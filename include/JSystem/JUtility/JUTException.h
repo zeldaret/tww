@@ -119,19 +119,19 @@ private:
     static u32 fpscr;
 
 private:
-    /* 0x7C */ JUTExternalFB* mFrameMemory;
-    /* 0x80 */ JUTDirectPrint* mDirectPrint;
-    /* 0x84 */ JUTGamePad* mGamePad;
-    /* 0x88 */ JUTGamePad::EPadPort mGamePadPort;
-    /* 0x8C */ s32 mPrintWaitTime0;
-    /* 0x90 */ s32 mPrintWaitTime1;
-    /* 0x94 */ u32 mTraceSuppress;
-    /* 0x98 */ u32 field_0x98;
-    /* 0x9C */ u32 mPrintFlags;
-    /* 0xA0 */ u32 mStackPointer;
+    /* 0x68 */ JUTExternalFB* mFrameMemory;
+    /* 0x6C */ JUTDirectPrint* mDirectPrint;
+    /* 0x70 */ JUTGamePad* mGamePad;
+    /* 0x74 */ JUTGamePad::EPadPort mGamePadPort;
+    /* 0x78 */ s32 mPrintWaitTime0;
+    /* 0x7C */ s32 mPrintWaitTime1;
+    /* 0x80 */ u32 mTraceSuppress;
+    /* 0x84 */ u32 field_0x98;
+    /* 0x88 */ u32 mPrintFlags;
+    /* 0x8C */ u32 mStackPointer;
 };
 
-STATIC_ASSERT(sizeof(JUTException) == 0xA4);
+STATIC_ASSERT(sizeof(JUTException) == 0x90);
 
 struct JUTWarn {
     JUTWarn& operator<<(const char*) { return *this; }

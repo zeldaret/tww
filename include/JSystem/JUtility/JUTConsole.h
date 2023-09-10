@@ -110,12 +110,11 @@ private:
     /* 0x58 */ int mOutput;
     /* 0x5C */ JUtility::TColor field_0x5c;
     /* 0x60 */ JUtility::TColor field_0x60;
-    /* 0x64 */ int field_0x64;
-    /* 0x68 */ bool mVisible;
-    /* 0x69 */ bool field_0x69;
-    /* 0x6A */ bool field_0x6a;
-    /* 0x6B */ bool field_0x6b;
-};  // Size: 0x6C
+    /* 0x64 */ bool mVisible;
+    /* 0x65 */ bool field_0x65;
+    /* 0x66 */ bool field_0x66;
+    /* 0x67 */ bool field_0x67;
+};  // Size: 0x68
 
 class JUTConsoleManager {
 public:
