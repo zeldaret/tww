@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: ghcr.io/encounter/ww-build:main
+    container: ghcr.io/zeldaret/tww-build:main
     strategy:
       fail-fast: false
       matrix:
