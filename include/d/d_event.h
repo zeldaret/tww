@@ -23,6 +23,42 @@ public:
 
 class dEvt_control_c {
 public:
+    dEvt_control_c();
+
+    void orderOld(u16, u16, u16, u16, void*, void*, const void*);
+    void order(u16, u16, u16, u16, void*, void*, s16, u8);
+    void setParam(dEvt_order_c*);
+    void beforeFlagProc(dEvt_order_c*);
+    void afterFlagProc(dEvt_order_c*);
+    void commonCheck(dEvt_order_c*, u16, u16);
+    void talkCheck(dEvt_order_c*);
+    void talkXyCheck(dEvt_order_c*);
+    void photoCheck(dEvt_order_c*);
+    void catchCheck(dEvt_order_c*);
+    void talkEnd();
+    void demoCheck(dEvt_order_c*);
+    void demoEnd();
+    void potentialCheck(dEvt_order_c*);
+    void doorCheck(dEvt_order_c*);
+    void itemCheck(dEvt_order_c*);
+    void endProc();
+    void checkChange();
+    void changeProc();
+    void checkStart();
+    void soundProc();
+    void check();
+    void photoCheck();
+    void moveApproval(void*);
+    void compulsory(void*, const char*, u16);
+    void remove();
+    void getStageEventDt();
+    void nextStageEventDt(void*);
+    void getPId(void*);
+    void convPId(unsigned int);
+    void getTactFreeMStick(int);
+    void getTactFreeCStick(int);
+    void giveItemCut(u8);
+
     /* 0x00 */ dEvt_order_c mOrder[8];
     /* 0xC0 */ u8 mOrderCount;
     /* 0xC1 */ u8 mFirstOrderIdx;

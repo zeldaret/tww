@@ -27,11 +27,18 @@ class dTimer_c;
 class camera_class;
 class J2DOrthoGraph;
 
-struct dADM {
+class dADM {
+public:
     /* 0x00 */ int mBlockCount;
     /* 0x04 */ void* mpData;
     /* 0x08 */ u8 mCharTbl[0x90];
-    /* 0x98 */ void* vtbl;
+
+public:
+    dADM();
+    void FindTag(u32, u32*, u32*);
+    void SetData(void*);
+
+    virtual ~dADM();
 };
 
 // setup properly later
@@ -75,14 +82,47 @@ public:
     /* 0x05 */ u8 mCamIdx;
     /* 0x06 */ u8 field_0x06;
     /* 0x07 */ u8 field_0x07;
-    /* 0x08 */ u32 field_0x08;
-    /* 0x0C */ f32 field_0x0c;
-    /* 0x10 */ f32 field_0x10;
+    /* 0x08 */ u32 mCameraAttentionStatus;
+    /* 0x0C */ f32 mCameraZoomScale;
+    /* 0x10 */ f32 mCameraZoomForcus;
 };
 STATIC_ASSERT(sizeof(dComIfG_camera_info_class) == 0x14);
 
 class dComIfG_play_c {
 public:
+    dComIfG_play_c() { ct(); }
+
+    void ct();
+    void init();
+    void itemInit();
+    void getLayerNo(int);
+    void createParticle();
+    void createDemo();
+    void removeDemo();
+    void executeEvtManager();
+    void createMagma();
+    void removeMagma();
+    void executeMagma();
+    void drawMagma();
+    void createGrass();
+    void removeGrass();
+    void executeGrass();
+    void drawGrass();
+    void createFlower();
+    void removeFlower();
+    void executeFlower();
+    void drawFlower();
+    void createTree();
+    void removeTree();
+    void executeTree();
+    void drawTree();
+    void createWood();
+    void removeWood();
+    void executeWood();
+    void drawWood();
+
+    ~dComIfG_play_c();
+
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
     /* 0x3DF8 */ dADM mADM;
@@ -131,19 +171,18 @@ public:
     /* 0x4834 */ dTree_packet_c* mpTreePacket;
     /* 0x4838 */ Packet_c* mpWoodPacket;
     /* 0x483C */ dFlower_packet_c* mpFlowerPacket;
-    /* 0x4840 */ u8 mLkDArcIdx;
+    /* 0x4840 */ s8 mLkDArcIdx;
     /* 0x4841 */ u8 field_0x4841;
-    /* 0x4842 */ short mVrboxFlags;
+    /* 0x4842 */ s16 mVrboxFlags;
     /* 0x4844 */ dDlst_window_c mDlstWindow[1];
     /* 0x486C */ u8 mCurCameraInfo;
     /* 0x486D */ u8 field_0x486D[0x4870 - 0x486D];
     /* 0x4870 */ dComIfG_camera_info_class mCameraInfo[1];
-    /* 0x48A4 */ daPy_py_c* mpCurPlayerActor[1];
-    /* 0x48A8 */ u8 mCurCamera;
+    /* 0x4884 */ u8 field_0x4884[0x48A4 - 0x4884];
+    /* 0x48A4 */ daPy_py_c* mpPlayer[1];
+    /* 0x48A8 */ s8 mCurCamera[1];
     /* 0x48A9 */ u8 field_0x48A9[0x48AC - 0x48A9];
-    /* 0x48AC */ daPy_lk_c* mpLinkActor;
-    /* 0x48B0 */ daPy_npc_c* mpPlayerPartnerActor;
-    /* 0x48B4 */ daShip_c* mpShip;
+    /* 0x48AC */ fopAc_ac_c* mpPlayerPtr[3];  // 0: Link, 1: Partner, 2: Ship
     /* 0x48B8 */ f32 field_0x48b8;
     /* 0x48BC */ int mItemLifeCount;
     /* 0x48C0 */ int mItemRupeeCount;
@@ -258,6 +297,11 @@ public:
 
 class dComIfG_inf_c {
 public:
+    dComIfG_inf_c() { ct(); }
+    ~dComIfG_inf_c();
+
+    void ct();
+
     /* 0x00000 */ dSv_info_c info;
     /* 0x012A0 */ dComIfG_play_c play;
     /* 0x05D1C */ dDlst_list_c drawlist;

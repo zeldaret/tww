@@ -672,6 +672,7 @@ public:
 
 class dSv_memory_c {
 public:
+    dSv_memory_c() { init(); }
     /* 8005CBB0 */ void init();
 
     dSv_memBit_c& getBit() { return mMembit; }
@@ -723,6 +724,7 @@ public:
 
 class dSv_zone_c {
 public:
+    dSv_zone_c() { mRoomNo = -1; }
     /* 8005D468 */ void init(int);
 
     dSv_zoneBit_c& getZoneBit() { return mZoneBit; }

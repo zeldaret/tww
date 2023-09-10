@@ -31,11 +31,20 @@ class dEvDtEvent_c {};
 
 class dEvDtFlag_c {
 public:
+    dEvDtFlag_c() {}
+
     u32 mFlags[320];
 };  // Size = 0x500
 
 class dEvDtBase_c {
 public:
+    dEvDtBase_c() { init(); }
+    ~dEvDtBase_c() {}
+
+    void init();
+    void advanceCut(dEvDtEvent_c*);
+    void advanceCutLocal(dEvDtStaff_c*);
+
     /* 0x00 */ event_binary_data_header* mHeaderP;
     /* 0x04 */ dEvDtEvent_c* mEventP;
     /* 0x08 */ dEvDtStaff_c* mStaffP;
