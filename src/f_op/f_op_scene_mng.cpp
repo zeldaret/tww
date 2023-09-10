@@ -46,7 +46,7 @@ u32 fopScnM_ReRequest(s16 param_1, u32 param_2) {
 
 void fopScnM_Management() {
     if (!fopScnRq_Handler())
-        JUT_ASSERT("f_op_scene_mng.cpp", 326, 0);
+        JUT_ASSERT(326, 0);
 }
 
 void fopScnM_Init() {

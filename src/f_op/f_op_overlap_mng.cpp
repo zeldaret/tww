@@ -94,7 +94,7 @@ int fopOvlpM_Cancel() {
 
     if (fopOvlpReq_Cancel((overlap_request_class*)l_fopOvlpM_overlap[0]) == true) {
         l_fopOvlpM_overlap[0] = NULL;
-        JUT_WARN("f_op_overlap_mng.cpp", 331, "%s", "fopOvlpM_Cancel SUCCESSED");
+        JUT_WARN(331, "%s", "fopOvlpM_Cancel SUCCESSED");
         return 1;
     }
 

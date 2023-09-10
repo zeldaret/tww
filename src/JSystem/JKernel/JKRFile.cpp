@@ -9,7 +9,7 @@
 
 /* 802BC610-802BC6B4       .text read__7JKRFileFPvll */
 s32 JKRFile::read(void* data, s32 length, long offset) {
-    JUT_ASSERT("JKRFile.cpp", 34, ( length & 0x1f ) == 0);
+    JUT_ASSERT(34, ( length & 0x1f ) == 0);
     while (true) {
         s32 result = readData(data, length, offset);
         if (length != result)

@@ -73,7 +73,7 @@ BOOL DynamicModuleControlBase::link() {
             mDoLinkCount++;
         }
     }
-    JUT_ASSERT(__FILE__, 100, mLinkCount < 65535);
+    JUT_ASSERT(100, mLinkCount < 65535);
     if (mLinkCount < 65535) {
         mLinkCount++;
     }
@@ -343,8 +343,8 @@ BOOL DynamicModuleControl::do_link() {
         do_load();
     }
     if (mModule != NULL) {
-        JUT_ASSERT(__FILE__, 613, mModule->info.sectionInfoOffset < 0x80000000);
-        JUT_ASSERT(__FILE__, 615, (u32)mModule + mModule->fixSize < 0x82000000);
+        JUT_ASSERT(613, mModule->info.sectionInfoOffset < 0x80000000);
+        JUT_ASSERT(615, (u32)mModule + mModule->fixSize < 0x82000000);
         OSGetTime();
         OSGetTime();
         if (mModule->mModuleVersion >= 3) {
@@ -412,7 +412,7 @@ BOOL DynamicModuleControl::do_link() {
                 }
             }
         } else {
-            JUT_ASSERT(__FILE__, 724, 0);
+            JUT_ASSERT(724, 0);
         }
         OSGetTime();
         sAllocBytes = sAllocBytes + getModuleSize();
@@ -494,7 +494,7 @@ void ModuleUnresolved() {
 }
 
 void ModuleConstructorsX(const VoidFunc* _ctors) {
-    JUT_ASSERT(__FILE__, 850, _ctors);
+    JUT_ASSERT(850, _ctors);
     while (*_ctors != 0) {
         (**_ctors)();
         _ctors++;
@@ -502,7 +502,7 @@ void ModuleConstructorsX(const VoidFunc* _ctors) {
 }
 
 void ModuleDestructorsX(const VoidFunc* _dtors) {
-    JUT_ASSERT(__FILE__, 864, _dtors);
+    JUT_ASSERT(864, _dtors);
     while (*_dtors != 0) {
         (**_dtors)();
         _dtors++;

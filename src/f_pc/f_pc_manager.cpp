@@ -85,10 +85,10 @@ void fpcM_Management(fpcM_ManagementFunc callBack1, fpcM_ManagementFunc callBack
     cAPIGph_Painter();
     fpcDt_Handler();
     if (!fpcPi_Handler())
-        JUT_ASSERT("f_pc_manager.cpp", 548, 0);
+        JUT_ASSERT(548, 0);
 
     if (!fpcCt_Handler())
-        JUT_ASSERT("f_pc_manager.cpp", 552, 0);
+        JUT_ASSERT(552, 0);
 
     if (callBack1 != NULL)
         callBack1();

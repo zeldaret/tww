@@ -17,7 +17,7 @@ JPATextureArc::JPATextureArc(const unsigned char * pData) {
 /* 802586D0-80258BB4       .text initialize__17JPADefaultTextureFP7JKRHeap */
 void JPADefaultTexture::initialize(JKRHeap* pHeap) {
     imgBuf = (u8*)JKRHeap::alloc(0x80, 0x20, pHeap);
-    JUT_ASSERT("JPATexture.cpp", 50, imgBuf);
+    JUT_ASSERT(50, imgBuf);
     imgBuf[0x00] = 0x00;
     imgBuf[0x01] = 0xff;
     imgBuf[0x02] = 0x00;

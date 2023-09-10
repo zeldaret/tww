@@ -4,18 +4,14 @@
 #include "dolphin/types.h"
 #include "dolphin/os/OS.h"
 
-#define JUT_ASSERT(FILE, LINE, COND)                                                               \
+#define JUT_ASSERT(LINE, COND)                                                                     \
     if (!(COND)) {                                                                                 \
-        JUTAssertion::showAssert(JUTAssertion::getSDevice(), FILE, LINE, #COND);                   \
-        OSPanic(FILE, LINE, "Halt");                                                               \
+        JUTAssertion::showAssert(JUTAssertion::getSDevice(), __FILE__, LINE, #COND);               \
+        OSPanic(__FILE__, LINE, "Halt");                                                           \
     }
 
-#define JUT_WARN(FILE, LINE, ...)                                                                  \
-    JUTAssertion::setWarningMessage_f(JUTAssertion::getSDevice(), FILE, LINE, __VA_ARGS__);        \
-
-#define JUT_PANIC(FILE, LINE, TEXT)                                                                \
-    JUTAssertion::showAssert(JUTAssertion::getSDevice(), FILE, LINE, TEXT);                        \
-    OSPanic(FILE, LINE, "Halt");
+#define JUT_WARN(LINE, ...)                                                                        \
+    JUTAssertion::setWarningMessage_f(JUTAssertion::getSDevice(), __FILE__, LINE, __VA_ARGS__);    \
 
 namespace JUTAssertion {
     u32 getSDevice();
