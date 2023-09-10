@@ -11,6 +11,12 @@
 #include "f_pc/f_pc_layer_iter.h"
 #include "f_pc/f_pc_line.h"
 #include "f_pc/f_pc_pause.h"
+#include "f_pc/f_pc_priority.h"
+#include "dolphin/dvd/DVD.h"
+#include "m_Do/m_Do_Reset.h"
+#include "SSystem/SComponent/c_lib.h"
+#include "SSystem/SComponent/c_API_graphic.h"
+#include "JSystem/JUtility/JUTAssert.h"
 
 /* 8003E318-8003E338       .text fpcM_Draw__FPv */
 void fpcM_Draw(void* i_proc) {
@@ -43,18 +49,55 @@ void messageSet(unsigned long) {
 }
 
 /* 8003E9F0-8003EBD4       .text drawDvdCondition__Fl */
-void drawDvdCondition(long) {
+void drawDvdCondition(long status) {
     /* Nonmatching */
 }
 
 /* 8003EBD4-8003EC84       .text checkDvdCondition__Fv */
-void checkDvdCondition() {
-    /* Nonmatching */
+static int checkDvdCondition() {
+    static int l_dvdError = 0;
+    
+    int status = DVDGetDriveStatus();
+    if (status != 0 && status != 1)
+        l_dvdError = 1;
+
+    if (l_dvdError != 0) {
+        if (status == 0) {
+            l_dvdError = 0;
+        } else if (mDoRst::isReset()) {
+            mDoRst::offReset();
+            mDoRst_reset(1, 0x80000000, 0);
+        } else {
+            drawDvdCondition(status);
+        }
+    }
+
+    return l_dvdError;
 }
 
 /* 8003EC84-8003ED90       .text fpcM_Management__FPFv_vPFv_v */
-void fpcM_Management(void (*)(void), void (*)(void)) {
-    /* Nonmatching */
+void fpcM_Management(fpcM_ManagementFunc callBack1, fpcM_ManagementFunc callBack2) {
+    MtxInit();
+
+    if (checkDvdCondition())
+        return;
+
+    cAPIGph_Painter();
+    fpcDt_Handler();
+    if (!fpcPi_Handler())
+        JUT_ASSERT("f_pc_manager.cpp", 548, 0);
+
+    if (!fpcCt_Handler())
+        JUT_ASSERT("f_pc_manager.cpp", 552, 0);
+
+    if (callBack1 != NULL)
+        callBack1();
+
+    fpcEx_Handler((fpcLnIt_QueueFunc)fpcM_Execute);
+    fpcDw_Handler((fpcDw_HandlerFuncFunc)fpcM_DrawIterater, (fpcDw_HandlerFunc)fpcM_Draw);
+
+    if (callBack2 != NULL)
+        callBack2();
 }
 
 /* 8003ED90-8003EDCC       .text fpcM_Init__Fv */

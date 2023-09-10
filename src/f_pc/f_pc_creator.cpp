@@ -23,6 +23,6 @@ BOOL fpcCt_Abort(base_process_class* i_proc) {
 }
 
 /* 8003D150-8003D170       .text fpcCt_Handler__Fv */
-void fpcCt_Handler() {
-    fpcCtRq_Handler();
+s32 fpcCt_Handler() {
+    return fpcCtRq_Handler();
 }

@@ -108,8 +108,8 @@ BOOL fpcCtRq_Do(create_request* i_request) {
 }
 
 /* 8003CFC4-8003CFF0       .text fpcCtRq_Handler__Fv */
-void fpcCtRq_Handler() {
-    fpcCtIt_Method((fpcCtIt_MethodFunc)fpcCtRq_Do, NULL);
+s32 fpcCtRq_Handler() {
+    return fpcCtIt_Method((fpcCtIt_MethodFunc)fpcCtRq_Do, NULL);
 }
 
 /* 8003CFF0-8003D078       .text fpcCtRq_Create__FP11layer_classUlP27create_request_method_class */

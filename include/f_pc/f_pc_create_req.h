@@ -35,7 +35,7 @@ void fpcCtRq_ToCreateQ(create_request* pReq);
 BOOL fpcCtRq_Delete(create_request* pReq);
 BOOL fpcCtRq_Cancel(create_request* pReq);
 s32 fpcCtRq_IsDoing(create_request* pReq);
-void fpcCtRq_Handler(void);
+s32 fpcCtRq_Handler(void);
 create_request* fpcCtRq_Create(layer_class* pLayer, u32 size,
                                create_request_method_class* pCtRqMtd);
 

@@ -4,6 +4,12 @@
 //
 
 #include "f_ap/f_ap_game.h"
+#include "f_op/f_op_scene_mng.h"
+#include "f_op/f_op_overlap_mng.h"
+#include "f_op/f_op_camera_mng.h"
+#include "f_op/f_op_draw_tag.h"
+#include "f_pc/f_pc_manager.h"
+#include "SSystem/SComponent/c_counter.h"
 #include "dolphin/types.h"
 
 /* 8002306C-800231BC       .text __ct__11fapGm_HIO_cFv */
@@ -13,20 +19,28 @@ fapGm_HIO_c::fapGm_HIO_c() {
 
 /* 800231BC-800231E4       .text fapGm_After__Fv */
 void fapGm_After() {
-    /* Nonmatching */
+    fopScnM_Management();
+    fopOvlpM_Management();
+    fopCamM_Management();
 }
 
 /* 800231E4-80023218       .text fapGm_Execute__Fv */
 void fapGm_Execute() {
-    /* Nonmatching */
+    fpcM_Management(0, fapGm_After);
+    cCt_Counter(0);
 }
 
 /* 80023218-80023288       .text fapGm_Create__Fv */
 void fapGm_Create() {
-    /* Nonmatching */
+    fpcM_Init();
+    fopScnM_Init();
+    fopOvlpM_Init();
+    fopCamM_Init();
+    fopDwTg_CreateQueue();
+    fopScnM_CreateReq(5, 0x7FFF, 0, 0);
+    // HIO
 }
 
 /* 80023288-800232D0       .text __dt__11fapGm_HIO_cFv */
 fapGm_HIO_c::~fapGm_HIO_c() {
-    /* Nonmatching */
 }
