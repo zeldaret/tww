@@ -48,7 +48,11 @@ base_process_class* fpcFCtRq_Request(layer_class* i_layer, s16 i_procTypeID,
                     return proc;
                 }
             }
+#if VERSION == VERSION_JPN
+            fpcCtRq_Delete(&request->mBase);
+#else
             fpcCtRq_Cancel(&request->mBase);
+#endif
         }
         return NULL;
     }
