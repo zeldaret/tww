@@ -20,7 +20,7 @@ public:
     /* 802E5260 */ JUTXfb(_GXRenderModeObj const*, JKRHeap*, JUTXfb::EXfbNumber);
     /* 802E5308 */ ~JUTXfb();
     /* 802E5378 */ void delXfb(int);
-    /* 802E53B8 */ static JUTXfb* createManager(JKRHeap*, JUTXfb::EXfbNumber);
+    /* 802E53B8 */ static JUTXfb* createManager(const _GXRenderModeObj*, JKRHeap*, JUTXfb::EXfbNumber);
     /* 802E5424 */ static void destroyManager();
     /* 802E5454 */ void initiate(u16, u16, JKRHeap*, JUTXfb::EXfbNumber);
 

@@ -64,7 +64,6 @@ public:
 
     OSThread* getThreadRecord() const { return mThreadRecord; }
     void* getStack() const { return mStackMemory; }
-    TLoad* getLoadInfo() { return &mLoadInfo; }
     JKRHeap* getCurrentHeap() const { return mCurrentHeap; }
     s32 getCurrentHeapError() const { return mCurrentHeapError; }
 
@@ -105,9 +104,8 @@ private:
     /* 0x54 */ s32 mMessageCount;
     /* 0x58 */ void* mStackMemory;
     /* 0x5C */ u32 mStackSize;
-    /* 0x60 */ TLoad mLoadInfo;
-    /* 0x74 */ JKRHeap* mCurrentHeap;
-    /* 0x78 */ s32 mCurrentHeapError;
+    /* 0x60 */ JKRHeap* mCurrentHeap;
+    /* 0x64 */ s32 mCurrentHeapError;
 
 public:
     static void* start(void* param_1);

@@ -23,14 +23,14 @@ public:
 //private:
     /* 0x00 */  // vtable
     /* 0x04 */  // JKRThread
-    /* 0x7C */ u32 mAudioMemoryPtr;
-    /* 0x80 */ u32 mAudioMemorySize;
-    /* 0x84 */ u32 mGraphMemoryPtr;
-    /* 0x88 */ u32 mGraphMemorySize;
-    /* 0x8C */ u32 mAramMemoryPtr;
-    /* 0x90 */ u32 mAramMemorySize;
-    /* 0x94 */ JKRAramHeap* mAramHeap;
-    /* 0x98 */ u32 mStackArray[3];
+    /* 0x68 */ u32 mAudioMemoryPtr;
+    /* 0x6C */ u32 mAudioMemorySize;
+    /* 0x70 */ u32 mGraphMemoryPtr;
+    /* 0x74 */ u32 mGraphMemorySize;
+    /* 0x78 */ u32 mAramMemoryPtr;
+    /* 0x7C */ u32 mAramMemorySize;
+    /* 0x80 */ JKRAramHeap* mAramHeap;
+    /* 0x84 */ u32 mStackArray[3];
 
 public:
     static JKRAram* create(u32, u32, long, long, long);

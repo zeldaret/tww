@@ -199,6 +199,8 @@ LIBS = [
         "cflags": CFLAGS_FRAMEWORK,
         "host": True,
         "objects": [
+            NonMatching("JSystem/JFramework/JFWDisplay.cpp"),
+            NonMatching("JSystem/JFramework/JFWSystem.cpp"),
             Matching   ("JSystem/JKernel/JKRFile.cpp"),
             Matching   ("JSystem/JSupport/JSUList.cpp"),
             NonMatching("JSystem/JSupport/JSUInputStream.cpp"),
