@@ -41,6 +41,8 @@ public:
     daObjGryw00_c * mpGryw00;
 };
 
+STATIC_ASSERT(sizeof(mDoExt_btkAnm) == 0x14);
+
 /* 00000078-0000009C       .text solidHeapCB__14daObjYgush00_cFP10fopAc_ac_c */
 s32 daObjYgush00_c::solidHeapCB(fopAc_ac_c* ac) {
     return ((daObjYgush00_c*)ac)->create_heap();
@@ -169,7 +171,7 @@ static actor_method_class l_daObjYgush00_Mehtod = {
 
 extern actor_process_profile_definition g_profile_Obj_Ygish00 = {
     -3,
-    2,
+    3,
     0xFFFD,
     PROC_Obj_Ygush00,
     &g_fpcLf_Method.mBase,
@@ -177,9 +179,9 @@ extern actor_process_profile_definition g_profile_Obj_Ygish00 = {
     0,
     0,
     &g_fopAc_Method.base,
-    0x0116,
+    0x005E,
     &l_daObjYgush00_Mehtod,
-    0x00044000,
-    0,
-    6,
+    0x00040100,
+    fopAc_ACTOR_e,
+    fopAc_CULLBOX_CUSTOM_e,
 };

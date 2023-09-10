@@ -144,9 +144,9 @@ extern actor_process_profile_definition g_profile_ALLDIE = {
     0,
     0,
     &g_fopAc_Method.base,
-    0x0116,
+    0x011D,
     &l_daAlldie_Method,
     0x00044000,
-    0,
-    6,
+    fopAc_ACTOR_e,
+    fopAc_CULLBOX_6_e,
 };

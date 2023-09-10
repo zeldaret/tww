@@ -14,11 +14,69 @@ struct actor_method_class {
     /* 0x14 */ u8 field_0x14[0xC];  // Likely padding
 };
 
+enum fopAc_Status_e {
+    fopAcStts_SHOWMAP_e     = 0x00000020,
+    fopAcStts_NOEXEC_e      = 0x00000080,
+    fopAcStts_CULLSTOP_e    = 0x00000100,
+    fopAcStts_FREEZE_e      = 0x00000400,
+    fopAcStts_CARRY_e       = 0x00002000,
+    fopAcStts_NOPAUSE_e     = 0x00020000,
+    fopAcStts_NODRAW_e      = 0x01000000,
+    fopAcStts_BOSS_e        = 0x04000000,
+};
+
+enum fopAc_Condition_e {
+    fopAcCnd_NOEXEC_e       = 0x02,
+    fopAcCnd_NODRAW_e       = 0x04,
+    fopAcCnd_INIT_e         = 0x08,
+};
+
+enum fopAc_Group_e {
+    fopAc_ACTOR_e,
+    fopAc_PLAYER_e,
+    fopAc_ENEMY_e,
+    fopAc_ENV_e,
+    fopAc_NPC_e,
+};
+
+enum fopAc_Cull_e {
+    fopAc_CULLBOX_0_e,
+    fopAc_CULLBOX_1_e,
+    fopAc_CULLBOX_2_e,
+    fopAc_CULLBOX_3_e,
+    fopAc_CULLBOX_4_e,
+    fopAc_CULLBOX_5_e,
+    fopAc_CULLBOX_6_e,
+    fopAc_CULLBOX_7_e,
+    fopAc_CULLBOX_8_e,
+    fopAc_CULLBOX_9_e,
+    fopAc_CULLBOX_10_e,
+    fopAc_CULLBOX_11_e,
+    fopAc_CULLBOX_12_e,
+    fopAc_CULLBOX_13_e,
+    fopAc_CULLBOX_CUSTOM_e,
+    fopAc_CULLSPHERE_0_e,
+    fopAc_CULLSPHERE_1_e,
+    fopAc_CULLSPHERE_2_e,
+    fopAc_CULLSPHERE_3_e,
+    fopAc_CULLSPHERE_4_e,
+    fopAc_CULLSPHERE_5_e,
+    fopAc_CULLSPHERE_6_e,
+    fopAc_CULLSPHERE_7_e,
+    fopAc_CULLSPHERE_8_e,
+    fopAc_CULLSPHERE_9_e,
+    fopAc_CULLSPHERE_10_e,
+    fopAc_CULLSPHERE_11_e,
+    fopAc_CULLSPHERE_12_e,
+    fopAc_CULLSPHERE_13_e,
+    fopAc_CULLSPHERE_CUSTOM_e,
+};
+
 struct actor_process_profile_definition {
     /* 0x00 */ leaf_process_profile_definition mBase;
     /* 0x24 */ actor_method_class* mSubMtd;
     /* 0x28 */ u32 mStatus;
-    /* 0x2C */ u8 mActorType;
+    /* 0x2C */ u8 mGroup;
     /* 0x2D */ u8 mCullType;
 };
 
@@ -26,10 +84,6 @@ struct actor_process_profile_definition {
 struct actor_process_profile_definition2 {
     /* 0x00 */ actor_process_profile_definition def;
     /* 0x30 */ u32 field_0x30;
-};
-
-enum {
-    ACTOR_TYPE_ENEMY = 2,
 };
 
 class JKRSolidHeap;
