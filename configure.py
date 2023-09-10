@@ -302,6 +302,7 @@ LIBS = [
             Matching   ("d/d_particle_name.cpp"),
             NonMatching("d/d_s_title.cpp"),
             NonMatching("d/d_save.cpp"),
+            NonMatching("d/d_save_init.cpp"),
 
             # ?
             NonMatching("DynamicLink.cpp"),

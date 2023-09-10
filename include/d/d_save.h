@@ -773,6 +773,7 @@ public:
     /* 8005D860 */ void init();
 
     dSv_player_c& getPlayer() { return mPlayer; }
+    dSv_event_c& getEvent() { return mEvent; }
 
     dSv_memory_c& getSave(int i_stageNo) { return mMemory[i_stageNo]; }
     void putSave(int i_stageNo, dSv_memory_c i_mem) { mMemory[i_stageNo] = i_mem; }
@@ -806,6 +807,7 @@ public:
     /* 8005ED00 */ int initdata_to_card(char*, int);
 
     dSv_player_c& getPlayer() { return mSavedata.getPlayer(); }
+    dSv_event_c& getEvent() { return mSavedata.getEvent(); }
 
     static const int MEMORY_SWITCH = 0x80;
     static const int DAN_SWITCH = 0x40;

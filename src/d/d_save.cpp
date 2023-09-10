@@ -4,14 +4,13 @@
 //
 
 #include "d/d_save.h"
+#include "d/d_save_init.h"
 #include "d/d_com_inf_game.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "MSL_C/string.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "SSystem/SComponent/c_math.h"
 #include "MSL_C/stdio.h"
-
-extern void setInitEventBit();
 
 struct daNpc_Sarace_c {
     static int ship_race_rupee;

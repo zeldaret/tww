@@ -1,13 +1,13 @@
 #ifndef D_COM_D_COM_INF_GAME_H
 #define D_COM_D_COM_INF_GAME_H
 
-#include "d/d_save.h"
 #include "d/d_bg_s.h"
 #include "d/d_cc_s.h"
-#include "d/d_stage.h"
 #include "d/d_event.h"
 #include "d/d_event_manager.h"
 #include "d/d_resorce.h"
+#include "d/d_save.h"
+#include "d/d_stage.h"
 
 class JKRArchive;
 class JKRExpHeap;
@@ -269,6 +269,10 @@ public:
 
 extern dComIfG_inf_c g_dComIfG_gameInfo;
 
+/**
+ * === SAVE ===
+ */
+
 inline u8 dComIfGs_getSelectEquip(int param_0) {
     return g_dComIfG_gameInfo.info.getPlayer().getPlayerStatusA().getSelectEquip(param_0);
 }
@@ -276,5 +280,13 @@ inline u8 dComIfGs_getSelectEquip(int param_0) {
 inline u8 dComIfGs_getItem(int param_0) {
     return g_dComIfG_gameInfo.info.getPlayer().getItem().getItem(param_0);
 }
+
+inline void dComIfGs_setEventReg(u16 i_reg, u8 i_no) {
+    g_dComIfG_gameInfo.info.getEvent().setEventReg(i_reg, i_no);
+}
+
+/**
+ * === PLAY ===
+ */
 
 #endif /* D_COM_D_COM_INF_GAME_H */

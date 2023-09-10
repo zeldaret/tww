@@ -3,6 +3,7 @@
 
 #include "global.h"
 #include "SSystem/SComponent/c_sxyz.h"
+#include "SSystem/SComponent/c_xyz.h"
 
 class cBgS_LinChk;
 class cBgS_GndChk;
