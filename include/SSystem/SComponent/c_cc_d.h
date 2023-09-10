@@ -22,35 +22,7 @@ class cCcD_AabAttr;
 class cCcD_CylAttr;
 class cCcD_SphAttr;
 
-enum cCcD_ObjAtType {
-    /* 0x00000002 */ AT_TYPE_NORMAL_SWORD = (1 << 1),  // wooden or ordon
-    /* 0x00000004 */ AT_TYPE_HORSE = (1 << 2),
-    /* 0x00000008 */ AT_TYPE_THROW_OBJ = (1 << 3),
-    /* 0x00000010 */ AT_TYPE_SHIELD_ATTACK = (1 << 4),
-    /* 0x00000020 */ AT_TYPE_BOMB = (1 << 5),
-    /* 0x00000040 */ AT_TYPE_40 = (1 << 6),
-    /* 0x00000080 */ AT_TYPE_SLINGSHOT = (1 << 7),
-    /* 0x00000200 */ AT_TYPE_LANTERN_SWING = (1 << 9),
-    /* 0x00000400 */ AT_TYPE_CSTATUE_SWING = (1 << 10),
-    /* 0x00000800 */ AT_TYPE_800 = (1 << 11),
-    /* 0x00001000 */ AT_TYPE_1000 = (1 << 12),
-    /* 0x00002000 */ AT_TYPE_ARROW = (1 << 13),
-    /* 0x00004000 */ AT_TYPE_HOOKSHOT = (1 << 14),
-    /* 0x00010000 */ AT_TYPE_BOOMERANG = (1 << 16),
-    /* 0x00040000 */ AT_TYPE_40000 = (1 << 18),
-    /* 0x00080000 */ AT_TYPE_SPINNER = (1 << 19),
-    /* 0x00100000 */ AT_TYPE_CSTATUE_BOSS_SWING = (1 << 20),
-    /* 0x00200000 */ AT_TYPE_HEAVY_BOOTS = (1 << 21),
-    /* 0x00400000 */ AT_TYPE_IRON_BALL = (1 << 22),
-    /* 0x00800000 */ AT_TYPE_COPY_ROD = (1 << 23),
-    /* 0x01000000 */ AT_TYPE_1000000 = (1 << 24),
-    /* 0x04000000 */ AT_TYPE_MASTER_SWORD = (1 << 26),
-    /* 0x08000000 */ AT_TYPE_MIDNA_LOCK = (1 << 27),
-    /* 0x10000000 */ AT_TYPE_10000000 = (1 << 28),
-    /* 0x40000000 */ AT_TYPE_WOLF_CUT_TURN = (1 << 30),
-    /* 0x80000000 */ AT_TYPE_WOLF_ATTACK = (1 << 31),
-    /* 0xD8000000 */ AT_TYPE_UNK = 0xD8000000
-};
+enum cCcD_ObjAtType {};
 
 class cCcD_ShapeAttr {
 public:
@@ -126,7 +98,6 @@ public:
     virtual bool CrossCo(cCcD_CylAttr const&, f32*) const { return false; }
     virtual bool CrossCo(cCcD_SphAttr const&, f32*) const { return false; }
     virtual ~cCcD_TriAttr() {}
-    cCcD_TriAttr() {}
 };
 
 struct cCcD_SrcCpsAttr {
@@ -175,9 +146,6 @@ struct cCcD_SrcSphAttr {
 class cCcD_SphAttr : public cCcD_ShapeAttr, public cM3dGSph {
 public:
     cCcD_SphAttr() {}
-    void Set(const cCcD_SrcSphAttr& src) {
-        cM3dGSph::Set(src.mSph);
-    }
 
     virtual ~cCcD_SphAttr() {}
     virtual const cXyz& GetCoCP() const { return mCenter; }
@@ -242,18 +210,16 @@ STATIC_ASSERT(0x38 == sizeof(cCcD_CylAttr));
 
 class cCcD_DivideInfo {
 private:
-    /* 0x00 */ u32 mXDivInfo;
-    /* 0x04 */ u32 mYDivInfo;
-    /* 0x08 */ u32 mZDivInfo;
-    /* 0x0C vtable */
+    /* 0x00 */ u32 mRangeBits;
+    /* 0x04 vtable */
 public:
     cCcD_DivideInfo() {}
     virtual ~cCcD_DivideInfo() {}
     void Set(u32, u32, u32);
     bool Chk(cCcD_DivideInfo const&) const;
-};  // Size = 0x10
+};  // Size = 0x8
 
-STATIC_ASSERT(0x10 == sizeof(cCcD_DivideInfo));
+STATIC_ASSERT(0x8 == sizeof(cCcD_DivideInfo));
 
 class cCcD_DivideArea : public cM3dGAab {
 private:
@@ -544,9 +510,9 @@ private:
     /* 0x040 */ int mFlags;
     /* 0x044 */ cCcD_Stts* mStts;
     /* 0x048 */ cCcD_DivideInfo mDivideInfo;
-};  // Size = 0x58
+};  // Size = 0x50
 
-STATIC_ASSERT(0x58 == sizeof(cCcD_Obj));
+STATIC_ASSERT(0x50 == sizeof(cCcD_Obj));
 
 class cCcD_GObjInf : public cCcD_Obj {
 public:
@@ -559,6 +525,6 @@ public:
     virtual cCcD_GObjInf* GetGObjInf() { return this; }
 };
 
-STATIC_ASSERT(0x58 == sizeof(cCcD_GObjInf));
+STATIC_ASSERT(0x50 == sizeof(cCcD_GObjInf));
 
 #endif /* C_CC_D_H */

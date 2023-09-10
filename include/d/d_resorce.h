@@ -1,12 +1,10 @@
 #ifndef D_D_RESORCE_H
 #define D_D_RESORCE_H
 
-#include "m_Do/m_Do_dvd_thread.h"
-#include "m_Do/m_Do_ext.h"
-
 class JKRArchive;
 class JKRHeap;
 class JKRSolidHeap;
+class mDoDvdThd_mountArchive_c;
 
 class dRes_info_c {
 public:
@@ -20,11 +18,11 @@ public:
     static void dump_long(dRes_info_c*, int);
     static void dump(dRes_info_c*, int);
 
-    void* getRes(u32 resIdx) { return *(mRes + resIdx); }
+    void* getRes(u32 resIdx) { return *(mpRes + resIdx); }
     int getCount() { return mCount; }
     char* getArchiveName() { return mArchiveName; }
-    mDoDvdThd_mountArchive_c* getDMCommand() { return mDMCommand; }
-    JKRArchive* getArchive() { return mArchive; }
+    mDoDvdThd_mountArchive_c* getDMCommand() { return mpDMCommand; }
+    JKRArchive* getArchive() { return mpArchive; }
     void incCount() { mCount++; }
     u16 decCount() {
         return --mCount;
@@ -108,8 +106,8 @@ public:
         return getResInfo(arcName, &mStageInfo[0], ARRAY_SIZE(mStageInfo));
     }
 
-    /* 0x0000 */ dRes_info_c mObjectInfo[0x80];
-    /* 0x1200 */ dRes_info_c mStageInfo[0x40];
+    /* 0x0000 */ dRes_info_c mObjectInfo[64];
+    /* 0x1200 */ dRes_info_c mStageInfo[64];
 };  // Size: 0x1B00
 
 #endif /* D_D_RESORCE_H */

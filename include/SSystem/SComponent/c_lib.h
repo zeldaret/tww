@@ -32,7 +32,7 @@ s16 cLib_targetAngleY(const Vec* lhs, const Vec* rhs);
 s16 cLib_targetAngleY(const Vec& lhs, const Vec& rhs);
 s16 cLib_targetAngleX(const cXyz*, const cXyz*);
 
-void cLib_offsetPos(cXyz* pDest, cXyz const* pSrc, s16 angle, cXyz const* vec);
+void cLib_offsetPos(cXyz* pDest, cXyz* pSrc, s16 angle, cXyz* vec);
 s32 cLib_distanceAngleS(s16 x, s16 y);
 
 template <typename T>

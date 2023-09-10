@@ -5,7 +5,7 @@
 #include "dolphin/os/OS.h"
 
 #define JUT_ASSERT(LINE, COND)                                                                     \
-    if (!(COND)) {                                                                                 \
+    if ((COND) == 0) {                                                                             \
         JUTAssertion::showAssert(JUTAssertion::getSDevice(), __FILE__, LINE, #COND);               \
         OSPanic(__FILE__, LINE, "Halt");                                                           \
     }
