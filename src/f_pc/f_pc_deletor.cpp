@@ -12,7 +12,7 @@
 #include "f_pc/f_pc_node.h"
 
 /* 8003D280-8003D2A0       .text fpcDt_IsComplete__Fv */
-bool fpcDt_IsComplete() {
+BOOL fpcDt_IsComplete() {
     return fpcDtTg_IsEmpty();
 }
 

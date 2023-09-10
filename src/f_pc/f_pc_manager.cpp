@@ -4,7 +4,13 @@
 //
 
 #include "f_pc/f_pc_manager.h"
-#include "dolphin/types.h"
+#include "f_pc/f_pc_creator.h"
+#include "f_pc/f_pc_draw.h"
+#include "f_pc/f_pc_deletor.h"
+#include "f_pc/f_pc_fstcreate_req.h"
+#include "f_pc/f_pc_layer_iter.h"
+#include "f_pc/f_pc_line.h"
+#include "f_pc/f_pc_pause.h"
 
 /* 8003E318-8003E338       .text fpcM_Draw__FPv */
 void fpcM_Draw(void* i_proc) {
@@ -53,30 +59,46 @@ void fpcM_Management(void (*)(void), void (*)(void)) {
 
 /* 8003ED90-8003EDCC       .text fpcM_Init__Fv */
 void fpcM_Init() {
-    /* Nonmatching */
+    static layer_class rootlayer;
+    static node_list_class queue[10];
+
+    fpcLy_Create(&rootlayer, NULL, queue, 10);
+    fpcLn_Create();
 }
 
 /* 8003EDCC-8003EE20       .text fpcM_FastCreate__FsPFPv_iPvPv */
-void fpcM_FastCreate(short, int (*)(void*), void*, void*) {
-    /* Nonmatching */
+base_process_class* fpcM_FastCreate(s16 i_procTypeID, FastCreateReqFunc i_createReqFunc,
+                                    void* i_createData, void* i_data) {
+    return fpcFCtRq_Request(fpcLy_CurrentLayer(), i_procTypeID, (fstCreateFunc)i_createReqFunc,
+                            i_createData, i_data);
 }
 
+
 /* 8003EE20-8003EE44       .text fpcM_IsPause__FPvUc */
-void fpcM_IsPause(void*, unsigned char) {
-    /* Nonmatching */
+s32 fpcM_IsPause(void* i_proc, u8 i_flag) {
+    return fpcPause_IsEnable((base_process_class*)i_proc, i_flag & 0xFF);
 }
 
 /* 8003EE44-8003EE68       .text fpcM_PauseEnable__FPvUc */
-void fpcM_PauseEnable(void*, unsigned char) {
-    /* Nonmatching */
+void fpcM_PauseEnable(void* i_proc, u8 i_flag) {
+    fpcPause_Enable((process_node_class*)i_proc, i_flag & 0xFF);
 }
 
 /* 8003EE68-8003EE8C       .text fpcM_PauseDisable__FPvUc */
-void fpcM_PauseDisable(void*, unsigned char) {
-    /* Nonmatching */
+void fpcM_PauseDisable(void* i_proc, u8 i_flag) {
+    fpcPause_Disable((process_node_class*)i_proc, i_flag & 0xFF);
 }
 
 /* 8003EE8C-8003EF00       .text fpcM_JudgeInLayer__FUiPFPvPv_PvPv */
-void fpcM_JudgeInLayer(unsigned int, void* (*)(void*, void*), void*) {
-    /* Nonmatching */
+void* fpcM_JudgeInLayer(unsigned int i_layerID, fpcCtIt_JudgeFunc i_judgeFunc, void* i_data) {
+    layer_class* layer = fpcLy_Layer(i_layerID);
+    if (layer != NULL) {
+        void* ret = fpcCtIt_JudgeInLayer(i_layerID, i_judgeFunc, i_data);
+        if (ret == NULL) {
+            ret = fpcLyIt_Judge(layer, i_judgeFunc, i_data);
+        }
+        return ret;
+    } else {
+        return NULL;
+    }
 }
