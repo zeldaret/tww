@@ -1,0 +1,18 @@
+Sections:
+	.text       type:code align:8
+	.ctors      type:rodata align:8
+	.dtors      type:rodata align:8
+	.rodata     type:rodata align:8
+	.data       type:data align:8
+
+REL/executor.c:
+	.text       start:0x00000000 end:0x00000078
+
+d/actor/d_a_npc_sv.cpp:
+	.text       start:0x00000078 end:0x00002C0C
+	.text       start:0x00002C0C end:0x00002C28
+	.text       start:0x00002C28 end:0x00002C58
+	.text       start:0x00002C58 end:0x00002CEC
+	.ctors      start:0x00000000 end:0x00000008
+	.rodata     start:0x00000000 end:0x00000194
+	.data       start:0x00000000 end:0x00000608

@@ -1,0 +1,18 @@
+Sections:
+	.text       type:code align:8
+	.ctors      type:rodata align:8
+	.dtors      type:rodata align:8
+	.rodata     type:rodata align:8
+	.data       type:data align:8
+	.bss        type:bss align:8
+
+REL/executor.c:
+	.text       start:0x00000000 end:0x00000078
+
+d/actor/d_a_bpw.cpp:
+	.text       start:0x00000078 end:0x0000E2E4
+	.text       start:0x0000E2E4 end:0x0000E470
+	.text       start:0x0000E470 end:0x0000E5DC
+	.rodata     start:0x00000000 end:0x00000308
+	.data       start:0x00000000 end:0x000005E8
+	.bss        start:0x00000000 end:0x00000198

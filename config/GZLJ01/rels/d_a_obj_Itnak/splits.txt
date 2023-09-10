@@ -1,0 +1,16 @@
+Sections:
+	.text       type:code align:8
+	.ctors      type:rodata align:8
+	.dtors      type:rodata align:8
+	.rodata     type:rodata align:8
+	.data       type:data align:8
+
+REL/executor.c:
+	.text       start:0x00000000 end:0x00000078
+
+d/actor/d_a_obj_Itnak.cpp:
+	.text       start:0x00000078 end:0x00001448
+	.text       start:0x00001448 end:0x0000184C
+	.text       start:0x0000184C end:0x000018B8
+	.rodata     start:0x00000000 end:0x000000FD
+	.data       start:0x00000000 end:0x00000234

@@ -1,0 +1,17 @@
+_prolog = .text:0x00000000; // type:function size:0x2C scope:global align:4
+_epilog = .text:0x0000002C; // type:function size:0x2C scope:global align:4
+_unresolved = .text:0x00000058; // type:function size:0x20 scope:global align:4
+useHeapInit__FP10fopAc_ac_c = .text:0x00000078; // type:function size:0xE4 scope:local align:4
+daKytag03_Draw__FP13kytag03_class = .text:0x0000015C; // type:function size:0x7C scope:local align:4
+draw_SUB__FP13kytag03_class = .text:0x000001D8; // type:function size:0xA8 scope:local align:4
+daKytag03_Execute__FP13kytag03_class = .text:0x00000280; // type:function size:0x28C scope:local align:4
+daKytag03_IsDelete__FP13kytag03_class = .text:0x0000050C; // type:function size:0x8 scope:local align:4
+daKytag03_Delete__FP13kytag03_class = .text:0x00000514; // type:function size:0x30 scope:local align:4
+daKytag03_Create__FP10fopAc_ac_c = .text:0x00000544; // type:function size:0xC0 scope:local align:4
+_ctors = .ctors:0x00000000; // type:label scope:global
+_dtors = .dtors:0x00000000; // type:label scope:global
+@4002 = .rodata:0x00000000; // type:object size:0x4 scope:local align:4
+@4114 = .rodata:0x00000004; // type:object size:0x4 scope:local align:4 data:float
+@stringBase0 = .rodata:0x00000008; // type:object size:0x7 scope:local align:4 data:string_table
+l_daKytag03_Method = .data:0x00000000; // type:object size:0x20 scope:local align:4
+g_profile_KYTAG03 = .data:0x00000020; // type:object size:0x30 scope:global align:4
