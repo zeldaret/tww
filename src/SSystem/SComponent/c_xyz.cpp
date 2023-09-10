@@ -5,7 +5,17 @@
 
 #include "SSystem/SComponent/c_xyz.h"
 #include "SSystem/SComponent/c_math.h"
-#include "dolphin/types.h"
+#include "MSL_C/float.h"
+#include "JSystem/JUtility/JUTAssert.h"
+
+const cXyz cXyz::Zero(0, 0, 0);
+const cXyz cXyz::BaseX(1, 0, 0);
+const cXyz cXyz::BaseY(0, 1, 0);
+const cXyz cXyz::BaseZ(0, 0, 1);
+const cXyz cXyz::BaseXY(1, 1, 0);
+const cXyz cXyz::BaseXZ(1, 0, 1);
+const cXyz cXyz::BaseYZ(0, 1, 1);
+const cXyz cXyz::BaseXYZ(1, 1, 1);
 
 /* 80245674-802456C4       .text __pl__4cXyzCFRC3Vec */
 cXyz cXyz::operator+(const Vec& vec) const {
@@ -63,6 +73,7 @@ cXyz cXyz::outprod(const Vec& vec) const {
 /* 80245874-80245918       .text norm__4cXyzCFv */
 cXyz cXyz::norm(void) const {
     Vec ret;
+    JUT_CONFIRM(233, isNearZeroSquare() == 0);
     VECNormalize(this, &ret);
     return cXyz(ret);
 }
@@ -102,6 +113,7 @@ cXyz cXyz::normZC(void) const {
 
 /* 80245ADC-80245B80       .text normalize__4cXyzFv */
 cXyz cXyz::normalize(void) {
+    JUT_ASSERT(267, isNearZeroSquare() == 0);
     VECNormalize(this, this);
     return *this;
 }
@@ -138,7 +150,7 @@ bool cXyz::operator!=(const Vec& vec) const {
 
 /* 80245CE4-80245D48       .text isZero__4cXyzCFv */
 bool cXyz::isZero(void) const {
-    return fabsf(this->x) < 32.0f * FLT_EPSILON &&
-           fabsf(this->y) < 32.0f * FLT_EPSILON &&
-           fabsf(this->z) < 32.0f * FLT_EPSILON;
+    return fabsf(this->x) < 3.814697e-06 &&
+           fabsf(this->y) < 3.814697e-06 &&
+           fabsf(this->z) < 3.814697e-06;
 }
