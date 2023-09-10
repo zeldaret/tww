@@ -3,56 +3,150 @@
 // Translation Unit: d_a_alldie.cpp
 //
 
-#include "d_a_alldie.h"
-#include "dolphin/types.h"
+#include "f_op/f_op_actor_mng.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "d/d_procname.h"
+
+enum {
+    ACT_WAIT,
+    ACT_CHECK,
+    ACT_TIMER,
+};
+
+struct daAlldie_c : public fopAc_ac_c {
+public:
+    u8 getSwbit();
+    s32 actionWait();
+    s32 actionCheck();
+    s32 actionTimer();
+    s32 execute();
+
+    inline s32 create();
+
+public:
+    u8 mAction;
+    u16 mTimer;
+};
 
 /* 00000078-00000084       .text getSwbit__10daAlldie_cFv */
-void daAlldie_c::getSwbit() {
-    /* Nonmatching */
+u8 daAlldie_c::getSwbit() {
+    return fopAcM_GetParam(this) >> 0x8; 
 }
 
 /* 00000084-0000008C       .text actionWait__10daAlldie_cFv */
-void daAlldie_c::actionWait() {
-    /* Nonmatching */
+s32 daAlldie_c::actionWait() {
+    return 1;
 }
 
 /* 0000008C-000000D8       .text actionCheck__10daAlldie_cFv */
-void daAlldie_c::actionCheck() {
-    /* Nonmatching */
+s32 daAlldie_c::actionCheck() {
+    if (!fopAcM_myRoomSearchEnemy(fopAcM_GetRoomNo(this))) {
+        mAction = ACT_TIMER;
+        mTimer = 65;
+    }
+
+    return 1;
 }
 
 /* 000000D8-0000016C       .text actionTimer__10daAlldie_cFv */
-void daAlldie_c::actionTimer() {
-    /* Nonmatching */
+s32 daAlldie_c::actionTimer() {
+    if (fopAcM_myRoomSearchEnemy(fopAcM_GetRoomNo(this))) {
+        mAction = ACT_CHECK;
+    } else {
+        if (mTimer > 0) {
+            mTimer--;
+        } else {
+            mAction = ACT_WAIT;
+            dComIfGs_onSwitch(getSwbit(), fopAcM_GetRoomNo(this));
+        }
+    }
+    return 1;
 }
 
 /* 0000016C-000001BC       .text execute__10daAlldie_cFv */
-void daAlldie_c::execute() {
-    /* Nonmatching */
+s32 daAlldie_c::execute() {
+    switch (mAction) {
+    case ACT_CHECK:
+        actionCheck();
+        break;
+    case ACT_TIMER:
+        actionTimer();
+        break;
+    default:
+        actionWait();
+        break;
+    }
+
+    return 1;
+}
+
+s32 daAlldie_c::create() {
+    fopAcM_SetupActor(this, daAlldie_c);
+
+    s8 roomNo = fopAcM_GetRoomNo(this);
+
+    if (!dComIfGs_isSwitch(this->getSwbit(), roomNo)) {
+        mAction = ACT_CHECK;
+    } else {
+        mAction = ACT_WAIT;
+    }
+
+    shape_angle.z = 0;
+    shape_angle.x = 0;
+    current.angle.z = 0;
+    current.angle.x = 0;
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 000001BC-000001C4       .text daAlldie_Draw__FP10daAlldie_c */
-void daAlldie_Draw(daAlldie_c*) {
-    /* Nonmatching */
+s32 daAlldie_Draw(daAlldie_c*) {
+    return 1;
 }
 
 /* 000001C4-000001E8       .text daAlldie_Execute__FP10daAlldie_c */
-void daAlldie_Execute(daAlldie_c*) {
-    /* Nonmatching */
+s32 daAlldie_Execute(daAlldie_c* i_this) {
+    i_this->execute();
+    return 1;
 }
 
 /* 000001E8-000001F0       .text daAlldie_IsDelete__FP10daAlldie_c */
-void daAlldie_IsDelete(daAlldie_c*) {
-    /* Nonmatching */
+s32 daAlldie_IsDelete(daAlldie_c*) {
+    return 1;
 }
 
 /* 000001F0-00000220       .text daAlldie_Delete__FP10daAlldie_c */
-void daAlldie_Delete(daAlldie_c*) {
-    /* Nonmatching */
+s32 daAlldie_Delete(daAlldie_c* i_this) {
+    i_this->~daAlldie_c();
+    return 1;
 }
 
 /* 00000220-000002CC       .text daAlldie_Create__FP10fopAc_ac_c */
-void daAlldie_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+s32 daAlldie_Create(fopAc_ac_c* ac) {
+    return ((daAlldie_c*)ac)->create();
 }
 
+static actor_method_class l_daAlldie_Method = {
+    (process_method_func)daAlldie_Create,
+    (process_method_func)daAlldie_Delete,
+    (process_method_func)daAlldie_Execute,
+    (process_method_func)daAlldie_IsDelete,
+    (process_method_func)daAlldie_Draw,
+};
+
+extern actor_process_profile_definition g_profile_ALLDIE = {
+    -3,
+    2,
+    0xFFFD,
+    PROC_ALLDIE,
+    &g_fpcLf_Method.mBase,
+    sizeof(daAlldie_c),
+    0,
+    0,
+    &g_fopAc_Method.base,
+    0x0116,
+    &l_daAlldie_Method,
+    0x00044000,
+    0,
+    6,
+};

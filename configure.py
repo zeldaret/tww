@@ -318,6 +318,15 @@ LIBS = [
             Matching("f_pc/f_pc_profile_lst.cpp"),
         ],
     },
+    {
+        "lib": "d_a_alldie",
+        "mw_version": "GC/1.3.2",
+        "cflags": CFLAGS_REL,
+        "host": True,
+        "objects": [
+            NonMatching("d/actor/d_a_alldie.cpp"),
+        ],
+    },
 ]
 
 # Tool versions
