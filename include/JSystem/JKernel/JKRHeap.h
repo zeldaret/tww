@@ -176,18 +176,28 @@ public:
     static JKRErrorHandler mErrorHandler;
 };
 
-void* operator new(u32 size);
-void* operator new(u32 size, int alignment);
-void* operator new(u32 size, JKRHeap* heap, int alignment);
+// The C++ standard says that the first argument to operator new must be a size_t;
+// which on 64-bit systems is unsigned long long; IntelliSense won't recognize the
+// override unless we give it that. I don't know of an easy way to convince
+// IntelliSense that we're in a 32-bit project, so just give it a different size.
+#if defined __INTELLISENSE__
+typedef unsigned long long NEW_SIZE;
+#else
+typedef u32 NEW_SIZE;
+#endif
 
-void* operator new[](u32 size);
-void* operator new[](u32 size, int alignment);
-void* operator new[](u32 size, JKRHeap* heap, int alignment);
+void* operator new(NEW_SIZE size);
+void* operator new(NEW_SIZE size, int alignment);
+void* operator new(NEW_SIZE size, JKRHeap* heap, int alignment);
+
+void* operator new[](NEW_SIZE size);
+void* operator new[](NEW_SIZE size, int alignment);
+void* operator new[](NEW_SIZE size, JKRHeap* heap, int alignment);
 
 void operator delete(void* ptr);
 void operator delete[](void* ptr);
 
-inline void* operator new(u32 size, void* ptr) {
+inline void* operator new(NEW_SIZE size, void* ptr) {
     return ptr;
 }
 
