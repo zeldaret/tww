@@ -8,29 +8,30 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "MSL_C/float.h"
 
-#define CHECK_FLOAT_CLASS(x) !(((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : __fpclassifyd( (double)(x)) ) == 1)
-#define CHECK_FLOAT_RANGE(x) -1.0e32f < x && x < 1.0e32f
+#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(__FILE__, line, !(((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)) ) == 1));
+#define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(__FILE__, line, -1.0e32f < x && x < 1.0e32f);
+#define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(__FILE__, line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
 
 /* 80251D88-80252020       .text SetC__8cM3dGCylFRC4cXyz */
 void cM3dGCyl::SetC(const cXyz& pos) {
-    JUT_ASSERT("c_m3d_g_cyl.cpp", 21, CHECK_FLOAT_CLASS(pos.x));
-    JUT_ASSERT("c_m3d_g_cyl.cpp", 22, CHECK_FLOAT_CLASS(pos.y));
-    JUT_ASSERT("c_m3d_g_cyl.cpp", 23, CHECK_FLOAT_CLASS(pos.z));
-    JUT_ASSERT("c_m3d_g_cyl.cpp", 26, CHECK_FLOAT_RANGE(pos.x) && CHECK_FLOAT_RANGE(pos.y) && CHECK_FLOAT_RANGE(pos.z));
+    CHECK_FLOAT_CLASS(21, pos.x);
+    CHECK_FLOAT_CLASS(22, pos.y);
+    CHECK_FLOAT_CLASS(23, pos.z);
+    CHECK_VEC3_RANGE(26, pos);
     mCenter = pos;
 }
 
 /* 80252020-8025214C       .text SetH__8cM3dGCylFf */
 void cM3dGCyl::SetH(f32 h) {
-    JUT_ASSERT("c_m3d_g_cyl.cpp", 36, CHECK_FLOAT_CLASS(h));
-    JUT_ASSERT("c_m3d_g_cyl.cpp", 37, CHECK_FLOAT_RANGE(h));
+    CHECK_FLOAT_CLASS(36, h);
+    CHECK_FLOAT_RANGE(37, h);
     mHeight = h;
 }
 
 /* 8025214C-80252278       .text SetR__8cM3dGCylFf */
 void cM3dGCyl::SetR(f32 r) {
-    JUT_ASSERT("c_m3d_g_cyl.cpp", 48, CHECK_FLOAT_CLASS(r));
-    JUT_ASSERT("c_m3d_g_cyl.cpp", 49, CHECK_FLOAT_RANGE(r));
+    CHECK_FLOAT_CLASS(48, r);
+    CHECK_FLOAT_RANGE(49, r);
     mRadius = r;
 }
 

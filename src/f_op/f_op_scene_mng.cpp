@@ -7,6 +7,7 @@
 #include "f_op/f_op_scene_iter.h"
 #include "f_op/f_op_scene_req.h"
 #include "f_pc/f_pc_searcher.h"
+#include "JSystem/JUtility/JUTAssert.h"
 
 scene_class* fopScnM_SearchByID(unsigned int id) {
     return (scene_class*)fopScnIt_Judge((fop_ScnItFunc)fpcSch_JudgeByID, &id);
@@ -44,7 +45,9 @@ u32 fopScnM_ReRequest(s16 param_1, u32 param_2) {
 }
 
 void fopScnM_Management() {
-    fopScnRq_Handler();
+    if (!fopScnRq_Handler())
+        JUT_ASSERT("f_op_scene_mng.cpp", 326, 0);
 }
 
-void fopScnM_Init() {}
+void fopScnM_Init() {
+}

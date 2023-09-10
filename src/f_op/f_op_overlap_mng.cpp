@@ -8,7 +8,7 @@
 #include "f_op/f_op_overlap_req.h"
 #include "f_op/f_op_scene_pause.h"
 #include "f_pc/f_pc_executor.h"
-
+#include "JSystem/JUtility/JUTAssert.h"
 
 // making it not an array put it in .bss
 static request_base_class* l_fopOvlpM_overlap[1] = {NULL};
@@ -94,6 +94,7 @@ int fopOvlpM_Cancel() {
 
     if (fopOvlpReq_Cancel((overlap_request_class*)l_fopOvlpM_overlap[0]) == true) {
         l_fopOvlpM_overlap[0] = NULL;
+        JUT_WARN("f_op_overlap_mng.cpp", 331, "%s", "fopOvlpM_Cancel SUCCESSED");
         return 1;
     }
 

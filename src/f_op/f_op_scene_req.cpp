@@ -144,6 +144,6 @@ s32 fopScnRq_ReRequest(unsigned int param_1, s16 param_2, void* param_3) {
     return fpcNdRq_ReRequest(param_1, param_2, param_3);
 }
 
-void fopScnRq_Handler() {
-    fpcNdRq_Handler();
+s32 fopScnRq_Handler() {
+    return fpcNdRq_Handler();
 }
