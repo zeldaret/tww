@@ -1,0 +1,15 @@
+Sections:
+	.text       type:code align:8
+	.ctors      type:rodata align:8
+	.dtors      type:rodata align:8
+	.rodata     type:rodata align:8
+	.data       type:data align:8
+
+REL/executor.c:
+	.text       start:0x00000000 end:0x00000078
+
+d/actor/d_a_fan.cpp:
+	.text       start:0x00000078 end:0x00001220
+	.text       start:0x00001220 end:0x00001324
+	.rodata     start:0x00000000 end:0x00000115
+	.data       start:0x00000000 end:0x000001F4

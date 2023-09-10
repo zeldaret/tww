@@ -1,0 +1,50 @@
+/**
+ * f_op_overlap.cpp
+ * Overlap Process Framework
+ */
+
+#include "SSystem/SComponent/c_request.h"
+#include "f_op/f_op_overlap.h"
+#include "f_op/f_op_overlap_mng.h"
+#include "f_pc/f_pc_manager.h"
+
+static s32 fopOvlp_Draw(void* i_this) {
+    overlap_task_class* _this = (overlap_task_class*)i_this;
+    return fpcLf_DrawMethod(_this->field_0xc0, i_this);
+}
+
+static s32 fopOvlp_Execute(void* i_this) {
+    overlap_task_class* _this = (overlap_task_class*)i_this;
+    return fpcMtd_Execute(&_this->field_0xc0->mBase, i_this);
+}
+
+static s32 fopOvlp_IsDelete(void* i_this) {
+    overlap_task_class* _this = (overlap_task_class*)i_this;
+    return fpcMtd_IsDelete(&_this->field_0xc0->mBase, i_this);
+}
+
+static s32 fopOvlp_Delete(void* i_this) {
+    overlap_task_class* _this = (overlap_task_class*)i_this;
+    return fpcMtd_Delete(&_this->field_0xc0->mBase, i_this);
+}
+
+static s32 fopOvlp_Create(void* i_this) {
+    overlap_task_class* _this = (overlap_task_class*)i_this;
+
+    if (fpcM_IsFirstCreating(_this)) {
+        overlap_process_profile_definition* profile =
+            (overlap_process_profile_definition*)fpcM_GetProfile(_this);
+
+        cReq_Create((request_base_class*)&_this->field_0xc4, 1);
+        _this->field_0xc0 = profile->mSubMtd;
+        _this->field_0xc8 = -1;
+    }
+
+    return fpcMtd_Create(&_this->field_0xc0->mBase, _this);
+}
+
+extern leafdraw_method_class g_fopOvlp_Method = {
+    (process_method_func)fopOvlp_Create,  (process_method_func)fopOvlp_Delete,
+    (process_method_func)fopOvlp_Execute, (process_method_func)fopOvlp_IsDelete,
+    (process_method_func)fopOvlp_Draw,
+};

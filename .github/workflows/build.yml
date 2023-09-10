@@ -1,0 +1,30 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: ghcr.io/encounter/ww-build:main
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [GZLE01, GZLP01, GZLJ01]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Git config
+      run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+    - name: Prepare
+      run: cp -R /orig/${{matrix.version}} orig
+    - name: Build
+      run: |
+        python configure.py --map --version ${{matrix.version}} --compilers /compilers
+        ninja
+    - name: Upload maps
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{matrix.version}} maps
+        path: build/${{matrix.version}}/**/*.MAP

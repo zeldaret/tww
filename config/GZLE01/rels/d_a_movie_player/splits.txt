@@ -1,0 +1,23 @@
+Sections:
+	.text       type:code align:8
+	.ctors      type:rodata align:8
+	.dtors      type:rodata align:8
+	.rodata     type:rodata align:8
+	.data       type:data align:8
+	.bss        type:bss align:32
+
+REL/executor.c:
+	.text       start:0x00000000 end:0x00000078
+
+REL/global_destructor_chain.c:
+	.text       start:0x00000078 end:0x000000EC
+	.dtors      start:0x00000000 end:0x00000008
+	.bss        start:0x00000000 end:0x00000020
+
+d/actor/d_a_movie_player.cpp:
+	.text       start:0x000000EC end:0x000068F4
+	.text       start:0x000068F4 end:0x00006970
+	.ctors      start:0x00000000 end:0x00000008
+	.rodata     start:0x00000000 end:0x00000441
+	.data       start:0x00000000 end:0x00000180
+	.bss        start:0x00000020 end:0x000CB5C8
