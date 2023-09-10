@@ -3,30 +3,98 @@
 // Translation Unit: f_op_kankyo.cpp
 //
 
-#include "f_op_kankyo.h"
-#include "dolphin/types.h"
+#include "f_op/f_op_kankyo.h"
+#include "f_op/f_op_draw_tag.h"
+#include "f_op/f_op_kankyo_mng.h"
+#include "f_pc/f_pc_manager.h"
+#include "d/d_procname.h"
+#include "d/d_s_play.h"
+
+extern bool dMenu_flag(void);
 
 /* 8002A454-8002A4A4       .text fopKy_Draw__FPv */
-void fopKy_Draw(void*) {
-    /* Nonmatching */
+static int fopKy_Draw(void* i_this) {
+    int ret;
+    kankyo_class* _this = (kankyo_class*)i_this;
+
+    if (!dMenu_flag()) {
+        ret = fpcLf_DrawMethod(_this->mSubMtd, i_this);
+    }
+
+    return ret;
 }
 
 /* 8002A4A4-8002A514       .text fopKy_Execute__FPv */
-void fopKy_Execute(void*) {
-    /* Nonmatching */
+static int fopKy_Execute(void* i_this) {
+    int ret;
+    kankyo_class* _this = (kankyo_class*)i_this;
+
+    if (dScnPly_ply_c::isPause() && (!dMenu_flag() || fpcM_GetName(i_this) == PROC_ENVSE || fpcM_GetName(i_this) == PROC_LEVEL_SE)) {
+        ret = fpcMtd_Execute(&_this->mSubMtd->mBase, i_this);
+    }
+
+    return ret;
 }
 
 /* 8002A514-8002A568       .text fopKy_IsDelete__FPv */
-void fopKy_IsDelete(void*) {
-    /* Nonmatching */
+static int fopKy_IsDelete(void* i_this) {
+    int ret;
+    kankyo_class* _this = (kankyo_class*)i_this;
+
+    ret = fpcMtd_IsDelete(&_this->mSubMtd->mBase, _this);
+    if (ret == 1) {
+        fopDwTg_DrawQTo(&_this->mDwTg);
+    }
+
+    return ret;
 }
 
 /* 8002A568-8002A5B4       .text fopKy_Delete__FPv */
-void fopKy_Delete(void*) {
-    /* Nonmatching */
+static int fopKy_Delete(void* i_this) {
+    kankyo_class* _this = (kankyo_class*)i_this;
+
+    int ret = fpcMtd_Delete(&_this->mSubMtd->mBase, _this);
+    fopDwTg_DrawQTo(&_this->mDwTg);
+
+    return ret;
 }
 
+static int fopKy_KANKYO_TYPE;
+
 /* 8002A5B4-8002A688       .text fopKy_Create__FPv */
-void fopKy_Create(void*) {
-    /* Nonmatching */
+static int fopKy_Create(void* i_this) {
+    kankyo_class* _this = (kankyo_class*)i_this;
+
+    if (fpcM_IsFirstCreating(i_this)) {
+        kankyo_process_profile_definition* profile =
+            (kankyo_process_profile_definition*)fpcM_GetProfile(i_this);
+
+        _this->mBsType = fpcBs_MakeOfType(&fopKy_KANKYO_TYPE);
+        _this->mSubMtd = profile->mSubMtd;
+
+        fopDwTg_Init(&_this->mDwTg, _this);
+        fopKyM_prm_class* append = (fopKyM_prm_class*)fopKyM_GetAppend(_this);
+
+        if (append != NULL) {
+            _this->mPos = append->mPos;
+            _this->mScale = append->mScale;
+            _this->mParam = append->mParam;
+        }
+    }
+
+    int ret = fpcMtd_Create(&_this->mSubMtd->mBase, _this);
+    if (ret == cPhs_COMPLEATE_e) {
+        s32 priority = fpcLf_GetPriority(_this);
+        fopDwTg_ToDrawQ(&_this->mDwTg, priority);
+    }
+
+    return ret;
 }
+
+leafdraw_method_class g_fopKy_Method = {
+    (process_method_func)fopKy_Create,
+    (process_method_func)fopKy_Delete,
+    (process_method_func)fopKy_Execute,
+    (process_method_func)fopKy_IsDelete,
+    (process_method_func)fopKy_Draw,
+};

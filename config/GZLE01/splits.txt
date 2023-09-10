@@ -1948,7 +1948,7 @@ JSystem/J3DU/J3DUDL.cpp:
 	.text       start:0x80256F80 end:0x80256F80
 	.text       start:0x80256F80 end:0x80256F88
 
-JSystem/JParticle/JSystem/JPABaseShape.cpp:
+JSystem/JParticle/JPABaseShape.cpp:
 	.text       start:0x80256F88 end:0x80257508
 	.text       start:0x80257508 end:0x80257988
 	.rodata     start:0x80366568 end:0x803665F8

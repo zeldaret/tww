@@ -256,7 +256,7 @@ LIBS = [
             Matching   ("f_op/f_op_scene_req.cpp"),
             Matching   ("f_op/f_op_scene_tag.cpp"),
             Matching   ("f_op/f_op_view.cpp"),
-            NonMatching("f_op/f_op_kankyo.cpp"),
+            Matching   ("f_op/f_op_kankyo.cpp"),
             Matching   ("f_op/f_op_msg.cpp"),
             NonMatching("f_op/f_op_kankyo_mng.cpp"),
             NonMatching("f_op/f_op_msg_mng.cpp"),
