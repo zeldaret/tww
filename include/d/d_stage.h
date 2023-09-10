@@ -463,7 +463,7 @@ public:
     dStage_nextStage_c() {
         mEnable = 0;  // TODO: maybe wrong
     }
-    void set(const char*, s8, s16, s8, s8, u8);
+    void set(const char*, s8, s16, s8, s8);
     void offEnable() { mEnable = 0; }
     s8 isEnable() const { return mEnable; }
     s8 getWipe() const { return mWipe; }

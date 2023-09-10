@@ -97,6 +97,31 @@ private:
 
 STATIC_ASSERT(sizeof(mDoExt_bckAnm) == 0x10);
 
+class mDoExt_McaMorfCallBack1_c {
+public:
+    virtual void execute(u16, J3DTransformInfo*) = 0;
+};
+
+class mDoExt_3DlineMat_c {
+public:
+    /* 0x0 */ void* field_0x0;
+    /* 0x4 */ mDoExt_3DlineMat_c* field_0x4;
+};
+
+class mDoExt_3DlineMatSortPacket : public J3DPacket {
+public:
+    mDoExt_3DlineMatSortPacket() { mp3DlineMat = NULL; }
+
+    void reset() { mp3DlineMat = NULL; }
+
+    void setMat(mDoExt_3DlineMat_c*);
+    virtual void draw();
+    virtual ~mDoExt_3DlineMatSortPacket();
+
+private:
+    /* 0x10 */ mDoExt_3DlineMat_c* mp3DlineMat;
+};
+
 J3DModel* mDoExt_J3DModel__create(J3DModelData* i_modelData, u32 i_modelFlag, u32 i_differedDlistFlag);
 
 void mDoExt_modelUpdate(J3DModel* i_model);

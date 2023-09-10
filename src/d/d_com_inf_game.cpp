@@ -4,7 +4,13 @@
 //
 
 #include "d/d_com_inf_game.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "MSL_C/string.h"
 #include "SSystem/SComponent/c_phase.h"
+#include "d/actor/d_a_player.h"
+#include "d/d_com_lib_game.h"
+#include "f_op/f_op_scene_mng.h"
+#include "m_Do/m_Do_audio.h"
 
 class J3DModel;
 
@@ -96,8 +102,84 @@ void dComIfG_play_c::itemInit() {
 }
 
 /* 80052400-8005286C       .text getLayerNo__14dComIfG_play_cFi */
-void dComIfG_play_c::getLayerNo(int) {
-    /* Nonmatching */
+// almost
+int dComIfG_play_c::getLayerNo(int i_roomNo) {
+    int layer = dComIfGp_getStartStageLayer();
+
+    if (layer < 0) {
+        int hour = dKy_getdaytime_hour();
+        if (dKy_checkEventNightStop()) {
+            layer = 1;
+        } else {
+            layer = (hour >= 6 && hour < 18) == 0;
+        }
+
+        if (strcmp(dComIfGp_getStartStageName(), "sea") == 0) {
+            if (i_roomNo == 44) {
+                if (dComIfGs_isEventBit(0x520)) {
+                    return layer | 4;
+                } else if (dComIfGs_isEventBit(0xE20)) {
+                    return layer | 2;
+                } else if (dComIfGs_isEventBit(0x101)) {
+                    return 9;
+                }
+            } else if (i_roomNo == 11) {
+                if (dComIfGs_isEventBit(0x2D01)) {
+                    return layer | 4;
+                } else if (dKy_checkEventNightStop()) {
+                    return layer | 2;
+                }
+            } else if (i_roomNo == 1) {
+                return dComIfGs_isEventBit(0x1820) ? 3 : 1;
+            }
+        } else if (strcmp(dComIfGp_getStartStageName(), "A_mori") == 0) {
+            if (dComIfGs_isEventBit(0xF80)) {
+                return layer | 2;
+            }
+        } else if (strcmp(dComIfGp_getStartStageName(), "Asoko") == 0) {
+            if (dComIfGs_isEventBit(0x520)) {
+                return layer | 2;
+            }
+        } else if (strcmp(dComIfGp_getStartStageName(), "Hyrule") == 0) {
+            if (dComIfGs_getTriforceNum() == 8) {
+                return layer | 4;
+            } else if (dComIfGs_isEventBit(0x3280)) {
+                return layer | 2;
+            }
+        } else if (strcmp(dComIfGp_getStartStageName(), "Hyroom") == 0) {
+            if (dComIfGs_getTriforceNum() == 8 && !dComIfGs_isEventBit(0x2C01)) {
+                return layer | 4;
+            } else if (dComIfGs_isEventBit(0x3280)) {
+                return layer | 2;
+            } else if (dComIfGs_isEventBit(0x3B40)) {
+                return layer | 6;
+            }
+        } else if (strcmp(dComIfGp_getStartStageName(), "kenroom") == 0) {
+            if (dComIfGs_isEventBit(0x2C01) ||
+                (dComIfGs_isEventBit(0x3802) && !dComIfGs_isEventBit(0x3280)))
+            {
+                return layer | 6;
+            } else if (dComIfGs_getTriforceNum() == 8) {
+                return layer | 4;
+            } else if (dComIfGs_isEventBit(0x3802)) {
+                return layer | 2;
+            }
+        } else if (strcmp(dComIfGp_getStartStageName(), "M2tower") == 0) {
+            if (dComIfGs_isEventBit(0x2D01)) {
+                return layer | 2;
+            }
+        } else if (strcmp(dComIfGp_getStartStageName(), "GanonK") == 0) {
+            if (!dComIfGs_isEventBit(0x3B02)) {
+                return 8;
+            }
+        } else if (strcmp(dComIfGp_getStartStageName(), "GTower") == 0 &&
+                   !dComIfGs_isEventBit(0x4002))
+        {
+            return 8;
+        }
+    }
+
+    return layer;
 }
 
 /* 8005286C-800528F4       .text createParticle__14dComIfG_play_cFv */
@@ -262,8 +344,18 @@ void dComIfG_inf_c::ct() {
 }
 
 /* 800531A8-8005326C       .text dComIfG_changeOpeningScene__FP11scene_classs */
-void dComIfG_changeOpeningScene(scene_class*, s16) {
-    /* Nonmatching */
+// matches with stringbase offset
+int dComIfG_changeOpeningScene(scene_class* i_scene, s16 i_procName) {
+    dComIfGp_offEnableNextStage();
+
+    dComIfGp_setNextStage("sea_T", 0, 44, 0, 0.0f, 0, 1, 0);
+    mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(),
+                        dComIfGp_getNextStageLayer());
+    dComIfGs_setRestartRoomParam(0);
+
+    fopScnM_ChangeReq(i_scene, i_procName, 0, 30);
+    fopScnM_ReRequest(i_procName, 0);
+    return 1;
 }
 
 /* 8005326C-800532D8       .text dComIfG_resetToOpening__FP11scene_class */
@@ -272,36 +364,59 @@ void dComIfG_resetToOpening(scene_class*) {
 }
 
 /* 800532D8-80053330       .text phase_1__FPc */
-void phase_1(char*) {
-    /* Nonmatching */
+// matches with stringbase
+int phase_1(char* i_arcName) {
+    return !dComIfG_setObjectRes(i_arcName, (u8)0, NULL) ? cPhs_ERROR_e : cPhs_NEXT_e;
 }
 
 /* 80053330-80053388       .text phase_2__FPc */
-void phase_2(char*) {
-    /* Nonmatching */
+int phase_2(char* i_arcName) {
+    int syncStatus = dComIfG_syncObjectRes(i_arcName);
+
+    if (syncStatus < 0) {
+        return cPhs_ERROR_e;
+    } else {
+        return syncStatus > 0 ? 0 : 2;
+    }
 }
 
 /* 80053388-80053390       .text phase_3__FPc */
-int phase_3(char*) {
+int phase_3(char* i_arcName) {
     return cPhs_COMPLEATE_e;
 }
 
 /* 80053390-800533D0       .text dComIfG_resLoad__FP30request_of_phase_process_classPCc */
-void dComIfG_resLoad(request_of_phase_process_class*, const char*) {
-    /* Nonmatching */
+int dComIfG_resLoad(request_of_phase_process_class* i_phase, const char* i_arcName) {
+    static int (*l_method[3])(void*) = {(int (*)(void*))phase_1, (int (*)(void*))phase_2,
+                                        (int (*)(void*))phase_3};
+
+    if (i_phase->id == cPhs_NEXT_e) {
+        return cPhs_COMPLEATE_e;
+    }
+
+    return dComLbG_PhaseHandler(i_phase, l_method, (void*)i_arcName);
 }
 
 /* 800533D0-8005347C       .text dComIfG_resDelete__FP30request_of_phase_process_classPCc */
-void dComIfG_resDelete(request_of_phase_process_class*, const char*) {
-    /* Nonmatching */
+// matches with stringbase
+int dComIfG_resDelete(request_of_phase_process_class* i_phase, const char* i_resName) {
+    JUT_ASSERT(1048, i_phase->id != 1);
+
+    if (i_phase->id == cPhs_NEXT_e) {
+        dComIfG_deleteObjectResMain(i_resName);
+        i_phase->id = cPhs_INIT_e;
+    }
+
+    return 0;
 }
 
 /* 8005347C-800534C4       .text dComIfGp_getReverb__Fi */
-void dComIfGp_getReverb(int) {
+s8 dComIfGp_getReverb(int) {
     /* Nonmatching */
 }
 
-/* 800534C4-800535B8       .text dComIfGd_setSimpleShadow2__FP4cXyzffR13cBgS_PolyInfosfP9_GXTexObj */
+/* 800534C4-800535B8       .text dComIfGd_setSimpleShadow2__FP4cXyzffR13cBgS_PolyInfosfP9_GXTexObj
+ */
 void dComIfGd_setSimpleShadow2(cXyz*, f32, f32, cBgS_PolyInfo&, s16, f32, _GXTexObj*) {
     /* Nonmatching */
 }
@@ -327,8 +442,28 @@ void dComIfGp_getRoomArrow(int) {
 }
 
 /* 800537C8-8005388C       .text dComIfGp_setNextStage__FPCcsScScfUliSc */
-void dComIfGp_setNextStage(const char*, s16, s8, s8, f32, u32, int, s8) {
-    /* Nonmatching */
+void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8 i_layer,
+                           f32 i_lastSpeed, u32 i_lastMode, int i_setPoint, s8 i_wipe) {
+    g_dComIfG_gameInfo.play.setNextStage(i_stageName, i_roomNo, i_point, i_layer, i_wipe);
+
+    if (daPy_getPlayerLinkActorClass() != NULL) {
+        u32 mode = daPy_getPlayerLinkActorClass()->field_0x2a0;
+
+        if (mode & 1) {
+            i_lastMode |= 0x8000;
+        }
+
+        i_lastMode |= daPy_getPlayerLinkActorClass()->field_0x354e << 0x10;
+
+        if (mode & 0x8000) {
+            i_lastMode |= 0x4000;
+        }
+    }
+
+    g_dComIfG_gameInfo.info.getRestart().setLastSceneInfo(i_lastSpeed, i_lastMode);
+    if (i_setPoint) {
+        dComIfGs_setStartPoint(i_point);
+    }
 }
 
 /* 8005388C-80053918       .text dComIfGs_onStageTbox__Fii */
@@ -366,8 +501,10 @@ void dComIfGs_checkGetItemNum(u8) {
     /* Nonmatching */
 }
 
-/* 80054578-8005468C       .text dComIfGd_setShadow__FUlScP8J3DModelP4cXyzffffR13cBgS_PolyInfoP12dKy_tevstr_csfP9_GXTexObj */
-void dComIfGd_setShadow(u32, s8, J3DModel*, cXyz*, f32, f32, f32, f32, cBgS_PolyInfo&, dKy_tevstr_c*, s16, f32, _GXTexObj*) {
+/* 80054578-8005468C       .text
+ * dComIfGd_setShadow__FUlScP8J3DModelP4cXyzffffR13cBgS_PolyInfoP12dKy_tevstr_csfP9_GXTexObj */
+void dComIfGd_setShadow(u32, s8, J3DModel*, cXyz*, f32, f32, f32, f32, cBgS_PolyInfo&,
+                        dKy_tevstr_c*, s16, f32, _GXTexObj*) {
     /* Nonmatching */
 }
 
@@ -393,7 +530,12 @@ void dComIfGs_setGameStartStage() {
 
 /* 80054C70-80054CC0       .text dComIfGs_gameStart__Fv */
 void dComIfGs_gameStart() {
-    /* Nonmatching */
+    dComIfGp_offEnableNextStage();
+
+    s8 roomNo = g_dComIfG_gameInfo.info.getPlayer().getPlayerReturnPlace().getRoomNo();
+    s16 point = g_dComIfG_gameInfo.info.getPlayer().getPlayerReturnPlace().getPlayerStatus();
+    char* name = g_dComIfG_gameInfo.info.getPlayer().getPlayerReturnPlace().getName();
+    dComIfGp_setNextStage(name, point, roomNo, -1, 0.0f, 0, 1, 0);
 }
 
 /* 80054CC0-80054E9C       .text dComIfGs_copyPlayerRecollectionData__Fv */
@@ -420,4 +562,3 @@ void dComIfGs_exchangePlayerRecollectionData() {
 void dComIfGs_setSelectEquip(int, u8) {
     /* Nonmatching */
 }
-
