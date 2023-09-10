@@ -5,9 +5,12 @@
 
 #include "JSystem/JSupport/JSUInputStream.h"
 #include "JSystem/JSupport/JSURandomInputStream.h"
+#include "dolphin/os/OS.h"
 
 /* 802BF3F4-802BF47C       .text __dt__14JSUInputStreamFv */
 JSUInputStream::~JSUInputStream() {
+    if (!isGood())
+        OSReport("JSUInputStream: occur error.\n");
 }
 
 /* 802BF47C-802BF4D4       .text read__14JSUInputStreamFPvl */

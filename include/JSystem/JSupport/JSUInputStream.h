@@ -67,7 +67,7 @@ public:
     }
 
     // TODO: return value probably wrong
-    /* 802DC298 */ s32 read(void*, s32);
+    s32 read(void*, s32);
 };  // Size = 0x8
 
 // move?
