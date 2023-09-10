@@ -162,6 +162,7 @@ public:
     static u32 stopStatus;
 
     const cXyz& getPosition() const { return current.pos; }
+    cXyz* getPositionP() { return &current.pos; }
     const csXyz& getAngle() const { return current.angle; }
     s8 getRoomNo() const { return current.roomNo; }
 };  // Size: 0x290

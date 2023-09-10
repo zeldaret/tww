@@ -10,6 +10,8 @@ struct J3DLightObj {
     u8 temp[0x74];
 };
 
+class J3DModel;
+
 class dKy_tevstr_c {
 public:
     /* 0x00 */ J3DLightObj mLightObj;
@@ -33,5 +35,35 @@ public:
 };  // Size = 0xB0
 
 STATIC_ASSERT(sizeof(dKy_tevstr_c) == 0xB0);
+
+enum TevType {
+    TEV_TYPE_ACTOR,
+    TEV_TYPE_BG0,
+    TEV_TYPE_BG1,
+    TEV_TYPE_BG2,
+    TEV_TYPE_BG3,
+    TEV_TYPE_BG0_FULL,
+    TEV_TYPE_BG1_FULL,
+    TEV_TYPE_BG2_FULL,
+    TEV_TYPE_BG3_FULL,
+    TEV_TYPE_PLAYER,
+    TEV_TYPE_BG0_PLIGHT,
+    TEV_TYPE_BG1_PLIGHT,
+    TEV_TYPE_BG2_PLIGHT,
+    TEV_TYPE_ACTOR_NOLIGHT,
+};
+
+struct dScnKy_env_light_c {
+public:
+    void settingTevStruct(int, cXyz*, dKy_tevstr_c*);
+    void setLightTevColorType(J3DModel*, dKy_tevstr_c*);
+
+public:
+    u8 pad[0xC9C];
+};  // Size = 0xC9C
+
+extern dScnKy_env_light_c g_env_light;
+
+
 
 #endif /* D_KANKYO_D_KANKYO_H */

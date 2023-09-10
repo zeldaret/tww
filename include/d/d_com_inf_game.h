@@ -306,7 +306,7 @@ public:
     /* 0x012A0 */ dComIfG_play_c play;
     /* 0x05D1C */ dDlst_list_c drawlist;
     /* 0x1BF50 */ u8 field_0x1BF50[0x1BFC0 - 0x1BF50];
-    /* 0x1BFC0 */ dRes_control_c res_control;
+    /* 0x1BFC0 */ dRes_control_c mResControl;
     /* 0x1D1C0 */ u8 field_0x1d1c0;
     /* 0x1D1C1 */ u8 field_0x1d1c1;
 };
@@ -329,8 +329,36 @@ inline void dComIfGs_setEventReg(u16 i_reg, u8 i_no) {
     g_dComIfG_gameInfo.info.getEvent().setEventReg(i_reg, i_no);
 }
 
+inline BOOL dComIfGs_isEventBit(u16 id) {
+    return g_dComIfG_gameInfo.info.getEvent().isEventBit(id);
+}
+
 /**
  * === PLAY ===
  */
+
+/**
+ * === RESOURCE ===
+ */
+
+int dComIfG_resLoad(request_of_phase_process_class* i_phase, char const* arc_name);
+int dComIfG_resLoad(request_of_phase_process_class* i_phase, char const* resName, JKRHeap* heap);
+int dComIfG_resDelete(request_of_phase_process_class* i_phase, char const* resName);
+
+inline int dComIfG_deleteStageRes(const char* res) {
+    return g_dComIfG_gameInfo.mResControl.deleteStageRes(res);
+}
+
+inline void* dComIfG_getStageRes(const char* arcName, const char* resName) {
+    return g_dComIfG_gameInfo.mResControl.getStageRes(arcName, resName);
+}
+
+inline void* dComIfG_getObjectRes(const char* arcName, const char* resName) {
+    return g_dComIfG_gameInfo.mResControl.getObjectRes(arcName, resName);
+}
+
+inline void* dComIfG_getObjectRes(const char* arcName, int param_1) {
+    return g_dComIfG_gameInfo.mResControl.getObjectRes(arcName, param_1);
+}
 
 #endif /* D_COM_D_COM_INF_GAME_H */

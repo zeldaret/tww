@@ -838,4 +838,8 @@ public:
 
 STATIC_ASSERT(sizeof(dSv_info_c) == 0x12A0);
 
+enum dSv_eventBit_e {
+    EV_BIT_TALKED_TO_IRCH_IN_FOREST_HAVEN = 0x3802,
+};
+
 #endif /* D_SAVE_D_SAVE_H */
