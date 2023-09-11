@@ -4,39 +4,45 @@
 //
 
 #include "m_Do/m_Do_hostIO.h"
-#include "dolphin/types.h"
+#include "dolphin/os/OS.h"
+#include "MSL_C/string.h"
+
+mDoHIO_root_c mDoHIO_root;
 
 /* 80017A4C-80017A50       .text update__13mDoHIO_root_cFv */
-void mDoHIO_root_c::update() {
-    /* Nonmatching */
-}
+void mDoHIO_root_c::update() {}
 
 /* 80017A50-80017B20       .text createChild__16mDoHIO_subRoot_cFPCcP13JORReflexible */
-void mDoHIO_subRoot_c::createChild(const char*, JORReflexible*) {
-    /* Nonmatching */
+s8 mDoHIO_subRoot_c::createChild(const char* i_name, JORReflexible* i_reflexible) {
+    for (int i = 0; i < 64; i++) {
+        if (mChild[i].mReflexible == i_reflexible) {
+            // "Danger: Trying to register an already registered HostIO<%s>\n"
+            OSReport_Error("危険：既に登録されているホストIOをふたたび登録しようとしています<%s>\n", i_name);
+            return -1;
+        }
+    }
+
+    for (int i = 0; i < 64; i++) {
+        if (mChild[i].mReflexible == NULL) {
+            strncpy(mChild[i].mName, i_name, sizeof(mChild[i].mName));
+            mChild[i].mReflexible = i_reflexible;
+            return i;
+        }
+    }
+
+    // "No free HostIO entries. Could not register. \n"
+    OSReport_Error("ホストIOの空きエントリがありません。登録できませんでした。\n");
+    return -1;
 }
 
 /* 80017B20-80017B88       .text deleteChild__16mDoHIO_subRoot_cFSc */
-void mDoHIO_subRoot_c::deleteChild(signed char) {
-    /* Nonmatching */
-}
-
-/* 80017C00-80017C84       .text __dt__13mDoHIO_root_cFv */
-mDoHIO_root_c::~mDoHIO_root_c() {
-    /* Nonmatching */
-}
-
-/* 80017C84-80017CF4       .text __dt__16mDoHIO_subRoot_cFv */
-mDoHIO_subRoot_c::~mDoHIO_subRoot_c() {
-    /* Nonmatching */
-}
-
-/* 80017CF4-80017D30       .text __dt__14mDoHIO_child_cFv */
-mDoHIO_child_c::~mDoHIO_child_c() {
-    /* Nonmatching */
-}
-
-/* 80017D30-80017D40       .text __ct__14mDoHIO_child_cFv */
-mDoHIO_child_c::mDoHIO_child_c() {
-    /* Nonmatching */
+void mDoHIO_subRoot_c::deleteChild(s8 i_childID) {
+    if (i_childID >= 0) {
+        if (mChild[i_childID].mReflexible == NULL) {
+            // "Danger: Trying to delete HostIO that has already been deleted<%s>\n"
+            OSReport_Error("危険：すでに削除されているホストIOをさらに削除しようとしています<%s>\n", mChild[i_childID].mName);
+        } else {
+            mChild[i_childID].mReflexible = NULL;
+        }
+    }
 }

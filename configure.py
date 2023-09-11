@@ -100,7 +100,7 @@ CFLAGS_BASE = [
     "-maxerrors 1",
     "-nosyspath",
     "-RTTI off",
-    "-fp_contract on",
+    # "-fp_contract on",
     "-str reuse",
     "-multibyte",
     "-i include",
@@ -322,6 +322,8 @@ LIBS = [
             # machine
             NonMatching("m_Do/m_Do_main.cpp"),
             NonMatching("m_Do/m_Do_controller_pad.cpp"),
+            Matching   ("m_Do/m_Do_hostIO.cpp"),
+            NonMatching("m_Do/m_Do_mtx.cpp"),
 
             # dolzel
             Matching   ("d/d_com_lib_game.cpp"),
