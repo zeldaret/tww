@@ -83,7 +83,7 @@ public:
     /* 0xE2 */ u8 mbInPhoto;
     /* 0xE3 */ u8 field_0xE3[0xE4 - 0xE3];
     /* 0xE4 */ f32 mCullFarClipRatio;
-    /* 0xE8 */ s16 mStateFlags;
+    /* 0xE8 */ u16 mStateFlags;
     /* 0xEA */ u8 mTactFreeMStick[4];
     /* 0xEE */ u8 mTactFreeCStick[4];
 };  // Size = 0xF4

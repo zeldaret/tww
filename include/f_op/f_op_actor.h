@@ -218,7 +218,7 @@ public:
     const cXyz& getPosition() const { return current.pos; }
     cXyz* getPositionP() { return &current.pos; }
     const csXyz& getAngle() const { return current.angle; }
-    s8 getRoomNo() const { return current.roomNo; }
+    int getRoomNo() const { return current.roomNo; }
 };  // Size: 0x290
 
 STATIC_ASSERT(sizeof(fopAc_ac_c) == 0x290);
