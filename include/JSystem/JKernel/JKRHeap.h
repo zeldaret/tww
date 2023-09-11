@@ -181,7 +181,7 @@ public:
 // override unless we give it that. I don't know of an easy way to convince
 // IntelliSense that we're in a 32-bit project, so just give it a different size.
 #if defined __INTELLISENSE__
-typedef unsigned long long NEW_SIZE;
+typedef unsigned int NEW_SIZE;
 #else
 typedef u32 NEW_SIZE;
 #endif

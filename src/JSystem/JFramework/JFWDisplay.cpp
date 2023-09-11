@@ -42,7 +42,7 @@ void JFWDisplay::ctor_subroutine(const _GXRenderModeObj* mode, bool enableAlpha)
 
     mZClear = 0xFFFFFF;
 
-    mpRenderMode = mode != 0 ? mode : JUTVideo::sManager->getRenderMode();
+    mpRenderMode = mode != 0 ? mode : JUTVideo::getManager()->getRenderMode();
 
     mGamma = 0;
     mpFader = 0;
@@ -83,7 +83,7 @@ JFWDisplay* JFWDisplay::createManager(JKRHeap* p_heap, JUTXfb::EXfbNumber xfb_nu
     return sManager;
 }
 
-static dummyFunc() {
+static void dummyFunc() {
     OSReport("sManager");
     OSReport("mTemporarySingle");
 }
@@ -544,6 +544,6 @@ void diagnoseGpHang() {
     }
 }
 
-static dummyFunc2() {
+static void dummyFunc2() {
     OSReport("\0\0\0\0\0\0");
 }
