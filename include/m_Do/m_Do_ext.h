@@ -76,7 +76,7 @@ class mDoExt_brkAnm : public mDoExt_baseAnm {
 public:
     mDoExt_brkAnm() { mpAnm = 0; }
     /* 8000D70C */ int init(J3DMaterialTable* i_matTable, J3DAnmTevRegKey* i_brk, int i_anmPlay,
-                            int i_attribute, f32 i_rate, s16 i_start, s16 param_6);
+                            int i_attribute, f32 i_rate, s16 i_start, s16 i_end, bool i_modify, int i_entry);
     /* 8000D7A8 */ void entry(J3DMaterialTable* i_matTable, f32 i_frame);
 
     void entry(J3DModelData* i_modelData) { entry(i_modelData, getFrame()); }
@@ -85,9 +85,9 @@ public:
     }
 
     int init(J3DModelData* i_modelData, J3DAnmTevRegKey* i_brk, int i_anmPlay, int i_attribute,
-             f32 i_rate, s16 i_start, s16 param_6) {
+             f32 i_rate, s16 i_start, s16 i_end, bool i_modify, int i_entry) {
         return init(&i_modelData->getMaterialTable(), i_brk, i_anmPlay, i_attribute, i_rate,
-                    i_start, param_6);
+                    i_start, i_end, i_modify, i_entry);
     }
 
     int remove(J3DModelData* i_modelData) { return i_modelData->removeTevRegAnimator(mpAnm); }

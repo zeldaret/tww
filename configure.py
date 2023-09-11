@@ -324,6 +324,11 @@ LIBS = [
             NonMatching("d/d_save.cpp"),
             NonMatching("d/d_save_init.cpp"),
 
+            NonMatching("d/actor/d_a_itembase_static.cpp"),
+            NonMatching("d/actor/d_a_item_static.cpp"),
+            NonMatching("d/actor/d_a_item.cpp"),
+            NonMatching("d/actor/d_a_itembase.cpp"),
+
             # ?
             NonMatching("DynamicLink.cpp"),
         ],

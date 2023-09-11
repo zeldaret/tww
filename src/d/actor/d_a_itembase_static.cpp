@@ -3,7 +3,7 @@
 // Translation Unit: d_a_itembase_static.cpp
 //
 
-#include "d_a_itembase_static.h"
+#include "d/actor/d_a_itembase_static.h"
 #include "dolphin/types.h"
 
 /* 80068650-80068658       .text getItemNo__12daItemBase_cFv */
