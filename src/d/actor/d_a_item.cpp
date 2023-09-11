@@ -3,12 +3,18 @@
 // Translation Unit: d_a_item.cpp
 //
 
-#include "d_a_item.h"
+#include "d/d_item.h"
+#include "d/actor/d_a_item.h"
+#include "d/actor/d_a_player.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_procname.h"
 #include "dolphin/types.h"
 
+class dCcD_GObjInf;
+
 /* 800F4BC8-800F4BD4       .text getData__12daItemBase_cFv */
-void daItemBase_c::getData() {
-    /* Nonmatching */
+daItemBase_c_m_data* daItemBase_c::getData() {
+    return &daItemBase_c::m_data;
 }
 
 /* 800F4BD4-800F4C4C       .text setArrowTrans__Fs4cXyz */
@@ -17,8 +23,45 @@ void setArrowTrans(short, cXyz) {
 }
 
 /* 800F4C4C-800F4CD8       .text getYOffset__8daItem_cFv */
-void daItem_c::getYOffset() {
-    /* Nonmatching */
+float daItem_c::getYOffset() {
+    switch (m_itemNo) {
+    case HEART:
+        return 0.0;
+    case GREEN_RUPEE:
+    case BLUE_RUPEE:
+    case YELLOW_RUPEE:
+    case RED_RUPEE:
+    case PURPLE_RUPEE:
+    case ORANGE_RUPEE:
+    case SILVER_RUPEE:
+        return 0.0;
+    case KAKERA_HEART:
+    case UTUWA_HEART:
+        return 0.0;
+    case SMALL_KEY:
+    case BOSS_KEY:
+        return 0.0;
+    case SWORD:
+        return 20.0;
+    case SHIELD:
+        return 23.0;
+    case DROPPED_SWORD:
+        return 10.0;
+    case SKULL_NECKLACE:
+        return 0.0;
+    case BOKOBABA_SEED:
+        return 0.0;
+    case GOLDEN_FEATHER:
+        return 0.0;
+    case BOKO_BELT:
+        return 0.0;
+    case RED_JELLY:
+    case GREEN_JELLY:
+    case BLUE_JELLY:
+        return 0.0;
+    default:
+        return 0.0;
+    }
 }
 
 /* 800F4CD8-800F4E6C       .text set_mtx__8daItem_cFv */
@@ -42,12 +85,12 @@ void daItem_c::CreateInit() {
 }
 
 /* 800F53EC-800F5668       .text _daItem_create__8daItem_cFv */
-void daItem_c::_daItem_create() {
+s32 daItem_c::_daItem_create() {
     /* Nonmatching */
 }
 
 /* 800F5668-800F5834       .text _daItem_execute__8daItem_cFv */
-void daItem_c::_daItem_execute() {
+s32 daItem_c::_daItem_execute() {
     /* Nonmatching */
 }
 
@@ -102,7 +145,7 @@ void daItem_c::scaleAnimFromBossItem() {
 }
 
 /* 800F60C0-800F6110       .text _daItem_draw__8daItem_cFv */
-void daItem_c::_daItem_draw() {
+s32 daItem_c::_daItem_draw() {
     /* Nonmatching */
 }
 
@@ -112,7 +155,7 @@ void daItem_c::setTevStr() {
 }
 
 /* 800F61C8-800F6268       .text _daItem_delete__8daItem_cFv */
-void daItem_c::_daItem_delete() {
+s32 daItem_c::_daItem_delete() {
     /* Nonmatching */
 }
 
@@ -124,16 +167,43 @@ void Reflect(cXyz&, cXyz*, float, float) {
 /* 800F6434-800F6D24       .text itemGetExecute__8daItem_cFv */
 void daItem_c::itemGetExecute() {
     /* Nonmatching */
+    execItemGet(m_itemNo);
 }
 
 /* 800F6D24-800F6D78       .text itemDefaultRotateY__8daItem_cFv */
 void daItem_c::itemDefaultRotateY() {
-    /* Nonmatching */
+    // Rotates at a fixed speed.
+    s16 rotationSpeed = 0xFFFF / getData()->mNumFramesPerFullSpin;
+    fopAcM_addAngleY(this, current.angle.y + rotationSpeed, rotationSpeed);
 }
 
 /* 800F6D78-800F6E54       .text checkItemDisappear__8daItem_cFv */
-void daItem_c::checkItemDisappear() {
-    /* Nonmatching */
+bool daItem_c::checkItemDisappear() {
+    bool disappearing = true;
+    if (mCurAction == 3) {
+        disappearing = false;
+        show();
+    }
+    if (mStatusFlags & 0x02) {
+        disappearing = false;
+    }
+    if (mStatusFlags & 0x10) {
+        disappearing = false;
+    }
+    if (dItem_data::item_info[m_itemNo].mSpecialBehaviors & 0x01) {
+        disappearing = false;
+    }
+    if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode != 0) {
+        disappearing = false;
+    }
+    if (mCurAction == 4) {
+        disappearing = false;
+    }
+    if ((mStatusFlags & 0x08) || (mStatusFlags & 0x40) || (mStatus & 0x100000)) {
+        disappearing = false;
+        show();
+    }
+    return disappearing;
 }
 
 /* 800F6E54-800F6E74       .text setItemTimer__8daItem_cFi */
@@ -142,7 +212,7 @@ void daItem_c::setItemTimer(int) {
 }
 
 /* 800F6E74-800F6EC8       .text checkPlayerGet__8daItem_cFv */
-void daItem_c::checkPlayerGet() {
+bool daItem_c::checkPlayerGet() {
     /* Nonmatching */
 }
 
@@ -187,8 +257,16 @@ void daItem_c::set_bound_se() {
 }
 
 /* 800F7DDC-800F7E6C       .text checkGetItem__8daItem_cFv */
-void daItem_c::checkGetItem() {
+s32 daItem_c::checkGetItem() {
     /* Nonmatching */
+    if (checkPlayerGet()) {
+        itemGetExecute();
+        
+        return 1;
+    }
+    
+    mStatusFlags |= 0x08;
+    return 0;
 }
 
 /* 800F7E6C-800F7F0C       .text timeCount__8daItem_cFv */
@@ -227,28 +305,28 @@ void daItem_Draw(daItem_c*) {
 }
 
 /* 800F8970-800F8990       .text daItem_Execute__FP8daItem_c */
-void daItem_Execute(daItem_c*) {
-    /* Nonmatching */
+s32 daItem_Execute(daItem_c* i_this) {
+    return i_this->_daItem_execute();
 }
 
 /* 800F8990-800F89B0       .text daItem_IsDelete__FP8daItem_c */
-void daItem_IsDelete(daItem_c*) {
-    /* Nonmatching */
+s32 daItem_IsDelete(daItem_c* i_this) {
+    return i_this->_daItem_isdelete();
 }
 
 /* 800F89B0-800F89D0       .text daItem_Delete__FP8daItem_c */
-void daItem_Delete(daItem_c*) {
-    /* Nonmatching */
+s32 daItem_Delete(daItem_c* i_this) {
+    return i_this->_daItem_delete();
 }
 
 /* 800F89D0-800F89F0       .text daItem_Create__FP10fopAc_ac_c */
-void daItem_Create(fopAc_ac_c*) {
+s32 daItem_Create(fopAc_ac_c* i_this) {
     /* Nonmatching */
 }
 
 /* 800F89F0-800F89F8       .text _daItem_isdelete__8daItem_cFv */
-void daItem_c::_daItem_isdelete() {
-    /* Nonmatching */
+s32 daItem_c::_daItem_isdelete() {
+    return 1;
 }
 
 /* 800F89F8-800F8A14       .text getHeadTopPos__9daPy_py_cCFv */
@@ -256,3 +334,27 @@ void daPy_py_c::getHeadTopPos() const {
     /* Nonmatching */
 }
 
+static actor_method_class l_daItem_Method = {
+    (process_method_func)daItem_Create,
+    (process_method_func)daItem_Delete,
+    (process_method_func)daItem_Execute,
+    (process_method_func)daItem_IsDelete,
+    (process_method_func)daItem_Draw,
+};
+
+extern actor_process_profile_definition g_profile_ITEM = {
+    -3,
+    7,
+    0xFFFD,
+    PROC_ITEM,
+    &g_fpcLf_Method.mBase,
+    sizeof(daItem_c),
+    0,
+    0,
+    &g_fopAc_Method.base,
+    0x00F5,
+    &l_daItem_Method,
+    0x000C0100,
+    fopAc_ACTOR_e,
+    fopAc_CULLBOX_0_e,
+};
