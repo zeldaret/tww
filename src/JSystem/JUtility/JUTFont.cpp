@@ -8,25 +8,51 @@
 
 /* 802C1DA4-802C1DD0       .text __ct__7JUTFontFv */
 JUTFont::JUTFont() {
-    /* Nonmatching */
+    mValid = false;
 }
 
 /* 802C1DD0-802C1E1C       .text initialize_state__7JUTFontFv */
 void JUTFont::initialize_state() {
-    /* Nonmatching */
+    setCharColor(JUtility::TColor());
+    mFixed = false;
+    mFixedWidth = 0;
+    mValid = false;
 }
 
 /* 802C1E1C-802C1EA0       .text setCharColor__7JUTFontFQ28JUtility6TColor */
-void JUTFont::setCharColor(JUtility::TColor) {
-    /* Nonmatching */
+void JUTFont::setCharColor(JUtility::TColor col1) {
+    mColor1 = col1;
+    mColor2 = col1;
+    mColor3 = col1;
+    mColor4 = col1;
 }
 
 /* 802C1EA0-802C1F24       .text setGradColor__7JUTFontFQ28JUtility6TColorQ28JUtility6TColor */
-void JUTFont::setGradColor(JUtility::TColor, JUtility::TColor) {
-    /* Nonmatching */
+void JUTFont::setGradColor(JUtility::TColor col1, JUtility::TColor col2) {
+    mColor1 = col1;
+    mColor2 = col1;
+    mColor3 = col2;
+    mColor4 = col2;
 }
 
 /* 802C1F24-802C2044       .text drawString_size_scale__7JUTFontFffffPCcUlb */
-void JUTFont::drawString_size_scale(float, float, float, float, const char*, unsigned long, bool) {
-    /* Nonmatching */
+f32 JUTFont::drawString_size_scale(f32 a1, f32 a2, f32 a3, f32 a4, const char* str, u32 usz,
+                                   bool a7) {
+    f32 temp = a1;
+
+    for (; usz > 0; usz--, str++) {
+        u32 c = *(u8*)str;
+        u32 b = c;
+        if (isLeadByte(b)) {
+            str++;
+            b <<= 8;
+            b |= *(u8*)str;
+            usz--;
+        }
+
+        a1 += drawChar_scale(a1, a2, a3, a4, b, a7);
+        a7 = 1;
+    }
+
+    return a1 - temp;
 }

@@ -68,29 +68,22 @@ public:
     void setCaptureFlag(bool flag) { mFlags &= 2 | flag; }
     u8 getCaptureFlag() const { return mFlags & 1; }
     u8 getEmbPaletteDelFlag() const { return mFlags & 2; }
-    void setEmbPaletteDelFlag(bool flag) { mFlags = (mFlags & 1) | (flag << 1);}
+    void setEmbPaletteDelFlag(bool flag) { mFlags = (mFlags & 1) | (flag << 1); }
     u8 getTlutName() const { return mTlutName; }
     bool operator==(const JUTTexture& other) {
-        return mTexInfo == other.mTexInfo
-            && field_0x2c == other.field_0x2c
-            && mWrapS == other.mWrapS
-            && mWrapT == other.mWrapT
-            && mMinFilter == other.mMinFilter
-            && mMagFilter == other.mMagFilter
-            && mMinLOD == other.mMinLOD
-            && mMinLOD == other.mMinLOD
-            && mLODBias == other.mLODBias;
+        return mTexInfo == other.mTexInfo && mAttachedPalette == other.mAttachedPalette &&
+               mWrapS == other.mWrapS && mWrapT == other.mWrapT && mMinFilter == other.mMinFilter &&
+               mMagFilter == other.mMagFilter && mMinLOD == other.mMinLOD &&
+               mMinLOD == other.mMinLOD && mLODBias == other.mLODBias;
     }
-    bool operator!=(const JUTTexture& other) {
-        return !operator==(other);
-    }
+    bool operator!=(const JUTTexture& other) { return !operator==(other); }
 
 private:
     /* 0x00 */ GXTexObj mTexObj;
     /* 0x20 */ const ResTIMG* mTexInfo;
     /* 0x24 */ void* mTexData;
     /* 0x28 */ JUTPalette* mEmbPalette;
-    /* 0x2C */ JUTPalette* field_0x2c;
+    /* 0x2C */ JUTPalette* mAttachedPalette;
     /* 0x30 */ u8 mWrapS;
     /* 0x31 */ u8 mWrapT;
     /* 0x32 */ u8 mMinFilter;

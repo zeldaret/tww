@@ -8,9 +8,9 @@ class JSUInputStream;
 
 class JUTResReference {
 private:
-    /* 0x001 */ u8 mType;
-    /* 0x002 */ u8 mNameLength;
-    /* 0x003 */ char mName[0x100];
+    /* 0x0 */ u8 mType;
+    /* 0x1 */ u8 mNameLength;
+    /* 0x2 */ char mName[0x100];
 
 public:
     enum ResType {
@@ -21,10 +21,8 @@ public:
         RESTYPE_Unk4 = 4,
     };
     JUTResReference() { mType = 0; }
-    /* 802DE078 */ void* getResource(JSUInputStream*, u32, JKRArchive*);
-    /* 802DE120 */ void* getResource(void const*, u32, JKRArchive*);
-    /* 802DE1BC */ void* getResource(u32, JKRArchive*);
+    void* getResource(JSUInputStream*, u32, JKRArchive*);
+    void* getResource(u32, JKRArchive*);
 };
-// only rough size known due to getPointer__7J2DPaneFP20JSURandomInputStreamUlP10JKRArchive
 
 #endif /* JUTRESOURCE_H */
