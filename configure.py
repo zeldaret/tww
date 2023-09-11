@@ -341,7 +341,7 @@ LIBS = [
     Rel(Matching, "f_pc_profile_lst", "f_pc/f_pc_profile_lst.cpp"),
     ActorRel(NonMatching, "d_a_agbsw0"),
     ActorRel(NonMatching, "d_a_andsw0"),
-    ActorRel(NonMatching, "d_a_andsw2"),
+    ActorRel(   Matching, "d_a_andsw2"),
     ActorRel(NonMatching, "d_a_att"),
     ActorRel(NonMatching, "d_a_bflower"),
     ActorRel(NonMatching, "d_a_bita"),

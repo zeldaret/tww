@@ -34,11 +34,11 @@ public:
     void mainProc();
     void runProc();
     void getEventData(s16);
-    void getEventIdx(const char*, u8);
+    s16 getEventIdx(const char*, u8);
     void order(s16);
     void startCheck(s16);
     void startCheckOld(const char*);
-    void endCheck(s16);
+    BOOL endCheck(s16);
     void endCheckOld(const char*);
     void getMyStaffId(const char*, fopAc_ac_c*, int);
     void getIsAddvance(int);

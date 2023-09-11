@@ -97,7 +97,7 @@ void dEvent_manager_c::getEventData(short) {
 }
 
 /* 800743AC-800744AC       .text getEventIdx__16dEvent_manager_cFPCcUc */
-void dEvent_manager_c::getEventIdx(const char*, unsigned char) {
+s16 dEvent_manager_c::getEventIdx(const char*, unsigned char) {
     /* Nonmatching */
 }
 
@@ -117,7 +117,7 @@ void dEvent_manager_c::startCheckOld(const char*) {
 }
 
 /* 80074564-800745A4       .text endCheck__16dEvent_manager_cFs */
-void dEvent_manager_c::endCheck(short) {
+BOOL dEvent_manager_c::endCheck(short) {
     /* Nonmatching */
 }
 
