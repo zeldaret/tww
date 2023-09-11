@@ -6,7 +6,6 @@
 void mDoRst_reset(int, u32, int);
 void mDoRst_resetCallBack(int, void*);
 
-extern bool SyncWidthSound;
 extern u8 sDefaultDirection;
 
 struct mDoRstData {

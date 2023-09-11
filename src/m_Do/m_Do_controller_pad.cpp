@@ -4,9 +4,7 @@
 //
 
 #include "m_Do/m_Do_controller_pad.h"
-#include "SSystem/SComponent/c_API_controller_pad.h"
 #include "SSystem/SComponent/c_lib.h"
-#include "JSystem/JUtility/JUTGamePad.h"
 #include "m_Do/m_Do_main.h"
 #include "m_Do/m_Do_Reset.h"
 

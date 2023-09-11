@@ -105,8 +105,10 @@ public:
     u8 getAnalogB() const { return mButton.mAnalogB; }
 
     u8 getAnalogL() const { return mButton.mAnalogL; }
+    f32 getAnalogLf() const { return mButton.mAnalogLf; }
 
     u8 getAnalogR() const { return mButton.mAnalogR; }
+    f32 getAnalogRf() const { return mButton.mAnalogRf; }
 
     s8 getErrorStatus() const { return mErrorStatus; }
 
@@ -225,8 +227,7 @@ public:
         /* 0x04 */ u32 field_0x4;
         /* 0x08 */ u8* field_0x8;
         /* 0x0C */ u32 field_0xc;
-        /* 0x10 */ u8* field_0x10;
-    };  // Size: 0x14
+    };  // Size: 0x10
 
     void startMotorWave(void* param_2, CRumble::ERumble rumble, u32 param_4) {
         mRumble.startPatternedRumble(param_2, rumble, param_4);
@@ -236,15 +237,15 @@ public:
     /* 0x48 */ CStick mMainStick;
     /* 0x58 */ CStick mSubStick;
     /* 0x68 */ CRumble mRumble;
-    /* 0x7C */ s16 mPortNum;
-    /* 0x7E */ s8 mErrorStatus;
-    /* 0x80 */ JSULink<JUTGamePad> mLink;
-    /* 0x90 */ JUTGamePadRecordBase* mPadRecord;
-    /* 0x94 */ JUTGamePadRecordBase* mPadReplay;
-    /* 0x98 */ C3ButtonReset mButtonReset;
-    /* 0x9C */ u8 field_0x9c[4];
-    /* 0xA0 */ OSTime mResetTime;
-    /* 0xA8 */ u8 field_0xa8;
+    /* 0x78 */ s16 mPortNum;
+    /* 0x7A */ s8 mErrorStatus;
+    /* 0x7C */ JSULink<JUTGamePad> mLink;
+    /* 0x8C */ JUTGamePadRecordBase* mPadRecord;
+    /* 0x90 */ JUTGamePadRecordBase* mPadReplay;
+    /* 0x94 */ C3ButtonReset mButtonReset;
+    /* 0x98 */ u8 field_0x98[4];
+    /* 0x9C */ OSTime mResetTime;
+    /* 0xA4 */ u8 field_0xa4;
 
     static JSUList<JUTGamePad> mPadList;
     static bool mListInitialized;
