@@ -105,7 +105,7 @@ BOOL daAndsw2_c::chkAllSw2() {
 }
 
 /* 000001D8-000002B0       .text daAndsw2_actionOnAll__FP10daAndsw2_c */
-s32 daAndsw2_actionOnAll(daAndsw2_c* i_this) {
+static s32 daAndsw2_actionOnAll(daAndsw2_c* i_this) {
     if (i_this->chkAllSw2()) {
         if (i_this->getTimer() != 0xFF) {
             i_this->mTimer = i_this->getTimer()*15;
@@ -128,7 +128,7 @@ s32 daAndsw2_actionOnAll(daAndsw2_c* i_this) {
 }
 
 /* 000002B0-00000380       .text daAndsw2_actionTimer__FP10daAndsw2_c */
-s32 daAndsw2_actionTimer(daAndsw2_c* i_this) {
+static s32 daAndsw2_actionTimer(daAndsw2_c* i_this) {
     if (i_this->getType() == TYPE_CONTINUOUS && !i_this->chkAllSw2()) {
         i_this->mAction = ACT_ON_ALL;
     } else if (i_this->mTimer > 0) {
@@ -148,7 +148,7 @@ s32 daAndsw2_actionTimer(daAndsw2_c* i_this) {
 }
 
 /* 00000380-00000438       .text daAndsw2_actionOrder__FP10daAndsw2_c */
-s32 daAndsw2_actionOrder(daAndsw2_c* i_this) {
+static s32 daAndsw2_actionOrder(daAndsw2_c* i_this) {
     if (i_this->mEvtInfo.checkCommandDemoAccrpt()) {
         i_this->mAction = ACT_EVENT;
         int room = i_this->getRoomNo();
@@ -163,7 +163,7 @@ s32 daAndsw2_actionOrder(daAndsw2_c* i_this) {
 }
 
 /* 00000438-000004BC       .text daAndsw2_actionEvent__FP10daAndsw2_c */
-s32 daAndsw2_actionEvent(daAndsw2_c* i_this) {
+static s32 daAndsw2_actionEvent(daAndsw2_c* i_this) {
     dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
     if (play->mEventMgr.endCheck(i_this->mEventIdx)) {
         if (i_this->getType() == TYPE_CONTINUOUS) {
@@ -177,7 +177,7 @@ s32 daAndsw2_actionEvent(daAndsw2_c* i_this) {
 }
 
 /* 000004BC-00000528       .text daAndsw2_actionOff__FP10daAndsw2_c */
-s32 daAndsw2_actionOff(daAndsw2_c* i_this) {
+static s32 daAndsw2_actionOff(daAndsw2_c* i_this) {
     if (!i_this->chkAllSw2()) {
         i_this->mAction = ACT_ON_ALL;
         int room = i_this->getRoomNo();
@@ -188,7 +188,7 @@ s32 daAndsw2_actionOff(daAndsw2_c* i_this) {
 }
 
 /* 00000528-00000530       .text daAndsw2_actionWait__FP10daAndsw2_c */
-s32 daAndsw2_actionWait(daAndsw2_c* i_this) {
+static s32 daAndsw2_actionWait(daAndsw2_c* i_this) {
     return 1;
 }
 
@@ -250,28 +250,28 @@ s32 daAndsw2_c::create() {
 }
 
 /* 00000530-00000538       .text daAndsw2_Draw__FP10daAndsw2_c */
-s32 daAndsw2_Draw(daAndsw2_c* i_this) {
+static s32 daAndsw2_Draw(daAndsw2_c* i_this) {
     return 1;
 }
 
 /* 00000538-00000574       .text daAndsw2_Execute__FP10daAndsw2_c */
-s32 daAndsw2_Execute(daAndsw2_c* i_this) {
+static s32 daAndsw2_Execute(daAndsw2_c* i_this) {
     return i_this->execute();
 }
 
 /* 00000574-0000057C       .text daAndsw2_IsDelete__FP10daAndsw2_c */
-s32 daAndsw2_IsDelete(daAndsw2_c* i_this) {
+static s32 daAndsw2_IsDelete(daAndsw2_c* i_this) {
     return 1;
 }
 
 /* 0000057C-000005AC       .text daAndsw2_Delete__FP10daAndsw2_c */
-s32 daAndsw2_Delete(daAndsw2_c* i_this) {
+static s32 daAndsw2_Delete(daAndsw2_c* i_this) {
     i_this->~daAndsw2_c();
     return 1;
 }
 
 /* 000005AC-00000724       .text daAndsw2_Create__FP10fopAc_ac_c */
-s32 daAndsw2_Create(fopAc_ac_c* ac) {
+static s32 daAndsw2_Create(fopAc_ac_c* ac) {
     return ((daAndsw2_c*)ac)->create();
 }
 
