@@ -255,4 +255,13 @@ void mDoExt_modelUpdate(J3DModel* i_model);
 void mDoExt_modelUpdateDL(J3DModel* i_model);
 void mDoExt_modelEntryDL(J3DModel* i_model);
 
+JKRExpHeap* mDoExt_getCommandHeap();
+JKRExpHeap* mDoExt_getZeldaHeap();
+JKRExpHeap* mDoExt_getGameHeap();
+JKRExpHeap* mDoExt_getArchiveHeap();
+
+extern JKRExpHeap* zeldaHeap;
+extern JKRExpHeap* gameHeap;
+extern JKRExpHeap* archiveHeap;
+
 #endif

@@ -117,6 +117,7 @@ struct mDoDvdThd {
     static OSThread l_thread;
     static mDoDvdThdStack l_threadStack;
     static mDoDvdThd_param_c l_param;
+    static bool SyncWidthSound;
 };
 
 #endif /* M_DO_M_DO_DVD_THREAD_H */

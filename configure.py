@@ -313,6 +313,7 @@ LIBS = [
             Matching   ("f_pc/f_pc_stdcreate_req.cpp"),
 
             # machine
+            NonMatching("m_Do/m_Do_main.cpp"),
             NonMatching("m_Do/m_Do_controller_pad.cpp"),
 
             # dolzel
