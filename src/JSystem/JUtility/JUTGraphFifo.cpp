@@ -4,14 +4,40 @@
 //
 
 #include "JSystem/JUtility/JUTGraphFifo.h"
+#include "JSystem/JKernel/JKRHeap.h"
 #include "dolphin/types.h"
 
+bool JUTGraphFifo::sInitiated;
+JUTGraphFifo* JUTGraphFifo::sCurrentFifo;
+
 /* 802C1C04-802C1CE0       .text __ct__12JUTGraphFifoFUl */
-JUTGraphFifo::JUTGraphFifo(unsigned long) {
-    /* Nonmatching */
+JUTGraphFifo::JUTGraphFifo(u32 size) {
+    mSize = size + 0x1F & ~0x1F;
+    if (sInitiated) {
+        mFifo = (GXFifoObj*)JKRAllocFromSysHeap(mSize + 0x80, 32);
+        mBase = mFifo + 1;
+        GXInitFifoBase(mFifo, mBase, mSize);
+        GXInitFifoPtrs(mFifo, mBase, mBase);
+    } else {
+        mBase = JKRAllocFromSysHeap(mSize + 0xA0, 32);
+        mBase = (void*)((int)mBase + 0x1F & ~0x1F);
+        mFifo = GXInit(mBase, mSize);
+        sInitiated = true;
+        sCurrentFifo = this;
+    }
 }
+
+bool JUTGraphFifo::mGpStatus[5];
 
 /* 802C1CE0-802C1DA4       .text __dt__12JUTGraphFifoFv */
 JUTGraphFifo::~JUTGraphFifo() {
-    /* Nonmatching */
+    sCurrentFifo->save();
+
+    do {
+    } while (isGPActive());
+
+    if (sCurrentFifo == this) {
+        sCurrentFifo = NULL;
+    }
+    JKRFreeToSysHeap(mBase);
 }

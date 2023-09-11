@@ -5,9 +5,8 @@
 
 class JUTGraphFifo {
 public:
-    /* 802DEB58 */ JUTGraphFifo(u32);
-
-    /* 802DEC34 */ virtual ~JUTGraphFifo();
+    JUTGraphFifo(u32);
+    virtual ~JUTGraphFifo();
 
     void getGpStatus() {
         GXGetGPStatus((GXBool*)&mGpStatus[0], (GXBool*)&mGpStatus[1], (GXBool*)&mGpStatus[2],
@@ -21,6 +20,7 @@ public:
 
     void save() { GXSaveCPUFifo(this->mFifo); }
 
+    static bool sInitiated;
     static JUTGraphFifo* sCurrentFifo;
     static bool mGpStatus[5];
 
@@ -31,6 +31,8 @@ private:
     /* 0x10 */ u8 field_0x10[0xC];
 };
 
-inline void JUTCreateFifo(u32 bufSize) { new JUTGraphFifo(bufSize); }
+inline void JUTCreateFifo(u32 bufSize) {
+    new JUTGraphFifo(bufSize);
+}
 
 #endif /* JUTGRAPHFIFO_H */
