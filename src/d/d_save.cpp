@@ -596,9 +596,9 @@ void dSv_player_collect_c::offCollect(int i_idx, u8 i_item) {
 }
 
 /* 8005AE10-8005AEAC       .text isCollect__20dSv_player_collect_cFiUc */
-bool dSv_player_collect_c::isCollect(int i_idx, u8 i_item) {
+BOOL dSv_player_collect_c::isCollect(int i_idx, u8 i_item) {
     JUT_ASSERT(1442, 0 <= i_item && i_item < 8);
-    return field_0x0[i_idx] & (u8)(1 << i_item) ? true : false;
+    return field_0x0[i_idx] & (u8)(1 << i_item) ? TRUE : FALSE;
 }
 
 /* 8005AEAC-8005AF40       .text onTact__20dSv_player_collect_cFUc */
@@ -608,9 +608,9 @@ void dSv_player_collect_c::onTact(u8 i_no) {
 }
 
 /* 8005AF40-8005AFD8       .text isTact__20dSv_player_collect_cFUc */
-bool dSv_player_collect_c::isTact(u8 i_no) {
+BOOL dSv_player_collect_c::isTact(u8 i_no) {
     JUT_ASSERT(1532, 0 <= i_no && i_no < 8);
-    return mTact & (u8)(1 << i_no) ? true : false;
+    return mTact & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
 /* 8005AFD8-8005B06C       .text onTriforce__20dSv_player_collect_cFUc */
@@ -632,9 +632,9 @@ void dSv_player_collect_c::onSymbol(u8 i_no) {
 }
 
 /* 8005B198-8005B230       .text isSymbol__20dSv_player_collect_cFUc */
-bool dSv_player_collect_c::isSymbol(u8 i_no) {
+BOOL dSv_player_collect_c::isSymbol(u8 i_no) {
     JUT_ASSERT(1622, 0 <= i_no && i_no < 8);
-    return mSymbol & (u8)(1 << i_no) ? true : false;
+    return mSymbol & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
 /* 8005B230-8005B290       .text getTriforceNum__20dSv_player_collect_cFv */

@@ -182,13 +182,13 @@ public:
     /* 8005ACA8 */ void init();
     /* 8005ACE0 */ void onCollect(int, u8);
     /* 8005AD78 */ void offCollect(int, u8);
-    /* 8005AE10 */ bool isCollect(int, u8);
+    /* 8005AE10 */ BOOL isCollect(int, u8);
     /* 8005AEAC */ void onTact(u8);
-    /* 8005AF40 */ bool isTact(u8);
+    /* 8005AF40 */ BOOL isTact(u8);
     /* 8005AFD8 */ void onTriforce(u8);
     /* 8005B06C */ BOOL isTriforce(u8);
     /* 8005B104 */ void onSymbol(u8);
-    /* 8005B198 */ bool isSymbol(u8);
+    /* 8005B198 */ BOOL isSymbol(u8);
     /* 8005B230 */ int getTriforceNum();
 
     /* 0x0 */ u8 field_0x0[8];
@@ -254,6 +254,8 @@ class dSv_player_config_c {
 public:
     /* 8005BF2C */ void init();
     /* 8005BFA4 */ void checkVibration();
+
+    u8 getVibration() const { return mVibration; }
 
     /* 0x0 */ u8 field_0x0;
     /* 0x1 */ u8 mSoundMode;
@@ -365,6 +367,16 @@ STATIC_ASSERT(sizeof(dSv_player_c) == 0x380);
 
 class dSv_memBit_c {
 public:
+    enum {
+        /* 0x0 */ MAP,
+        /* 0x1 */ COMPASS,
+        /* 0x2 */ BOSS_KEY,
+        /* 0x3 */ STAGE_BOSS_ENEMY,
+        /* 0x4 */ STAGE_LIFE,
+        /* 0x5 */ STAGE_BOSS_DEMO,
+        /* 0x7 */ STAGE_BOSS_ENEMY_2 = 7
+    };
+
     /* 8005C094 */ void init();
     /* 8005C0EC */ void onTbox(int);
     /* 8005C188 */ BOOL isTbox(int);
@@ -379,11 +391,25 @@ public:
     /* 8005C7A4 */ void onDungeonItem(int);
     /* 8005C844 */ BOOL isDungeonItem(int);
 
+    u8 getKeyNum() { return mKeyNum; }
+    void setKeyNum(u8 i_keyNum) { mKeyNum = i_keyNum; }
+    void onDungeonItemMap() { onDungeonItem(MAP); }
+    BOOL isDungeonItemMap() { return isDungeonItem(MAP); }
+    void onDungeonItemCompass() { onDungeonItem(COMPASS); }
+    BOOL isDungeonItemCompass() { return isDungeonItem(COMPASS); }
+    void onDungeonItemBossKey() { onDungeonItem(BOSS_KEY); }
+    BOOL isDungeonItemBossKey() { return isDungeonItem(BOSS_KEY); }
+    void onStageBossEnemy() { onDungeonItem(STAGE_BOSS_ENEMY); }
+    BOOL isStageBossEnemy() { return isDungeonItem(STAGE_BOSS_ENEMY); }
+    BOOL isStageBossEnemy2() { return isDungeonItem(STAGE_BOSS_ENEMY_2); }
+    void onStageLife() { onDungeonItem(STAGE_LIFE); }
+    BOOL isStageLife() { isDungeonItem(STAGE_LIFE); }
+
     /* 0x00 */ u32 mTbox;
     /* 0x04 */ u32 mSwitch[4];
     /* 0x14 */ u32 mItem[1];
     /* 0x18 */ u32 mVisitedRoom[2];
-    /* 0x20 */ u8 field_0x20;
+    /* 0x20 */ u8 mKeyNum;
     /* 0x21 */ u8 mDungeonItem;
 };  // Size: 0x24
 
@@ -562,9 +588,11 @@ public:
     /* 8005EA24 */ void card_to_memory(char*, int);
     /* 8005ED00 */ int initdata_to_card(char*, int);
 
+    dSv_save_c& getSavedata() { return mSavedata; }
     dSv_player_c& getPlayer() { return mSavedata.getPlayer(); }
     dSv_event_c& getEvent() { return mSavedata.getEvent(); }
     dSv_restart_c& getRestart() { return mRestart; }
+    dSv_memory_c& getMemory() { return mMemory; }
 
     static const int MEMORY_SWITCH = 0x80;
     static const int DAN_SWITCH = 0x40;

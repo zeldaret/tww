@@ -110,6 +110,7 @@ public:
 
     void setUserArea(u32 area) { mpUserData = (void*)area; }
 
+    virtual bool isSame(J3DMatPacket*) const;
     virtual int entry(J3DDrawBuffer*);
     virtual void draw();
     virtual ~J3DPacket() {}

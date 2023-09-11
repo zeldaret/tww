@@ -3,7 +3,16 @@
 
 #include "dolphin/types.h"
 
-struct JORReflexible;
+// move JOR stuff later
+class JOREventListener {
+public:
+
+};
+
+class JORReflexible : public JOREventListener {
+public:
+    virtual ~JORReflexible() {}
+};
 
 class mDoHIO_child_c {
 public:
@@ -39,7 +48,7 @@ public:
     /* 0x0 */ mDoHIO_subRoot_c m_subroot;
 };
 
-class mDoHIO_entry_c {
+class mDoHIO_entry_c : public JORReflexible {
 public:
     virtual ~mDoHIO_entry_c() {}
 };

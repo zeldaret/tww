@@ -70,9 +70,7 @@ public:
 
 class dDlst_shadowPoly_c {
 public:
-    dDlst_shadowPoly_c() {
-        reset();
-    }
+    dDlst_shadowPoly_c() { reset(); }
 
     void reset() { mCount = 0; }
 
@@ -173,7 +171,7 @@ public:
     dDlst_list_c();
     ~dDlst_list_c();
 
-    void init();    
+    void init();
     void reset();
     void entryZSortXluDrawList(J3DDrawBuffer*, J3DPacket*, cXyz&);
     void set(dDlst_base_c**&, dDlst_base_c**&, dDlst_base_c*);
@@ -182,6 +180,12 @@ public:
     void wipeIn(f32);
     void calcWipe();
     void set2DOpa(dDlst_base_c*);
+
+    int setSimpleShadow(cXyz* param_0, f32 param_1, f32 param_2, cXyz* param_3, s16 param_4,
+                        f32 param_5, _GXTexObj* param_6) {
+        return mShadowControl.setSimple(param_0, param_1, param_2, param_3, param_4, param_5,
+                                        param_6);
+    }
 
 private:
     /* 0x00000 */ J3DDrawBuffer* mpBufSkyOpa;
