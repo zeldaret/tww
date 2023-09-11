@@ -57,20 +57,19 @@ inline double sqrt_step(double tmpd, float mag) {
     return tmpd * 0.5 * (3.0 - mag * (tmpd * tmpd));
 }
 
-inline float sqrtf(float mag) {
-    if (mag > 0.0f) {
-        double tmpd = __frsqrte(mag);
-        tmpd = sqrt_step(tmpd, mag);
-        tmpd = sqrt_step(tmpd, mag);
-        tmpd = sqrt_step(tmpd, mag);
-        return mag * tmpd;
-    } else if (mag < 0.0) {
-        return NAN;
-    } else if (fpclassify(mag) == 1) {
-        return NAN;
-    } else {
-        return mag;
+extern inline float sqrtf(float x) {
+    static const double _half = .5;
+    static const double _three = 3.0;
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double)x);                   // returns an approximation to
+        guess = _half * guess * (_three - guess * guess * x);  // now have 12 sig bits
+        guess = _half * guess * (_three - guess * guess * x);  // now have 24 sig bits
+        guess = _half * guess * (_three - guess * guess * x);  // now have 32 sig bits
+        y = (float)(x * guess);
+        return y;
     }
+    return x;
 }
 
 inline float atan2f(float y, float x) {
