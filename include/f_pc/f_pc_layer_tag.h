@@ -4,6 +4,13 @@
 
 #include "SSystem/SComponent/c_tag.h"
 
+enum {
+    fpcLy_ROOT_e    = 0,
+    fpcLy_CURRENT_e = 0xFFFFFFFD,
+    fpcLy_SPECIAL_e = 0xFFFFFFFE,
+    fpcLy_NONE_e    = 0xFFFFFFFF,
+};
+
 typedef struct layer_class layer_class;
 
 typedef struct layer_management_tag_class {

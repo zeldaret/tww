@@ -6,6 +6,7 @@
 #include "f_pc/f_pc_priority.h"
 #include "f_pc/f_pc_base.h"
 #include "f_pc/f_pc_layer.h"
+#include "f_pc/f_pc_layer_tag.h"
 
 /* 8003FC08-8003FC28       .text fpcPi_IsInQueue__FP22process_priority_class */
 s32 fpcPi_IsInQueue(process_priority_class* i_procPriority) {
@@ -26,7 +27,7 @@ s32 fpcPi_ToQueue(process_priority_class* i_procPriority) {
     u32 layer = i_procPriority->mInfoQ.mLayer;
 
     if (cTg_Addition(&l_fpcPi_Queue, &i_procPriority->mBase)) {
-        if (layer != 0xFFFFFFFD) {
+        if (layer != fpcLy_CURRENT_e) {
             layer_class* pLayer = fpcLy_Layer(layer);
 
             if (!fpcLy_ToCancelQ(pLayer, &i_procPriority->mMtdTag)) {
@@ -72,7 +73,7 @@ s32 fpcPi_Delete(process_priority_class* i_procPriority) {
 
 /* 8003FD8C-8003FDC0       .text fpcPi_IsNormal__FUiUsUs */
 s32 fpcPi_IsNormal(unsigned int i_layer, u16 i_listID, u16 i_priority) {
-    if ((i_layer < 0xFFFFFFFE) && (i_listID < 0xFFFE) && (i_priority < 0xFFFE))
+    if ((i_layer < fpcLy_SPECIAL_e) && (i_listID < fpcPi_SPECIAL_e) && (i_priority < fpcPi_SPECIAL_e))
         return 1;
 
     return 0;
@@ -93,17 +94,17 @@ s32 fpcPi_Change(process_priority_class* i_procPriority, unsigned int i_layer, u
     i_procPriority->mInfoQ.mListID = i_procPriority->mInfoCurr.mListID;
     i_procPriority->mInfoQ.mListPrio = i_procPriority->mInfoCurr.mListPrio;
 
-    if (i_layer != 0xFFFFFFFD && i_procPriority->mInfoCurr.mLayer != i_layer) {
+    if (i_layer != fpcLy_CURRENT_e && i_procPriority->mInfoCurr.mLayer != i_layer) {
         i_procPriority->mInfoQ.mLayer = i_layer;
         changed = 1;
     }
 
-    if (i_listID != 0xFFFD && i_procPriority->mInfoCurr.mListID != i_listID) {
+    if (i_listID != fpcPi_CURRENT_e && i_procPriority->mInfoCurr.mListID != i_listID) {
         i_procPriority->mInfoQ.mListID = i_listID;
         changed = 1;
     }
 
-    if (i_priority != 0xFFFD && i_procPriority->mInfoCurr.mListPrio != i_priority) {
+    if (i_priority != fpcPi_CURRENT_e && i_procPriority->mInfoCurr.mListPrio != i_priority) {
         i_procPriority->mInfoQ.mListPrio = i_priority;
         changed = 1;
     }
@@ -128,8 +129,7 @@ s32 fpcPi_Handler() {
         base_process_class* pProc = (base_process_class*)i_procPriority->mBase.mpTagData;
         layer_management_tag_class* pLayerTag = &pProc->mLyTg;
         line_tag* pLineTag = &pProc->mLnTg;
-        if (fpcLyTg_Move(pLayerTag, i_procPriority->mInfoQ.mLayer, i_procPriority->mInfoQ.mListID,
-                         i_procPriority->mInfoQ.mListPrio) == 1) {
+        if (fpcLyTg_Move(pLayerTag, i_procPriority->mInfoQ.mLayer, i_procPriority->mInfoQ.mListID, i_procPriority->mInfoQ.mListPrio) == 1) {
             fpcLnTg_Move(pLineTag, i_procPriority->mInfoCurr.mListID);
             i_procPriority->mInfoCurr.mLayer = i_procPriority->mInfoQ.mLayer;
             i_procPriority->mInfoCurr.mListID = i_procPriority->mInfoQ.mListID;

@@ -51,7 +51,9 @@ static leafdraw_method_class l_dScnTitle_Method = {
 };
 
 extern scene_process_profile_definition g_profile_TITLE_SCENE = {
-	0, 1, -3,
+	fpcLy_ROOT_e,
+    1,
+    fpcPi_CURRENT_e,
     PROC_TITLE_SCENE,
 	&g_fpcNd_Method.mBase,
     sizeof(title_of_scene_class),
@@ -62,7 +64,9 @@ extern scene_process_profile_definition g_profile_TITLE_SCENE = {
 };
 
 extern scene_process_profile_definition g_profile_ENDING_SCENE = {
-	0, 1, -3,
+	fpcLy_ROOT_e,
+    1,
+    fpcPi_CURRENT_e,
     PROC_ENDING_SCENE,
 	&g_fpcNd_Method.mBase,
     sizeof(title_of_scene_class),

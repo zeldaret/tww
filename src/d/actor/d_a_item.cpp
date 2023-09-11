@@ -344,9 +344,9 @@ static actor_method_class l_daItem_Method = {
 };
 
 extern actor_process_profile_definition g_profile_ITEM = {
-    -3,
+    fpcLy_CURRENT_e,
     7,
-    0xFFFD,
+    fpcPi_CURRENT_e,
     PROC_ITEM,
     &g_fpcLf_Method.mBase,
     sizeof(daItem_c),
