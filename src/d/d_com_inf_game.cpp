@@ -9,58 +9,20 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_lib_game.h"
+#include "d/d_flower.h"
+#include "d/d_grass.h"
+#include "d/d_item_data.h"
+#include "d/d_magma.h"
+#include "d/d_particle.h"
+#include "d/d_tree.h"
 #include "f_op/f_op_scene_mng.h"
 #include "m_Do/m_Do_audio.h"
 
 class J3DModel;
-
-class dGrass_data_c {
+class daArrow_c {
 public:
-    ~dGrass_data_c();
-    dGrass_data_c();
+    static void setKeepType(u8);
 };
-
-class dGrass_packet_c {
-public:
-    ~dGrass_packet_c();
-    dGrass_packet_c();
-    void draw();
-    void calc();
-    void update();
-    void setData(dGrass_data_c*, int, cXyz*, int, u8);
-    void newData(cXyz*, int, u8);
-    void newAnm();
-    void setAnm(int, s16);
-};
-
-class dFlower_data_c {
-public:
-    ~dFlower_data_c();
-    dFlower_data_c();
-};
-
-class dFlower_packet_c {
-public:
-    ~dFlower_packet_c();
-};
-
-class dTree_data_c {
-public:
-    ~dTree_data_c();
-    dTree_data_c();
-};
-
-class dTree_packet_c {
-public:
-    ~dTree_packet_c();
-};
-
-class dTree_anm_c {
-public:
-    ~dTree_anm_c();
-};
-
-class scene_class;
 
 dComIfG_inf_c g_dComIfG_gameInfo;
 
@@ -98,11 +60,119 @@ void dComIfG_play_c::init() {
 
 /* 800521D4-80052400       .text itemInit__14dComIfG_play_cFv */
 void dComIfG_play_c::itemInit() {
-    /* Nonmatching */
+    field_0x48b8 = 0.0f;
+    mItemLifeCount = 0.0f;
+    mItemRupeeCount = 0;
+    mAirMeter = 0;
+    field_0x48c8 = 0;
+    mNpcNameMessageID = 0;
+    mItemNameMessageID = 0;
+    mItemKeyNumCount = 0;
+    mItemMaxLifeCount = 0;
+    mItemMagicCount = 0;
+    field_0x48da = 0;
+    field_0x48dc = 0;
+    field_0x48de = 0;
+    mItemArrowNumCount = 0;
+    field_0x48e2 = 0;
+    mItemBombNumCount = 0;
+    field_0x48e6 = 0;
+
+    for (int i = 0; i < 4; i++) {
+    }
+
+    mCurrAuctionItemNameMsgID = 0;
+    field_0x491a = 0;
+    field_0x491c = 0;
+    field_0x491e = 0;
+    field_0x4920 = 0;
+    field_0x4922 = 0;
+    mCurrHP = 0;
+    mRupyCountDisplay = 0;
+    field_0x4928 = 0;
+    field_0x4929 = 0;
+    field_0x492a = 0;
+    mbCamOverrideFarPlane = 0;
+    field_0x492c = 0;
+    field_0x492d = 0;
+    mCurrButtonBAction = 0;
+    mCurrButtonAAction = 0;
+    field_0x4930 = 0;
+    field_0x4931 = 0;
+    field_0x4932 = 0;
+
+    for (int i = 0; i < 4; i++) {
+        mEquippedItems[i] = 0;
+        field_0x4937[i] = 0;
+    }
+
+    mMesgAnime = 0;
+    mMesgAnimeTagInfo = 0;
+    field_0x493d = 0;
+    field_0x493e = 0;
+    field_0x493f = 0;
+    field_0x4940 = 0;
+    field_0x4941 = 0;
+    field_0x4942 = 0;
+
+    if (dComIfGs_checkGetItem(TELESCOPE)) {
+        field_0x4943 = 0;
+    } else {
+        field_0x4943 = 0x15;
+    }
+
+    field_0x4944 = 7;
+    field_0x4945 = 0;
+    field_0x4946 = 0;
+    field_0x4947 = 0;
+    field_0x4948 = 0;
+    field_0x4949 = 0;
+
+    for (int i = 0; i < 6; i++) {
+        field_0x494a[i] = 0;
+    }
+
+    mTactMode = 0;
+    field_0x4951 = 0;
+    field_0x4952 = 0;
+    field_0x4953 = 0;
+    field_0x4954 = 0;
+    field_0x4955 = 0;
+    field_0x4956 = 0;
+    mPlacenameIndex = 0;
+    field_0x4958 = 0;
+    field_0x4959 = 0;
+    field_0x495a = 0;
+    field_0x495b = 0;
+    field_0x495c = 0;
+    field_0x495d = 0;
+    field_0x495e = 0;
+    field_0x495f = 0;
+    field_0x4960 = 0;
+    field_0x4961 = 0;
+    field_0x4962 = 0;
+    field_0x4965 = 0;
+
+    strcpy(field_0x4966, "");
+
+    field_0x4977 = 0;
+    field_0x4978 = 0;
+    field_0x4979 = 0;
+    field_0x497a = 0;
+    field_0x4963 = dComIfGs_getOptVibration();
+    daArrow_c::setKeepType(0);
+    mMesgCameraTagInfo = 0;
+    field_0x4984 = 0;
+
+    for (int i = 0; i < 10; i++) {
+        field_0x4988[i] = 0;
+    }
+
+    return;
 }
 
 /* 80052400-8005286C       .text getLayerNo__14dComIfG_play_cFi */
-// almost
+// NONMATCHING - almost
 int dComIfG_play_c::getLayerNo(int i_roomNo) {
     int layer = dComIfGp_getStartStageLayer();
 
@@ -184,7 +254,9 @@ int dComIfG_play_c::getLayerNo(int i_roomNo) {
 
 /* 8005286C-800528F4       .text createParticle__14dComIfG_play_cFv */
 void dComIfG_play_c::createParticle() {
-    /* Nonmatching */
+    mParticle = new dPa_control_c();
+
+    JUT_ASSERT(360, mParticle != 0);
 }
 
 /* 800528F4-8005297C       .text createDemo__14dComIfG_play_cFv */
@@ -203,138 +275,179 @@ void dComIfG_play_c::executeEvtManager() {
 }
 
 /* 800529DC-80052A30       .text createMagma__14dComIfG_play_cFv */
-void dComIfG_play_c::createMagma() {
-    /* Nonmatching */
+dMagma_packet_c* dComIfG_play_c::createMagma() {
+    if (mpMagmaPacket == NULL) {
+        mpMagmaPacket = new dMagma_packet_c();
+    }
+
+    return mpMagmaPacket;
 }
 
 /* 80052A30-80052A84       .text removeMagma__14dComIfG_play_cFv */
 void dComIfG_play_c::removeMagma() {
-    /* Nonmatching */
+    if (mpMagmaPacket != NULL) {
+        delete mpMagmaPacket;
+        mpMagmaPacket = NULL;
+    }
 }
 
 /* 80052A84-80052AB0       .text executeMagma__14dComIfG_play_cFv */
 void dComIfG_play_c::executeMagma() {
-    /* Nonmatching */
+    if (mpMagmaPacket != NULL) {
+        mpMagmaPacket->calc();
+    }
 }
 
 /* 80052AB0-80052ADC       .text drawMagma__14dComIfG_play_cFv */
 void dComIfG_play_c::drawMagma() {
-    /* Nonmatching */
+    if (mpMagmaPacket != NULL) {
+        mpMagmaPacket->update();
+    }
 }
 
 /* 80052ADC-80052B34       .text createGrass__14dComIfG_play_cFv */
-void dComIfG_play_c::createGrass() {
-    /* Nonmatching */
+dGrass_packet_c* dComIfG_play_c::createGrass() {
+    if (mpGrassPacket == NULL) {
+        mpGrassPacket = new dGrass_packet_c();
+    }
+
+    return mpGrassPacket;
 }
 
 /* 80052B34-80052B88       .text removeGrass__14dComIfG_play_cFv */
 void dComIfG_play_c::removeGrass() {
-    /* Nonmatching */
+    if (mpGrassPacket != NULL) {
+        delete mpGrassPacket;
+        mpGrassPacket = NULL;
+    }
 }
 
 /* 80052B88-80052C0C       .text __dt__15dGrass_packet_cFv */
-dGrass_packet_c::~dGrass_packet_c() {
-    /* Nonmatching */
-}
+dGrass_packet_c::~dGrass_packet_c() {}
 
 /* 80052C0C-80052C48       .text __dt__13dGrass_data_cFv */
-dGrass_data_c::~dGrass_data_c() {
-    /* Nonmatching */
-}
+dGrass_data_c::~dGrass_data_c() {}
 
 /* 80052C48-80052C74       .text executeGrass__14dComIfG_play_cFv */
 void dComIfG_play_c::executeGrass() {
-    /* Nonmatching */
+    if (mpGrassPacket != NULL) {
+        mpGrassPacket->calc();
+    }
 }
 
 /* 80052C74-80052CA0       .text drawGrass__14dComIfG_play_cFv */
 void dComIfG_play_c::drawGrass() {
-    /* Nonmatching */
+    if (mpGrassPacket != NULL) {
+        mpGrassPacket->update();
+    }
 }
 
 /* 80052CA0-80052CF4       .text createFlower__14dComIfG_play_cFv */
-void dComIfG_play_c::createFlower() {
-    /* Nonmatching */
+dFlower_packet_c* dComIfG_play_c::createFlower() {
+    if (mpFlowerPacket == NULL) {
+        mpFlowerPacket = new dFlower_packet_c();
+    }
+
+    return mpFlowerPacket;
 }
 
 /* 80052CF4-80052D48       .text removeFlower__14dComIfG_play_cFv */
 void dComIfG_play_c::removeFlower() {
-    /* Nonmatching */
+    if (mpFlowerPacket != NULL) {
+        delete mpFlowerPacket;
+        mpFlowerPacket = NULL;
+    }
 }
 
 /* 80052D48-80052DCC       .text __dt__16dFlower_packet_cFv */
-dFlower_packet_c::~dFlower_packet_c() {
-    /* Nonmatching */
-}
+dFlower_packet_c::~dFlower_packet_c() {}
 
 /* 80052DCC-80052E08       .text __dt__14dFlower_data_cFv */
-dFlower_data_c::~dFlower_data_c() {
-    /* Nonmatching */
-}
+dFlower_data_c::~dFlower_data_c() {}
 
 /* 80052E08-80052E34       .text executeFlower__14dComIfG_play_cFv */
 void dComIfG_play_c::executeFlower() {
-    /* Nonmatching */
+    if (mpFlowerPacket != NULL) {
+        mpFlowerPacket->calc();
+    }
 }
 
 /* 80052E34-80052E60       .text drawFlower__14dComIfG_play_cFv */
 void dComIfG_play_c::drawFlower() {
-    /* Nonmatching */
+    if (mpFlowerPacket != NULL) {
+        mpFlowerPacket->update();
+    }
 }
 
 /* 80052E60-80052EB4       .text createTree__14dComIfG_play_cFv */
-void dComIfG_play_c::createTree() {
-    /* Nonmatching */
+dTree_packet_c* dComIfG_play_c::createTree() {
+    if (mpTreePacket == NULL) {
+        mpTreePacket = new dTree_packet_c();
+    }
+
+    return mpTreePacket;
 }
 
 /* 80052EB4-80052F08       .text removeTree__14dComIfG_play_cFv */
 void dComIfG_play_c::removeTree() {
-    /* Nonmatching */
+    if (mpTreePacket != NULL) {
+        delete mpTreePacket;
+        mpTreePacket = NULL;
+    }
 }
 
 /* 80052F08-80052FA4       .text __dt__14dTree_packet_cFv */
-dTree_packet_c::~dTree_packet_c() {
-    /* Nonmatching */
-}
+dTree_packet_c::~dTree_packet_c() {}
 
 /* 80052FA4-80052FE0       .text __dt__12dTree_data_cFv */
-dTree_data_c::~dTree_data_c() {
-    /* Nonmatching */
-}
+dTree_data_c::~dTree_data_c() {}
 
 /* 80052FE0-8005301C       .text __dt__11dTree_anm_cFv */
-dTree_anm_c::~dTree_anm_c() {
-    /* Nonmatching */
-}
+dTree_anm_c::~dTree_anm_c() {}
 
 /* 8005301C-80053048       .text executeTree__14dComIfG_play_cFv */
 void dComIfG_play_c::executeTree() {
-    /* Nonmatching */
+    if (mpTreePacket != NULL) {
+        mpTreePacket->calc();
+    }
 }
 
 /* 80053048-80053074       .text drawTree__14dComIfG_play_cFv */
 void dComIfG_play_c::drawTree() {
-    /* Nonmatching */
+    if (mpTreePacket != NULL) {
+        mpTreePacket->update();
+    }
 }
 
 /* 80053074-800530CC       .text createWood__14dComIfG_play_cFv */
-void dComIfG_play_c::createWood() {
-    /* Nonmatching */
+dWood::Packet_c* dComIfG_play_c::createWood() {
+    if (mpWoodPacket == NULL) {
+        mpWoodPacket = new dWood::Packet_c();
+    }
+
+    return mpWoodPacket;
 }
 
 /* 800530CC-80053120       .text removeWood__14dComIfG_play_cFv */
 void dComIfG_play_c::removeWood() {
-    /* Nonmatching */
+    if (mpWoodPacket != NULL) {
+        delete mpWoodPacket;
+        mpWoodPacket = NULL;
+    }
 }
 
 /* 80053120-8005314C       .text executeWood__14dComIfG_play_cFv */
 void dComIfG_play_c::executeWood() {
-    /* Nonmatching */
+    if (mpWoodPacket != NULL) {
+        mpWoodPacket->calc();
+    }
 }
 
 /* 8005314C-80053178       .text drawWood__14dComIfG_play_cFv */
 void dComIfG_play_c::drawWood() {
-    /* Nonmatching */
+    if (mpWoodPacket != NULL) {
+        mpWoodPacket->update();
+    }
 }
 
 /* 80053178-800531A8       .text ct__13dComIfG_inf_cFv */
@@ -411,34 +524,94 @@ int dComIfG_resDelete(request_of_phase_process_class* i_phase, const char* i_res
 }
 
 /* 8005347C-800534C4       .text dComIfGp_getReverb__Fi */
-s8 dComIfGp_getReverb(int) {
-    /* Nonmatching */
+s8 dComIfGp_getReverb(int param_0) {
+    return dStage_roomRead_dt_c_GetReverbStage(*dComIfGp_getStageRoom(), param_0);
 }
 
 /* 800534C4-800535B8       .text dComIfGd_setSimpleShadow2__FP4cXyzffR13cBgS_PolyInfosfP9_GXTexObj
  */
-void dComIfGd_setSimpleShadow2(cXyz*, f32, f32, cBgS_PolyInfo&, s16, f32, _GXTexObj*) {
-    /* Nonmatching */
+int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 param_1, f32 param_2, cBgS_PolyInfo& i_floorPoly,
+                              s16 i_angle, f32 param_5, GXTexObj* i_tex) {
+    if (i_floorPoly.ChkSetInfo() && -1000000000.0f != param_1) {
+        cM3dGPla* plane_p =
+            dComIfG_Bgsp()->GetTriPla(i_floorPoly.GetBgIndex(), i_floorPoly.GetPolyIndex());
+
+        return dComIfGd_setSimpleShadow(i_pos, param_1, param_2, &plane_p->mNormal, i_angle,
+                                        param_5, i_tex);
+    } else {
+        return 0;
+    }
 }
 
 /* 800535B8-80053678       .text dComIfGp_getShip__Fii */
-void dComIfGp_getShip(int, int) {
-    /* Nonmatching */
+dStage_Ship_data* dComIfGp_getShip(int i_roomNo, int param_1) {
+    dStage_roomStatus_c* roomSt_p = dComIfGp_roomControl_getStatusRoomDt(i_roomNo);
+    if (roomSt_p == NULL) {
+        return NULL;
+    }
+
+    dStage_Ship_c* ship_p = roomSt_p->mRoomDt.getShip();
+    if (ship_p == NULL || ship_p->m_num <= 0 || param_1 == 0xFF) {
+        return NULL;
+    }
+
+    dStage_Ship_data* data_p = ship_p->m_entries;
+    if (data_p == NULL) {
+        return NULL;
+    }
+
+    for (int i = 0; i < ship_p->m_num; i++) {
+        if (param_1 == data_p->field_0xe) {
+            return data_p;
+        }
+
+        data_p++;
+    }
+
+    return NULL;
 }
 
 /* 80053678-80053728       .text dComIfGp_getMapTrans__FiPfPfPs */
-void dComIfGp_getMapTrans(int, f32*, f32*, s16*) {
-    /* Nonmatching */
+bool dComIfGp_getMapTrans(int i_roomNo, f32* o_transX, f32* o_transY, s16* o_angle) {
+    dStage_Multi_c* multi_p = dComIfGp_getMulti();
+    if (multi_p == NULL) {
+        return false;
+    }
+
+    dStage_Mult_info* data_p = multi_p->m_entries;
+    for (int i = 0; i < multi_p->m_num; i++) {
+        if (i_roomNo == data_p->mRoomNo) {
+            *o_transX = data_p->mTransX;
+            *o_transY = data_p->mTransY;
+            *o_angle = data_p->mAngle;
+            return true;
+        }
+        data_p++;
+    }
+
+    return false;
 }
 
 /* 80053728-80053778       .text dComIfGp_getRoomCamera__Fi */
-void dComIfGp_getRoomCamera(int) {
-    /* Nonmatching */
+stage_camera_class* dComIfGp_getRoomCamera(int i_roomNo) {
+    dStage_roomStatus_c* status = dComIfGp_roomControl_getStatusRoomDt(i_roomNo);
+
+    if (status == NULL) {
+        return NULL;
+    }
+
+    return status->mRoomDt.getCamera();
 }
 
 /* 80053778-800537C8       .text dComIfGp_getRoomArrow__Fi */
-void dComIfGp_getRoomArrow(int) {
-    /* Nonmatching */
+stage_arrow_class* dComIfGp_getRoomArrow(int i_roomNo) {
+    dStage_roomStatus_c* status = dComIfGp_roomControl_getStatusRoomDt(i_roomNo);
+
+    if (status == NULL) {
+        return NULL;
+    }
+
+    return status->mRoomDt.getArrow();
 }
 
 /* 800537C8-8005388C       .text dComIfGp_setNextStage__FPCcsScScfUliSc */
@@ -467,33 +640,202 @@ void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8
 }
 
 /* 8005388C-80053918       .text dComIfGs_onStageTbox__Fii */
-void dComIfGs_onStageTbox(int, int) {
-    /* Nonmatching */
+void dComIfGs_onStageTbox(int i_stageNo, int i_no) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_onTbox(i_no);
+    }
+
+    dComIfGs_onSaveTbox(i_stageNo, i_no);
 }
 
 /* 80053918-800539A8       .text dComIfGs_isStageTbox__Fii */
-void dComIfGs_isStageTbox(int, int) {
-    /* Nonmatching */
+BOOL dComIfGs_isStageTbox(int i_stageNo, int i_no) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        return dComIfGs_isTbox(i_no);
+    } else {
+        return dComIfGs_isSaveTbox(i_stageNo, i_no);
+    }
 }
 
 /* 800539A8-80053A2C       .text dComIfGs_isStageBossEnemy__Fi */
-void dComIfGs_isStageBossEnemy(int) {
-    /* Nonmatching */
+BOOL dComIfGs_isStageBossEnemy(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        return dComIfGs_isStageBossEnemy();
+    } else {
+        return g_dComIfG_gameInfo.info.getSavedata().getSave(i_stageNo).getBit().isStageBossEnemy();
+    }
 }
 
 /* 80053A2C-80053AAC       .text dComIfGs_onStageLife__Fi */
-void dComIfGs_onStageLife(int) {
-    /* Nonmatching */
+void dComIfGs_onStageLife(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_onStageLife();
+    }
+
+    g_dComIfG_gameInfo.info.getSavedata().getSave(i_stageNo).getBit().onStageLife();
 }
 
 /* 80053AAC-80053B30       .text dComIfGs_isStageLife__Fi */
-void dComIfGs_isStageLife(int) {
-    /* Nonmatching */
+BOOL dComIfGs_isStageLife(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        return dComIfGs_isStageLife();
+    } else {
+        return g_dComIfG_gameInfo.info.getSavedata().getSave(i_stageNo).getBit().isStageLife();
+    }
 }
 
 /* 80053B30-80053F70       .text dComIfGs_checkGetItem__FUc */
-void dComIfGs_checkGetItem(u8) {
-    /* Nonmatching */
+// NONMATCHING - almost, just a couple small things
+u8 dComIfGs_checkGetItem(u8 i_itemNo) {
+    u8 get_item = 0;
+
+    switch (i_itemNo) {
+    case TACT_SONG1:
+        if (dComIfGs_isTact(0)) {
+            get_item = 1;
+        }
+        break;
+    case TACT_SONG2:
+        if (dComIfGs_isTact(1)) {
+            get_item = 1;
+        }
+        break;
+    case TACT_SONG3:
+        if (dComIfGs_isTact(2)) {
+            get_item = 1;
+        }
+        break;
+    case TACT_SONG4:
+        if (dComIfGs_isTact(3)) {
+            get_item = 1;
+        }
+        break;
+    case TACT_SONG5:
+        if (dComIfGs_isTact(4)) {
+            get_item = 1;
+        }
+        break;
+    case TACT_SONG6:
+        if (dComIfGs_isTact(5)) {
+            get_item = 1;
+        }
+        break;
+    case TRIFORCE1:
+        if (dComIfGs_isTriforce(0)) {
+            get_item = 1;
+        }
+        break;
+    case TRIFORCE2:
+        if (dComIfGs_isTriforce(1)) {
+            get_item = 1;
+        }
+        break;
+    case TRIFORCE3:
+        if (dComIfGs_isTriforce(2)) {
+            get_item = 1;
+        }
+        break;
+    case TRIFORCE4:
+        if (dComIfGs_isTriforce(3)) {
+            get_item = 1;
+        }
+        break;
+    case TRIFORCE5:
+        if (dComIfGs_isTriforce(4)) {
+            get_item = 1;
+        }
+        break;
+    case TRIFORCE6:
+        if (dComIfGs_isTriforce(5)) {
+            get_item = 1;
+        }
+        break;
+    case TRIFORCE7:
+        if (dComIfGs_isTriforce(6)) {
+            get_item = 1;
+        }
+        break;
+    case TRIFORCE8:
+        if (dComIfGs_isTriforce(7)) {
+            get_item = 1;
+        }
+        break;
+    case PEARL1:
+        if (dComIfGs_isSymbol(0)) {
+            get_item = 1;
+        }
+        break;
+    case PEARL2:
+        if (dComIfGs_isSymbol(1)) {
+            get_item = 1;
+        }
+        break;
+    case PEARL3:
+        if (dComIfGs_isSymbol(2)) {
+            get_item = 1;
+        }
+        break;
+    case PIRATES_OMAMORI:
+        if (dComIfGs_isCollect(3, 0)) {
+            get_item = 1;
+        }
+        break;
+    case HEROS_OMAMORI:
+        if (dComIfGs_isCollect(4, 0)) {
+            get_item = 1;
+        }
+        break;
+    default:
+        u8 item = 0;
+        for (int i = 0; i < 60; i++) {
+            if (i < 21) {
+                item = dComIfGs_getItem(i);
+            } else if (i < 24) {
+                item = NO_ITEM;
+            } else if (i < 32) {
+                item = g_dComIfG_gameInfo.info.getPlayer().getGetItem().mItemFlags[i - 0x18];
+            } else if (i < 36) {
+                item = NO_ITEM;
+            } else if (i < 44) {
+                item = g_dComIfG_gameInfo.info.getPlayer().getGetItem().mItemFlags[i - 0x1C];
+            } else if (i < 48) {
+                item = NO_ITEM;
+            } else if (i < 56) {
+                item = g_dComIfG_gameInfo.info.getPlayer().getGetItem().mItemFlags[i - 0x20];
+            } else {
+                item = NO_ITEM;
+            }
+
+            if (i_itemNo == item) {
+                get_item++;
+            }
+        }
+
+        for (int i = 0; i < 3; i++) {
+            if (i_itemNo == dComIfGs_getSelectEquip(i)) {
+                get_item++;
+            }
+        }
+
+        if (i_itemNo >= 0xBF && i_itemNo <= 0xFE &&
+            g_dComIfG_gameInfo.info.getPlayer().getMap().isGetMap(i_itemNo - 1))
+        {
+            get_item++;
+        }
+        break;
+    }
+
+    return get_item;
 }
 
 /* 80053F70-80054578       .text dComIfGs_checkGetItemNum__FUc */
@@ -559,6 +901,40 @@ void dComIfGs_exchangePlayerRecollectionData() {
 }
 
 /* 8005586C-800559E8       .text dComIfGs_setSelectEquip__FiUc */
-void dComIfGs_setSelectEquip(int, u8) {
-    /* Nonmatching */
+void dComIfGs_setSelectEquip(int i_type, u8 i_itemNo) {
+    switch (i_type) {
+    case 0:
+        switch (i_itemNo) {
+        case SWORD:
+            dComIfGs_onCollect(i_type, 0);
+            break;
+        case MASTER_SWORD:
+            dComIfGs_onCollect(i_type, 1);
+            break;
+        case LV3_SWORD:
+            dComIfGs_onCollect(i_type, 2);
+            break;
+        case MASTER_SWORD_EX:
+            dComIfGs_onCollect(i_type, 3);
+            break;
+        }
+        break;
+    case 1:
+        switch (i_itemNo) {
+        case SHIELD:
+            dComIfGs_onCollect(i_type, 0);
+            break;
+        case MIRROR_SHIELD:
+            dComIfGs_onCollect(i_type, 1);
+            break;
+        }
+        break;
+    case 2:
+        if (i_itemNo == PWR_GROOVE) {
+            dComIfGs_onCollect(i_type, 0);
+        }
+        break;
+    }
+
+    g_dComIfG_gameInfo.info.getPlayer().getPlayerStatusA().mSelectEquip[i_type] = i_itemNo;
 }

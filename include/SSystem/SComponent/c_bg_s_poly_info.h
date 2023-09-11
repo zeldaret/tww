@@ -12,7 +12,6 @@ private:
 
 public:
     cBgS_PolyInfo();
-    bool ChkSetInfo() const;
     void ClearPi();
     void SetPolyInfo(const cBgS_PolyInfo&);
     void SetActorInfo(int, void*, unsigned int);
@@ -24,6 +23,13 @@ public:
 
     u16 GetPolyIndex() const { return mPolyIndex; }
     u16 GetBgIndex() const { return mBgIndex; }
+    bool ChkSetInfo() const {
+        if (mPolyIndex == 0xFFFF || mBgIndex == 0x100) {
+            return false;
+        }
+
+        return true;
+    }
 };  // Size: 0x10
 
 #endif /* C_BG_S_POLY_INFO_H */

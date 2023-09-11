@@ -12,6 +12,7 @@
 #include "d/d_save.h"
 #include "d/d_stage.h"
 #include "d/d_vibration.h"
+#include "d/d_wood.h"
 
 class JKRArchive;
 class JKRExpHeap;
@@ -90,28 +91,32 @@ public:
     void createDemo();
     void removeDemo();
     void executeEvtManager();
-    void createMagma();
+    dMagma_packet_c* createMagma();
     void removeMagma();
     void executeMagma();
     void drawMagma();
-    void createGrass();
+    dGrass_packet_c* createGrass();
     void removeGrass();
     void executeGrass();
     void drawGrass();
-    void createFlower();
+    dFlower_packet_c* createFlower();
     void removeFlower();
     void executeFlower();
     void drawFlower();
-    void createTree();
+    dTree_packet_c* createTree();
     void removeTree();
     void executeTree();
     void drawTree();
-    void createWood();
+    dWood::Packet_c* createWood();
     void removeWood();
     void executeWood();
     void drawWood();
 
     ~dComIfG_play_c();
+
+    dStage_roomControl_c* getRoomControl() { return &mRoomCtrl; }
+    dStage_stageDt_c& getStage() { return mStageData; }
+    dEvt_control_c& getEvent() { return mEvtCtrl; }
 
     const char* getStartStageName() { return mCurStage.getName(); }
     s8 getStartStageRoomNo() { return mCurStage.getRoomNo(); }
@@ -180,7 +185,7 @@ public:
     /* 0x482C */ dMagma_packet_c* mpMagmaPacket;
     /* 0x4830 */ dGrass_packet_c* mpGrassPacket;
     /* 0x4834 */ dTree_packet_c* mpTreePacket;
-    /* 0x4838 */ Packet_c* mpWoodPacket;
+    /* 0x4838 */ dWood::Packet_c* mpWoodPacket;
     /* 0x483C */ dFlower_packet_c* mpFlowerPacket;
     /* 0x4840 */ s8 mLkDArcIdx;
     /* 0x4841 */ u8 field_0x4841;
@@ -192,7 +197,7 @@ public:
     /* 0x48A9 */ u8 field_0x48A9[0x48AC - 0x48A9];
     /* 0x48AC */ fopAc_ac_c* mpPlayerPtr[3];  // 0: Link, 1: Partner, 2: Ship
     /* 0x48B8 */ f32 field_0x48b8;
-    /* 0x48BC */ int mItemLifeCount;
+    /* 0x48BC */ f32 mItemLifeCount;
     /* 0x48C0 */ int mItemRupeeCount;
     /* 0x48C4 */ int mAirMeter;
     /* 0x48C8 */ int field_0x48c8;
@@ -322,6 +327,8 @@ extern dComIfG_inf_c g_dComIfG_gameInfo;
  * === SAVE ===
  */
 
+u8 dComIfGs_checkGetItem(u8);
+
 inline u8 dComIfGs_getSelectEquip(int param_0) {
     return g_dComIfG_gameInfo.info.getPlayer().getPlayerStatusA().getSelectEquip(param_0);
 }
@@ -348,6 +355,58 @@ inline void dComIfGs_setStartPoint(s16 i_point) {
 
 inline int dComIfGs_getTriforceNum() {
     return g_dComIfG_gameInfo.info.getPlayer().getCollect().getTriforceNum();
+}
+
+inline u8 dComIfGs_getOptVibration() {
+    return g_dComIfG_gameInfo.info.getPlayer().getConfig().getVibration();
+}
+
+inline BOOL dComIfGs_isTbox(int i_no) {
+    return g_dComIfG_gameInfo.info.getMemory().getBit().isTbox(i_no);
+}
+
+inline BOOL dComIfGs_isSaveTbox(int i_stageNo, int i_no) {
+    return g_dComIfG_gameInfo.info.getSavedata().getSave(i_stageNo).getBit().isTbox(i_no);
+}
+
+inline void dComIfGs_onTbox(int i_no) {
+    g_dComIfG_gameInfo.info.getMemory().getBit().onTbox(i_no);
+}
+
+inline void dComIfGs_onSaveTbox(int i_stageNo, int i_no) {
+    g_dComIfG_gameInfo.info.getSavedata().getSave(i_stageNo).getBit().onTbox(i_no);
+}
+
+inline BOOL dComIfGs_isStageBossEnemy() {
+    return g_dComIfG_gameInfo.info.getMemory().getBit().isStageBossEnemy();
+}
+
+inline void dComIfGs_onStageLife() {
+    g_dComIfG_gameInfo.info.getMemory().getBit().onStageLife();
+}
+
+inline BOOL dComIfGs_isStageLife() {
+    return g_dComIfG_gameInfo.info.getMemory().getBit().isStageLife();
+}
+
+inline BOOL dComIfGs_isCollect(int i_idx, u8 i_item) {
+    return g_dComIfG_gameInfo.info.getPlayer().getCollect().isCollect(i_idx, i_item);
+}
+
+inline void dComIfGs_onCollect(int i_idx, u8 i_item) {
+    g_dComIfG_gameInfo.info.getPlayer().getCollect().onCollect(i_idx, i_item);
+}
+
+inline BOOL dComIfGs_isTact(u8 i_no) {
+    return g_dComIfG_gameInfo.info.getPlayer().getCollect().isTact(i_no);
+}
+
+inline BOOL dComIfGs_isTriforce(u8 i_no) {
+    return g_dComIfG_gameInfo.info.getPlayer().getCollect().isTriforce(i_no);
+}
+
+inline BOOL dComIfGs_isSymbol(u8 i_no) {
+    return g_dComIfG_gameInfo.info.getPlayer().getCollect().isSymbol(i_no);
 }
 
 /**
@@ -409,8 +468,38 @@ inline fopAc_ac_c* dComIfGp_getPlayer(int idx) {
     return g_dComIfG_gameInfo.play.getPlayer(idx);
 }
 
+inline roomRead_class* dComIfGp_getStageRoom() {
+    return g_dComIfG_gameInfo.play.getStage().getRoom();
+}
+
+inline dStage_Multi_c* dComIfGp_getMulti() {
+    return g_dComIfG_gameInfo.play.getStage().getMulti();
+}
+
+inline stage_stag_info_class* dComIfGp_getStageStagInfo() {
+    return g_dComIfG_gameInfo.play.getStage().getStagInfo();
+}
+
+inline dStage_roomStatus_c* dComIfGp_roomControl_getStatusRoomDt(int room_no) {
+    return g_dComIfG_gameInfo.play.getRoomControl()->getStatusRoomDt(room_no);
+}
+
+inline dBgS* dComIfG_Bgsp() {
+    return &g_dComIfG_gameInfo.play.mBgS;
+}
+
 inline daPy_lk_c* daPy_getPlayerLinkActorClass() {
     return (daPy_lk_c*)g_dComIfG_gameInfo.play.getPlayerPtr(0);
+}
+
+/**
+ * === DRAWLIST ===
+ */
+
+inline int dComIfGd_setSimpleShadow(cXyz* pos, f32 param_1, f32 param_2, cXyz* param_3, s16 angle,
+                                    f32 param_5, _GXTexObj* tex) {
+    return g_dComIfG_gameInfo.drawlist.setSimpleShadow(pos, param_1, param_2, param_3, angle,
+                                                       param_5, tex);
 }
 
 /**

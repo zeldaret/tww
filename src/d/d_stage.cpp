@@ -292,7 +292,7 @@ void dStage_roomReadInit(dStage_dt_c*, void*, int, void*) {
 }
 
 /* 80042628-80042658       .text dStage_roomRead_dt_c_GetReverbStage__FR14roomRead_classi */
-void dStage_roomRead_dt_c_GetReverbStage(roomRead_class&, int) {
+s8 dStage_roomRead_dt_c_GetReverbStage(roomRead_class&, int) {
     /* Nonmatching */
 }
 

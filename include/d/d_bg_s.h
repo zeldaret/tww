@@ -39,6 +39,7 @@ public:
 
 STATIC_ASSERT(sizeof(cBgS_ChkElm) == 0x14);
 
+class cBgW;
 class cBgS {
 public:
     /* 0x0000 */ cBgS_ChkElm m_chk_element[256];
@@ -46,19 +47,23 @@ public:
 
 public:
     cBgS() {}
-    bool Regist(dBgW_Base*, unsigned int, void*);
-    int Release(dBgW_Base*);
+
+    bool GetTriPla(cBgS_PolyInfo&) const;
+    bool Regist(cBgW*, u32, void*);
+    int Release(cBgW*);
     bool LineCross(cBgS_LinChk*);
     f32 GroundCross(cBgS_GndChk*);
     static void* ConvDzb(void*);
     fopAc_ac_c* GetActorPointer(int) const;
-    dBgW_Base* GetBgWBasePointer(cBgS_PolyInfo const&) const;
-    bool ChkPolySafe(cBgS_PolyInfo const&);
-    s32 GetGrpRoomId(cBgS_PolyInfo const&) const;
-    bool GetTriPla(cBgS_PolyInfo const&, cM3dGPla*) const;
-    bool GetTriPnt(cBgS_PolyInfo const&, cXyz*, cXyz*, cXyz*) const;
+    dBgW_Base* GetBgWPointer(cBgS_PolyInfo&) const;
+    bool ChkPolySafe(cBgS_PolyInfo&);
+    void GetTriGrp(int, int) const;
+    void GetGrpToRoomId(int, int) const;
+    cM3dGPla* GetTriPla(int, int) const;
+    bool GetTriPnt(cBgS_PolyInfo&, cXyz*, cXyz*, cXyz*) const;
+    void Move(void);
     void ShdwDraw(cBgS_ShdwDraw*);
-    u32 GetGrpInf(cBgS_PolyInfo const&) const;
+    u32 GetGrpInf(cBgS_PolyInfo&, int) const;
 
     virtual ~cBgS() {}
     virtual void Ct();

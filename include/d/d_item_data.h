@@ -64,7 +64,7 @@ enum ItemTable {
     /* 0x39 */ MASTER_SWORD,
     /* 0x3A */ LV3_SWORD,
     /* 0x3B */ SHIELD,
-    /* 0x3C */ MIRROW_SHIELD,
+    /* 0x3C */ MIRROR_SHIELD,
     /* 0x3D */ DROPPED_SWORD,
     /* 0x3E */ MASTER_SWORD_EX,
     /* 0x3F */ KAKERA_HEART2,

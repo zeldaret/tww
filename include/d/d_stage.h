@@ -11,7 +11,18 @@ struct stage_vrbox_info_class {};
 
 class stage_tresure_class {};
 
-struct stage_stag_info_class {};
+struct stage_stag_info_class {
+    /* 0x00 */ f32 field_0x0;
+    /* 0x04 */ f32 field_0x4;
+    /* 0x08 */ u8 mCameraType;
+    /* 0x09 */ u8 field_0x09;
+    /* 0x0A */ u16 field_0x0a;
+    /* 0x0C */ u32 field_0x0c;
+    /* 0x10 */ u32 field_0x10;
+    /* 0x14 */ u32 field_0x14;
+    /* 0x18 */ u32 field_0x18;
+    /* 0x1C */ u32 field_0x1c;
+};
 
 struct stage_scls_info_class {};
 
@@ -51,7 +62,18 @@ struct dStage_MemoryMap_c {};
 
 struct dStage_dPath_c {};
 
-class dStage_Multi_c {};
+struct dStage_Mult_info {
+    /* 0x0 */ f32 mTransX;
+    /* 0x4 */ f32 mTransY;
+    /* 0x8 */ s16 mAngle;
+    /* 0xA */ u8 mRoomNo;
+};  // Size: 0xC
+
+class dStage_Multi_c {
+public:
+    /* 0x0 */ int m_num;
+    /* 0x4 */ dStage_Mult_info* m_entries;
+};
 
 struct dStage_SoundInfo_c {};
 
@@ -69,7 +91,17 @@ struct dStage_DMap_c {};
 
 struct dStage_EventInfo_c {};
 
-struct dStage_Ship_c {};
+struct dStage_Ship_data {
+    /* 0x0 */ u8 field_0x0[0xE];
+    /* 0xE */ u8 field_0xe;
+    /* 0xF */ u8 field_0xf;
+};
+
+class dStage_Ship_c {
+public:
+    /* 0x0 */ int m_num;
+    /* 0x4 */ dStage_Ship_data* m_entries;
+};
 
 class dStage_dt_c {
 public:
@@ -399,6 +431,24 @@ STATIC_ASSERT(sizeof(dStage_roomStatus_c) == 0x114);
 class dStage_roomControl_c {
 public:
     dStage_roomControl_c() {}
+    
+    void init();
+	dStage_roomStatus_c* getStatusRoomDt(int);
+	bool checkRoomDisp(int) const;
+	int loadRoom(int, u8*);
+	void zoneCountCheck(int) const;
+	void checkDrawArea() const;
+	void getDarkStatus();
+	void getDarkMode();
+    void getBgW(int);
+
+	static void createMemoryBlock(int, u32);
+	static void destroyMemoryBlock(void);
+	static void SetTimePass(int);
+	static JKRExpHeap* getMemoryBlock(int);
+	static void setStayNo(int);
+	static s8 GetTimePass();
+	static void setZoneNo(int, int);
     static int getZoneNo(int);
 
     static s8 getStayNo() { return mStayNo; }
@@ -472,5 +522,11 @@ private:
     /* 0xC */ s8 mEnable;
     /* 0xD */ s8 mWipe;
 };  // Size: 0xE
+
+s8 dStage_roomRead_dt_c_GetReverbStage(roomRead_class&, int);
+
+inline s32 dStage_stagInfo_GetSaveTbl(stage_stag_info_class* i_stagInfo) {
+    return (i_stagInfo->field_0x09 >> 1) & 0x7F;
+}
 
 #endif /* D_D_STAGE_H */
