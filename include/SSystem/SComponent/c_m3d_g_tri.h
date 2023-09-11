@@ -20,6 +20,7 @@ public:
     Vec mB;
     Vec mC;
 
+    cM3dGTri() {}
     cM3dGTri(const Vec *pA, const Vec *pB, const Vec *pC);
     bool cross(const cM3dGCyl*, Vec*) const;
 };

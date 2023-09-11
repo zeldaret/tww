@@ -152,6 +152,17 @@ private:
 
 STATIC_ASSERT(sizeof(dDlst_shadowControl_c) == 0x15E28);
 
+class dDlst_mirrorPacket : public J3DPacket {
+public:
+    /* 0x0010 */ u8 field_0x0010[0x0040 - 0x0010];
+    /* 0x0040 */ Mtx mPosMtx;
+    /* 0x0070 */ u8 field_0x0070[0x0080 - 0x0070];
+    /* 0x0080 */ Mtx mTexMtx;
+    /* 0x00B0 */ dDlst_shadowRealPoly_c mShadowPoly;
+    /* 0x24B8 */ GXTexObj mTexObj;
+    /* 0x24D8 */ u8 mAlpha;
+};
+
 struct view_port_class;
 struct view_class;
 struct camera_class;

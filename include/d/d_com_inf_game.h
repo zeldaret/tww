@@ -314,6 +314,8 @@ public:
     /* 0x1D1C1 */ u8 field_0x1d1c1;
 };
 
+STATIC_ASSERT(sizeof(dComIfG_inf_c) == 0x1D1C8);
+
 extern dComIfG_inf_c g_dComIfG_gameInfo;
 
 /**
