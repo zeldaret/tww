@@ -133,13 +133,7 @@ public:
      * Translates the `now` Matrix by the given cXyz
      * @param xyz The xyz translation vector
      */
-    /* 8000CD64 */ static void transS(cXyz const& xyz);
-
-    /**
-     * Translates a new Matrix by the given cXyz and then concatenates it with the `now` matrix
-     * @param xyz The xyz translation vector
-     */
-    /* 8000CDD4 */ static void transM(cXyz const& xyz);
+    /* 8000CD64 */ static inline void transS(cXyz const& xyz) { MTXTrans(now, xyz.x, xyz.y, xyz.z); }
 
     /**
      * Translates a new Matrix by the given X, Y, and Z values and then concatenates it with the `now` matrix

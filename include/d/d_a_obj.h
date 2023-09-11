@@ -3,10 +3,9 @@
 
 #include "f_op/f_op_actor_mng.h"
 
-class daObj {
-public:
+namespace daObj {
     template <typename T>
-    static int PrmAbstract(const fopAc_ac_c* actor, T width, T shift) {
+    int PrmAbstract(const fopAc_ac_c* actor, T width, T shift) {
         return ((1 << width) - 1) & (fopAcM_GetParam(actor) >> shift);
     }
 };

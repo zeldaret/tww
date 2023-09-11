@@ -15,7 +15,7 @@ class J3DTexMtxAnm;
 
 class mDoExt_baseAnm {
 public:
-    mDoExt_baseAnm() {}
+    mDoExt_baseAnm() { mpFrameCtrl = NULL; }
     virtual ~mDoExt_baseAnm() {}
 
     int initPlay(s16 i_frameMax, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF);
@@ -43,7 +43,7 @@ private:
 
 class mDoExt_btkAnm : public mDoExt_baseAnm {
 public:
-    mDoExt_btkAnm() { mpAnm = 0; }
+    mDoExt_btkAnm() { mpTexMtxAnm = NULL; }
     int init(J3DMaterialTable* i_matTable, J3DAnmTextureSRTKey* i_btk, int i_anmPlay,
              int i_attribute, f32 i_rate, s16 i_start, s16 i_end, bool i_modify, bool i_entry);
     void entry(J3DMaterialTable* i_matTable, f32 i_frame);
@@ -74,7 +74,7 @@ class J3DTevColorAnm;
 class J3DTevKColorAnm;
 class mDoExt_brkAnm : public mDoExt_baseAnm {
 public:
-    mDoExt_brkAnm() { mpAnm = 0; }
+    mDoExt_brkAnm() { mpAnm = NULL; }
     /* 8000D70C */ int init(J3DMaterialTable* i_matTable, J3DAnmTevRegKey* i_brk, int i_anmPlay,
                             int i_attribute, f32 i_rate, s16 i_start, s16 i_end, bool i_modify, int i_entry);
     /* 8000D7A8 */ void entry(J3DMaterialTable* i_matTable, f32 i_frame);

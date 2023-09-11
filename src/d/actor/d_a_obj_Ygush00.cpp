@@ -11,7 +11,7 @@
 #include "d/d_kankyo.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_ext.h"
-#include "dolphin/mtx/mtx.h"
+#include "m_Do/m_Do_mtx.h"
 
 struct daObjGryw00_c {
 public:
@@ -41,7 +41,9 @@ public:
     daObjGryw00_c * mpGryw00;
 };
 
-STATIC_ASSERT(sizeof(mDoExt_btkAnm) == 0x14);
+namespace {
+    static const char l_arcname[] = "Ygush00";
+};
 
 /* 00000078-0000009C       .text solidHeapCB__14daObjYgush00_cFP10fopAc_ac_c */
 s32 daObjYgush00_c::solidHeapCB(fopAc_ac_c* ac) {
@@ -50,17 +52,20 @@ s32 daObjYgush00_c::solidHeapCB(fopAc_ac_c* ac) {
 
 /* 0000009C-00000250       .text create_heap__14daObjYgush00_cFv */
 s32 daObjYgush00_c::create_heap() {
-    static const u32 mdl_table[] = { 0x0A, 0x09, 0x09, 0x09 };
-    static const u32 btk_table[] = { 0x0E, 0x0D, 0x0D, 0x0D };
-    static const u32 bck_table[] = { 0x06, 0x05, 0x05, 0x05 };
+    static u32 mdl_table[] = { 0x0A, 0x09, 0x09, 0x09 };
+    static u32 btk_table[] = { 0x0E, 0x0D, 0x0D, 0x0D };
+    static u32 bck_table[] = { 0x06, 0x05, 0x05, 0x05 };
 
-    J3DModelData * pModelData = (J3DModelData *)dComIfG_getObjectRes("Ygush00", mdl_table[mType]);
-    J3DAnmTextureSRTKey * pBtk = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes("Ygush00", btk_table[mType]);
-    J3DAnmTransform * pBck = (J3DAnmTransform *)dComIfG_getObjectRes("Ygush00", bck_table[mType]);
+    s32 ret = 1;
+
+    J3DModelData * pModelData = (J3DModelData *)dComIfG_getObjectRes(l_arcname, mdl_table[mType]);
+    J3DAnmTextureSRTKey * pBtk = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes(l_arcname, btk_table[mType]);
+    J3DAnmTransform * pBck = (J3DAnmTransform *)dComIfG_getObjectRes(l_arcname, bck_table[mType]);
 
     if (!pModelData || !pBtk || !pBck) {
         JUT_ASSERT(207, 0);
-        return 0;
+        ret = 0;
+        return ret;
     }
 
     mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000222);
@@ -68,41 +73,43 @@ s32 daObjYgush00_c::create_heap() {
     s32 bckRet = mBckAnm.init(pModelData, pBck, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false);
 
     if (!mpModel || !btkRet || !bckRet)
-        return 0;
+        ret = 0;
 
-    return 1;
+    return ret;
 }
 
 /* 00000250-000003F4       .text _create__14daObjYgush00_cFv */
 s32 daObjYgush00_c::_create() {
+    const char * arcname = l_arcname;
+
     fopAcM_SetupActor(this, daObjYgush00_c);
 
     if (fpcM_IsFirstCreating(this)) {
         u32 type = daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S);
-        if (type >= 0 && type <= 2) {
-            mType = type;
-        } else {
+        mType = type;
+        if ((int)mType < 0 || 4 <= (int)mType)
             mType = 0;
-        }
     }
 
-    if (dComIfG_resLoad(&mPhs, "Ygush00") == cPhs_COMPLEATE_e) {
-        if (!fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, 0x740))
+    if (dComIfG_resLoad(&mPhs, arcname) == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, 0x740) == 1) {
+            mpModel->setBaseScale(mScale);
+            mDoMtx_stack_c::transS(getPosition());
+            mpModel->i_setBaseTRMtx(mDoMtx_stack_c::get());
+            fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+
+            fopAcM_setCullSizeBox(this,
+                mScale.x * -80.0f, 0.0f, mScale.z * -80.0f,
+                mScale.x * 80.0f, mScale.y * 125.0f, mScale.z * 80.0f);
+        } else {
             return cPhs_ERROR_e;
-
-        J3DModel * pModel = mpModel;
-        pModel->setBaseScale(mScale);
-        // mDoMtx_stack_c::transS(getPosition());
-        // pModel->i_setBaseTRMtx(mDoMtx_stack_c::get());
-
-        fopAcM_setCullSizeBox(this, mScale.x * -80.0f, 0.0f, -mScale.z * -80.0f,
-            mScale.x * 80.0f, mScale.y * 125.0f, mScale.z * 80.0f);
+        }
     }
 }
 
 /* 000004F4-00000524       .text _delete__14daObjYgush00_cFv */
 s32 daObjYgush00_c::_delete() {
-    dComIfG_resDelete(&mPhs, "Ygush00");
+    dComIfG_resDelete(&mPhs, l_arcname);
     return 1;
 }
 
