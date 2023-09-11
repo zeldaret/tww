@@ -6,7 +6,7 @@
 #include "SSystem/SComponent/c_lib.h"
 #include "SSystem/SComponent/c_math.h"
 #include "MSL_C/string.h"
-#include "dolphin/types.h"
+#include "dolphin/mtx/mtxvec.h"
 
 /* 802528A4-802528C4       .text cLib_memCpy__FPvPCvUl */
 void cLib_memCpy(void* dst, const void* src, unsigned long size) {
@@ -202,13 +202,59 @@ void cLib_addCalcAngleS2(s16* pValue, s16 target, s16 scale, s16 maxStep) {
 }
 
 /* 802532C4-8025335C       .text cLib_addCalcAngleL__FPlllll */
-void cLib_addCalcAngleL(long*, long, long, long, long) {
-    /* Nonmatching */
+s16 cLib_addCalcAngleL(s32* pValue, s32 target, s32 scale, s32 maxStep, s32 minStep) {
+    s32 diff = target - *pValue;
+    if (*pValue != target) {
+        s32 step = (diff) / scale;
+        if (step > minStep || step < -minStep) {
+            if (step > maxStep) {
+                step = maxStep;
+            }
+            if (step < -maxStep) {
+                step = -maxStep;
+            }
+            *pValue += step;
+        } else {
+            if (0 <= diff) {
+                *pValue += minStep;
+                diff = target - *pValue;
+                if (0 >= diff) {
+                    *pValue = target;
+                }
+            } else {
+                *pValue -= minStep;
+                diff = target - *pValue;
+                if (0 <= diff) {
+                    *pValue = target;
+                }
+            }
+        }
+    }
+    return target - *pValue;
 }
 
 /* 8025335C-802533D0       .text cLib_chaseUC__FPUcUcUc */
-void cLib_chaseUC(unsigned char*, unsigned char, unsigned char) {
-    /* Nonmatching */
+int cLib_chaseUC(u8* pValue, u8 target, u8 step) {
+    if (step) {
+        s16 wideValue = *pValue;
+        s16 wideTarget = target;
+        s16 wideStep;
+        if (wideValue > wideTarget) {
+            wideStep = -step;
+        } else {
+            wideStep = step;
+        }
+        wideValue += wideStep;
+        if (wideStep * (wideValue - wideTarget) >= 0) {
+            *pValue = target;
+            return 1;
+        } else {
+            *pValue = wideValue;
+        }
+    } else if (*pValue == target) {
+        return 1;
+    }
+    return 0;
 }
 
 /* 802533D0-80253440       .text cLib_chaseS__FPsss */
@@ -296,17 +342,19 @@ int cLib_chaseAngleS(s16* pValue, s16 target, s16 step) {
 }
 
 /* 80253804-8025383C       .text cLib_targetAngleY__FP4cXyzP4cXyz */
-s16 cLib_targetAngleY(const Vec* lhs, const Vec* rhs) {
+s16 cLib_targetAngleY(cXyz* lhs, cXyz* rhs) {
     return cM_atan2s(rhs->x - lhs->x, rhs->z - lhs->z);
 }
 
 /* 8025383C-80253908       .text cLib_targetAngleX__FP4cXyzP4cXyz */
-s16 cLib_targetAngleY(const Vec& lhs, const Vec& rhs) {
-    return cM_atan2s(rhs.x - lhs.x, rhs.z - lhs.z);
+s16 cLib_targetAngleX(cXyz* lhs, cXyz* rhs) {
+    cXyz delta = (*rhs - *lhs);
+    f32 dist = delta.absXZ();
+    return cM_atan2s(delta.y, dist);
 }
 
 /* 80253908-8025397C       .text cLib_offsetPos__FP4cXyzP4cXyzsP4cXyz */
-void cLib_offsetPos(cXyz* pDest, cXyz const* pSrc, s16 angle, cXyz const* vec) {
+void cLib_offsetPos(cXyz* pDest, cXyz* pSrc, s16 angle, cXyz* vec) {
     f32 cos = cM_scos(angle);
     f32 sin = cM_ssin(angle);
     pDest->x = pSrc->x + (vec->x * cos + vec->z * sin);
@@ -329,8 +377,8 @@ void MtxInit() {
 }
 
 /* 802539B4-802539FC       .text MtxTrans__FfffUc */
-void MtxTrans(f32 x_trans, f32 y_trans, f32 z_trans, u8 param_3) {
-    if (param_3 == 0) {
+void MtxTrans(f32 x_trans, f32 y_trans, f32 z_trans, u8 concat) {
+    if (concat == 0) {
         MTXTrans(*calc_mtx, x_trans, y_trans, z_trans);
     } else {
         Mtx mtx;
@@ -340,23 +388,41 @@ void MtxTrans(f32 x_trans, f32 y_trans, f32 z_trans, u8 param_3) {
 }
 
 /* 802539FC-80253A4C       .text MtxRotX__FfUc */
-void MtxRotX(float, unsigned char) {
-    /* Nonmatching */
+void MtxRotX(f32 rot, u8 concat) {
+    if (concat == 0) {
+        MTXRotRad(*calc_mtx, 'X', rot);
+    } else {
+        Mtx mtx;
+        MTXRotRad(mtx, 'X', rot);
+        MTXConcat(*calc_mtx, mtx, *calc_mtx);
+    }
 }
 
 /* 80253A4C-80253A9C       .text MtxRotY__FfUc */
-void MtxRotY(float, unsigned char) {
-    /* Nonmatching */
+void MtxRotY(f32 rot, u8 concat) {
+    if (concat == 0) {
+        MTXRotRad(*calc_mtx, 'Y', rot);
+    } else {
+        Mtx mtx;
+        MTXRotRad(mtx, 'Y', rot);
+        MTXConcat(*calc_mtx, mtx, *calc_mtx);
+    }
 }
 
 /* 80253A9C-80253AEC       .text MtxRotZ__FfUc */
-void MtxRotZ(float, unsigned char) {
-    /* Nonmatching */
+void MtxRotZ(f32 rot, u8 concat) {
+    if (concat == 0) {
+        MTXRotRad(*calc_mtx, 'Z', rot);
+    } else {
+        Mtx mtx;
+        MTXRotRad(mtx, 'Z', rot);
+        MTXConcat(*calc_mtx, mtx, *calc_mtx);
+    }
 }
 
 /* 80253AEC-80253B34       .text MtxScale__FfffUc */
-void MtxScale(f32 x_trans, f32 y_trans, f32 z_trans, u8 param_3) {
-    if (param_3 == 0) {
+void MtxScale(f32 x_trans, f32 y_trans, f32 z_trans, u8 concat) {
+    if (concat == 0) {
         MTXScale(*calc_mtx, x_trans, y_trans, z_trans);
     } else {
         Mtx mtx;
