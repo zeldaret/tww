@@ -302,8 +302,12 @@ STATIC_ASSERT(sizeof(dSv_player_status_b_c) == 0x18);
 
 class dSv_player_return_place_c {
 public:
-    /* 80058B84 */ void init();
-    /* 80058BC8 */ void set(char const*, s8, u8);
+    void init();
+    void set(char const*, s8, u8);
+
+    s8 getRoomNo() const { return mRoomNo; }
+    u8 getPlayerStatus() const { return mPlayerStatus; }
+    char* getName() { return mName; }
 
     /* 0x00 */ char mName[8];
     /* 0x08 */ s8 mRoomNo;
@@ -743,17 +747,26 @@ public:
     /* 8005D4C8 */ void setRestartOption(s8);
     /* 8005D584 */ void setRestartOption(s8, cXyz*, s16, s8);
 
+    void setRoomParam(u32 param) { mRestartParam = param; }
+    void setStartPoint(s16 point) { mStartCode = point; }
+    void setLastSceneInfo(f32 speed, u32 mode) {
+        mLastSpeedF = speed;
+        mLastMode = mode;
+    }
+
     /* 0x00 */ s8 mRestartRoom;
     /* 0x01 */ u8 field_0x1;
     /* 0x02 */ s8 mRoomNo;
     /* 0x04 */ s16 field_0x4;
     /* 0x06 */ s16 mRoomAngleY;
     /* 0x08 */ cXyz mRoomPos;
-    /* 0x14 */ u16 mStartCode;
+    /* 0x14 */ s16 mStartCode;
     /* 0x16 */ s16 mRestartAngle;
     /* 0x18 */ cXyz mRestartPos;
     /* 0x24 */ u32 mRestartParam;
-};  // Size: 0x28
+    /* 0x28 */ f32 mLastSpeedF;
+    /* 0x2C */ u32 mLastMode;
+};  // Size: 0x30
 
 class dSv_turnRestart_c {
 public:
@@ -810,6 +823,7 @@ public:
 
     dSv_player_c& getPlayer() { return mSavedata.getPlayer(); }
     dSv_event_c& getEvent() { return mSavedata.getEvent(); }
+    dSv_restart_c& getRestart() { return mRestart; }
 
     static const int MEMORY_SWITCH = 0x80;
     static const int DAN_SWITCH = 0x40;
@@ -826,8 +840,6 @@ public:
     /* 0x079C */ dSv_danBit_c mDan;
     /* 0x07A8 */ dSv_zone_c mZone[ZONE_MAX];
     /* 0x1128 */ dSv_restart_c mRestart;
-    /* 0x1150 */ f32 field_0x1150;
-    /* 0x1154 */ int field_0x1154;
     /* 0x1158 */ dSv_event_c mTmp;
     /* 0x1258 */ dSv_turnRestart_c mTurnRestart;
     /* 0x1290 */ u8 field_0x1290;

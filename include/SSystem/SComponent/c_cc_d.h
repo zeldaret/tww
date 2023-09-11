@@ -77,6 +77,8 @@ struct cCcD_SrcTriAttr {
 
 class cCcD_TriAttr : public cCcD_ShapeAttr, public cM3dGTri {
 public:
+    cCcD_TriAttr() {}
+
     virtual void CalcAabBox();
     virtual bool GetNVec(cXyz const&, cXyz*) const;
     virtual bool CrossAtTg(cCcD_CpsAttr const&, cXyz*) const;

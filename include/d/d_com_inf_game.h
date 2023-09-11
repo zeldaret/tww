@@ -1,13 +1,17 @@
 #ifndef D_COM_D_COM_INF_GAME_H
 #define D_COM_D_COM_INF_GAME_H
 
+#include "d/d_attention.h"
 #include "d/d_bg_s.h"
 #include "d/d_cc_s.h"
+#include "d/d_detect.h"
+#include "d/d_drawlist.h"
 #include "d/d_event.h"
 #include "d/d_event_manager.h"
 #include "d/d_resorce.h"
 #include "d/d_save.h"
 #include "d/d_stage.h"
+#include "d/d_vibration.h"
 
 class JKRArchive;
 class JKRExpHeap;
@@ -27,6 +31,22 @@ class dTimer_c;
 class camera_class;
 class J2DOrthoGraph;
 
+class __d_timer_info_c {
+public:
+    __d_timer_info_c() {
+        mTimerMode = -1;
+        mTimerLimitTimeMs = 0;
+        mTimerNowTimeMs = 0;
+        mTimerPtr = NULL;
+    }
+
+    /* 0x00 */ dTimer_c* mTimerPtr;
+    /* 0x04 */ s32 mTimerNowTimeMs;
+    /* 0x08 */ s32 mTimerLimitTimeMs;
+    /* 0x0C */ s32 mTimerMode;
+    /* 0x10 */ u8 mTimerType;
+};
+
 class dADM {
 public:
     /* 0x00 */ int mBlockCount;
@@ -39,37 +59,6 @@ public:
     void SetData(void*);
 
     virtual ~dADM();
-};
-
-// setup properly later
-struct dAttention_c {
-    u8 temp[0x190];
-};
-
-struct dVibration_c {
-    u8 temp[0x84];
-};
-
-struct dDetect_c {
-    u8 temp[0x14];
-};
-
-struct dDlst_list_c {
-    u8 temp[0x16234];
-};
-
-class dDlst_window_c {
-public:
-    /* 0x00 */ f32 mXOrig;
-    /* 0x04 */ f32 mYOrig;
-    /* 0x08 */ f32 mWidth;
-    /* 0x0C */ f32 mHeight;
-    /* 0x10 */ f32 mNearZ;
-    /* 0x14 */ f32 mFarZ;
-    /* 0x18 */ f32 mScissorXOrig;
-    /* 0x1C */ f32 mScissorYOrig;
-    /* 0x20 */ f32 mScissorWidth;
-    /* 0x24 */ f32 mScissorHeight;
 };
 
 class dComIfG_camera_info_class {
@@ -85,8 +74,9 @@ public:
     /* 0x08 */ u32 mCameraAttentionStatus;
     /* 0x0C */ f32 mCameraZoomScale;
     /* 0x10 */ f32 mCameraZoomForcus;
+    /* 0x14 */ u8 field_0x14[0x34 - 0x14];
 };
-STATIC_ASSERT(sizeof(dComIfG_camera_info_class) == 0x14);
+STATIC_ASSERT(sizeof(dComIfG_camera_info_class) == 0x34);
 
 class dComIfG_play_c {
 public:
@@ -95,7 +85,7 @@ public:
     void ct();
     void init();
     void itemInit();
-    void getLayerNo(int);
+    int getLayerNo(int i_roomNo);
     void createParticle();
     void createDemo();
     void removeDemo();
@@ -122,6 +112,27 @@ public:
     void drawWood();
 
     ~dComIfG_play_c();
+
+    const char* getStartStageName() { return mCurStage.getName(); }
+    s8 getStartStageRoomNo() { return mCurStage.getRoomNo(); }
+    s8 getStartStageLayer() { return mCurStage.getLayer(); }
+    s16 getStartStagePoint() { return mCurStage.getPoint(); }
+    void setStartStageLayer(s8 layer) { mCurStage.setLayer(layer); }
+
+    const char* getNextStageName() { return mNextStage.getName(); }
+    dStage_startStage_c* getNextStartStage() { return &mNextStage; }
+    s8 getNextStageRoomNo() { return mNextStage.getRoomNo(); }
+    s8 getNextStageLayer() { return mNextStage.getLayer(); }
+    s16 getNextStagePoint() { return mNextStage.getPoint(); }
+    s8 getNextStageWipe() { return mNextStage.getWipe(); }
+    bool isEnableNextStage() { return mNextStage.isEnable(); }
+    void offEnableNextStage() { mNextStage.offEnable(); }
+    void setNextStage(const char* i_stageName, s8 i_roomNo, s16 i_point, s8 i_layer, s8 i_wipe) {
+        mNextStage.set(i_stageName, i_roomNo, i_point, i_layer, i_wipe);
+    }
+
+    fopAc_ac_c* getPlayerPtr(int idx) { return (fopAc_ac_c*)mpPlayerPtr[idx]; }
+    fopAc_ac_c* getPlayer(int idx) { return (fopAc_ac_c*)mpPlayer[idx]; }
 
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
@@ -175,10 +186,7 @@ public:
     /* 0x4841 */ u8 field_0x4841;
     /* 0x4842 */ s16 mVrboxFlags;
     /* 0x4844 */ dDlst_window_c mDlstWindow[1];
-    /* 0x486C */ u8 mCurCameraInfo;
-    /* 0x486D */ u8 field_0x486D[0x4870 - 0x486D];
     /* 0x4870 */ dComIfG_camera_info_class mCameraInfo[1];
-    /* 0x4884 */ u8 field_0x4884[0x48A4 - 0x4884];
     /* 0x48A4 */ daPy_py_c* mpPlayer[1];
     /* 0x48A8 */ s8 mCurCamera[1];
     /* 0x48A9 */ u8 field_0x48A9[0x48AC - 0x48A9];
@@ -277,12 +285,7 @@ public:
     /* 0x4A24 */ daAgb_c* mpAgb;
     /* 0x4A28 */ u32 mPlayerStatus[2][2];
     /* 0x4A38 */ u8 field_0x4A38[0x4A40 - 0x4A38];
-    /* 0x4A40 */ dTimer_c* mpRestartTimer;
-    /* 0x4A44 */ int field_0x4a44;
-    /* 0x4A48 */ int field_0x4a48;
-    /* 0x4A4C */ int field_0x4a4c;
-    /* 0x4A50 */ u16 field_0x4a50;
-    /* 0x4A52 */ u8 field_0x4A52[0x4A54 - 0x4A52];
+    /* 0x4A40 */ __d_timer_info_c mTimerInfo;
     /* 0x4A54 */ dDlst_window_c* field_0x4a54;
     /* 0x4A58 */ camera_class* field_0x4a58;
     /* 0x4A5C */ dDlst_window_c* field_0x4a5c;
@@ -311,6 +314,8 @@ public:
     /* 0x1D1C1 */ u8 field_0x1d1c1;
 };
 
+STATIC_ASSERT(sizeof(dComIfG_inf_c) == 0x1D1C8);
+
 extern dComIfG_inf_c g_dComIfG_gameInfo;
 
 /**
@@ -333,17 +338,113 @@ inline BOOL dComIfGs_isEventBit(u16 id) {
     return g_dComIfG_gameInfo.info.getEvent().isEventBit(id);
 }
 
+inline void dComIfGs_setRestartRoomParam(u32 i_param) {
+    g_dComIfG_gameInfo.info.getRestart().setRoomParam(i_param);
+}
+
+inline void dComIfGs_setStartPoint(s16 i_point) {
+    g_dComIfG_gameInfo.info.getRestart().setStartPoint(i_point);
+}
+
+inline int dComIfGs_getTriforceNum() {
+    return g_dComIfG_gameInfo.info.getPlayer().getCollect().getTriforceNum();
+}
+
 /**
  * === PLAY ===
  */
+
+void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8 i_layer,
+                           f32 i_lastSpeed, u32 i_lastMode, int, s8 i_wipe);
+
+inline const char* dComIfGp_getStartStageName() {
+    return g_dComIfG_gameInfo.play.getStartStageName();
+}
+
+inline s8 dComIfGp_getStartStageRoomNo() {
+    return g_dComIfG_gameInfo.play.getStartStageRoomNo();
+}
+
+inline s8 dComIfGp_getStartStageLayer() {
+    return g_dComIfG_gameInfo.play.getStartStageLayer();
+}
+
+inline s16 dComIfGp_getStartStagePoint() {
+    return g_dComIfG_gameInfo.play.getStartStagePoint();
+}
+
+inline void dComIfGp_offEnableNextStage() {
+    g_dComIfG_gameInfo.play.offEnableNextStage();
+}
+
+inline const char* dComIfGp_getNextStageName() {
+    return g_dComIfG_gameInfo.play.getNextStageName();
+}
+
+inline dStage_startStage_c* dComIfGp_getNextStartStage() {
+    return g_dComIfG_gameInfo.play.getNextStartStage();
+}
+
+inline s8 dComIfGp_getNextStageRoomNo() {
+    return g_dComIfG_gameInfo.play.getNextStageRoomNo();
+}
+
+inline s8 dComIfGp_getNextStageLayer() {
+    return g_dComIfG_gameInfo.play.getNextStageLayer();
+}
+
+inline s32 dComIfGp_getNextStageWipe() {
+    return g_dComIfG_gameInfo.play.getNextStageWipe();
+}
+
+inline bool dComIfGp_isEnableNextStage() {
+    return g_dComIfG_gameInfo.play.isEnableNextStage();
+}
+
+inline s16 dComIfGp_getNextStagePoint() {
+    return g_dComIfG_gameInfo.play.getNextStagePoint();
+}
+
+inline fopAc_ac_c* dComIfGp_getPlayer(int idx) {
+    return g_dComIfG_gameInfo.play.getPlayer(idx);
+}
+
+inline daPy_lk_c* daPy_getPlayerLinkActorClass() {
+    return (daPy_lk_c*)g_dComIfG_gameInfo.play.getPlayerPtr(0);
+}
 
 /**
  * === RESOURCE ===
  */
 
+class request_of_phase_process_class;
 int dComIfG_resLoad(request_of_phase_process_class* i_phase, char const* arc_name);
 int dComIfG_resLoad(request_of_phase_process_class* i_phase, char const* resName, JKRHeap* heap);
 int dComIfG_resDelete(request_of_phase_process_class* i_phase, char const* resName);
+
+inline int dComIfG_setObjectRes(const char* name, u8 param_1, JKRHeap* heap) {
+    return g_dComIfG_gameInfo.mResControl.setObjectRes(name, param_1, heap);
+}
+
+inline int dComIfG_setObjectRes(const char* name, void* param_1, u32 param_2) {
+    return g_dComIfG_gameInfo.mResControl.setObjectRes(name, param_1, param_2, NULL);
+}
+
+inline int dComIfG_setStageRes(const char* name, JKRHeap* heap) {
+    return g_dComIfG_gameInfo.mResControl.setStageRes(name, heap);
+}
+
+inline int dComIfG_syncObjectRes(const char* name) {
+    return g_dComIfG_gameInfo.mResControl.syncObjectRes(name);
+}
+
+inline int dComIfG_syncStageRes(const char* name) {
+    return g_dComIfG_gameInfo.mResControl.syncStageRes(name);
+}
+
+inline int dComIfG_deleteObjectResMain(const char* res) {
+    return g_dComIfG_gameInfo.mResControl.deleteObjectRes(res);
+}
 
 inline int dComIfG_deleteStageRes(const char* res) {
     return g_dComIfG_gameInfo.mResControl.deleteStageRes(res);
