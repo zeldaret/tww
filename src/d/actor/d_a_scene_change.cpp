@@ -41,10 +41,10 @@ s32 daSceneChgCreate(void* i_this) {
     
     fopAcM_SetupActor(scnChg, d_a_scene_change_c);
     
-    MTXTrans(&mDoMtx_stack_c::now[0], scnChg->current.pos.x, scnChg->current.pos.y, scnChg->current.pos.z);
-    mDoMtx_ZXYrotM(&mDoMtx_stack_c::now[0], scnChg->shape_angle.x, scnChg->shape_angle.y, scnChg->shape_angle.z);
+    MTXTrans(mDoMtx_stack_c::now, scnChg->current.pos.x, scnChg->current.pos.y, scnChg->current.pos.z);
+    mDoMtx_ZXYrotM(mDoMtx_stack_c::now, scnChg->shape_angle.x, scnChg->shape_angle.y, scnChg->shape_angle.z);
     
-    MTXCopy(&mDoMtx_stack_c::now[0], &scnChg->mTransformMtx[0]);
+    MTXCopy(mDoMtx_stack_c::now, scnChg->mTransformMtx);
     return cPhs_COMPLEATE_e;
 }
 
