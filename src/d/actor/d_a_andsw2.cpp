@@ -97,7 +97,7 @@ BOOL daAndsw2_c::chkAllSw2() {
         return false;
     }
     for (int i = 0; i < num; i++) {
-        if (!g_dComIfG_gameInfo.info.isSwitch(topSw+i, getRoomNo())) {
+        if (!dComIfGs_isSwitch(topSw+i, getRoomNo())) {
             return false;
         }
     }
@@ -115,7 +115,7 @@ static s32 daAndsw2_actionOnAll(daAndsw2_c* i_this) {
         } else {
             int room = i_this->getRoomNo();
             int sw = i_this->getSwbit();
-            g_dComIfG_gameInfo.info.onSwitch(sw, room);
+            dComIfGs_onSwitch(sw, room);
 
             if (i_this->getType() == TYPE_CONTINUOUS) {
                 i_this->mAction = ACT_OFF;
@@ -138,7 +138,7 @@ static s32 daAndsw2_actionTimer(daAndsw2_c* i_this) {
     } else {
         int room = i_this->getRoomNo();
         int sw = i_this->getSwbit();
-        g_dComIfG_gameInfo.info.onSwitch(sw, room);
+        dComIfGs_onSwitch(sw, room);
         
         if (i_this->getType() == TYPE_CONTINUOUS) {
             i_this->mAction = ACT_WAIT;
@@ -153,7 +153,7 @@ static s32 daAndsw2_actionOrder(daAndsw2_c* i_this) {
         i_this->mAction = ACT_EVENT;
         int room = i_this->getRoomNo();
         int sw = i_this->getSwbit();
-        g_dComIfG_gameInfo.info.onSwitch(sw, room);
+        dComIfGs_onSwitch(sw, room);
     } else if (i_this->getType() == TYPE_CONTINUOUS && !i_this->chkAllSw2()) {
         i_this->mAction = ACT_ON_ALL;
     } else {
@@ -165,7 +165,7 @@ static s32 daAndsw2_actionOrder(daAndsw2_c* i_this) {
 /* 00000438-000004BC       .text daAndsw2_actionEvent__FP10daAndsw2_c */
 static s32 daAndsw2_actionEvent(daAndsw2_c* i_this) {
     dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
-    if (play->mEventMgr.endCheck(i_this->mEventIdx)) {
+    if (dComIfGp_evmng_endCheck(i_this->mEventIdx)) {
         if (i_this->getType() == TYPE_CONTINUOUS) {
             i_this->mAction = ACT_OFF;
         } else {
@@ -182,7 +182,7 @@ static s32 daAndsw2_actionOff(daAndsw2_c* i_this) {
         i_this->mAction = ACT_ON_ALL;
         int room = i_this->getRoomNo();
         int sw = i_this->getSwbit();
-        g_dComIfG_gameInfo.info.offSwitch(sw, room);
+        dComIfGs_offSwitch(sw, room);
     }
     return 1;
 }
@@ -212,27 +212,27 @@ s32 daAndsw2_c::create() {
     
     switch (getType()) {
     case TYPE_ONE_OFF:
-        if (sw == 0xFF || g_dComIfG_gameInfo.info.isSwitch(sw, getRoomNo())) {
+        if (sw == 0xFF || dComIfGs_isSwitch(sw, getRoomNo())) {
             // Switch invalid or already set.
             mAction = ACT_WAIT;
         } else {
             // Switch not yet set, check for the condition to be met.
             mAction = ACT_ON_ALL;
         }
-        mEventIdx = g_dComIfG_gameInfo.play.mEventMgr.getEventIdx(NULL, getEventNo());
+        mEventIdx = dComIfGp_evmng_getEventIdx(NULL, getEventNo());
         break;
     case TYPE_CONTINUOUS:
         if (sw == 0xFF) {
             // Switch invalid.
             mAction = ACT_WAIT;
-        } else if (g_dComIfG_gameInfo.info.isSwitch(sw, getRoomNo())) {
+        } else if (dComIfGs_isSwitch(sw, getRoomNo())) {
             // Switch already set, wait for the condition to no longer be met.
             mAction = ACT_OFF;
         } else {
             // Switch not yet set, check for the condition to be met.
             mAction = ACT_ON_ALL;
         }
-        mEventIdx = g_dComIfG_gameInfo.play.mEventMgr.getEventIdx(NULL, getEventNo());
+        mEventIdx = dComIfGp_evmng_getEventIdx(NULL, getEventNo());
         break;
     default:
         // Invalid type, do nothing.

@@ -117,6 +117,7 @@ public:
     dStage_roomControl_c* getRoomControl() { return &mRoomCtrl; }
     dStage_stageDt_c& getStage() { return mStageData; }
     dEvt_control_c& getEvent() { return mEvtCtrl; }
+    dEvent_manager_c& getEvtManager() { return mEvtManager; }
 
     const char* getStartStageName() { return mCurStage.getName(); }
     s8 getStartStageRoomNo() { return mCurStage.getRoomNo(); }
@@ -148,7 +149,7 @@ public:
     /* 0x3EB0 */ dStage_stageDt_c mStageData;
     /* 0x3F34 */ dStage_roomControl_c mRoomCtrl;
     /* 0x3F38 */ dEvt_control_c mEvtCtrl;
-    /* 0x402C */ dEvent_manager_c mEventMgr;
+    /* 0x402C */ dEvent_manager_c mEvtManager;
     /* 0x4568 */ dAttention_c mAttention;
     /* 0x46F8 */ u8 field_0x46F8[0x4700 - 0x46F8];
     /* 0x4700 */ dVibration_c mVibration;
@@ -310,7 +311,7 @@ public:
 
     void ct();
 
-    /* 0x00000 */ dSv_info_c info;
+    /* 0x00000 */ dSv_info_c save;
     /* 0x012A0 */ dComIfG_play_c play;
     /* 0x05D1C */ dDlst_list_c drawlist;
     /* 0x1BF50 */ u8 field_0x1BF50[0x1BFC0 - 0x1BF50];
@@ -330,83 +331,95 @@ extern dComIfG_inf_c g_dComIfG_gameInfo;
 u8 dComIfGs_checkGetItem(u8);
 
 inline u8 dComIfGs_getSelectEquip(int param_0) {
-    return g_dComIfG_gameInfo.info.getPlayer().getPlayerStatusA().getSelectEquip(param_0);
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getSelectEquip(param_0);
 }
 
 inline u8 dComIfGs_getItem(int param_0) {
-    return g_dComIfG_gameInfo.info.getPlayer().getItem().getItem(param_0);
+    return g_dComIfG_gameInfo.save.getPlayer().getItem().getItem(param_0);
 }
 
 inline void dComIfGs_setEventReg(u16 i_reg, u8 i_no) {
-    g_dComIfG_gameInfo.info.getEvent().setEventReg(i_reg, i_no);
+    g_dComIfG_gameInfo.save.getEvent().setEventReg(i_reg, i_no);
 }
 
 inline BOOL dComIfGs_isEventBit(u16 id) {
-    return g_dComIfG_gameInfo.info.getEvent().isEventBit(id);
+    return g_dComIfG_gameInfo.save.getEvent().isEventBit(id);
 }
 
 inline void dComIfGs_setRestartRoomParam(u32 i_param) {
-    g_dComIfG_gameInfo.info.getRestart().setRoomParam(i_param);
+    g_dComIfG_gameInfo.save.getRestart().setRoomParam(i_param);
 }
 
 inline void dComIfGs_setStartPoint(s16 i_point) {
-    g_dComIfG_gameInfo.info.getRestart().setStartPoint(i_point);
+    g_dComIfG_gameInfo.save.getRestart().setStartPoint(i_point);
 }
 
 inline int dComIfGs_getTriforceNum() {
-    return g_dComIfG_gameInfo.info.getPlayer().getCollect().getTriforceNum();
+    return g_dComIfG_gameInfo.save.getPlayer().getCollect().getTriforceNum();
 }
 
 inline u8 dComIfGs_getOptVibration() {
-    return g_dComIfG_gameInfo.info.getPlayer().getConfig().getVibration();
+    return g_dComIfG_gameInfo.save.getPlayer().getConfig().getVibration();
 }
 
 inline BOOL dComIfGs_isTbox(int i_no) {
-    return g_dComIfG_gameInfo.info.getMemory().getBit().isTbox(i_no);
+    return g_dComIfG_gameInfo.save.getMemory().getBit().isTbox(i_no);
 }
 
 inline BOOL dComIfGs_isSaveTbox(int i_stageNo, int i_no) {
-    return g_dComIfG_gameInfo.info.getSavedata().getSave(i_stageNo).getBit().isTbox(i_no);
+    return g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().isTbox(i_no);
 }
 
 inline void dComIfGs_onTbox(int i_no) {
-    g_dComIfG_gameInfo.info.getMemory().getBit().onTbox(i_no);
+    g_dComIfG_gameInfo.save.getMemory().getBit().onTbox(i_no);
 }
 
 inline void dComIfGs_onSaveTbox(int i_stageNo, int i_no) {
-    g_dComIfG_gameInfo.info.getSavedata().getSave(i_stageNo).getBit().onTbox(i_no);
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().onTbox(i_no);
 }
 
 inline BOOL dComIfGs_isStageBossEnemy() {
-    return g_dComIfG_gameInfo.info.getMemory().getBit().isStageBossEnemy();
+    return g_dComIfG_gameInfo.save.getMemory().getBit().isStageBossEnemy();
 }
 
 inline void dComIfGs_onStageLife() {
-    g_dComIfG_gameInfo.info.getMemory().getBit().onStageLife();
+    g_dComIfG_gameInfo.save.getMemory().getBit().onStageLife();
 }
 
 inline BOOL dComIfGs_isStageLife() {
-    return g_dComIfG_gameInfo.info.getMemory().getBit().isStageLife();
+    return g_dComIfG_gameInfo.save.getMemory().getBit().isStageLife();
 }
 
 inline BOOL dComIfGs_isCollect(int i_idx, u8 i_item) {
-    return g_dComIfG_gameInfo.info.getPlayer().getCollect().isCollect(i_idx, i_item);
+    return g_dComIfG_gameInfo.save.getPlayer().getCollect().isCollect(i_idx, i_item);
 }
 
 inline void dComIfGs_onCollect(int i_idx, u8 i_item) {
-    g_dComIfG_gameInfo.info.getPlayer().getCollect().onCollect(i_idx, i_item);
+    g_dComIfG_gameInfo.save.getPlayer().getCollect().onCollect(i_idx, i_item);
 }
 
 inline BOOL dComIfGs_isTact(u8 i_no) {
-    return g_dComIfG_gameInfo.info.getPlayer().getCollect().isTact(i_no);
+    return g_dComIfG_gameInfo.save.getPlayer().getCollect().isTact(i_no);
 }
 
 inline BOOL dComIfGs_isTriforce(u8 i_no) {
-    return g_dComIfG_gameInfo.info.getPlayer().getCollect().isTriforce(i_no);
+    return g_dComIfG_gameInfo.save.getPlayer().getCollect().isTriforce(i_no);
 }
 
 inline BOOL dComIfGs_isSymbol(u8 i_no) {
-    return g_dComIfG_gameInfo.info.getPlayer().getCollect().isSymbol(i_no);
+    return g_dComIfG_gameInfo.save.getPlayer().getCollect().isSymbol(i_no);
+}
+
+inline void dComIfGs_onSwitch(int i_no, int i_roomNo) {
+    g_dComIfG_gameInfo.save.onSwitch(i_no, i_roomNo);
+}
+
+inline void dComIfGs_offSwitch(int i_no, int i_roomNo) {
+    g_dComIfG_gameInfo.save.offSwitch(i_no, i_roomNo);
+}
+
+inline BOOL dComIfGs_isSwitch(s32 i_no, s32 i_roomNo) {
+    return g_dComIfG_gameInfo.save.isSwitch(i_no, i_roomNo);
 }
 
 /**
@@ -490,6 +503,22 @@ inline dBgS* dComIfG_Bgsp() {
 
 inline daPy_lk_c* daPy_getPlayerLinkActorClass() {
     return (daPy_lk_c*)g_dComIfG_gameInfo.play.getPlayerPtr(0);
+}
+
+/**
+ * === EVENT ===
+ */
+
+inline dEvent_manager_c& dComIfGp_getEventManager() {
+    return g_dComIfG_gameInfo.play.getEvtManager();
+}
+
+inline u32 dComIfGp_evmng_getEventIdx(char *pName, u8 evNo) {
+    return dComIfGp_getEventManager().getEventIdx(pName, evNo);
+}
+
+inline BOOL dComIfGp_evmng_endCheck(s16 eventID) {
+    return g_dComIfG_gameInfo.play.getEvtManager().endCheck(eventID);
 }
 
 /**

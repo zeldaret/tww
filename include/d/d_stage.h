@@ -449,7 +449,7 @@ public:
 	static void setStayNo(int);
 	static s8 GetTimePass();
 	static void setZoneNo(int, int);
-    static int getZoneNo(int);
+    static int getZoneNo(int i_roomNo);
 
     static s8 getStayNo() { return mStayNo; }
     static s8 getMemoryBlockID(int i_roomNo) { return mStatus[i_roomNo].mMemBlockID; }

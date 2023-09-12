@@ -6,7 +6,10 @@
 #include "d/d_save.h"
 #include "d/d_save_init.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_item_data.h"
+#include "d/d_stage.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "JSystem/JUtility/JUTGamePad.h"
 #include "MSL_C/string.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "SSystem/SComponent/c_math.h"
@@ -67,7 +70,7 @@ void dSv_player_status_a_c::init() {
             case 29:
             case 30:
             case 31:
-                item = g_dComIfG_gameInfo.info.getPlayer().mGetItem.mItemFlags[item_idx + 13];
+                item = g_dComIfG_gameInfo.save.getPlayer().mGetItem.mItemFlags[item_idx + 13];
                 break;
             case 32:
             case 33:
@@ -82,7 +85,7 @@ void dSv_player_status_a_c::init() {
             case 41:
             case 42:
             case 43:
-                item = g_dComIfG_gameInfo.info.getPlayer().mGetItem.mItemFlags[item_idx + 9];
+                item = g_dComIfG_gameInfo.save.getPlayer().mGetItem.mItemFlags[item_idx + 9];
                 break;
             case 44:
             case 45:
@@ -97,7 +100,7 @@ void dSv_player_status_a_c::init() {
             case 53:
             case 54:
             case 55:
-                item = g_dComIfG_gameInfo.info.getPlayer().mGetItem.mItemFlags[item_idx + 5];
+                item = g_dComIfG_gameInfo.save.getPlayer().mGetItem.mItemFlags[item_idx + 5];
                 break;
             }
 
@@ -352,13 +355,23 @@ void dSv_player_item_record_c::init() {
 }
 
 /* 8005987C-80059894       .text resetTimer__24dSv_player_item_record_cFUs */
-void dSv_player_item_record_c::resetTimer(u16) {
-    /* Nonmatching */
+void dSv_player_item_record_c::resetTimer(u16 timer) {
+    mTimer = timer;
+    g_dComIfG_gameInfo.play.field_0x4956 = 0;
 }
 
 /* 80059894-800598D0       .text decTimer__24dSv_player_item_record_cFv */
 void dSv_player_item_record_c::decTimer() {
-    /* Nonmatching */
+    if (g_dComIfG_gameInfo.play.field_0x4956 != 1)
+        return;
+
+    if (mTimer != 0) {
+        mTimer--;
+        return;
+    }
+
+    mTimer = 0;
+    g_dComIfG_gameInfo.play.field_0x4956 = 0;
 }
 
 /* 800598D0-800598D8       .text getTimer__24dSv_player_item_record_cFv */
@@ -815,8 +828,11 @@ void dSv_player_config_c::init() {
 }
 
 /* 8005BFA4-8005BFC8       .text checkVibration__19dSv_player_config_cFv */
-void dSv_player_config_c::checkVibration() {
-    /* Nonmatching */
+s32 dSv_player_config_c::checkVibration() {
+    if (JUTGamePad::sRumbleSupported)
+        return g_dComIfG_gameInfo.play.field_0x4963;
+
+    return 0;
 }
 
 /* 8005BFC8-8005BFD4       .text init__19dSv_player_priest_cFv */
@@ -867,7 +883,6 @@ void dSv_memBit_c::init() {
         mVisitedRoom[i] = 0;
     }
 
-    field_0x20 = 0;
     mDungeonItem = 0;
 }
 
@@ -1263,11 +1278,6 @@ void dSv_info_c::onSwitch(int i_no, int i_roomNo) {
 
         mZone[zoneId].getZoneBit().onSwitch(i_no - (MEMORY_SWITCH + DAN_SWITCH));
     }
-}
-
-/* 8005DCD0-8005DCEC       .text getZoneNo__20dStage_roomControl_cFi */
-int dStage_roomControl_c::getZoneNo(int param_0) {
-    /* Nonmatching */
 }
 
 /* 8005DCEC-8005DE98       .text offSwitch__10dSv_info_cFii */

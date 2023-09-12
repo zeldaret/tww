@@ -253,7 +253,7 @@ STATIC_ASSERT(sizeof(dSv_player_info_c) == 0x5C);
 class dSv_player_config_c {
 public:
     /* 8005BF2C */ void init();
-    /* 8005BFA4 */ void checkVibration();
+    /* 8005BFA4 */ s32 checkVibration();
 
     u8 getVibration() const { return mVibration; }
 
