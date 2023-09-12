@@ -3,7 +3,6 @@
 
 #include "MSL_C/math.h"
 #include "dolphin/mtx/vec.h"
-#include "MSL_C/MSL_Common/Src/printf.h"
 
 struct cXy {
     f32 x;
