@@ -9,8 +9,9 @@
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_resorce.h"
+#include "dolphin/mtx/mtx.h"
 #include "dolphin/types.h"
 
 
@@ -24,9 +25,10 @@ public:
     static s32 solidHeapCB(fopAc_ac_c*);
 
     /* 0x0290 */ request_of_phase_process_class mPhs;
-    /* 0x0294 */ s8 dummy[0x10];
-    // ...
-    /* 0x02A8*/ mDoExt_McaMorf* mAnims[2];
+    /* 0x0294 */ //s8 dummy[0x04];
+    /* 0x0298 */ J3DModel* mModels[2];
+    /* 0x02A0 */ s8 dummy2[0x08]; 
+    /* 0x02A8 */ mDoExt_McaMorf* mAnims[2];
 
     static char m_arcname[];
 };
@@ -35,20 +37,30 @@ char daBranch_c::m_arcname[] = "Kwood_00";
 
 /* 00000078-00000128       .text set_mtx__10daBranch_cFv */
 void daBranch_c::set_mtx() {
-    /* Nonmatching */
-    //for (int i = 0; i < 2; i ++) {
+    J3DModel* pMdl;
 
-    //}
+    for (int i = 0; i < 2; i ++) {
+        pMdl = mModels[i];
+
+        if (pMdl) {
+            pMdl->setBaseScale(mScale);
+
+            MTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
+            mDoMtx_XYZrotM(mDoMtx_stack_c::now, current.angle.x, current.angle.y, current.angle.z);
+
+            MTXCopy(mDoMtx_stack_c::now, pMdl->getBaseTRMtx());
+        }
+    }
 }
 
 /* 00000128-000001E4       .text set_anim__10daBranch_cFiii */
 void daBranch_c::set_anim(int i_animIdx, int i_bckIdx, int i_basIdx) {
     if (i_bckIdx > 0 && i_basIdx > 0) {
         void* pSnd = dComIfG_getObjectIDRes(m_arcname, i_basIdx);
-        void* pAnm = dComIfG_getObjectIDRes(m_arcname, i_bckIdx);
+        J3DAnmTransform* pAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectIDRes(m_arcname, i_bckIdx));
         
         mAnims[i_animIdx]->setAnm(
-            static_cast<J3DAnmTransform*>(pAnm),
+            pAnm,
             -1,
             0.0f,
             1.0f,
@@ -76,21 +88,21 @@ s32 daBranch_c::CreateHeap() {
 
     BOOL status = TRUE;
 
-    s32 ids[] = {
+    int ids[] = {
         8, 0, 
         7, 2, 
         6, 5 
     };
 
     for (int i = 0; i < 2; i++) {
-        void* modelRes = dRes_control_c::getIDRes(m_arcname, ids[i + 4], g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
-        void* bckRes = dRes_control_c::getIDRes(m_arcname, ids[i + 2], g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
+        J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes(m_arcname, ids[i + 4]));
+        J3DAnmTransformKey* bck = static_cast<J3DAnmTransformKey*>(dComIfG_getObjectIDRes(m_arcname, ids[i + 2]));
 
-        if (!modelRes) {
-            JUT_ASSERT(0x1CC, "modelData != 0");
+        if (!modelData) {
+            JUT_ASSERT(0x1CC, modelData != 0);
         }
-        if (!bckRes) {
-            JUT_ASSERT(0x1CD, "bck != 0");
+        if (!bck) {
+            JUT_ASSERT(0x1CD, bck != 0);
         }
 
         mDoExt_McaMorf* newMorf = new mDoExt_McaMorf(
