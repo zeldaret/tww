@@ -4,9 +4,10 @@
 //
 
 #include "SSystem/SComponent/c_lib.h"
-#include "SSystem/SComponent/c_math.h"
 #include "MSL_C/string.h"
+#include "SSystem/SComponent/c_math.h"
 #include "dolphin/mtx/mtxvec.h"
+
 
 /* 802528A4-802528C4       .text cLib_memCpy__FPvPCvUl */
 void cLib_memCpy(void* dst, const void* src, unsigned long size) {
@@ -202,35 +203,33 @@ void cLib_addCalcAngleS2(s16* pValue, s16 target, s16 scale, s16 maxStep) {
 }
 
 /* 802532C4-8025335C       .text cLib_addCalcAngleL__FPlllll */
-s16 cLib_addCalcAngleL(s32* pValue, s32 target, s32 scale, s32 maxStep, s32 minStep) {
+s32 cLib_addCalcAngleL(s32* pValue, s32 target, s32 scale, s32 maxStep, s32 minStep) {
     s32 diff = target - *pValue;
     if (*pValue != target) {
-        s32 step = (diff) / scale;
-        if (step > minStep || step < -minStep) {
-            if (step > maxStep) {
-                step = maxStep;
+        scale = (diff) / scale;
+        if (scale > minStep || scale < -minStep) {
+            if (scale > maxStep) {
+                scale = maxStep;
             }
-            if (step < -maxStep) {
-                step = -maxStep;
+            if (scale < -maxStep) {
+                scale = -maxStep;
             }
-            *pValue += step;
+            *pValue += scale;
         } else {
             if (0 <= diff) {
                 *pValue += minStep;
-                diff = target - *pValue;
-                if (0 >= diff) {
+                if (0 >= target - *pValue) {
                     *pValue = target;
                 }
             } else {
                 *pValue -= minStep;
-                diff = target - *pValue;
-                if (0 <= diff) {
+                if (0 <= target - *pValue) {
                     *pValue = target;
                 }
             }
         }
     }
-    return target - *pValue;
+    return diff;
 }
 
 /* 8025335C-802533D0       .text cLib_chaseUC__FPUcUcUc */

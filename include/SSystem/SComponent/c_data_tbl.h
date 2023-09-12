@@ -4,13 +4,13 @@
 #include "dolphin/types.h"
 
 struct cDT_NamePTbl {
+    u32 mCount;
+    char ** mpNames;
+    
     cDT_NamePTbl();
     virtual ~cDT_NamePTbl();
     int GetIndex(const char *pName, int start) const;
     void Set(u32 count, char** pNames);
-
-    u32 mCount;
-    char ** mpNames;
 };
 
 struct cDT_DataSrc {
