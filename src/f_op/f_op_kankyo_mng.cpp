@@ -7,6 +7,7 @@
 #include "f_op/f_op_kankyo.h"
 #include "f_pc/f_pc_executor.h"
 #include "d/d_procname.h"
+#include "d/d_com_inf_game.h"
 #include "SSystem/SComponent/c_malloc.h"
 #include "SSystem/SComponent/c_lib.h"
 
@@ -98,6 +99,6 @@ int fopKyM_createMpillar(cXyz const* i_pos, f32 i_size) {
     scale.x = i_size;
     scale.y = i_size;
     scale.z = i_size;
-    // dComIfGp_particle_set(0x80d5, i_pos, NULL, &scale);
+    dComIfGp_particle_set(0x80d5, i_pos, NULL, &scale);
     return -1;
 }

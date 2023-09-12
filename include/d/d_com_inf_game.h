@@ -8,6 +8,7 @@
 #include "d/d_drawlist.h"
 #include "d/d_event.h"
 #include "d/d_event_manager.h"
+#include "d/d_particle.h"
 #include "d/d_resorce.h"
 #include "d/d_save.h"
 #include "d/d_stage.h"
@@ -118,6 +119,7 @@ public:
     dStage_stageDt_c& getStage() { return mStageData; }
     dEvt_control_c& getEvent() { return mEvtCtrl; }
     dEvent_manager_c& getEvtManager() { return mEvtManager; }
+    dPa_control_c* getParticle() { return mParticle; }
 
     const char* getStartStageName() { return mCurStage.getName(); }
     s8 getStartStageRoomNo() { return mCurStage.getRoomNo(); }
@@ -506,8 +508,15 @@ inline daPy_lk_c* daPy_getPlayerLinkActorClass() {
 }
 
 /**
- * === EVENT ===
- */
+ * === EVENT ===*/
+
+inline void dComIfGp_event_onEventFlag(s16 flag) {
+    return g_dComIfG_gameInfo.play.getEvent().onEventFlag(flag);
+}
+
+inline void dComIfGp_event_offEventFlag(s16 flag) {
+    return g_dComIfG_gameInfo.play.getEvent().offEventFlag(flag);
+}
 
 inline dEvent_manager_c& dComIfGp_getEventManager() {
     return g_dComIfG_gameInfo.play.getEvtManager();
@@ -578,6 +587,21 @@ inline void* dComIfG_getObjectRes(const char* arcName, const char* resName) {
 
 inline void* dComIfG_getObjectRes(const char* arcName, int param_1) {
     return g_dComIfG_gameInfo.mResControl.getObjectRes(arcName, param_1);
+}
+
+/**
+ * === PARTICLE ===
+ */
+
+void set(u8, u16, cXyz const*, csXyz const*, cXyz const*, u8, dPa_levelEcallBack*, s8, GXColor const*, GXColor const*, cXyz const*);
+
+inline JPABaseEmitter * dComIfGp_particle_set(u16 particleID, const cXyz* pos, const csXyz * angle, const cXyz * scale, u8 alpha, dPa_levelEcallBack * pCallBack, s8 setupInfo, const GXColor * pPrmColor, const GXColor * pEnvColor, const cXyz * pScale2D) {
+    dPa_control_c * pParticle = g_dComIfG_gameInfo.play.getParticle();
+    return pParticle->set(0, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
+}
+
+inline JPABaseEmitter * dComIfGp_particle_set(u16 particleID, const cXyz* pos, const csXyz * angle, const cXyz * scale) {
+    return dComIfGp_particle_set(particleID, pos, angle, scale, 0xFF, NULL, -1, NULL, NULL, NULL);
 }
 
 #endif /* D_COM_D_COM_INF_GAME_H */

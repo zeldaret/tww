@@ -164,14 +164,13 @@ static s32 daAndsw2_actionOrder(daAndsw2_c* i_this) {
 
 /* 00000438-000004BC       .text daAndsw2_actionEvent__FP10daAndsw2_c */
 static s32 daAndsw2_actionEvent(daAndsw2_c* i_this) {
-    dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
     if (dComIfGp_evmng_endCheck(i_this->mEventIdx)) {
         if (i_this->getType() == TYPE_CONTINUOUS) {
             i_this->mAction = ACT_OFF;
         } else {
             i_this->mAction = ACT_WAIT;
         }
-        play->mEvtCtrl.mStateFlags |= 8;
+        dComIfGp_event_onEventFlag(8);
     }
     return 1;
 }

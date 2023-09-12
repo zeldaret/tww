@@ -100,7 +100,7 @@ CFLAGS_BASE = [
     "-maxerrors 1",
     "-nosyspath",
     "-RTTI off",
-    # "-fp_contract on",
+    "-fp_contract on",
     "-str reuse",
     "-multibyte",
     "-i include",
@@ -126,6 +126,7 @@ CFLAGS_FRAMEWORK = [
     "-O3,s",
     "-schedule off",
     "-sym on",
+    "-fp_contract off",
 ]
 
 CFLAGS_REL = [
@@ -341,7 +342,7 @@ LIBS = [
     Rel(Matching, "f_pc_profile_lst", "f_pc/f_pc_profile_lst.cpp"),
     ActorRel(NonMatching, "d_a_agbsw0"),
     ActorRel(NonMatching, "d_a_andsw0"),
-    ActorRel(   Matching, "d_a_andsw2"),
+    ActorRel(Matching,    "d_a_andsw2"),
     ActorRel(NonMatching, "d_a_att"),
     ActorRel(NonMatching, "d_a_bflower"),
     ActorRel(NonMatching, "d_a_bita"),
@@ -723,7 +724,7 @@ LIBS = [
     ActorRel(NonMatching, "d_a_pz"),
     ActorRel(NonMatching, "d_a_sail"),
     ActorRel(NonMatching, "d_a_salvage_tbox"),
-    ActorRel(Matching, "d_a_scene_change"),
+    ActorRel(Matching,    "d_a_scene_change"),
     ActorRel(NonMatching, "d_a_shutter"),
     ActorRel(NonMatching, "d_a_shutter2"),
     ActorRel(NonMatching, "d_a_st"),
