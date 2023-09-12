@@ -3,17 +3,58 @@
 // Translation Unit: d_a_branch.cpp
 //
 
-#include "d_a_branch.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "f_op/f_op_actor.h"
+#include "f_op/f_op_actor_mng.h"
+#include "d/d_procname.h"
+#include "m_Do/m_Do_ext.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_resorce.h"
 #include "dolphin/types.h"
+
+
+class daBranch_c : public fopAc_ac_c {
+public:
+    void set_mtx();
+    void set_anim(int, int, int);
+    void demoPlay(mDoExt_McaMorf*);
+
+    s32 CreateHeap();
+    static s32 solidHeapCB(fopAc_ac_c*);
+
+    request_of_phase_process_class mPhs;
+    s8 dummy[0x10];
+    mDoExt_McaMorf* mAnims[2];
+
+    static char m_arcname[];
+};
+
+char daBranch_c::m_arcname[] = "Kwood_00";
 
 /* 00000078-00000128       .text set_mtx__10daBranch_cFv */
 void daBranch_c::set_mtx() {
-    /* Nonmatching */
+    //for (int i = 0; i < 2; i ++) {
+
+   // }
 }
 
 /* 00000128-000001E4       .text set_anim__10daBranch_cFiii */
-void daBranch_c::set_anim(int, int, int) {
-    /* Nonmatching */
+void daBranch_c::set_anim(int i_animIdx, int i_bckIdx, int i_basIdx) {
+    if (i_bckIdx > 0 && i_basIdx > 0) {
+        void* pSnd = g_dComIfG_gameInfo.mResControl.getObjectIDRes(m_arcname, i_basIdx);
+        void* pAnm = g_dComIfG_gameInfo.mResControl.getObjectIDRes(m_arcname, i_bckIdx);
+        
+        mAnims[i_animIdx]->setAnm(
+            static_cast<J3DAnmTransform*>(pAnm),
+            -1,
+            0.0f,
+            1.0f,
+            0.0f,
+            -1.0f,
+            pSnd
+        );
+    }
 }
 
 /* 000001E4-00000228       .text demoPlay__10daBranch_cFP14mDoExt_McaMorf */
@@ -22,13 +63,57 @@ void daBranch_c::demoPlay(mDoExt_McaMorf*) {
 }
 
 /* 00000228-00000248       .text solidHeapCB__10daBranch_cFP10fopAc_ac_c */
-void daBranch_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+s32 daBranch_c::solidHeapCB(fopAc_ac_c* i_this) {
+    daBranch_c* branch = static_cast<daBranch_c*>(i_this);
+    return branch->CreateHeap();
 }
 
 /* 00000248-0000049C       .text CreateHeap__10daBranch_cFv */
-void daBranch_c::CreateHeap() {
-    /* Nonmatching */
+s32 daBranch_c::CreateHeap() {
+    BOOL status = TRUE;
+
+    s32 ids[] = {
+        8, 0, 
+        7, 2, 
+        6, 5 
+    };
+
+    for (int i = 0; i < 2; i++) {
+        void* modelRes = dRes_control_c::getIDRes(m_arcname, ids[i + 4], g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
+        void* bckRes = dRes_control_c::getIDRes(m_arcname, ids[i + 2], g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
+
+        if (!modelRes) {
+            JUT_ASSERT(0x1CC, "modelData != 0");
+        }
+        if (!bckRes) {
+            JUT_ASSERT(0x1CD, "bck != 0");
+        }
+
+        mDoExt_McaMorf* newMorf = new mDoExt_McaMorf(
+            (J3DModelData*)dRes_control_c::getIDRes(m_arcname, ids[i + 4], g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40),
+            0,
+            0,
+            (J3DAnmTransformKey*)dRes_control_c::getIDRes(m_arcname, ids[i + 2], g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40),
+            0,
+            1.0f,
+            0,
+            -1,
+            1,
+            0,
+            0, 
+            0x11020203
+        );
+
+        mAnims[i] = newMorf;
+        if (mAnims[i] == 0) {
+            status = FALSE;
+            break;
+        }
+
+
+    }
+
+    return status;
 }
 
 /* 0000049C-00000524       .text daBranch_Draw__FP10daBranch_c */
@@ -42,8 +127,8 @@ void daBranch_Execute(daBranch_c*) {
 }
 
 /* 0000060C-00000614       .text daBranch_IsDelete__FP10daBranch_c */
-void daBranch_IsDelete(daBranch_c*) {
-    /* Nonmatching */
+BOOL daBranch_IsDelete(daBranch_c*) {
+    return TRUE;
 }
 
 /* 00000614-00000694       .text daBranch_Delete__FP10daBranch_c */
@@ -52,7 +137,51 @@ void daBranch_Delete(daBranch_c*) {
 }
 
 /* 00000694-0000080C       .text daBranch_Create__FP10fopAc_ac_c */
-void daBranch_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+s32 daBranch_Create(fopAc_ac_c* i_this) {
+    daBranch_c* branch = static_cast<daBranch_c*>(i_this);
+
+    fopAcM_SetupActor(branch, daBranch_c);
+
+    s32 state = dComIfG_resLoad(&branch->mPhs, daBranch_c::m_arcname);
+    if (state == cPhs_COMPLEATE_e) {
+        int solidHeapResult = fopAcM_entrySolidHeap(i_this, (heapCallbackFunc)daBranch_c::solidHeapCB, 0x4000);
+
+        if (solidHeapResult & 0xFF == 0) {
+            for (int i = 0; i < 2; i++) {
+                //branch->mBase.m
+            }
+
+            state = cPhs_ERROR_e;
+        }
+        else {
+
+        }
+    }
+
+    return state;
 }
 
+static actor_method_class l_daBranch_Method = {
+    (process_method_func)daBranch_Create,
+    (process_method_func)daBranch_Delete,
+    (process_method_func)daBranch_Execute,
+    (process_method_func)daBranch_IsDelete,
+    (process_method_func)daBranch_Draw,
+};
+
+extern actor_process_profile_definition g_profile_BRANCH = {
+    fpcLy_CURRENT_e,
+    7,
+    fpcLy_CURRENT_e,
+    PROC_BRANCH,
+    &g_fpcLf_Method.mBase,
+    sizeof(daBranch_c),
+    0,
+    0,
+    &g_fopAc_Method.base,
+    0x0193,
+    &l_daBranch_Method,
+    0x00044000,
+    fopAc_ACTOR_e,
+    fopAc_CULLBOX_CUSTOM_e,
+};
