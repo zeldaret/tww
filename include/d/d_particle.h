@@ -12,6 +12,7 @@ class dPa_modelControl_c;
 class JKRHeap;
 class JPABaseEmitter;
 class JPAEmitterManager;
+struct csXyz;
 
 class dPa_simpleData_c {
 public:
@@ -61,7 +62,7 @@ public:
 	void calc2D();
 	void calcMenu();
 	void draw(JPADrawInfo*, u8);
-	void set(u8, u16, cXyz const*, csXyz const*, cXyz const*, u8, dPa_levelEcallBack*, s8, GXColor const*, GXColor const*, cXyz const*);
+	JPABaseEmitter * set(u8, u16, cXyz const*, csXyz const*, cXyz const*, u8, dPa_levelEcallBack*, s8, GXColor const*, GXColor const*, cXyz const*);
 	void setBombSmoke(u16, cXyz const*, csXyz const*, cXyz const*, u8);
 	void setSimpleLand(int, cXyz const*, csXyz const*, f32, f32, f32, dKy_tevstr_c*, int*, int);
 	void setSimpleLand(cBgS_PolyInfo&, cXyz const*, csXyz const*, f32, f32, f32, dKy_tevstr_c*, int*, int);

@@ -59,6 +59,10 @@ public:
     void getTactFreeCStick(int);
     void giveItemCut(u8);
 
+    inline u16 chkEventFlag(u16 flag) { return flag & mEventFlag; }
+    inline void onEventFlag(u16 flag) { mEventFlag |= flag; }
+    inline void offEventFlag(u16 flag) { mEventFlag &= ~flag; }
+
     /* 0x00 */ dEvt_order_c mOrder[8];
     /* 0xC0 */ u8 mOrderCount;
     /* 0xC1 */ u8 mFirstOrderIdx;
@@ -83,7 +87,7 @@ public:
     /* 0xE2 */ u8 mbInPhoto;
     /* 0xE3 */ u8 field_0xE3[0xE4 - 0xE3];
     /* 0xE4 */ f32 mCullFarClipRatio;
-    /* 0xE8 */ u16 mStateFlags;
+    /* 0xE8 */ u16 mEventFlag;
     /* 0xEA */ u8 mTactFreeMStick[4];
     /* 0xEE */ u8 mTactFreeCStick[4];
 };  // Size = 0xF4

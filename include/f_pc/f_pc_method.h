@@ -19,9 +19,4 @@ s32 fpcMtd_IsDelete(process_method_class* pMthd, void* pUserData);
 s32 fpcMtd_Delete(process_method_class* pMthd, void* pUserData);
 s32 fpcMtd_Create(process_method_class* pMthd, void* pUserData);
 
-extern "C" {
-void fpcMtd_Execute__FP20process_method_classPv(void);
-void fpcMtd_Create__FP20process_method_classPv(void);
-}
-
 #endif
