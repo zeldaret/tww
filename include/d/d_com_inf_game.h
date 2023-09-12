@@ -309,7 +309,7 @@ public:
 class dComIfG_inf_c {
 public:
     dComIfG_inf_c() { ct(); }
-    ~dComIfG_inf_c();
+    ~dComIfG_inf_c() {}
 
     void ct();
 
@@ -342,6 +342,10 @@ inline u8 dComIfGs_getItem(int param_0) {
 
 inline void dComIfGs_setEventReg(u16 i_reg, u8 i_no) {
     g_dComIfG_gameInfo.save.getEvent().setEventReg(i_reg, i_no);
+}
+
+inline u8 dComIfGs_getEventReg(u16 i_reg) {
+    return g_dComIfG_gameInfo.save.getEvent().getEventReg(i_reg);
 }
 
 inline BOOL dComIfGs_isEventBit(u16 id) {
@@ -501,6 +505,18 @@ inline dStage_roomStatus_c* dComIfGp_roomControl_getStatusRoomDt(int room_no) {
 
 inline dBgS* dComIfG_Bgsp() {
     return &g_dComIfG_gameInfo.play.mBgS;
+}
+
+inline daShip_c* dComIfGp_getShipActor() {
+    return (daShip_c*)g_dComIfG_gameInfo.play.getPlayerPtr(2);
+}
+
+inline void dComIfGp_getIkadaShipBeforePos(Vec* o_pos) {
+    *o_pos = g_dComIfG_gameInfo.play.mIkadaLinkPos;
+}
+
+inline dStage_stageDt_c& dComIfGp_getStage() {
+    return g_dComIfG_gameInfo.play.getStage();
 }
 
 inline daPy_lk_c* daPy_getPlayerLinkActorClass() {

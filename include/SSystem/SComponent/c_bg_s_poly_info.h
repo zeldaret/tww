@@ -32,4 +32,6 @@ public:
     }
 };  // Size: 0x10
 
+STATIC_ASSERT(sizeof(cBgS_PolyInfo) == 0x10);
+
 #endif /* C_BG_S_POLY_INFO_H */

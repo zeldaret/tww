@@ -32,7 +32,9 @@ public:
     cBgS_PolyPassChk* GetPolyPassChk() const { return mPolyPassChk; }
     cBgS_GrpPassChk* GetGrpPassChk() const { return mGrpPassChk; }
 
-    virtual ~cBgS_Chk(void);
+    virtual ~cBgS_Chk();
 };  // Size: 0x14
+
+STATIC_ASSERT(sizeof(cBgS_Chk) == 0x14);
 
 #endif /* C_BG_S_CHK_H */

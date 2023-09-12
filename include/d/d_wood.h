@@ -23,15 +23,15 @@ public:
     void cc_hit_after_cut(Packet_c*);
     void proc(Packet_c*);
 
-	/* 0x000 */ cXyz mPos;
-	/* 0x00C */ u8 field_0x00C[0x010 - 0x00C];
-	/* 0x010 */ u32 mFlags;
-	/* 0x014 */ int mAnmIdx;
-	/* 0x018 */ Mtx field_0x018;
-	/* 0x048 */ Mtx field_0x048;
-	/* 0x078 */ Mtx field_0x078;
-	/* 0x0A8 */ Mtx field_0x0a8;
-	/* 0x0D8 */ Unit_c* mpNext;
+    /* 0x000 */ cXyz mPos;
+    /* 0x00C */ u8 field_0x00C[0x010 - 0x00C];
+    /* 0x010 */ u32 mFlags;
+    /* 0x014 */ int mAnmIdx;
+    /* 0x018 */ Mtx field_0x018;
+    /* 0x048 */ Mtx field_0x048;
+    /* 0x078 */ Mtx field_0x078;
+    /* 0x0A8 */ Mtx field_0x0a8;
+    /* 0x0D8 */ Unit_c* mpNext;
     /* 0x0DC */ u8 field_0xdc[0x18C - 0xDC];
 };
 
@@ -58,11 +58,11 @@ public:
     void mode_to_norm_init(AnmID_e);
     void mode_to_norm(Packet_c*);
 
-	/* 0x00 */ u8 field_0x00[0x60 - 0x00];
-	/* 0x60 */ int field_0x60;
-	/* 0x64 */ s16 field_0x64;
-	/* 0x66 */ u8 field_0x66[0x8A - 0x66];
-	/* 0x8A */ u8 field_0x8a;
+    /* 0x00 */ u8 field_0x00[0x60 - 0x00];
+    /* 0x60 */ int field_0x60;
+    /* 0x64 */ s16 field_0x64;
+    /* 0x66 */ u8 field_0x66[0x8A - 0x66];
+    /* 0x8A */ u8 field_0x8a;
 };
 
 STATIC_ASSERT(sizeof(Anm_c) == 0x8C);
@@ -73,7 +73,7 @@ public:
     void entry_unit(Unit_c*);
     void delete_all_unit();
 
-	/* 0x0 */ Unit_c* mpUnit;
+    /* 0x0 */ Unit_c* mpUnit;
 };
 
 class Packet_c : public J3DPacket {
@@ -84,7 +84,7 @@ public:
     void put_unit(const cXyz&, int);
     void calc_cc();
     void calc();
-	void update();
+    void update();
     void search_empty_UnitID() const;
     void search_anm(Anm_c::Mode_e);
 

@@ -10,4 +10,6 @@ public:
     /* 8001DF30 */ virtual ~dBgS_WtrChk();
 };  // Size: 0x50
 
+STATIC_ASSERT(sizeof(dBgS_WtrChk) == 0x50);
+
 #endif /* D_BG_D_BG_S_WTR_CHK_H */

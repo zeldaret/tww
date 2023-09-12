@@ -24,9 +24,18 @@ struct stage_stag_info_class {
     /* 0x1C */ u32 field_0x1c;
 };
 
-struct stage_scls_info_class {};
+struct stage_scls_info_class {
+    /* 0x0 */ char mStage[8];
+    /* 0x8 */ u8 mStart;
+    /* 0x9 */ u8 mRoom;
+    /* 0xA */ u8 field_0xa;
+    /* 0xB */ s8 mWipe;
+};
 
-struct stage_scls_info_dummy_class {};
+struct stage_scls_info_dummy_class {
+    /* 0x00 */ int num;
+    /* 0x04 */ stage_scls_info_class* m_entries;
+};
 
 struct stage_lightvec_info_class {};
 
@@ -433,22 +442,22 @@ public:
     dStage_roomControl_c() {}
     
     void init();
-	dStage_roomStatus_c* getStatusRoomDt(int);
-	bool checkRoomDisp(int) const;
-	int loadRoom(int, u8*);
-	void zoneCountCheck(int) const;
-	void checkDrawArea() const;
-	void getDarkStatus();
-	void getDarkMode();
+    dStage_roomStatus_c* getStatusRoomDt(int);
+    bool checkRoomDisp(int) const;
+    int loadRoom(int, u8*);
+    void zoneCountCheck(int) const;
+    void checkDrawArea() const;
+    void getDarkStatus();
+    void getDarkMode();
     void getBgW(int);
 
-	static void createMemoryBlock(int, u32);
-	static void destroyMemoryBlock(void);
-	static void SetTimePass(int);
-	static JKRExpHeap* getMemoryBlock(int);
-	static void setStayNo(int);
-	static s8 GetTimePass();
-	static void setZoneNo(int, int);
+    static void createMemoryBlock(int, u32);
+    static void destroyMemoryBlock(void);
+    static void SetTimePass(int);
+    static JKRExpHeap* getMemoryBlock(int);
+    static void setStayNo(int);
+    static s8 GetTimePass();
+    static void setZoneNo(int, int);
     static int getZoneNo(int i_roomNo);
 
     static s8 getStayNo() { return mStayNo; }
@@ -524,9 +533,15 @@ private:
 };  // Size: 0xE
 
 s8 dStage_roomRead_dt_c_GetReverbStage(roomRead_class&, int);
+int dStage_mapInfo_GetOceanZ(stage_map_info_class*);
+int dStage_mapInfo_GetOceanX(stage_map_info_class*);
 
 inline s32 dStage_stagInfo_GetSaveTbl(stage_stag_info_class* i_stagInfo) {
     return (i_stagInfo->field_0x09 >> 1) & 0x7F;
+}
+
+inline u32 dStage_stagInfo_GetSTType(stage_stag_info_class* i_stagInfo) {
+    return (i_stagInfo->field_0x0c >> 16) & 7;
 }
 
 #endif /* D_D_STAGE_H */
