@@ -82,9 +82,9 @@ static actor_method_class daSceneChgMethodTable = {
 };
 
 extern actor_process_profile_definition g_profile_SCENECHG = {
-    -3,
+    fpcLy_CURRENT_e,
     3,
-    0xFFFD,
+    fpcLy_CURRENT_e,
     PROC_SCENECHG,
     &g_fpcLf_Method.mBase,
     sizeof(d_a_scene_change_c),
