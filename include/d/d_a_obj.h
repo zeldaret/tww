@@ -6,7 +6,8 @@
 namespace daObj {
     template <typename T>
     int PrmAbstract(const fopAc_ac_c* actor, T width, T shift) {
-        return ((1 << width) - 1) & (fopAcM_GetParam(actor) >> shift);
+        u32 param = fopAcM_GetParam(actor);
+        return ((1 << width) - 1) & (param >> shift);
     }
 };
 

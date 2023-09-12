@@ -101,7 +101,7 @@ BOOL daAndsw2_c::chkAllSw2() {
             return false;
         }
     }
-    return true;
+    return TRUE;
 }
 
 /* 000001D8-000002B0       .text daAndsw2_actionOnAll__FP10daAndsw2_c */
@@ -245,7 +245,7 @@ s32 daAndsw2_c::create() {
     current.angle.z = 0;
     current.angle.x = 0;
     
-    return 4;
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000530-00000538       .text daAndsw2_Draw__FP10daAndsw2_c */
