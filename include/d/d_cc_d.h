@@ -351,7 +351,7 @@ STATIC_ASSERT(sizeof(dCcD_GObjInf) == 0xF8);
 class dCcD_Cyl : public dCcD_GObjInf, public cCcD_CylAttr {
 public:
     void Set(dCcD_SrcCyl const&);
-    cCcD_ShapeAttr* GetShapeAttr();
+    cCcD_ShapeAttr* GetShapeAttr() { return this; }
     void StartCAt(cXyz&);
     void MoveCAt(cXyz&);
     void MoveCTg(cXyz&);

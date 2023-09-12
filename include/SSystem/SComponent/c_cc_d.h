@@ -61,7 +61,6 @@ public:
     virtual cXyz& GetCoCP() { return m_virtual_center; }
     virtual void CalcAabBox() = 0;
     virtual bool GetNVec(cXyz const&, cXyz*) const = 0;
-    virtual void getShapeAccess(cCcD_ShapeAttr::Shape*) const;
 
     cM3dGAab& GetWorkAab() { return mAab; }
     cM3dGAab const& GetWorkAab() const { return mAab; }
@@ -172,7 +171,6 @@ public:
     virtual bool CrossCo(cCcD_CylAttr const&, f32*) const;
     virtual void CalcAabBox();
     virtual bool GetNVec(cXyz const&, cXyz*) const;
-    virtual void getShapeAccess(cCcD_ShapeAttr::Shape*) const;
 
 };  // Size = 0x34
 
@@ -204,7 +202,6 @@ public:
     virtual cXyz& GetCoCP() { return mCenter; }
     virtual void CalcAabBox();
     virtual bool GetNVec(cXyz const&, cXyz*) const;
-    virtual void getShapeAccess(cCcD_ShapeAttr::Shape*) const;
 
 };  // Size = 0x38
 
@@ -497,7 +494,6 @@ public:
     virtual cCcD_GObjInf* GetGObjInf() { return NULL; }
     virtual cCcD_ShapeAttr const* GetShapeAttr() const { return NULL; }
     virtual cCcD_ShapeAttr* GetShapeAttr() { return NULL; }
-    virtual void Draw(_GXColor const&) {}
     void ct();
     void Set(cCcD_SrcObj const&);
     fopAc_ac_c* GetAc();
