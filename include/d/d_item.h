@@ -1,8 +1,8 @@
 #ifndef D_ITEM_H
 #define D_ITEM_H
 
-void execItemGet(unsigned char);
-void checkItemGet(unsigned char, int);
+void execItemGet(u8 itemNo);
+BOOL checkItemGet(u8 itemNo, BOOL defaultVal);
 void item_func_heart();
 void item_func_green_rupee();
 void item_func_blue_rupee();
