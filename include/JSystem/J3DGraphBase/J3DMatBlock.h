@@ -5,7 +5,6 @@
 #include "JSystem/J3DGraphBase/J3DTevs.h"
 #include "JSystem/J3DGraphBase/J3DTexture.h"
 #include "dolphin/types.h"
-#include "m_Do/m_Do_lib.h"
 
 struct J3DGXColorS10 : public GXColorS10 {
     /* 8000E460 */ J3DGXColorS10() {}
@@ -592,6 +591,10 @@ struct J3DAlphaCompInfo {
 };
 
 extern const u16 j3dDefaultAlphaCmpID;
+
+inline u32 calcAlphaCmpID(u32 param_1, u32 param_2, u32 param_3) {
+    return ((param_1 & 0xff) << 5) + ((param_2 & 0xff) << 3) + (param_3 & 0xff);
+}
 
 struct J3DAlphaComp {
     J3DAlphaComp() {

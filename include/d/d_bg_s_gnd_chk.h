@@ -10,6 +10,8 @@ public:
     /* 800775F0 */ virtual ~dBgS_GndChk();
 };  // Size: 0x54
 
+STATIC_ASSERT(sizeof(dBgS_GndChk) == 0x54);
+
 class dBgS_LinkGndChk : public dBgS_GndChk {
 public:
     dBgS_LinkGndChk() { /* SetLink(); */ }

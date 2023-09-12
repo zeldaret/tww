@@ -234,11 +234,31 @@ public:
     virtual void execute(u16, J3DTransformInfo*) = 0;
 };
 
-class mDoExt_McaMorf {
+class JAIAnimeSound;
+
+class mDoExt_McaMorf /* : public J3DMtxCalcMaya */ {
 public:
     mDoExt_McaMorf(J3DModelData*, mDoExt_McaMorfCallBack1_c*, mDoExt_McaMorfCallBack2_c*, J3DAnmTransform*, int, float, int, int, int, void*, unsigned long, unsigned long);
+    virtual ~mDoExt_McaMorf();
 
     void setAnm(J3DAnmTransform*, int, f32, f32, f32, f32, void*);
+    J3DModel* getModel() { return mpModel; }
+    void setFrame(f32 frame) { mFrameCtrl.setFrame(frame); }
+    void updateDL();
+    void play(Vec *, u32, u8);
+
+    u32 pad[0x50]; // J3DMtxCalcMaya
+    /* 0x50 */ J3DModel* mpModel;
+    /* 0x54 */ J3DAnmTransform* mpAnm;
+    /* 0x58 */ J3DFrameCtrl mFrameCtrl;
+    /* 0x6C */ J3DTransformInfo* mpTransformInfo;
+    /* 0x70 */ Quaternion* mpQuats;
+    /* 0x74 */ f32 mCurMorf;
+    /* 0x78 */ f32 mPrevMorf;
+    /* 0x7C */ f32 mMorfStep;
+    /* 0x80 */ JAIAnimeSound * mpSound;
+    /* 0x84 */ mDoExt_McaMorfCallBack1_c * mpCallBack1;
+    /* 0x88 */ mDoExt_McaMorfCallBack2_c * mpCallBack2;
 };
 
 class mDoExt_3DlineMat_c {

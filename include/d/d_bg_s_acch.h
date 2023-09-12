@@ -186,8 +186,11 @@ public:
     /* 0x0D0 */ f32 field_0xd8;
     /* 0x0D4 */ dBgS_GndChk m_gnd;
     /* 0x128 */ dBgS_RoofChk m_roof;
+    /* 0x16C */ u8 field_0x16c[0x174 - 0x16C];
     /* 0x174 */ dBgS_WtrChk m_wtr;
 };  // Size: 0x1C4
+
+STATIC_ASSERT(sizeof(dBgS_Acch) == 0x1C4);
 
 class dBgS_LinkAcch : public dBgS_Acch {
 public:

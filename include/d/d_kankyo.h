@@ -4,11 +4,7 @@
 #include "global.h"
 #include "dolphin/gx/GX.h"
 #include "SSystem/SComponent/c_xyz.h"
-
-// setup properly later
-struct J3DLightObj {
-    u8 temp[0x74];
-};
+#include "JSystem/J3DGraphBase/J3DStruct.h"
 
 class J3DModel;
 
@@ -66,6 +62,7 @@ extern dScnKy_env_light_c g_env_light;
 
 int dKy_getdaytime_hour();
 BOOL dKy_checkEventNightStop();
+void dKy_set_nexttime(f32);
 
 
 #endif /* D_KANKYO_D_KANKYO_H */

@@ -9,6 +9,7 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_lib_game.h"
+#include "d/d_demo.h"
 #include "d/d_flower.h"
 #include "d/d_grass.h"
 #include "d/d_item_data.h"
@@ -16,12 +17,17 @@
 #include "d/d_particle.h"
 #include "d/d_tree.h"
 #include "f_op/f_op_scene_mng.h"
+#include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_audio.h"
 
 class J3DModel;
 class daArrow_c {
 public:
     static void setKeepType(u8);
+};
+
+class daShip_c : public fopAc_ac_c {
+public:
 };
 
 dComIfG_inf_c g_dComIfG_gameInfo;
@@ -153,7 +159,7 @@ void dComIfG_play_c::itemInit() {
     field_0x4962 = 0;
     field_0x4965 = 0;
 
-    strcpy(field_0x4966, "");
+    strcpy(field_0x4966, "\0");
 
     field_0x4977 = 0;
     field_0x4978 = 0;
@@ -261,17 +267,20 @@ void dComIfG_play_c::createParticle() {
 
 /* 800528F4-8005297C       .text createDemo__14dComIfG_play_cFv */
 void dComIfG_play_c::createDemo() {
-    /* Nonmatching */
+    mDemo = new dDemo_manager_c();
+
+    JUT_ASSERT(390, mDemo != 0);
 }
 
 /* 8005297C-800529B8       .text removeDemo__14dComIfG_play_cFv */
 void dComIfG_play_c::removeDemo() {
-    /* Nonmatching */
+    delete mDemo;
+    mDemo = NULL;
 }
 
 /* 800529B8-800529DC       .text executeEvtManager__14dComIfG_play_cFv */
 void dComIfG_play_c::executeEvtManager() {
-    mEventMgr.runProc();
+    mEvtManager.runProc();
 }
 
 /* 800529DC-80052A30       .text createMagma__14dComIfG_play_cFv */
@@ -472,8 +481,15 @@ int dComIfG_changeOpeningScene(scene_class* i_scene, s16 i_procName) {
 }
 
 /* 8005326C-800532D8       .text dComIfG_resetToOpening__FP11scene_class */
-void dComIfG_resetToOpening(scene_class*) {
-    /* Nonmatching */
+int dComIfG_resetToOpening(scene_class* i_scene) {
+    if (!mDoRst::isReset()) {
+        return 0;
+    }
+
+    dComIfG_changeOpeningScene(i_scene, 8);
+    mDoAud_bgmStop(30);
+    mDoAud_resetProcess();
+    return 1;
 }
 
 /* 800532D8-80053330       .text phase_1__FPc */
@@ -633,7 +649,7 @@ void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8
         }
     }
 
-    g_dComIfG_gameInfo.info.getRestart().setLastSceneInfo(i_lastSpeed, i_lastMode);
+    g_dComIfG_gameInfo.save.getRestart().setLastSceneInfo(i_lastSpeed, i_lastMode);
     if (i_setPoint) {
         dComIfGs_setStartPoint(i_point);
     }
@@ -668,7 +684,7 @@ BOOL dComIfGs_isStageBossEnemy(int i_stageNo) {
     if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
         return dComIfGs_isStageBossEnemy();
     } else {
-        return g_dComIfG_gameInfo.info.getSavedata().getSave(i_stageNo).getBit().isStageBossEnemy();
+        return g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().isStageBossEnemy();
     }
 }
 
@@ -680,7 +696,7 @@ void dComIfGs_onStageLife(int i_stageNo) {
         dComIfGs_onStageLife();
     }
 
-    g_dComIfG_gameInfo.info.getSavedata().getSave(i_stageNo).getBit().onStageLife();
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().onStageLife();
 }
 
 /* 80053AAC-80053B30       .text dComIfGs_isStageLife__Fi */
@@ -690,7 +706,7 @@ BOOL dComIfGs_isStageLife(int i_stageNo) {
     if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
         return dComIfGs_isStageLife();
     } else {
-        return g_dComIfG_gameInfo.info.getSavedata().getSave(i_stageNo).getBit().isStageLife();
+        return g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().isStageLife();
     }
 }
 
@@ -803,15 +819,15 @@ u8 dComIfGs_checkGetItem(u8 i_itemNo) {
             } else if (i < 24) {
                 item = NO_ITEM;
             } else if (i < 32) {
-                item = g_dComIfG_gameInfo.info.getPlayer().getGetItem().mItemFlags[i - 0x18];
+                item = g_dComIfG_gameInfo.save.getPlayer().getGetItem().mItemFlags[i - 0x18];
             } else if (i < 36) {
                 item = NO_ITEM;
             } else if (i < 44) {
-                item = g_dComIfG_gameInfo.info.getPlayer().getGetItem().mItemFlags[i - 0x1C];
+                item = g_dComIfG_gameInfo.save.getPlayer().getGetItem().mItemFlags[i - 0x1C];
             } else if (i < 48) {
                 item = NO_ITEM;
             } else if (i < 56) {
-                item = g_dComIfG_gameInfo.info.getPlayer().getGetItem().mItemFlags[i - 0x20];
+                item = g_dComIfG_gameInfo.save.getPlayer().getGetItem().mItemFlags[i - 0x20];
             } else {
                 item = NO_ITEM;
             }
@@ -828,7 +844,7 @@ u8 dComIfGs_checkGetItem(u8 i_itemNo) {
         }
 
         if (i_itemNo >= 0xBF && i_itemNo <= 0xFE &&
-            g_dComIfG_gameInfo.info.getPlayer().getMap().isGetMap(i_itemNo - 1))
+            g_dComIfG_gameInfo.save.getPlayer().getMap().isGetMap(i_itemNo - 1))
         {
             get_item++;
         }
@@ -851,32 +867,153 @@ void dComIfGd_setShadow(u32, s8, J3DModel*, cXyz*, f32, f32, f32, f32, cBgS_Poly
 }
 
 /* 8005468C-800547BC       .text getSceneList__Fi */
-void getSceneList(int) {
-    /* Nonmatching */
+stage_scls_info_class* getSceneList(int i_no) {
+    stage_scls_info_dummy_class* sclsInfo = dComIfGp_getStage().getSclsInfo();
+    JUT_ASSERT(2132, sclsInfo != 0);
+
+    JUT_ASSERT(2134, 0 <= i_no && i_no < sclsInfo->num);
+
+    stage_scls_info_class* sclsData = sclsInfo->m_entries;
+    JUT_ASSERT(2136, sclsData != 0);
+
+    return &sclsData[i_no];
 }
 
 /* 800547BC-80054870       .text dComIfGd_getMeshSceneList__FR3Vec */
-void dComIfGd_getMeshSceneList(Vec&) {
+stage_scls_info_class* dComIfGd_getMeshSceneList(Vec&) {
     /* Nonmatching */
 }
 
 /* 80054870-800548FC       .text dComIfGs_checkSeaLandingEvent__FSc */
-void dComIfGs_checkSeaLandingEvent(s8) {
-    /* Nonmatching */
+BOOL dComIfGs_checkSeaLandingEvent(s8 i_roomNo) {
+    struct landing_event {
+        /* 0x0 */ s8 roomNo;
+        /* 0x2 */ u16 event;
+    };
+
+    static landing_event l_landingEvent[] = {
+        {1, 0x3040}, {4, 0x2E02}, {13, 0x902}, {23, 0xA02}, {41, 0xA20}, {45, 0x2E04},
+    };
+
+    landing_event* event_check = l_landingEvent;
+
+    for (u32 i = 0; i < 6; i++) {
+        if (i_roomNo == event_check->roomNo && !dComIfGs_isEventBit(event_check->event)) {
+            return FALSE;
+        }
+
+        event_check++;
+    }
+
+    return TRUE;
 }
 
 /* 800548FC-80054C70       .text dComIfGs_setGameStartStage__Fv */
+// NONMATCHING - one tiny reg swap, string data
 void dComIfGs_setGameStartStage() {
-    /* Nonmatching */
+    struct check_data {
+        /* 0x0 */ u8 mbHasEvent;
+        /* 0x2 */ u16 mEvent;
+        /* 0x4 */ char mStage[8];
+        /* 0xC */ s8 mRoomNo;
+        /* 0xD */ u8 mStartCode;
+    };
+
+    static check_data l_checkData[] = {
+        {true, 0x2A08, "", 0, 0},          {true, 0xF80, "sea", 11, 128},
+        {true, 0x801, "MajyuE", 0, 0},     {true, 0x808, "MajyuE", 0, 18},
+        {true, 0x2401, "A_umikz", 0, 204}, {false, 0, "sea", 44, 128},
+    };
+
+    check_data* data_p = l_checkData;
+    for (int i = 0; i < 5; i++) {
+        if (data_p->mbHasEvent == true && dComIfGs_isEventBit(data_p->mEvent)) {
+            break;
+        }
+
+        data_p++;
+    }
+
+    char stage_name[8];
+    s8 room_no;
+    u8 point;
+
+    if (strcmp(data_p->mStage, "") != 0) {
+        strcpy(stage_name, data_p->mStage);
+        room_no = data_p->mRoomNo;
+        point = data_p->mStartCode;
+    } else {
+        u32 stage_type = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo());
+        int save_tbl = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());
+        BOOL isNot_PShip = strcmp(dComIfGp_getStartStageName(), "PShip");
+
+        if (!isNot_PShip) {
+            strcpy(stage_name, "sea");
+            room_no = dComIfGs_getEventReg(0xC3FF);
+            point = dComIfGs_getEventReg(0x85FF);
+            dKy_set_nexttime(120.0f);
+        } else if (stage_type == 7) {
+            daPy_lk_c* player_p = daPy_getPlayerLinkActorClass();
+            point = player_p->field_0x3594;
+
+            s8 temp_r3 = player_p->current.roomNo;
+            room_no = temp_r3;
+
+            stage_scls_info_class* scls_p;
+            if (temp_r3 >= 0 && point != 0xFF && dComIfGs_checkSeaLandingEvent(room_no)) {
+                strcpy(stage_name, dComIfGp_getStartStageName());
+            } else {
+                if (dComIfGp_getShipActor() != NULL) {
+                    scls_p = dComIfGd_getMeshSceneList(dComIfGp_getShipActor()->current.pos);
+                } else {
+                    scls_p = dComIfGd_getMeshSceneList(player_p->current.pos);
+                }
+
+                strcpy(stage_name, scls_p->mStage);
+                room_no = scls_p->mRoom;
+                point = scls_p->mStart;
+            }
+        } else if (stage_type == 1 || stage_type == 6 || stage_type == 3 || stage_type == 8 ||
+                   save_tbl == 9)
+        {
+            stage_scls_info_class* scls_p = getSceneList(0);
+            strcpy(stage_name, scls_p->mStage);
+            room_no = scls_p->mRoom;
+            point = scls_p->mStart;
+        } else if (save_tbl == 10) {
+            cXyz ikada_pos;
+            dComIfGp_getIkadaShipBeforePos(&ikada_pos);
+
+            stage_scls_info_class* scls_p = dComIfGd_getMeshSceneList(ikada_pos);
+            strcpy(stage_name, scls_p->mStage);
+            room_no = scls_p->mRoom;
+            point = scls_p->mStart;
+        } else if (save_tbl == 11 || save_tbl == 12 || save_tbl == 13) {
+            strcpy(stage_name, "sea");
+
+            stage_map_info_class* mapInfo = dComIfGp_getStage().getMapInfo();
+            JUT_ASSERT(2362, mapInfo != 0);
+
+            room_no = dStage_mapInfo_GetOceanX(mapInfo) +
+                      (((dStage_mapInfo_GetOceanZ(mapInfo) + 3) * 7) + 4);
+            point = 0;
+        } else {
+            strcpy(stage_name, "sea");
+            room_no = 11;
+            point = 0;
+        }
+    }
+
+    g_dComIfG_gameInfo.save.getPlayer().getPlayerReturnPlace().set(stage_name, room_no, point);
 }
 
 /* 80054C70-80054CC0       .text dComIfGs_gameStart__Fv */
 void dComIfGs_gameStart() {
     dComIfGp_offEnableNextStage();
 
-    s8 roomNo = g_dComIfG_gameInfo.info.getPlayer().getPlayerReturnPlace().getRoomNo();
-    s16 point = g_dComIfG_gameInfo.info.getPlayer().getPlayerReturnPlace().getPlayerStatus();
-    char* name = g_dComIfG_gameInfo.info.getPlayer().getPlayerReturnPlace().getName();
+    s8 roomNo = g_dComIfG_gameInfo.save.getPlayer().getPlayerReturnPlace().getRoomNo();
+    s16 point = g_dComIfG_gameInfo.save.getPlayer().getPlayerReturnPlace().getPlayerStatus();
+    char* name = g_dComIfG_gameInfo.save.getPlayer().getPlayerReturnPlace().getName();
     dComIfGp_setNextStage(name, point, roomNo, -1, 0.0f, 0, 1, 0);
 }
 
@@ -936,5 +1073,5 @@ void dComIfGs_setSelectEquip(int i_type, u8 i_itemNo) {
         break;
     }
 
-    g_dComIfG_gameInfo.info.getPlayer().getPlayerStatusA().mSelectEquip[i_type] = i_itemNo;
+    g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().mSelectEquip[i_type] = i_itemNo;
 }

@@ -24,6 +24,9 @@ private:
     /* 0x30 */ u32 mFlags;
     /* 0x34 */ f32 mNowY;
     /* 0x38 */ u32 mWallPrecheck;
+    /* 0x3C */ u32 mGndPrecheck;
 };
+
+STATIC_ASSERT(sizeof(cBgS_GndChk) == 0x40);
 
 #endif /* C_BG_S_GND_CHK_H */
