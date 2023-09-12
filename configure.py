@@ -723,7 +723,7 @@ LIBS = [
     ActorRel(NonMatching, "d_a_pz"),
     ActorRel(NonMatching, "d_a_sail"),
     ActorRel(NonMatching, "d_a_salvage_tbox"),
-    ActorRel(NonMatching, "d_a_scene_change"),
+    ActorRel(Matching, "d_a_scene_change"),
     ActorRel(NonMatching, "d_a_shutter"),
     ActorRel(NonMatching, "d_a_shutter2"),
     ActorRel(NonMatching, "d_a_st"),
