@@ -2,6 +2,7 @@
 #define D_A_ITEM_H
 
 #include "d/actor/d_a_itembase.h"
+#include "d/d_particle.h"
 
 class daItem_c : public daItemBase_c {
 public:
@@ -28,7 +29,7 @@ public:
     void itemDefaultRotateY();
     bool checkItemDisappear();
     void setItemTimer(int);
-    bool checkPlayerGet();
+    BOOL checkPlayerGet();
     void itemActionForRupee();
     void itemActionForHeart();
     void itemActionForKey();
@@ -45,14 +46,36 @@ public:
     void mode_water();
     void initAction();
     s32 _daItem_isdelete();
+    
+    s32 checkControl();
+    s32 startControl();
+    s32 endControl();
+    s32 checkLock();
+    s32 setLock();
+    s32 releaseLock();
+    s32 checkActionNow();
 
 public:
-    u8 temp1[0x20];
+    /* 0x648 */ s32 mSwitchId;
+    /* 0x64C */ s32 mActivationSwitch;
+    /* 0x650 */ f32 field3_0x650;
+    /* 0x654 */ u8 field4_0x654[0x658 - 0x654];
+    /* 0x658 */ s16 mItemTimer;
+    /* 0x65A */ s16 field7_0x65a;
+    /* 0x65C */ s16 field8_0x65c;
+    /* 0x65E */ u8 field10_0x65e[0x667 - 0x65E];
+    /* 0x667 */ u8 mUnknownParam;
     /* 0x668 */ u8 mItemAction;
     /* 0x669 */ u8 mStatusFlags;
     /* 0x66A */ u8 mMode;
-    /* 0x66B */ u8 mCurAction;
-    u8 temp2[0x54];
+    /* 0x66B */ u8 mCurState;
+    /* 0x66C */ u8 field23_0x66c[0x6BC - 0x66C];
+    // /* 0x674 */ dPa_rippleEcallBack mPtclRippleCb;
+    // /* 0x688 */ dPa_followEcallBack mPtclFollowCb;
+    // /* 0x69C */ dPa_smokeEcallBack mPtclSmokeCb;
+    /* 0x6BC */ JPABaseEmitter* mpParticleEmitter;
 };
+
+STATIC_ASSERT(sizeof(daItem_c) == 0x6C0);
 
 #endif /* D_A_ITEM_H */

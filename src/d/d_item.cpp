@@ -7,12 +7,12 @@
 #include "dolphin/types.h"
 
 /* 800C2DFC-800C2E30       .text execItemGet__FUc */
-void execItemGet(unsigned char) {
+void execItemGet(u8 itemNo) {
     /* Nonmatching */
 }
 
 /* 800C2E30-800C2E7C       .text checkItemGet__FUci */
-void checkItemGet(unsigned char, int) {
+BOOL checkItemGet(u8, BOOL defaultVal) {
     /* Nonmatching */
 }
 
