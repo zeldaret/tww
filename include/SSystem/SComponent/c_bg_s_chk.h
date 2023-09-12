@@ -2,6 +2,7 @@
 #define C_BG_S_CHK_H
 
 #include "dolphin/mtx/vec.h"
+#include "global.h"
 
 struct cBgD_Vtx_t : public Vec {};
 
