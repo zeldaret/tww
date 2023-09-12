@@ -100,7 +100,7 @@ CFLAGS_BASE = [
     "-maxerrors 1",
     "-nosyspath",
     "-RTTI off",
-    # "-fp_contract on",
+    "-fp_contract on",
     "-str reuse",
     "-multibyte",
     "-i include",
@@ -126,6 +126,7 @@ CFLAGS_FRAMEWORK = [
     "-O3,s",
     "-schedule off",
     "-sym on",
+    "-fp_contract off",
 ]
 
 CFLAGS_REL = [
