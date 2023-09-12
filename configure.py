@@ -534,7 +534,7 @@ LIBS = [
     ActorRel(NonMatching, "d_a_bmdfoot"),
     ActorRel(NonMatching, "d_a_bmdhand"),
     ActorRel(NonMatching, "d_a_bo"),
-    ActorRel(NonMatching, "d_a_boss_item"),
+    ActorRel(Matching, "d_a_boss_item"),
     ActorRel(NonMatching, "d_a_bpw"),
     ActorRel(NonMatching, "d_a_bst"),
     ActorRel(NonMatching, "d_a_btd"),

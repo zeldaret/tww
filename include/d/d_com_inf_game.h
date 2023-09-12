@@ -378,7 +378,7 @@ inline void dComIfGs_onSaveTbox(int i_stageNo, int i_no) {
     g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().onTbox(i_no);
 }
 
-inline BOOL dComIfGs_isStageBossEnemy() {
+BOOL dComIfGs_isStageBossEnemy(int i_stageNo) {
     return g_dComIfG_gameInfo.save.getMemory().getBit().isStageBossEnemy();
 }
 
@@ -386,7 +386,7 @@ inline void dComIfGs_onStageLife() {
     g_dComIfG_gameInfo.save.getMemory().getBit().onStageLife();
 }
 
-inline BOOL dComIfGs_isStageLife() {
+BOOL dComIfGs_isStageLife(int i_stageNo) {
     return g_dComIfG_gameInfo.save.getMemory().getBit().isStageLife();
 }
 
