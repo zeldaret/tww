@@ -57,25 +57,25 @@ void setArrowTrans(short, cXyz) {
 float daItem_c::getYOffset() {
     switch (m_itemNo) {
     case HEART:
-        return 0.0;
+        return 0.0f;
     case SKULL_NECKLACE:
-        return 0.0;
+        return 0.0f;
     case BOKOBABA_SEED:
-        return 0.0;
+        return 0.0f;
     case GOLDEN_FEATHER:
-        return 0.0;
+        return 0.0f;
     case BOKO_BELT:
-        return 0.0;
+        return 0.0f;
     case RED_JELLY:
     case GREEN_JELLY:
     case BLUE_JELLY:
-        return 0.0;
+        return 0.0f;
     case SWORD:
-        return 20.0;
+        return 20.0f;
     case SHIELD:
-        return 23.0;
+        return 23.0f;
     case DROPPED_SWORD:
-        return 10.0;
+        return 10.0f;
     case GREEN_RUPEE:
     case BLUE_RUPEE:
     case YELLOW_RUPEE:
@@ -83,15 +83,15 @@ float daItem_c::getYOffset() {
     case PURPLE_RUPEE:
     case ORANGE_RUPEE:
     case SILVER_RUPEE:
-        return 0.0;
+        return 0.0f;
     case KAKERA_HEART:
     case UTUWA_HEART:
-        return 0.0;
+        return 0.0f;
     case SMALL_KEY:
     case BOSS_KEY:
-        return 0.0;
+        return 0.0f;
     default:
-        return 0.0;
+        return 0.0f;
     }
 }
 
@@ -517,7 +517,7 @@ s32 daItem_Delete(daItem_c* i_this) {
 
 /* 800F89D0-800F89F0       .text daItem_Create__FP10fopAc_ac_c */
 s32 daItem_Create(fopAc_ac_c* i_this) {
-    ((daItem_c*)i_this)->_daItem_create();
+    return ((daItem_c*)i_this)->_daItem_create();
 }
 
 /* 800F89F0-800F89F8       .text _daItem_isdelete__8daItem_cFv */
