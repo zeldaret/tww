@@ -4,21 +4,35 @@
 //
 
 #include "m_Do/m_Do_audio.h"
-#include "dolphin/types.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+#include "SSystem/SComponent/c_lib.h"
+
+mDoAud_zelAudio_c g_mDoAud_zelAudio;
+
+bool mDoAud_zelAudio_c::mInitFlag;
+bool mDoAud_zelAudio_c::mResetFlag;
+bool mDoAud_zelAudio_c::mBgmSet;
+u8 mDoAud_zelAudio_c::mLoadTimer;
+
+JKRSolidHeap* g_mDoAud_audioHeap;
 
 /* 80006D84-80006D90       .text reset__17mDoAud_zelAudio_cFv */
 void mDoAud_zelAudio_c::reset() {
-    /* Nonmatching */
+    mBgmSet = false;
 }
 
 /* 80006D90-80006DC0       .text calcLoadTimer__17mDoAud_zelAudio_cFv */
 void mDoAud_zelAudio_c::calcLoadTimer() {
-    /* Nonmatching */
+    if (mLoadTimer > 1) {
+        cLib_calcTimer(&mLoadTimer);
+    }
 }
 
+BOOL mDoAud_StreamBufferPointer;
+
 /* 80006DC0-80006DD4       .text mDoAud_isUsedHeapForStreamBuffer__Fv */
-void mDoAud_isUsedHeapForStreamBuffer() {
-    /* Nonmatching */
+BOOL mDoAud_isUsedHeapForStreamBuffer() {
+    return mDoAud_StreamBufferPointer != false;
 }
 
 /* 80006DD4-80006F88       .text mDoAud_allocStreamBuffer__Fv */
@@ -32,9 +46,7 @@ void mDoAud_deallocStreamBuffer() {
 }
 
 /* 8000703C-80007040       .text mDoAud_executeStreamBuffer__Fv */
-void mDoAud_executeStreamBuffer() {
-    /* Nonmatching */
-}
+void mDoAud_executeStreamBuffer() {}
 
 /* 80007040-80007090       .text mDoAud_setupStreamBuffer__Fv */
 void mDoAud_setupStreamBuffer() {
@@ -48,7 +60,13 @@ void mDoAud_Create() {
 
 /* 80007224-80007268       .text mDoAud_Execute__Fv */
 void mDoAud_Execute() {
-    /* Nonmatching */
+    if (!mDoAud_zelAudio_c::isInitFlag()) {
+        mDoAud_Create();
+    } else {
+        mDoAud_executeStreamBuffer();
+        g_mDoAud_zelAudio.gframeProcess();
+        mDoAud_zelAudio_c::calcLoadTimer();
+    }
 }
 
 /* 80007268-800073D8       .text mDoAud_getTactDirection__Fii */
@@ -57,26 +75,22 @@ void mDoAud_getTactDirection(int, int) {
 }
 
 /* 800073D8-80007424       .text mDoAud_setSceneName__FPCcll */
-void mDoAud_setSceneName(const char*, long, long) {
-    /* Nonmatching */
+void mDoAud_setSceneName(const char* i_name, s32 i_point, s32 i_layer) {
+    if (mDoAud_zelAudio_c::getLoadTimer() == 0) {
+        mDoAud_zelAudio_c::getInterface()->setSceneName((char*)i_name, i_point, i_layer);
+        mDoAud_zelAudio_c::setLoadTimer(36);
+    }
 }
 
 /* 80007424-80007478       .text mDoAud_load1stDynamicWave__Fv */
-void mDoAud_load1stDynamicWave() {
-    /* Nonmatching */
-}
-
-/* 80007478-80007494       .text cLib_calcTimer<Uc>__FPUc */
-void cLib_calcTimer<unsigned char>(unsigned char*) {
-    /* Nonmatching */
-}
-
-/* 80007500-8000755C       .text __dt__17mDoAud_zelAudio_cFv */
-mDoAud_zelAudio_c::~mDoAud_zelAudio_c() {
-    /* Nonmatching */
-}
-
-/* 8000755C-80007598       .text __dt__10JAIZelInstFv */
-JAIZelInst::~JAIZelInst() {
-    /* Nonmatching */
+int mDoAud_load1stDynamicWave() {
+    if (mDoAud_zelAudio_c::getLoadTimer() == 0) {
+        return 1;
+    } else if (mDoAud_zelAudio_c::getLoadTimer() <= 1) {
+        mDoAud_zelAudio_c::getInterface()->load1stDynamicWave();
+        mDoAud_zelAudio_c::setLoadTimer(0);
+        return 1;
+    } else {
+        return 0;
+    }
 }

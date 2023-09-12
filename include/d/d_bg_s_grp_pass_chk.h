@@ -27,4 +27,6 @@ private:
     /* 0x4 */ u32 mGrp;
 };
 
+STATIC_ASSERT(sizeof(dBgS_GrpPassChk) == 0x8);
+
 #endif /* D_BG_D_BG_S_GRP_PASS_CHK_H */

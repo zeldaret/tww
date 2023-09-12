@@ -13,4 +13,6 @@ public:
     virtual ~dBgS_Chk();
 };  // Size: 0x14
 
+STATIC_ASSERT(sizeof(dBgS_Chk) == 0x14);
+
 #endif /* D_BG_D_BG_S_CHK_H */

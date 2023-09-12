@@ -318,6 +318,7 @@ LIBS = [
 
             # machine
             Object(NonMatching, "m_Do/m_Do_main.cpp"),
+            Object(NonMatching, "m_Do/m_Do_audio.cpp"),
             Object(NonMatching, "m_Do/m_Do_controller_pad.cpp"),
             Object(Matching,    "m_Do/m_Do_hostIO.cpp"),
             Object(NonMatching, "m_Do/m_Do_mtx.cpp"),

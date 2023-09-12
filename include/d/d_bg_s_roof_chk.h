@@ -20,6 +20,8 @@ private:
     /* 0x38 */ cXyz m_pos;
 };  // Size: 0x44
 
+STATIC_ASSERT(sizeof(dBgS_RoofChk) == 0x44);
+
 class dBgS_LinkRoofChk : public dBgS_RoofChk {
 public:
     dBgS_LinkRoofChk() { /* SetLink(); */ }
