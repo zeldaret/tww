@@ -4,11 +4,7 @@
 #include "global.h"
 #include "dolphin/gx/GX.h"
 #include "SSystem/SComponent/c_xyz.h"
-
-// setup properly later
-struct J3DLightObj {
-    u8 temp[0x74];
-};
+#include "JSystem/J3DGraphBase/J3DStruct.h"
 
 class J3DModel;
 
