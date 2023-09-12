@@ -11,6 +11,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
 #include "dolphin/mtx/mtx.h"
 #include "dolphin/types.h"
 
@@ -25,10 +26,11 @@ public:
     static s32 solidHeapCB(fopAc_ac_c*);
 
     /* 0x0290 */ request_of_phase_process_class mPhs;
-    /* 0x0294 */ //s8 dummy[0x04];
     /* 0x0298 */ J3DModel* mModels[2];
-    /* 0x02A0 */ s8 dummy2[0x08]; 
+    /* 0x02A0 */ u8 dummy2[0x08]; 
     /* 0x02A8 */ mDoExt_McaMorf* mAnims[2];
+    /* 0x02B0 */ u8 dummy[0x08];
+    /* 0x02B8 */ u32 m02B8;
 
     static char m_arcname[];
 };
@@ -85,7 +87,6 @@ s32 daBranch_c::solidHeapCB(fopAc_ac_c* i_this) {
 /* 00000248-0000049C       .text CreateHeap__10daBranch_cFv */
 s32 daBranch_c::CreateHeap() {
     /* Nonmatching */
-
     BOOL status = TRUE;
 
     int ids[] = {
@@ -95,21 +96,19 @@ s32 daBranch_c::CreateHeap() {
     };
 
     for (int i = 0; i < 2; i++) {
-        J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes(m_arcname, ids[i + 4]));
+        int curId = ids[i + 4];
+
+        J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes(m_arcname, curId));
         J3DAnmTransformKey* bck = static_cast<J3DAnmTransformKey*>(dComIfG_getObjectIDRes(m_arcname, ids[i + 2]));
 
-        if (!modelData) {
-            JUT_ASSERT(0x1CC, modelData != 0);
-        }
-        if (!bck) {
-            JUT_ASSERT(0x1CD, bck != 0);
-        }
+        JUT_ASSERT(0x1CC, modelData != 0);
+        JUT_ASSERT(0x1CD, bck != 0);
 
         mDoExt_McaMorf* newMorf = new mDoExt_McaMorf(
-            (J3DModelData*)dRes_control_c::getIDRes(m_arcname, ids[i + 4], g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40),
+            static_cast<J3DModelData*>(dComIfG_getObjectIDRes(m_arcname, curId)),
             0,
             0,
-            (J3DAnmTransformKey*)dRes_control_c::getIDRes(m_arcname, ids[i + 2], g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40),
+            static_cast<J3DAnmTransformKey*>(dComIfG_getObjectIDRes(m_arcname, ids[i + 2])),
             0,
             1.0f,
             0,
@@ -121,34 +120,79 @@ s32 daBranch_c::CreateHeap() {
         );
 
         mAnims[i] = newMorf;
-        if (mAnims[i] == 0) {
+        if (!mAnims[i]) {
             status = FALSE;
             break;
         }
 
+        mModels[i] = newMorf->mpModel;
+        if (!mModels[i]) {
+            status = FALSE;
+            break;
+        }
 
+        mAnims[i]->mFrameCtrl.setFrame(0.0f);
+        set_anim(i, ids[i + 2], ids[i]);
     }
 
     return status;
 }
 
 /* 0000049C-00000524       .text daBranch_Draw__FP10daBranch_c */
-void daBranch_Draw(daBranch_c*) {
-    /* Nonmatching */
+BOOL daBranch_Draw(daBranch_c* i_this) {
+    int activeIdx = 0;
+    if (i_this->m02B8 == 5) {
+        activeIdx = 1;
+    }
+
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &i_this->current.pos, &i_this->mTevStr);
+    g_env_light.setLightTevColorType(i_this->mModels[activeIdx], &i_this->mTevStr);
+
+    i_this->mAnims[activeIdx]->updateDL();
+
+    return TRUE;
 }
 
 /* 00000524-0000060C       .text daBranch_Execute__FP10daBranch_c */
-void daBranch_Execute(daBranch_c*) {
+void daBranch_Execute(daBranch_c* i_this) {
     /* Nonmatching */
+    int demoId = i_this->mDemoActorId;
+
+    if (demoId == 0) {
+        if (i_this->m02B8 == 5) {
+            if (i_this->mAnims[1]) {
+                i_this->mAnims[1]->play(0, 0, 0);
+            }
+        }
+        else if (i_this->m02B8 == 6 && i_this->mAnims[0]) {
+            i_this->mAnims[0]->play(0, 0, 0);
+        }
+    }
+    else {
+        void* demoActor = g_dComIfG_gameInfo.play.mDemo;
+
+        if (demoActor) {
+            //i_this->m02B8 = demoActor->mShape;
+
+            if (i_this->m02B8 == 6) {
+                i_this->demoPlay(i_this->mAnims[0]);
+            }
+            else if (i_this->m02B8 == 5) {
+                i_this->demoPlay(i_this->mAnims[1]);
+            }
+        }
+    }
+
+    i_this->set_mtx();
 }
 
 /* 0000060C-00000614       .text daBranch_IsDelete__FP10daBranch_c */
-BOOL daBranch_IsDelete(daBranch_c*) {
+BOOL daBranch_IsDelete(daBranch_c* i_this) {
     return TRUE;
 }
 
 /* 00000614-00000694       .text daBranch_Delete__FP10daBranch_c */
-void daBranch_Delete(daBranch_c*) {
+void daBranch_Delete(daBranch_c* i_this) {
     /* Nonmatching */
 }
 
