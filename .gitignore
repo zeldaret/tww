@@ -11,3 +11,4 @@ orig/*/*
 tools/mwcc_compiler/*
 !tools/mwcc_compiler/.gitkeep
 /*.txt
+ctx.c
