@@ -23,9 +23,10 @@ public:
     s32 CreateHeap();
     static s32 solidHeapCB(fopAc_ac_c*);
 
-    request_of_phase_process_class mPhs;
-    s8 dummy[0x10];
-    mDoExt_McaMorf* mAnims[2];
+    /* 0x0290 */ request_of_phase_process_class mPhs;
+    /* 0x0294 */ s8 dummy[0x10];
+    // ...
+    /* 0x02A8*/ mDoExt_McaMorf* mAnims[2];
 
     static char m_arcname[];
 };
@@ -34,16 +35,17 @@ char daBranch_c::m_arcname[] = "Kwood_00";
 
 /* 00000078-00000128       .text set_mtx__10daBranch_cFv */
 void daBranch_c::set_mtx() {
+    /* Nonmatching */
     //for (int i = 0; i < 2; i ++) {
 
-   // }
+    //}
 }
 
 /* 00000128-000001E4       .text set_anim__10daBranch_cFiii */
 void daBranch_c::set_anim(int i_animIdx, int i_bckIdx, int i_basIdx) {
     if (i_bckIdx > 0 && i_basIdx > 0) {
-        void* pSnd = g_dComIfG_gameInfo.mResControl.getObjectIDRes(m_arcname, i_basIdx);
-        void* pAnm = g_dComIfG_gameInfo.mResControl.getObjectIDRes(m_arcname, i_bckIdx);
+        void* pSnd = dComIfG_getObjectIDRes(m_arcname, i_basIdx);
+        void* pAnm = dComIfG_getObjectIDRes(m_arcname, i_bckIdx);
         
         mAnims[i_animIdx]->setAnm(
             static_cast<J3DAnmTransform*>(pAnm),
@@ -70,6 +72,8 @@ s32 daBranch_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 00000248-0000049C       .text CreateHeap__10daBranch_cFv */
 s32 daBranch_c::CreateHeap() {
+    /* Nonmatching */
+
     BOOL status = TRUE;
 
     s32 ids[] = {
@@ -138,6 +142,7 @@ void daBranch_Delete(daBranch_c*) {
 
 /* 00000694-0000080C       .text daBranch_Create__FP10fopAc_ac_c */
 s32 daBranch_Create(fopAc_ac_c* i_this) {
+    /* Nonmatching */
     daBranch_c* branch = static_cast<daBranch_c*>(i_this);
 
     fopAcM_SetupActor(branch, daBranch_c);
