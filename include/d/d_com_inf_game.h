@@ -589,6 +589,14 @@ inline void* dComIfG_getObjectRes(const char* arcName, int param_1) {
     return g_dComIfG_gameInfo.mResControl.getObjectRes(arcName, param_1);
 }
 
+inline void* dComIfG_getObjectIDRes(const char* arcName, int id) {
+    return g_dComIfG_gameInfo.mResControl.getObjectIDRes(arcName, id);
+}
+
+inline void* dComIfG_getObjectIDRes(const char* arcName, u16 id) {
+    return g_dComIfG_gameInfo.mResControl.getObjectIDRes(arcName, id);
+}
+
 /**
  * === PARTICLE ===
  */

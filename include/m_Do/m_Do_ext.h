@@ -229,6 +229,18 @@ public:
     virtual void execute(u16, J3DTransformInfo*) = 0;
 };
 
+class mDoExt_McaMorfCallBack2_c {
+public:
+    virtual void execute(u16, J3DTransformInfo*) = 0;
+};
+
+class mDoExt_McaMorf {
+public:
+    mDoExt_McaMorf(J3DModelData*, mDoExt_McaMorfCallBack1_c*, mDoExt_McaMorfCallBack2_c*, J3DAnmTransform*, int, float, int, int, int, void*, unsigned long, unsigned long);
+
+    void setAnm(J3DAnmTransform*, int, f32, f32, f32, f32, void*);
+};
+
 class mDoExt_3DlineMat_c {
 public:
     /* 0x0 */ void* field_0x0;
