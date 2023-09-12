@@ -1,6 +1,8 @@
 #ifndef D_ITEM_H
 #define D_ITEM_H
 
+#include "dolphin/types.h"
+
 void execItemGet(u8 itemNo);
 BOOL checkItemGet(u8 itemNo, BOOL defaultVal);
 void item_func_heart();
