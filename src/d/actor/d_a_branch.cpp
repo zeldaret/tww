@@ -12,12 +12,24 @@
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
+#include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "dolphin/mtx/mtx.h"
 #include "dolphin/types.h"
 
 
 class daBranch_c : public fopAc_ac_c {
 public:
+    ~daBranch_c() {
+        for (int i = 0; i < 2; i++) {
+            mDoExt_McaMorf* anim = mAnims[i];
+            if (anim != 0) {
+                anim->stopZelAnime();
+            }
+        }
+
+        dComIfG_resDelete(&mPhs, m_arcname);
+    }
+
     void set_mtx();
     void set_anim(int, int, int);
     void demoPlay(mDoExt_McaMorf*);
@@ -31,6 +43,8 @@ public:
     /* 0x02A8 */ mDoExt_McaMorf* mAnims[2];
     /* 0x02B0 */ u8 dummy[0x08];
     /* 0x02B8 */ u32 m02B8;
+    /* 0x02BC */ u8 m02BC;
+    /* 0x02BD */ u8 m02BD;
 
     static char m_arcname[];
 };
@@ -87,28 +101,25 @@ s32 daBranch_c::solidHeapCB(fopAc_ac_c* i_this) {
 /* 00000248-0000049C       .text CreateHeap__10daBranch_cFv */
 s32 daBranch_c::CreateHeap() {
     /* Nonmatching */
+    int basIds[] = { 8, 0 }; 
+    int bckIds[] = { 7, 2 };
+    int bmdIds[] = { 6, 5 };
+    int t[] = {0, 0};
+
     BOOL status = TRUE;
 
-    int ids[] = {
-        8, 0, 
-        7, 2, 
-        6, 5 
-    };
-
     for (int i = 0; i < 2; i++) {
-        int curId = ids[i + 4];
-
-        J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes(m_arcname, curId));
-        J3DAnmTransformKey* bck = static_cast<J3DAnmTransformKey*>(dComIfG_getObjectIDRes(m_arcname, ids[i + 2]));
+        J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes(m_arcname, bmdIds[i]));
+        J3DAnmTransformKey* bck = static_cast<J3DAnmTransformKey*>(dComIfG_getObjectIDRes(m_arcname, bckIds[i]));
 
         JUT_ASSERT(0x1CC, modelData != 0);
         JUT_ASSERT(0x1CD, bck != 0);
 
         mDoExt_McaMorf* newMorf = new mDoExt_McaMorf(
-            static_cast<J3DModelData*>(dComIfG_getObjectIDRes(m_arcname, curId)),
+            static_cast<J3DModelData*>(dComIfG_getObjectIDRes(m_arcname, bmdIds[i])),
             0,
             0,
-            static_cast<J3DAnmTransformKey*>(dComIfG_getObjectIDRes(m_arcname, ids[i + 2])),
+            static_cast<J3DAnmTransformKey*>(dComIfG_getObjectIDRes(m_arcname, bckIds[i])),
             0,
             1.0f,
             0,
@@ -132,7 +143,7 @@ s32 daBranch_c::CreateHeap() {
         }
 
         mAnims[i]->mFrameCtrl.setFrame(0.0f);
-        set_anim(i, ids[i + 2], ids[i]);
+        set_anim(i, bckIds[i], basIds[i]);
     }
 
     return status;
@@ -192,8 +203,9 @@ BOOL daBranch_IsDelete(daBranch_c* i_this) {
 }
 
 /* 00000614-00000694       .text daBranch_Delete__FP10daBranch_c */
-void daBranch_Delete(daBranch_c* i_this) {
-    /* Nonmatching */
+BOOL daBranch_Delete(daBranch_c* i_this) {
+    i_this->~daBranch_c();
+    return TRUE;
 }
 
 /* 00000694-0000080C       .text daBranch_Create__FP10fopAc_ac_c */
@@ -209,13 +221,30 @@ s32 daBranch_Create(fopAc_ac_c* i_this) {
 
         if (solidHeapResult & 0xFF == 0) {
             for (int i = 0; i < 2; i++) {
-                //branch->mBase.m
+                branch->mAnims[i] = 0;
             }
 
             state = cPhs_ERROR_e;
         }
         else {
+            branch->mCullMtx = branch->mModels[0]->mBaseTransformMtx;
+            fopAcM_setCullSizeBox(i_this, 0.0f, 0.0f, -50.0f, 300.0f, 100.0f, 50.0f);
+            
+            branch->m02B8 = 6;
+            branch->m02BC = 0;
+            branch->m02BD = 0;
 
+            for (int i = 0; i < 2; i++) {
+                J3DModelData* modelData = branch->mModels[i]->mModelData;
+
+                for (int j = 0; j < modelData->getMaterialNum(); j++) {
+                    J3DMaterial* mat = modelData->getMaterialNodePointer(j);
+                    if (mat) {
+                        J3DFog* fog = mat->getPEBlock()->getFog();
+                        fog->field_0x0 = 2;
+                    }
+                }
+            }
         }
     }
 
