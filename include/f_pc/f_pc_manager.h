@@ -43,7 +43,7 @@ inline s16 fpcM_DrawPriority(const void* param_0) {
 }
 
 inline s32 fpcM_ChangeLayerID(void* proc, int layerID) {
-    return fpcPi_Change(&((base_process_class*)proc)->mPi, layerID, 0xFFFD, 0xFFFD);
+    return fpcPi_Change(&((base_process_class*)proc)->mPi, layerID, fpcPi_CURRENT_e, fpcPi_CURRENT_e);
 }
 
 inline s32 fpcM_IsJustType(int type1, int type2) {

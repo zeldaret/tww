@@ -4,6 +4,7 @@
 //
 
 #include "f_pc/f_pc_layer.h"
+#include "f_pc/f_pc_layer_tag.h"
 #include "f_pc/f_pc_method_iter.h"
 #include "f_pc/f_pc_method_tag.h"
 
@@ -112,9 +113,9 @@ layer_class* fpcLy_Search(unsigned int i_id) {
 
 /* 8003D9C4-8003DA34       .text fpcLy_Layer__FUi */
 layer_class* fpcLy_Layer(unsigned int i_id) {
-    if (i_id == 0 || fpcLy_RootLayer()->mLayerID == i_id) {
+    if (i_id == fpcLy_ROOT_e || fpcLy_RootLayer()->mLayerID == i_id) {
         return fpcLy_RootLayer();
-    } else if (i_id == ~2 || fpcLy_CurrentLayer()->mLayerID == i_id) {
+    } else if (i_id == fpcLy_CURRENT_e || fpcLy_CurrentLayer()->mLayerID == i_id) {
         return fpcLy_CurrentLayer();
     } else {
         return fpcLy_Search(i_id);
@@ -144,9 +145,6 @@ s32 fpcLy_Cancel(layer_class* i_layer) {
 
 /* 8003DB40-8003DC78       .text fpcLy_Create__FP11layer_classPvP15node_list_classi */
 void fpcLy_Create(layer_class* i_layer, void* i_node, node_list_class* i_nodeList, int i_numLists) {
-    void* pvVar1;
-    s32 iVar2;
-
     static int IsInitOfLayerList = 1;
     static int layer_id = 0;
     *i_layer = l_fpcLy_Crear;
@@ -158,9 +156,8 @@ void fpcLy_Create(layer_class* i_layer, void* i_node, node_list_class* i_nodeLis
         cLs_Create(&l_fpcLy_LayerList);
         fpcLy_SetCurrentLayer(i_layer);
     }
-    (i_layer->mNodeListTree).mpLists = i_nodeList;
-    (i_layer->mNodeListTree).mNumLists = i_numLists;
-    cTr_Create(&i_layer->mNodeListTree, (i_layer->mNodeListTree).mpLists,
-               (i_layer->mNodeListTree).mNumLists);
+    i_layer->mNodeListTree.mpLists = i_nodeList;
+    i_layer->mNodeListTree.mNumLists = i_numLists;
+    cTr_Create(&i_layer->mNodeListTree, i_layer->mNodeListTree.mpLists, i_layer->mNodeListTree.mNumLists);
     fpcLy_Regist(i_layer);
 }

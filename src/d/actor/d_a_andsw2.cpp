@@ -284,9 +284,9 @@ static actor_method_class l_daAndsw2_Method = {
 };
 
 extern actor_process_profile_definition g_profile_ANDSW2 = {
-    -3,
+    fpcLy_CURRENT_e,
     7,
-    0xFFFD,
+    fpcPi_CURRENT_e,
     PROC_ANDSW2,
     &g_fpcLf_Method.mBase,
     sizeof(daAndsw2_c),

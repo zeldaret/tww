@@ -403,7 +403,7 @@ public:
     BOOL isStageBossEnemy() { return isDungeonItem(STAGE_BOSS_ENEMY); }
     BOOL isStageBossEnemy2() { return isDungeonItem(STAGE_BOSS_ENEMY_2); }
     void onStageLife() { onDungeonItem(STAGE_LIFE); }
-    BOOL isStageLife() { isDungeonItem(STAGE_LIFE); }
+    BOOL isStageLife() { return isDungeonItem(STAGE_LIFE); }
 
     /* 0x00 */ u32 mTbox;
     /* 0x04 */ u32 mSwitch[4];

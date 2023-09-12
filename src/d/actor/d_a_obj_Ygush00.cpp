@@ -168,7 +168,7 @@ s32 daObjYgush00_IsDelete(daObjYgush00_c* i_this) {
     return 1;
 }
 
-static actor_method_class l_daObjYgush00_Mehtod = {
+static actor_method_class l_daObjYgush00_Method = {
     (process_method_func)daObjYgush00_Create,
     (process_method_func)daObjYgush00_Delete,
     (process_method_func)daObjYgush00_Execute,
@@ -176,10 +176,10 @@ static actor_method_class l_daObjYgush00_Mehtod = {
     (process_method_func)daObjYgush00_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Ygish00 = {
-    -3,
+extern actor_process_profile_definition g_profile_Obj_Ygush00 = {
+    fpcLy_CURRENT_e,
     3,
-    0xFFFD,
+    fpcPi_CURRENT_e,
     PROC_Obj_Ygush00,
     &g_fpcLf_Method.mBase,
     sizeof(daObjYgush00_c),
@@ -187,7 +187,7 @@ extern actor_process_profile_definition g_profile_Obj_Ygish00 = {
     0,
     &g_fopAc_Method.base,
     0x005E,
-    &l_daObjYgush00_Mehtod,
+    &l_daObjYgush00_Method,
     0x00040100,
     fopAc_ACTOR_e,
     fopAc_CULLBOX_CUSTOM_e,
