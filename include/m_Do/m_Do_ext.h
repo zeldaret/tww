@@ -51,10 +51,7 @@ public:
 
     void entry(J3DModelData* i_modelData) { entry(i_modelData, getFrame()); }
     int init(J3DModelData* i_modelData, J3DAnmTextureSRTKey* i_btk, int i_anmPlay, int i_attribute,
-             f32 i_rate, s16 i_start, s16 i_end, bool i_modify, bool i_entry) {
-        return init(&i_modelData->getMaterialTable(), i_btk, i_anmPlay, i_attribute, i_rate,
-                    i_start, i_end, i_modify, i_entry);
-    }
+             f32 i_rate, s16 i_start, s16 i_end, bool i_modify, bool i_entry);
 
     int remove(J3DModelData* i_modelData) { return i_modelData->removeTexMtxAnimator(mpAnm); }
     void entryFrame() { entryFrame(getFrame()); }
