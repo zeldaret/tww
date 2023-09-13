@@ -8,7 +8,6 @@ build.ninja
 objdiff.json
 orig/*/*
 !orig/*/.gitkeep
-tools/mwcc_compiler/*
-!tools/mwcc_compiler/.gitkeep
+tools/mwcc_compiler
 /*.txt
 ctx.c

@@ -1,4 +1,16 @@
 #!/usr/bin/env python3
+
+###
+# Transforms .d files, converting Windows paths to Unix paths.
+# Allows usage of the mwcc -MMD flag on platforms other than Windows.
+#
+# Usage:
+#   python3 tools/transform_dep.py build/src/file.d build/src/file.d
+#
+# If changes are made, please submit a PR to
+# https://github.com/encounter/dtk-template
+###
+
 import argparse
 import os
 from platform import uname
