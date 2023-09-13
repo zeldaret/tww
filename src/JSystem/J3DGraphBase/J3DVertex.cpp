@@ -26,9 +26,9 @@ J3DVertexData::J3DVertexData() {
     for (int i = 0; i < ARRAY_SIZE(mVtxTexCoordArray); i++)
         mVtxTexCoordArray[i] = NULL;
 
-    mPacketNum = 0;
-    mVtxPosType = GX_F32;
     mVtxPosFrac = 0;
+    mVtxPosType = GX_F32;
+    mVtxNrmFrac = 0;
     mVtxNrmType = GX_F32;
 }
 

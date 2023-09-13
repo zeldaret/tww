@@ -179,9 +179,11 @@ public:
     void setModel(J3DModel* pModel) { mpModel = pModel; }
     void setDrawMtx(Mtx** pDrawMtx) { mpDrawMtx = pDrawMtx; }
     void setNrmMtx(Mtx33** pNrmMtx) { mpNrmMtx = pNrmMtx; }
+    void setBaseMtxPtr(Mtx* pMtx) { mpBaseMtxPtr = pMtx; }
 
     J3DShape* getShape() const { return mpShape; }
     J3DModel* getModel() const { return mpModel; }
+    Mtx* getBaseMtxPtr() const { return mpBaseMtxPtr; }
 
 public:
     /* 0x24 */ J3DShape* mpShape;

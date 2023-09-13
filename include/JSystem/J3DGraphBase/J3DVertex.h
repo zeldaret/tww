@@ -53,11 +53,11 @@ private:
     /* 0x1C */ void* mVtxNBTArray;
     /* 0x20 */ GXColor* mVtxColorArray[2];
     /* 0x28 */ void* mVtxTexCoordArray[8];
-    /* 0x48 */ u8 mPacketNum;
+    /* 0x48 */ u8 mVtxPosFrac;
     /* 0x4C */ GXCompType mVtxPosType;
-    /* 0x50 */ u8 mVtxPosFrac;
+    /* 0x50 */ u8 mVtxNrmFrac;
     /* 0x54 */ GXCompType mVtxNrmType;
-    /* 0x58 */ u8 mVtxNrmFrac;
+    /* 0x58 */ u32 mPacketNum;
 };
 
 class J3DVertexBuffer {

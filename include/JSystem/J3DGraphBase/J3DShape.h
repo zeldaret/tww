@@ -121,6 +121,7 @@ public:
     static void resetVcdVatCache() { sOldVcdVatCmd = NULL; }
 
     static void* sOldVcdVatCmd;
+    static u8 sEnvelopeFlag;
 
 private:
     friend struct J3DShapeFactory;
