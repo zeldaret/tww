@@ -469,7 +469,7 @@ public:
     void entryBrk(J3DModelData*, int);
     void playerInit();
     daPy_lk_c();
-    void makeBgWait();
+    int makeBgWait();
     void setSeAnime(daPy_anmHeap_c const*, J3DFrameCtrl*);
     void initSeAnime();
     void resetSeAnime();
