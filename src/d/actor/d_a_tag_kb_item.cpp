@@ -32,12 +32,11 @@ public:
 
 /* 00000078-000000C8       .text _delete__13daTagKbItem_cFv */
 bool daTagKbItem_c::_delete() {
+#if VERSION != VERSION_JP
     if (field_0x2a0 != 0xff && field_0x2a4 != 0xff) {
-        /* fopAcM_GetHomeRoomNo causes regalloc inside i_fopAcM_offSwitch */
-        // i_fopAcM_offSwitch(this, field_0x2a4);
-
-        g_dComIfG_gameInfo.save.offSwitch(field_0x2a4, orig.roomNo);
+        dComIfGs_offSwitch(field_0x2a4, orig.roomNo);
     }
+#endif
     return 1;
 }
 
@@ -58,11 +57,8 @@ int daTagKbItem_c::_create() {
     fopAcM_SetupActor(this, daTagKbItem_c);
 
     CreateInit();
-    // same regalloc issues
-    // if (field_0x29c != 0x1f && fopAcM_isItem(this, field_0x29c) || field_0x2a4 != 0xff &&
-    // i_fopAcM_isSwitch(this, field_0x2a4))
-    if (field_0x29c != 0x1f && g_dComIfG_gameInfo.save.isItem(field_0x29c, orig.roomNo) ||
-        field_0x2a4 != 0xff && g_dComIfG_gameInfo.save.isSwitch(field_0x2a4, orig.roomNo))
+    if (field_0x29c != 0x1f && dComIfGs_isItem(field_0x29c, orig.roomNo) ||
+        field_0x2a4 != 0xff && dComIfGs_isSwitch(field_0x2a4, orig.roomNo))
     {
         return cPhs_ERROR_e;
     }
@@ -71,6 +67,13 @@ int daTagKbItem_c::_create() {
 
 /* 000001BC-000001C4       .text _execute__13daTagKbItem_cFv */
 bool daTagKbItem_c::_execute() {
+#if VERSION == VERSION_JP
+    if (field_0x29c != 0x1f && dComIfGs_isItem(field_0x29c, orig.roomNo) ||
+        field_0x2a4 != 0xff && dComIfGs_isSwitch(field_0x2a4, orig.roomNo))
+    {
+        fopAcM_delete(this);
+    }
+#endif
     return 1;
 }
 
