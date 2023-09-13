@@ -22,6 +22,7 @@ struct J3DVtxColorCalc {
 class J3DVertexData {
 public:
     J3DVertexData();
+    ~J3DVertexData();
 
     void* getVtxPosArray() const { return mVtxPosArray; }
     void* getVtxNrmArray() const { return mVtxNrmArray; }
@@ -46,32 +47,32 @@ private:
     /* 0x04 */ u32 mNrmNum;
     /* 0x08 */ u32 mColNum;
     /* 0x0C */ u32 mTexCoordNum;
-    /* 0x10 */ u32 mPacketNum;
-    /* 0x14 */ GXVtxAttrFmtList* mVtxAttrFmtList;
-    /* 0x18 */ void* mVtxPosArray;
-    /* 0x1C */ void* mVtxNrmArray;
-    /* 0x20 */ void* mVtxNBTArray;
-    /* 0x24 */ GXColor* mVtxColorArray[2];
-    /* 0x2C */ void* mVtxTexCoordArray[8];
-    /* 0x4C */ u8 mVtxPosFrac;
-    /* 0x50 */ GXCompType mVtxPosType;
-    /* 0x54 */ u8 mVtxNrmFrac;
-    /* 0x58 */ GXCompType mVtxNrmType;
+    /* 0x10 */ GXVtxAttrFmtList* mVtxAttrFmtList;
+    /* 0x14 */ void* mVtxPosArray;
+    /* 0x18 */ void* mVtxNrmArray;
+    /* 0x1C */ void* mVtxNBTArray;
+    /* 0x20 */ GXColor* mVtxColorArray[2];
+    /* 0x28 */ void* mVtxTexCoordArray[8];
+    /* 0x48 */ u8 mPacketNum;
+    /* 0x4C */ GXCompType mVtxPosType;
+    /* 0x50 */ u8 mVtxPosFrac;
+    /* 0x54 */ GXCompType mVtxNrmType;
+    /* 0x58 */ u8 mVtxNrmFrac;
 };
 
 class J3DVertexBuffer {
 public:
     J3DVertexBuffer() { init(); }
 
-    /* 80310F78 */ void setVertexData(J3DVertexData*);
-    /* 80310FD8 */ void init();
-    /* 80311030 */ ~J3DVertexBuffer();
-    /* 8031106C */ void setArray() const;
-    /* 80311090 */ s32 copyLocalVtxPosArray(u32);
-    /* 803111B0 */ s32 copyLocalVtxNrmArray(u32);
-    /* 803112D0 */ s32 copyLocalVtxArray(u32);
-    /* 80311478 */ s32 allocTransformedVtxPosArray();
-    /* 8031152C */ s32 allocTransformedVtxNrmArray();
+    void setVertexData(J3DVertexData*);
+    void init();
+    ~J3DVertexBuffer();
+    void setArray() const;
+    s32 copyLocalVtxPosArray(u32);
+    s32 copyLocalVtxNrmArray(u32);
+    s32 copyLocalVtxArray(u32);
+    s32 allocTransformedVtxPosArray();
+    s32 allocTransformedVtxNrmArray();
 
     void setCurrentVtxPos(void* pVtxPos) { mCurrentVtxPos = pVtxPos; }
     void* getCurrentVtxPos() { return mCurrentVtxPos; }

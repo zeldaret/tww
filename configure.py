@@ -198,6 +198,7 @@ LIBS = [
         "objects": [
             Object(NonMatching, "JSystem/JFramework/JFWDisplay.cpp"),
             Object(NonMatching, "JSystem/JFramework/JFWSystem.cpp"),
+            Object(Matching,    "JSystem/J3DGraphBase/J3DVertex.cpp"),
             Object(NonMatching, "JSystem/J3DGraphBase/J3DPacket.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DDrawBuffer.cpp"),
             Object(Matching,    "JSystem/J3DU/J3DUDL.cpp"),
