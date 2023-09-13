@@ -379,7 +379,7 @@ LIBS = [
     ActorRel(NonMatching, "d_a_lamp"),
     ActorRel(NonMatching, "d_a_lod_bg"),
     ActorRel(NonMatching, "d_a_lwood"),
-    ActorRel(NonMatching, "d_a_magma"),
+    ActorRel(Matching, "d_a_magma"),
     ActorRel(NonMatching, "d_a_majuu_flag"),
     ActorRel(NonMatching, "d_a_mdoor"),
     ActorRel(NonMatching, "d_a_msw"),
