@@ -1,14 +1,14 @@
 /**
  * d_a_tag_kb_item.cpp
- * 
-*/
+ *
+ */
 
-//#include "d_a_tag_kb_item.h"
-#include "dolphin/types.h"
-#include "d/d_com_inf_game.h"
-#include "f_op/f_op_actor_mng.h"
+// #include "d_a_tag_kb_item.h"
 #include "JSystem/JKernel/JKRHeap.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "dolphin/types.h"
+#include "f_op/f_op_actor_mng.h"
 
 class daTagKbItem_c : public fopAc_ac_c {
 public:
@@ -33,9 +33,9 @@ public:
 /* 00000078-000000C8       .text _delete__13daTagKbItem_cFv */
 bool daTagKbItem_c::_delete() {
     if (field_0x2a0 != 0xff && field_0x2a4 != 0xff) {
-    /* fopAcM_GetHomeRoomNo causes regalloc inside i_fopAcM_offSwitch */
-        //i_fopAcM_offSwitch(this, field_0x2a4);
-        
+        /* fopAcM_GetHomeRoomNo causes regalloc inside i_fopAcM_offSwitch */
+        // i_fopAcM_offSwitch(this, field_0x2a4);
+
         g_dComIfG_gameInfo.save.offSwitch(field_0x2a4, orig.roomNo);
     }
     return 1;
@@ -59,8 +59,11 @@ int daTagKbItem_c::_create() {
 
     CreateInit();
     // same regalloc issues
-    // if (field_0x29c != 0x1f && fopAcM_isItem(this, field_0x29c) || field_0x2a4 != 0xff && i_fopAcM_isSwitch(this, field_0x2a4))
-    if (field_0x29c != 0x1f && g_dComIfG_gameInfo.save.isItem(field_0x29c, orig.roomNo) || field_0x2a4 != 0xff && g_dComIfG_gameInfo.save.isSwitch(field_0x2a4, orig.roomNo)) {
+    // if (field_0x29c != 0x1f && fopAcM_isItem(this, field_0x29c) || field_0x2a4 != 0xff &&
+    // i_fopAcM_isSwitch(this, field_0x2a4))
+    if (field_0x29c != 0x1f && g_dComIfG_gameInfo.save.isItem(field_0x29c, orig.roomNo) ||
+        field_0x2a4 != 0xff && g_dComIfG_gameInfo.save.isSwitch(field_0x2a4, orig.roomNo))
+    {
         return cPhs_ERROR_e;
     }
     return cPhs_COMPLEATE_e;
@@ -102,10 +105,8 @@ static int daTagKbItem_IsDelete(void* i_this) {
 }
 
 static actor_method_class daTagKbItemMethodTable = {
-    (process_method_func)daTagKbItem_Create,
-    (process_method_func)daTagKbItem_Delete,
-    (process_method_func)daTagKbItem_Execute,
-    (process_method_func)daTagKbItem_IsDelete,
+    (process_method_func)daTagKbItem_Create,  (process_method_func)daTagKbItem_Delete,
+    (process_method_func)daTagKbItem_Execute, (process_method_func)daTagKbItem_IsDelete,
     (process_method_func)daTagKbItem_Draw,
 };
 
