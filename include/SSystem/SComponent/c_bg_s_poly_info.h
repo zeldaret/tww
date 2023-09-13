@@ -2,17 +2,24 @@
 #define C_BG_S_POLY_INFO_H
 
 #include "dolphin/types.h"
+#include "global.h"
 
+class cBgW;
 class cBgS_PolyInfo {
 private:
     /* 0x00 */ u16 mPolyIndex;
     /* 0x02 */ u16 mBgIndex;
-    /* 0x04 */ void* unk_0x04;
+    /* 0x04 */ cBgW* mpBgW;
     /* 0x08 */ unsigned int mActorId;
 
 public:
     cBgS_PolyInfo();
-    void ClearPi();
+    void ClearPi() {
+        mPolyIndex = -1;
+        mBgIndex = 0x100;
+        mpBgW = NULL;
+        mActorId = -1;
+    }
     void SetPolyInfo(const cBgS_PolyInfo&);
     void SetActorInfo(int, void*, unsigned int);
     bool ChkSafe(const void*, unsigned int) const;

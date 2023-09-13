@@ -54,6 +54,7 @@ public:
     static u32 sCurrentPipeline;
     // static J3DScaleFlag sCurrentScaleFlag;
     static u8* sCurrentScaleFlag;
+    static u8 sNBTFlag;
     static u32 sTexMtxLoadType;
 
     static void setCurrentPipeline(u32 pipeline) { sCurrentPipeline = pipeline; }

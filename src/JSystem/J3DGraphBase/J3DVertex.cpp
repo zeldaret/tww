@@ -4,54 +4,132 @@
 //
 
 #include "JSystem/J3DGraphBase/J3DVertex.h"
-#include "dolphin/types.h"
+#include "JSystem/J3DGraphBase/J3DSys.h"
+#include "JSystem/J3DGraphAnimator/J3DJointTree.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "global.h"
 
 /* 802D9D24-802D9D9C       .text __ct__13J3DVertexDataFv */
 J3DVertexData::J3DVertexData() {
-    /* Nonmatching */
+    mVtxNum = 0;
+    mNrmNum = 0;
+    mColNum = 0;
+
+    mVtxAttrFmtList = NULL;
+    mVtxPosArray = NULL;
+    mVtxNrmArray = NULL;
+    mVtxNBTArray = NULL;
+
+    for (int i = 0; i < ARRAY_SIZE(mVtxColorArray); i++)
+        mVtxColorArray[i] = NULL;
+
+    for (int i = 0; i < ARRAY_SIZE(mVtxTexCoordArray); i++)
+        mVtxTexCoordArray[i] = NULL;
+
+    mVtxPosFrac = 0;
+    mVtxPosType = GX_F32;
+    mVtxNrmFrac = 0;
+    mVtxNrmType = GX_F32;
 }
 
 /* 802D9D9C-802D9DD8       .text __dt__13J3DVertexDataFv */
 J3DVertexData::~J3DVertexData() {
-    /* Nonmatching */
 }
 
 /* 802D9DD8-802D9E38       .text setVertexData__15J3DVertexBufferFP13J3DVertexData */
-void J3DVertexBuffer::setVertexData(J3DVertexData*) {
-    /* Nonmatching */
+void J3DVertexBuffer::setVertexData(J3DVertexData* pVtxData) {
+    mVtxData = pVtxData;
+    mVtxPosArray[0] = pVtxData->getVtxPosArray();
+    mVtxNrmArray[0] = pVtxData->getVtxNrmArray();
+    mVtxColArray[0] = pVtxData->getVtxColorArray(0);
+    mVtxPosArray[1] = NULL;
+    mVtxNrmArray[1] = NULL;
+    mVtxColArray[1] = NULL;
+
+    mTransformedVtxPosArray[0] = pVtxData->getVtxPosArray();
+    mTransformedVtxNrmArray[0] = pVtxData->getVtxNrmArray();
+    mTransformedVtxPosArray[1] = NULL;
+    mTransformedVtxNrmArray[1] = NULL;
+
+    frameInit();
 }
 
 /* 802D9E38-802D9E90       .text init__15J3DVertexBufferFv */
 void J3DVertexBuffer::init() {
-    /* Nonmatching */
+    mVtxData = NULL;
+
+    mVtxPosArray[1] = NULL;
+    mVtxPosArray[0] = NULL;
+
+    mVtxNrmArray[1] = NULL;
+    mVtxNrmArray[0] = NULL;
+
+    mVtxColArray[1] = NULL;
+    mVtxColArray[0] = NULL;
+
+    mTransformedVtxPosArray[1] = NULL;
+    mTransformedVtxPosArray[0] = NULL;
+
+    mTransformedVtxNrmArray[1] = NULL;
+    mTransformedVtxNrmArray[0] = NULL;
+
+    mCurrentVtxPos = NULL;
+    mCurrentVtxNrm = NULL;
+    mCurrentVtxCol = NULL;
+
+    frameInit();
 }
 
 /* 802D9E90-802D9ECC       .text __dt__15J3DVertexBufferFv */
 J3DVertexBuffer::~J3DVertexBuffer() {
-    /* Nonmatching */
 }
 
 /* 802D9ECC-802D9EF0       .text setArray__15J3DVertexBufferCFv */
 void J3DVertexBuffer::setArray() const {
-    /* Nonmatching */
+    j3dSys.setVtxPos(mCurrentVtxPos);
+    j3dSys.setVtxNrm(mCurrentVtxNrm);
+    j3dSys.setVtxCol(mCurrentVtxCol);
 }
 
 /* 802D9EF0-802D9FA4       .text allocTransformedVtxPosArray__15J3DVertexBufferFv */
-void J3DVertexBuffer::allocTransformedVtxPosArray() {
-    /* Nonmatching */
+s32 J3DVertexBuffer::allocTransformedVtxPosArray() {
+    if (mTransformedVtxPosArray[0] != NULL && mTransformedVtxPosArray[1] != NULL)
+        return kJ3DError_Success;
+
+    for (int i = 0; i < 2; i++) {
+        if (i == 0 || mTransformedVtxPosArray[i] == NULL) {
+            mTransformedVtxPosArray[i] = new (0x20) Vec[mVtxData->getVtxNum()];
+            if (mTransformedVtxPosArray[i] == NULL)
+                return kJ3DError_Alloc;
+        }
+    }
+
+    return kJ3DError_Success;
 }
 
 /* 802D9FA4-802DA058       .text allocTransformedVtxNrmArray__15J3DVertexBufferFv */
-void J3DVertexBuffer::allocTransformedVtxNrmArray() {
-    /* Nonmatching */
+s32 J3DVertexBuffer::allocTransformedVtxNrmArray() {
+    if (mTransformedVtxNrmArray[0] != NULL && mTransformedVtxNrmArray[1] != NULL)
+        return kJ3DError_Success;
+
+    for (int i = 0; i < 2; i++) {
+        if (i == 0 || mTransformedVtxNrmArray[i] == NULL) {
+            mTransformedVtxNrmArray[i] = new (0x20) VertexNormal[mVtxData->getNrmNum()];
+            if (mTransformedVtxNrmArray[i] == NULL)
+                return kJ3DError_Alloc;
+        }
+    }
+
+    return kJ3DError_Success;
 }
 
 /* 802DA058-802DA06C       .text __ct__14J3DDrawMtxDataFv */
 J3DDrawMtxData::J3DDrawMtxData() {
-    /* Nonmatching */
+    mEntryNum = 0;
+    mDrawMtxFlag = NULL;
+    mDrawMtxIndex = NULL;
 }
 
 /* 802DA06C-802DA0A8       .text __dt__14J3DDrawMtxDataFv */
 J3DDrawMtxData::~J3DDrawMtxData() {
-    /* Nonmatching */
 }

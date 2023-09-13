@@ -3,26 +3,91 @@
 // Translation Unit: d_a_swc00.cpp
 //
 
-#include "d_a_swc00.h"
-#include "dolphin/types.h"
+#include "f_op/f_op_actor_mng.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "d/d_procname.h"
+#include "d/d_com_inf_game.h"
 
-/* 00000078-00000180       .text daSwc00_Execute__FP11swc00_class */
-void daSwc00_Execute(swc00_class*) {
-    /* Nonmatching */
+struct swc00_class : public fopAc_ac_c {};
+
+static inline s32 getSwBit(u32 param) {
+    return param & 0xFF;
 }
 
-/* 00000180-00000188       .text daSwc00_IsDelete__FP11swc00_class */
-void daSwc00_IsDelete(swc00_class*) {
+static s32 daSwc00_Execute(swc00_class* i_this) {
     /* Nonmatching */
+    s32 enable_sw = fopAcM_GetParam(i_this) >> 8 & 0xFF;
+    if(enable_sw == 0xFF || dComIfGs_isSwitch(enable_sw, i_this->current.roomNo)) {
+        u8 swBit = fopAcM_GetParam(i_this) & 0xFF;
+
+        f32 xz_dist = fopAcM_searchPlayerDistanceXZ2(i_this);
+        f32 y_diff = dComIfGp_getPlayer(0)->current.pos.y - i_this->current.pos.y;
+        if(xz_dist < i_this->mScale.x && (-100.0f < y_diff && y_diff < i_this->mScale.y)) {
+            dComIfGs_onSwitch(swBit, i_this->current.roomNo);
+
+            if((fopAcM_GetParam(i_this) >> 0x10 & 3) != 0) {
+                fopAcM_delete(i_this);
+            }
+        }
+        else if((fopAcM_GetParam(i_this) >> 0x10 & 3) == 0) {
+            dComIfGs_offSwitch(swBit, i_this->current.roomNo);
+        }
+    }
+
+    return 1;
 }
 
-/* 00000188-00000190       .text daSwc00_Delete__FP11swc00_class */
-void daSwc00_Delete(swc00_class*) {
-    /* Nonmatching */
+static s32 daSwc00_IsDelete(swc00_class* i_this) {
+    return 1;
 }
 
-/* 00000190-00000274       .text daSwc00_Create__FP10fopAc_ac_c */
-void daSwc00_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daSwc00_Delete(swc00_class* i_this) {
+    return 1;
 }
 
+static s32 daSwc00_Create(fopAc_ac_c* i_this) {
+    fopAcM_SetupActor(i_this, swc00_class);
+
+    if(dComIfGs_isSwitch(fopAcM_GetParam(i_this) & 0xFF, i_this->current.roomNo)) {
+        if((fopAcM_GetParam(i_this) >> 0x10 & 0x3) == 0) {
+            u32 swBit = getSwBit(fopAcM_GetParam(i_this));
+            dComIfGs_offSwitch(swBit, i_this->current.roomNo);
+        }
+        else {
+            return cPhs_ERROR_e;
+        }
+    }
+
+    i_this->mScale.x *= 100.0f;
+    i_this->mScale.x += 30.0f;
+    i_this->mScale.x *= i_this->mScale.x;
+    i_this->mScale.y *= 100.0f;
+
+    return cPhs_COMPLEATE_e;
+}
+
+
+static actor_method_class l_daSwc00_Method = {
+    (process_method_func)daSwc00_Create,
+    (process_method_func)daSwc00_Delete,
+    (process_method_func)daSwc00_Execute,
+    (process_method_func)daSwc00_IsDelete,
+    (process_method_func)0,
+};
+
+extern actor_process_profile_definition g_profile_SWC00 = {
+    fpcLy_CURRENT_e,
+    7,
+    fpcPi_CURRENT_e,
+    PROC_SWC00,
+    &g_fpcLf_Method.mBase,
+    sizeof(swc00_class),
+    0,
+    0,
+    &g_fopAc_Method.base,
+    0x011A,
+    &l_daSwc00_Method,
+    0x00040000,
+    fopAc_ACTOR_e,
+    fopAc_CULLBOX_0_e,
+};

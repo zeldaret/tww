@@ -2,9 +2,9 @@
 #define D_A_PLAYER
 
 #include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
-#include "d/d_cc_d.h"
-#include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_cc_d.h"
 
 class daPy_matAnm_c : public J3DMaterialAnm {
 public:

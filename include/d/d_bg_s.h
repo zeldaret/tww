@@ -1,9 +1,10 @@
 #ifndef D_BG_D_BG_S_H
 #define D_BG_D_BG_S_H
 
-#include "global.h"
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_xyz.h"
+#include "d/d_bg_w.h"
+#include "global.h"
 
 class cBgS_LinChk;
 class cBgS_GndChk;
@@ -12,7 +13,6 @@ class cM3dGPla;
 class cBgS_ShdwDraw;
 class dBgW;
 class fopAc_ac_c;
-class dBgW_Base;
 class dBgS_Acch;
 class dBgS_RoofChk;
 class dBgS_SplGrpChk;
@@ -20,19 +20,19 @@ class dBgS_SphChk;
 
 class cBgS_ChkElm {
 public:
-    /* 0x00 */ dBgW_Base* m_bgw_base_ptr;
+    /* 0x00 */ cBgW* m_bgw_base_ptr;
     /* 0x04 */ bool m_used;
     /* 0x08 */ u32 m_actor_id;
     /* 0x0C */ fopAc_ac_c* m_actor_ptr;
     /* 0x10 vtable */
 
 public:
-    cBgS_ChkElm() { this->Init(); }
+    cBgS_ChkElm() { Init(); }
     void Init();
     void Release();
 
     virtual ~cBgS_ChkElm() {}
-    virtual void Regist2(dBgW_Base*, unsigned int, void*);
+    virtual void Regist2(cBgW*, u32, void*);
 
     bool ChkUsed() const { return m_used; }
 };  // Size: 0x14
@@ -55,7 +55,7 @@ public:
     f32 GroundCross(cBgS_GndChk*);
     static void* ConvDzb(void*);
     fopAc_ac_c* GetActorPointer(int) const;
-    dBgW_Base* GetBgWPointer(cBgS_PolyInfo&) const;
+    cBgW* GetBgWPointer(cBgS_PolyInfo&) const;
     bool ChkPolySafe(cBgS_PolyInfo&);
     void GetTriGrp(int, int) const;
     void GetGrpToRoomId(int, int) const;
@@ -76,43 +76,47 @@ class dBgS : public cBgS {
 public:
     dBgS() {}
     ~dBgS() {}
+
     void Ct();
     void Dt();
     void ClrMoveFlag();
     void Move();
-    bool Regist(dBgW_Base*, fopAc_ac_c*);
-    bool ChkMoveBG(cBgS_PolyInfo const&);
-    bool ChkMoveBG_NoDABg(cBgS_PolyInfo const&);
-    s32 GetExitId(cBgS_PolyInfo const&);
-    s32 GetPolyColor(cBgS_PolyInfo const&);
-    BOOL GetHorseNoEntry(cBgS_PolyInfo const&);
-    int GetSpecialCode(cBgS_PolyInfo const&);
-    int GetMagnetCode(cBgS_PolyInfo const&);
-    int GetMonkeyBarsCode(cBgS_PolyInfo const&);
-    u32 GetUnderwaterRoofCode(cBgS_PolyInfo const&);
-    s32 GetWallCode(cBgS_PolyInfo const&);
-    int GetPolyAtt0(cBgS_PolyInfo const&);
-    int GetPolyAtt1(cBgS_PolyInfo const&);
-    int GetGroundCode(cBgS_PolyInfo const&);
-    s32 GetCamMoveBG(cBgS_PolyInfo const&);
-    s32 GetRoomCamId(cBgS_PolyInfo const&);
-    s32 GetRoomPathId(cBgS_PolyInfo const&);
-    s32 GetRoomPathPntNo(cBgS_PolyInfo const&);
-    u8 GetGrpSoundId(cBgS_PolyInfo const&);
-    u32 ChkGrpInf(cBgS_PolyInfo const&, u32);
-    s32 GetRoomId(cBgS_PolyInfo const&);
-    bool GetPolyAttackThrough(cBgS_PolyInfo const&);
-    u32 ChkPolyHSStick(cBgS_PolyInfo const&);
+    bool Regist(cBgW*, fopAc_ac_c*);
+    bool ChkMoveBG(cBgS_PolyInfo&);
+    bool ChkMoveBG_NoDABg(cBgS_PolyInfo&);
+    int GetPolyId0(int, int, int, u32, u32);
+    int GetPolyCamId(int, int);
+    int GetMtrlSndId(cBgS_PolyInfo&);
+    int GetExitId(cBgS_PolyInfo&);
+    int GetPolyColor(cBgS_PolyInfo&);
+    int GetGrpRoomInfId(cBgS_PolyInfo&);
+    u8 GetGrpSoundId(cBgS_PolyInfo&);
+    u32 ChkGrpInf(cBgS_PolyInfo&, u32);
+    int GetPolyId1(int, int, int, u32, u32);
+    void GetLinkNo(cBgS_PolyInfo&);
+    int GetWallCode(cBgS_PolyInfo&);
+    int GetSpecialCode(cBgS_PolyInfo&);
+    void GetAttributeCodeDirect(cBgS_PolyInfo&);
+    void GetAttributeCode(cBgS_PolyInfo&);
+    void GetGroundCode(cBgS_PolyInfo&);
+    void GetPolyId2(int, int, int, u32, u32);
+    int GetCamMoveBG(cBgS_PolyInfo&);
+    int GetRoomCamId(cBgS_PolyInfo&);
+    int GetRoomPathId(cBgS_PolyInfo&);
+    int GetRoomPathPntNo(cBgS_PolyInfo&);
+    int GetRoomId(cBgS_PolyInfo&);
+    u32 ChkPolyHSStick(cBgS_PolyInfo&);
+    void LineCrossNonMoveBG(cBgS_LinChk*);
     void WallCorrect(dBgS_Acch*);
-    void WallCorrectSort(dBgS_Acch*);
     f32 RoofChk(dBgS_RoofChk*);
     bool SplGrpChk(dBgS_SplGrpChk*);
     bool SphChk(dBgS_SphChk*, void*);
-    void MoveBgCrrPos(cBgS_PolyInfo const&, bool, cXyz*, csXyz*, csXyz*, bool, bool);
-    void MoveBgTransPos(cBgS_PolyInfo const&, bool, cXyz*, csXyz*, csXyz*);
-    void MoveBgMatrixCrrPos(cBgS_PolyInfo const&, bool, cXyz*, csXyz*, csXyz*);
-    void RideCallBack(cBgS_PolyInfo const&, fopAc_ac_c*);
-    void ArrowStickCallBack(cBgS_PolyInfo const&, fopAc_ac_c*, cXyz&);
+    void WallCrrPos(dBgS_CrrPos*);
+    void MoveBgCrrPos(cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*);
+    void MoveBgTransPos(cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*);
+    void MoveBgMatrixCrrPos(cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*);
+    void RideCallBack(cBgS_PolyInfo&, fopAc_ac_c*);
+    void PushPullCallBack(cBgS_PolyInfo&, fopAc_ac_c*, short, dBgW::PushPullLabel);
 
     bool WaterChk(dBgS_SplGrpChk* chk) { return SplGrpChk(chk); }
 };  // Size: 0x1404

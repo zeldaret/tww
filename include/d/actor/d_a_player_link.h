@@ -2,11 +2,12 @@
 #define D_A_PLAYER_LINK
 
 #include "JAZelAudio/JAIZelBasic.h"
+#include "m_Do/m_Do_ext.h"
 #include "d/d_attention.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_drawlist.h"
-#include "m_Do/m_Do_ext.h"
+#include "d/d_bg_w.h"
 #include "d/actor/d_a_player.h"
 
 class mDoExt_MtxCalcOldFrame;
@@ -176,11 +177,6 @@ struct MagicArmorAuraEntry {
 };
 
 class daPy_anmIndex_c;
-
-class dBgW {
-public:
-    enum PushPullLabel {};
-};
 
 class daPy_lk_c : public daPy_py_c {
 public:

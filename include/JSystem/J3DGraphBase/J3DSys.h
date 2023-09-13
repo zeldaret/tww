@@ -44,27 +44,27 @@ struct J3DSys {
     /* 0x05C */ u8 field_0x5c[0x04];
     /* 0x060 */ u32 mTexCacheRegionNum;
     /* 0x064 */ GXTexRegion mTexCacheRegion[8];
-    /* 0x0E4 */ u8 field_0xe4[0x20];
-    /* 0x104 */ Mtx* mModelDrawMtx;
-    /* 0x108 */ Mtx33* mModelNrmMtx;
-    /* 0x10C */ void* mVtxPos;
-    /* 0x110 */ void* mVtxNrm;
-    /* 0x114 */ _GXColor* mVtxCol;
-    /* 0x118 */ Vec* mNBTScale;
+    /* 0x0E4 */ u8 field_0xe4[0x24];
+    /* 0x108 */ Mtx* mModelDrawMtx;
+    /* 0x10C */ Mtx33* mModelNrmMtx;
+    /* 0x110 */ void* mVtxPos;
+    /* 0x114 */ void* mVtxNrm;
+    /* 0x118 */ _GXColor* mVtxCol;
+    /* 0x11C */ Vec* mNBTScale;
 
-    /* 8030FDE8 */ J3DSys();
-    /* 8030FEC0 */ void loadPosMtxIndx(int, u16) const;
-    /* 8030FEE4 */ void loadNrmMtxIndx(int, u16) const;
-    /* 8030FF0C */ void setTexCacheRegion(_GXTexCacheSize);
-    /* 803100BC */ void drawInit();
-    /* 8031073C */ void reinitGX();
-    /* 8031079C */ void reinitGenMode();
-    /* 803107E8 */ void reinitLighting();
-    /* 80310894 */ void reinitTransform();
-    /* 80310998 */ void reinitTexture();
-    /* 80310A3C */ void reinitTevStages();
-    /* 80310D44 */ void reinitIndStages();
-    /* 80310E3C */ void reinitPixelProc();
+    J3DSys();
+    void loadPosMtxIndx(int, u16) const;
+    void loadNrmMtxIndx(int, u16) const;
+    void setTexCacheRegion(_GXTexCacheSize);
+    void drawInit();
+    void reinitGX();
+    void reinitGenMode();
+    void reinitLighting();
+    void reinitTransform();
+    void reinitTexture();
+    void reinitTevStages();
+    void reinitIndStages();
+    void reinitPixelProc();
 
     enum DrawMode {
         /* 0x3 */ OPA_TEX_EDGE = 3,

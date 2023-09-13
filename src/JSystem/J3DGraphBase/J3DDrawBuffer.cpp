@@ -4,79 +4,252 @@
 //
 
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
+#include "JSystem/J3DGraphBase/J3DPacket.h"
+#include "JSystem/J3DGraphBase/J3DMaterial.h"
+#include "JSystem/J3DGraphBase/J3DSys.h"
+#include "JSystem/J3DGraphBase/J3DTexture.h"
+#include "JSystem/J3DGraphBase/J3DTransform.h"
+#include "JSystem/JKernel/JKRHeap.h"
 #include "dolphin/types.h"
+
+void J3DDrawBuffer::calcZRatio() {
+    mZRatio = (mZFar - mZNear) / (f32)mBufSize;
+}
 
 /* 802EC74C-802EC7B4       .text initialize__13J3DDrawBufferFv */
 void J3DDrawBuffer::initialize() {
-    /* Nonmatching */
+    mDrawType = DRAW_HEAD;
+    mSortType = SORT_MAT;
+    mZNear = 1.0f;
+    mZFar = 10000.0f;
+    mpZMtx = NULL;
+    mpCallBackPacket = NULL;
+    mBufSize = 0x20;
+    calcZRatio();
 }
 
 /* 802EC7B4-802EC84C       .text allocBuffer__13J3DDrawBufferFUl */
-void J3DDrawBuffer::allocBuffer(unsigned long) {
-    /* Nonmatching */
+J3DError J3DDrawBuffer::allocBuffer(u32 bufSize) {
+    mpBuf = new (0x20) J3DPacket*[bufSize];
+    if (mpBuf == NULL)
+        return kJ3DError_Alloc;
+
+    mBufSize = bufSize;
+    frameInit();
+    calcZRatio();
+    return kJ3DError_Success;
 }
 
 /* 802EC84C-802EC8AC       .text __dt__13J3DDrawBufferFv */
 J3DDrawBuffer::~J3DDrawBuffer() {
-    /* Nonmatching */
+    frameInit();
+
+    delete[] mpBuf;
+    mpBuf = NULL;
 }
 
 /* 802EC8AC-802EC8E4       .text frameInit__13J3DDrawBufferFv */
 void J3DDrawBuffer::frameInit() {
-    /* Nonmatching */
+    for (u32 i = 0; i < mBufSize; i++)
+        mpBuf[i] = NULL;
+
+    mpCallBackPacket = NULL;
 }
 
 /* 802EC8E4-802ECA38       .text entryMatSort__13J3DDrawBufferFP12J3DMatPacket */
-void J3DDrawBuffer::entryMatSort(J3DMatPacket*) {
-    /* Nonmatching */
+int J3DDrawBuffer::entryMatSort(J3DMatPacket* pMatPacket) {
+    pMatPacket->drawClear();
+    pMatPacket->getShapePacket()->drawClear();
+
+    if (pMatPacket->isChanged()) {
+        pMatPacket->setNextPacket(mpBuf[0]);
+        mpBuf[0] = pMatPacket;
+        return 1;
+    }
+
+    J3DTexture* texture = j3dSys.getTexture();
+    u32 hash;
+    u16 texNo = pMatPacket->getMaterial()->getTexNo(0);
+    if (texNo == 0xFFFF) {
+        hash = 0;
+    } else {
+        hash = ((u32)texture->getResTIMG(texNo) + texture->getResTIMG(texNo)->imageOffset) >> 5;
+    }
+    u32 slot = hash & (mBufSize - 1);
+
+    if (mpBuf[slot] == NULL) {
+        mpBuf[slot] = pMatPacket;
+        return 1;
+    } else {
+        for (J3DMatPacket* pkt = (J3DMatPacket*)mpBuf[slot]; pkt != NULL; pkt = (J3DMatPacket*)pkt->getNextPacket()) {
+            if (pkt->isSame(pMatPacket)) {
+                pkt->addShapePacket(pMatPacket->getShapePacket());
+                return 0;
+            }
+        }
+
+        pMatPacket->setNextPacket(mpBuf[slot]);
+        mpBuf[slot] = pMatPacket;
+        return 1;
+    }
 }
 
 /* 802ECA38-802ECAF0       .text entryMatAnmSort__13J3DDrawBufferFP12J3DMatPacket */
-void J3DDrawBuffer::entryMatAnmSort(J3DMatPacket*) {
-    /* Nonmatching */
+int J3DDrawBuffer::entryMatAnmSort(J3DMatPacket* pMatPacket) {
+    J3DMaterialAnm* pMaterialAnm = pMatPacket->mpMaterialAnm;
+    u32 slot = (u32)pMaterialAnm & (mBufSize - 1);
+
+    if (pMaterialAnm == NULL) {
+        return entryMatSort(pMatPacket);
+    } else {
+        pMatPacket->drawClear();
+        pMatPacket->getShapePacket()->drawClear();
+        if (mpBuf[slot] == NULL) {
+            mpBuf[slot] = pMatPacket;
+            return 1;
+        } else {
+            for (J3DMatPacket* pkt = (J3DMatPacket*)mpBuf[slot]; pkt != NULL;
+                 pkt = (J3DMatPacket*)pkt->getNextPacket())
+            {
+                if (pkt->mpMaterialAnm == pMaterialAnm) {
+                    pkt->addShapePacket(pMatPacket->getShapePacket());
+                    return 0;
+                }
+            }
+
+            pMatPacket->setNextPacket(mpBuf[slot]);
+            mpBuf[slot] = pMatPacket;
+            return 1;
+        }
+    }
 }
 
 /* 802ECAF0-802ECBEC       .text entryZSort__13J3DDrawBufferFP12J3DMatPacket */
-void J3DDrawBuffer::entryZSort(J3DMatPacket*) {
-    /* Nonmatching */
+int J3DDrawBuffer::entryZSort(J3DMatPacket* i_packet) {
+    i_packet->drawClear();
+    i_packet->getShapePacket()->drawClear();
+
+    Vec tmp;
+    tmp.x = mpZMtx[0][3];
+    tmp.y = mpZMtx[1][3];
+    tmp.z = mpZMtx[2][3];
+
+    f32 value = -J3DCalcZValue(j3dSys.getViewMtx(), tmp);
+
+    u32 uvar4;
+    if (mZNear + mZRatio < value) {
+        if (mZFar - mZRatio > value) {
+            uvar4 = value / mZRatio;
+        } else {
+            uvar4 = mBufSize - 1;
+        }
+    } else {
+        uvar4 = 0;
+    }
+
+    u32 idx = (mBufSize - 1) - uvar4;
+    i_packet->setNextPacket(mpBuf[idx]);
+    mpBuf[idx] = i_packet;
+
+    return 1;
 }
 
 /* 802ECBEC-802ECC3C       .text entryModelSort__13J3DDrawBufferFP12J3DMatPacket */
-void J3DDrawBuffer::entryModelSort(J3DMatPacket*) {
-    /* Nonmatching */
+int J3DDrawBuffer::entryModelSort(J3DMatPacket* i_packet) {
+    i_packet->drawClear();
+    i_packet->getShapePacket()->drawClear();
+
+    if (mpCallBackPacket != NULL) {
+        mpCallBackPacket->addChildPacket(i_packet);
+        return 1;
+    }
+
+    return 0;
 }
 
 /* 802ECC3C-802ECC90       .text entryInvalidSort__13J3DDrawBufferFP12J3DMatPacket */
-void J3DDrawBuffer::entryInvalidSort(J3DMatPacket*) {
-    /* Nonmatching */
+int J3DDrawBuffer::entryInvalidSort(J3DMatPacket* i_packet) {
+    i_packet->drawClear();
+    i_packet->getShapePacket()->drawClear();
+
+    if (mpCallBackPacket != NULL) {
+        mpCallBackPacket->addChildPacket(i_packet->getShapePacket());
+        return 1;
+    }
+
+    return 0;
 }
 
 /* 802ECC90-802ECCC4       .text entryNonSort__13J3DDrawBufferFP12J3DMatPacket */
-void J3DDrawBuffer::entryNonSort(J3DMatPacket*) {
-    /* Nonmatching */
+int J3DDrawBuffer::entryNonSort(J3DMatPacket* i_packet) {
+    i_packet->drawClear();
+    i_packet->mpShapePacket->drawClear();
+
+    i_packet->setNextPacket(mpBuf[0]);
+    mpBuf[0] = i_packet;
+
+    return 1;
 }
 
 /* 802ECCC4-802ECCE4       .text entryImm__13J3DDrawBufferFP9J3DPacketUs */
-void J3DDrawBuffer::entryImm(J3DPacket*, unsigned short) {
-    /* Nonmatching */
+int J3DDrawBuffer::entryImm(J3DPacket* i_packet, u16 index) {
+    i_packet->setNextPacket(mpBuf[index]);
+    mpBuf[index] = i_packet;
+
+    return 1;
 }
+
+sortFunc J3DDrawBuffer::sortFuncTable[] = {
+    &J3DDrawBuffer::entryMatSort,
+    &J3DDrawBuffer::entryMatAnmSort,
+    &J3DDrawBuffer::entryZSort,
+    &J3DDrawBuffer::entryModelSort,
+    &J3DDrawBuffer::entryInvalidSort,
+    &J3DDrawBuffer::entryNonSort,
+};
+
+drawFunc J3DDrawBuffer::drawFuncTable[] = {
+    &J3DDrawBuffer::drawHead,
+    &J3DDrawBuffer::drawTail,
+};
 
 /* 802ECCE4-802ECD38       .text draw__13J3DDrawBufferCFv */
 void J3DDrawBuffer::draw() const {
-    /* Nonmatching */
+    drawFunc func = drawFuncTable[mDrawType];
+    (this->*func)();
 }
 
 /* 802ECD38-802ECDB0       .text drawHead__13J3DDrawBufferCFv */
 void J3DDrawBuffer::drawHead() const {
-    /* Nonmatching */
+    u32 size = mBufSize;
+    J3DPacket** buf = mpBuf;
+
+    for (u32 i = 0; i < size; i++) {
+        for (J3DPacket* packet = buf[i]; packet != NULL; packet = packet->getNextPacket()) {
+            packet->draw();
+        }
+    }
 }
 
 /* 802ECDB0-802ECE2C       .text drawTail__13J3DDrawBufferCFv */
 void J3DDrawBuffer::drawTail() const {
-    /* Nonmatching */
+    int num = mBufSize - 1;
+
+    for (int i = num; i >= 0; i--) {
+        for (J3DPacket* packet = mpBuf[i]; packet != NULL; packet = packet->getNextPacket()) {
+            packet->draw();
+        }
+    }
 }
 
 /* 802ECE2C-802ECE5C       .text setCallBackPacket__13J3DDrawBufferFP17J3DCallBackPacket */
-void J3DDrawBuffer::setCallBackPacket(J3DCallBackPacket*) {
-    /* Nonmatching */
+void J3DDrawBuffer::setCallBackPacket(J3DCallBackPacket* pPacket) {
+    mpCallBackPacket = pPacket;
+    if (pPacket != NULL) {
+        pPacket->drawClear();
+        pPacket->setNextPacket(mpBuf[0]);
+        mpBuf[0] = pPacket;
+    }
 }
+
+int J3DDrawBuffer::entryNum;

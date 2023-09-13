@@ -93,7 +93,7 @@ namespace daTagRet {
         mCyl.SetC(current.pos);
         mCyl.SetR(1000.0f*mScale.x);
         mCyl.SetH(100.0f*mScale.y);
-        g_dComIfG_gameInfo.play.mCcS.Set(&mCyl);
+        dComIfG_Ccsp()->Set(&mCyl);
         
         if (mCyl.ChkCoHit()) {
             u32 playerId = daObj::PrmAbstract(this, PRM_PLAYER_ID_W, PRM_PLAYER_ID_S);

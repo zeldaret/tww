@@ -7,22 +7,22 @@
 #include "dolphin/types.h"
 
 /* 800C12F4-800C1334       .text checkAppearEffect__10dItem_dataFUc */
-void dItem_data::checkAppearEffect(unsigned char) {
+bool dItem_data::checkAppearEffect(u8 itemNo) {
     /* Nonmatching */
 }
 
 /* 800C1334-800C13B4       .text getAppearEffect__10dItem_dataFUc */
-void dItem_data::getAppearEffect(unsigned char) {
+s16 dItem_data::getAppearEffect(u8 itemNo) {
     /* Nonmatching */
 }
 
 /* 800C13B4-800C13F8       .text checkSpecialEffect__10dItem_dataFUc */
-void dItem_data::checkSpecialEffect(unsigned char) {
+bool dItem_data::checkSpecialEffect(u8 itemNo) {
     /* Nonmatching */
 }
 
 /* 800C13F8-800C1474       .text getSpecialEffect__10dItem_dataFUc */
-void dItem_data::getSpecialEffect(unsigned char) {
+u16 dItem_data::getSpecialEffect(u8 itemNo) {
     /* Nonmatching */
 }
 

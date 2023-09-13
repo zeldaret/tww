@@ -8,9 +8,9 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "MSL_C/float.h"
 
-#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(__FILE__, line, !(((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)) ) == 1));
-#define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(__FILE__, line, -1.0e32f < x && x < 1.0e32f);
-#define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(__FILE__, line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
+#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)) ) == 1));
+#define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);
+#define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
 
 /* 80251D88-80252020       .text SetC__8cM3dGCylFRC4cXyz */
 void cM3dGCyl::SetC(const cXyz& pos) {

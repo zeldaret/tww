@@ -210,4 +210,6 @@ inline void J3DPSMulMtxVec(register Mtx3P mtx, register SVec* vec, register SVec
     }
 }
 
+f32 J3DCalcZValue(register MtxP m, register Vec v);
+
 #endif /* J3DTRANSFORM_H */

@@ -4,9 +4,9 @@
 //
 
 #include "SSystem/SComponent/c_xyz.h"
-#include "SSystem/SComponent/c_math.h"
-#include "MSL_C/float.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "MSL_C/float.h"
+#include "SSystem/SComponent/c_math.h"
 
 const cXyz cXyz::Zero(0, 0, 0);
 const cXyz cXyz::BaseX(1, 0, 0);
@@ -150,7 +150,6 @@ bool cXyz::operator!=(const Vec& vec) const {
 
 /* 80245CE4-80245D48       .text isZero__4cXyzCFv */
 bool cXyz::isZero(void) const {
-    return fabsf(this->x) < 3.814697e-06 &&
-           fabsf(this->y) < 3.814697e-06 &&
-           fabsf(this->z) < 3.814697e-06;
+    return fabsf(this->x) < 3.814697e-06f && fabsf(this->y) < 3.814697e-06f &&
+           fabsf(this->z) < 3.814697e-06f;
 }

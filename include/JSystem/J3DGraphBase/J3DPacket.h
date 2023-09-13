@@ -30,7 +30,7 @@ inline int calcDifferedBufferSize_TexMtxSize(int param_1) {
 }
 
 inline int calcDifferedBufferSize_TexGenSize(int param_1) {
-    return param_1 * 0x3d + 10;
+    return param_1 * 0x39 + 5;
 }
 
 inline u32 getDiffFlag_TexNoNum(u32 param_1) {
@@ -146,15 +146,23 @@ public:
     void offFlag(u32 flag) { mFlags &= ~flag; }
     void lock() { onFlag(LOCKED); }
     void unlock() { offFlag(LOCKED); }
-    J3DTexMtxObj* getTexMtxObj() const { return mpTexMtxObj; }
     bool isLocked() const { return checkFlag(1); }
 
 public:
     /* 0x10 */ u32 mFlags;
     /* 0x14 */ char mPad0[0x0C];  // unk
     /* 0x20 */ J3DDisplayListObj* mpDisplayListObj;
-    /* 0x24 */ J3DTexMtxObj* mpTexMtxObj;
 };  // Size: 0x28
+
+class J3DCallBackPacket : public J3DPacket {
+public:
+    ~J3DCallBackPacket();
+    virtual void draw();
+
+public:
+    typedef void (*CallBack)(J3DCallBackPacket * pPacket, u32 timing);
+    CallBack mpCallBack;
+};
 
 class J3DShapePacket : public J3DDrawPacket {
 public:
@@ -169,7 +177,8 @@ public:
 
     void setShape(J3DShape* pShape) { mpShape = pShape; }
     void setModel(J3DModel* pModel) { mpModel = pModel; }
-    void setMtxBuffer(J3DMtxBuffer* pMtxBuffer) { mpMtxBuffer = pMtxBuffer; }
+    void setDrawMtx(Mtx** pDrawMtx) { mpDrawMtx = pDrawMtx; }
+    void setNrmMtx(Mtx33** pNrmMtx) { mpNrmMtx = pNrmMtx; }
     void setBaseMtxPtr(Mtx* pMtx) { mpBaseMtxPtr = pMtx; }
 
     J3DShape* getShape() const { return mpShape; }
@@ -177,12 +186,15 @@ public:
     Mtx* getBaseMtxPtr() const { return mpBaseMtxPtr; }
 
 public:
-    /* 0x28 */ J3DShape* mpShape;
-    /* 0x2C */ J3DMtxBuffer* mpMtxBuffer;
+    /* 0x24 */ J3DShape* mpShape;
+    /* 0x28 */ Mtx** mpDrawMtx;
+    /* 0x2C */ Mtx33** mpNrmMtx;
     /* 0x30 */ Mtx* mpBaseMtxPtr;
-    /* 0x34 */ u32 mDiffFlag;
-    /* 0x38 */ J3DModel* mpModel;
-};  // Size: 0x3C
+    /* 0x34 */ u32* mpCurrentViewNo;
+    /* 0x38 */ u32 mDiffFlag;
+    /* 0x3C */ u8* mpScaleFlagArray;
+    /* 0x40 */ J3DModel* mpModel;
+};  // Size: 0x44
 
 class J3DMatPacket : public J3DDrawPacket {
 public:

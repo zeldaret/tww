@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_itembase_static.h"
+#include "d/actor/d_a_itembase.h"
 #include "dolphin/types.h"
 
 /* 80068650-80068658       .text getItemNo__12daItemBase_cFv */
@@ -37,7 +38,7 @@ void daItemBase_c::changeDraw() {
 }
 
 /* 800686F8-80068710       .text chkDraw__12daItemBase_cFv */
-void daItemBase_c::chkDraw() {
+bool daItemBase_c::chkDraw() {
     /* Nonmatching */
 }
 
@@ -62,7 +63,7 @@ void CheckItemCreateHeap(fopAc_ac_c*) {
 }
 
 /* 800687B4-80068820       .text CheckFieldItemCreateHeap__FP10fopAc_ac_c */
-void CheckFieldItemCreateHeap(fopAc_ac_c*) {
+s32 CheckFieldItemCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

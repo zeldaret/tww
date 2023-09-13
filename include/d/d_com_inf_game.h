@@ -180,9 +180,11 @@ public:
     /* 0x47EC */ JKRArchive* mpCamResArchive;
     /* 0x47F0 */ JKRArchive* mpSwimResArchive;
     /* 0x47F4 */ JKRArchive* mpWindResArchive;
+#if VERSION != VERSION_JP
     /* 0x47F8 */ JKRArchive* mpEnglishTextArchive;
     /* 0x47FC */ JKRArchive* mpHyruleTextArchive;
-    /* 0x4800 */ u8 field_0x4800[0x4824 - 0x4800];
+#endif
+    /* 0x4800 */ u8 mpCARDHeap[0x24];
     /* 0x4824 */ dPa_control_c* mParticle;
     /* 0x4828 */ dDemo_manager_c* mDemo;
     /* 0x482C */ dMagma_packet_c* mpMagmaPacket;
@@ -428,6 +430,14 @@ inline BOOL dComIfGs_isSwitch(s32 i_no, s32 i_roomNo) {
     return g_dComIfG_gameInfo.save.isSwitch(i_no, i_roomNo);
 }
 
+inline void dComIfGs_onItem(int bitNo, int roomNo) {
+    g_dComIfG_gameInfo.save.onItem(bitNo, roomNo);
+}
+
+inline bool dComIfGs_isItem(int bitNo, int roomNo) {
+    return g_dComIfG_gameInfo.save.isItem(bitNo, roomNo);
+}
+
 /**
  * === PLAY ===
  */
@@ -507,6 +517,10 @@ inline dBgS* dComIfG_Bgsp() {
     return &g_dComIfG_gameInfo.play.mBgS;
 }
 
+inline dCcS* dComIfG_Ccsp() {
+    return &g_dComIfG_gameInfo.play.mCcS;
+}
+
 inline daShip_c* dComIfGp_getShipActor() {
     return (daShip_c*)g_dComIfG_gameInfo.play.getPlayerPtr(2);
 }
@@ -517,6 +531,10 @@ inline void dComIfGp_getIkadaShipBeforePos(Vec* o_pos) {
 
 inline dStage_stageDt_c& dComIfGp_getStage() {
     return g_dComIfG_gameInfo.play.getStage();
+}
+
+inline daPy_py_c* daPy_getPlayerActorClass() {
+    return (daPy_py_c*)dComIfGp_getPlayer(0);
 }
 
 inline daPy_lk_c* daPy_getPlayerLinkActorClass() {

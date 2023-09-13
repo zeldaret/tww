@@ -246,6 +246,7 @@ public:
     void setFrame(f32 frame) { mFrameCtrl.setFrame(frame); }
     void updateDL();
     void play(Vec *, u32, u8);
+    void stopZelAnime();
 
     u32 pad[0x50]; // J3DMtxCalcMaya
     /* 0x50 */ J3DModel* mpModel;

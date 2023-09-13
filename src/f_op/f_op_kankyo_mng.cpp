@@ -48,7 +48,7 @@ void fopKyM_Delete(void* i_process) {
 }
 
 /* 8002A988-8002A9D8       .text fopKyM_Create__FsPFPv_iPv */
-static int fopKyM_Create(s16 i_procName, fopKyM_CreateFunc i_createFunc, void* i_process) {
+int fopKyM_Create(s16 i_procName, fopKyM_CreateFunc i_createFunc, void* i_process) {
     return fpcM_Create(i_procName, i_createFunc, i_process);
 }
 
