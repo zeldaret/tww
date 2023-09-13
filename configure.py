@@ -451,7 +451,7 @@ LIBS = [
     ActorRel(NonMatching, "d_a_tag_evsw"),
     ActorRel(NonMatching, "d_a_tag_ghostship"),
     ActorRel(NonMatching, "d_a_tag_hint"),
-    ActorRel(NonMatching, "d_a_tag_kb_item"),
+    ActorRel(Matching, "d_a_tag_kb_item"),
     ActorRel(NonMatching, "d_a_tag_kk1"),
     ActorRel(NonMatching, "d_a_tag_light"),
     ActorRel(NonMatching, "d_a_tag_msg"),
