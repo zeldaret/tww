@@ -10,6 +10,7 @@ class dBgS_SplGrpChk;
 class dBgS_SphChk;
 class cM3dGTri;
 class dBgS_CrrPos;
+class cBgS_PolyInfo;
 
 class dBgW;
 typedef void (*dBgW_CrrFunc)(dBgW*, void*, cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*);

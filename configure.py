@@ -280,7 +280,7 @@ LIBS = [
             Object(Matching,    "f_op/f_op_view.cpp"),
             Object(Matching,    "f_op/f_op_kankyo.cpp"),
             Object(Matching,    "f_op/f_op_msg.cpp"),
-            Object(NonMatching, "f_op/f_op_kankyo_mng.cpp"),
+            Object(Matching,    "f_op/f_op_kankyo_mng.cpp"),
             Object(NonMatching, "f_op/f_op_msg_mng.cpp"),
             Object(Matching,    "f_op/f_op_draw_iter.cpp"),
             Object(Matching,    "f_op/f_op_draw_tag.cpp"),
