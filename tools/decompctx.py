@@ -1,5 +1,15 @@
 #!/usr/bin/env python3
 
+###
+# Generates a ctx.c file, usable for "Context" on https://decomp.me.
+#
+# Usage:
+#   python3 tools/decompctx.py src/file.cpp
+#
+# If changes are made, please submit a PR to
+# https://github.com/encounter/dtk-template
+###
+
 import argparse
 import os
 import re
@@ -30,7 +40,7 @@ def import_c_file(in_file) -> str:
     out_text = ''
 
     try:
-      with open(in_file, encoding="shift-jis") as file:
+      with open(in_file, encoding="utf-8") as file:
         out_text += process_file(in_file, list(file))
     except Exception:
       with open(in_file) as file:
