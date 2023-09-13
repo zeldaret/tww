@@ -7,7 +7,7 @@
 #include "d/d_item_data.h"
 #include "d/actor/d_a_itembase_static.h"
 #include "d/actor/d_a_item.h"
-#include "d/actor/d_a_player.h"
+#include "d/actor/d_a_player_link.h"
 #include "d/d_com_inf_game.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "d/d_procname.h"

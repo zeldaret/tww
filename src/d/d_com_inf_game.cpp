@@ -7,7 +7,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "MSL_C/string.h"
 #include "SSystem/SComponent/c_phase.h"
-#include "d/actor/d_a_player.h"
+#include "d/actor/d_a_player_link.h"
 #include "d/d_com_lib_game.h"
 #include "d/d_demo.h"
 #include "d/d_flower.h"
