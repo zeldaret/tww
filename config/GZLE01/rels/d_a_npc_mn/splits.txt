@@ -12,6 +12,6 @@ d/actor/d_a_npc_mn.cpp:
 	.text       start:0x00000078 end:0x00003F9C
 	.text       start:0x00003F9C end:0x00003FCC
 	.text       start:0x00003FCC end:0x00004128
-	.ctors      start:0x00000000 end:0x00000008
+	.ctors      start:0x00000000 end:0x00000004
 	.rodata     start:0x00000000 end:0x000001F2
 	.data       start:0x00000000 end:0x00000564

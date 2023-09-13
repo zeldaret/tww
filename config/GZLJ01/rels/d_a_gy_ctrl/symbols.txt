@@ -111,5 +111,5 @@ __vt__15daGy_Ctrl_HIO_c = .data:0x00000258; // type:object size:0xC scope:weak a
 __vt__14mDoHIO_entry_c = .data:0x00000264; // type:object size:0xC scope:weak align:4
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global align:4
 @4158 = .bss:0x00000008; // type:object size:0xC scope:local align:4
-l_HIO = .bss:0x00000014; // type:object size:0x30 scope:local align:4
+l_HIO = .bss:0x00000014; // type:object size:0x30 scope:local align:4 data:float
 init$4420 = .bss:0x00000044; // type:object size:0x1 scope:local align:1 data:byte

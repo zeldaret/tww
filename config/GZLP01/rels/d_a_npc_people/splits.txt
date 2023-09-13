@@ -14,6 +14,6 @@ d/actor/d_a_npc_people.cpp:
 	.text       start:0x00009BF0 end:0x00009C38
 	.text       start:0x00009C38 end:0x00009C68
 	.text       start:0x00009C68 end:0x0000A170
-	.ctors      start:0x00000000 end:0x00000008
+	.ctors      start:0x00000000 end:0x00000004
 	.rodata     start:0x00000000 end:0x00000597
 	.data       start:0x00000000 end:0x00002758

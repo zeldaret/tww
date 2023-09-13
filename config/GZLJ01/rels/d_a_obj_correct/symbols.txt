@@ -60,4 +60,4 @@ demo_proc$4380 = .data:0x00000084; // type:object size:0x24 scope:local align:4
 Mthd_Table__Q212daObjCorrect29@unnamed@d_a_obj_correct_cpp@ = .data:0x000000A8; // type:object size:0x20 scope:local align:4
 g_profile_Obj_Correct = .data:0x000000C8; // type:object size:0x30 scope:global align:4
 init$4378 = .bss:0x00000000; // type:object size:0x1 scope:local align:1
-init$4384 = .bss:0x00000001; // type:object size:0x1 scope:local align:1
+init$4384 = .bss:0x00000001; // type:object size:0x1 scope:local align:1 data:byte

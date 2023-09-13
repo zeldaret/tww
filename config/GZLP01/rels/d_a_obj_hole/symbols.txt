@@ -94,5 +94,5 @@ __vt__13cBgS_PolyInfo = .data:0x000001FC; // type:object size:0xC scope:weak ali
 __vt__16daObj_Hole_HIO_c = .data:0x00000208; // type:object size:0xC scope:weak align:4
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global align:4
 @4011 = .bss:0x00000008; // type:object size:0xC scope:local align:4
-l_HIO = .bss:0x00000014; // type:object size:0x14 scope:local align:4
-init$4146 = .bss:0x00000028; // type:object size:0x1 scope:local align:1
+l_HIO = .bss:0x00000014; // type:object size:0x14 scope:local align:4 data:byte
+init$4146 = .bss:0x00000028; // type:object size:0x1 scope:local align:1 data:byte
