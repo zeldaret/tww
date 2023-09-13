@@ -76,9 +76,9 @@ static actor_method_class l_daSwc00_Method = {
 };
 
 extern actor_process_profile_definition g_profile_SWC00 = {
-    -3,
+    fpcLy_CURRENT_e,
     7,
-    0xFFFD,
+    fpcPi_CURRENT_e,
     PROC_SWC00,
     &g_fpcLf_Method.mBase,
     sizeof(swc00_class),

@@ -29,6 +29,10 @@ struct J3DUnkCalc2 {
 
 typedef void (*J3DCalcCallBack)(J3DModel*, u32 timing);
 
+class J3DMatPacket;
+class J3DShapePacket;
+class J3DVisibilityManager;
+
 class J3DModel {
 public:
     J3DModel() {
@@ -39,32 +43,32 @@ public:
         entryModelData(param_0, param_1, param_2);
     }
 
-    /* 800CFFF4 */ void setBaseTRMtx(f32 (*)[4]);
-    /* 80327100 */ void initialize();
-    /* 80327184 */ s32 entryModelData(J3DModelData*, u32, u32);
-    /* 80327300 */ s32 createShapePacket(J3DModelData*);
-    /* 803273CC */ s32 createMatPacket(J3DModelData*, u32);
-    /* 803275FC */ s32 newDifferedDisplayList(u32);
-    /* 8032767C */ void lock();
-    /* 803276B4 */ void unlock();
-    /* 803279A0 */ void diff();
-    /* 80327A2C */ s32 setDeformData(J3DDeformData*, u32);
-    /* 80327AA0 */ s32 setSkinDeform(J3DSkinDeform*, u32);
-    /* 80327BD4 */ void calcAnmMtx();
-    /* 80327C58 */ void calcWeightEnvelopeMtx();
-    /* 80328190 */ void calcNrmMtx();
-    /* 803281B4 */ void calcBumpMtx();
-    /* 803282B8 */ void calcBBoardMtx();
-    /* 803282EC */ void prepareShapePackets();
+    void setBaseTRMtx(f32 (*)[4]);
+    void initialize();
+    s32 entryModelData(J3DModelData*, u32, u32);
+    s32 createShapePacket(J3DModelData*);
+    s32 createMatPacket(J3DModelData*, u32);
+    s32 newDifferedDisplayList(u32);
+    void lock();
+    void unlock();
+    void diff();
+    s32 setDeformData(J3DDeformData*, u32);
+    s32 setSkinDeform(J3DSkinDeform*, u32);
+    void calcAnmMtx();
+    void calcWeightEnvelopeMtx();
+    void calcNrmMtx();
+    void calcBumpMtx();
+    void calcBBoardMtx();
+    void prepareShapePackets();
     MtxP getAnmMtx(int);
 
-    /* 80327CA4 */ virtual void update();
-    /* 80327E4C */ virtual void entry();
-    /* 80327CF0 */ virtual void calc();
-    /* 803276EC */ virtual void calcMaterial();
-    /* 80327858 */ virtual void calcDiffTexMtx();
-    /* 80327F40 */ virtual void viewCalc();
-    /* 80328350 */ virtual ~J3DModel();
+    virtual void update();
+    virtual void entry();
+    virtual void calc();
+    virtual void calcMaterial();
+    virtual void calcDiffTexMtx();
+    virtual void viewCalc();
+    virtual ~J3DModel();
 
     J3DModelData* getModelData() { return mModelData; }
 
@@ -78,39 +82,42 @@ public:
     void i_setBaseTRMtx(Mtx m) { MTXCopy(m, mBaseTransformMtx); }
     u32 getMtxCalcMode() const { return mFlags & 0x03; }
     J3DVertexBuffer* getVertexBuffer() const { return (J3DVertexBuffer*)&mVertexBuffer; }
-    J3DMatPacket* getMatPacket(u16 idx) const { return &mMatPacket[idx]; }
-    J3DShapePacket* getShapePacket(u16 idx) const { return &mShapePacket[idx]; }
-    J3DMtxBuffer* getMtxBuffer() const { return mMtxBuffer; }
-    Mtx33* getBumpMtxPtr(int idx) const { return mMtxBuffer->getBumpMtxPtr(idx); }
-    Mtx33* getNrmMtxPtr() const { return mMtxBuffer->getNrmMtxPtr(); }
-    Mtx* getDrawMtxPtr() const { return mMtxBuffer->getDrawMtxPtr(); }
+    J3DMatPacket* getMatPacket(u16 idx) const { return &mpMatPacket[idx]; }
+    J3DShapePacket* getShapePacket(u16 idx) const { return &mpShapePacket[idx]; }
+    // Mtx33* getBumpMtxPtr(int idx) const { return mMtxBuffer->getBumpMtxPtr(idx); }
+    Mtx33* getNrmMtxPtr() const { return mpNrmMtxBuf[1][mCurrentViewNo]; }
+    Mtx* getDrawMtxPtr() const { return mpDrawMtxBuf[1][mCurrentViewNo]; }
     void setBaseScale(const Vec& scale) { mBaseScale = scale; }
     void setUserArea(u32 area) { mUserArea = area; }
     u32 getUserArea() const { return mUserArea; }
     Vec* getBaseScale() { return &mBaseScale; }
-    void setAnmMtx(int i, Mtx m) { mMtxBuffer->setAnmMtx(i, m); }
 
-    // is there a better way to handle inlines with same name as non-inlines?
-    MtxP i_getAnmMtx(int p1) { return mMtxBuffer->getAnmMtx(p1); }
-    void i_setAnmMtx(int p1, Mtx mtx) { mMtxBuffer->setAnmMtx(p1, mtx); }
-
-    /* 0x04 */ J3DModelData* mModelData;
-    /* 0x08 */ u32 mFlags;
-    /* 0x0C */ u32 mDiffFlag;
-    /* 0x10 */ J3DCalcCallBack mCalcCallBack;
-    /* 0x14 */ u32 mUserArea;
-    /* 0x18 */ Vec mBaseScale;
-    /* 0x24 */ Mtx mBaseTransformMtx;
-    /* 0x54 */ Mtx mInternalView;
-    /* 0x84 */ J3DMtxBuffer* mMtxBuffer;
-    /* 0x88 */ J3DVertexBuffer mVertexBuffer;
-    /* 0xC0 */ J3DMatPacket* mMatPacket;
-    /* 0xC4 */ J3DShapePacket* mShapePacket;
-    /* 0xC8 */ J3DDeformData* mDeformData;
-    /* 0xCC */ J3DSkinDeform* mSkinDeform;
-    /* 0xD0 */ J3DVtxColorCalc* mVtxColorCalc;
-    /* 0xD4 */ J3DUnkCalc1* mUnkCalc1;
-    /* 0xD8 */ J3DUnkCalc2* mUnkCalc2;
+    /* 0x004 */ J3DModelData* mModelData;
+    /* 0x008 */ u32 mFlags;
+    /* 0x00C */ u32 mDiffFlag;
+    /* 0x010 */ J3DCalcCallBack mCalcCallBack;
+    /* 0x014 */ u32 mUserArea;
+    /* 0x018 */ Vec mBaseScale;
+    /* 0x024 */ Mtx mBaseTransformMtx;
+    /* 0x054 */ Mtx mInternalView;
+    /* 0x084 */ u8* mpScaleFlagArr;
+    /* 0x088 */ u8* mpEvlpScaleFlagArr;
+    /* 0x08C */ Mtx* mpNodeMtx;
+    /* 0x090 */ Mtx* mpWeightEnvMtx;
+    /* 0x094 */ Mtx** mpDrawMtxBuf[2];
+    /* 0x09C */ Mtx33** mpNrmMtxBuf[2];
+    /* 0x0A4 */ Mtx33*** mpBumpMtxArr[2];
+    /* 0x0AC */ u32 mMtxBufferFlag;
+    /* 0x0B0 */ u32 mCurrentViewNo;
+    /* 0x0B4 */ J3DMatPacket* mpMatPacket;
+    /* 0x0B8 */ J3DShapePacket* mpShapePacket;
+    /* 0x0BC */ J3DDeformData* mpDeformData;
+    /* 0x0C0 */ J3DSkinDeform* mpSkinDeform;
+    /* 0x0C4 */ void * pad4[2];
+    /* 0x0CC */ J3DVertexBuffer mVertexBuffer;
+    /* 0x104 */ J3DVisibilityManager * mpVisibilityManager;
 };
+
+STATIC_ASSERT(sizeof(J3DModel) == 0x108);
 
 #endif /* J3DMODEL_H */

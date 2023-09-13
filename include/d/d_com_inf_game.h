@@ -180,9 +180,11 @@ public:
     /* 0x47EC */ JKRArchive* mpCamResArchive;
     /* 0x47F0 */ JKRArchive* mpSwimResArchive;
     /* 0x47F4 */ JKRArchive* mpWindResArchive;
+#if VERSION != VERSION_JP
     /* 0x47F8 */ JKRArchive* mpEnglishTextArchive;
     /* 0x47FC */ JKRArchive* mpHyruleTextArchive;
-    /* 0x4800 */ u8 field_0x4800[0x4824 - 0x4800];
+#endif
+    /* 0x4800 */ u8 mpCARDHeap[0x24];
     /* 0x4824 */ dPa_control_c* mParticle;
     /* 0x4828 */ dDemo_manager_c* mDemo;
     /* 0x482C */ dMagma_packet_c* mpMagmaPacket;
