@@ -7,6 +7,7 @@
 #include "d/actor/d_a_player_link.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
+#include "JSystem/JKernel/JKRHeap.h"
 
 /* 80102E8C-80102EAC       .text daPy_createHeap__FP10fopAc_ac_c */
 void daPy_createHeap(fopAc_ac_c*) {
@@ -1470,14 +1471,33 @@ void daPy_lk_c::playerInit() {
     /* Nonmatching */
 }
 
-/* 80125CC8-80125D30       .text phase_1__FP9daPy_lk_c */
-void phase_1(daPy_lk_c*) {
-    /* Nonmatching */
+int phase_1(daPy_lk_c* i_this) {
+    g_dComIfG_gameInfo.play.mpPlayer[0] = i_this;
+    g_dComIfG_gameInfo.play.mpPlayerPtr[0] = i_this;
+
+    fopAcM_setStageLayer(i_this);
+    i_this->mAttentionInfo.mFlags = 0xFFFFFFFF;
+
+    i_this->mAttentionInfo.mPosition.x = i_this->current.pos.x;
+    i_this->mAttentionInfo.mPosition.y = i_this->current.pos.y + 125.0f;
+    i_this->mAttentionInfo.mPosition.z = i_this->current.pos.z;
+
+    return cPhs_NEXT_e;
 }
 
-/* 80125D30-80125DB4       .text phase_2__FP9daPy_lk_c */
-void phase_2(daPy_lk_c*) {
-    /* Nonmatching */
+int phase_2(daPy_lk_c* i_this) {
+    int result;
+
+    if (g_dComIfG_gameInfo.play.mCameraInfo[g_dComIfG_gameInfo.play.mCurCamera[0]].mpCamera == NULL)  {
+        result = cPhs_INIT_e;
+    } else {
+        fopAcM_SetupActor(i_this, daPy_lk_c);
+        i_this->playerInit();
+
+        result = cPhs_NEXT_e;
+    }
+
+    return result;
 }
 
 /* 80125DB4-80126F00       .text __ct__9daPy_lk_cFv */
@@ -1496,13 +1516,13 @@ daPy_footData_c::daPy_footData_c() {
 }
 
 /* 80127160-80127B50       .text makeBgWait__9daPy_lk_cFv */
-void daPy_lk_c::makeBgWait() {
+int daPy_lk_c::makeBgWait() {
     /* Nonmatching */
+    return cPhs_NEXT_e;
 }
 
-/* 80127B50-80127B70       .text phase_3__FP9daPy_lk_c */
-void phase_3(daPy_lk_c*) {
-    /* Nonmatching */
+int phase_3(daPy_lk_c* i_this) {
+    return i_this->makeBgWait();
 }
 
 void daPy_Create(fopAc_ac_c* i_this) {
@@ -1511,9 +1531,9 @@ void daPy_Create(fopAc_ac_c* i_this) {
         (int (*)(void*))phase_2,
         (int (*)(void*))phase_3,
     };
-    daPy_lk_c* link = (daPy_lk_c*)i_this;
+    daPy_lk_c* player_link = (daPy_lk_c*)i_this;
 
-    dComLbG_PhaseHandler(&link->mPhsLoad, l_method, link);
+    dComLbG_PhaseHandler(&player_link->mPhsLoad, l_method, player_link);
 }
 
 /* 80127BA0-80127CC0       .text setSeAnime__9daPy_lk_cFPC14daPy_anmHeap_cP12J3DFrameCtrl */
