@@ -1,125 +1,16 @@
-#ifndef D_D_A_PLAYER_H
-#define D_D_A_PLAYER_H
+#ifndef D_A_PY_LK
+#define D_A_PY_LK
 
 #include "JAZelAudio/JAIZelBasic.h"
-#include "JSystem/J3DGraphAnimator/J3DAnimation.h"
-#include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
 #include "d/d_attention.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_bg_s_lin_chk.h"
-#include "d/d_cc_d.h"
 #include "d/d_drawlist.h"
-#include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_com_inf_game.h"
+#include "d/actor/daPy_py.h"
 
 class mDoExt_MtxCalcOldFrame;
-class daPy_matAnm_c;
-class daPy_HIO_c;
-
-class daPy_demo_c {
-public:
-    void setDemoType(u16 pType) { mDemoType = pType; }
-    int getDemoType() const { return mDemoType; }
-    void setDemoMode(u32 mode) { mDemoMode = mode; }
-    u32 getDemoMode() const { return mDemoMode; }
-    int getParam1() const { return mParam1; }
-    void setOriginalDemoType() { setDemoType(3); }
-    void setSpecialDemoType() { setDemoType(5); }
-    void setSystemDemoType() { setDemoType(2); }
-    void setStick(f32 stick) { mStick = stick; }
-    void setMoveAngle(s16 angle) { mDemoMoveAngle = angle; }
-    s16 getMoveAngle() const { return mDemoMoveAngle; }
-    f32 getStick() { return mStick; }
-    int getParam0() const { return mParam0; }
-    void setParam0(int value) { mParam0 = value; }
-    void setParam1(int value) { mParam1 = value; }
-    void setParam2(int value) { mParam2 = value; }
-
-private:
-    /* 0x00 */ u16 mDemoType;
-    /* 0x02 */ s16 mDemoMoveAngle;
-    /* 0x04 */ s16 mTimer;
-    /* 0x06 */ s16 mParam2;
-    /* 0x08 */ int mParam0;
-    /* 0x0C */ int mParam1;
-    /* 0x10 */ u32 mDemoMode;
-    /* 0x14 */ f32 mStick;
-};  // Size: 0x18
-
-class daPy_py_c : public fopAc_ac_c {
-public:
-    /* 0x290 */ u8 mAttackState;
-    /* 0x291 */ u8 field_0x291;
-    /* 0x292 */ u8 field_0x292[0x294 - 0x292];
-    /* 0x294 */ s16 field_0x294;
-    /* 0x296 */ s16 mQuakeTimer;
-    /* 0x298 */ int field_0x298;
-    /* 0x29C */ u32 field_0x29c;
-    /* 0x2A0 */ u32 field_0x2a0;
-    /* 0x2A4 */ u32 field_0x2a4;
-    /* 0x2A8 */ f32 field_0x2a8;
-    /* 0x2AC */ u8 field_0x2AC[0x2B0 - 0x2AC];
-    /* 0x2B0 */ f32 field_0x2b0;
-    /* 0x2B4 */ u8 field_0x2B4[0x2BC - 0x2B4];
-    /* 0x2BC */ cXyz mHeadTopPos;
-    /* 0x2C8 */ cXyz mSwordTopPos;
-    /* 0x2D4 */ cXyz field_0x2d4;
-    /* 0x2E0 */ cXyz field_0x2e0;
-    /* 0x2EC */ cXyz mRopePos;
-    /* 0x2F8 */ f32 field_0x2f8;
-    /* 0x2FC */ u8 field_0x2FC[0x300 - 0x2FC];
-    /* 0x300 */ f32 field_0x300;
-    /* 0x304 */ daPy_demo_c mDemo;
-
-    virtual void getLeftHandMatrix();
-    virtual void getRightHandMatrix();
-    virtual void getGroundY();
-    virtual void getTactMusic() const;
-    virtual void getTactTimerCancel() const;
-    virtual void checkPlayerGuard() const;
-    virtual void getGrabMissActor();
-    virtual void checkPlayerFly() const;
-    virtual void checkFrontRoll() const;
-    virtual void checkBottleSwing() const;
-    virtual void checkCutCharge() const;
-    virtual void getBokoFlamePos(cXyz*);
-    virtual void checkTactWait() const;
-    virtual void setTactZev(u32, int, char*);
-    virtual void onDekuSpReturnFlg(u8);
-    virtual void checkComboCutTurn() const;
-    virtual void getBaseAnimeFrameRate();
-    virtual void getBaseAnimeFrame();
-    virtual void getItemID() const;
-    virtual void getThrowBoomerangID() const;
-    virtual void getGrabActorID() const;
-    virtual void checkGrabBarrel();
-    virtual void checkPlayerNoDraw();
-    virtual void checkRopeTag();
-    virtual void checkRopeReadyAnime() const;
-    virtual void voiceStart(u32);
-    virtual void setOutPower(f32, s16, int);
-    virtual void onFrollCrashFlg(u32);
-    virtual void getModelJointMtx(u16);
-    virtual void getOldSpeedY();
-    virtual void setHookshotCarryOffset(u32, cXyz const*);
-    virtual void setPlayerPosAndAngle(cXyz*, s16);
-    virtual void setPlayerPosAndAngle(cXyz*, csXyz*);
-    virtual void setPlayerPosAndAngle(f32*[][][][]);
-    virtual void setThrowDamage(cXyz*, s16, f32, f32, int);
-    virtual void changeTextureAnime(u16, u16, int);
-    virtual void cancelChangeTextureAnime();
-    
-    void getSwordTopPos() const;
-    void getLeftHandPos() const;
-    void getRopeJumpLand() const;
-    void checkRopeForceEnd() const;
-    void getHeadTopPos() const;
-    void changePlayer(fopAc_ac_c*);
-    void objWindHitCheck(dCcD_Cyl*);
-    void setDoButtonQuake();
-    void stopDoButtonQuake(int);
-    void getRopePos() const;
-};
 
 class daPy_anmHeap_c {
 public:
@@ -174,11 +65,35 @@ private:
 
 class daPy_footEffect_c {
 public:
+    ~daPy_footEffect_c();
+    daPy_footEffect_c();
     /* 0x0 */ u8 field_0x0[0x4C];
+};
+
+class daPy_fanSwingEcallBack_c {
+public:
+    void execute(JPABaseEmitter*);
+    ~daPy_fanSwingEcallBack_c();
+    void setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char);
+};
+
+class daPy_waterDropPcallBack_c {
+public:
+    void execute(JPABaseEmitter*, JPABaseParticle*);
+    ~daPy_waterDropPcallBack_c();
 };
 
 class daPy_swimTailEcallBack_c {
 public:
+
+    void setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char);
+    void getMaxWaterY(JGeometry::TVec3<float>*);
+    void remove();
+    void execute(JPABaseEmitter*);
+    void draw(JPABaseEmitter*);
+    ~daPy_swimTailEcallBack_c();
+    daPy_swimTailEcallBack_c();
+
     /* 0x0 */ u8 field_0x0[0x28];
 };
 
@@ -199,26 +114,50 @@ public:
 
 class daPy_waterDropEcallBack_c {
 public:
+    void execute(JPABaseEmitter*);
+    void setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char);
+    void end();
+    ~daPy_waterDropEcallBack_c();
+
     /* 0x0 */ u8 field_0x0[0x20];
 };
 
 class daPy_followEcallBack_c {
 public:
+    void execute(JPABaseEmitter*);
+    void setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char);
+    void end();
+    ~daPy_followEcallBack_c();
+
     /* 0x0 */ u8 field_0x0[0x1C];
 };
 
 class daPy_dmEcallBack_c {
 public:
+    void execute(JPABaseEmitter*);
+    ~daPy_dmEcallBack_c();
+    daPy_dmEcallBack_c();
+
     /* 0x0 */ u8 field_0x0[0xC];
 };
 
 class daPy_mtxPosFollowEcallBack_c {
 public:
+    void makeEmitterColor(unsigned short, float(*)[4], const cXyz*, const csXyz*, const _GXColor*, const _GXColor*);
+    void execute(JPABaseEmitter*);
+    daPy_mtxPosFollowEcallBack_c();
+    ~daPy_mtxPosFollowEcallBack_c();
+
     /* 0x0 */ u8 field_0x0[0x10];
 };
 
 class daPy_swBlur_c : public J3DPacket {
 public:
+    void initSwBlur(float(*)[4], int, float, int);
+    void copySwBlur(float(*)[4], int);
+    void draw();
+    ~daPy_swBlur_c();
+
     /* 0x010 */ u8 field_0x010[0x014 - 0x010];
     /* 0x014 */ int field_0x014;
     /* 0x018 */ int field_0x018;
@@ -232,6 +171,8 @@ public:
 
 class daPy_footData_c {
 public:
+    ~daPy_footData_c();
+    daPy_footData_c();
     /* 0x0 */ u8 field_0x0[0x118];
 };
 
@@ -249,7 +190,7 @@ public:
 
 class daPy_lk_c : public daPy_py_c {
 public:
-    enum HEAP_TYPE {};
+    enum daPy_HEAP_TYPE {};
 
     enum daPy_ANM {};
 
@@ -395,7 +336,7 @@ public:
     void checkSubjectEnd(int);
     void checkGuardAccept();
     void cancelNoDamageMode();
-    void commonProcInit();
+    void commonProcInit(daPy_lk_c::daPy_PROC procID);
     void procScope_init(int);
     void procScope();
     void procSubjectivity_init(int);
@@ -532,7 +473,7 @@ public:
     void initTextureAnime();
     void initTextureScroll();
     void createHeap();
-    void createAnimeHeap(JKRSolidHeap**, daPy_lk_c::HEAP_TYPE);
+    void createAnimeHeap(JKRSolidHeap**, daPy_HEAP_TYPE);
     void initModel(J3DModel**, int, u32);
     void entryBtk(J3DModelData*, int);
     void entryBrk(J3DModelData*, int);
@@ -543,20 +484,20 @@ public:
     void initSeAnime();
     void resetSeAnime();
     void setMoveAnime(f32, f32, f32, daPy_lk_c::daPy_ANM, daPy_lk_c::daPy_ANM, int, f32);
-    void setSingleMoveAnime();
+    void setSingleMoveAnime(daPy_lk_c::daPy_ANM, float, float, short, float);
     void setActAnimeUpper(u16, daPy_lk_c::daPy_UPPER, f32, f32, s16, f32);
-    void resetActAnimeUpper();
+    void resetActAnimeUpper(daPy_lk_c::daPy_UPPER, float);
     void animeUpdate();
     void simpleAnmPlay(J3DAnmBase*);
-    void setHandModel();
-    void getAnmData();
+    void setHandModel(daPy_lk_c::daPy_ANM);
+    void getAnmData(daPy_lk_c::daPy_ANM) const;
     void checkGrabWeapon(int);
     void onDekuSpReturnFlg(u8);
     void changeTextureAnime(u16, u16, int);
     void setThrowDamage(cXyz*, s16, f32, f32, int);
     void setPlayerPosAndAngle(cXyz*, s16);
     void setPlayerPosAndAngle(cXyz*, csXyz*);
-    void setPlayerPosAndAngle(f32*[][][][]);
+    void setPlayerPosAndAngle(float(*)[4]);
     void endDemoMode();
     void getBokoFlamePos(cXyz*);
     void setAuraEffect();
@@ -807,7 +748,7 @@ public:
     void swimOutAfter(int);
     void checkSwimFallCheck();
     void changeSwimOutProc();
-    void setSwimMoveAnime();
+    void setSwimMoveAnime(daPy_lk_c::daPy_ANM);
     void getSwimTimerRate();
     void setSwimTimerStartStop();
     void procSwimUp_init(int);
@@ -955,7 +896,7 @@ public:
     void procBowMove_init();
     void procBowMove();
     void checkHookshotReturn();
-    void setHookshotCarryOffset(u32, cXyz const*);
+    void setHookshotCarryOffset(unsigned int, const cXyz*);
     void setHookshotModel();
     void setHookshotSight();
     void freeHookshotItem();
@@ -988,7 +929,7 @@ public:
     void checkEndTactMusic() const;
     void getTactMetronomeRate();
     void checkTactLastInput();
-    void setTactZev(u32, int, char*);
+    void setTactZev(unsigned int, int, char*);
     void getTactTopPos(cXyz*);
     void getTactNormalWait() const;
     void getTactMusic() const;
@@ -1365,4 +1306,4 @@ public:
     /* 0x4AF0 */ dCcD_Cps field_0x4af0;
 };
 
-#endif /* D_D_A_PLAYER_H */
+#endif /* D_A_PY_LK */

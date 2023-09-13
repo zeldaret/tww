@@ -331,6 +331,7 @@ LIBS = [
             Object(NonMatching, "d/d_save.cpp"),
             Object(NonMatching, "d/d_save_init.cpp"),
 
+            Object(NonMatching, "d/actor/d_a_player_main.cpp"),
             Object(NonMatching, "d/actor/d_a_itembase_static.cpp"),
             Object(NonMatching, "d/actor/d_a_item_static.cpp"),
             Object(NonMatching, "d/actor/d_a_item.cpp"),

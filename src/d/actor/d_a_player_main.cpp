@@ -3,21 +3,12 @@
 // Translation Unit: d_a_player_main.cpp
 //
 
-#include "d_a_player_main.h"
 #include "dolphin/types.h"
+#include "d/actor/daPy_lk.h"
+#include "d/d_com_inf_game.h"
 
 /* 80102E8C-80102EAC       .text daPy_createHeap__FP10fopAc_ac_c */
 void daPy_createHeap(fopAc_ac_c*) {
-    /* Nonmatching */
-}
-
-/* 80102EAC-80102F1C       .text __ct__13daPy_matAnm_cFv */
-daPy_matAnm_c::daPy_matAnm_c() {
-    /* Nonmatching */
-}
-
-/* 80102F1C-80102F64       .text __dt__14J3DMaterialAnmFv */
-J3DMaterialAnm::~J3DMaterialAnm() {
     /* Nonmatching */
 }
 
@@ -75,6 +66,8 @@ void daPy_lk_c::checkSetItemTrigger(int, int) {
 void daPy_lk_c::auraJointCB0(int) {
     /* Nonmatching */
 }
+
+class J3DNode;
 
 /* 80103450-80103494       .text daPy_auraCallback__FP7J3DNodei */
 void daPy_auraCallback(J3DNode*, int) {
@@ -752,7 +745,7 @@ void daPy_lk_c::cancelNoDamageMode() {
 }
 
 /* 80112348-80112954       .text commonProcInit__9daPy_lk_cFQ29daPy_lk_c9daPy_PROC */
-void daPy_lk_c::commonProcInit(daPy_lk_c::daPy_PROC) {
+void daPy_lk_c::commonProcInit(daPy_lk_c::daPy_PROC procID) {
     /* Nonmatching */
 }
 
@@ -1446,11 +1439,6 @@ void daPy_lk_c::initTextureScroll() {
     /* Nonmatching */
 }
 
-/* 80123830-80123834       .text setTexMtx__14J3DTexGenBlockFUlP9J3DTexMtx */
-void J3DTexGenBlock::setTexMtx(unsigned long, J3DTexMtx*) {
-    /* Nonmatching */
-}
-
 /* 80123834-8012469C       .text createHeap__9daPy_lk_cFv */
 void daPy_lk_c::createHeap() {
     /* Nonmatching */
@@ -1458,11 +1446,6 @@ void daPy_lk_c::createHeap() {
 
 /* 8012469C-801249F8       .text createAnimeHeap__9daPy_lk_cFPP12JKRSolidHeapQ29daPy_lk_c14daPy_HEAP_TYPE */
 void daPy_lk_c::createAnimeHeap(JKRSolidHeap**, daPy_lk_c::daPy_HEAP_TYPE) {
-    /* Nonmatching */
-}
-
-/* 801249F8-80124A40       .text __dt__10JUTNameTabFv */
-JUTNameTab::~JUTNameTab() {
     /* Nonmatching */
 }
 
@@ -1522,8 +1505,14 @@ void phase_3(daPy_lk_c*) {
 }
 
 /* 80127B70-80127BA0       .text daPy_Create__FP10fopAc_ac_c */
-void daPy_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+void daPy_Create(fopAc_ac_c* i_this) {
+    // static int (*l_method[3])(void*) = {
+    //     (int (*)(void*))phase_1, 
+    //     (int (*)(void*))phase_2,
+    //     (int (*)(void*))phase_3,
+    // };
+    
+    // dComLbG_PhaseHandler(&(<static_cast>(i_this)->mPhsLoad), l_method, i_this);
 }
 
 /* 80127BA0-80127CC0       .text setSeAnime__9daPy_lk_cFPC14daPy_anmHeap_cP12J3DFrameCtrl */
@@ -3536,36 +3525,6 @@ daPy_sightPacket_c::~daPy_sightPacket_c() {
     /* Nonmatching */
 }
 
-/* 80147094-801470D4       .text __ct__12J3DFrameCtrlFv */
-J3DFrameCtrl::J3DFrameCtrl() {
-    /* Nonmatching */
-}
-
-/* 801470D4-80147110       .text __dt__19mDoExt_AnmRatioPackFv */
-mDoExt_AnmRatioPack::~mDoExt_AnmRatioPack() {
-    /* Nonmatching */
-}
-
-/* 80147110-80147124       .text __ct__19mDoExt_AnmRatioPackFv */
-mDoExt_AnmRatioPack::mDoExt_AnmRatioPack() {
-    /* Nonmatching */
-}
-
-/* 80147124-80147278       .text __dt__19dBgS_MirLightLinChkFv */
-dBgS_MirLightLinChk::~dBgS_MirLightLinChk() {
-    /* Nonmatching */
-}
-
-/* 80147278-8014739C       .text __dt__16dBgS_LinkRoofChkFv */
-dBgS_LinkRoofChk::~dBgS_LinkRoofChk() {
-    /* Nonmatching */
-}
-
-/* 8014739C-801474DC       .text __dt__15dBgS_LinkGndChkFv */
-dBgS_LinkGndChk::~dBgS_LinkGndChk() {
-    /* Nonmatching */
-}
-
 /* 801474DC-801474E4       .text getGroundY__9daPy_lk_cFv */
 void daPy_lk_c::getGroundY() {
     /* Nonmatching */
@@ -3668,51 +3627,6 @@ daPy_waterDropPcallBack_c::~daPy_waterDropPcallBack_c() {
 
 /* 801477E0-801477FC       .text setup__24daPy_fanSwingEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
 void daPy_fanSwingEcallBack_c::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
-    /* Nonmatching */
-}
-
-/* 80149524-8014952C       .text @20@__dt__15dBgS_LinkGndChkFv */
-void @20@__dt__15dBgS_LinkGndChkFv {
-    /* Nonmatching */
-}
-
-/* 8014952C-80149534       .text @76@__dt__15dBgS_LinkGndChkFv */
-void @76@__dt__15dBgS_LinkGndChkFv {
-    /* Nonmatching */
-}
-
-/* 80149534-8014953C       .text @64@__dt__15dBgS_LinkGndChkFv */
-void @64@__dt__15dBgS_LinkGndChkFv {
-    /* Nonmatching */
-}
-
-/* 8014953C-80149544       .text @16@__dt__16dBgS_LinkRoofChkFv */
-void @16@__dt__16dBgS_LinkRoofChkFv {
-    /* Nonmatching */
-}
-
-/* 80149544-8014954C       .text @48@__dt__16dBgS_LinkRoofChkFv */
-void @48@__dt__16dBgS_LinkRoofChkFv {
-    /* Nonmatching */
-}
-
-/* 8014954C-80149554       .text @36@__dt__16dBgS_LinkRoofChkFv */
-void @36@__dt__16dBgS_LinkRoofChkFv {
-    /* Nonmatching */
-}
-
-/* 80149554-8014955C       .text @20@__dt__19dBgS_MirLightLinChkFv */
-void @20@__dt__19dBgS_MirLightLinChkFv {
-    /* Nonmatching */
-}
-
-/* 8014955C-80149564       .text @100@__dt__19dBgS_MirLightLinChkFv */
-void @100@__dt__19dBgS_MirLightLinChkFv {
-    /* Nonmatching */
-}
-
-/* 80149564-8014956C       .text @88@__dt__19dBgS_MirLightLinChkFv */
-void @88@__dt__19dBgS_MirLightLinChkFv {
     /* Nonmatching */
 }
 
@@ -3928,11 +3842,6 @@ void daPy_lk_c::procHookshotFly_init() {
 
 /* 8014B854-8014BA84       .text procHookshotFly__9daPy_lk_cFv */
 void daPy_lk_c::procHookshotFly() {
-    /* Nonmatching */
-}
-
-/* 8014BA84-8014BAA0       .text getMoveVec__12daHookshot_cCFv */
-void daHookshot_c::getMoveVec() const {
     /* Nonmatching */
 }
 
@@ -4660,139 +4569,3 @@ void daPy_lk_c::procCutKesa_init() {
 void daPy_lk_c::procCutKesa() {
     /* Nonmatching */
 }
-
-/* 8015A1DC-8015A1E0       .text __ct__10daPy_HIO_cFv */
-daPy_HIO_c::daPy_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 8015A1E0-8015A1E8       .text getTactMusic__9daPy_py_cCFv */
-void daPy_py_c::getTactMusic() const {
-    /* Nonmatching */
-}
-
-/* 8015A1E8-8015A1F0       .text getTactTimerCancel__9daPy_py_cCFv */
-void daPy_py_c::getTactTimerCancel() const {
-    /* Nonmatching */
-}
-
-/* 8015A1F0-8015A1F8       .text getGrabMissActor__9daPy_py_cFv */
-void daPy_py_c::getGrabMissActor() {
-    /* Nonmatching */
-}
-
-/* 8015A1F8-8015A200       .text checkFrontRoll__9daPy_py_cCFv */
-void daPy_py_c::checkFrontRoll() const {
-    /* Nonmatching */
-}
-
-/* 8015A200-8015A208       .text checkBottleSwing__9daPy_py_cCFv */
-void daPy_py_c::checkBottleSwing() const {
-    /* Nonmatching */
-}
-
-/* 8015A208-8015A210       .text checkCutCharge__9daPy_py_cCFv */
-void daPy_py_c::checkCutCharge() const {
-    /* Nonmatching */
-}
-
-/* 8015A210-8015A218       .text checkTactWait__9daPy_py_cCFv */
-void daPy_py_c::checkTactWait() const {
-    /* Nonmatching */
-}
-
-/* 8015A218-8015A21C       .text setTactZev__9daPy_py_cFUiiPc */
-void daPy_py_c::setTactZev(unsigned int, int, char*) {
-    /* Nonmatching */
-}
-
-/* 8015A21C-8015A220       .text onDekuSpReturnFlg__9daPy_py_cFUc */
-void daPy_py_c::onDekuSpReturnFlg(unsigned char) {
-    /* Nonmatching */
-}
-
-/* 8015A220-8015A228       .text checkComboCutTurn__9daPy_py_cCFv */
-void daPy_py_c::checkComboCutTurn() const {
-    /* Nonmatching */
-}
-
-/* 8015A228-8015A230       .text getItemID__9daPy_py_cCFv */
-void daPy_py_c::getItemID() const {
-    /* Nonmatching */
-}
-
-/* 8015A230-8015A238       .text getThrowBoomerangID__9daPy_py_cCFv */
-void daPy_py_c::getThrowBoomerangID() const {
-    /* Nonmatching */
-}
-
-/* 8015A238-8015A240       .text checkGrabBarrel__9daPy_py_cFv */
-void daPy_py_c::checkGrabBarrel() {
-    /* Nonmatching */
-}
-
-/* 8015A240-8015A248       .text checkRopeTag__9daPy_py_cFv */
-void daPy_py_c::checkRopeTag() {
-    /* Nonmatching */
-}
-
-/* 8015A248-8015A24C       .text voiceStart__9daPy_py_cFUl */
-void daPy_py_c::voiceStart(unsigned long) {
-    /* Nonmatching */
-}
-
-/* 8015A24C-8015A250       .text setOutPower__9daPy_py_cFfsi */
-void daPy_py_c::setOutPower(float, short, int) {
-    /* Nonmatching */
-}
-
-/* 8015A250-8015A258       .text getModelJointMtx__9daPy_py_cFUs */
-void daPy_py_c::getModelJointMtx(unsigned short) {
-    /* Nonmatching */
-}
-
-/* 8015A258-8015A260       .text getOldSpeedY__9daPy_py_cFv */
-void daPy_py_c::getOldSpeedY() {
-    /* Nonmatching */
-}
-
-/* 8015A260-8015A268       .text setHookshotCarryOffset__9daPy_py_cFUiPC4cXyz */
-void daPy_py_c::setHookshotCarryOffset(unsigned int, const cXyz*) {
-    /* Nonmatching */
-}
-
-/* 8015A268-8015A26C       .text setPlayerPosAndAngle__9daPy_py_cFPA4_f */
-void daPy_py_c::setPlayerPosAndAngle(float(*)[4]) {
-    /* Nonmatching */
-}
-
-/* 8015A26C-8015A270       .text setPlayerPosAndAngle__9daPy_py_cFP4cXyzP5csXyz */
-void daPy_py_c::setPlayerPosAndAngle(cXyz*, csXyz*) {
-    /* Nonmatching */
-}
-
-/* 8015A270-8015A278       .text setThrowDamage__9daPy_py_cFP4cXyzsffi */
-void daPy_py_c::setThrowDamage(cXyz*, short, float, float, int) {
-    /* Nonmatching */
-}
-
-/* 8015A278-8015A27C       .text changeTextureAnime__9daPy_py_cFUsUsi */
-void daPy_py_c::changeTextureAnime(unsigned short, unsigned short, int) {
-    /* Nonmatching */
-}
-
-/* 8015A27C-8015A280       .text cancelChangeTextureAnime__9daPy_py_cFv */
-void daPy_py_c::cancelChangeTextureAnime() {
-    /* Nonmatching */
-}
-
-/* 8015A280-8015A308       .text __dt__19J3DAnmTextureSRTKeyFv */
-J3DAnmTextureSRTKey::~J3DAnmTextureSRTKey() {
-    /* Nonmatching */
-}
-
-/* 8015A308-8015A37C       .text __dt__16J3DAnmTexPatternFv */
-J3DAnmTexPattern::~J3DAnmTexPattern() {
-    /* Nonmatching */
-}
-
