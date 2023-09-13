@@ -11,7 +11,7 @@ REL/executor.c:
 
 REL/global_destructor_chain.c:
 	.text       start:0x00000078 end:0x000000EC
-	.dtors      start:0x00000000 end:0x00000008
+	.dtors      start:0x00000000 end:0x00000004
 	.bss        start:0x00000000 end:0x00000008
 
 d/actor/d_a_npc_md.cpp:
@@ -20,7 +20,7 @@ d/actor/d_a_npc_md.cpp:
 	.text       start:0x0001190C end:0x000119A8
 	.text       start:0x000119A8 end:0x00012A88
 	.text       start:0x00012A88 end:0x00012A98
-	.ctors      start:0x00000000 end:0x00000008
+	.ctors      start:0x00000000 end:0x00000004
 	.rodata     start:0x00000000 end:0x0000077C
 	.data       start:0x00000000 end:0x00002A58
 	.bss        start:0x00000008 end:0x0000029C

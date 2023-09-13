@@ -765,7 +765,7 @@ LIBS = [
 
 # Tool versions
 COMPILERS_TAG = "1"
-DTK_TAG = "v0.4.1"
+DTK_TAG = "v0.5.0"
 SJISWRAP_TAG = "v1.1.0"
 WIBO_TAG = "0.5.1"
 
@@ -1038,6 +1038,7 @@ class LinkStep:
         self.name = config["name"]
         self.module_id = config["module_id"]
         self.ldscript = config["ldscript"]
+        self.entry = config["entry"]
         self.inputs = []
 
     def add(self, obj):
@@ -1083,8 +1084,8 @@ class LinkStep:
         else:
             preplf_path = build_path / self.name / f"{self.name}.preplf"
             plf_path = build_path / self.name / f"{self.name}.plf"
-            preplf_ldflags = f"$ldflags -sdata 0 -sdata2 0 -m _prolog -r"
-            plf_ldflags = f"$ldflags -sdata 0 -sdata2 0 -m _prolog -r1 -strip_partial -lcf {self.ldscript}"
+            preplf_ldflags = f"$ldflags -sdata 0 -sdata2 0 -r"
+            plf_ldflags = f"$ldflags -sdata 0 -sdata2 0 -m {self.entry} -r1 -strip_partial -lcf {self.ldscript}"
             if args.map:
                 preplf_map = map_path(preplf_path)
                 preplf_ldflags += f" -map {preplf_map}"
@@ -1327,7 +1328,6 @@ if build_config_path.is_file():
     # TODO: make these rules work for RELs too
     dol_link_step = link_steps[0]
     dol_elf_path = dol_link_step.partial_output()
-    dol_map_path = map_path(dol_elf_path)
     n.comment("Check for mismatching symbols")
     n.rule(
         name="dol_diff",
@@ -1335,7 +1335,7 @@ if build_config_path.is_file():
         description=f"DIFF {dol_elf_path}",
     )
     n.build(
-        inputs=path([config_path, dol_elf_path, dol_map_path]),
+        inputs=path([config_path, dol_elf_path]),
         outputs="dol_diff",
         rule="dol_diff",
     )
@@ -1353,7 +1353,7 @@ if build_config_path.is_file():
         description=f"APPLY {dol_elf_path}",
     )
     n.build(
-        inputs=path([config_path, dol_elf_path, dol_map_path]),
+        inputs=path([config_path, dol_elf_path]),
         outputs="dol_apply",
         rule="dol_apply",
         implicit=path([ok_path]),

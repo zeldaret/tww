@@ -92,7 +92,7 @@ m_Do/m_Do_hostIO.cpp:
 	.ctors      start:0x80336090 end:0x80336094
 	.rodata     start:0x80336E20 end:0x80336EE8
 	.data       start:0x803651B0 end:0x803651C8
-	.bss        start:0x80398C58 end:0x80399480
+	.bss        start:0x80398C58 end:0x80399470
 
 m_Do/m_Do_Reset.cpp:
 	.text       start:0x80017A08 end:0x80017B74
@@ -300,7 +300,7 @@ f_pc/f_pc_delete_tag.cpp:
 
 f_pc/f_pc_deletor.cpp:
 	.text       start:0x8003B1E8 end:0x8003B4E8
-	.rodata     start:0x8033A120 end:0x8033A140
+	.rodata     start:0x8033A120 end:0x8033A138
 
 f_pc/f_pc_draw_priority.cpp:
 	.text       start:0x8003B4E8 end:0x8003B518
@@ -2513,7 +2513,7 @@ JSystem/JAudio/JASChAllocQueue.cpp:
 	.text       start:0x8028886C end:0x80288B90
 	.ctors      start:0x803361C4 end:0x803361C8
 	.rodata     start:0x8035B928 end:0x8035B958
-	.bss        start:0x803DE420 end:0x803DE440
+	.bss        start:0x803DE420 end:0x803DE438
 
 JSystem/JAudio/JASChannel.cpp:
 	.text       start:0x80288B90 end:0x8028AB68
@@ -2657,7 +2657,7 @@ JSystem/JAudio/JAISystemInterface.cpp:
 	.text       start:0x8029C0D0 end:0x8029C0D0
 	.ctors      start:0x803361D0 end:0x803361D4
 	.rodata     start:0x8035D578 end:0x8035D5A8
-	.bss        start:0x803E0698 end:0x803E06C0
+	.bss        start:0x803E0698 end:0x803E06B8
 	.sdata2     start:0x803EF8E8 end:0x803EF8F0
 
 JSystem/JMessage/data.cpp:
@@ -3087,7 +3087,7 @@ JSystem/JUtility/JUTDirectFile.cpp:
 
 JSystem/JUtility/JUTGba.cpp:
 	.text       start:0x802C9510 end:0x802CA6B0
-	.rodata     start:0x8035FE40 end:0x8035FEE0
+	.rodata     start:0x8035FE40 end:0x8035FEC8
 	.data       start:0x80390AC8 end:0x80390AE8
 	.sbss       start:0x803EADC0 end:0x803EADC8
 
@@ -3242,7 +3242,7 @@ JSystem/J3DGraphBase/J3DDrawBuffer.cpp:
 	.text       start:0x802E9DAC end:0x802EA590
 	.text       start:0x802EA590 end:0x802EA590
 	.text       start:0x802EA590 end:0x802EA590
-	.ctors      start:0x80336208 end:0x80336210
+	.ctors      start:0x80336208 end:0x8033620C
 	.data       start:0x80391E48 end:0x80391F08
 	.sbss       start:0x803EAE18 end:0x803EAE20
 	.sdata2     start:0x803EFE48 end:0x803EFE58
@@ -3258,7 +3258,7 @@ JSystem/J3DGraphAnimator/J3DModel.cpp:
 	.text       start:0x802ED358 end:0x802ED358
 	.text       start:0x802ED358 end:0x802ED358
 	.data       start:0x80391F70 end:0x80391F90
-	.bss        start:0x803E3620 end:0x803E3680
+	.bss        start:0x803E3620 end:0x803E3678
 	.sdata      start:0x803E9B78 end:0x803E9B88
 	.sdata2     start:0x803EFE58 end:0x803EFE60
 
@@ -3421,7 +3421,7 @@ dolphin/os/OSContext.c:
 dolphin/os/OSError.c:
 	.text       start:0x80301E04 end:0x80302304
 	.data       start:0x80392F58 end:0x80393278
-	.bss        start:0x803E36D0 end:0x803E3720
+	.bss        start:0x803E36D0 end:0x803E3718
 	.sdata      start:0x803E9BA0 end:0x803E9BA8
 
 dolphin/os/OSFont.c:
@@ -3749,7 +3749,7 @@ Runtime.PPCEABI.H/__va_arg.c:
 
 Runtime.PPCEABI.H/global_destructor_chain.c:
 	.text       start:0x8032634C end:0x803263AC
-	.dtors      start:0x80336228 end:0x80336230
+	.dtors      start:0x80336228 end:0x8033622C
 	.sbss       start:0x803EB150 end:0x803EB158
 
 Runtime.PPCEABI.H/CPlusLibPPC.cp:
@@ -3757,7 +3757,7 @@ Runtime.PPCEABI.H/CPlusLibPPC.cp:
 
 Runtime.PPCEABI.H/NMWException.cp:
 	extab       start:0x80005620 end:0x80005668
-	extabindex  start:0x80005680 end:0x800056DC
+	extabindex  start:0x80005680 end:0x800056BC
 	.text       start:0x803263DC end:0x80326780
 
 Runtime.PPCEABI.H/ptmf.c:
@@ -4009,7 +4009,7 @@ TRK_MINNOW_DOLPHIN/mem_TRK.c:
 	.text       start:0x803330CC end:0x80333188
 
 TRK_MINNOW_DOLPHIN/targimpl.c:
-	.text       start:0x80333188 end:0x80334A20
+	.text       start:0x80333188 end:0x80334A18
 	.rodata     start:0x80364940 end:0x803649C8
 	.data       start:0x80395DE0 end:0x80395E10
 	.bss        start:0x803E6DE8 end:0x803E7368

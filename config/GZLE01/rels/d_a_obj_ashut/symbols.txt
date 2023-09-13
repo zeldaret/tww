@@ -69,4 +69,4 @@ g_profile_Obj_Ashut = .data:0x000000C8; // type:object size:0x30 scope:global al
 __vt__16dBgS_MoveBgActor = .data:0x000000F8; // type:object size:0x28 scope:weak align:4
 __vt__Q210daObjAshut5Act_c = .data:0x00000120; // type:object size:0x28 scope:global align:4
 M_tmp_mtx__Q210daObjAshut5Act_c = .bss:0x00000000; // type:object size:0x30 scope:global align:4
-init$4323 = .bss:0x00000030; // type:object size:0x1 scope:local align:1
+init$4323 = .bss:0x00000030; // type:object size:0x1 scope:local align:1 data:byte
