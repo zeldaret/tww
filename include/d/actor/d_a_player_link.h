@@ -1,5 +1,5 @@
-#ifndef D_A_PY_LK
-#define D_A_PY_LK
+#ifndef D_A_PLAYER_LINK
+#define D_A_PLAYER_LINK
 
 #include "JAZelAudio/JAIZelBasic.h"
 #include "d/d_attention.h"
@@ -7,8 +7,7 @@
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_drawlist.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_com_inf_game.h"
-#include "d/actor/daPy_py.h"
+#include "d/actor/d_a_player.h"
 
 class mDoExt_MtxCalcOldFrame;
 
@@ -95,11 +94,6 @@ public:
     daPy_swimTailEcallBack_c();
 
     /* 0x0 */ u8 field_0x0[0x28];
-};
-
-class daPy_mtxFollowEcallBack_c {
-public:
-    /* 0x0 */ u8 field_0x0[0xC];
 };
 
 class dPa_smokeEcallBack {
@@ -1306,4 +1300,4 @@ public:
     /* 0x4AF0 */ dCcD_Cps field_0x4af0;
 };
 
-#endif /* D_A_PY_LK */
+#endif /* D_A_PLAYER_LINK */

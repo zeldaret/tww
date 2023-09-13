@@ -4,8 +4,9 @@
 //
 
 #include "dolphin/types.h"
-#include "d/actor/daPy_lk.h"
+#include "d/actor/d_a_player_link.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_com_lib_game.h"
 
 /* 80102E8C-80102EAC       .text daPy_createHeap__FP10fopAc_ac_c */
 void daPy_createHeap(fopAc_ac_c*) {
@@ -1504,15 +1505,15 @@ void phase_3(daPy_lk_c*) {
     /* Nonmatching */
 }
 
-/* 80127B70-80127BA0       .text daPy_Create__FP10fopAc_ac_c */
 void daPy_Create(fopAc_ac_c* i_this) {
-    // static int (*l_method[3])(void*) = {
-    //     (int (*)(void*))phase_1, 
-    //     (int (*)(void*))phase_2,
-    //     (int (*)(void*))phase_3,
-    // };
-    
-    // dComLbG_PhaseHandler(&(<static_cast>(i_this)->mPhsLoad), l_method, i_this);
+    static int (*l_method[3])(void*) = {
+        (int (*)(void*))phase_1, 
+        (int (*)(void*))phase_2,
+        (int (*)(void*))phase_3,
+    };
+    daPy_lk_c* link = (daPy_lk_c*)i_this;
+
+    dComLbG_PhaseHandler(&link->mPhsLoad, l_method, link);
 }
 
 /* 80127BA0-80127CC0       .text setSeAnime__9daPy_lk_cFPC14daPy_anmHeap_cP12J3DFrameCtrl */

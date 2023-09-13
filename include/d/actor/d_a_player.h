@@ -1,8 +1,9 @@
-#ifndef D_A_PY_PY
-#define D_A_PY_PY
+#ifndef D_A_PLAYER
+#define D_A_PLAYER
 
 #include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
 #include "d/d_cc_d.h"
+#include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
 class daPy_matAnm_c : public J3DMaterialAnm {
@@ -13,6 +14,17 @@ public:
 
     virtual ~daPy_matAnm_c();
     virtual void calc(J3DMaterial*) const;
+};
+
+class daPy_mtxFollowEcallBack_c {
+public:
+    void execute(JPABaseEmitter*);
+    void end();
+    void makeEmitter(unsigned short, float(*)[4], const cXyz*, const cXyz*);
+    void makeEmitterColor(unsigned short, float(*)[4], const cXyz*, const _GXColor*, const _GXColor*);
+    void setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char);
+
+    /* 0x0 */ u8 field_0x0[0xC];
 };
 
 class daPy_HIO_c {
@@ -51,9 +63,7 @@ private:
 
 class daPy_py_c : public fopAc_ac_c {
 public:
-    enum daPy_PROC {
-        /* 0x000 */ PROC_0,
-    };
+    enum daPy_PROC {};
 
     /* 0x290 */ u8 mAttackState;
     /* 0x291 */ u8 field_0x291;
@@ -128,4 +138,4 @@ public:
     void getRopePos() const;
 };
 
-#endif /* D_A_PY_PY */
+#endif /* D_A_PLAYER */

@@ -3,8 +3,8 @@
 // Translation Unit: d_a_player.cpp
 //
 
-#include "daPy_lk.h"
 #include "dolphin/types.h"
+#include "d/actor/d_a_player.h"
 
 /* 801028FC-80102940       .text changePlayer__9daPy_py_cFP10fopAc_ac_c */
 void daPy_py_c::changePlayer(fopAc_ac_c*) {
