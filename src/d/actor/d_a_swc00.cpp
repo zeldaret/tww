@@ -15,6 +15,7 @@ static inline s32 getSwBit(u32 param) {
 }
 
 static s32 daSwc00_Execute(swc00_class* i_this) {
+    /* Nonmatching */
     s32 enable_sw = fopAcM_GetParam(i_this) >> 8 & 0xFF;
     if(enable_sw == 0xFF || dComIfGs_isSwitch(enable_sw, i_this->current.roomNo)) {
         u8 swBit = fopAcM_GetParam(i_this) & 0xFF;
