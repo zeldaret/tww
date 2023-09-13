@@ -428,6 +428,14 @@ inline BOOL dComIfGs_isSwitch(s32 i_no, s32 i_roomNo) {
     return g_dComIfG_gameInfo.save.isSwitch(i_no, i_roomNo);
 }
 
+inline void dComIfGs_onItem(int bitNo, int roomNo) {
+    g_dComIfG_gameInfo.save.onItem(bitNo, roomNo);
+}
+
+inline bool dComIfGs_isItem(int bitNo, int roomNo) {
+    return g_dComIfG_gameInfo.save.isItem(bitNo, roomNo);
+}
+
 /**
  * === PLAY ===
  */
@@ -507,6 +515,10 @@ inline dBgS* dComIfG_Bgsp() {
     return &g_dComIfG_gameInfo.play.mBgS;
 }
 
+inline dCcS* dComIfG_Ccsp() {
+    return &g_dComIfG_gameInfo.play.mCcS;
+}
+
 inline daShip_c* dComIfGp_getShipActor() {
     return (daShip_c*)g_dComIfG_gameInfo.play.getPlayerPtr(2);
 }
@@ -517,6 +529,10 @@ inline void dComIfGp_getIkadaShipBeforePos(Vec* o_pos) {
 
 inline dStage_stageDt_c& dComIfGp_getStage() {
     return g_dComIfG_gameInfo.play.getStage();
+}
+
+inline daPy_py_c* daPy_getPlayerActorClass() {
+    return (daPy_py_c*)dComIfGp_getPlayer(0);
 }
 
 inline daPy_lk_c* daPy_getPlayerLinkActorClass() {

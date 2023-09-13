@@ -22,7 +22,15 @@ class cCcD_AabAttr;
 class cCcD_CylAttr;
 class cCcD_SphAttr;
 
-enum cCcD_ObjAtType {};
+enum cCcD_ObjAtType {
+    /* 0x00000002 */ AT_TYPE_SWORD = (1 << 1),
+    /* 0x00000020 */ AT_TYPE_BOMB = (1 << 5),
+    /* 0x00000040 */ AT_TYPE_BOOMERANG = (1 << 6),
+    /* 0x00004000 */ AT_TYPE_NORMAL_ARROW = (1 << 14),
+    /* 0x00040000 */ AT_TYPE_FIRE_ARROW = (1 << 18),
+    /* 0x00080000 */ AT_TYPE_ICE_ARROW = (1 << 19),
+    /* 0x00100000 */ AT_TYPE_LIGHT_ARROW = (1 << 20),
+};
 
 class cCcD_ShapeAttr {
 public:

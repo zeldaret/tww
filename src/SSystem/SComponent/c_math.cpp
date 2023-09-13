@@ -10,8 +10,8 @@
 
 /* 80246044-8024609C       .text cM_rad2s__Ff */
 s16 cM_rad2s(float f0) {
-    f32 tmpF = fmod(f0, 6.2831854820251465 /* approx. 2 * PI */);
-    s32 tmp = (tmpF * 10430.378f /* approx. 32768 / PI */);
+    f64 tmpF = fmod(f0, 6.2831854820251465 /* approx. 2 * PI */);
+    s32 tmp = (tmpF * 10430.3779296875 /* approx. 32768 / PI */);
     if (tmp < -0x8000) {
         tmp += 0x10000;
     } else if (tmp > 0x7FFF) {

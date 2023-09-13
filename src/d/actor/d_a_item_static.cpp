@@ -3,41 +3,44 @@
 // Translation Unit: d_a_item_static.cpp
 //
 
-#include "d_a_item_static.h"
+// #include "d/actor/d_a_item_static.h"
+#include "d/actor/d_a_item.h"
 #include "dolphin/types.h"
 
 /* 80068820-800688A0       .text checkControl__8daItem_cFv */
-void daItem_c::checkControl() {
+s32 daItem_c::checkControl() {
     /* Nonmatching */
 }
 
 /* 800688A0-800688E8       .text startControl__8daItem_cFv */
-void daItem_c::startControl() {
+s32 daItem_c::startControl() {
     /* Nonmatching */
 }
 
 /* 800688E8-800688F8       .text endControl__8daItem_cFv */
-void daItem_c::endControl() {
-    /* Nonmatching */
+s32 daItem_c::endControl() {
+    mCurState = 0;
+    return 1;
 }
 
 /* 800688F8-80068950       .text checkLock__8daItem_cFv */
-void daItem_c::checkLock() {
+s32 daItem_c::checkLock() {
     /* Nonmatching */
 }
 
 /* 80068950-80068998       .text setLock__8daItem_cFv */
-void daItem_c::setLock() {
+s32 daItem_c::setLock() {
     /* Nonmatching */
 }
 
 /* 80068998-800689A8       .text releaseLock__8daItem_cFv */
-void daItem_c::releaseLock() {
-    /* Nonmatching */
+s32 daItem_c::releaseLock() {
+    mCurState = 0;
+    return 1;
 }
 
 /* 800689A8-800689F0       .text checkActionNow__8daItem_cFv */
-void daItem_c::checkActionNow() {
+s32 daItem_c::checkActionNow() {
     /* Nonmatching */
 }
 

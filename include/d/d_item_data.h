@@ -282,6 +282,29 @@ struct dItem_data_item_resource {
 
 STATIC_ASSERT(sizeof(dItem_data_item_resource) == 0x24);
 
+struct dItem_data_field_item_res {
+    /* 0x00 */ char * mModelArcName;
+    /* 0x04 */ short mModelFileId;
+    /* 0x06 */ short mBtkAnmResIdx1;
+    /* 0x08 */ short mBtkAnmResIdx2;
+    /* 0x0A */ short mBrkAnmResIdx1;
+    /* 0x0C */ short mBrkAnmResIdx2;
+    /* 0x0E */ short mBckAnmResIdx;
+    /* 0x10 */ u8 mTevRegAnimFrameIndex;
+    /* 0x11 */ u8 field8_0x11;
+    /* 0x12 */ u8 field9_0x12;
+    /* 0x13 */ u8 field10_0x13;
+    /* 0x14 */ u8 field11_0x14;
+    /* 0x15 */ u8 field12_0x15;
+    /* 0x16 */ u8 field13_0x16;
+    /* 0x17 */ u8 field14_0x17;
+    /* 0x18 */ u16 mHeapSize;
+    /* 0x1A */ u8 field16_0x1a;
+    /* 0x1B */ u8 field17_0x1b;
+};
+
+STATIC_ASSERT(sizeof(dItem_data_field_item_res) == 0x1C);
+
 struct dItem_data_item_info {
     /* 0x00 */ u8 mMaybeShadowRelated;
     /* 0x01 */ u8 mCollisionH; // Cylinder Height
@@ -293,8 +316,14 @@ STATIC_ASSERT(sizeof(dItem_data_item_info) == 0x4);
 
 class dItem_data {
 public:
-  static dItem_data_item_resource item_resource[0x100];
-  static dItem_data_item_info item_info[0x100];
+    static dItem_data_item_resource item_resource[0x100];
+    static dItem_data_field_item_res field_item_res[0x100];
+    static dItem_data_item_info item_info[0x100];
+    
+    static bool checkAppearEffect(u8 itemNo);
+    static s16 getAppearEffect(u8 itemNo);
+    static bool checkSpecialEffect(u8 itemNo);
+    static u16 getSpecialEffect(u8 itemNo);
 };
 
 #endif /* D_ITEM_DATA_H */
