@@ -204,9 +204,9 @@ config.libs = [
         "cflags": cflags_runtime,
         "host": False,
         "objects": [
-            Object(Matching, "Runtime/__init_cpp_exceptions.cpp"),
-            Object(Matching, "Runtime/Gecko_ExceptionPPC.cp"),
-            Object(Matching, "Runtime/global_destructor_chain.c"),
+            Object(Matching, "Runtime.PPCEABI.H/__init_cpp_exceptions.cpp"),
+            Object(Matching, "Runtime.PPCEABI.H/Gecko_ExceptionPPC.cp"),
+            Object(Matching, "Runtime.PPCEABI.H/global_destructor_chain.c"),
         ],
     },
     {
@@ -219,7 +219,7 @@ config.libs = [
             Object(
                 Matching,
                 "REL/global_destructor_chain.c",
-                source="Runtime/global_destructor_chain.c",
+                source="Runtime.PPCEABI.H/global_destructor_chain.c",
             ),
         ],
     },
