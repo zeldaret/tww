@@ -11,6 +11,7 @@
 #include "d/d_drawlist.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_bg_w.h"
 
 class mDoExt_MtxCalcOldFrame;
 class daPy_matAnm_c;
@@ -241,11 +242,6 @@ struct MagicArmorAuraEntry {
 };
 
 class daPy_anmIndex_c;
-
-class dBgW {
-public:
-    enum PushPullLabel {};
-};
 
 class daPy_lk_c : public daPy_py_c {
 public:
