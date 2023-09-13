@@ -2,6 +2,7 @@
 #define C_BG_S_POLY_INFO_H
 
 #include "dolphin/types.h"
+#include "global.h"
 
 class cBgW;
 class cBgS_PolyInfo {

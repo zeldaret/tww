@@ -3,76 +3,102 @@
 // Translation Unit: d_bg_s_movebg_actor.cpp
 //
 
-#include "d_bg_s_movebg_actor.h"
-#include "dolphin/types.h"
+#include "d/d_bg_s_movebg_actor.h"
+#include "d/d_bg_w.h"
+#include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_mtx.h"
 
 /* 800A56B8-800A56FC       .text __ct__16dBgS_MoveBgActorFv */
 dBgS_MoveBgActor::dBgS_MoveBgActor() {
-    /* Nonmatching */
+    mpBgW = NULL;
 }
 
 /* 800A56FC-800A571C       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static int CheckCreateHeap(fopAc_ac_c* i_actor) {
+    return static_cast<dBgS_MoveBgActor*>(i_actor)->MoveBGCreateHeap();
 }
+
+const char* dBgS_MoveBgActor::m_name;
+
+int dBgS_MoveBgActor::m_dzb_id;
+
+MoveBGActor_SetFunc dBgS_MoveBgActor::m_set_func;
 
 /* 800A571C-800A57F4       .text MoveBGCreateHeap__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::MoveBGCreateHeap() {
-    /* Nonmatching */
+int dBgS_MoveBgActor::MoveBGCreateHeap() {
+    if (!CreateHeap()) {
+        return 0;
+    }
+
+    mpBgW = new dBgW();
+    if (mpBgW != NULL) {
+        cBgD_t* res = (cBgD_t*)dComIfG_getObjectRes(m_name, m_dzb_id);
+        if (!mpBgW->Set(res, cBgW::MOVE_BG_e, &mBgMtx)) {
+            if (m_set_func != NULL) {
+                mpBgW->SetCrrFunc(m_set_func);
+            }
+        } else {
+            goto RET;  // probably fake match, clean up later
+        }
+    } else {
+    RET:
+        mpBgW = NULL;
+        return 0;
+    }
+
+    return 1;
 }
 
-/* 800A57F4-800A58F4       .text MoveBGCreate__16dBgS_MoveBgActorFPCciPFP4dBgWPvR13cBgS_PolyInfobP4cXyzP5csXyzP5csXyz_vUl */
-void dBgS_MoveBgActor::MoveBGCreate(const char*, int, void (*)(dBgW*, void*, cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*), unsigned long) {
-    /* Nonmatching */
+/* 800A57F4-800A58F4       .text
+ * MoveBGCreate__16dBgS_MoveBgActorFPCciPFP4dBgWPvR13cBgS_PolyInfobP4cXyzP5csXyzP5csXyz_vUl */
+int dBgS_MoveBgActor::MoveBGCreate(const char* i_arcName, int i_dzb_id,
+                                   MoveBGActor_SetFunc i_setFunc, u32 i_heapSize) {
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
+    mDoMtx_stack_c::scaleM(mScale.x, mScale.y, mScale.z);
+    MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
+
+    m_name = i_arcName;
+    m_dzb_id = i_dzb_id;
+    m_set_func = i_setFunc;
+
+    if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, i_heapSize)) {
+        return cPhs_ERROR_e;
+    }
+
+    if (dComIfG_Bgsp()->Regist(mpBgW, this)) {
+        return cPhs_ERROR_e;
+    }
+
+    // return Create() ? cPhs_COMPLEATE_e : cPhs_ERROR_e;  // using enums here changes code gen
+    return Create() ? 4 : 5;
 }
 
 /* 800A58F4-800A5980       .text MoveBGDelete__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::MoveBGDelete() {
-    /* Nonmatching */
+int dBgS_MoveBgActor::MoveBGDelete() {
+    int ret = Delete();
+
+    if (mpBgW != NULL && mpBgW->ChkUsed()) {
+        dComIfG_Bgsp()->Release(mpBgW);
+    }
+    return ret;
 }
 
 /* 800A5980-800A5A3C       .text MoveBGExecute__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::MoveBGExecute() {
-    /* Nonmatching */
-}
+int dBgS_MoveBgActor::MoveBGExecute() {
+    Mtx* new_mtx = NULL;
 
-/* 800A5A3C-800A5A44       .text CreateHeap__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::CreateHeap() {
-    /* Nonmatching */
-}
+    int ret = Execute(&new_mtx);
+    if (new_mtx == NULL) {
+        mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+        mDoMtx_stack_c::YrotM(shape_angle.y);
+        mDoMtx_stack_c::scaleM(mScale.x, mScale.y, mScale.z);
+        MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
+    } else {
+        MTXCopy(*new_mtx, mBgMtx);
+    }
 
-/* 800A5A44-800A5A4C       .text Create__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::Create() {
-    /* Nonmatching */
-}
+    mpBgW->Move();
 
-/* 800A5A4C-800A5A54       .text Delete__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::Delete() {
-    /* Nonmatching */
+    return ret;
 }
-
-/* 800A5A54-800A5A5C       .text Execute__16dBgS_MoveBgActorFPPA3_A4_f */
-void dBgS_MoveBgActor::Execute(float(**)[3][4]) {
-    /* Nonmatching */
-}
-
-/* 800A5A5C-800A5A64       .text Draw__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::Draw() {
-    /* Nonmatching */
-}
-
-/* 800A5A64-800A5A6C       .text IsDelete__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::IsDelete() {
-    /* Nonmatching */
-}
-
-/* 800A5A6C-800A5A74       .text ToFore__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToFore() {
-    /* Nonmatching */
-}
-
-/* 800A5A74-800A5A7C       .text ToBack__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToBack() {
-    /* Nonmatching */
-}
-
