@@ -61,10 +61,9 @@ void daBranch_c::set_mtx() {
         if (pMdl) {
             pMdl->setBaseScale(mScale);
 
-            MTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
-            mDoMtx_XYZrotM(mDoMtx_stack_c::now, current.angle.x, current.angle.y, current.angle.z);
-
-            MTXCopy(mDoMtx_stack_c::now, pMdl->getBaseTRMtx());
+            mDoMtx_stack_c::transS(getPosition());
+            mDoMtx_stack_c::XYZrotM(getAngle().x, getAngle().y, getAngle().z);
+            pMdl->i_setBaseTRMtx(mDoMtx_stack_c::get());
         }
     }
 }
@@ -142,7 +141,7 @@ s32 daBranch_c::CreateHeap() {
             break;
         }
 
-        mAnims[i]->mFrameCtrl.setFrame(0.0f);
+        mAnims[i]->setFrame(0.0f);
         set_anim(i, bckIds[i], basIds[i]);
     }
 
