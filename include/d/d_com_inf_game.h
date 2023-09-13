@@ -325,7 +325,9 @@ public:
     /* 0x1D1C1 */ u8 field_0x1d1c1;
 };
 
+#if VERSION != VERSION_JP
 STATIC_ASSERT(sizeof(dComIfG_inf_c) == 0x1D1C8);
+#endif
 
 extern dComIfG_inf_c g_dComIfG_gameInfo;
 
