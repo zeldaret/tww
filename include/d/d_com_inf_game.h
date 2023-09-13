@@ -160,8 +160,8 @@ public:
     /* 0x479C */ JKRArchive* mpDmsgArchive;
     /* 0x47A0 */ JKRArchive* mpTmsgArchive;
     /* 0x47A4 */ JKRArchive* mpMenuArchive;
-    /* 0x47A8 */ JKRArchive* mpFontArchive;
-    /* 0x47AC */ u8 field_0x47AC[0x47B0 - 0x47AC];
+    /* 0x47A8 */ JKRArchive* mpFont0Archive;
+    /* 0x47AC */ JKRArchive* mpFont1Archive;
     /* 0x47B0 */ JKRArchive* mpAnmArchive;
     /* 0x47B4 */ JKRArchive* mpLkDArc;
     /* 0x47B8 */ JKRArchive* mpFMapArchive;
@@ -183,8 +183,9 @@ public:
 #if VERSION != VERSION_JP
     /* 0x47F8 */ JKRArchive* mpEnglishTextArchive;
     /* 0x47FC */ JKRArchive* mpHyruleTextArchive;
+    /* 0x4800 */ u8 mCARDHeap0[0x04];
 #endif
-    /* 0x4800 */ u8 mpCARDHeap[0x24];
+    /* 0x4804 */ u8 mCARDHeap1[0x20];
     /* 0x4824 */ dPa_control_c* mParticle;
     /* 0x4828 */ dDemo_manager_c* mDemo;
     /* 0x482C */ dMagma_packet_c* mpMagmaPacket;
