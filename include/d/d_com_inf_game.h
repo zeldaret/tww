@@ -112,6 +112,10 @@ public:
     void removeWood();
     void executeWood();
     void drawWood();
+    
+    BOOL checkCameraAttentionStatus(int idx, u32 flag) {
+        return mCameraInfo[idx].mCameraAttentionStatus & flag;
+    }
 
     ~dComIfG_play_c();
 
@@ -141,6 +145,7 @@ public:
 
     fopAc_ac_c* getPlayerPtr(int idx) { return (fopAc_ac_c*)mpPlayerPtr[idx]; }
     fopAc_ac_c* getPlayer(int idx) { return (fopAc_ac_c*)mpPlayer[idx]; }
+    s8 getPlayerCameraID(int idx) { return mCurCamera[idx]; }
 
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
@@ -542,6 +547,14 @@ inline daPy_py_c* daPy_getPlayerActorClass() {
 
 inline daPy_lk_c* daPy_getPlayerLinkActorClass() {
     return (daPy_lk_c*)g_dComIfG_gameInfo.play.getPlayerPtr(0);
+}
+
+inline s8 dComIfGp_getPlayerCameraID(int idx) {
+    return g_dComIfG_gameInfo.play.getPlayerCameraID(idx);
+}
+
+inline BOOL dComIfGp_checkCameraAttentionStatus(int idx, u32 flag) {
+    return g_dComIfG_gameInfo.play.checkCameraAttentionStatus(idx, flag);
 }
 
 /**

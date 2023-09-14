@@ -9,6 +9,9 @@ namespace daObj {
         u32 param = fopAcM_GetParam(actor);
         return ((1 << width) - 1) & (param >> shift);
     }
+
+    void HitSeStart(const cXyz*, int, const dCcD_GObjInf*, unsigned long);
+    void HitEff_hibana(const fopAc_ac_c*, const dCcD_Cyl*);
 };
 
 #endif /* D_A_OBJ */
