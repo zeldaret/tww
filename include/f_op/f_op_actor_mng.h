@@ -338,15 +338,15 @@ inline BOOL dComIfGs_isSwitch(s32 i_no, s32 i_roomNo);
 inline void dComIfGs_offActor(int i_no, int i_roomNo);
 
 inline void fopAcM_onSwitch(const fopAc_ac_c* pActor, int sw) {
-    return dComIfGs_onSwitch(sw, pActor->orig.roomNo);
+    return dComIfGs_onSwitch(sw, pActor->orig.roomNo); // Should use fopAcM_GetHomeRoomNo, but that breaks regalloc?
 }
 
 inline void fopAcM_offSwitch(const fopAc_ac_c* pActor, int sw) {
-    return dComIfGs_offSwitch(sw, pActor->orig.roomNo);
+    return dComIfGs_offSwitch(sw, pActor->orig.roomNo); // Should use fopAcM_GetHomeRoomNo, but that breaks regalloc?
 }
 
 inline BOOL fopAcM_isSwitch(const fopAc_ac_c* pActor, int sw) {
-    return dComIfGs_isSwitch(sw, pActor->orig.roomNo);
+    return dComIfGs_isSwitch(sw, pActor->orig.roomNo); // Should use fopAcM_GetHomeRoomNo, but that breaks regalloc?
 }
 
 inline fopAc_ac_c* i_fopAcM_SearchByName(s16 proc_id) {
