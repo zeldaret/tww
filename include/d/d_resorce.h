@@ -68,8 +68,8 @@ public:
         return getRes(arcName, resName, &mObjectInfo[0], ARRAY_SIZE(mObjectInfo));
     }
 
-    void* getObjectRes(const char* arcName, s32 param_1) {
-        return getRes(arcName, param_1, &mObjectInfo[0], ARRAY_SIZE(mObjectInfo));
+    void* getObjectRes(const char* arcName, s32 index) {
+        return getRes(arcName, index, &mObjectInfo[0], ARRAY_SIZE(mObjectInfo));
     }
 
     void* getObjectIDRes(const char* arcName, u16 id) {

@@ -242,7 +242,7 @@ public:
     static void ZXYrotS(s16 x, s16 y, s16 z) { mDoMtx_ZXYrotS(now, x, y, z); }
     
     /**
-     * Rotates the `now` matrix by the given X, Y, and Z values in the order X, Y, Z
+     * Rotates the `now` matrix by the given X, Y, and Z values in the order Z, X, Y
      * @param x The x-axis rotation value
      * @param y The y-axis rotation value
      * @param z The z-axis rotation value

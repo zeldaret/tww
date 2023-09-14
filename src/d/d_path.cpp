@@ -3,16 +3,16 @@
 // Translation Unit: d_path.cpp
 //
 
-#include "d_path.h"
+#include "d/d_path.h"
 #include "dolphin/types.h"
 
 /* 80080018-8008010C       .text dPath_GetPnt__FP5dPathi */
-void dPath_GetPnt(dPath*, int) {
+dPath__Point* dPath_GetPnt(dPath*, int) {
     /* Nonmatching */
 }
 
 /* 8008010C-80080218       .text dPath_GetRoomPath__Fii */
-void dPath_GetRoomPath(int, int) {
+dPath* dPath_GetRoomPath(int, int) {
     /* Nonmatching */
 }
 

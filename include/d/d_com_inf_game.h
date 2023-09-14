@@ -759,8 +759,8 @@ inline void* dComIfG_getObjectRes(const char* arcName, const char* resName) {
     return g_dComIfG_gameInfo.mResControl.getObjectRes(arcName, resName);
 }
 
-inline void* dComIfG_getObjectRes(const char* arcName, int param_1) {
-    return g_dComIfG_gameInfo.mResControl.getObjectRes(arcName, param_1);
+inline void* dComIfG_getObjectRes(const char* arcName, int index) {
+    return g_dComIfG_gameInfo.mResControl.getObjectRes(arcName, index);
 }
 
 inline void* dComIfG_getObjectIDRes(const char* arcName, int id) {

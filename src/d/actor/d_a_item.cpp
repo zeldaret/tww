@@ -166,7 +166,7 @@ void daItem_c::CreateInit() {
     }
     
     mSwitchId = (fpcM_GetParam(this) & 0x00FF0000) >> 0x10;
-    if (mSwitchId != 0xFF && i_fopAcM_isSwitch(this, mSwitchId)) {
+    if (mSwitchId != 0xFF && fopAcM_isSwitch(this, mSwitchId)) {
         hide();
         mStatusFlags |= 2;
     }
