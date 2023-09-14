@@ -205,7 +205,6 @@ static int daShopItem_Create(void* i_this) {
 }
 
 int daShopItem_c::_create() {
-    /* Nonmatching */
     fopAcM_SetupActor(this, daShopItem_c);
     
     m_itemNo = fopAcM_GetParamBit(this, 0, 8);
@@ -237,7 +236,7 @@ int daShopItem_c::_create() {
                 }
             }
             else if(type == 1 || (type == 0 && mModelType[m_itemNo] == 0x01)) {
-                if(fopAcM_entrySolidHeap(this, &CheckItemCreateHeap, dItem_data::getFieldHeapSize(m_itemNo)) == 0) {
+                if(fopAcM_entrySolidHeap(this, &CheckFieldItemCreateHeap, dItem_data::getFieldHeapSize(m_itemNo)) == 0) {
                     return cPhs_ERROR_e;
                 }
             }
@@ -246,9 +245,9 @@ int daShopItem_c::_create() {
                     return cPhs_ERROR_e;
                 }
             }
-        }
 
-        CreateInit();
+            CreateInit();
+        }
     }
     
     return result;
