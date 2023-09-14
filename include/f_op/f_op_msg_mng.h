@@ -52,6 +52,7 @@ f32 fopMsgM_valueIncrease(int param_0, int param_1, u8 param_2);
 s32 fopMsgM_setStageLayer(void*);
 int fopMsgM_messageSet(u32 i_msgIdx, fopAc_ac_c* i_actorP, u32 param_2);
 int fopMsgM_messageSet(u32 param_0, u32 param_1);
+int fopMsgM_messageSet(u32 param_0, cXyz* param_1);
 int fopMsgM_messageSetDemo(u32 param_0);
 msg_class* fopMsgM_SearchByID(unsigned int param_0);
 char* fopMsgM_messageGet(char* msg, u32 string_id);
