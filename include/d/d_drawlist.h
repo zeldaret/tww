@@ -232,4 +232,6 @@ private:
 
 STATIC_ASSERT(sizeof(dDlst_list_c) == 0x16234);
 
+void dDlst_texSpecmapST(const cXyz*, const dKy_tevstr_c*, J3DModelData*, float);
+
 #endif /* D_D_DRAWLIST_H */

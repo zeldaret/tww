@@ -5,6 +5,7 @@
 #include "f_op/f_op_actor_iter.h"
 #include "f_pc/f_pc_manager.h"
 #include "f_pc/f_pc_searcher.h"
+#include "m_Do/m_Do_audio.h"
 
 #define fopAcM_SetupActor(ptr,ClassName) \
     if (!fopAcM_CheckCondition(ptr, fopAcCnd_INIT_e)) { \
@@ -604,9 +605,9 @@ inline f32 fopAcM_searchPlayerDistance(const fopAc_ac_c* actor) {
 
 s8 dComIfGp_getReverb(int roomNo);
 
-inline void fopAcM_seStartCurrent(const fopAc_ac_c* actor, u32 sfxID, u32 param_2) {
+inline void fopAcM_seStartCurrent(fopAc_ac_c* actor, u32 sfxID, u32 param_2) {
     s8 roomNo = fopAcM_GetRoomNo(actor);
-    // mDoAud_seStart(sfxID, &actor->current.pos, param_2, dComIfGp_getReverb(roomNo));
+    mDoAud_seStart(sfxID, &actor->current.pos, param_2, dComIfGp_getReverb(roomNo));
 }
 
 inline void fopAcM_seStart(const fopAc_ac_c* actor, u32 sfxID, u32 param_2) {

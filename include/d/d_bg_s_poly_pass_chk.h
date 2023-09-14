@@ -20,6 +20,8 @@ class dBgS_PolyPassChk : public cBgS_PolyPassChk {
 public:
     dBgS_PolyPassChk();
     virtual ~dBgS_PolyPassChk();
+
+    void SetObj() { mbObjThrough = 1; }
 };
 
 STATIC_ASSERT(sizeof(dBgS_PolyPassChk) == 0xC);

@@ -150,5 +150,5 @@ __vt__11mflft_class = .data:0x000002F4; // type:object size:0xC scope:global ali
 @937 = .bss:0x00000044; // type:object size:0x1 scope:local align:4
 @936 = .bss:0x00000048; // type:object size:0x1 scope:local align:4
 wind_vec = .bss:0x0000004C; // type:object size:0x4 scope:local align:4
-wy = .bss:0x00000050; // type:object size:0x2 scope:local align:2
-wp = .bss:0x00000054; // type:object size:0x4 scope:local align:4
+wy = .bss:0x00000050; // type:object size:0x2 scope:local align:2 data:2byte
+wp = .bss:0x00000054; // type:object size:0x4 scope:local align:4 data:4byte

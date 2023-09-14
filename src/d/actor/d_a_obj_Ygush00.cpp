@@ -26,10 +26,10 @@ public:
     };
 
     s32 _create();
-    s32 _delete();
-    s32 _execute();
-    s32 _draw();
-    s32 create_heap();
+    bool _delete();
+    bool _execute();
+    bool _draw();
+    bool create_heap();
     static s32 solidHeapCB(fopAc_ac_c*);
 
 public:
@@ -37,7 +37,7 @@ public:
     J3DModel * mpModel;
     mDoExt_btkAnm mBtkAnm;
     mDoExt_bckAnm mBckAnm;
-    u32 mType;
+    s32 mType;
     daObjGryw00_c * mpGryw00;
 };
 
@@ -51,12 +51,12 @@ s32 daObjYgush00_c::solidHeapCB(fopAc_ac_c* ac) {
 }
 
 /* 0000009C-00000250       .text create_heap__14daObjYgush00_cFv */
-s32 daObjYgush00_c::create_heap() {
+bool daObjYgush00_c::create_heap() {
     static u32 mdl_table[] = { 0x0A, 0x09, 0x09, 0x09 };
     static u32 btk_table[] = { 0x0E, 0x0D, 0x0D, 0x0D };
     static u32 bck_table[] = { 0x06, 0x05, 0x05, 0x05 };
 
-    s32 ret = 1;
+    bool ret = true;
 
     J3DModelData * pModelData = (J3DModelData *)dComIfG_getObjectRes(l_arcname, mdl_table[mType]);
     J3DAnmTextureSRTKey * pBtk = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes(l_arcname, btk_table[mType]);
@@ -64,7 +64,7 @@ s32 daObjYgush00_c::create_heap() {
 
     if (!pModelData || !pBtk || !pBck) {
         JUT_ASSERT(207, 0);
-        ret = 0;
+        ret = false;
         return ret;
     }
 
@@ -73,15 +73,13 @@ s32 daObjYgush00_c::create_heap() {
     s32 bckRet = mBckAnm.init(pModelData, pBck, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false);
 
     if (!mpModel || !btkRet || !bckRet)
-        ret = 0;
+        ret = false;
 
     return ret;
 }
 
 /* 00000250-000003F4       .text _create__14daObjYgush00_cFv */
 s32 daObjYgush00_c::_create() {
-    const char * arcname = l_arcname;
-
     fopAcM_SetupActor(this, daObjYgush00_c);
 
     if (fpcM_IsFirstCreating(this)) {
@@ -91,7 +89,9 @@ s32 daObjYgush00_c::_create() {
             mType = 0;
     }
 
-    if (dComIfG_resLoad(&mPhs, arcname) == cPhs_COMPLEATE_e) {
+    s32 ret = dComIfG_resLoad(&mPhs, l_arcname);
+
+    if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, 0x740) == 1) {
             mpModel->setBaseScale(mScale);
             mDoMtx_stack_c::transS(getPosition());
@@ -102,20 +102,22 @@ s32 daObjYgush00_c::_create() {
                 mScale.x * -80.0f, 0.0f, mScale.z * -80.0f,
                 mScale.x * 80.0f, mScale.y * 125.0f, mScale.z * 80.0f);
         } else {
-            return cPhs_ERROR_e;
+            ret = cPhs_ERROR_e;
         }
     }
+
+    return ret;
 }
 
 /* 000004F4-00000524       .text _delete__14daObjYgush00_cFv */
-s32 daObjYgush00_c::_delete() {
+bool daObjYgush00_c::_delete() {
     dComIfG_resDelete(&mPhs, l_arcname);
     return 1;
 }
 
 /* 00000524-0000066C       .text _execute__14daObjYgush00_cFv */
-s32 daObjYgush00_c::_execute() {
-    if (mType != 3 || dComIfGs_isEventBit(EV_BIT_TALKED_TO_IRCH_IN_FOREST_HAVEN)) {
+bool daObjYgush00_c::_execute() {
+    if (mType != 3 || dComIfGs_isEventBit(EV_BIT_TALKED_TO_IRCH_IN_FOREST_HAVEN) == 1) {
         mBtkAnm.play();
         mBckAnm.play();
     }
@@ -123,18 +125,20 @@ s32 daObjYgush00_c::_execute() {
     if (mType == 1) {
         if (mpGryw00 != NULL) {
             if (mpGryw00->get_draw_water_lvl(mpGryw00) <= getPosition().y) {
-                // fopAcM_seStartCurrent(this, 0x61fe, 0);
+                fopAcM_seStartCurrent(this, 0x61fe, 0);
             }
         } else {
             mpGryw00 = (daObjGryw00_c*)i_fopAcM_SearchByName(PROC_Obj_Gryw00);
         }
     } else {
-        // fopAcM_seStartCurrent(this, 0x61fe, 0);
+        fopAcM_seStartCurrent(this, 0x61fe, 0);
     }
+
+    return TRUE;
 }
 
 /* 0000066C-000006FC       .text _draw__14daObjYgush00_cFv */
-s32 daObjYgush00_c::_draw() {
+bool daObjYgush00_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG1, getPositionP(), &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &mTevStr);
     mBtkAnm.entry(mpModel->getModelData());

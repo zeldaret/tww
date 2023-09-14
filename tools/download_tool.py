@@ -1,13 +1,26 @@
+#!/usr/bin/env python3
+
+###
+# Downloads various tools from GitHub releases.
+#
+# Usage:
+#   python3 tools/download_tool.py wibo build/tools/wibo --tag 1.0.0
+#
+# If changes are made, please submit a PR to
+# https://github.com/encounter/dtk-template
+###
+
 import argparse
+import io
+import os
+import platform
+import shutil
+import stat
 import sys
 import urllib.request
-import os
-import stat
-import platform
-from pathlib import Path
 import zipfile
-import io
-import shutil
+
+from pathlib import Path
 
 
 def dtk_url(tag):

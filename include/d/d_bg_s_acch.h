@@ -202,7 +202,7 @@ public:
 class dBgS_ObjAcch : public dBgS_Acch {
 public:
     dBgS_ObjAcch() {
-        /* SetObj(); */
+        SetObj();
     }
 
     /* 80BB336C */ virtual ~dBgS_ObjAcch() {}

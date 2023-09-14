@@ -13,6 +13,6 @@ d/actor/d_a_npc_sv.cpp:
 	.text       start:0x00002C0C end:0x00002C28
 	.text       start:0x00002C28 end:0x00002C58
 	.text       start:0x00002C58 end:0x00002CEC
-	.ctors      start:0x00000000 end:0x00000008
+	.ctors      start:0x00000000 end:0x00000004
 	.rodata     start:0x00000000 end:0x00000194
 	.data       start:0x00000000 end:0x00000608

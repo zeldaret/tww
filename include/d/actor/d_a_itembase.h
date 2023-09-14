@@ -72,7 +72,7 @@ public:
     /* 0x2B0 */ mDoExt_brkAnm* mBrkAnm1;
     /* 0x2B4 */ mDoExt_brkAnm* mBrkAnm2;
     /* 0x2B8 */ mDoExt_bckAnm* mBckAnm;
-    /* 0x2BC */ dBgS_Acch mAcch;
+    /* 0x2BC */ dBgS_ObjAcch mAcch;
     /* 0x480 */ dBgS_AcchCir mAcchCir;
     /* 0x4C0 */ dCcD_Stts mStts;
     /* 0x4FC */ dCcD_Cyl mCyl;
@@ -82,9 +82,8 @@ public:
     /* 0x638 */ short field20_0x638;
     /* 0x63A */ u8 m_itemNo;
     /* 0x63B */ u8 mDrawFlags;
-    /* 0x63C */ cXyz mScaleTarget;
 };
 
-STATIC_ASSERT(sizeof(daItemBase_c) == 0x648);
+STATIC_ASSERT(sizeof(daItemBase_c) == 0x63C);
 
 #endif /* D_A_ITEMBASE_H */
