@@ -4,46 +4,141 @@
 //
 
 #include "JSystem/J2DGraph/J2DPane.h"
+#include "JSystem/JSupport/JSURandomInputStream.h"
 #include "dolphin/types.h"
 
 /* 802CF8F4-802CF984       .text __ct__7J2DPaneFv */
-J2DPane::J2DPane() {
-    /* Nonmatching */
+J2DPane::J2DPane() : mPaneTree(this) {
+    mMagic = 'PAN1';
+    mVisible = true;
+    mTag = 0;
+
+    mBounds.set(0.f, 0.f, 0.f, 0.f);
+    initiate();
 }
 
 /* 802CF984-802CFA44       .text __ct__7J2DPaneFP7J2DPanebUlRCQ29JGeometry8TBox2<f> */
-J2DPane::J2DPane(J2DPane*, bool, unsigned long, const JGeometry::TBox2<float>&) {
-    /* Nonmatching */
+J2DPane::J2DPane(J2DPane* pPane, bool visible, u32 tag, const JGeometry::TBox2<f32>& bounds)
+    : mPaneTree(this) {
+    mMagic = 'PAN1';
+    mVisible = visible;
+    mTag = tag;
+    mBounds.set(bounds);
+    if (pPane) {
+        pPane->mPaneTree.appendChild(&mPaneTree);
+    }
+    initiate();
 }
 
 /* 802CFA44-802CFAE4       .text __ct__7J2DPaneFUlRCQ29JGeometry8TBox2<f> */
-J2DPane::J2DPane(unsigned long, const JGeometry::TBox2<float>&) {
-    /* Nonmatching */
+J2DPane::J2DPane(u32 tag, const JGeometry::TBox2<f32>& bounds) : mPaneTree(this) {
+    mMagic = 'PAN1';
+    mVisible = true;
+    mTag = tag;
+    mBounds.set(bounds);
+    initiate();
 }
 
 /* 802CFAE4-802CFB48       .text initiate__7J2DPaneFv */
 void J2DPane::initiate() {
-    /* Nonmatching */
+    mBasePosition.x = 0.0f;
+    mBasePosition.y = 0.0f;
+    mRotationAxis = ROTATE_Z;
+    mRotation = 0.0f;
+    mCullMode = 0;
+    mAlpha = 0xFF;
+    field_0xae = 1;
+    mDrawAlpha = 0xFF;
+    field_0xaf = 0;
+    calcMtx();
 }
 
 /* 802CFB48-802CFC00       .text __ct__7J2DPaneFP7J2DPaneP20JSURandomInputStream */
-J2DPane::J2DPane(J2DPane*, JSURandomInputStream*) {
-    /* Nonmatching */
+J2DPane::J2DPane(J2DPane* pParentPane, JSURandomInputStream* pStream) : mPaneTree(this) {
+    J2DPaneHeader header;
+
+    int pos = pStream->getPosition();
+    pStream->read(&header, sizeof(header));
+    mMagic = header.mMagic;
+    pos += header.mSize;
+    makePaneStream(pParentPane, pStream);
+    pStream->seek(pos, JSUStreamSeekFrom_SET);
 }
 
 /* 802CFC00-802CFEF8       .text makePaneStream__7J2DPaneFP7J2DPaneP20JSURandomInputStream */
-void J2DPane::makePaneStream(J2DPane*, JSURandomInputStream*) {
-    /* Nonmatching */
+void J2DPane::makePaneStream(J2DPane* pParentPane, JSURandomInputStream* pStream) {
+    u8 unk;
+    pStream->read(&unk, 1);
+    pStream->read(&mVisible, 1);
+    pStream->skip(2);
+    mTag = pStream->read32b();
+
+    f32 x0 = pStream->readS16();
+    f32 y0 = pStream->readS16();
+    f32 x1 = x0 + pStream->readS16();
+    f32 y1 = y0 + pStream->readS16();
+    mBounds.set(x0, y0, x1, y1);
+
+    unk -= 6;
+    mRotation = 0;
+    if (unk != 0) {
+        mRotation = pStream->readU16();
+        unk--;
+    }
+
+    if (unk != 0) {
+        setBasePosition((J2DBasePosition)pStream->readU8());
+        unk--;
+    } else {
+        setBasePosition(J2DBasePosition_0);
+    }
+
+    mAlpha = 0xFF;
+
+    if (unk != 0) {
+        mAlpha = pStream->readU8();
+        unk--;
+    }
+
+    field_0xae = 1;
+    if (unk != 0) {
+        field_0xae = pStream->readU8() != 0;
+        unk--;
+    }
+
+    pStream->align(4);
+    if (pParentPane != NULL) {
+        pParentPane->mPaneTree.appendChild(&mPaneTree);
+    }
+
+    mCullMode = GX_CULL_NONE;
+    mDrawAlpha = 0xFF;
+    field_0xaf = 0;
+    calcMtx();
 }
 
 /* 802CFEF8-802CFFD8       .text __dt__7J2DPaneFv */
 J2DPane::~J2DPane() {
-    /* Nonmatching */
+    JSUTreeIterator<J2DPane> iterator;
+    for (iterator = mPaneTree.getFirstChild(); iterator != mPaneTree.getEndChild();) {
+        J2DPane* child = (iterator++).getObject();
+        delete child;
+    }
 }
 
 /* 802CFFD8-802D0078       .text insertChild__7J2DPaneFP7J2DPaneP7J2DPane */
-void J2DPane::insertChild(J2DPane*, J2DPane*) {
-    /* Nonmatching */
+bool J2DPane::insertChild(J2DPane* pPrev, J2DPane* pChild) {
+    if (pPrev == NULL || pChild == NULL)
+        return false;
+
+    bool result =
+        mPaneTree.insertChild(pPrev != NULL ? &pPrev->mPaneTree : NULL, &pChild->mPaneTree);
+
+    if (result) {
+        pChild->calcMtx();
+    }
+
+    return result;
 }
 
 /* 802D0078-802D054C       .text draw__7J2DPaneFffPC14J2DGrafContextb */
@@ -57,18 +152,31 @@ void J2DPane::move(float, float) {
 }
 
 /* 802D05C8-802D0604       .text add__7J2DPaneFff */
-void J2DPane::add(float, float) {
-    /* Nonmatching */
+void J2DPane::add(f32 px, f32 py) {
+    move(mBounds.i.x + px, mBounds.i.y + py);
 }
 
 /* 802D0604-802D0680       .text clip__7J2DPaneFRCQ29JGeometry8TBox2<f> */
-void J2DPane::clip(const JGeometry::TBox2<float>&) {
-    /* Nonmatching */
+void J2DPane::clip(const JGeometry::TBox2<f32>& bounds) {
+    JGeometry::TBox2<f32> boxA(bounds);
+    JGeometry::TBox2<f32> boxB(mScreenPos);
+    boxA.addPos(boxB.i);
+    mBox.intersect(boxA);
 }
 
 /* 802D0680-802D0714       .text search__7J2DPaneFUl */
-void J2DPane::search(unsigned long) {
-    /* Nonmatching */
+J2DPane* J2DPane::search(u32 tag) {
+    if (tag == mTag) {
+        return this;
+    }
+
+    JSUTreeIterator<J2DPane> iter;
+    for (iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
+        if (J2DPane* result = iter.getObject()->search(tag)) {
+            return result;
+        }
+    }
+    return NULL;
 }
 
 /* 802D0714-802D0800       .text makeMatrix__7J2DPaneFff */
@@ -77,16 +185,37 @@ void J2DPane::makeMatrix(float, float) {
 }
 
 /* 802D0800-802D08D8       .text setBasePosition__7J2DPaneF15J2DBasePosition */
-void J2DPane::setBasePosition(J2DBasePosition) {
+void J2DPane::setBasePosition(J2DBasePosition pos) {
     /* Nonmatching */
+    m2DBasePosition = pos;
+
+    if (pos % 3 == 0) {
+        mBasePosition.x = 0.0f;
+    } else if (pos % 3 == 1) {
+        f32 width = mBounds.getWidth();
+        mBasePosition.x = 0.5f * width;
+    } else {
+        mBasePosition.x = mBounds.getWidth();
+    }
+
+    if (pos / 3 == 0) {
+        mBasePosition.y = 0.0f;
+    } else if (pos / 3 == 1) {
+        f32 height = mBounds.getHeight();
+        mBasePosition.y = height * 0.5f;
+    } else {
+        mBasePosition.y = mBounds.getHeight();
+    }
+    mRotationAxis = ROTATE_Z;
+    calcMtx();
 }
 
 /* 802D08D8-802D08DC       .text drawSelf__7J2DPaneFffPA3_A4_f */
-void J2DPane::drawSelf(float, float, float(*)[3][4]) {
-    /* Nonmatching */
-}
+// void J2DPane::drawSelf(float, float, float (*)[3][4]) {
+//     /* Nonmatching */
+// }
 
 /* 802D08DC-802D08E4       .text getTypeID__7J2DPaneFv */
-void J2DPane::getTypeID() {
-    /* Nonmatching */
-}
+// u16 J2DPane::getTypeID() {
+//     /* Nonmatching */
+// }
