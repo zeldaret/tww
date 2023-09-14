@@ -28,31 +28,37 @@ if sys.platform == "cygwin":
 
 
 class ProjectConfig:
-    # Paths
-    build_dir = Path("build")
-    src_dir = Path("src")
-    tools_dir = Path("tools")
+    def __init__(self):
+        # Paths
+        self.build_dir = Path("build")
+        self.src_dir = Path("src")
+        self.tools_dir = Path("tools")
 
-    # Tooling
-    dtk_tag = None  # Git tag
-    build_dtk_path = None  # If None, download
-    compilers_tag = None  # 1
-    compilers_path = None  # If None, download
-    wibo_tag = None  # Git tag
-    wrapper = None  # If None, download wibo on Linux
-    sjiswrap_tag = None  # Git tag
-    sjiswrap_path = None  # If None, download
+        # Tooling
+        self.dtk_tag = None  # Git tag
+        self.build_dtk_path = None  # If None, download
+        self.compilers_tag = None  # 1
+        self.compilers_path = None  # If None, download
+        self.wibo_tag = None  # Git tag
+        self.wrapper = None  # If None, download wibo on Linux
+        self.sjiswrap_tag = None  # Git tag
+        self.sjiswrap_path = None  # If None, download
 
-    # Project config
-    check_sha_path = None  # Path to version.sha1
-    config_path = None  # Path to config.yml
-    build_rels = True  # Build REL files
-    debug = False  # Build with debug info
-    generate_map = False  # Generate map file(s)
-    ldflags = None  # Linker flags
-    linker_version = None  # mwld version
-    libs = None  # List of libraries
-    version = None  # Version name
+        # Project config
+        self.check_sha_path = None  # Path to version.sha1
+        self.config_path = None  # Path to config.yml
+        self.build_rels = True  # Build REL files
+        self.debug = False  # Build with debug info
+        self.generate_map = False  # Generate map file(s)
+        self.ldflags = None  # Linker flags
+        self.linker_version = None  # mwld version
+        self.libs = None  # List of libraries
+        self.version = None  # Version name
+
+        # Progress output and progress.json config
+        self.progress_all = True  # Include combined "all" category
+        self.progress_modules = True  # Include combined "modules" category
+        self.progress_each_module = True  # Include individual modules, disable for large numbers of modules
 
     def validate(self):
         required_attrs = [
@@ -127,20 +133,30 @@ def path(value):
 
 # Load decomp-toolkit generated config.json
 def load_build_config(config, build_config_path):
+    if not build_config_path.is_file():
+        return None
+
     def versiontuple(v):
         return tuple(map(int, (v.split("."))))
 
-    if build_config_path.is_file():
-        with open(build_config_path) as r:
-            build_config = json.load(r)
-            config_version = build_config.get("version")
-            if not config_version:
-                return None
-            dtk_version = config.dtk_tag[1:]  # Strip v
-            if versiontuple(config_version) < versiontuple(dtk_version):
-                return None
-            return build_config
-    return None
+    f = open(build_config_path, "r", encoding="utf-8")
+    build_config = json.load(f)
+    config_version = build_config.get("version")
+    if not config_version:
+        # Invalid config.json
+        f.close()
+        os.remove(build_config_path)
+        return None
+
+    dtk_version = config.dtk_tag[1:]  # Strip v
+    if versiontuple(config_version) < versiontuple(dtk_version):
+        # Outdated config.json
+        f.close()
+        os.remove(build_config_path)
+        return None
+
+    f.close()
+    return build_config
 
 
 # Generate build.ninja and objdiff.json
@@ -159,6 +175,9 @@ def generate_build_ninja(config, build_config):
     n.variable("ninja_required_version", "1.3")
     n.newline()
 
+    configure_script = os.path.relpath(os.path.abspath(sys.argv[0]))
+    python_lib = os.path.relpath(__file__)
+    python_lib_dir = os.path.dirname(python_lib)
     n.comment("The arguments passed to configure.py, for rerunning it.")
     n.variable("configure_args", sys.argv[1:])
     n.variable("python", f'"{sys.executable}"')
@@ -204,6 +223,7 @@ def generate_build_ninja(config, build_config):
             outputs=path(dtk),
             rule="cargo",
             inputs=path(config.build_dtk_path / "Cargo.toml"),
+            implicit=path(config.build_dtk_path / "Cargo.lock"),
             variables={
                 "bin": "dtk",
                 "target": build_tools_path,
@@ -303,7 +323,9 @@ def generate_build_ninja(config, build_config):
     if os.name != "nt":
         transform_dep = config.tools_dir / "transform_dep.py"
         mwcc_cmd += f" && $python {transform_dep} $basefile.d $basefile.d"
+        mwcc_sjis_cmd += f" && $python {transform_dep} $basefile.d $basefile.d"
         mwcc_implicit.append(transform_dep)
+        mwcc_sjis_implicit.append(transform_dep)
 
     n.comment("Link ELF file")
     n.rule(
@@ -635,6 +657,22 @@ def generate_build_ninja(config, build_config):
         n.newline()
 
         ###
+        # Calculate progress
+        ###
+        n.comment("Calculate progress")
+        progress_path = build_path / "progress.json"
+        n.rule(
+            name="progress",
+            command=f"$python {configure_script} $configure_args progress",
+            description="PROGRESS",
+        )
+        n.build(
+            outputs=path(progress_path),
+            rule="progress",
+            implicit=path([ok_path, configure_script, python_lib, config.config_path]),
+        )
+
+        ###
         # Helper tools
         ###
         # TODO: make these rules work for RELs too
@@ -701,14 +739,11 @@ def generate_build_ninja(config, build_config):
     # Regenerate on change
     ###
     n.comment("Reconfigure on change")
-    python_script = os.path.relpath(os.path.abspath(sys.argv[0]))
-    python_lib = os.path.relpath(__file__)
-    python_lib_dir = os.path.dirname(python_lib)
     n.rule(
         name="configure",
-        command=f"$python {python_script} $configure_args",
+        command=f"$python {configure_script} $configure_args",
         generator=True,
-        description=f"RUN {python_script}",
+        description=f"RUN {configure_script}",
     )
     n.build(
         outputs="build.ninja",
@@ -716,7 +751,7 @@ def generate_build_ninja(config, build_config):
         implicit=path(
             [
                 build_config_path,
-                python_script,
+                configure_script,
                 python_lib,
                 Path(python_lib_dir) / "ninja_syntax.py",
             ]
@@ -729,7 +764,7 @@ def generate_build_ninja(config, build_config):
     ###
     n.comment("Default rule")
     if build_config:
-        n.default(path(ok_path))
+        n.default(path(progress_path))
     else:
         n.default(path(build_config_path))
 
@@ -818,3 +853,121 @@ def generate_objdiff_config(config, build_config):
     # Write objdiff.json
     with open("objdiff.json", "w", encoding="utf-8") as w:
         json.dump(objdiff_config, w, indent=4)
+
+
+# Calculate, print and write progress to progress.json
+def calculate_progress(config):
+    out_path = config.out_path()
+    build_config = load_build_config(config, out_path / "config.json")
+    if not build_config:
+        return
+
+    class ProgressUnit:
+        def __init__(self, name):
+            self.name = name
+            self.code_total = 0
+            self.code_progress = 0
+            self.data_total = 0
+            self.data_progress = 0
+            self.objects_progress = 0
+            self.objects_total = 0
+            self.objects = set()
+
+        def add(self, build_obj):
+            self.code_total += build_obj["code_size"]
+            self.data_total += build_obj["data_size"]
+
+            # Avoid counting the same object in different modules twice
+            include_object = build_obj["name"] not in self.objects
+            if include_object:
+                self.objects.add(build_obj["name"])
+                self.objects_total += 1
+
+            if build_obj["autogenerated"]:
+                # Skip autogenerated objects
+                return
+
+            result = config.find_object(build_obj["name"])
+            if not result:
+                return
+
+            _, obj = result
+            if not obj.completed:
+                return
+
+            self.code_progress += build_obj["code_size"]
+            self.data_progress += build_obj["data_size"]
+            if include_object:
+                self.objects_progress += 1
+
+        def code_frac(self):
+            return self.code_progress / self.code_total
+
+        def data_frac(self):
+            return self.data_progress / self.data_total
+
+    # Add DOL units
+    all_progress = ProgressUnit("All") if config.progress_all else None
+    dol_progress = ProgressUnit("DOL")
+    for unit in build_config["units"]:
+        if all_progress:
+            all_progress.add(unit)
+        dol_progress.add(unit)
+
+    # Add REL units
+    rels_progress = ProgressUnit("Modules") if config.progress_modules else None
+    modules_progress = []
+    for module in build_config["modules"]:
+        progress = ProgressUnit(module["name"])
+        modules_progress.append(progress)
+        for unit in module["units"]:
+            if all_progress:
+                all_progress.add(unit)
+            if rels_progress:
+                rels_progress.add(unit)
+            progress.add(unit)
+
+    # Print human-readable progress
+    print("Progress:")
+
+    def print_category(unit):
+        code_frac = unit.code_frac()
+        data_frac = unit.data_frac()
+        print(
+            f"  {unit.name}: {code_frac:.2%} code, {data_frac:.2%} data ({unit.objects_progress} / {unit.objects_total} files)"
+        )
+        print(f"    Code: {unit.code_progress} / {unit.code_total} bytes")
+        print(f"    Data: {unit.data_progress} / {unit.data_total} bytes")
+
+    if all_progress:
+        print_category(all_progress)
+    print_category(dol_progress)
+    module_count = len(build_config["modules"])
+    if module_count > 0:
+        print_category(rels_progress)
+        if config.progress_each_module:
+            for progress in modules_progress:
+                print_category(progress)
+
+    # Generate and write progress.json
+    progress_json = {}
+
+    def add_category(category, unit):
+        progress_json[category] = {
+            "code": unit.code_progress,
+            "code/total": unit.code_total,
+            "data": unit.data_progress,
+            "data/total": unit.data_total,
+        }
+
+    if all_progress:
+        add_category("all", all_progress)
+    add_category("dol", dol_progress)
+    if len(build_config["modules"]) > 0:
+        if rels_progress:
+            add_category("modules", rels_progress)
+        if config.progress_each_module:
+            for progress in modules_progress:
+                add_category(progress.name, progress)
+    with open(out_path / "progress.json", "w", encoding="utf-8") as w:
+        json.dump(progress_json, w, indent=4)
