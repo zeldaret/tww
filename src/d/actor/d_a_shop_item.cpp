@@ -25,7 +25,7 @@ struct daShopItem_c_m_data {
 struct daShopItem_c : public daItemBase_c {
     char* getShopArcname();
     s16 getShopBmdIdx();
-    int CreateInit();
+    void CreateInit();
     int _create();
     bool _execute();
     void set_mtx();
@@ -37,12 +37,12 @@ struct daShopItem_c : public daItemBase_c {
     void setTevStr();
     s32 clothCreate();
 
-    daShopItem_c_m_data* getData() { return m_data; }
+    daShopItem_c_m_data* getData() { return mData; }
 
     static const char m_cloth_arcname[];
     static const f32 m_cullfar_max;
     static u8 mModelType[256];
-    static daShopItem_c_m_data m_data[256];
+    static daShopItem_c_m_data mData[256];
 
     /* 0x63C */ request_of_phase_process_class field_0x63C;
     /* 0x644 */ dCloth_packet_c* field_0x644;
@@ -74,8 +74,7 @@ s16 daShopItem_c::getShopBmdIdx() {
     }
 }
 
-int daShopItem_c::CreateInit() {
-    /* Nonmatching */
+void daShopItem_c::CreateInit() {
     mCullMtx = field_0x64C;
     fopAcM_setCullSizeBox(this, -100.0f, 0.0f, -100.0f, 100.0f, 200.0f, 100.0f);
     if(mDoLib_clipper::mSystemFar > 1.0f) {
