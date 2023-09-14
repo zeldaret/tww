@@ -187,6 +187,10 @@ public:
                                         param_6);
     }
 
+    static void offWipe() { mWipe = false; }
+
+    static bool mWipe;
+
 private:
     /* 0x00000 */ J3DDrawBuffer* mpBufSkyOpa;
     /* 0x00004 */ J3DDrawBuffer* mpBufSkyXlu;

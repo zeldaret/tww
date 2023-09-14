@@ -13,8 +13,12 @@ public:
 
     static bool isResetFlag() { return mResetFlag; }
     static void onResetFlag() { mResetFlag = true; }
+    static void offResetFlag() { mResetFlag = false; }
 
     static bool isInitFlag() { return mInitFlag; }
+
+    static bool isBgmSet() { return mBgmSet; }
+    static void offBgmSet() { mBgmSet = false; }
 
     static void setLoadTimer(u8 i_timer) { mLoadTimer = i_timer; }
     static u8 getLoadTimer() { return mLoadTimer; }
@@ -29,11 +33,21 @@ extern mDoAud_zelAudio_c g_mDoAud_zelAudio;
 
 void mDoAud_setSceneName(const char*, s32, s32);
 void mDoAud_Execute();
+BOOL mDoAud_isUsedHeapForStreamBuffer();
+int mDoAud_load1stDynamicWave();
 
 extern JKRSolidHeap* g_mDoAud_audioHeap;
 
 inline void mDoAud_bgmStop(u32 param_0) {
     mDoAud_zelAudio_c::getInterface()->bgmStop(param_0, 0);
+}
+
+inline void mDoAud_sceneBgmStart() {
+    mDoAud_zelAudio_c::getInterface()->sceneBgmStart();
+}
+
+inline void mDoAud_load2ndDynamicWave() {
+    mDoAud_zelAudio_c::getInterface()->load2ndDynamicWave();
 }
 
 inline void mDoAud_resetProcess() {

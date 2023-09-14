@@ -1,6 +1,7 @@
 #ifndef D_COM_D_COM_INF_GAME_H
 #define D_COM_D_COM_INF_GAME_H
 
+#include "JSystem/JUtility/TColor.h"
 #include "d/d_attention.h"
 #include "d/d_bg_s.h"
 #include "d/d_cc_s.h"
@@ -8,12 +9,14 @@
 #include "d/d_drawlist.h"
 #include "d/d_event.h"
 #include "d/d_event_manager.h"
+#include "d/d_map.h"
 #include "d/d_particle.h"
 #include "d/d_resorce.h"
 #include "d/d_save.h"
 #include "d/d_stage.h"
 #include "d/d_vibration.h"
 #include "d/d_wood.h"
+#include "d/d_demo.h"
 
 class JKRArchive;
 class JKRExpHeap;
@@ -124,12 +127,23 @@ public:
     dEvt_control_c& getEvent() { return mEvtCtrl; }
     dEvent_manager_c& getEvtManager() { return mEvtManager; }
     dPa_control_c* getParticle() { return mParticle; }
+    dVibration_c& getVibration() { return mVibration; }
+    dAttention_c& getAttention() { return mAttention; }
+    dDetect_c& getDetect() { return mDetect; }
+    dDemo_manager_c* getDemo() { return mDemo; }
+
+    dMagma_packet_c* getMagma() { return mpMagmaPacket; }
+    dGrass_packet_c* getGrass() { return mpGrassPacket; }
+    dTree_packet_c* getTree() { return mpTreePacket; }
+    dWood::Packet_c* getWood() { return mpWoodPacket; }
+    dFlower_packet_c* getFlower() { return mpFlowerPacket; }
 
     const char* getStartStageName() { return mCurStage.getName(); }
     s8 getStartStageRoomNo() { return mCurStage.getRoomNo(); }
     s8 getStartStageLayer() { return mCurStage.getLayer(); }
     s16 getStartStagePoint() { return mCurStage.getPoint(); }
     void setStartStageLayer(s8 layer) { mCurStage.setLayer(layer); }
+    void setStartStage(dStage_startStage_c* i_startStage) { mCurStage = *i_startStage; }
 
     const char* getNextStageName() { return mNextStage.getName(); }
     dStage_startStage_c* getNextStartStage() { return &mNextStage; }
@@ -146,6 +160,9 @@ public:
     fopAc_ac_c* getPlayerPtr(int idx) { return (fopAc_ac_c*)mpPlayerPtr[idx]; }
     fopAc_ac_c* getPlayer(int idx) { return (fopAc_ac_c*)mpPlayer[idx]; }
     s8 getPlayerCameraID(int idx) { return mCurCamera[idx]; }
+
+    void setLkDemoAnmArchive(JKRArchive* i_arc) { mpLkDArc = i_arc; }
+    void setStatus(u16 status) { mStatus = status; }
 
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
@@ -200,7 +217,7 @@ public:
     /* 0x483C */ dFlower_packet_c* mpFlowerPacket;
     /* 0x4840 */ s8 mLkDArcIdx;
     /* 0x4841 */ u8 field_0x4841;
-    /* 0x4842 */ s16 mVrboxFlags;
+    /* 0x4842 */ s16 mStatus;
     /* 0x4844 */ dDlst_window_c mDlstWindow[1];
     /* 0x4870 */ dComIfG_camera_info_class mCameraInfo[1];
     /* 0x48A4 */ daPy_py_c* mpPlayer[1];
@@ -336,11 +353,18 @@ STATIC_ASSERT(sizeof(dComIfG_inf_c) == 0x1D1C8);
 
 extern dComIfG_inf_c g_dComIfG_gameInfo;
 
+extern JUtility::TColor g_saftyWhiteColor;
+extern JUtility::TColor g_blackColor;
+
 /**
  * === SAVE ===
  */
 
 u8 dComIfGs_checkGetItem(u8);
+
+inline void dComIfGs_init() {
+    g_dComIfG_gameInfo.save.init();
+}
 
 inline u8 dComIfGs_getSelectEquip(int param_0) {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getSelectEquip(param_0);
@@ -481,6 +505,10 @@ inline dStage_startStage_c* dComIfGp_getNextStartStage() {
     return g_dComIfG_gameInfo.play.getNextStartStage();
 }
 
+inline void dComIfGp_setStartStage(dStage_startStage_c* p_startStage) {
+    g_dComIfG_gameInfo.play.setStartStage(p_startStage);
+}
+
 inline s8 dComIfGp_getNextStageRoomNo() {
     return g_dComIfG_gameInfo.play.getNextStageRoomNo();
 }
@@ -521,6 +549,10 @@ inline dStage_roomStatus_c* dComIfGp_roomControl_getStatusRoomDt(int room_no) {
     return g_dComIfG_gameInfo.play.getRoomControl()->getStatusRoomDt(room_no);
 }
 
+inline void dComIfGp_roomControl_checkDrawArea() {
+    return g_dComIfG_gameInfo.play.getRoomControl()->checkDrawArea();
+}
+
 inline dBgS* dComIfG_Bgsp() {
     return &g_dComIfG_gameInfo.play.mBgS;
 }
@@ -539,6 +571,94 @@ inline void dComIfGp_getIkadaShipBeforePos(Vec* o_pos) {
 
 inline dStage_stageDt_c& dComIfGp_getStage() {
     return g_dComIfG_gameInfo.play.getStage();
+}
+
+inline dVibration_c& dComIfGp_getVibration() {
+    return g_dComIfG_gameInfo.play.getVibration();
+}
+
+inline dAttention_c& dComIfGp_getAttention() {
+    return g_dComIfG_gameInfo.play.getAttention();
+}
+
+inline dDetect_c& dComIfGp_getDetect() {
+    return g_dComIfG_gameInfo.play.getDetect();
+}
+
+inline dMagma_packet_c* dComIfGp_getMagma() {
+    return g_dComIfG_gameInfo.play.getMagma();
+}
+
+inline dGrass_packet_c* dComIfGp_getGrass() {
+    return g_dComIfG_gameInfo.play.getGrass();
+}
+
+inline dTree_packet_c* dComIfGp_getTree() {
+    return g_dComIfG_gameInfo.play.getTree();
+}
+
+inline dWood::Packet_c* dComIfGp_getWood() {
+    return g_dComIfG_gameInfo.play.getWood();
+}
+
+inline dFlower_packet_c* dComIfGp_getFlower() {
+    return g_dComIfG_gameInfo.play.getFlower();
+}
+
+inline void dComIfGp_executeMagma() {
+    return g_dComIfG_gameInfo.play.executeMagma();
+}
+
+inline void dComIfGp_executeGrass() {
+    return g_dComIfG_gameInfo.play.executeGrass();
+}
+
+inline void dComIfGp_executeTree() {
+    return g_dComIfG_gameInfo.play.executeTree();
+}
+
+inline void dComIfGp_executeWood() {
+    return g_dComIfG_gameInfo.play.executeWood();
+}
+
+inline void dComIfGp_executeFlower() {
+    return g_dComIfG_gameInfo.play.executeFlower();
+}
+
+inline void dComIfGp_drawMagma() {
+    return g_dComIfG_gameInfo.play.drawMagma();
+}
+
+inline void dComIfGp_drawGrass() {
+    return g_dComIfG_gameInfo.play.drawGrass();
+}
+
+inline void dComIfGp_drawTree() {
+    return g_dComIfG_gameInfo.play.drawTree();
+}
+
+inline void dComIfGp_drawWood() {
+    return g_dComIfG_gameInfo.play.drawWood();
+}
+
+inline void dComIfGp_drawFlower() {
+    return g_dComIfG_gameInfo.play.drawFlower();
+}
+
+inline void dComIfGp_map_mapBufferSendAGB(int param_0) {
+    dMap_c::mapBufferSendAGB(param_0);
+}
+
+inline void dComIfGp_demo_update() {
+    g_dComIfG_gameInfo.play.getDemo()->update();
+}
+
+inline void dComIfGp_setLkDemoAnmArchive(JKRArchive* i_arc) {
+    g_dComIfG_gameInfo.play.setLkDemoAnmArchive(i_arc);
+}
+
+inline void dComIfGp_setStatus(u16 status) {
+    g_dComIfG_gameInfo.play.setStatus(status);
 }
 
 inline daPy_py_c* daPy_getPlayerActorClass() {
@@ -572,12 +692,16 @@ inline dEvent_manager_c& dComIfGp_getEventManager() {
     return g_dComIfG_gameInfo.play.getEvtManager();
 }
 
-inline u32 dComIfGp_evmng_getEventIdx(char *pName, u8 evNo) {
+inline u32 dComIfGp_evmng_getEventIdx(char* pName, u8 evNo) {
     return dComIfGp_getEventManager().getEventIdx(pName, evNo);
 }
 
 inline BOOL dComIfGp_evmng_endCheck(s16 eventID) {
     return g_dComIfG_gameInfo.play.getEvtManager().endCheck(eventID);
+}
+
+inline void dComIfGp_evmng_execute() {
+    g_dComIfG_gameInfo.play.executeEvtManager();
 }
 
 /**
@@ -651,15 +775,49 @@ inline void* dComIfG_getObjectIDRes(const char* arcName, u16 id) {
  * === PARTICLE ===
  */
 
-void set(u8, u16, cXyz const*, csXyz const*, cXyz const*, u8, dPa_levelEcallBack*, s8, GXColor const*, GXColor const*, cXyz const*);
+void set(u8, u16, cXyz const*, csXyz const*, cXyz const*, u8, dPa_levelEcallBack*, s8,
+         GXColor const*, GXColor const*, cXyz const*);
 
-inline JPABaseEmitter * dComIfGp_particle_set(u16 particleID, const cXyz* pos, const csXyz * angle, const cXyz * scale, u8 alpha, dPa_levelEcallBack * pCallBack, s8 setupInfo, const GXColor * pPrmColor, const GXColor * pEnvColor, const cXyz * pScale2D) {
-    dPa_control_c * pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->set(0, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
+inline JPABaseEmitter* dComIfGp_particle_set(u16 particleID, const cXyz* pos, const csXyz* angle,
+                                             const cXyz* scale, u8 alpha,
+                                             dPa_levelEcallBack* pCallBack, s8 setupInfo,
+                                             const GXColor* pPrmColor, const GXColor* pEnvColor,
+                                             const cXyz* pScale2D) {
+    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
+    return pParticle->set(0, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor,
+                          pEnvColor, pScale2D);
 }
 
-inline JPABaseEmitter * dComIfGp_particle_set(u16 particleID, const cXyz* pos, const csXyz * angle, const cXyz * scale) {
+inline JPABaseEmitter* dComIfGp_particle_set(u16 particleID, const cXyz* pos, const csXyz* angle,
+                                             const cXyz* scale) {
     return dComIfGp_particle_set(particleID, pos, angle, scale, 0xFF, NULL, -1, NULL, NULL, NULL);
 }
+
+inline void dComIfGp_particle_calc3D() {
+    g_dComIfG_gameInfo.play.getParticle()->calc3D();
+}
+
+inline void dComIfGp_particle_calc2D() {
+    g_dComIfG_gameInfo.play.getParticle()->calc2D();
+}
+
+inline void dComIfGp_particle_calcMenu() {
+    g_dComIfG_gameInfo.play.getParticle()->calcMenu();
+}
+
+inline void dComIfGp_particle_drawModelParticle() {
+    g_dComIfG_gameInfo.play.getParticle()->drawModelParticle();
+}
+
+inline void dComIfGp_particle_readScene(u8 particle_no, mDoDvdThd_toMainRam_c** param_1) {
+    g_dComIfG_gameInfo.play.getParticle()->readScene(particle_no, param_1);
+}
+
+/**
+ * === MISC ===
+ */
+
+class scene_class;
+int dComIfG_resetToOpening(scene_class* i_scene);
 
 #endif /* D_COM_D_COM_INF_GAME_H */

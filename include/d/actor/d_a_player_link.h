@@ -539,7 +539,7 @@ public:
     void dProcFreezeDamage();
     void dProcDead_init_sub();
     void dProcDead_init_sub2();
-    void checkGameOverStart();
+    BOOL checkGameOverStart();
     void dProcDead_init();
     void dProcDead();
     void dProcLookAround_init();

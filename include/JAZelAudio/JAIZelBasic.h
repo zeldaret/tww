@@ -97,7 +97,7 @@ public:
     void sceneChange(u32, u32, u32, s32);
     void sceneBgmStart();
     void load1stDynamicWave();
-    void check1stDynamicWave();
+    BOOL check1stDynamicWave();
     void load2ndDynamicWave();
     void loadStaticWaves();
     void checkFirstWaves();

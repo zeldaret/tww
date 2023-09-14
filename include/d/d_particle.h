@@ -2,13 +2,13 @@
 #define D_PARTICLE
 
 #include "JSystem/JParticle/JPAParticle.h"
+#include "f_pc/f_pc_node.h"
 
 class mDoDvdThd_toMainRam_c;
 class dPa_levelEcallBack;
 class dKy_tevstr_c;
 class cBgS_PolyInfo;
 class JPADrawInfo;
-class dPa_modelControl_c;
 class JKRHeap;
 class JPABaseEmitter;
 class JPAEmitterManager;
@@ -46,6 +46,48 @@ public:
     /* 0x010 */ dPa_simpleData_c mSimpleData[32];
 };
 
+class dPa_modelControl_c {
+public:
+    dPa_modelControl_c(J3DModelData*);
+    ~dPa_modelControl_c();
+
+    void newModel(J3DModelData*);
+    void draw();
+
+    /* 0x00 */ node_list_class parent;
+    /* 0x0C */ void* field_0x0c;
+    /* 0x10 */ void* field_0x10;
+    /* 0x14 */ void* field_0x14;
+    /* 0x18 */ void* field_0x18;
+    /* 0x1C */ void* field_0x1c;
+    /* 0x20 */ void* field_0x20;
+    /* 0x24 */ void* field_0x24;
+    /* 0x28 */ void* field_0x28;
+    /* 0x2C */ void* field_0x2c;
+    /* 0x30 */ void* field_0x30;
+    /* 0x34 */ void* field_0x34;
+    /* 0x38 */ void* field_0x38;
+    /* 0x3C */ void* field_0x3c;
+    /* 0x40 */ void* field_0x40;
+    /* 0x44 */ void* field_0x44;
+    /* 0x48 */ void* field_0x48;
+    /* 0x4C */ void* field_0x4c;
+    /* 0x50 */ void* field_0x50;
+    /* 0x54 */ void* field_0x54;
+    /* 0x58 */ void* field_0x58;
+    /* 0x5C */ void* field_0x5c;
+    /* 0x60 */ void* field_0x60;
+    /* 0x64 */ void* field_0x64;
+    /* 0x68 */ void* field_0x68;
+    /* 0x6C */ void* field_0x6c;
+    /* 0x70 */ void* field_0x70;
+    /* 0x74 */ void* field_0x74;
+    /* 0x78 */ void* field_0x78;
+    /* 0x7C */ void* field_0x7c;
+    /* 0x80 */ void* field_0x80;
+    /* 0x84 */ J3DVertexData mVertexData;
+};
+
 class dPa_control_c {
 public:
     dPa_control_c();
@@ -62,15 +104,19 @@ public:
     void calc2D();
     void calcMenu();
     void draw(JPADrawInfo*, u8);
-    JPABaseEmitter * set(u8, u16, cXyz const*, csXyz const*, cXyz const*, u8, dPa_levelEcallBack*, s8, GXColor const*, GXColor const*, cXyz const*);
+    JPABaseEmitter* set(u8, u16, cXyz const*, csXyz const*, cXyz const*, u8, dPa_levelEcallBack*,
+                        s8, GXColor const*, GXColor const*, cXyz const*);
     void setBombSmoke(u16, cXyz const*, csXyz const*, cXyz const*, u8);
     void setSimpleLand(int, cXyz const*, csXyz const*, f32, f32, f32, dKy_tevstr_c*, int*, int);
-    void setSimpleLand(cBgS_PolyInfo&, cXyz const*, csXyz const*, f32, f32, f32, dKy_tevstr_c*, int*, int);
+    void setSimpleLand(cBgS_PolyInfo&, cXyz const*, csXyz const*, f32, f32, f32, dKy_tevstr_c*,
+                       int*, int);
     void checkAtrCodeEffect(int);
     void setNormalStripes(u16, cXyz const*, csXyz const*, cXyz const*, u8, u16);
     void newSimple(u16, u8);
     void setSimple(u16, cXyz const*, u8, GXColor const&, GXColor const&, int);
     void getSimple(u16);
+
+    void drawModelParticle() { mModelCtrl->draw(); }
 
     /* 0x0000 */ JKRHeap* mpHeap;
     /* 0x0004 */ JPAResourceManager* mpCommonResMgr;

@@ -143,6 +143,13 @@ public:
     void LockonTruth();
     void Lockon();
 
+    void Init(fopAc_ac_c* i_owner, u32 i_playerNo) {
+        mpPlayer = (daPy_lk_c*)i_owner;
+        mPlayerNo = i_playerNo;
+    }
+
+    fopAc_ac_c* Owner() { return (fopAc_ac_c*)mpPlayer; }
+
 public:
     /* 0x000 */ daPy_lk_c* mpPlayer;
     /* 0x004 */ int mLockOnTargetBsPcID;
