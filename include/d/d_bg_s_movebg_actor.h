@@ -5,7 +5,7 @@
 #include "f_op/f_op_actor_mng.h"
 
 class dBgW;
-typedef void (*MoveBGActor_SetFunc)(dBgW*, void*, cBgS_PolyInfo&, bool, cXyz*, csXyz*,csXyz*);
+typedef void (*MoveBGActor_SetFunc)(dBgW*, void*, cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*);
 void dBgS_MoveBGProc_Typical(dBgW*, void*, cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*);
 void dBgS_MoveBGProc_RotY(dBgW*, void*, cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*);
 void dBgS_MoveBGProc_TypicalRotY(dBgW*, void*, cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*);
@@ -18,7 +18,7 @@ public:
 
     dBgS_MoveBgActor();
     int MoveBGCreateHeap();
-    int MoveBGCreate(char const* resName, int resIndex, MoveBGActor_SetFunc callback, u32 size);
+    int MoveBGCreate(char const* resName, int resIndex, MoveBGActor_SetFunc callback, u32 resSize);
     int MoveBGDelete();
     int MoveBGExecute();
 

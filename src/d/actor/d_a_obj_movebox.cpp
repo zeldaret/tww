@@ -511,7 +511,7 @@ namespace daObjMovebox {
     
     /* 000016B8-00001830       .text path_init__Q212daObjMovebox5Act_cFv */
     void Act_c::path_init() {
-        // Load the position the this box was last left pushed to based on the path and switch(es).
+        // Load the position the box was last left pushed to based on the path and switch(es).
         s32 pathId = prmZ_get_pathId();
         s32 swSave1 = prm_get_swSave1();
         if (pathId != 0xFF && swSave1 != 0xFF) {
@@ -727,7 +727,7 @@ namespace daObjMovebox {
     /* 00002AD4-00002B48       .text mode_wait_init__Q212daObjMovebox5Act_cFv */
     void Act_c::mode_wait_init() {
         /* Nonmatching (rodata only) */
-        speedF = 0.0;
+        speedF = 0.0f;
         const Type_Attr* attr = &M_attr[mType];
         mGravity = attr->unk14;
         mpBgW->m_crr_func = &dBgS_MoveBGProc_Trans;
@@ -744,7 +744,7 @@ namespace daObjMovebox {
     /* 00002D84-00002DA4       .text mode_walk_init__Q212daObjMovebox5Act_cFv */
     void Act_c::mode_walk_init() {
         /* Nonmatching (rodata only) */
-        speedF = 0.0;
+        speedF = 0.0f;
         mbUnknown64F = false;
         mMode = MODE_WALK;
     }
@@ -757,7 +757,7 @@ namespace daObjMovebox {
     /* 000031AC-000031D4       .text mode_afl_init__Q212daObjMovebox5Act_cFv */
     void Act_c::mode_afl_init() {
         /* Nonmatching (rodata only) */
-        speedF = 0.0;
+        speedF = 0.0f;
         mpBgW->m_crr_func = &dBgS_MoveBGProc_Typical;
         mMode = MODE_AFLOAT;
     }
