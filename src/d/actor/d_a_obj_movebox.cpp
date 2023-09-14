@@ -116,23 +116,23 @@ namespace daObjMovebox {
         inline s32 Mthd_Create();
         inline s32 Mthd_Delete();
         
-        inline s32 prm_get_type() const { return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S); }
-        inline s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
+        s32 prm_get_type() const { return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S); }
+        s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
         s32 prm_get_swSave1() const;
-        inline s32 prmZ_get_swSave2() const { return mType == TYPE_BLACK_BOX_2 ? 0xFF : (u8)(mPrmZ >> 8); }
-        inline s32 prmZ_get_pathId() const { return mType == TYPE_BLACK_BOX_2 ? 0xFF : (mPrmZ & 0x00FF) >> 0; }
-        inline s32 prmX_get_evId() const { return (mPrmX & 0x00FF) >> 0; }
-        inline s32 prm_get_itemNo() const { return daObj::PrmAbstract(this, PRM_ITEMNO_W, PRM_ITEMNO_S); }
-        inline s32 prm_get_itemSave() const { return daObj::PrmAbstract(this, PRM_ITEMSAVE_W, PRM_ITEMSAVE_S); }
-        inline s32 prm_get_buoy() const { return daObj::PrmAbstract(this, PRM_BUOY_W, PRM_BUOY_S); }
-        inline s32 prm_get_dmy() const; // Unused?
+        s32 prmZ_get_swSave2() const { return mType == TYPE_BLACK_BOX_2 ? 0xFF : (u8)(mPrmZ >> 8); }
+        s32 prmZ_get_pathId() const { return mType == TYPE_BLACK_BOX_2 ? 0xFF : (mPrmZ & 0x00FF) >> 0; }
+        s32 prmX_get_evId() const { return (mPrmX & 0x00FF) >> 0; }
+        s32 prm_get_itemNo() const { return daObj::PrmAbstract(this, PRM_ITEMNO_W, PRM_ITEMNO_S); }
+        s32 prm_get_itemSave() const { return daObj::PrmAbstract(this, PRM_ITEMSAVE_W, PRM_ITEMSAVE_S); }
+        s32 prm_get_buoy() const { return daObj::PrmAbstract(this, PRM_BUOY_W, PRM_BUOY_S); }
+        s32 prm_get_dmy() const; // Unused?
         
-        inline BOOL is_switch1() const { return fopAcM_isSwitch(this, prm_get_swSave1()); };
-        inline BOOL is_switch2() const { return fopAcM_isSwitch(this, prmZ_get_swSave2()); };
-        inline void on_switch1() const { fopAcM_onSwitch(this, prm_get_swSave1()); };
-        inline void on_switch2() const { fopAcM_onSwitch(this, prmZ_get_swSave2()); };
-        inline void off_switch1() const { fopAcM_offSwitch(this, prm_get_swSave1()); };
-        inline void off_switch2() const { fopAcM_offSwitch(this, prmZ_get_swSave2()); };
+        BOOL is_switch1() const { return fopAcM_isSwitch(this, prm_get_swSave1()); };
+        BOOL is_switch2() const { return fopAcM_isSwitch(this, prmZ_get_swSave2()); };
+        void on_switch1() const { fopAcM_onSwitch(this, prm_get_swSave1()); };
+        void on_switch2() const { fopAcM_onSwitch(this, prmZ_get_swSave2()); };
+        void off_switch1() const { fopAcM_offSwitch(this, prm_get_swSave1()); };
+        void off_switch2() const { fopAcM_offSwitch(this, prmZ_get_swSave2()); };
         
         void prmZ_init();
         void prmX_init();
