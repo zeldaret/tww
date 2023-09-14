@@ -82,9 +82,8 @@ public:
     /* 0x638 */ short field20_0x638;
     /* 0x63A */ u8 m_itemNo;
     /* 0x63B */ u8 mDrawFlags;
-    /* 0x63C */ cXyz mScaleTarget;
 };
 
-STATIC_ASSERT(sizeof(daItemBase_c) == 0x648);
+STATIC_ASSERT(sizeof(daItemBase_c) == 0x63C);
 
 #endif /* D_A_ITEMBASE_H */

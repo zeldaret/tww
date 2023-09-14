@@ -1882,7 +1882,7 @@ void isDaizaItem(unsigned char) {
 }
 
 /* 800C7B7C-800C7BA8       .text isBomb__FUc */
-void isBomb(unsigned char) {
+bool isBomb(unsigned char) {
     /* Nonmatching */
 }
 

@@ -35,8 +35,3 @@ void mDoLib_cnvind32(unsigned long) {
 void mDoLib_cnvind16(unsigned short) {
     /* Nonmatching */
 }
-
-/* 80017A04-80017A4C       .text __dt__11J3DUClipperFv */
-J3DUClipper::~J3DUClipper() {
-    /* Nonmatching */
-}
