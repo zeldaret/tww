@@ -2,6 +2,7 @@
 #define D_PARTICLE
 
 #include "JSystem/JParticle/JPAParticle.h"
+#include "f_pc/f_pc_node.h"
 
 class mDoDvdThd_toMainRam_c;
 class dPa_levelEcallBack;

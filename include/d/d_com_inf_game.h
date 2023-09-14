@@ -817,6 +817,7 @@ inline void dComIfGp_particle_readScene(u8 particle_no, mDoDvdThd_toMainRam_c** 
  * === MISC ===
  */
 
+class scene_class;
 int dComIfG_resetToOpening(scene_class* i_scene);
 
 #endif /* D_COM_D_COM_INF_GAME_H */

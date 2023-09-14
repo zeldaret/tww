@@ -368,7 +368,7 @@ config.libs = [
             Object(NonMatching, "d/d_save.cpp"),
             Object(NonMatching, "d/d_save_init.cpp"),
             Object(Matching,    "d/d_bg_s_movebg_actor.cpp"),
-            Object(Matching,    "d/d_s_play.cpp"),
+            Object(NonMatching, "d/d_s_play.cpp"),
 
             Object(NonMatching, "d/actor/d_a_player_main.cpp"),
             Object(NonMatching, "d/actor/d_a_itembase_static.cpp"),

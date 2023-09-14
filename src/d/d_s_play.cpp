@@ -17,6 +17,7 @@
 #include "d/d_kankyo_rain.h"
 #include "d/d_material.h"
 #include "d/d_meter.h"
+#include "d/d_procname.h"
 #include "d/d_snap.h"
 #include "f_op/f_op_draw_iter.h"
 #include "f_op/f_op_msg_mng.h"
@@ -260,7 +261,7 @@ int dScnPly_Draw(dScnPly_ply_c* i_this) {
     dComIfG_Ccsp()->Move();
     dComIfG_Bgsp()->ClrMoveFlag();
 
-    if (!fopOvlpM_IsPeek() && !dComIfG_resetToOpening(i_this) && fpcM_GetName(i_this) == 7) {
+    if (!fopOvlpM_IsPeek() && !dComIfG_resetToOpening(i_this) && fpcM_GetName(i_this) == PROC_PLAY_SCENE) {
         if (dComIfGp_isEnableNextStage()) {
             static s16 l_wipeType[] = {0, 0, 16, 17, 18, 1, 2, 1, 3, 3, 4, 4};
 
@@ -268,10 +269,10 @@ int dScnPly_Draw(dScnPly_ply_c* i_this) {
                        dComIfGp_getNextStageWipe() < (sizeof(l_wipeType) / sizeof(l_wipeType[0])));
 
             if (strcmp(dComIfGp_getNextStageName(), "ENDING") == 0) {
-                fopScnM_ChangeReq(i_this, 11, 0, 5);
+                fopScnM_ChangeReq(i_this, PROC_ENDING_SCENE, 0, 5);
                 mDoAud_bgmStop(30);
             } else {
-                fopScnM_ChangeReq(i_this, 7, l_wipeType[dComIfGp_getNextStageWipe()], 5);
+                fopScnM_ChangeReq(i_this, PROC_PLAY_SCENE, l_wipeType[dComIfGp_getNextStageWipe()], 5);
 
                 int hour = dKy_getdaytime_hour();
                 bool useWhiteColor = false;
@@ -432,7 +433,7 @@ int phase_00(dScnPly_ply_c* i_this) {
 
     mDoGph_gInf_c::offBlure();
 
-    if (fpcM_GetName(i_this) != 7) {
+    if (fpcM_GetName(i_this) != PROC_PLAY_SCENE) {
         if (!heapSizeCheck()) {
             mDoRst_reset(0, 0x80000000, 0);
         }
@@ -567,3 +568,48 @@ int dScnPly_Create(scene_class* i_this) {
 
     return dComLbG_PhaseHandler(&static_cast<dScnPly_ply_c*>(i_this)->mLoadPhs, l_method, i_this);
 }
+
+static scene_method_class l_dScnPly_Method = {
+    (process_method_func)dScnPly_Create,  (process_method_func)dScnPly_Delete,
+    (process_method_func)dScnPly_Execute, (process_method_func)dScnPly_IsDelete,
+    (process_method_func)dScnPly_Draw,
+};
+
+extern scene_process_profile_definition g_profile_PLAY_SCENE = {
+    fpcLy_ROOT_e,
+    1,
+    fpcPi_CURRENT_e,
+    PROC_PLAY_SCENE,
+    &g_fpcLf_Method.mBase,
+    sizeof(dScnPly_ply_c),
+    0,
+    0,
+    &g_fopScn_Method.mBase,
+    &l_dScnPly_Method.base.mBase,
+};
+
+extern scene_process_profile_definition g_profile_OPENING_SCENE = {
+    fpcLy_ROOT_e,
+    1,
+    fpcPi_CURRENT_e,
+    PROC_OPENING_SCENE,
+    &g_fpcLf_Method.mBase,
+    sizeof(dScnPly_ply_c),
+    0,
+    0,
+    &g_fopScn_Method.mBase,
+    &l_dScnPly_Method.base.mBase,
+};
+
+extern scene_process_profile_definition g_profile_OPENING2_SCENE = {
+    fpcLy_ROOT_e,
+    1,
+    fpcPi_CURRENT_e,
+    PROC_OPENING2_SCENE,
+    &g_fpcLf_Method.mBase,
+    sizeof(dScnPly_ply_c),
+    0,
+    0,
+    &g_fopScn_Method.mBase,
+    &l_dScnPly_Method.base.mBase,
+};

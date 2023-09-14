@@ -3,9 +3,14 @@
 
 #include "f_op/f_op_scene_tag.h"
 #include "f_pc/f_pc_node.h"
+#include "f_pc/f_pc_leaf.h"
 
 struct request_of_phase_process_class;
 class mDoDvdThd_command_c;
+
+struct scene_method_class {
+    /* 0x00 */ leafdraw_method_class base;
+};
 
 typedef struct scene_process_profile_definition {
     /* 0x00 */ node_process_profile_definition mBase;
