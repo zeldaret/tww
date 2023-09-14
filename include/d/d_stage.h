@@ -417,6 +417,19 @@ public:
     /* 0x50 */ int mVrboxNum;
 };
 
+class dStage_darkStatus_c {
+public:
+    // name to offset relation is guessed based on debug map
+    // may need to be fixed
+
+    /* 0x00 */ u8 mRatio;
+    /* 0x01 */ u8 mNonAlpha[2];
+    /* 0x04 */ f32 mNonScale[2];
+    /* 0x0C */ int field_0xc;
+    /* 0x10 */ int field_0x10[2];
+    /* 0x18 */ int field_0x18[2];
+};
+
 class dBgW_base;
 class dStage_roomStatus_c {
 public:
@@ -469,6 +482,7 @@ public:
     static u32 getProcID() { return mProcID; }
     static void setStatusProcID(int i_roomNo, unsigned int i_id) { mStatus[i_roomNo].mProcID = i_id; }
     static int getStatusProcID(int i_roomNo) { return mStatus[i_roomNo].mProcID; }
+    static dStage_darkStatus_c& getDarkStatus(int i_idx) { return mDarkStatus[i_idx]; }
 
     static void setMemoryBlockID(int i_roomNo, int i_blockID) {
         mStatus[i_roomNo].mMemBlockID = i_blockID;
@@ -492,6 +506,7 @@ public:
 
     static JKRExpHeap* mMemoryBlock[101];
     static dStage_roomStatus_c mStatus[64];
+    static dStage_darkStatus_c mDarkStatus[8];
     static u32 mProcID;
     static s8 mStayNo;
     static s8 mOldStayNo;
@@ -535,6 +550,7 @@ private:
 s8 dStage_roomRead_dt_c_GetReverbStage(roomRead_class&, int);
 int dStage_mapInfo_GetOceanZ(stage_map_info_class*);
 int dStage_mapInfo_GetOceanX(stage_map_info_class*);
+void dStage_infoCreate();
 
 inline s32 dStage_stagInfo_GetSaveTbl(stage_stag_info_class* i_stagInfo) {
     return (i_stagInfo->field_0x09 >> 1) & 0x7F;
@@ -542,6 +558,10 @@ inline s32 dStage_stagInfo_GetSaveTbl(stage_stag_info_class* i_stagInfo) {
 
 inline u32 dStage_stagInfo_GetSTType(stage_stag_info_class* i_stagInfo) {
     return (i_stagInfo->field_0x0c >> 16) & 7;
+}
+
+inline u8 dStage_stagInfo_GetParticleNo(stage_stag_info_class* i_stagInfo) {
+    return (i_stagInfo->field_0x0a >> 0x3) & 0xFF;
 }
 
 #endif /* D_D_STAGE_H */

@@ -293,6 +293,11 @@ JKRExpHeap* mDoExt_getZeldaHeap();
 JKRExpHeap* mDoExt_getGameHeap();
 JKRExpHeap* mDoExt_getArchiveHeap();
 
+int mDoExt_getSafeArchiveHeapSize();
+int mDoExt_getSafeGameHeapSize();
+int mDoExt_getSafeZeldaHeapSize();
+int mDoExt_getSafeCommandHeapSize();
+
 extern JKRExpHeap* zeldaHeap;
 extern JKRExpHeap* gameHeap;
 extern JKRExpHeap* archiveHeap;

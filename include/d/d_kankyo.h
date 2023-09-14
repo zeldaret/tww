@@ -63,6 +63,6 @@ extern dScnKy_env_light_c g_env_light;
 int dKy_getdaytime_hour();
 BOOL dKy_checkEventNightStop();
 void dKy_set_nexttime(f32);
-
+void dKy_itudemo_se();
 
 #endif /* D_KANKYO_D_KANKYO_H */

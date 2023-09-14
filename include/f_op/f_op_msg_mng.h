@@ -3,6 +3,7 @@
 
 #include "SSystem/SComponent/c_xyz.h"
 #include "f_pc/f_pc_leaf.h"
+#include "f_op/f_op_msg.h"
 
 class JKRExpHeap;
 class JKRHeap;
@@ -50,8 +51,9 @@ void fopMsgM_setMessageID(unsigned int);
 void fopMsgM_destroyExpHeap(JKRExpHeap*);
 f32 fopMsgM_valueIncrease(int param_0, int param_1, u8 param_2);
 s32 fopMsgM_setStageLayer(void*);
-int fopMsgM_messageSet(u32 i_msgIdx, fopAc_ac_c* i_actorP, u32 param_2);
-int fopMsgM_messageSet(u32 param_0, u32 param_1);
+int fopMsgM_messageSet(u32 i_msgIdx, fopAc_ac_c* i_actorP);
+int fopMsgM_messageSet(u32 param_0, cXyz*);
+int fopMsgM_messageSet(u32 param_0);
 int fopMsgM_messageSetDemo(u32 param_0);
 msg_class* fopMsgM_SearchByID(unsigned int param_0);
 char* fopMsgM_messageGet(char* msg, u32 string_id);
@@ -63,5 +65,7 @@ inline s32 fopMsgM_Timer_create(s16 param_0, u8 param_1, u32 param_2, u8 param_3
     return fop_Timer_create(param_0, param_1, param_2, param_3, param_4, param_5, param_6, param_7,
                             param_8, createFunc);
 }
+
+u32 fopMsgM_searchMessageNumber(u32);
 
 #endif

@@ -20,7 +20,10 @@ struct interface_of_controller_pad {
     /* 0x24 */ f32 mAnalogB;
     /* 0x28 */ f32 mTriggerLeft;
     /* 0x2C */ f32 mTriggerRight;
-    /* 0x30 */ u32 mButtonFlags;
+    /* 0x30 */ u8 mButtonHold0;
+    /* 0x31 */ u8 mButtonHold1;
+    /* 0x32 */ u8 mButtonTrig0;
+    /* 0x33 */ u8 mButtonTrig1;
     /* 0x34 */ s8 mGamepadErrorFlags;
     /* 0x35 */ u8 mHoldLockL;
     /* 0x36 */ u8 mTrigLockL;

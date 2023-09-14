@@ -27,7 +27,7 @@ inline void mDoCPd_TRIGGER_CONV(u8 analog, f32& param_1) {
 
 /* 80007598-800078C0       .text mDoCPd_Convert__FP27interface_of_controller_padP10JUTGamePad */
 static s32 mDoCPd_Convert(interface_of_controller_pad* pInterface, JUTGamePad* pPad) {
-    pInterface->mButtonFlags = pPad->getButton();
+    // pInterface->mButtonFlags = pPad->getButton();
     pInterface->mMainStickPosX = pPad->getMainStickX();
     pInterface->mMainStickPosY = pPad->getMainStickY();
     pInterface->mMainStickValue = pPad->getMainStickValue();

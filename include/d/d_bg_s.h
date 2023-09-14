@@ -61,13 +61,13 @@ public:
     void GetGrpToRoomId(int, int) const;
     cM3dGPla* GetTriPla(int, int) const;
     bool GetTriPnt(cBgS_PolyInfo&, cXyz*, cXyz*, cXyz*) const;
-    void Move(void);
     void ShdwDraw(cBgS_ShdwDraw*);
     u32 GetGrpInf(cBgS_PolyInfo&, int) const;
 
     virtual ~cBgS() {}
     virtual void Ct();
     virtual void Dt();
+    virtual void Move();
 };  // Size: 0x1404
 
 class dBgS_Acch;
@@ -75,12 +75,13 @@ class dBgS_Acch;
 class dBgS : public cBgS {
 public:
     dBgS() {}
-    ~dBgS() {}
+    virtual ~dBgS() {}
 
-    void Ct();
-    void Dt();
+    virtual void Ct();
+    virtual void Dt();
+    virtual void Move();
+
     void ClrMoveFlag();
-    void Move();
     bool Regist(cBgW*, fopAc_ac_c*);
     bool ChkMoveBG(cBgS_PolyInfo&);
     bool ChkMoveBG_NoDABg(cBgS_PolyInfo&);
