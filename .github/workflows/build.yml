@@ -23,6 +23,14 @@ jobs:
       run: |
         python configure.py --map --version ${{matrix.version}} --compilers /compilers
         ninja
+    - name: Upload progress
+      if: github.ref == 'refs/heads/main'
+      continue-on-error: true
+      env:
+        PROGRESS_API_KEY: ${{secrets.PROGRESS_API_KEY}}
+      run: |
+        python tools/upload_progress.py -b https://progress.deco.mp/ -p tww -v ${{matrix.version}} \
+          build/${{matrix.version}}/progress.json
     - name: Upload maps
       uses: actions/upload-artifact@v3
       with:

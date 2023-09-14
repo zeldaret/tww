@@ -1,13 +1,17 @@
-The Legend of Zelda: The Wind Waker [![Build Status]][actions]
+The Legend of Zelda: The Wind Waker  
+[![Build Status]][actions] ![Progress] ![DOL Progress] ![RELs Progress]
 =============
 
 [Build Status]: https://github.com/zeldaret/tww/actions/workflows/build.yml/badge.svg
 [actions]: https://github.com/zeldaret/tww/actions/workflows/build.yml
+[Progress]: https://img.shields.io/endpoint?label=Code&url=https%3A%2F%2Fprogress.deco.mp%2Fdata%2Ftww%2FGZLE01%2Fall%2F%3Fmode%3Dshield%26measure%3Dcode
+[DOL Progress]: https://img.shields.io/endpoint?label=DOL&url=https%3A%2F%2Fprogress.deco.mp%2Fdata%2Ftww%2FGZLE01%2Fdol%2F%3Fmode%3Dshield%26measure%3Dcode
+[RELs Progress]: https://img.shields.io/endpoint?label=RELs&url=https%3A%2F%2Fprogress.deco.mp%2Fdata%2Ftww%2FGZLE01%2Fmodules%2F%3Fmode%3Dshield%26measure%3Dcode
 
 This repository supports the following versions:
 
-- GZLE01 - Rev 0 (USA), Rev 48 (Korea)
-- GZLP01 - Rev 0 (EUR)
+- GZLE01 - Rev 0 (USA), Rev 48 (KOR)
+- GZLP01 - Rev 0 (PAL)
 - GZLJ01 - Rev 0 (JPN)
 
 Dependencies
@@ -43,11 +47,11 @@ Linux:
 Building
 ========
 
-- Checkout the repository:
+- Clone the repository:
   ```
   git clone https://github.com/zeldaret/tww.git
   ```
-- Using [Dolphin Emulator](https://dolphin-emu.org/), extract your game to `orig/GZLE01` (or `GLZJ01` for JPN, `GLZE01` for PAL).  
+- Using [Dolphin Emulator](https://dolphin-emu.org/), extract your game to `orig/GZLE01` (or `GZLJ01` for JPN, `GZLE01` for PAL).  
 ![](assets/dolphin-extract.png)
   - To save space, the only necessary files are the following. Any others can be deleted.
     - `sys/main.dol`
@@ -57,6 +61,7 @@ Building
   ```
   python configure.py
   ```
+  To use a version other than `GZLE01` (USA), specify `--version GZLJ01` (JPN) or `--version GZLP01` (PAL).
 - Build:
   ```
   ninja

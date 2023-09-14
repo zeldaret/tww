@@ -19,6 +19,7 @@ from pathlib import Path
 from tools.project import (
     Object,
     ProjectConfig,
+    calculate_progress,
     generate_build,
     is_windows,
 )
@@ -37,6 +38,12 @@ else:
     versions_str = VERSIONS[0]
 
 parser = argparse.ArgumentParser()
+parser.add_argument(
+    "mode",
+    default="configure",
+    help="configure or progress (default: configure)",
+    nargs='?',
+)
 parser.add_argument(
     "--version",
     dest="version",
@@ -87,6 +94,12 @@ parser.add_argument(
     type=Path,
     help="path to sjiswrap.exe (optional)",
 )
+parser.add_argument(
+    "--verbose",
+    dest="verbose",
+    action="store_true",
+    help="print verbose output",
+)
 args = parser.parse_args()
 
 config = ProjectConfig()
@@ -107,7 +120,7 @@ if not is_windows():
 
 # Tool versions
 config.compilers_tag = "1"
-config.dtk_tag = "v0.5.1"
+config.dtk_tag = "v0.5.2"
 config.sjiswrap_tag = "v1.1.0"
 config.wibo_tag = "0.5.1"
 
@@ -796,5 +809,12 @@ config.libs = [
     ActorRel(NonMatching, "d_a_movie_player"),
 ]
 
-# Write build.ninja and objdiff.json
-generate_build(config)
+if args.mode == "configure":
+    # Write build.ninja and objdiff.json
+    generate_build(config)
+elif args.mode == "progress":
+    # Print progress and write progress.json
+    config.progress_each_module = args.verbose
+    calculate_progress(config)
+else:
+    sys.exit("Unknown mode: " + args.mode)
