@@ -323,7 +323,9 @@ def generate_build_ninja(config, build_config):
     if os.name != "nt":
         transform_dep = config.tools_dir / "transform_dep.py"
         mwcc_cmd += f" && $python {transform_dep} $basefile.d $basefile.d"
+        mwcc_sjis_cmd += f" && $python {transform_dep} $basefile.d $basefile.d"
         mwcc_implicit.append(transform_dep)
+        mwcc_sjis_implicit.append(transform_dep)
 
     n.comment("Link ELF file")
     n.rule(
