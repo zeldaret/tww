@@ -249,7 +249,6 @@ int daShopItem_c::_create() {
         }
 
         CreateInit();
-        return result;
     }
     
     return result;
