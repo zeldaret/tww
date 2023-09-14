@@ -82,7 +82,7 @@ static void event_start_check(andsw0_class* i_this) {
     switch (i_this->mEventState) {
     case 0:
     default:
-        if (i_this->mEventIdx != -1 && i_fopAcM_isSwitch(i_this, i_this->mSwitchToSet)) {
+        if (i_this->mEventIdx != -1 && fopAcM_isSwitch(i_this, i_this->mSwitchToSet)) {
             if (i_this->mEvtInfo.i_checkCommandDemoAccrpt()) {
                 i_this->mEventState++;
             } else {
