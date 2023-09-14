@@ -56,6 +56,7 @@ public:
     s32 checkActionNow();
 
 public:
+    /* 0x63C */ cXyz mScaleTarget;
     /* 0x648 */ s32 mSwitchId;
     /* 0x64C */ s32 mActivationSwitch;
     /* 0x650 */ f32 field3_0x650;

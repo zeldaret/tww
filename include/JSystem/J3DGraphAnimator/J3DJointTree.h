@@ -59,8 +59,8 @@ private:
     /* 0x0C */ u32 mModelDataType;
     /* 0x10 */ J3DJoint* mRootNode;
     /* 0x14 */ J3DMtxCalc* mBasicMtxCalc;
-    /* 0x18 */ J3DJoint** mJointNodePointer;
-    /* 0x1C */ u16 mJointNum;
+    /* 0x18 */ u16 mJointNum;
+    /* 0x1C */ J3DJoint** mJointNodePointer;
     /* 0x1E */ u16 mWEvlpMtxNum;
     /* 0x20 */ u8* mWEvlpMixMtxNum;
     /* 0x24 */ u16* mWEvlpMixIndex;

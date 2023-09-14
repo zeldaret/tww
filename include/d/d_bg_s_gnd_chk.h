@@ -20,7 +20,7 @@ public:
 
 class dBgS_ObjGndChk : public dBgS_GndChk {
 public:
-    dBgS_ObjGndChk() { /* SetObj(); */ }
+    dBgS_ObjGndChk() { SetObj(); }
 
     /* 8001E020 */ virtual ~dBgS_ObjGndChk();
 };

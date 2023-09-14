@@ -320,6 +320,9 @@ public:
     static dItem_data_field_item_res field_item_res[0x100];
     static dItem_data_item_info item_info[0x100];
     
+    static u32 getHeapSize(u8 itemNo) { return item_resource[itemNo].mMaxHeapSize; }
+    static u32 getFieldHeapSize(u8 itemNo) { return field_item_res[itemNo].mHeapSize; }
+    
     static bool checkAppearEffect(u8 itemNo);
     static s16 getAppearEffect(u8 itemNo);
     static bool checkSpecialEffect(u8 itemNo);

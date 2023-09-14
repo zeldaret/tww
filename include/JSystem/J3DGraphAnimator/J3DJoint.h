@@ -2,6 +2,7 @@
 #define J3DJOINT_H
 
 #include "JSystem/J3DGraphBase/J3DTransform.h"
+#include "JSystem/J3DGraphAnimator/J3DNode.h"
 
 class J3DAnmTransform;
 class J3DJoint;
@@ -44,12 +45,8 @@ public:
     virtual void calc();
 };
 
-class J3DJoint;
-typedef int (*J3DJointCallBack)(J3DJoint*, int);
-
-class J3DJoint {
+class J3DJoint : public J3DNode {
 public:
-    /* 8032F13C */ void appendChild(J3DJoint*);
     /* 8032F170 */ J3DJoint();
     /* 8032F254 */ void entryIn();
     /* 8032F3F8 */ void recursiveCalc();
@@ -57,18 +54,15 @@ public:
     J3DMaterial* getMesh() { return mMesh; }
     u16 getJntNo() const { return mJntNo; }
     u8 getScaleCompensate() const { return mScaleCompensate; }
-    J3DJoint* getYounger() { return mYounger; }
-    void setYounger(J3DJoint* pYounger) { mYounger = pYounger; }
     void setCurrentMtxCalc(J3DMtxCalc* pMtxCalc) { mCurrentMtxCalc = pMtxCalc; }
     J3DTransformInfo& getTransformInfo() { return mTransformInfo; }
     Vec* getMax() { return &mMax; }
     Vec* getMin() { return &mMin; }
-    void setCallBack(J3DJointCallBack callback) { mCallBack = callback; }
-    J3DJointCallBack getCallBack() { return mCallBack; }
     void setMtxCalc(J3DMtxCalc* i_mtxCalc) { mMtxCalc = i_mtxCalc; }
     J3DMtxCalc* getMtxCalc() { return mMtxCalc; }
+    void setOldMtxCalc(J3DMtxCalc* i_mtxCalc) { mOldMtxCalc = i_mtxCalc; }
+    J3DMtxCalc* getOldMtxCalc() { return mOldMtxCalc; }
     J3DMtxCalc* getCurrentMtxCalc() { return mCurrentMtxCalc; };
-    J3DJoint* getChild() { return mChild; }
 
     static J3DMtxCalc* mCurrentMtxCalc;
 
@@ -76,21 +70,17 @@ private:
     friend struct J3DJointFactory;
     friend class J3DJointTree;
 
-    /* 0x00 */ void* mCallBackUserData;
-    /* 0x04 */ J3DJointCallBack mCallBack;
-    /* 0x08 */ void* field_0x8;
-    /* 0x0C */ J3DJoint* mChild;
-    /* 0x10 */ J3DJoint* mYounger;
     /* 0x14 */ u16 mJntNo;
-    /* 0x16 */ u8 mKind;
-    /* 0x17 */ u8 mScaleCompensate;
-    /* 0x18 */ J3DTransformInfo mTransformInfo;
-    /* 0x38 */ f32 mBoundingSphereRadius;
-    /* 0x3C */ Vec mMin;
-    /* 0x48 */ Vec mMax;
-    /* 0x54 */ J3DMtxCalc* mMtxCalc;
-    /* 0x58 */ J3DMaterial* mMesh;
-};  // Size: 0x5C
+    /* 0x1A */ u8 mKind;
+    /* 0x1B */ u8 mScaleCompensate;
+    /* 0x1C */ J3DTransformInfo mTransformInfo;
+    /* 0x3C */ f32 mBoundingSphereRadius;
+    /* 0x40 */ Vec mMin;
+    /* 0x4C */ Vec mMax;
+    /* 0x58 */ J3DMtxCalc* mMtxCalc;
+    /* 0x5C */ J3DMtxCalc* mOldMtxCalc;
+    /* 0x60 */ J3DMaterial* mMesh;
+};  // Size: 0x54
 
 struct J3DMtxCalcJ3DSysInitMaya {
     /* 8032ECAC */ static void init(Vec const&, f32 const (&)[3][4]);
