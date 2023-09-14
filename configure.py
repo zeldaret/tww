@@ -249,7 +249,8 @@ config.libs = [
             Object(Matching,    "JSystem/JUtility/JUTGraphFifo.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTFont.cpp"),
             Object(NonMatching, "JSystem/J2DGraph/J2DGrafContext.cpp"),
-            Object(NonMatching, "JSystem/J2DGraph/J2DOrthoGraph.cpp"),
+            Object(Matching,    "JSystem/J2DGraph/J2DOrthoGraph.cpp"),
+            Object(NonMatching, "JSystem/J2DGraph/J2DPane.cpp"),
         ],
     },
     {
