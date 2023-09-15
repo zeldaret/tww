@@ -391,7 +391,7 @@ config.libs = [
             Object(NonMatching, "d/actor/d_a_itembase.cpp"),
 
             # ?
-            Object(NonMatching, "DynamicLink.cpp"),
+            Object(Matching,    "DynamicLink.cpp"),
         ],
     },
     Rel(Matching, "f_pc_profile_lst", "f_pc/f_pc_profile_lst.cpp"),

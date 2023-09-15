@@ -13,13 +13,8 @@
 #include "MSL_C/stdio.h"
 #include "REL/executor.h"
 #include "m_Do/m_Do_dvd_thread.h"
+#include "m_Do/m_Do_ext.h"
 #include "dolphin/os/OS.h"
-
-// TODO 
-// #include "m_Do/m_Do_ext.h"
-JKRExpHeap* mDoExt_getArchiveHeap();
-extern JKRExpHeap* archiveHeap;
-// end m_Do_ext.h
 
 DynamicModuleControlBase* DynamicModuleControlBase::mFirst;
 DynamicModuleControlBase* DynamicModuleControlBase::mLast;

@@ -40,7 +40,7 @@ inline u16 read_big_endian_u16(void* ptr) {
     return ((u16)uptr[0] << 8) | ((u16)uptr[1]);
 }
 
-inline u32 JKRDecompExpandSize(u8 * pBuf) {
+inline u32 JKRDecompExpandSize(u8* pBuf) {
     return (pBuf[4] << 0x18) | (pBuf[5] << 0x10) | (pBuf[6] << 8) | pBuf[7];
 }
 
@@ -151,10 +151,12 @@ public:
     /* vt[09] */ virtual void removeResourceAll(void);                   /* override */
     /* vt[10] */ virtual bool removeResource(void*);                     /* override */
     /* vt[11] */ virtual bool detachResource(void*);                     /* override */
-    /* vt[12] */ virtual u32 getResSize(const void*) const;              /* override */
+    /* vt[12] */ virtual u32 getResSize(const void* resource) const;     /* override */
     /* vt[13] */ virtual u32 countFile(const char*) const;               /* override */
     /* vt[14] */ virtual JKRFileFinder* getFirstFile(const char*) const; /* override */
-    /* vt[15] */ virtual u32 getExpandedResSize(const void*) const;
+    /* vt[15] */ virtual u32 getExpandedResSize(const void* resource) const {
+        return getResSize(resource);
+    }
     /* vt[16] */ virtual void* fetchResource(SDIFileEntry*, u32*) = 0;
     /* vt[17] */ virtual void* fetchResource(void*, u32, SDIFileEntry*, u32*) = 0;
     /* vt[18] */ virtual void setExpandSize(SDIFileEntry*, u32);
@@ -163,9 +165,7 @@ public:
     u32 countFile() const { return mArcInfoBlock->num_file_entries; }
     s32 countDirectory() const { return mArcInfoBlock->num_nodes; }
     u8 getMountMode() const { return mMountMode; }
-    bool isFileEntry(u32 param_0) {
-        return getFileAttribute(param_0) & 1;
-    }
+    bool isFileEntry(u32 param_0) { return getFileAttribute(param_0) & 1; }
 
 public:
     /* 0x00 */  // vtable
