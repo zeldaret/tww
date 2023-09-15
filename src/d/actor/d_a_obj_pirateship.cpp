@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_pirateship.cpp
 //
 
-#include "d_a_obj_pirateship.h"
+#include "d/actor/d_a_obj_pirateship.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000000FC       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */

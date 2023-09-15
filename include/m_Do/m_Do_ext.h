@@ -233,7 +233,19 @@ public:
 
 class JAIAnimeSound;
 
-class mDoExt_McaMorf /* : public J3DMtxCalcMaya */ {
+class J3DMtxCalcBasic { // Placeholder to fix mDoExt_McaMorf inheritance
+public:
+    virtual ~J3DMtxCalcBasic();
+};
+
+class J3DMtxCalcMaya : virtual J3DMtxCalcBasic { // Placeholder to fix mDoExt_McaMorf inheritance
+public:
+    virtual ~J3DMtxCalcMaya();
+    
+    u8 pad[0x48];
+};
+
+class mDoExt_McaMorf : public J3DMtxCalcMaya {
 public:
     mDoExt_McaMorf(J3DModelData*, mDoExt_McaMorfCallBack1_c*, mDoExt_McaMorfCallBack2_c*, J3DAnmTransform*, int, float, int, int, int, void*, unsigned long, unsigned long);
     virtual ~mDoExt_McaMorf();
@@ -241,11 +253,11 @@ public:
     void setAnm(J3DAnmTransform*, int, f32, f32, f32, f32, void*);
     J3DModel* getModel() { return mpModel; }
     void setFrame(f32 frame) { mFrameCtrl.setFrame(frame); }
+    void update();
     void updateDL();
-    void play(Vec *, u32, u8);
+    void play(Vec *, u32, s8);
     void stopZelAnime();
 
-    u8 pad[0x4C]; // J3DMtxCalcMaya
     /* 0x50 */ J3DModel* mpModel;
     /* 0x54 */ J3DAnmTransform* mpAnm;
     /* 0x58 */ J3DFrameCtrl mFrameCtrl;
@@ -257,6 +269,8 @@ public:
     /* 0x80 */ JAIAnimeSound * mpSound;
     /* 0x84 */ mDoExt_McaMorfCallBack1_c * mpCallBack1;
     /* 0x88 */ mDoExt_McaMorfCallBack2_c * mpCallBack2;
+    /* 0x8C */ /* virtual inheritance */
+    /* 0x94 */ u8 pad2[0xB4 - 0x94];
 };
 
 class mDoExt_3DlineMat_c {
