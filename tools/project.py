@@ -45,15 +45,17 @@ class ProjectConfig:
         self.sjiswrap_path = None  # If None, download
 
         # Project config
+        self.build_rels = True  # Build REL files
         self.check_sha_path = None  # Path to version.sha1
         self.config_path = None  # Path to config.yml
-        self.build_rels = True  # Build REL files
         self.debug = False  # Build with debug info
         self.generate_map = False  # Generate map file(s)
         self.ldflags = None  # Linker flags
-        self.linker_version = None  # mwld version
         self.libs = None  # List of libraries
+        self.linker_version = None  # mwld version
         self.version = None  # Version name
+        self.warn_missing_config = False  # Warn on missing unit configuration
+        self.warn_missing_source = False  # Warn on missing source file
 
         # Progress output and progress.json config
         self.progress_all = True  # Include combined "all" category
@@ -495,6 +497,8 @@ def generate_build_ninja(config, build_config):
             obj_path, obj_name = build_obj["object"], build_obj["name"]
             result = config.find_object(obj_name)
             if not result:
+                if config.warn_missing_config:
+                    print(f"Missing configuration for {obj_name}")
                 link_step.add(obj_path)
                 return
 
@@ -506,6 +510,8 @@ def generate_build_ninja(config, build_config):
 
             unit_src_path = config.src_dir / options["source"]
             if not unit_src_path.exists():
+                if config.warn_missing_source:
+                    print(f"Missing source file {unit_src_path}")
                 link_step.add(obj_path)
                 return
 
