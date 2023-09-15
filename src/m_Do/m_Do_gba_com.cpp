@@ -4,249 +4,697 @@
 //
 
 #include "m_Do/m_Do_gba_com.h"
-#include "dolphin/types.h"
+#include "JSystem/JUtility/JUTGba.h"
+#include "SSystem/SComponent/c_math.h"
+#include "m_Do/m_Do_Reset.h"
+
+mDoGaC_agbCom_c g_mDoGaC_gbaCom;
+mDoGaC_DataManag_c TestDataManager[16];
+
+static u32 BigLittleChange(u32);
 
 /* 8001A498-8001A4C0       .text ProbeCheck_0__FP11JUTGbaParamPv */
 void ProbeCheck_0(JUTGbaParam*, void*) {
-    /* Nonmatching */
+    g_mDoGaC_gbaCom.mDoGaC_ProbeCheck0();
 }
 
 /* 8001A4C0-8001A4E8       .text ProbeCheck_1__FP11JUTGbaParamPv */
 void ProbeCheck_1(JUTGbaParam*, void*) {
-    /* Nonmatching */
+    g_mDoGaC_gbaCom.mDoGaC_ProbeCheck1();
 }
 
 /* 8001A4E8-8001A510       .text CodeExchange_0__FP11JUTGbaParamPv */
 void CodeExchange_0(JUTGbaParam*, void*) {
-    /* Nonmatching */
+    g_mDoGaC_gbaCom.mDoGaC_CodeExchange0();
 }
 
 /* 8001A510-8001A538       .text CodeExchange_1__FP11JUTGbaParamPv */
 void CodeExchange_1(JUTGbaParam*, void*) {
-    /* Nonmatching */
+    g_mDoGaC_gbaCom.mDoGaC_CodeExchange1();
 }
 
 /* 8001A538-8001A560       .text CodeExchange_2__FP11JUTGbaParamPv */
 void CodeExchange_2(JUTGbaParam*, void*) {
-    /* Nonmatching */
+    g_mDoGaC_gbaCom.mDoGaC_CodeExchange2();
 }
 
 /* 8001A560-8001A588       .text CodeExchange_3__FP11JUTGbaParamPv */
 void CodeExchange_3(JUTGbaParam*, void*) {
-    /* Nonmatching */
+    g_mDoGaC_gbaCom.mDoGaC_CodeExchange3();
 }
 
 /* 8001A588-8001A5B0       .text CodeExchange_4__FP11JUTGbaParamPv */
 void CodeExchange_4(JUTGbaParam*, void*) {
-    /* Nonmatching */
+    g_mDoGaC_gbaCom.mDoGaC_CodeExchange4();
 }
 
 /* 8001A5B0-8001A5D8       .text ContextCheck__FP11JUTGbaParamPv */
 void ContextCheck(JUTGbaParam*, void*) {
-    /* Nonmatching */
+    g_mDoGaC_gbaCom.mDoGaC_ContextCheck();
 }
 
 /* 8001A5D8-8001A600       .text ContextSend__FP11JUTGbaParamPv */
 void ContextSend(JUTGbaParam*, void*) {
-    /* Nonmatching */
+    g_mDoGaC_gbaCom.mDoGaC_ContextSend();
 }
 
 /* 8001A600-8001A628       .text ContextRead__FP11JUTGbaParamPv */
 void ContextRead(JUTGbaParam*, void*) {
-    /* Nonmatching */
+    g_mDoGaC_gbaCom.mDoGaC_ContextRead();
 }
 
 /* 8001A628-8001A650       .text GbaWriteResult__FP11JUTGbaParamPv */
 void GbaWriteResult(JUTGbaParam*, void*) {
-    /* Nonmatching */
+    g_mDoGaC_gbaCom.mDoGaC_WriteResult();
 }
 
 /* 8001A650-8001A678       .text GbaReadResult__FP11JUTGbaParamPv */
 void GbaReadResult(JUTGbaParam*, void*) {
-    /* Nonmatching */
+    g_mDoGaC_gbaCom.mDoGaC_ReadResult();
 }
 
 /* 8001A678-8001A6A0       .text GbaReset__FP11JUTGbaParamPv */
 void GbaReset(JUTGbaParam*, void*) {
-    /* Nonmatching */
+    g_mDoGaC_gbaCom.mDoGaC_GbaReset();
 }
 
 /* 8001A6A0-8001A7B8       .text mDoGaC_Initial__15mDoGaC_agbCom_cFP18mDoGaC_DataManag_cUc */
-void mDoGaC_agbCom_c::mDoGaC_Initial(mDoGaC_DataManag_c*, unsigned char) {
-    /* Nonmatching */
+// NONMATCHING - loop / end issues
+void mDoGaC_agbCom_c::mDoGaC_Initial(mDoGaC_DataManag_c* param_0, u8 param_1) {
+    field_0x0 = 0;
+    field_0x1 = 0;
+    field_0x2 = 0;
+    field_0x3 = 0;
+    field_0x4 = 1;
+    field_0x5 = 0;
+    mPortNo = 1;
+    field_0x10e = 0;
+    field_0x7 = 0;
+    field_0x8 = 0;
+    field_0x10c = param_1;
+    field_0x9 = 0;
+    field_0xa = 0;
+    field_0xb = 0;
+
+    for (int i = 0; i < 16; i++) {
+        field_0xc[i].field_0x0 = 0;
+        field_0xc[i].field_0x4 = 0;
+        field_0xc[i].field_0x8 = 0;
+        field_0xc[i].field_0xc = 0;
+    }
+
+    field_0x110 = param_0;
+    if (param_1 != 0) {
+        for (int i = 0; i < param_1; i++) {
+            param_0[i].field_0x0 = 0;
+            param_0[i].field_0x4 = 0;
+            param_0[i].field_0x5 = 0;
+        }
+    }
+
+    field_0x114 = -1;
+    field_0x118 = 0;
+
+    field_0x12c.U16._12e |= (u32)cM_rndF(32767.0f);
+    field_0x12c.U32 |= (u32)cM_rndF(32767.0f);
+    field_0x12c.U8 = (field_0x12c.U8 & 0x3F) | 0x40;
+    field_0x128 = 0;
 }
 
 /* 8001A7B8-8001A7C4       .text mDoGaC_ComOpen__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_ComOpen() {
-    /* Nonmatching */
+    field_0x2 = 2;
 }
 
 /* 8001A7C4-8001A814       .text mDoGaC_ComClose__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_ComClose() {
-    /* Nonmatching */
+    field_0x4 = 1;
+    field_0x2 = 0;
+    field_0x10e = 0;
+
+    for (int i = 0; i < field_0x10c; i++) {
+        field_0x110[i].field_0x4 = 9;
+        field_0x110[i].field_0x5 = 1;
+    }
 }
 
 /* 8001A814-8001A820       .text mDoGaC_ComStart__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_ComStart() {
-    /* Nonmatching */
+    field_0x1 = 1;
 }
 
 /* 8001A820-8001A858       .text mDoGaC_ComStop__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_ComStop() {
-    /* Nonmatching */
+    mDoGaC_ComClose();
+    field_0x1 = 0;
+    field_0x5 = 0;
 }
 
 /* 8001A858-8001A8B4       .text mDoGaC_GbaReboot__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_GbaReboot() {
-    /* Nonmatching */
+    mDoGaC_ComStop();
+    field_0x0 = 0;
+    field_0x3 = 0;
+    field_0x12c.U32 |= (u32)cM_rndF(32767.0f);
+    field_0x128 = 0;
 }
 
 /* 8001A8B4-8001A94C       .text mDoGaC_GbaReset__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_GbaReset() {
-    /* Nonmatching */
+    u8 sp8[16];
+
+    if (JUTGba::getManager()->resultReset(mDoGaC_getPortNo(), sp8)) {
+        mDoGaC_GbaReboot();
+    } else {
+        field_0x6++;
+        if (field_0x6 > 60) {
+            mDoGaC_GbaReboot();
+        } else {
+            JUTGba::getManager()->doReset(mDoGaC_getPortNo(), GbaReset, NULL);
+        }
+    }
 }
 
 /* 8001A94C-8001A9A4       .text mDoGaC_ComRestart__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_ComRestart() {
-    /* Nonmatching */
+    field_0x4 = 0;
+    field_0x7 = 0;
+    field_0x8 = 0;
+    field_0x9 = 0;
+    field_0xa = 0;
+    field_0xb = 0;
+
+    for (int i = 0; i < field_0x10c; i++) {
+        field_0x110[i].field_0x4 = 0;
+        field_0x110[i].field_0x5 = 0;
+    }
 }
 
 /* 8001A9A4-8001AAD4       .text mDoGaC_Connect__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_Connect() {
-    /* Nonmatching */
+    if (field_0x0 != 0) {
+        if (mDoRst::isReset()) {
+            mDoGaC_ComStop();
+            field_0x6 = 0;
+            JUTGba::getManager()->doReset(mDoGaC_getPortNo(), GbaReset, NULL);
+        } else if (field_0x1 != 0) {
+            switch (field_0x2) {
+            case 0:
+                field_0x2 = 1;
+                JUTGba::getManager()->doProbe(mDoGaC_getPortNo(), ProbeCheck_0, NULL);
+                if (field_0x10e < 3) {
+                    field_0x10e++;
+                }
+                break;
+            case 2:
+                mDoGaC_ComRestart();
+                mDoGaC_GbaWrite();
+                field_0x2 = 3;
+                break;
+            case 3:
+                if (field_0x5 == 0) {
+                    mDoGaC_SendDataWrite();
+                }
+
+                if (field_0x4 == 1) {
+                    mDoGaC_ComClose();
+                }
+
+                field_0x10e = 0;
+                break;
+            case 4:
+                break;
+            }
+        }
+    }
 }
 
 /* 8001AAD4-8001AAEC       .text mDoGaC_ConnectSleep__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_ConnectSleep() {
-    /* Nonmatching */
+    if (field_0x2 == 0) {
+        field_0x2 = 4;
+    }
 }
 
 /* 8001AAEC-8001AAF8       .text mDoGaC_ConnectWake__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_ConnectWake() {
-    /* Nonmatching */
+    field_0x2 = 0;
 }
 
 /* 8001AAF8-8001AB4C       .text mDoGaC_GbaLink__15mDoGaC_agbCom_cFv */
-void mDoGaC_agbCom_c::mDoGaC_GbaLink() {
-    /* Nonmatching */
+int mDoGaC_agbCom_c::mDoGaC_GbaLink() {
+    if (field_0x0 == 1 && field_0x2 == 3 && field_0x4 == 0) {
+        return 1;
+    }
+
+    if (field_0x128 == 1 && field_0x10e < 3) {
+        return 1;
+    }
+
+    return 0;
 }
 
 /* 8001AB4C-8001AC14       .text mDoGaC_SendDataSet__15mDoGaC_agbCom_cFPUliUcUl */
-void mDoGaC_agbCom_c::mDoGaC_SendDataSet(unsigned long*, int, unsigned char, unsigned long) {
-    /* Nonmatching */
+int mDoGaC_agbCom_c::mDoGaC_SendDataSet(u32* param_0, int param_1, u8 param_2, u32 param_3) {
+    u8 uvar1 = field_0x9 + 1;
+    if (uvar1 >= 16) {
+        uvar1 = 0;
+    }
+
+    if (uvar1 == field_0xa || param_1 <= 0) {
+        return 0;
+    }
+
+    if (param_1 < 4) {
+        param_1 = 4;
+    }
+
+    field_0xc[field_0x9].field_0x0 = param_0;
+    field_0xc[field_0x9].field_0x4 = param_1;
+    field_0xc[field_0x9].field_0x8 = param_2;
+    field_0xc[field_0x9].field_0xc = param_3;
+    field_0x110[param_2].field_0x4 = 2;
+
+    field_0x9++;
+    if (field_0x9 >= 16) {
+        field_0x9 = 0;
+    }
+
+    field_0xb++;
+
+    return 1;
 }
 
 /* 8001AC14-8001AD48       .text mDoGaC_SendDataWrite__15mDoGaC_agbCom_cFv */
+// NONMATCHING - regswap
 void mDoGaC_agbCom_c::mDoGaC_SendDataWrite() {
-    /* Nonmatching */
+    u8 var_r5 = 0;
+    while (field_0x10c > var_r5) {
+        u8 var_r0 = field_0x110[var_r5].field_0x5;
+        if (var_r0 != 0) {
+            u8 temp_r0 = field_0x9 + 1;
+            if (temp_r0 >= 16) {
+                temp_r0 = 0;
+            }
+
+            if (temp_r0 == field_0xa) {
+                return;
+            }
+
+            if (field_0x110[var_r5].field_0x4 == 0 || field_0x110[var_r5].field_0x4 == 1) {
+                if (var_r0 == 1) {
+                    field_0xc[field_0x9].field_0x0 = &field_0x11C;
+                    field_0xc[field_0x9].field_0x4 = 4;
+                } else {
+                    field_0xc[field_0x9].field_0x0 = &field_0x120;
+                    field_0xc[field_0x9].field_0x4 = 8;
+                }
+
+                field_0xc[field_0x9].field_0x8 = var_r5;
+                field_0xc[field_0x9].field_0xc = 0;
+                field_0x110[var_r5].field_0x4 = 2;
+
+                field_0x9++;
+                if (field_0x9 >= 16) {
+                    field_0x9 = 0;
+                }
+
+                field_0xb++;
+                field_0x110[var_r5].field_0x5 = 0;
+            }
+        }
+
+        var_r5++;
+    }
 }
 
 /* 8001AD48-8001AD84       .text mDoGaC_SendEntry__15mDoGaC_agbCom_cFUcUl */
-void mDoGaC_agbCom_c::mDoGaC_SendEntry(unsigned char, unsigned long) {
-    /* Nonmatching */
+int mDoGaC_agbCom_c::mDoGaC_SendEntry(u8 param_0, u32 param_1) {
+    if (field_0x110[param_0].field_0x5 == 0) {
+        field_0x11C = param_1;
+        field_0x110[param_0].field_0x5 = 1;
+        return 1;
+    }
+
+    return 0;
 }
 
 /* 8001AD84-8001ADB4       .text mDoGaC_SendStatusCheck__15mDoGaC_agbCom_cFUc */
-void mDoGaC_agbCom_c::mDoGaC_SendStatusCheck(unsigned char) {
-    /* Nonmatching */
+int mDoGaC_agbCom_c::mDoGaC_SendStatusCheck(u8 param_0) {
+    if (field_0x110[param_0].field_0x4 == 0 || field_0x110[param_0].field_0x4 == 1) {
+        return 1;
+    }
+
+    return 0;
 }
 
 /* 8001ADB4-8001ADE4       .text mDoGaC_SendEndCheck__15mDoGaC_agbCom_cFUc */
-void mDoGaC_agbCom_c::mDoGaC_SendEndCheck(unsigned char) {
-    /* Nonmatching */
+int mDoGaC_agbCom_c::mDoGaC_SendEndCheck(u8 param_0) {
+    if (field_0x110[param_0].field_0x4 == 4 || field_0x110[param_0].field_0x4 == 0) {
+        return 1;
+    }
+
+    return 0;
 }
 
 /* 8001ADE4-8001AE04       .text mDoGaC_RecvStatusCheck__15mDoGaC_agbCom_cFUc */
-void mDoGaC_agbCom_c::mDoGaC_RecvStatusCheck(unsigned char) {
-    /* Nonmatching */
+bool mDoGaC_agbCom_c::mDoGaC_RecvStatusCheck(u8 param_0) {
+    return field_0x110[param_0].field_0x4 == 8;
 }
 
 /* 8001AE04-8001AE44       .text mDoGaC_DataStatusReset__15mDoGaC_agbCom_cFUc */
-void mDoGaC_agbCom_c::mDoGaC_DataStatusReset(unsigned char) {
-    /* Nonmatching */
+void mDoGaC_agbCom_c::mDoGaC_DataStatusReset(u8 param_0) {
+    if (field_0x110[param_0].field_0x4 == 8) {
+        field_0x110[param_0].field_0x4 = 0;
+        mDoGaC_StatusSendSet(param_0);
+    }
 }
 
 /* 8001AE44-8001AEE4       .text mDoGaC_StatusSendSet__15mDoGaC_agbCom_cFUc */
-void mDoGaC_agbCom_c::mDoGaC_StatusSendSet(unsigned char) {
-    /* Nonmatching */
+int mDoGaC_agbCom_c::mDoGaC_StatusSendSet(u8 param_0) {
+    u8 temp_r0 = field_0x9 + 1;
+    if (temp_r0 >= 16) {
+        temp_r0 = 0;
+    }
+
+    if (temp_r0 == field_0xa) {
+        return 0;
+    }
+
+    field_0xc[field_0x9].field_0x0 = 0;
+    field_0xc[field_0x9].field_0x4 = 0;
+    field_0xc[field_0x9].field_0x8 = param_0;
+    field_0xc[field_0x9].field_0xc = 0;
+
+    field_0x9++;
+    if (field_0x9 >= 16) {
+        field_0x9 = 0;
+    }
+
+    field_0xb++;
+    return 1;
 }
 
 /* 8001AEE4-8001AF68       .text mDoGaC_ProbeCheck0__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_ProbeCheck0() {
-    /* Nonmatching */
+    u32 sp8;
+    if (!JUTGba::getManager()->resultProbe(mDoGaC_getPortNo(), &sp8) && sp8 == 0x40000) {
+        JUTGba::getManager()->doReset(mDoGaC_getPortNo(), ProbeCheck_1, NULL);
+    } else {
+        field_0x2 = 0;
+    }
 }
 
 /* 8001AF68-8001AFDC       .text mDoGaC_ProbeCheck1__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_ProbeCheck1() {
-    /* Nonmatching */
+    u8 sp8[16];
+    if (!JUTGba::getManager()->resultReset(mDoGaC_getPortNo(), sp8)) {
+        JUTGba::getManager()->doGetStatus(mDoGaC_getPortNo(), CodeExchange_0, NULL);
+    } else {
+        field_0x2 = 0;
+    }
 }
 
 /* 8001AFDC-8001B060       .text mDoGaC_CodeExchange0__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_CodeExchange0() {
-    /* Nonmatching */
+    u8 sp8[16];
+    if (!JUTGba::getManager()->resultGetStatus(mDoGaC_getPortNo(), sp8) && sp8[0] == 0x28) {
+        JUTGba::getManager()->doRead(mDoGaC_getPortNo(), (u8*)&field_0x118, CodeExchange_1, NULL);
+    } else {
+        field_0x2 = 0;
+    }
 }
 
 /* 8001B060-8001B0F4       .text mDoGaC_CodeExchange1__15mDoGaC_agbCom_cFv */
+// NONMATCHING - weird string load
 void mDoGaC_agbCom_c::mDoGaC_CodeExchange1() {
-    /* Nonmatching */
+    u8 sp8[16];
+    if (!JUTGba::getManager()->resultRead(mDoGaC_getPortNo(), sp8)) {
+        if (field_0x118 == (u32) "GZLE") {
+            JUTGba::getManager()->doGetStatus(mDoGaC_getPortNo(), CodeExchange_2, NULL);
+        } else {
+            mDoGaC_GbaReboot();
+        }
+    } else {
+        field_0x2 = 0;
+    }
 }
 
 /* 8001B0F4-8001B184       .text mDoGaC_CodeExchange2__15mDoGaC_agbCom_cFv */
+// NONMATCHING - weird string load
 void mDoGaC_agbCom_c::mDoGaC_CodeExchange2() {
-    /* Nonmatching */
+    u8 sp8[16];
+    if (!JUTGba::getManager()->resultGetStatus(mDoGaC_getPortNo(), sp8) && sp8[0] == 0x20) {
+        field_0x114 = (u32) "GZLE";
+        JUTGba::getManager()->doWrite(mDoGaC_getPortNo(), (u8*)&field_0x114, CodeExchange_3, NULL);
+    } else {
+        field_0x2 = 0;
+    }
 }
 
 /* 8001B184-8001B1F8       .text mDoGaC_CodeExchange3__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_CodeExchange3() {
-    /* Nonmatching */
+    u8 sp8[16];
+    if (!JUTGba::getManager()->resultWrite(mDoGaC_getPortNo(), sp8)) {
+        JUTGba::getManager()->doGetStatus(mDoGaC_getPortNo(), CodeExchange_4, NULL);
+    } else {
+        field_0x2 = 0;
+    }
 }
 
 /* 8001B1F8-8001B298       .text mDoGaC_CodeExchange4__15mDoGaC_agbCom_cFv */
+// NONMATCHING - weird bit shifting
 void mDoGaC_agbCom_c::mDoGaC_CodeExchange4() {
-    /* Nonmatching */
+    u8 sp8[16];
+    if (!JUTGba::getManager()->resultGetStatus(mDoGaC_getPortNo(), sp8) && sp8[0] == 0x30) {
+        field_0x12c.U8 = (field_0x12c.U8 & ~0xC0) | (mDoGaC_getPortNo() & 0xC0);
+        field_0x114 = BigLittleChange(field_0x12c.U32);
+        JUTGba::getManager()->doWrite(mDoGaC_getPortNo(), (u8*)&field_0x114, ContextSend, NULL);
+    } else {
+        field_0x2 = 0;
+    }
 }
 
 /* 8001B298-8001B334       .text mDoGaC_ContextCheck__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_ContextCheck() {
-    /* Nonmatching */
+    u8 sp8[16];
+    if (!JUTGba::getManager()->resultRead(mDoGaC_getPortNo(), sp8)) {
+        u32 var_r0 = BigLittleChange(field_0x118);
+        if (var_r0 == field_0x12c.U32) {
+            if (field_0x128 == 1) {
+                field_0x3 = 1;
+            } else {
+                field_0x128 = 1;
+            }
+
+            mDoGaC_ComOpen();
+        } else {
+            field_0x2 = 0;
+        }
+    } else {
+        field_0x2 = 0;
+    }
 }
 
 /* 8001B334-8001B3A8       .text mDoGaC_ContextSend__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_ContextSend() {
-    /* Nonmatching */
+    u8 sp8[16];
+    if (!JUTGba::getManager()->resultWrite(mDoGaC_getPortNo(), sp8)) {
+        JUTGba::getManager()->doGetStatus(mDoGaC_getPortNo(), ContextRead, NULL);
+    } else {
+        field_0x2 = 0;
+    }
 }
 
 /* 8001B3A8-8001B42C       .text mDoGaC_ContextRead__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_ContextRead() {
-    /* Nonmatching */
+    u8 sp8[16];
+    if (!JUTGba::getManager()->resultGetStatus(mDoGaC_getPortNo(), sp8) && sp8[0] == 0x38) {
+        JUTGba::getManager()->doRead(mDoGaC_getPortNo(), (u8*)&field_0x118, ContextRead, NULL);
+    } else {
+        field_0x2 = 0;
+    }
 }
 
 /* 8001B42C-8001B6CC       .text mDoGaC_GbaWrite__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_GbaWrite() {
-    /* Nonmatching */
+    static int flag = 0;
+
+    if (field_0xa == field_0x9) {
+        if (field_0x5 == 1) {
+            mDoGaC_ComStop();
+            field_0x114 = -0x10101011;
+        } else {
+            field_0x114 = -1;
+        }
+    } else {
+        mDoGaC_unk_data* temp_r31 = &field_0xc[field_0xa];
+        switch (field_0x8) {
+        case 0:
+            field_0x114 = BigLittleChange(-0x01010102);
+            field_0x8 = 1;
+            break;
+        case 1:
+            field_0x114 = BigLittleChange(temp_r31->field_0x8);
+            field_0x8 = 2;
+            break;
+        case 2:
+            u8 temp_r3_2 = field_0x110[temp_r31->field_0x8].field_0x4;
+            if (temp_r3_2 == 2) {
+                field_0x110[temp_r31->field_0x8].field_0x4 = 3;
+                field_0x114 = BigLittleChange(3);
+                field_0x8 = 3;
+            } else {
+                field_0x114 = BigLittleChange(temp_r3_2);
+                if (field_0x110[temp_r31->field_0x8].field_0x4 == 5) {
+                    field_0x110[temp_r31->field_0x8].field_0x4 = 6;
+                }
+
+                field_0xb--;
+                field_0xa++;
+                if (field_0xa >= 16) {
+                    field_0xa = 0;
+                }
+
+                field_0x8 = 0;
+            }
+            break;
+        case 3:
+            field_0x114 = BigLittleChange(temp_r31->field_0x4);
+            temp_r31->field_0xc = 0;
+            field_0x8 = 5;
+            break;
+        case 4:
+            field_0x114 = BigLittleChange(temp_r31->field_0xc);
+            field_0x110[temp_r31->field_0x8].field_0x4 = 4;
+
+            field_0xb--;
+            field_0xa++;
+            if (field_0xa >= 16) {
+                field_0xa = 0;
+            }
+            field_0x8 = 0;
+            break;
+        case 5:
+            field_0x114 = *temp_r31->field_0x0;
+            temp_r31->field_0xc += BigLittleChange(field_0x114);
+            temp_r31->field_0x4 -= 4;
+            if (temp_r31->field_0x4 <= 0) {
+                field_0x8 = 4;
+            } else {
+                temp_r31->field_0x0++;
+            }
+            break;
+        default:
+            field_0x114 = -1;
+            break;
+        }
+    }
+
+    JUTGba::getManager()->doWrite(mDoGaC_getPortNo(), (u8*)&field_0x114, GbaWriteResult, NULL);
 }
 
 /* 8001B6CC-8001B734       .text mDoGaC_WriteResult__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_WriteResult() {
-    /* Nonmatching */
+    u8 sp8[16];
+    if (!JUTGba::getManager()->resultWrite(mDoGaC_getPortNo(), sp8) && field_0x4 == 0) {
+        mDoGaC_GbaRead();
+    } else {
+        field_0x4 = 1;
+    }
 }
 
 /* 8001B734-8001B778       .text mDoGaC_GbaRead__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_GbaRead() {
-    /* Nonmatching */
+    JUTGba::getManager()->doRead(mDoGaC_getPortNo(), (u8*)&field_0x118, GbaReadResult, NULL);
 }
 
 /* 8001B778-8001BA34       .text mDoGaC_ReadResult__15mDoGaC_agbCom_cFv */
+// NONMATCHING - almost
 void mDoGaC_agbCom_c::mDoGaC_ReadResult() {
-    /* Nonmatching */
+    static u8 data_type = 0;
+    static u32 check_sum = 0;
+    static u32 data_sum = 0;
+    static u32* recv_p = NULL;
+    static u32* end_p = NULL;
+
+    u8 sp8[16];
+    if (!JUTGba::getManager()->resultRead(mDoGaC_getPortNo(), sp8) && field_0x4 == 0) {
+        switch (field_0x7) {
+        case 0:
+            u32 temp_r0 = BigLittleChange(field_0x118);
+            if (temp_r0 == -0x1010102) {
+                field_0x7 = 1;
+            }
+            break;
+        case 1:
+            u32 temp_r0_2 = BigLittleChange(field_0x118);
+            data_type = temp_r0_2;
+            if ((temp_r0_2 & 0xFF) < 0x10) {
+                recv_p = &field_0x110[temp_r0_2 & 0xFF].field_0x0;
+            } else {
+                recv_p = NULL;
+            }
+            field_0x7 = 2;
+            break;
+        case 2:
+            u32 temp_r0_3 = BigLittleChange(field_0x118);
+            field_0x110[data_type].field_0x4 = temp_r0_3;
+            if (temp_r0_3 == 7) {
+                field_0x7 = 3;
+            } else {
+                field_0x7 = 0;
+                if (temp_r0_3 == 9) {
+                    field_0x4 = 1;
+                }
+            }
+            break;
+        case 3:
+            u32 temp_r0_4 = BigLittleChange(field_0x118);
+            end_p = &field_0x110[data_type].field_0x0 + temp_r0_4;
+            data_sum = 0;
+            if (recv_p == NULL) {
+                field_0x7 = 6;
+            } else {
+                field_0x7 = 5;
+            }
+            break;
+        case 4:
+            check_sum = BigLittleChange(field_0x118);
+            if (data_sum == check_sum) {
+                field_0x110[data_type].field_0x4 = 8;
+            } else {
+                field_0x110[data_type].field_0x4 = 9;
+                mDoGaC_StatusSendSet(data_type);
+                field_0x4 = 1;
+            }
+            field_0x7 = 0;
+            break;
+        case 5:
+            *recv_p = field_0x118;
+            data_sum += BigLittleChange(field_0x118);
+        case 6:
+            recv_p++;
+            if (recv_p >= end_p) {
+                field_0x7 = 4;
+            }
+            break;
+        }
+
+        mDoGaC_GbaWrite();
+    } else {
+        field_0x4 = 1;
+    }
 }
 
 /* 8001BA34-8001BA68       .text BigLittleChange__FUl */
-void BigLittleChange(unsigned long) {
-    /* Nonmatching */
+// NONMATCHING - not even close
+u32 BigLittleChange(u32 param_0) {
+    u8 b1 = param_0 >> 8;
+    u8 b2 = param_0 >> 0x10;
+    u8 b3 = param_0 >> 0x18;
+    return (param_0 << 0x18) | (b1 << 0x10) | (b2 << 8) | b3;
 }
 
 /* 8001BAA0-8001BADC       .text __dt__15mDoGaC_agbCom_cFv */
-mDoGaC_agbCom_c::~mDoGaC_agbCom_c() {
-    /* Nonmatching */
-}
+mDoGaC_agbCom_c::~mDoGaC_agbCom_c() {}
