@@ -7,8 +7,6 @@
 class JKRHeap;
 typedef void (*JKRErrorHandler)(void*, u32, int);
 
-extern bool data_804508B0;
-
 class JKRHeap : public JKRDisposer {
 public:
     class TState {
@@ -44,6 +42,7 @@ public:
     s32 getFreeSize();
     void* getMaxFreeBlock();
     s32 getTotalFreeSize();
+    u8 getCurrentGroupId();
     s32 changeGroupID(u8 newGroupId);
     u32 getMaxAllocatableSize(int alignment);
 
@@ -76,7 +75,7 @@ public:
     /* vt[18] */ virtual s32 do_getTotalFreeSize() = 0;
     /* vt[19] */ virtual s32 do_changeGroupID(u8 newGroupID);
     /* vt[20] */ virtual u8 do_getCurrentGroupId();
-    /* vt[21] */ virtual u32 state_register(JKRHeap::TState* p, u32 id) const;
+    /* vt[21] */ virtual void state_register(JKRHeap::TState* p, u32 id) const;
     /* vt[22] */ virtual bool state_compare(JKRHeap::TState const& r1, JKRHeap::TState const& r2) const;
     /* vt[23] */ virtual void state_dump(JKRHeap::TState const& p) const;
 
@@ -135,7 +134,7 @@ public:
 
     static JKRErrorHandler setErrorHandler(JKRErrorHandler errorHandler);
 
-    static void setDefaultDebugFill(bool status) { data_804508B0 = status; }
+    static void setDefaultDebugFill(bool status) { sDefaultFillFlag = status; }
     static void* getCodeStart(void) { return mCodeStart; }
     static void* getCodeEnd(void) { return mCodeEnd; }
     static void* getUserRamStart(void) { return mUserRamStart; }
@@ -172,32 +171,23 @@ public:
 
     static JKRHeap* sSystemHeap;
     static JKRHeap* sCurrentHeap;
+    static bool sDefaultFillFlag;
 
     static JKRErrorHandler mErrorHandler;
 };
 
-// The C++ standard says that the first argument to operator new must be a size_t;
-// which on 64-bit systems is unsigned long long; IntelliSense won't recognize the
-// override unless we give it that. I don't know of an easy way to convince
-// IntelliSense that we're in a 32-bit project, so just give it a different size.
-#if defined __INTELLISENSE__
-typedef unsigned int NEW_SIZE;
-#else
-typedef u32 NEW_SIZE;
-#endif
+void* operator new(size_t size);
+void* operator new(size_t size, int alignment);
+void* operator new(size_t size, JKRHeap* heap, int alignment);
 
-void* operator new(NEW_SIZE size);
-void* operator new(NEW_SIZE size, int alignment);
-void* operator new(NEW_SIZE size, JKRHeap* heap, int alignment);
-
-void* operator new[](NEW_SIZE size);
-void* operator new[](NEW_SIZE size, int alignment);
-void* operator new[](NEW_SIZE size, JKRHeap* heap, int alignment);
+void* operator new[](size_t size);
+void* operator new[](size_t size, int alignment);
+void* operator new[](size_t size, JKRHeap* heap, int alignment);
 
 void operator delete(void* ptr);
 void operator delete[](void* ptr);
 
-inline void* operator new(NEW_SIZE size, void* ptr) {
+inline void* operator new(size_t size, void* ptr) {
     return ptr;
 }
 
