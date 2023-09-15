@@ -3,8 +3,83 @@
 // Translation Unit: d_a_mozo.cpp
 //
 
-#include "d_a_mozo.h"
+#include "f_op/f_op_actor_mng.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
+#include "d/d_procname.h"
+#include "d/d_cc_d.h"
+#include "m_do/m_Do_mtx.h"
+#include "m_Do/m_Do_ext.h"
 #include "dolphin/types.h"
+
+
+/*** HIO ***/
+class daMozo_HIO_c {
+public:
+    daMozo_HIO_c();
+    ~daMozo_HIO_c();
+};
+
+static daMozo_HIO_c l_HIO;
+
+class daMozo_childHIO_c {
+public:
+    ~daMozo_childHIO_c();
+};
+
+class daMozo_FireChildHIO_c {
+public:
+    ~daMozo_FireChildHIO_c();
+};
+
+class daMozo_BeamChildHIO_c {
+public:
+    ~daMozo_BeamChildHIO_c();
+};
+
+/*** Actor ***/
+class daMozo_c : public fopAc_ac_c {
+public:
+    s32 _create();
+    bool _delete();
+    bool _draw();
+    bool _execute();
+    void anime_proc();
+    void checkRange(int);
+    s32 CreateHeap();
+    s32 CreateInit();
+    void event_move();
+    void getBeamActor(u32);
+    void search_beam_proc();
+    void search_beam_proc_init();
+    void search_fire_proc();
+    void search_fire_proc_init();
+    void set_mtx();
+    void setAnm(int, float);
+    void towait_proc();
+    void towait_proc_init();
+    void wait_proc();
+    void wait_proc_init();
+
+    typedef void(daMozo_c::*proc_t)(void);
+    proc_t mCurrentProc;
+    request_of_phase_process_class mPhs;
+    
+    mDoExt_McaMorf* mAnimMorf;
+    
+    mDoExt_brkAnm mBrkAnm;
+    J3DAnmTevRegKey* m_brk;
+    
+    mDoExt_btkAnm mBtkAnm;
+    J3DAnmTextureSRTKey* m_btk;
+
+    // ...
+
+    dCcD_Stts mColStatus;
+    dCcD_Cps mCapsuleCol;
+};
 
 /* 000000EC-000001D0       .text __ct__12daMozo_HIO_cFv */
 daMozo_HIO_c::daMozo_HIO_c() {
@@ -42,18 +117,53 @@ void daMozo_nodeCallBack(J3DNode*, int) {
 }
 
 /* 0000078C-000007AC       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+s32 CheckCreateHeap(fopAc_ac_c* i_this) {
+    return static_cast<daMozo_c*>(i_this)->CreateHeap();
 }
 
 /* 000007AC-00000A24       .text CreateHeap__8daMozo_cFv */
-void daMozo_c::CreateHeap() {
+s32 daMozo_c::CreateHeap() {
     /* Nonmatching */
+    J3DModelData* mdlData = (J3DModelData*)dComIfG_getObjectRes("Mozo", 9);
+    
+    mDoExt_McaMorf* newMorf =  new mDoExt_McaMorf(
+        mdlData,
+        0,
+        0,
+        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Mozo", 6)),
+        2,
+        1.0f,
+        0,
+        -1,
+        0,
+        0,
+        0,
+        0x11020203
+    );
+    
+    mAnimMorf = newMorf;
+
+    m_brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Mozo", 0x0C);
+    JUT_ASSERT(0x16A, m_brk != 0);
+
+    m_btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Mozo", 0x0F);
+    JUT_ASSERT(0x16D, m_btk != 0);
+
+    int brkInitResult = mBrkAnm.init(mdlData, m_brk, true, 0, 1.0f, 0, -1, false, 0);
+    int btkInitResult = mBtkAnm.init(mdlData, m_btk, true, 0, 1.0f, 0, -1, false, 0);
+
+    return mdlData != 0 && mAnimMorf != 0 && mAnimMorf->getModel() != 0 && brkInitResult != 0 && btkInitResult != 0;
 }
 
 /* 00000A24-00000AAC       .text set_mtx__8daMozo_cFv */
 void daMozo_c::set_mtx() {
-    /* Nonmatching */
+    J3DModel* mdl = mAnimMorf->getModel();
+    mdl->setBaseScale(mScale);
+
+    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::YrotM(getAngle().y);
+        
+    mdl->i_setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000AAC-00000C38       .text anime_proc__8daMozo_cFv */
@@ -112,22 +222,75 @@ void daMozo_c::setAnm(int, float) {
 }
 
 /* 00001F70-00002228       .text CreateInit__8daMozo_cFv */
-void daMozo_c::CreateInit() {
+s32 daMozo_c::CreateInit() {
     /* Nonmatching */
+    J3DModelData* mdlData = mAnimMorf->getModel()->getModelData();
+
+    int param = mBase.mParameters * 0xFF;
+    if (param == 0xFF) {
+        param = 0;
+    }
+    
+    int a = 2;
+    if (param < 3) {
+        a = param;
+    }
+
+    //m0376 = a;
+
+    mAnimMorf->getModel()->setUserArea(this);
+    for (int i = 0; i < mdlData->getJointNum(); i++) {
+        if (i == 2) {
+            mdlData->getJointNodePointer(2)->setCallBack((J3DNodeCallBack)daMozo_nodeCallBack);
+        }
+    }
+
+    //mQuatRotation = ZeroQuat;
+
+    fopAcM_setCullSizeBox(this, -1000.f, -1000.f, -1000.f, 1000.0f, 1000.0f, 1000.0f);
+    mCullMtx = mAnimMorf->getModel()->getBaseTRMtx();
+
+    //m02F4 = getPosition();
+    //m0300 = getPosition();
+
+    //if ()
+
+    set_mtx();
+    mAnimMorf->calc();
+    wait_proc_init();
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00002228-000023B0       .text _create__8daMozo_cFv */
-void daMozo_c::_create() {
+s32 daMozo_c::_create() {
     /* Nonmatching */
+    fopAcM_SetupActor(this, daMozo_c);
+
+    s32 result = dComIfG_resLoad(&mPhs, "Mozo");
+
+    if (result == cPhs_COMPLEATE_e) {
+        s32 solidHeapResult = fopAcM_entrySolidHeap(this, (heapCallbackFunc)CheckCreateHeap, 0x1AA0);
+
+        if (solidHeapResult & 0xFF == 0) {
+            result = cPhs_ERROR_e;
+        }
+        else {
+            result = CreateInit();
+            _execute();
+        }
+    }
+
+    return result;
 }
 
 /* 000023B0-0000242C       .text _delete__8daMozo_cFv */
-void daMozo_c::_delete() {
+bool daMozo_c::_delete() {
     /* Nonmatching */
 }
 
 /* 0000242C-00002498       .text getBeamActor__8daMozo_cFUi */
-void daMozo_c::getBeamActor(unsigned int) {
+void daMozo_c::getBeamActor(u32) {
     /* Nonmatching */
 }
 
@@ -137,38 +300,53 @@ void daMozo_c::event_move() {
 }
 
 /* 00002588-000025DC       .text _execute__8daMozo_cFv */
-void daMozo_c::_execute() {
-    /* Nonmatching */
+bool daMozo_c::_execute() {
+    mAnimMorf->calc();
+
+    (this->*mCurrentProc)();
+    event_move();
+    set_mtx();
+
+    return true;
 }
 
 /* 000025DC-0000267C       .text _draw__8daMozo_cFv */
-void daMozo_c::_draw() {
+bool daMozo_c::_draw() {
     /* Nonmatching */
+    J3DModelData* mdlData = mAnimMorf->getModel()->getModelData();
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, getPositionP(), &mTevStr);
+    g_env_light.setLightTevColorType(mAnimMorf->getModel(), &mTevStr);
+
+    mBrkAnm.entry(mdlData);
+    mBtkAnm.entry(mdlData);
+    mAnimMorf->entryDL();
+
+    return true;
 }
 
 /* 0000267C-000026A0       .text daMozo_Draw__FP8daMozo_c */
-void daMozo_Draw(daMozo_c*) {
-    /* Nonmatching */
+s32 daMozo_Draw(daMozo_c* i_this) {
+    return i_this->_draw();
 }
 
 /* 000026A0-000026C4       .text daMozo_Execute__FP8daMozo_c */
-void daMozo_Execute(daMozo_c*) {
-    /* Nonmatching */
+s32 daMozo_Execute(daMozo_c* i_this) {
+    return i_this->_execute();
 }
 
 /* 000026C4-000026CC       .text daMozo_IsDelete__FP8daMozo_c */
-void daMozo_IsDelete(daMozo_c*) {
-    /* Nonmatching */
+s32 daMozo_IsDelete(daMozo_c*) {
+    return TRUE;
 }
 
 /* 000026CC-000026F0       .text daMozo_Delete__FP8daMozo_c */
-void daMozo_Delete(daMozo_c*) {
-    /* Nonmatching */
+s32 daMozo_Delete(daMozo_c* i_this) {
+    return i_this->_delete();
 }
 
 /* 000026F0-00002710       .text daMozo_Create__FP10fopAc_ac_c */
-void daMozo_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+s32 daMozo_Create(fopAc_ac_c* i_this) {
+    return static_cast<daMozo_c*>(i_this)->_create();
 }
 
 /* 00002710-000027AC       .text __dt__12daMozo_HIO_cFv */
@@ -176,128 +354,27 @@ daMozo_HIO_c::~daMozo_HIO_c() {
     /* Nonmatching */
 }
 
-/* 000027E8-000027F0       .text @280@__dt__8dCcD_CpsFv */
-void @280@__dt__8dCcD_CpsFv {
-    /* Nonmatching */
-}
+static actor_method_class l_daMozo_Method = {
+    (process_method_func)daMozo_Create,
+    (process_method_func)daMozo_Delete,
+    (process_method_func)daMozo_Execute,
+    (process_method_func)daMozo_IsDelete,
+    (process_method_func)daMozo_Draw,
+};
 
-/* 000027F0-000027F8       .text @248@__dt__8dCcD_CpsFv */
-void @248@__dt__8dCcD_CpsFv {
-    /* Nonmatching */
-}
-
-/* 000027F8-00002834       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
-/* 00002834-00002914       .text __dt__8dCcD_CpsFv */
-dCcD_Cps::~dCcD_Cps() {
-    /* Nonmatching */
-}
-
-/* 00002914-00002924       .text GetShapeAttr__8dCcD_CpsFv */
-void dCcD_Cps::GetShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 00002924-00002980       .text __dt__14cCcD_ShapeAttrFv */
-cCcD_ShapeAttr::~cCcD_ShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 00002980-00002988       .text CrossAtTg__12cCcD_CpsAttrCFRC12cCcD_AabAttrP4cXyz */
-void cCcD_CpsAttr::CrossAtTg(const cCcD_AabAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00002988-00002990       .text CrossAtTg__12cCcD_CpsAttrCFRC12cCcD_PntAttrP4cXyz */
-void cCcD_CpsAttr::CrossAtTg(const cCcD_PntAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00002990-000029C8       .text CrossAtTg__12cCcD_CpsAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_CpsAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 000029C8-000029D0       .text CrossCo__12cCcD_CpsAttrCFRC12cCcD_AabAttrPf */
-void cCcD_CpsAttr::CrossCo(const cCcD_AabAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 000029D0-000029D8       .text CrossCo__12cCcD_CpsAttrCFRC12cCcD_TriAttrPf */
-void cCcD_CpsAttr::CrossCo(const cCcD_TriAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 000029D8-000029E0       .text CrossCo__12cCcD_CpsAttrCFRC12cCcD_PntAttrPf */
-void cCcD_CpsAttr::CrossCo(const cCcD_PntAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 000029E0-00002A18       .text CrossCo__12cCcD_CpsAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_CpsAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00002A18-00002A24       .text GetCoCP__14cCcD_ShapeAttrFv */
-void cCcD_ShapeAttr::GetCoCP() {
-    /* Nonmatching */
-}
-
-/* 00002A24-00002A30       .text GetCoCP__14cCcD_ShapeAttrCFv */
-void cCcD_ShapeAttr::GetCoCP() const {
-    /* Nonmatching */
-}
-
-/* 00002A30-00002A34       .text GetGObjInf__12cCcD_GObjInfCFv */
-void cCcD_GObjInf::GetGObjInf() const {
-    /* Nonmatching */
-}
-
-/* 00002A34-00002A3C       .text GetShapeAttr__8cCcD_ObjCFv */
-void cCcD_Obj::GetShapeAttr() const {
-    /* Nonmatching */
-}
-
-/* 00002A3C-00002A44       .text CrossAtTg__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_ShapeAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00002A44-00002A4C       .text CrossCo__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_ShapeAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00002A4C-00002AA8       .text __dt__8cM3dGCpsFv */
-cM3dGCps::~cM3dGCps() {
-    /* Nonmatching */
-}
-
-/* 00002AA8-00002AF0       .text __dt__8cM3dGLinFv */
-cM3dGLin::~cM3dGLin() {
-    /* Nonmatching */
-}
-
-/* 00002AF0-00002B38       .text __dt__8cM3dGAabFv */
-cM3dGAab::~cM3dGAab() {
-    /* Nonmatching */
-}
-
-/* 00002B38-00002B94       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 00002B94-00002BF0       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 00002BF0-00002C38       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
+extern actor_process_profile_definition g_profile_MOZO = {
+    fpcLy_CURRENT_e,
+    7,
+    fpcPi_CURRENT_e,
+    PROC_MOZO,
+    &g_fpcLf_Method.mBase,
+    sizeof(daMozo_c),
+    0,
+    0,
+    &g_fopAc_Method.base,
+    0x00D1,
+    &l_daMozo_Method,
+    0x00040100,
+    fopAc_ACTOR_e,
+    fopAc_CULLBOX_CUSTOM_e,
+};
