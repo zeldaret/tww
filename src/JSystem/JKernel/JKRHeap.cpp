@@ -4,229 +4,473 @@
 //
 
 #include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "dolphin/os/OS.h"
 #include "dolphin/types.h"
+#include "global.h"
+
+bool JKRHeap::sDefaultFillFlag = true;
+JKRHeap* JKRHeap::sSystemHeap;
+JKRHeap* JKRHeap::sCurrentHeap;
+JKRHeap* JKRHeap::sRootHeap;
+JKRErrorHandler JKRHeap::mErrorHandler;
 
 /* 802B0100-802B0224       .text __ct__7JKRHeapFPvUlP7JKRHeapb */
-JKRHeap::JKRHeap(void*, unsigned long, JKRHeap*, bool) {
-    /* Nonmatching */
+JKRHeap::JKRHeap(void* data, u32 size, JKRHeap* parent, bool errorFlag) : JKRDisposer(), mChildTree(this), mDisposerList() {
+    OSInitMutex(&mMutex);
+    mSize = size;
+    mStart = (u8*)data;
+    mEnd = (u8*)data + size;
+
+    if (parent == NULL) {
+        becomeSystemHeap();
+        becomeCurrentHeap();
+    } else {
+        parent->mChildTree.appendChild(&mChildTree);
+
+        if (getSystemHeap() == getRootHeap()) {
+            becomeSystemHeap();
+        }
+
+        if (getCurrentHeap() == getRootHeap()) {
+            becomeCurrentHeap();
+        }
+    }
+
+    mErrorFlag = errorFlag;
+    if (mErrorFlag == true && mErrorHandler == NULL) {
+        mErrorHandler = JKRDefaultMemoryErrorRoutine;
+    }
+
+    mDebugFill = sDefaultFillFlag;
+    mInitFlag = false;
 }
 
 /* 802B0224-802B0338       .text __dt__7JKRHeapFv */
 JKRHeap::~JKRHeap() {
-    /* Nonmatching */
+    mChildTree.getParent()->removeChild(&mChildTree);
+    JSUTree<JKRHeap>* nextRootHeap = sRootHeap->mChildTree.getFirstChild();
+
+    if (sCurrentHeap == this) {
+        sCurrentHeap = !nextRootHeap ? sRootHeap : nextRootHeap->getObject();
+    }
+
+    if (sSystemHeap == this) {
+        sSystemHeap = !nextRootHeap ? sRootHeap : nextRootHeap->getObject();
+    }
 }
 
+void* JKRHeap::mCodeStart;
+void* JKRHeap::mCodeEnd;
+void* JKRHeap::mUserRamStart;
+void* JKRHeap::mUserRamEnd;
+u32 JKRHeap::mMemorySize;
+
 /* 802B0338-802B03E8       .text initArena__7JKRHeapFPPcPUli */
-void JKRHeap::initArena(char**, unsigned long*, int) {
-    /* Nonmatching */
+bool JKRHeap::initArena(char** memory, u32* size, int maxHeaps) {
+    void* ram_start;
+    void* ram_end;
+    void* arenaStart;
+
+    void* arenaLo = OSGetArenaLo();
+    void* arenaHi = OSGetArenaHi();
+    if (arenaLo == arenaHi)
+        return false;
+
+    arenaStart = OSInitAlloc(arenaLo, arenaHi, maxHeaps);
+    ram_start = OSRoundUpPtr(arenaStart, 0x20);
+    ram_end = OSRoundDownPtr(arenaHi, 0x20);
+
+    OSBootInfo* codeStart = (OSBootInfo*)OSPhysicalToCached(0);
+    mCodeStart = codeStart;
+    mCodeEnd = ram_start;
+
+    mUserRamStart = ram_start;
+    mUserRamEnd = ram_end;
+    mMemorySize = codeStart->memory_size;
+
+    OSSetArenaLo(ram_end);
+    OSSetArenaHi(ram_end);
+
+    *memory = (char*)ram_start;
+    *size = (u32)ram_end - (u32)ram_start;
+    return true;
 }
 
 /* 802B03E8-802B03F8       .text becomeSystemHeap__7JKRHeapFv */
-void JKRHeap::becomeSystemHeap() {
-    /* Nonmatching */
+JKRHeap* JKRHeap::becomeSystemHeap() {
+    JKRHeap* prev = sSystemHeap;
+    sSystemHeap = this;
+    return prev;
 }
 
 /* 802B03F8-802B0408       .text becomeCurrentHeap__7JKRHeapFv */
-void JKRHeap::becomeCurrentHeap() {
-    /* Nonmatching */
+JKRHeap* JKRHeap::becomeCurrentHeap() {
+    JKRHeap* prev = sCurrentHeap;
+    sCurrentHeap = this;
+    return prev;
 }
 
 /* 802B0408-802B0434       .text destroy__7JKRHeapFv */
 void JKRHeap::destroy() {
-    /* Nonmatching */
+    do_destroy();
 }
 
 /* 802B0434-802B0494       .text alloc__7JKRHeapFUliP7JKRHeap */
-void JKRHeap::alloc(unsigned long, int, JKRHeap*) {
-    /* Nonmatching */
+void* JKRHeap::alloc(u32 size, int alignment, JKRHeap* heap) {
+    if (heap != NULL) {
+        return heap->alloc(size, alignment);
+    }
+
+    if (sCurrentHeap != NULL) {
+        return sCurrentHeap->alloc(size, alignment);
+    }
+
+    return NULL;
+}
+
+static void dummy1(JKRHeap* heap) {
+    JUT_ASSERT(0, heap != 0);
 }
 
 /* 802B0494-802B0518       .text alloc__7JKRHeapFUli */
-void JKRHeap::alloc(unsigned long, int) {
-    /* Nonmatching */
+void* JKRHeap::alloc(u32 size, int alignment) {
+    if (mInitFlag) {
+        JUT_WARN(308, "alloc %x byte in heap %x", size, this);
+    }
+    return do_alloc(size, alignment);
 }
 
 /* 802B0518-802B0560       .text free__7JKRHeapFPvP7JKRHeap */
-void JKRHeap::free(void*, JKRHeap*) {
-    /* Nonmatching */
+void JKRHeap::free(void* ptr, JKRHeap* heap) {
+    if (!heap) {
+        heap = findFromRoot(ptr);
+        if (!heap)
+            return;
+    }
+
+    heap->free(ptr);
 }
 
 /* 802B0560-802B05DC       .text free__7JKRHeapFPv */
-void JKRHeap::free(void*) {
-    /* Nonmatching */
+void JKRHeap::free(void* ptr) {
+    if (mInitFlag) {
+        JUT_WARN(356, "free %x in heap %x", ptr, this);
+    }
+    do_free(ptr);
 }
 
 /* 802B05DC-802B0634       .text callAllDisposer__7JKRHeapFv */
 void JKRHeap::callAllDisposer() {
-    /* Nonmatching */
+    JSUListIterator<JKRDisposer> iterator;
+
+    while ((iterator = mDisposerList.getFirst()) != mDisposerList.getEnd()) {
+        iterator->~JKRDisposer();
+    }
 }
 
 /* 802B0634-802B069C       .text freeAll__7JKRHeapFv */
 void JKRHeap::freeAll() {
-    /* Nonmatching */
+    if (mInitFlag) {
+        JUT_WARN(408, "freeAll in heap %x", this);
+    }
+    do_freeAll();
 }
 
 /* 802B069C-802B0704       .text freeTail__7JKRHeapFv */
 void JKRHeap::freeTail() {
-    /* Nonmatching */
+    if (mInitFlag) {
+        JUT_WARN(422, "freeTail in heap %x", this);
+    }
+    do_freeTail();
 }
 
 /* 802B0704-802B0764       .text resize__7JKRHeapFPvUlP7JKRHeap */
-void JKRHeap::resize(void*, unsigned long, JKRHeap*) {
-    /* Nonmatching */
+s32 JKRHeap::resize(void* ptr, u32 size, JKRHeap* heap) {
+    if (!heap) {
+        heap = findFromRoot(ptr);
+        if (!heap)
+            return -1;
+    }
+
+    return heap->resize(ptr, size);
 }
 
 /* 802B0764-802B07EC       .text resize__7JKRHeapFPvUl */
-void JKRHeap::resize(void*, unsigned long) {
-    /* Nonmatching */
+s32 JKRHeap::resize(void* ptr, u32 size) {
+    if (mInitFlag) {
+        JUT_WARN(466, "resize block %x into %x in heap %x", ptr, size, this);
+    }
+    return do_resize(ptr, size);
 }
 
 /* 802B07EC-802B083C       .text getSize__7JKRHeapFPvP7JKRHeap */
-void JKRHeap::getSize(void*, JKRHeap*) {
-    /* Nonmatching */
+s32 JKRHeap::getSize(void* ptr, JKRHeap* heap) {
+    if (!heap) {
+        heap = findFromRoot(ptr);
+        if (!heap)
+            return -1;
+    }
+
+    return heap->getSize(ptr);
 }
 
 /* 802B083C-802B0868       .text getSize__7JKRHeapFPv */
-void JKRHeap::getSize(void*) {
-    /* Nonmatching */
+s32 JKRHeap::getSize(void* ptr) {
+    return do_getSize(ptr);
 }
 
 /* 802B0868-802B0894       .text getFreeSize__7JKRHeapFv */
-void JKRHeap::getFreeSize() {
-    /* Nonmatching */
+s32 JKRHeap::getFreeSize() {
+    return do_getFreeSize();
 }
 
 /* 802B0894-802B08C0       .text getMaxFreeBlock__7JKRHeapFv */
-void JKRHeap::getMaxFreeBlock() {
-    /* Nonmatching */
+void* JKRHeap::getMaxFreeBlock() {
+    return do_getMaxFreeBlock();
 }
 
 /* 802B08C0-802B08EC       .text getTotalFreeSize__7JKRHeapFv */
-void JKRHeap::getTotalFreeSize() {
-    /* Nonmatching */
+s32 JKRHeap::getTotalFreeSize() {
+    return do_getTotalFreeSize();
 }
 
 /* 802B08EC-802B0918       .text getCurrentGroupId__7JKRHeapFv */
-void JKRHeap::getCurrentGroupId() {
-    /* Nonmatching */
+u8 JKRHeap::getCurrentGroupId() {
+    return do_getCurrentGroupId();
+}
+
+static void dummy2() {
+    OSReport("change heap ID into %x in heap %x");
 }
 
 /* 802B0918-802B0978       .text getMaxAllocatableSize__7JKRHeapFi */
-void JKRHeap::getMaxAllocatableSize(int) {
-    /* Nonmatching */
+u32 JKRHeap::getMaxAllocatableSize(int alignment) {
+    u32 maxFreeBlock = (u32)getMaxFreeBlock();
+    u32 ptrOffset = (alignment - 1) & alignment - (maxFreeBlock & 0xf);
+    return ~(alignment - 1) & (getFreeSize() - ptrOffset);
 }
 
 /* 802B0978-802B09B0       .text findFromRoot__7JKRHeapFPv */
-void JKRHeap::findFromRoot(void*) {
-    /* Nonmatching */
+JKRHeap* JKRHeap::findFromRoot(void* ptr) {
+    if (sRootHeap) {
+        return sRootHeap->find(ptr);
+    }
+
+    return NULL;
 }
 
 /* 802B09B0-802B0A58       .text find__7JKRHeapCFPv */
-void JKRHeap::find(void*) const {
-    /* Nonmatching */
+JKRHeap* JKRHeap::find(void* memory) const {
+    if (mStart <= memory && memory < mEnd) {
+        if (mChildTree.getNumChildren() != 0) {
+            for (JSUTreeIterator<JKRHeap> iterator(mChildTree.getFirstChild());
+                 iterator != mChildTree.getEndChild(); ++iterator)
+            {
+                JKRHeap* result = iterator->find(memory);
+                if (result) {
+                    return result;
+                }
+            }
+        }
+
+        return const_cast<JKRHeap*>(this);
+    }
+
+    return NULL;
 }
 
 /* 802B0A58-802B0AEC       .text dispose_subroutine__7JKRHeapFUlUl */
-void JKRHeap::dispose_subroutine(unsigned long, unsigned long) {
-    /* Nonmatching */
+void JKRHeap::dispose_subroutine(u32 begin, u32 end) {
+    JSUListIterator<JKRDisposer> last_iterator;
+    JSUListIterator<JKRDisposer> next_iterator;
+    JSUListIterator<JKRDisposer> iterator;
+
+    for (iterator = mDisposerList.getFirst(); iterator != mDisposerList.getEnd();
+         iterator = next_iterator)
+    {
+        JKRDisposer* disposer = iterator.getObject();
+
+        if ((void*)begin <= disposer && disposer < (void*)end) {
+            disposer->~JKRDisposer();
+
+            if (last_iterator == NULL) {
+                next_iterator = mDisposerList.getFirst();
+            } else {
+                next_iterator = last_iterator;
+                next_iterator++;
+            }
+        } else {
+            last_iterator = iterator;
+            next_iterator = iterator;
+            next_iterator++;
+        }
+    }
 }
 
 /* 802B0AEC-802B0B14       .text dispose__7JKRHeapFPvUl */
-void JKRHeap::dispose(void*, unsigned long) {
-    /* Nonmatching */
+bool JKRHeap::dispose(void* ptr, u32 size) {
+    dispose_subroutine((u32)ptr, (u32)ptr + size);
+    return false;
 }
 
 /* 802B0B14-802B0B34       .text dispose__7JKRHeapFPvPv */
-void JKRHeap::dispose(void*, void*) {
-    /* Nonmatching */
+void JKRHeap::dispose(void* begin, void* end) {
+    dispose_subroutine((u32)begin, (u32)end);
 }
 
 /* 802B0B34-802B0B8C       .text dispose__7JKRHeapFv */
 void JKRHeap::dispose() {
-    /* Nonmatching */
+    JSUListIterator<JKRDisposer> iterator;
+    while ((iterator = mDisposerList.getFirst()) != mDisposerList.getEnd()) {
+        iterator->~JKRDisposer();
+    }
 }
 
 /* 802B0B8C-802B0BB4       .text copyMemory__7JKRHeapFPvPvUl */
-void JKRHeap::copyMemory(void*, void*, unsigned long) {
-    /* Nonmatching */
+void JKRHeap::copyMemory(void* dst, void* src, u32 size) {
+    u32 count = (size + 3) / 4;
+
+    u32* dst_32 = (u32*)dst;
+    u32* src_32 = (u32*)src;
+    while (count > 0) {
+        *dst_32 = *src_32;
+        dst_32++;
+        src_32++;
+        count--;
+    }
 }
 
 /* 802B0BB4-802B0C08       .text JKRDefaultMemoryErrorRoutine__FPvUli */
-void JKRDefaultMemoryErrorRoutine(void*, unsigned long, int) {
-    /* Nonmatching */
+void JKRDefaultMemoryErrorRoutine(void* heap, u32 size, int alignment) {
+    OSReport("Error: Cannot allocate memory %d(0x%x)byte in %d byte alignment from %08x\n", size, size, alignment, heap);
+    OSPanic(__FILE__, 767, "abort\n");
 }
 
 /* 802B0C08-802B0C18       .text setErrorFlag__7JKRHeapFb */
-void JKRHeap::setErrorFlag(bool) {
-    /* Nonmatching */
+bool JKRHeap::setErrorFlag(bool errorFlag) {
+    bool prev = mErrorFlag;
+    mErrorFlag = errorFlag;
+    return prev;
 }
 
 /* 802B0C18-802B0C38       .text setErrorHandler__7JKRHeapFPFPvUli_v */
-void JKRHeap::setErrorHandler(void (*)(void*, unsigned long, int)) {
-    /* Nonmatching */
+JKRErrorHandler JKRHeap::setErrorHandler(JKRErrorHandler errorHandler) {
+    JKRErrorHandler prev = mErrorHandler;
+
+    if (!errorHandler) {
+        errorHandler = JKRDefaultMemoryErrorRoutine;
+    }
+
+    mErrorHandler = errorHandler;
+    return prev;
 }
 
 /* 802B0C38-802B0C60       .text __nw__FUl */
-void operator new(unsigned long) {
-    /* Nonmatching */
+void* operator new(size_t size) {
+    return JKRHeap::alloc(size, 4, NULL);
 }
 
 /* 802B0C60-802B0C84       .text __nw__FUli */
-void operator new(unsigned long, int) {
-    /* Nonmatching */
+void* operator new(size_t size, int alignment) {
+    return JKRHeap::alloc(size, alignment, NULL);
 }
 
 /* 802B0C84-802B0CB0       .text __nw__FUlP7JKRHeapi */
-void operator new(unsigned long, JKRHeap*, int) {
-    /* Nonmatching */
+void* operator new(size_t size, JKRHeap* heap, int alignment) {
+    return JKRHeap::alloc(size, alignment, heap);
 }
 
 /* 802B0CB0-802B0CD8       .text __nwa__FUl */
-void operator new[](unsigned long) {
-    /* Nonmatching */
+void* operator new[](size_t size) {
+    return JKRHeap::alloc(size, 4, NULL);
 }
 
 /* 802B0CD8-802B0CFC       .text __nwa__FUli */
-void operator new[](unsigned long, int) {
-    /* Nonmatching */
+void* operator new[](size_t size, int alignment) {
+    return JKRHeap::alloc(size, alignment, NULL);
 }
 
 /* 802B0CFC-802B0D28       .text __nwa__FUlP7JKRHeapi */
-void operator new[](unsigned long, JKRHeap*, int) {
-    /* Nonmatching */
+void* operator new[](size_t size, JKRHeap* heap, int alignment) {
+    return JKRHeap::alloc(size, alignment, heap);
 }
 
 /* 802B0D28-802B0D4C       .text __dl__FPv */
-void operator delete(void*) {
-    /* Nonmatching */
+void operator delete(void* ptr) {
+    JKRHeap::free(ptr, NULL);
 }
 
 /* 802B0D4C-802B0D70       .text __dla__FPv */
-void operator delete[](void*) {
-    /* Nonmatching */
+void operator delete[](void* ptr) {
+    JKRHeap::free(ptr, NULL);
+}
+
+static void dummy3() {
+#if VERSION != VERSION_JPN
+    OSReport("\x1B[41;37m:::addr %08x size %08x: Freeされた領域が浸食されている (%08x=%02x)\n\x1B[m");
+#endif
+    OSReport("%s");
+    OSReport("heap unchanged");
+    OSReport("**** heap changed ****");
+    OSReport("location   : [%s:%d]");
+    OSReport("**** heap changed : old ****");
+    OSReport("**** heap changed : new ****");
 }
 
 /* 802B0D70-802B0E14       .text state_register__7JKRHeapCFPQ27JKRHeap6TStateUl */
-void JKRHeap::state_register(JKRHeap::TState*, unsigned long) const {
-    /* Nonmatching */
+void JKRHeap::state_register(JKRHeap::TState* p, u32 id) const {
+#if VERSION == VERSION_JP
+    JUT_ASSERT(1034, p != 0);
+    JUT_ASSERT(1035, p->getHeap() == this);
+#else
+    JUT_ASSERT(1090, p != 0);
+    JUT_ASSERT(1091, p->getHeap() == this);
+#endif
 }
 
 /* 802B0E14-802B0E9C       .text state_compare__7JKRHeapCFRCQ27JKRHeap6TStateRCQ27JKRHeap6TState */
-void JKRHeap::state_compare(const JKRHeap::TState&, const JKRHeap::TState&) const {
-    /* Nonmatching */
+bool JKRHeap::state_compare(const JKRHeap::TState& r1, const JKRHeap::TState& r2) const {
+#if VERSION == VERSION_JP
+    JUT_ASSERT(1043, r1.getHeap() == r2.getHeap());
+#else
+    JUT_ASSERT(1099, r1.getHeap() == r2.getHeap());
+#endif
+    return r1.getCheckCode() == r2.getCheckCode();
+}
+
+static void dummy4() {
+    OSReport("heap       : %p / %p");
+    OSReport("check-code : 0x%08x / 0x%08x");
+    OSReport("id         : 0x%08x / 0x%08x");
+    OSReport("used size  : %10u / %10u");
 }
 
 /* 802B0E9C-802B0F24       .text state_dump__7JKRHeapCFRCQ27JKRHeap6TState */
-void JKRHeap::state_dump(const JKRHeap::TState&) const {
-    /* Nonmatching */
+void JKRHeap::state_dump(const JKRHeap::TState& p) const {
+#if VERSION == VERSION_JP
+    JUT_LOG(1067, "check-code : 0x%08x", p.getCheckCode());
+    JUT_LOG(1068, "id         : 0x%08x", p.getId());
+    JUT_LOG(1069, "used size  : %u", p.getUsedSize());
+#else
+    JUT_LOG(1123, "check-code : 0x%08x", p.getCheckCode());
+    JUT_LOG(1124, "id         : 0x%08x", p.getId());
+    JUT_LOG(1125, "used size  : %u", p.getUsedSize());
+#endif
 }
 
 /* 802B0F24-802B0F2C       .text do_changeGroupID__7JKRHeapFUc */
-void JKRHeap::do_changeGroupID(unsigned char) {
-    /* Nonmatching */
+s32 JKRHeap::do_changeGroupID(u8 param_0) {
+    return 0;
 }
 
 /* 802B0F2C-802B0F34       .text do_getCurrentGroupId__7JKRHeapFv */
-void JKRHeap::do_getCurrentGroupId() {
-    /* Nonmatching */
+u8 JKRHeap::do_getCurrentGroupId() {
+    return 0;
 }
+
+#if VERSION == VERSION_JP
+static void dummy5() {
+    OSReport("\x1B[41;37m:::addr %08x size %08x: Freeされた領域が浸食されている (%08x=%02x)\n\x1B[m");
+}
+#endif
