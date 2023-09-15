@@ -114,12 +114,12 @@ BOOL daKaji_c::_execute() {
 
 bool daKaji_c::_draw() {
     if (!l_p_ship->unk2CC) {
-        return TRUE;
+        return true;
     }
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpMorf->getModel(), &mTevStr);
     mpMorf->update();
-    return TRUE;
+    return true;
 }
 
 /* 000001F4-00000344       .text daKajiCreate__FPv */
