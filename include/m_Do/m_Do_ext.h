@@ -245,7 +245,7 @@ public:
     void play(Vec *, u32, u8);
     void stopZelAnime();
 
-    u32 pad[0x50]; // J3DMtxCalcMaya
+    u8 pad[0x4C]; // J3DMtxCalcMaya
     /* 0x50 */ J3DModel* mpModel;
     /* 0x54 */ J3DAnmTransform* mpAnm;
     /* 0x58 */ J3DFrameCtrl mFrameCtrl;
