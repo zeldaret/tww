@@ -90,7 +90,7 @@ public:
     void ct();
     void init();
     void itemInit();
-    int getLayerNo(int i_roomNo);
+    static int getLayerNo(int i_roomNo);
     void createParticle();
     void createDemo();
     void removeDemo();
@@ -372,6 +372,42 @@ inline u8 dComIfGs_getSelectEquip(int param_0) {
 
 inline u8 dComIfGs_getItem(int param_0) {
     return g_dComIfG_gameInfo.save.getPlayer().getItem().getItem(param_0);
+}
+
+inline u8 dComIfGs_getBeast(int i_idx) {
+    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getBeast(i_idx);
+}
+
+inline u8 dComIfGs_getBait(int i_idx) {
+    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getBait(i_idx);
+}
+
+inline u8 dComIfGs_getReserve(int i_idx) {
+    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getReserve(i_idx);
+}
+
+inline BOOL dComIfGs_isGetCollectMap(int i_itemNo) {
+    return g_dComIfG_gameInfo.save.getPlayer().getMap().isGetMap(i_itemNo - 1);
+}
+
+inline u8 dComIfGs_getArrowNum() {
+    return g_dComIfG_gameInfo.save.getPlayer().getItemRecord().getArrowNum();
+}
+
+inline u8 dComIfGs_getBombNum() {
+    return g_dComIfG_gameInfo.save.getPlayer().getItemRecord().getBombNum();
+}
+
+inline u8 dComIfGs_getBeastNum(int i_idx) {
+    return g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord().getBeastNum(i_idx);
+}
+
+inline u8 dComIfGs_getBaitNum(int i_idx) {
+    return g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord().getBaitNum(i_idx);
+}
+
+inline u8 dComIfGs_getReserveNum(int i_idx) {
+    return g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord().getReserveNum(i_idx);
 }
 
 inline void dComIfGs_setEventReg(u16 i_reg, u8 i_no) {
@@ -708,10 +744,19 @@ inline void dComIfGp_evmng_execute() {
  * === DRAWLIST ===
  */
 
-inline int dComIfGd_setSimpleShadow(cXyz* pos, f32 param_1, f32 param_2, cXyz* param_3, s16 angle,
-                                    f32 param_5, _GXTexObj* tex) {
-    return g_dComIfG_gameInfo.drawlist.setSimpleShadow(pos, param_1, param_2, param_3, angle,
-                                                       param_5, tex);
+inline int dComIfGd_setSimpleShadow(cXyz* pPos, f32 param_1, f32 param_2, cXyz* param_3, s16 angle,
+                                    f32 param_5, GXTexObj* pTex) {
+    return g_dComIfG_gameInfo.drawlist.setSimpleShadow(pPos, param_1, param_2, param_3, angle,
+                                                       param_5, pTex);
+}
+
+int dComIfGd_setSimpleShadow2(cXyz* pPos, f32 param_1, f32 param_2, cBgS_PolyInfo& pPolyInfo,
+                              s16 param_4, f32 param_5, GXTexObj* pTex);
+
+inline int dComIfGd_setRealShadow2(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5,
+                                   f32 param_6, dKy_tevstr_c* pTevStr) {
+    return g_dComIfG_gameInfo.drawlist.setRealShadow2(id, param_2, pModel, pPos, param_5, param_6,
+                                                      pTevStr);
 }
 
 /**

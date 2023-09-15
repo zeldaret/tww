@@ -1316,7 +1316,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_warphr"),
     ActorRel(NonMatching, "d_a_wbird"),
     ActorRel(NonMatching, "d_a_ykgr"),
-    ActorRel(NonMatching, "d_a_alldie"),
+    ActorRel(Matching,    "d_a_alldie"),
     ActorRel(NonMatching, "d_a_am"),
     ActorRel(NonMatching, "d_a_am2"),
     ActorRel(NonMatching, "d_a_amiprop"),
