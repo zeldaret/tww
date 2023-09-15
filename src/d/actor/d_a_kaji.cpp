@@ -17,10 +17,10 @@ extern dScnPly_reg_HIO_c g_regHIO;
 
 struct daKaji_c : fopAc_ac_c {
 public:
-    s32 CreateHeap();
+    BOOL CreateHeap();
     inline s32 _create();
-    inline s32 _delete();
-    inline s32 _execute();
+    inline BOOL _delete();
+    inline BOOL _execute();
     inline bool _draw();
 
 public:
@@ -37,12 +37,12 @@ static daObjPirateship::Act_c* l_p_ship;
 const char daKaji_c::M_arcname[] = "Kaji";
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-static s32 CheckCreateHeap(fopAc_ac_c* i_this) {
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daKaji_c*)i_this)->CreateHeap();
 }
 
 /* 00000098-000001F4       .text CreateHeap__8daKaji_cFv */
-s32 daKaji_c::CreateHeap() {
+BOOL daKaji_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 0x11); // asoda.bdl
     JUT_ASSERT(0x55, modelData != 0);
     
@@ -84,12 +84,12 @@ s32 daKaji_c::_create() {
     return phase_state;
 }
 
-s32 daKaji_c::_delete() {
+BOOL daKaji_c::_delete() {
     dComIfG_resDelete(&mPhs, M_arcname);
-    return 1;
+    return TRUE;
 }
 
-s32 daKaji_c::_execute() {
+BOOL daKaji_c::_execute() {
     // Copy the ship's transform (plus an offset) to the helm.
     cXyz* offset = &cXyz(0.0f, 740.0f, -858.0f);
     offset->y += g_regHIO.mChild[10].mFloatRegs[10];
@@ -109,17 +109,17 @@ s32 daKaji_c::_execute() {
     mpMorf->getModel()->i_setBaseTRMtx(mDoMtx_stack_c::get());
     MTXCopy(mDoMtx_stack_c::get(), mMtx);
     
-    return 0;
+    return FALSE;
 }
 
 bool daKaji_c::_draw() {
     if (!l_p_ship->unk2CC) {
-        return 1;
+        return TRUE;
     }
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpMorf->getModel(), &mTevStr);
     mpMorf->update();
-    return 1;
+    return TRUE;
 }
 
 /* 000001F4-00000344       .text daKajiCreate__FPv */
@@ -128,23 +128,23 @@ static s32 daKajiCreate(void* i_this) {
 }
 
 /* 00000344-00000374       .text daKajiDelete__FPv */
-static s32 daKajiDelete(void* i_this) {
+static BOOL daKajiDelete(void* i_this) {
     return ((daKaji_c*)i_this)->_delete();
 }
 
 /* 00000374-000004D4       .text daKajiExecute__FPv */
-static s32 daKajiExecute(void* i_this) {
+static BOOL daKajiExecute(void* i_this) {
     return ((daKaji_c*)i_this)->_execute();
 }
 
 /* 000004D4-00000568       .text daKajiDraw__FPv */
-static s32 daKajiDraw(void* i_this) {
+static BOOL daKajiDraw(void* i_this) {
     return ((daKaji_c*)i_this)->_draw();
 }
 
 /* 00000568-00000570       .text daKajiIsDelete__FPv */
-static s32 daKajiIsDelete(void* actor) {
-    return 1;
+static BOOL daKajiIsDelete(void* actor) {
+    return TRUE;
 }
 
 static actor_method_class daKajiMethodTable = {
