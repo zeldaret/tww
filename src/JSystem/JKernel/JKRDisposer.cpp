@@ -4,14 +4,20 @@
 //
 
 #include "JSystem/JKernel/JKRDisposer.h"
-#include "dolphin/types.h"
+#include "JSystem/JKernel/JKRHeap.h"
 
 /* 802B3C30-802B3C98       .text __ct__11JKRDisposerFv */
-JKRDisposer::JKRDisposer() {
-    /* Nonmatching */
+JKRDisposer::JKRDisposer() : mLink(this) {
+    mHeap = JKRHeap::findFromRoot(this);
+    if (mHeap) {
+        mHeap->appendDisposer(this);
+    }
 }
 
 /* 802B3C98-802B3D1C       .text __dt__11JKRDisposerFv */
 JKRDisposer::~JKRDisposer() {
-    /* Nonmatching */
+    JKRHeap* heap = mHeap;
+    if (heap) {
+        heap->removeDisposer(this);
+    }
 }

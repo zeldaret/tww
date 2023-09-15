@@ -759,7 +759,7 @@ config.libs = [
             Object(NonMatching, "JSystem/JKernel/JKRStdHeap.cpp"),
             Object(NonMatching, "JSystem/JKernel/JKRExpHeap.cpp"),
             Object(NonMatching, "JSystem/JKernel/JKRSolidHeap.cpp"),
-            Object(NonMatching, "JSystem/JKernel/JKRDisposer.cpp"),
+            Object(Matching, "JSystem/JKernel/JKRDisposer.cpp"),
             Object(NonMatching, "JSystem/JKernel/JKRThread.cpp"),
             Object(NonMatching, "JSystem/JKernel/JKRAram.cpp"),
             Object(NonMatching, "JSystem/JKernel/JKRAramHeap.cpp"),
