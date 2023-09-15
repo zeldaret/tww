@@ -3,31 +3,56 @@
 // Translation Unit: d_a_spotbox.cpp
 //
 
-#include "d_a_spotbox.h"
+#include "d/actor/d_a_spotbox.h"
+#include "f_op/f_op_actor_mng.h"
+#include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_mtx.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000C4       .text daSpotbox_Draw__FP11daSpotbox_c */
-void daSpotbox_Draw(daSpotbox_c*) {
-    /* Nonmatching */
+void daSpotbox_Draw(daSpotbox_c* self) {
+
+
 }
 
 /* 000000C4-00000138       .text daSpotbox_Execute__FP11daSpotbox_c */
-void daSpotbox_Execute(daSpotbox_c*) {
-    /* Nonmatching */
+BOOL daSpotbox_Execute(daSpotbox_c* self) {
+    PSMTXTrans(mDoMtx_stack_c::now, self->current.pos.x, self->current.pos.y, self->current.pos.z);
+    mDoMtx_YrotM(mDoMtx_stack_c::now, self->current.angle.y);
+    mDoMtx_stack_c::scaleM(self->mScale.x, self->mScale.y, self->mScale.z);
+    PSMTXCopy(mDoMtx_stack_c::now, self->mtx);
+    return true;
 }
 
 /* 00000138-00000140       .text daSpotbox_IsDelete__FP11daSpotbox_c */
-void daSpotbox_IsDelete(daSpotbox_c*) {
-    /* Nonmatching */
+BOOL daSpotbox_IsDelete(daSpotbox_c*) {
+    return true;
 }
 
 /* 00000140-00000170       .text daSpotbox_Delete__FP11daSpotbox_c */
-void daSpotbox_Delete(daSpotbox_c*) {
-    /* Nonmatching */
+static BOOL daSpotbox_Delete(daSpotbox_c* self) {
+    if(self != NULL)
+        self->fopAc_ac_c::~fopAc_ac_c();
+    return true;
 }
 
 /* 00000170-00000250       .text daSpotbox_Create__FP10fopAc_ac_c */
-void daSpotbox_Create(fopAc_ac_c*) {
-    /* Nonmatching */
-}
+static s32 daSpotbox_Create(fopAc_ac_c* self) {
+    f32 var_f2;
 
+    if(!(self->mCondition & 8)) {
+        if (self != NULL) {
+            self->fopAc_ac_c::~fopAc_ac_c();
+        }
+        self->mCondition |= 8;
+    }
+    if (self->fopAc_ac_c::leafdraw_class::mBase.mParameters & 1){
+        var_f2 = 12;
+    } else {
+        var_f2 = 14;
+    }
+    self->mScale.x = var_f2;
+    self->mScale.y = var_f2;
+    self->mCullMtx = ((daSpotbox_c *)self)->mtx;
+    fopAcM_setCullSizeBox(self, )
+}
