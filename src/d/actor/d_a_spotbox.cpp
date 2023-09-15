@@ -31,28 +31,30 @@ BOOL daSpotbox_IsDelete(daSpotbox_c*) {
 
 /* 00000140-00000170       .text daSpotbox_Delete__FP11daSpotbox_c */
 static BOOL daSpotbox_Delete(daSpotbox_c* self) {
-    if(self != NULL)
-        self->fopAc_ac_c::~fopAc_ac_c();
+    self->~daSpotbox_c();
     return true;
 }
 
 /* 00000170-00000250       .text daSpotbox_Create__FP10fopAc_ac_c */
 static s32 daSpotbox_Create(fopAc_ac_c* self) {
-    f32 var_f2;
+    float fvar1;
 
-    if(!(self->mCondition & 8)) {
+    //8 = Constructed
+    if((self->mCondition & 8) == 0) {
         if (self != NULL) {
-            self->fopAc_ac_c::~fopAc_ac_c();
+            fopAc_ac_c::fopAc_ac_c();
         }
         self->mCondition |= 8;
     }
-    if (self->fopAc_ac_c::leafdraw_class::mBase.mParameters & 1){
-        var_f2 = 12;
+    if (((self->mBase.mParameters & 1U) == 0)) {
+        fvar1 = 100.0f;
     } else {
-        var_f2 = 14;
+        fvar1 = 1000.0f;
     }
-    self->mScale.x = var_f2;
-    self->mScale.y = var_f2;
-    self->mCullMtx = ((daSpotbox_c *)self)->mtx;
-    fopAcM_setCullSizeBox(self, )
+    self->mScale.x = self->mScale.x * fvar1;
+    self->mScale.y = self->mScale.y * fvar1;
+    self->mScale.z = self->mScale.z * fvar1;
+    self->current.pos.y += self->mScale.y * 0.5;
+    fopAcM_setCullSizeBox(self, -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f);
+    return 4;
 }
