@@ -33,7 +33,7 @@ extern interface_of_controller_pad g_mDoCPd_cpadInfo[4];
 #define CPad_CHECK_TRIG_RIGHT(padNo) ((g_mDoCPd_cpadInfo[padNo].mButtonTrig0 >> 6) & 1)
 #define CPad_CHECK_TRIG_LEFT(padNo) ((g_mDoCPd_cpadInfo[padNo].mButtonTrig0 >> 7) & 1)
 
-void mDoCPd_Create();
-void mDoCPd_Read();
+int mDoCPd_Create();
+int mDoCPd_Read();
 
 #endif

@@ -4,9 +4,12 @@
 //
 
 #include "m_Do/m_Do_controller_pad.h"
+#include "JSystem/JUtility/JUTGba.h"
 #include "SSystem/SComponent/c_lib.h"
-#include "m_Do/m_Do_main.h"
+#include "f_ap/f_ap_game.h"
 #include "m_Do/m_Do_Reset.h"
+#include "m_Do/m_Do_gba_com.h"
+#include "m_Do/m_Do_main.h"
 
 JUTGamePad* g_mDoCPd_gamePad[4];
 interface_of_controller_pad g_mDoCPd_cpadInfo[4];
@@ -26,6 +29,7 @@ inline void mDoCPd_TRIGGER_CONV(u8 analog, f32& param_1) {
 }
 
 /* 80007598-800078C0       .text mDoCPd_Convert__FP27interface_of_controller_padP10JUTGamePad */
+// NONMATCHING
 static s32 mDoCPd_Convert(interface_of_controller_pad* pInterface, JUTGamePad* pPad) {
     // pInterface->mButtonFlags = pPad->getButton();
     pInterface->mMainStickPosX = pPad->getMainStickX();
@@ -47,7 +51,7 @@ static s32 mDoCPd_Convert(interface_of_controller_pad* pInterface, JUTGamePad* p
 }
 
 /* 800078C0-80007A70       .text mDoCPd_Read__Fv */
-void mDoCPd_Read(void) {
+int mDoCPd_Read() {
     JUTGamePad::read();
 
     if (!mDoRst::isReset() && mDoRst::is3ButtonReset()) {
@@ -61,32 +65,60 @@ void mDoCPd_Read(void) {
     JUTGamePad** pad = g_mDoCPd_gamePad;
     interface_of_controller_pad* interface = g_mDoCPd_cpadInfo;
 
-    for (u32 i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         if (*pad == NULL) {
-            cLib_memSet(interface, 0, sizeof(interface_of_controller_pad));
+            cLib_memSet(interface++, 0, sizeof(interface_of_controller_pad));
         } else {
-            mDoCPd_Convert(interface, *pad);
+            mDoCPd_Convert(interface++, *pad);
         }
 
         pad++;
-        interface++;
     }
-    
-    for (u32 i = 0; i < 4; i++) {
+
+    for (int i = 0; i < 4; i++) {
+        f32 threshold_lo = g_HIO.mTriggerThreshLo;
+        f32 threshold_hi = g_HIO.mTriggerThreshHi;
+
+        f32 trigL = g_mDoCPd_cpadInfo[i].mTriggerLeft;
         g_mDoCPd_cpadInfo[i].mTrigLockL = false;
         g_mDoCPd_cpadInfo[i].mTrigLockR = false;
+
+        if (trigL > threshold_lo) {
+            if (g_mDoCPd_cpadInfo[i].mHoldLockL != true) {
+                g_mDoCPd_cpadInfo[i].mTrigLockL = true;
+            }
+
+            g_mDoCPd_cpadInfo[i].mHoldLockL = true;
+        } else if (trigL < threshold_hi) {
+            g_mDoCPd_cpadInfo[i].mHoldLockL = false;
+        }
+
+        f32 trigR = g_mDoCPd_cpadInfo[i].mTriggerRight;
+        if (trigR > threshold_lo) {
+            if (g_mDoCPd_cpadInfo[i].mHoldLockR != true) {
+                g_mDoCPd_cpadInfo[i].mTrigLockR = true;
+            }
+
+            g_mDoCPd_cpadInfo[i].mHoldLockR = true;
+        } else if (trigR < threshold_hi) {
+            g_mDoCPd_cpadInfo[i].mHoldLockR = false;
+        }
     }
+
+    g_mDoGaC_gbaCom.mDoGaC_Connect();
+    return 1;
 }
 
 /* 80007A70-80007BBC       .text mDoCPd_Create__Fv */
-void mDoCPd_Create(void) {
+// NONMATCHING - weird ending
+int mDoCPd_Create() {
     JUTGamePad::sSuppressPadReset = 1;
 
     JUTGamePad* pad = new JUTGamePad(JUTGamePad::Port_1);
     g_mDoCPd_gamePad[0] = pad;
     g_mDoCPd_gamePad[1] = NULL;
 
-    if (mDoMain::developmentMode != 0) {
+    if (mDoMain::developmentMode) {
         g_mDoCPd_gamePad[2] = new JUTGamePad(JUTGamePad::Port_3);
         g_mDoCPd_gamePad[3] = new JUTGamePad(JUTGamePad::Port_4);
     } else {
@@ -100,15 +132,15 @@ void mDoCPd_Create(void) {
         JUTGamePad::setResetCallback(mDoRst_resetCallBack, NULL);
     }
 
-    // JUTGba::create();
-    // mDoGaC_Initial();
+    JUTGba::create();
+    g_mDoGaC_gbaCom.mDoGaC_Initial(TestDataManager, 16);
 
-    interface_of_controller_pad* cpad = &g_mDoCPd_cpadInfo[0];
     for (int i = 0; i < 4; i++) {
-        cpad->mTrigLockL = false;
-        cpad->mHoldLockL = false;
-        cpad->mTrigLockR = false;
-        cpad->mHoldLockR = false;
-        cpad++;
+        g_mDoCPd_cpadInfo[i].mTrigLockL = false;
+        g_mDoCPd_cpadInfo[i].mHoldLockL = false;
+        g_mDoCPd_cpadInfo[i].mTrigLockR = false;
+        g_mDoCPd_cpadInfo[i].mHoldLockR = false;
     }
+
+    return 1;
 }
