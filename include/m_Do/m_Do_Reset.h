@@ -36,6 +36,19 @@ public:
 
     static mDoRstData* mResetData;
 #else
+    static void set3ButtonResetPort(int port) { m3ButtonResetPort = port; }
+    static void off3ButtonReset() { m3ButtonResetFlag = 0; }
+    static void offResetPrepare() { mResetPrepare = 0; }
+    static void offReset() {
+        mResetFlag = 0;
+        mResetPrepare = 0;
+    }
+    static int isReset() { return mResetFlag; }
+    static int get3ButtonResetPort() { return m3ButtonResetPort; }
+    static int is3ButtonReset() { return m3ButtonResetFlag; }
+    static void onReset() { mResetFlag = 1; }
+    static void on3ButtonReset() { m3ButtonResetFlag = 1; }
+
     static int mResetPrepare;
     static int mResetFlag;
     static int m3ButtonResetFlag;
