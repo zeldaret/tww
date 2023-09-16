@@ -5,6 +5,7 @@
 
 #include "JSystem/J2DGraph/J2DPane.h"
 #include "JSystem/JSupport/JSURandomInputStream.h"
+#include "dolphin/gx/GXEnum.h"
 #include "dolphin/types.h"
 
 /* 802CF8F4-802CF984       .text __ct__7J2DPaneFv */
@@ -180,8 +181,18 @@ J2DPane* J2DPane::search(u32 tag) {
 }
 
 /* 802D0714-802D0800       .text makeMatrix__7J2DPaneFff */
-void J2DPane::makeMatrix(float, float) {
-    /* Nonmatching */
+void J2DPane::makeMatrix(f32 x, f32 y) {
+    Mtx stack1, stack2, stack3;
+    if (mRotation != 0.0f) {
+        MTXTrans(stack1, -mBasePosition.x, -mBasePosition.y, 0.0f);
+        f32 rot = mRotationAxis == ROTATE_Z ? -mRotation : mRotation;
+        MTXRotRad(stack2, mRotationAxis, rot * 0.017445329f);
+        MTXTrans(stack3, mBasePosition.x + x, mBasePosition.y + y, 0.0f);
+        MTXConcat(stack2, stack1, mMtx);
+        MTXConcat(stack3, mMtx, mMtx);
+    } else {
+        MTXTrans(mMtx, x, y, 0.0f);
+    }
 }
 
 /* 802D0800-802D08D8       .text setBasePosition__7J2DPaneF15J2DBasePosition */
@@ -209,13 +220,3 @@ void J2DPane::setBasePosition(J2DBasePosition pos) {
     mRotationAxis = ROTATE_Z;
     calcMtx();
 }
-
-/* 802D08D8-802D08DC       .text drawSelf__7J2DPaneFffPA3_A4_f */
-// void J2DPane::drawSelf(float, float, float (*)[3][4]) {
-//     /* Nonmatching */
-// }
-
-/* 802D08DC-802D08E4       .text getTypeID__7J2DPaneFv */
-// u16 J2DPane::getTypeID() {
-//     /* Nonmatching */
-// }

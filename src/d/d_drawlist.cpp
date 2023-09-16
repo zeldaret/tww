@@ -7,12 +7,12 @@
 #include "dolphin/types.h"
 
 /* 800804A4-800804C0       .text setViewPort__14dDlst_window_cFffffff */
-void dDlst_window_c::setViewPort(float, float, float, float, float, float) {
+void dDlst_window_c::setViewPort(f32, f32, f32, f32, f32, f32) {
     /* Nonmatching */
 }
 
 /* 800804C0-800804D4       .text setScissor__14dDlst_window_cFffff */
-void dDlst_window_c::setScissor(float, float, float, float) {
+void dDlst_window_c::setScissor(f32, f32, f32, f32) {
     /* Nonmatching */
 }
 
@@ -37,7 +37,7 @@ void dDlst_2DT2_c::draw() {
 }
 
 /* 800811E8-800812F4       .text init__12dDlst_2DT2_cFP7ResTIMGffffUcUcUcff */
-void dDlst_2DT2_c::init(ResTIMG*, float, float, float, float, unsigned char, unsigned char, unsigned char, float, float) {
+void dDlst_2DT2_c::init(ResTIMG*, f32, f32, f32, f32, u8, u8, u8, f32, f32) {
     /* Nonmatching */
 }
 
@@ -47,22 +47,22 @@ void dDlst_2DM_c::draw() {
 }
 
 /* 800817CC-80081850       .text init__11dDlst_2Dm_cFP7ResTIMGP7ResTIMGff */
-void dDlst_2Dm_c::init(ResTIMG*, ResTIMG*, float, float) {
+void dDlst_2Dm_c::init(ResTIMG*, ResTIMG*, f32, f32) {
     /* Nonmatching */
 }
 
 /* 80081850-80081864       .text setPos__11dDlst_2Dm_cFssss */
-void dDlst_2Dm_c::setPos(short, short, short, short) {
+void dDlst_2Dm_c::setPos(s16, s16, s16, s16) {
     /* Nonmatching */
 }
 
 /* 80081864-80081870       .text setScale__11dDlst_2Dm_cFff */
-void dDlst_2Dm_c::setScale(float, float) {
+void dDlst_2Dm_c::setScale(f32, f32) {
     /* Nonmatching */
 }
 
 /* 80081870-80081888       .text setScroll__11dDlst_2Dm_cFiss */
-void dDlst_2Dm_c::setScroll(int, short, short) {
+void dDlst_2Dm_c::setScroll(int, s16, s16) {
     /* Nonmatching */
 }
 
@@ -77,7 +77,7 @@ void dDlst_2DMt_c::draw() {
 }
 
 /* 80082130-800821B0       .text __ct__10dDlst_2D_cFP7ResTIMGssUc */
-dDlst_2D_c::dDlst_2D_c(ResTIMG*, short, short, unsigned char) {
+dDlst_2D_c::dDlst_2D_c(ResTIMG*, s16, s16, u8) {
     /* Nonmatching */
 }
 
@@ -97,17 +97,17 @@ void cM_rnd_c::get() {
 }
 
 /* 80082368-800823A0       .text getF__8cM_rnd_cFf */
-void cM_rnd_c::getF(float) {
+void cM_rnd_c::getF(f32) {
     /* Nonmatching */
 }
 
 /* 800823A0-800823E8       .text getFX__8cM_rnd_cFf */
-void cM_rnd_c::getFX(float) {
+void cM_rnd_c::getFX(f32) {
     /* Nonmatching */
 }
 
 /* 800823E8-80082424       .text getValue__8cM_rnd_cFff */
-void cM_rnd_c::getValue(float, float) {
+void cM_rnd_c::getValue(f32, f32) {
     /* Nonmatching */
 }
 
@@ -117,17 +117,17 @@ void dDlst_effectLine_c::draw() {
 }
 
 /* 80082794-80082828       .text update__18dDlst_effectLine_cFR4cXyzR8_GXColorUsUsUsUsffff */
-void dDlst_effectLine_c::update(cXyz&, _GXColor&, unsigned short, unsigned short, unsigned short, unsigned short, float, float, float, float) {
+void dDlst_effectLine_c::update(cXyz&, _GXColor&, u16, u16, u16, u16, f32, f32, f32, f32) {
     /* Nonmatching */
 }
 
 /* 80082828-80082838       .text set__22dDlst_alphaModelData_cFUcPA4_fUc */
-void dDlst_alphaModelData_c::set(unsigned char, float(*)[4], unsigned char) {
+void dDlst_alphaModelData_c::set(u8, f32(*)[4], u8) {
     /* Nonmatching */
 }
 
 /* 80082838-80082E44       .text draw__22dDlst_alphaModelData_cFPA4_f */
-void dDlst_alphaModelData_c::draw(float(*)[4]) {
+void dDlst_alphaModelData_c::draw(f32(*)[4]) {
     /* Nonmatching */
 }
 
@@ -152,12 +152,12 @@ dDlst_alphaModelData_c::dDlst_alphaModelData_c() {
 }
 
 /* 80082F3C-80082F9C       .text set__18dDlst_alphaModel_cFUcPA4_fUc */
-void dDlst_alphaModel_c::set(unsigned char, float(*)[4], unsigned char) {
+void dDlst_alphaModel_c::set(u8, f32(*)[4], u8) {
     /* Nonmatching */
 }
 
 /* 80082F9C-80083064       .text draw__18dDlst_alphaModel_cFPA4_f */
-void dDlst_alphaModel_c::draw(float(*)[4]) {
+void dDlst_alphaModel_c::draw(f32(*)[4]) {
     /* Nonmatching */
 }
 
@@ -167,7 +167,7 @@ void dDlst_alphaModelPacket::draw() {
 }
 
 /* 800832C4-800833CC       .text set__18dDlst_shadowPoly_cFP10cBgD_Vtx_tUsUsUsP8cM3dGPla */
-void dDlst_shadowPoly_c::set(cBgD_Vtx_t*, unsigned short, unsigned short, unsigned short, cM3dGPla*) {
+void dDlst_shadowPoly_c::set(cBgD_Vtx_t*, u16, u16, u16, cM3dGPla*) {
     /* Nonmatching */
 }
 
@@ -207,7 +207,7 @@ void dDlst_shadowReal_c::reset() {
 }
 
 /* 80083850-8008398C       .text imageDraw__18dDlst_shadowReal_cFPA4_f */
-void dDlst_shadowReal_c::imageDraw(float(*)[4]) {
+void dDlst_shadowReal_c::imageDraw(f32(*)[4]) {
     /* Nonmatching */
 }
 
@@ -227,7 +227,7 @@ void seaRealCallBack(void*, cXyz&, cXyz&, cXyz&) {
 }
 
 /* 80083E18-800840B0       .text realPolygonCheck__FP4cXyzffP4cXyzP18dDlst_shadowPoly_c */
-void realPolygonCheck(cXyz*, float, float, cXyz*, dDlst_shadowPoly_c*) {
+void realPolygonCheck(cXyz*, f32, f32, cXyz*, dDlst_shadowPoly_c*) {
     /* Nonmatching */
 }
 
@@ -242,17 +242,17 @@ cBgS_ShdwDraw::~cBgS_ShdwDraw() {
 }
 
 /* 800841B0-8008450C       .text setShadowRealMtx__FPA4_fPA4_fPA4_fP4cXyzP4cXyzffP18dDlst_shadowPoly_cf */
-void setShadowRealMtx(float(*)[4], float(*)[4], float(*)[4], cXyz*, cXyz*, float, float, dDlst_shadowPoly_c*, float) {
+void setShadowRealMtx(f32(*)[4], f32(*)[4], f32(*)[4], cXyz*, cXyz*, f32, f32, dDlst_shadowPoly_c*, f32) {
     /* Nonmatching */
 }
 
 /* 8008450C-800846C8       .text set__18dDlst_shadowReal_cFUlScP8J3DModelP4cXyzffP12dKy_tevstr_c */
-void dDlst_shadowReal_c::set(unsigned long, signed char, J3DModel*, cXyz*, float, float, dKy_tevstr_c*) {
+void dDlst_shadowReal_c::set(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*) {
     /* Nonmatching */
 }
 
 /* 800846C8-80084844       .text set2__18dDlst_shadowReal_cFUlScP8J3DModelP4cXyzffP12dKy_tevstr_c */
-void dDlst_shadowReal_c::set2(unsigned long, signed char, J3DModel*, cXyz*, float, float, dKy_tevstr_c*) {
+void dDlst_shadowReal_c::set2(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*) {
     /* Nonmatching */
 }
 
@@ -267,7 +267,7 @@ void dDlst_shadowSimple_c::draw() {
 }
 
 /* 80084AC8-80084D48       .text set__20dDlst_shadowSimple_cFP4cXyzffP4cXyzsfP9_GXTexObj */
-void dDlst_shadowSimple_c::set(cXyz*, float, float, cXyz*, short, float, _GXTexObj*) {
+void dDlst_shadowSimple_c::set(cXyz*, f32, f32, cXyz*, s16, f32, _GXTexObj*) {
     /* Nonmatching */
 }
 
@@ -282,32 +282,32 @@ void dDlst_shadowControl_c::reset() {
 }
 
 /* 80084DEC-80084EF0       .text imageDraw__21dDlst_shadowControl_cFPA4_f */
-void dDlst_shadowControl_c::imageDraw(float(*)[4]) {
+void dDlst_shadowControl_c::imageDraw(f32(*)[4]) {
     /* Nonmatching */
 }
 
 /* 80084EF0-800850D4       .text draw__21dDlst_shadowControl_cFPA4_f */
-void dDlst_shadowControl_c::draw(float(*)[4]) {
+void dDlst_shadowControl_c::draw(f32(*)[4]) {
     /* Nonmatching */
 }
 
 /* 800850D4-80085170       .text setReal__21dDlst_shadowControl_cFUlScP8J3DModelP4cXyzffP12dKy_tevstr_c */
-void dDlst_shadowControl_c::setReal(unsigned long, signed char, J3DModel*, cXyz*, float, float, dKy_tevstr_c*) {
+void dDlst_shadowControl_c::setReal(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*) {
     /* Nonmatching */
 }
 
 /* 80085170-8008520C       .text setReal2__21dDlst_shadowControl_cFUlScP8J3DModelP4cXyzffP12dKy_tevstr_c */
-void dDlst_shadowControl_c::setReal2(unsigned long, signed char, J3DModel*, cXyz*, float, float, dKy_tevstr_c*) {
+void dDlst_shadowControl_c::setReal2(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*) {
     /* Nonmatching */
 }
 
 /* 8008520C-80085274       .text addReal__21dDlst_shadowControl_cFUlP8J3DModel */
-void dDlst_shadowControl_c::addReal(unsigned long, J3DModel*) {
+void dDlst_shadowControl_c::addReal(u32, J3DModel*) {
     /* Nonmatching */
 }
 
 /* 80085274-800852D8       .text setSimple__21dDlst_shadowControl_cFP4cXyzffP4cXyzsfP9_GXTexObj */
-void dDlst_shadowControl_c::setSimple(cXyz*, float, float, cXyz*, short, float, _GXTexObj*) {
+void dDlst_shadowControl_c::setSimple(cXyz*, f32, f32, cXyz*, s16, f32, _GXTexObj*) {
     /* Nonmatching */
 }
 
@@ -327,12 +327,12 @@ void dDlst_mirrorPacket::init(ResTIMG*) {
 }
 
 /* 80085624-80085808       .text mirrorPolygonCheck__FP4cXyzP4cXyzfP18dDlst_shadowPoly_c */
-void mirrorPolygonCheck(cXyz*, cXyz*, float, dDlst_shadowPoly_c*) {
+void mirrorPolygonCheck(cXyz*, cXyz*, f32, dDlst_shadowPoly_c*) {
     /* Nonmatching */
 }
 
 /* 80085808-800859DC       .text update__18dDlst_mirrorPacketFPA4_fUcf */
-void dDlst_mirrorPacket::update(float(*)[4], unsigned char, float) {
+void dDlst_mirrorPacket::update(f32(*)[4], u8, f32) {
     /* Nonmatching */
 }
 
@@ -347,7 +347,7 @@ void dDlst_alphaInvVolPacket::draw() {
 }
 
 /* 80085BBC-80085BFC       .text newData__13dDlst_peekZ_cFssPUl */
-void dDlst_peekZ_c::newData(short, short, unsigned long*) {
+void dDlst_peekZ_c::newData(s16, s16, u32*) {
     /* Nonmatching */
 }
 
@@ -427,12 +427,12 @@ void dDlst_list_c::draw(dDlst_base_c**, dDlst_base_c**) {
 }
 
 /* 800865C8-800866C8       .text wipeIn__12dDlst_list_cFfR8_GXColor */
-void dDlst_list_c::wipeIn(float, _GXColor&) {
+void dDlst_list_c::wipeIn(f32, _GXColor&) {
     /* Nonmatching */
 }
 
 /* 800866C8-800866F0       .text wipeIn__12dDlst_list_cFf */
-void dDlst_list_c::wipeIn(float) {
+void dDlst_list_c::wipeIn(f32) {
     /* Nonmatching */
 }
 
@@ -442,7 +442,7 @@ void dDlst_list_c::calcWipe() {
 }
 
 /* 80086790-8008696C       .text dDlst_texSpecmapST__FPC4cXyzPC12dKy_tevstr_cP12J3DModelDataf */
-void dDlst_texSpecmapST(const cXyz*, const dKy_tevstr_c*, J3DModelData*, float) {
+void dDlst_texSpecmapST(const cXyz*, const dKy_tevstr_c*, J3DModelData*, f32) {
     /* Nonmatching */
 }
 
@@ -520,4 +520,3 @@ dDlst_2DPoint_c::~dDlst_2DPoint_c() {
 dDlst_2DTri_c::~dDlst_2DTri_c() {
     /* Nonmatching */
 }
-

@@ -140,10 +140,10 @@ m_Do/m_Do_machine_exception.cpp:
 	.rodata     start:0x80337158 end:0x80337338
 	.sbss       start:0x803E9E90 end:0x803E9E98
 
-dolphin/os/__start.o:
+dolphin/os/__start.c:
 	.init       start:0x80003100 end:0x800033A8
 
-c/c_damagereaction.o:
+c/c_damagereaction.cpp:
 	.text       start:0x8001BB70 end:0x80022430
 	.ctors      start:0x803360A0 end:0x803360A4
 	.data       start:0x80365270 end:0x80365478
@@ -152,7 +152,7 @@ c/c_damagereaction.o:
 	.sbss       start:0x803E9E98 end:0x803E9EA0
 	.sdata2     start:0x803EB300 end:0x803EB458
 
-c/c_dylink.o:
+c/c_dylink.cpp:
 	.text       start:0x80022430 end:0x80022C94
 	.text       start:0x80022C94 end:0x80022CFC
 	.rodata     start:0x80337338 end:0x803395F0
@@ -1704,7 +1704,7 @@ d/d_wpot_water.cpp:
 	.sbss       start:0x803EA7A0 end:0x803EA7A8
 	.sdata2     start:0x803EEFD8 end:0x803EEFF8
 
-Runtime.PPCEABI.H/__mem.o:
+Runtime.PPCEABI.H/__mem.c:
 	.init       start:0x800033A8 end:0x800034E0
 
 DynamicLink.cpp:

@@ -21,7 +21,7 @@ jobs:
       run: cp -R /orig/${{matrix.version}} orig
     - name: Build
       run: |
-        python configure.py --map --version ${{matrix.version}} --compilers /compilers
+        python configure.py --version ${{matrix.version}} --compilers /compilers
         ninja
     - name: Upload progress
       if: github.ref == 'refs/heads/main'
@@ -31,8 +31,3 @@ jobs:
       run: |
         python tools/upload_progress.py -b https://progress.deco.mp/ -p tww -v ${{matrix.version}} \
           build/${{matrix.version}}/progress.json
-    - name: Upload maps
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{matrix.version}} maps
-        path: build/${{matrix.version}}/**/*.MAP

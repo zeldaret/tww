@@ -46,7 +46,7 @@ public:
     void init();
     void set(char const*, s8, u8);
 
-    s8 getRoomNo() const { return mRoomNo; }
+    const s8 getRoomNo() const { return mRoomNo; }
     u8 getPlayerStatus() const { return mPlayerStatus; }
     char* getName() { return mName; }
 
@@ -99,6 +99,9 @@ public:
     /* 80059894 */ void decTimer();
     /* 800598D0 */ u16 getTimer();
 
+    u8 getArrowNum() const { return mArrowNum; }
+    u8 getBombNum() const { return mBombNum; }
+
     /* 0x0 */ u16 mTimer;
     /* 0x2 */ u8 field_0x2;
     /* 0x3 */ u8 mArrowNum;
@@ -141,9 +144,13 @@ public:
     /* 8005A854 */ u8 checkReserveItemEmpty();
     /* 8005A878 */ u8 checkReserveItem(u8);
 
-    /* 0x00 */ u8 field_0x0[8];
-    /* 0x08 */ u8 field_0x8[8];
-    /* 0x10 */ u8 field_0x10[8];
+    u8 getBeast(int i_idx) const { return mBeast[i_idx]; }
+    u8 getBait(int i_idx) const { return mBait[i_idx]; }
+    u8 getReserve(int i_idx) const { return mReserve[i_idx]; }
+
+    /* 0x00 */ u8 mBeast[8];
+    /* 0x08 */ u8 mBait[8];
+    /* 0x10 */ u8 mReserve[8];
 };  // Size: 0x18
 
 STATIC_ASSERT(sizeof(dSv_player_bag_item_c) == 0x18);
@@ -170,9 +177,13 @@ class dSv_player_bag_item_record_c {
 public:
     /* 8005AC48 */ void init();
 
-    /* 0x00 */ u8 field_0x0[8];
-    /* 0x08 */ u8 field_0x8[8];
-    /* 0x10 */ u8 field_0x10[8];
+    u8 getBeastNum(int i_idx) const { return mBeastNum[i_idx]; }
+    u8 getBaitNum(int i_idx) const { return mBaitNum[i_idx]; }
+    u8 getReserveNum(int i_idx) const { return mReserveNum[i_idx]; }
+
+    /* 0x00 */ u8 mBeastNum[8];
+    /* 0x08 */ u8 mBaitNum[8];
+    /* 0x10 */ u8 mReserveNum[8];
 };  // Size: 0x18
 
 STATIC_ASSERT(sizeof(dSv_player_bag_item_record_c) == 0x18);
@@ -413,6 +424,8 @@ public:
     /* 0x21 */ u8 mDungeonItem;
 };  // Size: 0x24
 
+STATIC_ASSERT(sizeof(dSv_memBit_c) == 0x24);
+
 class dSv_ocean_c {
 public:
     /* 8005C8E8 */ void init();
@@ -421,6 +434,8 @@ public:
 
     /* 0x0 */ u16 field_0x0[50];
 };
+
+STATIC_ASSERT(sizeof(dSv_ocean_c) == 0x64);
 
 class dSv_event_c {
 public:
@@ -433,6 +448,8 @@ public:
 
     /* 0x0 */ u8 mFlags[0x100];
 };  // Size: 0x100
+
+STATIC_ASSERT(sizeof(dSv_event_c) == 0x100);
 
 class dSv_reserve_c {
 public:
@@ -451,6 +468,8 @@ public:
 
     /* 0x0 */ dSv_memBit_c mMembit;
 };  // Size: 0x24
+
+STATIC_ASSERT(sizeof(dSv_memory_c) == 0x24);
 
 class dSv_danBit_c {
 public:
@@ -567,6 +586,8 @@ public:
     /* 0x5C0 */ dSv_ocean_c mOcean;
     /* 0x624 */ dSv_event_c mEvent;
 };  // Size: 0x724
+
+STATIC_ASSERT(sizeof(dSv_save_c) == 0x728);
 
 class dSv_info_c {
 public:

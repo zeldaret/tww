@@ -4,23 +4,10 @@
 #include "JSystem/JGeometry.h"
 #include "JSystem/JSupport/JSUList.h"
 #include "SSystem/SComponent/c_xyz.h"
-#include "dolphin/gx/GXEnum.h"
 #include "dolphin/mtx/mtx.h"
 
-class J2DAnmBase;
-class J2DAnmColor;
-class J2DAnmTransform;
-class J2DAnmTevRegKey;
-class J2DAnmTextureSRTKey;
-class J2DAnmVisibilityFull;
-class J2DAnmVtxColor;
 class J2DGrafContext;
-class J2DScreen;
-class J2DAnmTexPattern;
-class JKRArchive;
 class JSURandomInputStream;
-struct ResFONT;
-struct ResTIMG;
 
 enum J2DRotateAxis {
     /* 0x78 */ ROTATE_X = 'x',
@@ -46,44 +33,26 @@ public:
     J2DPane();
     J2DPane(J2DPane*, bool, u32, const JGeometry::TBox2<f32>&);
     J2DPane(u32, const JGeometry::TBox2<f32>&);
-    J2DPane(J2DPane* other, JSURandomInputStream* stream, u8 arg3);
     J2DPane(J2DPane*, JSURandomInputStream*);
     void initiate();
-    void initialize(J2DPane*, bool, u64, const JGeometry::TBox2<f32>&);
-    void initialize(u64 tag, const JGeometry::TBox2<f32>& dim);
     void makePaneStream(J2DPane* other, JSURandomInputStream* stream);
-    void changeUseTrans(J2DPane* other);
-    bool appendChild(J2DPane* child);
     bool insertChild(J2DPane* before, J2DPane* child);
     void draw(f32 a1, f32 a2, const J2DGrafContext* ctx, bool a4);
-    void place(const JGeometry::TBox2<f32>& dim);
-    JGeometry::TBox2<f32>& getBounds();
-    void rotate(f32 offsetX, f32 offsetY, J2DRotateAxis axis, f32 angle);
-    void rotate(f32 angle);
     void clip(const JGeometry::TBox2<f32>& bounds);
     void setBasePosition(J2DBasePosition position);
-    void setInfluencedAlpha(bool arg1, bool arg2);
-    JGeometry::TVec3<f32> getGlbVtx(u8 arg1) const;
-    J2DPane* getFirstChildPane();
-    J2DPane* getNextChildPane();
-    J2DPane* getParentPane();
-    void makePaneExStream(J2DPane* other, JSURandomInputStream* stream);
-    void* getPointer(JSURandomInputStream* stream, u32 size, JKRArchive* archive);
-    void animationTransform();
-    void updateTransform(const J2DAnmTransform* transform);
 
     virtual ~J2DPane();
+    virtual u16 getTypeID() { return 16; }
     virtual void move(f32 x, f32 y);
     virtual void add(f32 x, f32 y);
     virtual void resize(f32 x, f32 y);
     virtual bool setConnectParent(bool connected);
-    virtual void update();
     virtual void calcMtx();
+    virtual void update();
     virtual void drawSelf(f32 arg1, f32 arg2);
     virtual void drawSelf(f32 arg1, f32 arg2, Mtx* mtx){};
-    virtual void makeMatrix(f32, f32);
     virtual J2DPane* search(u32 tag);
-    virtual u16 getTypeID() { return 16; }
+    virtual void makeMatrix(f32, f32);
 
     JSUTree<J2DPane>* getFirstChild() { return mPaneTree.getFirstChild(); }
     JSUTree<J2DPane>* getEndChild() { return mPaneTree.getEndChild(); }
@@ -100,7 +69,7 @@ public:
     /* 0x6C */ Mtx mDrawMtx;
     /* 0x9C */ cXy mBasePosition;
     /* 0xA4 */ f32 mRotation;
-    /* 0xA8 */ u8 mRotationAxis;
+    /* 0xA8 */ s8 mRotationAxis;
     /* 0xA9 */ u8 m2DBasePosition;
     /* 0xAA */ bool mVisible;
     /* 0xAB */ u8 mCullMode;

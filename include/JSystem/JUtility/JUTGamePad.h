@@ -242,10 +242,9 @@ public:
     /* 0x7C */ JSULink<JUTGamePad> mLink;
     /* 0x8C */ JUTGamePadRecordBase* mPadRecord;
     /* 0x90 */ JUTGamePadRecordBase* mPadReplay;
-    /* 0x94 */ C3ButtonReset mButtonReset;
-    /* 0x98 */ u8 field_0x98[4];
+    /* 0x94 */ u8 field_0x94[4];
+    /* 0x98 */ C3ButtonReset mButtonReset;
     /* 0x9C */ OSTime mResetTime;
-    /* 0xA4 */ u8 field_0xa4;
 
     static JSUList<JUTGamePad> mPadList;
     static bool mListInitialized;

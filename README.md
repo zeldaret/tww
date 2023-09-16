@@ -1,5 +1,5 @@
 The Legend of Zelda: The Wind Waker  
-[![Build Status]][actions] ![Progress] ![DOL Progress] ![RELs Progress]
+[![Build Status]][actions] ![Progress] ![DOL Progress] ![RELs Progress] [![Discord Badge]][discord]
 =============
 
 [Build Status]: https://github.com/zeldaret/tww/actions/workflows/build.yml/badge.svg
@@ -7,12 +7,18 @@ The Legend of Zelda: The Wind Waker
 [Progress]: https://img.shields.io/endpoint?label=Code&url=https%3A%2F%2Fprogress.deco.mp%2Fdata%2Ftww%2FGZLE01%2Fall%2F%3Fmode%3Dshield%26measure%3Dcode
 [DOL Progress]: https://img.shields.io/endpoint?label=DOL&url=https%3A%2F%2Fprogress.deco.mp%2Fdata%2Ftww%2FGZLE01%2Fdol%2F%3Fmode%3Dshield%26measure%3Dcode
 [RELs Progress]: https://img.shields.io/endpoint?label=RELs&url=https%3A%2F%2Fprogress.deco.mp%2Fdata%2Ftww%2FGZLE01%2Fmodules%2F%3Fmode%3Dshield%26measure%3Dcode
+[Discord Badge]: https://img.shields.io/discord/688807550715560050?color=%237289DA&logo=discord&logoColor=%23FFFFFF
+[discord]: https://discord.zelda64.dev
 
-This repository supports the following versions:
+A work-in-progress decompilation of The Legend of Zelda: The Wind Waker for GameCube.
 
-- GZLE01 - Rev 0 (USA), Rev 48 (KOR)
-- GZLP01 - Rev 0 (PAL)
-- GZLJ01 - Rev 0 (JPN)
+This repository does **not** contain any game assets or assembly whatsoever. An existing copy of the game is required.
+
+All GameCube versions are supported:
+
+- `GZLE01`: Rev 0 (USA), Rev 48 (KOR)
+- `GZLP01`: Rev 0 (PAL)
+- `GZLJ01`: Rev 0 (JPN)
 
 Dependencies
 ============

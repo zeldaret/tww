@@ -132,6 +132,7 @@ public:
     void imageDraw(f32 (*)[4]);
     void draw(f32 (*)[4]);
     int setReal(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*);
+    int setReal2(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*);
     bool addReal(u32, J3DModel*);
     int setSimple(cXyz*, f32, f32, cXyz*, s16, f32, GXTexObj*);
     static void setSimpleTex(ResTIMG const*);
@@ -185,6 +186,10 @@ public:
                         f32 param_5, _GXTexObj* param_6) {
         return mShadowControl.setSimple(param_0, param_1, param_2, param_3, param_4, param_5,
                                         param_6);
+    }
+    int setRealShadow2(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5, f32 param_6,
+                       dKy_tevstr_c* pTevStr) {
+        return mShadowControl.setReal2(id, param_2, pModel, pPos, param_5, param_6, pTevStr);
     }
 
     static void offWipe() { mWipe = false; }
