@@ -111,8 +111,8 @@ struct DOUBLE_POS {
     double x, y, z;
 };
 
-inline s32 fopAcM_GetRoomNo(const fopAc_ac_c* pActor) {
-    return (s8)pActor->current.roomNo;
+inline const s8 fopAcM_GetRoomNo(const fopAc_ac_c* pActor) {
+    return pActor->current.roomNo;
 }
 
 inline u32 fopAcM_GetID(const void* pActor) {

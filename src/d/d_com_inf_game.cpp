@@ -183,11 +183,11 @@ int dComIfG_play_c::getLayerNo(int i_roomNo) {
     int layer = dComIfGp_getStartStageLayer();
 
     if (layer < 0) {
-        int hour = dKy_getdaytime_hour();
+        layer = dKy_getdaytime_hour();
         if (dKy_checkEventNightStop()) {
             layer = 1;
         } else {
-            layer = (hour >= 6 && hour < 18) == 0;
+            layer = (layer >= 6 && layer < 18) ? 0 : 1;
         }
 
         if (strcmp(dComIfGp_getStartStageName(), "sea") == 0) {
@@ -494,12 +494,12 @@ int dComIfG_resetToOpening(scene_class* i_scene) {
 
 /* 800532D8-80053330       .text phase_1__FPc */
 // matches with stringbase
-int phase_1(char* i_arcName) {
+static int phase_1(char* i_arcName) {
     return !dComIfG_setObjectRes(i_arcName, (u8)0, NULL) ? cPhs_ERROR_e : cPhs_NEXT_e;
 }
 
 /* 80053330-80053388       .text phase_2__FPc */
-int phase_2(char* i_arcName) {
+static int phase_2(char* i_arcName) {
     int syncStatus = dComIfG_syncObjectRes(i_arcName);
 
     if (syncStatus < 0) {
@@ -510,7 +510,7 @@ int phase_2(char* i_arcName) {
 }
 
 /* 80053388-80053390       .text phase_3__FPc */
-int phase_3(char* i_arcName) {
+static int phase_3(char* i_arcName) {
     return cPhs_COMPLEATE_e;
 }
 
@@ -711,7 +711,6 @@ BOOL dComIfGs_isStageLife(int i_stageNo) {
 }
 
 /* 80053B30-80053F70       .text dComIfGs_checkGetItem__FUc */
-// NONMATCHING - almost, just a couple small things
 u8 dComIfGs_checkGetItem(u8 i_itemNo) {
     u8 get_item = 0;
 
@@ -819,15 +818,15 @@ u8 dComIfGs_checkGetItem(u8 i_itemNo) {
             } else if (i < 24) {
                 item = NO_ITEM;
             } else if (i < 32) {
-                item = g_dComIfG_gameInfo.save.getPlayer().getGetItem().mItemFlags[i - 0x18];
+                item = dComIfGs_getBeast(i - 24);
             } else if (i < 36) {
                 item = NO_ITEM;
             } else if (i < 44) {
-                item = g_dComIfG_gameInfo.save.getPlayer().getGetItem().mItemFlags[i - 0x1C];
+                item = dComIfGs_getBait(i - 36);
             } else if (i < 48) {
                 item = NO_ITEM;
             } else if (i < 56) {
-                item = g_dComIfG_gameInfo.save.getPlayer().getGetItem().mItemFlags[i - 0x20];
+                item = dComIfGs_getReserve(i - 48);
             } else {
                 item = NO_ITEM;
             }
@@ -843,8 +842,8 @@ u8 dComIfGs_checkGetItem(u8 i_itemNo) {
             }
         }
 
-        if (i_itemNo >= 0xBF && i_itemNo <= 0xFE &&
-            g_dComIfG_gameInfo.save.getPlayer().getMap().isGetMap(i_itemNo - 1))
+        if (i_itemNo >= 0xBF && i_itemNo <= NO_ITEM - 1 &&
+            dComIfGs_isGetCollectMap(NO_ITEM - i_itemNo))
         {
             get_item++;
         }
@@ -855,15 +854,229 @@ u8 dComIfGs_checkGetItem(u8 i_itemNo) {
 }
 
 /* 80053F70-80054578       .text dComIfGs_checkGetItemNum__FUc */
-void dComIfGs_checkGetItemNum(u8) {
-    /* Nonmatching */
+u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
+    u8 get_item = 0;
+
+    switch (i_itemNo) {
+    case TACT_SONG1:
+        if (dComIfGs_isTact(0)) {
+            get_item = 1;
+        }
+        break;
+    case TACT_SONG2:
+        if (dComIfGs_isTact(1)) {
+            get_item = 1;
+        }
+        break;
+    case TACT_SONG3:
+        if (dComIfGs_isTact(2)) {
+            get_item = 1;
+        }
+        break;
+    case TACT_SONG4:
+        if (dComIfGs_isTact(3)) {
+            get_item = 1;
+        }
+        break;
+    case TACT_SONG5:
+        if (dComIfGs_isTact(4)) {
+            get_item = 1;
+        }
+        break;
+    case TACT_SONG6:
+        if (dComIfGs_isTact(5)) {
+            get_item = 1;
+        }
+        break;
+    case TRIFORCE1:
+        if (dComIfGs_isTriforce(0)) {
+            get_item = 1;
+        }
+        break;
+    case TRIFORCE2:
+        if (dComIfGs_isTriforce(1)) {
+            get_item = 1;
+        }
+        break;
+    case TRIFORCE3:
+        if (dComIfGs_isTriforce(2)) {
+            get_item = 1;
+        }
+        break;
+    case TRIFORCE4:
+        if (dComIfGs_isTriforce(3)) {
+            get_item = 1;
+        }
+        break;
+    case TRIFORCE5:
+        if (dComIfGs_isTriforce(4)) {
+            get_item = 1;
+        }
+        break;
+    case TRIFORCE6:
+        if (dComIfGs_isTriforce(5)) {
+            get_item = 1;
+        }
+        break;
+    case TRIFORCE7:
+        if (dComIfGs_isTriforce(6)) {
+            get_item = 1;
+        }
+        break;
+    case TRIFORCE8:
+        if (dComIfGs_isTriforce(7)) {
+            get_item = 1;
+        }
+        break;
+    case PEARL1:
+        if (dComIfGs_isSymbol(0)) {
+            get_item = 1;
+        }
+        break;
+    case PEARL2:
+        if (dComIfGs_isSymbol(1)) {
+            get_item = 1;
+        }
+        break;
+    case PEARL3:
+        if (dComIfGs_isSymbol(2)) {
+            get_item = 1;
+        }
+        break;
+    case PIRATES_OMAMORI:
+        if (dComIfGs_isCollect(3, 0)) {
+            get_item = 1;
+        }
+        break;
+    case HEROS_OMAMORI:
+        if (dComIfGs_isCollect(4, 0)) {
+            get_item = 1;
+        }
+        break;
+    case BOW:
+        if (dComIfGs_getItem(12)) {
+            get_item = dComIfGs_getArrowNum();
+        }
+        break;
+    case BOMB_BAG:
+        if (dComIfGs_getItem(13)) {
+            get_item = dComIfGs_getBombNum();
+        }
+        break;
+    case SKULL_NECKLACE:
+        for (int i = 0; i < 8; i++) {
+            if (dComIfGs_getBeast(i) == SKULL_NECKLACE) {
+                get_item = dComIfGs_getBeastNum(0);
+            }
+        }
+        break;
+    case BOKOBABA_SEED:
+        for (int i = 0; i < 8; i++) {
+            if (dComIfGs_getBeast(i) == BOKOBABA_SEED) {
+                get_item = dComIfGs_getBeastNum(1);
+            }
+        }
+        break;
+    case GOLDEN_FEATHER:
+        for (int i = 0; i < 8; i++) {
+            if (dComIfGs_getBeast(i) == GOLDEN_FEATHER) {
+                get_item = dComIfGs_getBeastNum(2);
+            }
+        }
+        break;
+    case BOKO_BELT:
+        for (int i = 0; i < 8; i++) {
+            if (dComIfGs_getBeast(i) == BOKO_BELT) {
+                get_item = dComIfGs_getBeastNum(3);
+            }
+        }
+        break;
+    case RED_JELLY:
+        for (int i = 0; i < 8; i++) {
+            if (dComIfGs_getBeast(i) == RED_JELLY) {
+                get_item = dComIfGs_getBeastNum(4);
+            }
+        }
+        break;
+    case GREEN_JELLY:
+        for (int i = 0; i < 8; i++) {
+            if (dComIfGs_getBeast(i) == GREEN_JELLY) {
+                get_item = dComIfGs_getBeastNum(5);
+            }
+        }
+        break;
+    case BLUE_JELLY:
+        for (int i = 0; i < 8; i++) {
+            if (dComIfGs_getBeast(i) == BLUE_JELLY) {
+                get_item = dComIfGs_getBeastNum(6);
+            }
+        }
+        break;
+    case PENDANT:
+        for (int i = 0; i < 8; i++) {
+            if (dComIfGs_getBeast(i) == PENDANT) {
+                get_item = dComIfGs_getBeastNum(7);
+            }
+        }
+        break;
+    default:
+        u8 item = 0;
+        for (int i = 0; i < 60; i++) {
+            if (i < 21) {
+                item = dComIfGs_getItem(i);
+            } else if (i < 24) {
+                item = NO_ITEM;
+            } else if (i < 32) {
+                item = dComIfGs_getBeast(i - 24);
+            } else if (i < 36) {
+                item = NO_ITEM;
+            } else if (i < 44) {
+                item = dComIfGs_getBait(i - 36);
+            } else if (i < 48) {
+                item = NO_ITEM;
+            } else if (i < 56) {
+                item = dComIfGs_getReserve(i - 48);
+            } else {
+                item = NO_ITEM;
+            }
+
+            if (i_itemNo == item) {
+                get_item = 1;
+            }
+        }
+
+        for (int i = 0; i < 3; i++) {
+            if (i_itemNo == dComIfGs_getSelectEquip(i)) {
+                get_item = 1;
+            }
+        }
+
+        if (i_itemNo >= 0xBF && i_itemNo <= NO_ITEM - 1 &&
+            dComIfGs_isGetCollectMap(NO_ITEM - i_itemNo))
+        {
+            get_item = 1;
+        }
+        break;
+    }
+
+    return get_item;
 }
 
 /* 80054578-8005468C       .text
  * dComIfGd_setShadow__FUlScP8J3DModelP4cXyzffffR13cBgS_PolyInfoP12dKy_tevstr_csfP9_GXTexObj */
-void dComIfGd_setShadow(u32, s8, J3DModel*, cXyz*, f32, f32, f32, f32, cBgS_PolyInfo&,
-                        dKy_tevstr_c*, s16, f32, _GXTexObj*) {
-    /* Nonmatching */
+int dComIfGd_setShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5, f32 param_6,
+                       f32 y, f32 param_8, cBgS_PolyInfo& pFloorPoly, dKy_tevstr_c* param_10,
+                       s16 rotY, f32 param_12, GXTexObj* pTexObj) {
+    if (param_8 <= -1000000000.0f) {
+        return 0;
+    }
+
+    int sid = dComIfGd_setRealShadow2(id, param_2, pModel, pPos, param_5, y - param_8, param_10);
+    if (sid == 0) {
+        cXyz i_pos(pPos->x, y, pPos->z);
+        dComIfGd_setSimpleShadow2(&i_pos, param_8, param_6, pFloorPoly, rotY, param_12, pTexObj);
+    }
+    return sid;
 }
 
 /* 8005468C-800547BC       .text getSceneList__Fi */
@@ -880,8 +1093,20 @@ stage_scls_info_class* getSceneList(int i_no) {
 }
 
 /* 800547BC-80054870       .text dComIfGd_getMeshSceneList__FR3Vec */
-stage_scls_info_class* dComIfGd_getMeshSceneList(Vec&) {
-    /* Nonmatching */
+stage_scls_info_class* dComIfGd_getMeshSceneList(Vec& vec) {
+    s32 x = (s32)((vec.x + 350000.0f) * 2e-05f);
+    s32 z = (s32)((vec.z + 350000.0f) * 2e-05f);
+    if (x < 0) {
+        x = 0;
+    } else if (13 < x) {
+        x = 13;
+    }
+    if (z < 0) {
+        z = 0;
+    } else if (13 < z) {
+        z = 13;
+    }
+    return getSceneList((x & 1) + ((x >> 1) + (z >> 1) * 7) * 4 + (z & 1) * 2);
 }
 
 /* 80054870-800548FC       .text dComIfGs_checkSeaLandingEvent__FSc */
@@ -926,7 +1151,7 @@ void dComIfGs_setGameStartStage() {
     };
 
     check_data* data_p = l_checkData;
-    for (int i = 0; i < 5; i++) {
+    for (u32 i = 0; i < 5; i++) {
         if (data_p->mbHasEvent == true && dComIfGs_isEventBit(data_p->mEvent)) {
             break;
         }

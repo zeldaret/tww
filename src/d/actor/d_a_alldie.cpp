@@ -3,9 +3,10 @@
 // Translation Unit: d_a_alldie.cpp
 //
 
-#include "f_op/f_op_actor_mng.h"
 #include "JSystem/JKernel/JKRHeap.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "f_op/f_op_actor_mng.h"
 
 enum {
     ACT_WAIT,
@@ -25,12 +26,12 @@ public:
 
 public:
     u8 mAction;
-    u16 mTimer;
+    s16 mTimer;
 };
 
 /* 00000078-00000084       .text getSwbit__10daAlldie_cFv */
 u8 daAlldie_c::getSwbit() {
-    return fopAcM_GetParam(this) >> 0x8; 
+    return fopAcM_GetParam(this) >> 0x8;
 }
 
 /* 00000084-0000008C       .text actionWait__10daAlldie_cFv */
@@ -52,13 +53,11 @@ s32 daAlldie_c::actionCheck() {
 s32 daAlldie_c::actionTimer() {
     if (fopAcM_myRoomSearchEnemy(fopAcM_GetRoomNo(this))) {
         mAction = ACT_CHECK;
+    } else if (mTimer > 0) {
+        mTimer--;
     } else {
-        if (mTimer > 0) {
-            mTimer--;
-        } else {
-            mAction = ACT_WAIT;
-            dComIfGs_onSwitch(getSwbit(), fopAcM_GetRoomNo(this));
-        }
+        mAction = ACT_WAIT;
+        dComIfGs_onSwitch(getSwbit(), fopAcM_GetRoomNo(this));
     }
     return 1;
 }
@@ -83,9 +82,7 @@ s32 daAlldie_c::execute() {
 s32 daAlldie_c::create() {
     fopAcM_SetupActor(this, daAlldie_c);
 
-    s8 roomNo = fopAcM_GetRoomNo(this);
-
-    if (!dComIfGs_isSwitch(this->getSwbit(), roomNo)) {
+    if (!dComIfGs_isSwitch(getSwbit(), fopAcM_GetRoomNo(this))) {
         mAction = ACT_CHECK;
     } else {
         mAction = ACT_WAIT;
@@ -100,29 +97,29 @@ s32 daAlldie_c::create() {
 }
 
 /* 000001BC-000001C4       .text daAlldie_Draw__FP10daAlldie_c */
-s32 daAlldie_Draw(daAlldie_c*) {
+static s32 daAlldie_Draw(daAlldie_c*) {
     return 1;
 }
 
 /* 000001C4-000001E8       .text daAlldie_Execute__FP10daAlldie_c */
-s32 daAlldie_Execute(daAlldie_c* i_this) {
+static s32 daAlldie_Execute(daAlldie_c* i_this) {
     i_this->execute();
     return 1;
 }
 
 /* 000001E8-000001F0       .text daAlldie_IsDelete__FP10daAlldie_c */
-s32 daAlldie_IsDelete(daAlldie_c*) {
+static s32 daAlldie_IsDelete(daAlldie_c*) {
     return 1;
 }
 
 /* 000001F0-00000220       .text daAlldie_Delete__FP10daAlldie_c */
-s32 daAlldie_Delete(daAlldie_c* i_this) {
+static s32 daAlldie_Delete(daAlldie_c* i_this) {
     i_this->~daAlldie_c();
     return 1;
 }
 
 /* 00000220-000002CC       .text daAlldie_Create__FP10fopAc_ac_c */
-s32 daAlldie_Create(fopAc_ac_c* ac) {
+static s32 daAlldie_Create(fopAc_ac_c* ac) {
     return ((daAlldie_c*)ac)->create();
 }
 
