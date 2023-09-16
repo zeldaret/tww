@@ -5,7 +5,7 @@
 
 class cBgS_PolyPassChk {
 public:
-    virtual ~cBgS_PolyPassChk();
+    virtual ~cBgS_PolyPassChk() {}
 
     /* 0x4 */ u8 mbObjThrough;
     /* 0x5 */ u8 mbCamThrough;
@@ -18,8 +18,16 @@ public:
 
 class dBgS_PolyPassChk : public cBgS_PolyPassChk {
 public:
-    dBgS_PolyPassChk();
-    virtual ~dBgS_PolyPassChk();
+    dBgS_PolyPassChk() {
+        mbObjThrough = 0;
+        mbCamThrough = 0;
+        mbLinkThrough = 0;
+        mbArrowsAndLightThrough = 0;
+        mbBombThrough = 0;
+        mbBoomerangThrough = 0;
+        mbHookshotThrough = 0;
+    }
+    virtual ~dBgS_PolyPassChk() {}
 
     void SetObj() { mbObjThrough = 1; }
 };
