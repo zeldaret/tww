@@ -74,7 +74,6 @@ s32 daDisappear_Delete(disappear_class*) {
 
 /* 800E7AD0-800E7DBC       .text set_disappear__FP15disappear_classf */
 void set_disappear(disappear_class* i_this, float scale) {
-    /* Nonmatching */
     s8 rev = dComIfGp_getReverb(i_this->getRoomNo());
     mDoAud_seStart(0x5801, &i_this->mEyePos, 0, rev);
 
@@ -108,7 +107,6 @@ void set_disappear(disappear_class* i_this, float scale) {
 
 /* 800E7DBC-800E7E60       .text daDisappear_Create__FP10fopAc_ac_c */
 s32 daDisappear_Create(fopAc_ac_c* i_this) {
-    /* Nonmatching */
     disappear_class* dis = static_cast<disappear_class*>(i_this);
 
     fopAcM_SetupActor(dis, disappear_class);
