@@ -4,54 +4,157 @@
 //
 
 #include "JSystem/JKernel/JKRFileLoader.h"
-#include "dolphin/types.h"
+#include "MSL_C/string.h"
+#include "MSL_C/MSL_Common/Src/ctype.h"
+#include "global.h"
+
+JKRFileLoader* JKRFileLoader::sCurrentVolume;
+JSUList<JKRFileLoader> JKRFileLoader::sVolumeList;
 
 /* 802B6770-802B67C8       .text __ct__13JKRFileLoaderFv */
-JKRFileLoader::JKRFileLoader() {
-    /* Nonmatching */
+JKRFileLoader::JKRFileLoader() : mFileLoaderLink(this) {
+    mVolumeName = NULL;
+    mVolumeType = 0;
+    mMountCount = 0;
 }
 
 /* 802B67C8-802B6854       .text __dt__13JKRFileLoaderFv */
 JKRFileLoader::~JKRFileLoader() {
-    /* Nonmatching */
+    if (getCurrentVolume() == this) {
+        setCurrentVolume(NULL);
+    }
 }
 
 /* 802B6854-802B68A4       .text unmount__13JKRFileLoaderFv */
 void JKRFileLoader::unmount() {
-    /* Nonmatching */
+    s32 count = mMountCount;
+    if (mMountCount != 0) {
+        count--;
+        mMountCount = count;
+        if (count == 0) {
+            delete this;
+        }
+    }
 }
 
 /* 802B68A4-802B68F0       .text getGlbResource__13JKRFileLoaderFPCc */
-void JKRFileLoader::getGlbResource(const char*) {
-    /* Nonmatching */
+void* JKRFileLoader::getGlbResource(const char* name) {
+    const char* name_reference[1];
+    name_reference[0] = name;
+
+    JKRFileLoader* fileLoader = findVolume(name_reference);
+    void* resource;
+    if (fileLoader == NULL) {
+        resource = NULL;
+    } else {
+        resource = fileLoader->getResource(name_reference[0]);
+    }
+
+    return resource;
 }
 
 /* 802B68F0-802B6988       .text getGlbResource__13JKRFileLoaderFPCcP13JKRFileLoader */
-void JKRFileLoader::getGlbResource(const char*, JKRFileLoader*) {
-    /* Nonmatching */
+void* JKRFileLoader::getGlbResource(const char* name, JKRFileLoader* fileLoader) {
+    void* resource = NULL;
+    if (fileLoader) {
+        return fileLoader->getResource(0, name);
+    }
+
+    JSUList<JKRFileLoader>& volumeList = getVolumeList();
+    JSUListIterator<JKRFileLoader> iterator;
+    for (iterator = volumeList.getFirst(); iterator != volumeList.getEnd(); ++iterator) {
+        resource = iterator->getResource(0, name);
+        if (resource)
+            break;
+    }
+    return resource;
 }
 
 /* 802B6988-802B6A20       .text removeResource__13JKRFileLoaderFPvP13JKRFileLoader */
-void JKRFileLoader::removeResource(void*, JKRFileLoader*) {
-    /* Nonmatching */
+bool JKRFileLoader::removeResource(void* resource, JKRFileLoader* fileLoader) {
+    if (fileLoader) {
+        return fileLoader->removeResource(resource);
+    }
+
+    JSUList<JKRFileLoader>& volumeList = getVolumeList();
+    JSUListIterator<JKRFileLoader> iterator;
+    for (iterator = volumeList.getFirst(); iterator != volumeList.getEnd(); ++iterator) {
+        if (iterator->removeResource(resource)) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /* 802B6A20-802B6AB8       .text detachResource__13JKRFileLoaderFPvP13JKRFileLoader */
-void JKRFileLoader::detachResource(void*, JKRFileLoader*) {
-    /* Nonmatching */
+bool JKRFileLoader::detachResource(void* resource, JKRFileLoader* fileLoader) {
+    if (fileLoader) {
+        return fileLoader->detachResource(resource);
+    }
+
+    JSUList<JKRFileLoader>& volumeList = getVolumeList();
+    JSUListIterator<JKRFileLoader> iterator;
+    for (iterator = volumeList.getFirst(); iterator != volumeList.getEnd(); ++iterator) {
+        if (iterator->detachResource(resource)) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /* 802B6AB8-802B6B44       .text findVolume__13JKRFileLoaderFPPCc */
-void JKRFileLoader::findVolume(const char**) {
-    /* Nonmatching */
+JKRFileLoader* JKRFileLoader::findVolume(const char** volumeName) {
+    if (*volumeName[0] != '/') {
+        return getCurrentVolume();
+    }
+
+    char volumeNameBuffer[0x101];
+    *volumeName = fetchVolumeName(volumeNameBuffer, ARRAY_SIZE(volumeNameBuffer), *volumeName);
+
+    JSUList<JKRFileLoader>& volumeList = getVolumeList();
+    JSUListIterator<JKRFileLoader> iterator;
+    for (iterator = volumeList.getFirst(); iterator != volumeList.getEnd(); ++iterator) {
+        if (strcmp(volumeNameBuffer, iterator->mVolumeName) == 0) {
+            return iterator.getObject();
+        }
+    }
+
+    return NULL;
 }
+
+static char rootPath[2] = "/";
 
 /* 802B6B44-802B6C20       .text fetchVolumeName__13JKRFileLoaderFPclPCc */
-void JKRFileLoader::fetchVolumeName(char*, long, const char*) {
-    /* Nonmatching */
-}
+const char* JKRFileLoader::fetchVolumeName(char* buffer, long bufferSize, const char* path) {
+    if (strcmp(path, "/") == 0) {
+        strcpy(buffer, rootPath);
+        return rootPath;
+    }
 
-/* 802B6C64-802B6CB8       .text __dt__24JSUList<13JKRFileLoader>Fv */
-JSUList<JKRFileLoader>::~JSUList() {
-    /* Nonmatching */
+    path++;
+    while (*path != 0 && *path != '/') {
+        if (1 < bufferSize) {
+            int lower_char;
+            int ch = (int)*path;
+            if (ch == -1) {
+                lower_char = -1;
+            } else {
+                lower_char = __lower_map[ch & 0xFF];
+            }
+
+            *buffer = lower_char;
+            buffer++;
+            bufferSize--;
+        }
+        path++;
+    }
+
+    *buffer = '\0';
+    if (*path == '\0') {
+        path = rootPath;
+    }
+
+    return path;
 }
