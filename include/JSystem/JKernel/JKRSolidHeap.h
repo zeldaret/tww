@@ -32,7 +32,7 @@ public:
     /* vt[10] */ virtual void do_free(void*);            /* override */
     /* vt[11] */ virtual void do_freeAll(void);          /* override */
     /* vt[12] */ virtual void do_freeTail(void);         /* override */
-    /* vt[13] */ virtual void do_fillFreeArea(void);     /* override */
+    /* vt[13] */ virtual void do_freeFill(void);     /* override */
     /* vt[14] */ virtual s32 do_resize(void*, u32);      /* override */
     /* vt[15] */ virtual s32 do_getSize(void*);          /* override */
     /* vt[16] */ virtual s32 do_getFreeSize(void);       /* override */
