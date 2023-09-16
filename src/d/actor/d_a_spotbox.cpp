@@ -3,15 +3,42 @@
 // Translation Unit: d_a_spotbox.cpp
 //
 
-#include "d/actor/d_a_spotbox.h"
+#include "JSystem/JKernel/JKRHeap.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
 #include "dolphin/types.h"
 
+struct daSpotbox_c : public fopAc_ac_c {
+public:
+    inline int create();
+public:
+    Mtx mtx; //unk290
+}; /* size = 0x2A0 */
+
+int daSpotbox_c::create() {
+    fopAcM_SetupActor(this, daSpotbox_c);
+    float fvar1;
+
+    if (((this->mBase).mParameters & 1U) != 0) {
+        fvar1 = 100.0f;
+    } else {
+        fvar1 = 1000.0f;
+    }
+
+    this->mScale.x *= fvar1;
+    this->mScale.y *= fvar1;
+    this->mScale.z *= (fvar1 * 1.2f);
+    this->current.pos.y += this->mScale.y * 0.5f;
+    this->mCullMtx = ((daSpotbox_c *)this)->mtx;
+    fopAcM_setCullSizeBox(this, -0.5, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f);
+
+    return cPhs_COMPLEATE_e;
+}
+
+
 /* 00000078-000000C4       .text daSpotbox_Draw__FP11daSpotbox_c */
 void daSpotbox_Draw(daSpotbox_c* self) {
-
 
 }
 
@@ -36,25 +63,6 @@ static BOOL daSpotbox_Delete(daSpotbox_c* self) {
 }
 
 /* 00000170-00000250       .text daSpotbox_Create__FP10fopAc_ac_c */
-static s32 daSpotbox_Create(fopAc_ac_c* self) {
-    float fvar1;
-
-    //8 = Constructed
-    if((self->mCondition & 8) == 0) {
-        if (self != NULL) {
-            fopAc_ac_c::fopAc_ac_c();
-        }
-        self->mCondition |= 8;
-    }
-    if (((self->mBase.mParameters & 1U) == 0)) {
-        fvar1 = 100.0f;
-    } else {
-        fvar1 = 1000.0f;
-    }
-    self->mScale.x = self->mScale.x * fvar1;
-    self->mScale.y = self->mScale.y * fvar1;
-    self->mScale.z = self->mScale.z * fvar1;
-    self->current.pos.y += self->mScale.y * 0.5;
-    fopAcM_setCullSizeBox(self, -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f);
-    return 4;
+static int daSpotbox_Create(fopAc_ac_c* i_this) {
+    return ((daSpotbox_c*)i_this)->create();
 }
