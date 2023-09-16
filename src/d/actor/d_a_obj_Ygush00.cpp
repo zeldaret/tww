@@ -128,7 +128,7 @@ bool daObjYgush00_c::_execute() {
                 fopAcM_seStartCurrent(this, 0x61fe, 0);
             }
         } else {
-            mpGryw00 = (daObjGryw00_c*)i_fopAcM_SearchByName(PROC_Obj_Gryw00);
+            mpGryw00 = (daObjGryw00_c*)fopAcM_SearchByName(PROC_Obj_Gryw00);
         }
     } else {
         fopAcM_seStartCurrent(this, 0x61fe, 0);
