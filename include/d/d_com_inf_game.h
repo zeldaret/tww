@@ -838,6 +838,11 @@ inline JPABaseEmitter* dComIfGp_particle_set(u16 particleID, const cXyz* pos, co
     return dComIfGp_particle_set(particleID, pos, angle, scale, 0xFF, NULL, -1, NULL, NULL, NULL);
 }
 
+inline void dComIfGp_particle_setStripes(u16 particleID, cXyz* pos, csXyz* angle, cXyz* scale, u8 param_4, u16 param_5) {
+    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
+    pParticle->setNormalStripes(particleID, pos, angle, scale, param_4, param_5);
+}
+
 inline void dComIfGp_particle_calc3D() {
     g_dComIfG_gameInfo.play.getParticle()->calc3D();
 }
