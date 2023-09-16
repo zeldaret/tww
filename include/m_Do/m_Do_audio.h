@@ -16,6 +16,7 @@ public:
     static void offResetFlag() { mResetFlag = false; }
 
     static bool isInitFlag() { return mInitFlag; }
+    static void offInitFlag() { mInitFlag = false; }
 
     static bool isBgmSet() { return mBgmSet; }
     static void offBgmSet() { mBgmSet = false; }

@@ -127,12 +127,12 @@ namespace daObjMovebox {
         s32 prm_get_buoy() const { return daObj::PrmAbstract(this, PRM_BUOY_W, PRM_BUOY_S); }
         s32 prm_get_dmy() const; // Unused?
         
-        BOOL is_switch1() const { return fopAcM_isSwitch(this, prm_get_swSave1()); };
-        BOOL is_switch2() const { return fopAcM_isSwitch(this, prmZ_get_swSave2()); };
-        void on_switch1() const { fopAcM_onSwitch(this, prm_get_swSave1()); };
-        void on_switch2() const { fopAcM_onSwitch(this, prmZ_get_swSave2()); };
-        void off_switch1() const { fopAcM_offSwitch(this, prm_get_swSave1()); };
-        void off_switch2() const { fopAcM_offSwitch(this, prmZ_get_swSave2()); };
+        BOOL is_switch1() const { return fopAcM_isSwitch((Act_c*)this, prm_get_swSave1()); };
+        BOOL is_switch2() const { return fopAcM_isSwitch((Act_c*)this, prmZ_get_swSave2()); };
+        void on_switch1() const { fopAcM_onSwitch((Act_c*)this, prm_get_swSave1()); };
+        void on_switch2() const { fopAcM_onSwitch((Act_c*)this, prmZ_get_swSave2()); };
+        void off_switch1() const { fopAcM_offSwitch((Act_c*)this, prm_get_swSave1()); };
+        void off_switch2() const { fopAcM_offSwitch((Act_c*)this, prmZ_get_swSave2()); };
         
         void prmZ_init();
         void prmX_init();

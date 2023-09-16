@@ -56,11 +56,12 @@ protected:
     void removeUsedBlock(CMemBlock* block);
     void recycleFreeBlock(CMemBlock* block);
     void joinTwoBlocks(CMemBlock* block);
+    bool dump_sort_by_address();
 
 public:
     s32 getUsedSize(u8 groupId) const;
     s32 getTotalUsedSize(void) const;
-    
+
     CMemBlock* getHeadUsedList() const { return mHeadUsedList; }
     void setAllocationMode(EAllocMode mode) {
         mAllocMode = mode;
@@ -76,7 +77,7 @@ public:
     /* vt[10] */ virtual void do_free(void* ptr);                               /* override */
     /* vt[11] */ virtual void do_freeAll();                                     /* override */
     /* vt[12] */ virtual void do_freeTail();                                    /* override */
-    /* vt[13] */ virtual void do_fillFreeArea();                                /* override */
+    /* vt[13] */ virtual void do_freeFill();                                    /* override */
     /* vt[14] */ virtual s32 do_resize(void* ptr, u32 size);                    /* override */
     /* vt[15] */ virtual s32 do_getSize(void* ptr);                             /* override */
     /* vt[16] */ virtual s32 do_getFreeSize();                                  /* override */
@@ -84,7 +85,7 @@ public:
     /* vt[18] */ virtual s32 do_getTotalFreeSize();                             /* override */
     /* vt[19] */ virtual s32 do_changeGroupID(u8 newGroupID);                   /* override */
     /* vt[20] */ virtual u8 do_getCurrentGroupId();                             /* override */
-    /* vt[21] */ virtual u32 state_register(JKRHeap::TState* p, u32 id) const; /* override */
+    /* vt[21] */ virtual void state_register(JKRHeap::TState* p, u32 id) const; /* override */
     /* vt[22] */ virtual bool state_compare(JKRHeap::TState const& r1,
                                             JKRHeap::TState const& r2) const; /* override */
 

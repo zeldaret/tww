@@ -4,10 +4,13 @@
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_cc_d.h"
 
+class dBgS_GndChk;
+class cBgS_PolyInfo;
+
 namespace daObj {
     template <typename T>
     int PrmAbstract(const fopAc_ac_c* actor, T width, T shift) {
-        u32 param = fopAcM_GetParam(actor);
+        u32 param = fopAcM_GetParam((fopAc_ac_c*)actor);
         return ((1 << width) - 1) & (param >> shift);
     }
     

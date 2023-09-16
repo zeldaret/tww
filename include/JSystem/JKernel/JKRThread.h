@@ -14,53 +14,11 @@ struct JKRThreadName_ {
 class JUTConsole;
 class JKRThread : JKRDisposer {
 public:
-    class TLoad {
-    public:
-        TLoad() {
-            clear();
-            mValid = false;
-            mThreadId = 0;
-        }
-
-        bool isValid() const { return mValid; }
-        u32 getCost() const { return mCost; }
-        u32 getCount() const { return mSwitchCount; }
-        s32 getId() const { return mThreadId; }
-
-        void setValid(bool valid) { mValid = valid; }
-        void setId(s32 id) { mThreadId = id; }
-        void setCurrentTime() { mLastTick = OSGetTick(); }
-
-        void resetCost() { mCost = 0; }
-        void resetCount() { mSwitchCount = 0; }
-
-        void incCount() { mSwitchCount++; }
-        void addCurrentCost() { mCost = mCost + (OSGetTick() - mLastTick); }
-
-        void clear() {
-            resetCount();
-            resetCost();
-            mLastTick = 0;
-        }
-
-    private:
-        /* 0x00 */ bool mValid;
-        /* 0x01 */ u8 padding_0x61[3];
-        /* 0x04 */ u32 mCost;
-        /* 0x08 */ u32 mSwitchCount;
-        /* 0x0C */ OSTick mLastTick;
-        /* 0x10 */ s32 mThreadId;
-    };
-
     JKRThread(u32 stack_size, int message_count, int param_3);
-    JKRThread(JKRHeap* heap, u32 stack_size, int message_count, int param_4);
     JKRThread(OSThread* thread, int message_count);
     virtual ~JKRThread();
 
-    /* vt[03] */ virtual void* run();
-
-    void setCommon_mesgQueue(JKRHeap* heap, int message_count);
-    void setCommon_heapSpecified(JKRHeap* heap, u32 stack_size, int param_3);
+    /* vt[03] */ virtual void* run() { return NULL; }
 
     OSThread* getThreadRecord() const { return mThreadRecord; }
     void* getStack() const { return mStackMemory; }
@@ -122,9 +80,6 @@ typedef void (*JKRThreadSwitch_PostCallback)(OSThread* current, OSThread* next);
 class JKRThreadSwitch {
 public:
     JKRThreadSwitch(JKRHeap*);
-    virtual void draw(JKRThreadName_* param_1, JUTConsole* param_2);
-    virtual void draw(JKRThreadName_* param_1);
-    virtual ~JKRThreadSwitch();
 
     static JKRThreadSwitch* createManager(JKRHeap* heap);
 
@@ -145,13 +100,9 @@ private:
     /* 0x00 */  // vtable
     /* 0x04 */ JKRHeap* mHeap;
     /* 0x08 */ bool mSetNextHeap;
-    /* 0x09 */ u8 field_0x9[3];
-    /* 0x0C */ u32 field_0xC;
-    /* 0x10 */ u32 field_0x10;
-    /* 0x14 */ u8 field_0x14[4];
-    /* 0x18 */ s64 field_0x18;
-    /* 0x20 */ u32 field_0x20;
-    /* 0x24 */ u32 field_0x24;
+
+public:
+    virtual ~JKRThreadSwitch() {}
 };
 
 struct JKRTask {

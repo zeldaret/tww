@@ -67,7 +67,7 @@ public:
     /* vt[10] */ virtual void do_free(void* ptr) = 0;
     /* vt[11] */ virtual void do_freeAll() = 0;
     /* vt[12] */ virtual void do_freeTail() = 0;
-    /* vt[13] */ virtual void do_fillFreeArea() = 0;
+    /* vt[13] */ virtual void do_freeFill() = 0;
     /* vt[14] */ virtual s32 do_resize(void* ptr, u32 size) = 0;
     /* vt[15] */ virtual s32 do_getSize(void* ptr) = 0;
     /* vt[16] */ virtual s32 do_getFreeSize() = 0;
