@@ -75,7 +75,7 @@ public:
     mDoExt_btkAnm mBtkAnm;
     J3DAnmTextureSRTKey* m_btk;
 
-    // ...
+    // TODO: insert missing members
 
     dCcD_Stts mColStatus;
     dCcD_Cps mCapsuleCol;
@@ -236,7 +236,7 @@ s32 daMozo_c::CreateInit() {
         a = param;
     }
 
-    //m0376 = a;
+    // TODO: insert missing assignment here
 
     mAnimMorf->getModel()->setUserArea(this);
     for (int i = 0; i < mdlData->getJointNum(); i++) {
@@ -245,15 +245,13 @@ s32 daMozo_c::CreateInit() {
         }
     }
 
+    // TODO: find out where d_lib::ZeroQuat lives
     //mQuatRotation = ZeroQuat;
 
     fopAcM_setCullSizeBox(this, -1000.f, -1000.f, -1000.f, 1000.0f, 1000.0f, 1000.0f);
     mCullMtx = mAnimMorf->getModel()->getBaseTRMtx();
 
-    //m02F4 = getPosition();
-    //m0300 = getPosition();
-
-    //if ()
+    // TODO: Insert missing code here
 
     set_mtx();
     mAnimMorf->calc();
