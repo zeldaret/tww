@@ -449,6 +449,8 @@ s32 fopAcM_createItemFromTable(cXyz* p_pos, int i_tableNo, int i_itemBitNo, int 
                                csXyz* p_angle, int param_5, cXyz * p_scale, f32* speedF,
                                f32* speedY, bool createDirect);
 
+s32 fopAcM_createIball(cXyz*, int, int, csXyz*, int);
+
 s32 fopAcM_createDemoItem(cXyz* p_pos, int itemNo, int itemBitNo, csXyz* p_angle,
                           int roomNo, cXyz* scale, u8 param_7);
 
@@ -466,8 +468,8 @@ void* fopAcM_createItemForSimpleDemo(cXyz* p_pos, int i_itemNo, int i_roomNo,
                                      csXyz* p_angle, cXyz* p_scale, f32 speedF,
                                      f32 speedY);
 
-s32 fopAcM_createItem(cXyz* p_pos, int itemNo, int param_3, int roomNo, csXyz* p_angle,
-                      cXyz* p_scale, int param_7);
+s32 fopAcM_createItem(cXyz* p_pos, int itemNo, int param_3, int roomNo, int param_4, csXyz* p_angle,
+                      int param_7, cXyz* p_scale);
 
 void* fopAcM_fastCreateItem2(cXyz* p_pos, int itemNo, int param_3, int roomNo, int param_5,
                              csXyz* p_angle, cXyz* p_scale);
