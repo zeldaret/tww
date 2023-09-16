@@ -303,6 +303,10 @@ JKRExpHeap* mDoExt_getCommandHeap();
 JKRExpHeap* mDoExt_getZeldaHeap();
 JKRExpHeap* mDoExt_getGameHeap();
 JKRExpHeap* mDoExt_getArchiveHeap();
+JKRExpHeap* mDoExt_createCommandHeap(u32 heapSize, JKRHeap* i_heap);
+JKRExpHeap* mDoExt_createArchiveHeap(u32 heapSize, JKRHeap* i_heap);
+JKRExpHeap* mDoExt_createZeldaHeap(u32 heapSize, JKRHeap* i_heap);
+JKRExpHeap* mDoExt_createGameHeap(u32 heapSize, JKRHeap* i_heap);
 
 int mDoExt_getSafeArchiveHeapSize();
 int mDoExt_getSafeGameHeapSize();
@@ -311,6 +315,7 @@ int mDoExt_getSafeCommandHeapSize();
 
 extern JKRExpHeap* zeldaHeap;
 extern JKRExpHeap* gameHeap;
+extern JKRExpHeap* commandHeap;
 extern JKRExpHeap* archiveHeap;
 
 #endif
