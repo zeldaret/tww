@@ -4,10 +4,16 @@
 #include "JSystem/JUtility/TColor.h"
 #include "MSL_C/string.h"
 
+struct BlockHeader {
+    const BlockHeader* getNext() const {
+        return reinterpret_cast<const BlockHeader*>(reinterpret_cast<const u8*>(this) + size);
+    }
+    u32 magic;
+    u32 size;
+};
+
 struct ResFONT {
-    struct INF1 {
-        /* 0x00 */ u32 magic;
-        /* 0x04 */ u32 size;
+    struct INF1 : BlockHeader {
         /* 0x08 */ u16 fontType;
         /* 0x0A */ u16 ascent;
         /* 0x0C */ u16 descent;
@@ -16,17 +22,13 @@ struct ResFONT {
         /* 0x12 */ u16 defaultCode;
     };
 
-    struct WID1 {
-        /* 0x00 */ u32 magic;
-        /* 0x04 */ u32 size;
+    struct WID1 : BlockHeader {
         /* 0x08 */ u16 startCode;
         /* 0x0A */ u16 endCode;
         /* 0x0C */ u8 mChunkNum[4];
     };
 
-    struct MAP1 {
-        /* 0x00 */ u32 magic;
-        /* 0x04 */ u32 size;
+    struct MAP1 : BlockHeader {
         /* 0x08 */ u16 mappingMethod;
         /* 0x0A */ u16 startCode;
         /* 0x0C */ u16 endCode;
@@ -34,9 +36,7 @@ struct ResFONT {
         /* 0x10 */ u16 mLeading;
     };
 
-    struct GLY1 {
-        /* 0x00 */ u32 magic;
-        /* 0x04 */ u32 size;
+    struct GLY1 : BlockHeader {
         /* 0x08 */ u16 startCode;
         /* 0x0A */ u16 endCode;
         /* 0x0C */ u16 cellWidth;
@@ -80,7 +80,7 @@ public:
     /* 0x30 */ virtual int getCellWidth() const;
     /* 0x34 */ virtual s32 getCellHeight() const;
     /* 0x38 */ virtual int getFontType() const = 0;
-    /* 0x3C */ virtual ResFONT* getResFont() const = 0;
+    /* 0x3C */ virtual const ResFONT* getResFont() = 0;
     /* 0x40 */ virtual bool isLeadByte(int a1) const = 0;
 
     static bool isLeadByte_1Byte(int b);
