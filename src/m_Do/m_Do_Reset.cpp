@@ -23,7 +23,14 @@ void destroyVideo() {
     VIWaitForRetrace();
 }
 
+#if VERSION == VERSION_JP
+int mDoRst::mResetFlag;
+int mDoRst::mResetPrepare;
+int mDoRst::m3ButtonResetFlag;
+int mDoRst::m3ButtonResetPort = -1;
+#else
 mDoRstData* mDoRst::mResetData;
+#endif
 
 /* 80017D7C-80017E40       .text mDoRst_reset__FiUli */
 void mDoRst_reset(int param_0, unsigned long param_1, int param_2) {
@@ -69,19 +76,32 @@ void mDoRst_reset(int param_0, unsigned long param_1, int param_2) {
 
 /* 80017E40-80017EF0       .text mDoRst_resetCallBack__FiPv */
 void mDoRst_resetCallBack(int port, void*) {
+#if VERSION != VERSION_JP
     if (!mDoRst::isReset()) {
+#else
+    if (!mDoRst::mResetFlag) {
+#endif
         if (port == -1) {
             JUTGamePad::clearForReset();
             JUTGamePad::CRumble::setEnabled(0xF0000000);
         } else {
+#if VERSION != VERSION_JP
             if (mDoRst::is3ButtonReset()) {
+#else
+            if (mDoRst::m3ButtonResetFlag) {
+#endif
                 JUTGamePad::C3ButtonReset::sResetOccurred = false;
                 JUTGamePad::C3ButtonReset::sCallback = mDoRst_resetCallBack;
                 JUTGamePad::C3ButtonReset::sCallbackArg = NULL;
                 return;
             }
+#if VERSION != VERSION_JP
             mDoRst::on3ButtonReset();
             mDoRst::set3ButtonResetPort(port);
+#else
+            mDoRst::m3ButtonResetFlag = true;
+            mDoRst::m3ButtonResetPort = port;
+#endif
             JUTGamePad::clearForReset();
             JUTGamePad::CRumble::setEnabled(0xF0000000);
         }
@@ -89,7 +109,10 @@ void mDoRst_resetCallBack(int port, void*) {
         if (DVDCheckDisk() == 0) {
             mDoRst_reset(1, 0x80000000, 0);
         }
-#endif
+
         mDoRst::onReset();
+#else
+        mDoRst::mResetFlag = true;
+#endif
     }
 }

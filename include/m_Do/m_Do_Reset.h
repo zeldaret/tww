@@ -17,6 +17,7 @@ struct mDoRstData {
 
 class mDoRst {
 public:
+#if VERSION != VERSION_JP
     static void set3ButtonResetPort(int port) { mResetData->m3ButtonResetPort = port; }
     static void off3ButtonReset() { mResetData->m3ButtonReset = 0; }
     static void offResetPrepare() { mResetData->mResetPrepare = 0; }
@@ -34,6 +35,12 @@ public:
     static void setResetData(mDoRstData* rstData) { mResetData = rstData; }
 
     static mDoRstData* mResetData;
+#else
+    static int mResetPrepare;
+    static int mResetFlag;
+    static int m3ButtonResetFlag;
+    static int m3ButtonResetPort;
+#endif
 };
 
 extern bool mDoDvdErr_initialized;
