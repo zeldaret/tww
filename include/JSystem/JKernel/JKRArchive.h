@@ -5,6 +5,7 @@
 #include "JSystem/JKernel/JKRFileLoader.h"
 #include "global.h"
 
+class JKRArcFinder;
 class JKRHeap;
 
 struct SArcHeader {
@@ -129,7 +130,8 @@ public:
     void* getResource(u16);
     u32 readIdxResource(void*, u32, u32);
     u32 readResource(void*, u32, u16);
-    u32 countResource(void) const;
+    u32 countResource(u32) const;
+    JKRArcFinder* getFirstResource(u32) const;
     u32 getFileAttribute(u32) const;
 
     SDIFileEntry* findNameResource(const char*) const;
@@ -182,13 +184,16 @@ public:
 
 protected:
     /* 0x58 */ u32 field_0x58;
+    /* 0x5C */ JKRCompression mCompression;
+    /* 0x60 */ EMountDirection mMountDirection;
 
 public:
-    static JKRArchive* check_mount_already(s32, JKRHeap*);
+    static JKRArchive* check_mount_already(s32);
     static JKRArchive* mount(const char*, EMountMode, JKRHeap*, EMountDirection);
     static JKRArchive* mount(void*, JKRHeap*, EMountDirection);
     static JKRArchive* mount(s32, EMountMode, JKRHeap*, EMountDirection);
     static void* getGlbResource(u32, const char*, JKRArchive*);
+    static void readTypeResource(void*, u32, u32, const char*, JKRArchive*);
 
     static JKRCompression convertAttrToCompressionType(u32 attr) {
 #define JKRARCHIVE_ATTR_COMPRESSION 0x04

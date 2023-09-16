@@ -3,85 +3,238 @@
 // Translation Unit: JKRArchivePri.cpp
 //
 
-#include "JSystem/JKernel/JKRArchivePri.h"
+#include "JSystem/JKernel/JKRArchive.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "MSL_C/MSL_Common/Src/ctype.h"
+#include "MSL_C/string.h"
 #include "dolphin/types.h"
+
+u32 JKRArchive::sCurrentDirID;
 
 /* 802B8DFC-802B8E48       .text __ct__10JKRArchiveFv */
 JKRArchive::JKRArchive() {
-    /* Nonmatching */
+    mIsMounted = false;
+    mMountDirection = MOUNT_DIRECTION_HEAD;
 }
 
 /* 802B8E48-802B8EE8       .text __ct__10JKRArchiveFlQ210JKRArchive10EMountMode */
-JKRArchive::JKRArchive(long, JKRArchive::EMountMode) {
-    /* Nonmatching */
+JKRArchive::JKRArchive(s32 entryNumber, JKRArchive::EMountMode mountMode) {
+    mIsMounted = false;
+    mMountMode = mountMode;
+    mMountCount = 1;
+    field_0x58 = 1;
+
+    mHeap = JKRHeap::findFromRoot(this);
+    if (mHeap == NULL) {
+        mHeap = JKRHeap::getCurrentHeap();
+    }
+
+    mEntryNum = entryNumber;
+    if (getCurrentVolume() == NULL) {
+        setCurrentVolume(this);
+        setCurrentDirID(0);
+    }
 }
 
 /* 802B8EE8-802B8F48       .text __dt__10JKRArchiveFv */
-JKRArchive::~JKRArchive() {
-    /* Nonmatching */
-}
+JKRArchive::~JKRArchive() {}
 
 /* 802B8F48-802B8F94       .text isSameName__10JKRArchiveCFRQ210JKRArchive8CArcNameUlUs */
-void JKRArchive::isSameName(JKRArchive::CArcName&, unsigned long, unsigned short) const {
-    /* Nonmatching */
+bool JKRArchive::isSameName(JKRArchive::CArcName& name, u32 nameOffset, u16 nameHash) const {
+    u16 hash = name.getHash();
+    if (hash != nameHash)
+        return false;
+    return strcmp(mStringTable + nameOffset, name.getString()) == 0;
 }
 
 /* 802B8F94-802B8FD0       .text findResType__10JKRArchiveCFUl */
-void JKRArchive::findResType(unsigned long) const {
-    /* Nonmatching */
+JKRArchive::SDIDirEntry* JKRArchive::findResType(u32 type) const {
+    SDIDirEntry* node = mNodes;
+    u32 count = 0;
+    while (count < mArcInfoBlock->num_nodes) {
+        if (node->type == type) {
+            return node;
+        }
+
+        node++;
+        count++;
+    }
+
+    return NULL;
 }
 
 /* 802B8FD0-802B90A8       .text findDirectory__10JKRArchiveCFPCcUl */
-void JKRArchive::findDirectory(const char*, unsigned long) const {
-    /* Nonmatching */
+JKRArchive::SDIDirEntry* JKRArchive::findDirectory(const char* name, u32 directoryId) const {
+    if (name == NULL) {
+        return mNodes + directoryId;
+    }
+
+    CArcName arcName(&name, '/');
+    SDIDirEntry* dirEntry = mNodes + directoryId;
+    SDIFileEntry* fileEntry = mFiles + dirEntry->first_file_index;
+
+    for (int i = 0; i < dirEntry->num_entries; fileEntry++, i++) {
+        if (isSameName(arcName, fileEntry->getNameOffset(), fileEntry->name_hash)) {
+            if (fileEntry->isDirectory()) {
+                return findDirectory(name, fileEntry->data_offset);
+            }
+            break;
+        }
+    }
+
+    return NULL;
 }
 
 /* 802B90A8-802B9158       .text findTypeResource__10JKRArchiveCFUlPCc */
-void JKRArchive::findTypeResource(unsigned long, const char*) const {
-    /* Nonmatching */
+JKRArchive::SDIFileEntry* JKRArchive::findTypeResource(u32 type, const char* name) const {
+    if (type) {
+        CArcName arcName(name);
+        SDIDirEntry* dirEntry = findResType(type);
+
+        if (dirEntry) {
+            SDIFileEntry* fileEntry = mFiles + dirEntry->first_file_index;
+            for (int i = 0; i < dirEntry->num_entries; fileEntry++, i++) {
+                if (isSameName(arcName, fileEntry->getNameOffset(), fileEntry->getNameHash())) {
+                    return fileEntry;
+                }
+            }
+        }
+    }
+
+    return NULL;
 }
 
 /* 802B9158-802B9238       .text findFsResource__10JKRArchiveCFPCcUl */
-void JKRArchive::findFsResource(const char*, unsigned long) const {
-    /* Nonmatching */
+JKRArchive::SDIFileEntry* JKRArchive::findFsResource(const char* name, u32 directoryId) const {
+    if (name) {
+        CArcName arcName(&name, '/');
+        SDIDirEntry* dirEntry = mNodes + directoryId;
+        SDIFileEntry* fileEntry = mFiles + dirEntry->first_file_index;
+
+        for (int i = 0; i < dirEntry->num_entries; fileEntry++, i++) {
+            if (isSameName(arcName, fileEntry->getNameOffset(), fileEntry->name_hash)) {
+                if (fileEntry->isDirectory()) {
+                    return findFsResource(name, fileEntry->data_offset);
+                }
+
+                if (name == NULL) {
+                    return fileEntry;
+                }
+
+                return NULL;
+            }
+        }
+    }
+
+    return NULL;
 }
 
 /* 802B9238-802B9260       .text findIdxResource__10JKRArchiveCFUl */
-void JKRArchive::findIdxResource(unsigned long) const {
-    /* Nonmatching */
+JKRArchive::SDIFileEntry* JKRArchive::findIdxResource(u32 fileIndex) const {
+    if (fileIndex < mArcInfoBlock->num_file_entries) {
+        return mFiles + fileIndex;
+    }
+
+    return NULL;
 }
 
 /* 802B9260-802B92E8       .text findNameResource__10JKRArchiveCFPCc */
-void JKRArchive::findNameResource(const char*) const {
-    /* Nonmatching */
+JKRArchive::SDIFileEntry* JKRArchive::findNameResource(const char* name) const {
+    SDIFileEntry* fileEntry = mFiles;
+
+    CArcName arcName(name);
+    for (int i = 0; i < mArcInfoBlock->num_file_entries; fileEntry++, i++) {
+        if (isSameName(arcName, fileEntry->getNameOffset(), fileEntry->getNameHash())) {
+            return fileEntry;
+        }
+    }
+
+    return NULL;
 }
 
 /* 802B92E8-802B9324       .text findPtrResource__10JKRArchiveCFPCv */
-void JKRArchive::findPtrResource(const void*) const {
-    /* Nonmatching */
+JKRArchive::SDIFileEntry* JKRArchive::findPtrResource(const void* resource) const {
+    SDIFileEntry* fileEntry = mFiles;
+    for (int i = 0; i < mArcInfoBlock->num_file_entries; fileEntry++, i++) {
+        if (fileEntry->data == resource) {
+            return fileEntry;
+        }
+    }
+
+    return NULL;
 }
 
 /* 802B9324-802B93A4       .text findIdResource__10JKRArchiveCFUs */
-void JKRArchive::findIdResource(unsigned short) const {
-    /* Nonmatching */
+JKRArchive::SDIFileEntry* JKRArchive::findIdResource(u16 id) const {
+    if (id != 0xFFFF) {
+        SDIFileEntry* fileEntry = mFiles + id;
+        if (fileEntry->file_id == id && fileEntry->isUnknownFlag1()) {
+            return fileEntry;
+        }
+
+        fileEntry = mFiles;
+        for (int i = 0; i < mArcInfoBlock->num_file_entries; fileEntry++, i++) {
+            if (fileEntry->file_id == id && fileEntry->isUnknownFlag1()) {
+                return fileEntry;
+            }
+        }
+    }
+
+    return NULL;
 }
 
 /* 802B93A4-802B9434       .text store__Q210JKRArchive8CArcNameFPCc */
-void JKRArchive::CArcName::store(const char*) {
-    /* Nonmatching */
+void JKRArchive::CArcName::store(const char* name) {
+    mHash = 0;
+    s32 length = 0;
+    while (*name) {
+        s32 ch = tolower(*name);
+        mHash = ch + mHash * 3;
+        if (length < (s32)ARRAY_SIZE(mData)) {
+            mData[length++] = ch;
+        }
+        name++;
+    }
+
+    mLength = (u16)length;
+    mData[length] = 0;
 }
 
 /* 802B9434-802B94EC       .text store__Q210JKRArchive8CArcNameFPCcc */
-void JKRArchive::CArcName::store(const char*, char) {
-    /* Nonmatching */
+const char* JKRArchive::CArcName::store(const char* name, char endChar) {
+    mHash = 0;
+    s32 length = 0;
+    while (*name && *name != endChar) {
+        s32 lch = tolower((int)*name);
+        mHash = lch + mHash * 3;
+        if (length < (s32)ARRAY_SIZE(mData)) {
+            mData[length++] = lch;
+        }
+        name++;
+    }
+
+    mLength = (u16)length;
+    mData[length] = 0;
+
+    if (*name == 0)
+        return NULL;
+    return name + 1;
 }
 
 /* 802B94EC-802B9528       .text setExpandSize__10JKRArchiveFPQ210JKRArchive12SDIFileEntryUl */
-void JKRArchive::setExpandSize(JKRArchive::SDIFileEntry*, unsigned long) {
-    /* Nonmatching */
+void JKRArchive::setExpandSize(SDIFileEntry* fileEntry, u32 expandSize) {
+    int index = fileEntry - mFiles;
+    if (!mExpandedSize || index >= mArcInfoBlock->num_file_entries)
+        return;
+
+    mExpandedSize[index] = expandSize;
 }
 
 /* 802B9528-802B9568       .text getExpandSize__10JKRArchiveCFPQ210JKRArchive12SDIFileEntry */
-void JKRArchive::getExpandSize(JKRArchive::SDIFileEntry*) const {
-    /* Nonmatching */
+u32 JKRArchive::getExpandSize(SDIFileEntry* fileEntry) const {
+    int index = fileEntry - mFiles;
+    if (!mExpandedSize || index >= mArcInfoBlock->num_file_entries)
+        return 0;
+
+    return mExpandedSize[index];
 }
