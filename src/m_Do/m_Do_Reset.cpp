@@ -37,8 +37,10 @@ void mDoRst_reset(int param_0, unsigned long param_1, int param_2) {
     JUTGamePad::clearForReset();
     mDoAud_zelAudio_c::offInitFlag();
 
+#if VERSION != VERSION_JP
     VIWaitForRetrace();
     VIWaitForRetrace();
+#endif
 
     OSThread* gxThread = GXGetCurrentGXThread();
     s32 enable = OSDisableInterrupts();
@@ -55,7 +57,9 @@ void mDoRst_reset(int param_0, unsigned long param_1, int param_2) {
     destroyVideo();
     my_OSCancelAlarmAll();
     LCDisable();
+#if VERSION != VERSION_JP
     OSSetSaveRegion(mDoRst::mResetData, (u8*)&mDoRst::getResetData + 0x10);
+#endif
     OSResetSystem(param_0, param_1, param_2);
 
     do {
@@ -81,10 +85,11 @@ void mDoRst_resetCallBack(int port, void*) {
             JUTGamePad::clearForReset();
             JUTGamePad::CRumble::setEnabled(0xF0000000);
         }
-
+#if VERSION != VERSION_JP
         if (DVDCheckDisk() == 0) {
             mDoRst_reset(1, 0x80000000, 0);
         }
+#endif
         mDoRst::onReset();
     }
 }
