@@ -766,7 +766,7 @@ config.libs = [
             Object(NonMatching, "JSystem/JKernel/JKRAramBlock.cpp"),
             Object(NonMatching, "JSystem/JKernel/JKRAramPiece.cpp"),
             Object(NonMatching, "JSystem/JKernel/JKRAramStream.cpp"),
-            Object(NonMatching, "JSystem/JKernel/JKRFileLoader.cpp"),
+            Object(Matching, "JSystem/JKernel/JKRFileLoader.cpp"),
             Object(NonMatching, "JSystem/JKernel/JKRFileFinder.cpp"),
             Object(NonMatching, "JSystem/JKernel/JKRFileCache.cpp"),
             Object(NonMatching, "JSystem/JKernel/JKRArchivePub.cpp"),
