@@ -395,7 +395,7 @@ config.libs = [
             Object(NonMatching, "d/d_wood.cpp"),
             Object(NonMatching, "d/d_flower.cpp"),
             Object(NonMatching, "d/d_item_data.cpp"),
-            Object(NonMatching, "d/d_seafightgame.cpp"),
+            Object(Matching,    "d/d_seafightgame.cpp"),
             Object(NonMatching, "d/d_spline_path.cpp"),
             Object(NonMatching, "d/d_s_actor_data_mng.cpp"),
             Object(NonMatching, "d/d_item.cpp"),

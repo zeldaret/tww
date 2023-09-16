@@ -3,26 +3,126 @@
 // Translation Unit: d_seafightgame.cpp
 //
 
-#include "d_seafightgame.h"
-#include "dolphin/types.h"
+#include "d/d_seafightgame.h"
+#include "SSystem/SComponent/c_math.h"
 
 /* 800C1F90-800C20B0       .text init__20dSeaFightGame_info_cFii */
-void dSeaFightGame_info_c::init(int, int) {
-    /* Nonmatching */
+int dSeaFightGame_info_c::init(int i_bulletNum, int i_scenario) {
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            mGrid[i][j] = 0;
+        }
+    }
+
+    mBulletNum = i_bulletNum;
+    mScore = 0;
+
+    switch (i_scenario) {
+    case 1:
+        mAliveShipNum = 1;
+        put_ship(0, 2);
+        break;
+    case 2:
+        mAliveShipNum = 2;
+        put_ship(0, 2);
+        put_ship(1, 3);
+        break;
+    case 3:
+        mAliveShipNum = 3;
+        put_ship(0, 2);
+        put_ship(1, 3);
+        put_ship(2, 4);
+        break;
+    }
+
+    mDeadShipNum = 0;
+    return 1;
 }
 
 /* 800C20B0-800C225C       .text put_ship__20dSeaFightGame_info_cFUcUc */
-void dSeaFightGame_info_c::put_ship(unsigned char, unsigned char) {
-    /* Nonmatching */
+int dSeaFightGame_info_c::put_ship(u8 i_shipNo, u8 i_shipSize) {
+    u8 y;
+    u8 x;
+    u8 direction;
+
+    do {
+        direction = (s16)cM_rndF(1000.0f) % 2;
+        y = (int)cM_rndF(8.0f);
+        x = (int)cM_rndF(8.0f);
+    } while (!checkPutShip(y, x, i_shipSize, direction));
+
+    if (direction == 0) {
+        for (int i = 0; i < i_shipSize; i++) {
+            mShips[i_shipNo].m_pos[i][0] = y;
+            mShips[i_shipNo].m_pos[i][1] = x + i;
+            mGrid[y][x + i] = i_shipNo + 102;
+        }
+
+        mShips[i_shipNo].field_0xb = y;
+        mShips[i_shipNo].field_0xc = x;
+        mShips[i_shipNo].field_0xd = 0;
+        mShips[i_shipNo].field_0xe = i_shipSize;
+    } else {
+        for (int i = 0; i < i_shipSize; i++) {
+            mShips[i_shipNo].m_pos[i][0] = y + i;
+            mShips[i_shipNo].m_pos[i][1] = x;
+            mGrid[y + i][x] = i_shipNo + 102;
+        }
+
+        mShips[i_shipNo].field_0xb = y;
+        mShips[i_shipNo].field_0xc = x;
+        mShips[i_shipNo].field_0xd = i_shipSize;
+        mShips[i_shipNo].field_0xe = 0;
+    }
+
+    mShips[i_shipNo].field_0x8 = i_shipSize;
+    mShips[i_shipNo].field_0x9 = i_shipSize;
+    return 1;
 }
 
 /* 800C225C-800C22FC       .text checkPutShip__20dSeaFightGame_info_cFiiii */
-void dSeaFightGame_info_c::checkPutShip(int, int, int, int) {
-    /* Nonmatching */
+bool dSeaFightGame_info_c::checkPutShip(int i_y, int i_x, int i_shipSize, int i_direction) {
+    if (i_direction == 0) {
+        for (int i = 0; i < i_shipSize; i++) {
+            if (i_y > 7 || i_x > 7 || mGrid[i_y][i_x] > 100) {
+                return false;
+            }
+            i_x++;
+        }
+    } else {
+        for (int i = 0; i < i_shipSize; i++) {
+            if (i_y > 7 || i_x > 7 || mGrid[i_y][i_x] > 100) {
+                return false;
+            }
+            i_y++;
+        }
+    }
+
+    return true;
 }
 
 /* 800C22FC-800C239C       .text attack__20dSeaFightGame_info_cFUcUc */
-void dSeaFightGame_info_c::attack(unsigned char, unsigned char) {
-    /* Nonmatching */
-}
+int dSeaFightGame_info_c::attack(u8 i_y, u8 i_x) {
+    int rt = -1;
 
+    u8 uvar1 = mGrid[i_y][i_x];
+    if (uvar1 == 0) {
+        mGrid[i_y][i_x] = 1;
+    } else if (uvar1 > 100) {
+        rt = uvar1 - 102;
+
+        mShips[rt].field_0x9--;
+        if (mShips[rt].field_0x9 == 0) {
+            mAliveShipNum--;
+            mDeadShipNum++;
+        }
+
+        mGrid[i_y][i_x] = 3;
+    } else {
+        return -2;
+    }
+
+    mBulletNum--;
+    mScore++;
+    return rt;
+}
