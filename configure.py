@@ -258,7 +258,7 @@ config.libs = [
             Object(NonMatching, "m_Do/m_Do_MemCard.cpp"),
             Object(NonMatching, "m_Do/m_Do_MemCardRWmng.cpp"),
             Object(NonMatching, "m_Do/m_Do_gba_com.cpp"),
-            Object(NonMatching, "m_Do/m_Do_machine_exception.cpp"),
+            Object(Matching,    "m_Do/m_Do_machine_exception.cpp"),
 
             # c
             Object(NonMatching, "c/c_damagereaction.cpp"),
