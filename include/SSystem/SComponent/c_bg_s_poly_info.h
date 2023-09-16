@@ -13,7 +13,7 @@ private:
     /* 0x08 */ unsigned int mActorId;
 
 public:
-    cBgS_PolyInfo();
+    cBgS_PolyInfo() {}
     void ClearPi() {
         mPolyIndex = -1;
         mBgIndex = 0x100;
@@ -26,7 +26,7 @@ public:
     void SetPolyIndex(int);
     bool ChkBgIndex() const;
 
-    virtual ~cBgS_PolyInfo();
+    virtual ~cBgS_PolyInfo() {}
 
     u16 GetPolyIndex() const { return mPolyIndex; }
     u16 GetBgIndex() const { return mBgIndex; }
