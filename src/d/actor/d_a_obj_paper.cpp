@@ -14,6 +14,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_a_obj.h"
+#include "d/d_npc.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 #include "dolphin/types.h"
@@ -54,8 +55,6 @@ namespace daObjPaper {
         inline static int getEntryModelId(int idx) { return L_attr[idx].getModelId(); }
     }
 
-    static cXyz a(1.0f, 1.0f, 1.0f);
-
     static const dCcD_SrcCyl M_cyl_src = {
         0,
         0,
@@ -82,6 +81,13 @@ namespace daObjPaper {
         0.0f, // Z
         0.0f, // Radius
         0.0f, // Height
+    };
+
+    enum Act_Mode_e {
+        ActMode_WAIT_e,
+        ActMode_TALKBEGIN_e,
+        ActMode_GETMSG_e,
+        ActMode_TALKWAIT_e,
     };
 
     class Act_c : public fopAc_ac_c {
@@ -220,25 +226,25 @@ namespace daObjPaper {
 
     /* 00000730-00000748       .text mode_wait_init__Q210daObjPaper5Act_cFv */
     void daObjPaper::Act_c::mode_wait_init() {
-        mStatus |= 0x80;
-        mMode = 0;
+        mStatus |= fopAcStts_NOEXEC_e;
+        mMode = ActMode_WAIT_e;
     }
 
     /* 00000748-00000784       .text mode_wait__Q210daObjPaper5Act_cFv */
     void daObjPaper::Act_c::mode_wait() {
-        if (mEvtInfo.mCommand == 1) {
+        if (mEvtInfo.mCommand == dEvtCmd_INTALK_e) {
             mode_talk0_init();
         }
         else {
-            mEvtInfo.mCondition |= 1;
+            mEvtInfo.mCondition |= dEvtCnd_CANTALK_e;
         }
     }
 
     /* 00000784-000007A4       .text mode_talk0_init__Q210daObjPaper5Act_cFv */
     void daObjPaper::Act_c::mode_talk0_init() {
-        mStatus &= ~0x80;
+        mStatus &= ~fopAcStts_NOEXEC_e;
         mMsgId = -1;
-        mMode = 1;
+        mMode = ActMode_TALKBEGIN_e;
     }
 
     /* 000007A4-00000820       .text mode_talk0__Q210daObjPaper5Act_cFv */
@@ -254,7 +260,7 @@ namespace daObjPaper {
 
     /* 00000820-0000082C       .text mode_talk1_init__Q210daObjPaper5Act_cFv */
     void daObjPaper::Act_c::mode_talk1_init() {
-        mMode = 2;
+        mMode = ActMode_GETMSG_e;
     }
 
     /* 0000082C-00000874       .text mode_talk1__Q210daObjPaper5Act_cFv */
@@ -267,13 +273,13 @@ namespace daObjPaper {
 
     /* 00000874-00000880       .text mode_talk2_init__Q210daObjPaper5Act_cFv */
     void daObjPaper::Act_c::mode_talk2_init() {
-        mMode = 3;
+        mMode = ActMode_TALKWAIT_e;
     }
 
     /* 00000880-000008DC       .text mode_talk2__Q210daObjPaper5Act_cFv */
     void daObjPaper::Act_c::mode_talk2() {
-        if (mpMsg->mMode == 0x12) {
-            mpMsg->mMode = 0x13;
+        if (mpMsg->mMode == dNpcMsgStts_BOX_CLOSED_e) {
+            mpMsg->mMode = dNpcMsgStts_MSG_DESTROYED_e;
             mpMsg = 0;
             mMsgId = -1;
 
