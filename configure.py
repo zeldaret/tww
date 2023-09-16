@@ -254,7 +254,7 @@ config.libs = [
             Object(Matching,    "m_Do/m_Do_hostIO.cpp"),
             Object(Matching,    "m_Do/m_Do_Reset.cpp"),
             Object(NonMatching, "m_Do/m_Do_dvd_thread.cpp"),
-            Object(NonMatching, "m_Do/m_Do_DVDError.cpp"),
+            Object(Matching,    "m_Do/m_Do_DVDError.cpp"),
             Object(NonMatching, "m_Do/m_Do_MemCard.cpp"),
             Object(NonMatching, "m_Do/m_Do_MemCardRWmng.cpp"),
             Object(NonMatching, "m_Do/m_Do_gba_com.cpp"),

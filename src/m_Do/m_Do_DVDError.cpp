@@ -4,24 +4,64 @@
 //
 
 #include "m_Do/m_Do_DVDError.h"
-#include "dolphin/types.h"
+#include "JSystem/JKernel/JKRThread.h"
+#include "dolphin/os/OS.h"
+#include "m_Do/m_Do_dvd_thread.h"
+#include "m_Do/m_Do_ext.h"
+
+OSThread DvdErr_thread;
+u8 DvdErr_stack[0x1000] __attribute__((aligned(16)));
+
+static OSAlarm Alarm;
+bool mDoDvdErr_initialized;
+
+void mDoDvdErr_Watch(void*);
+void AlarmHandler(OSAlarm*, OSContext*);
 
 /* 80018BE0-80018CA0       .text mDoDvdErr_ThdInit__Fv */
 void mDoDvdErr_ThdInit() {
-    /* Nonmatching */
+    if (!mDoDvdErr_initialized) {
+        OSTime time = OSGetTime();
+        OSThread* curThread = OSGetCurrentThread();
+        s32 priority = OSGetThreadPriority(curThread);
+
+        OSCreateThread(&DvdErr_thread, mDoDvdErr_Watch, NULL, DvdErr_stack + sizeof(DvdErr_stack),
+                       sizeof(DvdErr_stack), priority - 3, 1);
+        OSResumeThread(&DvdErr_thread);
+        OSCreateAlarm(&Alarm);
+        OSSetPeriodicAlarm(&Alarm, time, OS_BUS_CLOCK / 4, AlarmHandler);
+
+        mDoDvdErr_initialized = true;
+    }
 }
 
 /* 80018CA0-80018CE8       .text mDoDvdErr_ThdCleanup__Fv */
 void mDoDvdErr_ThdCleanup() {
-    /* Nonmatching */
+    if (mDoDvdErr_initialized) {
+        OSCancelThread(&DvdErr_thread);
+        OSCancelAlarm(&Alarm);
+        mDoDvdErr_initialized = false;
+    }
 }
 
 /* 80018CE8-80018D44       .text mDoDvdErr_Watch__FPv */
 void mDoDvdErr_Watch(void*) {
-    /* Nonmatching */
+    {
+        JKRThread thread(OSGetCurrentThread(), 0);
+    }
+
+    JKRHeap* heap = NULL;
+    heap->becomeCurrentHeap();
+
+    do {
+        if (DVDGetDriveStatus() == DVD_STATE_FATAL_ERROR) {
+            mDoDvdThd::suspend();
+        }
+        OSSuspendThread(&DvdErr_thread);
+    } while (true);
 }
 
 /* 80018D44-80018D6C       .text AlarmHandler__FP7OSAlarmP9OSContext */
 void AlarmHandler(OSAlarm*, OSContext*) {
-    /* Nonmatching */
+    OSResumeThread(&DvdErr_thread);
 }
