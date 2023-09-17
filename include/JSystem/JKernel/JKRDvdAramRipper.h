@@ -42,11 +42,11 @@ public:
     static JKRADCommand* callCommand_Async(JKRADCommand*);
     static bool syncAram(JKRADCommand*, int);
 
-    static void setSZSBufferSize(u32 size) { sSZSBufferSize = size; }
+    static void setSzpBufferSize(u32 size) { sSzpBufferSize = size; }
 
     // TODO: fix type
     static u8 sDvdAramAsyncList[12];
-    static u32 sSZSBufferSize;
+    static u32 sSzpBufferSize;
 };
 
 inline JKRAramBlock *JKRDvdToAram(s32 entrynum, u32 p2, JKRExpandSwitch expSwitch, u32 p4, u32 p5, u32 *p6) {

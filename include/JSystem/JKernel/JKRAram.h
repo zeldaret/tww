@@ -55,14 +55,14 @@ public:
         return (u8)groupId;
     }
 
-    static u32 getSZSBufferSize() { return sSZSBufferSize; }
-    static void setSZSBufferSize(u32 size) { sSZSBufferSize = size; }
+    static u32 getSzpBufferSize() { return sSzpBufferSize; }
+    static void setSzpBufferSize(u32 size) { sSzpBufferSize = size; }
 
     static OSMessageQueue sMessageQueue;
 
 private:
     static JKRAram* sAramObject;
-    static u32 sSZSBufferSize;
+    static u32 sSzpBufferSize;
     static OSMessage sMessageBuffer[4];
     static JSUList<JKRAMCommand> sAramCommandList;
 };
