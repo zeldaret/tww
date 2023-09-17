@@ -78,14 +78,22 @@ static dCcD_SrcCyl l_cyl_src = {
 
 class daNh_c : fopAc_ac_c {
 public:
+    typedef BOOL (daNh_c::*daNh_c_ActionFunc)(void*);
+    
+    enum ActionStatus {
+        ACTION_ENDING = -1,
+        ACTION_STARTING = 0,
+        ACTION_ONGOING = 1,
+    };
+    
     ~daNh_c();
     void setBaseMtx();
     BOOL createHeap();
     s32 create();
     BOOL init();
     void action(void*);
-    void setAction(int (daNh_c::*)(void*), void*);
-    void checkBinCatch();
+    BOOL setAction(daNh_c_ActionFunc, void*);
+    BOOL checkBinCatch();
     void searchPlayer();
     void moveProc(float, float, short);
     f32 getHomeDistance();
@@ -111,24 +119,27 @@ public:
     /* 0x60C */ mDoExt_brkAnm mBrkAnm;
     /* 0x624 */ u8 temp2[0x630 - 0x624];
     /* 0x630 */ cBgS_PolyInfo mPolyInfo;
-    /* 0x640 */ u8 temp3[0x64C - 0x640];
+    /* 0x640 */ daNh_c_ActionFunc mCurrActionFunc;
     /* 0x64C */ Mtx mMtx;
     /* 0x67C */ f32 mPlayerDist;
     /* 0x680 */ f32 mGroundY;
     /* 0x684 */ int mTimer;
     /* 0x688 */ s32 unk688;
     /* 0x68C */ u8 unk68C;
-    /* 0x68D */ s8 unk68D;
+    /* 0x68D */ s8 mActionStatus;
     /* 0x68E */ u8 unk68E;
     /* 0x68F */ u8 unk68F;
     /* 0x690 */ u8 unk690;
     /* 0x691 */ u8 unk691;
     /* 0x692 */ u8 temp5[0x694 - 0x692];
     /* 0x694 */ s16 unk694;
-    /* 0x696 */ u8 temp6[0x6A8 - 0x696];
+    /* 0x696 */ s16 unk696;
+    /* 0x698 */ s16 unk698;
+    /* 0x69A */ s16 unk69A;
+    /* 0x69C */ u8 temp6[0x6A0 - 0x69C];
+    /* 0x6A0 */ f32 unk6A0;
+    /* 0x6A4 */ u8 temp7[0x6A8 - 0x6A4];
 };
-
-STATIC_ASSERT(sizeof(daNh_c) == 0x6A8);
 
 /* 800F95B8-800F9654       .text __ct__10daNh_HIO_cFv */
 daNh_HIO_c::daNh_HIO_c() {
@@ -260,12 +271,27 @@ void daNh_c::action(void*) {
 }
 
 /* 800F9DF4-800F9EB8       .text setAction__6daNh_cFM6daNh_cFPCvPvPv_iPv */
-void daNh_c::setAction(int (daNh_c::*)(void*), void*) {
+BOOL daNh_c::setAction(daNh_c_ActionFunc actionFunc, void* arg) {
     /* Nonmatching */
+    if (mCurrActionFunc != actionFunc) {
+        if (mCurrActionFunc != NULL) {
+            mActionStatus = ACTION_ENDING;
+            (this->*mCurrActionFunc)(arg);
+        }
+        mCurrActionFunc = actionFunc;
+        mActionStatus = ACTION_STARTING;
+        unk694 = 0;
+        unk696 = 0;
+        unk698 = 0;
+        unk69A = 0;
+        unk6A0 = 0.0f;
+        (this->*mCurrActionFunc)(arg);
+    }
+    return TRUE;
 }
 
 /* 800F9EB8-800F9F3C       .text checkBinCatch__6daNh_cFv */
-void daNh_c::checkBinCatch() {
+BOOL daNh_c::checkBinCatch() {
     /* Nonmatching */
 }
 
@@ -324,10 +350,10 @@ void daNh_c::airMove() {
 
 /* 800FA5B4-800FA674       .text waitAction__6daNh_cFPv */
 BOOL daNh_c::waitAction(void*) {
-    if (unk68D == 0){ 
-        unk68D += 1;
+    if (mActionStatus == ACTION_STARTING) { 
+        mActionStatus += 1; // ACTION_ONGOING
         mPlayerDist = fopAcM_searchPlayerDistance(this);
-    } else if (unk68D != -1) {
+    } else if (mActionStatus != ACTION_ENDING) {
         cLib_addCalc(&speedF, 0.0f, 0.1f, 10.0f, 1.0f);
         if (getHomeDistance() > 50.0f) {
             setAction(&returnAction, NULL);
@@ -354,12 +380,12 @@ BOOL daNh_c::checkEscapeEnd() {
 
 /* 800FA78C-800FA880       .text escapeAction__6daNh_cFPv */
 BOOL daNh_c::escapeAction(void*) {
-    if (unk68D == 0) {
-        unk68D += 1;
+    if (mActionStatus == ACTION_STARTING) { 
+        mActionStatus += 1; // ACTION_ONGOING
         unk68F = 0;
         unk690 = 0;
         unk694 = 150;
-    } else if (unk68D != -1) {
+    } else if (mActionStatus != ACTION_ENDING) {
         if (!checkEscapeEnd()) {
             s16 angle = fopAcM_searchPlayerAngleY(this) + 0x8000;
             if (!cLib_calcTimer(&unk690)) {
@@ -375,7 +401,37 @@ BOOL daNh_c::escapeAction(void*) {
 
 /* 800FA880-800FAA34       .text returnAction__6daNh_cFPv */
 BOOL daNh_c::returnAction(void*) {
-    /* Nonmatching */
+    if (mActionStatus == ACTION_STARTING) { 
+        mActionStatus += 1; // ACTION_ONGOING
+        unk68F = 0;
+        unk690 = 0;
+        unk694 = 150;
+    } else if (mActionStatus != ACTION_ENDING) {
+        if (getHomeDistance() < 50.0f) {
+            setAction(&waitAction, NULL);
+        } else {
+            s16 targetAngle = cLib_targetAngleY(&current.pos, &orig.pos);
+            cXyz delta = orig.pos - current.pos;
+            f32 distXZ = cXyz(delta.x, 0.0f, delta.z).abs2();
+            if (distXZ < l_HIO.reg.field_0x30*l_HIO.reg.field_0x30) {
+                s16 temp2 = targetAngle - fopAcM_searchPlayerAngleY(this);
+                if (abs(temp2) < 0x1000) {
+                    if (temp2 < 0) {
+                        targetAngle -= 0x4000;
+                    } else {
+                        targetAngle += 0x4000;
+                    }
+                }
+            }
+            if (!cLib_calcTimer(&unk690)) {
+                unk68F ^= 1;
+                unk690 = cLib_getRndValue(15, 20);
+            }
+            targetAngle += (unk68F ? -0x2000 : 0x2000);
+            moveProc(5.0f, 0.5f, targetAngle);
+        }
+    }
+    return TRUE;
 }
 
 /* 800FAA34-800FABE0       .text execute__6daNh_cFv */
