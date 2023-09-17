@@ -28,7 +28,7 @@ public:
     void getSubstance(dEvDtData_c*, int);
     void setData(const char*);
     void create();
-    void remove(const char*);
+    void remove();
     void startProc(dEvDtEvent_c*);
     void closeProc(dEvDtEvent_c*);
     void endProc(s16, int);

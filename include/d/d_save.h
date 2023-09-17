@@ -523,6 +523,8 @@ public:
     dSv_zoneActor_c& getActor() { return mZoneActor; }
     const dSv_zoneActor_c& getActor() const { return mZoneActor; }
 
+    void reset() { mRoomNo = -1; }
+
     /* 0x00 */ s8 mRoomNo;
     /* 0x02 */ dSv_zoneBit_c mZoneBit;
     /* 0x0C */ dSv_zoneActor_c mZoneActor;
@@ -541,6 +543,13 @@ public:
         mLastMode = mode;
     }
 
+    s16 getStartPoint() const { return mStartCode; }
+    u32 getLastMode() const { return mLastMode; }
+    s8 getRoomNo() const { return mRestartRoom; }
+    u32 getRoomParam() const { return mRestartParam; }
+    cXyz& getRoomPos() { return mRestartPos; }
+    s16 getRoomAngleY() const { return mRestartAngle; }
+
     /* 0x00 */ s8 mRestartRoom;
     /* 0x01 */ u8 field_0x1;
     /* 0x02 */ s8 mRoomNo;
@@ -557,7 +566,15 @@ public:
 
 class dSv_turnRestart_c {
 public:
-    /* 8005D5B4 */ void set(cXyz const&, s16, s8, u32, cXyz const&, s16, int);
+    void set(cXyz const&, s16, s8, u32, cXyz const&, s16, int);
+
+    u32 getParam() const { return mParam; }
+    cXyz& getPos() { return mPosition; }
+    s16 getAngleY() const { return mAngleY; }
+
+    cXyz& getShipPos() { return field_0x24; }
+    s16 getShipAngleY() const { return field_0x30; }
+    s8 getRoomNo() { return mRoomNo; }
 
     /* 0x00 */ cXyz mPosition;
     /* 0x0C */ u32 mParam;
@@ -592,29 +609,34 @@ STATIC_ASSERT(sizeof(dSv_save_c) == 0x728);
 
 class dSv_info_c {
 public:
-    /* 8005D604 */ void init();
-    /* 8005D660 */ void reinit();
-    /* 8005D8C8 */ void getSave(int);
-    /* 8005D988 */ void putSave(int);
-    /* 8005DA70 */ void initZone();
-    /* 8005DAC8 */ int createZone(int);
-    /* 8005DB24 */ void onSwitch(int, int);
-    /* 8005DCEC */ void offSwitch(int, int);
-    /* 8005DE98 */ BOOL isSwitch(int, int);
-    /* 8005DFE0 */ BOOL revSwitch(int, int);
-    /* 8005E190 */ void onItem(int, int);
-    /* 8005E324 */ BOOL isItem(int, int);
-    /* 8005E4BC */ void onActor(int, int);
-    /* 8005E5F0 */ BOOL isActor(int, int);
-    /* 8005E780 */ void memory_to_card(char*, int);
-    /* 8005EA24 */ void card_to_memory(char*, int);
-    /* 8005ED00 */ int initdata_to_card(char*, int);
+    void init();
+    void reinit();
+    void getSave(int);
+    void putSave(int);
+    void initZone();
+    int createZone(int);
+    void onSwitch(int, int);
+    void offSwitch(int, int);
+    BOOL isSwitch(int, int);
+    BOOL revSwitch(int, int);
+    void onItem(int, int);
+    BOOL isItem(int, int);
+    void onActor(int, int);
+    BOOL isActor(int, int);
+    void memory_to_card(char*, int);
+    void card_to_memory(char*, int);
+    int initdata_to_card(char*, int);
 
     dSv_save_c& getSavedata() { return mSavedata; }
     dSv_player_c& getPlayer() { return mSavedata.getPlayer(); }
     dSv_event_c& getEvent() { return mSavedata.getEvent(); }
     dSv_restart_c& getRestart() { return mRestart; }
+    dSv_turnRestart_c& getTurnRestart() { return mTurnRestart; }
     dSv_memory_c& getMemory() { return mMemory; }
+    dSv_zone_c& getZone(int id) { return mZone[id]; }
+
+    void removeZone(int zoneNo) { mZone[zoneNo].reset(); }
+    void initDan(s8 i_stage) { mDan.init(i_stage); }
 
     static const int MEMORY_SWITCH = 0x80;
     static const int DAN_SWITCH = 0x40;
