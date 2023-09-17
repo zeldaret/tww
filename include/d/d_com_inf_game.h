@@ -1015,6 +1015,14 @@ inline void dComIfGd_setAlphaModel(unsigned char param_0, float(*param_1)[4], un
     g_dComIfG_gameInfo.drawlist.setAlphaModel(param_0, param_1, param_2);
 }
 
+inline void dComIfGd_setAlphaModel2(unsigned char param_0, float(*param_1)[4], unsigned char param_2) {
+    g_dComIfG_gameInfo.drawlist.setAlphaModel2(param_0, param_1, param_2);
+}
+
+inline const dDlst_alphaModel_c* dComIfGd_getAlphaModel2(unsigned char param_0, float(*param_1)[4], unsigned char param_2) {
+    return g_dComIfG_gameInfo.drawlist.getAlphaModel2();
+}
+
 /**
  * === RESOURCE ===
  */

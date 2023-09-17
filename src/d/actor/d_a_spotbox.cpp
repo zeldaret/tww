@@ -12,23 +12,20 @@
 struct daSpotbox_c : public fopAc_ac_c {
 public:
     inline int create();
+    inline int draw();
+    inline int execute();
 public:
-    Mtx mtx; //unk290
+    Mtx mtx;
 }; /* size = 0x2A0 */
 
 int daSpotbox_c::create() {
+    float baseScale;
     fopAcM_SetupActor(this, daSpotbox_c);
-    float fvar1;
-
-    if (((this->mBase).mParameters & 1U) != 0) {
-        fvar1 = 100.0f;
-    } else {
-        fvar1 = 1000.0f;
-    }
-
-    this->mScale.x *= fvar1;
-    this->mScale.y *= fvar1;
-    this->mScale.z *= (fvar1 * 1.2f);
+    if ((this->mBase.mParameters & 1) != 0) baseScale = 100.0f;
+    else baseScale = 1000.0f;
+    this->mScale.x *= baseScale;
+    this->mScale.y *= baseScale;
+    this->mScale.z *= (baseScale * 1.2f);
     this->current.pos.y += this->mScale.y * 0.5f;
     this->mCullMtx = ((daSpotbox_c *)this)->mtx;
     fopAcM_setCullSizeBox(this, -0.5, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f);
@@ -36,28 +33,39 @@ int daSpotbox_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
+int daSpotbox_c::draw() {
+    if(g_dComIfG_gameInfo.drawlist.getAlphaModel2()->mCount != 0) {
+        g_dComIfG_gameInfo.drawlist.setAlphaModel2(0x3, this->mtx, 0x20);
+    }
+    return TRUE;
+}
+
+int daSpotbox_c::execute() {
+    PSMTXTrans(mDoMtx_stack_c::now, this->current.pos.x, this->current.pos.y, this->current.pos.z);
+    mDoMtx_YrotM(mDoMtx_stack_c::now, this->current.angle.y);
+    mDoMtx_stack_c::scaleM(this->mScale.x, this->mScale.y, this->mScale.z);
+    PSMTXCopy(mDoMtx_stack_c::now, this->mtx);
+    return TRUE;
+}
+
 
 /* 00000078-000000C4       .text daSpotbox_Draw__FP11daSpotbox_c */
-void daSpotbox_Draw(daSpotbox_c* self) {
-
+static int daSpotbox_Draw(daSpotbox_c* i_this) {
+    return ((daSpotbox_c*)i_this)->draw();
 }
 
 /* 000000C4-00000138       .text daSpotbox_Execute__FP11daSpotbox_c */
-BOOL daSpotbox_Execute(daSpotbox_c* self) {
-    PSMTXTrans(mDoMtx_stack_c::now, self->current.pos.x, self->current.pos.y, self->current.pos.z);
-    mDoMtx_YrotM(mDoMtx_stack_c::now, self->current.angle.y);
-    mDoMtx_stack_c::scaleM(self->mScale.x, self->mScale.y, self->mScale.z);
-    PSMTXCopy(mDoMtx_stack_c::now, self->mtx);
-    return true;
+static int daSpotbox_Execute(daSpotbox_c* i_this) {
+    return ((daSpotbox_c*)i_this)->execute();
 }
 
 /* 00000138-00000140       .text daSpotbox_IsDelete__FP11daSpotbox_c */
-BOOL daSpotbox_IsDelete(daSpotbox_c*) {
-    return true;
+static int daSpotbox_IsDelete(daSpotbox_c* i_this) {
+    return TRUE;
 }
 
 /* 00000140-00000170       .text daSpotbox_Delete__FP11daSpotbox_c */
-static BOOL daSpotbox_Delete(daSpotbox_c* self) {
+static int daSpotbox_Delete(daSpotbox_c* self) {
     self->~daSpotbox_c();
     return true;
 }
