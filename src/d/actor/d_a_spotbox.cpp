@@ -14,16 +14,15 @@ public:
     inline int create();
     inline int draw();
     inline int execute();
+    inline u8 getType();
 public:
     Mtx mtx;
 }; /* size = 0x2A0 */
 
 int daSpotbox_c::create() {
     /* Matching 96% */
-    float baseScale;
     fopAcM_SetupActor(this, daSpotbox_c);
-    if ((this->mBase.mParameters & 1) != 0) baseScale = 100.0f;
-    else baseScale = 1000.0f;
+    float baseScale = (this->getType() & 1) != 0 ? 100.0f : 1000.0f;
     this->mScale.x *= baseScale;
     this->mScale.y *= baseScale;
     this->mScale.z *= (baseScale * 1.2f);
@@ -47,6 +46,10 @@ int daSpotbox_c::execute() {
     mDoMtx_stack_c::scaleM(this->mScale.x, this->mScale.y, this->mScale.z);
     PSMTXCopy(mDoMtx_stack_c::now, this->mtx);
     return TRUE;
+}
+
+u8 daSpotbox_c::getType() {
+    return fopAcM_GetParam(this);
 }
 
 
