@@ -17,9 +17,10 @@ class dNpc_JntCtrl_c {
     /* 0x06 */ s16 mBackboneLeftRightRot;
     /* 0x08 */ u8 mHeadJntNum;
     /* 0x09 */ u8 mBackboneJntNum;
-    /* 0x0A */ bool field_0x0B;
-    /* 0x0B */ u8 field_0x0C;
-    /* 0x0C */ u8 field_0x0D;
+    /* 0x0A */ bool field_0x0A;
+    /* 0x0B */ u8 field_0x0B;
+    /* 0x0C */ u8 field_0x0C;
+    /* 0x0D */ u8 field_0x0D;
     /* 0x0E */ s16 field_0x0E;
     /* 0x10 */ s16 mMinHeadRot;
     /* 0x12 */ s16 field_0x12;
@@ -36,18 +37,18 @@ class dNpc_JntCtrl_c {
     /* 0x32 */ s16 field_0x32;
 
 public:
-    void angCalcS(short*, short, short, short);
-    void limitter(short*, short, short);
-    void follow(short*, short, short, int);
-    void move(short, int);
-    void lookAtTarget(short*, cXyz*, cXyz, short, short, bool);
-    void setParam(short, short, short, short, short, short, short, short, short);
+    bool angCalcS(s16*, s16, s16, s16);
+    void limitter(s16*, s16, s16);
+    void follow(s16*, s16, s16, int);
+    void move(s16, int);
+    void lookAtTarget(s16*, cXyz*, cXyz, s16, s16, bool);
+    void setParam(s16, s16, s16, s16, s16, s16, s16, s16, s16);
 
-    void chkLim(short, int, int);
-    void turn_fromBackbone2Head(short, short*, short*, bool);
-    void turn_fromHead2Backbone(short, short*, short*);
-    void follow_current(short*, short);
-    void lookAtTarget_2(short*, cXyz*, cXyz, short, short, bool);
+    s16 chkLim(s16, int, int);
+    void turn_fromBackbone2Head(s16, s16*, s16*, bool);
+    void turn_fromHead2Backbone(s16, s16*, s16*);
+    s16 follow_current(s16*, s16);
+    void lookAtTarget_2(s16*, cXyz*, cXyz, s16, s16, bool);
 };
 
 class dNpc_EventCut_c {
@@ -100,35 +101,53 @@ public:
 
 class dNpc_PathRun_c {
 public:
-    void setInfDrct(dPath*);
-    void setInf(unsigned char, signed char, unsigned char);
-    void nextPath(signed char);
-    void getPoint(unsigned char);
+    bool setInfDrct(dPath* pPath);
+    bool setInf(u8 pathIdx, s8 roomNo, u8 forwards);
+    dPath* nextPath(s8 roomNo);
+    cXyz getPoint(u8 pointIdx);
     void chkPointPass(cXyz, bool);
-    void incIdx();
-    void incIdxLoop();
-    void incIdxAuto();
-    void decIdx();
-    void decIdxLoop();
-    void decIdxAuto();
-    void nextIdx();
-    void nextIdxAuto();
-    void absIdx(unsigned char, unsigned char);
-    void maxPoint();
-    void pointArg(unsigned char);
-    void setNearPathIndx(cXyz*, float);
-    void setNearPathIndxMk(cXyz*);
-    void setNearPathIndxMk2(cXyz*, unsigned char, unsigned char);
-    void chkInside(cXyz*);
+    bool incIdx();
+    bool incIdxLoop();
+    bool incIdxAuto();
+    bool decIdx();
+    bool decIdxLoop();
+    bool decIdxAuto();
+    bool nextIdx();
+    bool nextIdxAuto();
+    s32 absIdx(u8, u8);
+    u8 maxPoint();
+    u8 pointArg(u8 idx);
+    bool setNearPathIndx(cXyz*, f32);
+    f32 setNearPathIndxMk(cXyz*);
+    bool setNearPathIndxMk2(cXyz*, u8, u8);
+    bool chkInside(cXyz*);
+
+    /* 0x00 */ dPath* mPath;
+    /* 0x04 */ u8 field_0x04;
+    /* 0x05 */ u8 mCurrPointIndex;
+    /* 0x06 */ u8 mbGoingForwards;
+    /* 0x07 */ u8 field_0x07;
 };
 
 class dNpc_HeadAnm_c {
 public:
-    void swing_vertical_init(short, short, short, int);
+    void swing_vertical_init(s16 param_1, s16 param_2, s16 param_3, int param_4);
     void swing_vertical();
-    void swing_horizone_init(short, short, short, int);
+    void swing_horizone_init(s16 param_1, s16 param_2, s16 param_3, int param_4);
     void swing_horizone();
     void move();
+
+    typedef void (dNpc_HeadAnm_c::*swing_func)(void);
+
+    /* 0x00 */ s16 field_0x00;
+    /* 0x02 */ s16 field_0x02;
+    /* 0x04 */ u32 field_0x04;
+    /* 0x08 */ swing_func mFunc;
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ f32 field_0x18;
+    /* 0x1C */ s16 field_0x1C;
+    /* 0x1E */ s16 field_0x1E;
+    /* 0x20 */ s16 field_0x20;
 };
 
 enum dNpc_MessageStatus_e {
@@ -168,14 +187,14 @@ public:
     u16 talk(int);
 };
 
-void dNpc_setAnmIDRes(mDoExt_McaMorf*, int, float, float, int, int, const char*);
-void dNpc_setAnmFNDirect(mDoExt_McaMorf*, int, float, float, char*, char*, const char*);
-void dNpc_setAnm(mDoExt_McaMorf*, int, float, float, int, int, const char*);
+bool dNpc_setAnmIDRes(mDoExt_McaMorf* pMorf, int loopMode, float morf, float speed, int animResId, int soundResId, const char* arcName);
+bool dNpc_setAnmFNDirect(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, char* animFilename, char* soundFilename, const char* arcName);
+bool dNpc_setAnm(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileidx, int soundFileIdx, const char* arcName);
 void dNpc_setShadowModel(J3DModel*, J3DModelData*, J3DModel*);
 cXyz dNpc_playerEyePos(f32);
 void dNpc_calc_DisXZ_AngY(cXyz, cXyz, float*, short*);
-void dNpc_chkArasoi();
-bool dNpc_chkLetterPassed();
-void dNpc_setAnm_2(mDoExt_McaMorf*, int, float, float, int, int, const char*);
+bool dNpc_chkArasoi();
+BOOL dNpc_chkLetterPassed();
+bool dNpc_setAnm_2(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileidx, int soundFileIdx, const char* arcName);
 
 #endif /* D_NPC_H */

@@ -366,6 +366,14 @@ inline void dComIfGs_init() {
     g_dComIfG_gameInfo.save.init();
 }
 
+inline dSv_player_bag_item_c* dComIfGs_getpBagItem() {
+    return g_dComIfG_gameInfo.save.getPlayer().getpBagItem();
+}
+
+inline BOOL dComIfGs_checkReserveItem(u8 i_itemNo) {
+    return dComIfGs_getpBagItem()->checkReserveItem(i_itemNo);
+}
+
 inline u8 dComIfGs_getSelectEquip(int param_0) {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getSelectEquip(param_0);
 }
@@ -388,6 +396,10 @@ inline u8 dComIfGs_getBait(int i_idx) {
 
 inline u8 dComIfGs_getReserve(int i_idx) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getReserve(i_idx);
+}
+
+inline BOOL dComIfGs_isGetItemReserve(int i_No) {
+    return g_dComIfG_gameInfo.save.getPlayer().getGetBagItem().isReserve(i_No);
 }
 
 inline BOOL dComIfGs_isGetCollectMap(int i_itemNo) {

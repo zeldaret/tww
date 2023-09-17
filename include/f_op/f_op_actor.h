@@ -113,11 +113,6 @@ public:
     void setEventName(char*);
     char* getEventName();
     void beforeProc();
-    void onCondition(u16);
-    void offCondition(u16);
-    bool checkCommandCatch();
-    BOOL checkCommandDoor();
-    BOOL checkCommandDemoAccrpt() { return mCommand == 2; }
 
     void setCommand(u16 command) { mCommand = command; }
     void setMapToolId(u8 id) { mMapToolId = id; }
@@ -131,14 +126,14 @@ public:
     void setIdx(u8 i_idx) { mIndex = i_idx; }
     char* getArchiveName() { return mArchiveName; }
     BOOL chkCondition(u16 condition) { return (mCondition & condition) == condition; }
-    void i_onCondition(u16 cond) { mCondition |= cond; }
-    void i_offCondition(u16 cond) { mCondition &= ~cond; }
+    void onCondition(u16 cond) { mCondition |= cond; }
+    void offCondition(u16 cond) { mCondition &= ~cond; }
 
     bool checkCommandTalk() { return mCommand == 1; }
     bool checkCommandItem() { return mCommand == 4; }
-    BOOL i_checkCommandDoor() { return mCommand == 3; }
-    bool i_checkCommandDemoAccrpt() { return mCommand == 2; }
-    bool i_checkCommandCatch() { return mCommand == 6; }
+    BOOL checkCommandDoor() { return mCommand == 3; }
+    bool checkCommandDemoAccrpt() { return mCommand == 2; }
+    bool checkCommandCatch() { return mCommand == 6; }
 
     void suspendProc(void* actor) {
         if (field_0x10 != NULL) {
