@@ -78,20 +78,9 @@ BOOL OSIsThreadSuspended(OSThread* thread);
 
 u32 OSGetConsoleType(void);
 
-void OSAttention(const char* msg, ...);
 void OSPanic(const char* file, s32 line, const char* fmt, ...);
 void OSReport(const char* fmt, ...);
-void OSReport_Error(const char* fmt, ...);
-void OSReport_FatalError(const char* fmt, ...);
-void OSReport_System(const char* fmt, ...);
-void OSReport_Warning(const char* fmt, ...);
-void OSReportDisable(void);
-void OSReportEnable(void);
-void OSReportForceEnableOff(void);
-void OSReportForceEnableOn(void);
 void OSVReport(const char* format, va_list list);
-void OSVAttention(const char* fmt, va_list args);
-void OSReportInit(void);
 
 extern u8 __OSReport_disable;
 extern u8 __OSReport_Error_disable;

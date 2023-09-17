@@ -4,79 +4,187 @@
 //
 
 #include "m_Do/m_Do_printf.h"
-#include "dolphin/types.h"
+#include "MSL_C/stdio.h"
+#include "dolphin/base/PPCArch.h"
+#include "dolphin/os/OS.h"
+
+u8 __OSReport_disable;
+u8 __OSReport_Error_disable;
+u8 __OSReport_Warning_disable;
+u8 __OSReport_enable;
 
 /* 800065DC-80006640       .text OSGetCallerPC */
-void OSGetCallerPC {
-    /* Nonmatching */
+extern "C" void* OSGetCallerPC(int param_0) {
+    u32* stack = (u32*)OSGetStackPointer();
+    for (u32 i = 0; i <= param_0; i++) {
+        stack = (u32*)stack[0];
+        if (stack == 0 || u32(stack) == 0xffffffff) {
+            return NULL;
+        }
+    }
+    return (void*)stack[1];
 }
 
 /* 80006640-800066B0       .text OSGetActiveThreadID */
-void OSGetActiveThreadID {
-    /* Nonmatching */
+extern "C" int OSGetActiveThreadID(OSThread* thread) {
+    OSThread* r31;
+    int id = -1;
+    BOOL enable = OSDisableInterrupts();
+    for (r31 = OS_THREAD_QUEUE.head; r31; r31 = r31->active_threads_link.next, id++) {
+        if (r31 == thread) {
+            break;
+        }
+    }
+    OSRestoreInterrupts(enable);
+    return r31 ? id : -1;
 }
 
 /* 800066B0-80006770       .text search_partial_address */
-void search_partial_address {
+extern "C" int search_partial_address(void* param_0, int* param_1, int* param_2, int* param_3, int* param_4) {
     /* Nonmatching */
 }
 
 /* 80006770-800067D0       .text convert_partial_address */
-void convert_partial_address {
+extern "C" int convert_partial_address(void* param_0) {
     /* Nonmatching */
 }
 
 /* 800067D0-800067DC       .text OSReportDisable */
-void OSReportDisable {
-    /* Nonmatching */
+void OSReportDisable() {
+    __OSReport_disable = true;
 }
 
 /* 800067DC-800067E8       .text OSReportEnable */
-void OSReportEnable {
-    /* Nonmatching */
+void OSReportEnable() {
+    __OSReport_disable = false;
 }
 
 /* 800067E8-800067F4       .text OSReportForceEnableOn */
-void OSReportForceEnableOn {
-    /* Nonmatching */
+void OSReportForceEnableOn() {
+    __OSReport_enable = true;
 }
 
 /* 800067F4-80006800       .text OSReportForceEnableOff */
-void OSReportForceEnableOff {
-    /* Nonmatching */
+void OSReportForceEnableOff() {
+    __OSReport_enable = false;
 }
+
+static OSThread* __OSReport_MonopolyThread;
+static u8 print_threadID;
+static u8 print_callerPC;
+static u8 print_callerPCLevel = 3;
+static u32 print_counts;
+static u32 print_errors;
+static u32 print_warings;
+static bool print_initialized;
 
 /* 80006800-80006818       .text OSReportInit__Fv */
 void OSReportInit() {
-    /* Nonmatching */
+    if (print_initialized) {
+        return;
+    }
+    print_initialized = true;
 }
 
 /* 80006818-80006950       .text OSVReport */
-void OSVReport {
-    /* Nonmatching */
+void OSVReport(const char* fmt, va_list args) {
+    if (!print_initialized) {
+        OSReportInit();
+    }
+    if (__OSReport_enable || !__OSReport_disable) {
+        OSThread* currentThread = OSGetCurrentThread();
+        if (currentThread && currentThread->state != OS_THREAD_STATE_RUNNING) {
+            currentThread = NULL;
+        }
+        if (__OSReport_MonopolyThread == NULL || __OSReport_MonopolyThread == currentThread) {
+            if (print_threadID) {
+                printf("[%x]", OSGetActiveThreadID(currentThread));
+            }
+            if (print_callerPC) {
+                printf("[PC:");
+                for (u32 i = 3; i <= print_callerPCLevel; i++) {
+                    printf(" %08x", convert_partial_address(OSGetCallerPC(i)));
+                }
+                printf("]");
+            }
+            vprintf(fmt, args);
+            print_counts++;
+        }
+    }
 }
 
 /* 80006950-800069D0       .text OSReport */
-void OSReport {
-    /* Nonmatching */
+void OSReport(const char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+    OSVReport(fmt, args);
+    va_end(args);
 }
 
 /* 800069D0-80006A9C       .text OSReport_FatalError */
-void OSReport_FatalError {
-    /* Nonmatching */
+void OSReport_FatalError(const char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+
+    OSReportForceEnableOn();
+    OSReport("\x1B[41;37m***** FATAL ERROR *****\n");
+    OSVReport(fmt, args);
+    OSReport("***** FATAL ERROR *****\n\x1B[m");
+    OSReportForceEnableOff();
+    print_errors++;
+
+    va_end(args);
 }
 
 /* 80006A9C-80006B74       .text OSReport_Error */
-void OSReport_Error {
-    /* Nonmatching */
+void OSReport_Error(const char* fmt, ...) {
+    print_errors++;
+    if (!__OSReport_Error_disable) {
+        va_list args;
+        va_start(args, fmt);
+        OSReportForceEnableOn();
+        printf("\x1B[41;37m");
+        OSVReport(fmt, args);
+        printf("\x1B[m");
+        OSReportForceEnableOff();
+        va_end(args);
+    }
 }
 
 /* 80006B74-80006C4C       .text OSReport_Warning */
-void OSReport_Warning {
-    /* Nonmatching */
+void OSReport_Warning(const char* fmt, ...) {
+    print_warings++;
+    if (!__OSReport_Warning_disable) {
+        va_list args;
+        va_start(args, fmt);
+        OSReportForceEnableOn();
+        OSReport("\x1B[43;30m");
+        OSVReport(fmt, args);
+        OSReport("\x1B[m");
+        OSReportForceEnableOff();
+        va_end(args);
+    }
 }
 
 /* 80006C4C-80006D84       .text OSPanic */
-void OSPanic {
-    /* Nonmatching */
+void OSPanic(const char* file, s32 line, const char* fmt, ...) {
+    va_list args;
+    u32 i;
+    u32* p;
+    u32* tmp;
+
+    OSDisableInterrupts();
+    va_start(args, fmt);
+    vprintf(fmt, args);
+    va_end(args);
+    OSReport(" in \"%s\" on line %d.\n", file, line);
+
+    OSReport("\nAddress:      Back Chain    LR Save\n");
+    for (i = 0, p = (u32*)OSGetStackPointer(); p && (u32)p != 0xFFFFFFFF && i++ < 16; p = (u32*)*p) {
+        OSReport("0x%08x:   0x%08x    0x%08x\n", p, p[0], p[1]);
+    }
+
+    tmp = (u32*)0x1234567;  // ??????
+    *tmp = 0x1234567;
+    PPCHalt();
 }

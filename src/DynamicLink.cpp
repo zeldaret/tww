@@ -14,7 +14,7 @@
 #include "REL/executor.h"
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_ext.h"
-#include "dolphin/os/OS.h"
+#include "m_Do/m_Do_printf.h"
 
 DynamicModuleControlBase* DynamicModuleControlBase::mFirst;
 DynamicModuleControlBase* DynamicModuleControlBase::mLast;

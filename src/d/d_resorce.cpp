@@ -4,7 +4,7 @@
 //
 
 #include "d_resorce.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_printf.h"
 
 /* 8006D804-8006D824       .text __ct__11dRes_info_cFv */
 dRes_info_c::dRes_info_c()
