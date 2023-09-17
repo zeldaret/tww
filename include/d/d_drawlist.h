@@ -171,6 +171,11 @@ public:
     void create(int);
     void set(unsigned char, float(*)[4], unsigned char);
     void draw(float(*)[4]);
+public:
+    short pad;
+    short pad2;
+    short pad3;
+    short mCount;
 };
 
 class dDlst_list_c {
@@ -199,6 +204,12 @@ public:
     }
     void setAlphaModel(unsigned char param_0, float(*param_1)[4], unsigned char param_2) {
         mpAlphaModel0->set(param_0, param_1, param_2);
+    }
+    void setAlphaModel2(unsigned char param_0, float(*param_1)[4], unsigned char param_2) {
+        mpAlphaModel2->set(param_0, param_1, param_2);
+    }
+    const dDlst_alphaModel_c* getAlphaModel2() {
+        return mpAlphaModel2;
     }
 
     static void offWipe() { mWipe = false; }
