@@ -212,7 +212,11 @@ void debugDisplay() {
             return;
         }
     } else if (mHeapBriefType != 0) {
+#if VERSION == VERSION_JPN
+        JUT_ASSERT(530, mHeapBriefType < HeapCheckTableNum);
+#else
         JUT_ASSERT(531, mHeapBriefType < HeapCheckTableNum);
+#endif
 
         JUTReport(500, 100, "%s", desc1[mHeapBriefType]);
         JUTReport(500, 114, "%s", desc2[mHeapBriefType]);
@@ -420,7 +424,11 @@ void main01() {
 
     mDoDvdThd_callback_c::create((mDoDvdThd_callback_func)LOAD_COPYDATE, NULL);
     fapGm_Create();  // init framework
+#if VERSION == VERSION_JPN
+    mDisplayHeapSize = 1;
+#else
     mDisplayHeapSize = 0;
+#endif
     cDyl_InitAsync();  // init RELs
 
     g_mDoAud_audioHeap = JKRSolidHeap::create(0x166800, JKRHeap::getCurrentHeap(), false);
@@ -442,7 +450,7 @@ void main01() {
     } while (true);
 }
 
-static OSThread mainThread;
+OSThread mainThread;
 
 /* 80006464-800065DC       .text main */
 void main() {
@@ -452,10 +460,11 @@ void main() {
     mDoMain::sPowerOnTime = OSGetTime();
     OSReportInit__Fv();
     version_check();
+#if VERSION != VERSION_JPN
     mDoRstData* reset_data = (mDoRstData*)OSAllocFromArenaLo(0x10, 4);
     mDoRst::setResetData(reset_data);
 
-    if (!mDoRst::i_getResetData()) {
+    if (!mDoRst::getResetData()) {
         do {
         } while (true);
     }
@@ -468,6 +477,7 @@ void main() {
     }
 
     g_dComIfG_gameInfo.ct();
+#endif
 
     if (mDoMain::developmentMode < 0) {
         DVDDiskID* disk_id = DVDGetCurrentDiskID();
