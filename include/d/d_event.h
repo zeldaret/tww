@@ -58,6 +58,9 @@ public:
     void getTactFreeMStick(int);
     void getTactFreeCStick(int);
     void giveItemCut(u8);
+    u8 getTalkXYBtn() { return mTalkButton; }
+    bool chkTalkXY() { return mTalkButton == 1 || mTalkButton == 2 || mTalkButton == 3; }
+    void setPtI_Id(u32 id) { mPtItem = id; }
 
     inline u16 chkEventFlag(u16 flag) { return flag & mEventFlag; }
     inline void onEventFlag(u16 flag) { mEventFlag |= flag; }
@@ -71,7 +74,7 @@ public:
     /* 0xC4 */ u32 mPt1;
     /* 0xC8 */ u32 mPt2;
     /* 0xCC */ int mPtTalk;
-    /* 0xD0 */ int mPtItem;
+    /* 0xD0 */ u32 mPtItem;
     /* 0xD4 */ u8 mCurStaffId;
     /* 0xD5 */ u8 field_0xD5[0xD6 - 0xD5];
     /* 0xD6 */ s16 field_0xd6;

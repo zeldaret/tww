@@ -24,7 +24,7 @@ struct dPath {
 
 dPath__Point* dPath_GetPnt(dPath*, int);
 dPath* dPath_GetRoomPath(int, int);
-void dPath_GetNextRoomPath(dPath*, int);
+dPath* dPath_GetNextRoomPath(dPath*, int);
 void dPath_GetPolyRoomPathVec(cBgS_PolyInfo&, cXyz*, int*);
 
 #endif /* D_PATH_H */

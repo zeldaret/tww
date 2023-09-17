@@ -28,8 +28,8 @@ int cLib_chasePos(cXyz* o_value, cXyz const& target, f32 step);
 int cLib_chasePosXZ(cXyz* o_value, cXyz const& target, f32 step);
 int cLib_chaseAngleS(s16* o_value, s16 target, s16 step);
 
-s16 cLib_targetAngleY(const Vec* lhs, const Vec* rhs);
-s16 cLib_targetAngleY(const Vec& lhs, const Vec& rhs);
+s16 cLib_targetAngleY(cXyz* lhs, cXyz* rhs);
+s16 cLib_targetAngleY(const cXyz& lhs, const cXyz& rhs);
 s16 cLib_targetAngleX(const cXyz*, const cXyz*);
 
 void cLib_offsetPos(cXyz* pDest, cXyz* pSrc, s16 angle, cXyz* vec);

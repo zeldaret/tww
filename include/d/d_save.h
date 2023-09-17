@@ -10,6 +10,7 @@ public:
 
     u8 getSelectItemIndex(int i_no) const { return mSelectItem[i_no]; }
     u8 getSelectEquip(int i_no) const { return mSelectEquip[i_no]; }
+    u8 getWalletSize() const { return mWalletSize; }
 
     /* 0x00 */ u16 mMaxLife;
     /* 0x02 */ u16 mLife;
@@ -141,8 +142,8 @@ public:
     /* 8005A7C0 */ void setReserveItemEmpty(u8);
     /* 8005A79C */ void setReserveItemEmpty();
     /* 8005A7E4 */ void setReserveItem(u8);
-    /* 8005A854 */ u8 checkReserveItemEmpty();
-    /* 8005A878 */ u8 checkReserveItem(u8);
+    /* 8005A854 */ bool checkReserveItemEmpty();
+    /* 8005A878 */ bool checkReserveItem(u8);
 
     u8 getBeast(int i_idx) const { return mBeast[i_idx]; }
     u8 getBait(int i_idx) const { return mBait[i_idx]; }
@@ -159,11 +160,11 @@ class dSv_player_get_bag_item_c {
 public:
     /* 8005A8B8 */ void init();
     /* 8005A8CC */ void onBeast(u8);
-    /* 8005A960 */ bool isBeast(u8);
+    /* 8005A960 */ BOOL isBeast(u8);
     /* 8005A9F8 */ void onBait(u8);
-    /* 8005AA8C */ bool isBait(u8);
+    /* 8005AA8C */ BOOL isBait(u8);
     /* 8005AB24 */ void onReserve(u8);
-    /* 8005ABB4 */ bool isReserve(u8);
+    /* 8005ABB4 */ BOOL isReserve(u8);
 
     /* 0x0 */ u32 mReserveFlags;
     /* 0x4 */ u8 mBeastFlags;

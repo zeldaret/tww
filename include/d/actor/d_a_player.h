@@ -38,6 +38,8 @@ public:
     void setDemoMode(u32 mode) { mDemoMode = mode; }
     u32 getDemoMode() const { return mDemoMode; }
     int getParam1() const { return mParam1; }
+    void setTimer(s16 time) { mTimer = time; }
+    void decTimer() { mTimer--; }
     void setOriginalDemoType() { setDemoType(3); }
     void setSpecialDemoType() { setDemoType(5); }
     void setSystemDemoType() { setDemoType(2); }
@@ -104,7 +106,7 @@ public:
     virtual void setTactZev(unsigned int, int, char*);
     virtual void onDekuSpReturnFlg(u8);
     virtual void checkComboCutTurn() const;
-    virtual void getBaseAnimeFrameRate();
+    virtual f32 getBaseAnimeFrameRate();
     virtual void getBaseAnimeFrame();
     virtual void getItemID() const;
     virtual void getThrowBoomerangID() const;
@@ -130,7 +132,7 @@ public:
     void getLeftHandPos() const;
     void getRopeJumpLand() const;
     void checkRopeForceEnd() const;
-    void getHeadTopPos() const;
+    cXyz getHeadTopPos() const;
     void changePlayer(fopAc_ac_c*);
     void objWindHitCheck(dCcD_Cyl*);
     void setDoButtonQuake();

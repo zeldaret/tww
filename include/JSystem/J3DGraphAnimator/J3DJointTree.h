@@ -39,7 +39,6 @@ public:
     u8 getWEvlpMixMtxNum(u16 idx) const { return mWEvlpMixMtxNum[idx]; }
     u16 * getWEvlpMixIndex() const { return mWEvlpMixIndex; }
     f32 * getWEvlpMixWeight() const { return mWEvlpMixWeight; }
-    u16 * getWEvlpImportantMtxIndex() const { return mWEvlpImportantMtxIdx; }
     u16 getDrawFullWgtMtxNum() const { return mDrawMtxData.mDrawFullWgtMtxNum; }
     u16 getJointNum() const { return mJointNum; }
     u16 getDrawMtxNum() const { return mDrawMtxData.mEntryNum; }
@@ -61,12 +60,11 @@ private:
     /* 0x14 */ J3DMtxCalc* mBasicMtxCalc;
     /* 0x18 */ u16 mJointNum;
     /* 0x1C */ J3DJoint** mJointNodePointer;
-    /* 0x1E */ u16 mWEvlpMtxNum;
-    /* 0x20 */ u8* mWEvlpMixMtxNum;
-    /* 0x24 */ u16* mWEvlpMixIndex;
-    /* 0x28 */ f32* mWEvlpMixWeight;
-    /* 0x2C */ Mtx* mInvJointMtx;
-    /* 0x30 */ u16* mWEvlpImportantMtxIdx;
+    /* 0x20 */ u16 mWEvlpMtxNum;
+    /* 0x24 */ u8* mWEvlpMixMtxNum;
+    /* 0x28 */ u16* mWEvlpMixIndex;
+    /* 0x2C */ f32* mWEvlpMixWeight;
+    /* 0x30 */ Mtx* mInvJointMtx;
     /* 0x34 */ J3DDrawMtxData mDrawMtxData;
     /* 0x40 */ u32 field_0x40;
     /* 0x44 */ JUTNameTab* mJointName;
