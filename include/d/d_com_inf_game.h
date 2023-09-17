@@ -385,12 +385,24 @@ inline void dComIfGs_init() {
     g_dComIfG_gameInfo.save.init();
 }
 
+inline dSv_player_bag_item_c* dComIfGs_getpBagItem() {
+    return g_dComIfG_gameInfo.save.getPlayer().getpBagItem();
+}
+
+inline BOOL dComIfGs_checkReserveItem(u8 i_itemNo) {
+    return dComIfGs_getpBagItem()->checkReserveItem(i_itemNo);
+}
+
 inline void dComIfGs_initZone() {
     g_dComIfG_gameInfo.save.initZone();
 }
 
 inline u8 dComIfGs_getSelectEquip(int param_0) {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getSelectEquip(param_0);
+}
+
+inline u8 dComIfGs_getWalletSize() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getWalletSize();
 }
 
 inline u8 dComIfGs_getItem(int param_0) {
@@ -407,6 +419,10 @@ inline u8 dComIfGs_getBait(int i_idx) {
 
 inline u8 dComIfGs_getReserve(int i_idx) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getReserve(i_idx);
+}
+
+inline BOOL dComIfGs_isGetItemReserve(int i_No) {
+    return g_dComIfG_gameInfo.save.getPlayer().getGetBagItem().isReserve(i_No);
 }
 
 inline BOOL dComIfGs_isGetCollectMap(int i_itemNo) {
@@ -443,6 +459,10 @@ inline u8 dComIfGs_getEventReg(u16 i_reg) {
 
 inline BOOL dComIfGs_isEventBit(u16 id) {
     return g_dComIfG_gameInfo.save.getEvent().isEventBit(id);
+}
+
+inline void dComIfGs_onEventBit(u16 id) {
+    g_dComIfG_gameInfo.save.getEvent().onEventBit(id);
 }
 
 inline void dComIfGs_setRestartRoomParam(u32 i_param) {
@@ -484,6 +504,8 @@ inline void dComIfGs_onTbox(int i_no) {
 inline void dComIfGs_onSaveTbox(int i_stageNo, int i_no) {
     g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().onTbox(i_no);
 }
+
+BOOL dComIfGs_isStageBossEnemy(int i_stageNo);
 
 inline BOOL dComIfGs_isStageBossEnemy() {
     return g_dComIfG_gameInfo.save.getMemory().getBit().isStageBossEnemy();
@@ -884,12 +906,24 @@ inline BOOL dComIfGp_checkCameraAttentionStatus(int idx, u32 flag) {
 /**
  * === EVENT ===*/
 
+inline u8 dComIfGp_event_getTalkXYBtn(void) {
+    return g_dComIfG_gameInfo.play.getEvent().getTalkXYBtn();
+}
+
+inline bool dComIfGp_event_chkTalkXY(void) {
+    return g_dComIfG_gameInfo.play.getEvent().chkTalkXY();
+}
+
 inline void dComIfGp_event_onEventFlag(s16 flag) {
     return g_dComIfG_gameInfo.play.getEvent().onEventFlag(flag);
 }
 
 inline void dComIfGp_event_offEventFlag(s16 flag) {
     return g_dComIfG_gameInfo.play.getEvent().offEventFlag(flag);
+}
+
+inline void dComIfGp_event_setItemPartnerId(u32 id) {
+    return g_dComIfG_gameInfo.play.getEvent().setPtI_Id(id);
 }
 
 inline dEvent_manager_c& dComIfGp_getEventManager() {
@@ -900,8 +934,48 @@ inline u32 dComIfGp_evmng_getEventIdx(char* pName, u8 evNo) {
     return dComIfGp_getEventManager().getEventIdx(pName, evNo);
 }
 
+inline u32 dComIfGp_evmng_getMyStaffId(char* pName, fopAc_ac_c* pActor, s32 param_3) {
+    return dComIfGp_getEventManager().getMyStaffId(pName, pActor, param_3);
+}
+
+inline u32 dComIfGp_evmng_getMyActIdx(int staffIdx, const char* const* pActions, int actionCount, int force, int param_5) {
+    return dComIfGp_getEventManager().getMyActIdx(staffIdx, pActions, actionCount, force, param_5);
+}
+
+inline f32* dComIfGp_evmng_getMyFloatP(int staffIdx, const char* name) {
+    return reinterpret_cast<f32*>(dComIfGp_getEventManager().getMySubstanceP(staffIdx, name, 0)); //type 0 is float
+}
+
+inline Vec* dComIfGp_evmng_getMyVec3dP(int staffIdx, const char* name) {
+    return reinterpret_cast<Vec*>(dComIfGp_getEventManager().getMySubstanceP(staffIdx, name, 1)); //type 1 is vec3f
+}
+
+inline u32* dComIfGp_evmng_getMyIntegerP(int staffIdx, const char* name) {
+    return reinterpret_cast<u32*>(dComIfGp_getEventManager().getMySubstanceP(staffIdx, name, 3)); //type 3 is int
+}
+
+inline char* dComIfGp_evmng_getMyStringP(int staffIdx, const char* name) {
+    return reinterpret_cast<char*>(dComIfGp_getEventManager().getMySubstanceP(staffIdx, name, 4)); //type 4 is string
+}
+
 inline BOOL dComIfGp_evmng_endCheck(s16 eventID) {
-    return g_dComIfG_gameInfo.play.getEvtManager().endCheck(eventID);
+    return dComIfGp_getEventManager().endCheck(eventID);
+}
+
+inline BOOL dComIfGp_evmng_ChkPresentEnd() {
+    return dComIfGp_getEventManager().ChkPresentEnd();
+}
+
+inline void dComIfGp_evmng_CancelPresent() {
+    return dComIfGp_getEventManager().CancelPresent();
+}
+
+inline BOOL dComIfGp_evmng_getIsAddvance(s32 staffIdx) {
+    return dComIfGp_getEventManager().getIsAddvance(staffIdx);
+}
+
+inline void dComIfGp_evmng_cutEnd(s32 staffIdx) {
+    return dComIfGp_getEventManager().cutEnd(staffIdx);
 }
 
 inline void dComIfGp_evmng_execute() {
@@ -934,6 +1008,8 @@ inline int dComIfGd_setRealShadow2(u32 id, s8 param_2, J3DModel* pModel, cXyz* p
     return g_dComIfG_gameInfo.drawlist.setRealShadow2(id, param_2, pModel, pPos, param_5, param_6,
                                                       pTevStr);
 }
+
+int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 param_1, f32 param_2, cBgS_PolyInfo& i_floorPoly, s16 i_angle, f32 param_5, GXTexObj* i_tex);
 
 /**
  * === RESOURCE ===
