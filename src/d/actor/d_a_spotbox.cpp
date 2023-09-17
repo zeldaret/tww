@@ -19,6 +19,7 @@ public:
 }; /* size = 0x2A0 */
 
 int daSpotbox_c::create() {
+    /* Matching 96% */
     float baseScale;
     fopAcM_SetupActor(this, daSpotbox_c);
     if ((this->mBase.mParameters & 1) != 0) baseScale = 100.0f;
