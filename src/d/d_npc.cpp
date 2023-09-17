@@ -3,8 +3,12 @@
 // Translation Unit: d_npc.cpp
 //
 
-#include "d_npc.h"
-#include "dolphin/types.h"
+#include "d/d_npc.h"
+#include "d/d_com_inf_game.h"
+#include "f_op/f_op_actor_mng.h"
+#include "f_op/f_op_msg_mng.h"
+#include "SSystem/SComponent/c_math.h"
+#include "JSystem/JGeometry.h"
 
 /* 8021A7B4-8021A858       .text angCalcS__14dNpc_JntCtrl_cFPssss */
 void dNpc_JntCtrl_c::angCalcS(short*, short, short, short) {
@@ -136,17 +140,25 @@ void dNpc_PathRun_c::chkInside(cXyz*) {
     /* Nonmatching */
 }
 
-/* 8021B95C-8021B998       .text setActorInfo__15dNpc_EventCut_cFPcP10fopAc_ac_c */
-void dNpc_EventCut_c::setActorInfo(char*, fopAc_ac_c*) {
-    /* Nonmatching */
+void dNpc_EventCut_c::setActorInfo(char* staffName, fopAc_ac_c* pActor) {
+    mpEvtStaffName = staffName;
+    mpActor = pActor;
+    mTargetActorPos.set(0.0f, 0.0f, 0.0f);
+    mOffsetPos.set(0.0f, 0.0f, 0.0f);
+    mPos.set(0.0f, 0.0f, 0.0f);
+    mCurActIdx = -1;
 }
 
-/* 8021B998-8021B9D8       .text setActorInfo2__15dNpc_EventCut_cFPcP12fopNpc_npc_c */
-void dNpc_EventCut_c::setActorInfo2(char*, fopNpc_npc_c*) {
-    /* Nonmatching */
+void dNpc_EventCut_c::setActorInfo2(char* staffName, fopNpc_npc_c* pActor) {
+    mpEvtStaffName = staffName;
+    mpActor = pActor;
+    mpTalkActor = pActor;
+    mTargetActorPos.set(0.0f, 0.0f, 0.0f);
+    mOffsetPos.set(0.0f, 0.0f, 0.0f);
+    mPos.set(0.0f, 0.0f, 0.0f);
+    mCurActIdx = -1;
 }
 
-/* 8021B9D8-8021BABC       .text dNpc_setAnmIDRes__FP14mDoExt_McaMorfiffiiPCc */
 void dNpc_setAnmIDRes(mDoExt_McaMorf*, int, float, float, int, int, const char*) {
     /* Nonmatching */
 }
@@ -166,8 +178,7 @@ void dNpc_setShadowModel(J3DModel*, J3DModelData*, J3DModel*) {
     /* Nonmatching */
 }
 
-/* 8021BD2C-8021BDE8       .text dNpc_playerEyePos__Ff */
-void dNpc_playerEyePos(float) {
+cXyz dNpc_playerEyePos(f32) {
     /* Nonmatching */
 }
 
@@ -181,19 +192,50 @@ void dNpc_chkArasoi() {
     /* Nonmatching */
 }
 
-/* 8021BF30-8021BF98       .text dNpc_chkLetterPassed__Fv */
-void dNpc_chkLetterPassed() {
-    /* Nonmatching */
+bool dNpc_chkLetterPassed() {
+
 }
 
-/* 8021BF98-8021C010       .text setCollision__12fopNpc_npc_cFff */
-void fopNpc_npc_c::setCollision(float, float) {
-    /* Nonmatching */
+void fopNpc_npc_c::setCollision(f32 radius, f32 height) {
+    mCyl.SetC(current.pos);
+    mCyl.SetR(radius);
+    mCyl.SetH(height);
+    dComIfG_Ccsp()->Set(&mCyl);
 }
 
-/* 8021C010-8021C120       .text talk__12fopNpc_npc_cFi */
-void fopNpc_npc_c::talk(int) {
-    /* Nonmatching */
+u16 fopNpc_npc_c::talk(int param_1) {
+    u16 mode = 0xFF;
+
+    if(mCurrMsgBsPcId == 0xFFFFFFFF) {
+        if(param_1 == 1) {
+            mCurrMsgID = getMsg();
+        }
+
+        mCurrMsgBsPcId = fopMsgM_messageSet(mCurrMsgID, this);
+        mpCurrMsg = 0;
+    }
+    else {
+        if(mpCurrMsg) {
+            mode = mpCurrMsg->mMode;
+            if(mode == dNpcMsgStts_MSG_DISPLAYED_e) {
+                mpCurrMsg->mMode = next_msgStatus(&mCurrMsgID);
+                if(mpCurrMsg->mMode == dNpcMsgStts_MSG_CONTINUES_e) {
+                    fopMsgM_messageSet(mCurrMsgID);
+                }
+            }
+            else if (mode == dNpcMsgStts_BOX_CLOSED_e) {
+                mpCurrMsg->mMode = dNpcMsgStts_MSG_DESTROYED_e;
+                mCurrMsgBsPcId = -1;
+            }
+
+            anmAtr(mode);
+        }
+        else {
+            mpCurrMsg = fopMsgM_SearchByID(mCurrMsgBsPcId);
+        }
+    }
+
+    return mode;
 }
 
 /* 8021C120-8021C238       .text dNpc_setAnm_2__FP14mDoExt_McaMorfiffiiPCc */
@@ -251,64 +293,508 @@ void dNpc_JntCtrl_c::lookAtTarget_2(short*, cXyz*, cXyz, short, short, bool) {
     /* Nonmatching */
 }
 
-/* 8021CAB8-8021CC4C       .text dNpc_chkAttn__FP10fopAc_ac_c4cXyzfffb */
-void dNpc_chkAttn(fopAc_ac_c*, cXyz, float, float, float, bool) {
-    /* Nonmatching */
+bool dNpc_chkAttn(fopAc_ac_c* i_this, cXyz destPos, float param_3, float param_4, float param_5, bool param_6) {
+    s16 angle = cLib_targetAngleY(&i_this->current.pos, &destPos);
+    cXyz temp = i_this->current.pos - destPos;
+    f32 dist = sqrtf(temp.getMagXZ());
+    s16 angle_diff = angle - i_this->current.angle.y;
+
+    if(359.0f < param_5) {
+        param_5 = 359.0f;
+    }
+    if (param_5 < 0.0f) {
+        param_5 = 0.0f;
+    }
+    if(param_6) {
+        param_3 += param_4;
+    }
+
+    bool ret = false;
+    if(dist <= param_3 && abs(angle_diff) <= cM_deg2s(param_5)) {
+        ret = true;
+    }
+
+    return ret;
 }
 
-/* 8021CC4C-8021CED0       .text cutProc__15dNpc_EventCut_cFv */
-void dNpc_EventCut_c::cutProc() {
-    /* Nonmatching */
+bool dNpc_EventCut_c::cutProc() {
+    static char* action_table[] = {
+        "WAIT",
+        "TURN_TO_ACTOR",
+        "MOVE_TO_ACTOR",
+        "TURN_TO_POS",
+        "MOVE_TO_POS",
+        "TALK_MSG",
+        "CONTINUE_TALK"
+    };
+
+    if(mpEvtStaffName == 0 || mpActor == 0) {
+        return false;
+    }
+    else {
+        mEvtStaffId = dComIfGp_evmng_getMyStaffId(mpEvtStaffName, 0, 0);
+        if(mEvtStaffId == -1) {
+            return false;
+        }
+        else {
+            typedef void(dNpc_EventCut_c::*cut_func_t)(void);
+            struct cut_entry_t {
+                cut_func_t start;
+                cut_func_t proc;
+            };
+
+            static cut_entry_t cut_tbl[] = {
+                {
+                    &dNpc_EventCut_c::cutWaitStart,
+                    &dNpc_EventCut_c::cutWaitProc,
+                },
+                {
+                    &dNpc_EventCut_c::cutTurnToActorStart,
+                    &dNpc_EventCut_c::cutTurnToActorProc,
+                },
+                {
+                    &dNpc_EventCut_c::cutMoveToActorStart,
+                    &dNpc_EventCut_c::cutMoveToActorProc,
+                },
+                {
+                    &dNpc_EventCut_c::cutTurnToPosStart,
+                    &dNpc_EventCut_c::cutTurnToPosProc,
+                },
+                {
+                    &dNpc_EventCut_c::cutMoveToPosStart,
+                    &dNpc_EventCut_c::cutMoveToPosProc,
+                },
+                {
+                    &dNpc_EventCut_c::cutTalkMsgStart,
+                    &dNpc_EventCut_c::cutTalkMsgProc,
+                },
+                {
+                    &dNpc_EventCut_c::cutContinueTalkStart,
+                    &dNpc_EventCut_c::cutTalkMsgProc,
+                },
+            };
+
+            mCurActIdx = dComIfGp_evmng_getMyActIdx(mEvtStaffId, action_table, 7, 1, 0);
+            if(mCurActIdx == -1) {
+                return false;
+            }
+            else {
+                if(dComIfGp_evmng_getIsAddvance(mEvtStaffId)) {
+                    mbAttention = 0;
+                    (this->*cut_tbl[mCurActIdx].start)();
+                }
+                
+                (this->*cut_tbl[mCurActIdx].proc)();
+                return 1;
+            }
+        }
+    }
 }
 
-/* 8021CED0-8021CF3C       .text cutWaitStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutWaitStart() {
-    /* Nonmatching */
+    u32* timer = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Timer");
+    if(timer) {
+        mTimer = (s16)*timer;
+    }
+    else {
+        mTimer = 0;
+    }
 }
 
-/* 8021CF3C-8021CF88       .text cutWaitProc__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutWaitProc() {
-    /* Nonmatching */
+    if(cLib_calcTimer(&mTimer) == 0) {
+        dComIfGp_evmng_cutEnd(mEvtStaffId);
+    }
 }
 
-/* 8021CF88-8021D1C8       .text cutTurnToActorStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTurnToActorStart() {
-    /* Nonmatching */
+    mpActorName = dComIfGp_evmng_getMyStringP(mEvtStaffId, "ActorName");
+
+    u32* set = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "SetId");
+    if(set) {
+        mSetID = *set;
+    }
+    else {
+        mSetID = 0;
+    }
+
+    Vec* pos = dComIfGp_evmng_getMyVec3dP(mEvtStaffId, "OffsetPos");
+    if(pos) {
+        mOffsetPos = *pos;
+    }
+    else {
+        mOffsetPos.set(0.0f, 0.0f, 0.0f);
+    }
+
+    u32* turnType = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "TurnType");
+    if(turnType) {
+        mTurnType = *turnType;
+    }
+    else {
+        mTurnType = 1;
+    }
+
+    u32* timer = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Timer");
+    if(timer) {
+        mTimer = (s16)*timer;
+    }
+    else {
+        mTimer = 1;
+    }
+
+    u32* speed = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "TurnSpeed");
+    if(speed) {
+        mTurnSpeed = *speed;
+    }
+    else {
+        mTurnSpeed = 0;
+    }
+
+    u32* angle = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "AddAngle");
+    if(angle == 0) {
+        mAddAngle = 0;
+    }
+    else {
+        mAddAngle = *angle;
+    }
+
+    f32* dist = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "DelDistance");
+    if(dist == 0) {
+        pDelDistance = 0.0f;
+    }
+    else {
+        pDelDistance = *dist;
+    }
+
+    u32* noTurn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "NoTurn");
+    if(noTurn) {
+        mbNoTurn = 1;
+    }
+    else {
+        mbNoTurn = 0;
+    }
+
+    field_0x44 = 0;
 }
 
-/* 8021D1C8-8021D51C       .text cutTurnToActorProc__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTurnToActorProc() {
-    /* Nonmatching */
+    if(mSetID != 0) {
+        mTargetActorPos.set(0.0f, 0.0f, 0.0f);
+        fopAcM_Search((fopAcIt_JudgeFunc)&findActorCallBack, this);
+    }
+    else {
+        if(mpActorName == 0 || dEvmng_strcmp(mpActorName, "Player") == 0) {
+            mpTargetActor = dComIfGp_getPlayer(0);
+        }
+        else {
+            mTargetActorPos.set(0.0f, 0.0f, 0.0f);
+            fopAcM_Search((fopAcIt_JudgeFunc)&findActorCallBack, this);
+        }
+    }
+
+    if(field_0x68 != 0) {
+        switch(mTurnType) {
+            case 2:
+                field_0x68[0xA] = 1;
+            case 1:
+                field_0x68[0xC] = 0;
+                break;
+            case 0:
+                field_0x68[0xC] = 1;
+                break;
+            default:
+                field_0x68[0xC] = 0;
+                break;
+        }
+    }
+
+    if(mpTargetActor == 0) {
+        dComIfGp_evmng_cutEnd(mEvtStaffId);
+    }
+    if(mpActorName == 0 || dEvmng_strcmp(mpActorName, "Player") == 0) {
+        mPos = dNpc_playerEyePos(0.0f) + mOffsetPos;
+    }
+    else {
+        if(mAddAngle == 0 && pDelDistance != 0.0f) {
+            mPos = mpTargetActor->current.pos;
+            u16 angle = mpTargetActor->shape_angle.y + mAddAngle;
+        }
+        else {
+            mPos = mpTargetActor->current.pos + mOffsetPos;
+        }
+    }
+
+    mbAttention = 1;
+
+    //not sure what this section is doing
+    s16 tAngle = cLib_targetAngleY(&mpActor->current.pos, &mPos);
+    u32 temp = abs(tAngle - fopAcM_GetAngle_p(mpActor).y);
+    if(fabsf2(field_0x44) == temp && temp < 5376.0f) {
+        cLib_calcTimer(&mTimer);
+    }
+
+    if(mTimer == 0) {
+        mTurnSpeed = 0;
+        dComIfGp_evmng_cutEnd(mEvtStaffId);
+    }
+    
+    field_0x44 = fabsf2(tAngle - mpActor->current.angle.y);
 }
 
-/* 8021D51C-8021D730       .text cutMoveToActorStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutMoveToActorStart() {
-    /* Nonmatching */
+    mpActorName = dComIfGp_evmng_getMyStringP(mEvtStaffId, "ActorName");
+    u32* set = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "SetId");
+    f32* speed = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "Speed");
+    f32* dist = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "DelDistance");
+    Vec* offs = dComIfGp_evmng_getMyVec3dP(mEvtStaffId, "OffsetPos");
+    u32* attn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Attention");
+    u32* noTurn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "NoTurn");
+    u32* angle = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "ShapeAngle");
+
+    if(noTurn == 0) {
+        mbNoTurn = 0;
+    }
+    else {
+        mbNoTurn = 1;
+    }
+
+    if(attn == 0) {
+        mbAttention = 0;
+    }
+    else {
+        mbAttention = 1;
+    }
+
+    if(offs == 0) {
+        mOffsetPos.set(0.0f, 0.0f, 0.0f);
+    }
+    else {
+        mOffsetPos = *offs;
+    }
+
+    if(set == 0) {
+        mSetID = 0;
+    }
+    else {
+        mSetID = *set;
+    }
+
+    if(speed == 0) {
+        mSpeed = 2.0f;
+    }
+    else {
+        mSpeed = *speed;
+    }
+
+    if(dist == 0) {
+        pDelDistance = 0.0f;
+    }
+    else {
+        pDelDistance = *dist;
+    }
+
+    if(angle == 0) {
+        mAddAngle = 0;
+    }
+    else {
+        mAddAngle = *angle;
+    }
 }
 
-/* 8021D730-8021D9DC       .text cutMoveToActorProc__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutMoveToActorProc() {
-    /* Nonmatching */
+    if(mSetID != 0) {
+        mTargetActorPos.set(0.0f, 0.0f, 0.0f);
+        fopAcM_Search((fopAcIt_JudgeFunc)&findActorCallBack, this);
+    }
+    else {
+        if(mpActorName == 0 || dEvmng_strcmp(mpActorName, "Player") == 0) {
+            mpTargetActor = dComIfGp_getPlayer(0);
+        }
+        else {
+            mTargetActorPos.set(0.0f, 0.0f, 0.0f);
+            fopAcM_Search((fopAcIt_JudgeFunc)&findActorCallBack, this);
+        }
+    }
+
+    if(mpTargetActor == 0) {
+        dComIfGp_evmng_cutEnd(mEvtStaffId);
+    }
+
+    cXyz temp = mpTargetActor->current.pos + mOffsetPos;
+    u16 angle = fopAcM_searchActorAngleY(mpActor, mpTargetActor);
+    if(mAddAngle != 0) {
+        angle = mpTargetActor->shape_angle.y + mAddAngle;
+    }
+    //sin/cos table stuff
+    if(mSpeed == 0.0f) {
+        mpActor->current.pos = temp;
+        dComIfGp_evmng_cutEnd(mEvtStaffId);
+    }
+
+    //more math stuff
 }
 
-/* 8021D9DC-8021DC7C       .text findActorCallBack__15dNpc_EventCut_cFP10fopAc_ac_cPv */
-void dNpc_EventCut_c::findActorCallBack(fopAc_ac_c*, void*) {
-    /* Nonmatching */
+fopAc_ac_c* dNpc_EventCut_c::findActorCallBack(fopAc_ac_c* pActor, void* pData) {
+    dNpc_EventCut_c* cut = static_cast<dNpc_EventCut_c*>(pData);
+
+    if(cut == 0) {
+        pActor = 0;
+    }
+    else if(cut->mSetID == 0 || pActor->mSetID != cut->mSetID) {
+        if(cut->mpActorName == 0) {
+            pActor = 0;
+        }
+        else {
+            //if(dStage_searchName(cut->mpActorName) == 0) {
+            //    pActor = 0;
+            //}
+            //else {
+            //}
+        }
+    }
+    else {
+        cut->mTargetActorPos = pActor->current.pos;
+        cut->mpTargetActor = pActor;
+    }
+
+    return 0;
 }
 
-/* 8021DC7C-8021DE2C       .text cutTurnToPosStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTurnToPosStart() {
-    /* Nonmatching */
+    Vec* pos = dComIfGp_evmng_getMyVec3dP(mEvtStaffId, "Pos");
+    if(pos) {
+        mPos = *pos;
+    }
+    else {
+        mPos.set(0.0f, 0.0f, 0.0f);
+    }
+
+    u32* turnType = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "TurnType");
+    if(turnType) {
+        mTurnType = *turnType;
+    }
+    else {
+        mTurnType = 1;
+    }
+
+    u32* timer = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Timer");
+    if(timer) {
+        mTimer = (s16)*timer;
+    }
+    else {
+        mTimer = 1;
+    }
+
+    u32* speed = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "TurnSpeed");
+    if(speed) {
+        mTurnSpeed = *speed;
+    }
+    else {
+        mTurnSpeed = 0;
+    }
+    
+    u32* noTurn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "NoTurn");
+    if(noTurn) {
+        mbNoTurn = 1;
+    }
+    else {
+        mbNoTurn = 0;
+    }
+
+    u32* angle = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "AddAngle");
+    if(angle == 0) {
+        mAddAngle = 0;
+    }
+    else {
+        mAddAngle = *angle;
+    }
+
+    field_0x44 = 0;
 }
 
-/* 8021DE2C-8021DFB0       .text cutTurnToPosProc__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTurnToPosProc() {
-    /* Nonmatching */
+    s16 tAngle = cLib_targetAngleY(&mpActor->current.pos, &mPos);
+    mbAttention = 1;
+
+    if(field_0x68 != 0) {
+        switch(mTurnType) {
+            case 2:
+                field_0x68[0xA] = 1;
+            case 1:
+                field_0x68[0xC] = 0;
+                break;
+            case 0:
+                field_0x68[0xC] = 1;
+                break;
+            default:
+                field_0x68[0xC] = 0;
+                break;
+        }
+    }
+
+    //not sure what this section is doing
+    u32 temp = abs(tAngle - fopAcM_GetAngle_p(mpActor).y);
+    if(fabsf2(field_0x44) == temp && temp < 5376.0f) {
+        cLib_calcTimer(&mTimer);
+    }
+
+    if(mTimer == 0) {
+        mTurnSpeed = 0;
+        dComIfGp_evmng_cutEnd(mEvtStaffId);
+    }
+    
+    field_0x44 = fabsf2(tAngle - mpActor->current.angle.y);
 }
 
-/* 8021DFB0-8021E168       .text cutMoveToPosStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutMoveToPosStart() {
-    /* Nonmatching */
+    Vec* pos = dComIfGp_evmng_getMyVec3dP(mEvtStaffId, "Pos");
+    f32* speed = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "Speed");
+    f32* dist = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "DelDistance");
+    u32* attn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Attention");
+    u32* noTurn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "NoTurn");
+    u32* angle = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "AddAngle");
+
+    if(noTurn == 0) {
+        mbNoTurn = 0;
+    }
+    else {
+        mbNoTurn = 1;
+    }
+
+    if(pos == 0) {
+        mPos.set(0.0f, 0.0f, 0.0f);
+    }
+    else {
+        mPos = *pos;
+    }
+    
+    if(attn == 0) {
+        mbAttention = 0;
+    }
+    else {
+        mbAttention = 1;
+    }
+
+    if(speed == 0) {
+        mSpeed = 2.0f;
+    }
+    else {
+        mSpeed = *speed;
+    }
+
+    if(dist == 0) {
+        pDelDistance = 0.0f;
+    }
+    else {
+        pDelDistance = *dist;
+    }
+
+    if(angle == 0) {
+        mAddAngle = 0;
+    }
+    else {
+        mAddAngle = *angle;
+    }
 }
 
 /* 8021E168-8021E338       .text cutMoveToPosProc__15dNpc_EventCut_cFv */
@@ -316,18 +802,61 @@ void dNpc_EventCut_c::cutMoveToPosProc() {
     /* Nonmatching */
 }
 
-/* 8021E338-8021E444       .text cutTalkMsgStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTalkMsgStart() {
-    /* Nonmatching */
+    if(mpTalkActor != 0) {
+        u32* attn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Attention");
+        if(attn == 0) {
+            mbAttention = 0;
+        }
+        else {
+            mbAttention = 1;
+        }
+
+        u32* firstMsg = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "msg_num");
+        u32* endMsg = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "end_msg");
+        if(firstMsg == 0) {
+            mpTalkActor->mCurrMsgID = 0;
+        }
+        else {
+            mpTalkActor->mCurrMsgID = *firstMsg;
+        }
+        if(endMsg) {
+            mpTalkActor->mEndMsgID = *endMsg;
+        }
+        else {
+            mpTalkActor->mEndMsgID = -1;
+        }
+
+        field_0x52 = 1;
+    }
 }
 
-/* 8021E444-8021E4C0       .text cutContinueTalkStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutContinueTalkStart() {
-    /* Nonmatching */
+    if(mpTalkActor != 0) {
+        u32* endMsg = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "end_num");
+        if(endMsg) {
+            mpTalkActor->mEndMsgID = *endMsg;
+        }
+        else {
+            mpTalkActor->mEndMsgID = -1;
+        }
+    }
 }
 
-/* 8021E4C0-8021E58C       .text cutTalkMsgProc__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTalkMsgProc() {
-    /* Nonmatching */
+    if(mpTalkActor == 0 || field_0x52 == 0) {
+        dComIfGp_evmng_cutEnd(mEvtStaffId);
+    }
+    else {
+        u16 status = mpTalkActor->talk(0);
+        if(status == dNpcMsgStts_BOX_CLOSED_e) {
+            field_0x52 = 0;
+            dComIfGp_evmng_cutEnd(mEvtStaffId);
+        }
+        else if((status == 2 || status == 6) && mpTalkActor->mEndMsgID == mpTalkActor->mCurrMsgID) {
+            mpTalkActor->mEndMsgID = -1;
+            dComIfGp_evmng_cutEnd(mEvtStaffId);
+        }
+    }
 }
 

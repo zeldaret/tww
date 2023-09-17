@@ -416,11 +416,12 @@ s32 fopAcM_cullingCheck(fopAc_ac_c*);
 void* event_second_actor(u16);
 s32 fopAcM_orderTalkEvent(fopAc_ac_c*, fopAc_ac_c*, u16, u16);
 s32 fopAcM_orderTalkItemBtnEvent(u16, fopAc_ac_c*, fopAc_ac_c*, u16, u16);
-s32 fopAcM_orderSpeakEvent(fopAc_ac_c* i_actor, u16 i_priority, u16 i_flag);
+s32 fopAcM_orderSpeakEvent(fopAc_ac_c* i_actor);
 s32 fopAcM_orderDoorEvent(fopAc_ac_c*, fopAc_ac_c*, u16, u16);
 s32 fopAcM_orderCatchEvent(fopAc_ac_c*, fopAc_ac_c*, u16, u16);
 s32 fopAcM_orderOtherEvent(fopAc_ac_c*, char*, u16, u16, u16);
 s32 fopAcM_orderOtherEvent(fopAc_ac_c*, fopAc_ac_c*, char*, u16, u16, u16);
+s32 fopAcM_orderOtherEvent2(fopAc_ac_c*, char*, u16, u16);
 s32 fopAcM_orderChangeEventId(fopAc_ac_c*, s16, u16, u16);
 s32 fopAcM_orderOtherEventId(fopAc_ac_c* actor, s16 eventID, u8 mapToolID, u16 param_3,
                              u16 priority, u16 flag);
