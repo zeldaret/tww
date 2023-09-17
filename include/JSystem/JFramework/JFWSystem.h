@@ -1,7 +1,7 @@
 #ifndef JFWSYSTEM_H
 #define JFWSYSTEM_H
 
-#include "dolphin/types.h"
+#include "JSystem/JUtility/JUTAssert.h"
 
 typedef struct _GXRenderModeObj GXRenderModeObj;
 class JKRExpHeap;
@@ -32,6 +32,30 @@ struct JFWSystem {
 
     static JUTConsole* getSystemConsole() { return systemConsole; }
     static JKRExpHeap* getSystemHeap() { return systemHeap; }
+    static void setMaxStdHeap(int max) {
+        JUT_ASSERT(47, sInitCalled == 0);
+        CSetUpParam::maxStdHeaps = max;
+    }
+    static void setSysHeapSize(u32 size) {
+        JUT_ASSERT(50, sInitCalled == 0);
+        CSetUpParam::sysHeapSize = size;
+    }
+    static void setFifoBufSize(u32 size) {
+        JUT_ASSERT(53, sInitCalled == 0);
+        CSetUpParam::fifoBufSize = size;
+    }
+    static void setAramAudioBufSize(u32 size) {
+        JUT_ASSERT(58, sInitCalled == 0);
+        CSetUpParam::aramAudioBufSize = size;
+    }
+    static void setAramGraphBufSize(u32 size) {
+        JUT_ASSERT(61, sInitCalled == 0);
+        CSetUpParam::aramGraphBufSize = size;
+    }
+    static void setRenderMode(GXRenderModeObj* p_modeObj) {
+        JUT_ASSERT(80, sInitCalled == 0);
+        CSetUpParam::renderMode = p_modeObj;
+    }
 
     static JKRExpHeap* rootHeap;
     static JKRExpHeap* systemHeap;

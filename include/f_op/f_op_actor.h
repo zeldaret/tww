@@ -88,6 +88,24 @@ struct actor_process_profile_definition2 {
 
 class JKRSolidHeap;
 
+enum dEvt_Command_e {
+    dEvtCmd_NONE_e,
+    dEvtCmd_INTALK_e,
+    dEvtCmd_INDEMO_e,
+    dEvtCmd_INDOOR_e,
+    dEvtCmd_INGETITEM_e,
+    dEvtCmd_DUMMY = 0xFFFF,
+};
+
+enum dEvt_Condition_e {
+    dEvtCnd_NONE_e        = 0x0000,
+    dEvtCnd_CANTALK_e     = 0x0001,
+    dEvtCnd_CANDOOR_e     = 0x0004,
+    dEvtCnd_CANGETITEM_e  = 0x0008,
+    dEvtCnd_CANTALKITEM_e = 0x0020,
+    dEvtCnd_DUMMY         = 0x8000,
+};
+
 class dEvt_info_c {
 public:
     dEvt_info_c();

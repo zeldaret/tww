@@ -6,11 +6,11 @@
 
 class dBgS_Chk : public dBgS_PolyPassChk, public dBgS_GrpPassChk {
 public:
-    dBgS_Chk();
-    cBgS_PolyPassChk* GetPolyPassChkInfo();
-    cBgS_GrpPassChk* GetGrpPassChkInfo();
+    dBgS_Chk() {}
+    cBgS_PolyPassChk* GetPolyPassChkInfo() { return (cBgS_PolyPassChk*)this; }
+    cBgS_GrpPassChk* GetGrpPassChkInfo() { return (cBgS_GrpPassChk*)this; }
 
-    virtual ~dBgS_Chk();
+    virtual ~dBgS_Chk() {}
 };  // Size: 0x14
 
 STATIC_ASSERT(sizeof(dBgS_Chk) == 0x14);
