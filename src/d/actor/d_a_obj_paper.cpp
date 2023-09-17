@@ -293,7 +293,7 @@ namespace daObjPaper {
         mDoMtx_stack_c::transS(getPosition());
         mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
         
-        mpModel->i_setBaseTRMtx(mDoMtx_stack_c::get());
+        mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     }
 
     /* 00000948-00000984       .text init_mtx__Q210daObjPaper5Act_cFv */

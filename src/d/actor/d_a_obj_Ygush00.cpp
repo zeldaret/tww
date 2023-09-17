@@ -95,7 +95,7 @@ s32 daObjYgush00_c::_create() {
         if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, 0x740) == 1) {
             mpModel->setBaseScale(mScale);
             mDoMtx_stack_c::transS(getPosition());
-            mpModel->i_setBaseTRMtx(mDoMtx_stack_c::get());
+            mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
             fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
 
             fopAcM_setCullSizeBox(this,

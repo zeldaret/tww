@@ -3,6 +3,7 @@
 
 #include "JSystem/J3DGraphAnimator/J3DJoint.h"
 #include "dolphin/types.h"
+#include "global.h"
 
 class JUTNameTab;
 
@@ -69,5 +70,7 @@ private:
     /* 0x40 */ u32 field_0x40;
     /* 0x44 */ JUTNameTab* mJointName;
 };  // Size: 0x48
+
+STATIC_ASSERT(sizeof(J3DJointTree) == 0x48);
 
 #endif /* J3DJOINTTREE_H */

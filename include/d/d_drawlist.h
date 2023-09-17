@@ -165,7 +165,13 @@ public:
 struct view_port_class;
 struct view_class;
 struct camera_class;
-struct dDlst_alphaModel_c;
+struct dDlst_alphaModel_c {
+public:
+    dDlst_alphaModel_c();
+    void create(int);
+    void set(unsigned char, float(*)[4], unsigned char);
+    void draw(float(*)[4]);
+};
 
 class dDlst_list_c {
 public:
@@ -190,6 +196,9 @@ public:
     int setRealShadow2(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5, f32 param_6,
                        dKy_tevstr_c* pTevStr) {
         return mShadowControl.setReal2(id, param_2, pModel, pPos, param_5, param_6, pTevStr);
+    }
+    void setAlphaModel(unsigned char param_0, float(*param_1)[4], unsigned char param_2) {
+        mpAlphaModel0->set(param_0, param_1, param_2);
     }
 
     static void offWipe() { mWipe = false; }

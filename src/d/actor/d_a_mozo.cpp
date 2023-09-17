@@ -163,7 +163,7 @@ void daMozo_c::set_mtx() {
     mDoMtx_stack_c::transS(getPosition());
     mDoMtx_stack_c::YrotM(getAngle().y);
         
-    mdl->i_setBaseTRMtx(mDoMtx_stack_c::get());
+    mdl->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000AAC-00000C38       .text anime_proc__8daMozo_cFv */

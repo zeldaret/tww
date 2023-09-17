@@ -835,6 +835,10 @@ inline int dComIfGd_setRealShadow2(u32 id, s8 param_2, J3DModel* pModel, cXyz* p
 
 int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 param_1, f32 param_2, cBgS_PolyInfo& i_floorPoly, s16 i_angle, f32 param_5, GXTexObj* i_tex);
 
+inline void dComIfGd_setAlphaModel(unsigned char param_0, float(*param_1)[4], unsigned char param_2) {
+    g_dComIfG_gameInfo.drawlist.setAlphaModel(param_0, param_1, param_2);
+}
+
 /**
  * === RESOURCE ===
  */

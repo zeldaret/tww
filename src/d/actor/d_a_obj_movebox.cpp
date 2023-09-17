@@ -474,7 +474,7 @@ namespace daObjMovebox {
         }
         
         if (mpModel) {
-            mpModel->i_setBaseTRMtx(mDoMtx_stack_c::get());
+            mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
         }
         MTXCopy(mDoMtx_stack_c::get(), mMtx);
         

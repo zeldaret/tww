@@ -64,7 +64,7 @@ void daBranch_c::set_mtx() {
             mDoMtx_stack_c::transS(getPosition());
             mDoMtx_stack_c::XYZrotM(getAngle().x, getAngle().y, getAngle().z);
             
-            pMdl->i_setBaseTRMtx(mDoMtx_stack_c::get());
+            pMdl->setBaseTRMtx(mDoMtx_stack_c::get());
         }
     }
 }

@@ -2,6 +2,7 @@
 #define C_LIB_H_
 
 #include "SSystem/SComponent/c_xyz.h"
+#include "SSystem/SComponent/c_math.h"
 #include "dolphin/mtx/mtx.h"
 
 inline bool cLib_IsZero(f32 value) {
