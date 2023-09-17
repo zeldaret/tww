@@ -349,11 +349,12 @@ void fopAcM_delete(fopAc_ac_c* p_actor);
 
 s32 fopAcM_delete(unsigned int actorID);
 
-s32 fopAcM_create(s16 procName, u16 enemyNo, u32 parameter, cXyz* p_pos, int roomNo,
-                  csXyz* p_angle, cXyz* p_scale, s8 subType, createFunc p_createFunc);
+s32 fopAcM_create(char*, u32 i_parameter, cXyz* i_pos, int i_roomNo, csXyz* i_angle, cXyz* i_scale, createFunc i_createFunc);
 
-s32 fopAcM_create(s16 procName, u32 parameter, cXyz* p_pos, int roomNo, csXyz* p_angle,
-                  cXyz* p_scale, s8 subType);
+s32 fopAcM_create(s16 i_procName, u32 i_parameter, cXyz* i_pos, int i_roomNo, csXyz* i_angle,
+                  cXyz* i_scale, s8 i_subType, createFunc i_createFunc);
+
+inline s32 fopAcM_create(s16 i_procName, createFunc i_createFunc, void*);
 
 void* fopAcM_fastCreate(s16 procName, u32 parameter, cXyz* p_pos, int roomNo,
                         csXyz* p_angle, cXyz* p_scale, s8 subType,

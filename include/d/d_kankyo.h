@@ -8,6 +8,12 @@
 
 class J3DModel;
 
+struct color_RGB_class {
+    u8 r;
+    u8 g;
+    u8 b;
+};
+
 class dKy_tevstr_c {
 public:
     /* 0x00 */ J3DLightObj mLightObj;

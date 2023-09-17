@@ -17,6 +17,7 @@
 #include "d/d_vibration.h"
 #include "d/d_wood.h"
 #include "d/d_demo.h"
+#include "d/d_timer.h"
 
 class JKRArchive;
 class JKRExpHeap;
@@ -144,6 +145,7 @@ public:
     s16 getStartStagePoint() { return mCurStage.getPoint(); }
     void setStartStageLayer(s8 layer) { mCurStage.setLayer(layer); }
     void setStartStage(dStage_startStage_c* i_startStage) { mCurStage = *i_startStage; }
+    dStage_startStage_c* getStartStage() { return &mCurStage; }
 
     const char* getNextStageName() { return mNextStage.getName(); }
     dStage_startStage_c* getNextStartStage() { return &mNextStage; }
@@ -163,6 +165,22 @@ public:
 
     void setLkDemoAnmArchive(JKRArchive* i_arc) { mpLkDArc = i_arc; }
     void setStatus(u16 status) { mStatus = status; }
+
+    void setShipId(u8 i_id) { mShipId = i_id; }
+    void setShipRoomId(u8 i_id) { mShipRoomId = i_id; }
+    u8 getShipId() { return mShipId; }
+    u8 getShipRoomId() { return mShipRoomId; }
+
+    void setAgb(fopAc_ac_c* i_agb) { mpAgb = (daAgb_c*)i_agb; }
+
+    void setIkadaShipBeforePos(Vec& i_pos) { mIkadaLinkPos = i_pos; }
+    void setIkadaShipId(u8 i_id) { mIkadaShipId = i_id; }
+    void setIkadaShipBeforeRoomId(u8 i_roomId) { mIkadaShipBeforeRoomId = i_roomId; }
+    u8 getIkadaShipId() { return mIkadaShipId; }
+    u8 getIkadaShipBeforeRoomId() { return mIkadaShipBeforeRoomId; }
+
+    dTimer_c* getTimerPtr() { return mTimerInfo.mTimerPtr; }
+    s32 getTimerMode() { return mTimerInfo.mTimerMode; }
 
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
@@ -323,9 +341,10 @@ public:
     /* 0x4A58 */ camera_class* field_0x4a58;
     /* 0x4A5C */ dDlst_window_c* field_0x4a5c;
     /* 0x4A60 */ J2DOrthoGraph* mp2DOrthoGraph;
-    /* 0x4A64 */ u8 field_0x4A64[0x4A66 - 0x4A64];
-    /* 0x4A66 */ u8 mLastSeaRoom;
-    /* 0x4A67 */ u8 field_0x4A67[0x4A68 - 0x4A67];
+    /* 0x4A64 */ u8 mShipId;
+    /* 0x4A65 */ u8 mShipRoomId;
+    /* 0x4A66 */ u8 mIkadaShipBeforeRoomId;
+    /* 0x4A67 */ u8 mIkadaShipId;
     /* 0x4A68 */ cXyz mIkadaLinkPos;
     /* 0x4A74 */ void* mpItemTableArchive;
     /* 0x4A78 */ void* mpFmapDataArchive;
@@ -364,6 +383,10 @@ u8 dComIfGs_checkGetItem(u8);
 
 inline void dComIfGs_init() {
     g_dComIfG_gameInfo.save.init();
+}
+
+inline void dComIfGs_initZone() {
+    g_dComIfG_gameInfo.save.initZone();
 }
 
 inline u8 dComIfGs_getSelectEquip(int param_0) {
@@ -424,6 +447,14 @@ inline BOOL dComIfGs_isEventBit(u16 id) {
 
 inline void dComIfGs_setRestartRoomParam(u32 i_param) {
     g_dComIfG_gameInfo.save.getRestart().setRoomParam(i_param);
+}
+
+inline s8 dComIfGs_getRestartRoomNo() {
+    return g_dComIfG_gameInfo.save.getRestart().getRoomNo();
+}
+
+inline s8 dComIfGs_getTurnRestartRoomNo() {
+    return g_dComIfG_gameInfo.save.getTurnRestart().getRoomNo();
 }
 
 inline void dComIfGs_setStartPoint(s16 i_point) {
@@ -506,12 +537,73 @@ inline bool dComIfGs_isItem(int bitNo, int roomNo) {
     return g_dComIfG_gameInfo.save.isItem(bitNo, roomNo);
 }
 
+inline void dComIfGs_clearRoomSwitch(int i_zoneNo) {
+    g_dComIfG_gameInfo.save.getZone(i_zoneNo).getZoneBit().clearRoomSwitch();
+}
+
+inline void dComIfGs_removeZone(int i_zoneNo) {
+    g_dComIfG_gameInfo.save.removeZone(i_zoneNo);
+}
+
+inline u32 dComIfGs_getTurnRestartParam() {
+    return g_dComIfG_gameInfo.save.getTurnRestart().getParam();
+}
+
+inline cXyz& dComIfGs_getTurnRestartPos() {
+    return g_dComIfG_gameInfo.save.getTurnRestart().getPos();
+}
+
+inline cXyz& dComIfGs_getTurnRestartShipPos() {
+    return g_dComIfG_gameInfo.save.getTurnRestart().getShipPos();
+}
+
+inline s16 dComIfGs_getTurnRestartAngleY() {
+    return g_dComIfG_gameInfo.save.getTurnRestart().getAngleY();
+}
+
+inline s16 dComIfGs_getTurnRestartShipAngleY() {
+    return g_dComIfG_gameInfo.save.getTurnRestart().getShipAngleY();
+}
+
+inline u32 dComIfGs_getRestartRoomParam() {
+    return g_dComIfG_gameInfo.save.getRestart().getRoomParam();
+}
+
+inline cXyz& dComIfGs_getRestartRoomPos() {
+    return g_dComIfG_gameInfo.save.getRestart().getRoomPos();
+}
+
+inline s16 dComIfGs_getRestartRoomAngleY() {
+    return g_dComIfG_gameInfo.save.getRestart().getRoomAngleY();
+}
+
+inline void dComIfGs_putSave(int i_stageNo) {
+    g_dComIfG_gameInfo.save.putSave(i_stageNo);
+}
+
+inline void dComIfGs_getSave(int i_stageNo) {
+    g_dComIfG_gameInfo.save.getSave(i_stageNo);
+}
+
+inline void dComIfGs_initDan(s8 i_stageNo) {
+    g_dComIfG_gameInfo.save.initDan(i_stageNo);
+}
+
+inline BOOL dComIfGs_isActor(int i_no, int i_roomNo) {
+    return g_dComIfG_gameInfo.save.isActor(i_no, i_roomNo);
+}
+
+inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param) {
+    g_dComIfG_gameInfo.save.getTurnRestart().set(i_pos, i_angle, i_roomNo, i_param, i_pos, i_angle, 0);
+}
+
 /**
  * === PLAY ===
  */
 
 void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8 i_layer,
                            f32 i_lastSpeed, u32 i_lastMode, int, s8 i_wipe);
+dStage_Ship_data* dComIfGp_getShip(int i_roomNo, int param_1);
 
 inline const char* dComIfGp_getStartStageName() {
     return g_dComIfG_gameInfo.play.getStartStageName();
@@ -539,6 +631,10 @@ inline const char* dComIfGp_getNextStageName() {
 
 inline dStage_startStage_c* dComIfGp_getNextStartStage() {
     return g_dComIfG_gameInfo.play.getNextStartStage();
+}
+
+inline dStage_startStage_c* dComIfGp_getStartStage() {
+    return g_dComIfG_gameInfo.play.getStartStage();
 }
 
 inline void dComIfGp_setStartStage(dStage_startStage_c* p_startStage) {
@@ -581,12 +677,40 @@ inline stage_stag_info_class* dComIfGp_getStageStagInfo() {
     return g_dComIfG_gameInfo.play.getStage().getStagInfo();
 }
 
+inline s32 dComIfGp_roomControl_getStayNo() {
+    return dStage_roomControl_c::getStayNo();
+}
+
+inline void dComIfGp_roomControl_init() {
+    g_dComIfG_gameInfo.play.getRoomControl()->init();
+}
+
 inline dStage_roomStatus_c* dComIfGp_roomControl_getStatusRoomDt(int room_no) {
     return g_dComIfG_gameInfo.play.getRoomControl()->getStatusRoomDt(room_no);
 }
 
 inline void dComIfGp_roomControl_checkDrawArea() {
     return g_dComIfG_gameInfo.play.getRoomControl()->checkDrawArea();
+}
+
+inline void dComIfGp_roomControl_setStayNo(int stayNo) {
+    g_dComIfG_gameInfo.play.getRoomControl()->setStayNo(stayNo);
+}
+
+inline void dComIfGp_roomControl_setStatusFlag(int i_roomNo, u8 i_flag) {
+    g_dComIfG_gameInfo.play.getRoomControl()->setStatusFlag(i_roomNo, i_flag);
+}
+
+inline void dComIfGp_roomControl_zoneCountCheck(int i_roomNo) {
+    g_dComIfG_gameInfo.play.getRoomControl()->zoneCountCheck(i_roomNo);
+}
+
+inline void dComIfGp_roomControl_setTimePass(int isPassing) {
+    g_dComIfG_gameInfo.play.getRoomControl()->SetTimePass(isPassing);
+}
+
+inline int dComIfGp_roomControl_loadRoom(int param_0, u8* param_1) {
+    return g_dComIfG_gameInfo.play.getRoomControl()->loadRoom(param_0, param_1);
 }
 
 inline dBgS* dComIfG_Bgsp() {
@@ -603,6 +727,30 @@ inline daShip_c* dComIfGp_getShipActor() {
 
 inline void dComIfGp_getIkadaShipBeforePos(Vec* o_pos) {
     *o_pos = g_dComIfG_gameInfo.play.mIkadaLinkPos;
+}
+
+inline void dComIfGp_setIkadaShipBeforePos(Vec& i_pos) {
+    g_dComIfG_gameInfo.play.setIkadaShipBeforePos(i_pos);
+}
+
+inline void dComIfGp_setIkadaShipId(u8 i_id) {
+    g_dComIfG_gameInfo.play.setIkadaShipId(i_id);
+}
+
+inline void dComIfGp_setIkadaShipBeforeRoomId(u8 i_roomId) {
+    g_dComIfG_gameInfo.play.setIkadaShipBeforeRoomId(i_roomId);
+}
+
+inline u8 dComIfGp_getIkadaShipId() {
+    return g_dComIfG_gameInfo.play.getIkadaShipId();
+}
+
+inline u8 dComIfGp_getIkadaShipBeforeRoomId() {
+    return g_dComIfG_gameInfo.play.getIkadaShipBeforeRoomId();
+}
+
+inline stage_scls_info_dummy_class* dComIfGp_getStageSclsInfo() {
+    return g_dComIfG_gameInfo.play.getStage().getSclsInfo();
 }
 
 inline dStage_stageDt_c& dComIfGp_getStage() {
@@ -697,6 +845,26 @@ inline void dComIfGp_setStatus(u16 status) {
     g_dComIfG_gameInfo.play.setStatus(status);
 }
 
+inline void dComIfGp_setShipId(u8 i_id) {
+    g_dComIfG_gameInfo.play.setShipId(i_id);
+}
+
+inline void dComIfGp_setShipRoomId(u8 i_id) {
+    g_dComIfG_gameInfo.play.setShipRoomId(i_id);
+}
+
+inline u8 dComIfGp_getShipId() {
+    return g_dComIfG_gameInfo.play.getShipId();
+}
+
+inline u8 dComIfGp_getShipRoomId() {
+    return g_dComIfG_gameInfo.play.getShipRoomId();
+}
+
+inline void dComIfGp_setAgb(fopAc_ac_c* i_agb) {
+    g_dComIfG_gameInfo.play.setAgb(i_agb);
+}
+
 inline daPy_py_c* daPy_getPlayerActorClass() {
     return (daPy_py_c*)dComIfGp_getPlayer(0);
 }
@@ -738,6 +906,14 @@ inline BOOL dComIfGp_evmng_endCheck(s16 eventID) {
 
 inline void dComIfGp_evmng_execute() {
     g_dComIfG_gameInfo.play.executeEvtManager();
+}
+
+inline void dComIfGp_evmng_create() {
+    g_dComIfG_gameInfo.play.getEvtManager().create();
+}
+
+inline void dComIfGp_evmng_remove() {
+    g_dComIfG_gameInfo.play.getEvtManager().remove();
 }
 
 /**
@@ -864,5 +1040,17 @@ inline void dComIfGp_particle_readScene(u8 particle_no, mDoDvdThd_toMainRam_c** 
 
 class scene_class;
 int dComIfG_resetToOpening(scene_class* i_scene);
+
+inline int dComIfG_getTimerMode() {
+    return g_dComIfG_gameInfo.play.getTimerMode();
+}
+
+inline dTimer_c* dComIfG_getTimerPtr() {
+    return g_dComIfG_gameInfo.play.getTimerPtr();
+}
+
+inline void dComIfG_TimerDeleteRequest() {
+    dComIfG_getTimerPtr()->deleteRequest();
+}
 
 #endif /* D_COM_D_COM_INF_GAME_H */

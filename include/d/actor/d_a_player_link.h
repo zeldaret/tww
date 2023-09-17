@@ -911,7 +911,7 @@ public:
     void procFanSwing();
     void procFanGlide_init(int);
     void procFanGlide();
-    void getDayNightParamData();
+    u32 getDayNightParamData();
     void setTactModel();
     void checkNpcStatus();
     void getTactPlayRightArmAnm(s32);

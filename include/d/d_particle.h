@@ -1,6 +1,8 @@
 #ifndef D_PARTICLE
 #define D_PARTICLE
 
+#include "JSystem/J3DGraphBase/J3DVertex.h"
+#include "JSystem/JGeometry.h"
 #include "JSystem/JParticle/JPAParticle.h"
 #include "f_pc/f_pc_node.h"
 
@@ -25,6 +27,11 @@ public:
     /* 0x13 */ u8 mbAffectedByWind;
 };
 
+class dPa_levelEcallBack {
+public:
+    virtual ~dPa_levelEcallBack() {}
+};
+
 class dPa_simpleEcallBack {
 public:
     dPa_simpleEcallBack();
@@ -44,6 +51,83 @@ public:
     /* 0x00C */ s16 mCount;
     /* 0x00E */ u8 field_0x00E[0x010 - 0x00E];
     /* 0x010 */ dPa_simpleData_c mSimpleData[32];
+};
+
+class dPa_waveEcallBack : public dPa_levelEcallBack {
+public:
+    void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
+    void remove();
+    void executeAfter(JPABaseEmitter*);
+    void draw(JPABaseEmitter*);
+
+    ~dPa_waveEcallBack();
+
+    /* 0x04 */ s16 mState;
+    /* 0x06 */ s16 mFadeTimer;
+    /* 0x08 */ f32 mVelFade1;
+    /* 0x0C */ f32 mVel;
+    /* 0x10 */ f32 mVelSpeed;
+    /* 0x14 */ f32 mVelFade2;
+    /* 0x18 */ f32 mMaxParticleVelocity;
+    /* 0x1C */ cXyz mCollapsePos[2];
+    /* 0x34 */ cXyz* mpPos;
+    /* 0x38 */ csXyz* mpRot;
+    /* 0x3C */ cXyz mRotMtx[3];
+    /* 0x60 */ JPABaseEmitter* mpBaseEmitter;
+};
+
+class dPa_splashEcallBack : public dPa_levelEcallBack {
+public:
+    void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
+    void remove();
+    void execute(JPABaseEmitter*);
+
+    ~dPa_splashEcallBack();
+
+    /* 0x04 */ s16 mState;
+    /* 0x08 */ f32 mScaleTimer;
+    /* 0x0C */ f32 mMaxScaleTimer;
+    /* 0x10 */ cXyz* mpPos;
+    /* 0x14 */ csXyz* mpRot;
+    /* 0x18 */ JPABaseEmitter* mpBaseEmitter;
+};
+
+class dPa_trackEcallBack : public dPa_levelEcallBack {
+public:
+    void getMaxWaterY(JGeometry::TVec3<f32>*);
+    void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
+    void remove();
+    void execute(JPABaseEmitter*);
+    void draw(JPABaseEmitter*);
+
+    ~dPa_trackEcallBack();
+
+    /* 0x04 */ s16 mState;
+    /* 0x08 */ f32 mBaseY;
+    /* 0x0C */ f32 mMinY;
+    /* 0x10 */ cXyz mPos[3];
+    /* 0x34 */ cXyz* mpPos;
+    /* 0x38 */ csXyz* mpRot;
+    /* 0x3C */ f32 mExTransY;
+    /* 0x40 */ f32 mExScaleY;
+    /* 0x44 */ f32 mVel;
+    /* 0x48 */ f32 mMinVel;
+    /* 0x4C */ JPABaseEmitter* mpBaseEmitter;
+};
+
+class dPa_rippleEcallBack : public dPa_levelEcallBack {
+public:
+    void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
+    void end();
+    void execute(JPABaseEmitter*);
+    void draw(JPABaseEmitter*);
+
+    ~dPa_rippleEcallBack();
+
+    /* 0x04 */ JPABaseEmitter* mpBaseEmitter;
+    /* 0x08 */ cXyz* mPos;
+    /* 0x0C */ u32 mFlags;
+    /* 0x10 */ f32 mRate;
 };
 
 class dPa_modelControl_c {
