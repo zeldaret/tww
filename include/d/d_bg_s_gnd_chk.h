@@ -6,8 +6,11 @@
 
 class dBgS_GndChk : public cBgS_GndChk, public dBgS_Chk {
 public:
-    /* 8007757C */ dBgS_GndChk();
-    /* 800775F0 */ virtual ~dBgS_GndChk();
+    /* 8007757C */ dBgS_GndChk() {
+        this->SetPolyPassChk(this->GetPolyPassChkInfo());
+        this->SetGrpPassChk(this->GetGrpPassChkInfo());
+    }
+    /* 800775F0 */ virtual ~dBgS_GndChk() {}
 };  // Size: 0x54
 
 STATIC_ASSERT(sizeof(dBgS_GndChk) == 0x54);
@@ -22,7 +25,7 @@ class dBgS_ObjGndChk : public dBgS_GndChk {
 public:
     dBgS_ObjGndChk() { SetObj(); }
 
-    /* 8001E020 */ virtual ~dBgS_ObjGndChk();
+    /* 8001E020 */ virtual ~dBgS_ObjGndChk() {}
 };
 
 class dBgS_ObjGndChk_Wtr : public dBgS_ObjGndChk {
@@ -41,9 +44,9 @@ public:
 
 class dBgS_ObjGndChk_All : public dBgS_ObjGndChk {
 public:
-    /* 800778E8 */ virtual ~dBgS_ObjGndChk_All();
+    /* 800778E8 */ virtual ~dBgS_ObjGndChk_All() {}
 
-    dBgS_ObjGndChk_All() { /* OnAll(); */ }
+    dBgS_ObjGndChk_All() { OnAll(); }
 };
 
 class dBgS_CamGndChk : public dBgS_GndChk {

@@ -206,6 +206,6 @@ public:
     }
 
     /* 80BB336C */ virtual ~dBgS_ObjAcch() {}
-};
+};  // Size: 0x1C4
 
 #endif /* D_BG_D_BG_S_ACCH_H */
