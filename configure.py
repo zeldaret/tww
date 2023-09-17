@@ -247,7 +247,7 @@ config.libs = [
             Object(NonMatching, "m_Do/m_Do_audio.cpp"),
             Object(NonMatching, "m_Do/m_Do_controller_pad.cpp"),
             Object(NonMatching, "m_Do/m_Do_graphic.cpp"),
-            Object(NonMatching, "m_Do/m_Do_machine.cpp"),
+            Object(Matching,    "m_Do/m_Do_machine.cpp"),
             Object(NonMatching, "m_Do/m_Do_mtx.cpp"),
             Object(NonMatching, "m_Do/m_Do_ext.cpp"),
             Object(NonMatching, "m_Do/m_Do_lib.cpp"),
