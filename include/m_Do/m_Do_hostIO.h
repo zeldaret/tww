@@ -11,7 +11,9 @@ public:
 
 class JORReflexible : public JOREventListener {
 public:
+#ifdef DEBUG
     virtual ~JORReflexible() {}
+#endif
 };
 
 class mDoHIO_child_c {
@@ -44,6 +46,13 @@ public:
     virtual ~mDoHIO_root_c() {}
 
     void update();
+    
+    s8 mDoHIO_createChild(const char* name, JORReflexible* hio) {
+        return m_subroot.createChild(name, hio);
+    }
+    void mDoHIO_deleteChild(s8 childID) {
+        m_subroot.deleteChild(childID);
+    }
 
     /* 0x0 */ mDoHIO_subRoot_c m_subroot;
 };

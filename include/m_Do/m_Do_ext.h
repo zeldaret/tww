@@ -18,7 +18,7 @@ public:
     mDoExt_baseAnm() { mpFrameCtrl = NULL; }
     virtual ~mDoExt_baseAnm() {}
 
-    int initPlay(s16 i_frameMax, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF);
+    int initPlay(s16 i_frameMax, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool);
     int play();
 
     J3DFrameCtrl* getFrameCtrl() { return mpFrameCtrl; }
@@ -71,21 +71,19 @@ class J3DTevColorAnm;
 class J3DTevKColorAnm;
 class mDoExt_brkAnm : public mDoExt_baseAnm {
 public:
-    mDoExt_brkAnm() { mpAnm = NULL; }
+    mDoExt_brkAnm() {
+        mpCRegAnm = NULL;
+        mpKRegAnm = NULL;
+    }
     /* 8000D70C */ int init(J3DMaterialTable* i_matTable, J3DAnmTevRegKey* i_brk, int i_anmPlay,
                             int i_attribute, f32 i_rate, s16 i_start, s16 i_end, bool i_modify, int i_entry);
     /* 8000D7A8 */ void entry(J3DMaterialTable* i_matTable, f32 i_frame);
 
     void entry(J3DModelData* i_modelData) { entry(i_modelData, getFrame()); }
-    void entry(J3DModelData* i_modelData, f32 i_frame) {
-        entry(&i_modelData->getMaterialTable(), i_frame);
-    }
+    void entry(J3DModelData* i_modelData, f32 i_frame);
 
     int init(J3DModelData* i_modelData, J3DAnmTevRegKey* i_brk, int i_anmPlay, int i_attribute,
-             f32 i_rate, s16 i_start, s16 i_end, bool i_modify, int i_entry) {
-        return init(&i_modelData->getMaterialTable(), i_brk, i_anmPlay, i_attribute, i_rate,
-                    i_start, i_end, i_modify, i_entry);
-    }
+             f32 i_rate, s16 i_start, s16 i_end, bool i_modify, int i_entry);
 
     int remove(J3DModelData* i_modelData) { return i_modelData->removeTevRegAnimator(mpAnm); }
     void entryFrame() { entryFrame(getFrame()); }

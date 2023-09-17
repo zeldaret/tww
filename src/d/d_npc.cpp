@@ -1186,7 +1186,7 @@ void dNpc_EventCut_c::cutMoveToPosStart() {
 }
 
 void dNpc_EventCut_c::cutMoveToPosProc() {
-    s16 angle = cLib_targetAngleY(mpActor->current.pos, mPos);
+    s16 angle = cLib_targetAngleY(&mpActor->current.pos, &mPos);
 
     cXyz temp(pDelDistance * JMASinShort(angle), mPos.y, pDelDistance * JMASCosShort(angle));
 

@@ -43,7 +43,6 @@ public:
         entryModelData(param_0, param_1, param_2);
     }
 
-    void setBaseTRMtx(f32 (*)[4]);
     void initialize();
     s32 entryModelData(J3DModelData*, u32, u32);
     s32 createShapePacket(J3DModelData*);
@@ -79,7 +78,7 @@ public:
     bool isCpuSkinningOn() const { return (mFlags & J3DMdlFlag_SkinPosCpu) && (mFlags & J3DMdlFlag_SkinNrmCpu); }
 
     Mtx& getBaseTRMtx() { return mBaseTransformMtx; }
-    void i_setBaseTRMtx(Mtx m) { MTXCopy(m, mBaseTransformMtx); }
+    void setBaseTRMtx(Mtx m) { MTXCopy(m, mBaseTransformMtx); }
     u32 getMtxCalcMode() const { return mFlags & 0x03; }
     J3DVertexBuffer* getVertexBuffer() const { return (J3DVertexBuffer*)&mVertexBuffer; }
     J3DMatPacket* getMatPacket(u16 idx) const { return &mpMatPacket[idx]; }
