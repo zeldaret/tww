@@ -10,38 +10,43 @@
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_bg_s_gnd_chk.h"
+#include "d/actor/d_a_player.h"
+#include "d/d_item_data.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "m_Do/m_Do_mtx.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
-struct daNh_HIO_c__Registers {
-    /* 0x08 */ f32 field_0x08;
-    /* 0x0C */ f32 field_0x0c;
-    /* 0x10 */ f32 field_0x10;
-    /* 0x14 */ f32 field_0x14;
-    /* 0x18 */ f32 field_0x18;
-    /* 0x1C */ f32 field_0x1c;
-    /* 0x20 */ f32 field_0x20;
-    /* 0x24 */ f32 field_0x24;
-    /* 0x28 */ f32 field_0x28;
-    /* 0x2C */ f32 mGravity;
-    /* 0x30 */ f32 field_0x30;
-    /* 0x34 */ f32 field_0x34;
-    /* 0x38 */ f32 mModelScale;
-    /* 0x3C */ s16 field_0x3c;
-    /* 0x3E */ s16 field_0x3e;
-    /* 0x40 */ s16 field_0x40;
-};  // Size: 0x3C
+class daNh_c;
 
 class daNh_HIO_c : public JORReflexible {
+    struct hio_prm_c {
+        // Note: Offsets are relative to daNh_HIO_c instead of hio_prm_c for convenience.
+        /* 0x08 */ f32 field_0x08;
+        /* 0x0C */ f32 field_0x0c;
+        /* 0x10 */ f32 field_0x10;
+        /* 0x14 */ f32 mGlowOffsetY;
+        /* 0x18 */ f32 mGlowScale;
+        /* 0x1C */ f32 mMinFrightenSpeed;
+        /* 0x20 */ f32 mHeightAboveGround;
+        /* 0x24 */ f32 mAscentSpeed;
+        /* 0x28 */ f32 mDescentSpeed;
+        /* 0x2C */ f32 mGravity;
+        /* 0x30 */ f32 mMaxHomeDist;
+        /* 0x34 */ f32 field_0x34;
+        /* 0x38 */ f32 mModelScale;
+        /* 0x3C */ s16 field_0x3c;
+        /* 0x3E */ s16 mDefaultGlowAlpha;
+        /* 0x40 */ s16 mBottleLifetime;
+    };  // Size: 0x3C
+
 public:
     daNh_HIO_c();
     virtual ~daNh_HIO_c();
     
 public:
     /* 0x04 */ s8 mChildID;
-    /* 0x08 */ daNh_HIO_c__Registers reg;
-    /* 0x44 */ fopAc_ac_c* unk44;
+    /* 0x08 */ hio_prm_c prm;
+    /* 0x44 */ daNh_c* mActor;
 };  // Size: 0x44
 
 static daNh_HIO_c l_HIO;
@@ -78,13 +83,22 @@ static dCcD_SrcCyl l_cyl_src = {
 
 class daNh_c : fopAc_ac_c {
 public:
-    typedef BOOL (daNh_c::*daNh_c_ActionFunc)(void*);
+    enum Type {
+        TYPE_BOTTLE = 0x01,
+        // Any other value besides 0x01 will behave as the normal, non-bottled type.
+        // All three of the Forest Fireflies placed in stages have their type set to 0xFF.
+        // TYPE_BOTTLE (0x01) is spawned via daPy_lk_c::procBottleOpen.
+    };
     
     enum ActionStatus {
-        ACTION_ENDING = -1,
         ACTION_STARTING = 0,
-        ACTION_ONGOING = 1,
+        ACTION_ONGOING  = 1,
+        ACTION_ENDING   = -1,
     };
+    
+    typedef BOOL (daNh_c::*daNh_c_ActionFunc)(void*);
+    
+    bool isTypeBottle() { return mType == TYPE_BOTTLE; }
     
     ~daNh_c();
     void setBaseMtx();
@@ -94,8 +108,8 @@ public:
     void action(void*);
     BOOL setAction(daNh_c_ActionFunc, void*);
     BOOL checkBinCatch();
-    void searchPlayer();
-    void moveProc(float, float, short);
+    BOOL searchPlayer();
+    BOOL moveProc(f32, f32, s16);
     f32 getHomeDistance();
     BOOL checkTimer();
     void BGCheck();
@@ -120,19 +134,19 @@ public:
     /* 0x624 */ u8 temp2[0x630 - 0x624];
     /* 0x630 */ cBgS_PolyInfo mPolyInfo;
     /* 0x640 */ daNh_c_ActionFunc mCurrActionFunc;
-    /* 0x64C */ Mtx mMtx;
+    /* 0x64C */ Mtx mGlowMtx;
     /* 0x67C */ f32 mPlayerDist;
     /* 0x680 */ f32 mGroundY;
-    /* 0x684 */ int mTimer;
-    /* 0x688 */ s32 unk688;
+    /* 0x684 */ int mBottleTimer;
+    /* 0x688 */ s32 mAlpha;
     /* 0x68C */ u8 unk68C;
     /* 0x68D */ s8 mActionStatus;
-    /* 0x68E */ u8 unk68E;
-    /* 0x68F */ u8 unk68F;
-    /* 0x690 */ u8 unk690;
-    /* 0x691 */ u8 unk691;
+    /* 0x68E */ u8 mGlowAlpha;
+    /* 0x68F */ u8 mWobbleDir;
+    /* 0x690 */ u8 mWobbleTimer;
+    /* 0x691 */ u8 mType;
     /* 0x692 */ u8 temp5[0x694 - 0x692];
-    /* 0x694 */ s16 unk694;
+    /* 0x694 */ s16 mEscapeTimer;
     /* 0x696 */ s16 unk696;
     /* 0x698 */ s16 unk698;
     /* 0x69A */ s16 unk69A;
@@ -143,31 +157,27 @@ public:
 
 /* 800F95B8-800F9654       .text __ct__10daNh_HIO_cFv */
 daNh_HIO_c::daNh_HIO_c() {
-    /* Nonmatching */
     mChildID = -1;
-    static const daNh_HIO_c__Registers init_data = {
-        200.0f,
-        100.0f,
-        -50.0f,
-        140.0f,
-        0.95f,
-        5.0f,
-        50.0f,
-        1.0f,
-        -1.0f,
-        /* mGravity    */ 0.25f,
-        250.0f,
-        600.0f,
-        /* mModelScale */ 2.5f,
-        0x2000,
-        0x20,
-        0x12C,
+    static const hio_prm_c init_data = {
+        /* field_0x08         */ 200.0f,
+        /* field_0x0c         */ 100.0f,
+        /* field_0x10         */ -50.0f,
+        /* mGlowOffsetY       */ 140.0f,
+        /* mGlowScale         */ 0.95f,
+        /* mMinFrightenSpeed  */ 5.0f,
+        /* mHeightAboveGround */ 50.0f,
+        /* mAscentSpeed       */ 1.0f,
+        /* mDescentSpeed      */ -1.0f,
+        /* mGravity           */ 0.25f,
+        /* mMaxHomeDist       */ 250.0f,
+        /* field_0x34         */ 600.0f,
+        /* mModelScale        */ 2.5f,
+        /* field_0x3c         */ 0x2000,
+        /* mDefaultGlowAlpha  */ 0x20,
+        /* mBottleLifetime    */ 10*30,
     };
-    reg = init_data;
+    prm = init_data;
 }
-
-/* 800FAEAC-800FAEF4       .text __dt__10daNh_HIO_cFv */
-daNh_HIO_c::~daNh_HIO_c() {}
 
 /* 800F9654-800F9874       .text __dt__6daNh_cFv */
 daNh_c::~daNh_c() {
@@ -180,21 +190,21 @@ daNh_c::~daNh_c() {
 /* 800F9874-800F9980       .text setBaseMtx__6daNh_cFv */
 void daNh_c::setBaseMtx() {
     J3DModel* model = mpModel;
-    mScale.setAll(l_HIO.reg.mModelScale);
+    mScale.setAll(l_HIO.prm.mModelScale);
     model->setBaseScale(mScale);
     mDoMtx_stack_c::transS(getPosition());
     mDoMtx_stack_c::YrotM(shape_angle.y);
     MTXCopy(mDoMtx_stack_c::get(), model->getBaseTRMtx());
     
-    cXyz offset;
-    offset.z = 0.0f;
-    offset.x = 0.0f;
-    offset.y = l_HIO.reg.field_0x14;
-    cXyz temp;
-    cMtx_multVec(mDoMtx_stack_c::get(), &offset, &temp);
-    PSMTXTrans(mDoMtx_stack_c::get(), temp.x, temp.y, temp.z);
-    mDoMtx_stack_c::scaleM(l_HIO.reg.field_0x18, l_HIO.reg.field_0x18, l_HIO.reg.field_0x18);
-    MTXCopy(mDoMtx_stack_c::get(), mMtx);
+    cXyz glowOffset;
+    glowOffset.z = 0.0f;
+    glowOffset.x = 0.0f;
+    glowOffset.y = l_HIO.prm.mGlowOffsetY;
+    cXyz glowPos;
+    cMtx_multVec(mDoMtx_stack_c::get(), &glowOffset, &glowPos);
+    PSMTXTrans(mDoMtx_stack_c::get(), glowPos.x, glowPos.y, glowPos.z);
+    mDoMtx_stack_c::scaleM(l_HIO.prm.mGlowScale, l_HIO.prm.mGlowScale, l_HIO.prm.mGlowScale);
+    MTXCopy(mDoMtx_stack_c::get(), mGlowMtx);
 }
 
 /* 800F9980-800F9A54       .text createHeap__6daNh_cFv */
@@ -238,7 +248,7 @@ s32 daNh_c::create() {
     
     if (l_HIO.mChildID < 0) {
         l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("森のほたる", &l_HIO);
-        l_HIO.unk44 = this;
+        l_HIO.mActor = this;
     }
     if (!this->init()) {
         phase_state = cPhs_ERROR_e;
@@ -249,8 +259,14 @@ s32 daNh_c::create() {
 
 /* 800F9C8C-800F9D64       .text init__6daNh_cFv */
 BOOL daNh_c::init() {
-    /* Nonmatching */
-    mGravity = l_HIO.reg.mGravity;
+    mType = fopAcM_GetParam(this) & 0xFF;
+    speed.y = 1.0f;
+    mGravity = l_HIO.prm.mGravity;
+    mGlowAlpha = l_HIO.prm.mDefaultGlowAlpha;
+    mPlayerDist = 0.0f;
+    mAlpha = 0xFF;
+    mBottleTimer = l_HIO.prm.mBottleLifetime;
+    mGroundY = 0.0f;
     
     BGCheck();
     
@@ -259,20 +275,22 @@ BOOL daNh_c::init() {
     mCyl.SetStts(&mStts);
     
     setBaseMtx();
-    
     mEyePos = mAttentionInfo.mPosition = current.pos;
     
     return TRUE;
 }
 
 /* 800F9D64-800F9DF4       .text action__6daNh_cFPv */
-void daNh_c::action(void*) {
-    /* Nonmatching */
+void daNh_c::action(void* arg) {
+    if (mCurrActionFunc == NULL) {
+        speedF = 0.0f;
+        setAction(&waitAction, NULL);
+    }
+    (this->*mCurrActionFunc)(arg);
 }
 
 /* 800F9DF4-800F9EB8       .text setAction__6daNh_cFM6daNh_cFPCvPvPv_iPv */
 BOOL daNh_c::setAction(daNh_c_ActionFunc actionFunc, void* arg) {
-    /* Nonmatching */
     if (mCurrActionFunc != actionFunc) {
         if (mCurrActionFunc != NULL) {
             mActionStatus = ACTION_ENDING;
@@ -280,7 +298,7 @@ BOOL daNh_c::setAction(daNh_c_ActionFunc actionFunc, void* arg) {
         }
         mCurrActionFunc = actionFunc;
         mActionStatus = ACTION_STARTING;
-        unk694 = 0;
+        mEscapeTimer = 0;
         unk696 = 0;
         unk698 = 0;
         unk69A = 0;
@@ -292,17 +310,51 @@ BOOL daNh_c::setAction(daNh_c_ActionFunc actionFunc, void* arg) {
 
 /* 800F9EB8-800F9F3C       .text checkBinCatch__6daNh_cFv */
 BOOL daNh_c::checkBinCatch() {
-    /* Nonmatching */
+    if (mEvtInfo.checkCommandCatch()) {
+        fopAcM_delete(this);
+        return TRUE;
+    }
+    
+    dComIfGp_getAttention().CatchRequest(
+        this, FIREFLY_BOTTLE,
+        l_HIO.prm.field_0x08, l_HIO.prm.field_0x0c,
+        l_HIO.prm.field_0x10, l_HIO.prm.field_0x3c,
+        1
+    );
+    mEvtInfo.onCondition(0x40);
+    
+    return FALSE;
 }
 
 /* 800F9F3C-800FA108       .text searchPlayer__6daNh_cFv */
-void daNh_c::searchPlayer() {
-    /* Nonmatching */
+BOOL daNh_c::searchPlayer() {
+    if (isTypeBottle()) {
+        setAction(&escapeAction, NULL);
+        return TRUE;
+    }
+    
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    cXyz playerDelta = player->next.pos - player->current.pos;
+    f32 playerDist = fopAcM_searchPlayerDistance(this);
+    f32 playerDistDelta = mPlayerDist - playerDist;
+    mPlayerDist = playerDist;
+    if (playerDelta.absXZ() > 0.001f && playerDist < 600.0f && playerDistDelta > l_HIO.prm.mMinFrightenSpeed) {
+        // Player is nearby and moving closer. The Forest Firefly becomes frightened and tries to head home.
+        setAction(&returnAction, NULL);
+        return TRUE;
+    }
+    
+    return FALSE;
 }
 
 /* 800FA108-800FA19C       .text moveProc__6daNh_cFffs */
-void daNh_c::moveProc(float, float, short) {
-    /* Nonmatching */
+BOOL daNh_c::moveProc(f32 targetSpeed, f32 speedStep, s16 targetAngle) {
+    cLib_chaseAngleS(&current.angle.y, targetAngle, 0x400);
+    shape_angle.y = current.angle.y;
+    if (cLib_chaseF(&speedF, targetSpeed, speedStep) && targetSpeed == 0.0f) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 800FA19C-800FA260       .text getHomeDistance__6daNh_cFv */
@@ -313,12 +365,14 @@ f32 daNh_c::getHomeDistance() {
 
 /* 800FA260-800FA2E4       .text checkTimer__6daNh_cFv */
 BOOL daNh_c::checkTimer() {
-    if (unk691 == 1 && !cLib_calcTimer(&mTimer)) {
-        unk688 -= 4;
-        if (unk688 < 0) {
-            unk688 = 0;
+    // Count down after being released from a bottle.
+    if (isTypeBottle() && cLib_calcTimer(&mBottleTimer) == 0) {
+        // Timer finished, start fading out.
+        mAlpha -= 4;
+        if (mAlpha < 0) {
+            mAlpha = 0;
         }
-        if (unk688 == 0) {
+        if (mAlpha == 0) {
             fopAcM_delete(this);
             return TRUE;
         }
@@ -340,17 +394,17 @@ void daNh_c::BGCheck() {
 
 /* 800FA568-800FA5B4       .text airMove__6daNh_cFv */
 void daNh_c::airMove() {
-    f32 idealY = mGroundY + l_HIO.reg.field_0x20;
+    f32 idealY = mGroundY + l_HIO.prm.mHeightAboveGround;
     if (current.pos.y < idealY - 10.0f) {
-        mMaxFallSpeed = l_HIO.reg.field_0x24;
+        mMaxFallSpeed = l_HIO.prm.mAscentSpeed;
     } else if (current.pos.y > idealY + 10.0f) {
-        mMaxFallSpeed = l_HIO.reg.field_0x28;
+        mMaxFallSpeed = l_HIO.prm.mDescentSpeed;
     }
 }
 
 /* 800FA5B4-800FA674       .text waitAction__6daNh_cFPv */
 BOOL daNh_c::waitAction(void*) {
-    if (mActionStatus == ACTION_STARTING) { 
+    if (mActionStatus == ACTION_STARTING) {
         mActionStatus += 1; // ACTION_ONGOING
         mPlayerDist = fopAcM_searchPlayerDistance(this);
     } else if (mActionStatus != ACTION_ENDING) {
@@ -364,13 +418,13 @@ BOOL daNh_c::waitAction(void*) {
 
 /* 800FA674-800FA78C       .text checkEscapeEnd__6daNh_cFv */
 BOOL daNh_c::checkEscapeEnd() {
-    cXyz deltaPos = orig.pos - current.pos;
-    if (unk691 != 1) {
-        if (!cLib_calcTimer(&unk694)) {
+    cXyz homeDelta = orig.pos - current.pos;
+    if (!isTypeBottle()) {
+        if (cLib_calcTimer(&mEscapeTimer) == 0) {
             setAction(&waitAction, NULL);
             return TRUE;
         }
-        if (deltaPos.abs2XZ() > l_HIO.reg.field_0x30*l_HIO.reg.field_0x30) {
+        if (homeDelta.abs2XZ() > l_HIO.prm.mMaxHomeDist*l_HIO.prm.mMaxHomeDist) {
             setAction(&returnAction, NULL);
             return TRUE;
         }
@@ -380,20 +434,21 @@ BOOL daNh_c::checkEscapeEnd() {
 
 /* 800FA78C-800FA880       .text escapeAction__6daNh_cFPv */
 BOOL daNh_c::escapeAction(void*) {
-    if (mActionStatus == ACTION_STARTING) { 
+    // Run away after being released from a bottle.
+    if (mActionStatus == ACTION_STARTING) {
         mActionStatus += 1; // ACTION_ONGOING
-        unk68F = 0;
-        unk690 = 0;
-        unk694 = 150;
+        mWobbleDir = 0;
+        mWobbleTimer = 0;
+        mEscapeTimer = 150;
     } else if (mActionStatus != ACTION_ENDING) {
         if (!checkEscapeEnd()) {
-            s16 angle = fopAcM_searchPlayerAngleY(this) + 0x8000;
-            if (!cLib_calcTimer(&unk690)) {
-                unk68F ^= 1;
-                unk690 = cLib_getRndValue(15, 20);
+            s16 targetAngle = fopAcM_searchPlayerAngleY(this) + 0x8000;
+            if (cLib_calcTimer(&mWobbleTimer) == 0) {
+                mWobbleDir ^= 1;
+                mWobbleTimer = cLib_getRndValue(15, 20);
             }
-            angle += unk68F ? -0x2000 : 0x2000;
-            moveProc(5.0f, 0.5f, angle);
+            targetAngle += mWobbleDir ? -0x2000 : 0x2000;
+            moveProc(5.0f, 0.5f, targetAngle);
         }
     }
     return TRUE;
@@ -401,33 +456,33 @@ BOOL daNh_c::escapeAction(void*) {
 
 /* 800FA880-800FAA34       .text returnAction__6daNh_cFPv */
 BOOL daNh_c::returnAction(void*) {
-    if (mActionStatus == ACTION_STARTING) { 
+    // Try to head in the direction of home (the Forest Firefly's spawn position).
+    if (mActionStatus == ACTION_STARTING) {
         mActionStatus += 1; // ACTION_ONGOING
-        unk68F = 0;
-        unk690 = 0;
-        unk694 = 150;
+        mWobbleDir = 0;
+        mWobbleTimer = 0;
+        mEscapeTimer = 150;
     } else if (mActionStatus != ACTION_ENDING) {
         if (getHomeDistance() < 50.0f) {
             setAction(&waitAction, NULL);
         } else {
             s16 targetAngle = cLib_targetAngleY(&current.pos, &orig.pos);
-            cXyz delta = orig.pos - current.pos;
-            f32 distXZ = cXyz(delta.x, 0.0f, delta.z).abs2();
-            if (distXZ < l_HIO.reg.field_0x30*l_HIO.reg.field_0x30) {
-                s16 temp2 = targetAngle - fopAcM_searchPlayerAngleY(this);
-                if (abs(temp2) < 0x1000) {
-                    if (temp2 < 0) {
+            cXyz homeDelta = orig.pos - current.pos;
+            if (homeDelta.abs2XZ() < l_HIO.prm.mMaxHomeDist*l_HIO.prm.mMaxHomeDist) {
+                s16 angle = targetAngle - fopAcM_searchPlayerAngleY(this);
+                if (abs(angle) < 0x1000) {
+                    if (angle < 0) {
                         targetAngle -= 0x4000;
                     } else {
                         targetAngle += 0x4000;
                     }
                 }
             }
-            if (!cLib_calcTimer(&unk690)) {
-                unk68F ^= 1;
-                unk690 = cLib_getRndValue(15, 20);
+            if (cLib_calcTimer(&mWobbleTimer) == 0) {
+                mWobbleDir ^= 1;
+                mWobbleTimer = cLib_getRndValue(15, 20);
             }
-            targetAngle += (unk68F ? -0x2000 : 0x2000);
+            targetAngle += mWobbleDir ? -0x2000 : 0x2000;
             moveProc(5.0f, 0.5f, targetAngle);
         }
     }
@@ -436,7 +491,46 @@ BOOL daNh_c::returnAction(void*) {
 
 /* 800FAA34-800FABE0       .text execute__6daNh_cFv */
 BOOL daNh_c::execute() {
-    /* Nonmatching */
+    playBrkAnm();
+    
+    mGlowAlpha = l_HIO.prm.mDefaultGlowAlpha;
+    
+    if (mMaxFallSpeed < speed.y) {
+        speed.y -= mGravity;
+        if (speed.y < mMaxFallSpeed) {
+            speed.y = mMaxFallSpeed;
+        }
+    } else if (mMaxFallSpeed > speed.y) {
+        speed.y += mGravity;
+        if (speed.y > mMaxFallSpeed) {
+            speed.y = mMaxFallSpeed;
+        }
+    }
+    
+    speed.x = speedF * cM_ssin(current.angle.y);
+    speed.z = speedF * cM_scos(current.angle.y);
+    
+    fopAcM_posMove(this, mStts.GetCCMoveP());
+    
+    BGCheck();
+    
+    cXyz pos = current.pos;
+    pos.y -= 10.0f;
+    mCyl.SetC(pos);
+    dComIfG_Ccsp()->Set(&mCyl);
+    
+    checkTimer();
+    
+    if (!checkBinCatch()) {
+        airMove();
+        searchPlayer();
+        action(NULL);
+    }
+    
+    setBaseMtx();
+    mEyePos = mAttentionInfo.mPosition = current.pos;
+    
+    return TRUE;
 }
 
 /* 800FABE0-800FACC4       .text initBrkAnm__6daNh_cFb */
@@ -475,17 +569,17 @@ BOOL daNh_c::draw() {
         if (tevBlock) {
             GXColorS10* color = tevBlock->getTevColor(1);
             if (color) {
-                unk68E = ((color->r + color->g + color->b) / 3) >> 2;
+                mGlowAlpha = ((color->r + color->g + color->b) / 3) >> 2;
             }
             
             GXColor* kColor = tevBlock->getTevKColor(3);
             if (kColor) {
-                kColor->a = unk688;
+                kColor->a = mAlpha;
             }
         }
     }
     
-    dComIfGd_setAlphaModel(dDlst_alphaModel_c::TYPE_SPHERE, mMtx, unk68E);
+    dComIfGd_setAlphaModel(dDlst_alphaModel_c::TYPE_SPHERE, mGlowMtx, mGlowAlpha);
     
     return TRUE;
 }
@@ -516,7 +610,10 @@ s32 daNh_Create(fopAc_ac_c* i_this) {
     return ((daNh_c*)i_this)->create();
 }
 
-static actor_method_class l_daNh_Method = {
+/* 800FAEAC-800FAEF4       .text __dt__10daNh_HIO_cFv */
+daNh_HIO_c::~daNh_HIO_c() {}
+
+actor_method_class l_daNh_Method = {
     (process_method_func)daNh_Create,
     (process_method_func)daNh_Delete,
     (process_method_func)daNh_Execute,

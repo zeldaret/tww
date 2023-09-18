@@ -1136,6 +1136,16 @@ inline void dComIfGp_particle_readScene(u8 particle_no, mDoDvdThd_toMainRam_c** 
 }
 
 /**
+ * === ATTENTION ===
+ */
+
+inline void dComIfGp_att_CatchRequest(fopAc_ac_c* param_0, u8 param_1, f32 param_2, f32 param_3,
+                                      f32 param_4, s16 param_5, s32 param_6) {
+    dAttention_c& attention = g_dComIfG_gameInfo.play.getAttention();
+    attention.CatchRequest(param_0, param_1, param_2, param_3, param_4,param_5, param_6);
+}
+
+/**
  * === MISC ===
  */
 
