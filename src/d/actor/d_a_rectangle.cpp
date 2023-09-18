@@ -5,10 +5,7 @@
 #include "f_op/f_op_actor.h"
 #include "dolphin/types.h"
 
-struct RECTANGLE_class
-{
-
-};
+struct RECTANGLE_class{};
 
 /* 00000078-00000080       .text daRct_Draw__FP15RECTANGLE_class */
 bool daRct_Draw(RECTANGLE_class*) {
