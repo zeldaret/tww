@@ -15,7 +15,6 @@
 #include "MSL_C/string.h"
 #include "c/c_dylink.h"
 #include "d/d_com_inf_game.h"
-#include "dolphin/os/OS.h"
 #include "f_ap/f_ap_game.h"
 #include "m_Do/m_Do_MemCard.h"
 #include "m_Do/m_Do_Reset.h"
@@ -24,6 +23,7 @@
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_machine.h"
+#include "m_Do/m_Do_printf.h"
 
 class JUTGamePad;
 

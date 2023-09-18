@@ -20,7 +20,6 @@
 #include "SSystem/SComponent/c_math.h"
 #include "dolphin/base/PPCArch.h"
 #include "dolphin/gx/GXStruct.h"
-#include "dolphin/os/OS.h"
 #include "dolphin/vi/vi.h"
 #include "m_Do/m_Do_DVDError.h"
 #include "m_do/m_Do_MemCard.h"
@@ -29,6 +28,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_machine_exception.h"
 #include "m_Do/m_Do_main.h"
+#include "m_Do/m_Do_printf.h"
 
 namespace mDoMch {
     static u8 mDebugFill;
