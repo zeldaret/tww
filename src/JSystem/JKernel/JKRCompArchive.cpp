@@ -4,44 +4,392 @@
 //
 
 #include "JSystem/JKernel/JKRCompArchive.h"
-#include "dolphin/types.h"
+#include "JSystem/JKernel/JKRAram.h"
+#include "JSystem/JKernel/JKRAramArchive.h"
+#include "JSystem/JKernel/JKRAramBlock.h"
+#include "JSystem/JKernel/JKRDecomp.h"
+#include "JSystem/JKernel/JKRDvdAramRipper.h"
+#include "JSystem/JKernel/JKRDvdArchive.h"
+#include "JSystem/JKernel/JKRDvdFile.h"
+#include "JSystem/JKernel/JKRDvdRipper.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JKernel/JKRMemArchive.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "MSL_C/math.h"
+#include "MSL_C/string.h"
+#include "dolphin/os/OS.h"
 
 /* 802BB82C-802BB8D4       .text __ct__14JKRCompArchiveFlQ210JKRArchive15EMountDirection */
-JKRCompArchive::JKRCompArchive(long, JKRArchive::EMountDirection) {
-    /* Nonmatching */
+JKRCompArchive::JKRCompArchive(s32 entryNum, JKRArchive::EMountDirection mountDirection) : JKRArchive(entryNum, MOUNT_COMP) {
+    mMountDirection = mountDirection;
+
+    if (!open(entryNum)) {
+        return;
+    }
+
+    mVolumeType = 'RARC';
+    mVolumeName = &mStringTable[mNodes->name_offset];
+    sVolumeList.prepend(&mFileLoaderLink);
+    mIsMounted = true;
 }
 
 /* 802BB8D4-802BBA14       .text __dt__14JKRCompArchiveFv */
 JKRCompArchive::~JKRCompArchive() {
-    /* Nonmatching */
+    if (mArcInfoBlock != NULL) {
+        SDIFileEntry* file = mFiles;
+        for (int i = 0; i < mArcInfoBlock->num_file_entries; i++) {
+            if (!((file->type_flags_and_name_offset >> 0x18) & 0x10) && file->data != NULL) {
+                JKRFreeToHeap(mHeap, file->data);
+            }
+
+            file++;
+        }
+
+        JKRFreeToHeap(mHeap, mArcInfoBlock);
+        mArcInfoBlock = NULL;
+    }
+
+    if (mAramPart != NULL) {
+        delete mAramPart;
+    }
+
+    if (mExpandedSize != NULL) {
+        i_JKRFree(mExpandedSize);
+        mExpandedSize = NULL;
+    }
+
+    if (mDvdFile != NULL) {
+        delete mDvdFile;
+    }
+
+    sVolumeList.remove(&mFileLoaderLink);
+    mIsMounted = false;
+}
+
+static void dummy() {
+    OSReport(__FILE__);
+    OSReport("isMounted()");
+    OSReport("Halt");
+    OSReport("mMountCount == 1");
 }
 
 /* 802BBA14-802BBFDC       .text open__14JKRCompArchiveFl */
-void JKRCompArchive::open(long) {
-    /* Nonmatching */
+bool JKRCompArchive::open(s32 entryNum) {
+    mArcInfoBlock = NULL;
+    field_0x64 = 0;
+    mAramPart = NULL;
+    field_0x6c = 0;
+    mSizeOfMemPart = 0;
+    mSizeOfAramPart = 0;
+    field_0x7c = 0;
+    mNodes = NULL;
+    mFiles = NULL;
+    mStringTable = NULL;
+
+    mDvdFile = new (JKRGetSystemHeap(), 0) JKRDvdFile(entryNum);
+    if(mDvdFile == NULL) {
+        mMountMode = 0;
+        return 0;
+    }
+    SArcHeader *arcHeader = (SArcHeader *)JKRAllocFromSysHeap(sizeof(SArcHeader), -32); // NOTE: unconfirmed if this struct is used
+    if(arcHeader == NULL) {
+        mMountMode = 0;
+    }
+    else {
+        int alignment;
+
+        JKRDvdToMainRam(entryNum, (u8 *)arcHeader, EXPAND_SWITCH_UNKNOWN1, 32, NULL, JKRDvdRipper::ALLOC_DIRECTION_FORWARD, 0, &mCompression);
+
+        mSizeOfMemPart = arcHeader->field_0x14;
+        mSizeOfAramPart = arcHeader->field_0x18;
+        JUT_ASSERT(346, ( mSizeOfMemPart & 0x1f ) == 0);
+        JUT_ASSERT(347, ( mSizeOfAramPart & 0x1f ) == 0);
+
+        switch (mCompression)
+        {
+        case COMPRESSION_NONE:
+        case COMPRESSION_YAZ0:
+            alignment = mMountDirection == 1 ? 32 : -32;
+            mArcInfoBlock = (SArcDataInfo *)JKRAllocFromHeap(mHeap, arcHeader->file_data_offset + mSizeOfMemPart, alignment);
+            if (mArcInfoBlock == NULL) {
+                mMountMode = 0;
+            }
+            else
+            {
+                JKRDvdToMainRam(entryNum, (u8 *)mArcInfoBlock, EXPAND_SWITCH_UNKNOWN1, (u32)arcHeader->file_data_offset + mSizeOfMemPart,
+                                NULL, JKRDvdRipper::ALLOC_DIRECTION_FORWARD, 0x20, NULL);
+                field_0x64 = (u32)mArcInfoBlock + arcHeader->file_data_offset;
+
+                if (mSizeOfAramPart != 0) {
+                    mAramPart = (JKRAramBlock*)JKRAllocFromAram(mSizeOfAramPart, JKRAramHeap::HEAD);
+                    if(mAramPart == NULL) {
+                        mMountMode = 0;
+                        break;
+                    }
+
+                    JKRDvdToAram(entryNum, mAramPart->getAddress(), EXPAND_SWITCH_UNKNOWN1, arcHeader->header_length + arcHeader->file_data_offset + mSizeOfMemPart, 0);
+                }
+
+                mNodes = (SDIDirEntry*)((u32)mArcInfoBlock + mArcInfoBlock->node_offset);
+                mFiles = (SDIFileEntry *)((u32)mArcInfoBlock + mArcInfoBlock->file_entry_offset);
+                mStringTable = (char*)((u32)mArcInfoBlock + mArcInfoBlock->string_table_offset);
+                field_0x6c = arcHeader->header_length + arcHeader->file_data_offset;
+            }
+            break;
+
+        case COMPRESSION_YAY0:
+            u32 alignedSize = ALIGN_NEXT(mDvdFile->getFileSize(), 32);
+            alignment = ((mMountDirection == 1) ? 32 : -32);
+            u8 *buf = (u8 *)JKRAllocFromSysHeap(alignedSize, -alignment);
+
+            if(buf == NULL) {
+                mMountMode = 0;
+            }
+            else {
+                JKRDvdToMainRam(entryNum, buf, EXPAND_SWITCH_UNKNOWN2, alignedSize, NULL, JKRDvdRipper::ALLOC_DIRECTION_FORWARD, 0, NULL);
+                u32 expandSize = ALIGN_NEXT(JKRDecompExpandSize(buf), 32);
+                u8 *mem = (u8 *)JKRAllocFromHeap(mHeap, expandSize, -alignment);
+
+                if(mem == NULL) {
+                    mMountMode = 0;
+                }
+                else {
+                    arcHeader = (SArcHeader *)mem;
+                    JKRDecompress((u8 *)buf, (u8 *)mem, expandSize, 0);
+                    JKRFreeToSysHeap(buf);
+
+                    mArcInfoBlock = (SArcDataInfo *)JKRAllocFromHeap(mHeap, arcHeader->file_data_offset + mSizeOfMemPart, alignment);
+                    if(mArcInfoBlock == NULL) {
+                        mMountMode = 0;
+                    }
+                    else {
+                        // arcHeader + 1 should lead to 0x20, which is the data after the header
+                        JKRHeap::copyMemory((u8 *)mArcInfoBlock, arcHeader + 1, (arcHeader->file_data_offset + mSizeOfMemPart));
+                        field_0x64 = (u32)mArcInfoBlock + arcHeader->file_data_offset;
+                        if (mSizeOfAramPart != 0) {
+                            mAramPart = (JKRAramBlock*)JKRAllocFromAram(mSizeOfAramPart, JKRAramHeap::HEAD);
+                            if(mAramPart == NULL) {
+                                mMountMode = 0;
+                            }
+                            else {
+                                JKRMainRamToAram((u8 *)mem + arcHeader->header_length + arcHeader->file_data_offset + mSizeOfMemPart,
+                                                 mAramPart->getAddress(), mSizeOfAramPart, EXPAND_SWITCH_UNKNOWN0, 0, NULL, -1);
+                            }
+                        }
+                    }
+                }
+            }
+            mNodes = (SDIDirEntry *)((u32)mArcInfoBlock + mArcInfoBlock->node_offset);
+            mFiles = (SDIFileEntry *)((u32)mArcInfoBlock + mArcInfoBlock->file_entry_offset);
+            mStringTable = (char *)((u32)mArcInfoBlock + mArcInfoBlock->string_table_offset);
+            field_0x6c = arcHeader->header_length + arcHeader->file_data_offset;
+            break;
+        }
+        mExpandedSize = NULL;
+        u8 compressedFiles = 0;
+        SDIFileEntry *fileEntry = mFiles;
+        for (int i = 0; i < mArcInfoBlock->num_file_entries; i++)
+        {
+            u8 flag = fileEntry->type_flags_and_name_offset >> 0x18;
+            if (((flag & 0x1) != 0) && (((flag)&0x10) == 0))
+            {
+                compressedFiles = compressedFiles | (flag & 4);
+            }
+            fileEntry++;
+        }
+
+        if (compressedFiles != 0)
+        {
+            mExpandedSize = (s32 *)JKRAllocFromHeap(mHeap, mArcInfoBlock->num_file_entries * 4, abs(alignment));
+            if (mExpandedSize == NULL)
+            {
+                JKRFreeToSysHeap(mArcInfoBlock);
+                mMountMode = 0;
+            }
+            else
+            {
+                memset(mExpandedSize, 0, mArcInfoBlock->num_file_entries * 4);
+            }
+        }
+    }
+
+    if (arcHeader != NULL)
+    {
+        JKRFreeToSysHeap(arcHeader);
+    }
+    if(mMountMode == 0) {
+        OSReport(":::[%s: %d] Cannot alloc memory in mounting CompArchive\n", __FILE__, 548);
+        if(mDvdFile != NULL) {
+            delete mDvdFile;
+        }
+        return false;
+    }
+    return true;
 }
 
 /* 802BBFDC-802BC198       .text fetchResource__14JKRCompArchiveFPQ210JKRArchive12SDIFileEntryPUl */
-void JKRCompArchive::fetchResource(JKRArchive::SDIFileEntry*, unsigned long*) {
-    /* Nonmatching */
+void* JKRCompArchive::fetchResource(SDIFileEntry* fileEntry, u32* pSize) {
+    JUT_ASSERT(578, isMounted());
+    u32 ptrSize;
+    u32 size = fileEntry->data_size;
+    int compression = JKRConvertAttrToCompressionType(fileEntry->type_flags_and_name_offset >> 0x18);
+
+    if(pSize == NULL) {
+        pSize = &ptrSize; // this makes barely any sense but ok
+    }
+
+    if (fileEntry->data == NULL) {
+        u32 flag = fileEntry->type_flags_and_name_offset >> 0x18;
+        if(flag & 0x10) {
+            fileEntry->data = (void *)(field_0x64 + fileEntry->data_offset);
+            *pSize = size;
+        }
+        else if (flag & 0x20) {
+            u8 *data;
+            *pSize = JKRAramArchive::fetchResource_subroutine(fileEntry->data_offset + mAramPart->getAddress() - mSizeOfMemPart, size, mHeap, compression, &data);
+            fileEntry->data = data;
+            if(compression == COMPRESSION_YAZ0) {
+                setExpandSize(fileEntry, *pSize);
+            }
+        }
+        else if (flag & 0x40) {
+            u8 *data;
+            u32 resSize = JKRDvdArchive::fetchResource_subroutine(mEntryNum, field_0x6c + fileEntry->data_offset, fileEntry->data_size, mHeap, compression, mCompression, &data);
+            if (pSize != NULL) {
+                *pSize = resSize;
+            }
+            fileEntry->data = data;
+            if (compression == COMPRESSION_YAZ0) {
+                setExpandSize(fileEntry, *pSize);
+            }
+        }
+    }
+    else  {
+        if (pSize != NULL) {
+            *pSize = fileEntry->data_size;
+        }
+    }
+    return fileEntry->data;
 }
 
 /* 802BC198-802BC370       .text fetchResource__14JKRCompArchiveFPvUlPQ210JKRArchive12SDIFileEntryPUl */
-void JKRCompArchive::fetchResource(void*, unsigned long, JKRArchive::SDIFileEntry*, unsigned long*) {
-    /* Nonmatching */
+void* JKRCompArchive::fetchResource(void* data, u32 compressedSize, SDIFileEntry *fileEntry, u32 *pSize) {
+    u32 size = 0;
+    JUT_ASSERT(696, isMounted());
+    u32 fileSize = fileEntry->data_size;
+    u32 alignedSize = ALIGN_NEXT(fileSize, 32);
+    u32 fileFlag = fileEntry->type_flags_and_name_offset >> 0x18;
+    int compression = JKRConvertAttrToCompressionType(fileFlag);
+
+    if(fileEntry->data != NULL) {
+        if (compression == COMPRESSION_YAZ0) {
+            u32 expandSize = getExpandSize(fileEntry);
+            if (expandSize != 0) {
+                fileSize = expandSize;
+            }
+        }
+
+        if (fileSize > compressedSize) {
+            fileSize = compressedSize;
+        }
+
+        JKRHeap::copyMemory(data, fileEntry->data, fileSize);
+        size = fileSize;
+        }
+    else {
+        if (fileFlag & 0x10) {
+            size = JKRMemArchive::fetchResource_subroutine((u8 *)(field_0x64 + fileEntry->data_offset), alignedSize, (u8 *)data,
+                                                           compressedSize & ~31, compression);
+        }
+        else if (fileFlag & 0x20) {
+            size = JKRAramArchive::fetchResource_subroutine(fileEntry->data_offset + mAramPart->getAddress() - mSizeOfMemPart,
+                                                            alignedSize, (u8 *)data, compressedSize & ~31, compression);
+        }
+        else if (fileFlag & 0x40){
+            size = JKRDvdArchive::fetchResource_subroutine(mEntryNum, field_0x6c + fileEntry->data_offset, alignedSize, (u8 *)data,
+                                                           compressedSize & ~31, compression, mCompression);
+        } else {
+            OSPanic(__FILE__, 756, ":::CompArchive: bad mode.");
+        }
+    }
+
+    if(pSize != NULL) {
+        *pSize = size;
+    }
+    return data;
 }
 
 /* 802BC370-802BC404       .text removeResourceAll__14JKRCompArchiveFv */
 void JKRCompArchive::removeResourceAll() {
-    /* Nonmatching */
+    if (mArcInfoBlock != NULL && mMountMode != MOUNT_MEM) {
+        SDIFileEntry* fileEntry = mFiles;
+        for (int i = 0; i < mArcInfoBlock->num_file_entries; i++) {
+            int tmp = fileEntry->type_flags_and_name_offset >> 0x18;
+
+            if (fileEntry->data != NULL) {
+                if (!(tmp & 0x10)) {
+                    JKRFreeToHeap(mHeap, fileEntry->data);
+                }
+
+                fileEntry->data = NULL;
+            }
+        }
+    }
 }
 
 /* 802BC404-802BC470       .text removeResource__14JKRCompArchiveFPv */
-void JKRCompArchive::removeResource(void*) {
-    /* Nonmatching */
+bool JKRCompArchive::removeResource(void* resource) {
+    SDIFileEntry* fileEntry = findPtrResource(resource);
+    if (!fileEntry)
+        return false;
+
+    if (!((fileEntry->type_flags_and_name_offset >> 0x18) & 0x10)) {
+        JKRFreeToHeap(mHeap, resource);
+    }
+
+    fileEntry->data = NULL;
+    return true;
 }
 
 /* 802BC470-802BC610       .text getExpandedResSize__14JKRCompArchiveCFPCv */
-void JKRCompArchive::getExpandedResSize(const void*) const {
-    /* Nonmatching */
+u32 JKRCompArchive::getExpandedResSize(const void* resource) const {
+    if (mExpandedSize == NULL) {
+        return getResSize(resource);
+    }
+
+    SDIFileEntry *fileEntry = findPtrResource(resource);
+    if(!fileEntry) {
+        return 0xffffffff;
+    }
+
+    u8 flags = (fileEntry->type_flags_and_name_offset >> 0x18);
+    if((flags & 4) == 0) { // not compressed
+        return getResSize(resource);
+    }
+
+    if ((flags & 0x10) != 0) {
+        return JKRDecompExpandSize((u8 *)resource);
+    }
+
+    u8 buf[64];
+    u8 *bufPtr = (u8 *)ALIGN_NEXT((u32)buf, 32);
+    if ((flags & 0x20) != 0) {
+        u32 addr = mAramPart->mAddress;
+        addr = fileEntry->data_offset + addr;
+        JKRAramToMainRam(addr, bufPtr, sizeof(buf) / 2, EXPAND_SWITCH_UNKNOWN0, 0, NULL, -1, NULL);
+    }
+    else if ((flags & 0x40) != 0) {
+        JKRDvdToMainRam(mEntryNum, bufPtr, EXPAND_SWITCH_UNKNOWN2, sizeof(buf) / 2, NULL, JKRDvdRipper::ALLOC_DIRECTION_FORWARD, field_0x6c + fileEntry->data_offset, NULL);
+        DCInvalidateRange(bufPtr, sizeof(buf) / 2);
+    }
+    else {
+#if VERSION == VERSION_JPN
+        OSPanic(__FILE__, 948, "illegal resource.");
+#else
+        OSPanic(__FILE__, 944, "illegal resource.");
+#endif
+    }
+    u32 expandSize = JKRDecompExpandSize(bufPtr);
+    const_cast<JKRCompArchive *>(this)->setExpandSize(fileEntry, expandSize);
+    return expandSize;
 }

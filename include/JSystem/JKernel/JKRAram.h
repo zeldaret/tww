@@ -36,7 +36,7 @@ public:
     static JKRAram* create(u32, u32, long, long, long);
     static void checkOkAddress(u8*, u32, JKRAramBlock*, u32);
     static void changeGroupIdIfNeed(u8*, int);
-    static JKRAramBlock* mainRamToAram(u8*, u32, u32, JKRExpandSwitch, u32, JKRHeap*, int, u32*);
+    static JKRAramBlock* mainRamToAram(u8*, u32, u32, JKRExpandSwitch, u32, JKRHeap*, int);
     static u8* aramToMainRam(u32, u8*, u32, JKRExpandSwitch, u32, JKRHeap*, int, u32*);
     static void dump(void);
 
@@ -80,8 +80,8 @@ inline void JKRAramToMainRam(u32 p1, u8* p2, u32 p3, JKRExpandSwitch p4, u32 p5,
     JKRAram::aramToMainRam(p1, p2, p3, p4, p5, p6, p7, p8);
 }
 
-inline JKRAramBlock *JKRMainRamToAram(u8 *buf, u32 bufSize, u32 alignedSize, JKRExpandSwitch expandSwitch, u32 fileSize, JKRHeap *heap, int id, u32 *pSize) {
-    return JKRAram::mainRamToAram(buf, bufSize, alignedSize, expandSwitch, fileSize, heap, id, pSize);
+inline JKRAramBlock *JKRMainRamToAram(u8 *buf, u32 bufSize, u32 alignedSize, JKRExpandSwitch expandSwitch, u32 fileSize, JKRHeap *heap, int id) {
+    return JKRAram::mainRamToAram(buf, bufSize, alignedSize, expandSwitch, fileSize, heap, id);
 }
 
 // void JKRDecompressFromAramToMainRam(u32, void*, u32, u32, u32, u32*);

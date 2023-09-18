@@ -774,7 +774,7 @@ config.libs = [
             Object(Matching,    "JSystem/JKernel/JKRMemArchive.cpp"),
             Object(NonMatching, "JSystem/JKernel/JKRAramArchive.cpp"),
             Object(NonMatching, "JSystem/JKernel/JKRDvdArchive.cpp"),
-            Object(NonMatching, "JSystem/JKernel/JKRCompArchive.cpp"),
+            Object(Matching,    "JSystem/JKernel/JKRCompArchive.cpp"),
             Object(Matching,    "JSystem/JKernel/JKRFile.cpp"),
             Object(NonMatching, "JSystem/JKernel/JKRDvdFile.cpp"),
             Object(NonMatching, "JSystem/JKernel/JKRDvdRipper.cpp"),
