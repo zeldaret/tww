@@ -35,10 +35,10 @@ public:
 class JKRDvdFile;
 class JKRDvdAramRipper {
 public:
-    static JKRAramBlock* loadToAram(long, u32, JKRExpandSwitch, u32, u32, u32*);
-    static JKRAramBlock* loadToAram(JKRDvdFile*, u32, JKRExpandSwitch, u32, u32, u32*);
+    static JKRAramBlock* loadToAram(long, u32, JKRExpandSwitch, u32, u32);
+    static JKRAramBlock* loadToAram(JKRDvdFile*, u32, JKRExpandSwitch, u32, u32);
     static JKRADCommand* loadToAram_Async(JKRDvdFile*, u32, JKRExpandSwitch, void (*)(u32), u32,
-                                          u32, u32*);
+                                          u32);
     static JKRADCommand* callCommand_Async(JKRADCommand*);
     static bool syncAram(JKRADCommand*, int);
 
@@ -49,8 +49,8 @@ public:
     static u32 sSzpBufferSize;
 };
 
-inline JKRAramBlock *JKRDvdToAram(s32 entrynum, u32 p2, JKRExpandSwitch expSwitch, u32 p4, u32 p5, u32 *p6) {
-    return JKRDvdAramRipper::loadToAram(entrynum, p2, expSwitch, p4, p5, p6);
+inline JKRAramBlock *JKRDvdToAram(s32 entrynum, u32 p2, JKRExpandSwitch expSwitch, u32 p4, u32 p5) {
+    return JKRDvdAramRipper::loadToAram(entrynum, p2, expSwitch, p4, p5);
 }
 
 #endif /* JKRDVDARAMRIPPER_H */
