@@ -13,6 +13,8 @@
 #include "d/d_com_lib_game.h"
 #include "JSystem/JKernel/JKRHeap.h"
 
+#include "src/d/actor/d_a_player_HIO.inc"
+
 /* 80102E8C-80102EAC       .text daPy_createHeap__FP10fopAc_ac_c */
 void daPy_createHeap(fopAc_ac_c*) {
     /* Nonmatching */
@@ -1668,7 +1670,7 @@ void daPy_lk_c::getBokoFlamePos(cXyz*) {
 
 #include "src/d/actor/d_a_player_bow.inc"
 
-#include "src/d/actor/d_a_player_hookshot.inc"
+#include "src/d/actor/d_a_player_hook.inc"
 
 #include "src/d/actor/d_a_player_fan.inc"
 

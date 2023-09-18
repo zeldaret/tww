@@ -173,7 +173,7 @@ void daPy_lk_c::dProcDead_init_sub2() {
 }
 
 /* 8012F38C-8012F3B8       .text checkGameOverStart__9daPy_lk_cFv */
-void daPy_lk_c::checkGameOverStart() {
+BOOL daPy_lk_c::checkGameOverStart() {
     /* Nonmatching */
 }
 
