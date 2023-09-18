@@ -1011,16 +1011,24 @@ inline int dComIfGd_setRealShadow2(u32 id, s8 param_2, J3DModel* pModel, cXyz* p
 
 int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 param_1, f32 param_2, cBgS_PolyInfo& i_floorPoly, s16 i_angle, f32 param_5, GXTexObj* i_tex);
 
-inline void dComIfGd_setAlphaModel(unsigned char param_0, float(*param_1)[4], unsigned char param_2) {
-    g_dComIfG_gameInfo.drawlist.setAlphaModel(param_0, param_1, param_2);
+inline void dComIfGd_setAlphaModel(u8 type, Mtx mtx, u8 alpha) {
+    g_dComIfG_gameInfo.drawlist.setAlphaModel(type, mtx, alpha);
 }
 
-inline void dComIfGd_setAlphaModel2(unsigned char param_0, float(*param_1)[4], unsigned char param_2) {
-    g_dComIfG_gameInfo.drawlist.setAlphaModel2(param_0, param_1, param_2);
+inline void dComIfGd_setSpotModel(u8 type, Mtx mtx, u8 alpha) {
+    g_dComIfG_gameInfo.drawlist.setSpotModel(type, mtx, alpha);
 }
 
-inline const dDlst_alphaModel_c* dComIfGd_getAlphaModel2(unsigned char param_0, float(*param_1)[4], unsigned char param_2) {
-    return g_dComIfG_gameInfo.drawlist.getAlphaModel2();
+inline void dComIfGd_setLightModel(u8 type, Mtx mtx, u8 alpha) {
+    g_dComIfG_gameInfo.drawlist.setLightModel(type, mtx, alpha);
+}
+
+inline s32 dComIfGd_getSpotModelNum() {
+    return g_dComIfG_gameInfo.drawlist.getSpotModelNum();
+}
+
+inline s32 dComIfGd_getLightModelNum() {
+    return g_dComIfG_gameInfo.drawlist.getLightModelNum();
 }
 
 /**

@@ -485,7 +485,7 @@ BOOL daNh_c::draw() {
         }
     }
     
-    dComIfGd_setAlphaModel(0, mMtx, unk68E);
+    dComIfGd_setAlphaModel(dDlst_alphaModel_c::TYPE_SPHERE, mMtx, unk68E);
     
     return TRUE;
 }
