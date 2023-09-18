@@ -172,10 +172,10 @@ public:
     void set(unsigned char, float(*)[4], unsigned char);
     void draw(float(*)[4]);
 public:
-    short pad;
-    short pad2;
-    short pad3;
-    short mCount;
+    /* 0x0 */ short field_0x0;
+    /* 0x2 */ short field_0x2;
+    /* 0x4 */ short field_0x4;
+    /* 0x6 */ short mCount;
 };
 
 class dDlst_list_c {

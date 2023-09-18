@@ -23,11 +23,11 @@ int daSpotbox_c::create() {
     /* Matching 96% */
     fopAcM_SetupActor(this, daSpotbox_c);
     float baseScale = this->getType() != 0 ? 100.0f : 1000.0f;
-    this->mScale.x *= baseScale;
-    this->mScale.y *= baseScale;
-    this->mScale.z *= (baseScale * 1.2f);
-    this->current.pos.y += this->mScale.y * 0.5f;
-    this->mCullMtx = ((daSpotbox_c *)this)->mtx;
+    mScale.x *= baseScale;
+    mScale.y *= baseScale;
+    mScale.z *= (baseScale * 1.2f);
+    current.pos.y += mScale.y * 0.5f;
+    mCullMtx = mtx;
     fopAcM_setCullSizeBox(this, -0.5, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f);
 
     return cPhs_COMPLEATE_e;
@@ -35,16 +35,17 @@ int daSpotbox_c::create() {
 
 int daSpotbox_c::draw() {
     if(g_dComIfG_gameInfo.drawlist.getAlphaModel2()->mCount != 0) {
-        g_dComIfG_gameInfo.drawlist.setAlphaModel2(0x3, this->mtx, 0x20);
+        g_dComIfG_gameInfo.drawlist.setAlphaModel2(0x3, mtx, 0x20);
     }
     return TRUE;
 }
 
 int daSpotbox_c::execute() {
-    PSMTXTrans(mDoMtx_stack_c::now, this->current.pos.x, this->current.pos.y, this->current.pos.z);
-    mDoMtx_YrotM(mDoMtx_stack_c::now, this->current.angle.y);
-    mDoMtx_stack_c::scaleM(this->mScale.x, this->mScale.y, this->mScale.z);
-    PSMTXCopy(mDoMtx_stack_c::now, this->mtx);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mDoMtx_stack_c::scaleM(mScale.x, mScale.y, mScale.z);
+    //mDoMtx_stack_c::copy(mtx); //does not match
+    PSMTXCopy(mDoMtx_stack_c::now, mtx);
     return TRUE;
 }
 
