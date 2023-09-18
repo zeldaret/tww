@@ -149,6 +149,11 @@ public:
     }
 
     fopAc_ac_c* Owner() { return (fopAc_ac_c*)mpPlayer; }
+    
+    void CatchRequest(fopAc_ac_c* param_0, u8 param_1, f32 param_2, f32 param_3,
+                      f32 param_4, s16 param_5, s32 param_6) {
+        mCatch.request(param_0, param_1, param_2, param_3, param_4, param_5, param_6);
+    }
 
 public:
     /* 0x000 */ daPy_lk_c* mpPlayer;

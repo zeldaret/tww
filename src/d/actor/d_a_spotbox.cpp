@@ -34,8 +34,8 @@ int daSpotbox_c::create() {
 }
 
 int daSpotbox_c::draw() {
-    if(g_dComIfG_gameInfo.drawlist.getAlphaModel2()->mCount != 0) {
-        g_dComIfG_gameInfo.drawlist.setAlphaModel2(0x3, this->mtx, 0x20);
+    if (dComIfGd_getSpotModelNum() != 0) {
+        dComIfGd_setSpotModel(dDlst_alphaModel_c::TYPE_CUBE, mtx, 0x20);
     }
     return TRUE;
 }

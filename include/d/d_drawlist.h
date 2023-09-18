@@ -165,18 +165,33 @@ public:
 struct view_port_class;
 struct view_class;
 struct camera_class;
+
+struct dDlst_alphaModelData_c;
+
 struct dDlst_alphaModel_c {
 public:
+    enum Type {
+        TYPE_SPHERE        = 0,
+        TYPE_TWO_SPHERES   = 1,
+        TYPE_SEARCHLIGHT   = 2,
+        TYPE_CUBE          = 3,
+        TYPE_SMALL_SPHERE  = 4,
+        TYPE_THREE_SPHERES = 5,
+    };
+    
     dDlst_alphaModel_c();
     void create(int);
-    void set(unsigned char, float(*)[4], unsigned char);
-    void draw(float(*)[4]);
+    void set(u8 type, Mtx mtx, u8 alpha);
+    void draw(MtxP);
+    s32 getNum() {
+        return mNum;
+    }
 public:
-    short pad;
-    short pad2;
-    short pad3;
-    short mCount;
-};
+    /* 0x00 */ _GXColor mColor;
+    /* 0x04 */ s16 mCapacity;
+    /* 0x06 */ s16 mNum;
+    /* 0x08 */ dDlst_alphaModelData_c* mpData;
+};  // Size: 0xC
 
 class dDlst_list_c {
 public:
@@ -202,14 +217,21 @@ public:
                        dKy_tevstr_c* pTevStr) {
         return mShadowControl.setReal2(id, param_2, pModel, pPos, param_5, param_6, pTevStr);
     }
-    void setAlphaModel(unsigned char param_0, float(*param_1)[4], unsigned char param_2) {
-        mpAlphaModel0->set(param_0, param_1, param_2);
+    
+    void setAlphaModel(u8 type, Mtx mtx, u8 alpha) {
+        mpAlphaModel->set(type, mtx, alpha);
     }
-    void setAlphaModel2(unsigned char param_0, float(*param_1)[4], unsigned char param_2) {
-        mpAlphaModel2->set(param_0, param_1, param_2);
+    void setSpotModel(u8 type, Mtx mtx, u8 alpha) {
+        mpSpotModel->set(type, mtx, alpha);
     }
-    const dDlst_alphaModel_c* getAlphaModel2() {
-        return mpAlphaModel2;
+    void setLightModel(u8 type, Mtx mtx, u8 alpha) {
+        mpLightModel->set(type, mtx, alpha);
+    }
+    s32 getSpotModelNum() {
+        return mpSpotModel->getNum();
+    }
+    s32 getLightModelNum() {
+        return mpLightModel->getNum();
     }
 
     static void offWipe() { mWipe = false; }
@@ -247,9 +269,9 @@ private:
     /* 0x00230 */ dDlst_window_c* field_0x00230;
     /* 0x00234 */ camera_class* mpCamera;
     /* 0x00238 */ u8 field_0x00238[0x00244 - 0x00238];
-    /* 0x00244 */ dDlst_alphaModel_c* mpAlphaModel0;
-    /* 0x00248 */ dDlst_alphaModel_c* mpAlphaModel2;
-    /* 0x0024C */ dDlst_alphaModel_c* mpAlphaModel1;
+    /* 0x00244 */ dDlst_alphaModel_c* mpAlphaModel;
+    /* 0x00248 */ dDlst_alphaModel_c* mpSpotModel;
+    /* 0x0024C */ dDlst_alphaModel_c* mpLightModel;
     /* 0x00250 */ dDlst_shadowControl_c mShadowControl;
     /* 0x16078 */ mDoExt_3DlineMatSortPacket m3DLineMatSortPacket[2];
     /* 0x160A0 */ dDlst_peekZ_c mPeekZ;

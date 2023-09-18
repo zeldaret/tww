@@ -893,8 +893,8 @@ void dNpc_EventCut_c::cutTurnToActorProc() {
         if(addAngle && pDelDistance) {
             u16 angle = mpTargetActor->shape_angle.y + addAngle;
             mPos = mpTargetActor->current.pos;
-            mPos.x -= pDelDistance * JMASinShort(angle);
-            mPos.z -= pDelDistance * JMASCosShort(angle);
+            mPos.x -= pDelDistance * cM_ssin(angle);
+            mPos.z -= pDelDistance * cM_scos(angle);
         }
         else {
             mPos = mpTargetActor->current.pos + mOffsetPos;
@@ -1002,8 +1002,8 @@ void dNpc_EventCut_c::cutMoveToActorProc() {
         angle = mpTargetActor->shape_angle.y + mAddAngle;
     }
 
-    temp.x -= pDelDistance * JMASinShort(angle);
-    temp.z -= pDelDistance * JMASCosShort(angle);
+    temp.x -= pDelDistance * cM_ssin(angle);
+    temp.z -= pDelDistance * cM_scos(angle);
 
     if(mSpeed == 0.0f) {
         mpActor->current.pos = temp;
@@ -1188,7 +1188,7 @@ void dNpc_EventCut_c::cutMoveToPosStart() {
 void dNpc_EventCut_c::cutMoveToPosProc() {
     s16 angle = cLib_targetAngleY(&mpActor->current.pos, &mPos);
 
-    cXyz temp(pDelDistance * JMASinShort(angle), mPos.y, pDelDistance * JMASCosShort(angle));
+    cXyz temp(pDelDistance * cM_ssin(angle), mPos.y, pDelDistance * cM_scos(angle));
 
     if(mSpeed == 0.0f) {
         mpActor->current.pos = temp;

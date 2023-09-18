@@ -846,7 +846,7 @@ public:
     void checkBottleSwing() const;
     void checkCutCharge() const;
     void checkTactWait() const;
-    void getBaseAnimeFrameRate();
+    f32 getBaseAnimeFrameRate();
     void getBaseAnimeFrame();
     void getItemID() const;
     void getThrowBoomerangID() const;
