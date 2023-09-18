@@ -405,6 +405,10 @@ inline u8 dComIfGs_getWalletSize() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getWalletSize();
 }
 
+inline u8 dComIfGs_getMagic() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getMagic();
+}
+
 inline u8 dComIfGs_getItem(int param_0) {
     return g_dComIfG_gameInfo.save.getPlayer().getItem().getItem(param_0);
 }
@@ -1101,8 +1105,8 @@ inline JPABaseEmitter* dComIfGp_particle_set(u16 particleID, const cXyz* pos, co
                                              const GXColor* pPrmColor, const GXColor* pEnvColor,
                                              const cXyz* pScale2D) {
     dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    return pParticle->set(0, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor,
-                          pEnvColor, pScale2D);
+    return pParticle->setNormal(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
+                                pPrmColor, pEnvColor, pScale2D);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_set(u16 particleID, const cXyz* pos, const csXyz* angle,
@@ -1113,6 +1117,16 @@ inline JPABaseEmitter* dComIfGp_particle_set(u16 particleID, const cXyz* pos, co
 inline void dComIfGp_particle_setStripes(u16 particleID, cXyz* pos, csXyz* angle, cXyz* scale, u8 param_4, u16 param_5) {
     dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
     pParticle->setNormalStripes(particleID, pos, angle, scale, param_4, param_5);
+}
+
+inline JPABaseEmitter* dComIfGp_particle_setToon(u16 particleID, const cXyz* pos,
+                                                 const csXyz* angle, const cXyz* scale, u8 alpha,
+                                                 dPa_levelEcallBack* pCallBack, s8 setupInfo,
+                                                 const GXColor* pPrmColor, const GXColor* pEnvColor,
+                                                 const cXyz* pScale2D) {
+    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
+    return pParticle->setToon(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
+                              pPrmColor, pEnvColor, pScale2D);
 }
 
 inline void dComIfGp_particle_calc3D() {
