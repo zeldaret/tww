@@ -21,6 +21,7 @@ public:
 
     /* 802E4240 */ static JUTDirectPrint* start();
 
+    void* getFrameBuffer() { return field_0x00; }
     bool isActive() const { return field_0x00 != 0; }
     JUtility::TColor getCharColor() const { return mCharColor; }
 

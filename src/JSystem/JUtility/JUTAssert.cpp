@@ -4,69 +4,182 @@
 //
 
 #include "JSystem/JUtility/JUTAssert.h"
-#include "dolphin/types.h"
+#include "JSystem/JUtility/JUTConsole.h"
+#include "JSystem/JUtility/JUTDbPrint.h"
+#include "JSystem/JUtility/JUTDirectPrint.h"
+#include "MSL_C/stdio.h"
+#include "dolphin/vi/vi.h"
 
-/* 802C740C-802C7410       .text create__12JUTAssertionFv */
-void JUTAssertion::create() {
-    /* Nonmatching */
+namespace JUTAssertion {
+    namespace {
+        static char sMessageFileLine[64];
+        static char sMessageString[96];
+        static s32 sDisplayTime = -1;
+        static s32 sDevice = 3;
+        static bool mVisible = true;
+        static u32 sMessageLife;
+        static s32 sMessageOwner;
+        static u8 mSynchro;
+    }
 }
 
+/* 802C740C-802C7410       .text create__12JUTAssertionFv */
+void JUTAssertion::create() {}
+
 /* 802C7410-802C744C       .text flush_subroutine__12JUTAssertionFv */
-void JUTAssertion::flush_subroutine() {
-    /* Nonmatching */
+u32 JUTAssertion::flush_subroutine() {
+    if (sMessageLife == 0) {
+        return 0;
+    }
+
+    if (sMessageLife != -1) {
+        sMessageLife--;
+    }
+
+    if (sMessageLife >= 5) {
+        return sMessageLife;
+    }
+
+    return 0;
 }
 
 /* 802C744C-802C74B0       .text flushMessage__12JUTAssertionFv */
 void JUTAssertion::flushMessage() {
-    /* Nonmatching */
+    if (flush_subroutine() && mVisible == true) {
+        JUTDirectPrint::getManager()->drawString(16, 16, sMessageFileLine);
+        JUTDirectPrint::getManager()->drawString(16, 24, sMessageString);
+    }
 }
 
 /* 802C74B0-802C7690       .text flushMessage_dbPrint__12JUTAssertionFv */
 void JUTAssertion::flushMessage_dbPrint() {
-    /* Nonmatching */
+    if (flush_subroutine() && mVisible == true && JUTDbPrint::getManager() != NULL) {
+        JUTFont* font = JUTDbPrint::getManager()->getFont();
+        if (font != NULL) {
+            u8 tmp = ((VIGetRetraceCount() & 0x3C) << 2) | 0xF;
+            font->setGX();
+            font->setCharColor(JUtility::TColor(255, tmp, tmp, 255));
+            font->drawString(30, 36, sMessageFileLine, true);
+            font->drawString(30, 54, sMessageString, true);
+        }
+    }
 }
 
 /* 802C7690-802C7698       .text getSDevice__12JUTAssertionFv */
-void JUTAssertion::getSDevice() {
-    /* Nonmatching */
+u32 JUTAssertion::getSDevice() {
+    return sDevice;
 }
 
 /* 802C7698-802C7788       .text setConfirmMessage__12JUTAssertionFUlPcibPCc */
-void JUTAssertion::setConfirmMessage(unsigned long, char*, int, bool, const char*) {
-    /* Nonmatching */
+void JUTAssertion::setConfirmMessage(u32 param_1, char* file, int line, bool param_4, const char* msg) {
+    if (param_4 == 1) {
+        return;
+    }
+    u32 r28 = sMessageLife;
+    if (r28 == 0 && (param_1 & 1) != 0) {
+        sMessageLife = sDisplayTime;
+        sMessageOwner = 2;
+        snprintf(sMessageFileLine, sizeof(sMessageFileLine) - 1, "FAILED [%s:%d]", file, line);
+        snprintf(sMessageString, sizeof(sMessageString) - 1, "%s", msg);
+    }
+    if ((r28 == 0 || mSynchro == 0) && (param_1 & 2) != 0) {
+        JUTWarningConsole_f("FAILED [%s:%d] %s\n", file, line, msg);
+    }
 }
 
 /* 802C7788-802C78E4       .text showAssert__12JUTAssertionFUlPCciPCc */
-void JUTAssertion::showAssert(unsigned long, const char*, int, const char*) {
-    /* Nonmatching */
+void JUTAssertion::showAssert(u32 device, const char* file, int line, const char* msg) {
+    OSReport("Failed assertion %s in \"%s\" on line %d\n", msg, file, line);
+    if ((device & 1) == 0) {
+        return;
+    }
+    if (!JUTDirectPrint::getManager()) {
+        return;
+    }
+    JUTDirectPrint::getManager()->erase(10, 0x10, 0x132, 0x18);
+    char buffer[0x100];
+    snprintf(buffer, 95, "Failed assertion: %s:%d", file, line);
+    JUTDirectPrint::getManager()->drawString(0x10, 0x10, buffer);
+    snprintf(buffer, 95, "%s", msg);
+    JUTDirectPrint::getManager()->drawString(0x10, 0x18, buffer);
+    VISetNextFrameBuffer(JUTDirectPrint::getManager()->getFrameBuffer());
+    VIWaitForRetrace();
+    VIFlush();
+    // busy loop for 2 seconds
+    OSTime var1 = OSGetTime();
+    while (OSTicksToMilliseconds(OSGetTime() - var1) < 2000) {}
 }
 
 /* 802C78E4-802C79FC       .text setWarningMessage_f_va */
-void setWarningMessage_f_va {
-    /* Nonmatching */
+void setWarningMessage_f_va(u32 device, const char* file, int line, const char* msg, va_list args) {
+    u32 messageLife = JUTAssertion::sMessageLife;
+    bool r26 = false;
+    if (messageLife == 0) {
+        if (device & 1) {
+            JUTAssertion::sMessageLife = JUTAssertion::sDisplayTime;
+            JUTAssertion::sMessageOwner = 3;
+            snprintf(JUTAssertion::sMessageFileLine, sizeof(JUTAssertion::sMessageFileLine) - 1, "WARNING [%s:%d]", file, line);
+        }
+        vsnprintf(JUTAssertion::sMessageString, sizeof(JUTAssertion::sMessageString) - 1, msg, args);
+        r26 = true;
+    }
+    if ((messageLife == 0 || JUTAssertion::mSynchro == 0) && (device & 2)) {
+        JUTWarningConsole_f("WARNING [%s:%d] ", file, line);
+        if (!r26) {
+            JUTWarningConsole_f_va(msg, args);
+        } else {
+            JUTWarningConsole(JUTAssertion::sMessageString);
+        }
+        JUTWarningConsole("\n");
+    }
 }
 
 /* 802C79FC-802C7A7C       .text setWarningMessage_f__12JUTAssertionFUlPciPCce */
-void JUTAssertion::setWarningMessage_f(unsigned long, char*, int, const char*, ...) {
-    /* Nonmatching */
+void JUTAssertion::setWarningMessage_f(u32 device, char* file, int line, const char* msg, ...) {
+    va_list args;
+    va_start(args, msg);
+    setWarningMessage_f_va(device, file, line, msg, args);
+    va_end(args);
 }
 
 /* 802C7A7C-802C7B94       .text setLogMessage_f_va */
-void setLogMessage_f_va {
-    /* Nonmatching */
+void setLogMessage_f_va(u32 device, const char* file, int line, const char* msg, va_list args) {
+    u32 messageLife = JUTAssertion::sMessageLife;
+    bool r26 = false;
+    if (messageLife == 0) {
+        if (device & 1) {
+            JUTAssertion::sMessageLife = JUTAssertion::sDisplayTime;
+            JUTAssertion::sMessageOwner = 4;
+            snprintf(JUTAssertion::sMessageFileLine, sizeof(JUTAssertion::sMessageFileLine) - 1, "[%s:%d]", file, line);
+        }
+        vsnprintf(JUTAssertion::sMessageString, sizeof(JUTAssertion::sMessageString) - 1, msg, args);
+        r26 = true;
+    }
+    if ((messageLife == 0 || JUTAssertion::mSynchro == 0) && (device & 2)) {
+        JUTReportConsole_f("[%s:%d] ", file, line);
+        if (!r26) {
+            JUTReportConsole_f_va(msg, args);
+        } else {
+            JUTReportConsole(JUTAssertion::sMessageString);
+        }
+        JUTReportConsole("\n");
+    }
 }
 
 /* 802C7B94-802C7C14       .text setLogMessage_f__12JUTAssertionFUlPciPCce */
-void JUTAssertion::setLogMessage_f(unsigned long, char*, int, const char*, ...) {
-    /* Nonmatching */
+void JUTAssertion::setLogMessage_f(u32 device, char* file, int line, const char* msg, ...) {
+    va_list args;
+    va_start(args, msg);
+    setLogMessage_f_va(device, file, line, msg, args);
+    va_end(args);
 }
 
 /* 802C7C14-802C7C1C       .text setVisible__12JUTAssertionFb */
-void JUTAssertion::setVisible(bool) {
-    /* Nonmatching */
+void JUTAssertion::setVisible(bool visible) {
+    mVisible = visible;
 }
 
 /* 802C7C1C-802C7C34       .text setMessageCount__12JUTAssertionFi */
-void JUTAssertion::setMessageCount(int) {
-    /* Nonmatching */
+void JUTAssertion::setMessageCount(int msg_count) {
+    sMessageLife = msg_count <= 0 ? 0 : msg_count;
 }
