@@ -5,7 +5,9 @@
 #include "d/d_procname.h"
 #include "dolphin/types.h"
 
-struct RECTANGLE_class{};
+struct RECTANGLE_class{
+    u8 padding[0x290];
+};
 
 /* 00000078-00000080       .text daRct_Draw__FP15RECTANGLE_class */
 static BOOL daRct_Draw(RECTANGLE_class*) {
@@ -32,7 +34,7 @@ static BOOL daRct_Create(fopAc_ac_c*) {
     return 0x4;
 }
 
-static actor_method_class RECTANGLE_class = {
+static actor_method_class l_daRct_Method = {
     (process_method_func)daRct_Create,
     (process_method_func)daRct_Delete,
     (process_method_func)daRct_Execute,
@@ -42,15 +44,17 @@ static actor_method_class RECTANGLE_class = {
 
 extern actor_process_profile_definition g_profile_RECTANGLE = {
     fpcLy_CURRENT_e,
-    0x0007FFFD,
-    0x00B50000,
+    7,
+    fpcLy_CURRENT_e,
     PROC_RECTANGLE,
-    0x00000290,
-    0x00000000,
-    0x00000000,
-    g_fopAc_Method,
-    0x009F0000,
-    l_daRct_Method,
+    &g_fpcLf_Method.mBase,
+    sizeof(RECTANGLE_class),
+    0,
+    0,
+    &g_fopAc_Method.base,
+    0x9F,
+    &l_daRct_Method,
     0x00040000,
-    0x00000000
+    fopAc_ACTOR_e,
+    fopAc_CULLBOX_0_e,
 };
