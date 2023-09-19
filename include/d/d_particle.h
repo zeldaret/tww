@@ -4,6 +4,7 @@
 #include "JSystem/J3DGraphBase/J3DVertex.h"
 #include "JSystem/JGeometry.h"
 #include "JSystem/JParticle/JPAParticle.h"
+#include "JSystem/JParticle/JPAEmitter.h"
 #include "f_pc/f_pc_node.h"
 
 class mDoDvdThd_toMainRam_c;
@@ -14,6 +15,7 @@ class JPADrawInfo;
 class JKRHeap;
 class JPABaseEmitter;
 class JPAEmitterManager;
+class J3DModelData;
 struct csXyz;
 
 class dPa_simpleData_c {
@@ -27,10 +29,53 @@ public:
     /* 0x13 */ u8 mbAffectedByWind;
 };
 
-class dPa_levelEcallBack {
+class JPACallBackBase {
+public:
+    JPACallBackBase();
+    virtual ~JPACallBackBase();
+    
+    virtual void init(JPABaseEmitter*);
+    virtual void execute(JPABaseEmitter*);
+    virtual void executeAfter(JPABaseEmitter*);
+    virtual void draw(JPABaseEmitter*);
+};
+
+class dPa_levelEcallBack : public JPACallBackBase {
 public:
     virtual ~dPa_levelEcallBack() {}
 };
+
+class dPa_followEcallBack : public dPa_levelEcallBack {
+public:
+    virtual ~dPa_followEcallBack();
+    
+    virtual void execute(JPABaseEmitter*);
+    virtual void draw(JPABaseEmitter*);
+    virtual void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
+    virtual void end();
+    
+    JPABaseEmitter* getEmitter() { return mpEmitter; }
+    
+    /* 0x04 */ JPABaseEmitter* mpEmitter;
+    /* 0x08 */ u8 field_0x08[0x10 - 0x08];
+    /* 0x10 */ u8 field_0x10;
+    /* 0x11 */ u8 field_0x11;
+    /* 0x12 */ u8 field_0x12;
+    /* 0x13 */ u8 field_0x13;
+};
+
+STATIC_ASSERT(sizeof(dPa_followEcallBack) == 0x14);
+
+class dPa_smokeEcallBack : dPa_followEcallBack {
+public:
+    /* 0x14 */ s8 field_0x14;
+    /* 0x15 */ u8 field_0x15;
+    /* 0x16 */ _GXColor field_0x16;
+    /* 0x1A */ u8 field_0x1A[0x1C - 0x1A];
+    /* 0x1C */ dKy_tevstr_c* mTevstr;
+};
+
+STATIC_ASSERT(sizeof(dPa_smokeEcallBack) == 0x20);
 
 class dPa_simpleEcallBack {
 public:
@@ -200,6 +245,19 @@ public:
     void setSimple(u16, cXyz const*, u8, GXColor const&, GXColor const&, int);
     void getSimple(u16);
 
+    JPABaseEmitter* setNormal(u16 particleID, const cXyz* pos, const csXyz* angle,
+                              const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,
+                              s8 setupInfo, const GXColor* pPrmColor, const GXColor* pEnvColor,
+                              const cXyz* pScale2D) {
+        return set(0, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
+    }
+    JPABaseEmitter* setToon(u16 particleID, const cXyz* pos, const csXyz* angle,
+                              const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,
+                              s8 setupInfo, const GXColor* pPrmColor, const GXColor* pEnvColor,
+                              const cXyz* pScale2D) {
+        return set(1, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
+    }
+    
     void drawModelParticle() { mModelCtrl->draw(); }
 
     /* 0x0000 */ JKRHeap* mpHeap;
