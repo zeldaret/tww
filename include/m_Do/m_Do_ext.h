@@ -248,11 +248,27 @@ public:
     mDoExt_McaMorf(J3DModelData*, mDoExt_McaMorfCallBack1_c*, mDoExt_McaMorfCallBack2_c*, J3DAnmTransform*, int, float, int, int, int, void*, unsigned long, unsigned long);
     virtual ~mDoExt_McaMorf();
 
+    void calc();
+    void calc(u16);
     void setAnm(J3DAnmTransform*, int, f32, f32, f32, f32, void*);
+    void setMorf(f32);
     J3DModel* getModel() { return mpModel; }
     void setFrame(f32 frame) { mFrameCtrl.setFrame(frame); }
+    f32 getFrame() { return mFrameCtrl.getFrame(); }
+    bool isStop() const { //regswap somewhere here
+        bool stopped = true;
+        if (!mFrameCtrl.checkState(1) && mFrameCtrl.getRate() != 0.0f) {
+            stopped = false;
+        }
+
+        return stopped;
+    }
+
     void update();
     void updateDL();
+    void entry();
+    void entryDL();
+    void entryDL(J3DMaterialTable*);
     void play(Vec *, u32, s8);
     void stopZelAnime();
 

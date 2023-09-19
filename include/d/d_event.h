@@ -62,6 +62,7 @@ public:
     u8 getTalkXYBtn() { return mTalkButton; }
     bool chkTalkXY() { return mTalkButton == 1 || mTalkButton == 2 || mTalkButton == 3; }
     void setPtI_Id(u32 id) { mPtItem = id; }
+    u8 getPreItemNo() { return mItemNo; }
 
     u16 chkEventFlag(u16 flag) { return flag & mEventFlag; }
     void onEventFlag(u16 flag) { mEventFlag |= flag; }

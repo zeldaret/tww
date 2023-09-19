@@ -411,7 +411,7 @@ f32 fopAcM_searchActorDistanceXZ(fopAc_ac_c* p_actorA, fopAc_ac_c* p_actorB);
 
 f32 fopAcM_searchActorDistanceXZ2(fopAc_ac_c* p_actorA, fopAc_ac_c* p_actorB);
 
-s32 fopAcM_rollPlayerCrash(fopAc_ac_c*, f32, u32, f32, f32, int, f32);
+s32 fopAcM_rollPlayerCrash(fopAc_ac_c*, f32, u32);
 s32 fopAcM_checkCullingBox(f32[3][4], f32, f32, f32, f32, f32, f32);
 s32 fopAcM_cullingCheck(fopAc_ac_c*);
 void* event_second_actor(u16);

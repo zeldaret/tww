@@ -87,7 +87,7 @@ void dComIfG_play_c::itemInit() {
     for (int i = 0; i < 4; i++) {
     }
 
-    mCurrAuctionItemNameMsgID = 0;
+    mMsgCountNumber = 0;
     field_0x491a = 0;
     field_0x491c = 0;
     field_0x491e = 0;

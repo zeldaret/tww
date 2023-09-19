@@ -29,14 +29,14 @@ public:
         /* 0x4 */ WALL_H_DIRECT = 4,
     };
 
-    /* 80075EAC */ dBgS_AcchCir();
-    /* 80075F14 */ void ClrWallHit();
-    /* 80075F40 */ void SetWallR(f32);
-    /* 80075F48 */ void CalcWallRR();
-    /* 80075F58 */ void SetWall(f32, f32);
-    /* 80075F80 */ void SetWallHDirect(f32);
+    dBgS_AcchCir();
+    void ClrWallHit();
+    void SetWallR(f32);
+    void CalcWallRR();
+    void SetWall(f32, f32);
+    void SetWallHDirect(f32);
 
-    /* 80077414 */ virtual ~dBgS_AcchCir() {}
+    virtual ~dBgS_AcchCir() {}
 
     f32 GetWallH() { return m_wall_h; }
     f32 GetWallR() { return m_wall_r; }
