@@ -132,6 +132,7 @@ public:
     dAttention_c& getAttention() { return mAttention; }
     dDetect_c& getDetect() { return mDetect; }
     dDemo_manager_c* getDemo() { return mDemo; }
+    camera_class* getCamera(int idx) { return mCameraInfo[idx].mpCamera; }
 
     dMagma_packet_c* getMagma() { return mpMagmaPacket; }
     dGrass_packet_c* getGrass() { return mpGrassPacket; }
@@ -619,6 +620,26 @@ inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo,
     g_dComIfG_gameInfo.save.getTurnRestart().set(i_pos, i_angle, i_roomNo, i_param, i_pos, i_angle, 0);
 }
 
+inline u16 dComIfGs_getDate() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusB().getDate();
+}
+
+inline void dComIfGs_setDate(u16 i_date) {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusB().setDate(i_date);
+}
+
+inline f32 dComIfGs_getTime() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusB().getTime();
+}
+
+inline void dComIfGs_setTime(f32 i_time) {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusB().setTime(i_time);
+}
+
+inline BOOL dComIfGs_isGetItem(int i_field, u8 i_item) {
+    return g_dComIfG_gameInfo.save.getPlayer().getGetItem().isItem(i_field, i_item);
+}
+
 /**
  * === PLAY ===
  */
@@ -626,6 +647,10 @@ inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo,
 void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8 i_layer,
                            f32 i_lastSpeed, u32 i_lastMode, int, s8 i_wipe);
 dStage_Ship_data* dComIfGp_getShip(int i_roomNo, int param_1);
+
+inline camera_class* dComIfGp_getCamera(int idx) {
+    return g_dComIfG_gameInfo.play.getCamera(idx);
+}
 
 inline const char* dComIfGp_getStartStageName() {
     return g_dComIfG_gameInfo.play.getStartStageName();
@@ -695,8 +720,36 @@ inline dStage_Multi_c* dComIfGp_getMulti() {
     return g_dComIfG_gameInfo.play.getStage().getMulti();
 }
 
+inline stage_envr_info_class* dComIfGp_getStageEnvrInfo() {
+    return g_dComIfG_gameInfo.play.getStage().getEnvrInfo();
+}
+
+inline stage_palet_info_class* dComIfGp_getStagePaletteInfo() {
+    return g_dComIfG_gameInfo.play.getStage().getPaletInfo();
+}
+
+inline stage_pselect_info_class* dComIfGp_getStagePselectInfo() {
+    return g_dComIfG_gameInfo.play.getStage().getPselectInfo();
+}
+
+inline stage_vrbox_info_class* dComIfGp_getStageVrboxInfo() {
+    return g_dComIfG_gameInfo.play.getStage().getVrboxInfo();
+}
+
 inline stage_stag_info_class* dComIfGp_getStageStagInfo() {
     return g_dComIfG_gameInfo.play.getStage().getStagInfo();
+}
+
+inline stage_plight_info_class* dComIfGp_getStagePlightInfo() {
+    return g_dComIfG_gameInfo.play.getStage().getPlightInfo();
+}
+
+inline int dComIfGp_getStagePlightNumInfo() {
+    return g_dComIfG_gameInfo.play.getStage().getPlightNumInfo();
+}
+
+inline s32 dComIfGp_roomControl_getTimePass() {
+    return g_dComIfG_gameInfo.play.getRoomControl()->GetTimePass();
 }
 
 inline s32 dComIfGp_roomControl_getStayNo() {
@@ -906,11 +959,15 @@ inline BOOL dComIfGp_checkCameraAttentionStatus(int idx, u32 flag) {
 /**
  * === EVENT ===*/
 
-inline u8 dComIfGp_event_getTalkXYBtn(void) {
+inline BOOL dComIfGp_event_runCheck() {
+    return g_dComIfG_gameInfo.play.getEvent().runCheck();
+}
+
+inline u8 dComIfGp_event_getTalkXYBtn() {
     return g_dComIfG_gameInfo.play.getEvent().getTalkXYBtn();
 }
 
-inline bool dComIfGp_event_chkTalkXY(void) {
+inline bool dComIfGp_event_chkTalkXY() {
     return g_dComIfG_gameInfo.play.getEvent().chkTalkXY();
 }
 

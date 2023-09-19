@@ -13,8 +13,6 @@
 #include "d/d_procname.h"
 #include "dolphin/types.h"
 
-extern dScnPly_reg_HIO_c g_regHIO;
-
 struct daKaji_c : fopAc_ac_c {
 public:
     BOOL CreateHeap();

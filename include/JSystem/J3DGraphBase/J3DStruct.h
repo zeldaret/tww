@@ -63,18 +63,15 @@ struct J3DIndTexMtxInfo {
 struct J3DFogInfo {
     /* 80325800 */ void operator=(J3DFogInfo const&);
 
-    /* 0x00 */ u8 field_0x0;
-    /* 0x01 */ u8 field_0x1;
-    /* 0x02 */ u16 field_0x2;
-    /* 0x04 */ f32 field_0x4;
-    /* 0x08 */ f32 field_0x8;
-    /* 0x0C */ f32 field_0xc;
-    /* 0x10 */ f32 field_0x10;
-    /* 0x14 */ u8 field_0x14;
-    /* 0x15 */ u8 field_0x15;
-    /* 0x16 */ u8 field_0x16;
-    /* 0x17 */ u8 field_0x17;
-    /* 0x18 */ u16 field_0x18[10];
+    /* 0x00 */ u8 mType;
+    /* 0x01 */ u8 mAdjEnable;
+    /* 0x02 */ u16 mCenter;
+    /* 0x04 */ f32 mStartZ;
+    /* 0x08 */ f32 mEndZ;
+    /* 0x0C */ f32 mNearZ;
+    /* 0x10 */ f32 mFarZ;
+    /* 0x14 */ GXColor mColor;
+    /* 0x18 */ u16 mFogAdjTable[10];
 };  // Size: 0x2C
 
 struct J3DNBTScaleInfo {

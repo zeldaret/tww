@@ -76,9 +76,12 @@ inline float atan2f(float y, float x) {
     return (float)atan2(y, x);
 }
 
+// these are duplicated due to sinf/cosf having a symbol, but
+// still being used as inlines elsewhere
 inline float i_sinf(float x) {
     return sin(x);
 }
+
 inline float i_cosf(float x) {
     return cos(x);
 }

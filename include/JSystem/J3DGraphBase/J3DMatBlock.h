@@ -162,7 +162,7 @@ public:
     virtual _GXColor* getTevKColor(u32);
     virtual void setTevKColorSel(u32, u8 const*);
     virtual void setTevKColorSel(u32, u8);
-    virtual bool getTevKColorSel(u32);
+    virtual u8 getTevKColorSel(u32);
     virtual void setTevKAlphaSel(u32, u8 const*);
     virtual void setTevKAlphaSel(u32, u8);
     virtual bool getTevKAlphaSel(u32);
@@ -228,7 +228,7 @@ public:
     virtual GXColor* getTevKColor(u32);
     virtual void setTevKColorSel(u32, u8 const*);
     virtual void setTevKColorSel(u32, u8);
-    virtual bool getTevKColorSel(u32);
+    virtual u8 getTevKColorSel(u32);
     virtual void setTevStageNum(u8 const*);
     virtual void setTevStageNum(u8);
     virtual u8 getTevStageNum() const;
@@ -295,7 +295,7 @@ public:
     virtual GXColor* getTevKColor(u32);
     virtual void setTevKColorSel(u32, u8 const*);
     virtual void setTevKColorSel(u32, u8);
-    virtual bool getTevKColorSel(u32);
+    virtual u8 getTevKColorSel(u32);
     virtual void setTevKAlphaSel(u32, u8 const*);
     virtual void setTevKAlphaSel(u32, u8);
     virtual bool getTevKAlphaSel(u32);
@@ -368,7 +368,7 @@ public:
     virtual GXColor* getTevKColor(u32);
     virtual void setTevKColorSel(u32, u8 const*);
     virtual void setTevKColorSel(u32, u8);
-    virtual bool getTevKColorSel(u32);
+    virtual u8 getTevKColorSel(u32);
     virtual void setTevKAlphaSel(u32, u8 const*);
     virtual void setTevKAlphaSel(u32, u8);
     virtual bool getTevKAlphaSel(u32);
@@ -441,7 +441,7 @@ public:
     virtual GXColor* getTevKColor(u32);
     virtual void setTevKColorSel(u32, u8 const*);
     virtual void setTevKColorSel(u32, u8);
-    virtual bool getTevKColorSel(u32);
+    virtual u8 getTevKColorSel(u32);
     virtual void setTevKAlphaSel(u32, u8 const*);
     virtual void setTevKAlphaSel(u32, u8);
     virtual bool getTevKAlphaSel(u32);
@@ -626,7 +626,6 @@ public:
     virtual void diffBlend();
     virtual s32 countDLSize();
     virtual u32 getType() = 0;
-    virtual void setFog(J3DFog);
     virtual void setFog(J3DFog*);
     virtual J3DFog* getFog();
     virtual void setAlphaComp(J3DAlphaComp const*);
@@ -688,7 +687,6 @@ public:
     virtual void diffBlend();
     virtual s32 countDLSize();
     virtual u32 getType();
-    virtual void setFog(J3DFog);
     virtual void setFog(J3DFog*);
     virtual J3DFog* getFog();
     virtual void setAlphaComp(J3DAlphaComp const*);
@@ -875,15 +873,13 @@ public:
     virtual void patchMatColor();
     virtual void patchLight();
     virtual void diff(u32);
-    virtual void diffAmbColor();
     virtual void diffMatColor();
-    virtual void diffColorChan();
-    virtual void diffLightObj(u32);
+    virtual void diffLight();
     virtual s32 countDLSize();
     virtual u32 getType() = 0;
     virtual void setMatColor(u32, J3DGXColor const*);
     virtual void setMatColor(u32, J3DGXColor);
-    virtual _GXColor* getMatColor(u32);
+    virtual GXColor* getMatColor(u32);
     virtual void setAmbColor(u32, J3DGXColor const*);
     virtual void setAmbColor(u32, J3DGXColor);
     virtual bool getAmbColor(u32);
@@ -918,10 +914,8 @@ public:
     virtual void patchMatColor();
     virtual void patchLight();
     virtual void diff(u32);
-    virtual void diffAmbColor();
     virtual void diffMatColor();
-    virtual void diffColorChan();
-    virtual void diffLightObj(u32);
+    virtual void diffLight();
     virtual s32 countDLSize();
     virtual u32 getType();
     virtual void setMatColor(u32, J3DGXColor const*);
@@ -972,7 +966,6 @@ public:
     virtual void patchLight();
     virtual void diff(u32);
     virtual void diffMatColor();
-    virtual void diffColorChan();
     virtual s32 countDLSize();
     virtual u32 getType();
     virtual void setMatColor(u32, J3DGXColor const*);
