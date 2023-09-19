@@ -4,6 +4,7 @@
 //
 
 #include "d/d_kankyo.h"
+#include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_data.h"
 #include "d/d_kankyo_rain.h"
@@ -1684,9 +1685,9 @@ void dScnKy_env_light_c::CalcTevColor() {
 
 /* 80193B68-80193BA8       .text Sndpos__18dScnKy_env_light_cFv */
 void dScnKy_env_light_c::Sndpos() {
-    if (field_0x944 != 0) {
-        field_0x944--;
-        if (field_0x944 == 0) {
+    if (mSound.field_0x10 != 0) {
+        mSound.field_0x10--;
+        if (mSound.field_0x10 == 0) {
             dKy_Sound_init();
         }
     }
@@ -1931,7 +1932,7 @@ void dKy_event_proc() {
             if (g_env_light.mInitAnimTimer == 0) {
                 if (dComIfGp_roomControl_getTimePass() && dComIfGs_isGetItem(2, 0)) {
                     if (dKy_pship_existense_chk()) {
-                        g_env_light.mThunderMode = 1;
+                        g_env_light.mThunderEff.mMode = 1;
                         dice_rain_minus();
 
                         if (env_light.mColpatWeather != 1) {
@@ -2033,8 +2034,8 @@ void dKy_event_proc() {
                             switch (env_light.mDiceWeatherMode) {
                             case DICE_MODE_SUNNY_e:
                                 weather_colpat = 0;
-                                if (g_env_light.mThunderMode == 1) {
-                                    g_env_light.mThunderMode = 0;
+                                if (g_env_light.mThunderEff.mMode == 1) {
+                                    g_env_light.mThunderEff.mMode = 0;
                                 }
 
                                 dice_rain_minus();
@@ -2054,7 +2055,7 @@ void dKy_event_proc() {
                                 }
                                 break;
                             case DICE_MODE_THUNDER_HEAVY_e:
-                                g_env_light.mThunderMode = 1;
+                                g_env_light.mThunderEff.mMode = 1;
                             case DICE_MODE_RAIN_HEAVY_e:
                                 weather_colpat = 1;
                                 if (env_light.mRainCount < 250) {
@@ -2064,7 +2065,7 @@ void dKy_event_proc() {
                                 break;
                             case DICE_MODE_THUNDER_LIGHT_e:
                                 weather_colpat = 1;
-                                g_env_light.mThunderMode = 1;
+                                g_env_light.mThunderEff.mMode = 1;
                                 dice_rain_minus();
                                 break;
                             }
@@ -2081,15 +2082,15 @@ void dKy_event_proc() {
                         g_env_light.mColpatCurrGather = 1;
                     }
 
-                    g_env_light.mThunderMode = 1;
+                    g_env_light.mThunderEff.mMode = 1;
                 } else {
                     if (g_env_light.mColpatWeather != 0) {
                         g_env_light.mColpatWeather = 0;
                         g_env_light.mColpatCurrGather = 0;
                     }
 
-                    if (g_env_light.mThunderMode == 1) {
-                        g_env_light.mThunderMode = 0;
+                    if (g_env_light.mThunderEff.mMode == 1) {
+                        g_env_light.mThunderEff.mMode = 0;
                     }
 
                     dice_rain_minus();
@@ -2447,8 +2448,14 @@ BOOL dKy_checkEventNightStop() {
 }
 
 /* 801967C4-801967F4       .text dKy_Sound_init__Fv */
+// NONMATCHING - reg swap
 void dKy_Sound_init() {
-    /* Nonmatching */
+    g_env_light.mSound.field_0x0.x = 999999.9f;
+    g_env_light.mSound.field_0x0.y = 999999.9f;
+    g_env_light.mSound.field_0x0.z = 999999.9f;
+    g_env_light.mSound.field_0xc = 0;
+    g_env_light.mSound.field_0x14 = -1;
+    g_env_light.mSound.field_0x10 = -1;
 }
 
 /* 801967F4-801969A8       .text dKy_Sound_set__F4cXyziUii */
@@ -2590,8 +2597,21 @@ int dKy_rain_check() {
 }
 
 /* 80196F88-80196FF8       .text dKy_usonami_set__Ff */
-void dKy_usonami_set(f32) {
-    /* Nonmatching */
+void dKy_usonami_set(f32 param_0) {
+    if (g_env_light.mWaveChan.mWaveCount < 200) {
+        g_env_light.mWaveChan.mWaveSpawnDist = 20000.0f;
+        g_env_light.mWaveChan.mWaveSpawnRadius = 22000.0f;
+        g_env_light.mWaveChan.mWaveReset = 0;
+        g_env_light.mWaveChan.mWaveScale = 300.0f;
+        g_env_light.mWaveChan.mWaveScaleRand = 0.001f;
+        g_env_light.mWaveChan.mWaveCounterSpeedScale = 1.2f;
+        g_env_light.mWaveChan.field_0x2f = 0;
+        g_env_light.mWaveChan.mWaveScaleBottom = 6.0f;
+        g_env_light.mWaveChan.mWaveCount = 300;
+        g_env_light.mWaveChan.mWaveSpeed = 30.0f;
+    }
+
+    g_env_light.mWaveChan.mWaveFlatInter = param_0;
 }
 
 /* 80196FF8-80197008       .text dKy_get_schbit__Fv */
@@ -2792,9 +2812,19 @@ bool dKy_daynighttact_stop_chk() {
 }
 
 /* 80197760-801979F4       .text dKyr_player_overhead_bg_chk__Fv */
-void dKyr_player_overhead_bg_chk() {
-    /* Nonmatching */
-}
+BOOL dKyr_player_overhead_bg_chk() {
+    fopAc_ac_c* player_p = dComIfGp_getPlayer(0);
+    BOOL ret = false;
+    dBgS_ObjGndChk_All gnd_chk;
 
-/* 801979F4-80197A7C       .text __dt__18dScnKy_env_light_cFv */
-dScnKy_env_light_c::~dScnKy_env_light_c() {}
+    if (dKy_rain_check() > 200) {
+        cXyz pos = player_p->current.pos;
+        pos.y += 10000.0f;
+        gnd_chk.SetPos(&pos);
+        if (dComIfG_Bgsp()->GroundCross(&gnd_chk) < player_p->current.pos.y + 50.0f) {
+            ret = true;
+        }
+    }
+
+    return ret;
+}

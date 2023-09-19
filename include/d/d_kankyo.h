@@ -15,9 +15,6 @@ struct color_RGB_class {
 };
 
 struct LIGHT_INFLUENCE {
-    ~LIGHT_INFLUENCE() {}
-    LIGHT_INFLUENCE() {}
-
     /* 0x00 */ cXyz mPos;
     /* 0x0C */ GXColorS10 mColor;
     /* 0x14 */ f32 mPower;
@@ -25,9 +22,14 @@ struct LIGHT_INFLUENCE {
     /* 0x1C */ int mIdx;
 };
 
-struct WIND_INFLUENCE {
-    ~WIND_INFLUENCE() {}
+struct EFLIGHT_PROC {
+    /* 0x00 */ u8 mSwordState;
+    /* 0x01 */ u8 mSwordFrame;
+    /* 0x04 */ int mSwordLightType;
+    /* 0x08 */ LIGHT_INFLUENCE mSwordLight;
+};
 
+struct WIND_INFLUENCE {
     /* 0x00 */ cXyz mPos;
     /* 0x0C */ cXyz mDir;
     /* 0x18 */ f32 mRadius;
@@ -38,9 +40,6 @@ struct WIND_INFLUENCE {
 };
 
 struct WIND_INF_ENTITY {
-    ~WIND_INF_ENTITY() {}
-    WIND_INF_ENTITY() {}
-
     /* 0x00 */ u8 mbInUse;
     /* 0x04 */ f32 mMinRadius;
     /* 0x08 */ f32 mSpeed;
@@ -48,7 +47,65 @@ struct WIND_INF_ENTITY {
     /* 0x10 */ WIND_INFLUENCE mInfluence;
 };
 
-struct dKankyo_wave__INFLUENCE {};
+struct GB_WIND_INFLUENCE {
+    /* 0x00 */ cXyz mWindVec;
+    /* 0x04 */ cXyz* mpWindVecOverride;
+    /* 0x08 */ f32 field_0x8;
+    /* 0x0C */ f32 field_0xc;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ f32 mWindPower;
+    /* 0x18 */ f32 mWindStrengthOverride;
+    /* 0x1C */ f32 mCustomWindPower;
+    /* 0x20 */ s16 mTactWindAngleX;
+    /* 0x22 */ s16 mTactWindAngleY;
+    /* 0x24 */ s16 mEvtWindAngleX;
+    /* 0x26 */ s16 mEvtWindAngleY;
+    /* 0x28 */ u8 mTactWindAngleFlags;
+    /* 0x2E */ u8 mEvtWindSet;
+};
+
+struct EF_THUNDER {
+    /* 0x00 */ u8 mStatus;
+    /* 0x01 */ u8 mStateTimer;
+    /* 0x02 */ u8 field_0x2;
+    /* 0x04 */ int mMode;
+    /* 0x08 */ f32 mFlashTimer;
+    /* 0x0C */ f32 field_0xc;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ u8 field_0x14[4];
+    /* 0x18 */ LIGHT_INFLUENCE mLightInfluence;
+};
+
+struct SND_INFLUENCE {
+    /* 0x00 */ cXyz field_0x0;
+    /* 0x0C */ int field_0xc;
+    /* 0x10 */ int field_0x10;
+    /* 0x14 */ u32 field_0x14;
+};
+
+struct WAVECHAN {
+    /* 0x00 */ f32 field_0x0;
+    /* 0x04 */ f32 field_0x4;
+    /* 0x08 */ f32 field_0x8;
+    /* 0x0C */ f32 mWaveSpeed;
+    /* 0x10 */ f32 mWaveSpawnDist;
+    /* 0x14 */ f32 mWaveSpawnRadius;
+    /* 0x18 */ f32 mWaveScale;
+    /* 0x1C */ f32 mWaveScaleRand;
+    /* 0x20 */ f32 mWaveCounterSpeedScale;
+    /* 0x24 */ f32 mWaveScaleBottom;
+    /* 0x28 */ f32 mWaveFlatInter;
+    /* 0x2C */ s16 mWaveCount;
+    /* 0x2E */ u8 mWaveReset;
+    /* 0x2F */ u8 field_0x2f;
+};
+
+struct WAVE_INFO {
+    /* 0x00 */ cXyz mPos;
+    /* 0x0C */ f32 mOuterRadius;
+    /* 0x10 */ f32 mInnerRadius;
+    /* 0x14 */ f32 field_0x14;
+};
 
 class dKy_tevstr_c {
 public:
@@ -117,7 +174,7 @@ class stage_plight_info_class;
 class dScnKy_env_light_c {
 public:
     dScnKy_env_light_c();
-    virtual ~dScnKy_env_light_c();
+    virtual ~dScnKy_env_light_c() {}
 
     void setDaytime();
     void SetSchbit();
@@ -152,75 +209,35 @@ public:
     /* 0x3F8 */ LIGHT_INFLUENCE* mpPLights[200];
     /* 0x718 */ LIGHT_INFLUENCE* mpEfLights[10];
     /* 0x740 */ u8 field_0x740[0x764 - 0x740];
-    /* 0x764 */ u8 mSwordState;
-    /* 0x765 */ u8 mSwordFrame;
-    /* 0x766 */ u8 field_0x766[0x768 - 0x766];
-    /* 0x768 */ int mSwordLightType;
-    /* 0x76C */ LIGHT_INFLUENCE mSwordLight;
+    /* 0x764 */ EFLIGHT_PROC mEfLightProc;
     /* 0x78C */ stage_plight_info_class* mpPlightInfo;
     /* 0x790 */ WIND_INFLUENCE* mpWindInfluence[30];
     /* 0x808 */ WIND_INF_ENTITY mWindInfluenceEntity[5];
-    /* 0x934 */ u8 field_0x934[0x944 - 0x934];
-    /* 0x944 */ int field_0x944;
-    /* 0x948 */ u8 field_0x948[0x94c - 0x948];
-    /* 0x94C */ f32 field_0x94c;
-    /* 0x950 */ f32 field_0x950;
-    /* 0x954 */ f32 field_0x954;
-    /* 0x958 */ f32 mWaveSpeed;
-    /* 0x95C */ f32 mWaveSpawnDist;
-    /* 0x960 */ f32 mWaveSpawnRadius;
-    /* 0x964 */ f32 mWaveScale;
-    /* 0x968 */ f32 mWaveScaleRand;
-    /* 0x96C */ f32 mWaveCounterSpeedScale;
-    /* 0x970 */ f32 mWaveScaleBottom;
-    /* 0x974 */ f32 mWaveFlatInter;
-    /* 0x978 */ s16 mWaveCount;
-    /* 0x97A */ u8 mWaveReset;
-    /* 0x97B */ u8 field_0x97b;
-    /* 0x97C */ cXyz mWindVec;
-    /* 0x988 */ cXyz* mpWindVecOverride;
-    /* 0x98C */ u8 field_0x98C[0x990 - 0x98C];
-    /* 0x990 */ f32 field_0x990;
-    /* 0x994 */ u8 field_0x994[0x998 - 0x994];
-    /* 0x998 */ f32 mWindPower;
-    /* 0x99C */ f32 mWindStrengthOverride;
-    /* 0x9A0 */ f32 mCustomWindPower;
-    /* 0x9A4 */ s16 mTactWindAngleX;
-    /* 0x9A6 */ s16 mTactWindAngleY;
-    /* 0x9A8 */ s16 mEvtWindAngleX;
-    /* 0x9AA */ s16 mEvtWindAngleY;
-    /* 0x9AC */ u8 mTactWindAngleFlags;
-    /* 0x9AD */ u8 mEvtWindSet;
-    /* 0x9AE */ u8 field_0x9AE[0x9B0 - 0x9AE];
+    /* 0x934 */ SND_INFLUENCE mSound;
+    /* 0x94C */ WAVECHAN mWaveChan;
+    /* 0x97C */ GB_WIND_INFLUENCE mWind;
     /* 0x9B0 */ u8 mbSunInitialized;
-    /* 0x9B1 */ u8 field_0x9B1[0x9B4 - 0x9B1];
     /* 0x9B4 */ dKankyo_sun_Packet* mpSunPacket;
     /* 0x9B8 */ dKankyo_sunlenz_Packet* mpSunlenzPacket;
     /* 0x9BC */ u8 mbRainInitialized;
-    /* 0x9BD */ u8 field_0x9BD[0x9C0 - 0x9BD];
     /* 0x9C0 */ int mRainCount;
     /* 0x9C4 */ dKankyo_rain_Packet* mpRainPacket;
     /* 0x9C8 */ u8 mbSnowInitialized;
-    /* 0x9C9 */ u8 field_0x9C9[0x9CC - 0x9C9];
     /* 0x9CC */ int mSnowCount;
     /* 0x9D0 */ dKankyo_snow_Packet* mpSnowPacket;
     /* 0x9D4 */ u8 mbStarInitialized;
-    /* 0x9D5 */ u8 field_0x9D5[0x9D8 - 0x9D5];
     /* 0x9D8 */ int mStarCount;
     /* 0x9DC */ f32 mStarCountTarget;
     /* 0x9E0 */ dKankyo_star_Packet* mpStarPacket;
     /* 0x9E4 */ u8 field_0x9E4[0x9F0 - 0x9E4];
     /* 0x9F0 */ u8 mbHouseInitialized;
-    /* 0x9F1 */ u8 field_0x9F1[0x9F4 - 0x9F1];
     /* 0x9F4 */ int mHousiCount;
     /* 0x9F8 */ dKankyo_housi_Packet* mpHousiPacket;
     /* 0x9FC */ u8 mMoyaInitialized;
     /* 0x9FD */ u8 mMoyaMode;
-    /* 0x9FE */ u8 field_0x9FE[0xA00 - 0x9FE];
     /* 0xA00 */ int mMoyaCount;
     /* 0xA04 */ dKankyo_cloud_Packet* mpMoyaPacket;
     /* 0xA08 */ u8 mVrkumoStatus;
-    /* 0xA09 */ u8 field_0xA09[0xA0C - 0xA09];
     /* 0xA0C */ int mVrkumoCount;
     /* 0xA10 */ f32 mVrkumoStrength;
     /* 0xA14 */ dKankyo_vrkumo_Packet* mpVrkumoPacket;
@@ -228,19 +245,10 @@ public:
     /* 0xA19 */ u8 field_0xA19[0xA20 - 0xA19];
     /* 0xA20 */ dKankyo_wave_Packet* mpWavePacket;
     /* 0xA24 */ u8 mbWindlineInitialized;
-    /* 0xA25 */ u8 field_0xA25[0xA28 - 0xA25];
     /* 0xA28 */ int mWindlineCount;
     /* 0xA2C */ dKyr__wind_Packet* mpWind;
-    /* 0xA30 */ bool mbThunderActive;
-    /* 0xA31 */ u8 mThunderStateTimer;
-    /* 0xA32 */ u8 field_0xA32[0xA34 - 0xA32];
-    /* 0xA34 */ int mThunderMode;
-    /* 0xA38 */ f32 mThunderFlashTimer;
-    /* 0xA3C */ f32 field_0xa3c;
-    /* 0xA40 */ f32 field_0xa40;
-    /* 0xA44 */ u8 field_0xA44[0xA48 - 0xA44];
-    /* 0xA48 */ LIGHT_INFLUENCE mThunderLightInfluence;
-    /* 0xA68 */ dKankyo_wave__INFLUENCE* mpWaveInfl[10];
+    /* 0xA30 */ EF_THUNDER mThunderEff;
+    /* 0xA68 */ WAVE_INFO* mpWaveInfl[10];
     /* 0xA90 */ cXyz mLightDir;
     /* 0xA9C */ cXyz mSunPos2;
     /* 0xAA8 */ cXyz mPLightNearPlayer;
@@ -400,6 +408,7 @@ cXyz dKy_get_orion_pos();
 cXyz dKy_get_hokuto_pos();
 
 /* 80197AB8-80197FE4       .text dKankyo_DayProc__Fv */
+// supposed to be generated after sinit...
 static void dKankyo_DayProc() {
     /* Nonmatching */
 }
