@@ -81,7 +81,16 @@ public:
     /* 0x8 */ f32 mChangeRate;
 };
 
-struct stage_plight_info_class {};
+struct stage_plight_info_class {
+    /* 0x00 */ Vec mPos;
+    /* 0x0C */ f32 mRadius;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ u8 mColorR;
+    /* 0x19 */ u8 mColorG;
+    /* 0x1A */ u8 mColorB;
+    /* 0x1B */ u8 mFluctuation;
+};
 
 class stage_palet_info_class {
 public:
@@ -799,7 +808,7 @@ public:
     static void SetTimePass(int);
     static JKRExpHeap* getMemoryBlock(int);
     static void setStayNo(int);
-    static s8 GetTimePass();
+    static s32 GetTimePass();
     static void setZoneNo(int, int);
     static int getZoneNo(int i_roomNo);
 
@@ -921,6 +930,14 @@ inline u32 dStage_stagInfo_GetSTType(stage_stag_info_class* i_stagInfo) {
 
 inline u8 dStage_stagInfo_GetParticleNo(stage_stag_info_class* i_stagInfo) {
     return (i_stagInfo->field_0x0a >> 0x3) & 0xFF;
+}
+
+inline s8 dStage_stagInfo_GetTimeH(stage_stag_info_class* p_info) {
+    return (p_info->field_0x0c >> 8) & 0xFF;
+}
+
+inline u8 dStage_stagInfo_getStartSch(stage_stag_info_class* p_info) {
+    return (p_info->field_0x10 >> 0x10) & 0xFF;
 }
 
 inline u8 dStage_roomRead_dt_c_GetLoadRoomIndex(u8 param_0) {

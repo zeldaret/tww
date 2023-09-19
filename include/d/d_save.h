@@ -31,7 +31,14 @@ STATIC_ASSERT(sizeof(dSv_player_status_a_c) == 0x18);
 
 class dSv_player_status_b_c {
 public:
-    /* 80058B54 */ void init();
+    void init();
+
+    void setDateIpl(s64 i_time) { mDateIPL = i_time; }
+    u16 getDate() const { return mDate; }
+    f32 getTime() const { return mTime; }
+    void setDate(u16 i_date) { mDate = i_date; }
+    void setTime(f32 i_time) { mTime = i_time; }
+    s64 getDateIpl() const { return mDateIPL; }
 
     /* 0x00 */ u64 mDateIPL;
     /* 0x08 */ f32 field_0x8;
@@ -85,7 +92,7 @@ class dSv_player_get_item_c {
 public:
     /* 800594A8 */ void init();
     /* 800594C4 */ void onItem(int, u8);
-    /* 8005955C */ bool isItem(int, u8);
+    /* 8005955C */ BOOL isItem(int, u8);
     /* 800595F8 */ void onBottleItem(u8);
     /* 80059740 */ bool isBottleItem(u8);
 
