@@ -135,4 +135,6 @@ public:
     /* 0x8 */ dScnPly_reg_childHIO_c mChild[22];
 };
 
+extern dScnPly_reg_HIO_c g_regHIO;
+
 #endif /* D_S_PLAY */

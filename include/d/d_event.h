@@ -58,13 +58,16 @@ public:
     void getTactFreeMStick(int);
     void getTactFreeCStick(int);
     void giveItemCut(u8);
+
     u8 getTalkXYBtn() { return mTalkButton; }
     bool chkTalkXY() { return mTalkButton == 1 || mTalkButton == 2 || mTalkButton == 3; }
     void setPtI_Id(u32 id) { mPtItem = id; }
 
-    inline u16 chkEventFlag(u16 flag) { return flag & mEventFlag; }
-    inline void onEventFlag(u16 flag) { mEventFlag |= flag; }
-    inline void offEventFlag(u16 flag) { mEventFlag &= ~flag; }
+    u16 chkEventFlag(u16 flag) { return flag & mEventFlag; }
+    void onEventFlag(u16 flag) { mEventFlag |= flag; }
+    void offEventFlag(u16 flag) { mEventFlag &= ~flag; }
+
+    bool runCheck() { return mMode != 0; }
 
     /* 0x00 */ dEvt_order_c mOrder[8];
     /* 0xC0 */ u8 mOrderCount;

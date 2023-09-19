@@ -238,7 +238,6 @@ public:
 
     static bool mWipe;
 
-private:
     /* 0x00000 */ J3DDrawBuffer* mpBufSkyOpa;
     /* 0x00004 */ J3DDrawBuffer* mpBufSkyXlu;
     /* 0x00008 */ J3DDrawBuffer* mpLinkBuf;

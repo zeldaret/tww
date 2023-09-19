@@ -12,9 +12,6 @@
 #include "m_Do/m_Do_ext.h"
 #include "dolphin/types.h"
 
-
-extern dScnPly_reg_HIO_c g_regHIO;
-
 class disappear_class : public fopAc_ac_c {
 public:
     int m0000;
