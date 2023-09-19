@@ -7,11 +7,11 @@
 class dSv_player_status_a_c {
 public:
     /* 800589A8 */ void init();
-
-    u8 getSelectItemIndex(int i_no) const { return mSelectItem[i_no]; }
-    u8 getSelectEquip(int i_no) const { return mSelectEquip[i_no]; }
-    u8 getWalletSize() const { return mWalletSize; }
+  
+    u8 getSelectEquip(int i_no) { return mSelectEquip[i_no]; }
+    u8 getWalletSize() { return mWalletSize; }
     int getRupee() const { return mRupee; }
+    u8 getMagic() { return mMagic; }
 
     /* 0x00 */ u16 mMaxLife;
     /* 0x02 */ u16 mLife;

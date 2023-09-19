@@ -1284,7 +1284,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_pirate_flag"),
     ActorRel(NonMatching, "d_a_race_item"),
     ActorRel(NonMatching, "d_a_rd"),
-    ActorRel(NonMatching, "d_a_rectangle"),
+    ActorRel(Matching, "d_a_rectangle"),
     ActorRel(NonMatching, "d_a_salvage"),
     ActorRel(NonMatching, "d_a_sbox"),
     ActorRel(NonMatching, "d_a_sk"),
