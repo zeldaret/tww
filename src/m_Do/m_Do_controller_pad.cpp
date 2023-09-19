@@ -112,7 +112,7 @@ int mDoCPd_Read() {
 /* 80007A70-80007BBC       .text mDoCPd_Create__Fv */
 // NONMATCHING - weird ending
 int mDoCPd_Create() {
-    JUTGamePad::sSuppressPadReset = 1;
+    JUTGamePad::mSuppressPadReset = 1;
 
     JUTGamePad* pad = new JUTGamePad(JUTGamePad::Port_1);
     g_mDoCPd_gamePad[0] = pad;
@@ -136,10 +136,8 @@ int mDoCPd_Create() {
     g_mDoGaC_gbaCom.mDoGaC_Initial(TestDataManager, 16);
 
     for (int i = 0; i < 4; i++) {
-        g_mDoCPd_cpadInfo[i].mTrigLockL = false;
-        g_mDoCPd_cpadInfo[i].mHoldLockL = false;
-        g_mDoCPd_cpadInfo[i].mTrigLockR = false;
-        g_mDoCPd_cpadInfo[i].mHoldLockR = false;
+        g_mDoCPd_cpadInfo[i].mHoldLockL = g_mDoCPd_cpadInfo[i].mTrigLockL = false;
+        g_mDoCPd_cpadInfo[i].mHoldLockR = g_mDoCPd_cpadInfo[i].mTrigLockR = false;
     }
 
     return 1;
