@@ -5,8 +5,7 @@
 #include "d/d_procname.h"
 #include "dolphin/types.h"
 
-struct RECTANGLE_class : fopAc_ac_c {
-};
+struct RECTANGLE_class : fopAc_ac_c {};
 
 /* 00000078-00000080       .text daRct_Draw__FP15RECTANGLE_class */
 static BOOL daRct_Draw(RECTANGLE_class*) {
