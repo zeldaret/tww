@@ -11,6 +11,7 @@ public:
     u8 getSelectItemIndex(int i_no) const { return mSelectItem[i_no]; }
     u8 getSelectEquip(int i_no) const { return mSelectEquip[i_no]; }
     u8 getWalletSize() const { return mWalletSize; }
+    int getRupee() const { return mRupee; }
 
     /* 0x00 */ u16 mMaxLife;
     /* 0x02 */ u16 mLife;

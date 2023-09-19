@@ -163,6 +163,10 @@ public:
     fopAc_ac_c* getPlayer(int idx) { return (fopAc_ac_c*)mpPlayer[idx]; }
     s8 getPlayerCameraID(int idx) { return mCurCamera[idx]; }
 
+    int getItemRupeeCount() { return mItemRupeeCount; }
+    void setItemRupeeCount(int count) { mItemRupeeCount += count; }
+    void setMessageCountNumber(s16 num) { mMsgCountNumber = num; }
+
     void setLkDemoAnmArchive(JKRArchive* i_arc) { mpLkDArc = i_arc; }
     void setStatus(u16 status) { mStatus = status; }
 
@@ -262,7 +266,7 @@ public:
     /* 0x48E8 */ u8 field_0x48E8[0x48F6 - 0x48E8];
     /* 0x48F6 */ s16 mItemPendantNumCount;
     /* 0x48F8 */ u8 field_0x48F8[0x4918 - 0x48F8];
-    /* 0x4918 */ u16 mCurrAuctionItemNameMsgID;
+    /* 0x4918 */ u16 mMsgCountNumber;
     /* 0x491A */ s16 field_0x491a;
     /* 0x491C */ s16 field_0x491c;
     /* 0x491E */ s16 field_0x491e;
@@ -405,6 +409,10 @@ inline u8 dComIfGs_getWalletSize() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getWalletSize();
 }
 
+inline int dComIfGs_getRupee() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getRupee();
+}
+
 inline u8 dComIfGs_getItem(int param_0) {
     return g_dComIfG_gameInfo.save.getPlayer().getItem().getItem(param_0);
 }
@@ -447,6 +455,10 @@ inline u8 dComIfGs_getBaitNum(int i_idx) {
 
 inline u8 dComIfGs_getReserveNum(int i_idx) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord().getReserveNum(i_idx);
+}
+
+inline void dComIfGs_setReserveItemEmpty() {
+    g_dComIfG_gameInfo.save.getPlayer().getBagItem().setReserveItemEmpty();
 }
 
 inline void dComIfGs_setEventReg(u16 i_reg, u8 i_no) {
@@ -903,6 +915,18 @@ inline BOOL dComIfGp_checkCameraAttentionStatus(int idx, u32 flag) {
     return g_dComIfG_gameInfo.play.checkCameraAttentionStatus(idx, flag);
 }
 
+inline int dComIfGp_getItemRupeeCount() {
+    return g_dComIfG_gameInfo.play.getItemRupeeCount();
+}
+
+inline void dComIfGp_setItemRupeeCount(int count) {
+    g_dComIfG_gameInfo.play.setItemRupeeCount(count);
+}
+
+inline void dComIfGp_setMessageCountNumber(s16 num) {
+    g_dComIfG_gameInfo.play.setMessageCountNumber(num);
+}
+
 /**
  * === EVENT ===*/
 
@@ -922,6 +946,10 @@ inline void dComIfGp_event_offEventFlag(s16 flag) {
     return g_dComIfG_gameInfo.play.getEvent().offEventFlag(flag);
 }
 
+inline u8 dComIfGp_event_getPreItemNo() {
+    return g_dComIfG_gameInfo.play.getEvent().getPreItemNo();
+}
+
 inline void dComIfGp_event_setItemPartnerId(u32 id) {
     return g_dComIfG_gameInfo.play.getEvent().setPtI_Id(id);
 }
@@ -934,11 +962,11 @@ inline u32 dComIfGp_evmng_getEventIdx(char* pName, u8 evNo) {
     return dComIfGp_getEventManager().getEventIdx(pName, evNo);
 }
 
-inline u32 dComIfGp_evmng_getMyStaffId(char* pName, fopAc_ac_c* pActor, s32 param_3) {
+inline int dComIfGp_evmng_getMyStaffId(char* pName, fopAc_ac_c* pActor, s32 param_3) {
     return dComIfGp_getEventManager().getMyStaffId(pName, pActor, param_3);
 }
 
-inline u32 dComIfGp_evmng_getMyActIdx(int staffIdx, const char* const* pActions, int actionCount, int force, int param_5) {
+inline int dComIfGp_evmng_getMyActIdx(int staffIdx, const char* const* pActions, int actionCount, int force, int param_5) {
     return dComIfGp_getEventManager().getMyActIdx(staffIdx, pActions, actionCount, force, param_5);
 }
 
@@ -974,7 +1002,7 @@ inline BOOL dComIfGp_evmng_getIsAddvance(s32 staffIdx) {
     return dComIfGp_getEventManager().getIsAddvance(staffIdx);
 }
 
-inline void dComIfGp_evmng_cutEnd(s32 staffIdx) {
+inline void dComIfGp_evmng_cutEnd(int staffIdx) {
     return dComIfGp_getEventManager().cutEnd(staffIdx);
 }
 

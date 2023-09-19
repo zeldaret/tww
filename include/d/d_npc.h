@@ -37,14 +37,19 @@ class dNpc_JntCtrl_c {
     /* 0x32 */ s16 field_0x32;
 
 public:
+    dNpc_JntCtrl_c() {
+        field_0x0C = 0;
+        field_0x0B = 0;
+    }
+
     bool angCalcS(s16*, s16, s16, s16);
     void limitter(s16*, s16, s16);
-    void follow(s16*, s16, s16, int);
+    bool follow(s16*, s16, s16, int);
     void move(s16, int);
     void lookAtTarget(s16*, cXyz*, cXyz, s16, s16, bool);
     void setParam(s16, s16, s16, s16, s16, s16, s16, s16, s16);
 
-    s16 chkLim(s16, int, int);
+    s32 chkLim(s16, int, int);
     void turn_fromBackbone2Head(s16, s16*, s16*, bool);
     void turn_fromHead2Backbone(s16, s16*, s16*);
     s16 follow_current(s16*, s16);
@@ -53,10 +58,10 @@ public:
 
 class dNpc_EventCut_c {
     /* 0x00 */ char* mpEvtStaffName;
-    /* 0x04 */ s32 mEvtStaffId;
+    /* 0x04 */ int mEvtStaffId;
     /* 0x08 */ fopAc_ac_c* mpActor;
     /* 0x0C */ fopNpc_npc_c* mpTalkActor;
-    /* 0x10 */ s32 mCurActIdx;
+    /* 0x10 */ int mCurActIdx;
     /* 0x14 */ u32 field_0x14;
     /* 0x18 */ int mTimer;
     /* 0x1C */ char* mpActorName;
@@ -78,6 +83,12 @@ class dNpc_EventCut_c {
     /* 0x68 */ u8* field_0x68;
 
 public:
+    dNpc_EventCut_c() {
+        mpActor = 0;
+        mpTalkActor = 0;
+        field_0x68 = 0;
+    }
+
     void setActorInfo(char*, fopAc_ac_c*);
     void setActorInfo2(char*, fopNpc_npc_c*);
 
@@ -166,8 +177,12 @@ enum dNpc_MessageStatus_e {
 
 class fopNpc_npc_c : public fopAc_ac_c {
 public:
+    fopNpc_npc_c() {
+        mCurrMsgBsPcId = -1;
+        mpCurrMsg = 0;
+    }
     /* 0x290 */ dNpc_JntCtrl_c mJntCtrl;
-    /* 0x2C4 */ dNpc_EventCut_c mEventCtrl;
+    /* 0x2C4 */ dNpc_EventCut_c mEventCut;
     /* 0x330 */ mDoExt_McaMorf* mpMcaMorf;
     /* 0x334 */ dBgS_ObjAcch mObjAcch;
     /* 0x4F8 */ dBgS_AcchCir mAcchCir;
@@ -179,8 +194,8 @@ public:
     /* 0x6B0 */ msg_class* mpCurrMsg;
     /* 0x6B4 */ u8 pad_0x6B4[0x6C0 - 0x6B4];
 
-    virtual u32 next_msgStatus(u32*) { return 0x10; }
-    virtual u32 getMsg() { return 1; }
+    virtual u16 next_msgStatus(u32* msgId) { return dNpcMsgStts_MSG_ENDS_e; }
+    virtual u32 getMsg() { return 0; }
     virtual void anmAtr(u16) {}
 
     void setCollision(float radius, float height);

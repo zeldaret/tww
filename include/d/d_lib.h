@@ -5,7 +5,7 @@
 
 class STControl {
 public:
-    void STControl(s16, s16, s16, s16, f32, f32, s16, s16);
+    STControl(s16, s16, s16, s16, f32, f32, s16, s16);
     void setWaitParm(s16, s16, s16, s16, f32, f32, s16, s16);
     void init();
     void Xinit();
@@ -37,5 +37,17 @@ public:
     /* 0x24 */ s16 field_0x24;
     /* 0x26 */ s16 field_0x26;
 };
+
+class dLib_anm_prm_c {
+public:
+    /* 0x00 */ s8 field_0x00;
+    /* 0x01 */ s8 field_0x01;
+    /* 0x02 */ s16 field_0x02;
+    /* 0x04 */ f32 field_0x04;
+    /* 0x08 */ f32 field_0x08;
+    /* 0x0C */ u32 loopMode;
+};
+
+void dLib_bcks_setAnm(const char*, mDoExt_McaMorf*, s8*, s8*, s8*, const int*, const dLib_anm_prm_c*, bool);
 
 #endif /* D_LIB_H */

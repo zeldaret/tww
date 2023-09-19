@@ -35,9 +35,10 @@ void dNpc_JntCtrl_c::limitter(s16* targetDiff, s16 maxDiff, s16 minDiff) {
     }
 }
 
-/* 8021A884-8021A97C       .text follow__14dNpc_JntCtrl_cFPsssi */
-void dNpc_JntCtrl_c::follow(short*, short, short, int) {
-    /* Nonmatching */
+bool dNpc_JntCtrl_c::follow(s16* outY, s16 targetY, s16 maxVel, int param_4) {
+    angCalcS(outY, targetY, 4, maxVel);
+
+    return *outY != targetY;
 }
 
 /* 8021A97C-8021AABC       .text move__14dNpc_JntCtrl_cFsi */
@@ -289,16 +290,18 @@ u8 dNpc_PathRun_c::pointArg(u8 idx) {
     return arg;
 }
 
-bool dNpc_PathRun_c::setNearPathIndx(cXyz* param_1, float param_2) {
+bool dNpc_PathRun_c::setNearPathIndx(cXyz* param_1, f32 param_2) {
     bool set = false;
     if(mPath != 0) {
         f32 max_dist = 1000000000.0f;
         u8 pointIdx = 0;
         for(int i = 0; i < maxPoint(); i++) {
             cXyz point = getPoint(i);
+    
             cXyz diff = (*param_1 - point);
-            f32 temp = diff.getMagXZ();
-            f32 dist = sqrtf(param_2 * (diff.y * diff.y) + temp);
+            f32 xz_mag = diff.getMagXZ();
+            f32 y_mag = param_2 * (diff.y * diff.y);
+            f32 dist = sqrtf(y_mag + xz_mag);
 
             if(max_dist > dist) {
                 max_dist = dist;
@@ -575,12 +578,12 @@ bool dNpc_setAnm_2(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int
 }
 
 void dNpc_HeadAnm_c::swing_vertical_init(s16 param_1, s16 param_2, s16 param_3, int param_4) {
-    if(param_4 == 0 || mFunc != &swing_vertical) {
+    if(param_4 == 0 || mFunc != &swing_horizone) { //these ptmfs should be going in rodata instead of data
         field_0x1C = 0;
         field_0x20 = param_1;
         field_0x1E = param_2;
         field_0x14 = param_3;
-        mFunc = &swing_vertical;
+        mFunc = &swing_vertical; //these ptmfs should be going in rodata instead of data
     }
 }
 
@@ -589,14 +592,13 @@ void dNpc_HeadAnm_c::swing_vertical() {
     /* Nonmatching */
 }
 
-/* 8021C3C8-8021C478       .text swing_horizone_init__14dNpc_HeadAnm_cFsssi */
 void dNpc_HeadAnm_c::swing_horizone_init(s16 param_1, s16 param_2, s16 param_3, int param_4) {
-    if(param_4 == 0 || mFunc != &swing_horizone) {
+    if(param_4 == 0 || mFunc != &swing_vertical) { //these ptmfs should be going in rodata instead of data
         field_0x1C = 0;
         field_0x20 = param_1;
         field_0x1E = param_2;
         field_0x18 = param_3;
-        mFunc = &swing_horizone;
+        mFunc = &swing_horizone; //these ptmfs should be going in rodata instead of data
     }
 }
 
@@ -615,9 +617,15 @@ void dNpc_HeadAnm_c::move() {
     }
 }
 
-/* 8021C5D8-8021C620       .text chkLim__14dNpc_JntCtrl_cFsii */
-s16 dNpc_JntCtrl_c::chkLim(short, int, int) {
-    /* Nonmatching */
+s32 dNpc_JntCtrl_c::chkLim(s16 param_1, int param_2, int param_3) {
+    //if(maxRotations[param_2][param_3] > param_1) {
+    //    param_1 = maxRotations[param_2][param_3];
+    //}
+    //if(param_1 < minRotations[param_2][param_3]) {
+    //    param_1 = minRotations[param_2][param_3];
+    //}
+
+    //return param_1;
 }
 
 void dNpc_JntCtrl_c::turn_fromBackbone2Head(s16 param_1, s16* param_2, s16* param_3, bool param_4) {
@@ -1026,23 +1034,43 @@ fopAc_ac_c* dNpc_EventCut_c::findActorCallBack(fopAc_ac_c* pActor, void* pData) 
     dNpc_EventCut_c* cut = static_cast<dNpc_EventCut_c*>(pData);
 
     if(cut == 0) {
-        pActor = 0;
+        return 0;
     }
-    else if(cut->mSetID == 0 || pActor->mSetID != cut->mSetID) {
-        if(cut->mpActorName == 0) {
-            pActor = 0;
-        }
-        else {
-            //if(dStage_searchName(cut->mpActorName) == 0) {
-            //    pActor = 0;
-            //}
-            //else {
-            //}
-        }
-    }
-    else {
+    
+    if(cut->mSetID != 0 && pActor->mSetID == cut->mSetID) {
         cut->mTargetActorPos = pActor->current.pos;
         cut->mpTargetActor = pActor;
+
+        return pActor;
+    }
+    else {
+        if(cut->mpActorName == 0) {
+            return 0;
+        }
+        else {
+            dStage__ObjectNameTable* obj = dStage_searchName(cut->mpActorName);
+            if(obj == 0) {
+                return 0;
+            }
+            else {
+                if(obj->mProcName == fopAcM_GetProfName(pActor) && obj->mSubtype == pActor->mSubtype) {
+                    f32 mag = sqrtf(cut->mTargetActorPos.getSquareMag());
+
+                    if(mag == 0.0f) {
+                        cut->mTargetActorPos = pActor->current.pos;
+                        cut->mpTargetActor = pActor;
+                    }
+                    else {
+                        f32 mag1 = sqrtf((cut->mTargetActorPos - cut->mpActor->current.pos).getSquareMag());
+                        f32 mag2 = sqrtf((pActor->current.pos - cut->mpActor->current.pos).getSquareMag());
+                        if(mag2 < mag1) {
+                            cut->mTargetActorPos = pActor->current.pos;
+                            cut->mpTargetActor = pActor;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     return 0;
@@ -1262,3 +1290,31 @@ void dNpc_EventCut_c::cutTalkMsgProc() {
         }
     }
 }
+
+dCcD_SrcCyl dNpc_cyl_src = {
+    0,
+    0,
+    0,
+    0,
+    0xFFFFFFBF, // Tg damage types
+    3,
+    0x75,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    4,
+    0,
+    
+    // Cylinder
+    0.0, // X
+    0.0, // Y
+    0.0, // Z
+    0.0, // Radius
+    0.0, // Height
+};
