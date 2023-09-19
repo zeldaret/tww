@@ -909,14 +909,7 @@ int dStage_mapInfo_GetOceanZ(stage_map_info_class*);
 int dStage_mapInfo_GetOceanX(stage_map_info_class*);
 void dStage_infoCreate();
 
-struct dStage__ObjectNameTable {
-    char mName[8];
-    s16 mProcName;
-    s8 mSubtype;
-    s8 mGbaName;
-};
-
-dStage__ObjectNameTable* dStage_searchName(const char*);
+dStage_objectNameInf* dStage_searchName(const char*);
 
 inline s32 dStage_stagInfo_GetSaveTbl(stage_stag_info_class* i_stagInfo) {
     return (i_stagInfo->field_0x09 >> 1) & 0x7F;

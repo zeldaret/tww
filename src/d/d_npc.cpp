@@ -1048,7 +1048,7 @@ fopAc_ac_c* dNpc_EventCut_c::findActorCallBack(fopAc_ac_c* pActor, void* pData) 
             return 0;
         }
         else {
-            dStage__ObjectNameTable* obj = dStage_searchName(cut->mpActorName);
+            dStage_objectNameInf* obj = dStage_searchName(cut->mpActorName);
             if(obj == 0) {
                 return 0;
             }
