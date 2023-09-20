@@ -107,6 +107,12 @@ struct WAVE_INFO {
     /* 0x14 */ f32 field_0x14;
 };
 
+struct DEMO_PLIGHT {
+    /* 0x00 */ int field_0x00;
+    /* 0x04 */ int field_0x04;
+    /* 0x08 */ LIGHT_INFLUENCE mLightInfluence;
+};
+
 class dKy_tevstr_c {
 public:
     /* 0x00 */ J3DLightObj mLightObj;
@@ -148,13 +154,6 @@ enum TevType {
     TEV_TYPE_ACTOR_NOLIGHT,
 };
 
-struct dScnKy__Schedule {
-    /* 0x0 */ f32 mTimeEnd;
-    /* 0x4 */ f32 mTimeBegin;
-    /* 0x8 */ u8 mPalIdx0;
-    /* 0x9 */ u8 mPalIdx1;
-};
-
 class dKankyo_sun_Packet;
 class dKankyo_sunlenz_Packet;
 class dKankyo_rain_Packet;
@@ -170,6 +169,7 @@ class stage_pselect_info_class;
 class stage_envr_info_class;
 class stage_vrbox_info_class;
 class stage_plight_info_class;
+struct dKyd_Schedule;
 
 class dScnKy_env_light_c {
 public:
@@ -203,7 +203,7 @@ public:
     /* 0x008 */ stage_pselect_info_class* mpPselectInfo;
     /* 0x00C */ stage_envr_info_class* mpEnvrInfo;
     /* 0x010 */ stage_vrbox_info_class* mpVrboxInfo;
-    /* 0x014 */ dScnKy__Schedule* mpSchejule;
+    /* 0x014 */ dKyd_Schedule* mpSchejule;
     /* 0x018 */ LIGHT_INFLUENCE mBaseLightInfluence;
     /* 0x038 */ LIGHT_INFLUENCE mLightInfluence[30];
     /* 0x3F8 */ LIGHT_INFLUENCE* mpPLights[200];
@@ -392,6 +392,9 @@ void dKy_Sound_set(cXyz i_pos, int param_1, unsigned int i_actorID, int param_3)
 void dKy_itudemo_se();
 void dKy_actor_addcol_set(s16, s16, s16, f32);
 void dKy_plight_set(LIGHT_INFLUENCE*);
+void dKy_efplight_set(LIGHT_INFLUENCE* param_0);
+void dKy_plight_cut(LIGHT_INFLUENCE* param_0);
+void dKy_efplight_cut(LIGHT_INFLUENCE* param_0);
 void dKy_fog_startendz_set(f32, f32, f32);
 void dKy_vrbox_addcol_set(s16, s16, s16, f32);
 BOOL dKy_daynight_check();
