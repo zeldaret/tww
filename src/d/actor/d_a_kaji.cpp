@@ -65,7 +65,7 @@ s32 daKaji_c::_create() {
         if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)&CheckCreateHeap, 0x660)) {
             mDoMtx_stack_c::transS(getPosition());
             mDoMtx_stack_c::YrotM(shape_angle.y);
-            mDoMtx_stack_c::scaleM(mScale.x, mScale.y, mScale.z);
+            mDoMtx_stack_c::scaleM(mScale);
             MTXCopy(mDoMtx_stack_c::get(), mMtx);
             
             l_p_ship = (daObjPirateship::Act_c*)fopAcM_SearchByID(mParentPcId);
@@ -102,7 +102,7 @@ BOOL daKaji_c::_execute() {
     
     mpMorf->getModel()->setBaseScale(mScale);
     mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
     mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
     MTXCopy(mDoMtx_stack_c::get(), mMtx);
     

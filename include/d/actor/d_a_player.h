@@ -90,8 +90,8 @@ public:
     /* 0x300 */ f32 field_0x300;
     /* 0x304 */ daPy_demo_c mDemo;
 
-    virtual void getLeftHandMatrix();
-    virtual void getRightHandMatrix();
+    virtual MtxP getLeftHandMatrix();
+    virtual MtxP getRightHandMatrix();
     virtual void getGroundY();
     virtual void getTactMusic() const;
     virtual void getTactTimerCancel() const;
