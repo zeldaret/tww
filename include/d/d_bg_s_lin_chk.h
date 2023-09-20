@@ -8,10 +8,13 @@ class fopAc_ac_c;
 
 class dBgS_LinChk : public cBgS_LinChk, public dBgS_Chk {
 public:
-    /* 80077C68 */ dBgS_LinChk();
+    /* 80077C68 */ dBgS_LinChk() {
+        SetPolyPassChk(GetPolyPassChkInfo());
+        SetGrpPassChk(GetGrpPassChkInfo());
+    }
     /* 80077D64 */ void Set(cXyz const* pi_start, cXyz const* pi_end, fopAc_ac_c const*);
 
-    /* 80077CDC */ virtual ~dBgS_LinChk();
+    /* 80077CDC */ virtual ~dBgS_LinChk() {}
 
     /* 0x00 cBgS_LinChk */;
     /* 0x58 dBgS_Chk */;
@@ -40,9 +43,13 @@ public:
 
 class dBgS_ArrowLinChk : public dBgS_LinChk {
 public:
-    /* 800781D8 */ dBgS_ArrowLinChk();
+    /* 800781D8 */ dBgS_ArrowLinChk() {
+        SetArrow(); // Don't check arrows
+        OnYoganGrp(); // Check lava
+        OnNormalGrp();
+    }
 
-    /* 80078240 */ virtual ~dBgS_ArrowLinChk();
+    /* 80078240 */ virtual ~dBgS_ArrowLinChk() {}
 };
 
 class dBgS_ObjLinChk : public dBgS_LinChk {

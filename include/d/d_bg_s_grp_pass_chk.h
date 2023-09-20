@@ -6,23 +6,33 @@
 class dBgS_GrpPassChk : public cBgS_GrpPassChk {
 public:
     enum {
-        /* 0x1 */ NORMAL_GRP = 1,
-        /* 0x2 */ WATER_GRP = 2,
-        /* 0x3 */ FULL_GRP = NORMAL_GRP | WATER_GRP | 4 | 8,
+        NORMAL_GRP = 0x01,
+        WATER_GRP  = 0x02,
+        YOGAN_GRP  = 0x04, // Lava
+        DOKU_GRP   = 0x08, // Unused, for poison?
+        SPL_GRP    = WATER_GRP | YOGAN_GRP | DOKU_GRP,
+        FULL_GRP   = NORMAL_GRP | SPL_GRP,
+        LIGHT_GRP  = 0x10,
     };
 
     /* 80077BA0 */ dBgS_GrpPassChk() { mGrp = NORMAL_GRP; }
 
     /* 80077BC4 */ virtual ~dBgS_GrpPassChk() {}
 
-    void OnWaterGrp() { mGrp |= WATER_GRP; }
-    void OnSpl() { mGrp |= WATER_GRP; }
     void OnNormalGrp() { mGrp |= NORMAL_GRP; }
-    void OffNormalGrp() { mGrp &= ~NORMAL_GRP; }
-    void OffFullGrp() { mGrp &= ~FULL_GRP; }
+    void OnWaterGrp() { mGrp |= WATER_GRP; }
+    void OnYoganGrp() { mGrp |= YOGAN_GRP; }
+    void OnSpl() { mGrp |= SPL_GRP; }
     void OnAll() { mGrp |= FULL_GRP; }
-    u32 MaskNormalGrp() const {return mGrp & 1; }
-    u32 MaskWaterGrp() const {return mGrp & 2; }
+    void OnLightGrp() { mGrp |= LIGHT_GRP; }
+    void OffNormalGrp() { mGrp &= ~NORMAL_GRP; }
+    void OffWaterGrp() { mGrp &= ~WATER_GRP; }
+    void OffFullGrp() { mGrp &= ~FULL_GRP; }
+    u32 MaskNormalGrp() const { return mGrp & NORMAL_GRP; }
+    u32 MaskWaterGrp() const { return mGrp & WATER_GRP; }
+    u32 MaskYoganGrp() const { return mGrp & YOGAN_GRP; }
+    u32 MaskDokuGrp() const { return mGrp & DOKU_GRP; }
+    u32 MaskLightGrp() const { return mGrp & LIGHT_GRP; }
 private:
     /* 0x4 */ u32 mGrp;
 };

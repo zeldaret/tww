@@ -7,8 +7,8 @@
 class dBgS_GndChk : public cBgS_GndChk, public dBgS_Chk {
 public:
     /* 8007757C */ dBgS_GndChk() {
-        this->SetPolyPassChk(this->GetPolyPassChkInfo());
-        this->SetGrpPassChk(this->GetGrpPassChkInfo());
+        SetPolyPassChk(GetPolyPassChkInfo());
+        SetGrpPassChk(GetGrpPassChkInfo());
     }
     /* 800775F0 */ virtual ~dBgS_GndChk() {}
 };  // Size: 0x54

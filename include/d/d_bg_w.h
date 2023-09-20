@@ -2,6 +2,7 @@
 #define D_BG_W_H
 
 #include "SSystem/SComponent/c_bg_w.h"
+#include "SSystem/SComponent/c_sxyz.h"
 
 class dBgS_Acch;
 class cM3dGPla;
@@ -45,7 +46,7 @@ public:
     virtual ~dBgW() {}
     virtual void ChkPolyThrough(int, cBgS_PolyPassChk*);
     virtual void ChkShdwDrawThrough(int, cBgS_PolyPassChk*);
-    virtual void ChkGrpThrough(int, cBgS_GrpPassChk*, int);
+    virtual bool ChkGrpThrough(int, cBgS_GrpPassChk*, int);
     virtual void CrrPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*);
     virtual void TransPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*);
     virtual void MatrixCrrPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*);

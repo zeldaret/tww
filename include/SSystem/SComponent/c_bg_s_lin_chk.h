@@ -18,13 +18,13 @@ public:
     /* 0x054 */ bool mBackFlag;
 
 public:
-    cBgS_LinChk();
+    cBgS_LinChk() { ct(); }
     void ct();
     void Set2(cXyz*, cXyz*, unsigned int);
     void PreCalc();
     void GetCross();
 
-    virtual ~cBgS_LinChk();
+    virtual ~cBgS_LinChk() {}
 
     void ClrHit() { field_0x4c &= ~16; }
     void SetHit() { field_0x4c |= 16; }
@@ -37,6 +37,6 @@ public:
     bool GetPreWallChk() const { return mPreWallChk; }
     bool GetPreGroundChk() const { return mPreGroundChk; }
     bool GetPreRoofChk() const { return mPreRoofChk; }
-};
+};  // Size: 0x58
 
 #endif /* C_BG_S_LIN_CHK_H */

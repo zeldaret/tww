@@ -87,7 +87,7 @@ public:
     virtual void ClassifyPlane();
     virtual void ChkPolyThrough(int, cBgS_PolyPassChk*);
     virtual void ChkShdwDrawThrough(int, cBgS_PolyPassChk*);
-    virtual void ChkGrpThrough(int, cBgS_GrpPassChk*, int);
+    virtual bool ChkGrpThrough(int, cBgS_GrpPassChk*, int);
 
     /* 0x08 */ Mtx* mpModelMtx;
     /* 0x0C */ Mtx mOldMtx;
