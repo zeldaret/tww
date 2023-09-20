@@ -47,6 +47,7 @@ public:
 
 class dPa_followEcallBack : public dPa_levelEcallBack {
 public:
+    dPa_followEcallBack(u8, u8);
     virtual ~dPa_followEcallBack();
     
     virtual void execute(JPABaseEmitter*);

@@ -186,6 +186,9 @@ public:
 
     dTimer_c* getTimerPtr() { return mTimerInfo.mTimerPtr; }
     s32 getTimerMode() { return mTimerInfo.mTimerMode; }
+    
+    s16 getItemMagicCount() { return mItemMagicCount; }
+    void setItemMagicCount(s16 magic) { mItemMagicCount = magic; }
 
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
@@ -982,6 +985,14 @@ inline void dComIfGp_setItemRupeeCount(int count) {
 
 inline void dComIfGp_setMessageCountNumber(s16 num) {
     g_dComIfG_gameInfo.play.setMessageCountNumber(num);
+}
+
+inline s16 dComIfGp_getItemMagicCount() {
+    return g_dComIfG_gameInfo.play.getItemMagicCount();
+}
+
+inline void dComIfGp_setItemMagicCount(s16 magic) {
+    g_dComIfG_gameInfo.play.setItemMagicCount(magic);
 }
 
 /**
