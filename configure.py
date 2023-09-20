@@ -413,7 +413,7 @@ config.libs = [
             Object(NonMatching, "d/actor/d_a_boomerang.cpp"),
             Object(NonMatching, "d/actor/d_a_dai_item.cpp"),
             Object(NonMatching, "d/actor/d_a_demo00.cpp"),
-            Object(Matching, "d/actor/d_a_disappear.cpp"),
+            Object(Matching,    "d/actor/d_a_disappear.cpp"),
             Object(NonMatching, "d/actor/d_a_esa.cpp"),
             Object(NonMatching, "d/actor/d_a_grid.cpp"),
             Object(NonMatching, "d/actor/d_a_himo2.cpp"),
