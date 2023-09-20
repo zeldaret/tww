@@ -119,8 +119,8 @@ inline void fopAcM_SetParam(void* p_actor, u32 param) {
     fpcM_SetParam(p_actor, param);
 }
 
-inline void fopAcM_SetJntCol(fopAc_ac_c* i_actorP, dJntCol_c* i_jntColP) {
-    i_actorP->mJntCol = i_jntColP;
+inline void fopAcM_SetJntHit(fopAc_ac_c* i_actorP, JntHit_c* i_jntHitP) {
+    i_actorP->mJntHit = i_jntHitP;
 }
 
 inline s16 fopAcM_GetProfName(void* pActor) {
@@ -251,8 +251,8 @@ inline f32 fopAcM_GetMaxFallSpeed(fopAc_ac_c* p_actor) {
     return p_actor->mMaxFallSpeed;
 }
 
-inline dJntCol_c* fopAcM_GetJntCol(fopAc_ac_c* i_actor) {
-    return i_actor->mJntCol;
+inline JntHit_c* fopAcM_GetJntHit(fopAc_ac_c* i_actor) {
+    return i_actor->mJntHit;
 }
 
 inline void fopAcM_setCullSizeFar(fopAc_ac_c* i_actor, f32 i_far) {
