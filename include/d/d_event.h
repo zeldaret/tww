@@ -67,6 +67,7 @@ public:
     u16 chkEventFlag(u16 flag) { return flag & mEventFlag; }
     void onEventFlag(u16 flag) { mEventFlag |= flag; }
     void offEventFlag(u16 flag) { mEventFlag &= ~flag; }
+    void reset() { onEventFlag(8); }
 
     bool runCheck() { return mMode != 0; }
 
