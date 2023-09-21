@@ -1,6 +1,7 @@
 #ifndef D_D_DRAWLIST_H
 #define D_D_DRAWLIST_H
 
+#include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "f_op/f_op_view.h"
 #include "global.h"
 #include "m_Do/m_Do_ext.h"
@@ -171,21 +172,20 @@ struct dDlst_alphaModelData_c;
 struct dDlst_alphaModel_c {
 public:
     enum Type {
-        TYPE_SPHERE        = 0,
-        TYPE_TWO_SPHERES   = 1,
-        TYPE_SEARCHLIGHT   = 2,
-        TYPE_CUBE          = 3,
-        TYPE_SMALL_SPHERE  = 4,
+        TYPE_SPHERE = 0,
+        TYPE_TWO_SPHERES = 1,
+        TYPE_SEARCHLIGHT = 2,
+        TYPE_CUBE = 3,
+        TYPE_SMALL_SPHERE = 4,
         TYPE_THREE_SPHERES = 5,
     };
-    
+
     dDlst_alphaModel_c();
     void create(int);
     void set(u8 type, Mtx mtx, u8 alpha);
     void draw(MtxP);
-    s32 getNum() {
-        return mNum;
-    }
+    s32 getNum() { return mNum; }
+
 public:
     /* 0x00 */ _GXColor mColor;
     /* 0x04 */ s16 mCapacity;
@@ -208,6 +208,21 @@ public:
     void calcWipe();
     void set2DOpa(dDlst_base_c*);
 
+    J3DDrawBuffer* getOpaListFilter() { return mpWetherFxBuffer; }
+
+    void setXluDrawList(J3DDrawBuffer* buffer) { j3dSys.setDrawBuffer(buffer, XLU_BUFFER); }
+    void setOpaDrawList(J3DDrawBuffer* buffer) { j3dSys.setDrawBuffer(buffer, OPA_BUFFER); }
+    void setOpaList() { setOpaDrawList(mpBufInvisibleModelOpa); }
+    void setXluList() { setXluDrawList(mpBufInvisibleModelXlu); }
+    void setOpaListSky() { setOpaDrawList(mpBufSkyOpa); }
+    void setXluListSky() { setXluDrawList(mpBufSkyXlu); }
+    void setOpaListBG() { setOpaDrawList(mpBufWorldOpa); }
+    void setXluListBG() { setXluDrawList(mpBufWorldXlu); }
+
+    void entryZSortXluList(J3DPacket* i_packet, cXyz& param_1) {
+        entryZSortXluDrawList(mpBufInvisibleModelXlu, i_packet, param_1);
+    }
+
     int setSimpleShadow(cXyz* param_0, f32 param_1, f32 param_2, cXyz* param_3, s16 param_4,
                         f32 param_5, _GXTexObj* param_6) {
         return mShadowControl.setSimple(param_0, param_1, param_2, param_3, param_4, param_5,
@@ -217,22 +232,12 @@ public:
                        dKy_tevstr_c* pTevStr) {
         return mShadowControl.setReal2(id, param_2, pModel, pPos, param_5, param_6, pTevStr);
     }
-    
-    void setAlphaModel(u8 type, Mtx mtx, u8 alpha) {
-        mpAlphaModel->set(type, mtx, alpha);
-    }
-    void setSpotModel(u8 type, Mtx mtx, u8 alpha) {
-        mpSpotModel->set(type, mtx, alpha);
-    }
-    void setLightModel(u8 type, Mtx mtx, u8 alpha) {
-        mpLightModel->set(type, mtx, alpha);
-    }
-    s32 getSpotModelNum() {
-        return mpSpotModel->getNum();
-    }
-    s32 getLightModelNum() {
-        return mpLightModel->getNum();
-    }
+
+    void setAlphaModel(u8 type, Mtx mtx, u8 alpha) { mpAlphaModel->set(type, mtx, alpha); }
+    void setSpotModel(u8 type, Mtx mtx, u8 alpha) { mpSpotModel->set(type, mtx, alpha); }
+    void setLightModel(u8 type, Mtx mtx, u8 alpha) { mpLightModel->set(type, mtx, alpha); }
+    s32 getSpotModelNum() { return mpSpotModel->getNum(); }
+    s32 getLightModelNum() { return mpLightModel->getNum(); }
 
     static void offWipe() { mWipe = false; }
 

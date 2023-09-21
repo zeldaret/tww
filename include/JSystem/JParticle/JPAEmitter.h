@@ -16,6 +16,16 @@ class JPACallBackBase;
 class JPACallBackBase2;
 class JPADataBlockLinkInfo;
 
+enum {
+    JPAEmtrStts_StopEmit = 0x01,
+    JPAEmtrStts_StopCalc = 0x02,
+    JPAEmtrStts_StopDraw = 0x04,
+    JPAEmtrStts_EnableDeleteEmitter = 0x08,
+    JPAEmtrStts_FirstEmit = 0x10,
+    JPAEmtrStts_RateStepEmit = 0x20,
+    JPAEmtrStts_Immortal = 0x40,
+};
+
 class JPABaseEmitter {
 public:
     typedef void (JPABaseEmitter::*VolumeFunc)();
@@ -45,11 +55,20 @@ public:
     void calcgReRDirection();
     void getPivotX();
     void getPivotY();
+
+    void setStatus(u32 status) { mFlags |= status; }
     
     u8 getGlobalAlpha() { return mGlobalPrmColor.a; }
     void setGlobalAlpha(u8 alpha) { mGlobalPrmColor.a = alpha; }
     void setGlobalRTMatrix(MtxP mtx) {
         JPASetRMtxTVecfromMtx(mtx, mGlobalRotation, mGlobalTranslation);
+    }
+
+    void stopCreateParticle() { setStatus(JPAEmtrStts_StopEmit); }
+
+    void becomeInvalidEmitter() {
+        mMaxFrame = -1;
+        stopCreateParticle();
     }
     
     /* 0x000 */ VolumeFunc mVolumeFunc;

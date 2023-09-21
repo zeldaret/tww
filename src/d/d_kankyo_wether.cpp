@@ -3,566 +3,1397 @@
 // Translation Unit: d_kankyo_wether.cpp
 //
 
-#include "d_kankyo_wether.h"
-#include "dolphin/types.h"
+#include "d/d_kankyo_wether.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
+#include "d/d_kankyo_rain.h"
+#include "f_op/f_op_camera_mng.h"
+#include "m_Do/m_Do_audio.h"
 
 /* 80086F74-80086FC4       .text dKyw_setDrawPacketList__FP9J3DPacketi */
-void dKyw_setDrawPacketList(J3DPacket*, int) {
-    /* Nonmatching */
+J3DPacket* dKyw_setDrawPacketList(J3DPacket* i_packet, int) {
+    if (i_packet == NULL) {
+        return NULL;
+    } else {
+        dComIfGd_getListFilter()->entryImm(i_packet, 0);
+        return i_packet;
+    }
 }
 
 /* 80086FC4-80087054       .text dKyw_setDrawPacketListSky__FP9J3DPacketi */
-void dKyw_setDrawPacketListSky(J3DPacket*, int) {
-    /* Nonmatching */
+J3DPacket* dKyw_setDrawPacketListSky(J3DPacket* i_packet, int i_type) {
+    if (i_packet == NULL) {
+        return NULL;
+    } else {
+        dComIfGd_setListSky();
+        j3dSys.getDrawBuffer(i_type)->entryImm(i_packet, 0);
+        dComIfGd_setList();
+        return i_packet;
+    }
 }
 
 /* 80087054-800870DC       .text dKyw_setDrawPacketListXluBg__FP9J3DPacketi */
-void dKyw_setDrawPacketListXluBg(J3DPacket*, int) {
-    /* Nonmatching */
+J3DPacket* dKyw_setDrawPacketListXluBg(J3DPacket* i_packet, int i_type) {
+    if (i_packet == NULL) {
+        return NULL;
+    } else {
+        dComIfGd_setXluListBG();
+        j3dSys.getDrawBuffer(i_type)->entryImm(i_packet, 0);
+        dComIfGd_setList();
+        return i_packet;
+    }
 }
 
 /* 800870DC-80087130       .text dKyw_setDrawPacketListXluZPos__FP9J3DPacketP4cXyz */
-void dKyw_setDrawPacketListXluZPos(J3DPacket*, cXyz*) {
-    /* Nonmatching */
+J3DPacket* dKyw_setDrawPacketListXluZPos(J3DPacket* i_packet, cXyz* param_1) {
+    if (i_packet == NULL) {
+        return NULL;
+    } else {
+        dComIfGd_entryZSortXluList(i_packet, *param_1);
+        return i_packet;
+    }
 }
 
 /* 80087130-80087168       .text draw__18dKankyo_sun_PacketFv */
 void dKankyo_sun_Packet::draw() {
-    /* Nonmatching */
+    dKyr_drawSun(j3dSys.getViewMtx(), mPos, mColor, mpTextureData);
 }
 
 /* 80087168-800871A0       .text draw__22dKankyo_sunlenz_PacketFv */
 void dKankyo_sunlenz_Packet::draw() {
-    /* Nonmatching */
+    dKyr_drawLenzflare(j3dSys.getViewMtx(), mPositions, mColorTmp, &mpTexSnow01);
 }
 
 /* 800871A0-800871DC       .text __dt__8RAIN_EFFFv */
-RAIN_EFF::~RAIN_EFF() {
-    /* Nonmatching */
-}
+RAIN_EFF::~RAIN_EFF() {}
 
 /* 800871DC-800871E0       .text __ct__8RAIN_EFFFv */
-RAIN_EFF::RAIN_EFF() {
-    /* Nonmatching */
-}
+RAIN_EFF::RAIN_EFF() {}
 
 /* 800871E0-80087228       .text draw__19dKankyo_rain_PacketFv */
 void dKankyo_rain_Packet::draw() {
-    /* Nonmatching */
+    dKyr_drawSibuki(j3dSys.getViewMtx(), &mpTxSnow01);
+    dKyr_drawRain(j3dSys.getViewMtx(), &mpTxSnow01);
 }
 
 /* 80087228-80087264       .text __dt__8SNOW_EFFFv */
-SNOW_EFF::~SNOW_EFF() {
-    /* Nonmatching */
-}
+SNOW_EFF::~SNOW_EFF() {}
 
 /* 80087264-80087268       .text __ct__8SNOW_EFFFv */
-SNOW_EFF::SNOW_EFF() {
-    /* Nonmatching */
-}
+SNOW_EFF::SNOW_EFF() {}
 
 /* 80087268-80087298       .text draw__19dKankyo_snow_PacketFv */
 void dKankyo_snow_Packet::draw() {
-    /* Nonmatching */
+    dKyr_drawSnow(j3dSys.getViewMtx(), &mpTexture);
 }
 
 /* 80087298-800872D4       .text __dt__8STAR_EFFFv */
-STAR_EFF::~STAR_EFF() {
-    /* Nonmatching */
-}
+STAR_EFF::~STAR_EFF() {}
 
 /* 800872D4-800872D8       .text __ct__8STAR_EFFFv */
-STAR_EFF::STAR_EFF() {
-    /* Nonmatching */
-}
+STAR_EFF::STAR_EFF() {}
 
 /* 800872D8-80087308       .text draw__19dKankyo_star_PacketFv */
 void dKankyo_star_Packet::draw() {
-    /* Nonmatching */
+    dKyr_drawStar(j3dSys.getViewMtx(), &field_0x10);
 }
 
 /* 80087308-80087344       .text __dt__10POISON_EFFFv */
-POISON_EFF::~POISON_EFF() {
-    /* Nonmatching */
-}
+POISON_EFF::~POISON_EFF() {}
 
 /* 80087344-80087348       .text __ct__10POISON_EFFFv */
-POISON_EFF::POISON_EFF() {
-    /* Nonmatching */
-}
+POISON_EFF::POISON_EFF() {}
 
 /* 80087348-8008737C       .text draw__21dKankyo_poison_PacketFv */
 void dKankyo_poison_Packet::draw() {
-    /* Nonmatching */
+    drawPoison(j3dSys.getViewMtx(), &field_0xbbac);
 }
 
 /* 8008737C-800873B8       .text __dt__9CLOUD_EFFFv */
-CLOUD_EFF::~CLOUD_EFF() {
-    /* Nonmatching */
-}
+CLOUD_EFF::~CLOUD_EFF() {}
 
 /* 800873B8-800873BC       .text __ct__9CLOUD_EFFFv */
-CLOUD_EFF::CLOUD_EFF() {
-    /* Nonmatching */
-}
+CLOUD_EFF::CLOUD_EFF() {}
 
 /* 800873BC-800873EC       .text draw__20dKankyo_cloud_PacketFv */
 void dKankyo_cloud_Packet::draw() {
-    /* Nonmatching */
+    drawCloudShadow(j3dSys.getViewMtx(), &mpTexture);
 }
 
 /* 800873EC-80087428       .text __dt__9HOUSI_EFFFv */
-HOUSI_EFF::~HOUSI_EFF() {
-    /* Nonmatching */
-}
+HOUSI_EFF::~HOUSI_EFF() {}
 
 /* 80087428-8008742C       .text __ct__9HOUSI_EFFFv */
-HOUSI_EFF::HOUSI_EFF() {
-    /* Nonmatching */
-}
+HOUSI_EFF::HOUSI_EFF() {}
 
 /* 8008742C-8008745C       .text draw__20dKankyo_housi_PacketFv */
 void dKankyo_housi_Packet::draw() {
-    /* Nonmatching */
+    dKyr_drawHousi(j3dSys.getViewMtx(), &mpTex);
 }
 
 /* 8008745C-80087498       .text __dt__10VRKUMO_EFFFv */
-VRKUMO_EFF::~VRKUMO_EFF() {
-    /* Nonmatching */
-}
+VRKUMO_EFF::~VRKUMO_EFF() {}
 
 /* 80087498-8008749C       .text __ct__10VRKUMO_EFFFv */
-VRKUMO_EFF::VRKUMO_EFF() {
-    /* Nonmatching */
-}
+VRKUMO_EFF::VRKUMO_EFF() {}
 
 /* 8008749C-800874D0       .text draw__21dKankyo_vrkumo_PacketFv */
 void dKankyo_vrkumo_Packet::draw() {
-    /* Nonmatching */
+    drawVrkumo(j3dSys.getViewMtx(), mColorTmp, &mpCloudTx1);
 }
 
 /* 800874D0-8008750C       .text __dt__8WAVE_EFFFv */
-WAVE_EFF::~WAVE_EFF() {
-    /* Nonmatching */
-}
+WAVE_EFF::~WAVE_EFF() {}
 
 /* 8008750C-80087510       .text __ct__8WAVE_EFFFv */
-WAVE_EFF::WAVE_EFF() {
-    /* Nonmatching */
-}
+WAVE_EFF::WAVE_EFF() {}
 
 /* 80087510-80087540       .text draw__19dKankyo_wave_PacketFv */
 void dKankyo_wave_Packet::draw() {
-    /* Nonmatching */
+    drawWave(j3dSys.getViewMtx(), &mpTexUsonami);
 }
 
 /* 80087540-80087570       .text dKyw_drawSun__Fi */
-void dKyw_drawSun(int) {
-    /* Nonmatching */
+void dKyw_drawSun(int i_type) {
+    dKyw_setDrawPacketListSky(g_env_light.mpSunPacket, i_type);
 }
 
 /* 80087570-80087594       .text dKyw_Sun_Draw__Fv */
 void dKyw_Sun_Draw() {
-    /* Nonmatching */
+    dKyw_drawSun(1);
 }
 
 /* 80087594-800875D8       .text dKyw_drawSunlenz__Fi */
-void dKyw_drawSunlenz(int) {
-    /* Nonmatching */
+void dKyw_drawSunlenz(int i_type) {
+    if (!g_env_light.mpSunlenzPacket->mbDrawLenzInSky) {
+        dKyw_setDrawPacketList(g_env_light.mpSunlenzPacket, i_type);
+    } else {
+        dKyw_setDrawPacketListSky(g_env_light.mpSunlenzPacket, i_type);
+    }
 }
 
 /* 800875D8-800875FC       .text dKyw_Sunlenz_Draw__Fv */
 void dKyw_Sunlenz_Draw() {
-    /* Nonmatching */
+    dKyw_drawSunlenz(1);
 }
 
 /* 800875FC-8008762C       .text dKyw_drawRain__Fi */
-void dKyw_drawRain(int) {
-    /* Nonmatching */
+void dKyw_drawRain(int i_type) {
+    dKyw_setDrawPacketList(g_env_light.mpRainPacket, i_type);
 }
 
 /* 8008762C-80087650       .text dKyw_Rain_Draw__Fv */
 void dKyw_Rain_Draw() {
-    /* Nonmatching */
+    dKyw_drawRain(1);
 }
 
 /* 80087650-80087680       .text dKyw_drawSnow__Fi */
-void dKyw_drawSnow(int) {
-    /* Nonmatching */
+void dKyw_drawSnow(int i_type) {
+    dKyw_setDrawPacketList(g_env_light.mpSnowPacket, i_type);
 }
 
 /* 80087680-800876A4       .text dKyw_Snow_Draw__Fv */
 void dKyw_Snow_Draw() {
-    /* Nonmatching */
+    dKyw_drawSnow(1);
 }
 
 /* 800876A4-800876D4       .text dKyw_drawStar__Fi */
-void dKyw_drawStar(int) {
-    /* Nonmatching */
+void dKyw_drawStar(int i_type) {
+    dKyw_setDrawPacketListSky(g_env_light.mpStarPacket, i_type);
 }
 
 /* 800876D4-800876F8       .text dKyw_Star_Draw__Fv */
 void dKyw_Star_Draw() {
-    /* Nonmatching */
+    dKyw_drawStar(1);
 }
 
 /* 800876F8-8008772C       .text dKyw_drawPoison__Fi */
-void dKyw_drawPoison(int) {
-    /* Nonmatching */
+void dKyw_drawPoison(int i_type) {
+    dKyw_setDrawPacketListXluZPos(g_env_light.mpPoisonPacket,
+                                  &g_env_light.mpPoisonPacket->field_0xbb9c);
 }
 
 /* 8008772C-80087750       .text dKyw_Poison_Draw__Fv */
 void dKyw_Poison_Draw() {
-    /* Nonmatching */
+    dKyw_drawPoison(1);
 }
 
 /* 80087750-80087780       .text dKyw_drawHousi__Fi */
-void dKyw_drawHousi(int) {
-    /* Nonmatching */
+void dKyw_drawHousi(int i_type) {
+    dKyw_setDrawPacketList(g_env_light.mpHousiPacket, i_type);
 }
 
 /* 80087780-800877A4       .text dKyw_Housi_Draw__Fv */
 void dKyw_Housi_Draw() {
-    /* Nonmatching */
+    dKyw_drawHousi(1);
 }
 
 /* 800877A4-800877D4       .text dKyw_drawCloud__Fi */
-void dKyw_drawCloud(int) {
-    /* Nonmatching */
+void dKyw_drawCloud(int i_type) {
+    dKyw_setDrawPacketList(g_env_light.mpMoyaPacket, i_type);
 }
 
 /* 800877D4-800877F8       .text dKyw_Cloud_Draw__Fv */
 void dKyw_Cloud_Draw() {
-    /* Nonmatching */
+    dKyw_drawCloud(1);
 }
 
 /* 800877F8-80087828       .text dKyw_drawVrkumo__Fi */
-void dKyw_drawVrkumo(int) {
-    /* Nonmatching */
+void dKyw_drawVrkumo(int i_type) {
+    dKyw_setDrawPacketListSky(g_env_light.mpVrkumoPacket, i_type);
 }
 
 /* 80087828-8008784C       .text dKyw_Vrkumo_Draw__Fv */
 void dKyw_Vrkumo_Draw() {
-    /* Nonmatching */
+    dKyw_drawVrkumo(1);
 }
 
 /* 8008784C-8008787C       .text dKyw_drawWave__Fi */
-void dKyw_drawWave(int) {
-    /* Nonmatching */
+void dKyw_drawWave(int i_type) {
+    dKyw_setDrawPacketListXluBg(g_env_light.mpWavePacket, i_type);
 }
 
 /* 8008787C-800878A0       .text dKyw_Wave_Draw__Fv */
 void dKyw_Wave_Draw() {
-    /* Nonmatching */
+    dKyw_drawWave(1);
 }
 
 /* 800878A0-8008792C       .text dKyw_wether_init__Fv */
 void dKyw_wether_init() {
-    /* Nonmatching */
+    g_env_light.mbSunInitialized = false;
+    g_env_light.mThunderEff.mStatus = 0;
+    g_env_light.mThunderEff.mMode = 0;
+    g_env_light.mbRainInitialized = false;
+    g_env_light.mRainCount = 0;
+    g_env_light.mbSnowInitialized = false;
+    g_env_light.mSnowCount = 0;
+    g_env_light.mbStarInitialized = false;
+    g_env_light.mStarCount = 0;
+    g_env_light.mStarCountTarget = 0.0f;
+    g_env_light.mMoyaInitialized = false;
+    g_env_light.mMoyaCount = 0;
+    g_env_light.mMoyaMode = 0;
+    g_env_light.mbHousiInitialized = false;
+    g_env_light.mHousiCount = 0;
+    g_env_light.mbPoisonInitialized = false;
+    g_env_light.mPoisonCount = 0;
+    g_env_light.mWind.mCustomWindPower = 0.0f;
+    g_env_light.mWaveInitialized = false;
+    g_env_light.field_0xa1c = 0;
+    g_env_light.mbWindlineInitialized = false;
+    g_env_light.mWindlineCount = 0;
+    dKyw_wind_init();
+    dKyw_pntwind_init();
 }
 
 /* 8008792C-80087944       .text dKyw_wether_init2__Fv */
 void dKyw_wether_init2() {
-    /* Nonmatching */
+    g_env_light.mVrkumoStatus = 0;
+    g_env_light.mVrkumoCount = 0;
 }
 
 /* 80087944-80087C28       .text dKyw_wether_delete__Fv */
 void dKyw_wether_delete() {
-    /* Nonmatching */
+    if (g_env_light.mbSunInitialized) {
+        delete g_env_light.mpSunPacket;
+        delete g_env_light.mpSunlenzPacket;
+    }
+
+    if (g_env_light.mbRainInitialized) {
+        delete g_env_light.mpRainPacket;
+    }
+
+    if (g_env_light.mbSnowInitialized) {
+        delete g_env_light.mpSnowPacket;
+    }
+
+    if (g_env_light.mbStarInitialized) {
+        delete g_env_light.mpStarPacket;
+    }
+
+    if (g_env_light.mbPoisonInitialized) {
+        delete g_env_light.mpPoisonPacket;
+    }
+
+    if (g_env_light.mbHousiInitialized) {
+        delete g_env_light.mpHousiPacket;
+    }
+
+    if (g_env_light.mMoyaInitialized) {
+        delete g_env_light.mpMoyaPacket;
+    }
+
+    if (g_env_light.mWaveInitialized) {
+        delete g_env_light.mpWavePacket;
+    }
+
+    if (g_env_light.mbWindlineInitialized) {
+        WINDEFF_SET* wind_p = g_env_light.mpWind;
+        for (int i = 0; i < 30; i++) {
+            if (wind_p->mWindEff[i].mpEmitter != NULL) {
+                wind_p->mWindEff[i].mpEmitter->deleteAllParticle();
+                wind_p->mWindEff[i].mpEmitter->becomeInvalidEmitter();
+                wind_p->mWindEff[i].mpEmitter = NULL;
+            }
+        }
+
+        for (int i = 0; i < 2; i++) {
+            if (wind_p->mKamomeEff[i].mpBaseEmitter != NULL) {
+                wind_p->mKamomeEff[i].mpBaseEmitter->deleteAllParticle();
+                wind_p->mKamomeEff[i].mpBaseEmitter->becomeInvalidEmitter();
+                wind_p->mKamomeEff[i].mpBaseEmitter = NULL;
+            }
+        }
+
+        delete g_env_light.mpWind;
+    }
 }
 
 /* 80087C28-80087C64       .text __dt__8WIND_EFFFv */
-WIND_EFF::~WIND_EFF() {
-    /* Nonmatching */
-}
+WIND_EFF::~WIND_EFF() {}
 
 /* 80087C64-80087CA0       .text __dt__10KAMOME_EFFFv */
-KAMOME_EFF::~KAMOME_EFF() {
-    /* Nonmatching */
-}
+KAMOME_EFF::~KAMOME_EFF() {}
 
 /* 80087CA0-80087D24       .text __dt__19dKankyo_wave_PacketFv */
-dKankyo_wave_Packet::~dKankyo_wave_Packet() {
-    /* Nonmatching */
-}
+dKankyo_wave_Packet::~dKankyo_wave_Packet() {}
 
 /* 80087D24-80087DA8       .text __dt__20dKankyo_cloud_PacketFv */
-dKankyo_cloud_Packet::~dKankyo_cloud_Packet() {
-    /* Nonmatching */
-}
+dKankyo_cloud_Packet::~dKankyo_cloud_Packet() {}
 
 /* 80087DA8-80087E2C       .text __dt__20dKankyo_housi_PacketFv */
-dKankyo_housi_Packet::~dKankyo_housi_Packet() {
-    /* Nonmatching */
-}
+dKankyo_housi_Packet::~dKankyo_housi_Packet() {}
 
 /* 80087E2C-80087EB0       .text __dt__21dKankyo_poison_PacketFv */
-dKankyo_poison_Packet::~dKankyo_poison_Packet() {
-    /* Nonmatching */
-}
+dKankyo_poison_Packet::~dKankyo_poison_Packet() {}
 
 /* 80087EB0-80087F34       .text __dt__19dKankyo_star_PacketFv */
-dKankyo_star_Packet::~dKankyo_star_Packet() {
-    /* Nonmatching */
-}
+dKankyo_star_Packet::~dKankyo_star_Packet() {}
 
 /* 80087F34-80087FB8       .text __dt__19dKankyo_snow_PacketFv */
-dKankyo_snow_Packet::~dKankyo_snow_Packet() {
-    /* Nonmatching */
-}
+dKankyo_snow_Packet::~dKankyo_snow_Packet() {}
 
 /* 80087FB8-8008803C       .text __dt__19dKankyo_rain_PacketFv */
-dKankyo_rain_Packet::~dKankyo_rain_Packet() {
-    /* Nonmatching */
-}
+dKankyo_rain_Packet::~dKankyo_rain_Packet() {}
 
 /* 8008803C-800880C0       .text __dt__22dKankyo_sunlenz_PacketFv */
-dKankyo_sunlenz_Packet::~dKankyo_sunlenz_Packet() {
-    /* Nonmatching */
-}
+dKankyo_sunlenz_Packet::~dKankyo_sunlenz_Packet() {}
 
 /* 800880C0-80088144       .text __dt__18dKankyo_sun_PacketFv */
-dKankyo_sun_Packet::~dKankyo_sun_Packet() {
-    /* Nonmatching */
-}
+dKankyo_sun_Packet::~dKankyo_sun_Packet() {}
 
 /* 80088144-80088194       .text dKyw_wether_delete2__Fv */
 void dKyw_wether_delete2() {
-    /* Nonmatching */
+    if (g_env_light.mVrkumoStatus != 0) {
+        delete g_env_light.mpVrkumoPacket;
+    }
 }
 
 /* 80088194-80088218       .text __dt__21dKankyo_vrkumo_PacketFv */
-dKankyo_vrkumo_Packet::~dKankyo_vrkumo_Packet() {
-    /* Nonmatching */
-}
+dKankyo_vrkumo_Packet::~dKankyo_vrkumo_Packet() {}
 
 /* 80088218-800883D4       .text wether_move_windline__Fv */
 void wether_move_windline() {
-    /* Nonmatching */
+    dStage_FileList_dt_c* fili_p = NULL;
+
+    int roomNo = dComIfGp_roomControl_getStayNo();
+    if (roomNo >= 0) {
+        fili_p = dComIfGp_roomControl_getStatusRoomDt(roomNo)->mRoomDt.getFileListInfo();
+    }
+
+    g_env_light.mWindlineCount = 0;
+
+    if (fili_p != NULL && dStage_FileList_dt_ChkPathWindEffect(fili_p) &&
+        strcmp(dComIfGp_getStartStageName(), "GTower") != 0)
+    {
+        g_env_light.mWindlineCount = dKyw_get_wind_pow() * 10.0f;
+    }
+
+    if (g_env_light.mWind.field_0x8.y < 10000000.0f) {
+        g_env_light.mWindlineCount = 0;
+        g_env_light.mWind.field_0x8.y = 10000000.0f;
+    }
+
+    switch (g_env_light.mbWindlineInitialized) {
+    case 0:
+        if (g_env_light.mWindlineCount != 0) {
+            g_env_light.mpWind = new (0x20) WINDEFF_SET();
+
+            if (g_env_light.mpWind == NULL) {
+                return;
+            }
+
+            for (int i = 0; i < 30; i++) {
+                g_env_light.mpWind->mWindEff[i].mState = 0;
+                g_env_light.mpWind->mWindEff[i].mpEmitter = NULL;
+            }
+
+            dKyr_wind_init();
+            dKyr_wind_move();
+            g_env_light.mbWindlineInitialized = true;
+        }
+        break;
+    case 1:
+        dKyr_wind_move();
+        break;
+    }
 }
 
 /* 800883D4-800883D8       .text __ct__10KAMOME_EFFFv */
-KAMOME_EFF::KAMOME_EFF() {
-    /* Nonmatching */
-}
+KAMOME_EFF::KAMOME_EFF() {}
 
 /* 800883D8-800883DC       .text __ct__8WIND_EFFFv */
-WIND_EFF::WIND_EFF() {
-    /* Nonmatching */
-}
+WIND_EFF::WIND_EFF() {}
 
 /* 800883DC-80088444       .text wether_move_thunder__Fv */
 void wether_move_thunder() {
-    /* Nonmatching */
+    switch (g_env_light.mThunderEff.mStatus) {
+    case 0:
+        if (g_env_light.mThunderEff.mMode != 0) {
+            dKyr_thunder_init();
+            g_env_light.mThunderEff.mStatus = true;
+        }
+        break;
+    case 1:
+        dKyr_thunder_move();
+        break;
+    }
 }
 
 /* 80088444-80088468       .text dKyw_wether_move__Fv */
 void dKyw_wether_move() {
-    /* Nonmatching */
+    wether_move_thunder();
+    wether_move_windline();
 }
 
 /* 80088468-8008878C       .text wether_move_sun__Fv */
 void wether_move_sun() {
-    /* Nonmatching */
+    if (dComIfGp_checkStatus(1) && !g_env_light.mbVrboxInvisible) {
+        switch (g_env_light.mbSunInitialized) {
+        case 0:
+            g_env_light.mpSunPacket = new (0x20) dKankyo_sun_Packet();
+            g_env_light.mpSunlenzPacket = new (0x20) dKankyo_sunlenz_Packet();
+
+            if (g_env_light.mpSunPacket != NULL && g_env_light.mpSunlenzPacket != NULL) {
+                g_env_light.mpSunPacket->mpTextureData[0] =
+                    (u8*)dComIfG_getObjectRes("Always", 0x87);
+                g_env_light.mpSunPacket->mpTextureData[1] =
+                    (u8*)dComIfG_getObjectRes("Always", 0x88);
+                g_env_light.mpSunPacket->mpTextureData[2] =
+                    (u8*)dComIfG_getObjectRes("Always", 0x89);
+                g_env_light.mpSunPacket->mpTextureData[3] =
+                    (u8*)dComIfG_getObjectRes("Always", 0x8A);
+                g_env_light.mpSunPacket->mpTextureData[4] =
+                    (u8*)dComIfG_getObjectRes("Always", 0x86);
+                g_env_light.mpSunPacket->field_0x3c = 0;
+                g_env_light.mpSunPacket->field_0x3d = 0;
+                g_env_light.mpSunPacket->mVisibility = 0.0f;
+                g_env_light.mpSunPacket->mSunAlpha = 0.0f;
+                g_env_light.mpSunPacket->mMoonAlpha = 0.0f;
+                g_env_light.mpSunPacket->mVizChkData[0] = 0;
+                g_env_light.mpSunPacket->mVizChkData[1] = 0;
+                g_env_light.mpSunPacket->mVizChkData[2] = 0;
+                g_env_light.mpSunPacket->mVizChkData[3] = 0;
+
+                g_env_light.mpSunlenzPacket->mpTexSnow01 =
+                    (u8*)dComIfG_getObjectRes("Always", 0x81);
+                g_env_light.mpSunlenzPacket->mpTexLensHalf =
+                    (u8*)dComIfG_getObjectRes("Always", 0x82);
+                g_env_light.mpSunlenzPacket->mpTexRingHalf =
+                    (u8*)dComIfG_getObjectRes("Always", 0x85);
+                g_env_light.mpSunlenzPacket->field_0x88 = 1000000000.0f;
+                g_env_light.mpSunlenzPacket->field_0x8c = 0.0f;
+                g_env_light.mpSunlenzPacket->mDistFalloff = 0.0f;
+                g_env_light.mpSunlenzPacket->mbDrawLenzInSky = false;
+
+                dKyr_sun_move();
+                dKyr_lenzflare_move();
+                g_env_light.mbSunInitialized = true;
+            }
+            break;
+        case 1:
+            dKyr_sun_move();
+            dKyr_lenzflare_move();
+            break;
+        }
+    }
 }
 
 /* 8008878C-80088978       .text wether_move_rain__Fv */
 void wether_move_rain() {
-    /* Nonmatching */
+    switch (g_env_light.mbRainInitialized) {
+    case 0:
+        if (g_env_light.mRainCount != 0) {
+            g_env_light.mpRainPacket = new (0x20) dKankyo_rain_Packet();
+            if (g_env_light.mpRainPacket == NULL) {
+                return;
+            }
+
+            dKyr_rain_init();
+            dKyr_rain_move();
+            g_env_light.mbRainInitialized = true;
+
+            if (g_env_light.mRainCount != 250) {
+                mDoAud_seStart(JA_SE_ATM_RAIN_START, NULL, 0, 0);
+            }
+        }
+        break;
+    case 1:
+        dKyr_rain_move();
+
+        if (g_env_light.mSnowCount == 0) {
+            if (g_env_light.mRainCount < 125.0f) {
+                mDoAud_rainPlay(0);
+            } else {
+                mDoAud_rainPlay(1);
+            }
+        }
+
+        if (g_env_light.mRainCount == 0) {
+            g_env_light.mbRainInitialized = false;
+            mDoAud_seStart(JA_SE_ATM_RAIN_END, NULL, 0, 0);
+            delete g_env_light.mpRainPacket;
+        }
+        break;
+    }
 }
 
 /* 80088978-80088A50       .text wether_move_snow__Fv */
 void wether_move_snow() {
-    /* Nonmatching */
+    switch (g_env_light.mbSnowInitialized) {
+    case 0:
+        if (g_env_light.mSnowCount != 0) {
+            dKyr_snow_init();
+
+            if (g_env_light.mpSnowPacket == NULL) {
+                return;
+            }
+
+            if (strcmp(dComIfGp_getStartStageName(), "Adanmae") != 0) {
+                dKyr_snow_move();
+            } else {
+                dKyr_kazanbai_move();
+            }
+
+            g_env_light.mbSnowInitialized = true;
+        }
+        break;
+    case 1:
+        if (strcmp(dComIfGp_getStartStageName(), "Adanmae") != 0) {
+            dKyr_snow_move();
+        } else {
+            dKyr_kazanbai_move();
+        }
+        break;
+    }
 }
 
 /* 80088A50-80088D08       .text wether_move_star__Fv */
 void wether_move_star() {
-    /* Nonmatching */
+    if (dComIfGp_checkStatus(1) && (!g_env_light.mbVrboxInvisible &&
+                                    strcmp(dComIfGp_getStartStageName(), "M_DragB") != 0) ||
+        strcmp(dComIfGp_getStartStageName(), "Name") == 0)
+    {
+        f32 time = g_env_light.getDaytime();
+        f32 target;
+
+        if (strcmp(dComIfGp_getStartStageName(), "Name") == 0) {
+            if (time >= 315.0f || time < 60.0f) {
+                target = 1.0f;
+            } else if (time > 270.0f) {
+                target = 1.0f - (315.0f - time) * (1 / 45.0f);
+            } else if (time < 75.0f) {
+                target = (75.0f - time) * (1 / 15.0f);
+            } else {
+                target = 0.0f;
+            }
+        } else if (time >= 330.0f || time < 90.0f) {
+            target = 1.0f;
+        } else if (time > 300.0f) {
+            target = 1.0f - (330.0f - time) * (1 / 30.0f);
+        } else if (time < 105.0f) {
+            target = (105.0f - time) * (1 / 15.0f);
+        } else {
+            target = 0.0f;
+        }
+
+        if (g_env_light.mColpatWeather != 0) {
+            target = 0.0f;
+        }
+
+        if (g_env_light.mColpatCurr != 0 && g_env_light.mColPatBlend > 0.5f) {
+            target = 0.0f;
+        }
+
+        cLib_addCalc(&g_env_light.mStarCountTarget, target, 0.1f, 0.01f, 0.000001f);
+        g_env_light.mStarCount = (s16)(g_env_light.mStarCountTarget * 1000.0f);
+
+        switch (g_env_light.mbStarInitialized) {
+        case 0:
+            if (g_env_light.mStarCount != 0) {
+                dKyr_star_init();
+                if (g_env_light.mpStarPacket == NULL) {
+                    return;
+                }
+
+                dKyr_star_move();
+                g_env_light.mbStarInitialized = true;
+            }
+            break;
+        case 1:
+            dKyr_star_move();
+
+            if (g_env_light.mStarCount == 0) {
+                g_env_light.mbStarInitialized = false;
+                delete g_env_light.mpStarPacket;
+            }
+            break;
+        }
+    }
 }
 
 /* 80088D08-80088DA4       .text wether_move_poison__Fv */
 void wether_move_poison() {
-    /* Nonmatching */
+    if (strcmp(dComIfGp_getStartStageName(), "M_Dai") == 0) {
+        g_env_light.mPoisonCount = 500;
+    }
+
+    switch (g_env_light.mbPoisonInitialized) {
+    case 0:
+        if (g_env_light.mPoisonCount != 0) {
+            poison_init();
+            g_env_light.mbPoisonInitialized = true;
+        }
+        break;
+    case 1:
+        poison_move();
+        break;
+    }
 }
 
 /* 80088DA4-80088F3C       .text wether_move_housi__Fv */
 void wether_move_housi() {
-    /* Nonmatching */
+    switch (g_env_light.mbHousiInitialized) {
+    case 0:
+        if (g_env_light.mHousiCount != 0) {
+            g_env_light.mpHousiPacket = new (0x20) dKankyo_housi_Packet();
+            if (g_env_light.mpHousiPacket == NULL) {
+                return;
+            }
+
+            g_env_light.mpHousiPacket->mpTex = (u8*)dComIfG_getObjectRes("Always", 0x6D);
+            g_env_light.mpHousiPacket->field_0x5ddc = 0.0f;
+
+            for (int i = 0; i < 300; i++) {
+                g_env_light.mpHousiPacket->mEff[i].mState = 0;
+            }
+
+            dKyr_housi_move();
+            g_env_light.mbHousiInitialized = true;
+        }
+        break;
+    case 1:
+        if (g_env_light.mHousiCount == 0 && g_env_light.mpHousiPacket->field_0x5ddc <= 0.0f) {
+            g_env_light.mbHousiInitialized = false;
+            delete g_env_light.mpHousiPacket;
+        } else {
+            dKyr_housi_move();
+            g_env_light.mHousiCount = 0;
+        }
+        break;
+    }
 }
 
 /* 80088F3C-800891A8       .text wether_move_moya__Fv */
 void wether_move_moya() {
-    /* Nonmatching */
+    switch (g_env_light.mMoyaInitialized) {
+    case 0:
+        if (g_env_light.mMoyaCount != 0) {
+            g_env_light.mpMoyaPacket = new (0x20) dKankyo_cloud_Packet();
+            if (g_env_light.mpMoyaPacket == NULL) {
+                return;
+            }
+
+            g_env_light.mpMoyaPacket->mpTexture = (u8*)dComIfG_getObjectRes("Always", 0x84);
+
+            for (int i = 0; i < 100; i++) {
+                g_env_light.mpMoyaPacket->mEff[i].mStatus = 0;
+            }
+
+            g_env_light.mpMoyaPacket->mCount = 0;
+            cloud_shadow_move();
+            g_env_light.mMoyaInitialized++;
+        }
+        break;
+    case 1:
+        if (g_env_light.mMoyaMode == 0 && dKyw_get_wind_pow() > 0.2f && g_env_light.mMoyaCount != 0)
+        {
+            if (strcmp(dComIfGp_getStartStageName(), "M_NewD2") == 0) {
+                if (g_env_light.mbVrboxInvisible) {
+                    g_env_light.mMoyaSE = JA_SE_ATM_WIND_HOT;
+                } else {
+                    g_env_light.mMoyaSE = JA_SE_ATM_WIND_1;
+                }
+            }
+        } else if (g_env_light.mMoyaMode == 1) {
+            g_env_light.mMoyaSE = JA_SE_ATM_WIND_HOT;
+        } else if (g_env_light.mMoyaMode == 2 &&
+                   strcmp(dComIfGp_getStartStageName(), "A_mori") == 0)
+        {
+            g_env_light.mMoyaSE = JA_SE_ATM_WIND_GRASS;
+        }
+
+        cloud_shadow_move();
+        if (g_env_light.mMoyaCount == 0 && g_env_light.mpMoyaPacket->mCount == 0) {
+            g_env_light.mMoyaInitialized = false;
+            delete g_env_light.mpMoyaPacket;
+        }
+        break;
+    }
 }
 
 /* 800891A8-80089698       .text wether_move_vrkumo__Fv */
+// NONMATCHING - almost, regswap
 void wether_move_vrkumo() {
-    /* Nonmatching */
+    camera_class* camera_p = dComIfGp_getCamera(0);
+    static cXyz r09o(-180000.0f, 750.0f, -200000.0f);
+
+    if (strcmp(dComIfGp_getStartStageName(), "Name") != 0) {
+        if (dComIfGp_checkStatus(1) && !g_env_light.mbVrboxInvisible) {
+            g_env_light.mVrkumoCount = 50;
+            if ((g_env_light.mColpatCurr == 1 && g_env_light.mColPatBlend > 0.0f) ||
+                (g_env_light.mColpatPrev == 1 && g_env_light.mColPatBlend < 1.0f) ||
+                (g_env_light.mColpatCurr == 2 && g_env_light.mColPatBlend > 0.0f) ||
+                (g_env_light.mColpatPrev == 2 && g_env_light.mColPatBlend < 1.0f))
+            {
+                cLib_addCalc(&g_env_light.mVrkumoStrength, 1.0f, 0.1f, 0.003f, 0.0000001f);
+            } else {
+                cLib_addCalc(&g_env_light.mVrkumoStrength, 0.0f, 0.08f, 0.002f, 0.00000001f);
+            }
+
+            if (strcmp(dComIfGp_getStartStageName(), "sea") == 0 &&
+                dComIfGp_roomControl_getStayNo() == 9)
+            {
+                if (camera_p->mLookat.mEye.abs(r09o) < 2500.0f) {
+                    g_env_light.mVrkumoStrength = 1.0f;
+                }
+            }
+
+            g_env_light.mVrkumoCount = (s16)(g_env_light.mVrkumoStrength * 50.0f + 50.0f);
+            if (strcmp(dComIfGp_getStartStageName(), "GTower") == 0) {
+                g_env_light.mVrkumoCount = 0;
+            }
+        } else {
+            g_env_light.mVrkumoCount = 0;
+        }
+    } else {
+        g_env_light.mVrkumoCount = 70;
+    }
+
+    switch (g_env_light.mVrkumoStatus) {
+    case 0:
+        if (g_env_light.mVrkumoCount != 0) {
+            g_env_light.mpVrkumoPacket = new (0x20) dKankyo_vrkumo_Packet();
+            if (g_env_light.mpVrkumoPacket == NULL) {
+                return;
+            }
+
+            if (dComIfG_getStageRes("Stage", "vr_box.bmd") != NULL ||
+                dComIfG_getStageRes("Stage", "vr_box.bdl"))
+            {
+                g_env_light.mpVrkumoPacket->mpCloudTx1 =
+                    (u8*)dComIfG_getStageRes("Stage", "cloud_01.bti");
+                g_env_light.mpVrkumoPacket->mpCloudTx2 =
+                    (u8*)dComIfG_getStageRes("Stage", "cloud_02.bti");
+                g_env_light.mpVrkumoPacket->mpCloudTx3 =
+                    (u8*)dComIfG_getStageRes("Stage", "cloud_03.bti");
+            } else {
+                g_env_light.mpVrkumoPacket->mpCloudTx1 =
+                    (u8*)dComIfG_getStageRes("Stage", "cloudtx_01.bti");
+                g_env_light.mpVrkumoPacket->mpCloudTx2 =
+                    (u8*)dComIfG_getStageRes("Stage", "cloudtx_02.bti");
+                g_env_light.mpVrkumoPacket->mpCloudTx3 =
+                    (u8*)dComIfG_getStageRes("Stage", "cloudtx_03.bti");
+            }
+
+            if (g_env_light.mpVrkumoPacket->mpCloudTx1 == NULL) {
+                g_env_light.mVrkumoStatus = 99;
+            }
+
+            for (int i = 0; i < 100; i++) {
+                g_env_light.mpVrkumoPacket->mInst[i].mStatus = 0;
+            }
+
+            vrkumo_move();
+            g_env_light.mVrkumoStatus++;
+        }
+        break;
+    case 1:
+        vrkumo_move();
+        break;
+    }
 }
 
 /* 80089698-8008982C       .text wether_move_wave__Fv */
 void wether_move_wave() {
-    /* Nonmatching */
+    switch (g_env_light.mWaveInitialized) {
+    case 0:
+        if (g_env_light.mWaveChan.mWaveCount != 0) {
+            g_env_light.mpWavePacket = new (0x20) dKankyo_wave_Packet();
+            if (g_env_light.mpWavePacket == NULL) {
+                return;
+            }
+
+            g_env_light.mpWavePacket->mpTexUsonami = (u8*)dComIfG_getObjectRes("Always", 0x8B);
+            g_env_light.mpWavePacket->mpTexUsonamiM = (u8*)dComIfG_getObjectRes("Always", 0x8C);
+
+            for (int i = 0; i < 300; i++) {
+                g_env_light.mpWavePacket->mpWaveEff[i].mState = 0;
+            }
+
+            wave_move();
+            g_env_light.mWaveInitialized = true;
+        }
+        break;
+    case 1:
+        if (g_env_light.mWaveChan.mWaveCount == 0) {
+            g_env_light.mWaveInitialized = false;
+            delete g_env_light.mpWavePacket;
+        }
+
+        wave_move();
+        break;
+    }
 }
 
 /* 8008982C-800898E0       .text dKyw_wether_move_draw__Fv */
 void dKyw_wether_move_draw() {
-    /* Nonmatching */
+    g_env_light.mMoyaSE = 0;
+
+    if (strcmp(dComIfGp_getStartStageName(), "Name") != 0) {
+        wether_move_sun();
+        wether_move_rain();
+        wether_move_snow();
+    }
+
+    wether_move_star();
+
+    if (strcmp(dComIfGp_getStartStageName(), "Name") != 0) {
+        wether_move_poison();
+        wether_move_housi();
+        wether_move_moya();
+    }
+
+    if (strcmp(dComIfGp_getStartStageName(), "Name") != 0) {
+        wether_move_wave();
+    }
 }
 
 /* 800898E0-80089900       .text dKyw_wether_move_draw2__Fv */
 void dKyw_wether_move_draw2() {
-    /* Nonmatching */
+    wether_move_vrkumo();
 }
 
 /* 80089900-80089A48       .text dKyw_wether_draw__Fv */
 void dKyw_wether_draw() {
-    /* Nonmatching */
+    if (strcmp(dComIfGp_getStartStageName(), "Name") != 0) {
+        if (g_env_light.mbPoisonInitialized) {
+            dKyw_Poison_Draw();
+        }
+
+        if (g_env_light.mWaveInitialized) {
+            dKyw_Wave_Draw();
+        }
+
+        if (g_env_light.mMoyaInitialized) {
+            dKyw_Cloud_Draw();
+        }
+    }
+
+    if (strcmp(dComIfGp_getStartStageName(), "Name") != 0 && g_env_light.mbSunInitialized) {
+        dKyw_Sun_Draw();
+        dKyw_Sunlenz_Draw();
+    }
+
+    if (g_env_light.mbStarInitialized) {
+        dKyw_Star_Draw();
+    }
+
+    if (strcmp(dComIfGp_getStartStageName(), "Name") != 0) {
+        if (g_env_light.mbRainInitialized) {
+            dKyw_Rain_Draw();
+        }
+
+        if (g_env_light.mbSnowInitialized) {
+            dKyw_Snow_Draw();
+        }
+
+        if (g_env_light.mbHousiInitialized) {
+            dKyw_Housi_Draw();
+        }
+    }
 }
 
 /* 80089A48-80089A84       .text dKyw_wether_draw2__Fv */
 void dKyw_wether_draw2() {
-    /* Nonmatching */
+    if (g_env_light.mVrkumoStatus != 0 && g_env_light.mVrkumoStatus < 99) {
+        dKyw_Vrkumo_Draw();
+    }
 }
 
 /* 80089A84-80089AA4       .text dKyw_wether_proc__Fv */
 void dKyw_wether_proc() {
-    /* Nonmatching */
+    squal_proc();
 }
 
 /* 80089AA4-80089B48       .text dKyw_wind_init__Fv */
 void dKyw_wind_init() {
-    /* Nonmatching */
+    g_env_light.mWind.mWindVec.x = -1.0f;
+    g_env_light.mWind.mWindVec.y = 0.0f;
+    g_env_light.mWind.mWindVec.z = 0.0f;
+    g_env_light.mWind.mWindPower = 0.0f;
+
+    if (dComIfGs_getWindX() == -1 && dComIfGs_getWindY() == -1) {
+        g_env_light.mWind.mTactWindAngleFlags = 0;
+        g_env_light.mWind.mTactWindAngleX = 0;
+        g_env_light.mWind.mTactWindAngleY = 0;
+    } else {
+        g_env_light.mWind.mTactWindAngleFlags = 1;
+        g_env_light.mWind.mTactWindAngleX = dComIfGs_getWindX();
+        g_env_light.mWind.mTactWindAngleY = dComIfGs_getWindY();
+    }
+
+    g_env_light.mWind.mpWindVecOverride = NULL;
+    g_env_light.mWind.mWindStrengthOverride = 0.0f;
+    g_env_light.mWind.mEvtWindSet = 0;
+    g_env_light.mWind.field_0x8.x = 10000000.0f;
+    g_env_light.mWind.field_0x8.y = 10000000.0f;
+    g_env_light.mWind.field_0x8.z = 10000000.0f;
 }
 
 /* 80089B48-80089E50       .text dKyw_wind_set__Fv */
 void dKyw_wind_set() {
-    /* Nonmatching */
+    cXyz wind_vec;
+    f32 strength;
+
+    if (g_env_light.mWind.mpWindVecOverride != NULL) {
+        wind_vec = *g_env_light.mWind.mpWindVecOverride;
+        strength = g_env_light.mWind.mWindStrengthOverride;
+
+        cM_atan2s(wind_vec.x, wind_vec.z);
+        cM_atan2s(wind_vec.absXZ(), wind_vec.y);
+    } else {
+        dStage_FileList_dt_c* fili_p = NULL;
+        int wind_level = 0;
+
+        s32 roomNo = dComIfGp_roomControl_getStayNo();
+        if (roomNo >= 0) {
+            fili_p = dComIfGp_roomControl_getStatusRoomDt(roomNo)->mRoomDt.getFileListInfo();
+        }
+
+        s16 tact_wind_x;
+        s16 tact_wind_y;
+        if (g_env_light.mWind.mEvtWindSet != 0 && g_env_light.mWind.mEvtWindSet != 0xFF) {
+            tact_wind_x = g_env_light.mWind.mEvtWindAngleX;
+            tact_wind_y = g_env_light.mWind.mEvtWindAngleY;
+        } else if (g_env_light.mWind.mTactWindAngleFlags != 0) {
+            tact_wind_x = g_env_light.mWind.mTactWindAngleX;
+            tact_wind_y = g_env_light.mWind.mTactWindAngleY;
+        } else {
+            tact_wind_x = 0;
+            tact_wind_y = 0;
+        }
+
+        wind_vec.x = cM_scos(tact_wind_x) * cM_scos(tact_wind_y);
+        wind_vec.y = cM_ssin(tact_wind_x);
+        wind_vec.z = cM_scos(tact_wind_x) * cM_ssin(tact_wind_y);
+
+        if (fili_p != NULL) {
+            wind_level = dStage_FileList_dt_GlobalWindLevel(fili_p);
+        }
+
+        switch (wind_level) {
+        case 0:
+            strength = 0.3f;
+            break;
+        case 1:
+            strength = 0.6f;
+            break;
+        case 2:
+            strength = 0.9f;
+            break;
+        default:
+            strength = 0.0f;
+            break;
+        }
+    }
+
+    if (g_env_light.mWind.mCustomWindPower > 0.0f) {
+        strength = g_env_light.mWind.mCustomWindPower;
+        g_env_light.mWind.mWindPower = g_env_light.mWind.mCustomWindPower;
+    }
+
+    if (g_env_light.mWind.mEvtWindSet == 2) {
+        strength = 0.0f;
+    }
+
+    if (strength > 1.0f) {
+        strength = 1.0f;
+    }
+
+    if (g_env_light.mInitAnimTimer != 0) {
+        g_env_light.mWind.mWindVec = wind_vec;
+        g_env_light.mWind.mWindPower = strength;
+    } else {
+        cLib_addCalc(&g_env_light.mWind.mWindVec.x, wind_vec.x, 0.1f, 2.0f, 0.001f);
+        cLib_addCalc(&g_env_light.mWind.mWindVec.y, wind_vec.y, 0.1f, 2.0f, 0.001f);
+        cLib_addCalc(&g_env_light.mWind.mWindVec.z, wind_vec.z, 0.1f, 2.0f, 0.001f);
+        cLib_addCalc(&g_env_light.mWind.mWindPower, strength, 0.1f, 1.0f, 0.005f);
+    }
 }
 
 /* 80089E50-80089E60       .text dKyw_get_wind_vec__Fv */
-void dKyw_get_wind_vec() {
-    /* Nonmatching */
+cXyz* dKyw_get_wind_vec() {
+    return &g_env_light.mWind.mWindVec;
 }
 
 /* 80089E60-80089E70       .text dKyw_get_wind_pow__Fv */
-void dKyw_get_wind_pow() {
-    /* Nonmatching */
+f32 dKyw_get_wind_pow() {
+    return g_env_light.mWind.mWindPower;
 }
 
 /* 80089E70-80089E80       .text dKyw_get_wind_power__Fv */
-void dKyw_get_wind_power() {
-    /* Nonmatching */
+f32* dKyw_get_wind_power() {
+    return &g_env_light.mWind.mWindPower;
 }
 
 /* 80089E80-80089EE4       .text dKyw_get_wind_vecpow__Fv */
-void dKyw_get_wind_vecpow() {
-    /* Nonmatching */
+cXyz dKyw_get_wind_vecpow() {
+    cXyz vecpow = g_env_light.mWind.mWindVec * g_env_light.mWind.mWindPower;
+    return vecpow;
 }
 
 /* 80089EE4-80089FDC       .text dKyw_squal_set__FP4cXyzssfffff */
-void dKyw_squal_set(cXyz*, short, short, float, float, float, float, float) {
-    /* Nonmatching */
+void dKyw_squal_set(cXyz* i_pos, s16 i_x, s16 i_y, f32 i_radius, f32 i_minRadius, f32 i_strength,
+                    f32 i_speed, f32 i_maxStrength) {
+    dScnKy_env_light_c& env_light = dKy_getEnvlight();
+
+    for (int i = 0; i < 5; i++) {
+        if (!env_light.mWindInfluenceEntity[i].mbInUse) {
+            env_light.mWindInfluenceEntity[i].mbInUse = true;
+            env_light.mWindInfluenceEntity[i].mMinRadius = i_minRadius;
+            env_light.mWindInfluenceEntity[i].mSpeed = i_speed;
+            env_light.mWindInfluenceEntity[i].mStrengthMaxVel = i_maxStrength;
+
+            WIND_INFLUENCE* influence = &env_light.mWindInfluenceEntity[i].mInfluence;
+            influence->mPos = *i_pos;
+            influence->mDir.x = cM_scos(i_x) * cM_ssin(i_y);
+            influence->mDir.y = cM_ssin(i_x);
+            influence->mDir.z = cM_scos(i_x) * cM_scos(i_y);
+            influence->mRadius = i_radius;
+            influence->field_0x20 = influence->mRadius;
+            influence->mStrength = i_strength;
+
+            dKyw_pntwind_set(influence);
+            return;
+        }
+    }
 }
 
 /* 80089FDC-8008A0F0       .text squal_proc__Fv */
 void squal_proc() {
-    /* Nonmatching */
+    dScnKy_env_light_c& env_light = dKy_getEnvlight();
+    WIND_INFLUENCE* influence;
+
+    for (int i = 0; i < 5; i++) {
+        influence = &env_light.mWindInfluenceEntity[i].mInfluence;
+        switch (env_light.mWindInfluenceEntity[i].mbInUse) {
+        case 0:
+            break;
+        case 1:
+            influence->mPos.x += influence->mDir.x * env_light.mWindInfluenceEntity[i].mSpeed;
+            influence->mPos.y += influence->mDir.y * env_light.mWindInfluenceEntity[i].mSpeed;
+            influence->mPos.z += influence->mDir.z * env_light.mWindInfluenceEntity[i].mSpeed;
+
+            cLib_addCalc(&influence->mStrength, 0.0f, 0.2f,
+                         env_light.mWindInfluenceEntity[i].mStrengthMaxVel, 0.001f);
+
+            f32 speed = 1.0f - influence->mStrength;
+            f32 target = env_light.mWindInfluenceEntity[i].mMinRadius;
+            cLib_addCalc(&influence->mRadius, target, speed, speed * target * 0.05f, 0.01f);
+
+            if (influence->mStrength < 0.01f) {
+                dKyw_pntwind_cut(influence);
+                env_light.mWindInfluenceEntity[i].mbInUse = false;
+            }
+            break;
+        }
+    }
 }
 
 /* 8008A0F0-8008A144       .text dKyw_pntwind_init__Fv */
 void dKyw_pntwind_init() {
-    /* Nonmatching */
+    for (int i = 0; i < 30; i++) {
+        g_env_light.mpWindInfluence[i] = NULL;
+    }
+
+    for (int i = 0; i < 5; i++) {
+        g_env_light.mWindInfluenceEntity[i].mbInUse = false;
+    }
 }
 
 /* 8008A144-8008A1A8       .text pntwind_set__FP14WIND_INFLUENCE */
-void pntwind_set(WIND_INFLUENCE*) {
-    /* Nonmatching */
+void pntwind_set(WIND_INFLUENCE* i_influence) {
+    int i = 0;
+    for (; i < 30; i++) {
+        if (g_env_light.mpWindInfluence[i] == NULL) {
+            g_env_light.mpWindInfluence[i] = i_influence;
+            g_env_light.mpWindInfluence[i]->field_0x24 = i;
+            break;
+        }
+    }
+
+    if (i >= 30) {
+        i_influence->field_0x24 = 9999;
+    }
 }
 
 /* 8008A1A8-8008A1D0       .text dKyw_pntwind_set__FP14WIND_INFLUENCE */
-void dKyw_pntwind_set(WIND_INFLUENCE*) {
-    /* Nonmatching */
+void dKyw_pntwind_set(WIND_INFLUENCE* i_influence) {
+    i_influence->mbConstant = 0;
+    pntwind_set(i_influence);
 }
 
 /* 8008A1D0-8008A1F8       .text dKyw_pwind_cylinder_set__FP14WIND_INFLUENCE */
-void dKyw_pwind_cylinder_set(WIND_INFLUENCE*) {
-    /* Nonmatching */
+void dKyw_pwind_cylinder_set(WIND_INFLUENCE* i_influence) {
+    i_influence->mbConstant = 0;
+    pntwind_set(i_influence);
 }
 
 /* 8008A1F8-8008A230       .text dKyw_pntwind_cut__FP14WIND_INFLUENCE */
-void dKyw_pntwind_cut(WIND_INFLUENCE*) {
-    /* Nonmatching */
+void dKyw_pntwind_cut(WIND_INFLUENCE* i_influence) {
+    if (i_influence != NULL) {
+        if (i_influence->field_0x24 >= 0 && i_influence->field_0x24 < 30) {
+            g_env_light.mpWindInfluence[i_influence->field_0x24] = NULL;
+        }
+    }
 }
 
 /* 8008A230-8008A4C8       .text dKyw_pntwind_get_info__FP4cXyzP4cXyzPf */
-void dKyw_pntwind_get_info(cXyz*, cXyz*, float*) {
-    /* Nonmatching */
+void dKyw_pntwind_get_info(cXyz* param_0, cXyz* i_dir, f32* i_power) {
+    i_dir->x = 0.0f;
+    i_dir->y = 0.0f;
+    i_dir->z = 0.0f;
+    *i_power = 0.0f;
+
+    WIND_INFLUENCE* influence;
+    for (int i = 0; i < 30; i++) {
+        influence = g_env_light.mpWindInfluence[i];
+        if (influence != NULL) {
+            f32 dist = param_0->abs(influence->mPos);
+
+            if (influence->mbConstant == 0) {
+                if (dist < influence->mRadius && influence->mStrength > 0.0f && dist != 0.0f) {
+                    f32 temp_f0;
+                    if (influence->mRadius > 0.0f) {
+                        f32 temp_f0_4 = (dist / influence->mRadius);
+                        temp_f0 = 1.0f - (temp_f0_4 * temp_f0_4);
+                    } else {
+                        temp_f0 = 1.0f;
+                    }
+
+                    *i_power = influence->mStrength * temp_f0;
+
+                    cXyz sp10;
+                    sp10.x = influence->mPos.x + -(influence->mDir.x) * influence->mRadius;
+                    sp10.y = influence->mPos.y + -(influence->mDir.y) * influence->mRadius;
+                    sp10.z = influence->mPos.z + -(influence->mDir.z) * influence->mRadius;
+                    dKyr_get_vectle_calc(&sp10, param_0, i_dir);
+
+                    if (param_0->abs(sp10) < influence->mRadius) {
+                        i_dir->x = 0.0f;
+                        i_dir->y = 0.0f;
+                        i_dir->z = 0.0f;
+                    }
+                    return;
+                }
+            } else {
+                if (dist < influence->mRadius && influence->mStrength > 0.0f && dist != 0.0f) {
+                    f32 temp_f0;
+                    if (influence->mRadius > 0.0f) {
+                        temp_f0 = 1.0f - (dist / influence->mRadius);
+                    } else {
+                        temp_f0 = 1.0f;
+                    }
+
+                    i_dir->x = influence->mDir.x;
+                    i_dir->y = influence->mDir.y;
+                    i_dir->z = influence->mDir.z;
+                    *i_power = influence->mStrength * temp_f0;
+                    return;
+                }
+            }
+        }
+    }
 }
 
 /* 8008A4C8-8008A53C       .text dKyw_pntwind_get_vecpow__FP4cXyz */
-void dKyw_pntwind_get_vecpow(cXyz*) {
-    /* Nonmatching */
+cXyz dKyw_pntwind_get_vecpow(cXyz* param_0) {
+    cXyz direction;
+    f32 power;
+    dKyw_pntwind_get_info(param_0, &direction, &power);
+
+    direction = direction * power;
+    return direction;
 }
 
 /* 8008A53C-8008A6F4       .text dKyw_get_AllWind_vec__FP4cXyzP4cXyzPf */
-void dKyw_get_AllWind_vec(cXyz*, cXyz*, float*) {
-    /* Nonmatching */
+void dKyw_get_AllWind_vec(cXyz* param_0, cXyz* i_direction, f32* i_power) {
+    dScnKy_env_light_c& env_light = dKy_getEnvlight();
+    dKyw_pntwind_get_info(param_0, i_direction, i_power);
+
+    cXyz sp54;
+    cXyz sp30;
+    cXyz sp24;
+
+    sp30 = env_light.mWind.mWindVec * (env_light.mWind.mWindPower * (1.0f - *i_power));
+    sp24 = *i_direction * (*i_power * 5.0f);
+    sp54 = sp30 + sp24;
+    *i_power = sp54.abs();
+
+    sp54 = sp54.normZP();
+    if (sp54 != cXyz::Zero) {
+        i_direction->x = sp54.x;
+        i_direction->y = sp54.y;
+        i_direction->z = sp54.z;
+    } else {
+        i_direction->x = env_light.mWind.mWindVec.x;
+        i_direction->y = env_light.mWind.mWindVec.y;
+        i_direction->z = env_light.mWind.mWindVec.z;
+    }
 }
 
 /* 8008A6F4-8008A7D0       .text dKyw_get_AllWind_vecpow__FP4cXyz */
-void dKyw_get_AllWind_vecpow(cXyz*) {
-    /* Nonmatching */
+cXyz dKyw_get_AllWind_vecpow(cXyz* param_0) {
+    cXyz vecpow;
+    cXyz sp24;
+    cXyz sp18;
+    cXyz direction;
+    f32 power;
+    dKyw_pntwind_get_info(param_0, &direction, &power);
+
+    sp24 = g_env_light.mWind.mWindVec * (g_env_light.mWind.mWindPower * (1.0f - power));
+    sp18 = direction * (power * 5.0f);
+    vecpow = sp24 + sp18;
+
+    return vecpow;
 }
 
 /* 8008A7D0-8008A870       .text dKyw_tact_wind_set__Fss */
-void dKyw_tact_wind_set(short, short) {
-    /* Nonmatching */
+// NONMATCHING - small regswap...
+void dKyw_tact_wind_set(s16 i_windX, s16 i_windY) {
+    dScnKy_env_light_c& env_light = dKy_getEnvlight();
+    cXyz* wind_vec = dKyw_get_wind_vec();
+
+    env_light.mWind.mTactWindAngleX = i_windX;
+    env_light.mWind.mTactWindAngleY = i_windY;
+    dComIfGs_setWindX(i_windX);
+    dComIfGs_setWindY(i_windY);
+
+    s16 temp_r29 = -(cM_atan2s(wind_vec->x, wind_vec->z) + 0x4000);
+    env_light.mWind.mTactWindAngleFlags = 1;
+
+    if ((s16)(temp_r29 - env_light.mWind.mTactWindAngleY) < 0) {
+        env_light.mWind.mTactWindAngleFlags |= 0x80;
+    }
 }
 
 /* 8008A870-8008A890       .text dKyw_tact_wind_set_go__Fv */
 void dKyw_tact_wind_set_go() {
-    /* Nonmatching */
+    g_env_light.mWind.mTactWindAngleFlags |= 1;
+    g_env_light.mWind.mEvtWindSet = 0xFF;
 }
 
 /* 8008A890-8008A8B0       .text dKyw_get_tactwind_dir__Fv */
-void dKyw_get_tactwind_dir() {
-    /* Nonmatching */
+int dKyw_get_tactwind_dir() {
+    int ret = 0;
+    if ((g_env_light.mWind.mTactWindAngleFlags & 0x80) != 0) {
+        ret = 1;
+    }
+
+    return ret;
 }
 
 /* 8008A8B0-8008A8C0       .text dKyw_custom_windpower__Ff */
-void dKyw_custom_windpower(float) {
-    /* Nonmatching */
+void dKyw_custom_windpower(f32 i_windpower) {
+    g_env_light.mWind.mCustomWindPower = i_windpower;
 }
 
 /* 8008A8C0-8008A944       .text dKyw_get_windsdir__Fv */
-void dKyw_get_windsdir() {
-    /* Nonmatching */
+int dKyw_get_windsdir() {
+    struct wind_tbl {
+        u16 min_angle;
+        u16 max_angle;
+        int direction;
+    };
+
+    static const wind_tbl wind_table[] = {
+        {0x0000, 0x1000, 0}, {0x1000, 0x3000, 1}, {0x3000, 0x5000, 2},
+        {0x5000, 0x7000, 3}, {0x7000, 0x9000, 4}, {0x9000, 0xB000, 5},
+        {0xB000, 0xD000, 6}, {0xD000, 0xF000, 7}, {0xF000, 0xFFFF, 0},
+    };
+
+    cXyz* wind_vec = dKyw_get_wind_vec();
+    u16 t = -(cM_atan2s(wind_vec->x, wind_vec->z) + 0x4000);
+
+    int dir;
+    for (int i = 0; i < 9; i++) {
+        if (t >= wind_table[i].min_angle && t < wind_table[i].max_angle) {
+            dir = wind_table[i].direction;
+        }
+    }
+
+    return dir;
 }
 
 /* 8008A944-8008A958       .text dKyw_evt_wind_set__Fss */
-void dKyw_evt_wind_set(short, short) {
-    /* Nonmatching */
+void dKyw_evt_wind_set(s16 i_windX, s16 i_windY) {
+    g_env_light.mWind.mEvtWindAngleX = i_windX;
+    g_env_light.mWind.mEvtWindAngleY = i_windY;
 }
 
 /* 8008A958-8008A96C       .text dKyw_evt_wind_set_go__Fv */
 void dKyw_evt_wind_set_go() {
-    /* Nonmatching */
+    g_env_light.mWind.mEvtWindSet = 1;
 }
 
 /* 8008A96C-8008A9F8       .text dKyw_gbwind_use_check__Fv */
-void dKyw_gbwind_use_check() {
-    /* Nonmatching */
+BOOL dKyw_gbwind_use_check() {
+    dStage_FileList_dt_c* fili_p = NULL;
+    int rt = 0;
+
+    if (g_env_light.mWind.mpWindVecOverride == NULL) {
+        s32 roomNo = dComIfGp_roomControl_getStayNo();
+        if (roomNo >= 0) {
+            fili_p = dComIfGp_roomControl_getStatusRoomDt(roomNo)->mRoomDt.getFileListInfo();
+        }
+
+        if (fili_p != NULL && dStage_FileList_dt_GlobalWindLevel(fili_p) <= 2) {
+            rt = 1;
+        }
+    }
+
+    return rt;
 }
 
 /* 8008A9F8-8008AA1C       .text dKyw_tornado_Notice__FP4cXyz */
-void dKyw_tornado_Notice(cXyz*) {
-    /* Nonmatching */
+void dKyw_tornado_Notice(cXyz* param_0) {
+    g_env_light.mWind.field_0x8 = *param_0;
 }
 
 /* 8008AA1C-8008AA30       .text dKyw_rain_set__Fi */
-void dKyw_rain_set(int) {
-    /* Nonmatching */
+void dKyw_rain_set(int i_count) {
+    g_env_light.mRainCount = i_count;
+    g_env_light.mRainCountOrig = i_count;
 }
-

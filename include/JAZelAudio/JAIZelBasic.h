@@ -2,6 +2,8 @@
 #define JAZELAUDIO_JAIZELBASIC_H
 
 #include "dolphin/types.h"
+#include "JAZelAudio/JAZelAudio_SE.h"
+#include "JAZelAudio/JAZelAudio_BGM.h"
 
 class Vec;
 class JAISound;

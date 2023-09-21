@@ -956,4 +956,12 @@ inline s32 dStage_sclsInfo_getWipe(stage_scls_info_class* p_info) {
     return p_info->mWipe;
 }
 
+inline int dStage_FileList_dt_ChkPathWindEffect(dStage_FileList_dt_c* i_fili) {
+    return i_fili->mParam & 0x100000;
+}
+
+inline int dStage_FileList_dt_GlobalWindLevel(dStage_FileList_dt_c* i_fili) {
+    return (i_fili->mParam >> 0x12) & 3;
+}
+
 #endif /* D_D_STAGE_H */

@@ -640,7 +640,7 @@ void dScnKy_env_light_c::setLight_palno_get(u8* i_envrSel0, u8* i_envrSel1, u8* 
         }
     }
 
-    dScnKy__Schedule* schedule_p;
+    dKyd_Schedule* schedule_p;
     for (int i = 0; i < 11; i++) {
         schedule_p = &mpSchejule[i];
         if (mCurTime >= schedule_p->mTimeEnd && mCurTime <= schedule_p->mTimeBegin) {
