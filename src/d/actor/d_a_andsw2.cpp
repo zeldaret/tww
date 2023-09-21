@@ -170,7 +170,7 @@ static s32 daAndsw2_actionEvent(daAndsw2_c* i_this) {
         } else {
             i_this->mAction = ACT_WAIT;
         }
-        dComIfGp_event_onEventFlag(8);
+        dComIfGp_event_reset();
     }
     return 1;
 }

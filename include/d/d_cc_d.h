@@ -173,6 +173,7 @@ public:
     u8 GetHitMark() { return mHitMark; }
     void SetRVec(cXyz& vec) { mRVec = vec; }
     void SetHitPos(cXyz& pos) { mHitPos = pos; }
+    cXyz* GetHitPosP() { return &mHitPos; }
 
     // private:
     /* 0x1C */ u8 mSe;
@@ -202,6 +203,7 @@ public:
     void SetRVec(cXyz& vec) { mRVec = vec; }
     cXyz* GetVecP() { return &mVec; }
     void SetHitPos(cXyz& pos) { mHitPos = pos; }
+    cXyz* GetHitPosP() { return &mHitPos; }
 
 private:
     /* 0x1C */ u8 mSe;
@@ -344,6 +346,8 @@ public:
     void SetAtRVec(cXyz& vec) { mGObjAt.SetRVec(vec); }
     void SetTgHitPos(cXyz& pos) { mGObjTg.SetHitPos(pos); }
     void SetAtHitPos(cXyz& pos) { mGObjAt.SetHitPos(pos); }
+    cXyz* GetAtHitPosP() { return mGObjAt.GetHitPosP(); }
+    cXyz* GetTgHitPosP() { return mGObjTg.GetHitPosP(); }
 
 protected:
     /* 0x050 */ dCcD_GObjAt mGObjAt;
@@ -372,7 +376,7 @@ public:
     void Set(dCcD_SrcSph const&);
     void StartCAt(cXyz&);
     void MoveCAt(cXyz&);
-    virtual cCcD_ShapeAttr* GetShapeAttr();
+    virtual cCcD_ShapeAttr* GetShapeAttr() { return (cCcD_ShapeAttr*)this; }
     virtual ~dCcD_Sph() {}
 };  // Size = 0x12C
 
@@ -380,7 +384,7 @@ public:
 class dCcD_Cps : public dCcD_GObjInf, public cCcD_CpsAttr {
 public:
     void Set(dCcD_SrcCps const&);
-    cCcD_ShapeAttr* GetShapeAttr();
+    cCcD_ShapeAttr* GetShapeAttr() { return (cCcD_ShapeAttr*)this; }
     void CalcAtVec();
     void CalcTgVec();
     virtual ~dCcD_Cps() {}

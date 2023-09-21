@@ -839,8 +839,8 @@ public:
     void checkRopeTag();
     void checkPlayerNoDraw();
     void getGroundY();
-    void getLeftHandMatrix();
-    void getRightHandMatrix();
+    MtxP getLeftHandMatrix();
+    MtxP getRightHandMatrix();
     void checkPlayerFly() const;
     void checkFrontRoll() const;
     void checkBottleSwing() const;

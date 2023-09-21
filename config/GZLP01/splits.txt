@@ -489,52 +489,52 @@ d/actor/d_a_obj.cpp:
 	.sbss       start:0x803FE3A0 end:0x803FE3A8
 	.sdata2     start:0x803FFCF0 end:0x803FFD58
 
-d/actor/d_a_obj_tribox_static.cpp:
+d/d_a_obj_tribox_static.cpp:
 	.text       start:0x8006BAFC end:0x8006BB74
 	.ctors      start:0x8033DC08 end:0x8033DC0C
 	.bss        start:0x803E9858 end:0x803E9870
 	.sbss       start:0x803FE3A8 end:0x803FE3C0
 
-d/actor/d_a_ship_static.cpp:
+d/d_a_ship_static.cpp:
 	.text       start:0x8006BB74 end:0x8006BC58
 	.sdata2     start:0x803FFD58 end:0x803FFD60
 
-d/actor/d_a_boko_static.cpp:
+d/d_a_boko_static.cpp:
 	.text       start:0x8006BC58 end:0x8006BD80
 	.data       start:0x8037DCF8 end:0x8037DE48
 	.sdata      start:0x803FD9E0 end:0x803FD9E8
 
-d/actor/d_a_bomb_static.cpp:
+d/d_a_bomb_static.cpp:
 	.text       start:0x8006BD80 end:0x8006C2D4
 	.text       start:0x8006C2D4 end:0x8006C2F0
 	.rodata     start:0x80355FA8 end:0x80355FE0
 
-d/actor/d_a_branch_static.cpp:
+d/d_a_branch_static.cpp:
 	.text       start:0x8006C2F0 end:0x8006C3D8
 	.rodata     start:0x80355FE0 end:0x80356010
 
-d/actor/d_a_mgameboard_static.cpp:
+d/d_a_mgameboard_static.cpp:
 	.text       start:0x8006C3D8 end:0x8006C430
 
-d/actor/d_a_itembase_static.cpp:
+d/d_a_itembase_static.cpp:
 	.text       start:0x8006C430 end:0x8006C600
 	.rodata     start:0x80356010 end:0x80356060
 
-d/actor/d_a_item_static.cpp:
+d/d_a_item_static.cpp:
 	.text       start:0x8006C600 end:0x8006C7D0
 	.sdata2     start:0x803FFD60 end:0x803FFD68
 
-d/actor/d_a_shop_item_static.cpp:
+d/d_a_shop_item_static.cpp:
 	.text       start:0x8006C7D0 end:0x8006C838
 	.rodata     start:0x80356060 end:0x80358140
 	.sdata2     start:0x803FFD68 end:0x803FFD78
 
-d/actor/d_a_race_item_static.cpp:
+d/d_a_race_item_static.cpp:
 	.text       start:0x8006C838 end:0x8006CEC4
 	.data       start:0x8037DE48 end:0x8037DF08
 	.sdata2     start:0x803FFD78 end:0x803FFD80
 
-d/actor/d_a_leaflift_static.cpp:
+d/d_a_leaflift_static.cpp:
 	.text       start:0x8006CEC4 end:0x8006D0A4
 	.sdata2     start:0x803FFD80 end:0x803FFDA8
 
@@ -952,11 +952,11 @@ d/d_2dnumber.cpp:
 	.data       start:0x8038FDA8 end:0x8038FE18
 	.sdata2     start:0x80400CB0 end:0x80400D30
 
-d/actor/d_a_npc_cb1_static.cpp:
+d/d_a_npc_cb1_static.cpp:
 	.text       start:0x800CF264 end:0x800CF26C
 	.sbss       start:0x803FE660 end:0x803FE668
 
-d/actor/d_a_npc_mk_static.cpp:
+d/d_a_npc_mk_static.cpp:
 	.text       start:0x800CF26C end:0x800D03D4
 	.sdata2     start:0x80400D30 end:0x80400D88
 

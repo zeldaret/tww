@@ -187,6 +187,9 @@ public:
 
     dTimer_c* getTimerPtr() { return mTimerInfo.mTimerPtr; }
     s32 getTimerMode() { return mTimerInfo.mTimerMode; }
+    
+    s16 getItemMagicCount() { return mItemMagicCount; }
+    void setItemMagicCount(s16 magic) { mItemMagicCount = magic; }
 
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
@@ -1005,6 +1008,14 @@ inline s32 dComIfGp_checkStatus(u16 flags) {
     return g_dComIfG_gameInfo.play.checkStatus(flags);
 }
 
+inline s16 dComIfGp_getItemMagicCount() {
+    return g_dComIfG_gameInfo.play.getItemMagicCount();
+}
+
+inline void dComIfGp_setItemMagicCount(s16 magic) {
+    g_dComIfG_gameInfo.play.setItemMagicCount(magic);
+}
+
 /**
  * === EVENT ===*/
 
@@ -1026,6 +1037,10 @@ inline void dComIfGp_event_onEventFlag(s16 flag) {
 
 inline void dComIfGp_event_offEventFlag(s16 flag) {
     return g_dComIfG_gameInfo.play.getEvent().offEventFlag(flag);
+}
+
+inline void dComIfGp_event_reset() {
+    g_dComIfG_gameInfo.play.getEvent().reset();
 }
 
 inline u8 dComIfGp_event_getPreItemNo() {

@@ -8,6 +8,12 @@
 extern "C" {
 #endif
 
+extern GXRenderModeObj GXNtsc480IntDf;
+extern GXRenderModeObj GXNtsc480Int;
+extern GXRenderModeObj GXMpal480IntDf;
+extern GXRenderModeObj GXPal528IntDf;
+extern GXRenderModeObj GXEurgb60Hz480IntDf;
+
 void GXSetDispCopySrc(u16 left, u16 top, u16 width, u16 height);
 void GXSetTexCopySrc(u16 left, u16 top, u16 width, u16 height);
 void GXSetDispCopyDst(u16 arg0, u16 arg1);

@@ -168,7 +168,7 @@ struct actor_attention_types {
     /* 0x14 */ u32 mFlags;
 };  // Size = 0x18
 
-class dJntCol_c;
+class JntHit_c;
 
 struct cull_sphere {
     /* 0x0 */ Vec mCenter;
@@ -211,7 +211,7 @@ public:
     } mCull;
     /* 0x248 */ f32 mCullSizeFar;
     /* 0x24C */ J3DModel* model;
-    /* 0x250 */ dJntCol_c* mJntCol;
+    /* 0x250 */ JntHit_c* mJntHit;
     /* 0x254 */ f32 speedF;
     /* 0x258 */ f32 mGravity;
     /* 0x25C */ f32 mMaxFallSpeed;

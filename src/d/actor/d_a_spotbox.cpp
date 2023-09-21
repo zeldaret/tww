@@ -41,10 +41,10 @@ int daSpotbox_c::draw() {
 }
 
 int daSpotbox_c::execute() {
-    PSMTXTrans(mDoMtx_stack_c::now, this->current.pos.x, this->current.pos.y, this->current.pos.z);
-    mDoMtx_YrotM(mDoMtx_stack_c::now, this->current.angle.y);
-    mDoMtx_stack_c::scaleM(this->mScale.x, this->mScale.y, this->mScale.z);
-    PSMTXCopy(mDoMtx_stack_c::now, this->mtx);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mDoMtx_stack_c::scaleM(mScale);
+    cMtx_copy(mDoMtx_stack_c::get(), mtx);
     return TRUE;
 }
 

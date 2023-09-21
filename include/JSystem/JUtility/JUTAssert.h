@@ -33,6 +33,9 @@ namespace JUTAssertion {
     void setMessageCount(int);
 };
 
-extern bool sAssertVisible;
+extern "C" {
+    void setWarningMessage_f_va(u32 device, const char* file, int line, const char* msg, va_list args);
+    void setLogMessage_f_va(u32 device, const char* file, int line, const char* msg, va_list args);
+}
 
 #endif /* JUTASSERT_H */
