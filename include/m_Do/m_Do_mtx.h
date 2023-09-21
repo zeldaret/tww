@@ -136,6 +136,12 @@ public:
     /* 8000CD64 */ static inline void transS(cXyz const& xyz) { MTXTrans(now, xyz.x, xyz.y, xyz.z); }
 
     /**
+     * Translates a new Matrix by the given cXyz and then concatenates it with the `now` matrix
+     * @param xyz The xyz translation vector
+     */
+    /* 8000CD64 */ static inline void transM(cXyz const& xyz) { transM(xyz.x, xyz.y, xyz.z); }
+
+    /**
      * Translates a new Matrix by the given X, Y, and Z values and then concatenates it with the `now` matrix
      * @param x The x-axis translation value
      * @param y The y-axis translation value
@@ -153,7 +159,7 @@ public:
      * Scales a new Matrix by the given cXyz and then concatenates it with the `now` matrix
      * @param xyz The xyz scale vector
      */
-    /* 8000CE70 */ static void scaleM(cXyz const& xyz);
+    /* 8000CE70 */ static void scaleM(cXyz const& xyz) { scaleM(xyz.x, xyz.y, xyz.z); }
 
     /**
      * Scales a new Matrix by the given X, Y, and Z values and then concatenates it with the `now` matrix
@@ -166,7 +172,7 @@ public:
     /* 8000CE9C */ static void XYZrotS(csXyz const& xyz);
 
     /**
-     * Rotates the `now` matrix by the given csXyz in the order Z, Y, X
+     * Rotates the `now` matrix by the given csXyz in the order X, Y, Z
      * @param xyz The xyz rotation vector
      */
     /* 8000CED4 */ static void XYZrotM(csXyz const& xyz);
@@ -174,10 +180,10 @@ public:
     /* 8000CF0C */ static void ZXYrotS(csXyz const& xyz);
 
     /**
-     * Rotates the `now` matrix by the given csXyz in the order X, Y, Z
+     * Rotates the `now` matrix by the given csXyz in the order Z, X, Y
      * @param xyz The xyz rotation vector
      */
-    /* 8000CF44 */ static void ZXYrotM(csXyz const& xyz);
+    /* 8000CF44 */ static void ZXYrotM(csXyz const& xyz) { ZXYrotM(xyz.x, xyz.y, xyz.z); }
 
     /* 8000CF7C */ static void quatM(Quaternion const*);
 
@@ -232,7 +238,7 @@ public:
     static void XYZrotS(s16 x, s16 y, s16 z) { mDoMtx_XYZrotS(now, x, y, z); }
     
     /**
-     * Rotates the `now` matrix by the given X, Y, and Z values in the order Z, Y, X
+     * Rotates the `now` matrix by the given X, Y, and Z values in the order X, Y, Z
      * @param x The x-axis rotation value
      * @param y The y-axis rotation value
      * @param z The z-axis rotation value

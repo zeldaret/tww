@@ -202,9 +202,9 @@ void daNh_c::setBaseMtx() {
     glowOffset.y = l_HIO.prm.mGlowOffsetY;
     cXyz glowPos;
     cMtx_multVec(mDoMtx_stack_c::get(), &glowOffset, &glowPos);
-    PSMTXTrans(mDoMtx_stack_c::get(), glowPos.x, glowPos.y, glowPos.z);
+    mDoMtx_stack_c::transS(glowPos);
     mDoMtx_stack_c::scaleM(l_HIO.prm.mGlowScale, l_HIO.prm.mGlowScale, l_HIO.prm.mGlowScale);
-    MTXCopy(mDoMtx_stack_c::get(), mGlowMtx);
+    cMtx_copy(mDoMtx_stack_c::get(), mGlowMtx);
 }
 
 /* 800F9980-800F9A54       .text createHeap__6daNh_cFv */
@@ -229,12 +229,7 @@ static BOOL checkCreateHeap(fopAc_ac_c* i_this) {
 
 /* 800F9A74-800F9C8C       .text create__6daNh_cFv */
 s32 daNh_c::create() {
-    static u32 a_heap_size_tbl;
-    static s8 init;
-    if (!init) {
-        a_heap_size_tbl = 0x4000;
-        init = 1;
-    }
+    static u32 a_heap_size_tbl = 0x4000;
     
     s32 phase_state = cPhs_COMPLEATE_e;
     

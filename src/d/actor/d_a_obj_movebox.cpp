@@ -467,8 +467,8 @@ namespace daObjMovebox {
         }
         
         daObj::quat_rotBaseY(&temp2, temp3);
-        
-        mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
+        mDoMtx_stack_c::quatM(&temp2);
+        mDoMtx_stack_c::ZXYrotM(shape_angle);
         if (isFloating) {
             mDoMtx_stack_c::transM(0.0f, -mUnknown624, 0.0f);
         }

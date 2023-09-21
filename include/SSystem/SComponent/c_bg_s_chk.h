@@ -22,7 +22,11 @@ private:
     /* 0x10 */  // __vtable__
 
 public:
-    cBgS_Chk();
+    cBgS_Chk() {
+        mPolyPassChk = NULL;
+        mGrpPassChk = NULL;
+        unk_0x0C = 1;
+    }
     void SetExtChk(cBgS_Chk&);
     bool ChkSameActorPid(unsigned int) const;
 

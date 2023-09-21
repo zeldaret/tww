@@ -241,7 +241,7 @@ s32 daBranch_Create(fopAc_ac_c* i_this) {
                     J3DMaterial* mat = modelData->getMaterialNodePointer(j);
                     if (mat) {
                         J3DFog* fog = mat->getPEBlock()->getFog();
-                        fog->field_0x0 = 2;
+                        fog->mType = 2;
                     }
                 }
             }
