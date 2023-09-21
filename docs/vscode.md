@@ -21,6 +21,9 @@ Recommended `.vscode/settings.json`:
   },
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
+  "files.associations": {
+    "*.inc": "cpp",
+  },
   "search.useIgnoreFiles": false,
   "search.exclude": {
     "build/*/config.json": true,
