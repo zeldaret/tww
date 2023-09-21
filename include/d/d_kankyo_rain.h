@@ -2,21 +2,26 @@
 #define D_KANKYO_D_KANKYO_RAIN_H
 
 #include "dolphin/types.h"
+#include "dolphin/gx/GX.h"
+
+struct DOUBLE_POS {
+    f64 x, y, z;
+};
 
 class cXyz;
 
-void dKyr_drawSun(f32(*)[4], cXyz*, GXColor&, u8**);
-void dKyr_drawLenzflare(f32(*)[4], cXyz*, GXColor&, u8**);
-void dKyr_drawRain(f32(*)[4], u8**);
-void dKyr_drawSibuki(f32(*)[4], u8**);
-void drawPoison(f32(*)[4], u8**);
-void dKyr_drawHousi(f32(*)[4], u8**);
-void dKyr_drawKazanbai(f32(*)[4], u8**);
-void dKyr_drawSnow(f32(*)[4], u8**);
-void dKyr_drawStar(f32(*)[4], u8**);
-void drawWave(f32(*)[4], u8**);
-void drawCloudShadow(f32(*)[4], u8**);
-void drawVrkumo(f32(*)[4], GXColor&, u8**);
+void dKyr_drawSun(Mtx, cXyz*, GXColor&, u8**);
+void dKyr_drawLenzflare(Mtx, cXyz*, GXColor&, u8**);
+void dKyr_drawRain(Mtx, u8**);
+void dKyr_drawSibuki(Mtx, u8**);
+void drawPoison(Mtx, u8**);
+void dKyr_drawHousi(Mtx, u8**);
+void dKyr_drawKazanbai(Mtx, u8**);
+void dKyr_drawSnow(Mtx, u8**);
+void dKyr_drawStar(Mtx, u8**);
+void drawWave(Mtx, u8**);
+void drawCloudShadow(Mtx, u8**);
+void drawVrkumo(Mtx, GXColor&, u8**);
 void dKyr_thunder_init();
 void dKyr_thunder_move();
 void dKyr_poison_light_colision();

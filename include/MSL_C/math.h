@@ -49,7 +49,6 @@ double modf(double, double*);
 double pow(double, double);
 double sin(double);
 float sinf(float);
-double sqrt(double);
 double tan(double);
 float tanf(float);
 
@@ -70,6 +69,24 @@ extern inline float sqrtf(float x) {
         return y;
     }
     return x;
+}
+
+extern inline double sqrt(double x) {
+    if(x > 0.0)
+    {
+        double guess = __frsqrte(x);                   /* returns an approximation to    */
+        guess = .5*guess*(3.0 - guess*guess*x);      /* now have 8 sig bits            */
+        guess = .5*guess*(3.0 - guess*guess*x);      /* now have 16 sig bits            */
+        guess = .5*guess*(3.0 - guess*guess*x);      /* now have 32 sig bits            */
+        guess = .5*guess*(3.0 - guess*guess*x);      /* now have > 53 sig bits        */
+        return x*guess ;
+    }
+    else if ( x == 0 )
+        return 0;
+    else if ( x )
+        return NAN;
+
+    return HUGE_VALF;
 }
 
 inline float atan2f(float y, float x) {

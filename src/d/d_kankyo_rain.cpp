@@ -3,37 +3,87 @@
 // Translation Unit: d_kankyo_rain.cpp
 //
 
-#include "d_kankyo_rain.h"
-#include "dolphin/types.h"
+#include "d/d_kankyo_rain.h"
+#include "d/d_bg_s_gnd_chk.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
+#include "f_op/f_op_camera_mng.h"
 
 /* 8008AA30-8008AB3C       .text vectle_calc__FP10DOUBLE_POSP4cXyz */
-void vectle_calc(DOUBLE_POS*, cXyz*) {
-    /* Nonmatching */
+void vectle_calc(DOUBLE_POS* i_pos, cXyz* o_out) {
+    double s = sqrt(i_pos->x * i_pos->x + i_pos->y * i_pos->y + i_pos->z * i_pos->z);
+
+    if (s != 0.0) {
+        o_out->x = i_pos->x / s;
+        o_out->y = i_pos->y / s;
+        o_out->z = i_pos->z / s;
+    } else {
+        o_out->x = 0.0;
+        o_out->y = 0.0;
+        o_out->z = 0.0;
+    }
 }
 
 /* 8008AB3C-8008AB94       .text get_vectle_calc__FP4cXyzP4cXyzP4cXyz */
-void get_vectle_calc(cXyz*, cXyz*, cXyz*) {
-    /* Nonmatching */
+void get_vectle_calc(cXyz* param_0, cXyz* param_1, cXyz* param_2) {
+    DOUBLE_POS pos;
+    pos.x = param_1->x - param_0->x;
+    pos.y = param_1->y - param_0->y;
+    pos.z = param_1->z - param_0->z;
+
+    vectle_calc(&pos, param_2);
 }
 
 /* 8008AB94-8008ABB4       .text dKyr_get_vectle_calc__FP4cXyzP4cXyzP4cXyz */
-void dKyr_get_vectle_calc(cXyz*, cXyz*, cXyz*) {
-    /* Nonmatching */
+void dKyr_get_vectle_calc(cXyz* param_0, cXyz* param_1, cXyz* param_2) {
+    get_vectle_calc(param_0, param_1, param_2);
 }
 
 /* 8008ABB4-8008AC64       .text dKy_set_eyevect_calc__FP12camera_classP3Vecff */
-void dKy_set_eyevect_calc(camera_class*, Vec*, float, float) {
-    /* Nonmatching */
+void dKy_set_eyevect_calc(camera_class* i_camera, Vec* param_1, f32 param_2, f32 param_3) {
+    cXyz tmp;
+    get_vectle_calc(&i_camera->mLookat.mEye, &i_camera->mLookat.mCenter, &tmp);
+    param_1->x = i_camera->mLookat.mEye.x + tmp.x * param_2;
+    param_1->y = (i_camera->mLookat.mEye.y + tmp.y * param_3) - 200.0f;
+    param_1->z = i_camera->mLookat.mEye.z + tmp.z * param_2;
 }
 
 /* 8008AC64-8008AD60       .text dKy_set_eyevect_calc2__FP12camera_classP3Vecff */
-void dKy_set_eyevect_calc2(camera_class*, Vec*, float, float) {
-    /* Nonmatching */
+void dKy_set_eyevect_calc2(camera_class* i_camera, Vec* param_1, f32 param_2, f32 param_3) {
+    cXyz tmp;
+    DOUBLE_POS pos;
+
+    pos.x = i_camera->mLookat.mCenter.x - i_camera->mLookat.mEye.x;
+    if (param_3 != 0.0f) {
+        pos.y = i_camera->mLookat.mCenter.y - i_camera->mLookat.mEye.y;
+    } else {
+        pos.y = 0.0f;
+    }
+    pos.z = i_camera->mLookat.mCenter.z - i_camera->mLookat.mEye.z;
+
+    vectle_calc(&pos, &tmp);
+
+    param_1->x = i_camera->mLookat.mEye.x + tmp.x * param_2;
+    param_1->y = i_camera->mLookat.mEye.y + tmp.y * param_3;
+    param_1->z = i_camera->mLookat.mEye.z + tmp.z * param_2;
+
+    if (param_3 == 0.0f) {
+        param_1->y = 0.0f;
+    }
 }
 
 /* 8008AD60-8008AE54       .text dKyr_set_btitex__FP9_GXTexObjP7ResTIMG */
-void dKyr_set_btitex(_GXTexObj*, ResTIMG*) {
-    /* Nonmatching */
+void dKyr_set_btitex(GXTexObj* i_obj, ResTIMG* i_img) {
+    GXInitTexObj(i_obj, (&i_img->format + i_img->imageOffset), i_img->width, i_img->height,
+                 (GXTexFmt)i_img->format, (GXTexWrapMode)i_img->wrapS, (GXTexWrapMode)i_img->wrapT,
+                 (GXBool)(i_img->mipmapCount > 1));
+
+    GXInitTexObjLOD(i_obj, (GXTexFilter)i_img->minFilter, (GXTexFilter)i_img->magFilter,
+                    i_img->minLOD * 0.125f, i_img->maxLOD * 0.125f, i_img->LODBias * 0.01f,
+                    (GXBool)i_img->biasClamp, (GXBool)i_img->doEdgeLOD,
+                    (GXAnisotropy)i_img->maxAnisotropy);
+
+    GXLoadTexObj(i_obj, GX_TEXMAP0);
 }
 
 /* 8008AE54-8008B44C       .text dKyr_kamome_move__Fv */
@@ -51,18 +101,13 @@ void dKyr_wind_move() {
     /* Nonmatching */
 }
 
-/* 8008C4BC-8008C624       .text __dt__18dBgS_ObjGndChk_AllFv */
-dBgS_ObjGndChk_All::~dBgS_ObjGndChk_All() {
-    /* Nonmatching */
-}
-
 /* 8008C624-8008C888       .text dKyr_lenzflare_move__Fv */
 void dKyr_lenzflare_move() {
     /* Nonmatching */
 }
 
 /* 8008C888-8008C8B8       .text dKyr_moon_arrival_check__Fv */
-void dKyr_moon_arrival_check() {
+BOOL dKyr_moon_arrival_check() {
     /* Nonmatching */
 }
 
@@ -86,13 +131,8 @@ void overhead_bg_chk() {
     /* Nonmatching */
 }
 
-/* 8008D53C-8008D638       .text __dt__12dBgS_RoofChkFv */
-dBgS_RoofChk::~dBgS_RoofChk() {
-    /* Nonmatching */
-}
-
 /* 8008D638-8008DAF0       .text forward_overhead_bg_chk__FP4cXyzf */
-void forward_overhead_bg_chk(cXyz*, float) {
+void forward_overhead_bg_chk(cXyz*, f32) {
     /* Nonmatching */
 }
 
@@ -152,7 +192,7 @@ void light_at_hit_check(cXyz*) {
 }
 
 /* 80092310-80092330       .text dKyr_poison_live_check__Fv */
-void dKyr_poison_live_check() {
+BOOL dKyr_poison_live_check() {
     /* Nonmatching */
 }
 
@@ -186,63 +226,63 @@ void snap_sunmoon_proc(cXyz*, int) {
     /* Nonmatching */
 }
 
-/* 8009428C-8009514C       .text dKyr_drawSun__FPA4_fP4cXyzR8_GXColorPPUc */
-void dKyr_drawSun(float(*)[4], cXyz*, _GXColor&, unsigned char**) {
+/* 8009428C-8009514C       .text dKyr_drawSun__FPA4_fP4cXyzR8GXColorPPUc */
+void dKyr_drawSun(Mtx, cXyz*, GXColor&, u8**) {
     /* Nonmatching */
 }
 
-/* 8009514C-80095E8C       .text dKyr_drawLenzflare__FPA4_fP4cXyzR8_GXColorPPUc */
-void dKyr_drawLenzflare(float(*)[4], cXyz*, _GXColor&, unsigned char**) {
+/* 8009514C-80095E8C       .text dKyr_drawLenzflare__FPA4_fP4cXyzR8GXColorPPUc */
+void dKyr_drawLenzflare(Mtx, cXyz*, GXColor&, u8**) {
     /* Nonmatching */
 }
 
 /* 80095E8C-8009682C       .text dKyr_drawRain__FPA4_fPPUc */
-void dKyr_drawRain(float(*)[4], unsigned char**) {
+void dKyr_drawRain(Mtx, u8**) {
     /* Nonmatching */
 }
 
 /* 8009682C-80096D18       .text dKyr_drawSibuki__FPA4_fPPUc */
-void dKyr_drawSibuki(float(*)[4], unsigned char**) {
+void dKyr_drawSibuki(Mtx, u8**) {
     /* Nonmatching */
 }
 
 /* 80096D18-800973CC       .text drawPoison__FPA4_fPPUc */
-void drawPoison(float(*)[4], unsigned char**) {
+void drawPoison(Mtx, u8**) {
     /* Nonmatching */
 }
 
 /* 800973CC-80097AD0       .text dKyr_drawHousi__FPA4_fPPUc */
-void dKyr_drawHousi(float(*)[4], unsigned char**) {
+void dKyr_drawHousi(Mtx, u8**) {
     /* Nonmatching */
 }
 
 /* 80097AD0-800987B8       .text dKyr_drawKazanbai__FPA4_fPPUc */
-void dKyr_drawKazanbai(float(*)[4], unsigned char**) {
+void dKyr_drawKazanbai(Mtx, u8**) {
     /* Nonmatching */
 }
 
 /* 800987B8-80098FF0       .text dKyr_drawSnow__FPA4_fPPUc */
-void dKyr_drawSnow(float(*)[4], unsigned char**) {
+void dKyr_drawSnow(Mtx, u8**) {
     /* Nonmatching */
 }
 
 /* 80098FF0-80099D38       .text dKyr_drawStar__FPA4_fPPUc */
-void dKyr_drawStar(float(*)[4], unsigned char**) {
+void dKyr_drawStar(Mtx, u8**) {
     /* Nonmatching */
 }
 
 /* 80099D38-8009A5D4       .text drawWave__FPA4_fPPUc */
-void drawWave(float(*)[4], unsigned char**) {
+void drawWave(Mtx, u8**) {
     /* Nonmatching */
 }
 
 /* 8009A5D4-8009AB88       .text drawCloudShadow__FPA4_fPPUc */
-void drawCloudShadow(float(*)[4], unsigned char**) {
+void drawCloudShadow(Mtx, u8**) {
     /* Nonmatching */
 }
 
-/* 8009AB88-8009B9C4       .text drawVrkumo__FPA4_fR8_GXColorPPUc */
-void drawVrkumo(float(*)[4], _GXColor&, unsigned char**) {
+/* 8009AB88-8009B9C4       .text drawVrkumo__FPA4_fR8GXColorPPUc */
+void drawVrkumo(Mtx, GXColor&, u8**) {
     /* Nonmatching */
 }
 
@@ -255,39 +295,3 @@ void dKyr_thunder_init() {
 void dKyr_thunder_move() {
     /* Nonmatching */
 }
-
-/* 8009BDEC-8009BDF4       .text @20@__dt__18dBgS_ObjGndChk_AllFv */
-void @20@__dt__18dBgS_ObjGndChk_AllFv {
-    /* Nonmatching */
-}
-
-/* 8009BDF4-8009BDFC       .text @76@__dt__18dBgS_ObjGndChk_AllFv */
-void @76@__dt__18dBgS_ObjGndChk_AllFv {
-    /* Nonmatching */
-}
-
-/* 8009BDFC-8009BE04       .text @64@__dt__18dBgS_ObjGndChk_AllFv */
-void @64@__dt__18dBgS_ObjGndChk_AllFv {
-    /* Nonmatching */
-}
-
-/* 8009BE04-8009BE0C       .text @16@__dt__12dBgS_RoofChkFv */
-void @16@__dt__12dBgS_RoofChkFv {
-    /* Nonmatching */
-}
-
-/* 8009BE0C-8009BE14       .text @48@__dt__12dBgS_RoofChkFv */
-void @48@__dt__12dBgS_RoofChkFv {
-    /* Nonmatching */
-}
-
-/* 8009BE14-8009BE1C       .text @36@__dt__12dBgS_RoofChkFv */
-void @36@__dt__12dBgS_RoofChkFv {
-    /* Nonmatching */
-}
-
-/* 8009BE1C-8009BE64       .text __dt__9dSnap_ObjFv */
-dSnap_Obj::~dSnap_Obj() {
-    /* Nonmatching */
-}
-
