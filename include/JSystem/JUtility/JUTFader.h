@@ -15,7 +15,7 @@ public:
     /* 802E55DC */ void control();
     /* 802E57D0 */ void setStatus(JUTFader::EStatus, int);
 
-    /* 802E5840 */ virtual ~JUTFader();
+    /* 802E5840 */ virtual ~JUTFader() {};
     /* 802E576C */ virtual bool startFadeIn(int);
     /* 802E579C */ virtual bool startFadeOut(int);
     /* 802E56DC */ virtual void draw();

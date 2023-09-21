@@ -4,51 +4,261 @@
 //
 
 #include "JSystem/JUtility/JUTCacheFont.h"
-#include "dolphin/types.h"
+#include "JSystem/JKernel/JKRAram.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "JSystem/JUtility/JUTConsole.h"
+#include "dolphin/gx/GX.h"
 
 /* 802C03D4-802C0454       .text __ct__12JUTCacheFontFPC7ResFONTUlP7JKRHeap */
-JUTCacheFont::JUTCacheFont(const ResFONT*, unsigned long, JKRHeap*) {
-    /* Nonmatching */
+JUTCacheFont::JUTCacheFont(const ResFONT* p_fontRes, u32 cacheSize, JKRHeap* p_heap) {
+    initialize_state();
+    JUTResFont::initialize_state();
+    JUTFont::initialize_state();
+    initiate(p_fontRes, NULL, cacheSize, p_heap);
 }
 
 /* 802C0454-802C04E8       .text __dt__12JUTCacheFontFv */
 JUTCacheFont::~JUTCacheFont() {
-    /* Nonmatching */
+    if (isValid()) {
+        deleteMemBlocks_CacheFont();
+        initialize_state();
+
+        deleteMemBlocks_ResFont();
+        JUTResFont::initialize_state();
+
+        JUTFont::initialize_state();
+    }
 }
 
 /* 802C04E8-802C056C       .text deleteMemBlocks_CacheFont__12JUTCacheFontFv */
 void JUTCacheFont::deleteMemBlocks_CacheFont() {
-    /* Nonmatching */
+    if (field_0xb0 != 0) {
+        delete[] mCacheBuffer;
+    }
+
+    delete field_0xac;
+    delete mInfoBlock;
+    delete mpMemBlocks;
+    delete field_0x7c;
+    delete field_0x80;
+    delete field_0x84;
 }
 
 /* 802C056C-802C05A8       .text initialize_state__12JUTCacheFontFv */
 void JUTCacheFont::initialize_state() {
-    /* Nonmatching */
+    field_0xb0 = 0;
+    mCacheBuffer = NULL;
+
+    field_0xac = NULL;
+    mInfoBlock = NULL;
+    field_0x7c = NULL;
+    field_0x80 = NULL;
+    field_0x84 = NULL;
+    mpMemBlocks = NULL;
+
+    mPagingType = PAGE_TYPE_0;
+    mMaxSheetSize = 0;
+
+    mCacheBuffer = NULL;
+    field_0x9c = NULL;
+    field_0xa0 = NULL;
 }
 
 /* 802C05A8-802C0738       .text getMemorySize__12JUTCacheFontFPC7ResFONTPUsPUlPUsPUlPUsPUlPUl */
-void JUTCacheFont::getMemorySize(const ResFONT*, unsigned short*, unsigned long*, unsigned short*, unsigned long*, unsigned short*, unsigned long*, unsigned long*) {
-    /* Nonmatching */
+int JUTCacheFont::getMemorySize(const ResFONT* p_font, u16* o_widCount, u32* o_widSize, u16* o_glyCount, u32* o_glySize, u16* o_mapCount, u32* o_mapSize, u32* o_glyTexSize) {
+    if (p_font == NULL) {
+        return 0;
+    }
+
+    u16 widBlockCount = 0;
+    u16 glyBlockCount = 0;
+    u16 mapBlockCount = 0;
+    u32 totalWidSize = 0;
+    u32 totalGlySize = 0;
+    u32 totalMapSize = 0;
+    u32 maxGlyTexSize = 0;
+    u32 glyTexSize;
+
+    u8* fontInf = (u8*)p_font->data;
+    for (int i = 0; i < p_font->numBlocks; i++) {
+        switch (((BlockHeader*)fontInf)->magic) {
+        case 'INF1':
+            break;
+        case 'WID1':
+            totalWidSize += ((BlockHeader*)fontInf)->size;
+            widBlockCount++;
+            break;
+        case 'GLY1':
+            totalGlySize += ((BlockHeader*)fontInf)->size;
+            glyTexSize = ((ResFONT::GLY1*)fontInf)->textureSize;
+            glyBlockCount++;
+            if (glyTexSize > maxGlyTexSize) {
+                maxGlyTexSize = glyTexSize;
+            }
+            break;
+        case 'MAP1':
+            totalMapSize += ((BlockHeader*)fontInf)->size;
+            mapBlockCount++;
+            break;
+        default:
+            JUTReportConsole("JUTCacheFont: Unknown data block\n");
+            break;
+        }
+
+        fontInf += ((BlockHeader*)fontInf)->size;
+    }
+
+    if (o_widCount != NULL) {
+        *o_widCount = widBlockCount;
+    }
+
+    if (o_glyCount != NULL) {
+        *o_glyCount = glyBlockCount;
+    }
+
+    if (o_mapCount != NULL) {
+        *o_mapCount = mapBlockCount;
+    }
+
+    if (o_widSize != NULL) {
+        *o_widSize = totalWidSize;
+    }
+
+    if (o_glySize != NULL) {
+        *o_glySize = totalGlySize;
+    }
+
+    if (o_mapSize != NULL) {
+        *o_mapSize = totalMapSize;
+    }
+
+    if (o_glyTexSize != NULL) {
+        *o_glyTexSize = maxGlyTexSize;
+    }
+
+    return 1;
 }
 
 /* 802C0738-802C0798       .text initiate__12JUTCacheFontFPC7ResFONTPvUlP7JKRHeap */
-void JUTCacheFont::initiate(const ResFONT*, void*, unsigned long, JKRHeap*) {
-    /* Nonmatching */
+int JUTCacheFont::initiate(const ResFONT* p_fontRes, void* param_1, u32 param_2, JKRHeap* p_heap) {
+    if (!internal_initiate(p_fontRes, param_1, param_2, p_heap)) {
+        deleteMemBlocks_CacheFont();
+        deleteMemBlocks_ResFont();
+        JUTFont::initialize_state();
+        mValid = false;
+        return 0;
+    }
+
+    return 1;
 }
 
 /* 802C0798-802C089C       .text internal_initiate__12JUTCacheFontFPC7ResFONTPvUlP7JKRHeap */
-void JUTCacheFont::internal_initiate(const ResFONT*, void*, unsigned long, JKRHeap*) {
-    /* Nonmatching */
+bool JUTCacheFont::internal_initiate(const ResFONT* p_fontRes, void* param_1, u32 param_2, JKRHeap* param_3) {
+    deleteMemBlocks_CacheFont();
+    initialize_state();
+    deleteMemBlocks_ResFont();
+    JUTResFont::initialize_state();
+    JUTFont::initialize_state();
+
+    if (p_fontRes == NULL) {
+        return false;
+    }
+
+    mResFont = p_fontRes;
+    mValid = true;
+    getMemorySize(p_fontRes, &mWidthBlockNum, &mTotalWidSize, &mGlyphBlockNum, &mTotalGlySize,
+                  &mMapBlockNum, &mTotalMapSize, &mMaxSheetSize);
+
+    if (!allocArea(param_1, param_2, param_3)) {
+        return false;
+    } else if (!allocArray(param_3)) {
+        return false;
+    }
+
+    setBlock();
+    return true;
 }
 
 /* 802C089C-802C0A90       .text allocArea__12JUTCacheFontFPvUlP7JKRHeap */
-void JUTCacheFont::allocArea(void*, unsigned long, JKRHeap*) {
-    /* Nonmatching */
+bool JUTCacheFont::allocArea(void* cacheBuffer, u32 param_1, JKRHeap* heap) {
+    mInfoBlock = (ResFONT::INF1*)new (heap, 0) ResFONT();
+    if (mInfoBlock == NULL) {
+        return false;
+    }
+
+    if (mTotalWidSize != 0) {
+        field_0x7c = new (heap, 0) u8[mTotalWidSize];
+        if (field_0x7c == NULL) {
+            return false;
+        }
+    }
+
+    if (mGlyphBlockNum != 0) {
+        field_0x80 = new (heap, 0) u8[mGlyphBlockNum * sizeof(ResFONT::GLY1)];
+        if (field_0x80 == NULL) {
+            return false;
+        }
+
+        field_0xac = JKRAram::getManager()->mAramHeap->alloc(
+            mTotalGlySize - (mGlyphBlockNum * sizeof(ResFONT::GLY1)), JKRAramHeap::HEAD);
+        if (field_0xac == NULL) {
+            return false;
+        }
+    }
+
+    if (mTotalMapSize != 0) {
+        field_0x84 = new (heap, 0) u8[mTotalMapSize];
+        if (field_0x84 == NULL) {
+            return false;
+        }
+    }
+
+    field_0x94 = mMaxSheetSize + 0x40;
+    mCachePage = param_1 / field_0x94;
+    u32 v1 = field_0x94 * mCachePage;
+    if (mCachePage == 0) {
+        return false;
+    }
+
+    if (cacheBuffer != NULL) {
+        JUT_ASSERT(351, ( (u32)cacheBuffer & 0x1f ) == 0);
+        mCacheBuffer = cacheBuffer;
+        field_0xb0 = 0;
+    } else {
+        mCacheBuffer = new (heap, 0x20) u8[v1];
+        if (mCacheBuffer == NULL) {
+            return false;
+        }
+        field_0xb0 = 1;
+    }
+
+    invalidiateAllCache();
+    return true;
 }
 
 /* 802C0A90-802C0B78       .text allocArray__12JUTCacheFontFP7JKRHeap */
-void JUTCacheFont::allocArray(JKRHeap*) {
-    /* Nonmatching */
+bool JUTCacheFont::allocArray(JKRHeap* heap) {
+    mpMemBlocks = (void**)new (heap, 0) u32[mWidthBlockNum + mGlyphBlockNum + mMapBlockNum];
+    if (mpMemBlocks == NULL) {
+        return false;
+    }
+
+    void** blocks = mpMemBlocks;
+    if (mWidthBlockNum) {
+        mpWidthBlocks = (ResFONT::WID1**)blocks;
+        blocks = blocks + mWidthBlockNum;
+    }
+    if (mGlyphBlockNum) {
+        mpGlyphBlocks = (ResFONT::GLY1**)blocks;
+        blocks = blocks + mGlyphBlockNum;
+        for (int i = 0; i < mGlyphBlockNum; i++) {
+            mpGlyphBlocks[i] = (ResFONT::GLY1*)((u8*)mCacheBuffer + (field_0x94 * i));
+        }
+    }
+    if (mMapBlockNum) {
+        mpMapBlocks = (ResFONT::MAP1**)blocks;
+    }
+    return true;
 }
 
 /* 802C0B78-802C0DD0       .text setBlock__12JUTCacheFontFv */
@@ -82,11 +292,30 @@ void JUTCacheFont::invalidiateAllCache() {
 }
 
 /* 802C126C-802C12B0       .text unlink__12JUTCacheFontFPQ212JUTCacheFont15TGlyphCacheInfo */
-void JUTCacheFont::unlink(JUTCacheFont::TGlyphCacheInfo*) {
-    /* Nonmatching */
+void JUTCacheFont::unlink(JUTCacheFont::TGlyphCacheInfo* cacheInfo) {
+    if (cacheInfo->mPrev == NULL) {
+        field_0x9c = cacheInfo->mNext;
+    } else {
+        cacheInfo->mPrev->mNext = cacheInfo->mNext;
+    }
+
+    if (cacheInfo->mNext == NULL) {
+        field_0xa0 = cacheInfo->mPrev;
+    } else {
+        cacheInfo->mNext->mPrev = cacheInfo->mPrev;
+    }
 }
 
 /* 802C12B0-802C12DC       .text prepend__12JUTCacheFontFPQ212JUTCacheFont15TGlyphCacheInfo */
-void JUTCacheFont::prepend(JUTCacheFont::TGlyphCacheInfo*) {
-    /* Nonmatching */
+void JUTCacheFont::prepend(JUTCacheFont::TGlyphCacheInfo* cacheInfo) {
+    TGlyphCacheInfo* oldHead = field_0x9c;
+    field_0x9c = cacheInfo;
+    cacheInfo->mPrev = NULL;
+    cacheInfo->mNext = oldHead;
+
+    if (oldHead == NULL) {
+        field_0xa0 = cacheInfo;
+    } else {
+        oldHead->mPrev = cacheInfo;
+    }
 }

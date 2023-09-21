@@ -66,7 +66,7 @@ void J2DGrafContext::setup2D() {
 
 /* 802CD340-802CD590       .text setScissor__14J2DGrafContextFv */
 void J2DGrafContext::setScissor() {
-    JGeometry::TBox2<f32> bounds(0, 0, 1024, 1024);
+    JGeometry::TBox2<f32> bounds(0, 0, 1024, 1000);
     JGeometry::TBox2<f32> curBounds(mScissorBounds);
     mScissorBounds.intersect(bounds);
     curBounds.absolute();

@@ -4,44 +4,121 @@
 //
 
 #include "JSystem/JUtility/JUTDbPrint.h"
+#include "JSystem/J2DGraph/J2DOrthoGraph.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JUtility/JUTVideo.h"
+#include "MSL_C/stdio.h"
+#include "Runtime.PPCEABI.H/__va_arg.h"
 #include "dolphin/types.h"
 
 /* 802C328C-802C32D4       .text __ct__10JUTDbPrintFP7JUTFontP7JKRHeap */
-JUTDbPrint::JUTDbPrint(JUTFont*, JKRHeap*) {
-    /* Nonmatching */
+JUTDbPrint::JUTDbPrint(JUTFont* pFont, JKRHeap* pHeap) {
+    mFont = pFont;
+    mFirst = NULL;
+    mHeap = pHeap != NULL ? pHeap : JKRHeap::getCurrentHeap();
+    mColor.set(255, 255, 255, 255);
+    mVisible = true;
 }
 
+JUTDbPrint* JUTDbPrint::sDebugPrint;
+
 /* 802C32D4-802C3348       .text start__10JUTDbPrintFP7JUTFontP7JKRHeap */
-void JUTDbPrint::start(JUTFont*, JKRHeap*) {
-    /* Nonmatching */
+JUTDbPrint* JUTDbPrint::start(JUTFont* pFont, JKRHeap* pHeap) {
+    if (sDebugPrint == NULL) {
+        if (pHeap == NULL) {
+            pHeap = JKRHeap::getCurrentHeap();
+        }
+        sDebugPrint = new JUTDbPrint(pFont, pHeap);
+    }
+
+    return sDebugPrint;
 }
 
 /* 802C3348-802C3360       .text changeFont__10JUTDbPrintFP7JUTFont */
-void JUTDbPrint::changeFont(JUTFont*) {
-    /* Nonmatching */
+JUTFont* JUTDbPrint::changeFont(JUTFont* pFont) {
+    JUTFont* old = mFont;
+    if (pFont != NULL) {
+        mFont = pFont;
+    }
+    return old;
 }
 
 /* 802C3360-802C33E8       .text enter__10JUTDbPrintFiiiPCci */
-void JUTDbPrint::enter(int, int, int, const char*, int) {
-    /* Nonmatching */
+void JUTDbPrint::enter(int param_0, int param_1, int param_2, const char* param_3, int param_4) {
+    if (param_4 > 0) {
+        unk_print* ptr = static_cast<unk_print*>(JKRAllocFromHeap(mHeap, param_4 + 0x10, -4));
+        if (ptr != NULL) {
+            ptr->unk_0x04 = param_0;
+            ptr->unk_0x06 = param_1;
+            ptr->unk_0x08 = param_2;
+            ptr->unk_0x0A = param_4;
+            strcpy(ptr->unk_0x0C, param_3);
+            ptr->mNext = mFirst;
+            mFirst = ptr;
+        }
+    }
 }
 
 /* 802C33E8-802C3504       .text flush__10JUTDbPrintFv */
 void JUTDbPrint::flush() {
-    /* Nonmatching */
+    unk_print* curPtr = (unk_print*)&mFirst;
+    unk_print* cur = mFirst;
+    if (mFont != NULL && cur != NULL) {
+        J2DOrthoGraph g(0, 0, 640.0f, 480.0f, -1, 1);
+        g.setPort();
+        mFont->setGX();
+        mFont->setCharColor(mColor);
+
+        while (cur != NULL) {
+            if (mVisible) {
+                this->drawString(cur->unk_0x04, cur->unk_0x06, cur->unk_0x0A, (u8*)cur->unk_0x0C);
+            }
+
+            if (--cur->unk_0x08 <= 0) {
+                unk_print* next = cur->mNext;
+                JKRFreeToHeap(mHeap, cur);
+                cur = next;
+                curPtr->mNext = next;
+            } else {
+                curPtr = cur;
+                cur = cur->mNext;
+            }
+        }
+    }
 }
 
 /* 802C3504-802C35F4       .text drawString__10JUTDbPrintFiiiPCUc */
-void JUTDbPrint::drawString(int, int, int, const unsigned char*) {
-    /* Nonmatching */
+void JUTDbPrint::drawString(int param_0, int param_1, int param_2, const unsigned char* param_3) {
+    JUTFont* font = mFont;
+    font->drawString_size_scale(param_0, param_1, font->getWidth(), font->getHeight(), (const char*)param_3, param_2, true);
 }
 
 /* 802C35F4-802C36C4       .text JUTReport__FiiPCce */
-void JUTReport(int, int, const char*, ...) {
-    /* Nonmatching */
+void JUTReport(int param_0, int param_1, const char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+
+    char buf[0x100];
+    int ret = vsnprintf(buf, 0x100, fmt, args);
+    va_end(args);
+
+    if (ret < 0) {
+        return;
+    }
+    JUTDbPrint::sDebugPrint->enter(param_0, param_1, 1, buf, ret < 0x100 ? ret : 0xFF);
 }
 
 /* 802C36C4-802C37A0       .text JUTReport__FiiiPCce */
-void JUTReport(int, int, int, const char*, ...) {
-    /* Nonmatching */
+void JUTReport(int param_0, int param_1, int param_2, const char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+
+    char buf[0x100];
+    int ret = vsnprintf(buf, 0x100, fmt, args);
+    va_end(args);
+
+    if (ret < 0) {
+        return;
+    }
+    JUTDbPrint::sDebugPrint->enter(param_0, param_1, param_2, buf, ret < 0x100 ? ret : 0xFF);
 }
