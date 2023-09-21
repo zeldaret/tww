@@ -6,8 +6,8 @@
  * This file is not a standalone translation unit and is instead directly 
  * included into d_a_player_main.cpp.
  * 
- * The original name of this file is known because of an assert contained within
- * a function from this file.
+ * The original name of this file is not known, but a best guess was taken 
+ * based on the original names of the classes it contains.
  */
 
 #include "dolphin/types.h"

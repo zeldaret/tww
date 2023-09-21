@@ -57,7 +57,7 @@ Building
   ```
   git clone https://github.com/zeldaret/tww.git
   ```
-- Using [Dolphin Emulator](https://dolphin-emu.org/), extract your game to `orig/GZLE01` (or `GZLJ01` for JPN, `GZLE01` for PAL).  
+- Using [Dolphin Emulator](https://dolphin-emu.org/), extract your game to `orig/GZLE01` (or `GZLJ01` for JPN, `GZLP01` for PAL).  
 ![](assets/dolphin-extract.png)
   - To save space, the only necessary files are the following. Any others can be deleted.
     - `sys/main.dol`
