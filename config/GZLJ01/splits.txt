@@ -3955,98 +3955,98 @@ MSL_C/Math/Double_precision/w_fmod.c:
 MSL_C/PPC_EABI/math_ppc.c:
 	.text       start:0x8032E858 end:0x8032E8E8
 
-TRK_MINNOW_DOLPHIN/mainloop.c:
+TRK_MINNOW_DOLPHIN/Portable/mainloop.c:
 	.text       start:0x8032E8E8 end:0x8032E9E0
 
-TRK_MINNOW_DOLPHIN/nubevent.c:
+TRK_MINNOW_DOLPHIN/Portable/nubevent.c:
 	.text       start:0x8032E9E0 end:0x8032EC08
 	.bss        start:0x803E53E0 end:0x803E5408
 
-TRK_MINNOW_DOLPHIN/nubinit.c:
+TRK_MINNOW_DOLPHIN/Portable/nubinit.c:
 	.text       start:0x8032EC08 end:0x8032ED88
 	.rodata     start:0x80364900 end:0x80364920
 	.bss        start:0x803E5408 end:0x803E5410
 
-TRK_MINNOW_DOLPHIN/msg.c:
+TRK_MINNOW_DOLPHIN/Portable/msg.c:
 	.text       start:0x8032ED88 end:0x8032EF64
 
-TRK_MINNOW_DOLPHIN/msgbuf.c:
+TRK_MINNOW_DOLPHIN/Portable/msgbuf.c:
 	.text       start:0x8032EF64 end:0x8032F990
 	.rodata     start:0x80364920 end:0x80364940
 	.bss        start:0x803E5410 end:0x803E6DC0
 
-TRK_MINNOW_DOLPHIN/serpoll.c:
+TRK_MINNOW_DOLPHIN/Portable/serpoll.c:
 	.text       start:0x8032F990 end:0x8032FD5C
 	.bss        start:0x803E6DC0 end:0x803E6DD8
 
-TRK_MINNOW_DOLPHIN/usr_put.c:
+TRK_MINNOW_DOLPHIN/Portable/usr_put.c:
 	.text       start:0x8032FD5C end:0x8032FDE8
 
-TRK_MINNOW_DOLPHIN/dispatch.c:
+TRK_MINNOW_DOLPHIN/Portable/dispatch.c:
 	.text       start:0x8032FDE8 end:0x8032FE84
 	.data       start:0x80395D20 end:0x80395DA8
 	.bss        start:0x803E6DD8 end:0x803E6DE0
 
-TRK_MINNOW_DOLPHIN/msghndlr.c:
+TRK_MINNOW_DOLPHIN/Portable/msghndlr.c:
 	.text       start:0x8032FE84 end:0x803326E4
 	.data       start:0x80395DA8 end:0x80395DE0
 	.bss        start:0x803E6DE0 end:0x803E6DE8
 
-TRK_MINNOW_DOLPHIN/support.c:
+TRK_MINNOW_DOLPHIN/Portable/support.c:
 	.text       start:0x803326E4 end:0x80332FA4
 
-TRK_MINNOW_DOLPHIN/mutex_TRK.c:
+TRK_MINNOW_DOLPHIN/Portable/mutex_TRK.c:
 	.text       start:0x80332FA4 end:0x80332FBC
 
-TRK_MINNOW_DOLPHIN/notify.c:
+TRK_MINNOW_DOLPHIN/Portable/notify.c:
 	.text       start:0x80332FBC end:0x80333094
 
-TRK_MINNOW_DOLPHIN/flush_cache.c:
+TRK_MINNOW_DOLPHIN/ppc/Generic/flush_cache.c:
 	.text       start:0x80333094 end:0x803330CC
 
-TRK_MINNOW_DOLPHIN/mem_TRK.c:
+TRK_MINNOW_DOLPHIN/Portable/mem_TRK.c:
 	.init       start:0x800034E0 end:0x80003534
 	.text       start:0x803330CC end:0x80333188
 
-TRK_MINNOW_DOLPHIN/targimpl.c:
+TRK_MINNOW_DOLPHIN/ppc/Generic/targimpl.c:
 	.text       start:0x80333188 end:0x80334A18
 	.rodata     start:0x80364940 end:0x803649C8
 	.data       start:0x80395DE0 end:0x80395E10
 	.bss        start:0x803E6DE8 end:0x803E7368
 
-TRK_MINNOW_DOLPHIN/targsupp.s: comment:0
+TRK_MINNOW_DOLPHIN/ppc/Export/targsupp.s: comment:0
 	.text       start:0x80334A20 end:0x80334A40 align:16
 
-TRK_MINNOW_DOLPHIN/__exception.c: comment:0
+TRK_MINNOW_DOLPHIN/ppc/Generic/__exception.c: comment:0
 	.init       start:0x80003534 end:0x80005468
 
-TRK_MINNOW_DOLPHIN/dolphin_trk.c:
+TRK_MINNOW_DOLPHIN/Os/dolphin/dolphin_trk.c:
 	.init       start:0x80005468 end:0x8000556C
 	.text       start:0x80334A40 end:0x80334B80
 	.data       start:0x80395E10 end:0x80395E50
 	.bss        start:0x803E7368 end:0x803E7370
 
-TRK_MINNOW_DOLPHIN/mpc_7xx_603e.c:
+TRK_MINNOW_DOLPHIN/ppc/Generic/mpc_7xx_603e.c:
 	.text       start:0x80334B80 end:0x80334EF8
 
-TRK_MINNOW_DOLPHIN/main_TRK.c:
+TRK_MINNOW_DOLPHIN/Portable/main_TRK.c:
 	.text       start:0x80334EF8 end:0x80334F3C
 	.bss        start:0x803E7370 end:0x803E7378
 
-TRK_MINNOW_DOLPHIN/dolphin_trk_glue.c:
+TRK_MINNOW_DOLPHIN/Os/dolphin/dolphin_trk_glue.c:
 	.text       start:0x80334F3C end:0x803353E8
 	.rodata     start:0x803649C8 end:0x80364A10
 	.data       start:0x80395E50 end:0x80395E6C
 	.bss        start:0x803E7378 end:0x803E95A0
 
-TRK_MINNOW_DOLPHIN/targcont.c:
+TRK_MINNOW_DOLPHIN/Os/dolphin/targcont.c:
 	.text       start:0x803353E8 end:0x8033541C
 
-TRK_MINNOW_DOLPHIN/target_options.c:
+TRK_MINNOW_DOLPHIN/Os/dolphin/target_options.c:
 	.text       start:0x8033541C end:0x80335438
 	.bss        start:0x803E95A0 end:0x803E95A1
 
-TRK_MINNOW_DOLPHIN/mslsupp.c:
+TRK_MINNOW_DOLPHIN/MetroTRK/Export/mslsupp.c:
 	.text       start:0x80335438 end:0x803355B0
 
 amcstubs/AmcExi2Stubs.c:
