@@ -35,7 +35,7 @@ struct WIND_INFLUENCE {
     /* 0x18 */ f32 mRadius;
     /* 0x1C */ f32 mStrength;
     /* 0x20 */ f32 field_0x20;
-    /* 0x24 */ u32 field_0x24;
+    /* 0x24 */ int field_0x24;
     /* 0x28 */ u8 mbConstant;
 };
 
@@ -50,9 +50,7 @@ struct WIND_INF_ENTITY {
 struct GB_WIND_INFLUENCE {
     /* 0x00 */ cXyz mWindVec;
     /* 0x04 */ cXyz* mpWindVecOverride;
-    /* 0x08 */ f32 field_0x8;
-    /* 0x0C */ f32 field_0xc;
-    /* 0x10 */ f32 field_0x10;
+    /* 0x08 */ cXyz field_0x8;
     /* 0x14 */ f32 mWindPower;
     /* 0x18 */ f32 mWindStrengthOverride;
     /* 0x1C */ f32 mCustomWindPower;
@@ -162,7 +160,8 @@ class dKankyo_housi_Packet;
 class dKankyo_cloud_Packet;
 class dKankyo_vrkumo_Packet;
 class dKankyo_wave_Packet;
-class dKyr__wind_Packet;
+class dKankyo_poison_Packet;
+class WINDEFF_SET;
 class dKankyo_star_Packet;
 class stage_palet_info_class;
 class stage_pselect_info_class;
@@ -229,8 +228,10 @@ public:
     /* 0x9D8 */ int mStarCount;
     /* 0x9DC */ f32 mStarCountTarget;
     /* 0x9E0 */ dKankyo_star_Packet* mpStarPacket;
-    /* 0x9E4 */ u8 field_0x9E4[0x9F0 - 0x9E4];
-    /* 0x9F0 */ u8 mbHouseInitialized;
+    /* 0x9E4 */ u8 mbPoisonInitialized;
+    /* 0x9E8 */ int mPoisonCount;
+    /* 0x9EC */ dKankyo_poison_Packet* mpPoisonPacket;
+    /* 0x9F0 */ u8 mbHousiInitialized;
     /* 0x9F4 */ int mHousiCount;
     /* 0x9F8 */ dKankyo_housi_Packet* mpHousiPacket;
     /* 0x9FC */ u8 mMoyaInitialized;
@@ -242,11 +243,11 @@ public:
     /* 0xA10 */ f32 mVrkumoStrength;
     /* 0xA14 */ dKankyo_vrkumo_Packet* mpVrkumoPacket;
     /* 0xA18 */ u8 mWaveInitialized;
-    /* 0xA19 */ u8 field_0xA19[0xA20 - 0xA19];
+    /* 0xA1C */ int field_0xa1c;
     /* 0xA20 */ dKankyo_wave_Packet* mpWavePacket;
     /* 0xA24 */ u8 mbWindlineInitialized;
     /* 0xA28 */ int mWindlineCount;
-    /* 0xA2C */ dKyr__wind_Packet* mpWind;
+    /* 0xA2C */ WINDEFF_SET* mpWind;
     /* 0xA30 */ EF_THUNDER mThunderEff;
     /* 0xA68 */ WAVE_INFO* mpWaveInfl[10];
     /* 0xA90 */ cXyz mLightDir;

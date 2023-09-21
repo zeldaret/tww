@@ -170,6 +170,7 @@ public:
 
     void setLkDemoAnmArchive(JKRArchive* i_arc) { mpLkDArc = i_arc; }
     void setStatus(u16 status) { mStatus = status; }
+    s32 checkStatus(u16 flags) { return flags & mStatus; }
 
     void setShipId(u8 i_id) { mShipId = i_id; }
     void setShipRoomId(u8 i_id) { mShipRoomId = i_id; }
@@ -240,7 +241,7 @@ public:
     /* 0x483C */ dFlower_packet_c* mpFlowerPacket;
     /* 0x4840 */ s8 mLkDArcIdx;
     /* 0x4841 */ u8 field_0x4841;
-    /* 0x4842 */ s16 mStatus;
+    /* 0x4842 */ u16 mStatus;
     /* 0x4844 */ dDlst_window_c mDlstWindow[1];
     /* 0x4870 */ dComIfG_camera_info_class mCameraInfo[1];
     /* 0x48A4 */ daPy_py_c* mpPlayer[1];
@@ -656,6 +657,22 @@ inline BOOL dComIfGs_isGetItem(int i_field, u8 i_item) {
     return g_dComIfG_gameInfo.save.getPlayer().getGetItem().isItem(i_field, i_item);
 }
 
+inline s16 dComIfGs_getWindY() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusB().getWindY();
+}
+
+inline s16 dComIfGs_getWindX() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusB().getWindX();
+}
+
+inline void dComIfGs_setWindY(s16 i_windY) {
+    g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusB().setWindY(i_windY);
+}
+
+inline void dComIfGs_setWindX(s16 i_windX) {
+    g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusB().setWindX(i_windX);
+}
+
 /**
  * === PLAY ===
  */
@@ -984,6 +1001,10 @@ inline void dComIfGp_setMessageCountNumber(s16 num) {
     g_dComIfG_gameInfo.play.setMessageCountNumber(num);
 }
 
+inline s32 dComIfGp_checkStatus(u16 flags) {
+    return g_dComIfG_gameInfo.play.checkStatus(flags);
+}
+
 /**
  * === EVENT ===*/
 
@@ -1118,6 +1139,28 @@ inline s32 dComIfGd_getSpotModelNum() {
 
 inline s32 dComIfGd_getLightModelNum() {
     return g_dComIfG_gameInfo.drawlist.getLightModelNum();
+}
+
+inline J3DDrawBuffer* dComIfGd_getListFilter() {
+    return g_dComIfG_gameInfo.drawlist.getOpaListFilter();
+}
+
+inline void dComIfGd_setList() {
+    g_dComIfG_gameInfo.drawlist.setOpaList();
+    g_dComIfG_gameInfo.drawlist.setXluList();
+}
+
+inline void dComIfGd_setListSky() {
+    g_dComIfG_gameInfo.drawlist.setOpaListSky();
+    g_dComIfG_gameInfo.drawlist.setXluListSky();
+}
+
+inline void dComIfGd_setXluListBG() {
+    g_dComIfG_gameInfo.drawlist.setXluListBG();
+}
+
+inline void dComIfGd_entryZSortXluList(J3DPacket* i_packet, cXyz& param_1) {
+    g_dComIfG_gameInfo.drawlist.entryZSortXluList(i_packet, param_1);
 }
 
 /**

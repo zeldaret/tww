@@ -39,6 +39,10 @@ public:
     void setDate(u16 i_date) { mDate = i_date; }
     void setTime(f32 i_time) { mTime = i_time; }
     s64 getDateIpl() const { return mDateIPL; }
+    s16 getWindY() { return mTactWindAngleY; }
+    s16 getWindX() { return mTactWindAngleX; }
+    void setWindY(s16 i_windY) { mTactWindAngleY = i_windY; }
+    void setWindX(s16 i_windX) { mTactWindAngleX = i_windX; }
 
     /* 0x00 */ u64 mDateIPL;
     /* 0x08 */ f32 field_0x8;
