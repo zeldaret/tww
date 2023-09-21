@@ -810,7 +810,7 @@ config.libs = [
             Object(Matching,    "JSystem/JUtility/JUTGraphFifo.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTFont.cpp"),
             Object(NonMatching, "JSystem/JUtility/JUTResFont.cpp"),
-            Object(NonMatching, "JSystem/JUtility/JUTDbPrint.cpp"),
+            Object(Matching,    "JSystem/JUtility/JUTDbPrint.cpp"),
             Object(NonMatching, "JSystem/JUtility/JUTGamePad.cpp"),
             Object(NonMatching, "JSystem/JUtility/JUTException.cpp"),
             Object(NonMatching, "JSystem/JUtility/JUTDirectPrint.cpp"),
