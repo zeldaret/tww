@@ -21,7 +21,6 @@ void J2DGrafContext::setPort() {
     setup2D();
 
     JGeometry::TBox2<f32> bounds(mBounds);
-
     GXSetViewport(bounds.i.x, bounds.i.y, bounds.getWidth(), bounds.getHeight(), 0.0f, 1.875f);
 }
 
@@ -66,11 +65,12 @@ void J2DGrafContext::setup2D() {
 
 /* 802CD340-802CD590       .text setScissor__14J2DGrafContextFv */
 void J2DGrafContext::setScissor() {
-    JGeometry::TBox2<f32> bounds(0, 0, 1024, 1000);
+    JGeometry::TBox2<f32> maxBounds(0, 0, 1024, 1000);
     JGeometry::TBox2<f32> curBounds(mScissorBounds);
-    mScissorBounds.intersect(bounds);
+    mScissorBounds.intersect(maxBounds);
     curBounds.absolute();
-    if (curBounds.intersect(bounds)) {
+    curBounds.addPos(0.0f, -1.0f);
+    if (curBounds.intersect(maxBounds)) {
         GXSetScissor(curBounds.i.x, curBounds.i.y, curBounds.getWidth(), curBounds.getHeight());
     } else {
         GXSetScissor(0, 0, 0, 0);

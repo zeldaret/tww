@@ -63,8 +63,8 @@ public:
     /* 0x04 */ u32 mMagic;
     /* 0x08 */ int mTag;
     /* 0x0C */ JGeometry::TBox2<f32> mBounds;
-    /* 0x1C */ JGeometry::TBox2<f32> mScreenPos;
-    /* 0x2C */ JGeometry::TBox2<f32> mBox;
+    /* 0x1C */ JGeometry::TBox2<f32> mScreenBounds;
+    /* 0x2C */ JGeometry::TBox2<f32> mDrawBounds;
     /* 0x3C */ Mtx mMtx;
     /* 0x6C */ Mtx mDrawMtx;
     /* 0x9C */ cXy mBasePosition;
@@ -75,7 +75,7 @@ public:
     /* 0xAB */ u8 mCullMode;
     /* 0xAC */ u8 mAlpha;
     /* 0xAD */ u8 mDrawAlpha;
-    /* 0xAE */ u8 field_0xae;
+    /* 0xAE */ u8 mInheritAlpha;
     /* 0xAF */ u8 field_0xaf;
     /* 0xB0 */ JSUTree<J2DPane> mPaneTree;
 };
