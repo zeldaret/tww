@@ -58,7 +58,7 @@ int cM3d_Cross_LinSph_CrossPos(const cM3dGSph&, const cM3dGLin&, Vec*, Vec*);
 bool cM3d_Cross_CylSph(const cM3dGCyl*, const cM3dGSph*, f32*);
 bool cM3d_Cross_CylSph(const cM3dGCyl*, const cM3dGSph*, Vec*, f32*);
 bool cM3d_Cross_SphSph(const cM3dGSph*, const cM3dGSph*, f32*);
-static bool cM3d_Cross_SphSph(const cM3dGSph*, const cM3dGSph*, f32*, f32*);
+bool cM3d_Cross_SphSph(const cM3dGSph*, const cM3dGSph*, f32*, f32*);
 bool cM3d_Cross_SphSph(const cM3dGSph*, const cM3dGSph*, Vec*);
 static void cM3d_CalcSphVsTriCrossPoint(const cM3dGSph*, const cM3dGTri*, Vec*);
 bool cM3d_Cross_SphTri(const cM3dGSph*, const cM3dGTri*, Vec*);

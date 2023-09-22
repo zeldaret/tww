@@ -794,10 +794,10 @@ void dNpc_EventCut_c::cutTurnToActorStart() {
 
     u32* set = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "SetId");
     if(set) {
-        mSetID = *set;
+        mSetId = *set;
     }
     else {
-        mSetID = 0;
+        mSetId = 0;
     }
 
     Vec* pos = dComIfGp_evmng_getMyVec3dP(mEvtStaffId, "OffsetPos");
@@ -860,7 +860,7 @@ void dNpc_EventCut_c::cutTurnToActorStart() {
 }
 
 void dNpc_EventCut_c::cutTurnToActorProc() {
-    if(mSetID != 0) {
+    if(mSetId != 0) {
         mTargetActorPos.set(0.0f, 0.0f, 0.0f);
         fopAcM_Search((fopAcIt_JudgeFunc)&findActorCallBack, this);
     }
@@ -957,10 +957,10 @@ void dNpc_EventCut_c::cutMoveToActorStart() {
     }
 
     if(set == 0) {
-        mSetID = 0;
+        mSetId = 0;
     }
     else {
-        mSetID = *set;
+        mSetId = *set;
     }
 
     if(speed == 0) {
@@ -986,7 +986,7 @@ void dNpc_EventCut_c::cutMoveToActorStart() {
 }
 
 void dNpc_EventCut_c::cutMoveToActorProc() {
-    if(mSetID != 0) {
+    if(mSetId != 0) {
         mTargetActorPos.set(0.0f, 0.0f, 0.0f);
         fopAcM_Search((fopAcIt_JudgeFunc)&findActorCallBack, this);
     }
@@ -1037,7 +1037,7 @@ fopAc_ac_c* dNpc_EventCut_c::findActorCallBack(fopAc_ac_c* pActor, void* pData) 
         return 0;
     }
     
-    if(cut->mSetID != 0 && pActor->mSetID == cut->mSetID) {
+    if(cut->mSetId != 0 && pActor->mSetId == cut->mSetId) {
         cut->mTargetActorPos = pActor->current.pos;
         cut->mpTargetActor = pActor;
 

@@ -185,11 +185,11 @@ public:
     /* 0x0C0 */ int mAcType;
     /* 0x0C4 */ create_tag_class mAcTg;
     /* 0x0D8 */ create_tag_class mDwTg;
-    /* 0x0EC */ profile_method_class* mSubMtd;
+    /* 0x0EC */ actor_method_class* mSubMtd;
     /* 0x0F0 */ JKRSolidHeap* mHeap;
     /* 0x0F4 */ dEvt_info_c mEvtInfo;
     /* 0x10C */ dKy_tevstr_c mTevStr;
-    /* 0x1BC */ u16 mSetID;
+    /* 0x1BC */ u16 mSetId;
     /* 0x1BE */ u8 mGroup;
     /* 0x1BF */ s8 mCullType;
     /* 0x1C0 */ u8 mDemoActorId;

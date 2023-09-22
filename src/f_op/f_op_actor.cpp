@@ -29,24 +29,26 @@ s32 fopAc_IsActor(void* pProc) {
 extern void drawActorPointMiniMap(fopAc_ac_c*);
 
 /* 80023540-8002362C       .text fopAc_Draw__FPv */
-void fopAc_Draw(void* pProc) {
-    if (dMenu_flag())
-        return;
-
+s32 fopAc_Draw(void* pProc) {
     fopAc_ac_c * actor = (fopAc_ac_c *)pProc;
-    if ((dComIfGp_event_moveApproval(pProc) == 2 || !fopAcM_checkStatus(actor, fopAc_ac_c::stopStatus)) &&
-        (!fopAcM_checkStatus(actor, fopAcStts_CULL_e) || fopAcM_cullingCheck(actor)) &&
-        !fopAcM_checkStatus(actor, fopAcStts_NODRAW_e)) {
-        fopAcM_OffCondition(actor, fopAcCnd_NODRAW_e);
-        fpcLf_DrawMethod(actor->mpDrawMtd, actor);
-    } else {
-        fopAcM_OnCondition(actor, fopAcCnd_NODRAW_e);
+    s32 ret = TRUE;
+
+    if (!dMenu_flag()) {
+        if ((dComIfGp_event_moveApproval(actor) == 2 || !fopAcM_checkStatus(actor, fopAc_ac_c::stopStatus)) &&
+            (!fopAcM_checkStatus(actor, fopAcStts_CULL_e) || !fopAcM_cullingCheck(actor)) && !fopAcM_checkStatus(actor, fopAcStts_NODRAW_e)) {
+            fopAcM_OffCondition(actor, fopAcCnd_NODRAW_e);
+            ret = fpcLf_DrawMethod((leafdraw_method_class*)actor->mSubMtd, actor);
+        } else {
+            fopAcM_OnCondition(actor, fopAcCnd_NODRAW_e);
+        }
+
+        fopAcM_OffStatus(actor, fopAcStts_NODRAW_e);
+
+        if (dComIfGp_roomControl_getStayNo() >= 0 && fopAcM_checkStatus(actor, fopAcStts_SHOWMAP_e))
+            drawActorPointMiniMap(actor);
     }
 
-    fopAcM_OffStatus(actor, fopAcStts_NODRAW_e);
-
-    if (dComIfGp_roomControl_getStayNo() >= 0 && fopAcM_checkStatus(actor, fopAcStts_SHOWMAP_e))
-        drawActorPointMiniMap(actor);
+    return ret;
 }
 
 #define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)) ) == 1));
@@ -111,8 +113,57 @@ s32 fopAc_Delete(void* pProc) {
 }
 
 /* 80023CD4-80023F78       .text fopAc_Create__FPv */
-void fopAc_Create(void*) {
-    /* Nonmatching */
+s32 fopAc_Create(void* pProc) {
+    fopAc_ac_c* actor = (fopAc_ac_c*)pProc;
+
+    if (fpcM_IsFirstCreating(actor)) {
+        actor_process_profile_definition* profile = (actor_process_profile_definition*)fpcM_GetProfile(pProc);
+        actor->mAcType = fpcBs_MakeOfType(&g_fopAc_type);
+        actor->mSubMtd = profile->mSubMtd;
+        fopAcTg_Init(&actor->mAcTg, actor);
+        fopAcTg_ToActorQ(&actor->mAcTg);
+        fopDwTg_Init(&actor->mDwTg, actor);
+        actor->mStatus = profile->mStatus;
+        actor->mGroup = profile->mGroup;
+        actor->mCullType = profile->mCullType;
+
+        fopAcM_prm_class* prm = fopAcM_GetAppend(actor);
+        if (prm != NULL) {
+            fopAcM_SetParam(actor, prm->mParameter);
+            actor->orig.pos = prm->mPos;
+            actor->orig.angle = prm->mAngle;
+            actor->shape_angle = prm->mAngle;
+            actor->mParentPcId = prm->mParentPcId;
+            actor->mSubtype = prm->mSubtype;
+            actor->mCarryType = prm->mGbaName;
+            actor->mScale.set(prm->mScale[0] * 0.1f, prm->mScale[1] * 0.1f, prm->mScale[2] * 0.1f);
+            actor->mSetId = prm->mSetId;
+            actor->orig.roomNo = prm->mRoomNo;
+        }
+
+        actor->next = actor->orig;
+        actor->current = actor->orig;
+        actor->mEyePos = actor->orig.pos;
+        actor->mMaxFallSpeed = -100.0f;
+        actor->mAttentionInfo.mDistances[0] = 1;
+        actor->mAttentionInfo.mDistances[1] = 2;
+        actor->mAttentionInfo.mDistances[2] = 3;
+        actor->mAttentionInfo.mDistances[3] = 7;
+        actor->mAttentionInfo.mDistances[4] = 8;
+        actor->mAttentionInfo.mDistances[7] = 15;
+        actor->mAttentionInfo.mDistances[5] = 16;
+        actor->mAttentionInfo.mDistances[6] = 16;
+        actor->mAttentionInfo.mPosition = actor->orig.pos;
+        dKy_tevstr_init(&actor->mTevStr, actor->orig.roomNo, 0xFF);
+    }
+
+    s32 status = fpcMtd_Create((process_method_class*)actor->mSubMtd, actor);
+    if (status == cPhs_COMPLEATE_e) {
+        s32 priority = fpcLf_GetPriority(actor);
+        fopDwTg_ToDrawQ(&actor->mDwTg, priority);
+    }
+
+    return status;
 }
 
 actor_method_class g_fopAc_Method = {
