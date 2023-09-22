@@ -47,7 +47,7 @@ public:
     virtual void TexObjLoad();
     virtual void TevSetting();
 
-    void setScale(cXyz scale);
+    void setScale(cXyz scale) { mScale = scale; }
     void setMtx(Mtx mtx);
 }; // Size: 0xFC
 
