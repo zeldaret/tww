@@ -34,10 +34,12 @@ public:
 
 public:
     static JKRAram* create(u32, u32, long, long, long);
-    static void checkOkAddress(u8*, u32, JKRAramBlock*, u32);
+    static bool checkOkAddress(u8*, u32, JKRAramBlock*, u32);
     static void changeGroupIdIfNeed(u8*, int);
     static JKRAramBlock* mainRamToAram(u8*, u32, u32, JKRExpandSwitch, u32, JKRHeap*, int);
+    static JKRAramBlock* mainRamToAram(u8*, JKRAramBlock*, u32, JKRExpandSwitch, u32, JKRHeap*, int);
     static u8* aramToMainRam(u32, u8*, u32, JKRExpandSwitch, u32, JKRHeap*, int, u32*);
+    static u8* aramToMainRam(JKRAramBlock*, u8*, u32, u32, JKRExpandSwitch, u32, JKRHeap*, int, u32*);
     static void dump(void);
 
     static JKRAram* getManager() { return sAramObject; }
