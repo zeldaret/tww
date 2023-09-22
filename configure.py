@@ -762,7 +762,7 @@ config.libs = [
             Object(Matching,    "JSystem/JKernel/JKRDisposer.cpp"),
             Object(Matching,    "JSystem/JKernel/JKRThread.cpp"),
             Object(Matching,    "JSystem/JKernel/JKRAram.cpp"),
-            Object(NonMatching, "JSystem/JKernel/JKRAramHeap.cpp"),
+            Object(Matching,    "JSystem/JKernel/JKRAramHeap.cpp"),
             Object(NonMatching, "JSystem/JKernel/JKRAramBlock.cpp"),
             Object(NonMatching, "JSystem/JKernel/JKRAramPiece.cpp"),
             Object(NonMatching, "JSystem/JKernel/JKRAramStream.cpp"),
