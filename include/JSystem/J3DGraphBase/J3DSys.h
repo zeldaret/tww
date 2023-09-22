@@ -44,13 +44,16 @@ struct J3DSys {
     /* 0x05C */ u8 field_0x5c[0x04];
     /* 0x060 */ u32 mTexCacheRegionNum;
     /* 0x064 */ GXTexRegion mTexCacheRegion[8];
-    /* 0x0E4 */ u8 field_0xe4[0x24];
+    /* 0x0E4 */ u8 field_0xe4[0x20];
+    /* 0x104 */ void* field_0x104;
     /* 0x108 */ Mtx* mModelDrawMtx;
     /* 0x10C */ Mtx33* mModelNrmMtx;
     /* 0x110 */ void* mVtxPos;
     /* 0x114 */ void* mVtxNrm;
     /* 0x118 */ _GXColor* mVtxCol;
     /* 0x11C */ Vec* mNBTScale;
+    /* 0x120 */ void* field_0x120;
+    /* 0x124 */ void* field_0x124;
 
     J3DSys();
     void loadPosMtxIndx(int, u16) const;
