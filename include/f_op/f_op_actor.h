@@ -17,7 +17,7 @@ struct actor_method_class {
 enum fopAc_Status_e {
     fopAcStts_SHOWMAP_e     = 0x00000020,
     fopAcStts_NOEXEC_e      = 0x00000080,
-    fopAcStts_CULLSTOP_e    = 0x00000100,
+    fopAcStts_CULL_e        = 0x00000100,
     fopAcStts_FREEZE_e      = 0x00000400,
     fopAcStts_CARRY_e       = 0x00002000,
     fopAcStts_NOPAUSE_e     = 0x00020000,

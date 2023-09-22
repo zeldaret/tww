@@ -36,6 +36,7 @@ class daAgb_c;
 class dTimer_c;
 class camera_class;
 class J2DOrthoGraph;
+class dDemo_actor_c;
 
 class __d_timer_info_c {
 public:
@@ -948,6 +949,10 @@ inline void dComIfGp_demo_update() {
     g_dComIfG_gameInfo.play.getDemo()->update();
 }
 
+inline dDemo_actor_c* dComIfGp_demo_getActor(u8 id) {
+    return g_dComIfG_gameInfo.play.getDemo()->mDemoObj.getActor(id);
+}
+
 inline void dComIfGp_setLkDemoAnmArchive(JKRArchive* i_arc) {
     g_dComIfG_gameInfo.play.setLkDemoAnmArchive(i_arc);
 }
@@ -1049,6 +1054,10 @@ inline u8 dComIfGp_event_getPreItemNo() {
 
 inline void dComIfGp_event_setItemPartnerId(u32 id) {
     return g_dComIfG_gameInfo.play.getEvent().setPtI_Id(id);
+}
+
+inline s32 dComIfGp_event_moveApproval(void* actor) {
+    return g_dComIfG_gameInfo.play.getEvent().moveApproval(actor);
 }
 
 inline dEvent_manager_c& dComIfGp_getEventManager() {

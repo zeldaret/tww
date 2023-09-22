@@ -4,64 +4,121 @@
 //
 
 #include "f_op/f_op_actor.h"
-#include "dolphin/types.h"
+#include "f_op/f_op_actor_mng.h"
+#include "f_op/f_op_actor_tag.h"
+#include "f_op/f_op_draw_tag.h"
+#include "f_pc/f_pc_leaf.h"
+#include "d/d_demo.h"
+#include "d/d_map.h"
+#include "d/d_meter.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_s_play.h"
 
 /* 8002330C-800233C4       .text __ct__10fopAc_ac_cFv */
 fopAc_ac_c::fopAc_ac_c() {
-    /* Nonmatching */
 }
 
-/* 800233C4-80023400       .text __dt__20fopAc_cullSizeSphereFv */
-fopAc_cullSizeSphere::~fopAc_cullSizeSphere() {
-    /* Nonmatching */
-}
-
-/* 80023400-8002343C       .text __dt__17fopAc_cullSizeBoxFv */
-fopAc_cullSizeBox::~fopAc_cullSizeBox() {
-    /* Nonmatching */
-}
-
-/* 8002343C-80023478       .text __dt__12dKy_tevstr_cFv */
-dKy_tevstr_c::~dKy_tevstr_c() {
-    /* Nonmatching */
-}
-
-/* 80023478-800234C0       .text __dt__11dEvt_info_cFv */
-dEvt_info_c::~dEvt_info_c() {
-    /* Nonmatching */
-}
-
-/* 800234C0-80023514       .text __dt__10fopAc_ac_cFv */
-fopAc_ac_c::~fopAc_ac_c() {
-    /* Nonmatching */
-}
+int g_fopAc_type;
+u32 fopAc_ac_c::stopStatus;
 
 /* 80023514-80023540       .text fopAc_IsActor__FPv */
-void fopAc_IsActor(void*) {
-    /* Nonmatching */
+s32 fopAc_IsActor(void* pProc) {
+    return fpcBs_Is_JustOfType(g_fopAc_type, ((fopAc_ac_c*)pProc)->mAcType);
 }
+
+extern void drawActorPointMiniMap(fopAc_ac_c*);
 
 /* 80023540-8002362C       .text fopAc_Draw__FPv */
-void fopAc_Draw(void*) {
-    /* Nonmatching */
+void fopAc_Draw(void* pProc) {
+    if (dMenu_flag())
+        return;
+
+    fopAc_ac_c * actor = (fopAc_ac_c *)pProc;
+    if ((dComIfGp_event_moveApproval(pProc) == 2 || !fopAcM_checkStatus(actor, fopAc_ac_c::stopStatus)) &&
+        (!fopAcM_checkStatus(actor, fopAcStts_CULL_e) || fopAcM_cullingCheck(actor)) &&
+        !fopAcM_checkStatus(actor, fopAcStts_NODRAW_e)) {
+        fopAcM_OffCondition(actor, fopAcCnd_NODRAW_e);
+        fpcLf_DrawMethod(actor->mpDrawMtd, actor);
+    } else {
+        fopAcM_OnCondition(actor, fopAcCnd_NODRAW_e);
+    }
+
+    fopAcM_OffStatus(actor, fopAcStts_NODRAW_e);
+
+    if (dComIfGp_roomControl_getStayNo() >= 0 && fopAcM_checkStatus(actor, fopAcStts_SHOWMAP_e))
+        drawActorPointMiniMap(actor);
 }
 
+#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)) ) == 1));
+#define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
+
 /* 8002362C-80023BDC       .text fopAc_Execute__FPv */
-void fopAc_Execute(void*) {
-    /* Nonmatching */
+s32 fopAc_Execute(void* pProc) {
+    fopAc_ac_c * actor = (fopAc_ac_c *)pProc;
+    s32 ret = TRUE;
+
+    CHECK_FLOAT_CLASS(0x27d, actor->current.pos.x);
+    CHECK_FLOAT_CLASS(0x27e, actor->current.pos.y);
+    CHECK_FLOAT_CLASS(0x27f, actor->current.pos.z);
+    CHECK_VEC3_RANGE(0x286, actor->current.pos);
+
+    if (fopAcM_checkStatus(actor, fopAcStts_NOPAUSE_e) || (!dMenu_flag() && !dScnPly_ply_c::isPause())) {
+        actor->mEvtInfo.setCondition(dEvtCnd_NONE_e);
+
+        s32 moveApproval = dComIfGp_event_moveApproval(actor);
+        if (moveApproval == 2 || (moveApproval != 0 && !fopAcM_checkStatus(actor, fopAc_ac_c::stopStatus)) &&
+            !fopAcM_checkStatus(actor, fopAcStts_NOEXEC_e) || !fopAcM_CheckCondition(actor, fopAcStts_NODRAW_e)) {
+            fopAcM_OffCondition(actor, fopAcCnd_NOEXEC_e);
+            actor->next = actor->current;
+            ret = fpcMtd_Execute((process_method_class*)actor->mSubMtd, actor);
+        } else {
+            fopAcM_OnCondition(actor, fopAcCnd_NOEXEC_e);
+        }
+        
+        CHECK_FLOAT_CLASS(0x2b4, actor->current.pos.x);
+        CHECK_FLOAT_CLASS(0x2b5, actor->current.pos.y);
+        CHECK_FLOAT_CLASS(0x2b6, actor->current.pos.z);
+        CHECK_VEC3_RANGE(0x2bd, actor->current.pos);
+    }
+
+    return ret;
 }
 
 /* 80023BDC-80023C30       .text fopAc_IsDelete__FPv */
-void fopAc_IsDelete(void*) {
-    /* Nonmatching */
+s32 fopAc_IsDelete(void* pProc) {
+    fopAc_ac_c * actor = (fopAc_ac_c *)pProc;
+    s32 ret = fpcMtd_IsDelete((process_method_class*)actor->mSubMtd, actor);
+    if (ret == 1)
+        fopDwTg_DrawQTo(&actor->mDwTg);
+    return ret;
 }
 
 /* 80023C30-80023CD4       .text fopAc_Delete__FPv */
-void fopAc_Delete(void*) {
-    /* Nonmatching */
+s32 fopAc_Delete(void* pProc) {
+    fopAc_ac_c * actor = (fopAc_ac_c *)pProc;
+    s32 ret = fpcMtd_Delete((process_method_class*)actor->mSubMtd, actor);
+    if (ret == 1) {
+        fopAcTg_ActorQTo(&actor->mAcTg);
+        fopDwTg_DrawQTo(&actor->mDwTg);
+        fopAcM_DeleteHeap(actor);
+        dDemo_actor_c *pDemoActor = dComIfGp_demo_getActor(actor->mDemoActorId);
+        if (pDemoActor != NULL)
+            pDemoActor->setActor(NULL);
+        mDoAud_seDeleteObject(&actor->mEyePos);
+        mDoAud_seDeleteObject(&actor->current.pos);
+    }
+    return ret;
 }
 
 /* 80023CD4-80023F78       .text fopAc_Create__FPv */
 void fopAc_Create(void*) {
     /* Nonmatching */
 }
+
+actor_method_class g_fopAc_Method = {
+    (process_method_func)fopAc_Create,
+    (process_method_func)fopAc_Delete,
+    (process_method_func)fopAc_Execute,
+    (process_method_func)fopAc_IsDelete,
+    (process_method_func)fopAc_Draw,
+};

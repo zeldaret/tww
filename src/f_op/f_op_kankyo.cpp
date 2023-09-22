@@ -29,7 +29,7 @@ static int fopKy_Execute(void* i_this) {
     int ret;
     kankyo_class* _this = (kankyo_class*)i_this;
 
-    if (dScnPly_ply_c::isPause() && (!dMenu_flag() || fpcM_GetName(i_this) == PROC_ENVSE || fpcM_GetName(i_this) == PROC_LEVEL_SE)) {
+    if (!dScnPly_ply_c::isPause() && (!dMenu_flag() || fpcM_GetName(i_this) == PROC_ENVSE || fpcM_GetName(i_this) == PROC_LEVEL_SE)) {
         ret = fpcMtd_Execute(&_this->mSubMtd->mBase, i_this);
     }
 

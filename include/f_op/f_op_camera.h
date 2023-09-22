@@ -2,16 +2,32 @@
 #define F_F_OP_CAMERA_H_
 
 #include "f_op/f_op_view.h"
+#include "SSystem/SComponent/c_sxyz.h"
+#include "SSystem/SComponent/c_phase.h"
 
-class camera_class;
+class camera_process_class : public view_class {
+public:
+    /* 0x210 */ create_tag_class mDwTg;
+    /* 0x224 */ leafdraw_method_class* mpMtd;
+    /* 0x228 */ u8 field_0x228[4];
+    /* 0x22C */ s8 mPrm1;
+    /* 0x22D */ s8 mPrm2;
+    /* 0x22E */ s8 mPrm3;
+    /* 0x22F */ s8 field_0x22f;
+    /* 0x230 */ csXyz mAngle;
+    /* 0x238 */ int field_0x238;
+};
+
+class camera_class : public camera_process_class {
+public:
+    /* 0x23C */ int field_0x23c;
+    /* 0x240 */ request_of_phase_process_class mPhaseReq;
+    // /* 0x248 */ dCamera_c mCamera;
+};
 
 struct camera_process_profile_definition {
     /* 0x00 */ view_process_profile_definition mBase;
     /* 0x3C */ leafdraw_method_class* mSubMtd; // Subclass methods
 };
-
-static s32 fopCam_Draw(camera_class* param_1);
-static int fopCam_Execute(camera_class* pCamera);
-int fopCam_IsDelete(camera_class* pCamera);
 
 #endif
