@@ -35,7 +35,7 @@ struct WIND_INFLUENCE {
     /* 0x18 */ f32 mRadius;
     /* 0x1C */ f32 mStrength;
     /* 0x20 */ f32 field_0x20;
-    /* 0x24 */ int field_0x24;
+    /* 0x24 */ f32 field_0x24;
     /* 0x28 */ u8 mbConstant;
 };
 

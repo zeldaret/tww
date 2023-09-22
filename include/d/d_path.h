@@ -13,7 +13,7 @@ struct dPath__Point {
 };
 
 struct dPath {
-    /* 0x00 */ u16 mNum;
+    /* 0x00 */ u16 m_num;
     /* 0x02 */ u16 mNextPathId;
     /* 0x04 */ u8 mArg0;
     /* 0x05 */ u8 mLoops;

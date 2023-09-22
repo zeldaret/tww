@@ -770,9 +770,8 @@ public:
 };
 
 class dBgW_base;
-class dStage_roomStatus_c {
+class dStage_roomStatus_c : public dStage_roomDt_c {
 public:
-    /* 0x000 */ dStage_roomDt_c mRoomDt;
     /* 0x054 */ dKy_tevstr_c mTevStr;
     /* 0x104 */ u8 mFlags;
     /* 0x105 */ bool mDraw;
@@ -800,7 +799,7 @@ public:
     void zoneCountCheck(int) const;
     void checkDrawArea() const;
     dStage_darkStatus_c* getDarkStatus();
-    void getDarkMode();
+    u32 getDarkMode();
     void getBgW(int);
 
     static JKRExpHeap* createMemoryBlock(int, u32);

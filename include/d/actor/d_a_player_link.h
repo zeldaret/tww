@@ -97,11 +97,6 @@ public:
     /* 0x0 */ u8 field_0x0[0x28];
 };
 
-class dPa_smokeEcallBack {
-public:
-    /* 0x0 */ u8 field_0x0[0x20];
-};
-
 class dPa_cutTurnEcallBack_c {
 public:
     /* 0x0 */ u8 field_0x0[0x10];
