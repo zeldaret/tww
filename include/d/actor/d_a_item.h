@@ -6,6 +6,8 @@
 
 class daItem_c : public daItemBase_c {
 public:
+    daItem_c() : mPtclFollowCb(0, 0), mPtclSmokeCb(1) {}
+    
     float getYOffset();
     void set_mtx();
     void set_mtx_base(J3DModel*, cXyz, csXyz);
@@ -54,6 +56,8 @@ public:
     s32 setLock();
     s32 releaseLock();
     s32 checkActionNow();
+    
+    static dCcD_SrcCyl m_cyl_src;
 
 public:
     /* 0x63C */ cXyz mScaleTarget;
@@ -70,10 +74,10 @@ public:
     /* 0x669 */ u8 mStatusFlags;
     /* 0x66A */ u8 mMode;
     /* 0x66B */ u8 mCurState;
-    /* 0x66C */ u8 field23_0x66c[0x6BC - 0x66C];
-    // /* 0x674 */ dPa_rippleEcallBack mPtclRippleCb;
-    // /* 0x688 */ dPa_followEcallBack mPtclFollowCb;
-    // /* 0x69C */ dPa_smokeEcallBack mPtclSmokeCb;
+    /* 0x66C */ u8 field23_0x66c[0x674 - 0x66C];
+    /* 0x674 */ dPa_rippleEcallBack mPtclRippleCb;
+    /* 0x688 */ dPa_followEcallBack mPtclFollowCb;
+    /* 0x69C */ dPa_smokeEcallBack mPtclSmokeCb;
     /* 0x6BC */ JPABaseEmitter* mpParticleEmitter;
 };
 

@@ -394,7 +394,7 @@ config.libs = [
             Object(NonMatching, "d/d_ev_camera.cpp"),
             Object(NonMatching, "d/d_wood.cpp"),
             Object(NonMatching, "d/d_flower.cpp"),
-            Object(NonMatching, "d/d_item_data.cpp"),
+            Object(Matching,    "d/d_item_data.cpp"),
             Object(Matching,    "d/d_seafightgame.cpp"),
             Object(NonMatching, "d/d_spline_path.cpp"),
             Object(NonMatching, "d/d_s_actor_data_mng.cpp"),

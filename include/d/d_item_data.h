@@ -263,70 +263,95 @@ enum ItemTable {
 };
 
 struct dItem_data_item_resource {
-    /* 0x00 */ char* mModelArcName;
-    /* 0x04 */ char* mIconFilename;
-    /* 0x08 */ s16 mModelFileIdx;
-    /* 0x0A */ s16 mBtkFileIdx;
-    /* 0x0C */ s16 mBrkFileIdx;
-    /* 0x0E */ s16 field5_0xe;
-    /* 0x10 */ s16 field6_0x10;
-    /* 0x12 */ s16 field7_0x12;
-    /* 0x14 */ s8 mTevRegAnimFrameIndex; // If specified, keep the BRK animation on this frame.
-    /* 0x15 */ u8 field9_0x15;
-    /* 0x16 */ s16 mNameMessageId;
-    /* 0x18 */ u8 temp[8];
-    /* 0x20 */ u16 mMaxHeapSize;
-    /* 0x22 */ u8 field20_0x22;
-    /* 0x23 */ u8 field21_0x23;
+    /* 0x00 */ char* mArcname;
+    /* 0x04 */ char* mTexture; // Filename in /files/res/Msg/itemicon.arc of its inventory icon.
+    /* 0x08 */ s16 mBmdIdx;
+    /* 0x0A */ s16 mSrtIdx; // BTK
+    /* 0x0C */ s16 mSrtIdx2; // BTK
+    /* 0x0E */ s16 mTevIdx; // BRK
+    /* 0x10 */ s16 mTevIdx2; // BRK
+    /* 0x12 */ s16 mBckIdx;
+    /* 0x14 */ s8 mTevFrm; // If specified, keep the BRK animation on this frame.
+    /* 0x16 */ s16 mItemMesgNum; // Message containing this item's name
+    /* 0x18 */ u32 mUnused; // Always 0, doesn't seem to be read
+    /* 0x1C */ u32 mUnknown; // Varies between items, but doesn't seem to be read
+    /* 0x20 */ u16 mHeapSize;
 };
 
 STATIC_ASSERT(sizeof(dItem_data_item_resource) == 0x24);
 
 struct dItem_data_field_item_res {
-    /* 0x00 */ char * mModelArcName;
-    /* 0x04 */ short mModelFileId;
-    /* 0x06 */ short mBtkAnmResIdx1;
-    /* 0x08 */ short mBtkAnmResIdx2;
-    /* 0x0A */ short mBrkAnmResIdx1;
-    /* 0x0C */ short mBrkAnmResIdx2;
-    /* 0x0E */ short mBckAnmResIdx;
-    /* 0x10 */ u8 mTevRegAnimFrameIndex;
-    /* 0x11 */ u8 field8_0x11;
-    /* 0x12 */ u8 field9_0x12;
-    /* 0x13 */ u8 field10_0x13;
-    /* 0x14 */ u8 field11_0x14;
-    /* 0x15 */ u8 field12_0x15;
-    /* 0x16 */ u8 field13_0x16;
-    /* 0x17 */ u8 field14_0x17;
+    /* 0x00 */ char* mArc;
+    /* 0x04 */ s16 mBmdIdx;
+    /* 0x06 */ s16 mSrtIdx; // BTK
+    /* 0x08 */ s16 mSrtIdx2; // BTK
+    /* 0x0A */ s16 mTevIdx; // BRK
+    /* 0x0C */ s16 mTevIdx2; // BRK
+    /* 0x0E */ s16 mBckIdx;
+    /* 0x10 */ s8 mTevFrm; // Unused, the equivalent in item_resource is used instead.
+    /* 0x14 */ u32 mUnknown;
     /* 0x18 */ u16 mHeapSize;
-    /* 0x1A */ u8 field16_0x1a;
-    /* 0x1B */ u8 field17_0x1b;
 };
 
 STATIC_ASSERT(sizeof(dItem_data_field_item_res) == 0x1C);
 
 struct dItem_data_item_info {
-    /* 0x00 */ u8 mMaybeShadowRelated;
+    /* 0x00 */ u8 mShadowSize;
     /* 0x01 */ u8 mCollisionH; // Cylinder Height
     /* 0x02 */ u8 mCollisionR; // Cylinder Radius
-    /* 0x03 */ u8 mSpecialBehaviors;
+    /* 0x03 */ u8 mFlag;
 };
 
 STATIC_ASSERT(sizeof(dItem_data_item_info) == 0x4);
 
+struct dItem_data_effect_info {
+    /* 0x00 */ u16 m_appear;
+    /* 0x02 */ u16 m_sp_effect;
+};
+
+STATIC_ASSERT(sizeof(dItem_data_effect_info) == 0x4);
+
 class dItem_data {
 public:
+    static char* item_arcname_tbl[0x70];
+    static char* item_texture_tbl[0x74];
     static dItem_data_item_resource item_resource[0x100];
     static dItem_data_field_item_res field_item_res[0x100];
     static dItem_data_item_info item_info[0x100];
+    static dItem_data_effect_info effect_info[0x81];
     
-    static u32 getHeapSize(u8 itemNo) { return item_resource[itemNo].mMaxHeapSize; }
-    static u32 getFieldHeapSize(u8 itemNo) { return field_item_res[itemNo].mHeapSize; }
+    static char* getArcname(u8 no) { return item_resource[no].mArcname; }
+    static char* getTexture(u8 no) { return item_resource[no].mTexture; }
+    static s16 getBmdIdx(u8 no) { return item_resource[no].mBmdIdx; }
+    static s16 getSrtIdx(u8 no) { return item_resource[no].mSrtIdx; }
+    static s16 getSrtIdx2(u8 no) { return item_resource[no].mSrtIdx2; }
+    static s16 getTevIdx(u8 no) { return item_resource[no].mTevIdx; }
+    static s16 getTevIdx2(u8 no) { return item_resource[no].mTevIdx2; }
+    static s16 getBckIdx(u8 no) { return item_resource[no].mBckIdx; }
+    // static s16 getBmtIdx(u8 no) { return item_resource[no].mBmtIdx; }
+    static s8 getTevFrm(u8 no) { return item_resource[no].mTevFrm; }
+    static s16 getItemMesgNum(u8 no) { return item_resource[no].mItemMesgNum; }
+    static u32 getHeapSize(u8 no) { return item_resource[no].mHeapSize; }
     
-    static bool checkAppearEffect(u8 itemNo);
-    static s16 getAppearEffect(u8 itemNo);
-    static bool checkSpecialEffect(u8 itemNo);
-    static u16 getSpecialEffect(u8 itemNo);
+    static char* getFieldArc(u8 no) { return field_item_res[no].mArc; }
+    static s16 getFieldBmdIdx(u8 no) { return field_item_res[no].mBmdIdx; }
+    static s16 getFieldSrtIdx(u8 no) { return field_item_res[no].mSrtIdx; }
+    static s16 getFieldSrtIdx2(u8 no) { return field_item_res[no].mSrtIdx2; }
+    static s16 getFieldTevIdx(u8 no) { return field_item_res[no].mTevIdx; }
+    static s16 getFieldTevIdx2(u8 no) { return field_item_res[no].mTevIdx2; }
+    static s16 getFieldBckIdx(u8 no) { return field_item_res[no].mBckIdx; }
+    // static s16 getFieldBmtIdx(u8 no) { return field_item_res[no].mBmtIdx; }
+    static u32 getFieldHeapSize(u8 no) { return field_item_res[no].mHeapSize; }
+    
+    static u8 getShadowSize(u8 no) { return item_info[no].mShadowSize; }
+    static u8 getH(u8 no) { return item_info[no].mCollisionH; }
+    static u8 getR(u8 no) { return item_info[no].mCollisionR; }
+    static bool chkFlag(u8 no, u32 mask) { return item_info[no].mFlag & mask; }
+    
+    static bool checkAppearEffect(u8 no);
+    static u16 getAppearEffect(u8 no);
+    static bool checkSpecialEffect(u8 no);
+    static u16 getSpecialEffect(u8 no);
 };
 
 #endif /* D_ITEM_DATA_H */

@@ -15,32 +15,34 @@
 
 class dCcD_GObjInf;
 
-static dCcD_SrcCyl m_cyl_src = {
-    0,
-    0,
-    0,
-    0,
-    0xFFFFFFFF, // Tg damage types
-    9,
-    0x59,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    4,
-    0,
-    
-    // Cylinder
-    0.0, // X
-    0.0, // Y
-    0.0, // Z
-    10.0, // Radius
-    50.0, // Height
+dCcD_SrcCyl daItem_c::m_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt Type     */ 0,
+        /* SrcObjAt Atp      */ 0,
+        /* SrcObjAt SPrm     */ 0,
+        /* SrcObjTg Type     */ 0xFFFFFFFF,
+        /* SrcObjTg SPrm     */ 0x09,
+        /* SrcObjCo SPrm     */ 0x59,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt GFlag   */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg GFlag   */ 0x04,
+        /* SrcGObjCo GFlag   */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 10.0f,
+        /* Height */ 50.0f,
+    },
 };
 
 /* 800F4BC8-800F4BD4       .text getData__12daItemBase_cFv */
@@ -113,20 +115,23 @@ void itemGetCallBack(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*) {
 /* 800F5044-800F53EC       .text CreateInit__8daItem_cFv */
 void daItem_c::CreateInit() {
     /* Nonmatching */
-    mAcchCir.SetWall(30.0, 30.0);
-    cXyz* speedPtr = &speed;
-    mAcch.Set(&current.pos, &next.pos, this, 1, &mAcchCir, speedPtr, NULL, NULL);
+    mAcchCir.SetWall(30.0f, 30.0f);
+    cXyz* speedPtr;
+    mAcch.Set(&current.pos, &next.pos, this, 1, &mAcchCir, speedPtr = &speed, NULL, NULL);
     mAcch.m_flags &= ~0x400;
     mAcch.m_flags &= ~0x8;
     mCullMtx = mModel->mBaseTransformMtx;
     mStts.Init(0, 0xFF, this);
     mCyl.Set(m_cyl_src);
+    mCyl.SetStts(&mStts);
     mCyl.SetCoHitCallback(&itemGetCallBack);
     
-    dItem_data_item_info* item_info = &dItem_data::item_info[m_itemNo];
-    f32 height = item_info->mCollisionH;
-    f32 radius = item_info->mCollisionR;
-    if (mScale.x > 1.0) {
+    // Regswaps if the inlines are used.
+    // f32 height = dItem_data::getH(m_itemNo);
+    // f32 radius = dItem_data::getR(m_itemNo);
+    f32 height = dItem_data::item_info[m_itemNo].mCollisionH;
+    f32 radius = dItem_data::item_info[m_itemNo].mCollisionR;
+    if (mScale.x > 1.0f) {
         height *= mScale.x;
         radius *= mScale.x;
     }
@@ -135,18 +140,22 @@ void daItem_c::CreateInit() {
     
     mItemTimer = getData()->mDuration;
     field7_0x65a = getData()->field7_0x18;
-    mCurState = 0;
     field3_0x650 = speedPtr->y;
-    mStatusFlags |= 2;
+    mCurState = 0;
     
     mUnknownParam = (fpcM_GetParam(this) & 0x03000000) >> 0x18;
+    // TODO: should probably add inlines here
+    // e.g. getType__10daItem_prmFP8daItem_c etc
+    if ((fpcM_GetParam(this) & 0x03000000) >> 0x18 == 3 || (fpcM_GetParam(this) & 0x03000000) >> 0x18 == 1) {
+        mStatusFlags |= 2;
+    }
     mItemAction = (fpcM_GetParam(this) & 0xFC000000) >> 0x1A;
     
     show();
     
-    if (dItem_data::checkSpecialEffect(m_itemNo) && (m_itemNo != SMALL_KEY || (mStatusFlags & 2))) {
-        dItem_data::getSpecialEffect(m_itemNo);
-        // TODO: dPa_control_c::set
+    if (dItem_data::checkSpecialEffect(m_itemNo) && (m_itemNo != SMALL_KEY || (m_itemNo == SMALL_KEY && (mStatusFlags & 2)))) {
+        u16 particleID = dItem_data::getSpecialEffect(m_itemNo);
+        dComIfGp_particle_set(particleID, &current.pos, NULL, NULL, 0xFF, &mPtclFollowCb, -1, NULL, NULL, NULL);
     }
     
     switch (m_itemNo) {
@@ -154,27 +163,30 @@ void daItem_c::CreateInit() {
     case BOMB_10:
     case BOMB_20:
     case BOMB_30:
-        mScaleTarget.x = 0.6;
-        mScaleTarget.y = 0.6;
-        mScaleTarget.z = 0.6;
+        mScaleTarget.x = 0.6f;
+        mScaleTarget.y = 0.6f;
+        mScaleTarget.z = 0.6f;
         break;
     default:
-        mScaleTarget.x = 1.0;
-        mScaleTarget.y = 1.0;
-        mScaleTarget.z = 1.0;
+        mScaleTarget.x = 1.0f;
+        mScaleTarget.y = 1.0f;
+        mScaleTarget.z = 1.0f;
         break;
     }
     
     mSwitchId = (fpcM_GetParam(this) & 0x00FF0000) >> 0x10;
-    if (mSwitchId != 0xFF && fopAcM_isSwitch(this, mSwitchId)) {
+    if (mSwitchId != 0xFF && !fopAcM_isSwitch(this, mSwitchId)) {
         hide();
         mStatusFlags |= 2;
     }
     mActivationSwitch = (orig.angle.z & 0x00FF) >> 0;
     
+    current.angle.z = 0;
+    orig.angle.z = 0;
     initAction();
     
     switch (m_itemNo) {
+    case SWORD:
     case SHIELD:
         mStatus |= 0x4000;
         break;
@@ -184,12 +196,11 @@ void daItem_c::CreateInit() {
     }
     
     set_mtx();
-    animPlay(1.0, 1.0, 1.0, 1.0, 1.0);
+    animPlay(1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
     
     s16 procname = PROC_BST; // Gohdan
     if (fopAcIt_Judge(&fpcSch_JudgeForPName, &procname)) {
-        // TODO: dPa_control_c::set
-        mpParticleEmitter = 0;
+        mpParticleEmitter = dComIfGp_particle_set(0x81E1, &current.pos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
     }
 }
 
@@ -200,7 +211,7 @@ s32 daItem_c::_daItem_create() {
     
     m_itemNo = (fpcM_GetParam(this) & 0x000000FF) >> 0x00;
     
-    if (!dItem_data::field_item_res[m_itemNo].mModelArcName) {
+    if (!dItem_data::getFieldArc(m_itemNo)) {
         setLoadError();
         return cPhs_ERROR_e;
     }
@@ -215,10 +226,9 @@ s32 daItem_c::_daItem_create() {
         }
     }
     
-    s32 phase_state = dComIfG_resLoad(&mPhs, dItem_data::field_item_res[m_itemNo].mModelArcName);
+    s32 phase_state = dComIfG_resLoad(&mPhs, dItem_data::getFieldArc(m_itemNo));
     if (phase_state == cPhs_COMPLEATE_e) {
-        u16 heapSize = dItem_data::field_item_res[m_itemNo].mHeapSize;
-        s32 result = fopAcM_entrySolidHeap(this, (heapCallbackFunc)&CheckFieldItemCreateHeap, heapSize);
+        s32 result = fopAcM_entrySolidHeap(this, &CheckFieldItemCreateHeap, dItem_data::getFieldHeapSize(m_itemNo));
         if (!result) {
             return cPhs_ERROR_e;
         }
@@ -332,8 +342,9 @@ void daItem_c::setTevStr() {
 /* 800F61C8-800F6268       .text _daItem_delete__8daItem_cFv */
 s32 daItem_c::_daItem_delete() {
     /* Nonmatching */
-    // TODO: dPa_rippleEcallBack::end()
-    DeleteBase(dItem_data::field_item_res[m_itemNo].mModelArcName);
+    mPtclRippleCb.end();
+    // TODO
+    DeleteBase(dItem_data::getFieldArc(m_itemNo));
 }
 
 /* 800F6268-800F6434       .text Reflect__FR4cXyzP4cXyzff */
@@ -367,7 +378,7 @@ bool daItem_c::checkItemDisappear() {
     if (mStatusFlags & 0x10) {
         disappearing = false;
     }
-    if (dItem_data::item_info[m_itemNo].mSpecialBehaviors & 0x01) {
+    if (dItem_data::chkFlag(m_itemNo, 0x01)) {
         disappearing = false;
     }
     if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode != 0) {
@@ -525,11 +536,6 @@ s32 daItem_c::_daItem_isdelete() {
     return 1;
 }
 
-/* 800F89F8-800F8A14       .text getHeadTopPos__9daPy_py_cCFv */
-void daPy_py_c::getHeadTopPos() const {
-    /* Nonmatching */
-}
-
 static actor_method_class l_daItem_Method = {
     (process_method_func)daItem_Create,
     (process_method_func)daItem_Delete,
@@ -539,18 +545,18 @@ static actor_method_class l_daItem_Method = {
 };
 
 extern actor_process_profile_definition g_profile_ITEM = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_ITEM,
-    &g_fpcLf_Method.mBase,
-    sizeof(daItem_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x00F5,
-    &l_daItem_Method,
-    0x000C0100,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 7,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_ITEM,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daItem_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00F5,
+    /* Actor SubMtd */ &l_daItem_Method,
+    /* Status       */ 0x000C0100,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
 };
