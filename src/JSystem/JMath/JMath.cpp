@@ -3,7 +3,7 @@
 // Translation Unit: JMath.cpp
 //
 
-#include "JMath.h"
+#include "JSystem/JMath/JMath.h"
 #include "dolphin/types.h"
 
 /* 80301028-80301150       .text JMANewSinTable__FUc */
