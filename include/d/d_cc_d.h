@@ -68,7 +68,7 @@ struct dCcD_SrcCps {
 class dCcD_GStts : public cCcD_GStts {
 public:
     dCcD_GStts();
-    virtual ~dCcD_GStts() {}
+    virtual ~dCcD_GStts();
 
     void Ct();
     void Move();
@@ -108,7 +108,7 @@ public:
     virtual void Ct();
     virtual void ClrAt();
     virtual void ClrTg();
-    virtual ~dCcD_Stts() {}
+    virtual ~dCcD_Stts();
 
 };  // Size = 0x3C
 
@@ -129,15 +129,18 @@ public:
 
 public:
     dCcD_GAtTgCoCommonBase() { ct(); }
-    void ClrActorInfo();
+    void ClrActorInfo() {
+        mApid = -1;
+        mAc = NULL;
+    }
     void ct();
     void SetHitApid(unsigned int);
     fopAc_ac_c* GetAc();
     void Set(dCcD_SrcGAtTgCoCommonBase const&);
     void SetEffCounterTimer();
-    void SubtractEffCounter();
-    bool ChkEffCounter();
-    virtual ~dCcD_GAtTgCoCommonBase() {}
+    void SubtractEffCounter() { mEffCounter -= 1; }
+    bool ChkEffCounter() { return mEffCounter >= 0; }
+    virtual ~dCcD_GAtTgCoCommonBase();
 
     void ClrEffCounter() { mEffCounter = 0; }
     u32 GetGFlag() const { return mGFlag; }
@@ -152,14 +155,13 @@ public:
     bool ChkRPrm(u32 flag) const { return MskRPrm(flag); }
     void SetHitCallback(dCcD_HitCallback callback) { mHitCallback = callback; }
     dCcD_HitCallback GetHitCallback() { return mHitCallback; }
-    void ClrHit() { ClrActorInfo(); }
 };  // Size = 0x1C
 
 // Attack (At) Collider
 class dCcD_GObjAt : public dCcD_GAtTgCoCommonBase {
 public:
     void Set(dCcD_SrcGObjAt const&);
-    virtual ~dCcD_GObjAt() {}
+    virtual ~dCcD_GObjAt();
     void SetVec(cXyz& vec) { mVec = vec; }
     cXyz& GetVec() { return mVec; }
     cXyz* GetVecP() { return &mVec; }
@@ -174,6 +176,7 @@ public:
     void SetRVec(cXyz& vec) { mRVec = vec; }
     void SetHitPos(cXyz& pos) { mHitPos = pos; }
     cXyz* GetHitPosP() { return &mHitPos; }
+    void ClrHit() { ClrActorInfo(); }
 
     // private:
     /* 0x1C */ u8 mSe;
@@ -189,7 +192,7 @@ public:
 class dCcD_GObjTg : public dCcD_GAtTgCoCommonBase {
 public:
     void Set(dCcD_SrcGObjTg const&);
-    virtual ~dCcD_GObjTg() {}
+    virtual ~dCcD_GObjTg();
     void SetSe(u8 se) { mSe = se; }
     void SetVec(cXyz& vec) { mVec = vec; }
     cXyz& GetVec() { return mVec; }
@@ -219,7 +222,7 @@ private:
 // Correction (Co) Collider
 class dCcD_GObjCo : public dCcD_GAtTgCoCommonBase {
 public:
-    virtual ~dCcD_GObjCo() {}
+    virtual ~dCcD_GObjCo();
     void Set(dCcD_SrcGObjCo const& pSrc) { dCcD_GAtTgCoCommonBase::Set(pSrc.mBase); }
 };  // Size = 0x1C ?
 
@@ -363,6 +366,8 @@ public:
     void Set(dCcD_SrcCyl const&);
     cCcD_ShapeAttr* GetShapeAttr() { return this; }
     void StartCAt(cXyz&);
+    void StartCTg(cXyz&);
+    void MoveCAtTg(cXyz&);
     void MoveCAt(cXyz&);
     void MoveCTg(cXyz&);
     virtual ~dCcD_Cyl() {}
