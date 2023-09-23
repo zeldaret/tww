@@ -31,6 +31,7 @@ public:
     /* 800164BC */ virtual s32 execute();
 
     void* getMemAddress() const { return mData; }
+    s32 getMemSize() const { return mDataSize; }
 
 private:
     /* 0x14 */ u8 mMountDirection;

@@ -59,7 +59,6 @@ public:
     u16 checkBumpFlag() const { return mbHasBumpArray; }
     void setBumpFlag(u32 flag) { mbHasBumpArray = flag; }
     bool checkBBoardFlag() const { return mbHasBillboard == 1; }
-    bool isLocked() { return mMaterialTable.isLocked(); }
     void entryTexMtxAnimator(J3DAnmTextureSRTKey* anm) { mMaterialTable.entryTexMtxAnimator(anm); }
     void entryTevRegAnimator(J3DAnmTevRegKey* anm) { mMaterialTable.entryTevRegAnimator(anm); }
     void entryTexNoAnimator(J3DAnmTexPattern* anm) { mMaterialTable.entryTexNoAnimator(anm); }

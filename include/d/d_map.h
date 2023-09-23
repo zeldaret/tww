@@ -6,7 +6,7 @@ class dMap_c {
 public:
     static void create();
     void isEnableEnlargementScroll();
-    void isEnableDispMap();
+    static bool isEnableDispMap();
     void getKindMapType();
     static void remove();
     void setImage(int, int, f32);
@@ -17,7 +17,7 @@ public:
     void mapDrawFrame(u8);
     void mapDrawEnlargementSize(f32, f32, f32, f32, u8);
     void mapDrawRealSize(f32, f32, u8);
-    void mapAGBSendIslandData();
+    static void mapAGBSendIslandData();
     void setPlayerStayAgbMapTypeNow(f32, f32);
     void agbMapNoSet(u8, u8);
     void agbMapNoSetCall();
@@ -62,7 +62,7 @@ public:
     void drawPointMain(u8, u8, f32, f32, f32, s8, s16, u8, u8, u8, u8);
     void drawPointAgb(u8, f32, f32, f32, s8, s16, u8, u8, u8, u8);
     void getTypeAgbGcFromTypeAcs(u8, u8*, u8*);
-    void drawPointSingle(u8, f32, f32, f32, s8, s16, u8, u8, u8);
+    static void drawPointSingle(u8, f32, f32, f32, s8, s16, u8, u8, u8);
     void drawActorPointMiniMap(fopAc_ac_c*);
     void mapBufferSendAGB_commonCursor();
     void mapBufferSendAGB_ocean();

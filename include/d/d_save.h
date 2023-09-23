@@ -12,6 +12,8 @@ public:
     u8 getWalletSize() { return mWalletSize; }
     int getRupee() const { return mRupee; }
     u8 getMagic() { return mMagic; }
+    u8 getMaxMagic() { return mMaxMagic; }
+    u16 getMaxLife() { return mMaxLife; }
 
     /* 0x00 */ u16 mMaxLife;
     /* 0x02 */ u16 mLife;
@@ -127,6 +129,9 @@ STATIC_ASSERT(sizeof(dSv_player_item_record_c) == 0x8);
 class dSv_player_item_max_c {
 public:
     /* 800598D8 */ void init();
+
+    u8 getArrowNum() const { return mArrowNum; }
+    u8 getBombNum() const { return mBombNum; }
 
     /* 0x0 */ u8 field_0x0;
     /* 0x1 */ u8 mArrowNum;
@@ -259,6 +264,8 @@ STATIC_ASSERT(sizeof(dSv_player_map_c) == 0x84);
 class dSv_player_info_c {
 public:
     /* 8005BE84 */ void init();
+
+    const char* getPlayerName() const { return mPlayerName; }
 
     /* 0x00 */ u8 field_0x0[0x10];
     /* 0x10 */ u16 field_0x10;
@@ -492,8 +499,11 @@ public:
     /* 8005CD60 */ BOOL isSwitch(int);
     /* 8005CE10 */ BOOL revSwitch(int);
 
+    u8 getGbaRupeeCount() { return mGbaRupeeCount; }
+    void incGbaRupeeCount() { mGbaRupeeCount++; }
+
     /* 0x0 */ s8 mStageNo;
-    /* 0x1 */ u8 field_0x1;
+    /* 0x1 */ u8 mGbaRupeeCount;
     /* 0x4 */ u32 mSwitch[2];
 };  // Size: 0xC
 
@@ -645,6 +655,7 @@ public:
     dSv_restart_c& getRestart() { return mRestart; }
     dSv_turnRestart_c& getTurnRestart() { return mTurnRestart; }
     dSv_memory_c& getMemory() { return mMemory; }
+    dSv_danBit_c& getDan() { return mDan; }
     dSv_zone_c& getZone(int id) { return mZone[id]; }
 
     void removeZone(int zoneNo) { mZone[zoneNo].reset(); }

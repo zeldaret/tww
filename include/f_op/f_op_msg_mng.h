@@ -67,5 +67,6 @@ inline s32 fopMsgM_Timer_create(s16 param_0, u8 param_1, u32 param_2, u8 param_3
 }
 
 u32 fopMsgM_searchMessageNumber(u32);
+void fopMsgM_messageSendOn();
 
 #endif

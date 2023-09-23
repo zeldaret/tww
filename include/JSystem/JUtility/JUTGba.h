@@ -16,9 +16,9 @@ public:
     void result_common(int, u32, u32*);
     void resultStatus_common(int, u32, u8*);
     void doJoyBoot(int, s32, s32, u8*, u32, JUTGba_Func, void*);
-    void resultJoyBoot(int, u8*);
+    int resultJoyBoot(int, u8*);
     void doInitProbe(int, JUTGba_Func, void*);
-    void resultInitProbe(int, u32*);
+    int resultInitProbe(int, u32*);
     void doProbe(int, JUTGba_Func, void*);
     BOOL resultProbe(int, u32*);
     void doReset(int, JUTGba_Func, void*);

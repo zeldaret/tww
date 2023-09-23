@@ -7,7 +7,9 @@
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
+#include "d/d_kankyo_wether.h"
 #include "f_op/f_op_camera_mng.h"
+#include "m_Do/m_Do_lib.h"
 
 /* 8008AA30-8008AB3C       .text vectle_calc__FP10DOUBLE_POSP4cXyz */
 void vectle_calc(DOUBLE_POS* i_pos, cXyz* o_out) {
@@ -93,7 +95,15 @@ void dKyr_kamome_move() {
 
 /* 8008B44C-8008B504       .text dKyr_wind_init__Fv */
 void dKyr_wind_init() {
-    /* Nonmatching */
+    g_env_light.mpWind->mbHasCustomWindPower = false;
+    g_env_light.mpWind->field_0x759 = 0;
+
+    for (int i = 0; i < 2; i++) {
+        g_env_light.mpWind->mKamomeEff[i].field_0x1e = 0;
+        g_env_light.mpWind->mKamomeEff[i].field_0x18 = 0.0f;
+        g_env_light.mpWind->mKamomeEff[i].field_0x1c = cM_rndF(1800.0f);
+        g_env_light.mpWind->mKamomeEff[i].mpBaseEmitter = NULL;
+    }
 }
 
 /* 8008B504-8008C4BC       .text dKyr_wind_move__Fv */
@@ -102,8 +112,49 @@ void dKyr_wind_move() {
 }
 
 /* 8008C624-8008C888       .text dKyr_lenzflare_move__Fv */
+// NONMATCHING
 void dKyr_lenzflare_move() {
-    /* Nonmatching */
+    dKankyo_sun_Packet* sun_p = g_env_light.mpSunPacket;
+    dKankyo_sunlenz_Packet* lenz_p = g_env_light.mpSunlenzPacket;
+    camera_class* camera_p = dComIfGp_getCamera(0);
+
+    if (!(g_env_light.mpSunPacket->mVisibility < 0.0001f)) {
+        cXyz eyeVect;
+        dKy_set_eyevect_calc(dComIfGp_getCamera(0), &eyeVect, 7200.0005f, 7200.0005f);
+
+        cXyz sunDirSmth;
+        dKyr_get_vectle_calc(&eyeVect, sun_p->mPos, &sunDirSmth);
+        lenz_p->mPositions[0] = sun_p->mPos[0];
+        lenz_p->mPositions[1] = sun_p->mPos[0];
+
+        cXyz projected;
+        mDoLib_project(lenz_p->mPositions, &projected);
+
+        cXyz center;
+        center.x = 320.0f;
+        center.y = 240.0f;
+        center.z = 0.0f;
+
+        cXyz vectle;
+        dKyr_get_vectle_calc(&center, &projected, &vectle);
+        s16 angle = cM_atan2s(vectle.x, vectle.y);
+
+        lenz_p->mAngleDeg = angle;
+        lenz_p->mAngleDeg *= 0.005493164f;
+        lenz_p->mAngleDeg += 180.0f;
+
+        cXyz camFwd;
+        dKyr_get_vectle_calc(&camera_p->mLookat.mEye, &camera_p->mLookat.mCenter, &camFwd);
+
+        f32 var_f4 = sunDirSmth.abs(camFwd);
+        var_f4 = (var_f4 * 350.0f) + 250.0f;
+
+        for (int i = 2; i < 8; i++) {
+            lenz_p->mPositions[i].x = sun_p->mPos[0].x - i * sunDirSmth.x * var_f4;
+            lenz_p->mPositions[i].y = sun_p->mPos[0].y - i * sunDirSmth.y * var_f4;
+            lenz_p->mPositions[i].z = sun_p->mPos[0].z - i * sunDirSmth.z * var_f4;
+        }
+    }
 }
 
 /* 8008C888-8008C8B8       .text dKyr_moon_arrival_check__Fv */
