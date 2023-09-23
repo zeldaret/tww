@@ -202,6 +202,11 @@ public:
     void clearPlayerStatus(int param_0, int i, u32 flag) { mPlayerStatus[param_0][i] &= ~flag; }
     bool checkPlayerStatus(int param_0, int i, u32 flag) { return flag & mPlayerStatus[param_0][i]; }
 
+    void setCurrentGrafPort(J2DOrthoGraph* i_graf) { mCurrentGrafPort = i_graf; }
+    void setCurrentWindow(dDlst_window_c* i_window) { mCurrentWindow = i_window; }
+    void setCurrentView(view_class* i_view) { mCurrentView = i_view; }
+    void setCurrentViewport(view_port_class* i_viewport) { mCurrentViewport = i_viewport; }
+
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
     /* 0x3DF8 */ dADM mADM;
@@ -357,10 +362,10 @@ public:
     /* 0x4A28 */ u32 mPlayerStatus[2][2];
     /* 0x4A38 */ u8 field_0x4A38[0x4A40 - 0x4A38];
     /* 0x4A40 */ __d_timer_info_c mTimerInfo;
-    /* 0x4A54 */ dDlst_window_c* field_0x4a54;
-    /* 0x4A58 */ camera_class* field_0x4a58;
-    /* 0x4A5C */ dDlst_window_c* field_0x4a5c;
-    /* 0x4A60 */ J2DOrthoGraph* mp2DOrthoGraph;
+    /* 0x4A54 */ dDlst_window_c* mCurrentWindow;
+    /* 0x4A58 */ view_class* mCurrentView;
+    /* 0x4A5C */ view_port_class* mCurrentViewport;
+    /* 0x4A60 */ J2DOrthoGraph* mCurrentGrafPort;
     /* 0x4A64 */ u8 mShipId;
     /* 0x4A65 */ u8 mShipRoomId;
     /* 0x4A66 */ u8 mIkadaShipBeforeRoomId;
@@ -1083,6 +1088,10 @@ inline bool dComIfGp_checkPlayerStatus0(int param_0, u32 flag) {
 
 inline bool dComIfGp_checkPlayerStatus1(int param_0, u32 flag) {
     return g_dComIfG_gameInfo.play.checkPlayerStatus(param_0, 1, flag);
+}
+
+inline void dComIfGp_setCurrentGrafPort(J2DOrthoGraph* i_graf) {
+    g_dComIfG_gameInfo.play.setCurrentGrafPort(i_graf);
 }
 
 

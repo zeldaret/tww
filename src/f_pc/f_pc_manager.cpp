@@ -12,11 +12,16 @@
 #include "f_pc/f_pc_line.h"
 #include "f_pc/f_pc_pause.h"
 #include "f_pc/f_pc_priority.h"
-#include "dolphin/dvd/DVD.h"
+#include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_Reset.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "SSystem/SComponent/c_API_graphic.h"
+#include "JSystem/J2DGraph/J2DOrthoGraph.h"
+#include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "dolphin/dvd/DVD.h"
+#include "dolphin/gx/GX.h"
 
 /* 8003E318-8003E338       .text fpcM_Draw__FPv */
 void fpcM_Draw(void* i_proc) {
@@ -44,13 +49,42 @@ BOOL fpcM_IsCreating(unsigned int pID) {
 }
 
 /* 8003E3D0-8003E9F0       .text messageSet__FUl */
-void messageSet(unsigned long) {
+void messageSet(unsigned long status) {
     /* Nonmatching */
 }
 
 /* 8003E9F0-8003EBD4       .text drawDvdCondition__Fl */
 void drawDvdCondition(long status) {
-    /* Nonmatching */
+    JFWDisplay::getManager()->setFader(NULL);
+    GXColor backColor = mDoGph_gInf_c::getBackColor();
+    JFWDisplay::getManager()->setClearColor(backColor);
+    JFWDisplay::getManager()->beginRender();
+    GXSetAlphaUpdate(GX_FALSE);
+    j3dSys.drawInit();
+
+    J2DOrthoGraph draw2D(0.0f, 0.0f, 640.0f, 480.0f, -1.0f, 1.0);
+    draw2D.setOrtho(-9.0f, -21.0f, 650.0f, 503.0f, -1.0f, 1.0f);
+    draw2D.setPort();
+    dComIfGp_setCurrentGrafPort(&draw2D);
+
+    if (status == 4) {
+        messageSet(2);
+    } else if (status == 5) {
+        messageSet(1);
+    } else if (status == 6) {
+        messageSet(3);
+    } else if (status == 12) {
+        messageSet(4);
+    } else if (status == 1) {
+        messageSet(0);
+    } else if (status == -1) {
+        messageSet(5);
+        // JAInter::StreamLib::stop();
+    } else {
+        JUT_WARN(0x1e1, "Dvd Error !! <%d>\n", status);
+    }
+
+    JFWDisplay::getManager()->endRender();
 }
 
 /* 8003EBD4-8003EC84       .text checkDvdCondition__Fv */
