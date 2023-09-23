@@ -1008,7 +1008,7 @@ void J3DTevBlock16::setTevKColorSel(u32 i, const u8* pNum) {
 
 /* 802EA3C0-802EA3CC       .text getTevKColorSel__13J3DTevBlock16FUl */
 u8 J3DTevBlock16::getTevKColorSel(u32 i) {
-    return mTevKAlphaSel[i];
+    return mTevKColorSel[i];
 }
 
 /* 802EA3CC-802EA3D8       .text setTevKAlphaSel__13J3DTevBlock16FUlUc */
@@ -1038,7 +1038,7 @@ void J3DTevBlock16::setTevStageNum(const u8* pNum) {
 
 /* 802EA408-802EA410       .text getTevStageNum__13J3DTevBlock16CFv */
 u8 J3DTevBlock16::getTevStageNum() const {
-    /* Nonmatching */
+    return mTevStageNum;
 }
 
 /* 802EA410-802EA44C       .text setTevStage__13J3DTevBlock16FUl11J3DTevStage */
@@ -1098,7 +1098,7 @@ J3DIndTevStage * J3DTevBlock16::getIndTevStage(u32 i) {
 
 /* 802EA578-802EA580       .text getTexNoOffset__13J3DTevBlock16CFv */
 u32 J3DTevBlock16::getTexNoOffset() const {
-    /* Nonmatching */
+    return mTexNoOffset;
 }
 
 /* 802EA580-802EA588       .text getTevRegOffset__13J3DTevBlock16CFv */
@@ -1118,7 +1118,7 @@ J3DTevBlock16::~J3DTevBlock16() {
 
 /* 802EA5EC-802EA5F4       .text setTexNoOffset__11J3DTevBlockFUl */
 void J3DTevBlock::setTexNoOffset(u32 i) {
-    /* Nonmatching */
+    mTexNoOffset = i;
 }
 
 /* 802EA5F4-802EA5F8       .text ptrToIndex__12J3DTevBlock4Fv */
@@ -1208,7 +1208,7 @@ void J3DTevBlock4::setTevKColorSel(u32 i, const u8* pNum) {
 
 /* 802EA7AC-802EA7B8       .text getTevKColorSel__12J3DTevBlock4FUl */
 u8 J3DTevBlock4::getTevKColorSel(u32 i) {
-    return mTevKAlphaSel[i];
+    return mTevKColorSel[i];
 }
 
 /* 802EA7B8-802EA7C4       .text setTevKAlphaSel__12J3DTevBlock4FUlUc */
@@ -1238,7 +1238,7 @@ void J3DTevBlock4::setTevStageNum(const u8* pNum) {
 
 /* 802EA7F4-802EA7FC       .text getTevStageNum__12J3DTevBlock4CFv */
 u8 J3DTevBlock4::getTevStageNum() const {
-    /* Nonmatching */
+    return mTevStageNum;
 }
 
 /* 802EA7FC-802EA838       .text setTevStage__12J3DTevBlock4FUl11J3DTevStage */
@@ -1298,7 +1298,7 @@ J3DIndTevStage * J3DTevBlock4::getIndTevStage(u32 i) {
 
 /* 802EA964-802EA96C       .text getTexNoOffset__12J3DTevBlock4CFv */
 u32 J3DTevBlock4::getTexNoOffset() const {
-    /* Nonmatching */
+    return mTexNoOffset;
 }
 
 /* 802EA96C-802EA974       .text getTevRegOffset__12J3DTevBlock4CFv */
@@ -1403,7 +1403,7 @@ void J3DTevBlock2::setTevKColorSel(u32 i, const u8* pNum) {
 
 /* 802EAB90-802EAB9C       .text getTevKColorSel__12J3DTevBlock2FUl */
 u8 J3DTevBlock2::getTevKColorSel(u32 i) {
-    return mTevKAlphaSel[i];
+    return mTevKColorSel[i];
 }
 
 /* 802EAB9C-802EABA8       .text setTevKAlphaSel__12J3DTevBlock2FUlUc */
@@ -2208,7 +2208,6 @@ J3DIndTexCoordScale * J3DIndBlockFull::getIndTexCoordScale(u32 i) {
 
 /* 802EBBA4-802EBC40       .text __dt__15J3DIndBlockFullFv */
 J3DIndBlockFull::~J3DIndBlockFull() {
-    /* Nonmatching */
 }
 
 /* 802EBC40-802EBC44       .text patchTexNo__11J3DTevBlockFv */

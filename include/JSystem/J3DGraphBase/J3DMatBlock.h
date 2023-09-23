@@ -760,9 +760,8 @@ struct J3DIndTexCoordScale {
     ~J3DIndTexCoordScale();
     J3DIndTexCoordScale();
 
-    /* 0x0 */ u8 mScaleS;
+    /* 0x0 */ u8 mScaleS __attribute__((aligned(4)));
     /* 0x1 */ u8 mScaleT;
-    u8 pad[2];
 };
 
 struct J3DIndTexMtx {
@@ -800,7 +799,7 @@ public:
     virtual void setIndTexCoordScale(u32, J3DIndTexCoordScale);
     virtual void setIndTexCoordScale(u32, J3DIndTexCoordScale const*);
     virtual J3DIndTexCoordScale * getIndTexCoordScale(u32);
-    virtual ~J3DIndBlock();
+    virtual ~J3DIndBlock() {}
 };
 
 class J3DIndBlockFull : public J3DIndBlock {

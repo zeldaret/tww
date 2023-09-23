@@ -39,17 +39,13 @@ struct J3DIndTevStage {
 };
 
 struct J3DTevOrderInfo {
-    /* 0x0 */ u8 mTexCoord;
+    /* 0x0 */ u8 mTexCoord __attribute__((aligned(2)));
     /* 0x1 */ u8 mTexMap;
     /* 0x2 */ u8 mColorChan;
-    /* 0x3 */ u8 field_0x3; // Maybe padding
 };
 
 struct J3DTevOrder : public J3DTevOrderInfo {
     J3DTevOrder();
-    J3DTevOrder(const J3DTevOrderInfo& info) {
-        *(J3DTevOrderInfo*)this = info;
-    }
 
     u8 getTexMap() { return mTexMap; }
 };
