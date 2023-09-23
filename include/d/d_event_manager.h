@@ -50,7 +50,7 @@ public:
     void* getMySubstanceP(int, const char*, int);
     void getMySubstanceNum(int, const char*);
     void cutEnd(int);
-    void getEventPrio(s16);
+    u16 getEventPrio(s16);
     void getEventEndSound(s16);
     void exceptionProc();
     void issueStaff(const char*);

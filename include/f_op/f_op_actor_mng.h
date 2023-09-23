@@ -416,7 +416,8 @@ s32 fopAcM_orderCatchEvent(fopAc_ac_c*, fopAc_ac_c*, u16, u16);
 s32 fopAcM_orderOtherEvent(fopAc_ac_c*, char*, u16, u16, u16);
 s32 fopAcM_orderOtherEvent(fopAc_ac_c*, fopAc_ac_c*, char*, u16, u16, u16);
 s32 fopAcM_orderOtherEvent2(fopAc_ac_c*, char*, u16, u16);
-s32 fopAcM_orderChangeEventId(fopAc_ac_c*, s16, u16, u16);
+s32 fopAcM_orderChangeEventId(fopAc_ac_c* i_this, s16 eventIdx, u16 flag, u16 hind);
+s32 fopAcM_orderChangeEventId(fopAc_ac_c* i_this, fopAc_ac_c* i_partner, s16 eventIdx, u16 flag, u16 hind);
 s32 fopAcM_orderOtherEventId(fopAc_ac_c* actor, s16 eventID, u8 mapToolID, u16 param_3,
                              u16 priority, u16 flag);
 s32 fopAcM_orderMapToolEvent(fopAc_ac_c*, u8, s16, u16, u16, u16);

@@ -5,6 +5,22 @@
 
 class fopAc_ac_c;
 
+enum dEvtType_e {
+    /* 0x00 */ dEvtType_TALK_e,
+    /* 0x01 */ dEvtType_DOOR_e,
+    /* 0x02 */ dEvtType_OTHER_e,
+    /* 0x03 */ dEvtType_COMPULSORY_e,
+    /* 0x04 */ dEvtType_POTENTIAL_e,
+    /* 0x05 */ dEvtType_ITEM_e,
+    /* 0x06 */ dEvtType_SHOWITEM_X_e,
+    /* 0x07 */ dEvtType_SHOWITEM_Y_e,
+    /* 0x08 */ dEvtType_SHOWITEM_Z_e,
+    /* 0x09 */ dEvtType_CATCH_e,
+    /* 0x0A */ dEvtType_TREASURE_e,
+    /* 0x0B */ dEvtType_PHOTO_e,
+    /* 0x0A */ dEvtType_CHANGE_e,
+};
+
 class dEvt_order_c {
 public:
     ~dEvt_order_c() {}
@@ -25,8 +41,8 @@ class dEvt_control_c {
 public:
     dEvt_control_c();
 
-    void orderOld(u16, u16, u16, u16, void*, void*, const void*);
-    void order(u16, u16, u16, u16, void*, void*, s16, u8);
+    s32 orderOld(u16, u16, u16, u16, void*, void*, const void*);
+    s32 order(u16, u16, u16, u16, void*, void*, s16, u8);
     void setParam(dEvt_order_c*);
     void beforeFlagProc(dEvt_order_c*);
     void afterFlagProc(dEvt_order_c*);
@@ -54,7 +70,7 @@ public:
     void getStageEventDt();
     void nextStageEventDt(void*);
     void getPId(void*);
-    void convPId(unsigned int);
+    fopAc_ac_c * convPId(unsigned int);
     void getTactFreeMStick(int);
     void getTactFreeCStick(int);
     void giveItemCut(u8);
