@@ -101,7 +101,7 @@ dPath* dNpc_PathRun_c::nextPath(s8 roomNo) {
 cXyz dNpc_PathRun_c::getPoint(u8 pointIdx) {
     cXyz point(0.0f, 0.0f, 0.0f);
 
-    if(mPath != 0 && pointIdx < mPath->mNum) {
+    if(mPath != 0 && pointIdx < mPath->m_num) {
         point = mPath->mpPnt[pointIdx].mPos;
     }
 
@@ -118,8 +118,8 @@ bool dNpc_PathRun_c::incIdx() {
 
     if(mPath != 0) {
         mCurrPointIndex += 1;
-        if(mCurrPointIndex >= mPath->mNum) {
-            mCurrPointIndex = mPath->mNum - 1;
+        if(mCurrPointIndex >= mPath->m_num) {
+            mCurrPointIndex = mPath->m_num - 1;
             ret = false;
         }
     }
@@ -132,7 +132,7 @@ bool dNpc_PathRun_c::incIdxLoop() {
 
     if(mPath != 0) {
         mCurrPointIndex += 1;
-        if(mCurrPointIndex >= mPath->mNum) {
+        if(mCurrPointIndex >= mPath->m_num) {
             mCurrPointIndex = 0;
             ret = false;
         }
@@ -147,14 +147,14 @@ bool dNpc_PathRun_c::incIdxAuto() {
     if(mPath != 0) {
         if(mPath->mLoops & 1) {
             mCurrPointIndex += 1;
-            if(mCurrPointIndex >= mPath->mNum) {
+            if(mCurrPointIndex >= mPath->m_num) {
                 mCurrPointIndex = 0;
             }
         }
         else {
             mCurrPointIndex += 1;
-            if(mCurrPointIndex >= mPath->mNum) {
-                mCurrPointIndex = mPath->mNum - 1;
+            if(mCurrPointIndex >= mPath->m_num) {
+                mCurrPointIndex = mPath->m_num - 1;
                 hitEnd = false;
             }
         }
@@ -168,7 +168,7 @@ bool dNpc_PathRun_c::decIdx() {
 
     if(mPath != 0) {
         mCurrPointIndex -= 1;
-        if(mCurrPointIndex >= mPath->mNum) {
+        if(mCurrPointIndex >= mPath->m_num) {
             mCurrPointIndex = 0;
             ret = false;
         }
@@ -182,8 +182,8 @@ bool dNpc_PathRun_c::decIdxLoop() {
 
     if(mPath != 0) {
         mCurrPointIndex -= 1;
-        if(mCurrPointIndex >= mPath->mNum) {
-            mCurrPointIndex = mPath->mNum - 1;
+        if(mCurrPointIndex >= mPath->m_num) {
+            mCurrPointIndex = mPath->m_num - 1;
             ret = false;
         }
     }
@@ -197,13 +197,13 @@ bool dNpc_PathRun_c::decIdxAuto() {
     if(mPath != 0) {
         if(mPath->mLoops & 1) {
             mCurrPointIndex -= 1;
-            if(mCurrPointIndex >= mPath->mNum) {
-                mCurrPointIndex = mPath->mNum - 1;
+            if(mCurrPointIndex >= mPath->m_num) {
+                mCurrPointIndex = mPath->m_num - 1;
             }
         }
         else {
             mCurrPointIndex -= 1;
-            if(mCurrPointIndex >= mPath->mNum) {
+            if(mCurrPointIndex >= mPath->m_num) {
                 mCurrPointIndex = 0;
                 hitEnd = false;
             }
@@ -275,7 +275,7 @@ s32 dNpc_PathRun_c::absIdx(u8 startIdx, u8 lastIdx) {
 u8 dNpc_PathRun_c::maxPoint() {
     u8 max = 0xFF;
     if(mPath != 0) {
-        max = mPath->mNum;
+        max = mPath->m_num;
     }
 
     return max;
@@ -283,7 +283,7 @@ u8 dNpc_PathRun_c::maxPoint() {
 
 u8 dNpc_PathRun_c::pointArg(u8 idx) {
     u8 arg = 0;
-    if(mPath != 0 && idx < (u8)mPath->mNum) {
+    if(mPath != 0 && idx < (u8)mPath->m_num) {
         arg = mPath->mpPnt[idx].mArg3;
     }
 

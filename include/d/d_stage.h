@@ -162,7 +162,7 @@ public:
     /* 0x08 */ u32 mParameter;
     /* 0x0C */ cXyz mSpawnPos;
     /* 0x18 */ csXyz mAngle;
-    /* 0x1E */ u16 mEnemyNo;
+    /* 0x1E */ u16 mSetId;
 };  // Size: 0x20
 
 class stage_actor_class {
@@ -918,6 +918,7 @@ int dStage_mapInfo_GetOceanX(stage_map_info_class*);
 void dStage_infoCreate();
 
 dStage_objectNameInf* dStage_searchName(const char*);
+const char* dStage_getName2(s16 i_procName, s8 i_subtype);
 
 inline s32 dStage_stagInfo_GetSaveTbl(stage_stag_info_class* i_stagInfo) {
     return (i_stagInfo->field_0x09 >> 1) & 0x7F;

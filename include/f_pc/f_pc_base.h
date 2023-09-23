@@ -20,7 +20,7 @@ typedef struct base_process_class {
     /* 0x0B */ u8 mPauseFlag;
     /* 0x0C */ s8 mInitState;
     /* 0x0D */ u8 mUnk2;
-    /* 0x0E */ s16 mBsTypeId;
+    /* 0x0E */ s16 mProfName;
     /* 0x10 */ process_profile_definition* mpProf;
     /* 0x14 */ struct create_request* mpCtRq;
     /* 0x18 */ layer_management_tag_class mLyTg;

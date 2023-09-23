@@ -30,7 +30,7 @@ inline void fpcM_SetParam(void* p_actor, u32 param) {
 }
 
 inline s16 fpcM_GetProfName(const void* pActor) {
-    return ((base_process_class*)pActor)->mBsTypeId;
+    return ((base_process_class*)pActor)->mProfName;
 }
 
 inline int fpcM_Create(s16 procName, FastCreateReqFunc createFunc, void* process) {

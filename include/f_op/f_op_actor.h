@@ -170,12 +170,19 @@ struct actor_attention_types {
 
 class JntHit_c;
 
-struct cull_sphere {
+struct fopAc_cullSizeSphere {
+public:
+    fopAc_cullSizeSphere(cXyz, float);
+
     /* 0x0 */ Vec mCenter;
     /* 0xC */ f32 mRadius;
 };
 
-struct cull_box {
+struct fopAc_cullSizeBox {
+public:
+    fopAc_cullSizeBox(const fopAc_cullSizeBox&);
+    fopAc_cullSizeBox(cXyz, cXyz);
+
     /* 0x0 */ Vec mMin;
     /* 0xC */ Vec mMax;
 };
@@ -186,7 +193,7 @@ public:
     /* 0x0C4 */ create_tag_class mAcTg;
     /* 0x0D8 */ create_tag_class mDwTg;
     /* 0x0EC */ actor_method_class* mSubMtd;
-    /* 0x0F0 */ JKRSolidHeap* mHeap;
+    /* 0x0F0 */ JKRSolidHeap* heap;
     /* 0x0F4 */ dEvt_info_c mEvtInfo;
     /* 0x10C */ dKy_tevstr_c mTevStr;
     /* 0x1BC */ u16 mSetId;
@@ -194,7 +201,7 @@ public:
     /* 0x1BF */ s8 mCullType;
     /* 0x1C0 */ u8 mDemoActorId;
     /* 0x1C1 */ s8 mSubtype;
-    /* 0x1C2 */ u8 mCarryType;
+    /* 0x1C2 */ u8 mGbaName;
     /* 0x1C4 */ u32 mStatus;
     /* 0x1C8 */ u32 mCondition;
     /* 0x1CC */ u32 mParentPcId;
@@ -206,8 +213,8 @@ public:
     /* 0x220 */ cXyz speed;
     /* 0x22C */ MtxP mCullMtx;
     union {
-        /* 0x230 */ cull_box mBox;
-        /* 0x230 */ cull_sphere mSphere;
+        /* 0x230 */ fopAc_cullSizeBox mBox;
+        /* 0x230 */ fopAc_cullSizeSphere mSphere;
     } mCull;
     /* 0x248 */ f32 mCullSizeFar;
     /* 0x24C */ J3DModel* model;

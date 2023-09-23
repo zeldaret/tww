@@ -327,6 +327,11 @@ int mDoExt_getSafeGameHeapSize();
 int mDoExt_getSafeZeldaHeapSize();
 int mDoExt_getSafeCommandHeapSize();
 
+JKRSolidHeap * mDoExt_createSolidHeapFromGameToCurrent(u32 size, u32 align);
+void mDoExt_restoreCurrentHeap();
+void mDoExt_adjustSolidHeap(JKRSolidHeap * pHeap);
+void mDoExt_destroySolidHeap(JKRSolidHeap * pHeap);
+
 extern JKRExpHeap* zeldaHeap;
 extern JKRExpHeap* gameHeap;
 extern JKRExpHeap* commandHeap;

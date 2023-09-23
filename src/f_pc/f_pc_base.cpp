@@ -81,12 +81,12 @@ s32 fpcBs_Delete(base_process_class* i_proc) {
 }
 
 /* 8003CA60-8003CB5C       .text fpcBs_Create__FsUiPv */
-base_process_class* fpcBs_Create(s16 i_procTypeID, unsigned int i_procID, void* i_data) {
+base_process_class* fpcBs_Create(s16 i_profName, unsigned int i_procID, void* i_data) {
     process_profile_definition* procProfDef;
     base_process_class* procClass;
     u32 size;
 
-    procProfDef = (process_profile_definition*)fpcPf_Get(i_procTypeID);
+    procProfDef = (process_profile_definition*)fpcPf_Get(i_profName);
     size = procProfDef->mSize + procProfDef->mSizeOther;
     procClass = (base_process_class*)cMl::memalignB(-4, size);
     if (procClass == NULL) {
@@ -101,7 +101,7 @@ base_process_class* fpcBs_Create(s16 i_procTypeID, unsigned int i_procID, void* 
         procClass->mInitState = 0;
         procClass->mUnk0 = 0;
         procClass->mBsPcId = i_procID;
-        procClass->mBsTypeId = i_procTypeID;
+        procClass->mProfName = i_profName;
         procClass->mBsType = fpcBs_MakeOfType(&g_fpcBs_type);
         procClass->mProcName = procProfDef->mProcName;
         fpcPause_Init(procClass);

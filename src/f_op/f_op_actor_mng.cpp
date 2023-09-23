@@ -4,185 +4,506 @@
 //
 
 #include "f_op/f_op_actor_mng.h"
-#include "dolphin/types.h"
+#include "f_op/f_op_actor.h"
+#include "f_op/f_op_scene_mng.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_item_data.h"
+#include "d/d_stage.h"
+#include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_lib.h"
+#include "m_Do/m_Do_printf.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "SSystem/SComponent/c_malloc.h"
 
 /* 80024060-80024104       .text fopAcM_setStageLayer__FPv */
-void fopAcM_setStageLayer(void*) {
-    /* Nonmatching */
+void fopAcM_setStageLayer(void* pProc) {
+    scene_class* stageProc = fopScnM_SearchByID(dStage_roomControl_c::getProcID());
+    JUT_ASSERT(0xee, stageProc != 0);
+    fpcM_ChangeLayerID(pProc, fopScnM_LayerID(stageProc));
 }
 
 /* 80024104-800241C0       .text fopAcM_setRoomLayer__FPvi */
-void fopAcM_setRoomLayer(void*, int) {
-    /* Nonmatching */
+void fopAcM_setRoomLayer(void* pProc, int room_no) {
+    if (room_no >= 0) {
+        scene_class* roomProc = fopScnM_SearchByID(dStage_roomControl_c::getStatusProcID(room_no));
+        JUT_ASSERT(0x105, roomProc != 0);
+        fpcM_ChangeLayerID(pProc, fopScnM_LayerID(roomProc));
+    }
 }
 
 /* 800241C0-80024230       .text fopAcM_SearchByID__FUiPP10fopAc_ac_c */
-void fopAcM_SearchByID(unsigned int, fopAc_ac_c**) {
-    /* Nonmatching */
+s32 fopAcM_SearchByID(unsigned int actorID, fopAc_ac_c** pDstActor) {
+    if (fpcM_IsCreating(actorID)) {
+        *pDstActor = NULL;
+    } else {
+        fopAc_ac_c *pActor = (fopAc_ac_c *) fopAcIt_Judge((fopAcIt_JudgeFunc)fpcSch_JudgeByID, &actorID);
+        *pDstActor = pActor;
+        if (*pDstActor == NULL)
+            return 0;
+    }
+
+    return 1;
 }
 
 /* 80024230-800242AC       .text fopAcM_SearchByName__FsPP10fopAc_ac_c */
-void fopAcM_SearchByName(short, fopAc_ac_c**) {
-    /* Nonmatching */
+s32 fopAcM_SearchByName(s16 procName, fopAc_ac_c** pDstActor) {
+    *pDstActor = (fopAc_ac_c*) fopAcIt_Judge((fopAcIt_JudgeFunc)fpcSch_JudgeForPName, &procName);
+    if (*pDstActor == NULL) {
+        return 0;
+    } else {
+        if (fpcM_IsCreating(fopAcM_GetID(*pDstActor))) {
+            *pDstActor = NULL;
+        }
+        return 1;
+    }
 }
 
 /* 800242AC-80024320       .text fopAcM_CreateAppend__Fv */
-void fopAcM_CreateAppend() {
-    /* Nonmatching */
+fopAcM_prm_class* fopAcM_CreateAppend() {
+    fopAcM_prm_class* params = (fopAcM_prm_class*) cMl::memalignB(-4, sizeof(fopAcM_prm_class));
+    if (params != NULL) {
+        cLib_memSet(params, 0, sizeof(fopAcM_prm_class));
+        params->mSetId = 0xFFFF;
+        params->mRoomNo = -1;
+        params->mScale[0] = 10;
+        params->mScale[1] = 10;
+        params->mScale[2] = 10;
+        params->mParentPcId = -1;
+        params->mSubtype = -1;
+    }
+    return params;
 }
 
 /* 80024320-80024474       .text createAppend__FUlP4cXyziP5csXyzP4cXyzScUi */
-void createAppend(unsigned long, cXyz*, int, csXyz*, cXyz*, signed char, unsigned int) {
-    /* Nonmatching */
+fopAcM_prm_class * createAppend(u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, s8 subtype, unsigned int parentPcId) {
+    fopAcM_prm_class * params = fopAcM_CreateAppend();
+    if (params == NULL)
+        return NULL;
+
+    if (pPos != NULL)
+        params->mPos = *pPos;
+    else
+        params->mPos = cXyz::Zero;
+
+    params->mRoomNo = roomNo;
+
+    if (pAngle != NULL)
+        params->mAngle = *pAngle;
+    else
+        params->mAngle = csXyz::Zero;
+
+    if (pScale != NULL) {
+        params->mScale[0] = 10.0f * pScale->x;
+        params->mScale[1] = 10.0f * pScale->y;
+        params->mScale[2] = 10.0f * pScale->z;
+    } else {
+        params->mScale[0] = 10.0f;
+        params->mScale[1] = 10.0f;
+        params->mScale[2] = 10.0f;
+    }
+
+    params->mParameter = parameter;
+    params->mParentPcId = parentPcId;
+    params->mSubtype = subtype;
+
+    return params;
 }
 
 /* 80024474-80024478       .text fopAcM_Log__FP10fopAc_ac_cPc */
 void fopAcM_Log(fopAc_ac_c*, char*) {
-    /* Nonmatching */
+    /* Empty function */
 }
 
 /* 80024478-800244B8       .text fopAcM_delete__FP10fopAc_ac_c */
-void fopAcM_delete(fopAc_ac_c*) {
-    /* Nonmatching */
+s32 fopAcM_delete(fopAc_ac_c* pActor) {
+    /* "Deleting Actor" */
+    fopAcM_Log(pActor, "アクターの削除");
+    return fpcM_Delete(pActor);
 }
 
 /* 800244B8-8002451C       .text fopAcM_delete__FUi */
-void fopAcM_delete(unsigned int) {
-    /* Nonmatching */
+s32 fopAcM_delete(unsigned int actorID) {
+    fopAc_ac_c* pActor = fopAcM_SearchByID(actorID);
+
+    if (pActor != NULL) {
+        /* "Deleting Actor" */
+        fopAcM_Log(pActor, "アクターの削除");
+        return fpcM_Delete(pActor);
+    } else {
+        return TRUE;
+    }
 }
 
 /* 8002451C-80024598       .text fopAcM_create__FsUlP4cXyziP5csXyzP4cXyzScPFPv_i */
-void fopAcM_create(short, unsigned long, cXyz*, int, csXyz*, cXyz*, signed char, int (*)(void*)) {
-    /* Nonmatching */
+s32 fopAcM_create(s16 procName, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, s8 subtype, createFunc createFunc) {
+    fopAcM_prm_class* params = createAppend(parameter, pPos, roomNo, pAngle, pScale, subtype, 0xFFFFFFFF);
+    if (params == NULL)
+        return -1;
+
+    return fpcM_Create(procName, createFunc, params);
 }
 
 /* 80024598-80024614       .text fopAcM_create__FPcUlP4cXyziP5csXyzP4cXyzPFPv_i */
-void fopAcM_create(char*, unsigned long, cXyz*, int, csXyz*, cXyz*, int (*)(void*)) {
-    /* Nonmatching */
+s32 fopAcM_create(char* pProcNameString, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, createFunc createFunc) {
+    dStage_objectNameInf * nameInf = dStage_searchName(pProcNameString);
+    if (nameInf == NULL)
+        return -1;
+
+    return fopAcM_create(nameInf->mProcName, parameter, pPos, roomNo, pAngle, pScale, nameInf->mSubtype, createFunc);
 }
 
 /* 80024614-8002468C       .text fopAcM_fastCreate__FsUlP4cXyziP5csXyzP4cXyzScPFPv_iPv */
-void fopAcM_fastCreate(short, unsigned long, cXyz*, int, csXyz*, cXyz*, signed char, int (*)(void*), void*) {
-    /* Nonmatching */
+void* fopAcM_fastCreate(s16 procName, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, s8 subtype, createFunc createFunc, void* pUserData) {
+    fopAcM_prm_class* params = createAppend(parameter, pPos, roomNo, pAngle, pScale, subtype, 0xFFFFFFFF);
+    if (params == NULL)
+        return NULL;
+
+    return fpcM_FastCreate(procName, createFunc, pUserData, params);
 }
 
 /* 8002468C-80024710       .text fopAcM_fastCreate__FPcUlP4cXyziP5csXyzP4cXyzPFPv_iPv */
-void fopAcM_fastCreate(char*, unsigned long, cXyz*, int, csXyz*, cXyz*, int (*)(void*), void*) {
-    /* Nonmatching */
+void* fopAcM_fastCreate(char* pProcNameString, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, createFunc createFunc, void *pUserData) {
+    dStage_objectNameInf * nameInf = dStage_searchName(pProcNameString);
+    if (nameInf == NULL)
+        return NULL;
+
+    return fopAcM_fastCreate(nameInf->mProcName, parameter, pPos, roomNo, pAngle, pScale, nameInf->mSubtype, createFunc, pUserData);
 }
 
 /* 80024710-80024790       .text fopAcM_createChild__FsUiUlP4cXyziP5csXyzP4cXyzScPFPv_i */
-void fopAcM_createChild(short, unsigned int, unsigned long, cXyz*, int, csXyz*, cXyz*, signed char, int (*)(void*)) {
-    /* Nonmatching */
+s32 fopAcM_createChild(s16 procName, unsigned int parentPcId, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, s8 subtype, createFunc createFunc) {
+    fopAcM_prm_class* params = createAppend(parameter, pPos, roomNo, pAngle, pScale, subtype, parentPcId);
+    if (params == NULL)
+        return -1;
+
+    return fpcM_Create(procName, createFunc, params);
 }
 
 /* 80024790-80024814       .text fopAcM_createChild__FPcUiUlP4cXyziP5csXyzP4cXyzPFPv_i */
-void fopAcM_createChild(char*, unsigned int, unsigned long, cXyz*, int, csXyz*, cXyz*, int (*)(void*)) {
-    /* Nonmatching */
+s32 fopAcM_createChild(char* pProcNameString, unsigned int parentPcId, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, createFunc createFunc) {
+    dStage_objectNameInf * nameInf = dStage_searchName(pProcNameString);
+    if (nameInf == NULL)
+        return -1;
+
+    return fopAcM_createChild(nameInf->mProcName, parentPcId, parameter, pPos, roomNo, pAngle, pScale, nameInf->mSubtype, createFunc);
 }
 
 /* 80024814-800249D4       .text fopAcM_createChildFromOffset__FsUiUlP4cXyziP5csXyzP4cXyzScPFPv_i */
-void fopAcM_createChildFromOffset(short, unsigned int, unsigned long, cXyz*, int, csXyz*, cXyz*, signed char, int (*)(void*)) {
-    /* Nonmatching */
+s32 fopAcM_createChildFromOffset(s16 procName, unsigned int parentPcId, u32 parameter, cXyz* pPosOffs, int roomNo, csXyz* pAngleOffs, cXyz* pScale, s8 subtype, createFunc createFunc) {
+    fopAc_ac_c * pParent = fopAcM_SearchByID(parentPcId);
+    s16 parentAngleY = pParent->current.angle.y;
+
+    cXyz posOffs;
+    if (pPosOffs == NULL)
+        posOffs = cXyz::Zero;
+    else
+        posOffs = *pPosOffs;
+
+    csXyz angleOffs;
+    if (pAngleOffs == NULL)
+        angleOffs = csXyz::Zero;
+    else
+        angleOffs = *pAngleOffs;
+
+    cXyz pos = pParent->current.pos;
+
+    csXyz angle(angleOffs);
+    angle.y += parentAngleY;
+
+    pos.x += posOffs.z * cM_ssin(parentAngleY) + posOffs.x * cM_scos(parentAngleY);
+    pos.y += posOffs.y;
+    pos.z += posOffs.z * cM_scos(parentAngleY) - posOffs.x * cM_ssin(parentAngleY);
+
+    fopAcM_prm_class* params = createAppend(parameter, &pos, roomNo, &angle, pScale, subtype, parentPcId);
+    if (params == NULL)
+        return -1;
+
+    return fpcM_Create(procName, createFunc, params);
 }
 
 /* 800249D4-80024B78       .text fopAcM_createChildFromOffset__FPcUiUlP4cXyziP5csXyzP4cXyzPFPv_i */
-void fopAcM_createChildFromOffset(char*, unsigned int, unsigned long, cXyz*, int, csXyz*, cXyz*, int (*)(void*)) {
-    /* Nonmatching */
+s32 fopAcM_createChildFromOffset(char* pProcNameString, unsigned int parentPcId, u32 parameter, cXyz* pPosOffs, int roomNo, csXyz* pAngleOffs, cXyz* pScale, createFunc createFunc) {
+    fopAc_ac_c * pParent = fopAcM_SearchByID(parentPcId);
+    s16 parentAngleY = pParent->current.angle.y;
+
+    cXyz pos = pParent->current.pos;
+
+    cXyz posOffs;
+    if (pPosOffs == NULL)
+        posOffs = cXyz::Zero;
+    else
+        posOffs = *pPosOffs;
+
+    csXyz angleOffs;
+    if (pAngleOffs == NULL)
+        angleOffs = csXyz::Zero;
+    else
+        angleOffs = *pAngleOffs;
+
+    csXyz angle(angleOffs);
+    angle.y += parentAngleY;
+
+    pos.x += posOffs.z * cM_ssin(parentAngleY) + posOffs.x * cM_scos(parentAngleY);
+    pos.y += posOffs.y;
+    pos.z += posOffs.z * cM_scos(parentAngleY) - posOffs.x * cM_ssin(parentAngleY);
+
+    return fopAcM_createChild(pProcNameString, parentPcId, parameter, &pos, roomNo, &angle, pScale, createFunc);
 }
 
 /* 80024B78-80024CA0       .text fopAcM_createHeap__FP10fopAc_ac_cUlUl */
-void fopAcM_createHeap(fopAc_ac_c*, unsigned long, unsigned long) {
-    /* Nonmatching */
+s32 fopAcM_createHeap(fopAc_ac_c* i_this, u32 size, u32 align) {
+    JUT_ASSERT(0x33b, i_this);
+    JUT_ASSERT(0x33c, i_this->heap == 0);
+    fopAcM_Log(i_this, "アクターのヒープの生成");
+    if (align == 0)
+        align = 0x20;
+
+    i_this->heap = mDoExt_createSolidHeapFromGameToCurrent(size, align);
+    if (i_this->heap == 0) {
+        OSReport_Error("fopAcM_createHeap 確保失敗\n");
+        JUT_CONFIRM(0x34c, i_this->heap != 0);
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /* 80024CA0-80024CD4       .text fopAcM_adjustHeap__FP10fopAc_ac_c */
-void fopAcM_adjustHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+void fopAcM_adjustHeap(fopAc_ac_c* i_this) {
+    mDoExt_restoreCurrentHeap();
+    mDoExt_adjustSolidHeap(i_this->heap);
 }
 
 /* 80024CD4-80024D24       .text fopAcM_DeleteHeap__FP10fopAc_ac_c */
-void fopAcM_DeleteHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+void fopAcM_DeleteHeap(fopAc_ac_c* i_this) {
+    /* "Destroying Actor Heap" */
+    fopAcM_Log(i_this, "アクターのヒープの破壊");
+
+    if (i_this->heap != NULL) {
+        mDoExt_destroySolidHeap(i_this->heap);
+        i_this->heap = NULL;
+    }
+}
+
+namespace fopAcM {
+    bool HeapAdjustEntry;
+    bool HeapAdjustVerbose;
+    bool HeapAdjustQuiet;
 }
 
 /* 80024D24-800250E4       .text fopAcM_entrySolidHeap__FP10fopAc_ac_cPFP10fopAc_ac_c_iUl */
-void fopAcM_entrySolidHeap(fopAc_ac_c*, int (*)(fopAc_ac_c*), unsigned long) {
-    /* Nonmatching */
+bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u32 maxHeapSize) {
+    const char * pProcNameString = fopAcM_getProcNameString(i_this);
+    JKRSolidHeap * heap = NULL;
+
+    if (maxHeapSize != 0) {
+        heap = mDoExt_createSolidHeapFromGameToCurrent(maxHeapSize, 0x20);
+        if (heap != NULL) {
+            bool result = createHeapCB(i_this);
+            if (heap->getFreeSize() >= 0x20)
+                JKRHeap::alloc(0x20, 0, NULL);
+
+            mDoExt_restoreCurrentHeap();
+
+            if (!result) {
+                if (!fopAcM::HeapAdjustQuiet)
+                    OSReport_Error("見積もりヒープサイズ(%08x)で登録失敗しました。[%s]\n", maxHeapSize, pProcNameString);
+                mDoExt_destroySolidHeap(heap);
+                heap = NULL;
+            } else {
+                u32 allocSize = ALIGN_NEXT(heap->getSize() - heap->getFreeSize(), 0x20);
+                if (maxHeapSize < allocSize + 0x40) {
+                    mDoExt_adjustSolidHeap(heap);
+                    i_this->heap = heap;
+                    return true;
+                }
+
+                if (fopAcM::HeapAdjustVerbose)
+                    OSReport_Warning("見積もりヒープサイズでは空きが多すぎます。 %08x %08x\n\x1b[m", allocSize, maxHeapSize);
+            }
+        } else {
+            if (!fopAcM::HeapAdjustQuiet)
+                OSReport_Warning("見積もりヒープが確保できませんでした。\n");
+        }
+    }
+
+    if (heap == NULL) {
+        heap = mDoExt_createSolidHeapFromGameToCurrent(-1, 0x20);
+        JUT_ASSERT(0x453, heap);
+
+        bool result = createHeapCB(i_this);
+        mDoExt_restoreCurrentHeap();
+
+        if (!result) {
+            OSReport_Error("最大空きヒープサイズで登録失敗。[%s]\n", pProcNameString);
+            mDoExt_destroySolidHeap(heap);
+            return false;
+        }
+
+        if (!fopAcM::HeapAdjustQuiet)
+            heap->getFreeSize();
+    }
+
+    if (heap != NULL) {
+        if (!fopAcM::HeapAdjustEntry) {
+            mDoExt_adjustSolidHeap(heap);
+            i_this->heap = heap;
+            return true;
+        }
+
+        JKRSolidHeap * heap1 = NULL;
+        u32 allocSize = ALIGN_NEXT(heap->getSize() - heap->getFreeSize(), 0x10);
+        if (allocSize + 0x90 < mDoExt_getGameHeap()->getFreeSize())
+            heap1 = mDoExt_createSolidHeapFromGameToCurrent(allocSize, 0x20);
+
+        if (heap1 != NULL) {
+            if (heap1 < heap) {
+                mDoExt_destroySolidHeap(heap);
+                heap = NULL;
+                bool result = createHeapCB(i_this);
+                mDoExt_restoreCurrentHeap();
+                JUT_ASSERT(0x48d, result != 0);
+                if (result == 0) {
+                    OSReport_Error("ぴったりサイズで、登録失敗？(バグ)\n");
+                    mDoExt_destroySolidHeap(heap1);
+                    heap1 = NULL;
+                }
+            } else {
+                mDoExt_restoreCurrentHeap();
+                mDoExt_destroySolidHeap(heap1);
+                heap1 = NULL;
+            }
+        }
+
+        if (heap1 != NULL) {
+            mDoExt_adjustSolidHeap(heap1);
+            i_this->heap = heap1;
+            return true;
+        }
+
+        if (heap != NULL) {
+            mDoExt_adjustSolidHeap(heap);
+            i_this->heap = heap;
+            return true;
+        }
+
+        OSReport_Error("ばぐばぐです\n");
+        JUT_ASSERT(0x4b5, 0);
+    }
+
+    OSReport_Error("fopAcM_entrySolidHeap だめでした [%s]\n", pProcNameString);
+    return false;
 }
 
 /* 800250E4-80025100       .text fopAcM_setCullSizeBox__FP10fopAc_ac_cffffff */
-void fopAcM_setCullSizeBox(fopAc_ac_c*, float, float, float, float, float, float) {
-    /* Nonmatching */
+void fopAcM_setCullSizeBox(fopAc_ac_c* i_this, float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
+    i_this->mCull.mBox.mMin.x = minX;
+    i_this->mCull.mBox.mMin.y = minY;
+    i_this->mCull.mBox.mMin.z = minZ;
+    i_this->mCull.mBox.mMax.x = maxX;
+    i_this->mCull.mBox.mMax.y = maxY;
+    i_this->mCull.mBox.mMax.z = maxZ;
 }
 
 /* 80025100-80025114       .text fopAcM_setCullSizeSphere__FP10fopAc_ac_cffff */
-void fopAcM_setCullSizeSphere(fopAc_ac_c*, float, float, float, float) {
-    /* Nonmatching */
+void fopAcM_setCullSizeSphere(fopAc_ac_c* i_this, float x, float y, float z, float r) {
+    i_this->mCull.mSphere.mCenter.x = x;
+    i_this->mCull.mSphere.mCenter.y = y;
+    i_this->mCull.mSphere.mCenter.z = z;
+    i_this->mCull.mSphere.mRadius = r;
 }
 
 /* 80025114-80025144       .text fopAcM_addAngleY__FP10fopAc_ac_css */
-void fopAcM_addAngleY(fopAc_ac_c*, short, short) {
-    /* Nonmatching */
+bool fopAcM_addAngleY(fopAc_ac_c* i_this, short target, short step) {
+    return cLib_chaseAngleS(&i_this->current.angle.y, target, step);
 }
 
 /* 80025144-800251A0       .text fopAcM_calcSpeed__FP10fopAc_ac_c */
-void fopAcM_calcSpeed(fopAc_ac_c*) {
-    /* Nonmatching */
+void fopAcM_calcSpeed(fopAc_ac_c* i_this) {
+    f32 speedF = fopAcM_GetSpeedF(i_this);
+    f32 gravity = fopAcM_GetGravity(i_this);
+    f32 xSpeed = speedF * cM_ssin(i_this->current.angle.y);
+    f32 ySpeed = i_this->speed.y + gravity;
+    f32 zSpeed = speedF * cM_scos(i_this->current.angle.y);
+
+    if (ySpeed < fopAcM_GetMaxFallSpeed(i_this))
+        ySpeed = fopAcM_GetMaxFallSpeed(i_this);
+
+    fopAcM_SetSpeed(i_this, xSpeed, ySpeed, zSpeed);
 }
 
 /* 800251A0-8002520C       .text fopAcM_posMove__FP10fopAc_ac_cPC4cXyz */
-void fopAcM_posMove(fopAc_ac_c*, const cXyz*) {
-    /* Nonmatching */
+void fopAcM_posMove(fopAc_ac_c* i_this, const cXyz* move) {
+    i_this->current.pos.x += i_this->speed.x;
+    i_this->current.pos.y += i_this->speed.y;
+    i_this->current.pos.z += i_this->speed.z;
+
+    if (move != NULL) {
+        i_this->current.pos.x += move->x;
+        i_this->current.pos.y += move->y;
+        i_this->current.pos.z += move->z;
+    }
 }
 
 /* 8002520C-80025250       .text fopAcM_posMoveF__FP10fopAc_ac_cPC4cXyz */
-void fopAcM_posMoveF(fopAc_ac_c*, const cXyz*) {
-    /* Nonmatching */
+void fopAcM_posMoveF(fopAc_ac_c* i_this, const cXyz* move) {
+    fopAcM_calcSpeed(i_this);
+    fopAcM_posMove(i_this, move);
 }
 
 /* 80025250-80025278       .text fopAcM_searchActorAngleY__FP10fopAc_ac_cP10fopAc_ac_c */
-void fopAcM_searchActorAngleY(fopAc_ac_c*, fopAc_ac_c*) {
-    /* Nonmatching */
+s16 fopAcM_searchActorAngleY(fopAc_ac_c* i_this, fopAc_ac_c* i_other) {
+    return cLib_targetAngleY(&i_this->current.pos, &i_other->current.pos);
 }
 
 /* 80025278-800252BC       .text fopAcM_seenActorAngleY__FP10fopAc_ac_cP10fopAc_ac_c */
-void fopAcM_seenActorAngleY(fopAc_ac_c*, fopAc_ac_c*) {
-    /* Nonmatching */
+s32 fopAcM_seenActorAngleY(fopAc_ac_c* i_this, fopAc_ac_c* i_other) {
+    s16 angleY = cLib_targetAngleY(&i_this->current.pos, &i_other->current.pos);
+    return abs((s16)(angleY - i_this->shape_angle.y));
 }
 
 /* 800252BC-80025370       .text fopAcM_searchActorDistance__FP10fopAc_ac_cP10fopAc_ac_c */
-void fopAcM_searchActorDistance(fopAc_ac_c*, fopAc_ac_c*) {
-    /* Nonmatching */
+f32 fopAcM_searchActorDistance(fopAc_ac_c* i_this, fopAc_ac_c* i_other) {
+    cXyz delta = i_other->current.pos - i_this->current.pos;
+    return delta.abs();
 }
 
 /* 80025370-800253C0       .text fopAcM_searchActorDistance2__FP10fopAc_ac_cP10fopAc_ac_c */
-void fopAcM_searchActorDistance2(fopAc_ac_c*, fopAc_ac_c*) {
-    /* Nonmatching */
+f32 fopAcM_searchActorDistance2(fopAc_ac_c* i_this, fopAc_ac_c* i_other) {
+    cXyz delta = i_other->current.pos - i_this->current.pos;
+    return delta.abs2();
 }
 
 /* 800253C0-80025470       .text fopAcM_searchActorDistanceXZ__FP10fopAc_ac_cP10fopAc_ac_c */
-void fopAcM_searchActorDistanceXZ(fopAc_ac_c*, fopAc_ac_c*) {
-    /* Nonmatching */
+f32 fopAcM_searchActorDistanceXZ(fopAc_ac_c* i_this, fopAc_ac_c* i_other) {
+    cXyz delta = i_other->current.pos - i_this->current.pos;
+    return delta.absXZ();
 }
 
 /* 80025470-800254BC       .text fopAcM_searchActorDistanceXZ2__FP10fopAc_ac_cP10fopAc_ac_c */
-void fopAcM_searchActorDistanceXZ2(fopAc_ac_c*, fopAc_ac_c*) {
-    /* Nonmatching */
+f32 fopAcM_searchActorDistanceXZ2(fopAc_ac_c* i_this, fopAc_ac_c* i_other) {
+    cXyz delta = i_other->current.pos - i_this->current.pos;
+    return delta.abs2XZ();
 }
 
 /* 800254BC-800255B4       .text fopAcM_rollPlayerCrash__FP10fopAc_ac_cfUl */
-void fopAcM_rollPlayerCrash(fopAc_ac_c*, float, unsigned long) {
+s32 fopAcM_rollPlayerCrash(fopAc_ac_c*, float, u32) {
     /* Nonmatching */
 }
 
 /* 800255B4-80025660       .text fopAcM_checkCullingBox__FPA4_fffffff */
-void fopAcM_checkCullingBox(float(*)[4], float, float, float, float, float, float) {
-    /* Nonmatching */
+s32 fopAcM_checkCullingBox(Mtx pMtx, float x0, float y0, float z0, float x1, float y1, float z1) {
+    Vec p0 = { x0, y0, z0 };
+    Vec p1 = { x1, y1, z1 };
+    Mtx viewMtx;
+    MTXConcat(j3dSys.mViewMtx, pMtx, viewMtx);
+    return mDoLib_clipper::clip(viewMtx, &p1, &p0) != 0;
 }
 
 /* 80025660-800259A8       .text fopAcM_cullingCheck__FP10fopAc_ac_c */
-void fopAcM_cullingCheck(fopAc_ac_c*) {
+s32 fopAcM_cullingCheck(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -212,7 +533,7 @@ void fopAcM_orderZHintEvent(fopAc_ac_c*, fopAc_ac_c*) {
 }
 
 /* 80025B3C-80025B8C       .text fopAcM_orderSpeakEvent__FP10fopAc_ac_c */
-void fopAcM_orderSpeakEvent(fopAc_ac_c*) {
+s32 fopAcM_orderSpeakEvent(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -227,37 +548,37 @@ void fopAcM_orderCatchEvent(fopAc_ac_c*, fopAc_ac_c*) {
 }
 
 /* 80025C34-80025CC8       .text fopAcM_orderOtherEvent2__FP10fopAc_ac_cPcUsUs */
-void fopAcM_orderOtherEvent2(fopAc_ac_c*, char*, unsigned short, unsigned short) {
+s32 fopAcM_orderOtherEvent2(fopAc_ac_c*, char*, u16, u16) {
     /* Nonmatching */
 }
 
 /* 80025CC8-80025D28       .text fopAcM_orderChangeEvent__FP10fopAc_ac_cPcUsUs */
-void fopAcM_orderChangeEvent(fopAc_ac_c*, char*, unsigned short, unsigned short) {
+void fopAcM_orderChangeEvent(fopAc_ac_c*, char*, u16, u16) {
     /* Nonmatching */
 }
 
 /* 80025D28-80025D94       .text fopAcM_orderChangeEvent__FP10fopAc_ac_cP10fopAc_ac_cPcUsUs */
-void fopAcM_orderChangeEvent(fopAc_ac_c*, fopAc_ac_c*, char*, unsigned short, unsigned short) {
+void fopAcM_orderChangeEvent(fopAc_ac_c*, fopAc_ac_c*, char*, u16, u16) {
     /* Nonmatching */
 }
 
 /* 80025D94-80025E1C       .text fopAcM_orderChangeEventId__FP10fopAc_ac_csUsUs */
-void fopAcM_orderChangeEventId(fopAc_ac_c*, short, unsigned short, unsigned short) {
+s32 fopAcM_orderChangeEventId(fopAc_ac_c*, short, u16, u16) {
     /* Nonmatching */
 }
 
 /* 80025E1C-80025EA4       .text fopAcM_orderChangeEventId__FP10fopAc_ac_cP10fopAc_ac_csUsUs */
-void fopAcM_orderChangeEventId(fopAc_ac_c*, fopAc_ac_c*, short, unsigned short, unsigned short) {
+void fopAcM_orderChangeEventId(fopAc_ac_c*, fopAc_ac_c*, short, u16, u16) {
     /* Nonmatching */
 }
 
 /* 80025EA4-80025F3C       .text fopAcM_orderOtherEventId__FP10fopAc_ac_csUcUsUsUs */
-void fopAcM_orderOtherEventId(fopAc_ac_c*, short, unsigned char, unsigned short, unsigned short, unsigned short) {
+s32 fopAcM_orderOtherEventId(fopAc_ac_c*, short, unsigned char, u16, u16, u16) {
     /* Nonmatching */
 }
 
 /* 80025F3C-80025F9C       .text fopAcM_orderPotentialEvent__FP10fopAc_ac_cUsUsUs */
-void fopAcM_orderPotentialEvent(fopAc_ac_c*, unsigned short, unsigned short, unsigned short) {
+s32 fopAcM_orderPotentialEvent(fopAc_ac_c*, u16, u16, u16) {
     /* Nonmatching */
 }
 
@@ -272,27 +593,27 @@ void fopAcM_orderTreasureEvent(fopAc_ac_c*, fopAc_ac_c*) {
 }
 
 /* 80026044-80026074       .text fopAcM_getTalkEventPartner__FP10fopAc_ac_c */
-void fopAcM_getTalkEventPartner(fopAc_ac_c*) {
+fopAc_ac_c* fopAcM_getTalkEventPartner(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 80026074-800260A4       .text fopAcM_getItemEventPartner__FP10fopAc_ac_c */
-void fopAcM_getItemEventPartner(fopAc_ac_c*) {
+fopAc_ac_c* fopAcM_getItemEventPartner(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 800260A4-80026118       .text fopAcM_getEventPartner__FP10fopAc_ac_c */
-void fopAcM_getEventPartner(fopAc_ac_c*) {
+fopAc_ac_c* fopAcM_getEventPartner(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 80026118-800261E8       .text fopAcM_createItemForPresentDemo__FP4cXyziUciiP5csXyzP4cXyz */
-void fopAcM_createItemForPresentDemo(cXyz*, int, unsigned char, int, int, csXyz*, cXyz*) {
+s32 fopAcM_createItemForPresentDemo(cXyz*, int, unsigned char, int, int, csXyz*, cXyz*) {
     /* Nonmatching */
 }
 
 /* 800261E8-800262B4       .text fopAcM_createItemForTrBoxDemo__FP4cXyziiiP5csXyzP4cXyz */
-void fopAcM_createItemForTrBoxDemo(cXyz*, int, int, int, csXyz*, cXyz*) {
+s32 fopAcM_createItemForTrBoxDemo(cXyz*, int, int, int, csXyz*, cXyz*) {
     /* Nonmatching */
 }
 
@@ -307,7 +628,7 @@ void fopAcM_createRaceItemFromTable(cXyz*, int, int, int, csXyz*, cXyz*, int) {
 }
 
 /* 800267C8-8002688C       .text fopAcM_createShopItem__FP4cXyziP5csXyziP4cXyzPFPv_i */
-void fopAcM_createShopItem(cXyz*, int, csXyz*, int, cXyz*, int (*)(void*)) {
+void fopAcM_createShopItem(cXyz*, int, csXyz*, int, cXyz*, createFunc createFunc) {
     /* Nonmatching */
 }
 
@@ -317,17 +638,17 @@ void fopAcM_createRaceItem(cXyz*, int, int, csXyz*, int, cXyz*, int) {
 }
 
 /* 80026980-80026A68       .text fopAcM_createDemoItem__FP4cXyziiP5csXyziP4cXyzUc */
-void fopAcM_createDemoItem(cXyz*, int, int, csXyz*, int, cXyz*, unsigned char) {
+s32 fopAcM_createDemoItem(cXyz*, int, int, csXyz*, int, cXyz*, unsigned char) {
     /* Nonmatching */
 }
 
 /* 80026A68-80026ADC       .text fopAcM_createItemForBoss__FP4cXyziiP5csXyzP4cXyzi */
-void fopAcM_createItemForBoss(cXyz*, int, int, csXyz*, cXyz*, int) {
+s32 fopAcM_createItemForBoss(cXyz*, int, int, csXyz*, cXyz*, int) {
     /* Nonmatching */
 }
 
 /* 80026ADC-80026C90       .text fopAcM_createItem__FP4cXyziiiiP5csXyziP4cXyz */
-void fopAcM_createItem(cXyz*, int, int, int, int, csXyz*, int, cXyz*) {
+s32 fopAcM_createItem(cXyz*, int, int, int, int, csXyz*, int, cXyz*) {
     /* Nonmatching */
 }
 
@@ -337,17 +658,17 @@ void fopAcM_fastCreateItem2(cXyz*, int, int, int, int, csXyz*, int, cXyz*) {
 }
 
 /* 80026E5C-80026F5C       .text fopAcM_createItemForKP2__FP4cXyziiP5csXyzP4cXyzfffUs */
-void fopAcM_createItemForKP2(cXyz*, int, int, csXyz*, cXyz*, float, float, float, unsigned short) {
+void fopAcM_createItemForKP2(cXyz*, int, int, csXyz*, cXyz*, float, float, float, u16) {
     /* Nonmatching */
 }
 
 /* 80026F5C-80026F98       .text fopAcM_createItemForSimpleDemo__FP4cXyziiP5csXyzP4cXyzff */
-void fopAcM_createItemForSimpleDemo(cXyz*, int, int, csXyz*, cXyz*, float, float) {
+void* fopAcM_createItemForSimpleDemo(cXyz*, int, int, csXyz*, cXyz*, float, float) {
     /* Nonmatching */
 }
 
 /* 80026F98-80027254       .text fopAcM_fastCreateItem__FP4cXyziiP5csXyzP4cXyzfffiPFPv_i */
-void fopAcM_fastCreateItem(cXyz*, int, int, csXyz*, cXyz*, float, float, float, int, int (*)(void*)) {
+void fopAcM_fastCreateItem(cXyz*, int, int, csXyz*, cXyz*, float, float, float, int, createFunc createFunc) {
     /* Nonmatching */
 }
 
@@ -362,12 +683,12 @@ void fopAcM_createStealItem(cXyz*, int, int, csXyz*, int) {
 }
 
 /* 800273D4-8002777C       .text fopAcM_createItemFromEnemyTable__FUsiiP4cXyzP5csXyz */
-void fopAcM_createItemFromEnemyTable(unsigned short, int, int, cXyz*, csXyz*) {
+void fopAcM_createItemFromEnemyTable(u16, int, int, cXyz*, csXyz*) {
     /* Nonmatching */
 }
 
 /* 8002777C-800278D8       .text fopAcM_createIball__FP4cXyziiP5csXyzi */
-void fopAcM_createIball(cXyz*, int, int, csXyz*, int) {
+s32 fopAcM_createIball(cXyz*, int, int, csXyz*, int) {
     /* Nonmatching */
 }
 
@@ -382,12 +703,12 @@ void enemySearchJugge(void*, void*) {
 }
 
 /* 80027970-80027A9C       .text fopAcM_myRoomSearchEnemy__FSc */
-void fopAcM_myRoomSearchEnemy(signed char) {
+fopAc_ac_c* fopAcM_myRoomSearchEnemy(signed char) {
     /* Nonmatching */
 }
 
 /* 80027A9C-80027B24       .text fopAcM_createDisappear__FP10fopAc_ac_cP4cXyzUcUcUc */
-void fopAcM_createDisappear(fopAc_ac_c*, cXyz*, unsigned char, unsigned char, unsigned char) {
+s32 fopAcM_createDisappear(fopAc_ac_c*, cXyz*, unsigned char, unsigned char, unsigned char) {
     /* Nonmatching */
 }
 
@@ -412,38 +733,39 @@ void fopAcM_viewCutoffCheck(fopAc_ac_c*, float) {
 }
 
 /* 800281D8-800282F8       .text fopAcM_otoCheck__FP10fopAc_ac_cf */
-void fopAcM_otoCheck(fopAc_ac_c*, float) {
+s32 fopAcM_otoCheck(fopAc_ac_c*, float) {
     /* Nonmatching */
 }
 
 /* 800282F8-8002833C       .text fopAcM_getProcNameString__FP10fopAc_ac_c */
-void fopAcM_getProcNameString(fopAc_ac_c*) {
-    /* Nonmatching */
+const char * fopAcM_getProcNameString(fopAc_ac_c* i_this) {
+    const char * pProcNameString = dStage_getName2(fpcM_GetProfName(i_this), i_this->mSubtype);
+    if (pProcNameString != NULL)
+        return pProcNameString;
+    return "UNKOWN";
 }
 
 /* 8002833C-80028410       .text fopAcM_findObjectCB__FP10fopAc_ac_cPv */
-void fopAcM_findObjectCB(fopAc_ac_c*, void*) {
+fopAc_ac_c* fopAcM_findObjectCB(fopAc_ac_c*, void*) {
     /* Nonmatching */
 }
 
 /* 80028410-80028448       .text fopAcM_searchFromName__FPcUlUl */
-void fopAcM_searchFromName(char*, unsigned long, unsigned long) {
+fopAc_ac_c* fopAcM_searchFromName(char* pProcName, u32 paramMask, u32 parameter) {
     /* Nonmatching */
 }
 
 /* 80028448-80028560       .text fopAcM_getWaterY__FPC4cXyzPf */
-void fopAcM_getWaterY(const cXyz*, float*) {
-    /* Nonmatching */
-}
-
-/* 80028560-80028684       .text __dt__11dBgS_WtrChkFv */
-dBgS_WtrChk::~dBgS_WtrChk() {
+s32 fopAcM_getWaterY(const cXyz*, float*) {
     /* Nonmatching */
 }
 
 /* 80028684-80028724       .text fopAcM_setGbaName__FP10fopAc_ac_cUcUcUc */
-void fopAcM_setGbaName(fopAc_ac_c*, unsigned char, unsigned char, unsigned char) {
-    /* Nonmatching */
+void fopAcM_setGbaName(fopAc_ac_c* i_this, u8 itemNo, u8 gbaName0, u8 gbaName1) {
+    if (dComIfGs_checkGetItem(itemNo) || (itemNo == BOW && (dComIfGs_checkGetItem(MAGIC_ARROW) || dComIfGs_checkGetItem(LIGHT_ARROW))) || (itemNo == MAGIC_ARROW && dComIfGs_checkGetItem(LIGHT_ARROW)))
+        i_this->mGbaName = gbaName1;
+    else
+        i_this->mGbaName = gbaName0;
 }
 
 /* 80028724-800287D8       .text fpoAcM_absolutePos__FP10fopAc_ac_cP4cXyzP4cXyz */
@@ -456,67 +778,20 @@ void fpoAcM_relativePos(fopAc_ac_c*, cXyz*, cXyz*) {
     /* Nonmatching */
 }
 
-/* 8002889C-80028998       .text __dt__14dBgS_SplGrpChkFv */
-dBgS_SplGrpChk::~dBgS_SplGrpChk() {
-    /* Nonmatching */
-}
-
 /* 80029178-80029198       .text __ct__20fopAc_cullSizeSphereF4cXyzf */
-fopAc_cullSizeSphere::fopAc_cullSizeSphere(cXyz, float) {
-    /* Nonmatching */
+fopAc_cullSizeSphere::fopAc_cullSizeSphere(cXyz p, float r) {
+    mCenter = p;
+    mRadius = r;
 }
 
 /* 80029198-800291CC       .text __ct__17fopAc_cullSizeBoxFRC17fopAc_cullSizeBox */
-fopAc_cullSizeBox::fopAc_cullSizeBox(const fopAc_cullSizeBox&) {
-    /* Nonmatching */
+fopAc_cullSizeBox::fopAc_cullSizeBox(const fopAc_cullSizeBox& box) {
+    mMin = box.mMin;
+    mMax = box.mMax;
 }
 
 /* 800291CC-80029200       .text __ct__17fopAc_cullSizeBoxF4cXyz4cXyz */
-fopAc_cullSizeBox::fopAc_cullSizeBox(cXyz, cXyz) {
-    /* Nonmatching */
-}
-
-/* 80029200-8002923C       .text __dt__5l_HIOFv */
-l_HIO::~l_HIO() {
-    /* Nonmatching */
-}
-
-/* 8002923C-80029244       .text @16@__dt__11dBgS_WtrChkFv */
-void @16@__dt__11dBgS_WtrChkFv {
-    /* Nonmatching */
-}
-
-/* 80029244-8002924C       .text @48@__dt__11dBgS_WtrChkFv */
-void @48@__dt__11dBgS_WtrChkFv {
-    /* Nonmatching */
-}
-
-/* 8002924C-80029254       .text @36@__dt__11dBgS_WtrChkFv */
-void @36@__dt__11dBgS_WtrChkFv {
-    /* Nonmatching */
-}
-
-/* 80029254-8002925C       .text @16@__dt__14dBgS_SplGrpChkFv */
-void @16@__dt__14dBgS_SplGrpChkFv {
-    /* Nonmatching */
-}
-
-/* 8002925C-80029264       .text @48@__dt__14dBgS_SplGrpChkFv */
-void @48@__dt__14dBgS_SplGrpChkFv {
-    /* Nonmatching */
-}
-
-/* 80029264-8002926C       .text @36@__dt__14dBgS_SplGrpChkFv */
-void @36@__dt__14dBgS_SplGrpChkFv {
-    /* Nonmatching */
-}
-
-/* 8002926C-80029270       .text onFrollCrashFlg__9daPy_py_cFUl */
-void daPy_py_c::onFrollCrashFlg(unsigned long) {
-    /* Nonmatching */
-}
-
-/* 80029270-80029278       .text getGrabActorID__9daPy_py_cCFv */
-void daPy_py_c::getGrabActorID() const {
-    /* Nonmatching */
+fopAc_cullSizeBox::fopAc_cullSizeBox(cXyz min, cXyz max) {
+    mMin = min;
+    mMax = max;
 }

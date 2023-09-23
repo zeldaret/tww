@@ -26,16 +26,15 @@ s32 fopAc_IsActor(void* pProc) {
     return fpcBs_Is_JustOfType(g_fopAc_type, ((fopAc_ac_c*)pProc)->mAcType);
 }
 
-extern void drawActorPointMiniMap(fopAc_ac_c*);
-
 /* 80023540-8002362C       .text fopAc_Draw__FPv */
 s32 fopAc_Draw(void* pProc) {
     fopAc_ac_c * actor = (fopAc_ac_c *)pProc;
     s32 ret = TRUE;
 
     if (!dMenu_flag()) {
-        if ((dComIfGp_event_moveApproval(actor) == 2 || !fopAcM_checkStatus(actor, fopAc_ac_c::stopStatus)) &&
-            (!fopAcM_checkStatus(actor, fopAcStts_CULL_e) || !fopAcM_cullingCheck(actor)) && !fopAcM_checkStatus(actor, fopAcStts_NODRAW_e)) {
+        s32 moveApproval = dComIfGp_event_moveApproval(actor);
+
+        if ((moveApproval == 2 || !fopAcM_checkStatus(actor, fopAc_ac_c::stopStatus)) && (!(fopAcM_checkStatus(actor, fopAcStts_CULL_e) && !fopAcM_cullingCheck(actor)) || !fopAcM_checkStatus(actor, fopAcStts_NODRAW_e))) {
             fopAcM_OffCondition(actor, fopAcCnd_NODRAW_e);
             ret = fpcLf_DrawMethod((leafdraw_method_class*)actor->mSubMtd, actor);
         } else {
@@ -45,7 +44,7 @@ s32 fopAc_Draw(void* pProc) {
         fopAcM_OffStatus(actor, fopAcStts_NODRAW_e);
 
         if (dComIfGp_roomControl_getStayNo() >= 0 && fopAcM_checkStatus(actor, fopAcStts_SHOWMAP_e))
-            drawActorPointMiniMap(actor);
+            dMap_c::drawActorPointMiniMap(actor);
     }
 
     return ret;
@@ -68,15 +67,15 @@ s32 fopAc_Execute(void* pProc) {
         actor->mEvtInfo.setCondition(dEvtCnd_NONE_e);
 
         s32 moveApproval = dComIfGp_event_moveApproval(actor);
-        if (moveApproval == 2 || (moveApproval != 0 && !fopAcM_checkStatus(actor, fopAc_ac_c::stopStatus)) &&
-            !fopAcM_checkStatus(actor, fopAcStts_NOEXEC_e) || !fopAcM_CheckCondition(actor, fopAcStts_NODRAW_e)) {
+
+        if ((moveApproval == 2 || moveApproval != 0 || !fopAcM_checkStatus(actor, fopAc_ac_c::stopStatus)) && (!fopAcM_checkStatus(actor, fopAcStts_NOEXEC_e) || !fopAcM_CheckCondition(actor, fopAcCnd_NODRAW_e))) {
             fopAcM_OffCondition(actor, fopAcCnd_NOEXEC_e);
             actor->next = actor->current;
             ret = fpcMtd_Execute((process_method_class*)actor->mSubMtd, actor);
         } else {
             fopAcM_OnCondition(actor, fopAcCnd_NOEXEC_e);
         }
-        
+
         CHECK_FLOAT_CLASS(0x2b4, actor->current.pos.x);
         CHECK_FLOAT_CLASS(0x2b5, actor->current.pos.y);
         CHECK_FLOAT_CLASS(0x2b6, actor->current.pos.z);
@@ -135,7 +134,7 @@ s32 fopAc_Create(void* pProc) {
             actor->shape_angle = prm->mAngle;
             actor->mParentPcId = prm->mParentPcId;
             actor->mSubtype = prm->mSubtype;
-            actor->mCarryType = prm->mGbaName;
+            actor->mGbaName = prm->mGbaName;
             actor->mScale.set(prm->mScale[0] * 0.1f, prm->mScale[1] * 0.1f, prm->mScale[2] * 0.1f);
             actor->mSetId = prm->mSetId;
             actor->orig.roomNo = prm->mRoomNo;

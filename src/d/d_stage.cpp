@@ -1282,7 +1282,7 @@ int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* param_3
         appen->mParameter = player_data->mParameter;
         appen->mPos = player_data->mSpawnPos;
         appen->mAngle = player_data->mAngle;
-        appen->mEnemyNo = player_data->mEnemyNo;
+        appen->mSetId = player_data->mSetId;
 
         if (roomParam != 0 && (int)((appen->mParameter >> 0xC) & 0xF) != 2) {
             appen->mParameter = (roomParam & 0xFFFFFFC0) | (appen->mParameter & 0x3F);
@@ -1290,7 +1290,7 @@ int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* param_3
     }
 
     dComIfGs_setRestartRoomParam(0);
-    appen->mEnemyNo = 0xFFFF;
+    appen->mSetId = 0xFFFF;
     appen->mRoomNo = -1;
 
     dComIfGp_getStartStage()->set(dComIfGp_getStartStageName(), appen->mParameter & 0x3F,
@@ -1501,14 +1501,14 @@ int dStage_actorInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
     stage_actor_data_class* actor_data = actor->m_entries;
 
     for (int i = 0; i < actor->num; i++) {
-        if (!dComIfGs_isActor(actor_data->mEnemyNo, i_stage->getRoomNo())) {
+        if (!dComIfGs_isActor(actor_data->mSetId, i_stage->getRoomNo())) {
             fopAcM_prm_class* appen = fopAcM_CreateAppend();
 
             if (appen != NULL) {
                 appen->mParameter = actor_data->mParameter;
                 appen->mPos = actor_data->mSpawnPos;
                 appen->mAngle = actor_data->mAngle;
-                appen->mEnemyNo = actor_data->mEnemyNo;
+                appen->mSetId = actor_data->mSetId;
                 appen->mRoomNo = i_stage->getRoomNo();
                 dStage_actorCreate(actor_data, appen);
             }
@@ -1531,7 +1531,7 @@ int dStage_tgscInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
             appen->mParameter = actor_data->mParameter;
             appen->mPos = actor_data->mSpawnPos;
             appen->mAngle = actor_data->mAngle;
-            appen->mEnemyNo = actor_data->mEnemyNo;
+            appen->mSetId = actor_data->mSetId;
             appen->mRoomNo = i_stage->getRoomNo();
             appen->mScale[0] = actor_data->field_0x20;
             appen->mScale[1] = actor_data->field_0x21;
@@ -1553,7 +1553,7 @@ int dStage_roomReadInit(dStage_dt_c* i_stage, void* i_data, int i_num, void* i_f
 
     roomRead_data_class ** ppEntry = pRoom->m_entries;
     for (s32 i = 0; i < room_info->m_entryNum; i++, ppEntry++) {
-        (u8*)(*ppEntry) = (u8*)(i_file) + (u32)ppEntry;
+        // (u8*)(*ppEntry) = (u8*)(i_file) + (u32)ppEntry;
         roomRead_data_class * pEntry = *ppEntry;
         pEntry->field_0x4 = (u8*)(i_file) + ((u32)pEntry->field_0x4);
     }
