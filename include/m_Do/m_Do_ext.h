@@ -178,6 +178,17 @@ private:
     /* 0x4 */ J3DAnmTransform* mAnmTransform;
 };  // Size: 0x8
 
+class mDoExt_transAnmBas : public J3DAnmTransformKey {
+public:
+    mDoExt_transAnmBas(void* bas) { mBas = bas; }
+    virtual ~mDoExt_transAnmBas();
+
+    void* getBas() { return mBas; }
+
+private:
+    /* 0x28 */ void* mBas;
+};
+
 class mDoExt_MtxCalcOldFrame {
 public:
     /* 8000F848 */ void initOldFrameMorf(f32, u16, u16);
@@ -327,9 +338,12 @@ int mDoExt_getSafeGameHeapSize();
 int mDoExt_getSafeZeldaHeapSize();
 int mDoExt_getSafeCommandHeapSize();
 
+s32 mDoExt_resIDToIndex(JKRArchive*, u16);
+
 JKRSolidHeap * mDoExt_createSolidHeapFromGameToCurrent(u32 size, u32 align);
+JKRSolidHeap * mDoExt_createSolidHeapToCurrent(u32, JKRHeap *, u32 align);
 void mDoExt_restoreCurrentHeap();
-void mDoExt_adjustSolidHeap(JKRSolidHeap * pHeap);
+u32 mDoExt_adjustSolidHeap(JKRSolidHeap * pHeap);
 void mDoExt_destroySolidHeap(JKRSolidHeap * pHeap);
 
 extern JKRExpHeap* zeldaHeap;

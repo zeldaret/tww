@@ -6,6 +6,8 @@
 #include "global.h"
 #include "m_Do/m_Do_ext.h"
 
+class ResTIMG;
+
 class dDlst_base_c {
 public:
     dDlst_base_c() {}
@@ -289,6 +291,9 @@ public:
     /* 0x00250 */ dDlst_shadowControl_c mShadowControl;
     /* 0x16078 */ mDoExt_3DlineMatSortPacket m3DLineMatSortPacket[2];
     /* 0x160A0 */ dDlst_peekZ_c mPeekZ;
+
+    static ResTIMG * mToonImage;
+    static ResTIMG * mToonExImage;
 };  // Size: 0x16234
 
 STATIC_ASSERT(sizeof(dDlst_list_c) == 0x16234);

@@ -764,7 +764,7 @@ void mDoExt_createSolidHeapFromGameToCurrent(unsigned long, unsigned long) {
 }
 
 /* 80011D0C-80011D48       .text mDoExt_adjustSolidHeap__FP12JKRSolidHeap */
-void mDoExt_adjustSolidHeap(JKRSolidHeap*) {
+u32 mDoExt_adjustSolidHeap(JKRSolidHeap*) {
     /* Nonmatching */
 }
 

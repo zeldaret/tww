@@ -3,9 +3,14 @@
 
 #include "dolphin/types.h"
 
+class J3DModelData;
+class J3DMaterialTable;
+
 class J3DModelLoaderDataBase {
 public:
-    /* 803346BC */ static void* load(void const*, u32);
+    static J3DModelData* load(void const*, u32);
+    static J3DModelData* loadBinaryDisplayList(void const*, u32);
+    static J3DMaterialTable* loadMaterialTable(void const*);
 };
 
 #endif /* J3DMODELLOADER_H */
