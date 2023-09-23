@@ -30,7 +30,7 @@ public:
     /* vt[04] */ virtual void close(void);                     /* override */
     /* vt[05] */ virtual s32 readData(void*, s32, s32);        /* override */
     /* vt[06] */ virtual s32 writeData(const void*, s32, s32); /* override */
-    /* vt[07] */ virtual s32 getFileSize(void) const;          /* override */
+    /* vt[07] */ virtual s32 getFileSize(void) const { return mFileInfo.length; } /* override */
     /* vt[08] */ virtual bool open(s32);
 
 // private:
