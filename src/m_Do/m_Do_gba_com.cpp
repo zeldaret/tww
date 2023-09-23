@@ -11,8 +11,6 @@
 mDoGaC_agbCom_c g_mDoGaC_gbaCom;
 mDoGaC_DataManag_c TestDataManager[16];
 
-static u32 BigLittleChange(u32);
-
 /* 8001A498-8001A4C0       .text ProbeCheck_0__FP11JUTGbaParamPv */
 void ProbeCheck_0(JUTGbaParam*, void*) {
     g_mDoGaC_gbaCom.mDoGaC_ProbeCheck0();
@@ -358,8 +356,8 @@ int mDoGaC_agbCom_c::mDoGaC_SendEndCheck(u8 param_0) {
 }
 
 /* 8001ADE4-8001AE04       .text mDoGaC_RecvStatusCheck__15mDoGaC_agbCom_cFUc */
-bool mDoGaC_agbCom_c::mDoGaC_RecvStatusCheck(u8 param_0) {
-    return field_0x110[param_0].field_0x4 == 8;
+BOOL mDoGaC_agbCom_c::mDoGaC_RecvStatusCheck(u8 param_0) {
+    return field_0x110[param_0].field_0x4 == 8 ? TRUE : FALSE;
 }
 
 /* 8001AE04-8001AE44       .text mDoGaC_DataStatusReset__15mDoGaC_agbCom_cFUc */

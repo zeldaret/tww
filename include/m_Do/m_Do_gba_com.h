@@ -36,7 +36,7 @@ public:
     int mDoGaC_SendEntry(u8, u32);
     int mDoGaC_SendStatusCheck(u8);
     int mDoGaC_SendEndCheck(u8);
-    bool mDoGaC_RecvStatusCheck(u8);
+    BOOL mDoGaC_RecvStatusCheck(u8);
     void mDoGaC_DataStatusReset(u8);
     int mDoGaC_StatusSendSet(u8);
     void mDoGaC_ProbeCheck0();
@@ -95,6 +95,8 @@ public:
 
 extern mDoGaC_agbCom_c g_mDoGaC_gbaCom;
 extern mDoGaC_DataManag_c TestDataManager[16];
+
+u32 BigLittleChange(u32);
 
 inline u8 mDoGaC_getPortNo() {
     return g_mDoGaC_gbaCom.getPortNo();

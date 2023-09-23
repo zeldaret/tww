@@ -38,7 +38,7 @@ public:
     s16 getEventIdx(const char*, u8);
     void order(s16);
     void startCheck(s16);
-    void startCheckOld(const char*);
+    BOOL startCheckOld(const char*);
     BOOL endCheck(s16);
     BOOL endCheckOld(const char*);
     int getMyStaffId(const char*, fopAc_ac_c*, int);

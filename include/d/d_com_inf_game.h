@@ -166,7 +166,7 @@ public:
     s8 getPlayerCameraID(int idx) { return mCurCamera[idx]; }
 
     int getItemRupeeCount() { return mItemRupeeCount; }
-    void setItemRupeeCount(int count) { mItemRupeeCount += count; }
+    void setItemRupeeCount(s32 count) { mItemRupeeCount += count; }
     void setMessageCountNumber(s16 num) { mMsgCountNumber = num; }
 
     void setLkDemoAnmArchive(JKRArchive* i_arc) { mpLkDArc = i_arc; }
@@ -190,7 +190,17 @@ public:
     s32 getTimerMode() { return mTimerInfo.mTimerMode; }
     
     s16 getItemMagicCount() { return mItemMagicCount; }
-    void setItemMagicCount(s16 magic) { mItemMagicCount = magic; }
+    void setItemMagicCount(s16 magic) { mItemMagicCount += magic; }
+
+    void setItemLifeCount(f32 num) {
+        mItemLifeCount += num;
+    }
+
+    u8 checkMesgCancelButton() { return field_0x4949; }
+
+    void setPlayerStatus(int param_0, int i, u32 flag) { mPlayerStatus[param_0][i] |= flag; }
+    void clearPlayerStatus(int param_0, int i, u32 flag) { mPlayerStatus[param_0][i] &= ~flag; }
+    bool checkPlayerStatus(int param_0, int i, u32 flag) { return flag & mPlayerStatus[param_0][i]; }
 
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
@@ -573,6 +583,10 @@ inline BOOL dComIfGs_isSwitch(s32 i_no, s32 i_roomNo) {
     return g_dComIfG_gameInfo.save.isSwitch(i_no, i_roomNo);
 }
 
+inline void dComIfGs_revSwitch(int i_no, int i_roomNo) {
+    g_dComIfG_gameInfo.save.revSwitch(i_no, i_roomNo);
+}
+
 inline void dComIfGs_onItem(int bitNo, int roomNo) {
     g_dComIfG_gameInfo.save.onItem(bitNo, roomNo);
 }
@@ -675,6 +689,38 @@ inline void dComIfGs_setWindY(s16 i_windY) {
 
 inline void dComIfGs_setWindX(s16 i_windX) {
     g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusB().setWindX(i_windX);
+}
+
+inline const char* dComIfGs_getPlayerName() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerInfo().getPlayerName();
+}
+
+inline u8 dComIfGs_getGbaRupeeCount() {
+    return g_dComIfG_gameInfo.save.getDan().getGbaRupeeCount();
+}
+
+inline void dComIfGs_incGbaRupeeCount() {
+    g_dComIfG_gameInfo.save.getDan().incGbaRupeeCount();
+}
+
+inline u8 dComIfGs_checkBaitItemEmpty() {
+    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().checkBaitItemEmpty();
+}
+
+inline u8 dComIfGs_getBombMax() {
+    return g_dComIfG_gameInfo.save.getPlayer().getItemMax().getBombNum();
+}
+
+inline u8 dComIfGs_getArrowMax() {
+    return g_dComIfG_gameInfo.save.getPlayer().getItemMax().getArrowNum();
+}
+
+inline u16 dComIfGs_getMaxLife() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getMaxLife();
+}
+
+inline u8 dComIfGs_getMaxMagic() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getMaxMagic();
 }
 
 /**
@@ -1001,8 +1047,12 @@ inline int dComIfGp_getItemRupeeCount() {
     return g_dComIfG_gameInfo.play.getItemRupeeCount();
 }
 
-inline void dComIfGp_setItemRupeeCount(int count) {
+inline void dComIfGp_setItemRupeeCount(s32 count) {
     g_dComIfG_gameInfo.play.setItemRupeeCount(count);
+}
+
+inline void dComIfGp_setItemLifeCount(f32 amount) {
+    g_dComIfG_gameInfo.play.setItemLifeCount(amount);
 }
 
 inline void dComIfGp_setMessageCountNumber(s16 num) {
@@ -1020,6 +1070,19 @@ inline s16 dComIfGp_getItemMagicCount() {
 inline void dComIfGp_setItemMagicCount(s16 magic) {
     g_dComIfG_gameInfo.play.setItemMagicCount(magic);
 }
+
+inline u8 dComIfGp_checkMesgCancelButton() {
+    return g_dComIfG_gameInfo.play.checkMesgCancelButton();
+}
+
+inline bool dComIfGp_checkPlayerStatus0(int param_0, u32 flag) {
+    return g_dComIfG_gameInfo.play.checkPlayerStatus(param_0, 0, flag);
+}
+
+inline bool dComIfGp_checkPlayerStatus1(int param_0, u32 flag) {
+    return g_dComIfG_gameInfo.play.checkPlayerStatus(param_0, 1, flag);
+}
+
 
 /**
  * === EVENT ===*/

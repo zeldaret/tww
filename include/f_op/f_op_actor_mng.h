@@ -541,7 +541,7 @@ inline void fopAcM_seStartCurrent(fopAc_ac_c* actor, u32 sfxID, u32 param_2) {
 }
 
 inline void fopAcM_seStart(fopAc_ac_c* actor, u32 sfxID, u32 param_2) {
-    s8 roomNo = fopAcM_GetRoomNo(actor);
+    s32 roomNo = fopAcM_GetRoomNo(actor);
     mDoAud_seStart(sfxID, &actor->mEyePos, param_2, dComIfGp_getReverb(roomNo));
 }
 

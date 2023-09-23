@@ -90,14 +90,14 @@ public:
     /* 0x300 */ f32 field_0x300;
     /* 0x304 */ daPy_demo_c mDemo;
 
-    virtual MtxP getLeftHandMatrix();
-    virtual MtxP getRightHandMatrix();
-    virtual void getGroundY();
+    virtual MtxP getLeftHandMatrix() = 0;
+    virtual MtxP getRightHandMatrix() = 0;
+    virtual void getGroundY() = 0;
     virtual void getTactMusic() const;
     virtual void getTactTimerCancel() const;
     virtual void checkPlayerGuard() const;
     virtual void getGrabMissActor();
-    virtual void checkPlayerFly() const;
+    virtual u32 checkPlayerFly() const;
     virtual void checkFrontRoll() const;
     virtual void checkBottleSwing() const;
     virtual void checkCutCharge() const;
@@ -106,8 +106,8 @@ public:
     virtual void setTactZev(unsigned int, int, char*);
     virtual void onDekuSpReturnFlg(u8);
     virtual void checkComboCutTurn() const;
-    virtual f32 getBaseAnimeFrameRate();
-    virtual void getBaseAnimeFrame();
+    virtual f32 getBaseAnimeFrameRate() = 0;
+    virtual void getBaseAnimeFrame() = 0;
     virtual void getItemID() const;
     virtual void getThrowBoomerangID() const;
     virtual void getGrabActorID() const;

@@ -194,9 +194,9 @@ STATIC_ASSERT(sizeof(dBgS_Acch) == 0x1C4);
 
 class dBgS_LinkAcch : public dBgS_Acch {
 public:
-    dBgS_LinkAcch() { /* SetLink(); */ }
+    dBgS_LinkAcch() { SetLink(); }
 
-    /* 80140F30 */ virtual ~dBgS_LinkAcch();
+    /* 80140F30 */ virtual ~dBgS_LinkAcch() {}
 };
 
 class dBgS_ObjAcch : public dBgS_Acch {
