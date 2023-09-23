@@ -81,27 +81,19 @@ public:
     }
 
     u32 getButton() const { return mButton.mButton; }
-
     u32 getTrigger() const { return mButton.mTrigger; }
 
     f32 getMainStickX() const { return mMainStick.mPosX; }
-
     f32 getMainStickY() const { return mMainStick.mPosY; }
-
     f32 getMainStickValue() const { return mMainStick.mValue; }
-
     s16 getMainStickAngle() const { return mMainStick.mAngle; }
 
     f32 getSubStickX() const { return mSubStick.mPosX; }
-
     f32 getSubStickY() const { return mSubStick.mPosY; }
-
     f32 getSubStickValue() const { return mSubStick.mValue; }
-
     s16 getSubStickAngle() const { return mSubStick.mAngle; }
 
     u8 getAnalogA() const { return mButton.mAnalogA; }
-
     u8 getAnalogB() const { return mButton.mAnalogB; }
 
     u8 getAnalogL() const { return mButton.mAnalogL; }
@@ -111,14 +103,13 @@ public:
     f32 getAnalogRf() const { return mButton.mAnalogRf; }
 
     s8 getErrorStatus() const { return mErrorStatus; }
-
     s16 getPortNum() const { return mPortNum; }
 
     JUTGamePadRecordBase* getPadReplay() const { return mPadReplay; }
-
     JUTGamePadRecordBase* getPadRecord() const { return mPadRecord; }
 
-    u32 testTrigger(u32 button) const { return mButton.mTrigger & button; }
+    u32 testButton(u32 button) const { return getButton() & button; }
+    u32 testTrigger(u32 button) const { return getTrigger() & button; }
 
     bool isPushing3ButtonReset() const {
         bool isPushingReset = false;

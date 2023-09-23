@@ -93,11 +93,8 @@ void CheckHeap(JUTGamePad* i_pad) {
     bool comboCheck = false;
 
     // if L + R + Z is pressed
-    if ((i_pad->getButton() & ~CButton::Z) == (CButton::L + CButton::R) &&
-        i_pad->getTrigger() & CButton::Z)
-    {
+    if ((i_pad->testButton(~CButton::Z)) == (CButton::L | CButton::R) && i_pad->testTrigger(CButton::Z))
         comboCheck = true;
-    }
 
     int saveRel = comboCheck;
     for (int i = 0; i < HeapCheckTableNum; i++) {
@@ -377,18 +374,12 @@ void debug() {
             CheckHeap(g_mDoCPd_gamePad[2]);
         }
 
-        if ((g_mDoCPd_gamePad[2]->getButton() & ~CButton::Z) == CButton::R &&
-            g_mDoCPd_gamePad[2]->testTrigger(CButton::Z))
-        {
+        if (g_mDoCPd_gamePad[2]->testButton(~CButton::Z) == CButton::R && g_mDoCPd_gamePad[2]->testTrigger(CButton::Z))
             mDisplayHeapSize ^= 1;
-        }
 
         if (mDisplayHeapSize) {
-            if ((g_mDoCPd_gamePad[2]->getButton() & ~CButton::Z) == CButton::L &&
-                g_mDoCPd_gamePad[2]->testTrigger(CButton::Z))
-            {
+            if (g_mDoCPd_gamePad[2]->testButton(~CButton::Z) == CButton::L && g_mDoCPd_gamePad[2]->testTrigger(CButton::Z))
                 mHeapBriefType < 5 ? mHeapBriefType++ : mHeapBriefType = 1;
-            }
 
             debugDisplay();
         }
