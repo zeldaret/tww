@@ -303,10 +303,10 @@ private:
 
 class J3DAnmTransform : public J3DAnmBase {
 public:
-    /* 80328E40 */ J3DAnmTransform(s16, f32*, s16*, f32*);
+    J3DAnmTransform(s16, f32*, s16*, f32*);
 
-    /* 8003B93C */ virtual ~J3DAnmTransform();
-    /* 8003C77C */ virtual s32 getKind() const;
+    virtual ~J3DAnmTransform();
+    virtual s32 getKind() const;
     virtual void getTransform(u16, J3DTransformInfo*) const = 0;
 
 private:
@@ -326,11 +326,11 @@ public:
         field_0x24 = 0;
     }
 
-    /* 80329A34 */ void calcTransform(f32, u16, J3DTransformInfo*) const;
+    void calcTransform(f32, u16, J3DTransformInfo*) const;
 
-    /* 8003B8D0 */ virtual ~J3DAnmTransformKey();
-    /* 8003C800 */ virtual s32 getKind() const;
-    /* 8003C808 */ virtual void getTransform(u16, J3DTransformInfo*) const;
+    virtual ~J3DAnmTransformKey();
+    virtual s32 getKind() const;
+    virtual void getTransform(u16, J3DTransformInfo*) const;
 
 private:
     /* 0x20 */ int field_0x20;
@@ -339,9 +339,9 @@ private:
 
 class J3DAnmTransformFull : public J3DAnmTransform {
 public:
-    /* 8032C2AC */ virtual ~J3DAnmTransformFull();
-    /* 8032C318 */ virtual s32 getKind() const;
-    /* 80328E90 */ virtual void getTransform(u16, J3DTransformInfo*) const;
+    virtual ~J3DAnmTransformFull();
+    virtual s32 getKind() const;
+    virtual void getTransform(u16, J3DTransformInfo*) const;
 
 private:
     /* 0x20 */ int field_0x20;
@@ -349,9 +349,9 @@ private:
 
 class J3DAnmTransformFullWithLerp : public J3DAnmTransformFull {
 public:
-    /* 8032C228 */ virtual ~J3DAnmTransformFullWithLerp();
-    /* 8032C2A4 */ virtual s32 getKind() const;
-    /* 803291F0 */ virtual void getTransform(u16, J3DTransformInfo*) const;
+    virtual ~J3DAnmTransformFullWithLerp();
+    virtual s32 getKind() const;
+    virtual void getTransform(u16, J3DTransformInfo*) const;
 };  // Size: 0x24
 
 struct J3DTextureSRTInfo;
@@ -360,13 +360,13 @@ class J3DMaterialTable;
 
 class J3DAnmTextureSRTKey : public J3DAnmBase {
 public:
-    /* 80329E5C */ J3DAnmTextureSRTKey();
-    /* 80329F14 */ void calcTransform(f32, u16, J3DTextureSRTInfo*) const;
-    /* 8032B0C0 */ void searchUpdateMaterialID(J3DMaterialTable*);
-    /* 8032B1D4 */ void searchUpdateMaterialID(J3DModelData*);
+    J3DAnmTextureSRTKey();
+    void calcTransform(f32, u16, J3DTextureSRTInfo*) const;
+    void searchUpdateMaterialID(J3DMaterialTable*);
+    void searchUpdateMaterialID(J3DModelData*);
 
-    /* 8032C198 */ virtual ~J3DAnmTextureSRTKey();
-    /* 8032C220 */ virtual s32 getKind() const;
+    virtual ~J3DAnmTextureSRTKey();
+    virtual s32 getKind() const;
 
     void getTransform(u16 param_0, J3DTextureSRTInfo* pSRTInfo) const {
         calcTransform(getFrame(), param_0, pSRTInfo);
@@ -404,15 +404,32 @@ private:
     /* 0x78 */ u32 mTexMtxCalcType;
 };  // Size: 0x7C
 
+class J3DAnmVisibilityFull : public J3DAnmBase {
+public:
+    J3DAnmVisibilityFull();
+    bool getVisibility(u16, u8*) const;
+
+    virtual ~J3DAnmVisibilityFull();
+    virtual s32 getKind() const;
+
+private:
+    /* 0x0C */ void* field_0xc;
+    /* 0x10 */ void* mAnmTable;
+    /* 0x14 */ u16 field_0x14;
+    /* 0x16 */ u16 mUpdateMaterialNum;
+    /* 0x18 */ u16* field_0x18;
+    /* 0x1C */ JUTNameTab field_0x1c;
+};  // Size: 0x2C
+
 class J3DAnmTexPattern : public J3DAnmBase {
 public:
-    /* 8032AED8 */ J3DAnmTexPattern();
-    /* 8032AF50 */ void getTexNo(u16, u16*) const;
-    /* 8032B004 */ void searchUpdateMaterialID(J3DMaterialTable*);
-    /* 8032B09C */ void searchUpdateMaterialID(J3DModelData*);
+    J3DAnmTexPattern();
+    void getTexNo(u16, u16*) const;
+    void searchUpdateMaterialID(J3DMaterialTable*);
+    void searchUpdateMaterialID(J3DModelData*);
 
-    /* 8032BD20 */ virtual ~J3DAnmTexPattern();
-    /* 8032BD94 */ virtual s32 getKind() const;
+    virtual ~J3DAnmTexPattern();
+    virtual s32 getKind() const;
 
 private:
     /* 0x0C */ void* field_0xc;
@@ -425,14 +442,14 @@ private:
 
 class J3DAnmTevRegKey : public J3DAnmBase {
 public:
-    /* 8032AE18 */ J3DAnmTevRegKey();
-    /* 8032B1F8 */ void getTevColorReg(u16, _GXColorS10*) const;
-    /* 8032B4BC */ void getTevKonstReg(u16, _GXColor*) const;
-    /* 8032B780 */ void searchUpdateMaterialID(J3DMaterialTable*);
-    /* 8032B87C */ void searchUpdateMaterialID(J3DModelData*);
+    J3DAnmTevRegKey();
+    void getTevColorReg(u16, _GXColorS10*) const;
+    void getTevKonstReg(u16, _GXColor*) const;
+    void searchUpdateMaterialID(J3DMaterialTable*);
+    void searchUpdateMaterialID(J3DModelData*);
 
-    /* 8032BD9C */ virtual ~J3DAnmTevRegKey();
-    /* 8032BE24 */ virtual s32 getKind() const;
+    virtual ~J3DAnmTevRegKey();
+    virtual s32 getKind() const;
 
     u16 getCRegUpdateMaterialNum() const { return mCRegUpdateMaterialNum; }
     u16 getKRegUpdateMaterialNum() const { return mKRegUpdateMaterialNum; }
@@ -469,12 +486,13 @@ private:
 
 class J3DAnmColor : public J3DAnmBase {
 public:
-    /* 8032A828 */ J3DAnmColor();
-    /* 8032A8A4 */ void searchUpdateMaterialID(J3DMaterialTable*);
+    J3DAnmColor();
+    void searchUpdateMaterialID(J3DMaterialTable*);
+    void searchUpdateMaterialID(J3DModelData*);
 
-    /* 8032BCAC */ virtual ~J3DAnmColor();
-    /* 8032BF44 */ virtual s32 getKind() const;
-    /* 8032BF4C */ virtual void getColor(u16, _GXColor*) const;
+    virtual ~J3DAnmColor();
+    virtual s32 getKind() const;
+    virtual void getColor(u16, _GXColor*) const;
 
     u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
     bool isValidUpdateMaterialID(u16 id) const { return mUpdateMaterialID[id] != 0xFFFF; }
@@ -492,11 +510,11 @@ private:
 
 class J3DAnmColorKey : public J3DAnmColor {
 public:
-    /* 8032AB00 */ J3DAnmColorKey();
+    J3DAnmColorKey();
 
-    /* 8032BE2C */ virtual ~J3DAnmColorKey();
-    /* 8032BEB0 */ virtual s32 getKind() const;
-    /* 8032AB54 */ virtual void getColor(u16, _GXColor*) const;
+    virtual ~J3DAnmColorKey();
+    virtual s32 getKind() const;
+    virtual void getColor(u16, _GXColor*) const;
 
 private:
     /* 0x2C */ int field_0x2c;
@@ -508,11 +526,11 @@ private:
 
 class J3DAnmColorFull : public J3DAnmColor {
 public:
-    /* 8032AB00 */ J3DAnmColorFull();
+    J3DAnmColorFull();
 
-    /* 8032BE2C */ virtual ~J3DAnmColorFull();
-    /* 8032BEB0 */ virtual s32 getKind() const;
-    /* 8032AB54 */ virtual void getColor(u16, _GXColor*) const;
+    virtual ~J3DAnmColorFull();
+    virtual s32 getKind() const;
+    virtual void getColor(u16, _GXColor*) const;
 
 private:
     /* 0x2C */ int field_0x2c;
@@ -537,22 +555,22 @@ private:
 
 class J3DAnmVtxColorKey : public J3DAnmVtxColor {
 public:
-    /* 8032A4E0 */ J3DAnmVtxColorKey();
+    J3DAnmVtxColorKey();
 
-    /* 8032BF50 */ virtual ~J3DAnmVtxColorKey();
-    /* 8032BFBC */ virtual s32 getKind() const;
-    /* 8032A53C */ virtual void getColor(u8, u16, _GXColor*) const;
+    virtual ~J3DAnmVtxColorKey();
+    virtual s32 getKind() const;
+    virtual void getColor(u8, u16, _GXColor*) const;
 
 private:
     /* 0x18 */ int field_0x18[2];
 };
 
 class J3DAnmVtxColorFull : public J3DAnmVtxColor {
-    /* 8032A30C */ J3DAnmVtxColorFull();
+    J3DAnmVtxColorFull();
 
-    /* 8032BFC4 */ virtual ~J3DAnmVtxColorFull();
-    /* 8032C030 */ virtual s32 getKind() const;
-    /* 8032A368 */ virtual void getColor(u8, u16, _GXColor*) const;
+    virtual ~J3DAnmVtxColorFull();
+    virtual s32 getKind() const;
+    virtual void getColor(u8, u16, _GXColor*) const;
 
 private:
     /* 0x18 */ int field_0x18[2];
@@ -560,9 +578,9 @@ private:
 
 class J3DAnmCluster : public J3DAnmBase {
 public:
-    /* 8032BCAC */ virtual ~J3DAnmCluster();
-    /* 8032BF44 */ virtual s32 getKind() const;
-    /* 8032BF4C */ virtual f32 getWeight(u16) const;
+    virtual ~J3DAnmCluster();
+    virtual s32 getKind() const;
+    virtual f32 getWeight(u16) const;
 
 private:
     /* 0x0C */ f32* field_0xc;
@@ -570,9 +588,9 @@ private:
 
 class J3DAnmClusterFull : public J3DAnmCluster {
 public:
-    /* 8032BCAC */ virtual ~J3DAnmClusterFull();
-    /* 8032BF44 */ virtual s32 getKind() const;
-    /* 8032BF4C */ virtual f32 getWeight(u16) const;
+    virtual ~J3DAnmClusterFull();
+    virtual s32 getKind() const;
+    virtual f32 getWeight(u16) const;
 
 private:
     /* 0x10 */ int field_0x10;
@@ -580,9 +598,9 @@ private:
 
 class J3DAnmClusterKey : public J3DAnmCluster {
 public:
-    /* 8032C044 */ virtual ~J3DAnmClusterKey();
-    /* 8032C0B0 */ virtual s32 getKind() const;
-    /* 8032A218 */ virtual f32 getWeight(u16) const;
+    virtual ~J3DAnmClusterKey();
+    virtual s32 getKind() const;
+    virtual f32 getWeight(u16) const;
 
 private:
     /* 0x10 */ int field_0x10;

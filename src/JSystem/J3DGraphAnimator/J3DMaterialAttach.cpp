@@ -37,22 +37,22 @@ void J3DMaterialTable::entryTevRegAnimator(J3DAnmTevRegKey*) {
 }
 
 /* 802F61E8-802F6260       .text removeMatColorAnimator__16J3DMaterialTableFP11J3DAnmColor */
-void J3DMaterialTable::removeMatColorAnimator(J3DAnmColor*) {
+int J3DMaterialTable::removeMatColorAnimator(J3DAnmColor*) {
     /* Nonmatching */
 }
 
 /* 802F6260-802F62F4       .text removeTexNoAnimator__16J3DMaterialTableFP16J3DAnmTexPattern */
-void J3DMaterialTable::removeTexNoAnimator(J3DAnmTexPattern*) {
+int J3DMaterialTable::removeTexNoAnimator(J3DAnmTexPattern*) {
     /* Nonmatching */
 }
 
 /* 802F62F4-802F6398       .text removeTexMtxAnimator__16J3DMaterialTableFP19J3DAnmTextureSRTKey */
-void J3DMaterialTable::removeTexMtxAnimator(J3DAnmTextureSRTKey*) {
+int J3DMaterialTable::removeTexMtxAnimator(J3DAnmTextureSRTKey*) {
     /* Nonmatching */
 }
 
 /* 802F6398-802F64B8       .text removeTevRegAnimator__16J3DMaterialTableFP15J3DAnmTevRegKey */
-void J3DMaterialTable::removeTevRegAnimator(J3DAnmTevRegKey*) {
+int J3DMaterialTable::removeTevRegAnimator(J3DAnmTevRegKey*) {
     /* Nonmatching */
 }
 

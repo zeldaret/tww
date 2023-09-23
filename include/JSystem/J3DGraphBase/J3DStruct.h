@@ -54,15 +54,11 @@ struct J3DTexMtxInfo {
 };  // Size: 0x64
 
 struct J3DIndTexMtxInfo {
-    /* 803257DC */ void operator=(J3DIndTexMtxInfo const&);
-
     /* 0x00 */ Mtx23 field_0x0;
     /* 0x18 */ u8 field_0x18;
 };  // Size: 0x1C
 
 struct J3DFogInfo {
-    /* 80325800 */ void operator=(J3DFogInfo const&);
-
     /* 0x00 */ u8 mType;
     /* 0x01 */ u8 mAdjEnable;
     /* 0x02 */ u16 mCenter;
@@ -75,10 +71,10 @@ struct J3DFogInfo {
 };  // Size: 0x2C
 
 struct J3DNBTScaleInfo {
-    /* 8032587C */ void operator=(J3DNBTScaleInfo const&);
-
     /* 0x0 */ u8 mbHasScale;
     /* 0x4 */ Vec mScale;
+
+    inline void operator=(const J3DNBTScaleInfo & other) { mbHasScale = other.mbHasScale; mScale = other.mScale; }
 };  // Size: 0x10
 
 #endif /* J3DSTRUCT_H */

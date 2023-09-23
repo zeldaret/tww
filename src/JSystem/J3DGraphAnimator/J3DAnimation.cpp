@@ -12,7 +12,7 @@ void J3DFrameCtrl::init(short) {
 }
 
 /* 802EF608-802EFBA8       .text checkPass__12J3DFrameCtrlFf */
-void J3DFrameCtrl::checkPass(float) {
+BOOL J3DFrameCtrl::checkPass(float) {
     /* Nonmatching */
 }
 
@@ -47,12 +47,12 @@ void J3DAnmTextureSRTKey::calcTransform(float, unsigned short, J3DTextureSRTInfo
 }
 
 /* 802F10D4-802F1188       .text getWeight__17J3DAnmClusterFullCFUs */
-void J3DAnmClusterFull::getWeight(unsigned short) const {
+f32 J3DAnmClusterFull::getWeight(unsigned short) const {
     /* Nonmatching */
 }
 
 /* 802F1188-802F120C       .text getWeight__16J3DAnmClusterKeyCFUs */
-void J3DAnmClusterKey::getWeight(unsigned short) const {
+f32 J3DAnmClusterKey::getWeight(unsigned short) const {
     /* Nonmatching */
 }
 
@@ -92,7 +92,7 @@ void J3DAnmTexPattern::getTexNo(unsigned short, unsigned short*) const {
 }
 
 /* 802F200C-802F20EC       .text getVisibility__20J3DAnmVisibilityFullCFUsPUc */
-void J3DAnmVisibilityFull::getVisibility(unsigned short, unsigned char*) const {
+bool J3DAnmVisibilityFull::getVisibility(u16, u8*) const {
     /* Nonmatching */
 }
 
@@ -133,16 +133,6 @@ void J3DAnmTevRegKey::searchUpdateMaterialID(J3DMaterialTable*) {
 
 /* 802F2A64-802F2A88       .text searchUpdateMaterialID__15J3DAnmTevRegKeyFP12J3DModelData */
 void J3DAnmTevRegKey::searchUpdateMaterialID(J3DModelData*) {
-    /* Nonmatching */
-}
-
-/* 802F2A88-802F2DAC       .text J3DGetKeyFrameInterpolation<s>__FfP18J3DAnmKeyTableBasePs */
-void J3DGetKeyFrameInterpolation<short>(float, J3DAnmKeyTableBase*, short*) {
-    /* Nonmatching */
-}
-
-/* 802F2DAC-802F2EF8       .text J3DGetKeyFrameInterpolation<f>__FfP18J3DAnmKeyTableBasePf */
-void J3DGetKeyFrameInterpolation<float>(float, J3DAnmKeyTableBase*, float*) {
     /* Nonmatching */
 }
 
@@ -197,7 +187,7 @@ J3DAnmCluster::~J3DAnmCluster() {
 }
 
 /* 802F3278-802F3280       .text getWeight__13J3DAnmClusterCFUs */
-void J3DAnmCluster::getWeight(unsigned short) const {
+f32 J3DAnmCluster::getWeight(unsigned short) const {
     /* Nonmatching */
 }
 

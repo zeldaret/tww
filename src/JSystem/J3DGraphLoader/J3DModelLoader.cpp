@@ -7,17 +7,17 @@
 #include "dolphin/types.h"
 
 /* 802FB758-802FB8A4       .text load__22J3DModelLoaderDataBaseFPCvUl */
-void J3DModelLoaderDataBase::load(const void*, unsigned long) {
+J3DModelData * J3DModelLoaderDataBase::load(const void*, unsigned long) {
     /* Nonmatching */
 }
 
 /* 802FB8A4-802FB94C       .text loadMaterialTable__22J3DModelLoaderDataBaseFPCv */
-void J3DModelLoaderDataBase::loadMaterialTable(const void*) {
+J3DMaterialTable * J3DModelLoaderDataBase::loadMaterialTable(const void*) {
     /* Nonmatching */
 }
 
 /* 802FB94C-802FBA04       .text loadBinaryDisplayList__22J3DModelLoaderDataBaseFPCvUl */
-void J3DModelLoaderDataBase::loadBinaryDisplayList(const void*, unsigned long) {
+J3DModelData * J3DModelLoaderDataBase::loadBinaryDisplayList(const void*, unsigned long) {
     /* Nonmatching */
 }
 

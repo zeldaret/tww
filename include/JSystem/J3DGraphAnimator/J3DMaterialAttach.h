@@ -9,23 +9,32 @@ class J3DAnmColor;
 class J3DAnmTexPattern;
 class J3DAnmTextureSRTKey;
 class J3DAnmTevRegKey;
+class J3DMatColorAnm;
+class J3DTexNoAnm;
+class J3DTexMtxAnm;
+class J3DTevColorAnm;
+class J3DTevKColorAnm;
 class JUTNameTab;
 
 class J3DMaterialTable {
 public:
-    /* 8032F5A8 */ void clear();
-    /* 8032F5D0 */ J3DMaterialTable();
-    /* 8032F64C */ int removeMatColorAnimator(J3DAnmColor*);
-    /* 8032F6F8 */ int removeTexNoAnimator(J3DAnmTexPattern*);
-    /* 8032F7B4 */ int removeTexMtxAnimator(J3DAnmTextureSRTKey*);
-    /* 8032F880 */ int removeTevRegAnimator(J3DAnmTevRegKey*);
-    /* 8032F9C0 */ void createTexMtxForAnimator(J3DAnmTextureSRTKey*);
-    /* 8032FAF4 */ void entryMatColorAnimator(J3DAnmColor*);
-    /* 8032FBC8 */ void entryTexNoAnimator(J3DAnmTexPattern*);
-    /* 8032FCC4 */ void entryTexMtxAnimator(J3DAnmTextureSRTKey*);
-    /* 8032FE70 */ void entryTevRegAnimator(J3DAnmTevRegKey*);
+    void clear();
+    J3DMaterialTable();
+    int removeMatColorAnimator(J3DAnmColor*);
+    int removeTexNoAnimator(J3DAnmTexPattern*);
+    int removeTexMtxAnimator(J3DAnmTextureSRTKey*);
+    int removeTevRegAnimator(J3DAnmTevRegKey*);
+    void createTexMtxForAnimator(J3DAnmTextureSRTKey*);
+    void entryMatColorAnimator(J3DAnmColor*);
+    void entryTexNoAnimator(J3DAnmTexPattern*);
+    void entryTexMtxAnimator(J3DAnmTextureSRTKey*);
+    void entryTevRegAnimator(J3DAnmTevRegKey*);
+    void setMatColorAnimator(J3DAnmColor*, J3DMatColorAnm *);
+    void setTexNoAnimator(J3DAnmTexPattern*, J3DTexNoAnm*);
+    void setTexMtxAnimator(J3DAnmTextureSRTKey*, J3DTexMtxAnm*, J3DTexMtxAnm*);
+    void setTevRegAnimator(J3DAnmTevRegKey*, J3DTevColorAnm*, J3DTevKColorAnm*);
 
-    /* 8032F604 */ virtual ~J3DMaterialTable();
+    virtual ~J3DMaterialTable();
 
     J3DMaterial* getMaterialNodePointer(u16 idx) const { return mMaterialNodePointer[idx]; }
 

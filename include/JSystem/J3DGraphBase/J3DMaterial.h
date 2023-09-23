@@ -31,7 +31,7 @@ public:
     s32 newSharedDisplayList(u32);
     s32 newSingleSharedDisplayList(u32);
 
-    virtual void calc(f32 const (*)[4]);
+    virtual void calc(const Mtx);
     virtual void makeDisplayList();
     virtual void makeSharedDisplayList();
     virtual void load();
@@ -97,29 +97,30 @@ public:
 
 class J3DPatchedMaterial : public J3DMaterial {
 public:
-    /* 80316FB8 */ void initialize();
+    void initialize();
 
-    /* 80316FD8 */ virtual void makeDisplayList();
-    /* 80316FDC */ virtual void makeSharedDisplayList();
-    /* 80316FE0 */ virtual void load();
-    /* 80316FFC */ virtual void loadSharedDL();
-    /* 8031703C */ virtual void reset();
-    /* 80317040 */ virtual void change();
+    virtual void calc(const Mtx);
+    virtual void makeDisplayList();
+    virtual void makeSharedDisplayList();
+    virtual void load();
+    virtual void loadSharedDL();
+    virtual void reset();
+    virtual void change();
 };
 
 class J3DLockedMaterial : public J3DMaterial {
 public:
-    /* 80317044 */ void initialize();
+    void initialize();
 
-    /* 803170D0 */ virtual void calc(f32 const (*)[4]);
-    /* 80317064 */ virtual void makeDisplayList();
-    /* 80317068 */ virtual void makeSharedDisplayList();
-    /* 8031706C */ virtual void load();
-    /* 80317088 */ virtual void loadSharedDL();
-    /* 803170C8 */ virtual void patch();
-    /* 803170CC */ virtual void diff(u32);
-    /* 803170D4 */ virtual void reset();
-    /* 803170D8 */ virtual void change();
+    virtual void calc(const Mtx);
+    virtual void makeDisplayList();
+    virtual void makeSharedDisplayList();
+    virtual void load();
+    virtual void loadSharedDL();
+    virtual void patch();
+    virtual void diff(u32);
+    virtual void reset();
+    virtual void change();
 };
 
 #endif /* J3DMATERIAL_H */
