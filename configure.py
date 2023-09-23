@@ -420,7 +420,7 @@ config.libs = [
             Object(NonMatching, "d/actor/d_a_hookshot.cpp"),
             Object(NonMatching, "d/actor/d_a_ib.cpp"),
             Object(NonMatching, "d/actor/d_a_item.cpp"),
-            Object(NonMatching, "d/actor/d_a_itembase.cpp"),
+            Object(Matching,    "d/actor/d_a_itembase.cpp"),
             Object(NonMatching, "d/actor/d_a_nh.cpp"),
             Object(NonMatching, "d/actor/d_a_npc_fa1.cpp"),
             Object(NonMatching, "d/actor/d_a_obj_search.cpp"),

@@ -214,10 +214,20 @@ public:
     void setOpaDrawList(J3DDrawBuffer* buffer) { j3dSys.setDrawBuffer(buffer, OPA_BUFFER); }
     void setOpaList() { setOpaDrawList(mpBufInvisibleModelOpa); }
     void setXluList() { setXluDrawList(mpBufInvisibleModelXlu); }
+    void setOpaListMaskOff() { setOpaDrawList(mpBufInvisibleModelMaskOffOpa); }
+    void setXluListMaskOff() { setXluDrawList(mpBufInvisibleModelMaskOffXlu); }
     void setOpaListSky() { setOpaDrawList(mpBufSkyOpa); }
     void setXluListSky() { setXluDrawList(mpBufSkyXlu); }
+    void setOpaListP0() { setOpaDrawList(mpLinkBuf); }
+    void setXluListP0() { setXluDrawList(mpLinkBuf); }
+    void setOpaListP1() { setOpaDrawList(field_0x0000c); }
+    void setXluListP1() { setXluDrawList(field_0x00010); }
     void setOpaListBG() { setOpaDrawList(mpBufWorldOpa); }
     void setXluListBG() { setXluDrawList(mpBufWorldXlu); }
+    void setOpaListFilter() { setOpaDrawList(mpWetherFxBuffer); }
+    void setXluListFilter() { setXluDrawList(mpWetherFxBuffer); }
+    void setOpaList2D() { setOpaDrawList(field_0x00038); }
+    void setXluList2D() { setXluDrawList(field_0x00038); }
 
     void entryZSortXluList(J3DPacket* i_packet, cXyz& param_1) {
         entryZSortXluDrawList(mpBufInvisibleModelXlu, i_packet, param_1);

@@ -1037,6 +1037,8 @@ public:
     void procCutKesa_init();
     void procCutKesa();
     void checkNoControll() const;
+    
+    J3DAnmTevRegKey* getBombBrk() { return mpBombBrk; }
 
     /* 0x0320 */ request_of_phase_process_class mPhsLoad;
     /* 0x0328 */ J3DModelData* mpModelData;
@@ -1093,7 +1095,7 @@ public:
     /* 0x2E98 */ J3DModel* mpHeldItemModel;
     /* 0x2E9C */ mDoExt_bckAnm mSwordAnim;
     /* 0x2EAC */ u8 field_0x2EAC[0x2EB0 - 0x2EAC];
-    /* 0x2EB0 */ J3DAnmTevRegKey* field_0x2eb0;
+    /* 0x2EB0 */ J3DAnmTevRegKey* mpBombBrk;
     /* 0x2EB4 */ J3DAnmTevRegKey* mpGwp00BrkData;
     /* 0x2EB8 */ J3DAnmTextureSRTKey* mpGwp00BtkData;
     /* 0x2EBC */ u8 field_0x2EBC[0x2ED4 - 0x2EBC];

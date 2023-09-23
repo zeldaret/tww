@@ -120,7 +120,7 @@ void daItem_c::CreateInit() {
     mAcch.Set(&current.pos, &next.pos, this, 1, &mAcchCir, speedPtr = &speed, NULL, NULL);
     mAcch.m_flags &= ~0x400;
     mAcch.m_flags &= ~0x8;
-    mCullMtx = mModel->mBaseTransformMtx;
+    mCullMtx = mpModel->mBaseTransformMtx;
     mStts.Init(0, 0xFF, this);
     mCyl.Set(m_cyl_src);
     mCyl.SetStts(&mStts);
@@ -329,13 +329,13 @@ void daItem_c::setTevStr() {
     mTevStr.mColorK0.r = 0xFF;
     mTevStr.mColorK0.g = 0xFF;
     mTevStr.mColorK0.b = 0xFF;
-    g_env_light.setLightTevColorType(mModel, &mTevStr);
+    g_env_light.setLightTevColorType(mpModel, &mTevStr);
     
     for (int i = 0; i < 2; i++) {
-        if (!mModelArrow[i]) {
+        if (!mpModelArrow[i]) {
             continue;
         }
-        g_env_light.setLightTevColorType(mModelArrow[i], &mTevStr);
+        g_env_light.setLightTevColorType(mpModelArrow[i], &mTevStr);
     }
 }
 
@@ -405,7 +405,7 @@ void daItem_c::setItemTimer(int timer) {
 
 /* 800F6E74-800F6EC8       .text checkPlayerGet__8daItem_cFv */
 BOOL daItem_c::checkPlayerGet() {
-    if (field20_0x638 < getData()->field47_0x42) {
+    if (field_0x638 < getData()->field47_0x42) {
         return FALSE;
     }
     if (mCurState == 3) {

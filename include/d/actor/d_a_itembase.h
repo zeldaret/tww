@@ -36,9 +36,9 @@ STATIC_ASSERT(sizeof(daItemBase_c_m_data) == 0x4C);
 
 struct daItemBase_c : public fopAc_ac_c {
 public:
-    s32 DeleteBase(const char*);
-    s32 CreateItemHeap(const char*, short, short, short, short, short, short, short);
-    virtual s32 DrawBase();
+    BOOL DeleteBase(const char*);
+    BOOL CreateItemHeap(const char*, short, short, short, short, short, short, short);
+    virtual BOOL DrawBase();
     virtual void setListStart();
     void setListEnd();
     virtual void settingBeforeDraw();
@@ -46,7 +46,7 @@ public:
     virtual void setShadow();
     virtual void animEntry();
     void animPlay(float, float, float, float, float);
-    virtual s32 clothCreate();
+    virtual BOOL clothCreate();
 
     void getItemNo();
     void getHeight();
@@ -65,21 +65,21 @@ public:
 
 public:
     /* 0x294 */ request_of_phase_process_class mPhs;
-    /* 0x29C */ J3DModel* mModel;
-    /* 0x2A0 */ J3DModel* mModelArrow[2]; // Extra models for arrow bundles
-    /* 0x2A8 */ mDoExt_btkAnm* mBtkAnm1;
-    /* 0x2AC */ mDoExt_btkAnm* mBtkAnm2;
-    /* 0x2B0 */ mDoExt_brkAnm* mBrkAnm1;
-    /* 0x2B4 */ mDoExt_brkAnm* mBrkAnm2;
-    /* 0x2B8 */ mDoExt_bckAnm* mBckAnm;
+    /* 0x29C */ J3DModel* mpModel;
+    /* 0x2A0 */ J3DModel* mpModelArrow[2]; // Extra models for arrow bundles
+    /* 0x2A8 */ mDoExt_btkAnm* mpBtkAnm1;
+    /* 0x2AC */ mDoExt_btkAnm* mpBtkAnm2;
+    /* 0x2B0 */ mDoExt_brkAnm* mpBrkAnm1;
+    /* 0x2B4 */ mDoExt_brkAnm* mpBrkAnm2;
+    /* 0x2B8 */ mDoExt_bckAnm* mpBckAnm;
     /* 0x2BC */ dBgS_ObjAcch mAcch;
     /* 0x480 */ dBgS_AcchCir mAcchCir;
     /* 0x4C0 */ dCcD_Stts mStts;
     /* 0x4FC */ dCcD_Cyl mCyl;
-    /* 0x62C */ u8 field14_0x62c[0x630 - 0x62C];
-    /* 0x630 */ int mPickupFlag;
-    /* 0x634 */ int field19_0x634;
-    /* 0x638 */ short field20_0x638;
+    /* 0x62C */ s32 mShadowId;
+    /* 0x630 */ s32 mPickupFlag;
+    /* 0x634 */ s32 field_0x634;
+    /* 0x638 */ s16 field_0x638;
     /* 0x63A */ u8 m_itemNo;
     /* 0x63B */ u8 mDrawFlags;
 };

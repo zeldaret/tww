@@ -263,7 +263,7 @@ const daShopItem_c_m_data daShopItem_c::mData[255] = {
     {{1.0f, 1.0f, 1.0f}, {0.0f, 20.0f, 0.0f}, {0, 0, 0}},
     {{1.0f, 1.0f, 1.0f}, {0.0f, 20.0f, 0.0f}, {0, 0, 0}},
 };
-const u8 daShopItem_c::mModelType[256] = {
+const u8 daShopItem_c::mModelType[255] = {
     2,
     2,
     2,
@@ -519,7 +519,6 @@ const u8 daShopItem_c::mModelType[256] = {
     2,
     2,
     2,
-    0
 };
 
 cXyz* daShopItem_c::getScaleP() {
