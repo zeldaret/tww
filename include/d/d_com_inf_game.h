@@ -723,6 +723,8 @@ inline u8 dComIfGs_getMaxMagic() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getMaxMagic();
 }
 
+u8 dComIfGs_checkGetItemNum(u8 i_itemNo);
+
 /**
  * === PLAY ===
  */
@@ -1313,6 +1315,14 @@ inline void dComIfGd_setList2D() {
 
 inline void dComIfGd_entryZSortXluList(J3DPacket* i_packet, cXyz& param_1) {
     g_dComIfG_gameInfo.drawlist.entryZSortXluList(i_packet, param_1);
+}
+
+inline view_class* dComIfGd_getView() {
+    return (view_class*)g_dComIfG_gameInfo.drawlist.mpCamera;
+}
+
+inline MtxP dComIfGd_getViewRotMtx() {
+    return dComIfGd_getView()->mViewMtxNoTrans;
 }
 
 /**

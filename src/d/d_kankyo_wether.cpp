@@ -399,7 +399,7 @@ void wether_move_windline() {
 
     int roomNo = dComIfGp_roomControl_getStayNo();
     if (roomNo >= 0) {
-        fili_p = dComIfGp_roomControl_getStatusRoomDt(roomNo)->mRoomDt.getFileListInfo();
+        fili_p = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
     }
 
     g_env_light.mWindlineCount = 0;
@@ -989,7 +989,7 @@ void dKyw_wind_set() {
 
         s32 roomNo = dComIfGp_roomControl_getStayNo();
         if (roomNo >= 0) {
-            fili_p = dComIfGp_roomControl_getStatusRoomDt(roomNo)->mRoomDt.getFileListInfo();
+            fili_p = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
         }
 
         s16 tact_wind_x;
@@ -1146,16 +1146,16 @@ void dKyw_pntwind_init() {
 /* 8008A144-8008A1A8       .text pntwind_set__FP14WIND_INFLUENCE */
 void pntwind_set(WIND_INFLUENCE* i_influence) {
     int i = 0;
-    for (; i < 30; i++) {
+    for (; i < ARRAY_SIZE(g_env_light.mpWindInfluence); i++) {
         if (g_env_light.mpWindInfluence[i] == NULL) {
             g_env_light.mpWindInfluence[i] = i_influence;
-            g_env_light.mpWindInfluence[i]->field_0x24 = i;
+            g_env_light.mpWindInfluence[i]->mRegistIdx = i;
             break;
         }
     }
 
     if (i >= 30) {
-        i_influence->field_0x24 = 9999;
+        i_influence->mRegistIdx = 9999;
     }
 }
 
@@ -1174,8 +1174,8 @@ void dKyw_pwind_cylinder_set(WIND_INFLUENCE* i_influence) {
 /* 8008A1F8-8008A230       .text dKyw_pntwind_cut__FP14WIND_INFLUENCE */
 void dKyw_pntwind_cut(WIND_INFLUENCE* i_influence) {
     if (i_influence != NULL) {
-        if (i_influence->field_0x24 >= 0 && i_influence->field_0x24 < 30) {
-            g_env_light.mpWindInfluence[i_influence->field_0x24] = NULL;
+        if (i_influence->mRegistIdx >= 0 && i_influence->mRegistIdx < 30) {
+            g_env_light.mpWindInfluence[i_influence->mRegistIdx] = NULL;
         }
     }
 }
@@ -1188,7 +1188,7 @@ void dKyw_pntwind_get_info(cXyz* param_0, cXyz* i_dir, f32* i_power) {
     *i_power = 0.0f;
 
     WIND_INFLUENCE* influence;
-    for (int i = 0; i < 30; i++) {
+    for (int i = 0; i < ARRAY_SIZE(g_env_light.mpWindInfluence); i++) {
         influence = g_env_light.mpWindInfluence[i];
         if (influence != NULL) {
             f32 dist = param_0->abs(influence->mPos);
@@ -1376,7 +1376,7 @@ BOOL dKyw_gbwind_use_check() {
     if (g_env_light.mWind.mpWindVecOverride == NULL) {
         s32 roomNo = dComIfGp_roomControl_getStayNo();
         if (roomNo >= 0) {
-            fili_p = dComIfGp_roomControl_getStatusRoomDt(roomNo)->mRoomDt.getFileListInfo();
+            fili_p = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
         }
 
         if (fili_p != NULL && dStage_FileList_dt_GlobalWindLevel(fili_p) <= 2) {

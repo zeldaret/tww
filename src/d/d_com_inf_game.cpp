@@ -616,7 +616,7 @@ stage_camera_class* dComIfGp_getRoomCamera(int i_roomNo) {
         return NULL;
     }
 
-    return status->mRoomDt.getCamera();
+    return status->getCamera();
 }
 
 /* 80053778-800537C8       .text dComIfGp_getRoomArrow__Fi */
@@ -627,7 +627,7 @@ stage_arrow_class* dComIfGp_getRoomArrow(int i_roomNo) {
         return NULL;
     }
 
-    return status->mRoomDt.getArrow();
+    return status->getArrow();
 }
 
 /* 800537C8-8005388C       .text dComIfGp_setNextStage__FPCcsScScfUliSc */

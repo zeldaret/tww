@@ -149,7 +149,7 @@ void daAgb_c::NameConv() {
 int daAgb_c::uploadInitCheck() {
     s32 roomNo = dComIfGp_roomControl_getStayNo();
     dStage_FileList_dt_c* fili_p =
-        dComIfGp_roomControl_getStatusRoomDt(roomNo)->mRoomDt.getFileListInfo();
+        dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
 
     if ((dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != 7 &&
          !dMap_c::isEnableDispMap()) ||
@@ -656,7 +656,7 @@ void daAgb_c::GbaItemUse() {
     if (temp_r0 == 0 || temp_r0 == 1 || temp_r0 == 2 || temp_r29 == 0x11 || temp_r29 == 0x12) {
         s32 roomNo = dComIfGp_roomControl_getStayNo();
         dStage_FileList_dt_c* fili_p =
-            dComIfGp_roomControl_getStatusRoomDt(roomNo)->mRoomDt.getFileListInfo();
+            dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
 
         if (fili_p != NULL && fili_p->mParam & 4) {
             if (field_0x67c != 0) {

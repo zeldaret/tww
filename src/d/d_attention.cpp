@@ -3,8 +3,9 @@
 // Translation Unit: d_attention.cpp
 //
 
-#include "d_attention.h"
-#include "dolphin/types.h"
+#include "d/d_attention.h"
+#include "f_op/f_op_actor_mng.h"
+#include "d/d_com_inf_game.h"
 
 /* 8009D220-8009D268       .text __ct__11dAttParam_cFl */
 dAttParam_c::dAttParam_c(long) {
@@ -32,38 +33,53 @@ dAttention_c::~dAttention_c() {
 }
 
 /* 8009D6EC-8009D728       .text GetActionList__12dAttention_cFl */
-void dAttention_c::GetActionList(long) {
-    /* Nonmatching */
+dAttList_c* dAttention_c::GetActionList(long idx) {
+    if (mActionNum != 0)
+        return &mActionList[(mActionOffs + idx) % mActionNum];
+    else
+        return NULL;
 }
 
 /* 8009D728-8009D764       .text GetLockonList__12dAttention_cFl */
-void dAttention_c::GetLockonList(long) {
-    /* Nonmatching */
+dAttList_c* dAttention_c::GetLockonList(long idx) {
+    if (mLockOnNum != 0)
+        return &mLockOnList[(mLockOnOffs + idx) % mLockOnNum];
+    else
+        return NULL;
 }
 
 /* 8009D764-8009D858       .text getActionBtnB__12dAttention_cFv */
-void dAttention_c::getActionBtnB() {
+dAttList_c* dAttention_c::getActionBtnB() {
     /* Nonmatching */
 }
 
 /* 8009D858-8009D9A8       .text getActionBtnXYZ_local__12dAttention_cFi */
-void dAttention_c::getActionBtnXYZ_local(int) {
+dAttList_c* dAttention_c::getActionBtnXYZ_local(int) {
     /* Nonmatching */
 }
 
 /* 8009D9A8-8009D9FC       .text getActionBtnX__12dAttention_cFv */
-void dAttention_c::getActionBtnX() {
-    /* Nonmatching */
+dAttList_c* dAttention_c::getActionBtnX() {
+    if (!dComIfGs_checkGetItemNum(g_dComIfG_gameInfo.play.mEquippedItems[0]))
+        return NULL;
+
+    return getActionBtnXYZ_local(0);
 }
 
 /* 8009D9FC-8009DA50       .text getActionBtnY__12dAttention_cFv */
-void dAttention_c::getActionBtnY() {
-    /* Nonmatching */
+dAttList_c* dAttention_c::getActionBtnY() {
+    if (!dComIfGs_checkGetItemNum(g_dComIfG_gameInfo.play.mEquippedItems[1]))
+        return NULL;
+
+    return getActionBtnXYZ_local(1);
 }
 
 /* 8009DA50-8009DAA4       .text getActionBtnZ__12dAttention_cFv */
-void dAttention_c::getActionBtnZ() {
-    /* Nonmatching */
+dAttList_c* dAttention_c::getActionBtnZ() {
+    if (!dComIfGs_checkGetItemNum(g_dComIfG_gameInfo.play.mEquippedItems[2]))
+        return NULL;
+
+    return getActionBtnXYZ_local(2);
 }
 
 /* 8009DAA4-8009DAF4       .text chkAttMask__12dAttention_cFUlUl */
@@ -102,27 +118,86 @@ void dAttention_c::calcWeight(int, fopAc_ac_c*, float, short, short, unsigned lo
 }
 
 /* 8009E03C-8009E128       .text setLList__12dAttention_cFP10fopAc_ac_cffUl */
-void dAttention_c::setLList(fopAc_ac_c*, float, float, unsigned long) {
-    /* Nonmatching */
+void dAttention_c::setLList(fopAc_ac_c* i_actor, float weight, float distance, unsigned long type) {
+    float bestWeight = 0.0f;
+
+    if (weight > 0.0f) {
+        int bestIdx;
+        if (mLockOnNum < (s32)ARRAY_SIZE(mLockOnList)) {
+            bestIdx = mLockOnNum++;
+        } else {
+            for (int i = (s32)ARRAY_SIZE(mLockOnList); i >= 0; i--) {
+                if (weight > bestWeight) {
+                    bestIdx = i;
+                    bestWeight = weight;
+                }
+            }
+        }
+
+        if (weight < mLockOnList[bestIdx].mWeight) {
+            mLockOnList[bestIdx].setActor(i_actor);
+            mLockOnList[bestIdx].mWeight = weight;
+            mLockOnList[bestIdx].mDistance = distance;
+            mLockOnList[bestIdx].mType = type;
+        }
+    }
 }
 
 /* 8009E128-8009E214       .text setAList__12dAttention_cFP10fopAc_ac_cffUl */
-void dAttention_c::setAList(fopAc_ac_c*, float, float, unsigned long) {
-    /* Nonmatching */
+void dAttention_c::setAList(fopAc_ac_c* i_actor, float weight, float distance, unsigned long type) {
+    float bestWeight = 0.0f;
+
+    if (weight > 0.0f) {
+        int bestIdx;
+        if (mActionNum < (s32)ARRAY_SIZE(mActionList)) {
+            bestIdx = mActionNum++;
+        } else {
+            for (int i = (s32)ARRAY_SIZE(mActionList); i >= 0; i--) {
+                if (weight > bestWeight) {
+                    bestIdx = i;
+                    bestWeight = weight;
+                }
+            }
+        }
+
+        if (weight < mActionList[bestIdx].mWeight) {
+            mActionList[bestIdx].setActor(i_actor);
+            mActionList[bestIdx].mWeight = weight;
+            mActionList[bestIdx].mDistance = distance;
+            mActionList[bestIdx].mType = type;
+        }
+    }
 }
 
 /* 8009E214-8009E2CC       .text initList__12dAttention_cFUl */
-void dAttention_c::initList(unsigned long) {
-    /* Nonmatching */
+void dAttention_c::initList(unsigned long flagMask) {
+    int i;
+
+    mFlagMask = flagMask;
+
+    for (i = 0; i < (s32)ARRAY_SIZE(mLockOnList); i++) {
+        mLockOnList[i].setActor(NULL);
+        mLockOnList[i].mWeight = 3.4028235E38f;
+    }
+    mLockOnOffs = 0;
+    mLockOnNum = 0;
+
+    for (i = 0; i < (s32)ARRAY_SIZE(mActionList); i++) {
+        mActionList[i].setActor(NULL);
+        mActionList[i].mWeight = 3.4028235E38f;
+    }
+    mActionOffs = 0;
+    mActionNum = 0;
 }
 
 /* 8009E2CC-8009E2F8       .text select_attention__FP10fopAc_ac_cPv */
-void select_attention(fopAc_ac_c*, void*) {
-    /* Nonmatching */
+void select_attention(fopAc_ac_c* pActor, void* i_attention) {
+    dAttention_c * pAttention = (dAttention_c*)i_attention;
+    pAttention->SelectAttention(pActor);
 }
 
 /* 8009E2F8-8009E33C       .text makeList__12dAttention_cFv */
-void dAttention_c::makeList() {
+s32 dAttention_c::makeList() {
     /* Nonmatching */
 }
 
@@ -137,18 +212,47 @@ void dAttention_c::sortList() {
 }
 
 /* 8009E5C4-8009E684       .text stockAttention__12dAttention_cFUl */
-void dAttention_c::stockAttention(unsigned long) {
-    /* Nonmatching */
+void dAttention_c::stockAttention(unsigned long interactMask) {
+    fopAc_ac_c * pTarget = LockonTarget(0);
+    initList(interactMask);
+    if (makeList())
+        sortList();
+
+    if (pTarget != mLockOnList[0].getActor()) {
+        if (pTarget != NULL) {
+            if (mLockOnList[0].getActor() != NULL)
+                mFlags |= 2;
+        } else {
+            mFlags |= 1;
+        }
+
+        mFlags |= 4;
+    }
+
+    LockonTarget(0);
 }
 
 /* 8009E684-8009E728       .text nextAttention__12dAttention_cFUl */
-void dAttention_c::nextAttention(unsigned long) {
-    /* Nonmatching */
+void dAttention_c::nextAttention(unsigned long interactMask) {
+    fopAc_ac_c * pTarget = fopAcM_SearchByID(mLockOnTargetBsPcID);
+    initList(interactMask);
+    if (makeList())
+        sortList();
+
+    if (pTarget == mLockOnList[0].getActor() && mLockOnNum > 1)
+        mLockOnOffs = 1;
+
+    LockonTarget(0);
 }
 
 /* 8009E728-8009E764       .text freeAttention__12dAttention_cFv */
-void dAttention_c::freeAttention() {
-    /* Nonmatching */
+s32 dAttention_c::freeAttention() {
+    mLockOnOffs = 0;
+    mLockOnNum = 0;
+    mActionOffs = 0;
+    mActionNum = 0;
+    initList(0xFFFFFFFF);
+    return 0;
 }
 
 /* 8009E764-8009E978       .text chaseAttention__12dAttention_cFv */
@@ -232,8 +336,15 @@ void dAttDraw_c::draw(cXyz&, float(*)[4]) {
 }
 
 /* 8009F834-8009F88C       .text LockonTarget__12dAttention_cFl */
-void dAttention_c::LockonTarget(long) {
-    /* Nonmatching */
+fopAc_ac_c* dAttention_c::LockonTarget(s32 idx) {
+    if (idx >= mLockOnNum)
+        return NULL;
+
+    s32 listIdx = mLockOnOffs + idx;
+    if (listIdx >= mLockOnNum)
+        listIdx -= mLockOnNum;
+
+    return mLockOnList[listIdx].getActor();
 }
 
 /* 8009F88C-8009F980       .text LockonReleaseDistanse__12dAttention_cFv */
@@ -242,68 +353,101 @@ void dAttention_c::LockonReleaseDistanse() {
 }
 
 /* 8009F980-8009F9B8       .text LockonTargetPId__12dAttention_cFl */
-void dAttention_c::LockonTargetPId(long) {
-    /* Nonmatching */
+unsigned int dAttention_c::LockonTargetPId(s32 idx) {
+    if (idx >= mLockOnNum)
+        return NULL;
+
+    s32 listIdx = mLockOnOffs + idx;
+    if (listIdx >= mLockOnNum)
+        listIdx -= mLockOnNum;
+
+    return mLockOnList[listIdx].getPid();
 }
 
 /* 8009F9B8-8009FA10       .text ActionTarget__12dAttention_cFl */
-void dAttention_c::ActionTarget(long) {
-    /* Nonmatching */
+fopAc_ac_c* dAttention_c::ActionTarget(s32 idx) {
+    if (idx >= mActionNum)
+        return NULL;
+
+    s32 listIdx = mActionOffs + idx;
+    if (listIdx >= mActionNum)
+        listIdx -= mActionNum;
+
+    return mActionList[listIdx].getActor();
 }
 
 /* 8009FA10-8009FA64       .text LockonTruth__12dAttention_cFv */
-void dAttention_c::LockonTruth() {
-    /* Nonmatching */
+bool dAttention_c::LockonTruth() {
+    return mLockOnState == 1 || (mLockOnState == 2 && LockonTarget(0));
 }
 
 /* 8009FA64-8009FA98       .text getActor__10dAttList_cFv */
-void dAttList_c::getActor() {
-    /* Nonmatching */
+fopAc_ac_c* dAttList_c::getActor() {
+    return fopAcM_SearchByID(mActorID);
 }
 
 /* 8009FA98-8009FAB4       .text setActor__10dAttList_cFP10fopAc_ac_c */
-void dAttList_c::setActor(fopAc_ac_c*) {
-    /* Nonmatching */
+void dAttList_c::setActor(fopAc_ac_c* i_actor) {
+    mActorID = fpcM_GetID(i_actor);
 }
 
 /* 8009FAB4-8009FACC       .text getPId__10dAttHint_cFPv */
-void dAttHint_c::getPId(void*) {
-    /* Nonmatching */
+u32 dAttHint_c::getPId(void* i_proc) {
+    return fpcM_GetID(i_proc);
 }
 
 /* 8009FACC-8009FAFC       .text convPId__10dAttHint_cFUi */
-void dAttHint_c::convPId(unsigned int) {
-    /* Nonmatching */
+fopAc_ac_c* dAttHint_c::convPId(unsigned int i_procID) {
+    return fopAcM_SearchByID(i_procID);
 }
 
 /* 8009FAFC-8009FB58       .text request__10dAttHint_cFP10fopAc_ac_ci */
-void dAttHint_c::request(fopAc_ac_c*, int) {
-    /* Nonmatching */
+int dAttHint_c::request(fopAc_ac_c* i_actor, int priority) {
+    if (priority < 0)
+        priority = 0x1FF;
+
+    if (priority <= mPriority) {
+        mHintActorID = getPId(i_actor);
+        mPriority = priority;
+    }
+
+    return TRUE;
 }
 
 /* 8009FB58-8009FB70       .text init__10dAttHint_cFv */
 void dAttHint_c::init() {
-    /* Nonmatching */
+    mHintActorID = -1;
+    field_0x8 = -1;
+    mPriority = 0x200;
 }
 
 /* 8009FB70-8009FB8C       .text proc__10dAttHint_cFv */
 void dAttHint_c::proc() {
-    /* Nonmatching */
+    field_0x8 = mHintActorID;
+    mHintActorID = -1;
+    mPriority = 0x200;
 }
 
 /* 8009FB8C-8009FBBC       .text convPId__11dAttCatch_cFUi */
-void dAttCatch_c::convPId(unsigned int) {
-    /* Nonmatching */
+fopAc_ac_c* dAttCatch_c::convPId(unsigned int i_procID) {
+    return fopAcM_SearchByID(i_procID);
 }
 
 /* 8009FBBC-8009FBDC       .text init__11dAttCatch_cFv */
 void dAttCatch_c::init() {
-    /* Nonmatching */
+    field_0xc = 0x56;
+    field_0x0 = -1;
+    mCatghTargetID = -1;
+    field_0x4 = 3;
 }
 
 /* 8009FBDC-8009FC08       .text proc__11dAttCatch_cFv */
 void dAttCatch_c::proc() {
-    /* Nonmatching */
+    mCatghTargetID = field_0x0;
+    mChangeItem = field_0xc;
+    field_0x0 = -1;
+    field_0x4 = 3;
+    field_0xc = 0x56;
 }
 
 /* 8009FC08-8009FE10       .text request__11dAttCatch_cFP10fopAc_ac_cUcfffsi */
@@ -312,18 +456,22 @@ void dAttCatch_c::request(fopAc_ac_c*, unsigned char, float, float, float, short
 }
 
 /* 8009FE10-8009FE40       .text convPId__10dAttLook_cFUi */
-void dAttLook_c::convPId(unsigned int) {
-    /* Nonmatching */
+fopAc_ac_c* dAttLook_c::convPId(unsigned int i_procID) {
+    return fopAcM_SearchByID(i_procID);
 }
 
 /* 8009FE40-8009FE58       .text init__10dAttLook_cFv */
 void dAttLook_c::init() {
-    /* Nonmatching */
+    field_0x0 = -1;
+    mLookTargetID = -1;
+    field_0x4 = 3;
 }
 
 /* 8009FE58-8009FE74       .text proc__10dAttLook_cFv */
 void dAttLook_c::proc() {
-    /* Nonmatching */
+    mLookTargetID = field_0x0;
+    field_0x0 = -1;
+    field_0x4 = 3;
 }
 
 /* 8009FE74-800A009C       .text request__10dAttLook_cFP10fopAc_ac_cfffsi */

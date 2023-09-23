@@ -80,7 +80,7 @@ static u16 lightMaskData[] = {
 BOOL toon_proc_check() {
     s32 roomNo = dComIfGp_roomControl_getStayNo();
     if (roomNo >= 0) {
-        dComIfGp_roomControl_getStatusRoomDt(roomNo)->mRoomDt.getFileListInfo();
+        dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
     }
 
     return false;
@@ -1718,7 +1718,7 @@ void dScnKy_env_light_c::SetBaseLight() {
 
     int roomNo = dComIfGp_roomControl_getStayNo();
     if (roomNo >= 0) {
-        plight_p = dComIfGp_roomControl_getStatusRoomDt(roomNo)->mRoomDt.getLightVecInfo();
+        plight_p = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getLightVecInfo();
     }
 
     if (plight_p != NULL) {
