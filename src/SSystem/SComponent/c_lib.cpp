@@ -366,7 +366,7 @@ s32 cLib_distanceAngleS(s16 x, s16 y) {
     return abs(static_cast<s16>(x - y));
 }
 
-static Mtx mtx[10];
+Mtx mtx[10];
 
 Mtx* calc_mtx = mtx;
 
