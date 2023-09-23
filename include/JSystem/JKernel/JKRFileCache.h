@@ -41,10 +41,10 @@ public:
     /* vt[12] */ virtual u32 getResSize(const void*) const;              /* override */
     /* vt[13] */ virtual u32 countFile(const char*) const;               /* override */
     /* vt[14] */ virtual JKRFileFinder* getFirstFile(const char*) const; /* override */
-    /* vt[15] */ virtual void* getFsResource(const char*);
-    /* vt[16] */ virtual void* getNameResource(u32, const char*);
-    /* vt[17] */ virtual u32 readFsResource(void*, u32, const char*);
-    /* vt[18] */ virtual u32 readNameResource(void*, u32, u32, const char*);
+    /* vt[15] */ virtual void* getFsResource(const char* path) { return getResource(path); }
+    /* vt[16] */ virtual void* getNameResource(u32 type, const char* path) { return getResource(type, path); }
+    /* vt[17] */ virtual u32 readFsResource(void* dst, u32 dstLength, const char* path) { return readResource(dst, dstLength, path); }
+    /* vt[18] */ virtual u32 readNameResource(void* dst, u32 dstLength, u32 type, const char* path) { return readResource(dst, dstLength, type, path); }
 
 private:
     /* 0x00 */  // vtable
