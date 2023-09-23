@@ -537,8 +537,8 @@ inline f32 fopAcM_searchPlayerDistance(fopAc_ac_c* actor) {
 s8 dComIfGp_getReverb(int roomNo);
 
 inline void fopAcM_seStartCurrent(fopAc_ac_c* actor, u32 sfxID, u32 param_2) {
-    s8 roomNo = fopAcM_GetRoomNo(actor);
-    mDoAud_seStart(sfxID, &actor->current.pos, param_2, dComIfGp_getReverb(roomNo));
+    s8 reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(actor));
+    mDoAud_seStart(sfxID, &actor->current.pos, param_2, reverb);
 }
 
 inline void fopAcM_seStart(fopAc_ac_c* actor, u32 sfxID, u32 param_2) {
