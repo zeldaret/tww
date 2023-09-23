@@ -153,3 +153,7 @@ bool cXyz::isZero(void) const {
     return fabsf(this->x) < 3.8146972e-06f && fabsf(this->y) < 3.8146972e-06f &&
            fabsf(this->z) < 3.8146972e-06f;
 }
+
+// Unused, but must be in .rodata to match
+static const char * fmt0 = "[%f %f %f]\n";
+static const char * fmt1 = "%s=[%f %f %f]\n";

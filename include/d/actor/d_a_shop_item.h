@@ -14,7 +14,7 @@ struct daShopItem_c : public daItemBase_c {
     char* getShopArcname();
     s16 getShopBmdIdx();
     void CreateInit();
-    int _create();
+    inline int _create();
     bool _execute();
     void set_mtx();
     bool _draw();
@@ -23,7 +23,7 @@ struct daShopItem_c : public daItemBase_c {
     void setListStart() {}
     void settingBeforeDraw();
     void setTevStr();
-    s32 clothCreate();
+    BOOL clothCreate();
 
     //funcs in d_a_shop_item_static
     cXyz* getScaleP();
@@ -35,7 +35,7 @@ struct daShopItem_c : public daItemBase_c {
 
     static const char m_cloth_arcname[];
     static const f32 m_cullfar_max;
-    static const u8 mModelType[256];
+    static const u8 mModelType[255];
     static const daShopItem_c_m_data mData[255];
 
     /* 0x63C */ request_of_phase_process_class field_0x63C;

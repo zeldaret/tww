@@ -12,7 +12,7 @@ public:
     bool resetGame();
     void offReset();
 
-    static bool isPause() { return pauseTimer == 0; }
+    static bool isPause() { return pauseTimer != 0; }
     static void setPauseTimer(s8 time) { pauseTimer = time; }
 
     static s8 pauseTimer;

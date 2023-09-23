@@ -66,7 +66,7 @@ class dNpc_EventCut_c {
     /* 0x18 */ int mTimer;
     /* 0x1C */ char* mpActorName;
     /* 0x20 */ u32 field_0x20;
-    /* 0x24 */ s32 mSetID;
+    /* 0x24 */ s32 mSetId;
     /* 0x28 */ cXyz mOffsetPos;
     /* 0x34 */ cXyz mTargetActorPos;
     /* 0x40 */ fopAc_ac_c* mpTargetActor;

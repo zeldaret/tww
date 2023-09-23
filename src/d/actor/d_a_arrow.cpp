@@ -226,8 +226,10 @@ void daArrow_c::setKeepMatrix() {
         daPy_py_c* player = daPy_getPlayerActorClass();
         
         mDoMtx_stack_c::transS(0.7f, -0.07f, -0.2f);
-        // TODO: How did they pass an unsigned short (0xB0B6) to a function that takes a signed short?
-        mDoMtx_stack_c::XYZrotM(0xB0B6, 0x238E, -0x6333);
+        // This function takes three signed shorts, but one of the literals passed here is unsigned.
+        // X rotation must be a float literal to force the compiler to pass an unsigned short.
+        // Z rotation must be an int literal to pass a signed short as normal.
+        mDoMtx_stack_c::XYZrotM((248.5f*65536)/360, 0x238E, -0x6333);
         
         MtxP handMtx = player->getLeftHandMatrix();
         cMtx_concat(handMtx, mDoMtx_stack_c::get(), mDoMtx_stack_c::get());

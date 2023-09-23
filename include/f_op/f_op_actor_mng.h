@@ -28,10 +28,10 @@ struct fopAcM_prm_class {
     /* 0x00 */ u32 mParameter;  // single U32 Parameter
     /* 0x04 */ cXyz mPos;
     /* 0x10 */ csXyz mAngle;  // rotation
-    /* 0x16 */ u16 mEnemyNo;
+    /* 0x16 */ u16 mSetId;
     /* 0x18 */ u8 mScale[3];
-    /* 0x1B */ u8 mGbaName;     // from WW, maybe a different parameter here
-    /* 0x1C */ s32 mParentPId;  // parent process ID
+    /* 0x1B */ u8 mGbaName;
+    /* 0x1C */ s32 mParentPcId;  // parent process ID
     /* 0x20 */ s8 mSubtype;
     /* 0x21 */ s8 mRoomNo;
 };
@@ -99,10 +99,6 @@ enum fopAcM_CARRY {
     /* 0x30 */ fopAcM_CARRY_UNK_30 = 0x30,
 };
 
-inline u32 fopAcM_CheckCarryType(fopAc_ac_c* actor, fopAcM_CARRY type) {
-    return actor->mCarryType & type;
-}
-
 inline u32 fopAcM_checkHookCarryNow(fopAc_ac_c* pActor) {
     return fopAcM_checkStatus(pActor, 0x100000);
 }
@@ -141,10 +137,6 @@ inline void fopAcM_OffStatus(fopAc_ac_c* pActor, u32 flag) {
 
 inline fopAc_ac_c* fopAcM_Search(fopAcIt_JudgeFunc func, void* param) {
     return (fopAc_ac_c*)fopAcIt_Judge(func, param);
-}
-
-inline fopAc_ac_c* fopAcM_SearchByID(unsigned int id) {
-    return (fopAc_ac_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)fpcSch_JudgeByID, &id);
 }
 
 inline cXyz& fopAcM_GetPosition_p(fopAc_ac_c* pActor) {
@@ -296,6 +288,10 @@ inline BOOL fopAcM_isSwitch(fopAc_ac_c* pActor, int sw) {
     return dComIfGs_isSwitch(sw, fopAcM_GetHomeRoomNo(pActor));
 }
 
+inline fopAc_ac_c* fopAcM_SearchByID(unsigned int id) {
+    return (fopAc_ac_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)fpcSch_JudgeByID, &id);
+}
+
 inline fopAc_ac_c* fopAcM_SearchByName(s16 proc_id) {
     return (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeForPName, &proc_id);
 }
@@ -315,7 +311,7 @@ inline f32 fopAcM_searchActorDistanceY(fopAc_ac_c* actorA, fopAc_ac_c* actorB) {
 }
 
 inline u16 fopAcM_GetSetId(fopAc_ac_c* p_actor) {
-    return p_actor->mSetID;
+    return p_actor->mSetId;
 }
 
 inline void dComIfGs_onActor(int bitNo, int roomNo);
@@ -345,14 +341,11 @@ fopAcM_prm_class* createAppend(u16 enemyNo, u32 parameters, cXyz* p_pos, int roo
 
 void fopAcM_Log(fopAc_ac_c* p_actor, char* str);
 
-void fopAcM_delete(fopAc_ac_c* p_actor);
-
+s32 fopAcM_delete(fopAc_ac_c* p_actor);
 s32 fopAcM_delete(unsigned int actorID);
 
 s32 fopAcM_create(char*, u32 i_parameter, cXyz* i_pos, int i_roomNo, csXyz* i_angle, cXyz* i_scale, createFunc i_createFunc);
-
-s32 fopAcM_create(s16 i_procName, u32 i_parameter, cXyz* i_pos, int i_roomNo, csXyz* i_angle,
-                  cXyz* i_scale, s8 i_subType, createFunc i_createFunc);
+s32 fopAcM_create(s16 i_procName, u32 i_parameter, cXyz* i_pos, int i_roomNo, csXyz* i_angle, cXyz* i_scale, s8 i_subType, createFunc i_createFunc);
 
 inline s32 fopAcM_create(s16 i_procName, createFunc i_createFunc, void*);
 

@@ -10,5 +10,5 @@
 cBgS_GndChk::cBgS_GndChk() {
     m_pos = cXyz::Zero;
     SetActorPid(0xFFFFFFFF);
-    mFlags = 2;
+    mFlags = 3;
 }

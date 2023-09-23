@@ -162,7 +162,7 @@ public:
     /* 0x08 */ u32 mParameter;
     /* 0x0C */ cXyz mSpawnPos;
     /* 0x18 */ csXyz mAngle;
-    /* 0x1E */ u16 mEnemyNo;
+    /* 0x1E */ u16 mSetId;
 };  // Size: 0x20
 
 class stage_actor_class {
@@ -770,9 +770,8 @@ public:
 };
 
 class dBgW_base;
-class dStage_roomStatus_c {
+class dStage_roomStatus_c : public dStage_roomDt_c {
 public:
-    /* 0x000 */ dStage_roomDt_c mRoomDt;
     /* 0x054 */ dKy_tevstr_c mTevStr;
     /* 0x104 */ u8 mFlags;
     /* 0x105 */ bool mDraw;
@@ -800,7 +799,7 @@ public:
     void zoneCountCheck(int) const;
     void checkDrawArea() const;
     dStage_darkStatus_c* getDarkStatus();
-    void getDarkMode();
+    u32 getDarkMode();
     void getBgW(int);
 
     static JKRExpHeap* createMemoryBlock(int, u32);
@@ -919,6 +918,7 @@ int dStage_mapInfo_GetOceanX(stage_map_info_class*);
 void dStage_infoCreate();
 
 dStage_objectNameInf* dStage_searchName(const char*);
+const char* dStage_getName2(s16 i_procName, s8 i_subtype);
 
 inline s32 dStage_stagInfo_GetSaveTbl(stage_stag_info_class* i_stagInfo) {
     return (i_stagInfo->field_0x09 >> 1) & 0x7F;

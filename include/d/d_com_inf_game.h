@@ -36,6 +36,7 @@ class daAgb_c;
 class dTimer_c;
 class camera_class;
 class J2DOrthoGraph;
+class dDemo_actor_c;
 
 class __d_timer_info_c {
 public:
@@ -994,6 +995,10 @@ inline void dComIfGp_demo_update() {
     g_dComIfG_gameInfo.play.getDemo()->update();
 }
 
+inline dDemo_actor_c* dComIfGp_demo_getActor(u8 id) {
+    return g_dComIfG_gameInfo.play.getDemo()->mDemoObj.getActor(id);
+}
+
 inline void dComIfGp_setLkDemoAnmArchive(JKRArchive* i_arc) {
     g_dComIfG_gameInfo.play.setLkDemoAnmArchive(i_arc);
 }
@@ -1114,6 +1119,10 @@ inline void dComIfGp_event_setItemPartnerId(u32 id) {
     return g_dComIfG_gameInfo.play.getEvent().setPtI_Id(id);
 }
 
+inline s32 dComIfGp_event_moveApproval(void* actor) {
+    return g_dComIfG_gameInfo.play.getEvent().moveApproval(actor);
+}
+
 inline dEvent_manager_c& dComIfGp_getEventManager() {
     return g_dComIfG_gameInfo.play.getEvtManager();
 }
@@ -1182,6 +1191,10 @@ inline void dComIfGp_evmng_remove() {
  * === DRAWLIST ===
  */
 
+int dComIfGd_setShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5, f32 param_6,
+                       f32 y, f32 param_8, cBgS_PolyInfo& pFloorPoly, dKy_tevstr_c* param_10,
+                       s16 rotY, f32 param_12, GXTexObj* pTexObj);
+
 inline int dComIfGd_setSimpleShadow(cXyz* pPos, f32 param_1, f32 param_2, cXyz* param_3, s16 angle,
                                     f32 param_5, GXTexObj* pTex) {
     return g_dComIfG_gameInfo.drawlist.setSimpleShadow(pPos, param_1, param_2, param_3, angle,
@@ -1228,13 +1241,42 @@ inline void dComIfGd_setList() {
     g_dComIfG_gameInfo.drawlist.setXluList();
 }
 
+inline void dComIfGd_setListMaskOff() {
+    g_dComIfG_gameInfo.drawlist.setOpaListMaskOff();
+    g_dComIfG_gameInfo.drawlist.setXluListMaskOff();
+}
+
 inline void dComIfGd_setListSky() {
     g_dComIfG_gameInfo.drawlist.setOpaListSky();
     g_dComIfG_gameInfo.drawlist.setXluListSky();
 }
 
+inline void dComIfGd_setListP0() {
+    g_dComIfG_gameInfo.drawlist.setOpaListP0();
+    g_dComIfG_gameInfo.drawlist.setXluListP0();
+}
+
+inline void dComIfGd_setListP1() {
+    g_dComIfG_gameInfo.drawlist.setOpaListP1();
+    g_dComIfG_gameInfo.drawlist.setXluListP1();
+}
+
+inline void dComIfGd_setListBG() {
+    g_dComIfG_gameInfo.drawlist.setOpaListBG();
+}
+
 inline void dComIfGd_setXluListBG() {
     g_dComIfG_gameInfo.drawlist.setXluListBG();
+}
+
+inline void dComIfGd_setListFilter() {
+    g_dComIfG_gameInfo.drawlist.setOpaListFilter();
+    g_dComIfG_gameInfo.drawlist.setXluListFilter();
+}
+
+inline void dComIfGd_setList2D() {
+    g_dComIfG_gameInfo.drawlist.setOpaList2D();
+    g_dComIfG_gameInfo.drawlist.setXluList2D();
 }
 
 inline void dComIfGd_entryZSortXluList(J3DPacket* i_packet, cXyz& param_1) {

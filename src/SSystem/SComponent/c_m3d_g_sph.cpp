@@ -13,18 +13,19 @@
 #define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
 
 /* 8025238C-80252624       .text SetC__8cM3dGSphFRC4cXyz */
-void cM3dGSph::SetC(const cXyz& pos) {
-    CHECK_FLOAT_CLASS(21, pos.x);
-    CHECK_FLOAT_CLASS(22, pos.y);
-    CHECK_FLOAT_CLASS(23, pos.z);
-    CHECK_VEC3_RANGE(26, pos);
-    mCenter = pos;
+void cM3dGSph::SetC(const cXyz& p) {
+    CHECK_FLOAT_CLASS(18, p.x);
+    CHECK_FLOAT_CLASS(19, p.y);
+    CHECK_FLOAT_CLASS(20, p.z);
+    CHECK_VEC3_RANGE(23, p);
+    mCenter = p;
 }
 
 /* 80252624-80252750       .text SetR__8cM3dGSphFf */
 void cM3dGSph::SetR(float r) {
     CHECK_FLOAT_CLASS(32, r);
     CHECK_FLOAT_RANGE(33, r);
+    mRadius = r;
 }
 
 /* 80252750-8025277C       .text cross__8cM3dGSphCFPC8cM3dGSphP4cXyz */

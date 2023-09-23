@@ -29,18 +29,7 @@ public:
     /* 0x13 */ u8 mbAffectedByWind;
 };
 
-class JPACallBackBase {
-public:
-    JPACallBackBase();
-    virtual ~JPACallBackBase();
-    
-    virtual void init(JPABaseEmitter*);
-    virtual void execute(JPABaseEmitter*);
-    virtual void executeAfter(JPABaseEmitter*);
-    virtual void draw(JPABaseEmitter*);
-};
-
-class dPa_levelEcallBack : public JPACallBackBase {
+class dPa_levelEcallBack : public JPACallBackBase<JPABaseEmitter*> {
 public:
     virtual ~dPa_levelEcallBack() {}
 };
@@ -69,6 +58,9 @@ STATIC_ASSERT(sizeof(dPa_followEcallBack) == 0x14);
 
 class dPa_smokeEcallBack : dPa_followEcallBack {
 public:
+    dPa_smokeEcallBack(u8);
+    virtual ~dPa_smokeEcallBack();
+    
     /* 0x14 */ s8 field_0x14;
     /* 0x15 */ u8 field_0x15;
     /* 0x16 */ _GXColor field_0x16;
@@ -163,12 +155,13 @@ public:
 
 class dPa_rippleEcallBack : public dPa_levelEcallBack {
 public:
+    dPa_rippleEcallBack() { mpBaseEmitter = NULL; }
+    ~dPa_rippleEcallBack();
+    
     void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
     void end();
     void execute(JPABaseEmitter*);
     void draw(JPABaseEmitter*);
-
-    ~dPa_rippleEcallBack();
 
     /* 0x04 */ JPABaseEmitter* mpBaseEmitter;
     /* 0x08 */ cXyz* mPos;

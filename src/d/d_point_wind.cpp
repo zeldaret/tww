@@ -3,21 +3,58 @@
 // Translation Unit: d_point_wind.cpp
 //
 
-#include "d_point_wind.h"
-#include "dolphin/types.h"
+#include "d/d_point_wind.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo_rain.h"
+#include "d/d_kankyo_wether.h"
+#include "SSystem/SComponent/c_lib.h"
 
 /* 800CF31C-800CF398       .text set_pwind_init__12dPointWind_cFP9cM3dGCpsS */
-void dPointWind_c::set_pwind_init(cM3dGCpsS*) {
-    /* Nonmatching */
+void dPointWind_c::set_pwind_init(cM3dGCpsS* pCps) {
+    mpCps = pCps;
+    mWind.mPos = mpCps->mStart;
+    mWind.mDir = mpCps->mEnd;
+    mWind.mRadius = mpCps->mRadius;
+    mWind.field_0x20 = 0.0f;
+    mWind.mStrength = 1.0f;
+    dKyw_pwind_cylinder_set(&mWind);
 }
 
 /* 800CF398-800CF5C8       .text set_pwind_move__12dPointWind_cFv */
 void dPointWind_c::set_pwind_move() {
-    /* Nonmatching */
+    f32 radScale = 1.8f;
+    BOOL animate = TRUE;
+
+    cXyz p0 = mpCps->mStart;
+    cXyz p1 = mpCps->mEnd;
+    cXyz dir;
+    dKyr_get_vectle_calc(&p0, &p1, &dir);
+
+    if (strcmp(dComIfGp_getStartStageName(), "sea") == 0 && dComIfGp_roomControl_getStayNo() == 4) {
+        radScale = 11.0f;
+        animate = false;
+        mWind.mPos = p0 + (dir * -100.0f);
+    }
+
+    mWind.mDir = dir;
+    mWind.mRadius = mpCps->mRadius * radScale;
+    mWind.field_0x20 = 0.0f;
+
+    if (animate) {
+        cLib_addCalc(&mWind.mPos.x, mpCps->mEnd.x, 0.1f, mWind.mRadius, mWind.mRadius * 0.5f);
+        cLib_addCalc(&mWind.mPos.y, mpCps->mEnd.y, 0.1f, mWind.mRadius, mWind.mRadius * 0.5f);
+        cLib_addCalc(&mWind.mPos.z, mpCps->mEnd.z, 0.1f, mWind.mRadius, mWind.mRadius * 0.5f);
+
+        if (mWind.mPos.abs(p1) < mWind.mRadius) {
+            mWind.mPos.x = mpCps->mStart.x;
+            mWind.mPos.y = mpCps->mStart.y;
+            mWind.mPos.z = mpCps->mStart.z;
+        }
+    }
 }
 
 /* 800CF5C8-800CF5EC       .text set_pwind_delete__12dPointWind_cFv */
 void dPointWind_c::set_pwind_delete() {
-    /* Nonmatching */
+    dKyw_pntwind_cut(&mWind);
 }
 

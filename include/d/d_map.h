@@ -63,7 +63,7 @@ public:
     void drawPointAgb(u8, f32, f32, f32, s8, s16, u8, u8, u8, u8);
     void getTypeAgbGcFromTypeAcs(u8, u8*, u8*);
     static void drawPointSingle(u8, f32, f32, f32, s8, s16, u8, u8, u8);
-    void drawActorPointMiniMap(fopAc_ac_c*);
+    static void drawActorPointMiniMap(fopAc_ac_c*);
     void mapBufferSendAGB_commonCursor();
     void mapBufferSendAGB_ocean();
     void mapBufferSendAGB_dungeon();

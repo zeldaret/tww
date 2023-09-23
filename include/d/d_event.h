@@ -48,7 +48,7 @@ public:
     void soundProc();
     void check();
     void photoCheck();
-    void moveApproval(void*);
+    s32 moveApproval(void*);
     void compulsory(void*, const char*, u16);
     void remove();
     void getStageEventDt();

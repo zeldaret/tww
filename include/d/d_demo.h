@@ -10,6 +10,12 @@ class dDemo_light_c;
 class dDemo_system_c;
 class TControl;
 class dMesg_tControl;
+class fopAc_ac_c;
+
+class dDemo_actor_c /* : public JStage::TActor */ {
+public:
+    void setActor(fopAc_ac_c*);
+};
 
 class dDemo_object_c {
 public:
@@ -17,7 +23,7 @@ public:
     ~dDemo_object_c();
 
     void appendActor(fopAc_ac_c*);
-    void getActor(u8);
+    dDemo_actor_c* getActor(u8);
     void createCamera();
     void getActiveCamera();
     void createAmbient();

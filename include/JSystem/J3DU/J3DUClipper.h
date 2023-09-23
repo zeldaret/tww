@@ -8,10 +8,10 @@ class J3DUClipper {
 public:
     J3DUClipper() { init(); }
     virtual ~J3DUClipper() {}
-    /* 80273778 */ void init();
-    /* 8027378C */ void calcViewFrustum();
-    /* 802738FC */ u32 clip(f32 const (*)[4], Vec, f32) const;
-    /* 80273A44 */ u32 clip(f32 const (*)[4], Vec*, Vec*) const;
+    void init();
+    void calcViewFrustum();
+    u32 clip(const Mtx, Vec, f32);
+    u32 clip(const Mtx, Vec*, Vec*);
 
     void setFovy(f32 fovy) { mFovY = fovy; }
     void setAspect(f32 aspect) { mAspect = aspect; }
