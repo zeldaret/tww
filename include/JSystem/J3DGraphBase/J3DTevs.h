@@ -4,14 +4,14 @@
 #include "dolphin/types.h"
 
 struct J3DTevStageInfo {
-    /* 0x0 */ u8 mTevMode;
-    /* 0x1 */ u8 mTevColorOp;
-    /* 0x2 */ u8 mTevColorAB;
-    /* 0x3 */ u8 mTevColorCD;
+    /* 0x0 */ u8 field_0x0;
+    /* 0x1 */ u8 field_0x1;
+    /* 0x2 */ u8 field_0x2;
+    /* 0x3 */ u8 field_0x3;
     /* 0x4 */ u8 field_0x4;
-    /* 0x5 */ u8 mTevAlphaOp;
-    /* 0x6 */ u8 mTevAlphaAB;
-    /* 0x7 */ u8 mTevSwapModeInfo;
+    /* 0x5 */ u8 field_0x5;
+    /* 0x6 */ u8 field_0x6;
+    /* 0x7 */ u8 field_0x7;
 };
 
 struct J3DTevStage : public J3DTevStageInfo {

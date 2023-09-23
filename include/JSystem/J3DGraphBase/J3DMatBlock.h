@@ -81,7 +81,7 @@ public:
     virtual void setTexMtxOffset(u32);
     virtual ~J3DTexGenBlockPatched();
 
-private:
+protected:
     /* 0x04 */ u32 mTexGenNum;
     /* 0x08 */ J3DTexCoord mTexCoord[8];
     /* 0x38 */ J3DTexMtx* mTexMtx[8];
@@ -248,8 +248,8 @@ private:
     /* 0x18 */ J3DTevOrder mTevOrder[8];
     /* 0x38 */ J3DTevStage mTevStage[8];
     /* 0x78 */ J3DIndTevStage mIndTevStage[8];
-    /* 0x98 */ J3DGXColorS10 mTevColor[4];
-    /* 0xB8 */ J3DGXColor mTevKColor[4];
+    /* 0x98 */ GXColorS10 mTevColor[4];
+    /* 0xB8 */ GXColor mTevKColor[4];
     /* 0xC8 */ u8 mTevKColorSel[8];
     /* 0xD0 */ u8 mTevStageNum;
     /* 0xD4 */ u32 mTevRegOffset;
@@ -323,8 +323,8 @@ private:
     /* 0x10 */ J3DTevOrder mTevOrder[4];
     /* 0x20 */ u8 mTevStageNum;
     /* 0x21 */ J3DTevStage mTevStage[4];
-    /* 0x42 */ J3DGXColorS10 mTevColor[4];
-    /* 0x62 */ J3DGXColor mTevKColor[4];
+    /* 0x42 */ GXColorS10 mTevColor[4];
+    /* 0x62 */ GXColor mTevKColor[4];
     /* 0x72 */ u8 mTevKColorSel[4];
     /* 0x76 */ u8 mTevKAlphaSel[4];
     /* 0x7A */ J3DTevSwapModeTable mTevSwapModeTable[4];
@@ -394,10 +394,10 @@ public:
 private:
     /* 0x08 */ u16 mTexNo[2];
     /* 0x0C */ J3DTevOrder mTevOrder[2];
-    /* 0x14 */ J3DGXColorS10 mTevColor[4];
+    /* 0x14 */ GXColorS10 mTevColor[4];
     /* 0x34 */ u8 mTevStageNum;
     /* 0x35 */ J3DTevStage mTevStage[2];
-    /* 0x45 */ J3DGXColor mTevKColor[4];
+    /* 0x45 */ GXColor mTevKColor[4];
     /* 0x55 */ u8 mTevKColorSel[2];
     /* 0x57 */ u8 mTevKAlphaSel[2];
     /* 0x59 */ J3DTevSwapModeTable mTevSwapModeTable[4];
@@ -469,8 +469,8 @@ private:
     /* 0x018 */ J3DTevOrder mTevOrder[16];
     /* 0x058 */ u8 mTevStageNum;
     /* 0x059 */ J3DTevStage mTevStage[16];
-    /* 0x0DA */ J3DGXColorS10 mTevColor[4];
-    /* 0x0FA */ J3DGXColor mTevKColor[4];
+    /* 0x0DA */ GXColorS10 mTevColor[4];
+    /* 0x0FA */ GXColor mTevKColor[4];
     /* 0x10A */ u8 mTevKColorSel[16];
     /* 0x11A */ u8 mTevKAlphaSel[16];
     /* 0x12A */ J3DTevSwapModeTable mTevSwapModeTable[4];
@@ -550,9 +550,6 @@ struct J3DZMode {
 };
 
 struct J3DBlendInfo {
-    void operator=(J3DBlendInfo const& other) {
-        *(int*)&mType = *(int*)&other.mType;
-    }
     /* 0x0 */ u8 mType;
     /* 0x1 */ u8 mSrcFactor;
     /* 0x2 */ u8 mDstFactor;
