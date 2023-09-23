@@ -26,6 +26,7 @@ class JKRDvdRipper {
 public:
     static JSUList<JKRDMCommand> sDvdAsyncList;
     static u32 sSzpBufferSize;
+    static bool errorRetry;
 
     enum EAllocDirection {
         UNKNOWN_EALLOC_DIRECTION = 0,
@@ -42,7 +43,7 @@ public:
     static void* loadToMainRAM(JKRDvdFile*, u8*, JKRExpandSwitch, u32, JKRHeap*, EAllocDirection,
                                u32, int*);
 
-    static u8 isErrorRetry(void);
+    static bool isErrorRetry(void) { return errorRetry; }
     inline static u32 getSzpBufferSize() { return sSzpBufferSize; }
 };
 
