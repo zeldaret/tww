@@ -21,20 +21,20 @@ const f32 daShopItem_c::m_cullfar_max = 5000.0f;
 char* daShopItem_c::getShopArcname() {
     u8 type = fopAcM_GetParamBit(this, 8, 4);
     if(type == 1 || (type == 0 && mModelType[m_itemNo] == 0x01)) {
-        return dItem_data::field_item_res[m_itemNo].mModelArcName;
+        return dItem_data::getFieldArc(m_itemNo);
     }
     else {
-        return dItem_data::item_resource[m_itemNo].mModelArcName;
+        return dItem_data::getArcname(m_itemNo);
     }
 }
 
 s16 daShopItem_c::getShopBmdIdx() {
     u8 type = fopAcM_GetParamBit(this, 8, 4);
     if(type == 1 || (type == 0 && mModelType[m_itemNo] == 0x01)) {
-        return dItem_data::field_item_res[m_itemNo].mModelFileId;
+        return dItem_data::getFieldBmdIdx(m_itemNo);
     }
     else {
-        return dItem_data::item_resource[m_itemNo].mModelFileIdx;
+        return dItem_data::getBmdIdx(m_itemNo);
     }
 }
 
@@ -57,10 +57,10 @@ void daShopItem_c::CreateInit() {
         tevType = (TevType)0x5C;
     }
 
-    mModel->setUserArea(0);
+    mpModel->setUserArea(0);
 }
 
-s32 daShopItem_c::clothCreate() {
+BOOL daShopItem_c::clothCreate() {
     if(isUseClothPacket(m_itemNo)) {
         dCloth_packet_c* (*clothFunc[4])(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**) = {dClothVobj03_create, dClothVobj04_create, dClothVobj05_create, dClothVobj07_0_create};
         u32 clothRes[4] = {0x20, 0x21, 0x22, 0x23};
@@ -96,7 +96,7 @@ s32 daShopItem_c::clothCreate() {
 }
 
 void daShopItem_c::set_mtx() {
-    mModel->setBaseScale(mScale);
+    mpModel->setBaseScale(mScale);
     MTXTrans(mDoMtx_stack_c::get(), current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, current.angle.z);
     MTXCopy(mDoMtx_stack_c::get(), field_0x64C);
@@ -105,7 +105,7 @@ void daShopItem_c::set_mtx() {
     mDoMtx_stack_c::transM(temp1.x, temp1.y, temp1.z);
     const SVec& temp2 = getData()[m_itemNo].field_0x18;
     mDoMtx_stack_c::ZXYrotM(temp2.x, temp2.y, temp2.z);
-    MTXCopy(mDoMtx_stack_c::get(), mModel->mBaseTransformMtx);
+    MTXCopy(mDoMtx_stack_c::get(), mpModel->mBaseTransformMtx);
 
     if(field_0x644 != 0) {
         // I have no clue why Nintendo would do this but it works
@@ -139,7 +139,7 @@ bool daShopItem_c::_draw() {
     if(chkDraw() == 0) return 1;
 
     if(m_itemNo == WATER_STATUE || m_itemNo == POSTMAN_STATUE) {
-        mModel->getModelData()->getJointTree().getJointNodePointer(0)->setMtxCalc(0);
+        mpModel->getModelData()->getJointTree().getJointNodePointer(0)->setMtxCalc(0);
     }
     DrawBase();
     
@@ -150,16 +150,16 @@ bool daShopItem_c::_draw() {
 
 void daShopItem_c::settingBeforeDraw() {
     if(isBomb(m_itemNo) || (m_itemNo == BOMB_BAG) || (m_itemNo == HUMMER) || m_itemNo == SMALL_KEY || m_itemNo == PRESIDENT_STATUE) {
-        dDlst_texSpecmapST(&mEyePos, &mTevStr, mModel->getModelData(), 1.0f);
+        dDlst_texSpecmapST(&mEyePos, &mTevStr, mpModel->getModelData(), 1.0f);
     }
 }
 
 void daShopItem_c::setTevStr() {
     g_env_light.settingTevStruct(tevType, getPositionP(), &mTevStr);
-    g_env_light.setLightTevColorType(mModel, &mTevStr);
+    g_env_light.setLightTevColorType(mpModel, &mTevStr);
     for(int i = 0; i < 2; i++) {
-        if(mModelArrow[i] != 0) {
-            g_env_light.setLightTevColorType(mModelArrow[i], &mTevStr);
+        if(mpModelArrow[i] != 0) {
+            g_env_light.setLightTevColorType(mpModelArrow[i], &mTevStr);
         }
     }
     
@@ -246,7 +246,7 @@ static actor_method_class daShopItemMethodTable = {
     (process_method_func)daShopItem_Delete,
     (process_method_func)daShopItem_Execute,
     (process_method_func)daShopItem_IsDelete,
-    (process_method_func)0,
+    (process_method_func)daShopItem_Draw,
 };
 
 extern actor_process_profile_definition g_profile_ShopItem = {

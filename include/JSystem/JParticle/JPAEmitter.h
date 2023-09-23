@@ -12,8 +12,6 @@
 #include "dolphin/gx/GXStruct.h"
 #include "dolphin/mtx/mtx.h"
 
-class JPACallBackBase;
-class JPACallBackBase2;
 class JPADataBlockLinkInfo;
 
 enum {
@@ -24,6 +22,18 @@ enum {
     JPAEmtrStts_FirstEmit = 0x10,
     JPAEmtrStts_RateStepEmit = 0x20,
     JPAEmtrStts_Immortal = 0x40,
+};
+
+template<typename T>
+class JPACallBackBase {
+public:
+    JPACallBackBase() {}
+    virtual ~JPACallBackBase();
+    
+    virtual void init(JPABaseEmitter*);
+    virtual void execute(JPABaseEmitter*);
+    virtual void executeAfter(JPABaseEmitter*);
+    virtual void draw(JPABaseEmitter*);
 };
 
 class JPABaseEmitter {
@@ -111,7 +121,7 @@ public:
     /* 0x188 */ JSUPtrList mChildParticles;
     /* 0x194 */ JSUPtrList* mpPtclVacList;
     /* 0x198 */ JPADataBlockLinkInfo* mpDataLinkInfo;
-    /* 0x19C */ JPACallBackBase* mpEmitterCallBack;
+    /* 0x19C */ JPACallBackBase<JPABaseEmitter>* mpEmitterCallBack;
     /* 0x1A0 */ JPACallBackBase2* mpParticleCallBack;
     /* 0x1A4 */ JMath::TRandom_fast_ mRandomSeed;
     /* 0x1A8 */ Mtx mGlobalRotation;
