@@ -51,7 +51,8 @@ void HeapCheck::CheckHeap1() {
 }
 
 // unused data?
-static u32 lit_2100[] = {0x3F800000, 0x3F800000, 0x3F800000, 0x3F800000, 0x3F800000, 0x3F800000};
+static u32 lit_2100[] = {0x3F800000, 0x3F800000, 0x3F800000};
+static u32 lit_2080[] = {0x3F800000, 0x3F800000, 0x3F800000};
 
 char mDoMain::COPYDATE_STRING[18] = "??/??/?? ??:??:??";
 
