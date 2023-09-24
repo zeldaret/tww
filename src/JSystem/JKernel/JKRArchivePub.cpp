@@ -168,21 +168,22 @@ void* JKRArchive::getResource(u32 type, const char* path) {
 
 /* 802B8528-802B85F0       .text readTypeResource__10JKRArchiveFPvUlUlPCcP10JKRArchive */
 // missing instructions
-void JKRArchive::readTypeResource(void* buffer, u32 bufferSize, u32 type, const char* path, JKRArchive* archive) {
-    /* Nonmatching */
+u32 JKRArchive::readTypeResource(void* buffer, u32 bufferSize, u32 type, const char* path, JKRArchive* archive) {
+    u32 ret = 0;
+
     if (archive) {
-        archive->readResource(buffer, bufferSize, type, path);
-        return;
-    }
-    JSUListIterator<JKRFileLoader> iterator;
-    for (iterator = sVolumeList.getFirst(); iterator != sVolumeList.getEnd(); iterator++) {
-        if (iterator->getVolumeType() == 'RARC') {
-            u32 result = iterator->readResource(buffer, bufferSize, type, path);
-            if (result != 0) {
-                return;
+        ret = archive->readResource(buffer, bufferSize, type, path);
+    } else {
+        for (JSUListIterator<JKRFileLoader> it = sVolumeList.getFirst(); it != sVolumeList.getEnd(); it++) {
+            if (it->getVolumeType() == 'RARC') {
+                ret = it->readResource(buffer, bufferSize, type, path);
+                if (ret != 0)
+                    break;
             }
         }
     }
+
+    return ret;
 }
 
 /* 802B85F0-802B86DC       .text readResource__10JKRArchiveFPvUlUlPCc */

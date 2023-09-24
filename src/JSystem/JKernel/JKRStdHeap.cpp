@@ -24,10 +24,10 @@ JKRStdHeap* JKRStdHeap::create(u32 size, JKRHeap* parent, bool errorFlag) {
     }
     u8* memory = (u8*)JKRAllocFromHeap(parent, alignedSize, 0x20);
     u32 stdHeapSize = ALIGN_NEXT(sizeof(JKRStdHeap), 0x20);
+    u8* dataPtr = (memory + stdHeapSize);
     if (!memory) {
         return NULL;
     }
-    u8* dataPtr = (memory + stdHeapSize);
     JKRStdHeap* newHeap = new(memory) JKRStdHeap(dataPtr, alignedSize - stdHeapSize, parent, errorFlag);
     return newHeap;
 }

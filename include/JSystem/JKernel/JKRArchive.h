@@ -41,8 +41,6 @@ inline u16 read_big_endian_u16(void* ptr) {
     return ((u16)uptr[0] << 8) | ((u16)uptr[1]);
 }
 
-extern u32 sCurrentDirID__10JKRArchive;  // JKRArchive::sCurrentDirID
-
 class JKRArchive : public JKRFileLoader {
 public:
     struct SDirEntry {
@@ -118,7 +116,6 @@ public:
 protected:
     JKRArchive();
     JKRArchive(long, EMountMode);
-    virtual ~JKRArchive();
 
 public:
     bool getDirEntry(SDirEntry*, u32) const;
@@ -165,6 +162,9 @@ public:
     u8 getMountMode() const { return mMountMode; }
     bool isFileEntry(u32 param_0) { return getFileAttribute(param_0) & 1; }
 
+protected:
+    virtual ~JKRArchive();
+
 public:
     /* 0x00 */  // vtable
     /* 0x04 */  // JKRFileLoader
@@ -189,7 +189,7 @@ public:
     static JKRArchive* mount(void*, JKRHeap*, EMountDirection);
     static JKRArchive* mount(s32, EMountMode, JKRHeap*, EMountDirection);
     static void* getGlbResource(u32, const char*, JKRArchive*);
-    static void readTypeResource(void*, u32, u32, const char*, JKRArchive*);
+    static u32 readTypeResource(void*, u32, u32, const char*, JKRArchive*);
 
     static JKRCompression convertAttrToCompressionType(u32 attr) {
 #define JKRARCHIVE_ATTR_COMPRESSION 0x04
