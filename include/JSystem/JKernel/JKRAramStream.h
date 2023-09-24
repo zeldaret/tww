@@ -64,4 +64,8 @@ inline JKRAramStream* JKRCreateAramStreamManager(long priority) {
     return JKRAramStream::create(priority);
 }
 
+inline JKRAramStreamCommand* JKRStreamToAram_Async(JSUFileInputStream *stream, u32 addr, u32 size, u32 offset, void (*callback)(u32)) {
+    return JKRAramStream::write_StreamToAram_Async(stream, addr, size, offset);
+}
+
 #endif /* JKRARAMSTREAM_H */

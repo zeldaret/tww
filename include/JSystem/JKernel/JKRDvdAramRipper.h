@@ -13,23 +13,22 @@ public:
     ~JKRADCommand();
 
     /* 0x00 */ JSULink<JKRADCommand> mLink;
-    /* 0x10 */ int field_0x10;
-    /* 0x14 */ int field_0x14;
-    /* 0x18 */ int field_0x18;
-    /* 0x1C */ int field_0x1c;
-    /* 0x20 */ int field_0x20;
-    /* 0x24 */ int field_0x24;
-    /* 0x28 */ JKRDvdFile* mDvdFile;
-    /* 0x2C */ u32 field_0x2c;
-    /* 0x30 */ JKRAramBlock* mBlock;
+    /* 0x10 */ JKRDvdFile* mDvdFile;
+    /* 0x14 */ u32 mOffset;
+    /* 0x18 */ u32 field_0x18;
+    /* 0x1C */ u32 mAddress;
+    /* 0x20 */ JKRAramBlock* mBlock;
+    /* 0x24 */ JKRExpandSwitch mExpandSwitch;
+    /* 0x28 */ int field_0x28;
+    /* 0x2C */ int field_0x2c;
+    /* 0x30 */ int field_0x30;
     /* 0x34 */ int field_0x34;
-    /* 0x38 */ void (*field_0x38)(u32);
-    /* 0x3C */ u32 field_0x3c;
-    /* 0x40 */ u32 field_0x40;
-    /* 0x44 */ u32* field_0x44;
-    /* 0x48 */ int field_0x48;
-    /* 0x4C */ u8 field_0x4c;
-    /* 0x50 */ JKRAramStreamCommand* mStreamCommand;
+    /* 0x38 */ int field_0x38;
+    /* 0x3C */ int field_0x3c;
+    /* 0x40 */ void (*mCallback)(u32);
+    /* 0x44 */ int field_0x44;
+    /* 0x48 */ bool field_0x48;
+    /* 0x4C */ JKRAramStreamCommand* mStreamCommand;
 };
 
 class JKRDvdFile;
@@ -42,11 +41,12 @@ public:
     static JKRADCommand* callCommand_Async(JKRADCommand*);
     static bool syncAram(JKRADCommand*, int);
 
+    static u32 getSzpBufferSize() { return sSzpBufferSize; }
     static void setSzpBufferSize(u32 size) { sSzpBufferSize = size; }
 
-    // TODO: fix type
-    static u8 sDvdAramAsyncList[12];
+    static JSUList<JKRADCommand> sDvdAramAsyncList;
     static u32 sSzpBufferSize;
+    static bool errorRetry;
 };
 
 inline JKRAramBlock *JKRDvdToAram(s32 entrynum, u32 p2, JKRExpandSwitch expSwitch, u32 p4, u32 p5) {
