@@ -22,22 +22,21 @@ public:
     /* 0x0C */ u32 field_0x0c;
     /* 0x10 */ JSUFileInputStream* mStream;
     /* 0x14 */ u32 mOffset;
-    /* 0x18 */ u32* mReturnSize;
-    /* 0x1C */ u8* mTransferBuffer;
-    /* 0x20 */ u32 mTransferBufferSize;
-    /* 0x24 */ JKRHeap* mHeap;
-    /* 0x28 */ bool mAllocatedTransferBuffer;
-    /* 0x29 */ u8 padding_0x29[3];
-    /* 0x2C */ u32 field_0x2c;
-    /* 0x30 */ OSMessageQueue mMessageQueue;
-    /* 0x50 */ OSMessage mMessage;
-    /* 0x54 */ u32 field_0x54;
-    /* 0x58 */ u32 field_0x58;
+    /* 0x18 */ u8* mTransferBuffer;
+    /* 0x1C */ u32 mTransferBufferSize;
+    /* 0x20 */ JKRHeap* mHeap;
+    /* 0x24 */ bool mAllocatedTransferBuffer;
+    /* 0x25 */ u8 padding_0x29[3];
+    /* 0x28 */ u32 field_0x2c;
+    /* 0x2C */ OSMessageQueue mMessageQueue;
+    /* 0x4C */ OSMessage mMessage;
+    /* 0x50 */ u32 field_0x54;
+    /* 0x54 */ u32 field_0x58;
 };
 
 class JKRAramStream : public JKRThread {
 private:
-    JKRAramStream(long);
+    JKRAramStream(s32);
     virtual ~JKRAramStream();
 
     /* vt[03] */ void* run(void); /* override */
@@ -47,7 +46,7 @@ public:
 
     static s32 readFromAram(void);
     static s32 writeToAram(JKRAramStreamCommand*);
-    static JKRAramStreamCommand* write_StreamToAram_Async(JSUFileInputStream*, u32, u32, u32, u32*);
+    static JKRAramStreamCommand* write_StreamToAram_Async(JSUFileInputStream*, u32, u32, u32);
     static JKRAramStreamCommand* sync(JKRAramStreamCommand*, BOOL);
     static void setTransBuffer(u8*, u32, JKRHeap*);
 
@@ -63,6 +62,10 @@ private:
 
 inline JKRAramStream* JKRCreateAramStreamManager(long priority) {
     return JKRAramStream::create(priority);
+}
+
+inline JKRAramStreamCommand* JKRStreamToAram_Async(JSUFileInputStream *stream, u32 addr, u32 size, u32 offset, void (*callback)(u32)) {
+    return JKRAramStream::write_StreamToAram_Async(stream, addr, size, offset);
 }
 
 #endif /* JKRARAMSTREAM_H */

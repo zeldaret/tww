@@ -22,7 +22,7 @@ typedef struct OSHeapCell {
     /* 0x14 */ char field_0x14[0x20 - 0x14];
 } OSHeapCell;
 
-typedef u32 OSHeapHandle;
+typedef s32 OSHeapHandle;
 
 extern volatile s32 __OSCurrHeap;
 
@@ -36,10 +36,15 @@ extern volatile s32 __OSCurrHeap;
 #define OSRoundDownPtr(x, align) ((void*)(((u32)(x)) & (~((align)-1))))
 
 static OSHeapCell* DLInsert(OSHeapCell* list, OSHeapCell* child);
+void* OSAllocFromHeap(OSHeapHandle handle, u32 size);
 void OSFreeToHeap(OSHeapHandle handle, void* ptr);
 s32 OSSetCurrentHeap(OSHeapHandle handle);
 void* OSInitAlloc(void* lo, void* hi, s32 maxHeaps);
 OSHeapHandle OSCreateHeap(void* start, void* end);
+void OSDestroyHeap(OSHeapHandle handle);
+s32 OSCheckHeap(OSHeapHandle handle);
+s32 OSReferentSize(void* ptr);
+void OSDumpHeap(OSHeapHandle handle);
 
 #ifdef __cplusplus
 };

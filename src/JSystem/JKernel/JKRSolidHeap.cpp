@@ -4,114 +4,269 @@
 //
 
 #include "JSystem/JKernel/JKRSolidHeap.h"
-#include "dolphin/types.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "JSystem/JUtility/JUTConsole.h"
+#include "global.h"
 
 /* 802B3290-802B333C       .text create__12JKRSolidHeapFUlP7JKRHeapb */
-void JKRSolidHeap::create(unsigned long, JKRHeap*, bool) {
-    /* Nonmatching */
+JKRSolidHeap* JKRSolidHeap::create(u32 size, JKRHeap* heap, bool useErrorHandler) {
+    if (!heap) {
+        heap = getRootHeap();
+    }
+
+    if (size == 0xffffffff) {
+        size = heap->getMaxAllocatableSize(0x10);
+    }
+
+    u32 alignedSize = ALIGN_PREV(size, 0x10);
+    u32 solidHeapSize = ALIGN_NEXT(sizeof(JKRSolidHeap), 0x10);
+    if (alignedSize < solidHeapSize)
+        return NULL;
+
+    JKRSolidHeap* solidHeap = (JKRSolidHeap*)JKRAllocFromHeap(heap, alignedSize, 0x10);
+    void* dataPtr = (u8*)solidHeap + solidHeapSize;
+    if (!solidHeap)
+        return NULL;
+
+    solidHeap =
+        new (solidHeap) JKRSolidHeap(dataPtr, alignedSize - solidHeapSize, heap, useErrorHandler);
+    return solidHeap;
 }
 
 /* 802B333C-802B339C       .text do_destroy__12JKRSolidHeapFv */
 void JKRSolidHeap::do_destroy() {
-    /* Nonmatching */
+    JKRHeap* parent = getParent();
+    if (parent) {
+        this->~JKRSolidHeap();
+        JKRFreeToHeap(parent, this);
+    }
 }
 
 /* 802B339C-802B33F8       .text __ct__12JKRSolidHeapFPvUlP7JKRHeapb */
-JKRSolidHeap::JKRSolidHeap(void*, unsigned long, JKRHeap*, bool) {
-    /* Nonmatching */
+JKRSolidHeap::JKRSolidHeap(void* start, u32 size, JKRHeap* parent, bool useErrorHandler) : JKRHeap(start, size, parent, useErrorHandler) {
+    mFreeSize = mSize;
+    mSolidHead = (u8*)mStart;
+    mSolidTail = (u8*)mEnd;
+    field_0x78 = NULL;
 }
 
 /* 802B33F8-802B3460       .text __dt__12JKRSolidHeapFv */
 JKRSolidHeap::~JKRSolidHeap() {
-    /* Nonmatching */
+    dispose();
 }
 
 /* 802B3460-802B351C       .text adjustSize__12JKRSolidHeapFv */
-void JKRSolidHeap::adjustSize() {
-    /* Nonmatching */
+s32 JKRSolidHeap::adjustSize() {
+    JKRHeap* parent = getParent();
+    if (parent) {
+        lock();
+        u32 thisSize = (u32)mStart - (u32)this;
+        u32 newSize = ALIGN_NEXT(mSolidHead - mStart, 0x20);
+        if (parent->resize(this, thisSize + newSize) != -1) {
+            mFreeSize = 0;
+            mSize = newSize;
+            mEnd = mStart + mSize;
+            mSolidHead = mEnd;
+            mSolidTail = mEnd;
+        }
+
+        unlock();
+
+        return thisSize + newSize;
+    }
+
+    return -1;
 }
 
 /* 802B351C-802B35C4       .text do_alloc__12JKRSolidHeapFUli */
-void JKRSolidHeap::do_alloc(unsigned long, int) {
-    /* Nonmatching */
+void* JKRSolidHeap::do_alloc(u32 size, int alignment) {
+    lock();
+
+    if (size < 4) {
+        size = 4;
+    }
+
+    void* ptr;
+    if (alignment >= 0) {
+        ptr = allocFromHead(size, alignment < 4 ? 4 : alignment);
+    } else {
+        if (-alignment < 4) {
+            alignment = 4;
+        } else {
+            alignment = -alignment;
+        }
+
+        ptr = allocFromTail(size, alignment);
+    }
+
+    unlock();
+    return ptr;
 }
 
 /* 802B35C4-802B368C       .text allocFromHead__12JKRSolidHeapFUli */
-void JKRSolidHeap::allocFromHead(unsigned long, int) {
-    /* Nonmatching */
+void* JKRSolidHeap::allocFromHead(u32 size, int alignment) {
+    size = ALIGN_NEXT(size, 0x4);
+    void* ptr = NULL;
+    u32 alignedStart = (alignment - 1 + (u32)mSolidHead) & ~(alignment - 1);
+    u32 offset = alignedStart - (u32)mSolidHead;
+    u32 totalSize = size + offset;
+    if (totalSize <= mFreeSize) {
+        ptr = (void*)alignedStart;
+        mSolidHead += totalSize;
+        mFreeSize -= totalSize;
+    } else {
+        JUTWarningConsole_f("allocFromHead: cannot alloc memory (0x%x byte).\n", totalSize);
+        if (getErrorFlag() == true) {
+            callErrorHandler(this, size, alignment);
+        }
+    }
+
+    return ptr;
 }
 
 /* 802B368C-802B3750       .text allocFromTail__12JKRSolidHeapFUli */
-void JKRSolidHeap::allocFromTail(unsigned long, int) {
-    /* Nonmatching */
+void* JKRSolidHeap::allocFromTail(u32 size, int alignment) {
+    size = ALIGN_NEXT(size, 4);
+    void* ptr = NULL;
+    u32 alignedStart = ALIGN_PREV((u32)mSolidTail - size, alignment);
+    u32 totalSize = (u32)mSolidTail - (u32)alignedStart;
+    if (totalSize <= mFreeSize) {
+        ptr = (void*)alignedStart;
+        mSolidTail -= totalSize;
+        mFreeSize -= totalSize;
+    } else {
+        JUTWarningConsole_f("allocFromTail: cannot alloc memory (0x%x byte).\n", totalSize);
+        if (getErrorFlag() == true) {
+            callErrorHandler(this, size, alignment);
+        }
+    }
+    return ptr;
 }
 
 /* 802B3750-802B3780       .text do_free__12JKRSolidHeapFPv */
-void JKRSolidHeap::do_free(void*) {
-    /* Nonmatching */
+void JKRSolidHeap::do_free(void* ptr) {
+    JUTWarningConsole_f("free: cannot free memory block (%08x)\n", ptr);
 }
 
 /* 802B3780-802B37E0       .text do_freeAll__12JKRSolidHeapFv */
 void JKRSolidHeap::do_freeAll() {
-    /* Nonmatching */
+    lock();
+
+    this->JKRHeap::callAllDisposer();
+    mFreeSize = mSize;
+    mSolidHead = (u8*)mStart;
+    mSolidTail = (u8*)mEnd;
+    field_0x78 = NULL;
+
+    unlock();
 }
 
 /* 802B37E0-802B386C       .text do_freeTail__12JKRSolidHeapFv */
 void JKRSolidHeap::do_freeTail() {
-    /* Nonmatching */
+    lock();
+
+    if (mSolidTail != mEnd) {
+        dispose(mSolidTail, mEnd);
+    }
+
+    this->mFreeSize = ((u32)mEnd - (u32)mSolidTail + mFreeSize);
+    this->mSolidTail = mEnd;
+
+    JKRSolidHeap::Unknown* unknown = field_0x78;
+    while (unknown) {
+        unknown->field_0xc = mEnd;
+        unknown = unknown->mNext;
+    }
+
+    unlock();
 }
 
 /* 802B386C-802B38A0       .text do_resize__12JKRSolidHeapFPvUl */
-void JKRSolidHeap::do_resize(void*, unsigned long) {
-    /* Nonmatching */
+s32 JKRSolidHeap::do_resize(void* ptr, u32 newSize) {
+    JUTWarningConsole_f("resize: cannot resize memory block (%08x: %d)\n", ptr, newSize);
+    return -1;
 }
 
 /* 802B38A0-802B38D4       .text do_getSize__12JKRSolidHeapFPv */
-void JKRSolidHeap::do_getSize(void*) {
-    /* Nonmatching */
+s32 JKRSolidHeap::do_getSize(void* ptr) {
+    JUTWarningConsole_f("getSize: cannot get memory block size (%08x)\n", ptr);
+    return -1;
 }
 
 /* 802B38D4-802B3964       .text check__12JKRSolidHeapFv */
-void JKRSolidHeap::check() {
-    /* Nonmatching */
+bool JKRSolidHeap::check() {
+    lock();
+
+    bool result = true;
+    u32 calculatedSize =
+        ((u32)mSolidHead - (u32)mStart) + mFreeSize + ((u32)mEnd - (u32)mSolidTail);
+    u32 availableSize = mSize;
+    if (calculatedSize != availableSize) {
+        result = false;
+        JUTWarningConsole_f("check: bad total memory block size (%08X, %08X)\n", availableSize,
+                            calculatedSize);
+    }
+
+    unlock();
+    return result;
 }
 
 /* 802B3964-802B3968       .text do_freeFill__12JKRSolidHeapFv */
-void JKRSolidHeap::do_freeFill() {
-    /* Nonmatching */
-}
+void JKRSolidHeap::do_freeFill() {}
 
 /* 802B3968-802B3A68       .text dump__12JKRSolidHeapFv */
-void JKRSolidHeap::dump() {
-    /* Nonmatching */
+bool JKRSolidHeap::dump() {
+    bool result = check();
+
+    lock();
+    u32 headSize = ((u32)mSolidHead - (u32)mStart);
+    u32 tailSize = ((u32)mEnd - (u32)mSolidTail);
+    s32 htSize = headSize + tailSize;
+    JUTReportConsole_f("head %08x: %08x\n", mStart, headSize);
+    JUTReportConsole_f("tail %08x: %08x\n", mSolidTail, ((u32)mEnd - (u32)mSolidTail));
+
+    u32 totalSize = mSize;
+    float percentage = (float)htSize / (float)totalSize * 100.0f;
+    JUTReportConsole_f("%d / %d bytes (%6.2f%%) used\n", htSize, totalSize, percentage);
+    unlock();
+
+    return result;
 }
 
 /* 802B3A68-802B3B4C       .text state_register__12JKRSolidHeapCFPQ27JKRHeap6TStateUl */
-void JKRSolidHeap::state_register(JKRHeap::TState*, unsigned long) const {
-    /* Nonmatching */
+void JKRSolidHeap::state_register(JKRHeap::TState* p, u32 id) const {
+#if VERSION == VERSION_JPN
+    JUT_ASSERT(610, p != 0);
+    JUT_ASSERT(611, p->getHeap() == this);
+#else
+    JUT_ASSERT(607, p != 0);
+    JUT_ASSERT(608, p->getHeap() == this);
+#endif
+
+    getState_(p);
+    setState_u32ID_(p, id);
+    setState_uUsedSize_(p, getUsedSize((JKRSolidHeap*)this));
+    u32 r29 = (u32)mSolidHead;
+    r29 += (u32)mSolidTail * 3;
+    setState_u32CheckCode_(p, r29);
 }
 
 /* 802B3B4C-802B3BF4       .text state_compare__12JKRSolidHeapCFRCQ27JKRHeap6TStateRCQ27JKRHeap6TState */
-void JKRSolidHeap::state_compare(const JKRHeap::TState&, const JKRHeap::TState&) const {
-    /* Nonmatching */
-}
+bool JKRSolidHeap::state_compare(const JKRHeap::TState& r1, const JKRHeap::TState& r2) const {
+#if VERSION == VERSION_JPN
+    JUT_ASSERT(638, r1.getHeap() == r2.getHeap());
+#else
+    JUT_ASSERT(635, r1.getHeap() == r2.getHeap());
+#endif
 
-/* 802B3BF4-802B3C00       .text getHeapType__12JKRSolidHeapFv */
-void JKRSolidHeap::getHeapType() {
-    /* Nonmatching */
-}
+    bool result = true;
+    if (r1.getCheckCode() != r2.getCheckCode()) {
+        result = false;
+    }
 
-/* 802B3C00-802B3C08       .text do_getFreeSize__12JKRSolidHeapFv */
-void JKRSolidHeap::do_getFreeSize() {
-    /* Nonmatching */
-}
+    if (r1.getUsedSize() != r2.getUsedSize()) {
+        result = false;
+    }
 
-/* 802B3C08-802B3C10       .text do_getMaxFreeBlock__12JKRSolidHeapFv */
-void JKRSolidHeap::do_getMaxFreeBlock() {
-    /* Nonmatching */
-}
-
-/* 802B3C10-802B3C30       .text do_getTotalFreeSize__12JKRSolidHeapFv */
-void JKRSolidHeap::do_getTotalFreeSize() {
-    /* Nonmatching */
+    return result;
 }
