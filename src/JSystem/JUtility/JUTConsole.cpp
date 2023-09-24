@@ -107,21 +107,19 @@ void JUTConsole::clear() {
 void JUTConsole::doDraw(JUTConsole::EConsoleType consoleType) const {
     /* Nonmatching */
     f32 font_yOffset;
-    s32 changeLine_1;
-    s32 changeLine_2;
 
     if (mVisible && (mFont != NULL || consoleType == CONSOLE_TYPE_2)) {
         if (mHeight != 0) {
-            bool temp_r30 = consoleType == CONSOLE_TYPE_0;
+            bool temp_r30 = consoleType == ACTIVE;
             font_yOffset = 2.0f + mFontSizeY;
 
             if (consoleType != CONSOLE_TYPE_2) {
-                if (JUTVideo::getManager() == NULL) {
+                if (JUTGetVideoManager() == NULL) {
                     J2DOrthoGraph ortho(0.0f, 0.0f, 640.0f, 480.0f, -1.0f, 1.0f);
                     ortho.setPort();
                 } else {
-                    J2DOrthoGraph ortho(0.0f, 0.0f, JUTVideo::getManager()->getFbWidth(),
-                                        JUTVideo::getManager()->getEfbHeight(), -1.0f, 1.0f);
+                    JUTVideo * pVideo = JUTGetVideoManager();
+                    J2DOrthoGraph ortho(0.0f, 0.0f, pVideo->getFbWidth(), pVideo->getEfbHeight(), -1.0f, 1.0f);
                     ortho.setPort();
                 }
 
@@ -157,28 +155,24 @@ void JUTConsole::doDraw(JUTConsole::EConsoleType consoleType) const {
 
             char* linePtr;
             s32 curLine = field_0x30;
-            s32 yFactor = 0;
+            s32 y = 0;
 
             do {
                 linePtr = (char*)getLinePtr(curLine);
 
                 if ((u8)linePtr[-1] != NULL) {
                     if (consoleType != CONSOLE_TYPE_2) {
-                        mFont->drawString_scale(mPositionX, ((yFactor * font_yOffset) + mPositionY),
-                                                mFontSizeX, mFontSizeY, linePtr, true);
+                        mFont->drawString_scale(mPositionX, ((y * font_yOffset) + mPositionY), mFontSizeX, mFontSizeY, linePtr, true);
                     } else {
-                        JUTDirectPrint::getManager()->drawString(
-                            mPositionX, ((yFactor * font_yOffset) + mPositionY), linePtr);
+                        JUTDirectPrint::getManager()->drawString(mPositionX, ((y * font_yOffset) + mPositionY), linePtr);
                     }
 
-                    changeLine_1 = curLine + 1;
-                    yFactor += 1;
-                    changeLine_2 = changeLine_1 & ~(-((s32)mMaxLines <= (s32)changeLine_1));
-                    curLine = changeLine_2;
+                    curLine = ((curLine + 1) <= mMaxLines) ? 0 : (curLine + 1);
+                    y++;
                 } else {
                     break;
                 }
-            } while (yFactor < mHeight && changeLine_2 != field_0x34);
+            } while (y < mHeight && curLine != field_0x34);
         }
     }
 }
@@ -268,7 +262,8 @@ void JUTConsole::dumpToTerminal(unsigned int param_0) {
     if (param_0 == 0) {
         return;
     }
-    u32 r29 = field_0x34;
+
+    s32 r29 = field_0x34;
     if (param_0 != -1) {
         r29 = field_0x38;
         for (int i = 0; i != param_0; i++) {
@@ -283,22 +278,24 @@ void JUTConsole::dumpToTerminal(unsigned int param_0) {
         }
     }
 
-    int r27 = 0;
+    s32 i = 0;
     OSReport("\n:::dump of console[%x]--------------------------------\n",this);
-    do {
+    while (true) {
         u8* r28 = getLinePtr(r29);
         u8 r24 = r28[-1];
         if (r24 == 0) {
             break;
         }
         if (field_0x65) {
-            OSReport("[%03d] %s\n", r27, r28);
+            OSReport("[%03d] %s\n", i, r28);
         } else {
             OSReport("%s\n", r28);
         }
         r29 = nextIndex(r29);
-        r27++;
-    } while (r27 != field_0x34);
+        i++;
+        if (r29 == field_0x34)
+            break;
+    }
     OSReport(":::dump of console[%x] END----------------------------\n",this);
 }
 
@@ -328,7 +325,7 @@ void JUTConsole::scroll(int scrollAmnt) {
         field_0x30 += mMaxLines;
     }
 
-    if (field_0x30 >= mMaxLines) {
+    if (field_0x30 >= (u32)mMaxLines) {
         field_0x30 -= mMaxLines;
     }
 }
@@ -370,6 +367,11 @@ JUTConsoleManager* JUTConsoleManager::createManager(JKRHeap* pHeap) {
 /* 802CB380-802CB4C4       .text appendConsole__17JUTConsoleManagerFP10JUTConsole */
 void JUTConsoleManager::appendConsole(JUTConsole* console) {
     /* Nonmatching */
+    JUT_ASSERT(0x3bf, sManager != 0 && console != 0);
+
+    // need to figure out how TLinkList works
+    JGadget::TLinkListNode node = console->mListNode;
+    mLinkList.Find(&node);
 }
 
 /* 802CB4C4-802CB674       .text removeConsole__17JUTConsoleManagerFP10JUTConsole */
@@ -380,6 +382,16 @@ void JUTConsoleManager::removeConsole(JUTConsole* console) {
 /* 802CB674-802CB740       .text draw__17JUTConsoleManagerCFv */
 void JUTConsoleManager::draw() const {
     /* Nonmatching */
+
+    // need to figure out how TLinkList works
+    for (JGadget::TLinkList<JUTConsole, 4>::const_iterator iter = mLinkList.begin(); iter; ++iter) {
+        const JUTConsole * pConsole = (const JUTConsole*) (&iter.node - offsetof(JUTConsole, mListNode));
+        if (pConsole != mActiveConsole)
+            pConsole->doDraw(JUTConsole::INACTIVE);
+    }
+
+    if (mActiveConsole != NULL)
+        mActiveConsole->doDraw(JUTConsole::ACTIVE);
 }
 
 /* 802CB740-802CB7B4       .text drawDirect__17JUTConsoleManagerCFb */
