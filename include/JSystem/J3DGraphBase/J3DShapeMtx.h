@@ -139,7 +139,6 @@ public:
     J3DShapeMtxYBBoardConcatView(u16 useMtxIndex) : J3DShapeMtxConcatView(useMtxIndex) {}
 
     virtual ~J3DShapeMtxYBBoardConcatView() {}
-    virtual u32 getType() const;
     virtual void load() const;
 };
 
@@ -148,7 +147,6 @@ public:
     J3DShapeMtxBBoardConcatView(u16 useMtxIndex) : J3DShapeMtxConcatView(useMtxIndex) {}
 
     virtual ~J3DShapeMtxBBoardConcatView() {}
-    virtual u32 getType() const;
     virtual void load() const;
 };
 
