@@ -4,34 +4,137 @@
 //
 
 #include "JSystem/JUtility/JUTDirectFile.h"
-#include "dolphin/types.h"
+#include "dolphin/dvd/dvd.h"
+#include "dolphin/os/OS.h"
+#include "global.h"
 
 /* 802CBAD8-802CBBA0       .text fetch32byte__13JUTDirectFileFv */
-void JUTDirectFile::fetch32byte() {
-    /* Nonmatching */
+int JUTDirectFile::fetch32byte() {
+    mToRead = mLength - ALIGN_PREV(mPos, 0x20);
+    if (mToRead > 0x800)
+        mToRead = 0x800;
+
+    BOOL interrupt = OSEnableInterrupts();
+    BOOL ret = DVDReadAsyncPrio(&mFileInfo, mSectorStart, ALIGN_NEXT(mToRead, 0x20), ALIGN_PREV(mPos, 0x20), NULL, 2);
+    OSRestoreInterrupts(interrupt);
+
+    if (!ret)
+        return -1;
+
+    interrupt = OSEnableInterrupts();
+    while (true) {
+        if (!DVDGetFileInfoStatus(&mFileInfo))
+            break;
+    }
+    OSRestoreInterrupts(interrupt);
+    return mToRead;
 }
 
 /* 802CBBA0-802CBBC4       .text __ct__13JUTDirectFileFv */
 JUTDirectFile::JUTDirectFile() {
-    /* Nonmatching */
+    mLength = 0;
+    mPos = 0;
+    mToRead = 0;
+    mSectorStart = (u8*)ALIGN_NEXT((u32)mBuffer, 0x20);
+    mIsOpen = false;
 }
 
 /* 802CBBC4-802CBC08       .text __dt__13JUTDirectFileFv */
 JUTDirectFile::~JUTDirectFile() {
-    /* Nonmatching */
+    mIsOpen = false;
 }
 
 /* 802CBC08-802CBCA4       .text fopen__13JUTDirectFileFPCc */
-void JUTDirectFile::fopen(const char*) {
-    /* Nonmatching */
+bool JUTDirectFile::fopen(const char* pFilename) {
+    if (pFilename == NULL)
+        return false;
+
+    BOOL interrupt = OSEnableInterrupts();
+    BOOL ret = DVDOpen(pFilename, &mFileInfo);
+    OSRestoreInterrupts(interrupt);
+
+    if (!ret) {
+        mIsOpen = false;
+        return false;
+    }
+
+    interrupt = OSEnableInterrupts();
+    mLength = DVDGetLength(&mFileInfo);
+    OSRestoreInterrupts(interrupt);
+    mPos = 0;
+    mIsOpen = true;
+    return true;
 }
 
 /* 802CBCA4-802CBD00       .text fclose__13JUTDirectFileFv */
 void JUTDirectFile::fclose() {
-    /* Nonmatching */
+    if (mIsOpen) {
+        BOOL interrupt = OSEnableInterrupts();
+        DVDClose(&mFileInfo);
+        OSRestoreInterrupts(interrupt);
+        mIsOpen = false;
+    }
 }
 
 /* 802CBD00-802CBEB0       .text fgets__13JUTDirectFileFPvi */
-void JUTDirectFile::fgets(void*, int) {
-    /* Nonmatching */
+int JUTDirectFile::fgets(void* pBuf, int n) {
+    if (!mIsOpen)
+        return -1;
+
+    if (n == 0)
+        return 0;
+    if (n == 1)
+        return 1;
+    if (pBuf == NULL)
+        return -1;
+    if (mPos >= mLength)
+        return -1;
+
+    u8* pDst = (u8*)pBuf;
+    s32 size = 0;
+
+    while (mPos < mLength) {
+        if (mToRead == 0 && fetch32byte() < 0)
+            return -1;
+
+        u32 readPos = mPos & 0x7FF;
+        u32 bufLeft = mToRead - readPos;
+        if ((size + bufLeft) > (n - 1))
+            bufLeft = n - size - 1;
+
+        BOOL endLine = FALSE;
+        for (u32 i = 0; i < bufLeft; i++) {
+            u8 c = mSectorStart[readPos++];
+            *pDst++ = c;
+
+            if (c == '\n') {
+                endLine = true;
+                bufLeft = i + 1;
+                break;
+            }
+        }
+
+        if (readPos >= 0x800)
+            mToRead = 0;
+
+        if (endLine == TRUE) {
+            *pDst = '\0';
+            mPos += bufLeft;
+            size += bufLeft;
+            break;
+        }
+
+        mPos += bufLeft;
+        size += bufLeft;
+
+        if (size >= (n - 1)) {
+            *pDst = '\0';
+            break;
+        }
+    }
+
+    if (mPos >= mLength)
+        *pDst = '\0';
+
+    return size;
 }
