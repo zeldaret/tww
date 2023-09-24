@@ -152,7 +152,9 @@ void J3DShape::makeVtxArrayCmd() {
             mHasNBT = true;
             stride[GX_VA_NRM - GX_VA_POS] *= 3;
             array[GX_VA_NRM - GX_VA_POS] = mVertexData->getVtxNBTArray();
-        } else if (vtxDesc->attr == GX_VA_PNMTXIDX && vtxDesc->type != GX_NONE) {
+        }
+
+        if (vtxDesc->attr == GX_VA_PNMTXIDX && vtxDesc->type != GX_NONE) {
             mHasPNMTXIdx = true;
         }
     }
