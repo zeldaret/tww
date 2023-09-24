@@ -39,12 +39,16 @@ public:
 
     J3DTexture* getTexture() const { return mTexture; }
     JUTNameTab* getTextureName() const { return mTextureName; }
+    void setTexture(J3DTexture* pTexture) { mTexture = pTexture; }
+    void setTextureName(JUTNameTab* pTextureName) { mTextureName = pTextureName; }
 
     JUTNameTab* getMaterialName() const { return mMaterialName; }
 
     u16 getMaterialNum() const { return mMaterialNum; }
 
 private:
+    friend class J3DJointTree;
+
     /* 0x04 */ u16 mMaterialNum;
     /* 0x06 */ u16 mUniqueMatNum;
     /* 0x08 */ J3DMaterial** mMaterialNodePointer;

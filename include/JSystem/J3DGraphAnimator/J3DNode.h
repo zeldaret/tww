@@ -11,7 +11,8 @@ public:
     virtual void init(Vec const& param_0, Mtx*);
     virtual void entryIn();
     virtual void calcIn();
-    virtual u32 getType();
+    virtual void calcOut();
+    virtual u32 getType() const;
     virtual ~J3DNode();
 
     J3DNode();

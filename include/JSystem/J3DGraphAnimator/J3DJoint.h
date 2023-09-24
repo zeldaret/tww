@@ -46,6 +46,7 @@ public:
     J3DJoint();
     void entryIn();
     void recursiveCalc();
+    void addMesh(J3DMaterial*);
 
     J3DMaterial* getMesh() { return mMesh; }
     u16 getJntNo() const { return mJntNo; }

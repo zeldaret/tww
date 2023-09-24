@@ -20,6 +20,11 @@ extern void J3DCalcBBoardMtx(Mtx);
 
 u32 J3DShapeMtx::sCurrentPipeline;
 
+/* 802DD048-802DD054       .text getType__11J3DShapeMtxCFv */
+u32 J3DShapeMtx::getType() const {
+    return 'SMTX';
+}
+
 /* 802DB9D8-802DBA1C       .text loadMtxIndx_PNGP__11J3DShapeMtxCFiUs */
 void J3DShapeMtx::loadMtxIndx_PNGP(int mtxNo, u16 index) const {
     J3DFifoLoadIndx(GX_CMD_LOAD_INDX_A, index, 0xB000 | ((u16)(mtxNo * 0x0C)));
@@ -282,6 +287,16 @@ void J3DShapeMtxBBoardConcatView::load() const {
     }
 }
 
+/* 802DCF88-802DCF94       .text getType__21J3DShapeMtxConcatViewCFv */
+u32 J3DShapeMtxConcatView::getType() const {
+    return 'SMCV';
+}
+
+/* 802DCF94-802DCF98       .text loadNrmMtx__21J3DShapeMtxConcatViewCFiUs */
+void J3DShapeMtxConcatView::loadNrmMtx(int mtxNo, u16 index) const {
+    /* Nonmatching */
+}
+
 /* 802DC8C0-802DC9B8       .text load__21J3DShapeMtxYBBoardImmCFv */
 void J3DShapeMtxYBBoardImm::load() const {
     /* Nonmatching */
@@ -289,26 +304,6 @@ void J3DShapeMtxYBBoardImm::load() const {
 
 /* 802DC9B8-802DCAEC       .text load__28J3DShapeMtxYBBoardConcatViewCFv */
 void J3DShapeMtxYBBoardConcatView::load() const {
-    /* Nonmatching */
-}
-
-/* 802DCAEC-802DCB04       .text __ct__12J3DShapeDrawFPCUcUl */
-J3DShapeDraw::J3DShapeDraw(const unsigned char*, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 802DCB04-802DCB30       .text draw__12J3DShapeDrawCFv */
-void J3DShapeDraw::draw() const {
-    /* Nonmatching */
-}
-
-/* 802DCB30-802DCB78       .text __dt__12J3DShapeDrawFv */
-J3DShapeDraw::~J3DShapeDraw() {
-    /* Nonmatching */
-}
-
-/* 802DCB78-802DCBF4       .text __dt__28J3DShapeMtxYBBoardConcatViewFv */
-J3DShapeMtxYBBoardConcatView::~J3DShapeMtxYBBoardConcatView() {
     /* Nonmatching */
 }
 
@@ -322,29 +317,9 @@ u32 J3DShapeMtx::getUseMtxIndex(u16 i) const {
     return mUseMtxIndex;
 }
 
-/* 802DCC08-802DCC74       .text __dt__21J3DShapeMtxYBBoardImmFv */
-J3DShapeMtxYBBoardImm::~J3DShapeMtxYBBoardImm() {
-    /* Nonmatching */
-}
-
-/* 802DCC74-802DCCF0       .text __dt__27J3DShapeMtxBBoardConcatViewFv */
-J3DShapeMtxBBoardConcatView::~J3DShapeMtxBBoardConcatView() {
-    /* Nonmatching */
-}
-
 /* 802DCCF0-802DCCFC       .text getType__20J3DShapeMtxBBoardImmCFv */
 u32 J3DShapeMtxBBoardImm::getType() const {
     return 'SMBB';
-}
-
-/* 802DCCFC-802DCD68       .text __dt__20J3DShapeMtxBBoardImmFv */
-J3DShapeMtxBBoardImm::~J3DShapeMtxBBoardImm() {
-    /* Nonmatching */
-}
-
-/* 802DCD68-802DCDE4       .text __dt__26J3DShapeMtxMultiConcatViewFv */
-J3DShapeMtxMultiConcatView::~J3DShapeMtxMultiConcatView() {
-    /* Nonmatching */
 }
 
 /* 802DCDE4-802DCDF0       .text getType__26J3DShapeMtxMultiConcatViewCFv */
@@ -367,11 +342,6 @@ void J3DShapeMtxMultiConcatView::loadNrmMtx(int mtxNo, u16 index) const {
     /* Nonmatching */
 }
 
-/* 802DCE0C-802DCE78       .text __dt__19J3DShapeMtxMultiImmFv */
-J3DShapeMtxMultiImm::~J3DShapeMtxMultiImm() {
-    /* Nonmatching */
-}
-
 /* 802DCE78-802DCE84       .text getType__19J3DShapeMtxMultiImmCFv */
 u32 J3DShapeMtxMultiImm::getType() const {
     return 'SMMI';
@@ -385,11 +355,6 @@ u32 J3DShapeMtxMultiImm::getUseMtxNum() const {
 /* 802DCE8C-802DCE9C       .text getUseMtxIndex__19J3DShapeMtxMultiImmCFUs */
 u32 J3DShapeMtxMultiImm::getUseMtxIndex(u16 i) const {
     return mUseMtxIndexTable[i];
-}
-
-/* 802DCE9C-802DCEF8       .text __dt__16J3DShapeMtxMultiFv */
-J3DShapeMtxMulti::~J3DShapeMtxMulti() {
-    /* Nonmatching */
 }
 
 /* 802DCEF8-802DCF04       .text getType__16J3DShapeMtxMultiCFv */
@@ -407,37 +372,18 @@ u32 J3DShapeMtxMulti::getUseMtxIndex(u16 i) const {
     return mUseMtxIndexTable[i];
 }
 
-/* 802DCF1C-802DCF88       .text __dt__21J3DShapeMtxConcatViewFv */
-J3DShapeMtxConcatView::~J3DShapeMtxConcatView() {
-    /* Nonmatching */
-}
-
-/* 802DCF88-802DCF94       .text getType__21J3DShapeMtxConcatViewCFv */
-u32 J3DShapeMtxConcatView::getType() const {
-    return 'SMCV';
-}
-
-/* 802DCF94-802DCF98       .text loadNrmMtx__21J3DShapeMtxConcatViewCFiUs */
-void J3DShapeMtxConcatView::loadNrmMtx(int mtxNo, u16 index) const {
-    /* Nonmatching */
-}
-
-/* 802DCF98-802DCFF4       .text __dt__14J3DShapeMtxImmFv */
-J3DShapeMtxImm::~J3DShapeMtxImm() {
-    /* Nonmatching */
-}
-
 /* 802DCFF4-802DD000       .text getType__14J3DShapeMtxImmCFv */
 u32 J3DShapeMtxImm::getType() const {
     return 'SMIM';
 }
 
-/* 802DD000-802DD048       .text __dt__11J3DShapeMtxFv */
-J3DShapeMtx::~J3DShapeMtx() {
-    /* Nonmatching */
+/* 802DCAEC-802DCB04       .text __ct__12J3DShapeDrawFPCUcUl */
+J3DShapeDraw::J3DShapeDraw(const u8* pDL, u32 size) {
+    mDisplayList = (void*) pDL;
+    mDisplayListSize = size;
 }
 
-/* 802DD048-802DD054       .text getType__11J3DShapeMtxCFv */
-u32 J3DShapeMtx::getType() const {
-    return 'SMTX';
+/* 802DCB04-802DCB30       .text draw__12J3DShapeDrawCFv */
+void J3DShapeDraw::draw() const {
+    GXCallDisplayList(mDisplayList, mDisplayListSize);
 }

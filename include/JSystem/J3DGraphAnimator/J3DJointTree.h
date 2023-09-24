@@ -25,16 +25,18 @@ struct J3DDrawMtxData {
 };  // Size: 0xC
 
 class J3DShapeTable;
+class J3DShape;
 
 class J3DJointTree {
 public:
-    J3DJointTree();
-    void makeHierarchy(J3DJoint*, J3DModelHierarchy const**, J3DMaterialTable*, J3DShapeTable*);
+    J3DJointTree() { clear(); }
+    void clear();
+    void makeHierarchy(J3DNode*, const J3DModelHierarchy**, J3DMaterialTable*, J3DShape**);
     void findImportantMtxIndex();
 
-    virtual void calc(J3DMtxBuffer*, Vec const&, f32 const (&)[3][4]);
-    virtual ~J3DJointTree();
+    virtual ~J3DJointTree() {}
 
+    J3DDrawMtxData * getDrawMtxData() { return &mDrawMtxData; }
     u16 getWEvlpMtxNum() const { return mWEvlpMtxNum; }
     u8 getWEvlpMixMtxNum(u16 idx) const { return mWEvlpMixMtxNum[idx]; }
     u16 * getWEvlpMixIndex() const { return mWEvlpMixIndex; }

@@ -24,6 +24,8 @@ public:
     J3DVertexData();
     ~J3DVertexData();
 
+    inline void clear() { mPacketNum = 0; }
+
     void* getVtxPosArray() const { return mVtxPosArray; }
     void* getVtxNrmArray() const { return mVtxNrmArray; }
     GXColor* getVtxColorArray(u8 idx) const { return mVtxColorArray[idx]; }

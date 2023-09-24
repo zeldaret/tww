@@ -39,7 +39,7 @@ public:
     void loadMtxIndx_NCPU(int, u16) const;
     void loadMtxIndx_PNCPU(int, u16) const;
 
-    virtual ~J3DShapeMtx();
+    virtual ~J3DShapeMtx() {}
     virtual u32 getType() const;
     virtual u32 getUseMtxNum() const;
     virtual u32 getUseMtxIndex(u16) const;
@@ -64,7 +64,7 @@ public:
 
     J3DShapeMtxImm(u16 useMtxIndex) : J3DShapeMtx(useMtxIndex) {}
 
-    virtual ~J3DShapeMtxImm();
+    virtual ~J3DShapeMtxImm() {}
     virtual u32 getType() const;
     virtual void load() const;
     virtual void loadNrmMtx(int, u16) const;
@@ -82,7 +82,7 @@ class J3DShapeMtxMultiImm : public J3DShapeMtxImm {
 public:
     J3DShapeMtxMultiImm(u16 useMtxIndex) : J3DShapeMtxImm(useMtxIndex) {}
 
-    virtual ~J3DShapeMtxMultiImm();
+    virtual ~J3DShapeMtxMultiImm() {}
     virtual u32 getType() const;
     virtual u32 getUseMtxNum() const;
     virtual u32 getUseMtxIndex(u16) const;
@@ -94,13 +94,13 @@ private:
     /* 0x8 */ u16* mUseMtxIndexTable;
 };
 
-class J3DShapeMtxConcatView : public J3DShapeMtx {
+class J3DShapeMtxConcatView : public J3DShapeMtxImm {
 public:
     typedef void (J3DShapeMtxConcatView::*MtxLoadConcatView)(int mtxNo, u16 index) const;
 
-    J3DShapeMtxConcatView(u16 useMtxIndex) : J3DShapeMtx(useMtxIndex) {}
+    J3DShapeMtxConcatView(u16 useMtxIndex) : J3DShapeMtxImm(useMtxIndex) {}
 
-    virtual ~J3DShapeMtxConcatView();
+    virtual ~J3DShapeMtxConcatView() {}
     virtual u32 getType() const;
     virtual void load() const;
     virtual void loadNrmMtx(int, u16) const;
@@ -120,7 +120,7 @@ class J3DShapeMtxBBoardImm : public J3DShapeMtxImm {
 public:
     J3DShapeMtxBBoardImm(u16 useMtxIndex) : J3DShapeMtxImm(useMtxIndex) {}
 
-    virtual ~J3DShapeMtxBBoardImm();
+    virtual ~J3DShapeMtxBBoardImm() {}
     virtual u32 getType() const;
     virtual void load() const;
 };
@@ -129,7 +129,7 @@ class J3DShapeMtxYBBoardImm : public J3DShapeMtxImm {
 public:
     J3DShapeMtxYBBoardImm(u16 useMtxIndex) : J3DShapeMtxImm(useMtxIndex) {}
 
-    virtual ~J3DShapeMtxYBBoardImm();
+    virtual ~J3DShapeMtxYBBoardImm() {}
     virtual u32 getType() const;
     virtual void load() const;
 };
@@ -138,7 +138,7 @@ class J3DShapeMtxYBBoardConcatView : public J3DShapeMtxConcatView {
 public:
     J3DShapeMtxYBBoardConcatView(u16 useMtxIndex) : J3DShapeMtxConcatView(useMtxIndex) {}
 
-    virtual ~J3DShapeMtxYBBoardConcatView();
+    virtual ~J3DShapeMtxYBBoardConcatView() {}
     virtual u32 getType() const;
     virtual void load() const;
 };
@@ -147,7 +147,7 @@ class J3DShapeMtxBBoardConcatView : public J3DShapeMtxConcatView {
 public:
     J3DShapeMtxBBoardConcatView(u16 useMtxIndex) : J3DShapeMtxConcatView(useMtxIndex) {}
 
-    virtual ~J3DShapeMtxBBoardConcatView();
+    virtual ~J3DShapeMtxBBoardConcatView() {}
     virtual u32 getType() const;
     virtual void load() const;
 };
@@ -157,7 +157,7 @@ public:
     J3DShapeMtxMulti(u16 useMtxIndex, u16 useMtxNum, u16* useMtxIndexTable)
         : J3DShapeMtx(useMtxIndex), mUseMtxNum(useMtxNum), mUseMtxIndexTable(useMtxIndexTable) {}
 
-    virtual ~J3DShapeMtxMulti();
+    virtual ~J3DShapeMtxMulti() {}
     virtual u32 getType() const;
     virtual u32 getUseMtxNum() const;
     virtual u32 getUseMtxIndex(u16) const;
@@ -175,7 +175,7 @@ public:
         : J3DShapeMtxConcatView(useMtxIndex), mUseMtxNum(useMtxNum),
           mUseMtxIndexTable(useMtxIndexTable) {}
 
-    virtual ~J3DShapeMtxMultiConcatView();
+    virtual ~J3DShapeMtxMultiConcatView() {}
     virtual u32 getType() const;
     virtual u32 getUseMtxNum() const;
     virtual u32 getUseMtxIndex(u16) const;

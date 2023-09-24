@@ -11,22 +11,29 @@
 typedef struct _GXColor GXColor;
 class JUTNameTab;
 
+enum J3DMaterialCopyFlag {
+    J3DMatCopyFlag_Material = 0x01,
+    J3DMatCopyFlag_Texture = 0x02,
+};
+
 class J3DModelData {
 public:
     void clear();
     J3DModelData();
     s32 newSharedDisplayList(u32);
+    bool isDeformablePositionFormat() const;
     void indexToPtr();
     void makeSharedDL();
-    void simpleCalcMaterial(u16, f32 (*)[4]);
-    void syncJ3DSysPointers() const;
-    void syncJ3DSysFlags() const;
+    void initShapeNodes();
+    void sortVcdVatCmd();
+    void setMaterialTable(J3DMaterialTable*, J3DMaterialCopyFlag);
 
     virtual ~J3DModelData();
 
     J3DMaterialTable& getMaterialTable() { return mMaterialTable; }
     JUTNameTab* getMaterialName() const { return mMaterialTable.getMaterialName(); }
     J3DVertexData& getVertexData() { return mVertexData; }
+    GXVtxAttrFmtList* getVtxAttrFmtList() const { return ((J3DVertexData*)&mVertexData)->getVtxAttrFmtList(); }
     u16 getShapeNum() const { return mShapeTable.getShapeNum(); }
     u16 getMaterialNum() const { return mMaterialTable.getMaterialNum(); }
     u16 getJointNum() const { return mJointTree.getJointNum(); }
@@ -36,6 +43,7 @@ public:
     }
     u32 getVtxNum() const { return mVertexData.getVtxNum(); }
     u32 getNrmNum() const { return mVertexData.getNrmNum(); }
+    J3DDrawMtxData * getDrawMtxData() { return mJointTree.getDrawMtxData(); }
     u8 getDrawMtxFlag(u16 idx) const { return mJointTree.getDrawMtxFlag(idx); }
     u16 getDrawMtxIndex(u16 idx) const { return mJointTree.getDrawMtxIndex(idx); }
     J3DShape* getShapeNodePointer(u16 idx) const { return mShapeTable.getShapeNodePointer(idx); }
@@ -45,6 +53,8 @@ public:
     Mtx& getInvJointMtx(s32 idx) const { return mJointTree.getInvJointMtx(idx); }
     J3DTexture* getTexture() const { return mMaterialTable.getTexture(); }
     JUTNameTab* getTextureName() const { return mMaterialTable.getTextureName(); }
+    void setTexture(J3DTexture* pTexture) { mMaterialTable.setTexture(pTexture); }
+    void setTextureName(JUTNameTab* pTextureName) { mMaterialTable.setTextureName(pTextureName); }
     u16 getWEvlpMtxNum() const { return mJointTree.getWEvlpMtxNum(); }
     u16* getWEvlpMixMtxIndex() const { return mJointTree.getWEvlpMixIndex(); }
     f32* getWEvlpMixWeight() const { return mJointTree.getWEvlpMixWeight(); }
@@ -73,10 +83,6 @@ public:
     }
     int removeMatColorAnimator(J3DAnmColor* anm) {
         return mMaterialTable.removeMatColorAnimator(anm);
-    }
-    void syncJ3DSys() {
-        syncJ3DSysFlags();
-        syncJ3DSysPointers();
     }
 
 private:
