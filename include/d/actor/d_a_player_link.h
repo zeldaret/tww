@@ -1002,6 +1002,8 @@ public:
     void checkNoControll() const;
     
     J3DAnmTevRegKey* getBombBrk() { return mpBombBrk; }
+    J3DAnmTextureSRTKey* getIceArrowBtk() { return mpIceArrowBtk; }
+    J3DAnmTextureSRTKey* getLightArrowBtk() { return mpLightArrowBtk; }
 
     virtual MtxP getLeftHandMatrix();
     virtual MtxP getRightHandMatrix();
@@ -1099,7 +1101,10 @@ public:
     /* 0x2EB0 */ J3DAnmTevRegKey* mpBombBrk;
     /* 0x2EB4 */ J3DAnmTevRegKey* mpGwp00BrkData;
     /* 0x2EB8 */ J3DAnmTextureSRTKey* mpGwp00BtkData;
-    /* 0x2EBC */ u8 field_0x2EBC[0x2ED4 - 0x2EBC];
+    /* 0x2EBC */ u8 field_0x2EBC[0x2EC0 - 0x2EBC];
+    /* 0x2EC0 */ J3DAnmTextureSRTKey* mpIceArrowBtk;
+    /* 0x2EC4 */ J3DAnmTextureSRTKey* mpLightArrowBtk;
+    /* 0x2EC8 */ u8 field_0x2EC8[0x2ED4 - 0x2EC8];
     /* 0x2ED4 */ J3DAnmTextureSRTKey* mpHeldItemModelAnimTexEx;
     /* 0x2ED8 */ J3DAnmTextureSRTKey* mpSwordAnimBTK;
     /* 0x2EDC */ J3DAnmTevRegKey* mpHeldItemAnimBRK;

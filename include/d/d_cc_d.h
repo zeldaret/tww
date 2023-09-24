@@ -390,7 +390,10 @@ class dCcD_Cps : public dCcD_GObjInf, public cCcD_CpsAttr {
 public:
     void Set(dCcD_SrcCps const&);
     cCcD_ShapeAttr* GetShapeAttr() { return (cCcD_ShapeAttr*)this; }
-    void CalcAtVec();
+    void CalcAtVec() {
+        cXyz* atVecP = GetAtVecP();
+        CalcVec(atVecP);
+    }
     void CalcTgVec();
     virtual ~dCcD_Cps() {}
     dCcD_Cps() {}
