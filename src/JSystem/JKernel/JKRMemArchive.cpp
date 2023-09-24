@@ -56,10 +56,10 @@ void JKRMemArchive::fixedInit(s32 param_1) {
 
 /* 802B9740-802B9810       .text mountFixed__13JKRMemArchiveFPv15JKRMemBreakFlag */
 bool JKRMemArchive::mountFixed(void* param_1, JKRMemBreakFlag param_2) {
-    if (check_mount_already((long)param_1)) {
+    if (check_mount_already((s32)param_1)) {
         return false;
     }
-	fixedInit((long)param_1);
+	fixedInit((s32)param_1);
 	if (!open(param_1, 0xffff, param_2)) {
         return false;
     }

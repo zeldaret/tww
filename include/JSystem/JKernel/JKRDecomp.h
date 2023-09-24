@@ -32,13 +32,13 @@ public:
 
 class JKRDecomp : public JKRThread {
 private:
-    JKRDecomp(long);
+    JKRDecomp(s32);
     virtual ~JKRDecomp();
 
     /* vt[03] */ virtual void* run(); /* override */
 
 public:
-    static JKRDecomp* create(long);
+    static JKRDecomp* create(s32);
     static JKRDecompCommand* prepareCommand(u8*, u8*, u32, u32, JKRDecompCommand::AsyncCallback);
     static void sendCommand(JKRDecompCommand*);
     static bool sync(JKRDecompCommand*, int);
@@ -50,7 +50,7 @@ public:
     static JKRCompression checkCompressed(u8*);
 
     static JKRDecomp* sDecompObject;
-    static OSMessage sMessageBuffer[8];
+    static OSMessage sMessageBuffer[4];
     static OSMessageQueue sMessageQueue;
 };
 
@@ -58,7 +58,7 @@ inline void JKRDecompress(u8* srcBuffer, u8* dstBuffer, u32 srcLength, u32 dstLe
     JKRDecomp::orderSync(srcBuffer, dstBuffer, srcLength, dstLength);
 }
 
-inline JKRDecomp* JKRCreateDecompManager(long priority) {
+inline JKRDecomp* JKRCreateDecompManager(s32 priority) {
     return JKRDecomp::create(priority);
 }
 

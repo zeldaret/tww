@@ -33,7 +33,7 @@ public:
     /* 0x84 */ u32 mStackArray[3];
 
 public:
-    static JKRAram* create(u32, u32, long, long, long);
+    static JKRAram* create(u32, u32, s32, s32, s32);
     static bool checkOkAddress(u8*, u32, JKRAramBlock*, u32);
     static void changeGroupIdIfNeed(u8*, int);
     static JKRAramBlock* mainRamToAram(u8*, u32, u32, JKRExpandSwitch, u32, JKRHeap*, int);

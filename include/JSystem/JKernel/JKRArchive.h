@@ -115,7 +115,7 @@ public:
 
 protected:
     JKRArchive();
-    JKRArchive(long, EMountMode);
+    JKRArchive(s32, EMountMode);
 
 public:
     bool getDirEntry(SDirEntry*, u32) const;
