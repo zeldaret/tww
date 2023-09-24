@@ -243,8 +243,78 @@ s32 J3DModel::createShapePacket(J3DModelData* pModelData) {
 }
 
 /* 802EDC8C-802EDF60       .text createMatPacket__8J3DModelFP12J3DModelDataUl */
-s32 J3DModel::createMatPacket(J3DModelData*, unsigned long) {
-    /* Nonmatching */
+s32 J3DModel::createMatPacket(J3DModelData* pModelData, u32 flag) {
+    if (pModelData->getMaterialNum() != 0) {
+        mpMatPacket = new J3DMatPacket[pModelData->getMaterialNum()];
+
+        if (mpMatPacket == NULL)
+            return kJ3DError_Alloc;
+    }
+
+    s32 ret;
+
+    u32 singleDLFlag = flag & 0x40000;
+    for (s32 i = 0; i < pModelData->getMaterialNum(); i++) {
+        mpMatPacket[i].setMaterial(pModelData->getMaterialNodePointer(i));
+        J3DShapePacket* shapePacket = getShapePacket(pModelData->getMaterialNodePointer(i)->getShape()->getIndex());
+        mpMatPacket[i].setInitShapePacket(shapePacket);
+        mpMatPacket[i].addShapePacket(shapePacket);
+        mpMatPacket[i].setTexture(pModelData->getMaterialTable().getTexture());
+        mpMatPacket[i].mDiffFlag = pModelData->getMaterialNodePointer(i)->mDiffFlag;
+
+        if (pModelData->getModelDataType() == 1)
+            mpMatPacket[i].mFlags |= 0x01;
+
+        if (!!(flag & 0x80000)) {
+            mpMatPacket[i].mpDisplayListObj = pModelData->getMaterialNodePointer(i)->getSharedDisplayListObj();
+        } else {
+            if (pModelData->getModelDataType() == 1) {
+                if (!!(flag & 0x40000)) {
+                    mpMatPacket[i].mpDisplayListObj = pModelData->getMaterialNodePointer(i)->getSharedDisplayListObj();
+                } else {
+                    J3DDisplayListObj* sharedDL = pModelData->getMaterialNodePointer(i)->getSharedDisplayListObj();
+                    ret = sharedDL->single_To_Double();
+                    if (ret != kJ3DError_Success)
+                        return ret;
+
+                    mpMatPacket[i].mpDisplayListObj = sharedDL;
+                }
+            } else if (!!(flag & 0x20000)) {
+                if (!!(flag & 0x40000)) {
+                    ret = pModelData->getMaterialNodePointer(i)->newSingleSharedDisplayList(pModelData->getMaterialNodePointer(i)->countDLSize());
+                    if (ret != kJ3DError_Success)
+                        return ret;
+
+                    mpMatPacket[i].mpDisplayListObj = pModelData->getMaterialNodePointer(i)->getSharedDisplayListObj();
+                } else {
+                    ret = pModelData->getMaterialNodePointer(i)->newSharedDisplayList(pModelData->getMaterialNodePointer(i)->countDLSize());
+                    if (ret != kJ3DError_Success)
+                        return ret;
+
+                    J3DDisplayListObj* sharedDL = pModelData->getMaterialNodePointer(i)->getSharedDisplayListObj();
+                    ret = sharedDL->single_To_Double();
+                    if (ret != kJ3DError_Success)
+                        return ret;
+
+                    mpMatPacket[i].mpDisplayListObj = sharedDL;
+                }
+            } else {
+                if (!!(flag & 0x40000)) {
+                    u32 size = pModelData->getMaterialNodePointer(i)->countDLSize();
+                    ret = mpMatPacket[i].newSingleDisplayList(size);
+                    if (ret != kJ3DError_Success)
+                        return ret;
+                } else {
+                    u32 size = pModelData->getMaterialNodePointer(i)->countDLSize();
+                    ret = mpMatPacket[i].newDisplayList(size);
+                    if (ret != kJ3DError_Success)
+                        return ret;
+                }
+            }
+        }
+    }
+
+    return kJ3DError_Success;
 }
 
 /* 802EDF60-802EE1D4       .text createBumpMtxArray__8J3DModelFP12J3DModelDataUl */
