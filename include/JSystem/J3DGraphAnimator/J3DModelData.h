@@ -13,16 +13,16 @@ class JUTNameTab;
 
 class J3DModelData {
 public:
-    /* 80325D88 */ void clear();
-    /* 80325DA0 */ J3DModelData();
-    /* 80325E14 */ s32 newSharedDisplayList(u32);
-    /* 80325EC8 */ void indexToPtr();
-    /* 80325F94 */ void makeSharedDL();
-    /* 8032600C */ void simpleCalcMaterial(u16, f32 (*)[4]);
-    /* 803260CC */ void syncJ3DSysPointers() const;
-    /* 803260F8 */ void syncJ3DSysFlags() const;
+    void clear();
+    J3DModelData();
+    s32 newSharedDisplayList(u32);
+    void indexToPtr();
+    void makeSharedDL();
+    void simpleCalcMaterial(u16, f32 (*)[4]);
+    void syncJ3DSysPointers() const;
+    void syncJ3DSysFlags() const;
 
-    /* 8032617C */ virtual ~J3DModelData();
+    virtual ~J3DModelData();
 
     J3DMaterialTable& getMaterialTable() { return mMaterialTable; }
     JUTNameTab* getMaterialName() const { return mMaterialTable.getMaterialName(); }
@@ -87,7 +87,10 @@ private:
     /* 0x10 */ J3DJointTree mJointTree;
     /* 0x58 */ J3DMaterialTable mMaterialTable;
     /* 0x78 */ J3DShapeTable mShapeTable;
-    /* 0x88 */ J3DVertexData mVertexData;
+    /* 0x84 */ J3DVertexData mVertexData;
+    /* 0xE0 */ JUTNameTab * mName;
 };  // Size: 0xE4
+
+STATIC_ASSERT(sizeof(J3DModelData) == 0xE4);
 
 #endif /* J3DMODELDATA_H */

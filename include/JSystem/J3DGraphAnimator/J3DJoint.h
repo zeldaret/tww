@@ -11,17 +11,13 @@ class J3DMtxBuffer;
 
 class J3DMtxCalc {
 public:
-    /* 80325D1C */ static void setMtxBuffer(J3DMtxBuffer*);
+    static void setMtxBuffer(J3DMtxBuffer*);
 
-    /* 8000D948 */ virtual ~J3DMtxCalc();
-    /* 80014E90 */ virtual void setAnmTransform(J3DAnmTransform*);
-    /* 80014E9C */ virtual bool getAnmTransform();
-    /* 80014E8C */ virtual void setAnmTransform(u8, J3DAnmTransform*);
-    /* 80014E94 */ virtual bool getAnmTransform(u8);
-    /* 80014EA4 */ virtual void setWeight(u8, f32);
-    /* 80014EA8 */ virtual void getWeight(u8) const;
-    virtual void init(Vec const& param_0, Mtx*) = 0;
+    virtual ~J3DMtxCalc();
+    virtual void init(Vec const& param_0, const Mtx&) = 0;
+    virtual void recursiveCalc(J3DNode *);
     virtual void calc() = 0;
+    virtual void calcTransform(u16, J3DTransformInfo const &) = 0;
 
     static J3DMtxBuffer* getMtxBuffer() { return mMtxBuffer; }
     static J3DJoint* getJoint() { return mJoint; }
@@ -33,7 +29,7 @@ public:
 
 class J3DMtxCalcNoAnmBase : public J3DMtxCalc {
 public:
-    /* 8000FA8C */ virtual ~J3DMtxCalcNoAnmBase();
+    virtual ~J3DMtxCalcNoAnmBase();
 };
 
 template <class A, class B>
@@ -47,9 +43,9 @@ public:
 
 class J3DJoint : public J3DNode {
 public:
-    /* 8032F170 */ J3DJoint();
-    /* 8032F254 */ void entryIn();
-    /* 8032F3F8 */ void recursiveCalc();
+    J3DJoint();
+    void entryIn();
+    void recursiveCalc();
 
     J3DMaterial* getMesh() { return mMesh; }
     u16 getJntNo() const { return mJntNo; }
@@ -83,23 +79,23 @@ private:
 };  // Size: 0x54
 
 struct J3DMtxCalcJ3DSysInitMaya {
-    /* 8032ECAC */ static void init(Vec const&, f32 const (&)[3][4]);
+    static void init(Vec const&, f32 const (&)[3][4]);
 };
 
 struct J3DMtxCalcJ3DSysInitBasic {
-    /* 8032EC28 */ static void init(Vec const&, f32 const (&)[3][4]);
+    static void init(Vec const&, f32 const (&)[3][4]);
 };
 
 struct J3DMtxCalcCalcTransformSoftimage {
-    /* 8032EE50 */ static void calcTransform(J3DTransformInfo const&);
+    static void calcTransform(J3DTransformInfo const&);
 };
 
 struct J3DMtxCalcCalcTransformMaya {
-    /* 8032EFBC */ static void calcTransform(J3DTransformInfo const&);
+    static void calcTransform(J3DTransformInfo const&);
 };
 
 struct J3DMtxCalcCalcTransformBasic {
-    /* 8032ED30 */ static void calcTransform(J3DTransformInfo const&);
+    static void calcTransform(J3DTransformInfo const&);
 };
 
 #endif /* J3DJOINT_H */

@@ -53,7 +53,6 @@ private:
     /* 0x14 */ u32 field_0x14;
     /* 0x18 */ J3DTexture* mTexture;
     /* 0x1C */ JUTNameTab* mTextureName;
-    /* 0x20 */ u16 field_0x20;
-};  // Size: 0x22
+};  // Size: 0x20
 
 #endif /* J3DMATERIALATTACH_H */
