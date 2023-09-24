@@ -24,7 +24,7 @@ static u8* nextSrcData(u8*);
 JKRAram* JKRAram::sAramObject;
 
 /* 802B42C4-802B4360       .text create__7JKRAramFUlUllll */
-JKRAram* JKRAram::create(u32 aram_audio_buffer_size, u32 aram_audio_graph_size, long stream_priority, long decomp_priority, long piece_priority) {
+JKRAram* JKRAram::create(u32 aram_audio_buffer_size, u32 aram_audio_graph_size, s32 stream_priority, s32 decomp_priority, s32 piece_priority) {
     if (!sAramObject) {
         sAramObject = new (JKRHeap::getSystemHeap(), 0)
             JKRAram(aram_audio_buffer_size, aram_audio_graph_size, piece_priority);
@@ -40,7 +40,7 @@ OSMessage JKRAram::sMessageBuffer[4] = { NULL, NULL, NULL, NULL };
 OSMessageQueue JKRAram::sMessageQueue = {0};
 
 /* 802B4360-802B44D8       .text __ct__7JKRAramFUlUll */
-JKRAram::JKRAram(u32 audio_buffer_size, u32 audio_graph_size, long priority) : JKRThread(0x4000, 0x10, priority) {
+JKRAram::JKRAram(u32 audio_buffer_size, u32 audio_graph_size, s32 priority) : JKRThread(0x4000, 0x10, priority) {
     u32 aramBase = ARInit(mStackArray, ARRAY_SIZE(mStackArray));
     ARQInit();
 
@@ -323,14 +323,14 @@ static u32 srcAddress;
 static u32 fileOffset;
 static u32 readCount;
 static u32 maxDest;
-static bool sIsInitMutex;
+static bool isInitMutex;
 
 /* 802B4D4C-802B4F20       .text JKRDecompressFromAramToMainRam__FUlPvUlUlUl */
 static int JKRDecompressFromAramToMainRam(u32 src, void* dst, u32 srcLength, u32 dstLength, u32 offset) {
     BOOL interrupts = OSDisableInterrupts();
-    if (sIsInitMutex == false) {
+    if (isInitMutex == false) {
         OSInitMutex(&decompMutex);
-        sIsInitMutex = true;
+        isInitMutex = true;
     }
     OSRestoreInterrupts(interrupts);
     OSLockMutex(&decompMutex);

@@ -52,7 +52,7 @@ public:
     /* 0xF4 */ OSThread* mOSThread;
 
 public:
-    static void doneProcess(long, DVDFileInfo*);
+    static void doneProcess(s32, DVDFileInfo*);
 
     static JSUList<JKRDvdFile>& getDvdList() { return sDvdList; }
 

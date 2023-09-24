@@ -149,7 +149,7 @@ void* JKRFileCache::getResource(const char* path) {
 }
 
 /* 802B7564-802B7630       .text getResource__12JKRFileCacheFUlPCc */
-void* JKRFileCache::getResource(unsigned long, const char* path) {
+void* JKRFileCache::getResource(u32, const char* path) {
     JUT_ASSERT(303, isMounted());
 
     char finalPath[256];
