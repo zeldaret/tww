@@ -57,7 +57,7 @@ struct J3DAnmTransformFullTable {
 struct J3DAnmTexPatternFullTable {
     /* 0x00 */ u16 mMaxFrame;
     /* 0x02 */ u16 mOffset;
-    /* 0x04 */ u8 _4;
+    /* 0x04 */ u8 mTexNo;
     /* 0x06 */ u16 _6;
 };  // Size = 0x8
 
@@ -66,7 +66,7 @@ struct J3DAnmCRegKeyTable {
     /* 0x06 */ J3DAnmKeyTableBase mGTable;
     /* 0x0C */ J3DAnmKeyTableBase mBTable;
     /* 0x12 */ J3DAnmKeyTableBase mATable;
-    /* 0x18 */ u8 _18;
+    /* 0x18 */ u8 mColorId;
     u8 padding[3];
 };  // Size = 0x1C
 
@@ -75,7 +75,7 @@ struct J3DAnmKRegKeyTable {
     /* 0x06 */ J3DAnmKeyTableBase mGTable;
     /* 0x0C */ J3DAnmKeyTableBase mBTable;
     /* 0x12 */ J3DAnmKeyTableBase mATable;
-    /* 0x18 */ u8 _18;
+    /* 0x18 */ u8 mColorId;
     u8 padding[3];
 };  // Size = 0x1C
 
@@ -373,36 +373,42 @@ public:
     }
 
     u16 getUpdateMaterialID(u16 idx) const { return mUpdateMaterialID[idx]; }
-    u16 getUpdateMaterialNum() const { return field_0x14 / 3; }
+    u16 getUpdateMaterialNum() const { return mTrackNum / 3; }
+    u16 getUpdateTexMtxID(u16 idx) const { return mUpdateTexMtxID[idx]; }
+
+    u32 getTexMtxCalcType() const { return mTexMtxCalcType; }
+    Vec& getSRTCenter(u16 idx) const { return mSRTCenter[idx]; }
 
 private:
-    /* 0x0C */ int field_0xc;
-    /* 0x10 */ int field_0x10;
-    /* 0x14 */ u16 field_0x14;
-    /* 0x16 */ u16 field_0x16;
-    /* 0x18 */ u16 field_0x18;
-    /* 0x1A */ u16 field_0x1a;
-    /* 0x1C */ int field_0x1c;
-    /* 0x20 */ int field_0x20;
-    /* 0x24 */ int field_0x24;
-    /* 0x28 */ u8 mUpdateTexMtxID[4];
-    /* 0x2C */ u16* mUpdateMaterialID;
-    /* 0x30 */ JUTNameTab field_0x30;
-    /* 0x40 */ int field_0x40;
-    /* 0x44 */ u16 field_0x44;
-    /* 0x46 */ u16 field_0x46;
-    /* 0x48 */ u16 field_0x48;
-    /* 0x4A */ u16 field_0x4a;
-    /* 0x4C */ int field_0x4c;
-    /* 0x50 */ int field_0x50;
-    /* 0x54 */ int field_0x54;
-    /* 0x58 */ int field_0x58;
-    /* 0x5C */ u8 field_0x5c[4];
-    /* 0x60 */ u16* field_0x60;
-    /* 0x64 */ JUTNameTab field_0x64;
-    /* 0x74 */ u8 field_0x74[4];
-    /* 0x78 */ u32 mTexMtxCalcType;
-};  // Size: 0x7C
+    /* 0x0C */ void* field_0xc;
+    /* 0x10 */ int mDecShift;
+    /* 0x14 */ u16 mTrackNum;
+    /* 0x18 */ void* mAnmTable;
+    /* 0x1C */ u16 mScaleNum;
+    /* 0x1E */ u16 mRotNum;
+    /* 0x20 */ u16 mTransNum;
+    /* 0x24 */ f32* mScaleData;
+    /* 0x28 */ f32* mRotData;
+    /* 0x2C */ f32* mTransData;
+    /* 0x30 */ u8* mUpdateTexMtxID;
+    /* 0x34 */ u16* mUpdateMaterialID;
+    /* 0x38 */ JUTNameTab mMaterialName;
+    /* 0x48 */ Vec* mSRTCenter;
+    /* 0x4C */ u16 mPostTrackNum;
+    /* 0x50 */ void * mPostAnmTable;
+    /* 0x54 */ void * field_0x54;
+    /* 0x58 */ void * field_0x58;
+    /* 0x5C */ f32* mPostScaleData;
+    /* 0x60 */ f32* mPostRotData;
+    /* 0x64 */ f32* mPostTransData;
+    /* 0x68 */ u8* mPostUpdateTexMtxID;
+    /* 0x68 */ u16* mPostUpdateMaterialID;
+    /* 0x70 */ JUTNameTab mDualName;
+    /* 0x80 */ Vec* mPostSRTCenter;
+    /* 0x80 */ u32 mTexMtxCalcType;
+};  // Size: 0x88
+
+STATIC_ASSERT(sizeof(J3DAnmTextureSRTKey) == 0x88);
 
 class J3DAnmVisibilityFull : public J3DAnmBase {
 public:
@@ -428,16 +434,22 @@ public:
     void searchUpdateMaterialID(J3DMaterialTable*);
     void searchUpdateMaterialID(J3DModelData*);
 
+    u16 getUpdateMaterialID(u16 idx) const { return mUpdateMaterialID[idx]; }
+    u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
+
+    J3DAnmTexPatternFullTable * getAnmTable() const { return mAnmTable; }
+
     virtual ~J3DAnmTexPattern();
     virtual s32 getKind() const;
 
 private:
     /* 0x0C */ void* field_0xc;
-    /* 0x10 */ void* mAnmTable;
-    /* 0x14 */ u16 field_0x14;
-    /* 0x16 */ u16 mUpdateMaterialNum;
-    /* 0x18 */ u16* field_0x18;
-    /* 0x1C */ JUTNameTab field_0x1c;
+    /* 0x10 */ s16* mTextureIndex;
+    /* 0x14 */ J3DAnmTexPatternFullTable* mAnmTable;
+    /* 0x18 */ u16 field_0x18;
+    /* 0x1A */ u16 mUpdateMaterialNum;
+    /* 0x1C */ u16* mUpdateMaterialID;
+    /* 0x20 */ JUTNameTab mMaterialName;
 };  // Size: 0x2C
 
 class J3DAnmTevRegKey : public J3DAnmBase {
@@ -457,32 +469,24 @@ public:
     u16 getCRegUpdateMaterialID(u16 idx) const { return mCRegUpdateMaterialID[idx]; }
     u16 getKRegUpdateMaterialID(u16 idx) const { return mKRegUpdateMaterialID[idx]; }
 
+    J3DAnmCRegKeyTable * getAnmCRegKeyTable() const { return mAnmCRegKeyTable; }
+    J3DAnmKRegKeyTable * getAnmKRegKeyTable() const { return mAnmKRegKeyTable; }
+
 private:
-    /* 0x0C */ u16 mCRegUpdateMaterialNum;
-    /* 0x0E */ u16 mKRegUpdateMaterialNum;
-    /* 0x10 */ u16 field_0x10;
-    /* 0x12 */ u16 field_0x12;
-    /* 0x14 */ u16 field_0x14;
-    /* 0x16 */ u16 field_0x16;
-    /* 0x18 */ u16 field_0x18;
-    /* 0x1A */ u16 field_0x1a;
-    /* 0x1C */ u16 field_0x1c;
-    /* 0x1E */ u16 field_0x1e;
-    /* 0x20 */ u16* mCRegUpdateMaterialID;
-    /* 0x24 */ JUTNameTab field_0x24;
-    /* 0x34 */ u16* mKRegUpdateMaterialID;
-    /* 0x38 */ JUTNameTab field_0x38;
-    /* 0x48 */ void* field_0x48;
-    /* 0x4C */ void* field_0x4c;
-    /* 0x50 */ int field_0x50;
-    /* 0x54 */ int field_0x54;
-    /* 0x58 */ int field_0x58;
-    /* 0x5C */ int field_0x5c;
-    /* 0x60 */ int field_0x60;
-    /* 0x64 */ int field_0x64;
-    /* 0x68 */ int field_0x68;
-    /* 0x6C */ int field_0x6c;
-};  // Size: 0x70
+    /* 0x0C */ u32 field_0x0c;
+    /* 0x10 */ u16 mCRegUpdateMaterialNum;
+    /* 0x12 */ u16 mKRegUpdateMaterialNum;
+    /* 0x14 */ u16 mCRegDataCount[4];
+    /* 0x1C */ u16 mKRegDataCount[4];
+    /* 0x24 */ u16* mCRegUpdateMaterialID;
+    /* 0x28 */ JUTNameTab mCRegNameTab;
+    /* 0x38 */ u16* mKRegUpdateMaterialID;
+    /* 0x3C */ JUTNameTab mKRegNameTab;
+    /* 0x4C */ J3DAnmCRegKeyTable* mAnmCRegKeyTable;
+    /* 0x50 */ J3DAnmKRegKeyTable* mAnmKRegKeyTable;
+    /* 0x54 */ s16 * mAnmCRegData[4];
+    /* 0x64 */ s16 * mAnmKRegData[4];
+};  // Size: 0x74
 
 class J3DAnmColor : public J3DAnmBase {
 public:
@@ -503,10 +507,11 @@ private:
     /* 0x0E */ u16 field_0xe;
     /* 0x10 */ u16 field_0x10;
     /* 0x12 */ u16 field_0x12;
-    /* 0x14 */ u16 mUpdateMaterialNum;
-    /* 0x18 */ u16* mUpdateMaterialID;
-    /* 0x1C */ JUTNameTab field_0x1c;
-};  // Size: 0x2C
+    /* 0x14 */ u32 field_0x14;
+    /* 0x18 */ u16 mUpdateMaterialNum;
+    /* 0x1C */ u16* mUpdateMaterialID;
+    /* 0x20 */ JUTNameTab field_0x1c;
+};  // Size: 0x30
 
 class J3DAnmColorKey : public J3DAnmColor {
 public:

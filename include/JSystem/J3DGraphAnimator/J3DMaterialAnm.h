@@ -8,21 +8,25 @@ typedef struct _GXColorS10 GXColorS10;
 
 class J3DMatColorAnm {
 public:
-    ~J3DMatColorAnm() {};
-    J3DMatColorAnm() {};
+    ~J3DMatColorAnm() {}
+    J3DMatColorAnm() {}
+    J3DMatColorAnm(J3DAnmColor * pAnm, u16 materialIdx) {
+        mAnmColor = pAnm;
+        mMaterialIdx = materialIdx;
+    }
 
     void operator=(J3DMatColorAnm const& other) {
         mAnmColor = other.mAnmColor;
-        field_0x0 = other.field_0x0;
+        mMaterialIdx = other.mMaterialIdx;
         mAnmFlag = other.mAnmFlag;
     }
 
     void setAnmFlag(bool flag) { mAnmFlag = flag; }
     bool getAnmFlag() const { return mAnmFlag; }
-    void calc(_GXColor* pColor) const { mAnmColor->getColor(field_0x0, pColor); }
+    void calc(_GXColor* pColor) const { mAnmColor->getColor(mMaterialIdx, pColor); }
 
 private:
-    /* 0x0 */ u16 field_0x0;
+    /* 0x0 */ u16 mMaterialIdx;
     /* 0x2 */ u16 mAnmFlag;
     /* 0x4 */ J3DAnmColor* mAnmColor;
 };  // Size: 0x8
@@ -51,65 +55,77 @@ private:
 
 class J3DTexMtxAnm {
 public:
-    ~J3DTexMtxAnm() {};
-    J3DTexMtxAnm() {};
+    ~J3DTexMtxAnm() {}
+    J3DTexMtxAnm() {}
+    J3DTexMtxAnm(J3DAnmTextureSRTKey * pAnm, u16 materialIdx) {
+        mAnmTransform = pAnm;
+        mMaterialIdx = materialIdx;
+    }
 
     void operator=(J3DTexMtxAnm const& other) {
         mAnmTransform = other.mAnmTransform;
-        field_0x0 = other.field_0x0;
+        mMaterialIdx = other.mMaterialIdx;
         mAnmFlag = other.mAnmFlag;
     }
 
     void setAnmFlag(bool flag) { mAnmFlag = flag; }
     void calc(J3DTextureSRTInfo* pSRTInfo) const {
-        mAnmTransform->getTransform(field_0x0, pSRTInfo);
+        mAnmTransform->getTransform(mMaterialIdx, pSRTInfo);
     }
     bool getAnmFlag() const { return mAnmFlag; }
 
 private:
-    /* 0x0 */ u16 field_0x0;
+    /* 0x0 */ u16 mMaterialIdx;
     /* 0x2 */ u16 mAnmFlag;
     /* 0x4 */ J3DAnmTextureSRTKey* mAnmTransform;
 };  // Size: 0x8
 
 class J3DTevKColorAnm {
 public:
-    ~J3DTevKColorAnm() {};
-    J3DTevKColorAnm() {};
+    ~J3DTevKColorAnm() {}
+    J3DTevKColorAnm() {}
+    J3DTevKColorAnm(J3DAnmTevRegKey * pAnm, u16 materialIdx) {
+        mAnmTevReg = pAnm;
+        mMaterialIdx = materialIdx;
+    }
 
     void operator=(J3DTevKColorAnm const& other) {
         mAnmTevReg = other.mAnmTevReg;
-        field_0x0 = other.field_0x0;
+        mMaterialIdx = other.mMaterialIdx;
         mAnmFlag = other.mAnmFlag;
     }
 
     void setAnmFlag(bool flag) { mAnmFlag = flag; }
     bool getAnmFlag() const { return mAnmFlag; }
-    void calc(_GXColor* pColor) const { mAnmTevReg->getTevKonstReg(field_0x0, pColor); }
+    void calc(_GXColor* pColor) const { mAnmTevReg->getTevKonstReg(mMaterialIdx, pColor); }
 
 private:
-    /* 0x0 */ u16 field_0x0;
+    /* 0x0 */ u16 mMaterialIdx;
     /* 0x2 */ u16 mAnmFlag;
     /* 0x4 */ J3DAnmTevRegKey* mAnmTevReg;
 };  // Size: 0x8
 
 class J3DTevColorAnm {
 public:
-    ~J3DTevColorAnm() {};
-    J3DTevColorAnm() {};
+    ~J3DTevColorAnm() {}
+    J3DTevColorAnm() {}
+    J3DTevColorAnm(J3DAnmTevRegKey * pAnm, u16 materialIdx) {
+        mAnmTevReg = pAnm;
+        mMaterialIdx = materialIdx;
+    }
 
     void operator=(J3DTevColorAnm const& other) {
         mAnmTevReg = other.mAnmTevReg;
-        field_0x0 = other.field_0x0;
+        mMaterialIdx = other.mMaterialIdx;
         mAnmFlag = other.mAnmFlag;
     }
 
     void setAnmFlag(bool flag) { mAnmFlag = flag; }
     bool getAnmFlag() const { return mAnmFlag; }
-    void calc(_GXColorS10* pColor) const { mAnmTevReg->getTevColorReg(field_0x0, pColor); }
+    void calc(_GXColorS10* pColor) const { mAnmTevReg->getTevColorReg(mMaterialIdx, pColor); }
 
 private:
-    /* 0x0 */ u16 field_0x0;
+    /* 0x0 */ u16 mMaterialIdx;
     /* 0x2 */ u16 mAnmFlag;
     /* 0x4 */ J3DAnmTevRegKey* mAnmTevReg;
 };  // Size: 0x8
@@ -119,11 +135,11 @@ public:
     J3DMaterialAnm() { initialize(); }
 
     void initialize();
-    void setMatColorAnm(int, J3DMatColorAnm*);
-    void setTexMtxAnm(int, J3DTexMtxAnm*);
-    void setTexNoAnm(int, J3DTexNoAnm*);
-    void setTevColorAnm(int, J3DTevColorAnm*);
-    void setTevKColorAnm(int, J3DTevKColorAnm*);
+    inline void setMatColorAnm(int i, J3DMatColorAnm* pAnm) { mMatColorAnm[i] = pAnm; }
+    inline void setTexMtxAnm(int i, J3DTexMtxAnm* pAnm) { mTexMtxAnm[i] = pAnm; }
+    inline void setTexNoAnm(int i, J3DTexNoAnm* pAnm) { mTexNoAnm[i] = pAnm; }
+    inline void setTevColorAnm(int i, J3DTevColorAnm* pAnm) { mTevColorAnm[i] = pAnm; }
+    inline void setTevKColorAnm(int i, J3DTevKColorAnm* pAnm) { mTevKColorAnm[i] = pAnm; }
 
     virtual ~J3DMaterialAnm() {};
     virtual void calc(J3DMaterial*) const;
