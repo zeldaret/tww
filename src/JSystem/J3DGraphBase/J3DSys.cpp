@@ -44,7 +44,7 @@ J3DSys::J3DSys() {
     mVtxPos = NULL;
     mVtxNrm = NULL;
     mVtxCol = NULL;
-    mNBTScale = NULL;
+    field_0x11c = NULL;
     field_0x104 = NULL;
     field_0x120 = NULL;
 

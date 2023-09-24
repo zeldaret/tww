@@ -44,9 +44,9 @@ void J3DShape::initialize() {
 }
 
 /* 802DD1FC-802DD27C       .text calcNBTScale__8J3DShapeFRC3VecPA3_A3_fPA3_A3_f */
-void J3DShape::calcNBTScale(Vec const& param_0, Mtx33* param_1, Mtx33* param_2) {
+void J3DShape::calcNBTScale(Vec const& scale, Mtx33* pSrc, Mtx33* pDst) {
     for (u16 i = 0; i < getMtxGroupNum(); i++)
-        getShapeMtx(i)->calcNBTScale(param_0, param_1, param_2);
+        getShapeMtx(i)->calcNBTScale(scale, pSrc, pDst);
 }
 
 /* 802DD27C-802DD2F0       .text countBumpMtxNum__8J3DShapeCFv */

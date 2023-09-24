@@ -72,22 +72,22 @@ public:
         kVcdVatDLSize = 0xC0,
     };
 
-    /* 80314B48 */ void initialize();
-    /* 80314BB8 */ void addTexMtxIndexInDL(_GXAttr, u32);
-    /* 80314CBC */ void addTexMtxIndexInVcd(_GXAttr);
-    /* 80314DA8 */ void calcNBTScale(Vec const&, f32 (*)[3][3], f32 (*)[3][3]);
-    /* 80314E28 */ u32 countBumpMtxNum() const;
-    /* 80314EEC */ void loadVtxArray() const;
-    /* 80314F5C */ bool isSameVcdVatCmd(J3DShape*);
-    /* 80314F98 */ void makeVtxArrayCmd();
-    /* 80315260 */ void makeVcdVatCmd();
-    /* 80315300 */ void loadPreDrawSetting() const;
-    /* 80315398 */ void setArrayAndBindPipeline() const;
+    void initialize();
+    void addTexMtxIndexInDL(_GXAttr, u32);
+    void addTexMtxIndexInVcd(_GXAttr);
+    void calcNBTScale(Vec const&, Mtx33*, Mtx33*);
+    u32 countBumpMtxNum() const;
+    void loadVtxArray() const;
+    bool isSameVcdVatCmd(J3DShape*);
+    void makeVtxArrayCmd();
+    void makeVcdVatCmd();
+    void loadPreDrawSetting() const;
+    void setArrayAndBindPipeline() const;
 
-    /* 803155E0 */ virtual void draw() const;
-    /* 8031544C */ virtual void drawFast() const;
-    /* 80315628 */ virtual void simpleDraw() const;
-    /* 803156AC */ virtual void simpleDrawCache() const;
+    virtual void draw() const;
+    virtual void drawFast() const;
+    virtual void simpleDraw() const;
+    virtual void simpleDrawCache() const;
 
     void onFlag(u32 flag) { mFlags |= flag; }
     void offFlag(u32 flag) { mFlags &= ~flag; }
