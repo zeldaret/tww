@@ -9,11 +9,79 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_npc.h"
+#include "d/d_item_data.h"
 #include "d/actor/d_a_player.h"
+#include "d/actor/d_a_player_link.h"
 #include "d/d_jnt_hit.h"
+#include "d/d_s_play.h"
 #include "dolphin/types.h"
 
+// Needed for the .data section to match.
+static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
+static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+
+s16 daArrow_c::m_count;
+
 const char daArrow_c::m_arc_name[] = "Link";
+
+const dCcD_SrcCps daArrow_c::m_at_cps_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt Type     */ AT_TYPE_NORMAL_ARROW,
+        /* SrcObjAt Atp      */ 2,
+        /* SrcObjAt SPrm     */ 0xB,
+        /* SrcObjTg Type     */ 0,
+        /* SrcObjTg SPrm     */ 0,
+        /* SrcObjCo SPrm     */ 0,
+        /* SrcGObjAt Se      */ 7,
+        /* SrcGObjAt HitMark */ 0xD,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt GFlag   */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg GFlag   */ 0,
+        /* SrcGObjCo GFlag   */ 0,
+    },
+    // cM3dGCpsS
+    {
+        /* Start  */ 0.0f, 0.0f, 0.0f,
+        /* End    */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 5.0f,
+    },
+};
+
+const dCcD_SrcSph daArrow_c::m_co_sph_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt Type     */ 0,
+        /* SrcObjAt Atp      */ 0,
+        /* SrcObjAt SPrm     */ 0,
+        /* SrcObjTg Type     */ 0,
+        /* SrcObjTg SPrm     */ 0,
+        /* SrcObjCo SPrm     */ 0x119,
+        /* SrcGObjAt Se      */ 7,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt GFlag   */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg GFlag   */ 0x04,
+        /* SrcGObjCo GFlag   */ 0,
+    },
+    // cM3dGSphS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 25.0f,
+    },
+};
 
 /* 800D455C-800D457C       .text createHeap_CB__FP10fopAc_ac_c */
 static BOOL createHeap_CB(fopAc_ac_c* i_this) {
@@ -23,7 +91,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 800D457C-800D4648       .text _createHeap__9daArrow_cFv */
 BOOL daArrow_c::_createHeap() {
     // arrowglitter.bdl for Light Arrows, arrow.bdl otherwise.
-    s32 modelFileIndex = (mArrowType == LIGHT_ARROWS ? 0x38 : 0x37) & 0xFFFF;
+    s32 modelFileIndex = (mArrowType == TYPE_LIGHT ? 0x38 : 0x37) & 0xFFFF;
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, modelFileIndex);
     JUT_ASSERT(190, modelData != 0);
     
@@ -82,7 +150,7 @@ void daArrow_c::checkCreater() {
 /* 800D4814-800D48E8       .text setLightEffect__9daArrow_cFv */
 void daArrow_c::setLightEffect() {
     if (field_0x682 == mArrowType) {
-        if (mArrowType == NORMAL_ARROWS) {
+        if (mArrowType == TYPE_NORMAL) {
             return;
         }
         if (!field_0x688) {
@@ -129,17 +197,112 @@ void daArrow_c::createBlur() {
 
 /* 800D4A04-800D4ADC       .text setArrowShootSe__9daArrow_cFv */
 void daArrow_c::setArrowShootSe() {
-    /* Nonmatching */
+    static const s32 se[8] = {
+        0,
+        0,
+        JA_SE_LK_FIT_FIRE_ARROW,
+        JA_SE_LK_SHOOT_FIRE_ARROW,
+        JA_SE_LK_FIT_ICE_ARROW,
+        JA_SE_LK_SHOOT_ICE_ARROW,
+        JA_SE_LK_FIT_LIGHT_ARROW,
+        JA_SE_LK_SHOOT_LIGHT_ARROW,
+    };
+    
+    if (mArrowType == TYPE_NORMAL) {
+        return;
+    }
+    
+    fopAcM_seStartCurrent(this, se[mArrowType*2+0], 0);
+    
+    fopAcM_seStartCurrent(this, se[mArrowType*2+1], 0);
 }
 
 /* 800D4ADC-800D4B70       .text setDrawShapeMaterial__9daArrow_cFv */
 void daArrow_c::setDrawShapeMaterial() {
-    /* Nonmatching */
+    struct ArrowAttackInfo {
+        u32 mAtType;
+        u8 mAtp;
+        u16 mTipJointIdx;
+    };
+    static const ArrowAttackInfo arrow_mat[] = {
+        {
+            /* mAtType      */ AT_TYPE_NORMAL_ARROW,
+            /* mAtp         */ 2,
+            /* mTipJointIdx */ 4,
+        },
+        {
+            /* mAtType      */ AT_TYPE_FIRE_ARROW,
+            /* mAtp         */ 4,
+            /* mTipJointIdx */ 2,
+        },
+        {
+            /* mAtType      */ AT_TYPE_ICE_ARROW,
+            /* mAtp         */ 4,
+            /* mTipJointIdx */ 3,
+        },
+        {
+            /* mAtType      */ AT_TYPE_LIGHT_ARROW,
+            /* mAtp         */ 0xFF,
+            /* mTipJointIdx */ 0,
+        },
+    };
+    
+    mCps.SetAtType(arrow_mat[mArrowType].mAtType);
+    mCps.SetAtAtp(arrow_mat[mArrowType].mAtp);
+    
+    if (mbShotByZelda) {
+        mCps.SetAtAtp(4);
+        mCps.SetAtType(arrow_mat[0].mAtType);
+        mCps.OnAtSPrmBit(0xE);
+    }
+    
+    if (arrow_mat[mArrowType].mTipJointIdx != 0) {
+        J3DModelData* modelData = mpModel->getModelData();
+        J3DJoint* tipJoint = modelData->getJointNodePointer(arrow_mat[mArrowType].mTipJointIdx);
+        mpTipMat = tipJoint->getMesh();
+    }
 }
 
 /* 800D4B70-800D4D98       .text arrowShooting__9daArrow_cFv */
 void daArrow_c::arrowShooting() {
-    /* Nonmatching */
+    field_0x6a8 = current.pos;
+    f32 xCos = cM_scos(current.angle.x);
+    speed.x = 200.0f * cM_ssin(current.angle.y) * xCos;
+    speed.y = 200.0f * cM_ssin(current.angle.x);
+    speed.z = 200.0f * cM_scos(current.angle.y) * xCos;
+    
+    setArrowShootSe();
+    
+    if (mArrowType == TYPE_LIGHT && !mbShotByZelda) {
+        if (strcmp(dComIfGp_getStartStageName(), "GanonK") != 0) { 
+            // Not in Puppet Ganon's boss room.
+            mCps.SetAtSpl((dCcG_At_Spl)0xB);
+        }
+    }
+    
+    field_0x67c = shape_angle;
+    
+    createBlur();
+    
+    field_0x602 = m_count;
+    m_count += 1;
+    if (m_count == 5) {
+        m_count = 0;
+    }
+    
+    cXyz end = current.pos + speed*1.25f;
+    mCps.SetStartEnd(current.pos, end);
+    mCps.SetR(5.0f);
+    mCps.CalcAtVec();
+    
+    dComIfG_Ccsp()->Set(&mCps);
+    // Using the dComIfG_Ccsp inline here breaks the match.
+    // dComIfG_Ccsp()->SetMass(&mCps, 1);
+    g_dComIfG_gameInfo.play.mCcS.SetMass(&mCps, 1);
+    
+    mbHitActor = false;
+    mNearestHitPos = end;
+    mNearestHitDist = MAXFLOAT;
 }
 
 /* 800D4D98-800D4DC0       .text arrowUseMp__9daArrow_cFv */
@@ -151,13 +314,57 @@ void daArrow_c::arrowUseMp() {
         -2, // Light Arrows
     };
     
-    s32 magic = dComIfGp_getItemMagicCount();
-    dComIfGp_setItemMagicCount(magic + use_mp[mArrowType]);
+    dComIfGp_setItemMagicCount(use_mp[mArrowType]);
+}
+
+// This is a fake inline (not present in debug maps) which is required for ShieldReflect to match.
+inline void setSphereCoordsFromXYAngles(cXyz& xyz, f32 mag, s16 targetAngleX, s16 targetAngleY) {
+    f32 normZ;
+    f32 normY;
+    f32 normX;
+    normX = cM_ssin(targetAngleY) * cM_scos(targetAngleX);
+    normY = -cM_ssin(targetAngleX);
+    normZ = cM_scos(targetAngleY) * cM_scos(targetAngleX);
+    xyz.x = normX * mag;
+    xyz.y = normY * mag;
+    xyz.z = normZ * mag;
 }
 
 /* 800D4DC0-800D50A0       .text ShieldReflect__9daArrow_cFv */
 void daArrow_c::ShieldReflect() {
-    /* Nonmatching */
+    f32 vel = speed.abs();
+    
+    daPy_lk_c* link = daPy_getPlayerLinkActorClass();
+    s16 targetAngleY = link->shape_angle.y + link->getBodyAngleY();
+    s16 targetAngleX = link->getBodyAngleX();
+    
+    fopAc_ac_c* ganondorf;
+    if (fopAcM_SearchByName(PROC_GND, &ganondorf) && dComIfGp_getAttention().LockonTruth() && dComIfGp_getAttention().LockonTarget(0) == ganondorf) {
+        cXyz ganondorfChestPos = ganondorf->current.pos;
+        ganondorfChestPos.y = g_regHIO.mChild[8].mFloatRegs[0] + 130.0f;
+        targetAngleX = -cLib_targetAngleX(&link->current.pos, &ganondorfChestPos);
+        fpcM_SetParam(ganondorf, 0x23);
+        field_0x608 = g_regHIO.mChild[0].mShortRegs[3] + 15;
+        mpSparkleEmitter = dComIfGp_particle_set(0x3EE, &link->current.pos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+    }
+    
+    // // Regswaps without creating a fake inline.
+    // // f1 -> f3: normY
+    // // f3 -> f1: normZ
+    // f32 normZ;
+    // f32 normY;
+    // f32 normX;
+    // normX = cM_ssin(targetAngleY) * cM_scos(targetAngleX);
+    // normY = -cM_ssin(targetAngleX);
+    // normZ = cM_scos(targetAngleY) * cM_scos(targetAngleX);
+    // speed.x = normX * vel;
+    // speed.y = normY * vel;
+    // speed.z = normZ * vel;
+    setSphereCoordsFromXYAngles(speed, vel, targetAngleX, targetAngleY);
+    
+    shape_angle.x = cM_atan2s(-speed.y, -speed.absXZ());
+    shape_angle.y = cM_atan2s(-speed.x, -speed.z);
+    shape_angle.z = 0;
 }
 
 /* 800D50A0-800D5388       .text check_water_in__9daArrow_cFv */
@@ -178,7 +385,29 @@ void daArrow_c::changeArrowType() {
 
 /* 800D553C-800D560C       .text changeArrowTypeNotReady__9daArrow_cFv */
 void daArrow_c::changeArrowTypeNotReady() {
-    /* Nonmatching */
+    if (m_keep_type == TYPE_NORMAL) {
+        if (dComIfGs_getMagic() < 1) {
+            return;
+        }
+        if (dComIfGs_getItem(0xC) == MAGIC_ARROW || dComIfGs_getItem(0xC) == LIGHT_ARROW) {
+            m_keep_type = TYPE_FIRE;
+        }
+    } else if (m_keep_type == TYPE_FIRE) {
+        if (dComIfGs_getMagic() < 1) {
+            return;
+        }
+        if (dComIfGs_getItem(0xC) == MAGIC_ARROW || dComIfGs_getItem(0xC) == LIGHT_ARROW) {
+            m_keep_type = TYPE_ICE;
+        }
+    } else if (m_keep_type == TYPE_ICE) {
+        if (dComIfGs_getMagic() >= 2 && dComIfGs_getItem(0xC) == LIGHT_ARROW) {
+            m_keep_type = TYPE_LIGHT;
+        } else {
+            m_keep_type = TYPE_NORMAL;
+        }
+    } else if (m_keep_type == TYPE_LIGHT) {
+        m_keep_type = TYPE_NORMAL;
+    }
 }
 
 /* 800D560C-800D56B0       .text setRoomInfo__9daArrow_cFv */
@@ -201,7 +430,6 @@ void daArrow_c::setRoomInfo() {
 
 /* 800D56B0-800D5854       .text setKeepMatrix__9daArrow_cFv */
 void daArrow_c::setKeepMatrix() {
-    /* Nonmatching */
     // Transform the arrow onto its archer's hand.
     if (mbShotByZelda) {
         fopNpc_npc_c* zelda;
@@ -283,33 +511,39 @@ void daArrow_c::setStopActorMatrix() {
 }
 
 /* 800D5A70-800D5B20       .text procWait__9daArrow_cFv */
-void daArrow_c::procWait() {
+BOOL daArrow_c::procWait() {
     /* Nonmatching */
 }
 
 /* 800D5B20-800D6BF4       .text procMove__9daArrow_cFv */
-void daArrow_c::procMove() {
+BOOL daArrow_c::procMove() {
     /* Nonmatching */
 }
 
 /* 800D6BF4-800D6E70       .text procReturn__9daArrow_cFv */
-void daArrow_c::procReturn() {
+BOOL daArrow_c::procReturn() {
     /* Nonmatching */
 }
 
 /* 800D6E70-800D71F8       .text procStop_BG__9daArrow_cFv */
-void daArrow_c::procStop_BG() {
+BOOL daArrow_c::procStop_BG() {
     /* Nonmatching */
 }
 
 /* 800D71F8-800D727C       .text procStop_Actor__9daArrow_cFv */
-void daArrow_c::procStop_Actor() {
+BOOL daArrow_c::procStop_Actor() {
     /* Nonmatching */
 }
 
 /* 800D727C-800D72BC       .text procWater__9daArrow_cFv */
-void daArrow_c::procWater() {
-    /* Nonmatching */
+BOOL daArrow_c::procWater() {
+    if (mInWaterTimer <= 0) {
+        fopAcM_delete(this);
+        return TRUE;
+    }
+    
+    mInWaterTimer--;
+    return TRUE;
 }
 
 /* 800D72BC-800D72EC       .text checkRestMp__9daArrow_cFv */
@@ -334,8 +568,54 @@ void daArrow_c::setTypeByPlayer() {
 }
 
 /* 800D7320-800D74FC       .text createInit__9daArrow_cFv */
-void daArrow_c::createInit() {
-    /* Nonmatching */
+BOOL daArrow_c::createInit() {
+    if (mArrowType == TYPE_LIGHT) {
+        mpBtk = daPy_getPlayerLinkActorClass()->getLightArrowBtk();
+    } else {
+        mpBtk = daPy_getPlayerLinkActorClass()->getIceArrowBtk();
+    }
+    
+    mCurrProcFunc = &procWait;
+    
+    setKeepMatrix();
+    mCullMtx = mpModel->getBaseTRMtx();
+    mCull.mBox.mMin.x = -6.0f;
+    mCull.mBox.mMin.y = -6.0f;
+    mCull.mBox.mMin.z = 0.0f;
+    mCull.mBox.mMax.x = 6.0f;
+    mCull.mBox.mMax.y = 6.0f;
+    mCull.mBox.mMax.z = 65.0f;
+    
+    mStts.Init(10, 0xFF, this);
+    mCps.Set(m_at_cps_src);
+    mCps.SetStts(&mStts);
+    mCps.SetAtHitCallback(&atHit_CB);
+    mSph.Set(m_co_sph_src);
+    mSph.SetStts(&mStts);
+    
+    field_0x602 = -1;
+    
+    if (mArrowType != TYPE_LIGHT) {
+        J3DModelData* modelData = mpModel->getModelData();
+        modelData->getJointNodePointer(4)->getMesh()->getShape()->hide();
+        modelData->getJointNodePointer(2)->getMesh()->getShape()->hide();
+        modelData->getJointNodePointer(3)->getMesh()->getShape()->hide();
+        modelData->getJointNodePointer(3)->getMesh()->getNext()->getShape()->hide();
+    }
+    setDrawShapeMaterial();
+    
+    field_0x698 = 1;
+    field_0x699 = 0;
+    field_0x69a = 0;
+    field_0x69c = 0;
+    field_0x6a0 = 300;
+    mInWaterTimer = 0;
+    field_0x6e4 = 0;
+    field_0x688 = 0;
+    field_0x664 = 0;
+    field_0x604 = 0;
+    
+    return TRUE;
 }
 
 /* 800D74FC-800D7820       .text _execute__9daArrow_cFv */
@@ -345,12 +625,66 @@ BOOL daArrow_c::_execute() {
 
 /* 800D7820-800D7960       .text _draw__9daArrow_cFv */
 BOOL daArrow_c::_draw() {
-    /* Nonmatching */
+    if (!field_0x698) {
+        return TRUE;
+    }
+    
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
+    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    
+    if (mArrowType != TYPE_LIGHT) {
+        mpTipMat->getShape()->show();
+        J3DMaterial* nextMat = mpTipMat->getNext();
+        if (nextMat) {
+            nextMat->getShape()->show();
+        }
+    }
+    
+    mpBtk->setFrame(mBtkFrame);
+    dComIfGd_setListP1();
+    mDoExt_modelUpdateDL(mpModel);
+    dComIfGd_setList();
+    
+    if (mArrowType != TYPE_LIGHT) {
+        mpTipMat->getShape()->hide();
+        J3DMaterial* nextMat = mpTipMat->getNext();
+        if (nextMat) {
+            nextMat->getShape()->hide();
+        }
+    }
+    
+    return TRUE;
 }
 
 /* 800D7960-800D7A38       .text _create__9daArrow_cFv */
 s32 daArrow_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daArrow_c);
+    
+    checkCreater();
+    
+    if (mbShotByZelda) {
+        mArrowType = TYPE_LIGHT;
+    } else {
+        setTypeByPlayer();
+    }
+    
+    if (dComIfGp_getMiniGameType() == 8) {
+        mArrowType = TYPE_NORMAL;
+    }
+    
+    const static u32 heap_size[] = {
+        0x1300,
+        0x1300,
+        0x1300,
+        0x820,
+    };
+    if (!fopAcM_entrySolidHeap(this, (heapCallbackFunc)&createHeap_CB, heap_size[mArrowType])) {
+        return cPhs_ERROR_e;
+    }
+    
+    // Using the enum here breaks the match.
+    // return createInit() ? cPhs_COMPLEATE_e : cPhs_ERROR_e;
+    return createInit() ? 4 : 5;
 }
 
 /* 800D7A38-800D7DB4       .text __ct__9daArrow_cFv */
@@ -364,19 +698,16 @@ BOOL daArrow_c::_delete() {
 
 /* 800D8200-800D8220       .text daArrowCreate__FPv */
 s32 daArrowCreate(void* i_this) {
-    /* Nonmatching */
     return ((daArrow_c*)i_this)->_create();
 }
 
 /* 800D8220-800D8240       .text daArrowDelete__FPv */
 BOOL daArrowDelete(void* i_this) {
-    /* Nonmatching */
     return ((daArrow_c*)i_this)->_delete();
 }
 
 /* 800D8240-800D8260       .text daArrowExecute__FPv */
 BOOL daArrowExecute(void* i_this) {
-    /* Nonmatching */
     return ((daArrow_c*)i_this)->_execute();
 }
 

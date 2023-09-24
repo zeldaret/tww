@@ -346,10 +346,12 @@ public:
     void setRPrm(s32 rprm) { mRPrm = rprm; }
     s32 getRPrm() const { return mRPrm; }
     cCcD_Obj* GetHitObj() { return mHitObj; }
+    void ClrObj() { mHitObj = NULL; }
     u32 MskSPrm(u32 mask) const { return mSPrm & mask; }
     u32 MskRPrm(u32 mask) { return mRPrm & mask; }
     void OnSPrmBit(u32 flag) { mSPrm |= flag; }
     void OffSPrmBit(u32 flag) { mSPrm &= ~flag; }
+    void ClrRPrm(u32 flag) { mRPrm &= ~flag; }
 
     void Set(cCcD_SrcObjCommonBase const& src) {
         mSPrm = src.mSPrm;
@@ -364,7 +366,7 @@ public:
     virtual ~cCcD_ObjAt() {}
     void SetHit(cCcD_Obj*);
     void Set(cCcD_SrcObjAt const&);
-    void ClrHit();
+    void ClrHit() { ClrObj(); }
     int GetType() const { return mType; }
     u32 GetGrp() const { return MskSPrm(0x1E); }
     bool ChkSet() const { return MskSPrm(1); }
@@ -373,6 +375,7 @@ public:
     void SetType(u32 type) { mType = type; }
     void SetAtp(int atp) { mAtp = atp; }
     void ClrSet() { OffSPrmBit(1); }
+    void OffHitBit() { ClrRPrm(1); }
     u32 ChkHit() { return MskRPrm(1); }
 
 protected:
@@ -470,6 +473,7 @@ public:
     void SetTgType(u32 type) { mObjTg.SetType(type); }
     void OnTgSPrmBit(u32 flag) { mObjTg.OnSPrmBit(flag); }
     void OffAtSetBit() { mObjAt.ClrSet(); }
+    void OffAtHitBit() { mObjAt.OffHitBit(); }
     void OnTgSetBit() { mObjTg.OnSPrmBit(1); }
     void OffTgSetBit() { mObjTg.ClrSet(); }
     void OnCoSetBit() { mObjCo.OnSPrmBit(1); }

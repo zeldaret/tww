@@ -360,7 +360,9 @@ public:
     /* 0x49B0 */ u8 field_0x49B0[0x4A24 - 0x49B0];
     /* 0x4A24 */ daAgb_c* mpAgb;
     /* 0x4A28 */ u32 mPlayerStatus[2][2];
-    /* 0x4A38 */ u8 field_0x4A38[0x4A40 - 0x4A38];
+    /* 0x4A38 */ u8 field_0x4A38[0x4A3A - 0x4A38];
+    /* 0x4A3A */ u8 mMiniGameType;
+    /* 0x4A3B */ u8 field_0x4A3B[0x4A40 - 0x4A3B];
     /* 0x4A40 */ __d_timer_info_c mTimerInfo;
     /* 0x4A54 */ dDlst_window_c* mCurrentWindow;
     /* 0x4A58 */ view_class* mCurrentView;
@@ -1094,6 +1096,11 @@ inline void dComIfGp_setCurrentGrafPort(J2DOrthoGraph* i_graf) {
     g_dComIfG_gameInfo.play.setCurrentGrafPort(i_graf);
 }
 
+inline u8 dComIfGp_getMiniGameType() {
+    // TODO add enum for minigame type.
+    // 0 for none, 8 for shooting the fishman, 2/6 for orca, 7 for mail sorting, etc
+    return g_dComIfG_gameInfo.play.mMiniGameType;
+}
 
 /**
  * === EVENT ===*/

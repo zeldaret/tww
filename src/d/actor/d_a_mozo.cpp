@@ -238,7 +238,7 @@ s32 daMozo_c::CreateInit() {
 
     // TODO: insert missing assignment here
 
-    mAnimMorf->getModel()->setUserArea(this);
+    mAnimMorf->getModel()->setUserArea((u32)this);
     for (int i = 0; i < mdlData->getJointNum(); i++) {
         if (i == 2) {
             mdlData->getJointNodePointer(2)->setCallBack((J3DNodeCallBack)daMozo_nodeCallBack);

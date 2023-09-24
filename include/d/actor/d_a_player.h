@@ -79,7 +79,8 @@ public:
     /* 0x2A8 */ f32 field_0x2a8;
     /* 0x2AC */ u8 field_0x2AC[0x2B0 - 0x2AC];
     /* 0x2B0 */ f32 field_0x2b0;
-    /* 0x2B4 */ u8 field_0x2B4[0x2BC - 0x2B4];
+    /* 0x2B4 */ csXyz mBodyAngle;
+    /* 0x2BA */ u8 field_0x2BA[0x2BC - 0x2BA];
     /* 0x2BC */ cXyz mHeadTopPos;
     /* 0x2C8 */ cXyz mSwordTopPos;
     /* 0x2D4 */ cXyz field_0x2d4;
@@ -89,6 +90,9 @@ public:
     /* 0x2FC */ u8 field_0x2FC[0x300 - 0x2FC];
     /* 0x300 */ f32 field_0x300;
     /* 0x304 */ daPy_demo_c mDemo;
+
+    s16 getBodyAngleX() { return mBodyAngle.x; }
+    s16 getBodyAngleY() { return mBodyAngle.y; }
 
     virtual MtxP getLeftHandMatrix() = 0;
     virtual MtxP getRightHandMatrix() = 0;

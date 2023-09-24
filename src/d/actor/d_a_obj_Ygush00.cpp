@@ -15,7 +15,7 @@
 
 struct daObjGryw00_c {
 public:
-    f32 get_draw_water_lvl(void *i_this);
+    f32 get_draw_water_lv(void *i_this);
 };
 
 struct daObjYgush00_c : public fopAc_ac_c {
@@ -30,23 +30,29 @@ public:
     bool _execute();
     bool _draw();
     bool create_heap();
-    static s32 solidHeapCB(fopAc_ac_c*);
+    static BOOL solidHeapCB(fopAc_ac_c*);
 
 public:
-    request_of_phase_process_class mPhs;
-    J3DModel * mpModel;
-    mDoExt_btkAnm mBtkAnm;
-    mDoExt_bckAnm mBckAnm;
-    s32 mType;
-    daObjGryw00_c * mpGryw00;
+    /* 0x290 */ request_of_phase_process_class mPhs;
+    /* 0x298 */ J3DModel * mpModel;
+    /* 0x29C */ mDoExt_btkAnm mBtkAnm;
+    /* 0x2B0 */ mDoExt_bckAnm mBckAnm;
+    /* 0x2C0 */ s32 mType;
+    /* 0x2C4 */ daObjGryw00_c * mpGryw00;
 };
 
 namespace {
     static const char l_arcname[] = "Ygush00";
 };
 
+// Needed for the .data section to match.
+static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
+static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
+static f64 dummy4[2] = {3.0, 0.5};
+
 /* 00000078-0000009C       .text solidHeapCB__14daObjYgush00_cFP10fopAc_ac_c */
-s32 daObjYgush00_c::solidHeapCB(fopAc_ac_c* ac) {
+BOOL daObjYgush00_c::solidHeapCB(fopAc_ac_c* ac) {
     return ((daObjYgush00_c*)ac)->create_heap();
 }
 
@@ -56,24 +62,27 @@ bool daObjYgush00_c::create_heap() {
     static u32 btk_table[] = { 0x0E, 0x0D, 0x0D, 0x0D };
     static u32 bck_table[] = { 0x06, 0x05, 0x05, 0x05 };
 
+    J3DModelData * pModelData;
     bool ret = true;
-
-    J3DModelData * pModelData = (J3DModelData *)dComIfG_getObjectRes(l_arcname, mdl_table[mType]);
+    
+    // TODO regswap
+    // r29 -> r30: g_dComIfG_gameInfo.mResControl.mObjectInfo / btkRet
+    // r30 -> r29: pModelData
+    pModelData = (J3DModelData *)dComIfG_getObjectRes(l_arcname, mdl_table[mType]);
     J3DAnmTextureSRTKey * pBtk = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes(l_arcname, btk_table[mType]);
     J3DAnmTransform * pBck = (J3DAnmTransform *)dComIfG_getObjectRes(l_arcname, bck_table[mType]);
 
     if (!pModelData || !pBtk || !pBck) {
         JUT_ASSERT(207, 0);
         ret = false;
-        return ret;
+    } else {
+        mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000222);
+        s32 btkRet = mBtkAnm.init(pModelData, pBtk, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+        s32 bckRet = mBckAnm.init(pModelData, pBck, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false);
+
+        if (!mpModel || !btkRet || !bckRet)
+            ret = false;
     }
-
-    mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000222);
-    s32 btkRet = mBtkAnm.init(pModelData, pBtk, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, false);
-    s32 bckRet = mBckAnm.init(pModelData, pBck, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false);
-
-    if (!mpModel || !btkRet || !bckRet)
-        ret = false;
 
     return ret;
 }
@@ -124,7 +133,7 @@ bool daObjYgush00_c::_execute() {
 
     if (mType == 1) {
         if (mpGryw00 != NULL) {
-            if (mpGryw00->get_draw_water_lvl(mpGryw00) <= getPosition().y) {
+            if (mpGryw00->get_draw_water_lv(mpGryw00) <= getPosition().y) {
                 fopAcM_seStartCurrent(this, 0x61fe, 0);
             }
         } else {
@@ -148,27 +157,27 @@ bool daObjYgush00_c::_draw() {
 }
 
 /* 000006FC-0000071C       .text daObjYgush00_Create__FP14daObjYgush00_c */
-s32 daObjYgush00_Create(daObjYgush00_c* i_this) {
+static s32 daObjYgush00_Create(daObjYgush00_c* i_this) {
     return i_this->_create();
 }
 
 /* 0000071C-00000740       .text daObjYgush00_Delete__FP14daObjYgush00_c */
-s32 daObjYgush00_Delete(daObjYgush00_c* i_this) {
+static s32 daObjYgush00_Delete(daObjYgush00_c* i_this) {
     return i_this->_delete();
 }
 
 /* 00000740-00000764       .text daObjYgush00_Execute__FP14daObjYgush00_c */
-s32 daObjYgush00_Execute(daObjYgush00_c* i_this) {
+static s32 daObjYgush00_Execute(daObjYgush00_c* i_this) {
     return i_this->_execute();
 }
 
 /* 00000764-00000788       .text daObjYgush00_Draw__FP14daObjYgush00_c */
-s32 daObjYgush00_Draw(daObjYgush00_c* i_this) {
+static s32 daObjYgush00_Draw(daObjYgush00_c* i_this) {
     return i_this->_draw();
 }
 
 /* 00000788-00000790       .text daObjYgush00_IsDelete__FP14daObjYgush00_c */
-s32 daObjYgush00_IsDelete(daObjYgush00_c* i_this) {
+static s32 daObjYgush00_IsDelete(daObjYgush00_c* i_this) {
     return 1;
 }
 
