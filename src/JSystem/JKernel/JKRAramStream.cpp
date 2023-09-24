@@ -196,8 +196,3 @@ void JKRAramStream::setTransBuffer(u8* buffer, u32 bufferSize, JKRHeap* heap) {
 JKRAramStreamCommand::JKRAramStreamCommand() {
     mAllocatedTransferBuffer = false;
 }
-
-/* 802B6714-802B6770       .text getAvailable__20JSURandomInputStreamCFv */
-s32 JSURandomInputStream::getAvailable() const {
-    return getLength() - getPosition();
-}
