@@ -136,7 +136,7 @@ public:
     void getLeftHandPos() const;
     void getRopeJumpLand() const;
     void checkRopeForceEnd() const;
-    cXyz getHeadTopPos() const;
+    cXyz getHeadTopPos() const { return mHeadTopPos; }
     void changePlayer(fopAc_ac_c*);
     void objWindHitCheck(dCcD_Cyl*);
     void setDoButtonQuake();

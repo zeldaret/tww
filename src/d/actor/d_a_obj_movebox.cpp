@@ -558,8 +558,8 @@ namespace daObjMovebox {
             } else {
                 numPnts = 4;
             }
-            if (numPnts > mPath->mNum) {
-                numPnts = mPath->mNum;
+            if (numPnts > mPath->m_num) {
+                numPnts = mPath->m_num;
             }
             
             s32 pntIdx;
