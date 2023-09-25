@@ -28,6 +28,7 @@ static bool daKytag06_Draw(kytag06_class*) {
 
 /* 00000080-00000194       .text daKytag06_Execute__FP13kytag06_class */
 BOOL daKytag06_Execute(kytag06_class* i_this) {
+    /* Nonmatching */
     int iVar1 = 1;
 
     if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode == 0) {
