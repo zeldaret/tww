@@ -13,6 +13,7 @@ public:
     int getRupee() const { return mRupee; }
     u8 getMagic() { return mMagic; }
     u8 getMaxMagic() { return mMaxMagic; }
+    u16 getLife() { return mLife; }
     u16 getMaxLife() { return mMaxLife; }
 
     /* 0x00 */ u16 mMaxLife;
@@ -114,8 +115,8 @@ public:
     /* 80059894 */ void decTimer();
     /* 800598D0 */ u16 getTimer();
 
-    u8 getArrowNum() const { return mArrowNum; }
-    u8 getBombNum() const { return mBombNum; }
+    u32 getArrowNum() const { return mArrowNum; }
+    u32 getBombNum() const { return mBombNum; }
 
     /* 0x0 */ u16 mTimer;
     /* 0x2 */ u8 field_0x2;
@@ -449,8 +450,8 @@ STATIC_ASSERT(sizeof(dSv_memBit_c) == 0x24);
 class dSv_ocean_c {
 public:
     /* 8005C8E8 */ void init();
-    /* 8005C908 */ void onOceanSvBit(u8, u16);
-    /* 8005C9E8 */ BOOL isOceanSvBit(u8, u16);
+    /* 8005C908 */ void onOceanSvBit(u8 i_grid, u16 i_bit);
+    /* 8005C9E8 */ BOOL isOceanSvBit(u8 i_grid, u16 i_bit);
 
     /* 0x0 */ u16 field_0x0[50];
 };
@@ -614,6 +615,7 @@ public:
     /* 8005D860 */ void init();
 
     dSv_player_c& getPlayer() { return mPlayer; }
+    dSv_ocean_c& getOcean() { return mOcean; }
     dSv_event_c& getEvent() { return mEvent; }
 
     dSv_memory_c& getSave(int i_stageNo) { return mMemory[i_stageNo]; }
@@ -651,6 +653,7 @@ public:
 
     dSv_save_c& getSavedata() { return mSavedata; }
     dSv_player_c& getPlayer() { return mSavedata.getPlayer(); }
+    dSv_ocean_c& getOcean() { return mSavedata.getOcean(); }
     dSv_event_c& getEvent() { return mSavedata.getEvent(); }
     dSv_restart_c& getRestart() { return mRestart; }
     dSv_turnRestart_c& getTurnRestart() { return mTurnRestart; }

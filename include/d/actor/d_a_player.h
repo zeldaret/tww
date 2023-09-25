@@ -142,6 +142,8 @@ public:
     void setDoButtonQuake();
     void stopDoButtonQuake(int);
     void getRopePos() const;
+
+    BOOL checkConfuse() { return field_0x2a0 & 0x100; }
 };
 
 #endif /* D_A_PLAYER */

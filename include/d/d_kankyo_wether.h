@@ -331,6 +331,7 @@ void dKyw_wether_proc();
 void dKyw_rain_set(int);
 void dKyw_wind_set();
 void dKyw_wind_init();
+int dKyw_get_windsdir();
 void dKyw_pntwind_init();
 void dKy_wave_chan_init();
 f32 dKyw_get_wind_pow();
