@@ -87,7 +87,7 @@ static actor_method_class l_kytag06__Method = {
     (process_method_func)daKytag06_Create,
 };
 
-extern actor_process_profile_definition g_profile_RECTANGLE = {
+extern actor_process_profile_definition g_profile_KYTAG06 = {
     fpcLy_CURRENT_e,
     7,
     fpcLy_CURRENT_e,
