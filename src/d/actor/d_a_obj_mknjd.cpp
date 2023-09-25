@@ -3,8 +3,114 @@
 // Translation Unit: d_a_obj_mknjd.cpp
 //
 
-#include "d_a_obj_mknjd.h"
+#include "f_op/f_op_actor_mng.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "d/d_procname.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_bg_s_movebg_actor.h"
+#include "d/d_item_data.h"
+#include "m_Do/m_Do_ext.h"
 #include "dolphin/types.h"
+
+
+namespace daObjMknjD {
+    class Act_c : public dBgS_MoveBgActor {
+    public:
+        s32 Mthd_Create();
+        s32 Mthd_Delete();
+
+        s16 XyCheckCB(int);
+        s32 XyEventCB(int);
+
+        int CreateHeap();
+        int Create();
+
+        int Delete();
+
+        void set_mtx();
+        void init_mtx();
+
+        void setGoal(int);
+        void setPlayerAngle(int);
+        void talk(int);
+        void privateCut();
+        void daObjMknjD_break();
+
+        int Execute(float(**)[3][4]);
+        int Draw();
+
+        static const char M_arcname[];
+
+        /* 0x0420 */ request_of_phase_process_class mPhs;
+        /* 0x04E2 */ s16 m04E2;
+    };
+
+    const char Act_c::M_arcname[] = "MknjD";
+
+    /* 00001348-00001400       .text manage_friend_draw__10daObjMknjDFi */
+    void manage_friend_draw(int) {
+        /* Nonmatching */
+    }
+
+    /* 000020E0-000022FC       .text setMaterial__10daObjMknjDFP11J3DMaterialUc */
+    void setMaterial(J3DMaterial*, unsigned char) {
+        /* Nonmatching */
+    }
+
+    namespace {
+        /* 00002430-00002450       .text Mthd_Create__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
+        s32 Mthd_Create(void* i_this) {
+            return static_cast<Act_c*>(i_this)->Mthd_Create();
+        }
+
+        /* 00002450-00002470       .text Mthd_Delete__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
+        s32 Mthd_Delete(void* i_this) {
+            return static_cast<Act_c*>(i_this)->Mthd_Delete();
+        }
+
+        /* 00002470-00002490       .text Mthd_Execute__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
+        s32 Mthd_Execute(void* i_this) {
+            return static_cast<Act_c*>(i_this)->MoveBGExecute();
+        }
+
+        /* 00002490-000024BC       .text Mthd_Draw__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
+        s32 Mthd_Draw(void* i_this) {
+            return static_cast<Act_c*>(i_this)->Draw();
+        }
+
+        /* 000024BC-000024E8       .text Mthd_IsDelete__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
+        s32 Mthd_IsDelete(void* i_this) {
+            return static_cast<Act_c*>(i_this)->IsDelete();
+        }
+
+        static actor_method_class Mthd_Table = {
+            (process_method_func)Mthd_Create,
+            (process_method_func)Mthd_Delete,
+            (process_method_func)Mthd_Execute,
+            (process_method_func)Mthd_IsDelete,
+            (process_method_func)Mthd_Draw,
+        };
+    }
+
+    extern actor_process_profile_definition g_profile_Obj_MknjD = {
+        fpcLy_CURRENT_e,
+        3,
+        fpcPi_CURRENT_e,
+        PROC_Obj_MknjD,
+        &g_fpcLf_Method.mBase,
+        sizeof(Act_c),
+        0,
+        0,
+        &g_fopAc_Method.base,
+        0x01C6,
+        &Mthd_Table,
+        0x00044100,
+        fopAc_ACTOR_e,
+        fopAc_CULLBOX_CUSTOM_e,
+    };
+}
+
 
 /* 00000078-0000012C       .text nodeCallBackL__FP7J3DNodei */
 void nodeCallBackL(J3DNode*, int) {
@@ -22,68 +128,60 @@ void nodeCallBack_Hahen(J3DNode*, int) {
 }
 
 /* 000002B0-000002D0       .text daObjMknjD_XyCheckCB__FPvi */
-void daObjMknjD_XyCheckCB(void*, int) {
-    /* Nonmatching */
+s16 daObjMknjD_XyCheckCB(void* i_this, int i_param2) {
+    return static_cast<daObjMknjD::Act_c*>(i_this)->XyCheckCB(i_param2);
 }
 
 /* 000002D0-000002F0       .text daObjMknjD_XyEventCB__FPvi */
-void daObjMknjD_XyEventCB(void*, int) {
-    /* Nonmatching */
+s32 daObjMknjD_XyEventCB(void* i_this, int i_param2) {
+    return static_cast<daObjMknjD::Act_c*>(i_this)->XyEventCB(i_param2);
 }
 
 /* 000002F0-00000314       .text XyCheckCB__Q210daObjMknjD5Act_cFi */
-void daObjMknjD::Act_c::XyCheckCB(int) {
-    /* Nonmatching */
+s16 daObjMknjD::Act_c::XyCheckCB(int i_itemIdx) {
+    return dComIfGp_getSelectItem(i_itemIdx) == WIND_TACT ? 1 : 0;
 }
 
 /* 00000314-0000031C       .text XyEventCB__Q210daObjMknjD5Act_cFi */
-void daObjMknjD::Act_c::XyEventCB(int) {
+s32 daObjMknjD::Act_c::XyEventCB(int) {
     /* Nonmatching */
+    return m04E2;
 }
 
 /* 0000031C-00000620       .text CreateHeap__Q210daObjMknjD5Act_cFv */
-void daObjMknjD::Act_c::CreateHeap() {
+int daObjMknjD::Act_c::CreateHeap() {
     /* Nonmatching */
+    return 0;
 }
 
 /* 00000620-000008E8       .text Create__Q210daObjMknjD5Act_cFv */
-void daObjMknjD::Act_c::Create() {
+int daObjMknjD::Act_c::Create() {
     /* Nonmatching */
+    return 0;
 }
 
 /* 000008E8-00000A84       .text Mthd_Create__Q210daObjMknjD5Act_cFv */
-void daObjMknjD::Act_c::Mthd_Create() {
+s32 daObjMknjD::Act_c::Mthd_Create() {
     /* Nonmatching */
-}
-
-/* 00000A84-00000B00       .text __dt__18dPa_smokeEcallBackFv */
-dPa_smokeEcallBack::~dPa_smokeEcallBack() {
-    /* Nonmatching */
-}
-
-/* 00000B00-00000B24       .text __defctor__18dPa_smokeEcallBackFv */
-void dPa_smokeEcallBack::__defctor() {
-    /* Nonmatching */
-}
-
-/* 00000B24-00000B28       .text __ct__4cXyzFv */
-cXyz::cXyz() {
-    /* Nonmatching */
-}
-
-/* 00000B28-00000B64       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
+    return 0;
 }
 
 /* 00000B64-00000BDC       .text Delete__Q210daObjMknjD5Act_cFv */
-void daObjMknjD::Act_c::Delete() {
+int daObjMknjD::Act_c::Delete() {
     /* Nonmatching */
+    return 0;
 }
 
 /* 00000BDC-00000C34       .text Mthd_Delete__Q210daObjMknjD5Act_cFv */
-void daObjMknjD::Act_c::Mthd_Delete() {
+s32 daObjMknjD::Act_c::Mthd_Delete() {
     /* Nonmatching */
+    int bgDeleteResult = MoveBGDelete();
+    
+    if (mBase.mUnk2 != 3) {
+        dComIfG_resDelete(&mPhs, M_arcname);
+    }
+
+    return bgDeleteResult;
 }
 
 /* 00000C34-00000CC8       .text set_mtx__Q210daObjMknjD5Act_cFv */
@@ -116,103 +214,19 @@ void daObjMknjD::Act_c::privateCut() {
     /* Nonmatching */
 }
 
-/* 00001348-00001400       .text manage_friend_draw__10daObjMknjDFi */
-void daObjMknjD::manage_friend_draw(int) {
-    /* Nonmatching */
-}
-
 /* 00001400-0000195C       .text daObjMknjD_break__Q210daObjMknjD5Act_cFv */
 void daObjMknjD::Act_c::daObjMknjD_break() {
     /* Nonmatching */
 }
 
 /* 0000195C-000020E0       .text Execute__Q210daObjMknjD5Act_cFPPA3_A4_f */
-void daObjMknjD::Act_c::Execute(float(**)[3][4]) {
+int daObjMknjD::Act_c::Execute(float(**)[3][4]) {
     /* Nonmatching */
-}
-
-/* 000020E0-000022FC       .text setMaterial__10daObjMknjDFP11J3DMaterialUc */
-void daObjMknjD::setMaterial(J3DMaterial*, unsigned char) {
-    /* Nonmatching */
+    return 0;
 }
 
 /* 000022FC-00002430       .text Draw__Q210daObjMknjD5Act_cFv */
-void daObjMknjD::Act_c::Draw() {
+int daObjMknjD::Act_c::Draw() {
     /* Nonmatching */
+    return 0;
 }
-
-/* 00002430-00002450       .text Mthd_Create__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
-void daObjMknjD::@unnamed@d_a_obj_mknjd_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
-
-/* 00002450-00002470       .text Mthd_Delete__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
-void daObjMknjD::@unnamed@d_a_obj_mknjd_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
-
-/* 00002470-00002490       .text Mthd_Execute__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
-void daObjMknjD::@unnamed@d_a_obj_mknjd_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
-
-/* 00002490-000024BC       .text Mthd_Draw__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
-void daObjMknjD::@unnamed@d_a_obj_mknjd_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
-
-/* 000024BC-000024E8       .text Mthd_IsDelete__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
-void daObjMknjD::@unnamed@d_a_obj_mknjd_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 000024E8-000024F0       .text IsDelete__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::IsDelete() {
-    /* Nonmatching */
-}
-
-/* 000024F0-000024F8       .text ToFore__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToFore() {
-    /* Nonmatching */
-}
-
-/* 000024F8-00002500       .text ToBack__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToBack() {
-    /* Nonmatching */
-}
-
-/* 00002500-00002504       .text draw__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::draw(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 00002504-00002508       .text executeAfter__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::executeAfter(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 00002508-0000250C       .text execute__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::execute(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 0000250C-00002510       .text init__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::init(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 00002510-00002558       .text __dt__34JPACallBackBase<P14JPABaseEmitter>Fv */
-JPACallBackBase<JPABaseEmitter*>::~JPACallBackBase() {
-    /* Nonmatching */
-}
-
-/* 00002558-000025B4       .text __dt__18dPa_levelEcallBackFv */
-dPa_levelEcallBack::~dPa_levelEcallBack() {
-    /* Nonmatching */
-}
-
-/* 000025B4-000025D0       .text PrmAbstract<Q310daObjMknjD5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ310daObjMknjD5Act_c5Prm_eQ310daObjMknjD5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjMknjD::Act_c::Prm_e>(const fopAc_ac_c*, daObjMknjD::Act_c::Prm_e, daObjMknjD::Act_c::Prm_e) {
-    /* Nonmatching */
-}
-
