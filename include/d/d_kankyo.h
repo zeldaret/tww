@@ -402,6 +402,7 @@ void dKy_vrbox_addcol_set(s16, s16, s16, f32);
 BOOL dKy_daynight_check();
 void dKy_tevstr_init(dKy_tevstr_c*, s8, u8);
 void dKy_Sound_init();
+void dKy_change_colpat(u8 param_0);
 u8 dKy_pship_existense_chk();
 void dKy_Itemgetcol_chg_move();
 void dKy_arrowcol_chg_move();

@@ -1246,6 +1246,10 @@ inline char* dComIfGp_evmng_getMyStringP(int staffIdx, const char* name) {
     return reinterpret_cast<char*>(dComIfGp_getEventManager().getMySubstanceP(staffIdx, name, 4)); //type 4 is string
 }
 
+inline BOOL dComIfGp_evmng_startCheck(char* eventID) {
+    return dComIfGp_getEventManager().startCheckOld(eventID);
+}
+
 inline BOOL dComIfGp_evmng_endCheck(s16 eventID) {
     return dComIfGp_getEventManager().endCheck(eventID);
 }
