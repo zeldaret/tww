@@ -56,7 +56,7 @@ public:
 
 STATIC_ASSERT(sizeof(dPa_followEcallBack) == 0x14);
 
-class dPa_smokeEcallBack : dPa_followEcallBack {
+class dPa_smokeEcallBack : public dPa_followEcallBack {
 public:
     dPa_smokeEcallBack(u8);
     virtual ~dPa_smokeEcallBack();

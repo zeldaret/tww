@@ -172,8 +172,10 @@ class JntHit_c;
 
 struct fopAc_cullSizeSphere {
 public:
+#ifndef __INTELLISENSE__
     fopAc_cullSizeSphere() {}
     fopAc_cullSizeSphere(cXyz, float);
+#endif
 
     /* 0x0 */ Vec mCenter;
     /* 0xC */ f32 mRadius;
@@ -181,9 +183,11 @@ public:
 
 struct fopAc_cullSizeBox {
 public:
+#ifndef __INTELLISENSE__
     fopAc_cullSizeBox() {}
     fopAc_cullSizeBox(const fopAc_cullSizeBox&);
     fopAc_cullSizeBox(cXyz, cXyz);
+#endif
 
     /* 0x0 */ Vec mMin;
     /* 0xC */ Vec mMax;

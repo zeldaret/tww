@@ -68,7 +68,7 @@ struct dCcD_SrcCps {
 class dCcD_GStts : public cCcD_GStts {
 public:
     dCcD_GStts();
-    virtual ~dCcD_GStts();
+    virtual ~dCcD_GStts() {}
 
     void Ct();
     void Move();
@@ -108,7 +108,7 @@ public:
     virtual void Ct();
     virtual void ClrAt();
     virtual void ClrTg();
-    virtual ~dCcD_Stts();
+    virtual ~dCcD_Stts() {}
 
 };  // Size = 0x3C
 
@@ -140,7 +140,7 @@ public:
     void SetEffCounterTimer();
     void SubtractEffCounter() { mEffCounter -= 1; }
     bool ChkEffCounter() { return mEffCounter >= 0; }
-    virtual ~dCcD_GAtTgCoCommonBase();
+    virtual ~dCcD_GAtTgCoCommonBase() {}
 
     void ClrEffCounter() { mEffCounter = 0; }
     u32 GetGFlag() const { return mGFlag; }
@@ -161,7 +161,7 @@ public:
 class dCcD_GObjAt : public dCcD_GAtTgCoCommonBase {
 public:
     void Set(dCcD_SrcGObjAt const&);
-    virtual ~dCcD_GObjAt();
+    virtual ~dCcD_GObjAt() {}
     void SetVec(cXyz& vec) { mVec = vec; }
     cXyz& GetVec() { return mVec; }
     cXyz* GetVecP() { return &mVec; }
@@ -192,7 +192,7 @@ public:
 class dCcD_GObjTg : public dCcD_GAtTgCoCommonBase {
 public:
     void Set(dCcD_SrcGObjTg const&);
-    virtual ~dCcD_GObjTg();
+    virtual ~dCcD_GObjTg() {}
     void SetSe(u8 se) { mSe = se; }
     void SetVec(cXyz& vec) { mVec = vec; }
     cXyz& GetVec() { return mVec; }
@@ -222,7 +222,7 @@ private:
 // Correction (Co) Collider
 class dCcD_GObjCo : public dCcD_GAtTgCoCommonBase {
 public:
-    virtual ~dCcD_GObjCo();
+    virtual ~dCcD_GObjCo() {}
     void Set(dCcD_SrcGObjCo const& pSrc) { dCcD_GAtTgCoCommonBase::Set(pSrc.mBase); }
 };  // Size = 0x1C ?
 

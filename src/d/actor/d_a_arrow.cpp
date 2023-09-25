@@ -274,7 +274,7 @@ void daArrow_c::arrowShooting() {
     setArrowShootSe();
     
     if (mArrowType == TYPE_LIGHT && !mbShotByZelda) {
-        if (strcmp(dComIfGp_getStartStageName(), "GanonK") != 0) { 
+        if (strcmp(dComIfGp_getStartStageName(), "GanonK") != 0) {
             // Not in Puppet Ganon's boss room.
             mCps.SetAtSpl((dCcG_At_Spl)0xB);
         }
