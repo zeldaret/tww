@@ -20,9 +20,8 @@ struct TNodeLinkList {
     struct iterator {
         iterator(TLinkListNode* pNode) { node = pNode; }
         iterator(const iterator& iter) { *this = iter; }
-        iterator& operator++() {
-            node = node->getNext();
-            return *this; 
+        operator bool() const {
+            return node != NULL;
         }
 
         TLinkListNode* node;
@@ -31,6 +30,9 @@ struct TNodeLinkList {
     struct const_iterator {
         const_iterator(TLinkListNode* pNode) { node = pNode; }
         const_iterator(const const_iterator& iter) { *this = iter; }
+        operator bool() const {
+            return node != NULL;
+        }
 
         TLinkListNode* node;
     };
@@ -53,11 +55,17 @@ struct TNodeLinkList {
         return iter;
     }
 
+    const_iterator begin() const {
+        const_iterator iter(ocObject_.mNext);
+        return iter;
+    }
+
     ~TNodeLinkList();
     iterator erase(JGadget::TNodeLinkList::iterator, JGadget::TNodeLinkList::iterator);
     iterator erase(JGadget::TNodeLinkList::iterator);
     void splice(JGadget::TNodeLinkList::iterator, JGadget::TNodeLinkList&,
                 JGadget::TNodeLinkList::iterator);
+    iterator Find(const JGadget::TLinkListNode*);
     iterator Insert(JGadget::TNodeLinkList::iterator, JGadget::TLinkListNode*);
     iterator Erase(JGadget::TLinkListNode*);
     void Remove(JGadget::TLinkListNode*);
@@ -72,6 +80,14 @@ struct TLinkList : public TNodeLinkList {
 
     struct iterator : TNodeLinkList::iterator {
         iterator(TNodeLinkList::iterator iter) : TNodeLinkList::iterator(iter) {}
+    };
+
+    struct const_iterator : TNodeLinkList::const_iterator {
+        const_iterator(TNodeLinkList::const_iterator iter) : TNodeLinkList::const_iterator(iter) {}
+        const_iterator& operator++() {
+            node = node->getNext();
+            return *this;
+        }
     };
 
     TLinkListNode* Element_toNode(T* element) const { return &element->ocObject_; }
@@ -95,6 +111,12 @@ struct TLinkList : public TNodeLinkList {
     TLinkList::iterator begin() {
         TNodeLinkList::iterator node_iter = TNodeLinkList::begin();
         TLinkList::iterator iter(node_iter);
+        return iter;
+    }
+
+    TLinkList::const_iterator begin() const {
+        TNodeLinkList::const_iterator node_iter = TNodeLinkList::begin();
+        TLinkList::const_iterator iter(node_iter);
         return iter;
     }
 

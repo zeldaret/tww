@@ -10,17 +10,17 @@
 #include "d/d_s_play.h"
 
 /* 8002A688-8002A6B0       .text fopMsg_Draw__FPv */
-static int fopMsg_Draw(void* i_this) {
+int fopMsg_Draw(void* i_this) {
     msg_class* _this = static_cast<msg_class*>(i_this);
     return fpcLf_DrawMethod(_this->mSubMtd, i_this);
 }
 
 /* 8002A6B0-8002A6E8       .text fopMsg_Execute__FPv */
-static int fopMsg_Execute(void* i_this) {
+int fopMsg_Execute(void* i_this) {
     msg_class* _this = static_cast<msg_class*>(i_this);
 
     int stat = 1;
-    if (dScnPly_ply_c::isPause()) {
+    if (!dScnPly_ply_c::isPause()) {
         stat = fpcMtd_Execute(&_this->mSubMtd->mBase, i_this);
     }
 
@@ -28,7 +28,7 @@ static int fopMsg_Execute(void* i_this) {
 }
 
 /* 8002A6E8-8002A73C       .text fopMsg_IsDelete__FPv */
-static int fopMsg_IsDelete(void* i_this) {
+int fopMsg_IsDelete(void* i_this) {
     msg_class* _this = static_cast<msg_class*>(i_this);
 
     int stat = fpcMtd_IsDelete(&_this->mSubMtd->mBase, i_this);
@@ -40,7 +40,7 @@ static int fopMsg_IsDelete(void* i_this) {
 }
 
 /* 8002A73C-8002A788       .text fopMsg_Delete__FPv */
-static int fopMsg_Delete(void* i_this) {
+int fopMsg_Delete(void* i_this) {
     msg_class* _this = static_cast<msg_class*>(i_this);
 
     int stat = fpcMtd_Delete(&_this->mSubMtd->mBase, i_this);

@@ -17,7 +17,7 @@ struct actor_method_class {
 enum fopAc_Status_e {
     fopAcStts_SHOWMAP_e     = 0x00000020,
     fopAcStts_NOEXEC_e      = 0x00000080,
-    fopAcStts_CULLSTOP_e    = 0x00000100,
+    fopAcStts_CULL_e        = 0x00000100,
     fopAcStts_FREEZE_e      = 0x00000400,
     fopAcStts_CARRY_e       = 0x00002000,
     fopAcStts_NOPAUSE_e     = 0x00020000,
@@ -113,11 +113,6 @@ public:
     void setEventName(char*);
     char* getEventName();
     void beforeProc();
-    void onCondition(u16);
-    void offCondition(u16);
-    bool checkCommandCatch();
-    BOOL checkCommandDoor();
-    BOOL checkCommandDemoAccrpt() { return mCommand == 2; }
 
     void setCommand(u16 command) { mCommand = command; }
     void setMapToolId(u8 id) { mMapToolId = id; }
@@ -131,14 +126,14 @@ public:
     void setIdx(u8 i_idx) { mIndex = i_idx; }
     char* getArchiveName() { return mArchiveName; }
     BOOL chkCondition(u16 condition) { return (mCondition & condition) == condition; }
-    void i_onCondition(u16 cond) { mCondition |= cond; }
-    void i_offCondition(u16 cond) { mCondition &= ~cond; }
+    void onCondition(u16 cond) { mCondition |= cond; }
+    void offCondition(u16 cond) { mCondition &= ~cond; }
 
     bool checkCommandTalk() { return mCommand == 1; }
     bool checkCommandItem() { return mCommand == 4; }
-    BOOL i_checkCommandDoor() { return mCommand == 3; }
-    bool i_checkCommandDemoAccrpt() { return mCommand == 2; }
-    bool i_checkCommandCatch() { return mCommand == 6; }
+    BOOL checkCommandDoor() { return mCommand == 3; }
+    bool checkCommandDemoAccrpt() { return mCommand == 2; }
+    bool checkCommandCatch() { return mCommand == 6; }
 
     void suspendProc(void* actor) {
         if (field_0x10 != NULL) {
@@ -169,18 +164,27 @@ struct actor_attention_types {
     void setFlag(u32 flags) { mFlags |= flags; }
 
     /* 0x00 */ u8 mDistances[8];
-    /* 0x0C */ cXyz mPosition;
-    /* 0x18 */ u32 mFlags;
-};  // Size = 0x1C
+    /* 0x08 */ cXyz mPosition;
+    /* 0x14 */ u32 mFlags;
+};  // Size = 0x18
 
-class dJntCol_c;
+class JntHit_c;
 
-struct cull_sphere {
+struct fopAc_cullSizeSphere {
+public:
+    fopAc_cullSizeSphere() {}
+    fopAc_cullSizeSphere(cXyz, float);
+
     /* 0x0 */ Vec mCenter;
     /* 0xC */ f32 mRadius;
 };
 
-struct cull_box {
+struct fopAc_cullSizeBox {
+public:
+    fopAc_cullSizeBox() {}
+    fopAc_cullSizeBox(const fopAc_cullSizeBox&);
+    fopAc_cullSizeBox(cXyz, cXyz);
+
     /* 0x0 */ Vec mMin;
     /* 0xC */ Vec mMax;
 };
@@ -190,16 +194,16 @@ public:
     /* 0x0C0 */ int mAcType;
     /* 0x0C4 */ create_tag_class mAcTg;
     /* 0x0D8 */ create_tag_class mDwTg;
-    /* 0x0EC */ profile_method_class* mSubMtd;
-    /* 0x0F0 */ JKRSolidHeap* mHeap;
+    /* 0x0EC */ actor_method_class* mSubMtd;
+    /* 0x0F0 */ JKRSolidHeap* heap;
     /* 0x0F4 */ dEvt_info_c mEvtInfo;
     /* 0x10C */ dKy_tevstr_c mTevStr;
-    /* 0x1BC */ u16 mSetID;
+    /* 0x1BC */ u16 mSetId;
     /* 0x1BE */ u8 mGroup;
     /* 0x1BF */ s8 mCullType;
     /* 0x1C0 */ u8 mDemoActorId;
     /* 0x1C1 */ s8 mSubtype;
-    /* 0x1C2 */ u8 mCarryType;
+    /* 0x1C2 */ u8 mGbaName;
     /* 0x1C4 */ u32 mStatus;
     /* 0x1C8 */ u32 mCondition;
     /* 0x1CC */ u32 mParentPcId;
@@ -211,12 +215,12 @@ public:
     /* 0x220 */ cXyz speed;
     /* 0x22C */ MtxP mCullMtx;
     union {
-        /* 0x230 */ cull_box mBox;
-        /* 0x230 */ cull_sphere mSphere;
+        /* 0x230 */ fopAc_cullSizeBox mBox;
+        /* 0x230 */ fopAc_cullSizeSphere mSphere;
     } mCull;
     /* 0x248 */ f32 mCullSizeFar;
     /* 0x24C */ J3DModel* model;
-    /* 0x250 */ dJntCol_c* mJntCol;
+    /* 0x250 */ JntHit_c* mJntHit;
     /* 0x254 */ f32 speedF;
     /* 0x258 */ f32 mGravity;
     /* 0x25C */ f32 mMaxFallSpeed;

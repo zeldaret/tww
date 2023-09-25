@@ -16,7 +16,7 @@ public:
         mIsAvailable = false;
         mIsFileOrDirectory = false;
     }
-    inline virtual ~JKRFileFinder();
+    inline virtual ~JKRFileFinder() {};
 
     bool isAvailable() const { return mIsAvailable; }
     bool isFile() const { return mIsFileOrDirectory; }
@@ -37,7 +37,7 @@ class JKRArchive;
 class JKRArcFinder : public JKRFileFinder {
 public:
     JKRArcFinder(JKRArchive*, s32, s32);
-    inline virtual ~JKRArcFinder();
+    inline virtual ~JKRArcFinder() {};
 
 public:
     /* vt[3] */ virtual bool findNextFile(void); /* override */

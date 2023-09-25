@@ -4,16 +4,24 @@
 //
 
 #include "JSystem/J3DGraphAnimator/J3DMaterialAttach.h"
-#include "dolphin/types.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
 
 /* 802F5C48-802F5C70       .text clear__16J3DMaterialTableFv */
 void J3DMaterialTable::clear() {
-    /* Nonmatching */
+    mMaterialNum = 0;
+    mMaterialNodePointer = NULL;
+    mMaterialName = NULL;
+    field_0x10 = NULL;
+    field_0x14 = NULL;
+    mTexture = NULL;
+    mTextureName = NULL;
+    field_0x20 = 0;
 }
 
 /* 802F5C70-802F5CAC       .text __ct__16J3DMaterialTableFv */
 J3DMaterialTable::J3DMaterialTable() {
-    /* Nonmatching */
+    clear();
 }
 
 /* 802F5CAC-802F5CF4       .text __dt__16J3DMaterialTableFv */
@@ -22,56 +30,271 @@ J3DMaterialTable::~J3DMaterialTable() {
 }
 
 /* 802F5CF4-802F5DC8       .text entryMatColorAnimator__16J3DMaterialTableFP11J3DAnmColor */
-void J3DMaterialTable::entryMatColorAnimator(J3DAnmColor*) {
-    /* Nonmatching */
+s32 J3DMaterialTable::entryMatColorAnimator(J3DAnmColor* pAnm) {
+    s32 ret = 0;
+    u16 materialNum = pAnm->getUpdateMaterialNum();
+
+    if (field_0x20 == 1)
+        return 2;
+
+    for (u16 i = 0; i < materialNum; i++) {
+        u16 materialID = pAnm->getUpdateMaterialID(i);
+        if (materialID != 0xFFFF) {
+            J3DMaterialAnm * pMatAnm = getMaterialNodePointer(materialID)->getMaterialAnm();
+            if (pMatAnm == NULL)
+                ret = 1;
+            else
+                pMatAnm->setMatColorAnm(0, new J3DMatColorAnm(pAnm, i));
+        }
+    }
+
+    return ret;
 }
 
 /* 802F5DC8-802F6058       .text entryTexMtxAnimator__16J3DMaterialTableFP19J3DAnmTextureSRTKey */
-void J3DMaterialTable::entryTexMtxAnimator(J3DAnmTextureSRTKey*) {
-    /* Nonmatching */
+s32 J3DMaterialTable::entryTexMtxAnimator(J3DAnmTextureSRTKey* pAnm) {
 }
 
 /* 802F6058-802F61E8       .text entryTevRegAnimator__16J3DMaterialTableFP15J3DAnmTevRegKey */
-void J3DMaterialTable::entryTevRegAnimator(J3DAnmTevRegKey*) {
-    /* Nonmatching */
+s32 J3DMaterialTable::entryTevRegAnimator(J3DAnmTevRegKey* pAnm) {
+    s32 ret = 0;
+    u16 cRegMaterialNum = pAnm->getCRegUpdateMaterialNum();
+    u16 kRegMaterialNum = pAnm->getKRegUpdateMaterialNum();
+
+    if (field_0x20 == 1)
+        return 2;
+
+    for (u16 i = 0; i < cRegMaterialNum; i++) {
+        u16 materialID = pAnm->getCRegUpdateMaterialID(i);
+        if (materialID != 0xFFFF) {
+            J3DMaterialAnm * pMatAnm = getMaterialNodePointer(materialID)->getMaterialAnm();
+            u8 colorId = pAnm->getAnmCRegKeyTable()[i].mColorId;
+            if (pMatAnm == NULL)
+                ret = 1;
+            else
+                pMatAnm->setTevColorAnm(colorId, new J3DTevColorAnm(pAnm, i));
+        }
+    }
+
+    for (u16 i = 0; i < kRegMaterialNum; i++) {
+        u16 materialID = pAnm->getKRegUpdateMaterialID(i);
+        if (materialID != 0xFFFF) {
+            J3DMaterialAnm * pMatAnm = getMaterialNodePointer(materialID)->getMaterialAnm();
+            u8 colorId = pAnm->getAnmKRegKeyTable()[i].mColorId;
+            if (pMatAnm == NULL)
+                ret = 1;
+            else
+                pMatAnm->setTevKColorAnm(colorId, new J3DTevKColorAnm(pAnm, i));
+        }
+    }
+
+    return ret;
 }
 
 /* 802F61E8-802F6260       .text removeMatColorAnimator__16J3DMaterialTableFP11J3DAnmColor */
-void J3DMaterialTable::removeMatColorAnimator(J3DAnmColor*) {
-    /* Nonmatching */
+int J3DMaterialTable::removeMatColorAnimator(J3DAnmColor* pAnm) {
+    s32 ret = 0;
+    u16 materialNum = pAnm->getUpdateMaterialNum();
+
+    for (u16 i = 0; i < materialNum; i++) {
+        u16 materialID = pAnm->getUpdateMaterialID(i);
+        if (materialID != 0xFFFF) {
+            J3DMaterialAnm * pMatAnm = getMaterialNodePointer(materialID)->getMaterialAnm();
+            if (pMatAnm == NULL)
+                ret = 1;
+            else
+                pMatAnm->setMatColorAnm(0, NULL);
+        }
+    }
+
+    return ret;
 }
 
 /* 802F6260-802F62F4       .text removeTexNoAnimator__16J3DMaterialTableFP16J3DAnmTexPattern */
-void J3DMaterialTable::removeTexNoAnimator(J3DAnmTexPattern*) {
-    /* Nonmatching */
+int J3DMaterialTable::removeTexNoAnimator(J3DAnmTexPattern* pAnm) {
+    s32 ret = 0;
+    u16 materialNum = pAnm->getUpdateMaterialNum();
+
+    for (u16 i = 0; i < materialNum; i++) {
+        u16 materialID = pAnm->getUpdateMaterialID(i);
+        if (materialID != 0xFFFF) {
+            J3DMaterialAnm * pMatAnm = getMaterialNodePointer(materialID)->getMaterialAnm();
+            u8 texNo = pAnm->getAnmTable()[i].mTexNo;
+            if (pMatAnm == NULL)
+                ret = 1;
+            else
+                pMatAnm->setTexNoAnm(texNo, NULL);
+        }
+    }
+
+    return ret;
 }
 
 /* 802F62F4-802F6398       .text removeTexMtxAnimator__16J3DMaterialTableFP19J3DAnmTextureSRTKey */
-void J3DMaterialTable::removeTexMtxAnimator(J3DAnmTextureSRTKey*) {
-    /* Nonmatching */
+int J3DMaterialTable::removeTexMtxAnimator(J3DAnmTextureSRTKey* pAnm) {
+    s32 ret = 0;
+    u16 materialNum = pAnm->getUpdateMaterialNum();
+
+    for (u16 i = 0; i < materialNum; i++) {
+        u16 materialID = pAnm->getUpdateMaterialID(i);
+        if (materialID != 0xFFFF) {
+            J3DMaterial * pMaterial = getMaterialNodePointer(materialID);
+            J3DMaterialAnm * pMatAnm = pMaterial->getMaterialAnm();
+            u8 texMtxID = pAnm->getUpdateTexMtxID(i);
+            if (pMatAnm == NULL) {
+                ret = 1;
+            } else if (texMtxID != 0xFF) {
+                pMatAnm->setTexMtxAnm(texMtxID, NULL);
+            }
+        }
+    }
+
+    return ret;
 }
 
 /* 802F6398-802F64B8       .text removeTevRegAnimator__16J3DMaterialTableFP15J3DAnmTevRegKey */
-void J3DMaterialTable::removeTevRegAnimator(J3DAnmTevRegKey*) {
-    /* Nonmatching */
+int J3DMaterialTable::removeTevRegAnimator(J3DAnmTevRegKey* pAnm) {
+    s32 ret = 0;
+    u16 cRegMaterialNum = pAnm->getCRegUpdateMaterialNum();
+    u16 kRegMaterialNum = pAnm->getKRegUpdateMaterialNum();
+
+    for (u16 i = 0; i < cRegMaterialNum; i++) {
+        if (pAnm->getCRegUpdateMaterialID(i) != 0xFFFF) {
+            J3DMaterialAnm * pMatAnm = getMaterialNodePointer(pAnm->getCRegUpdateMaterialID(i))->getMaterialAnm();
+            u8 colorId = pAnm->getAnmCRegKeyTable()[i].mColorId;
+            if (pMatAnm == NULL)
+                ret = 1;
+            else
+                pMatAnm->setTevColorAnm(colorId, NULL);
+        }
+    }
+
+    for (u16 i = 0; i < kRegMaterialNum; i++) {
+        if (pAnm->getKRegUpdateMaterialID(i) != 0xFFFF) {
+            J3DMaterialAnm * pMatAnm = getMaterialNodePointer(pAnm->getKRegUpdateMaterialID(i))->getMaterialAnm();
+            u8 colorId = pAnm->getAnmKRegKeyTable()[i].mColorId;
+            if (pMatAnm == NULL) {
+                ret = 1;
+            } else {
+                pMatAnm->setTevKColorAnm(colorId, NULL);
+            }
+        }
+    }
+
+    return ret;
 }
 
 /* 802F64B8-802F6550       .text setMatColorAnimator__16J3DMaterialTableFP11J3DAnmColorP14J3DMatColorAnm */
-void J3DMaterialTable::setMatColorAnimator(J3DAnmColor*, J3DMatColorAnm*) {
-    /* Nonmatching */
+s32 J3DMaterialTable::setMatColorAnimator(J3DAnmColor* pAnm, J3DMatColorAnm* pAnmR) {
+    s32 ret = 0;
+    u16 materialNum = pAnm->getUpdateMaterialNum();
+
+    if (field_0x20 == 1)
+        return 2;
+
+    for (u16 i = 0; i < materialNum; i++) {
+        u16 materialID = pAnm->getUpdateMaterialID(i);
+        if (materialID != 0xFFFF) {
+            J3DMaterialAnm * pMatAnm = getMaterialNodePointer(materialID)->getMaterialAnm();
+            if (pMatAnm == NULL)
+                ret = 1;
+            else
+                pMatAnm->setMatColorAnm(0, &pAnmR[i]);
+        }
+    }
+
+    return ret;
 }
 
 /* 802F6550-802F6600       .text setTexNoAnimator__16J3DMaterialTableFP16J3DAnmTexPatternP11J3DTexNoAnm */
-void J3DMaterialTable::setTexNoAnimator(J3DAnmTexPattern*, J3DTexNoAnm*) {
-    /* Nonmatching */
+s32 J3DMaterialTable::setTexNoAnimator(J3DAnmTexPattern* pAnm, J3DTexNoAnm* pAnmR) {
+    s32 ret = 0;
+    u16 materialNum = pAnm->getUpdateMaterialNum();
+
+    if (field_0x20 == 1)
+        return 2;
+
+    for (u16 i = 0; i < materialNum; i++) {
+        u16 materialID = pAnm->getUpdateMaterialID(i);
+        if (materialID != 0xFFFF) {
+            J3DMaterialAnm * pMatAnm = getMaterialNodePointer(materialID)->getMaterialAnm();
+            u8 texNo = pAnm->getAnmTable()[i].mTexNo;
+            if (pMatAnm == NULL)
+                ret = 1;
+            else
+                pMatAnm->setTexNoAnm(texNo, &pAnmR[i]);
+        }
+    }
+
+    return ret;
 }
 
 /* 802F6600-802F6798       .text setTexMtxAnimator__16J3DMaterialTableFP19J3DAnmTextureSRTKeyP12J3DTexMtxAnmP12J3DTexMtxAnm */
-void J3DMaterialTable::setTexMtxAnimator(J3DAnmTextureSRTKey*, J3DTexMtxAnm*, J3DTexMtxAnm*) {
-    /* Nonmatching */
+s32 J3DMaterialTable::setTexMtxAnimator(J3DAnmTextureSRTKey* pAnm, J3DTexMtxAnm* pTexAnmR, J3DTexMtxAnm* pDualAnmR) {
+    s32 ret = 0;
+    u16 materialNum = pAnm->getUpdateMaterialNum();
+
+    if (field_0x20 == 1)
+        return 2;
+
+    for (u16 i = 0; i < materialNum; i++) {
+        u16 materialID = pAnm->getUpdateMaterialID(i);
+        if (materialID != 0xFFFF) {
+            J3DMaterial * pMaterial = getMaterialNodePointer(materialID);
+            J3DMaterialAnm * pMatAnm = pMaterial->getMaterialAnm();
+            u8 texMtxID = pAnm->getUpdateTexMtxID(i);
+            if (pMatAnm == NULL) {
+                ret = 1;
+            } else if (texMtxID != 0xFF) {
+                if (pMaterial->getTexGenBlock()->getTexCoord(texMtxID) != NULL) {
+                    pMaterial->getTexGenBlock()->getTexCoord(texMtxID)->setTexGenMtx(GX_TEXMTX0 + (texMtxID & 0xFF) * 3);
+                }
+
+                J3DTexMtx *pTexMtx = pMaterial->getTexGenBlock()->getTexMtx(texMtxID);
+                pTexMtx->getTexMtxInfo().mInfo = ((pTexMtx->getTexMtxInfo().mInfo) & 0x7F) | (u8)(pAnm->getTexMtxCalcType() << 7);
+                pTexMtx->getTexMtxInfo().mCenter.x = pAnm->getSRTCenter(i).x;
+                pTexMtx->getTexMtxInfo().mCenter.x = pAnm->getSRTCenter(i).y;
+                pTexMtx->getTexMtxInfo().mCenter.z = pAnm->getSRTCenter(i).z;
+
+                pMatAnm->setTexMtxAnm(texMtxID, &pTexAnmR[i]);
+            }
+        }
+    }
+
+    return ret;
 }
 
 /* 802F6798-802F68F0       .text setTevRegAnimator__16J3DMaterialTableFP15J3DAnmTevRegKeyP14J3DTevColorAnmP15J3DTevKColorAnm */
-void J3DMaterialTable::setTevRegAnimator(J3DAnmTevRegKey*, J3DTevColorAnm*, J3DTevKColorAnm*) {
-    /* Nonmatching */
+s32 J3DMaterialTable::setTevRegAnimator(J3DAnmTevRegKey* pAnm, J3DTevColorAnm* pCRegAnmR, J3DTevKColorAnm* pKRegAnmR) {
+    s32 ret = 0;
+    u16 cRegMaterialNum = pAnm->getCRegUpdateMaterialNum();
+    u16 kRegMaterialNum = pAnm->getKRegUpdateMaterialNum();
+
+    if (field_0x20 == 1)
+        return 2;
+
+    for (u16 i = 0; i < cRegMaterialNum; i++) {
+        if (pAnm->getCRegUpdateMaterialID(i) != 0xFFFF) {
+            J3DMaterialAnm * pMatAnm = getMaterialNodePointer(pAnm->getCRegUpdateMaterialID(i))->getMaterialAnm();
+            u8 colorId = pAnm->getAnmCRegKeyTable()[i].mColorId;
+            if (pMatAnm == NULL)
+                ret = 1;
+            else
+                pMatAnm->setTevColorAnm(colorId, &pCRegAnmR[i]);
+        }
+    }
+
+    for (u16 i = 0; i < kRegMaterialNum; i++) {
+        if (pAnm->getKRegUpdateMaterialID(i) != 0xFFFF) {
+            J3DMaterialAnm * pMatAnm = getMaterialNodePointer(pAnm->getKRegUpdateMaterialID(i))->getMaterialAnm();
+            u8 colorId = pAnm->getAnmKRegKeyTable()[i].mColorId;
+            if (pMatAnm == NULL) {
+                ret = 1;
+            } else {
+                pMatAnm->setTevKColorAnm(colorId, &pKRegAnmR[i]);
+            }
+        }
+    }
+
+    return ret;
 }

@@ -12,7 +12,7 @@ public:
     bool resetGame();
     void offReset();
 
-    static bool isPause() { return pauseTimer == 0; }
+    static bool isPause() { return pauseTimer != 0; }
     static void setPauseTimer(s8 time) { pauseTimer = time; }
 
     static s8 pauseTimer;
@@ -134,5 +134,7 @@ public:
     /* 0x4 */ u8 field_0x4;
     /* 0x8 */ dScnPly_reg_childHIO_c mChild[22];
 };
+
+extern dScnPly_reg_HIO_c g_regHIO;
 
 #endif /* D_S_PLAY */

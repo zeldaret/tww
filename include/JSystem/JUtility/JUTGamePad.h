@@ -8,6 +8,8 @@
 
 typedef void (*callbackFn)(int, void*);
 
+extern u32 channel_mask[4];
+
 namespace CButton {
 enum {
     DPAD_LEFT = 0x0001,
@@ -24,8 +26,6 @@ enum {
     START = 0x1000,
 };
 }
-
-extern bool sResetSwitchPushing__Q210JUTGamePad13C3ButtonReset;
 
 struct JUTGamePadRecordBase {
     virtual void unk0() {}
@@ -81,27 +81,19 @@ public:
     }
 
     u32 getButton() const { return mButton.mButton; }
-
     u32 getTrigger() const { return mButton.mTrigger; }
 
     f32 getMainStickX() const { return mMainStick.mPosX; }
-
     f32 getMainStickY() const { return mMainStick.mPosY; }
-
     f32 getMainStickValue() const { return mMainStick.mValue; }
-
     s16 getMainStickAngle() const { return mMainStick.mAngle; }
 
     f32 getSubStickX() const { return mSubStick.mPosX; }
-
     f32 getSubStickY() const { return mSubStick.mPosY; }
-
     f32 getSubStickValue() const { return mSubStick.mValue; }
-
     s16 getSubStickAngle() const { return mSubStick.mAngle; }
 
     u8 getAnalogA() const { return mButton.mAnalogA; }
-
     u8 getAnalogB() const { return mButton.mAnalogB; }
 
     u8 getAnalogL() const { return mButton.mAnalogL; }
@@ -111,14 +103,13 @@ public:
     f32 getAnalogRf() const { return mButton.mAnalogRf; }
 
     s8 getErrorStatus() const { return mErrorStatus; }
-
     s16 getPortNum() const { return mPortNum; }
 
     JUTGamePadRecordBase* getPadReplay() const { return mPadReplay; }
-
     JUTGamePadRecordBase* getPadRecord() const { return mPadRecord; }
 
-    u32 testTrigger(u32 button) const { return mButton.mTrigger & button; }
+    u32 testButton(u32 button) const { return getButton() & button; }
+    u32 testTrigger(u32 button) const { return getTrigger() & button; }
 
     bool isPushing3ButtonReset() const {
         bool isPushingReset = false;
@@ -130,7 +121,7 @@ public:
     }
 
     inline void stopMotorWave() { mRumble.stopPatternedRumbleAtThePeriod(); }
-    void stopMotor() { mRumble.stopMotor(mPortNum, false); }
+    void stopMotor() { mRumble.stopMotor(mPortNum); }
     void stopMotorHard() { mRumble.stopMotorHard(mPortNum); }
 
     static s8 getPortStatus(u32 port) { return mPadStatus[port].error; }
@@ -180,9 +171,8 @@ public:
         CStick() { clear(); }
         void clear();
         void clear(JUTGamePad* pad);
-        u32 update(s8 unk0, s8 unk1, JUTGamePad::EStickMode mode, JUTGamePad::EWhichStick stick,
-                   u32 unk2);
-        u32 getButton(u32 unk);
+        u32 update(s8 unk0, s8 unk1, JUTGamePad::EStickMode mode, JUTGamePad::EWhichStick stick);
+        u32 getButton();
 
         /* 0x0 */ f32 mPosX;
         /* 0x4 */ f32 mPosY;
@@ -197,7 +187,6 @@ public:
     struct CRumble {
         CRumble(JUTGamePad* pad) { clear(pad); }
 
-        static PADMask sChannelMask[4];
         static bool mStatus[4];
         static PADMask mEnabled;
 
@@ -210,18 +199,17 @@ public:
         void clear();
         void clear(JUTGamePad* pad);
         static void startMotor(int channel);
-        static void stopMotor(int channel, bool stop);
+        static void stopMotor(int channel);
+        static void stopMotorHard(int channel);
         void update(s16 unk0);
         void triggerPatternedRumble(u32 unk0);
-        void startPatternedRumble(void* unk0, ERumble rumble, u32 unk1);
+        void startPatternedRumble(u8* unk0, ERumble rumble, u32 unk1);
         void stopPatternedRumble(s16 pad_port);
         void stopPatternedRumbleAtThePeriod();
         static void setEnabled(u32 pad_mask);
 
-        void stopMotorHard(int portNo) { stopMotor(portNo, true); }
-
         static bool isEnabled(u32 mask) { return mEnabled & mask; }
-        static bool isEnabledPort(int port) { return isEnabled(sChannelMask[port]); }
+        static bool isEnabledPort(int port) { return isEnabled(channel_mask[port]); }
 
         /* 0x00 */ u32 field_0x0;
         /* 0x04 */ u32 field_0x4;
@@ -229,7 +217,7 @@ public:
         /* 0x0C */ u32 field_0xc;
     };  // Size: 0x10
 
-    void startMotorWave(void* param_2, CRumble::ERumble rumble, u32 param_4) {
+    void startMotorWave(u8* param_2, CRumble::ERumble rumble, u32 param_4) {
         mRumble.startPatternedRumble(param_2, rumble, param_4);
     }
 
@@ -255,7 +243,7 @@ public:
     static EStickMode sStickMode;
     static u32 sClampMode;
     static u8 mPadAssign[4];
-    static u32 sSuppressPadReset;
+    static u32 mSuppressPadReset;
     static s32 sAnalogMode;
     static u32 sRumbleSupported;
 };

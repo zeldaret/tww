@@ -22,12 +22,12 @@ void isCurrentSolidHeap() {
 }
 
 /* 8000DD4C-8000DF24       .text initPlay__14mDoExt_baseAnmFsifssb */
-void mDoExt_baseAnm::initPlay(short, int, float, short, short, bool) {
+int mDoExt_baseAnm::initPlay(short, int, float, short, short, bool) {
     /* Nonmatching */
 }
 
 /* 8000DF24-8000DFC4       .text play__14mDoExt_baseAnmFv */
-void mDoExt_baseAnm::play() {
+int mDoExt_baseAnm::play() {
     /* Nonmatching */
 }
 
@@ -127,17 +127,19 @@ void mDoExt_btkAnm::entry(J3DMaterialTable*, float) {
 }
 
 /* 8000EB74-8000EBA0       .text init__13mDoExt_brkAnmFP12J3DModelDataP15J3DAnmTevRegKeyiifssbi */
-void mDoExt_brkAnm::init(J3DModelData*, J3DAnmTevRegKey*, int, int, float, short, short, bool, int) {
-    /* Nonmatching */
+int mDoExt_brkAnm::init(J3DModelData* i_modelData, J3DAnmTevRegKey* i_brk, int i_anmPlay,
+                        int i_attribute, f32 i_rate, s16 i_start, s16 i_end, bool i_modify, int i_entry) {
+    return init(&i_modelData->getMaterialTable(), i_brk, i_anmPlay, i_attribute, i_rate,
+                i_start, i_end, i_modify, i_entry);
 }
 
 /* 8000EBA0-8000EBC4       .text entry__13mDoExt_brkAnmFP12J3DModelDataf */
-void mDoExt_brkAnm::entry(J3DModelData*, float) {
-    /* Nonmatching */
+void mDoExt_brkAnm::entry(J3DModelData* i_modelData, float i_frame) {
+    entry(&i_modelData->getMaterialTable(), i_frame);
 }
 
 /* 8000EBC4-8000EEE8       .text init__13mDoExt_brkAnmFP16J3DMaterialTableP15J3DAnmTevRegKeyiifssbi */
-void mDoExt_brkAnm::init(J3DMaterialTable*, J3DAnmTevRegKey*, int, int, float, short, short, bool, int) {
+int mDoExt_brkAnm::init(J3DMaterialTable*, J3DAnmTevRegKey*, int, int, float, short, short, bool, int) {
     /* Nonmatching */
 }
 
@@ -762,7 +764,7 @@ void mDoExt_createSolidHeapFromGameToCurrent(unsigned long, unsigned long) {
 }
 
 /* 80011D0C-80011D48       .text mDoExt_adjustSolidHeap__FP12JKRSolidHeap */
-void mDoExt_adjustSolidHeap(JKRSolidHeap*) {
+u32 mDoExt_adjustSolidHeap(JKRSolidHeap*) {
     /* Nonmatching */
 }
 

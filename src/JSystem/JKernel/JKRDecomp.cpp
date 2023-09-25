@@ -4,79 +4,291 @@
 //
 
 #include "JSystem/JKernel/JKRDecomp.h"
+#include "JSystem/JKernel/JKRAramPiece.h"
 #include "dolphin/types.h"
 
+JKRDecomp* JKRDecomp::sDecompObject;
+
 /* 802BE890-802BE8F0       .text create__9JKRDecompFl */
-void JKRDecomp::create(long) {
-    /* Nonmatching */
+JKRDecomp* JKRDecomp::create(s32 priority) {
+    if (!sDecompObject) {
+        sDecompObject = new (JKRHeap::getSystemHeap(), 0) JKRDecomp(priority);
+    }
+
+    return sDecompObject;
 }
 
+OSMessage JKRDecomp::sMessageBuffer[4] = {NULL};
+OSMessageQueue JKRDecomp::sMessageQueue = {0};
+
 /* 802BE8F0-802BE940       .text __ct__9JKRDecompFl */
-JKRDecomp::JKRDecomp(long) {
-    /* Nonmatching */
+JKRDecomp::JKRDecomp(s32 priority) : JKRThread(0x4000, 0x10, priority) {
+    resume();
 }
 
 /* 802BE940-802BE9A0       .text __dt__9JKRDecompFv */
-JKRDecomp::~JKRDecomp() {
-    /* Nonmatching */
-}
+JKRDecomp::~JKRDecomp() {}
 
 /* 802BE9A0-802BEA68       .text run__9JKRDecompFv */
-void JKRDecomp::run() {
-    /* Nonmatching */
+void* JKRDecomp::run() {
+    OSInitMessageQueue(&sMessageQueue, sMessageBuffer, 4);
+    while (true) {
+        OSMessage message;
+        OSReceiveMessage(&sMessageQueue, &message, OS_MESSAGE_BLOCK);
+
+        JKRDecompCommand* command = (JKRDecompCommand*)message;
+        decode(command->mSrcBuffer, command->mDstBuffer, command->mSrcLength, command->mDstLength);
+
+        if (command->field_0x20 != 0) {
+            if (command->field_0x20 == 1) {
+                JKRAramPiece::sendCommand(command->mAMCommand);
+            }
+            continue;
+        }
+
+        if (command->mCallback) {
+            (*command->mCallback)((u32)command);
+            continue;
+        }
+
+        if (command->field_0x1c) {
+            OSSendMessage(command->field_0x1c, (OSMessage)1, OS_MESSAGE_NOBLOCK);
+        } else {
+            OSSendMessage(&command->mMessageQueue, (OSMessage)1, OS_MESSAGE_NOBLOCK);
+        }
+    }
 }
 
 /* 802BEA68-802BEAE0       .text prepareCommand__9JKRDecompFPUcPUcUlUlPFUl_v */
-void JKRDecomp::prepareCommand(unsigned char*, unsigned char*, unsigned long, unsigned long, void (*)(unsigned long)) {
-    /* Nonmatching */
+JKRDecompCommand* JKRDecomp::prepareCommand(u8* srcBuffer, u8* dstBuffer, u32 srcLength, u32 dstLength, JKRDecompCommand::AsyncCallback callback) {
+    JKRDecompCommand* command = new (JKRHeap::getSystemHeap(), -4) JKRDecompCommand();
+    command->mSrcBuffer = srcBuffer;
+    command->mDstBuffer = dstBuffer;
+    command->mSrcLength = srcLength;
+    command->mDstLength = dstLength;
+    command->mCallback = callback;
+    return command;
 }
 
 /* 802BEAE0-802BEB10       .text sendCommand__9JKRDecompFP16JKRDecompCommand */
-void JKRDecomp::sendCommand(JKRDecompCommand*) {
-    /* Nonmatching */
+void JKRDecomp::sendCommand(JKRDecompCommand* command) {
+    OSSendMessage(&sMessageQueue, command, OS_MESSAGE_BLOCK);
 }
 
 /* 802BEB10-802BEB44       .text orderAsync__9JKRDecompFPUcPUcUlUlPFUl_v */
-void JKRDecomp::orderAsync(unsigned char*, unsigned char*, unsigned long, unsigned long, void (*)(unsigned long)) {
-    /* Nonmatching */
+JKRDecompCommand* JKRDecomp::orderAsync(u8* srcBuffer, u8* dstBuffer, u32 srcLength, u32 dstLength, JKRDecompCommand::AsyncCallback callback) {
+    JKRDecompCommand* command =
+        prepareCommand(srcBuffer, dstBuffer, srcLength, dstLength, callback);
+    sendCommand(command);
+    return command;
 }
 
 /* 802BEB44-802BEB98       .text sync__9JKRDecompFP16JKRDecompCommandi */
-void JKRDecomp::sync(JKRDecompCommand*, int) {
-    /* Nonmatching */
+bool JKRDecomp::sync(JKRDecompCommand* command, int isNonBlocking) {
+    OSMessage message;
+    bool result;
+    if (isNonBlocking == JKRDECOMP_SYNC_BLOCKING) {
+        OSReceiveMessage(&command->mMessageQueue, &message, OS_MESSAGE_BLOCK);
+        result = true;
+    } else {
+        result =
+            OSReceiveMessage(&command->mMessageQueue, &message, OS_MESSAGE_NOBLOCK) != FALSE;
+    }
+
+    return result;
 }
 
 /* 802BEB98-802BEBEC       .text orderSync__9JKRDecompFPUcPUcUlUl */
-void JKRDecomp::orderSync(unsigned char*, unsigned char*, unsigned long, unsigned long) {
-    /* Nonmatching */
+bool JKRDecomp::orderSync(u8* srcBuffer, u8* dstBuffer, u32 srcLength, u32 dstLength) {
+    JKRDecompCommand* command = orderAsync(srcBuffer, dstBuffer, srcLength, dstLength, NULL);
+    bool result = sync(command, JKRDECOMP_SYNC_BLOCKING);
+    delete command;
+    return result;
 }
 
 /* 802BEBEC-802BEC68       .text decode__9JKRDecompFPUcPUcUlUl */
-void JKRDecomp::decode(unsigned char*, unsigned char*, unsigned long, unsigned long) {
-    /* Nonmatching */
+void JKRDecomp::decode(u8* srcBuffer, u8* dstBuffer, u32 srcLength, u32 dstLength) {
+    JKRCompression compression = checkCompressed(srcBuffer);
+    if (compression == COMPRESSION_YAY0) {
+        decodeSZP(srcBuffer, dstBuffer, srcLength, dstLength);
+    } else if (compression == COMPRESSION_YAZ0) {
+        decodeSZS(srcBuffer, dstBuffer, srcLength, dstLength);
+    }
 }
 
 /* 802BEC68-802BEE24       .text decodeSZP__9JKRDecompFPUcPUcUlUl */
-void JKRDecomp::decodeSZP(unsigned char*, unsigned char*, unsigned long, unsigned long) {
-    /* Nonmatching */
+void JKRDecomp::decodeSZP(u8* src, u8* dst, u32 srcLength, u32 dstLength) {
+    int srcChunkOffset;
+    int count;
+    int dstOffset;
+    u32 length = srcLength;
+    int linkInfo;
+    int offset;
+    int i;
+
+    int decodedSize = READU32_BE(src, 4);
+    int linkTableOffset = READU32_BE(src, 8);
+    int srcDataOffset = READU32_BE(src, 12);
+
+    dstOffset = 0;
+    u32 counter = 0;
+    srcChunkOffset = 16;
+
+    u32 chunkBits;
+    if (srcLength == 0)
+        return;
+    if (dstLength > decodedSize)
+        return;
+
+    do
+    {
+        if (counter == 0)
+        {
+            chunkBits = READU32_BE(src, srcChunkOffset);
+            srcChunkOffset += sizeof(u32);
+            counter = sizeof(u32) * 8;
+        }
+
+        if (chunkBits & 0x80000000)
+        {
+            if (dstLength == 0)
+            {
+                dst[dstOffset] = src[srcDataOffset];
+                length--;
+                if (length == 0)
+                    return;
+            }
+            else
+            {
+                dstLength--;
+            }
+            dstOffset++;
+            srcDataOffset++;
+        }
+        else
+        {
+            linkInfo = src[linkTableOffset] << 8 | src[linkTableOffset + 1];
+            linkTableOffset += sizeof(u16);
+
+            offset = dstOffset - (linkInfo & 0xFFF);
+            count = (linkInfo >> 12);
+            if (count == 0)
+            {
+                count = (u32)src[srcDataOffset++] + 0x12;
+            }
+            else
+                count += 2;
+
+            if (count > decodedSize - dstOffset)
+                count = decodedSize - dstOffset;
+
+            for (i = 0; i < count; i++, dstOffset++, offset++)
+            {
+                if (dstLength == 0)
+                {
+                    dst[dstOffset] = dst[offset - 1];
+                    length--;
+                    if (length == 0)
+                        return;
+                }
+                else
+                    dstLength--;
+            }
+        }
+
+        chunkBits <<= 1;
+        counter--;
+    } while (dstOffset < decodedSize);
 }
 
 /* 802BEE24-802BEF08       .text decodeSZS__9JKRDecompFPUcPUcUlUl */
-void JKRDecomp::decodeSZS(unsigned char*, unsigned char*, unsigned long, unsigned long) {
-    /* Nonmatching */
+void JKRDecomp::decodeSZS(u8* src_buffer, u8* dst_buffer, u32 srcSize, u32 dstSize) {
+    u8* decompEnd;
+    u8* copyStart;
+    s32 copyByteCount;
+    s32 chunkBitsLeft = 0;
+    s32 chunkBits;
+
+    decompEnd = dst_buffer + *(int*)(src_buffer + 4) - dstSize;
+
+    if (srcSize == 0) {
+        return;
+    }
+    if (dstSize > *(u32*)src_buffer) {
+        return;
+    }
+
+    u8* curSrcPos = src_buffer + 0x10;
+    do {
+        if (chunkBitsLeft == 0) {
+            chunkBits = curSrcPos[0];
+            chunkBitsLeft = 8;
+            curSrcPos++;
+        }
+        if ((chunkBits & 0x80) != 0) {
+            if (dstSize == 0) {
+                dst_buffer[0] = curSrcPos[0];
+                srcSize--;
+                dst_buffer++;
+                if (srcSize == 0)
+                    return;
+            } else {
+                dstSize--;
+            }
+            curSrcPos++;
+        } else {
+            u32 local_28 = curSrcPos[1] | (curSrcPos[0] & 0xF) << 8;
+            u32 r31 = curSrcPos[0] >> 4;
+            curSrcPos += 2;
+            copyStart = dst_buffer - local_28;
+            if (r31 == 0) {
+                copyByteCount = curSrcPos[0] + 0x12;
+                curSrcPos++;
+            } else {
+                copyByteCount = r31 + 2;
+            }
+            do {
+                if (dstSize == 0) {
+                    dst_buffer[0] = copyStart[-1];
+                    srcSize--;
+                    dst_buffer++;
+                    if (srcSize == 0)
+                        return;
+                } else {
+                    dstSize--;
+                }
+                copyByteCount--;
+                copyStart++;
+            } while (copyByteCount != 0);
+        }
+        chunkBits <<= 1;
+        chunkBitsLeft--;
+    } while (dst_buffer != decompEnd);
 }
 
 /* 802BEF08-802BEF58       .text checkCompressed__9JKRDecompFPUc */
-void JKRDecomp::checkCompressed(unsigned char*) {
-    /* Nonmatching */
+JKRCompression JKRDecomp::checkCompressed(u8* src) {
+    if ((src[0] == 'Y') && (src[1] == 'a') && (src[3] == '0')) {
+        if (src[2] == 'y') {
+            return COMPRESSION_YAY0;
+        }
+
+        if (src[2] == 'z') {
+            return COMPRESSION_YAZ0;
+        }
+    }
+
+    return COMPRESSION_NONE;
 }
 
 /* 802BEF58-802BEFA8       .text __ct__16JKRDecompCommandFv */
 JKRDecompCommand::JKRDecompCommand() {
-    /* Nonmatching */
+    OSInitMessageQueue(&mMessageQueue, &mMessage, 1);
+    mCallback = NULL;
+    field_0x1c = NULL;
+    mThis = this;
+    field_0x20 = 0;
 }
 
 /* 802BEFA8-802BEFE4       .text __dt__16JKRDecompCommandFv */
-JKRDecompCommand::~JKRDecompCommand() {
-    /* Nonmatching */
-}
+JKRDecompCommand::~JKRDecompCommand() {}

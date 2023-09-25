@@ -109,6 +109,9 @@ typedef struct DVDBB2 {
 
 typedef void (*DVDOptionalCommandChecker)(DVDCommandBlock* block, void (*cb)(u32 intType));
 
+#define DVDGetLength(fi) (fi)->length
+#define DVDGetFileInfoStatus(fi) (DVDGetCommandBlockStatus(&(fi)->block))
+
 void DVDInit(void);
 BOOL DVDOpen(const char* filename, DVDFileInfo* fileinfo);
 BOOL DVDClose(DVDFileInfo* fileinfo);

@@ -5,6 +5,19 @@
 #include "m_Do/m_Do_ext.h"
 
 class fopAc_ac_c;
+class mDoExt_McaMorf;
+class J3DAnmColor;
+class J3DMatColorAnm;
+
+class dAttDraw_c {
+public:
+    void setAnm(int, int, int);
+    void draw(cXyz&, Mtx);
+
+    /* 0x0 */ mDoExt_McaMorf * mpMorf;
+    /* 0x4 */ J3DAnmColor * mpAnmClr;
+    /* 0x8 */ J3DMatColorAnm * mpAnmMatClr;
+};
 
 class dAttHint_c {
 public:
@@ -66,10 +79,11 @@ public:
 
 class dAttLook_c {
 public:
-    /* 80073CA4 */ fopAc_ac_c* convPId(unsigned int);
-    /* 80073CD4 */ void init();
-    /* 80073CEC */ void proc();
-    /* 80073D08 */ void request(fopAc_ac_c*, f32, f32, f32, s16, int);
+    fopAc_ac_c* convPId(unsigned int);
+    void init();
+    void proc();
+    void request(fopAc_ac_c*, f32, f32, f32, s16, int);
+    void requestF(fopAc_ac_c*, s16, int);
 
 private:
     u32 field_0x0;
@@ -105,24 +119,24 @@ public:
     dAttention_c(fopAc_ac_c*, u32);
     ~dAttention_c();
 
-    void GetActionList(s32);
-    void GetLockonList(s32);
-    void getActionBtnB();
-    void getActionBtnXYZ_local(int);
-    void getActionBtnX();
-    void getActionBtnY();
-    void getActionBtnZ();
+    dAttList_c* GetActionList(s32);
+    dAttList_c* GetLockonList(s32);
+    dAttList_c* getActionBtnB();
+    dAttList_c* getActionBtnXYZ_local(int);
+    dAttList_c* getActionBtnX();
+    dAttList_c* getActionBtnY();
+    dAttList_c* getActionBtnZ();
     void chkAttMask(u32, u32);
     void calcWeight(int, fopAc_ac_c*, f32, s16, s16, u32*);
     void setLList(fopAc_ac_c*, f32, f32, u32);
     void setAList(fopAc_ac_c*, f32, f32, u32);
     void initList(u32);
-    void makeList();
+    s32 makeList();
     void SelectAttention(fopAc_ac_c*);
     void sortList();
     void stockAttention(u32);
     void nextAttention(u32);
-    void freeAttention();
+    s32 freeAttention();
     void chaseAttention();
     void EnemyDistance(fopAc_ac_c*);
     void runSoundProc();
@@ -136,12 +150,11 @@ public:
     void judgementStatusHd(u32);
     void Run(u32);
     void Draw();
-    void LockonTarget(s32);
+    fopAc_ac_c* LockonTarget(s32);
     void LockonReleaseDistanse();
-    void LockonTargetPId(s32);
-    void ActionTarget(s32);
-    void LockonTruth();
-    void Lockon();
+    unsigned int LockonTargetPId(s32);
+    fopAc_ac_c* ActionTarget(s32);
+    bool LockonTruth();
 
     void Init(fopAc_ac_c* i_owner, u32 i_playerNo) {
         mpPlayer = (daPy_lk_c*)i_owner;
@@ -149,11 +162,16 @@ public:
     }
 
     fopAc_ac_c* Owner() { return (fopAc_ac_c*)mpPlayer; }
+    
+    void CatchRequest(fopAc_ac_c* param_0, u8 param_1, f32 param_2, f32 param_3,
+                      f32 param_4, s16 param_5, s32 param_6) {
+        mCatch.request(param_0, param_1, param_2, param_3, param_4, param_5, param_6);
+    }
 
 public:
     /* 0x000 */ daPy_lk_c* mpPlayer;
     /* 0x004 */ int mLockOnTargetBsPcID;
-    /* 0x008 */ dAttDraw_CallBack_c field_0x8;
+    /* 0x008 */ dAttDraw_CallBack_c mpCallBack;
     /* 0x00C */ int mPlayerNo;
     /* 0x010 */ u32 mFlagMask;
     /* 0x014 */ u8 field_0x014[0x018 - 0x014];
@@ -166,7 +184,9 @@ public:
     /* 0x020 */ u32 mFlags;
     /* 0x024 */ JKRHeap* mpHeap;
     /* 0x028 */ u8 field_0x028;
-    /* 0x029 */ u8 field_0x029[0x054 - 0x029];
+    /* 0x02C */ cXyz field_0x02c;
+    /* 0x038 */ dAttDraw_c mDraw[2];
+    /* 0x050 */ u32 field_0x050;
     /* 0x054 */ dAttList_c mLockOnList[8];
     /* 0x0D4 */ int mLockOnNum;
     /* 0x0D8 */ int mLockOnOffs;
@@ -175,8 +195,7 @@ public:
     /* 0x120 */ int mActionOffs;
     /* 0x124 */ dAttHint_c mHint;
     /* 0x130 */ dAttCatch_c mCatch;
-    /* 0x148 */ dAttLook_c field_0x148;
-    /* 0x158 */ dAttLook_c field_0x158;
+    /* 0x148 */ dAttLook_c mLook[2];
     /* 0x168 */ int mEnemyBsPcId;
     /* 0x16C */ f32 mEnemyDistance;
     /* 0x170 */ dAttParam_c mAttParam;

@@ -3,6 +3,7 @@
 
 #include "JSystem/J3DGraphAnimator/J3DJoint.h"
 #include "dolphin/types.h"
+#include "global.h"
 
 class JUTNameTab;
 
@@ -14,8 +15,8 @@ struct J3DModelHierarchy {
 class J3DMaterialTable;
 
 struct J3DDrawMtxData {
-    /* 803115E0 */ J3DDrawMtxData();
-    /* 803115F4 */ ~J3DDrawMtxData();
+    J3DDrawMtxData();
+    ~J3DDrawMtxData();
 
     /* 0x0 */ u16 mEntryNum;
     /* 0x2 */ u16 mDrawFullWgtMtxNum;
@@ -24,22 +25,22 @@ struct J3DDrawMtxData {
 };  // Size: 0xC
 
 class J3DShapeTable;
+class J3DShape;
 
 class J3DJointTree {
 public:
-    /* 80325A18 */ J3DJointTree();
-    /* 80325A9C */ void makeHierarchy(J3DJoint*, J3DModelHierarchy const**, J3DMaterialTable*,
-                                      J3DShapeTable*);
-    /* 80325C00 */ void findImportantMtxIndex();
+    J3DJointTree() { clear(); }
+    void clear();
+    void makeHierarchy(J3DNode*, const J3DModelHierarchy**, J3DMaterialTable*, J3DShape**);
+    void findImportantMtxIndex();
 
-    /* 80325CAC */ virtual void calc(J3DMtxBuffer*, Vec const&, f32 const (&)[3][4]);
-    /* 80325D24 */ virtual ~J3DJointTree();
+    virtual ~J3DJointTree() {}
 
+    J3DDrawMtxData * getDrawMtxData() { return &mDrawMtxData; }
     u16 getWEvlpMtxNum() const { return mWEvlpMtxNum; }
     u8 getWEvlpMixMtxNum(u16 idx) const { return mWEvlpMixMtxNum[idx]; }
     u16 * getWEvlpMixIndex() const { return mWEvlpMixIndex; }
     f32 * getWEvlpMixWeight() const { return mWEvlpMixWeight; }
-    u16 * getWEvlpImportantMtxIndex() const { return mWEvlpImportantMtxIdx; }
     u16 getDrawFullWgtMtxNum() const { return mDrawMtxData.mDrawFullWgtMtxNum; }
     u16 getJointNum() const { return mJointNum; }
     u16 getDrawMtxNum() const { return mDrawMtxData.mEntryNum; }
@@ -61,15 +62,16 @@ private:
     /* 0x14 */ J3DMtxCalc* mBasicMtxCalc;
     /* 0x18 */ u16 mJointNum;
     /* 0x1C */ J3DJoint** mJointNodePointer;
-    /* 0x1E */ u16 mWEvlpMtxNum;
-    /* 0x20 */ u8* mWEvlpMixMtxNum;
-    /* 0x24 */ u16* mWEvlpMixIndex;
-    /* 0x28 */ f32* mWEvlpMixWeight;
-    /* 0x2C */ Mtx* mInvJointMtx;
-    /* 0x30 */ u16* mWEvlpImportantMtxIdx;
+    /* 0x20 */ u16 mWEvlpMtxNum;
+    /* 0x24 */ u8* mWEvlpMixMtxNum;
+    /* 0x28 */ u16* mWEvlpMixIndex;
+    /* 0x2C */ f32* mWEvlpMixWeight;
+    /* 0x30 */ Mtx* mInvJointMtx;
     /* 0x34 */ J3DDrawMtxData mDrawMtxData;
     /* 0x40 */ u32 field_0x40;
     /* 0x44 */ JUTNameTab* mJointName;
 };  // Size: 0x48
+
+STATIC_ASSERT(sizeof(J3DJointTree) == 0x48);
 
 #endif /* J3DJOINTTREE_H */

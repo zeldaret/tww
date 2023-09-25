@@ -4,164 +4,525 @@
 //
 
 #include "JSystem/JUtility/JUTGamePad.h"
-#include "dolphin/types.h"
+#include "MSL_C/math.h"
+#include "dolphin/os/OS.h"
+
+u32 channel_mask[4] = {0x80000000, 0x40000000, 0x20000000, 0x10000000};
+JSUList<JUTGamePad> JUTGamePad::mPadList(false);
+bool JUTGamePad::mListInitialized;
+u8 JUTGamePad::mPadAssign[4];
 
 /* 802C37A0-802C3860       .text __ct__10JUTGamePadFQ210JUTGamePad8EPadPort */
-JUTGamePad::JUTGamePad(JUTGamePad::EPadPort) {
-    /* Nonmatching */
+JUTGamePad::JUTGamePad(EPadPort port) : mRumble(this), mLink(this) {
+    mPortNum = port;
+    mPadAssign[port]++;
+
+    initList();
+    mPadList.append(&mLink);
+    update();
+    mPadRecord = 0;
+    mPadReplay = 0;
 }
 
 /* 802C3860-802C390C       .text __dt__10JUTGamePadFv */
 JUTGamePad::~JUTGamePad() {
-    /* Nonmatching */
+    if (mPortNum != -1) {
+        mPadAssign[mPortNum]--;
+        mPortNum = -1;
+    }
+
+    mPadList.remove(&mLink);
 }
 
 /* 802C390C-802C3948       .text initList__10JUTGamePadFv */
 void JUTGamePad::initList() {
-    /* Nonmatching */
+    if (!mListInitialized) {
+        mPadList.initiate();
+        mListInitialized = true;
+    }
 }
+
+u32 JUTGamePad::mSuppressPadReset;
+s32 JUTGamePad::sAnalogMode;
 
 /* 802C3948-802C3980       .text init__10JUTGamePadFv */
-void JUTGamePad::init() {
-    /* Nonmatching */
+s32 JUTGamePad::init() {
+    PADSetSpec(5);
+    setAnalogMode(3);
+    return PADInit();
 }
 
+PADStatus JUTGamePad::mPadStatus[4];
+JUTGamePad::CButton JUTGamePad::mPadButton[4];
+JUTGamePad::CStick JUTGamePad::mPadMStick[4];
+JUTGamePad::CStick JUTGamePad::mPadSStick[4];
+JUTGamePad::EStickMode JUTGamePad::sStickMode = STICK_MODE_1;
+u32 JUTGamePad::sClampMode = 0x00000001;
+u32 JUTGamePad::sRumbleSupported;
+
 /* 802C3980-802C3C14       .text read__10JUTGamePadFv */
-void JUTGamePad::read() {
+u32 JUTGamePad::read() {
     /* Nonmatching */
+    sRumbleSupported = PADRead(mPadStatus);
+
+    PADClamp(mPadStatus);
+
+    u32 mask = 0;
+    for (int i = 0; i < 4; i++) {
+        u32 mask_tmp = 0x80000000 >> i;
+        if (mPadStatus[i].error == 0) {
+            u32 local_2c = mPadMStick[i].update(mPadStatus[i].stick_x, mPadStatus[i].stick_y, sStickMode, WS_MAIN_STICK) << 0x18;
+            local_2c |= (mPadSStick[i].update(mPadStatus[i].substick_x, mPadStatus[i].substick_y, sStickMode, WS_SUB_STICK) << 0x10);
+            mPadButton[i].update(&mPadStatus[i], local_2c);
+        } else if (mPadStatus[i].error == -1) {
+            mPadMStick[i].update(0, 0, sStickMode, WS_MAIN_STICK);
+            mPadSStick[i].update(0, 0, sStickMode, WS_SUB_STICK);
+            mPadButton[i].update(NULL, 0);
+
+            if (!(mSuppressPadReset & mask_tmp)) {
+                mask |= mask_tmp;
+            }
+        } else {
+            if (mPadStatus[i].error != -3) {
+                OSReport("game pad read error (%d)\n", mPadStatus[i].error);
+            }
+            mPadButton[i].mTrigger = 0;
+            mPadButton[i].mRelease = 0;
+            mPadButton[i].mRepeat = 0;
+        }
+    }
+
+    for (JSUListIterator<JUTGamePad> pad(mPadList.getFirst()); pad != mPadList.getEnd(); pad++) {
+        if (pad->getPadReplay()) {
+            PADStatus status;
+            pad->getPadReplay()->unk1(&status);
+            u32 m_stick = pad->mMainStick.update(status.stick_x, status.stick_y, sStickMode,
+                                                 WS_MAIN_STICK)
+                          << 0x18;
+            u32 s_stick = pad->mSubStick.update(status.substick_x, status.substick_y, sStickMode,
+                                                WS_SUB_STICK)
+                          << 0x10;
+            m_stick |= s_stick;
+            pad->mButton.update(&status, m_stick);
+        } else {
+            if (pad->mPortNum == -1) {
+                pad->assign();
+            }
+            pad->update();
+        }
+
+        if (pad->getPadRecord()) {
+            s32 portNum = pad->mPortNum;
+            if (portNum != -1 && mPadStatus[portNum].error == 0) {
+                pad->getPadRecord()->unk2();
+            }
+        }
+    }
+
+    if (mask != 0) {
+        PADReset(mask);
+    }
+
+    checkResetSwitch();
+    return sRumbleSupported;
 }
 
 /* 802C3C14-802C3CC4       .text assign__10JUTGamePadFv */
 void JUTGamePad::assign() {
-    /* Nonmatching */
+    for (int i = 0; i < 4; i++) {
+        if (mPadStatus[i].error == 0 && mPadAssign[i] == 0) {
+            mPortNum = i;
+            mPadAssign[i] = 1;
+            mPadButton[i].setRepeat(mButton.field_0x24, mButton.field_0x28, mButton.field_0x2c);
+            mRumble.clear(this);
+            return;
+        }
+    }
 }
 
+bool JUTGamePad::CRumble::mStatus[4];
+PADMask JUTGamePad::CRumble::mEnabled;
+callbackFn JUTGamePad::C3ButtonReset::sCallback;
+void* JUTGamePad::C3ButtonReset::sCallbackArg;
+OSTime JUTGamePad::C3ButtonReset::sThreshold = (OSTime)((OS_BUS_CLOCK / 4) / 60) * 30;
+bool JUTGamePad::C3ButtonReset::sResetSwitchPushing;
+bool JUTGamePad::C3ButtonReset::sResetOccurred;
+s32 JUTGamePad::C3ButtonReset::sResetOccurredPort;
+
 /* 802C3CC4-802C3D3C       .text checkResetCallback__10JUTGamePadFx */
-void JUTGamePad::checkResetCallback(long long) {
-    /* Nonmatching */
+void JUTGamePad::checkResetCallback(OSTime holdTime) {
+    if (mPortNum < 0) {
+        return;
+    }
+    if (holdTime < JUTGamePad::C3ButtonReset::sThreshold) {
+        return;
+    }
+
+    JUTGamePad::C3ButtonReset::sResetOccurred = true;
+    JUTGamePad::C3ButtonReset::sResetOccurredPort = mPortNum;
+
+    if (JUTGamePad::C3ButtonReset::sCallback != NULL) {
+        JUTGamePad::C3ButtonReset::sCallback(mPortNum, JUTGamePad::C3ButtonReset::sCallbackArg);
+    }
 }
+
+u32 JUTGamePad::C3ButtonReset::sResetPattern = 0x00001600;
+u32 JUTGamePad::C3ButtonReset::sResetMaskPattern = 0x0000FFFF;
 
 /* 802C3D3C-802C3F10       .text update__10JUTGamePadFv */
 void JUTGamePad::update() {
-    /* Nonmatching */
+    if (mPortNum != -1) {
+        mButton = mPadButton[mPortNum];
+        mMainStick = mPadMStick[mPortNum];
+        mSubStick = mPadSStick[mPortNum];
+        mErrorStatus = mPadStatus[mPortNum].error;
+
+        if ((mButton.mButton & C3ButtonReset::sResetMaskPattern) != C3ButtonReset::sResetPattern)
+        {
+            mButtonReset.mReset = false;
+        } else if (!JUTGamePad::C3ButtonReset::sResetOccurred) {
+            if (mButtonReset.mReset == true) {
+                checkResetCallback(OSGetTime() - mResetTime);
+            } else {
+                mButtonReset.mReset = true;
+                mResetTime = OSGetTime();
+            }
+        }
+
+        mRumble.update(mPortNum);
+    }
 }
 
 /* 802C3F10-802C3F90       .text checkResetSwitch__10JUTGamePadFv */
 void JUTGamePad::checkResetSwitch() {
-    /* Nonmatching */
+    if (!JUTGamePad::C3ButtonReset::sResetOccurred) {
+        if (OSGetResetSwitchState()) {
+            C3ButtonReset::sResetSwitchPushing = true;
+        } else {
+            if (C3ButtonReset::sResetSwitchPushing == true) {
+                C3ButtonReset::sResetOccurred = true;
+                C3ButtonReset::sResetOccurredPort = -1;
+
+                if (C3ButtonReset::sCallback != NULL) {
+                    C3ButtonReset::sCallback(-1, C3ButtonReset::sCallbackArg);
+                }
+            }
+            C3ButtonReset::sResetSwitchPushing = false;
+        }
+    }
 }
 
 /* 802C3F90-802C3FBC       .text clearForReset__10JUTGamePadFv */
 void JUTGamePad::clearForReset() {
-    /* Nonmatching */
+    CRumble::setEnabled(0);
+    recalibrate(PAD_CHAN3_BIT | PAD_CHAN2_BIT | PAD_CHAN1_BIT | PAD_CHAN0_BIT);
 }
 
 /* 802C3FBC-802C3FF8       .text clear__Q210JUTGamePad7CButtonFv */
 void JUTGamePad::CButton::clear() {
-    /* Nonmatching */
+    mButton = 0;
+    mTrigger = 0;
+    mRelease = 0;
+    mRepeat = 0;
+    mAnalogA = 0;
+    mAnalogB = 0;
+    mAnalogL = 0;
+    mAnalogR = 0;
+    field_0x1c = 0;
+    field_0x20 = 0;
+    field_0x24 = 0;
+    field_0x28 = 0;
+    field_0x2c = 0;
 }
 
 /* 802C3FF8-802C4188       .text update__Q210JUTGamePad7CButtonFPC9PADStatusUl */
-void JUTGamePad::CButton::update(const PADStatus*, unsigned long) {
-    /* Nonmatching */
+void JUTGamePad::CButton::update(const PADStatus* padStatus, u32 stickStatus) {
+    u32 buttons;
+    if (padStatus != NULL) {
+        buttons = padStatus->button;
+    } else {
+        buttons = 0;
+    }
+
+    buttons = stickStatus | buttons;
+    mRepeat = 0;
+
+    if (field_0x28 != 0 && field_0x24 != 0) {
+        u32 repeatButton = buttons & field_0x24;
+        mRepeat = 0;
+
+        if (repeatButton == 0) {
+            field_0x20 = 0;
+            field_0x1c = 0;
+        } else if (field_0x20 == repeatButton) {
+            field_0x1c++;
+
+            if (field_0x1c == field_0x28 ||
+                (field_0x1c > field_0x28 && (field_0x1c - field_0x28) % field_0x2c == 0))
+            {
+                mRepeat = repeatButton;
+            }
+        } else {
+            mRepeat = repeatButton & (field_0x20 ^ 0xFFFFFFFF);
+            field_0x20 = repeatButton;
+            field_0x1c = 0;
+        }
+    }
+
+    mTrigger = buttons & (buttons ^ mButton);
+    mRelease = mButton & (buttons ^ mButton);
+    mButton = buttons;
+    mRepeat |= (field_0x24 ^ 0xFFFFFFFF) & mTrigger;
+
+    if (padStatus != NULL) {
+        mAnalogA = padStatus->analog_a;
+        mAnalogB = padStatus->analog_b;
+        mAnalogL = padStatus->trigger_left;
+        mAnalogR = padStatus->trigger_right;
+    } else {
+        mAnalogA = 0;
+        mAnalogB = 0;
+        mAnalogL = 0;
+        mAnalogR = 0;
+    }
+
+    mAnalogLf = (s32)mAnalogL / 150.0f;
+    mAnalogRf = (s32)mAnalogR / 150.0f;
 }
 
 /* 802C4188-802C41A4       .text clear__Q210JUTGamePad6CStickFv */
 void JUTGamePad::CStick::clear() {
-    /* Nonmatching */
+    mPosX = 0.0f;
+    mPosY = 0.0f;
+    mValue = 0.0f;
+    mAngle = 0;
 }
 
 /* 802C41A4-802C4378       .text update__Q210JUTGamePad6CStickFScScQ210JUTGamePad10EStickModeQ210JUTGamePad11EWhichStick */
-void JUTGamePad::CStick::update(signed char, signed char, JUTGamePad::EStickMode, JUTGamePad::EWhichStick) {
-    /* Nonmatching */
+u32 JUTGamePad::CStick::update(s8 x_val, s8 y_val, EStickMode mode, EWhichStick stick) {
+    s32 clamp = stick == WS_MAIN_STICK ? 54 : 42;
+
+    field_0xe = x_val;
+    field_0xf = y_val;
+    mPosX = (f32)x_val / (f32)clamp;
+    mPosY = (f32)y_val / (f32)clamp;
+    mValue = sqrtf((mPosX * mPosX) + (mPosY * mPosY));
+
+    if (mValue > 1.0f) {
+        if (mode == STICK_MODE_1) {
+            mPosX /= mValue;
+            mPosY /= mValue;
+        }
+        mValue = 1.0f;
+    }
+
+    if (mValue > 0.0f) {
+        if (mPosY == 0.0f) {
+            if (mPosX > 0.0f) {
+                mAngle = 0x4000;
+            } else {
+                mAngle = -0x4000;
+            }
+        } else {
+            mAngle = 10430.379f * atan2f(mPosX, -mPosY);
+        }
+    }
+
+    u32 buttonType = stick == WS_MAIN_STICK ? 0x18 : 0x10;
+    return getButton();
 }
 
 /* 802C4378-802C4424       .text getButton__Q210JUTGamePad6CStickFv */
-void JUTGamePad::CStick::getButton() {
-    /* Nonmatching */
+u32 JUTGamePad::CStick::getButton() {
+    u32 button = 0;
+
+    if (-0.25f < mPosX && mPosX < 0.25f) {
+        button = button & ~0x03;
+    } else if (mPosX <= -0.5f) {
+        button |= 1;
+    } else if (mPosX >= 0.5f) {
+        button |= 2;
+    }
+
+    if (-0.25f < mPosY && mPosY < 0.25f) {
+        button = button & ~0x0c;
+    } else if (mPosY <= -0.5f) {
+        button |= 4;
+    } else if (mPosY >= 0.5f) {
+        button |= 8;
+    }
+
+    return button;
 }
 
 /* 802C4424-802C4444       .text clear__Q210JUTGamePad7CRumbleFv */
 void JUTGamePad::CRumble::clear() {
-    /* Nonmatching */
+    field_0x0 = 0;
+    field_0x4 = 0;
+    field_0x8 = 0;
+    field_0xc = 0;
+    mEnabled = (PADMask)(PAD_CHAN3_BIT | PAD_CHAN2_BIT | PAD_CHAN1_BIT | PAD_CHAN0_BIT);
 }
 
 /* 802C4444-802C449C       .text clear__Q210JUTGamePad7CRumbleFP10JUTGamePad */
-void JUTGamePad::CRumble::clear(JUTGamePad*) {
-    /* Nonmatching */
+void JUTGamePad::CRumble::clear(JUTGamePad* pad) {
+    if (pad->getPortNum() >= 0 && pad->getPortNum() < 4) {
+        mStatus[pad->getPortNum()] = false;
+        pad->stopMotorHard();
+    }
+    clear();
 }
 
 /* 802C449C-802C44F4       .text startMotor__Q210JUTGamePad7CRumbleFi */
-void JUTGamePad::CRumble::startMotor(int) {
-    /* Nonmatching */
+void JUTGamePad::CRumble::startMotor(int portNo) {
+    if (isEnabledPort(portNo)) {
+        PADControlMotor(portNo, 1);
+        mStatus[portNo] = true;
+    }
 }
 
 /* 802C44F4-802C454C       .text stopMotor__Q210JUTGamePad7CRumbleFi */
-void JUTGamePad::CRumble::stopMotor(int) {
-    /* Nonmatching */
+void JUTGamePad::CRumble::stopMotor(int portNo) {
+    if (isEnabledPort(portNo)) {
+        PADControlMotor(portNo, 0);
+        mStatus[portNo] = false;
+    }
 }
 
 /* 802C454C-802C45A4       .text stopMotorHard__Q210JUTGamePad7CRumbleFi */
-void JUTGamePad::CRumble::stopMotorHard(int) {
-    /* Nonmatching */
+void JUTGamePad::CRumble::stopMotorHard(int portNo) {
+    if (isEnabledPort(portNo)) {
+        PADControlMotor(portNo, 2);
+        mStatus[portNo] = false;
+    }
+}
+
+inline u8 getNumBit(u8* arr, u32 bitNo) {
+    u8 bit = (arr[bitNo >> 3] & (0x80 >> (bitNo & 7)));
+    return bit;
 }
 
 /* 802C45A4-802C46CC       .text update__Q210JUTGamePad7CRumbleFs */
-void JUTGamePad::CRumble::update(short) {
+void JUTGamePad::CRumble::update(s16 portNo) {
     /* Nonmatching */
+    if (!isEnabledPort(portNo)) {
+        field_0x0 = 0;
+        field_0x4 = 0;
+        field_0x8 = NULL;
+        field_0xc = 0;
+    }
+
+    if (field_0x4 == 0) {
+        return;
+    }
+
+    if (field_0x0 >= field_0x4) {
+        stopMotorHard(portNo);
+        field_0x4 = 0;
+    } else if (field_0xc == 0) {
+        if (mStatus[portNo] == 0) {
+            startMotor(portNo);
+        }
+        return;
+    } else {
+        u32 temp = (field_0x0 / field_0xc);
+        u8 numBit = getNumBit(field_0x8, field_0x0 - temp * field_0xc);
+        if (numBit && !mStatus[portNo]) {
+            startMotor(portNo);
+        } else if (!numBit) {
+            if (mStatus[portNo]) {
+                stopMotorHard(portNo);
+            }
+        }
+    }
+
+    field_0x0++;
 }
 
 /* 802C46CC-802C46F4       .text triggerPatternedRumble__Q210JUTGamePad7CRumbleFUl */
-void JUTGamePad::CRumble::triggerPatternedRumble(unsigned long) {
-    /* Nonmatching */
+void JUTGamePad::CRumble::triggerPatternedRumble(u32 param_0) {
+    if (field_0x8 != NULL && field_0xc != 0) {
+        field_0x4 = param_0;
+        field_0x0 = 0;
+    }
 }
 
 /* 802C46F4-802C4770       .text startPatternedRumble__Q210JUTGamePad7CRumbleFPUcQ310JUTGamePad7CRumble7ERumbleUl */
-void JUTGamePad::CRumble::startPatternedRumble(unsigned char*, JUTGamePad::CRumble::ERumble, unsigned long) {
-    /* Nonmatching */
+void JUTGamePad::CRumble::startPatternedRumble(u8* param_0, JUTGamePad::CRumble::ERumble param_1, u32 param_2) {
+    field_0xc = ((*param_0) << 8) + *(param_0 + 1);
+    field_0x8 = param_0 + 2;
+    switch (param_1) {
+    case JUTGamePad::CRumble::VAL_0:
+        triggerPatternedRumble(field_0xc);
+        break;
+    case JUTGamePad::CRumble::VAL_1:
+        triggerPatternedRumble(-1);
+        break;
+    case JUTGamePad::CRumble::VAL_2:
+        triggerPatternedRumble(param_2);
+        break;
+    }
 }
 
 /* 802C4770-802C479C       .text stopPatternedRumble__Q210JUTGamePad7CRumbleFs */
-void JUTGamePad::CRumble::stopPatternedRumble(short) {
-    /* Nonmatching */
+void JUTGamePad::CRumble::stopPatternedRumble(s16 port) {
+    field_0x4 = 0;
+    stopMotorHard(port);
 }
 
 /* 802C479C-802C47C0       .text stopPatternedRumbleAtThePeriod__Q210JUTGamePad7CRumbleFv */
 void JUTGamePad::CRumble::stopPatternedRumbleAtThePeriod() {
-    /* Nonmatching */
+    field_0x4 = (field_0x0 + field_0xc - 1) % field_0xc;
 }
 
 /* 802C47C0-802C47FC       .text getGamePad__10JUTGamePadFi */
-void JUTGamePad::getGamePad(int) {
-    /* Nonmatching */
+JUTGamePad* JUTGamePad::getGamePad(int padNo) {
+    JSUListIterator<JUTGamePad> pad(mPadList.getFirst());
+
+    for (; pad != mPadList.getEnd(); pad++) {
+        if (padNo == pad->mPortNum) {
+            return pad.getObject();
+        }
+    }
+
+    return NULL;
 }
 
 /* 802C47FC-802C489C       .text setEnabled__Q210JUTGamePad7CRumbleFUl */
-void JUTGamePad::CRumble::setEnabled(unsigned long) {
-    /* Nonmatching */
+void JUTGamePad::CRumble::setEnabled(u32 mask) {
+    for (int i = 0; i < 4; i++) {
+        if ((mEnabled & channel_mask[i]) == 0) {
+            if (mStatus[i]) {
+                stopMotor(i);
+            }
+
+            JUTGamePad* pad = getGamePad(i);
+            if (pad != NULL) {
+                pad->mRumble.stopPatternedRumble(pad->mPortNum);
+            }
+        }
+    }
+    mEnabled = (PADMask)(mask & (PAD_CHAN3_BIT | PAD_CHAN2_BIT | PAD_CHAN1_BIT | PAD_CHAN0_BIT));
 }
 
 /* 802C489C-802C48B8       .text setRepeat__Q210JUTGamePad7CButtonFUlUlUl */
-void JUTGamePad::CButton::setRepeat(unsigned long, unsigned long, unsigned long) {
-    /* Nonmatching */
+void JUTGamePad::CButton::setRepeat(u32 param_0, u32 param_1, u32 param_2) {
+    field_0x20 = 0;
+    field_0x1c = 0;
+    field_0x24 = param_0;
+    field_0x28 = param_1;
+    field_0x2c = param_2;
 }
 
 /* 802C48B8-802C4940       .text recalibrate__10JUTGamePadFUl */
-void JUTGamePad::recalibrate(unsigned long) {
-    /* Nonmatching */
-}
+bool JUTGamePad::recalibrate(u32 mask) {
+    u32 channel_mask2[4] = {0x80000000, 0x40000000, 0x20000000, 0x10000000};
 
-/* 802C4A14-802C4A44       .text __ct__Q210JUTGamePad6CStickFv */
-JUTGamePad::CStick::CStick() {
-    /* Nonmatching */
-}
+    for (int i = 0; i < 4; i++) {
+        if (mSuppressPadReset & channel_mask2[i]) {
+            mask &= channel_mask2[i] ^ 0xFFFFFFFF;
+        }
+    }
 
-/* 802C4A44-802C4A74       .text __ct__Q210JUTGamePad7CButtonFv */
-JUTGamePad::CButton::CButton() {
-    /* Nonmatching */
-}
-
-/* 802C4A74-802C4AC8       .text __dt__21JSUList<10JUTGamePad>Fv */
-JSUList<JUTGamePad>::~JSUList() {
-    /* Nonmatching */
+    return PADRecalibrate((PADMask)mask);
 }

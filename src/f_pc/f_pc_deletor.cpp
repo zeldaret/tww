@@ -19,13 +19,13 @@ BOOL fpcDt_IsComplete() {
 /* 8003D2A0-8003D314       .text fpcDt_deleteMethod__FP18base_process_class */
 s32 fpcDt_deleteMethod(base_process_class* i_proc) {
     layer_class* layer = i_proc->mDtTg.mpLayer;
-    s16 typeID = i_proc->mBsTypeId;
+    s16 profName = i_proc->mProfName;
 
     fpcLy_SetCurrentLayer(layer);
     fpcLnTg_QueueTo(&i_proc->mLnTg);
     if (fpcBs_Delete(i_proc) == 1) {
         fpcLy_DeletedMesg(layer);
-        fpcLd_Free(typeID);
+        fpcLd_Free(profName);
         return 1;
     } else {
         return 0;

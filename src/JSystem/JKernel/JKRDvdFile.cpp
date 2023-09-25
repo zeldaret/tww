@@ -4,74 +4,145 @@
 //
 
 #include "JSystem/JKernel/JKRDvdFile.h"
+#include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/types.h"
 
+JSUList<JKRDvdFile> JKRDvdFile::sDvdList;
+
 /* 802BC6B4-802BC728       .text __ct__10JKRDvdFileFv */
-JKRDvdFile::JKRDvdFile() {
-    /* Nonmatching */
+JKRDvdFile::JKRDvdFile() : mDvdLink(this) {
+    initiate();
 }
 
 /* 802BC728-802BC7D0       .text __ct__10JKRDvdFileFPCc */
-JKRDvdFile::JKRDvdFile(const char*) {
-    /* Nonmatching */
+JKRDvdFile::JKRDvdFile(const char* name) : mDvdLink(this) {
+    initiate();
+    bool result = open(name);
+    mIsAvailable = result;
+    // weird code. doesn't match without this, maybe remains from assert or something?
+    if (mIsAvailable) {
+        return;
+    } else {
+        return;
+    }
 }
 
 /* 802BC7D0-802BC878       .text __ct__10JKRDvdFileFl */
-JKRDvdFile::JKRDvdFile(long) {
-    /* Nonmatching */
+JKRDvdFile::JKRDvdFile(s32 entryNum) : mDvdLink(this) {
+    initiate();
+    bool result = open(entryNum);
+    mIsAvailable = result;
+    // weird code. doesn't match without this, maybe remains from assert or something?
+    if (mIsAvailable) {
+        return;
+    } else {
+        return;
+    }
 }
 
 /* 802BC878-802BC914       .text __dt__10JKRDvdFileFv */
 JKRDvdFile::~JKRDvdFile() {
-    /* Nonmatching */
+    close();
 }
 
 /* 802BC914-802BC980       .text initiate__10JKRDvdFileFv */
 void JKRDvdFile::initiate() {
-    /* Nonmatching */
+    mDvdFile = this;
+    OSInitMutex(&mMutex1);
+    OSInitMutex(&mMutex2);
+    OSInitMessageQueue(&mMessageQueue2, &mMessage2, 1);
+    OSInitMessageQueue(&mMessageQueue1, &mMessage1, 1);
+    mOSThread = NULL;
+    field_0x50 = 0;
+    field_0x58 = 0;
 }
 
 /* 802BC980-802BC9F4       .text open__10JKRDvdFileFPCc */
-void JKRDvdFile::open(const char*) {
-    /* Nonmatching */
+bool JKRDvdFile::open(const char* name) {
+    if (!mIsAvailable) {
+        mIsAvailable = DVDOpen(name, &mFileInfo);
+        if (mIsAvailable) {
+            getDvdList().append(&mDvdLink);
+            getStatus();
+        }
+    }
+    return mIsAvailable;
 }
 
 /* 802BC9F4-802BCA68       .text open__10JKRDvdFileFl */
-void JKRDvdFile::open(long) {
-    /* Nonmatching */
+bool JKRDvdFile::open(s32 entryNum) {
+    if (!mIsAvailable) {
+        mIsAvailable = DVDFastOpen(entryNum, &mFileInfo);
+        if (mIsAvailable) {
+            getDvdList().append(&mDvdLink);
+            getStatus();
+        }
+    }
+    return mIsAvailable;
 }
 
 /* 802BCA68-802BCAE0       .text close__10JKRDvdFileFv */
 void JKRDvdFile::close() {
-    /* Nonmatching */
+    if (mIsAvailable) {
+        s32 result = DVDClose(&mFileInfo);
+        if (result != 0) {
+            mIsAvailable = false;
+            getDvdList().remove(&mDvdLink);
+        } else {
+            OSPanic(__FILE__, 212, "cannot close DVD file\n");
+        }
+    }
 }
 
 /* 802BCAE0-802BCBCC       .text readData__10JKRDvdFileFPvll */
-void JKRDvdFile::readData(void*, long, long) {
-    /* Nonmatching */
+s32 JKRDvdFile::readData(void* param_1, s32 length, s32 param_3) {
+    /* clang-format off */
+    JUT_ASSERT(236, ( length & 0x1f ) == 0);
+    /* clang-format on */
+
+    OSLockMutex(&mMutex1);
+    if (mOSThread) {
+        OSUnlockMutex(&mMutex1);
+        return -1;
+    }
+
+    mOSThread = OSGetCurrentThread();
+
+    s32 result = -1;
+    s32 readAsyncResult =
+        DVDReadAsyncPrio(&mFileInfo, param_1, length, param_3, JKRDvdFile::doneProcess, 2);
+    if (readAsyncResult) {
+        result = sync();
+    }
+
+    mOSThread = NULL;
+    OSUnlockMutex(&mMutex1);
+
+    return result;
 }
 
 /* 802BCBCC-802BCC24       .text writeData__10JKRDvdFileFPCvll */
-void JKRDvdFile::writeData(const void*, long, long) {
-    /* Nonmatching */
+s32 JKRDvdFile::writeData(const void* param_0, s32 length, s32 param_2) {
+    /* clang-format off */
+    JUT_ASSERT(340, ( length & 0x1f ) == 0);
+    /* clang-format on */
+
+    return -1;
 }
 
 /* 802BCC24-802BCC78       .text sync__10JKRDvdFileFv */
-void JKRDvdFile::sync() {
-    /* Nonmatching */
+s32 JKRDvdFile::sync() {
+    OSMessage message;
+    OSLockMutex(&mMutex1);
+    OSReceiveMessage(&mMessageQueue2, &message, 1);
+    mOSThread = NULL;
+    OSUnlockMutex(&mMutex1);
+    return (int)message;
 }
 
 /* 802BCC78-802BCCAC       .text doneProcess__10JKRDvdFileFlP11DVDFileInfo */
-void JKRDvdFile::doneProcess(long, DVDFileInfo*) {
-    /* Nonmatching */
-}
-
-/* 802BCCAC-802BCCB4       .text getFileSize__10JKRDvdFileCFv */
-void JKRDvdFile::getFileSize() const {
-    /* Nonmatching */
-}
-
-/* 802BCCF8-802BCD4C       .text __dt__21JSUList<10JKRDvdFile>Fv */
-JSUList<JKRDvdFile>::~JSUList() {
-    /* Nonmatching */
+void JKRDvdFile::doneProcess(s32 id, DVDFileInfo* fileInfo) {
+    // fileInfo->field_0x3c looks like some kind of user pointer?
+    JKRDvdFile* dvdFile = *(JKRDvdFile**)((u8*)fileInfo + 0x3c);
+    OSSendMessage(&dvdFile->mMessageQueue2, (OSMessage)id, OS_MESSAGE_NOBLOCK);
 }

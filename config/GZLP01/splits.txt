@@ -489,52 +489,52 @@ d/actor/d_a_obj.cpp:
 	.sbss       start:0x803FE3A0 end:0x803FE3A8
 	.sdata2     start:0x803FFCF0 end:0x803FFD58
 
-d/actor/d_a_obj_tribox_static.cpp:
+d/d_a_obj_tribox_static.cpp:
 	.text       start:0x8006BAFC end:0x8006BB74
 	.ctors      start:0x8033DC08 end:0x8033DC0C
 	.bss        start:0x803E9858 end:0x803E9870
 	.sbss       start:0x803FE3A8 end:0x803FE3C0
 
-d/actor/d_a_ship_static.cpp:
+d/d_a_ship_static.cpp:
 	.text       start:0x8006BB74 end:0x8006BC58
 	.sdata2     start:0x803FFD58 end:0x803FFD60
 
-d/actor/d_a_boko_static.cpp:
+d/d_a_boko_static.cpp:
 	.text       start:0x8006BC58 end:0x8006BD80
 	.data       start:0x8037DCF8 end:0x8037DE48
 	.sdata      start:0x803FD9E0 end:0x803FD9E8
 
-d/actor/d_a_bomb_static.cpp:
+d/d_a_bomb_static.cpp:
 	.text       start:0x8006BD80 end:0x8006C2D4
 	.text       start:0x8006C2D4 end:0x8006C2F0
 	.rodata     start:0x80355FA8 end:0x80355FE0
 
-d/actor/d_a_branch_static.cpp:
+d/d_a_branch_static.cpp:
 	.text       start:0x8006C2F0 end:0x8006C3D8
 	.rodata     start:0x80355FE0 end:0x80356010
 
-d/actor/d_a_mgameboard_static.cpp:
+d/d_a_mgameboard_static.cpp:
 	.text       start:0x8006C3D8 end:0x8006C430
 
-d/actor/d_a_itembase_static.cpp:
+d/d_a_itembase_static.cpp:
 	.text       start:0x8006C430 end:0x8006C600
 	.rodata     start:0x80356010 end:0x80356060
 
-d/actor/d_a_item_static.cpp:
+d/d_a_item_static.cpp:
 	.text       start:0x8006C600 end:0x8006C7D0
 	.sdata2     start:0x803FFD60 end:0x803FFD68
 
-d/actor/d_a_shop_item_static.cpp:
+d/d_a_shop_item_static.cpp:
 	.text       start:0x8006C7D0 end:0x8006C838
 	.rodata     start:0x80356060 end:0x80358140
 	.sdata2     start:0x803FFD68 end:0x803FFD78
 
-d/actor/d_a_race_item_static.cpp:
+d/d_a_race_item_static.cpp:
 	.text       start:0x8006C838 end:0x8006CEC4
 	.data       start:0x8037DE48 end:0x8037DF08
 	.sdata2     start:0x803FFD78 end:0x803FFD80
 
-d/actor/d_a_leaflift_static.cpp:
+d/d_a_leaflift_static.cpp:
 	.text       start:0x8006CEC4 end:0x8006D0A4
 	.sdata2     start:0x803FFD80 end:0x803FFDA8
 
@@ -952,11 +952,11 @@ d/d_2dnumber.cpp:
 	.data       start:0x8038FDA8 end:0x8038FE18
 	.sdata2     start:0x80400CB0 end:0x80400D30
 
-d/actor/d_a_npc_cb1_static.cpp:
+d/d_a_npc_cb1_static.cpp:
 	.text       start:0x800CF264 end:0x800CF26C
 	.sbss       start:0x803FE660 end:0x803FE668
 
-d/actor/d_a_npc_mk_static.cpp:
+d/d_a_npc_mk_static.cpp:
 	.text       start:0x800CF26C end:0x800D03D4
 	.sdata2     start:0x80400D30 end:0x80400D88
 
@@ -3959,98 +3959,98 @@ MSL_C/Math/Double_precision/w_fmod.c:
 MSL_C/PPC_EABI/math_ppc.c:
 	.text       start:0x803363AC end:0x8033643C
 
-TRK_MINNOW_DOLPHIN/mainloop.c:
+TRK_MINNOW_DOLPHIN/Portable/mainloop.c:
 	.text       start:0x8033643C end:0x80336534
 
-TRK_MINNOW_DOLPHIN/nubevent.c:
+TRK_MINNOW_DOLPHIN/Portable/nubevent.c:
 	.text       start:0x80336534 end:0x8033675C
 	.bss        start:0x803F9700 end:0x803F9728
 
-TRK_MINNOW_DOLPHIN/nubinit.c:
+TRK_MINNOW_DOLPHIN/Portable/nubinit.c:
 	.text       start:0x8033675C end:0x803368DC
 	.rodata     start:0x80378140 end:0x80378160
 	.bss        start:0x803F9728 end:0x803F9730
 
-TRK_MINNOW_DOLPHIN/msg.c:
+TRK_MINNOW_DOLPHIN/Portable/msg.c:
 	.text       start:0x803368DC end:0x80336AB8
 
-TRK_MINNOW_DOLPHIN/msgbuf.c:
+TRK_MINNOW_DOLPHIN/Portable/msgbuf.c:
 	.text       start:0x80336AB8 end:0x803374E4
 	.rodata     start:0x80378160 end:0x80378180
 	.bss        start:0x803F9730 end:0x803FB0E0
 
-TRK_MINNOW_DOLPHIN/serpoll.c:
+TRK_MINNOW_DOLPHIN/Portable/serpoll.c:
 	.text       start:0x803374E4 end:0x803378B0
 	.bss        start:0x803FB0E0 end:0x803FB0F8
 
-TRK_MINNOW_DOLPHIN/usr_put.c:
+TRK_MINNOW_DOLPHIN/Portable/usr_put.c:
 	.text       start:0x803378B0 end:0x8033793C
 
-TRK_MINNOW_DOLPHIN/dispatch.c:
+TRK_MINNOW_DOLPHIN/Portable/dispatch.c:
 	.text       start:0x8033793C end:0x803379D8
 	.data       start:0x803A9500 end:0x803A9588
 	.bss        start:0x803FB0F8 end:0x803FB100
 
-TRK_MINNOW_DOLPHIN/msghndlr.c:
+TRK_MINNOW_DOLPHIN/Portable/msghndlr.c:
 	.text       start:0x803379D8 end:0x8033A238
 	.data       start:0x803A9588 end:0x803A95C0
 	.bss        start:0x803FB100 end:0x803FB108
 
-TRK_MINNOW_DOLPHIN/support.c:
+TRK_MINNOW_DOLPHIN/Portable/support.c:
 	.text       start:0x8033A238 end:0x8033AAF8
 
-TRK_MINNOW_DOLPHIN/mutex_TRK.c:
+TRK_MINNOW_DOLPHIN/Portable/mutex_TRK.c:
 	.text       start:0x8033AAF8 end:0x8033AB10
 
-TRK_MINNOW_DOLPHIN/notify.c:
+TRK_MINNOW_DOLPHIN/Portable/notify.c:
 	.text       start:0x8033AB10 end:0x8033ABE8
 
-TRK_MINNOW_DOLPHIN/flush_cache.c:
+TRK_MINNOW_DOLPHIN/ppc/Generic/flush_cache.c:
 	.text       start:0x8033ABE8 end:0x8033AC20
 
-TRK_MINNOW_DOLPHIN/mem_TRK.c:
+TRK_MINNOW_DOLPHIN/Portable/mem_TRK.c:
 	.init       start:0x800034E0 end:0x80003534
 	.text       start:0x8033AC20 end:0x8033ACDC
 
-TRK_MINNOW_DOLPHIN/targimpl.c:
+TRK_MINNOW_DOLPHIN/ppc/Generic/targimpl.c:
 	.text       start:0x8033ACDC end:0x8033C56C
 	.rodata     start:0x80378180 end:0x80378208
 	.data       start:0x803A95C0 end:0x803A95F0
 	.bss        start:0x803FB108 end:0x803FB688
 
-TRK_MINNOW_DOLPHIN/targsupp.s: comment:0
+TRK_MINNOW_DOLPHIN/ppc/Export/targsupp.s: comment:0
 	.text       start:0x8033C570 end:0x8033C590 align:16
 
-TRK_MINNOW_DOLPHIN/__exception.c: comment:0
+TRK_MINNOW_DOLPHIN/ppc/Generic/__exception.c: comment:0
 	.init       start:0x80003534 end:0x80005468
 
-TRK_MINNOW_DOLPHIN/dolphin_trk.c:
+TRK_MINNOW_DOLPHIN/Os/dolphin/dolphin_trk.c:
 	.init       start:0x80005468 end:0x8000556C
 	.text       start:0x8033C590 end:0x8033C6D0
 	.data       start:0x803A95F0 end:0x803A9630
 	.bss        start:0x803FB688 end:0x803FB690
 
-TRK_MINNOW_DOLPHIN/mpc_7xx_603e.c:
+TRK_MINNOW_DOLPHIN/ppc/Generic/mpc_7xx_603e.c:
 	.text       start:0x8033C6D0 end:0x8033CA48
 
-TRK_MINNOW_DOLPHIN/main_TRK.c:
+TRK_MINNOW_DOLPHIN/Portable/main_TRK.c:
 	.text       start:0x8033CA48 end:0x8033CA8C
 	.bss        start:0x803FB690 end:0x803FB698
 
-TRK_MINNOW_DOLPHIN/dolphin_trk_glue.c:
+TRK_MINNOW_DOLPHIN/Os/dolphin/dolphin_trk_glue.c:
 	.text       start:0x8033CA8C end:0x8033CF38
 	.rodata     start:0x80378208 end:0x80378250
 	.data       start:0x803A9630 end:0x803A964C
 	.bss        start:0x803FB698 end:0x803FD8C0
 
-TRK_MINNOW_DOLPHIN/targcont.c:
+TRK_MINNOW_DOLPHIN/Os/dolphin/targcont.c:
 	.text       start:0x8033CF38 end:0x8033CF6C
 
-TRK_MINNOW_DOLPHIN/target_options.c:
+TRK_MINNOW_DOLPHIN/Os/dolphin/target_options.c:
 	.text       start:0x8033CF6C end:0x8033CF88
 	.bss        start:0x803FD8C0 end:0x803FD8C1
 
-TRK_MINNOW_DOLPHIN/mslsupp.c:
+TRK_MINNOW_DOLPHIN/MetroTRK/Export/mslsupp.c:
 	.text       start:0x8033CF88 end:0x8033D100
 
 amcstubs/AmcExi2Stubs.c:

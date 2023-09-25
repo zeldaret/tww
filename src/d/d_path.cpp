@@ -4,21 +4,61 @@
 //
 
 #include "d/d_path.h"
-#include "dolphin/types.h"
+#include "d/d_com_inf_game.h"
+#include "JSystem/JUtility/JUTAssert.h"
 
 /* 80080018-8008010C       .text dPath_GetPnt__FP5dPathi */
-dPath__Point* dPath_GetPnt(dPath*, int) {
-    /* Nonmatching */
+dPath__Point* dPath_GetPnt(dPath* path, int pnt_index) {
+    JUT_ASSERT(14, path != 0);
+    JUT_ASSERT(15, 0 <= pnt_index && pnt_index < path->m_num);
+
+    if (path == NULL || path->mpPnt == NULL || 0 > pnt_index || pnt_index >= path->m_num)
+        return NULL;
+    else
+        return &path->mpPnt[pnt_index];
 }
 
 /* 8008010C-80080218       .text dPath_GetRoomPath__Fii */
-dPath* dPath_GetRoomPath(int, int) {
-    /* Nonmatching */
+dPath* dPath_GetRoomPath(int path_index, int room_no) {
+    dStage_dPath_c * pd;
+    if (room_no == -1) {
+        pd = dComIfGp_getStage().getPath2Inf();
+    } else {
+        JUT_ASSERT(0x3d, 0 <= room_no && room_no < 64);
+        dStage_roomStatus_c * pRoom = dComIfGp_roomControl_getStatusRoomDt(room_no);
+        if (pRoom == NULL)
+            return NULL;
+        pd = pRoom->getPath2Inf();
+    }
+
+    if (pd == NULL || 0 > path_index || path_index >= pd->num)
+        return NULL;
+    else
+        return &pd->m_path[path_index];
 }
 
 /* 80080218-80080340       .text dPath_GetNextRoomPath__FP5dPathi */
-void dPath_GetNextRoomPath(dPath*, int) {
-    /* Nonmatching */
+dPath* dPath_GetNextRoomPath(dPath* path, int room_no) {
+    dStage_dPath_c * pd;
+    if (room_no == -1) {
+        pd = dComIfGp_getStage().getPath2Inf();
+    } else {
+        dStage_roomStatus_c * pRoom = dComIfGp_roomControl_getStatusRoomDt(room_no);
+        if (pRoom == NULL)
+            return NULL;
+        pd = pRoom->getPath2Inf();
+    }
+
+    s32 next_id = path->mNextPathId;
+    if (pd == NULL || (next_id & 0xFFFF) == 0xFFFF) {
+        return NULL;
+    } else {
+        JUT_ASSERT(0x72, 0 <= next_id && next_id < pd->num);
+        if (0 > next_id || next_id >= pd->num)
+            return NULL;
+        else
+            return &pd->m_path[next_id];
+    }
 }
 
 /* 80080340-800804A4       .text dPath_GetPolyRoomPathVec__FR13cBgS_PolyInfoP4cXyzPi */

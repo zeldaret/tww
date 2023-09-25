@@ -18,7 +18,7 @@ public:
     mDoExt_baseAnm() { mpFrameCtrl = NULL; }
     virtual ~mDoExt_baseAnm() {}
 
-    int initPlay(s16 i_frameMax, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF);
+    int initPlay(s16 i_frameMax, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool);
     int play();
 
     J3DFrameCtrl* getFrameCtrl() { return mpFrameCtrl; }
@@ -45,13 +45,13 @@ class mDoExt_btkAnm : public mDoExt_baseAnm {
 public:
     mDoExt_btkAnm() { mpTexMtxAnm = NULL; }
     int init(J3DMaterialTable* i_matTable, J3DAnmTextureSRTKey* i_btk, int i_anmPlay,
-             int i_attribute, f32 i_rate, s16 i_start, s16 i_end, bool i_modify, bool i_entry);
+             int i_attribute, f32 i_rate, s16 i_start, s16 i_end, bool i_modify, int i_entry);
     void entry(J3DMaterialTable* i_matTable, f32 i_frame);
     void entry(J3DModelData *i_modelData, f32 i_frame);
 
     void entry(J3DModelData* i_modelData) { entry(i_modelData, getFrame()); }
     int init(J3DModelData* i_modelData, J3DAnmTextureSRTKey* i_btk, int i_anmPlay, int i_attribute,
-             f32 i_rate, s16 i_start, s16 i_end, bool i_modify, bool i_entry);
+             f32 i_rate, s16 i_start, s16 i_end, bool i_modify, int i_entry);
 
     int remove(J3DModelData* i_modelData) { return i_modelData->removeTexMtxAnimator(mpAnm); }
     void entryFrame() { entryFrame(getFrame()); }
@@ -71,21 +71,19 @@ class J3DTevColorAnm;
 class J3DTevKColorAnm;
 class mDoExt_brkAnm : public mDoExt_baseAnm {
 public:
-    mDoExt_brkAnm() { mpAnm = NULL; }
+    mDoExt_brkAnm() {
+        mpCRegAnm = NULL;
+        mpKRegAnm = NULL;
+    }
     /* 8000D70C */ int init(J3DMaterialTable* i_matTable, J3DAnmTevRegKey* i_brk, int i_anmPlay,
                             int i_attribute, f32 i_rate, s16 i_start, s16 i_end, bool i_modify, int i_entry);
     /* 8000D7A8 */ void entry(J3DMaterialTable* i_matTable, f32 i_frame);
 
     void entry(J3DModelData* i_modelData) { entry(i_modelData, getFrame()); }
-    void entry(J3DModelData* i_modelData, f32 i_frame) {
-        entry(&i_modelData->getMaterialTable(), i_frame);
-    }
+    void entry(J3DModelData* i_modelData, f32 i_frame);
 
     int init(J3DModelData* i_modelData, J3DAnmTevRegKey* i_brk, int i_anmPlay, int i_attribute,
-             f32 i_rate, s16 i_start, s16 i_end, bool i_modify, int i_entry) {
-        return init(&i_modelData->getMaterialTable(), i_brk, i_anmPlay, i_attribute, i_rate,
-                    i_start, i_end, i_modify, i_entry);
-    }
+             f32 i_rate, s16 i_start, s16 i_end, bool i_modify, int i_entry);
 
     int remove(J3DModelData* i_modelData) { return i_modelData->removeTevRegAnimator(mpAnm); }
     void entryFrame() { entryFrame(getFrame()); }
@@ -180,6 +178,17 @@ private:
     /* 0x4 */ J3DAnmTransform* mAnmTransform;
 };  // Size: 0x8
 
+class mDoExt_transAnmBas : public J3DAnmTransformKey {
+public:
+    mDoExt_transAnmBas(void* bas) { mBas = bas; }
+    virtual ~mDoExt_transAnmBas();
+
+    void* getBas() { return mBas; }
+
+private:
+    /* 0x28 */ void* mBas;
+};
+
 class mDoExt_MtxCalcOldFrame {
 public:
     /* 8000F848 */ void initOldFrameMorf(f32, u16, u16);
@@ -250,11 +259,27 @@ public:
     mDoExt_McaMorf(J3DModelData*, mDoExt_McaMorfCallBack1_c*, mDoExt_McaMorfCallBack2_c*, J3DAnmTransform*, int, float, int, int, int, void*, unsigned long, unsigned long);
     virtual ~mDoExt_McaMorf();
 
+    void calc();
+    void calc(u16);
     void setAnm(J3DAnmTransform*, int, f32, f32, f32, f32, void*);
+    void setMorf(f32);
     J3DModel* getModel() { return mpModel; }
     void setFrame(f32 frame) { mFrameCtrl.setFrame(frame); }
+    f32 getFrame() { return mFrameCtrl.getFrame(); }
+    bool isStop() const { //regswap somewhere here
+        bool stopped = true;
+        if (!mFrameCtrl.checkState(1) && mFrameCtrl.getRate() != 0.0f) {
+            stopped = false;
+        }
+
+        return stopped;
+    }
+
     void update();
     void updateDL();
+    void entry();
+    void entryDL();
+    void entryDL(J3DMaterialTable*);
     void play(Vec *, u32, s8);
     void stopZelAnime();
 
@@ -303,14 +328,27 @@ JKRExpHeap* mDoExt_getCommandHeap();
 JKRExpHeap* mDoExt_getZeldaHeap();
 JKRExpHeap* mDoExt_getGameHeap();
 JKRExpHeap* mDoExt_getArchiveHeap();
+JKRExpHeap* mDoExt_createCommandHeap(u32 heapSize, JKRHeap* i_heap);
+JKRExpHeap* mDoExt_createArchiveHeap(u32 heapSize, JKRHeap* i_heap);
+JKRExpHeap* mDoExt_createZeldaHeap(u32 heapSize, JKRHeap* i_heap);
+JKRExpHeap* mDoExt_createGameHeap(u32 heapSize, JKRHeap* i_heap);
 
 int mDoExt_getSafeArchiveHeapSize();
 int mDoExt_getSafeGameHeapSize();
 int mDoExt_getSafeZeldaHeapSize();
 int mDoExt_getSafeCommandHeapSize();
 
+s32 mDoExt_resIDToIndex(JKRArchive*, u16);
+
+JKRSolidHeap * mDoExt_createSolidHeapFromGameToCurrent(u32 size, u32 align);
+JKRSolidHeap * mDoExt_createSolidHeapToCurrent(u32, JKRHeap *, u32 align);
+void mDoExt_restoreCurrentHeap();
+u32 mDoExt_adjustSolidHeap(JKRSolidHeap * pHeap);
+void mDoExt_destroySolidHeap(JKRSolidHeap * pHeap);
+
 extern JKRExpHeap* zeldaHeap;
 extern JKRExpHeap* gameHeap;
+extern JKRExpHeap* commandHeap;
 extern JKRExpHeap* archiveHeap;
 
 #endif

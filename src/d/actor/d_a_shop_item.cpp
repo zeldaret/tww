@@ -3,6 +3,7 @@
 // Translation Unit: d_a_shop_item.cpp
 //
 
+#include "d/actor/d_a_shop_item.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "d/d_procname.h"
@@ -10,46 +11,9 @@
 #include "d/d_s_play.h"
 #include "d/d_item.h"
 #include "d/d_item_data.h"
-#include "d/actor/d_a_itembase.h"
 #include "d/actor/d_a_itembase_static.h"
-#include "d/d_cloth_packet.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
-
-struct daShopItem_c_m_data {
-    /* 0x00 */ cXyz mScale;
-    /* 0x0C */ cXyz field_0x0C;
-    /* 0x18 */ csXyz field_0x18;
-};
-
-struct daShopItem_c : public daItemBase_c {
-    char* getShopArcname();
-    s16 getShopBmdIdx();
-    void CreateInit();
-    int _create();
-    bool _execute();
-    void set_mtx();
-    bool _draw();
-
-    //virtual funcs
-    void setListStart() {}
-    void settingBeforeDraw();
-    void setTevStr();
-    s32 clothCreate();
-
-    daShopItem_c_m_data* getData() { return mData; }
-
-    static const char m_cloth_arcname[];
-    static const f32 m_cullfar_max;
-    static u8 mModelType[256];
-    static daShopItem_c_m_data mData[256];
-
-    /* 0x63C */ request_of_phase_process_class field_0x63C;
-    /* 0x644 */ dCloth_packet_c* field_0x644;
-    /* 0x648 */ u8 field_0x648;
-    /* 0x64C */ Mtx field_0x64C;
-    /* 0x67C */ TevType tevType;
-};
 
 const char daShopItem_c::m_cloth_arcname[] = "Cloth";
 const f32 daShopItem_c::m_cullfar_max = 5000.0f;
@@ -57,20 +21,20 @@ const f32 daShopItem_c::m_cullfar_max = 5000.0f;
 char* daShopItem_c::getShopArcname() {
     u8 type = fopAcM_GetParamBit(this, 8, 4);
     if(type == 1 || (type == 0 && mModelType[m_itemNo] == 0x01)) {
-        return dItem_data::field_item_res[m_itemNo].mModelArcName;
+        return dItem_data::getFieldArc(m_itemNo);
     }
     else {
-        return dItem_data::item_resource[m_itemNo].mModelArcName;
+        return dItem_data::getArcname(m_itemNo);
     }
 }
 
 s16 daShopItem_c::getShopBmdIdx() {
     u8 type = fopAcM_GetParamBit(this, 8, 4);
     if(type == 1 || (type == 0 && mModelType[m_itemNo] == 0x01)) {
-        return dItem_data::field_item_res[m_itemNo].mModelFileId;
+        return dItem_data::getFieldBmdIdx(m_itemNo);
     }
     else {
-        return dItem_data::item_resource[m_itemNo].mModelFileIdx;
+        return dItem_data::getBmdIdx(m_itemNo);
     }
 }
 
@@ -93,10 +57,10 @@ void daShopItem_c::CreateInit() {
         tevType = (TevType)0x5C;
     }
 
-    mModel->setUserArea(0);
+    mpModel->setUserArea(0);
 }
 
-s32 daShopItem_c::clothCreate() {
+BOOL daShopItem_c::clothCreate() {
     if(isUseClothPacket(m_itemNo)) {
         dCloth_packet_c* (*clothFunc[4])(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**) = {dClothVobj03_create, dClothVobj04_create, dClothVobj05_create, dClothVobj07_0_create};
         u32 clothRes[4] = {0x20, 0x21, 0x22, 0x23};
@@ -132,30 +96,32 @@ s32 daShopItem_c::clothCreate() {
 }
 
 void daShopItem_c::set_mtx() {
-    /* Nonmatching */
-    mModel->setBaseScale(mScale);
-    mDoMtx_stack_c::transM(current.pos.x, current.pos.y, current.pos.z);
-    mDoMtx_stack_c::XYZrotM(current.angle.x, current.angle.y, current.angle.z);
+    mpModel->setBaseScale(mScale);
+    MTXTrans(mDoMtx_stack_c::get(), current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, current.angle.z);
     MTXCopy(mDoMtx_stack_c::get(), field_0x64C);
 
-    cXyz* temp = &getData()[m_itemNo].field_0x0C;
-    mDoMtx_stack_c::transM(temp->x, temp->y, temp->z);
-    csXyz* temp2 = &getData()[m_itemNo].field_0x18;
-    mDoMtx_stack_c::XYZrotM(temp2->x, temp2->y, temp2->z);
-    MTXCopy(mDoMtx_stack_c::get(), mModel->getBaseTRMtx()); //mDoMtx_stack_c is loading too late
+    const Vec& temp1 = getData()[m_itemNo].field_0x0C;
+    mDoMtx_stack_c::transM(temp1.x, temp1.y, temp1.z);
+    const SVec& temp2 = getData()[m_itemNo].field_0x18;
+    mDoMtx_stack_c::ZXYrotM(temp2.x, temp2.y, temp2.z);
+    MTXCopy(mDoMtx_stack_c::get(), mpModel->mBaseTransformMtx);
 
     if(field_0x644 != 0) {
-        //no clue what is actually happening here, commented stuff is to make .rodata less broken
-        f32 y1 = g_regHIO.mChild[8].mFloats[7] + 94.0f;
-        f32 y2 = g_regHIO.mChild[8].mFloats[7] + 97.5f;
-        //Vec local[4] = {
-        //    {0.0f, y1, 0.0f},
-        //    {0.0f, y1, 0.0f},
-        //    {0.0f, y2, 0.0f},
-        //    {0.0f, y1, 0.0f}
-        //};
+        // I have no clue why Nintendo would do this but it works
+        cXyz local[4];
+        cXyz local2[4];
 
-        //mDoMtx_stack_c::transM(local[field_0x648].x, local[field_0x648].y, local[field_0x648].z);
+        local2[3].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 94.0f, 0.0f);
+        local[0].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 94.0f, 0.0f);
+        local2[2].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 94.0f, 0.0f);
+        local[1].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 94.0f, 0.0f);
+        local2[1].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 97.5f, 0.0f);
+        local[2].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 97.5f, 0.0f);
+        local2[0].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 94.0f, 0.0f);
+        local[3].set(0.0f, g_regHIO.mChild[10].mFloatRegs[15] + 94.0f, 0.0f);
+
+        mDoMtx_stack_c::transM(local[field_0x648]);
         mDoMtx_stack_c::YrotM(0x4000);
         field_0x644->setScale(mScale);
         field_0x644->setMtx(mDoMtx_stack_c::get());
@@ -173,7 +139,7 @@ bool daShopItem_c::_draw() {
     if(chkDraw() == 0) return 1;
 
     if(m_itemNo == WATER_STATUE || m_itemNo == POSTMAN_STATUE) {
-        mModel->getModelData()->getJointTree().getJointNodePointer(0)->setMtxCalc(0);
+        mpModel->getModelData()->getJointTree().getJointNodePointer(0)->setMtxCalc(0);
     }
     DrawBase();
     
@@ -184,16 +150,16 @@ bool daShopItem_c::_draw() {
 
 void daShopItem_c::settingBeforeDraw() {
     if(isBomb(m_itemNo) || (m_itemNo == BOMB_BAG) || (m_itemNo == HUMMER) || m_itemNo == SMALL_KEY || m_itemNo == PRESIDENT_STATUE) {
-        dDlst_texSpecmapST(&mEyePos, &mTevStr, mModel->getModelData(), 1.0f);
+        dDlst_texSpecmapST(&mEyePos, &mTevStr, mpModel->getModelData(), 1.0f);
     }
 }
 
 void daShopItem_c::setTevStr() {
     g_env_light.settingTevStruct(tevType, getPositionP(), &mTevStr);
-    g_env_light.setLightTevColorType(mModel, &mTevStr);
+    g_env_light.setLightTevColorType(mpModel, &mTevStr);
     for(int i = 0; i < 2; i++) {
-        if(mModelArrow[i] != 0) {
-            g_env_light.setLightTevColorType(mModelArrow[i], &mTevStr);
+        if(mpModelArrow[i] != 0) {
+            g_env_light.setLightTevColorType(mpModelArrow[i], &mTevStr);
         }
     }
     
@@ -214,7 +180,7 @@ int daShopItem_c::_create() {
     }
 
     arcName = getShopArcname();
-    int result = dComIfG_resLoad(&this->mPhs, arcName);
+    int result = dComIfG_resLoad(&mPhs, arcName);
     if(result != cPhs_COMPLEATE_e) {
         return result;
     }
@@ -252,7 +218,7 @@ int daShopItem_c::_create() {
     return result;
 }
 
-static int daShopItem_Delete(void* i_this) {
+static BOOL daShopItem_Delete(void* i_this) {
     daShopItem_c* inst = static_cast<daShopItem_c*>(i_this);
 
     if(isUseClothPacket(inst->m_itemNo)) {
@@ -263,16 +229,16 @@ static int daShopItem_Delete(void* i_this) {
     return 1;
 }
 
-int daShopItem_Draw(void* i_this) {
+static BOOL daShopItem_Draw(void* i_this) {
     return static_cast<daShopItem_c*>(i_this)->_draw();
 }
 
-int daShopItem_Execute(void* i_this) {
+static BOOL daShopItem_Execute(void* i_this) {
     return static_cast<daShopItem_c*>(i_this)->_execute();
 }
 
-int daShopItem_IsDelete(void*) {
-    return 1;
+static bool daShopItem_IsDelete(void*) {
+    return true;
 }
 
 static actor_method_class daShopItemMethodTable = {
@@ -280,7 +246,7 @@ static actor_method_class daShopItemMethodTable = {
     (process_method_func)daShopItem_Delete,
     (process_method_func)daShopItem_Execute,
     (process_method_func)daShopItem_IsDelete,
-    (process_method_func)0,
+    (process_method_func)daShopItem_Draw,
 };
 
 extern actor_process_profile_definition g_profile_ShopItem = {

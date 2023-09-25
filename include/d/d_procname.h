@@ -504,6 +504,7 @@ enum {
     PROC_SCP                 = 0x01F3,
     PROC_PB                  = 0x01F4,
     PROC_GAMEOVER            = 0x01F5,
+    PROC_COUNT_e,
 };
 
 #endif /* D_PROCNAME_H */

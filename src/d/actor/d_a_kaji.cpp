@@ -13,8 +13,6 @@
 #include "d/d_procname.h"
 #include "dolphin/types.h"
 
-extern dScnPly_reg_HIO_c g_regHIO;
-
 struct daKaji_c : fopAc_ac_c {
 public:
     BOOL CreateHeap();
@@ -52,7 +50,7 @@ BOOL daKaji_c::CreateHeap() {
         (J3DAnmTransformKey*)dComIfG_getObjectRes("Kaji", 0xE), // kj_wait.bck
         2, 0.0f, 0, -1, 1,
         dComIfG_getObjectRes("Kaji", 0x8), // kj_wait.bas
-        0x00080000, 
+        0x00080000,
         0x11000002
     );
     
@@ -67,7 +65,7 @@ s32 daKaji_c::_create() {
         if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)&CheckCreateHeap, 0x660)) {
             mDoMtx_stack_c::transS(getPosition());
             mDoMtx_stack_c::YrotM(shape_angle.y);
-            mDoMtx_stack_c::scaleM(mScale.x, mScale.y, mScale.z);
+            mDoMtx_stack_c::scaleM(mScale);
             MTXCopy(mDoMtx_stack_c::get(), mMtx);
             
             l_p_ship = (daObjPirateship::Act_c*)fopAcM_SearchByID(mParentPcId);
@@ -94,7 +92,7 @@ BOOL daKaji_c::_execute() {
     cXyz* offset = &cXyz(0.0f, 740.0f, -858.0f);
     offset->y += g_regHIO.mChild[10].mFloatRegs[10];
     offset->z += g_regHIO.mChild[10].mFloatRegs[11];
-    cMtx_multVec( l_p_ship->mpModel->getBaseTRMtx(), offset, &current.pos);
+    cMtx_multVec(l_p_ship->mpModel->getBaseTRMtx(), offset, &current.pos);
     
     daObjPirateship::Act_c* ship = l_p_ship;
     shape_angle = ship->shape_angle;
@@ -103,10 +101,9 @@ BOOL daKaji_c::_execute() {
     mpMorf->play(NULL, 0, 0);
     
     mpMorf->getModel()->setBaseScale(mScale);
-    PSMTXTrans(mDoMtx_stack_c::get(), current.pos.x, current.pos.y, current.pos.z);
-    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
-    
-    mpMorf->getModel()->i_setBaseTRMtx(mDoMtx_stack_c::get());
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
     MTXCopy(mDoMtx_stack_c::get(), mMtx);
     
     return FALSE;
@@ -143,12 +140,12 @@ static BOOL daKajiDraw(void* i_this) {
 }
 
 /* 00000568-00000570       .text daKajiIsDelete__FPv */
-static BOOL daKajiIsDelete(void* actor) {
+static BOOL daKajiIsDelete(void* i_this) {
     return TRUE;
 }
 
 static actor_method_class daKajiMethodTable = {
-    (process_method_func)daKajiCreate, 
+    (process_method_func)daKajiCreate,
     (process_method_func)daKajiDelete,
     (process_method_func)daKajiExecute,
     (process_method_func)daKajiIsDelete,

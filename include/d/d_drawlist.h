@@ -1,9 +1,12 @@
 #ifndef D_D_DRAWLIST_H
 #define D_D_DRAWLIST_H
 
+#include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "f_op/f_op_view.h"
 #include "global.h"
 #include "m_Do/m_Do_ext.h"
+
+class ResTIMG;
 
 class dDlst_base_c {
 public:
@@ -165,7 +168,32 @@ public:
 struct view_port_class;
 struct view_class;
 struct camera_class;
-struct dDlst_alphaModel_c;
+
+struct dDlst_alphaModelData_c;
+
+struct dDlst_alphaModel_c {
+public:
+    enum Type {
+        TYPE_SPHERE = 0,
+        TYPE_TWO_SPHERES = 1,
+        TYPE_SEARCHLIGHT = 2,
+        TYPE_CUBE = 3,
+        TYPE_SMALL_SPHERE = 4,
+        TYPE_THREE_SPHERES = 5,
+    };
+
+    dDlst_alphaModel_c();
+    void create(int);
+    void set(u8 type, Mtx mtx, u8 alpha);
+    void draw(MtxP);
+    s32 getNum() { return mNum; }
+
+public:
+    /* 0x00 */ _GXColor mColor;
+    /* 0x04 */ s16 mCapacity;
+    /* 0x06 */ s16 mNum;
+    /* 0x08 */ dDlst_alphaModelData_c* mpData;
+};  // Size: 0xC
 
 class dDlst_list_c {
 public:
@@ -182,6 +210,31 @@ public:
     void calcWipe();
     void set2DOpa(dDlst_base_c*);
 
+    J3DDrawBuffer* getOpaListFilter() { return mpWetherFxBuffer; }
+
+    void setXluDrawList(J3DDrawBuffer* buffer) { j3dSys.setDrawBuffer(buffer, XLU_BUFFER); }
+    void setOpaDrawList(J3DDrawBuffer* buffer) { j3dSys.setDrawBuffer(buffer, OPA_BUFFER); }
+    void setOpaList() { setOpaDrawList(mpBufInvisibleModelOpa); }
+    void setXluList() { setXluDrawList(mpBufInvisibleModelXlu); }
+    void setOpaListMaskOff() { setOpaDrawList(mpBufInvisibleModelMaskOffOpa); }
+    void setXluListMaskOff() { setXluDrawList(mpBufInvisibleModelMaskOffXlu); }
+    void setOpaListSky() { setOpaDrawList(mpBufSkyOpa); }
+    void setXluListSky() { setXluDrawList(mpBufSkyXlu); }
+    void setOpaListP0() { setOpaDrawList(mpLinkBuf); }
+    void setXluListP0() { setXluDrawList(mpLinkBuf); }
+    void setOpaListP1() { setOpaDrawList(field_0x0000c); }
+    void setXluListP1() { setXluDrawList(field_0x00010); }
+    void setOpaListBG() { setOpaDrawList(mpBufWorldOpa); }
+    void setXluListBG() { setXluDrawList(mpBufWorldXlu); }
+    void setOpaListFilter() { setOpaDrawList(mpWetherFxBuffer); }
+    void setXluListFilter() { setXluDrawList(mpWetherFxBuffer); }
+    void setOpaList2D() { setOpaDrawList(field_0x00038); }
+    void setXluList2D() { setXluDrawList(field_0x00038); }
+
+    void entryZSortXluList(J3DPacket* i_packet, cXyz& param_1) {
+        entryZSortXluDrawList(mpBufInvisibleModelXlu, i_packet, param_1);
+    }
+
     int setSimpleShadow(cXyz* param_0, f32 param_1, f32 param_2, cXyz* param_3, s16 param_4,
                         f32 param_5, _GXTexObj* param_6) {
         return mShadowControl.setSimple(param_0, param_1, param_2, param_3, param_4, param_5,
@@ -192,11 +245,16 @@ public:
         return mShadowControl.setReal2(id, param_2, pModel, pPos, param_5, param_6, pTevStr);
     }
 
+    void setAlphaModel(u8 type, Mtx mtx, u8 alpha) { mpAlphaModel->set(type, mtx, alpha); }
+    void setSpotModel(u8 type, Mtx mtx, u8 alpha) { mpSpotModel->set(type, mtx, alpha); }
+    void setLightModel(u8 type, Mtx mtx, u8 alpha) { mpLightModel->set(type, mtx, alpha); }
+    s32 getSpotModelNum() { return mpSpotModel->getNum(); }
+    s32 getLightModelNum() { return mpLightModel->getNum(); }
+
     static void offWipe() { mWipe = false; }
 
     static bool mWipe;
 
-private:
     /* 0x00000 */ J3DDrawBuffer* mpBufSkyOpa;
     /* 0x00004 */ J3DDrawBuffer* mpBufSkyXlu;
     /* 0x00008 */ J3DDrawBuffer* mpLinkBuf;
@@ -227,12 +285,15 @@ private:
     /* 0x00230 */ dDlst_window_c* field_0x00230;
     /* 0x00234 */ camera_class* mpCamera;
     /* 0x00238 */ u8 field_0x00238[0x00244 - 0x00238];
-    /* 0x00244 */ dDlst_alphaModel_c* mpAlphaModel0;
-    /* 0x00248 */ dDlst_alphaModel_c* mpAlphaModel2;
-    /* 0x0024C */ dDlst_alphaModel_c* mpAlphaModel1;
+    /* 0x00244 */ dDlst_alphaModel_c* mpAlphaModel;
+    /* 0x00248 */ dDlst_alphaModel_c* mpSpotModel;
+    /* 0x0024C */ dDlst_alphaModel_c* mpLightModel;
     /* 0x00250 */ dDlst_shadowControl_c mShadowControl;
     /* 0x16078 */ mDoExt_3DlineMatSortPacket m3DLineMatSortPacket[2];
     /* 0x160A0 */ dDlst_peekZ_c mPeekZ;
+
+    static ResTIMG * mToonImage;
+    static ResTIMG * mToonExImage;
 };  // Size: 0x16234
 
 STATIC_ASSERT(sizeof(dDlst_list_c) == 0x16234);

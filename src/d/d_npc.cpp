@@ -3,22 +3,42 @@
 // Translation Unit: d_npc.cpp
 //
 
-#include "d_npc.h"
-#include "dolphin/types.h"
+#include "d/d_npc.h"
+#include "d/d_com_inf_game.h"
+#include "d/actor/d_a_player.h"
+#include "f_op/f_op_actor_mng.h"
+#include "f_op/f_op_msg_mng.h"
+#include "SSystem/SComponent/c_math.h"
+#include "JSystem/JGeometry.h"
+#include "m_Do/m_Do_mtx.h"
 
-/* 8021A7B4-8021A858       .text angCalcS__14dNpc_JntCtrl_cFPssss */
-void dNpc_JntCtrl_c::angCalcS(short*, short, short, short) {
-    /* Nonmatching */
+bool dNpc_JntCtrl_c::angCalcS(s16* out, s16 targetY, s16 speed, s16 maxVel) {
+    s16 origY = *out;
+    s16 diff = origY - targetY;
+    cLib_addCalcAngleS(&diff, 0, speed, maxVel, 0x60);
+    if(abs(diff) > speed) {
+        *out += (diff - (origY - targetY));
+    }
+    else {
+        *out = targetY;
+    }
+
+    return (s16)targetY - *out == 0;
 }
 
-/* 8021A858-8021A884       .text limitter__14dNpc_JntCtrl_cFPsss */
-void dNpc_JntCtrl_c::limitter(short*, short, short) {
-    /* Nonmatching */
+void dNpc_JntCtrl_c::limitter(s16* targetDiff, s16 maxDiff, s16 minDiff) {
+    if(*targetDiff > maxDiff) {
+        *targetDiff = maxDiff;
+    }
+    if(*targetDiff < minDiff) {
+        *targetDiff = minDiff;
+    }
 }
 
-/* 8021A884-8021A97C       .text follow__14dNpc_JntCtrl_cFPsssi */
-void dNpc_JntCtrl_c::follow(short*, short, short, int) {
-    /* Nonmatching */
+bool dNpc_JntCtrl_c::follow(s16* outY, s16 targetY, s16 maxVel, int param_4) {
+    angCalcS(outY, targetY, 4, maxVel);
+
+    return *outY != targetY;
 }
 
 /* 8021A97C-8021AABC       .text move__14dNpc_JntCtrl_cFsi */
@@ -31,29 +51,61 @@ void dNpc_JntCtrl_c::lookAtTarget(short*, cXyz*, cXyz, short, short, bool) {
     /* Nonmatching */
 }
 
-/* 8021AC6C-8021ACA8       .text setParam__14dNpc_JntCtrl_cFsssssssss */
-void dNpc_JntCtrl_c::setParam(short, short, short, short, short, short, short, short, short) {
-    /* Nonmatching */
+void dNpc_JntCtrl_c::setParam(s16 param_1, s16 maxSpineRot, s16 param_3, s16 minSpineRot, s16 param_5, s16 maxHeadRot, s16 param_7, s16 minHeadRot, s16 param_9) {
+    field_0x1A = param_1;
+    mMaxSpineRot = maxSpineRot;
+    field_0x12 = param_3;
+    mMinSpineRot = minSpineRot;
+    field_0x16 = param_5;
+    mMaxHeadRot = maxHeadRot;
+    field_0x0E = param_7;
+    mMinHeadRot = minHeadRot;
+    field_0x22 = param_9;
+    field_0x24 = param_9;
+    field_0x1E = param_9;
+    field_0x20 = param_9;
 }
 
-/* 8021ACA8-8021ACBC       .text setInfDrct__14dNpc_PathRun_cFP5dPath */
-void dNpc_PathRun_c::setInfDrct(dPath*) {
-    /* Nonmatching */
+bool dNpc_PathRun_c::setInfDrct(dPath* pPath) {
+    mPath = pPath;
+    mCurrPointIndex = 0;
+
+    return true;
 }
 
-/* 8021ACBC-8021AD1C       .text setInf__14dNpc_PathRun_cFUcScUc */
-void dNpc_PathRun_c::setInf(unsigned char, signed char, unsigned char) {
-    /* Nonmatching */
+bool dNpc_PathRun_c::setInf(u8 pathIdx, s8 roomNo, u8 forwards) {
+    bool setPath = false;
+
+    mPath = 0;
+    mbGoingForwards = forwards;
+    if(pathIdx != 0xFF) {
+        mPath = dPath_GetRoomPath(pathIdx, roomNo);
+        mCurrPointIndex = 0;
+
+        setPath = true;
+    }
+
+    return setPath;
 }
 
-/* 8021AD1C-8021AD58       .text nextPath__14dNpc_PathRun_cFSc */
-void dNpc_PathRun_c::nextPath(signed char) {
-    /* Nonmatching */
+dPath* dNpc_PathRun_c::nextPath(s8 roomNo) {
+    dPath* pPath = 0;
+
+    if(mPath != 0) {
+        pPath = dPath_GetNextRoomPath(mPath, roomNo);
+    }
+
+    return pPath;
 }
 
-/* 8021AD58-8021ADD0       .text getPoint__14dNpc_PathRun_cFUc */
-void dNpc_PathRun_c::getPoint(unsigned char) {
-    /* Nonmatching */
+cXyz dNpc_PathRun_c::getPoint(u8 pointIdx) {
+    cXyz point(0.0f, 0.0f, 0.0f);
+
+    if(mPath != 0 && pointIdx < mPath->m_num) {
+        point = mPath->mpPnt[pointIdx].mPos;
+    }
+
+    return point;
 }
 
 /* 8021ADD0-8021AFA8       .text chkPointPass__14dNpc_PathRun_cF4cXyzb */
@@ -61,149 +113,478 @@ void dNpc_PathRun_c::chkPointPass(cXyz, bool) {
     /* Nonmatching */
 }
 
-/* 8021AFA8-8021AFEC       .text incIdx__14dNpc_PathRun_cFv */
-void dNpc_PathRun_c::incIdx() {
-    /* Nonmatching */
+bool dNpc_PathRun_c::incIdx() {
+    bool ret = true;
+
+    if(mPath != 0) {
+        mCurrPointIndex += 1;
+        if(mCurrPointIndex >= mPath->m_num) {
+            mCurrPointIndex = mPath->m_num - 1;
+            ret = false;
+        }
+    }
+
+    return ret;
 }
 
-/* 8021AFEC-8021B030       .text incIdxLoop__14dNpc_PathRun_cFv */
-void dNpc_PathRun_c::incIdxLoop() {
-    /* Nonmatching */
+bool dNpc_PathRun_c::incIdxLoop() {
+    bool ret = true;
+
+    if(mPath != 0) {
+        mCurrPointIndex += 1;
+        if(mCurrPointIndex >= mPath->m_num) {
+            mCurrPointIndex = 0;
+            ret = false;
+        }
+    }
+
+    return ret;
 }
 
-/* 8021B030-8021B0AC       .text incIdxAuto__14dNpc_PathRun_cFv */
-void dNpc_PathRun_c::incIdxAuto() {
-    /* Nonmatching */
+bool dNpc_PathRun_c::incIdxAuto() {
+    bool hitEnd = true;
+
+    if(mPath != 0) {
+        if(mPath->mLoops & 1) {
+            mCurrPointIndex += 1;
+            if(mCurrPointIndex >= mPath->m_num) {
+                mCurrPointIndex = 0;
+            }
+        }
+        else {
+            mCurrPointIndex += 1;
+            if(mCurrPointIndex >= mPath->m_num) {
+                mCurrPointIndex = mPath->m_num - 1;
+                hitEnd = false;
+            }
+        }
+    }
+
+    return hitEnd;
 }
 
-/* 8021B0AC-8021B0F0       .text decIdx__14dNpc_PathRun_cFv */
-void dNpc_PathRun_c::decIdx() {
-    /* Nonmatching */
+bool dNpc_PathRun_c::decIdx() {
+    bool ret = true;
+
+    if(mPath != 0) {
+        mCurrPointIndex -= 1;
+        if(mCurrPointIndex >= mPath->m_num) {
+            mCurrPointIndex = 0;
+            ret = false;
+        }
+    }
+
+    return ret;
 }
 
-/* 8021B0F0-8021B134       .text decIdxLoop__14dNpc_PathRun_cFv */
-void dNpc_PathRun_c::decIdxLoop() {
-    /* Nonmatching */
+bool dNpc_PathRun_c::decIdxLoop() {
+    bool ret = true;
+
+    if(mPath != 0) {
+        mCurrPointIndex -= 1;
+        if(mCurrPointIndex >= mPath->m_num) {
+            mCurrPointIndex = mPath->m_num - 1;
+            ret = false;
+        }
+    }
+
+    return ret;
 }
 
-/* 8021B134-8021B1B0       .text decIdxAuto__14dNpc_PathRun_cFv */
-void dNpc_PathRun_c::decIdxAuto() {
-    /* Nonmatching */
+bool dNpc_PathRun_c::decIdxAuto() {
+    bool hitEnd = true;
+
+    if(mPath != 0) {
+        if(mPath->mLoops & 1) {
+            mCurrPointIndex -= 1;
+            if(mCurrPointIndex >= mPath->m_num) {
+                mCurrPointIndex = mPath->m_num - 1;
+            }
+        }
+        else {
+            mCurrPointIndex -= 1;
+            if(mCurrPointIndex >= mPath->m_num) {
+                mCurrPointIndex = 0;
+                hitEnd = false;
+            }
+        }
+    }
+
+    return hitEnd;
 }
 
-/* 8021B1B0-8021B224       .text nextIdx__14dNpc_PathRun_cFv */
-void dNpc_PathRun_c::nextIdx() {
-    /* Nonmatching */
+bool dNpc_PathRun_c::nextIdx() {
+    bool hitEnd;
+
+    if(mbGoingForwards) {
+        hitEnd = incIdx();
+        if(hitEnd == false) {
+            decIdx();
+        }
+    }
+    else {
+        hitEnd = decIdx();
+        if(hitEnd == false) {
+            incIdx();
+        }
+    }
+
+    return hitEnd;
 }
 
-/* 8021B224-8021B298       .text nextIdxAuto__14dNpc_PathRun_cFv */
-void dNpc_PathRun_c::nextIdxAuto() {
-    /* Nonmatching */
+bool dNpc_PathRun_c::nextIdxAuto() {
+    bool hitEnd;
+
+    if(mbGoingForwards) {
+        hitEnd = incIdxAuto();
+        if(hitEnd == 0) {
+            decIdx();
+        }
+    }
+    else {
+        hitEnd = decIdxAuto();
+        if(hitEnd == 0) {
+            incIdx();
+        }
+    }
+
+    return hitEnd;
 }
 
-/* 8021B298-8021B328       .text absIdx__14dNpc_PathRun_cFUcUc */
-void dNpc_PathRun_c::absIdx(unsigned char, unsigned char) {
-    /* Nonmatching */
+s32 dNpc_PathRun_c::absIdx(u8 startIdx, u8 lastIdx) {
+    if(mPath == 0) {
+        return 0;
+    }
+    
+    s32 diff_1 = startIdx - lastIdx;
+    s32 diff_2 = lastIdx - startIdx;
+
+    if(diff_1 < 0) {
+        diff_1 += maxPoint(); 
+    }
+    if(diff_2 < 0) {
+        diff_2 += maxPoint(); 
+    }
+    if(diff_1 > diff_2) {
+        return diff_2;
+    }
+
+    return diff_1;
 }
 
-/* 8021B328-8021B348       .text maxPoint__14dNpc_PathRun_cFv */
-void dNpc_PathRun_c::maxPoint() {
-    /* Nonmatching */
+u8 dNpc_PathRun_c::maxPoint() {
+    u8 max = 0xFF;
+    if(mPath != 0) {
+        max = mPath->m_num;
+    }
+
+    return max;
 }
 
-/* 8021B348-8021B384       .text pointArg__14dNpc_PathRun_cFUc */
-void dNpc_PathRun_c::pointArg(unsigned char) {
-    /* Nonmatching */
+u8 dNpc_PathRun_c::pointArg(u8 idx) {
+    u8 arg = 0;
+    if(mPath != 0 && idx < (u8)mPath->m_num) {
+        arg = mPath->mpPnt[idx].mArg3;
+    }
+
+    return arg;
 }
 
-/* 8021B384-8021B514       .text setNearPathIndx__14dNpc_PathRun_cFP4cXyzf */
-void dNpc_PathRun_c::setNearPathIndx(cXyz*, float) {
-    /* Nonmatching */
+bool dNpc_PathRun_c::setNearPathIndx(cXyz* param_1, f32 param_2) {
+    bool set = false;
+    if(mPath != 0) {
+        f32 max_dist = 1000000000.0f;
+        u8 pointIdx = 0;
+        for(int i = 0; i < maxPoint(); i++) {
+            cXyz point = getPoint(i);
+    
+            cXyz diff = (*param_1 - point);
+            f32 xz_mag = diff.getMagXZ();
+            f32 y_mag = param_2 * (diff.y * diff.y);
+            f32 dist = sqrtf(y_mag + xz_mag);
+
+            if(max_dist > dist) {
+                max_dist = dist;
+                pointIdx = i;
+            }
+        }
+
+        mCurrPointIndex = pointIdx;
+        set = true;
+    }
+
+    return set;
 }
 
-/* 8021B514-8021B670       .text setNearPathIndxMk__14dNpc_PathRun_cFP4cXyz */
-void dNpc_PathRun_c::setNearPathIndxMk(cXyz*) {
-    /* Nonmatching */
+f32 dNpc_PathRun_c::setNearPathIndxMk(cXyz* param_1) {
+    f32 max_dist;
+    if(mPath != 0) {
+        max_dist = 1000000000.0f;
+        u8 pointIdx = 0;
+        for(int i = 0; i < maxPoint(); i++) {
+            cXyz point = getPoint(i);
+            cXyz diff = (*param_1 - point);
+            f32 temp = diff.getSquareMag();
+            f32 dist = sqrtf(temp);
+            if(max_dist > dist) {
+                max_dist = dist;
+                pointIdx = i;
+            }
+        }
+
+        mCurrPointIndex = pointIdx;
+    }
+
+    return max_dist;
 }
 
-/* 8021B670-8021B818       .text setNearPathIndxMk2__14dNpc_PathRun_cFP4cXyzUcUc */
-void dNpc_PathRun_c::setNearPathIndxMk2(cXyz*, unsigned char, unsigned char) {
-    /* Nonmatching */
+bool dNpc_PathRun_c::setNearPathIndxMk2(cXyz* param_1, u8 param_2, u8 param_3) {
+    u8 pointIdx;
+    bool set = false;
+    if(mPath != 0) {
+        f32 max_dist = 1000000000.0f;
+        pointIdx = param_2;
+        for(int i = 0; i < maxPoint(); i++) {
+            cXyz point = getPoint(i);
+            cXyz diff = (*param_1 - point);
+            f32 temp = diff.getSquareMag();
+            f32 dist = sqrtf(temp);
+            s32 idx = absIdx(param_2, i);
+            if(idx <= param_3 && param_2 != i && max_dist > dist) {
+                max_dist = dist;
+                pointIdx = i;
+                set = true;
+            }
+        }
+
+        mCurrPointIndex = pointIdx;
+    }
+
+    return set;
 }
 
-/* 8021B818-8021B95C       .text chkInside__14dNpc_PathRun_cFP4cXyz */
-void dNpc_PathRun_c::chkInside(cXyz*) {
-    /* Nonmatching */
+bool dNpc_PathRun_c::chkInside(cXyz* param_1) {
+    cXyz point, point2, point3;
+
+    setNearPathIndx(param_1, 0.0f);
+    point2 = getPoint(mCurrPointIndex);
+    decIdxLoop();
+    point = getPoint(mCurrPointIndex);
+    incIdxLoop();
+    incIdxLoop();
+    point3 = getPoint(mCurrPointIndex);
+
+    s16 angle1 = cLib_targetAngleY(&point2, &point);
+    s16 angle2 = cLib_targetAngleY(&point2, param_1);
+    s16 angle3 = cLib_targetAngleY(&point2, &point3);
+
+    s16 diff1 = angle2 - angle3;
+    s16 diff2 = angle1 - angle3;
+    if(diff1 > 0) {
+        if(diff2 < 0 || diff1 < diff2) {
+            return true;
+        }
+    }
+    else if(diff2 < 0 && diff1 < diff2) {
+        return true;
+    }
+
+    return false;
 }
 
-/* 8021B95C-8021B998       .text setActorInfo__15dNpc_EventCut_cFPcP10fopAc_ac_c */
-void dNpc_EventCut_c::setActorInfo(char*, fopAc_ac_c*) {
-    /* Nonmatching */
+void dNpc_EventCut_c::setActorInfo(char* staffName, fopAc_ac_c* pActor) {
+    mpEvtStaffName = staffName;
+    mpActor = pActor;
+    mTargetActorPos.set(0.0f, 0.0f, 0.0f);
+    mOffsetPos.set(0.0f, 0.0f, 0.0f);
+    mPos.set(0.0f, 0.0f, 0.0f);
+    mCurActIdx = -1;
 }
 
-/* 8021B998-8021B9D8       .text setActorInfo2__15dNpc_EventCut_cFPcP12fopNpc_npc_c */
-void dNpc_EventCut_c::setActorInfo2(char*, fopNpc_npc_c*) {
-    /* Nonmatching */
+void dNpc_EventCut_c::setActorInfo2(char* staffName, fopNpc_npc_c* pActor) {
+    mpEvtStaffName = staffName;
+    mpActor = pActor;
+    mpTalkActor = pActor;
+    mTargetActorPos.set(0.0f, 0.0f, 0.0f);
+    mOffsetPos.set(0.0f, 0.0f, 0.0f);
+    mPos.set(0.0f, 0.0f, 0.0f);
+    mCurActIdx = -1;
 }
 
-/* 8021B9D8-8021BABC       .text dNpc_setAnmIDRes__FP14mDoExt_McaMorfiffiiPCc */
-void dNpc_setAnmIDRes(mDoExt_McaMorf*, int, float, float, int, int, const char*) {
-    /* Nonmatching */
+bool dNpc_setAnmIDRes(mDoExt_McaMorf* pMorf, int loopMode, float morf, float speed, int animResId, int soundResId, const char* arcName) {
+    void* pSoundAnimRes = 0;
+    bool ret = false;
+
+    if(pMorf != 0) {
+        if(0 <= soundResId) {
+            pSoundAnimRes = dComIfG_getObjectIDRes(arcName, soundResId);
+        }
+
+        void* pAnimRes = dComIfG_getObjectIDRes(arcName, animResId);
+        pMorf->setAnm((J3DAnmTransform*)pAnimRes, loopMode, morf, speed, 0.0f, -1.0f, pSoundAnimRes);
+        
+        ret = true;
+    }
+
+    return ret;
 }
 
-/* 8021BABC-8021BBA8       .text dNpc_setAnmFNDirect__FP14mDoExt_McaMorfiffPcPcPCc */
-void dNpc_setAnmFNDirect(mDoExt_McaMorf*, int, float, float, char*, char*, const char*) {
-    /* Nonmatching */
+bool dNpc_setAnmFNDirect(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, char* animFilename, char* soundFilename, const char* arcName) {
+    bool ret = false;
+
+    if(pMorf != 0 && animFilename != 0 && arcName != 0) {
+        void* pAnimRes = dComIfG_getObjectRes(arcName, animFilename);
+
+        void* pSoundAnimRes = 0;
+        if(soundFilename != 0) {
+            pSoundAnimRes = dComIfG_getObjectRes(arcName, soundFilename);
+        }
+
+        pMorf->setAnm((J3DAnmTransform*)pAnimRes, loopMode, morf, speed, 0.0f, -1.0f, pSoundAnimRes);
+        
+        ret = true;
+    }
+
+    return ret;
 }
 
-/* 8021BBA8-8021BC8C       .text dNpc_setAnm__FP14mDoExt_McaMorfiffiiPCc */
-void dNpc_setAnm(mDoExt_McaMorf*, int, float, float, int, int, const char*) {
-    /* Nonmatching */
+bool dNpc_setAnm(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileidx, int soundFileIdx, const char* arcName) {
+    void* pSoundAnimRes = 0;
+    bool ret = false;
+
+    if(pMorf != 0) {
+        if(0 <= soundFileIdx) {
+            pSoundAnimRes = dComIfG_getObjectRes(arcName, soundFileIdx);
+        }
+
+        void* pAnimRes = dComIfG_getObjectRes(arcName, animFileidx);
+        pMorf->setAnm((J3DAnmTransform*)pAnimRes, loopMode, morf, speed, 0.0f, -1.0f, pSoundAnimRes);
+        
+        ret = true;
+    }
+
+    return ret;
 }
 
-/* 8021BC8C-8021BD2C       .text dNpc_setShadowModel__FP8J3DModelP12J3DModelDataP8J3DModel */
-void dNpc_setShadowModel(J3DModel*, J3DModelData*, J3DModel*) {
-    /* Nonmatching */
+void dNpc_setShadowModel(J3DModel* param_1, J3DModelData* param_2, J3DModel* param_3) {
+    for(int i = 0; i < param_2->getWEvlpMtxNum(); i++) {
+        mDoMtx_copy(param_3->mpWeightEnvMtx[i], param_1->mpWeightEnvMtx[i]);
+    }
+    for(int i = 0; i < param_2->getJointNum(); i++) {
+        mDoMtx_copy(param_3->mpNodeMtx[i], param_1->mpNodeMtx[i]);
+    }
 }
 
-/* 8021BD2C-8021BDE8       .text dNpc_playerEyePos__Ff */
-void dNpc_playerEyePos(float) {
-    /* Nonmatching */
+cXyz dNpc_playerEyePos(f32 param_1) {
+    daPy_py_c* pPlayer = daPy_getPlayerActorClass();
+    cXyz pos = pPlayer->getHeadTopPos();
+    cXyz out;
+
+    MtxTrans(pos.x, pos.y, pos.z, false);
+    pos.set(0.0f, param_1, 0.0f);
+    MtxPosition(&pos, &out);
+    
+    out.x = pPlayer->current.pos.x;
+    out.z = pPlayer->current.pos.z;
+
+    return out;
 }
 
-/* 8021BDE8-8021BEC4       .text dNpc_calc_DisXZ_AngY__F4cXyz4cXyzPfPs */
-void dNpc_calc_DisXZ_AngY(cXyz, cXyz, float*, short*) {
-    /* Nonmatching */
+void dNpc_calc_DisXZ_AngY(cXyz param_1, cXyz param_2, float* param_3, short* param_4) {
+    cXyz diff;
+    diff.x = param_2.getXDiff(&param_1);
+    diff.z = param_2.getZDiff(&param_1);
+
+    if(param_3 != 0) {
+        f32 dist = sqrtf(diff.x * diff.x + diff.z * diff.z);
+        *param_3 = dist;
+    }
+
+    if(param_4 != 0) {
+        *param_4 = cM_atan2s(diff.x, diff.z);
+    }
 }
 
-/* 8021BEC4-8021BF30       .text dNpc_chkArasoi__Fv */
-void dNpc_chkArasoi() {
-    /* Nonmatching */
+bool dNpc_chkArasoi() {
+    return dComIfGs_isEventBit(0x1220) && !dComIfGs_isEventBit(0x1808);
 }
 
-/* 8021BF30-8021BF98       .text dNpc_chkLetterPassed__Fv */
-void dNpc_chkLetterPassed() {
-    /* Nonmatching */
+BOOL dNpc_chkLetterPassed() {
+    BOOL ret = false;
+    if(dComIfGs_isGetItemReserve(0xC)) {
+        ret = dComIfGs_checkReserveItem(0x98) ? 0 : 1;
+    }
+
+    return ret;
 }
 
-/* 8021BF98-8021C010       .text setCollision__12fopNpc_npc_cFff */
-void fopNpc_npc_c::setCollision(float, float) {
-    /* Nonmatching */
+void fopNpc_npc_c::setCollision(f32 radius, f32 height) {
+    mCyl.SetC(current.pos);
+    mCyl.SetR(radius);
+    mCyl.SetH(height);
+    dComIfG_Ccsp()->Set(&mCyl);
 }
 
-/* 8021C010-8021C120       .text talk__12fopNpc_npc_cFi */
-void fopNpc_npc_c::talk(int) {
-    /* Nonmatching */
+u16 fopNpc_npc_c::talk(int param_1) {
+    u16 mode = 0xFF;
+
+    if(mCurrMsgBsPcId == 0xFFFFFFFF) {
+        if(param_1 == 1) {
+            mCurrMsgID = getMsg();
+        }
+
+        mCurrMsgBsPcId = fopMsgM_messageSet(mCurrMsgID, this);
+        mpCurrMsg = 0;
+    }
+    else {
+        if(mpCurrMsg) {
+            mode = mpCurrMsg->mMode;
+            if(mode == dNpcMsgStts_MSG_DISPLAYED_e) {
+                mpCurrMsg->mMode = next_msgStatus(&mCurrMsgID);
+                if(mpCurrMsg->mMode == dNpcMsgStts_MSG_CONTINUES_e) {
+                    fopMsgM_messageSet(mCurrMsgID);
+                }
+            }
+            else if (mode == dNpcMsgStts_BOX_CLOSED_e) {
+                mpCurrMsg->mMode = dNpcMsgStts_MSG_DESTROYED_e;
+                mCurrMsgBsPcId = -1;
+            }
+
+            anmAtr(mode);
+        }
+        else {
+            mpCurrMsg = fopMsgM_SearchByID(mCurrMsgBsPcId);
+        }
+    }
+
+    return mode;
 }
 
-/* 8021C120-8021C238       .text dNpc_setAnm_2__FP14mDoExt_McaMorfiffiiPCc */
-void dNpc_setAnm_2(mDoExt_McaMorf*, int, float, float, int, int, const char*) {
-    /* Nonmatching */
+bool dNpc_setAnm_2(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileidx, int soundFileIdx, const char* arcName) {
+    if(0 <= soundFileIdx) {
+        void* pSoundAnimRes = dComIfG_getObjectRes(arcName, soundFileIdx);
+        void* pAnimRes = dComIfG_getObjectRes(arcName, animFileidx);
+        
+        pMorf->setAnm((J3DAnmTransform*)pAnimRes, loopMode, morf, speed, 0.0f, -1.0f, pSoundAnimRes);
+    }
+    else {
+        void* pAnimRes = dComIfG_getObjectRes(arcName, animFileidx);
+
+        pMorf->setAnm((J3DAnmTransform*)pAnimRes, loopMode, morf, speed, 0.0f, -1.0f, 0);
+    }
+
+
+    return true;
 }
 
-/* 8021C238-8021C2E8       .text swing_vertical_init__14dNpc_HeadAnm_cFsssi */
-void dNpc_HeadAnm_c::swing_vertical_init(short, short, short, int) {
-    /* Nonmatching */
+void dNpc_HeadAnm_c::swing_vertical_init(s16 param_1, s16 param_2, s16 param_3, int param_4) {
+    if(param_4 == 0 || mFunc != &swing_horizone) { //these ptmfs should be going in rodata instead of data
+        field_0x1C = 0;
+        field_0x20 = param_1;
+        field_0x1E = param_2;
+        field_0x14 = param_3;
+        mFunc = &swing_vertical; //these ptmfs should be going in rodata instead of data
+    }
 }
 
 /* 8021C2E8-8021C3C8       .text swing_vertical__14dNpc_HeadAnm_cFv */
@@ -211,9 +592,14 @@ void dNpc_HeadAnm_c::swing_vertical() {
     /* Nonmatching */
 }
 
-/* 8021C3C8-8021C478       .text swing_horizone_init__14dNpc_HeadAnm_cFsssi */
-void dNpc_HeadAnm_c::swing_horizone_init(short, short, short, int) {
-    /* Nonmatching */
+void dNpc_HeadAnm_c::swing_horizone_init(s16 param_1, s16 param_2, s16 param_3, int param_4) {
+    if(param_4 == 0 || mFunc != &swing_vertical) { //these ptmfs should be going in rodata instead of data
+        field_0x1C = 0;
+        field_0x20 = param_1;
+        field_0x1E = param_2;
+        field_0x18 = param_3;
+        mFunc = &swing_horizone; //these ptmfs should be going in rodata instead of data
+    }
 }
 
 /* 8021C478-8021C55C       .text swing_horizone__14dNpc_HeadAnm_cFv */
@@ -221,29 +607,68 @@ void dNpc_HeadAnm_c::swing_horizone() {
     /* Nonmatching */
 }
 
-/* 8021C55C-8021C5D8       .text move__14dNpc_HeadAnm_cFv */
 void dNpc_HeadAnm_c::move() {
-    /* Nonmatching */
+    if(mFunc) {
+        (this->*mFunc)();
+    }
+    else {
+        cLib_addCalcAngleS(&field_0x00, 0, 4, 0x1000, 0x100);
+        cLib_addCalcAngleS(&field_0x02, 0, 4, 0x1000, 0x100);
+    }
 }
 
-/* 8021C5D8-8021C620       .text chkLim__14dNpc_JntCtrl_cFsii */
-void dNpc_JntCtrl_c::chkLim(short, int, int) {
-    /* Nonmatching */
+s32 dNpc_JntCtrl_c::chkLim(s16 param_1, int param_2, int param_3) {
+    //if(maxRotations[param_2][param_3] > param_1) {
+    //    param_1 = maxRotations[param_2][param_3];
+    //}
+    //if(param_1 < minRotations[param_2][param_3]) {
+    //    param_1 = minRotations[param_2][param_3];
+    //}
+
+    //return param_1;
 }
 
-/* 8021C620-8021C6D8       .text turn_fromBackbone2Head__14dNpc_JntCtrl_cFsPsPsb */
-void dNpc_JntCtrl_c::turn_fromBackbone2Head(short, short*, short*, bool) {
-    /* Nonmatching */
+void dNpc_JntCtrl_c::turn_fromBackbone2Head(s16 param_1, s16* param_2, s16* param_3, bool param_4) {
+    *param_3 = 0;
+    if(field_0x0C == 0) {
+        *param_3 = chkLim(param_1, 1, 1);
+        if(field_0x32 && *param_3 < 0) {
+            *param_3 = 0;
+        }
+    }
+    
+    *param_2 = 0;
+    if(field_0x0B == 0) {
+        *param_2 = param_1 - *param_3;
+        *param_2 = chkLim(*param_2, 0, 1);
+    }
 }
 
-/* 8021C6D8-8021C780       .text turn_fromHead2Backbone__14dNpc_JntCtrl_cFsPsPs */
-void dNpc_JntCtrl_c::turn_fromHead2Backbone(short, short*, short*) {
-    /* Nonmatching */
+void dNpc_JntCtrl_c::turn_fromHead2Backbone(s16 param_1, s16* param_2, s16* param_3) {
+    *param_2 = 0;
+    if(field_0x0B == 0) {
+        *param_2 = param_1 - field_0x32;
+        *param_2 = chkLim(*param_2, 0, 1);
+    }
+
+    *param_3 = 0;
+    if(field_0x0C == 0) {
+        *param_3 = param_1 - *param_2;
+        *param_3 = chkLim(*param_3, 1, 1);
+    }
 }
 
-/* 8021C780-8021C7D0       .text follow_current__14dNpc_JntCtrl_cFPss */
-void dNpc_JntCtrl_c::follow_current(short*, short) {
-    /* Nonmatching */
+s16 dNpc_JntCtrl_c::follow_current(s16* orig, s16 diff) {
+    s16 angle = *orig;
+    *orig -= diff;
+
+    s16 ret = 0;
+    if((angle > 0 && *orig < 0) || (angle < 0 && *orig > 0)) {
+        ret = -*orig;
+        *orig = 0;
+    }
+    
+    return ret;
 }
 
 /* 8021C7D0-8021CAB8       .text lookAtTarget_2__14dNpc_JntCtrl_cFPsP4cXyz4cXyzssb */
@@ -251,83 +676,645 @@ void dNpc_JntCtrl_c::lookAtTarget_2(short*, cXyz*, cXyz, short, short, bool) {
     /* Nonmatching */
 }
 
-/* 8021CAB8-8021CC4C       .text dNpc_chkAttn__FP10fopAc_ac_c4cXyzfffb */
-void dNpc_chkAttn(fopAc_ac_c*, cXyz, float, float, float, bool) {
-    /* Nonmatching */
+bool dNpc_chkAttn(fopAc_ac_c* i_this, cXyz destPos, float param_3, float param_4, float param_5, bool param_6) {
+    s16 angle = cLib_targetAngleY(&i_this->current.pos, &destPos);
+    f32 dist = sqrtf((i_this->current.pos - destPos).getMagXZ()); //this is gross but I haven't found a better way (temp destroys stack)
+    s16 angle_diff = angle - i_this->current.angle.y;
+
+    if(param_5 > 359.0f) {
+        param_5 = 359.0f;
+    }
+    if (param_5 < 0.0f) {
+        param_5 = 0.0f;
+    }
+    if(param_6) {
+        param_3 += param_4;
+    }
+
+    bool ret = false;
+    if(dist <= param_3 && abs(angle_diff) <= cM_deg2s(param_5)) {
+        ret = true;
+    }
+
+    return ret;
 }
 
-/* 8021CC4C-8021CED0       .text cutProc__15dNpc_EventCut_cFv */
-void dNpc_EventCut_c::cutProc() {
-    /* Nonmatching */
+bool dNpc_EventCut_c::cutProc() {
+    static char* action_table[] = {
+        "WAIT",
+        "TURN_TO_ACTOR",
+        "MOVE_TO_ACTOR",
+        "TURN_TO_POS",
+        "MOVE_TO_POS",
+        "TALK_MSG",
+        "CONTINUE_TALK"
+    };
+
+    if(mpEvtStaffName == 0 || mpActor == 0) {
+        return false;
+    }
+    else {
+        mEvtStaffId = dComIfGp_evmng_getMyStaffId(mpEvtStaffName, 0, 0);
+        if(mEvtStaffId == -1) {
+            return false;
+        }
+        else {
+            typedef void(dNpc_EventCut_c::*cut_func_t)(void);
+            struct cut_entry_t {
+                cut_func_t start;
+                cut_func_t proc;
+            };
+
+            static cut_entry_t cut_tbl[] = {
+                {
+                    &dNpc_EventCut_c::cutWaitStart,
+                    &dNpc_EventCut_c::cutWaitProc,
+                },
+                {
+                    &dNpc_EventCut_c::cutTurnToActorStart,
+                    &dNpc_EventCut_c::cutTurnToActorProc,
+                },
+                {
+                    &dNpc_EventCut_c::cutMoveToActorStart,
+                    &dNpc_EventCut_c::cutMoveToActorProc,
+                },
+                {
+                    &dNpc_EventCut_c::cutTurnToPosStart,
+                    &dNpc_EventCut_c::cutTurnToPosProc,
+                },
+                {
+                    &dNpc_EventCut_c::cutMoveToPosStart,
+                    &dNpc_EventCut_c::cutMoveToPosProc,
+                },
+                {
+                    &dNpc_EventCut_c::cutTalkMsgStart,
+                    &dNpc_EventCut_c::cutTalkMsgProc,
+                },
+                {
+                    &dNpc_EventCut_c::cutContinueTalkStart,
+                    &dNpc_EventCut_c::cutTalkMsgProc,
+                },
+            };
+
+            mCurActIdx = dComIfGp_evmng_getMyActIdx(mEvtStaffId, action_table, 7, 1, 0);
+            if(mCurActIdx == -1) {
+                return false;
+            }
+            else {
+                if(dComIfGp_evmng_getIsAddvance(mEvtStaffId)) {
+                    mbAttention = 0;
+                    (this->*cut_tbl[mCurActIdx].start)();
+                }
+                
+                (this->*cut_tbl[mCurActIdx].proc)();
+                return 1;
+            }
+        }
+    }
 }
 
-/* 8021CED0-8021CF3C       .text cutWaitStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutWaitStart() {
-    /* Nonmatching */
+    u32* timer = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Timer");
+    if(timer) {
+        mTimer = (s16)*timer;
+    }
+    else {
+        mTimer = 0;
+    }
 }
 
-/* 8021CF3C-8021CF88       .text cutWaitProc__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutWaitProc() {
-    /* Nonmatching */
+    if(cLib_calcTimer(&mTimer) == 0) {
+        dComIfGp_evmng_cutEnd(mEvtStaffId);
+    }
 }
 
-/* 8021CF88-8021D1C8       .text cutTurnToActorStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTurnToActorStart() {
-    /* Nonmatching */
+    mpActorName = dComIfGp_evmng_getMyStringP(mEvtStaffId, "ActorName");
+
+    u32* set = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "SetId");
+    if(set) {
+        mSetId = *set;
+    }
+    else {
+        mSetId = 0;
+    }
+
+    Vec* pos = dComIfGp_evmng_getMyVec3dP(mEvtStaffId, "OffsetPos");
+    if(pos) {
+        mOffsetPos = *pos;
+    }
+    else {
+        mOffsetPos.set(0.0f, 0.0f, 0.0f);
+    }
+
+    u32* turnType = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "TurnType");
+    if(turnType) {
+        mTurnType = *turnType;
+    }
+    else {
+        mTurnType = 1;
+    }
+
+    u32* timer = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Timer");
+    if(timer) {
+        mTimer = (s16)*timer;
+    }
+    else {
+        mTimer = 1;
+    }
+
+    u32* speed = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "TurnSpeed");
+    if(speed) {
+        mTurnSpeed = *speed;
+    }
+    else {
+        mTurnSpeed = 0;
+    }
+
+    u32* angle = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "AddAngle");
+    if(angle == 0) {
+        mAddAngle = 0;
+    }
+    else {
+        mAddAngle = *angle;
+    }
+
+    f32* dist = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "DelDistance");
+    if(dist == 0) {
+        pDelDistance = 0.0f;
+    }
+    else {
+        pDelDistance = *dist;
+    }
+
+    u32* noTurn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "NoTurn");
+    if(noTurn) {
+        mbNoTurn = 1;
+    }
+    else {
+        mbNoTurn = 0;
+    }
+
+    field_0x44 = 0;
 }
 
-/* 8021D1C8-8021D51C       .text cutTurnToActorProc__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTurnToActorProc() {
-    /* Nonmatching */
+    if(mSetId != 0) {
+        mTargetActorPos.set(0.0f, 0.0f, 0.0f);
+        fopAcM_Search((fopAcIt_JudgeFunc)&findActorCallBack, this);
+    }
+    else {
+        if(mpActorName == 0 || dEvmng_strcmp(mpActorName, "Player") == 0) {
+            mpTargetActor = dComIfGp_getPlayer(0);
+        }
+        else {
+            mTargetActorPos.set(0.0f, 0.0f, 0.0f);
+            fopAcM_Search((fopAcIt_JudgeFunc)&findActorCallBack, this);
+        }
+    }
+
+    if(field_0x68 != 0) {
+        switch(mTurnType) {
+            case 2:
+                field_0x68[0xA] = 1;
+            case 1:
+                field_0x68[0xC] = 0;
+                break;
+            case 0:
+                field_0x68[0xC] = 1;
+                break;
+            default:
+                field_0x68[0xC] = 0;
+                break;
+        }
+    }
+
+    if(mpTargetActor == 0) {
+        dComIfGp_evmng_cutEnd(mEvtStaffId);
+    }
+    if(mpActorName == 0 || dEvmng_strcmp(mpActorName, "Player") == 0) {
+        mPos = dNpc_playerEyePos(0.0f) + mOffsetPos;
+    }
+    else {
+        s16 addAngle = mAddAngle;
+        if(addAngle && pDelDistance) {
+            u16 angle = mpTargetActor->shape_angle.y + addAngle;
+            mPos = mpTargetActor->current.pos;
+            mPos.x -= pDelDistance * cM_ssin(angle);
+            mPos.z -= pDelDistance * cM_scos(angle);
+        }
+        else {
+            mPos = mpTargetActor->current.pos + mOffsetPos;
+        }
+    }
+
+    mbAttention = 1;
+
+    s16 tAngle = cLib_targetAngleY(&mpActor->current.pos, &mPos);
+    u32 temp = abs(tAngle - fopAcM_GetAngle_p(mpActor).y);
+    if(fabsf2(field_0x44) == temp && temp < 5376.0f) {
+        cLib_calcTimer(&mTimer);
+    }
+
+    if(mTimer == 0) {
+        mTurnSpeed = 0;
+        dComIfGp_evmng_cutEnd(mEvtStaffId);
+    }
+    
+    field_0x44 = fabsf2(tAngle - mpActor->current.angle.y);
 }
 
-/* 8021D51C-8021D730       .text cutMoveToActorStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutMoveToActorStart() {
-    /* Nonmatching */
+    mpActorName = dComIfGp_evmng_getMyStringP(mEvtStaffId, "ActorName");
+    u32* set = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "SetId");
+    f32* speed = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "Speed");
+    f32* dist = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "DelDistance");
+    Vec* offs = dComIfGp_evmng_getMyVec3dP(mEvtStaffId, "OffsetPos");
+    u32* attn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Attention");
+    u32* noTurn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "NoTurn");
+    u32* angle = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "ShapeAngle");
+
+    if(noTurn == 0) {
+        mbNoTurn = 0;
+    }
+    else {
+        mbNoTurn = 1;
+    }
+
+    if(attn == 0) {
+        mbAttention = 0;
+    }
+    else {
+        mbAttention = 1;
+    }
+
+    if(offs == 0) {
+        mOffsetPos.set(0.0f, 0.0f, 0.0f);
+    }
+    else {
+        mOffsetPos = *offs;
+    }
+
+    if(set == 0) {
+        mSetId = 0;
+    }
+    else {
+        mSetId = *set;
+    }
+
+    if(speed == 0) {
+        mSpeed = 2.0f;
+    }
+    else {
+        mSpeed = *speed;
+    }
+
+    if(dist == 0) {
+        pDelDistance = 0.0f;
+    }
+    else {
+        pDelDistance = *dist;
+    }
+
+    if(angle == 0) {
+        mAddAngle = 0;
+    }
+    else {
+        mAddAngle = *angle;
+    }
 }
 
-/* 8021D730-8021D9DC       .text cutMoveToActorProc__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutMoveToActorProc() {
-    /* Nonmatching */
+    if(mSetId != 0) {
+        mTargetActorPos.set(0.0f, 0.0f, 0.0f);
+        fopAcM_Search((fopAcIt_JudgeFunc)&findActorCallBack, this);
+    }
+    else {
+        if(mpActorName == 0 || dEvmng_strcmp(mpActorName, "Player") == 0) {
+            mpTargetActor = dComIfGp_getPlayer(0);
+        }
+        else {
+            mTargetActorPos.set(0.0f, 0.0f, 0.0f);
+            fopAcM_Search((fopAcIt_JudgeFunc)&findActorCallBack, this);
+        }
+    }
+
+    if(mpTargetActor == 0) {
+        dComIfGp_evmng_cutEnd(mEvtStaffId);
+    }
+
+    cXyz temp = mpTargetActor->current.pos + mOffsetPos;
+    s16 angle = fopAcM_searchActorAngleY(mpActor, mpTargetActor);
+    if(mAddAngle != 0) {
+        angle = mpTargetActor->shape_angle.y + mAddAngle;
+    }
+
+    temp.x -= pDelDistance * cM_ssin(angle);
+    temp.z -= pDelDistance * cM_scos(angle);
+
+    if(mSpeed == 0.0f) {
+        mpActor->current.pos = temp;
+        dComIfGp_evmng_cutEnd(mEvtStaffId);
+    }
+
+    cXyz diff = temp - mPos;
+    f32 tempf = diff.getSquareMag();
+    f32 dist = sqrtf(tempf);
+
+    cLib_addCalc2(&mpActor->current.pos.x, temp.x, 0.1f, mSpeed);
+    cLib_addCalc2(&mpActor->current.pos.z, temp.z, 0.1f, mSpeed);
+    if(dist < 5.0f) {
+        mSpeed = 0.0f;
+        dComIfGp_evmng_cutEnd(mEvtStaffId);
+    }
 }
 
-/* 8021D9DC-8021DC7C       .text findActorCallBack__15dNpc_EventCut_cFP10fopAc_ac_cPv */
-void dNpc_EventCut_c::findActorCallBack(fopAc_ac_c*, void*) {
-    /* Nonmatching */
+fopAc_ac_c* dNpc_EventCut_c::findActorCallBack(fopAc_ac_c* pActor, void* pData) {
+    dNpc_EventCut_c* cut = static_cast<dNpc_EventCut_c*>(pData);
+
+    if(cut == 0) {
+        return 0;
+    }
+    
+    if(cut->mSetId != 0 && pActor->mSetId == cut->mSetId) {
+        cut->mTargetActorPos = pActor->current.pos;
+        cut->mpTargetActor = pActor;
+
+        return pActor;
+    }
+    else {
+        if(cut->mpActorName == 0) {
+            return 0;
+        }
+        else {
+            dStage_objectNameInf* obj = dStage_searchName(cut->mpActorName);
+            if(obj == 0) {
+                return 0;
+            }
+            else {
+                if(obj->mProcName == fopAcM_GetProfName(pActor) && obj->mSubtype == pActor->mSubtype) {
+                    f32 mag = sqrtf(cut->mTargetActorPos.getSquareMag());
+
+                    if(mag == 0.0f) {
+                        cut->mTargetActorPos = pActor->current.pos;
+                        cut->mpTargetActor = pActor;
+                    }
+                    else {
+                        f32 mag1 = sqrtf((cut->mTargetActorPos - cut->mpActor->current.pos).getSquareMag());
+                        f32 mag2 = sqrtf((pActor->current.pos - cut->mpActor->current.pos).getSquareMag());
+                        if(mag2 < mag1) {
+                            cut->mTargetActorPos = pActor->current.pos;
+                            cut->mpTargetActor = pActor;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return 0;
 }
 
-/* 8021DC7C-8021DE2C       .text cutTurnToPosStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTurnToPosStart() {
-    /* Nonmatching */
+    Vec* pos = dComIfGp_evmng_getMyVec3dP(mEvtStaffId, "Pos");
+    if(pos) {
+        mPos = *pos;
+    }
+    else {
+        mPos.set(0.0f, 0.0f, 0.0f);
+    }
+
+    u32* turnType = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "TurnType");
+    if(turnType) {
+        mTurnType = *turnType;
+    }
+    else {
+        mTurnType = 1;
+    }
+
+    u32* timer = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Timer");
+    if(timer) {
+        mTimer = (s16)*timer;
+    }
+    else {
+        mTimer = 1;
+    }
+
+    u32* speed = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "TurnSpeed");
+    if(speed) {
+        mTurnSpeed = *speed;
+    }
+    else {
+        mTurnSpeed = 0;
+    }
+    
+    u32* noTurn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "NoTurn");
+    if(noTurn) {
+        mbNoTurn = 1;
+    }
+    else {
+        mbNoTurn = 0;
+    }
+
+    u32* angle = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "AddAngle");
+    if(angle == 0) {
+        mAddAngle = 0;
+    }
+    else {
+        mAddAngle = *angle;
+    }
+
+    field_0x44 = 0;
 }
 
-/* 8021DE2C-8021DFB0       .text cutTurnToPosProc__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTurnToPosProc() {
-    /* Nonmatching */
+    s16 tAngle = cLib_targetAngleY(&mpActor->current.pos, &mPos);
+    mbAttention = 1;
+
+    if(field_0x68 != 0) {
+        switch(mTurnType) {
+            case 2:
+                field_0x68[0xA] = 1;
+            case 1:
+                field_0x68[0xC] = 0;
+                break;
+            case 0:
+                field_0x68[0xC] = 1;
+                break;
+            default:
+                field_0x68[0xC] = 0;
+                break;
+        }
+    }
+
+    //not sure what this section is doing
+    u32 temp = abs(tAngle - fopAcM_GetAngle_p(mpActor).y);
+    if(fabsf2(field_0x44) == temp && temp < 5376.0f) {
+        cLib_calcTimer(&mTimer);
+    }
+
+    if(mTimer == 0) {
+        mTurnSpeed = 0;
+        dComIfGp_evmng_cutEnd(mEvtStaffId);
+    }
+    
+    field_0x44 = fabsf2(tAngle - mpActor->current.angle.y);
 }
 
-/* 8021DFB0-8021E168       .text cutMoveToPosStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutMoveToPosStart() {
-    /* Nonmatching */
+    Vec* pos = dComIfGp_evmng_getMyVec3dP(mEvtStaffId, "Pos");
+    f32* speed = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "Speed");
+    f32* dist = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "DelDistance");
+    u32* attn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Attention");
+    u32* noTurn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "NoTurn");
+    u32* angle = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "AddAngle");
+
+    if(noTurn == 0) {
+        mbNoTurn = 0;
+    }
+    else {
+        mbNoTurn = 1;
+    }
+
+    if(pos == 0) {
+        mPos.set(0.0f, 0.0f, 0.0f);
+    }
+    else {
+        mPos = *pos;
+    }
+    
+    if(attn == 0) {
+        mbAttention = 0;
+    }
+    else {
+        mbAttention = 1;
+    }
+
+    if(speed == 0) {
+        mSpeed = 2.0f;
+    }
+    else {
+        mSpeed = *speed;
+    }
+
+    if(dist == 0) {
+        pDelDistance = 0.0f;
+    }
+    else {
+        pDelDistance = *dist;
+    }
+
+    if(angle == 0) {
+        mAddAngle = 0;
+    }
+    else {
+        mAddAngle = *angle;
+    }
 }
 
-/* 8021E168-8021E338       .text cutMoveToPosProc__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutMoveToPosProc() {
-    /* Nonmatching */
+    s16 angle = cLib_targetAngleY(&mpActor->current.pos, &mPos);
+
+    cXyz temp(pDelDistance * cM_ssin(angle), mPos.y, pDelDistance * cM_scos(angle));
+
+    if(mSpeed == 0.0f) {
+        mpActor->current.pos = temp;
+        dComIfGp_evmng_cutEnd(mEvtStaffId);
+    }
+
+    f32 dist = sqrtf((temp - mpActor->current.pos).getMagXZ());
+
+    cLib_addCalc2(&mpActor->current.pos.x, temp.x, 0.1f, mSpeed);
+    cLib_addCalc2(&mpActor->current.pos.z, temp.z, 0.1f, mSpeed);
+    if(dist < 5.0f) {
+        mSpeed = 0.0f;
+        dComIfGp_evmng_cutEnd(mEvtStaffId);
+    }
 }
 
-/* 8021E338-8021E444       .text cutTalkMsgStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTalkMsgStart() {
-    /* Nonmatching */
+    if(mpTalkActor != 0) {
+        u32* attn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Attention");
+        if(attn == 0) {
+            mbAttention = 0;
+        }
+        else {
+            mbAttention = 1;
+        }
+
+        u32* firstMsg = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "msg_num");
+        u32* endMsg = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "end_msg");
+        if(firstMsg == 0) {
+            mpTalkActor->mCurrMsgID = 0;
+        }
+        else {
+            mpTalkActor->mCurrMsgID = *firstMsg;
+        }
+        if(endMsg) {
+            mpTalkActor->mEndMsgID = *endMsg;
+        }
+        else {
+            mpTalkActor->mEndMsgID = -1;
+        }
+
+        field_0x52 = 1;
+    }
 }
 
-/* 8021E444-8021E4C0       .text cutContinueTalkStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutContinueTalkStart() {
-    /* Nonmatching */
+    if(mpTalkActor != 0) {
+        u32* endMsg = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "end_num");
+        if(endMsg) {
+            mpTalkActor->mEndMsgID = *endMsg;
+        }
+        else {
+            mpTalkActor->mEndMsgID = -1;
+        }
+    }
 }
 
-/* 8021E4C0-8021E58C       .text cutTalkMsgProc__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTalkMsgProc() {
-    /* Nonmatching */
+    if(mpTalkActor == 0 || field_0x52 == 0) {
+        dComIfGp_evmng_cutEnd(mEvtStaffId);
+    }
+    else {
+        u16 status = mpTalkActor->talk(0);
+        if(status == dNpcMsgStts_BOX_CLOSED_e) {
+            field_0x52 = 0;
+            dComIfGp_evmng_cutEnd(mEvtStaffId);
+        }
+        else if((status == 2 || status == 6) && mpTalkActor->mEndMsgID == mpTalkActor->mCurrMsgID) {
+            mpTalkActor->mEndMsgID = -1;
+            dComIfGp_evmng_cutEnd(mEvtStaffId);
+        }
+    }
 }
 
+dCcD_SrcCyl dNpc_cyl_src = {
+    0,
+    0,
+    0,
+    0,
+    0xFFFFFFBF, // Tg damage types
+    3,
+    0x75,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    4,
+    0,
+    
+    // Cylinder
+    0.0, // X
+    0.0, // Y
+    0.0, // Z
+    0.0, // Radius
+    0.0, // Height
+};

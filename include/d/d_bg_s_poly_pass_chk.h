@@ -10,10 +10,10 @@ public:
     /* 0x4 */ u8 mbObjThrough;
     /* 0x5 */ u8 mbCamThrough;
     /* 0x6 */ u8 mbLinkThrough;
-    /* 0x7 */ u8 mbArrowsAndLightThrough;
+    /* 0x7 */ u8 mbArrowThrough; // Also light
     /* 0x8 */ u8 mbBombThrough;
     /* 0x9 */ u8 mbBoomerangThrough;
-    /* 0xA */ u8 mbHookshotThrough;
+    /* 0xA */ u8 mbRopeThrough; // Actually Hookshot?
 };
 
 class dBgS_PolyPassChk : public cBgS_PolyPassChk {
@@ -22,14 +22,20 @@ public:
         mbObjThrough = 0;
         mbCamThrough = 0;
         mbLinkThrough = 0;
-        mbArrowsAndLightThrough = 0;
+        mbArrowThrough = 0;
         mbBombThrough = 0;
         mbBoomerangThrough = 0;
-        mbHookshotThrough = 0;
+        mbRopeThrough = 0;
     }
     virtual ~dBgS_PolyPassChk() {}
 
-    void SetObj() { mbObjThrough = 1; }
+    void SetObj() { mbObjThrough = true; }
+    void SetCam() { mbCamThrough = true; }
+    void SetLink() { mbLinkThrough = true; }
+    void SetArrow() { mbArrowThrough = true; }
+    void SetBomb() { mbBombThrough = true; }
+    void SetBoomerang() { mbBoomerangThrough = true; }
+    void SetRope() { mbRopeThrough = true; }
 };
 
 STATIC_ASSERT(sizeof(dBgS_PolyPassChk) == 0xC);

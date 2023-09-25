@@ -68,7 +68,7 @@ struct dCcD_SrcCps {
 class dCcD_GStts : public cCcD_GStts {
 public:
     dCcD_GStts();
-    virtual ~dCcD_GStts() {}
+    virtual ~dCcD_GStts();
 
     void Ct();
     void Move();
@@ -108,7 +108,7 @@ public:
     virtual void Ct();
     virtual void ClrAt();
     virtual void ClrTg();
-    virtual ~dCcD_Stts() {}
+    virtual ~dCcD_Stts();
 
 };  // Size = 0x3C
 
@@ -129,15 +129,18 @@ public:
 
 public:
     dCcD_GAtTgCoCommonBase() { ct(); }
-    void ClrActorInfo();
+    void ClrActorInfo() {
+        mApid = -1;
+        mAc = NULL;
+    }
     void ct();
     void SetHitApid(unsigned int);
     fopAc_ac_c* GetAc();
     void Set(dCcD_SrcGAtTgCoCommonBase const&);
     void SetEffCounterTimer();
-    void SubtractEffCounter();
-    bool ChkEffCounter();
-    virtual ~dCcD_GAtTgCoCommonBase() {}
+    void SubtractEffCounter() { mEffCounter -= 1; }
+    bool ChkEffCounter() { return mEffCounter >= 0; }
+    virtual ~dCcD_GAtTgCoCommonBase();
 
     void ClrEffCounter() { mEffCounter = 0; }
     u32 GetGFlag() const { return mGFlag; }
@@ -152,14 +155,13 @@ public:
     bool ChkRPrm(u32 flag) const { return MskRPrm(flag); }
     void SetHitCallback(dCcD_HitCallback callback) { mHitCallback = callback; }
     dCcD_HitCallback GetHitCallback() { return mHitCallback; }
-    void ClrHit() { ClrActorInfo(); }
 };  // Size = 0x1C
 
 // Attack (At) Collider
 class dCcD_GObjAt : public dCcD_GAtTgCoCommonBase {
 public:
     void Set(dCcD_SrcGObjAt const&);
-    virtual ~dCcD_GObjAt() {}
+    virtual ~dCcD_GObjAt();
     void SetVec(cXyz& vec) { mVec = vec; }
     cXyz& GetVec() { return mVec; }
     cXyz* GetVecP() { return &mVec; }
@@ -173,6 +175,8 @@ public:
     u8 GetHitMark() { return mHitMark; }
     void SetRVec(cXyz& vec) { mRVec = vec; }
     void SetHitPos(cXyz& pos) { mHitPos = pos; }
+    cXyz* GetHitPosP() { return &mHitPos; }
+    void ClrHit() { ClrActorInfo(); }
 
     // private:
     /* 0x1C */ u8 mSe;
@@ -188,7 +192,7 @@ public:
 class dCcD_GObjTg : public dCcD_GAtTgCoCommonBase {
 public:
     void Set(dCcD_SrcGObjTg const&);
-    virtual ~dCcD_GObjTg() {}
+    virtual ~dCcD_GObjTg();
     void SetSe(u8 se) { mSe = se; }
     void SetVec(cXyz& vec) { mVec = vec; }
     cXyz& GetVec() { return mVec; }
@@ -202,6 +206,7 @@ public:
     void SetRVec(cXyz& vec) { mRVec = vec; }
     cXyz* GetVecP() { return &mVec; }
     void SetHitPos(cXyz& pos) { mHitPos = pos; }
+    cXyz* GetHitPosP() { return &mHitPos; }
 
 private:
     /* 0x1C */ u8 mSe;
@@ -217,7 +222,7 @@ private:
 // Correction (Co) Collider
 class dCcD_GObjCo : public dCcD_GAtTgCoCommonBase {
 public:
-    virtual ~dCcD_GObjCo() {}
+    virtual ~dCcD_GObjCo();
     void Set(dCcD_SrcGObjCo const& pSrc) { dCcD_GAtTgCoCommonBase::Set(pSrc.mBase); }
 };  // Size = 0x1C ?
 
@@ -228,19 +233,25 @@ public:
     virtual ~dCcD_GObjInf();
     virtual cCcD_GObjInf* GetGObjInf();
     virtual void ClrAtHit();
+#if VERSION != VERSION_JPN
     u32 ChkAtHit();
+#endif
     void ResetAtHit();
     cCcD_Obj* GetAtHitObj();
     cCcD_GObjInf* GetAtHitGObj();
     u8 ChkAtNoGuard();
     virtual void ClrTgHit();
+#if VERSION != VERSION_JPN
     u32 ChkTgHit();
+#endif
     void ResetTgHit();
     cCcD_Obj* GetTgHitObj();
     dCcD_GObjInf* GetTgHitGObj();
     u8 GetTgHitObjSe();
     virtual void ClrCoHit();
+#if VERSION != VERSION_JPN
     u32 ChkCoHit();
+#endif
     void ResetCoHit();
     cCcD_Obj* GetCoHitObj();
     void Set(dCcD_SrcGObjInf const&);
@@ -338,6 +349,8 @@ public:
     void SetAtRVec(cXyz& vec) { mGObjAt.SetRVec(vec); }
     void SetTgHitPos(cXyz& pos) { mGObjTg.SetHitPos(pos); }
     void SetAtHitPos(cXyz& pos) { mGObjAt.SetHitPos(pos); }
+    cXyz* GetAtHitPosP() { return mGObjAt.GetHitPosP(); }
+    cXyz* GetTgHitPosP() { return mGObjTg.GetHitPosP(); }
 
 protected:
     /* 0x050 */ dCcD_GObjAt mGObjAt;
@@ -353,6 +366,8 @@ public:
     void Set(dCcD_SrcCyl const&);
     cCcD_ShapeAttr* GetShapeAttr() { return this; }
     void StartCAt(cXyz&);
+    void StartCTg(cXyz&);
+    void MoveCAtTg(cXyz&);
     void MoveCAt(cXyz&);
     void MoveCTg(cXyz&);
     virtual ~dCcD_Cyl() {}
@@ -366,7 +381,7 @@ public:
     void Set(dCcD_SrcSph const&);
     void StartCAt(cXyz&);
     void MoveCAt(cXyz&);
-    virtual cCcD_ShapeAttr* GetShapeAttr();
+    virtual cCcD_ShapeAttr* GetShapeAttr() { return (cCcD_ShapeAttr*)this; }
     virtual ~dCcD_Sph() {}
 };  // Size = 0x12C
 
@@ -374,8 +389,11 @@ public:
 class dCcD_Cps : public dCcD_GObjInf, public cCcD_CpsAttr {
 public:
     void Set(dCcD_SrcCps const&);
-    cCcD_ShapeAttr* GetShapeAttr();
-    void CalcAtVec();
+    cCcD_ShapeAttr* GetShapeAttr() { return (cCcD_ShapeAttr*)this; }
+    void CalcAtVec() {
+        cXyz* atVecP = GetAtVecP();
+        CalcVec(atVecP);
+    }
     void CalcTgVec();
     virtual ~dCcD_Cps() {}
     dCcD_Cps() {}

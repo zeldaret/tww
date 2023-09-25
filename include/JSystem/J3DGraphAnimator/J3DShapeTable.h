@@ -8,26 +8,18 @@ class JUTNameTab;
 
 class J3DShapeTable {
 public:
-    J3DShapeTable() {
+    inline void clear() {
         mShapeNum = 0;
         mShapeNodePointer = NULL;
-        mShapeName = NULL;
     }
-
-    /* 803258A0 */ void hide();
-    /* 803258D8 */ void show();
-    /* 80325910 */ void initShapeNodes(J3DDrawMtxData*, J3DVertexData*);
-    /* 8032597C */ void sortVcdVatCmd();
-
-    virtual ~J3DShapeTable();
 
     u16 getShapeNum() const { return mShapeNum; }
     J3DShape* getShapeNodePointer(u16 idx) const { return mShapeNodePointer[idx]; }
 
 private:
+    /* 0x0 */ void *field_0x0;
     /* 0x4 */ u16 mShapeNum;
     /* 0x8 */ J3DShape** mShapeNodePointer;
-    /* 0xC */ JUTNameTab* mShapeName;
-};  // Size: 0x10
+};  // Size: 0x0C
 
 #endif /* J3DSHAPETABLE_H */

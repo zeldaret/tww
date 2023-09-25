@@ -9,43 +9,54 @@ class J3DAnmColor;
 class J3DAnmTexPattern;
 class J3DAnmTextureSRTKey;
 class J3DAnmTevRegKey;
+class J3DMatColorAnm;
+class J3DTexNoAnm;
+class J3DTexMtxAnm;
+class J3DTevColorAnm;
+class J3DTevKColorAnm;
 class JUTNameTab;
 
 class J3DMaterialTable {
 public:
-    /* 8032F5A8 */ void clear();
-    /* 8032F5D0 */ J3DMaterialTable();
-    /* 8032F64C */ int removeMatColorAnimator(J3DAnmColor*);
-    /* 8032F6F8 */ int removeTexNoAnimator(J3DAnmTexPattern*);
-    /* 8032F7B4 */ int removeTexMtxAnimator(J3DAnmTextureSRTKey*);
-    /* 8032F880 */ int removeTevRegAnimator(J3DAnmTevRegKey*);
-    /* 8032F9C0 */ void createTexMtxForAnimator(J3DAnmTextureSRTKey*);
-    /* 8032FAF4 */ void entryMatColorAnimator(J3DAnmColor*);
-    /* 8032FBC8 */ void entryTexNoAnimator(J3DAnmTexPattern*);
-    /* 8032FCC4 */ void entryTexMtxAnimator(J3DAnmTextureSRTKey*);
-    /* 8032FE70 */ void entryTevRegAnimator(J3DAnmTevRegKey*);
+    void clear();
+    J3DMaterialTable();
+    s32 entryMatColorAnimator(J3DAnmColor*);
+    s32 entryTexNoAnimator(J3DAnmTexPattern*);
+    s32 entryTexMtxAnimator(J3DAnmTextureSRTKey*);
+    s32 entryTevRegAnimator(J3DAnmTevRegKey*);
+    int removeMatColorAnimator(J3DAnmColor*);
+    int removeTexNoAnimator(J3DAnmTexPattern*);
+    int removeTexMtxAnimator(J3DAnmTextureSRTKey*);
+    int removeTevRegAnimator(J3DAnmTevRegKey*);
+    s32 setMatColorAnimator(J3DAnmColor*, J3DMatColorAnm *);
+    s32 setTexNoAnimator(J3DAnmTexPattern*, J3DTexNoAnm*);
+    s32 setTexMtxAnimator(J3DAnmTextureSRTKey*, J3DTexMtxAnm*, J3DTexMtxAnm*);
+    s32 setTevRegAnimator(J3DAnmTevRegKey*, J3DTevColorAnm*, J3DTevKColorAnm*);
 
-    /* 8032F604 */ virtual ~J3DMaterialTable();
+    virtual ~J3DMaterialTable();
 
     J3DMaterial* getMaterialNodePointer(u16 idx) const { return mMaterialNodePointer[idx]; }
 
     J3DTexture* getTexture() const { return mTexture; }
     JUTNameTab* getTextureName() const { return mTextureName; }
+    void setTexture(J3DTexture* pTexture) { mTexture = pTexture; }
+    void setTextureName(JUTNameTab* pTextureName) { mTextureName = pTextureName; }
 
     JUTNameTab* getMaterialName() const { return mMaterialName; }
 
     u16 getMaterialNum() const { return mMaterialNum; }
-    bool isLocked() const { return field_0x1c == 1; }
 
 private:
+    friend class J3DJointTree;
+
     /* 0x04 */ u16 mMaterialNum;
     /* 0x06 */ u16 mUniqueMatNum;
     /* 0x08 */ J3DMaterial** mMaterialNodePointer;
     /* 0x0C */ JUTNameTab* mMaterialName;
-    /* 0x10 */ u32 field_0x10;
-    /* 0x14 */ J3DTexture* mTexture;
-    /* 0x18 */ JUTNameTab* mTextureName;
-    /* 0x1C */ u16 field_0x1c;
+    /* 0x10 */ u16 field_0x10;
+    /* 0x14 */ u32 field_0x14;
+    /* 0x18 */ J3DTexture* mTexture;
+    /* 0x1C */ JUTNameTab* mTextureName;
 };  // Size: 0x20
 
 #endif /* J3DMATERIALATTACH_H */

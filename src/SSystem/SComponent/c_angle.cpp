@@ -326,7 +326,7 @@ void cSGlobe::Polar(cSPolar* csp) const {
 }
 
 /* 80254864-80254890       .text Invert__7cSGlobeFv */
-cXyz cSGlobe::Norm() const {
-    cSGlobe glob(1.0f, mAzimuth, mInclination);
-    return glob.Xyz();
+cSGlobe& cSGlobe::Invert() {
+    mRadius = -mRadius;
+    return Formal();
 }

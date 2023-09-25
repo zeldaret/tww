@@ -10,8 +10,8 @@
 class JUTConsole : public JKRDisposer {
 public:
     enum EConsoleType {
-        CONSOLE_TYPE_0 = 0,
-        CONSOLE_TYPE_1 = 1,
+        ACTIVE = 0,
+        INACTIVE = 1,
         CONSOLE_TYPE_2 = 2,
     };
 
@@ -22,21 +22,21 @@ public:
         /* 0x3 */ OUTPUT_OSR_AND_CONSOLE,
     };
 
-    /* 802E73E4 */ static JUTConsole* create(unsigned int, void*, u32);
-    /* 802E7354 */ static JUTConsole* create(unsigned int, unsigned int, JKRHeap*);
-    /* 802E746C */ JUTConsole(unsigned int, unsigned int, bool);
-    /* 802E75CC */ static size_t getObjectSizeFromBufferSize(unsigned int, unsigned int);
-    /* 802E75DC */ static size_t getLineFromObjectSize(u32, unsigned int);
-    /* 802E75EC */ void clear();
-    /* 802E7648 */ void doDraw(JUTConsole::EConsoleType) const;
-    /* 802E7BB8 */ void print_f(char const*, ...);
-    /* 802E7C38 */ void print(char const*);
-    /* 802E7F7C */ void dumpToTerminal(unsigned int);
-    /* 802E80A8 */ void scroll(int);
-    /* 802E8184 */ int getUsedLine() const;
-    /* 802E81A8 */ int getLineOffset() const;
+    static JUTConsole* create(unsigned int, void*, u32);
+    static JUTConsole* create(unsigned int, unsigned int, JKRHeap*);
+    JUTConsole(unsigned int, unsigned int, bool);
+    static size_t getObjectSizeFromBufferSize(unsigned int, unsigned int);
+    static size_t getLineFromObjectSize(u32, unsigned int);
+    void clear();
+    void doDraw(JUTConsole::EConsoleType) const;
+    void print_f(char const*, ...);
+    void print(char const*);
+    void dumpToTerminal(unsigned int);
+    void scroll(int);
+    int getUsedLine() const;
+    int getLineOffset() const;
 
-    /* 802E755C */ virtual ~JUTConsole();
+    virtual ~JUTConsole();
 
     void setOutput(unsigned int output) { mOutput = output; }
     void setPosition(int x, int y) {
@@ -67,6 +67,7 @@ public:
     bool isVisible() const { return mVisible; }
     void setVisible(bool visible) { mVisible = visible; }
 
+    u8 getLineAttr(int param_0) { return mBuf[(field_0x20 + 2) * param_0]; }
     void setLineAttr(int param_0, u8 param_1) { mBuf[(field_0x20 + 2) * param_0] = param_1; }
     u8* getLinePtr(int param_0) const { return &mBuf[(field_0x20 + 2) * param_0] + 1; }
     int diffIndex(int param_0, int param_1) const {
@@ -77,28 +78,27 @@ public:
         return diff += mMaxLines;
     }
 
-    int nextIndex(int param_0) const {
-        int index = param_0 + 1;
-        if (mMaxLines <= index) {
-            index = 0;
-        }
+    int prevIndex(int index) const {
+        return --index < 0 ? index = mMaxLines - 1 : index;
+    }
 
-        return index;
+    int nextIndex(int index) const {
+        return ++index >= mMaxLines ? 0 : index;
     }
 
     void scrollToLastLine() { scroll(mMaxLines); }
     void scrollToFirstLine() { scroll(-mMaxLines); }
 
-private:
+public:
     /* 0x18 */ JGadget::TLinkListNode mListNode;
 
 private:
     /* 0x20 */ u32 field_0x20;
-    /* 0x24 */ u32 mMaxLines;
+    /* 0x24 */ s32 mMaxLines;
     /* 0x28 */ u8* mBuf;
     /* 0x2C */ bool field_0x2c;
-    /* 0x30 */ int field_0x30;
-    /* 0x34 */ int field_0x34;
+    /* 0x30 */ s32 field_0x30;
+    /* 0x34 */ s32 field_0x34;
     /* 0x38 */ int field_0x38;
     /* 0x3C */ int field_0x3c;
     /* 0x40 */ int mPositionX;
@@ -118,13 +118,13 @@ private:
 
 class JUTConsoleManager {
 public:
-    /* 802E81CC */ JUTConsoleManager();
-    /* 802E81F4 */ static JUTConsoleManager* createManager(JKRHeap*);
-    /* 802E8240 */ void appendConsole(JUTConsole*);
-    /* 802E82B0 */ void removeConsole(JUTConsole*);
-    /* 802E8384 */ void draw() const;
-    /* 802E8450 */ void drawDirect(bool) const;
-    /* 802E84C4 */ void setDirectConsole(JUTConsole*);
+    JUTConsoleManager();
+    static JUTConsoleManager* createManager(JKRHeap*);
+    void appendConsole(JUTConsole*);
+    void removeConsole(JUTConsole*);
+    void draw() const;
+    void drawDirect(bool) const;
+    void setDirectConsole(JUTConsole*);
 
     JUTConsole* getDirectConsole() const { return mDirectConsole; }
 
@@ -146,6 +146,7 @@ extern "C" JUTConsole* JUTGetWarningConsole();
 extern "C" void JUTReportConsole_f_va(const char*, va_list);
 extern "C" void JUTReportConsole_f(const char*, ...);
 extern "C" void JUTWarningConsole(const char* message);
+extern "C" void JUTWarningConsole_f_va(const char*, va_list);
 extern "C" void JUTWarningConsole_f(const char* message, ...);
 extern "C" void JUTReportConsole(const char* message);
 

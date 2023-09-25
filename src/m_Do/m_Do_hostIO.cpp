@@ -4,8 +4,8 @@
 //
 
 #include "m_Do/m_Do_hostIO.h"
-#include "dolphin/os/OS.h"
 #include "MSL_C/string.h"
+#include "m_Do/m_Do_printf.h"
 
 mDoHIO_root_c mDoHIO_root;
 

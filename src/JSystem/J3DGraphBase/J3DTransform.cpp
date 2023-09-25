@@ -4,6 +4,7 @@
 //
 
 #include "JSystem/J3DGraphBase/J3DTransform.h"
+#include "JSystem/J3DGraphBase/J3DStruct.h"
 #include "dolphin/types.h"
 
 /* 802DA0A8-802DA0B0       .text __MTGQR7__FUl */
@@ -103,13 +104,50 @@ void J3DMtxProjConcat(float(*)[4], float(*)[4], float(*)[4]) {
 }
 
 /* 802DACE0-802DAD0C       .text J3DPSMtx33Copy__FPA3_fPA3_f */
-void J3DPSMtx33Copy(float(*)[3], float(*)[3]) {
-    /* Nonmatching */
+void J3DPSMtx33Copy(register Mtx3P src, register Mtx3P dst) {
+    register f32 x1_y1;
+    register f32 z1_x2;
+    register f32 y2_z2;
+    register f32 x3_y3;
+    register f32 z3;
+
+    asm {
+        psq_l x1_y1, 0(src), 0, 0
+        psq_l z1_x2, 8(src), 0, 0
+        psq_l y2_z2, 16(src), 0, 0
+        psq_l x3_y3, 24(src), 0, 0
+        lfs z3, 32(src)
+        psq_st x1_y1, 0(dst), 0, 0
+        psq_st z1_x2, 8(dst), 0, 0
+        psq_st y2_z2, 16(dst), 0, 0
+        psq_st x3_y3, 24(dst), 0, 0
+        stfs z3, 32(dst)
+    }
 }
 
 /* 802DAD0C-802DAD40       .text J3DPSMtx33CopyFrom34__FPA4_fPA3_f */
-void J3DPSMtx33CopyFrom34(float(*)[4], float(*)[3]) {
-    /* Nonmatching */
+void J3DPSMtx33CopyFrom34(register MtxP src, register Mtx3P dst) {
+    register f32 x_y1;
+    register f32 z1;
+    register f32 x_y2;
+    register f32 z2;
+    register f32 x_y3;
+    register f32 z3;
+
+    asm {
+        psq_l x_y1, 0(src), 0, 0
+        psq_st x_y1, 0(dst), 0, 0
+        lfs z1, 8(src)
+        stfs z1, 8(dst)
+        psq_l x_y2, 16(src), 0, 0
+        psq_st x_y2, 12(dst), 0, 0
+        lfs z2, 0x18(src)
+        stfs z2, 0x14(dst)
+        psq_l x_y3, 32(src), 0, 0
+        psq_st x_y3, 24(dst), 0, 0
+        lfs z3, 0x28(src)
+        stfs z3, 0x20(dst)
+    }
 }
 
 /* 802DAD40-802DAE1C       .text J3DPSMtxArrayConcat__FPA4_fPA4_fPA4_fUl */

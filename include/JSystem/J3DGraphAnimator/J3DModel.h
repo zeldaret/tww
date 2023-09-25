@@ -31,19 +31,22 @@ typedef void (*J3DCalcCallBack)(J3DModel*, u32 timing);
 
 class J3DMatPacket;
 class J3DShapePacket;
-class J3DVisibilityManager;
+
+class J3DVisibilityManager {
+public:
+    virtual ~J3DVisibilityManager();
+    virtual void setVisibility(J3DModelData*);
+};
+
+class J3DUnkCallBack {
+public:
+    virtual void calc(J3DModel*);
+};
 
 class J3DModel {
 public:
-    J3DModel() {
-        initialize();
-    }
-    J3DModel(J3DModelData* param_0, u32 param_1, u32 param_2) {
-        initialize();
-        entryModelData(param_0, param_1, param_2);
-    }
+    J3DModel();
 
-    void setBaseTRMtx(f32 (*)[4]);
     void initialize();
     s32 entryModelData(J3DModelData*, u32, u32);
     s32 createShapePacket(J3DModelData*);
@@ -58,9 +61,15 @@ public:
     void calcWeightEnvelopeMtx();
     void calcNrmMtx();
     void calcBumpMtx();
-    void calcBBoardMtx();
+    void calcBBoard();
+    void calcDrawMtx();
     void prepareShapePackets();
-    MtxP getAnmMtx(int);
+    MtxP getAnmMtx(int idx) { return mpNodeMtx[idx]; }
+
+    s32 setNoUseDrawMtx();
+    s32 createSingleDrawMtx(J3DModelData*);
+    s32 createDoubleDrawMtx(J3DModelData*, u32);
+    s32 createBumpMtxArray(J3DModelData*, u32);
 
     virtual void update();
     virtual void entry();
@@ -78,15 +87,31 @@ public:
 
     bool isCpuSkinningOn() const { return (mFlags & J3DMdlFlag_SkinPosCpu) && (mFlags & J3DMdlFlag_SkinNrmCpu); }
 
+    void swapDrawMtx() {
+        Mtx* tmp = mpDrawMtxBuf[0][mCurrentViewNo];
+        mpDrawMtxBuf[0][mCurrentViewNo] = mpDrawMtxBuf[1][mCurrentViewNo];
+        mpDrawMtxBuf[1][mCurrentViewNo] = tmp;
+    }
+
+    void swapNrmMtx() {
+        Mtx33* tmp = mpNrmMtxBuf[0][mCurrentViewNo];
+        mpNrmMtxBuf[0][mCurrentViewNo] = mpNrmMtxBuf[1][mCurrentViewNo];
+        mpNrmMtxBuf[1][mCurrentViewNo] = tmp;
+    }
+
     Mtx& getBaseTRMtx() { return mBaseTransformMtx; }
-    void i_setBaseTRMtx(Mtx m) { MTXCopy(m, mBaseTransformMtx); }
+    void setBaseTRMtx(Mtx m) { MTXCopy(m, mBaseTransformMtx); }
     u32 getMtxCalcMode() const { return mFlags & 0x03; }
+    u32* getCurrentViewNoPtr() { return &mCurrentViewNo; }
+    u8* getScaleFlagArray() const { return mpScaleFlagArr; }
     J3DVertexBuffer* getVertexBuffer() const { return (J3DVertexBuffer*)&mVertexBuffer; }
     J3DMatPacket* getMatPacket(u16 idx) const { return &mpMatPacket[idx]; }
     J3DShapePacket* getShapePacket(u16 idx) const { return &mpShapePacket[idx]; }
-    // Mtx33* getBumpMtxPtr(int idx) const { return mMtxBuffer->getBumpMtxPtr(idx); }
-    Mtx33* getNrmMtxPtr() const { return mpNrmMtxBuf[1][mCurrentViewNo]; }
+    Mtx** getDrawMtxPtrPtr() const { return mpDrawMtxBuf[1]; }
     Mtx* getDrawMtxPtr() const { return mpDrawMtxBuf[1][mCurrentViewNo]; }
+    Mtx33** getNrmMtxPtrPtr() const { return mpNrmMtxBuf[1]; }
+    Mtx33* getNrmMtxPtr() const { return mpNrmMtxBuf[1][mCurrentViewNo]; }
+    Mtx33*** getBumpMtxPtrPtr() const { return mpBumpMtxArr[1]; }
     void setBaseScale(const Vec& scale) { mBaseScale = scale; }
     void setUserArea(u32 area) { mUserArea = area; }
     u32 getUserArea() const { return mUserArea; }
@@ -113,9 +138,15 @@ public:
     /* 0x0B8 */ J3DShapePacket* mpShapePacket;
     /* 0x0BC */ J3DDeformData* mpDeformData;
     /* 0x0C0 */ J3DSkinDeform* mpSkinDeform;
-    /* 0x0C4 */ void * pad4[2];
+    /* 0x0C4 */ J3DUnkCallBack * field_0xc4;
+    /* 0x0C8 */ J3DUnkCallBack * field_0xc8;
     /* 0x0CC */ J3DVertexBuffer mVertexBuffer;
     /* 0x104 */ J3DVisibilityManager * mpVisibilityManager;
+
+    static Mtx sNoUseDrawMtx;
+    static Mtx33 sNoUseNrmMtx;
+    static Mtx* sNoUseDrawMtxPtr;
+    static Mtx33* sNoUseNrmMtxPtr;
 };
 
 STATIC_ASSERT(sizeof(J3DModel) == 0x108);

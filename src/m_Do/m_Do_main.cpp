@@ -15,7 +15,6 @@
 #include "MSL_C/string.h"
 #include "c/c_dylink.h"
 #include "d/d_com_inf_game.h"
-#include "dolphin/os/OS.h"
 #include "f_ap/f_ap_game.h"
 #include "m_Do/m_Do_MemCard.h"
 #include "m_Do/m_Do_Reset.h"
@@ -24,6 +23,7 @@
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_machine.h"
+#include "m_Do/m_Do_printf.h"
 
 class JUTGamePad;
 
@@ -51,7 +51,8 @@ void HeapCheck::CheckHeap1() {
 }
 
 // unused data?
-static u32 lit_2100[] = {0x3F800000, 0x3F800000, 0x3F800000, 0x3F800000, 0x3F800000, 0x3F800000};
+static u32 lit_2100[] = {0x3F800000, 0x3F800000, 0x3F800000};
+static u32 lit_2080[] = {0x3F800000, 0x3F800000, 0x3F800000};
 
 char mDoMain::COPYDATE_STRING[18] = "??/??/?? ??:??:??";
 
@@ -92,11 +93,8 @@ void CheckHeap(JUTGamePad* i_pad) {
     bool comboCheck = false;
 
     // if L + R + Z is pressed
-    if ((i_pad->getButton() & ~CButton::Z) == (CButton::L + CButton::R) &&
-        i_pad->getTrigger() & CButton::Z)
-    {
+    if ((i_pad->testButton(~CButton::Z)) == (CButton::L | CButton::R) && i_pad->testTrigger(CButton::Z))
         comboCheck = true;
-    }
 
     int saveRel = comboCheck;
     for (int i = 0; i < HeapCheckTableNum; i++) {
@@ -212,7 +210,11 @@ void debugDisplay() {
             return;
         }
     } else if (mHeapBriefType != 0) {
+#if VERSION == VERSION_JPN
+        JUT_ASSERT(530, mHeapBriefType < HeapCheckTableNum);
+#else
         JUT_ASSERT(531, mHeapBriefType < HeapCheckTableNum);
+#endif
 
         JUTReport(500, 100, "%s", desc1[mHeapBriefType]);
         JUTReport(500, 114, "%s", desc2[mHeapBriefType]);
@@ -372,18 +374,12 @@ void debug() {
             CheckHeap(g_mDoCPd_gamePad[2]);
         }
 
-        if ((g_mDoCPd_gamePad[2]->getButton() & ~CButton::Z) == CButton::R &&
-            g_mDoCPd_gamePad[2]->testTrigger(CButton::Z))
-        {
+        if (g_mDoCPd_gamePad[2]->testButton(~CButton::Z) == CButton::R && g_mDoCPd_gamePad[2]->testTrigger(CButton::Z))
             mDisplayHeapSize ^= 1;
-        }
 
         if (mDisplayHeapSize) {
-            if ((g_mDoCPd_gamePad[2]->getButton() & ~CButton::Z) == CButton::L &&
-                g_mDoCPd_gamePad[2]->testTrigger(CButton::Z))
-            {
+            if (g_mDoCPd_gamePad[2]->testButton(~CButton::Z) == CButton::L && g_mDoCPd_gamePad[2]->testTrigger(CButton::Z))
                 mHeapBriefType < 5 ? mHeapBriefType++ : mHeapBriefType = 1;
-            }
 
             debugDisplay();
         }
@@ -420,7 +416,11 @@ void main01() {
 
     mDoDvdThd_callback_c::create((mDoDvdThd_callback_func)LOAD_COPYDATE, NULL);
     fapGm_Create();  // init framework
+#if VERSION == VERSION_JPN
+    mDisplayHeapSize = 1;
+#else
     mDisplayHeapSize = 0;
+#endif
     cDyl_InitAsync();  // init RELs
 
     g_mDoAud_audioHeap = JKRSolidHeap::create(0x166800, JKRHeap::getCurrentHeap(), false);
@@ -442,7 +442,7 @@ void main01() {
     } while (true);
 }
 
-static OSThread mainThread;
+OSThread mainThread;
 
 /* 80006464-800065DC       .text main */
 void main() {
@@ -452,10 +452,11 @@ void main() {
     mDoMain::sPowerOnTime = OSGetTime();
     OSReportInit__Fv();
     version_check();
+#if VERSION != VERSION_JPN
     mDoRstData* reset_data = (mDoRstData*)OSAllocFromArenaLo(0x10, 4);
     mDoRst::setResetData(reset_data);
 
-    if (!mDoRst::i_getResetData()) {
+    if (!mDoRst::getResetData()) {
         do {
         } while (true);
     }
@@ -468,6 +469,7 @@ void main() {
     }
 
     g_dComIfG_gameInfo.ct();
+#endif
 
     if (mDoMain::developmentMode < 0) {
         DVDDiskID* disk_id = DVDGetCurrentDiskID();

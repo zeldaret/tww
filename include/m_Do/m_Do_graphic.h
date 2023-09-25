@@ -47,6 +47,7 @@ public:
     static bool isAutoForcus() { return data_80450BE7; } */
     static void setTickRate(u32 rate) { JFWDisplay::getManager()->setTickRate(rate); }
     static void waitBlanking(int wait) { JFWDisplay::getManager()->waitBlanking(wait); }
+    static BOOL isMonotone() { return mMonotone; }
 
     static ResTIMG* getFrameBufferTimg() { return mFrameBufferTimg; }
     static void* getFrameBufferTex() { return mFrameBufferTex; }
@@ -74,6 +75,9 @@ public:
     static bool mBlureFlag;
     static u8 mBlureRate;
     static u8 mFade;
+    static u8 mMonotone;
+    static s16 mMonotoneRate;
+    static s16 mMonotoneRateSpeed;
 };
 
 #endif /* M_DO_M_DO_GRAPHIC_H */

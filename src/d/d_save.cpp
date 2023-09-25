@@ -232,10 +232,10 @@ void dSv_player_get_item_c::onItem(int i_field, u8 i_item) {
 }
 
 /* 8005955C-800595F8       .text isItem__21dSv_player_get_item_cFiUc */
-bool dSv_player_get_item_c::isItem(int i_field, u8 i_item) {
+BOOL dSv_player_get_item_c::isItem(int i_field, u8 i_item) {
     JUT_ASSERT(429, 0 <= i_item && i_item < 8);
 
-    return mItemFlags[i_field] & (u8)(1 << i_item) ? true : false;
+    return mItemFlags[i_field] & (u8)(1 << i_item) ? TRUE : FALSE;
 }
 
 /* 800595F8-80059740       .text onBottleItem__21dSv_player_get_item_cFUc */

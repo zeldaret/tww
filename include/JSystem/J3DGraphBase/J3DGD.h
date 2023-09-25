@@ -21,10 +21,10 @@ inline void J3DGDWrite_u32(u32 param) {
 }
 
 inline void J3DGDWriteXFCmd(u16 param_1, u32 param_2) {
-  J3DGDWrite_u8(0x10);
-  J3DGDWrite_u16(0);
-  J3DGDWrite_u16(param_1);
-  J3DGDWrite_u32(param_2);
+    J3DGDWrite_u8(0x10);
+    J3DGDWrite_u16(0);
+    J3DGDWrite_u16(param_1);
+    J3DGDWrite_u32(param_2);
 }
 
 void J3DGDSetGenMode(u8 texGenNum, u8 colorChanNum, u8 tevStageNum, u8 IndTexStageNum, _GXCullMode cullMode);

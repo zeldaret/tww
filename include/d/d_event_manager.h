@@ -3,6 +3,7 @@
 
 #include "SSystem/SComponent/c_xyz.h"
 #include "d/d_event_data.h"
+#include "MSL_C/string.h"
 
 class fopAc_ac_c;
 
@@ -27,7 +28,7 @@ public:
     void getSubstance(dEvDtData_c*, int);
     void setData(const char*);
     void create();
-    void remove(const char*);
+    void remove();
     void startProc(dEvDtEvent_c*);
     void closeProc(dEvDtEvent_c*);
     void endProc(s16, int);
@@ -37,19 +38,19 @@ public:
     s16 getEventIdx(const char*, u8);
     void order(s16);
     void startCheck(s16);
-    void startCheckOld(const char*);
+    BOOL startCheckOld(const char*);
     BOOL endCheck(s16);
-    void endCheckOld(const char*);
-    void getMyStaffId(const char*, fopAc_ac_c*, int);
-    void getIsAddvance(int);
-    void getMyActIdx(int, const char* const*, int, int, int);
+    BOOL endCheckOld(const char*);
+    int getMyStaffId(const char*, fopAc_ac_c*, int);
+    BOOL getIsAddvance(int);
+    int getMyActIdx(int, const char* const*, int, int, int);
     void getMyActName(int);
     void getMyNowCutName(int);
     void getMyDataP(int, const char*, int);
-    void getMySubstanceP(int, const char*, int);
+    void* getMySubstanceP(int, const char*, int);
     void getMySubstanceNum(int, const char*);
     void cutEnd(int);
-    void getEventPrio(s16);
+    u16 getEventPrio(s16);
     void getEventEndSound(s16);
     void exceptionProc();
     void issueStaff(const char*);
@@ -60,7 +61,7 @@ public:
     void specialCast(const char*, int);
     void setPrmStaff(void*, int);
     void getToolId(u8, int);
-    void ChkPresentEnd();
+    BOOL ChkPresentEnd();
     void CancelPresent();
     void checkStartDemo();
 
@@ -70,5 +71,9 @@ public:
     /* 0x030 */ cXyz mGoal;
     /* 0x03C */ dEvDtFlag_c mFlag;
 };
+
+inline int dEvmng_strcmp(const char* s1, const char* s2) {
+    return strcmp(s1, s2);
+}
 
 #endif /* D_EVENT_D_EVENT_MANAGER_H */

@@ -30,42 +30,7 @@ enum J3DSysFlag {
 };
 
 struct J3DSys {
-    /* 0x000 */ Mtx mViewMtx;
-    /* 0x030 */ J3DMtxCalc* mCurrentMtxCalc;
-    /* 0x034 */ u32 mFlags;
-    /* 0x038 */ J3DModel* mModel;
-    /* 0x03C */ J3DMatPacket* mMatPacket;
-    /* 0x040 */ J3DShapePacket* mShapePacket;
-    /* 0x044 */ J3DShape* mShape;
-    /* 0x048 */ J3DDrawBuffer* mDrawBuffer[2];
-    /* 0x050 */ u32 mDrawMode;
-    /* 0x054 */ u32 mMaterialMode;
-    /* 0x058 */ J3DTexture* mTexture;
-    /* 0x05C */ u8 field_0x5c[0x04];
-    /* 0x060 */ u32 mTexCacheRegionNum;
-    /* 0x064 */ GXTexRegion mTexCacheRegion[8];
-    /* 0x0E4 */ u8 field_0xe4[0x24];
-    /* 0x108 */ Mtx* mModelDrawMtx;
-    /* 0x10C */ Mtx33* mModelNrmMtx;
-    /* 0x110 */ void* mVtxPos;
-    /* 0x114 */ void* mVtxNrm;
-    /* 0x118 */ _GXColor* mVtxCol;
-    /* 0x11C */ Vec* mNBTScale;
-
-    J3DSys();
-    void loadPosMtxIndx(int, u16) const;
-    void loadNrmMtxIndx(int, u16) const;
-    void setTexCacheRegion(_GXTexCacheSize);
-    void drawInit();
-    void reinitGX();
-    void reinitGenMode();
-    void reinitLighting();
-    void reinitTransform();
-    void reinitTexture();
-    void reinitTevStages();
-    void reinitIndStages();
-    void reinitPixelProc();
-
+public:
     enum DrawMode {
         /* 0x3 */ OPA_TEX_EDGE = 3,
         /* 0x4 */ XLU,
@@ -91,6 +56,9 @@ struct J3DSys {
     void setMatPacket(J3DMatPacket* pPacket) { mMatPacket = pPacket; }
     J3DMatPacket* getMatPacket() { return mMatPacket; }
     void setMaterialMode(u32 mode) { mMaterialMode = mode; }
+
+    void setCurrentMtxCalc(J3DMtxCalc * pCalc) { mCurrentMtxCalc = pCalc; }
+    J3DMtxCalc * getCurrentMtxCalc() const { return mCurrentMtxCalc; }
 
     void setTexture(J3DTexture* pTex) { mTexture = pTex; }
     J3DTexture* getTexture() { return mTexture; }
@@ -127,11 +95,51 @@ struct J3DSys {
     void setViewMtx(Mtx m) { MTXCopy(m, mViewMtx); }
 
     J3DModel* getModel() { return mModel; }
+    Vec& getNBTScale() { return *mNBTScale; }
 
     static Mtx mCurrentMtx;
     static Vec mCurrentS;
     static Vec mParentS;
     static u16 sTexCoordScaleTable[32];
+
+    /* 0x000 */ Mtx mViewMtx;
+    /* 0x030 */ J3DMtxCalc* mCurrentMtxCalc;
+    /* 0x034 */ u32 mFlags;
+    /* 0x038 */ J3DModel* mModel;
+    /* 0x03C */ J3DMatPacket* mMatPacket;
+    /* 0x040 */ J3DShapePacket* mShapePacket;
+    /* 0x044 */ J3DShape* mShape;
+    /* 0x048 */ J3DDrawBuffer* mDrawBuffer[2];
+    /* 0x050 */ u32 mDrawMode;
+    /* 0x054 */ u32 mMaterialMode;
+    /* 0x058 */ J3DTexture* mTexture;
+    /* 0x05C */ u8 field_0x5c[0x04];
+    /* 0x060 */ u32 mTexCacheRegionNum;
+    /* 0x064 */ GXTexRegion mTexCacheRegion[8];
+    /* 0x0E4 */ u8 field_0xe4[0x20];
+    /* 0x104 */ void* field_0x104;
+    /* 0x108 */ Mtx* mModelDrawMtx;
+    /* 0x10C */ Mtx33* mModelNrmMtx;
+    /* 0x110 */ void* mVtxPos;
+    /* 0x114 */ void* mVtxNrm;
+    /* 0x118 */ _GXColor* mVtxCol;
+    /* 0x11C */ void* field_0x11c;
+    /* 0x120 */ void* field_0x120;
+    /* 0x124 */ Vec* mNBTScale;
+
+    J3DSys();
+    void loadPosMtxIndx(int, u16) const;
+    void loadNrmMtxIndx(int, u16) const;
+    void setTexCacheRegion(_GXTexCacheSize);
+    void drawInit();
+    void reinitGX();
+    void reinitGenMode();
+    void reinitLighting();
+    void reinitTransform();
+    void reinitTexture();
+    void reinitTevStages();
+    void reinitIndStages();
+    void reinitPixelProc();
 };
 
 extern u32 j3dDefaultViewNo;

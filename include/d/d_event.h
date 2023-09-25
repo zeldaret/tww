@@ -5,6 +5,22 @@
 
 class fopAc_ac_c;
 
+enum dEvtType_e {
+    /* 0x00 */ dEvtType_TALK_e,
+    /* 0x01 */ dEvtType_DOOR_e,
+    /* 0x02 */ dEvtType_OTHER_e,
+    /* 0x03 */ dEvtType_COMPULSORY_e,
+    /* 0x04 */ dEvtType_POTENTIAL_e,
+    /* 0x05 */ dEvtType_ITEM_e,
+    /* 0x06 */ dEvtType_SHOWITEM_X_e,
+    /* 0x07 */ dEvtType_SHOWITEM_Y_e,
+    /* 0x08 */ dEvtType_SHOWITEM_Z_e,
+    /* 0x09 */ dEvtType_CATCH_e,
+    /* 0x0A */ dEvtType_TREASURE_e,
+    /* 0x0B */ dEvtType_PHOTO_e,
+    /* 0x0A */ dEvtType_CHANGE_e,
+};
+
 class dEvt_order_c {
 public:
     ~dEvt_order_c() {}
@@ -25,8 +41,8 @@ class dEvt_control_c {
 public:
     dEvt_control_c();
 
-    void orderOld(u16, u16, u16, u16, void*, void*, const void*);
-    void order(u16, u16, u16, u16, void*, void*, s16, u8);
+    s32 orderOld(u16, u16, u16, u16, void*, void*, const void*);
+    s32 order(u16, u16, u16, u16, void*, void*, s16, u8);
     void setParam(dEvt_order_c*);
     void beforeFlagProc(dEvt_order_c*);
     void afterFlagProc(dEvt_order_c*);
@@ -48,20 +64,28 @@ public:
     void soundProc();
     void check();
     void photoCheck();
-    void moveApproval(void*);
+    s32 moveApproval(void*);
     void compulsory(void*, const char*, u16);
     void remove();
     void getStageEventDt();
     void nextStageEventDt(void*);
     void getPId(void*);
-    void convPId(unsigned int);
+    fopAc_ac_c * convPId(unsigned int);
     void getTactFreeMStick(int);
     void getTactFreeCStick(int);
     void giveItemCut(u8);
 
-    inline u16 chkEventFlag(u16 flag) { return flag & mEventFlag; }
-    inline void onEventFlag(u16 flag) { mEventFlag |= flag; }
-    inline void offEventFlag(u16 flag) { mEventFlag &= ~flag; }
+    u8 getTalkXYBtn() { return mTalkButton; }
+    bool chkTalkXY() { return mTalkButton == 1 || mTalkButton == 2 || mTalkButton == 3; }
+    void setPtI_Id(u32 id) { mPtItem = id; }
+    u8 getPreItemNo() { return mItemNo; }
+
+    u16 chkEventFlag(u16 flag) { return flag & mEventFlag; }
+    void onEventFlag(u16 flag) { mEventFlag |= flag; }
+    void offEventFlag(u16 flag) { mEventFlag &= ~flag; }
+    void reset() { onEventFlag(8); }
+
+    bool runCheck() { return mMode != 0; }
 
     /* 0x00 */ dEvt_order_c mOrder[8];
     /* 0xC0 */ u8 mOrderCount;
@@ -71,7 +95,7 @@ public:
     /* 0xC4 */ u32 mPt1;
     /* 0xC8 */ u32 mPt2;
     /* 0xCC */ int mPtTalk;
-    /* 0xD0 */ int mPtItem;
+    /* 0xD0 */ u32 mPtItem;
     /* 0xD4 */ u8 mCurStaffId;
     /* 0xD5 */ u8 field_0xD5[0xD6 - 0xD5];
     /* 0xD6 */ s16 field_0xd6;

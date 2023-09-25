@@ -1,6 +1,10 @@
 #ifndef D_D_RESORCE_H
 #define D_D_RESORCE_H
 
+#include "dolphin/types.h"
+#include "global.h"
+#include "JSystem/JKernel/JKRMemArchive.h"
+
 class JKRArchive;
 class JKRHeap;
 class JKRSolidHeap;
@@ -12,13 +16,12 @@ public:
     ~dRes_info_c();
     int set(char const*, char const*, u8, JKRHeap*);
     int loadResource();
-    void deleteArchiveRes();
     int setRes(JKRArchive*, JKRHeap*);
     int setRes();
     static void dump_long(dRes_info_c*, int);
     static void dump(dRes_info_c*, int);
 
-    void* getRes(u32 resIdx) { return *(mpRes + resIdx); }
+    void* getRes(u32 resIdx) { return *(mRes + resIdx); }
     int getCount() { return mCount; }
     char* getArchiveName() { return mArchiveName; }
     mDoDvdThd_mountArchive_c* getDMCommand() { return mpDMCommand; }
@@ -34,8 +37,8 @@ private:
     /* 0x10 */ mDoDvdThd_mountArchive_c* mpDMCommand;
     /* 0x14 */ JKRArchive* mpArchive;
     /* 0x18 */ JKRHeap* mpParentHeap;
-    /* 0x1C */ JKRSolidHeap* mpDataHeap;
-    /* 0x20 */ void** mpRes;
+    /* 0x1C */ JKRSolidHeap* mDataHeap;
+    /* 0x20 */ void** mRes;
 };  // Size: 0x24
 
 STATIC_ASSERT(sizeof(dRes_info_c) == 0x24);

@@ -4,8 +4,11 @@
 //
 
 #include "JSystem/J2DGraph/J2DPane.h"
+#include "JSystem/J2DGraph/J2DGrafContext.h"
+#include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JSupport/JSURandomInputStream.h"
 #include "dolphin/gx/GXEnum.h"
+#include "dolphin/gx/GX.h"
 #include "dolphin/types.h"
 
 /* 802CF8F4-802CF984       .text __ct__7J2DPaneFv */
@@ -48,7 +51,7 @@ void J2DPane::initiate() {
     mRotation = 0.0f;
     mCullMode = 0;
     mAlpha = 0xFF;
-    field_0xae = 1;
+    mInheritAlpha = TRUE;
     mDrawAlpha = 0xFF;
     field_0xaf = 0;
     calcMtx();
@@ -68,8 +71,8 @@ J2DPane::J2DPane(J2DPane* pParentPane, JSURandomInputStream* pStream) : mPaneTre
 
 /* 802CFC00-802CFEF8       .text makePaneStream__7J2DPaneFP7J2DPaneP20JSURandomInputStream */
 void J2DPane::makePaneStream(J2DPane* pParentPane, JSURandomInputStream* pStream) {
-    u8 unk;
-    pStream->read(&unk, 1);
+    u8 size;
+    pStream->read(&size, 1);
     pStream->read(&mVisible, 1);
     pStream->skip(2);
     mTag = pStream->read32b();
@@ -80,31 +83,31 @@ void J2DPane::makePaneStream(J2DPane* pParentPane, JSURandomInputStream* pStream
     f32 y1 = y0 + pStream->readS16();
     mBounds.set(x0, y0, x1, y1);
 
-    unk -= 6;
+    size -= 6;
     mRotation = 0;
-    if (unk != 0) {
+    if (size != 0) {
         mRotation = pStream->readU16();
-        unk--;
+        size--;
     }
 
-    if (unk != 0) {
+    if (size != 0) {
         setBasePosition((J2DBasePosition)pStream->readU8());
-        unk--;
+        size--;
     } else {
         setBasePosition(J2DBasePosition_0);
     }
 
     mAlpha = 0xFF;
 
-    if (unk != 0) {
+    if (size != 0) {
         mAlpha = pStream->readU8();
-        unk--;
+        size--;
     }
 
-    field_0xae = 1;
-    if (unk != 0) {
-        field_0xae = pStream->readU8() != 0;
-        unk--;
+    mInheritAlpha = TRUE;
+    if (size != 0) {
+        mInheritAlpha = pStream->readU8() != 0;
+        size--;
     }
 
     pStream->align(4);
@@ -143,13 +146,67 @@ bool J2DPane::insertChild(J2DPane* pPrev, J2DPane* pChild) {
 }
 
 /* 802D0078-802D054C       .text draw__7J2DPaneFffPC14J2DGrafContextb */
-void J2DPane::draw(float, float, const J2DGrafContext*, bool) {
-    /* Nonmatching */
+void J2DPane::draw(float x, float y, const J2DGrafContext* pCtx, bool clip) {
+    J2DGrafContext ctx = *pCtx;
+
+    if (pCtx->getGrafType() != 1)
+        clip = false;
+
+    JSUTree<J2DPane> * pParent = mPaneTree.getParent();
+    J2DPane * pParentPane = NULL;
+    if (pParent != NULL)
+        pParentPane = pParent->getObject();
+
+    if (mVisible && mBounds.isValid()) {
+        mScreenBounds = mBounds;
+        mDrawBounds = mBounds;
+
+        if (pParentPane != NULL) {
+            mScreenBounds.addPos(pParentPane->mScreenBounds.i.x, pParentPane->mScreenBounds.i.y);
+            MTXConcat(pParentPane->mDrawMtx, mMtx, mDrawMtx);
+
+            if (clip) {
+                mDrawBounds.addPos(pParentPane->mScreenBounds.i.x, pParentPane->mScreenBounds.i.y);
+                mDrawBounds.intersect(pParentPane->mDrawBounds);
+                mDrawAlpha = mAlpha;
+
+                if (mInheritAlpha)
+                    mDrawAlpha = (mAlpha * pParentPane->mDrawAlpha) / 0xFF;
+            }
+        } else {
+            mScreenBounds.addPos(x, y);
+            makeMatrix(mBounds.i.x + x, mBounds.i.y + y);
+            MTXCopy(mMtx, mDrawMtx);
+            mDrawBounds.set(mScreenBounds);
+            mDrawAlpha = mAlpha;
+        }
+
+        JGeometry::TBox2<f32> clipBounds( 0.0f, 0.0f, 0.0f, 0.0f );
+        if (clip)
+            ((J2DOrthoGraph*)pCtx)->scissorBounds(&clipBounds, &mDrawBounds);
+
+        if (mDrawBounds.isValid() || !clip) {
+            ctx.place(mScreenBounds);
+            if (clip) {
+                ctx.scissor(clipBounds);
+                ctx.setScissor();
+            }
+            GXSetCullMode((GXCullMode)mCullMode);
+            drawSelf(x, y, &ctx.mPosMtx);
+
+            for (JSUTreeIterator<J2DPane> iter = mPaneTree.getFirstChild(); iter.getObject(); ++iter)
+                iter->draw(0.0f, 0.0f, pCtx, clip);
+        }
+    }
 }
 
 /* 802D054C-802D05C8       .text move__7J2DPaneFff */
-void J2DPane::move(float, float) {
-    /* Nonmatching */
+void J2DPane::move(float x, float y) {
+    JGeometry::TBox2<f32> bounds;
+    f32 width = mBounds.getWidth(), height = mBounds.getHeight();
+    bounds.set(x, y, x + width, y + height);
+    mBounds = bounds;
+    calcMtx();
 }
 
 /* 802D05C8-802D0604       .text add__7J2DPaneFff */
@@ -160,9 +217,9 @@ void J2DPane::add(f32 px, f32 py) {
 /* 802D0604-802D0680       .text clip__7J2DPaneFRCQ29JGeometry8TBox2<f> */
 void J2DPane::clip(const JGeometry::TBox2<f32>& bounds) {
     JGeometry::TBox2<f32> boxA(bounds);
-    JGeometry::TBox2<f32> boxB(mScreenPos);
+    JGeometry::TBox2<f32> boxB(mScreenBounds);
     boxA.addPos(boxB.i);
-    mBox.intersect(boxA);
+    mDrawBounds.intersect(boxA);
 }
 
 /* 802D0680-802D0714       .text search__7J2DPaneFUl */
@@ -203,8 +260,7 @@ void J2DPane::setBasePosition(J2DBasePosition pos) {
     if (pos % 3 == 0) {
         mBasePosition.x = 0.0f;
     } else if (pos % 3 == 1) {
-        f32 width = mBounds.getWidth();
-        mBasePosition.x = 0.5f * width;
+        mBasePosition.x = mBounds.getWidth() / 2.0f;
     } else {
         mBasePosition.x = mBounds.getWidth();
     }
@@ -212,8 +268,7 @@ void J2DPane::setBasePosition(J2DBasePosition pos) {
     if (pos / 3 == 0) {
         mBasePosition.y = 0.0f;
     } else if (pos / 3 == 1) {
-        f32 height = mBounds.getHeight();
-        mBasePosition.y = height * 0.5f;
+        mBasePosition.y = mBounds.getHeight() / 2.0f;
     } else {
         mBasePosition.y = mBounds.getHeight();
     }

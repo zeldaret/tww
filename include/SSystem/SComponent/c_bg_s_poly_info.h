@@ -13,7 +13,9 @@ private:
     /* 0x08 */ unsigned int mActorId;
 
 public:
-    cBgS_PolyInfo() {}
+    cBgS_PolyInfo() {
+        ClearPi();
+    }
     void ClearPi() {
         mPolyIndex = -1;
         mBgIndex = 0x100;

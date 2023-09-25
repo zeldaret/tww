@@ -64,7 +64,7 @@ void daBranch_c::set_mtx() {
             mDoMtx_stack_c::transS(getPosition());
             mDoMtx_stack_c::XYZrotM(getAngle().x, getAngle().y, getAngle().z);
             
-            pMdl->i_setBaseTRMtx(mDoMtx_stack_c::get());
+            pMdl->setBaseTRMtx(mDoMtx_stack_c::get());
         }
     }
 }
@@ -241,7 +241,7 @@ s32 daBranch_Create(fopAc_ac_c* i_this) {
                     J3DMaterial* mat = modelData->getMaterialNodePointer(j);
                     if (mat) {
                         J3DFog* fog = mat->getPEBlock()->getFog();
-                        fog->field_0x0 = 2;
+                        fog->mType = 2;
                     }
                 }
             }

@@ -23,15 +23,15 @@ public:
     void Val(const cSAngle&);
     void Val(s16);
     void Val(float);
-    float Degree(void) const;
-    float Radian(void) const;
-    float Norm(void) const;
-    s16 Abs(void) const;
-    s16 Inv(void) const;
-    float Sin(void) const;
-    float Cos(void) const;
-    float Tan(void) const;
-    cSAngle operator-(void) const;
+    float Degree() const;
+    float Radian() const;
+    float Norm() const;
+    s16 Abs() const;
+    s16 Inv() const;
+    float Sin() const;
+    float Cos() const;
+    float Tan() const;
+    cSAngle operator-() const;
     cSAngle operator+(const cSAngle&) const;
     cSAngle operator-(const cSAngle&) const;
     void operator+=(const cSAngle&);
@@ -44,10 +44,10 @@ public:
     void operator*=(float);
     bool operator<(const cSAngle& other) const { return mAngle < other.mAngle; }
     bool operator>(const cSAngle& other) const { return mAngle > other.mAngle; }
-    operator s16(void) const { return mAngle; }
+    operator s16() const { return mAngle; }
     void operator=(const cSAngle& other) { mAngle = other.mAngle; }
-    static inline cSAngle getMaxNegative(void) { return cSAngle((s16)-0x8000); }
-    inline void mirrorAtMaxNeg(void) { *this = cSAngle((s16)-0x8000) - *this; }
+    static inline cSAngle getMaxNegative() { return cSAngle((s16)-0x8000); }
+    inline void mirrorAtMaxNeg() { *this = cSAngle((s16)-0x8000) - *this; }
 };
 
 cSAngle operator+(short, const cSAngle&);
@@ -91,11 +91,11 @@ public:
     cDegree(float);
     ~cDegree() {}
 
-    cDegree& Formal(void);
+    cDegree& Formal();
     void Val(float);
-    float Radian(void) const;
-    float Sin(void) const;
-    float Cos(void) const;
+    float Radian() const;
+    float Sin() const;
+    float Cos() const;
 };
 
 class cSPolar {
@@ -107,10 +107,10 @@ private:
 public:
     cSPolar() {}
     cSPolar(const cXyz&);
-    cSPolar& Formal(void);
+    cSPolar& Formal();
     void Val(float, short, short);
     void Val(const cXyz&);
-    cXyz Xyz(void) const;
+    cXyz Xyz() const;
     void Globe(class cSGlobe*) const;
 };
 
@@ -126,18 +126,18 @@ public:
     cSGlobe(float, const cSAngle&, const cSAngle&);
     cSGlobe(const cXyz&);
     ~cSGlobe() {}
-    cSGlobe& Formal(void);
+    cSGlobe& Formal();
     void Val(const cSGlobe&);
     void Val(float, short, short);
     void Val(float, const cSAngle&, const cSAngle&);
     void Val(const cXyz&);
-    float R(void) const { return mRadius; }
-    const cSAngle& V(void) const { return mAzimuth; }
-    const cSAngle& U(void) const { return mInclination; }
-    cXyz Xyz(void) const;
+    float R() const { return mRadius; }
+    const cSAngle& V() const { return mAzimuth; }
+    const cSAngle& U() const { return mInclination; }
+    cXyz Xyz() const;
     void Polar(cSPolar*) const;
-    cXyz Norm(void) const;
-    cSGlobe& Invert(void);
+    cXyz Norm() const;
+    cSGlobe& Invert();
 };
 
 #endif /* C_ANGLE_H */

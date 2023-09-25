@@ -28,6 +28,22 @@ inline u32 GDGetGDLObjOffset(GDLObj* obj) {
     return (u32)(obj->ptr - obj->start);
 }
 
+inline void GDSetCurrOffset(s32 offs) {
+    __GDCurrentDL->ptr = __GDCurrentDL->start + offs;
+}
+
+inline void GDAdvCurrOffset(s32 offs) {
+    __GDCurrentDL->ptr += offs;
+}
+
+inline GDLObj* GDGetCurrent() {
+    return __GDCurrentDL;
+}
+
+inline u8* GDGetCurrPointer() {
+    return __GDCurrentDL->ptr;
+}
+
 void GDInitGDLObj(GDLObj*, u8*, u32);
 void GDFlushCurrToMem();
 void GDPadCurr32();

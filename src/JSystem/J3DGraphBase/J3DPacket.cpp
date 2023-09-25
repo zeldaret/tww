@@ -351,19 +351,8 @@ void J3DShapePacket::draw() {
     if (!checkFlag(J3DShpFlag_Hidden) && mpShape != NULL) {
         prepareDraw();
 
-#if 0
-        if (mpTexMtxObj != NULL) {
-            J3DMaterial* material = mpShape->getMaterial();
-            J3DDifferedTexMtx::sTexGenBlock = material->getTexGenBlock();
-            J3DDifferedTexMtx::sTexMtxObj = getTexMtxObj();
-        } else {
-            J3DDifferedTexMtx::sTexGenBlock = NULL;
-        }
-#endif
-
-        if (mpDisplayListObj != NULL) {
+        if (mpDisplayListObj != NULL)
             mpDisplayListObj->callDL();
-        }
 
         mpShape->draw();
     }
@@ -373,17 +362,6 @@ void J3DShapePacket::draw() {
 void J3DShapePacket::drawFast() {
     if (!checkFlag(J3DShpFlag_Hidden) && mpShape != NULL) {
         prepareDraw();
-
-#if 0
-        if (mpTexMtxObj != NULL) {
-            J3DMaterial* material = mpShape->getMaterial();
-            J3DDifferedTexMtx::sTexGenBlock = material->getTexGenBlock();
-            J3DDifferedTexMtx::sTexMtxObj = getTexMtxObj();
-        } else {
-            J3DDifferedTexMtx::sTexGenBlock = NULL;
-        }
-#endif
-
         mpShape->drawFast();
     }
 }
@@ -400,9 +378,4 @@ bool J3DMatPacket::isSame(J3DMatPacket* pOther) const {
 
 /* 802DB978-802DB97C       .text draw__9J3DPacketFv */
 void J3DPacket::draw() {
-}
-
-/* 802DB97C-802DB9D8       .text __dt__17J3DCallBackPacketFv */
-J3DCallBackPacket::~J3DCallBackPacket() {
-    /* Nonmatching */
 }

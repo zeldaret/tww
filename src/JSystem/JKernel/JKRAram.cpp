@@ -4,79 +4,553 @@
 //
 
 #include "JSystem/JKernel/JKRAram.h"
-#include "dolphin/types.h"
+#include "JSystem/JKernel/JKRAramPiece.h"
+#include "JSystem/JKernel/JKRAramStream.h"
+#include "JSystem/JKernel/JKRDecomp.h"
+#include "JSystem/JKernel/JKRExpHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "JSystem/JUtility/JUTException.h"
+#include "MSL_C/string.h"
+#include "dolphin/ar/ar.h"
+#include "dolphin/ar/arq.h"
+#include "dolphin/os/OS.h"
+#include "global.h"
+
+static int JKRDecompressFromAramToMainRam(u32, void*, u32, u32, u32);
+static int decompSZS_subroutine(u8*, u8*);
+static u8* firstSrcData();
+static u8* nextSrcData(u8*);
+
+JKRAram* JKRAram::sAramObject;
 
 /* 802B42C4-802B4360       .text create__7JKRAramFUlUllll */
-void JKRAram::create(unsigned long, unsigned long, long, long, long) {
-    /* Nonmatching */
+JKRAram* JKRAram::create(u32 aram_audio_buffer_size, u32 aram_audio_graph_size, s32 stream_priority, s32 decomp_priority, s32 piece_priority) {
+    if (!sAramObject) {
+        sAramObject = new (JKRHeap::getSystemHeap(), 0)
+            JKRAram(aram_audio_buffer_size, aram_audio_graph_size, piece_priority);
+    }
+
+    JKRCreateAramStreamManager(stream_priority);
+    JKRCreateDecompManager(decomp_priority);
+    sAramObject->resume();
+    return sAramObject;
 }
 
+OSMessage JKRAram::sMessageBuffer[4] = { NULL, NULL, NULL, NULL };
+OSMessageQueue JKRAram::sMessageQueue = {0};
+
 /* 802B4360-802B44D8       .text __ct__7JKRAramFUlUll */
-JKRAram::JKRAram(unsigned long, unsigned long, long) {
-    /* Nonmatching */
+JKRAram::JKRAram(u32 audio_buffer_size, u32 audio_graph_size, s32 priority) : JKRThread(0x4000, 0x10, priority) {
+    u32 aramBase = ARInit(mStackArray, ARRAY_SIZE(mStackArray));
+    ARQInit();
+
+    u32 aramSize = ARGetSize();
+    OSReport("ARAM size = %08x\n", aramSize);
+
+    mAudioMemorySize = audio_buffer_size;
+    if (audio_graph_size == 0xFFFFFFFF) {
+        mGraphMemorySize = (aramSize - audio_buffer_size) - aramBase;
+        mAramMemorySize = 0;
+    } else {
+        mGraphMemorySize = audio_graph_size;
+        mAramMemorySize = (aramSize - (audio_buffer_size + audio_graph_size)) - aramBase;
+    }
+
+    mAudioMemoryPtr = ARAlloc(mAudioMemorySize);
+    mGraphMemoryPtr = ARAlloc(mGraphMemorySize);
+
+    if (mAramMemorySize) {
+        mAramMemoryPtr = ARAlloc(mAramMemorySize);
+    } else {
+        mAramMemoryPtr = NULL;
+    }
+    OSReport("ARAM audio area %08x: %08x\n", mAudioMemoryPtr, mAudioMemorySize);
+    OSReport("ARAM graph area %08x: %08x\n", mGraphMemoryPtr, mGraphMemorySize);
+    OSReport("ARAM  user area %08x: %08x\n", mAramMemoryPtr, mAramMemorySize);
+
+    mAramHeap = new (JKRHeap::getSystemHeap(), 0) JKRAramHeap(mGraphMemoryPtr, mGraphMemorySize);
 }
 
 /* 802B44D8-802B4568       .text __dt__7JKRAramFv */
 JKRAram::~JKRAram() {
-    /* Nonmatching */
+    sAramObject = NULL;
+    if (mAramHeap) {
+        delete mAramHeap;
+    }
 }
 
 /* 802B4568-802B45D4       .text run__7JKRAramFv */
-void JKRAram::run() {
-    /* Nonmatching */
+void* JKRAram::run() {
+    int result;
+    JKRAMCommand* command;
+    JKRAramPiece::Message* message;
+    OSInitMessageQueue(&sMessageQueue, sMessageBuffer, 4);
+    do {
+        OSReceiveMessage(&sMessageQueue, (OSMessage*)&message, OS_MESSAGE_BLOCK);
+        result = message->field_0x00;
+        command = message->command;
+        delete message;
+
+        switch (result) {
+        case 1:
+            JKRAramPiece::startDMA(command);
+            break;
+        }
+    } while (true);
 }
 
 /* 802B45D4-802B4664       .text checkOkAddress__7JKRAramFPUcUlP12JKRAramBlockUl */
-void JKRAram::checkOkAddress(unsigned char*, unsigned long, JKRAramBlock*, unsigned long) {
-    /* Nonmatching */
+bool JKRAram::checkOkAddress(u8* addr, u32 size, JKRAramBlock* block, u32 param_4) {
+    if (!IS_ALIGNED((u32)addr, 0x20) && !IS_ALIGNED(size, 0x20)) {
+        OSPanic(__FILE__, 226, ":::address not 32Byte aligned.");
+        return false;
+    }
+
+    if (block && !IS_ALIGNED((u32)block->getAddress() + param_4, 0x20)) {
+        OSPanic(__FILE__, 235, ":::address not 32Byte aligned.");
+        return false;
+    }
+    return true;
 }
 
 /* 802B4664-802B46C0       .text changeGroupIdIfNeed__7JKRAramFPUci */
-void JKRAram::changeGroupIdIfNeed(unsigned char*, int) {
-    /* Nonmatching */
+void JKRAram::changeGroupIdIfNeed(u8* data, int groupId) {
+    if (groupId < 0) {
+        return;
+    }
+    JKRHeap* currentHeap = JKRHeap::getCurrentHeap();
+    if (currentHeap->getHeapType() == 'EXPH') {
+        JKRExpHeap::CMemBlock* block = JKRExpHeap::CMemBlock::getBlock(data);
+        block->newGroupId(groupId);
+    }
 }
 
 /* 802B46C0-802B490C       .text mainRamToAram__7JKRAramFPUcUlUl15JKRExpandSwitchUlP7JKRHeapi */
-void JKRAram::mainRamToAram(unsigned char*, unsigned long, unsigned long, JKRExpandSwitch, unsigned long, JKRHeap*, int) {
-    /* Nonmatching */
+JKRAramBlock* JKRAram::mainRamToAram(u8 *buf, u32 bufSize, u32 alignedSize, JKRExpandSwitch expandSwitch, u32 fileSize, JKRHeap* heap, int id) {
+    JKRAramBlock *block = NULL;
+    checkOkAddress(buf, bufSize, NULL, 0);
+    if (expandSwitch == EXPAND_SWITCH_UNKNOWN1) {
+        expandSwitch = (JKRCheckCompressed(buf) == COMPRESSION_NONE) ? EXPAND_SWITCH_UNKNOWN0 : EXPAND_SWITCH_UNKNOWN1;
+    }
+    if (expandSwitch == EXPAND_SWITCH_UNKNOWN1) {
+        u32 expandSize = JKRCheckCompressed(buf) != COMPRESSION_NONE ? JKRDecompExpandSize(buf) : 0;
+        if (fileSize == 0 || fileSize > expandSize) {
+            fileSize = expandSize;
+        }
+        if (bufSize == 0) {
+            JKRAramBlock* allocatedBlock = (JKRAramBlock*)JKRAllocFromAram(fileSize, JKRAramHeap::HEAD);
+            block = (JKRAramBlock*)allocatedBlock;
+            if (allocatedBlock == NULL)
+                return NULL;
+
+            allocatedBlock->newGroupID(decideAramGroupId(id));
+            bufSize = allocatedBlock->getAddress();
+        }
+        if (alignedSize == 0 || alignedSize > expandSize)
+            alignedSize = expandSize;
+
+        if (fileSize > alignedSize)
+            fileSize = alignedSize;
+
+        void *allocatedMem = JKRAllocFromHeap(heap, fileSize, -32);
+        if (allocatedMem == NULL) {
+            if (block != NULL) {
+                JKRFreeToAram(block);
+            }
+            block = NULL;
+        }
+        else {
+            JKRDecompress(buf, (u8 *)allocatedMem, fileSize, 0);
+            JKRAramPcs(0, (u32)allocatedMem, bufSize, alignedSize, block);
+            JKRFreeToHeap(heap, allocatedMem);
+            block = block == NULL ? (JKRAramBlock *)-1 : block;
+        }
+    }
+    else {
+        if (bufSize == 0) {
+
+            JKRAramBlock* allocatedBlock = (JKRAramBlock*)JKRAllocFromAram(alignedSize, JKRAramHeap::HEAD);
+            block = allocatedBlock;
+            block->newGroupID(decideAramGroupId(id));
+            if (block == NULL)
+                return NULL;
+
+            bufSize = allocatedBlock->getAddress();
+        }
+
+        JKRAramPcs(0, (u32)buf, bufSize, alignedSize, block);
+        block = block == NULL ? (JKRAramBlock *)-1 : block;
+    }
+    return block;
 }
 
 /* 802B490C-802B49DC       .text mainRamToAram__7JKRAramFPUcP12JKRAramBlockUl15JKRExpandSwitchUlP7JKRHeapi */
-void JKRAram::mainRamToAram(unsigned char*, JKRAramBlock*, unsigned long, JKRExpandSwitch, unsigned long, JKRHeap*, int) {
+JKRAramBlock* JKRAram::mainRamToAram(u8 *buf, JKRAramBlock* block, u32 alignedSize, JKRExpandSwitch expandSwitch, u32 fileSize, JKRHeap* heap, int id) {
     /* Nonmatching */
+    checkOkAddress(buf, 0, block, 0);
+    if (!block) {
+        return mainRamToAram(buf, u32(0), alignedSize, expandSwitch, fileSize, heap, id);
+    }
+    u32 blockSize = block->mSize;
+    if (expandSwitch == 1) {
+        fileSize = fileSize >= blockSize ? blockSize : fileSize;
+    }
+    return mainRamToAram(buf, block->mAddress, alignedSize > blockSize ? blockSize : alignedSize, expandSwitch, fileSize, heap, id);
 }
 
 /* 802B49DC-802B4C54       .text aramToMainRam__7JKRAramFUlPUcUl15JKRExpandSwitchUlP7JKRHeapiPUl */
-void JKRAram::aramToMainRam(unsigned long, unsigned char*, unsigned long, JKRExpandSwitch, unsigned long, JKRHeap*, int, unsigned long*) {
-    /* Nonmatching */
+u8* JKRAram::aramToMainRam(u32 address, u8 *buf, u32 p3, JKRExpandSwitch expandSwitch, u32 p5, JKRHeap* heap, int id, u32 *pSize) {
+    JKRCompression compression = COMPRESSION_NONE;
+    if (pSize != NULL)
+        *pSize = 0;
+
+    checkOkAddress(buf, address, NULL, 0);
+
+    u32 expandSize;
+    if (expandSwitch == EXPAND_SWITCH_UNKNOWN1) {
+        u8 buffer[64];
+        u8 *bufPtr = (u8 *)ALIGN_NEXT((u32)buffer, 32);
+        JKRAramPcs(1, address, (u32)bufPtr, sizeof(buffer) / 2, NULL); // probably change sizeof(buffer) / 2 to 32
+        compression = JKRCheckCompressed(bufPtr);
+        expandSize = JKRDecompExpandSize(bufPtr);
+    }
+
+    if (compression == COMPRESSION_YAZ0) { // SZS
+        if (p5 != 0 && p5 < expandSize)
+            expandSize = p5;
+
+        if (buf == NULL)
+            buf = (u8 *)JKRAllocFromHeap(heap, expandSize, 32);
+        if (buf == NULL)
+            return NULL;
+        else {
+            changeGroupIdIfNeed(buf, id);
+            JKRDecompressFromAramToMainRam(address, buf, p3, expandSize, 0);
+            if (pSize != NULL) {
+                *pSize = expandSize;
+            }
+            return buf;
+        }
+    }
+    else if (compression == COMPRESSION_YAY0) { // SZP
+        u8 *szpSpace = (u8 *)JKRAllocFromHeap(heap, p3, -32);
+        if (szpSpace == NULL) {
+            return NULL;
+        }
+        else {
+            JKRAramPcs(1, address, (u32)szpSpace, p3, NULL);
+            if (p5 != 0 && p5 < expandSize)
+                expandSize = p5;
+
+            u8* rv;
+            if (buf == NULL) {
+                rv = (u8 *)JKRAllocFromHeap(heap, expandSize, 32);
+            } else {
+                rv = buf;
+            }
+
+            if (rv == NULL) {
+                i_JKRFree(szpSpace);
+                return NULL;
+            }
+            else {
+                changeGroupIdIfNeed(rv, id);
+                JKRDecompress(szpSpace, rv, expandSize, 0);
+                JKRFreeToHeap(heap, szpSpace);
+                if (pSize != NULL) {
+                    *pSize = expandSize;
+                }
+                return rv;
+            }
+        }
+    }
+    else { // Not compressed or ASR
+        if (buf == NULL)
+            buf = (u8 *)JKRAllocFromHeap(heap, p3, 32);
+        if (buf == NULL) {
+            return NULL;
+        }
+        else {
+            changeGroupIdIfNeed(buf, id);
+            JKRAramPcs(1, address, (u32)buf, p3, NULL);
+            if (pSize != NULL) {
+                *pSize = p3;
+            }
+            return buf;
+        }
+    }
 }
 
 /* 802B4C54-802B4D4C       .text aramToMainRam__7JKRAramFP12JKRAramBlockPUcUlUl15JKRExpandSwitchUlP7JKRHeapiPUl */
-void JKRAram::aramToMainRam(JKRAramBlock*, unsigned char*, unsigned long, unsigned long, JKRExpandSwitch, unsigned long, JKRHeap*, int, unsigned long*) {
+u8* JKRAram::aramToMainRam(JKRAramBlock* block, u8 *buf, u32 p3, u32 p4, JKRExpandSwitch expandSwitch, u32 p6, JKRHeap* heap, int id, u32 *pSize) {
     /* Nonmatching */
+    if (pSize) {
+        *pSize = 0;
+    }
+    checkOkAddress(buf, 0, block, p4);
+    if (!block) {
+#if VERSION == VERSION_JPN
+        OSPanic(__FILE__, 690, ":::Bad Aram Block specified.\n");
+#else
+        OSPanic(__FILE__, 683, ":::Bad Aram Block specified.\n");
+#endif
+    }
+    if (p4 >= block->mSize) {
+        return NULL;
+    }
+    p3 = p3 == 0 ? block->mSize : p3;
+    if (p4 + p3 > block->mSize) {
+        p3 = block->mSize - p4;
+    }
+    return aramToMainRam(p4 + block->mAddress, buf, p3, expandSwitch, p6, heap, id, pSize);
 }
 
+static void dummy() {
+    OSReport("---------------- BAD SYNC. you'd set callback, but now call sync.\n");
+}
+JSUList<JKRAMCommand> JKRAram::sAramCommandList;
+static OSMutex decompMutex;
+u32 JKRAram::sSzpBufferSize = 0x00000400;
+static u8* szpBuf;
+static u8* szpEnd;
+static u8* refBuf;
+static u8* refEnd;
+static u8* refCurrent;
+static u32 srcOffset;
+static u32 transLeft;
+static u8* srcLimit;
+static u32 srcAddress;
+static u32 fileOffset;
+static u32 readCount;
+static u32 maxDest;
+static bool isInitMutex;
+
 /* 802B4D4C-802B4F20       .text JKRDecompressFromAramToMainRam__FUlPvUlUlUl */
-void JKRDecompressFromAramToMainRam(unsigned long, void*, unsigned long, unsigned long, unsigned long) {
-    /* Nonmatching */
+static int JKRDecompressFromAramToMainRam(u32 src, void* dst, u32 srcLength, u32 dstLength, u32 offset) {
+    BOOL interrupts = OSDisableInterrupts();
+    if (isInitMutex == false) {
+        OSInitMutex(&decompMutex);
+        isInitMutex = true;
+    }
+    OSRestoreInterrupts(interrupts);
+    OSLockMutex(&decompMutex);
+
+    u32 szsBufferSize = JKRAram::getSzpBufferSize();
+    szpBuf = (u8 *)JKRAllocFromSysHeap(szsBufferSize, 32);
+#if VERSION == VERSION_JPN
+    JUT_ASSERT(1091, szpBuf != 0);
+#else
+    JUT_ASSERT(1077, szpBuf != 0);
+#endif
+
+    szpEnd = szpBuf + szsBufferSize;
+    if (offset != 0) {
+        refBuf = (u8 *)JKRAllocFromSysHeap(0x1120, 0);
+#if VERSION == VERSION_JPN
+        JUT_ASSERT(1100, refBuf != 0);
+#else
+        JUT_ASSERT(1086, refBuf != 0);
+#endif
+        refEnd = refBuf + 0x1120;
+        refCurrent = refBuf;
+    }
+    else {
+        refBuf = NULL;
+    }
+    srcAddress = src;
+    srcOffset = 0;
+    transLeft = (srcLength != 0) ? srcLength : -1;
+    fileOffset = offset;
+    readCount = 0;
+    maxDest = dstLength;
+
+    u8* data = firstSrcData();
+    u32 decompressedSize = ((u32*)data)[1];
+    decompSZS_subroutine(data, (u8 *)dst);
+    i_JKRFree(szpBuf);
+    if (refBuf) {
+        i_JKRFree(refBuf);
+    }
+
+    DCStoreRangeNoSync(dst, decompressedSize);
+    OSUnlockMutex(&decompMutex);
+
+    return 0;
 }
 
 /* 802B4F20-802B51A4       .text decompSZS_subroutine__FPUcPUc */
-void decompSZS_subroutine(unsigned char*, unsigned char*) {
-    /* Nonmatching */
+static int decompSZS_subroutine(u8 *src, u8 *dest) {
+    u8 *endPtr;
+    s32 validBitCount = 0;
+    s32 currCodeByte = 0;
+    u32 ts = 0;
+
+    if (src[0] != 'Y' || src[1] != 'a' || src[2] != 'z' || src[3] != '0') {
+        return -1;
+    }
+
+    SYaz0Header *header = (SYaz0Header *)src;
+    endPtr = dest + (header->length - fileOffset);
+    if (endPtr > dest + maxDest) {
+        endPtr = dest + maxDest;
+    }
+
+    src += 0x10;
+    do {
+        if (validBitCount == 0) {
+            if ((src > srcLimit) && transLeft) {
+                src = nextSrcData(src);
+            }
+            currCodeByte = *src;
+            validBitCount = 8;
+            src++;
+        }
+        if (currCodeByte & 0x80) {
+            if (fileOffset != 0) {
+                if (readCount >= fileOffset) {
+                    *dest = *src;
+                    dest++;
+                    ts++;
+                    if (dest == endPtr)
+                    {
+                        break;
+                    }
+                }
+                *(refCurrent++) = *src;
+                if (refCurrent == refEnd) {
+                    refCurrent = refBuf;
+                }
+                src++;
+            }
+            else {
+                *dest = *src;
+                dest++;
+                src++;
+                ts++;
+                if (dest == endPtr) {
+                    break;
+                }
+            }
+            readCount++;
+        }
+        else {
+            u32 dist = ((src[0] & 0x0f) << 8) | src[1];
+            s32 numBytes = src[0] >> 4;
+            src += 2;
+            u8 *copySource;
+            if (fileOffset != 0) {
+                copySource = refCurrent - dist - 1;
+                if (copySource < refBuf) {
+                    copySource += refEnd - refBuf;
+                }
+            }
+            else {
+                copySource = dest - dist - 1;
+            }
+            if (numBytes == 0) {
+                numBytes = *src + 0x12;
+                src += 1;
+            }
+            else {
+                numBytes += 2;
+            }
+            if (fileOffset != 0) {
+                do {
+                    if (readCount >= fileOffset) {
+                        *dest = *copySource;
+                        dest++;
+                        ts++;
+                        if (dest == endPtr) {
+                            break;
+                        }
+                    }
+                    *(refCurrent++) = *copySource;
+                    if (refCurrent == refEnd) {
+                        refCurrent = refBuf;
+                    }
+                    copySource++;
+                    if (copySource == refEnd) {
+                        copySource = refBuf;
+                    }
+                    readCount++;
+                    numBytes--;
+                } while (numBytes != 0);
+            }
+            else {
+                do {
+                    *dest = *copySource;
+                    dest++;
+                    ts++;
+                    if (dest == endPtr) {
+                        break;
+                    }
+                    readCount++;
+                    numBytes--;
+                    copySource++;
+                } while (numBytes != 0);
+            }
+        }
+        currCodeByte <<= 1;
+        validBitCount--;
+    } while (dest < endPtr);
+    return 0;
 }
 
 /* 802B51A4-802B5248       .text firstSrcData__Fv */
-void firstSrcData() {
-    /* Nonmatching */
+static u8* firstSrcData() {
+    srcLimit = szpEnd - 0x19;
+    u8* buffer = szpBuf;
+
+    u32 length;
+    u32 size = szpEnd - szpBuf;
+    if (transLeft < size) {
+        length = transLeft;
+    } else {
+        length = size;
+    }
+
+    u32 src = (u32)(srcAddress + srcOffset);
+    u32 dst = (u32)buffer;
+    u32 alignedLength = ALIGN_NEXT(length, 0x20);
+    JKRAramPcs(1, src, dst, alignedLength, NULL);
+
+    srcOffset += length;
+    transLeft -= length;
+    if (!transLeft) {
+        srcLimit = buffer + length;
+    }
+
+    return buffer;
 }
 
 /* 802B5248-802B5350       .text nextSrcData__FPUc */
-void nextSrcData(unsigned char*) {
-    /* Nonmatching */
-}
+static u8* nextSrcData(u8* current) {
+    u8 *dest;
+    u32 left = (u32)(szpEnd - current);
+    if (IS_NOT_ALIGNED(left, 0x20)) {
+        dest = szpBuf + 0x20 - (left & (0x20 - 1));
+    } else {
+        dest = szpBuf;
+    }
 
-/* 802B5394-802B53E8       .text __dt__23JSUList<12JKRAMCommand>Fv */
-JSUList<JKRAMCommand>::~JSUList() {
-    /* Nonmatching */
+    memcpy(dest, current, left);
+    u32 transSize = (u32)(szpEnd - (dest + left));
+    if (transSize > transLeft) {
+        transSize = transLeft;
+    }
+#if VERSION == VERSION_JPN
+    JUT_ASSERT(1376, transSize > 0)
+#else
+    JUT_ASSERT(1361, transSize > 0)
+#endif
+
+    JKRAramPcs(1, (u32)(srcAddress + srcOffset), ((u32)dest + left), ALIGN_NEXT(transSize, 0x20),
+               NULL);
+    srcOffset += transSize;
+    transLeft -= transSize;
+
+    if (transLeft == 0)
+        srcLimit = (dest + left) + transSize;
+
+    return dest;
 }

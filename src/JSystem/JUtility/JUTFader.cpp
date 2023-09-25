@@ -4,34 +4,85 @@
 //
 
 #include "JSystem/JUtility/JUTFader.h"
+#include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "dolphin/types.h"
 
 /* 802C8544-802C85F0       .text __ct__8JUTFaderFiiiiQ28JUtility6TColor */
-JUTFader::JUTFader(int, int, int, int, JUtility::TColor) {
-    /* Nonmatching */
+JUTFader::JUTFader(int x, int y, int width, int height, JUtility::TColor pColor) : mColor(pColor), mBox(x, y, x + width, y + height) {
+    mStatus = 0;
+    field_0x8 = 0;
+    field_0xa = 0;
+    field_0x24 = 0;
+    mEStatus = UNKSTATUS_M1;
 }
 
 /* 802C85F0-802C86F0       .text control__8JUTFaderFv */
 void JUTFader::control() {
-    /* Nonmatching */
+    if (0 <= mEStatus && mEStatus-- == 0) {
+        mStatus = field_0x24;
+    }
+
+    if (mStatus == 1) {
+        return;
+    }
+
+    switch (mStatus) {
+    case 0:
+        mColor.a = 0xFF;
+        break;
+    case 2:
+        mColor.a = 0xFF - ((++field_0xa * 0xFF) / field_0x8);
+
+        if (field_0xa >= field_0x8) {
+            mStatus = 1;
+        }
+
+        break;
+    case 3:
+        mColor.a = ((++field_0xa * 0xFF) / field_0x8);
+
+        if (field_0xa >= field_0x8) {
+            mStatus = 0;
+        }
+
+        break;
+    }
+    draw();
 }
 
 /* 802C86F0-802C8780       .text draw__8JUTFaderFv */
 void JUTFader::draw() {
-    /* Nonmatching */
+    if (mColor.a == 0) {
+        return;
+    }
+
+    J2DOrthoGraph orthograph;
+    orthograph.setColor(mColor);
+    orthograph.fillBox(mBox);
 }
 
 /* 802C8780-802C87B0       .text startFadeIn__8JUTFaderFi */
-void JUTFader::startFadeIn(int) {
-    /* Nonmatching */
+bool JUTFader::startFadeIn(int param_0) {
+    bool statusCheck = mStatus == 0;
+
+    if (statusCheck) {
+        mStatus = 2;
+        field_0xa = 0;
+        field_0x8 = param_0;
+    }
+
+    return statusCheck;
 }
 
 /* 802C87B0-802C87E4       .text startFadeOut__8JUTFaderFi */
-void JUTFader::startFadeOut(int) {
-    /* Nonmatching */
-}
+bool JUTFader::startFadeOut(int param_0) {
+    bool statusCheck = mStatus == 1;
 
-/* 802C87E4-802C882C       .text __dt__8JUTFaderFv */
-JUTFader::~JUTFader() {
-    /* Nonmatching */
+    if (statusCheck) {
+        mStatus = 3;
+        field_0xa = 0;
+        field_0x8 = param_0;
+    }
+
+    return statusCheck;
 }

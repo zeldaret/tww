@@ -28,10 +28,10 @@ struct fopAcM_prm_class {
     /* 0x00 */ u32 mParameter;  // single U32 Parameter
     /* 0x04 */ cXyz mPos;
     /* 0x10 */ csXyz mAngle;  // rotation
-    /* 0x16 */ u16 mEnemyNo;
+    /* 0x16 */ u16 mSetId;
     /* 0x18 */ u8 mScale[3];
-    /* 0x1B */ u8 mGbaName;     // from WW, maybe a different parameter here
-    /* 0x1C */ s32 mParentPId;  // parent process ID
+    /* 0x1B */ u8 mGbaName;
+    /* 0x1C */ s32 mParentPcId;  // parent process ID
     /* 0x20 */ s8 mSubtype;
     /* 0x21 */ s8 mRoomNo;
 };
@@ -99,10 +99,6 @@ enum fopAcM_CARRY {
     /* 0x30 */ fopAcM_CARRY_UNK_30 = 0x30,
 };
 
-inline u32 fopAcM_CheckCarryType(fopAc_ac_c* actor, fopAcM_CARRY type) {
-    return actor->mCarryType & type;
-}
-
 inline u32 fopAcM_checkHookCarryNow(fopAc_ac_c* pActor) {
     return fopAcM_checkStatus(pActor, 0x100000);
 }
@@ -119,8 +115,8 @@ inline void fopAcM_SetParam(void* p_actor, u32 param) {
     fpcM_SetParam(p_actor, param);
 }
 
-inline void fopAcM_SetJntCol(fopAc_ac_c* i_actorP, dJntCol_c* i_jntColP) {
-    i_actorP->mJntCol = i_jntColP;
+inline void fopAcM_SetJntHit(fopAc_ac_c* i_actorP, JntHit_c* i_jntHitP) {
+    i_actorP->mJntHit = i_jntHitP;
 }
 
 inline s16 fopAcM_GetProfName(void* pActor) {
@@ -141,10 +137,6 @@ inline void fopAcM_OffStatus(fopAc_ac_c* pActor, u32 flag) {
 
 inline fopAc_ac_c* fopAcM_Search(fopAcIt_JudgeFunc func, void* param) {
     return (fopAc_ac_c*)fopAcIt_Judge(func, param);
-}
-
-inline fopAc_ac_c* fopAcM_SearchByID(unsigned int id) {
-    return (fopAc_ac_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)fpcSch_JudgeByID, &id);
 }
 
 inline cXyz& fopAcM_GetPosition_p(fopAc_ac_c* pActor) {
@@ -251,8 +243,8 @@ inline f32 fopAcM_GetMaxFallSpeed(fopAc_ac_c* p_actor) {
     return p_actor->mMaxFallSpeed;
 }
 
-inline dJntCol_c* fopAcM_GetJntCol(fopAc_ac_c* i_actor) {
-    return i_actor->mJntCol;
+inline JntHit_c* fopAcM_GetJntHit(fopAc_ac_c* i_actor) {
+    return i_actor->mJntHit;
 }
 
 inline void fopAcM_setCullSizeFar(fopAc_ac_c* i_actor, f32 i_far) {
@@ -296,6 +288,10 @@ inline BOOL fopAcM_isSwitch(fopAc_ac_c* pActor, int sw) {
     return dComIfGs_isSwitch(sw, fopAcM_GetHomeRoomNo(pActor));
 }
 
+inline fopAc_ac_c* fopAcM_SearchByID(unsigned int id) {
+    return (fopAc_ac_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)fpcSch_JudgeByID, &id);
+}
+
 inline fopAc_ac_c* fopAcM_SearchByName(s16 proc_id) {
     return (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeForPName, &proc_id);
 }
@@ -315,7 +311,7 @@ inline f32 fopAcM_searchActorDistanceY(fopAc_ac_c* actorA, fopAc_ac_c* actorB) {
 }
 
 inline u16 fopAcM_GetSetId(fopAc_ac_c* p_actor) {
-    return p_actor->mSetID;
+    return p_actor->mSetId;
 }
 
 inline void dComIfGs_onActor(int bitNo, int roomNo);
@@ -345,15 +341,13 @@ fopAcM_prm_class* createAppend(u16 enemyNo, u32 parameters, cXyz* p_pos, int roo
 
 void fopAcM_Log(fopAc_ac_c* p_actor, char* str);
 
-void fopAcM_delete(fopAc_ac_c* p_actor);
-
+s32 fopAcM_delete(fopAc_ac_c* p_actor);
 s32 fopAcM_delete(unsigned int actorID);
 
-s32 fopAcM_create(s16 procName, u16 enemyNo, u32 parameter, cXyz* p_pos, int roomNo,
-                  csXyz* p_angle, cXyz* p_scale, s8 subType, createFunc p_createFunc);
+s32 fopAcM_create(char*, u32 i_parameter, cXyz* i_pos, int i_roomNo, csXyz* i_angle, cXyz* i_scale, createFunc i_createFunc);
+s32 fopAcM_create(s16 i_procName, u32 i_parameter, cXyz* i_pos, int i_roomNo, csXyz* i_angle, cXyz* i_scale, s8 i_subType, createFunc i_createFunc);
 
-s32 fopAcM_create(s16 procName, u32 parameter, cXyz* p_pos, int roomNo, csXyz* p_angle,
-                  cXyz* p_scale, s8 subType);
+inline s32 fopAcM_create(s16 i_procName, createFunc i_createFunc, void*);
 
 void* fopAcM_fastCreate(s16 procName, u32 parameter, cXyz* p_pos, int roomNo,
                         csXyz* p_angle, cXyz* p_scale, s8 subType,
@@ -410,18 +404,20 @@ f32 fopAcM_searchActorDistanceXZ(fopAc_ac_c* p_actorA, fopAc_ac_c* p_actorB);
 
 f32 fopAcM_searchActorDistanceXZ2(fopAc_ac_c* p_actorA, fopAc_ac_c* p_actorB);
 
-s32 fopAcM_rollPlayerCrash(fopAc_ac_c*, f32, u32, f32, f32, int, f32);
+s32 fopAcM_rollPlayerCrash(fopAc_ac_c*, f32, u32);
 s32 fopAcM_checkCullingBox(f32[3][4], f32, f32, f32, f32, f32, f32);
 s32 fopAcM_cullingCheck(fopAc_ac_c*);
 void* event_second_actor(u16);
 s32 fopAcM_orderTalkEvent(fopAc_ac_c*, fopAc_ac_c*, u16, u16);
 s32 fopAcM_orderTalkItemBtnEvent(u16, fopAc_ac_c*, fopAc_ac_c*, u16, u16);
-s32 fopAcM_orderSpeakEvent(fopAc_ac_c* i_actor, u16 i_priority, u16 i_flag);
+s32 fopAcM_orderSpeakEvent(fopAc_ac_c* i_actor);
 s32 fopAcM_orderDoorEvent(fopAc_ac_c*, fopAc_ac_c*, u16, u16);
 s32 fopAcM_orderCatchEvent(fopAc_ac_c*, fopAc_ac_c*, u16, u16);
 s32 fopAcM_orderOtherEvent(fopAc_ac_c*, char*, u16, u16, u16);
 s32 fopAcM_orderOtherEvent(fopAc_ac_c*, fopAc_ac_c*, char*, u16, u16, u16);
-s32 fopAcM_orderChangeEventId(fopAc_ac_c*, s16, u16, u16);
+s32 fopAcM_orderOtherEvent2(fopAc_ac_c*, char*, u16, u16);
+s32 fopAcM_orderChangeEventId(fopAc_ac_c* i_this, s16 eventIdx, u16 flag, u16 hind);
+s32 fopAcM_orderChangeEventId(fopAc_ac_c* i_this, fopAc_ac_c* i_partner, s16 eventIdx, u16 flag, u16 hind);
 s32 fopAcM_orderOtherEventId(fopAc_ac_c* actor, s16 eventID, u8 mapToolID, u16 param_3,
                              u16 priority, u16 flag);
 s32 fopAcM_orderMapToolEvent(fopAc_ac_c*, u8, s16, u16, u16, u16);
@@ -541,13 +537,13 @@ inline f32 fopAcM_searchPlayerDistance(fopAc_ac_c* actor) {
 s8 dComIfGp_getReverb(int roomNo);
 
 inline void fopAcM_seStartCurrent(fopAc_ac_c* actor, u32 sfxID, u32 param_2) {
-    s8 roomNo = fopAcM_GetRoomNo(actor);
-    mDoAud_seStart(sfxID, &actor->current.pos, param_2, dComIfGp_getReverb(roomNo));
+    s8 reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(actor));
+    mDoAud_seStart(sfxID, &actor->current.pos, param_2, reverb);
 }
 
 inline void fopAcM_seStart(fopAc_ac_c* actor, u32 sfxID, u32 param_2) {
-    s8 roomNo = fopAcM_GetRoomNo(actor);
-    // mDoAud_seStart(sfxID, &actor->mEyePos, param_2, dComIfGp_getReverb(roomNo));
+    s32 roomNo = fopAcM_GetRoomNo(actor);
+    mDoAud_seStart(sfxID, &actor->mEyePos, param_2, dComIfGp_getReverb(roomNo));
 }
 
 extern "C" {

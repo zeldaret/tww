@@ -4,11 +4,19 @@
 //
 
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
-#include "dolphin/types.h"
+#include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
+#include "JSystem/J3DGraphBase/J3DSys.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "dolphin/os/OSCache.h"
+
+Mtx J3DModel::sNoUseDrawMtx;
+Mtx33 J3DModel::sNoUseNrmMtx;
+Mtx* J3DModel::sNoUseDrawMtxPtr = &J3DModel::sNoUseDrawMtx;
+Mtx33* J3DModel::sNoUseNrmMtxPtr = &J3DModel::sNoUseNrmMtx;
 
 /* 802ED564-802ED5AC       .text __ct__8J3DModelFv */
 J3DModel::J3DModel() {
-    /* Nonmatching */
+    initialize();
 }
 
 /* 802ED5AC-802ED610       .text __dt__8J3DModelFv */
@@ -18,77 +26,427 @@ J3DModel::~J3DModel() {
 
 /* 802ED610-802ED6C4       .text initialize__8J3DModelFv */
 void J3DModel::initialize() {
-    /* Nonmatching */
+    mModelData = NULL;
+    mFlags = 0;
+    mDiffFlag = 0;
+    mCalcCallBack = NULL;
+    mUserArea = 0;
+
+    mBaseScale.x = 1.0f;
+    mBaseScale.y = 1.0f;
+    mBaseScale.z = 1.0f;
+
+    MTXIdentity(mBaseTransformMtx);
+    MTXIdentity(mInternalView);
+
+    mpScaleFlagArr = NULL;
+    mpEvlpScaleFlagArr = NULL;
+    mpNodeMtx = NULL;
+    mpWeightEnvMtx = NULL;
+    mpDrawMtxBuf[0] = NULL;
+    mpDrawMtxBuf[1] = NULL;
+    mpNrmMtxBuf[0] = NULL;
+    mpNrmMtxBuf[1] = NULL;
+    mpBumpMtxArr[0] = NULL;
+    mpBumpMtxArr[1] = NULL;
+    mMtxBufferFlag = 1;
+    mCurrentViewNo = 0;
+    mpMatPacket = NULL;
+    mpShapePacket = NULL;
+    mpDeformData = NULL;
+    mpSkinDeform = NULL;
+    field_0xc4 = NULL;
+    field_0xc8 = NULL;
+    mpVisibilityManager = NULL;
+}
+
+enum {
+    J3DMdlDataFlag_ConcatView = 0x10,
+    J3DMdlDataFlag_NoUseDrawMtx = 0x20,
+    J3DMdlDataFlag_NoAnimation = 0x100,
+};
+
+static inline u32 getMdlDataFlag_MtxLoadType(u32 flag) {
+    return flag & 0xF0;
 }
 
 /* 802ED6C4-802ED8D8       .text entryModelData__8J3DModelFP12J3DModelDataUlUl */
-void J3DModel::entryModelData(J3DModelData*, unsigned long, unsigned long) {
-    /* Nonmatching */
+s32 J3DModel::entryModelData(J3DModelData* pModelData, u32 modelFlag, u32 mtxBufferFlag) {
+    s32 ret = kJ3DError_Success;
+
+    mModelData = pModelData;
+    mMtxBufferFlag = mtxBufferFlag;
+
+    if (pModelData->getJointNum() != 0) {
+        mpScaleFlagArr = new u8[pModelData->getJointNum()];
+        if (pModelData->getWEvlpMtxNum() != 0)
+            mpEvlpScaleFlagArr = new u8[pModelData->getWEvlpMtxNum()];
+        mpNodeMtx = new Mtx[pModelData->getJointNum()];
+    }
+
+    if (pModelData->getWEvlpMtxNum() != 0) {
+        mpWeightEnvMtx = new Mtx[pModelData->getWEvlpMtxNum()];
+    }
+
+    if (mpScaleFlagArr == NULL)
+        return kJ3DError_Alloc;
+
+    if (pModelData->getWEvlpMtxNum() != 0 && mpEvlpScaleFlagArr == NULL)
+        return kJ3DError_Alloc;
+
+    if (mpNodeMtx == NULL)
+        return kJ3DError_Alloc;
+
+    if (pModelData->getWEvlpMtxNum() != 0 && mpWeightEnvMtx == NULL)
+        return kJ3DError_Alloc;
+
+    if (pModelData->checkFlag(J3DMdlDataFlag_NoAnimation)) {
+        setNoUseDrawMtx();
+    } else {
+        switch (getMdlDataFlag_MtxLoadType(pModelData->getFlag())) {
+        case J3DMdlDataFlag_NoUseDrawMtx:
+            ret = setNoUseDrawMtx();
+            break;
+        case J3DMdlDataFlag_ConcatView:
+            ret = createSingleDrawMtx(pModelData);
+            break;
+        case 0:
+        default:
+            ret = createDoubleDrawMtx(pModelData, mtxBufferFlag);
+            break;
+        }
+    }
+
+    if (ret != kJ3DError_Success)
+        return ret;
+
+    ret = createShapePacket(pModelData);
+    if (ret != kJ3DError_Success)
+        return ret;
+
+    ret = createMatPacket(pModelData, modelFlag);
+    if (ret != kJ3DError_Success)
+        return ret;
+
+    if (pModelData->checkFlag(J3DMdlDataFlag_ConcatView)) {
+        mModelData->setBumpFlag(0);
+    } else {
+        ret = createBumpMtxArray(pModelData, mtxBufferFlag);
+        if (ret != kJ3DError_Success)
+            return ret;
+    }
+
+    mVertexBuffer.setVertexData(&pModelData->getVertexData());
+    prepareShapePackets();
+    ret = kJ3DError_Success;
+
+    return ret;
 }
 
 /* 802ED8D8-802ED904       .text setNoUseDrawMtx__8J3DModelFv */
-void J3DModel::setNoUseDrawMtx() {
-    /* Nonmatching */
+s32 J3DModel::setNoUseDrawMtx() {
+    mpDrawMtxBuf[1] = &sNoUseDrawMtxPtr;
+    mpDrawMtxBuf[0] = &sNoUseDrawMtxPtr;
+    mpNrmMtxBuf[1] = &sNoUseNrmMtxPtr;
+    mpNrmMtxBuf[0] = &sNoUseNrmMtxPtr;
+    mpBumpMtxArr[1] = NULL;
+    mpBumpMtxArr[0] = NULL;
+    return kJ3DError_Success;
 }
 
 /* 802ED904-802EDA14       .text createSingleDrawMtx__8J3DModelFP12J3DModelData */
-void J3DModel::createSingleDrawMtx(J3DModelData*) {
-    /* Nonmatching */
+s32 J3DModel::createSingleDrawMtx(J3DModelData* pModelData) {
+    mpDrawMtxBuf[0] = new Mtx*[1];
+    mpDrawMtxBuf[1] = mpDrawMtxBuf[0];
+    mpNrmMtxBuf[0] = new Mtx33*[1];
+    mpNrmMtxBuf[1] = mpNrmMtxBuf[0];
+    mpBumpMtxArr[0] = NULL;
+    mpBumpMtxArr[1] = NULL;
+
+    if (mpDrawMtxBuf[0] == NULL)
+        return kJ3DError_Alloc;
+    if (mpNrmMtxBuf[0] == NULL)
+        return kJ3DError_Alloc;
+
+    if (pModelData->getDrawMtxNum() != 0) {
+        mpDrawMtxBuf[0][0] = new (0x20) Mtx[pModelData->getDrawMtxNum()];
+        mpDrawMtxBuf[1][0] = mpDrawMtxBuf[0][0];
+        mpNrmMtxBuf[0][0] = new (0x20) Mtx33[1];
+        mpNrmMtxBuf[1][0] = mpNrmMtxBuf[0][0];
+    }
+
+    if (pModelData->getDrawMtxNum() != 0 && mpDrawMtxBuf[0][0] == NULL)
+        return kJ3DError_Alloc;
+
+    return kJ3DError_Success;
 }
 
 /* 802EDA14-802EDBC0       .text createDoubleDrawMtx__8J3DModelFP12J3DModelDataUl */
-void J3DModel::createDoubleDrawMtx(J3DModelData*, unsigned long) {
-    /* Nonmatching */
+s32 J3DModel::createDoubleDrawMtx(J3DModelData* pModelData, u32 num) {
+    if (num != 0) {
+        for (s32 i = 0; i < 2; i++) {
+            mpDrawMtxBuf[i] = new Mtx*[num];
+            mpNrmMtxBuf[i] = new Mtx33*[num];
+            mpBumpMtxArr[i] = NULL;
+        }
+    }
+
+    if (num != 0) {
+        for (u32 i = 0; i < 2; i++) {
+            if (mpDrawMtxBuf[i] == NULL)
+                return kJ3DError_Alloc;
+            if (mpNrmMtxBuf[i] == NULL)
+                return kJ3DError_Alloc;
+        }
+    }
+
+    for (s32 i = 0; i < 2; i++) {
+        for (u32 j = 0; j < num; j++) {
+            if (pModelData->getDrawMtxNum() != 0) {
+                mpDrawMtxBuf[i][j] = new (0x20) Mtx[pModelData->getDrawMtxNum()];
+                mpNrmMtxBuf[i][j] = new (0x20) Mtx33[pModelData->getDrawMtxNum()];
+            }
+        }
+    }
+
+    for (s32 i = 0; i < 2; i++) {
+        for (u32 j = 0; j < num; j++) {
+            if (pModelData->getDrawMtxNum() != 0) {
+                if (mpDrawMtxBuf[i][j] == NULL)
+                    return kJ3DError_Alloc;
+                if (mpNrmMtxBuf[i][j] == NULL)
+                    return kJ3DError_Alloc;
+            }
+        }
+    }
+
+    return kJ3DError_Success;
 }
 
 /* 802EDBC0-802EDC8C       .text createShapePacket__8J3DModelFP12J3DModelData */
-void J3DModel::createShapePacket(J3DModelData*) {
-    /* Nonmatching */
+s32 J3DModel::createShapePacket(J3DModelData* pModelData) {
+    if (pModelData->getShapeNum() != 0) {
+        u16 shapeNum = pModelData->getShapeNum();
+
+        mpShapePacket = new J3DShapePacket[shapeNum];
+        if (mpShapePacket == NULL)
+            return kJ3DError_Alloc;
+
+        for (int i = 0; i < pModelData->getShapeNum(); i++) {
+            J3DShape* shapeNode = pModelData->getShapeNodePointer(i);
+            mpShapePacket[i].setShape(shapeNode);
+            mpShapePacket[i].setModel(this);
+        }
+    }
+
+    return kJ3DError_Success;
 }
 
 /* 802EDC8C-802EDF60       .text createMatPacket__8J3DModelFP12J3DModelDataUl */
-void J3DModel::createMatPacket(J3DModelData*, unsigned long) {
-    /* Nonmatching */
+s32 J3DModel::createMatPacket(J3DModelData* pModelData, u32 flag) {
+    if (pModelData->getMaterialNum() != 0) {
+        mpMatPacket = new J3DMatPacket[pModelData->getMaterialNum()];
+
+        if (mpMatPacket == NULL)
+            return kJ3DError_Alloc;
+    }
+
+    s32 ret;
+
+    u32 singleDLFlag = flag & 0x40000;
+    for (s32 i = 0; i < pModelData->getMaterialNum(); i++) {
+        mpMatPacket[i].setMaterial(pModelData->getMaterialNodePointer(i));
+        J3DShapePacket* shapePacket = getShapePacket(pModelData->getMaterialNodePointer(i)->getShape()->getIndex());
+        mpMatPacket[i].setInitShapePacket(shapePacket);
+        mpMatPacket[i].addShapePacket(shapePacket);
+        mpMatPacket[i].setTexture(pModelData->getMaterialTable().getTexture());
+        mpMatPacket[i].mDiffFlag = pModelData->getMaterialNodePointer(i)->mDiffFlag;
+
+        if (pModelData->getModelDataType() == 1)
+            mpMatPacket[i].mFlags |= 0x01;
+
+        if (!!(flag & 0x80000)) {
+            mpMatPacket[i].mpDisplayListObj = pModelData->getMaterialNodePointer(i)->getSharedDisplayListObj();
+        } else {
+            if (pModelData->getModelDataType() == 1) {
+                if (!!(flag & 0x40000)) {
+                    mpMatPacket[i].mpDisplayListObj = pModelData->getMaterialNodePointer(i)->getSharedDisplayListObj();
+                } else {
+                    J3DDisplayListObj* sharedDL = pModelData->getMaterialNodePointer(i)->getSharedDisplayListObj();
+                    ret = sharedDL->single_To_Double();
+                    if (ret != kJ3DError_Success)
+                        return ret;
+
+                    mpMatPacket[i].mpDisplayListObj = sharedDL;
+                }
+            } else if (!!(flag & 0x20000)) {
+                if (!!(flag & 0x40000)) {
+                    ret = pModelData->getMaterialNodePointer(i)->newSingleSharedDisplayList(pModelData->getMaterialNodePointer(i)->countDLSize());
+                    if (ret != kJ3DError_Success)
+                        return ret;
+
+                    mpMatPacket[i].mpDisplayListObj = pModelData->getMaterialNodePointer(i)->getSharedDisplayListObj();
+                } else {
+                    ret = pModelData->getMaterialNodePointer(i)->newSharedDisplayList(pModelData->getMaterialNodePointer(i)->countDLSize());
+                    if (ret != kJ3DError_Success)
+                        return ret;
+
+                    J3DDisplayListObj* sharedDL = pModelData->getMaterialNodePointer(i)->getSharedDisplayListObj();
+                    ret = sharedDL->single_To_Double();
+                    if (ret != kJ3DError_Success)
+                        return ret;
+
+                    mpMatPacket[i].mpDisplayListObj = sharedDL;
+                }
+            } else {
+                if (!!(flag & 0x40000)) {
+                    u32 size = pModelData->getMaterialNodePointer(i)->countDLSize();
+                    ret = mpMatPacket[i].newSingleDisplayList(size);
+                    if (ret != kJ3DError_Success)
+                        return ret;
+                } else {
+                    u32 size = pModelData->getMaterialNodePointer(i)->countDLSize();
+                    ret = mpMatPacket[i].newDisplayList(size);
+                    if (ret != kJ3DError_Success)
+                        return ret;
+                }
+            }
+        }
+    }
+
+    return kJ3DError_Success;
 }
 
 /* 802EDF60-802EE1D4       .text createBumpMtxArray__8J3DModelFP12J3DModelDataUl */
-void J3DModel::createBumpMtxArray(J3DModelData*, unsigned long) {
+s32 J3DModel::createBumpMtxArray(J3DModelData*, unsigned long) {
     /* Nonmatching */
 }
 
 /* 802EE1D4-802EE254       .text newDifferedDisplayList__8J3DModelFUl */
-void J3DModel::newDifferedDisplayList(unsigned long) {
-    /* Nonmatching */
+s32 J3DModel::newDifferedDisplayList(u32 flag) {
+    mDiffFlag = flag;
+    for (u16 i = 0; i < getModelData()->getShapeNum(); i++) {
+        s32 ret = getShapePacket(i)->newDifferedDisplayList(flag);
+        if (ret != kJ3DError_Success)
+            return ret;
+    }
+    return kJ3DError_Success;
 }
 
 /* 802EE254-802EE28C       .text lock__8J3DModelFv */
 void J3DModel::lock() {
-    /* Nonmatching */
+    u16 matNum = mModelData->getMaterialNum();
+
+    for (int i = 0; i < matNum; i++) {
+        mpMatPacket[i].lock();
+    }
 }
 
 /* 802EE28C-802EE2C4       .text unlock__8J3DModelFv */
 void J3DModel::unlock() {
-    /* Nonmatching */
+    u16 matNum = mModelData->getMaterialNum();
+
+    for (int i = 0; i < matNum; i++) {
+        mpMatPacket[i].unlock();
+    }
 }
 
 /* 802EE2C4-802EE42C       .text calcMaterial__8J3DModelFv */
 void J3DModel::calcMaterial() {
-    /* Nonmatching */
+    j3dSys.setTexture(mModelData->getTexture());
+
+    if (checkFlag(4)) {
+        j3dSys.onFlag(4);
+    } else {
+        j3dSys.offFlag(4);
+    }
+
+    if (checkFlag(8)) {
+        j3dSys.onFlag(8);
+    } else {
+        j3dSys.offFlag(8);
+    }
+
+    j3dSys.setModel(this);
+
+    for (u16 i = 0; i < mModelData->getMaterialNum(); i++) {
+        j3dSys.setMatPacket(&mpMatPacket[i]);
+        
+        J3DMaterial* pMaterial = mModelData->getMaterialNodePointer(i);
+        if (pMaterial->getMaterialAnm() != NULL)
+            pMaterial->getMaterialAnm()->calc(pMaterial);
+
+        s32 jntNo = pMaterial->getJoint()->getJntNo();
+        pMaterial->calc(getAnmMtx(jntNo));
+    }
 }
 
 /* 802EE42C-802EE4BC       .text diff__8J3DModelFv */
 void J3DModel::diff() {
-    /* Nonmatching */
+    for (u16 i = 0; i < getModelData()->getMaterialNum(); i++) {
+        j3dSys.setMatPacket(&mpMatPacket[i]);
+        getModelData()->getMaterialNodePointer(i)->diff(mDiffFlag);
+    }
 }
 
 /* 802EE4BC-802EE5D8       .text setSkinDeform__8J3DModelFP13J3DSkinDeformUl */
-void J3DModel::setSkinDeform(J3DSkinDeform*, unsigned long) {
-    /* Nonmatching */
+s32 J3DModel::setSkinDeform(J3DSkinDeform* pSkinDeform, u32 flags) {
+    mpSkinDeform = pSkinDeform;
+
+    s32 ret = kJ3DError_Success;
+
+    if (pSkinDeform == NULL) {
+        offFlag(J3DMdlFlag_SkinPosCpu);
+        offFlag(J3DMdlFlag_SkinNrmCpu);
+        return 5;
+    } else {
+        mpSkinDeform->initMtxIndexArray(mModelData);
+
+        ret = mModelData->checkFlag(0x100);
+        if (ret != kJ3DError_Success) {
+            mpSkinDeform->changeFastSkinDL(mModelData);
+            flags &= ~2;
+            flags &= ~4;
+        }
+
+        ret = 0;
+        if ((~flags & 2)) {
+            ret = mVertexBuffer.allocTransformedVtxPosArray();
+            if (ret != kJ3DError_Success) {
+                offFlag(J3DMdlFlag_SkinPosCpu);
+                return ret;
+            }
+            onFlag(J3DMdlFlag_SkinPosCpu);
+        } else {
+            offFlag(J3DMdlFlag_SkinPosCpu);
+        }
+
+        if ((~flags & 4)) {
+            ret = mVertexBuffer.allocTransformedVtxNrmArray();
+            if (ret != kJ3DError_Success) {
+                offFlag(J3DMdlFlag_SkinNrmCpu);
+                return ret;
+            }
+            onFlag(J3DMdlFlag_SkinNrmCpu);
+        } else {
+            offFlag(J3DMdlFlag_SkinNrmCpu);
+        }
+    }
+
+    return ret;
 }
 
 /* 802EE5D8-802EE67C       .text calcAnmMtx__8J3DModelFv */
 void J3DModel::calcAnmMtx() {
-    /* Nonmatching */
+    j3dSys.setCurrentMtxCalc(getModelData()->getJointTree().getBasicMtxCalc());
+    j3dSys.setModel(this);
+
+    if (checkFlag(2))
+        j3dSys.getCurrentMtxCalc()->init(j3dDefaultScale, j3dDefaultMtx);
+    else
+        j3dSys.getCurrentMtxCalc()->init(mBaseScale, mBaseTransformMtx);
+
+    j3dSys.getCurrentMtxCalc()->recursiveCalc(getModelData()->getJointTree().getRootNode());
 }
 
 /* 802EE67C-802EE874       .text calcWeightEnvelopeMtx__8J3DModelFv */
@@ -98,17 +456,74 @@ void J3DModel::calcWeightEnvelopeMtx() {
 
 /* 802EE874-802EE8C0       .text update__8J3DModelFv */
 void J3DModel::update() {
-    /* Nonmatching */
+    calc();
+    entry();
 }
 
 /* 802EE8C0-802EEA2C       .text calc__8J3DModelFv */
 void J3DModel::calc() {
-    /* Nonmatching */
+    j3dSys.setModel(this);
+
+    if (checkFlag(J3DMdlFlag_SkinPosCpu)) {
+        j3dSys.onFlag(J3DSysFlag_SkinPosCpu);
+    } else {
+        j3dSys.offFlag(J3DSysFlag_SkinPosCpu);
+    }
+
+    if (checkFlag(J3DMdlFlag_SkinNrmCpu)) {
+        j3dSys.onFlag(J3DSysFlag_SkinNrmCpu);
+    } else {
+        j3dSys.offFlag(J3DSysFlag_SkinNrmCpu);
+    }
+
+    mVertexBuffer.frameInit();
+
+    if (mpVisibilityManager != NULL)
+        mpVisibilityManager->setVisibility(getModelData());
+
+    if (mpDeformData != NULL)
+        mpDeformData->deform(this);
+
+    if (field_0xc4 != NULL)
+        field_0xc4->calc(this);
+
+    if (field_0xc8 != NULL)
+        field_0xc8->calc(this);
+
+    calcAnmMtx();
+    calcWeightEnvelopeMtx();
+
+    if (mpSkinDeform != NULL)
+        mpSkinDeform->deform(this);
+
+    if (mCalcCallBack != NULL)
+        mCalcCallBack(this, 0);
 }
 
 /* 802EEA2C-802EEB24       .text entry__8J3DModelFv */
 void J3DModel::entry() {
-    /* Nonmatching */
+    j3dSys.setModel(this);
+
+    if (checkFlag(J3DMdlFlag_SkinPosCpu)) {
+        j3dSys.onFlag(J3DSysFlag_SkinPosCpu);
+    } else {
+        j3dSys.offFlag(J3DSysFlag_SkinPosCpu);
+    }
+
+    if (checkFlag(J3DMdlFlag_SkinNrmCpu)) {
+        j3dSys.onFlag(J3DSysFlag_SkinNrmCpu);
+    } else {
+        j3dSys.offFlag(J3DSysFlag_SkinNrmCpu);
+    }
+
+    j3dSys.setTexture(getModelData()->getTexture());
+
+    for (u16 i = 0; i < getModelData()->getJointNum(); i++) {
+        J3DJoint* joint = getModelData()->getJointNodePointer(i);
+        if (joint->getMesh() != NULL) {
+            joint->entryIn();
+        }
+    }
 }
 
 /* 802EEB24-802EEBDC       .text calcViewBaseMtx__FPA4_fRC3VecRA3_A4_CfPA4_f */
@@ -123,7 +538,41 @@ void J3DModel::calcDrawMtx() {
 
 /* 802EEE30-802EF050       .text viewCalc__8J3DModelFv */
 void J3DModel::viewCalc() {
-    /* Nonmatching */
+    swapDrawMtx();
+    swapNrmMtx();
+
+    if (mModelData->checkFlag(0x20)) {
+        if (getMtxCalcMode() == 2)
+            calcViewBaseMtx(j3dSys.getViewMtx(), mBaseScale, mBaseTransformMtx, (MtxP)&mInternalView);
+
+        prepareShapePackets();
+    } else if (isCpuSkinningOn()) {
+        if (getMtxCalcMode() == 2)
+            calcViewBaseMtx(j3dSys.getViewMtx(), mBaseScale, mBaseTransformMtx, (MtxP)&mInternalView);
+
+        prepareShapePackets();
+    } else {
+        if (checkFlag(J3DMdlFlag_SkinPosCpu)) {
+            calcDrawMtx();
+            calcNrmMtx();
+            calcBumpMtx();
+            DCStoreRange(getDrawMtxPtr(), mModelData->getDrawMtxNum() * sizeof(Mtx));
+            DCStoreRange(getNrmMtxPtr(), mModelData->getDrawMtxNum() * sizeof(Mtx33));
+        } else if (checkFlag(J3DMdlFlag_SkinNrmCpu)) {
+            calcDrawMtx();
+            calcBBoard();
+            DCStoreRange(getDrawMtxPtr(), mModelData->getDrawMtxNum() * sizeof(Mtx));
+        } else {
+            calcDrawMtx();
+            calcNrmMtx();
+            calcBBoard();
+            calcBumpMtx();
+            DCStoreRange(getDrawMtxPtr(), mModelData->getDrawMtxNum() * sizeof(Mtx));
+            DCStoreRange(getNrmMtxPtr(), mModelData->getDrawMtxNum() * sizeof(Mtx33));
+        }
+
+        prepareShapePackets();
+    }
 }
 
 /* 802EF050-802EF1B8       .text calcNrmMtx__8J3DModelFv */
@@ -143,5 +592,44 @@ void J3DModel::calcBBoard() {
 
 /* 802EF414-802EF5D8       .text prepareShapePackets__8J3DModelFv */
 void J3DModel::prepareShapePackets() {
-    /* Nonmatching */
+    u16 shapeNum = getModelData()->getShapeNum();
+    for (u16 i = 0; i < shapeNum; i++) {
+        J3DShapePacket* pkt = getShapePacket(i);
+        pkt->mpScaleFlagArray = getScaleFlagArray();
+        pkt->mpDrawMtx = getDrawMtxPtrPtr();
+        pkt->mpNrmMtx = getNrmMtxPtrPtr();
+        pkt->mpCurrentViewNo = getCurrentViewNoPtr();
+    }
+
+    for (u16 i = 0; i < shapeNum; i++) {
+        J3DShape *pShape = getModelData()->getShapeNodePointer(i);
+        J3DShapePacket* pkt = getShapePacket(i);
+
+        if (checkFlag(J3DMdlFlag_SkinPosCpu))
+            pShape->onFlag(J3DSysFlag_SkinPosCpu);
+        else
+            pShape->offFlag(J3DSysFlag_SkinPosCpu);
+
+        if (checkFlag(J3DMdlFlag_SkinNrmCpu) && !pShape->checkFlag(J3DShpFlag_EnableLod))
+            pShape->onFlag(J3DSysFlag_SkinNrmCpu);
+        else
+            pShape->offFlag(J3DSysFlag_SkinNrmCpu);
+
+        if (getMtxCalcMode() == 2)
+            pkt->setBaseMtxPtr(&mInternalView);
+        else
+            pkt->setBaseMtxPtr(&j3dSys.mViewMtx);
+    }
+
+    if (getModelData()->checkBumpFlag() == 1) {
+        for (s32 i = 0; i < getModelData()->getMaterialNum(); i++) {
+            J3DMaterial* pMaterial = getModelData()->getMaterialNodePointer(i);
+            if (pMaterial->getTexGenBlock()->getNBTScale()->mbHasScale) {
+                J3DShape *pShape = pMaterial->getShape();
+                J3DShapePacket *pPacket = getShapePacket(pShape->getIndex());
+                u32 bumpMtxOffset = pShape->getBumpMtxOffset();
+                pPacket->setNrmMtx(getBumpMtxPtrPtr()[bumpMtxOffset]);
+            }
+        }
+    }
 }

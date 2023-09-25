@@ -7,9 +7,13 @@
 class dSv_player_status_a_c {
 public:
     /* 800589A8 */ void init();
-
-    u8 getSelectItemIndex(int i_no) const { return mSelectItem[i_no]; }
-    u8 getSelectEquip(int i_no) const { return mSelectEquip[i_no]; }
+  
+    u8 getSelectEquip(int i_no) { return mSelectEquip[i_no]; }
+    u8 getWalletSize() { return mWalletSize; }
+    int getRupee() const { return mRupee; }
+    u8 getMagic() { return mMagic; }
+    u8 getMaxMagic() { return mMaxMagic; }
+    u16 getMaxLife() { return mMaxLife; }
 
     /* 0x00 */ u16 mMaxLife;
     /* 0x02 */ u16 mLife;
@@ -29,7 +33,18 @@ STATIC_ASSERT(sizeof(dSv_player_status_a_c) == 0x18);
 
 class dSv_player_status_b_c {
 public:
-    /* 80058B54 */ void init();
+    void init();
+
+    void setDateIpl(s64 i_time) { mDateIPL = i_time; }
+    u16 getDate() const { return mDate; }
+    f32 getTime() const { return mTime; }
+    void setDate(u16 i_date) { mDate = i_date; }
+    void setTime(f32 i_time) { mTime = i_time; }
+    s64 getDateIpl() const { return mDateIPL; }
+    s16 getWindY() { return mTactWindAngleY; }
+    s16 getWindX() { return mTactWindAngleX; }
+    void setWindY(s16 i_windY) { mTactWindAngleY = i_windY; }
+    void setWindX(s16 i_windX) { mTactWindAngleX = i_windX; }
 
     /* 0x00 */ u64 mDateIPL;
     /* 0x08 */ f32 field_0x8;
@@ -83,7 +98,7 @@ class dSv_player_get_item_c {
 public:
     /* 800594A8 */ void init();
     /* 800594C4 */ void onItem(int, u8);
-    /* 8005955C */ bool isItem(int, u8);
+    /* 8005955C */ BOOL isItem(int, u8);
     /* 800595F8 */ void onBottleItem(u8);
     /* 80059740 */ bool isBottleItem(u8);
 
@@ -115,6 +130,9 @@ class dSv_player_item_max_c {
 public:
     /* 800598D8 */ void init();
 
+    u8 getArrowNum() const { return mArrowNum; }
+    u8 getBombNum() const { return mBombNum; }
+
     /* 0x0 */ u8 field_0x0;
     /* 0x1 */ u8 mArrowNum;
     /* 0x2 */ u8 mBombNum;
@@ -141,8 +159,8 @@ public:
     /* 8005A7C0 */ void setReserveItemEmpty(u8);
     /* 8005A79C */ void setReserveItemEmpty();
     /* 8005A7E4 */ void setReserveItem(u8);
-    /* 8005A854 */ u8 checkReserveItemEmpty();
-    /* 8005A878 */ u8 checkReserveItem(u8);
+    /* 8005A854 */ bool checkReserveItemEmpty();
+    /* 8005A878 */ bool checkReserveItem(u8);
 
     u8 getBeast(int i_idx) const { return mBeast[i_idx]; }
     u8 getBait(int i_idx) const { return mBait[i_idx]; }
@@ -159,11 +177,11 @@ class dSv_player_get_bag_item_c {
 public:
     /* 8005A8B8 */ void init();
     /* 8005A8CC */ void onBeast(u8);
-    /* 8005A960 */ bool isBeast(u8);
+    /* 8005A960 */ BOOL isBeast(u8);
     /* 8005A9F8 */ void onBait(u8);
-    /* 8005AA8C */ bool isBait(u8);
+    /* 8005AA8C */ BOOL isBait(u8);
     /* 8005AB24 */ void onReserve(u8);
-    /* 8005ABB4 */ bool isReserve(u8);
+    /* 8005ABB4 */ BOOL isReserve(u8);
 
     /* 0x0 */ u32 mReserveFlags;
     /* 0x4 */ u8 mBeastFlags;
@@ -246,6 +264,8 @@ STATIC_ASSERT(sizeof(dSv_player_map_c) == 0x84);
 class dSv_player_info_c {
 public:
     /* 8005BE84 */ void init();
+
+    const char* getPlayerName() const { return mPlayerName; }
 
     /* 0x00 */ u8 field_0x0[0x10];
     /* 0x10 */ u16 field_0x10;
@@ -479,8 +499,11 @@ public:
     /* 8005CD60 */ BOOL isSwitch(int);
     /* 8005CE10 */ BOOL revSwitch(int);
 
+    u8 getGbaRupeeCount() { return mGbaRupeeCount; }
+    void incGbaRupeeCount() { mGbaRupeeCount++; }
+
     /* 0x0 */ s8 mStageNo;
-    /* 0x1 */ u8 field_0x1;
+    /* 0x1 */ u8 mGbaRupeeCount;
     /* 0x4 */ u32 mSwitch[2];
 };  // Size: 0xC
 
@@ -522,6 +545,8 @@ public:
     dSv_zoneActor_c& getActor() { return mZoneActor; }
     const dSv_zoneActor_c& getActor() const { return mZoneActor; }
 
+    void reset() { mRoomNo = -1; }
+
     /* 0x00 */ s8 mRoomNo;
     /* 0x02 */ dSv_zoneBit_c mZoneBit;
     /* 0x0C */ dSv_zoneActor_c mZoneActor;
@@ -540,6 +565,13 @@ public:
         mLastMode = mode;
     }
 
+    s16 getStartPoint() const { return mStartCode; }
+    u32 getLastMode() const { return mLastMode; }
+    s8 getRoomNo() const { return mRestartRoom; }
+    u32 getRoomParam() const { return mRestartParam; }
+    cXyz& getRoomPos() { return mRestartPos; }
+    s16 getRoomAngleY() const { return mRestartAngle; }
+
     /* 0x00 */ s8 mRestartRoom;
     /* 0x01 */ u8 field_0x1;
     /* 0x02 */ s8 mRoomNo;
@@ -556,7 +588,15 @@ public:
 
 class dSv_turnRestart_c {
 public:
-    /* 8005D5B4 */ void set(cXyz const&, s16, s8, u32, cXyz const&, s16, int);
+    void set(cXyz const&, s16, s8, u32, cXyz const&, s16, int);
+
+    u32 getParam() const { return mParam; }
+    cXyz& getPos() { return mPosition; }
+    s16 getAngleY() const { return mAngleY; }
+
+    cXyz& getShipPos() { return field_0x24; }
+    s16 getShipAngleY() const { return field_0x30; }
+    s8 getRoomNo() { return mRoomNo; }
 
     /* 0x00 */ cXyz mPosition;
     /* 0x0C */ u32 mParam;
@@ -591,29 +631,35 @@ STATIC_ASSERT(sizeof(dSv_save_c) == 0x728);
 
 class dSv_info_c {
 public:
-    /* 8005D604 */ void init();
-    /* 8005D660 */ void reinit();
-    /* 8005D8C8 */ void getSave(int);
-    /* 8005D988 */ void putSave(int);
-    /* 8005DA70 */ void initZone();
-    /* 8005DAC8 */ int createZone(int);
-    /* 8005DB24 */ void onSwitch(int, int);
-    /* 8005DCEC */ void offSwitch(int, int);
-    /* 8005DE98 */ BOOL isSwitch(int, int);
-    /* 8005DFE0 */ BOOL revSwitch(int, int);
-    /* 8005E190 */ void onItem(int, int);
-    /* 8005E324 */ BOOL isItem(int, int);
-    /* 8005E4BC */ void onActor(int, int);
-    /* 8005E5F0 */ BOOL isActor(int, int);
-    /* 8005E780 */ void memory_to_card(char*, int);
-    /* 8005EA24 */ void card_to_memory(char*, int);
-    /* 8005ED00 */ int initdata_to_card(char*, int);
+    void init();
+    void reinit();
+    void getSave(int);
+    void putSave(int);
+    void initZone();
+    int createZone(int);
+    void onSwitch(int, int);
+    void offSwitch(int, int);
+    BOOL isSwitch(int, int);
+    BOOL revSwitch(int, int);
+    void onItem(int, int);
+    BOOL isItem(int, int);
+    void onActor(int, int);
+    BOOL isActor(int, int);
+    void memory_to_card(char*, int);
+    void card_to_memory(char*, int);
+    int initdata_to_card(char*, int);
 
     dSv_save_c& getSavedata() { return mSavedata; }
     dSv_player_c& getPlayer() { return mSavedata.getPlayer(); }
     dSv_event_c& getEvent() { return mSavedata.getEvent(); }
     dSv_restart_c& getRestart() { return mRestart; }
+    dSv_turnRestart_c& getTurnRestart() { return mTurnRestart; }
     dSv_memory_c& getMemory() { return mMemory; }
+    dSv_danBit_c& getDan() { return mDan; }
+    dSv_zone_c& getZone(int id) { return mZone[id]; }
+
+    void removeZone(int zoneNo) { mZone[zoneNo].reset(); }
+    void initDan(s8 i_stage) { mDan.init(i_stage); }
 
     static const int MEMORY_SWITCH = 0x80;
     static const int DAN_SWITCH = 0x40;

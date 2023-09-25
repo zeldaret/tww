@@ -31,25 +31,39 @@ public:
     /* 0x2A3 */ s8 mEventState;
 };
 
+// Bokoblin. TODO: Include d_a_bk.h once implemented.
+struct bk_class : public fopAc_ac_c {
+    u8 temp[0x121C - 0x290];
+    u8 field_0x121C;
+};
+
+// Kargaroc. TODO: Include d_a_bb.h once implemented.
+struct bb_class : public fopAc_ac_c {};
+
 static s32 daAndsw0_Draw(andsw0_class*) {
     return 1;
 }
 
 static void daAndsw0_check(andsw0_class* i_this) {
     /* Nonmatching */
-    u8 numToCheck = i_this->mNumSwitchesToCheck;
-    u32 switchIdxToCheck = i_this->mFirstSwitchToCheck ? i_this->mFirstSwitchToCheck : i_this->mSwitchToSet + 1;
+    s32 numToCheck = i_this->mNumSwitchesToCheck;
+    u32 switchIdxToCheck;
+    if (i_this->mFirstSwitchToCheck) {
+        switchIdxToCheck = i_this->mFirstSwitchToCheck;
+    } else {
+        switchIdxToCheck = i_this->mSwitchToSet + 1;
+    }
 
     switch(i_this->mAction) {
         case ACT_ON_ALL:
             for(int i = 0; i < numToCheck; i++) {
-                if(dComIfGs_isSwitch(switchIdxToCheck, i_this->current.roomNo) == false) {
+                if(dComIfGs_isSwitch(switchIdxToCheck, fopAcM_GetRoomNo(i_this)) == false) {
                     break;
                 }
 
                 if(i == numToCheck - 1) {
                     if(i_this->mBehaviorType != 3) {
-                        dComIfGs_onSwitch(i_this->mSwitchToSet, i_this->current.roomNo);
+                        dComIfGs_onSwitch(i_this->mSwitchToSet, fopAcM_GetRoomNo(i_this));
                     }
 
                     switch(i_this->mBehaviorType) {
@@ -71,16 +85,16 @@ static void daAndsw0_check(andsw0_class* i_this) {
 
             break;
         case ACT_OFF_ALL:
-            switchIdxToCheck = i_this->mFirstSwitchToCheck ? i_this->mFirstSwitchToCheck : i_this->mSwitchToSet + 1;
+            u32 switchIdxToCheck2 = i_this->mFirstSwitchToCheck ? i_this->mFirstSwitchToCheck : i_this->mSwitchToSet + 1;
 
             for(int i = 0; i < numToCheck; i++) {
-                if(dComIfGs_isSwitch(switchIdxToCheck, i_this->current.roomNo) == false) {
-                    dComIfGs_offSwitch(i_this->mSwitchToSet, i_this->current.roomNo);
+                if(dComIfGs_isSwitch(switchIdxToCheck2, fopAcM_GetRoomNo(i_this)) == false) {
+                    dComIfGs_offSwitch(i_this->mSwitchToSet, fopAcM_GetRoomNo(i_this));
                     i_this->mAction  = ACT_ON_ALL;
                     break;
                 }
                 
-                switchIdxToCheck += 1;
+                switchIdxToCheck2 += 1;
             }
 
             break;
@@ -147,7 +161,7 @@ static void* ac[7];
 static s32 check_count;
 
 static void* bk_s_sub1(void* i_this, void*) {
-    if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == 0xBE && (fopAcM_GetParam(i_this) & 0xF) == 7)  {
+    if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == PROC_BK && (fopAcM_GetParam(i_this) & 0xF) == 7)  {
         s32 count = check_count; //regswaps without this
         if(count < 2) {
             ac[check_count] = i_this;
@@ -161,7 +175,7 @@ static void* bk_s_sub1(void* i_this, void*) {
 }
 
 static void* bk_s_sub2(void* i_this, void*) {
-    if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == 0xBE && (fopAcM_GetParam(i_this) & 0xF) == 4)  {
+    if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == PROC_BK && (fopAcM_GetParam(i_this) & 0xF) == 4)  {
         s32 count = check_count; //regswaps without this
         if(count == 2) {
             ac[check_count] = i_this;
@@ -175,7 +189,7 @@ static void* bk_s_sub2(void* i_this, void*) {
 }
 
 static void* bk_s_sub3(void* i_this, void*) {
-    if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == 0xBE && (fopAcM_GetParam(i_this) & 0xF) == 5)  {
+    if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == PROC_BK && (fopAcM_GetParam(i_this) & 0xF) == 5)  {
         s32 count = check_count; //regswaps without this
         if(count < 5) {
             ac[check_count] = i_this;
@@ -189,7 +203,7 @@ static void* bk_s_sub3(void* i_this, void*) {
 }
 
 static void* bb_s_sub(void* i_this, void*) {
-    if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == 0xB6)  {
+    if(fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == PROC_BB)  {
         s32 count = check_count; //regswaps without this
         if(count < 7) {
             ac[check_count] = i_this;
@@ -224,7 +238,7 @@ static s32 hajimari_actor_entry(andsw0_class* i_this) {
 }
 
 static void hajimarinomori_check(andsw0_class* i_this) {
-    /* Nonmatching */
+    fopAc_ac_c* actor = i_this;
     if (i_this->mBehaviorType == 0) {
         if (hajimari_actor_entry(i_this)) {
             i_this->mBehaviorType = 1;
@@ -233,51 +247,61 @@ static void hajimarinomori_check(andsw0_class* i_this) {
     else {
         for(int i = 0; i < 7; i++) {}
 
-        //looks like these have something to do with bk_class and bb_class (based on the 0xB6/0xBE proc names earlier)
-        //finishing this probably needs some work on those
         if (dComIfGs_isEventBit(4)) {
-            fopAcM_delete((fopAc_ac_c*)ac[5]);
-            fopAcM_delete((fopAc_ac_c*)ac[6]);
-            //ac[3]->field_0x121C = 1;
-            //ac[4]->field_0x121C = 1;
+            bb_class* kargaroc = (bb_class*)ac[5];
+            fopAcM_delete(kargaroc);
+            kargaroc = (bb_class*)ac[6];
+            fopAcM_delete(kargaroc);
+            
+            bk_class* bokoblin = (bk_class*)ac[3];
+            bokoblin->field_0x121C = 1;
+            bokoblin = (bk_class*)ac[4];
+            bokoblin->field_0x121C = 1;
             
             if (dComIfGs_isEventBit(0x301)) {
-                //ac[0]->field_0x121C = 1;
+                bokoblin = (bk_class*)ac[0];
+                bokoblin->field_0x121C = 1;
             }
             if (dComIfGs_isEventBit(0x480)) {
-                //ac[1]->field_0x121C = 1;
+                bokoblin = (bk_class*)ac[1];
+                bokoblin->field_0x121C = 1;
             }
             if (dComIfGs_isEventBit(0x301) && dComIfGs_isEventBit(0x480)) {
-                //ac[2]->field_0x121C = 1;
+                bokoblin = (bk_class*)ac[2];
+                bokoblin->field_0x121C = 1;
             }
         }
         else {
-            //ac[0]->field_0x121C = 1;
-            //ac[1]->field_0x121C = 1;
+            bk_class* bokoblin = (bk_class*)ac[0];
+            bokoblin->field_0x121C = 1;
+            bokoblin = (bk_class*)ac[1];
+            bokoblin->field_0x121C = 1;
         }
+        
+        fopAcM_delete(actor);
     }
-
-    fopAcM_delete(i_this);
 }
 
 static void event_start_check(andsw0_class* i_this) {
-    /* Nonmatching */
+    fopAc_ac_c* actor = i_this;
     switch (i_this->mEventState) {
     case 0:
-        if (i_this->mEventIdx != -1 && fopAcM_isSwitch(i_this, i_this->mSwitchToSet)) {
-            if (i_this->mEvtInfo.i_checkCommandDemoAccrpt()) {
+        if (i_this->mEventIdx != -1 && fopAcM_isSwitch(actor, i_this->mSwitchToSet)) {
+            if (actor->mEvtInfo.checkCommandDemoAccrpt()) {
                 i_this->mEventState++;
             } else {
-                fopAcM_orderOtherEventId(i_this, i_this->mEventIdx, i_this->mEventNo, 0xFFFF, 0, 1);
+                fopAcM_orderOtherEventId(actor, i_this->mEventIdx, i_this->mEventNo, 0xFFFF, 0, 1);
             }
         }
 
         break;
     case 1:
         if (dComIfGp_evmng_endCheck(i_this->mEventIdx)) {
-            dComIfGp_event_onEventFlag(8);
+            dComIfGp_event_reset();
             i_this->mEventState++;
         }
+        break;
+    case 2:
         break;
     }
 }

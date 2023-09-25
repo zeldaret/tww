@@ -154,16 +154,6 @@ public:
     /* 0x20 */ J3DDisplayListObj* mpDisplayListObj;
 };  // Size: 0x28
 
-class J3DCallBackPacket : public J3DPacket {
-public:
-    ~J3DCallBackPacket();
-    virtual void draw();
-
-public:
-    typedef void (*CallBack)(J3DCallBackPacket * pPacket, u32 timing);
-    CallBack mpCallBack;
-};
-
 class J3DShapePacket : public J3DDrawPacket {
 public:
     J3DShapePacket();
@@ -202,11 +192,12 @@ public:
     void addShapePacket(J3DShapePacket*);
     void beginDiff();
     void endDiff();
-    bool isSame(J3DMatPacket*) const;
 
     J3DMaterial* getMaterial() const { return mpMaterial; }
     J3DShapePacket* getShapePacket() const { return mpShapePacket; }
     void setShapePacket(J3DShapePacket* packet) { mpShapePacket = packet; }
+    void setMaterial(J3DMaterial* pMaterial) { mpMaterial = pMaterial; }
+    void setTexture(J3DTexture* pTexture) { mpTexture = pTexture; }
     void setInitShapePacket(J3DShapePacket* packet) { mpInitShapePacket = packet; }
     void setMaterialAnmID(J3DMaterialAnm* materialAnm) { mpMaterialAnm = materialAnm; }
     bool isChanged() const { return mDiffFlag & 0x80000000; }
@@ -215,6 +206,7 @@ public:
     virtual ~J3DMatPacket();
     virtual int entry(J3DDrawBuffer*);
     virtual void draw();
+    virtual bool isSame(J3DMatPacket*) const;
 
 public:
     /* 0x28 */ J3DShapePacket* mpInitShapePacket;
@@ -224,5 +216,15 @@ public:
     /* 0x38 */ J3DTexture* mpTexture;
     /* 0x3C */ J3DMaterialAnm* mpMaterialAnm;
 };  // Size: 0x40
+
+class J3DCallBackPacket : public J3DPacket {
+public:
+    virtual ~J3DCallBackPacket() {}
+    virtual void draw();
+
+public:
+    typedef void (*CallBack)(J3DCallBackPacket * pPacket, u32 timing);
+    CallBack mpCallBack;
+};
 
 #endif /* J3DPACKET_H */

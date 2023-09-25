@@ -56,7 +56,7 @@ public:
     };
 
     /* 802E1D5C */ JUTException(JUTDirectPrint*);
-    /* 802E40EC */ virtual ~JUTException();
+    /* 802E40EC */ virtual ~JUTException() {};
 
     /* 802E22C4 */ void showFloatSub(int, f32);
     /* 802E2454 */ void showFloat(OSContext*);
@@ -108,7 +108,7 @@ private:
     static OSMessageQueue sMessageQueue;
     static const char* sCpuExpName[17];
     static JSUList<JUTException::JUTExMapFile> sMapFileList;
-    static u8 sMessageBuffer[4 + 4 /* padding */];
+    static OSMessage sMessageBuffer[1];
     static JUTException* sErrorManager;
     static OSErrorHandler sPreUserCallback;
     static OSErrorHandler sPostUserCallback;
@@ -128,10 +128,9 @@ private:
     /* 0x80 */ u32 mTraceSuppress;
     /* 0x84 */ u32 field_0x98;
     /* 0x88 */ u32 mPrintFlags;
-    /* 0x8C */ u32 mStackPointer;
 };
 
-STATIC_ASSERT(sizeof(JUTException) == 0x90);
+STATIC_ASSERT(sizeof(JUTException) == 0x8C);
 
 struct JUTWarn {
     JUTWarn& operator<<(const char*) { return *this; }

@@ -87,7 +87,7 @@ void dComIfG_play_c::itemInit() {
     for (int i = 0; i < 4; i++) {
     }
 
-    mCurrAuctionItemNameMsgID = 0;
+    mMsgCountNumber = 0;
     field_0x491a = 0;
     field_0x491c = 0;
     field_0x491e = 0;
@@ -616,7 +616,7 @@ stage_camera_class* dComIfGp_getRoomCamera(int i_roomNo) {
         return NULL;
     }
 
-    return status->mRoomDt.getCamera();
+    return status->getCamera();
 }
 
 /* 80053778-800537C8       .text dComIfGp_getRoomArrow__Fi */
@@ -627,7 +627,7 @@ stage_arrow_class* dComIfGp_getRoomArrow(int i_roomNo) {
         return NULL;
     }
 
-    return status->mRoomDt.getArrow();
+    return status->getArrow();
 }
 
 /* 800537C8-8005388C       .text dComIfGp_setNextStage__FPCcsScScfUliSc */

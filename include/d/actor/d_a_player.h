@@ -38,6 +38,8 @@ public:
     void setDemoMode(u32 mode) { mDemoMode = mode; }
     u32 getDemoMode() const { return mDemoMode; }
     int getParam1() const { return mParam1; }
+    void setTimer(s16 time) { mTimer = time; }
+    void decTimer() { mTimer--; }
     void setOriginalDemoType() { setDemoType(3); }
     void setSpecialDemoType() { setDemoType(5); }
     void setSystemDemoType() { setDemoType(2); }
@@ -77,7 +79,8 @@ public:
     /* 0x2A8 */ f32 field_0x2a8;
     /* 0x2AC */ u8 field_0x2AC[0x2B0 - 0x2AC];
     /* 0x2B0 */ f32 field_0x2b0;
-    /* 0x2B4 */ u8 field_0x2B4[0x2BC - 0x2B4];
+    /* 0x2B4 */ csXyz mBodyAngle;
+    /* 0x2BA */ u8 field_0x2BA[0x2BC - 0x2BA];
     /* 0x2BC */ cXyz mHeadTopPos;
     /* 0x2C8 */ cXyz mSwordTopPos;
     /* 0x2D4 */ cXyz field_0x2d4;
@@ -88,14 +91,17 @@ public:
     /* 0x300 */ f32 field_0x300;
     /* 0x304 */ daPy_demo_c mDemo;
 
-    virtual void getLeftHandMatrix();
-    virtual void getRightHandMatrix();
-    virtual void getGroundY();
+    s16 getBodyAngleX() { return mBodyAngle.x; }
+    s16 getBodyAngleY() { return mBodyAngle.y; }
+
+    virtual MtxP getLeftHandMatrix() = 0;
+    virtual MtxP getRightHandMatrix() = 0;
+    virtual void getGroundY() = 0;
     virtual void getTactMusic() const;
     virtual void getTactTimerCancel() const;
     virtual void checkPlayerGuard() const;
     virtual void getGrabMissActor();
-    virtual void checkPlayerFly() const;
+    virtual u32 checkPlayerFly() const;
     virtual void checkFrontRoll() const;
     virtual void checkBottleSwing() const;
     virtual void checkCutCharge() const;
@@ -104,8 +110,8 @@ public:
     virtual void setTactZev(unsigned int, int, char*);
     virtual void onDekuSpReturnFlg(u8);
     virtual void checkComboCutTurn() const;
-    virtual void getBaseAnimeFrameRate();
-    virtual void getBaseAnimeFrame();
+    virtual f32 getBaseAnimeFrameRate() = 0;
+    virtual void getBaseAnimeFrame() = 0;
     virtual void getItemID() const;
     virtual void getThrowBoomerangID() const;
     virtual void getGrabActorID() const;
@@ -130,7 +136,7 @@ public:
     void getLeftHandPos() const;
     void getRopeJumpLand() const;
     void checkRopeForceEnd() const;
-    void getHeadTopPos() const;
+    cXyz getHeadTopPos() const;
     void changePlayer(fopAc_ac_c*);
     void objWindHitCheck(dCcD_Cyl*);
     void setDoButtonQuake();
