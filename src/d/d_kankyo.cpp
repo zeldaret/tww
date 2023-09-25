@@ -2728,7 +2728,7 @@ void dKy_instant_rainchg() {
 }
 
 /* 801973B8-80197404       .text dKy_moon_type_chk__Fv */
-int dKy_moon_type_chk() {
+u32 dKy_moon_type_chk() {
     int weekday = dKy_get_dayofweek();
 
     if (dComIfGs_getTime() < 180.0f) {

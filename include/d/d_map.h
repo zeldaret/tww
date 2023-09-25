@@ -71,4 +71,8 @@ public:
     static void mapBufferSendAGB(int);
 };
 
+inline void dMap_drawPoint(u8 param_1, f32 param_2, f32 param_3, f32 param_4, s8 param_5, s16 param_6, u8 param_7, u8 param_8, u8 param_9) {
+    dMap_c::drawPointSingle(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9);
+}
+
 #endif /* D_MAP_H */

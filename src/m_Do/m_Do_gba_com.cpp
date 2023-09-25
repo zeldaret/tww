@@ -685,13 +685,16 @@ void mDoGaC_agbCom_c::mDoGaC_ReadResult() {
     }
 }
 
-/* 8001BA34-8001BA68       .text BigLittleChange__FUl */
-// NONMATCHING - not even close
 u32 BigLittleChange(u32 param_0) {
-    u8 b1 = param_0 >> 8;
-    u8 b2 = param_0 >> 0x10;
-    u8 b3 = param_0 >> 0x18;
-    return (param_0 << 0x18) | (b1 << 0x10) | (b2 << 8) | b3;
+    u32 big = param_0;
+    u32 little;
+
+    reinterpret_cast<u8*>(&little)[0] = reinterpret_cast<u8*>(&big)[3];
+    reinterpret_cast<u8*>(&little)[1] = reinterpret_cast<u8*>(&big)[2];
+    reinterpret_cast<u8*>(&little)[2] = reinterpret_cast<u8*>(&big)[1];
+    reinterpret_cast<u8*>(&little)[3] = reinterpret_cast<u8*>(&big)[0];
+
+    return little;
 }
 
 /* 8001BAA0-8001BADC       .text __dt__15mDoGaC_agbCom_cFv */

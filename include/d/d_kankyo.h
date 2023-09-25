@@ -387,6 +387,7 @@ class sub_kankyo__class;
 int dKy_getdaytime_hour();
 int dKy_getdaytime_minute();
 int dKy_get_dayofweek();
+u32 dKy_moon_type_chk();
 BOOL dKy_checkEventNightStop();
 void dKy_set_nexttime(f32);
 void dKy_Sound_set(cXyz i_pos, int param_1, unsigned int i_actorID, int param_3);
