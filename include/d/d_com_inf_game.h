@@ -197,8 +197,6 @@ public:
         mItemLifeCount += num;
     }
 
-    u8 getSelectItem(int i_itemIdx) { return mEquippedItems[i_itemIdx]; }
-
     u8 checkMesgCancelButton() { return field_0x4949; }
 
     void setPlayerStatus(int param_0, int i, u32 flag) { mPlayerStatus[param_0][i] |= flag; }
@@ -1117,10 +1115,6 @@ inline s16 dComIfGp_getItemMagicCount() {
 
 inline void dComIfGp_setItemMagicCount(s16 magic) {
     g_dComIfG_gameInfo.play.setItemMagicCount(magic);
-}
-
-inline u8 dComIfGp_getSelectItem(int i_itemIdx) {
-    return g_dComIfG_gameInfo.play.getSelectItem(i_itemIdx);
 }
 
 inline u8 dComIfGp_checkMesgCancelButton() {
