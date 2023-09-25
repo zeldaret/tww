@@ -17,6 +17,8 @@ public:
     /* 0x294 */ float field_0x294;
 };
 
+static const float[] unk = {1.0f, 0.1f, 0.001f, 0.0001};
+
 /* 00000078-00000080       .text daKytag06_Draw__FP13kytag06_class */
 static bool daKytag06_Draw(kytag06_class*) {
     return true;
