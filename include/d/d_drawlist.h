@@ -216,6 +216,8 @@ public:
     void setOpaDrawList(J3DDrawBuffer* buffer) { j3dSys.setDrawBuffer(buffer, OPA_BUFFER); }
     void setOpaList() { setOpaDrawList(mpBufInvisibleModelOpa); }
     void setXluList() { setXluDrawList(mpBufInvisibleModelXlu); }
+    void setOpaListInvisible() { setOpaDrawList(field_0x00030); }
+    void setXluListInvisible() { setXluDrawList(field_0x00034); }
     void setOpaListMaskOff() { setOpaDrawList(mpBufInvisibleModelMaskOffOpa); }
     void setXluListMaskOff() { setXluDrawList(mpBufInvisibleModelMaskOffXlu); }
     void setOpaListSky() { setOpaDrawList(mpBufSkyOpa); }

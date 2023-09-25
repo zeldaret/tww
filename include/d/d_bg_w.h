@@ -63,4 +63,6 @@ public:
     /* 0xBB */ u8 mRoomNo2;
 };
 
+dBgW* dBgW_NewSet(cBgD_t*, unsigned long, float(*)[3][4]);
+
 #endif /* D_BG_W_H */

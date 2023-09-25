@@ -515,6 +515,7 @@ public:
     cCcD_DivideInfo& GetDivideInfo() { return mDivideInfo; }
     cCcD_DivideInfo* GetPDivideInfo() { return &mDivideInfo; }
     int ChkBsRevHit() const { return mFlags & 2; }
+    void OnBsRevHit() { mFlags |= 2; }
 
 private:
     /* 0x040 */ int mFlags;
