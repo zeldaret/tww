@@ -321,6 +321,10 @@ inline void fopAcM_onActor(fopAc_ac_c* p_actor) {
     dComIfGs_onActor(setId, fopAcM_GetHomeRoomNo(p_actor));
 }
 
+inline bool fopAcM_IsFirstCreating(void* i_actor) {
+    return fpcM_IsFirstCreating(i_actor);
+}
+
 void fopAcM_initManager();
 
 void* fopAcM_FastCreate(s16 pProcTypeID, FastCreateReqFunc param_2, void* param_3, void* pData);
