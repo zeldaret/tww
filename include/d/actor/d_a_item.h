@@ -3,9 +3,12 @@
 
 #include "d/actor/d_a_itembase.h"
 #include "d/d_particle.h"
+#include "f_pc/f_pc_manager.h"
 
 class daItem_c : public daItemBase_c {
 public:
+    typedef void (daItem_c::*daItem_c_ModeFunc)();
+    
     daItem_c() : mPtclFollowCb(0, 0), mPtclSmokeCb(1) {}
     
     float getYOffset();
@@ -13,7 +16,7 @@ public:
     void set_mtx_base(J3DModel*, cXyz, csXyz);
     void CreateInit();
     s32 _daItem_create();
-    s32 _daItem_execute();
+    BOOL _daItem_execute();
     void mode_proc_call();
     void execInitNormalDirection();
     void execMainNormalDirection();
@@ -24,12 +27,12 @@ public:
     void execWaitMain();
     void execWaitMainFromBoss();
     void scaleAnimFromBossItem();
-    s32 _daItem_draw();
+    BOOL _daItem_draw();
     void setTevStr();
-    s32 _daItem_delete();
+    BOOL _daItem_delete();
     void itemGetExecute();
     void itemDefaultRotateY();
-    bool checkItemDisappear();
+    BOOL checkItemDisappear();
     void setItemTimer(int);
     BOOL checkPlayerGet();
     void itemActionForRupee();
@@ -40,14 +43,14 @@ public:
     void itemActionForArrow();
     void checkWall();
     void set_bound_se();
-    s32 checkGetItem();
-    void timeCount();
+    BOOL checkGetItem();
+    BOOL timeCount();
     void mode_wait_init();
     void mode_water_init();
     void mode_wait();
     void mode_water();
     void initAction();
-    s32 _daItem_isdelete();
+    BOOL _daItem_isdelete();
     
     s32 checkControl();
     s32 startControl();
@@ -58,29 +61,47 @@ public:
     s32 checkActionNow();
     
     static dCcD_SrcCyl m_cyl_src;
+    static s32 m_timer_max;
 
 public:
     /* 0x63C */ cXyz mScaleTarget;
     /* 0x648 */ s32 mSwitchId;
     /* 0x64C */ s32 mActivationSwitch;
-    /* 0x650 */ f32 field3_0x650;
-    /* 0x654 */ u8 field4_0x654[0x658 - 0x654];
+    /* 0x650 */ f32 field_0x650;
+    /* 0x654 */ s16 field_0x654;
+    /* 0x656 */ s16 field_0x656;
     /* 0x658 */ s16 mItemTimer;
-    /* 0x65A */ s16 field7_0x65a;
-    /* 0x65C */ s16 field8_0x65c;
-    /* 0x65E */ u8 field10_0x65e[0x667 - 0x65E];
-    /* 0x667 */ u8 mUnknownParam;
-    /* 0x668 */ u8 mItemAction;
+    /* 0x65A */ s16 field_0x65a;
+    /* 0x65C */ s16 field_0x65c;
+    /* 0x65E */ s16 mExtraZRot;
+    /* 0x660 */ u8 field_0x660[0x667 - 0x660];
+    /* 0x667 */ u8 mType;
+    /* 0x668 */ u8 mAction;
     /* 0x669 */ u8 mStatusFlags;
     /* 0x66A */ u8 mMode;
     /* 0x66B */ u8 mCurState;
-    /* 0x66C */ u8 field23_0x66c[0x674 - 0x66C];
+    /* 0x66C */ u8 field_0x66c;
+    /* 0x66D */ u8 field_0x66D[0x670 - 0x66D];
+    /* 0x670 */ u32 mDemoItemBsPcId;
     /* 0x674 */ dPa_rippleEcallBack mPtclRippleCb;
     /* 0x688 */ dPa_followEcallBack mPtclFollowCb;
     /* 0x69C */ dPa_smokeEcallBack mPtclSmokeCb;
     /* 0x6BC */ JPABaseEmitter* mpParticleEmitter;
+    
+    // TODO add enums for type, action, state, and status flags
+    // state 7 is probably "about to start an item get demo"
 };
 
 STATIC_ASSERT(sizeof(daItem_c) == 0x6C0);
+
+class daItem_prm {
+public:
+    static u32 getType(daItem_c* item) { return (fpcM_GetParam(item) & 0x03000000) >> 0x18; }
+    static u32 getAction(daItem_c* item) { return (fpcM_GetParam(item) & 0xFC000000) >> 0x1A; }
+    static u32 getItemNo(daItem_c* item) { return (fpcM_GetParam(item) & 0x000000FF) >> 0x00; }
+    static u32 getItemBitNo(daItem_c* item) { return (fpcM_GetParam(item) & 0x0000FF00) >> 0x08; }
+    static u32 getSwitchNo(daItem_c* item) { return (item->orig.angle.z & 0x00FF) >> 0; }
+    static u32 getSwitchNo2(daItem_c* item) { return (fpcM_GetParam(item) & 0x00FF0000) >> 0x10; }
+};
 
 #endif /* D_A_ITEM_H */

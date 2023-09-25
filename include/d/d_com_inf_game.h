@@ -557,6 +557,10 @@ inline void dComIfGs_onSaveTbox(int i_stageNo, int i_no) {
 void dComIfGs_onStageTbox(int i_stageNo, int i_no);
 BOOL dComIfGs_isStageTbox(int i_stageNo, int i_no);
 
+inline void dComIfGs_onSaveSwitch(int i_stageNo, int i_no) {
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().onSwitch(i_no);
+}
+
 BOOL dComIfGs_isStageBossEnemy(int i_stageNo);
 
 inline BOOL dComIfGs_isStageBossEnemy() {
@@ -697,6 +701,22 @@ inline void dComIfGs_setTime(f32 i_time) {
 
 inline BOOL dComIfGs_isGetItem(int i_field, u8 i_item) {
     return g_dComIfG_gameInfo.save.getPlayer().getGetItem().isItem(i_field, i_item);
+}
+
+inline BOOL dComIfGs_isGetItemBeast(u8 i_beast) {
+    return g_dComIfG_gameInfo.save.getPlayer().getGetBagItem().isBeast(i_beast);
+}
+
+inline void dComIfGs_onGetItemBeast(u8 i_beast) {
+    g_dComIfG_gameInfo.save.getPlayer().getGetBagItem().onBeast(i_beast);
+}
+
+inline BOOL dComIfGs_isGetItemBait(u8 i_bait) {
+    return g_dComIfG_gameInfo.save.getPlayer().getGetBagItem().isBait(i_bait);
+}
+
+inline void dComIfGs_onGetItemBait(u8 i_bait) {
+    g_dComIfG_gameInfo.save.getPlayer().getGetBagItem().onBait(i_bait);
 }
 
 inline s16 dComIfGs_getWindY() {
@@ -1246,8 +1266,12 @@ inline char* dComIfGp_evmng_getMyStringP(int staffIdx, const char* name) {
     return reinterpret_cast<char*>(dComIfGp_getEventManager().getMySubstanceP(staffIdx, name, 4)); //type 4 is string
 }
 
-inline BOOL dComIfGp_evmng_startCheck(char* eventID) {
-    return dComIfGp_getEventManager().startCheckOld(eventID);
+inline BOOL dComIfGp_evmng_startCheck(const char* pName) {
+    return dComIfGp_getEventManager().startCheckOld(pName);
+}
+
+inline BOOL dComIfGp_evmng_endCheck(const char* pName) {
+    return dComIfGp_getEventManager().endCheckOld(pName);
 }
 
 inline BOOL dComIfGp_evmng_endCheck(s16 eventID) {
