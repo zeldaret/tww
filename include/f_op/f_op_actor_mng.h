@@ -468,10 +468,10 @@ s32 fopAcM_createItem(cXyz* p_pos, int itemNo, int param_3, int roomNo, int para
                       int param_7, cXyz* p_scale);
 
 void* fopAcM_fastCreateItem2(cXyz* p_pos, int itemNo, int param_3, int roomNo, int param_5,
-                             csXyz* p_angle, cXyz* p_scale);
+                             csXyz* p_angle, int, cXyz* p_scale);
 
 void* fopAcM_fastCreateItem(cXyz* p_pos, int i_itemNo, int i_roomNo, csXyz* p_angle,
-                            cXyz* p_scale, f32* p_speedF, f32* p_speedY, int param_8,
+                            cXyz* p_scale, f32 p_speedF, f32 p_speedY, f32 param_8,
                             int param_9, createFunc p_createFunc);
 
 s32 fopAcM_createBokkuri(u16, cXyz*, int, int, int, cXyz*, int, int);
@@ -537,13 +537,11 @@ inline f32 fopAcM_searchPlayerDistance(fopAc_ac_c* actor) {
 s8 dComIfGp_getReverb(int roomNo);
 
 inline void fopAcM_seStartCurrent(fopAc_ac_c* actor, u32 sfxID, u32 param_2) {
-    s8 reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(actor));
-    mDoAud_seStart(sfxID, &actor->current.pos, param_2, reverb);
+    mDoAud_seStart(sfxID, &actor->current.pos, param_2, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
 }
 
 inline void fopAcM_seStart(fopAc_ac_c* actor, u32 sfxID, u32 param_2) {
-    s32 roomNo = fopAcM_GetRoomNo(actor);
-    mDoAud_seStart(sfxID, &actor->mEyePos, param_2, dComIfGp_getReverb(roomNo));
+    mDoAud_seStart(sfxID, &actor->mEyePos, param_2, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
 }
 
 extern "C" {

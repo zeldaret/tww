@@ -1598,7 +1598,7 @@ void daPy_lk_c::getAnmData(daPy_lk_c::daPy_ANM) const {
 }
 
 /* 8012894C-80128988       .text checkGrabWeapon__9daPy_lk_cFi */
-void daPy_lk_c::checkGrabWeapon(int) {
+BOOL daPy_lk_c::checkGrabWeapon(int) {
     /* Nonmatching */
 }
 

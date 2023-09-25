@@ -179,6 +179,7 @@ public:
     u8 getShipRoomId() { return mShipRoomId; }
 
     void setAgb(fopAc_ac_c* i_agb) { mpAgb = (daAgb_c*)i_agb; }
+    daAgb_c* getAgb() { return mpAgb; }
 
     void setIkadaShipBeforePos(Vec& i_pos) { mIkadaLinkPos = i_pos; }
     void setIkadaShipId(u8 i_id) { mIkadaShipId = i_id; }
@@ -202,11 +203,12 @@ public:
     void clearPlayerStatus(int param_0, int i, u32 flag) { mPlayerStatus[param_0][i] &= ~flag; }
     bool checkPlayerStatus(int param_0, int i, u32 flag) { return flag & mPlayerStatus[param_0][i]; }
 
+    u8 getSelectItem(int idx) { return mEquippedItems[idx]; }
+
     void setCurrentGrafPort(J2DOrthoGraph* i_graf) { mCurrentGrafPort = i_graf; }
     void setCurrentWindow(dDlst_window_c* i_window) { mCurrentWindow = i_window; }
     void setCurrentView(view_class* i_view) { mCurrentView = i_view; }
     void setCurrentViewport(view_port_class* i_viewport) { mCurrentViewport = i_viewport; }
-
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
     /* 0x3DF8 */ dADM mADM;
@@ -436,10 +438,6 @@ inline int dComIfGs_getRupee() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getRupee();
 }
 
-inline u8 dComIfGs_getMagic() {
-    return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getMagic();
-}
-
 inline u8 dComIfGs_getItem(int param_0) {
     return g_dComIfG_gameInfo.save.getPlayer().getItem().getItem(param_0);
 }
@@ -464,11 +462,19 @@ inline BOOL dComIfGs_isGetCollectMap(int i_itemNo) {
     return g_dComIfG_gameInfo.save.getPlayer().getMap().isGetMap(i_itemNo - 1);
 }
 
-inline u8 dComIfGs_getArrowNum() {
+inline BOOL dComIfGs_isCollectMapTriforce(int i_itemNo) {
+    return g_dComIfG_gameInfo.save.getPlayer().getMap().isTriforce(i_itemNo - 1);
+}
+
+inline BOOL dComIfGs_isOpenCollectMap(int i_itemNo) {
+    return g_dComIfG_gameInfo.save.getPlayer().getMap().isOpenMap(i_itemNo - 1);
+}
+
+inline u32 dComIfGs_getArrowNum() {
     return g_dComIfG_gameInfo.save.getPlayer().getItemRecord().getArrowNum();
 }
 
-inline u8 dComIfGs_getBombNum() {
+inline u32 dComIfGs_getBombNum() {
     return g_dComIfG_gameInfo.save.getPlayer().getItemRecord().getBombNum();
 }
 
@@ -494,6 +500,10 @@ inline void dComIfGs_setEventReg(u16 i_reg, u8 i_no) {
 
 inline u8 dComIfGs_getEventReg(u16 i_reg) {
     return g_dComIfG_gameInfo.save.getEvent().getEventReg(i_reg);
+}
+
+inline BOOL dComIfGs_isOceanSvBit(u8 i_grid, u16 i_bit) {
+    return g_dComIfG_gameInfo.save.getOcean().isOceanSvBit(i_grid, i_bit);
 }
 
 inline BOOL dComIfGs_isEventBit(u16 id) {
@@ -544,6 +554,9 @@ inline void dComIfGs_onSaveTbox(int i_stageNo, int i_no) {
     g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().onTbox(i_no);
 }
 
+void dComIfGs_onStageTbox(int i_stageNo, int i_no);
+BOOL dComIfGs_isStageTbox(int i_stageNo, int i_no);
+
 BOOL dComIfGs_isStageBossEnemy(int i_stageNo);
 
 inline BOOL dComIfGs_isStageBossEnemy() {
@@ -576,6 +589,10 @@ inline BOOL dComIfGs_isTriforce(u8 i_no) {
 
 inline BOOL dComIfGs_isSymbol(u8 i_no) {
     return g_dComIfG_gameInfo.save.getPlayer().getCollect().isSymbol(i_no);
+}
+
+inline BOOL dComIfGs_isDungeonItemBossKey() {
+    return g_dComIfG_gameInfo.save.getMemory().getBit().isDungeonItemBossKey();
 }
 
 inline void dComIfGs_onSwitch(int i_no, int i_roomNo) {
@@ -710,6 +727,10 @@ inline void dComIfGs_incGbaRupeeCount() {
     g_dComIfG_gameInfo.save.getDan().incGbaRupeeCount();
 }
 
+inline u8 dComIfGs_checkBaitItem(u8 item) {
+    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().checkBaitItem(item);
+}
+
 inline u8 dComIfGs_checkBaitItemEmpty() {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItem().checkBaitItemEmpty();
 }
@@ -722,12 +743,24 @@ inline u8 dComIfGs_getArrowMax() {
     return g_dComIfG_gameInfo.save.getPlayer().getItemMax().getArrowNum();
 }
 
+inline u16 dComIfGs_getLife() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getLife();
+}
+
 inline u16 dComIfGs_getMaxLife() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getMaxLife();
 }
 
+inline u8 dComIfGs_getMagic() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getMagic();
+}
+
 inline u8 dComIfGs_getMaxMagic() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getMaxMagic();
+}
+
+inline u8 dComIfGs_getKeyNum() {
+    return g_dComIfG_gameInfo.save.getMemory().getBit().getKeyNum();
 }
 
 u8 dComIfGs_checkGetItemNum(u8 i_itemNo);
@@ -1036,6 +1069,10 @@ inline void dComIfGp_setAgb(fopAc_ac_c* i_agb) {
     g_dComIfG_gameInfo.play.setAgb(i_agb);
 }
 
+inline daAgb_c* dComIfGp_getAgb() {
+    return g_dComIfG_gameInfo.play.getAgb();
+}
+
 inline daPy_py_c* daPy_getPlayerActorClass() {
     return (daPy_py_c*)dComIfGp_getPlayer(0);
 }
@@ -1090,6 +1127,10 @@ inline bool dComIfGp_checkPlayerStatus0(int param_0, u32 flag) {
 
 inline bool dComIfGp_checkPlayerStatus1(int param_0, u32 flag) {
     return g_dComIfG_gameInfo.play.checkPlayerStatus(param_0, 1, flag);
+}
+
+inline u8 dComIfGp_getSelectItem(int idx) {
+    return g_dComIfG_gameInfo.play.getSelectItem(idx);
 }
 
 inline void dComIfGp_setCurrentGrafPort(J2DOrthoGraph* i_graf) {

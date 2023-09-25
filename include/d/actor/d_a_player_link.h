@@ -472,7 +472,7 @@ public:
     void simpleAnmPlay(J3DAnmBase*);
     void setHandModel(daPy_lk_c::daPy_ANM);
     void getAnmData(daPy_lk_c::daPy_ANM) const;
-    void checkGrabWeapon(int);
+    BOOL checkGrabWeapon(int);
     void endDemoMode();
     void setAuraEffect();
     void setWaterRipple();
