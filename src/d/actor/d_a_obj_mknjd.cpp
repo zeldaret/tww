@@ -14,6 +14,43 @@
 #include "dolphin/types.h"
 
 
+static const char* daObjMknjD_jointName[] = {
+    "Hahen1",
+    "Hahen2",
+    "Hahen3",
+    "Hahen4",
+    "Hahen5",
+    "Hahen6",
+    "Hahen7",
+    "Hahen8",
+    "Hahen9",
+    "Hahen10",
+    "Hahen11",
+    "Hahen12",
+    "Hahen13",
+    "Hahen14",
+    "Hahen15",
+    "Hahen16",
+    "Hahen17",
+    "Hahen18",
+    "Hahen19",
+    "Hahen20"
+};
+
+const char* daObjMknjD_EventName[] = {
+    "MKNJD_D_DEMO",
+    "MKNJD_K_DEMO",
+
+    "MKNJD_D_CHECK",
+    "MKNJD_K_CHECK",
+
+    "MKNJD_D_ERROR",
+    "MKNJD_K_ERROR",
+
+    "MKNJD_D_LESSON",
+    "MKNJD_K_LESSON",
+};
+
 namespace daObjMknjD {
     class Act_c : public dBgS_MoveBgActor {
     public:
@@ -21,7 +58,7 @@ namespace daObjMknjD {
         s32 Mthd_Delete();
 
         s16 XyCheckCB(int);
-        s32 XyEventCB(int);
+        s16 XyEventCB(int);
 
         int CreateHeap();
         int Create();
@@ -48,69 +85,9 @@ namespace daObjMknjD {
 
     const char Act_c::M_arcname[] = "MknjD";
 
-    /* 00001348-00001400       .text manage_friend_draw__10daObjMknjDFi */
-    void manage_friend_draw(int) {
-        /* Nonmatching */
-    }
-
-    /* 000020E0-000022FC       .text setMaterial__10daObjMknjDFP11J3DMaterialUc */
-    void setMaterial(J3DMaterial*, unsigned char) {
-        /* Nonmatching */
-    }
-
-    namespace {
-        /* 00002430-00002450       .text Mthd_Create__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
-        s32 Mthd_Create(void* i_this) {
-            return static_cast<Act_c*>(i_this)->Mthd_Create();
-        }
-
-        /* 00002450-00002470       .text Mthd_Delete__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
-        s32 Mthd_Delete(void* i_this) {
-            return static_cast<Act_c*>(i_this)->Mthd_Delete();
-        }
-
-        /* 00002470-00002490       .text Mthd_Execute__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
-        s32 Mthd_Execute(void* i_this) {
-            return static_cast<Act_c*>(i_this)->MoveBGExecute();
-        }
-
-        /* 00002490-000024BC       .text Mthd_Draw__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
-        s32 Mthd_Draw(void* i_this) {
-            return static_cast<Act_c*>(i_this)->Draw();
-        }
-
-        /* 000024BC-000024E8       .text Mthd_IsDelete__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
-        s32 Mthd_IsDelete(void* i_this) {
-            return static_cast<Act_c*>(i_this)->IsDelete();
-        }
-
-        static actor_method_class Mthd_Table = {
-            (process_method_func)Mthd_Create,
-            (process_method_func)Mthd_Delete,
-            (process_method_func)Mthd_Execute,
-            (process_method_func)Mthd_IsDelete,
-            (process_method_func)Mthd_Draw,
-        };
-    }
-
-    extern actor_process_profile_definition g_profile_Obj_MknjD = {
-        fpcLy_CURRENT_e,
-        3,
-        fpcPi_CURRENT_e,
-        PROC_Obj_MknjD,
-        &g_fpcLf_Method.mBase,
-        sizeof(Act_c),
-        0,
-        0,
-        &g_fopAc_Method.base,
-        0x01C6,
-        &Mthd_Table,
-        0x00044100,
-        fopAc_ACTOR_e,
-        fopAc_CULLBOX_CUSTOM_e,
-    };
+    static void manage_friend_draw(int);
+    static void setMaterial(J3DMaterial*, unsigned char);
 }
-
 
 /* 00000078-0000012C       .text nodeCallBackL__FP7J3DNodei */
 void nodeCallBackL(J3DNode*, int) {
@@ -128,12 +105,12 @@ void nodeCallBack_Hahen(J3DNode*, int) {
 }
 
 /* 000002B0-000002D0       .text daObjMknjD_XyCheckCB__FPvi */
-s16 daObjMknjD_XyCheckCB(void* i_this, int i_param2) {
+static s16 daObjMknjD_XyCheckCB(void* i_this, int i_param2) {
     return static_cast<daObjMknjD::Act_c*>(i_this)->XyCheckCB(i_param2);
 }
 
 /* 000002D0-000002F0       .text daObjMknjD_XyEventCB__FPvi */
-s32 daObjMknjD_XyEventCB(void* i_this, int i_param2) {
+static s16 daObjMknjD_XyEventCB(void* i_this, int i_param2) {
     return static_cast<daObjMknjD::Act_c*>(i_this)->XyEventCB(i_param2);
 }
 
@@ -143,7 +120,7 @@ s16 daObjMknjD::Act_c::XyCheckCB(int i_itemIdx) {
 }
 
 /* 00000314-0000031C       .text XyEventCB__Q210daObjMknjD5Act_cFi */
-s32 daObjMknjD::Act_c::XyEventCB(int) {
+s16 daObjMknjD::Act_c::XyEventCB(int) {
     /* Nonmatching */
     return m04E2;
 }
@@ -214,6 +191,11 @@ void daObjMknjD::Act_c::privateCut() {
     /* Nonmatching */
 }
 
+/* 00001348-00001400       .text manage_friend_draw__10daObjMknjDFi */
+void daObjMknjD::manage_friend_draw(int) {
+    /* Nonmatching */
+}
+
 /* 00001400-0000195C       .text daObjMknjD_break__Q210daObjMknjD5Act_cFv */
 void daObjMknjD::Act_c::daObjMknjD_break() {
     /* Nonmatching */
@@ -225,8 +207,67 @@ int daObjMknjD::Act_c::Execute(float(**)[3][4]) {
     return 0;
 }
 
+/* 000020E0-000022FC       .text setMaterial__10daObjMknjDFP11J3DMaterialUc */
+void daObjMknjD::setMaterial(J3DMaterial*, unsigned char) {
+    /* Nonmatching */
+}
+
 /* 000022FC-00002430       .text Draw__Q210daObjMknjD5Act_cFv */
 int daObjMknjD::Act_c::Draw() {
     /* Nonmatching */
     return 0;
 }
+
+namespace daObjMknjD {
+    namespace {
+        /* 00002430-00002450       .text Mthd_Create__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
+        s32 Mthd_Create(void* i_this) {
+            return static_cast<Act_c*>(i_this)->Mthd_Create();
+        }
+
+        /* 00002450-00002470       .text Mthd_Delete__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
+        s32 Mthd_Delete(void* i_this) {
+            return static_cast<Act_c*>(i_this)->Mthd_Delete();
+        }
+
+        /* 00002470-00002490       .text Mthd_Execute__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
+        s32 Mthd_Execute(void* i_this) {
+            return static_cast<Act_c*>(i_this)->MoveBGExecute();
+        }
+
+        /* 00002490-000024BC       .text Mthd_Draw__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
+        s32 Mthd_Draw(void* i_this) {
+            return static_cast<Act_c*>(i_this)->Draw();
+        }
+
+        /* 000024BC-000024E8       .text Mthd_IsDelete__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
+        s32 Mthd_IsDelete(void* i_this) {
+            return static_cast<Act_c*>(i_this)->IsDelete();
+        }
+
+        static actor_method_class Mthd_Table = {
+            (process_method_func)Mthd_Create,
+            (process_method_func)Mthd_Delete,
+            (process_method_func)Mthd_Execute,
+            (process_method_func)Mthd_IsDelete,
+            (process_method_func)Mthd_Draw,
+        };
+    }
+}
+
+extern actor_process_profile_definition g_profile_Obj_MknjD = {
+    fpcLy_CURRENT_e,
+    3,
+    fpcPi_CURRENT_e,
+    PROC_Obj_MknjD,
+    &g_fpcLf_Method.mBase,
+    sizeof(daObjMknjD::Act_c),
+    0,
+    0,
+    &g_fopAc_Method.base,
+    0x01C6,
+    &daObjMknjD::Mthd_Table,
+    0x00044100,
+    fopAc_ACTOR_e,
+    fopAc_CULLBOX_CUSTOM_e,
+};
