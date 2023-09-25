@@ -94,14 +94,13 @@ public:
 
 STATIC_ASSERT(sizeof(daItem_c) == 0x6C0);
 
-class daItem_prm {
-public:
-    static u32 getType(daItem_c* item) { return (fpcM_GetParam(item) & 0x03000000) >> 0x18; }
-    static u32 getAction(daItem_c* item) { return (fpcM_GetParam(item) & 0xFC000000) >> 0x1A; }
-    static u32 getItemNo(daItem_c* item) { return (fpcM_GetParam(item) & 0x000000FF) >> 0x00; }
-    static u32 getItemBitNo(daItem_c* item) { return (fpcM_GetParam(item) & 0x0000FF00) >> 0x08; }
-    static u32 getSwitchNo(daItem_c* item) { return (item->orig.angle.z & 0x00FF) >> 0; }
-    static u32 getSwitchNo2(daItem_c* item) { return (fpcM_GetParam(item) & 0x00FF0000) >> 0x10; }
+namespace daItem_prm {
+    inline u32 getType(daItem_c* item) { return (fpcM_GetParam(item) & 0x03000000) >> 0x18; }
+    inline u32 getAction(daItem_c* item) { return (fpcM_GetParam(item) & 0xFC000000) >> 0x1A; }
+    inline u32 getItemNo(daItem_c* item) { return (fpcM_GetParam(item) & 0x000000FF) >> 0x00; }
+    inline u32 getItemBitNo(daItem_c* item) { return (fpcM_GetParam(item) & 0x0000FF00) >> 0x08; }
+    inline u32 getSwitchNo(daItem_c* item) { return (item->orig.angle.z & 0x00FF) >> 0; }
+    inline u32 getSwitchNo2(daItem_c* item) { return (fpcM_GetParam(item) & 0x00FF0000) >> 0x10; }
 };
 
 #endif /* D_A_ITEM_H */
