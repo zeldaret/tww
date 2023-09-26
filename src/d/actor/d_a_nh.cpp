@@ -549,7 +549,7 @@ void daNh_c::playBrkAnm() {
 
 /* 800FACE8-800FAE1C       .text draw__6daNh_cFv */
 BOOL daNh_c::draw() {
-    g_env_light.settingTevStruct(0, &current.pos, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &mTevStr);
     
     J3DModelData* modelData = mpModel->getModelData();

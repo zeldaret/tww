@@ -372,7 +372,7 @@ config.libs = [
             Object(NonMatching, "d/d_path.cpp"),
             Object(NonMatching, "d/d_drawlist.cpp"),
             Object(Matching,    "d/d_kankyo_data.cpp"),
-            Object(NonMatching, "d/d_kankyo_wether.cpp"),
+            Object(Matching,    "d/d_kankyo_wether.cpp"),
             Object(NonMatching, "d/d_kankyo_rain.cpp"),
             Object(Matching,    "d/d_kankyo_demo.cpp"),
             Object(NonMatching, "d/d_detect.cpp"),

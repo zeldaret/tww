@@ -31,17 +31,11 @@ int dBgS_MoveBgActor::MoveBGCreateHeap() {
     }
 
     mpBgW = new dBgW();
-    if (mpBgW != NULL) {
-        cBgD_t* res = (cBgD_t*)dComIfG_getObjectRes(m_name, m_dzb_id);
-        if (!mpBgW->Set(res, cBgW::MOVE_BG_e, &mBgMtx)) {
-            if (m_set_func != NULL) {
-                mpBgW->SetCrrFunc(m_set_func);
-            }
-        } else {
-            goto RET;  // probably fake match, clean up later
+    if (mpBgW && !mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_name, m_dzb_id), cBgW::MOVE_BG_e, &mBgMtx)) {
+        if (m_set_func != NULL) {
+            mpBgW->SetCrrFunc(m_set_func);
         }
     } else {
-    RET:
         mpBgW = NULL;
         return 0;
     }

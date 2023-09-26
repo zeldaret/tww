@@ -1746,7 +1746,6 @@ void dScnKy_env_light_c::SetBaseLight() {
 }
 
 /* 80193EE4-801940EC       .text exeKankyo__18dScnKy_env_light_cFv */
-// NONMATCHING - one block with regswaps
 void dScnKy_env_light_c::exeKankyo() {
     g_env_light.mColPatMode = g_env_light.mColPatModeGather;
 
@@ -1788,10 +1787,11 @@ void dScnKy_env_light_c::exeKankyo() {
             g_env_light.mColpatPrevGather = 0xFF;
         }
 
-        if (g_env_light.mColpatCurrGather != 0xFF) {
-            g_env_light.mColpatCurr = g_env_light.mColpatCurrGather;
+        u8 currGather = g_env_light.mColpatCurrGather;
+        if (currGather != 0xFF) {
+            g_env_light.mColpatCurr = currGather;
             g_env_light.mColpatCurrGather = 0xFF;
-            g_env_light.mColpatWeather = g_env_light.mColpatCurrGather;
+            g_env_light.mColpatWeather = currGather;
         }
 
         if (g_env_light.mColPatBlendGather >= 0.0f) {
