@@ -169,6 +169,14 @@ cflags_runtime = [
     "-inline deferred,auto",
 ]
 
+# Dolphin library flags
+cflags_dolphin = [
+    *cflags_base,
+    "-use_lmw_stmw on",
+    "-str reuse,pool,readonly",
+    "-inline auto",
+]
+
 # Framework flags
 cflags_framework = [
     *cflags_base,
@@ -222,8 +230,8 @@ def JSystemLib(lib_name, objects):
 def DolphinLib(lib_name, objects):
     return {
         "lib": lib_name,
-        "mw_version": "GC/1.3.2",
-        "cflags": cflags_runtime, # TODO check
+        "mw_version": "GC/1.2.5n",
+        "cflags": cflags_dolphin, # TODO check
         "host": False,
         "objects": objects,
     }
@@ -722,11 +730,11 @@ config.libs = [
         "gba",
         [
             Object(NonMatching, "dolphin/gba/GBA.c"),
-            Object(NonMatching, "dolphin/gba/GBAGetProcessStatus.c"),
+            Object(Matching,    "dolphin/gba/GBAGetProcessStatus.c"),
             Object(NonMatching, "dolphin/gba/GBAJoyBoot.c"),
-            Object(NonMatching, "dolphin/gba/GBARead.c"),
-            Object(NonMatching, "dolphin/gba/GBAWrite.c"),
-            Object(NonMatching, "dolphin/gba/GBAXfer.c"),
+            Object(Matching,    "dolphin/gba/GBARead.c"),
+            Object(Matching,    "dolphin/gba/GBAWrite.c"),
+            Object(Matching,    "dolphin/gba/GBAXfer.c"),
         ],
     ),
     JSystemLib(
