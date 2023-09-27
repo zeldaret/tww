@@ -1,10 +1,10 @@
 #ifndef J3DMATBLOCK_H
 #define J3DMATBLOCK_H
 
+#include "JSystem/J3DGraphBase/J3DGD.h"
 #include "JSystem/J3DGraphBase/J3DStruct.h"
 #include "JSystem/J3DGraphBase/J3DTevs.h"
 #include "JSystem/J3DGraphBase/J3DTexture.h"
-#include "dolphin/types.h"
 
 struct J3DGXColorS10 : public GXColorS10 {
     J3DGXColorS10() {}
@@ -551,9 +551,19 @@ struct J3DZModeInfo {
 struct J3DZMode {
     J3DZMode() { mZModeID = j3dDefaultZModeID; }
 
+    //u8 getCompareEnaable() const { return j3dZModeTable[mZModeID * 3]; }
+    //u8 getFunc() const { return j3dZModeTable[mZModeID * 3 + 1]; }
+    //u8 getUpdateEnable() const { return j3dZModeTable[mZModeID * 3 + 2]; }
+
     void setZModeInfo(const J3DZModeInfo& info) {
         mZModeID = calcZModeID(info.field_0x0, info.field_0x1, info.field_0x2);
     }
+
+    /*
+    void load() {
+        J3DGDSetZMode(getCompareEnaable(), GXCompare(getFunc()), getUpdateEnable());
+    }
+    */
 
     /* 0x0 */ u16 mZModeID;
 };
@@ -569,6 +579,15 @@ extern const J3DBlendInfo j3dDefaultBlendInfo;
 
 struct J3DBlend : public J3DBlendInfo {
     J3DBlend() { *(J3DBlendInfo*)this = j3dDefaultBlendInfo; }
+
+    void load() {
+        J3DGDSetBlendMode(
+            GXBlendMode(mType),
+            GXBlendFactor(mSrcFactor),
+            GXBlendFactor(mDstFactor),
+            GXLogicOp(mOp)
+        );
+    }
 };
 
 extern const J3DFogInfo j3dDefaultFogInfo;
@@ -576,6 +595,11 @@ extern const J3DFogInfo j3dDefaultFogInfo;
 struct J3DFog : public J3DFogInfo {
     J3DFog() { *getFogInfo() = j3dDefaultFogInfo; }
     J3DFogInfo* getFogInfo() { return (J3DFogInfo*)this; }
+
+    void load() {
+        J3DGDSetFog(GXFogType(mType), mStartZ, mEndZ, mNearZ, mFarZ, mColor);
+        J3DGDSetFogRangeAdj(mAdjEnable, mCenter, (GXFogAdjTable*)mFogAdjTable);
+    }
 };
 
 struct J3DAlphaCompInfo {
@@ -602,6 +626,10 @@ struct J3DAlphaComp {
         mRef1 = 0;
     }
 
+    //u8 getComp0() { return j3dAlphaCmpTable[field_0x0 * 3]; }
+    //u8 getOp() { return j3dAlphaCmpTable[field_0x0 * 3 + 1]; }
+    //u8 getComp1() { return j3dAlphaCmpTable[field_0x0 * 3 + 2]; }
+
     void setAlphaCompInfo(const J3DAlphaCompInfo& param_1) {
         mRef0 = param_1.field_0x1;
         mRef1 = param_1.field_0x4;
@@ -612,6 +640,18 @@ struct J3DAlphaComp {
         // while the above matches for `addWarpMaterial` but causes `dKy_bg_MAxx_proc` to fail?
         // field_0x0 = calcAlphaCmpID(param_1.field_0x0, param_1.mRef0, param_1.mRef1);
     }
+
+    /*
+    void load() {
+        J3DGDSetAlphaCompare(
+            GXCompare(getComp0()),
+            mRef0,
+            GXAlphaOp(getOp()),
+            GXCompare(getComp1()),
+            mRef1
+        );
+    }
+    */
 
     /* 0x00 */ u16 field_0x0;
     /* 0x02 */ u8 mRef0;
@@ -761,6 +801,9 @@ struct J3DIndTexCoordScale {
     J3DIndTexCoordScale();
     ~J3DIndTexCoordScale() {}
 
+    u8 getScaleS() { return mScaleS; }
+    u8 getScaleT() { return mScaleT; }
+
     /* 0x0 */ u8 mScaleS __attribute__((aligned(4)));
     /* 0x1 */ u8 mScaleT;
 };
@@ -769,6 +812,10 @@ struct J3DIndTexMtx {
     J3DIndTexMtx();
     ~J3DIndTexMtx() {}
 
+    void load(u32 param_1) {
+        J3DGDSetIndTexMtx(GXIndTexMtxID(param_1 + 1), mOffsetMtx, mScaleExp);
+    }
+
     /* 0x00 */ Mtx23 mOffsetMtx;
     /* 0x18 */ u8 mScaleExp;
 };  // Size: 0x1C
@@ -776,8 +823,11 @@ struct J3DIndTexMtx {
 struct J3DIndTexOrder {
     J3DIndTexOrder();
 
-    /* 0x0 */ u8 mMap;
-    /* 0x1 */ u8 mCoord;
+    u8 getCoord() const { return mCoord; }
+    u8 getMap() const { return mMap; }
+
+    /* 0x0 */ u8 mCoord;
+    /* 0x1 */ u8 mMap;
     /* 0x2 */ u8 field_0x2;
     /* 0x3 */ u8 field_0x3;
 };
@@ -851,13 +901,54 @@ struct J3DColorChanInfo {
     /* 0x5 */ u8 field_0x5;
 };
 
+/*
+inline u32 setChanCtrlMacro(u8 param_0, GXColorSrc param_1, GXColorSrc param_2, u32 param_3, GXDiffuseFn param_4, GXAttnFn param_5) {
+    GXDiffuseFn r31;
+    if (param_5 == GX_AF_SPEC) {
+        r31 = GX_DF_NONE;
+    } else {
+        r31 = param_4;
+    }
+    return
+        param_2 |
+        param_0 << 1 |
+        (param_3 & 0xf) << 2 |
+        param_1 << 6 |
+        r31 << 7 |
+        (param_5 != 2) << 9 |
+        (param_5 != 0) << 10 |
+        (param_3 >> 4 & 0x0f) << 11;
+}
+*/
+
 struct J3DColorChan {
     J3DColorChan();
+    /*
+    u8 getAttnFn() {
+        u8 local_8[4] = {0x20, 0x00, 0x02, 0x01};
+        return local_8[(mColorChanID & 0x600) >> 9];
+    }
+     */
+    u8 getDiffuseFn() { return (mColorChanID & 0x180) >> 7; }
     u8 getLightMask() { return (((mColorChanID & 0x7800) >> 7) | (mColorChanID & 0x3c) >> 2); }
     void setLightMask(u8 param_1) {
         mColorChanID = (mColorChanID & ~0x3c) | ((param_1 & 0xf) << 2);
         mColorChanID = (mColorChanID & ~0x7800) | ((param_1 & 0xf0) << 7);
     }
+    u8 getMatSrc() { return mColorChanID & 0x01; }
+    u8 getAmbSrc() { return (mColorChanID & 0x40) >> 6; }
+    u8 getEnable() { return (mColorChanID & 0x02) >> 1; }
+    /*
+    void load() {
+        u8 r26 = getAttnFn();
+        u8 r27 = getDiffuseFn();
+        u8 r28 = getLightMask();
+        u8 r29 = getMatSrc();
+        u8 r30 = getAmbSrc();
+        u8 r31 = getEnable();
+        J3DGDWrite_u32(setChanCtrlMacro(r31, GXColorSrc(r30), GXColorSrc(r29), r28, GXDiffuseFn(r27), GXAttnFn(r26)));
+    }
+    */
 
     /* 0x0 */ u16 mColorChanID;
 };
