@@ -1306,6 +1306,10 @@ inline void dComIfGp_evmng_remove() {
     g_dComIfG_gameInfo.play.getEvtManager().remove();
 }
 
+inline void dComIfGp_evmng_setGoal(cXyz* pos) {
+    g_dComIfG_gameInfo.play.getEvtManager().setGoal(pos);
+}
+
 /**
  * === DRAWLIST ===
  */
