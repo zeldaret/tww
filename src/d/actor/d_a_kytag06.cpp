@@ -17,15 +17,13 @@ public:
     /* 0x294 */ float field_0x294;
 };
 
-static const float[] unk = {1.0f, 0.1f, 0.001f, 0.0001};
-
 /* 00000078-00000080       .text daKytag06_Draw__FP13kytag06_class */
 static bool daKytag06_Draw(kytag06_class*) {
     return true;
 }
 
 /* 00000080-00000194       .text daKytag06_Execute__FP13kytag06_class */
-BOOL daKytag06_Execute(kytag06_class* i_this) {
+static BOOL daKytag06_Execute(kytag06_class* i_this) {
     f32 time;
     int date;
 
@@ -55,12 +53,12 @@ BOOL daKytag06_Execute(kytag06_class* i_this) {
 }
 
 /* 00000194-0000019C       .text daKytag06_IsDelete__FP13kytag06_class */
-static bool daKytag06_IsDelete(kytag06_class*) {
+static BOOL daKytag06_IsDelete(kytag06_class*) {
     return true;
 }
 
 /* 0000019C-000001A4       .text daKytag06_Delete__FP13kytag06_class */
-static bool daKytag06_Delete(kytag06_class*) {
+static BOOL daKytag06_Delete(kytag06_class*) {
     return true;
 }
 
@@ -81,7 +79,7 @@ static int daKytag06_Create(fopAc_ac_c* i_this) {
     return var;
 }
 
-static actor_method_class l_kytag06__Method = {
+static actor_method_class l_daKytag06_Method = {
     (process_method_func)daKytag06_Execute,
     (process_method_func)daKytag06_Draw,
     (process_method_func)daKytag06_IsDelete,
@@ -100,7 +98,7 @@ extern actor_process_profile_definition g_profile_KYTAG06 = {
     0,
     &g_fopAc_Method.base,
     0xA6,
-    &l_kytag06__Method,
+    &l_daKytag06_Method,
     0x00044000,
     fopAc_ACTOR_e,
     fopAc_CULLBOX_0_e,
