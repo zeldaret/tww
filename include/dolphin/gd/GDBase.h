@@ -40,6 +40,10 @@ inline u8* GDGetCurrPointer() {
     return __GDCurrentDL->ptr;
 }
 
+inline s32 GDGetCurrOffset() {
+    return __GDCurrentDL->ptr - __GDCurrentDL->start;
+}
+
 inline void GDSetCurrOffset(s32 offs) {
     __GDCurrentDL->ptr = __GDCurrentDL->start + offs;
 }

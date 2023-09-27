@@ -48,11 +48,11 @@ J3DSys::J3DSys() {
     field_0x104 = NULL;
     field_0x120 = NULL;
 
-    for (u32 i = 0; i < 32; i += 4) {
-        sTexCoordScaleTable[i + 0] = 1;
-        sTexCoordScaleTable[i + 1] = 1;
-        sTexCoordScaleTable[i + 2] = 0;
-        sTexCoordScaleTable[i + 3] = 0;
+    for (u32 i = 0; i < 8; i ++) {
+        sTexCoordScaleTable[i].field_0x00 = 1;
+        sTexCoordScaleTable[i].field_0x02 = 1;
+        sTexCoordScaleTable[i].field_0x04 = 0;
+        sTexCoordScaleTable[i].field_0x06 = 0;
     }
 }
 
@@ -411,6 +411,6 @@ J3DSys j3dSys;
 Mtx J3DSys::mCurrentMtx;
 Vec J3DSys::mCurrentS;
 Vec J3DSys::mParentS;
-u16 J3DSys::sTexCoordScaleTable[32];
+J3DTexCoordScaleInfo J3DSys::sTexCoordScaleTable[8];
 
 u32 j3dDefaultViewNo;
