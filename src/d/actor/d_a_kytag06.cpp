@@ -11,7 +11,7 @@
 #include "d/d_procname.h"
 #include "dolphin/types.h"
 
-struct kytag06_class : fopAc_ac_c {
+class kytag06_class : public fopAc_ac_c {
 public:
     /* 0x290 */ int field_0x290;
     /* 0x294 */ float field_0x294;
