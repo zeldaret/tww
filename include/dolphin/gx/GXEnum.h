@@ -301,12 +301,12 @@ typedef enum _GXTevColorArg {
     /* 0xF */ GX_CC_ZERO,
 } GXTevColorArg;
 
-typedef enum _GXTevColor {
+typedef enum _GXTevColorChan {
     /* 0x0 */ GX_CH_RED,
     /* 0x1 */ GX_CH_GREEN,
     /* 0x2 */ GX_CH_BLUE,
     /* 0x3 */ GX_CH_ALPHA,
-} GXTevColor;
+} GXTevColorChan;
 
 typedef enum _GXTevScale {
     /* 0x0 */ GX_CS_SCALE_1,

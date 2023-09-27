@@ -1,7 +1,9 @@
 #ifndef J3DTEVS_H
 #define J3DTEVS_H
 
-#include "dolphin/types.h"
+#include "JSystem/J3DGraphBase/J3DGD.h"
+
+extern u8 j3dTevSwapTableTable[1024];
 
 struct J3DTevStageInfo {
     /* 0x0 */ u8 field_0x0;
@@ -57,6 +59,11 @@ struct J3DTevStage {
 
     void setTevStageInfo(const J3DTevStageInfo&);
 
+    void load(u32) const {
+        J3DGDWriteBPCmd(*(u32*)&field_0x0);
+        J3DGDWriteBPCmd(*(u32*)&field_0x4);
+    }
+
     /* 0x0 */ u8 field_0x0;
     /* 0x1 */ u8 field_0x1;
     /* 0x1 */ u8 field_0x2;
@@ -82,6 +89,10 @@ struct J3DIndTevStageInfo {
 struct J3DIndTevStage {
     J3DIndTevStage();
 
+    void load(u32 param_1) {
+        J3DGDWriteBPCmd(mInfo | (param_1 + 16) << 24);
+    }
+
     /* 0x0 */ u32 mInfo;
 };
 
@@ -94,11 +105,17 @@ struct J3DTevOrderInfo {
 struct J3DTevOrder : public J3DTevOrderInfo {
     J3DTevOrder();
 
+    J3DTevOrderInfo* getTevOrderInfo() { return this; }
     u8 getTexMap() { return mTexMap; }
 };
 
 struct J3DTevSwapModeTable {
     J3DTevSwapModeTable();
+
+    u8 getR() { return j3dTevSwapTableTable[field_0x0 * 4]; }
+    u8 getG() { return j3dTevSwapTableTable[field_0x0 * 4 + 1]; }
+    u8 getB() { return j3dTevSwapTableTable[field_0x0 * 4 + 2]; }
+    u8 getA() { return j3dTevSwapTableTable[field_0x0 * 4 + 3]; }
 
     /* 0x0 */ u8 field_0x0;
 };  // Size: 0x1
@@ -108,6 +125,8 @@ struct J3DTevSwapModeInfo {
 };
 
 struct J3DNBTScale;
+class J3DTexCoord;
+void loadTexCoordGens(u32, J3DTexCoord*);
 void loadNBTScale(J3DNBTScale& param_0);
 
 #endif /* J3DTEVS_H */
