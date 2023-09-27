@@ -12,12 +12,59 @@ struct J3DTevStageInfo {
     /* 0x5 */ u8 field_0x5;
     /* 0x6 */ u8 field_0x6;
     /* 0x7 */ u8 field_0x7;
+    /* 0x8 */ u8 field_0x8;
+    /* 0x9 */ u8 field_0x9;
+    /* 0xA */ u8 field_0xa;
+    /* 0xB */ u8 field_0xb;
+    /* 0xC */ u8 field_0xc;
+    /* 0xD */ u8 field_0xd;
+    /* 0xE */ u8 field_0xe;
+    /* 0xF */ u8 field_0xf;
+    /* 0x10 */ u8 field_0x10;
+    /* 0x11 */ u8 field_0x11;
+    /* 0x12 */ u8 field_0x12;
+    /* 0x13 */ u8 field_0x13;
 };
 
-struct J3DTevStage : public J3DTevStageInfo {
-    J3DTevStage();
-    void setTevStageInfo(J3DTevStageInfo const&);
-    J3DTevStage(J3DTevStageInfo const&);
+STATIC_ASSERT(sizeof(J3DTevStageInfo) == 0x14);
+
+struct J3DTevStageTevSwapModeInfo {
+    u8 field_0x0_29 : 2;
+    u8 field_0x0_31 : 2;
+};
+
+struct J3DTevStage {
+    J3DTevStage() {
+        // TODO
+        // setTevStageInfo(j3dDefaultTevStageInfo);
+        mTevSwapModeInfo.field_0x0_29 = 0;
+        mTevSwapModeInfo.field_0x0_31 = 0;
+    }
+    J3DTevStage(const J3DTevStageInfo& info) {
+        setTevStageInfo(info);
+        mTevSwapModeInfo.field_0x0_29 = 0;
+        mTevSwapModeInfo.field_0x0_31 = 0;
+    }
+    J3DTevStage& operator=(const J3DTevStage& other) {
+        this->field_0x1 = other.field_0x1;
+        this->field_0x2 = other.field_0x2;
+        this->field_0x3 = other.field_0x3;
+        this->field_0x5 = other.field_0x5;
+        this->field_0x6 = other.field_0x6;
+        this->mTevSwapModeInfo = other.mTevSwapModeInfo;
+        return *this;
+    }
+
+    void setTevStageInfo(const J3DTevStageInfo&);
+
+    /* 0x0 */ u8 field_0x0;
+    /* 0x1 */ u8 field_0x1;
+    /* 0x1 */ u8 field_0x2;
+    /* 0x3 */ u8 field_0x3;
+    /* 0x4 */ u8 field_0x4;
+    /* 0x5 */ u8 field_0x5;
+    /* 0x6 */ u8 field_0x6;
+    /* 0x7 */ J3DTevStageTevSwapModeInfo mTevSwapModeInfo;
 };
 
 struct J3DIndTevStageInfo {

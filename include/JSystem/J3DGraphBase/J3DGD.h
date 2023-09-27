@@ -9,7 +9,7 @@ inline void J3DGDWrite_u8(u8 param) {
 }
 
 inline void J3DGDWrite_u16(u16 param) {
-    __GDWrite((param & 0xffff) >> 8);
+    __GDWrite((param >> 8) & 0xff);
     __GDWrite(param & 0xff);
 }
 
@@ -20,15 +20,27 @@ inline void J3DGDWrite_u32(u32 param) {
     __GDWrite(param & 0xff);
 }
 
-inline void J3DGDWriteXFCmd(u16 param_1, u32 param_2) {
+inline void J3DGDWrite_f32(f32 param) {
+    u32 tmp = *(u32*)&param;
+    J3DGDWrite_u32(tmp);
+}
+
+inline void J3DGDWriteXFCmd(u16 cmd, u32 param) {
     J3DGDWrite_u8(0x10);
     J3DGDWrite_u16(0);
-    J3DGDWrite_u16(param_1);
-    J3DGDWrite_u32(param_2);
+    J3DGDWrite_u16(cmd);
+    J3DGDWrite_u32(param);
+}
+
+inline void J3DGDWriteXFCmdHdr(u16 cmd, u8 len) {
+    J3DGDWrite_u8(0x10);
+    J3DGDWrite_u16(len - 1);
+    J3DGDWrite_u16(cmd);
 }
 
 void J3DGDSetGenMode(u8 texGenNum, u8 colorChanNum, u8 tevStageNum, u8 IndTexStageNum, _GXCullMode cullMode);
 void J3DGDSetGenMode_3Param(u8 texGenNum, u8 tevStageNum, u8 indTexStageNum);
+void J3DGDSetTexCoordGen(GXTexGenType, GXTexGenSrc);
 
 static inline void J3DFifoLoadIndx(u8 cmd, u16 indx, u16 addr) {
     GFX_FIFO(u8) = cmd;
