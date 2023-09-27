@@ -93,6 +93,7 @@ public:
 
     s16 getBodyAngleX() { return mBodyAngle.x; }
     s16 getBodyAngleY() { return mBodyAngle.y; }
+    void changeDemoMoveAngle(s16 angle) { mDemo.setMoveAngle(angle); }
 
     virtual MtxP getLeftHandMatrix() = 0;
     virtual MtxP getRightHandMatrix() = 0;

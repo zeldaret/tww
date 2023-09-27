@@ -62,13 +62,9 @@ bool daObjYgush00_c::create_heap() {
     static u32 btk_table[] = { 0x0E, 0x0D, 0x0D, 0x0D };
     static u32 bck_table[] = { 0x06, 0x05, 0x05, 0x05 };
 
-    J3DModelData * pModelData;
     bool ret = true;
     
-    // TODO regswap
-    // r29 -> r30: g_dComIfG_gameInfo.mResControl.mObjectInfo / btkRet
-    // r30 -> r29: pModelData
-    pModelData = (J3DModelData *)dComIfG_getObjectRes(l_arcname, mdl_table[mType]);
+    void* pModelData = dComIfG_getObjectRes(l_arcname, mdl_table[mType]);
     J3DAnmTextureSRTKey * pBtk = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes(l_arcname, btk_table[mType]);
     J3DAnmTransform * pBck = (J3DAnmTransform *)dComIfG_getObjectRes(l_arcname, bck_table[mType]);
 
@@ -76,9 +72,9 @@ bool daObjYgush00_c::create_heap() {
         JUT_ASSERT(207, 0);
         ret = false;
     } else {
-        mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000222);
-        s32 btkRet = mBtkAnm.init(pModelData, pBtk, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
-        s32 bckRet = mBckAnm.init(pModelData, pBck, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false);
+        mpModel = mDoExt_J3DModel__create((J3DModelData*)pModelData, 0x80000, 0x11000222);
+        s32 btkRet = mBtkAnm.init((J3DModelData*)pModelData, pBtk, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+        s32 bckRet = mBckAnm.init((J3DModelData*)pModelData, pBck, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false);
 
         if (!mpModel || !btkRet || !bckRet)
             ret = false;

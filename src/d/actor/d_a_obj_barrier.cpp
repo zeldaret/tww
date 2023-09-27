@@ -173,12 +173,12 @@ static cXyz l_ef_scale;
 // NONMATCHING - load order flipped
 void daObjBarrier_c::init_mtx() {
     mAnm.mpModel->setBaseScale(mScale);
-    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mAnm.mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 
     mDoMtx_stack_c::scaleM(mScale);
-    mDoMtx_copy(mDoMtx_stack_c::get(), mBgMtx);
+    cMtx_copy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
 /* 0000018C-000001B0       .text solidHeapCB__14daObjBarrier_cFP10fopAc_ac_c */
@@ -187,22 +187,23 @@ int daObjBarrier_c::solidHeapCB(fopAc_ac_c* i_this) {
 }
 
 /* 000001B0-00000340       .text init__18daObjBarrier_anm_cFv */
-// NONMATCHING - reg alloc
 bool daObjBarrier_anm_c::init() {
     bool rt = true;
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 10);
-    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, 18);
-    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, 14);
+    void* modelData = dComIfG_getObjectRes(l_arcName, 10);
+    void* pbtk = dComIfG_getObjectRes(l_arcName, 18);
+    void* pbrk = dComIfG_getObjectRes(l_arcName, 14);
 
     if (modelData == NULL || pbtk == NULL || pbrk == NULL) {
         JUT_PANIC(407);
         rt = false;
     } else {
-        mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x1000200);
-        BOOL btk_init =
-            mBtk.init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
-        BOOL brk_init =
-            mBrk.init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+        mpModel = mDoExt_J3DModel__create((J3DModelData*)modelData, 0x80000, 0x1000200);
+        BOOL btk_init = mBtk.init(
+            (J3DModelData*)modelData, (J3DAnmTextureSRTKey*)pbtk,
+            TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+        BOOL brk_init = mBrk.init(
+            (J3DModelData*)modelData, (J3DAnmTevRegKey*)pbrk,
+            TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
 
         if (mpModel == NULL || !btk_init || !brk_init) {
             rt = false;
@@ -315,11 +316,10 @@ void daObjBarrier_c::brkAnmPlay() {
 }
 
 /* 00000884-000009F0       .text break_start_wait_proc__14daObjBarrier_cFv */
-// NONMATCHING - regswap
 void daObjBarrier_c::break_start_wait_proc() {
     // 0x3980: Saw Hyrule 3 Electric Barrier Demo
     if (dComIfGs_isEventBit(0x3980) == true) {
-        daPy_py_c* player_p = daPy_getPlayerActorClass();
+        daPy_py_c* player_p = (daPy_py_c*)daPy_getPlayerActorClass();
 
         if ((player_p->current.pos - current.pos).absXZ() >= 8800.0f &&
             dComIfGs_getSelectEquip(0) == MASTER_SWORD_EX)
@@ -419,7 +419,7 @@ bool daObjBarrier_ef_c::checkHitActor(fopAc_ac_c* i_checkActor) {
 }
 
 /* 00000D5C-000011B8       .text birth__17daObjBarrier_ef_cFP10fopAc_ac_cf4cXyz4cXyzi */
-// NONMATCHING - regalloc
+// NONMATCHING
 void daObjBarrier_ef_c::birth(fopAc_ac_c* i_hitActor, f32 i_radius, cXyz i_center, cXyz i_hitPos,
                               int i_isNoEff) {
     if (!i_isNoEff || !checkHitActor(i_hitActor)) {
@@ -442,7 +442,7 @@ void daObjBarrier_ef_c::birth(fopAc_ac_c* i_hitActor, f32 i_radius, cXyz i_cente
 
         if (effect_idx == -1) {
             f32 var_f1 = -1.0f;
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 4; i++) { // nonmatching
                 if (mBtk[i].getFrame() > var_f1) {
                     var_f1 = mBtk[i].getFrame();
                     effect_idx = i;
@@ -466,21 +466,21 @@ void daObjBarrier_ef_c::birth(fopAc_ac_c* i_hitActor, f32 i_radius, cXyz i_cente
 
         J3DModelData* modelData = mpModel[effect_idx]->getModelData();
 
-        J3DAnmTextureSRTKey* btk_anm_p = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, 19);
+        void* btk_anm_p = dComIfG_getObjectRes(l_arcName, 19);
         JUT_ASSERT(937, btk_anm_p != 0);
 
-        J3DAnmTransform* bck_anm_p = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 7);
+        void* bck_anm_p = dComIfG_getObjectRes(l_arcName, 7);
         JUT_ASSERT(942, bck_anm_p != 0);
 
-        J3DAnmTevRegKey* brk_anm_p = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, 15);
+        void* brk_anm_p = dComIfG_getObjectRes(l_arcName, 15);
         JUT_ASSERT(947, brk_anm_p != 0);
 
-        mBtk[effect_idx].init(modelData, btk_anm_p, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1,
-                              true, 0);
-        mBck[effect_idx].init(modelData, bck_anm_p, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1,
-                              true);
-        mBrk[effect_idx].init(modelData, brk_anm_p, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1,
-                              true, 0);
+        mBtk[effect_idx].init(modelData, (J3DAnmTextureSRTKey*)btk_anm_p, TRUE,
+                              J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, true, 0);
+        mBck[effect_idx].init(modelData, (J3DAnmTransform*)bck_anm_p, TRUE,
+                              J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1, true);
+        mBrk[effect_idx].init(modelData, (J3DAnmTevRegKey*)brk_anm_p, TRUE,
+                              J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1, true, 0);
 
         mDoMtx_stack_c::transS(pos.x, pos.y, pos.z);
         mDoMtx_stack_c::ZXYrotM(0, angle.y, 0);
@@ -491,28 +491,30 @@ void daObjBarrier_ef_c::birth(fopAc_ac_c* i_hitActor, f32 i_radius, cXyz i_cente
 }
 
 /* 000011B8-000013E0       .text init__17daObjBarrier_ef_cFv */
-// NONMATCHING - regalloc
 bool daObjBarrier_ef_c::init() {
     bool rt = true;
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 11);
-    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, 19);
-    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 7);
-    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, 15);
+    void* modelData = dComIfG_getObjectRes(l_arcName, 11);
+    void* pbtk = dComIfG_getObjectRes(l_arcName, 19);
+    void* pbck = dComIfG_getObjectRes(l_arcName, 7);
+    void* pbrk = dComIfG_getObjectRes(l_arcName, 15);
 
     if (modelData == NULL || pbtk == NULL || pbck == NULL || pbrk == NULL) {
         JUT_PANIC(1016);
         rt = false;
     } else {
         for (int i = 0; i < 4; i++) {
-            mpModel[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x5020200);
+            mpModel[i] = mDoExt_J3DModel__create((J3DModelData*)modelData, 0x80000, 0x5020200);
             setDummyTexture(i);
 
-            BOOL btk_init = mBtk[i].init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0,
-                                         -1, false, 0);
-            BOOL bck_init =
-                mBck[i].init(modelData, pbck, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1, false);
-            BOOL brk_init = mBrk[i].init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0,
-                                         -1, false, 0);
+            BOOL btk_init = mBtk[i].init(
+                (J3DModelData*)modelData, (J3DAnmTextureSRTKey*)pbtk,
+                TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0);
+            BOOL bck_init = mBck[i].init(
+                (J3DModelData*)modelData, (J3DAnmTransform*)pbck,
+                TRUE, J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1, false);
+            BOOL brk_init = mBrk[i].init(
+                (J3DModelData*)modelData, (J3DAnmTevRegKey*)pbrk,
+                TRUE, J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1, false, 0);
 
             if (mpModel[i] == NULL || !btk_init || !bck_init || !brk_init) {
                 rt = false;
@@ -549,7 +551,6 @@ void daObjBarrier_ef_c::execute() {
 }
 
 /* 000014E0-00001638       .text draw__17daObjBarrier_ef_cFv */
-// NONMATCHING - load order
 void daObjBarrier_ef_c::draw() {
     J3DModel* model_p;
 
@@ -558,7 +559,8 @@ void daObjBarrier_ef_c::draw() {
         if (((active_flags >> i) & 1)) {
             model_p = mpModel[i];
 
-            mBtk[i].entry(model_p->getModelData(), getBtkFrame(i));
+            J3DModelData* modelData = model_p->getModelData();
+            mBtk[i].entry(modelData, getBtkFrame(i));
             mBck[i].entry(model_p->getModelData(), (s16)getBtkFrame(i));
             mBrk[i].entry(model_p->getModelData(), (s16)getBtkFrame(i));
 

@@ -62,9 +62,9 @@ class dKy_tevstr_c;
 typedef int (*heapCallbackFunc)(fopAc_ac_c*);
 typedef int (*createFunc)(void*);
 
-struct DOUBLE_POS {
-    double x, y, z;
-};
+// struct DOUBLE_POS {
+//     double x, y, z;
+// };
 
 inline s8 fopAcM_GetRoomNo(fopAc_ac_c* pActor) {
     return pActor->current.roomNo;

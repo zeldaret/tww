@@ -15,6 +15,34 @@ class fopAc_ac_c;
 class dDemo_actor_c /* : public JStage::TActor */ {
 public:
     void setActor(fopAc_ac_c*);
+    
+    bool checkEnable(u16 mask) { return mFlags & mask; }
+    csXyz* getRatate() { return &mRotation; }
+    
+    /* 0x00 */ u8 parent_placeholder[0x04 - 0x00];
+    /* 0x04 */ u16 mFlags;
+    /* 0x06 */ u8 field_0x06[0x08 - 0x06];
+    /* 0x08 */ cXyz mTranslation;
+    /* 0x14 */ cXyz mScaling;
+    /* 0x20 */ csXyz mRotation;
+    /* 0x26 */ u8 field_0x26[0x28 - 0x26];
+    /* 0x28 */ u32 mShape;
+    /* 0x2C */ u32 mNextBckId;
+    /* 0x30 */ f32 mAnimationFrame;
+    /* 0x34 */ f32 mAnimationTransition;
+    /* 0x38 */ f32 mAnimationFrameMax;
+    /* 0x3C */ s32 mTexAnimation;
+    /* 0x40 */ f32 mTexAnimationFrame;
+    /* 0x44 */ void* mTexAnimationFrameMax;
+    /* 0x48 */ J3DModel* mpModel;
+    /* 0x4C */ u32 field_0x4c;
+    /* 0x50 */ void* field_0x50;
+    /* 0x54 */ u32 field_0x54;
+    /* 0x58 */ s32 mActorPcId;
+    /* 0x5C */ s32 mBckId;
+    /* 0x60 */ s32 mBtpId;
+    /* 0x64 */ s32 mBtkId;
+    /* 0x68 */ s32 mBrkId;
 };
 
 class dDemo_object_c {
