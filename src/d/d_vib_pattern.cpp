@@ -5,4 +5,3 @@
 
 #include "d_vib_pattern.h"
 #include "dolphin/types.h"
-

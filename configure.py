@@ -257,7 +257,7 @@ config.libs = [
             Object(NonMatching, "m_Do/m_Do_graphic.cpp"),
             Object(Matching,    "m_Do/m_Do_machine.cpp"),
             Object(NonMatching, "m_Do/m_Do_mtx.cpp"),
-            Object(NonMatching, "m_Do/m_Do_ext.cpp"),
+            Object(NonMatching, "m_Do/m_Do_ext.cpp", cflags=[*cflags_framework, "-sym off"]),
             Object(NonMatching, "m_Do/m_Do_lib.cpp"),
             Object(Matching,    "m_Do/m_Do_hostIO.cpp"),
             Object(Matching,    "m_Do/m_Do_Reset.cpp"),
