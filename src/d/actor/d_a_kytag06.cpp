@@ -7,7 +7,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_npc.h"
 #include "d/d_procname.h"
 #include "dolphin/types.h"
 
@@ -17,12 +16,10 @@ public:
     /* 0x294 */ float field_0x294;
 };
 
-/* 00000078-00000080       .text daKytag06_Draw__FP13kytag06_class */
 static bool daKytag06_Draw(kytag06_class*) {
     return true;
 }
 
-/* 00000080-00000194       .text daKytag06_Execute__FP13kytag06_class */
 static BOOL daKytag06_Execute(kytag06_class* i_this) {
     f32 time;
     int date;
@@ -52,17 +49,14 @@ static BOOL daKytag06_Execute(kytag06_class* i_this) {
     return 1;
 }
 
-/* 00000194-0000019C       .text daKytag06_IsDelete__FP13kytag06_class */
 static BOOL daKytag06_IsDelete(kytag06_class*) {
     return true;
 }
 
-/* 0000019C-000001A4       .text daKytag06_Delete__FP13kytag06_class */
 static BOOL daKytag06_Delete(kytag06_class*) {
     return true;
 }
 
-/* 000001A4-00000224       .text daKytag06_Create__FP10fopAc_ac_c */
 static int daKytag06_Create(fopAc_ac_c* i_this) {
     kytag06_class* tag = (kytag06_class*)i_this;
     int var;
