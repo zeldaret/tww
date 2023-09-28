@@ -65,6 +65,7 @@ public:
     void calcDrawMtx();
     void prepareShapePackets();
     MtxP getAnmMtx(int idx) { return mpNodeMtx[idx]; }
+    MtxP getWeightAnmMtx(int idx) { return mpWeightEnvMtx[idx]; }
 
     s32 setNoUseDrawMtx();
     s32 createSingleDrawMtx(J3DModelData*);

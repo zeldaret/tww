@@ -102,7 +102,7 @@ public:
     void setViewMtx(Mtx m) { MTXCopy(m, mViewMtx); }
 
     J3DModel* getModel() { return mModel; }
-    Vec& getNBTScale() { return *mNBTScale; }
+    Vec* getNBTScale() { return mNBTScale; }
 
     static Mtx mCurrentMtx;
     static Vec mCurrentS;

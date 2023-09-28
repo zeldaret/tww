@@ -15,10 +15,16 @@ extern Vec const j3dDefaultScale;
 extern Mtx const j3dDefaultMtx;
 extern f32 PSMulUnit01[2];
 
+void J3DCalcBBoardMtx(Mtx);
+void J3DCalcYBBoardMtx(Mtx);
+
 void J3DGetTranslateRotateMtx(J3DTransformInfo const&, Mtx);
 void J3DGetTranslateRotateMtx(s16, s16, s16, f32, f32, f32, Mtx);
 void J3DPSCalcInverseTranspose(f32 (*param_0)[4], f32 (*param_1)[3]);
 void J3DGQRSetup7(u32 param_0, u32 param_1, u32 param_2, u32 param_3);
+
+void J3DScaleNrmMtx(Mtx, const Vec&);
+void J3DScaleNrmMtx33(Mtx33, const Vec&);
 
 void J3DPSMtx33Copy(register Mtx3P src, register Mtx3P dst);
 void J3DPSMtx33CopyFrom34(register MtxP src, register Mtx3P dst);

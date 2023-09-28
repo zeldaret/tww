@@ -4,9 +4,7 @@
 //
 
 #include "JSystem/J3DGraphBase/J3DShapeMtx.h"
-#include "dolphin/types.h"
 
-/* 80256F80-80256F88       .text getUseMtxNum__11J3DShapeMtxCFv */
-u32 J3DShapeMtx::getUseMtxNum() const {
-    return 1;
-}
+// generate getUseMtxNum weak function.
+static void dummy(J3DShapeMtx* shapeMtx) { shapeMtx->getUseMtxNum(); }
+
