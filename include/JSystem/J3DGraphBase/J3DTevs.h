@@ -105,7 +105,7 @@ struct J3DTevOrderInfo {
 struct J3DTevOrder : public J3DTevOrderInfo {
     J3DTevOrder();
 
-    J3DTevOrderInfo* getTevOrderInfo() { return this; }
+    J3DTevOrderInfo& getTevOrderInfo() { return *this; }
     u8 getTexMap() { return mTexMap; }
 };
 
