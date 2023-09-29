@@ -528,7 +528,7 @@ private:
 extern const u16 j3dDefaultZModeID;
 
 inline u16 calcZModeID(u8 param_0, u8 param_1, u8 param_2) {
-    return ((param_1 * 2) & 0x1FE) + (param_0 * 0x10) + param_2;
+    return (param_1 * 2) + (param_0 * 0x10) + param_2;
 }
 
 struct J3DZModeInfo {
@@ -537,6 +537,8 @@ struct J3DZModeInfo {
     /* 0x2 */ u8 field_0x2;
 };
 
+extern J3DZModeInfo j3dZModeTable[2];
+
 struct J3DZMode {
     J3DZMode() {
         mZModeID = j3dDefaultZModeID;
@@ -544,6 +546,14 @@ struct J3DZMode {
 
     void setZModeInfo(const J3DZModeInfo& info) {
         mZModeID = calcZModeID(info.field_0x0, info.field_0x1, info.field_0x2);
+    }
+
+    void setCompareEnable(u8 i_compare) {
+        mZModeID = calcZModeID(i_compare, j3dZModeTable[mZModeID].field_0x1, j3dZModeTable[mZModeID].field_0x2);
+    }
+
+    void setUpdateEnable(u8 i_enable) {
+        mZModeID = calcZModeID(j3dZModeTable[mZModeID].field_0x0, j3dZModeTable[mZModeID].field_0x1, i_enable);
     }
 
     /* 0x0 */ u16 mZModeID;
@@ -561,6 +571,18 @@ extern const J3DBlendInfo j3dDefaultBlendInfo;
 struct J3DBlend : public J3DBlendInfo {
     J3DBlend() {
         *(J3DBlendInfo*)this = j3dDefaultBlendInfo;
+    }
+
+    void setType(u8 i_type) {
+        mType = i_type;
+    }
+
+    void setSrcFactor(u8 i_src) {
+        mSrcFactor = i_src;
+    }
+
+    void setDstFactor(u8 i_dst) {
+        mDstFactor = i_dst;
     }
 };
 

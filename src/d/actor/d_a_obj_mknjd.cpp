@@ -6,6 +6,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "JSystem/J3DGraphBase/J3DSys.h"
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_movebg_actor.h"
@@ -79,14 +80,33 @@ namespace daObjMknjD {
 
         static const char M_arcname[];
 
+        /* 0x02C8 */ cXyz m02C8;
+        /* 0x02D4 */ cXyz m02D4;
+        /* 0x02E0 */ cXyz m02E0[0x14];
+        /* 0x03D0 */ float m03D0[0x14];
+
         /* 0x0420 */ request_of_phase_process_class mPhs;
+
+        /* 0x0428 */ J3DModel* mModel0;
+        /* 0x042C */ J3DModel* mModel1;
+        
+        /* 0x0430 */ u16 m0430;
+        /* 0x0432 */ u16 m0432;
+        /* 0x0434 */ u16 m0434;
+        /* 0x0438 */ u32 m0438;
+
+        /* 0x043C */ u8 m043C;
+        /* 0x043D */ bool m043D;
+        /* 0x043E */ u8 m043E;
+        /* 0x043F */ u8 m043F;
+
         /* 0x04E2 */ s16 m04E2;
     };
 
     const char Act_c::M_arcname[] = "MknjD";
 
     static void manage_friend_draw(int);
-    static void setMaterial(J3DMaterial*, unsigned char);
+    static void setMaterial(J3DMaterial*, u8);
 }
 
 /* 00000078-0000012C       .text nodeCallBackL__FP7J3DNodei */
@@ -208,14 +228,65 @@ int daObjMknjD::Act_c::Execute(float(**)[3][4]) {
 }
 
 /* 000020E0-000022FC       .text setMaterial__10daObjMknjDFP11J3DMaterialUc */
-void daObjMknjD::setMaterial(J3DMaterial*, unsigned char) {
-    /* Nonmatching */
+void daObjMknjD::setMaterial(J3DMaterial* i_mat, u8 i_alpha) {
+    for (; i_mat != NULL; i_mat = i_mat->getNext()) {
+        if (i_alpha == 0) {
+            i_mat->getShape()->hide();
+        }
+        else {
+            i_mat->getShape()->show();
+
+            if (i_alpha == 0xFF) {
+                i_mat->setMaterialMode(1);
+
+                i_mat->getPEBlock()->getZMode()->setUpdateEnable(1);
+                i_mat->getPEBlock()->getZMode()->setCompareEnable(1);
+
+                i_mat->getPEBlock()->getBlend()->setType(0);
+            }
+            else {
+                i_mat->setMaterialMode(1);
+
+                i_mat->getPEBlock()->getZMode()->setUpdateEnable(0);
+                i_mat->getPEBlock()->getZMode()->setCompareEnable(0);
+
+                i_mat->getPEBlock()->getBlend()->setType(1);
+                i_mat->getPEBlock()->getBlend()->setSrcFactor(4);
+                i_mat->getPEBlock()->getBlend()->setDstFactor(5);
+            }
+
+            GXColor* tevKColor = i_mat->getTevKColor(3);
+            tevKColor->a = i_alpha;
+        }
+    }
 }
 
 /* 000022FC-00002430       .text Draw__Q210daObjMknjD5Act_cFv */
 int daObjMknjD::Act_c::Draw() {
-    /* Nonmatching */
-    return 0;
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, getPositionP(), &mTevStr);
+    g_env_light.setLightTevColorType(mModel1, &mTevStr);
+
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, getPositionP(), &mTevStr);
+    g_env_light.setLightTevColorType(mModel0, &mTevStr);
+
+    dComIfGd_setList();
+
+    J3DModelData* mdlData = mModel0->getModelData();
+    u16 jointCount = mdlData->getJointNum();
+    for (u16 i = 0; i < jointCount; i++) {
+        setMaterial(mdlData->getJointNodePointer(i)->getMesh(), m043C);
+    }
+
+    dComIfGd_setListSky();
+
+    mDoExt_modelUpdateDL(mModel0);
+    if (m043D == true) {
+        mDoExt_modelUpdateDL(mModel1);
+    }
+
+    dComIfGd_setListBG();
+
+    return 1;
 }
 
 namespace daObjMknjD {

@@ -1354,6 +1354,7 @@ inline void dComIfGd_setListP1() {
 
 inline void dComIfGd_setListBG() {
     g_dComIfG_gameInfo.drawlist.setOpaListBG();
+    g_dComIfG_gameInfo.drawlist.setXluListBG();
 }
 
 inline void dComIfGd_setXluListBG() {

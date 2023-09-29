@@ -74,6 +74,7 @@ public:
     void setTevKColor(u32 i, const J3DGXColor* i_color) { mTevBlock->setTevKColor(i, i_color); }
     void setMaterialAnm(J3DMaterialAnm* i_anm) { mMaterialAnm = i_anm; }
     void setCullMode(u8 i_mode) { mColorBlock->setCullMode(i_mode); }
+    void setMaterialMode(u32 i_mode) { mMaterialMode = i_mode; }
 
 public:
     /* 0x04 */ J3DMaterial* mNext;

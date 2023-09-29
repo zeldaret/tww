@@ -214,8 +214,8 @@ public:
 
     void setXluDrawList(J3DDrawBuffer* buffer) { j3dSys.setDrawBuffer(buffer, XLU_BUFFER); }
     void setOpaDrawList(J3DDrawBuffer* buffer) { j3dSys.setDrawBuffer(buffer, OPA_BUFFER); }
-    void setOpaList() { setOpaDrawList(mpBufInvisibleModelOpa); }
-    void setXluList() { setXluDrawList(mpBufInvisibleModelXlu); }
+    void setOpaList() { setOpaDrawList(mpBufWorldOpa); }
+    void setXluList() { setXluDrawList(mpBufWorldXlu); }
     void setOpaListMaskOff() { setOpaDrawList(mpBufInvisibleModelMaskOffOpa); }
     void setXluListMaskOff() { setXluDrawList(mpBufInvisibleModelMaskOffXlu); }
     void setOpaListSky() { setOpaDrawList(mpBufSkyOpa); }
@@ -224,8 +224,8 @@ public:
     void setXluListP0() { setXluDrawList(mpLinkBuf); }
     void setOpaListP1() { setOpaDrawList(field_0x0000c); }
     void setXluListP1() { setXluDrawList(field_0x00010); }
-    void setOpaListBG() { setOpaDrawList(mpBufWorldOpa); }
-    void setXluListBG() { setXluDrawList(mpBufWorldXlu); }
+    void setOpaListBG() { setOpaDrawList(mpBufInvisibleModelOpa); }
+    void setXluListBG() { setXluDrawList(mpBufInvisibleModelXlu); }
     void setOpaListFilter() { setOpaDrawList(mpWetherFxBuffer); }
     void setXluListFilter() { setXluDrawList(mpWetherFxBuffer); }
     void setOpaList2D() { setOpaDrawList(field_0x00038); }
