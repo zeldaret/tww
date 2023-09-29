@@ -60,6 +60,11 @@ class dPa_smokeEcallBack : dPa_followEcallBack {
 public:
     dPa_smokeEcallBack(u8);
     virtual ~dPa_smokeEcallBack();
+
+    virtual void execute(JPABaseEmitter*);
+    virtual void draw(JPABaseEmitter*);
+    virtual void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
+    virtual void end();
     
     /* 0x14 */ s8 field_0x14;
     /* 0x15 */ u8 field_0x15;
