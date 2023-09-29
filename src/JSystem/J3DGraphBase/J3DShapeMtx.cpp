@@ -9,21 +9,13 @@
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/J3DGraphBase/J3DShapeDraw.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
+#include "JSystem/J3DGraphBase/J3DTransform.h"
 
 extern void J3DFifoLoadNrmMtxImm(Mtx, u32);
 extern void J3DFifoLoadNrmMtxImm3x3(Mtx33, u32);
 extern void J3DFifoLoadPosMtxImm(Mtx, u32);
-extern void J3DPSMtx33Copy(Mtx33, Mtx33);
-extern void J3DScaleNrmMtx(Mtx, Vec const &);
-extern void J3DScaleNrmMtx33(Mtx33, Vec const &);
-extern void J3DCalcBBoardMtx(Mtx);
 
 u32 J3DShapeMtx::sCurrentPipeline;
-
-/* 802DD048-802DD054       .text getType__11J3DShapeMtxCFv */
-u32 J3DShapeMtx::getType() const {
-    return 'SMTX';
-}
 
 /* 802DB9D8-802DBA1C       .text loadMtxIndx_PNGP__11J3DShapeMtxCFiUs */
 void J3DShapeMtx::loadMtxIndx_PNGP(int mtxNo, u16 index) const {
@@ -142,6 +134,8 @@ J3DShapeMtxConcatView::MtxLoadConcatView J3DShapeMtxConcatView::sMtxLoadPipeline
     &J3DShapeMtxConcatView::loadMtxConcatView_PNCPU,
 };
 
+u8* J3DShapeMtx::sCurrentScaleFlag;
+u8 J3DShapeMtx::sNBTFlag;
 Mtx * J3DShapeMtxConcatView::sMtxPtrTbl[2];
 
 /* 802DBFBC-802DC08C       .text load__21J3DShapeMtxConcatViewCFv */
@@ -160,26 +154,49 @@ void J3DShapeMtxImm::loadNrmMtx(int mtxNo, u16 index) const {
         if (J3DShapeMtx::sNBTFlag == 0) {
             J3DFifoLoadNrmMtxImm(j3dSys.getModelDrawMtx(index), 0);
         } else {
-            Mtx33 mtx;
-            J3DPSMtx33CopyFrom34(j3dSys.getModelDrawMtx(index), mtx);
-            J3DScaleNrmMtx33(mtx, j3dSys.getNBTScale());
-            J3DFifoLoadNrmMtxImm3x3(mtx, 0);
+            Mtx33 mtx33;
+            Vec* scale = j3dSys.getNBTScale();
+            J3DPSMtx33CopyFrom34(j3dSys.getModelDrawMtx(index), mtx33);
+            J3DScaleNrmMtx33(mtx33, *scale);
+            J3DFifoLoadNrmMtxImm3x3(mtx33, 0);
         }
     } else {
-        Mtx33 mtx;
-        J3DPSCalcInverseTranspose(j3dSys.getModelDrawMtx(index), mtx);
+        Mtx33 mtx33;
+        J3DPSCalcInverseTranspose(j3dSys.getModelDrawMtx(index), mtx33);
 
         if (J3DShapeMtx::sNBTFlag == 0) {
-            J3DFifoLoadNrmMtxImm(j3dSys.getModelDrawMtx(index), 0);
+            J3DFifoLoadNrmMtxImm3x3(mtx33, 0);
         } else {
-            J3DScaleNrmMtx33(mtx, j3dSys.getNBTScale());
-            J3DFifoLoadNrmMtxImm3x3(mtx, 0);
+            Vec* scale = j3dSys.getNBTScale();
+            J3DScaleNrmMtx33(mtx33, *scale);
+            J3DFifoLoadNrmMtxImm3x3(mtx33, 0);
         }
     }
 }
 
 /* 802DC184-802DC254       .text loadNrmMtx__21J3DShapeMtxConcatViewCFiUsPA4_f */
 void J3DShapeMtxConcatView::loadNrmMtx(int mtxNo, u16 index, Mtx mtx) const {
+    if (J3DShapeMtx::sCurrentScaleFlag[index] == 1) {
+        if (J3DShapeMtx::sNBTFlag == 0) {
+            J3DFifoLoadNrmMtxImm(mtx, 0);
+        } else {
+            Mtx33 mtx33;
+            Vec* scale = j3dSys.getNBTScale();
+            J3DPSMtx33CopyFrom34(mtx, mtx33);
+            J3DScaleNrmMtx33(mtx33, *scale);
+            J3DFifoLoadNrmMtxImm3x3(mtx33, 0);
+        }
+    } else {
+        Mtx33 mtx33;
+        J3DPSCalcInverseTranspose(mtx, mtx33);
+        if (J3DShapeMtx::sNBTFlag == 0) {
+            J3DFifoLoadNrmMtxImm3x3(mtx33, 0);
+        } else {
+            Vec* scale = j3dSys.getNBTScale();
+            J3DScaleNrmMtx33(mtx33, *scale);
+            J3DFifoLoadNrmMtxImm3x3(mtx33, 0);
+        }
+    }
 }
 
 /* 802DC254-802DC2F4       .text load__16J3DShapeMtxMultiCFv */
@@ -194,8 +211,13 @@ void J3DShapeMtxMulti::load() const {
 }
 
 /* 802DC2F4-802DC388       .text calcNBTScale__16J3DShapeMtxMultiFRC3VecPA3_A3_fPA3_A3_f */
-void J3DShapeMtxMulti::calcNBTScale(const Vec&, Mtx33*, Mtx33*) {
-    /* Nonmatching */
+void J3DShapeMtxMulti::calcNBTScale(const Vec& param_0, Mtx33* param_1, Mtx33* param_2) {
+    for (int i = 0; i < mUseMtxNum; i++) {
+        if (mUseMtxIndexTable[i] != 0xFFFF) {
+            J3DPSMtx33Copy(param_1[mUseMtxIndexTable[i]], param_2[mUseMtxIndexTable[i]]);
+            J3DScaleNrmMtx33(param_2[mUseMtxIndexTable[i]], param_0);
+        }
+    }
 }
 
 /* 802DC388-802DC428       .text load__19J3DShapeMtxMultiImmCFv */
@@ -228,11 +250,54 @@ void J3DShapeMtxMultiConcatView::load() const {
 
 /* 802DC524-802DC620       .text loadNrmMtx__19J3DShapeMtxMultiImmCFiUs */
 void J3DShapeMtxMultiImm::loadNrmMtx(int mtxNo, u16 index) const {
-    /* Nonmatching */
+    if (J3DShapeMtx::sCurrentScaleFlag[index] == 1) {
+        if (J3DShapeMtx::sNBTFlag == 0) {
+            J3DFifoLoadNrmMtxImm(j3dSys.getModelDrawMtx(index), mtxNo * 3);
+        } else {
+            Mtx33 mtx33;
+            Vec* scale = j3dSys.getNBTScale();
+            J3DPSMtx33CopyFrom34(j3dSys.getModelDrawMtx(index), mtx33);
+            J3DScaleNrmMtx33(mtx33, *scale);
+            J3DFifoLoadNrmMtxImm3x3(mtx33, 0);
+        }
+    } else {
+        Mtx33 mtx33;
+        J3DPSCalcInverseTranspose(j3dSys.getModelDrawMtx(index), mtx33);
+
+        if (J3DShapeMtx::sNBTFlag == 0) {
+            J3DFifoLoadNrmMtxImm3x3(mtx33, mtxNo * 3);
+        } else {
+            Vec* scale = j3dSys.getNBTScale();
+            J3DScaleNrmMtx33(mtx33, *scale);
+            J3DFifoLoadNrmMtxImm3x3(mtx33, mtxNo * 3);
+        }
+    }
 }
 
 /* 802DC620-802DC6F4       .text loadNrmMtx__26J3DShapeMtxMultiConcatViewCFiUsPA4_f */
-void J3DShapeMtxMultiConcatView::loadNrmMtx(int, u16, Mtx) const {
+void J3DShapeMtxMultiConcatView::loadNrmMtx(int mtxNo, u16 index, Mtx mtx) const {
+    if (J3DShapeMtx::sCurrentScaleFlag[index] == 1) {
+        if (J3DShapeMtx::sNBTFlag == 0) {
+            J3DFifoLoadNrmMtxImm(mtx, mtxNo * 3);
+        } else {
+            Mtx33 mtx33;
+            Vec* scale = j3dSys.getNBTScale();
+            J3DPSMtx33CopyFrom34(mtx, mtx33);
+            J3DScaleNrmMtx33(mtx33, *scale);
+            J3DFifoLoadNrmMtxImm3x3(mtx33, 0);
+        }
+    } else {
+        Mtx33 mtx33;
+        J3DPSCalcInverseTranspose(mtx, mtx33);
+
+        if (J3DShapeMtx::sNBTFlag == 0) {
+            J3DFifoLoadNrmMtxImm3x3(mtx33, mtxNo * 3);
+        } else {
+            Vec* scale = j3dSys.getNBTScale();
+            J3DScaleNrmMtx33(mtx33, *scale);
+            J3DFifoLoadNrmMtxImm3x3(mtx33, mtxNo * 3);
+        }
+    }
     /* Nonmatching */
 }
 
@@ -253,7 +318,8 @@ void J3DShapeMtxBBoardImm::load() const {
     if (sNBTFlag == 0) {
         J3DFifoLoadNrmMtxImm(mtx, 0);
     } else {
-        J3DScaleNrmMtx(mtx, j3dSys.getNBTScale());
+        Vec* scale = j3dSys.getNBTScale();
+        J3DScaleNrmMtx(mtx, *scale);
         J3DFifoLoadNrmMtxImm(mtx, 0);
     }
 }
@@ -264,9 +330,11 @@ void J3DShapeMtxBBoardConcatView::load() const {
 
     Mtx mtx;
     if (j3dSys.getModel()->getModelData()->getDrawMtxFlag(mUseMtxIndex) == 0) {
-        MTXConcat(j3dSys.getViewMtx(), j3dSys.getModel()->mpNodeMtx[drawMtxIndex], mtx);
+        MtxP anmMtx = j3dSys.getModel()->getAnmMtx(drawMtxIndex);
+        MTXConcat(j3dSys.getViewMtx(), anmMtx, mtx);
     } else {
-        MTXConcat(j3dSys.getViewMtx(), j3dSys.getModel()->mpWeightEnvMtx[drawMtxIndex], mtx);
+        MtxP weightMtx = j3dSys.getModel()->getWeightAnmMtx(drawMtxIndex);
+        MTXConcat(j3dSys.getViewMtx(), weightMtx, mtx);
     }
 
     J3DCalcBBoardMtx(mtx);
@@ -282,99 +350,75 @@ void J3DShapeMtxBBoardConcatView::load() const {
     if (sNBTFlag == 0) {
         J3DFifoLoadNrmMtxImm(mtx, 0);
     } else {
-        J3DScaleNrmMtx(mtx, j3dSys.getNBTScale());
+        Vec* scale = j3dSys.getNBTScale();
+        J3DScaleNrmMtx(mtx, *scale);
         J3DFifoLoadNrmMtxImm(mtx, 0);
     }
 }
 
-/* 802DCF88-802DCF94       .text getType__21J3DShapeMtxConcatViewCFv */
-u32 J3DShapeMtxConcatView::getType() const {
-    return 'SMCV';
-}
-
-/* 802DCF94-802DCF98       .text loadNrmMtx__21J3DShapeMtxConcatViewCFiUs */
-void J3DShapeMtxConcatView::loadNrmMtx(int mtxNo, u16 index) const {
-    /* Nonmatching */
-}
-
 /* 802DC8C0-802DC9B8       .text load__21J3DShapeMtxYBBoardImmCFv */
 void J3DShapeMtxYBBoardImm::load() const {
+    Mtx mtx;
+    MTXCopy(j3dSys.getModelDrawMtx(mUseMtxIndex), mtx);
+    J3DCalcYBBoardMtx(mtx);
+    J3DFifoLoadPosMtxImm(mtx, 0);
+    if (J3DShapeMtx::sCurrentScaleFlag[mUseMtxIndex] == 1) {
+        if (J3DShapeMtx::sNBTFlag == 0) {
+            J3DFifoLoadNrmMtxImm(mtx, 0);
+        } else {
+            Vec* scale = j3dSys.getNBTScale();
+            J3DScaleNrmMtx(mtx, *scale);
+            J3DFifoLoadNrmMtxImm(mtx, 0);
+        }
+    } else {
+        Mtx33 mtx33;
+        J3DPSCalcInverseTranspose(mtx, mtx33);
+        if (J3DShapeMtx::sNBTFlag == 0) {
+            J3DFifoLoadNrmMtxImm3x3(mtx33, 0);
+        } else {
+            Vec* scale = j3dSys.getNBTScale();
+            J3DScaleNrmMtx33(mtx33, *scale);
+            J3DFifoLoadNrmMtxImm3x3(mtx33, 0);
+        }
+    }
     /* Nonmatching */
 }
 
 /* 802DC9B8-802DCAEC       .text load__28J3DShapeMtxYBBoardConcatViewCFv */
 void J3DShapeMtxYBBoardConcatView::load() const {
+    u16 drawMtxIndex = j3dSys.getModel()->getModelData()->getDrawMtxIndex(mUseMtxIndex);
+
+    Mtx mtx;
+    if (j3dSys.getModel()->getModelData()->getDrawMtxFlag(mUseMtxIndex) == 0) {
+        MtxP anmMtx = j3dSys.getModel()->getAnmMtx(drawMtxIndex);
+        MTXConcat(j3dSys.getViewMtx(), anmMtx, mtx);
+    } else {
+        MtxP weightMtx = j3dSys.getModel()->getWeightAnmMtx(drawMtxIndex);
+        MTXConcat(j3dSys.getViewMtx(), weightMtx, mtx);
+    }
+    J3DCalcYBBoardMtx(mtx);
+    J3DFifoLoadPosMtxImm(mtx, 0);
+    if (J3DShapeMtx::sCurrentScaleFlag[mUseMtxIndex] == 1) {
+        if (J3DShapeMtx::sNBTFlag == 0) {
+            J3DFifoLoadNrmMtxImm(mtx, 0);
+        } else {
+            Vec* scale = j3dSys.getNBTScale();
+            J3DScaleNrmMtx(mtx, *scale);
+            J3DFifoLoadNrmMtxImm(mtx, 0);
+        }
+    } else {
+        Mtx33 mtx33;
+        J3DPSCalcInverseTranspose(mtx, mtx33);
+        if (J3DShapeMtx::sNBTFlag == 0) {
+            J3DFifoLoadNrmMtxImm3x3(mtx33, 0);
+        } else {
+            Vec* scale = j3dSys.getNBTScale();
+            J3DScaleNrmMtx33(mtx33, *scale);
+            J3DFifoLoadNrmMtxImm3x3(mtx33, 0);
+        }
+    }
+
     /* Nonmatching */
-}
-
-/* 802DCBF4-802DCC00       .text getType__21J3DShapeMtxYBBoardImmCFv */
-u32 J3DShapeMtxYBBoardImm::getType() const {
-    return 'SMYB';
-}
-
-/* 802DCC00-802DCC08       .text getUseMtxIndex__11J3DShapeMtxCFUs */
-u32 J3DShapeMtx::getUseMtxIndex(u16 i) const {
-    return mUseMtxIndex;
-}
-
-/* 802DCCF0-802DCCFC       .text getType__20J3DShapeMtxBBoardImmCFv */
-u32 J3DShapeMtxBBoardImm::getType() const {
-    return 'SMBB';
-}
-
-/* 802DCDE4-802DCDF0       .text getType__26J3DShapeMtxMultiConcatViewCFv */
-u32 J3DShapeMtxMultiConcatView::getType() const {
-    return 'SMMI';
-}
-
-/* 802DCDF0-802DCDF8       .text getUseMtxNum__26J3DShapeMtxMultiConcatViewCFv */
-u32 J3DShapeMtxMultiConcatView::getUseMtxNum() const {
-    return mUseMtxNum;
-}
-
-/* 802DCDF8-802DCE08       .text getUseMtxIndex__26J3DShapeMtxMultiConcatViewCFUs */
-u32 J3DShapeMtxMultiConcatView::getUseMtxIndex(u16 i) const {
-    return mUseMtxIndexTable[i];
-}
-
-/* 802DCE08-802DCE0C       .text loadNrmMtx__26J3DShapeMtxMultiConcatViewCFiUs */
-void J3DShapeMtxMultiConcatView::loadNrmMtx(int mtxNo, u16 index) const {
-    /* Nonmatching */
-}
-
-/* 802DCE78-802DCE84       .text getType__19J3DShapeMtxMultiImmCFv */
-u32 J3DShapeMtxMultiImm::getType() const {
-    return 'SMMI';
-}
-
-/* 802DCE84-802DCE8C       .text getUseMtxNum__19J3DShapeMtxMultiImmCFv */
-u32 J3DShapeMtxMultiImm::getUseMtxNum() const {
-    return mUseMtxNum;
-}
-
-/* 802DCE8C-802DCE9C       .text getUseMtxIndex__19J3DShapeMtxMultiImmCFUs */
-u32 J3DShapeMtxMultiImm::getUseMtxIndex(u16 i) const {
-    return mUseMtxIndexTable[i];
-}
-
-/* 802DCEF8-802DCF04       .text getType__16J3DShapeMtxMultiCFv */
-u32 J3DShapeMtxMulti::getType() const {
-    return 'SMML';
-}
-
-/* 802DCF04-802DCF0C       .text getUseMtxNum__16J3DShapeMtxMultiCFv */
-u32 J3DShapeMtxMulti::getUseMtxNum() const {
-    return mUseMtxNum;
-}
-
-/* 802DCF0C-802DCF1C       .text getUseMtxIndex__16J3DShapeMtxMultiCFUs */
-u32 J3DShapeMtxMulti::getUseMtxIndex(u16 i) const {
-    return mUseMtxIndexTable[i];
-}
-
-/* 802DCFF4-802DD000       .text getType__14J3DShapeMtxImmCFv */
-u32 J3DShapeMtxImm::getType() const {
-    return 'SMIM';
 }
 
 /* 802DCAEC-802DCB04       .text __ct__12J3DShapeDrawFPCUcUl */
