@@ -1427,8 +1427,8 @@ void J3DIndBlockFull::diff(u32 flag) {
         GXIndTexStageID(0),
         GXIndTexScale(mIndTexCoordScale[0].getScaleS()),
         GXIndTexScale(mIndTexCoordScale[0].getScaleT()),
-        GXIndTexScale(mIndTexCoordScale[2].getScaleS()),
-        GXIndTexScale(mIndTexCoordScale[2].getScaleT())
+        GXIndTexScale(mIndTexCoordScale[1].getScaleS()),
+        GXIndTexScale(mIndTexCoordScale[1].getScaleT())
     );
     loadTexCoordScale(GXTexCoordID(mIndTexOrder[0].getCoord()), J3DSys::sTexCoordScaleTable[mIndTexOrder[0].getMap() & 7]);
     J3DGDSetIndTexOrder(
