@@ -810,14 +810,14 @@ config.libs = [
     JSystemLib(
         "JUtility",
         [
-            Object(NonMatching, "JSystem/JUtility/JUTCacheFont.cpp"),
+            Object(Matching,    "JSystem/JUtility/JUTCacheFont.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTResource.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTTexture.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTPalette.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTNameTab.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTGraphFifo.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTFont.cpp"),
-            Object(NonMatching, "JSystem/JUtility/JUTResFont.cpp"),
+            Object(Matching,    "JSystem/JUtility/JUTResFont.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTDbPrint.cpp"),
             Object(NonMatching, "JSystem/JUtility/JUTGamePad.cpp"),
             Object(NonMatching, "JSystem/JUtility/JUTException.cpp"),

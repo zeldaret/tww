@@ -23,7 +23,7 @@ public:
     virtual int getCellWidth() const;
     virtual s32 getCellHeight() const;
     virtual int getFontType() const { return mInfoBlock->fontType; }
-    virtual const ResFONT* getResFont() { return mResFont; }
+    virtual const ResFONT* getResFont() const { return mResFont; }
     virtual bool isLeadByte(int) const;
     virtual void loadImage(int, _GXTexMapID);
     virtual void setBlock();
@@ -44,7 +44,8 @@ public:
         initialize_state();
     }
 
-    static IsLeadByte_func const saoAboutEncoding_[3];
+    static const int suAboutEncoding_ = 3;
+    static IsLeadByte_func const saoAboutEncoding_[suAboutEncoding_];
 
     /* 0x1C */ int mWidth;
     /* 0x20 */ int mHeight;
@@ -61,7 +62,7 @@ public:
     /* 0x64 */ u16 mMapBlockNum;
     /* 0x66 */ u16 field_0x66;
     /* 0x68 */ u16 mMaxCode;
-    /* 0x6C */ IsLeadByte_func* mIsLeadByte;
+    /* 0x6C */ const IsLeadByte_func* mIsLeadByte;
 };
 
 #endif /* JUTRESFONT_H */
