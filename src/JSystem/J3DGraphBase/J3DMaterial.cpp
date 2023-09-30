@@ -61,24 +61,28 @@ J3DIndBlock * J3DMaterial::createIndBlock(int param_0) {
 }
 
 /* 802DE384-802DE548       .text createPEBlock__11J3DMaterialFUlUl */
-J3DPEBlock * J3DMaterial::createPEBlock(u32 param_0, u32 param_1) {
-    /* Nonmatching */
+J3DPEBlock * J3DMaterial::createPEBlock(u32 createFlags, u32 materialMode) {
     J3DPEBlock* rv = NULL;
-    if (param_0 == 0) {
-        if (param_1 & 1) {
-            return new J3DPEBlockOpa();
-        } else if (param_1 & 2) {
-            return new J3DPEBlockTexEdge();
-        } else if (param_1 & 4) {
-            return new J3DPEBlockXlu();
+
+    if (createFlags == 0) {
+        if (materialMode & 1) {
+            rv = new J3DPEBlockOpa();
+            return rv;
+        } else if (materialMode & 2) {
+            rv = new J3DPEBlockTexEdge();
+            return rv;
+        } else if (materialMode & 4) {
+            rv = new J3DPEBlockXlu();
+            return rv;
         }
     }
 
-    if (param_0 == 0x10000000) {
+    if (createFlags == 0x10000000) {
         rv = new J3DPEBlockFull();
-    } else if (param_0 == 0x20000000) {
+    } else if (createFlags == 0x20000000) {
         rv = new J3DPEBlockFogOff();
     }
+
     return rv;
 }
 
