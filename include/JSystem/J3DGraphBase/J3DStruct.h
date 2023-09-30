@@ -8,7 +8,7 @@
 
 class J3DLightInfo {
 public:
-    /* 803256C4 */ void operator=(J3DLightInfo const&);
+    void operator=(J3DLightInfo const&);
 
     /* 0x00 */ Vec mLightPosition;
     /* 0x0C */ Vec mLightDirection;
@@ -25,9 +25,24 @@ struct J3DTextureSRTInfo {
     /* 0x10 */ f32 mTranslationY;
 };  // Size: 0x14
 
+enum J3DTexMtxMode {
+    J3DTexMtxMode_None,
+    J3DTexMtxMode_EnvmapBasic,
+    J3DTexMtxMode_ProjmapBasic,
+    J3DTexMtxMode_ViewProjmapBasic,
+    J3DTexMtxMode_Unknown4,
+    J3DTexMtxMode_Unknown5,
+    J3DTexMtxMode_EnvmapOld,
+    J3DTexMtxMode_Envmap,
+    J3DTexMtxMode_Projmap,
+    J3DTexMtxMode_ViewProjmap,
+    J3DTexMtxMode_EnvmapOldEffectMtx,
+    J3DTexMtxMode_EnvmapEffectMtx,
+};
+
 struct J3DTexMtxInfo {
-    /* 80325718 */ void operator=(J3DTexMtxInfo const&);
-    /* 80325794 */ void setEffectMtx(Mtx);
+    void operator=(J3DTexMtxInfo const&);
+    void setEffectMtx(Mtx);
 
     /* 0x00 */ u8 mProjection;
     /* 0x01 */ u8 mInfo;
@@ -129,10 +144,10 @@ struct J3DIndTexCoordScaleInfo {
 };
 
 struct J3DBlendInfo {
-    /* 0x0 */ u8 mType;
+    /* 0x0 */ u8 mBlendMode;
     /* 0x1 */ u8 mSrcFactor;
     /* 0x2 */ u8 mDstFactor;
-    /* 0x3 */ u8 mOp;
+    /* 0x3 */ u8 mLogicOp;
 };
 
 struct J3DTevOrderInfo {
@@ -150,6 +165,12 @@ struct J3DColorChanInfo {
     /* 0x5 */ u8 field_0x5;
     /* 0x6 */ u8 field_0x6;
     /* 0x7 */ u8 field_0x7;
+};
+
+struct J3DZModeInfo {
+    /* 0x0 */ u8 mCompareEnable;
+    /* 0x1 */ u8 mFunc;
+    /* 0x2 */ u8 mUpdateEnable;
 };
 
 STATIC_ASSERT(sizeof(J3DTevStageInfo) == 0x14);

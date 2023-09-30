@@ -9,28 +9,28 @@
 #include "JSystem/J3DGraphBase/J3DTransform.h"
 
 /* 802EBC94-802EBD48       .text load__11J3DLightObjCFUl */
-void J3DLightObj::load(u32 param_0) const {
+void J3DLightObj::load(u32 lightIdx) const {
     /* Nonmatching */
     GDOverflowCheck(0x48);
-    J3DGDSetLightPos(GXLightID(param_0 * 2), mInfo.mLightPosition.x, mInfo.mLightPosition.y, mInfo.mLightPosition.z);
-    J3DGDSetLightAttn(GXLightID(param_0 * 2), mInfo.mCosAtten.x, mInfo.mCosAtten.y, mInfo.mCosAtten.z, mInfo.mDistAtten.x, mInfo.mDistAtten.y, mInfo.mDistAtten.z);
-    J3DGDSetLightColor(GXLightID(param_0 * 2), mInfo.mColor);
-    J3DGDSetLightDir(GXLightID(param_0 * 2), mInfo.mLightDirection.x, mInfo.mLightDirection.y, mInfo.mLightDirection.z);
+    J3DGDSetLightPos(GXLightID(1 << lightIdx), mInfo.mLightPosition.x, mInfo.mLightPosition.y, mInfo.mLightPosition.z);
+    J3DGDSetLightAttn(GXLightID(1 << lightIdx), mInfo.mCosAtten.x, mInfo.mCosAtten.y, mInfo.mCosAtten.z, mInfo.mDistAtten.x, mInfo.mDistAtten.y, mInfo.mDistAtten.z);
+    J3DGDSetLightColor(GXLightID(1 << lightIdx), mInfo.mColor);
+    J3DGDSetLightDir(GXLightID(1 << lightIdx), mInfo.mLightDirection.x, mInfo.mLightDirection.y, mInfo.mLightDirection.z);
 }
 
 /* 802EBD48-802EBF40       .text loadTexCoordGens__FUlP11J3DTexCoord */
-void loadTexCoordGens(u32 param_0, J3DTexCoord* param_1) {
-    GDOverflowCheck(param_0 * 8 + 10);
-    J3DGDWriteXFCmdHdr(0x1040, param_0);
-    for (int i = 0; i < param_0; i++) {
+void loadTexCoordGens(u32 num, J3DTexCoord* pTexCoord) {
+    GDOverflowCheck(num * 8 + 10);
+    J3DGDWriteXFCmdHdr(0x1040, num);
+    for (int i = 0; i < num; i++) {
         J3DGDSetTexCoordGen(
-            GXTexGenType(param_1[i].getTexGenType()),
-            GXTexGenSrc(param_1[i].getTexGenSrc())
+            GXTexGenType(pTexCoord[i].getTexGenType()),
+            GXTexGenSrc(pTexCoord[i].getTexGenSrc())
         );
     }
     static u32 dualReg = 61;
-    J3DGDWriteXFCmdHdr(0x1050, param_0);
-    for (int i = 0; i < param_0; i++) {
+    J3DGDWriteXFCmdHdr(0x1050, num);
+    for (int i = 0; i < num; i++) {
         J3DGDWrite_u32(dualReg);
     }
 }
@@ -51,69 +51,69 @@ void J3DTexMtx::calc() {
         0.0f, 0.0f, 1.0f, 0.0f,
     };
 
-    u32 r28 = mTexMtxInfo.mInfo & 0x7f;
-    u32 r30 = (mTexMtxInfo.mInfo >> 7) & 1;
+    u32 mode = mTexMtxInfo.mInfo & 0x7f;
+    u32 extra = (mTexMtxInfo.mInfo >> 7) & 1;
 
-    if (r28 - 8 <= 1 || r28 == 0x0b) {
-        if (r30 == 0) {
+    if (mode == J3DTexMtxMode_Projmap || mode == J3DTexMtxMode_ViewProjmap || mode == J3DTexMtxMode_EnvmapEffectMtx) {
+        if (extra == 0) {
             J3DGetTextureMtx(mTexMtxInfo.mSRT, mTexMtxInfo.mCenter, mtx2);
-        } else if (r30 == 1) {
+        } else if (extra == 1) {
             J3DGetTextureMtxMaya(mTexMtxInfo.mSRT, mtx2);
         }
         MTXConcat(mtx2, qMtx, mtx2);
         J3DMtxProjConcat(mtx2, mTexMtxInfo.mEffectMtx, mtx1);
-        MTXConcat(mtx1, field_0x94, mMtx);
-    } else if (r28 == 7) {
-        if (r30 == 0) {
+        MTXConcat(mtx1, mViewMtx, mMtx);
+    } else if (mode == J3DTexMtxMode_Envmap) {
+        if (extra == 0) {
             J3DGetTextureMtx(mTexMtxInfo.mSRT, mTexMtxInfo.mCenter, mtx1);
-        } else if (r30 == 1) {
+        } else if (extra == 1) {
             J3DGetTextureMtxMaya(mTexMtxInfo.mSRT, mtx1);
         }
         MTXConcat(mtx1, qMtx, mtx1);
-        MTXConcat(mtx1, field_0x94, mMtx);
-    } else if (r28 == 10) {
-        if (r30 == 0) {
+        MTXConcat(mtx1, mViewMtx, mMtx);
+    } else if (mode == J3DTexMtxMode_EnvmapOldEffectMtx) {
+        if (extra == 0) {
             J3DGetTextureMtxOld(mTexMtxInfo.mSRT, mTexMtxInfo.mCenter, mtx2);
-        } else if (r30 == 1) {
+        } else if (extra == 1) {
             J3DGetTextureMtxMayaOld(mTexMtxInfo.mSRT, mtx2);
         }
         MTXConcat(mtx2, qMtx2, mtx2);
         J3DMtxProjConcat(mtx2, mTexMtxInfo.mEffectMtx, mtx1);
-        MTXConcat(mtx1, field_0x94, mMtx);
-    } else if (r28 == 6) {
-        if (r30 == 0) {
+        MTXConcat(mtx1, mViewMtx, mMtx);
+    } else if (mode == J3DTexMtxMode_EnvmapOld) {
+        if (extra == 0) {
             J3DGetTextureMtxOld(mTexMtxInfo.mSRT, mTexMtxInfo.mCenter, mtx1);
-        } else if (r30 == 1) {
+        } else if (extra == 1) {
             J3DGetTextureMtxMayaOld(mTexMtxInfo.mSRT, mtx1);
         }
         MTXConcat(mtx1, qMtx2, mtx1);
-        MTXConcat(mtx1, field_0x94, mMtx);
-    } else if (r28 == 1) {
-        if (r30 == 0) {
+        MTXConcat(mtx1, mViewMtx, mMtx);
+    } else if (mode == J3DTexMtxMode_EnvmapBasic) {
+        if (extra == 0) {
             J3DGetTextureMtxOld(mTexMtxInfo.mSRT, mTexMtxInfo.mCenter, mtx1);
-        } else if (r30 == 1) {
+        } else if (extra == 1) {
             J3DGetTextureMtxMayaOld(mTexMtxInfo.mSRT, mtx1);
         }
-        MTXConcat(mtx1, field_0x94, mMtx);
-    } else if (r28 - 2 <= 1 || r28 == 5) {
-        if (r30 == 0) {
+        MTXConcat(mtx1, mViewMtx, mMtx);
+    } else if (mode == J3DTexMtxMode_ProjmapBasic || mode == J3DTexMtxMode_ViewProjmapBasic || mode == J3DTexMtxMode_Unknown5) {
+        if (extra == 0) {
             J3DGetTextureMtxOld(mTexMtxInfo.mSRT, mTexMtxInfo.mCenter, mtx2);
-        } else if (r30 == 1) {
+        } else if (extra == 1) {
             J3DGetTextureMtxMayaOld(mTexMtxInfo.mSRT, mtx2);
         }
         J3DMtxProjConcat(mtx2, mTexMtxInfo.mEffectMtx, mtx1);
-        MTXConcat(mtx1, field_0x94, mMtx);
-    } else if (r28 == 4) {
-        if (r30 == 0) {
+        MTXConcat(mtx1, mViewMtx, mMtx);
+    } else if (mode == J3DTexMtxMode_Unknown4) {
+        if (extra == 0) {
             J3DGetTextureMtxOld(mTexMtxInfo.mSRT, mTexMtxInfo.mCenter, mtx2);
-        } else if (r30 == 1) {
+        } else if (extra == 1) {
             J3DGetTextureMtxMayaOld(mTexMtxInfo.mSRT, mtx2);
         }
         J3DMtxProjConcat(mtx2, mTexMtxInfo.mEffectMtx, mMtx);
     } else {
-        if (r30 == 0) {
+        if (extra == 0) {
             J3DGetTextureMtxOld(mTexMtxInfo.mSRT, mTexMtxInfo.mCenter, mMtx);
-        } else if (r30 == 1) {
+        } else if (extra == 1) {
             J3DGetTextureMtxMayaOld(mTexMtxInfo.mSRT, mMtx);
         }
     }
@@ -219,16 +219,28 @@ static u8 j3dTexCoordTable[7623];
 /* 802EC588-802EC630       .text makeTexCoordTable__Fv */
 void makeTexCoordTable() {
     /* Nonmatching */
-    u8 bytes[] = { 0x1e, 0x21, 0x24, 0x27, 0x2a, 0x2d, 0x30, 0x33, 0x36, 0x39, 0x3c };
+    u8 texMtx[] = {
+        GX_TEXMTX0,
+        GX_TEXMTX1,
+        GX_TEXMTX2,
+        GX_TEXMTX3,
+        GX_TEXMTX4,
+        GX_TEXMTX5,
+        GX_TEXMTX6,
+        GX_TEXMTX7,
+        GX_TEXMTX8,
+        GX_TEXMTX9,
+        GX_IDENTITY,
+    };
 
     u8* table = j3dTexCoordTable;
     for (u32 i = 0; i < 11; i++) {
         for (u32 j = 0; j < 21; j++) {
-            for (int k = 0; k < 11; k++) {
+            for (int k = 0; k < ARRAY_SIZE(texMtx); k++) {
                 u32 idx = i * 0xe7 + j * 11 + k;
-                table[idx * 3] = i;
+                table[idx * 3 + 0] = i;
                 table[idx * 3 + 1] = j;
-                table[idx * 3 + 2] = bytes[k];
+                table[idx * 3 + 2] = texMtx[k];
             }
         }
     }

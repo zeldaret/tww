@@ -67,11 +67,13 @@ public:
     J3DTexMtxInfo& getTexMtxInfo() { return mTexMtxInfo; }
     Mtx& getMtx() { return mMtx; }
     void setEffectMtx(Mtx effectMtx) { mTexMtxInfo.setEffectMtx(effectMtx); }
+    Mtx& getViewMtx() { return mViewMtx; }
+    void setViewMtx(const Mtx viewMtx) { MTXCopy(viewMtx, mViewMtx); }
 
 private:
     /* 0x00 */ J3DTexMtxInfo mTexMtxInfo;
     /* 0x64 */ Mtx mMtx;
-    /* 0x94 */ Mtx field_0x94;
+    /* 0x94 */ Mtx mViewMtx;
 };  // Size: 0xc4
 
 struct J3DTexCoord : public J3DTexCoordInfo {

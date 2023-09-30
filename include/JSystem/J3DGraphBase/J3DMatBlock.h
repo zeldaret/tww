@@ -5,6 +5,7 @@
 #include "JSystem/J3DGraphBase/J3DStruct.h"
 #include "JSystem/J3DGraphBase/J3DTevs.h"
 #include "JSystem/J3DGraphBase/J3DTexture.h"
+#include "dolphin/gx/GXEnum.h"
 
 struct J3DGXColorS10 : public GXColorS10 {
     J3DGXColorS10() {}
@@ -71,9 +72,9 @@ public:
 protected:
     /* 0x04 */ u32 mTexGenNum;
     /* 0x08 */ J3DTexCoord mTexCoord[8];
-    /* 0x38 */ J3DTexMtx* mTexMtx[8];
-    /* 0x58 */ u32 mTexMtxOffset;
-};  // Size: 0x5C
+    /* 0x28 */ J3DTexMtx* mTexMtx[8];
+    /* 0x48 */ u32 mTexMtxOffset;
+};  // Size: 0x4C
 
 class J3DTexGenBlockBasic : public J3DTexGenBlockPatched {
 public:
@@ -91,8 +92,8 @@ public:
     virtual ~J3DTexGenBlockBasic() {}
 
 private:
-    /* 0x5C */ J3DNBTScale mNBTScale;
-};  // Size: 0x6C
+    /* 0x4C */ J3DNBTScale mNBTScale;
+};  // Size: 0x5C
 
 class J3DTexGenBlock4 : public J3DTexGenBlockPatched {
 public:
@@ -110,8 +111,8 @@ public:
     virtual ~J3DTexGenBlock4() {}
 
 private:
-    /* 0x5C */ J3DNBTScale mNBTScale;
-};  // Size: 0x6C
+    /* 0x4C */ J3DNBTScale mNBTScale;
+};  // Size: 0x5C
 
 class J3DTevBlock {
 public:
@@ -529,28 +530,22 @@ inline u16 calcZModeID(u8 param_0, u8 param_1, u8 param_2) {
     return ((param_1 * 2) & 0x1FE) + (param_0 * 0x10) + param_2;
 }
 
-struct J3DZModeInfo {
-    /* 0x0 */ u8 field_0x0;
-    /* 0x1 */ u8 field_0x1;
-    /* 0x2 */ u8 field_0x2;
-};
+extern u8 j3dZModeTable[96];
 
 struct J3DZMode {
     J3DZMode() { mZModeID = j3dDefaultZModeID; }
 
-    //u8 getCompareEnaable() const { return j3dZModeTable[mZModeID * 3]; }
-    //u8 getFunc() const { return j3dZModeTable[mZModeID * 3 + 1]; }
-    //u8 getUpdateEnable() const { return j3dZModeTable[mZModeID * 3 + 2]; }
+    u8 getCompareEnaable() const { return j3dZModeTable[mZModeID * 3]; }
+    u8 getFunc() const { return j3dZModeTable[mZModeID * 3 + 1]; }
+    u8 getUpdateEnable() const { return j3dZModeTable[mZModeID * 3 + 2]; }
 
     void setZModeInfo(const J3DZModeInfo& info) {
-        mZModeID = calcZModeID(info.field_0x0, info.field_0x1, info.field_0x2);
+        mZModeID = calcZModeID(info.mCompareEnable, info.mFunc, info.mUpdateEnable);
     }
 
-    /*
     void load() {
         J3DGDSetZMode(getCompareEnaable(), GXCompare(getFunc()), getUpdateEnable());
     }
-    */
 
     /* 0x0 */ u16 mZModeID;
 };
@@ -558,13 +553,13 @@ struct J3DZMode {
 struct J3DBlend : public J3DBlendInfo {
     J3DBlend() { *(J3DBlendInfo*)this = j3dDefaultBlendInfo; }
 
-    void load() {
-        J3DGDSetBlendMode(
-            GXBlendMode(mType),
-            GXBlendFactor(mSrcFactor),
-            GXBlendFactor(mDstFactor),
-            GXLogicOp(mOp)
-        );
+    GXBlendMode getBlendMode() const { return (GXBlendMode)mBlendMode; }
+    GXBlendFactor getSrcFactor() const { return (GXBlendFactor)mSrcFactor; }
+    GXBlendFactor getDstFactor() const { return (GXBlendFactor)mDstFactor; }
+    GXLogicOp getLogicOp() const { return (GXLogicOp)mLogicOp; }
+
+    void load(u8 ditherEnable) {
+        J3DGDSetBlendMode(getBlendMode(), getSrcFactor(), getDstFactor(), getLogicOp(), ditherEnable);
     }
 };
 
@@ -595,41 +590,30 @@ inline u32 calcAlphaCmpID(u32 param_1, u32 param_2, u32 param_3) {
     return ((param_1 & 0xff) << 5) + ((param_2 & 0xff) << 3) + (param_3 & 0xff);
 }
 
+extern u8 j3dAlphaCmpTable[768];
+
 struct J3DAlphaComp {
     J3DAlphaComp() {
-        field_0x0 = j3dDefaultAlphaCmpID;
+        mAlphaCmpID = j3dDefaultAlphaCmpID;
         mRef0 = 0;
         mRef1 = 0;
     }
 
-    //u8 getComp0() { return j3dAlphaCmpTable[field_0x0 * 3]; }
-    //u8 getOp() { return j3dAlphaCmpTable[field_0x0 * 3 + 1]; }
-    //u8 getComp1() { return j3dAlphaCmpTable[field_0x0 * 3 + 2]; }
+    GXCompare getComp0() const { return GXCompare(j3dAlphaCmpTable[mAlphaCmpID * 3]); }
+    GXAlphaOp getOp() const { return GXAlphaOp(j3dAlphaCmpTable[mAlphaCmpID * 3 + 1]); }
+    GXCompare getComp1() const { return GXCompare(j3dAlphaCmpTable[mAlphaCmpID * 3 + 2]); }
+    u8 getRef0() const { return mRef0; }
+    u8 getRef1() const { return mRef1; }
 
-    void setAlphaCompInfo(const J3DAlphaCompInfo& param_1) {
-        mRef0 = param_1.field_0x1;
-        mRef1 = param_1.field_0x4;
-        u32 p1_mref1 = param_1.mRef1;
-        field_0x0 = calcAlphaCmpID(param_1.field_0x0, param_1.mRef0, p1_mref1);
-
-        // this matches for `dKy_bg_MAxx_proc` but causes `addWarpMaterial` to fail,
-        // while the above matches for `addWarpMaterial` but causes `dKy_bg_MAxx_proc` to fail?
-        // field_0x0 = calcAlphaCmpID(param_1.field_0x0, param_1.mRef0, param_1.mRef1);
+    void setAlphaCompInfo(const J3DAlphaCompInfo& info) {
+        // mAlphaCmpID = calcAlphaCmpID(param_1, param_1.mRef0, param_1.mRef1);
     }
 
-    /*
     void load() {
-        J3DGDSetAlphaCompare(
-            GXCompare(getComp0()),
-            mRef0,
-            GXAlphaOp(getOp()),
-            GXCompare(getComp1()),
-            mRef1
-        );
+        J3DGDSetAlphaCompare(getComp0(), getRef0(), getOp(), getComp1(), getRef1());
     }
-    */
 
-    /* 0x00 */ u16 field_0x0;
+    /* 0x00 */ u16 mAlphaCmpID;
     /* 0x02 */ u8 mRef0;
     /* 0x03 */ u8 mRef1;
 };  // Size: 0x4
@@ -868,54 +852,40 @@ public:
     virtual ~J3DIndBlockNull();
 };
 
-/*
-inline u32 setChanCtrlMacro(u8 param_0, GXColorSrc param_1, GXColorSrc param_2, u32 param_3, GXDiffuseFn param_4, GXAttnFn param_5) {
-    GXDiffuseFn r31;
-    if (param_5 == GX_AF_SPEC) {
-        r31 = GX_DF_NONE;
-    } else {
-        r31 = param_4;
-    }
+inline u32 setChanCtrlMacro(u8 enable, GXColorSrc ambSrc, GXColorSrc matSrc, u32 lightMask, GXDiffuseFn diffuseFn, GXAttnFn attnFn) {
     return
-        param_2 |
-        param_0 << 1 |
-        (param_3 & 0xf) << 2 |
-        param_1 << 6 |
-        r31 << 7 |
-        (param_5 != 2) << 9 |
-        (param_5 != 0) << 10 |
-        (param_3 >> 4 & 0x0f) << 11;
+        matSrc |
+        enable << 1 |
+        (lightMask & 0x0f) << 2 |
+        ambSrc << 6 |
+        ((attnFn == GX_AF_SPEC) ? GX_DF_NONE : diffuseFn) << 7 |
+        (attnFn != GX_AF_NONE) << 9 |
+        (attnFn != GX_AF_SPEC) << 10 |
+        (lightMask >> 4 & 0x0f) << 11;
 }
-*/
 
 struct J3DColorChan {
     J3DColorChan();
-    /*
-    u8 getAttnFn() {
-        u8 local_8[4] = {0x20, 0x00, 0x02, 0x01};
-        return local_8[(mColorChanID & 0x600) >> 9];
+    GXAttnFn getAttnFn() {
+        // Need a way to put this in sdata2 without affecting every single TU ever...
+
+        // static const u8 attnFnTbl[] = { GX_AF_NONE, GX_AF_SPEC, GX_AF_NONE, GX_AF_SPOT, };
+        // return GXAttnFn(attnFnTbl[mColorChanID >> 9 & 0x03]);
+        return GXAttnFn(mColorChanID >> 9 & 0x03);
     }
-     */
-    u8 getDiffuseFn() { return (mColorChanID & 0x180) >> 7; }
-    u8 getLightMask() { return (((mColorChanID & 0x7800) >> 7) | (mColorChanID & 0x3c) >> 2); }
+    GXDiffuseFn getDiffuseFn() { return GXDiffuseFn(mColorChanID >> 7 & 3); }
+    u8 getLightMask() { return ((mColorChanID >> 2 & 0x0f) | (mColorChanID >> 11 & 0x0f) << 4); }
     void setLightMask(u8 param_1) {
-        mColorChanID = (mColorChanID & ~0x3c) | ((param_1 & 0xf) << 2);
+        mColorChanID = (mColorChanID & ~0x3c) | ((param_1 & 0x0f) << 2);
         mColorChanID = (mColorChanID & ~0x7800) | ((param_1 & 0xf0) << 7);
     }
-    u8 getMatSrc() { return mColorChanID & 0x01; }
-    u8 getAmbSrc() { return (mColorChanID & 0x40) >> 6; }
-    u8 getEnable() { return (mColorChanID & 0x02) >> 1; }
-    /*
+    // bug? both enable and getMatSrc seem to use bit 0? enable should use bit 1
+    GXColorSrc getMatSrc() { return GXColorSrc(mColorChanID >> 0 & 0x01); }
+    GXColorSrc getAmbSrc() { return GXColorSrc(mColorChanID >> 6 & 0x01); }
+    u8 getEnable() { return mColorChanID >> 0 & 0x01; }
     void load() {
-        u8 r26 = getAttnFn();
-        u8 r27 = getDiffuseFn();
-        u8 r28 = getLightMask();
-        u8 r29 = getMatSrc();
-        u8 r30 = getAmbSrc();
-        u8 r31 = getEnable();
-        J3DGDWrite_u32(setChanCtrlMacro(r31, GXColorSrc(r30), GXColorSrc(r29), r28, GXDiffuseFn(r27), GXAttnFn(r26)));
+        J3DGDWrite_u32(setChanCtrlMacro(getEnable(), getAmbSrc(), getMatSrc(), getLightMask(), getDiffuseFn(), getAttnFn()));
     }
-    */
 
     /* 0x0 */ u16 mColorChanID;
 };

@@ -82,26 +82,42 @@ inline void J3DGDSetNumTexGens(u8 numTexGens) {
     J3DGDWriteXFCmd(0x103f, numTexGens);
 }
 
-inline void J3DGDSetAlphaCompare(GXCompare param_0, u8 param_1, GXAlphaOp param_2, GXCompare param_3, u8 param_4) {
-    J3DGDWriteBPCmd(param_2 << 22 | param_3 << 19 | param_0 << 16 | param_4 << 8 | param_1 | 0xF3000000);
+inline void J3DGDSetAlphaCompare(GXCompare cmp0, u8 ref0, GXAlphaOp op, GXCompare cmp1, u8 ref1) {
+    J3DGDWriteBPCmd(ref0 | ref1 << 8 | cmp0 << 16 | cmp1 << 19 | op << 22 | 0xF3 << 24);
 }
 
-inline void J3DGDSetBlendMode(GXBlendMode param_0, GXBlendFactor param_1, GXBlendFactor param_2, GXLogicOp param_3) {
+inline void J3DGDSetBlendMode(GXBlendMode mode, GXBlendFactor srcFactor, GXBlendFactor dstFactor, GXLogicOp logicOp) {
     J3DGDWriteBPCmd(0xFE001FE3);
-    bool r30 = true;
-    if (param_0 != GX_BM_BLEND && param_0 != GX_BM_SUBTRACT) {
-        r30 = false;
-    }
-    J3DGDWriteBPCmd(param_3 << 12 | (param_0 == GX_BM_LOGIC) << 11 | param_1 << 8 | param_2 << 5 | (param_0 == GX_BM_BLEND) << 1 | r30 | 0x41000000);
+    J3DGDWriteBPCmd(
+        (mode == GX_BM_BLEND || mode == GX_BM_SUBTRACT) << 0 |
+        (mode == GX_BM_LOGIC) << 1 |
+        dstFactor << 5 |
+        srcFactor << 8 |
+        (mode == GX_BM_SUBTRACT) << 11 |
+        logicOp << 12 |
+        0x41 << 24);
 }
 
-inline void J3DGDSetZMode(u8 param_0, GXCompare param_1, u8 param_2) {
-    J3DGDWriteBPCmd(param_2 << 4 | param_0 | param_1 << 1 | 0x40000000);
+inline void J3DGDSetBlendMode(GXBlendMode mode, GXBlendFactor srcFactor, GXBlendFactor dstFactor, GXLogicOp logicOp, u8 ditherEnable) {
+    J3DGDWriteBPCmd(0xFE001FE7);
+    J3DGDWriteBPCmd(
+        (mode == GX_BM_BLEND || mode == GX_BM_SUBTRACT) << 0 |
+        (mode == GX_BM_LOGIC) << 1 |
+        ditherEnable << 2 |
+        dstFactor << 5 |
+        srcFactor << 8 |
+        (mode == GX_BM_SUBTRACT) << 11 |
+        logicOp << 12 |
+        0x41 << 24);
 }
 
-inline void J3DGDSetZCompLoc(u32 param_0) {
+inline void J3DGDSetZMode(u8 compareEnable, GXCompare func, u8 writeEnable) {
+    J3DGDWriteBPCmd(compareEnable | func << 1 | writeEnable << 4 | 0x40 << 24);
+}
+
+inline void J3DGDSetZCompLoc(u32 compLocEnable) {
     J3DGDWriteBPCmd(0xFE000040);
-    J3DGDWriteBPCmd(param_0 << 6 | 0x43000000);
+    J3DGDWriteBPCmd(compLocEnable << 6 | 0x43 << 24);
 }
 
 inline void J3DGDSetTevKonstantSel_SwapModeTable(GXTevStageID stage, GXTevKColorSel colorSel1, GXTevKAlphaSel alphaSel1, GXTevKColorSel colorSel2, GXTevKAlphaSel alphaSel2, GXTevColorChan chan1, GXTevColorChan chan2) {
