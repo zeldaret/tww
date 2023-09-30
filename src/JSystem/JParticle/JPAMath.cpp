@@ -4,44 +4,152 @@
 //
 
 #include "JSystem/JParticle/JPAMath.h"
+#include "JSystem/JMath/JMath.h"
+#include "JSystem/JMath/JMATrigonometric.h"
 #include "dolphin/types.h"
 
 /* 8025991C-802599A0       .text JPAGetYZRotateMtx__FssPA4_f */
-void JPAGetYZRotateMtx(short, short, float(*)[4]) {
-    /* Nonmatching */
+void JPAGetYZRotateMtx(s16 y, s16 z, Mtx dst) {
+    f32 cosY = JMASCos(y);
+    f32 cosZ = JMASCos(z);
+    f32 sinY = JMASSin(y);
+    f32 sinZ = JMASSin(z);
+    dst[0][0] = (cosY * cosZ);
+    dst[0][1] = -sinZ;
+    dst[0][2] = (sinY * cosZ);
+    dst[1][0] = (cosY * sinZ);
+    dst[1][1] = cosZ;
+    dst[1][2] = (sinY * sinZ);
+    dst[2][0] = -sinY;
+    dst[2][2] = cosY;
+    dst[2][3] = 0.0f;
+    dst[2][1] = 0.0f;
+    dst[1][3] = 0.0f;
+    dst[0][3] = 0.0f;
 }
 
 /* 802599A0-80259A64       .text JPAGetXYZRotateMtx__FsssPA4_f */
-void JPAGetXYZRotateMtx(short, short, short, float(*)[4]) {
-    /* Nonmatching */
+void JPAGetXYZRotateMtx(s16 x, s16 y, s16 z, Mtx dst) {
+    f32 cosx = JMASCos(x);
+    f32 cosY = JMASCos(y);
+    f32 cosZ = JMASCos(z);
+    f32 sinX = JMASSin(x);
+    f32 sinY = JMASSin(y);
+    f32 sinZ = JMASSin(z);
+    dst[0][0] = cosY * cosZ;
+    dst[1][0] = cosY * sinZ;
+    dst[2][0] = -sinY;
+    dst[2][1] = sinX * cosY;
+    dst[2][2] = cosx * cosY;
+    f32 cosXsinZ = cosx * sinZ;
+    f32 sinXcosZ = sinX * cosZ;
+    dst[0][1] = sinXcosZ * sinY - cosXsinZ;
+    dst[1][2] = cosXsinZ * sinY - sinXcosZ;
+    f32 sinXsinZ = sinX * sinZ;
+    f32 cosXcosZ = cosx * cosZ;
+    dst[0][2] = sinXsinZ + cosXcosZ * sinY;
+    dst[1][1] = cosXcosZ + sinXsinZ * sinY;
+    dst[2][3] = 0.0f;
+    dst[1][3] = 0.0f;
+    dst[0][3] = 0.0f;
 }
 
 /* 80259A64-80259B6C       .text JPAGetDirMtx__FRCQ29JGeometry8TVec3<f>PA4_f */
-void JPAGetDirMtx(const JGeometry::TVec3<float>&, float(*)[4]) {
+void JPAGetDirMtx(const JGeometry::TVec3<f32>& dir, Mtx dst) {
     /* Nonmatching */
+    JGeometry::TVec3<f32> perp;
+    perp.x = dir.y;
+    perp.y = -dir.x;
+    perp.z = 0.0f;
+
+    f32 mag = perp.normalize();
+
+    f32 x = perp.x, y = perp.y, z = dir.z;
+    dst[0][0] = x*x + z * (1.0f - x*x);
+    dst[0][1] = (1.0f - z) * (x * y);
+    dst[0][2] = -y * mag;
+    dst[0][3] = 0.0f;
+
+    dst[1][0] = (1.0f - z) * (x * y);
+    dst[1][1] = y*y + z * (1.0f - y*y);
+    dst[1][2] = x*mag;
+    dst[1][3] = 0.0f;
+
+    dst[2][0] = y * mag;
+    dst[2][1] = -x * mag;
+    dst[2][2] = z;
+    dst[2][3] = 0.0f;
 }
 
 /* 80259B6C-80259C90       .text JPASetSVecfromMtx__FPA4_fRQ29JGeometry8TVec3<f> */
-void JPASetSVecfromMtx(float(*)[4], JGeometry::TVec3<float>&) {
+void JPASetSVecfromMtx(Mtx mtx, JGeometry::TVec3<f32>& scale) {
     /* Nonmatching */
+    JGeometry::TVec3<f32> tmp;
+    scale.x = sqrtf(mtx[0][0] * mtx[0][0] + mtx[1][0] * mtx[1][0] + mtx[2][0] * mtx[2][0]);
+    scale.y = sqrtf(mtx[0][1] * mtx[0][1] + mtx[1][1] * mtx[1][1] + mtx[2][1] * mtx[2][1]);
+    scale.z = sqrtf(mtx[0][2] * mtx[0][2] + mtx[1][2] * mtx[1][2] + mtx[2][2] * mtx[2][2]);
 }
 
 /* 80259C90-80259CB8       .text JPASetRMtxTVecfromMtx__FPA4_fPA4_fRQ29JGeometry8TVec3<f> */
-void JPASetRMtxTVecfromMtx(float(*)[4], float(*)[4], JGeometry::TVec3<float>&) {
-    /* Nonmatching */
+void JPASetRMtxTVecfromMtx(Mtx src, Mtx dst, JGeometry::TVec3<f32>& translate) {
+    JGeometry::TVec3<f32> scale;
+    JPASetRMtxSTVecfromMtx(src, dst, scale, translate);
 }
 
 /* 80259CB8-80259DD0       .text JPASetRMtxSTVecfromMtx__FPA4_fPA4_fRQ29JGeometry8TVec3<f>RQ29JGeometry8TVec3<f> */
-void JPASetRMtxSTVecfromMtx(float(*)[4], float(*)[4], JGeometry::TVec3<float>&, JGeometry::TVec3<float>&) {
-    /* Nonmatching */
+void JPASetRMtxSTVecfromMtx(Mtx src, Mtx dst, JGeometry::TVec3<f32>& scale, JGeometry::TVec3<f32>& translate) {
+    JPASetSVecfromMtx(src, scale);
+    MTXIdentity(dst);
+    if (scale.x != 0.0f) {
+        f32 inv = 1.0f / scale.x;
+        dst[0][0] = src[0][0] * inv;
+        dst[1][0] = src[1][0] * inv;
+        dst[2][0] = src[2][0] * inv;
+    }
+    if (scale.y != 0.0f) {
+        f32 inv = 1.0f / scale.y;
+        dst[0][1] = src[0][1] * inv;
+        dst[1][1] = src[1][1] * inv;
+        dst[2][1] = src[2][1] * inv;
+    }
+    if (scale.z != 0.0f) {
+        f32 inv = 1.0f / scale.z;
+        dst[0][2] = src[0][2] * inv;
+        dst[1][2] = src[1][2] * inv;
+        dst[2][2] = src[2][2] * inv;
+    }
+    translate.set(src[0][3], src[1][3], src[2][3]);
 }
 
 /* 80259DD0-80259E7C       .text JPAGetKeyFrameValue__FfUsPCf */
-void JPAGetKeyFrameValue(float, unsigned short, const float*) {
-    /* Nonmatching */
+f32 JPAGetKeyFrameValue(f32 time, u16 frameNum, const f32* pFrames) {
+    /* keyframes are time, value, tangent out, tangent in */
+
+    if (time < pFrames[0])
+        return pFrames[1];
+
+    if (pFrames[(frameNum - 1) * 4] <= time)
+        return pFrames[(frameNum - 1) * 4 + 1];
+
+    /* binary search; find keyframe */
+    s32 frame = frameNum;
+    while (frame > 1) {
+        u32 idx = frame / 2;
+        if (time >= pFrames[idx * 4]) {
+            pFrames += idx * 4;
+            frame -= idx;
+        } else {
+            frame = idx;
+        }
+    }
+
+    return JMAHermiteInterpolation(time, pFrames[0], pFrames[1], pFrames[3], pFrames[4], pFrames[5], pFrames[6]);
 }
 
 /* 80259E7C-80259EE8       .text JPAGetUnitVec__FssRQ29JGeometry8TVec3<f> */
-void JPAGetUnitVec(short, short, JGeometry::TVec3<float>&) {
-    /* Nonmatching */
+void JPAGetUnitVec(s16 x, s16 y, JGeometry::TVec3<f32>& dst) {
+    f32 sinX = JMASSin(x);
+    dst.x = sinX * JMASCos(y);
+    dst.y = sinX * JMASSin(y);
+    dst.z = JMASCos(x);
 }
