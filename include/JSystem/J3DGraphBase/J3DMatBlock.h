@@ -32,7 +32,7 @@ public:
     virtual void setTexCoord(u32, J3DTexCoord const*);
     virtual J3DTexCoord* getTexCoord(u32);
     virtual void setTexMtx(u32, J3DTexMtx*);
-    virtual J3DTexMtx* getTexMtx(u32);
+    virtual J3DTexMtx* getTexMtx(u32) { return NULL; }
     virtual void setNBTScale(J3DNBTScale const*);
     virtual void setNBTScale(J3DNBTScale);
     virtual J3DNBTScale* getNBTScale();

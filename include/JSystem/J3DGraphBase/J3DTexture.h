@@ -1,8 +1,9 @@
 #ifndef J3DTEXTURE_H
 #define J3DTEXTURE_H
 
-#include "JSystem/J3DGraphBase/J3DStruct.h"
 #include "JSystem/J3DGraphBase/J3DGD.h"
+#include "JSystem/J3DGraphBase/J3DStruct.h"
+#include "JSystem/J3DGraphBase/J3DTevs.h"
 #include "JSystem/JUtility/JUTTexture.h"
 #include "dolphin/mtx/mtx.h"
 #include "dolphin/types.h"
@@ -49,7 +50,7 @@ public:
 
 class J3DTexMtx {
 public:
-    J3DTexMtx();
+    J3DTexMtx() { mTexMtxInfo = j3dDefaultTexMtxInfo; }
     J3DTexMtx(const J3DTexMtxInfo& info) {
         mTexMtxInfo = info;
     }
