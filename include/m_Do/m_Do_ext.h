@@ -18,30 +18,30 @@ class J3DTexMtxAnm;
 
 class mDoExt_baseAnm {
 public:
-    mDoExt_baseAnm() { mpFrameCtrl = NULL; }
+    mDoExt_baseAnm() { mFrameCtrl = NULL; }
     virtual ~mDoExt_baseAnm() {}
 
     int initPlay(s16 i_frameMax, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool);
     int play();
 
-    J3DFrameCtrl* getFrameCtrl() { return mpFrameCtrl; }
-    f32 getPlaySpeed() { return mpFrameCtrl->getRate(); }
-    void setPlaySpeed(f32 speed) { mpFrameCtrl->setRate(speed); }
-    f32 getFrame() { return mpFrameCtrl->getFrame(); }
-    f32 getEndFrame() { return mpFrameCtrl->getEnd(); }
-    void setFrame(f32 frame) { mpFrameCtrl->setFrame(frame); }
-    void setPlayMode(int i_mode) { mpFrameCtrl->setAttribute(i_mode); }
-    void setLoopFrame(f32 i_frame) { mpFrameCtrl->setLoop(i_frame); }
+    J3DFrameCtrl* getFrameCtrl() { return mFrameCtrl; }
+    f32 getPlaySpeed() { return mFrameCtrl->getRate(); }
+    void setPlaySpeed(f32 speed) { mFrameCtrl->setRate(speed); }
+    f32 getFrame() { return mFrameCtrl->getFrame(); }
+    f32 getEndFrame() { return mFrameCtrl->getEnd(); }
+    void setFrame(f32 frame) { mFrameCtrl->setFrame(frame); }
+    void setPlayMode(int i_mode) { mFrameCtrl->setAttribute(i_mode); }
+    void setLoopFrame(f32 i_frame) { mFrameCtrl->setLoop(i_frame); }
     bool isStop() {
         bool stopped = true;
-        if (!mpFrameCtrl->checkState(1) && mpFrameCtrl->getRate() != 0.0f) {
+        if (!mFrameCtrl->checkState(1) && mFrameCtrl->getRate() != 0.0f) {
             stopped = false;
         }
         return stopped;
     }
 
 private:
-    /* 0x4 */ J3DFrameCtrl* mpFrameCtrl;
+    /* 0x4 */ J3DFrameCtrl* mFrameCtrl;
 };  // Size: 0x08
 
 class mDoExt_btkAnm : public mDoExt_baseAnm {
@@ -65,7 +65,7 @@ public:
 private:
     /* 0x08 */ J3DAnmTextureSRTKey* mpAnm;
     /* 0x0C */ J3DTexMtxAnm* mpTexMtxAnm;
-    /* 0x10 */ s16 mUpdateMaterialNum;
+    /* 0x10 */ u16 mUpdateMaterialNum;
 };  // Size: 0x14
 
 STATIC_ASSERT(sizeof(mDoExt_btkAnm) == 0x14);
@@ -138,12 +138,10 @@ public:
                             int i_attribute, f32 i_rate, s16 i_start, s16 param_6);
     int init(J3DModelData*, J3DAnmTexPattern*, int, int, float, short, short, bool, int);
     int init(J3DMaterialTable*, J3DAnmTexPattern*, int, int, float, short, short, bool, int);
+    void entry(J3DModelData* i_modelData, s16 i_frame);
     /* 8000D5E8 */ void entry(J3DMaterialTable* i_matTable, s16 i_frame);
 
     void entry(J3DModelData* i_modelData) { entry(i_modelData, getFrame()); }
-    void entry(J3DModelData* i_modelData, s16 i_frame) {
-        entry(&i_modelData->getMaterialTable(), i_frame);
-    }
 
     int init(J3DModelData* i_modelData, J3DAnmTexPattern* i_btk, int i_anmPlay, int i_attribute,
              f32 i_rate, s16 i_start, s16 param_6) {
@@ -154,7 +152,9 @@ public:
     int remove(J3DModelData* i_modelData) { return i_modelData->removeTexNoAnimator(mpAnm); }
 
 private:
-    /* 0x14 */ J3DAnmTexPattern* mpAnm;
+    /* 0x08 */ J3DAnmTexPattern* mpAnm;
+    /* 0x0C */ J3DTexNoAnm* field_0xc;
+    /* 0x10 */ u16 mUpdateMaterialNum;
 };
 
 class mDoExt_blkAnm : public mDoExt_baseAnm {
@@ -177,7 +177,9 @@ public:
     void entry(J3DMaterialTable*, float);
 
 private:
-    // TODO
+    /* 0x08 */ J3DAnmColor* mpAnm;
+    /* 0x0C */ J3DMatColorAnm* field_0xc;
+    /* 0x10 */ u16 mUpdateMaterialNum;
 };
 
 class mDoExt_bvaAnm : public mDoExt_baseAnm {
@@ -464,5 +466,7 @@ extern JKRExpHeap* zeldaHeap;
 extern JKRExpHeap* gameHeap;
 extern JKRExpHeap* commandHeap;
 extern JKRExpHeap* archiveHeap;
+
+//inline void mDoMtx_concat(const Mtx a, const Mtx b, Mtx ab) { MTXConcat(a, b, ab); }
 
 #endif

@@ -65,6 +65,7 @@ public:
     void calcDrawMtx();
     void prepareShapePackets();
     MtxP getAnmMtx(int idx) { return mpNodeMtx[idx]; }
+    void setAnmMtx(int idx, Mtx mtx) { MTXCopy(mtx, mpNodeMtx[idx]); }
     MtxP getWeightAnmMtx(int idx) { return mpWeightEnvMtx[idx]; }
 
     s32 setNoUseDrawMtx();
@@ -105,6 +106,7 @@ public:
     u32 getMtxCalcMode() const { return mFlags & 0x03; }
     u32* getCurrentViewNoPtr() { return &mCurrentViewNo; }
     u8* getScaleFlagArray() const { return mpScaleFlagArr; }
+    void setScaleFlag(int idx, u8 param_1) { mpScaleFlagArr[idx] = param_1; }
     J3DVertexBuffer* getVertexBuffer() const { return (J3DVertexBuffer*)&mVertexBuffer; }
     J3DMatPacket* getMatPacket(u16 idx) const { return &mpMatPacket[idx]; }
     J3DShapePacket* getShapePacket(u16 idx) const { return &mpShapePacket[idx]; }
