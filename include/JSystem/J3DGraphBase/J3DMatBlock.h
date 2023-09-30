@@ -14,17 +14,6 @@ struct J3DGXColor : public GXColor {
     J3DGXColor() {}
 };
 
-struct J3DNBTScale : public J3DNBTScaleInfo {
-    J3DNBTScale() {}
-    J3DNBTScale(J3DNBTScaleInfo const& info) {
-        mbHasScale = info.mbHasScale;
-        mScale = info.mScale;
-    }
-    Vec* getScale() { return &mScale; }
-};
-
-extern const J3DNBTScaleInfo j3dDefaultNBTScaleInfo;
-
 class J3DTexGenBlock {
 public:
     virtual void reset(J3DTexGenBlock*);
@@ -536,8 +525,6 @@ private:
     /* 0x18 */ J3DIndTevStage mIndTevStage[1];
 };  // Size: 0x1C
 
-extern const u16 j3dDefaultZModeID;
-
 inline u16 calcZModeID(u8 param_0, u8 param_1, u8 param_2) {
     return ((param_1 * 2) & 0x1FE) + (param_0 * 0x10) + param_2;
 }
@@ -567,15 +554,6 @@ struct J3DZMode {
 
     /* 0x0 */ u16 mZModeID;
 };
-
-struct J3DBlendInfo {
-    /* 0x0 */ u8 mType;
-    /* 0x1 */ u8 mSrcFactor;
-    /* 0x2 */ u8 mDstFactor;
-    /* 0x3 */ u8 mOp;
-};
-
-extern const J3DBlendInfo j3dDefaultBlendInfo;
 
 struct J3DBlend : public J3DBlendInfo {
     J3DBlend() { *(J3DBlendInfo*)this = j3dDefaultBlendInfo; }
@@ -612,8 +590,6 @@ struct J3DAlphaCompInfo {
     /* 0x6 */ u8 field_0x6;
     /* 0x7 */ u8 field_0x7;
 };
-
-extern const u16 j3dDefaultAlphaCmpID;
 
 inline u32 calcAlphaCmpID(u32 param_1, u32 param_2, u32 param_3) {
     return ((param_1 & 0xff) << 5) + ((param_2 & 0xff) << 3) + (param_3 & 0xff);
@@ -890,15 +866,6 @@ public:
     virtual void load();
     virtual u32 getType();
     virtual ~J3DIndBlockNull();
-};
-
-struct J3DColorChanInfo {
-    /* 0x0 */ u8 field_0x0;
-    /* 0x1 */ u8 field_0x1;
-    /* 0x2 */ u8 field_0x2;
-    /* 0x3 */ u8 field_0x3;
-    /* 0x4 */ u8 field_0x4;
-    /* 0x5 */ u8 field_0x5;
 };
 
 /*

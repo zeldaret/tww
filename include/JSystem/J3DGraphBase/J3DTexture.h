@@ -58,7 +58,7 @@ public:
         GDOverflowCheck(53);
         J3DGDLoadTexMtxImm((Mtx&)mMtx, i * 3 + 30, (GXTexMtxType)mTexMtxInfo.mProjection);
     };
-    void calc(f32 const (*)[4]);
+    void calc();
     void calcTexMtx(f32 const (*)[4]);
     void calcPostTexMtx(f32 const (*)[4]);
     void loadTexMtx(u32) const;
@@ -71,26 +71,16 @@ public:
 private:
     /* 0x00 */ J3DTexMtxInfo mTexMtxInfo;
     /* 0x64 */ Mtx mMtx;
-};  // Size: 0x94
-
-struct J3DTexCoordInfo {
-    /* 0x0 */ u8 mTexGenType __attribute__((aligned(4)));
-    /* 0x1 */ u8 mTexGenSrc;
-    /* 0x2 */ u8 mTexGenMtx;
-};
+    /* 0x94 */ Mtx field_0x94;
+};  // Size: 0xc4
 
 struct J3DTexCoord : public J3DTexCoordInfo {
     J3DTexCoord();
 
+    u8 getTexGenType() { return mTexGenType; }
+    u8 getTexGenSrc() { return mTexGenSrc; }
     u8 getTexGenMtx() { return mTexGenMtx & 0xff; }
     void setTexGenMtx(u8 v) { mTexGenMtx = v; }
 };  // Size: 0x4
-
-struct J3DDefaultTexCoordInfo {
-    /* 0x0 */ u8 mTexGenType;
-    /* 0x1 */ u8 mTexGenSrc;
-    /* 0x2 */ u8 mTexGenMtx;
-    /* 0x3 */ u8 pad;
-};
 
 #endif /* J3DTEXTURE_H */

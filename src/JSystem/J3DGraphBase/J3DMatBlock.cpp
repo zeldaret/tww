@@ -12,11 +12,6 @@
 #include "dolphin/os/OSCache.h"
 #include "dolphin/types.h"
 
-extern "C" extern const GXColor j3dDefaultColInfo;
-extern "C" extern const GXColor j3dDefaultAmbInfo;
-extern "C" extern const GXColorS10 j3dDefaultTevColor;
-extern "C" extern const GXColor j3dDefaultTevKColor;
-
 extern bool isTexNoReg(void*);
 extern u16 getTexNoReg(void*);
 extern void loadTexNo(u32, const u16 &);

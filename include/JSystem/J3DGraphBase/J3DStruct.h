@@ -17,23 +17,6 @@ public:
     /* 0x28 */ Vec mDistAtten;
 };  // Size = 0x34
 
-extern "C" extern J3DLightInfo const j3dDefaultLightInfo;
-
-class J3DLightObj {
-public:
-    /* 80018C0C */ J3DLightObj() { mInfo = j3dDefaultLightInfo; }
-    /* 80323590 */ void load(u32) const;
-
-    J3DLightInfo& getLightInfo() { return mInfo; }
-    J3DLightObj& operator=(J3DLightObj const& other) {
-        mInfo = other.mInfo;
-        return *this;
-    }
-
-    /* 0x00 */ J3DLightInfo mInfo;
-    /* 0x34 */ u8 field_0x34[64];
-};  // Size = 0x74
-
 struct J3DTextureSRTInfo {
     /* 0x00 */ f32 mScaleX;
     /* 0x04 */ f32 mScaleY;
@@ -47,10 +30,11 @@ struct J3DTexMtxInfo {
     /* 80325794 */ void setEffectMtx(Mtx);
 
     /* 0x00 */ u8 mProjection;
-    /* 0x01 */ s8 mInfo;
+    /* 0x01 */ u8 mInfo;
+    /* 0x02 */ u8 padding[2];
     /* 0x04 */ Vec mCenter;
     /* 0x10 */ J3DTextureSRTInfo mSRT;
-    /* 0x24 */ Mtx44 mEffectMtx;    
+    /* 0x24 */ Mtx44 mEffectMtx;
 };  // Size: 0x64
 
 struct J3DIndTexMtxInfo {
@@ -76,5 +60,98 @@ struct J3DNBTScaleInfo {
 
     inline void operator=(const J3DNBTScaleInfo & other) { mbHasScale = other.mbHasScale; mScale = other.mScale; }
 };  // Size: 0x10
+
+struct J3DIndTexOrderInfo {
+    /* 0x0 */ u8 mCoord;
+    /* 0x1 */ u8 mMap;
+    /* 0x2 */ u8 field_0x2;
+    /* 0x3 */ u8 field_0x3;
+};
+
+struct J3DTevSwapModeInfo {
+    /* 0x0 */ u8 field_0x0;
+    /* 0x1 */ u8 field_0x1;
+};
+
+struct J3DTevSwapModeTableInfo {
+    /* 0x0 */ u8 field_0x0;
+    /* 0x1 */ u8 field_0x1;
+    /* 0x2 */ u8 field_0x2;
+    /* 0x3 */ u8 field_0x3;
+};
+
+struct J3DTevStageInfo {
+    /* 0x0 */ u8 field_0x0;
+    /* 0x1 */ u8 field_0x1;
+    /* 0x2 */ u8 field_0x2;
+    /* 0x3 */ u8 field_0x3;
+    /* 0x4 */ u8 field_0x4;
+    /* 0x5 */ u8 field_0x5;
+    /* 0x6 */ u8 field_0x6;
+    /* 0x7 */ u8 field_0x7;
+    /* 0x8 */ u8 field_0x8;
+    /* 0x9 */ u8 field_0x9;
+    /* 0xA */ u8 field_0xa;
+    /* 0xB */ u8 field_0xb;
+    /* 0xC */ u8 field_0xc;
+    /* 0xD */ u8 field_0xd;
+    /* 0xE */ u8 field_0xe;
+    /* 0xF */ u8 field_0xf;
+    /* 0x10 */ u8 field_0x10;
+    /* 0x11 */ u8 field_0x11;
+    /* 0x12 */ u8 field_0x12;
+    /* 0x13 */ u8 field_0x13;
+};
+
+struct J3DIndTevStageInfo {
+    /* 0x0 */ u8 mIndStage;
+    /* 0x1 */ u8 mIndFormat;
+    /* 0x2 */ u8 mBiasSel;
+    /* 0x3 */ u8 mMtxSel;
+    /* 0x4 */ u8 mWrapS;
+    /* 0x5 */ u8 mWrapT;
+    /* 0x6 */ u8 mPrev;
+    /* 0x7 */ u8 mLod;
+    /* 0x8 */ u8 mAlphaSel;
+};
+
+struct J3DTexCoordInfo {
+    /* 0x0 */ u8 mTexGenType __attribute__((aligned(4)));
+    /* 0x1 */ u8 mTexGenSrc;
+    /* 0x2 */ u8 mTexGenMtx;
+};
+
+struct J3DIndTexCoordScaleInfo {
+    /* 0x0 */ u8 mScaleS;
+    /* 0x1 */ u8 mScaleT;
+    /* 0x2 */ u8 field_0x2;
+    /* 0x3 */ u8 field_0x3;
+};
+
+struct J3DBlendInfo {
+    /* 0x0 */ u8 mType;
+    /* 0x1 */ u8 mSrcFactor;
+    /* 0x2 */ u8 mDstFactor;
+    /* 0x3 */ u8 mOp;
+};
+
+struct J3DTevOrderInfo {
+    /* 0x0 */ u8 mTexCoord __attribute__((aligned(2)));
+    /* 0x1 */ u8 mTexMap;
+    /* 0x2 */ u8 mColorChan;
+};
+
+struct J3DColorChanInfo {
+    /* 0x0 */ u8 field_0x0;
+    /* 0x1 */ u8 field_0x1;
+    /* 0x2 */ u8 field_0x2;
+    /* 0x3 */ u8 field_0x3;
+    /* 0x4 */ u8 field_0x4;
+    /* 0x5 */ u8 field_0x5;
+    /* 0x6 */ u8 field_0x6;
+    /* 0x7 */ u8 field_0x7;
+};
+
+STATIC_ASSERT(sizeof(J3DTevStageInfo) == 0x14);
 
 #endif /* J3DSTRUCT_H */
