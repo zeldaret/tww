@@ -17,9 +17,8 @@ public:
     J3DShape* getShapeNodePointer(u16 idx) const { return mShapeNodePointer[idx]; }
 
 private:
-    /* 0x0 */ void *field_0x0;
-    /* 0x4 */ u16 mShapeNum;
-    /* 0x8 */ J3DShape** mShapeNodePointer;
-};  // Size: 0x0C
+    /* 0x0 */ u16 mShapeNum;
+    /* 0x4 */ J3DShape** mShapeNodePointer;
+};  // Size: 0x08
 
 #endif /* J3DSHAPETABLE_H */
