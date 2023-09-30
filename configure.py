@@ -871,7 +871,7 @@ config.libs = [
     JSystemLib(
         "J3DGraphAnimator",
         [
-            Object(NonMatching, "JSystem/J3DGraphAnimator/J3DModelData.cpp"),
+            Object(Matching,    "JSystem/J3DGraphAnimator/J3DModelData.cpp"),
             Object(NonMatching, "JSystem/J3DGraphAnimator/J3DModel.cpp"),
             Object(NonMatching, "JSystem/J3DGraphAnimator/J3DAnimation.cpp"),
             Object(NonMatching, "JSystem/J3DGraphAnimator/J3DMaterialAnm.cpp"),

@@ -63,8 +63,10 @@ void J3DJointTree::makeHierarchy(J3DNode* pRootNode, const J3DModelHierarchy** p
             }
             break;
         case kTypeMaterial:
-            *pHierarchy = inf + 1;
-            pNewMaterial = pMaterialTable->mMaterialNodePointer[inf->mValue];
+            {
+                *pHierarchy = inf + 1;
+                pNewMaterial = pMaterialTable->getMaterialNodePointer(inf->getValue());
+            }
             break;
         case kTypeShape:
             *pHierarchy = inf + 1;
@@ -81,7 +83,7 @@ void J3DJointTree::makeHierarchy(J3DNode* pRootNode, const J3DModelHierarchy** p
         } else if (pNewMaterial != NULL && pRootNode->getType() == 'NJNT') {
             ((J3DJoint*)pRootNode)->addMesh(pNewMaterial);
             pNewMaterial->mJoint = ((J3DJoint*)pRootNode);
-        } else if (pNewShape != NULL && pNewNode->getType() == 'NJNT') {
+        } else if (pNewShape != NULL && pRootNode->getType() == 'NJNT') {
             pNewMaterial = ((J3DJoint*)pRootNode)->getMesh();
             pNewMaterial->mShape = pNewShape;
             pNewShape->mMaterial = pNewMaterial;

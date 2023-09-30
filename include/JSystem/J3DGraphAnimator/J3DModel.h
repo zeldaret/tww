@@ -105,14 +105,19 @@ public:
     u32 getMtxCalcMode() const { return mFlags & 0x03; }
     u32* getCurrentViewNoPtr() { return &mCurrentViewNo; }
     u8* getScaleFlagArray() const { return mpScaleFlagArr; }
+    u8 getScaleFlag(u32 idx) const { return mpScaleFlagArr[idx]; }
+    u8 getEnvScaleFlag(u32 idx) const { return mpEvlpScaleFlagArr[idx]; }
     J3DVertexBuffer* getVertexBuffer() const { return (J3DVertexBuffer*)&mVertexBuffer; }
     J3DMatPacket* getMatPacket(u16 idx) const { return &mpMatPacket[idx]; }
     J3DShapePacket* getShapePacket(u16 idx) const { return &mpShapePacket[idx]; }
     Mtx** getDrawMtxPtrPtr() const { return mpDrawMtxBuf[1]; }
     Mtx* getDrawMtxPtr() const { return mpDrawMtxBuf[1][mCurrentViewNo]; }
+    Mtx& getDrawMtx(u32 idx) const { return getDrawMtxPtr()[idx]; }
     Mtx33** getNrmMtxPtrPtr() const { return mpNrmMtxBuf[1]; }
     Mtx33* getNrmMtxPtr() const { return mpNrmMtxBuf[1][mCurrentViewNo]; }
-    Mtx33*** getBumpMtxPtrPtr() const { return mpBumpMtxArr[1]; }
+    Mtx33& getNrmMtx(u32 idx) const { return getNrmMtxPtr()[idx]; }
+    Mtx33** getBumpMtxPtrPtr(u32 idx) const { return mpBumpMtxArr[1][idx]; }
+    Mtx33* getBumpMtxPtr(u32 idx) const { return mpBumpMtxArr[1][idx][mCurrentViewNo]; }
     void setBaseScale(const Vec& scale) { mBaseScale = scale; }
     void setUserArea(u32 area) { mUserArea = area; }
     u32 getUserArea() const { return mUserArea; }

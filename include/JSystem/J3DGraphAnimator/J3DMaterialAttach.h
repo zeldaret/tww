@@ -35,7 +35,7 @@ public:
 
     virtual ~J3DMaterialTable();
 
-    J3DMaterial* getMaterialNodePointer(u16 idx) const { return mMaterialNodePointer[idx]; }
+    J3DMaterial* getMaterialNodePointer(const u16 idx) const { return mMaterialNodePointer[idx]; }
 
     J3DTexture* getTexture() const { return mTexture; }
     JUTNameTab* getTextureName() const { return mTextureName; }

@@ -55,6 +55,7 @@ public:
     JUTNameTab* getTextureName() const { return mMaterialTable.getTextureName(); }
     void setTexture(J3DTexture* pTexture) { mMaterialTable.setTexture(pTexture); }
     void setTextureName(JUTNameTab* pTextureName) { mMaterialTable.setTextureName(pTextureName); }
+    u16 getDrawFullWgtMtxNum() const { return mJointTree.getDrawFullWgtMtxNum(); }
     u16 getWEvlpMtxNum() const { return mJointTree.getWEvlpMtxNum(); }
     u16* getWEvlpMixMtxIndex() const { return mJointTree.getWEvlpMixIndex(); }
     f32* getWEvlpMixWeight() const { return mJointTree.getWEvlpMixWeight(); }

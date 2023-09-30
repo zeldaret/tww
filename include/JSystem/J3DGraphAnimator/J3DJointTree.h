@@ -10,6 +10,8 @@ class JUTNameTab;
 struct J3DModelHierarchy {
     /* 0x0 */ u16 mType;
     /* 0x2 */ u16 mValue;
+
+    inline u16 getValue() const { return mValue; }
 };
 
 class J3DMaterialTable;
