@@ -866,28 +866,21 @@ inline u32 setChanCtrlMacro(u8 enable, GXColorSrc ambSrc, GXColorSrc matSrc, u32
 
 struct J3DColorChan {
     J3DColorChan();
-    GXAttnFn getAttnFn() {
-        // Need a way to put this in sdata2 without affecting every single TU ever...
-
-        // static const u8 attnFnTbl[] = { GX_AF_NONE, GX_AF_SPEC, GX_AF_NONE, GX_AF_SPOT, };
-        // return GXAttnFn(attnFnTbl[mColorChanID >> 9 & 0x03]);
-        return GXAttnFn(mColorChanID >> 9 & 0x03);
-    }
-    GXDiffuseFn getDiffuseFn() { return GXDiffuseFn(mColorChanID >> 7 & 3); }
-    u8 getLightMask() { return ((mColorChanID >> 2 & 0x0f) | (mColorChanID >> 11 & 0x0f) << 4); }
+    GXAttnFn getAttnFn();
+    GXDiffuseFn getDiffuseFn() { return GXDiffuseFn(mChanCtrl >> 7 & 3); }
+    u8 getLightMask() { return ((mChanCtrl >> 2 & 0x0f) | (mChanCtrl >> 11 & 0x0f) << 4); }
     void setLightMask(u8 param_1) {
-        mColorChanID = (mColorChanID & ~0x3c) | ((param_1 & 0x0f) << 2);
-        mColorChanID = (mColorChanID & ~0x7800) | ((param_1 & 0xf0) << 7);
+        mChanCtrl = (mChanCtrl & ~0x3c) | ((param_1 & 0x0f) << 2);
+        mChanCtrl = (mChanCtrl & ~0x7800) | ((param_1 & 0xf0) << 7);
     }
-    // bug? both enable and getMatSrc seem to use bit 0? enable should use bit 1
-    GXColorSrc getMatSrc() { return GXColorSrc(mColorChanID >> 0 & 0x01); }
-    GXColorSrc getAmbSrc() { return GXColorSrc(mColorChanID >> 6 & 0x01); }
-    u8 getEnable() { return mColorChanID >> 0 & 0x01; }
+    GXColorSrc getMatSrc() { return GXColorSrc(mChanCtrl >> 0 & 0x01); }
+    GXColorSrc getAmbSrc() { return GXColorSrc(mChanCtrl >> 6 & 0x01); }
+    u8 getEnable() { return !!(mChanCtrl & 0x02); }
     void load() {
         J3DGDWrite_u32(setChanCtrlMacro(getEnable(), getAmbSrc(), getMatSrc(), getLightMask(), getDiffuseFn(), getAttnFn()));
     }
 
-    /* 0x0 */ u16 mColorChanID;
+    /* 0x0 */ u16 mChanCtrl;
 };
 
 class J3DColorBlock {
