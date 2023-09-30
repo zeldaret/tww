@@ -35,7 +35,7 @@ public:
 
     virtual ~J3DMaterialTable();
 
-    J3DMaterial* getMaterialNodePointer(u16 idx) const { return mMaterialNodePointer[idx]; }
+    J3DMaterial* getMaterialNodePointer(const u16 idx) const { return mMaterialNodePointer[idx]; }
 
     J3DTexture* getTexture() const { return mTexture; }
     JUTNameTab* getTextureName() const { return mTextureName; }
@@ -57,6 +57,7 @@ private:
     /* 0x14 */ u32 field_0x14;
     /* 0x18 */ J3DTexture* mTexture;
     /* 0x1C */ JUTNameTab* mTextureName;
-};  // Size: 0x20
+    /* 0x20 */ u16 field_0x20;
+};  // Size: 0x24
 
 #endif /* J3DMATERIALATTACH_H */

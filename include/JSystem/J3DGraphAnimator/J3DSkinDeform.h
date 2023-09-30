@@ -2,10 +2,11 @@
 #define J3DSKINDEFORM_H
 
 #include "JSystem/J3DGraphAnimator/J3DCluster.h"
-#include "JSystem/J3DGraphAnimator/J3DMtxBuffer.h"
 #include "JSystem/J3DGraphBase/J3DTransform.h"
 #include "dolphin/types.h"
 
+class J3DModelData;
+class J3DVertexBuffer;
 class J3DModel;
 class J3DAnmCluster;
 
@@ -51,13 +52,13 @@ public:
     void initSkinInfo(J3DModelData*);
     int initMtxIndexArray(J3DModelData*);
     void changeFastSkinDL(J3DModelData*);
-    void calcNrmMtx(J3DMtxBuffer*);
+    // void calcNrmMtx(J3DMtxBuffer*);
     void transformVtxPosNrm(J3DModelData*);
-    void calcAnmInvJointMtx(J3DMtxBuffer*);
-    void deformFastVtxPos_F32(J3DVertexBuffer*, J3DMtxBuffer*) const;
-    void deformFastVtxNrm_F32(J3DVertexBuffer*, J3DMtxBuffer*) const;
-    void deformVtxPos_F32(J3DVertexBuffer*, J3DMtxBuffer*) const;
-    void deformVtxPos_S16(J3DVertexBuffer*, J3DMtxBuffer*) const;
+    // void calcAnmInvJointMtx(J3DMtxBuffer*);
+    // void deformFastVtxPos_F32(J3DVertexBuffer*, J3DMtxBuffer*) const;
+    // void deformFastVtxNrm_F32(J3DVertexBuffer*, J3DMtxBuffer*) const;
+    // void deformVtxPos_F32(J3DVertexBuffer*, J3DMtxBuffer*) const;
+    // void deformVtxPos_S16(J3DVertexBuffer*, J3DMtxBuffer*) const;
     void deformVtxNrm_F32(J3DVertexBuffer*) const;
     void deformVtxNrm_S16(J3DVertexBuffer*) const;
     void setNrmMtx(int i, MtxP mtx) {

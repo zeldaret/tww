@@ -99,6 +99,13 @@ public:
     virtual void calc(u16 v) { J3DMtxCalcAnm::calc(v); }
 };
 
+enum J3DJointMtxType {
+    J3DJntMtxType_Normal,
+    J3DJntMtxType_BBoard,
+    J3DJntMtxType_YBBoard,
+    J3DJntMtxType_Multi,
+};
+
 class J3DJoint : public J3DNode {
 public:
     void initialize();
@@ -114,6 +121,8 @@ public:
 
     J3DMaterial* getMesh() { return mMesh; }
     u16 getJntNo() const { return mJntNo; }
+    u8 getKind() const { return mKind; }
+    u8 getMtxType() const { return getKind() >> 4; }
     u8 getScaleCompensate() const { return mScaleCompensate; }
     void setCurrentMtxCalc(J3DMtxCalc* pMtxCalc) { mCurrentMtxCalc = pMtxCalc; }
     J3DTransformInfo& getTransformInfo() { return mTransformInfo; }

@@ -871,14 +871,14 @@ config.libs = [
     JSystemLib(
         "J3DGraphAnimator",
         [
-            Object(NonMatching, "JSystem/J3DGraphAnimator/J3DModelData.cpp"),
+            Object(Matching,    "JSystem/J3DGraphAnimator/J3DModelData.cpp"),
             Object(NonMatching, "JSystem/J3DGraphAnimator/J3DModel.cpp"),
             Object(NonMatching, "JSystem/J3DGraphAnimator/J3DAnimation.cpp"),
             Object(NonMatching, "JSystem/J3DGraphAnimator/J3DMaterialAnm.cpp"),
             Object(NonMatching, "JSystem/J3DGraphAnimator/J3DVisibility.cpp"),
             Object(NonMatching, "JSystem/J3DGraphAnimator/J3DCluster.cpp"),
             Object(NonMatching, "JSystem/J3DGraphAnimator/J3DJoint.cpp"),
-            Object(NonMatching, "JSystem/J3DGraphAnimator/J3DNode.cpp"),
+            Object(Matching,    "JSystem/J3DGraphAnimator/J3DNode.cpp"),
             Object(NonMatching, "JSystem/J3DGraphAnimator/J3DMaterialAttach.cpp"),
         ],
     ),

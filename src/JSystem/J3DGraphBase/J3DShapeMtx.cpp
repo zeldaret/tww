@@ -6,10 +6,11 @@
 #include "JSystem/J3DGraphBase/J3DShapeMtx.h"
 #include "JSystem/J3DGraphBase/J3DGD.h"
 #include "JSystem/J3DGraphBase/J3DPacket.h"
-#include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/J3DGraphBase/J3DShapeDraw.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/J3DGraphBase/J3DTransform.h"
+#include "JSystem/J3DGraphAnimator/J3DModel.h"
+#include "JSystem/J3DGraphAnimator/J3DModelData.h"
 
 extern void J3DFifoLoadNrmMtxImm(Mtx, u32);
 extern void J3DFifoLoadNrmMtxImm3x3(Mtx33, u32);

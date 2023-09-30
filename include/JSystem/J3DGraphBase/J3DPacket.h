@@ -170,6 +170,8 @@ public:
     void setDrawMtx(Mtx** pDrawMtx) { mpDrawMtx = pDrawMtx; }
     void setNrmMtx(Mtx33** pNrmMtx) { mpNrmMtx = pNrmMtx; }
     void setBaseMtxPtr(Mtx* pMtx) { mpBaseMtxPtr = pMtx; }
+    void setScaleFlagArray(u8* pScaleFlagArray) { mpScaleFlagArray = pScaleFlagArray; }
+    void setCurrentViewNoPtr(u32* pCurrentViewNo) { mpCurrentViewNo = pCurrentViewNo; }
 
     J3DShape* getShape() const { return mpShape; }
     J3DModel* getModel() const { return mpModel; }
