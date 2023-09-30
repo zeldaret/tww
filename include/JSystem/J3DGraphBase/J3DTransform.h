@@ -4,6 +4,8 @@
 #include "JSystem/JGeometry.h"
 #include "dolphin/mtx/mtxvec.h"
 
+struct J3DTextureSRTInfo;
+
 struct J3DTransformInfo {
     /* 0x00 */ JGeometry::TVec3<f32> mScale;
     /* 0x0C */ JGeometry::TVec3<s16> mRotation;
@@ -15,19 +17,22 @@ extern Vec const j3dDefaultScale;
 extern Mtx const j3dDefaultMtx;
 extern f32 PSMulUnit01[2];
 
+void J3DGQRSetup7(u32 param_0, u32 param_1, u32 param_2, u32 param_3);
+f32 J3DCalcZValue(MtxP m, Vec v);
 void J3DCalcBBoardMtx(Mtx);
 void J3DCalcYBBoardMtx(Mtx);
-
+void J3DPSCalcInverseTranspose(f32 (*param_0)[4], f32 (*param_1)[3]);
 void J3DGetTranslateRotateMtx(J3DTransformInfo const&, Mtx);
 void J3DGetTranslateRotateMtx(s16, s16, s16, f32, f32, f32, Mtx);
-void J3DPSCalcInverseTranspose(f32 (*param_0)[4], f32 (*param_1)[3]);
-void J3DGQRSetup7(u32 param_0, u32 param_1, u32 param_2, u32 param_3);
-
+void J3DGetTextureMtx(const J3DTextureSRTInfo&, Vec, f32(*)[4]);
+void J3DGetTextureMtxOld(const J3DTextureSRTInfo&, Vec, f32(*)[4]);
+void J3DGetTextureMtxMaya(const J3DTextureSRTInfo&, f32(*)[4]);
+void J3DGetTextureMtxMayaOld(const J3DTextureSRTInfo&, f32(*)[4]);
 void J3DScaleNrmMtx(Mtx, const Vec&);
 void J3DScaleNrmMtx33(Mtx33, const Vec&);
-
-void J3DPSMtx33Copy(register Mtx3P src, register Mtx3P dst);
-void J3DPSMtx33CopyFrom34(register MtxP src, register Mtx3P dst);
+void J3DMtxProjConcat(f32(*)[4], f32(*)[4], f32(*)[4]);
+void J3DPSMtx33Copy(Mtx3P src, Mtx3P dst);
+void J3DPSMtx33CopyFrom34(MtxP src, Mtx3P dst);
 
 // regalloc issues
 inline void J3DPSMulMtxVec(register MtxP mtx, register Vec* vec, register Vec* dst) {
@@ -195,7 +200,5 @@ inline void J3DPSMulMtxVec(register Mtx3P mtx, register SVec* vec, register SVec
         psq_st fr6, 4(dst), 1, 7
     }
 }
-
-f32 J3DCalcZValue(register MtxP m, register Vec v);
 
 #endif /* J3DTRANSFORM_H */

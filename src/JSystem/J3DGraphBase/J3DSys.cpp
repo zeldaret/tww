@@ -6,6 +6,7 @@
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/J3DGraphBase/J3DGD.h"
 #include "JSystem/J3DGraphBase/J3DTexture.h"
+#include "JSystem/J3DGraphBase/J3DTevs.h"
 #include "JSystem/J3DGraphBase/J3DShape.h"
 #include "dolphin/os/OS.h"
 
@@ -14,12 +15,6 @@ extern void makeTexCoordTable();
 extern void makeAlphaCmpTable();
 extern void makeZModeTable();
 extern void makeTevSwapTable();
-
-extern "C" extern J3DDefaultTexCoordInfo const j3dDefaultTexCoordInfo[8];
-extern "C" extern const GXColor j3dDefaultColInfo;
-extern "C" extern u8 j3dDefaultColorChanNum;
-extern "C" extern const GXColorS10 j3dDefaultTevColor;
-extern "C" extern const GXColor j3dDefaultTevKColor;
 
 /* 802D8AA8-802D8B8C       .text __ct__6J3DSysFv */
 J3DSys::J3DSys() {
