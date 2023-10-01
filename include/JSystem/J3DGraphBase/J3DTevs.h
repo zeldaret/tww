@@ -31,21 +31,14 @@ extern const u16 j3dDefaultTevSwapTableID;
 extern const u16 j3dDefaultAlphaCmpID;
 extern const u16 j3dDefaultZModeID;
 
-struct J3DTevStageTevSwapModeInfo {
-    u8 field_0x0_29 : 2;
-    u8 field_0x0_31 : 2;
-};
-
 struct J3DTevStage {
     J3DTevStage() {
         setTevStageInfo(j3dDefaultTevStageInfo);
-        mTevSwapModeInfo.field_0x0_29 = 0;
-        mTevSwapModeInfo.field_0x0_31 = 0;
+        setTevSwapModeInfo(j3dDefaultTevSwapMode);
     }
     J3DTevStage(const J3DTevStageInfo& info) {
         setTevStageInfo(info);
-        mTevSwapModeInfo.field_0x0_29 = 0;
-        mTevSwapModeInfo.field_0x0_31 = 0;
+        setTevSwapModeInfo(j3dDefaultTevSwapMode);
     }
     J3DTevStage& operator=(const J3DTevStage& other) {
         this->field_0x1 = other.field_0x1;
@@ -55,6 +48,13 @@ struct J3DTevStage {
         this->field_0x6 = other.field_0x6;
         this->mTevSwapModeInfo = other.mTevSwapModeInfo;
         return *this;
+    }
+
+    void setTexSel(u8 param_0) { mTevSwapModeInfo = mTevSwapModeInfo & ~0x0C | param_0 << 2; }
+    void setRasSel(u8 param_0) { mTevSwapModeInfo = mTevSwapModeInfo & ~0x03 | param_0; }
+    void setTevSwapModeInfo(const J3DTevSwapModeInfo& info) {
+        setTexSel(info.field_0x1);
+        setRasSel(info.field_0x0);
     }
 
     void setTevStageInfo(const J3DTevStageInfo&);
@@ -71,7 +71,7 @@ struct J3DTevStage {
     /* 0x4 */ u8 field_0x4;
     /* 0x5 */ u8 field_0x5;
     /* 0x6 */ u8 field_0x6;
-    /* 0x7 */ J3DTevStageTevSwapModeInfo mTevSwapModeInfo;
+    /* 0x7 */ u8 mTevSwapModeInfo;
 };
 
 struct J3DIndTevStage {

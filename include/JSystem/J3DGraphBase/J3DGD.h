@@ -101,7 +101,7 @@ inline void J3DGDSetBlendMode(GXBlendMode mode, GXBlendFactor srcFactor, GXBlend
 inline void J3DGDSetBlendMode(GXBlendMode mode, GXBlendFactor srcFactor, GXBlendFactor dstFactor, GXLogicOp logicOp, u8 ditherEnable) {
     J3DGDWriteBPCmd(0xFE001FE7);
     J3DGDWriteBPCmd(
-        (mode == GX_BM_BLEND || mode == GX_BM_SUBTRACT) << 0 |
+        u32(mode == GX_BM_BLEND || mode == GX_BM_SUBTRACT) << 0 |
         (mode == GX_BM_LOGIC) << 1 |
         ditherEnable << 2 |
         dstFactor << 5 |

@@ -63,8 +63,16 @@ struct J3DTexMtxInfo {
 };  // Size: 0x64
 
 struct J3DIndTexMtxInfo {
-    /* 0x00 */ Mtx23 field_0x0;
-    /* 0x18 */ u8 field_0x18;
+    void operator=(const J3DIndTexMtxInfo& other) {
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 3; j++) {
+                mOffsetMtx[i][j] = other.mOffsetMtx[i][j];
+            }
+        }
+        mScaleExp = other.mScaleExp;
+    }
+    /* 0x00 */ Mtx23 mOffsetMtx;
+    /* 0x18 */ u8 mScaleExp;
 };  // Size: 0x1C
 
 struct J3DFogInfo {
@@ -87,6 +95,11 @@ struct J3DNBTScaleInfo {
 };  // Size: 0x10
 
 struct J3DIndTexOrderInfo {
+    void operator=(const J3DIndTexOrderInfo& other) {
+        mCoord = other.mCoord;
+        mMap = other.mMap;
+    }
+
     /* 0x0 */ u8 mCoord;
     /* 0x1 */ u8 mMap;
     /* 0x2 */ u8 field_0x2;
@@ -147,6 +160,11 @@ struct J3DTexCoordInfo {
 };
 
 struct J3DIndTexCoordScaleInfo {
+    void operator=(const J3DIndTexCoordScaleInfo& other) {
+        mScaleS = other.mScaleS;
+        mScaleT = other.mScaleT;
+    }
+
     /* 0x0 */ u8 mScaleS;
     /* 0x1 */ u8 mScaleT;
     /* 0x2 */ u8 field_0x2;
