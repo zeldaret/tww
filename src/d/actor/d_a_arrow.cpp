@@ -368,8 +368,61 @@ void daArrow_c::ShieldReflect() {
 }
 
 /* 800D50A0-800D5388       .text check_water_in__9daArrow_cFv */
-void daArrow_c::check_water_in() {
-    /* Nonmatching */
+bool daArrow_c::check_water_in() {
+    u8 prev_field_0x699 = field_0x699;
+    field_0x699 = daPy_lk_c::setItemWaterEffect(this, field_0x699, 1);
+    if (prev_field_0x699 == 0 && field_0x699 == 1) {
+        f32 waterY;
+        fopAcM_getWaterY(&current.pos, &waterY);
+        
+        f32 deltaY = fabs(next.pos.y - current.pos.y);
+        f32 waterDist = fabs(waterY - current.pos.y);
+        cXyz waterHitPos;
+        if (deltaY < 1.0f) {
+            waterHitPos = current.pos;
+        } else {
+            f32 weight = waterDist / deltaY;
+            if (weight > 1.0f) {
+                weight = 1.0f;
+            }
+            waterHitPos = (next.pos * weight) + (current.pos * (1.0f - weight));
+        }
+        
+        mCurrProcFunc = &procWater;
+        fopAcM_SetParam(this, 4);
+        
+        if (mArrowType == TYPE_FIRE) {
+            mInWaterTimer = 1;
+            dComIfGp_particle_setToon(0x35A, &waterHitPos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+            if (field_0x6e4 == 0) {
+                dKy_arrowcol_chg_on(&current.pos, 0);
+            }
+        } else if (mArrowType == TYPE_ICE) {
+            mInWaterTimer = 300;
+            fopAcM_createChild(
+                PROC_ARROW_ICEEFF, fpcM_GetID(this), mArrowType,
+                &waterHitPos, current.roomNo, &current.angle, NULL, -1, NULL
+            );
+            if (field_0x6e4 == 0) {
+                dKy_arrowcol_chg_on(&current.pos, 1);
+            }
+        } else if (mArrowType == TYPE_LIGHT) {
+            dComIfGp_particle_setToon(0x2A1, &waterHitPos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+            fopAcM_seStartCurrent(this, JA_SE_OBJ_LIGHT_ARW_EFF, 0);
+            if (field_0x6e4 == 0) {
+                dKy_arrowcol_chg_on(&current.pos, 2);
+            }
+            mInWaterTimer = 1;
+        } else {
+            mInWaterTimer = 1;
+        }
+        
+        field_0x698 = 0;
+        
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 /* 800D5388-800D53AC       .text changeArrowMp__9daArrow_cFv */
@@ -379,8 +432,50 @@ BOOL daArrow_c::changeArrowMp() {
 }
 
 /* 800D53AC-800D553C       .text changeArrowType__9daArrow_cFv */
-void daArrow_c::changeArrowType() {
-    /* Nonmatching */
+daArrow_c* daArrow_c::changeArrowType() {
+    u8 origArrowType = mArrowType;
+    mBtkFrame = 0.0f;
+    
+    daArrow_c* ret = this;
+    
+    if (mArrowType == TYPE_NORMAL) {
+        if (dComIfGs_getMagic() < 1 || !(dComIfGs_getItem(0xC) == MAGIC_ARROW || dComIfGs_getItem(0xC) == LIGHT_ARROW)) {
+            mArrowType = TYPE_NORMAL;
+        } else {
+            mArrowType = TYPE_FIRE;
+        }
+    } else if (mArrowType == TYPE_FIRE) {
+        if (dComIfGs_getMagic() < 1 || !(dComIfGs_getItem(0xC) == MAGIC_ARROW || dComIfGs_getItem(0xC) == LIGHT_ARROW)) {
+            mArrowType = TYPE_NORMAL;
+        } else {
+            mArrowType = TYPE_ICE;
+        }
+    } else if (mArrowType == TYPE_ICE) {
+        if (dComIfGs_getMagic() < 2 || dComIfGs_getItem(0xC) != LIGHT_ARROW) {
+            mArrowType = TYPE_NORMAL;
+        } else {
+            mArrowType = TYPE_LIGHT;
+        }
+    } else if (mArrowType == TYPE_LIGHT) {
+        mArrowType = TYPE_NORMAL;
+    }
+    
+    if (mArrowType != origArrowType) {
+        m_keep_type = mArrowType;
+        daArrow_c* newNockedArrow = (daArrow_c*)fopAcM_fastCreate(PROC_ARROW, 0, &current.pos, current.roomNo, NULL, NULL, -1, NULL, NULL);
+        if (!newNockedArrow) {
+            mArrowType = origArrowType;
+            m_keep_type = origArrowType;
+            setDrawShapeMaterial();
+            ret = this;
+        } else {
+            mArrowType = origArrowType;
+            fopAcM_delete(this);
+            ret = newNockedArrow;
+        }
+    }
+    
+    return ret;
 }
 
 /* 800D553C-800D560C       .text changeArrowTypeNotReady__9daArrow_cFv */
@@ -453,7 +548,7 @@ void daArrow_c::setKeepMatrix() {
     } else {
         daPy_py_c* player = daPy_getPlayerActorClass();
         
-        mDoMtx_stack_c::transS(0.7f, -0.07f, -0.2f);
+        mDoMtx_stack_c::transS(7.6f, -0.8f, -0.5f);
         // This function takes three signed shorts, but one of the literals passed here is unsigned.
         // X rotation must be a float literal to force the compiler to pass an unsigned short.
         // Z rotation must be an int literal to pass a signed short as normal.
@@ -512,27 +607,410 @@ void daArrow_c::setStopActorMatrix() {
 
 /* 800D5A70-800D5B20       .text procWait__9daArrow_cFv */
 BOOL daArrow_c::procWait() {
-    /* Nonmatching */
+    speedF = 0.0f;
+    setKeepMatrix();
+    cMtx_copy(mpModel->getBaseTRMtx(), field_0x6b4);
+    field_0x6e6 = shape_angle;
+    
+    if (fopAcM_GetParam(this) == 1) {
+        if (!mbShotByZelda) {
+            arrowUseMp();
+            checkRestMp();
+        }
+        
+        mCurrProcFunc = &procMove;
+        arrowShooting();
+    }
+    
+    return TRUE;
 }
 
 /* 800D5B20-800D6BF4       .text procMove__9daArrow_cFv */
 BOOL daArrow_c::procMove() {
-    /* Nonmatching */
+    speedF = 100.0f;
+    current.pos += speed;
+    cXyz quarterStepPos = current.pos + speed*0.25f;
+    mLinChk.Set(&next.pos, &quarterStepPos, this);
+    field_0x6e6 = shape_angle;
+    
+    cMtx_copy(mpModel->getBaseTRMtx(), field_0x6b4);
+    field_0x67c.z += 0x889;
+    
+    s32 hitType = 0; // No hit
+    if (mCps.ChkAtHit()) {
+        cXyz temp12;
+        cXyz hitPos;
+        csXyz temp11;
+        if (mArrowType == TYPE_LIGHT && field_0x664 == 0 && mCps.ChkAtShieldHit() && fpcM_GetName(mCps.GetAtHitAc()) == PROC_PLAYER) {
+            mCps.GetAtHitAc();
+            hitPos = *mCps.GetAtHitPosP();
+            hitType = -1; // Reflected hit
+            field_0x664 = 1;
+            ShieldReflect();
+        } else {
+            fopAc_ac_c* hitActor;
+            BOOL hitWasBlocked;
+            s32 bHitActor = mbHitActor;
+            if (bHitActor) {
+                hitActor = field_0x6ec;
+                hitPos = mNearestHitPos;
+                hitWasBlocked = FALSE;
+            } else {
+                hitActor = mCps.GetAtHitAc();
+                hitPos = *mCps.GetAtHitPosP();
+                hitWasBlocked = mCps.ChkAtShieldHit();
+            }
+            
+            if (hitActor) {
+                JntHit_c* jntHit = fopAcM_GetJntHit(hitActor);
+                if (mArrowType == TYPE_LIGHT) {
+                    if (fpcM_GetName(mCps.GetAtHitAc()) == PROC_BGN
+                     || fpcM_GetName(mCps.GetAtHitAc()) == PROC_BGN2
+                     || fpcM_GetName(mCps.GetAtHitAc()) == PROC_BGN3) {
+                        // Hit Puppet Ganon.
+                        if (hitWasBlocked) {
+                            field_0x6a8 = hitPos;
+                            current.pos = hitPos - (speed * 0.25f);
+                            
+                            if (field_0x6e4 == 0) {
+                                dKy_arrowcol_chg_on(&current.pos, 2);
+                            }
+                            
+                            mCurrProcFunc = &procStop_BG;
+                            fopAcM_OnStatus(this, 0x4000);
+                            fopAcM_SetParam(this, 2);
+                            field_0x604 = 0x28;
+                            
+                            dComIfG_Bgsp()->i_GetTriPla(mLinChk);
+                            
+                            csXyz temp10;
+                            temp10.x = cM_atan2s(speed.y, speed.absXZ());
+                            temp10.y = cM_atan2s(speed.x, speed.z);
+                            temp10.z = 0;
+                            mDoMtx_stack_c::transS(current.pos);
+                            mDoMtx_stack_c::ZXYrotM(temp10.x, temp10.y, 0);
+                            cMtx_copy(mDoMtx_stack_c::get(), field_0x6b4);
+                            
+                            dComIfGp_particle_setToon(0x2A1, &field_0x6a8, &temp10, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+                            fopAcM_seStartCurrent(this, JA_SE_OBJ_LIGHT_ARW_EFF, 0);
+                            fopAcM_delete(this);
+                        } else {
+                            hitType = 0; // No hit (pass through)
+                        }
+                    } else {
+                        hitType = 0; // No hit (pass through)
+                    }
+                } else if (hitWasBlocked) {
+                    hitType = 1; // Blocked hit
+                } else if (jntHit) {
+                    mHitJointIndex = jntHit->searchJntHitPosAngleOffset(&hitPos, &shape_angle, &temp12, &temp11);
+                    if (mHitJointIndex >= 0) {
+                        field_0x6e6 = temp11;
+                        field_0x618 = temp12;
+                        hitType = 2; // Hit a joint
+                    } else if (mHitJointIndex == -3) {
+                        fopAcM_delete(this);
+                        return TRUE;
+                    }
+                }
+            }
+        }
+    }
+    
+    if (hitType > 0) {
+        field_0x604 = 0x28;
+        fopAcM_OnStatus(this, 0x4000);
+        
+        if (mPtclFollowCb.mpEmitter) {
+            mPtclFollowCb.end();
+        }
+        
+        if (hitType == 1) { // Blocked hit
+            fopAcM_SetParam(this, 3);
+            mCurrProcFunc = &procReturn;
+            speed *= -0.1f;
+            speed.y += speed.absXZ();
+            current.pos = next.pos;
+            field_0x69c = 0x2C00;
+            mDoMtx_stack_c::transS(current.pos);
+            mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, 0);
+            mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+            fopAcM_seStartCurrent(this, JA_SE_LK_ARROW_REBOUND, 0x20);
+        } else if (hitType == 2) { // Hit a joint
+            fpcM_SetParam(this, 2);
+            mCurrProcFunc = &procStop_Actor;
+            
+            if (mArrowType == TYPE_FIRE) {
+                fopAcM_seStartCurrent(this, JA_SE_OBJ_FIRE_ARW_EFF, 0);
+                field_0x698 = 0;
+            } else if (mArrowType == TYPE_ICE) {
+                fopAcM_seStartCurrent(this, JA_SE_OBJ_ICE_ARW_EFF, 0);
+            } else if (mArrowType == TYPE_LIGHT) {
+                fopAcM_seStartCurrent(this, JA_SE_OBJ_LIGHT_ARW_EFF, 0);
+                field_0x698 = 0;
+            }
+            
+            setStopActorMatrix();
+        }
+    } else if (dComIfG_Bgsp()->LineCross(&mLinChk)) {
+        cXyz* linEnd = &mLinChk.GetLinP()->GetEndP();
+        field_0x6a8 = *linEnd;
+        current.pos = *linEnd - (speed * 0.25f);
+        
+        if (!check_water_in()) {
+            s32 temp8;
+            switch (mArrowType) {
+            case TYPE_FIRE:
+                temp8 = 0;
+                break;
+            case TYPE_ICE:
+                temp8 = 1;
+                break;
+            case TYPE_LIGHT:
+                temp8 = 2;
+                break;
+            default:
+                temp8 = -1;
+            }
+            
+            if (temp8 >= 0 && field_0x6e4 == 0) {
+                dKy_arrowcol_chg_on(&current.pos, temp8);
+            }
+            
+            mCurrProcFunc = &procStop_BG;
+            fopAcM_OnStatus(this, 0x4000);
+            fopAcM_SetParam(this, 2);
+            field_0x604 = 0x28;
+            cM3dGPla* triPla = dComIfG_Bgsp()->i_GetTriPla(mLinChk);
+            
+            csXyz temp10;
+            temp10.x = cM_atan2s(-triPla->mNormal.y, -triPla->mNormal.absXZ());
+            temp10.y = cM_atan2s(-triPla->mNormal.x, -triPla->mNormal.z);
+            temp10.z = 0;
+            mDoMtx_stack_c::transS(current.pos);
+            mDoMtx_stack_c::ZXYrotM(temp10.x, temp10.y, 0);
+            cMtx_copy(mDoMtx_stack_c::get(), field_0x6b4);
+            
+            if (mArrowType == TYPE_FIRE) {
+                dComIfGp_particle_setToon(0x29A, &field_0x6a8, &temp10, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+                dComIfGp_particle_setToon(0x29B, &field_0x6a8, &temp10, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+                fopAcM_seStartCurrent(this, JA_SE_OBJ_FIRE_ARW_EFF, 0);
+                field_0x698 = 0;
+            } else if (mArrowType == TYPE_ICE) {
+                if (dComIfG_Bgsp()->ChkGrpInf(mLinChk, 0x200)) {
+                    fopAcM_create(PROC_Obj_Magmarock, NULL, &field_0x6a8, current.roomNo, NULL, NULL, -1, NULL);
+                } else {
+                    dComIfGp_particle_setToon(0x29E, &field_0x6a8, &temp10, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+                    
+                    fopAcM_createChild(
+                        PROC_ARROW_ICEEFF, fpcM_GetID(this),
+                        mArrowType, &field_0x6a8,
+                        current.roomNo, &field_0x6e6, NULL, -1, NULL
+                    );
+                    
+                    fopAcM_seStartCurrent(this, JA_SE_OBJ_ICE_ARW_EFF, 0);
+                }
+            } else if (mArrowType == TYPE_LIGHT) {
+                dComIfGp_particle_setToon(0x2A1, &field_0x6a8, &temp10, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+                fopAcM_seStartCurrent(this, JA_SE_OBJ_LIGHT_ARW_EFF, 0);
+                field_0x698 = 0;
+            }
+            
+            s32 attribCode = dComIfG_Bgsp()->GetAttributeCode(mLinChk);
+            s32 mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(mLinChk);
+            
+            if (mArrowType == TYPE_NORMAL && (attribCode == 0x3 || attribCode == 0x14 || attribCode == 0xF || attribCode == 0x9 || attribCode == 0x15)) {
+                mCurrProcFunc = &procReturn;
+                fopAcM_SetParam(this, 3);
+                speed *= -0.1f;
+                speed.y += speed.absXZ();
+                current.pos = next.pos;
+                field_0x69c = 0x2C00;
+                csXyz temp9;
+                cM3d_CalcVecZAngle(triPla->mNormal, &temp9);
+                
+                dComIfGp_particle_setToon(0xC, &field_0x6a8, &temp9, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+                fopAcM_seStartCurrent(this, JA_SE_LK_ARROW_REBOUND, mtrlSndId);
+            } else {
+                fopAcM_seStartCurrent(this, JA_SE_LK_ARROW_HIT, mtrlSndId);
+            }
+        }
+    } else if (check_water_in()) {
+        // Do nothing.
+        // There was probably some code here that got commented out.
+    }
+    
+    if (mCurrProcFunc == &procWater) {
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, 0);
+        mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    } else {
+        if ((current.pos - field_0x6a8).abs() > 25000.0f) {
+            speed.y -= 2.0f;
+            if (speed.y < -100.0f) {
+                speed.y = -100.0f;
+            }
+            if (field_0x6a8.y > current.pos.y) {
+                fopAcM_delete(this);
+                return TRUE;
+            }
+        } else if ((current.pos - field_0x6a8).abs() > 20000.0f) {
+            field_0x6e4 = 1;
+        }
+        
+        createBlur();
+        
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, 0);
+        mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+        
+        cXyz end = current.pos + speed*1.25f;
+        mCps.SetStartEnd(current.pos, end);
+        mCps.SetR(5.0f);
+        mCps.CalcAtVec();
+        
+        dComIfG_Ccsp()->Set(&mCps);
+        // Using the dComIfG_Ccsp inline here breaks the match.
+        // dComIfG_Ccsp()->SetMass(&mCps, 1);
+        g_dComIfG_gameInfo.play.mCcS.SetMass(&mCps, 1);
+    }
+    
+    return TRUE;
 }
 
 /* 800D6BF4-800D6E70       .text procReturn__9daArrow_cFv */
 BOOL daArrow_c::procReturn() {
-    /* Nonmatching */
+    speedF = 0.0f;
+    speed.y -= 2.0f;
+    current.pos += speed;
+    shape_angle.x += field_0x69c;
+    cXyz quarterStepPos = current.pos + speed*0.25f;
+    field_0x699 = daPy_lk_c::setItemWaterEffect(this, field_0x699, 1);
+    mLinChk.Set(&next.pos, &quarterStepPos, this);
+    setBlur();
+    
+    if (dComIfG_Bgsp()->LineCross(&mLinChk)) {
+        cM3dGPla* triPla = dComIfG_Bgsp()->i_GetTriPla(mLinChk);
+        f32 temp2 = speed.abs();
+        cXyz temp1;
+        C_VECReflect(&speed, &triPla->mNormal, &temp1);
+        speed.x = temp1.x*temp2*0.5f;
+        speed.y = temp1.y*temp2*0.5f;
+        speed.z = temp1.z*temp2*0.5f;
+        
+        s32 temp3 = -field_0x69c;
+        field_0x69c = (temp3 / 2);
+        triPla = dComIfG_Bgsp()->i_GetTriPla(mLinChk);
+        if (triPla->mNormal.y >= 0.5f) {
+            field_0x69a = 1;
+        }
+    } else if (field_0x69a && speed.y < 0.0f) {
+        fopAcM_delete(this);
+    }
+    
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, 0);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    
+    return TRUE;
 }
 
 /* 800D6E70-800D71F8       .text procStop_BG__9daArrow_cFv */
 BOOL daArrow_c::procStop_BG() {
-    /* Nonmatching */
+    speedF = 0.0f;
+    
+    if (!dComIfG_Bgsp()->ChkPolySafe(mLinChk)) {
+        fopAcM_delete(this);
+        return TRUE;
+    }
+    
+    BOOL temp2 = FALSE;
+    
+    if (field_0x604 > 0) {
+        field_0x604--;
+        f32 temp4 = (field_0x604*(1/40.0f)) * 1024.0f * (field_0x604*(1/40.0f)) * cM_ssin(field_0x604*0x52FB);
+        shape_angle.x = field_0x6e6.x + temp4;
+        shape_angle.y = field_0x6e6.y;
+        temp2 = TRUE;
+    } else if (field_0x600) {
+        fopAcM_delete(this);
+        return TRUE;
+    }
+    
+    setBlur();
+    
+    if (dComIfG_Bgsp()->ChkMoveBG(mLinChk)) {
+        dComIfG_Bgsp()->MoveBgTransPos(mLinChk, true, &field_0x6a8, &current.angle, &shape_angle);
+        temp2 = TRUE;
+    }
+    
+    if (temp2) {
+        f32 xCos = cM_scos(shape_angle.x);
+        current.pos.x = field_0x6a8.x - cM_ssin(shape_angle.y) * 50.0f * xCos;
+        current.pos.y = field_0x6a8.y + cM_ssin(shape_angle.x) * 50.0f;
+        current.pos.z = field_0x6a8.z - cM_scos(shape_angle.y) * 50.0f * xCos;
+        
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, 0);
+        mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    }
+    
+    if (mArrowType == TYPE_NORMAL) {
+        mSph.SetC(current.pos);
+        dComIfG_Ccsp()->Set(&mSph);
+        
+        if (field_0x6a0 == 0) {
+            field_0x600 = true;
+            field_0x698 = 0;
+        } else {
+            field_0x6a0--;
+            
+            if (field_0x6a0 < 60) {
+                // This matches but probably isn't what they actually wrote.
+                u32 signBit = ((u32)field_0x6a0)>>31;
+                if ((((field_0x6a0&1) ^ signBit) - signBit) == 0) {
+                    field_0x698 = 0;
+                } else {
+                    field_0x698 = 1;
+                }
+            } else {
+                field_0x698 = 1;
+            }
+        }
+        
+        if (mSph.ChkCoHit()) {
+            dComIfGp_getItemArrowNumCount(1);
+            fopAcM_createItemForSimpleDemo(&current.pos, ARROW_10, -1, NULL, NULL, 0.0f, 0.0f);
+            mDoAud_seStart(JA_SE_CONSUMP_ITEM_GET, NULL, 0, 0);
+            fopAcM_delete(this);
+            return TRUE;
+        }
+    }
+    
+    if (mbShotByZelda) {
+        field_0x600 = true;
+    }
+    
+    return TRUE;
 }
 
 /* 800D71F8-800D727C       .text procStop_Actor__9daArrow_cFv */
 BOOL daArrow_c::procStop_Actor() {
-    /* Nonmatching */
+    speedF = 0.0f;
+    if (field_0x600) {
+        fopAcM_delete(this);
+        return TRUE;
+    }
+    
+    setBlur();
+    
+    if (fopAcM_SearchByID(mHitActorProcID)) {
+        setStopActorMatrix();
+    } else {
+        field_0x600 = true;
+    }
+    
+    return TRUE;
 }
 
 /* 800D727C-800D72BC       .text procWater__9daArrow_cFv */
@@ -620,7 +1098,88 @@ BOOL daArrow_c::createInit() {
 
 /* 800D74FC-800D7820       .text _execute__9daArrow_cFv */
 BOOL daArrow_c::_execute() {
-    /* Nonmatching */
+    if (mbShotByZelda) {
+        if (field_0x664 == 0) {
+            if (daPy_getPlayerLinkActorClass()->checkPlayerGuard()) {
+                mCps.SetAtSpl((dCcG_At_Spl)0);
+                mCps.SetAtType(AT_TYPE_NORMAL_ARROW);
+            } else {
+                mCps.SetAtSpl((dCcG_At_Spl)0xB);
+                mCps.SetAtType(AT_TYPE_LIGHT_ARROW);
+            }
+        } else {
+            mCps.SetAtSpl((dCcG_At_Spl)0);
+            mCps.SetAtType(AT_TYPE_NORMAL_ARROW);
+        }
+    }
+    
+    if (field_0x608 != 0) {
+        field_0x608--;
+        s8 temp4 = 0;
+        daPy_py_c* player = daPy_getPlayerActorClass();
+        
+        cXyz offset;
+        offset.x = 0.0f;
+        offset.y = g_regHIO.mChild->mFloatRegs[8] + 45.0f;
+        offset.z = g_regHIO.mChild->mFloatRegs[9] + 30.0f;
+        mDoMtx_YrotS(*calc_mtx, player->shape_angle.y);
+        cXyz offsetOut;
+        MtxPosition(&offset, &offsetOut);
+        current.pos = player->current.pos + offsetOut;
+        
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, 0);
+        mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+        
+        if (mpSparkleEmitter) {
+            if (field_0x608) {
+                f32 scale = field_0x608*2.0f;
+                if (scale > 7.0f) {
+                    scale = 7.0f;
+                }
+                mpSparkleEmitter->setGlobalTranslation(current.pos.x, current.pos.y, current.pos.z);
+                JGeometry::TVec3<f32> scaleVec;
+                scaleVec.x = scale;
+                scaleVec.y = scale;
+                scaleVec.z = scale;
+                mpSparkleEmitter->setGlobalParticleScale(scaleVec);
+            } else {
+                mpSparkleEmitter->becomeInvalidEmitter();
+                mpSparkleEmitter = NULL;
+                temp4 = 1;
+            }
+        }
+        if (temp4 == 0) {
+            return TRUE;
+        }
+    }
+    
+    if (field_0x602 == m_count) {
+        field_0x600 = true;
+    }
+    
+    if (mBtkFrame > 0.0f) {
+        mBtkFrame += 1.0f;
+        if (mBtkFrame >= mpBtk->getFrameMax()) {
+            mBtkFrame = 0.0f;
+        }
+    } else {
+        if (cM_rnd() < 0.02f) {
+            mBtkFrame += 1.0f;
+        }
+    }
+    
+    setLightEffect();
+    
+    if (mCurrProcFunc) {
+        (this->*mCurrProcFunc)();
+    }
+    
+    mAttentionInfo.mPosition = current.pos;
+    mEyePos = current.pos;
+    setRoomInfo();
+    
+    return TRUE;
 }
 
 /* 800D7820-800D7960       .text _draw__9daArrow_cFv */
@@ -745,3 +1304,6 @@ extern actor_process_profile_definition g_profile_ARROW = {
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };
+
+// Needed for the .data section to match.
+static u8 dummy3[0x3C] = {};

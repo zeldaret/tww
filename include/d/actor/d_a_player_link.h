@@ -490,7 +490,7 @@ public:
     void setDamageEmitter();
     void endFlameDamageEmitter();
     void endDamageEmitter();
-    void setItemWaterEffect(fopAc_ac_c*, int, int);
+    static u32 setItemWaterEffect(fopAc_ac_c*, int, int);
     void getDemoLookActor();
     void setTinkleCeiverModel();
     void setTalismanModel();
@@ -1010,7 +1010,7 @@ public:
     virtual void getGroundY();
     virtual void getTactMusic() const;
     virtual void getTactTimerCancel() const;
-    virtual void checkPlayerGuard() const;
+    virtual BOOL checkPlayerGuard() const;
     virtual void getGrabMissActor();
     virtual u32 checkPlayerFly() const;
     virtual void checkFrontRoll() const;

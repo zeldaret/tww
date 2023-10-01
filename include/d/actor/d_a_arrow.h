@@ -33,9 +33,9 @@ public:
     void arrowShooting();
     void arrowUseMp();
     void ShieldReflect();
-    void check_water_in();
+    bool check_water_in();
     BOOL changeArrowMp();
-    void changeArrowType();
+    daArrow_c* changeArrowType();
     void changeArrowTypeNotReady();
     void setRoomInfo();
     void setKeepMatrix();
@@ -79,7 +79,7 @@ public:
     /* 0x360 */ dCcD_Stts mStts;
     /* 0x39C */ dCcD_Cps mCps;
     /* 0x4D4 */ dCcD_Sph mSph;
-    /* 0x600 */ u8 field_0x600[0x601 - 0x600];
+    /* 0x600 */ bool field_0x600;
     /* 0x601 */ u8 mArrowType;
     /* 0x602 */ s16 field_0x602;
     /* 0x604 */ s16 field_0x604;
@@ -111,7 +111,7 @@ public:
     /* 0x6A0 */ s32 field_0x6a0;
     /* 0x6A4 */ s32 mInWaterTimer;
     /* 0x6A8 */ cXyz field_0x6a8;
-    /* 0x6B4 */ u8 field_0x6B4[0x6E4 - 0x6B4];
+    /* 0x6B4 */ Mtx field_0x6b4;
     /* 0x6E4 */ u8 field_0x6e4;
     /* 0x6E5 */ u8 field_0x6E5[0x6E6 - 0x6E5];
     /* 0x6E6 */ csXyz field_0x6e6;
