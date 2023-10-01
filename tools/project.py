@@ -96,6 +96,7 @@ class Object:
         self.options = {
             "add_to_all": True,
             "cflags": None,
+            "extra_cflags": None,
             "mw_version": None,
             "shiftjis": True,
             "source": name,
@@ -493,6 +494,12 @@ def generate_build_ninja(config, build_config):
         host_source_inputs = []
         source_added = set()
 
+        def make_cflags_str(cflags):
+            if isinstance(cflags, list):
+                return " ".join(cflags)
+            else:
+                return cflags
+
         def add_unit(build_obj, link_step):
             obj_path, obj_name = build_obj["object"], build_obj["name"]
             result = config.find_object(obj_name)
@@ -516,11 +523,10 @@ def generate_build_ninja(config, build_config):
                 return
 
             mw_version = options["mw_version"] or lib["mw_version"]
-            cflags = options["cflags"] or lib["cflags"]
-            if type(cflags) is list:
-                cflags_str = " ".join(cflags)
-            else:
-                cflags_str = str(cflags)
+            cflags_str = make_cflags_str(options["cflags"] or lib["cflags"])
+            if options["extra_cflags"] is not None:
+                extra_cflags_str = make_cflags_str(options["extra_cflags"])
+                cflags_str += " " + extra_cflags_str
             used_compiler_versions.add(mw_version)
 
             base_object = Path(obj.name).with_suffix("")
