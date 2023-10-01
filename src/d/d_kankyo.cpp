@@ -530,10 +530,8 @@ void dScnKy_env_light_c::setDaytime() {
 }
 
 /* 80190A18-80190A20       .text GetTimePass__20dStage_roomControl_cFv */
-// NONMATCHING
-// making this return s8 matches this, but places where it's used want it to be s32?
 s32 dStage_roomControl_c::GetTimePass() {
-    return m_time_pass;
+    return (u8)m_time_pass;
 }
 
 /* 80190A20-80190ACC       .text SetSchbit__18dScnKy_env_light_cFv */
@@ -1566,7 +1564,7 @@ void setLightTevColorType_sub(J3DMaterial* i_material, dKy_tevstr_c* i_tevstr) {
         J3DColorChan* colorchan_p = i_material->getColorBlock()->getColorChan(0);
         colorchan_p->setLightMask(1);
         int var_r28;
-        int prev_a = i_material->getTevColor(3)->a;
+        int prev_a = i_material->getTevColor(3)->mColor.a;
 
         var_r28 = 0xFF;
         if (prev_a > 0 && i_material->getTevBlock()->getTevKColorSel(prev_a - 1) == 13) {
@@ -1595,33 +1593,33 @@ void setLightTevColorType_sub(J3DMaterial* i_material, dKy_tevstr_c* i_tevstr) {
     i_material->getColorBlock()->setLight(0, &i_tevstr->mLightObj);
 
     if (toon_proc_check() && i_tevstr->mLightMode != 0) {
-        GXColor* kcol_p = i_material->getTevKColor(0);
+        GXColor* kcol_p = &i_material->getTevKColor(0)->mColor;
         if (kcol_p != NULL) {
             J3DGXColor kcol;
-            kcol.a = kcol_p->a;
-            kcol.r = i_tevstr->mColorC0.r;
-            kcol.g = i_tevstr->mColorC0.g;
-            kcol.b = i_tevstr->mColorC0.b;
+            kcol.mColor.a = kcol_p->a;
+            kcol.mColor.r = i_tevstr->mColorC0.r;
+            kcol.mColor.g = i_tevstr->mColorC0.g;
+            kcol.mColor.b = i_tevstr->mColorC0.b;
             i_material->setTevKColor(0, &kcol);
         }
 
-        GXColorS10* col_p = i_material->getTevColor(0);
+        GXColorS10* col_p = &i_material->getTevColor(0)->mColor;
         if (col_p != NULL) {
             J3DGXColorS10 col;
-            col.a = col_p->a;
-            col.r = i_tevstr->mColorK0.r;
-            col.g = i_tevstr->mColorK0.g;
-            col.b = i_tevstr->mColorK0.b;
+            col.mColor.a = col_p->a;
+            col.mColor.r = i_tevstr->mColorK0.r;
+            col.mColor.g = i_tevstr->mColorK0.g;
+            col.mColor.b = i_tevstr->mColorK0.b;
             i_material->setTevColor(0, &col);
         }
     } else {
-        GXColorS10* col_p = i_material->getTevColor(0);
+        GXColorS10* col_p = &i_material->getTevColor(0)->mColor;
         if (col_p != NULL) {
             i_tevstr->mColorC0.a = col_p->a;
             i_material->setTevColor(0, (J3DGXColorS10*)&i_tevstr->mColorC0);
         }
 
-        GXColor* kcol_p = i_material->getTevKColor(0);
+        GXColor* kcol_p = &i_material->getTevKColor(0)->mColor;
         if (kcol_p != NULL) {
             i_tevstr->mColorK0.a = kcol_p->a;
             i_material->setTevKColor(0, (J3DGXColor*)&i_tevstr->mColorK0);
