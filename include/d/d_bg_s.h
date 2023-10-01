@@ -52,7 +52,10 @@ public:
 public:
     cBgS() {}
 
-    bool GetTriPla(cBgS_PolyInfo&) const;
+    cM3dGPla* GetTriPla(cBgS_PolyInfo&) const;
+    cM3dGPla* i_GetTriPla(cBgS_PolyInfo& polyInfo) const {
+        return GetTriPla(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex());
+    }
     bool Regist(cBgW*, u32, void*);
     int Release(cBgW*);
     bool LineCross(cBgS_LinChk*);
@@ -101,8 +104,8 @@ public:
     void GetLinkNo(cBgS_PolyInfo&);
     int GetWallCode(cBgS_PolyInfo&);
     int GetSpecialCode(cBgS_PolyInfo&);
-    void GetAttributeCodeDirect(cBgS_PolyInfo&);
-    void GetAttributeCode(cBgS_PolyInfo&);
+    s32 GetAttributeCodeDirect(cBgS_PolyInfo&);
+    s32 GetAttributeCode(cBgS_PolyInfo&);
     void GetGroundCode(cBgS_PolyInfo&);
     void GetPolyId2(int, int, int, u32, u32);
     int GetCamMoveBG(cBgS_PolyInfo&);

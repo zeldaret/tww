@@ -100,7 +100,7 @@ public:
     virtual void getGroundY() = 0;
     virtual void getTactMusic() const;
     virtual void getTactTimerCancel() const;
-    virtual void checkPlayerGuard() const;
+    virtual BOOL checkPlayerGuard() const;
     virtual void getGrabMissActor();
     virtual u32 checkPlayerFly() const;
     virtual void checkFrontRoll() const;

@@ -73,6 +73,12 @@ public:
     void setGlobalRTMatrix(MtxP mtx) {
         JPASetRMtxTVecfromMtx(mtx, mGlobalRotation, mGlobalTranslation);
     }
+    void setGlobalTranslation(f32 x, f32 y, f32 z) { mGlobalTranslation.set(x, y, z); }
+    void setGlobalParticleScale(const JGeometry::TVec3<float>& scale) {
+        mGlobalScale.set(scale);
+        mGlobalScale2D.set(scale);
+    }
+    void setMaxFrame(s32 maxFrame) { mMaxFrame = maxFrame; }
 
     void stopCreateParticle() { setStatus(JPAEmtrStts_StopEmit); }
 

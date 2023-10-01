@@ -405,6 +405,7 @@ void dKy_Sound_init();
 void dKy_change_colpat(u8 param_0);
 u8 dKy_pship_existense_chk();
 void dKy_Itemgetcol_chg_move();
+void dKy_arrowcol_chg_on(cXyz*, int);
 void dKy_arrowcol_chg_move();
 void dKy_setLight_init();
 void GxXFog_set();

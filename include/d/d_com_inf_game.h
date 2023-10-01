@@ -193,9 +193,10 @@ public:
     s16 getItemMagicCount() { return mItemMagicCount; }
     void setItemMagicCount(s16 magic) { mItemMagicCount += magic; }
 
-    void setItemLifeCount(f32 num) {
-        mItemLifeCount += num;
-    }
+    void setItemLifeCount(f32 num) { mItemLifeCount += num; }
+    
+    s16 getItemArrowNumCount() { return mItemArrowNumCount; }
+    void setItemArrowNumCount(s16 num) { mItemArrowNumCount += num; }
 
     u8 checkMesgCancelButton() { return field_0x4949; }
 
@@ -1147,6 +1148,14 @@ inline s16 dComIfGp_getItemMagicCount() {
 
 inline void dComIfGp_setItemMagicCount(s16 magic) {
     g_dComIfG_gameInfo.play.setItemMagicCount(magic);
+}
+
+inline s16 dComIfGp_getItemArrowNumCount() {
+    return g_dComIfG_gameInfo.play.getItemArrowNumCount();
+}
+
+inline void dComIfGp_getItemArrowNumCount(s16 num) {
+    return g_dComIfG_gameInfo.play.setItemArrowNumCount(num);
 }
 
 inline u8 dComIfGp_checkMesgCancelButton() {

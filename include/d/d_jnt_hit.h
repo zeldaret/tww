@@ -15,6 +15,13 @@ public:
 
 class JntHit_c {
 public:
+    void CreateInit();
+    void CylHitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*, cXyz, cXyz, float);
+    void Cyl2HitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*, cXyz, cXyz, float);
+    void SphHitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*, cXyz, float);
+    void HitBufferUpdate(int*, cXyz*, int, csXyz*, cXyz*);
+    s32 searchJntHitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*);
+    
     J3DModel* getModel() { return mpModel; }
     
     /* 0x00 */ __jnt_hit_data_c* mpHitData;

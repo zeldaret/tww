@@ -198,11 +198,11 @@ cflags_rel = [
 
 
 # Helper function for single-object RELs
-def Rel(status, rel_name, cpp_name):
+def Rel(status, rel_name, cpp_name, extra_cflags=[]):
     return {
         "lib": rel_name,
         "mw_version": "GC/1.3.2",
-        "cflags": cflags_rel,
+        "cflags": cflags_rel + extra_cflags,
         "host": True,
         "objects": [
             Object(status, cpp_name),
@@ -211,8 +211,8 @@ def Rel(status, rel_name, cpp_name):
 
 
 # Helper function for actor RELs
-def ActorRel(status, rel_name):
-    return Rel(status, rel_name, f"d/actor/{rel_name}.cpp")
+def ActorRel(status, rel_name, extra_cflags=[]):
+    return Rel(status, rel_name, f"d/actor/{rel_name}.cpp", extra_cflags=extra_cflags)
 
 
 # Helper function for JSystem libraries
@@ -414,7 +414,7 @@ config.libs = [
             Object(NonMatching, "d/d_snap.cpp"),
             Object(Matching,    "d/d_point_wind.cpp"),
             Object(NonMatching, "d/actor/d_a_agb.cpp"),
-            Object(NonMatching, "d/actor/d_a_arrow.cpp"),
+            Object(Matching,    "d/actor/d_a_arrow.cpp", cflags=[*cflags_framework, "-sym off"]),
             Object(NonMatching, "d/actor/d_a_bg.cpp"),
             Object(NonMatching, "d/actor/d_a_bomb.cpp"),
             Object(NonMatching, "d/actor/d_a_bomb2.cpp"),
@@ -429,7 +429,7 @@ config.libs = [
             Object(NonMatching, "d/actor/d_a_ib.cpp"),
             Object(NonMatching, "d/actor/d_a_item.cpp"),
             Object(Matching,    "d/actor/d_a_itembase.cpp"),
-            Object(NonMatching, "d/actor/d_a_nh.cpp"),
+            Object(Matching,    "d/actor/d_a_nh.cpp"),
             Object(NonMatching, "d/actor/d_a_npc_fa1.cpp"),
             Object(NonMatching, "d/actor/d_a_obj_search.cpp"),
             Object(NonMatching, "d/actor/d_a_player.cpp"),
@@ -1239,7 +1239,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_kytag03"),
     ActorRel(NonMatching, "d_a_kytag04"),
     ActorRel(NonMatching, "d_a_kytag05"),
-    ActorRel(NonMatching, "d_a_kytag06"),
+    ActorRel(Matching,    "d_a_kytag06"),
     ActorRel(NonMatching, "d_a_kytag07"),
     ActorRel(NonMatching, "d_a_lamp"),
     ActorRel(NonMatching, "d_a_lod_bg"),
@@ -1250,7 +1250,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_msw"),
     ActorRel(NonMatching, "d_a_mtoge"),
     ActorRel(NonMatching, "d_a_obj_AjavW"),
-    ActorRel(NonMatching, "d_a_obj_Ygush00"),
+    ActorRel(Matching,    "d_a_obj_Ygush00", extra_cflags=["-sym off"]),
     ActorRel(NonMatching, "d_a_obj_akabe"),
     ActorRel(NonMatching, "d_a_obj_barrel"),
     ActorRel(NonMatching, "d_a_obj_barrel2"),
@@ -1292,7 +1292,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_pirate_flag"),
     ActorRel(NonMatching, "d_a_race_item"),
     ActorRel(NonMatching, "d_a_rd"),
-    ActorRel(Matching, "d_a_rectangle"),
+    ActorRel(Matching,    "d_a_rectangle"),
     ActorRel(NonMatching, "d_a_salvage"),
     ActorRel(NonMatching, "d_a_sbox"),
     ActorRel(NonMatching, "d_a_sk"),
@@ -1602,7 +1602,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_tag_etc"),
     ActorRel(NonMatching, "d_a_tag_island"),
     ActorRel(NonMatching, "d_a_tag_kf1"),
-    ActorRel(NonMatching, "d_a_tag_ret"),
+    ActorRel(Matching,    "d_a_tag_ret", extra_cflags=["-sym off"]),
     ActorRel(NonMatching, "d_a_tag_volcano"),
     ActorRel(NonMatching, "d_a_title"),
     ActorRel(NonMatching, "d_a_tn"),

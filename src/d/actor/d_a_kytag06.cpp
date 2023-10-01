@@ -74,11 +74,11 @@ static int daKytag06_Create(fopAc_ac_c* i_this) {
 }
 
 static actor_method_class l_daKytag06_Method = {
-    (process_method_func)daKytag06_Execute,
-    (process_method_func)daKytag06_Draw,
-    (process_method_func)daKytag06_IsDelete,
-    (process_method_func)daKytag06_Delete,
     (process_method_func)daKytag06_Create,
+    (process_method_func)daKytag06_Delete,
+    (process_method_func)daKytag06_Execute,
+    (process_method_func)daKytag06_IsDelete,
+    (process_method_func)daKytag06_Draw,
 };
 
 extern actor_process_profile_definition g_profile_KYTAG06 = {

@@ -12,7 +12,7 @@ public:
         SetPolyPassChk(GetPolyPassChkInfo());
         SetGrpPassChk(GetGrpPassChkInfo());
     }
-    /* 80077D64 */ void Set(cXyz const* pi_start, cXyz const* pi_end, fopAc_ac_c const*);
+    /* 80077D64 */ void Set(cXyz* pi_start, cXyz* pi_end, fopAc_ac_c*);
 
     /* 80077CDC */ virtual ~dBgS_LinChk() {}
 
