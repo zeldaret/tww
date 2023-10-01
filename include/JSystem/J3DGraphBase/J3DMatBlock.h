@@ -7,12 +7,32 @@
 #include "JSystem/J3DGraphBase/J3DTexture.h"
 #include "dolphin/gx/GXEnum.h"
 
-struct J3DGXColorS10 : public GXColorS10 {
+struct J3DGXColorS10 {
     J3DGXColorS10() {}
+    J3DGXColorS10& operator=(const J3DGXColorS10& other) {
+        mColor = other.mColor;
+        return *this;
+    }
+    J3DGXColorS10& operator=(const GXColorS10& color) {
+        mColor = color;
+        return *this;
+    }
+
+    GXColorS10 mColor;
 };
 
-struct J3DGXColor : public GXColor {
+struct J3DGXColor {
     J3DGXColor() {}
+    J3DGXColor& operator=(const J3DGXColor& other) {
+        mColor = other.mColor;
+        return *this;
+    }
+    J3DGXColor& operator=(const GXColor& color) {
+        mColor = color;
+        return *this;
+    }
+
+    GXColor mColor;
 };
 
 class J3DTexGenBlock {
@@ -140,10 +160,10 @@ public:
     virtual J3DTevOrder* getTevOrder(u32);
     virtual void setTevColor(u32, J3DGXColorS10 const*);
     virtual void setTevColor(u32, J3DGXColorS10);
-    virtual _GXColorS10* getTevColor(u32);
+    virtual J3DGXColorS10* getTevColor(u32);
     virtual void setTevKColor(u32, J3DGXColor const*);
     virtual void setTevKColor(u32, J3DGXColor);
-    virtual _GXColor* getTevKColor(u32);
+    virtual J3DGXColor* getTevKColor(u32);
     virtual void setTevKColorSel(u32 i, const u8* pNum) {}
     virtual void setTevKColorSel(u32, u8);
     virtual u8 getTevKColorSel(u32);
@@ -213,10 +233,10 @@ public:
     virtual J3DIndTevStage* getIndTevStage(u32 i) { return &mIndTevStage[i]; }
     virtual void setTevColor(u32 i, const J3DGXColorS10* pColor) { mTevColor[i] = *pColor; }
     virtual void setTevColor(u32 i, J3DGXColorS10 color) { mTevColor[i] = color; }
-    virtual GXColorS10* getTevColor(u32 i) { return &mTevColor[i]; }
+    virtual J3DGXColorS10* getTevColor(u32 i) { return &mTevColor[i]; }
     virtual void setTevKColor(u32 i, const J3DGXColor* pColor) { mTevKColor[i] = *pColor; }
     virtual void setTevKColor(u32 i, J3DGXColor color) { mTevKColor[i] = color; }
-    virtual GXColor* getTevKColor(u32 i) { return &mTevKColor[i]; }
+    virtual J3DGXColor* getTevKColor(u32 i) { return &mTevKColor[i]; }
     virtual void setTevKColorSel(u32 i, const u8* pSel) { mTevKColorSel[i] = *pSel; }
     virtual void setTevKColorSel(u32 i, u8 sel) { mTevKColorSel[i] = sel; }
     virtual u8 getTevKColorSel(u32 i) { return mTevKColorSel[i]; }
@@ -231,8 +251,8 @@ private:
     /* 0x18 */ J3DTevOrder mTevOrder[8];
     /* 0x38 */ J3DTevStage mTevStage[8];
     /* 0x78 */ J3DIndTevStage mIndTevStage[8];
-    /* 0x98 */ GXColorS10 mTevColor[4];
-    /* 0xB8 */ GXColor mTevKColor[4];
+    /* 0x98 */ J3DGXColorS10 mTevColor[4];
+    /* 0xB8 */ J3DGXColor mTevKColor[4];
     /* 0xC8 */ u8 mTevKColorSel[8];
     /* 0xD0 */ u8 mTevStageNum;
     /* 0xD4 */ u32 mTevRegOffset;
@@ -270,10 +290,10 @@ public:
     virtual J3DTevOrder* getTevOrder(u32 i) { return &mTevOrder[i]; }
     virtual void setTevColor(u32 i, const J3DGXColorS10* pColor) { mTevColor[i] = *pColor; }
     virtual void setTevColor(u32 i, J3DGXColorS10 color) { mTevColor[i] = color; }
-    virtual GXColorS10* getTevColor(u32 i) { return &mTevColor[i]; }
+    virtual J3DGXColorS10* getTevColor(u32 i) { return &mTevColor[i]; }
     virtual void setTevKColor(u32 i, const J3DGXColor* pColor) { mTevKColor[i] = *pColor; }
     virtual void setTevKColor(u32 i, J3DGXColor color) { mTevKColor[i] = color; }
-    virtual GXColor* getTevKColor(u32 i) { return &mTevKColor[i]; }
+    virtual J3DGXColor* getTevKColor(u32 i) { return &mTevKColor[i]; }
     virtual void setTevKColorSel(u32 i, const u8* pNum) { mTevKColorSel[i] = *pNum; }
     virtual void setTevKColorSel(u32 i, u8 num) { mTevKColorSel[i] = num; }
     virtual u8 getTevKColorSel(u32 i) { return mTevKColorSel[i]; }
@@ -286,10 +306,8 @@ public:
     virtual void setTevStage(u32 i, const J3DTevStage* pStage) { mTevStage[i] = *pStage; }
     virtual void setTevStage(u32 i, J3DTevStage stage) { mTevStage[i] = stage; }
     virtual J3DTevStage* getTevStage(u32 i) { return &mTevStage[i]; }
-    virtual void setTevSwapModeInfo(u32 i, const J3DTevSwapModeInfo*) { /* Nonmatching */
-    }
-    virtual void setTevSwapModeInfo(u32 i, J3DTevSwapModeInfo) { /* Nonmatching */
-    }
+    virtual void setTevSwapModeInfo(u32 i, const J3DTevSwapModeInfo* pInfo) { mTevStage[i].setTevSwapModeInfo(*pInfo); }
+    virtual void setTevSwapModeInfo(u32 i, J3DTevSwapModeInfo info) { mTevStage[i].setTevSwapModeInfo(info); }
     virtual void setTevSwapModeTable(u32 i, const J3DTevSwapModeTable* pTable) {
         mTevSwapModeTable[i] = *pTable;
     }
@@ -310,8 +328,8 @@ private:
     /* 0x10 */ J3DTevOrder mTevOrder[4];
     /* 0x20 */ u8 mTevStageNum;
     /* 0x21 */ J3DTevStage mTevStage[4];
-    /* 0x42 */ GXColorS10 mTevColor[4];
-    /* 0x62 */ GXColor mTevKColor[4];
+    /* 0x42 */ J3DGXColorS10 mTevColor[4];
+    /* 0x62 */ J3DGXColor mTevKColor[4];
     /* 0x72 */ u8 mTevKColorSel[4];
     /* 0x76 */ u8 mTevKAlphaSel[4];
     /* 0x7A */ J3DTevSwapModeTable mTevSwapModeTable[4];
@@ -347,10 +365,10 @@ public:
     virtual J3DTevOrder* getTevOrder(u32 i) { return &mTevOrder[i]; }
     virtual void setTevColor(u32 i, const J3DGXColorS10* pColor) { mTevColor[i] = *pColor; }
     virtual void setTevColor(u32 i, J3DGXColorS10 color) { mTevColor[i] = color; }
-    virtual GXColorS10* getTevColor(u32 i) { return &mTevColor[i]; }
+    virtual J3DGXColorS10* getTevColor(u32 i) { return &mTevColor[i]; }
     virtual void setTevKColor(u32 i, const J3DGXColor* pColor) { mTevKColor[i] = *pColor; }
     virtual void setTevKColor(u32 i, J3DGXColor color) { mTevKColor[i] = color; }
-    virtual GXColor* getTevKColor(u32 i) { return &mTevKColor[i]; }
+    virtual J3DGXColor* getTevKColor(u32 i) { return &mTevKColor[i]; }
     virtual void setTevKColorSel(u32 i, const u8* pNum) { mTevKColorSel[i] = *pNum; }
     virtual void setTevKColorSel(u32 i, u8 num) { mTevKColorSel[i] = num; }
     virtual u8 getTevKColorSel(u32 i) { return mTevKColorSel[i]; }
@@ -363,10 +381,8 @@ public:
     virtual void setTevStage(u32 i, const J3DTevStage* pStage) { mTevStage[i] = *pStage; }
     virtual void setTevStage(u32 i, J3DTevStage stage) { mTevStage[i] = stage; }
     virtual J3DTevStage* getTevStage(u32 i) { return &mTevStage[i]; }
-    virtual void setTevSwapModeInfo(u32 i, const J3DTevSwapModeInfo*) { /* Nonmatching */
-    }
-    virtual void setTevSwapModeInfo(u32 i, J3DTevSwapModeInfo) { /* Nonmatching */
-    }
+    virtual void setTevSwapModeInfo(u32 i, const J3DTevSwapModeInfo* pInfo) { mTevStage[i].setTevSwapModeInfo(*pInfo); }
+    virtual void setTevSwapModeInfo(u32 i, J3DTevSwapModeInfo info) { mTevStage[i].setTevSwapModeInfo(info); }
     virtual void setTevSwapModeTable(u32 i, const J3DTevSwapModeTable* pTable) {
         mTevSwapModeTable[i] = *pTable;
     }
@@ -385,10 +401,10 @@ public:
 private:
     /* 0x08 */ u16 mTexNo[2];
     /* 0x0C */ J3DTevOrder mTevOrder[2];
-    /* 0x14 */ GXColorS10 mTevColor[4];
+    /* 0x14 */ J3DGXColorS10 mTevColor[4];
     /* 0x34 */ u8 mTevStageNum;
     /* 0x35 */ J3DTevStage mTevStage[2];
-    /* 0x45 */ GXColor mTevKColor[4];
+    /* 0x45 */ J3DGXColor mTevKColor[4];
     /* 0x55 */ u8 mTevKColorSel[2];
     /* 0x57 */ u8 mTevKAlphaSel[2];
     /* 0x59 */ J3DTevSwapModeTable mTevSwapModeTable[4];
@@ -424,10 +440,10 @@ public:
     virtual J3DTevOrder* getTevOrder(u32 i) { return &mTevOrder[i]; }
     virtual void setTevColor(u32 i, const J3DGXColorS10* pColor) { mTevColor[i] = *pColor; }
     virtual void setTevColor(u32 i, J3DGXColorS10 color) { mTevColor[i] = color; }
-    virtual GXColorS10* getTevColor(u32 i) { return &mTevColor[i]; }
+    virtual J3DGXColorS10* getTevColor(u32 i) { return &mTevColor[i]; }
     virtual void setTevKColor(u32 i, const J3DGXColor* pColor) { mTevKColor[i] = *pColor; }
     virtual void setTevKColor(u32 i, J3DGXColor color) { mTevKColor[i] = color; }
-    virtual GXColor* getTevKColor(u32 i) { return &mTevKColor[i]; }
+    virtual J3DGXColor* getTevKColor(u32 i) { return &mTevKColor[i]; }
     virtual void setTevKColorSel(u32 i, const u8* pNum) { mTevKColorSel[i] = *pNum; }
     virtual void setTevKColorSel(u32 i, u8 num) { mTevKColorSel[i] = num; }
     virtual u8 getTevKColorSel(u32 i) { return mTevKColorSel[i]; }
@@ -440,15 +456,8 @@ public:
     virtual void setTevStage(u32 i, const J3DTevStage* pStage) { mTevStage[i] = *pStage; }
     virtual void setTevStage(u32 i, J3DTevStage stage) { mTevStage[i] = stage; }
     virtual J3DTevStage* getTevStage(u32 i) { return &mTevStage[i]; }
-    virtual void setTevSwapModeInfo(u32 i, const J3DTevSwapModeInfo* pInfo) {
-        J3DTevStageTevSwapModeInfo& out = mTevStage[i].mTevSwapModeInfo;
-        out.field_0x0_29 = pInfo->field_0x0 + 1;
-        out.field_0x0_31 = pInfo->field_0x0;
-    }
-    virtual void setTevSwapModeInfo(u32 i, J3DTevSwapModeInfo info) {
-        mTevStage[i].mTevSwapModeInfo.field_0x0_29 = info.field_0x0 + 1;
-        mTevStage[i].mTevSwapModeInfo.field_0x0_31 = info.field_0x0;
-    }
+    virtual void setTevSwapModeInfo(u32 i, const J3DTevSwapModeInfo* pInfo) { mTevStage[i].setTevSwapModeInfo(*pInfo); }
+    virtual void setTevSwapModeInfo(u32 i, J3DTevSwapModeInfo info) { mTevStage[i].setTevSwapModeInfo(info); }
     virtual void setTevSwapModeTable(u32 i, const J3DTevSwapModeTable* pTable) {
         mTevSwapModeTable[i] = *pTable;
     }
@@ -469,8 +478,8 @@ public:
     /* 0x018 */ J3DTevOrder mTevOrder[16];
     /* 0x058 */ u8 mTevStageNum;
     /* 0x059 */ J3DTevStage mTevStage[16];
-    /* 0x0DA */ GXColorS10 mTevColor[4];
-    /* 0x0FA */ GXColor mTevKColor[4];
+    /* 0x0DA */ J3DGXColorS10 mTevColor[4];
+    /* 0x0FA */ J3DGXColor mTevKColor[4];
     /* 0x10A */ u8 mTevKColorSel[16];
     /* 0x11A */ u8 mTevKAlphaSel[16];
     /* 0x12A */ J3DTevSwapModeTable mTevSwapModeTable[4];
@@ -757,39 +766,28 @@ private:
     /* 0x0F */ u8 mDither;
 };  // Size: 0x10
 
-struct J3DIndTexCoordScale {
+struct J3DIndTexCoordScale : public J3DIndTexCoordScaleInfo {
     J3DIndTexCoordScale();
     ~J3DIndTexCoordScale() {}
 
     u8 getScaleS() { return mScaleS; }
     u8 getScaleT() { return mScaleT; }
-
-    /* 0x0 */ u8 mScaleS __attribute__((aligned(4)));
-    /* 0x1 */ u8 mScaleT;
 };
 
-struct J3DIndTexMtx {
+struct J3DIndTexMtx : public J3DIndTexMtxInfo {
     J3DIndTexMtx();
     ~J3DIndTexMtx() {}
 
     void load(u32 param_1) {
         J3DGDSetIndTexMtx(GXIndTexMtxID(param_1 + 1), mOffsetMtx, mScaleExp);
     }
-
-    /* 0x00 */ Mtx23 mOffsetMtx;
-    /* 0x18 */ u8 mScaleExp;
 };  // Size: 0x1C
 
-struct J3DIndTexOrder {
+struct J3DIndTexOrder : public J3DIndTexOrderInfo {
     J3DIndTexOrder();
 
     u8 getCoord() const { return mCoord; }
     u8 getMap() const { return mMap; }
-
-    /* 0x0 */ u8 mCoord;
-    /* 0x1 */ u8 mMap;
-    /* 0x2 */ u8 field_0x2;
-    /* 0x3 */ u8 field_0x3;
 };
 
 class J3DIndBlock {
@@ -897,10 +895,10 @@ public:
     virtual u32 getType() = 0;
     virtual void setMatColor(u32, J3DGXColor const*);
     virtual void setMatColor(u32, J3DGXColor);
-    virtual GXColor* getMatColor(u32);
+    virtual J3DGXColor* getMatColor(u32);
     virtual void setAmbColor(u32, J3DGXColor const*);
     virtual void setAmbColor(u32, J3DGXColor);
-    virtual GXColor* getAmbColor(u32);
+    virtual J3DGXColor* getAmbColor(u32);
     virtual void setColorChanNum(u8);
     virtual void setColorChanNum(u8 const*);
     virtual u8 getColorChanNum() const;
@@ -936,10 +934,10 @@ public:
     virtual u32 getType();
     virtual void setMatColor(u32, J3DGXColor const*);
     virtual void setMatColor(u32, J3DGXColor);
-    virtual GXColor* getMatColor(u32);
+    virtual J3DGXColor* getMatColor(u32);
     virtual void setAmbColor(u32, J3DGXColor const*);
     virtual void setAmbColor(u32, J3DGXColor);
-    virtual GXColor* getAmbColor(u32);
+    virtual J3DGXColor* getAmbColor(u32);
     virtual void setColorChanNum(u8);
     virtual void setColorChanNum(u8 const*);
     virtual u8 getColorChanNum() const;
@@ -958,8 +956,8 @@ public:
     virtual ~J3DColorBlockLightOn() {}
 
 private:
-    /* 0x04 */ GXColor mMatColor[2];
-    /* 0x0C */ GXColor mAmbColor[2];
+    /* 0x04 */ J3DGXColor mMatColor[2];
+    /* 0x0C */ J3DGXColor mAmbColor[2];
     /* 0x14 */ u8 mColorChanNum;
     /* 0x16 */ J3DColorChan mColorChan[4];
     /* 0x20 */ J3DLightObj* mLight[8];
@@ -985,7 +983,7 @@ public:
     virtual u32 getType();
     virtual void setMatColor(u32, J3DGXColor const*);
     virtual void setMatColor(u32, J3DGXColor);
-    virtual GXColor* getMatColor(u32);
+    virtual J3DGXColor* getMatColor(u32);
     virtual void setColorChanNum(u8);
     virtual void setColorChanNum(u8 const*);
     virtual u8 getColorChanNum() const;
@@ -1002,7 +1000,7 @@ public:
     virtual ~J3DColorBlockLightOff() {}
 
 protected:
-    /* 0x04 */ GXColor mMatColor[2];
+    /* 0x04 */ J3DGXColor mMatColor[2];
     /* 0x0C */ u8 mColorChanNum;
     /* 0x0E */ J3DColorChan mColorChan[4];
     /* 0x16 */ u8 mCullMode;
@@ -1023,11 +1021,11 @@ public:
     virtual u32 getType();
     virtual void setAmbColor(u32, J3DGXColor const*);
     virtual void setAmbColor(u32, J3DGXColor);
-    virtual GXColor* getAmbColor(u32);
+    virtual J3DGXColor* getAmbColor(u32);
     virtual ~J3DColorBlockAmbientOn() {}
 
 protected:
-    /* 0x20 */ GXColor mAmbColor[2];
+    /* 0x20 */ J3DGXColor mAmbColor[2];
 };  // Size: 0x28
 
 extern int SizeOfJ3DColorBlockAmbientOnLoad;
