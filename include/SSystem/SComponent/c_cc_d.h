@@ -78,6 +78,10 @@ public:
 
 STATIC_ASSERT(0x20 == sizeof(cCcD_ShapeAttr));
 
+struct cCcD_SrcCylAttr {
+    cM3dGCylS mCyl;
+};
+
 struct cCcD_SrcTriAttr {
     cM3dGTriS mTri;
 };
@@ -156,6 +160,10 @@ class cCcD_SphAttr : public cCcD_ShapeAttr, public cM3dGSph {
 public:
     cCcD_SphAttr() {}
 
+    inline void Set(const cCcD_SrcSphAttr& src) {
+        cM3dGSph::Set(src.mSph);
+    }
+
     virtual ~cCcD_SphAttr() {}
     virtual const cXyz& GetCoCP() const { return mCenter; }
     virtual cXyz& GetCoCP() { return mCenter; }
@@ -187,6 +195,10 @@ STATIC_ASSERT(0x34 == sizeof(cCcD_SphAttr));
 class cCcD_CylAttr : public cCcD_ShapeAttr, public cM3dGCyl {
 public:
     cCcD_CylAttr() {}
+    inline void Set(const cCcD_SrcCylAttr& src) {
+        cM3dGCyl::Set(src.mCyl);
+    }
+
     virtual ~cCcD_CylAttr() {}
     virtual const cXyz& GetCoCP() const { return mCenter; }
     virtual bool CrossAtTg(cCcD_SphAttr const&, cXyz*) const;
@@ -366,7 +378,7 @@ public:
     virtual ~cCcD_ObjAt() {}
     void SetHit(cCcD_Obj*);
     void Set(cCcD_SrcObjAt const&);
-    void ClrHit() { ClrObj(); }
+    void ClrHit() { ClrRPrm(1); ClrObj(); }
     int GetType() const { return mType; }
     u32 GetGrp() const { return MskSPrm(0x1E); }
     bool ChkSet() const { return MskSPrm(1); }
@@ -391,7 +403,7 @@ public:
     virtual ~cCcD_ObjTg() {}
     void Set(cCcD_SrcObjTg const&);
     void SetGrp(u32);
-    void ClrHit();
+    void ClrHit() { ClrRPrm(1); ClrObj(); }
     void SetHit(cCcD_Obj*);
     int GetType() const { return mType; }
     void SetType(u32 type) { mType = type; }
@@ -410,7 +422,7 @@ class cCcD_ObjCo : public cCcD_ObjCommonBase {
 public:
     virtual ~cCcD_ObjCo() {}
     void SetHit(cCcD_Obj*);
-    void ClrHit();
+    void ClrHit() { ClrRPrm(1); ClrObj(); }
     void SetIGrp(u32);
     void SetVsGrp(u32);
     u32 GetGrp() const { return MskSPrm(0x1E); }
@@ -505,7 +517,6 @@ public:
     virtual cCcD_GObjInf const* GetGObjInf() const { return NULL; }
     virtual cCcD_GObjInf* GetGObjInf() { return NULL; }
     virtual cCcD_ShapeAttr const* GetShapeAttr() const { return NULL; }
-    virtual cCcD_ShapeAttr* GetShapeAttr() { return NULL; }
     void ct();
     void Set(cCcD_SrcObj const&);
     fopAc_ac_c* GetAc();
@@ -528,7 +539,7 @@ STATIC_ASSERT(0x50 == sizeof(cCcD_Obj));
 class cCcD_GObjInf : public cCcD_Obj {
 public:
     cCcD_GObjInf() {}
-    virtual ~cCcD_GObjInf() {}
+    virtual ~cCcD_GObjInf();
     virtual void ClrAtHit() { mObjAt.ClrHit(); }
     virtual void ClrTgHit() { mObjTg.ClrHit(); }
     virtual void ClrCoHit() { mObjCo.ClrHit(); }

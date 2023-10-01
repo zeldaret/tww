@@ -25,6 +25,11 @@ public:
     void SetC(const cXyz& pos);
     void SetH(f32 h);
     void SetR(f32 r);
+    inline void Set(const cM3dGCylS & src) {
+        SetC(src.mCenter);
+        SetR(src.mRadius);
+        SetH(src.mHeight);
+    }
     bool cross(const cM3dGSph*, cXyz*) const;
     bool cross(const cM3dGCyl*, cXyz*) const;
     bool cross(const cM3dGSph*, f32*) const;
