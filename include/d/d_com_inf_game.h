@@ -514,6 +514,18 @@ inline void dComIfGs_onEventBit(u16 id) {
     g_dComIfG_gameInfo.save.getEvent().onEventBit(id);
 }
 
+inline void dComIfGs_offEventBit(u16 id) {
+    g_dComIfG_gameInfo.save.getEvent().offEventBit(id);
+}
+
+inline void dComIfGs_onTmpBit(u16 id) {
+    g_dComIfG_gameInfo.save.getTmp().onEventBit(id);
+}
+
+inline void dComIfGs_offTmpBit(u16 id) {
+    g_dComIfG_gameInfo.save.getTmp().offEventBit(id);
+}
+
 inline void dComIfGs_setRestartRoomParam(u32 i_param) {
     g_dComIfG_gameInfo.save.getRestart().setRoomParam(i_param);
 }

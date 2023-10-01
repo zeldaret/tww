@@ -18,9 +18,11 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_printf.h"
 
+#include "src/d/d_kankyo_dayproc.inc"
+
 // stripped or compiler generated?
-static u32 unused_lit_2100[] = {0x3F800000, 0x3F800000, 0x3F800000,
-                                0x3F800000, 0x3F800000, 0x3F800000};
+static Vec unused_lit_2100[] = {1.0f, 1.0f, 1.0f};
+static Vec unused_lit_210c[] = {1.0f, 1.0f, 1.0f};
 
 struct dKy_setLight__Status {
     /* 0x00 */ Vec mPos;
@@ -2171,12 +2173,32 @@ void dKy_setLight() {
 
 /* 8019514C-80195270       .text dKy_setLight_again__Fv */
 void dKy_setLight_again() {
-    /* Nonmatching */
+    Mtx invView;
+    Vec tmp;
+    GXLightObj lightObj;
+
+    mDoMtx_inverseTranspose(j3dSys.getViewMtx(), invView);
+
+    MTXMultVec(j3dSys.getViewMtx(), &lightStatusData[0].mPos, &tmp);
+    GXInitLightPos(&lightObj, tmp.x, tmp.y, tmp.z);
+    MTXMultVec(invView, &lightStatusData[0].mLightDir, &tmp);
+    GXInitLightPos(&lightObj, tmp.x, tmp.y, tmp.z);
+    GXInitLightColor(&lightObj, lightStatusData[0].mColor);
+    if (lightStatusData[0].mAttnType == 0) {
+        GXInitLightAttn(&lightObj,
+            lightStatusData[0].mLightA[0], lightStatusData[0].mLightA[1], lightStatusData[0].mLightA[2],
+            lightStatusData[0].mLightK[0], lightStatusData[0].mLightK[1], lightStatusData[0].mLightK[2]);
+    } else {
+        GXInitLightDistAttn(&lightObj, lightStatusData[0].mRefDistance, lightStatusData[0].mRefBrightness, lightStatusData[0].mDistAttnFn);
+        GXInitLightSpot(&lightObj, lightStatusData[0].mSpotCutoff, lightStatusData[0].mSpotFn);
+    }
+
+    GXLoadLightObjImm(&lightObj, GXLightID(lightMaskData[0]));
 }
 
 /* 80195270-80195280       .text dKy_Get_DifCol__Fv */
-void dKy_Get_DifCol() {
-    /* Nonmatching */
+GXColorS10 * dKy_Get_DifCol() {
+    return &g_env_light.mActorK0;
 }
 
 /* 80195280-801952BC       .text dKy_light_influence_pos__Fi */
@@ -2464,33 +2486,66 @@ void dKy_Sound_set(cXyz, int, unsigned int, int) {
 }
 
 /* 801969A8-801969B8       .text dKy_Sound_get__Fv */
-void dKy_Sound_get() {
-    /* Nonmatching */
+SND_INFLUENCE * dKy_Sound_get() {
+    return &g_env_light.mSound;
 }
 
 /* 801969B8-80196A08       .text dKy_SordFlush_set__F4cXyzi */
-void dKy_SordFlush_set(cXyz, int) {
-    /* Nonmatching */
+void dKy_SordFlush_set(cXyz hitPos, int lightType) {
+    if (g_env_light.mEfLightProc.mSwordState == 0) {
+        g_env_light.mEfLightProc.mSwordState = 1;
+        g_env_light.mEfLightProc.mSwordLightType = lightType;
+        g_env_light.mEfLightProc.mSwordLight.mPos = hitPos;
+    } else if (g_env_light.mEfLightProc.mSwordState == 2) {
+        g_env_light.mEfLightProc.mSwordState = 4;
+    }
 }
 
 /* 80196A08-80196A34       .text dKy_FirstlightVec_get__FP4cXyz */
-void dKy_FirstlightVec_get(cXyz*) {
-    /* Nonmatching */
+cXyz dKy_FirstlightVec_get(cXyz *pDst) {
+    pDst->x = 0.0f;
+    pDst->y = 0.0f;
+    pDst->z = 0.0f;
+    return *pDst;
 }
 
 /* 80196A34-80196AE4       .text GxFogSet_Sub__FP8_GXColor */
-void GxFogSet_Sub(GXColor*) {
-    /* Nonmatching */
+void GxFogSet_Sub(GXColor* pFogColor) {
+    f32 near = 1.0f;
+    f32 far = 160000.0f;
+
+    GXColor fogColor;
+    fogColor.r = pFogColor->r;
+    fogColor.g = pFogColor->g;
+    fogColor.b = pFogColor->b;
+    fogColor.a = pFogColor->a;
+
+    if (g_dComIfG_gameInfo.drawlist.mpCamera != NULL) {
+        if (g_dComIfG_gameInfo.drawlist.mpCamera->mNear >= 0.0f && g_dComIfG_gameInfo.drawlist.mpCamera->mFar >= 0.0f && g_dComIfG_gameInfo.drawlist.mpCamera->mNear < g_dComIfG_gameInfo.drawlist.mpCamera->mFar) {
+            near = g_dComIfG_gameInfo.drawlist.mpCamera->mNear;
+            far = g_dComIfG_gameInfo.drawlist.mpCamera->mFar;
+        }
+    }
+
+    GXSetFog(GX_FOG_PERSP_LIN, g_env_light.mFogStartZ__setLight, g_env_light.mFogEndZ__setLight, near, far, fogColor);
 }
 
 /* 80196AE4-80196B28       .text GxFog_set__Fv */
 void GxFog_set() {
-    /* Nonmatching */
+    GXColor fogColor;
+    fogColor.r = g_env_light.mFogColor.r;
+    fogColor.g = g_env_light.mFogColor.g;
+    fogColor.b = g_env_light.mFogColor.b;
+    GxFogSet_Sub(&fogColor);
 }
 
 /* 80196B28-80196B6C       .text GxFog_sea_set__Fv */
 void GxFog_sea_set() {
-    /* Nonmatching */
+    GXColor fogColor;
+    fogColor.r = g_env_light.mVrUsoUmiColor.r;
+    fogColor.g = g_env_light.mVrUsoUmiColor.g;
+    fogColor.b = g_env_light.mVrUsoUmiColor.b;
+    GxFogSet_Sub(&fogColor);
 }
 
 /* 80196B6C-80196B90       .text dKy_GxFog_set__Fv */
@@ -2506,18 +2561,53 @@ void dKy_GxFog_sea_set() {
 }
 
 /* 80196BB4-80196C5C       .text dKy_GxFog_tevstr_set__FP12dKy_tevstr_c */
-void dKy_GxFog_tevstr_set(dKy_tevstr_c*) {
-    /* Nonmatching */
+void dKy_GxFog_tevstr_set(dKy_tevstr_c* pTevStr) {
+    f32 near = 1.0f;
+    f32 far = 160000.0f;
+
+    GXColor fogColor;
+    fogColor.r = pTevStr->mFogColor.r;
+    fogColor.g = pTevStr->mFogColor.g;
+    fogColor.b = pTevStr->mFogColor.b;
+
+    if (g_dComIfG_gameInfo.drawlist.mpCamera != NULL) {
+        if (g_dComIfG_gameInfo.drawlist.mpCamera->mNear >= 0.0f && g_dComIfG_gameInfo.drawlist.mpCamera->mFar >= 0.0f && g_dComIfG_gameInfo.drawlist.mpCamera->mNear < g_dComIfG_gameInfo.drawlist.mpCamera->mFar) {
+            near = g_dComIfG_gameInfo.drawlist.mpCamera->mNear;
+            far = g_dComIfG_gameInfo.drawlist.mpCamera->mFar;
+        }
+    }
+
+    GXSetFog(GX_FOG_PERSP_LIN, pTevStr->mFogStartZ, pTevStr->mFogEndZ, near, far, fogColor);
+    GxXFog_set();
 }
 
+extern void GFSetFog(GXFogType type, f32 startZ, f32 endZ, f32 nearZ, f32 farZ, GXColor color);
+
 /* 80196C5C-80196D04       .text dKy_GfFog_tevstr_set__FP12dKy_tevstr_c */
-void dKy_GfFog_tevstr_set(dKy_tevstr_c*) {
-    /* Nonmatching */
+void dKy_GfFog_tevstr_set(dKy_tevstr_c* pTevStr) {
+    f32 near = 1.0f;
+    f32 far = 160000.0f;
+
+    GXColor fogColor;
+    fogColor.r = pTevStr->mFogColor.r;
+    fogColor.g = pTevStr->mFogColor.g;
+    fogColor.b = pTevStr->mFogColor.b;
+
+    if (g_dComIfG_gameInfo.drawlist.mpCamera != NULL) {
+        if (g_dComIfG_gameInfo.drawlist.mpCamera->mNear >= 0.0f && g_dComIfG_gameInfo.drawlist.mpCamera->mFar >= 0.0f && g_dComIfG_gameInfo.drawlist.mpCamera->mNear < g_dComIfG_gameInfo.drawlist.mpCamera->mFar) {
+            near = g_dComIfG_gameInfo.drawlist.mpCamera->mNear;
+            far = g_dComIfG_gameInfo.drawlist.mpCamera->mFar;
+        }
+    }
+
+    GFSetFog(GX_FOG_PERSP_LIN, pTevStr->mFogStartZ, pTevStr->mFogEndZ, near, far, fogColor);
+    GxXFog_set();
 }
 
 /* 80196D04-80196D48       .text GxXFog_set__Fv */
 void GxXFog_set() {
-    /* Nonmatching */
+    dKyd_xfog_table_set(g_env_light.mFogAdjTableType);
+    GXSetFogRangeAdj(g_env_light.mFogAdjEnable, g_env_light.mFogAdjCenter, &g_env_light.mFogAdjTable);
 }
 
 /* 80196D48-80196D70       .text dKy_change_colset__FUcUcf */
@@ -2557,8 +2647,20 @@ void dKy_custom_timeset(f32 i_speed) {
 }
 
 /* 80196DEC-80196EB4       .text dKy_setLight_mine__FP12dKy_tevstr_c */
-void dKy_setLight_mine(dKy_tevstr_c*) {
-    /* Nonmatching */
+void dKy_setLight_mine(dKy_tevstr_c* pTevStr) {
+    GXLightObj lightObj;
+
+    if (!toon_proc_check())
+        GXInitLightPos(&lightObj, pTevStr->mLightObj.mInfo.mLightPosition.x, pTevStr->mLightObj.mInfo.mLightPosition.y, pTevStr->mLightObj.mInfo.mLightPosition.z);
+    else
+        GXInitLightPos(&lightObj, -pTevStr->mLightObj.mInfo.mLightPosition.x, -pTevStr->mLightObj.mInfo.mLightPosition.y, -pTevStr->mLightObj.mInfo.mLightPosition.z);
+
+    GXInitLightDir(&lightObj, pTevStr->mLightObj.mInfo.mLightDirection.x, pTevStr->mLightObj.mInfo.mLightDirection.y, pTevStr->mLightObj.mInfo.mLightDirection.z);
+    GXInitLightColor(&lightObj, pTevStr->mLightObj.mInfo.mColor);
+    GXInitLightAttn(&lightObj,
+        pTevStr->mLightObj.mInfo.mCosAtten.x, pTevStr->mLightObj.mInfo.mCosAtten.y, pTevStr->mLightObj.mInfo.mCosAtten.z,
+        pTevStr->mLightObj.mInfo.mDistAtten.x, pTevStr->mLightObj.mInfo.mDistAtten.y, pTevStr->mLightObj.mInfo.mDistAtten.z);
+    GXLoadLightObjImm(&lightObj, GXLightID(lightMaskData[0]));
 }
 
 /* 80196EB4-80196F78       .text dKy_tevstr_init__FP12dKy_tevstr_cScUc */
@@ -2625,8 +2727,44 @@ int dKy_get_schbit_timer() {
 }
 
 /* 80197018-80197144       .text dKy_get_seacolor__FP8_GXColorP8_GXColor */
-void dKy_get_seacolor(GXColor*, GXColor*) {
-    /* Nonmatching */
+void dKy_get_seacolor(GXColor* amb, GXColor* dif) {
+    s16 ambr = g_env_light.mBG1_C0.r + g_env_light.mBg1AddColAmb.r;
+    s16 ambg = g_env_light.mBG1_C0.g + g_env_light.mBg1AddColAmb.g;
+    s16 ambb = g_env_light.mBG1_C0.b + g_env_light.mBg1AddColAmb.b;
+    if (ambr < 0x00)
+        ambr = 0x00;
+    if (ambg < 0x00)
+        ambg = 0x00;
+    if (ambb < 0x00)
+        ambb = 0x00;
+    if (ambr > 0xFF)
+        ambr = 0xFF;
+    if (ambg > 0xFF)
+        ambg = 0xFF;
+    if (ambb > 0xFF)
+        ambb = 0xFF;
+    amb->r = ambr;
+    amb->g = ambg;
+    amb->b = ambb;
+
+    s16 difr = g_env_light.mBG1_K0.r + g_env_light.mBg1AddColDif.r;
+    s16 difg = g_env_light.mBG1_K0.g + g_env_light.mBg1AddColDif.g;
+    s16 difb = g_env_light.mBG1_K0.b + g_env_light.mBg1AddColDif.b;
+    if (difr < 0x00)
+        difr = 0x00;
+    if (difg < 0x00)
+        difg = 0x00;
+    if (difb < 0x00)
+        difb = 0x00;
+    if (difr > 0xFF)
+        difr = 0xFF;
+    if (difg > 0xFF)
+        difg = 0xFF;
+    if (difb > 0xFF)
+        difb = 0xFF;
+    dif->r = difr;
+    dif->g = difg;
+    dif->b = difb;
 }
 
 /* 80197144-80197154       .text dKy_set_allcol_ratio__Ff */
@@ -2696,7 +2834,7 @@ u8 dKy_contrast_flg_get() {
 
 /* 801972CC-801972EC       .text dKy_get_dayofweek__Fv */
 int dKy_get_dayofweek() {
-    return dComIfGs_getDate();
+    return dComIfGs_getDate() % 7;
 }
 
 /* 801972EC-801972FC       .text dKy_set_nexttime__Ff */
@@ -2743,7 +2881,7 @@ u32 dKy_moon_type_chk() {
 }
 
 /* 80197404-80197504       .text dKy_telescope_lookin_chk__FP4cXyzff */
-bool dKy_telescope_lookin_chk(cXyz*, f32, f32) {
+bool dKy_telescope_lookin_chk(cXyz* pPos, f32, f32) {
     /* Nonmatching */
 }
 
@@ -2776,12 +2914,22 @@ cXyz dKy_get_moon_pos() {
 
 /* 80197614-80197668       .text dKy_get_hokuto_pos__Fv */
 cXyz dKy_get_hokuto_pos() {
-    /* Nonmatching */
+    const Vec & eyePos = dComIfGp_getCamera(0)->mLookat.mEye;
+    cXyz pos;
+    pos.x = eyePos.x + 10300.0f;
+    pos.y = eyePos.y + 13400.0f;
+    pos.z = eyePos.z - 13525.0f;
+    return pos;
 }
 
 /* 80197668-801976BC       .text dKy_get_orion_pos__Fv */
 cXyz dKy_get_orion_pos() {
-    /* Nonmatching */
+    const Vec & eyePos = dComIfGp_getCamera(0)->mLookat.mEye;
+    cXyz pos;
+    pos.x = eyePos.x + -9400.0f;
+    pos.y = eyePos.y + 22500.0f;
+    pos.z = eyePos.z + 15900.0f;
+    return pos;
 }
 
 /* 801976BC-801976D0       .text dKy_pship_existense_set__Fv */

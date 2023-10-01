@@ -413,10 +413,4 @@ void dKy_set_vrboxkumocol_ratio(f32 ratio);
 cXyz dKy_get_orion_pos();
 cXyz dKy_get_hokuto_pos();
 
-/* 80197AB8-80197FE4       .text dKankyo_DayProc__Fv */
-// supposed to be generated after sinit...
-static void dKankyo_DayProc() {
-    /* Nonmatching */
-}
-
 #endif /* D_KANKYO_D_KANKYO_H */

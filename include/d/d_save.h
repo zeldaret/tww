@@ -656,6 +656,7 @@ public:
     dSv_ocean_c& getOcean() { return mSavedata.getOcean(); }
     dSv_event_c& getEvent() { return mSavedata.getEvent(); }
     dSv_restart_c& getRestart() { return mRestart; }
+    dSv_event_c& getTmp() { return mTmp; }
     dSv_turnRestart_c& getTurnRestart() { return mTurnRestart; }
     dSv_memory_c& getMemory() { return mMemory; }
     dSv_danBit_c& getDan() { return mDan; }
