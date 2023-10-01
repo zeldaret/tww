@@ -26,13 +26,12 @@ extern void loadTexNo(u32, const u16 &);
 extern void J3DGDSetTevColorS10(GXTevRegID, GXColorS10);
 extern void J3DGDSetTevKColor(GXTevKColorID, GXColor);
 
-static int SizeOfLoadMatColors = 13;
-static int SizeOfLoadAmbColors = 13;
-static int SizeOfLoadColorChans = 21;
+int SizeOfLoadMatColors = 13;
+int SizeOfLoadAmbColors = 13;
+int SizeOfLoadColorChans = 21;
 
-static int SizeOfJ3DColorBlockLightOffLoad = SizeOfLoadMatColors + SizeOfLoadColorChans;
-static int SizeOfJ3DColorBlockAmbientOnLoad =
-    SizeOfLoadMatColors + SizeOfLoadAmbColors + SizeOfLoadColorChans;
+int SizeOfJ3DColorBlockLightOffLoad = SizeOfLoadMatColors + SizeOfLoadColorChans;
+int SizeOfJ3DColorBlockAmbientOnLoad = SizeOfLoadMatColors + SizeOfLoadAmbColors + SizeOfLoadColorChans;
 
 inline void loadMatColors(const J3DGXColor* color) {
     J3DGDWriteXFCmdHdr(0x100C, 2);
@@ -2268,39 +2267,6 @@ J3DIndTexCoordScale * J3DIndBlockFull::getIndTexCoordScale(u32 i) {
 
 /* 802EBBA4-802EBC40       .text __dt__15J3DIndBlockFullFv */
 J3DIndBlockFull::~J3DIndBlockFull() {
-}
-
-/* 802EBC40-802EBC44       .text patchTexNo__11J3DTevBlockFv */
-void J3DTevBlock::patchTexNo() {
-}
-
-/* 802EBC44-802EBC48       .text patchTevReg__11J3DTevBlockFv */
-void J3DTevBlock::patchTevReg() {
-}
-
-/* 802EBC48-802EBC4C       .text setTexNo__11J3DTevBlockFUlPCUs */
-void J3DTevBlock::setTexNo(u32 i, const u16*) {
-}
-
-/* 802EBC4C-802EBC50       .text setTevOrder__11J3DTevBlockFUlPC11J3DTevOrder */
-void J3DTevBlock::setTevOrder(u32 i, const J3DTevOrder* pOrder) {
-}
-
-/* 802EBC50-802EBC54       .text setTevStageNum__11J3DTevBlockFPCUc */
-void J3DTevBlock::setTevStageNum(const u8* pNum) {
-}
-
-/* 802EBC54-802EBC58       .text setTevStage__11J3DTevBlockFUlPC11J3DTevStage */
-void J3DTevBlock::setTevStage(u32 i, const J3DTevStage* pStage) {
-}
-
-/* 802EBC58-802EBC5C       .text setIndTevStage__11J3DTevBlockFUlPC14J3DIndTevStage */
-void J3DTevBlock::setIndTevStage(u32 i, const J3DIndTevStage* pStage) {
-}
-
-/* 802EBC5C-802EBC64       .text getTexNoOffset__11J3DTevBlockCFv */
-u32 J3DTevBlock::getTexNoOffset() const {
-    return 0;
 }
 
 /* 802EBC64-802EBC70       .text getType__21J3DColorBlockLightOffFv */
