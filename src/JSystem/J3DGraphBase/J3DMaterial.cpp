@@ -270,7 +270,6 @@ void J3DMaterial::setCurrentMtx() {
 
 /* 802DEEA0-802DEFF0       .text calcCurrentMtx__11J3DMaterialFv */
 void J3DMaterial::calcCurrentMtx() {
-    /* Nonmatching */
     mCurrentMtx.setCurrentTexMtx(
         mTexGenBlock->getTexCoord(0)->getTexGenMtx(),
         mTexGenBlock->getTexCoord(1)->getTexGenMtx(),

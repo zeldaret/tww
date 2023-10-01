@@ -630,32 +630,32 @@ struct J3DAlphaComp {
 class J3DPEBlock {
 public:
     virtual void reset(J3DPEBlock*);
-    virtual void load() = 0;
-    virtual void patch() = 0;
-    virtual void diff(u32) = 0;
-    virtual void diffFog() = 0;
-    virtual void diffBlend() = 0;
-    virtual s32 countDLSize() = 0;
-    virtual u32 getType() = 0;
-    virtual void setFog(J3DFog*) = 0;
-    virtual J3DFog* getFog() = 0;
-    virtual void setAlphaComp(J3DAlphaComp const*) = 0;
-    virtual void setAlphaComp(J3DAlphaComp) = 0;
-    virtual J3DAlphaComp* getAlphaComp() = 0;
-    virtual void setBlend(J3DBlend const*) = 0;
-    virtual void setBlend(J3DBlend) = 0;
-    virtual J3DBlend* getBlend() = 0;
-    virtual void setZMode(J3DZMode const*) = 0;
-    virtual void setZMode(J3DZMode) = 0;
-    virtual J3DZMode* getZMode() = 0;
-    virtual void setZCompLoc(u8 const*) = 0;
-    virtual void setZCompLoc(u8) = 0;
-    virtual u8 getZCompLoc() const = 0;
-    virtual void setDither(u8 const*) = 0;
-    virtual void setDither(u8) = 0;
-    virtual u8 getDither() const = 0;
-    virtual u32 getFogOffset() const = 0;
-    virtual void setFogOffset(u32) = 0;
+    virtual void load();
+    virtual void patch();
+    virtual void diff(u32);
+    virtual void diffFog();
+    virtual void diffBlend();
+    virtual s32 countDLSize();
+    virtual u32 getType();
+    virtual void setFog(J3DFog*);
+    virtual J3DFog* getFog();
+    virtual void setAlphaComp(J3DAlphaComp const*);
+    virtual void setAlphaComp(J3DAlphaComp);
+    virtual J3DAlphaComp* getAlphaComp();
+    virtual void setBlend(J3DBlend const*);
+    virtual void setBlend(J3DBlend);
+    virtual J3DBlend* getBlend();
+    virtual void setZMode(J3DZMode const*);
+    virtual void setZMode(J3DZMode);
+    virtual J3DZMode* getZMode();
+    virtual void setZCompLoc(u8 const*);
+    virtual void setZCompLoc(u8);
+    virtual u8 getZCompLoc() const;
+    virtual void setDither(u8 const*);
+    virtual void setDither(u8);
+    virtual u8 getDither() const;
+    virtual u32 getFogOffset() const;
+    virtual void setFogOffset(u32);
     virtual ~J3DPEBlock() {}
 };
 

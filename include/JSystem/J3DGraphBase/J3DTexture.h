@@ -82,7 +82,7 @@ struct J3DTexCoord : public J3DTexCoordInfo {
 
     u8 getTexGenType() { return mTexGenType; }
     u8 getTexGenSrc() { return mTexGenSrc; }
-    u8 getTexGenMtx() { return mTexGenMtx & 0xff; }
+    u32 getTexGenMtx() { return mTexGenMtx & 0xFF; }
     void setTexGenMtx(u8 v) { mTexGenMtx = v; }
 };  // Size: 0x4
 
