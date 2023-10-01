@@ -6,25 +6,27 @@
 #include "SSystem/SComponent/c_m2d.h"
 #include "SSystem/SComponent/c_m3d.h"
 #include "SSystem/SComponent/c_m3d_g_cir.h"
+#include "JSystem/JUtility/JUTAssert.h"
 
 /* 80249DAC-8024A0E0       .text cM2d_CrossCirLin__FR8cM2dGCirffffPfPf */
-void cM2d_CrossCirLin(cM2dGCir& param_0, f32 param_1, f32 param_2, f32 param_3, f32 param_4,
-                          f32* param_5, f32* param_6) {
-    f32 fVar1 = param_1 - param_0.GetCx();
-    f32 fVar15 = param_2 - param_0.GetCy();
-    f32 dVar13 = param_3 * param_3 + param_4 * param_4;
-    f32 dVar14 = 2.0f * ((param_3 * fVar1) + (param_4 * fVar15));
-    f32 fVar3 = (fVar1 * fVar1 + fVar15 * fVar15) - (param_0.GetR() * param_0.GetR());
-    f32 in_f31;
+void cM2d_CrossCirLin(cM2dGCir& circle, f32 x0, f32 y0, f32 x1, f32 y1, f32* pDstX, f32* pDstY) {
+    f32 fVar1 = x0 - circle.GetCx();
+    f32 fVar15 = y0 - circle.GetCy();
+    f32 dVar13 = x1 * x1 + y1 * y1;
+    f32 dVar14 = 2.0f * ((x1 * fVar1) + (y1 * fVar15));
+    f32 c = (fVar1 * fVar1 + fVar15 * fVar15) - (circle.GetR() * circle.GetR());
+    f32 t;
+
+    JUT_ASSERT(0x47, c < 0.0f);
 
     if (cM3d_IsZero(dVar13)) {
         if (!cM3d_IsZero(dVar14)) {
-            in_f31 = -fVar3 / dVar14;
+            t = -c / dVar14;
         }
     } else {
-        f32 dVar10 = ((dVar14 * dVar14) - (4.0f * dVar13) * fVar3);
+        f32 dVar10 = ((dVar14 * dVar14) - (4.0f * dVar13) * c);
         if (cM3d_IsZero(dVar10)) {
-            in_f31 =(-dVar14 / (2.0f * dVar13));
+            t =(-dVar14 / (2.0f * dVar13));
         } else {
             if (dVar10 < 0.0f) {
             } else {
@@ -34,19 +36,20 @@ void cM2d_CrossCirLin(cM2dGCir& param_0, f32 param_1, f32 param_2, f32 param_3, 
                 f32 fVar16 = sqrtf(dVar10);
                 f32 fVar4 = fVar2 * (-dVar14 - fVar16);
                 if (fVar15 > fVar4) {
-                    in_f31 = fVar15;
+                    t = fVar15;
                 } else {
-                    in_f31 = fVar4;
+                    t = fVar4;
                 }
             }
         }
     }
 
-    if (cM3d_IsZero(in_f31)) {
-        *param_5 = param_1;
-        *param_6 = param_2;
+    if (cM3d_IsZero(t)) {
+        *pDstX = x0;
+        *pDstY = y0;
     } else {
-        *param_5 = param_1 + (in_f31 * param_3);
-        *param_6 = param_2 + (in_f31 * param_4);
+        JUT_ASSERT(0x89, t >= 0.0f);
+        *pDstX = x0 + (t * x1);
+        *pDstY = y0 + (t * y1);
     }
 }

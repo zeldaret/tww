@@ -517,6 +517,7 @@ public:
     virtual cCcD_GObjInf const* GetGObjInf() const { return NULL; }
     virtual cCcD_GObjInf* GetGObjInf() { return NULL; }
     virtual cCcD_ShapeAttr const* GetShapeAttr() const { return NULL; }
+    virtual cCcD_ShapeAttr* GetShapeAttr() { return NULL; }
     void ct();
     void Set(cCcD_SrcObj const&);
     fopAc_ac_c* GetAc();
