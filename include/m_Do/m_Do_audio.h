@@ -39,6 +39,10 @@ int mDoAud_load1stDynamicWave();
 
 extern JKRSolidHeap* g_mDoAud_audioHeap;
 
+inline void mDoAud_bgmStart(u32 param_0) {
+    mDoAud_zelAudio_c::getInterface()->bgmStart(param_0, 0, 0);
+}
+
 inline void mDoAud_bgmStop(u32 param_0) {
     mDoAud_zelAudio_c::getInterface()->bgmStop(param_0, 0);
 }

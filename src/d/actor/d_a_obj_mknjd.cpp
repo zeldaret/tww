@@ -9,12 +9,19 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
+#include "JAZelAudio/JAIZelBasic.h"
+#include "JAZelAudio/JAZelAudio_BGM.h"
+#include "JAZelAudio/JAZelAudio_SE.h"
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_movebg_actor.h"
+#include "d/d_bg_w.h"
 #include "d/d_item_data.h"
 #include "d/d_particle.h"
+#include "d/actor/d_a_player.h"
+#include "d/d_a_obj.h"
 #include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_mtx.h"
 #include "dolphin/types.h"
 
 
@@ -55,6 +62,8 @@ const char* daObjMknjD_EventName[] = {
     "MKNJD_K_LESSON",
 };
 
+static u16 joint_number_table[20];
+
 namespace daObjMknjD {
     class Act_c : public dBgS_MoveBgActor {
     public:
@@ -74,14 +83,15 @@ namespace daObjMknjD {
 
         void setGoal(int);
         void setPlayerAngle(int);
-        u32 talk(int);
+        u16 talk(int);
         void privateCut();
-        void daObjMknjD_break();
+        bool daObjMknjD_break();
 
         int Execute(float(**)[3][4]);
         int Draw();
 
         static const char M_arcname[];
+        static Mtx M_tmp_mtx;
 
         /* 0x02C8 */ cXyz mLeftHalfPos;
         /* 0x02D4 */ cXyz mRightHalfPos;
@@ -101,7 +111,7 @@ namespace daObjMknjD {
 
         /* 0x043C */ u8 mModel0Alpha;
         /* 0x043D */ bool m043D;
-        /* 0x043E */ u8 m043E;
+        /* 0x043E */ bool m043E;
         /* 0x043F */ u8 m043F;
 
         /* 0x0440 */ JPABaseEmitter* mEmitter0;
@@ -118,7 +128,7 @@ namespace daObjMknjD {
         /* 0x04E0 */ s16 mErrorEventIdx;
         /* 0x04E2 */ s16 mLessonEventIdx;
         
-        /* 0x04E4 */ u8 mActionIdx;
+        /* 0x04E4 */ s8 mActionIdx;
         /* 0x04E5 */ u8 mTactMode;
         /* 0x04E6 */ u8 mGiveItemId;
 
@@ -130,6 +140,13 @@ namespace daObjMknjD {
 
         /* 0x0500 */ s32 m0500;
         /* 0x0504 */ bool m0504;
+
+        enum Prm_e {
+            PRM_SWITCH_W = 0x08,
+            PRM_SWITCH_S = 0x00,
+        };
+
+        inline int prm_get_swSave() { return daObj::PrmAbstract<Prm_e>(this, PRM_SWITCH_W, PRM_SWITCH_S); }
     };
 
     const char Act_c::M_arcname[] = "MknjD";
@@ -139,18 +156,67 @@ namespace daObjMknjD {
 }
 
 /* 00000078-0000012C       .text nodeCallBackL__FP7J3DNodei */
-void nodeCallBackL(J3DNode*, int) {
-    /* Nonmatching */
+u32 nodeCallBackL(J3DNode* i_node, int i_param2) {
+    if (i_param2 == 0) {
+        int jntNo = i_node->getJntNo();
+        
+        J3DModel* mdl = j3dSys.getModel();
+        daObjMknjD::Act_c* actor = (daObjMknjD::Act_c*)mdl->getUserArea();
+
+        if (actor != NULL) {
+            mDoMtx_copy(mdl->getAnmMtx(jntNo), *calc_mtx);
+
+            MtxTrans(actor->mLeftHalfPos.x, actor->mLeftHalfPos.y, actor->mLeftHalfPos.z, 1);
+
+            mdl->setAnmMtx(jntNo, *calc_mtx);
+            mDoMtx_copy(*calc_mtx, j3dSys.mCurrentMtx);
+        }
+    }
+
+    return 1;
 }
 
 /* 0000012C-000001E0       .text nodeCallBackR__FP7J3DNodei */
-void nodeCallBackR(J3DNode*, int) {
-    /* Nonmatching */
+u32 nodeCallBackR(J3DNode* i_node, int i_param2) {
+    if (i_param2 == 0) {
+        int jntNo = i_node->getJntNo();
+
+        J3DModel* mdl = j3dSys.getModel();
+        daObjMknjD::Act_c* actor = (daObjMknjD::Act_c*)mdl->getUserArea();
+
+        if (actor != NULL) {
+            mDoMtx_copy(mdl->getAnmMtx(jntNo), *calc_mtx);
+
+            MtxTrans(actor->mRightHalfPos.x, actor->mRightHalfPos.y, actor->mRightHalfPos.z, 1);
+
+            mdl->setAnmMtx(jntNo, *calc_mtx);
+            mDoMtx_copy(*calc_mtx, j3dSys.mCurrentMtx);
+        }
+    }
+
+    return 1;
 }
 
 /* 000001E0-000002B0       .text nodeCallBack_Hahen__FP7J3DNodei */
-void nodeCallBack_Hahen(J3DNode*, int) {
-    /* Nonmatching */
+s32 nodeCallBack_Hahen(J3DNode* i_node, int i_param2) {
+    if (i_param2 == 0) {
+        int jntNo = i_node->getJntNo();
+        u16 shardIdx = joint_number_table[jntNo - 1];
+
+        J3DModel* mdl = j3dSys.getModel();
+        daObjMknjD::Act_c* actor = (daObjMknjD::Act_c*)mdl->getUserArea();
+
+        if (actor != NULL) {
+            mDoMtx_copy(mdl->getAnmMtx(jntNo), *calc_mtx);
+
+            MtxTrans(actor->mShardPositions[shardIdx].x, actor->mShardPositions[shardIdx].y, actor->mShardPositions[shardIdx].z, 1);
+
+            mdl->setAnmMtx(jntNo, *calc_mtx);
+            mDoMtx_copy(*calc_mtx, j3dSys.mCurrentMtx);
+        }
+    }
+
+    return 1;
 }
 
 /* 000002B0-000002D0       .text daObjMknjD_XyCheckCB__FPvi */
@@ -216,25 +282,54 @@ s32 daObjMknjD::Act_c::Mthd_Delete() {
 /* 00000C34-00000CC8       .text set_mtx__Q210daObjMknjD5Act_cFv */
 void daObjMknjD::Act_c::set_mtx() {
     /* Nonmatching */
+    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+
+    mModel0->setBaseTRMtx(mDoMtx_stack_c::get());
+    mModel1->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    mDoMtx_copy(mDoMtx_stack_c::get(), M_tmp_mtx);
 }
 
 /* 00000CC8-00000D28       .text init_mtx__Q210daObjMknjD5Act_cFv */
 void daObjMknjD::Act_c::init_mtx() {
     /* Nonmatching */
+    mModel0->setBaseScale(cXyz(1.0f, 1.0f, 1.0f));
+    mModel1->setBaseScale(cXyz(1.0f, 1.0f, 1.0f));
+
+    set_mtx();
 }
 
 /* 00000D28-00000E04       .text setGoal__Q210daObjMknjD5Act_cFi */
-void daObjMknjD::Act_c::setGoal(int) {
+void daObjMknjD::Act_c::setGoal(int i_staffIdx) {
     /* Nonmatching */
+    cXyz pos = *dComIfGp_evmng_getMyXyzP(i_staffIdx, "Posion");
+
+    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_YrotM(mDoMtx_stack_c::get(), current.angle.GetY());
+
+    mDoMtx_stack_c::transM(pos);
+    
+    mDoMtx_multVecZero(mDoMtx_stack_c::get(), &pos);
+    mGoalPos = pos;
+
+    dComIfGp_evmng_setGoal(&mGoalPos);
 }
 
 /* 00000E04-00000E84       .text setPlayerAngle__Q210daObjMknjD5Act_cFi */
-void daObjMknjD::Act_c::setPlayerAngle(int) {
+void daObjMknjD::Act_c::setPlayerAngle(int i_staffIdx) {
     /* Nonmatching */
+    u32 angle = *dComIfGp_evmng_getMyIntegerP(i_staffIdx, "angle");
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    
+    player->setPlayerPosAndAngle(
+        player->getPositionP(),
+        current.angle.y + (s16)angle
+    );
 }
 
 /* 00000E84-00000F88       .text talk__Q210daObjMknjD5Act_cFi */
-u32 daObjMknjD::Act_c::talk(int i_param1) {
+u16 daObjMknjD::Act_c::talk(int i_param1) {
     u32 msgMode = 0xFF;
 
     if (mMsgInstId == 0xFFFFFFFF) {
@@ -280,9 +375,144 @@ u32 daObjMknjD::Act_c::talk(int i_param1) {
     return msgMode;
 }
 
+#define ACT_SETGOAL 0
+#define ACT_SETANGLE 1
+#define ACT_WAIT 2
+#define ACT_INPUT 3
+#define ACT_BREAK 4
+#define ACT_HIDE_LINK 5
+#define ACT_DISP_LINK 6
+#define ACT_LESSON 7
+#define ACT_TACT 8
+
 /* 00000F88-00001348       .text privateCut__Q210daObjMknjD5Act_cFv */
 void daObjMknjD::Act_c::privateCut() {
     /* Nonmatching */
+    static const char* cut_name_table[] = {
+        "SETGOAL",
+        "SETANGLE",
+        "WAIT",
+        "INPUT",
+        "BREAK",
+        "HIDE_LINK",
+        "DISP_LINK",
+        "LESSON",
+        "TACT"
+    };
+
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+
+    int staffIdx = dComIfGp_evmng_getMyStaffId("MknjD", NULL, 0);
+    if (staffIdx != -1) {
+        mActionIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_table, 9, 1, 0);
+
+        if (mActionIdx == -1) {
+            dComIfGp_evmng_cutEnd(staffIdx);
+        }
+        else {
+            bool doCutEnd = false;
+            
+            if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
+                switch (mActionIdx) {
+                    case ACT_SETGOAL:
+                        setGoal(staffIdx);
+                        break;
+                    case ACT_SETANGLE:
+                        setPlayerAngle(staffIdx);
+                        break;
+                    case ACT_BREAK:
+                        mDoAud_seStart(JA_SE_READ_RIDDLE_1, NULL, 0, 0);
+
+                        int switchId = prm_get_swSave();
+                        fopAcM_onSwitch(this, switchId);
+
+                        mBreakTimer = 0;
+
+                        if (mpBgW != NULL) {
+                            if (mpBgW->ChkUsed()) {
+                                g_dComIfG_gameInfo.play.mBgS.Release(mpBgW);
+                            }
+                        }
+
+                        break;
+                    case ACT_HIDE_LINK:
+                        player->onPlayerNoDraw();
+                        break;
+                    case ACT_DISP_LINK:
+                        player->offPlayerNoDraw();
+                        break;
+                    case ACT_LESSON:
+                        m0504 = false;
+                        m0500 = 0;
+                        mMsgInstId = 0xFFFFFFFF;
+                        break;
+                    case ACT_TACT:
+                        break;
+                }
+            }
+
+            switch (mActionIdx) {
+                case ACT_SETGOAL:
+                    doCutEnd = true;
+                    break;
+                case ACT_SETANGLE:
+                    doCutEnd = true;
+                    break;
+                case ACT_INPUT:
+                    if (talk(1) == 0x12) {
+                        doCutEnd = true;
+                    }
+                    break;
+                case ACT_WAIT:
+                    doCutEnd = true;
+                    break;
+                case ACT_BREAK:
+                    if (daObjMknjD_break() == true) {
+                        if (strcmp(dComIfGp_getStartStageName(), "Ekaze") == 0 || strcmp(dComIfGp_getStartStageName(), "Edaichi") == 0) {
+                            mDoAud_bgmStart(0x80000000 | JA_BGM_JABOO_CAVE);
+                        }
+                        else if (m043E == true) {
+                            mDoAud_bgmStart(0x80000000 | JA_BGM_D_WIND);
+                        }
+                        else {
+                            mDoAud_bgmStart(0x80000000 | JA_BGM_D_EARTH);
+                        }
+
+                        if (mSmokeCBs[2].getEmitter() != NULL) {
+                            mSmokeCBs[2].end();
+                        }
+                        if (mSmokeCBs[3].getEmitter() != NULL) {
+                            mSmokeCBs[3].end();
+                        }
+
+                        doCutEnd = true;
+                    }
+                    break;
+                case ACT_LESSON:
+                    u32 talkResult = talk(1);
+
+                    if (talkResult == 0x12 || talkResult == 0x15) {
+                        doCutEnd = true;
+                    }
+                    break;
+                case ACT_TACT:
+                    if (m0504 == false) {
+                        doCutEnd = true;
+                    }
+                    else {
+                        dComIfGp_event_onEventFlag(8);
+                    }
+                    break;
+                default:
+                    doCutEnd = true;
+                    break;
+            }
+
+            if (doCutEnd) {
+                dComIfGp_evmng_cutEnd(staffIdx);
+            }
+        }
+    }
 }
 
 /* 00001348-00001400       .text manage_friend_draw__10daObjMknjDFi */
@@ -315,7 +545,7 @@ void daObjMknjD::manage_friend_draw(int i_param1) {
 }
 
 /* 00001400-0000195C       .text daObjMknjD_break__Q210daObjMknjD5Act_cFv */
-void daObjMknjD::Act_c::daObjMknjD_break() {
+bool daObjMknjD::Act_c::daObjMknjD_break() {
     /* Nonmatching */
 }
 

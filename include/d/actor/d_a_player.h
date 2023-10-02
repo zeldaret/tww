@@ -94,6 +94,9 @@ public:
     s16 getBodyAngleX() { return mBodyAngle.x; }
     s16 getBodyAngleY() { return mBodyAngle.y; }
 
+    void onPlayerNoDraw() { field_0x29c |= 0x8000000; }
+    void offPlayerNoDraw() { field_0x29c &= ~0x8000000; }
+
     virtual MtxP getLeftHandMatrix() = 0;
     virtual MtxP getRightHandMatrix() = 0;
     virtual void getGroundY() = 0;

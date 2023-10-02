@@ -1234,7 +1234,7 @@ inline f32* dComIfGp_evmng_getMyFloatP(int staffIdx, const char* name) {
     return reinterpret_cast<f32*>(dComIfGp_getEventManager().getMySubstanceP(staffIdx, name, 0)); //type 0 is float
 }
 
-inline Vec* dComIfGp_evmng_getMyVec3dP(int staffIdx, const char* name) {
+inline Vec* dComIfGp_evmng_getMyXyzP(int staffIdx, const char* name) {
     return reinterpret_cast<Vec*>(dComIfGp_getEventManager().getMySubstanceP(staffIdx, name, 1)); //type 1 is vec3f
 }
 
@@ -1276,6 +1276,10 @@ inline void dComIfGp_evmng_create() {
 
 inline void dComIfGp_evmng_remove() {
     g_dComIfG_gameInfo.play.getEvtManager().remove();
+}
+
+inline void dComIfGp_evmng_setGoal(cXyz* i_goal) {
+    g_dComIfG_gameInfo.play.getEvtManager().setGoal(i_goal);
 }
 
 /**

@@ -4,6 +4,7 @@
 #include "JSystem/J3DGraphAnimator/J3DSkinDeform.h"
 #include "JSystem/J3DGraphBase/J3DPacket.h"
 #include "JSystem/J3DGraphBase/J3DVertex.h"
+#include "dolphin/mtx/mtx.h"
 #include "dolphin/mtx/mtxvec.h"
 #include "dolphin/types.h"
 
@@ -113,15 +114,19 @@ public:
     Mtx33* getNrmMtxPtr() const { return mpNrmMtxBuf[1][mCurrentViewNo]; }
     Mtx33*** getBumpMtxPtrPtr() const { return mpBumpMtxArr[1]; }
     void setBaseScale(const Vec& scale) { mBaseScale = scale; }
-    void setUserArea(u32 area) { mUserArea = area; }
-    u32 getUserArea() const { return mUserArea; }
+    void setUserArea(void* area) { mUserArea = area; }
+    void* getUserArea() const { return mUserArea; }
     Vec* getBaseScale() { return &mBaseScale; }
+
+    void setAnmMtx(int jntNo, Mtx mtx) {
+        MTXCopy(mtx, mpNodeMtx[jntNo]);
+    }
 
     /* 0x004 */ J3DModelData* mModelData;
     /* 0x008 */ u32 mFlags;
     /* 0x00C */ u32 mDiffFlag;
     /* 0x010 */ J3DCalcCallBack mCalcCallBack;
-    /* 0x014 */ u32 mUserArea;
+    /* 0x014 */ void* mUserArea;
     /* 0x018 */ Vec mBaseScale;
     /* 0x024 */ Mtx mBaseTransformMtx;
     /* 0x054 */ Mtx mInternalView;
