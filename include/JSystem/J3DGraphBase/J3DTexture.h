@@ -54,7 +54,7 @@ public:
     J3DTexMtx(const J3DTexMtxInfo& info) {
         mTexMtxInfo = info;
     }
-    ~J3DTexMtx();
+    ~J3DTexMtx() {}
     void load(u32 i) const {
         GDOverflowCheck(53);
         J3DGDLoadTexMtxImm((Mtx&)mMtx, i * 3 + 30, (GXTexMtxType)mTexMtxInfo.mProjection);
@@ -78,7 +78,7 @@ private:
 };  // Size: 0xc4
 
 struct J3DTexCoord : public J3DTexCoordInfo {
-    J3DTexCoord();
+    J3DTexCoord() { *(J3DTexCoordInfo*)this = j3dDefaultTexCoordInfo[0]; }
 
     u8 getTexGenType() { return mTexGenType; }
     u8 getTexGenSrc() { return mTexGenSrc; }

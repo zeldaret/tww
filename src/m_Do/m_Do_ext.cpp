@@ -5,9 +5,11 @@
 
 #include "m_Do/m_Do_ext.h"
 #include "JSystem/J3DGraphBase/J3DTransform.h"
-#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JKernel/JKRArchive.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "SSystem/SComponent/c_m3d.h"
+#include "d/d_s_play.h"
 #include "m_Do/m_Do_printf.h"
 
 /* 8000DA70-8000DCF0       .text mDoExt_setJ3DData__FPA4_fPC16J3DTransformInfoUs */
@@ -340,202 +342,366 @@ int mDoExt_brkAnm::init(J3DMaterialTable* i_matTable, J3DAnmTevRegKey* i_brk, in
         }
     }
     return 1;
-
-    /* Nonmatching */
 }
 
 /* 8000EF80-8000EFBC       .text entry__13mDoExt_brkAnmFP16J3DMaterialTablef */
-void mDoExt_brkAnm::entry(J3DMaterialTable*, f32) {
-    /* Nonmatching */
+void mDoExt_brkAnm::entry(J3DMaterialTable* i_matTable, f32 i_frame) {
+    mpAnm->setFrame(i_frame);
+    i_matTable->setTevRegAnimator(mpAnm, mpCRegAnm, mpKRegAnm);
 }
 
 /* 8000EFBC-8000F178       .text init__13mDoExt_bvaAnmFP8J3DModelP20J3DAnmVisibilityFulliifssbi */
-int mDoExt_bvaAnm::init(J3DModel*, J3DAnmVisibilityFull*, int, int, f32, s16, s16, bool, int) {
-    /* Nonmatching */
+int mDoExt_bvaAnm::init(J3DModel* i_model, J3DAnmVisibilityFull* i_bva, int i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, int i_entry) {
+    JUT_ASSERT(1002, i_modify || isCurrentSolidHeap());
+    JUT_ASSERT(1004, i_model != 0 && i_bva != 0);
+    mpAnm = i_bva;
+    if (!i_modify) {
+        field_0xc = new J3DVisibilityManager(mpAnm);
+        if (!field_0xc) {
+            return 0;
+        }
+        if (i_entry) {
+            i_model->setVisibilityManager(field_0xc);
+        }
+    } else {
+        field_0xc->mAnmVisibility = mpAnm;
+    }
+    if (i_anmPlay) {
+        if (initPlay(mpAnm->getFrameMax(), i_attribute, i_rate, i_startF, i_endF, i_modify) == 0) {
+            return 0;
+        }
+    }
+    return 1;
 }
 
 /* 8000F178-8000F1B4       .text entry__13mDoExt_bvaAnmFP8J3DModels */
-void mDoExt_bvaAnm::entry(J3DModel*, s16) {
-    /* Nonmatching */
+void mDoExt_bvaAnm::entry(J3DModel* i_model, s16 i_frame) {
+    mpAnm->setFrame(i_frame);
+    i_model->setVisibilityManager(field_0xc);
 }
 
 /* 8000F1B4-8000F408       .text init__13mDoExt_bckAnmFP12J3DModelDataP15J3DAnmTransformiifssb */
-int mDoExt_bckAnm::init(J3DModelData*, J3DAnmTransform*, int, int, f32, s16, s16, bool) {
+int mDoExt_bckAnm::init(J3DModelData* i_modelData, J3DAnmTransform* i_bck, int i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify) {
     /* Nonmatching */
+    JUT_ASSERT(1065, i_modify || isCurrentSolidHeap());
+    JUT_ASSERT(1067, i_bck != 0);
+    mAnm = i_bck;
+    if (!i_modify) {
+        mpMtxCalc = new J3DMtxCalcMayaAnm(mAnm);
+        if (!mpMtxCalc) {
+            return 0;
+        }
+    } else {
+        mpMtxCalc->mOne[0] = (u32)mAnm;
+    }
+    if (i_anmPlay) {
+        if (initPlay(mAnm->getFrameMax(), i_attribute, i_rate, i_startF, i_endF, i_modify) == 0) {
+            return 0;
+        }
+    }
+    return 1;
 }
 
 /* 8000F590-8000F610       .text changeBckOnly__13mDoExt_bckAnmFP15J3DAnmTransform */
-void mDoExt_bckAnm::changeBckOnly(J3DAnmTransform*) {
+void mDoExt_bckAnm::changeBckOnly(J3DAnmTransform* i_bck) {
+    /* Nonmatching */
+    mAnm = i_bck;
+    JUT_ASSERT(1104, mAnm != 0);
+    mpMtxCalc->mOne[0] = (u32)mAnm;
     /* Nonmatching */
 }
 
 /* 8000F610-8000F638       .text entry__13mDoExt_bckAnmFP12J3DModelDataf */
-void mDoExt_bckAnm::entry(J3DModelData*, f32) {
-    /* Nonmatching */
+void mDoExt_bckAnm::entry(J3DModelData* i_modelData, f32 i_frame) {
+    mAnm->setFrame(i_frame);
+    i_modelData->getJointNodePointer(0)->setMtxCalc(mpMtxCalc);
 }
 
 /* 8000F638-8000F6A0       .text mDoExt_changeMaterial__FP8J3DModel */
-void mDoExt_changeMaterial(J3DModel*) {
-    /* Nonmatching */
+void mDoExt_changeMaterial(J3DModel* i_model) {
+    J3DModelData* model_data = i_model->getModelData();
+
+    for (u16 i = 0; i < model_data->getMaterialNum(); i++) {
+        model_data->getMaterialNodePointer(i)->change();
+    }
 }
 
 /* 8000F6A0-8000F758       .text mDoExt_modelTexturePatch__FP12J3DModelData */
-void mDoExt_modelTexturePatch(J3DModelData*) {
-    /* Nonmatching */
+void mDoExt_modelTexturePatch(J3DModelData* i_modelData) {
+    j3dSys.setTexture(i_modelData->getTexture());
+
+    for (u16 i = 0; i < i_modelData->getMaterialNum(); i++) {
+        J3DMaterial* mat = i_modelData->getMaterialNodePointer(i);
+        J3DTevBlock* tev = mat->getTevBlock();
+        J3DDisplayListObj* dlObj = mat->getSharedDisplayListObj();
+
+        BOOL ret = OSDisableInterrupts();
+        GDInitGDLObj(&J3DDisplayListObj::sGDLObj, dlObj->getDisplayList(0),
+                     dlObj->getDisplayListSize());
+        GDSetCurrent(&J3DDisplayListObj::sGDLObj);
+        tev->patchTexNoAndTexCoordScale();
+        OSRestoreInterrupts(ret);
+        GDSetCurrent(NULL);
+    }
 }
 
-/* 8000F758-8000F75C       .text patchTexNoAndTexCoordScale__11J3DTevBlockFv */
-void J3DTevBlock::patchTexNoAndTexCoordScale() {
-    /* Nonmatching */
-}
-
-/* 8000F75C-8000F760       .text patch__10J3DPEBlockFv */
-void J3DPEBlock::patch() {
-    /* Nonmatching */
-}
-
-/* 8000F760-8000F764       .text patchLight__13J3DColorBlockFv */
-void J3DColorBlock::patchLight() {
-    /* Nonmatching */
-}
-
-/* 8000F764-8000F768       .text patch__11J3DTevBlockFv */
-void J3DTevBlock::patch() {
-    /* Nonmatching */
+static void dummy(J3DTevBlock* tev, J3DColorBlock* color, J3DPEBlock* pe) {
+    tev->patch();
+    color->patchLight();
+    pe->patch();
 }
 
 /* 8000F768-8000F7BC       .text mDoExt_modelDiff__FP8J3DModel */
-void mDoExt_modelDiff(J3DModel*) {
-    /* Nonmatching */
+void mDoExt_modelDiff(J3DModel* i_model) {
+    i_model->calcMaterial();
+    i_model->diff();
+    i_model->entry();
 }
 
 /* 8000F7BC-8000F84C       .text mDoExt_modelUpdate__FP8J3DModel */
-void mDoExt_modelUpdate(J3DModel*) {
-    /* Nonmatching */
+void mDoExt_modelUpdate(J3DModel* i_model) {
+    J3DModelData* model_data = i_model->getModelData();
+
+    if (model_data->getModelDataType() == 1 && !model_data->isLocked()) {
+        i_model->calc();
+        mDoExt_modelDiff(i_model);
+    } else {
+        i_model->update();
+        i_model->lock();
+    }
+
+    i_model->viewCalc();
 }
 
 /* 8000F84C-8000F8F8       .text mDoExt_modelUpdateDL__FP8J3DModel */
-void mDoExt_modelUpdateDL(J3DModel*) {
-    /* Nonmatching */
+void mDoExt_modelUpdateDL(J3DModel* i_model) {
+    J3DModelData* model_data = i_model->getModelData();
+
+    if (model_data->getModelDataType() == 1 && !model_data->isLocked()) {
+        i_model->calc();
+        mDoExt_modelDiff(i_model);
+    } else {
+        if (g_regHIO.mChild[2].mShortRegs[9] == 0) {
+            i_model->unlock();
+        }
+        i_model->update();
+        i_model->lock();
+    }
+
+    i_model->viewCalc();
 }
 
 /* 8000F8F8-8000F974       .text mDoExt_modelEntry__FP8J3DModel */
-void mDoExt_modelEntry(J3DModel*) {
-    /* Nonmatching */
+void mDoExt_modelEntry(J3DModel* i_model) {
+    J3DModelData* model_data = i_model->getModelData();
+
+    if (model_data->getModelDataType() == 1 && !model_data->isLocked()) {
+        mDoExt_modelDiff(i_model);
+    } else {
+        i_model->entry();
+        i_model->lock();
+    }
+
+    i_model->viewCalc();
 }
 
 /* 8000F974-8000FA0C       .text mDoExt_modelEntryDL__FP8J3DModel */
-void mDoExt_modelEntryDL(J3DModel*) {
-    /* Nonmatching */
+void mDoExt_modelEntryDL(J3DModel* i_model) {
+    J3DModelData* model_data = i_model->getModelData();
+
+    if (model_data->getModelDataType() == 1 && !model_data->isLocked()) {
+        mDoExt_modelDiff(i_model);
+    } else {
+        if (g_regHIO.mChild[2].mShortRegs[9] == 0) {
+            i_model->unlock();
+        }
+        i_model->entry();
+        i_model->lock();
+    }
+
+    i_model->viewCalc();
 }
 
 /* 8000FA0C-800100F0       .text store__23mDoExt_backupMatBlock_cFP11J3DMaterial */
-void mDoExt_backupMatBlock_c::store(J3DMaterial*) {
+void mDoExt_backupMatBlock_c::store(J3DMaterial* i_material) {
     /* Nonmatching */
+    J3DColorBlock* colorBlock = i_material->getColorBlock();
+    mColorChanNum = colorBlock->getColorChanNum();
+    for (u32 i = 0; i < 2; i++) {
+        mMatColor[i] = *colorBlock->getMatColor(i);
+    }
+    for (u32 i = 0; i < 4; i++) {
+        mColorChan[i] = *colorBlock->getColorChan(i);
+    }
+    for (u32 i = 0; i < 2; i++) {
+        mAmbColor[i] = *colorBlock->getAmbColor(i);
+    }
+    J3DTexGenBlock* texGenBlock = i_material->getTexGenBlock();
+    mTexGenNum = texGenBlock->getTexGenNum();
+    u32 texGenMax = 8;
+    if (texGenBlock->getType() == 'TGB4') {
+        texGenMax = 4;
+    };
+    for (u32 i = 0; i < texGenMax; i++) {
+        mTexCoord[i] = *texGenBlock->getTexCoord(i);
+    }
+    for (u32 i = 0; i < texGenMax; i++) {
+        if (texGenBlock->getTexMtx(i)) {
+            memcpy(&mTexMtx[i], texGenBlock->getTexMtx(i), sizeof(J3DTexMtx));
+            DCStoreRange(&mTexMtx[i], sizeof(J3DTexMtx));
+        }
+    }
+    J3DTevBlock* tevBlock = i_material->getTevBlock();
+    mTevStageNum = tevBlock->getTevStageNum();
+    for (u32 i = 0; i < 4; i++) {
+        mTevColor[i] = *tevBlock->getTevColor(i);
+    }
+    for (u32 i = 0; i < 4; i++) {
+        mTevKColor[i] = *tevBlock->getTevKColor(i);
+    }
+    u32 texNoMax = 8;
+    if (tevBlock->getType() == 'TVB4') {
+        texNoMax = 4;
+        for (u32 i = 0; i < 4; i++) {
+            mTevOrder[i] = *tevBlock->getTevOrder(i);
+            mTevKColorSel[i] = tevBlock->getTevKColorSel(i);
+            mTevKAlphaSel[i] = tevBlock->getTevKAlphaSel(i);
+        }
+        for (u32 i = 0; i < 4; i++) {
+            mTevSwapModeTable[i] = *tevBlock->getTevSwapModeTable(i);
+        }
+    }
+    for (u32 i = 0; i < texNoMax; i++) {
+        mTexNo[i] = tevBlock->getTexNo(i);
+    }
+    for (u32 i = 0; i < texNoMax; i++) {
+        mTevStage[i] = *tevBlock->getTevStage(i);
+        mIndTevStage[i] = *tevBlock->getIndTevStage(i);
+    }
+    J3DIndBlock* indBlock = i_material->getIndBlock();
+    if (indBlock->getType() == 'IBLF') {
+        mIndTexStageNum = indBlock->getIndTexStageNum();
+        for (u32 i = 0; i < 4; i++) {
+            mIndTexOrder[i] = *indBlock->getIndTexOrder(i);
+        }
+        for (u32 i = 0; i < 3; i++) {
+            mIndTexMtx[i] = *indBlock->getIndTexMtx(i);
+        }
+        for (u32 i = 0; i < 4; i++) {
+            mIndTexCoordScale[i] = *indBlock->getIndTexCoordScale(i);
+        }
+    }
+    J3DPEBlock* peBlock = i_material->getPEBlock();
+    memcpy(&mFog, peBlock->getFog(), sizeof(J3DFog));
+    DCStoreRange(&mFog, sizeof(J3DFog));
+    mAlphaComp = *peBlock->getAlphaComp();
+    mBlend = *peBlock->getBlend();
+    mZMode = *peBlock->getZMode();
+    mZCompLoc = peBlock->getZCompLoc();
+    mMaterialAnm = i_material->getMaterialAnm();
+    mMaterialMode = i_material->getMaterialMode();
 }
 
 /* 800101BC-8001084C       .text restore__23mDoExt_backupMatBlock_cFP11J3DMaterial */
-void mDoExt_backupMatBlock_c::restore(J3DMaterial*) {
+void mDoExt_backupMatBlock_c::restore(J3DMaterial* i_material) {
     /* Nonmatching */
-}
-
-/* 800108DC-800108E0       .text setIndTexStageNum__11J3DIndBlockFUc */
-void J3DIndBlock::setIndTexStageNum(u8) {
-    /* Nonmatching */
-}
-
-/* 800108E0-800108E4       .text setIndTevStage__11J3DTevBlockFUl14J3DIndTevStage */
-void J3DTevBlock::setIndTevStage(u32, J3DIndTevStage) {
-    /* Nonmatching */
-}
-
-/* 800108E4-800108E8       .text setTevStage__11J3DTevBlockFUl11J3DTevStage */
-void J3DTevBlock::setTevStage(u32, J3DTevStage) {
-    /* Nonmatching */
-}
-
-/* 800108E8-800108EC       .text setTexNo__11J3DTevBlockFUlUs */
-void J3DTevBlock::setTexNo(u32, u16) {
-    /* Nonmatching */
-}
-
-/* 800108EC-800108F0       .text setTevSwapModeTable__11J3DTevBlockFUl19J3DTevSwapModeTable */
-void J3DTevBlock::setTevSwapModeTable(u32, J3DTevSwapModeTable) {
-    /* Nonmatching */
-}
-
-/* 800108F0-800108F4       .text setTevKAlphaSel__11J3DTevBlockFUlUc */
-void J3DTevBlock::setTevKAlphaSel(u32, u8) {
-    /* Nonmatching */
-}
-
-/* 800108F4-800108F8       .text setTevKColorSel__11J3DTevBlockFUlUc */
-void J3DTevBlock::setTevKColorSel(u32, u8) {
-    /* Nonmatching */
-}
-
-/* 800108F8-800108FC       .text setTevOrder__11J3DTevBlockFUl11J3DTevOrder */
-void J3DTevBlock::setTevOrder(u32, J3DTevOrder) {
-    /* Nonmatching */
-}
-
-/* 800108FC-80010900       .text setTevKColor__11J3DTevBlockFUl10J3DGXColor */
-void J3DTevBlock::setTevKColor(u32, J3DGXColor) {
-    /* Nonmatching */
-}
-
-/* 80010900-80010904       .text setTevColor__11J3DTevBlockFUl13J3DGXColorS10 */
-void J3DTevBlock::setTevColor(u32, J3DGXColorS10) {
-    /* Nonmatching */
-}
-
-/* 80010904-80010908       .text setTevStageNum__11J3DTevBlockFUc */
-void J3DTevBlock::setTevStageNum(u8) {
-    /* Nonmatching */
-}
-
-/* 80010908-8001090C       .text setTexCoord__14J3DTexGenBlockFUlPC11J3DTexCoord */
-void J3DTexGenBlock::setTexCoord(u32, const J3DTexCoord*) {
-    /* Nonmatching */
-}
-
-/* 8001090C-80010910       .text setTexGenNum__14J3DTexGenBlockFUl */
-void J3DTexGenBlock::setTexGenNum(u32) {
-    /* Nonmatching */
-}
-
-/* 80010910-80010914       .text setAmbColor__13J3DColorBlockFUl10J3DGXColor */
-void J3DColorBlock::setAmbColor(u32, J3DGXColor) {
-    /* Nonmatching */
-}
-
-/* 80010914-80010918       .text setColorChan__13J3DColorBlockFUlRC12J3DColorChan */
-void J3DColorBlock::setColorChan(u32, const J3DColorChan&) {
-    /* Nonmatching */
-}
-
-/* 80010918-8001091C       .text setMatColor__13J3DColorBlockFUl10J3DGXColor */
-void J3DColorBlock::setMatColor(u32, J3DGXColor) {
-    /* Nonmatching */
-}
-
-/* 8001091C-80010920       .text setColorChanNum__13J3DColorBlockFUc */
-void J3DColorBlock::setColorChanNum(u8) {
-    /* Nonmatching */
+    J3DColorBlock* colorBlock = i_material->getColorBlock();
+    colorBlock->setColorChanNum(mColorChanNum);
+    for (u32 i = 0; i < 2; i++) {
+        colorBlock->setMatColor(i, mMatColor[i]);
+    }
+    for (u32 i = 0; i < 4; i++) {
+        colorBlock->setColorChan(i, mColorChan[i]);
+    }
+    for (u32 i = 0; i < 2; i++) {
+        colorBlock->setAmbColor(i, mAmbColor[i]);
+    }
+    J3DTexGenBlock* texGenBlock = i_material->getTexGenBlock();
+    texGenBlock->setTexGenNum(mTexGenNum);
+    u32 texGenMax = 8;
+    if (texGenBlock->getType() == 'TGB4') {
+        texGenMax = 4;
+    };
+    for (u32 i = 0; i < texGenMax; i++) {
+        texGenBlock->setTexCoord(i, &mTexCoord[i]);
+    }
+    for (u32 i = 0; i < texGenMax; i++) {
+        if (texGenBlock->getTexMtx(i)) {
+            memcpy(texGenBlock->getTexMtx(i), &mTexMtx[i], sizeof(J3DTexMtx));
+            DCStoreRange(texGenBlock->getTexMtx(i), sizeof(J3DTexMtx));
+        }
+    }
+    J3DTevBlock* tevBlock = i_material->getTevBlock();
+    tevBlock->setTevStageNum(mTevStageNum);
+    for (u32 i = 0; i < 4; i++) {
+        tevBlock->setTevColor(i, mTevColor[i]);
+    }
+    for (u32 i = 0; i < 4; i++) {
+        tevBlock->setTevKColor(i, mTevKColor[i]);
+    }
+    u32 texNoMax = 8;
+    if (tevBlock->getType() == 'TVB4') {
+        texNoMax = 4;
+        for (u32 i = 0; i < 4; i++) {
+            tevBlock->setTevOrder(i, mTevOrder[i]);
+            tevBlock->setTevKColorSel(i, mTevKColorSel[i]);
+            tevBlock->setTevKAlphaSel(i, mTevKAlphaSel[i]);
+        }
+        for (u32 i = 0; i < 4; i++) {
+            tevBlock->setTevSwapModeTable(i, mTevSwapModeTable[i]);
+        }
+    }
+    for (u32 i = 0; i < texNoMax; i++) {
+        tevBlock->setTexNo(i, mTexNo[i]);
+    }
+    for (u32 i = 0; i < texNoMax; i++) {
+        tevBlock->setTevStage(i, mTevStage[i]);
+        tevBlock->setIndTevStage(i, mIndTevStage[i]);
+    }
+    J3DIndBlock* indBlock = i_material->getIndBlock();
+    if (indBlock->getType() == 'IBLF') {
+        indBlock->setIndTexStageNum(mIndTexStageNum);
+        for (u32 i = 0; i < 4; i++) {
+            *indBlock->getIndTexOrder(i) = mIndTexOrder[i];
+        }
+        for (u32 i = 0; i < 3; i++) {
+            indBlock->setIndTexMtx(i, mIndTexMtx[i]);
+        }
+        for (u32 i = 0; i < 4; i++) {
+            indBlock->setIndTexCoordScale(i, mIndTexCoordScale[i]);
+        }
+    }
+    J3DPEBlock* peBlock = i_material->getPEBlock();
+    memcpy(peBlock->getFog(), &mFog, sizeof(J3DFog));
+    DCStoreRange(peBlock->getFog(), sizeof(J3DFog));
+    peBlock->setAlphaComp(mAlphaComp);
+    peBlock->setBlend(mBlend);
+    peBlock->setZMode(mZMode);
+    peBlock->setZCompLoc(mZCompLoc);
+    i_material->setMaterialAnm(mMaterialAnm);
+    i_material->setMaterialMode(mMaterialMode);
 }
 
 /* 80010920-800109F4       .text create__23mDoExt_backupMaterial_cFP12J3DModelData */
-void mDoExt_backupMaterial_c::create(J3DModelData*) {
+bool mDoExt_backupMaterial_c::create(J3DModelData* i_modelData) {
     /* Nonmatching */
+    if (!mBackupMatBlock) {
+        mBackupMatBlock = new mDoExt_backupMatBlock_c[i_modelData->getMaterialNum()];
+        if (!mBackupMatBlock) {
+            return false;
+        }
+    }
+    for (u16 i = 0; i < i_modelData->getMaterialNum(); i++) {
+        J3DMaterial* material = i_modelData->getMaterialNodePointer(i);
+        mBackupMatBlock[i].store(material);
+    }
+    mTexture = i_modelData->getTexture();
+    mTextureName = i_modelData->getTextureName();
+    return true;
 }
 
 /* 800109F4-80010A88       .text __dt__23mDoExt_backupMatBlock_cFv */
 mDoExt_backupMatBlock_c::~mDoExt_backupMatBlock_c() {
-    /* Nonmatching */
-}
-
-/* 80010A88-80010AC4       .text __dt__9J3DTexMtxFv */
-J3DTexMtx::~J3DTexMtx() {
     /* Nonmatching */
 }
 
@@ -544,74 +710,45 @@ mDoExt_backupMatBlock_c::mDoExt_backupMatBlock_c() {
     /* Nonmatching */
 }
 
-/* 80010D44-80010D5C       .text __ct__19J3DIndTexCoordScaleFv */
-J3DIndTexCoordScale::J3DIndTexCoordScale() {
-    /* Nonmatching */
-}
-
-/* 80010D5C-80010DB4       .text __ct__12J3DIndTexMtxFv */
-J3DIndTexMtx::J3DIndTexMtx() {
-    /* Nonmatching */
-}
-
-/* 80010DB4-80010DCC       .text __ct__14J3DIndTexOrderFv */
-J3DIndTexOrder::J3DIndTexOrder() {
-    /* Nonmatching */
-}
-
-/* 80010DCC-80010DD8       .text __ct__19J3DTevSwapModeTableFv */
-J3DTevSwapModeTable::J3DTevSwapModeTable() {
-    /* Nonmatching */
-}
-
-/* 80010DD8-80010DF8       .text __ct__11J3DTevOrderFv */
-J3DTevOrder::J3DTevOrder() {
-    /* Nonmatching */
-}
-
-/* 80010DF8-80010EDC       .text __ct__14J3DIndTevStageFv */
-J3DIndTevStage::J3DIndTevStage() {
-    /* Nonmatching */
-}
-
 /* 80010F44-8001110C       .text setTevStageInfo__11J3DTevStageFRC15J3DTevStageInfo */
 void J3DTevStage::setTevStageInfo(const J3DTevStageInfo&) {
     /* Nonmatching */
 }
 
-/* 800111B4-800111D4       .text __ct__11J3DTexCoordFv */
-J3DTexCoord::J3DTexCoord() {
-    /* Nonmatching */
-}
-
-/* 800111D4-80011290       .text __ct__12J3DColorChanFv */
-J3DColorChan::J3DColorChan() {
-    /* Nonmatching */
-}
-
 /* 80011294-80011300       .text create__23mDoExt_backupMaterial_cFUs */
-void mDoExt_backupMaterial_c::create(u16) {
-    /* Nonmatching */
+bool mDoExt_backupMaterial_c::create(u16 param_0) {
+    mBackupMatBlock = new mDoExt_backupMatBlock_c[param_0];
+    return mBackupMatBlock != NULL;
 }
 
 /* 80011300-80011380       .text restore__23mDoExt_backupMaterial_cFP12J3DModelData */
-void mDoExt_backupMaterial_c::restore(J3DModelData*) {
-    /* Nonmatching */
+void mDoExt_backupMaterial_c::restore(J3DModelData* i_modelData) {
+    for (u16 i = 0; i < i_modelData->getMaterialNum(); i++) {
+        J3DMaterial* material = i_modelData->getMaterialNodePointer(i);
+        mBackupMatBlock[i].restore(material);
+    }
+    i_modelData->setTexture(mTexture);
+    i_modelData->setTextureName(mTextureName);
 }
 
 /* 80011380-80011434       .text create__21mDoExt_invisibleModelFP8J3DModel */
-void mDoExt_invisibleModel::create(J3DModel*) {
-    /* Nonmatching */
-}
+bool mDoExt_invisibleModel::create(J3DModel* model) {
+    J3DModelData* modelData = model->getModelData();
 
-/* 80011434-80011490       .text __dt__19mDoExt_invJntPacketFv */
-mDoExt_invJntPacket::~mDoExt_invJntPacket() {
-    /* Nonmatching */
-}
+    mpPackets = new mDoExt_invJntPacket[modelData->getJointNum()];
+    if (!mpPackets) {
+        return false;
+    }
 
-/* 80011490-800114BC       .text __ct__19mDoExt_invJntPacketFv */
-mDoExt_invJntPacket::mDoExt_invJntPacket() {
-    /* Nonmatching */
+    mModel = model;
+    mDoExt_invJntPacket* packet = mpPackets;
+
+    for (u16 i = 0; i < modelData->getJointNum(); i++) {
+        packet->setJoint(mModel, i);
+        packet++;
+    }
+
+    return true;
 }
 
 /* 80011504-800115AC       .text entry__21mDoExt_invisibleModelFv */
@@ -634,139 +771,224 @@ void mDoExt_invisibleModel::updateDL(mDoExt_McaMorf*) {
     /* Nonmatching */
 }
 
+JKRExpHeap* gameHeap;
+
 /* 80011734-800117E4       .text mDoExt_createGameHeap__FUlP7JKRHeap */
-JKRExpHeap* mDoExt_createGameHeap(u32, JKRHeap*) {
-    /* Nonmatching */
+JKRExpHeap* mDoExt_createGameHeap(u32 heapSize, JKRHeap* i_heap) {
+    JUT_ASSERT(2050, gameHeap == 0 || heapSize == 0);
+    gameHeap = JKRExpHeap::create(heapSize, i_heap, true);
+    gameHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
+    return gameHeap;
 }
 
 /* 800117E4-800117EC       .text mDoExt_getGameHeap__Fv */
 JKRExpHeap* mDoExt_getGameHeap() {
-    /* Nonmatching */
+    return gameHeap;
 }
+
+s32 safeGameHeapSize;
 
 /* 800117EC-80011814       .text mDoExt_setSafeGameHeapSize__Fv */
 void mDoExt_setSafeGameHeapSize() {
-    /* Nonmatching */
+    safeGameHeapSize = mDoExt_getGameHeap()->getTotalFreeSize();
 }
 
 /* 80011814-8001181C       .text mDoExt_getSafeGameHeapSize__Fv */
-int mDoExt_getSafeGameHeapSize() {
-    /* Nonmatching */
+s32 mDoExt_getSafeGameHeapSize() {
+    return safeGameHeapSize;
 }
 
+JKRExpHeap* zeldaHeap;
+
 /* 8001181C-800118C0       .text mDoExt_createZeldaHeap__FUlP7JKRHeap */
-JKRExpHeap* mDoExt_createZeldaHeap(u32, JKRHeap*) {
-    /* Nonmatching */
+JKRExpHeap* mDoExt_createZeldaHeap(u32 heapSize, JKRHeap* i_heap) {
+    JUT_ASSERT(2112, zeldaHeap == 0 || heapSize == 0);
+    return zeldaHeap = JKRExpHeap::create(heapSize, i_heap, true);
 }
 
 /* 800118C0-800118C8       .text mDoExt_getZeldaHeap__Fv */
 JKRExpHeap* mDoExt_getZeldaHeap() {
-    /* Nonmatching */
+    return zeldaHeap;
 }
+
+s32 safeZeldaHeapSize;
 
 /* 800118C8-800118F0       .text mDoExt_setSafeZeldaHeapSize__Fv */
 int mDoExt_setSafeZeldaHeapSize() {
-    /* Nonmatching */
+    safeZeldaHeapSize = mDoExt_getZeldaHeap()->getTotalFreeSize();
 }
 
 /* 800118F0-800118F8       .text mDoExt_getSafeZeldaHeapSize__Fv */
-int mDoExt_getSafeZeldaHeapSize() {
-    /* Nonmatching */
+s32 mDoExt_getSafeZeldaHeapSize() {
+    return safeZeldaHeapSize;
 }
 
+JKRExpHeap* commandHeap;
+
 /* 800118F8-8001199C       .text mDoExt_createCommandHeap__FUlP7JKRHeap */
-JKRExpHeap* mDoExt_createCommandHeap(u32, JKRHeap*) {
-    /* Nonmatching */
+JKRExpHeap* mDoExt_createCommandHeap(u32 heapSize, JKRHeap* i_heap) {
+    JUT_ASSERT(2173, commandHeap == 0 || heapSize == 0);
+    return commandHeap = JKRExpHeap::create(heapSize, i_heap, true);
 }
 
 /* 8001199C-800119A4       .text mDoExt_getCommandHeap__Fv */
 JKRExpHeap* mDoExt_getCommandHeap() {
-    /* Nonmatching */
+    return commandHeap;
 }
+
+s32 safeCommandHeapSize;
 
 /* 800119A4-800119CC       .text mDoExt_setSafeCommandHeapSize__Fv */
 void mDoExt_setSafeCommandHeapSize() {
-    /* Nonmatching */
+    safeCommandHeapSize = mDoExt_getCommandHeap()->getTotalFreeSize();
 }
 
 /* 800119CC-800119D4       .text mDoExt_getSafeCommandHeapSize__Fv */
-int mDoExt_getSafeCommandHeapSize() {
-    /* Nonmatching */
+s32 mDoExt_getSafeCommandHeapSize() {
+    return safeCommandHeapSize;
 }
 
+JKRExpHeap* archiveHeap;
+
 /* 800119D4-80011A84       .text mDoExt_createArchiveHeap__FUlP7JKRHeap */
-JKRExpHeap* mDoExt_createArchiveHeap(u32, JKRHeap*) {
-    /* Nonmatching */
+JKRExpHeap* mDoExt_createArchiveHeap(u32 heapSize, JKRHeap* i_heap) {
+    JUT_ASSERT(2237, archiveHeap == 0 || heapSize == 0);
+    archiveHeap = JKRExpHeap::create(heapSize, i_heap, true);
+    archiveHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
+    return archiveHeap;
 }
+
+s32 safeArchiveHeapSize;
 
 /* 80011A84-80011AAC       .text mDoExt_setSafeArchiveHeapSize__Fv */
 void mDoExt_setSafeArchiveHeapSize() {
-    /* Nonmatching */
+    safeArchiveHeapSize = mDoExt_getArchiveHeap()->getTotalFreeSize();
 }
 
 /* 80011AAC-80011AB4       .text mDoExt_getSafeArchiveHeapSize__Fv */
-int mDoExt_getSafeArchiveHeapSize() {
-    /* Nonmatching */
+s32 mDoExt_getSafeArchiveHeapSize() {
+    return safeArchiveHeapSize;
 }
 
 /* 80011AB4-80011ABC       .text mDoExt_getArchiveHeap__Fv */
 JKRExpHeap* mDoExt_getArchiveHeap() {
-    /* Nonmatching */
+    return archiveHeap;
 }
 
 /* 80011ABC-80011B54       .text mDoExt_createSolidHeap__FUlP7JKRHeapUl */
-void mDoExt_createSolidHeap(u32, JKRHeap*, u32) {
-    /* Nonmatching */
+JKRSolidHeap* mDoExt_createSolidHeap(u32 i_size, JKRHeap* i_heap, u32 i_alignment) {
+    if (i_heap == NULL) {
+        i_heap = JKRHeap::getCurrentHeap();
+    }
+
+    JKRSolidHeap* createdHeap;
+    if (i_size == 0 || i_size == 0xFFFFFFFF) {
+        createdHeap = JKRSolidHeap::create(0xFFFFFFFFFF, i_heap, false);
+    } else {
+        i_size = ALIGN_NEXT(i_size, 0x10);
+        i_size += 0x80;
+
+        if (0x10 < i_alignment) {
+            i_size = (i_alignment - 0x10 + i_size);
+        }
+        createdHeap = JKRSolidHeap::create(i_size, i_heap, false);
+    }
+
+    if (createdHeap != NULL) {
+        createdHeap->setErrorFlag(true);
+    }
+
+    return createdHeap;
 }
 
 /* 80011B54-80011B9C       .text mDoExt_createSolidHeapFromGame__FUlUl */
-void mDoExt_createSolidHeapFromGame(u32, u32) {
-    /* Nonmatching */
+JKRSolidHeap* mDoExt_createSolidHeapFromGame(u32 i_size, u32 i_alignment) {
+    return mDoExt_createSolidHeap(i_size, mDoExt_getGameHeap(), i_alignment);
 }
 
 /* 80011B9C-80011BE4       .text mDoExt_createSolidHeapFromSystem__FUlUl */
-void mDoExt_createSolidHeapFromSystem(u32, u32) {
-    /* Nonmatching */
+JKRSolidHeap* mDoExt_createSolidHeapFromSystem(u32 i_size, u32 i_alignment) {
+    return mDoExt_createSolidHeap(i_size, mDoExt_getZeldaHeap(), i_alignment);
 }
 
+static void dummy() {
+    OSReport("situationHeap == 0 || heapSize == 0");
+    OSReport("situationHeapLocked == 0");
+    OSReport("situationHeap");
+    OSReport("situationHeapLocked");
+    OSReport("heap == situationHeap");
+}
+
+JKRHeap* mDoExt_SaveCurrentHeap;
+
 /* 80011BE4-80011CC0       .text mDoExt_createSolidHeapToCurrent__FUlP7JKRHeapUl */
-JKRSolidHeap* mDoExt_createSolidHeapToCurrent(u32, JKRHeap*, u32) {
-    /* Nonmatching */
+JKRSolidHeap* mDoExt_createSolidHeapToCurrent(u32 i_size, JKRHeap* i_parent, u32 i_alignment) {
+    JKRSolidHeap* resultHeap = mDoExt_createSolidHeap(i_size, i_parent, i_alignment);
+    if (!resultHeap) {
+        return NULL;
+    }
+    JUT_ASSERT(2545, OSGetCurrentThread() == &mainThread);
+    JUT_ASSERT(2546, mDoExt_SaveCurrentHeap == 0);
+    mDoExt_SaveCurrentHeap = JKRGetCurrentHeap();
+    mDoExt_setCurrentHeap(resultHeap);
+
+    return resultHeap;
 }
 
 /* 80011CC0-80011D0C       .text mDoExt_createSolidHeapFromGameToCurrent__FUlUl */
-JKRSolidHeap* mDoExt_createSolidHeapFromGameToCurrent(u32, u32) {
-    /* Nonmatching */
+JKRSolidHeap* mDoExt_createSolidHeapFromGameToCurrent(u32 i_size, u32 i_alignment) {
+    mDoExt_getGameHeap();
+    return mDoExt_createSolidHeapToCurrent(i_size, mDoExt_getGameHeap(), i_alignment);
 }
 
 /* 80011D0C-80011D48       .text mDoExt_adjustSolidHeap__FP12JKRSolidHeap */
-u32 mDoExt_adjustSolidHeap(JKRSolidHeap*) {
-    /* Nonmatching */
+u32 mDoExt_adjustSolidHeap(JKRSolidHeap* i_heap) {
+    if (i_heap == NULL) {
+        return 0;
+    }
+
+    s32 result = i_heap->adjustSize();
+
+    if (result >= (u32)0x80) {
+        result -= 0x80;
+    }
+
+    return result;
 }
 
 /* 80011D48-80011D68       .text mDoExt_destroySolidHeap__FP12JKRSolidHeap */
-void mDoExt_destroySolidHeap(JKRSolidHeap*) {
-    /* Nonmatching */
+void mDoExt_destroySolidHeap(JKRSolidHeap* i_heap) {
+    i_heap->destroy();
 }
 
 /* 80011D68-80011DD4       .text mDoExt_setCurrentHeap__FP7JKRHeap */
-void mDoExt_setCurrentHeap(JKRHeap*) {
-    /* Nonmatching */
+JKRHeap* mDoExt_setCurrentHeap(JKRHeap* heap) {
+    JUT_ASSERT(2684, heap != 0);
+    return heap->becomeCurrentHeap();
 }
 
 /* 80011DD4-80011DDC       .text mDoExt_getCurrentHeap__Fv */
-void mDoExt_getCurrentHeap() {
-    /* Nonmatching */
+JKRHeap* mDoExt_getCurrentHeap() {
+    return JKRGetCurrentHeap();
 }
 
 /* 80011DDC-80011E98       .text mDoExt_restoreCurrentHeap__Fv */
 void mDoExt_restoreCurrentHeap() {
-    /* Nonmatching */
+    JUT_ASSERT(2754, OSGetCurrentThread() == &mainThread);
+    JUT_ASSERT(2755, mDoExt_SaveCurrentHeap != 0);
+    mDoExt_SaveCurrentHeap->becomeCurrentHeap();
+    mDoExt_SaveCurrentHeap = NULL;
 }
 
 /* 80011E98-80011EE4       .text mDoExt_resIDToIndex__FP10JKRArchiveUs */
-s32 mDoExt_resIDToIndex(JKRArchive*, u16) {
-    /* Nonmatching */
+s32 mDoExt_resIDToIndex(JKRArchive* p_archive, u16 id) {
+    JKRArchive::SDIFileEntry* res = p_archive->findIdResource(id);
+
+    if (res == NULL) {
+        return -1;
+    }
+
+    return res - p_archive->mFiles;
 }
 
 /* 80011EE4-80012140       .text calc__25mDoExt_MtxCalcAnmBlendTblFUs */

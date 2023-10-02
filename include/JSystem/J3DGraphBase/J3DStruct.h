@@ -76,6 +76,20 @@ struct J3DIndTexMtxInfo {
 };  // Size: 0x1C
 
 struct J3DFogInfo {
+    void operator=(const J3DFogInfo& other) {
+        mType = other.mType;
+        mAdjEnable = other.mAdjEnable;
+        mCenter = other.mCenter;
+        mStartZ = other.mStartZ;
+        mEndZ = other.mEndZ;
+        mNearZ = other.mNearZ;
+        mFarZ = other.mFarZ;
+        mColor = other.mColor;
+        for (int i = 0; i < 10; i++) {
+            mFogAdjTable[i] = other.mFogAdjTable[i];
+        }
+    }
+
     /* 0x00 */ u8 mType;
     /* 0x01 */ u8 mAdjEnable;
     /* 0x02 */ u16 mCenter;

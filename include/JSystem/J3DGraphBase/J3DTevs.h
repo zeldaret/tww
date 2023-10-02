@@ -27,7 +27,7 @@ extern const J3DTevSwapModeInfo j3dDefaultTevSwapMode;
 extern const J3DTevSwapModeTableInfo j3dDefaultTevSwapModeTable;
 extern const J3DBlendInfo j3dDefaultBlendInfo;
 extern const J3DColorChanInfo j3dDefaultColorChanInfo;
-extern const u16 j3dDefaultTevSwapTableID;
+extern const u8 j3dDefaultTevSwapTableID;
 extern const u16 j3dDefaultAlphaCmpID;
 extern const u16 j3dDefaultZModeID;
 
@@ -75,7 +75,32 @@ struct J3DTevStage {
 };
 
 struct J3DIndTevStage {
-    J3DIndTevStage();
+    J3DIndTevStage() {
+        mInfo = 0;
+        setIndTevStageInfo(j3dDefaultIndTevStageInfo);
+    }
+
+    void setIndStage(u8 stage) { mInfo = mInfo & ~0x03 | stage; }
+    void setIndFormat(u8 format) { mInfo = mInfo & ~0x0C | format << 2; }
+    void setBiasSel(u8 sel) { mInfo = mInfo & ~0x70 | sel << 4; }
+    void setAlphaSel(u8 sel) { mInfo = mInfo & ~0x0180 | sel << 7; }
+    void setMtxSel(u8 sel) { mInfo = mInfo & ~0x1E00 | sel << 9; }
+    void setWrapS(u8 wrap) { mInfo = mInfo & ~0xE000 | wrap << 13; }
+    void setWrapT(u8 wrap) { mInfo = mInfo & ~0x070000 | wrap << 16; }
+    void setLod(u8 lod) { mInfo = mInfo & ~0x080000 | lod << 19; }
+    void setPrev(u8 prev) { mInfo = mInfo & ~0x100000 | prev << 20; }
+
+    void setIndTevStageInfo(const J3DIndTevStageInfo& info) {
+        setIndStage(info.mIndStage);
+        setIndFormat(info.mIndFormat);
+        setBiasSel(info.mBiasSel);
+        setMtxSel(info.mMtxSel);
+        setWrapS(info.mWrapS);
+        setWrapT(info.mWrapT);
+        setPrev(info.mPrev);
+        setLod(info.mLod);
+        setAlphaSel(info.mAlphaSel);
+    }
 
     void load(u32 param_1) {
         J3DGDWriteBPCmd(mInfo | (param_1 + 16) << 24);
@@ -85,14 +110,14 @@ struct J3DIndTevStage {
 };
 
 struct J3DTevOrder : public J3DTevOrderInfo {
-    J3DTevOrder();
+    J3DTevOrder() { *(J3DTevOrderInfo*)this = j3dDefaultTevOrderInfoNull; }
 
     J3DTevOrderInfo& getTevOrderInfo() { return *this; }
     u8 getTexMap() { return mTexMap; }
 };
 
 struct J3DTevSwapModeTable {
-    J3DTevSwapModeTable();
+    J3DTevSwapModeTable() { field_0x0 = j3dDefaultTevSwapTableID; }
 
     u8 getR() { return j3dTevSwapTableTable[field_0x0 * 4]; }
     u8 getG() { return j3dTevSwapTableTable[field_0x0 * 4 + 1]; }

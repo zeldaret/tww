@@ -29,13 +29,21 @@ struct J3DUnkCalc2 {
 
 typedef void (*J3DCalcCallBack)(J3DModel*, u32 timing);
 
+class J3DAnmVisibilityFull;
 class J3DMatPacket;
 class J3DShapePacket;
 
 class J3DVisibilityManager {
 public:
+    J3DVisibilityManager(J3DAnmVisibilityFull* visibility) {
+        mAnmVisibility = visibility;
+        field_0x8 = 1;
+    }
     virtual ~J3DVisibilityManager();
     virtual void setVisibility(J3DModelData*);
+
+    /* 0x04 */ J3DAnmVisibilityFull* mAnmVisibility;
+    /* 0x08 */ int field_0x8;
 };
 
 class J3DUnkCallBack {
@@ -77,7 +85,6 @@ public:
     virtual void entry();
     virtual void calc();
     virtual void calcMaterial();
-    virtual void calcDiffTexMtx();
     virtual void viewCalc();
     virtual ~J3DModel();
 
@@ -124,6 +131,7 @@ public:
     void setUserArea(u32 area) { mUserArea = area; }
     u32 getUserArea() const { return mUserArea; }
     Vec* getBaseScale() { return &mBaseScale; }
+    void setVisibilityManager(J3DVisibilityManager* manager) { mpVisibilityManager = manager; }
 
     /* 0x004 */ J3DModelData* mModelData;
     /* 0x008 */ u32 mFlags;

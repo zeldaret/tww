@@ -126,7 +126,7 @@ public:
 
 private:
     /* 0x08 */ J3DAnmTransform* mAnm;
-    /* 0x0C */ J3DMtxCalc* mpMtxCalc;
+    /* 0x0C */ J3DMtxCalcMayaAnm* mpMtxCalc;
 };  // Size: 0x10
 
 STATIC_ASSERT(sizeof(mDoExt_bckAnm) == 0x10);
@@ -190,7 +190,8 @@ public:
     int init(J3DModelData*, J3DAnmTransform*, int, int, float, short, short, bool);
 
 private:
-    // TODO
+    /* 0x08 */ J3DAnmVisibilityFull* mpAnm;
+    /* 0x0C */ J3DVisibilityManager* field_0xc;
 };
 
 class mDoExt_AnmRatioPack {
@@ -358,36 +359,76 @@ public:
     void restore(J3DMaterial*);
 
 private:
-    // TODO
+    /* 0x000 */ J3DGXColor mMatColor[2];
+    /* 0x008 */ u8 mColorChanNum;
+    /* 0x00A */ J3DColorChan mColorChan[4];
+    /* 0x012 */ J3DGXColor mAmbColor[2];
+    /* 0x01C */ u32 mTexGenNum;
+    /* 0x020 */ J3DTexCoord mTexCoord[8];
+    /* 0x040 */ J3DTexMtx mTexMtx[8];
+    /* 0x660 */ u8 mTevStageNum;
+    /* 0x662 */ u16 mTexNo[8];
+    /* 0x672 */ J3DGXColorS10 mTevColor[4];
+    /* 0x692 */ J3DGXColor mTevKColor[4];
+    /* 0x6A2 */ J3DTevStage mTevStage[8];
+    /* 0x6E4 */ J3DIndTevStage mIndTevStage[8];
+    /* 0x704 */ J3DTevOrder mTevOrder[4];
+    /* 0x714 */ u8 mTevKColorSel[4];
+    /* 0x718 */ u8 mTevKAlphaSel[4];
+    /* 0x71C */ J3DTevSwapModeTable mTevSwapModeTable[4];
+    /* 0x720 */ u8 mIndTexStageNum;
+    /* 0x721 */ J3DIndTexOrder mIndTexOrder[4];
+    /* 0x734 */ J3DIndTexMtx mIndTexMtx[3];
+    /* 0x788 */ J3DIndTexCoordScale mIndTexCoordScale[4];
+    /* 0x798 */ J3DFog mFog;
+    /* 0x7C4 */ J3DAlphaComp mAlphaComp;
+    /* 0x7C8 */ J3DBlend mBlend;
+    /* 0x7CC */ J3DZMode mZMode;
+    /* 0x7CE */ u8 mZCompLoc;
+    /* 0x7D0 */ J3DMaterialAnm* mMaterialAnm;
+    /* 0x7D4 */ u32 mMaterialMode;
 };
 
 class mDoExt_backupMaterial_c {
 public:
-    void create(J3DModelData*);
-    void create(u16);
+    bool create(J3DModelData*);
+    bool create(u16);
     void restore(J3DModelData*);
 
 private:
-    // TODO
+    /* 0x00 */ mDoExt_backupMatBlock_c* mBackupMatBlock;
+    /* 0x04 */ J3DTexture* mTexture;
+    /* 0x08 */ JUTNameTab* mTextureName;
+};
+
+class mDoExt_invJntPacket : public J3DPacket {
+public:
+    mDoExt_invJntPacket() {}
+    ~mDoExt_invJntPacket() {}
+
+    void draw();
+
+    void setJoint(J3DModel* i_model, u16 param_1) {
+        mModel = i_model;
+        field_0x14 = param_1;
+    }
+
+    J3DModel* mModel;
+    u16 field_0x14;
 };
 
 class mDoExt_invisibleModel {
 public:
-    void create(J3DModel*);
+    bool create(J3DModel*);
 
     void entry();
     void entryMaskOff();
 
     void updateDL(J3DModel*);
     void updateDL(mDoExt_McaMorf*);
-};
 
-class mDoExt_invJntPacket : public J3DPacket {
-public:
-    mDoExt_invJntPacket();
-    ~mDoExt_invJntPacket();
-
-    void draw();
+    J3DModel* mModel;
+    mDoExt_invJntPacket* mpPackets;
 };
 
 class mDoExt_offCupOnAupPacket : public J3DPacket {
@@ -449,10 +490,10 @@ JKRExpHeap* mDoExt_createArchiveHeap(u32 heapSize, JKRHeap* i_heap);
 JKRExpHeap* mDoExt_createZeldaHeap(u32 heapSize, JKRHeap* i_heap);
 JKRExpHeap* mDoExt_createGameHeap(u32 heapSize, JKRHeap* i_heap);
 
-int mDoExt_getSafeArchiveHeapSize();
-int mDoExt_getSafeGameHeapSize();
-int mDoExt_getSafeZeldaHeapSize();
-int mDoExt_getSafeCommandHeapSize();
+s32 mDoExt_getSafeArchiveHeapSize();
+s32 mDoExt_getSafeGameHeapSize();
+s32 mDoExt_getSafeZeldaHeapSize();
+s32 mDoExt_getSafeCommandHeapSize();
 
 s32 mDoExt_resIDToIndex(JKRArchive*, u16);
 
@@ -461,6 +502,7 @@ JKRSolidHeap * mDoExt_createSolidHeapToCurrent(u32, JKRHeap *, u32 align);
 void mDoExt_restoreCurrentHeap();
 u32 mDoExt_adjustSolidHeap(JKRSolidHeap * pHeap);
 void mDoExt_destroySolidHeap(JKRSolidHeap * pHeap);
+JKRHeap* mDoExt_setCurrentHeap(JKRHeap*);
 
 extern JKRExpHeap* zeldaHeap;
 extern JKRExpHeap* gameHeap;
