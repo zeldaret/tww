@@ -127,18 +127,18 @@ inline void GXTexCoord2s16(const s16 u, const s16 v) {
 }
 
 inline void GFWriteBPCmd(u32 param_1) {
-  GXFIFO.u8 = 0x61;
-  GXFIFO.u32 = param_1;
+    GXFIFO.u8 = 0x61;
+    GXFIFO.u32 = param_1;
 }
 
 inline void GFFill(u16 param_1, u32 param_2) {
-  GXFIFO.u8 = 0x10;
-  GXFIFO.u16 = 0;
-  GXFIFO.u16 = param_1;
-  GXFIFO.u32 = param_2;
+    GXFIFO.u8 = 0x10;
+    GXFIFO.u16 = 0;
+    GXFIFO.u16 = param_1;
+    GXFIFO.u32 = param_2;
 }
 
-inline void i_GXEnd() {}
+inline void GXEnd() {}
 
 #ifdef __cplusplus
 };

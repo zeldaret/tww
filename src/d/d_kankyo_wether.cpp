@@ -96,7 +96,7 @@ STAR_EFF::STAR_EFF() {}
 
 /* 800872D8-80087308       .text draw__19dKankyo_star_PacketFv */
 void dKankyo_star_Packet::draw() {
-    dKyr_drawStar(j3dSys.getViewMtx(), &field_0x10);
+    dKyr_drawStar(j3dSys.getViewMtx(), &mpTexture);
 }
 
 /* 80087308-80087344       .text __dt__10POISON_EFFFv */
@@ -107,7 +107,7 @@ POISON_EFF::POISON_EFF() {}
 
 /* 80087348-8008737C       .text draw__21dKankyo_poison_PacketFv */
 void dKankyo_poison_Packet::draw() {
-    drawPoison(j3dSys.getViewMtx(), &field_0xbbac);
+    drawPoison(j3dSys.getViewMtx(), &mpTexture);
 }
 
 /* 8008737C-800873B8       .text __dt__9CLOUD_EFFFv */

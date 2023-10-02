@@ -3,6 +3,8 @@
 
 #include "JSystem/J3DGraphBase/J3DPacket.h"
 #include "SSystem/SComponent/c_xyz.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
 
 class JUTTexture;
 class JPABaseEmitter;
@@ -120,6 +122,7 @@ public:
     /* 0x36D4 */ f32 field_0x36d4;
     /* 0x36D8 */ s16 mEffCount;
     /* 0x36DA */ s16 mTamariStart;
+    /* 0x36DC */ void *field_0x36dc;
 };
 
 struct STAR_EFF {
@@ -140,7 +143,7 @@ public:
     virtual void draw();
     virtual ~dKankyo_star_Packet();
 
-    /* 0x10 */ u8* field_0x10;
+    /* 0x10 */ u8* mpTexture;
     /* 0x14 */ STAR_EFF mStarEff[1];
     /* 0x48 */ s16 mCount;
 };
@@ -149,7 +152,8 @@ struct POISON_EFF {
     POISON_EFF();
     ~POISON_EFF();
 
-    /* 0x0 */ u8 field_0x0[0x30];
+    /* 0x00 */ u8 mStatus;
+    /* 0x01 */ u8 field_0x1[0x2F];
 };
 
 class dKankyo_poison_Packet : public J3DPacket {
@@ -159,11 +163,11 @@ public:
     virtual void draw();
     virtual ~dKankyo_poison_Packet();
 
-    /* 0x0010 */ POISON_EFF mPoisonEff[1000];
+    /* 0x0010 */ POISON_EFF mEff[1000];
     /* 0xBB90 */ u8 field_0xbb90[0xBB9C - 0xBB90];
     /* 0xBB9C */ cXyz field_0xbb9c;
-    /* 0xBBA8 */ u8 field_0xbba8[0xBBAC - 0xBBA8];
-    /* 0xBBAC */ u8* field_0xbbac;
+    /* 0xBBA8 */ u32 mCount;
+    /* 0xBBAC */ u8* mpTexture;
 };
 
 struct CLOUD_EFF {
