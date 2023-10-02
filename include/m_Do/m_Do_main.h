@@ -9,6 +9,8 @@ class JKRExpHeap;
 void version_check();
 s32 LOAD_COPYDATE(void*);
 
+extern OSThread mainThread;
+
 #define HeapCheckTableNum 6
 
 class HeapCheck {

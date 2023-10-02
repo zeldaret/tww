@@ -45,6 +45,7 @@ public:
     JUTNameTab* getMaterialName() const { return mMaterialName; }
 
     u16 getMaterialNum() const { return mMaterialNum; }
+    bool isLocked() const { return field_0x20 == 1; }
 
 private:
     friend class J3DJointTree;

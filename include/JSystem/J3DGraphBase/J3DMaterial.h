@@ -43,6 +43,8 @@ public:
 
     J3DMaterial* getNext() const { return mNext; }
     J3DShape* getShape() const { return mShape; }
+    u32 getMaterialMode() { return mMaterialMode; }
+    void setMaterialMode(u32 mode) { mMaterialMode = mode; }
     J3DTevBlock* getTevBlock() const { return mTevBlock; }
     J3DColorBlock* getColorBlock() const { return mColorBlock; }
     J3DTexGenBlock* getTexGenBlock() const { return mTexGenBlock; }

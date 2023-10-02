@@ -308,6 +308,6 @@ const J3DTevSwapModeInfo j3dDefaultTevSwapMode = {};
 const J3DTevSwapModeTableInfo j3dDefaultTevSwapModeTable = {0, 1, 2, 3};
 const J3DBlendInfo j3dDefaultBlendInfo = {GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_NOOP};
 const J3DColorChanInfo j3dDefaultColorChanInfo = {0, 0, 0, 2, 2, 0, 0xFF, 0xFF};
-const u16 j3dDefaultTevSwapTableID = 0x1B00;
+const u8 j3dDefaultTevSwapTableID = 0x1B;
 const u16 j3dDefaultAlphaCmpID = 0xE7;
 const u16 j3dDefaultZModeID = 0x17;
