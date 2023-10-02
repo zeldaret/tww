@@ -23,14 +23,12 @@ public:
     void setCallBack(J3DNodeCallBack callback) { mCallBack = callback; }
     J3DNodeCallBack getCallBack() { return mCallBack; }
     J3DNode* getChild() { return mChild; }
-    u16 getJntNo() { return mJntNo; }
 
     /* 0x04 */ void* mCallBackUserData;
     /* 0x08 */ J3DNodeCallBack mCallBack;
     /* 0x0C */ void* field_0x8;
     /* 0x10 */ J3DNode* mChild;
     /* 0x14 */ J3DNode* mYounger;
-    /* 0x18 */ u16 mJntNo;
 };  // Size: 0x18
 
 #endif /* J3DNODE_H */

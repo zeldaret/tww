@@ -136,6 +136,10 @@ void dPa_smokeEcallBack::end() {
     /* Nonmatching */
 }
 
+void dPa_smokeEcallBack::~dPa_smokeEcallBack() {
+    
+}
+
 /* 8007BBD8-8007BC84       .text dPa_setWindPower__FP15JPABaseParticle */
 void dPa_setWindPower(JPABaseParticle*) {
     /* Nonmatching */
@@ -560,4 +564,3 @@ void dPa_setColorEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, si
 dPa_setColorEcallBack::~dPa_setColorEcallBack() {
     /* Nonmatching */
 }
-

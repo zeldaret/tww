@@ -16,6 +16,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_bg_w.h"
+#include "d/d_item.h"
 #include "d/d_item_data.h"
 #include "d/d_particle.h"
 #include "d/actor/d_a_player.h"
@@ -24,6 +25,21 @@
 #include "m_Do/m_Do_mtx.h"
 #include "dolphin/types.h"
 
+
+#define ACT_SETGOAL 0
+#define ACT_SETANGLE 1
+#define ACT_WAIT 2
+#define ACT_INPUT 3
+#define ACT_BREAK 4
+#define ACT_HIDE_LINK 5
+#define ACT_DISP_LINK 6
+#define ACT_LESSON 7
+#define ACT_TACT 8
+
+#define ID_EARTH_MDL 4
+#define ID_BREAK_MDL 5
+#define ID_WIND_MDL 6
+#define ID_COL_DZB 9
 
 static const char* daObjMknjD_jointName[] = {
     "Hahen1",
@@ -63,6 +79,7 @@ const char* daObjMknjD_EventName[] = {
 };
 
 static u16 joint_number_table[20];
+Mtx M_tmp_mtx;
 
 namespace daObjMknjD {
     class Act_c : public dBgS_MoveBgActor {
@@ -91,7 +108,7 @@ namespace daObjMknjD {
         int Draw();
 
         static const char M_arcname[];
-        static Mtx M_tmp_mtx;
+        //static Mtx M_tmp_mtx;
 
         /* 0x02C8 */ cXyz mLeftHalfPos;
         /* 0x02D4 */ cXyz mRightHalfPos;
@@ -101,24 +118,20 @@ namespace daObjMknjD {
 
         /* 0x0420 */ request_of_phase_process_class mPhs;
 
-        /* 0x0428 */ J3DModel* mModel0;
-        /* 0x042C */ J3DModel* mModel1;
+        /* 0x0428 */ J3DModel* mMainMdl;
+        /* 0x042C */ J3DModel* mBreakMdl;
         
         /* 0x0430 */ u16 m0430;
         /* 0x0432 */ u16 m0432;
         /* 0x0434 */ u16 m0434;
         /* 0x0438 */ u32 mBreakTimer;
 
-        /* 0x043C */ u8 mModel0Alpha;
+        /* 0x043C */ u8 mMainMdlAlpha;
         /* 0x043D */ bool m043D;
-        /* 0x043E */ bool m043E;
+        /* 0x043E */ u8 m043E;
         /* 0x043F */ u8 m043F;
 
-        /* 0x0440 */ JPABaseEmitter* mEmitter0;
-        /* 0x0444 */ JPABaseEmitter* mEmitter1;
-        /* 0x0448 */ JPABaseEmitter* mEmitter2;
-        /* 0x044C */ JPABaseEmitter* mEmitter3;
-
+        /* 0x0440 */ JPABaseEmitter* mEmitters[4];
         /* 0x0450 */ dPa_smokeEcallBack mSmokeCBs[4];
 
         /* 0x04D0 */ cXyz m04D0;
@@ -144,9 +157,13 @@ namespace daObjMknjD {
         enum Prm_e {
             PRM_SWITCH_W = 0x08,
             PRM_SWITCH_S = 0x00,
+
+            PRM_TYPE_W = 0x01,
+            PRM_TYPE_S = 0x10,
         };
 
         inline int prm_get_swSave() { return daObj::PrmAbstract<Prm_e>(this, PRM_SWITCH_W, PRM_SWITCH_S); }
+        inline u8 prm_get_Type() { return daObj::PrmAbstract<Prm_e>(this, PRM_TYPE_W, PRM_TYPE_S); }
     };
 
     const char Act_c::M_arcname[] = "MknjD";
@@ -158,7 +175,7 @@ namespace daObjMknjD {
 /* 00000078-0000012C       .text nodeCallBackL__FP7J3DNodei */
 u32 nodeCallBackL(J3DNode* i_node, int i_param2) {
     if (i_param2 == 0) {
-        int jntNo = i_node->getJntNo();
+        int jntNo = static_cast<J3DJoint*>(i_node)->getJntNo();
         
         J3DModel* mdl = j3dSys.getModel();
         daObjMknjD::Act_c* actor = (daObjMknjD::Act_c*)mdl->getUserArea();
@@ -179,7 +196,7 @@ u32 nodeCallBackL(J3DNode* i_node, int i_param2) {
 /* 0000012C-000001E0       .text nodeCallBackR__FP7J3DNodei */
 u32 nodeCallBackR(J3DNode* i_node, int i_param2) {
     if (i_param2 == 0) {
-        int jntNo = i_node->getJntNo();
+        int jntNo = static_cast<J3DJoint*>(i_node)->getJntNo();
 
         J3DModel* mdl = j3dSys.getModel();
         daObjMknjD::Act_c* actor = (daObjMknjD::Act_c*)mdl->getUserArea();
@@ -200,7 +217,7 @@ u32 nodeCallBackR(J3DNode* i_node, int i_param2) {
 /* 000001E0-000002B0       .text nodeCallBack_Hahen__FP7J3DNodei */
 s32 nodeCallBack_Hahen(J3DNode* i_node, int i_param2) {
     if (i_param2 == 0) {
-        int jntNo = i_node->getJntNo();
+        int jntNo = static_cast<J3DJoint*>(i_node)->getJntNo();
         u16 shardIdx = joint_number_table[jntNo - 1];
 
         J3DModel* mdl = j3dSys.getModel();
@@ -242,19 +259,157 @@ s16 daObjMknjD::Act_c::XyEventCB(int) {
 /* 0000031C-00000620       .text CreateHeap__Q210daObjMknjD5Act_cFv */
 int daObjMknjD::Act_c::CreateHeap() {
     /* Nonmatching */
-    return 0;
+    J3DModelData* model_data_d;
+    if (m043E == true) {
+        model_data_d = (J3DModelData*)dComIfG_getObjectRes(M_arcname, ID_WIND_MDL);
+    }
+    else {
+        model_data_d = (J3DModelData*)dComIfG_getObjectRes(M_arcname, ID_EARTH_MDL);
+    }
+
+    J3DModelData* model_data_h = (J3DModelData*)dComIfG_getObjectRes(M_arcname, ID_BREAK_MDL);
+
+    JUT_ASSERT(0x123, model_data_d != 0)
+    JUT_ASSERT(0x124, model_data_h != 0)
+    
+    mMainMdl = mDoExt_J3DModel__create(model_data_d, 0x80000, 0x31000002);
+    mBreakMdl = mDoExt_J3DModel__create(model_data_h, 0x80000, 0x11000002);
+
+    if (mMainMdl != NULL && mBreakMdl != NULL) {
+        JUTNameTab* nameTable = mMainMdl->getModelData()->getJointName();
+        
+        for (u16 i = 0; i < mMainMdl->getModelData()->getJointNum(); i++) {
+            const char* jntName = nameTable->getName(i);
+
+            if (strcmp("MknjL", jntName) == 0) {
+                mMainMdl->getModelData()->getJointNodePointer(i)->setCallBack((J3DNodeCallBack)nodeCallBackL);
+            }
+            else if (strcmp("MknjR", jntName) == 0) {
+                mMainMdl->getModelData()->getJointNodePointer(i)->setCallBack((J3DNodeCallBack)nodeCallBackR);
+            }
+        }
+
+        mMainMdl->setUserArea(this);
+
+        int curTblIdx = 0;
+        nameTable = mBreakMdl->getModelData()->getJointName();
+
+        for (u16 i = 0; i < mBreakMdl->getModelData()->getJointNum(); i++) {
+            const char* jntName = nameTable->getName(i);
+
+            for (u16 j = 0; j < 20; j++) {
+                if (strcmp(daObjMknjD_jointName[j], jntName) == 0) {
+                    mBreakMdl->getModelData()->getJointNodePointer(i)->setCallBack((J3DNodeCallBack)nodeCallBack_Hahen);
+                    joint_number_table[curTblIdx++] = j;
+
+                    break;
+                }
+            }
+        }
+
+        mBreakMdl->setUserArea(this);
+        mMainMdlAlpha = 0xFF;
+
+        return true;
+    }
+
+    return false;
 }
 
 /* 00000620-000008E8       .text Create__Q210daObjMknjD5Act_cFv */
 int daObjMknjD::Act_c::Create() {
     /* Nonmatching */
-    return 0;
+    mCullMtx = mMainMdl->getBaseTRMtx();
+    init_mtx();
+    mCullMtx = mBreakMdl->getBaseTRMtx();
+    init_mtx();
+
+    fopAcM_setCullSizeBox(this, -400.0f, -1.0f, -400.0f, 400.0f, 405.0f, 400.0f);
+
+    mLeftHalfPos.setAll(0.0f);
+    mRightHalfPos.setAll(0.0f);
+
+    for (int i = 0; i < 20; i++) {
+        mShardPositions[i].setAll(0.0f);
+        mShardHeights[i] = 0.0f;
+    }
+
+    m043D = false;
+    mBreakTimer = 0;
+
+    for (int i = 0; i < 4; i++) {
+        mEmitters[i] = NULL;
+    }
+
+    if (m043E == true) {
+        mCheckEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[3], 0xFF);
+        mDemoEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[1], 0xFF);
+        mErrorEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[5], 0xFF);
+        mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[7], 0xFF);
+
+        mTactMode = 4;
+        mGiveItemId = TACT_SONG5;
+        mEvtInfo.setEventName("MKNJD_K_TALK");
+        m0430 = 0x2910;
+    }
+    else {
+        mCheckEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[2], 0xFF);
+        mDemoEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[0], 0xFF);
+        mErrorEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[4], 0xFF);
+        mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[6], 0xFF);
+
+        mTactMode = 3;
+        mGiveItemId = TACT_SONG4;
+        mEvtInfo.setEventName("MKNJD_D_TALK");
+        m0430 = 0x2920;
+    }
+
+    mAttentionInfo.mDistances[1] = 0x3D;
+    mAttentionInfo.mDistances[3] = 0x3D;
+    mAttentionInfo.mFlags |= 0x20000000 | 0x8;
+
+    if (checkItemGet(mGiveItemId, 1) == 0) {
+        m043F = 8;
+        mEvtInfo.mpCheckCB = daObjMknjD_XyCheckCB;
+        mEvtInfo.mpEventCB = daObjMknjD_XyEventCB;
+    }
+    else {
+        m043F = 0;
+    }
+
+    mMsgPtr = NULL;
+    mMsgInstId = 0xFFFFFFFF;
+    m0504 = false;
+
+    return 1;
 }
 
 /* 000008E8-00000A84       .text Mthd_Create__Q210daObjMknjD5Act_cFv */
 s32 daObjMknjD::Act_c::Mthd_Create() {
     /* Nonmatching */
-    return 0;
+    s32 phase_state;
+
+    fopAcM_SetupActor(this, daObjMknjD::Act_c);
+
+    m043E = prm_get_Type();
+
+    int switchIdx = prm_get_swSave();
+    if (fopAcM_isSwitch(this, switchIdx)) {
+        mEmitters[2] = NULL;
+        mEmitters[3] = NULL;
+
+        return 3;
+    }
+    else {
+        phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+        if (phase_state == cPhs_COMPLEATE_e) {
+            phase_state = MoveBGCreate(M_arcname, ID_COL_DZB, NULL, 0x65A0);
+
+            JUT_ASSERT(0x1CA, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e))
+        }
+    }
+
+    return phase_state;
 }
 
 /* 00000B64-00000BDC       .text Delete__Q210daObjMknjD5Act_cFv */
@@ -285,8 +440,8 @@ void daObjMknjD::Act_c::set_mtx() {
     mDoMtx_stack_c::transS(getPosition());
     mDoMtx_stack_c::ZXYrotM(shape_angle);
 
-    mModel0->setBaseTRMtx(mDoMtx_stack_c::get());
-    mModel1->setBaseTRMtx(mDoMtx_stack_c::get());
+    mMainMdl->setBaseTRMtx(mDoMtx_stack_c::get());
+    mBreakMdl->setBaseTRMtx(mDoMtx_stack_c::get());
 
     mDoMtx_copy(mDoMtx_stack_c::get(), M_tmp_mtx);
 }
@@ -294,8 +449,8 @@ void daObjMknjD::Act_c::set_mtx() {
 /* 00000CC8-00000D28       .text init_mtx__Q210daObjMknjD5Act_cFv */
 void daObjMknjD::Act_c::init_mtx() {
     /* Nonmatching */
-    mModel0->setBaseScale(cXyz(1.0f, 1.0f, 1.0f));
-    mModel1->setBaseScale(cXyz(1.0f, 1.0f, 1.0f));
+    mMainMdl->setBaseScale(cXyz(1.0f, 1.0f, 1.0f));
+    mBreakMdl->setBaseScale(cXyz(1.0f, 1.0f, 1.0f));
 
     set_mtx();
 }
@@ -330,7 +485,7 @@ void daObjMknjD::Act_c::setPlayerAngle(int i_staffIdx) {
 
 /* 00000E84-00000F88       .text talk__Q210daObjMknjD5Act_cFi */
 u16 daObjMknjD::Act_c::talk(int i_param1) {
-    u32 msgMode = 0xFF;
+    u16 msgMode = 0xFF;
 
     if (mMsgInstId == 0xFFFFFFFF) {
         if (i_param1 == 1) {
@@ -374,16 +529,6 @@ u16 daObjMknjD::Act_c::talk(int i_param1) {
 
     return msgMode;
 }
-
-#define ACT_SETGOAL 0
-#define ACT_SETANGLE 1
-#define ACT_WAIT 2
-#define ACT_INPUT 3
-#define ACT_BREAK 4
-#define ACT_HIDE_LINK 5
-#define ACT_DISP_LINK 6
-#define ACT_LESSON 7
-#define ACT_TACT 8
 
 /* 00000F88-00001348       .text privateCut__Q210daObjMknjD5Act_cFv */
 void daObjMknjD::Act_c::privateCut() {
@@ -591,24 +736,24 @@ void daObjMknjD::setMaterial(J3DMaterial* i_mat, u8 i_alpha) {
 /* 000022FC-00002430       .text Draw__Q210daObjMknjD5Act_cFv */
 int daObjMknjD::Act_c::Draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, getPositionP(), &mTevStr);
-    g_env_light.setLightTevColorType(mModel1, &mTevStr);
+    g_env_light.setLightTevColorType(mBreakMdl, &mTevStr);
 
     g_env_light.settingTevStruct(TEV_TYPE_BG0, getPositionP(), &mTevStr);
-    g_env_light.setLightTevColorType(mModel0, &mTevStr);
+    g_env_light.setLightTevColorType(mMainMdl, &mTevStr);
 
     dComIfGd_setList();
 
-    J3DModelData* mdlData = mModel0->getModelData();
+    J3DModelData* mdlData = mMainMdl->getModelData();
     u16 jointCount = mdlData->getJointNum();
     for (u16 i = 0; i < jointCount; i++) {
-        setMaterial(mdlData->getJointNodePointer(i)->getMesh(), mModel0Alpha);
+        setMaterial(mdlData->getJointNodePointer(i)->getMesh(), mMainMdlAlpha);
     }
 
     dComIfGd_setListSky();
 
-    mDoExt_modelUpdateDL(mModel0);
+    mDoExt_modelUpdateDL(mMainMdl);
     if (m043D == true) {
-        mDoExt_modelUpdateDL(mModel1);
+        mDoExt_modelUpdateDL(mBreakMdl);
     }
 
     dComIfGd_setListBG();

@@ -36,7 +36,7 @@ public:
 
 class dPa_followEcallBack : public dPa_levelEcallBack {
 public:
-    dPa_followEcallBack(u8, u8);
+    dPa_followEcallBack(u8 = 0, u8 = 0);
     virtual ~dPa_followEcallBack();
     
     virtual void execute(JPABaseEmitter*);
@@ -58,7 +58,7 @@ STATIC_ASSERT(sizeof(dPa_followEcallBack) == 0x14);
 
 class dPa_smokeEcallBack : public dPa_followEcallBack {
 public:
-    dPa_smokeEcallBack(u8);
+    dPa_smokeEcallBack(u8 = 1);
     virtual ~dPa_smokeEcallBack();
 
     virtual void execute(JPABaseEmitter*);

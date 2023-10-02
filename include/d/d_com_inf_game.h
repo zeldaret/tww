@@ -1218,7 +1218,7 @@ inline s32 dComIfGp_evmng_getEventPrio(s16 eventIdx) {
     return dComIfGp_getEventManager().getEventPrio(eventIdx);
 }
 
-inline s16 dComIfGp_evmng_getEventIdx(char* pName, u8 evNo) {
+inline s16 dComIfGp_evmng_getEventIdx(const char* pName, u8 evNo) {
     return dComIfGp_getEventManager().getEventIdx(pName, evNo);
 }
 
