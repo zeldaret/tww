@@ -79,7 +79,6 @@ const char* daObjMknjD_EventName[] = {
 };
 
 static u16 joint_number_table[20];
-Mtx M_tmp_mtx;
 
 namespace daObjMknjD {
     class Act_c : public dBgS_MoveBgActor {
@@ -164,6 +163,8 @@ namespace daObjMknjD {
 
         inline int prm_get_swSave() { return daObj::PrmAbstract<Prm_e>(this, PRM_SWITCH_W, PRM_SWITCH_S); }
         inline u8 prm_get_Type() { return daObj::PrmAbstract<Prm_e>(this, PRM_TYPE_W, PRM_TYPE_S); }
+
+        static Mtx M_tmp_mtx;
     };
 
     const char Act_c::M_arcname[] = "MknjD";
@@ -171,6 +172,8 @@ namespace daObjMknjD {
     static void manage_friend_draw(int);
     static void setMaterial(J3DMaterial*, u8);
 }
+
+Mtx daObjMknjD::Act_c::M_tmp_mtx;
 
 /* 00000078-0000012C       .text nodeCallBackL__FP7J3DNodei */
 u32 nodeCallBackL(J3DNode* i_node, int i_param2) {
