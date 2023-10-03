@@ -251,6 +251,14 @@ STATIC_ASSERT(sizeof(fopAc_ac_c) == 0x290);
 
 class fopEn_enemy_c : public fopAc_ac_c {
 public:
+    enum ParryOpeningType {
+        OPENING_NONE = 0,
+        OPENING_JUMP_PARRY = 1,
+        OPENING_ROLL_PARRY = 2,
+        OPENING_VERTICAL_JUMP_PARRY = 3,
+        OPENING_GANONDORF_FINISHER_PARRY = 4,
+    };
+    
     /* 0x290 */ f32 m290;
     /* 0x294 */ f32 m294;
     /* 0x298 */ f32 m298;

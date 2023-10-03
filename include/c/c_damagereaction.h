@@ -4,6 +4,8 @@
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_kankyo.h"
+#include "d/d_particle.h"
+#include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
 
 struct enemyice {
@@ -67,27 +69,34 @@ public:
 STATIC_ASSERT(sizeof(enemyfire) == 0x228);
 
 struct damagereaction {
+public:
+    enum EnemyType {
+        TYPE_MOBLIN = 1,
+        TYPE_BOKOBLIN = 2,
+        TYPE_DARKNUT = 3,
+    };
+    
     /* 0x000 */ fopEn_enemy_c* mpEnemy;
     /* 0x004 */ s16 m004;
     /* 0x006 */ s16 mState;
     /* 0x008 */ u16 mEnemyType;
     /* 0x00A */ u8 m00A[0x00C - 0x00A];
-    /* 0x00C */ s32 mTimer;
+    /* 0x00C */ int mTimer;
     /* 0x010 */ csXyz m010[20];
     /* 0x088 */ csXyz m088[20];
     /* 0x100 */ cXyz m100[20];
     /* 0x1F0 */ cXyz m1F0[20];
     /* 0x2E0 */ cXyz m2E0[20];
     /* 0x3D0 */ u8 m3D0[0x410 - 0x3D0];
-    /* 0x410 */ s32 m410;
+    /* 0x410 */ int m410;
     /* 0x414 */ u8 m414[0x418 - 0x414];
-    /* 0x418 */ s32 m418;
+    /* 0x418 */ int m418;
     /* 0x41C */ u8 m41C[0x420 - 0x41C];
-    /* 0x420 */ s32 m420;
-    /* 0x424 */ s32 m424;
+    /* 0x420 */ int m420;
+    /* 0x424 */ int m424;
     /* 0x428 */ f32 m428;
     /* 0x42C */ cXyz m42C;
-    /* 0x438 */ s32 m438;
+    /* 0x438 */ int m438;
     /* 0x43C */ u8 m43C[0x440 - 0x43C];
     /* 0x440 */ s16 m440;
     /* 0x442 */ s16 m442;
@@ -103,7 +112,7 @@ struct damagereaction {
     /* 0x470 */ f32 m470;
     /* 0x474 */ f32 m474;
     /* 0x478 */ f32 m478;
-    /* 0x47C */ s32 m47C;
+    /* 0x47C */ int m47C;
     /* 0x480 */ s16 m480;
     /* 0x482 */ s16 m482;
     /* 0x484 */ s16 m484;
@@ -143,7 +152,7 @@ struct damagereaction {
     /* 0x4D8 */ u8 m4D8[0x4DC - 0x4D8];
     /* 0x4DC */ dBgS_AcchCir mAcchCir;
     /* 0x51C */ dBgS_Acch mAcch;
-    /* 0x6E0 */ s32 m6E0;
+    /* 0x6E0 */ int m6E0;
     /* 0x6E4 */ f32 mSpawnY;
     /* 0x6E8 */ cXyz m6E8;
     /* 0x6F4 */ cXyz m6F4[2];
@@ -162,8 +171,7 @@ struct damagereaction {
     /* 0x760 */ cXyz mParticlePos;
     /* 0x76C */ csXyz mParticleAngle;
     /* 0x772 */ u8 m772[0x774 - 0x772];
-    /* 0x774 */ dPa_levelEcallBack mParticleCallBack;
-    /* 0x778 */ u8 m778[0x794 - 0x778];
+    /* 0x774 */ dPa_smokeEcallBack mParticleCallBack;
     /* 0x794 */ s16 m794;
     /* 0x796 */ u8 m796[0x7A0 - 0x796];
     /* 0x7A0 */ cXyz m7A0;
@@ -172,7 +180,7 @@ struct damagereaction {
     /* 0x7B0 */ u8 m7B0[0x7B2 - 0x7B0];
     /* 0x7B2 */ s16 m7B2;
     /* 0x7B4 */ u8 m7B4[0x7B8 - 0x7B4];
-    /* 0x7B8 */ s32 m7B8;
+    /* 0x7B8 */ int m7B8;
 };
 // STATIC_ASSERT(sizeof(damagereaction) == 0x7BC);
 
