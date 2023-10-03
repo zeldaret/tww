@@ -92,4 +92,6 @@ public:
     /* 0xDC */ int mState;
 };
 
+void dDemo_setDemoData(fopAc_ac_c*, u8, mDoExt_McaMorf*, const char*, int, u16*, u32, s8);
+
 #endif /* D_DEMO_H */
