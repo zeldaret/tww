@@ -13,6 +13,7 @@
 #include "d/d_bg_s.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_path.h"
 #include "d/d_procname.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera_mng.h"
@@ -220,7 +221,7 @@ dStage_darkStatus_c* dStage_roomControl_c::getDarkStatus() {
         return NULL;
 
     // pointer math here seems wrong...
-    return &mDarkStatus[plist_p->mParam & 0x78];
+    return &mDarkStatus[(plist_p->mParam & 0x78) >> 3];
 }
 
 /* 80041330-80041370       .text getDarkMode__20dStage_roomControl_cFv */
@@ -1338,22 +1339,20 @@ int dStage_arrowInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
 /* 80041F3C-80041F54       .text dStage_mapInfo_GetOceanX__FP20stage_map_info_class */
 int dStage_mapInfo_GetOceanX(stage_map_info_class* i_mapInfo) {
     int rt = (i_mapInfo->mOceanXZ & 0xF);
-    if (!(i_mapInfo->mOceanXZ & 8)) {
+    if (rt & 8)
+        return rt - 0x10;
+    else
         return rt;
-    }
-
-    return rt - 0x10;
 }
 
 /* 80041F54-80041F6C       .text dStage_mapInfo_GetOceanZ__FP20stage_map_info_class */
 // NONMATCHING
 int dStage_mapInfo_GetOceanZ(stage_map_info_class* i_mapInfo) {
-    int rt = (i_mapInfo->mOceanXZ >> 4) & 0xF;
-    if ((i_mapInfo->mOceanXZ >> 4) & 8) {
+    int rt = (i_mapInfo->mOceanXZ >> 4) & 0x0F;
+    if (rt & 8)
         return rt - 0x10;
-    }
-
-    return rt;
+    else
+        return rt;
 }
 
 /* 80041F6C-80041FD0       .text dStage_mapInfoInit__FP11dStage_dt_cPviPv */
@@ -1578,7 +1577,13 @@ int dStage_ppntInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
 
 /* 8004268C-8004271C       .text dStage_pathInfoInit__FP11dStage_dt_cPviPv */
 int dStage_pathInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
-    /* Nonmatching */
+    dStage_dPath_c* pStagePath = (dStage_dPath_c*)((char*)i_data + 4);
+    dPath* pPath = pStagePath->m_path;
+
+    i_stage->setPathInfo(pStagePath);
+    for (s32 i = 0; i < pStagePath->num; i++, pPath++)
+        *(u32*)pPath->mpPnt += (u32)i_stage->getPntInf();
+    return 1;
 }
 
 /* 8004271C-80042750       .text dStage_rppnInfoInit__FP11dStage_dt_cPviPv */
@@ -2151,7 +2156,23 @@ void dStage_restartRoom(u32 roomParam, u32 mode) {
 
 /* 80043B10-80043BD0       .text dStage_turnRestart__Fv */
 void dStage_turnRestart() {
-    /* Nonmatching */
+    s8 layerNo = dComIfGp_getStartStageLayer();
+    if (layerNo >= 0)
+        layerNo = dComIfGp_getStartStageLayer() ^ 1;
+
+    dComIfGp_setNextStage(dComIfGp_getStartStageName(), -3, dComIfGs_getTurnRestartRoomNo(), layerNo, 0.0f, 0, 0, 6);
+
+    s32 hour = dKy_getdaytime_hour();
+    f32 nextTime = 180.0f;
+    if (hour >= 6 && hour < 18)
+        nextTime = 0.0f;
+
+    if (hour >= 6 && hour <= 23) {
+        dComIfGs_setDate(dComIfGs_getDate() + 1);
+        dKy_DayProc();
+    }
+
+    dKy_set_nexttime(nextTime);
 }
 
 /* 80043BD0-80043C84       .text dStage_escapeRestart__Fv */

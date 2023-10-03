@@ -413,5 +413,6 @@ void dKy_set_vrboxsoracol_ratio(f32 ratio);
 void dKy_set_vrboxkumocol_ratio(f32 ratio);
 cXyz dKy_get_orion_pos();
 cXyz dKy_get_hokuto_pos();
+void dKy_DayProc();
 
 #endif /* D_KANKYO_D_KANKYO_H */

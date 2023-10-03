@@ -57,10 +57,10 @@ s32 daThrowstone_c::_create() {
             mDoMtx_stack_c::YrotM(shape_angle.y);
             mDoMtx_stack_c::scaleM(mScale);
 
-            MTXCopy(mDoMtx_stack_c::get(), mMtx);
+            mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
             mCullMtx = mpModel->getBaseTRMtx();
 
-            MTXCopy(mpModel->getBaseTRMtx(), mMtx);
+            mDoMtx_copy(mpModel->getBaseTRMtx(), mMtx);
         }
     }
 
@@ -90,7 +90,7 @@ BOOL daThrowstone_c::_execute() {
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
 
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    MTXCopy(mDoMtx_stack_c::get(), mMtx);
+    mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
 
     return FALSE;
 }
