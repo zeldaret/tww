@@ -145,3 +145,38 @@ s32 dScnOpen_Create(scene_class* i_scn) {
     return i_this->create();
 }
 
+static scene_method_class l_dScnOpen_Method = {
+    (process_method_func)dScnOpen_Create,
+    (process_method_func)dScnOpen_Delete,
+    (process_method_func)dScnOpen_Execute,
+    (process_method_func)dScnOpen_IsDelete,
+    (process_method_func)dScnOpen_Draw,
+};
+
+extern scene_process_profile_definition g_profile_OPEN_SCENE = {
+    fpcLy_ROOT_e,
+    1,
+    fpcPi_CURRENT_e,
+    PROC_OPEN_SCENE,
+    &g_fpcLf_Method.mBase,
+    sizeof(dScnOpen_c),
+    0,
+    0,
+    &g_fopScn_Method.mBase,
+    &l_dScnOpen_Method,
+    NULL,
+};
+
+extern scene_process_profile_definition g_profile_OPEN2_SCENE = {
+    fpcLy_ROOT_e,
+    1,
+    fpcPi_CURRENT_e,
+    PROC_OPEN2_SCENE,
+    &g_fpcLf_Method.mBase,
+    sizeof(dScnOpen_c),
+    0,
+    0,
+    &g_fopScn_Method.mBase,
+    &l_dScnOpen_Method,
+    NULL,
+};
