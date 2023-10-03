@@ -97,11 +97,6 @@ public:
     /* 0x0 */ u8 field_0x0[0x28];
 };
 
-class dPa_cutTurnEcallBack_c {
-public:
-    /* 0x0 */ u8 field_0x0[0x10];
-};
-
 class daPy_waterDropEcallBack_c {
 public:
     void execute(JPABaseEmitter*);

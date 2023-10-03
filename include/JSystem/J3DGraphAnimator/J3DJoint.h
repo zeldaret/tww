@@ -140,7 +140,7 @@ private:
     friend struct J3DJointFactory;
     friend class J3DJointTree;
 
-    /* 0x14 */ u16 mJntNo;
+    /* 0x18 */ u16 mJntNo;
     /* 0x1A */ u8 mKind;
     /* 0x1B */ u8 mScaleCompensate;
     /* 0x1C */ J3DTransformInfo mTransformInfo;
@@ -150,6 +150,6 @@ private:
     /* 0x58 */ J3DMtxCalc* mMtxCalc;
     /* 0x5C */ J3DMtxCalc* mOldMtxCalc;
     /* 0x60 */ J3DMaterial* mMesh;
-};  // Size: 0x54
+};  // Size: 0x64
 
 #endif /* J3DJOINT_H */

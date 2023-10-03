@@ -3,7 +3,7 @@
 // Translation Unit: d_jnt_hit.cpp
 //
 
-#include "d_jnt_hit.h"
+#include "d/d_jnt_hit.h"
 #include "dolphin/types.h"
 
 /* 80060BE8-80060C44       .text __ct__12JntHit_HIO_cFv */
@@ -17,17 +17,17 @@ void JntHit_c::CreateInit() {
 }
 
 /* 80060EC4-80061440       .text CylHitPosAngleOffset__8JntHit_cFP4cXyzP5csXyzP4cXyzP5csXyz4cXyz4cXyzf */
-void JntHit_c::CylHitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*, cXyz, cXyz, float) {
+void JntHit_c::CylHitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*, cXyz, cXyz, f32) {
     /* Nonmatching */
 }
 
 /* 80061440-80061830       .text Cyl2HitPosAngleOffset__8JntHit_cFP4cXyzP5csXyzP4cXyzP5csXyz4cXyz4cXyzf */
-void JntHit_c::Cyl2HitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*, cXyz, cXyz, float) {
+void JntHit_c::Cyl2HitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*, cXyz, cXyz, f32) {
     /* Nonmatching */
 }
 
 /* 80061830-80061ACC       .text SphHitPosAngleOffset__8JntHit_cFP4cXyzP5csXyzP4cXyzP5csXyz4cXyzf */
-void JntHit_c::SphHitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*, cXyz, float) {
+void JntHit_c::SphHitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*, cXyz, f32) {
     /* Nonmatching */
 }
 
@@ -37,12 +37,12 @@ void JntHit_c::HitBufferUpdate(int*, cXyz*, int, csXyz*, cXyz*) {
 }
 
 /* 80061C28-800627DC       .text searchJntHitPosAngleOffset__8JntHit_cFP4cXyzP5csXyzP4cXyzP5csXyz */
-void JntHit_c::searchJntHitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*) {
+s32 JntHit_c::searchJntHitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*) {
     /* Nonmatching */
 }
 
 /* 800627DC-8006286C       .text JntHit_create__FP8J3DModelP16__jnt_hit_data_cs */
-void JntHit_create(J3DModel*, __jnt_hit_data_c*, short) {
+JntHit_c* JntHit_create(J3DModel* model, __jnt_hit_data_c* jntHitData, s16 hitDataCount) {
     /* Nonmatching */
 }
 

@@ -18,6 +18,7 @@
 #include "d/d_wood.h"
 #include "d/d_demo.h"
 #include "d/d_timer.h"
+#include "SSystem/SComponent/c_data_tbl.h"
 
 class JKRArchive;
 class JKRExpHeap;
@@ -54,11 +55,42 @@ public:
     /* 0x10 */ u8 mTimerType;
 };
 
+class dADM_CharTbl : public cDT {
+public:
+    /* 0x28 */ s32 mIndex_ARG;
+    /* 0x2C */ s32 mIndex_N_ITEM0;
+    /* 0x30 */ s32 mIndex_N_ITEM1;
+    /* 0x34 */ s32 mIndex_N_ITEM2;
+    /* 0x38 */ s32 mIndex_N_ITEM3;
+    /* 0x3C */ s32 mIndex_N_ITEM4;
+    /* 0x40 */ s32 mIndex_N_ITEM5;
+    /* 0x44 */ s32 mIndex_N_ITEM6;
+    /* 0x48 */ s32 mIndex_N_ITEM7;
+    /* 0x4C */ s32 mIndex_N_ITEM8;
+    /* 0x50 */ s32 mIndex_N_ITEM9;
+    /* 0x54 */ s32 mIndex_N_ITEM10;
+    /* 0x58 */ s32 mIndex_N_ITEM11;
+    /* 0x5C */ s32 mIndex_N_ITEM12;
+    /* 0x60 */ s32 mIndex_N_ITEM13;
+    /* 0x64 */ s32 mIndex_N_ITEM14;
+    /* 0x68 */ s32 mIndex_N_ITEM15;
+    /* 0x6C */ s32 mIndex_percent;
+    /* 0x70 */ s32 mIndex_ITEM0;
+    /* 0x74 */ s32 mIndex_ITEM1;
+    /* 0x78 */ s32 mIndex_ITEM2;
+    /* 0x7C */ s32 mIndex_ITEM3;
+    /* 0x80 */ s32 mIndex_ITEM4;
+    /* 0x84 */ s32 mIndex_ITEM5;
+    /* 0x88 */ s32 mIndex_ITEM6;
+    /* 0x8C */ s32 mIndex_ITEM7;
+};
+STATIC_ASSERT(sizeof(dADM_CharTbl) == 0x90);
+
 class dADM {
 public:
     /* 0x00 */ int mBlockCount;
     /* 0x04 */ void* mpData;
-    /* 0x08 */ u8 mCharTbl[0x90];
+    /* 0x08 */ dADM_CharTbl mCharTbl;
 
 public:
     dADM();
@@ -1185,6 +1217,10 @@ inline u8 dComIfGp_getMiniGameType() {
 }
 
 inline dDlst_window_c * dComIfGp_getWindow(int idx) { return &g_dComIfG_gameInfo.play.mDlstWindow[idx]; }
+
+inline dADM_CharTbl* dComIfGp_CharTbl() {
+    return &g_dComIfG_gameInfo.play.mADM.mCharTbl;
+}
 
 /**
  * === EVENT ===*/

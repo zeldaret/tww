@@ -120,7 +120,7 @@ s32 daBranch_c::CreateHeap() {
             0,
             0,
             static_cast<J3DAnmTransformKey*>(dComIfG_getObjectIDRes(m_arcname, bckIds[i])),
-            0,
+            -1,
             1.0f,
             0,
             -1,

@@ -33,7 +33,7 @@ public:
     void ClrWallHit();
     void SetWallR(f32);
     void CalcWallRR();
-    void SetWall(f32, f32);
+    void SetWall(f32 i_halfHeight, f32 i_radius);
     void SetWallHDirect(f32);
 
     virtual ~dBgS_AcchCir() {}
