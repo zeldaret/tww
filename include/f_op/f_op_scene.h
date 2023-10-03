@@ -21,7 +21,7 @@ typedef struct scene_process_profile_definition {
 class scene_class {
 public:
     /* 0x000 */ process_node_class mBase;
-    /* 0x1AC */ process_method_class* mpMtd;
+    /* 0x1AC */ scene_method_class* mpMtd;
     /* 0x1B0 */ scene_tag_class mScnTg;
 };
 
