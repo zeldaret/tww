@@ -2,6 +2,7 @@
 #define JPAPARTICLE_H
 
 #include "JSystem/JSupport/JSUList.h"
+#include "JSystem/JParticle/JPAEmitter.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "dolphin/gx/GXStruct.h"
 
@@ -13,7 +14,6 @@ class JPAEmitterManager;
 class JPAParticleCallBack;
 class JPAResourceManager;
 struct JPAEmitterWorkData;
-struct JPACallBackBase2;
 
 class JPABaseParticle {
 public:
@@ -58,7 +58,7 @@ public:
     /* 0xC2 */ s16 mRotateSpeed;
     /* 0xC4 */ u8 field_0xC4[0xC6 - 0xC4];
     /* 0xC6 */ u16 mTexIdx;
-    /* 0xC8 */ JPACallBackBase2* mpCallBack2;
+    /* 0xC8 */ JPACallBackBase2<JPABaseEmitter,JPABaseParticle>* mpCallBack2;
     /* 0xCC */ u32 mFlags;
 };
 

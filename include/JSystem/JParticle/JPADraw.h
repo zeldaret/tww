@@ -11,6 +11,8 @@ class JPAExtraShapeArc;
 class JPASweepShapeArc;
 class JPAExTexShapeArc;
 class JPATextureResource;
+class JPABaseEmitter;
+class JPABaseParticle;
 
 class JPADraw;
 class JPADrawExecEmitterVisitor;
