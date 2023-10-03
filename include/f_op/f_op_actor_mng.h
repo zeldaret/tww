@@ -498,6 +498,8 @@ fopAc_ac_c* fopAcM_searchFromName4Event(char* name, s16 eventID);
 s32 fopAcM_getWaterY(const cXyz*, f32*);
 void fpoAcM_relativePos(fopAc_ac_c* actor, cXyz* p_inPos, cXyz* p_outPos);
 
+void fopAcM_setGbaName(fopAc_ac_c* i_this, u8 itemNo, u8 gbaName0, u8 gbaName1);
+
 inline void make_prm_warp_hole(u32* actorParams, u8 p1, u8 p2, u8 p3) {
     u32 pp1 = (p3 << 0x8);
     u32 pp2 = (p2 << 0x10);

@@ -279,7 +279,7 @@ public:
 
     void calc();
     void calc(u16);
-    void setAnm(J3DAnmTransform*, int, f32, f32, f32, f32, void*);
+    void setAnm(J3DAnmTransform* bckAnm, int loopMode, f32 morf, f32 speed, f32, f32, void* soundAnm);
     void setMorf(f32);
     J3DModel* getModel() { return mpModel; }
     void setFrame(f32 frame) { mFrameCtrl.setFrame(frame); }

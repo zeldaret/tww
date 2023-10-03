@@ -131,7 +131,7 @@ s32 daMozo_c::CreateHeap() {
         0,
         0,
         static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Mozo", 6)),
-        2,
+        J3DFrameCtrl::LOOP_REPEAT_e,
         1.0f,
         0,
         -1,

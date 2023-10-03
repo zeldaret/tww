@@ -23,13 +23,23 @@ class cCcD_CylAttr;
 class cCcD_SphAttr;
 
 enum cCcD_ObjAtType {
-    /* 0x00000002 */ AT_TYPE_SWORD = (1 << 1),
-    /* 0x00000020 */ AT_TYPE_BOMB = (1 << 5),
-    /* 0x00000040 */ AT_TYPE_BOOMERANG = (1 << 6),
-    /* 0x00004000 */ AT_TYPE_NORMAL_ARROW = (1 << 14),
-    /* 0x00040000 */ AT_TYPE_FIRE_ARROW = (1 << 18),
-    /* 0x00080000 */ AT_TYPE_ICE_ARROW = (1 << 19),
-    /* 0x00100000 */ AT_TYPE_LIGHT_ARROW = (1 << 20),
+    /* 0x00000002 */ AT_TYPE_SWORD          = (1 << 1),
+    /* 0x00000020 */ AT_TYPE_BOMB           = (1 << 5),
+    /* 0x00000040 */ AT_TYPE_BOOMERANG      = (1 << 6),
+    /* 0x00000080 */ AT_TYPE_BOKO_STICK     = (1 << 7),
+    /* 0x00000100 */ AT_TYPE_WATER          = (1 << 8),
+    /* 0x00000200 */ AT_TYPE_FIRE           = (1 << 9),
+    /* 0x00000400 */ AT_TYPE_MACHETE        = (1 << 10),
+    /* 0x00004000 */ AT_TYPE_NORMAL_ARROW   = (1 << 14),
+    /* 0x00010000 */ AT_TYPE_SKULL_HAMMER   = (1 << 16),
+    /* 0x00040000 */ AT_TYPE_FIRE_ARROW     = (1 << 18),
+    /* 0x00080000 */ AT_TYPE_ICE_ARROW      = (1 << 19),
+    /* 0x00100000 */ AT_TYPE_LIGHT_ARROW    = (1 << 20),
+    /* 0x00200000 */ AT_TYPE_LEAF_WIND      = (1 << 21),
+    /* 0x01000000 */ AT_TYPE_STALFOS_MACE   = (1 << 24),
+    /* 0x04000000 */ AT_TYPE_DARKNUT_SWORD  = (1 << 26),
+    /* 0x08000000 */ AT_TYPE_GRAPPLING_HOOK = (1 << 27),
+    /* 0x10000000 */ AT_TYPE_MOBLIN_SPEAR   = (1 << 28),
 };
 
 class cCcD_ShapeAttr {

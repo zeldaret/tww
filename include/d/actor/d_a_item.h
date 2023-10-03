@@ -9,8 +9,6 @@ class daItem_c : public daItemBase_c {
 public:
     typedef void (daItem_c::*daItem_c_ModeFunc)();
     
-    daItem_c() : mPtclFollowCb(0, 0), mPtclSmokeCb(1) {}
-    
     float getYOffset();
     void set_mtx();
     void set_mtx_base(J3DModel*, cXyz, csXyz);

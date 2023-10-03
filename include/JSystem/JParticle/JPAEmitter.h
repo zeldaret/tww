@@ -28,7 +28,7 @@ template<typename T>
 class JPACallBackBase {
 public:
     JPACallBackBase() {}
-    virtual ~JPACallBackBase();
+    virtual ~JPACallBackBase() {}
     
     virtual void init(JPABaseEmitter*);
     virtual void execute(JPABaseEmitter*);
