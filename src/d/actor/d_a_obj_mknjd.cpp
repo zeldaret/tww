@@ -103,7 +103,7 @@ namespace daObjMknjD {
         void privateCut();
         bool daObjMknjD_break();
 
-        int Execute(float(**)[3][4]);
+        int Execute(Mtx**);
         int Draw();
 
         static const char M_arcname[];
@@ -816,9 +816,221 @@ bool daObjMknjD::Act_c::daObjMknjD_break() {
 }
 
 /* 0000195C-000020E0       .text Execute__Q210daObjMknjD5Act_cFPPA3_A4_f */
-int daObjMknjD::Act_c::Execute(float(**)[3][4]) {
+int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
     /* Nonmatching */
-    return 0;
+    daPy_py_c* player = static_cast<daPy_py_c*>(dComIfGp_getPlayer(0));
+    daPy_py_c* partner = static_cast<daPy_py_c*>(dComIfGp_getCb1Player());
+
+    switch (m043F) {
+        case 0:
+            mEvtInfo.onCondition(1);
+
+            if (mEvtInfo.checkCommandTalk() == true) {
+                m0500 = 1;
+                m043F = 0x0B;
+            }
+            else if (partner != NULL) {
+                cXyz partnerDiff = current.pos - partner->current.pos;
+
+                s16 rotDiff = cM_atan2s(partnerDiff.x, partnerDiff.z) - current.angle.y;
+                f32 absXZ = partnerDiff.absXZ();
+
+                if (absXZ < 800.0f && (rotDiff < -0x4000 || rotDiff > 0x4000)) {
+                    if (dComIfGp_checkPlayerStatus1(0, 1) != 0) {
+                        m043F = 1;
+                        manage_friend_draw(0);
+                    }
+                }
+            }
+
+            break;
+        case 1:
+            if (m043E == 1) {
+                static_cast<daPy_py_c*>(dComIfGp_getPlayer(0))->setTactZev(fopAcM_GetID(this), 4, daObjMknjD_EventName[3]);
+            }
+            else {
+                static_cast<daPy_py_c*>(dComIfGp_getPlayer(0))->setTactZev(fopAcM_GetID(this), 3, daObjMknjD_EventName[2]);
+            }
+
+            m043F = 2;
+            break;
+        case 2:
+            if (dComIfGp_evmng_startCheck(mCheckEventIdx) != 0) {
+                if (partner != NULL && player != NULL) {
+                    s16 rotDiff = cM_atan2s(current.pos.x - partner->current.pos.x, current.pos.z - partner->current.pos.z) - current.angle.y;
+                    f32 absXZ = (partner->current.pos - current.pos).absXZ();
+
+                    if (absXZ < 800.0f && (rotDiff >= -0x4000 && rotDiff > 0x4000)) {
+                        fopAcM_orderChangeEventId(this, mDemoEventIdx, 0, 0xFFFF);
+                        dComIfGs_onEventBit(m0430);
+
+                        s16 procMedli = PROC_NPC_MD;
+                        void* judgeResult = fopAcIt_Judge(fpcSch_JudgeForPName, &procMedli);
+
+                        if (judgeResult != NULL) {
+                            dComIfGp_event_setTalkPartner(judgeResult);
+                        }
+
+                        m043F = 6;
+                    }
+                    else {
+                        fopAcM_orderChangeEventId(this, mErrorEventIdx, 0, 0xFFFF);
+
+                        m043F = 3;
+                        manage_friend_draw(1);
+                    }
+                }
+                else {
+                    fopAcM_orderChangeEventId(this, mErrorEventIdx, 0, 0xFFFF);
+
+                    m043F = 3;
+                    manage_friend_draw(1);
+                }
+            }
+            else {
+                if (dComIfGp_checkPlayerStatus1(0, 1) == 0) {
+                    m043F = 0;
+                    manage_friend_draw(1);
+                }
+            }
+
+            break;
+        case 3:
+            if (mEvtInfo.checkCommandDemoAccrpt()) {
+                m043F = 4;
+            }
+
+            break;
+        case 4:
+            if (dComIfGp_evmng_endCheck(mErrorEventIdx)) {
+                dComIfGp_event_reset();
+                m043F = 5;
+            }
+
+            break;
+        case 5:
+            if (dComIfGp_checkPlayerStatus1(0, 1) == 0) {
+                m043F = 0;
+            }
+
+            break;
+        case 6:
+            if (mEvtInfo.checkCommandDemoAccrpt()) {
+                m043F = 7;
+
+                mDoAud_bgmStop(0x1E);
+                mDoAud_taktModeMuteOff();
+
+                dComIfGp_getAttention().mFlags |= 0x80000000;
+
+                if (m043E == true) {
+                    m0432 = 0x2B;
+                    m0434 = 5;
+                }
+                else {
+                    m0432 = 0x0E;
+                    m0434 = 5;
+                }
+            }
+
+            break;
+        case 7:
+            privateCut();
+
+            if (dComIfGp_evmng_endCheck(mDemoEventIdx)) {
+                dComIfGp_getAttention().mFlags &= ~0x80000000;
+                dComIfGp_event_onEventFlag(8);
+
+                fopAcM_delete(this);
+            }
+
+            break;
+        case 8:
+            mEvtInfo.onCondition(1);
+            mEvtInfo.onCondition(32);
+
+            if (mEvtInfo.checkCommandTalk() == true) {
+                bool bXyzTalk = false;
+
+                if (dComIfGp_event_chkTalkXY()) {
+                    bXyzTalk = true;
+                }
+
+                if (bXyzTalk) {
+                    m0500 = 0;
+                    m043F = 9;
+
+                    fopAcM_seStartCurrent(this, JA_SE_PRE_TAKT, 0);
+                }
+                else {
+                    m0500 = 1;
+                    m043F = 11;
+                }
+            }
+
+            break;
+        case 9:
+            m043F = 10;
+            break;
+        case 10:
+            privateCut();
+
+            if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode == 0) {
+                if (checkItemGet(mGiveItemId, 1) != 0) {
+                    m043F = 0;
+                }
+                else {
+                    m043F = 8;
+                }
+            }
+
+            break;
+        case 11:
+            static_cast<daPy_py_c*>(dComIfGp_getPlayer(0))->onPlayerNoDraw();
+            m043F = 12;
+            break;
+        case 12:
+            if (talk(1) == 18) {
+                partner->offPlayerNoDraw();
+                g_dComIfG_gameInfo.play.mEvtCtrl.mEventFlag |= 8;
+
+                if (checkItemGet(mGiveItemId, 1) != 0) {
+                    m043F = 0;
+                }
+                else {
+                    m043F = 8;
+                }
+            }
+            break;
+    }
+
+    set_mtx();
+
+    *i_mtx = &M_tmp_mtx;
+
+    if (m0432 > 1) {
+        m0432--;
+    }
+    if (m0432 == 1) {
+        if (m043E == true) {
+            mDoAud_bgmStart(0x80000000 | JA_BGM_TAKT_MAKORE);
+        }
+        else {
+            mDoAud_bgmStart(0x80000000 | JA_BGM_TAKT_MEDRI);
+        }
+
+        m0432 = 0;
+    }
+
+    if (m0434 > 1) {
+        m0434--;
+    }
+    if (m0434 == 1) {
+        manage_friend_draw(1);
+        m0434 = 0;
+    }
+
+    return 1;
 }
 
 /* 000020E0-000022FC       .text setMaterial__10daObjMknjDFP11J3DMaterialUc */

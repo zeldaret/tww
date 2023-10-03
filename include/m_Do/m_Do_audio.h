@@ -55,6 +55,10 @@ inline void mDoAud_load2ndDynamicWave() {
     mDoAud_zelAudio_c::getInterface()->load2ndDynamicWave();
 }
 
+inline void mDoAud_taktModeMuteOff() {
+    mDoAud_zelAudio_c::getInterface()->taktModeMuteOff();
+}
+
 inline void mDoAud_resetProcess() {
     if (mDoAud_zelAudio_c::isResetFlag()) {
         mDoAud_zelAudio_c::getInterface()->resetProcess();

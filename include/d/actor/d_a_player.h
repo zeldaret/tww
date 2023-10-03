@@ -110,7 +110,7 @@ public:
     virtual void checkCutCharge() const;
     virtual void getBokoFlamePos(cXyz*);
     virtual void checkTactWait() const;
-    virtual void setTactZev(unsigned int, int, char*);
+    virtual void setTactZev(unsigned int, int, const char*);
     virtual void onDekuSpReturnFlg(u8);
     virtual void checkComboCutTurn() const;
     virtual f32 getBaseAnimeFrameRate() = 0;

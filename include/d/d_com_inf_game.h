@@ -837,6 +837,10 @@ inline fopAc_ac_c* dComIfGp_getPlayer(int idx) {
     return g_dComIfG_gameInfo.play.getPlayer(idx);
 }
 
+inline fopAc_ac_c* dComIfGp_getCb1Player() {
+    return g_dComIfG_gameInfo.play.getPlayerPtr(1);
+}
+
 inline roomRead_class* dComIfGp_getStageRoom() {
     return g_dComIfG_gameInfo.play.getStage().getRoom();
 }
@@ -1195,6 +1199,10 @@ inline fopAc_ac_c* dComIfGp_event_getTalkPartner() {
     return g_dComIfG_gameInfo.play.getEvent().convPId(t);
 }
 
+inline void dComIfGp_event_setTalkPartner(void* i_actor) {
+    g_dComIfG_gameInfo.play.getEvent().setPtT(i_actor);
+}
+
 inline fopAc_ac_c* dComIfGp_event_getItemPartner() {
     u32 i = g_dComIfG_gameInfo.play.getEvent().mPtItem;
     return g_dComIfG_gameInfo.play.getEvent().convPId(i);
@@ -1244,6 +1252,10 @@ inline u32* dComIfGp_evmng_getMyIntegerP(int staffIdx, const char* name) {
 
 inline char* dComIfGp_evmng_getMyStringP(int staffIdx, const char* name) {
     return reinterpret_cast<char*>(dComIfGp_getEventManager().getMySubstanceP(staffIdx, name, 4)); //type 4 is string
+}
+
+inline BOOL dComIfGp_evmng_startCheck(s16 eventID) {
+    return dComIfGp_getEventManager().startCheck(eventID);
 }
 
 inline BOOL dComIfGp_evmng_endCheck(s16 eventID) {
