@@ -74,6 +74,22 @@ public:
         JPASetRMtxTVecfromMtx(mtx, mGlobalRotation, mGlobalTranslation);
     }
 
+    void setVolumeSweep(float i_volSweep) { mVolumeSweep = i_volSweep; }
+    void setLifeTime(s16 i_lifeTime) { mLifeTime = i_lifeTime; }
+    void setRate(float i_rate) { mRate = i_rate; }
+    void setMaxFrame(s32 i_maxFrame) { mMaxFrame = i_maxFrame; }
+
+    void setGlobalDynamicsScale(JGeometry::TVec3<float>& i_vec) {
+        mGlobalScale.x = i_vec.x;
+        mGlobalScale.y = i_vec.y;
+        mGlobalScale.z = i_vec.z;
+    }
+    void setGlobalParticleScale(JGeometry::TVec3<float>& i_vec) {
+        mGlobalScale2D.x = i_vec.x;
+        mGlobalScale2D.y = i_vec.y;
+        mGlobalScale2D.z = i_vec.z;
+    }
+
     void stopCreateParticle() { setStatus(JPAEmtrStts_StopEmit); }
 
     void becomeInvalidEmitter() {

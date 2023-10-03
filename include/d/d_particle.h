@@ -43,6 +43,8 @@ public:
     virtual void draw(JPABaseEmitter*);
     virtual void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
     virtual void end();
+
+    void setRateOff(u8 i_rate) { field_0x11 = i_rate; }
     
     JPABaseEmitter* getEmitter() { return mpEmitter; }
     
@@ -254,8 +256,15 @@ public:
                               const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,
                               s8 setupInfo, const GXColor* pPrmColor, const GXColor* pEnvColor,
                               const cXyz* pScale2D) {
-        return set(1, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
+        return set(2, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
     }
+    JPABaseEmitter* setProjection(u16 particleID, const cXyz* pos, const csXyz* angle,
+                              const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,
+                              s8 setupInfo, const GXColor* pPrmColor, const GXColor* pEnvColor,
+                              const cXyz* pScale2D) {
+        return set(4, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
+    }
+
     
     void drawModelParticle() { mModelCtrl->draw(); }
 

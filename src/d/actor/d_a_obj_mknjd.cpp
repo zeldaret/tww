@@ -123,7 +123,7 @@ namespace daObjMknjD {
         /* 0x0430 */ u16 m0430;
         /* 0x0432 */ u16 m0432;
         /* 0x0434 */ u16 m0434;
-        /* 0x0438 */ u32 mBreakTimer;
+        /* 0x0438 */ s32 mBreakTimer;
 
         /* 0x043C */ u8 mMainMdlAlpha;
         /* 0x043D */ bool m043D;
@@ -133,7 +133,7 @@ namespace daObjMknjD {
         /* 0x0440 */ JPABaseEmitter* mEmitters[4];
         /* 0x0450 */ dPa_smokeEcallBack mSmokeCBs[4];
 
-        /* 0x04D0 */ cXyz m04D0;
+        /* 0x04D0 */ cXyz mBrokenPos;
         
         /* 0x04DC */ s16 mCheckEventIdx;
         /* 0x04DE */ s16 mDemoEventIdx;
@@ -694,7 +694,125 @@ void daObjMknjD::manage_friend_draw(int i_param1) {
 
 /* 00001400-0000195C       .text daObjMknjD_break__Q210daObjMknjD5Act_cFv */
 bool daObjMknjD::Act_c::daObjMknjD_break() {
-    /* Nonmatching */
+    bool ret = false;
+    mBreakTimer++;
+
+    /* Statue splitting into left/right halves */
+    // From 0 to 60 frames, the left and right halves of the statue split apart.
+    if (mBreakTimer < 60) {
+        mLeftHalfPos.x = -((mBreakTimer * 20.0) / 60.0);
+        mRightHalfPos.x = (mBreakTimer * 20.0) / 60.0;
+    }
+    // After 60 frames, the halves stay at +/- 20 units on the X axis.
+    else {
+        mLeftHalfPos.x = -20.0f;
+        mRightHalfPos.x = 20.0f;
+    }
+
+    /* Particles and sound effects */
+    // After 1 frame, the particles for the statue splitting in half spawn.
+    if (mBreakTimer == 1) {
+        mEmitters[0] = dComIfGp_particle_set(0x8185, &current.pos, &current.angle, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+
+        GXColor emitter2Color;
+        emitter2Color.r = mTevStr.mColorC0.r;
+        emitter2Color.g = mTevStr.mColorC0.g;
+        emitter2Color.b = mTevStr.mColorC0.b;
+        emitter2Color.a = mTevStr.mColorC0.a;
+        
+        mEmitters[1] = dComIfGp_particle_setProjection(0x8186, &current.pos, &current.angle, NULL, 0xFF, NULL, current.roomNo, &mTevStr.mColorK0, &emitter2Color, NULL);
+
+        mEmitters[2] = dComIfGp_particle_setToon(0xA187, &current.pos, &current.angle, NULL, 0xFF, &mSmokeCBs[2], -1, NULL, NULL, NULL);
+        mSmokeCBs[2].setRateOff(0);
+
+        fopAcM_seStartCurrent(this, JA_SE_OBJ_SAGE_GATE_CREAK, 0);
+    }
+    // After 30 frames, the sound effect for the light beam particles coming from the statue plays.
+    else if (mBreakTimer == 30) {
+        fopAcM_seStartCurrent(this, JA_SE_OBJ_SAGE_GATE_LIGHT, 0);
+    }
+    // After 60 frames, the shards that the statue will crumble into begin moving to their initial locations.
+    else if (mBreakTimer == 60) {
+        m043D = true;
+
+        for (int i = 0; i < 20; i++) {
+            mShardPositions[i].setAll(0.0f);
+
+            if (i == 0x02 || i == 0x03 || i == 0x06 || i == 0x07 || i == 0x0A || i == 0x0D || i == 0x0E || i == 0x12 || i == 0x13) {
+                mShardPositions[i].x += 20.0f;
+            }
+            else {
+                mShardPositions[i].x -= 20.0f;
+            }
+        }
+    }
+    // After 160 frames, the particles for the statue shattering spawn.
+    else if (mBreakTimer == 160) {
+        dComIfGp_getVibration().StartShock(6, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+
+        fopAcM_seStartCurrent(this, JA_SE_OBJ_SAGE_GATE_BREAK, 0);
+
+        mBrokenPos = current.pos;
+        mBrokenPos.y += 350.0f;
+
+        mEmitters[3] = dComIfGp_particle_setToon(0x2027, &mBrokenPos, &current.angle, NULL, 0xFF, &mSmokeCBs[3], -1, NULL, NULL, NULL);
+        if (mEmitters[3] != NULL) {
+            mEmitters[3]->setVolumeSweep(0.5f);
+            mEmitters[3]->setLifeTime(0x2D);
+            mEmitters[3]->setRate(50.0f);
+            mEmitters[3]->setMaxFrame(1);
+
+            JGeometry::TVec3<f32> vec;
+
+            vec.set(3.0f, 3.0f, 3.0f);
+            mEmitters[3]->setGlobalDynamicsScale(vec);
+
+            vec.set(6.0f, 6.0f, 6.0f);
+            mEmitters[3]->setGlobalParticleScale(vec);
+        }
+    }
+    // After 255 frames, the cutscene ends.
+    else if (mBreakTimer == 255) {
+        ret = true;
+    }
+
+    /* Main (unbroken) model transparency */
+    // From 0 to 60 frames, the main model is 100% visible.
+    if (mBreakTimer < 60) {
+        mMainMdlAlpha = 0xFF;
+    }
+    // From 60 to 160 frames, the main model's transparency is lowered to 0.
+    else if (mBreakTimer >= 60 && mBreakTimer < 160) {
+        f64 mdlAlpha = ((0xA0 - mBreakTimer) * 255.0) / 100.0;
+
+        if (mdlAlpha >= 255.0) {
+            mMainMdlAlpha = 0xFF;
+        }
+        else {
+            mMainMdlAlpha = static_cast<u8>(mdlAlpha);
+        }
+    }
+    // After 160 frames, the main model's transparency is 0.
+    else {
+        mMainMdlAlpha = 0;
+    }
+
+    /* Falling shards */
+    // After 160 frames, the shards of the broken statue model begin to fall.
+    if (mBreakTimer >= 160) {
+        int fallingShardNum = 19 - (mBreakTimer - 160);
+
+        if  (fallingShardNum < 0) {
+            fallingShardNum = 0;
+        }
+
+        for (fallingShardNum; fallingShardNum < 20; fallingShardNum++) {
+            mShardHeights[fallingShardNum] -= 2.0f;
+            mShardPositions[fallingShardNum].y += mShardHeights[fallingShardNum];
+        }
+    }
+
+    return ret;
 }
 
 /* 0000195C-000020E0       .text Execute__Q210daObjMknjD5Act_cFPPA3_A4_f */

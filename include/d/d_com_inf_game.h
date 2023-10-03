@@ -1461,6 +1461,16 @@ inline JPABaseEmitter* dComIfGp_particle_set(u16 particleID, const cXyz* pos, co
                                 pPrmColor, pEnvColor, pScale2D);
 }
 
+inline JPABaseEmitter* dComIfGp_particle_setProjection(u16 particleID, const cXyz* pos, const csXyz* angle,
+                                             const cXyz* scale, u8 alpha,
+                                             dPa_levelEcallBack* pCallBack, s8 setupInfo,
+                                             const GXColor* pPrmColor, const GXColor* pEnvColor,
+                                             const cXyz* pScale2D) {
+    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
+    return pParticle->setProjection(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
+                                    pPrmColor, pEnvColor, pScale2D);
+}
+
 inline JPABaseEmitter* dComIfGp_particle_set(u16 particleID, const cXyz* pos, const csXyz* angle,
                                              const cXyz* scale) {
     return dComIfGp_particle_set(particleID, pos, angle, scale, 0xFF, NULL, -1, NULL, NULL, NULL);
