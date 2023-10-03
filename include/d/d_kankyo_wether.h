@@ -344,5 +344,6 @@ void squal_proc();
 void dKyw_pntwind_set(WIND_INFLUENCE*);
 void dKyw_pntwind_cut(WIND_INFLUENCE*);
 void dKyw_pwind_cylinder_set(WIND_INFLUENCE*);
-
+void dKyw_evt_wind_set(s16 i_windX, s16 i_windY);
+void dKyw_evt_wind_set_go();
 #endif /* D_KANKYO_WETHER_H */
