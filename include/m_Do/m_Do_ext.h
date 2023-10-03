@@ -217,7 +217,7 @@ public:
     void* getBas() { return mBas; }
 
 private:
-    /* 0x28 */ void* mBas;
+    /* 0x2C */ void* mBas;
 };
 
 class mDoExt_MtxCalcOldFrame {
