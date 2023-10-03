@@ -3,7 +3,7 @@
 
 
 struct J3DClusterLoaderDataBase {
-    /* 80334130 */ static void* load(void const*);
+    static void* load(void const*);
 };
 
 #endif /* J3DCLUSTERLOADER_H */

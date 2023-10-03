@@ -11,7 +11,7 @@ class J3DAnmVtxColor;
 class J3DVertexBuffer;
 
 struct J3DVtxColorCalc {
-    /* 8032E180 */ void calc(J3DModel*);
+    void calc(J3DModel*);
     virtual void calc(J3DVertexBuffer*);
 
     /* 0x0 */ void* vtable;  // inlined vtable?

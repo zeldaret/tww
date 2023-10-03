@@ -78,9 +78,9 @@ public:
         mpCRegAnm = NULL;
         mpKRegAnm = NULL;
     }
-    /* 8000D70C */ int init(J3DMaterialTable* i_matTable, J3DAnmTevRegKey* i_brk, int i_anmPlay,
+    int init(J3DMaterialTable* i_matTable, J3DAnmTevRegKey* i_brk, int i_anmPlay,
                             int i_attribute, f32 i_rate, s16 i_start, s16 i_end, bool i_modify, int i_entry);
-    /* 8000D7A8 */ void entry(J3DMaterialTable* i_matTable, f32 i_frame);
+    void entry(J3DMaterialTable* i_matTable, f32 i_frame);
 
     void entry(J3DModelData* i_modelData) { entry(i_modelData, getFrame()); }
     void entry(J3DModelData* i_modelData, f32 i_frame);
@@ -107,11 +107,11 @@ STATIC_ASSERT(sizeof(mDoExt_brkAnm) == 0x18);
 class mDoExt_bckAnm : public mDoExt_baseAnm {
 public:
     mDoExt_bckAnm() { mpMtxCalc = NULL; }
-    /* 8000D7DC */ int init(J3DModelData * i_model, J3DAnmTransform* i_bck, int i_play, int i_attr,
+    int init(J3DModelData * i_model, J3DAnmTransform* i_bck, int i_play, int i_attr,
                             f32 i_rate, s16 i_startF, s16 i_endF1, bool i_modify);
-    /* 8000D990 */ void changeBckOnly(J3DAnmTransform* i_bck);
-    /* 8000D9CC */ void entry(J3DModelData* i_modelData, f32 i_frame);
-    /* 8000D9E8 */ void entryJoint(J3DModelData* i_modelData, u16 i_jntNo, f32 i_frame);
+    void changeBckOnly(J3DAnmTransform* i_bck);
+    void entry(J3DModelData* i_modelData, f32 i_frame);
+    void entryJoint(J3DModelData* i_modelData, u16 i_jntNo, f32 i_frame);
 
     void entry(J3DModelData* i_modelData) { entry(i_modelData, getFrame()); }
 
@@ -134,12 +134,12 @@ STATIC_ASSERT(sizeof(mDoExt_bckAnm) == 0x10);
 class mDoExt_btpAnm : public mDoExt_baseAnm {
 public:
     mDoExt_btpAnm() { mpAnm = NULL; }
-    /* 8000D54C */ int init(J3DMaterialTable* i_matTable, J3DAnmTexPattern* i_btk, int i_anmPlay,
+    int init(J3DMaterialTable* i_matTable, J3DAnmTexPattern* i_btk, int i_anmPlay,
                             int i_attribute, f32 i_rate, s16 i_start, s16 param_6);
     int init(J3DModelData*, J3DAnmTexPattern*, int, int, float, short, short, bool, int);
     int init(J3DMaterialTable*, J3DAnmTexPattern*, int, int, float, short, short, bool, int);
     void entry(J3DModelData* i_modelData, s16 i_frame);
-    /* 8000D5E8 */ void entry(J3DMaterialTable* i_matTable, s16 i_frame);
+    void entry(J3DMaterialTable* i_matTable, s16 i_frame);
 
     void entry(J3DModelData* i_modelData) { entry(i_modelData, getFrame()); }
 
@@ -159,7 +159,7 @@ private:
 
 class mDoExt_blkAnm : public mDoExt_baseAnm {
 public:
-    /* 8000DA08 */ int init(J3DDeformData* i_deformData, J3DAnmCluster* i_blk, int i_anmPlay,
+    int init(J3DDeformData* i_deformData, J3DAnmCluster* i_blk, int i_anmPlay,
                             int i_attribute, f32 i_rate, s16 i_start, s16 param_6);
 
     J3DAnmCluster* getBlkAnm() { return mpAnm; }
@@ -196,8 +196,8 @@ private:
 
 class mDoExt_AnmRatioPack {
 public:
-    /* 80140DF0 */ ~mDoExt_AnmRatioPack();
-    /* 80140E2C */ mDoExt_AnmRatioPack();
+    ~mDoExt_AnmRatioPack();
+    mDoExt_AnmRatioPack();
 
     void setRatio(f32 ratio) { mRatio = ratio; }
     f32 getRatio() { return mRatio; }
@@ -222,8 +222,8 @@ private:
 
 class mDoExt_MtxCalcOldFrame {
 public:
-    /* 8000F848 */ void initOldFrameMorf(f32, u16, u16);
-    /* 8000F8CC */ void decOldFrameMorfCounter();
+    void initOldFrameMorf(f32, u16, u16);
+    void decOldFrameMorfCounter();
 
     f32 getOldFrameRate() { return mOldFrameRate; }
     J3DTransformInfo* getOldFrameTransInfo(int i) { return &mOldFrameTransInfo[i]; }

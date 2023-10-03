@@ -73,40 +73,40 @@ public:
         /* 0x800000 */ LINE_DOWN = (1 << 23),
     };
 
-    /* 800760A0 */ dBgS_Acch();
-    /* 800761CC */ void Init();
-    /* 80076288 */ void Set(fopAc_ac_c*, int, dBgS_AcchCir*);
-    /* 80076248 */ void Set(cXyz*, cXyz*, fopAc_ac_c*, int, dBgS_AcchCir*, cXyz*, csXyz*, csXyz*);
-    /* 800762D8 */ void GroundCheckInit(dBgS&);
-    /* 80076350 */ void GroundCheck(dBgS&);
-    /* 8007654C */ void GroundRoofProc(dBgS&);
-    /* 80076624 */ void LineCheck(dBgS&);
-    /* 80076AAC */ void CrrPos(dBgS&);
-    /* 80076F84 */ f32 GetWallAllR();
-    /* 80076FC0 */ void SetWallCir();
-    /* 8007703C */ void CalcWallBmdCyl();
-    /* 80077114 */ void SetGroundUpY(f32);
-    /* 80077128 */ f32 GetWallAllLowH();
-    /* 80077178 */ f32 GetWallAllLowH_R();
-    /* 800771E4 */ f32 GetSpeedY();
-    /* 80077200 */ f32 GetWallAddY(Vec&);
-    /* 80077278 */ void SetNowActorInfo(int, void*, unsigned int);
-    /* 80077288 */ void SetWallPolyIndex(int, int);
-    /* 800772E8 */ void CalcMovePosWork();
-    /* 8007732C */ void CalcWallRR();
-    /* 80077388 */ void SetMoveBGOnly();
-    /* 800773A4 */ void ClrMoveBGOnly();
-    /* 800773C0 */ void SetGndThinCellingOff();
-    /* 800773D0 */ void ClrGndThinCellingOff();
-    /* 800773E0 */ bool ChkGndThinCellingOff();
-    /* 800773EC */ void OnWallSort();
-    /* 800773FC */ bool ChkWallSort();
-    /* 80077408 */ bool ChkLineDown();
-    /* 800D00D0 */ bool ChkRoofHit() const;
-    /* 800D00DC */ void ClrGroundHit();
-    /* 80141404 */ bool ChkGroundHit() const;
+    dBgS_Acch();
+    void Init();
+    void Set(fopAc_ac_c*, int, dBgS_AcchCir*);
+    void Set(cXyz*, cXyz*, fopAc_ac_c*, int, dBgS_AcchCir*, cXyz*, csXyz*, csXyz*);
+    void GroundCheckInit(dBgS&);
+    void GroundCheck(dBgS&);
+    void GroundRoofProc(dBgS&);
+    void LineCheck(dBgS&);
+    void CrrPos(dBgS&);
+    f32 GetWallAllR();
+    void SetWallCir();
+    void CalcWallBmdCyl();
+    void SetGroundUpY(f32);
+    f32 GetWallAllLowH();
+    f32 GetWallAllLowH_R();
+    f32 GetSpeedY();
+    f32 GetWallAddY(Vec&);
+    void SetNowActorInfo(int, void*, unsigned int);
+    void SetWallPolyIndex(int, int);
+    void CalcMovePosWork();
+    void CalcWallRR();
+    void SetMoveBGOnly();
+    void ClrMoveBGOnly();
+    void SetGndThinCellingOff();
+    void ClrGndThinCellingOff();
+    bool ChkGndThinCellingOff();
+    void OnWallSort();
+    bool ChkWallSort();
+    bool ChkLineDown();
+    bool ChkRoofHit() const;
+    void ClrGroundHit();
+    bool ChkGroundHit() const;
 
-    /* 80075F94 */ virtual ~dBgS_Acch();
+    virtual ~dBgS_Acch();
 
     cXyz* GetPos() { return pm_pos; }
     cXyz* GetOldPos() { return pm_old_pos; }
@@ -196,7 +196,7 @@ class dBgS_LinkAcch : public dBgS_Acch {
 public:
     dBgS_LinkAcch() { SetLink(); }
 
-    /* 80140F30 */ virtual ~dBgS_LinkAcch() {}
+    virtual ~dBgS_LinkAcch() {}
 };
 
 class dBgS_ObjAcch : public dBgS_Acch {
@@ -205,7 +205,7 @@ public:
         SetObj();
     }
 
-    /* 80BB336C */ virtual ~dBgS_ObjAcch() {}
+    virtual ~dBgS_ObjAcch() {}
 };  // Size: 0x1C4
 
 #endif /* D_BG_D_BG_S_ACCH_H */

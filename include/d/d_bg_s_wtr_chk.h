@@ -5,9 +5,9 @@
 
 class dBgS_WtrChk : public dBgS_SplGrpChk {
 public:
-    /* 80079164 */ dBgS_WtrChk();
+    dBgS_WtrChk();
 
-    /* 8001DF30 */ virtual ~dBgS_WtrChk();
+    virtual ~dBgS_WtrChk();
 };  // Size: 0x50
 
 STATIC_ASSERT(sizeof(dBgS_WtrChk) == 0x50);

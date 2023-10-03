@@ -129,8 +129,8 @@ struct J3DTevSwapModeTable {
 
 class J3DLightObj {
 public:
-    /* 80018C0C */ J3DLightObj() { mInfo = j3dDefaultLightInfo; }
-    /* 80323590 */ void load(u32) const;
+    J3DLightObj() { mInfo = j3dDefaultLightInfo; }
+    void load(u32) const;
 
     J3DLightInfo& getLightInfo() { return mInfo; }
     J3DLightObj& operator=(J3DLightObj const& other) {

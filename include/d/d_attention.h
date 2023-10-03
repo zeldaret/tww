@@ -107,7 +107,7 @@ public:
 
 class dAttDraw_CallBack_c : public mDoExt_McaMorfCallBack1_c {
 public:
-    /* 80070178 */ virtual void execute(u16, J3DTransformInfo*);
+    virtual void execute(u16, J3DTransformInfo*);
 };
 
 class daPy_lk_c;
