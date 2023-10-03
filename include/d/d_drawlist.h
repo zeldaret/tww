@@ -11,6 +11,7 @@ class ResTIMG;
 class dDlst_base_c {
 public:
     dDlst_base_c() {}
+    virtual ~dDlst_base_c();
     virtual void draw();
 };
 
@@ -208,7 +209,6 @@ public:
     void wipeIn(f32, GXColor&);
     void wipeIn(f32);
     void calcWipe();
-    void set2DOpa(dDlst_base_c*);
 
     J3DDrawBuffer* getOpaListFilter() { return mpWetherFxBuffer; }
 
@@ -237,6 +237,9 @@ public:
         entryZSortXluDrawList(mpBufInvisibleModelXlu, i_packet, param_1);
     }
 
+    void set2DOpa(dDlst_base_c* pList) { set(mp2DOpa, mp2DOpaEnd, pList); }
+    void set2DXlu(dDlst_base_c* pList) { set(mp2DXlu, mp2DXluEnd, pList); }
+
     int setSimpleShadow(cXyz* param_0, f32 param_1, f32 param_2, cXyz* param_3, s16 param_4,
                         f32 param_5, _GXTexObj* param_6) {
         return mShadowControl.setSimple(param_0, param_1, param_2, param_3, param_4, param_5,
@@ -252,6 +255,10 @@ public:
     void setLightModel(u8 type, Mtx mtx, u8 alpha) { mpLightModel->set(type, mtx, alpha); }
     s32 getSpotModelNum() { return mpSpotModel->getNum(); }
     s32 getLightModelNum() { return mpLightModel->getNum(); }
+
+    void setWindow(dDlst_window_c* pWindow) { mpWindow = pWindow; }
+    void setViewPort(view_port_class* pViewPort) { mpViewPort = pViewPort; }
+    void setView(view_class* pView) { mpCamera = (camera_class*)pView; }
 
     static void offWipe() { mWipe = false; }
 
@@ -279,13 +286,13 @@ public:
     /* 0x00098 */ void* field_0x00098;
     /* 0x0009C */ dDlst_base_c* mp2DArr[64];
     /* 0x0019C */ dDlst_base_c** mp2DOpa;
-    /* 0x001A0 */ dDlst_base_c*** mp2DOpaEnd;
+    /* 0x001A0 */ dDlst_base_c** mp2DOpaEnd;
     /* 0x001A4 */ u8 field_0x001A4[0x00224 - 0x001A4];
-    /* 0x00224 */ dDlst_base_c** field_0x00224;
-    /* 0x00228 */ dDlst_base_c*** field_0x00228;
-    /* 0x0022C */ dDlst_window_c* field_0x0022c;
-    /* 0x00230 */ dDlst_window_c* field_0x00230;
-    /* 0x00234 */ camera_class* mpCamera;
+    /* 0x00224 */ dDlst_base_c** mp2DXlu;
+    /* 0x00228 */ dDlst_base_c** mp2DXluEnd;
+    /* 0x0022C */ dDlst_window_c* mpWindow;
+    /* 0x00230 */ view_port_class* mpViewPort;
+    /* 0x00234 */ camera_class* mpCamera; // should be view_class*
     /* 0x00238 */ u8 field_0x00238[0x00244 - 0x00238];
     /* 0x00244 */ dDlst_alphaModel_c* mpAlphaModel;
     /* 0x00248 */ dDlst_alphaModel_c* mpSpotModel;

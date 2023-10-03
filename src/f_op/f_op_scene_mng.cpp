@@ -15,8 +15,8 @@ scene_class* fopScnM_SearchByID(unsigned int id) {
 
 static u32 l_scnRqID = 0xFFFFFFFF;
 
-int fopScnM_ChangeReq(scene_class* i_scene, s16 param_2, s16 param_3, u16 param_4) {
-    u32 sceneRequestID = fopScnRq_Request(2, i_scene, param_2, 0, param_3, param_4);
+int fopScnM_ChangeReq(scene_class* i_scene, s16 procName, s16 fadeTime, u16 param_4) {
+    u32 sceneRequestID = fopScnRq_Request(2, i_scene, procName, 0, fadeTime, param_4);
 
     if (sceneRequestID == 0xFFFFFFFF) {
         return 0;

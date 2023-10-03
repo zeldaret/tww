@@ -1184,6 +1184,8 @@ inline u8 dComIfGp_getMiniGameType() {
     return g_dComIfG_gameInfo.play.mMiniGameType;
 }
 
+inline dDlst_window_c * dComIfGp_getWindow(int idx) { return &g_dComIfG_gameInfo.play.mDlstWindow[idx]; }
+
 /**
  * === EVENT ===*/
 
@@ -1440,6 +1442,13 @@ inline MtxP dComIfGd_getViewRotMtx() {
     return dComIfGd_getView()->mViewMtxNoTrans;
 }
 
+inline void dComIfGd_set2DOpa(dDlst_base_c* pBase) { g_dComIfG_gameInfo.drawlist.set2DOpa(pBase); }
+inline void dComIfGd_set2DXlu(dDlst_base_c* pBase) { g_dComIfG_gameInfo.drawlist.set2DXlu(pBase); }
+
+inline void dComIfGd_setWindow(dDlst_window_c* pWindow) { g_dComIfG_gameInfo.drawlist.setWindow(pWindow); }
+inline void dComIfGd_setViewPort(view_port_class* pViewPort) { g_dComIfG_gameInfo.drawlist.setViewPort(pViewPort); }
+inline void dComIfGd_setView(view_class* pView) { g_dComIfG_gameInfo.drawlist.setView(pView); }
+
 /**
  * === RESOURCE ===
  */
@@ -1582,5 +1591,7 @@ inline dTimer_c* dComIfG_getTimerPtr() {
 inline void dComIfG_TimerDeleteRequest() {
     dComIfG_getTimerPtr()->deleteRequest();
 }
+
+int dComIfG_changeOpeningScene(scene_class* i_scene, s16 i_procName);
 
 #endif /* D_COM_D_COM_INF_GAME_H */

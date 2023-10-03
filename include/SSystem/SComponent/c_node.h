@@ -3,9 +3,9 @@
 
 
 typedef struct node_class {
-    struct node_class* mpPrevNode;
-    void* mpData;
-    struct node_class* mpNextNode;
+    /* 0x00 */ struct node_class* mpPrevNode;
+    /* 0x04 */ void* mpData;
+    /* 0x08 */ struct node_class* mpNextNode;
 } node_class;
 
 void cNd_Join(node_class* pA, node_class* pB);

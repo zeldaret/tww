@@ -82,8 +82,7 @@ static scene_request_class* fopScnRq_FadeRequest(s16 param_1, u16 param_2) {
     return (scene_request_class*)req;
 }
 
-s32 fopScnRq_Request(int param_1, scene_class* i_scene, s16 param_3, void* param_4, s16 param_5,
-                     u16 param_6) {
+s32 fopScnRq_Request(int param_1, scene_class* i_scene, s16 param_3, void* param_4, s16 param_5, u16 param_6) {
     static node_create_request_method_class submethod = {
         (process_method_func)fopScnRq_Execute,
         (process_method_func)fopScnRq_Cancel,
