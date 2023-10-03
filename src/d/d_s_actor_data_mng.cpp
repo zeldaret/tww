@@ -3,37 +3,73 @@
 // Translation Unit: d_s_actor_data_mng.cpp
 //
 
-#include "d_s_actor_data_mng.h"
-#include "dolphin/types.h"
+#include "d/d_s_actor_data_mng.h"
+#include "JSystem/JUtility/JUTAssert.h"
 
 /* 800C26D4-800C2704       .text __ct__12dADM_CharTblFv */
 dADM_CharTbl::dADM_CharTbl() {
-    /* Nonmatching */
-}
-
-/* 800C2704-800C2758       .text __dt__12dADM_CharTblFv */
-dADM_CharTbl::~dADM_CharTbl() {
-    /* Nonmatching */
 }
 
 /* 800C2758-800C2844       .text SetData__12dADM_CharTblFUlUlUlUlUlUlUl */
-void dADM_CharTbl::SetData(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long) {
-    /* Nonmatching */
+void dADM_CharTbl::SetData(u32 offs, u32 row_num, u32 pRow, u32 colum_num, u32 pColumn, u32 dat_size, u32 data) {
+    for (u32 i = 0; i < row_num; i++, pRow += 4)
+        *((u32*)pRow) += offs;
+
+    for (u32 i = 0; i < colum_num; i++, pColumn += 4)
+        *((u32*)pColumn) += offs;
+
+    JUT_ASSERT(0x39, dat_size == row_num * colum_num);
+    cDT::Set(row_num, (char**)pRow, colum_num, (char**)pColumn, (u8*)data);
+    SetUpIndex();
 }
 
 /* 800C2844-800C2B40       .text SetUpIndex__12dADM_CharTblFv */
 void dADM_CharTbl::SetUpIndex() {
-    /* Nonmatching */
+    mIndex_ARG = mFmt.GetIndex("ARG", 0);
+    mIndex_N_ITEM[0] = mFmt.GetIndex("N_ITEM0", 0);
+    mIndex_N_ITEM[1] = mFmt.GetIndex("N_ITEM1", 0);
+    mIndex_N_ITEM[2] = mFmt.GetIndex("N_ITEM2", 0);
+    mIndex_N_ITEM[3] = mFmt.GetIndex("N_ITEM3", 0);
+    mIndex_N_ITEM[4] = mFmt.GetIndex("N_ITEM4", 0);
+    mIndex_N_ITEM[5] = mFmt.GetIndex("N_ITEM5", 0);
+    mIndex_N_ITEM[6] = mFmt.GetIndex("N_ITEM6", 0);
+    mIndex_N_ITEM[7] = mFmt.GetIndex("N_ITEM7", 0);
+    mIndex_N_ITEM[8] = mFmt.GetIndex("N_ITEM8", 0);
+    mIndex_N_ITEM[9] = mFmt.GetIndex("N_ITEM9", 0);
+    mIndex_N_ITEM[10] = mFmt.GetIndex("N_ITEM10", 0);
+    mIndex_N_ITEM[11] = mFmt.GetIndex("N_ITEM11", 0);
+    mIndex_N_ITEM[12] = mFmt.GetIndex("N_ITEM12", 0);
+    mIndex_N_ITEM[13] = mFmt.GetIndex("N_ITEM13", 0);
+    mIndex_N_ITEM[14] = mFmt.GetIndex("N_ITEM14", 0);
+    mIndex_N_ITEM[15] = mFmt.GetIndex("N_ITEM15", 0);
+    mIndex_percent = mFmt.GetIndex("percent", 0);
+    mIndex_ITEM[0] = mFmt.GetIndex("ITEM0", 0);
+    mIndex_ITEM[1] = mFmt.GetIndex("ITEM1", 0);
+    mIndex_ITEM[2] = mFmt.GetIndex("ITEM2", 0);
+    mIndex_ITEM[3] = mFmt.GetIndex("ITEM3", 0);
+    mIndex_ITEM[4] = mFmt.GetIndex("ITEM4", 0);
+    mIndex_ITEM[5] = mFmt.GetIndex("ITEM5", 0);
+    mIndex_ITEM[6] = mFmt.GetIndex("ITEM6", 0);
+    mIndex_ITEM[7] = mFmt.GetIndex("ITEM7", 0);
 }
 
 /* 800C2B40-800C2BC8       .text GetNameIndex2__12dADM_CharTblCFPCci */
-void dADM_CharTbl::GetNameIndex2(const char*, int) const {
-    /* Nonmatching */
+int dADM_CharTbl::GetNameIndex2(const char* pName, int index) const {
+    for (int start = 0; ; start++) {
+        int col = mName.GetIndex(pName, start);
+        if (col == -1)
+            return -1;
+
+        int inf = GetInf(mIndex_ARG, col);
+        if (index == inf)
+            return start;
+    }
 }
 
 /* 800C2BC8-800C2C14       .text __ct__4dADMFv */
 dADM::dADM() {
-    /* Nonmatching */
+    mBlockCount = 0;
+    mpData = NULL;
 }
 
 /* 800C2C14-800C2C78       .text __dt__4dADMFv */
@@ -42,12 +78,39 @@ dADM::~dADM() {
 }
 
 /* 800C2C78-800C2CC0       .text FindTag__4dADMFUlPUlPUl */
-void dADM::FindTag(unsigned long, unsigned long*, unsigned long*) {
-    /* Nonmatching */
+bool dADM::FindTag(u32 tag, u32* pSize, u32* pOffs) {
+    u32 *pData = (u32*)mpData;
+    for (s32 i = 0; i < mBlockCount; i++) {
+        if (tag == pData[0]) {
+            *pSize = pData[1];
+            *pOffs = pData[2];
+            return true;
+        }
+
+        pData += 3;
+    }
+
+    return false;
 }
 
 /* 800C2CC0-800C2DFC       .text SetData__4dADMFPv */
-void dADM::SetData(void*) {
-    /* Nonmatching */
+void dADM::SetData(void* pData) {
+    u32 row, rowOffs;
+    u32 name, nameOffs;
+    u32 dat_size, dataOffs;
+
+    mBlockCount = *((s32*)pData);
+    mpData = (u8*)pData + 4;
+
+    u32 *pHeader = (u32*)mpData;
+    for (s32 i = 0; i < mBlockCount; i++) {
+        pHeader[2] = pHeader[2] + (u32)pData;
+        pHeader += 3;
+    }
+
+    if (FindTag('ACFN', &row, &rowOffs) && FindTag('ACNA', &name, &nameOffs) && FindTag('ACDS', &dat_size, &dataOffs)) {
+        JUT_ASSERT(0xca, row * name == dat_size);
+        mCharTbl.SetData((u32)pData, row, rowOffs, name, nameOffs, dat_size, dataOffs);
+    }
 }
 

@@ -42,7 +42,6 @@ public:
     u8 GetInf(int row, int col) const;
     void Set(u32 fmtNum, char **pFmt, u32 nameNum, char **pName, u8* pData);
 
-private:
     cDT_Format mFmt;
     cDT_Name mName;
     cDT_DataSrc mSrc;
