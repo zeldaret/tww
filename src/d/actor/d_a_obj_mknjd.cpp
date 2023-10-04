@@ -65,7 +65,7 @@ static const char* daObjMknjD_jointName[] = {
     "Hahen20"
 };
 
-const char* daObjMknjD_EventName[] = {
+char* daObjMknjD_EventName[] = {
     "MKNJD_D_DEMO",
     "MKNJD_K_DEMO",
 
@@ -162,8 +162,8 @@ namespace daObjMknjD {
             PRM_TYPE_S = 0x10,
         };
 
-        inline int prm_get_swSave() { return daObj::PrmAbstract<Prm_e>(this, PRM_SWITCH_W, PRM_SWITCH_S); }
-        inline u8 prm_get_Type() { return daObj::PrmAbstract<Prm_e>(this, PRM_TYPE_W, PRM_TYPE_S); }
+        int prm_get_swSave() { return daObj::PrmAbstract<Prm_e>(this, PRM_SWITCH_W, PRM_SWITCH_S); }
+        u8 prm_get_Type() { return daObj::PrmAbstract<Prm_e>(this, PRM_TYPE_W, PRM_TYPE_S); }
 
         static Mtx M_tmp_mtx;
     };
@@ -293,7 +293,7 @@ int daObjMknjD::Act_c::CreateHeap() {
             }
         }
 
-        mMainMdl->setUserArea(this);
+        mMainMdl->setUserArea(reinterpret_cast<u32>(this));
 
         int curTblIdx = 0;
         nameTable = mBreakMdl->getModelData()->getJointName();
@@ -311,7 +311,7 @@ int daObjMknjD::Act_c::CreateHeap() {
             }
         }
 
-        mBreakMdl->setUserArea(this);
+        mBreakMdl->setUserArea(reinterpret_cast<u32>(this));
         mMainMdlAlpha = 0xFF;
 
         return 1;
@@ -460,7 +460,7 @@ void daObjMknjD::Act_c::setGoal(int i_staffIdx) {
     cXyz pos = *dComIfGp_evmng_getMyXyzP(i_staffIdx, "Posion");
 
     mDoMtx_stack_c::transS(getPosition());
-    mDoMtx_YrotM(mDoMtx_stack_c::get(), current.angle.GetY());
+    mDoMtx_YrotM(mDoMtx_stack_c::get(), current.angle.y);
 
     mDoMtx_stack_c::transM(pos);
     
@@ -659,8 +659,7 @@ void daObjMknjD::Act_c::privateCut() {
 
 /* 00001348-00001400       .text manage_friend_draw__10daObjMknjDFi */
 void daObjMknjD::manage_friend_draw(int i_param1) {
-    u16 medliProc = PROC_NPC_MD;
-    fopAc_ac_c* judgeResult = static_cast<fopAc_ac_c*>(fopAcIt_Judge(fpcSch_JudgeForPName, &medliProc));
+    fopAc_ac_c* judgeResult = fopAcM_SearchByName(PROC_NPC_MD);
 
     if (judgeResult != NULL) {
         if (i_param1 == 1) {
@@ -672,8 +671,7 @@ void daObjMknjD::manage_friend_draw(int i_param1) {
         }
     }
 
-    u16 makarProc = PROC_NPC_CB1;
-    judgeResult = static_cast<fopAc_ac_c*>(fopAcIt_Judge(fpcSch_JudgeForPName, &makarProc));
+    judgeResult = fopAcM_SearchByName(PROC_NPC_CB1);
     
     if (judgeResult != NULL) {
         if (i_param1 == 1) {
@@ -759,10 +757,10 @@ bool daObjMknjD::Act_c::daObjMknjD_break() {
             JGeometry::TVec3<f32> vec;
 
             vec.set(3.0f, 3.0f, 3.0f);
-            mEmitters[3]->setGlobalDynamicsScale(vec);
+            mEmitters[3]->setGlobalParticleScale(vec);
 
             vec.set(6.0f, 6.0f, 6.0f);
-            mEmitters[3]->setGlobalParticleScale(vec);
+            mEmitters[3]->setGlobalDynamicsScale(vec);
         }
     }
     // After 255 frames, the cutscene ends.

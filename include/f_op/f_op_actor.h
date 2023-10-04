@@ -135,12 +135,6 @@ public:
     bool checkCommandDemoAccrpt() { return mCommand == 2; }
     bool checkCommandCatch() { return mCommand == 6; }
 
-    //void suspendProc(void* actor) {
-    //    if (field_0x10 != NULL) {
-    //        field_0x14(actor);
-    //    }
-    //}
-
     /* 0x04 */ u16 mCommand;
     /* 0x06 */ u16 mCondition;
     /* 0x08 */ s16 mEventId;

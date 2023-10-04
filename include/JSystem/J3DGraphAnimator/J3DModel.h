@@ -129,8 +129,8 @@ public:
     Mtx33** getBumpMtxPtrPtr(u32 idx) const { return mpBumpMtxArr[1][idx]; }
     Mtx33* getBumpMtxPtr(u32 idx) const { return mpBumpMtxArr[1][idx][mCurrentViewNo]; }
     void setBaseScale(const Vec& scale) { mBaseScale = scale; }
-    void setUserArea(void* area) { mUserArea = area; }
-    void* getUserArea() const { return mUserArea; }
+    void setUserArea(u32 area) { mUserArea = area; }
+    u32 getUserArea() const { return mUserArea; }
     Vec* getBaseScale() { return &mBaseScale; }
     void setVisibilityManager(J3DVisibilityManager* manager) { mpVisibilityManager = manager; }
 
@@ -138,7 +138,7 @@ public:
     /* 0x008 */ u32 mFlags;
     /* 0x00C */ u32 mDiffFlag;
     /* 0x010 */ J3DCalcCallBack mCalcCallBack;
-    /* 0x014 */ void* mUserArea;
+    /* 0x014 */ u32 mUserArea;
     /* 0x018 */ Vec mBaseScale;
     /* 0x024 */ Mtx mBaseTransformMtx;
     /* 0x054 */ Mtx mInternalView;
