@@ -12,6 +12,7 @@
 #include "JAZelAudio/JAIZelBasic.h"
 #include "JAZelAudio/JAZelAudio_BGM.h"
 #include "JAZelAudio/JAZelAudio_SE.h"
+#include "SSystem/SComponent/c_xyz.h"
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_movebg_actor.h"
@@ -176,7 +177,7 @@ namespace daObjMknjD {
 Mtx daObjMknjD::Act_c::M_tmp_mtx;
 
 /* 00000078-0000012C       .text nodeCallBackL__FP7J3DNodei */
-u32 nodeCallBackL(J3DNode* i_node, int i_param2) {
+static u32 nodeCallBackL(J3DNode* i_node, int i_param2) {
     if (i_param2 == 0) {
         int jntNo = static_cast<J3DJoint*>(i_node)->getJntNo();
         
@@ -197,7 +198,7 @@ u32 nodeCallBackL(J3DNode* i_node, int i_param2) {
 }
 
 /* 0000012C-000001E0       .text nodeCallBackR__FP7J3DNodei */
-u32 nodeCallBackR(J3DNode* i_node, int i_param2) {
+static u32 nodeCallBackR(J3DNode* i_node, int i_param2) {
     if (i_param2 == 0) {
         int jntNo = static_cast<J3DJoint*>(i_node)->getJntNo();
 
@@ -218,7 +219,7 @@ u32 nodeCallBackR(J3DNode* i_node, int i_param2) {
 }
 
 /* 000001E0-000002B0       .text nodeCallBack_Hahen__FP7J3DNodei */
-s32 nodeCallBack_Hahen(J3DNode* i_node, int i_param2) {
+static s32 nodeCallBack_Hahen(J3DNode* i_node, int i_param2) {
     if (i_param2 == 0) {
         int jntNo = static_cast<J3DJoint*>(i_node)->getJntNo();
         u16 shardIdx = joint_number_table[jntNo - 1];
@@ -313,10 +314,10 @@ int daObjMknjD::Act_c::CreateHeap() {
         mBreakMdl->setUserArea(this);
         mMainMdlAlpha = 0xFF;
 
-        return true;
+        return 1;
     }
 
-    return false;
+    return 0;
 }
 
 /* 00000620-000008E8       .text Create__Q210daObjMknjD5Act_cFv */
@@ -829,8 +830,8 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
                 m0500 = 1;
                 m043F = 0x0B;
             }
-            else if (partner != NULL) {
-                cXyz partnerDiff = current.pos - partner->current.pos;
+            else if (player != NULL) {
+                cXyz partnerDiff = current.pos - player->current.pos;
 
                 s16 rotDiff = cM_atan2s(partnerDiff.x, partnerDiff.z) - current.angle.y;
                 f32 absXZ = partnerDiff.absXZ();
@@ -846,10 +847,10 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
             break;
         case 1:
             if (m043E == 1) {
-                static_cast<daPy_py_c*>(dComIfGp_getPlayer(0))->setTactZev(fopAcM_GetID(this), 4, daObjMknjD_EventName[3]);
+                player->setTactZev(fopAcM_GetID(this), 4, daObjMknjD_EventName[3]);
             }
             else {
-                static_cast<daPy_py_c*>(dComIfGp_getPlayer(0))->setTactZev(fopAcM_GetID(this), 3, daObjMknjD_EventName[2]);
+                player->setTactZev(fopAcM_GetID(this), 3, daObjMknjD_EventName[2]);
             }
 
             m043F = 2;
@@ -858,9 +859,11 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
             if (dComIfGp_evmng_startCheck(mCheckEventIdx) != 0) {
                 if (partner != NULL && player != NULL) {
                     s16 rotDiff = cM_atan2s(current.pos.x - partner->current.pos.x, current.pos.z - partner->current.pos.z) - current.angle.y;
-                    f32 absXZ = (partner->current.pos - current.pos).absXZ();
+                    
+                    cXyz diff = player->current.pos - partner->current.pos;
+                    f32 absXZ = diff.absXZ();
 
-                    if (absXZ < 800.0f && (rotDiff >= -0x4000 && rotDiff > 0x4000)) {
+                    if ((absXZ < 800.0f) && ((rotDiff < -0x4000) || (rotDiff > 0x4000))) {
                         fopAcM_orderChangeEventId(this, mDemoEventIdx, 0, 0xFFFF);
                         dComIfGs_onEventBit(m0430);
 
@@ -950,17 +953,11 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
             mEvtInfo.onCondition(32);
 
             if (mEvtInfo.checkCommandTalk() == true) {
-                bool bXyzTalk = false;
-
                 if (dComIfGp_event_chkTalkXY()) {
-                    bXyzTalk = true;
-                }
-
-                if (bXyzTalk) {
                     m0500 = 0;
                     m043F = 9;
 
-                    fopAcM_seStartCurrent(this, JA_SE_PRE_TAKT, 0);
+                    fopAcM_seStart(this, JA_SE_PRE_TAKT, 0);
                 }
                 else {
                     m0500 = 1;
@@ -986,12 +983,12 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
 
             break;
         case 11:
-            static_cast<daPy_py_c*>(dComIfGp_getPlayer(0))->onPlayerNoDraw();
+            player->onPlayerNoDraw();
             m043F = 12;
             break;
         case 12:
             if (talk(1) == 18) {
-                partner->offPlayerNoDraw();
+                player->offPlayerNoDraw();
                 g_dComIfG_gameInfo.play.mEvtCtrl.mEventFlag |= 8;
 
                 if (checkItemGet(mGiveItemId, 1) != 0) {

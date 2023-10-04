@@ -37,7 +37,7 @@ public:
     void getEventData(s16);
     s16 getEventIdx(const char*, u8);
     void order(s16);
-    bool startCheck(s16);
+    BOOL startCheck(s16);
     BOOL startCheckOld(const char*);
     BOOL endCheck(s16);
     BOOL endCheckOld(const char*);
