@@ -14,9 +14,9 @@
 
 class kytag05_class : public fopAc_ac_c {
 public:
-    u8 bsType;
-    u32 pcId;
-    u32 procName;
+    /* 0x00 */ u32 field_0x290;
+    /* 0x04 */ u32 field_0x294;
+    /* 0x08 */ u32 field_0x298;
 };
 
 BOOL daKytag05_Draw(kytag05_class*) {
@@ -26,25 +26,27 @@ BOOL daKytag05_Draw(kytag05_class*) {
 /* 00000080-000003F4       .text daKytag05_Execute__FP13kytag05_class */
 int daKytag05_Execute(kytag05_class* a_this) {
     /* Nonmatching */
-    static s16 wind_table[] = {
-        0,
-        90,
-        180,
-        270
-        };// 0x2C
+//    static s16 wind_table[] = {
+//        0, //18
+//        90, //1C
+//        180, //20
+//        270 //24
+//        };// 0x2C
+
     daPy_py_c *playerActor;
     camera_class *mpCamera;
     u8 bVar1;
     u32 uVar4;
     u32 iVar5;
     u32 demoField;
-    float fVar7;
+    float var_f1;
+    float var_f30;
     float blend;
 
     mpCamera = dComIfGp_getCamera(0);
     playerActor = daPy_getPlayerActorClass();
     dKyw_get_wind_pow();
-    blend = 1.0;
+    var_f30 = 0;
 
     if (g_env_light.mWind.mEvtWindSet == 0xff) {
         return 1;
@@ -53,59 +55,39 @@ int daKytag05_Execute(kytag05_class* a_this) {
         dComIfGp_getEventManager().startCheckOld("KYTAG05") != 0 &&
         g_dComIfG_gameInfo.play.getDemo() != NULL) {
         demoField = g_dComIfG_gameInfo.play.getDemo()->field_0xd4;
-        if(demoField >= 0x186)
-        {
-            daYkgr_c::m_emitter = NULL;
-        }
-
-    }
-
-    bVar1 = a_this->bsType;
-    if ((bVar1 & 1) == 0) {
-        iVar5 = a_this->pcId + 3;
-        if (iVar5 < *(short *)(0 + (bVar1 & 0xfffffffe))) {
-            dKy_custom_colset(0,7, blend);
-            a_this->pcId = iVar5 + 1;
-        } else {
-            a_this->pcId = 0;
-            a_this->bsType = a_this->bsType + 1;
-            g_env_light.mWind.mEvtWindSet = 2;
-        }
-    } else {
-        iVar5 = a_this->pcId;
-        if (iVar5 < *(short *)(0 + (bVar1 & 0xfffffffe))) {
-            a_this->pcId = iVar5 + 1;
-        } else {
-            a_this->bsType = bVar1 + 1;
-            if (3 < a_this->bsType >> 1) {
-                a_this->bsType = 0;
+        if(demoField >= 0x186) {
+            var_f1 = (demoField - 90.0f) / 180.0f;
+            if(var_f1 > var_f30) {
+                var_f1 = var_f30;
             }
-            dKyw_evt_wind_set(0,0);
-            a_this->pcId = 0;
-            g_env_light.mWind.mEvtWindSet = 1;
+            var_f30 = 0 - var_f1;
+            g_env_light.mSnowCount = 270.0f * var_f30;
+        } else if (demoField == 0x187 && daYkgr_c::m_emitter != 0) {
+            daYkgr_c::m_alpha_flag = 0;
         }
     }
-    blend = mpCamera->mLookat.mEye.z;
-    if (((blend <= 1445.0) && (playerActor->current.pos.z <= 1445.0)) ||
-        ((mpCamera->mLookat.mEye.x <= 520.0 && (playerActor->current.pos.x <= 520.0)))) {
-        if ((blend < -4085.0) || (fVar7 = playerActor->current.pos.z, fVar7 < -4085.0)) {
-            dKyw_evt_wind_set(0,-16000);
-        } else if ((blend < -3108.0) || (fVar7 < -3108.0)) {
-            dKyw_evt_wind_set(0,-0x4b00);
-        } else if ((blend < -1412.0) || (fVar7 < -1412.0)) {
-            dKyw_evt_wind_set(0,-13000);
+    dKy_custom_colset(0, 7, var_f30);
+    if(a_this->field_0x290 & 1) {
+        if(a_this->field_0x294 >= 0) {
+            a_this->field_0x294 = 0;
+            a_this->field_0x290 += 1;
+            g_env_light.mWind.mEvtWindSet = 2;
+        } else {
+            a_this->field_0x294 += 1;
         }
-    } else if ((2100.0 < blend) || (fVar7 = playerActor->current.pos.z, 2100.0 < fVar7)) {
-        dKyw_evt_wind_set(0,25000);
-    } else if ((1970.0 < blend) || (1970.0 < fVar7)) {
-        dKyw_evt_wind_set(0,20000);
     } else {
-        dKyw_evt_wind_set(0,18000);
+        if(a_this->field_0x294 >= 0) {
+            a_this->field_0x290 += 1;
+            if(a_this->field_0x290 >> 1 >= 4) {
+                a_this->field_0x290 = 0;
+            }
+            dKyw_evt_wind_set(0, -16000);
+            a_this->field_0x294 = 0;
+            g_env_light.mWind.mEvtWindSet = 1;
+        } else {
+            a_this->field_0x294 += 1;
+        }
     }
-
-    fopAcM_seStartCurrent(a_this, 0x106a, 0);
-
-    return 1;
 }
 
 BOOL daKytag05_IsDelete(kytag05_class*) {
@@ -122,9 +104,9 @@ int daKytag05_Create(fopAc_ac_c* i_this) {
     if (dComIfGs_isSymbol(1) != 0) {
         return 3;
     }
-    a_this->bsType = 0;
-    a_this->pcId = 0;
-    a_this->procName = i_this->mBase.mParameters & 0xff;
+    a_this->field_0x290 = 0;
+    a_this->field_0x294 = 0;
+    a_this->field_0x298 = i_this->mBase.mParameters & 0xff;
     dKyw_evt_wind_set_go();
     dKyw_evt_wind_set(0,0);
     g_env_light.mSnowCount = 200;

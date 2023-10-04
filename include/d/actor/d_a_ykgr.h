@@ -8,7 +8,7 @@
 struct daYkgr_c {
 public:
     static JPABaseEmitter* m_emitter;
-    static int m_alpha_flag;
+    static u8 m_alpha_flag;
 public:
 
 };
