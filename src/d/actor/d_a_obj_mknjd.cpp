@@ -1063,7 +1063,7 @@ int daObjMknjD::Act_c::Draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, getPositionP(), &mTevStr);
     g_env_light.setLightTevColorType(mMainMdl, &mTevStr);
 
-    dComIfGd_setList();
+    dComIfGd_setListBG();
 
     J3DModelData* mdlData = mMainMdl->getModelData();
     u16 jointCount = mdlData->getJointNum();
@@ -1078,7 +1078,7 @@ int daObjMknjD::Act_c::Draw() {
         mDoExt_modelUpdateDL(mBreakMdl);
     }
 
-    dComIfGd_setListBG();
+    dComIfGd_setList();
 
     return 1;
 }
