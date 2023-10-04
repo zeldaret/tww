@@ -3,12 +3,19 @@
 // Translation Unit: d_a_bomb.cpp
 //
 
-#include "d_a_bomb.h"
+#include "d/actor/d_a_bomb.h"
 #include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
-/* 800D9318-800D9364       .text chk_attrState__22@unnamed@d_a_bomb_cpp@FPC8daBomb_cQ222@unnamed@d_a_bomb_cpp@8AttrSt_e */
-void @unnamed@d_a_bomb_cpp@::chk_attrState(const daBomb_c*, @unnamed@d_a_bomb_cpp@::AttrSt_e) {
-    /* Nonmatching */
+namespace {
+    enum AttrSt_e {
+        
+    };
+    
+    /* 800D9318-800D9364       .text chk_attrState__22@unnamed@d_a_bomb_cpp@FPC8daBomb_cQ222@unnamed@d_a_bomb_cpp@8AttrSt_e */
+    void chk_attrState(const daBomb_c*, AttrSt_e) {
+        /* Nonmatching */
+    }
 }
 
 /* 800D9364-800D977C       .text executeAfter__25daBomb_fuseSmokeEcallBackFP14JPABaseEmitter */
@@ -311,11 +318,6 @@ daBomb_c::daBomb_c() {
     /* Nonmatching */
 }
 
-/* 800DCEBC-800DCEF8       .text __dt__15LIGHT_INFLUENCEFv */
-LIGHT_INFLUENCE::~LIGHT_INFLUENCE() {
-    /* Nonmatching */
-}
-
 /* 800DCEF8-800DCF18       .text daBomb_Create__FP10fopAc_ac_c */
 void daBomb_Create(fopAc_ac_c*) {
     /* Nonmatching */
@@ -323,26 +325,6 @@ void daBomb_Create(fopAc_ac_c*) {
 
 /* 800DCF18-800DD1A4       .text create_init__8daBomb_cFv */
 void daBomb_c::create_init() {
-    /* Nonmatching */
-}
-
-/* 800DD1A4-800DD210       .text __dt__26daBomb_fuseSparksEcallBackFv */
-daBomb_fuseSparksEcallBack::~daBomb_fuseSparksEcallBack() {
-    /* Nonmatching */
-}
-
-/* 800DD210-800DD27C       .text __dt__25daBomb_fuseSmokeEcallBackFv */
-daBomb_fuseSmokeEcallBack::~daBomb_fuseSmokeEcallBack() {
-    /* Nonmatching */
-}
-
-/* 800DD27C-800DD2EC       .text __dt__13dBgS_BombAcchFv */
-dBgS_BombAcch::~dBgS_BombAcch() {
-    /* Nonmatching */
-}
-
-/* 800DD2EC-800DD348       .text __dt__13mDoExt_bckAnmFv */
-mDoExt_bckAnm::~mDoExt_bckAnm() {
     /* Nonmatching */
 }
 
@@ -370,14 +352,3 @@ void daBomb_fuseSmokeEcallBack::draw(JPABaseEmitter*) {
 void daBomb_fuseSmokeEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
     /* Nonmatching */
 }
-
-/* 800DD36C-800DD374       .text @32@__dt__13dBgS_BombAcchFv */
-void @32@__dt__13dBgS_BombAcchFv {
-    /* Nonmatching */
-}
-
-/* 800DD374-800DD37C       .text @20@__dt__13dBgS_BombAcchFv */
-void @20@__dt__13dBgS_BombAcchFv {
-    /* Nonmatching */
-}
-

@@ -30,10 +30,10 @@ public:
     JPACallBackBase() {}
     virtual ~JPACallBackBase() {}
     
-    virtual void init(JPABaseEmitter*);
-    virtual void execute(JPABaseEmitter*);
-    virtual void executeAfter(JPABaseEmitter*);
-    virtual void draw(JPABaseEmitter*);
+    virtual void init(T) {}
+    virtual void execute(T) {}
+    virtual void executeAfter(T) {}
+    virtual void draw(T) {}
 };
 
 template<typename T, typename U>
@@ -42,9 +42,9 @@ public:
     JPACallBackBase2() {}
     virtual ~JPACallBackBase2() {}
     
-    virtual void init(JPABaseEmitter*, JPABaseParticle*);
-    virtual void execute(JPABaseEmitter*, JPABaseParticle*);
-    virtual void draw(JPABaseEmitter*, JPABaseParticle*);
+    virtual void init(T, U) {}
+    virtual void execute(T, U) {}
+    virtual void draw(T, U) {}
 };
 
 class JPABaseEmitter {

@@ -15,6 +15,11 @@ class JPAParticleCallBack;
 class JPAResourceManager;
 struct JPAEmitterWorkData;
 
+template<typename T>
+class JPACallBackBase;
+template<typename T, typename U>
+class JPACallBackBase2;
+
 class JPABaseParticle {
 public:
     void initParticle();

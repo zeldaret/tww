@@ -3,7 +3,8 @@
 // Translation Unit: d_a_bomb_static.cpp
 //
 
-#include "d_a_bomb_static.h"
+#include "d/actor/d_a_bomb.h"
+#include "d/actor/d_a_bomb2.h"
 #include "dolphin/types.h"
 
 /* 80067FA0-80067FD0       .text getBombRestTime__8daBomb_cFv */
@@ -135,9 +136,3 @@ void daBomb2::Act_c::set_no_hit() {
 void daBomb2::Act_c::chk_explode() {
     /* Nonmatching */
 }
-
-/* 800684F4-80068510       .text PrmAbstract<Q28daBomb_c5Prm_e>__5daObjFPC10fopAc_ac_cQ28daBomb_c5Prm_eQ28daBomb_c5Prm_e */
-void daObj::PrmAbstract<daBomb_c::Prm_e>(const fopAc_ac_c*, daBomb_c::Prm_e, daBomb_c::Prm_e) {
-    /* Nonmatching */
-}
-

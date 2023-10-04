@@ -16,11 +16,6 @@ dPa_J3DmodelEmitter_c::dPa_J3DmodelEmitter_c(JPABaseEmitter*, J3DModelData*, dKy
     /* Nonmatching */
 }
 
-// /* 8007A804-8007A84C       .text __dt__18dPa_modelEmitter_cFv */
-// dPa_modelEmitter_c::~dPa_modelEmitter_c() {
-//     /* Nonmatching */
-// }
-
 /* 8007A84C-8007A8C8       .text __dt__21dPa_J3DmodelEmitter_cFv */
 dPa_J3DmodelEmitter_c::~dPa_J3DmodelEmitter_c()  {
     if (mpHeap) {
@@ -45,6 +40,7 @@ dPa_J3Dmodel_c::dPa_J3Dmodel_c() {
 
 /* 8007AED8-8007AF64       .text __dt__18dPa_modelControl_cFv */
 dPa_modelControl_c::~dPa_modelControl_c() {
+    /* Nonmatching (node_class has no virtual destructor) */
     node_class* node = parent.mpHead;
     while (node) {
         node_class* nextNode = node->mpNextNode;
@@ -94,11 +90,6 @@ dPa_smokeEcallBack::dPa_smokeEcallBack(unsigned char) {
     /* Nonmatching */
 }
 
-// /* 8007B444-8007B4B0       .text __dt__19dPa_followEcallBackFv */
-// dPa_followEcallBack::~dPa_followEcallBack() {
-//     /* Nonmatching */
-// }
-
 /* 8007B4B0-8007B558       .text __ct__18dPa_smokeEcallBackFUcUcUcUc */
 dPa_smokeEcallBack::dPa_smokeEcallBack(unsigned char, unsigned char, unsigned char, unsigned char) {
     /* Nonmatching */
@@ -113,16 +104,6 @@ dPa_smokeEcallBack::dPa_smokeEcallBack(const _GXColor&, dKy_tevstr_c*, unsigned 
 void dPa_smokeEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
     /* Nonmatching */
 }
-
-// /* 8007B698-8007B6F4       .text __dt__18dPa_smokePcallBackFv */
-// dPa_smokePcallBack::~dPa_smokePcallBack() {
-//     /* Nonmatching */
-// }
-
-// /* 8007B6F4-8007B73C       .text __dt__54JPACallBackBase2<P14JPABaseEmitter,P15JPABaseParticle>Fv */
-// JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::~JPACallBackBase2() {
-//     /* Nonmatching */
-// }
 
 /* 8007B73C-8007B804       .text initiateLighting__FR11_GXColorS10R8_GXColorR8_GXColor */
 void initiateLighting(_GXColorS10&, _GXColor&, _GXColor&) {
@@ -170,11 +151,6 @@ dPa_simpleEcallBack::dPa_simpleEcallBack() {
     mCount = 0;
 }
 
-// /* 8007C420-8007C45C       .text __dt__16dPa_simpleData_cFv */
-// dPa_simpleData_c::~dPa_simpleData_c() {
-//     /* Nonmatching */
-// }
-
 /* 8007C45C-8007C460       .text __ct__16dPa_simpleData_cFv */
 dPa_simpleData_c::dPa_simpleData_c() {
     /* Nonmatching */
@@ -184,11 +160,6 @@ dPa_simpleData_c::dPa_simpleData_c() {
 void dPa_simpleEcallBack::executeAfter(JPABaseEmitter*) {
     /* Nonmatching */
 }
-
-// /* 8007C618-8007C674       .text __dt__17dPa_windPcallBackFv */
-// dPa_windPcallBack::~dPa_windPcallBack() {
-//     /* Nonmatching */
-// }
 
 /* 8007C674-8007C6EC       .text draw__19dPa_simpleEcallBackFP14JPABaseEmitter */
 void dPa_simpleEcallBack::draw(JPABaseEmitter*) {
@@ -219,11 +190,6 @@ void dPa_windPcallBack::execute(JPABaseEmitter*, JPABaseParticle*) {
 dPa_control_c::dPa_control_c() {
     /* Nonmatching */
 }
-
-// /* 8007C9A4-8007CA28       .text __dt__19dPa_simpleEcallBackFv */
-// dPa_simpleEcallBack::~dPa_simpleEcallBack() {
-//     /* Nonmatching */
-// }
 
 /* 8007CA28-8007CA30       .text getRM_ID__13dPa_control_cFUs */
 void dPa_control_c::getRM_ID(unsigned short) {
@@ -465,88 +431,18 @@ void dPa_trackEcallBack::draw(JPABaseEmitter*) {
     /* Nonmatching */
 }
 
-// /* 8007F62C-8007F698       .text __dt__18dPa_trackEcallBackFv */
-// dPa_trackEcallBack::~dPa_trackEcallBack() {
-//     /* Nonmatching */
-// }
-
-// /* 8007F698-8007F704       .text __dt__22dPa_bombSmokeEcallBackFv */
-// dPa_bombSmokeEcallBack::~dPa_bombSmokeEcallBack() {
-//     /* Nonmatching */
-// }
-
 /* 8007F704-8007F708       .text setup__22dPa_bombSmokeEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
 void dPa_bombSmokeEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
     /* Nonmatching */
 }
-
-// /* 8007F708-8007F764       .text __dt__19dPa_kageroEcallBackFv */
-// dPa_kageroEcallBack::~dPa_kageroEcallBack() {
-//     /* Nonmatching */
-// }
-
-// /* 8007F764-8007F7D0       .text __dt__20dPa_stripesEcallBackFv */
-// dPa_stripesEcallBack::~dPa_stripesEcallBack() {
-//     /* Nonmatching */
-// }
 
 /* 8007F7D0-8007F7D4       .text setup__20dPa_stripesEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
 void dPa_stripesEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
     /* Nonmatching */
 }
 
-// /* 8007F7D4-8007F840       .text __dt__22dPa_cutTurnEcallBack_cFv */
-// dPa_cutTurnEcallBack_c::~dPa_cutTurnEcallBack_c() {
-//     /* Nonmatching */
-// }
-
-// /* 8007F840-8007F8AC       .text __dt__19dPa_splashEcallBackFv */
-// dPa_splashEcallBack::~dPa_splashEcallBack() {
-//     /* Nonmatching */
-// }
-
-// /* 8007F8AC-8007F940       .text __dt__17dPa_waveEcallBackFv */
-// dPa_waveEcallBack::~dPa_waveEcallBack() {
-//     /* Nonmatching */
-// }
-
-// /* 8007F940-8007F99C       .text __dt__19dPa_ripplePcallBackFv */
-// dPa_ripplePcallBack::~dPa_ripplePcallBack() {
-//     /* Nonmatching */
-// }
-
-/* 8007F99C-8007F9A0       .text init__54JPACallBackBase2<P14JPABaseEmitter,P15JPABaseParticle>FP14JPABaseEmitterP15JPABaseParticle */
-void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::init(JPABaseEmitter*, JPABaseParticle*) {
-    /* Nonmatching */
-}
-
-// /* 8007F9A0-8007FA0C       .text __dt__25dPa_singleRippleEcallBackFv */
-// dPa_singleRippleEcallBack::~dPa_singleRippleEcallBack() {
-//     /* Nonmatching */
-// }
-
-// /* 8007FA0C-8007FA78       .text __dt__19dPa_rippleEcallBackFv */
-// dPa_rippleEcallBack::~dPa_rippleEcallBack() {
-//     /* Nonmatching */
-// }
-
-/* 8007FA78-8007FA7C       .text draw__54JPACallBackBase2<P14JPABaseEmitter,P15JPABaseParticle>FP14JPABaseEmitterP15JPABaseParticle */
-void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::draw(JPABaseEmitter*, JPABaseParticle*) {
-    /* Nonmatching */
-}
-
-// /* 8007FA7C-8007FAE8       .text __dt__22dPa_selectTexEcallBackFv */
-// dPa_selectTexEcallBack::~dPa_selectTexEcallBack() {
-//     /* Nonmatching */
-// }
-
 /* 8007FAE8-8007FAEC       .text setup__22dPa_selectTexEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
 void dPa_selectTexEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
-    /* Nonmatching */
-}
-
-/* 8007FAEC-8007FAF0       .text execute__54JPACallBackBase2<P14JPABaseEmitter,P15JPABaseParticle>FP14JPABaseEmitterP15JPABaseParticle */
-void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::execute(JPABaseEmitter*, JPABaseParticle*) {
     /* Nonmatching */
 }
 
@@ -559,8 +455,3 @@ void dPa_setColorEcallBack::draw(JPABaseEmitter*) {
 void dPa_setColorEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
     /* Nonmatching */
 }
-
-// /* 8007FFAC-80080018       .text __dt__21dPa_setColorEcallBackFv */
-// dPa_setColorEcallBack::~dPa_setColorEcallBack() {
-//     /* Nonmatching */
-// }

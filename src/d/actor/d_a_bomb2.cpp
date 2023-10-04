@@ -3,7 +3,7 @@
 // Translation Unit: d_a_bomb2.cpp
 //
 
-#include "d_a_bomb2.h"
+#include "d/actor/d_a_bomb2.h"
 #include "dolphin/types.h"
 
 /* 800DD37C-800DD454       .text set__Q27daBomb25Env_cFRC4cXyz */
@@ -476,30 +476,34 @@ void daBomb2::Act_c::_draw() {
     /* Nonmatching */
 }
 
-/* 800E0A80-800E0AA0       .text Mthd_Create__Q27daBomb223@unnamed@d_a_bomb2_cpp@FPv */
-void daBomb2::@unnamed@d_a_bomb2_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
+namespace daBomb2 {
+    namespace {
+        /* 800E0A80-800E0AA0       .text Mthd_Create__Q27daBomb223@unnamed@d_a_bomb2_cpp@FPv */
+        void Mthd_Create(void*) {
+            /* Nonmatching */
+        }
 
-/* 800E0AA0-800E0AC4       .text Mthd_Delete__Q27daBomb223@unnamed@d_a_bomb2_cpp@FPv */
-void daBomb2::@unnamed@d_a_bomb2_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
+        /* 800E0AA0-800E0AC4       .text Mthd_Delete__Q27daBomb223@unnamed@d_a_bomb2_cpp@FPv */
+        void Mthd_Delete(void*) {
+            /* Nonmatching */
+        }
 
-/* 800E0AC4-800E0AE8       .text Mthd_Execute__Q27daBomb223@unnamed@d_a_bomb2_cpp@FPv */
-void daBomb2::@unnamed@d_a_bomb2_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
+        /* 800E0AC4-800E0AE8       .text Mthd_Execute__Q27daBomb223@unnamed@d_a_bomb2_cpp@FPv */
+        void Mthd_Execute(void*) {
+            /* Nonmatching */
+        }
 
-/* 800E0AE8-800E0B0C       .text Mthd_Draw__Q27daBomb223@unnamed@d_a_bomb2_cpp@FPv */
-void daBomb2::@unnamed@d_a_bomb2_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
+        /* 800E0AE8-800E0B0C       .text Mthd_Draw__Q27daBomb223@unnamed@d_a_bomb2_cpp@FPv */
+        void Mthd_Draw(void*) {
+            /* Nonmatching */
+        }
 
-/* 800E0B0C-800E0B14       .text Mthd_IsDelete__Q27daBomb223@unnamed@d_a_bomb2_cpp@FPv */
-void daBomb2::@unnamed@d_a_bomb2_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
+        /* 800E0B0C-800E0B14       .text Mthd_IsDelete__Q27daBomb223@unnamed@d_a_bomb2_cpp@FPv */
+        void Mthd_IsDelete(void*) {
+            /* Nonmatching */
+        }
+    };
+};
 
 /* 800E0B14-800E0B80       .text __dt__Q27daBomb214FuseSparksCB_cFv */
 daBomb2::FuseSparksCB_c::~FuseSparksCB_c() {
@@ -510,9 +514,3 @@ daBomb2::FuseSparksCB_c::~FuseSparksCB_c() {
 daBomb2::FuseSmokeCB_c::~FuseSmokeCB_c() {
     /* Nonmatching */
 }
-
-/* 800E0BEC-800E0C08       .text PrmAbstract<Q37daBomb25Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ37daBomb25Act_c5Prm_eQ37daBomb25Act_c5Prm_e */
-void daObj::PrmAbstract<daBomb2::Act_c::Prm_e>(const fopAc_ac_c*, daBomb2::Act_c::Prm_e, daBomb2::Act_c::Prm_e) {
-    /* Nonmatching */
-}
-
