@@ -46,8 +46,6 @@ public:
     virtual void draw(JPABaseEmitter*);
     virtual void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
     virtual void end();
-
-    void setRateOff(u8 i_rate) { field_0x11 = i_rate; }
     
     JPABaseEmitter* getEmitter() { return mpEmitter; }
     void setRateOff(u8 param_0) { field_0x11 = param_0; }

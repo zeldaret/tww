@@ -1058,7 +1058,7 @@ void daObjMknjD::setMaterial(J3DMaterial* i_mat, u8 i_alpha) {
                 i_mat->getPEBlock()->getBlend()->setDstFactor(5);
             }
 
-            i_mat->getTevKColor(3)->a = i_alpha;
+            i_mat->getTevKColor(3)->mColor.a = i_alpha;
         }
     }
 }

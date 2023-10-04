@@ -134,10 +134,6 @@ public:
     Vec* getBaseScale() { return &mBaseScale; }
     void setVisibilityManager(J3DVisibilityManager* manager) { mpVisibilityManager = manager; }
 
-    void setAnmMtx(int jntNo, Mtx mtx) {
-        MTXCopy(mtx, mpNodeMtx[jntNo]);
-    }
-
     /* 0x004 */ J3DModelData* mModelData;
     /* 0x008 */ u32 mFlags;
     /* 0x00C */ u32 mDiffFlag;
