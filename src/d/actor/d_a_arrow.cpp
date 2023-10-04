@@ -1142,7 +1142,7 @@ BOOL daArrow_c::_execute() {
                 scaleVec.x = scale;
                 scaleVec.y = scale;
                 scaleVec.z = scale;
-                mpSparkleEmitter->setGlobalParticleScale(scaleVec);
+                mpSparkleEmitter->setGlobalScale(scaleVec);
             } else {
                 mpSparkleEmitter->becomeInvalidEmitter();
                 mpSparkleEmitter = NULL;
