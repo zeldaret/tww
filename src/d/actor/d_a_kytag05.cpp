@@ -3,9 +3,13 @@
 // Translation Unit: d_a_kytag05.cpp
 //
 #include "JSystem/JKernel/JKRHeap.h"
+#include "JAZelAudio/JAIZelBasic.h"
 #include "f_op/f_op_actor_mng.h"
+#include "f_op/f_op_camera_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
+#include "d/actor/d_a_player.h"
+#include "d/actor/d_a_ykgr.h"
 #include "dolphin/types.h"
 
 class kytag05_class : public fopAc_ac_c {
@@ -15,29 +19,104 @@ public:
     u32 procName;
 };
 
-/* 00000078-00000080       .text daKytag05_Draw__FP13kytag05_class */
 BOOL daKytag05_Draw(kytag05_class*) {
     return true;
 }
 
 /* 00000080-000003F4       .text daKytag05_Execute__FP13kytag05_class */
-void daKytag05_Execute(kytag05_class*) {
+int daKytag05_Execute(kytag05_class* a_this) {
     /* Nonmatching */
+    static s16 wind_table[] = {
+        0,
+        90,
+        180,
+        270
+        };// 0x2C
+    daPy_py_c *playerActor;
+    camera_class *mpCamera;
+    u8 bVar1;
+    u32 uVar4;
+    u32 iVar5;
+    u32 demoField;
+    float fVar7;
+    float blend;
+
+    mpCamera = dComIfGp_getCamera(0);
+    playerActor = daPy_getPlayerActorClass();
+    dKyw_get_wind_pow();
+    blend = 1.0;
+
+    if (g_env_light.mWind.mEvtWindSet == 0xff) {
+        return 1;
+    }
+    if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode != 0 &&
+        dComIfGp_getEventManager().startCheckOld("KYTAG05") != 0 &&
+        g_dComIfG_gameInfo.play.getDemo() != NULL) {
+        demoField = g_dComIfG_gameInfo.play.getDemo()->field_0xd4;
+        if(demoField >= 0x186)
+        {
+            daYkgr_c::m_emitter = NULL;
+        }
+
+    }
+
+    bVar1 = a_this->bsType;
+    if ((bVar1 & 1) == 0) {
+        iVar5 = a_this->pcId + 3;
+        if (iVar5 < *(short *)(0 + (bVar1 & 0xfffffffe))) {
+            dKy_custom_colset(0,7, blend);
+            a_this->pcId = iVar5 + 1;
+        } else {
+            a_this->pcId = 0;
+            a_this->bsType = a_this->bsType + 1;
+            g_env_light.mWind.mEvtWindSet = 2;
+        }
+    } else {
+        iVar5 = a_this->pcId;
+        if (iVar5 < *(short *)(0 + (bVar1 & 0xfffffffe))) {
+            a_this->pcId = iVar5 + 1;
+        } else {
+            a_this->bsType = bVar1 + 1;
+            if (3 < a_this->bsType >> 1) {
+                a_this->bsType = 0;
+            }
+            dKyw_evt_wind_set(0,0);
+            a_this->pcId = 0;
+            g_env_light.mWind.mEvtWindSet = 1;
+        }
+    }
+    blend = mpCamera->mLookat.mEye.z;
+    if (((blend <= 1445.0) && (playerActor->current.pos.z <= 1445.0)) ||
+        ((mpCamera->mLookat.mEye.x <= 520.0 && (playerActor->current.pos.x <= 520.0)))) {
+        if ((blend < -4085.0) || (fVar7 = playerActor->current.pos.z, fVar7 < -4085.0)) {
+            dKyw_evt_wind_set(0,-16000);
+        } else if ((blend < -3108.0) || (fVar7 < -3108.0)) {
+            dKyw_evt_wind_set(0,-0x4b00);
+        } else if ((blend < -1412.0) || (fVar7 < -1412.0)) {
+            dKyw_evt_wind_set(0,-13000);
+        }
+    } else if ((2100.0 < blend) || (fVar7 = playerActor->current.pos.z, 2100.0 < fVar7)) {
+        dKyw_evt_wind_set(0,25000);
+    } else if ((1970.0 < blend) || (1970.0 < fVar7)) {
+        dKyw_evt_wind_set(0,20000);
+    } else {
+        dKyw_evt_wind_set(0,18000);
+    }
+
+    fopAcM_seStartCurrent(a_this, 0x106a, 0);
+
+    return 1;
 }
 
-/* 000003F4-000003FC       .text daKytag05_IsDelete__FP13kytag05_class */
 BOOL daKytag05_IsDelete(kytag05_class*) {
     return true;
 }
 
-/* 000003FC-00000404       .text daKytag05_Delete__FP13kytag05_class */
 BOOL daKytag05_Delete(kytag05_class*) {
     return true;
 }
 
-/* 00000404-000004C0       .text daKytag05_Create__FP10fopAc_ac_c */
 int daKytag05_Create(fopAc_ac_c* i_this) {
-
     fopAcM_SetupActor(i_this, kytag05_class);
     kytag05_class *a_this = (kytag05_class*)i_this;
     if (dComIfGs_isSymbol(1) != 0) {

@@ -1,0 +1,136 @@
+{
+	"inputs" : 
+	[
+		{
+			"path" : "CMakeLists.txt"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/CMakeFiles/3.26.4/CMakeSystem.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/kris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/linux/x64/share/cmake-3.26/Modules/CMakeSystemSpecificInitialize.cmake"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/CMakeFiles/3.26.4/CMakeCCompiler.cmake"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/CMakeFiles/3.26.4/CMakeCXXCompiler.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/kris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/linux/x64/share/cmake-3.26/Modules/CMakeSystemSpecificInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/kris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/linux/x64/share/cmake-3.26/Modules/CMakeGenericSystem.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/kris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/linux/x64/share/cmake-3.26/Modules/CMakeInitializeConfigs.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/kris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/linux/x64/share/cmake-3.26/Modules/Platform/Linux.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/kris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/linux/x64/share/cmake-3.26/Modules/Platform/UnixPaths.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/kris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/linux/x64/share/cmake-3.26/Modules/CMakeCInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/kris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/linux/x64/share/cmake-3.26/Modules/CMakeLanguageInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/kris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/linux/x64/share/cmake-3.26/Modules/Compiler/GNU-C.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/kris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/linux/x64/share/cmake-3.26/Modules/Compiler/GNU.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/kris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/linux/x64/share/cmake-3.26/Modules/Compiler/CMakeCommonCompilerMacros.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/kris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/linux/x64/share/cmake-3.26/Modules/Platform/Linux-GNU-C.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/kris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/linux/x64/share/cmake-3.26/Modules/Platform/Linux-GNU.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/kris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/linux/x64/share/cmake-3.26/Modules/CMakeCommonLanguageInclude.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/kris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/linux/x64/share/cmake-3.26/Modules/CMakeCXXInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/kris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/linux/x64/share/cmake-3.26/Modules/CMakeLanguageInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/kris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/linux/x64/share/cmake-3.26/Modules/Compiler/GNU-CXX.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/kris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/linux/x64/share/cmake-3.26/Modules/Compiler/GNU.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/kris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/linux/x64/share/cmake-3.26/Modules/Platform/Linux-GNU-CXX.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/kris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/linux/x64/share/cmake-3.26/Modules/Platform/Linux-GNU.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/kris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/linux/x64/share/cmake-3.26/Modules/CMakeCommonLanguageInclude.cmake"
+		}
+	],
+	"kind" : "cmakeFiles",
+	"paths" : 
+	{
+		"build" : "/home/kris/Documents/GitHub/tww/cmake-build-debug",
+		"source" : "/home/kris/Documents/GitHub/tww"
+	},
+	"version" : 
+	{
+		"major" : 1,
+		"minor" : 0
+	}
+}

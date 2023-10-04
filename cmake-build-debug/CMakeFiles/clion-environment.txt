@@ -1,0 +1,3 @@
+ToolSet: 1.0 (local)Options: 
+
+Options:-DCMAKE_MAKE_PROGRAM=/home/kris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/ninja/linux/x64/ninja
