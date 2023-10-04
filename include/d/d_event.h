@@ -69,7 +69,7 @@ public:
     void remove();
     void getStageEventDt();
     void nextStageEventDt(void*);
-    void getPId(void*);
+    int getPId(void*);
     fopAc_ac_c * convPId(unsigned int);
     void getTactFreeMStick(int);
     void getTactFreeCStick(int);
@@ -78,6 +78,7 @@ public:
     u8 getTalkXYBtn() { return mTalkButton; }
     bool chkTalkXY() { return mTalkButton == 1 || mTalkButton == 2 || mTalkButton == 3; }
     void setPtI_Id(u32 id) { mPtItem = id; }
+    void setPtT(void* i_actor) { mPtTalk = getPId(i_actor); }
     u8 getPreItemNo() { return mItemNo; }
 
     u16 chkEventFlag(u16 flag) { return flag & mEventFlag; }

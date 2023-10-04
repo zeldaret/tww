@@ -119,12 +119,12 @@ public:
     void setEventId(s16 id) { mEventId = id; }
     void setCondition(u16 condition) { mCondition = condition; }
     u16 getCondition() { return mCondition; }
-    void setArchiveName(char* name) { mArchiveName = name; }
+    //void setArchiveName(char* name) { mArchiveName = name; }
     u8 getMapToolId() { return mMapToolId; }
     s16 getEventId() { return mEventId; }
     s16 getIdx() { return mIndex; }
     void setIdx(u8 i_idx) { mIndex = i_idx; }
-    char* getArchiveName() { return mArchiveName; }
+    //char* getArchiveName() { return mArchiveName; }
     BOOL chkCondition(u16 condition) { return (mCondition & condition) == condition; }
     void onCondition(u16 cond) { mCondition |= cond; }
     void offCondition(u16 cond) { mCondition &= ~cond; }
@@ -135,20 +135,14 @@ public:
     bool checkCommandDemoAccrpt() { return mCommand == 2; }
     bool checkCommandCatch() { return mCommand == 6; }
 
-    void suspendProc(void* actor) {
-        if (field_0x10 != NULL) {
-            field_0x14(actor);
-        }
-    }
-
     /* 0x04 */ u16 mCommand;
     /* 0x06 */ u16 mCondition;
     /* 0x08 */ s16 mEventId;
     /* 0x0A */ u8 mMapToolId;
     /* 0x0B */ s8 mIndex;
-    /* 0x0C */ char* mArchiveName;
-    /* 0x10 */ u8 field_0x10;
-    /* 0x14 */ void (*field_0x14)(void*);
+    /* 0x0C */ s16 (*mpEventCB)(void*, int);
+    /* 0x10 */ s16 (*mpCheckCB)(void*, int);
+    /* 0x14 */ s16 (*mpPhotoCB)(void*, int);
 };  // Size = 0x18
 
 struct actor_place {

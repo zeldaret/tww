@@ -538,17 +538,17 @@ private:
 };  // Size: 0x1C
 
 inline u16 calcZModeID(u8 param_0, u8 param_1, u8 param_2) {
-    return ((param_1 * 2) & 0x1FE) + (param_0 * 0x10) + param_2;
+    return (param_1 * 2) + (param_0 * 0x10) + param_2;
 }
 
-extern u8 j3dZModeTable[96];
+extern J3DZModeInfo j3dZModeTable[2];
 
 struct J3DZMode {
     J3DZMode() { mZModeID = j3dDefaultZModeID; }
 
-    u8 getCompareEnaable() const { return j3dZModeTable[mZModeID * 3]; }
-    u8 getFunc() const { return j3dZModeTable[mZModeID * 3 + 1]; }
-    u8 getUpdateEnable() const { return j3dZModeTable[mZModeID * 3 + 2]; }
+    u8 getCompareEnaable() const { return j3dZModeTable[mZModeID].mCompareEnable; }
+    u8 getFunc() const { return j3dZModeTable[mZModeID].mFunc; }
+    u8 getUpdateEnable() const { return j3dZModeTable[mZModeID].mUpdateEnable; }
 
     void setZModeInfo(const J3DZModeInfo& info) {
         mZModeID = calcZModeID(info.mCompareEnable, info.mFunc, info.mUpdateEnable);
@@ -556,6 +556,14 @@ struct J3DZMode {
 
     void load() {
         J3DGDSetZMode(getCompareEnaable(), GXCompare(getFunc()), getUpdateEnable());
+    }
+
+    void setCompareEnable(u8 i_compare) {
+        mZModeID = calcZModeID(i_compare, j3dZModeTable[mZModeID].mFunc, j3dZModeTable[mZModeID].mUpdateEnable);
+    }
+
+    void setUpdateEnable(u8 i_enable) {
+        mZModeID = calcZModeID(j3dZModeTable[mZModeID].mCompareEnable, j3dZModeTable[mZModeID].mFunc, i_enable);
     }
 
     /* 0x0 */ u16 mZModeID;
@@ -571,6 +579,18 @@ struct J3DBlend : public J3DBlendInfo {
 
     void load(u8 ditherEnable) {
         J3DGDSetBlendMode(getBlendMode(), getSrcFactor(), getDstFactor(), getLogicOp(), ditherEnable);
+    }
+
+    void setType(u8 i_type) {
+        mBlendMode = i_type;
+    }
+
+    void setSrcFactor(u8 i_src) {
+        mSrcFactor = i_src;
+    }
+
+    void setDstFactor(u8 i_dst) {
+        mDstFactor = i_dst;
     }
 };
 

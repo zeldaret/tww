@@ -902,6 +902,10 @@ inline fopAc_ac_c* dComIfGp_getPlayer(int idx) {
     return g_dComIfG_gameInfo.play.getPlayer(idx);
 }
 
+inline fopAc_ac_c* dComIfGp_getCb1Player() {
+    return g_dComIfG_gameInfo.play.getPlayerPtr(1);
+}
+
 inline roomRead_class* dComIfGp_getStageRoom() {
     return g_dComIfG_gameInfo.play.getStage().getRoom();
 }
@@ -1274,6 +1278,10 @@ inline fopAc_ac_c* dComIfGp_event_getTalkPartner() {
     return g_dComIfG_gameInfo.play.getEvent().convPId(t);
 }
 
+inline void dComIfGp_event_setTalkPartner(void* i_actor) {
+    g_dComIfG_gameInfo.play.getEvent().setPtT(i_actor);
+}
+
 inline fopAc_ac_c* dComIfGp_event_getItemPartner() {
     u32 i = g_dComIfG_gameInfo.play.getEvent().mPtItem;
     return g_dComIfG_gameInfo.play.getEvent().convPId(i);
@@ -1297,7 +1305,7 @@ inline s32 dComIfGp_evmng_getEventPrio(s16 eventIdx) {
     return dComIfGp_getEventManager().getEventPrio(eventIdx);
 }
 
-inline s16 dComIfGp_evmng_getEventIdx(char* pName, u8 evNo) {
+inline s16 dComIfGp_evmng_getEventIdx(const char* pName, u8 evNo) {
     return dComIfGp_getEventManager().getEventIdx(pName, evNo);
 }
 
@@ -1313,7 +1321,7 @@ inline f32* dComIfGp_evmng_getMyFloatP(int staffIdx, const char* name) {
     return reinterpret_cast<f32*>(dComIfGp_getEventManager().getMySubstanceP(staffIdx, name, 0)); //type 0 is float
 }
 
-inline Vec* dComIfGp_evmng_getMyVec3dP(int staffIdx, const char* name) {
+inline Vec* dComIfGp_evmng_getMyXyzP(int staffIdx, const char* name) {
     return reinterpret_cast<Vec*>(dComIfGp_getEventManager().getMySubstanceP(staffIdx, name, 1)); //type 1 is vec3f
 }
 
@@ -1323,6 +1331,10 @@ inline u32* dComIfGp_evmng_getMyIntegerP(int staffIdx, const char* name) {
 
 inline char* dComIfGp_evmng_getMyStringP(int staffIdx, const char* name) {
     return reinterpret_cast<char*>(dComIfGp_getEventManager().getMySubstanceP(staffIdx, name, 4)); //type 4 is string
+}
+
+inline BOOL dComIfGp_evmng_startCheck(s16 eventID) {
+    return dComIfGp_getEventManager().startCheck(eventID);
 }
 
 inline BOOL dComIfGp_evmng_startCheck(const char* pName) {
@@ -1450,6 +1462,7 @@ inline void dComIfGd_setListP1() {
 
 inline void dComIfGd_setListBG() {
     g_dComIfG_gameInfo.drawlist.setOpaListBG();
+    g_dComIfG_gameInfo.drawlist.setXluListBG();
 }
 
 inline void dComIfGd_setXluListBG() {
@@ -1559,14 +1572,14 @@ inline JPABaseEmitter* dComIfGp_particle_set(u16 particleID, const cXyz* pos, co
                                 pPrmColor, pEnvColor, pScale2D);
 }
 
-inline JPABaseEmitter* dComIfGp_particle_set(u16 particleID, const cXyz* pos, const csXyz* angle,
-                                             const cXyz* scale) {
-    return dComIfGp_particle_set(particleID, pos, angle, scale, 0xFF, NULL, -1, NULL, NULL, NULL);
-}
-
-inline void dComIfGp_particle_setStripes(u16 particleID, cXyz* pos, csXyz* angle, cXyz* scale, u8 param_4, u16 param_5) {
+inline JPABaseEmitter* dComIfGp_particle_setP1(u16 particleID, const cXyz* pos, const csXyz* angle,
+                                             const cXyz* scale, u8 alpha,
+                                             dPa_levelEcallBack* pCallBack, s8 setupInfo,
+                                             const GXColor* pPrmColor, const GXColor* pEnvColor,
+                                             const cXyz* pScale2D) {
     dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
-    pParticle->setNormalStripes(particleID, pos, angle, scale, param_4, param_5);
+    return pParticle->setNormalP1(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
+                                pPrmColor, pEnvColor, pScale2D);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_setToon(u16 particleID, const cXyz* pos,
@@ -1577,6 +1590,26 @@ inline JPABaseEmitter* dComIfGp_particle_setToon(u16 particleID, const cXyz* pos
     dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
     return pParticle->setToon(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
                               pPrmColor, pEnvColor, pScale2D);
+}
+
+inline JPABaseEmitter* dComIfGp_particle_setProjection(u16 particleID, const cXyz* pos, const csXyz* angle,
+                                             const cXyz* scale, u8 alpha,
+                                             dPa_levelEcallBack* pCallBack, s8 setupInfo,
+                                             const GXColor* pPrmColor, const GXColor* pEnvColor,
+                                             const cXyz* pScale2D) {
+    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
+    return pParticle->setProjection(particleID, pos, angle, scale, alpha, pCallBack, setupInfo,
+                                    pPrmColor, pEnvColor, pScale2D);
+}
+
+inline JPABaseEmitter* dComIfGp_particle_set(u16 particleID, const cXyz* pos, const csXyz* angle,
+                                             const cXyz* scale) {
+    return dComIfGp_particle_set(particleID, pos, angle, scale, 0xFF, NULL, -1, NULL, NULL, NULL);
+}
+
+inline void dComIfGp_particle_setStripes(u16 particleID, cXyz* pos, csXyz* angle, cXyz* scale, u8 param_4, u16 param_5) {
+    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
+    pParticle->setNormalStripes(particleID, pos, angle, scale, param_4, param_5);
 }
 
 inline void dComIfGp_particle_calc3D() {

@@ -70,6 +70,10 @@ inline void* fpcM_LyJudge(process_node_class* i_node, fpcLyIt_JudgeFunc i_func, 
     return fpcLyIt_Judge(&i_node->mLayer, i_func, i_data);
 }
 
+inline s8 fpcM_CreateResult(const void* pActor) {
+    return ((base_process_class*)pActor)->mCreateResult;
+}
+
 void fpcM_Draw(void* pProc);
 s32 fpcM_DrawIterater(fpcM_DrawIteraterFunc pFunc);
 s32 fpcM_Execute(void* pProc);

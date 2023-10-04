@@ -96,6 +96,9 @@ public:
     void changeDemoMoveAngle(s16 angle) { mDemo.setMoveAngle(angle); }
     u8 getCutType() const { return mAttackState; }
 
+    void onPlayerNoDraw() { field_0x29c |= 0x8000000; }
+    void offPlayerNoDraw() { field_0x29c &= ~0x8000000; }
+
     virtual MtxP getLeftHandMatrix() = 0;
     virtual MtxP getRightHandMatrix() = 0;
     virtual void getGroundY() = 0;

@@ -564,4 +564,3 @@ void dPa_setColorEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, si
 // dPa_setColorEcallBack::~dPa_setColorEcallBack() {
 //     /* Nonmatching */
 // }
-
