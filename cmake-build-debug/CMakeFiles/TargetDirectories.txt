@@ -1,3 +1,0 @@
-/home/kris/Documents/GitHub/tww/cmake-build-debug/CMakeFiles/tww.dir
-/home/kris/Documents/GitHub/tww/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/kris/Documents/GitHub/tww/cmake-build-debug/CMakeFiles/rebuild_cache.dir
