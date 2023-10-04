@@ -322,7 +322,6 @@ int daObjMknjD::Act_c::CreateHeap() {
 
 /* 00000620-000008E8       .text Create__Q210daObjMknjD5Act_cFv */
 int daObjMknjD::Act_c::Create() {
-    /* Nonmatching */
     mCullMtx = mMainMdl->getBaseTRMtx();
     init_mtx();
     mCullMtx = mBreakMdl->getBaseTRMtx();
@@ -390,7 +389,6 @@ int daObjMknjD::Act_c::Create() {
 
 /* 000008E8-00000A84       .text Mthd_Create__Q210daObjMknjD5Act_cFv */
 s32 daObjMknjD::Act_c::Mthd_Create() {
-    /* Nonmatching */
     s32 phase_state;
 
     fopAcM_SetupActor(this, daObjMknjD::Act_c);
@@ -440,7 +438,6 @@ s32 daObjMknjD::Act_c::Mthd_Delete() {
 
 /* 00000C34-00000CC8       .text set_mtx__Q210daObjMknjD5Act_cFv */
 void daObjMknjD::Act_c::set_mtx() {
-    /* Nonmatching */
     mDoMtx_stack_c::transS(getPosition());
     mDoMtx_stack_c::ZXYrotM(shape_angle);
 
@@ -452,7 +449,6 @@ void daObjMknjD::Act_c::set_mtx() {
 
 /* 00000CC8-00000D28       .text init_mtx__Q210daObjMknjD5Act_cFv */
 void daObjMknjD::Act_c::init_mtx() {
-    /* Nonmatching */
     mMainMdl->setBaseScale(cXyz(1.0f, 1.0f, 1.0f));
     mBreakMdl->setBaseScale(cXyz(1.0f, 1.0f, 1.0f));
 
@@ -461,7 +457,6 @@ void daObjMknjD::Act_c::init_mtx() {
 
 /* 00000D28-00000E04       .text setGoal__Q210daObjMknjD5Act_cFi */
 void daObjMknjD::Act_c::setGoal(int i_staffIdx) {
-    /* Nonmatching */
     cXyz pos = *dComIfGp_evmng_getMyXyzP(i_staffIdx, "Posion");
 
     mDoMtx_stack_c::transS(getPosition());
@@ -477,7 +472,6 @@ void daObjMknjD::Act_c::setGoal(int i_staffIdx) {
 
 /* 00000E04-00000E84       .text setPlayerAngle__Q210daObjMknjD5Act_cFi */
 void daObjMknjD::Act_c::setPlayerAngle(int i_staffIdx) {
-    /* Nonmatching */
     u32 angle = *dComIfGp_evmng_getMyIntegerP(i_staffIdx, "angle");
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     
@@ -536,7 +530,6 @@ u16 daObjMknjD::Act_c::talk(int i_param1) {
 
 /* 00000F88-00001348       .text privateCut__Q210daObjMknjD5Act_cFv */
 void daObjMknjD::Act_c::privateCut() {
-    /* Nonmatching */
     static const char* cut_name_table[] = {
         "SETGOAL",
         "SETANGLE",
@@ -818,7 +811,6 @@ bool daObjMknjD::Act_c::daObjMknjD_break() {
 
 /* 0000195C-000020E0       .text Execute__Q210daObjMknjD5Act_cFPPA3_A4_f */
 int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
-    /* Nonmatching */
     daPy_py_c* player = static_cast<daPy_py_c*>(dComIfGp_getPlayer(0));
     daPy_py_c* partner = static_cast<daPy_py_c*>(dComIfGp_getCb1Player());
 
