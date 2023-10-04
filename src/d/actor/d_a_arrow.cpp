@@ -191,7 +191,7 @@ void daArrow_c::setBlur() {
 /* 800D4994-800D4A04       .text createBlur__9daArrow_cFv */
 void daArrow_c::createBlur() {
     if (!mPtclFollowCb.getEmitter()) {
-        dComIfGp_particle_setToon(0x48, &current.pos, NULL, NULL, 0xFF, &mPtclFollowCb, -1, NULL, NULL, NULL);
+        dComIfGp_particle_setP1(0x48, &current.pos, NULL, NULL, 0xFF, &mPtclFollowCb, -1, NULL, NULL, NULL);
     }
 }
 
@@ -393,7 +393,7 @@ bool daArrow_c::check_water_in() {
         
         if (mArrowType == TYPE_FIRE) {
             mInWaterTimer = 1;
-            dComIfGp_particle_setToon(0x35A, &waterHitPos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+            dComIfGp_particle_setP1(0x35A, &waterHitPos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
             if (field_0x6e4 == 0) {
                 dKy_arrowcol_chg_on(&current.pos, 0);
             }
@@ -407,7 +407,7 @@ bool daArrow_c::check_water_in() {
                 dKy_arrowcol_chg_on(&current.pos, 1);
             }
         } else if (mArrowType == TYPE_LIGHT) {
-            dComIfGp_particle_setToon(0x2A1, &waterHitPos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+            dComIfGp_particle_setP1(0x2A1, &waterHitPos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
             fopAcM_seStartCurrent(this, JA_SE_OBJ_LIGHT_ARW_EFF, 0);
             if (field_0x6e4 == 0) {
                 dKy_arrowcol_chg_on(&current.pos, 2);
@@ -691,7 +691,7 @@ BOOL daArrow_c::procMove() {
                             mDoMtx_stack_c::ZXYrotM(temp10.x, temp10.y, 0);
                             cMtx_copy(mDoMtx_stack_c::get(), field_0x6b4);
                             
-                            dComIfGp_particle_setToon(0x2A1, &field_0x6a8, &temp10, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+                            dComIfGp_particle_setP1(0x2A1, &field_0x6a8, &temp10, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
                             fopAcM_seStartCurrent(this, JA_SE_OBJ_LIGHT_ARW_EFF, 0);
                             fopAcM_delete(this);
                         } else {
@@ -792,15 +792,15 @@ BOOL daArrow_c::procMove() {
             cMtx_copy(mDoMtx_stack_c::get(), field_0x6b4);
             
             if (mArrowType == TYPE_FIRE) {
-                dComIfGp_particle_setToon(0x29A, &field_0x6a8, &temp10, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
-                dComIfGp_particle_setToon(0x29B, &field_0x6a8, &temp10, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+                dComIfGp_particle_setP1(0x29A, &field_0x6a8, &temp10, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+                dComIfGp_particle_setP1(0x29B, &field_0x6a8, &temp10, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
                 fopAcM_seStartCurrent(this, JA_SE_OBJ_FIRE_ARW_EFF, 0);
                 field_0x698 = 0;
             } else if (mArrowType == TYPE_ICE) {
                 if (dComIfG_Bgsp()->ChkGrpInf(mLinChk, 0x200)) {
                     fopAcM_create(PROC_Obj_Magmarock, NULL, &field_0x6a8, current.roomNo, NULL, NULL, -1, NULL);
                 } else {
-                    dComIfGp_particle_setToon(0x29E, &field_0x6a8, &temp10, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+                    dComIfGp_particle_setP1(0x29E, &field_0x6a8, &temp10, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
                     
                     fopAcM_createChild(
                         PROC_ARROW_ICEEFF, fpcM_GetID(this),
@@ -811,7 +811,7 @@ BOOL daArrow_c::procMove() {
                     fopAcM_seStartCurrent(this, JA_SE_OBJ_ICE_ARW_EFF, 0);
                 }
             } else if (mArrowType == TYPE_LIGHT) {
-                dComIfGp_particle_setToon(0x2A1, &field_0x6a8, &temp10, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+                dComIfGp_particle_setP1(0x2A1, &field_0x6a8, &temp10, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
                 fopAcM_seStartCurrent(this, JA_SE_OBJ_LIGHT_ARW_EFF, 0);
                 field_0x698 = 0;
             }
@@ -829,7 +829,7 @@ BOOL daArrow_c::procMove() {
                 csXyz temp9;
                 cM3d_CalcVecZAngle(triPla->mNormal, &temp9);
                 
-                dComIfGp_particle_setToon(0xC, &field_0x6a8, &temp9, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+                dComIfGp_particle_setP1(0xC, &field_0x6a8, &temp9, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
                 fopAcM_seStartCurrent(this, JA_SE_LK_ARROW_REBOUND, mtrlSndId);
             } else {
                 fopAcM_seStartCurrent(this, JA_SE_LK_ARROW_HIT, mtrlSndId);

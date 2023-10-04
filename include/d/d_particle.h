@@ -370,11 +370,17 @@ public:
                               const cXyz* pScale2D) {
         return set(0, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
     }
-    JPABaseEmitter* setToon(u16 particleID, const cXyz* pos, const csXyz* angle,
+    JPABaseEmitter* setNormalP1(u16 particleID, const cXyz* pos, const csXyz* angle,
                               const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,
                               s8 setupInfo, const GXColor* pPrmColor, const GXColor* pEnvColor,
                               const cXyz* pScale2D) {
         return set(1, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
+    }
+    JPABaseEmitter* setToon(u16 particleID, const cXyz* pos, const csXyz* angle,
+                              const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,
+                              s8 setupInfo, const GXColor* pPrmColor, const GXColor* pEnvColor,
+                              const cXyz* pScale2D) {
+        return set(2, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
     }
     JPABaseEmitter* setProjection(u16 particleID, const cXyz* pos, const csXyz* angle,
                               const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,
