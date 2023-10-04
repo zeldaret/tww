@@ -62,9 +62,9 @@ class dKy_tevstr_c;
 typedef int (*heapCallbackFunc)(fopAc_ac_c*);
 typedef int (*createFunc)(void*);
 
-struct DOUBLE_POS {
-    double x, y, z;
-};
+// struct DOUBLE_POS {
+//     double x, y, z;
+// };
 
 inline s8 fopAcM_GetRoomNo(fopAc_ac_c* pActor) {
     return pActor->current.roomNo;
@@ -321,6 +321,10 @@ inline void fopAcM_onActor(fopAc_ac_c* p_actor) {
     dComIfGs_onActor(setId, fopAcM_GetHomeRoomNo(p_actor));
 }
 
+inline bool fopAcM_IsFirstCreating(void* i_actor) {
+    return fpcM_IsFirstCreating(i_actor);
+}
+
 void fopAcM_initManager();
 
 void* fopAcM_FastCreate(s16 pProcTypeID, FastCreateReqFunc param_2, void* param_3, void* pData);
@@ -408,23 +412,18 @@ s32 fopAcM_rollPlayerCrash(fopAc_ac_c*, f32, u32);
 s32 fopAcM_checkCullingBox(f32[3][4], f32, f32, f32, f32, f32, f32);
 s32 fopAcM_cullingCheck(fopAc_ac_c*);
 void* event_second_actor(u16);
-s32 fopAcM_orderTalkEvent(fopAc_ac_c*, fopAc_ac_c*, u16, u16);
-s32 fopAcM_orderTalkItemBtnEvent(u16, fopAc_ac_c*, fopAc_ac_c*, u16, u16);
+s32 fopAcM_orderTalkEvent(fopAc_ac_c*, fopAc_ac_c*);
 s32 fopAcM_orderSpeakEvent(fopAc_ac_c* i_actor);
-s32 fopAcM_orderDoorEvent(fopAc_ac_c*, fopAc_ac_c*, u16, u16);
-s32 fopAcM_orderCatchEvent(fopAc_ac_c*, fopAc_ac_c*, u16, u16);
-s32 fopAcM_orderOtherEvent(fopAc_ac_c*, char*, u16, u16, u16);
-s32 fopAcM_orderOtherEvent(fopAc_ac_c*, fopAc_ac_c*, char*, u16, u16, u16);
+s32 fopAcM_orderDoorEvent(fopAc_ac_c*, fopAc_ac_c*);
+s32 fopAcM_orderCatchEvent(fopAc_ac_c*, fopAc_ac_c*);
 s32 fopAcM_orderOtherEvent2(fopAc_ac_c*, char*, u16, u16);
 s32 fopAcM_orderChangeEventId(fopAc_ac_c* i_this, s16 eventIdx, u16 flag, u16 hind);
 s32 fopAcM_orderChangeEventId(fopAc_ac_c* i_this, fopAc_ac_c* i_partner, s16 eventIdx, u16 flag, u16 hind);
 s32 fopAcM_orderOtherEventId(fopAc_ac_c* actor, s16 eventID, u8 mapToolID, u16 param_3,
                              u16 priority, u16 flag);
-s32 fopAcM_orderMapToolEvent(fopAc_ac_c*, u8, s16, u16, u16, u16);
-s32 fopAcM_orderMapToolAutoNextEvent(fopAc_ac_c*, u8, s16, u16, u16, u16);
 s32 fopAcM_orderPotentialEvent(fopAc_ac_c*, u16, u16, u16);
-s32 fopAcM_orderItemEvent(fopAc_ac_c*, u16, u16);
-s32 fopAcM_orderTreasureEvent(fopAc_ac_c*, fopAc_ac_c*, u16, u16);
+s32 fopAcM_orderItemEvent(fopAc_ac_c*);
+s32 fopAcM_orderTreasureEvent(fopAc_ac_c*, fopAc_ac_c*);
 fopAc_ac_c* fopAcM_getTalkEventPartner(fopAc_ac_c*);
 fopAc_ac_c* fopAcM_getItemEventPartner(fopAc_ac_c*);
 fopAc_ac_c* fopAcM_getEventPartner(fopAc_ac_c*);
@@ -498,6 +497,8 @@ fopAc_ac_c* fopAcM_searchFromName4Event(char* name, s16 eventID);
 
 s32 fopAcM_getWaterY(const cXyz*, f32*);
 void fpoAcM_relativePos(fopAc_ac_c* actor, cXyz* p_inPos, cXyz* p_outPos);
+
+void fopAcM_setGbaName(fopAc_ac_c* i_this, u8 itemNo, u8 gbaName0, u8 gbaName1);
 
 inline void make_prm_warp_hole(u32* actorParams, u8 p1, u8 p2, u8 p3) {
     u32 pp1 = (p3 << 0x8);

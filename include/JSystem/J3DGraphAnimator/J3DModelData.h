@@ -55,6 +55,8 @@ public:
     JUTNameTab* getTextureName() const { return mMaterialTable.getTextureName(); }
     void setTexture(J3DTexture* pTexture) { mMaterialTable.setTexture(pTexture); }
     void setTextureName(JUTNameTab* pTextureName) { mMaterialTable.setTextureName(pTextureName); }
+    bool isLocked() { return mMaterialTable.isLocked(); }
+    u16 getDrawFullWgtMtxNum() const { return mJointTree.getDrawFullWgtMtxNum(); }
     u16 getWEvlpMtxNum() const { return mJointTree.getWEvlpMtxNum(); }
     u16* getWEvlpMixMtxIndex() const { return mJointTree.getWEvlpMixIndex(); }
     f32* getWEvlpMixWeight() const { return mJointTree.getWEvlpMixWeight(); }
@@ -92,7 +94,7 @@ private:
     /* 0x0E */ u16 mbHasBillboard;
     /* 0x10 */ J3DJointTree mJointTree;
     /* 0x58 */ J3DMaterialTable mMaterialTable;
-    /* 0x78 */ J3DShapeTable mShapeTable;
+    /* 0x7C */ J3DShapeTable mShapeTable;
     /* 0x84 */ J3DVertexData mVertexData;
     /* 0xE0 */ JUTNameTab * mName;
 };  // Size: 0xE4

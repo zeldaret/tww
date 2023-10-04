@@ -15,9 +15,9 @@ public:
         LIGHT_GRP  = 0x10,
     };
 
-    /* 80077BA0 */ dBgS_GrpPassChk() { mGrp = NORMAL_GRP; }
+    dBgS_GrpPassChk() { mGrp = NORMAL_GRP; }
 
-    /* 80077BC4 */ virtual ~dBgS_GrpPassChk() {}
+    virtual ~dBgS_GrpPassChk() {}
 
     void OnNormalGrp() { mGrp |= NORMAL_GRP; }
     void OnWaterGrp() { mGrp |= WATER_GRP; }

@@ -86,16 +86,16 @@ inline T cLib_maxLimit(T val, T max) {
 }
 
 template <typename T>
-T cLib_calcTimer(T* value) {
-    if (*value != 0) {
-        *value = *value - 1;
-    }
-    return *value;
+T cLib_getRndValue(T min, T range) {
+    return (T)(min + cM_rndF((f32)range));
 }
 
 template <typename T>
-T cLib_getRndValue(T min, T range) {
-    return (T)(min + cM_rndF((f32)range));
+T cLib_calcTimer(T* value) {
+    if ((s32)*value != 0) {
+        *value = *value - 1;
+    }
+    return *value;
 }
 
 void MtxInit(void);

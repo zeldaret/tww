@@ -15,27 +15,27 @@ public:
         CARD_DETACH,
     };
 
-    /* 8001672C */ mDoMemCd_Ctrl_c();
-    /* 80016730 */ void ThdInit();
-    /* 800167D0 */ void main();
-    /* 80016894 */ void update();
-    /* 800169B4 */ void load();
-    /* 80016A0C */ void restore();
-    /* 80016AB0 */ s32 LoadSync(void*, u32, u32);
-    /* 80016B58 */ void save(void*, u32, u32);
-    /* 80016BD4 */ void store();
-    /* 80016CE0 */ s32 SaveSync();
-    /* 80016D74 */ u32 getStatus(u32);
-    /* 80016E58 */ void command_format();
-    /* 80016EA8 */ void format();
-    /* 80016F2C */ s32 FormatSync();
-    /* 80016FB8 */ void attach();
-    /* 800170B8 */ void command_attach();
-    /* 80017110 */ void detach();
-    /* 80017148 */ s32 mount();
-    /* 80017274 */ s32 loadfile();
-    /* 800172D4 */ s32 checkspace();
-    /* 80017360 */ void setCardState(s32);
+    mDoMemCd_Ctrl_c();
+    void ThdInit();
+    void main();
+    void update();
+    void load();
+    void restore();
+    s32 LoadSync(void*, u32, u32);
+    void save(void*, u32, u32);
+    void store();
+    s32 SaveSync();
+    u32 getStatus(u32);
+    void command_format();
+    void format();
+    s32 FormatSync();
+    void attach();
+    void command_attach();
+    void detach();
+    s32 mount();
+    s32 loadfile();
+    s32 checkspace();
+    void setCardState(s32);
 
     bool isCardCommNone() { return mCardCommand == CARD_NO_COMMAND; }
 

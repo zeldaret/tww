@@ -6,6 +6,7 @@
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/J3DGraphBase/J3DGD.h"
 #include "JSystem/J3DGraphBase/J3DTexture.h"
+#include "JSystem/J3DGraphBase/J3DTevs.h"
 #include "JSystem/J3DGraphBase/J3DShape.h"
 #include "dolphin/os/OS.h"
 
@@ -14,12 +15,6 @@ extern void makeTexCoordTable();
 extern void makeAlphaCmpTable();
 extern void makeZModeTable();
 extern void makeTevSwapTable();
-
-extern "C" extern J3DDefaultTexCoordInfo const j3dDefaultTexCoordInfo[8];
-extern "C" extern const GXColor j3dDefaultColInfo;
-extern "C" extern u8 j3dDefaultColorChanNum;
-extern "C" extern const GXColorS10 j3dDefaultTevColor;
-extern "C" extern const GXColor j3dDefaultTevKColor;
 
 /* 802D8AA8-802D8B8C       .text __ct__6J3DSysFv */
 J3DSys::J3DSys() {
@@ -48,11 +43,11 @@ J3DSys::J3DSys() {
     field_0x104 = NULL;
     field_0x120 = NULL;
 
-    for (u32 i = 0; i < 32; i += 4) {
-        sTexCoordScaleTable[i + 0] = 1;
-        sTexCoordScaleTable[i + 1] = 1;
-        sTexCoordScaleTable[i + 2] = 0;
-        sTexCoordScaleTable[i + 3] = 0;
+    for (u32 i = 0; i < 8; i ++) {
+        sTexCoordScaleTable[i].field_0x00 = 1;
+        sTexCoordScaleTable[i].field_0x02 = 1;
+        sTexCoordScaleTable[i].field_0x04 = 0;
+        sTexCoordScaleTable[i].field_0x06 = 0;
     }
 }
 
@@ -411,6 +406,6 @@ J3DSys j3dSys;
 Mtx J3DSys::mCurrentMtx;
 Vec J3DSys::mCurrentS;
 Vec J3DSys::mParentS;
-u16 J3DSys::sTexCoordScaleTable[32];
+J3DTexCoordScaleInfo J3DSys::sTexCoordScaleTable[8];
 
 u32 j3dDefaultViewNo;

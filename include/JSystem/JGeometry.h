@@ -151,10 +151,10 @@ struct TVec3<f32> {
         return C_VECSquareMag((Vec*)&x);
     }
 
-    void normalize() {
+    f32 normalize() {
         f32 sq = squared();
         if (sq <= FLT_EPSILON * 32.0f) {
-            return;
+            return 0.0f;
         }
         f32 norm;
         if (sq <= 0.0f) {
@@ -162,14 +162,15 @@ struct TVec3<f32> {
         } else {
             norm = fsqrt_step(sq);
         }
-        scale(norm);
+        scale(1.0f / norm);
+        return norm;
     }
 
-    void normalize(const TVec3<f32>& other) {
+    f32 normalize(const TVec3<f32>& other) {
         f32 sq = other.squared();
         if (sq <= FLT_EPSILON * 32.0f) {
             zero();
-            return;
+            return 0.0f;
         }
         f32 norm;
         if (sq <= 0.0f) {
@@ -177,7 +178,8 @@ struct TVec3<f32> {
         } else {
             norm = fsqrt_step(sq);
         }
-        scale(norm, other);
+        scale(1.0f / norm, other);
+        return norm;
     }
 
     f32 length() const {
@@ -249,7 +251,7 @@ struct TVec3<f32> {
     void cross(const TVec3<f32>& a, const TVec3<f32>& b) {
         VECCrossProduct(a, b, *this);
     }
-    
+
     void setLength(f32 len) {
          f32 sq = squared();
         if (sq <= FLT_EPSILON * 32.0f) {

@@ -96,7 +96,7 @@ STAR_EFF::STAR_EFF() {}
 
 /* 800872D8-80087308       .text draw__19dKankyo_star_PacketFv */
 void dKankyo_star_Packet::draw() {
-    dKyr_drawStar(j3dSys.getViewMtx(), &field_0x10);
+    dKyr_drawStar(j3dSys.getViewMtx(), &mpTexture);
 }
 
 /* 80087308-80087344       .text __dt__10POISON_EFFFv */
@@ -107,7 +107,7 @@ POISON_EFF::POISON_EFF() {}
 
 /* 80087348-8008737C       .text draw__21dKankyo_poison_PacketFv */
 void dKankyo_poison_Packet::draw() {
-    drawPoison(j3dSys.getViewMtx(), &field_0xbbac);
+    drawPoison(j3dSys.getViewMtx(), &mpTexture);
 }
 
 /* 8008737C-800873B8       .text __dt__9CLOUD_EFFFv */
@@ -754,9 +754,8 @@ void wether_move_moya() {
 }
 
 /* 800891A8-80089698       .text wether_move_vrkumo__Fv */
-// NONMATCHING - almost, regswap
 void wether_move_vrkumo() {
-    camera_class* camera_p = dComIfGp_getCamera(0);
+    camera_process_class* camera_p = dComIfGp_getCamera(0);
     static cXyz r09o(-180000.0f, 750.0f, -200000.0f);
 
     if (strcmp(dComIfGp_getStartStageName(), "Name") != 0) {
@@ -1188,7 +1187,8 @@ void dKyw_pntwind_get_info(cXyz* param_0, cXyz* i_dir, f32* i_power) {
     *i_power = 0.0f;
 
     WIND_INFLUENCE* influence;
-    for (int i = 0; i < ARRAY_SIZE(g_env_light.mpWindInfluence); i++) {
+    s32 influence_count = ARRAY_SIZE(g_env_light.mpWindInfluence);
+    for (int i = 0; i < influence_count; i++) {
         influence = g_env_light.mpWindInfluence[i];
         if (influence != NULL) {
             f32 dist = param_0->abs(influence->mPos);
@@ -1291,7 +1291,6 @@ cXyz dKyw_get_AllWind_vecpow(cXyz* param_0) {
 }
 
 /* 8008A7D0-8008A870       .text dKyw_tact_wind_set__Fss */
-// NONMATCHING - small regswap...
 void dKyw_tact_wind_set(s16 i_windX, s16 i_windY) {
     dScnKy_env_light_c& env_light = dKy_getEnvlight();
     cXyz* wind_vec = dKyw_get_wind_vec();
@@ -1301,10 +1300,10 @@ void dKyw_tact_wind_set(s16 i_windX, s16 i_windY) {
     dComIfGs_setWindX(i_windX);
     dComIfGs_setWindY(i_windY);
 
-    s16 temp_r29 = -(cM_atan2s(wind_vec->x, wind_vec->z) + 0x4000);
+    i_windY = -(cM_atan2s(wind_vec->x, wind_vec->z) + 0x4000);
     env_light.mWind.mTactWindAngleFlags = 1;
 
-    if ((s16)(temp_r29 - env_light.mWind.mTactWindAngleY) < 0) {
+    if ((s16)(i_windY - env_light.mWind.mTactWindAngleY) < 0) {
         env_light.mWind.mTactWindAngleFlags |= 0x80;
     }
 }

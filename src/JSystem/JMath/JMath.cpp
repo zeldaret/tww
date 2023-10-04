@@ -22,7 +22,7 @@ void JMAQuatLerp(Quaternion*, Quaternion*, float, Quaternion*) {
 }
 
 /* 803012D8-80301350       .text JMAHermiteInterpolation__Ffffffff */
-void JMAHermiteInterpolation(float, float, float, float, float, float, float) {
+f32 JMAHermiteInterpolation(f32, f32, f32, f32, f32, f32, f32) {
     /* Nonmatching */
 }
 

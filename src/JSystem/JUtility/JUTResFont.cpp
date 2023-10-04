@@ -11,9 +11,6 @@
 #include "dolphin/gx/GX.h"
 #include "dolphin/types.h"
 
-// Only used for an assert
-#define suAboutEncoding_ 3
-
 IsLeadByte_func const JUTResFont::saoAboutEncoding_[3] = {
     isLeadByte_1Byte,
     isLeadByte_2Byte,
@@ -220,7 +217,6 @@ void JUTResFont::setGX(JUtility::TColor col1, JUtility::TColor col2) {
 
 /* 802C28F8-802C2D6C       .text drawChar_scale__10JUTResFontFffffib */
 f32 JUTResFont::drawChar_scale(f32 posX, f32 posY, f32 scaleX, f32 scaleY, int chr, bool flag) {
-    /* Nonmatching */
     JUTFont::TWidth width;
     f32 x1;
     f32 y1;
@@ -294,7 +290,6 @@ void JUTResFont::loadFont(int code, _GXTexMapID texMapID, JUTFont::TWidth* pDstW
 
 /* 802C2DE8-802C2E90       .text getWidthEntry__10JUTResFontCFiPQ27JUTFont6TWidth */
 void JUTResFont::getWidthEntry(int code, JUTFont::TWidth* width) const {
-    /* Nonmatching */
     int fontCode = getFontCode(code);
     width->field_0x0 = 0;
     width->field_0x1 = mInfoBlock->width;
@@ -339,7 +334,6 @@ bool JUTResFont::isLeadByte(int chr) const {
 
 /* 802C2F5C-802C30E4       .text getFontCode__10JUTResFontCFi */
 int JUTResFont::getFontCode(int chr) const {
-    /* Nonmatching */
     static const u16 halftofull[95] = {
         0x8140, 0x8149, 0x8168, 0x8194, 0x8190, 0x8193, 0x8195, 0x8166, 0x8169, 0x816A, 0x8196,
         0x817B, 0x8143, 0x817C, 0x8144, 0x815E, 0x824F, 0x8250, 0x8251, 0x8252, 0x8253, 0x8254,
@@ -356,15 +350,14 @@ int JUTResFont::getFontCode(int chr) const {
     if ((getFontType() == 2) && (mMaxCode >= 0x8000u) && (chr >= 0x20) && (chr < 0x7Fu)) {
         chr = halftofull[chr - 32];
     }
-    int j = 0;
-    for (int i = mMapBlockNum; i > 0; j++, i--) {
-        if ((mpMapBlocks[j]->startCode <= chr) && (chr <= mpMapBlocks[j]->endCode)) {
-            ResFONT::MAP1* map = mpMapBlocks[j];
+    for (int i = 0; i < mMapBlockNum; i++) {
+        if ((mpMapBlocks[i]->startCode <= chr) && (chr <= mpMapBlocks[i]->endCode)) {
+            ResFONT::MAP1* map = mpMapBlocks[i];
             if (map->mappingMethod == 0) {
                 ret = chr - map->startCode;
                 break;
             } else if (map->mappingMethod == 2) {
-                ret = *(&mpMapBlocks[j]->mLeading + ((chr - mpMapBlocks[j]->startCode)));
+                ret = *(&mpMapBlocks[i]->mLeading + ((chr - mpMapBlocks[i]->startCode)));
                 break;
             } else if (map->mappingMethod == 3) {
                 u16* leading_temp = &map->mLeading;
@@ -372,8 +365,7 @@ int JUTResFont::getFontCode(int chr) const {
                 int phi_r6_2 = map->numEntries - 1;
 
                 while (phi_r6_2 >= phi_r5) {
-                    u32 temp_r3 = phi_r6_2 + phi_r5;
-                    int temp_r7 = (int)((temp_r3 >> 0x1FU) + phi_r6_2 + phi_r5) >> 1;
+                    int temp_r7 = (phi_r6_2 + phi_r5) / 2;
 
                     if (chr < leading_temp[temp_r7 * 2]) {
                         phi_r6_2 = temp_r7 - 1;
@@ -393,7 +385,7 @@ int JUTResFont::getFontCode(int chr) const {
                 if (map->numEntries == 1) {
                     phi_r5_2 = &map->mLeading;
                 }
-                ret = JUTResFont::convertSjis(chr, phi_r5_2);
+                ret = convertSjis(chr, phi_r5_2);
                 break;
             }
             break;

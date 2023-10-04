@@ -15,7 +15,7 @@ enum dCcG_At_Spl {};
 enum dCcG_Tg_Spl {};
 
 struct dCcD_SrcGAtTgCoCommonBase {
-    /* 0x0 */ u32 mGFlag;
+    /* 0x0 */ u32 mSPrm;
 };  // Size: 0x4
 
 struct dCcD_SrcGObjAt {
@@ -57,7 +57,7 @@ struct dCcD_SrcTri {
 
 struct dCcD_SrcCyl {
     /* 0x00 */ dCcD_SrcGObjInf mObjInf;
-    /* 0x30 */ cM3dGCylS mCyl;
+    /* 0x30 */ cCcD_SrcCylAttr mCylAttr;
 };  // Size: 0x44
 
 struct dCcD_SrcCps {
@@ -68,12 +68,12 @@ struct dCcD_SrcCps {
 class dCcD_GStts : public cCcD_GStts {
 public:
     dCcD_GStts();
-    virtual ~dCcD_GStts();
+    virtual ~dCcD_GStts() {}
 
     void Ct();
     void Move();
-    void ClrAt() { mAt = 0; }
-    void ClrTg() { mTg = 0; }
+    void ClrAt() { mAtSpl = 0; }
+    void ClrTg() { mTgSpl = 0; }
     void SetAtApid(unsigned int id) { mAtApid = id; }
     void SetTgApid(unsigned int id) { mTgApid = id; }
     u8 GetRoomId() { return mRoomId; }
@@ -82,15 +82,15 @@ public:
     unsigned int GetTgOldApid() { return mTgOldApid; }
     bool ChkNoActor() { return field_0x1C & 1; }
     bool ChkNoneActorPerfTblId() { return field_0x08 == 0xFFFF; }
-    dCcG_At_Spl GetAtSpl() { return (dCcG_At_Spl)mAt; }
-    void SetAtSpl(dCcG_At_Spl spl) { mAt = spl; }
-    dCcG_Tg_Spl GetTgSpl() { return (dCcG_Tg_Spl)mTg; }
-    void SetTgSpl(dCcG_Tg_Spl spl) { mTg = spl; }
+    dCcG_At_Spl GetAtSpl() { return (dCcG_At_Spl)mAtSpl; }
+    void SetAtSpl(dCcG_At_Spl spl) { mAtSpl = spl; }
+    dCcG_Tg_Spl GetTgSpl() { return (dCcG_Tg_Spl)mTgSpl; }
+    void SetTgSpl(dCcG_Tg_Spl spl) { mTgSpl = spl; }
     void OnNoActor() { field_0x1C |= 1; }
 
     // private:
-    /* 0x04 */ u8 mAt;
-    /* 0x05 */ u8 mTg;
+    /* 0x04 */ u8 mAtSpl;
+    /* 0x05 */ u8 mTgSpl;
     /* 0x06 */ u8 mRoomId;
     /* 0x08 */ u16 field_0x08;
     /* 0x0C */ int mAtApid;
@@ -103,12 +103,20 @@ public:
 class dCcD_Stts : public cCcD_Stts, public dCcD_GStts {
 public:
     dCcD_Stts() {}
-    virtual cCcD_GStts* GetGStts();
+    virtual cCcD_GStts* GetGStts() {
+        return (cCcD_GStts*)this;
+    }
     void Init(int, int, fopAc_ac_c*);
     virtual void Ct();
-    virtual void ClrAt();
-    virtual void ClrTg();
-    virtual ~dCcD_Stts();
+    virtual void ClrAt() {
+        cCcD_Stts::ClrAt();
+        dCcD_GStts::ClrAt();
+    }
+    virtual void ClrTg() {
+        cCcD_Stts::ClrTg();
+        dCcD_GStts::ClrTg();
+    }
+    virtual ~dCcD_Stts() {}
 
 };  // Size = 0x3C
 
@@ -118,7 +126,7 @@ typedef void (*dCcD_HitCallback)(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_G
 // Attack/Defense/Correction Collider Common Base
 class dCcD_GAtTgCoCommonBase {
 public:
-    /* 0x00 */ u32 mGFlag;
+    /* 0x00 */ u32 mSPrm;
     /* 0x04 */ u32 mRPrm;
     /* 0x08 */ dCcD_HitCallback mHitCallback;
     /* 0x0C */ u32 mApid;
@@ -136,21 +144,28 @@ public:
     void ct();
     void SetHitApid(unsigned int);
     fopAc_ac_c* GetAc();
-    void Set(dCcD_SrcGAtTgCoCommonBase const&);
+    void Set(dCcD_SrcGAtTgCoCommonBase const& base) {
+        mSPrm = base.mSPrm;
+        ClrEffCounter();
+    }
     void SetEffCounterTimer();
-    void SubtractEffCounter() { mEffCounter -= 1; }
+    void SubtractEffCounter() {
+        mEffCounter -= 1;
+        if (mEffCounter < 0)
+            mEffCounter = 0;
+    }
     bool ChkEffCounter() { return mEffCounter >= 0; }
-    virtual ~dCcD_GAtTgCoCommonBase();
+    virtual ~dCcD_GAtTgCoCommonBase() {}
 
     void ClrEffCounter() { mEffCounter = 0; }
-    u32 GetGFlag() const { return mGFlag; }
+    u32 GetSPrm() const { return mSPrm; }
     u32 GetRPrm() const { return mRPrm; }
-    u32 MskSPrm(u32 mask) const { return mGFlag & mask; }
+    u32 MskSPrm(u32 mask) const { return mSPrm & mask; }
     u32 MskRPrm(u32 mask) const { return mRPrm & mask; }
     bool ChkSPrm(u32 mask) const { return MskSPrm(mask); }
-    void OnSPrm(u32 flag) { mGFlag |= flag; }
+    void OnSPrm(u32 flag) { mSPrm |= flag; }
     void OnRPrm(u32 flag) { mRPrm |= flag; }
-    void OffSPrm(u32 flag) { mGFlag &= ~flag; }
+    void OffSPrm(u32 flag) { mSPrm &= ~flag; }
     void OffRPrm(u32 flag) { mRPrm &= ~flag; }
     bool ChkRPrm(u32 flag) const { return MskRPrm(flag); }
     void SetHitCallback(dCcD_HitCallback callback) { mHitCallback = callback; }
@@ -161,7 +176,7 @@ public:
 class dCcD_GObjAt : public dCcD_GAtTgCoCommonBase {
 public:
     void Set(dCcD_SrcGObjAt const&);
-    virtual ~dCcD_GObjAt();
+    virtual ~dCcD_GObjAt() {}
     void SetVec(cXyz& vec) { mVec = vec; }
     cXyz& GetVec() { return mVec; }
     cXyz* GetVecP() { return &mVec; }
@@ -192,7 +207,7 @@ public:
 class dCcD_GObjTg : public dCcD_GAtTgCoCommonBase {
 public:
     void Set(dCcD_SrcGObjTg const&);
-    virtual ~dCcD_GObjTg();
+    virtual ~dCcD_GObjTg() {}
     void SetSe(u8 se) { mSe = se; }
     void SetVec(cXyz& vec) { mVec = vec; }
     cXyz& GetVec() { return mVec; }
@@ -207,6 +222,7 @@ public:
     cXyz* GetVecP() { return &mVec; }
     void SetHitPos(cXyz& pos) { mHitPos = pos; }
     cXyz* GetHitPosP() { return &mHitPos; }
+    inline void ClrHit() { ClrActorInfo(); }
 
 private:
     /* 0x1C */ u8 mSe;
@@ -222,8 +238,9 @@ private:
 // Correction (Co) Collider
 class dCcD_GObjCo : public dCcD_GAtTgCoCommonBase {
 public:
-    virtual ~dCcD_GObjCo();
+    virtual ~dCcD_GObjCo() {}
     void Set(dCcD_SrcGObjCo const& pSrc) { dCcD_GAtTgCoCommonBase::Set(pSrc.mBase); }
+    void ClrHit() { ClrActorInfo(); }
 };  // Size = 0x1C ?
 
 // Object Info

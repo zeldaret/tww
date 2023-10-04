@@ -10,6 +10,9 @@
 #include "d/d_kankyo_wether.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_lib.h"
+#include "JSystem/JKernel/JKRHeap.h"
+
+static u32 now_room;
 
 /* 8008AA30-8008AB3C       .text vectle_calc__FP10DOUBLE_POSP4cXyz */
 void vectle_calc(DOUBLE_POS* i_pos, cXyz* o_out) {
@@ -165,7 +168,10 @@ void dKyr_lenzflare_move() {
 
 /* 8008C888-8008C8B8       .text dKyr_moon_arrival_check__Fv */
 BOOL dKyr_moon_arrival_check() {
-    /* Nonmatching */
+    BOOL ret = false;
+    if (g_env_light.mCurTime > 277.5f || g_env_light.mCurTime < 112.5f)
+        ret = true;
+    return ret;
 }
 
 /* 8008C8B8-8008CF68       .text dKyr_sun_move__Fv */
@@ -175,7 +181,24 @@ void dKyr_sun_move() {
 
 /* 8008CF68-8008D0B4       .text dKyr_rain_init__Fv */
 void dKyr_rain_init() {
-    /* Nonmatching */
+    camera_class * pCamera = dComIfGp_getCamera(0);
+    g_env_light.mpRainPacket->mpTxSnow01 = (u8*)dComIfG_getObjectRes("Always", 0x81);
+    g_env_light.mpRainPacket->mpTxRingAHalf = (u8*)dComIfG_getObjectRes("Always", 0x85);
+    g_env_light.mpRainPacket->mCamEyePos = pCamera->mLookat.mEye;
+    g_env_light.mpRainPacket->mCamCenterPos = pCamera->mLookat.mCenter;
+    g_env_light.mpRainPacket->mCenterDeltaMul = 0.0f;
+    g_env_light.mpRainPacket->field_0x3700 = 0.0f;
+    g_env_light.mpRainPacket->mSibukiAlpha = 0.0f;
+    g_env_light.mpRainPacket->mOverheadFade = 0.0f;
+    g_env_light.mpRainPacket->mFwd1Fade = 0.0f;
+    g_env_light.mpRainPacket->mFwdFade2 = 0.0f;
+    g_env_light.mpRainPacket->mStatus = 0;
+    g_env_light.mpRainPacket->mCenterDelta.x = 0.0f;
+    g_env_light.mpRainPacket->mCenterDelta.y = 0.0f;
+    g_env_light.mpRainPacket->mCenterDelta.z = 0.0f;
+    for (u32 i = 0; i < ARRAY_SIZE(g_env_light.mpRainPacket->mRainEff); i++)
+        g_env_light.mpRainPacket->mRainEff[i].mStatus = 0;
+    g_env_light.mpRainPacket->mRainCount = 0;
 }
 
 /* 8008D0B4-8008D0DC       .text rain_bg_chk__FP19dKankyo_rain_Packeti */
@@ -205,7 +228,19 @@ void dKyr_housi_move() {
 
 /* 8008F0BC-8008F23C       .text dKyr_snow_init__Fv */
 void dKyr_snow_init() {
-    /* Nonmatching */
+    camera_class * pCamera = dComIfGp_getCamera(0);
+    g_env_light.mpSnowPacket = new(0x20) dKankyo_snow_Packet();
+    if (g_env_light.mpSnowPacket != NULL) {
+        if (strcmp(dComIfGp_getStartStageName(), "Adanmae") != 0) {
+            g_env_light.mpSnowPacket->mpTexture = (u8*)dComIfG_getObjectRes("Always", 0x81);
+        } else {
+            g_env_light.mpSnowPacket->mpTexture = (u8*)dComIfG_getStageRes("Stage", "ak_kazanbai00.bti");
+        }
+    }
+    for (u32 i = 0; i < ARRAY_SIZE(g_env_light.mpSnowPacket->mEff); i++)
+        g_env_light.mpSnowPacket->mEff[i].mStatus = 0;
+    g_env_light.mpSnowPacket->mEffCount = 0;
+    g_env_light.mpSnowPacket->mOldEyePos = pCamera->mLookat.mEye;
 }
 
 /* 8008F23C-8008F9FC       .text dKyr_snow_move__Fv */
@@ -225,12 +260,24 @@ void dKyr_kazanbai_tamari_move() {
 
 /* 80090C68-80090D50       .text dKyr_star_init__Fv */
 void dKyr_star_init() {
-    /* Nonmatching */
+    g_env_light.mpStarPacket = new(0x20) dKankyo_star_Packet();
+    if (g_env_light.mpStarPacket != NULL) {
+        g_env_light.mpStarPacket->field_0x10 = (u8*)dComIfG_getObjectRes("Always", 0x81);
+        g_env_light.mpStarPacket->mStarEff[0].mSin = 1.0f;
+        g_env_light.mpStarPacket->mCount = 0;
+    }
 }
 
 /* 80090D50-80090DE0       .text dKyr_star_move__Fv */
 void dKyr_star_move() {
-    /* Nonmatching */
+    dKankyo_star_Packet * pPkt = g_env_light.mpStarPacket;
+    pPkt->mCount = g_env_light.mStarCount;
+    if (pPkt->mCount != 0) {
+        f32 wave = fabsf(cM_fsin(pPkt->mStarEff[0].mAnimCounter));
+        pPkt->mStarEff[0].mAnimCounter += 0.01f;
+        pPkt->mStarEff[0].mSin = wave;
+        cLib_addCalc(&pPkt->mStarEff[0].mSin, wave, 0.5f, 0.1f, 0.01f);
+    }
 }
 
 /* 80090DE0-80091964       .text wave_move__Fv */
@@ -260,7 +307,18 @@ void dKyr_poison_light_colision() {
 
 /* 80092448-8009258C       .text poison_init__Fv */
 void poison_init() {
-    /* Nonmatching */
+    g_env_light.mpPoisonPacket = new(0x20) dKankyo_poison_Packet();
+    g_env_light.mpPoisonPacket->field_0xbb9c.x = 0.0f;
+    g_env_light.mpPoisonPacket->field_0xbb9c.y = 0.0f;
+    g_env_light.mpPoisonPacket->field_0xbb9c.z = 0.0f;
+    g_env_light.mpPoisonPacket->mCount = 0;
+    if (g_env_light.mpPoisonPacket != NULL) {
+        g_env_light.mpPoisonPacket->mpTex = (u8*)dComIfG_getObjectRes("Always", 0x6e);
+        for (u32 i = 0; i < ARRAY_SIZE(g_env_light.mpPoisonPacket->mEff); i++)
+            g_env_light.mpPoisonPacket->mEff[i].mStatus = 0;
+        poison_move();
+        now_room = dComIfGp_roomControl_getStayNo();
+    }
 }
 
 /* 8009258C-800937BC       .text poison_move__Fv */
@@ -312,6 +370,7 @@ void dKyr_drawRain(Mtx, u8**) {
 
 /* 8009682C-80096D18       .text dKyr_drawSibuki__FPA4_fPPUc */
 void dKyr_drawSibuki(Mtx drawMtx, u8** pImg) {
+    /* Nonmatching */
     dKankyo_rain_Packet * pPkt = g_env_light.mpRainPacket;
     camera_class *pCamera = dComIfGp_getCamera(0);
 
@@ -403,7 +462,7 @@ void dKyr_drawSibuki(Mtx drawMtx, u8** pImg) {
         GXTexCoord2s16(0x1FF, 0x1FF);
         GXPosition3f32(p3.x, p3.y, p3.z);
         GXTexCoord2s16(0, 0x1FF);
-        i_GXEnd();
+        GXEnd();
     }
 
     GXSetClipMode(GX_CLIP_ENABLE);

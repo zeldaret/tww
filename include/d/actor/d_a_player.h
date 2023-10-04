@@ -93,6 +93,8 @@ public:
 
     s16 getBodyAngleX() { return mBodyAngle.x; }
     s16 getBodyAngleY() { return mBodyAngle.y; }
+    void changeDemoMoveAngle(s16 angle) { mDemo.setMoveAngle(angle); }
+    u8 getCutType() const { return mAttackState; }
 
     void onPlayerNoDraw() { field_0x29c |= 0x8000000; }
     void offPlayerNoDraw() { field_0x29c &= ~0x8000000; }
@@ -102,7 +104,7 @@ public:
     virtual void getGroundY() = 0;
     virtual void getTactMusic() const;
     virtual void getTactTimerCancel() const;
-    virtual void checkPlayerGuard() const;
+    virtual BOOL checkPlayerGuard() const;
     virtual void getGrabMissActor();
     virtual u32 checkPlayerFly() const;
     virtual void checkFrontRoll() const;
@@ -139,7 +141,7 @@ public:
     void getLeftHandPos() const;
     void getRopeJumpLand() const;
     void checkRopeForceEnd() const;
-    cXyz getHeadTopPos() const;
+    cXyz getHeadTopPos() const { return mHeadTopPos; }
     void changePlayer(fopAc_ac_c*);
     void objWindHitCheck(dCcD_Cyl*);
     void setDoButtonQuake();

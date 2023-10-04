@@ -1,8 +1,9 @@
 #ifndef J3DJOINT_H
 #define J3DJOINT_H
 
-#include "JSystem/J3DGraphBase/J3DTransform.h"
 #include "JSystem/J3DGraphAnimator/J3DNode.h"
+#include "JSystem/J3DGraphBase/J3DSys.h"
+#include "JSystem/J3DGraphBase/J3DTransform.h"
 
 class J3DAnmTransform;
 class J3DJoint;
@@ -11,45 +12,117 @@ class J3DMtxBuffer;
 
 class J3DMtxCalc {
 public:
-    static void setMtxBuffer(J3DMtxBuffer*);
+    virtual void init(const Vec&, const Mtx&) {}
+    virtual void recursiveCalc(J3DNode*) {}
+    virtual void calcTransform(u16, const J3DTransformInfo&) {}
+    virtual void calc(u16) {}
 
-    virtual ~J3DMtxCalc();
-    virtual void init(Vec const& param_0, const Mtx&) = 0;
-    virtual void recursiveCalc(J3DNode *);
-    virtual void calc() = 0;
-    virtual void calcTransform(u16, J3DTransformInfo const &) = 0;
+    void initAnm() {
+        for (int i = 0; i < 4; i++) {
+            mOne[i] = 0;
+            mTwo[i] = 0.0f;
+        }
+    }
+    void setAnmTransform(J3DAnmTransform* mAnmTransform);
 
-    static J3DMtxBuffer* getMtxBuffer() { return mMtxBuffer; }
-    static J3DJoint* getJoint() { return mJoint; }
-    static void setJoint(J3DJoint* joint) { mJoint = joint; }
-
-    static J3DMtxBuffer* mMtxBuffer;
-    static J3DJoint* mJoint;
-};  // Size: 0x4
-
-class J3DMtxCalcNoAnmBase : public J3DMtxCalc {
 public:
-    virtual ~J3DMtxCalcNoAnmBase();
+    u32 mOne[4];
+    f32 mTwo[4];
 };
 
-template <class A, class B>
-class J3DMtxCalcNoAnm : public J3DMtxCalcNoAnmBase, public A, public B {
+class J3DMtxCalcAnm : public virtual J3DMtxCalc {
 public:
-    J3DMtxCalcNoAnm() {}
-    virtual ~J3DMtxCalcNoAnm() {}
-    virtual void init(Vec const& param_0, f32 const (&param_1)[3][4]);
-    virtual void calc();
+    J3DMtxCalcAnm(J3DAnmTransform* mAnmTransform) : J3DMtxCalc() { setAnmTransform(mAnmTransform); }
+    virtual ~J3DMtxCalcAnm() { initAnm(); }
+    virtual void calc(u16);
+};
+
+class J3DMtxCalcBasic : public virtual J3DMtxCalc {
+private:
+    Mtx mBackupMtx;
+    Vec mBackupS;
+    Vec mBackupParentS;
+
+public:
+    J3DMtxCalcBasic();
+    virtual ~J3DMtxCalcBasic() {}
+    virtual void init(const Vec& vec, const Mtx& mtx);
+    virtual void recursiveCalc(J3DNode*);
+    virtual void calcTransform(u16, const J3DTransformInfo&);
+    virtual void calc(u16);
+
+    Mtx& getBackupMtx() { return mBackupMtx; }
+    Vec& getBackupS() { return mBackupS; }
+    Vec& getBackupParentS() { return mBackupParentS; }
+
+    void setBackupS(const Vec& vec) { mBackupS = vec; }
+    void setBackupParentS(const Vec& vec) { mBackupParentS = vec; }
+};
+
+class J3DMtxCalcSoftimage : public J3DMtxCalcBasic {
+public:
+    J3DMtxCalcSoftimage() : J3DMtxCalc() {}
+    virtual ~J3DMtxCalcSoftimage();
+    virtual void init(const Vec& vec, const Mtx& mtx);
+    virtual void calcTransform(u16, const J3DTransformInfo&);
+};
+
+class J3DMtxCalcMaya : public J3DMtxCalcBasic {
+public:
+    J3DMtxCalcMaya() : J3DMtxCalcBasic() {}
+    virtual ~J3DMtxCalcMaya() {}
+    virtual void init(const Vec& vec, const Mtx& mtx) {
+        // TODO: This breaks some TUs by adding extra data ({0x3F800000, 0x3F800000, 0x3F800000})
+        // J3DSys::mParentS = (Vec){1.0f, 1.0f, 1.0f};
+        J3DSys::mCurrentS = vec;
+        J3DSys::mCurrentMtx[0][0] = mtx[0][0] * J3DSys::mCurrentS.x;
+        J3DSys::mCurrentMtx[0][1] = mtx[0][1] * J3DSys::mCurrentS.y;
+        J3DSys::mCurrentMtx[0][2] = mtx[0][2] * J3DSys::mCurrentS.z;
+        J3DSys::mCurrentMtx[0][3] = mtx[0][3];
+        J3DSys::mCurrentMtx[1][0] = mtx[1][0] * J3DSys::mCurrentS.x;
+        J3DSys::mCurrentMtx[1][1] = mtx[1][1] * J3DSys::mCurrentS.y;
+        J3DSys::mCurrentMtx[1][2] = mtx[1][2] * J3DSys::mCurrentS.z;
+        J3DSys::mCurrentMtx[1][3] = mtx[1][3];
+        J3DSys::mCurrentMtx[2][0] = mtx[2][0] * J3DSys::mCurrentS.x;
+        J3DSys::mCurrentMtx[2][1] = mtx[2][1] * J3DSys::mCurrentS.y;
+        J3DSys::mCurrentMtx[2][2] = mtx[2][2] * J3DSys::mCurrentS.z;
+        J3DSys::mCurrentMtx[2][3] = mtx[2][3];
+    }
+    virtual void calcTransform(u16, const J3DTransformInfo&);
+};
+
+class J3DMtxCalcMayaAnm : public J3DMtxCalcMaya, public J3DMtxCalcAnm {
+public:
+    J3DMtxCalcMayaAnm(J3DAnmTransform* pAnmTransform)
+        : J3DMtxCalcMaya(), J3DMtxCalcAnm(pAnmTransform) {}
+    virtual ~J3DMtxCalcMayaAnm() {}
+    virtual void calc(u16 v) { J3DMtxCalcAnm::calc(v); }
+};
+
+enum J3DJointMtxType {
+    J3DJntMtxType_Normal,
+    J3DJntMtxType_BBoard,
+    J3DJntMtxType_YBBoard,
+    J3DJntMtxType_Multi,
 };
 
 class J3DJoint : public J3DNode {
 public:
-    J3DJoint();
-    void entryIn();
-    void recursiveCalc();
+    void initialize();
     void addMesh(J3DMaterial*);
+    void calcIn();
+    void calcOut();
+    void entryIn();
+    u32 getType() const { return 'NJNT'; }
+    void recursiveCalc();
+
+    J3DJoint();
+    ~J3DJoint() {}
 
     J3DMaterial* getMesh() { return mMesh; }
     u16 getJntNo() const { return mJntNo; }
+    u8 getKind() const { return mKind; }
+    u8 getMtxType() const { return getKind() >> 4; }
     u8 getScaleCompensate() const { return mScaleCompensate; }
     void setCurrentMtxCalc(J3DMtxCalc* pMtxCalc) { mCurrentMtxCalc = pMtxCalc; }
     J3DTransformInfo& getTransformInfo() { return mTransformInfo; }
@@ -67,7 +140,7 @@ private:
     friend struct J3DJointFactory;
     friend class J3DJointTree;
 
-    /* 0x14 */ u16 mJntNo;
+    /* 0x18 */ u16 mJntNo;
     /* 0x1A */ u8 mKind;
     /* 0x1B */ u8 mScaleCompensate;
     /* 0x1C */ J3DTransformInfo mTransformInfo;
@@ -77,26 +150,6 @@ private:
     /* 0x58 */ J3DMtxCalc* mMtxCalc;
     /* 0x5C */ J3DMtxCalc* mOldMtxCalc;
     /* 0x60 */ J3DMaterial* mMesh;
-};  // Size: 0x54
-
-struct J3DMtxCalcJ3DSysInitMaya {
-    static void init(Vec const&, f32 const (&)[3][4]);
-};
-
-struct J3DMtxCalcJ3DSysInitBasic {
-    static void init(Vec const&, f32 const (&)[3][4]);
-};
-
-struct J3DMtxCalcCalcTransformSoftimage {
-    static void calcTransform(J3DTransformInfo const&);
-};
-
-struct J3DMtxCalcCalcTransformMaya {
-    static void calcTransform(J3DTransformInfo const&);
-};
-
-struct J3DMtxCalcCalcTransformBasic {
-    static void calcTransform(J3DTransformInfo const&);
-};
+};  // Size: 0x64
 
 #endif /* J3DJOINT_H */

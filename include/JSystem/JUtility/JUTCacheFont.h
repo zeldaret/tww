@@ -11,48 +11,49 @@ public:
     struct TGlyphCacheInfo {
         /* 0x0 */ TGlyphCacheInfo* mPrev;
         /* 0x4 */ TGlyphCacheInfo* mNext;
-    };
-
-    struct TCachePage {
-        /* 0x00 */ u8 field_0x0[8];
-        /* 0x08 */ s16 field_0x8;
+        /* 0x08 */ u16 field_0x8;
         /* 0x0A */ u16 field_0xa;
-        /* 0x0C */ u8 field_0xc[4];
-        /* 0x10 */ u8* field_0x10;
-        /* 0x14 */ u16 field_0x14;
+        /* 0x0C */ u16 field_0xc;
+        /* 0x0E */ u16 field_0xe;
+        /* 0x10 */ u32 field_0x10;
+        /* 0x14 */ u16 mTexFormat;
         /* 0x16 */ u16 field_0x16;
         /* 0x18 */ u16 field_0x18;
-        /* 0x1A */ u16 field_0x1a;
-        /* 0x1C */ u16 field_0x1c;
+        /* 0x1A */ u16 mWidth;
+        /* 0x1C */ u16 mHeight;
         /* 0x1E */ u16 field_0x1e;
-    };  // Size: 0x20
+    };
+
+    struct TCachePage : TGlyphCacheInfo {
+        /* 0x20 */ GXTexObj mTexObj;
+    };  // Size: 0x40
 
     enum EPagingType {
         PAGE_TYPE_0,
         PAGE_TYPE_1,
     };
 
-    /* 802DD188 */ JUTCacheFont(ResFONT const*, u32, JKRHeap*);
-    /* 802DD29C */ void deleteMemBlocks_CacheFont();
-    /* 802DD320 */ void initialize_state();
-    /* 802DD35C */ int getMemorySize(ResFONT const*, u16*, u32*, u16*, u32*, u16*, u32*, u32*);
-    /* 802DD4EC */ int initiate(ResFONT const*, void*, u32, JKRHeap*);
-    /* 802DD54C */ bool internal_initiate(ResFONT const*, void*, u32, JKRHeap*);
-    /* 802DD650 */ bool allocArea(void*, u32, JKRHeap*);
-    /* 802DD804 */ bool allocArray(JKRHeap*);
-    /* 802DDB0C */ void determineBlankPage();
-    /* 802DDBBC */ void getGlyphFromAram(JUTCacheFont::TGlyphCacheInfo*, JUTCacheFont::TCachePage*,
-                                         int*, int*);
-    /* 802DDD98 */ void loadCache_char_subroutine(int*, bool);
-    /* 802DDEE0 */ void invalidiateAllCache();
-    /* 802DDF68 */ void unlink(JUTCacheFont::TGlyphCacheInfo*);
-    /* 802DDFAC */ void prepend(JUTCacheFont::TGlyphCacheInfo*);
+    JUTCacheFont(ResFONT const*, u32, JKRHeap*);
+    void deleteMemBlocks_CacheFont();
+    void initialize_state();
+    int getMemorySize(ResFONT const*, u16*, u32*, u16*, u32*, u16*, u32*, u32*);
+    int initiate(ResFONT const*, void*, u32, JKRHeap*);
+    bool internal_initiate(ResFONT const*, void*, u32, JKRHeap*);
+    bool allocArea(void*, u32, JKRHeap*);
+    bool allocArray(JKRHeap*);
+    TGlyphCacheInfo* determineBlankPage();
+    void getGlyphFromAram(TGlyphCacheInfo*, TCachePage*, int*, int*);
+    TCachePage* loadCache_char_subroutine(int*, bool);
+    void invalidiateAllCache();
+    void unlink(TGlyphCacheInfo*);
+    void prepend(TGlyphCacheInfo*);
 
-    /* 802DD208 */ virtual ~JUTCacheFont();
-    /* 802DDCE4 */ virtual void loadImage(int, _GXTexMapID);
-    /* 802DD8EC */ virtual void setBlock();
+    virtual ~JUTCacheFont();
+    virtual void loadImage(int, _GXTexMapID);
+    virtual void setBlock();
 
     void setPagingType(EPagingType type) { mPagingType = type; }
+    GXTexObj* getTexObj(void* buffer) { return &((TCachePage*)buffer)->mTexObj; }
 
     static u32 calcCacheSize(u32 param_0, int param_1) { return (ALIGN_NEXT(param_0, 0x20) + 0x40) * param_1; }
 
@@ -70,7 +71,7 @@ private:
     /* 0x98 */ u32 mCachePage;
     /* 0x9C */ TGlyphCacheInfo* field_0x9c;
     /* 0xA0 */ TGlyphCacheInfo* field_0xa0;
-    /* 0xA4 */ void* field_0xa4;
+    /* 0xA4 */ TGlyphCacheInfo* field_0xa4;
     /* 0xA8 */ u32 field_0xa8;
     /* 0xAC */ JKRAramBlock* field_0xac;
     /* 0xB0 */ u8 field_0xb0;

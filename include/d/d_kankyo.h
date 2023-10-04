@@ -1,7 +1,7 @@
 #ifndef D_KANKYO_D_KANKYO_H
 #define D_KANKYO_D_KANKYO_H
 
-#include "JSystem/J3DGraphBase/J3DStruct.h"
+#include "JSystem/J3DGraphBase/J3DTevs.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "dolphin/gx/GX.h"
 #include "global.h"
@@ -402,8 +402,10 @@ void dKy_vrbox_addcol_set(s16, s16, s16, f32);
 BOOL dKy_daynight_check();
 void dKy_tevstr_init(dKy_tevstr_c*, s8, u8);
 void dKy_Sound_init();
+void dKy_change_colpat(u8 param_0);
 u8 dKy_pship_existense_chk();
 void dKy_Itemgetcol_chg_move();
+void dKy_arrowcol_chg_on(cXyz*, int);
 void dKy_arrowcol_chg_move();
 void dKy_setLight_init();
 void GxXFog_set();
@@ -411,11 +413,6 @@ void dKy_set_vrboxsoracol_ratio(f32 ratio);
 void dKy_set_vrboxkumocol_ratio(f32 ratio);
 cXyz dKy_get_orion_pos();
 cXyz dKy_get_hokuto_pos();
-
-/* 80197AB8-80197FE4       .text dKankyo_DayProc__Fv */
-// supposed to be generated after sinit...
-static void dKankyo_DayProc() {
-    /* Nonmatching */
-}
+void dKy_DayProc();
 
 #endif /* D_KANKYO_D_KANKYO_H */

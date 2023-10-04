@@ -41,8 +41,9 @@ public:
 
     u8 GetInf(int row, int col) const;
     void Set(u32 fmtNum, char **pFmt, u32 nameNum, char **pName, u8* pData);
+    
+    int GetNameIndex(const char* pName, int start) const { return mName.GetIndex(pName, start); }
 
-private:
     cDT_Format mFmt;
     cDT_Name mName;
     cDT_DataSrc mSrc;

@@ -172,8 +172,10 @@ class JntHit_c;
 
 struct fopAc_cullSizeSphere {
 public:
+#ifndef __INTELLISENSE__
     fopAc_cullSizeSphere() {}
     fopAc_cullSizeSphere(cXyz, float);
+#endif
 
     /* 0x0 */ Vec mCenter;
     /* 0xC */ f32 mRadius;
@@ -181,9 +183,11 @@ public:
 
 struct fopAc_cullSizeBox {
 public:
+#ifndef __INTELLISENSE__
     fopAc_cullSizeBox() {}
     fopAc_cullSizeBox(const fopAc_cullSizeBox&);
     fopAc_cullSizeBox(cXyz, cXyz);
+#endif
 
     /* 0x0 */ Vec mMin;
     /* 0xC */ Vec mMax;
@@ -245,7 +249,27 @@ public:
 
 STATIC_ASSERT(sizeof(fopAc_ac_c) == 0x290);
 
-class fopEn_enemy_c;
+class fopEn_enemy_c : public fopAc_ac_c {
+public:
+    enum ParryOpeningType {
+        OPENING_NONE = 0,
+        OPENING_JUMP_PARRY = 1,
+        OPENING_ROLL_PARRY = 2,
+        OPENING_VERTICAL_JUMP_PARRY = 3,
+        OPENING_GANONDORF_FINISHER_PARRY = 4,
+    };
+    
+    /* 0x290 */ f32 m290;
+    /* 0x294 */ f32 m294;
+    /* 0x298 */ f32 m298;
+    /* 0x29C */ f32 m29C;
+    /* 0x2A0 */ f32 m2A0;
+    /* 0x2A4 */ f32 m2A4;
+    /* 0x2A8 */ u8 mCurrParryOpeningType;
+    /* 0x2A9 */ u8 field_2A9[0x2AC - 0x2A9];
+};
+
+STATIC_ASSERT(sizeof(fopEn_enemy_c) == 0x2AC);
 
 s32 fopAc_IsActor(void* actor);
 

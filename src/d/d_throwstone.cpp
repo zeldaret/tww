@@ -3,41 +3,145 @@
 // Translation Unit: d_throwstone.cpp
 //
 
-#include "d_throwstone.h"
-#include "dolphin/types.h"
+#include "f_op/f_op_actor.h"
+#include "f_op/f_op_actor_mng.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_demo.h"
+#include "d/d_procname.h"
+#include "m_Do/m_Do_mtx.h"
+#include "JSystem/JKernel/JKRHeap.h"
+
+class daThrowstone_c : fopAc_ac_c {
+public:
+    s32 CreateHeap();
+    inline s32 _create();
+    inline BOOL _delete();
+    inline BOOL _execute();
+    inline bool _draw();
+    static const char M_arcname[5];
+
+public:
+    /* 0x290 */ request_of_phase_process_class mPhs;
+    /* 0x298 */ J3DModel * mpModel;
+    /* 0x29C */ Mtx mMtx;
+};
+
+const char daThrowstone_c::M_arcname[] = "Aisi";
 
 /* 8023B544-8023B564       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+s32 CheckCreateHeap(fopAc_ac_c* i_actor) {
+    daThrowstone_c* i_this = (daThrowstone_c*)i_actor;
+    return i_this->CreateHeap();
 }
 
 /* 8023B564-8023B5DC       .text CreateHeap__14daThrowstone_cFv */
-void daThrowstone_c::CreateHeap() {
-    /* Nonmatching */
+s32 daThrowstone_c::CreateHeap() {
+    J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 0x03);
+    if (pModelData == NULL)
+        return FALSE;
+
+    mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000002);
+    return (mpModel != NULL) ? TRUE : FALSE;
+}
+
+s32 daThrowstone_c::_create() {
+    s32 result = dComIfG_resLoad(&mPhs, M_arcname);
+
+    if (result == cPhs_COMPLEATE_e) {
+        fopAcM_SetupActor(this, daThrowstone_c);
+
+        if (!fopAcM_entrySolidHeap(this, (heapCallbackFunc)CheckCreateHeap, 0x4C0)) {
+            result = cPhs_ERROR_e;
+        } else {
+            mDoMtx_stack_c::transS(getPosition());
+            mDoMtx_stack_c::YrotM(shape_angle.y);
+            mDoMtx_stack_c::scaleM(mScale);
+
+            mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
+            mCullMtx = mpModel->getBaseTRMtx();
+
+            mDoMtx_copy(mpModel->getBaseTRMtx(), mMtx);
+        }
+    }
+
+    return result;
 }
 
 /* 8023B5DC-8023B6DC       .text daThrowstoneCreate__FPv */
-void daThrowstoneCreate(void*) {
-    /* Nonmatching */
+s32 daThrowstoneCreate(void* ptr) {
+    return ((daThrowstone_c*)ptr)->_create();
+}
+
+BOOL daThrowstone_c::_delete() {
+    dComIfG_resDelete(&mPhs, M_arcname);
+    return TRUE;
 }
 
 /* 8023B6DC-8023B708       .text daThrowstoneDelete__FPv */
-void daThrowstoneDelete(void*) {
-    /* Nonmatching */
+BOOL daThrowstoneDelete(void* ptr) {
+    return ((daThrowstone_c*)ptr)->_delete();
+}
+
+BOOL daThrowstone_c::_execute() {
+    dDemo_setDemoData(this, 0x6a, NULL, NULL, 0, NULL, 0, 0);
+
+    mpModel->setBaseScale(mScale);
+    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
+
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
+
+    return FALSE;
 }
 
 /* 8023B708-8023B7C4       .text daThrowstoneExecute__FPv */
-void daThrowstoneExecute(void*) {
-    /* Nonmatching */
+BOOL daThrowstoneExecute(void* ptr) {
+    return ((daThrowstone_c*)ptr)->_execute();
+}
+
+bool daThrowstone_c::_draw() {
+    if (!dComIfGs_isEventBit(0x0310))
+        return TRUE;
+
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, getPositionP(), &mTevStr);
+    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    mDoExt_modelUpdateDL(mpModel);
+
+    return TRUE;
 }
 
 /* 8023B7C4-8023B858       .text daThrowstoneDraw__FPv */
-void daThrowstoneDraw(void*) {
-    /* Nonmatching */
+BOOL daThrowstoneDraw(void* ptr) {
+    return ((daThrowstone_c*)ptr)->_draw();
 }
 
 /* 8023B858-8023B860       .text daThrowstoneIsDelete__FPv */
-void daThrowstoneIsDelete(void*) {
-    /* Nonmatching */
+BOOL daThrowstoneIsDelete(void*) {
+    return TRUE;
 }
 
+static actor_method_class l_daThrowstone_Method = {
+    (process_method_func)daThrowstoneCreate,
+    (process_method_func)daThrowstoneDelete,
+    (process_method_func)daThrowstoneExecute,
+    (process_method_func)daThrowstoneIsDelete,
+    (process_method_func)daThrowstoneDraw,
+};
+
+actor_process_profile_definition g_profile_THROWSTONE = {
+    fpcLy_CURRENT_e,
+    2,
+    fpcPi_CURRENT_e,
+    PROC_THROWSTONE,
+    &g_fpcLf_Method.mBase,
+    sizeof(daThrowstone_c),
+    0,
+    0,
+    &g_fopAc_Method.base,
+    0x01CE,
+    &l_daThrowstone_Method,
+    0x00040100,
+    fopAc_ACTOR_e,
+    fopAc_CULLBOX_0_e,
+};

@@ -263,32 +263,197 @@ bool JUTCacheFont::allocArray(JKRHeap* heap) {
 
 /* 802C0B78-802C0DD0       .text setBlock__12JUTCacheFontFv */
 void JUTCacheFont::setBlock() {
-    /* Nonmatching */
+    int widthNum = 0;
+    int gylphNum = 0;
+    int mapNum = 0;
+    u8* pWidth = (u8*)field_0x7c;
+    ResFONT::GLY1* piVar5 = (ResFONT::GLY1*)field_0x80;
+    ResFONT::MAP1* pMap = (ResFONT::MAP1*)field_0x84;
+    u32 aramAddress = field_0xac->getAddress();
+    mMaxCode = 0xffff;
+    const int* pData = (int*)mResFont->data;
+
+    for (int i = 0; i < mResFont->numBlocks; i++) {
+        switch (*pData) {
+        case 'INF1':
+            memcpy(mInfoBlock, pData, 0x20);
+            u32 u = mInfoBlock->fontType;
+            JUT_ASSERT(447, u < suAboutEncoding_);
+            mIsLeadByte = &JUTResFont::saoAboutEncoding_[u];
+            break;
+        case 'WID1':
+            memcpy(pWidth, pData, pData[1]);
+            mpWidthBlocks[widthNum] = (ResFONT::WID1*)pWidth;
+            pWidth += pData[1];
+            widthNum++;
+            break;
+        case 'GLY1':
+            memcpy(piVar5, pData, 0x20);
+            JKRAramBlock* iVar1 =
+                JKRMainRamToAram((u8*)pData + 0x20, aramAddress, pData[1] - 0x20,
+                                 EXPAND_SWITCH_UNKNOWN0, 0, NULL, 0xffffffff);
+            if (iVar1 == NULL) {
+                OSPanic(__FILE__, 476, "Cannot alloc ARAM area.");
+            }
+            piVar5->magic = aramAddress;
+            if (piVar5->textureSize > mMaxSheetSize) {
+                mMaxSheetSize = piVar5->textureSize;
+            }
+            mpGlyphBlocks[gylphNum] = piVar5;
+            gylphNum++;
+            piVar5++;
+            aramAddress = pData[1] + aramAddress - 0x20;
+            break;
+        case 'MAP1':
+            memcpy(pMap, pData, pData[1]);
+            mpMapBlocks[mapNum] = pMap;
+            if (mMaxCode > mpMapBlocks[mapNum]->startCode) {
+                mMaxCode = mpMapBlocks[mapNum]->startCode;
+            }
+            mapNum++;
+            pMap = (ResFONT::MAP1*)((u8*)pMap + pData[1]);
+            break;
+        default:
+            JUTReportConsole("Unknown data block\n");
+            break;
+        }
+
+        pData = (int*)((u8*)pData + pData[1]);
+    }
 }
 
 /* 802C0DD0-802C0E80       .text determineBlankPage__12JUTCacheFontFv */
-void JUTCacheFont::determineBlankPage() {
-    /* Nonmatching */
+JUTCacheFont::TGlyphCacheInfo* JUTCacheFont::determineBlankPage() {
+    TGlyphCacheInfo* pVar1 = field_0xa4;
+    if (pVar1 != NULL) {
+        field_0xa4 = pVar1->mNext;
+        TGlyphCacheInfo* pVar2 = pVar1->mNext;
+        if (pVar2 == NULL) {
+            field_0xa8 = 0;
+        } else {
+            pVar2->mPrev = NULL;
+        }
+        return pVar1;
+    }
+
+    TGlyphCacheInfo* puVar1 = field_0xa0;
+    while (puVar1 != NULL) {
+        TGlyphCacheInfo* prev = puVar1->mPrev;
+        if (puVar1->field_0x1e == 0) {
+            unlink(puVar1);
+            field_0xb4++;
+            return puVar1;
+        }
+        puVar1 = prev;
+    }
+
+    return NULL;
 }
 
 /* 802C0E80-802C0FE8       .text getGlyphFromAram__12JUTCacheFontFPQ212JUTCacheFont15TGlyphCacheInfoPQ212JUTCacheFont10TCachePagePiPi */
-void JUTCacheFont::getGlyphFromAram(JUTCacheFont::TGlyphCacheInfo*, JUTCacheFont::TCachePage*, int*, int*) {
+void JUTCacheFont::getGlyphFromAram(TGlyphCacheInfo* param_0, TCachePage* pCachePage, int* param_2, int* param_3) {
     /* Nonmatching */
+    TGlyphCacheInfo* pGylphCacheInfo = pCachePage;
+    memcpy(pGylphCacheInfo, param_0, sizeof(TGlyphCacheInfo));
+    prepend(pGylphCacheInfo);
+    int iVar3 = pGylphCacheInfo->field_0x16 * pGylphCacheInfo->field_0x18;
+    int iVar2 = *param_2 / iVar3;
+    pGylphCacheInfo->field_0x8 += iVar2 * iVar3;
+    u16 local_30 = pGylphCacheInfo->field_0x8 + iVar3 - 1;
+    pGylphCacheInfo->field_0xa = pGylphCacheInfo->field_0xa < local_30 ? pGylphCacheInfo->field_0xa : local_30;
+    *param_3 = iVar2;
+    *param_2 -= iVar2 * iVar3;
+    u8* result =
+        JKRAramToMainRam((u32)param_0->mPrev + pGylphCacheInfo->field_0x10 * iVar2, (u8*)(pCachePage + 1),
+                         pGylphCacheInfo->field_0x10, EXPAND_SWITCH_UNKNOWN0, 0, NULL, 0xffffffff, NULL);
+    JUT_ASSERT(623, result);
+    GXInitTexObj(&pCachePage->mTexObj, pCachePage + 1, pGylphCacheInfo->mWidth, pGylphCacheInfo->mHeight,
+                 (GXTexFmt)pGylphCacheInfo->mTexFormat, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(&pCachePage->mTexObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE,
+                    GX_ANISO_1);
 }
 
 /* 802C0FE8-802C109C       .text loadImage__12JUTCacheFontFi11_GXTexMapID */
-void JUTCacheFont::loadImage(int, _GXTexMapID) {
+void JUTCacheFont::loadImage(int param_0, GXTexMapID texMapId) {
     /* Nonmatching */
+    TCachePage* cachePage = loadCache_char_subroutine(&param_0, false);
+    if (cachePage != NULL) {
+        mWidth = cachePage->field_0xc * (param_0 % int(cachePage->field_0x16));
+        mHeight = cachePage->field_0xe * (param_0 / cachePage->field_0x16);
+        GXLoadTexObj(getTexObj(cachePage), texMapId);
+        if (mPagingType == PAGE_TYPE_1) {
+            unlink(cachePage);
+            prepend(cachePage);
+        }
+    }
 }
 
 /* 802C109C-802C11E4       .text loadCache_char_subroutine__12JUTCacheFontFPib */
-void JUTCacheFont::loadCache_char_subroutine(int*, bool) {
+JUTCacheFont::TCachePage* JUTCacheFont::loadCache_char_subroutine(int* param_0, bool param_1) {
     /* Nonmatching */
+    TCachePage* rv = NULL;
+    for (TCachePage* pCachePage = (TCachePage*)field_0x9c; pCachePage != NULL;
+         pCachePage = (TCachePage*)pCachePage->mNext)
+    {
+        if (pCachePage->field_0x8 <= *param_0 && *param_0 <= pCachePage->field_0xa) {
+            rv = pCachePage;
+            *param_0 -= pCachePage->field_0x8;
+            break;
+        }
+    }
+
+    if (rv == NULL) {
+        int i = 0;
+        for (; i < mGlyphBlockNum; i++) {
+            if (mpGlyphBlocks[i]->startCode <= *param_0 && *param_0 <= mpGlyphBlocks[i]->endCode) {
+                *param_0 -= mpGlyphBlocks[i]->startCode;
+                break;
+            }
+        }
+        if (i < mGlyphBlockNum) {
+            TCachePage* pBlankPage = (TCachePage*)determineBlankPage();
+            if (pBlankPage == NULL) {
+                return NULL;
+            }
+            int texPageIdx;
+            getGlyphFromAram((JUTCacheFont::TGlyphCacheInfo*)mpGlyphBlocks[i], pBlankPage, param_0,
+                             &texPageIdx);
+            mTexPageIdx = texPageIdx;
+            field_0x66 = i;
+            rv = pBlankPage;
+        } else {
+            return NULL;
+        }
+    }
+    if (param_1) {
+        rv->field_0x1e = 1;
+    }
+    return rv;
 }
 
 /* 802C11E4-802C126C       .text invalidiateAllCache__12JUTCacheFontFv */
 void JUTCacheFont::invalidiateAllCache() {
-    /* Nonmatching */
+    int* piVar3 = (int*)mCacheBuffer;
+    for (int uVar2 = 0; uVar2 < mCachePage; uVar2++) {
+        int iVar1;
+        if (uVar2 == 0) {
+            iVar1 = 0;
+        } else {
+            iVar1 = (int)piVar3 - field_0x94;
+        }
+        *piVar3 = iVar1;
+        if (uVar2 == mCachePage - 1) {
+            iVar1 = 0;
+        } else {
+            iVar1 = (int)piVar3 + field_0x94;
+        }
+        piVar3[1] = iVar1;
+        piVar3 = (int*)((int)piVar3 + field_0x94);
+    }
+    field_0xa8 = (int)piVar3 - field_0x94;
+    field_0xa4 = (TGlyphCacheInfo*)mCacheBuffer;
+    field_0x9c = NULL;
+    field_0xa0 = NULL;
 }
 
 /* 802C126C-802C12B0       .text unlink__12JUTCacheFontFPQ212JUTCacheFont15TGlyphCacheInfo */

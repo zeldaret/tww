@@ -19,14 +19,18 @@ public:
         mStart = start;
         mEnd = end;
     }
-    void SetStartEnd(const Vec&, const Vec&);
+    void SetStartEnd(const Vec& start, const Vec& end) {
+        mStart = start;
+        mEnd = end;
+    }
     void CalcPos(Vec*, f32) const;
     void CalcVec(Vec* pOut) const { VECSubtract(&this->mEnd, &this->mStart, pOut); }
     void SetEnd(const cXyz&);
-    const cXyz& GetStartP(void) const { return mStart; }
-    cXyz& GetStartP(void) { return mStart; }
-    const cXyz& GetEndP(void) const { return mEnd; }
-    cXyz& GetEndP(void) { return mEnd; }
+    const cXyz& GetStartP() const { return mStart; }
+    cXyz& GetStartP() { return mStart; }
+    cXyz& GetStart() { return mStart; }
+    const cXyz& GetEndP() const { return mEnd; }
+    cXyz& GetEndP() { return mEnd; }
     cXyz& GetEnd() { return mEnd; }
 };  // Size = 0x1C
 

@@ -118,4 +118,6 @@ inline void gekko_ps_copy16(register void* dst, register const void* src) {
 
 };  // namespace JMath
 
+f32 JMAHermiteInterpolation(f32, f32, f32, f32, f32, f32, f32);
+
 #endif /* JMATH_H */

@@ -413,7 +413,7 @@ void daAgb_c::modeLoad() {
         (this->*func)();
     } else {
         mUploadAction = 0;
-        mEvtInfo.onCondition(1);
+        mEvtInfo.onCondition(dEvtCnd_CANTALK_e);
         mMode = 0;
     }
 }

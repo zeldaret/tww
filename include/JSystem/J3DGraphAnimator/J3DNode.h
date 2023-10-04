@@ -4,14 +4,15 @@
 #include "dolphin/mtx/mtx.h"
 
 class J3DNode;
+class J3DModelData;
 typedef int (*J3DNodeCallBack)(J3DNode*, int);
 
 class J3DNode {
 public:
-    virtual void init(Vec const& param_0, Mtx*);
+    virtual void init(J3DModelData*) {}
     virtual void entryIn();
-    virtual void calcIn();
-    virtual void calcOut();
+    virtual void calcIn() {}
+    virtual void calcOut() {}
     virtual u32 getType() const;
     virtual ~J3DNode();
 

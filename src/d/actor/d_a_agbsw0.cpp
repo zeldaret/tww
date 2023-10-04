@@ -328,8 +328,8 @@ public:
                 field_0x299 = 0;
                 mTimer = 0;
 
-                l_cyl_src.mCyl.mRadius = mScale.x;
-                l_cyl_src.mCyl.mHeight = mScale.y;
+                l_cyl_src.mCylAttr.mCyl.mRadius = mScale.x;
+                l_cyl_src.mCylAttr.mCyl.mHeight = mScale.y;
                 mStts.Init(0, 0xFF, this);
                 mCyl.Set(l_cyl_src);
                 mCyl.SetC(current.pos);
@@ -1069,8 +1069,13 @@ BOOL daAgbsw0_c::ExeSubMW() {
     return true;
 }
 
+class daBomb_c {
+public:
+    enum State_e { EIGHT = 8, };
+    bool chk_state(State_e) const;
+};
+
 BOOL daAgbsw0_c::ExeSubT() {
-    /* Nonmatching */
     u8 sw = getSw0();
 
     if(sw != 0xFF && fopAcM_isSwitch(this, sw)) {
@@ -1095,10 +1100,7 @@ BOOL daAgbsw0_c::ExeSubT() {
     else {
         if(g_mDoGaC_gbaCom.mDoGaC_GbaLink()) {
             if(g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(0xF)) {
-                //daBomb_c* bomb = mCyl.GetTgHitAc();
-                //if(bomb->chk_state(8))
-                // ^ replace field_0x298 with this later
-                if(mCyl.ChkTgHit() && mCyl.GetTgHitAc() && fopAcM_GetName(mCyl.GetTgHitAc()) == 0x128 && field_0x298) { //0x298 filler condition so objdiff is less confused
+                if(mCyl.ChkTgHit() && mCyl.GetTgHitAc() && fopAcM_GetName(mCyl.GetTgHitAc()) == PROC_BOMB && ((daBomb_c*)mCyl.GetTgHitAc())->chk_state(daBomb_c::EIGHT)) {
                     mSE = BigLittleChange(0x12);
                     g_mDoGaC_gbaCom.mDoGaC_SendDataSet((u32*)&mSE, 4, 0xF, 0);
                     fopAcM_onSwitch(this, sw);
@@ -1146,8 +1148,7 @@ BOOL daAgbsw0_c::ExeSubS() {
                         return true;
                     }
                     else {
-                        if(g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5))
-                        {
+                        if(g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5)) {
                             MailSend(BigLittleChange(getMsgNo()) >> 0x10, 0x9, sw1, sw, 0);
                             field_0x299 = 1;
                         }
@@ -1165,8 +1166,7 @@ BOOL daAgbsw0_c::ExeSubS() {
                     return true;
                 }
                 else {
-                    if(g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5))
-                    {
+                    if(g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5)) {
                         u32 param = fopAcM_GetParam(this);
                         MailSend(BigLittleChange(param & 0xFFFF) >> 0x10, 0x9, sw1, sw, 0);
                         field_0x299 = 1;
@@ -1328,7 +1328,7 @@ BOOL daAgbsw0_c::ExeSubB() {
                     fpoAcM_relativePos(this, &agb->current.pos, &rel);
                     rel.y = rel.y - mScale.y / 2.0f + 5.0f;
                     f32 x_diff = mScale.x - fabsf(rel.x);
-                    f32 y_diff = mScale.y - fabsf(rel.y) + 50.0f; //some register oddity here
+                    f32 y_diff = (mScale.y / 2.0f) - fabsf(rel.y) + 50.0f; //some register oddity here
                     f32 z_diff = mScale.z - fabsf(rel.z);
                     if(y_diff < x_diff && y_diff < z_diff) {
                         if(agb->current.pos.y < current.pos.y + mScale.y / 2.0f) {

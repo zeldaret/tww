@@ -2,6 +2,7 @@
 #define C_M3D_G_PLA_H_
 
 #include "SSystem/SComponent/c_xyz.h"
+#include "dolphin/mtx/vec.h"
 
 // Plane with a normal
 class cM3dGPla {
@@ -13,6 +14,10 @@ public:
     cM3dGPla() {}
     void CalcAngleXz(short* pAngleX, short* pAngleY) const;
     void SetupNP0(const Vec&, const Vec&);
+    f32 getPlaneFunc(const Vec *p) const {
+        return mD + VECDotProduct(&mNormal, p);
+    }
+    const cXyz * GetNP() const { return &mNormal; }
     
     virtual ~cM3dGPla() {}
 };

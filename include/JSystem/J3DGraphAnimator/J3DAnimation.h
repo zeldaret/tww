@@ -281,10 +281,8 @@ STATIC_ASSERT(sizeof(J3DAnmColorFullData) == 0x34);
 class J3DAnmBase {
 public:
     J3DAnmBase(s16 i_frameMax) {
-        mAttribute = 0;
-        field_0x5 = 0;
-        mFrameMax = i_frameMax;
         mFrame = 0.0f;
+        mFrameMax = i_frameMax;
     }
 
     virtual ~J3DAnmBase();
@@ -303,7 +301,12 @@ private:
 
 class J3DAnmTransform : public J3DAnmBase {
 public:
-    J3DAnmTransform(s16, f32*, s16*, f32*);
+    J3DAnmTransform(s16 i_frameMax, f32* p1, s16* p2, f32* p3) : J3DAnmBase(i_frameMax) {
+        field_0x10 = p2;
+        field_0x14 = p3;
+        field_0x18 = 0;
+        field_0xc = p1;
+    }
 
     virtual ~J3DAnmTransform();
     virtual s32 getKind() const;
@@ -313,17 +316,17 @@ private:
     /* 0x0C */ f32* field_0xc;
     /* 0x10 */ s16* field_0x10;
     /* 0x14 */ f32* field_0x14;
-    /* 0x18 */ s16 field_0x18;
-    /* 0x1A */ s16 field_0x1a;
-    /* 0x1C */ s16 field_0x1c;
-    /* 0x1E */ s16 field_0x1e;
-};  // Size: 0x20
+    /* 0x18 */ s32 field_0x18;
+    /* 0x1C */ s16 field_0x1a;
+    /* 0x1E */ s16 field_0x1c;
+    /* 0x20 */ s16 field_0x1e;
+};  // Size: 0x22
 
 class J3DAnmTransformKey : public J3DAnmTransform {
 public:
     J3DAnmTransformKey() : J3DAnmTransform(0, NULL, NULL, NULL) {
-        field_0x20 = 0;
         field_0x24 = 0;
+        field_0x28 = 0;
     }
 
     void calcTransform(f32, u16, J3DTransformInfo*) const;
@@ -333,9 +336,9 @@ public:
     virtual void getTransform(u16, J3DTransformInfo*) const;
 
 private:
-    /* 0x20 */ int field_0x20;
     /* 0x24 */ int field_0x24;
-};  // Size: 0x28
+    /* 0x28 */ int field_0x28;
+};  // Size: 0x2C
 
 class J3DAnmTransformFull : public J3DAnmTransform {
 public:

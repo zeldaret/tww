@@ -97,11 +97,6 @@ public:
     /* 0x0 */ u8 field_0x0[0x28];
 };
 
-class dPa_cutTurnEcallBack_c {
-public:
-    /* 0x0 */ u8 field_0x0[0x10];
-};
-
 class daPy_waterDropEcallBack_c {
 public:
     void execute(JPABaseEmitter*);
@@ -490,7 +485,7 @@ public:
     void setDamageEmitter();
     void endFlameDamageEmitter();
     void endDamageEmitter();
-    void setItemWaterEffect(fopAc_ac_c*, int, int);
+    static u32 setItemWaterEffect(fopAc_ac_c*, int, int);
     void getDemoLookActor();
     void setTinkleCeiverModel();
     void setTalismanModel();
@@ -1010,7 +1005,7 @@ public:
     virtual void getGroundY();
     virtual void getTactMusic() const;
     virtual void getTactTimerCancel() const;
-    virtual void checkPlayerGuard() const;
+    virtual BOOL checkPlayerGuard() const;
     virtual void getGrabMissActor();
     virtual u32 checkPlayerFly() const;
     virtual void checkFrontRoll() const;

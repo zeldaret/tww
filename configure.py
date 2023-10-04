@@ -120,7 +120,7 @@ if not is_windows():
 
 # Tool versions
 config.compilers_tag = "1"
-config.dtk_tag = "v0.5.2"
+config.dtk_tag = "v0.5.4"
 config.sjiswrap_tag = "v1.1.0"
 config.wibo_tag = "0.5.1"
 
@@ -169,6 +169,14 @@ cflags_runtime = [
     "-inline deferred,auto",
 ]
 
+# Dolphin library flags
+cflags_dolphin = [
+    *cflags_base,
+    "-use_lmw_stmw on",
+    "-str reuse,pool,readonly",
+    "-inline auto",
+]
+
 # Framework flags
 cflags_framework = [
     *cflags_base,
@@ -190,11 +198,11 @@ cflags_rel = [
 
 
 # Helper function for single-object RELs
-def Rel(status, rel_name, cpp_name):
+def Rel(status, rel_name, cpp_name, extra_cflags=[]):
     return {
         "lib": rel_name,
         "mw_version": "GC/1.3.2",
-        "cflags": cflags_rel,
+        "cflags": cflags_rel + extra_cflags,
         "host": True,
         "objects": [
             Object(status, cpp_name),
@@ -203,8 +211,8 @@ def Rel(status, rel_name, cpp_name):
 
 
 # Helper function for actor RELs
-def ActorRel(status, rel_name):
-    return Rel(status, rel_name, f"d/actor/{rel_name}.cpp")
+def ActorRel(status, rel_name, extra_cflags=[]):
+    return Rel(status, rel_name, f"d/actor/{rel_name}.cpp", extra_cflags=extra_cflags)
 
 
 # Helper function for JSystem libraries
@@ -222,8 +230,8 @@ def JSystemLib(lib_name, objects):
 def DolphinLib(lib_name, objects):
     return {
         "lib": lib_name,
-        "mw_version": "GC/1.3.2",
-        "cflags": cflags_runtime, # TODO check
+        "mw_version": "GC/1.2.5n",
+        "cflags": cflags_dolphin, # TODO check
         "host": False,
         "objects": objects,
     }
@@ -249,7 +257,7 @@ config.libs = [
             Object(NonMatching, "m_Do/m_Do_graphic.cpp"),
             Object(Matching,    "m_Do/m_Do_machine.cpp"),
             Object(NonMatching, "m_Do/m_Do_mtx.cpp"),
-            Object(NonMatching, "m_Do/m_Do_ext.cpp"),
+            Object(NonMatching, "m_Do/m_Do_ext.cpp", extra_cflags=["-sym off"]),
             Object(NonMatching, "m_Do/m_Do_lib.cpp"),
             Object(Matching,    "m_Do/m_Do_hostIO.cpp"),
             Object(Matching,    "m_Do/m_Do_Reset.cpp"),
@@ -364,7 +372,7 @@ config.libs = [
             Object(NonMatching, "d/d_path.cpp"),
             Object(NonMatching, "d/d_drawlist.cpp"),
             Object(Matching,    "d/d_kankyo_data.cpp"),
-            Object(NonMatching, "d/d_kankyo_wether.cpp"),
+            Object(Matching,    "d/d_kankyo_wether.cpp"),
             Object(NonMatching, "d/d_kankyo_rain.cpp"),
             Object(Matching,    "d/d_kankyo_demo.cpp"),
             Object(NonMatching, "d/d_detect.cpp"),
@@ -406,7 +414,7 @@ config.libs = [
             Object(NonMatching, "d/d_snap.cpp"),
             Object(Matching,    "d/d_point_wind.cpp"),
             Object(NonMatching, "d/actor/d_a_agb.cpp"),
-            Object(NonMatching, "d/actor/d_a_arrow.cpp"),
+            Object(Matching,    "d/actor/d_a_arrow.cpp", cflags=[*cflags_framework, "-sym off"]),
             Object(NonMatching, "d/actor/d_a_bg.cpp"),
             Object(NonMatching, "d/actor/d_a_bomb.cpp"),
             Object(NonMatching, "d/actor/d_a_bomb2.cpp"),
@@ -421,7 +429,7 @@ config.libs = [
             Object(NonMatching, "d/actor/d_a_ib.cpp"),
             Object(NonMatching, "d/actor/d_a_item.cpp"),
             Object(Matching,    "d/actor/d_a_itembase.cpp"),
-            Object(NonMatching, "d/actor/d_a_nh.cpp"),
+            Object(Matching,    "d/actor/d_a_nh.cpp"),
             Object(NonMatching, "d/actor/d_a_npc_fa1.cpp"),
             Object(NonMatching, "d/actor/d_a_obj_search.cpp"),
             Object(NonMatching, "d/actor/d_a_player.cpp"),
@@ -722,11 +730,11 @@ config.libs = [
         "gba",
         [
             Object(NonMatching, "dolphin/gba/GBA.c"),
-            Object(NonMatching, "dolphin/gba/GBAGetProcessStatus.c"),
+            Object(Matching,    "dolphin/gba/GBAGetProcessStatus.c"),
             Object(NonMatching, "dolphin/gba/GBAJoyBoot.c"),
-            Object(NonMatching, "dolphin/gba/GBARead.c"),
-            Object(NonMatching, "dolphin/gba/GBAWrite.c"),
-            Object(NonMatching, "dolphin/gba/GBAXfer.c"),
+            Object(Matching,    "dolphin/gba/GBARead.c"),
+            Object(Matching,    "dolphin/gba/GBAWrite.c"),
+            Object(Matching,    "dolphin/gba/GBAXfer.c"),
         ],
     ),
     JSystemLib(
@@ -765,7 +773,7 @@ config.libs = [
             Object(Matching,    "JSystem/JKernel/JKRAramHeap.cpp"),
             Object(Matching,    "JSystem/JKernel/JKRAramBlock.cpp"),
             Object(Matching,    "JSystem/JKernel/JKRAramPiece.cpp"),
-            Object(NonMatching, "JSystem/JKernel/JKRAramStream.cpp"),
+            Object(Matching,    "JSystem/JKernel/JKRAramStream.cpp"),
             Object(Matching,    "JSystem/JKernel/JKRFileLoader.cpp"),
             Object(Matching,    "JSystem/JKernel/JKRFileFinder.cpp"),
             Object(Matching,    "JSystem/JKernel/JKRFileCache.cpp"),
@@ -802,14 +810,14 @@ config.libs = [
     JSystemLib(
         "JUtility",
         [
-            Object(NonMatching, "JSystem/JUtility/JUTCacheFont.cpp"),
+            Object(Matching,    "JSystem/JUtility/JUTCacheFont.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTResource.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTTexture.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTPalette.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTNameTab.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTGraphFifo.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTFont.cpp"),
-            Object(NonMatching, "JSystem/JUtility/JUTResFont.cpp"),
+            Object(Matching,    "JSystem/JUtility/JUTResFont.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTDbPrint.cpp"),
             Object(NonMatching, "JSystem/JUtility/JUTGamePad.cpp"),
             Object(NonMatching, "JSystem/JUtility/JUTException.cpp"),
@@ -852,9 +860,9 @@ config.libs = [
             Object(Matching,    "JSystem/J3DGraphBase/J3DVertex.cpp"),
             Object(NonMatching, "JSystem/J3DGraphBase/J3DTransform.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DPacket.cpp"),
-            Object(NonMatching, "JSystem/J3DGraphBase/J3DShapeMtx.cpp"),
+            Object(Matching,    "JSystem/J3DGraphBase/J3DShapeMtx.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DShape.cpp"),
-            Object(NonMatching, "JSystem/J3DGraphBase/J3DMaterial.cpp"),
+            Object(Matching,    "JSystem/J3DGraphBase/J3DMaterial.cpp"),
             Object(NonMatching, "JSystem/J3DGraphBase/J3DMatBlock.cpp"),
             Object(NonMatching, "JSystem/J3DGraphBase/J3DTevs.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DDrawBuffer.cpp"),
@@ -863,14 +871,14 @@ config.libs = [
     JSystemLib(
         "J3DGraphAnimator",
         [
-            Object(NonMatching, "JSystem/J3DGraphAnimator/J3DModelData.cpp"),
+            Object(Matching,    "JSystem/J3DGraphAnimator/J3DModelData.cpp"),
             Object(NonMatching, "JSystem/J3DGraphAnimator/J3DModel.cpp"),
             Object(NonMatching, "JSystem/J3DGraphAnimator/J3DAnimation.cpp"),
             Object(NonMatching, "JSystem/J3DGraphAnimator/J3DMaterialAnm.cpp"),
             Object(NonMatching, "JSystem/J3DGraphAnimator/J3DVisibility.cpp"),
             Object(NonMatching, "JSystem/J3DGraphAnimator/J3DCluster.cpp"),
             Object(NonMatching, "JSystem/J3DGraphAnimator/J3DJoint.cpp"),
-            Object(NonMatching, "JSystem/J3DGraphAnimator/J3DNode.cpp"),
+            Object(Matching,    "JSystem/J3DGraphAnimator/J3DNode.cpp"),
             Object(NonMatching, "JSystem/J3DGraphAnimator/J3DMaterialAttach.cpp"),
         ],
     ),
@@ -1229,9 +1237,9 @@ config.libs = [
     ActorRel(NonMatching, "d_a_kytag01"),
     ActorRel(NonMatching, "d_a_kytag02"),
     ActorRel(NonMatching, "d_a_kytag03"),
-    ActorRel(NonMatching, "d_a_kytag04"),
+    ActorRel(Matching, "d_a_kytag04"),
     ActorRel(NonMatching, "d_a_kytag05"),
-    ActorRel(NonMatching, "d_a_kytag06"),
+    ActorRel(Matching,    "d_a_kytag06"),
     ActorRel(NonMatching, "d_a_kytag07"),
     ActorRel(NonMatching, "d_a_lamp"),
     ActorRel(NonMatching, "d_a_lod_bg"),
@@ -1242,7 +1250,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_msw"),
     ActorRel(NonMatching, "d_a_mtoge"),
     ActorRel(NonMatching, "d_a_obj_AjavW"),
-    ActorRel(NonMatching, "d_a_obj_Ygush00"),
+    ActorRel(Matching,    "d_a_obj_Ygush00", extra_cflags=["-sym off"]),
     ActorRel(NonMatching, "d_a_obj_akabe"),
     ActorRel(NonMatching, "d_a_obj_barrel"),
     ActorRel(NonMatching, "d_a_obj_barrel2"),
@@ -1284,7 +1292,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_pirate_flag"),
     ActorRel(NonMatching, "d_a_race_item"),
     ActorRel(NonMatching, "d_a_rd"),
-    ActorRel(Matching, "d_a_rectangle"),
+    ActorRel(Matching,    "d_a_rectangle"),
     ActorRel(NonMatching, "d_a_salvage"),
     ActorRel(NonMatching, "d_a_sbox"),
     ActorRel(NonMatching, "d_a_sk"),
@@ -1427,7 +1435,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_lstair"),
     ActorRel(NonMatching, "d_a_machine"),
     ActorRel(NonMatching, "d_a_mant"),
-    ActorRel(NonMatching, "d_a_mbdoor"),
+    ActorRel(Matching,    "d_a_mbdoor"),
     ActorRel(NonMatching, "d_a_mgameboard"),
     ActorRel(NonMatching, "d_a_mmusic"),
     ActorRel(NonMatching, "d_a_mo2"),
@@ -1594,7 +1602,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_tag_etc"),
     ActorRel(NonMatching, "d_a_tag_island"),
     ActorRel(NonMatching, "d_a_tag_kf1"),
-    ActorRel(NonMatching, "d_a_tag_ret"),
+    ActorRel(Matching,    "d_a_tag_ret", extra_cflags=["-sym off"]),
     ActorRel(NonMatching, "d_a_tag_volcano"),
     ActorRel(NonMatching, "d_a_title"),
     ActorRel(NonMatching, "d_a_tn"),

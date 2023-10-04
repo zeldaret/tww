@@ -23,10 +23,14 @@ public:
     virtual ~cM3dGSph() {}
     void SetC(const cXyz&);
     void SetR(f32);
+    void Set(const cM3dGSphS & src) {
+        SetC(src.mCenter);
+        SetR(src.mRadius);
+    }
     bool cross(const cM3dGSph*, cXyz*) const;
     bool cross(const cM3dGCyl*, cXyz*) const;
     bool cross(const cM3dGSph*, f32*) const;
-    const cXyz& GetC(void) const { return mCenter; }
+    const cXyz& GetC() const { return mCenter; }
     const cXyz* GetCP() const { return &mCenter; }
     const f32 GetR(void) const { return mRadius; }
     f32 GetCX(void) const { return mCenter.x; }

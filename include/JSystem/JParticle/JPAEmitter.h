@@ -28,12 +28,23 @@ template<typename T>
 class JPACallBackBase {
 public:
     JPACallBackBase() {}
-    virtual ~JPACallBackBase();
+    virtual ~JPACallBackBase() {}
     
     virtual void init(JPABaseEmitter*);
     virtual void execute(JPABaseEmitter*);
     virtual void executeAfter(JPABaseEmitter*);
     virtual void draw(JPABaseEmitter*);
+};
+
+template<typename T, typename U>
+class JPACallBackBase2 {
+public:
+    JPACallBackBase2() {}
+    virtual ~JPACallBackBase2() {}
+    
+    virtual void init(JPABaseEmitter*, JPABaseParticle*);
+    virtual void execute(JPABaseEmitter*, JPABaseParticle*);
+    virtual void draw(JPABaseEmitter*, JPABaseParticle*);
 };
 
 class JPABaseEmitter {
@@ -73,6 +84,12 @@ public:
     void setGlobalRTMatrix(MtxP mtx) {
         JPASetRMtxTVecfromMtx(mtx, mGlobalRotation, mGlobalTranslation);
     }
+    void setGlobalTranslation(f32 x, f32 y, f32 z) { mGlobalTranslation.set(x, y, z); }
+    void setGlobalParticleScale(const JGeometry::TVec3<float>& scale) {
+        mGlobalScale.set(scale);
+        mGlobalScale2D.set(scale);
+    }
+    void setMaxFrame(s32 maxFrame) { mMaxFrame = maxFrame; }
 
     void setVolumeSweep(float i_volSweep) { mVolumeSweep = i_volSweep; }
     void setLifeTime(s16 i_lifeTime) { mLifeTime = i_lifeTime; }
@@ -138,7 +155,7 @@ public:
     /* 0x194 */ JSUPtrList* mpPtclVacList;
     /* 0x198 */ JPADataBlockLinkInfo* mpDataLinkInfo;
     /* 0x19C */ JPACallBackBase<JPABaseEmitter>* mpEmitterCallBack;
-    /* 0x1A0 */ JPACallBackBase2* mpParticleCallBack;
+    /* 0x1A0 */ JPACallBackBase2<JPABaseEmitter,JPABaseParticle>* mpParticleCallBack;
     /* 0x1A4 */ JMath::TRandom_fast_ mRandomSeed;
     /* 0x1A8 */ Mtx mGlobalRotation;
     /* 0x1D8 */ JGeometry::TVec3<f32> mGlobalScale;

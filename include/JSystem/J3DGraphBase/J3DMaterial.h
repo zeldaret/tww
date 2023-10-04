@@ -43,6 +43,8 @@ public:
 
     J3DMaterial* getNext() const { return mNext; }
     J3DShape* getShape() const { return mShape; }
+    u32 getMaterialMode() { return mMaterialMode; }
+    void setMaterialMode(u32 mode) { mMaterialMode = mode; }
     J3DTevBlock* getTevBlock() const { return mTevBlock; }
     J3DColorBlock* getColorBlock() const { return mColorBlock; }
     J3DTexGenBlock* getTexGenBlock() const { return mTexGenBlock; }
@@ -59,8 +61,8 @@ public:
     }
     J3DNBTScale* getNBTScale() const { return mTexGenBlock->getNBTScale(); }
     u16 getTexNo(u32 idx) const { return mTevBlock->getTexNo(idx); }
-    GXColor* getTevKColor(u32 param_0) { return mTevBlock->getTevKColor(param_0); }
-    GXColorS10* getTevColor(u32 param_0) { return mTevBlock->getTevColor(param_0); }
+    J3DGXColor* getTevKColor(u32 param_0) { return mTevBlock->getTevKColor(param_0); }
+    J3DGXColorS10* getTevColor(u32 param_0) { return mTevBlock->getTevColor(param_0); }
     J3DFog* getFog() { return mPEBlock->getFog(); }
     J3DTexMtx* getTexMtx(u32 idx) { return mTexGenBlock->getTexMtx(idx); }
     u16 getIndex() { return mIndex; }

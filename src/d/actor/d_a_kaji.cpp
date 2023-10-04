@@ -48,7 +48,7 @@ BOOL daKaji_c::CreateHeap() {
         modelData,
         NULL, NULL,
         (J3DAnmTransformKey*)dComIfG_getObjectRes("Kaji", 0xE), // kj_wait.bck
-        2, 0.0f, 0, -1, 1,
+        J3DFrameCtrl::LOOP_REPEAT_e, 0.0f, 0, -1, 1,
         dComIfG_getObjectRes("Kaji", 0x8), // kj_wait.bas
         0x00080000,
         0x11000002

@@ -18,7 +18,10 @@ public:
     cM3dGCps(void) {}
     virtual ~cM3dGCps(void) {}
     void Set(const cXyz&, const cXyz&, f32);
-    void Set(const cM3dGCpsS&);
+    void Set(const cM3dGCpsS& src) {
+        SetStartEnd(src.mStart, src.mEnd);
+        SetR(src.mRadius);
+    }
     void SetCps(const cM3dGCps&);
     bool Cross(cM3dGCps const* other, cXyz* xyz) const {
         return cM3d_Cross_CpsCps(*this, *other, xyz);

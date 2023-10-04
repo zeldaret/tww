@@ -1,7 +1,7 @@
 Sections:
-	.text       type:code align:8
-	.ctors      type:rodata align:8
-	.dtors      type:rodata align:8
+	.text       type:code align:4
+	.ctors      type:rodata align:4
+	.dtors      type:rodata align:4
 	.rodata     type:rodata align:8
 	.data       type:data align:8
 	.bss        type:bss align:8

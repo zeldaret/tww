@@ -23,13 +23,23 @@ class cCcD_CylAttr;
 class cCcD_SphAttr;
 
 enum cCcD_ObjAtType {
-    /* 0x00000002 */ AT_TYPE_SWORD = (1 << 1),
-    /* 0x00000020 */ AT_TYPE_BOMB = (1 << 5),
-    /* 0x00000040 */ AT_TYPE_BOOMERANG = (1 << 6),
-    /* 0x00004000 */ AT_TYPE_NORMAL_ARROW = (1 << 14),
-    /* 0x00040000 */ AT_TYPE_FIRE_ARROW = (1 << 18),
-    /* 0x00080000 */ AT_TYPE_ICE_ARROW = (1 << 19),
-    /* 0x00100000 */ AT_TYPE_LIGHT_ARROW = (1 << 20),
+    /* 0x00000002 */ AT_TYPE_SWORD          = (1 << 1),
+    /* 0x00000020 */ AT_TYPE_BOMB           = (1 << 5),
+    /* 0x00000040 */ AT_TYPE_BOOMERANG      = (1 << 6),
+    /* 0x00000080 */ AT_TYPE_BOKO_STICK     = (1 << 7),
+    /* 0x00000100 */ AT_TYPE_WATER          = (1 << 8),
+    /* 0x00000200 */ AT_TYPE_FIRE           = (1 << 9),
+    /* 0x00000400 */ AT_TYPE_MACHETE        = (1 << 10),
+    /* 0x00004000 */ AT_TYPE_NORMAL_ARROW   = (1 << 14),
+    /* 0x00010000 */ AT_TYPE_SKULL_HAMMER   = (1 << 16),
+    /* 0x00040000 */ AT_TYPE_FIRE_ARROW     = (1 << 18),
+    /* 0x00080000 */ AT_TYPE_ICE_ARROW      = (1 << 19),
+    /* 0x00100000 */ AT_TYPE_LIGHT_ARROW    = (1 << 20),
+    /* 0x00200000 */ AT_TYPE_LEAF_WIND      = (1 << 21),
+    /* 0x01000000 */ AT_TYPE_STALFOS_MACE   = (1 << 24),
+    /* 0x04000000 */ AT_TYPE_DARKNUT_SWORD  = (1 << 26),
+    /* 0x08000000 */ AT_TYPE_GRAPPLING_HOOK = (1 << 27),
+    /* 0x10000000 */ AT_TYPE_MOBLIN_SPEAR   = (1 << 28),
 };
 
 class cCcD_ShapeAttr {
@@ -77,6 +87,10 @@ public:
 };
 
 STATIC_ASSERT(0x20 == sizeof(cCcD_ShapeAttr));
+
+struct cCcD_SrcCylAttr {
+    cM3dGCylS mCyl;
+};
 
 struct cCcD_SrcTriAttr {
     cM3dGTriS mTri;
@@ -156,6 +170,10 @@ class cCcD_SphAttr : public cCcD_ShapeAttr, public cM3dGSph {
 public:
     cCcD_SphAttr() {}
 
+    inline void Set(const cCcD_SrcSphAttr& src) {
+        cM3dGSph::Set(src.mSph);
+    }
+
     virtual ~cCcD_SphAttr() {}
     virtual const cXyz& GetCoCP() const { return mCenter; }
     virtual cXyz& GetCoCP() { return mCenter; }
@@ -187,6 +205,10 @@ STATIC_ASSERT(0x34 == sizeof(cCcD_SphAttr));
 class cCcD_CylAttr : public cCcD_ShapeAttr, public cM3dGCyl {
 public:
     cCcD_CylAttr() {}
+    inline void Set(const cCcD_SrcCylAttr& src) {
+        cM3dGCyl::Set(src.mCyl);
+    }
+
     virtual ~cCcD_CylAttr() {}
     virtual const cXyz& GetCoCP() const { return mCenter; }
     virtual bool CrossAtTg(cCcD_SphAttr const&, cXyz*) const;
@@ -366,7 +388,7 @@ public:
     virtual ~cCcD_ObjAt() {}
     void SetHit(cCcD_Obj*);
     void Set(cCcD_SrcObjAt const&);
-    void ClrHit() { ClrObj(); }
+    void ClrHit() { ClrRPrm(1); ClrObj(); }
     int GetType() const { return mType; }
     u32 GetGrp() const { return MskSPrm(0x1E); }
     bool ChkSet() const { return MskSPrm(1); }
@@ -391,7 +413,7 @@ public:
     virtual ~cCcD_ObjTg() {}
     void Set(cCcD_SrcObjTg const&);
     void SetGrp(u32);
-    void ClrHit();
+    void ClrHit() { ClrRPrm(1); ClrObj(); }
     void SetHit(cCcD_Obj*);
     int GetType() const { return mType; }
     void SetType(u32 type) { mType = type; }
@@ -410,7 +432,7 @@ class cCcD_ObjCo : public cCcD_ObjCommonBase {
 public:
     virtual ~cCcD_ObjCo() {}
     void SetHit(cCcD_Obj*);
-    void ClrHit();
+    void ClrHit() { ClrRPrm(1); ClrObj(); }
     void SetIGrp(u32);
     void SetVsGrp(u32);
     u32 GetGrp() const { return MskSPrm(0x1E); }
@@ -515,6 +537,7 @@ public:
     cCcD_DivideInfo& GetDivideInfo() { return mDivideInfo; }
     cCcD_DivideInfo* GetPDivideInfo() { return &mDivideInfo; }
     int ChkBsRevHit() const { return mFlags & 2; }
+    void OnBsRevHit() { mFlags |= 2; }
 
 private:
     /* 0x040 */ int mFlags;
@@ -527,7 +550,7 @@ STATIC_ASSERT(0x50 == sizeof(cCcD_Obj));
 class cCcD_GObjInf : public cCcD_Obj {
 public:
     cCcD_GObjInf() {}
-    virtual ~cCcD_GObjInf() {}
+    virtual ~cCcD_GObjInf();
     virtual void ClrAtHit() { mObjAt.ClrHit(); }
     virtual void ClrTgHit() { mObjTg.ClrHit(); }
     virtual void ClrCoHit() { mObjCo.ClrHit(); }

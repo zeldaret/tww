@@ -334,8 +334,8 @@ BOOL daNh_c::searchPlayer() {
     f32 playerDistDelta = mPlayerDist - playerDist;
     mPlayerDist = playerDist;
     if (playerDelta.absXZ() > 0.001f && playerDist < 600.0f && playerDistDelta > l_HIO.prm.mMinFrightenSpeed) {
-        // Player is nearby and moving closer. The Forest Firefly becomes frightened and tries to head home.
-        setAction(&returnAction, NULL);
+        // Player is nearby and moving closer. The Forest Firefly becomes frightened and tries to escape.
+        setAction(&escapeAction, NULL);
         return TRUE;
     }
     
@@ -549,7 +549,7 @@ void daNh_c::playBrkAnm() {
 
 /* 800FACE8-800FAE1C       .text draw__6daNh_cFv */
 BOOL daNh_c::draw() {
-    g_env_light.settingTevStruct(0, &current.pos, &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &mTevStr);
     
     J3DModelData* modelData = mpModel->getModelData();
@@ -562,12 +562,12 @@ BOOL daNh_c::draw() {
     if (mat) {
         J3DTevBlock* tevBlock = mat->getTevBlock();
         if (tevBlock) {
-            GXColorS10* color = tevBlock->getTevColor(1);
+            GXColorS10* color = &tevBlock->getTevColor(1)->mColor;
             if (color) {
                 mGlowAlpha = ((color->r + color->g + color->b) / 3) >> 2;
             }
             
-            GXColor* kColor = tevBlock->getTevKColor(3);
+            GXColor* kColor = &tevBlock->getTevKColor(3)->mColor;
             if (kColor) {
                 kColor->a = mAlpha;
             }

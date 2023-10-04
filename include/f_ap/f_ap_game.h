@@ -9,8 +9,8 @@ void fapGm_Execute();
 
 class fapGm_HIO_c {
 public:
-    /* 80018944 */ fapGm_HIO_c();
-    /* 80018AE0 */ virtual ~fapGm_HIO_c();
+    fapGm_HIO_c();
+    virtual ~fapGm_HIO_c();
 
     /* 0x04 */ u8 field_0x04[0x06 - 0x04];
     /* 0x06 */ u8 mDisplayMeter;

@@ -42,10 +42,9 @@ public:
         GFX_FIFO(u32) = getMtxIdxRegB();
     }
 
-    void setCurrentTexMtx(u8 param_1, u8 param_2, u8 param_3, u8 param_4,
-        u8 param_5, u8 param_6, u8 param_7, u8 param_8) {
-        mMtxIdxRegA = ((param_1 & 0xff) << 6) | (param_2 << 0xc)| (param_3 << 0x12) | (param_4 << 0x18);
-        mMtxIdxRegB = (param_5) | param_6 << 6 | param_7 << 0xc | param_8 << 0x12;
+    void setCurrentTexMtx(u8 t0, u8 t1, u8 t2, u8 t3, u8 t4, u8 t5, u8 t6, u8 t7) {
+        mMtxIdxRegA = t0 << 6 | t1 << 12 | t2 << 18 | t3 << 24;
+        mMtxIdxRegB = t4 << 0 | t5 << 6 | t6 << 12 | t7 << 18;
     }
 };
 

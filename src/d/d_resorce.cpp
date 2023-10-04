@@ -91,7 +91,7 @@ static void setToonTex(J3DModelData* pModel) {
                 J3DTevBlock * pTevBlock = pMaterial->getTevBlock();
 
                 if (pTevBlock != NULL) {
-                    GXColorS10 * pTev3 = pTevBlock->getTevColor(3);
+                    GXColorS10 * pTev3 = &pTevBlock->getTevColor(3)->mColor;
                     if (pTev3 != NULL)
                         pTev3->a = pTevBlock->getTevStageNum();
 
@@ -131,7 +131,7 @@ static void setToonTex(J3DMaterialTable* pMaterialTable) {
                 J3DTevBlock * pTevBlock = pMaterial->getTevBlock();
 
                 if (pTevBlock != NULL) {
-                    GXColorS10 * pTev3 = pTevBlock->getTevColor(3);
+                    GXColorS10 * pTev3 = &pTevBlock->getTevColor(3)->mColor;
                     if (pTev3 != NULL)
                         pTev3->a = pTevBlock->getTevStageNum();
                 }
@@ -142,8 +142,6 @@ static void setToonTex(J3DMaterialTable* pMaterialTable) {
 
 /* 8006DFD4-8006E7A4       .text loadResource__11dRes_info_cFv */
 int dRes_info_c::loadResource() {
-    // nonmatching, missing mDoExt_transAnmBas anm case
-
     JUT_ASSERT(0x254, mRes == 0);
 
     s32 fileNum = mpArchive->countFile();
@@ -317,8 +315,19 @@ int dRes_info_c::loadResource() {
                 pRes = J3DClusterLoaderDataBase::load(pRes);
                 if (pRes == NULL)
                     return -1;
-            } else if (resType == 'BCKS' || resType == 'BCK') {
-                // TODO
+            } else if (resType == 'BCKS' || resType == 'BCK ') {
+                void *pBasData;
+                if (*((u32*)((char*)pRes + 0x1C)) != 0xFFFFFFFF)
+                    pBasData = (void*)(*((u32*)((char*)pRes + 0x1C)) + ((u32)pRes));
+                else
+                    pBasData = NULL;
+
+                mDoExt_transAnmBas *pAnm  = new mDoExt_transAnmBas(pBasData);
+                if (pAnm == NULL)
+                    return -1;
+
+                J3DAnmLoaderDataBase::setResource(pAnm, pRes);
+                pRes = pAnm;
             } else if (resType == 'BTP ' || resType == 'BTK ' || resType == 'BPK ' || resType == 'BRK ' || resType == 'BLK ' || resType == 'BVA ') {
                 pRes = J3DAnmLoaderDataBase::load(pRes);
                 if (pRes == NULL)

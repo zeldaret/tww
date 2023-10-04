@@ -196,3 +196,5 @@ void JKRAramStream::setTransBuffer(u8* buffer, u32 bufferSize, JKRHeap* heap) {
 JKRAramStreamCommand::JKRAramStreamCommand() {
     mAllocatedTransferBuffer = false;
 }
+
+static void dummy(JSURandomInputStream* stream) { stream->getAvailable(); }

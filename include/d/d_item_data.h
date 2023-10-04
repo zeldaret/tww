@@ -299,7 +299,7 @@ struct dItem_data_item_info {
     /* 0x00 */ u8 mShadowSize;
     /* 0x01 */ u8 mCollisionH; // Cylinder Height
     /* 0x02 */ u8 mCollisionR; // Cylinder Radius
-    /* 0x03 */ u8 mFlag;
+    /* 0x03 */ u8 mFlag; // TODO enum
 };
 
 STATIC_ASSERT(sizeof(dItem_data_item_info) == 0x4);

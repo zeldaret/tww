@@ -9,24 +9,29 @@ typedef struct _GXColorS10 GXColorS10;
 class J3DMatColorAnm {
 public:
     ~J3DMatColorAnm() {}
-    J3DMatColorAnm() {}
-    J3DMatColorAnm(J3DAnmColor * pAnm, u16 materialIdx) {
+    J3DMatColorAnm() {
+        mAnmColor = NULL;
+        mAnmIndex = 0;
+    }
+    J3DMatColorAnm(J3DAnmColor* pAnm, u16 anmIdx) {
         mAnmColor = pAnm;
-        mMaterialIdx = materialIdx;
+        mAnmIndex = anmIdx;
     }
 
     void operator=(J3DMatColorAnm const& other) {
         mAnmColor = other.mAnmColor;
-        mMaterialIdx = other.mMaterialIdx;
+        mAnmIndex = other.mAnmIndex;
         mAnmFlag = other.mAnmFlag;
     }
 
+    void setAnmIndex(u16 index) { mAnmIndex = index; }
     void setAnmFlag(bool flag) { mAnmFlag = flag; }
     bool getAnmFlag() const { return mAnmFlag; }
-    void calc(_GXColor* pColor) const { mAnmColor->getColor(mMaterialIdx, pColor); }
+    void setAnmColor(J3DAnmColor* anmColor) { mAnmColor = anmColor; }
+    void calc(_GXColor* pColor) const { mAnmColor->getColor(mAnmIndex, pColor); }
 
 private:
-    /* 0x0 */ u16 mMaterialIdx;
+    /* 0x0 */ u16 mAnmIndex;
     /* 0x2 */ u16 mAnmFlag;
     /* 0x4 */ J3DAnmColor* mAnmColor;
 };  // Size: 0x8
@@ -34,21 +39,26 @@ private:
 class J3DTexNoAnm {
 public:
     ~J3DTexNoAnm() {};
-    J3DTexNoAnm() {};
-    virtual void calc(u16* param_0) const { mAnmTexPattern->getTexNo(field_0x4, param_0); }
+    J3DTexNoAnm() {
+        mAnmTexPattern = NULL;
+        mAnmIndex = 0;
+    };
+    virtual void calc(u16* param_0) const { mAnmTexPattern->getTexNo(mAnmIndex, param_0); }
 
     void operator=(J3DTexNoAnm const& other) {
         mAnmTexPattern = other.mAnmTexPattern;
-        field_0x4 = other.field_0x4;
+        mAnmIndex = other.mAnmIndex;
         mAnmFlag = other.mAnmFlag;
     }
 
+    void setAnmIndex(u16 index) { mAnmIndex = index; }
     void setAnmFlag(bool flag) { mAnmFlag = flag; }
     bool getAnmFlag() const { return mAnmFlag; }
     J3DAnmTexPattern* getAnmTexPattern() { return mAnmTexPattern; }
+    void setAnmTexPattern(J3DAnmTexPattern* pattern) { mAnmTexPattern = pattern; }
 
 private:
-    /* 0x4 */ u16 field_0x4;
+    /* 0x4 */ u16 mAnmIndex;
     /* 0x6 */ u16 mAnmFlag;
     /* 0x8 */ J3DAnmTexPattern* mAnmTexPattern;
 };  // Size: 0xC
@@ -56,26 +66,31 @@ private:
 class J3DTexMtxAnm {
 public:
     ~J3DTexMtxAnm() {}
-    J3DTexMtxAnm() {}
-    J3DTexMtxAnm(J3DAnmTextureSRTKey * pAnm, u16 materialIdx) {
+    J3DTexMtxAnm() {
+        mAnmIndex = 0;
+        mAnmTransform = NULL;
+    }
+    J3DTexMtxAnm(J3DAnmTextureSRTKey * pAnm, u16 anmIdx) {
         mAnmTransform = pAnm;
-        mMaterialIdx = materialIdx;
+        mAnmIndex = anmIdx;
     }
 
     void operator=(J3DTexMtxAnm const& other) {
         mAnmTransform = other.mAnmTransform;
-        mMaterialIdx = other.mMaterialIdx;
+        mAnmIndex = other.mAnmIndex;
         mAnmFlag = other.mAnmFlag;
     }
 
-    void setAnmFlag(bool flag) { mAnmFlag = flag; }
-    void calc(J3DTextureSRTInfo* pSRTInfo) const {
-        mAnmTransform->getTransform(mMaterialIdx, pSRTInfo);
-    }
+    void setAnmIndex(u16 index) { mAnmIndex = index; }
     bool getAnmFlag() const { return mAnmFlag; }
+    void setAnmFlag(bool flag) { mAnmFlag = flag; }
+    void setAnmTransform(J3DAnmTextureSRTKey* transform) { mAnmTransform = transform; }
+    void calc(J3DTextureSRTInfo* pSRTInfo) const {
+        mAnmTransform->getTransform(mAnmIndex, pSRTInfo);
+    }
 
 private:
-    /* 0x0 */ u16 mMaterialIdx;
+    /* 0x0 */ u16 mAnmIndex;
     /* 0x2 */ u16 mAnmFlag;
     /* 0x4 */ J3DAnmTextureSRTKey* mAnmTransform;
 };  // Size: 0x8
@@ -83,24 +98,29 @@ private:
 class J3DTevKColorAnm {
 public:
     ~J3DTevKColorAnm() {}
-    J3DTevKColorAnm() {}
-    J3DTevKColorAnm(J3DAnmTevRegKey * pAnm, u16 materialIdx) {
+    J3DTevKColorAnm() {
+        mAnmTevReg = NULL;
+        mAnmIndex = 0;
+    }
+    J3DTevKColorAnm(J3DAnmTevRegKey * pAnm, u16 anmIdx) {
         mAnmTevReg = pAnm;
-        mMaterialIdx = materialIdx;
+        mAnmIndex = anmIdx;
     }
 
     void operator=(J3DTevKColorAnm const& other) {
         mAnmTevReg = other.mAnmTevReg;
-        mMaterialIdx = other.mMaterialIdx;
+        mAnmIndex = other.mAnmIndex;
         mAnmFlag = other.mAnmFlag;
     }
 
+    void setAnmIndex(u16 index) { mAnmIndex = index; }
     void setAnmFlag(bool flag) { mAnmFlag = flag; }
     bool getAnmFlag() const { return mAnmFlag; }
-    void calc(_GXColor* pColor) const { mAnmTevReg->getTevKonstReg(mMaterialIdx, pColor); }
+    void setAnmTevReg(J3DAnmTevRegKey* tevReg) { mAnmTevReg = tevReg; }
+    void calc(_GXColor* pColor) const { mAnmTevReg->getTevKonstReg(mAnmIndex, pColor); }
 
 private:
-    /* 0x0 */ u16 mMaterialIdx;
+    /* 0x0 */ u16 mAnmIndex;
     /* 0x2 */ u16 mAnmFlag;
     /* 0x4 */ J3DAnmTevRegKey* mAnmTevReg;
 };  // Size: 0x8
@@ -108,24 +128,29 @@ private:
 class J3DTevColorAnm {
 public:
     ~J3DTevColorAnm() {}
-    J3DTevColorAnm() {}
-    J3DTevColorAnm(J3DAnmTevRegKey * pAnm, u16 materialIdx) {
+    J3DTevColorAnm() {
+        mAnmTevReg = NULL;
+        mAnmIndex = 0;
+    }
+    J3DTevColorAnm(J3DAnmTevRegKey * pAnm, u16 anmIdx) {
         mAnmTevReg = pAnm;
-        mMaterialIdx = materialIdx;
+        mAnmIndex = anmIdx;
     }
 
     void operator=(J3DTevColorAnm const& other) {
         mAnmTevReg = other.mAnmTevReg;
-        mMaterialIdx = other.mMaterialIdx;
+        mAnmIndex = other.mAnmIndex;
         mAnmFlag = other.mAnmFlag;
     }
 
+    void setAnmIndex(u16 index) { mAnmIndex = index; }
     void setAnmFlag(bool flag) { mAnmFlag = flag; }
     bool getAnmFlag() const { return mAnmFlag; }
-    void calc(_GXColorS10* pColor) const { mAnmTevReg->getTevColorReg(mMaterialIdx, pColor); }
+    void setAnmTevReg(J3DAnmTevRegKey* tevReg) { mAnmTevReg = tevReg; }
+    void calc(_GXColorS10* pColor) const { mAnmTevReg->getTevColorReg(mAnmIndex, pColor); }
 
 private:
-    /* 0x0 */ u16 mMaterialIdx;
+    /* 0x0 */ u16 mAnmIndex;
     /* 0x2 */ u16 mAnmFlag;
     /* 0x4 */ J3DAnmTevRegKey* mAnmTevReg;
 };  // Size: 0x8

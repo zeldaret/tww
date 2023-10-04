@@ -30,13 +30,21 @@ struct J3DUnkCalc2 {
 
 typedef void (*J3DCalcCallBack)(J3DModel*, u32 timing);
 
+class J3DAnmVisibilityFull;
 class J3DMatPacket;
 class J3DShapePacket;
 
 class J3DVisibilityManager {
 public:
+    J3DVisibilityManager(J3DAnmVisibilityFull* visibility) {
+        mAnmVisibility = visibility;
+        field_0x8 = 1;
+    }
     virtual ~J3DVisibilityManager();
     virtual void setVisibility(J3DModelData*);
+
+    /* 0x04 */ J3DAnmVisibilityFull* mAnmVisibility;
+    /* 0x08 */ int field_0x8;
 };
 
 class J3DUnkCallBack {
@@ -66,6 +74,8 @@ public:
     void calcDrawMtx();
     void prepareShapePackets();
     MtxP getAnmMtx(int idx) { return mpNodeMtx[idx]; }
+    void setAnmMtx(int idx, Mtx mtx) { MTXCopy(mtx, mpNodeMtx[idx]); }
+    MtxP getWeightAnmMtx(int idx) { return mpWeightEnvMtx[idx]; }
 
     s32 setNoUseDrawMtx();
     s32 createSingleDrawMtx(J3DModelData*);
@@ -76,7 +86,6 @@ public:
     virtual void entry();
     virtual void calc();
     virtual void calcMaterial();
-    virtual void calcDiffTexMtx();
     virtual void viewCalc();
     virtual ~J3DModel();
 
@@ -105,18 +114,25 @@ public:
     u32 getMtxCalcMode() const { return mFlags & 0x03; }
     u32* getCurrentViewNoPtr() { return &mCurrentViewNo; }
     u8* getScaleFlagArray() const { return mpScaleFlagArr; }
+    u8 getScaleFlag(u32 idx) const { return mpScaleFlagArr[idx]; }
+    void setScaleFlag(int idx, u8 param_1) { mpScaleFlagArr[idx] = param_1; }
+    u8 getEnvScaleFlag(u32 idx) const { return mpEvlpScaleFlagArr[idx]; }
     J3DVertexBuffer* getVertexBuffer() const { return (J3DVertexBuffer*)&mVertexBuffer; }
     J3DMatPacket* getMatPacket(u16 idx) const { return &mpMatPacket[idx]; }
     J3DShapePacket* getShapePacket(u16 idx) const { return &mpShapePacket[idx]; }
     Mtx** getDrawMtxPtrPtr() const { return mpDrawMtxBuf[1]; }
     Mtx* getDrawMtxPtr() const { return mpDrawMtxBuf[1][mCurrentViewNo]; }
+    Mtx& getDrawMtx(u32 idx) const { return getDrawMtxPtr()[idx]; }
     Mtx33** getNrmMtxPtrPtr() const { return mpNrmMtxBuf[1]; }
     Mtx33* getNrmMtxPtr() const { return mpNrmMtxBuf[1][mCurrentViewNo]; }
-    Mtx33*** getBumpMtxPtrPtr() const { return mpBumpMtxArr[1]; }
+    Mtx33& getNrmMtx(u32 idx) const { return getNrmMtxPtr()[idx]; }
+    Mtx33** getBumpMtxPtrPtr(u32 idx) const { return mpBumpMtxArr[1][idx]; }
+    Mtx33* getBumpMtxPtr(u32 idx) const { return mpBumpMtxArr[1][idx][mCurrentViewNo]; }
     void setBaseScale(const Vec& scale) { mBaseScale = scale; }
     void setUserArea(void* area) { mUserArea = area; }
     void* getUserArea() const { return mUserArea; }
     Vec* getBaseScale() { return &mBaseScale; }
+    void setVisibilityManager(J3DVisibilityManager* manager) { mpVisibilityManager = manager; }
 
     void setAnmMtx(int jntNo, Mtx mtx) {
         MTXCopy(mtx, mpNodeMtx[jntNo]);

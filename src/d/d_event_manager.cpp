@@ -109,10 +109,11 @@ void dEvent_manager_c::order(short) {
 /* 800744E8-80074528       .text startCheck__16dEvent_manager_cFs */
 void dEvent_manager_c::startCheck(short) {
     /* Nonmatching */
+    startCheckOld()
 }
 
 /* 80074528-80074564       .text startCheckOld__16dEvent_manager_cFPCc */
-void dEvent_manager_c::startCheckOld(const char*) {
+int dEvent_manager_c::startCheckOld(const char*) {
     /* Nonmatching */
 }
 

@@ -1,10 +1,32 @@
 #ifndef J3DTEXTURE_H
 #define J3DTEXTURE_H
 
+#include "JSystem/J3DGraphBase/J3DGD.h"
 #include "JSystem/J3DGraphBase/J3DStruct.h"
+#include "JSystem/J3DGraphBase/J3DTevs.h"
 #include "JSystem/JUtility/JUTTexture.h"
 #include "dolphin/mtx/mtx.h"
 #include "dolphin/types.h"
+
+inline void J3DGDLoadTexMtxImm(Mtx pMtx, u32 i, GXTexMtxType mType) {
+    u16 cmd = i * 4;
+    u8 len = mType == GX_MTX2x4 ? 8 : 12;
+    J3DGDWriteXFCmdHdr(cmd, len);
+    J3DGDWrite_f32(pMtx[0][0]);
+    J3DGDWrite_f32(pMtx[0][1]);
+    J3DGDWrite_f32(pMtx[0][2]);
+    J3DGDWrite_f32(pMtx[0][3]);
+    J3DGDWrite_f32(pMtx[1][0]);
+    J3DGDWrite_f32(pMtx[1][1]);
+    J3DGDWrite_f32(pMtx[1][2]);
+    J3DGDWrite_f32(pMtx[1][3]);
+    if (mType == GX_MTX3x4) {
+        J3DGDWrite_f32(pMtx[2][0]);
+        J3DGDWrite_f32(pMtx[2][1]);
+        J3DGDWrite_f32(pMtx[2][2]);
+        J3DGDWrite_f32(pMtx[2][3]);
+    }
+}
 
 class J3DTexture {
 private:
@@ -28,11 +50,16 @@ public:
 
 class J3DTexMtx {
 public:
+    J3DTexMtx() { mTexMtxInfo = j3dDefaultTexMtxInfo; }
     J3DTexMtx(const J3DTexMtxInfo& info) {
         mTexMtxInfo = info;
     }
-    void load(u32) const;
-    void calc(f32 const (*)[4]);
+    ~J3DTexMtx() {}
+    void load(u32 i) const {
+        GDOverflowCheck(53);
+        J3DGDLoadTexMtxImm((Mtx&)mMtx, i * 3 + 30, (GXTexMtxType)mTexMtxInfo.mProjection);
+    };
+    void calc();
     void calcTexMtx(f32 const (*)[4]);
     void calcPostTexMtx(f32 const (*)[4]);
     void loadTexMtx(u32) const;
@@ -41,42 +68,22 @@ public:
     J3DTexMtxInfo& getTexMtxInfo() { return mTexMtxInfo; }
     Mtx& getMtx() { return mMtx; }
     void setEffectMtx(Mtx effectMtx) { mTexMtxInfo.setEffectMtx(effectMtx); }
+    Mtx& getViewMtx() { return mViewMtx; }
+    void setViewMtx(const Mtx viewMtx) { MTXCopy(viewMtx, mViewMtx); }
 
 private:
     /* 0x00 */ J3DTexMtxInfo mTexMtxInfo;
     /* 0x64 */ Mtx mMtx;
-};  // Size: 0x94
-
-struct J3DTexCoordInfo {
-    /* 0x0 */ u8 mTexGenType;
-    /* 0x1 */ u8 mTexGenSrc;
-    /* 0x2 */ u8 mTexGenMtx;
-};
+    /* 0x94 */ Mtx mViewMtx;
+};  // Size: 0xc4
 
 struct J3DTexCoord : public J3DTexCoordInfo {
-    J3DTexCoord();
+    J3DTexCoord() { *(J3DTexCoordInfo*)this = j3dDefaultTexCoordInfo[0]; }
 
-    void setTexCoordInfo(J3DTexCoordInfo *param_1) {
-        *(J3DTexCoordInfo*)this = *param_1;
-    }
-
-    u8 getTexGenMtx() { return mTexGenMtx & 0xff; }
-    u16 getTexMtxReg() { return mTexMtxReg & 0xff; }
-
+    u8 getTexGenType() { return mTexGenType; }
+    u8 getTexGenSrc() { return mTexGenSrc; }
+    u32 getTexGenMtx() { return mTexGenMtx & 0xFF; }
     void setTexGenMtx(u8 v) { mTexGenMtx = v; }
-
-    void resetTexMtxReg() {
-        mTexMtxReg = mTexGenMtx;
-    }
-
-    /* 0x4 */ u8 mTexMtxReg;
-};  // Size: 0x6
-
-struct J3DDefaultTexCoordInfo {
-    /* 0x0 */ u8 mTexGenType;
-    /* 0x1 */ u8 mTexGenSrc;
-    /* 0x2 */ u8 mTexGenMtx;
-    /* 0x3 */ u8 pad;
-};
+};  // Size: 0x4
 
 #endif /* J3DTEXTURE_H */
