@@ -4,6 +4,7 @@
 //
 
 #include "f_op/f_op_actor_mng.h"
+#include "f_pc/f_pc_manager.h"
 #include "f_op/f_op_msg.h"
 #include "f_op/f_op_draw_tag.h"
 #include "JSystem/JKernel/JKRHeap.h"
@@ -429,7 +430,7 @@ int daObjMknjD::Act_c::Delete() {
 s32 daObjMknjD::Act_c::Mthd_Delete() {
     int bgDeleteResult = MoveBGDelete();
     
-    if (mBase.mUnk2 != 3) {
+    if (fpcM_CreateResult(this) != 3) {
         dComIfG_resDelete(&mPhs, M_arcname);
     }
 
