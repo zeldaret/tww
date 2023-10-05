@@ -17,44 +17,36 @@
 class kytag05_class : public fopAc_ac_c {
 public:
     /* 0x00 */ u8 mWindIndex;
-    /* 0x04 */ u32 mCurrWindDir;
-    /* 0x08 */ u32 field_0x298;
+    /* 0x04 */ int mCurrWindDir;
+    /* 0x08 */ int field_0x298;
 }; /* size = 0x29C */
 
 BOOL daKytag05_Draw(kytag05_class*) {
     return true;
 }
 
+static const s16 wind_table[] = {
+    0,    // 18
+    90,   // 1C
+    180,  // 20
+    270,  // 24
+};
 
 /* 00000080-000003F4       .text daKytag05_Execute__FP13kytag05_class */
 int daKytag05_Execute(kytag05_class* a_this) {
     /* Nonmatching */
-    static s16 wind_table[] = {
-        0,    // 18
-        90,   // 1C
-        180,  // 20
-        270,  // 24
-        360,  // 28
-        450,  // 2C
-        540,  // 30
-        630,  // 34
-        720,  // 38
-        810,  // 3C
-        900   // 40
-    };
+
 
     daPy_py_c *playerActor;
     camera_class *mpCamera;
-    f32 var_f1;
     f32 cameraEyeZ;
     f32 i_blend;
     f32 windPow;
-    u32 demoField;
 
     mpCamera = dComIfGp_getCamera(0);
     playerActor = daPy_getPlayerActorClass();
     windPow = dKyw_get_wind_pow();
-    i_blend = 0;
+    i_blend = 5;
 
     if (g_env_light.mWind.mEvtWindSet == 0xFF) {
         return 1;
@@ -62,9 +54,9 @@ int daKytag05_Execute(kytag05_class* a_this) {
     if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode != 0 &&
         dComIfGp_getEventManager().startCheckOld("demo41") != 0 &&
         g_dComIfG_gameInfo.play.getDemo() != NULL) {
-        demoField = g_dComIfG_gameInfo.play.getDemo()->field_0xd4;
+        u32 demoField = g_dComIfG_gameInfo.play.getDemo()->field_0xd4;
         if(demoField >= 0x186) {
-            var_f1 = (demoField - 90.0f) / 180.0f;
+            f32 var_f1 = (demoField - 90.0f) / 180.0f;
             if(var_f1 > i_blend) {
                 var_f1 = i_blend;
             }
@@ -75,9 +67,10 @@ int daKytag05_Execute(kytag05_class* a_this) {
         }
     }
     dKy_custom_colset(0, 7, i_blend);
-    if((a_this->mWindIndex & 1) == 0) {
-        
-        if(a_this->mCurrWindDir >= wind_table[(a_this->mWindIndex & 0xFFFFFFFE + 0x10)]) {
+    u8 windIndex = a_this->mWindIndex;
+    if((windIndex & 1) == 0) {
+        s32 index = a_this->mWindIndex & ~0x1 + 0x10;
+        if (a_this->mCurrWindDir >= wind_table[a_this->mWindIndex/2]) {
             a_this->mCurrWindDir = 0;
             a_this->mWindIndex += 1;
             g_env_light.mWind.mEvtWindSet = 2;
@@ -85,12 +78,13 @@ int daKytag05_Execute(kytag05_class* a_this) {
             a_this->mCurrWindDir += 1;
         }
     } else {
-        if(a_this->mCurrWindDir >= wind_table[a_this->mWindIndex & 0xFE]) {
+        if (a_this->mCurrWindDir >=  (s32)(a_this->mWindIndex & 0xFFFFFFFE) + 8) {
             a_this->mWindIndex += 1;
             if(a_this->mWindIndex >> 1 >= 4) {
                 a_this->mWindIndex = 0;
             }
-            dKyw_evt_wind_set(0, wind_table[a_this->mWindIndex]);
+            s32 index = a_this->mWindIndex & ~0x1 + 0x10;
+            dKyw_evt_wind_set(0, wind_table[index]);
             a_this->mCurrWindDir = 0;
             g_env_light.mWind.mEvtWindSet = 1;
         } else {
@@ -98,21 +92,21 @@ int daKytag05_Execute(kytag05_class* a_this) {
         }
     }
     cameraEyeZ = mpCamera->mLookat.mEye.z;
-    if(cameraEyeZ > 360 || cameraEyeZ > 360 &&
-       mpCamera->mLookat.mEye.x > 450 || playerActor->current.pos.x > 450){
-        if(cameraEyeZ > 540 || playerActor->current.pos.z < 540) {
+    if(cameraEyeZ > 360.0f || cameraEyeZ > 360.0f &&
+       mpCamera->mLookat.mEye.x > 450 || playerActor->current.pos.x > 450.0f){
+        if(cameraEyeZ > 540.0f || playerActor->current.pos.z < 540.0f) {
             dKyw_evt_wind_set(0, 0x61A8);
-        } else if(cameraEyeZ > 630 || playerActor->current.pos.z > 630) {
+        } else if(cameraEyeZ > 630.0f || playerActor->current.pos.z > 630.0f) {
             dKyw_evt_wind_set(0, 0x4E20);
         } else {
             dKyw_evt_wind_set(0,0x4650);
         }
     } else if(mpCamera->mLookat.mEye.z < 720 ||  playerActor->current.pos.z < 720) {
-        dKyw_evt_wind_set(0, 25000);
+        dKyw_evt_wind_set(0, -0x3E80);
     } else if(mpCamera->mLookat.mEye.z < 810 || playerActor->current.pos.z < 810 ) {
-        dKyw_evt_wind_set(0, 0);
+        dKyw_evt_wind_set(0, -0x4B00);
     } else if(mpCamera->mLookat.mEye.z < 900 || playerActor->current.pos.z < 900) {
-        dKyw_evt_wind_set(0, -0x32c8);
+        dKyw_evt_wind_set(0, -0x32C8);
     }
 
     mDoAud_seStart(0x106A, 0, (u32)(windPow * 180), 0);
