@@ -4,7 +4,7 @@
 # Uploads progress information to https://github.com/decompals/frogress.
 #
 # Usage:
-#   python3 tools/upload_progress.py -b https://progress.deco.mp/ -p [project] -v [version] build/[version]/progress.json
+#   python3 tools/upload_progress.py -b https://progress.decomp.club/ -p [project] -v [version] build/[version]/progress.json
 #
 # If changes are made, please submit a PR to
 # https://github.com/encounter/dtk-template
