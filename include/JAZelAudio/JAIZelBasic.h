@@ -253,4 +253,10 @@ public:
     /* 0x0 */ u8 field_0x0[0x98];
 };
 
+extern JAIZelBasic jAIZelBasic;
+
+void JAIZelBasic_seStart(u32 p1, Vec* p2, u32 p3, s8 p4, f32 p5, f32 p6, f32 p7, f32 p8, u8 p9){
+    jAIZelBasic.seStart(p1, p2, p3, p4, p5, p6, p7, p8, p9);
+}
+
 #endif /* JAZELAUDIO_JAIZELBASIC_H */

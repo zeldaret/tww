@@ -10,84 +10,113 @@
 #include "d/d_kankyo_wether.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_ykgr.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_audio.h"
+#include "d/d_procname.h"
+
 
 class kytag05_class : public fopAc_ac_c {
 public:
-    /* 0x00 */ u32 field_0x290;
-    /* 0x04 */ u32 field_0x294;
+    /* 0x00 */ u8 mWindIndex;
+    /* 0x04 */ u32 mCurrWindDir;
     /* 0x08 */ u32 field_0x298;
-};
+}; /* size = 0x29C */
 
 BOOL daKytag05_Draw(kytag05_class*) {
     return true;
 }
 
+
 /* 00000080-000003F4       .text daKytag05_Execute__FP13kytag05_class */
 int daKytag05_Execute(kytag05_class* a_this) {
     /* Nonmatching */
-//    static s16 wind_table[] = {
-//        0, //18
-//        90, //1C
-//        180, //20
-//        270 //24
-//        };// 0x2C
+    static s16 wind_table[] = {
+        0,    // 18
+        90,   // 1C
+        180,  // 20
+        270,  // 24
+        360,  // 28
+        450,  // 2C
+        540,  // 30
+        630,  // 34
+        720,  // 38
+        810,  // 3C
+        900   // 40
+    };
 
     daPy_py_c *playerActor;
     camera_class *mpCamera;
-    u8 bVar1;
-    u32 uVar4;
-    u32 iVar5;
+    f32 var_f1;
+    f32 cameraEyeZ;
+    f32 i_blend;
+    f32 windPow;
     u32 demoField;
-    float var_f1;
-    float var_f30;
-    float blend;
 
     mpCamera = dComIfGp_getCamera(0);
     playerActor = daPy_getPlayerActorClass();
-    dKyw_get_wind_pow();
-    var_f30 = 0;
+    windPow = dKyw_get_wind_pow();
+    i_blend = 0;
 
-    if (g_env_light.mWind.mEvtWindSet == 0xff) {
+    if (g_env_light.mWind.mEvtWindSet == 0xFF) {
         return 1;
     }
     if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode != 0 &&
-        dComIfGp_getEventManager().startCheckOld("KYTAG05") != 0 &&
+        dComIfGp_getEventManager().startCheckOld("demo41") != 0 &&
         g_dComIfG_gameInfo.play.getDemo() != NULL) {
         demoField = g_dComIfG_gameInfo.play.getDemo()->field_0xd4;
         if(demoField >= 0x186) {
             var_f1 = (demoField - 90.0f) / 180.0f;
-            if(var_f1 > var_f30) {
-                var_f1 = var_f30;
+            if(var_f1 > i_blend) {
+                var_f1 = i_blend;
             }
-            var_f30 = 0 - var_f1;
-            g_env_light.mSnowCount = 270.0f * var_f30;
+            i_blend = 0.5f - var_f1;
+            g_env_light.mSnowCount = (int)(259 * i_blend);
         } else if (demoField == 0x187 && daYkgr_c::m_emitter != 0) {
             daYkgr_c::m_alpha_flag = 0;
         }
     }
-    dKy_custom_colset(0, 7, var_f30);
-    if(a_this->field_0x290 & 1) {
-        if(a_this->field_0x294 >= 0) {
-            a_this->field_0x294 = 0;
-            a_this->field_0x290 += 1;
+    dKy_custom_colset(0, 7, i_blend);
+    if((a_this->mWindIndex & 1) == 0) {
+        
+        if(a_this->mCurrWindDir >= wind_table[(a_this->mWindIndex & 0xFFFFFFFE + 0x10)]) {
+            a_this->mCurrWindDir = 0;
+            a_this->mWindIndex += 1;
             g_env_light.mWind.mEvtWindSet = 2;
         } else {
-            a_this->field_0x294 += 1;
+            a_this->mCurrWindDir += 1;
         }
     } else {
-        if(a_this->field_0x294 >= 0) {
-            a_this->field_0x290 += 1;
-            if(a_this->field_0x290 >> 1 >= 4) {
-                a_this->field_0x290 = 0;
+        if(a_this->mCurrWindDir >= wind_table[a_this->mWindIndex & 0xFE]) {
+            a_this->mWindIndex += 1;
+            if(a_this->mWindIndex >> 1 >= 4) {
+                a_this->mWindIndex = 0;
             }
-            dKyw_evt_wind_set(0, -16000);
-            a_this->field_0x294 = 0;
+            dKyw_evt_wind_set(0, wind_table[a_this->mWindIndex]);
+            a_this->mCurrWindDir = 0;
             g_env_light.mWind.mEvtWindSet = 1;
         } else {
-            a_this->field_0x294 += 1;
+            a_this->mCurrWindDir += 1;
         }
     }
+    cameraEyeZ = mpCamera->mLookat.mEye.z;
+    if(cameraEyeZ > 360 || cameraEyeZ > 360 &&
+       mpCamera->mLookat.mEye.x > 450 || playerActor->current.pos.x > 450){
+        if(cameraEyeZ > 540 || playerActor->current.pos.z < 540) {
+            dKyw_evt_wind_set(0, 0x61A8);
+        } else if(cameraEyeZ > 630 || playerActor->current.pos.z > 630) {
+            dKyw_evt_wind_set(0, 0x4E20);
+        } else {
+            dKyw_evt_wind_set(0,0x4650);
+        }
+    } else if(mpCamera->mLookat.mEye.z < 720 ||  playerActor->current.pos.z < 720) {
+        dKyw_evt_wind_set(0, 25000);
+    } else if(mpCamera->mLookat.mEye.z < 810 || playerActor->current.pos.z < 810 ) {
+        dKyw_evt_wind_set(0, 0);
+    } else if(mpCamera->mLookat.mEye.z < 900 || playerActor->current.pos.z < 900) {
+        dKyw_evt_wind_set(0, -0x32c8);
+    }
+
+    mDoAud_seStart(0x106A, 0, (u32)(windPow * 180), 0);
+    return 1;
 }
 
 BOOL daKytag05_IsDelete(kytag05_class*) {
@@ -104,8 +133,8 @@ int daKytag05_Create(fopAc_ac_c* i_this) {
     if (dComIfGs_isSymbol(1) != 0) {
         return 3;
     }
-    a_this->field_0x290 = 0;
-    a_this->field_0x294 = 0;
+    a_this->mWindIndex = 0;
+    a_this->mCurrWindDir = 0;
     a_this->field_0x298 = i_this->mBase.mParameters & 0xff;
     dKyw_evt_wind_set_go();
     dKyw_evt_wind_set(0,0);
@@ -116,3 +145,27 @@ int daKytag05_Create(fopAc_ac_c* i_this) {
     return 4;
 }
 
+static actor_method_class l_daKytag05_Method = {
+    (process_method_func)daKytag05_Create,
+    (process_method_func)daKytag05_Delete,
+    (process_method_func)daKytag05_Execute,
+    (process_method_func)daKytag05_IsDelete,
+    (process_method_func)daKytag05_Draw,
+};
+
+extern actor_process_profile_definition g_profile_KYTAG06 = {
+    fpcLy_CURRENT_e,
+    7,
+    fpcLy_CURRENT_e,
+    PROC_KYTAG05,
+    &g_fpcLf_Method.mBase,
+    sizeof(kytag05_class),
+    0,
+    0,
+    &g_fopAc_Method.base,
+    0xA5,
+    &l_daKytag05_Method,
+    0x00000044000,
+    fopAc_ACTOR_e,
+    fopAc_CULLBOX_0_e,
+};
