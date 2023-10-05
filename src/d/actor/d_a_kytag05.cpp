@@ -26,17 +26,41 @@ BOOL daKytag05_Draw(kytag05_class*) {
 }
 
 static const s16 wind_table[] = {
-    0,    // 18
-    90,   // 1C
-    180,  // 20
-    270,  // 24
+    0x00,
+    0x00,
+    0x80,
+    0x01,
+    0xC0,
+    0x00,
+    0x40,
+    0x00
+};
+
+static const s16 fuu_timer[] = {
+    0x00,
+    0x96,
+    0x00,
+    0x96,
+    0x00,
+    0x96,
+    0x00,
+    0x96
+};
+
+static const s16 mufuu_timer[] = {
+    0x00,
+    0x0A,
+    0x00,
+    0x0A,
+    0x00,
+    0x00,
+    0x00,
+    0x5A
 };
 
 /* 00000080-000003F4       .text daKytag05_Execute__FP13kytag05_class */
 int daKytag05_Execute(kytag05_class* a_this) {
     /* Nonmatching */
-
-
     daPy_py_c *playerActor;
     camera_class *mpCamera;
     f32 cameraEyeZ;
@@ -67,10 +91,8 @@ int daKytag05_Execute(kytag05_class* a_this) {
         }
     }
     dKy_custom_colset(0, 7, i_blend);
-    u8 windIndex = a_this->mWindIndex;
-    if((windIndex & 1) == 0) {
-        s32 index = a_this->mWindIndex & ~0x1 + 0x10;
-        if (a_this->mCurrWindDir >= wind_table[a_this->mWindIndex/2]) {
+    if((a_this->mWindIndex & 1) == 0) {
+        if (a_this->mCurrWindDir >= fuu_timer[a_this->mWindIndex]) {
             a_this->mCurrWindDir = 0;
             a_this->mWindIndex += 1;
             g_env_light.mWind.mEvtWindSet = 2;
