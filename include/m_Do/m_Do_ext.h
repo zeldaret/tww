@@ -32,7 +32,7 @@ public:
     void setFrame(f32 frame) { mFrameCtrl->setFrame(frame); }
     void setPlayMode(int i_mode) { mFrameCtrl->setAttribute(i_mode); }
     void setLoopFrame(f32 i_frame) { mFrameCtrl->setLoop(i_frame); }
-    bool isStop() {
+    BOOL isStop() {
         bool stopped = true;
         if (!mFrameCtrl->checkState(1) && mFrameCtrl->getRate() != 0.0f) {
             stopped = false;
@@ -284,13 +284,15 @@ public:
     J3DModel* getModel() { return mpModel; }
     void setFrame(f32 frame) { mFrameCtrl.setFrame(frame); }
     f32 getFrame() { return mFrameCtrl.getFrame(); }
-    bool isStop() const { //regswap somewhere here
+    BOOL isStop() { //regswap somewhere here
         bool stopped = true;
         if (!mFrameCtrl.checkState(1) && mFrameCtrl.getRate() != 0.0f) {
             stopped = false;
         }
-
         return stopped;
+    }
+    BOOL checkFrame(f32 frame) {
+        return mFrameCtrl.checkPass(frame);
     }
 
     void update();

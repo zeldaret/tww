@@ -50,7 +50,6 @@ public:
     int getMsgNormal();
     u32 getMsg();
     u16 next_msgStatus(u32* msgId);
-    void anmAtr(u16);
     bool checkTalk();
     void eventOrder();
     void checkOrder();
@@ -151,7 +150,7 @@ const dCcD_SrcCyl daObjTpost_c::m_cyl_src = {
     0.0, // Radius
     0.0, // Height
 };
-static const s32 daObjTpost_c::m_send_price[] = {
+const s32 daObjTpost_c::m_send_price[] = {
     0x05,
     0x0A,
     0x14
@@ -305,7 +304,12 @@ void daObjTpost_c::cutSetAnmStart(int staffIdx) {
 }
 
 void daObjTpost_c::cutSetAnmProc(int staffIdx) {
-    if(mMorf->isStop()) { //probably regswap in isStop()
+    // Using the mDoExt_McaMorf::isStop inline causes regswap.
+    // if(mMorf->isStop()) { //
+    mDoExt_McaMorf* morf = mMorf;
+    bool stopped = true;
+    if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+    if (stopped) {
         dComIfGp_evmng_cutEnd(staffIdx);
     }
 }
@@ -835,7 +839,12 @@ void daObjTpost_c::modeTalkXY() {
     }
 
     if(field_0x6C9 == 2 || field_0x6C9 == 3) {
-        if(mMorf->isStop()) { //probably regswap in isStop()
+        // Using the mDoExt_McaMorf::isStop inline causes regswap.
+        // if(mMorf->isStop()) {
+        mDoExt_McaMorf* morf = mMorf;
+        bool stopped = true;
+        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (stopped) {
             if(cLib_calcTimer(&field_0x8DC) == 0 && talk(1) == dNpcMsgStts_BOX_CLOSED_e) {
                 modeProc(PROC_INIT, 0);
                 dComIfGp_event_onEventFlag(8);

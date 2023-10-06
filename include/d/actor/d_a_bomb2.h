@@ -43,8 +43,8 @@ namespace daBomb2 {
         
         void remove_fuse_effect();
         void set_time(int);
-        void get_time() const;
-        void chk_eat() const;
+        s32 get_time() const;
+        bool chk_eat() const;
         void set_eat();
         void set_no_hit();
         void chk_explode();

@@ -74,6 +74,14 @@ inline void mDoAud_seDeleteObject(Vec* i_sePos) {
     mDoAud_zelAudio_c::getInterface()->seDeleteObject(i_sePos);
 }
 
+inline void mDoAud_monsSeStart(u32 param_0, Vec* param_1, u32 param_2, u32 param_3, s8 i_reverb) {
+    mDoAud_zelAudio_c::getInterface()->monsSeStart(param_0, param_1, param_2, param_3, i_reverb);
+}
+
+inline void mDoAud_onEnemyDamage() {
+    mDoAud_zelAudio_c::getInterface()->onEnemyDamage();
+}
+
 inline void mDoAud_bgmMuteMtDragon() {
     mDoAud_zelAudio_c::getInterface()->bgmMuteMtDragon();
 }

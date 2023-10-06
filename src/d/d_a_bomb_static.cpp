@@ -8,12 +8,12 @@
 #include "dolphin/types.h"
 
 /* 80067FA0-80067FD0       .text getBombRestTime__8daBomb_cFv */
-void daBomb_c::getBombRestTime() {
+s16 daBomb_c::getBombRestTime() {
     /* Nonmatching */
 }
 
 /* 80067FD0-80068000       .text getBombCheck_Flag__8daBomb_cFv */
-void daBomb_c::getBombCheck_Flag() {
+s16 daBomb_c::getBombCheck_Flag() {
     /* Nonmatching */
 }
 
@@ -113,12 +113,12 @@ void daBomb2::Act_c::set_time(int) {
 }
 
 /* 80068490-80068498       .text get_time__Q27daBomb25Act_cCFv */
-void daBomb2::Act_c::get_time() const {
+s32 daBomb2::Act_c::get_time() const {
     /* Nonmatching */
 }
 
 /* 80068498-800684A0       .text chk_eat__Q27daBomb25Act_cCFv */
-void daBomb2::Act_c::chk_eat() const {
+bool daBomb2::Act_c::chk_eat() const {
     /* Nonmatching */
 }
 

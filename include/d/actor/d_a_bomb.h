@@ -26,8 +26,8 @@ public:
         
     };
     
-    void getBombRestTime();
-    void getBombCheck_Flag();
+    s16 getBombRestTime();
+    s16 getBombCheck_Flag();
     void setBombCheck_Flag();
     void setBombFire_ON();
     void setBombNoHit();

@@ -10,6 +10,7 @@
 #include "d/d_procname.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
+#include "d/d_bg_s_lin_chk.h"
 #include "d/d_particle.h"
 #include "d/d_s_play.h"
 #include "d/d_com_inf_game.h"
@@ -19,16 +20,18 @@
 #include "d/d_snap.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_jnt_hit.h"
+#include "d/d_cc_uty.h"
+#include "d/actor/d_a_bomb.h"
+#include "d/actor/d_a_bomb2.h"
+
+// Needed for the .data section to match.
+static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
+static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
+static f64 dummy4[2] = {3.0, 0.5};
 
 class am_class : public fopEn_enemy_c {
 public:
-    enum Action {
-        ACTION_DOUSA       = 0x0,
-        ACTION_MODORU_MOVE = 0x1,
-        ACTION_HANDOU_MOVE = 0x2,
-        ACTION_ITAI_MOVE   = 0x3,
-    };
-    
     /* 0x02AC */ request_of_phase_process_class mPhs;
     /* 0x02B4 */ JntHit_c* m02B4;
     /* 0x02B8 */ mDoExt_McaMorf* mpMorf;
@@ -40,14 +43,14 @@ public:
     /* 0x02C4 */ u8 mAction;
     /* 0x02C5 */ u8 m02C5;
     /* 0x02C6 */ u8 mHugeKnockback;
-    /* 0x02C7 */ bool mbIsBeingHit;
+    /* 0x02C7 */ bool mbIsBodyBeingHit;
     /* 0x02C8 */ s16 m02C8[4];
     /* 0x02D0 */ s16 m02D0[5];
     /* 0x02DA */ s16 m02DA;
     /* 0x02DC */ s16 m02DC;
     /* 0x02DE */ u8 m02DE[0x02E0 - 0x02DE];
-    /* 0x02E0 */ int m02E0;
-    /* 0x02E4 */ int m02E4;
+    /* 0x02E0 */ int mCurrBckIdx;
+    /* 0x02E4 */ u32 mSwallowedActorProcID;
     /* 0x02E8 */ f32 mAreaRadius;
     /* 0x02EC */ f32 m02EC;
     /* 0x02F0 */ f32 m02F0;
@@ -55,7 +58,7 @@ public:
     /* 0x0300 */ cXyz m0300;
     /* 0x030C */ cXyz m030C;
     /* 0x0318 */ cXyz m0318;
-    /* 0x0324 */ cXyz m0324;
+    /* 0x0324 */ cXyz mSpawnPos;
     /* 0x0330 */ csXyz m0330;
     /* 0x0336 */ s16 m0336;
     /* 0x0338 */ s16 m0338;
@@ -74,8 +77,49 @@ public:
     /* 0x0E74 */ enemyfire mEnemyFire;
 };
 
+enum Action {
+    ACTION_DOUSA       = 0x0,
+    ACTION_MODORU_MOVE = 0x1,
+    ACTION_HANDOU_MOVE = 0x2,
+    ACTION_ITAI_MOVE   = 0x3,
+};
+
+enum AM_RES_FILE_IDS {
+    /* BAS */
+    AM_BAS_BOM_NOMI=0x5,
+    AM_BAS_BOM_NOMI2=0x6,
+    AM_BAS_CLOSE=0x7,
+    AM_BAS_CLOSE_LOOP=0x8,
+    AM_BAS_DAMAGE=0x9,
+    AM_BAS_DAMAGE_END=0xA,
+    AM_BAS_DAMAGE_LOOP=0xB,
+    AM_BAS_DEAD=0xC,
+    AM_BAS_OKIRU=0xD,
+    AM_BAS_OPEN=0xE,
+    AM_BAS_OPEN_LOOP=0xF,
+    AM_BAS_SLEEP=0x10,
+    AM_BAS_SLEEP_LOOP=0x11,
+    
+    /* BCK */
+    AM_BCK_BOM_NOMI=0x14,
+    AM_BCK_CLOSE=0x15,
+    AM_BCK_CLOSE_LOOP=0x16,
+    AM_BCK_DAMAGE=0x17,
+    AM_BCK_DAMAGE_END=0x18,
+    AM_BCK_DAMAGE_LOOP=0x19,
+    AM_BCK_DEAD=0x1A,
+    AM_BCK_OKIRU=0x1B,
+    AM_BCK_OPEN=0x1C,
+    AM_BCK_OPEN_LOOP=0x1D,
+    AM_BCK_SLEEP=0x1E,
+    AM_BCK_SLEEP_LOOP=0x1F,
+    
+    /* BDL */
+    AM_BDL_AM=0x22,
+};
+
 /* 00000078-0000021C       .text nodeCallBack__FP7J3DNodei */
-BOOL nodeCallBack(J3DNode* node, int param_1) {
+static BOOL nodeCallBack(J3DNode* node, int param_1) {
     if (!param_1) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
@@ -123,7 +167,7 @@ BOOL nodeCallBack(J3DNode* node, int param_1) {
 }
 
 /* 0000021C-000002E4       .text draw_SUB__FP8am_class */
-void draw_SUB(am_class* i_this) {
+static void draw_SUB(am_class* i_this) {
     J3DModel* model = i_this->mpMorf->getModel();
     model->setBaseScale(i_this->mScale);
     mDoMtx_stack_c::transS(i_this->current.pos);
@@ -138,7 +182,7 @@ void draw_SUB(am_class* i_this) {
 }
 
 /* 000002E4-00000378       .text daAM_Draw__FP8am_class */
-BOOL daAM_Draw(am_class* i_this) {
+static BOOL daAM_Draw(am_class* i_this) {
     g_env_light.setLightTevColorType(i_this->mpMorf->getModel(), &i_this->mTevStr);
     
     dSnap_RegistFig(0xB7, i_this, 1.0f, 1.0f, 1.0f);
@@ -154,8 +198,8 @@ BOOL daAM_Draw(am_class* i_this) {
 }
 
 /* 00000378-000004A4       .text anm_init__FP8am_classifUcfi */
-void anm_init(am_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f32 speed, int soundFileIdx) {
-    i_this->m02E0 = bckFileIdx;
+static void anm_init(am_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f32 speed, int soundFileIdx) {
+    i_this->mCurrBckIdx = bckFileIdx;
     if (soundFileIdx >= 0) {
         void* soundAnm = dComIfG_getObjectRes("AM", soundFileIdx);
         J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("AM", bckFileIdx);
@@ -167,13 +211,13 @@ void anm_init(am_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f32 speed
 }
 
 /* 000004A4-00000784       .text body_atari_check__FP8am_class */
-void body_atari_check(am_class* i_this) {
+static void body_atari_check(am_class* i_this) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     
     i_this->mStts.Move();
     
     if (i_this->mBodyCyl.ChkTgHit() || i_this->mSwordCyl.ChkTgHit()) {
-        if (i_this->mbIsBeingHit) {
+        if (i_this->mbIsBodyBeingHit) {
             return;
         }
         
@@ -186,7 +230,7 @@ void body_atari_check(am_class* i_this) {
         if (!hitObj) {
             return;
         }
-        i_this->mbIsBeingHit = true;
+        i_this->mbIsBodyBeingHit = true;
         
         switch (hitObj->GetAtType()) {
         case AT_TYPE_SWORD:
@@ -207,13 +251,13 @@ void body_atari_check(am_class* i_this) {
             if (i_this->mStartsInactive == 1 && i_this->mSwitch != 0xFF && !dComIfGs_isSwitch(i_this->mSwitch, dComIfGp_roomControl_getStayNo())) {
                 return;
             }
-            if (i_this->mAction == am_class::ACTION_HANDOU_MOVE) {
+            if (i_this->mAction == ACTION_HANDOU_MOVE) {
                 return;
             }
-            if (i_this->mAction == am_class::ACTION_ITAI_MOVE) {
+            if (i_this->mAction == ACTION_ITAI_MOVE) {
                 return;
             }
-            i_this->mAction = am_class::ACTION_HANDOU_MOVE;
+            i_this->mAction = ACTION_HANDOU_MOVE;
             i_this->m02C5 = 30;
             i_this->mHugeKnockback = 0;
             if (player->getCutType() == 0x11) {
@@ -226,27 +270,223 @@ void body_atari_check(am_class* i_this) {
             break;
         }
     } else {
-        i_this->mbIsBeingHit = false;
+        i_this->mbIsBodyBeingHit = false;
     }
 }
 
 /* 00000784-00000D14       .text medama_atari_check__FP8am_class */
-void medama_atari_check(am_class* i_this) {
-    /* Nonmatching */
+static BOOL medama_atari_check(am_class* i_this) {
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    cCcD_Obj* hitObj = i_this->mEyeSph.GetTgHitObj();
+    bool ret = false;
+    
+    if (i_this->mStartsInactive == 1 && i_this->mSwitch != 0xFF && !dComIfGs_isSwitch(i_this->mSwitch, dComIfGp_roomControl_getStayNo())) {
+        return ret;
+    }
+    
+    i_this->mStts.Move();
+    if (!i_this->mEyeSph.ChkTgHit()) {
+        return ret;
+    }
+    if (!hitObj) {
+        return ret;
+    }
+    
+    CcAtInfo atInfo;
+    atInfo.pParticlePos = NULL;
+    cXyz hitPos = *i_this->mEyeSph.GetTgHitPosP();
+    
+    switch (hitObj->GetAtType()) {
+    case AT_TYPE_GRAPPLING_HOOK:
+        if (i_this->mCurrBckIdx != AM_BCK_SLEEP && i_this->mCurrBckIdx != AM_BCK_SLEEP_LOOP) {
+            if (i_this->mItemStealLeft > 0) {
+                i_this->mMaxHealth = 10;
+                i_this->mHealth = 10;
+                atInfo.mpObj = i_this->mEyeSph.GetTgHitObj();
+                atInfo.pParticlePos = NULL;
+                cc_at_check(i_this, &atInfo);
+                i_this->mMaxHealth = 10;
+                i_this->mHealth = 10;
+                dComIfGp_particle_set(0x27B, &i_this->mAttentionInfo.mPosition, NULL, NULL);
+            } else {
+                dComIfGp_particle_set(0xC, &hitPos, NULL, NULL);
+            }
+            fopAcM_seStart(i_this, JA_SE_LK_MS_WEP_HIT, 0x42);
+        }
+        break;
+    case AT_TYPE_SWORD:
+    case AT_TYPE_MACHETE:
+    case 0x00000800:
+    case AT_TYPE_DARKNUT_SWORD:
+    case AT_TYPE_MOBLIN_SPEAR:
+        fopAcM_seStart(i_this, JA_SE_LK_SW_HIT_S, 0x42);
+        break;
+    case AT_TYPE_BOOMERANG:
+    case AT_TYPE_BOKO_STICK:
+    case 0x00002000:
+    case AT_TYPE_STALFOS_MACE:
+        fopAcM_seStart(i_this, JA_SE_LK_W_WEP_HIT, 0x42);
+        break;
+    case AT_TYPE_LIGHT_ARROW:
+        ret = true;
+        i_this->mEnemyIce.mNumFramesDyingToLightArrowsSoFar = 1;
+        i_this->mEnemyIce.m1AC = 1.0f;
+        i_this->mEnemyIce.mYOffset = 80.0f;
+        i_this->mAttentionInfo.mFlags = 0;
+        break;
+    case AT_TYPE_NORMAL_ARROW:
+    case AT_TYPE_FIRE_ARROW:
+    case AT_TYPE_ICE_ARROW:
+        // Using the fopAcM_seStart inline multiple times in a single case makes the codegen not match.
+        // fopAcM_seStart(i_this, JA_SE_LK_MS_WEP_HIT, 0x42);
+        mDoAud_seStart(JA_SE_LK_MS_WEP_HIT, &i_this->mEyePos, 0x42, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+        ret = true;
+        if (i_this->mCurrBckIdx == AM_BCK_SLEEP || i_this->mCurrBckIdx == AM_BCK_SLEEP_LOOP) {
+            anm_init(i_this, AM_BCK_OKIRU, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+            i_this->mAttentionInfo.mFlags = 0x4;
+            i_this->mSwordCyl.OnAtSPrmBit(1);
+            i_this->mSwordCyl.OnAtHitBit();
+            i_this->mAction = ACTION_DOUSA;
+            i_this->m02C5 = 2;
+        } else {
+            dComIfGp_particle_set(0x10, &i_this->m02F4, &player->shape_angle, NULL);
+            // fopAcM_seStart(i_this, JA_SE_CM_AM_EYE_DAMAGE, 0);
+            mDoAud_seStart(JA_SE_CM_AM_EYE_DAMAGE, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+            fopAcM_monsSeStart(i_this, JA_SE_CV_AM_EYE_DAMAGE, 0x42);
+            i_this->mAction = ACTION_ITAI_MOVE;
+            i_this->m02C5 = 40;
+        }
+        break;
+    default:
+        dComIfGp_particle_set(0xC, &hitPos, NULL, NULL);
+        fopAcM_seStart(i_this, JA_SE_LK_MS_WEP_HIT, 0x42);
+        break;
+    }
+    
+    // return ret; // Doesn't match, too few instructions
+    // return ret ? TRUE : FALSE; // Doesn't match, optimized into arithmetic instead of a branch
+    return ret ? (ret ? TRUE : TRUE) : FALSE; // Matches, tricking the compiler into using a branch
 }
 
 /* 00000D14-00000F04       .text bomb_move_set__FP8am_classUc */
-void bomb_move_set(am_class* i_this, u8) {
-    /* Nonmatching */
+static void bomb_move_set(am_class* i_this, u8 param_2) {
+    if (i_this->mSwallowedActorProcID == -1) {
+        return;
+    }
+    fopAc_ac_c* swallowedActor = fopAcM_SearchByID(i_this->mSwallowedActorProcID);
+    if (!swallowedActor) {
+        return;
+    }
+    
+    cMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
+    
+    cXyz mouthOffset(0.0f, 120.0f, 40.0f);
+    cXyz mouthPos;
+    MtxPosition(&mouthOffset, &mouthPos);
+    mouthPos += i_this->current.pos;
+    
+    // Pull the bomb into the Armos Knight's mouth by 50 units per frame on each axis.
+    cLib_addCalc2(&swallowedActor->current.pos.x, mouthPos.x, 1.0f, 50.0f);
+    if (param_2 || mouthPos.y - 10.0f < swallowedActor->current.pos.y) {
+        cLib_addCalc2(&swallowedActor->current.pos.y, mouthPos.y, 1.0f, 50.0f);
+    }
+    cLib_addCalc2(&swallowedActor->current.pos.z, mouthPos.z, 1.0f, 50.0f);
+    
+    swallowedActor->mGravity = 0.0f;
+    swallowedActor->speedF = 0.0f;
+    swallowedActor->speed.setAll(0.0f);
+    swallowedActor->current.angle.setall(0);
+    swallowedActor->shape_angle.setall(0);
+    swallowedActor->current.angle.y = i_this->shape_angle.y;
+    swallowedActor->shape_angle.y = i_this->shape_angle.y;
+    
+    if (fpcM_GetName(swallowedActor) == PROC_BOMB) {
+        daBomb_c* bomb = (daBomb_c*)swallowedActor;
+        if (i_this->m02C8[1] == 1) {
+            bomb->mScale.setAll(0.0f);
+            bomb->setBombNoEff();
+        } else if (i_this->m02C8[1] > 1) {
+            bomb->mScale.setAll(1.0f);
+        }
+        bomb->setBombRestTime(100);
+    } else if (fpcM_GetName(swallowedActor) == PROC_Bomb2) {
+        daBomb2::Act_c* bomb2 = (daBomb2::Act_c*)swallowedActor;
+        if (i_this->m02C8[1] == 1) {
+            bomb2->mScale.setAll(0.0f);
+            bomb2->remove_fuse_effect();
+        } else if (i_this->m02C8[1] > 1) {
+            bomb2->mScale.setAll(1.0f);
+        }
+        bomb2->set_time(100);
+    }
 }
 
 /* 00000F04-00001138       .text bomb_nomi_check__FP8am_class */
-void bomb_nomi_check(am_class* i_this) {
-    /* Nonmatching */
+static BOOL bomb_nomi_check(am_class* i_this) {
+    fopAc_ac_c* actor = i_this;
+    i_this->mStts.Move();
+    
+    if (i_this->mCurrBckIdx != AM_BCK_OPEN && i_this->mCurrBckIdx != AM_BCK_OPEN_LOOP &&
+        i_this->mCurrBckIdx != AM_BCK_DAMAGE && i_this->mCurrBckIdx != AM_BCK_DAMAGE_LOOP)
+    {
+        return FALSE;
+    }
+    
+    s16 angleToPlayer = fopAcM_searchPlayerAngleY(actor);
+    s16 angleDiff = cLib_distanceAngleS(actor->shape_angle.y, angleToPlayer);
+    if (angleDiff > 0x2000) {
+        return FALSE;
+    }
+    
+    if (i_this->mMouthSph.ChkCoHit()) {
+        cCcD_Obj* hitObj = i_this->mMouthSph.GetCoHitObj();
+        if (hitObj) {
+            cCcD_Stts* hitStts = hitObj->GetStts();
+            if (hitStts == NULL) {
+                actor = NULL;
+            } else {
+                actor = hitStts->GetAc();
+            }
+            if (actor) {
+                if (fpcM_GetName(actor) == PROC_BOMB) {
+                    daBomb_c* bomb = (daBomb_c*)actor;
+                    if (!bomb->getBombCheck_Flag() && bomb->getBombRestTime() > 1) {
+                        f32 temp7 = 20.0f + g_regHIO.mChild[8].mFloatRegs[1];
+                        if (i_this->m0300.y - temp7 < bomb->current.pos.y) {
+                            bomb->setBombCheck_Flag();
+                            bomb->change_state((daBomb_c::State_e)2);
+                            i_this->mSwallowedActorProcID = fopAcM_GetID(bomb);
+                            bomb->setBombNoHit();
+                            bomb_move_set(i_this, 0);
+                            i_this->mAction = ACTION_ITAI_MOVE;
+                            i_this->m02C5 = 0x2C;
+                            return TRUE;
+                        }
+                    }
+                } else if (fpcM_GetName(actor) == PROC_Bomb2) {
+                    daBomb2::Act_c* bomb2 = (daBomb2::Act_c*)actor;
+                    if (!bomb2->chk_eat() && bomb2->get_time() > 1) {
+                        f32 temp7 = 20.0f + g_regHIO.mChild[8].mFloatRegs[1];
+                        if (i_this->m0300.y - temp7 < bomb2->current.pos.y) {
+                            bomb2->set_eat();
+                            i_this->mSwallowedActorProcID = fopAcM_GetID(bomb2);
+                            bomb2->set_no_hit();
+                            bomb_move_set(i_this, 0);
+                            i_this->mAction = ACTION_ITAI_MOVE;
+                            i_this->m02C5 = 0x2C;
+                            return TRUE;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    return FALSE;
 }
 
 /* 00001138-000011E4       .text BG_check__FP8am_class */
-void BG_check(am_class* i_this) {
+static void BG_check(am_class* i_this) {
     f32 halfHeight = g_regHIO.mChild[12].mFloatRegs[3] + 30.0f;
     f32 radius = g_regHIO.mChild[12].mFloatRegs[4] + 150.0f;
     i_this->mAcchCir.SetWall(halfHeight, radius);
@@ -259,37 +499,554 @@ void BG_check(am_class* i_this) {
 }
 
 /* 000011E4-00001504       .text Line_check__FP8am_class4cXyz */
-void Line_check(am_class* i_this, cXyz) {
-    /* Nonmatching */
+static BOOL Line_check(am_class* i_this, cXyz destPos) {
+    fopAc_ac_c* actor = i_this;
+    dBgS_LinChk linChk;
+    cXyz centerPos = actor->current.pos;
+    centerPos.y += 100.0f;
+    destPos.y += 100.0f;
+    linChk.Set(&centerPos, &destPos, actor);
+    if (!dComIfG_Bgsp()->LineCross(&linChk)) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 0000193C-00001B00       .text medama_move__FP8am_class */
-void medama_move(am_class* i_this) {
-    /* Nonmatching */
+static void medama_move(am_class* i_this) {
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    if (i_this->mCurrBckIdx == AM_BCK_SLEEP || i_this->mCurrBckIdx == AM_BCK_SLEEP_LOOP) {
+        i_this->m0330.setall(0);
+        return;
+    }
+    
+    f32 diffX = i_this->current.pos.x - player->current.pos.x;
+    f32 diffY = i_this->mEyePos.y - player->current.pos.y;
+    f32 diffZ = i_this->current.pos.z - player->current.pos.z;
+    
+    i_this->m0338 = cM_atan2s(diffX, diffZ);
+    if (i_this->m0338 < -0x71C) {
+        i_this->m0338 = -0x71C;
+    } else if (i_this->m0338 > 0x71C) {
+        i_this->m0338 = 0x71C;
+    }
+    
+    i_this->m0336 = cM_atan2s(diffY, sqrtf(diffX*diffX + diffZ*diffZ));
+    if (i_this->m0336 < -0x38E) {
+        i_this->m0336 = -0x38E;
+    } else if (i_this->m0336 > 0x38E) {
+        i_this->m0336 = 0x38E;
+    }
+    
+    cLib_addCalcAngleS2(&i_this->m0330.x, i_this->m0336, 1, 0x500);
+    cLib_addCalcAngleS2(&i_this->m0330.y, i_this->m0338, 1, 0x500);
 }
 
 /* 00001B00-00002564       .text action_dousa__FP8am_class */
-void action_dousa(am_class* i_this) {
-    /* Nonmatching */
+static void action_dousa(am_class* i_this) {
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    switch (i_this->m02C5) {
+    case 0:
+        for (int i = 0; i < ARRAY_SIZE(i_this->m02D0); i++) {
+            i_this->m02D0[i] = 0;
+        }
+        anm_init(i_this, AM_BCK_SLEEP_LOOP, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+        i_this->m02C5 += 1;
+        // Fall-through
+    case 1:
+        if (i_this->mStartsInactive == 1 && i_this->mSwitch != 0xFF && !dComIfGs_isSwitch(i_this->mSwitch, dComIfGp_roomControl_getStayNo())) {
+            break;
+        }
+        fopAcM_OnStatus(i_this, fopAcStts_SHOWMAP_e);
+        if (fopAcM_searchPlayerDistance(i_this) < 1000.0f) {
+            f32 yDist = player->current.pos.y - i_this->current.pos.y;
+            yDist = sqrtf(yDist*yDist); // ???
+            if (yDist > 300.0f) {
+                break;
+            }
+            if (Line_check(i_this, player->current.pos)) {
+                anm_init(i_this, AM_BCK_OKIRU, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+                fopAcM_monsSeStart(i_this, JA_SE_CV_AM_AWAKE, 0);
+                i_this->mAttentionInfo.mFlags = 0x4;
+                i_this->mSwordCyl.OnAtSetBit();
+                i_this->mSwordCyl.OnAtHitBit();
+                i_this->m02C5 += 1;
+            }
+        }
+        break;
+    case 2:
+        // Using the mDoExt_McaMorf::isStop inline causes regswap.
+        // if (!i_this->mpMorf->isStop()) {
+        mDoExt_McaMorf* morf = i_this->mpMorf;
+        bool stopped = true;
+        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (!stopped) {
+            break;
+        }
+        i_this->m02C5 += 1;
+        // Fall-through
+    case 3:
+        if (i_this->mCurrBckIdx != AM_BCK_CLOSE && i_this->mCurrBckIdx != AM_BCK_CLOSE_LOOP) {
+            if (i_this->mCurrBckIdx != AM_BCK_DAMAGE_END) {
+                // Using the fopAcM_seStart inline multiple times in a single case makes the codegen not match.
+                // fopAcM_seStart(i_this, JA_SE_CM_AM_NEEDLE_OUT, 0);
+                // fopAcM_seStart(i_this, JA_SE_CM_AM_MOUTH_CLOSE, 0);
+                mDoAud_seStart(JA_SE_CM_AM_NEEDLE_OUT, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+                mDoAud_seStart(JA_SE_CM_AM_MOUTH_CLOSE, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+            }
+            anm_init(i_this, AM_BCK_CLOSE, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+            i_this->m02C8[2] = 6;
+        }
+        i_this->m02DA = fopAcM_searchPlayerAngleY(i_this);
+        i_this->m02C5 += 1;
+        // Fall-through
+    case 4:
+        if (i_this->m02C8[2] == 1) {
+            i_this->mSwordCyl.OnAtSPrmBit(1);
+            i_this->mSwordCyl.OnAtHitBit();
+        }
+        if (i_this->m02C8[2] != 0) {
+            break;
+        }
+        if (i_this->mType & 1) {
+            f32 xDist = i_this->current.pos.x - i_this->mSpawnPos.x;
+            f32 zDist = i_this->current.pos.z - i_this->mSpawnPos.z;
+            f32 xzDist = sqrtf(xDist*xDist + zDist*zDist);
+            if (xzDist > i_this->mAreaRadius) {
+                i_this->mAction = ACTION_MODORU_MOVE;
+                i_this->m02C5 = 0x14;
+                return;
+            }
+        } else {
+            if (fopAcM_searchPlayerDistance(i_this) > 2000.0f) {
+                i_this->m02C5 = 9;
+                break;
+            }
+            f32 yDist = player->current.pos.y - i_this->current.pos.y;
+            yDist = sqrtf(yDist*yDist); // ???
+            if (yDist > 300.0f) {
+                i_this->m02C5 = 9;
+                break;
+            }
+        }
+        s16 temp = cLib_distanceAngleS(i_this->shape_angle.y, i_this->m02DA);
+        if (temp < 0x100) {
+            i_this->m02C5 += 1;
+        }
+        break;
+    case 5:
+        i_this->speedF = 30.0f;
+        i_this->mGravity = -11.0f;
+        i_this->speed.y = 40.0f;
+        fopAcM_monsSeStart(i_this, JA_SE_CV_AM_JUMP, 0);
+        if (!Line_check(i_this, player->current.pos) || player->getDamageWaitTimer()) {
+            i_this->speedF = 0.0f;
+        }
+        i_this->m02C5 += 1;
+        break;
+    case 6:
+        if (i_this->mCurrBckIdx == AM_BCK_CLOSE) {
+            // Using the mDoExt_McaMorf::isStop inline causes regswap.
+            // if (i_this->mpMorf->isStop()) {
+            mDoExt_McaMorf* morf = i_this->mpMorf;
+            bool stopped = true;
+            if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+            if (stopped) {
+                anm_init(i_this, AM_BCK_CLOSE_LOOP, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+            }
+        }
+        if (!i_this->mAcch.ChkGroundHit()) {
+            break;
+        }
+        fopAcM_seStart(i_this, JA_SE_CM_AM_JUMP, 0);
+        i_this->mSmokeCbs[0].end();
+        dComIfGp_particle_setToon(
+            0xA125, &i_this->m030C, &i_this->shape_angle, NULL,
+            0xB9, &i_this->mSmokeCbs[0], fopAcM_GetRoomNo(i_this), NULL, NULL, NULL
+        );
+        dComIfGp_getVibration().StartShock(3, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+        i_this->speedF = 0.0f;
+        i_this->m02C8[0] = 0;
+        if (i_this->m02D0[0] < 2) {
+            i_this->m02C8[0] = 10;
+        }
+        i_this->m02C5 += 1;
+        // Fall-through
+    case 7:
+        if (i_this->m02C8[0] != 0) {
+            break;
+        }
+        i_this->m02D0[0]++;
+        if (i_this->m02D0[0] > 2) {
+            i_this->m02C8[0] = 100;
+            i_this->m02D0[0] = 0;
+            anm_init(i_this, AM_BCK_DAMAGE, 0.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+            // Using the fopAcM_seStart inline multiple times in a single case makes the codegen not match.
+            // fopAcM_seStart(i_this, JA_SE_CM_AM_NEEDLE_IN, 0);
+            // fopAcM_seStart(i_this, JA_SE_CM_AM_MOUTH_OPEN, 0);
+            mDoAud_seStart(JA_SE_CM_AM_NEEDLE_IN, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+            mDoAud_seStart(JA_SE_CM_AM_MOUTH_OPEN, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+            fopAcM_monsSeStart(i_this, JA_SE_CV_AM_OPEN_MOUTH, 0);
+            i_this->mSwordCyl.OffAtSetBit();
+            i_this->mSwordCyl.OffAtSetBit();
+            if (i_this->mSmokeCbs[2].getEmitter() == NULL) {
+                dComIfGp_particle_setToon(
+                    0xA154, &i_this->m030C, &i_this->shape_angle, NULL,
+                    0xB9, &i_this->mSmokeCbs[2], fopAcM_GetRoomNo(i_this), NULL, NULL, NULL
+                );
+            }
+            i_this->m02C5 = 8;
+        } else {
+            i_this->m02C5 = 3;
+        }
+        break;
+    case 8:
+        if (i_this->mAcch.ChkGroundHit()) {
+            i_this->mGravity = -6.0f;
+            i_this->speed.y = 15.0f;
+            fopAcM_seStart(i_this, JA_SE_CM_AM_JUMP_S, 0);
+            i_this->m02DA = fopAcM_searchPlayerAngleY(i_this);
+        }
+        if (i_this->m02C8[0] == 0) {
+            i_this->mSmokeCbs[2].end();
+            i_this->m02C5 = 3;
+        }
+        break;
+    case 9:
+        anm_init(i_this, AM_BCK_SLEEP, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+        fopAcM_seStart(i_this, JA_SE_CM_AM_NEEDLE_IN, 0);
+        i_this->mSwordCyl.OffAtSetBit();
+        i_this->mSwordCyl.OffAtSetBit();
+        i_this->mAttentionInfo.mFlags = 0;
+        i_this->m02C5 += 1;
+        break;
+    case 10:
+        // Using the mDoExt_McaMorf::isStop inline causes regswap.
+        // if (i_this->mpMorf->isStop()) {
+        morf = i_this->mpMorf;
+        stopped = true;
+        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (stopped) {
+            i_this->m02C5 = 0;
+        }
+        break;
+    }
+    
+    medama_move(i_this);
+    
+    if (i_this->m02C5 != 2 && medama_atari_check(i_this)) {
+        i_this->mSmokeCbs[2].end();
+    } else if (bomb_nomi_check(i_this)) {
+        i_this->mSmokeCbs[2].end();
+    }
 }
 
 /* 00002564-000028C4       .text action_modoru_move__FP8am_class */
-void action_modoru_move(am_class* i_this) {
-    /* Nonmatching */
+static void action_modoru_move(am_class* i_this) {
+    switch (i_this->m02C5) {
+    case 0x14:
+        anm_init(i_this, AM_BCK_CLOSE_LOOP, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+        i_this->mSwordCyl.OnAtSetBit();
+        i_this->mSwordCyl.OnAtHitBit();
+        i_this->mGravity = -11.0f;
+        i_this->speed.y = 40.0f;
+        i_this->speedF = 15.0f;
+        fopAcM_monsSeStart(i_this, JA_SE_CV_AM_JUMP, 0x42);
+        
+        f32 xDistToSpawn = i_this->mSpawnPos.x - i_this->current.pos.x;
+        f32 zDistToSpawn = i_this->mSpawnPos.z - i_this->current.pos.z;
+        i_this->m02DA = cM_atan2s(xDistToSpawn, zDistToSpawn);
+        i_this->m02C5 += 1;
+        break;
+    case 0x15:
+        xDistToSpawn = i_this->mSpawnPos.x - i_this->current.pos.x;
+        zDistToSpawn = i_this->mSpawnPos.z - i_this->current.pos.z;
+        if (i_this->mAcch.ChkGroundHit()) {
+            i_this->mSmokeCbs[0].end();
+            dComIfGp_particle_setToon(
+                0xA125, &i_this->m030C, &i_this->shape_angle, NULL,
+                0xB9, &i_this->mSmokeCbs[0], fopAcM_GetRoomNo(i_this), NULL, NULL, NULL
+            );
+            
+            dComIfGp_getVibration().StartShock(1, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+            // The fopAcM_seStart inline makes the codegen not match.
+            // fopAcM_seStart(i_this, JA_SE_CM_AM_JUMP, 0);
+            mDoAud_seStart(JA_SE_CM_AM_JUMP, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+            fopAcM_monsSeStart(i_this, JA_SE_CV_AM_JUMP, 0x42);
+            
+            i_this->speed.y = 40.0f;
+            i_this->speedF = 15.0f;
+            i_this->m02DA = cM_atan2s(xDistToSpawn, zDistToSpawn);
+        }
+        
+        f32 xzDist = sqrtf(xDistToSpawn*xDistToSpawn + zDistToSpawn*zDistToSpawn);
+        if (xzDist < 20.0f) {
+            i_this->m02DA = i_this->m02DC;
+            i_this->speedF = 0.0f;
+            i_this->m02C5 += 1;
+        }
+        break;
+    case 0x16:
+        s16 angleDiff = cLib_distanceAngleS(i_this->shape_angle.y, i_this->m02DA);
+        if (angleDiff < 0x100) {
+            i_this->mSwordCyl.OffAtSetBit();
+            i_this->mSwordCyl.OffAtSetBit();
+            i_this->mAttentionInfo.mFlags = 0;
+            i_this->mAction = ACTION_DOUSA;
+            i_this->m02C5 = 0;
+        }
+        break;
+    }
 }
 
 /* 000028C4-00002A6C       .text action_handou_move__FP8am_class */
-void action_handou_move(am_class* i_this) {
+static void action_handou_move(am_class* i_this) {
     /* Nonmatching */
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    switch (i_this->m02C5) {
+    case 0x1E:
+        i_this->speedF = 20.0f;
+        s16 angleToPlayer = fopAcM_searchPlayerAngleY(i_this);
+        i_this->current.angle.y = angleToPlayer + 0x8000;
+        if (i_this->mHugeKnockback == 1) {
+            i_this->current.angle.y = player->shape_angle.y - 0x4000;
+            i_this->speedF = 40.0f;
+        }
+        i_this->m02DA = i_this->current.angle.y;
+        if (i_this->mCurrBckIdx != AM_BCK_CLOSE && i_this->mCurrBckIdx != AM_BCK_CLOSE_LOOP) {
+            // Using the fopAcM_seStart inline multiple times makes the codegen not match.
+            // fopAcM_seStart(i_this, JA_SE_CM_AM_NEEDLE_OUT, 0);
+            // fopAcM_seStart(i_this, JA_SE_CM_AM_MOUTH_CLOSE, 0);
+            mDoAud_seStart(JA_SE_CM_AM_NEEDLE_OUT, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+            mDoAud_seStart(JA_SE_CM_AM_MOUTH_CLOSE, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+            anm_init(i_this, AM_BCK_CLOSE, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+        }
+        i_this->m02C5 += 1;
+    case 0x1F:
+        cLib_addCalc0(&i_this->speedF, 0.8f, 2.0f);
+        if (i_this->speedF < 0.1f) {
+            i_this->speedF = 0.0f;
+            i_this->m02C8[2] = 6;
+            i_this->current.angle.y = i_this->shape_angle.y;
+            i_this->mAction = ACTION_DOUSA;
+            i_this->m02C5 = 3;
+        }
+    }
 }
 
 /* 00002A6C-000034F4       .text action_itai_move__FP8am_class */
-void action_itai_move(am_class* i_this) {
-    /* Nonmatching */
+static void action_itai_move(am_class* i_this) {
+    switch (i_this->m02C5) {
+    case 0x28:
+        i_this->m0330.setall(0);
+        i_this->mSwordCyl.OffAtSetBit();
+        i_this->mSwordCyl.OffAtSetBit();
+        i_this->speedF = -20.0f;
+        i_this->current.angle.y = fopAcM_searchPlayerAngleY(i_this);
+        i_this->m02DA = i_this->current.angle.y;
+        fopAcM_seStart(i_this, JA_SE_CM_AM_NEEDLE_IN, 0);
+        anm_init(i_this, AM_BCK_DAMAGE, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+        i_this->m02C5 += 1;
+        // Fall-through
+    case 0x29:
+        cLib_addCalc0(&i_this->speedF, 0.8f, 2.0f);
+        // Using the mDoExt_McaMorf::isStop inline causes regswap.
+        // if (!i_this->mpMorf->isStop()) {
+        mDoExt_McaMorf* morf = i_this->mpMorf;
+        bool stopped = true;
+        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (!stopped) {
+            break;
+        }
+        i_this->m02C8[0] = 100;
+        i_this->speedF = 0.0f;
+        anm_init(i_this, AM_BCK_DAMAGE_LOOP, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+        i_this->m02C5 += 1;
+        break;
+    case 0x2A:
+        if (i_this->m02C8[0] != 0) {
+            break;
+        }
+        anm_init(i_this, AM_BCK_DAMAGE_END, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+        // Using the fopAcM_seStart inline multiple times in a single case makes the codegen not match.
+        // fopAcM_seStart(i_this, JA_SE_CM_AM_NEEDLE_OUT, 0);
+        // fopAcM_seStart(i_this, JA_SE_CM_AM_MOUTH_CLOSE, 0);
+        mDoAud_seStart(JA_SE_CM_AM_NEEDLE_OUT, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+        mDoAud_seStart(JA_SE_CM_AM_MOUTH_CLOSE, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+        i_this->m02C5 += 1;
+        break;
+    case 0x2B:
+        // Using the mDoExt_McaMorf::isStop inline causes regswap.
+        // if (!i_this->mpMorf->isStop()) {
+        morf = i_this->mpMorf;
+        stopped = true;
+        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (!stopped) {
+            break;
+        }
+        i_this->mSwordCyl.OnAtSetBit();
+        i_this->mSwordCyl.OnAtHitBit();
+        i_this->m02D0[0] = 0;
+        i_this->mAction = ACTION_DOUSA;
+        i_this->m02C5 = 3;
+        break;
+    case 0x2C:
+        i_this->mSmokeCbs[3].end();
+        i_this->mStts.SetWeight(0xFF);
+        dComIfGp_particle_setToon(
+            0xA155, &i_this->m0318, &i_this->shape_angle, NULL,
+            0xB9, &i_this->mSmokeCbs[3], fopAcM_GetRoomNo(i_this), NULL, NULL, NULL
+        );
+        fopAcM_seStart(i_this, JA_SE_CM_AM_MOUTH_CLOSE, 0);
+        anm_init(i_this, AM_BCK_BOM_NOMI, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+        mDoAud_onEnemyDamage();
+        i_this->m0330.setall(0);
+        i_this->mSwordCyl.OffAtSetBit();
+        i_this->mSwordCyl.OffAtSetBit();
+        i_this->m02C8[1] = 10;
+        i_this->m02C5 += 1;
+        // Fall-through
+    case 0x2D:
+        bomb_move_set(i_this, 0);
+        if (i_this->mpMorf->checkFrame(3.0f)) {
+            // The fopAcM_seStart inline makes the codegen not match.
+            // fopAcM_seStart(i_this, JA_SE_CM_AM_EAT_BOMB, 0);
+            mDoAud_seStart(JA_SE_CM_AM_EAT_BOMB, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+            fopAcM_monsSeStart(i_this, JA_SE_CV_AM_EAT_BOMB, 0);
+        }
+        if (i_this->mpMorf->checkFrame(6.0f)) {
+            i_this->mSmokeCbs[1].end();
+            i_this->mSwordCyl.OnAtSetBit();
+            i_this->mSwordCyl.OnAtHitBit();
+            dComIfGp_particle_setToon(
+                0xA126, &i_this->m0318, &i_this->shape_angle, NULL,
+                0xB9, &i_this->mSmokeCbs[1], fopAcM_GetRoomNo(i_this), NULL, NULL, NULL
+            );
+            i_this->m033C = dComIfGp_particle_set(
+                0x8157, &i_this->m0318, NULL, NULL,
+                0xFF, NULL, -1, NULL, NULL, NULL
+            );
+            i_this->m0340 = dComIfGp_particle_set(
+                0x8156, &i_this->m0318, NULL, NULL,
+                0xFF, NULL, -1, NULL, NULL, NULL
+            );
+        }
+        
+        // Using the mDoExt_McaMorf::isStop inline causes regswap.
+        // if (!i_this->mpMorf->isStop()) {
+        morf = i_this->mpMorf;
+        stopped = true;
+        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (!stopped) {
+            break;
+        }
+        i_this->m02C8[0] = 100;
+        i_this->m02DA = fopAcM_searchPlayerAngleY(i_this);
+        i_this->m02C5 += 1;
+        break;
+    case 0x2E:
+        bomb_move_set(i_this, 1);
+        i_this->shape_angle.y += 0x1000;
+        if (i_this->mAcch.ChkGroundHit()) {
+            i_this->mSmokeCbs[0].end();
+            // The fopAcM_seStart inline makes the codegen not match.
+            // fopAcM_seStart(i_this, JA_SE_CM_AM_JUMP, 0);
+            mDoAud_seStart(JA_SE_CM_AM_JUMP, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+            dComIfGp_particle_setToon(
+                0xA125, &i_this->m030C, &i_this->shape_angle, NULL,
+                0xB9, &i_this->mSmokeCbs[0], fopAcM_GetRoomNo(i_this), NULL, NULL, NULL
+            );
+            dComIfGp_getVibration().StartShock(1, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+            // The fopAcM_seStart inline makes the codegen not match.
+            // fopAcM_seStart(i_this, JA_SE_CM_AM_JUMP_L, 0);
+            mDoAud_seStart(JA_SE_CM_AM_JUMP_L, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+            fopAcM_monsSeStart(i_this, JA_SE_CV_AM_JITABATA, 0);
+            i_this->speed.y = 25.0f;
+            i_this->mGravity = -10.0f;
+            i_this->speedF = 10.0f;
+        }
+        
+        if (i_this->m02C8[0] != 0) {
+            break;
+        }
+        anm_init(i_this, AM_BCK_DEAD, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+        dComIfGp_particle_set(
+            0x8127, &i_this->m030C, NULL, NULL,
+            0xFF, NULL, -1, NULL, NULL, NULL
+        );
+        dComIfGp_particle_set(
+            0x8128, &i_this->m030C, NULL, NULL,
+            0xFF, NULL, -1, NULL, NULL, NULL
+        );
+        
+        // The fopAcM_seStart inline makes the codegen not match.
+        // fopAcM_seStart(i_this, JA_SE_CM_AM_BEF_EXPLODE, 0);
+        mDoAud_seStart(JA_SE_CM_AM_BEF_EXPLODE, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+        i_this->m02DA = i_this->current.angle.y;
+        
+        if (i_this->m033C) {
+            i_this->m033C->becomeInvalidEmitter();
+            i_this->m033C = NULL;
+        }
+        if (i_this->m0340) {
+            i_this->m0340->becomeInvalidEmitter();
+            i_this->m0340 = NULL;
+        }
+        i_this->speedF = 0.0f;
+        i_this->m02C5 += 1;
+        break;
+    case 0x2F:
+        bomb_move_set(i_this, 1);
+        // Using the mDoExt_McaMorf::isStop inline causes regswap.
+        // if (!i_this->mpMorf->isStop()) {
+        morf = i_this->mpMorf;
+        stopped = true;
+        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (!stopped) {
+            break;
+        }
+        cXyz centerPos = i_this->current.pos;
+        centerPos.y += 150.0f;
+        if (i_this->mSwallowedActorProcID != -1) {
+            fopAc_ac_c* swallowedActor = fopAcM_SearchByID(i_this->mSwallowedActorProcID);
+            if (swallowedActor) {
+                swallowedActor->mScale.setAll(1.0f);
+                if (fpcM_GetName(swallowedActor) == PROC_BOMB) {
+                    daBomb_c* bomb = (daBomb_c*)swallowedActor;
+                    bomb->setBombRestTime(1);
+                } else if (fpcM_GetName(swallowedActor) == PROC_Bomb2) {
+                    daBomb2::Act_c* bomb2 = (daBomb2::Act_c*)swallowedActor;
+                    bomb2->set_time(1);
+                }
+            }
+        }
+        
+        // Using the fopAcM_seStart inline multiple times in a single case makes the codegen not match.
+        // fopAcM_seStart(i_this, JA_SE_CM_AM_EXPLODE, 0);
+        // fopAcM_seStart(i_this, JA_SE_LK_LAST_HIT, 0);
+        mDoAud_seStart(JA_SE_CM_AM_EXPLODE, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+        mDoAud_seStart(JA_SE_LK_LAST_HIT, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+        
+        fopAcM_createDisappear(i_this, &centerPos, 5, 0, 0xFF);
+        fopAcM_onActor(i_this);
+        fopAcM_delete(i_this);
+        break;
+    }
+    
+    if (i_this->m033C) {
+        i_this->m033C->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(2));
+    }
+    if (i_this->m0340) {
+        i_this->m0340->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(2));
+    }
+    
+    if (i_this->m02C5 == 0x29 || i_this->m02C5 == 0x2A) {
+        bomb_nomi_check(i_this);
+    }
 }
 
 /* 000034F4-000039A4       .text daAM_Execute__FP8am_class */
-BOOL daAM_Execute(am_class* i_this) {
+static BOOL daAM_Execute(am_class* i_this) {
     fopAcM_setGbaName(i_this, BOW, 0xC, 0x2A);
     
     if (enemy_ice(&i_this->mEnemyIce)) {
@@ -305,22 +1062,22 @@ BOOL daAM_Execute(am_class* i_this) {
     }
     
     switch (i_this->mAction) {
-    case am_class::ACTION_DOUSA:
+    case ACTION_DOUSA:
         action_dousa(i_this);
         break;
-    case am_class::ACTION_MODORU_MOVE:
+    case ACTION_MODORU_MOVE:
         action_modoru_move(i_this);
         break;
-    case am_class::ACTION_HANDOU_MOVE:
+    case ACTION_HANDOU_MOVE:
         action_handou_move(i_this);
         break;
-    case am_class::ACTION_ITAI_MOVE:
+    case ACTION_ITAI_MOVE:
         action_itai_move(i_this);
         break;
     }
     
-    if (i_this->mAction != am_class::ACTION_ITAI_MOVE && i_this->m02F0 - 1500.0f > i_this->current.pos.y) {
-        anm_init(i_this, 0x1A, 0.0f, 0, 0.0f, -1);
+    if (i_this->mAction != ACTION_ITAI_MOVE && i_this->m02F0 - 1500.0f > i_this->current.pos.y) {
+        anm_init(i_this, AM_BCK_DEAD, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
         
         dComIfGp_particle_set(0x8127, &i_this->m030C, NULL, NULL);
         dComIfGp_particle_set(0x8128, &i_this->m030C, NULL, NULL);
@@ -339,7 +1096,7 @@ BOOL daAM_Execute(am_class* i_this) {
         }
         
         i_this->speedF = 0.0f;
-        i_this->mAction = am_class::ACTION_ITAI_MOVE;
+        i_this->mAction = ACTION_ITAI_MOVE;
         i_this->m02C5 = 0x2F;
     }
     
@@ -403,12 +1160,12 @@ BOOL daAM_Execute(am_class* i_this) {
 }
 
 /* 000039A4-000039AC       .text daAM_IsDelete__FP8am_class */
-BOOL daAM_IsDelete(am_class* i_this) {
+static BOOL daAM_IsDelete(am_class* i_this) {
     return TRUE;
 }
 
 /* 000039AC-00003A84       .text daAM_Delete__FP8am_class */
-BOOL daAM_Delete(am_class* i_this) {
+static BOOL daAM_Delete(am_class* i_this) {
     dComIfG_resDelete(&i_this->mPhs, "AM");
     
     for (int i = 0; i < 4; i++) {
@@ -429,14 +1186,14 @@ BOOL daAM_Delete(am_class* i_this) {
 }
 
 /* 00003A84-00003C00       .text useHeapInit__FP10fopAc_ac_c */
-BOOL useHeapInit(fopAc_ac_c* i_actor) {
+static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     am_class* i_this = (am_class*)i_actor;
     
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("AM", 0x22), // am.bdl
+        (J3DModelData*)dComIfG_getObjectRes("AM", AM_BDL_AM),
         NULL, NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("AM", 0x1F), // sleep_loop.bck
-        J3DFrameCtrl::LOOP_REPEAT_e, 0.0f, 0, -1, 1,
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("AM", AM_BCK_SLEEP_LOOP),
+        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
         NULL,
         0x00000000,
         0x11020203
@@ -473,7 +1230,7 @@ BOOL useHeapInit(fopAc_ac_c* i_actor) {
 }
 
 /* 00003C00-00003F5C       .text daAM_Create__FP10fopAc_ac_c */
-s32 daAM_Create(fopAc_ac_c* i_actor) {
+static s32 daAM_Create(fopAc_ac_c* i_actor) {
     fopAcM_SetupActor(i_actor, am_class);
     
     am_class* i_this = (am_class*)i_actor;
@@ -510,7 +1267,7 @@ s32 daAM_Create(fopAc_ac_c* i_actor) {
             i_this->mAreaRadius = i_this->mPrmAreaRadius * 100.0f;
         }
         i_this->m02F0 = i_this->current.pos.y;
-        i_this->m02E4 = -1;
+        i_this->mSwallowedActorProcID = -1;
         
         if (i_this->mStartsInactive == 0 && i_this->mSwitch != 0xFF && dComIfGs_isSwitch(i_this->mSwitch, dComIfGp_roomControl_getStayNo())) {
             // When mStartsInactive is 0, the Armos Knight starts active and attacking the player.
@@ -675,7 +1432,7 @@ s32 daAM_Create(fopAc_ac_c* i_actor) {
         i_this->mSwordCyl.OffAtSetBit();
         
         i_this->m02DA = i_this->current.angle.y;
-        i_this->m0324 = i_this->current.pos;
+        i_this->mSpawnPos = i_this->current.pos;
         i_this->m02DC = i_this->current.angle.y;
         
         draw_SUB(i_this);

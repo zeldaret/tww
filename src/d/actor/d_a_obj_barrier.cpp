@@ -540,7 +540,7 @@ void daObjBarrier_ef_c::execute() {
         if (((active_flags >> i) & 1)) {
             mBtk[i].play();
 
-            if ((int)mBtk[i].isStop() == true) {
+            if (mBtk[i].isStop() == true) {
                 active_flags ^= 1 << i;
                 mHitActor[i] = NULL;
             }

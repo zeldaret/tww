@@ -4,6 +4,7 @@
 #include "dolphin/types.h"
 #include "JAZelAudio/JAZelAudio_SE.h"
 #include "JAZelAudio/JAZelAudio_BGM.h"
+#include "dolphin/mtx/mtx.h"
 
 class Vec;
 class JAISound;
@@ -80,7 +81,7 @@ public:
     void talkOut();
     void menuIn();
     void menuOut();
-    void getCameraInfo(Vec*, f32*[][][][], u32);
+    void getCameraInfo(Vec*, Mtx, u32);
     void getCameraMapInfo(u32);
     void setCameraPolygonPos(Vec*);
     void setCameraGroupInfo(u8);
