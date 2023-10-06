@@ -7,6 +7,7 @@
 #include "dolphin/mtx/mtx.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JMath/JMath.h"
+#include "SSystem/SComponent/c_m3d.h"
 #include "SSystem/SComponent/c_math.h"
 
 /* 8000CB48-8000CBEC       .text mDoMtx_XYZrotM__FPA4_fsss */
@@ -14,17 +15,17 @@ void mDoMtx_XYZrotM(Mtx mtx, s16 x, s16 y, s16 z) {
     Mtx tmp;
     if (z != 0) {
         mDoMtx_ZrotS(tmp, z);
-        PSMTXConcat(mtx, tmp, mtx);
+        mDoMtx_concat(mtx, tmp, mtx);
     }
 
     if (y != 0) {
         mDoMtx_YrotS(tmp, y);
-        PSMTXConcat(mtx, tmp, mtx);
+        mDoMtx_concat(mtx, tmp, mtx);
     }
 
     if (x != 0) {
         mDoMtx_XrotS(tmp, x);
-        PSMTXConcat(mtx, tmp, mtx);
+        mDoMtx_concat(mtx, tmp, mtx);
     }
 }
 
@@ -34,17 +35,17 @@ void mDoMtx_ZXYrotS(Mtx mtx, s16 x, s16 y, s16 z) {
     if (y != 0) {
         mDoMtx_YrotS(mtx, y);
     } else {
-        PSMTXIdentity(mtx);
+        mDoMtx_identity(mtx);
     }
 
     if (x != 0) {
         mDoMtx_XrotS(tmp, x);
-        PSMTXConcat(mtx, tmp, mtx);
+        mDoMtx_concat(mtx, tmp, mtx);
     }
 
     if (z != 0) {
         mDoMtx_ZrotS(tmp, z);
-        PSMTXConcat(mtx, tmp, mtx);
+        mDoMtx_concat(mtx, tmp, mtx);
     }
 }
 
@@ -53,85 +54,225 @@ void mDoMtx_ZXYrotM(Mtx mtx, s16 x, s16 y, s16 z) {
     Mtx tmp;
     if (y != 0) {
         mDoMtx_YrotS(tmp, y);
-        PSMTXConcat(mtx, tmp, mtx);
+        mDoMtx_concat(mtx, tmp, mtx);
     }
 
     if (x != 0) {
         mDoMtx_XrotS(tmp, x);
-        PSMTXConcat(mtx, tmp, mtx);
+        mDoMtx_concat(mtx, tmp, mtx);
     }
 
     if (z != 0) {
         mDoMtx_ZrotS(tmp, z);
-        PSMTXConcat(mtx, tmp, mtx);
+        mDoMtx_concat(mtx, tmp, mtx);
     }
 }
 
 /* 8000CD28-8000CD88       .text mDoMtx_XrotS__FPA4_fs */
-void mDoMtx_XrotS(Mtx, s16) {
-    /* Nonmatching */
+void mDoMtx_XrotS(Mtx mtx, s16 x) {
+    f32 l_cos = JMASCos(x);
+    f32 l_sin = JMASSin(x);
+
+    mtx[0][0] = 1.0f;
+    mtx[0][1] = 0.0f;
+    mtx[0][2] = 0.0f;
+    mtx[0][3] = 0.0f;
+
+    mtx[1][0] = 0.0f;
+    mtx[1][1] = l_cos;
+    mtx[1][2] = -l_sin;
+    mtx[1][3] = 0.0f;
+
+    mtx[2][0] = 0.0f;
+    mtx[2][1] = l_sin;
+    mtx[2][2] = l_cos;
+    mtx[2][3] = 0.0f;
 }
 
 /* 8000CD88-8000CDC8       .text mDoMtx_XrotM__FPA4_fs */
 void mDoMtx_XrotM(Mtx mtx, s16 x) {
     Mtx tmp;
     mDoMtx_XrotS(tmp, x);
-    PSMTXConcat(mtx, tmp, mtx);
+    mDoMtx_concat(mtx, tmp, mtx);
 }
 
 /* 8000CDC8-8000CE28       .text mDoMtx_YrotS__FPA4_fs */
-void mDoMtx_YrotS(Mtx, s16) {
-    /* Nonmatching */
+void mDoMtx_YrotS(Mtx mtx, s16 y) {
+    f32 l_cos = JMASCos(y);
+    f32 l_sin = JMASSin(y);
+
+    mtx[0][0] = l_cos;
+    mtx[0][1] = 0.0f;
+    mtx[0][2] = l_sin;
+    mtx[0][3] = 0.0f;
+
+    mtx[1][0] = 0.0f;
+    mtx[1][1] = 1.0;
+    mtx[1][2] = 0.0;
+    mtx[1][3] = 0.0f;
+
+    mtx[2][0] = -l_sin;
+    mtx[2][1] = 0.0f;
+    mtx[2][2] = l_cos;
+    mtx[2][3] = 0.0f;
 }
 
 /* 8000CE28-8000CE68       .text mDoMtx_YrotM__FPA4_fs */
 void mDoMtx_YrotM(Mtx mtx, s16 y) {
     Mtx tmp;
     mDoMtx_YrotS(tmp, y);
-    PSMTXConcat(mtx, tmp, mtx);
+    mDoMtx_concat(mtx, tmp, mtx);
 }
 
 /* 8000CE68-8000CEC8       .text mDoMtx_ZrotS__FPA4_fs */
-void mDoMtx_ZrotS(Mtx, s16) {
-    /* Nonmatching */
+void mDoMtx_ZrotS(Mtx mtx, s16 z) {
+    f32 l_cos = JMASCos(z);
+    f32 l_sin = JMASSin(z);
+
+    mtx[0][0] = l_cos;
+    mtx[0][1] = -l_sin;
+    mtx[0][2] = 0.0f;
+    mtx[0][3] = 0.0f;
+
+    mtx[1][0] = l_sin;
+    mtx[1][1] = l_cos;
+    mtx[1][2] = 0.0;
+    mtx[1][3] = 0.0f;
+
+    mtx[2][0] = 0.0f;
+    mtx[2][1] = 0.0f;
+    mtx[2][2] = 1.0f;
+    mtx[2][3] = 0.0f;
 }
 
 /* 8000CEC8-8000CF08       .text mDoMtx_ZrotM__FPA4_fs */
 void mDoMtx_ZrotM(Mtx mtx, s16 z) {
     Mtx tmp;
     mDoMtx_ZrotS(tmp, z);
-    PSMTXConcat(mtx, tmp, mtx);
+    mDoMtx_concat(mtx, tmp, mtx);
 }
 
 /* 8000CF08-8000D10C       .text mDoMtx_lookAt__FPA4_fPC3VecPC3Vecs */
-void mDoMtx_lookAt(Mtx, const Vec*, const Vec*, s16) {
-    /* Nonmatching */
+void mDoMtx_lookAt(Mtx mtx, const Vec* param_1, const Vec* param_2, s16 param_3) {
+    cXyz stack_48(*(cXyz*)param_1);
+    cXyz local_54;
+    cXyz local_60;
+    cXyz local_6c = stack_48 - cXyz(*(cXyz*)param_2);
+
+    local_6c.normalize();
+    local_54.set(0.0f, 1.0f, 0.0f);
+    local_54 = local_54.outprod(local_6c);
+
+    if (!local_54.normalizeRS()) {
+        local_54.set(-local_6c.y,0.0f,0.0f);
+        local_54 = local_54.outprod(local_6c);
+        local_54.normalize();
+    }
+
+    local_60 = local_6c.outprod(local_54);
+    local_60.normalize();
+
+    mtx[0][0] = local_54.x;
+    mtx[0][1] = local_54.y;
+    mtx[0][2] = local_54.z;
+    mtx[0][3] = -local_54.inprod(stack_48);
+
+    mtx[1][0] = local_60.x;
+    mtx[1][1] = local_60.y;
+    mtx[1][2] = local_60.z;
+    mtx[1][3] = -local_60.inprod(stack_48);
+
+    mtx[2][0] = local_6c.x;
+    mtx[2][1] = local_6c.y;
+    mtx[2][2] = local_6c.z;
+    mtx[2][3] = -local_6c.inprod(stack_48);
+
+    Mtx tmp;
+    mDoMtx_ZrotS(tmp, param_3);
+    mDoMtx_concat(tmp, mtx, mtx);
 }
 
 /* 8000D148-8000D284       .text mDoMtx_lookAt__FPA4_fPC3VecPC3VecPC3Vecs */
-void mDoMtx_lookAt(Mtx, const Vec*, const Vec*, const Vec*, s16) {
+void mDoMtx_lookAt(Mtx mtx, const Vec* param_1, const Vec* param_2, const Vec* param_3, s16 param_4) {
     /* Nonmatching */
+    cXyz local_4c(*(cXyz*)param_1);
+    cXyz local_58(*(cXyz*)param_2);
+    cXyz local_64(*(cXyz*)param_3);
+    cXyz local_70 = local_4c - local_58;
+    if (!local_70.normalizeRS()) {
+        local_58.z += 1.0f;
+    }
+    if (cM3d_IsZero(local_64.x) && cM3d_IsZero(local_64.y) && cM3d_IsZero(local_64.z)) {
+        local_64.y = 1.0f;
+    }
+    C_MTXLookAt(mtx, &local_4c, &local_64, &local_58);
+    Mtx local_40;
+    mDoMtx_ZrotS(local_40, param_4);
+    mDoMtx_concat(local_40, mtx, mtx);
 }
 
 /* 8000D284-8000D388       .text mDoMtx_concatProjView__FPA4_CfPA4_CfPA4_f */
-void mDoMtx_concatProjView(const Mtx, const Mtx, Mtx) {
-    /* Nonmatching */
+void mDoMtx_concatProjView(const Mtx44 a, const Mtx b, Mtx44 c) {
+    mDoMtx_concat(a, b, c);
+    c[3][0] = a[3][0] * b[0][0] + a[3][1] * b[1][0] + a[3][2] * b[2][0];
+    c[3][1] = a[3][0] * b[0][1] + a[3][1] * b[1][1] + a[3][2] * b[2][1];
+    c[3][2] = a[3][0] * b[0][2] + a[3][1] * b[1][2] + a[3][2] * b[2][2];
+    c[3][3] = a[3][0] * b[0][3] + a[3][1] * b[1][3] + a[3][2] * b[2][3] + a[3][3];
 }
 
 /* 8000D388-8000D530       .text mDoMtx_inverseTranspose__FPA4_CfPA4_f */
-void mDoMtx_inverseTranspose(const Mtx, Mtx) {
+bool mDoMtx_inverseTranspose(const Mtx a, Mtx b) {
     /* Nonmatching */
+    f32 var1 = a[0][0] * a[1][1] * a[2][2] + a[0][1] * a[1][2] * a[2][0] +
+               a[0][2] * a[1][0] * a[2][1] - a[2][0] * a[1][1] * a[0][2] -
+               a[1][0] * a[0][1] * a[2][2] - a[0][0] * a[2][1] * a[1][2];
+
+    if (var1 == 0.0f) {
+        return false;
+    }
+
+    var1 = 1.0f / var1;
+
+    Mtx23 tmp;
+    tmp[0][0] = var1 * (a[1][1] * a[2][2] - a[2][1] * a[1][2]);
+    tmp[0][1] = var1 * -(a[1][0] * a[2][2] - a[2][0] * a[1][2]);
+    tmp[0][2] = var1 * (a[1][0] * a[2][1] - a[2][0] * a[1][1]);
+    tmp[1][0] = var1 * -(a[0][1] * a[2][2] - a[2][1] * a[0][2]);
+    tmp[1][1] = var1 * (a[0][0] * a[2][2] - a[2][0] * a[0][2]);
+    tmp[1][2] = var1 * -(a[0][0] * a[2][1] - a[2][0] * a[0][1]);
+
+    b[2][0] = var1 * (a[0][1] * a[1][2] - a[1][1] * a[0][2]);
+    b[2][1] = var1 * -(a[0][0] * a[1][2] - a[1][0] * a[0][2]);
+    b[2][2] = var1 * (a[0][0] * a[1][1] - a[1][0] * a[0][1]);
+    b[0][0] = tmp[0][0];
+    b[0][1] = tmp[0][1];
+    b[0][2] = tmp[0][2];
+    b[0][3] = 0.0f;
+    b[1][0] = tmp[1][0];
+    b[1][1] = tmp[1][1];
+    b[1][2] = tmp[1][2];
+    b[1][3] = 0.0f;
+    b[2][3] = 0.0f;
+
+    return true;
 }
 
 /* 8000D530-8000D634       .text mDoMtx_QuatConcat__FPC10QuaternionPC10QuaternionP10Quaternion */
-void mDoMtx_QuatConcat(const Quaternion*, const Quaternion*, Quaternion*) {
-    /* Nonmatching */
+void mDoMtx_QuatConcat(const Quaternion* a, const Quaternion* b, Quaternion* c) {
+    c->w = (a->w * b->w) - (a->x * b->x) - (a->y * b->y) - (a->z * b->z);
+    c->x = (a->w * b->x) + (a->x * b->w) + (a->y * b->z) - (a->z * b->y);
+    c->y = (a->w * b->y) + (a->y * b->w) + (a->z * b->x) - (a->x * b->z);
+    c->z = (a->w * b->z) + (a->z * b->w) + (a->x * b->y) - (a->y * b->x);
 }
 
 /* 8000D634-8000D74C       .text mDoMtx_MtxToRot__FPA4_CfP5csXyz */
-// NONMATCHING - sqrtf issues
 void mDoMtx_MtxToRot(const Mtx m, csXyz* o_rot) {
-    o_rot->x = cM_atan2s(-m[1][2], sqrtf(m[0][2] * m[0][2] + m[2][2] * m[2][2]));
+    f32 f31 = m[0][2];
+    f31 *= f31;
+    f32 f30 = m[2][2];
+    f31 += f30 * f30;
+    f31 = sqrtf(f31);
+    o_rot->x = cM_atan2s(-m[1][2], f31);
 
     if (o_rot->x == 0x4000 || o_rot->x == -0x4000) {
         o_rot->z = 0;
@@ -141,6 +282,8 @@ void mDoMtx_MtxToRot(const Mtx m, csXyz* o_rot) {
         o_rot->z = cM_atan2s(m[1][0], m[1][1]);
     }
 }
+
+static u8 lit_3569[12];
 
 Mtx mDoMtx_stack_c::now;
 Mtx mDoMtx_stack_c::buffer[16];
@@ -155,7 +298,7 @@ bool mDoMtx_stack_c::push() {
         return false;
     }
     Mtx* old = next++;
-    PSMTXCopy(now, *old);
+    mDoMtx_copy(now, *old);
     return true;
 }
 
@@ -166,43 +309,43 @@ bool mDoMtx_stack_c::pop() {
         return false;
     }
     next--;
-    PSMTXCopy(*next, now);
+    mDoMtx_copy(*next, now);
     return true;
 }
 
 /* 8000D850-8000D888       .text transM__14mDoMtx_stack_cFfff */
 void mDoMtx_stack_c::transM(f32 x, f32 y, f32 z) {
     Mtx tmp;
-    PSMTXTrans(tmp, x, y, z);
-    PSMTXConcat(now, tmp, now);
+    mDoMtx_trans(tmp, x, y, z);
+    mDoMtx_concat(now, tmp, now);
 }
 
 /* 8000D888-8000D8C0       .text scaleM__14mDoMtx_stack_cFfff */
 void mDoMtx_stack_c::scaleM(f32 x, f32 y, f32 z) {
     Mtx tmp;
-    PSMTXScale(tmp, x, y, z);
-    PSMTXConcat(now, tmp, now);
+    mDoMtx_scale(tmp, x, y, z);
+    mDoMtx_concat(now, tmp, now);
 }
 
 /* 8000D8C0-8000D904       .text lYrotM__14mDoMtx_stack_cFl */
 void mDoMtx_stack_c::lYrotM(s32 param_0) {
     Mtx m;
     mDoMtx_YrotS(m, param_0 >> 16);
-    MTXConcat(now, m, now);
+    mDoMtx_concat(now, m, now);
 }
 
 /* 8000D904-8000D940       .text rYrotM__14mDoMtx_stack_cFf */
 void mDoMtx_stack_c::rYrotM(f32 i_rad) {
     Mtx m;
     PSMTXRotRad(m, 'Y', i_rad);
-    MTXConcat(now, m, now);
+    mDoMtx_concat(now, m, now);
 }
 
 /* 8000D940-8000D97C       .text quatM__14mDoMtx_stack_cFPC10Quaternion */
 void mDoMtx_stack_c::quatM(const Quaternion* param_0) {
     Mtx tmp;
-    PSMTXQuat(tmp, param_0);
-    PSMTXConcat(now, tmp, now);
+    mDoMtx_quat(tmp, param_0);
+    mDoMtx_concat(now, tmp, now);
 }
 
 static mDoMtx_stack_c mDoMtx_stack;
