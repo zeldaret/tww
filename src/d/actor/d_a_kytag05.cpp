@@ -28,9 +28,9 @@ BOOL daKytag05_Draw(kytag05_class*) {
 
 static const s16 wind_table[] = {
     0,
-    0x8001,
-    0xC000,
-    0x4000
+    90,
+    180,
+    270
 };
 
 static const s16 mufuu_timer[] = {
@@ -50,7 +50,7 @@ static const s16 fuu_timer[] = {
 
 /* 00000080-000003F4       .text daKytag05_Execute__FP13kytag05_class */
 int daKytag05_Execute(kytag05_class* a_this) {
-    /* Nonmatching */
+    /* Nonmatching - 92% matching */
     daPy_py_c *playerActor;
     camera_class *mpCamera;
     f32 cameraEyeZ;
@@ -102,6 +102,7 @@ int daKytag05_Execute(kytag05_class* a_this) {
             a_this->field_0x294 += 1;
         }
     }
+    /* Numbers in this sections aren't necessarily right */
     cameraEyeZ = mpCamera->mLookat.mEye.z;
     if(cameraEyeZ > 360.0f|| playerActor->current.pos.z > 360.0f &&
        mpCamera->mLookat.mEye.x > 450 || playerActor->current.pos.x > 450.0f){
