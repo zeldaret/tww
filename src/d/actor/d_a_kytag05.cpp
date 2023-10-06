@@ -66,7 +66,7 @@ int daKytag05_Execute(kytag05_class* a_this) {
     f32 cameraEyeZ;
     f32 i_blend;
     f32 windPow;
-
+    u32 demoField;
     mpCamera = dComIfGp_getCamera(0);
     playerActor = daPy_getPlayerActorClass();
     windPow = dKyw_get_wind_pow();
@@ -78,9 +78,9 @@ int daKytag05_Execute(kytag05_class* a_this) {
     if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode != 0 &&
         dComIfGp_getEventManager().startCheckOld("demo41") != 0 &&
         g_dComIfG_gameInfo.play.getDemo() != NULL) {
-        u32 demoField = g_dComIfG_gameInfo.play.getDemo()->field_0xd4;
+        demoField = g_dComIfG_gameInfo.play.getDemo()->field_0xd4;
         if(demoField >= 0x186) {
-            f32 var_f1 = (demoField - 90.0f) / 180.0f;
+            f32 var_f1 = ((f32)demoField - 90.0f) / 180.0f;
             if(var_f1 > i_blend) {
                 var_f1 = i_blend;
             }
@@ -92,7 +92,7 @@ int daKytag05_Execute(kytag05_class* a_this) {
     }
     dKy_custom_colset(0, 7, i_blend);
     if((a_this->mWindIndex & 1) == 0) {
-        if (a_this->mCurrWindDir >= fuu_timer[a_this->mWindIndex]) {
+        if (a_this->mCurrWindDir >= fuu_timer[(a_this->mWindIndex & ~0x1) >> 1]) {
             a_this->mCurrWindDir = 0;
             a_this->mWindIndex += 1;
             g_env_light.mWind.mEvtWindSet = 2;
@@ -100,13 +100,12 @@ int daKytag05_Execute(kytag05_class* a_this) {
             a_this->mCurrWindDir += 1;
         }
     } else {
-        if (a_this->mCurrWindDir >=  (s32)(a_this->mWindIndex & 0xFFFFFFFE) + 8) {
+        if (a_this->mCurrWindDir >=  mufuu_timer[(a_this->mWindIndex & ~0x1) >> 1]) {
             a_this->mWindIndex += 1;
             if(a_this->mWindIndex >> 1 >= 4) {
                 a_this->mWindIndex = 0;
             }
-            s32 index = a_this->mWindIndex & ~0x1 + 0x10;
-            dKyw_evt_wind_set(0, wind_table[index]);
+            dKyw_evt_wind_set(0, wind_table[a_this->mWindIndex]);
             a_this->mCurrWindDir = 0;
             g_env_light.mWind.mEvtWindSet = 1;
         } else {
