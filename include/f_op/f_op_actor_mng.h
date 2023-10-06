@@ -545,6 +545,10 @@ inline void fopAcM_seStart(fopAc_ac_c* actor, u32 sfxID, u32 param_2) {
     mDoAud_seStart(sfxID, &actor->mEyePos, param_2, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
 }
 
+inline void fopAcM_monsSeStart(fopAc_ac_c* actor, u32 sfxID, u32 param_2) {
+    mDoAud_monsSeStart(sfxID, &actor->mEyePos, fopAcM_GetID(actor), 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+}
+
 extern "C" {
 void fopAcM_initManager__Fv(void);
 void fopAcM_CreateAppend__Fv(void);

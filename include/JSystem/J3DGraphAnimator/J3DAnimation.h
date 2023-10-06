@@ -645,9 +645,9 @@ public:
     }
     void setFrame(f32 frame) { mFrame = frame; }
     void setLoop(s16 loop) { mLoop = loop; }
-    bool checkState(u8 state) const { return mState & state; }
+    BOOL checkState(u8 state) const { return mState & state; }
 
-private:
+public:
     /* 0x04 */ u8 mAttribute;
     /* 0x05 */ u8 mState;
     /* 0x06 */ s16 mStart;

@@ -228,7 +228,7 @@ public:
     /* 0x285 */ s8 mHealth;
     /* 0x288 */ s32 mItemTableIdx;
     /* 0x28C */ u8 mItemStealNum;
-    /* 0x28D */ u8 mItemStealLeft;
+    /* 0x28D */ s8 mItemStealLeft;
 
     fopAc_ac_c();
     ~fopAc_ac_c();

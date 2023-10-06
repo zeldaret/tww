@@ -3,16 +3,17 @@
 // Translation Unit: d_a_bomb_static.cpp
 //
 
-#include "d_a_bomb_static.h"
+#include "d/actor/d_a_bomb.h"
+#include "d/actor/d_a_bomb2.h"
 #include "dolphin/types.h"
 
 /* 80067FA0-80067FD0       .text getBombRestTime__8daBomb_cFv */
-void daBomb_c::getBombRestTime() {
+s16 daBomb_c::getBombRestTime() {
     /* Nonmatching */
 }
 
 /* 80067FD0-80068000       .text getBombCheck_Flag__8daBomb_cFv */
-void daBomb_c::getBombCheck_Flag() {
+s16 daBomb_c::getBombCheck_Flag() {
     /* Nonmatching */
 }
 
@@ -112,12 +113,12 @@ void daBomb2::Act_c::set_time(int) {
 }
 
 /* 80068490-80068498       .text get_time__Q27daBomb25Act_cCFv */
-void daBomb2::Act_c::get_time() const {
+s32 daBomb2::Act_c::get_time() const {
     /* Nonmatching */
 }
 
 /* 80068498-800684A0       .text chk_eat__Q27daBomb25Act_cCFv */
-void daBomb2::Act_c::chk_eat() const {
+bool daBomb2::Act_c::chk_eat() const {
     /* Nonmatching */
 }
 
@@ -135,9 +136,3 @@ void daBomb2::Act_c::set_no_hit() {
 void daBomb2::Act_c::chk_explode() {
     /* Nonmatching */
 }
-
-/* 800684F4-80068510       .text PrmAbstract<Q28daBomb_c5Prm_e>__5daObjFPC10fopAc_ac_cQ28daBomb_c5Prm_eQ28daBomb_c5Prm_e */
-void daObj::PrmAbstract<daBomb_c::Prm_e>(const fopAc_ac_c*, daBomb_c::Prm_e, daBomb_c::Prm_e) {
-    /* Nonmatching */
-}
-

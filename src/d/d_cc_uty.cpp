@@ -3,7 +3,7 @@
 // Translation Unit: d_cc_uty.cpp
 //
 
-#include "d_cc_uty.h"
+#include "d/d_cc_uty.h"
 #include "dolphin/types.h"
 
 /* 800AE938-800AE9E8       .text cc_pl_cut_bit_get__Fv */
@@ -40,9 +40,3 @@ void at_power_check(CcAtInfo*) {
 void cc_at_check(fopAc_ac_c*, CcAtInfo*) {
     /* Nonmatching */
 }
-
-/* 800AF368-800AF384       .text PrmAbstract<Q37daTsubo5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ37daTsubo5Act_c5Prm_eQ37daTsubo5Act_c5Prm_e */
-void daObj::PrmAbstract<daTsubo::Act_c::Prm_e>(const fopAc_ac_c*, daTsubo::Act_c::Prm_e, daTsubo::Act_c::Prm_e) {
-    /* Nonmatching */
-}
-

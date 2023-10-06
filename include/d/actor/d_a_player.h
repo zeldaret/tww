@@ -70,7 +70,7 @@ public:
     /* 0x290 */ u8 mAttackState;
     /* 0x291 */ u8 field_0x291;
     /* 0x292 */ u8 field_0x292[0x294 - 0x292];
-    /* 0x294 */ s16 field_0x294;
+    /* 0x294 */ s16 mDamageWaitTimer;
     /* 0x296 */ s16 mQuakeTimer;
     /* 0x298 */ int field_0x298;
     /* 0x29C */ u32 field_0x29c;
@@ -91,10 +91,11 @@ public:
     /* 0x300 */ f32 field_0x300;
     /* 0x304 */ daPy_demo_c mDemo;
 
+    u8 getCutType() const { return mAttackState; }
+    s16 getDamageWaitTimer() const { return mDamageWaitTimer; }
     s16 getBodyAngleX() { return mBodyAngle.x; }
     s16 getBodyAngleY() { return mBodyAngle.y; }
     void changeDemoMoveAngle(s16 angle) { mDemo.setMoveAngle(angle); }
-    u8 getCutType() const { return mAttackState; }
 
     void onPlayerNoDraw() { field_0x29c |= 0x8000000; }
     void offPlayerNoDraw() { field_0x29c &= ~0x8000000; }

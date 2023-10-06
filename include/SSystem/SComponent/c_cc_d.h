@@ -364,9 +364,9 @@ public:
     virtual ~cCcD_ObjCommonBase() {}
     void ct();
     void SetSPrm(u32 sprm) { mSPrm = sprm; }
-    s32 getSPrm() const { return mSPrm; }
-    void setRPrm(s32 rprm) { mRPrm = rprm; }
-    s32 getRPrm() const { return mRPrm; }
+    u32 getSPrm() const { return mSPrm; }
+    void SetRPrm(u32 rprm) { mRPrm = rprm; }
+    u32 getRPrm() const { return mRPrm; }
     cCcD_Obj* GetHitObj() { return mHitObj; }
     void ClrObj() { mHitObj = NULL; }
     u32 MskSPrm(u32 mask) const { return mSPrm & mask; }
@@ -397,6 +397,7 @@ public:
     void SetType(u32 type) { mType = type; }
     void SetAtp(int atp) { mAtp = atp; }
     void ClrSet() { OffSPrmBit(1); }
+    void OnHitBit() { SetRPrm(1); }
     void OffHitBit() { ClrRPrm(1); }
     u32 ChkHit() { return MskRPrm(1); }
 
@@ -495,6 +496,7 @@ public:
     void SetTgType(u32 type) { mObjTg.SetType(type); }
     void OnTgSPrmBit(u32 flag) { mObjTg.OnSPrmBit(flag); }
     void OffAtSetBit() { mObjAt.ClrSet(); }
+    void OnAtHitBit() { mObjAt.OnHitBit(); }
     void OffAtHitBit() { mObjAt.OffHitBit(); }
     void OnTgSetBit() { mObjTg.OnSPrmBit(1); }
     void OffTgSetBit() { mObjTg.ClrSet(); }

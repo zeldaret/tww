@@ -720,6 +720,10 @@ inline void dComIfGs_initDan(s8 i_stageNo) {
     g_dComIfG_gameInfo.save.initDan(i_stageNo);
 }
 
+inline void dComIfGs_onActor(int i_no, int i_roomNo) {
+    g_dComIfG_gameInfo.save.onActor(i_no, i_roomNo);
+}
+
 inline BOOL dComIfGs_isActor(int i_no, int i_roomNo) {
     return g_dComIfG_gameInfo.save.isActor(i_no, i_roomNo);
 }

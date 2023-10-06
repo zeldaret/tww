@@ -318,6 +318,8 @@ void daArrow_c::arrowUseMp() {
 }
 
 // This is a fake inline (not present in debug maps) which is required for ShieldReflect to match.
+// It's possible that an inline similar to this was added to the final game even though it didn't exist in the demo,
+// as this section of code was missing from the demo's version of ShieldReflect.
 inline void setSphereCoordsFromXYAngles(cXyz& xyz, f32 mag, s16 targetAngleX, s16 targetAngleY) {
     f32 normZ;
     f32 normY;
