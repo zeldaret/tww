@@ -34,7 +34,7 @@ public:
 class dPa_levelEcallBack : public JPACallBackBase<JPABaseEmitter*> {
 public:
     virtual ~dPa_levelEcallBack() {}
-    virtual void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8) {}
+    virtual void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8) = 0;
 };
 
 class dPa_followEcallBack : public dPa_levelEcallBack {

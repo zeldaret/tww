@@ -1325,7 +1325,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_wbird"),
     ActorRel(NonMatching, "d_a_ykgr"),
     ActorRel(Matching,    "d_a_alldie"),
-    ActorRel(NonMatching, "d_a_am"),
+    ActorRel(Matching,    "d_a_am", extra_cflags=["-sym off"]),
     ActorRel(NonMatching, "d_a_am2"),
     ActorRel(NonMatching, "d_a_amiprop"),
     ActorRel(NonMatching, "d_a_arrow_iceeff"),
