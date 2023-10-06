@@ -354,7 +354,7 @@ public:
     void draw(JPADrawInfo*, u8);
     JPABaseEmitter* set(u8, u16, cXyz const*, csXyz const*, cXyz const*, u8, dPa_levelEcallBack*,
                         s8, GXColor const*, GXColor const*, cXyz const*);
-    void setBombSmoke(u16, cXyz const*, csXyz const*, cXyz const*, u8);
+    JPABaseEmitter* setBombSmoke(u16, cXyz const*, csXyz const*, cXyz const*, u8);
     void setSimpleLand(int, cXyz const*, csXyz const*, f32, f32, f32, dKy_tevstr_c*, int*, int);
     void setSimpleLand(cBgS_PolyInfo&, cXyz const*, csXyz const*, f32, f32, f32, dKy_tevstr_c*,
                        int*, int);
@@ -381,6 +381,12 @@ public:
                               s8 setupInfo, const GXColor* pPrmColor, const GXColor* pEnvColor,
                               const cXyz* pScale2D) {
         return set(2, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
+    }
+    JPABaseEmitter* setToonP1(u16 particleID, const cXyz* pos, const csXyz* angle,
+                              const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,
+                              s8 setupInfo, const GXColor* pPrmColor, const GXColor* pEnvColor,
+                              const cXyz* pScale2D) {
+        return set(3, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
     }
     JPABaseEmitter* setProjection(u16 particleID, const cXyz* pos, const csXyz* angle,
                               const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,

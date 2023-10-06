@@ -30,8 +30,8 @@ public:
 
     virtual ~cBgS_PolyInfo() {}
 
-    u16 GetPolyIndex() const { return mPolyIndex; }
-    u16 GetBgIndex() const { return mBgIndex; }
+    s32 GetPolyIndex() const { return mPolyIndex; }
+    s32 GetBgIndex() const { return mBgIndex; }
     bool ChkSetInfo() const {
         if (mPolyIndex == 0xFFFF || mBgIndex == 0x100) {
             return false;

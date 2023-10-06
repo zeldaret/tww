@@ -28,6 +28,16 @@ public:
     virtual ~dBgS_ObjGndChk() {}
 };
 
+class dBgS_ObjGndChk_Yogan : public dBgS_ObjGndChk {
+public:
+    /* 806bf6a4 */ dBgS_ObjGndChk_Yogan() {
+        OffNormalGrp();
+        OnYoganGrp();
+    }
+
+    /* 806bf53c */ virtual ~dBgS_ObjGndChk_Yogan();
+};
+
 class dBgS_ObjGndChk_Wtr : public dBgS_ObjGndChk {
 public:
     dBgS_ObjGndChk_Wtr();

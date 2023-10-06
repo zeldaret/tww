@@ -16,7 +16,7 @@ void fopKyM_Delete(void* param_1);
 int fopKyM_Create(s16 param_1, fopKyM_CreateFunc param_2, void* param_3);
 base_process_class* fopKyM_fastCreate(s16 param_0, int param_1, cXyz* param_2, cXyz* param_3,
                                       fopKyM_CreateFunc);
-int fopKyM_createWpillar(cXyz const* i_pos, f32 scale, int i_param);
+int fopKyM_createWpillar(cXyz const* i_pos, f32 scaleXZ, f32 scaleY, int i_param);
 
 inline void* fopKyM_GetAppend(void* param_0) {
     return fpcM_GetAppend(param_0);

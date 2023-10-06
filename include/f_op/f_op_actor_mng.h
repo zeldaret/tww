@@ -223,6 +223,10 @@ inline void fopAcM_SetModel(fopAc_ac_c* actor, J3DModel* model) {
     actor->model = model;
 }
 
+inline J3DModel* fopAcM_GetModel(fopAc_ac_c* actor) {
+    return actor->model;
+}
+
 inline fopAcM_prm_class* fopAcM_GetAppend(void* actor) {
     return (fopAcM_prm_class*)fpcM_GetAppend(actor);
 }

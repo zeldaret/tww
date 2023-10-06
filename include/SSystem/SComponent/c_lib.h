@@ -21,6 +21,7 @@ void cLib_addCalcPos2(cXyz* o_value, cXyz const& target, f32 scale, f32 maxStep)
 void cLib_addCalcPosXZ2(cXyz* o_value, cXyz const& target, f32 scale, f32 maxStep);
 s16 cLib_addCalcAngleS(s16* o_value, s16 target, s16 scale, s16 maxStep, s16 minStep);
 void cLib_addCalcAngleS2(s16* o_value, s16 target, s16 scale, s16 maxStep);
+s32 cLib_addCalcAngleL(s32* pValue, s32 target, s32 scale, s32 maxStep, s32 minStep);
 
 int cLib_chaseUC(u8* o_value, u8 target, u8 step);
 int cLib_chaseS(s16* o_value, s16 target, s16 step);
@@ -46,8 +47,8 @@ inline void cLib_onBit(T& value, u8 bit) {
 }
 
 template <typename T>
-inline T cLib_checkBit(T& value, u8 bit) {
-    return value & bit;
+inline T cLib_checkBit(T value, T bit) {
+    return static_cast<T>(value & bit);
 }
 
 template <typename T>

@@ -13,6 +13,7 @@
 #include "d/d_kankyo_wether.h"
 #include "d/actor/d_a_agb.h"
 #include "d/actor/d_a_player_link.h"
+#include "d/actor/d_a_bomb.h"
 #include "m_Do/m_Do_gba_com.h"
 
 // need to figure out what's putting this data in front of a bunch of rels with the compiler-generated symbol names
@@ -1069,12 +1070,6 @@ BOOL daAgbsw0_c::ExeSubMW() {
     return true;
 }
 
-class daBomb_c {
-public:
-    enum State_e { EIGHT = 8, };
-    bool chk_state(State_e) const;
-};
-
 BOOL daAgbsw0_c::ExeSubT() {
     u8 sw = getSw0();
 
@@ -1100,7 +1095,7 @@ BOOL daAgbsw0_c::ExeSubT() {
     else {
         if(g_mDoGaC_gbaCom.mDoGaC_GbaLink()) {
             if(g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(0xF)) {
-                if(mCyl.ChkTgHit() && mCyl.GetTgHitAc() && fopAcM_GetName(mCyl.GetTgHitAc()) == PROC_BOMB && ((daBomb_c*)mCyl.GetTgHitAc())->chk_state(daBomb_c::EIGHT)) {
+                if(mCyl.ChkTgHit() && mCyl.GetTgHitAc() && fopAcM_GetName(mCyl.GetTgHitAc()) == PROC_BOMB && ((daBomb_c*)mCyl.GetTgHitAc())->chk_state(daBomb_c::STATE_8)) {
                     mSE = BigLittleChange(0x12);
                     g_mDoGaC_gbaCom.mDoGaC_SendDataSet((u32*)&mSE, 4, 0xF, 0);
                     fopAcM_onSwitch(this, sw);

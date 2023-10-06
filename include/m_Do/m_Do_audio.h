@@ -70,6 +70,10 @@ inline void mDoAud_seStart(u32 i_sfxID, Vec* i_sePos, u32 param_2, s8 i_reverb) 
     mDoAud_zelAudio_c::getInterface()->seStart(i_sfxID, i_sePos, param_2, i_reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
+inline void mDoAud_seStopActor(Vec* param_1, u32 param_2) {
+    mDoAud_zelAudio_c::getInterface()->seStopActor(param_1, param_2);
+}
+
 inline void mDoAud_seDeleteObject(Vec* i_sePos) {
     mDoAud_zelAudio_c::getInterface()->seDeleteObject(i_sePos);
 }

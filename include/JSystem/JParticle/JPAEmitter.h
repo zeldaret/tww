@@ -63,7 +63,7 @@ public:
     void calc();
     void calcCreatePtcls();
     void createChildren(JPABaseParticle*);
-    void createParticle();
+    JPABaseParticle* createParticle();
     void calcParticle();
     void calcChild();
     void calcKey();

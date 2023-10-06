@@ -16,11 +16,11 @@ struct mDoLib_clipper {
         mClipper.calcViewFrustum();
     }
 
-    static u32 clip(const Mtx m, const Vec* param_1, const Vec* param_2) {
+    static s32 clip(const Mtx m, const Vec* param_1, const Vec* param_2) {
         return mClipper.clip(m, (Vec*)param_1, (Vec*)param_2);
     }
 
-    static u32 clip(const Mtx m, Vec param_1, f32 param_2) {
+    static s32 clip(const Mtx m, Vec param_1, f32 param_2) {
         return mClipper.clip(m, param_1, param_2);
     }
 

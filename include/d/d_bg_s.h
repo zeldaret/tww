@@ -94,7 +94,7 @@ public:
     bool ChkMoveBG_NoDABg(cBgS_PolyInfo&);
     int GetPolyId0(int, int, int, u32, u32);
     int GetPolyCamId(int, int);
-    int GetMtrlSndId(cBgS_PolyInfo&);
+    u32 GetMtrlSndId(cBgS_PolyInfo&);
     int GetExitId(cBgS_PolyInfo&);
     int GetPolyColor(cBgS_PolyInfo&);
     int GetGrpRoomInfId(cBgS_PolyInfo&);
