@@ -87,7 +87,7 @@ extern actor_process_profile_definition g_profile_SWC00 = {
     &g_fopAc_Method.base,
     0x011A,
     &l_daSwc00_Method,
-    0x00040000,
+    fopAcStts_UNK40000_e,
     fopAc_ACTOR_e,
     fopAc_CULLBOX_0_e,
 };

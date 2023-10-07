@@ -68,7 +68,7 @@ s32 fopAc_Execute(void* pProc) {
 
         s32 moveApproval = dComIfGp_event_moveApproval(actor);
 
-        if ((moveApproval == 2 || moveApproval != 0 || !fopAcM_checkStatus(actor, fopAc_ac_c::stopStatus)) && (!fopAcM_checkStatus(actor, fopAcStts_NOEXEC_e) || !fopAcM_CheckCondition(actor, fopAcCnd_NODRAW_e))) {
+        if ((moveApproval == 2 || moveApproval != 0 || !fopAcM_checkStatus(actor, fopAc_ac_c::stopStatus)) && (!fopAcM_checkStatus(actor, fopAcStts_NOCULLEXEC_e) || !fopAcM_CheckCondition(actor, fopAcCnd_NODRAW_e))) {
             fopAcM_OffCondition(actor, fopAcCnd_NOEXEC_e);
             actor->next = actor->current;
             ret = fpcMtd_Execute((process_method_class*)actor->mSubMtd, actor);

@@ -171,7 +171,7 @@ extern actor_process_profile_definition g_profile_KYTAG06 = {
     &g_fopAc_Method.base,
     0xA5,
     &l_daKytag05_Method,
-    0x00000044000,
+    fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     fopAc_ACTOR_e,
     fopAc_CULLBOX_0_e,
 };

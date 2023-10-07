@@ -1104,7 +1104,7 @@ extern actor_process_profile_definition g_profile_OBJ_TORIPOST = {
     &g_fopAc_Method.base,
     0x01B3,
     &daObjTpostMethodTable,
-    0x00240138,
+    0x18 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     fopAc_ACTOR_e,
     fopAc_CULLBOX_4_e,
 };

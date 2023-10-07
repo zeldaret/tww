@@ -1469,7 +1469,7 @@ extern actor_process_profile_definition g_profile_AM = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x00BD,
     /* Actor SubMtd */ &l_daAM_Method,
-    /* Status       */ 0x00040120,
+    /* Status       */ fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

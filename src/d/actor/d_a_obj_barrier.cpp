@@ -727,7 +727,7 @@ extern actor_process_profile_definition g_profile_Obj_Barrier = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 131,
     /* Actor SubMtd */ &l_daObjBarrier_Method,
-    /* Status       */ 0x40000,
+    /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };
