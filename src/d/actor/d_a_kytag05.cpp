@@ -17,138 +17,129 @@
 
 class kytag05_class : public fopAc_ac_c {
 public:
-    /* 0x00 */ u8 mIndex;
-    /* 0x04 */ int field_0x294;
-    /* 0x08 */ int field_0x298;
+    /* 0x290 */ u8 mIndex;
+    /* 0x294 */ int mTimer;
+    /* 0x298 */ int mUnknownParam;
 }; /* size = 0x29C */
 
-BOOL daKytag05_Draw(kytag05_class*) {
-    return true;
+static BOOL daKytag05_Draw(kytag05_class*) {
+    return TRUE;
 }
 
-static const s16 wind_table[] = {
-    0,
-    90,
-    180,
-    270
-};
-
-static const s16 mufuu_timer[] = {
-    0x0A,
-    0xA,
-    0x00,
-    0x5A
-};
-
-static const s16 fuu_timer[] = {
-    0x0096,
-    0x0096,
-    0x0096,
-    0x0096,
-};
-
-
 /* 00000080-000003F4       .text daKytag05_Execute__FP13kytag05_class */
-int daKytag05_Execute(kytag05_class* a_this) {
-    /* Nonmatching - 92% matching */
-    daPy_py_c *playerActor;
-    camera_class *mpCamera;
-    f32 cameraEyeZ;
-    f32 i_blend;
-    f32 windPow;
-    u32 demoField;
-    mpCamera = dComIfGp_getCamera(0);
-    playerActor = daPy_getPlayerActorClass();
-    windPow = dKyw_get_wind_pow();
-    i_blend = 1.0f;
+static BOOL daKytag05_Execute(kytag05_class* a_this) {
+    static const s16 wind_table[] = {
+        0x0000,
+        0x8001,
+        0xC000,
+        0x4000,
+    };
+    static const s16 mufuu_timer[] = {
+        10,
+        10,
+        0,
+        90
+    };
+    static const s16 fuu_timer[] = {
+        150,
+        150,
+        150,
+        150,
+    };
+    
+    camera_process_class *camera = dComIfGp_getCamera(0);
+    fopAc_ac_c *player = dComIfGp_getPlayer(0);
+    f32 windPow = dKyw_get_wind_pow();
+    f32 i_blend = 1.0f;
 
     if (g_env_light.mWind.mEvtWindSet == 0xFF) {
-        return 1;
+        return TRUE;
     }
-    if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode != 0 &&
-        dComIfGp_getEventManager().startCheckOld("demo41") != 0 &&
-        g_dComIfG_gameInfo.play.getDemo() != NULL) {
-        demoField = g_dComIfG_gameInfo.play.getDemo()->field_0xd4;
-        if(demoField >= 0x186) {
-            f32 fVar7 = ((f32)demoField - 390.0f) / 100.0f;
+    
+    if (dComIfGp_event_runCheck() && dComIfGp_evmng_startCheck("demo41") &&
+        g_dComIfG_gameInfo.play.getDemo()) {
+        u32 demoFrame = dComIfGp_demo_get()->getFrame();
+        if(demoFrame >= 0x186) {
+            f32 fVar7 = ((f32)demoFrame - 390.0f) / 100.0f;
             if(fVar7 > i_blend) {
                 fVar7 = i_blend;
             }
             i_blend = 1.0f - fVar7;
             g_env_light.mSnowCount = (int)(200.0f * i_blend);
-        } else if (demoField == 0x187 && daYkgr_c::m_emitter != 0) {
-            daYkgr_c::m_alpha_flag = 0;
+        } else if (demoFrame == 0x187) {
+            daYkgr_c::stop();
         }
     }
     dKy_custom_colset(0, 7, i_blend);
+    
     if((a_this->mIndex & 1) == 0) {
-        if (a_this->field_0x294 >= fuu_timer[a_this->mIndex >> 1]) {
-            a_this->field_0x294 = 0;
+        if (a_this->mTimer >= fuu_timer[a_this->mIndex >> 1]) {
+            a_this->mTimer = 0;
             a_this->mIndex += 1;
             g_env_light.mWind.mEvtWindSet = 2;
         } else {
-            a_this->field_0x294 += 1;
+            a_this->mTimer += 1;
         }
     } else {
-        if (a_this->field_0x294 >=  mufuu_timer[(a_this->mIndex) >> 1]) {
+        if (a_this->mTimer >= mufuu_timer[a_this->mIndex >> 1]) {
             a_this->mIndex += 1;
             if(a_this->mIndex >> 1 >= 4) {
                 a_this->mIndex = 0;
             }
             dKyw_evt_wind_set(0, wind_table[a_this->mIndex >> 1]);
-            a_this->field_0x294 = 0;
+            a_this->mTimer = 0;
             g_env_light.mWind.mEvtWindSet = 1;
         } else {
-            a_this->field_0x294 += 1;
+            a_this->mTimer += 1;
         }
     }
-    /* Numbers in this sections aren't necessarily right */
-    cameraEyeZ = mpCamera->mLookat.mEye.z;
-    if(cameraEyeZ > 360.0f|| playerActor->current.pos.z > 360.0f &&
-       mpCamera->mLookat.mEye.x > 450 || playerActor->current.pos.x > 450.0f){
-        if(cameraEyeZ > 540.0f || playerActor->current.pos.z < 540.0f) {
+    
+    if((camera->mLookat.mEye.z > 1445.0f || player->current.pos.z > 1445.0f) &&
+       (camera->mLookat.mEye.x > 520.0f || player->current.pos.x > 520.0f)){
+        if(camera->mLookat.mEye.z > 2100.0f || player->current.pos.z > 2100.0f) {
             dKyw_evt_wind_set(0, 0x61A8);
-        } else if(cameraEyeZ > 630.0f || playerActor->current.pos.z > 630.0f) {
+        } else if(camera->mLookat.mEye.z > 1970.0f || player->current.pos.z > 1970.0f) {
             dKyw_evt_wind_set(0, 0x4E20);
         } else {
-            dKyw_evt_wind_set(0,0x4650);
+            dKyw_evt_wind_set(0, 0x4650);
         }
-    } else if(mpCamera->mLookat.mEye.z < 720 ||  playerActor->current.pos.x < 720) {
+    } else if(camera->mLookat.mEye.z < -4085.0f || player->current.pos.z < -4085.0f) {
         dKyw_evt_wind_set(0, -0x3E80);
-    } else if(mpCamera->mLookat.mEye.z < 810 || playerActor->current.pos.x < 810 ) {
+    } else if(camera->mLookat.mEye.z < -3108.0f || player->current.pos.z < -3108.0f) {
         dKyw_evt_wind_set(0, -0x4B00);
-    } else if(mpCamera->mLookat.mEye.z < 900 || playerActor->current.pos.x < 900) {
+    } else if(camera->mLookat.mEye.z < -1412.0f || player->current.pos.z < -1412.0f) {
         dKyw_evt_wind_set(0, -0x32C8);
     }
 
-    mDoAud_seStart(0x106A, 0, (u32)(windPow * 180), 0);
-    return 1;
+    mDoAud_seStart(0x106A, 0, windPow * 100.0f, 0);
+    
+    return TRUE;
 }
 
-BOOL daKytag05_IsDelete(kytag05_class*) {
-    return true;
+static BOOL daKytag05_IsDelete(kytag05_class*) {
+    return TRUE;
 }
 
-BOOL daKytag05_Delete(kytag05_class*) {
-    return true;
+static BOOL daKytag05_Delete(kytag05_class*) {
+    return TRUE;
 }
 
-int daKytag05_Create(fopAc_ac_c* i_this) {
+static int daKytag05_Create(fopAc_ac_c* i_this) {
     fopAcM_SetupActor(i_this, kytag05_class);
     kytag05_class *a_this = (kytag05_class*)i_this;
     if (dComIfGs_isSymbol(1) != 0) {
         return 3;
     }
     a_this->mIndex = 0;
-    a_this->field_0x294 = 0;
-    a_this->field_0x298 = i_this->mBase.mParameters & 0xff;
+    a_this->mTimer = 0;
+    a_this->mUnknownParam = i_this->mBase.mParameters & 0xff;
     dKyw_evt_wind_set_go();
-    dKyw_evt_wind_set(0,0);
+    dKyw_evt_wind_set(0, 0);
     g_env_light.mSnowCount = 200;
     g_env_light.mMoyaMode = 0;
     g_env_light.mMoyaCount = 100;
 
-    return 4;
+    return cPhs_COMPLEATE_e;
 }
 
 static actor_method_class l_daKytag05_Method = {
@@ -159,7 +150,7 @@ static actor_method_class l_daKytag05_Method = {
     (process_method_func)daKytag05_Draw,
 };
 
-extern actor_process_profile_definition g_profile_KYTAG06 = {
+extern actor_process_profile_definition g_profile_KYTAG05 = {
     fpcLy_CURRENT_e,
     7,
     fpcLy_CURRENT_e,

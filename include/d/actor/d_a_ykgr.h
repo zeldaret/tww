@@ -7,6 +7,12 @@
 
 struct daYkgr_c {
 public:
+    static void stop() {
+        if (m_emitter) {
+            m_alpha_flag = 0;
+        }
+    };
+    
     static JPABaseEmitter* m_emitter;
     static u8 m_alpha_flag;
 public:

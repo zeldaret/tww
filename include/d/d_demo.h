@@ -76,6 +76,8 @@ public:
     void create(u8 const*, cXyz*, f32);
     void remove();
     void update();
+    
+    int getFrame() { return mFrame; }
 
     /* 0x00 */ dDemo_system_c* mpSystem;
     /* 0x04 */ TControl* mpControl;
@@ -87,7 +89,7 @@ public:
     /* 0x1C */ void* mpMessage;
     /* 0x20 */ dDemo_object_c mDemoObj;
     /* 0xD0 */ void* field_0xd0;
-    /* 0xD4 */ int field_0xd4;
+    /* 0xD4 */ int mFrame;
     /* 0xD8 */ int field_0xd8;
     /* 0xDC */ int mState;
 };

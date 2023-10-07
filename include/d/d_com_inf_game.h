@@ -1106,6 +1106,10 @@ inline void dComIfGp_map_mapBufferSendAGB(int param_0) {
     dMap_c::mapBufferSendAGB(param_0);
 }
 
+inline dDemo_manager_c* dComIfGp_demo_get() {
+    return g_dComIfG_gameInfo.play.getDemo();
+}
+
 inline void dComIfGp_demo_update() {
     g_dComIfG_gameInfo.play.getDemo()->update();
 }
