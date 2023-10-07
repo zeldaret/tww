@@ -266,7 +266,18 @@ struct dStage_MemoryConfig_c {
 
 struct dStage_DMap_c {};
 
-struct dStage_EventInfo_c {};
+struct dStage_EventInfo_c {
+    /* 0x0 */ int field_0x0;
+    /* 0x1 */ char* mName;
+    /* 0x10 */ u8 field_0x10;
+    /* 0x11 */ u8 field_0x11;
+    /* 0x12 */ u8 field_0x12;
+    /* 0x13 */ u8 field_0x13;
+    /* 0x14 */ u8 field_0x14;
+    /* 0x15 */ u8 field_0x15;
+    /* 0x16 */ u8 field_0x16;
+    /* 0x17 */ u8 field_0x17;
+}; // Size: 0x18
 
 struct dStage_Ship_data {
     /* 0x0 */ cXyz m_pos;

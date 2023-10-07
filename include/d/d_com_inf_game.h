@@ -1062,6 +1062,10 @@ inline stage_envr_info_class* dComIfGp_getStageEnvrInfo() {
     return g_dComIfG_gameInfo.play.getStage().getEnvrInfo();
 }
 
+inline dStage_EventInfo_c* dComIfGp_getStageEventInfo() {
+    return g_dComIfG_gameInfo.play.getStage().getEventInfo();
+}
+
 inline stage_palet_info_class* dComIfGp_getStagePaletteInfo() {
     return g_dComIfG_gameInfo.play.getStage().getPaletInfo();
 }
