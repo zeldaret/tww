@@ -404,6 +404,6 @@ namespace daObjPaper {
         &Mthd_Table,
         0x00040180,
         fopAc_ACTOR_e,
-        fopAc_CULLSPHERE_8_e,
+        fopAc_CULLSPHERE_CUSTOM_e,
     };
 }

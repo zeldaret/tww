@@ -408,8 +408,8 @@ f32 fopAcM_searchActorDistanceXZ(fopAc_ac_c* p_actorA, fopAc_ac_c* p_actorB);
 
 f32 fopAcM_searchActorDistanceXZ2(fopAc_ac_c* p_actorA, fopAc_ac_c* p_actorB);
 
-s32 fopAcM_rollPlayerCrash(fopAc_ac_c*, f32, u32);
-s32 fopAcM_checkCullingBox(f32[3][4], f32, f32, f32, f32, f32, f32);
+s32 fopAcM_rollPlayerCrash(fopAc_ac_c* i_this, f32 distAdjust, u32 flag);
+s32 fopAcM_checkCullingBox(Mtx, f32, f32, f32, f32, f32, f32);
 s32 fopAcM_cullingCheck(fopAc_ac_c*);
 void* event_second_actor(u16);
 s32 fopAcM_orderTalkEvent(fopAc_ac_c*, fopAc_ac_c*);
@@ -434,15 +434,15 @@ s32 fopAcM_createItemForPresentDemo(cXyz* p_pos, int i_itemNo, u8 param_2, int i
 s32 fopAcM_createItemForTrBoxDemo(cXyz* p_pos, int i_itemNo, int i_itemBitNo, int i_roomNo,
                                   csXyz* p_angle, cXyz* p_scale);
 
-u8 fopAcM_getItemNoFromTableNo(u8 i_tableNo);
-
-s32 fopAcM_createItemFromEnemyID(u8 i_enemyID, cXyz* p_pos, int i_itemBitNo, int i_roomNo,
-                                 csXyz * p_angle, cXyz * p_scale, f32* speedF,
-                                 f32* speedY);
-
 s32 fopAcM_createItemFromTable(cXyz* p_pos, int i_tableNo, int i_itemBitNo, int i_roomNo,
                                csXyz* p_angle, int param_5, cXyz * p_scale, f32* speedF,
                                f32* speedY, bool createDirect);
+
+s32 fopAcM_createShopItem(cXyz* pos, int i_itemNo, csXyz* rot, int roomNo, cXyz* scale,
+                          createFunc createFunc);
+
+s32 fopAcM_createRaceItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* rot, int roomNo,
+                          cXyz* scale, int param_7);
 
 s32 fopAcM_createIball(cXyz*, int, int, csXyz*, int);
 
@@ -452,19 +452,12 @@ s32 fopAcM_createDemoItem(cXyz* p_pos, int itemNo, int itemBitNo, csXyz* p_angle
 s32 fopAcM_createItemForBoss(cXyz* p_pos, int param_2, int roomNo, csXyz* p_angle,
                              cXyz* p_scale, int param_8);
 
-s32 fopAcM_createItemForMidBoss(cXyz* p_pos, int i_itemNo, int i_roomNo, csXyz* p_angle,
-                                cXyz* p_scale, int param_6, int param_7);
-
-void* fopAcM_createItemForDirectGet(cXyz* p_pos, int i_itemNo, int i_roomNo,
-                                    csXyz* p_angle, cXyz* p_scale, f32 speedF,
-                                    f32 speedY);
-
 void* fopAcM_createItemForSimpleDemo(cXyz* p_pos, int i_itemNo, int i_roomNo,
                                      csXyz* p_angle, cXyz* p_scale, f32 speedF,
                                      f32 speedY);
 
-s32 fopAcM_createItem(cXyz* p_pos, int itemNo, int param_3, int roomNo, int param_4, csXyz* p_angle,
-                      int param_7, cXyz* p_scale);
+s32 fopAcM_createItem(cXyz* p_pos, int itemNo, int param_3, int roomNo, int type, csXyz* p_angle,
+                      int action, cXyz* p_scale);
 
 void* fopAcM_fastCreateItem2(cXyz* p_pos, int itemNo, int param_3, int roomNo, int param_5,
                              csXyz* p_angle, int, cXyz* p_scale);
@@ -473,14 +466,13 @@ void* fopAcM_fastCreateItem(cXyz* p_pos, int i_itemNo, int i_roomNo, csXyz* p_an
                             cXyz* p_scale, f32 p_speedF, f32 p_speedY, f32 param_8,
                             int param_9, createFunc p_createFunc);
 
-s32 fopAcM_createBokkuri(u16, cXyz*, int, int, int, cXyz*, int, int);
-s32 fopAcM_createWarpHole(cXyz*, csXyz*, int, u8, u8, u8);
+BOOL stealItem_CB(void* actor);
 
 fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo);
 
 s32 fopAcM_createDisappear(fopAc_ac_c*, cXyz*, u8, u8, u8);
-void fopAcM_setCarryNow(fopAc_ac_c*, int);
-void fopAcM_cancelCarryNow(fopAc_ac_c*);
+void fopAcM_setCarryNow(fopAc_ac_c* i_this, int stageLayer);
+void fopAcM_cancelCarryNow(fopAc_ac_c* i_this);
 s32 fopAcM_otoCheck(fopAc_ac_c*, f32);
 // void vectle_calc(DOUBLE_POS*, cXyz*);
 // void get_vectle_calc(cXyz*, cXyz*, cXyz*);
@@ -499,19 +491,6 @@ s32 fopAcM_getWaterY(const cXyz*, f32*);
 void fpoAcM_relativePos(fopAc_ac_c* actor, cXyz* p_inPos, cXyz* p_outPos);
 
 void fopAcM_setGbaName(fopAc_ac_c* i_this, u8 itemNo, u8 gbaName0, u8 gbaName1);
-
-inline void make_prm_warp_hole(u32* actorParams, u8 p1, u8 p2, u8 p3) {
-    u32 pp1 = (p3 << 0x8);
-    u32 pp2 = (p2 << 0x10);
-    u32 pp3 = (p1 << 0x1B) | 0x170000FF;
-    *actorParams = pp2 | pp3 | pp1;
-}
-
-inline void make_prm_bokkuri(u32* pActorParams, csXyz* p_angle, u8 param_2, u8 param_3, u8 param_4,
-                             u8 param_5, u8 param_6) {
-    p_angle->x = (param_4 << 0x8) | (param_3 & 0xFF);
-    p_angle->z = (param_6 << 0xD) | (param_2 << 0x1) | param_5;
-}
 
 inline fopAc_ac_c* dComIfGp_getPlayer(int);
 

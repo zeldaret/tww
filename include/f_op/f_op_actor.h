@@ -63,12 +63,6 @@ enum fopAc_Cull_e {
     fopAc_CULLSPHERE_5_e,
     fopAc_CULLSPHERE_6_e,
     fopAc_CULLSPHERE_7_e,
-    fopAc_CULLSPHERE_8_e,
-    fopAc_CULLSPHERE_9_e,
-    fopAc_CULLSPHERE_10_e,
-    fopAc_CULLSPHERE_11_e,
-    fopAc_CULLSPHERE_12_e,
-    fopAc_CULLSPHERE_13_e,
     fopAc_CULLSPHERE_CUSTOM_e,
 };
 
@@ -198,7 +192,7 @@ public:
     /* 0x10C */ dKy_tevstr_c mTevStr;
     /* 0x1BC */ u16 mSetId;
     /* 0x1BE */ u8 mGroup;
-    /* 0x1BF */ s8 mCullType;
+    /* 0x1BF */ u8 mCullType;
     /* 0x1C0 */ u8 mDemoActorId;
     /* 0x1C1 */ s8 mSubtype;
     /* 0x1C2 */ u8 mGbaName;
