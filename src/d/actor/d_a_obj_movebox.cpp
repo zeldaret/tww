@@ -870,7 +870,7 @@ extern actor_process_profile_definition g_profile_Obj_Movebox = {
     &g_fopAc_Method.base,
     0x0015,
     &daObjMovebox::Mthd_Table,
-    0x00040524,
+    0x04 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK40000_e,
     fopAc_ACTOR_e,
     fopAc_CULLBOX_CUSTOM_e,
 };

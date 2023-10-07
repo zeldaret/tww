@@ -679,7 +679,7 @@ BOOL daArrow_c::procMove() {
                             }
                             
                             mCurrProcFunc = &procStop_BG;
-                            fopAcM_OnStatus(this, 0x4000);
+                            fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
                             fopAcM_SetParam(this, 2);
                             field_0x604 = 0x28;
                             
@@ -721,7 +721,7 @@ BOOL daArrow_c::procMove() {
     
     if (hitType > 0) {
         field_0x604 = 0x28;
-        fopAcM_OnStatus(this, 0x4000);
+        fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
         
         if (mPtclFollowCb.mpEmitter) {
             mPtclFollowCb.end();
@@ -780,7 +780,7 @@ BOOL daArrow_c::procMove() {
             }
             
             mCurrProcFunc = &procStop_BG;
-            fopAcM_OnStatus(this, 0x4000);
+            fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
             fopAcM_SetParam(this, 2);
             field_0x604 = 0x28;
             cM3dGPla* triPla = dComIfG_Bgsp()->i_GetTriPla(mLinChk);
@@ -1302,7 +1302,7 @@ extern actor_process_profile_definition g_profile_ARROW = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x01BF,
     /* Actor SubMtd */ &daArrowMethodTable,
-    /* Status       */ 0x00044000,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

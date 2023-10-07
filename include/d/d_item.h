@@ -389,7 +389,7 @@ BOOL isUseClothPacket(u8);
 BOOL isTriforce(u8);
 BOOL isHeart(u8);
 void getItemNoByLife(u8);
-void check_itemno(int);
+int check_itemno(int);
 void getEmonoItemFromLifeBallTable(u16);
 void getItemFromLifeBallTableWithoutEmono(u16);
 

@@ -16,13 +16,15 @@ struct mDoLib_clipper {
         mClipper.calcViewFrustum();
     }
 
-    static s32 clip(const Mtx m, const Vec* param_1, const Vec* param_2) {
-        return mClipper.clip(m, (Vec*)param_1, (Vec*)param_2);
+    static s32 clip(const Mtx m, const Vec* max, const Vec* min) {
+        return mClipper.clip(m, (Vec*)max, (Vec*)min);
     }
 
-    static s32 clip(const Mtx m, Vec param_1, f32 param_2) {
-        return mClipper.clip(m, param_1, param_2);
+    static s32 clip(const Mtx m, Vec center, f32 radius) {
+        return mClipper.clip(m, center, radius);
     }
+    
+    static s32 clip(J3DModel*);
 
     static f32 getFar() { return mSystemFar; }
     static f32 getFovyRate() { return mFovyRate; }

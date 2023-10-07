@@ -78,9 +78,14 @@ public:
     u8 getTalkXYBtn() { return mTalkButton; }
     bool chkTalkXY() { return mTalkButton == 1 || mTalkButton == 2 || mTalkButton == 3; }
     void setPtI_Id(u32 id) { mPtItem = id; }
+    void setGtItm(u8 itemNo) { mGetItemNo = itemNo; }
+    u8 getGtItm() { return mGetItemNo; }
     void setPtT(void* i_actor) { mPtTalk = getPId(i_actor); }
     u8 getPreItemNo() { return mItemNo; }
-
+    
+    f32 getCullRate() { return mCullFarClipRatio; }
+    void setCullRate(f32 ratio) { mCullFarClipRatio = ratio; }
+    
     u16 chkEventFlag(u16 flag) { return flag & mEventFlag; }
     void onEventFlag(u16 flag) { mEventFlag |= flag; }
     void offEventFlag(u16 flag) { mEventFlag &= ~flag; }
@@ -97,7 +102,7 @@ public:
     /* 0xC8 */ u32 mPt2;
     /* 0xCC */ int mPtTalk;
     /* 0xD0 */ u32 mPtItem;
-    /* 0xD4 */ u8 mCurStaffId;
+    /* 0xD4 */ u8 mGetItemNo;
     /* 0xD5 */ u8 field_0xD5[0xD6 - 0xD5];
     /* 0xD6 */ s16 field_0xd6;
     /* 0xD8 */ s16 mEventId;

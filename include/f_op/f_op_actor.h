@@ -16,11 +16,17 @@ struct actor_method_class {
 
 enum fopAc_Status_e {
     fopAcStts_SHOWMAP_e     = 0x00000020,
-    fopAcStts_NOEXEC_e      = 0x00000080,
+    fopAcStts_NOCULLEXEC_e  = 0x00000080,
     fopAcStts_CULL_e        = 0x00000100,
     fopAcStts_FREEZE_e      = 0x00000400,
+    fopAcStts_UNK800_e      = 0x00000800,
     fopAcStts_CARRY_e       = 0x00002000,
+    fopAcStts_UNK4000_e     = 0x00004000,
     fopAcStts_NOPAUSE_e     = 0x00020000,
+    fopAcStts_UNK40000_e    = 0x00040000,
+    fopAcStts_UNK80000_e    = 0x00080000,
+    fopAcStts_HOOK_CARRY_e  = 0x00100000,
+    fopAcStts_UNK200000_e   = 0x00200000,
     fopAcStts_NODRAW_e      = 0x01000000,
     fopAcStts_BOSS_e        = 0x04000000,
 };
@@ -63,12 +69,6 @@ enum fopAc_Cull_e {
     fopAc_CULLSPHERE_5_e,
     fopAc_CULLSPHERE_6_e,
     fopAc_CULLSPHERE_7_e,
-    fopAc_CULLSPHERE_8_e,
-    fopAc_CULLSPHERE_9_e,
-    fopAc_CULLSPHERE_10_e,
-    fopAc_CULLSPHERE_11_e,
-    fopAc_CULLSPHERE_12_e,
-    fopAc_CULLSPHERE_13_e,
     fopAc_CULLSPHERE_CUSTOM_e,
 };
 
@@ -198,7 +198,7 @@ public:
     /* 0x10C */ dKy_tevstr_c mTevStr;
     /* 0x1BC */ u16 mSetId;
     /* 0x1BE */ u8 mGroup;
-    /* 0x1BF */ s8 mCullType;
+    /* 0x1BF */ u8 mCullType;
     /* 0x1C0 */ u8 mDemoActorId;
     /* 0x1C1 */ s8 mSubtype;
     /* 0x1C2 */ u8 mGbaName;

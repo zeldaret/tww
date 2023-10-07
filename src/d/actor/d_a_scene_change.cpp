@@ -93,7 +93,7 @@ extern actor_process_profile_definition g_profile_SCENECHG = {
     &g_fopAc_Method.base,
     0x01A1,
     &daSceneChgMethodTable,
-    0x00040000,
+    fopAcStts_UNK40000_e,
     fopAc_ACTOR_e,
     fopAc_CULLBOX_4_e,
 };

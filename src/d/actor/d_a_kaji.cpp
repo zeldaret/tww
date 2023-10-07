@@ -164,7 +164,7 @@ extern actor_process_profile_definition g_profile_Kaji = {
     &g_fopAc_Method.base,
     0x01AC,
     &daKajiMethodTable,
-    0x00040100,
+    fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     fopAc_ACTOR_e,
     fopAc_CULLBOX_CUSTOM_e,
 };

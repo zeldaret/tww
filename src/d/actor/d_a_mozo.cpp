@@ -372,7 +372,7 @@ extern actor_process_profile_definition g_profile_MOZO = {
     &g_fopAc_Method.base,
     0x00D1,
     &l_daMozo_Method,
-    0x00040100,
+    fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     fopAc_ACTOR_e,
     fopAc_CULLBOX_CUSTOM_e,
 };
