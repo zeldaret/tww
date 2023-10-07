@@ -27,12 +27,12 @@ namespace daBomb2 {
 
         void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
 
-        s16 field_0x04;
-        const cXyz* mpPos;
-        const cXyz* field_0x0C;
-        const cXyz* field_0x10;
-        JPABaseEmitter* mpEmitter;
-    };
+        /* 0x04 */ s16 field_0x04;
+        /* 0x08 */ const cXyz* mpPos;
+        /* 0x0C */ const cXyz* field_0x0C;
+        /* 0x10 */ const cXyz* field_0x10;
+        /* 0x14 */ JPABaseEmitter* mpEmitter;
+    }; // Size 0x18
     
     class FuseSparksCB_c : public dPa_levelEcallBack {
     public:
@@ -48,9 +48,9 @@ namespace daBomb2 {
 
         void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
 
-        const cXyz* mpPos;
-        JPABaseEmitter* mpEmitter;
-    };
+        /* 0x04 */ const cXyz* mpPos;
+        /* 0x08 */ JPABaseEmitter* mpEmitter;
+    }; // Size 0x0C
     
     class Env_c {
     public:
@@ -59,11 +59,12 @@ namespace daBomb2 {
         bool is_end() const;
         void proc(const cXyz&);
 
-        LIGHT_INFLUENCE mPntLight;
-        WIND_INFLUENCE mPntWind;
-        u8 field_0x4C;
-        f32 field_0x50;
-    };
+    private:
+        /* 0x00 */ LIGHT_INFLUENCE mPntLight;
+        /* 0x20 */ WIND_INFLUENCE mPntWind;
+        /* 0x4C */ u8 field_0x4C;
+        /* 0x50 */ f32 field_0x50;
+    }; // Size 0x54
 
     class Act_c : public fopAc_ac_c { 
     public:
@@ -79,8 +80,8 @@ namespace daBomb2 {
         bool chk_explode();
 
         static int solidHeapCB(fopAc_ac_c*);
-        int create_heap_nut();
-        int create_heap();
+        bool create_heap_nut();
+        bool create_heap();
         void crr_init();
         void cc_init();
         void start_explode_instant();
@@ -167,44 +168,54 @@ namespace daBomb2 {
         };
 
     private: 
-        //some of these might be extra since i initially copied them from daBomb_c
-        request_of_phase_process_class mPhs;
-        J3DModel* mpModel;
-        mDoExt_bckAnm mBck0;
-        mDoExt_brkAnm mBrk0;
-        dBgS_BombAcch mAcch;
-        dBgS_AcchCir mCir;
-        dBgS_ObjGndChk_Yogan mGndChk;
-        f32 field_0x51C;
-        f32 field_0x520;
-        bool field_0x524;
-        bool mbWaterIn;
-        u8 field_0x526;
-        f32 field_0x528;
-        dCcD_Stts mStts;
-        dCcD_Sph mSph;
-        int field_0x694;
-        int field_0x698;
+        //some of these might need updating since i initially copied them from daBomb_c
+        /* 0x290 */ request_of_phase_process_class mPhs;
+        /* 0x298 */ J3DModel* mpModel;
+        /* 0x29C */ mDoExt_bckAnm mBck0;
+        /* 0x2AC */ mDoExt_brkAnm mBrk0;
+        /* 0x2C4 */ dBgS_BombAcch mAcch;
+        /* 0x488 */ dBgS_AcchCir mCir;
+        /* 0x4C8 */ dBgS_ObjGndChk_Yogan mGndChk;
+        /* 0x51C */ f32 field_0x51C;
+        /* 0x520 */ f32 field_0x520;
+        /* 0x524 */ bool field_0x524;
+        /* 0x525 */ bool mbWaterIn;
+        /* 0x526 */ u8 field_0x526;
+        /* 0x528 */ f32 field_0x528;
+        /* 0x52C */ dCcD_Stts mStts;
+        /* 0x568 */ dCcD_Sph mSph;
+        /* 0x694 */ int field_0x694;
+        /* 0x698 */ int field_0x698;
 
-        FuseSmokeCB_c mSmoke;
-        FuseSparksCB_c mSparks;
-        cXyz field_0x6C0;
-        cXyz field_0x6CC;
-        cXyz field_0x6D8;
-        Env_c mEnv;
-        int field_0x738;
-        int field_0x73C;
-        u8 field_0x740;
-        u8 field_0x741;
-        u8 field_0x742;
-        u8 field_0x743;
-        bool field_0x744;
-        bool field_0x745;
-        cXyz field_0x748;
-        Mtx field_0x754;
+        /* 0x69C */ FuseSmokeCB_c mSmoke;
+        /* 0x6B4 */ FuseSparksCB_c mSparks;
+        /* 0x6C0 */ cXyz field_0x6C0;
+        /* 0x6CC */ cXyz field_0x6CC;
+        /* 0x6D8 */ cXyz field_0x6D8;
+        /* 0x6E4 */ Env_c mEnv;
+        /* 0x738 */ int field_0x738;
+        /* 0x73C */ int field_0x73C;
+        /* 0x740 */ u8 field_0x740;
+        /* 0x741 */ u8 field_0x741;
+        /* 0x742 */ u8 field_0x742;
+        /* 0x743 */ u8 field_0x743;
+        /* 0x744 */ bool field_0x744;
+        /* 0x745 */ bool field_0x745;
+        /* 0x748 */ cXyz field_0x748;
+        /* 0x754 */ Mtx field_0x754;
+        /* 0x784 */ f32 field_0x784;
+        /* 0x788 */ f32 field_0x788;
+        /* 0x78C */ f32 field_0x78C;
+        /* 0x790 */ f32 field_0x790;
+        /* 0x794 */ f32 field_0x794;
+        /* 0x798 */ f32 field_0x798;
+        /* 0x79C */ f32 field_0x79C;
+        /* 0x7A0 */ f32 field_0x7A0;
+        /* 0x7A4 */ f32 field_0x7A4;
+        /* 0x7A8 */ s32 field_0x7A8;
 
         static dCcD_SrcSph M_sph_src;
-    };
+    }; // Size 0x7AC
 }
 
 #endif /* D_A_BOMB_2_H */

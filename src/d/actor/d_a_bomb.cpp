@@ -510,7 +510,7 @@ void daBomb_c::bgCrrPos() {
 
 void daBomb_c::bgCrrPos_lava() {
     cXyz temp(current.pos.x, next.pos.y + 1.0f, current.pos.z);
-    mGndChk.GetPointP() = temp;
+    mGndChk.SetPos(&temp);
 
     field_0x554.x = dComIfG_Bgsp()->GroundCross(&mGndChk);
 }
@@ -546,9 +546,33 @@ bool daBomb_c::chk_dead_zone() {
     return mAcch.GetGroundH() == -1.0e9f && field_0x554.y == -1.0e9f && field_0x554.x == -1.0e9f;
 }
 
-/* 800DA7CC-800DA8C8       .text bound__8daBomb_cFf */
-void daBomb_c::bound(f32) {
-    /* Nonmatching */
+void daBomb_c::bound(f32 param_1) {
+    if(mAcch.ChkWallHit()) {
+        speedF *= 0.8f;
+        current.angle.y = (mCir.GetWallAngleY() * 2) - (current.angle.y - 0x8000); //+ 0x10000 - 0x8000 generates the addis but seems fake
+    }
+
+    if(mAcch.ChkGroundLanding()) {
+        daObj::make_land_effect(this, &mAcch.m_gnd, 0.6f);
+        param_1 *= -0.6f;
+        if(param_1 < 19.5f) {
+            field_0x780 = 0;
+        }
+        else {
+            speedF *= 0.9f;
+            if(param_1 > 13.0f) {
+                speed.y = 13.0f;
+            }
+            else {
+                speed.y = param_1;
+            }
+        }
+    }
+    else {
+        if(mAcch.ChkGroundHit()) {
+            cLib_addCalc(&speedF, 0.0f, 0.5f, 5.5f, 1.0f);
+        }
+    }
 }
 
 /* 800DA8C8-800DA9DC       .text set_real_shadow_flag__8daBomb_cFv */
@@ -619,23 +643,23 @@ void daBomb_c::setFuseEffect() {
         mFusePos2 = mFusePos;
         mFusePos3 = mFusePos;
 
-            dComIfGp_particle_setToon(0x11, &mFusePos, 0, &mScale, 0xFF, &mSparks, -1, 0, 0, 0);
-            dComIfGp_particle_setToonP1(0x2012, &mFusePos, 0, &mScale, 0xDC, &mSmoke, -1, 0, 0, 0);
-            mSmoke.field_0x0C = &mFusePos2;
-            mSmoke.field_0x10 = &mFusePos3;
-            mSmoke.field_0x04 = 0x14;
+        dComIfGp_particle_setP1(0x11, &mFusePos, 0, &mScale, 0xFF, &mSparks, -1, 0, 0, 0);
+        dComIfGp_particle_setToonP1(0x2012, &mFusePos, 0, &mScale, 0xDC, &mSmoke, -1, 0, 0, 0);
+        mSmoke.field_0x0C = &mFusePos2;
+        mSmoke.field_0x10 = &mFusePos3;
+        mSmoke.field_0x04 = 0x14;
     }
 }
 
 void daBomb_c::eff_explode_normal(const csXyz* rotation) {
-    dComIfGp_particle_setToon(0xB, &current.pos, rotation, &mScale, 0xFF, 0, -1, 0, 0, 0);
+    dComIfGp_particle_setP1(0xB, &current.pos, rotation, &mScale, 0xFF, 0, -1, 0, 0, 0);
     g_dComIfG_gameInfo.play.getParticle()->setBombSmoke(0x2009, &current.pos, 0, &mScale, 0xFF);
     g_dComIfG_gameInfo.play.getParticle()->setBombSmoke(0x200A, &current.pos, 0, &mScale, 0xFF);
     dComIfGp_particle_setToonP1(0x2008, &current.pos, 0, &mScale, 0xFF, 0, -1, 0, 0, 0);
 }
 
 void daBomb_c::eff_explode_cheap(const csXyz* rotation) {
-    JPABaseEmitter* emitter = dComIfGp_particle_setToon(0xB, &current.pos, rotation, &mScale, 0xFF, 0, -1, 0, 0, 0);
+    JPABaseEmitter* emitter = dComIfGp_particle_setP1(0xB, &current.pos, rotation, &mScale, 0xFF, 0, -1, 0, 0, 0);
     if(emitter) {
         emitter->mLifeTime = 0xC;
         emitter->mGlobalScale2D.set(0.5f, 0.67f, 1.0f);
@@ -682,7 +706,7 @@ int daBomb_c::procExplode_init() {
             cXyz temp3;
             dBgS_ObjGndChk gndCheck;
             temp3.set(current.pos.x, current.pos.y + 1.0f, current.pos.z);
-            gndCheck.GetPointP().set(current.pos.x, current.pos.y + 1.0f, current.pos.z);
+            gndCheck.SetPos(&temp3);
 
             if(dComIfG_Bgsp()->GroundCross(&gndCheck) > temp2 || current.pos.y > temp2 + 50.0f) {
                 temp = 0;

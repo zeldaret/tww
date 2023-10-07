@@ -28,10 +28,25 @@ namespace daBomb2 {
             f32 field_0x24;
             f32 field_0x28;
             f32 field_0x2C;
+            f32 field_0x30;
+            f32 field_0x34;
+            f32 field_0x38;
+            f32 field_0x3C;
+            f32 field_0x40;
+            f32 field_0x44;
+            f32 field_0x48;
+            f32 field_0x4C;
+            f32 field_0x50;
+            f32 field_0x54;
+            f32 field_0x58;
+            f32 field_0x5C;
+            f32 field_0x60;
+            f32 field_0x64;
+            f32 field_0x68;
         };
 
         const AttrType L_attr = {
-            "VbakH", 0x920, 0x96, 0x1E, 2.9f, -100.0f, -0.6f, 19.5f, 13.0f, 0.1f, 0.5f, 20.0f, 25.0f
+            "VbakH", 0x920, 0x96, 0x1E, 2.9f, -100.0f, -0.6f, 19.5f, 13.0f, 0.1f, 0.5f, 20.0f, 25.0f, 0.002f, 0.0005f, 140.0f, 100.0f, 180.0f, 50.0f, 2.0f, 0.3f, 0.03f, 0.1f, 0.4f, 0.5f, -0.005f, 1.5f, 0.6f
         };
     }
     
@@ -171,12 +186,11 @@ namespace daBomb2 {
         mpEmitter = param_1;
     }
 
-    /* 800DDB88-800DDBAC       .text solidHeapCB__Q27daBomb25Act_cFP10fopAc_ac_c */
     int Act_c::solidHeapCB(fopAc_ac_c* i_this) {
         return static_cast<Act_c*>(i_this)->create_heap();
     }
 
-    int Act_c::create_heap_nut() {
+    bool Act_c::create_heap_nut() {
         const char* resName = L_attr.resName;
 
         J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(resName, 0xC);
@@ -191,15 +205,10 @@ namespace daBomb2 {
         JUT_ASSERT(0x314, brk_data != 0);
         int temp3 = mBrk0.init(mdl_data, brk_data, true, 0, 1.0f, 0, -1, false, 0);
 
-        int ret = 0;
-        if(mpModel && temp && temp3) {
-            ret = 1;
-        }
-
-        return ret;
+        return mpModel && temp && temp3;
     }
 
-    int Act_c::create_heap() {
+    bool Act_c::create_heap() {
         return create_heap_nut();
     }
 
@@ -365,7 +374,7 @@ namespace daBomb2 {
     /* 800DE8A8-800DE914       .text bgCrrPos_lava__Q27daBomb25Act_cFv */
     void Act_c::bgCrrPos_lava() {
         cXyz temp(current.pos.x, next.pos.y + 1.0f, current.pos.z);
-        mGndChk.GetPointP() = temp;
+        mGndChk.SetPos(&temp);
 
         field_0x51C = dComIfG_Bgsp()->GroundCross(&mGndChk);
     }
@@ -402,9 +411,33 @@ namespace daBomb2 {
         current.roomNo = roomNo;
     }
 
-    /* 800DEAC4-800DEBD0       .text bound__Q27daBomb25Act_cFf */
-    void Act_c::bound(float) {
-        /* Nonmatching */
+    void Act_c::bound(f32 param_1) {
+        if(mAcch.ChkWallHit()) {
+            speedF *= 0.8f;
+            current.angle.y = (mCir.GetWallAngleY() * 2) - (current.angle.y - 0x8000); //+ 0x10000 - 0x8000 generates the addis but seems fake
+        }
+
+        if(mAcch.ChkGroundLanding()) {
+            daObj::make_land_effect(this, &mAcch.m_gnd, L_attr.field_0x68);
+            param_1 *= L_attr.field_0x14;
+            if(param_1 < L_attr.field_0x18) {
+                field_0x741 = 0;
+            }
+            else {
+                speedF *= 0.9f;
+                if(param_1 > L_attr.field_0x1C) {
+                    speed.y = L_attr.field_0x1C;
+                }
+                else {
+                    speed.y = param_1;
+                }
+            }
+        }
+        else {
+            if(mAcch.ChkGroundHit()) {
+                cLib_addCalc(&speedF, 0.0f, 0.5f, 5.5f, 1.0f);
+            }
+        }
     }
 
     void Act_c::set_nut_exp_interval() {
@@ -446,7 +479,7 @@ namespace daBomb2 {
     }
 
     void Act_c::eff_explode_normal(const csXyz* rotation) {
-        dComIfGp_particle_setToon(0xB, &current.pos, rotation, &mScale, 0xFF, 0, -1, 0, 0, 0);
+        dComIfGp_particle_setP1(0xB, &current.pos, rotation, &mScale, 0xFF, 0, -1, 0, 0, 0);
         g_dComIfG_gameInfo.play.getParticle()->setBombSmoke(0x2009, &current.pos, 0, &mScale, 0xFF);
         g_dComIfG_gameInfo.play.getParticle()->setBombSmoke(0x200A, &current.pos, 0, &mScale, 0xFF);
         dComIfGp_particle_setToonP1(0x2008, &current.pos, 0, &mScale, 0xFF, 0, -1, 0, 0, 0);
@@ -468,14 +501,32 @@ namespace daBomb2 {
         field_0x744 = 0;
     }
 
-    /* 800DF1F0-800DF314       .text eff_fuse_start__Q27daBomb25Act_cFv */
     void Act_c::eff_fuse_start() {
-        /* Nonmatching */
+        if(!field_0x744) {
+            field_0x744 = 1;
+
+            field_0x6C0.x = current.pos.x;
+            field_0x6C0.y = current.pos.y + 60.0f;
+            field_0x6C0.z = current.pos.z;
+            field_0x6CC = field_0x6C0;
+            field_0x6D8 = field_0x6C0;
+
+            dComIfGp_particle_setP1(0x11, &field_0x6C0, 0, &mScale, 0xFF, &mSparks, -1, 0, 0, 0);
+            dComIfGp_particle_setToonP1(0x2012, &field_0x6C0, 0, &mScale, 0xDC, &mSmoke, -1, 0, 0, 0);
+            mSmoke.setOldPosP(&field_0x6CC, &field_0x6D8);
+        }
     }
 
-    /* 800DF314-800DF3DC       .text eff_fuse_move__Q27daBomb25Act_cFv */
     void Act_c::eff_fuse_move() {
-        /* Nonmatching */
+        static cXyz fuse_offset(0.0f, 60.0f, 5.0f);
+        
+        field_0x6D8 = field_0x6CC;
+        field_0x6CC = field_0x6C0;
+        mDoMtx_stack_c::multVec(&fuse_offset, &field_0x6C0);
+
+        if(field_0x744) {
+            se_ignition();
+        }
     }
 
     /* 800DF3DC-800DF41C       .text eff_fuse_end__Q27daBomb25Act_cFv */
@@ -630,12 +681,7 @@ namespace daBomb2 {
     }
 
     bool Act_c::chk_exp_pre() {
-        bool ret = false;
-        if(chk_exp_cc() || chk_exp_timer()) {
-            ret = true;
-        }
-
-        return ret;
+        return chk_exp_cc() || chk_exp_timer();
     }
 
     bool Act_c::chk_exp_post() {
@@ -656,97 +702,197 @@ namespace daBomb2 {
         /* Nonmatching */
     }
 
-    /* 800DFDB0-800DFDC0       .text on_carry__Q27daBomb25Act_cFv */
     void Act_c::on_carry() {
-        /* Nonmatching */
+        mAttentionInfo.setFlag(0x10);
     }
 
-    /* 800DFDC0-800DFDD0       .text off_carry__Q27daBomb25Act_cFv */
     void Act_c::off_carry() {
-        /* Nonmatching */
+        mAttentionInfo.mFlags &= ~0x10;
     }
 
-    /* 800DFDD0-800DFDF8       .text mode_wait_init__Q27daBomb25Act_cFv */
     void Act_c::mode_wait_init() {
-        /* Nonmatching */
+        field_0x694 = 0;
+        mGravity = L_attr.gravity;
+        mSph.GetObjCo().OnSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
     }
 
-    /* 800DFDF8-800DFF40       .text mode_wait__Q27daBomb25Act_cFv */
     void Act_c::mode_wait() {
-        /* Nonmatching */
+        if(chk_exp_pre()) {
+            mode_explode_init();
+            mode_explode();
+        }
+        else {
+            if(fopAcM_checkCarryNow(this)) {
+                mode_carry_init();
+                mode_carry();
+            }
+            else {
+                bool temp = daObj::PrmAbstract(this, PRM_1_W, PRM_1_S);
+                f32 yVel = 0.0f;
+                if(!temp) {
+                    if(!field_0x745) {
+                        posMoveF();
+                    }
+
+                    yVel = speed.y;
+                    bgCrrPos();
+                }
+
+                if(chk_exp_post()) {
+                    mode_explode_init();
+                }
+                else {
+                    if(chk_sink_post()) {
+                        mode_sink_init();
+                    }
+                    else {
+                        if(!field_0x740) {
+                            if(temp) {
+                                off_carry();
+                            }
+                            else {
+                                bound(yVel);
+                                if(mAcch.ChkGroundHit()) {
+                                    on_carry();
+                                }
+                                else {
+                                    off_carry();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    /* 800DFF40-800DFFA4       .text mode_carry_init__Q27daBomb25Act_cFv */
     void Act_c::mode_carry_init() {
+        field_0x694 = 1;
+        speedF = 0.0f;
+        speed = cXyz::Zero;
         off_carry();
+        mSph.GetObjCo().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
     }
 
-    /* 800DFFA4-800E006C       .text mode_carry__Q27daBomb25Act_cFv */
     void Act_c::mode_carry() {
         carry_fuse_start();
-        chk_exp_pre();
+        if(chk_exp_pre()) {
+            mode_explode_init();
+            mode_explode();
+        }
+        else {
+            if(!fopAcM_checkCarryNow(this)) {
+                if(speedF > 0.0f) {
+                    field_0x741 = 1;
+                    field_0x7A8 = 2;
+                }
 
-        bgCrrPos();
+                mode_wait_init();
+                mode_wait();
+            }
+            else {
+                cXyz temp = current.pos;
+                bgCrrPos();
+                current.pos = temp;
+            }
+        }
     }
 
-    /* 800E006C-800E0150       .text mode_explode_init__Q27daBomb25Act_cFv */
     void Act_c::mode_explode_init() {
+        field_0x694 = 2;
         camera_lockoff();
         eff_fuse_end();
         mEnv.set(current.pos);
+        speedF = 0.0f;
+        speed = cXyz::Zero;
+        mGravity = 0.0f;
         off_carry();
         mSph.GetObjTg().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
         mSph.GetObjCo().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
         mSph.GetObjAt().OnSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
         fopAcM_cancelCarryNow(this);
+        field_0x738 = 0;
+        field_0x73C = 4;
         dComIfGp_getVibration().StartShock(7, -0x21, cXyz(0.0f, 1.0f, 0.0f));
     }
 
-    /* 800E0150-800E01A8       .text mode_explode__Q27daBomb25Act_cFv */
     void Act_c::mode_explode() {
         mEnv.proc(current.pos);
-        if(mEnv.is_end()) {
-            field_0x524 = 4;
+        if(!field_0x73C && mEnv.is_end()) {
+            field_0x740 = 1;
         }
     }
 
-    /* 800E01A8-800E0238       .text mode_sink_init__Q27daBomb25Act_cFv */
     void Act_c::mode_sink_init() {
+        field_0x694 = 3;
+        speed.y *= 0.8f;
+        speedF *= 0.8f;
+        mSph.GetObjAt().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
+        mSph.GetObjTg().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
+        mSph.GetObjCo().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
         off_carry();
         fopAcM_cancelCarryNow(this);
-        field_0x524 = 4;
+        field_0x698 = 4;
         fopAcM_getWaterY(&current.pos, &field_0x528);
     }
 
-    /* 800E0238-800E02D0       .text mode_sink__Q27daBomb25Act_cFv */
     void Act_c::mode_sink() {
-        /* Nonmatching */
+        f32 temp;
+        if(fopAcM_getWaterY(&current.pos, &temp) && field_0x528 != -1.0e9f && --field_0x698 > 0) {
+            current.pos.y += temp - field_0x528;
+            field_0x528 = temp;
+            posMoveF();
+        }
+        else {
+            field_0x740 = 1;
+        }
     }
 
-    /* 800E02D0-800E03C4       .text mode_proc_call__Q27daBomb25Act_cFv */
     void Act_c::mode_proc_call() {
-        /* Nonmatching */
+        typedef void(Act_c::*procFunc)();
+        static procFunc mode_proc[] = {
+            &mode_wait,
+            &mode_carry,
+            &mode_explode,
+            &mode_sink,
+        };
+
+        if(fopAcM_checkCarryNow(this) && field_0x694 != 1) {
+            mode_carry_init();
+        }
+
+        (this->*mode_proc[field_0x694])();
+        set_real_shadow_flag();
     }
 
-    /* 800E03C4-800E03FC       .text tensor_init__Q27daBomb25Act_cFv */
     void Act_c::tensor_init() {
         mDoMtx_identity(field_0x754);
         vib_init();
     }
 
-    /* 800E03FC-800E0430       .text vib_init__Q27daBomb25Act_cFv */
     void Act_c::vib_init() {
-        /* Nonmatching */
+        field_0x784 = 0.0f;
+        field_0x788 = 0.0f;
+        field_0x78C = 0.0f;
+        field_0x790 = 0.0f;
+        field_0x794 = 0.0f;
+        field_0x798 = 0.0f;
+        field_0x79C = 0.0f;
+        field_0x7A0 = 0.0f;
+        field_0x7A4 = 0.0f;
+        field_0x7A8 = 0.0f;
     }
 
     /* 800E0430-800E04FC       .text vib_proc__Q27daBomb25Act_cFv */
     void Act_c::vib_proc() {
-        /* Nonmatching */
+        
     }
 
-    /* 800E04FC-800E0554       .text set_vib_tensor__Q27daBomb25Act_cFv */
     void Act_c::set_vib_tensor() {
-        /* Nonmatching */
+        cXyz temp(field_0x790, 1.0f, field_0x78C);
+        Quaternion quat;
+        daObj::quat_rotBaseY2(&quat, temp);
+        mDoMtx_quat(&field_0x754[0], &quat);
     }
 
     /* 800E0554-800E0588       .text tensor_wait__Q27daBomb25Act_cFv */
@@ -759,32 +905,49 @@ namespace daBomb2 {
         }
     }
 
-    /* 800E0588-800E05D8       .text tensor_wait_drop__Q27daBomb25Act_cFv */
     void Act_c::tensor_wait_drop() {
-        /* Nonmatching */
+        if(field_0x7A8 > 0) {
+            field_0x79C = speed.z * L_attr.field_0x60;
+            field_0x7A0 = speed.x * L_attr.field_0x60;
+        }
+
+        field_0x784 = 0.0f;
+        field_0x788 = 0.0f;
+        field_0x7A4 = L_attr.field_0x54;
     }
 
-    /* 800E05D8-800E0664       .text tensor_wait_ground__Q27daBomb25Act_cFv */
     void Act_c::tensor_wait_ground() {
-        /* Nonmatching */
+        cM3dGPla* pNormal = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd.GetBgIndex(), mAcch.m_gnd.GetPolyIndex());
+        if(pNormal) {
+            field_0x784 = pNormal->mNormal.z * L_attr.field_0x64;
+            field_0x788 = pNormal->mNormal.x * L_attr.field_0x64;
+        }
+        else {
+            field_0x784 = 0.0f;
+            field_0x788 = 0.0f;
+        }
+        
+        field_0x7A4 = L_attr.field_0x58;
     }
 
-    /* 800E0664-800E0684       .text tensor_carry__Q27daBomb25Act_cFv */
     void Act_c::tensor_carry() {
-        /* Nonmatching */
+        field_0x784 = 0.0f;
+        field_0x788 = 0.0f;
+        field_0x7A4 = L_attr.field_0x58;
     }
 
-    /* 800E0684-800E06A4       .text tensor_explode__Q27daBomb25Act_cFv */
     void Act_c::tensor_explode() {
-        /* Nonmatching */
+        field_0x784 = 0.0f;
+        field_0x788 = 0.0f;
+        field_0x7A4 = L_attr.field_0x58;
     }
 
-    /* 800E06A4-800E06C4       .text tensor_sink__Q27daBomb25Act_cFv */
     void Act_c::tensor_sink() {
-        /* Nonmatching */
+        field_0x784 = 0.0f;
+        field_0x788 = 0.0f;
+        field_0x7A4 = L_attr.field_0x58;
     }
 
-    /* 800E06C4-800E07B8       .text tensor_proc_call__Q27daBomb25Act_cFv */
     void Act_c::tensor_proc_call() {
         typedef void(Act_c::*procFunc)();
         static procFunc tensor_proc[] = {
@@ -846,7 +1009,7 @@ namespace daBomb2 {
     }
 
     void Act_c::draw_shadow() {
-        static f32 mult[] = {
+        static const f32 mult[] = {
             2.08f,
             1.8f,
             1.5f,
@@ -900,6 +1063,7 @@ namespace daBomb2 {
             return true;
         }
         
+        //global visibility according to objdiff
         actor_method_class Mthd_Table = {
             (process_method_func)Mthd_Create,
             (process_method_func)Mthd_Delete,

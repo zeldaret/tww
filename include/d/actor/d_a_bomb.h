@@ -23,12 +23,12 @@ public:
     
     void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
 
-    s16 field_0x04;
-    const cXyz* mpPos;
-    cXyz* field_0x0C;
-    cXyz* field_0x10;
-    JPABaseEmitter* mpEmitter;
-};
+    /* 0x04 */ s16 field_0x04;
+    /* 0x08 */ const cXyz* mpPos;
+    /* 0x0C */ cXyz* field_0x0C;
+    /* 0x10 */ cXyz* field_0x10;
+    /* 0x14 */ JPABaseEmitter* mpEmitter;
+}; // Size 0x18
 
 class daBomb_fuseSparksEcallBack : public dPa_levelEcallBack {
 public:
@@ -42,14 +42,14 @@ public:
 
     void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
 
-    const cXyz* mpPos;
-    JPABaseEmitter* mpEmitter;
-};
+    /* 0x04 */ const cXyz* mpPos;
+    /* 0x08 */ JPABaseEmitter* mpEmitter;
+}; // Size 0x0C
 
 class dBgS_BombAcch : public dBgS_Acch {
 public:
     dBgS_BombAcch() { mbBombThrough = true; }
-};
+}; // Size 0x1C4
 
 
 class daBomb_c : public fopAc_ac_c {
@@ -159,63 +159,63 @@ public:
 private:
     typedef bool(daBomb_c::*procFunc)();
 
-    procFunc mFunc;
-    request_of_phase_process_class mPhs;
-    J3DModel* mpModel;
-    mDoExt_bckAnm mBck0;
-    mDoExt_bckAnm mBck1;
-    mDoExt_brkAnm mBrk0;
-    mDoExt_brkAnm mBrk1;
-    s32 mType;
-    dBgS_BombAcch mAcch;
-    dBgS_AcchCir mCir;
-    dBgS_ObjGndChk_Yogan mGndChk;
-    cXyz field_0x554;
-    bool field_0x560;
-    bool mbWaterIn;
-    u8 field_0x562;
-    dCcD_Stts mStts;
-    dCcD_Sph mSph;
-    daBomb_fuseSmokeEcallBack mSmoke;
-    daBomb_fuseSparksEcallBack mSparks;
-    u8 field_0x6F0;
-    u8 field_0x6F1;
-    u8 field_0x6F2;
-    u8 field_0x6F3;
-    u8 field_0x6F4;
-    u8 field_0x6F5;
-    u8 field_0x6F6;
-    u8 field_0x6F7;
-    s32 mInitialState;
-    s16 mRestTime;
-    s16 field_0x6FE;
-    s16 mNoGravityTime;
-    s16 field_0x702;
-    cXyz mFusePos;
-    cXyz mFusePos2;
-    cXyz mFusePos3;
-    LIGHT_INFLUENCE mPntLight;
-    WIND_INFLUENCE mPntWind;
-    u8 field_0x774;
-    f32 field_0x778;
-    u8 field_0x77C;
-    u8 field_0x77D;
-    u8 field_0x77E;
-    u8 field_0x77F;
-    u8 field_0x780;
-    u8 field_0x781;
-    u8 field_0x782;
-    int field_0x784;
-    cXyz mWindVec;
-    u8 field_0x794[0x7C4 - 0x794];
-    int mMassCounter;
-    int field_0x7C8;
+    /* 0x290 */ procFunc mFunc;
+    /* 0x29C */ request_of_phase_process_class mPhs;
+    /* 0x2A4 */ J3DModel* mpModel;
+    /* 0x2A8 */ mDoExt_bckAnm mBck0;
+    /* 0x2B8 */ mDoExt_bckAnm mBck1;
+    /* 0x2C8 */ mDoExt_brkAnm mBrk0;
+    /* 0x2E0 */ mDoExt_brkAnm mBrk1;
+    /* 0x2F8 */ s32 mType;
+    /* 0x2FC */ dBgS_BombAcch mAcch;
+    /* 0x4C0 */ dBgS_AcchCir mCir;
+    /* 0x500 */ dBgS_ObjGndChk_Yogan mGndChk;
+    /* 0x554 */ cXyz field_0x554;
+    /* 0x560 */ bool field_0x560;
+    /* 0x561 */ bool mbWaterIn;
+    /* 0x562 */ u8 field_0x562;
+    /* 0x564 */ dCcD_Stts mStts;
+    /* 0x5A0 */ dCcD_Sph mSph;
+    /* 0x6CC */ daBomb_fuseSmokeEcallBack mSmoke;
+    /* 0x6E4 */ daBomb_fuseSparksEcallBack mSparks;
+    /* 0x6F0 */ u8 field_0x6F0;
+    /* 0x6F1 */ u8 field_0x6F1;
+    /* 0x6F2 */ u8 field_0x6F2;
+    /* 0x6F3 */ u8 field_0x6F3;
+    /* 0x6F4 */ u8 field_0x6F4;
+    /* 0x6F5 */ u8 field_0x6F5;
+    /* 0x6F6 */ u8 field_0x6F6;
+    /* 0x6F7 */ u8 field_0x6F7;
+    /* 0x6F8 */ s32 mInitialState;
+    /* 0x6FC */ s16 mRestTime;
+    /* 0x6FE */ s16 field_0x6FE;
+    /* 0x700 */ s16 mNoGravityTime;
+    /* 0x702 */ s16 field_0x702;
+    /* 0x704 */ cXyz mFusePos; //should figure out what this 3 cXyz thing really is
+    /* 0x710 */ cXyz mFusePos2; //seems like several particle structures use it and a couple construct it as a TVec3<f32> array
+    /* 0x71C */ cXyz mFusePos3; //others have no special construction, and it gets passed to functions that take cXyz sometimes
+    /* 0x728 */ LIGHT_INFLUENCE mPntLight;
+    /* 0x748 */ WIND_INFLUENCE mPntWind;
+    /* 0x774 */ u8 field_0x774;
+    /* 0x778 */ f32 field_0x778;
+    /* 0x77C */ u8 field_0x77C;
+    /* 0x77D */ u8 field_0x77D;
+    /* 0x77E */ u8 field_0x77E;
+    /* 0x77F */ u8 field_0x77F;
+    /* 0x780 */ u8 field_0x780;
+    /* 0x781 */ u8 field_0x781;
+    /* 0x782 */ u8 field_0x782;
+    /* 0x784 */ int field_0x784;
+    /* 0x788 */ cXyz mWindVec;
+    /* 0x794 */ u8 field_0x794[0x7C4 - 0x794];
+    /* 0x7C4 */ int mMassCounter;
+    /* 0x7C8 */ int field_0x7C8;
     
     struct AttrType {
         const char* resName;
         u32 heapSize;
     };
     static const AttrType m_attrType[];
-};
+}; // Size 0x7CC
 
 #endif /* D_A_BOMB_H */
