@@ -5,6 +5,13 @@
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_phase.h"
 
+class dCamera_c {
+    u8 m_[0x800];
+
+public:
+    void ForceLockOff(unsigned int pcId);
+};
+
 class camera_process_class : public view_class {
 public:
     /* 0x210 */ create_tag_class mDwTg;
@@ -21,8 +28,8 @@ public:
 class camera_class : public camera_process_class {
 public:
     /* 0x23C */ int field_0x23c;
-    /* 0x240 */ request_of_phase_process_class mPhaseReq;
-    // /* 0x248 */ dCamera_c mCamera;
+    /* 0x240 */ int field_0x244;
+     /* 0x244 */ dCamera_c mCamera;
 };
 
 struct camera_process_profile_definition {

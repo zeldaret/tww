@@ -26,7 +26,17 @@ public:
     dBgS_ObjGndChk() { SetObj(); }
 
     virtual ~dBgS_ObjGndChk() {}
-};
+}; // Size: 0x54
+
+class dBgS_ObjGndChk_Yogan : public dBgS_ObjGndChk {
+public:
+    /* 806bf6a4 */ dBgS_ObjGndChk_Yogan() {
+        OffNormalGrp();
+        OnYoganGrp();
+    }
+
+    /* 806bf53c */ virtual ~dBgS_ObjGndChk_Yogan();
+}; // Size: 0x54
 
 class dBgS_ObjGndChk_Wtr : public dBgS_ObjGndChk {
 public:

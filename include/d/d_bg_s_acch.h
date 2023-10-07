@@ -40,6 +40,7 @@ public:
 
     f32 GetWallH() { return m_wall_h; }
     f32 GetWallR() { return m_wall_r; }
+    s16 GetWallAngleY() { return m_wall_angle_y; }
     void SetWallH(f32 h) { m_wall_h = h; }
     void ClrWallHDirect() { m_flags &= ~WALL_H_DIRECT; }
     bool ChkWallHit() { return m_flags & WALL_HIT; }

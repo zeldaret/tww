@@ -286,6 +286,7 @@ struct FuncTable;
 class dStage_dt_c {
 public:
     dStage_dt_c() {}
+    ~dStage_dt_c() {}
 
     /* vt[ 2] */ virtual void init() = 0;
     /* vt[ 3] */ virtual int getRoomNo() const = 0;
@@ -831,7 +832,7 @@ public:
 
     static void setBgW(int param_0, dBgW_base* i_bgw) { mStatus[param_0].mpBgW = i_bgw; }
 
-    BOOL checkStatusFlag(int i_roomNo, u8 flag) const {
+    bool checkStatusFlag(int i_roomNo, u8 flag) const {
         return cLib_checkBit(mStatus[i_roomNo].mFlags, flag);
     }
 

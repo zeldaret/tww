@@ -257,7 +257,7 @@ JPABaseEmitter* dPa_control_c::set(unsigned char, unsigned short, const cXyz*, c
 }
 
 /* 8007D378-8007D414       .text setBombSmoke__13dPa_control_cFUsPC4cXyzPC5csXyzPC4cXyzUc */
-void dPa_control_c::setBombSmoke(unsigned short, const cXyz*, const csXyz*, const cXyz*, unsigned char) {
+JPABaseEmitter* dPa_control_c::setBombSmoke(unsigned short, const cXyz*, const csXyz*, const cXyz*, unsigned char) {
     /* Nonmatching */
 }
 

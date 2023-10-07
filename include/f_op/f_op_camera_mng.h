@@ -3,34 +3,7 @@
 
 #include "SSystem/SComponent/c_phase.h"
 #include "SSystem/SComponent/c_sxyz.h"
-#include "dolphin/types.h"
-#include "f_op/f_op_view.h"
-
-struct dCamera_c {
-    u8 m_[0x800];
-};
-
-typedef struct leafdraw_method_class leafdraw_method_class;
-
-class camera_process_class : public view_class {
-public:
-    /* 0x210 */ create_tag_class mCreateTag;
-    /* 0x224 */ leafdraw_method_class* mpMtd;
-    /* 0x228 */ u8 field_0x228[4];
-    /* 0x22C */ s8 mPrm1;
-    /* 0x22D */ s8 mPrm2;
-    /* 0x22E */ s8 mPrm3;
-    /* 0x22F */ s8 field_0x22f;
-    /* 0x230 */ csXyz mAngle;
-    /* 0x238 */ int field_0x238;
-};
-
-class camera_class : public camera_process_class {
-public:
-    /* 0x23C */ int field_0x23c;
-    /* 0x240 */ request_of_phase_process_class mPhaseReq;
-    /* 0x248 */ dCamera_c mCamera;
-};
+#include "f_op/f_op_camera.h"
 
 /* void fopCamM_SetNear(camera_class* cam, f32 near) {
     cam->mNear = near;
