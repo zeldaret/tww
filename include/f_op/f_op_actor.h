@@ -16,11 +16,17 @@ struct actor_method_class {
 
 enum fopAc_Status_e {
     fopAcStts_SHOWMAP_e     = 0x00000020,
-    fopAcStts_NOEXEC_e      = 0x00000080,
+    fopAcStts_NOCULLEXEC_e  = 0x00000080,
     fopAcStts_CULL_e        = 0x00000100,
     fopAcStts_FREEZE_e      = 0x00000400,
+    fopAcStts_UNK800_e      = 0x00000800,
     fopAcStts_CARRY_e       = 0x00002000,
+    fopAcStts_UNK4000_e     = 0x00004000,
     fopAcStts_NOPAUSE_e     = 0x00020000,
+    fopAcStts_UNK40000_e    = 0x00040000,
+    fopAcStts_UNK80000_e    = 0x00080000,
+    fopAcStts_HOOK_CARRY_e  = 0x00100000,
+    fopAcStts_UNK200000_e   = 0x00200000,
     fopAcStts_NODRAW_e      = 0x01000000,
     fopAcStts_BOSS_e        = 0x04000000,
 };

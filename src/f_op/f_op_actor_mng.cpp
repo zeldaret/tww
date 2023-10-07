@@ -994,7 +994,7 @@ void fopAcM_cancelCarryNow(fopAc_ac_c* i_this) {
         i_this->shape_angle.z = 0;
         
         if (dComIfGp_event_runCheck() && i_this->mGroup != fopAc_ENEMY_e) {
-            fopAcM_OnStatus(i_this, 0x800);
+            fopAcM_OnStatus(i_this, fopAcStts_UNK800_e);
         }
     }
 }

@@ -226,7 +226,7 @@ namespace daObjPaper {
 
     /* 00000730-00000748       .text mode_wait_init__Q210daObjPaper5Act_cFv */
     void daObjPaper::Act_c::mode_wait_init() {
-        mStatus |= fopAcStts_NOEXEC_e;
+        mStatus |= fopAcStts_NOCULLEXEC_e;
         mMode = ActMode_WAIT_e;
     }
 
@@ -242,7 +242,7 @@ namespace daObjPaper {
 
     /* 00000784-000007A4       .text mode_talk0_init__Q210daObjPaper5Act_cFv */
     void daObjPaper::Act_c::mode_talk0_init() {
-        mStatus &= ~fopAcStts_NOEXEC_e;
+        mStatus &= ~fopAcStts_NOCULLEXEC_e;
         mMsgId = -1;
         mMode = ActMode_TALKBEGIN_e;
     }
@@ -402,7 +402,7 @@ namespace daObjPaper {
         &g_fopAc_Method.base,
         0x0108,
         &Mthd_Table,
-        0x00040180,
+        fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
         fopAc_ACTOR_e,
         fopAc_CULLSPHERE_CUSTOM_e,
     };

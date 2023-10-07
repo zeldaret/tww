@@ -100,7 +100,7 @@ enum fopAcM_CARRY {
 };
 
 inline u32 fopAcM_checkHookCarryNow(fopAc_ac_c* pActor) {
-    return fopAcM_checkStatus(pActor, 0x100000);
+    return fopAcM_checkStatus(pActor, fopAcStts_HOOK_CARRY_e);
 }
 
 inline u32 fopAcM_GetParam(void* pActor) {
@@ -184,11 +184,11 @@ inline void fopAcM_SetRoomNo(fopAc_ac_c* actor, s8 roomNo) {
 }
 
 inline void fopAcM_setHookCarryNow(fopAc_ac_c* actor) {
-    fopAcM_OnStatus(actor, 0x100000);
+    fopAcM_OnStatus(actor, fopAcStts_HOOK_CARRY_e);
 }
 
 inline void fopAcM_cancelHookCarryNow(fopAc_ac_c* actor) {
-    fopAcM_OffStatus(actor, 0x100000);
+    fopAcM_OffStatus(actor, fopAcStts_HOOK_CARRY_e);
 }
 
 inline s8 fopAcM_GetHomeRoomNo(fopAc_ac_c* pActor) {

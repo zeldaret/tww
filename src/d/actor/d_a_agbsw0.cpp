@@ -2531,7 +2531,7 @@ extern actor_process_profile_definition g_profile_AGBSW0 = {
     &g_fopAc_Method.base,
     0x000D,
     &l_daAgbsw0_Method,
-    0x00040000,
+    fopAcStts_UNK40000_e,
     fopAc_ACTOR_e,
     fopAc_CULLBOX_0_e,
 };

@@ -74,7 +74,7 @@ extern actor_process_profile_definition g_profile_MAGMA = {
     &g_fopAc_Method.base,
     0x01BC,
     &l_daMagma_Method,
-    0x00040180,
+    fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     fopAc_ACTOR_e,
     fopAc_CULLBOX_0_e
 };
