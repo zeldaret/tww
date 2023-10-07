@@ -42,7 +42,7 @@ void dScnTitle_Create(scene_class*) {
     /* Nonmatching */
 }
 
-static leafdraw_method_class l_dScnTitle_Method = {
+static scene_method_class l_dScnTitle_Method = {
     (process_method_func)dScnTitle_Create,
     (process_method_func)dScnTitle_Delete,
     (process_method_func)dScnTitle_Execute,
@@ -60,7 +60,7 @@ extern scene_process_profile_definition g_profile_TITLE_SCENE = {
     0,
     0,
     &g_fopScn_Method.mBase,
-    &l_dScnTitle_Method.mBase,
+    &l_dScnTitle_Method,
 };
 
 extern scene_process_profile_definition g_profile_ENDING_SCENE = {
@@ -73,5 +73,5 @@ extern scene_process_profile_definition g_profile_ENDING_SCENE = {
     0,
     0,
     &g_fopScn_Method.mBase,
-    &l_dScnTitle_Method.mBase,
+    &l_dScnTitle_Method,
 };

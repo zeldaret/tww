@@ -182,8 +182,8 @@ void dKyr_sun_move() {
 /* 8008CF68-8008D0B4       .text dKyr_rain_init__Fv */
 void dKyr_rain_init() {
     camera_class * pCamera = dComIfGp_getCamera(0);
-    g_env_light.mpRainPacket->mpTxSnow01 = (u8*)dComIfG_getObjectRes("Always", 0x81);
-    g_env_light.mpRainPacket->mpTxRingAHalf = (u8*)dComIfG_getObjectRes("Always", 0x85);
+    g_env_light.mpRainPacket->mpTxSnow01 = (u8*)dComIfG_getObjectRes("Always", ALWAYS_I8_TX_SNOW01);
+    g_env_light.mpRainPacket->mpTxRingAHalf = (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXA_RING_A_32HAFE);
     g_env_light.mpRainPacket->mCamEyePos = pCamera->mLookat.mEye;
     g_env_light.mpRainPacket->mCamCenterPos = pCamera->mLookat.mCenter;
     g_env_light.mpRainPacket->mCenterDeltaMul = 0.0f;
@@ -232,7 +232,7 @@ void dKyr_snow_init() {
     g_env_light.mpSnowPacket = new(0x20) dKankyo_snow_Packet();
     if (g_env_light.mpSnowPacket != NULL) {
         if (strcmp(dComIfGp_getStartStageName(), "Adanmae") != 0) {
-            g_env_light.mpSnowPacket->mpTexture = (u8*)dComIfG_getObjectRes("Always", 0x81);
+            g_env_light.mpSnowPacket->mpTexture = (u8*)dComIfG_getObjectRes("Always", ALWAYS_I8_TX_SNOW01);
         } else {
             g_env_light.mpSnowPacket->mpTexture = (u8*)dComIfG_getStageRes("Stage", "ak_kazanbai00.bti");
         }
@@ -262,7 +262,7 @@ void dKyr_kazanbai_tamari_move() {
 void dKyr_star_init() {
     g_env_light.mpStarPacket = new(0x20) dKankyo_star_Packet();
     if (g_env_light.mpStarPacket != NULL) {
-        g_env_light.mpStarPacket->field_0x10 = (u8*)dComIfG_getObjectRes("Always", 0x81);
+        g_env_light.mpStarPacket->mpTexture = (u8*)dComIfG_getObjectRes("Always", ALWAYS_I8_TX_SNOW01);
         g_env_light.mpStarPacket->mStarEff[0].mSin = 1.0f;
         g_env_light.mpStarPacket->mCount = 0;
     }
@@ -313,7 +313,7 @@ void poison_init() {
     g_env_light.mpPoisonPacket->field_0xbb9c.z = 0.0f;
     g_env_light.mpPoisonPacket->mCount = 0;
     if (g_env_light.mpPoisonPacket != NULL) {
-        g_env_light.mpPoisonPacket->mpTex = (u8*)dComIfG_getObjectRes("Always", 0x6e);
+        g_env_light.mpPoisonPacket->mpTexture = (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_AK_SMOKE01);
         for (u32 i = 0; i < ARRAY_SIZE(g_env_light.mpPoisonPacket->mEff); i++)
             g_env_light.mpPoisonPacket->mEff[i].mStatus = 0;
         poison_move();
