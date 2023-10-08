@@ -39,7 +39,7 @@ class camera_class;
 class J2DOrthoGraph;
 class dDemo_actor_c;
 
-enum ALWAYS_RES_FILE_IDS {
+enum ALWAYS_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     ALWAYS_BCK_FA=0xC,
     ALWAYS_BCK_OBM_SYOUGEKISW=0xD,

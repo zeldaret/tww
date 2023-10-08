@@ -82,7 +82,7 @@ enum Action {
     ACTION_ITAI_MOVE   = 0x3,
 };
 
-enum AM_RES_FILE_IDS {
+enum AM_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     AM_BAS_BOM_NOMI=0x5,
     AM_BAS_BOM_NOMI2=0x6,
