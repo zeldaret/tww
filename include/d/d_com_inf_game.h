@@ -330,6 +330,7 @@ public:
 
     fopAc_ac_c* getPlayerPtr(int idx) { return (fopAc_ac_c*)mpPlayerPtr[idx]; }
     fopAc_ac_c* getPlayer(int idx) { return (fopAc_ac_c*)mpPlayer[idx]; }
+    void setPlayer(int idx, fopAc_ac_c* player) { mpPlayer[idx] = (daPy_py_c*)player; }
     s8 getPlayerCameraID(int idx) { return mCurCamera[idx]; }
 
     int getItemRupeeCount() { return mItemRupeeCount; }
@@ -1039,6 +1040,10 @@ inline s16 dComIfGp_getNextStagePoint() {
 
 inline fopAc_ac_c* dComIfGp_getPlayer(int idx) {
     return g_dComIfG_gameInfo.play.getPlayer(idx);
+}
+
+inline void dComIfGp_setPlayer(int idx, fopAc_ac_c* player) {
+    g_dComIfG_gameInfo.play.setPlayer(idx, player);
 }
 
 inline fopAc_ac_c* dComIfGp_getCb1Player() {

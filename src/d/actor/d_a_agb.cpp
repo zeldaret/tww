@@ -53,15 +53,15 @@ u8 daAgb_c::mShop;
 
 /* 800CF5EC-800CF6B8       .text __ct__11daAgb_HIO_cFv */
 daAgb_HIO_c::daAgb_HIO_c() {
-    field_0x04[0].r = 0;
-    field_0x04[0].g = 255;
-    field_0x04[0].b = 0;
-    field_0x04[0].a = 255;
+    field_0x04[0].mColor.r = 0;
+    field_0x04[0].mColor.g = 255;
+    field_0x04[0].mColor.b = 0;
+    field_0x04[0].mColor.a = 255;
 
-    field_0x04[1].r = 0;
-    field_0x04[1].g = 30;
-    field_0x04[1].b = 0;
-    field_0x04[1].a = 0;
+    field_0x04[1].mColor.r = 0;
+    field_0x04[1].mColor.g = 30;
+    field_0x04[1].mColor.b = 0;
+    field_0x04[1].mColor.a = 0;
 
     field_0x14 = 24.0f;
     field_0x18 = 50.0f;
@@ -678,7 +678,7 @@ void daAgb_c::GbaItemUse() {
                 }
 
                 if ((var_r28 == 0xC || var_r28 == 0xD) &&
-                    (daPy_getPlayerLinkActorClass()->field_0x2a0 & 1))
+                    (daPy_getPlayerLinkActorClass()->checkEquipDragonShield()))
                 {
                     var_r28 = 0xA;
                 }
@@ -760,14 +760,14 @@ void daAgb_c::GbaItemUse() {
         return;
     case 3:
         daPy_lk_c* temp_r3 = daPy_getPlayerLinkActorClass();
-        temp_r3->field_0x29c |= 0x1000;
+        temp_r3->onNoResetFlg0(daPy_py_c::daPyFlg0_UNK1000);
         temp_r3->field_0x354c = 0x96;
         resetCursor(false);
         field_0x65c = 0x96;
         mBrk.setPlaySpeed(6.0f);
         break;
     case 0x12:
-        if (daPy_getPlayerLinkActorClass()->field_0x2a0 & 1) {
+        if (daPy_getPlayerLinkActorClass()->checkEquipDragonShield()) {
             mEffect = 0;
             return;
         } else {
@@ -776,7 +776,7 @@ void daAgb_c::GbaItemUse() {
         }
         break;
     case 4:
-        if (daPy_getPlayerLinkActorClass()->field_0x2a0 & 1) {
+        if (daPy_getPlayerLinkActorClass()->checkEquipDragonShield()) {
             mEffect = 0;
             return;
         } else {
@@ -792,9 +792,9 @@ void daAgb_c::GbaItemUse() {
             return;
         } else {
             daPy_lk_c* temp_r4 = daPy_getPlayerLinkActorClass();
-            temp_r4->field_0x29c |= 0x1000;
+            temp_r4->onNoResetFlg0(daPy_py_c::daPyFlg0_UNK1000);
             temp_r4->field_0x354c = 300;
-            if (!(daPy_getPlayerLinkActorClass()->field_0x2a0 & 1)) {
+            if (!(daPy_getPlayerLinkActorClass()->checkEquipDragonShield())) {
                 temp_r4->field_0x354e = 300;
             }
 
@@ -808,7 +808,7 @@ void daAgb_c::GbaItemUse() {
             mEffect = BigLittleChange((field_0x660 << 0x10) | 0x300);
             return;
         } else {
-            if ((daPy_getPlayerLinkActorClass()->field_0x2a0 & 1)) {
+            if ((daPy_getPlayerLinkActorClass()->checkEquipDragonShield())) {
                 mEffect = 0;
                 return;
             }
@@ -953,7 +953,7 @@ int daAgb_Execute(daAgb_c* i_this) {
         if (i_this->field_0x65c != 0) {
             if (i_this->field_0x66b == 3 || i_this->field_0x66b == 12) {
                 daPy_lk_c* player_p = daPy_getPlayerLinkActorClass();
-                player_p->field_0x29c |= 0x1000;
+                player_p->onNoResetFlg0(daPy_py_c::daPyFlg0_UNK1000);
                 player_p->field_0x354c = 10;
             } else if (i_this->field_0x66b == 4 || i_this->field_0x66b == 13 ||
                        i_this->field_0x66b == 12)

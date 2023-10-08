@@ -78,6 +78,9 @@ public:
     void getPivotY();
 
     void setStatus(u32 status) { mFlags |= status; }
+    void clearStatus(u32 status) { mFlags &= ~status; }
+    bool checkStatus(u32 status) { return mFlags & status; }
+    void initStatus(u32 status);
     
     u8 getGlobalAlpha() { return mGlobalPrmColor.a; }
     void setGlobalAlpha(u8 alpha) { mGlobalPrmColor.a = alpha; }
@@ -102,10 +105,19 @@ public:
     void setRate(float i_rate) { mRate = i_rate; }
 
     void stopCreateParticle() { setStatus(JPAEmtrStts_StopEmit); }
+    void becomeImmortalEmitter() { setStatus(JPAEmtrStts_Immortal); }
+    void quitImmortalEmitter() { clearStatus(JPAEmtrStts_Immortal); }
 
     void becomeInvalidEmitter() {
         mMaxFrame = -1;
         stopCreateParticle();
+    }
+    
+    void setEmitterCallBackPtr(JPACallBackBase<JPABaseEmitter*>* callback) {
+        mpEmitterCallBack = callback;
+    }
+    void setParticleCallBackPtr(JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>* callback) {
+        mpParticleCallBack = callback;
     }
     
     /* 0x000 */ VolumeFunc mVolumeFunc;
@@ -148,8 +160,8 @@ public:
     /* 0x188 */ JSUPtrList mChildParticles;
     /* 0x194 */ JSUPtrList* mpPtclVacList;
     /* 0x198 */ JPADataBlockLinkInfo* mpDataLinkInfo;
-    /* 0x19C */ JPACallBackBase<JPABaseEmitter>* mpEmitterCallBack;
-    /* 0x1A0 */ JPACallBackBase2<JPABaseEmitter,JPABaseParticle>* mpParticleCallBack;
+    /* 0x19C */ JPACallBackBase<JPABaseEmitter*>* mpEmitterCallBack;
+    /* 0x1A0 */ JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>* mpParticleCallBack;
     /* 0x1A4 */ JMath::TRandom_fast_ mRandomSeed;
     /* 0x1A8 */ Mtx mGlobalRotation;
     /* 0x1D8 */ JGeometry::TVec3<f32> mGlobalScale;

@@ -5,54 +5,102 @@
 
 #include "dolphin/types.h"
 #include "d/actor/d_a_player.h"
+#include "f_op/f_op_camera_mng.h"
 
 /* 801028FC-80102940       .text changePlayer__9daPy_py_cFP10fopAc_ac_c */
-void daPy_py_c::changePlayer(fopAc_ac_c*) {
-    /* Nonmatching */
+void daPy_py_c::changePlayer(fopAc_ac_c* newPlayer) {
+    if (!newPlayer) {
+        return;
+    }
+    if (dComIfGp_roomControl_getStayNo() != newPlayer->getRoomNo()) {
+        return;
+    }
+    dComIfGp_setPlayer(0, newPlayer);
+    dComIfGp_getCamera(0)->mCamera.mpPlayerActor = newPlayer;
+    dComIfGp_getAttention().mFlags |= 0x80;
 }
 
 /* 80102940-80102B84       .text objWindHitCheck__9daPy_py_cFP8dCcD_Cyl */
-void daPy_py_c::objWindHitCheck(dCcD_Cyl*) {
-    /* Nonmatching */
+void daPy_py_c::objWindHitCheck(dCcD_Cyl* cyl) {
+    cXyz targetSpeed(0.0f, 0.0f, 0.0f);
+    f32 maxStep = 3.0f;
+    
+    if (cyl->ChkTgHit()) {
+        cCcD_Obj* hitObj = cyl->GetTgHitObj();
+        if (hitObj && hitObj->GetAtType() & AT_TYPE_LEAF_WIND) {
+            targetSpeed = *cyl->GetTgRVecP();
+            f32 distXZ = cyl->GetTgRVecP()->absXZ();
+            maxStep = 1.0f;
+            if (distXZ < 1.0f) {
+                targetSpeed = (current.pos - *cyl->GetTgHitPosP()) * 30.0f;
+                distXZ = targetSpeed.absXZ();
+            }
+            if (distXZ > 30.0f) {
+                targetSpeed *= 30.0f / distXZ;
+            }
+        }
+    }
+    
+    cLib_addCalc(&field_0x2f8.x, targetSpeed.x, 0.5f, maxStep, 0.5f);
+    cLib_addCalc(&field_0x2f8.z, targetSpeed.z, 0.5f, maxStep, 0.5f);
+    current.pos.x += field_0x2f8.x;
+    current.pos.z += field_0x2f8.z;
 }
 
 /* 80102B84-80102BB4       .text execute__25daPy_mtxFollowEcallBack_cFP14JPABaseEmitter */
-void daPy_mtxFollowEcallBack_c::execute(JPABaseEmitter*) {
-    /* Nonmatching */
+void daPy_mtxFollowEcallBack_c::execute(JPABaseEmitter* emitter) {
+    emitter->setGlobalRTMatrix(mpMtx);
 }
 
 /* 80102BB4-80102BF8       .text end__25daPy_mtxFollowEcallBack_cFv */
 void daPy_mtxFollowEcallBack_c::end() {
-    /* Nonmatching */
+    if (!mpEmitter) {
+        return;
+    }
+    mpEmitter->becomeInvalidEmitter();
+    mpEmitter->quitImmortalEmitter();
+    mpEmitter->setEmitterCallBackPtr(NULL);
+    mpEmitter = NULL;
 }
 
 /* 80102BF8-80102C84       .text makeEmitter__25daPy_mtxFollowEcallBack_cFUsPA4_fPC4cXyzPC4cXyz */
-void daPy_mtxFollowEcallBack_c::makeEmitter(unsigned short, float(*)[4], const cXyz*, const cXyz*) {
-    /* Nonmatching */
+void daPy_mtxFollowEcallBack_c::makeEmitter(u16 particleID, MtxP mtx, const cXyz* pos, const cXyz* scale) {
+    end();
+    mpMtx = mtx;
+    dComIfGp_particle_setP1(particleID, pos, NULL, scale, 0xFF, this, -1, NULL, NULL, NULL);
 }
 
 /* 80102C84-80102D14       .text makeEmitterColor__25daPy_mtxFollowEcallBack_cFUsPA4_fPC4cXyzPC8_GXColorPC8_GXColor */
-void daPy_mtxFollowEcallBack_c::makeEmitterColor(unsigned short, float(*)[4], const cXyz*, const _GXColor*, const _GXColor*) {
-    /* Nonmatching */
+void daPy_mtxFollowEcallBack_c::makeEmitterColor(u16 particleID, MtxP mtx, const cXyz* pos, const _GXColor* prmColor, const _GXColor* envColor) {
+    end();
+    mpMtx = mtx;
+    dComIfGp_particle_setP1(particleID, pos, NULL, NULL, 0xFF, this, -1, prmColor, envColor, NULL);
 }
 
 /* 80102D14-80102D90       .text setDoButtonQuake__9daPy_py_cFv */
 void daPy_py_c::setDoButtonQuake() {
-    /* Nonmatching */
+    if (checkNoResetFlg0(daPyFlg0_UNK200000)) {
+        return;
+    }
+    
+    onNoResetFlg0(daPyFlg0_UNK200000);
+    mQuakeTimer = 60;
+    
+    // u8 temp[4] = {0x00, 0x10, 0xFF, 0xEE}; // Doesn't match
+    u32 temp2 = 0x0010FFEE;
+    u8* temp = (u8*)&temp2;
+    dComIfGp_getVibration().StartQuake(temp, 0, 1, cXyz(0.0f, 1.0f, 0.0f));
 }
 
 /* 80102D90-80102E18       .text stopDoButtonQuake__9daPy_py_cFi */
-void daPy_py_c::stopDoButtonQuake(int) {
-    /* Nonmatching */
+void daPy_py_c::stopDoButtonQuake(int param_1) {
+    if (mQuakeTimer > 0) {
+        mQuakeTimer--;
+        if (mQuakeTimer == 0) {
+            dComIfGp_getVibration().StopQuake(-1);
+        }
+    }
+    if (param_1 && mQuakeTimer == 0) {
+        mNoResetFlg0 &= ~0x00200000;
+    }
 }
-
-/* 80102E18-80102E84       .text __dt__25daPy_mtxFollowEcallBack_cFv */
-daPy_mtxFollowEcallBack_c::~daPy_mtxFollowEcallBack_c() {
-    /* Nonmatching */
-}
-
-/* 80102E84-80102E8C       .text setup__25daPy_mtxFollowEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void daPy_mtxFollowEcallBack_c::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
-    /* Nonmatching */
-}
-

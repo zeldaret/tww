@@ -432,7 +432,7 @@ config.libs = [
             Object(Matching,    "d/actor/d_a_nh.cpp"),
             Object(NonMatching, "d/actor/d_a_npc_fa1.cpp"),
             Object(NonMatching, "d/actor/d_a_obj_search.cpp"),
-            Object(NonMatching, "d/actor/d_a_player.cpp"),
+            Object(Matching,    "d/actor/d_a_player.cpp"),
             Object(NonMatching, "d/actor/d_a_player_main.cpp"),
             Object(NonMatching, "d/actor/d_a_player_npc.cpp"),
             Object(NonMatching, "d/actor/d_a_sea.cpp"),
