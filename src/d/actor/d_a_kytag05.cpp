@@ -136,7 +136,7 @@ static int daKytag05_Create(fopAc_ac_c* i_this) {
     dKyw_evt_wind_set_go();
     dKyw_evt_wind_set(0, 0);
     g_env_light.mSnowCount = 200;
-#if VERSION == VERSION_JPN
+#if VERSION != VERSION_USA
     g_env_light.mMoyaMode = 3;
 #else
     g_env_light.mMoyaMode = 0;
