@@ -63,7 +63,7 @@ public:
     /* 0xC2 */ s16 mRotateSpeed;
     /* 0xC4 */ u8 field_0xC4[0xC6 - 0xC4];
     /* 0xC6 */ u16 mTexIdx;
-    /* 0xC8 */ JPACallBackBase2<JPABaseEmitter,JPABaseParticle>* mpCallBack2;
+    /* 0xC8 */ JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>* mpCallBack2;
     /* 0xCC */ u32 mFlags;
 };
 

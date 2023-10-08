@@ -504,8 +504,8 @@ int phase_1(dScnPly_ply_c* i_this) {
     int rt = dComIfG_setStageRes("Stage", NULL);
     JUT_ASSERT(3458, rt == 1);
 
-    dMat_control_c::create((J3DMaterialTable*)dComIfG_getObjectRes("Always", 0x41),
-                           (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Always", 0x57));
+    dMat_control_c::create((J3DMaterialTable*)dComIfG_getObjectRes("Always", ALWAYS_BMT_ICE),
+                           (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Always", ALWAYS_BTK_ICE));
 
     return cPhs_NEXT_e;
 }
@@ -585,7 +585,7 @@ extern scene_process_profile_definition g_profile_PLAY_SCENE = {
     0,
     0,
     &g_fopScn_Method.mBase,
-    &l_dScnPly_Method.base.mBase,
+    &l_dScnPly_Method,
 };
 
 extern scene_process_profile_definition g_profile_OPENING_SCENE = {
@@ -598,7 +598,7 @@ extern scene_process_profile_definition g_profile_OPENING_SCENE = {
     0,
     0,
     &g_fopScn_Method.mBase,
-    &l_dScnPly_Method.base.mBase,
+    &l_dScnPly_Method,
 };
 
 extern scene_process_profile_definition g_profile_OPENING2_SCENE = {
@@ -611,5 +611,5 @@ extern scene_process_profile_definition g_profile_OPENING2_SCENE = {
     0,
     0,
     &g_fopScn_Method.mBase,
-    &l_dScnPly_Method.base.mBase,
+    &l_dScnPly_Method,
 };

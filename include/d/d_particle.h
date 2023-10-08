@@ -222,7 +222,7 @@ public:
     virtual void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
 };
 
-class dPa_windPcallBack : JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*> {
+class dPa_windPcallBack : public JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*> {
 public:
     dPa_windPcallBack();
     virtual ~dPa_windPcallBack() {}
@@ -240,7 +240,7 @@ public:
     virtual void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
 };
 
-class dPa_ripplePcallBack : JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*> {
+class dPa_ripplePcallBack : public JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*> {
 public:
     dPa_ripplePcallBack();
     virtual ~dPa_ripplePcallBack() {}

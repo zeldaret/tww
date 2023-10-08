@@ -220,6 +220,7 @@ public:
     u8 GetHitMark() { return mHitMark; }
     void SetRVec(cXyz& vec) { mRVec = vec; }
     cXyz* GetVecP() { return &mVec; }
+    cXyz* GetRVecP() { return &mRVec; }
     void SetHitPos(cXyz& pos) { mHitPos = pos; }
     cXyz* GetHitPosP() { return &mHitPos; }
     inline void ClrHit() { ClrActorInfo(); }
@@ -294,6 +295,7 @@ public:
     bool ChkAtShieldHit() { return mGObjAt.ChkRPrm(1); }
     cXyz* GetAtVecP() { return mGObjAt.GetVecP(); }
     cXyz* GetTgVecP() { return mGObjTg.GetVecP(); }
+    cXyz* GetTgRVecP() { return mGObjTg.GetRVecP(); }
     void SetAtSpl(dCcG_At_Spl spl) { mGObjAt.SetAtSpl(spl); }
     void SetAtHitCallback(dCcD_HitCallback callback) { mGObjAt.SetHitCallback(callback); }
     void SetTgHitCallback(dCcD_HitCallback callback) { mGObjTg.SetHitCallback(callback); }

@@ -39,6 +39,141 @@ class camera_class;
 class J2DOrthoGraph;
 class dDemo_actor_c;
 
+enum ALWAYS_RES_FILE_IDS {
+    /* BCK */
+    ALWAYS_BCK_FA=0xC,
+    ALWAYS_BCK_OBM_SYOUGEKISW=0xD,
+    ALWAYS_BCK_START=0xE,
+    ALWAYS_BCK_VBELL=0xF,
+    ALWAYS_BCK_VBOKL=0x10,
+    ALWAYS_BCK_VCHUL=0x11,
+    ALWAYS_BCK_VDOKL=0x12,
+    ALWAYS_BCK_VESAL=0x13,
+    ALWAYS_BCK_VHANL=0x14,
+    ALWAYS_BCK_VHAPL=0x15,
+    ALWAYS_BCK_W_PILLAR_A=0x16,
+    ALWAYS_BCK_YJ_DELETE=0x17,
+    ALWAYS_BCK_YJ_IN=0x18,
+    ALWAYS_BCK_YJ_LOOP=0x19,
+    ALWAYS_BCK_YJ_OUT=0x1A,
+    ALWAYS_BCK_YJ_SCALE=0x1B,
+    
+    /* BDL */
+    ALWAYS_BDL_ARROWITEM=0x1E,
+    ALWAYS_BDL_FA=0x1F,
+    ALWAYS_BDL_KROCK_00=0x20,
+    ALWAYS_BDL_OBM_KOISI1=0x21,
+    ALWAYS_BDL_OBM_KOISI2=0x22,
+    ALWAYS_BDL_OBM_KOTUBO1=0x23,
+    ALWAYS_BDL_OBM_OOTUBO1=0x24,
+    ALWAYS_BDL_VBELL=0x25,
+    ALWAYS_BDL_VBOKL=0x26,
+    ALWAYS_BDL_VDOKL=0x27,
+    ALWAYS_BDL_VESAL=0x28,
+    ALWAYS_BDL_VHAPL=0x29,
+    ALWAYS_BDL_VHRTL=0x2A,
+    ALWAYS_BDL_VKEYL=0x2B,
+    
+    /* BDLM */
+    ALWAYS_BDL_IB=0x2E,
+    ALWAYS_BDL_MPA_SIMI=0x2F,
+    ALWAYS_BDL_MPI_KOISHI=0x30,
+    ALWAYS_BDL_MPM_TUBO=0x31,
+    ALWAYS_BDL_MPODA=0x32,
+    ALWAYS_BDL_MPODB=0x33,
+    ALWAYS_BDL_NH=0x34,
+    ALWAYS_BDL_OBM_SYOUGEKISW=0x35,
+    ALWAYS_BDL_VCHUL=0x36,
+    ALWAYS_BDL_VHANL=0x37,
+    ALWAYS_BDL_VHKAL=0x38,
+    ALWAYS_BDL_VHUTL=0x39,
+    ALWAYS_BDL_VLUPL=0x3A,
+    ALWAYS_BDL_W_PILLAR_A=0x3B,
+    ALWAYS_BDL_YA=0x3C,
+    ALWAYS_BDL_YAZIRUSHI_01=0x3D,
+    ALWAYS_BDL_YTHDR00=0x3E,
+    
+    /* BMTM */
+    ALWAYS_BMT_ICE=0x41,
+    
+    /* BPK */
+    ALWAYS_BPK_YJ_DELETE=0x44,
+    ALWAYS_BPK_YJ_IN=0x45,
+    ALWAYS_BPK_YJ_LOOP=0x46,
+    ALWAYS_BPK_YJ_OUT=0x47,
+    ALWAYS_BPK_YJ_SCALE=0x48,
+    
+    /* BRK */
+    ALWAYS_BRK_IB_01=0x4B,
+    ALWAYS_BRK_IB_02=0x4C,
+    ALWAYS_BRK_MPA_SIMI=0x4D,
+    ALWAYS_BRK_TNH=0x4E,
+    ALWAYS_BRK_VCHUL=0x4F,
+    ALWAYS_BRK_VHANL=0x50,
+    ALWAYS_BRK_VLUPL=0x51,
+    ALWAYS_BRK_YTHDR00=0x52,
+    
+    /* BTK */
+    ALWAYS_BTK_EFA_USONAMI_01=0x55,
+    ALWAYS_BTK_IB=0x56,
+    ALWAYS_BTK_ICE=0x57,
+    ALWAYS_BTK_OBM_SYOUGEKISW=0x58,
+    ALWAYS_BTK_VBELL=0x59,
+    ALWAYS_BTK_VHANL=0x5A,
+    ALWAYS_BTK_VHKAL=0x5B,
+    ALWAYS_BTK_VHUTL=0x5C,
+    ALWAYS_BTK_VLUPL=0x5D,
+    ALWAYS_BTK_W_PILLAR_A=0x5E,
+    ALWAYS_BTK_YA=0x5F,
+    ALWAYS_BTK_YTHDR00=0x60,
+    
+    /* BTP */
+    ALWAYS_BTP_MPA_SIMI=0x63,
+    ALWAYS_BTP_MPI_KIBAKO_TARU=0x64,
+    ALWAYS_BTP_MPI_KINOHAHEN=0x65,
+    ALWAYS_BTP_MPI_KOISHI=0x66,
+    ALWAYS_BTP_MPM_TUBO=0x67,
+    
+    /* DAT */
+    ALWAYS_BIN_ITEM_TABLE=0x6A,
+    
+    /* TEX */
+    ALWAYS_BTI_AK_HOUSHI00=0x6D,
+    ALWAYS_BTI_AK_SMOKE01=0x6E,
+    ALWAYS_BTI_B_SEA_TEX0AND2=0x6F,
+    ALWAYS_BTI_B_WYURAYURA_TEX1=0x70,
+    ALWAYS_I4_BALL128B=0x71,
+    ALWAYS_BTI_BLACK_WHITE_2=0x72,
+    ALWAYS_BTI_CAMERA_FREE=0x73,
+    ALWAYS_BTI_CAMERA_SELF=0x74,
+    ALWAYS_BTI_F_SHIPICON=0x75,
+    ALWAYS_CI4_MAP08G=0x76,
+    ALWAYS_CI4_MAP16G=0x77,
+    ALWAYS_BTI_MAP_BLACK_CI8=0x78,
+    ALWAYS_BTI_MAP_CHECK16_CI4=0x79,
+    ALWAYS_BTI_MAP_FRAME1=0x7A,
+    ALWAYS_BTI_MAP_FRAME2=0x7B,
+    ALWAYS_BTI_MAP_FRAME3=0x7C,
+    ALWAYS_BTI_MAP_FRAME4=0x7D,
+    ALWAYS_BTI_ROPE=0x7E,
+    ALWAYS_BTI_SHMREF=0x7F,
+    ALWAYS_BTI_TREASUREBOX=0x80,
+    ALWAYS_I8_TX_SNOW01=0x81,
+    ALWAYS_BTI_TXA_LENS_32HALF=0x82,
+    ALWAYS_BTI_TXA_MOYA_A_64=0x83,
+    ALWAYS_BTI_TXA_MOYA_B_64=0x84,
+    ALWAYS_BTI_TXA_RING_A_32HAFE=0x85,
+    ALWAYS_BTI_TXA_TAIYO=0x86,
+    ALWAYS_BTI_TXA_TUKI_AS=0x87,
+    ALWAYS_BTI_TXA_TUKI_BS=0x88,
+    ALWAYS_BTI_TXA_TUKI_CS=0x89,
+    ALWAYS_BTI_TXA_TUKI_DS=0x8A,
+    ALWAYS_BTI_TXA_USONAMI_256_64MIP=0x8B,
+    ALWAYS_BTI_TXA_USONAMI_M_256_64MIP=0x8C,
+    ALWAYS_BTI_TXM_ROPE1=0x8D,
+    ALWAYS_BTI_UMIPT=0x8E,
+};
+
 class __d_timer_info_c {
 public:
     __d_timer_info_c() {
@@ -195,6 +330,7 @@ public:
 
     fopAc_ac_c* getPlayerPtr(int idx) { return (fopAc_ac_c*)mpPlayerPtr[idx]; }
     fopAc_ac_c* getPlayer(int idx) { return (fopAc_ac_c*)mpPlayer[idx]; }
+    void setPlayer(int idx, fopAc_ac_c* player) { mpPlayer[idx] = (daPy_py_c*)player; }
     s8 getPlayerCameraID(int idx) { return mCurCamera[idx]; }
 
     int getItemRupeeCount() { return mItemRupeeCount; }
@@ -906,6 +1042,10 @@ inline fopAc_ac_c* dComIfGp_getPlayer(int idx) {
     return g_dComIfG_gameInfo.play.getPlayer(idx);
 }
 
+inline void dComIfGp_setPlayer(int idx, fopAc_ac_c* player) {
+    g_dComIfG_gameInfo.play.setPlayer(idx, player);
+}
+
 inline fopAc_ac_c* dComIfGp_getCb1Player() {
     return g_dComIfG_gameInfo.play.getPlayerPtr(1);
 }
@@ -1104,6 +1244,10 @@ inline void dComIfGp_drawFlower() {
 
 inline void dComIfGp_map_mapBufferSendAGB(int param_0) {
     dMap_c::mapBufferSendAGB(param_0);
+}
+
+inline dDemo_manager_c* dComIfGp_demo_get() {
+    return g_dComIfG_gameInfo.play.getDemo();
 }
 
 inline void dComIfGp_demo_update() {

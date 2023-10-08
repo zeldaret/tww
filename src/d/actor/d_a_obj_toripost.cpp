@@ -321,7 +321,7 @@ void daObjTpost_c::cutDispLetterStart(int staffIdx) {
 void daObjTpost_c::cutDispLetterProc(int staffIdx) {
     u16 mode = talk(0);
     if(mode == 5) {
-        daPy_getPlayerActorClass()->field_0x2a0 |= 0x4000; // may be a onLetterReadEyeMove__9daPy_py_cFv inline based on debug map
+        daPy_getPlayerActorClass()->onLetterReadEyeMove();
     }
     if(mode == dNpcMsgStts_BOX_CLOSED_e) {
         dComIfGp_evmng_cutEnd(staffIdx);

@@ -42,10 +42,10 @@ void dComIfG_play_c::ct() {
     mpTreePacket = NULL;
     mpWoodPacket = NULL;
     mpFlowerPacket = NULL;
-    field_0x4A64[0] = 0xFF;
-    field_0x4A64[1] = 0xFF;
-    mLastSeaRoom = 0xFF;
-    field_0x4A67[0] = 0xFF;
+    mShipId = 0xFF;
+    mShipRoomId = 0xFF;
+    mIkadaShipBeforeRoomId = 0xFF;
+    mIkadaShipId = 0xFF;
     mIkadaLinkPos.set(0.0f, 0.0f, 0.0f);
     mLkDArcIdx = -1;
 
@@ -566,8 +566,8 @@ dStage_Ship_data* dComIfGp_getShip(int i_roomNo, int param_1) {
         return NULL;
     }
 
-    dStage_Ship_c* ship_p = roomSt_p->mRoomDt.getShip();
-    if (ship_p == NULL || ship_p->m_num <= 0 || param_1 == 0xFF) {
+    dStage_Ship_c* ship_p = roomSt_p->getShip();
+    if (ship_p == NULL || ship_p->num <= 0 || param_1 == 0xFF) {
         return NULL;
     }
 
@@ -576,7 +576,7 @@ dStage_Ship_data* dComIfGp_getShip(int i_roomNo, int param_1) {
         return NULL;
     }
 
-    for (int i = 0; i < ship_p->m_num; i++) {
+    for (int i = 0; i < ship_p->num; i++) {
         if (param_1 == data_p->field_0xe) {
             return data_p;
         }
@@ -595,7 +595,7 @@ bool dComIfGp_getMapTrans(int i_roomNo, f32* o_transX, f32* o_transY, s16* o_ang
     }
 
     dStage_Mult_info* data_p = multi_p->m_entries;
-    for (int i = 0; i < multi_p->m_num; i++) {
+    for (int i = 0; i < multi_p->num; i++) {
         if (i_roomNo == data_p->mRoomNo) {
             *o_transX = data_p->mTransX;
             *o_transY = data_p->mTransY;
@@ -636,15 +636,15 @@ void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8
     g_dComIfG_gameInfo.play.setNextStage(i_stageName, i_roomNo, i_point, i_layer, i_wipe);
 
     if (daPy_getPlayerLinkActorClass() != NULL) {
-        u32 mode = daPy_getPlayerLinkActorClass()->field_0x2a0;
+        u32 mode = daPy_getPlayerLinkActorClass()->mNoResetFlg1;
 
-        if (mode & 1) {
+        if (mode & daPy_lk_c::daPy_FLG1_EQUIP_DRAGON_SHIELD) {
             i_lastMode |= 0x8000;
         }
 
         i_lastMode |= daPy_getPlayerLinkActorClass()->field_0x354e << 0x10;
 
-        if (mode & 0x8000) {
+        if (mode & daPy_lk_c::daPy_FLG1_UNK8000) {
             i_lastMode |= 0x4000;
         }
     }
