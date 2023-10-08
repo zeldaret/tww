@@ -106,7 +106,7 @@ public:
     int GetSpecialCode(cBgS_PolyInfo&);
     s32 GetAttributeCodeDirect(cBgS_PolyInfo&);
     s32 GetAttributeCode(cBgS_PolyInfo&);
-    void GetGroundCode(cBgS_PolyInfo&);
+    int GetGroundCode(cBgS_PolyInfo&);
     void GetPolyId2(int, int, int, u32, u32);
     int GetCamMoveBG(cBgS_PolyInfo&);
     int GetRoomCamId(cBgS_PolyInfo&);

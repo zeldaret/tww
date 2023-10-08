@@ -94,6 +94,7 @@ enum dEvt_Command_e {
     dEvtCmd_INDEMO_e,
     dEvtCmd_INDOOR_e,
     dEvtCmd_INGETITEM_e,
+    dEvtCmd_INCATCH_e = 6,
     dEvtCmd_DUMMY = 0xFFFF,
 };
 
@@ -129,11 +130,11 @@ public:
     void onCondition(u16 cond) { mCondition |= cond; }
     void offCondition(u16 cond) { mCondition &= ~cond; }
 
-    bool checkCommandTalk() { return mCommand == 1; }
-    bool checkCommandItem() { return mCommand == 4; }
-    BOOL checkCommandDoor() { return mCommand == 3; }
-    bool checkCommandDemoAccrpt() { return mCommand == 2; }
-    bool checkCommandCatch() { return mCommand == 6; }
+    bool checkCommandTalk() { return mCommand == dEvtCmd_INTALK_e; }
+    bool checkCommandItem() { return mCommand == dEvtCmd_INGETITEM_e; }
+    BOOL checkCommandDoor() { return mCommand == dEvtCmd_INDOOR_e; }
+    bool checkCommandDemoAccrpt() { return mCommand == dEvtCmd_INDEMO_e; }
+    bool checkCommandCatch() { return mCommand == dEvtCmd_INCATCH_e; }
 
     /* 0x04 */ u16 mCommand;
     /* 0x06 */ u16 mCondition;

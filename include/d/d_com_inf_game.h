@@ -331,6 +331,7 @@ public:
     fopAc_ac_c* getPlayerPtr(int idx) { return (fopAc_ac_c*)mpPlayerPtr[idx]; }
     fopAc_ac_c* getPlayer(int idx) { return (fopAc_ac_c*)mpPlayer[idx]; }
     void setPlayer(int idx, fopAc_ac_c* player) { mpPlayer[idx] = (daPy_py_c*)player; }
+    void setPlayerPtr(int idx, fopAc_ac_c* playerPtr) { mpPlayerPtr[idx] = playerPtr; }
     s8 getPlayerCameraID(int idx) { return mCurCamera[idx]; }
 
     int getItemRupeeCount() { return mItemRupeeCount; }
@@ -703,12 +704,80 @@ inline s8 dComIfGs_getRestartRoomNo() {
     return g_dComIfG_gameInfo.save.getRestart().getRoomNo();
 }
 
-inline s8 dComIfGs_getTurnRestartRoomNo() {
-    return g_dComIfG_gameInfo.save.getTurnRestart().getRoomNo();
+inline s8 dComIfGs_getRestartOption() {
+    return g_dComIfG_gameInfo.save.getRestart().getRestartOption();
+}
+
+inline s16 dComIfGs_getRestartOptionPoint() {
+    return g_dComIfG_gameInfo.save.getRestart().getRestartOptionPoint();
+}
+
+inline s8 dComIfGs_getRestartOptionRoomNo() {
+    return g_dComIfG_gameInfo.save.getRestart().getRestartOptionRoomNo();
+}
+
+inline cXyz& dComIfGs_getRestartOptionPos() {
+    return g_dComIfG_gameInfo.save.getRestart().getRestartOptionPos();
+}
+
+inline s16 dComIfGs_getRestartOptionAngleY() {
+    return g_dComIfG_gameInfo.save.getRestart().getRestartOptionAngleY();
+}
+
+inline void dComIfGs_setRestartOption(s8 i_option) {
+    g_dComIfG_gameInfo.save.getRestart().setRestartOption(i_option);
+}
+
+inline void dComIfGs_setRestartOption(cXyz* i_pos, s16 i_angle, s8 i_roomNo, s8 i_option) {
+    g_dComIfG_gameInfo.save.getRestart().setRestartOption(i_option, i_pos, i_angle, i_roomNo);
+}
+
+inline u32 dComIfGs_getRestartRoomParam() {
+    return g_dComIfG_gameInfo.save.getRestart().getRoomParam();
+}
+
+inline cXyz& dComIfGs_getRestartRoomPos() {
+    return g_dComIfG_gameInfo.save.getRestart().getRoomPos();
+}
+
+inline s16 dComIfGs_getRestartRoomAngleY() {
+    return g_dComIfG_gameInfo.save.getRestart().getRoomAngleY();
 }
 
 inline void dComIfGs_setStartPoint(s16 i_point) {
     g_dComIfG_gameInfo.save.getRestart().setStartPoint(i_point);
+}
+
+inline s8 dComIfGs_getTurnRestartRoomNo() {
+    return g_dComIfG_gameInfo.save.getTurnRestart().getRoomNo();
+}
+
+inline u32 dComIfGs_getTurnRestartParam() {
+    return g_dComIfG_gameInfo.save.getTurnRestart().getParam();
+}
+
+inline cXyz& dComIfGs_getTurnRestartPos() {
+    return g_dComIfG_gameInfo.save.getTurnRestart().getPos();
+}
+
+inline cXyz& dComIfGs_getTurnRestartShipPos() {
+    return g_dComIfG_gameInfo.save.getTurnRestart().getShipPos();
+}
+
+inline s16 dComIfGs_getTurnRestartAngleY() {
+    return g_dComIfG_gameInfo.save.getTurnRestart().getAngleY();
+}
+
+inline s16 dComIfGs_getTurnRestartShipAngleY() {
+    return g_dComIfG_gameInfo.save.getTurnRestart().getShipAngleY();
+}
+
+inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param) {
+    g_dComIfG_gameInfo.save.getTurnRestart().set(i_pos, i_angle, i_roomNo, i_param, i_pos, i_angle, 0);
+}
+
+inline void dComIfGs_setPlayerPriest(u8 i_option, cXyz& i_pos, s16 i_angle, s8 i_roomNo) {
+    g_dComIfG_gameInfo.save.getPlayer().getPriest().set(i_option, i_pos, i_angle, i_roomNo);
 }
 
 inline int dComIfGs_getTriforceNum() {
@@ -812,38 +881,6 @@ inline void dComIfGs_removeZone(int i_zoneNo) {
     g_dComIfG_gameInfo.save.removeZone(i_zoneNo);
 }
 
-inline u32 dComIfGs_getTurnRestartParam() {
-    return g_dComIfG_gameInfo.save.getTurnRestart().getParam();
-}
-
-inline cXyz& dComIfGs_getTurnRestartPos() {
-    return g_dComIfG_gameInfo.save.getTurnRestart().getPos();
-}
-
-inline cXyz& dComIfGs_getTurnRestartShipPos() {
-    return g_dComIfG_gameInfo.save.getTurnRestart().getShipPos();
-}
-
-inline s16 dComIfGs_getTurnRestartAngleY() {
-    return g_dComIfG_gameInfo.save.getTurnRestart().getAngleY();
-}
-
-inline s16 dComIfGs_getTurnRestartShipAngleY() {
-    return g_dComIfG_gameInfo.save.getTurnRestart().getShipAngleY();
-}
-
-inline u32 dComIfGs_getRestartRoomParam() {
-    return g_dComIfG_gameInfo.save.getRestart().getRoomParam();
-}
-
-inline cXyz& dComIfGs_getRestartRoomPos() {
-    return g_dComIfG_gameInfo.save.getRestart().getRoomPos();
-}
-
-inline s16 dComIfGs_getRestartRoomAngleY() {
-    return g_dComIfG_gameInfo.save.getRestart().getRoomAngleY();
-}
-
 inline void dComIfGs_putSave(int i_stageNo) {
     g_dComIfG_gameInfo.save.putSave(i_stageNo);
 }
@@ -862,10 +899,6 @@ inline void dComIfGs_onActor(int i_no, int i_roomNo) {
 
 inline BOOL dComIfGs_isActor(int i_no, int i_roomNo) {
     return g_dComIfG_gameInfo.save.isActor(i_no, i_roomNo);
-}
-
-inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param) {
-    g_dComIfG_gameInfo.save.getTurnRestart().set(i_pos, i_angle, i_roomNo, i_param, i_pos, i_angle, 0);
 }
 
 inline u16 dComIfGs_getDate() {
@@ -1050,6 +1083,10 @@ inline fopAc_ac_c* dComIfGp_getCb1Player() {
     return g_dComIfG_gameInfo.play.getPlayerPtr(1);
 }
 
+inline void dComIfGp_setCb1Player(fopAc_ac_c* player) {
+    g_dComIfG_gameInfo.play.setPlayerPtr(1, player);
+}
+
 inline roomRead_class* dComIfGp_getStageRoom() {
     return g_dComIfG_gameInfo.play.getStage().getRoom();
 }
@@ -1086,6 +1123,14 @@ inline int dComIfGp_getStagePlightNumInfo() {
     return g_dComIfG_gameInfo.play.getStage().getPlightNumInfo();
 }
 
+inline stage_actor_class* dComIfGp_getStagePlayer() {
+    return g_dComIfG_gameInfo.play.getStage().getPlayer();
+}
+
+inline u16 dComIfGp_getStagePlayerNum() {
+    return g_dComIfG_gameInfo.play.getStage().getPlayerNum();
+}
+
 inline s32 dComIfGp_roomControl_getTimePass() {
     return g_dComIfG_gameInfo.play.getRoomControl()->GetTimePass();
 }
@@ -1112,6 +1157,10 @@ inline void dComIfGp_roomControl_setStayNo(int stayNo) {
 
 inline void dComIfGp_roomControl_setStatusFlag(int i_roomNo, u8 i_flag) {
     g_dComIfG_gameInfo.play.getRoomControl()->setStatusFlag(i_roomNo, i_flag);
+}
+
+inline BOOL dComIfGp_roomControl_checkStatusFlag(int i_roomNo, u8 i_flag) {
+    return g_dComIfG_gameInfo.play.getRoomControl()->checkStatusFlag(i_roomNo, i_flag);
 }
 
 inline void dComIfGp_roomControl_zoneCountCheck(int i_roomNo) {
@@ -1473,7 +1522,7 @@ inline s16 dComIfGp_evmng_getEventIdx(const char* pName, u8 evNo) {
     return dComIfGp_getEventManager().getEventIdx(pName, evNo);
 }
 
-inline int dComIfGp_evmng_getMyStaffId(char* pName, fopAc_ac_c* pActor, s32 param_3) {
+inline int dComIfGp_evmng_getMyStaffId(const char* pName, fopAc_ac_c* pActor, s32 param_3) {
     return dComIfGp_getEventManager().getMyStaffId(pName, pActor, param_3);
 }
 

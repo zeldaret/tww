@@ -566,19 +566,25 @@ public:
         mLastMode = mode;
     }
 
-    s16 getStartPoint() const { return mStartCode; }
-    u32 getLastMode() const { return mLastMode; }
-    s8 getRoomNo() const { return mRestartRoom; }
-    u32 getRoomParam() const { return mRestartParam; }
+    s16 getStartPoint() { return mStartCode; }
+    u32 getLastMode() { return mLastMode; }
+    f32 getLastSpeedF() { return mLastSpeedF; }
+    s8 getRoomNo() { return mRestartRoom; }
+    u32 getRoomParam() { return mRestartParam; }
     cXyz& getRoomPos() { return mRestartPos; }
-    s16 getRoomAngleY() const { return mRestartAngle; }
+    s16 getRoomAngleY() { return mRestartAngle; }
+    s8 getRestartOption() { return mOption; }
+    s8 getRestartOptionRoomNo() { return mOptionRoomNo; }
+    s16 getRestartOptionPoint() { return mOptionPoint; }
+    s16 getRestartOptionAngleY() { return mOptionRoomAngleY; }
+    cXyz& getRestartOptionPos() { return mOptionRoomPos; }
 
     /* 0x00 */ s8 mRestartRoom;
-    /* 0x01 */ u8 field_0x1;
-    /* 0x02 */ s8 mRoomNo;
-    /* 0x04 */ s16 field_0x4;
-    /* 0x06 */ s16 mRoomAngleY;
-    /* 0x08 */ cXyz mRoomPos;
+    /* 0x01 */ u8 mOption;
+    /* 0x02 */ s8 mOptionRoomNo;
+    /* 0x04 */ s16 mOptionPoint;
+    /* 0x06 */ s16 mOptionRoomAngleY;
+    /* 0x08 */ cXyz mOptionRoomPos;
     /* 0x14 */ s16 mStartCode;
     /* 0x16 */ s16 mRestartAngle;
     /* 0x18 */ cXyz mRestartPos;
