@@ -170,6 +170,7 @@ public:
 #ifndef __INTELLISENSE__
     fopAc_cullSizeSphere() {}
     fopAc_cullSizeSphere(cXyz, float);
+    ~fopAc_cullSizeSphere() {}
 #endif
 
     /* 0x0 */ Vec mCenter;
@@ -182,6 +183,7 @@ public:
     fopAc_cullSizeBox() {}
     fopAc_cullSizeBox(const fopAc_cullSizeBox&);
     fopAc_cullSizeBox(cXyz, cXyz);
+    ~fopAc_cullSizeBox() {}
 #endif
 
     /* 0x0 */ Vec mMin;

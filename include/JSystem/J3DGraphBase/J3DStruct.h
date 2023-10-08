@@ -8,7 +8,13 @@
 
 class J3DLightInfo {
 public:
-    void operator=(J3DLightInfo const&);
+    void operator=(J3DLightInfo const& other) {
+        mLightPosition = other.mLightPosition;
+        mLightDirection = other.mLightDirection;
+        mColor = other.mColor;
+        mCosAtten = other.mCosAtten;
+        mDistAtten = other.mDistAtten;
+    }
 
     /* 0x00 */ Vec mLightPosition;
     /* 0x0C */ Vec mLightDirection;
