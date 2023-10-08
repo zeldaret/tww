@@ -23,16 +23,19 @@ public:
             mTwo[i] = 0.0f;
         }
     }
-    void setAnmTransform(J3DAnmTransform* mAnmTransform);
+    void setAnmTransform(J3DAnmTransform* mAnmTransform) { mOne[0] = mAnmTransform; }
 
 public:
-    u32 mOne[4];
+    J3DAnmTransform* mOne[4];
     f32 mTwo[4];
 };
 
 class J3DMtxCalcAnm : public virtual J3DMtxCalc {
 public:
-    J3DMtxCalcAnm(J3DAnmTransform* mAnmTransform) : J3DMtxCalc() { setAnmTransform(mAnmTransform); }
+    J3DMtxCalcAnm(J3DAnmTransform* mAnmTransform) : J3DMtxCalc() {
+        initAnm();
+        setAnmTransform(mAnmTransform);
+    }
     virtual ~J3DMtxCalcAnm() { initAnm(); }
     virtual void calc(u16);
 };

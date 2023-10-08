@@ -1647,6 +1647,10 @@ inline void dComIfGd_entryZSortXluList(J3DPacket* i_packet, cXyz& param_1) {
     g_dComIfG_gameInfo.drawlist.entryZSortXluList(i_packet, param_1);
 }
 
+inline void dComIfGd_entryZSortXluListMaskOff(J3DPacket* i_packet, cXyz& param_1) {
+    g_dComIfG_gameInfo.drawlist.entryZSortXluListMaskOff(i_packet, param_1);
+}
+
 inline view_class* dComIfGd_getView() {
     return (view_class*)g_dComIfG_gameInfo.drawlist.mpCamera;
 }

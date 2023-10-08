@@ -309,7 +309,6 @@ public:
     }
 
     virtual ~J3DAnmTransform();
-    virtual s32 getKind() const;
     virtual void getTransform(u16, J3DTransformInfo*) const = 0;
 
 private:
@@ -332,7 +331,6 @@ public:
     void calcTransform(f32, u16, J3DTransformInfo*) const;
 
     virtual ~J3DAnmTransformKey();
-    virtual s32 getKind() const;
     virtual void getTransform(u16, J3DTransformInfo*) const;
 
 private:
@@ -343,18 +341,10 @@ private:
 class J3DAnmTransformFull : public J3DAnmTransform {
 public:
     virtual ~J3DAnmTransformFull();
-    virtual s32 getKind() const;
     virtual void getTransform(u16, J3DTransformInfo*) const;
 
 private:
     /* 0x20 */ int field_0x20;
-};  // Size: 0x24
-
-class J3DAnmTransformFullWithLerp : public J3DAnmTransformFull {
-public:
-    virtual ~J3DAnmTransformFullWithLerp();
-    virtual s32 getKind() const;
-    virtual void getTransform(u16, J3DTransformInfo*) const;
 };  // Size: 0x24
 
 struct J3DTextureSRTInfo;
@@ -630,22 +620,23 @@ public:
     void update();
     virtual ~J3DFrameCtrl() {}
 
-    f32 getRate() const { return mRate; }
-    f32 getFrame() const { return mFrame; }
-    s16 getEnd() const { return mEnd; }
-    s16 getStart() const { return mStart; }
     u8 getAttribute() const { return mAttribute; }
-    u8 getState() const { return mState; }
     void setAttribute(u8 attr) { mAttribute = attr; }
-    void setEnd(s16 end) { mEnd = end; }
-    void setRate(f32 rate) { mRate = rate; }
+    u8 getState() const { return mState; }
+    bool checkState(u8 state) const { return mState & state; }
+    s16 getStart() const { return mStart; }
     void setStart(s16 start) {
         mStart = start;
         mFrame = start;
     }
-    void setFrame(f32 frame) { mFrame = frame; }
+    s16 getEnd() const { return mEnd; }
+    void setEnd(s16 end) { mEnd = end; }
+    s32 getLoop() { return mLoop; }
     void setLoop(s16 loop) { mLoop = loop; }
-    BOOL checkState(u8 state) const { return mState & state; }
+    f32 getRate() const { return mRate; }
+    void setRate(f32 rate) { mRate = rate; }
+    f32 getFrame() const { return mFrame; }
+    void setFrame(f32 frame) { mFrame = frame; }
 
 public:
     /* 0x04 */ u8 mAttribute;
