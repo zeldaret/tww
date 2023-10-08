@@ -4,8 +4,8 @@
 #include "dolphin/mtx/mtx.h"
 
 void JMANewSinTable(u8 param_1);
-void JMAMTXApplyScale(const Mtx, Mtx, f32, f32, f32);
 void JMAEulerToQuat(s16 param_0, s16 param_1, s16 param_2, Quaternion* param_3);
+void JMAQuatLerp(Quaternion*, Quaternion*, f32, Quaternion*);
 
 inline f32 JMAFastReciprocal(f32 value) {
     return __fres(value);

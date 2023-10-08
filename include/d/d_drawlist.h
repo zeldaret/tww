@@ -237,6 +237,10 @@ public:
         entryZSortXluDrawList(mpBufInvisibleModelXlu, i_packet, param_1);
     }
 
+    void entryZSortXluListMaskOff(J3DPacket* i_packet, cXyz& param_1) {
+        entryZSortXluDrawList(mpBufInvisibleModelMaskOffXlu, i_packet, param_1);
+    }
+
     void set2DOpa(dDlst_base_c* pList) { set(mp2DOpa, mp2DOpaEnd, pList); }
     void set2DXlu(dDlst_base_c* pList) { set(mp2DXlu, mp2DXluEnd, pList); }
 
