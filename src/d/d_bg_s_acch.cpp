@@ -9,9 +9,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
-
-bool daSea_ChkArea(f32, f32);
-f32 daSea_calcWave(f32, f32);
+#include "d/actor/d_a_sea.h"
 
 #define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)) ) == 1));
 #define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);

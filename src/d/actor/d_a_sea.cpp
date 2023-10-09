@@ -3,16 +3,18 @@
 // Translation Unit: d_a_sea.cpp
 //
 
-#include "d_a_sea.h"
+#include "d/actor/d_a_sea.h"
 #include "dolphin/types.h"
 
+f32 daSea_packet_c::BASE_HEIGHT = 1.0;
+
 /* 8015B0A4-8015B0FC       .text Pos2Index__25daSea_WaterHeightInfo_MngFfPf */
-void daSea_WaterHeightInfo_Mng::Pos2Index(float, float*) {
+void daSea_WaterHeightInfo_Mng::Pos2Index(f32, f32*) {
     /* Nonmatching */
 }
 
 /* 8015B0FC-8015B164       .text GetHeight__25daSea_WaterHeightInfo_MngFff */
-void daSea_WaterHeightInfo_Mng::GetHeight(float, float) {
+void daSea_WaterHeightInfo_Mng::GetHeight(f32, f32) {
     /* Nonmatching */
 }
 
@@ -27,12 +29,12 @@ void daSea_WaterHeightInfo_Mng::GetHeight(int, int) {
 }
 
 /* 8015B288-8015B2D0       .text calcMinMax__FiPfPf */
-void calcMinMax(int, float*, float*) {
+void calcMinMax(int, f32*, f32*) {
     /* Nonmatching */
 }
 
 /* 8015B2D0-8015B328       .text GetArea__25daSea_WaterHeightInfo_MngFiiPfPfPfPf */
-void daSea_WaterHeightInfo_Mng::GetArea(int, int, float*, float*, float*, float*) {
+void daSea_WaterHeightInfo_Mng::GetArea(int, int, f32*, f32*, f32*, f32*) {
     /* Nonmatching */
 }
 
@@ -67,7 +69,7 @@ void daSea_WaveInfo::GetKm(int) {
 }
 
 /* 8015B54C-8015B56C       .text GetScale__14daSea_WaveInfoFf */
-void daSea_WaveInfo::GetScale(float) {
+void daSea_WaveInfo::GetScale(f32) {
     /* Nonmatching */
 }
 
@@ -112,17 +114,17 @@ void daSea_Init() {
 }
 
 /* 8015BAF8-8015BB60       .text daSea_ChkAreaBeforePos__Fff */
-void daSea_ChkAreaBeforePos(float, float) {
+void daSea_ChkAreaBeforePos(f32, f32) {
     /* Nonmatching */
 }
 
 /* 8015BB60-8015BBFC       .text daSea_ChkArea__Fff */
-void daSea_ChkArea(float, float) {
+bool daSea_ChkArea(f32, f32) {
     /* Nonmatching */
 }
 
 /* 8015BBFC-8015BDB0       .text daSea_calcWave__Fff */
-void daSea_calcWave(float, float) {
+f32 daSea_calcWave(f32, f32) {
     /* Nonmatching */
 }
 
@@ -186,18 +188,7 @@ void daSea_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 8015D99C-8015D9E4       .text __dt__25daSea_WaterHeightInfo_MngFv */
-daSea_WaterHeightInfo_Mng::~daSea_WaterHeightInfo_Mng() {
-    /* Nonmatching */
-}
-
 /* 8015D9E4-8015DA70       .text __dt__14daSea_packet_cFv */
 daSea_packet_c::~daSea_packet_c() {
     /* Nonmatching */
 }
-
-/* 8015DAAC-8015DAF4       .text __dt__8cM2dGBoxFv */
-cM2dGBox::~cM2dGBox() {
-    /* Nonmatching */
-}
-
