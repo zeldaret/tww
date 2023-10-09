@@ -1262,7 +1262,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_doguu_demo"),
     ActorRel(NonMatching, "d_a_obj_gryw00"),
     ActorRel(NonMatching, "d_a_obj_hfuck1"),
-    ActorRel(NonMatching, "d_a_obj_hole"),
+    ActorRel(Matching, "d_a_obj_hole", extra_cflags=["-sym off"]),
     ActorRel(NonMatching, "d_a_obj_ice"),
     ActorRel(NonMatching, "d_a_obj_ikada"),
     ActorRel(NonMatching, "d_a_obj_kanat"),

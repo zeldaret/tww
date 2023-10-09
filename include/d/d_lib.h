@@ -49,5 +49,8 @@ public:
 };
 
 void dLib_bcks_setAnm(const char*, mDoExt_McaMorf*, s8*, s8*, s8*, const int*, const dLib_anm_prm_c*, bool);
+bool dLib_checkPlayerInCircle(cXyz, f32, f32);
+
+void dLib_setNextStageBySclsNum(u8, s8);
 
 #endif /* D_LIB_H */
