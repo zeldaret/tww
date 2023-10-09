@@ -27,7 +27,12 @@ public:
         mGrpPassChk = NULL;
         unk_0x0C = 1;
     }
-    void SetExtChk(cBgS_Chk&);
+    void SetExtChk(cBgS_Chk& other) {
+        mPolyPassChk = other.mPolyPassChk;
+        mGrpPassChk = other.mGrpPassChk;
+        mActorPid = other.mActorPid;
+        unk_0x0C = other.unk_0x0C;
+    }
     bool ChkSameActorPid(unsigned int) const;
 
     void SetActorPid(u32 pid) { mActorPid = pid; }

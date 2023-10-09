@@ -13,11 +13,10 @@ public:
         /* 0x4 */ MOVE_BG_ONLY = 4
     };
 
-    void Set(cXyz&, f32);
     dBgS_SplGrpChk();
     void Init();
 
-    virtual ~dBgS_SplGrpChk();
+    virtual ~dBgS_SplGrpChk() {}
 
     void OffFind() { m_flags &= ~FIND; }
     void OffIn() { m_flags &= ~IN; }
@@ -29,6 +28,10 @@ public:
     f32 GetHeight() { return m_height; }
     cXyz& GetPosP() { return m_ground; }
     f32 GetRoof() const { return m_roof; }
+    void Set(cXyz& ground, f32 roof) {
+        m_ground = ground;
+        m_roof = roof;
+    }
 
 private:
     /* 0x38 */ cXyz m_ground;

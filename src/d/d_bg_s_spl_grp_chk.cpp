@@ -3,16 +3,26 @@
 // Translation Unit: d_bg_s_spl_grp_chk.cpp
 //
 
-#include "d_bg_s_spl_grp_chk.h"
+#include "d/d_bg_s_spl_grp_chk.h"
 #include "dolphin/types.h"
 
 /* 800A5A7C-800A5B94       .text __ct__14dBgS_SplGrpChkFv */
 dBgS_SplGrpChk::dBgS_SplGrpChk() {
-    /* Nonmatching */
+    SetPolyPassChk(GetPolyPassChkInfo());
+    SetGrpPassChk(GetGrpPassChkInfo());
+    OffNormalGrp();
+    m_ground.x = 0.0f;
+    m_ground.y = 0.0f;
+    m_ground.z = 0.0f;
+    m_roof = 1000000000.0f;
+    m_height = 0.0f;
 }
 
 /* 800A5B94-800A5BDC       .text Init__14dBgS_SplGrpChkFv */
 void dBgS_SplGrpChk::Init() {
-    /* Nonmatching */
+    OffIn();
+    OffFind();
+    SetHeight(m_ground.y);
+    ClearPi();
 }
 

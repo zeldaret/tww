@@ -3,11 +3,12 @@
 // Translation Unit: d_bg_s_lin_chk.cpp
 //
 
-#include "d_bg_s_lin_chk.h"
+#include "d/d_bg_s_lin_chk.h"
+#include "f_op/f_op_actor_mng.h"
 #include "dolphin/types.h"
 
 /* 800A5678-800A56B8       .text Set__11dBgS_LinChkFP4cXyzP4cXyzP10fopAc_ac_c */
-void dBgS_LinChk::Set(cXyz*, cXyz*, fopAc_ac_c*) {
-    /* Nonmatching */
+void dBgS_LinChk::Set(cXyz* pi_start, cXyz* pi_end, fopAc_ac_c* pi_actor) {
+    Set2(pi_start, pi_end, pi_actor ? fopAcM_GetID(pi_actor) : -1);
 }
 

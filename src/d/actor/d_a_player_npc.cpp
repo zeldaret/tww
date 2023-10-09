@@ -177,19 +177,14 @@ void daPy_npc_c::drawDamageFog() {
         return;
     }
     
-    cXyz temp;
-    f32 temp_f1;
-    f32 temp_f2;
-    mDoLib_pos2camera(&current.pos, &temp);
-    temp_f2 = fabs(cM_ssin(g_Counter.mTimer * 0x800));
+    cXyz camPos;
+    mDoLib_pos2camera(&current.pos, &camPos);
+    f32 adjust = fabsf(cM_ssin(g_Counter.mTimer * 0x800));
     mTevStr.mFogColor.r = 255;
     mTevStr.mFogColor.g = 60;
     mTevStr.mFogColor.b = 60;
     
-    temp_f1 = -temp.z;
-    temp_f1 -= 200.0f;
-    temp_f2 = 200.0f * temp_f2;
-    mTevStr.mFogStartZ = temp_f1 + temp_f2;
+    mTevStr.mFogStartZ = (-camPos.z - 200.0f) + 200.0f * adjust;
     mTevStr.mFogEndZ = mTevStr.mFogStartZ + 300.0f;
 }
 

@@ -770,7 +770,7 @@ public:
     /* 0x18 */ int field_0x18[2];
 };
 
-class dBgW_base;
+class dBgW;
 class dStage_roomStatus_c : public dStage_roomDt_c {
 public:
     /* 0x054 */ dKy_tevstr_c mTevStr;
@@ -780,7 +780,7 @@ public:
     /* 0x107 */ s8 mZoneNo;
     /* 0x108 */ s8 mMemBlockID;
     /* 0x10C */ int mProcID;
-    /* 0x110 */ dBgW_base* mpBgW;
+    /* 0x110 */ dBgW* mpBgW;
 
     int getZoneNo() const { return mZoneNo; }
     ~dStage_roomStatus_c() {}
@@ -801,7 +801,7 @@ public:
     void checkDrawArea() const;
     dStage_darkStatus_c* getDarkStatus();
     u32 getDarkMode();
-    void getBgW(int);
+    static dBgW* getBgW(int i_roomNo);
 
     static JKRExpHeap* createMemoryBlock(int, u32);
     static void destroyMemoryBlock();
@@ -830,7 +830,7 @@ public:
         mStatus[i_roomNo].mMemBlockID = i_blockID;
     }
 
-    static void setBgW(int param_0, dBgW_base* i_bgw) { mStatus[param_0].mpBgW = i_bgw; }
+    static void setBgW(int i_roomNo, dBgW* i_bgw) { mStatus[i_roomNo].mpBgW = i_bgw; }
 
     BOOL checkStatusFlag(int i_roomNo, u8 flag) const {
         return cLib_checkBit(mStatus[i_roomNo].mFlags, flag);

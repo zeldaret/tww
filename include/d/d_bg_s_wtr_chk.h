@@ -7,7 +7,7 @@ class dBgS_WtrChk : public dBgS_SplGrpChk {
 public:
     dBgS_WtrChk();
 
-    virtual ~dBgS_WtrChk();
+    virtual ~dBgS_WtrChk() {}
 };  // Size: 0x50
 
 STATIC_ASSERT(sizeof(dBgS_WtrChk) == 0x50);

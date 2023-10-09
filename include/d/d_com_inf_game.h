@@ -1139,6 +1139,10 @@ inline s32 dComIfGp_roomControl_getStayNo() {
     return dStage_roomControl_c::getStayNo();
 }
 
+inline dBgW* dComIfGp_roomControl_getBgW(int i_roomNo) {
+    return dStage_roomControl_c::getBgW(i_roomNo);
+}
+
 inline void dComIfGp_roomControl_init() {
     g_dComIfG_gameInfo.play.getRoomControl()->init();
 }
