@@ -13,7 +13,7 @@ public:
         /* 0x4 */ MOVE_BG_ONLY = 4
     };
 
-    dBgS_SplGrpChk() {}
+    dBgS_SplGrpChk();
     void Init();
 
     virtual ~dBgS_SplGrpChk() {}
