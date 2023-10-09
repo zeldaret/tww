@@ -832,7 +832,7 @@ public:
 
     static void setBgW(int param_0, dBgW_base* i_bgw) { mStatus[param_0].mpBgW = i_bgw; }
 
-    bool checkStatusFlag(int i_roomNo, u8 flag) const {
+    BOOL checkStatusFlag(int i_roomNo, u8 flag) const {
         return cLib_checkBit(mStatus[i_roomNo].mFlags, flag);
     }
 

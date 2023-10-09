@@ -137,6 +137,7 @@ struct TVec3<f32> {
         x = b.x;
         y = b.y;
         z = b.z;
+        return *this;
     }
 
     f32 squared() const {

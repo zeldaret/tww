@@ -82,7 +82,7 @@ inline MtxP fopAcM_GetMtx(fopAc_ac_c* pActor) {
     return pActor->mCullMtx;
 }
 
-inline u32 fopAcM_checkStatus(fopAc_ac_c* pActor, u32 status) {
+inline bool fopAcM_checkStatus(fopAc_ac_c* pActor, u32 status) {
     return pActor->mStatus & status;
 }
 

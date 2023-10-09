@@ -3,71 +3,277 @@
 // Translation Unit: d_a_player_npc.cpp
 //
 
-#include "d_a_player_npc.h"
+#include "d/actor/d_a_player_npc.h"
 #include "dolphin/types.h"
+#include "m_Do/m_Do_lib.h"
+#include "SSystem/SComponent/c_counter.h"
+#include "d/d_procname.h"
 
 /* 8015A37C-8015A448       .text check_initialRoom__10daPy_npc_cFv */
-void daPy_npc_c::check_initialRoom() {
-    /* Nonmatching */
+int daPy_npc_c::check_initialRoom() {
+    if (orig.roomNo < 0) {
+        mAcch.CrrPos(*dComIfG_Bgsp());
+        if (mAcch.GetGroundH() == -1000000000.0f || dComIfG_Bgsp()->GetGroundCode(mAcch.m_gnd) == 4) {
+            return 0;
+        } else {
+           int roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
+            if (roomNo < 0 || !dComIfGp_roomControl_checkStatusFlag(roomNo, 0x10)) {
+                return 0;
+            } else {
+                orig.roomNo = roomNo;
+                current.roomNo = roomNo;
+                return -1;
+            }
+        }
+    }
+    return 1;
 }
 
 /* 8015A448-8015A524       .text check_moveStop__10daPy_npc_cFv */
-void daPy_npc_c::check_moveStop() {
-    /* Nonmatching */
+BOOL daPy_npc_c::check_moveStop() {
+    int roomNo = current.roomNo;
+    BOOL hasBgW = dComIfGp_roomControl_checkStatusFlag(roomNo, 0x10);
+    if ((roomNo < 0 || !hasBgW)) {
+        if (!hasBgW || m4E8 >= 30) {
+            current = orig;
+            shape_angle = orig.angle;
+            speedF = 0.0f;
+            m4E8 = 0;
+        }
+        if (dComIfGp_getPlayer(0)->mEvtInfo.mCommand != dEvtCmd_INDOOR_e) {
+            offNpcCallCommand();
+        }
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 8015A524-8015A590       .text setRestart__10daPy_npc_cFSc */
-void daPy_npc_c::setRestart(signed char) {
-    /* Nonmatching */
+void daPy_npc_c::setRestart(s8 option) {
+    if (option == dComIfGs_getRestartOption()) {
+        bool playerInDoor = dComIfGp_getPlayer(0)->mEvtInfo.checkCommandDoor();
+        s8 roomNo = current.roomNo;
+        s8 optionRoomNo = dComIfGs_getRestartOptionRoomNo();
+        if (!playerInDoor && roomNo != optionRoomNo) {
+            unconditionalSetRestart(option);
+        }
+    }
 }
 
 /* 8015A590-8015A624       .text unconditionalSetRestart__10daPy_npc_cFSc */
-void daPy_npc_c::unconditionalSetRestart(signed char) {
-    /* Nonmatching */
+void daPy_npc_c::unconditionalSetRestart(s8 option) {
+    dComIfGs_setRestartOption(option);
+    dComIfGs_setPlayerPriest(option, dComIfGs_getRestartOptionPos(), dComIfGs_getRestartOptionAngleY(), dComIfGs_getRestartOptionRoomNo());
+    orig.pos = dComIfGs_getRestartOptionPos();
+    orig.angle.y = dComIfGs_getRestartOptionAngleY();
+    orig.roomNo = dComIfGs_getRestartOptionRoomNo();
 }
 
 /* 8015A624-8015A6A4       .text setOffsetHomePos__10daPy_npc_cFv */
 void daPy_npc_c::setOffsetHomePos() {
-    /* Nonmatching */
+    static cXyz l_offsetPos(100.0f, 0.0f, 0.0f);
+    cLib_offsetPos(&orig.pos, &orig.pos, orig.angle.y, &l_offsetPos);
 }
 
 /* 8015A6A4-8015AA0C       .text setPointRestart__10daPy_npc_cFsSc */
-void daPy_npc_c::setPointRestart(short, signed char) {
-    /* Nonmatching */
+void daPy_npc_c::setPointRestart(s16 i_point, s8 option) {
+    /* Nonmatching (regswaps) */
+    JUT_ASSERT(157, dComIfGp_getStagePlayer() != 0);
+    stage_scls_info_dummy_class* sclsinfo = dComIfGp_getStageSclsInfo();
+    JUT_ASSERT(159, sclsinfo != 0);
+    
+    JUT_ASSERT(161, 0 <= i_point && i_point < sclsinfo->num);
+    stage_scls_info_class* scls_data = sclsinfo->m_entries;
+    JUT_ASSERT(163, scls_data != 0);
+    
+    stage_actor_data_class* player_data = dComIfGp_getStagePlayer()->m_entries;
+    int scls_start_code = scls_data[i_point].mStart;
+    int i;
+    for (i = 0; i < dComIfGp_getStagePlayerNum(); i++) {
+        u8 plyr_start_code = player_data->mAngle.z & 0xFF;
+        if (plyr_start_code == scls_start_code) {
+            break;
+        }
+        player_data++;
+    }
+    JUT_ASSERT(174, i != dComIfGp_getStagePlayerNum());
+    
+    orig.pos = player_data->mSpawnPos;
+    orig.angle.y = player_data->mAngle.y;
+    orig.roomNo = -1;
+    setOffsetHomePos();
+    current = orig;
+    next = orig;
+    shape_angle = orig.angle;
+    
+    s16 rotY = orig.angle.y;
+    s8 roomNo = -1;
+    dComIfGs_setRestartOption(&orig.pos, rotY, roomNo, option);
+    dComIfGs_setPlayerPriest(option, orig.pos, rotY, roomNo);
+    dComIfGs_setPlayerPriest(option, dComIfGs_getRestartOptionPos(), dComIfGs_getRestartOptionAngleY(), dComIfGs_getRestartOptionRoomNo());
+    fopAcM_setStageLayer(this);
 }
 
 /* 8015AA0C-8015AB28       .text checkRestart__10daPy_npc_cFSc */
-void daPy_npc_c::checkRestart(signed char) {
-    /* Nonmatching */
+BOOL daPy_npc_c::checkRestart(s8 option) {
+    if (option == dComIfGs_getRestartOption()) {
+        s16 option_point = dComIfGs_getRestartOptionPoint();
+        if (option_point < 0) {
+            orig.pos = dComIfGs_getRestartOptionPos();
+            orig.angle.y = dComIfGs_getRestartOptionAngleY();
+            orig.roomNo = dComIfGs_getRestartOptionRoomNo();
+            current = orig;
+            next = orig;
+            shape_angle = orig.angle;
+        } else {
+            setPointRestart(option_point, 1);
+        }
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 8015AB28-8015ABD8       .text initialRestartOption__10daPy_npc_cFSci */
-void daPy_npc_c::initialRestartOption(signed char, int) {
-    /* Nonmatching */
+BOOL daPy_npc_c::initialRestartOption(s8 option, int save) {
+    fopAc_ac_c* partner = dComIfGp_getCb1Player();
+    if (!partner) {
+        dComIfGp_setCb1Player(this);
+        if (save && option != dComIfGs_getRestartOption()) {
+            s16 rotY;
+            s8 roomNo = current.roomNo;
+            rotY = orig.angle.y;
+            dComIfGs_setRestartOption(&orig.pos, rotY, roomNo, option);
+            dComIfGs_setPlayerPriest(option, orig.pos, rotY, roomNo);
+        }
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 8015ABD8-8015AC74       .text checkNowPosMove__10daPy_npc_cFPCc */
-void daPy_npc_c::checkNowPosMove(const char*) {
-    /* Nonmatching */
+BOOL daPy_npc_c::checkNowPosMove(const char* pName) {
+    /* Nonmatching (regalloc) */
+    if (!dComIfGp_event_runCheck()) {
+        return TRUE;
+    }
+    if (mEvtInfo.checkCommandTalk()) {
+        return TRUE;
+    }
+    if (isEventAccept() && !isReturnLink()) {
+        return TRUE;
+    }
+    
+    int evtStaffId = dComIfGp_evmng_getMyStaffId(pName, NULL, 0);
+    if (evtStaffId != -1) {
+        return TRUE;
+    }
+    
+    return fopAcM_checkStatus(this, fopAcStts_UNK800_e);
 }
 
 /* 8015AC74-8015AD20       .text drawDamageFog__10daPy_npc_cFv */
 void daPy_npc_c::drawDamageFog() {
-    /* Nonmatching */
+    if (mDamageFogTimer == 0) {
+        return;
+    }
+    
+    cXyz temp;
+    f32 temp_f1;
+    f32 temp_f2;
+    mDoLib_pos2camera(&current.pos, &temp);
+    temp_f2 = fabs(cM_ssin(g_Counter.mTimer * 0x800));
+    mTevStr.mFogColor.r = 255;
+    mTevStr.mFogColor.g = 60;
+    mTevStr.mFogColor.b = 60;
+    
+    temp_f1 = -temp.z;
+    temp_f1 -= 200.0f;
+    temp_f2 = 200.0f * temp_f2;
+    mTevStr.mFogStartZ = temp_f1 + temp_f2;
+    mTevStr.mFogEndZ = mTevStr.mFogStartZ + 300.0f;
 }
 
 /* 8015AD20-8015AEF8       .text chkMoveBlock__10daPy_npc_cFP4cXyz */
-void daPy_npc_c::chkMoveBlock(cXyz*) {
-    /* Nonmatching */
+int daPy_npc_c::chkMoveBlock(cXyz* outBlockVel) {
+    cXyz blockRelPos;
+    fopAc_ac_c* block = daPy_npc_SearchAreaByName(this, PROC_Obj_Movebox, 300.0f, &blockRelPos);
+    if (block) {
+        cXyz blockVel = block->current.pos - block->next.pos;
+        if (blockVel.abs() > 0.001f) {
+            if (outBlockVel) {
+                *outBlockVel = blockVel;
+            }
+            
+            blockRelPos.normalizeZP();
+            blockVel.normalizeZP();
+            f32 dot = blockRelPos.getDotProduct(blockVel);
+            
+            blockVel.y = 0.0f;
+            blockRelPos.y = 0.0f;
+            cXyz cross = blockRelPos.outprod(blockVel);
+            
+            if (dot < -0.707099974155426f) {
+                if (cross.y < 0.0f) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+            
+            if (block->current.pos.y > current.pos.y + 100.0f) {
+                if (cross.y < 0.0f) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        }
+    }
+    
+    return 0;
 }
 
+struct judge_parm_c {
+    /* 0x00 */ s16 mProcName;
+    /* 0x04 */ cXyz mAreaCenter;
+    /* 0x10 */ cXyz mActorRelPos;
+    /* 0x1C */ f32 mAreaRadius;
+    /* 0x20 */ f32 mMinDist;
+    /* 0x24 */ fopAc_ac_c* mpActor;
+};
+
 /* 8015AEF8-8015B00C       .text daPy_npc_JudgeForPNameAndDistance__FPvPv */
-void daPy_npc_JudgeForPNameAndDistance(void*, void*) {
-    /* Nonmatching */
+void* daPy_npc_JudgeForPNameAndDistance(void* i_actor, void* i_prm) {
+    fopAc_ac_c* actor = (fopAc_ac_c*)i_actor;
+    judge_parm_c* prm = (judge_parm_c*)i_prm;
+    
+    if (fopAcM_GetName(actor) == prm->mProcName) {
+        cXyz actorOffset = actor->current.pos - prm->mAreaCenter;
+        f32 dist = actorOffset.abs();
+        if (dist < prm->mAreaRadius && dist < prm->mMinDist) {
+            prm->mMinDist = dist;
+            prm->mpActor = actor;
+            prm->mActorRelPos = actorOffset;
+        }
+    }
+    
+    return NULL;
 }
 
 /* 8015B00C-8015B0A4       .text daPy_npc_SearchAreaByName__FP10fopAc_ac_csfP4cXyz */
-void daPy_npc_SearchAreaByName(fopAc_ac_c*, short, float, cXyz*) {
-    /* Nonmatching */
+fopAc_ac_c* daPy_npc_SearchAreaByName(fopAc_ac_c* i_this, s16 procName, f32 areaRadius, cXyz* outActorRelPos) {
+    judge_parm_c prm;
+    prm.mProcName = procName;
+    prm.mAreaCenter = i_this->current.pos;
+    prm.mAreaRadius = areaRadius;
+    prm.mMinDist = areaRadius;
+    prm.mpActor = NULL;
+    prm.mActorRelPos.x = 0.0f;
+    prm.mActorRelPos.y = 0.0f;
+    prm.mActorRelPos.z = 0.0f;
+    fopAcIt_Judge(daPy_npc_JudgeForPNameAndDistance, &prm);
+    if (outActorRelPos) {
+        *outActorRelPos = prm.mActorRelPos;
+    }
+    return prm.mpActor;
 }
-

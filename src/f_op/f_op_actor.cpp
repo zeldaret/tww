@@ -18,6 +18,9 @@
 fopAc_ac_c::fopAc_ac_c() {
 }
 
+fopAc_ac_c::~fopAc_ac_c() {
+}
+
 int g_fopAc_type;
 u32 fopAc_ac_c::stopStatus;
 
@@ -34,7 +37,18 @@ s32 fopAc_Draw(void* pProc) {
     if (!dMenu_flag()) {
         s32 moveApproval = dComIfGp_event_moveApproval(actor);
 
-        if ((moveApproval == 2 || !fopAcM_checkStatus(actor, fopAc_ac_c::stopStatus)) && (!(fopAcM_checkStatus(actor, fopAcStts_CULL_e) && !fopAcM_cullingCheck(actor)) || !fopAcM_checkStatus(actor, fopAcStts_NODRAW_e))) {
+        if (
+            (
+                moveApproval == 2
+                || (
+                    !fopAcM_checkStatus(actor, fopAc_ac_c::stopStatus)
+                    && !(
+                        fopAcM_checkStatus(actor, fopAcStts_CULL_e)
+                        && fopAcM_cullingCheck(actor)
+                    )
+                )
+            ) && !fopAcM_checkStatus(actor, fopAcStts_NODRAW_e)
+        ) {
             fopAcM_OffCondition(actor, fopAcCnd_NODRAW_e);
             ret = fpcLf_DrawMethod((leafdraw_method_class*)actor->mSubMtd, actor);
         } else {
@@ -68,7 +82,21 @@ s32 fopAc_Execute(void* pProc) {
 
         s32 moveApproval = dComIfGp_event_moveApproval(actor);
 
-        if ((moveApproval == 2 || moveApproval != 0 || !fopAcM_checkStatus(actor, fopAc_ac_c::stopStatus)) && (!fopAcM_checkStatus(actor, fopAcStts_NOCULLEXEC_e) || !fopAcM_CheckCondition(actor, fopAcCnd_NODRAW_e))) {
+        if (
+            (
+                moveApproval == 2
+                || (
+                    (
+                        moveApproval != 0
+                        && !fopAcM_checkStatus(actor, fopAc_ac_c::stopStatus)
+                    )
+                    && (
+                        !fopAcM_checkStatus(actor, fopAcStts_NOCULLEXEC_e)
+                        || !fopAcM_CheckCondition(actor, fopAcCnd_NODRAW_e)
+                    )
+                )
+            )
+        ) {
             fopAcM_OffCondition(actor, fopAcCnd_NOEXEC_e);
             actor->next = actor->current;
             ret = fpcMtd_Execute((process_method_class*)actor->mSubMtd, actor);
