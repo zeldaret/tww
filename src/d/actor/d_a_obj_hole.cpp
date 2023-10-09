@@ -3,241 +3,398 @@
 // Translation Unit: d_a_obj_hole.cpp
 //
 
-#include "d_a_obj_hole.h"
+#include "d/d_bg_s_lin_chk.h"
+#include "d/d_bg_s_acch.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_lib.h"
+#include "d/d_procname.h"
+#include "f_op/f_op_actor_mng.h"
+#include "f_op/f_op_camera_mng.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_mtx.h"
 #include "dolphin/types.h"
 
+
+// Needed for the .data section to match.
+static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
+static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
+static f64 dummy4[2] = {3.0, 0.5};
+
+
+class daObj_Hole_HIO_c {
+public:
+    daObj_Hole_HIO_c();
+    virtual ~daObj_Hole_HIO_c() {}
+
+    /* 0x0004 */ s8 m0004;
+    /* 0x0005 */ u8 m0005;
+    /* 0x0008 */ float m0008;
+    /* 0x000C */ s16 m000C;
+    /* 0x0010 */ float m0010;
+};
+
+static daObj_Hole_HIO_c l_HIO;
+
+class daObj_Hole_c : public fopAc_ac_c {
+public:
+    enum Proc_e {
+        PROC_MODE_WAIT,
+        PROC_MODE_EVENT
+    };
+
+    void setMtx();
+    void getPosAndAngle();
+
+    void modeWaitInit();
+    void modeWait();
+    void modeEventInit();
+    void modeEvent();
+    void modeProc(Proc_e, int);
+
+    s32 _execute();
+
+    void debugDraw();
+    s32 _draw();
+
+    void createInit();
+    s32 _createHeap();
+    void getArg();
+
+    s32 _create();
+    s32 _delete();
+
+    static const char m_arc_name[];
+
+    /* 0x0290 */ s32 mState;
+    /* 0x0294 */ u8 mHasModel;
+    /* 0x0295 */ u8 mExitIdx;
+    /* 0x0296 */ u16 mScaleLocal;
+    /* 0x0298 */ request_of_phase_process_class mPhs;
+    
+    /* 0x029C */ //u32 m029C; // TODO: Does this do anything?
+    
+    /* 0x02A0 */ J3DModel* mpMdl;
+
+    /* 0x02A4 */ dBgS_ObjLinChk mLinChk;
+    /* 0x0310 */ dBgS_ObjAcch mAcch;
+    /* 0x04D4 */ dBgS_AcchCir mAcchCir;
+};
+
+const char daObj_Hole_c::m_arc_name[] = "Aana";
+
 /* 000000EC-0000010C       .text createHeap_CB__FP10fopAc_ac_c */
-void createHeap_CB(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 createHeap_CB(fopAc_ac_c* i_actor) {
+    return static_cast<daObj_Hole_c*>(i_actor)->_createHeap();
 }
 
 /* 0000010C-00000148       .text __ct__16daObj_Hole_HIO_cFv */
 daObj_Hole_HIO_c::daObj_Hole_HIO_c() {
-    /* Nonmatching */
+    m0004 = -1;
+    m0005 = 0;
+    m0008 = 65.0f;
+    m000C = 0;
+    m0010 = 2.0f;
 }
 
 /* 00000148-000002BC       .text setMtx__12daObj_Hole_cFv */
 void daObj_Hole_c::setMtx() {
     /* Nonmatching */
+    cXyz adjustPos;
+    adjustPos.x = current.pos.x;
+    adjustPos.y = current.pos.y;
+    adjustPos.z = current.pos.z;
+    adjustPos.y += l_HIO.m0010;
+
+    if (mState != 1) {
+        shape_angle.y = fopCamM_GetAngleY(dComIfGp_getCamera(0)) + 0x8000;
+    }
+
+    if (mHasModel == 0xFF) {
+        float scale = l_HIO.m0008 * mScale.x;
+
+        if (l_HIO.m000C != 0) {
+            scale += l_HIO.m000C * 10;
+        }
+        else {
+            scale += mScaleLocal * 10;
+        }
+
+        scale /= l_HIO.m0008;
+
+        cXyz scaleVec;
+        scaleVec.setAll(scale);
+        mpMdl->setBaseScale(scaleVec);
+
+        mDoMtx_stack_c::transS(adjustPos);
+        mDoMtx_stack_c::ZXYrotM(shape_angle.x, 0, shape_angle.z);
+        mDoMtx_stack_c::YrotM(shape_angle.y);
+
+        mpMdl->setBaseTRMtx(mDoMtx_stack_c::get());
+    }
 }
 
 /* 000002BC-000003F0       .text getPosAndAngle__12daObj_Hole_cFv */
 void daObj_Hole_c::getPosAndAngle() {
-    /* Nonmatching */
+    cXyz posUp(0.0f, 10.0f, 0.0f);
+    posUp += current.pos;
+
+    cXyz posDown(0.0f, -100.0f, 0.0f);
+    posDown += current.pos;
+
+    csXyz unused_angle(0, 0, 0);
+
+    mLinChk.Set(&posUp, &posDown, this);
+    if (dComIfG_Bgsp()->LineCross(&mLinChk) != 0) {
+        cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mLinChk.GetBgIndex(), mLinChk.GetPolyIndex());
+        
+        triPla->CalcAngleXz(&shape_angle.x, &shape_angle.z);
+        triPla->getCrossY(current.pos, &current.pos.y);
+    }
 }
 
 /* 000003F0-00000410       .text modeWaitInit__12daObj_Hole_cFv */
 void daObj_Hole_c::modeWaitInit() {
-    /* Nonmatching */
+    getPosAndAngle();
 }
 
 /* 00000410-000004F0       .text modeWait__12daObj_Hole_cFv */
 void daObj_Hole_c::modeWait() {
-    /* Nonmatching */
+    float scale = l_HIO.m0008 * mScale.x;
+
+    if (l_HIO.m000C != 0) {
+        scale += l_HIO.m000C * 10;
+    }
+    else {
+        scale += mScaleLocal * 10;
+    }
+
+    if (dLib_checkPlayerInCircle(current.pos, scale, 20.0f)) {
+        modeProc(PROC_MODE_WAIT, 1);
+    }
 }
+
+// Required to make rodata match
+const u8 dummy5[] = { 0x00, 0xFF, 0x00, 0x80};
 
 /* 000004F0-000004F4       .text modeEventInit__12daObj_Hole_cFv */
 void daObj_Hole_c::modeEventInit() {
-    /* Nonmatching */
+    return;
 }
 
 /* 000004F4-000005D0       .text modeEvent__12daObj_Hole_cFv */
 void daObj_Hole_c::modeEvent() {
     /* Nonmatching */
+    if (mEvtInfo.checkCommandDemoAccrpt()) {
+        int staffId = dComIfGp_evmng_getMyStaffId("Ypit00", NULL, 0);
+
+        if (dComIfGp_evmng_endCheck("DEFAULT_PITFALL")) {
+            if (mExitIdx != 0xFF) {
+                dLib_setNextStageBySclsNum(mExitIdx, current.roomNo);
+            }
+            else {
+                dComIfGp_setNextStage(dComIfGp_getStartStageName(), 0, current.roomNo, 0xFF, 0.0f, 0, 1, 0);
+            }
+        }
+    }
+    else {
+        fopAcM_orderOtherEvent2(this, "DEFAULT_PITFALL", 1, 0xFFFF);
+    }
 }
 
 /* 000005D0-000006C0       .text modeProc__12daObj_Hole_cFQ212daObj_Hole_c6Proc_ei */
-void daObj_Hole_c::modeProc(daObj_Hole_c::Proc_e, int) {
+void daObj_Hole_c::modeProc(daObj_Hole_c::Proc_e mode, int i_nextState) {
     /* Nonmatching */
+    typedef void (daObj_Hole_c::*daObjHole_mode_t)(void);
+
+    struct mode_struct {
+        daObjHole_mode_t init;
+        daObjHole_mode_t exec;
+        const char* name;
+    };
+
+    static const mode_struct mode_tbl[] = {
+        {
+            &daObj_Hole_c::modeWaitInit,
+            &daObj_Hole_c::modeWait,
+            "WAIT"
+        },
+        {
+            &daObj_Hole_c::modeEventInit,
+            &daObj_Hole_c::modeEvent,
+            "EVENT"
+        }
+    };
+
+    if (mode == PROC_MODE_WAIT) {
+        mState = i_nextState;
+        (this->*mode_tbl[mState].init)();
+    }
+    else if (mode == PROC_MODE_EVENT) {
+        (this->*mode_tbl[mState].exec)();
+    }
 }
 
 /* 000006C0-00000700       .text _execute__12daObj_Hole_cFv */
-void daObj_Hole_c::_execute() {
-    /* Nonmatching */
+s32 daObj_Hole_c::_execute() {
+    modeProc(PROC_MODE_EVENT, 2);
+    setMtx();
+    return 0;
 }
 
 /* 00000700-00000738       .text debugDraw__12daObj_Hole_cFv */
 void daObj_Hole_c::debugDraw() {
-    /* Nonmatching */
+    cXyz pos = current.pos;
+    pos.y += l_HIO.m0010;
 }
 
 /* 00000738-000007BC       .text _draw__12daObj_Hole_cFv */
-void daObj_Hole_c::_draw() {
-    /* Nonmatching */
+s32 daObj_Hole_c::_draw() {
+    if (l_HIO.m0005 != 0) {
+        debugDraw();
+    }
+
+    if (mHasModel == 0xFF) {
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, getPositionP(), &mTevStr);
+        g_env_light.setLightTevColorType(mpMdl, &mTevStr);
+
+        mDoExt_modelUpdateDL(mpMdl);
+    }
+
+    return 1;
 }
 
 /* 000007BC-00000864       .text createInit__12daObj_Hole_cFv */
 void daObj_Hole_c::createInit() {
     /* Nonmatching */
+    modeProc(PROC_MODE_WAIT, 0);
+
+    fopAcM_SetMtx(this, mpMdl->getBaseTRMtx());
+    fopAcM_setCullSizeFar(this, 10.0f);
+
+    mAcchCir.SetWall(100.0f, 10.0f);
+    mAcch.Set(&current.pos, &next.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
+
+    mAcch.SetWallNone();
+    mAcch.SetRoofNone();
+
+    setMtx();
 }
 
 /* 00000864-00000928       .text _createHeap__12daObj_Hole_cFv */
-void daObj_Hole_c::_createHeap() {
-    /* Nonmatching */
+s32 daObj_Hole_c::_createHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, 3);
+
+    JUT_ASSERT(0x13D, modelData != 0);
+
+    mpMdl = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+
+    if (mpMdl == NULL) {
+        return 0;
+    }
+    else {
+        return 1;
+    }
 }
 
 /* 00000928-0000096C       .text getArg__12daObj_Hole_cFv */
 void daObj_Hole_c::getArg() {
-    /* Nonmatching */
+    u32 param = fopAcM_GetParamBit(this, 0, 0xFFFF);
+    mExitIdx = param & 0xFF;
+    mHasModel = param >> 8;
+
+    mScaleLocal = orig.angle.z;
+    if (mScaleLocal == 0xFFFF) {
+        mScaleLocal = 0;
+    }
+    
+    if (mHasModel >= 1) {
+        mHasModel = 0xFF;
+    }
 }
 
 /* 0000096C-00000BA8       .text _create__12daObj_Hole_cFv */
-void daObj_Hole_c::_create() {
+s32 daObj_Hole_c::_create() {
     /* Nonmatching */
-}
+    fopAcM_SetupActor(this, daObj_Hole_c);
 
-/* 00000BA8-00000C30       .text __dt__12dBgS_AcchCirFv */
-dBgS_AcchCir::~dBgS_AcchCir() {
-    /* Nonmatching */
-}
+    s32 result = dComIfG_resLoad(&mPhs, m_arc_name);
+    if (result == cPhs_COMPLEATE_e) {
+        getArg();
 
-/* 00000C30-00000CA0       .text __dt__12dBgS_ObjAcchFv */
-dBgS_ObjAcch::~dBgS_ObjAcch() {
-    /* Nonmatching */
-}
+        if (mHasModel == 0xFF) {
+            u32 heapResult = fopAcM_entrySolidHeap(this, (heapCallbackFunc)createHeap_CB, 0x1000);
 
-/* 00000CA0-00000DF4       .text __dt__14dBgS_ObjLinChkFv */
-dBgS_ObjLinChk::~dBgS_ObjLinChk() {
-    /* Nonmatching */
-}
+            if (heapResult == 0) {
+                return cPhs_ERROR_e;
+            }
+        }
 
-/* 00000DF4-00000F20       .text __dt__11dBgS_LinChkFv */
-dBgS_LinChk::~dBgS_LinChk() {
-    /* Nonmatching */
-}
+        createInit();
+    }
 
-/* 00000F20-00000FC0       .text __dt__8dBgS_ChkFv */
-dBgS_Chk::~dBgS_Chk() {
-    /* Nonmatching */
-}
-
-/* 00000FC0-0000101C       .text __dt__15dBgS_GrpPassChkFv */
-dBgS_GrpPassChk::~dBgS_GrpPassChk() {
-    /* Nonmatching */
-}
-
-/* 0000101C-00001064       .text __dt__15cBgS_GrpPassChkFv */
-cBgS_GrpPassChk::~cBgS_GrpPassChk() {
-    /* Nonmatching */
-}
-
-/* 00001064-000010C0       .text __dt__16dBgS_PolyPassChkFv */
-dBgS_PolyPassChk::~dBgS_PolyPassChk() {
-    /* Nonmatching */
-}
-
-/* 000010C0-00001108       .text __dt__16cBgS_PolyPassChkFv */
-cBgS_PolyPassChk::~cBgS_PolyPassChk() {
-    /* Nonmatching */
-}
-
-/* 00001108-0000119C       .text __dt__11cBgS_LinChkFv */
-cBgS_LinChk::~cBgS_LinChk() {
-    /* Nonmatching */
-}
-
-/* 0000119C-000011E4       .text __dt__8cM3dGLinFv */
-cM3dGLin::~cM3dGLin() {
-    /* Nonmatching */
-}
-
-/* 000011E4-0000122C       .text __dt__13cBgS_PolyInfoFv */
-cBgS_PolyInfo::~cBgS_PolyInfo() {
-    /* Nonmatching */
+    return result;
 }
 
 /* 0000122C-0000125C       .text _delete__12daObj_Hole_cFv */
-void daObj_Hole_c::_delete() {
-    /* Nonmatching */
+s32 daObj_Hole_c::_delete() {
+    dComIfG_resDelete(&mPhs, m_arc_name);
+    return 1;
 }
 
 /* 0000125C-0000127C       .text daObj_HoleCreate__FPv */
-void daObj_HoleCreate(void*) {
-    /* Nonmatching */
+static s32 daObj_HoleCreate(void* i_actor) {
+    return static_cast<daObj_Hole_c*>(i_actor)->_create();
 }
 
 /* 0000127C-000012A0       .text daObj_HoleDelete__FPv */
-void daObj_HoleDelete(void*) {
-    /* Nonmatching */
+static u8 daObj_HoleDelete(void* i_actor) {
+    return static_cast<daObj_Hole_c*>(i_actor)->_delete();
 }
 
 /* 000012A0-000012C4       .text daObj_HoleExecute__FPv */
-void daObj_HoleExecute(void*) {
-    /* Nonmatching */
+static u8 daObj_HoleExecute(void* i_actor) {
+    return static_cast<daObj_Hole_c*>(i_actor)->_execute();
 }
 
 /* 000012C4-000012E8       .text daObj_HoleDraw__FPv */
-void daObj_HoleDraw(void*) {
-    /* Nonmatching */
+static u8 daObj_HoleDraw(void* i_actor) {
+    return static_cast<daObj_Hole_c*>(i_actor)->_draw();
 }
 
 /* 000012E8-000012F0       .text daObj_HoleIsDelete__FPv */
-void daObj_HoleIsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 000012F0-00001338       .text __dt__8cM2dGCirFv */
-cM2dGCir::~cM2dGCir() {
-    /* Nonmatching */
-}
-
-/* 00001338-00001394       .text __dt__8cM3dGCirFv */
-cM3dGCir::~cM3dGCir() {
-    /* Nonmatching */
+static u8 daObj_HoleIsDelete(void* i_actor) {
+    return TRUE;
 }
 
 /* 00001394-000013DC       .text __dt__16daObj_Hole_HIO_cFv */
-daObj_Hole_HIO_c::~daObj_Hole_HIO_c() {
-    /* Nonmatching */
-}
+//daObj_Hole_HIO_c::~daObj_Hole_HIO_c() {
+//
+//}
 
-/* 00001418-00001420       .text @20@__dt__11cBgS_LinChkFv */
-void @20@__dt__11cBgS_LinChkFv {
-    /* Nonmatching */
-}
+static actor_method_class daObj_HoleMethodTable = {
+    (process_method_func)daObj_HoleCreate,
+    (process_method_func)daObj_HoleDelete,
+    (process_method_func)daObj_HoleExecute,
+    (process_method_func)daObj_HoleIsDelete,
+    (process_method_func)daObj_HoleDraw,
+};
 
-/* 00001420-00001428       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
-
-/* 00001428-00001430       .text @20@__dt__11dBgS_LinChkFv */
-void @20@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
-
-/* 00001430-00001438       .text @100@__dt__11dBgS_LinChkFv */
-void @100@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
-
-/* 00001438-00001440       .text @88@__dt__11dBgS_LinChkFv */
-void @88@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
-
-/* 00001440-00001448       .text @20@__dt__14dBgS_ObjLinChkFv */
-void @20@__dt__14dBgS_ObjLinChkFv {
-    /* Nonmatching */
-}
-
-/* 00001448-00001450       .text @100@__dt__14dBgS_ObjLinChkFv */
-void @100@__dt__14dBgS_ObjLinChkFv {
-    /* Nonmatching */
-}
-
-/* 00001450-00001458       .text @88@__dt__14dBgS_ObjLinChkFv */
-void @88@__dt__14dBgS_ObjLinChkFv {
-    /* Nonmatching */
-}
-
-/* 00001458-00001460       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
-
-/* 00001460-00001468       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
-
+extern actor_process_profile_definition g_profile_OBJ_HOLE = {
+    fpcLy_CURRENT_e,
+    3,
+    fpcPi_CURRENT_e,
+    PROC_OBJ_HOLE,
+    &g_fpcLf_Method.mBase,
+    sizeof(daObj_Hole_c),
+    0,
+    0,
+    &g_fopAc_Method.base,
+    0x01B7,
+    &daObj_HoleMethodTable,
+    fopAcStts_UNK40000_e,
+    fopAc_ACTOR_e,
+    fopAc_CULLBOX_4_e,
+};

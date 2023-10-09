@@ -54,9 +54,9 @@ public:
 
 class dBgS_ObjLinChk : public dBgS_LinChk {
 public:
-    dBgS_ObjLinChk();
+    dBgS_ObjLinChk() { SetObj(); }
 
-    virtual ~dBgS_ObjLinChk();
+    virtual ~dBgS_ObjLinChk() {}
 };
 
 class dBgS_BombLinChk : public dBgS_LinChk {

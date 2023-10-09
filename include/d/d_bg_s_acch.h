@@ -120,6 +120,7 @@ public:
     void ClrGroundLanding() { m_flags &= ~GROUND_LANDING; }
     void ClrGroundAway() { m_flags &= ~GROUND_AWAY; }
     void ClrWallHit() { m_flags &= ~WALL_HIT; }
+    void SetWallNone() { m_flags |= WALL_NONE; }
     void SetRoofNone() { m_flags |= ROOF_NONE; }
     void SetRoofHit() { m_flags |= ROOF_HIT; }
     void SetWaterNone() { m_flags |= WATER_NONE; }
