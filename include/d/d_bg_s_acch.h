@@ -178,7 +178,7 @@ public:
     /* 0x07C */ u32 field_0x7c;
     /* 0x080 */ fopAc_ac_c* m_my_ac;
     /* 0x084 */ int m_tbl_size;
-    /* 0x088 */ dBgS_AcchCir* mp_acch_cir;
+    /* 0x088 */ dBgS_AcchCir* pm_acch_cir;
     /* 0x08C */ f32 m_ground_up_h;
     /* 0x090 */ f32 m_ground_up_h_diff;
     /* 0x094 */ f32 m_ground_h;
