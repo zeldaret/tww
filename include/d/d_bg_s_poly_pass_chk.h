@@ -36,6 +36,10 @@ public:
     void SetBomb() { mbBombThrough = true; }
     void SetBoomerang() { mbBoomerangThrough = true; }
     void SetRope() { mbRopeThrough = true; }
+    
+    void SetPassChkInfo(dBgS_PolyPassChk& other) {
+        *this = other;
+    }
 };
 
 STATIC_ASSERT(sizeof(dBgS_PolyPassChk) == 0xC);

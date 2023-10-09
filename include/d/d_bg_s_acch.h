@@ -68,6 +68,9 @@ public:
         /* 0x004000 */ LINE_CHECK_NONE = (1 << 14),
         /* 0x008000 */ CLR_SPEED_Y = (1 << 15),
         /* 0x010000 */ LINE_CHECK_HIT = (1 << 16),
+        /* 0x020000 */ SEA_CHECK = (1 << 17),
+        /* 0x040000 */ SEA_WATER_HEIGHT = (1 << 18),
+        /* 0x080000 */ SEA_IN = (1 << 19),
         /* 0x100000 */ MOVE_BG_ONLY = (1 << 20),
         /* 0x200000 */ GND_THIN_CELLING_OFF = (1 << 21),
         /* 0x400000 */ WALL_SORT = (1 << 22),
@@ -103,16 +106,17 @@ public:
     void OnWallSort();
     bool ChkWallSort();
     bool ChkLineDown();
-    bool ChkRoofHit() const;
     void ClrGroundHit();
-    bool ChkGroundHit() const;
+    f32 GetOnePolyInfo(cBgS_PolyInfo*);
+    f32 GetWallAddY(Vec&, int);
 
     virtual ~dBgS_Acch();
 
     cXyz* GetPos() { return pm_pos; }
     cXyz* GetOldPos() { return pm_old_pos; }
-    f32 GetGroundH() const { return m_ground_h; }
-    f32 GetRoofHeight() const { return m_roof_height; }
+    f32 GetGroundH() { return m_ground_h; }
+    f32 GetRoofHeight() { return m_roof_height; }
+    f32 GetSeaHeight() { return m_sea_height; }
     void SetLin() { m_lin.SetStartEnd(*pm_old_pos, *pm_pos); }
     bool ChkGroundFind() { return m_flags & GROUND_FIND; }
     bool ChkGroundHit() { return m_flags & GROUND_HIT; }
@@ -155,6 +159,9 @@ public:
     bool ChkMoveBGOnly() const { return m_flags & MOVE_BG_ONLY; }
     void SetWallHit() { m_flags |= WALL_HIT; }
     void ClrWallNone() { m_flags &= ~WALL_NONE; }
+    bool ChkSeaCheckOn() { return m_flags & SEA_CHECK;}
+    bool ChkSeaWaterHeight() { return m_flags & SEA_WATER_HEIGHT;}
+    bool ChkSeaIn() { return m_flags & SEA_IN;}
     cM3dGCyl* GetWallBmdCylP() { return &m_wall_cyl; }
 
 public:
@@ -167,28 +174,27 @@ public:
     /* 0x040 */ cM3dGLin m_lin;
     /* 0x05C */ cM3dGCyl m_wall_cyl;
     /* 0x074 */ int m_bg_index;
-    /* 0x078 */ void* field_0x7c;
-    /* 0x07C */ u32 field_0x80;
+    /* 0x078 */ void* field_0x78;
+    /* 0x07C */ u32 field_0x7c;
     /* 0x080 */ fopAc_ac_c* m_my_ac;
     /* 0x084 */ int m_tbl_size;
-    /* 0x088 */ dBgS_AcchCir* field_0x8c;
-    /* 0x08C */ f32 field_0x90;
-    /* 0x090 */ f32 field_0x94;
+    /* 0x088 */ dBgS_AcchCir* mp_acch_cir;
+    /* 0x08C */ f32 m_ground_up_h;
+    /* 0x090 */ f32 m_ground_up_h_diff;
     /* 0x094 */ f32 m_ground_h;
-    /* 0x098 */ f32 field_0x9c;
-    /* 0x09C */ cM3dGPla field_0xa0;
-    /* 0x0B0 */ u8 field_0xb4;
-    /* 0x0B4 */ f32 field_0xb8;
-    /* 0x0B8 */ f32 field_0xbc;
-    /* 0x0BC */ u8 field_0xc0;
+    /* 0x098 */ f32 field_0x98;
+    /* 0x09C */ cM3dGPla m_pla;
+    /* 0x0B0 */ u8 field_0xb0;
+    /* 0x0B4 */ f32 field_0xb4;
+    /* 0x0B8 */ f32 field_0xb8;
+    /* 0x0BC */ f32 m_roof_y;
     /* 0x0C0 */ f32 m_roof_height;
     /* 0x0C4 */ f32 m_roof_crr_height;
     /* 0x0C8 */ f32 field_0xc8;
-    /* 0x0CC */ int field_0xd4;
-    /* 0x0D0 */ f32 field_0xd8;
+    /* 0x0CC */ cBgS_PolyInfo* pm_out_poly_info;
+    /* 0x0D0 */ f32 m_sea_height;
     /* 0x0D4 */ dBgS_GndChk m_gnd;
     /* 0x128 */ dBgS_RoofChk m_roof;
-    /* 0x16C */ u8 field_0x16c[0x174 - 0x16C];
     /* 0x174 */ dBgS_WtrChk m_wtr;
 };  // Size: 0x1C4
 

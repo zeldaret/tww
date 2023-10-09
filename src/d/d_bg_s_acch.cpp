@@ -3,32 +3,73 @@
 // Translation Unit: d_bg_s_acch.cpp
 //
 
-#include "d_bg_s_acch.h"
+#include "d/d_bg_s_acch.h"
+#include "d/d_bg_s.h"
 #include "dolphin/types.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "f_op/f_op_actor_mng.h"
+#include "d/d_com_inf_game.h"
+
+bool daSea_ChkArea(f32, f32);
+f32 daSea_calcWave(f32, f32);
 
 /* 800A257C-800A25F4       .text __ct__12dBgS_AcchCirFv */
 dBgS_AcchCir::dBgS_AcchCir() {
-    /* Nonmatching */
+    m_flags = 0;
+    m_wall_rr = 0.0f;
+    field_0x2c = 0.0f;
+    m_wall_h = 0.0f;
+    m_wall_r = 0.0f;
+    m_wall_angle_y = 0;
+    m_wall_h_direct = 0.0f;
 }
 
 /* 800A25F4-800A25FC       .text SetWallR__12dBgS_AcchCirFf */
-void dBgS_AcchCir::SetWallR(float) {
-    /* Nonmatching */
+void dBgS_AcchCir::SetWallR(f32 radius) {
+    m_wall_r = radius;
 }
 
 /* 800A25FC-800A2624       .text SetWall__12dBgS_AcchCirFff */
-void dBgS_AcchCir::SetWall(float, float) {
-    /* Nonmatching */
+void dBgS_AcchCir::SetWall(f32 height, f32 radius) {
+    m_wall_h = height;
+    SetWallR(radius);
 }
 
 /* 800A2624-800A29B0       .text __dt__9dBgS_AcchFv */
 dBgS_Acch::~dBgS_Acch() {
-    /* Nonmatching */
 }
 
 /* 800A29B0-800A2CFC       .text __ct__9dBgS_AcchFv */
 dBgS_Acch::dBgS_Acch() {
-    /* Nonmatching */
+    SetPolyPassChk(GetPolyPassChkInfo());
+    SetGrpPassChk(GetGrpPassChkInfo());
+    m_flags = 0;
+    SetRoofNone();
+    pm_pos = NULL;
+    pm_old_pos = NULL;
+    pm_speed = NULL;
+    m_ground_h = 1000000000.0f;
+    m_ground_up_h = 0.0f;
+    field_0x98 = 98.0f;
+    m_ground_up_h_diff = 0.0f;
+    field_0xb0 = 0;
+    field_0xb4 = 0.0f;
+    field_0xb8 = 0.0f;
+    m_tbl_size = 0;
+    mp_acch_cir = NULL;
+    m_roof_y = 0.0f;
+    m_roof_height = 0.0f;
+    m_roof_crr_height = 0.0f;
+    field_0xc8 = 200.0f;
+    pm_angle = NULL;
+    pm_shape_angle = NULL;
+    m_my_ac = NULL;
+    pm_out_poly_info = NULL;
+    m_sea_height = 1000000000.0f;
+}
+
+static void dummy1() {
+    OSReport("***********************************\ndBgS_Acch::copy constructer called.\n***********************************\n");
 }
 
 /* 800A2CFC-800A2D78       .text Init__9dBgS_AcchFv */
@@ -37,8 +78,19 @@ void dBgS_Acch::Init() {
 }
 
 /* 800A2D78-800A2E80       .text Set__9dBgS_AcchFP4cXyzP4cXyzP10fopAc_ac_ciP12dBgS_AcchCirP4cXyzP5csXyzP5csXyz */
-void dBgS_Acch::Set(cXyz*, cXyz*, fopAc_ac_c*, int, dBgS_AcchCir*, cXyz*, csXyz*, csXyz*) {
-    /* Nonmatching */
+void dBgS_Acch::Set(cXyz* param_1, cXyz* param_2, fopAc_ac_c* param_3, int param_4, dBgS_AcchCir* param_5, cXyz* param_6, csXyz* param_7, csXyz* param_8) {
+    pm_pos = param_1;
+    pm_old_pos = param_2;
+    JUT_ASSERT(221, pm_pos != 0);
+    JUT_ASSERT(222, pm_old_pos != 0);
+    
+    m_my_ac = param_3;
+    SetActorPid(fopAcM_GetID(param_3));
+    pm_speed = param_6;
+    m_tbl_size = param_4;
+    mp_acch_cir = param_5;
+    pm_angle = param_7;
+    pm_shape_angle = param_8;
 }
 
 /* 800A2E80-800A2EE8       .text GroundCheckInit__9dBgS_AcchFR4dBgS */
@@ -62,12 +114,144 @@ void dBgS_Acch::LineCheck(dBgS&) {
 }
 
 /* 800A3460-800A3F50       .text CrrPos__9dBgS_AcchFR4dBgS */
-void dBgS_Acch::CrrPos(dBgS&) {
-    /* Nonmatching */
+void dBgS_Acch::CrrPos(dBgS& i_bgs) {
+    if (m_flags & 0x1) {
+        return;
+    }
+    
+    JUT_ASSERT(494, pm_pos != 0);
+    JUT_ASSERT(495, pm_old_pos != 0);
+    
+    JUT_ASSERT(535, !(((sizeof(pm_pos->x) == sizeof(float)) ? __fpclassifyf((float)(pm_pos->x)) : __fpclassifyd((double)(pm_pos->x)) ) == 1));
+    JUT_ASSERT(536, !(((sizeof(pm_pos->y) == sizeof(float)) ? __fpclassifyf((float)(pm_pos->y)) : __fpclassifyd((double)(pm_pos->y)) ) == 1));
+    JUT_ASSERT(537, !(((sizeof(pm_pos->z) == sizeof(float)) ? __fpclassifyf((float)(pm_pos->z)) : __fpclassifyd((double)(pm_pos->z)) ) == 1));
+    JUT_ASSERT(541, -1.0e32f < pm_pos->x && pm_pos->x < 1.0e32f && -1.0e32f < pm_pos->y && pm_pos->y < 1.0e32f && -1.0e32f < pm_pos->z && pm_pos->z < 1.0e32f);
+    
+    i_bgs.MoveBgCrrPos(m_gnd, ChkGroundHit(), pm_pos, pm_angle, pm_shape_angle);
+    
+    GroundCheckInit(i_bgs);
+    Init();
+    
+    f32 lowH_R = GetWallAllLowH_R();
+    cXyz* temp9 = pm_old_pos;
+    cXyz* temp10 = pm_pos;
+    f32 distXZ2 = temp9->abs2XZ(*temp10);
+    f32 distY = pm_old_pos->y - pm_pos->y;
+    f32 lowH = GetWallAllLowH();
+    field_0xb4 = pm_pos->y;
+    f32 oldY = pm_old_pos->y;
+    f32 temp7 = lowH + oldY;
+    f32 temp8 = field_0x98 + pm_pos->y;
+    
+    bool ranLineCheck = false;
+    OffLineCheckHit();
+    if (!ChkLineCheckNone() && !cM3d_IsZero(lowH_R)) {
+        if (distXZ2 > lowH_R*lowH_R || temp7 > temp8 || distY > field_0x98 || ChkLineCheck()) {
+            ranLineCheck = true;
+            LineCheck(i_bgs);
+        }
+    }
+    if (!(m_flags & WALL_NONE)) {
+        i_bgs.WallCorrect(this);
+    }
+    if (ChkWallHit() && ranLineCheck) {
+        LineCheck(i_bgs);
+    }
+    
+    m_roof_crr_height = 1000000000.0f;
+    if (!(m_flags & ROOF_NONE)) {
+        m_roof.SetExtChk(*(cBgS_Chk*)this);
+        ClrRoofHit();
+        cXyz roofPos = *pm_pos;
+        m_roof.SetPos(roofPos);
+        m_roof_y = i_bgs.RoofChk(&m_roof);
+        if (m_roof_y != 1000000000.0f && pm_pos->y + m_roof_height > m_roof_y) {
+            m_roof_crr_height = m_roof_y - m_roof_height;
+            SetRoofHit();
+        }
+    }
+    
+    if (!(m_flags & GRND_NONE)) {
+        ClrGroundFind();
+        GroundCheck(i_bgs);
+        GroundRoofProc(i_bgs);
+    } else if (m_roof_crr_height < pm_pos->y) {
+        pm_pos->y = m_roof_crr_height;
+    }
+    
+    if (!(m_flags & WATER_NONE)) {
+        ClrWaterHit();
+        ClrWaterIn();
+        m_wtr.SetHeight(-1000000000.0f);
+        
+        int room_no = i_bgs.GetRoomId(m_gnd);
+        if (m_ground_h != -1000000000.0f && 0 <= room_no && room_no < 64) {
+            JUT_ASSERT(693, 0 <= room_no && room_no < 64);
+            
+            dBgW* bgw = dComIfGp_roomControl_getBgW(room_no);
+            if (bgw) {
+                f32 top;
+                f32 under;
+                bgw->GetTopUnder(&top, &under);
+                
+                cXyz ground = *pm_pos;
+                ground.y = under;
+                m_wtr.Set(ground, top);
+                m_wtr.SetPassChkInfo(*this);
+                if (i_bgs.SplGrpChk(&m_wtr)) {
+                    SetWaterHit();
+                    if (m_wtr.GetHeight() > pm_pos->y) {
+                        SetWaterIn();
+                    }
+                    
+                    // JUT_ASSERT's (COND) == 0 check screws up the codegen here. Using !(COND) instead fixes it.
+                    // JUT_ASSERT(718, m_wtr.GetHeight() >= ground.y);
+                    // JUT_ASSERT(719, m_wtr.GetHeight() <= top);
+                    if (!(m_wtr.GetHeight() >= ground.y)) {
+                        JUTAssertion::showAssert(JUTAssertion::getSDevice(), __FILE__, 718, "m_wtr.GetHeight() >= ground.y");
+                        OSPanic(__FILE__, 718, "Halt");
+                    }
+                    if (!(m_wtr.GetHeight() <= top)) {
+                        JUTAssertion::showAssert(JUTAssertion::getSDevice(), __FILE__, 719, "m_wtr.GetHeight() <= top");
+                        OSPanic(__FILE__, 719, "Halt");
+                    }
+                }
+            }
+        }
+    }
+    
+    if (ChkSeaCheckOn()) {
+        m_flags &= ~SEA_IN;
+        m_sea_height = -1000000000.0f;
+        
+        if (daSea_ChkArea(pm_pos->x, pm_pos->z)) {
+            m_sea_height = daSea_calcWave(pm_pos->x, pm_pos->z);
+        }
+        
+        if (ChkSeaWaterHeight()) {
+            f32 wtr_height = m_wtr.GetHeight();
+            if (m_sea_height < wtr_height) {
+                m_sea_height = wtr_height;
+            }
+        }
+        
+        if (m_sea_height > pm_pos->y) {
+            m_flags |= SEA_IN;
+        }
+    }
+    
+    JUT_ASSERT(780, !(((sizeof(pm_pos->x) == sizeof(float)) ? __fpclassifyf((float)(pm_pos->x)) : __fpclassifyd((double)(pm_pos->x)) ) == 1));
+    JUT_ASSERT(781, !(((sizeof(pm_pos->y) == sizeof(float)) ? __fpclassifyf((float)(pm_pos->y)) : __fpclassifyd((double)(pm_pos->y)) ) == 1));
+    JUT_ASSERT(782, !(((sizeof(pm_pos->z) == sizeof(float)) ? __fpclassifyf((float)(pm_pos->z)) : __fpclassifyd((double)(pm_pos->z)) ) == 1));
+    JUT_ASSERT(786, -1.0e32f < pm_pos->x && pm_pos->x < 1.0e32f && -1.0e32f < pm_pos->y && pm_pos->y < 1.0e32f && -1.0e32f < pm_pos->z && pm_pos->z < 1.0e32f);
+}
+
+static void dummy2() {
+    OSReport("\033[43;30m**************************************\ndBgS_ObjAcch::copy constructer called.\n**************************************\n\033[m");
 }
 
 /* 800A3F50-800A3F8C       .text GetWallAllR__9dBgS_AcchFv */
-void dBgS_Acch::GetWallAllR() {
+f32 dBgS_Acch::GetWallAllR() {
     /* Nonmatching */
 }
 
@@ -82,77 +266,42 @@ void dBgS_Acch::CalcWallBmdCyl() {
 }
 
 /* 800A4114-800A4128       .text SetGroundUpY__9dBgS_AcchFf */
-void dBgS_Acch::SetGroundUpY(float) {
-    /* Nonmatching */
+void dBgS_Acch::SetGroundUpY(f32 y) {
+    m_ground_up_h_diff = y - m_ground_up_h;
+    m_ground_up_h = y;
 }
 
 /* 800A4128-800A4178       .text GetWallAllLowH__9dBgS_AcchFv */
-void dBgS_Acch::GetWallAllLowH() {
+f32 dBgS_Acch::GetWallAllLowH() {
     /* Nonmatching */
 }
 
 /* 800A4178-800A41E4       .text GetWallAllLowH_R__9dBgS_AcchFv */
-void dBgS_Acch::GetWallAllLowH_R() {
+f32 dBgS_Acch::GetWallAllLowH_R() {
     /* Nonmatching */
 }
 
 /* 800A41E4-800A42B4       .text GetOnePolyInfo__9dBgS_AcchFP13cBgS_PolyInfo */
-void dBgS_Acch::GetOnePolyInfo(cBgS_PolyInfo*) {
+f32 dBgS_Acch::GetOnePolyInfo(cBgS_PolyInfo*) {
     /* Nonmatching */
 }
 
 /* 800A42B4-800A4348       .text GetWallAddY__9dBgS_AcchFR3Veci */
-void dBgS_Acch::GetWallAddY(Vec&, int) {
-    /* Nonmatching */
-}
-
-/* 800A4348-800A43A4       .text __dt__8cM3dGCirFv */
-cM3dGCir::~cM3dGCir() {
-    /* Nonmatching */
-}
-
-/* 800A43A4-800A43EC       .text __dt__8cM2dGCirFv */
-cM2dGCir::~cM2dGCir() {
-    /* Nonmatching */
-}
-
-/* 800A43EC-800A4434       .text __dt__8cM3dGPlaFv */
-cM3dGPla::~cM3dGPla() {
+f32 dBgS_Acch::GetWallAddY(Vec&, int) {
     /* Nonmatching */
 }
 
 /* 800A4434-800A444C       .text getBgW__20dStage_roomControl_cFi */
-void dStage_roomControl_c::getBgW(int) {
-    /* Nonmatching */
+dBgW* dStage_roomControl_c::getBgW(int i_roomNo) {
+    return mStatus[i_roomNo].mpBgW;
 }
 
-/* 800A444C-800A44BC       .text __dt__12dBgS_ObjAcchFv */
-dBgS_ObjAcch::~dBgS_ObjAcch() {
-    /* Nonmatching */
-}
+// /* 800A444C-800A44BC       .text __dt__12dBgS_ObjAcchFv */
+// dBgS_ObjAcch::~dBgS_ObjAcch() {
+//     /* Nonmatching */
+// }
 
-/* 800A44BC-800A4544       .text __dt__12dBgS_AcchCirFv */
-dBgS_AcchCir::~dBgS_AcchCir() {
-    /* Nonmatching */
-}
-
-/* 800A4544-800A454C       .text @32@__dt__9dBgS_AcchFv */
-void @32@__dt__9dBgS_AcchFv {
-    /* Nonmatching */
-}
-
-/* 800A454C-800A4554       .text @20@__dt__9dBgS_AcchFv */
-void @20@__dt__9dBgS_AcchFv {
-    /* Nonmatching */
-}
-
-/* 800A4554-800A455C       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
-
-/* 800A455C-800A4564       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
-
+// /* 800A44BC-800A4544       .text __dt__12dBgS_AcchCirFv */
+// dBgS_AcchCir::~dBgS_AcchCir() {
+//     /* Nonmatching */
+// }

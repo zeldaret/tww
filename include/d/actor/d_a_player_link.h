@@ -1061,8 +1061,6 @@ public:
     /* 0x0708 */ dBgS_BoomerangLinChk mBoomerangLinChk;
     /* 0x0774 */ dBgS_LinkGndChk mGndChk;
     /* 0x07C8 */ dBgS_LinkRoofChk mRoofChk;
-    /* 0x080C */ void* field_0x080c;
-    /* 0x0810 */ void* field_0x0810;
     /* 0x0814 */ dBgS_ArrowLinChk mArrowLinChk;
     /* 0x0880 */ dBgS_MirLightLinChk mMirLightLinChk;
     /* 0x08EC */ u8 field_0x08EC[0x0910 - 0x08EC];
