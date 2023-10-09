@@ -74,8 +74,6 @@ public:
     /* 0x0296 */ u16 mScaleLocal;
     /* 0x0298 */ request_of_phase_process_class mPhs;
     
-    /* 0x029C */ //u32 m029C; // TODO: Does this do anything?
-    
     /* 0x02A0 */ J3DModel* mpMdl;
 
     /* 0x02A4 */ dBgS_ObjLinChk mLinChk;
@@ -101,7 +99,6 @@ daObj_Hole_HIO_c::daObj_Hole_HIO_c() {
 
 /* 00000148-000002BC       .text setMtx__12daObj_Hole_cFv */
 void daObj_Hole_c::setMtx() {
-    /* Nonmatching */
     cXyz adjustPos;
     adjustPos.x = current.pos.x;
     adjustPos.y = current.pos.y;
@@ -186,7 +183,6 @@ void daObj_Hole_c::modeEventInit() {
 
 /* 000004F4-000005D0       .text modeEvent__12daObj_Hole_cFv */
 void daObj_Hole_c::modeEvent() {
-    /* Nonmatching */
     if (mEvtInfo.checkCommandDemoAccrpt()) {
         int staffId = dComIfGp_evmng_getMyStaffId("Ypit00", NULL, 0);
 
@@ -206,7 +202,6 @@ void daObj_Hole_c::modeEvent() {
 
 /* 000005D0-000006C0       .text modeProc__12daObj_Hole_cFQ212daObj_Hole_c6Proc_ei */
 void daObj_Hole_c::modeProc(daObj_Hole_c::Proc_e mode, int i_nextState) {
-    /* Nonmatching */
     typedef void (daObj_Hole_c::*daObjHole_mode_t)(void);
 
     struct mode_struct {
@@ -268,7 +263,6 @@ s32 daObj_Hole_c::_draw() {
 
 /* 000007BC-00000864       .text createInit__12daObj_Hole_cFv */
 void daObj_Hole_c::createInit() {
-    /* Nonmatching */
     modeProc(PROC_MODE_WAIT, 0);
 
     fopAcM_SetMtx(this, mpMdl->getBaseTRMtx());
@@ -317,7 +311,6 @@ void daObj_Hole_c::getArg() {
 
 /* 0000096C-00000BA8       .text _create__12daObj_Hole_cFv */
 s32 daObj_Hole_c::_create() {
-    /* Nonmatching */
     fopAcM_SetupActor(this, daObj_Hole_c);
 
     s32 result = dComIfG_resLoad(&mPhs, m_arc_name);
@@ -368,11 +361,6 @@ static u8 daObj_HoleDraw(void* i_actor) {
 static u8 daObj_HoleIsDelete(void* i_actor) {
     return TRUE;
 }
-
-/* 00001394-000013DC       .text __dt__16daObj_Hole_HIO_cFv */
-//daObj_Hole_HIO_c::~daObj_Hole_HIO_c() {
-//
-//}
 
 static actor_method_class daObj_HoleMethodTable = {
     (process_method_func)daObj_HoleCreate,
