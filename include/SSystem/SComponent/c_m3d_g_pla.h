@@ -21,7 +21,7 @@ public:
     }
 
     const cXyz * GetNP() const { return &mNormal; }
-    f32 getCrossY(const cXyz& i_axis, float* i_value) const {
+    void getCrossY(const cXyz& i_axis, float* i_value) const {
         if (!cM3d_IsZero(mNormal.y)) {
             *i_value = (-mNormal.x * i_axis.x -
                          mNormal.z * i_axis.z -
