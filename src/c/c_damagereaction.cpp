@@ -106,18 +106,18 @@ dCcD_SrcCyl cc_cyl_src = {
 BOOL enemy_ice(enemyice* ei) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     fopAc_ac_c* ac = ei->mpActor;
-    s8 temp13 = 0;
-    cXyz temp;
-    cXyz temp11;
+    s8 shattered = 0;
+    cXyz speedXZRel;
+    cXyz speedXZ;
     cXyz particleScale;
     cXyz pos;
     
-    if (ei->mLightShrinkTimer != 0) {
+    if (ei->mLightShrinkTimer != 0) { // Dying to light arrows.
         particleScale.setAll(ei->mParticleScale);
         pos = ac->current.pos;
         pos.y += ei->mYOffset;
         
-        if (ei->mLightShrinkTimer == 1) {
+        if (ei->mLightShrinkTimer == 1) { // Just started dying to light arrows.
             ei->mLightShrinkTimer++;
             dComIfGp_particle_set(0x272, &pos, NULL, &particleScale);
             ac->mTevStr.mFogColor.b = 0xFF;
@@ -129,7 +129,9 @@ BOOL enemy_ice(enemyice* ei) {
             ac->mAttentionInfo.mFlags &= ~4;
         } else {
             ei->mLightShrinkTimer++;
+            
             cLib_addCalc2(&ac->mTevStr.mFogEndZ, 10.0f, 1.0f, 80.0f);
+            
             mDoMtx_stack_c::transS(ac->current.pos);
             mDoMtx_stack_c::transM(0, ei->mYOffset, 0);
             mDoMtx_stack_c::scaleM(ei->mScaleXZ, ei->mScaleY, ei->mScaleXZ);
@@ -139,19 +141,18 @@ BOOL enemy_ice(enemyice* ei) {
             mDoMtx_stack_c::ZrotM(ac->shape_angle.z);
             mDoMtx_stack_c::scaleM(ac->mScale);
             
-            s8 temp15 = 70 + g_regHIO.mChild[14].mShortRegs[1];
-            if (ei->mLightShrinkTimer < temp15) {
+            if (ei->mLightShrinkTimer < (s8)(70 + g_regHIO.mChild[14].mShortRegs[1])) {
                 cLib_addCalc0(&ei->mScaleXZ, 0.1f, 0.01f + g_regHIO.mChild[14].mFloatRegs[0]);
                 cLib_addCalc0(&ei->mScaleY, 0.1f, 0.01f + g_regHIO.mChild[14].mFloatRegs[0]);
             } else {
-                s8 temp16 = 70 + g_regHIO.mChild[14].mShortRegs[1];
-                if (ei->mLightShrinkTimer == temp16) {
+                if (ei->mLightShrinkTimer == (s8)(70 + g_regHIO.mChild[14].mShortRegs[1])) {
                     fopAcM_seStart(ac, JA_SE_CM_L_ARROW_PASS_AWAY, 0);
                 }
+                
                 cLib_addCalc2(&ei->mScaleY, 5.0f + g_regHIO.mChild[14].mFloatRegs[1], 0.1f, 1.0f + g_regHIO.mChild[14].mFloatRegs[2]);
                 cLib_addCalc0(&ei->mScaleXZ, 0.1f + g_regHIO.mChild[14].mFloatRegs[3], 0.05f + g_regHIO.mChild[14].mFloatRegs[4]);
-                s8 temp5 = 90 + g_regHIO.mChild[14].mShortRegs[2];
-                if (ei->mLightShrinkTimer > temp5) {
+                
+                if (ei->mLightShrinkTimer > (s8)(90 + g_regHIO.mChild[14].mShortRegs[2])) {
                     fopAcM_delete(ac);
                     fopAcM_onActor(ac);
                     if (fopAcM_GetName(ac) != PROC_PZ) {
@@ -170,10 +171,11 @@ BOOL enemy_ice(enemyice* ei) {
         return TRUE;
     }
     
-    BOOL temp12 = FALSE;
-    BOOL temp6 = FALSE;
+    BOOL frozen = FALSE;
+    BOOL moveAndCollide = FALSE;
     switch (ei->mState) {
-    case 0:
+    case 0: // Not initialized
+        // Initialize the enemyice now.
         ei->mStts.Init(0xFA, 0xFF, ac);
         ei->mCyl.Set(cc_cyl_src);
         ei->mCyl.SetStts(&ei->mStts);
@@ -181,6 +183,7 @@ BOOL enemy_ice(enemyice* ei) {
         ei->mCyl.SetH(ei->mCylHeight);
         ei->mBgAcch.Set(&ac->current.pos, &ac->next.pos, ac, 1, &ei->mBgAcchCir, &ei->mSpeed, NULL, NULL);
         ei->mBgAcchCir.SetWall(40.0f, ei->mWallRadius);
+        
         if (ei->mParticleScale < 0.1f) {
             ei->mParticleScale = 1.0f;
         }
@@ -192,18 +195,21 @@ BOOL enemy_ice(enemyice* ei) {
         ei->mScaleXZ = 1.0f;
         fopAcM_OnStatus(ac, fopAcStts_UNK8000000_e);
         break;
-    case 1:
+    case 1: // Idle
         if (ei->mFreezeDuration != 0) {
+            // The enemy has signaled that it wants to be frozen for some length of time.
             ei->mFreezeTimer = ei->mFreezeDuration;
             ei->mFreezeDuration = 0;
             ei->mState = 2;
             if (ei->m00C == 0) {
                 ei->mSpeed.y = 30.0f;
-                ei->mAngularVelY = cM_rndFX(3000.0f);
+                ei->mAngularVelY = (s16)cM_rndFX(3000.0f);
             }
             ac->mHealth -= 4;
             if (ac->mHealth <= 0) {
-                ei->m010 = 40;
+                // If the enemy died instantly upon being frozen, don't let it fall and shatter instantly.
+                // Instead add a short delay where it will simply stay frozen in the air to emphasize that it froze.
+                ei->mMoveDelayTimer = 40;
                 ei->mSpeed.y = 0.0f;
             }
             fopAcM_seStart(ac, JA_SE_CM_FREEZE, 0);
@@ -216,9 +222,9 @@ BOOL enemy_ice(enemyice* ei) {
             return FALSE;
         }
         // Fall-through
-    case 2:
-        temp12 = TRUE;
-        temp6 = TRUE;
+    case 2: // Frozen
+        frozen = TRUE;
+        moveAndCollide = TRUE;
         if (ei->m00C != 1) {
             ac->mAttentionInfo.mFlags |= 0x10;
             ac->mAttentionInfo.mDistances[4] = 0x12;
@@ -231,8 +237,8 @@ BOOL enemy_ice(enemyice* ei) {
             }
         }
         break;
-    case 3:
-        temp12 = TRUE;
+    case 3: // Frozen and being carried around by the player
+        frozen = TRUE;
         if (!fopAcM_checkStatus(ac, fopAcStts_CARRY_e)) {
             if (fopAcM_GetSpeedF(ac) > 0.0f) {
                 ei->mSpeedF = 25.0f + g_regHIO.mChild[0].mFloatRegs[5];
@@ -247,15 +253,15 @@ BOOL enemy_ice(enemyice* ei) {
         break;
     }
     
-    if (temp6) {
-        if (ei->m010 == 0) {
+    if (moveAndCollide) {
+        if (ei->mMoveDelayTimer == 0) {
             cMtx_YrotS(*calc_mtx, ei->mAngleY);
-            temp.x = 0.0f;
-            temp.y = 0.0f;
-            temp.z = ei->mSpeedF;
-            MtxPosition(&temp, &temp11);
-            ei->mSpeed.x = temp11.x;
-            ei->mSpeed.z = temp11.z;
+            speedXZRel.x = 0.0f;
+            speedXZRel.y = 0.0f;
+            speedXZRel.z = ei->mSpeedF;
+            MtxPosition(&speedXZRel, &speedXZ);
+            ei->mSpeed.x = speedXZ.x;
+            ei->mSpeed.z = speedXZ.z;
             if (ei->m00C == 2) {
                 ei->mSpeed.y = 0.0f;
             } else {
@@ -263,16 +269,17 @@ BOOL enemy_ice(enemyice* ei) {
                 ei->mSpeed.y -= 5.0f;
             }
             ac->shape_angle.y += ei->mAngularVelY;
+            
             if (ice_bg_check(ei)) {
                 ei->mFreezeTimer = -1;
             }
         } else {
-            ei->m010--;
+            ei->mMoveDelayTimer--;
         }
         
-        cXyz* temp11 = ei->mStts.GetCCMoveP();
-        if (temp11) {
-            ac->current.pos += *temp11;
+        cXyz* ccMove = ei->mStts.GetCCMoveP();
+        if (ccMove) {
+            ac->current.pos += *ccMove;
         }
         
         if (fabsf(ei->mSpeedF) > 5.0f) {
@@ -294,9 +301,9 @@ BOOL enemy_ice(enemyice* ei) {
                 ei->mFreezeTimer = 1;
             } else if (atInfo.mpObj->ChkAtType(AT_TYPE_BOMB | AT_TYPE_SKULL_HAMMER | AT_TYPE_FIRE_ARROW)) {
                 if (atInfo.mpObj->ChkAtType(AT_TYPE_SKULL_HAMMER)) {
-                    ei->mFreezeTimer = -2;
+                    ei->mFreezeTimer = -2; // Shattered by Skull Hammer.
                 } else {
-                    ei->mFreezeTimer = -1;
+                    ei->mFreezeTimer = -1; // Shattered
                 }
             } else {
                 def_se_set(ac, atInfo.mpObj, 0x42);
@@ -304,10 +311,11 @@ BOOL enemy_ice(enemyice* ei) {
         }
     }
     
-    if (temp12) {
-        // NOTE: Usage of uninitialized variables.
-        f32 temp_f31;
-        f32 temp_f30;
+    if (frozen) {
+        // NOTE: These variables could theoretically be used uninitialized if mFreezeTimer was
+        // somehow zero while frozen is true. But in practice this shouldn't happen.
+        f32 shiverOffsetX;
+        f32 shiverOffsetZ;
         
         if (ei->mFreezeTimer != 0) {
             if (ei->mFreezeTimer < 0) {
@@ -319,11 +327,11 @@ BOOL enemy_ice(enemyice* ei) {
                 dComIfGp_particle_set(0x274, &pos, NULL, &particleScale);
                 
                 if (ei->mFreezeTimer == -2) {
-                    // Skull Hammer shattered.
+                    // Shattered by Skull Hammer.
                     dComIfGp_particle_set(0x10, &pos);
-                    csXyz temp14(0, fopAcM_searchPlayerAngleY(ac), 0);
+                    csXyz angle(0, fopAcM_searchPlayerAngleY(ac), 0);
                     particleScale.setAll(2.0f);
-                    dComIfGp_particle_set(0xD, &pos, &temp14, &particleScale);
+                    dComIfGp_particle_set(0xD, &pos, &angle, &particleScale);
                     dScnPly_ply_c::setPauseTimer(8);
                 }
                 
@@ -333,7 +341,7 @@ BOOL enemy_ice(enemyice* ei) {
                 if (ei->mDeathSwitch != 0) {
                     dComIfGs_onSwitch(ei->mDeathSwitch, fopAcM_GetRoomNo(ac));
                 }
-                temp13 = 1;
+                shattered = 1;
             } else {
                 ei->mFreezeTimer--;
             }
@@ -342,11 +350,13 @@ BOOL enemy_ice(enemyice* ei) {
                 ei->mState = 1;
                 ei->mCyl.SetC(non_pos);
                 dComIfG_Ccsp()->Set(&ei->mCyl);
+                
                 if (fopAcM_checkCarryNow(ac)) {
                     fopAcM_cancelCarryNow(ac);
                 }
-                if (!temp13) {
-                    temp12 = FALSE;
+                
+                if (shattered == 0) {
+                    frozen = FALSE;
                 } else {
                     fopAcM_delete(ac);
                     fopAcM_onActor(ac);
@@ -355,11 +365,11 @@ BOOL enemy_ice(enemyice* ei) {
             }
             
             if (ei->mFreezeTimer < 50) {
-                temp_f31 = (ei->mFreezeTimer & 1)*2 - 1;
-                temp_f30 = (ei->mFreezeTimer+1 & 1)*2 - 1;
+                shiverOffsetX = (ei->mFreezeTimer & 1)*2 - 1;
+                shiverOffsetZ = (ei->mFreezeTimer+1 & 1)*2 - 1;
             } else {
-                temp_f30 = 0.0f;
-                temp_f31 = 0.0f;
+                shiverOffsetZ = 0.0f;
+                shiverOffsetX = 0.0f;
             }
             
             if (ei->mFreezeTimer == 20) {
@@ -374,7 +384,11 @@ BOOL enemy_ice(enemyice* ei) {
         ac->current.angle = ac->shape_angle;
         
         cLib_addCalc2(&ei->m028, ei->m02C, 1.0f, 3.0f);
-        mDoMtx_stack_c::transS(ac->current.pos.x + temp_f31, ac->current.pos.y + ei->m02C, ac->current.pos.z + temp_f30);
+        mDoMtx_stack_c::transS(
+            ac->current.pos.x + shiverOffsetX,
+            ac->current.pos.y + ei->m02C,
+            ac->current.pos.z + shiverOffsetZ
+        );
         mDoMtx_stack_c::YrotM(ac->shape_angle.y);
         mDoMtx_stack_c::XrotM(ac->shape_angle.x);
         mDoMtx_stack_c::ZrotM(ac->shape_angle.z);
@@ -385,7 +399,7 @@ BOOL enemy_ice(enemyice* ei) {
         cLib_addCalc0(&ei->m028, 1.0f, 3.0f);
     }
     
-    return temp12;
+    return frozen;
 }
 
 dCcD_SrcSph fire_at_sph_src = {
@@ -419,130 +433,134 @@ dCcD_SrcSph fire_at_sph_src = {
 
 /* 8001CDB8-8001D3B0       .text enemy_fire__FP9enemyfire */
 void enemy_fire(enemyfire* ef) {
-    /* Nonmatching */
     fopAc_ac_c* ac = ef->mpActor;
-    cXyz temp;
-    cXyz temp4;
-    JGeometry::TVec3<f32> scale;
-    temp.setAll(0.0f);
-    // scale = temp; // ??
+    cXyz offset;
+    cXyz pos;
+    offset.setAll(0.0f);
     
-    switch (ef->m006) {
-    case 0:
-        if (ef->m004 == 0) {
+    switch (ef->mState) {
+    case 0: // Not on fire.
+        if (ef->mFireDuration == 0) {
             return;
         }
-        ef->m008 = ef->m004;
-        ef->m004 = 0;
+        // The enemy has signaled that it wants to be lit on fire for some length of time.
+        ef->mFireTimer = ef->mFireDuration;
+        ef->mFireDuration = 0;
         
-        ef->m006 = 1;
+        ef->mState = 1; // On fire
         
         dKy_plight_set(&ef->mLight);
         
         for (int i = 0; i < 10; i++) {
-            if (ef->m010[i] < 0) {
+            if (ef->mFlameJntIdxs[i] < 0) {
                 continue;
             }
-            if (ef->mpFireEmitters[i]) {
+            if (ef->mpFlameEmitters[i]) {
                 continue;
             }
-            cXyz scale2;
-            scale2.setAll(ef->m01C[i]);
-            ef->mpFireEmitters[i] = dComIfGp_particle_set(0x3F1, &ac->current.pos, NULL, &scale2);
-            ef->m044[i] = ef->m008 - (s16)cM_rndF(60.0f);
-            if (ef->m044[i] < 10) {
-                ef->m044[i] = 10;
+            cXyz scale;
+            scale.setAll(ef->mParticleScale[i]);
+            ef->mpFlameEmitters[i] = dComIfGp_particle_set(0x3F1, &ac->current.pos, NULL, &scale);
+            ef->mFlameTimers[i] = ef->mFireTimer - (s16)cM_rndF(60.0f);
+            if (ef->mFlameTimers[i] < 10) {
+                ef->mFlameTimers[i] = 10;
             }
-            ef->m098 = 2.0f;
+            ef->mFlameScaleY = 2.0f;
         }
         
         ef->mStts.Init(0xFA, 0xFF, ac);
         ef->mSph.Set(fire_at_sph_src);
         ef->mSph.SetStts(&ef->mStts);
         break;
-    case 1:
+    case 1: // On fire.
         ef->mLight.mPos = ac->current.pos;
         ef->mLight.mColor.r = 600;
         ef->mLight.mColor.g = 400;
         ef->mLight.mColor.b = 120;
-        s16 power = ef->m098 * 150.0f;
+        s16 power = ef->mFlameScaleY * 150.0f;
         ef->mLight.mPower = power;
         ef->mLight.mFluctuation = 250.0f;
         
-        JGeometry::TVec3<f32> temp10;
-        temp10 = ac->current.pos - ef->m080;
+        JGeometry::TVec3<f32> vel;
+        vel = ac->current.pos - ef->mPrevPos;
         
-        ef->m080 = ac->current.pos;
+        ef->mPrevPos = ac->current.pos;
         
-        f32 temp2x = temp10.x * (-0.02f + g_regHIO.mChild[0].mFloatRegs[4]);
-        f32 temp3x = 1.0f;
-        if (temp2x > 1.0f) {
-            temp2x = 1.0f;
-        } else if (temp2x < -1.0f) {
-            temp2x = -1.0f;
+        f32 dirX = vel.x * (-0.02f + g_regHIO.mChild[0].mFloatRegs[4]);
+        if (dirX > 1.0f) {
+            dirX = 1.0f;
+        } else if (dirX < -1.0f) {
+            dirX = -1.0f;
         }
         
-        f32 temp2z = temp10.z * (-0.02f + g_regHIO.mChild[0].mFloatRegs[4]);
-        if (temp2z > 1.0f) {
-            temp2z = 1.0f;
-        } else if (temp2z < -1.0f) {
-            temp2z = -1.0f;
+        f32 dirZ = vel.z * (-0.02f + g_regHIO.mChild[0].mFloatRegs[4]);
+        if (dirZ > 1.0f) {
+            dirZ = 1.0f;
+        } else if (dirZ < -1.0f) {
+            dirZ = -1.0f;
         }
         
-        cLib_addCalc2(&ef->m08C.x, temp2x, 0.5f, 0.05f);
-        cLib_addCalc2(&ef->m08C.z, temp2z, 0.5f, 0.05f);
+        cLib_addCalc2(&ef->mDirection.x, dirX, 0.5f, 0.05f);
+        cLib_addCalc2(&ef->mDirection.z, dirZ, 0.5f, 0.05f);
         
-        ef->m08C.y = 0.2f + g_regHIO.mChild[0].mFloatRegs[11];
+        ef->mDirection.y = 0.2f + g_regHIO.mChild[0].mFloatRegs[11];
         
-        f32 temp6 = sqrtf(temp10.x * temp10.x + temp10.y * temp10.y + temp10.z * temp10.z);
-        temp6 = (0.03f + g_regHIO.mChild[0].mFloatRegs[12]) * temp6 + 1.0f;
-        if (temp6 > 1.5f + g_regHIO.mChild[0].mFloatRegs[13]) {
-            temp6 = 1.5f + g_regHIO.mChild[0].mFloatRegs[13];
+        f32 speed = sqrtf(vel.x * vel.x + vel.y * vel.y + vel.z * vel.z);
+        speed = (0.03f + g_regHIO.mChild[0].mFloatRegs[12]) * speed + 1.0f;
+        if (speed > 1.5f + g_regHIO.mChild[0].mFloatRegs[13]) {
+            speed = 1.5f + g_regHIO.mChild[0].mFloatRegs[13];
         }
         
-        cLib_addCalc2(&ef->m098, temp6, 0.5f, 0.05f);
+        cLib_addCalc2(&ef->mFlameScaleY, speed, 0.5f, 0.05f);
         
-        u8 temp5 = 0;
+        u8 numFlamesLeft = 0;
         for (int i = 0; i < 10; i++) {
-            if (ef->m010[i] < 0) {
+            if (ef->mFlameJntIdxs[i] < 0) {
                 continue;
             }
-            if (!ef->mpFireEmitters[i]) {
+            if (!ef->mpFlameEmitters[i]) {
                 continue;
             }
-            if (ef->m044[i] == 0) {
-                ef->mpFireEmitters[i]->becomeInvalidEmitter();
-                ef->mpFireEmitters[i] = NULL;
+            if (ef->mFlameTimers[i] == 0) {
+                ef->mpFlameEmitters[i]->becomeInvalidEmitter();
+                ef->mpFlameEmitters[i] = NULL;
             } else {
-                ef->m044[i]--;
+                ef->mFlameTimers[i]--;
                 
-                cMtx_copy(ef->mpMcaMorf->getModel()->getAnmMtx(ef->m010[i]), *calc_mtx);
-                MtxPosition(&temp, &temp4);
+                cMtx_copy(ef->mpMcaMorf->getModel()->getAnmMtx(ef->mFlameJntIdxs[i]), *calc_mtx);
+                MtxPosition(&offset, &pos);
                 
-                ef->mpFireEmitters[i]->setGlobalTranslation(temp4.x, temp4.y, temp4.z);
-                ef->mpFireEmitters[i]->setDirection(ef->m08C);
+                ef->mpFlameEmitters[i]->setGlobalTranslation(pos.x, pos.y, pos.z);
+                ef->mpFlameEmitters[i]->setDirection(ef->mDirection);
                 
-                scale.set(ef->m01C[i], ef->m098 * ef->m01C[i], ef->m01C[i]);
-                ef->mpFireEmitters[i]->setGlobalParticleScale(scale);
+                JGeometry::TVec3<f32> scale;
+                scale.set(
+                    ef->mParticleScale[i],
+                    ef->mFlameScaleY * ef->mParticleScale[i],
+                    ef->mParticleScale[i]
+                );
+                ef->mpFlameEmitters[i]->setGlobalParticleScale(scale);
                 
-                if (ef->m09D == temp5) {
-                    ef->mSph.SetC(temp4);
+                if (ef->mHitboxFlameIdx == numFlamesLeft) {
+                    // We don't want to give each flame a separate hitbox, so instead simply move the single hitbox to
+                    // a single flame, and cycle through which flame that is every frame.
+                    ef->mSph.SetC(pos);
                     dComIfG_Ccsp()->Set(&ef->mSph);
                 }
                 
-                temp5++;
+                numFlamesLeft++;
             }
         }
         
-        ef->m09D++;
-        if (ef->m09D >= temp5) {
-            ef->m09D = 0;
+        ef->mHitboxFlameIdx++;
+        if (ef->mHitboxFlameIdx >= numFlamesLeft) {
+            ef->mHitboxFlameIdx = 0;
         }
         
         fopAcM_seStart(ac, JA_SE_OBJ_TORCH_BURNING, 0);
         
-        if (ef->m008 == 0) {
-            ef->m006 = 0;
+        if (ef->mFireTimer == 0) {
+            ef->mState = 0; // Not on fire
             dKy_plight_cut(&ef->mLight);
             ef->mSph.SetC(non_pos);
             dComIfG_Ccsp()->Set(&ef->mSph);
@@ -550,8 +568,8 @@ void enemy_fire(enemyfire* ef) {
             fopAcM_seStart(ac, JA_SE_CM_FIRE_ARROW_BURNING, 0);
         }
         
-        if (ef->m008 != 0) {
-            ef->m008--;
+        if (ef->mFireTimer != 0) {
+            ef->mFireTimer--;
         }
         break;
     }
@@ -559,13 +577,13 @@ void enemy_fire(enemyfire* ef) {
 
 /* 8001D3B0-8001D428       .text enemy_fire_remove__FP9enemyfire */
 void enemy_fire_remove(enemyfire* ef) {
-    ef->m006 = 0;
+    ef->mState = 0; // Not on fire
     dKy_plight_cut(&ef->mLight);
     
     for (int i = 0; i < 10; i++) {
-        if (ef->mpFireEmitters[i]) {
-            ef->mpFireEmitters[i]->becomeInvalidEmitter();
-            ef->mpFireEmitters[i] = NULL;
+        if (ef->mpFlameEmitters[i]) {
+            ef->mpFlameEmitters[i]->becomeInvalidEmitter();
+            ef->mpFlameEmitters[i] = NULL;
         }
     }
 }
