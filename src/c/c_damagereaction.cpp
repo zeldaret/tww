@@ -119,7 +119,7 @@ BOOL enemy_ice(enemyice* ei) {
         
         if (ei->mLightShrinkTimer == 1) {
             ei->mLightShrinkTimer++;
-            dComIfGp_particle_set(0x272, &pos, NULL, &particleScale, 0xFF, NULL, -1, NULL, NULL, NULL);
+            dComIfGp_particle_set(0x272, &pos, NULL, &particleScale);
             ac->mTevStr.mFogColor.b = 0xFF;
             ac->mTevStr.mFogColor.g = 0xFF;
             ac->mTevStr.mFogColor.r = 0xFF;
@@ -211,7 +211,7 @@ BOOL enemy_ice(enemyice* ei) {
             particleScale.setAll(ei->mParticleScale);
             pos = ac->current.pos;
             pos.y += ei->mYOffset;
-            dComIfGp_particle_set(0x274, &pos, NULL, &particleScale, 0xFF, NULL, -1, NULL, NULL, NULL);
+            dComIfGp_particle_set(0x274, &pos, NULL, &particleScale);
         } else {
             return FALSE;
         }
@@ -315,15 +315,15 @@ BOOL enemy_ice(enemyice* ei) {
                 particleScale.setAll(ei->mParticleScale);
                 pos = ac->current.pos;
                 pos.y += ei->mYOffset;
-                dComIfGp_particle_set(0x273, &pos, NULL, &particleScale, 0xFF, NULL, -1, NULL, NULL, NULL);
-                dComIfGp_particle_set(0x274, &pos, NULL, &particleScale, 0xFF, NULL, -1, NULL, NULL, NULL);
+                dComIfGp_particle_set(0x273, &pos, NULL, &particleScale);
+                dComIfGp_particle_set(0x274, &pos, NULL, &particleScale);
                 
                 if (ei->mFreezeTimer == -2) {
                     // Skull Hammer shattered.
-                    dComIfGp_particle_set(0x10, &pos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+                    dComIfGp_particle_set(0x10, &pos);
                     csXyz temp14(0, fopAcM_searchPlayerAngleY(ac), 0);
                     particleScale.setAll(2.0f);
-                    dComIfGp_particle_set(0xD, &pos, &temp14, &particleScale, 0xFF, NULL, -1, NULL, NULL, NULL);
+                    dComIfGp_particle_set(0xD, &pos, &temp14, &particleScale);
                     dScnPly_ply_c::setPauseTimer(8);
                 }
                 
@@ -366,7 +366,7 @@ BOOL enemy_ice(enemyice* ei) {
                 particleScale.setAll(ei->mParticleScale);
                 pos = ac->current.pos;
                 pos.y += ei->mYOffset;
-                dComIfGp_particle_set(0x277, &pos, NULL, &particleScale, 0xFF, NULL, -1, NULL, NULL, NULL);
+                dComIfGp_particle_set(0x277, &pos, NULL, &particleScale);
                 fopAcM_seStart(ac, JA_SE_CM_ICE_RECOVER, 0);
             }
         }
@@ -448,7 +448,7 @@ void enemy_fire(enemyfire* ef) {
             }
             cXyz scale2;
             scale2.setAll(ef->m01C[i]);
-            ef->mpFireEmitters[i] = dComIfGp_particle_set(0x3F1, &ac->current.pos, NULL, &scale2, 0xFF, NULL, -1, NULL, NULL, NULL);
+            ef->mpFireEmitters[i] = dComIfGp_particle_set(0x3F1, &ac->current.pos, NULL, &scale2);
             ef->m044[i] = ef->m008 - (s16)cM_rndF(60.0f);
             if (ef->m044[i] < 10) {
                 ef->m044[i] = 10;
@@ -573,7 +573,7 @@ void enemy_fire_remove(enemyfire* ef) {
 /* 8001D428-8001D48C       .text enemy_piyo_set__FP10fopAc_ac_c */
 void enemy_piyo_set(fopAc_ac_c* enemy) {
     // Creates the rotating stars particle for when an enemy is stunned.
-    dComIfGp_particle_set(0x27A, &enemy->mAttentionInfo.mPosition, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+    dComIfGp_particle_set(0x27A, &enemy->mAttentionInfo.mPosition);
 }
 
 /* 8001D48C-8001D890       .text wall_angle_get__FP10fopAc_ac_cs */

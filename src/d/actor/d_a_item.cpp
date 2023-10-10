@@ -173,7 +173,7 @@ void daItem_c::CreateInit() {
     
     if (dItem_data::checkSpecialEffect(m_itemNo) && (m_itemNo != SMALL_KEY || (m_itemNo == SMALL_KEY && (mStatusFlags & 2)))) {
         u16 particleID = dItem_data::getSpecialEffect(m_itemNo);
-        dComIfGp_particle_set(particleID, &current.pos, NULL, NULL, 0xFF, &mPtclFollowCb, -1, NULL, NULL, NULL);
+        dComIfGp_particle_set(particleID, &current.pos, NULL, NULL, 0xFF, &mPtclFollowCb);
     }
     
     switch (m_itemNo) {
@@ -217,7 +217,7 @@ void daItem_c::CreateInit() {
     animPlay(1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
     
     if (fopAcM_SearchByName(PROC_BST)) { // Gohdan
-        mpParticleEmitter = dComIfGp_particle_set(0x81E1, &current.pos, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+        mpParticleEmitter = dComIfGp_particle_set(0x81E1, &current.pos);
     }
 }
 

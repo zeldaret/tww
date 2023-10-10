@@ -349,8 +349,7 @@ int daAgb_c::uploadMessageSend() {
             field_0x664 = 60;
 
             dComIfGs_onEventBit(0x1A20);
-            dComIfGp_particle_set(0x2E7, &current.pos, NULL, NULL, 255, &field_0x684, -1, NULL,
-                                  NULL, NULL);
+            dComIfGp_particle_set(0x2E7, &current.pos, NULL, NULL, 255, &field_0x684);
 
             JKRHeap::free(l_gbaCommand->getMemAddress(), NULL);
             delete l_gbaCommand;
