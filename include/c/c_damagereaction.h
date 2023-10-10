@@ -11,19 +11,19 @@
 struct enemyice {
 public:
     /* 0x000 */ fopAc_ac_c* mpActor;
-    /* 0x004 */ s16 mTotalNumFramesToRemainFrozen;
-    /* 0x006 */ u8 mNumFramesDyingToLightArrowsSoFar;
+    /* 0x004 */ s16 mFreezeDuration;
+    /* 0x006 */ s8 mLightShrinkTimer;
     /* 0x007 */ u8 m007[0x008 - 0x007];
     /* 0x008 */ f32 mYOffset;
-    /* 0x00C */ u8 m00C;
-    /* 0x00D */ u8 mState;
-    /* 0x00E */ s16 mNumFramesLeftToRemainFrozen;
+    /* 0x00C */ s8 m00C;
+    /* 0x00D */ s8 mState;
+    /* 0x00E */ s16 mFreezeTimer;
     /* 0x010 */ s16 m010;
-    /* 0x012 */ s16 m012;
-    /* 0x014 */ s16 m014;
+    /* 0x012 */ s16 mAngleY;
+    /* 0x014 */ s16 mAngularVelY;
     /* 0x016 */ u8 m016[0x018 - 0x016];
-    /* 0x018 */ cXyz m018;
-    /* 0x024 */ f32 m024;
+    /* 0x018 */ cXyz mSpeed;
+    /* 0x024 */ f32 mSpeedF;
     /* 0x028 */ f32 m028;
     /* 0x02C */ f32 m02C;
     /* 0x030 */ dCcD_Stts mStts;
@@ -32,7 +32,7 @@ public:
     /* 0x1A0 */ f32 mWallRadius;
     /* 0x1A4 */ f32 mScaleXZ;
     /* 0x1A8 */ f32 mScaleY;
-    /* 0x1AC */ f32 m1AC;
+    /* 0x1AC */ f32 mParticleScale;
     /* 0x1B0 */ u8 m1B0;
     /* 0x1B1 */ u8 mDeathSwitch;
     /* 0x1B2 */ u8 m1B2[0x1B4 - 0x1B2];
@@ -45,22 +45,21 @@ struct enemyfire {
 public:
     /* 0x000 */ fopAc_ac_c* mpActor;
     /* 0x004 */ s16 m004;
-    /* 0x006 */ u8 m006;
+    /* 0x006 */ s8 m006;
     /* 0x007 */ u8 m007[0x008 - 0x007];
     /* 0x008 */ s16 m008;
     /* 0x00A */ u8 m00A[0x00C - 0x00A];
     /* 0x00C */ mDoExt_McaMorf* mpMcaMorf;
-    /* 0x010 */ u8 m010[10];
+    /* 0x010 */ s8 m010[10];
     /* 0x01A */ u8 m01A[0x01C - 0x01A];
     /* 0x01C */ f32 m01C[10];
-    /* 0x044 */ u8 m044[0x080 - 0x044];
+    /* 0x044 */ s16 m044[10];
+    /* 0x058 */ JPABaseEmitter* mpFireEmitters[10];
     /* 0x080 */ cXyz m080;
-    /* 0x08C */ f32 m08C;
-    /* 0x090 */ f32 m090;
-    /* 0x094 */ f32 m094;
+    /* 0x08C */ JGeometry::TVec3<f32> m08C;
     /* 0x098 */ f32 m098;
     /* 0x09C */ u8 m09C[0x09D - 0x09C];
-    /* 0x09D */ char m09D;
+    /* 0x09D */ u8 m09D;
     /* 0x09E */ u8 m09E[0x0A0 - 0x09E];
     /* 0x0A0 */ dCcD_Stts mStts;
     /* 0x0DC */ dCcD_Sph mSph;
@@ -184,12 +183,12 @@ public:
 };
 // STATIC_ASSERT(sizeof(damagereaction) == 0x7BC);
 
-void ice_bg_check(enemyice*);
+BOOL ice_bg_check(enemyice*);
 BOOL enemy_ice(enemyice*);
 void enemy_fire(enemyfire*);
 void enemy_fire_remove(enemyfire*);
 void enemy_piyo_set(fopAc_ac_c*);
-void wall_angle_get(fopAc_ac_c*, short);
+void wall_angle_get(fopAc_ac_c*, s16);
 void dr_body_bg_check(damagereaction*);
 void dr_joint_bg_check(damagereaction*);
 void kado_check(damagereaction*);

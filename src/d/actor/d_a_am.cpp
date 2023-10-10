@@ -335,8 +335,8 @@ static BOOL medama_atari_check(am_class* i_this) {
         break;
     case AT_TYPE_LIGHT_ARROW:
         ret = true;
-        i_this->mEnemyIce.mNumFramesDyingToLightArrowsSoFar = 1;
-        i_this->mEnemyIce.m1AC = 1.0f;
+        i_this->mEnemyIce.mLightShrinkTimer = 1;
+        i_this->mEnemyIce.mParticleScale = 1.0f;
         i_this->mEnemyIce.mYOffset = 80.0f;
         i_this->mAttentionInfo.mFlags = 0;
         break;

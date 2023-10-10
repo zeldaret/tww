@@ -810,7 +810,7 @@ BOOL daItem_c::checkItemDisappear() {
     if (mCurState == 4) {
         disappearing = false;
     }
-    if ((mStatusFlags & 0x08) || (mStatusFlags & 0x40) || (mStatus & 0x100000)) {
+    if ((mStatusFlags & 0x08) || (mStatusFlags & 0x40) || (mStatus & fopAcStts_HOOK_CARRY_e)) {
         disappearing = false;
         show();
     }

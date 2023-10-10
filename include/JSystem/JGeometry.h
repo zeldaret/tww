@@ -88,6 +88,12 @@ struct TVec3<f32> {
         z = other.z;
     }
 
+    void set(const Vec& vec) {
+        x = vec.x;
+        y = vec.y;
+        z = vec.z;
+    }
+
     void set(f32 x_, f32 y_, f32 z_) {
         x = x_;
         y = y_;
@@ -137,6 +143,11 @@ struct TVec3<f32> {
         x = b.x;
         y = b.y;
         z = b.z;
+        return *this;
+    }
+
+    inline TVec3<f32>& operator=(const Vec& vec) {
+        set(vec);
         return *this;
     }
 

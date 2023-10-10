@@ -758,10 +758,10 @@ bool daObjMknjD::Act_c::daObjMknjD_break() {
             JGeometry::TVec3<f32> vec;
 
             vec.set(3.0f, 3.0f, 3.0f);
-            mEmitters[3]->setGlobalParticleScale(vec);
+            mEmitters[3]->setGlobalDynamicsScale(vec);
 
             vec.set(6.0f, 6.0f, 6.0f);
-            mEmitters[3]->setGlobalDynamicsScale(vec);
+            mEmitters[3]->setGlobalParticleScale(vec);
         }
     }
     // After 255 frames, the cutscene ends.

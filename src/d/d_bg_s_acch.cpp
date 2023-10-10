@@ -81,19 +81,20 @@ void dBgS_Acch::Init() {
 }
 
 /* 800A2D78-800A2E80       .text Set__9dBgS_AcchFP4cXyzP4cXyzP10fopAc_ac_ciP12dBgS_AcchCirP4cXyzP5csXyzP5csXyz */
-void dBgS_Acch::Set(cXyz* param_1, cXyz* param_2, fopAc_ac_c* param_3, int param_4, dBgS_AcchCir* param_5, cXyz* param_6, csXyz* param_7, csXyz* param_8) {
-    pm_pos = param_1;
-    pm_old_pos = param_2;
+void dBgS_Acch::Set(cXyz* pos, cXyz* old_pos, fopAc_ac_c* actor, int tbl_size, dBgS_AcchCir* acchCir, cXyz* speed,
+                    csXyz* angle, csXyz* shape_angle) {
+    pm_pos = pos;
+    pm_old_pos = old_pos;
     JUT_ASSERT(221, pm_pos != 0);
     JUT_ASSERT(222, pm_old_pos != 0);
     
-    m_my_ac = param_3;
-    SetActorPid(fopAcM_GetID(param_3));
-    pm_speed = param_6;
-    m_tbl_size = param_4;
-    pm_acch_cir = param_5;
-    pm_angle = param_7;
-    pm_shape_angle = param_8;
+    m_my_ac = actor;
+    SetActorPid(fopAcM_GetID(actor));
+    pm_speed = speed;
+    m_tbl_size = tbl_size;
+    pm_acch_cir = acchCir;
+    pm_angle = angle;
+    pm_shape_angle = shape_angle;
 }
 
 /* 800A2E80-800A2EE8       .text GroundCheckInit__9dBgS_AcchFR4dBgS */

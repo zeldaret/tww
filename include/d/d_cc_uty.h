@@ -5,6 +5,11 @@
 #include "f_op/f_op_actor.h"
 
 struct CcAtInfo {
+public:
+    CcAtInfo() {}
+    ~CcAtInfo() {}
+
+public:
     /* 0x00 */ cCcD_Obj* mpObj;
     /* 0x04 */ fopAc_ac_c* mpActor;
     /* 0x08 */ u8 mDamage;
