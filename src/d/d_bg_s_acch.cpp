@@ -9,9 +9,12 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
+#include "d/actor/d_a_sea.h"
 
-bool daSea_ChkArea(f32, f32);
-f32 daSea_calcWave(f32, f32);
+#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)) ) == 1));
+#define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);
+#define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
+#define CHECK_PVEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v->x && v->x < 1.0e32f && -1.0e32f < v->y && v->y < 1.0e32f && -1.0e32f < v->z && v->z < 1.0e32f)
 
 /* 800A257C-800A25F4       .text __ct__12dBgS_AcchCirFv */
 dBgS_AcchCir::dBgS_AcchCir() {
@@ -56,7 +59,7 @@ dBgS_Acch::dBgS_Acch() {
     field_0xb4 = 0.0f;
     field_0xb8 = 0.0f;
     m_tbl_size = 0;
-    mp_acch_cir = NULL;
+    pm_acch_cir = NULL;
     m_roof_y = 0.0f;
     m_roof_height = 0.0f;
     m_roof_crr_height = 0.0f;
@@ -78,19 +81,20 @@ void dBgS_Acch::Init() {
 }
 
 /* 800A2D78-800A2E80       .text Set__9dBgS_AcchFP4cXyzP4cXyzP10fopAc_ac_ciP12dBgS_AcchCirP4cXyzP5csXyzP5csXyz */
-void dBgS_Acch::Set(cXyz* param_1, cXyz* param_2, fopAc_ac_c* param_3, int param_4, dBgS_AcchCir* param_5, cXyz* param_6, csXyz* param_7, csXyz* param_8) {
-    pm_pos = param_1;
-    pm_old_pos = param_2;
+void dBgS_Acch::Set(cXyz* pos, cXyz* old_pos, fopAc_ac_c* actor, int tbl_size, dBgS_AcchCir* acchCir, cXyz* speed,
+                    csXyz* angle, csXyz* shape_angle) {
+    pm_pos = pos;
+    pm_old_pos = old_pos;
     JUT_ASSERT(221, pm_pos != 0);
     JUT_ASSERT(222, pm_old_pos != 0);
     
-    m_my_ac = param_3;
-    SetActorPid(fopAcM_GetID(param_3));
-    pm_speed = param_6;
-    m_tbl_size = param_4;
-    mp_acch_cir = param_5;
-    pm_angle = param_7;
-    pm_shape_angle = param_8;
+    m_my_ac = actor;
+    SetActorPid(fopAcM_GetID(actor));
+    pm_speed = speed;
+    m_tbl_size = tbl_size;
+    pm_acch_cir = acchCir;
+    pm_angle = angle;
+    pm_shape_angle = shape_angle;
 }
 
 /* 800A2E80-800A2EE8       .text GroundCheckInit__9dBgS_AcchFR4dBgS */
@@ -122,10 +126,10 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
     JUT_ASSERT(494, pm_pos != 0);
     JUT_ASSERT(495, pm_old_pos != 0);
     
-    JUT_ASSERT(535, !(((sizeof(pm_pos->x) == sizeof(float)) ? __fpclassifyf((float)(pm_pos->x)) : __fpclassifyd((double)(pm_pos->x)) ) == 1));
-    JUT_ASSERT(536, !(((sizeof(pm_pos->y) == sizeof(float)) ? __fpclassifyf((float)(pm_pos->y)) : __fpclassifyd((double)(pm_pos->y)) ) == 1));
-    JUT_ASSERT(537, !(((sizeof(pm_pos->z) == sizeof(float)) ? __fpclassifyf((float)(pm_pos->z)) : __fpclassifyd((double)(pm_pos->z)) ) == 1));
-    JUT_ASSERT(541, -1.0e32f < pm_pos->x && pm_pos->x < 1.0e32f && -1.0e32f < pm_pos->y && pm_pos->y < 1.0e32f && -1.0e32f < pm_pos->z && pm_pos->z < 1.0e32f);
+    CHECK_FLOAT_CLASS(535, pm_pos->x);
+    CHECK_FLOAT_CLASS(536, pm_pos->y);
+    CHECK_FLOAT_CLASS(537, pm_pos->z);
+    CHECK_PVEC3_RANGE(541, pm_pos);
     
     i_bgs.MoveBgCrrPos(m_gnd, ChkGroundHit(), pm_pos, pm_angle, pm_shape_angle);
     
@@ -240,10 +244,10 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
         }
     }
     
-    JUT_ASSERT(780, !(((sizeof(pm_pos->x) == sizeof(float)) ? __fpclassifyf((float)(pm_pos->x)) : __fpclassifyd((double)(pm_pos->x)) ) == 1));
-    JUT_ASSERT(781, !(((sizeof(pm_pos->y) == sizeof(float)) ? __fpclassifyf((float)(pm_pos->y)) : __fpclassifyd((double)(pm_pos->y)) ) == 1));
-    JUT_ASSERT(782, !(((sizeof(pm_pos->z) == sizeof(float)) ? __fpclassifyf((float)(pm_pos->z)) : __fpclassifyd((double)(pm_pos->z)) ) == 1));
-    JUT_ASSERT(786, -1.0e32f < pm_pos->x && pm_pos->x < 1.0e32f && -1.0e32f < pm_pos->y && pm_pos->y < 1.0e32f && -1.0e32f < pm_pos->z && pm_pos->z < 1.0e32f);
+    CHECK_FLOAT_CLASS(780, pm_pos->x);
+    CHECK_FLOAT_CLASS(781, pm_pos->y);
+    CHECK_FLOAT_CLASS(782, pm_pos->z);
+    CHECK_PVEC3_RANGE(786, pm_pos);
 }
 
 static void dummy2() {
@@ -295,13 +299,3 @@ f32 dBgS_Acch::GetWallAddY(Vec&, int) {
 dBgW* dStage_roomControl_c::getBgW(int i_roomNo) {
     return mStatus[i_roomNo].mpBgW;
 }
-
-// /* 800A444C-800A44BC       .text __dt__12dBgS_ObjAcchFv */
-// dBgS_ObjAcch::~dBgS_ObjAcch() {
-//     /* Nonmatching */
-// }
-
-// /* 800A44BC-800A4544       .text __dt__12dBgS_AcchCirFv */
-// dBgS_AcchCir::~dBgS_AcchCir() {
-//     /* Nonmatching */
-// }

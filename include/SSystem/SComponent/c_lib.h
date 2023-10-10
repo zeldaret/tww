@@ -102,7 +102,7 @@ T cLib_calcTimer(T* value) {
 void MtxInit(void);
 void MtxTrans(f32, f32, f32, u8);
 void MtxScale(f32, f32, f32, u8);
-void MtxPosition(cXyz*, cXyz*);
+void MtxPosition(cXyz* src, cXyz* dest);
 void MtxPush(void);
 Mtx* MtxPull(void);
 

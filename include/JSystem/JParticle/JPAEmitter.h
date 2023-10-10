@@ -93,10 +93,13 @@ public:
         mGlobalScale2D.set(scale);
     }
     void setGlobalParticleScale(const JGeometry::TVec3<float>& scale) {
-        mGlobalScale.set(scale);
+        mGlobalScale2D.set(scale);
     }
     void setGlobalDynamicsScale(const JGeometry::TVec3<float>& scale) {
-        mGlobalScale2D.set(scale);
+        mGlobalScale.set(scale);
+    }
+    void setDirection(const JGeometry::TVec3<float>& dir) {
+        mEmitterDir.set(dir);
     }
     void setMaxFrame(s32 maxFrame) { mMaxFrame = maxFrame; }
 
@@ -126,7 +129,7 @@ public:
     /* 0x024 */ csXyz mEmitterRot;
     /* 0x02A */ u8 mVolumeType;
     /* 0x02B */ u8 mRateStep;
-    /* 0x02C */ cXyz mEmitterDir;
+    /* 0x02C */ JGeometry::TVec3<f32> mEmitterDir;
     /* 0x038 */ f32 mRate;
     /* 0x03C */ f32 mRateRndm;
     /* 0x040 */ f32 mAccel;

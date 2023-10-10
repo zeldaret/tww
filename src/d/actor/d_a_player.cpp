@@ -67,14 +67,14 @@ void daPy_mtxFollowEcallBack_c::end() {
 void daPy_mtxFollowEcallBack_c::makeEmitter(u16 particleID, MtxP mtx, const cXyz* pos, const cXyz* scale) {
     end();
     mpMtx = mtx;
-    dComIfGp_particle_setP1(particleID, pos, NULL, scale, 0xFF, this, -1, NULL, NULL, NULL);
+    dComIfGp_particle_setP1(particleID, pos, NULL, scale, 0xFF, this);
 }
 
 /* 80102C84-80102D14       .text makeEmitterColor__25daPy_mtxFollowEcallBack_cFUsPA4_fPC4cXyzPC8_GXColorPC8_GXColor */
 void daPy_mtxFollowEcallBack_c::makeEmitterColor(u16 particleID, MtxP mtx, const cXyz* pos, const _GXColor* prmColor, const _GXColor* envColor) {
     end();
     mpMtx = mtx;
-    dComIfGp_particle_setP1(particleID, pos, NULL, NULL, 0xFF, this, -1, prmColor, envColor, NULL);
+    dComIfGp_particle_setP1(particleID, pos, NULL, NULL, 0xFF, this, -1, prmColor, envColor);
 }
 
 /* 80102D14-80102D90       .text setDoButtonQuake__9daPy_py_cFv */

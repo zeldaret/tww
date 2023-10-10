@@ -40,6 +40,7 @@ enum cCcD_ObjAtType {
     /* 0x04000000 */ AT_TYPE_DARKNUT_SWORD  = (1 << 26),
     /* 0x08000000 */ AT_TYPE_GRAPPLING_HOOK = (1 << 27),
     /* 0x10000000 */ AT_TYPE_MOBLIN_SPEAR   = (1 << 28),
+    /* 0xFFFFFFFF */ AT_TYPE_ALL            = ~0,
 };
 
 class cCcD_ShapeAttr {

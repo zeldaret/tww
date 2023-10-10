@@ -486,7 +486,7 @@ void daObjBarrier_ef_c::birth(fopAc_ac_c* i_hitActor, f32 i_radius, cXyz i_cente
         mDoMtx_stack_c::ZXYrotM(0, angle.y, 0);
         mpModel[effect_idx]->setBaseTRMtx(mDoMtx_stack_c::get());
 
-        dComIfGp_particle_set(0x81A9, &pos, &angle, NULL);
+        dComIfGp_particle_set(0x81A9, &pos, &angle);
     }
 }
 

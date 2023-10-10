@@ -313,9 +313,9 @@ static BOOL medama_atari_check(am_class* i_this) {
                 cc_at_check(i_this, &atInfo);
                 i_this->mMaxHealth = 10;
                 i_this->mHealth = 10;
-                dComIfGp_particle_set(0x27B, &i_this->mAttentionInfo.mPosition, NULL, NULL);
+                dComIfGp_particle_set(0x27B, &i_this->mAttentionInfo.mPosition);
             } else {
-                dComIfGp_particle_set(0xC, &hitPos, NULL, NULL);
+                dComIfGp_particle_set(0xC, &hitPos);
             }
             fopAcM_seStart(i_this, JA_SE_LK_MS_WEP_HIT, 0x42);
         }
@@ -335,8 +335,8 @@ static BOOL medama_atari_check(am_class* i_this) {
         break;
     case AT_TYPE_LIGHT_ARROW:
         ret = true;
-        i_this->mEnemyIce.mNumFramesDyingToLightArrowsSoFar = 1;
-        i_this->mEnemyIce.m1AC = 1.0f;
+        i_this->mEnemyIce.mLightShrinkTimer = 1;
+        i_this->mEnemyIce.mParticleScale = 1.0f;
         i_this->mEnemyIce.mYOffset = 80.0f;
         i_this->mAttentionInfo.mFlags = 0;
         break;
@@ -355,7 +355,7 @@ static BOOL medama_atari_check(am_class* i_this) {
             i_this->mAction = ACTION_DOUSA;
             i_this->mState = 2;
         } else {
-            dComIfGp_particle_set(0x10, &i_this->mEyeballPos, &player->shape_angle, NULL);
+            dComIfGp_particle_set(0x10, &i_this->mEyeballPos, &player->shape_angle);
             // fopAcM_seStart(i_this, JA_SE_CM_AM_EYE_DAMAGE, 0);
             mDoAud_seStart(JA_SE_CM_AM_EYE_DAMAGE, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
             fopAcM_monsSeStart(i_this, JA_SE_CV_AM_EYE_DAMAGE, 0x42);
@@ -364,7 +364,7 @@ static BOOL medama_atari_check(am_class* i_this) {
         }
         break;
     default:
-        dComIfGp_particle_set(0xC, &hitPos, NULL, NULL);
+        dComIfGp_particle_set(0xC, &hitPos);
         fopAcM_seStart(i_this, JA_SE_LK_MS_WEP_HIT, 0x42);
         break;
     }
@@ -670,7 +670,7 @@ static void action_dousa(am_class* i_this) {
         i_this->mSmokeCbs[0].end();
         dComIfGp_particle_setToon(
             0xA125, &i_this->mWaistPos, &i_this->shape_angle, NULL,
-            0xB9, &i_this->mSmokeCbs[0], fopAcM_GetRoomNo(i_this), NULL, NULL, NULL
+            0xB9, &i_this->mSmokeCbs[0], fopAcM_GetRoomNo(i_this)
         );
         dComIfGp_getVibration().StartShock(3, -0x21, cXyz(0.0f, 1.0f, 0.0f));
         i_this->speedF = 0.0f;
@@ -700,7 +700,7 @@ static void action_dousa(am_class* i_this) {
             if (i_this->mSmokeCbs[2].getEmitter() == NULL) {
                 dComIfGp_particle_setToon(
                     0xA154, &i_this->mWaistPos, &i_this->shape_angle, NULL,
-                    0xB9, &i_this->mSmokeCbs[2], fopAcM_GetRoomNo(i_this), NULL, NULL, NULL
+                    0xB9, &i_this->mSmokeCbs[2], fopAcM_GetRoomNo(i_this)
                 );
             }
             i_this->mState = 8;
@@ -773,7 +773,7 @@ static void action_modoru_move(am_class* i_this) {
             i_this->mSmokeCbs[0].end();
             dComIfGp_particle_setToon(
                 0xA125, &i_this->mWaistPos, &i_this->shape_angle, NULL,
-                0xB9, &i_this->mSmokeCbs[0], fopAcM_GetRoomNo(i_this), NULL, NULL, NULL
+                0xB9, &i_this->mSmokeCbs[0], fopAcM_GetRoomNo(i_this)
             );
             
             dComIfGp_getVibration().StartShock(1, -0x21, cXyz(0.0f, 1.0f, 0.0f));
@@ -903,7 +903,7 @@ static void action_itai_move(am_class* i_this) {
         i_this->mStts.SetWeight(0xFF);
         dComIfGp_particle_setToon(
             0xA155, &i_this->mJawPos, &i_this->shape_angle, NULL,
-            0xB9, &i_this->mSmokeCbs[3], fopAcM_GetRoomNo(i_this), NULL, NULL, NULL
+            0xB9, &i_this->mSmokeCbs[3], fopAcM_GetRoomNo(i_this)
         );
         fopAcM_seStart(i_this, JA_SE_CM_AM_MOUTH_CLOSE, 0);
         anm_init(i_this, AM_BCK_BOM_NOMI, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
@@ -928,16 +928,10 @@ static void action_itai_move(am_class* i_this) {
             i_this->mNeedleCyl.OnAtHitBit();
             dComIfGp_particle_setToon(
                 0xA126, &i_this->mJawPos, &i_this->shape_angle, NULL,
-                0xB9, &i_this->mSmokeCbs[1], fopAcM_GetRoomNo(i_this), NULL, NULL, NULL
+                0xB9, &i_this->mSmokeCbs[1], fopAcM_GetRoomNo(i_this)
             );
-            i_this->m033C = dComIfGp_particle_set(
-                0x8157, &i_this->mJawPos, NULL, NULL,
-                0xFF, NULL, -1, NULL, NULL, NULL
-            );
-            i_this->m0340 = dComIfGp_particle_set(
-                0x8156, &i_this->mJawPos, NULL, NULL,
-                0xFF, NULL, -1, NULL, NULL, NULL
-            );
+            i_this->m033C = dComIfGp_particle_set(0x8157, &i_this->mJawPos);
+            i_this->m0340 = dComIfGp_particle_set(0x8156, &i_this->mJawPos);
         }
         
         // Using the mDoExt_McaMorf::isStop inline causes regswap.
@@ -962,7 +956,7 @@ static void action_itai_move(am_class* i_this) {
             mDoAud_seStart(JA_SE_CM_AM_JUMP, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
             dComIfGp_particle_setToon(
                 0xA125, &i_this->mWaistPos, &i_this->shape_angle, NULL,
-                0xB9, &i_this->mSmokeCbs[0], fopAcM_GetRoomNo(i_this), NULL, NULL, NULL
+                0xB9, &i_this->mSmokeCbs[0], fopAcM_GetRoomNo(i_this)
             );
             dComIfGp_getVibration().StartShock(1, -0x21, cXyz(0.0f, 1.0f, 0.0f));
             // The fopAcM_seStart inline makes the codegen not match.
@@ -978,14 +972,8 @@ static void action_itai_move(am_class* i_this) {
             break;
         }
         anm_init(i_this, AM_BCK_DEAD, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
-        dComIfGp_particle_set(
-            0x8127, &i_this->mWaistPos, NULL, NULL,
-            0xFF, NULL, -1, NULL, NULL, NULL
-        );
-        dComIfGp_particle_set(
-            0x8128, &i_this->mWaistPos, NULL, NULL,
-            0xFF, NULL, -1, NULL, NULL, NULL
-        );
+        dComIfGp_particle_set(0x8127, &i_this->mWaistPos);
+        dComIfGp_particle_set(0x8128, &i_this->mWaistPos);
         
         // The fopAcM_seStart inline makes the codegen not match.
         // fopAcM_seStart(i_this, JA_SE_CM_AM_BEF_EXPLODE, 0);
@@ -1087,8 +1075,8 @@ static BOOL daAM_Execute(am_class* i_this) {
     if (i_this->mAction != ACTION_ITAI_MOVE && i_this->mSpawnPosY - 1500.0f > i_this->current.pos.y) {
         anm_init(i_this, AM_BCK_DEAD, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
         
-        dComIfGp_particle_set(0x8127, &i_this->mWaistPos, NULL, NULL);
-        dComIfGp_particle_set(0x8128, &i_this->mWaistPos, NULL, NULL);
+        dComIfGp_particle_set(0x8127, &i_this->mWaistPos);
+        dComIfGp_particle_set(0x8128, &i_this->mWaistPos);
         
         fopAcM_seStart(i_this, JA_SE_CM_AM_BEF_EXPLODE, 0);
         

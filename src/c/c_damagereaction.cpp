@@ -5,73 +5,636 @@
 
 #include "c/c_damagereaction.h"
 #include "dolphin/types.h"
+#include "d/d_com_inf_game.h"
+#include "d/actor/d_a_sea.h"
+#include "d/d_s_play.h"
+#include "JAZelAudio/JAZelAudio_SE.h"
+#include "f_op/f_op_actor_mng.h"
+#include "m_Do/m_Do_mtx.h"
+#include "d/d_cc_uty.h"
+#include "d/d_procname.h"
+
+cXyz non_pos(-20000.0f, -20000.0f, 20000.0f);
 
 /* 8001BEDC-8001C0B4       .text ice_bg_check__FP8enemyice */
-void ice_bg_check(enemyice*) {
-    /* Nonmatching */
+BOOL ice_bg_check(enemyice* ei) {
+    fopAc_ac_c* ac = ei->mpActor;
+    BOOL ret = FALSE;
+    f32 speedY = ei->mSpeed.y;
+    
+    ei->mBgAcch.CrrPos(*dComIfG_Bgsp());
+    
+    if (ei->mBgAcch.ChkWaterHit()) {
+        f32 waterH = ei->mBgAcch.m_wtr.GetHeight();
+        if (ac->current.pos.y < waterH + 100.0f) {
+            if (speedY < -20.0f) {
+                ei->mSpeed.y = 0.0f;
+            } else {
+                ei->mSpeed.y = 0.0f;
+            }
+            if (ac->mHealth <= 0) {
+                ret = TRUE;
+            }
+        }
+    } else if (ei->mBgAcch.ChkGroundHit()) {
+        ei->mSpeedF *= 0.5f;
+        if (ac->mHealth <= 0 || speedY < -40.0f + g_regHIO.mChild[0].mFloatRegs[14]) {
+            ret = TRUE;
+        }
+        if (speedY < -20.0f) {
+            ei->mSpeed.y = 10.0f;
+        } else {
+            ei->mSpeed.y = 0.0f;
+        }
+        ei->mAngularVelY = 0;
+    } else if (daSea_ChkArea(ac->current.pos.x, ac->current.pos.z)) {
+        f32 seaH = daSea_calcWave(ac->current.pos.x, ac->current.pos.z);
+        if (ac->current.pos.y < seaH + 100.0f) {
+            if (speedY < -20.0f) {
+                ei->mSpeed.y = 0.0f;
+            } else {
+                ei->mSpeed.y = 0.0f;
+            }
+            if (ac->mHealth <= 0) {
+                ret = TRUE;
+            }
+        }
+    }
+    
+    if (ei->mBgAcch.ChkWallHit()) {
+        if (fabsf(ei->mSpeedF) > 10.0f) {
+            ret = TRUE;
+        }
+        ei->mSpeedF *= 0.5f;
+        ei->mAngleY += 0x8000;
+    }
+    
+    return ret;
 }
+
+dCcD_SrcCyl cc_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt Type     */ AT_TYPE_SKULL_HAMMER,
+        /* SrcObjAt Atp      */ 0,
+        /* SrcObjAt SPrm     */ 0x0F,
+        /* SrcObjTg Type     */ AT_TYPE_ALL,
+        /* SrcObjTg SPrm     */ 0x03,
+        /* SrcObjCo SPrm     */ 0x75,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt GFlag   */ 0,
+        /* SrcGObjTg Se      */ 0x05,
+        /* SrcGObjTg HitMark */ 0x0C,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg GFlag   */ 0x03,
+        /* SrcGObjCo GFlag   */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 250.0f,
+        /* Height */ 400.0f,
+    },
+};
 
 /* 8001C0B4-8001CD7C       .text enemy_ice__FP8enemyice */
-BOOL enemy_ice(enemyice*) {
-    /* Nonmatching */
+BOOL enemy_ice(enemyice* ei) {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    fopAc_ac_c* ac = ei->mpActor;
+    s8 shattered = 0;
+    cXyz speedXZRel;
+    cXyz speedXZ;
+    cXyz particleScale;
+    cXyz pos;
+    
+    if (ei->mLightShrinkTimer != 0) { // Dying to light arrows.
+        particleScale.setAll(ei->mParticleScale);
+        pos = ac->current.pos;
+        pos.y += ei->mYOffset;
+        
+        if (ei->mLightShrinkTimer == 1) { // Just started dying to light arrows.
+            ei->mLightShrinkTimer++;
+            dComIfGp_particle_set(0x272, &pos, NULL, &particleScale);
+            ac->mTevStr.mFogColor.b = 0xFF;
+            ac->mTevStr.mFogColor.g = 0xFF;
+            ac->mTevStr.mFogColor.r = 0xFF;
+            ac->mTevStr.mFogStartZ = 0.0f;
+            ac->mTevStr.mFogEndZ = 2000.0f;
+            fopAcM_seStart(ac, JA_SE_CM_L_ARROW_SHRINK, 0);
+            ac->mAttentionInfo.mFlags &= ~4;
+        } else {
+            ei->mLightShrinkTimer++;
+            
+            cLib_addCalc2(&ac->mTevStr.mFogEndZ, 10.0f, 1.0f, 80.0f);
+            
+            mDoMtx_stack_c::transS(ac->current.pos);
+            mDoMtx_stack_c::transM(0, ei->mYOffset, 0);
+            mDoMtx_stack_c::scaleM(ei->mScaleXZ, ei->mScaleY, ei->mScaleXZ);
+            mDoMtx_stack_c::transM(0, -ei->mYOffset, 0);
+            mDoMtx_stack_c::YrotM(ac->shape_angle.y);
+            mDoMtx_stack_c::XrotM(ac->shape_angle.x);
+            mDoMtx_stack_c::ZrotM(ac->shape_angle.z);
+            mDoMtx_stack_c::scaleM(ac->mScale);
+            
+            if (ei->mLightShrinkTimer < (s8)(70 + g_regHIO.mChild[14].mShortRegs[1])) {
+                cLib_addCalc0(&ei->mScaleXZ, 0.1f, 0.01f + g_regHIO.mChild[14].mFloatRegs[0]);
+                cLib_addCalc0(&ei->mScaleY, 0.1f, 0.01f + g_regHIO.mChild[14].mFloatRegs[0]);
+            } else {
+                if (ei->mLightShrinkTimer == (s8)(70 + g_regHIO.mChild[14].mShortRegs[1])) {
+                    fopAcM_seStart(ac, JA_SE_CM_L_ARROW_PASS_AWAY, 0);
+                }
+                
+                cLib_addCalc2(&ei->mScaleY, 5.0f + g_regHIO.mChild[14].mFloatRegs[1], 0.1f, 1.0f + g_regHIO.mChild[14].mFloatRegs[2]);
+                cLib_addCalc0(&ei->mScaleXZ, 0.1f + g_regHIO.mChild[14].mFloatRegs[3], 0.05f + g_regHIO.mChild[14].mFloatRegs[4]);
+                
+                if (ei->mLightShrinkTimer > (s8)(90 + g_regHIO.mChild[14].mShortRegs[2])) {
+                    fopAcM_delete(ac);
+                    fopAcM_onActor(ac);
+                    if (fopAcM_GetName(ac) != PROC_PZ) {
+                        // If the actor is not Princess Zelda, drop an item ball.
+                        // TODO: Why the Zelda check? Is she coded to be able to die to Light Arrows?
+                        fopAcM_createIball(&pos, ac->mItemTableIdx, fopAcM_GetRoomNo(ac), &ac->current.angle, ac->mItemStealNum);
+                    }
+                    if (ei->mDeathSwitch != 0) {
+                        dComIfGs_onSwitch(ei->mDeathSwitch, fopAcM_GetRoomNo(ac));
+                    }
+                    ac->mHealth = -0x80;
+                }
+            }
+        }
+        
+        return TRUE;
+    }
+    
+    BOOL frozen = FALSE;
+    BOOL moveAndCollide = FALSE;
+    switch (ei->mState) {
+    case 0: // Not initialized
+        // Initialize the enemyice now.
+        ei->mStts.Init(0xFA, 0xFF, ac);
+        ei->mCyl.Set(cc_cyl_src);
+        ei->mCyl.SetStts(&ei->mStts);
+        ei->mCyl.SetR(ei->mWallRadius);
+        ei->mCyl.SetH(ei->mCylHeight);
+        ei->mBgAcch.Set(&ac->current.pos, &ac->next.pos, ac, 1, &ei->mBgAcchCir, &ei->mSpeed, NULL, NULL);
+        ei->mBgAcchCir.SetWall(40.0f, ei->mWallRadius);
+        
+        if (ei->mParticleScale < 0.1f) {
+            ei->mParticleScale = 1.0f;
+        }
+        if (fabsf(ei->mYOffset) < 0.1f) {
+            ei->mYOffset = 80.0f;
+        }
+        ei->mState = 1;
+        ei->mScaleY = 1.0f;
+        ei->mScaleXZ = 1.0f;
+        fopAcM_OnStatus(ac, fopAcStts_UNK8000000_e);
+        break;
+    case 1: // Idle
+        if (ei->mFreezeDuration != 0) {
+            // The enemy has signaled that it wants to be frozen for some length of time.
+            ei->mFreezeTimer = ei->mFreezeDuration;
+            ei->mFreezeDuration = 0;
+            ei->mState = 2;
+            if (ei->m00C == 0) {
+                ei->mSpeed.y = 30.0f;
+                ei->mAngularVelY = (s16)cM_rndFX(3000.0f);
+            }
+            ac->mHealth -= 4;
+            if (ac->mHealth <= 0) {
+                // If the enemy died instantly upon being frozen, don't let it fall and shatter instantly.
+                // Instead add a short delay where it will simply stay frozen in the air to emphasize that it froze.
+                ei->mMoveDelayTimer = 40;
+                ei->mSpeed.y = 0.0f;
+            }
+            fopAcM_seStart(ac, JA_SE_CM_FREEZE, 0);
+            
+            particleScale.setAll(ei->mParticleScale);
+            pos = ac->current.pos;
+            pos.y += ei->mYOffset;
+            dComIfGp_particle_set(0x274, &pos, NULL, &particleScale);
+        } else {
+            return FALSE;
+        }
+        // Fall-through
+    case 2: // Frozen
+        frozen = TRUE;
+        moveAndCollide = TRUE;
+        if (ei->m00C != 1) {
+            ac->mAttentionInfo.mFlags |= 0x10;
+            ac->mAttentionInfo.mDistances[4] = 0x12;
+            if (fopAcM_checkStatus(ac, fopAcStts_CARRY_e)) {
+                ac->mAttentionInfo.mFlags &= ~0x10;
+                ei->mState = 3;
+                if (ei->m00C == 2) {
+                    ei->m00C = 0;
+                }
+            }
+        }
+        break;
+    case 3: // Frozen and being carried around by the player
+        frozen = TRUE;
+        if (!fopAcM_checkStatus(ac, fopAcStts_CARRY_e)) {
+            if (fopAcM_GetSpeedF(ac) > 0.0f) {
+                ei->mSpeedF = 25.0f + g_regHIO.mChild[0].mFloatRegs[5];
+                ei->mSpeed.y = 20.0f + g_regHIO.mChild[0].mFloatRegs[6];
+            } else {
+                ei->mSpeedF = 5.0f;
+                ei->mSpeed.y = -15.0;
+            }
+            ei->mAngleY = player->shape_angle.y;
+            ei->mState = 2;
+        }
+        break;
+    }
+    
+    if (moveAndCollide) {
+        if (ei->mMoveDelayTimer == 0) {
+            cMtx_YrotS(*calc_mtx, ei->mAngleY);
+            speedXZRel.x = 0.0f;
+            speedXZRel.y = 0.0f;
+            speedXZRel.z = ei->mSpeedF;
+            MtxPosition(&speedXZRel, &speedXZ);
+            ei->mSpeed.x = speedXZ.x;
+            ei->mSpeed.z = speedXZ.z;
+            if (ei->m00C == 2) {
+                ei->mSpeed.y = 0.0f;
+            } else {
+                ac->current.pos += ei->mSpeed;
+                ei->mSpeed.y -= 5.0f;
+            }
+            ac->shape_angle.y += ei->mAngularVelY;
+            
+            if (ice_bg_check(ei)) {
+                ei->mFreezeTimer = -1;
+            }
+        } else {
+            ei->mMoveDelayTimer--;
+        }
+        
+        cXyz* ccMove = ei->mStts.GetCCMoveP();
+        if (ccMove) {
+            ac->current.pos += *ccMove;
+        }
+        
+        if (fabsf(ei->mSpeedF) > 5.0f) {
+            ei->mCyl.OnAtSetBit();
+        } else {
+            ei->mCyl.OffAtSetBit();
+        }
+        
+        ei->mCyl.SetC(ac->current.pos);
+        dComIfG_Ccsp()->Set(&ei->mCyl);
+        
+        if (ei->mFreezeTimer >= 23 && ei->mCyl.ChkTgHit()) {
+            CcAtInfo atInfo;
+            atInfo.mpObj = ei->mCyl.GetTgHitObj();
+            if (atInfo.mpObj->ChkAtType(AT_TYPE_LIGHT_ARROW)) {
+                ei->mFreezeTimer = 1;
+                ei->mLightShrinkTimer = 1;
+            } else if (atInfo.mpObj->ChkAtType(AT_TYPE_FIRE)) {
+                ei->mFreezeTimer = 1;
+            } else if (atInfo.mpObj->ChkAtType(AT_TYPE_BOMB | AT_TYPE_SKULL_HAMMER | AT_TYPE_FIRE_ARROW)) {
+                if (atInfo.mpObj->ChkAtType(AT_TYPE_SKULL_HAMMER)) {
+                    ei->mFreezeTimer = -2; // Shattered by Skull Hammer.
+                } else {
+                    ei->mFreezeTimer = -1; // Shattered
+                }
+            } else {
+                def_se_set(ac, atInfo.mpObj, 0x42);
+            }
+        }
+    }
+    
+    if (frozen) {
+        // NOTE: These variables could theoretically be used uninitialized if mFreezeTimer was
+        // somehow zero while frozen is true. But in practice this shouldn't happen.
+        f32 shiverOffsetX;
+        f32 shiverOffsetZ;
+        
+        if (ei->mFreezeTimer != 0) {
+            if (ei->mFreezeTimer < 0) {
+                // Shattered.
+                particleScale.setAll(ei->mParticleScale);
+                pos = ac->current.pos;
+                pos.y += ei->mYOffset;
+                dComIfGp_particle_set(0x273, &pos, NULL, &particleScale);
+                dComIfGp_particle_set(0x274, &pos, NULL, &particleScale);
+                
+                if (ei->mFreezeTimer == -2) {
+                    // Shattered by Skull Hammer.
+                    dComIfGp_particle_set(0x10, &pos);
+                    csXyz angle(0, fopAcM_searchPlayerAngleY(ac), 0);
+                    particleScale.setAll(2.0f);
+                    dComIfGp_particle_set(0xD, &pos, &angle, &particleScale);
+                    dScnPly_ply_c::setPauseTimer(8);
+                }
+                
+                fopAcM_seStart(ac, JA_SE_CM_ICE_BREAK, 0);
+                fopAcM_createIball(&pos, ac->mItemTableIdx, fopAcM_GetRoomNo(ac), &ac->current.angle, ac->mItemStealNum);
+                ei->mFreezeTimer = 0;
+                if (ei->mDeathSwitch != 0) {
+                    dComIfGs_onSwitch(ei->mDeathSwitch, fopAcM_GetRoomNo(ac));
+                }
+                shattered = 1;
+            } else {
+                ei->mFreezeTimer--;
+            }
+            
+            if (ei->mFreezeTimer == 0) {
+                ei->mState = 1;
+                ei->mCyl.SetC(non_pos);
+                dComIfG_Ccsp()->Set(&ei->mCyl);
+                
+                if (fopAcM_checkCarryNow(ac)) {
+                    fopAcM_cancelCarryNow(ac);
+                }
+                
+                if (shattered == 0) {
+                    frozen = FALSE;
+                } else {
+                    fopAcM_delete(ac);
+                    fopAcM_onActor(ac);
+                    ac->mHealth = -0x80;
+                }
+            }
+            
+            if (ei->mFreezeTimer < 50) {
+                shiverOffsetX = (ei->mFreezeTimer & 1)*2 - 1;
+                shiverOffsetZ = (ei->mFreezeTimer+1 & 1)*2 - 1;
+            } else {
+                shiverOffsetZ = 0.0f;
+                shiverOffsetX = 0.0f;
+            }
+            
+            if (ei->mFreezeTimer == 20) {
+                particleScale.setAll(ei->mParticleScale);
+                pos = ac->current.pos;
+                pos.y += ei->mYOffset;
+                dComIfGp_particle_set(0x277, &pos, NULL, &particleScale);
+                fopAcM_seStart(ac, JA_SE_CM_ICE_RECOVER, 0);
+            }
+        }
+        
+        ac->current.angle = ac->shape_angle;
+        
+        cLib_addCalc2(&ei->m028, ei->m02C, 1.0f, 3.0f);
+        mDoMtx_stack_c::transS(
+            ac->current.pos.x + shiverOffsetX,
+            ac->current.pos.y + ei->m02C,
+            ac->current.pos.z + shiverOffsetZ
+        );
+        mDoMtx_stack_c::YrotM(ac->shape_angle.y);
+        mDoMtx_stack_c::XrotM(ac->shape_angle.x);
+        mDoMtx_stack_c::ZrotM(ac->shape_angle.z);
+        mDoMtx_stack_c::scaleM(ac->mScale);
+        fopAcM_OnStatus(ac, fopAcStts_FREEZE_e);
+    } else {
+        fopAcM_OffStatus(ac, fopAcStts_FREEZE_e);
+        cLib_addCalc0(&ei->m028, 1.0f, 3.0f);
+    }
+    
+    return frozen;
 }
 
+dCcD_SrcSph fire_at_sph_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt Type     */ AT_TYPE_FIRE,
+        /* SrcObjAt Atp      */ 0x02,
+        /* SrcObjAt SPrm     */ 0x0F,
+        /* SrcObjTg Type     */ 0,
+        /* SrcObjTg SPrm     */ 0,
+        /* SrcObjCo SPrm     */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt GFlag   */ 0x01,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg GFlag   */ 0,
+        /* SrcGObjCo GFlag   */ 0,
+    },
+    // cM3dGSphS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 50.0f,
+    },
+};
+
 /* 8001CDB8-8001D3B0       .text enemy_fire__FP9enemyfire */
-void enemy_fire(enemyfire*) {
-    /* Nonmatching */
+void enemy_fire(enemyfire* ef) {
+    fopAc_ac_c* ac = ef->mpActor;
+    cXyz offset;
+    cXyz pos;
+    offset.setAll(0.0f);
+    
+    switch (ef->mState) {
+    case 0: // Not on fire.
+        if (ef->mFireDuration == 0) {
+            return;
+        }
+        // The enemy has signaled that it wants to be lit on fire for some length of time.
+        ef->mFireTimer = ef->mFireDuration;
+        ef->mFireDuration = 0;
+        
+        ef->mState = 1; // On fire
+        
+        dKy_plight_set(&ef->mLight);
+        
+        for (int i = 0; i < 10; i++) {
+            if (ef->mFlameJntIdxs[i] < 0) {
+                continue;
+            }
+            if (ef->mpFlameEmitters[i]) {
+                continue;
+            }
+            cXyz scale;
+            scale.setAll(ef->mParticleScale[i]);
+            ef->mpFlameEmitters[i] = dComIfGp_particle_set(0x3F1, &ac->current.pos, NULL, &scale);
+            ef->mFlameTimers[i] = ef->mFireTimer - (s16)cM_rndF(60.0f);
+            if (ef->mFlameTimers[i] < 10) {
+                ef->mFlameTimers[i] = 10;
+            }
+            ef->mFlameScaleY = 2.0f;
+        }
+        
+        ef->mStts.Init(0xFA, 0xFF, ac);
+        ef->mSph.Set(fire_at_sph_src);
+        ef->mSph.SetStts(&ef->mStts);
+        break;
+    case 1: // On fire.
+        ef->mLight.mPos = ac->current.pos;
+        ef->mLight.mColor.r = 600;
+        ef->mLight.mColor.g = 400;
+        ef->mLight.mColor.b = 120;
+        s16 power = ef->mFlameScaleY * 150.0f;
+        ef->mLight.mPower = power;
+        ef->mLight.mFluctuation = 250.0f;
+        
+        JGeometry::TVec3<f32> vel;
+        vel = ac->current.pos - ef->mPrevPos;
+        
+        ef->mPrevPos = ac->current.pos;
+        
+        f32 dirX = vel.x * (-0.02f + g_regHIO.mChild[0].mFloatRegs[4]);
+        if (dirX > 1.0f) {
+            dirX = 1.0f;
+        } else if (dirX < -1.0f) {
+            dirX = -1.0f;
+        }
+        
+        f32 dirZ = vel.z * (-0.02f + g_regHIO.mChild[0].mFloatRegs[4]);
+        if (dirZ > 1.0f) {
+            dirZ = 1.0f;
+        } else if (dirZ < -1.0f) {
+            dirZ = -1.0f;
+        }
+        
+        cLib_addCalc2(&ef->mDirection.x, dirX, 0.5f, 0.05f);
+        cLib_addCalc2(&ef->mDirection.z, dirZ, 0.5f, 0.05f);
+        
+        ef->mDirection.y = 0.2f + g_regHIO.mChild[0].mFloatRegs[11];
+        
+        f32 speed = sqrtf(vel.x * vel.x + vel.y * vel.y + vel.z * vel.z);
+        speed = (0.03f + g_regHIO.mChild[0].mFloatRegs[12]) * speed + 1.0f;
+        if (speed > 1.5f + g_regHIO.mChild[0].mFloatRegs[13]) {
+            speed = 1.5f + g_regHIO.mChild[0].mFloatRegs[13];
+        }
+        
+        cLib_addCalc2(&ef->mFlameScaleY, speed, 0.5f, 0.05f);
+        
+        u8 numFlamesLeft = 0;
+        for (int i = 0; i < 10; i++) {
+            if (ef->mFlameJntIdxs[i] < 0) {
+                continue;
+            }
+            if (!ef->mpFlameEmitters[i]) {
+                continue;
+            }
+            if (ef->mFlameTimers[i] == 0) {
+                ef->mpFlameEmitters[i]->becomeInvalidEmitter();
+                ef->mpFlameEmitters[i] = NULL;
+            } else {
+                ef->mFlameTimers[i]--;
+                
+                cMtx_copy(ef->mpMcaMorf->getModel()->getAnmMtx(ef->mFlameJntIdxs[i]), *calc_mtx);
+                MtxPosition(&offset, &pos);
+                
+                ef->mpFlameEmitters[i]->setGlobalTranslation(pos.x, pos.y, pos.z);
+                ef->mpFlameEmitters[i]->setDirection(ef->mDirection);
+                
+                JGeometry::TVec3<f32> scale;
+                scale.set(
+                    ef->mParticleScale[i],
+                    ef->mFlameScaleY * ef->mParticleScale[i],
+                    ef->mParticleScale[i]
+                );
+                ef->mpFlameEmitters[i]->setGlobalParticleScale(scale);
+                
+                if (ef->mHitboxFlameIdx == numFlamesLeft) {
+                    // We don't want to give each flame a separate hitbox, so instead simply move the single hitbox to
+                    // a single flame, and cycle through which flame that is every frame.
+                    ef->mSph.SetC(pos);
+                    dComIfG_Ccsp()->Set(&ef->mSph);
+                }
+                
+                numFlamesLeft++;
+            }
+        }
+        
+        ef->mHitboxFlameIdx++;
+        if (ef->mHitboxFlameIdx >= numFlamesLeft) {
+            ef->mHitboxFlameIdx = 0;
+        }
+        
+        fopAcM_seStart(ac, JA_SE_OBJ_TORCH_BURNING, 0);
+        
+        if (ef->mFireTimer == 0) {
+            ef->mState = 0; // Not on fire
+            dKy_plight_cut(&ef->mLight);
+            ef->mSph.SetC(non_pos);
+            dComIfG_Ccsp()->Set(&ef->mSph);
+        } else {
+            fopAcM_seStart(ac, JA_SE_CM_FIRE_ARROW_BURNING, 0);
+        }
+        
+        if (ef->mFireTimer != 0) {
+            ef->mFireTimer--;
+        }
+        break;
+    }
 }
 
 /* 8001D3B0-8001D428       .text enemy_fire_remove__FP9enemyfire */
-void enemy_fire_remove(enemyfire*) {
-    /* Nonmatching */
+void enemy_fire_remove(enemyfire* ef) {
+    ef->mState = 0; // Not on fire
+    dKy_plight_cut(&ef->mLight);
+    
+    for (int i = 0; i < 10; i++) {
+        if (ef->mpFlameEmitters[i]) {
+            ef->mpFlameEmitters[i]->becomeInvalidEmitter();
+            ef->mpFlameEmitters[i] = NULL;
+        }
+    }
 }
 
 /* 8001D428-8001D48C       .text enemy_piyo_set__FP10fopAc_ac_c */
-void enemy_piyo_set(fopAc_ac_c*) {
-    /* Nonmatching */
+void enemy_piyo_set(fopAc_ac_c* enemy) {
+    // Creates the rotating stars particle for when an enemy is stunned.
+    dComIfGp_particle_set(0x27A, &enemy->mAttentionInfo.mPosition);
 }
 
 /* 8001D48C-8001D890       .text wall_angle_get__FP10fopAc_ac_cs */
-void wall_angle_get(fopAc_ac_c*, short) {
+void wall_angle_get(fopAc_ac_c*, s16) {
     /* Nonmatching */
 }
 
 /* 8001DCC8-8001E244       .text dr_body_bg_check__FP14damagereaction */
-void dr_body_bg_check(damagereaction*) {
+void dr_body_bg_check(damagereaction* dr) {
     /* Nonmatching */
 }
 
 /* 8001E684-8001F6A0       .text dr_joint_bg_check__FP14damagereaction */
-void dr_joint_bg_check(damagereaction*) {
+void dr_joint_bg_check(damagereaction* dr) {
     /* Nonmatching */
 }
 
 /* 8001F808-8001FBA8       .text kado_check__FP14damagereaction */
-void kado_check(damagereaction*) {
+void kado_check(damagereaction* dr) {
     /* Nonmatching */
 }
 
 /* 8001FBA8-8001FFEC       .text hang_ang_get__FP14damagereaction */
-void hang_ang_get(damagereaction*) {
+void hang_ang_get(damagereaction* dr) {
     /* Nonmatching */
 }
 
 /* 8001FFEC-80020FD8       .text dr_damage_set__FP14damagereaction */
-void dr_damage_set(damagereaction*) {
+void dr_damage_set(damagereaction* dr) {
     /* Nonmatching */
 }
 
 /* 80020FD8-80022460       .text dr_damage_anime__FP14damagereaction */
-void dr_damage_anime(damagereaction*) {
+void dr_damage_anime(damagereaction* dr) {
     /* Nonmatching */
 }
 
 /* 80022460-800225D0       .text dr_matrix_set__FP14damagereaction */
-void dr_matrix_set(damagereaction*) {
+void dr_matrix_set(damagereaction* dr) {
     /* Nonmatching */
 }
 
 /* 800225D0-800226C8       .text damage_reaction__FP14damagereaction */
-void damage_reaction(damagereaction*) {
+void damage_reaction(damagereaction* dr) {
     /* Nonmatching */
 }

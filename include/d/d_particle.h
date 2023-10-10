@@ -394,6 +394,30 @@ public:
                               const cXyz* pScale2D) {
         return set(4, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
     }
+    JPABaseEmitter* setShipTail(u16 particleID, const cXyz* pos, const csXyz* angle,
+                              const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,
+                              s8 setupInfo, const GXColor* pPrmColor, const GXColor* pEnvColor,
+                              const cXyz* pScale2D) {
+        return set(5, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
+    }
+    JPABaseEmitter* set2Dfore(u16 particleID, const cXyz* pos, const csXyz* angle,
+                              const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,
+                              s8 setupInfo, const GXColor* pPrmColor, const GXColor* pEnvColor,
+                              const cXyz* pScale2D) {
+        return set(7, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
+    }
+    JPABaseEmitter* set2Dback(u16 particleID, const cXyz* pos, const csXyz* angle,
+                              const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,
+                              s8 setupInfo, const GXColor* pPrmColor, const GXColor* pEnvColor,
+                              const cXyz* pScale2D) {
+        return set(8, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
+    }
+    JPABaseEmitter* set2DmenuFore(u16 particleID, const cXyz* pos, const csXyz* angle,
+                              const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,
+                              s8 setupInfo, const GXColor* pPrmColor, const GXColor* pEnvColor,
+                              const cXyz* pScale2D) {
+        return set(9, particleID, pos, angle, scale, alpha, pCallBack, setupInfo, pPrmColor, pEnvColor, pScale2D);
+    }
 
     
     void drawModelParticle() { mModelCtrl->draw(); }

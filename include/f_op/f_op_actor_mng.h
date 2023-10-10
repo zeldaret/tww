@@ -87,7 +87,7 @@ inline bool fopAcM_checkStatus(fopAc_ac_c* pActor, u32 status) {
 }
 
 inline u32 fopAcM_checkCarryNow(fopAc_ac_c* pActor) {
-    return pActor->mStatus & 0x2000;
+    return pActor->mStatus & fopAcStts_CARRY_e;
 }
 
 enum fopAcM_CARRY {
@@ -442,13 +442,13 @@ s32 fopAcM_createItemFromTable(cXyz* p_pos, int i_tableNo, int i_itemBitNo, int 
                                csXyz* p_angle, int param_5, cXyz * p_scale, f32* speedF,
                                f32* speedY, bool createDirect);
 
-s32 fopAcM_createShopItem(cXyz* pos, int i_itemNo, csXyz* rot, int roomNo, cXyz* scale,
+s32 fopAcM_createShopItem(cXyz* p_pos, int i_itemNo, csXyz* rot, int roomNo, cXyz* scale,
                           createFunc createFunc);
 
-s32 fopAcM_createRaceItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* rot, int roomNo,
+s32 fopAcM_createRaceItem(cXyz* p_pos, int i_itemNo, int i_itemBitNo, csXyz* rot, int roomNo,
                           cXyz* scale, int param_7);
 
-s32 fopAcM_createIball(cXyz*, int, int, csXyz*, int);
+s32 fopAcM_createIball(cXyz* p_pos, int itemTableIdx, int roomNo, csXyz* rot, int itemStealNum);
 
 s32 fopAcM_createDemoItem(cXyz* p_pos, int itemNo, int itemBitNo, csXyz* p_angle,
                           int roomNo, cXyz* scale, u8 param_7);
