@@ -9,7 +9,7 @@
 #include "dolphin/types.h"
 
 /* 80258660-802586D0       .text __ct__13JPATextureArcFPCUc */
-JPATextureArc::JPATextureArc(const unsigned char * pData) {
+JPATextureArc::JPATextureArc(const u8 * pData) {
     mpData = (JPATextureData *) pData;
     mTexture.storeTIMG(&mpData->mResTIMG, (unsigned char)'\0');
 }

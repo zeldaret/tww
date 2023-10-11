@@ -16,24 +16,23 @@ struct JPATextureData {
 
 class JPATexture {
 public:
-    virtual ~JPATexture();
-    virtual const char* getName() const;
-    virtual void load(GXTexMapID);
-    virtual JUTTexture* getJUTTexture();
-
-    JUTTexture mTexture;
+    virtual ~JPATexture() {}
+    virtual const char* getName() const = 0;
+    virtual void load(GXTexMapID) = 0;
+    virtual JUTTexture* getJUTTexture() = 0;
 };
 
 class JPATextureArc : public JPATexture {
 public:
     JPATextureArc(u8 const*);
-    virtual ~JPATextureArc();
+    virtual ~JPATextureArc() {}
 
-    const char* getName() const { return mpData->mName; }
-    void load(GXTexMapID texMapID) { mTexture.load(texMapID); }
-    JUTTexture* getJUTTexture() { return &mTexture; }
+    virtual const char* getName() const { return mpData->mName; }
+    virtual void load(GXTexMapID texMapID) { mTexture.load(texMapID); }
+    virtual JUTTexture* getJUTTexture() { return &mTexture; }
 
 public:
+    JUTTexture mTexture;
     const JPATextureData* mpData;
 };
 
