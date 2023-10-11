@@ -24,6 +24,7 @@ enum fopAc_Status_e {
     fopAcStts_UNK4000_e     = 0x00004000,
     fopAcStts_NOPAUSE_e     = 0x00020000,
     fopAcStts_UNK40000_e    = 0x00040000,
+    fopAcStts_UNK00040180_e = 0x00040180,
     fopAcStts_UNK80000_e    = 0x00080000,
     fopAcStts_HOOK_CARRY_e  = 0x00100000,
     fopAcStts_UNK200000_e   = 0x00200000,
