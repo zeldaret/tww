@@ -121,7 +121,6 @@ u32 JUTException::fpscr;
 
 /* 802C4CEC-802C5084       .text errorHandler__12JUTExceptionFUsP9OSContextUlUl */
 void JUTException::errorHandler(OSError error, OSContext* context, u32 param_3, u32 param_4) {
-    /* Nonmatching */
     if (error == 0x10) {
         OSReport("\x1b[41;37m");
         OSReport(" FPE: 浮動小数点例外が発生しました。アドレスは %08x fpscr=%08x\n", context->srr0, context->fpscr);
@@ -134,9 +133,10 @@ void JUTException::errorHandler(OSError error, OSContext* context, u32 param_3, 
             search_name_part((u8*)stack_3c, stack_38, 0x20);
             OSReport("%s:%x section:%d\n", stack_38, stack_48, stack_44);
         }
-        u32 r31 = context->fpscr;
-        r31 &= ((context->fpscr & 0xf8) << 22) | 0x01f80700;
-        if (r31 & 0x20000000) {
+        u32 ctx_fpcsr = context->fpscr;
+        ctx_fpcsr &= ((ctx_fpcsr & 0xf8) << 22) | 0x01f80700;
+
+        if (ctx_fpcsr & 0x20000000) {
             context->fpscr &= ~0x80;
             OSReport(" FPE: Invalid operation(無効な演算)\n");
             if (fpscr & 0x01000000) {
@@ -167,19 +167,19 @@ void JUTException::errorHandler(OSError error, OSContext* context, u32 param_3, 
                 OSReport(" Invalid integer convert\n");
             }
         }
-        if (r31 & 0x10000000) {
+        if (ctx_fpcsr & 0x10000000) {
             context->fpscr &= ~0x40;
             OSReport(" FPE: Overflow(オーバーフロー)\n");
         }
-        if (r31 & 0x08000000) {
+        if (ctx_fpcsr & 0x08000000) {
             context->fpscr &= ~0x20;
             OSReport(" FPE: Underflow(アンダーフロー)\n");
         }
-        if (r31 & 0x04000000) {
+        if (ctx_fpcsr & 0x04000000) {
             context->fpscr &= ~0x10;
             OSReport(" FPE: Zero division(０による割り算)\n");
         }
-        if (r31 & 0x02000000) {
+        if (ctx_fpcsr & 0x02000000) {
             context->fpscr &= ~0x08;
             OSReport(" FPE: Inexact result(不正確な結果)\n");
         }
@@ -264,11 +264,11 @@ bool JUTException::searchPartialModule(u32 address, u32* module_id, u32* section
     }
 
     OSModuleInfo* module = *(OSModuleInfo**)0x800030C8;
-    while (module) {
+    for (; module != NULL; module = (OSModuleInfo*)module->mNext) {
         OSSectionInfo* section = (OSSectionInfo*)module->info.sectionInfoOffset;
-        for (u32 i = 0; i < module->mNumSections; section = section + 1, i++) {
-            if (section->mSize) {
-                u32 addr = ALIGN_PREV(section->mOffset, 2);
+        for (u32 i = 0; i < module->mNumSections; section++, i++) {
+            if (section->mSize != 0) {
+                u32 addr = section->mOffset & ~0x01;
                 if ((addr <= address) && (address < addr + section->mSize)) {
                     if (module_id)
                         *module_id = module->mId;
@@ -282,8 +282,6 @@ bool JUTException::searchPartialModule(u32 address, u32* module_id, u32* section
                 }
             }
         }
-
-        module = (OSModuleInfo*)module->mNext;
     }
 
     return false;

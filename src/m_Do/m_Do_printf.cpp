@@ -40,13 +40,46 @@ extern "C" int OSGetActiveThreadID(OSThread* thread) {
 }
 
 /* 800066B0-80006770       .text search_partial_address */
-extern "C" int search_partial_address(void* param_0, int* param_1, int* param_2, int* param_3, int* param_4) {
-    /* Nonmatching */
+extern "C" int search_partial_address(void* address, int* module_id, int* section_id, int* section_offset, int* name_offset) {
+    if (address == NULL)
+        return 0xFFFFFFFF;
+
+    OSModuleInfo* module = *(OSModuleInfo**)0x800030C8;
+    for (; module != NULL; module = (OSModuleInfo*)module->mNext) {
+        u32 i, addr;
+        OSSectionInfo* section = (OSSectionInfo*)module->info.sectionInfoOffset;
+
+        for (i = 0; i < module->mNumSections; section++, i++) {
+            if (section->mSize != 0) {
+                addr = section->mOffset & ~0x01;
+                if ((addr <= (u32)address) && (u32)address < (addr + section->mSize)) {
+                    if (module_id != NULL)
+                        *module_id = module->mId;
+                    if (section_id != NULL)
+                        *section_id = i;
+                    if (section_offset)
+                        *section_offset = (u32)address - addr;
+                    if (name_offset)
+                        *name_offset = module->mModuleNameOffset;
+                    return 0;
+                }
+            }
+        }
+    }
+
+    return 0xFFFFFFFF;
 }
 
 /* 80006770-800067D0       .text convert_partial_address */
-extern "C" int convert_partial_address(void* param_0) {
-    /* Nonmatching */
+extern "C" u32 convert_partial_address(void* param_0) {
+    int param_1;
+    int param_2;
+    int param_3;
+    if (search_partial_address(param_0, &param_1, &param_2, &param_3, NULL) == 0) {
+        return (param_2 << 28) + (param_3 & 0x01FFFFFF);
+    } else {
+        return (u32)param_0;
+    }
 }
 
 /* 800067D0-800067DC       .text OSReportDisable */
