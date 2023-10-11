@@ -4,29 +4,171 @@
 //
 
 #include "JSystem/J3DU/J3DUClipper.h"
-#include "dolphin/types.h"
+#include "JSystem/J3DGraphAnimator/J3DModel.h"
+#include "JSystem/J3DGraphAnimator/J3DModelData.h"
+#include "MSL_C/math.h"
+
+static const f32 Deg2Rad = 0.017453292f;
 
 /* 802566B8-802566CC       .text init__11J3DUClipperFv */
 void J3DUClipper::init() {
-    /* Nonmatching */
+    setNear(1.0f);
+    setFar(10000.0f);
+}
+
+static inline void J3DVecCrossProduct(Vec* pA, Vec* pB, Vec *dst) {
+    dst->x = pA->y * pB->z - pA->z * pB->y;
+    dst->y = pA->z * pB->x - pA->x * pB->z;
+    dst->z = pA->x * pB->y - pA->y * pB->x;
 }
 
 /* 802566CC-80256888       .text calcViewFrustum__11J3DUClipperFv */
 void J3DUClipper::calcViewFrustum() {
-    /* Nonmatching */
+    f32 tanFovY = tan(mFovY * 0.5f * Deg2Rad);
+
+    f32 nearY = tanFovY * mNear;
+    f32 nearX = mAspect * nearY;
+
+    Vec corner[] = {
+        { -nearX, -nearY, -mNear },
+        { -nearX,  nearY, -mNear },
+        {  nearX,  nearY, -mNear },
+        {  nearX, -nearY, -mNear },
+    };
+    J3DVecCrossProduct(&corner[1], &corner[0], &mPlane[0]);
+    J3DVecCrossProduct(&corner[2], &corner[1], &mPlane[1]);
+    J3DVecCrossProduct(&corner[3], &corner[2], &mPlane[2]);
+    J3DVecCrossProduct(&corner[0], &corner[3], &mPlane[3]);
+
+    VECNormalize(&mPlane[0], &mPlane[0]);
+    VECNormalize(&mPlane[1], &mPlane[1]);
+    VECNormalize(&mPlane[2], &mPlane[2]);
+    VECNormalize(&mPlane[3], &mPlane[3]);
 }
 
 /* 80256888-802569D0       .text clip__11J3DUClipperFPA4_Cf3Vecf */
-void J3DUClipper::clip(const float(*)[4], Vec, float) {
-    /* Nonmatching */
+u32 J3DUClipper::clip(const Mtx mtx, Vec pos, float radius) {
+    Vec p;
+    MTXMultVec(mtx, &pos, &p);
+
+    if (-p.z < (mNear - radius))
+        return TRUE;
+    if (-p.z > mFar + radius)
+        return TRUE;
+    if (p.x * mPlane[0].x + p.y * mPlane[0].y + p.z * mPlane[0].z > radius)
+        return TRUE;
+    if (p.x * mPlane[1].x + p.y * mPlane[1].y + p.z * mPlane[1].z > radius)
+        return TRUE;
+    if (p.x * mPlane[2].x + p.y * mPlane[2].y + p.z * mPlane[2].z > radius)
+        return TRUE;
+    if (p.x * mPlane[3].x + p.y * mPlane[3].y + p.z * mPlane[3].z > radius)
+        return TRUE;
+
+    return FALSE;
 }
 
 /* 802569D0-80256CB8       .text clip__11J3DUClipperFPA4_CfP3VecP3Vec */
-void J3DUClipper::clip(const float(*)[4], Vec*, Vec*) {
-    /* Nonmatching */
+u32 J3DUClipper::clip(const Mtx mtx, Vec* pMin, Vec* pMax) {
+    s32 clip[6];
+    for (u32 i = 0; i < ARRAY_SIZE(clip); i++)
+        clip[i] = 0;
+
+    Vec corner[8];
+    corner[0].x = pMax->x;
+    corner[0].y = pMax->y;
+    corner[0].z = pMin->z;
+
+    corner[1].x = pMax->x;
+    corner[1].y = pMax->y;
+    corner[1].z = pMax->z;
+
+    corner[2].x = pMin->x;
+    corner[2].y = pMax->y;
+    corner[2].z = pMax->z;
+
+    corner[3].x = pMin->x;
+    corner[3].y = pMax->y;
+    corner[3].z = pMin->z;
+
+    corner[4].x = pMax->x;
+    corner[4].y = pMin->y;
+    corner[4].z = pMin->z;
+
+    corner[5].x = pMax->x;
+    corner[5].y = pMin->y;
+    corner[5].z = pMax->z;
+
+    corner[6].x = pMin->x;
+    corner[6].y = pMin->y;
+    corner[6].z = pMax->z;
+
+    corner[7].x = pMin->x;
+    corner[7].y = pMin->y;
+    corner[7].z = pMin->z;
+
+    for (u32 i = 0; i < ARRAY_SIZE(corner); i++) {
+        Vec p;
+        MTXMultVec(mtx, &corner[i], &p);
+        s32 any = false;
+
+        if (-p.z < mNear)
+            clip[4]++, any++;
+        if (-p.z > mFar)
+            clip[5]++, any++;
+        if (p.x * mPlane[0].x + p.y * mPlane[0].y + p.z * mPlane[0].z > 0.0f)
+            clip[0]++, any++;
+        if (p.x * mPlane[1].x + p.y * mPlane[1].y + p.z * mPlane[1].z > 0.0f)
+            clip[1]++, any++;
+        if (p.x * mPlane[2].x + p.y * mPlane[2].y + p.z * mPlane[2].z > 0.0f)
+            clip[2]++, any++;
+        if (p.x * mPlane[3].x + p.y * mPlane[3].y + p.z * mPlane[3].z > 0.0f)
+            clip[3]++, any++;
+
+        if (!any)
+            return FALSE;
+    }
+
+    if (clip[0] == 8)
+        return TRUE;
+    if (clip[2] == 8)
+        return TRUE;
+    if (clip[1] == 8)
+        return TRUE;
+    if (clip[3] == 8)
+        return TRUE;
+    if (clip[4] == 8)
+        return TRUE;
+    if (clip[5] == 8)
+        return TRUE;
+
+    return FALSE;
 }
 
 /* 80256CB8-80256DBC       .text clipByBox__11J3DUClipperFP8J3DModel */
-void J3DUClipper::clipByBox(J3DModel*) {
-    /* Nonmatching */
+u32 J3DUClipper::clipByBox(J3DModel* pModel) {
+    u32 hideJointNum = 0;
+
+    J3DModelData * pModelData = pModel->getModelData();
+    for (u16 i = 0; i < pModelData->getJointNum(); i++) {
+        J3DJoint * pJoint = pModelData->getJointNodePointer(i);
+        if (pJoint->getKind() == 0) {
+            Mtx mtx;
+            MTXConcat(j3dSys.getViewMtx(), pModel->getAnmMtx(i), mtx);
+
+            BOOL ret = clip(mtx, pJoint->getMax(), pJoint->getMin());
+            J3DMaterial * pMaterial = pModelData->getJointNodePointer(i)->getMesh();
+
+            if (ret) {
+                for (; pMaterial != NULL; pMaterial = pMaterial->getNext()) {
+                    pMaterial->getShape()->hide();
+                    hideJointNum++;
+                }
+            } else {
+                for (; pMaterial != NULL; pMaterial = pMaterial->getNext())
+                    pMaterial->getShape()->show();
+            }
+        }
+    }
+
+    return hideJointNum;
 }

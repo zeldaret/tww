@@ -4,6 +4,8 @@
 #include "dolphin/mtx/mtxvec.h"
 #include "dolphin/types.h"
 
+class J3DModel;
+
 class J3DUClipper {
 public:
     J3DUClipper() { init(); }
@@ -12,6 +14,7 @@ public:
     void calcViewFrustum();
     u32 clip(const Mtx, Vec, f32);
     u32 clip(const Mtx, Vec*, Vec*);
+    u32 clipByBox(J3DModel*);
 
     void setFovy(f32 fovy) { mFovY = fovy; }
     void setAspect(f32 aspect) { mAspect = aspect; }
@@ -21,10 +24,7 @@ public:
     f32 getFar() { return mFar; }
 
 private:
-    /* 0x04 */ Vec _04;
-    /* 0x10 */ Vec _10;
-    /* 0x1C */ Vec _1C;
-    /* 0x28 */ Vec _28;
+    /* 0x04 */ Vec mPlane[4];
     /* 0x34 */ u8 _34[0x4C - 0x34];
     /* 0x4C */ f32 mFovY;
     /* 0x50 */ f32 mAspect;

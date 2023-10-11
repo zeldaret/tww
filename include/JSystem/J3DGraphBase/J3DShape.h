@@ -53,7 +53,7 @@ class J3DVertexData;
 class J3DDrawMtxData;
 
 enum J3DShpFlag {
-    J3DShpFlag_Visible = 0x0001,
+    J3DShpFlag_Hide = 0x0001,
     J3DShpFlag_SkinPosCpu = 0x0004,
     J3DShpFlag_SkinNrmCpu = 0x0008,
     J3DShpFlag_Hidden = 0x0010,
@@ -95,8 +95,8 @@ public:
     void setVertexDataPointer(J3DVertexData* pVtxData) { mVertexData = pVtxData; }
     void* getVcdVatCmd() const { return mVcdVatCmd; }
     void setVcdVatCmd(void* pVatCmd) { mVcdVatCmd = (u8*)pVatCmd; }
-    void show() { offFlag(J3DShpFlag_Visible); }
-    void hide() { onFlag(J3DShpFlag_Visible); }
+    void show() { offFlag(J3DShpFlag_Hide); }
+    void hide() { onFlag(J3DShpFlag_Hide); }
     void setCurrentViewNoPtr(u32* pViewNoPtr) { mCurrentViewNo = pViewNoPtr; }
     void setCurrentMtx(J3DCurrentMtx& mtx) { mCurrentMtx = mtx; }
     void setScaleFlagArray(u8* pScaleFlagArray) { mScaleFlagArray = pScaleFlagArray; }
