@@ -4,6 +4,7 @@
 //
 
 #include "JSystem/JParticle/JPAParticle.h"
+#include "JSystem/JParticle/JPAEmitter.h"
 #include "dolphin/types.h"
 
 /* 8025DEF4-8025E62C       .text initParticle__15JPABaseParticleFv */
@@ -18,17 +19,62 @@ void JPABaseParticle::initChild(JPABaseParticle*) {
 
 /* 8025EB28-8025EB90       .text incFrame__15JPABaseParticleFv */
 void JPABaseParticle::incFrame() {
-    /* Nonmatching */
+    mCurFrame += 1.0f;
+    if (mCurFrame < 0.0f)
+        mCurFrame = 0.0f;
+
+    mStatus &= ~0x01;
+
+    if (mCurFrame >= mLifeTime) {
+        mCurNormTime = 1.0f;
+        mStatus |= 0x02;
+    } else {
+        mCurNormTime = mCurFrame / mLifeTime;
+    }
 }
 
 /* 8025EB90-8025ECE8       .text calcVelocity__15JPABaseParticleFv */
 void JPABaseParticle::calcVelocity() {
     /* Nonmatching */
+    mFieldVel.zero();
+    if (mStatus & 0x20)
+        mGlobalPosition = JPABaseEmitter::emtrInfo.mEmitterGlobalCenter;
+    mBaseVel.x += mAccel.x;
+    mBaseVel.y += mAccel.y;
+    mBaseVel.z += mAccel.z;
+    if (!(mStatus & 0x40))
+        JPABaseEmitter::emtrInfo.mpCurEmitter->mFieldManager.calc(this);
+    mFieldVel.x += mFieldAccel.x;
+    mFieldVel.y += mFieldAccel.y;
+    mFieldVel.z += mFieldAccel.z;
+
+    f32 airResist = mAirResist;
+    mBaseVel.x *= airResist;
+    mBaseVel.y *= airResist;
+    mBaseVel.z *= airResist;
+
+    f32 velScale = mMoment * mDrag;
+    JGeometry::TVec3<f32> vel;
+    vel.x = (mBaseVel.x + mFieldVel.x) * velScale;
+    vel.y = (mBaseVel.y + mFieldVel.y) * velScale;
+    vel.z = (mBaseVel.z + mFieldVel.z) * velScale;
+
+    mVelocity = vel;
 }
 
 /* 8025ECE8-8025ED6C       .text calcPosition__15JPABaseParticleFv */
 void JPABaseParticle::calcPosition() {
     /* Nonmatching */
+    mLocalPosition.x += mVelocity.x;
+    mLocalPosition.y += mVelocity.y;
+    mLocalPosition.z += mVelocity.z;
+
+    JGeometry::TVec3<f32> pos;
+    pos.x = mGlobalPosition.x + JPABaseEmitter::emtrInfo.mPublicScale.x * mLocalPosition.x;
+    pos.y = mGlobalPosition.y + JPABaseEmitter::emtrInfo.mPublicScale.y * mLocalPosition.y;
+    pos.z = mGlobalPosition.z + JPABaseEmitter::emtrInfo.mPublicScale.z * mLocalPosition.z;
+
+    mPosition = pos;
 }
 
 /* 8025ED6C-8025EE44       .text checkCreateChild__15JPABaseParticleFv */

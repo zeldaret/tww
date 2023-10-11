@@ -34,14 +34,14 @@ public:
 
 public:
     /* 0x00 */ JSUPtrLink mLink;
-    /* 0x10 */ cXyz mGlobalPosition;
-    /* 0x1C */ cXyz mLocalPosition;
-    /* 0x28 */ cXyz mPosition;
-    /* 0x34 */ cXyz mVelocity;
-    /* 0x40 */ cXyz mBaseVel;
-    /* 0x4C */ cXyz mAccel;
-    /* 0x58 */ cXyz mFieldVel;
-    /* 0x64 */ cXyz mFieldAccel;
+    /* 0x10 */ JGeometry::TVec3<f32> mGlobalPosition;
+    /* 0x1C */ JGeometry::TVec3<f32> mLocalPosition;
+    /* 0x28 */ JGeometry::TVec3<f32> mPosition;
+    /* 0x34 */ JGeometry::TVec3<f32> mVelocity;
+    /* 0x40 */ JGeometry::TVec3<f32> mBaseVel;
+    /* 0x4C */ JGeometry::TVec3<f32> mAccel;
+    /* 0x58 */ JGeometry::TVec3<f32> mFieldVel;
+    /* 0x64 */ JGeometry::TVec3<f32> mFieldAccel;
     /* 0x70 */ f32 mAirResist;
     /* 0x74 */ f32 mMoment;
     /* 0x78 */ f32 mCurFrame;
@@ -49,7 +49,7 @@ public:
     /* 0x80 */ f32 mCurNormTime;
     /* 0x84 */ f32 mFieldDrag;
     /* 0x88 */ f32 mDrag;
-    /* 0x8C */ cXyz mAxis;
+    /* 0x8C */ JGeometry::TVec3<f32> mAxis;
     /* 0x98 */ f32 mScaleOut;
     /* 0x9C */ f32 mScaleX;
     /* 0xA0 */ f32 mScaleY;
@@ -64,7 +64,7 @@ public:
     /* 0xC4 */ u8 field_0xC4[0xC6 - 0xC4];
     /* 0xC6 */ u16 mTexIdx;
     /* 0xC8 */ JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>* mpCallBack2;
-    /* 0xCC */ u32 mFlags;
+    /* 0xCC */ u32 mStatus;
 };
 
 class JPAParticleCallBack {

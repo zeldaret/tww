@@ -47,6 +47,31 @@ public:
     inline virtual void draw(T, U);
 };
 
+struct JPAEmitterInfo {
+public:
+    /* 0x000 */ JMath::TRandom_fast_ mRandom;
+    /* 0x004 */ JPABaseEmitter * mpCurEmitter;
+    /* 0x008 */ Mtx mEmitterGlobalSR;
+    /* 0x038 */ Mtx mEmitterGlobalRot;
+    /* 0x068 */ Mtx mGlobalRot;
+    /* 0x098 */ Mtx mEmitterDirMtx;
+    /* 0x0C8 */ JGeometry::TVec3<f32> mEmitterGlobalScale;
+    /* 0x0D4 */ JGeometry::TVec3<f32> mEmitterTranslation;
+    /* 0x0E0 */ JGeometry::TVec3<f32> mEmitterGlobalCenter;
+    /* 0x0EC */ JGeometry::TVec3<f32> mPublicScale;
+    /* 0x0F8 */ u8 field_0xf8[0x10c - 0xf8];
+    /* 0x10C */ JGeometry::TVec3<f32> mVolumePos;
+    /* 0x118 */ JGeometry::TVec3<f32> mVelOmni;
+    /* 0x124 */ JGeometry::TVec3<f32> mVelAxis;
+    /* 0x130 */ f32 mVolumeSize;
+    /* 0x134 */ u32 mVolumeEmitCount;
+    /* 0x138 */ u32 mVolumeEmitIdx;
+    /* 0x13C */ u32 mVolumeEmitAngleCount;
+    /* 0x140 */ u32 mVolumeEmitXCount;
+    /* 0x144 */ u32 mVolumeEmitAngleMax;
+    /* 0x148 */ u32 mDivNumber;
+};
+
 class JPABaseEmitter {
 public:
     typedef void (JPABaseEmitter::*VolumeFunc)();
@@ -122,6 +147,8 @@ public:
     void setParticleCallBackPtr(JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>* callback) {
         mpParticleCallBack = callback;
     }
+
+    static JPAEmitterInfo emtrInfo;
 
     /* 0x000 */ VolumeFunc mVolumeFunc;
     /* 0x00C */ cXyz mEmitterScale;
