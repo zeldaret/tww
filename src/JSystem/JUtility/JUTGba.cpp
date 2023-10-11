@@ -4,149 +4,394 @@
 //
 
 #include "JSystem/JUtility/JUTGba.h"
-#include "dolphin/types.h"
+#include "JSystem/JKernel/JKRThread.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "dolphin/gba/GBA.h"
+#include "dolphin/si/SIBios.h"
+
+typedef struct OSAlarm OSAlarm;
+typedef struct OSContext OSContext;
+
+struct JUTGbaAlarm : public OSAlarm {
+    OSThread* thread;
+};
 
 /* 802CBEB0-802CBEB4       .text __ct__6JUTGbaFv */
-JUTGba::JUTGba() {
-    /* Nonmatching */
-}
+JUTGba::JUTGba() {}
+
+JUTGba* JUTGba::sManager;
 
 /* 802CBEB4-802CC03C       .text create__6JUTGbaFv */
-void JUTGba::create() {
-    /* Nonmatching */
+JUTGba* JUTGba::create() {
+    JUT_ASSERT(61, sManager == 0);
+    sManager = new JUTGba();
+    GBAInit();
+    OSReport(":::GBA: Init()\n");
+    for (int i = 0; i < 4; i++) {
+        JUTGbaParam* param = sManager->mParams + i;
+        char* mem = (char*)param;
+        for (int j = 0; j < sizeof(JUTGbaParam); j++) {
+            *(mem++) = 0;
+        }
+        param->channel = i;
+        param->program = 0;
+        param->length = 0;
+        param->field_0x24 = 0;
+        OSInitMessageQueue(&param->field_0x0, &param->field_0x20, 1);
+    }
+    for (int i = 0; i < 4; i++) {
+        JUTGbaParam* param = &sManager->mParams[i];
+        OSReport(":::GBA: Create Thread %d\n", i);
+        OSCreateThread(&sManager->mThreads[i], &gbaThreadMain, param, sManager->mStacks + i + 1, 0x1000, 8, 0);
+        OSResumeThread(&sManager->mThreads[i]);
+    }
+    return sManager;
 }
 
 /* 802CC03C-802CC08C       .text result_common__6JUTGbaFiUlPUl */
-void JUTGba::result_common(int, unsigned long, unsigned long*) {
-    /* Nonmatching */
+int JUTGba::result_common(int param_1, u32 param_2, u32* param_3) {
+    JUTGbaParam* param = &sManager->mParams[param_1];
+    if (param->field_0x24 != param_2) {
+        return -1;
+    }
+    if (param->field_0x3c != 1) {
+        *param_3 = 0;
+        return -2;
+    }
+    *param_3 = param->field_0x40;
+    return 0;
 }
 
 /* 802CC08C-802CC0E8       .text resultStatus_common__6JUTGbaFiUlPUc */
-void JUTGba::resultStatus_common(int, unsigned long, unsigned char*) {
-    /* Nonmatching */
+int JUTGba::resultStatus_common(int param_1, u32 param_2, u8* oStatus) {
+    JUTGbaParam* param = &sManager->mParams[param_1];
+    if (param->field_0x24 != param_2) {
+        return -1;
+    }
+    if (param->field_0x3c != 1) {
+        return -2;
+    }
+    if (!param->field_0x40 && oStatus) {
+        *oStatus = param->status;
+    }
+    return param->field_0x40;
 }
 
 /* 802CC0E8-802CC1F8       .text doJoyBoot__6JUTGbaFillPUcUlPFP11JUTGbaParamPv_vPv */
-void JUTGba::doJoyBoot(int, long, long, unsigned char*, unsigned long, void (*)(JUTGbaParam*, void*), void*) {
-    /* Nonmatching */
+void JUTGba::doJoyBoot(int param_1, s32 palette_color, s32 palette_speed, u8* program, u32 length, JUTGba_Func param_6, void* param_7) {
+    JUT_ASSERT(183, sManager != 0);
+    JUT_ASSERT(184, program != 0 && length != 0);
+    JUTGbaParam* param = &sManager->mParams[param_1];
+    param->program = program;
+    param->length = length;
+    param->palette_color = palette_color;
+    param->palette_speed = palette_speed;
+    param->field_0x4c = param_6;
+    param->field_0x50 = param_7;
+    param->field_0x3c = 0;
+    OSSendMessage(&param->field_0x0, (OSMessage)1, OS_MESSAGE_BLOCK);
 }
 
 /* 802CC1F8-802CC308       .text resultJoyBoot__6JUTGbaFiPUc */
-void JUTGba::resultJoyBoot(int, unsigned char*) {
-    /* Nonmatching */
+int JUTGba::resultJoyBoot(int param_1, u8* param_2) {
+    JUT_ASSERT(212, sManager != 0);
+    JUTGbaParam* param = &sManager->mParams[param_1];
+    if (param->field_0x24 != 1) {
+        return -1;
+    }
+    if (param->field_0x3c == 0) {
+        if (param->field_0x40 == 1) {
+            if (param_2) {
+                *param_2 = 0xFF;
+            }
+        } else if (param_2) {
+            GBAGetProcessStatus(param_1, param_2);
+        }
+        return -2;
+    }
+    if (param->field_0x40 == 0) {
+        if (param_2) {
+            *param_2 = 100;
+        }
+    } else if (param_2) {
+        *param_2 = 0;
+    }
+    return param->field_0x40;
 }
 
 /* 802CC308-802CC3A8       .text doInitProbe__6JUTGbaFiPFP11JUTGbaParamPv_vPv */
-void JUTGba::doInitProbe(int, void (*)(JUTGbaParam*, void*), void*) {
-    /* Nonmatching */
+void JUTGba::doInitProbe(int param_1, JUTGba_Func param_2, void* param_3) {
+    JUT_ASSERT(255, sManager != 0);
+    JUTGbaParam* param = &sManager->mParams[param_1];
+    param->field_0x4c = param_2;
+    param->field_0x50 = param_3;
+    param->field_0x3c = 0;
+    OSSendMessage(&param->field_0x0, (OSMessage)2, OS_MESSAGE_BLOCK);
 }
 
 /* 802CC3A8-802CC430       .text resultInitProbe__6JUTGbaFiPUl */
-void JUTGba::resultInitProbe(int, unsigned long*) {
-    /* Nonmatching */
+int JUTGba::resultInitProbe(int param_1, u32* param_2) {
+    JUT_ASSERT(278, sManager != 0);
+    return result_common(param_1, 2, param_2);
 }
 
 /* 802CC430-802CC4D0       .text doProbe__6JUTGbaFiPFP11JUTGbaParamPv_vPv */
-void JUTGba::doProbe(int, void (*)(JUTGbaParam*, void*), void*) {
-    /* Nonmatching */
+void JUTGba::doProbe(int param_1, JUTGba_Func param_2, void* param_3) {
+    JUT_ASSERT(287, sManager != 0);
+    JUTGbaParam* param = &sManager->mParams[param_1];
+    param->field_0x4c = param_2;
+    param->field_0x50 = param_3;
+    param->field_0x3c = 0;
+    OSSendMessage(&param->field_0x0, (OSMessage)3, OS_MESSAGE_BLOCK);
 }
 
 /* 802CC4D0-802CC558       .text resultProbe__6JUTGbaFiPUl */
-void JUTGba::resultProbe(int, unsigned long*) {
-    /* Nonmatching */
+BOOL JUTGba::resultProbe(int param_1, u32* param_2) {
+    JUT_ASSERT(310, sManager != 0);
+    return result_common(param_1, 3, param_2);
 }
 
 /* 802CC558-802CC5F8       .text doReset__6JUTGbaFiPFP11JUTGbaParamPv_vPv */
-void JUTGba::doReset(int, void (*)(JUTGbaParam*, void*), void*) {
-    /* Nonmatching */
+void JUTGba::doReset(int param_1, JUTGba_Func param_2, void* param_3) {
+    JUT_ASSERT(320, sManager != 0);
+    JUTGbaParam* param = &sManager->mParams[param_1];
+    param->field_0x4c = param_2;
+    param->field_0x50 = param_3;
+    param->field_0x3c = 0;
+    OSSendMessage(&param->field_0x0, (OSMessage)4, OS_MESSAGE_BLOCK);
 }
 
 /* 802CC5F8-802CC680       .text resultReset__6JUTGbaFiPUc */
-void JUTGba::resultReset(int, unsigned char*) {
-    /* Nonmatching */
+BOOL JUTGba::resultReset(int param_1, u8* param_2) {
+    JUT_ASSERT(340, sManager != 0);
+    return resultStatus_common(param_1, 4, param_2);
 }
 
 /* 802CC680-802CC728       .text doRead__6JUTGbaFiPUcPFP11JUTGbaParamPv_vPv */
-void JUTGba::doRead(int, unsigned char*, void (*)(JUTGbaParam*, void*), void*) {
-    /* Nonmatching */
+void JUTGba::doRead(int param_1, u8* param_2, JUTGba_Func param_3, void* param_4) {
+    JUT_ASSERT(350, sManager != 0);
+    JUTGbaParam* param = &sManager->mParams[param_1];
+    param->field_0x4c = param_3;
+    param->field_0x50 = param_4;
+    param->field_0x3c = 0;
+    param->field_0x48 = param_2;
+    OSSendMessage(&param->field_0x0, (OSMessage)5, OS_MESSAGE_BLOCK);
 }
 
 /* 802CC728-802CC7B0       .text resultRead__6JUTGbaFiPUc */
-void JUTGba::resultRead(int, unsigned char*) {
-    /* Nonmatching */
+BOOL JUTGba::resultRead(int param_1, u8* param_2) {
+    JUT_ASSERT(371, sManager != 0);
+    return resultStatus_common(param_1, 5, param_2);
 }
 
 /* 802CC7B0-802CC858       .text doWrite__6JUTGbaFiPUcPFP11JUTGbaParamPv_vPv */
-void JUTGba::doWrite(int, unsigned char*, void (*)(JUTGbaParam*, void*), void*) {
-    /* Nonmatching */
+void JUTGba::doWrite(int param_1, u8* param_2, JUTGba_Func param_3, void* param_4) {
+    JUT_ASSERT(381, sManager != 0);
+    JUTGbaParam* param = &sManager->mParams[param_1];
+    param->field_0x4c = param_3;
+    param->field_0x50 = param_4;
+    param->field_0x3c = 0;
+    param->field_0x48 = param_2;
+    OSSendMessage(&param->field_0x0, (OSMessage)6, OS_MESSAGE_BLOCK);
 }
 
 /* 802CC858-802CC8E0       .text resultWrite__6JUTGbaFiPUc */
-void JUTGba::resultWrite(int, unsigned char*) {
-    /* Nonmatching */
+BOOL JUTGba::resultWrite(int param_1, u8* param_2) {
+    JUT_ASSERT(403, sManager != 0);
+    return resultStatus_common(param_1, 6, param_2);
 }
 
 /* 802CC8E0-802CC980       .text doGetStatus__6JUTGbaFiPFP11JUTGbaParamPv_vPv */
-void JUTGba::doGetStatus(int, void (*)(JUTGbaParam*, void*), void*) {
-    /* Nonmatching */
+void JUTGba::doGetStatus(int param_1, JUTGba_Func param_2, void* param_3) {
+    JUT_ASSERT(413, sManager != 0);
+    JUTGbaParam* param = &sManager->mParams[param_1];
+    param->field_0x4c = param_2;
+    param->field_0x50 = param_3;
+    param->field_0x3c = 0;
+    OSSendMessage(&param->field_0x0, (OSMessage)7, OS_MESSAGE_BLOCK);
 }
 
 /* 802CC980-802CCA08       .text resultGetStatus__6JUTGbaFiPUc */
-void JUTGba::resultGetStatus(int, unsigned char*) {
-    /* Nonmatching */
+BOOL JUTGba::resultGetStatus(int param_1, u8* param_2) {
+    JUT_ASSERT(434, sManager != 0);
+    return resultStatus_common(param_1, 7, param_2);
 }
 
 /* 802CCA08-802CCC6C       .text gbaThreadMain__6JUTGbaFPv */
-void JUTGba::gbaThreadMain(void*) {
+void* JUTGba::gbaThreadMain(void* param_1) {
     /* Nonmatching */
+    JUTGbaParam* param = (JUTGbaParam*)param_1;
+    { JKRThread jkrThread(OSGetCurrentThread(), 0); }
+    JKRSetCurrentHeap(NULL);
+    JUTGbaThreadVar threadVar;
+    threadVar.field_0x0 = param;
+    while (true) {
+        if (!OSReceiveMessage(&param->field_0x0, (OSMessage*)&threadVar.field_0x10, OS_MESSAGE_NOBLOCK)) {
+            param->field_0x54 = 0;
+            OSReceiveMessage(&param->field_0x0, (OSMessage*)&threadVar.field_0x10, OS_MESSAGE_BLOCK);
+        }
+        param->field_0x54 = 1;
+        param->field_0x40 = 0;
+        param->field_0x24 = threadVar.field_0x10;
+        threadVar.field_0x8 = OSGetTime();
+        threadVar.field_0x14 = 0;
+        threadVar.field_0x18 = 0;
+        if (threadVar.field_0x10 == 8) {
+            sManager->gbaThread_Destroy(&threadVar);
+            param->field_0x3c = 1;
+            return NULL;
+        }
+        while (true) {
+            if (param->field_0x58) {
+                break;
+            }
+            if (OSMillisecondsToTicks(4000) < OSGetTime() - threadVar.field_0x8) {
+                if (param->field_0x40 == 3) {
+                    break;
+                }
+                param->field_0x40 = 1;
+                param->field_0x3c = 1;
+                break;
+            }
+            switch (threadVar.field_0x10) {
+            case 1:
+                sManager->gbaThread_JoyBoot(&threadVar);
+                break;
+            case 2:
+                sManager->gbaThread_InitProbe(&threadVar);
+                break;
+            case 3:
+                sManager->gbaThread_Probe(&threadVar);
+                break;
+            case 4:
+                sManager->gbaThread_Reset(&threadVar);
+                break;
+            case 5:
+                sManager->gbaThread_Read(&threadVar);
+                break;
+            case 6:
+                sManager->gbaThread_Write(&threadVar);
+                break;
+            case 7:
+                sManager->gbaThread_GetStatus(&threadVar);
+                break;
+            default:
+                OSPanic(__FILE__, 623, "UNKNOWN GBA COMMAND.");
+                break;
+            }
+            if (threadVar.field_0x14) {
+                if (threadVar.field_0x18) {
+                    sManager->gbaThread_sleep(threadVar.field_0x18);
+                }
+                threadVar.field_0x10 = threadVar.field_0x14;
+                threadVar.field_0x14 = 0;
+                continue;
+            }
+            if (!param->field_0x4c) {
+                break;
+            }
+            param->field_0x4c(param, param->field_0x50);
+            break;
+        }
+    }
+    return NULL;
 }
 
 /* 802CCC6C-802CCC90       .text JUTGBAThreadAlarmHandler__FP7OSAlarmP9OSContext */
-void JUTGBAThreadAlarmHandler(OSAlarm*, OSContext*) {
-    /* Nonmatching */
+void JUTGBAThreadAlarmHandler(OSAlarm* alarm, OSContext* context) {
+    JUTGbaAlarm* gbaAlarm = (JUTGbaAlarm*)alarm;
+    OSResumeThread(gbaAlarm->thread);
 }
 
 /* 802CCC90-802CCD04       .text gbaThread_sleep__6JUTGbaFx */
-void JUTGba::gbaThread_sleep(long long) {
-    /* Nonmatching */
+void JUTGba::gbaThread_sleep(OSTime param_1) {
+    JUTGbaAlarm alarm;
+    OSCreateAlarm(&alarm);
+    alarm.thread = OSGetCurrentThread();
+    BOOL enable = OSDisableInterrupts();
+    OSSetAlarm(&alarm, param_1, &JUTGBAThreadAlarmHandler);
+    OSSuspendThread(alarm.thread);
+    OSRestoreInterrupts(enable);
 }
 
 /* 802CCD04-802CCD14       .text gbaThread_Destroy__6JUTGbaFP15JUTGbaThreadVar */
-void JUTGba::gbaThread_Destroy(JUTGbaThreadVar*) {
-    /* Nonmatching */
+void JUTGba::gbaThread_Destroy(JUTGbaThreadVar* var) {
+    var->field_0x0->field_0x40 = 0;
 }
 
 /* 802CCD14-802CCDB8       .text gbaThread_JoyBoot__6JUTGbaFP15JUTGbaThreadVar */
-void JUTGba::gbaThread_JoyBoot(JUTGbaThreadVar*) {
-    /* Nonmatching */
+int JUTGba::gbaThread_JoyBoot(JUTGbaThreadVar* var) {
+    JUTGbaParam* param = var->field_0x0;
+    param->field_0x40 = GBAJoyBoot(param->channel, param->palette_color, param->palette_speed, param->program, param->length, &param->status);
+    if (param->field_0x40 == 0) {
+        param->field_0x3c = 1;
+    } else if (param->field_0x40 == 1 || param->field_0x40 == 3) {
+        var->field_0x14 = var->field_0x10;
+        var->field_0x18 = OSMillisecondsToTicks(15);
+    }
+    return param->field_0x40;
 }
 
 /* 802CCDB8-802CCEB8       .text gbaThread_InitProbe__6JUTGbaFP15JUTGbaThreadVar */
-void JUTGba::gbaThread_InitProbe(JUTGbaThreadVar*) {
-    /* Nonmatching */
+int JUTGba::gbaThread_InitProbe(JUTGbaThreadVar* var) {
+    JUTGbaParam* param = var->field_0x0;
+    param->field_0x40 = SIProbe(param->channel);
+    if (OSMillisecondsToTicks(1000) < OSGetTime() - var->field_0x8) {
+        param->field_0x40 = 8;
+        param->field_0x3c = 1;
+    } else if (param->field_0x40 == 0x80) {
+        var->field_0x14 = var->field_0x10;
+        var->field_0x18 = OSMillisecondsToTicks(15);
+    } else if (param->field_0x40 == 8) {
+        var->field_0x14 = var->field_0x10;
+        var->field_0x18 = OSMillisecondsToTicks(50);
+    } else {
+        param->field_0x3c = 1;
+    }
+    return param->field_0x40;
 }
 
 /* 802CCEB8-802CCF38       .text gbaThread_Probe__6JUTGbaFP15JUTGbaThreadVar */
-void JUTGba::gbaThread_Probe(JUTGbaThreadVar*) {
-    /* Nonmatching */
+int JUTGba::gbaThread_Probe(JUTGbaThreadVar* var) {
+    JUTGbaParam* param = var->field_0x0;
+    param->field_0x40 = SIProbe(param->channel);
+    if (param->field_0x40 == 0x80) {
+        var->field_0x14 = var->field_0x10;
+        var->field_0x18 = OSMillisecondsToTicks(15);
+    } else {
+        param->field_0x3c = 1;
+    }
+    return param->field_0x40;
 }
 
 /* 802CCF38-802CCF7C       .text gbaThread_Reset__6JUTGbaFP15JUTGbaThreadVar */
-void JUTGba::gbaThread_Reset(JUTGbaThreadVar*) {
-    /* Nonmatching */
+int JUTGba::gbaThread_Reset(JUTGbaThreadVar* var) {
+    JUTGbaParam* param = var->field_0x0;
+    param->field_0x40 = GBAReset(param->channel, &param->status);
+    param->field_0x3c = 1;
+    return param->field_0x40;
 }
 
 /* 802CCF7C-802CCFC4       .text gbaThread_Read__6JUTGbaFP15JUTGbaThreadVar */
-void JUTGba::gbaThread_Read(JUTGbaThreadVar*) {
-    /* Nonmatching */
+int JUTGba::gbaThread_Read(JUTGbaThreadVar* var) {
+    JUTGbaParam* param = var->field_0x0;
+    param->field_0x40 = GBARead(param->channel, param->field_0x48, &param->status);
+    param->field_0x3c = 1;
+    return param->field_0x40;
 }
 
 /* 802CCFC4-802CD00C       .text gbaThread_Write__6JUTGbaFP15JUTGbaThreadVar */
-void JUTGba::gbaThread_Write(JUTGbaThreadVar*) {
-    /* Nonmatching */
+int JUTGba::gbaThread_Write(JUTGbaThreadVar* var) {
+    JUTGbaParam* param = var->field_0x0;
+    param->field_0x40 = GBAWrite(param->channel, param->field_0x48, &param->status);
+    param->field_0x3c = 1;
+    return param->field_0x40;
 }
 
 /* 802CD00C-802CD050       .text gbaThread_GetStatus__6JUTGbaFP15JUTGbaThreadVar */
-void JUTGba::gbaThread_GetStatus(JUTGbaThreadVar*) {
-    /* Nonmatching */
+int JUTGba::gbaThread_GetStatus(JUTGbaThreadVar* var) {
+    JUTGbaParam* param = var->field_0x0;
+    param->field_0x40 = GBAGetStatus(param->channel, &param->status);
+    param->field_0x3c = 1;
+    return param->field_0x40;
 }
