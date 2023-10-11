@@ -1370,7 +1370,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_oq"),
     ActorRel(NonMatching, "d_a_pedestal"),
     ActorRel(NonMatching, "d_a_saku"),
-    ActorRel(NonMatching, "d_a_seatag"),
+    ActorRel(Matching, "d_a_seatag"),
     ActorRel(NonMatching, "d_a_shand"),
     ActorRel(NonMatching, "d_a_ship"),
     ActorRel(NonMatching, "d_a_shop_item"),
