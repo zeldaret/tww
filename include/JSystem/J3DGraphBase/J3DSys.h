@@ -56,7 +56,7 @@ public:
     void setVtxNrm(void* pVtxNrm) { mVtxNrm = pVtxNrm; }
 
     void* getVtxCol() const { return mVtxCol; }
-    void setVtxCol(_GXColor* pVtxCol) { mVtxCol = pVtxCol; }
+    void setVtxCol(GXColor* pVtxCol) { mVtxCol = pVtxCol; }
 
     void setModel(J3DModel* pModel) { mModel = pModel; }
     void setShapePacket(J3DShapePacket* pPacket) { mShapePacket = pPacket; }
@@ -129,7 +129,7 @@ public:
     /* 0x10C */ Mtx33* mModelNrmMtx;
     /* 0x110 */ void* mVtxPos;
     /* 0x114 */ void* mVtxNrm;
-    /* 0x118 */ _GXColor* mVtxCol;
+    /* 0x118 */ GXColor* mVtxCol;
     /* 0x11C */ void* field_0x11c;
     /* 0x120 */ void* field_0x120;
     /* 0x124 */ Vec* mNBTScale;

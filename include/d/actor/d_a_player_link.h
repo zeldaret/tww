@@ -128,7 +128,7 @@ public:
 
 class daPy_mtxPosFollowEcallBack_c {
 public:
-    void makeEmitterColor(unsigned short, float(*)[4], const cXyz*, const csXyz*, const _GXColor*, const _GXColor*);
+    void makeEmitterColor(unsigned short, float(*)[4], const cXyz*, const csXyz*, const GXColor*, const GXColor*);
     void execute(JPABaseEmitter*);
     daPy_mtxPosFollowEcallBack_c();
     ~daPy_mtxPosFollowEcallBack_c();

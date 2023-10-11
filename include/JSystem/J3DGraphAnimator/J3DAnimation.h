@@ -448,8 +448,8 @@ private:
 class J3DAnmTevRegKey : public J3DAnmBase {
 public:
     J3DAnmTevRegKey();
-    void getTevColorReg(u16, _GXColorS10*) const;
-    void getTevKonstReg(u16, _GXColor*) const;
+    void getTevColorReg(u16, GXColorS10*) const;
+    void getTevKonstReg(u16, GXColor*) const;
     void searchUpdateMaterialID(J3DMaterialTable*);
     void searchUpdateMaterialID(J3DModelData*);
 
@@ -489,7 +489,7 @@ public:
 
     virtual ~J3DAnmColor();
     virtual s32 getKind() const;
-    virtual void getColor(u16, _GXColor*) const;
+    virtual void getColor(u16, GXColor*) const;
 
     u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
     bool isValidUpdateMaterialID(u16 id) const { return mUpdateMaterialID[id] != 0xFFFF; }
@@ -512,7 +512,7 @@ public:
 
     virtual ~J3DAnmColorKey();
     virtual s32 getKind() const;
-    virtual void getColor(u16, _GXColor*) const;
+    virtual void getColor(u16, GXColor*) const;
 
 private:
     /* 0x2C */ int field_0x2c;
@@ -528,7 +528,7 @@ public:
 
     virtual ~J3DAnmColorFull();
     virtual s32 getKind() const;
-    virtual void getColor(u16, _GXColor*) const;
+    virtual void getColor(u16, GXColor*) const;
 
 private:
     /* 0x2C */ int field_0x2c;
@@ -544,7 +544,7 @@ public:
 
     virtual ~J3DAnmVtxColor();
     virtual s32 getKind() const;
-    virtual void getColor(u8, u16, _GXColor*) const;
+    virtual void getColor(u8, u16, GXColor*) const;
 
 private:
     /* 0x0C */ s16 mAnmTableNum[2];
@@ -557,7 +557,7 @@ public:
 
     virtual ~J3DAnmVtxColorKey();
     virtual s32 getKind() const;
-    virtual void getColor(u8, u16, _GXColor*) const;
+    virtual void getColor(u8, u16, GXColor*) const;
 
 private:
     /* 0x18 */ int field_0x18[2];
@@ -568,7 +568,7 @@ class J3DAnmVtxColorFull : public J3DAnmVtxColor {
 
     virtual ~J3DAnmVtxColorFull();
     virtual s32 getKind() const;
-    virtual void getColor(u8, u16, _GXColor*) const;
+    virtual void getColor(u8, u16, GXColor*) const;
 
 private:
     /* 0x18 */ int field_0x18[2];

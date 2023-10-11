@@ -72,8 +72,8 @@ public:
     /* 0x8F */ u8 mCalcChldVisNum;
     /* 0x90 */ JPADrawContext mDrawContext;
     /* 0xB4 */ f32 mScaleOut;
-    /* 0xB8 */ _GXColor mPrmColor;
-    /* 0xBC */ _GXColor mEnvColor;
+    /* 0xB8 */ GXColor mPrmColor;
+    /* 0xBC */ GXColor mEnvColor;
     /* 0xC0 */ s16 mTexIdx;
     /* 0xC2 */ u8 field_0xc2;
     /* 0xC3 */ u8 field_0xC3[0xC4 - 0xC3];

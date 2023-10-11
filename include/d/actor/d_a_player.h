@@ -21,7 +21,7 @@ public:
     void execute(JPABaseEmitter*);
     void end();
     void makeEmitter(u16, MtxP, const cXyz*, const cXyz*);
-    void makeEmitterColor(u16, MtxP, const cXyz*, const _GXColor*, const _GXColor*);
+    void makeEmitterColor(u16, MtxP, const cXyz*, const GXColor*, const GXColor*);
     void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz*, s8) { mpEmitter = emitter; }
 
     /* 0x04 */ JPABaseEmitter* mpEmitter;

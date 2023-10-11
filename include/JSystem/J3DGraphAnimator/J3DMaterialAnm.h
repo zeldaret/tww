@@ -28,7 +28,7 @@ public:
     void setAnmFlag(bool flag) { mAnmFlag = flag; }
     bool getAnmFlag() const { return mAnmFlag; }
     void setAnmColor(J3DAnmColor* anmColor) { mAnmColor = anmColor; }
-    void calc(_GXColor* pColor) const { mAnmColor->getColor(mAnmIndex, pColor); }
+    void calc(GXColor* pColor) const { mAnmColor->getColor(mAnmIndex, pColor); }
 
 private:
     /* 0x0 */ u16 mAnmIndex;
@@ -117,7 +117,7 @@ public:
     void setAnmFlag(bool flag) { mAnmFlag = flag; }
     bool getAnmFlag() const { return mAnmFlag; }
     void setAnmTevReg(J3DAnmTevRegKey* tevReg) { mAnmTevReg = tevReg; }
-    void calc(_GXColor* pColor) const { mAnmTevReg->getTevKonstReg(mAnmIndex, pColor); }
+    void calc(GXColor* pColor) const { mAnmTevReg->getTevKonstReg(mAnmIndex, pColor); }
 
 private:
     /* 0x0 */ u16 mAnmIndex;
@@ -147,7 +147,7 @@ public:
     void setAnmFlag(bool flag) { mAnmFlag = flag; }
     bool getAnmFlag() const { return mAnmFlag; }
     void setAnmTevReg(J3DAnmTevRegKey* tevReg) { mAnmTevReg = tevReg; }
-    void calc(_GXColorS10* pColor) const { mAnmTevReg->getTevColorReg(mAnmIndex, pColor); }
+    void calc(GXColorS10* pColor) const { mAnmTevReg->getTevColorReg(mAnmIndex, pColor); }
 
 private:
     /* 0x0 */ u16 mAnmIndex;

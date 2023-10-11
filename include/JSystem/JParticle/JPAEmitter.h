@@ -29,7 +29,7 @@ class JPACallBackBase {
 public:
     JPACallBackBase() {}
     virtual ~JPACallBackBase() {}
-    
+
     inline virtual void init(T);
     inline virtual void execute(T);
     inline virtual void executeAfter(T);
@@ -41,7 +41,7 @@ class JPACallBackBase2 {
 public:
     JPACallBackBase2() {}
     virtual ~JPACallBackBase2() {}
-    
+
     inline virtual void init(T, U);
     inline virtual void execute(T, U);
     inline virtual void draw(T, U);
@@ -50,7 +50,7 @@ public:
 class JPABaseEmitter {
 public:
     typedef void (JPABaseEmitter::*VolumeFunc)();
-    
+
     void calcVolumePoint();
     void calcVolumeLine();
     void calcVolumeCircle();
@@ -81,7 +81,7 @@ public:
     void clearStatus(u32 status) { mFlags &= ~status; }
     bool checkStatus(u32 status) { return mFlags & status; }
     void initStatus(u32 status);
-    
+
     u8 getGlobalAlpha() { return mGlobalPrmColor.a; }
     void setGlobalAlpha(u8 alpha) { mGlobalPrmColor.a = alpha; }
     void setGlobalRTMatrix(MtxP mtx) {
@@ -89,14 +89,14 @@ public:
     }
     void setGlobalTranslation(f32 x, f32 y, f32 z) { mGlobalTranslation.set(x, y, z); }
     void setGlobalScale(const JGeometry::TVec3<float>& scale) {
-        mGlobalScale.set(scale);
-        mGlobalScale2D.set(scale);
+        mGlobalDynamicsScale.set(scale);
+        mGlobalParticleScale.set(scale);
     }
     void setGlobalParticleScale(const JGeometry::TVec3<float>& scale) {
-        mGlobalScale2D.set(scale);
+        mGlobalParticleScale.set(scale);
     }
     void setGlobalDynamicsScale(const JGeometry::TVec3<float>& scale) {
-        mGlobalScale.set(scale);
+        mGlobalDynamicsScale.set(scale);
     }
     void setDirection(const JGeometry::TVec3<float>& dir) {
         mEmitterDir.set(dir);
@@ -115,14 +115,14 @@ public:
         mMaxFrame = -1;
         stopCreateParticle();
     }
-    
+
     void setEmitterCallBackPtr(JPACallBackBase<JPABaseEmitter*>* callback) {
         mpEmitterCallBack = callback;
     }
     void setParticleCallBackPtr(JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>* callback) {
         mpParticleCallBack = callback;
     }
-    
+
     /* 0x000 */ VolumeFunc mVolumeFunc;
     /* 0x00C */ cXyz mEmitterScale;
     /* 0x018 */ cXyz mEmitterTranslation;
@@ -167,11 +167,11 @@ public:
     /* 0x1A0 */ JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>* mpParticleCallBack;
     /* 0x1A4 */ JMath::TRandom_fast_ mRandomSeed;
     /* 0x1A8 */ Mtx mGlobalRotation;
-    /* 0x1D8 */ JGeometry::TVec3<f32> mGlobalScale;
+    /* 0x1D8 */ JGeometry::TVec3<f32> mGlobalDynamicsScale;
     /* 0x1E4 */ JGeometry::TVec3<f32> mGlobalTranslation;
-    /* 0x1F0 */ JGeometry::TVec3<f32> mGlobalScale2D;
-    /* 0x1FC */ _GXColor mGlobalPrmColor;
-    /* 0x200 */ _GXColor mGlobalEnvColor;
+    /* 0x1F0 */ JGeometry::TVec3<f32> mGlobalParticleScale;
+    /* 0x1FC */ GXColor mGlobalPrmColor;
+    /* 0x200 */ GXColor mGlobalEnvColor;
     /* 0x204 */ f32 mEmitCount;
     /* 0x208 */ f32 mRateStepTimer;
     /* 0x20C */ u32 mFlags;

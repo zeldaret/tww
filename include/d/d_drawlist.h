@@ -190,7 +190,7 @@ public:
     s32 getNum() { return mNum; }
 
 public:
-    /* 0x00 */ _GXColor mColor;
+    /* 0x00 */ GXColor mColor;
     /* 0x04 */ s16 mCapacity;
     /* 0x06 */ s16 mNum;
     /* 0x08 */ dDlst_alphaModelData_c* mpData;

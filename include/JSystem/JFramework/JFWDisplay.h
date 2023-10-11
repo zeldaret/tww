@@ -55,7 +55,7 @@ public:
     void clearEfb_init();
     void clearEfb(int param_0, int param_1, int param_2, int param_3, GXColor color);
     void clearEfb();
-    void clearEfb(_GXColor color);
+    void clearEfb(GXColor color);
     void calcCombinationRatio();
 
     virtual void beginRender();

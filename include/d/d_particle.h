@@ -64,7 +64,7 @@ class dPa_smokeEcallBack : public dPa_followEcallBack {
 public:
     dPa_smokeEcallBack(u8=1);
     dPa_smokeEcallBack(u8, u8, u8, u8);
-    dPa_smokeEcallBack(const _GXColor&, dKy_tevstr_c*, u8);
+    dPa_smokeEcallBack(const GXColor&, dKy_tevstr_c*, u8);
     virtual ~dPa_smokeEcallBack() {}
     
     virtual void draw(JPABaseEmitter*);
@@ -73,7 +73,7 @@ public:
     
     /* 0x14 */ s8 field_0x14;
     /* 0x15 */ u8 field_0x15;
-    /* 0x16 */ _GXColor field_0x16;
+    /* 0x16 */ GXColor field_0x16;
     /* 0x1A */ u8 field_0x1A[0x1C - 0x1A];
     /* 0x1C */ dKy_tevstr_c* mTevstr;
 };
