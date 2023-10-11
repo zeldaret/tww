@@ -8,6 +8,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/gba/GBA.h"
 #include "dolphin/si/SIBios.h"
+#include "global.h"
 
 typedef struct OSAlarm OSAlarm;
 typedef struct OSContext OSContext;
@@ -37,14 +38,16 @@ JUTGba* JUTGba::create() {
         param->program = 0;
         param->length = 0;
         param->field_0x24 = 0;
-        OSInitMessageQueue(&param->field_0x0, &param->field_0x20, 1);
+        OSInitMessageQueue(&param->msg_q, param->msg, ARRAY_SIZE(param->msg));
     }
+
     for (int i = 0; i < 4; i++) {
         JUTGbaParam* param = &sManager->mParams[i];
         OSReport(":::GBA: Create Thread %d\n", i);
         OSCreateThread(&sManager->mThreads[i], &gbaThreadMain, param, sManager->mStacks + i + 1, 0x1000, 8, 0);
         OSResumeThread(&sManager->mThreads[i]);
     }
+
     return sManager;
 }
 
@@ -89,7 +92,7 @@ void JUTGba::doJoyBoot(int param_1, s32 palette_color, s32 palette_speed, u8* pr
     param->field_0x4c = param_6;
     param->field_0x50 = param_7;
     param->field_0x3c = 0;
-    OSSendMessage(&param->field_0x0, (OSMessage)1, OS_MESSAGE_BLOCK);
+    OSSendMessage(&param->msg_q, (OSMessage)1, OS_MESSAGE_BLOCK);
 }
 
 /* 802CC1F8-802CC308       .text resultJoyBoot__6JUTGbaFiPUc */
@@ -126,7 +129,7 @@ void JUTGba::doInitProbe(int param_1, JUTGba_Func param_2, void* param_3) {
     param->field_0x4c = param_2;
     param->field_0x50 = param_3;
     param->field_0x3c = 0;
-    OSSendMessage(&param->field_0x0, (OSMessage)2, OS_MESSAGE_BLOCK);
+    OSSendMessage(&param->msg_q, (OSMessage)2, OS_MESSAGE_BLOCK);
 }
 
 /* 802CC3A8-802CC430       .text resultInitProbe__6JUTGbaFiPUl */
@@ -142,7 +145,7 @@ void JUTGba::doProbe(int param_1, JUTGba_Func param_2, void* param_3) {
     param->field_0x4c = param_2;
     param->field_0x50 = param_3;
     param->field_0x3c = 0;
-    OSSendMessage(&param->field_0x0, (OSMessage)3, OS_MESSAGE_BLOCK);
+    OSSendMessage(&param->msg_q, (OSMessage)3, OS_MESSAGE_BLOCK);
 }
 
 /* 802CC4D0-802CC558       .text resultProbe__6JUTGbaFiPUl */
@@ -158,7 +161,7 @@ void JUTGba::doReset(int param_1, JUTGba_Func param_2, void* param_3) {
     param->field_0x4c = param_2;
     param->field_0x50 = param_3;
     param->field_0x3c = 0;
-    OSSendMessage(&param->field_0x0, (OSMessage)4, OS_MESSAGE_BLOCK);
+    OSSendMessage(&param->msg_q, (OSMessage)4, OS_MESSAGE_BLOCK);
 }
 
 /* 802CC5F8-802CC680       .text resultReset__6JUTGbaFiPUc */
@@ -175,7 +178,7 @@ void JUTGba::doRead(int param_1, u8* param_2, JUTGba_Func param_3, void* param_4
     param->field_0x50 = param_4;
     param->field_0x3c = 0;
     param->field_0x48 = param_2;
-    OSSendMessage(&param->field_0x0, (OSMessage)5, OS_MESSAGE_BLOCK);
+    OSSendMessage(&param->msg_q, (OSMessage)5, OS_MESSAGE_BLOCK);
 }
 
 /* 802CC728-802CC7B0       .text resultRead__6JUTGbaFiPUc */
@@ -192,7 +195,7 @@ void JUTGba::doWrite(int param_1, u8* param_2, JUTGba_Func param_3, void* param_
     param->field_0x50 = param_4;
     param->field_0x3c = 0;
     param->field_0x48 = param_2;
-    OSSendMessage(&param->field_0x0, (OSMessage)6, OS_MESSAGE_BLOCK);
+    OSSendMessage(&param->msg_q, (OSMessage)6, OS_MESSAGE_BLOCK);
 }
 
 /* 802CC858-802CC8E0       .text resultWrite__6JUTGbaFiPUc */
@@ -208,7 +211,7 @@ void JUTGba::doGetStatus(int param_1, JUTGba_Func param_2, void* param_3) {
     param->field_0x4c = param_2;
     param->field_0x50 = param_3;
     param->field_0x3c = 0;
-    OSSendMessage(&param->field_0x0, (OSMessage)7, OS_MESSAGE_BLOCK);
+    OSSendMessage(&param->msg_q, (OSMessage)7, OS_MESSAGE_BLOCK);
 }
 
 /* 802CC980-802CCA08       .text resultGetStatus__6JUTGbaFiPUc */
@@ -226,9 +229,10 @@ void* JUTGba::gbaThreadMain(void* param_1) {
     JUTGbaThreadVar threadVar;
     threadVar.field_0x0 = param;
     while (true) {
-        if (!OSReceiveMessage(&param->field_0x0, (OSMessage*)&threadVar.field_0x10, OS_MESSAGE_NOBLOCK)) {
+        threadVar.field_0x1c = OSReceiveMessage(&param->msg_q, (OSMessage*)&threadVar.field_0x10, OS_MESSAGE_NOBLOCK);
+        if (!threadVar.field_0x1c) {
             param->field_0x54 = 0;
-            OSReceiveMessage(&param->field_0x0, (OSMessage*)&threadVar.field_0x10, OS_MESSAGE_BLOCK);
+            OSReceiveMessage(&param->msg_q, (OSMessage*)&threadVar.field_0x10, OS_MESSAGE_BLOCK);
         }
         param->field_0x54 = 1;
         param->field_0x40 = 0;

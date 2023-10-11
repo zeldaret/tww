@@ -829,7 +829,7 @@ config.libs = [
             Object(NonMatching, "JSystem/JUtility/JUTProcBar.cpp"),
             Object(NonMatching, "JSystem/JUtility/JUTConsole.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTDirectFile.cpp"),
-            Object(NonMatching, "JSystem/JUtility/JUTGba.cpp"),
+            Object(Matching,    "JSystem/JUtility/JUTGba.cpp"),
             Object(NonMatching, "JSystem/JUtility/JUTFontData_Ascfont_fix12.s"),
         ],
     ),

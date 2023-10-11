@@ -9,8 +9,8 @@ struct JUTGbaParam;
 typedef void (*JUTGba_Func)(JUTGbaParam*, void*);
 
 struct JUTGbaParam {
-    /* 0x00 */ OSMessageQueue field_0x0;
-    /* 0x20 */ OSMessage field_0x20;
+    /* 0x00 */ OSMessageQueue msg_q;
+    /* 0x20 */ OSMessage msg[1];
     /* 0x24 */ u32 field_0x24;
     /* 0x28 */ s32 channel;
     /* 0x2C */ u8* program;
@@ -33,6 +33,7 @@ struct JUTGbaThreadVar {
     /* 0x10 */ u32 field_0x10;
     /* 0x14 */ u32 field_0x14;
     /* 0x18 */ u32 field_0x18;
+    /* 0x1C */ s32 field_0x1c;
 };
 
 class JUTGba {
