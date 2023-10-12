@@ -5,6 +5,7 @@
 
 #include "JSystem/J2DGraph/J2DWindow.h"
 #include "JSystem/JUtility/TColor.h"
+#include "JSystem/JUtility/JUTPalette.h"
 #include "JSystem/JUtility/JUTTexture.h"
 #include "dolphin/gx/GX.h"
 
@@ -20,6 +21,12 @@ void J2DWindow::initinfo2() {
 
 /* 802D1A9C-802D1B44       .text __dt__9J2DWindowFv */
 J2DWindow::~J2DWindow() {
+    delete mpFrameTexture[0];
+    delete mpFrameTexture[1];
+    delete mpFrameTexture[2];
+    delete mpFrameTexture[3];
+    delete mpPalette;
+    delete mpContentsTexture;
 }
 
 /* 802D1B44-802D1F5C       .text draw_private__9J2DWindowFRCQ29JGeometry8TBox2<f>RCQ29JGeometry8TBox2<f> */
@@ -33,13 +40,48 @@ void J2DWindow::draw_private(const JGeometry::TBox2<f32>& frameBox, const JGeome
     GXSetNumTexGens(1);
 
     if (mpFrameTexture[0] != NULL && mpFrameTexture[1] != NULL && mpFrameTexture[2] != NULL && mpFrameTexture[3] != NULL) {
-        f32 right = frameBox.getWidth() - mpFrameTexture[3]->getWidth();
-        f32 bottom = frameBox.getHeight() - mpFrameTexture[3]->getHeight();
-        f32 left = mpFrameTexture[0]->getWidth();
-        f32 top = mpFrameTexture[0]->getHeight();
+        f32 right = frameBox.f.x - mpFrameTexture[3]->getWidth();
+        f32 top = frameBox.f.y - mpFrameTexture[3]->getHeight();
+        f32 left = frameBox.i.x + mpFrameTexture[0]->getWidth();
+        f32 bottom = frameBox.i.y + mpFrameTexture[0]->getHeight();
 
-        drawFrameTexture(mpFrameTexture[3], 0.0f, 0.0f, ((field_0x110 >> 7) & 1), ((field_0x110 >> 6) & 1), true);
-        drawFrameTexture(mpFrameTexture[1], left, 0.0f, ((field_0x110 >> 5) & 1), ((field_0x110 >> 4) & 1), (field_0x111 & 1));
+        drawFrameTexture(mpFrameTexture[3], 0.0f, 0.0f,
+            ((field_0x110 >> 7) & 1),
+            ((field_0x110 >> 6) & 1), true);
+        drawFrameTexture(mpFrameTexture[1], left, 0.0f,
+            ((field_0x110 >> 5) & 1),
+            ((field_0x110 >> 4) & 1), (field_0x111 & 1));
+
+        {
+            u16 s0 = ((field_0x110 >> 5) & 1) ? (u16)0x8000 : (u16)0;
+            u16 t0 = ((field_0x110 >> 4) & 1) ? (u16)0x8000 : (u16)0;
+            u16 t1 = t0 ^ 0x8000;
+            drawFrameTexture(mpFrameTexture[1], right, 0.0f, left - right, (f32)mpFrameTexture[1]->getHeight(),
+                s0, t0, s0, t1, false);
+        }
+
+        drawFrameTexture(mpFrameTexture[3], left, top,
+            ((field_0x110 >> 1) & 1),
+            ((field_0x110 >> 0) & 1), (field_0x111 & 1));
+
+        drawFrameTexture(mpFrameTexture[3], right, top, left - right, (f32)mpFrameTexture[3]->getHeight(),
+            ((field_0x110 >> 1) & 1) ? (u16)0 : (u16)0x8000,
+            ((field_0x110 >> 0) & 1) ? (u16)0 : (u16)0x8000,
+            ((field_0x110 >> 1) & 1) ? (u16)0x8000 : (u16)0,
+            ((field_0x110 >> 0) & 1) ? (u16)0x8000 : (u16)0, false);
+        drawFrameTexture(mpFrameTexture[3], left, 0.0f,
+            ((field_0x110 >> 5) & 1),
+            ((field_0x110 >> 4) & 1), (field_0x111 & 1));
+        drawFrameTexture(mpFrameTexture[2], right, 0.0f, left - right, (f32)mpFrameTexture[1]->getHeight(),
+            ((field_0x110 >> 5) & 1) ? (u16)0 : (u16)0x8000,
+            ((field_0x110 >> 4) & 1) ? (u16)0 : (u16)0x8000,
+            ((field_0x110 >> 5) & 1) ? (u16)0x8000 : (u16)0,
+            ((field_0x110 >> 4) & 1) ? (u16)0x8000 : (u16)0, false);
+        drawFrameTexture(mpFrameTexture[2], 0.0f, bottom, (f32)mpFrameTexture[2]->getWidth(), top - bottom,
+            ((field_0x110 >> 3) & 1) ? (u16)0 : (u16)0x8000,
+            ((field_0x110 >> 2) & 1) ? (u16)0 : (u16)0x8000,
+            ((field_0x110 >> 3) & 1) ? (u16)0x8000 : (u16)0,
+            ((field_0x110 >> 2) & 1) ? (u16)0x8000 : (u16)0, false);
     }
 
     GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
@@ -67,10 +109,10 @@ void J2DWindow::resize(f32 w, f32 h) {
 
 /* 802D207C-802D2128       .text setContentsColor__9J2DWindowFQ28JUtility6TColorQ28JUtility6TColorQ28JUtility6TColorQ28JUtility6TColor */
 void J2DWindow::setContentsColor(JUtility::TColor c0, JUtility::TColor c1, JUtility::TColor c2, JUtility::TColor c3) {
-    mColor[0].set(c0);
-    mColor[1].set(c1);
-    mColor[2].set(c2);
-    mColor[3].set(c3);
+    mColorTL.set(c0);
+    mColorTR.set(c1);
+    mColorBL.set(c2);
+    mColorBR.set(c3);
 }
 
 /* 802D2128-802D2190       .text drawSelf__9J2DWindowFff */
@@ -103,10 +145,46 @@ void J2DWindow::drawContents(const JGeometry::TBox2<f32>& contentsBox) {
         GXSetNumTevStages(1);
         GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
-        if ((mColor[0] & 0xFF) == 0xFF && (mColor[1] & 0xFF) == 0xFF && (mColor[2] & 0xFF) == 0xFF && (mColor[3] & 0xFF) == 0xFF && mDrawAlpha == 0xFF) {
+        if ((mColorTL & 0xFF) == 0xFF && (mColorTR & 0xFF) == 0xFF && (mColorBL & 0xFF) == 0xFF && (mColorBR & 0xFF) == 0xFF && mDrawAlpha == 0xFF) {
             GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_SET);
         } else {
             GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+        }
+
+        GXClearVtxDesc();
+        GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+        GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+
+        JUtility::TColor drawColorTL = mColorTL;
+        JUtility::TColor drawColorBL = mColorBL;
+        JUtility::TColor drawColorTR = mColorTR;
+        JUtility::TColor drawColorBR = mColorBR;
+        if (mDrawAlpha != 0xFF) {
+            drawColorTL.a = (drawColorTL.a * mDrawAlpha) / 0xFF;
+            drawColorBL.a = (drawColorBL.a * mDrawAlpha) / 0xFF;
+            drawColorTR.a = (drawColorTR.a * mDrawAlpha) / 0xFF;
+            drawColorBR.a = (drawColorBR.a * mDrawAlpha) / 0xFF;
+        }
+
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+        GXPosition3f32(contentsBox.i.x, contentsBox.i.y, 0.0f);
+        GXColor1u32(drawColorTL);
+        GXPosition3f32(contentsBox.f.x, contentsBox.i.y, 0.0f);
+        GXColor1u32(drawColorTR);
+        GXPosition3f32(contentsBox.f.x, contentsBox.f.y, 0.0f);
+        GXColor1u32(drawColorBR);
+        GXPosition3f32(contentsBox.i.x, contentsBox.f.y, 0.0f);
+        GXColor1u32(drawColorBL);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
+
+        if (mpContentsTexture != NULL) {
+            GXClearVtxDesc();
+            GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+            GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+            GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+            GXSetNumTexGens(1);
+            drawContentsTexture(contentsBox.i.x, contentsBox.i.y, contentsBox.getWidth(), contentsBox.getHeight());
         }
     }
 }
@@ -158,12 +236,104 @@ void J2DWindow::drawFrameTexture(JUTTexture* pTexture, f32 x, f32 y, bool flipS,
 }
 
 /* 802D2784-802D29F4       .text drawContentsTexture__9J2DWindowFffff */
-void J2DWindow::drawContentsTexture(f32, f32, f32, f32) {
-    /* Nonmatching */
+void J2DWindow::drawContentsTexture(f32 x0, f32 y0, f32 w, f32 h) {
+    f32 x1 = x0 + w;
+    f32 y1 = y0 + h;
+
+    f32 texW = mpContentsTexture->getWidth();
+    f32 texH = mpContentsTexture->getHeight();
+    f32 s0 = -(w / texW - 1.0f) / 2.0f;
+    f32 t0 = -(h / texH - 1.0f) / 2.0f;
+    f32 s1 = s0 + w / texW;
+    f32 t1 = t0 + h / texH;
+
+    mpContentsTexture->load(GX_TEXMAP0);
+    setTevMode(mpContentsTexture, 0x00000000, 0xFFFFFFFF);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGBA6, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+
+    GXPosition3f32(x0, y0, 0.0f);
+    GXColor1u32(mDrawAlpha | 0xFFFFFF00);
+    GXTexCoord2f32(s0, t0);
+
+    GXPosition3f32(x1, y0, 0.0f);
+    GXColor1u32(mDrawAlpha | 0xFFFFFF00);
+    GXTexCoord2f32(s1, t0);
+
+    GXPosition3f32(x1, y1, 0.0f);
+    GXColor1u32(mDrawAlpha | 0xFFFFFF00);
+    GXTexCoord2f32(s1, t1);
+
+    GXPosition3f32(x0, y1, 0.0f);
+    GXColor1u32(mDrawAlpha | 0xFFFFFF00);
+    GXTexCoord2f32(s0, t1);
+
+    GXEnd();
+
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_U16, 0xf);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
+}
+
+static inline void GXSetTexCoordGen(GXTexCoordID dst, GXTexGenType type, GXTexGenSrc src, u32 mtx) {
+    GXSetTexCoordGen2(dst, type, src, mtx, GX_FALSE, GX_PTIDENTITY);
 }
 
 /* 802D29F4-802D2D8C       .text setTevMode__9J2DWindowFP10JUTTextureQ28JUtility6TColorQ28JUtility6TColor */
-void J2DWindow::setTevMode(JUTTexture* pTexture, JUtility::TColor c0, JUtility::TColor c1) {
-    /* Nonmatching */
+void J2DWindow::setTevMode(JUTTexture* pTexture, JUtility::TColor reg0, JUtility::TColor reg1) {
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+
+    if (mDrawAlpha == 0xFF && reg0 == 0x00000000 && reg1 == 0xFFFFFFFF) {
+        s32 alphaEn = pTexture->getTransparency();
+        GXSetNumTevStages(1);
+        if (mpPalette != NULL)
+            alphaEn = mpPalette->getTransparency();
+
+        if (alphaEn == 0) {
+            GXSetTevColor(GX_TEVREG2, JUtility::TColor(0xFFFFFFFF));
+            GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_TEXC, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
+            GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_A2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+            GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_SET);
+        } else {
+            GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);
+            GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+        }
+    } else {
+        u8 tevStageNum = 1;
+        GXSetTevColor(GX_TEVREG2, JUtility::TColor(0xFFFFFFFF));
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_TEXC, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
+        if (pTexture->getTransparency())
+            GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_TEXA, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+        else
+            GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_A2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+
+        if (reg0 != 0x00000000 || reg1 != 0xFFFFFFFF) {
+            GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+            GXSetTevColor(GX_TEVREG0, reg0);
+            GXSetTevColor(GX_TEVREG1, reg1);
+            GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_C0, GX_CC_C1, GX_CC_CPREV, GX_CC_ZERO);
+            GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_A0, GX_CA_A1, GX_CA_APREV, GX_CA_ZERO);
+            GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            tevStageNum = 2;
+        }
+
+        if (mDrawAlpha != 0xFF) {
+            GXSetTevOrder((GXTevStageID)(GX_TEVSTAGE0 + tevStageNum), GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+            GXSetTevColorIn((GXTevStageID)(GX_TEVSTAGE0 + tevStageNum), GX_CC_CPREV, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
+            GXSetTevAlphaIn((GXTevStageID)(GX_TEVSTAGE0 + tevStageNum), GX_CA_ZERO, GX_CA_APREV, GX_CA_RASA, GX_CA_ZERO);
+            GXSetTevColorOp((GXTevStageID)(GX_TEVSTAGE0 + tevStageNum), GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaOp((GXTevStageID)(GX_TEVSTAGE0 + tevStageNum), GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            tevStageNum++;
+        }
+
+        GXSetNumTevStages(tevStageNum);
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+    }
+
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
 }
