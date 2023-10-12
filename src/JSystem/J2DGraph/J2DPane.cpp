@@ -168,11 +168,11 @@ void J2DPane::draw(float x, float y, const J2DGrafContext* pCtx, bool clip) {
             if (clip) {
                 mDrawBounds.addPos(pParentPane->mScreenBounds.i.x, pParentPane->mScreenBounds.i.y);
                 mDrawBounds.intersect(pParentPane->mDrawBounds);
-                mDrawAlpha = mAlpha;
-
-                if (mInheritAlpha)
-                    mDrawAlpha = (mAlpha * pParentPane->mDrawAlpha) / 0xFF;
             }
+
+            mDrawAlpha = mAlpha;
+            if (mInheritAlpha)
+                mDrawAlpha = (mAlpha * pParentPane->mDrawAlpha) / 0xFF;
         } else {
             mScreenBounds.addPos(x, y);
             makeMatrix(mBounds.i.x + x, mBounds.i.y + y);

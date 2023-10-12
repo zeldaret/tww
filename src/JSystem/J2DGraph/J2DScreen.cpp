@@ -179,7 +179,7 @@ J2DPane * J2DScreen::search(u32 tag) {
 /* 802D1180-802D12E0       .text drawSelf__9J2DScreenFffPA3_A4_f */
 void J2DScreen::drawSelf(f32 x, f32 y, Mtx* pMtx) {
     GXColor color = mColor;
-    u8 alpha = ((mColor.a * mAlpha) / 0xFF);
+    u8 alpha = ((color.a * mAlpha) / 0xFF);
     if (alpha == 0)
         return;
     color.a = alpha;

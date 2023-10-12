@@ -19,9 +19,7 @@ J2DGrafContext::J2DGrafContext(f32 x, f32 y, f32 width, f32 height)
 void J2DGrafContext::setPort() {
     setScissor();
     setup2D();
-
-    JGeometry::TBox2<f32> bounds(mBounds);
-    GXSetViewport(bounds.i.x, bounds.i.y, bounds.getWidth(), bounds.getHeight(), 0.0f, 1.875f);
+    GXSetViewport(mBounds.i.x, mBounds.i.y, mBounds.getWidth(), mBounds.getHeight(), 0.0f, 1.0f);
 }
 
 static inline void GXSetTexCoordGen(GXTexCoordID dst, GXTexGenType type, GXTexGenSrc src, u32 mtx) {

@@ -836,7 +836,7 @@ config.libs = [
     JSystemLib(
         "J2DGraph",
         [
-            Object(NonMatching, "JSystem/J2DGraph/J2DGrafContext.cpp"),
+            Object(Matching,    "JSystem/J2DGraph/J2DGrafContext.cpp"),
             Object(Matching,    "JSystem/J2DGraph/J2DOrthoGraph.cpp"),
             Object(NonMatching, "JSystem/J2DGraph/J2DPrint.cpp"),
             Object(NonMatching, "JSystem/J2DGraph/J2DPane.cpp"),
@@ -1262,7 +1262,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_doguu_demo"),
     ActorRel(NonMatching, "d_a_obj_gryw00"),
     ActorRel(NonMatching, "d_a_obj_hfuck1"),
-    ActorRel(Matching, "d_a_obj_hole", extra_cflags=["-sym off"]),
+    ActorRel(Matching,    "d_a_obj_hole", extra_cflags=["-sym off"]),
     ActorRel(NonMatching, "d_a_obj_ice"),
     ActorRel(NonMatching, "d_a_obj_ikada"),
     ActorRel(NonMatching, "d_a_obj_kanat"),
@@ -1370,7 +1370,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_oq"),
     ActorRel(NonMatching, "d_a_pedestal"),
     ActorRel(NonMatching, "d_a_saku"),
-    ActorRel(Matching, "d_a_seatag"),
+    ActorRel(Matching,    "d_a_seatag"),
     ActorRel(NonMatching, "d_a_shand"),
     ActorRel(NonMatching, "d_a_ship"),
     ActorRel(NonMatching, "d_a_shop_item"),
