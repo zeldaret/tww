@@ -3,16 +3,123 @@
 // Translation Unit: d_a_boko_static.cpp
 //
 
-#include "d_a_boko_static.h"
-#include "dolphin/types.h"
+#include "f_op/f_op_actor.h"
+#include "f_op/f_op_actor_mng.h"
+#include "d/d_cc_d.h"
+#include "SSystem/SComponent/c_xyz.h"
+#include "SSystem/SComponent/c_phase.h"
+#include "JSystem/J3DGraphAnimator/J3DModel.h"
+#include "m_Do/m_Do_mtx.h"
+
+class daBoko_c : fopAc_ac_c {
+public:
+    /* 0x290 */ request_of_phase_process_class mPhs;
+    /* 0x298 */ J3DModel * mpModel;
+
+    /* TODO The entire rest of daBoko_c */
+
+public:
+    void getTopPos(cXyz *);
+    void getBlurRootPos(cXyz *);
+
+    static Vec m_top_offset[6];
+    static Vec m_blur_root_offset[6];
+    static Vec m_root_offset[6];
+    static f32 m_cps_r[6];
+    static s32 m_at_point[6];
+    static u32 m_at_type[6];
+    static f32 m_jump_blur_rate[6];
+    static f32 m_blur_rate[6];
+    static const u32 m_se_type[6];
+};
+
+Vec daBoko_c::m_top_offset[6] = {
+    { 0.0f, 0.0f, 85.0f },
+    { 16.0f, 0.0f, 77.0f },
+    { -8.0f, 3.0f, 120.0f },
+    { 0.0f, 0.0f, 128.0f },
+    { 10.0f, 0.0f, 200.0f },
+    { -40.0f, 0.0f, 110.0f },
+};
+Vec daBoko_c::m_blur_root_offset[6] = {
+    { 0.0f, 0.0f, -45.0f },
+    { 0.0f, 0.0f, -43.0f },
+    { -1.0f, 3.0f, -60.0f },
+    { 0.0f, 0.0f, -50.0f },
+    { 0.0f, 0.0f, -100.0f },
+    { -20.0f, 0.0f, -50.0f },
+};
+Vec daBoko_c::m_root_offset[6] = {
+    { 0.0f, 0.0f, -85.0f },
+    { 5.0f, 0.0f, -90.0f },
+    { 3.0f, 0.0f, -120.0f },
+    { 0.0f, 0.0f, -130.0f },
+    { 0.0f, 0.0f, -175.0f },
+    { 0.0f, 0.0f, -125.0f },
+};
+f32 daBoko_c::m_cps_r[6] = {
+    30.0f,
+    30.0f,
+    50.0f,
+    50.0f,
+    50.0f,
+    50.0f,
+};
+s32 daBoko_c::m_at_point[6] = {
+    0x01,
+    0x02,
+    0x04,
+    0x04,
+    0x04,
+    0x04,
+};
+u32 daBoko_c::m_at_type[6] = {
+    AT_TYPE_BOKO_STICK,
+    AT_TYPE_MACHETE,
+    AT_TYPE_STALFOS_MACE,
+    AT_TYPE_DARKNUT_SWORD,
+    AT_TYPE_MOBLIN_SPEAR,
+    AT_TYPE_PGANON_SWORD,
+};
+f32 daBoko_c::m_jump_blur_rate[6] = {
+    0.0f,
+    -0.1f,
+    0.4f,
+    0.5f,
+    1.4f,
+    0.5f,
+};
+f32 daBoko_c::m_blur_rate[6] = {
+    0.0f,
+    -0.1f,
+    0.1f,
+    0.2f,
+    1.0f,
+    0.2f,
+};
+const u32 daBoko_c::m_se_type[6] = {
+    0x04,
+    0x01,
+    0x01,
+    0x01,
+    0x03,
+    0x01,
+};
 
 /* 80067E78-80067F0C       .text getTopPos__8daBoko_cFP4cXyz */
-void daBoko_c::getTopPos(cXyz*) {
-    /* Nonmatching */
+void daBoko_c::getTopPos(cXyz* ret) {
+    if (mpModel != NULL) {
+        cMtx_multVec(mpModel->getBaseTRMtx(), &m_top_offset[fopAcM_GetParam(this)], ret);
+    } else {
+        *ret = fopAcM_GetPosition(this) + m_top_offset[fopAcM_GetParam(this)];
+    }
 }
 
 /* 80067F0C-80067FA0       .text getBlurRootPos__8daBoko_cFP4cXyz */
-void daBoko_c::getBlurRootPos(cXyz*) {
-    /* Nonmatching */
+void daBoko_c::getBlurRootPos(cXyz* ret) {
+    if (mpModel != NULL) {
+        cMtx_multVec(mpModel->getBaseTRMtx(), &m_blur_root_offset[fopAcM_GetParam(this)], ret);
+    } else {
+        *ret = fopAcM_GetPosition(this) + m_blur_root_offset[fopAcM_GetParam(this)];
+    }
 }
-

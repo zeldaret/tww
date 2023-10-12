@@ -9,8 +9,8 @@
 
 /* 80080018-8008010C       .text dPath_GetPnt__FP5dPathi */
 dPath__Point* dPath_GetPnt(dPath* path, int pnt_index) {
-    JUT_ASSERT(14, path != 0);
-    JUT_ASSERT(15, 0 <= pnt_index && pnt_index < path->m_num);
+    JUT_ASSERT(30, path != 0);
+    JUT_ASSERT(31, 0 <= pnt_index && pnt_index < path->m_num);
 
     if (path == NULL || path->mpPnt == NULL || 0 > pnt_index || pnt_index >= path->m_num)
         return NULL;
@@ -62,7 +62,39 @@ dPath* dPath_GetNextRoomPath(dPath* path, int room_no) {
 }
 
 /* 80080340-800804A4       .text dPath_GetPolyRoomPathVec__FR13cBgS_PolyInfoP4cXyzPi */
-void dPath_GetPolyRoomPathVec(cBgS_PolyInfo&, cXyz*, int*) {
-    /* Nonmatching */
+int dPath_GetPolyRoomPathVec(cBgS_PolyInfo& polyInfo, cXyz* pDstPos, int* pDstArg0) {
+    int room_no = dComIfG_Bgsp()->GetRoomId(polyInfo);
+    int path_index = dComIfG_Bgsp()->GetRoomPathId(polyInfo);
+
+    pDstPos->x = 0.0f;
+    pDstPos->y = 0.0f;
+    pDstPos->z = 0.0f;
+    *pDstArg0 = 0;
+
+    if (room_no == -1)
+        return FALSE;
+
+    dPath * path = dPath_GetRoomPath(path_index, room_no);
+    if (path == NULL)
+        return FALSE;
+
+    if (path->field4_0x6 != 0xFF && dComIfGs_isSwitch(path->field4_0x6, room_no))
+        return FALSE;
+
+    int pnt_no = dComIfG_Bgsp()->GetRoomPathPntNo(polyInfo);
+    if (pnt_no == 0xFF || pnt_no < 0 || pnt_no >= path->m_num)
+        return FALSE;
+
+    dPath__Point *point = &path->mpPnt[pnt_no];
+    dPath__Point *next_point;
+    if (pnt_no == path->m_num - 1)
+        next_point = &path->mpPnt[0];
+    else
+        next_point = &path->mpPnt[pnt_no + 1];
+    pDstPos->x = next_point->mPos.x - point->mPos.x;
+    pDstPos->y = next_point->mPos.y - point->mPos.y;
+    pDstPos->z = next_point->mPos.z - point->mPos.z;
+    *pDstArg0 = path->mArg0;
+    return TRUE;
 }
 

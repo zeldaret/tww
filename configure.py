@@ -369,7 +369,7 @@ config.libs = [
             Object(NonMatching, "d/d_tree.cpp"),
             Object(NonMatching, "d/d_particle.cpp"),
             Object(Matching,    "d/d_particle_name.cpp"),
-            Object(NonMatching, "d/d_path.cpp"),
+            Object(Matching,    "d/d_path.cpp"),
             Object(NonMatching, "d/d_drawlist.cpp"),
             Object(Matching,    "d/d_kankyo_data.cpp"),
             Object(Matching,    "d/d_kankyo_wether.cpp"),
