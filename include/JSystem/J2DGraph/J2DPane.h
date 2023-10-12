@@ -46,22 +46,28 @@ public:
     void setBasePosition(J2DBasePosition position);
 
     virtual ~J2DPane();
-    virtual u16 getTypeID() { return 16; }
+    virtual u16 getTypeID() { return 0x10; }
     virtual void move(f32 x, f32 y);
     virtual void add(f32 x, f32 y);
-    virtual void resize(f32 x, f32 y);
+    virtual void resize(f32 w, f32 h) {
+        mBounds.f.x = mBounds.i.x + w;
+        mBounds.f.y = mBounds.i.y + h;
+    }
     virtual bool setConnectParent(bool connected);
     virtual void calcMtx();
     virtual void update();
-    virtual void drawSelf(f32 arg1, f32 arg2);
-    virtual void drawSelf(f32 arg1, f32 arg2, Mtx* mtx) {}
+    virtual void drawSelf(f32 x, f32 y);
+    virtual void drawSelf(f32 x, f32 y, Mtx* mtx) {}
     virtual J2DPane* search(u32 tag);
     virtual void makeMatrix(f32, f32);
 
+    f32 getWidth() const { return mBounds.getWidth(); }
+    f32 getHeight() const { return mBounds.getHeight(); }
     JSUTree<J2DPane>* getFirstChild() { return mPaneTree.getFirstChild(); }
     JSUTree<J2DPane>* getEndChild() { return mPaneTree.getEndChild(); }
     const JSUTree<J2DPane>* getPaneTree() { return &mPaneTree; }
     u8 getAlpha() const { return mAlpha; }
+    bool isConnectParent() const { return mIsConnectParent; }
 
 public:
     /* 0x04 */ u32 mMagic;
@@ -80,7 +86,7 @@ public:
     /* 0xAC */ u8 mAlpha;
     /* 0xAD */ u8 mDrawAlpha;
     /* 0xAE */ u8 mInheritAlpha;
-    /* 0xAF */ u8 field_0xaf;
+    /* 0xAF */ u8 mIsConnectParent;
     /* 0xB0 */ JSUTree<J2DPane> mPaneTree;
 };
 

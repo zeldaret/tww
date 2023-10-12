@@ -53,7 +53,7 @@ void J2DPane::initiate() {
     mAlpha = 0xFF;
     mInheritAlpha = TRUE;
     mDrawAlpha = 0xFF;
-    field_0xaf = 0;
+    mIsConnectParent = 0;
     calcMtx();
 }
 
@@ -117,7 +117,7 @@ void J2DPane::makePaneStream(J2DPane* pParentPane, JSURandomInputStream* pStream
 
     mCullMode = GX_CULL_NONE;
     mDrawAlpha = 0xFF;
-    field_0xaf = 0;
+    mIsConnectParent = 0;
     calcMtx();
 }
 
@@ -196,7 +196,7 @@ void J2DPane::draw(float x, float y, const J2DGrafContext* pCtx, bool clip) {
             GXSetCullMode((GXCullMode)mCullMode);
             drawSelf(x, y, &ctx.mPosMtx);
 
-            for (JSUTreeIterator<J2DPane> iter = mPaneTree.getFirstChild(); iter; ++iter)
+            for (JSUTreeIterator<J2DPane> iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter)
                 iter->draw(0.0f, 0.0f, pCtx, clip);
         }
     }

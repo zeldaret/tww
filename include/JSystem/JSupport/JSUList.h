@@ -201,8 +201,6 @@ public:
 
     bool operator!=(JSUTree<T>* other) { return this->mTree != other; }
 
-    operator bool() const { return this->mTree != NULL; }
-
     JSUTreeIterator<T> operator++(int) {
         JSUTreeIterator<T> prev = *this;
         this->mTree = this->mTree->getNextChild();

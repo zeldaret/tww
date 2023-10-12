@@ -14,11 +14,13 @@
 class J2DWindow : public J2DPane {
 public:
     J2DWindow(J2DPane * pPane, JSURandomInputStream * pStream);
+    u8 pad[0x114 - 0x0cc];
 };
 
 class J2DPicture : public J2DPane {
 public:
     J2DPicture(J2DPane * pPane, JSURandomInputStream * pStream);
+    u8 pad[0x124 - 0x0cc];
 };
 
 /* 802D08E4-802D0944       .text __dt__9J2DScreenFv */
@@ -69,24 +71,29 @@ s32 J2DScreen::makeHierarchyPanes(J2DPane* pParent, JSURandomInputStream* pStrea
 
 /* 802D0B40-802D0CE0       .text createPane__9J2DScreenFRCQ27J2DPane18J2DScrnBlockHeaderP20JSURandomInputStreamP7J2DPane */
 J2DPane * J2DScreen::createPane(const J2DPane::J2DScrnBlockHeader& header, JSURandomInputStream* pStream, J2DPane* pParent) {
-    /* Nonmatching - regalloc */
+    J2DPane * pPane;
 
     switch (header.mMagic) {
-    case 'TBX1':
-        return new J2DTextBox(pParent, pStream);
-    case 'PIC1':
-        return new J2DPicture(pParent, pStream);
     case 'PAN1':
-        return new J2DPane(pParent, pStream);
+        pPane = new J2DPane(pParent, pStream);
+        break;
     case 'WIN1':
-        return new J2DWindow(pParent, pStream);
+        pPane = new J2DWindow(pParent, pStream);
+        break;
+    case 'PIC1':
+        pPane = new J2DPicture(pParent, pStream);
+        break;
+    case 'TBX1':
+        pPane = new J2DTextBox(pParent, pStream);
+        break;
     default:
         JUT_WARN(0x9f, "%s", "unknown pane");
         u32 pos = pStream->getPosition() + header.mSize;
-        J2DPane * pPane = new J2DPane(pPane, pStream);
+        pPane = new J2DPane(pParent, pStream);
         pStream->seek(pos, JSUStreamSeekFrom_SET);
-        return pPane;
     }
+
+    return pPane;
 }
 
 /* 802D0CE0-802D0D70       .text set__9J2DScreenFP20JSURandomInputStream */
@@ -117,28 +124,26 @@ bool J2DScreen::checkSignature(JSURandomInputStream* pStream) {
 
 /* 802D0DE8-802D0F2C       .text getScreenInformation__9J2DScreenFP20JSURandomInputStream */
 bool J2DScreen::getScreenInformation(JSURandomInputStream* pStream) {
-    /* Nonmatching - regalloc / load order */
-
-    struct {
+    struct J2DScrnInfoHeader {
         u32 mMagic;
         u32 mSize;
         u16 mWidth;
         u16 mHeight;
-        GXColor mColor;
+        u32 mColor;
     } header;
 
     pStream->read(&header, sizeof(header));
 
     if (header.mMagic != 'INF1') {
-        JUT_WARN(0xf9, "%s", "SCRN resource is broken.\n");
+        JUT_WARN(0xf2, "%s", "SCRN resource is broken.\n");
         return false;
     }
 
-    GXColor color = header.mColor;
     JGeometry::TBox2<f32> bounds(0.0f, 0.0f, header.mWidth, header.mHeight);
-
     mBounds = bounds;
     calcMtx();
+
+    JUtility::TColor color(header.mColor);
     mColor = color;
 
     if (header.mSize > sizeof(header))
@@ -178,24 +183,25 @@ J2DPane * J2DScreen::search(u32 tag) {
 
 /* 802D1180-802D12E0       .text drawSelf__9J2DScreenFffPA3_A4_f */
 void J2DScreen::drawSelf(f32 x, f32 y, Mtx* pMtx) {
-    GXColor color = mColor;
+    JUtility::TColor color(mColor);
     u8 alpha = ((color.a * mAlpha) / 0xFF);
     if (alpha == 0)
         return;
-    color.a = alpha;
 
-    JUtility::TColor vtxColor(color);
+    JUtility::TColor colorAlpha((color & 0xFFFFFF00) | alpha);
+    color = colorAlpha;
+
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(0.0f, 0.0f, 0.0f);
-    GXColor1u32(vtxColor);
+    GXColor1u32(color);
     GXPosition3f32(mBounds.getWidth(), 0.0f, 0.0f);
-    GXColor1u32(vtxColor);
+    GXColor1u32(color);
     GXPosition3f32(mBounds.getWidth(), mBounds.getHeight(), 0.0f);
-    GXColor1u32(vtxColor);
+    GXColor1u32(color);
     GXPosition3f32(0.0f, mBounds.getHeight(), 0.0f);
-    GXColor1u32(vtxColor);
+    GXColor1u32(color);
     GXEnd();
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
 }
