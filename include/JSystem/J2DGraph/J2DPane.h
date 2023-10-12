@@ -41,7 +41,7 @@ public:
     void initiate();
     void makePaneStream(J2DPane* other, JSURandomInputStream* stream);
     bool insertChild(J2DPane* before, J2DPane* child);
-    void draw(f32 a1, f32 a2, const J2DGrafContext* ctx, bool a4);
+    void draw(f32 x, f32 y, const J2DGrafContext* ctx, bool clip);
     void clip(const JGeometry::TBox2<f32>& bounds);
     void setBasePosition(J2DBasePosition position);
 

@@ -162,11 +162,13 @@ void J2DPane::draw(float x, float y, const J2DGrafContext* pCtx, bool clip) {
         mDrawBounds = mBounds;
 
         if (pParentPane != NULL) {
-            mScreenBounds.addPos(pParentPane->mScreenBounds.i.x, pParentPane->mScreenBounds.i.y);
+            JGeometry::TBox2<f32> screenBounds = pParentPane->mScreenBounds;
+            mScreenBounds.addPos(screenBounds.i.x, screenBounds.i.y);
             MTXConcat(pParentPane->mDrawMtx, mMtx, mDrawMtx);
 
             if (clip) {
-                mDrawBounds.addPos(pParentPane->mScreenBounds.i.x, pParentPane->mScreenBounds.i.y);
+                JGeometry::TBox2<f32> screenBounds = pParentPane->mScreenBounds;
+                mDrawBounds.addPos(screenBounds.i.x, screenBounds.i.y);
                 mDrawBounds.intersect(pParentPane->mDrawBounds);
             }
 
@@ -181,7 +183,7 @@ void J2DPane::draw(float x, float y, const J2DGrafContext* pCtx, bool clip) {
             mDrawAlpha = mAlpha;
         }
 
-        JGeometry::TBox2<f32> clipBounds( 0.0f, 0.0f, 0.0f, 0.0f );
+        JGeometry::TBox2<f32> clipBounds(0.0f, 0.0f, 0.0f, 0.0f);
         if (clip)
             ((J2DOrthoGraph*)pCtx)->scissorBounds(&clipBounds, &mDrawBounds);
 
@@ -194,7 +196,7 @@ void J2DPane::draw(float x, float y, const J2DGrafContext* pCtx, bool clip) {
             GXSetCullMode((GXCullMode)mCullMode);
             drawSelf(x, y, &ctx.mPosMtx);
 
-            for (JSUTreeIterator<J2DPane> iter = mPaneTree.getFirstChild(); iter.getObject(); ++iter)
+            for (JSUTreeIterator<J2DPane> iter = mPaneTree.getFirstChild(); iter; ++iter)
                 iter->draw(0.0f, 0.0f, pCtx, clip);
         }
     }
@@ -243,7 +245,7 @@ void J2DPane::makeMatrix(f32 x, f32 y) {
     if (mRotation != 0.0f) {
         MTXTrans(stack1, -mBasePosition.x, -mBasePosition.y, 0.0f);
         f32 rot = mRotationAxis == ROTATE_Z ? -mRotation : mRotation;
-        MTXRotRad(stack2, mRotationAxis, rot * 0.017445329f);
+        MTXRotRad(stack2, mRotationAxis, rot * 0.017453292f);
         MTXTrans(stack3, mBasePosition.x + x, mBasePosition.y + y, 0.0f);
         MTXConcat(stack2, stack1, mMtx);
         MTXConcat(stack3, mMtx, mMtx);
