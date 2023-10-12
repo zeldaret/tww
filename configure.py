@@ -1066,9 +1066,9 @@ config.libs = [
         "host": False,
         "objects": [
             Object(NonMatching, "Runtime.PPCEABI.H/__mem.c"),
-            Object(NonMatching, "Runtime.PPCEABI.H/__va_arg.c"),
+            Object(Matching,    "Runtime.PPCEABI.H/__va_arg.c"),
             Object(Matching,    "Runtime.PPCEABI.H/global_destructor_chain.c"),
-            Object(NonMatching, "Runtime.PPCEABI.H/CPlusLibPPC.cp"),
+            Object(Matching,    "Runtime.PPCEABI.H/CPlusLibPPC.cp"),
             Object(NonMatching, "Runtime.PPCEABI.H/NMWException.cp"),
             Object(NonMatching, "Runtime.PPCEABI.H/ptmf.c"),
             Object(NonMatching, "Runtime.PPCEABI.H/runtime.c"),
