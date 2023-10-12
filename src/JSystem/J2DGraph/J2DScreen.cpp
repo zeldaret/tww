@@ -4,54 +4,198 @@
 //
 
 #include "JSystem/J2DGraph/J2DScreen.h"
-#include "dolphin/types.h"
+#include "JSystem/J2DGraph/J2DTextBox.h"
+#include "JSystem/J2DGraph/J2DOrthoGraph.h"
+#include "JSystem/JKernel/JKRArchive.h"
+#include "JSystem/JKernel/JKRFileLoader.h"
+#include "JSystem/JSupport/JSUMemoryStream.h"
+#include "JSystem/JUtility/JUTAssert.h"
+
+class J2DWindow : public J2DPane {
+public:
+    J2DWindow(J2DPane * pPane, JSURandomInputStream * pStream);
+};
+
+class J2DPicture : public J2DPane {
+public:
+    J2DPicture(J2DPane * pPane, JSURandomInputStream * pStream);
+};
 
 /* 802D08E4-802D0944       .text __dt__9J2DScreenFv */
 J2DScreen::~J2DScreen() {
-    /* Nonmatching */
 }
 
 /* 802D0944-802D0A2C       .text set__9J2DScreenFPCcP10JKRArchive */
-void J2DScreen::set(const char*, JKRArchive*) {
-    /* Nonmatching */
+bool J2DScreen::set(const char* pName, JKRArchive* pArc) {
+    void * pRes = JKRFileLoader::getGlbResource(pName, pArc);
+    if (pRes != NULL) {
+        u32 size = pArc->getExpandedResSize(pRes);
+        JSUMemoryInputStream stream(pRes, size);
+        return set(&stream);
+    } else {
+        return 0;
+    }
 }
 
 /* 802D0A2C-802D0B40       .text makeHierarchyPanes__9J2DScreenFP7J2DPaneP20JSURandomInputStream */
-void J2DScreen::makeHierarchyPanes(J2DPane*, JSURandomInputStream*) {
-    /* Nonmatching */
+s32 J2DScreen::makeHierarchyPanes(J2DPane* pParent, JSURandomInputStream* pStream) {
+    J2DPane * pPane = pParent;
+
+    while (true) {
+        J2DPane::J2DScrnBlockHeader header;
+        pStream->peek(&header, 8);
+
+        switch (header.mMagic) {
+        case 'EXT1':
+            pStream->seek(header.mSize, JSUStreamSeekFrom_CUR);
+            return 1;
+        case 'BGN1':
+            pStream->seek(header.mSize, JSUStreamSeekFrom_CUR);
+            s32 ret = makeHierarchyPanes(pPane, pStream);
+            if (ret != 0)
+                return ret;
+            break;
+        case 'END1':
+            pStream->seek(header.mSize, JSUStreamSeekFrom_CUR);
+            return 0;
+        default:
+            pPane = createPane(header, pStream, pParent);
+            if (pPane == NULL)
+                return 2;
+            break;
+        }
+    }
 }
 
 /* 802D0B40-802D0CE0       .text createPane__9J2DScreenFRCQ27J2DPane18J2DScrnBlockHeaderP20JSURandomInputStreamP7J2DPane */
-void J2DScreen::createPane(const J2DPane::J2DScrnBlockHeader&, JSURandomInputStream*, J2DPane*) {
-    /* Nonmatching */
+J2DPane * J2DScreen::createPane(const J2DPane::J2DScrnBlockHeader& header, JSURandomInputStream* pStream, J2DPane* pParent) {
+    /* Nonmatching - regalloc */
+
+    switch (header.mMagic) {
+    case 'TBX1':
+        return new J2DTextBox(pParent, pStream);
+    case 'PIC1':
+        return new J2DPicture(pParent, pStream);
+    case 'PAN1':
+        return new J2DPane(pParent, pStream);
+    case 'WIN1':
+        return new J2DWindow(pParent, pStream);
+    default:
+        JUT_WARN(0x9f, "%s", "unknown pane");
+        u32 pos = pStream->getPosition() + header.mSize;
+        J2DPane * pPane = new J2DPane(pPane, pStream);
+        pStream->seek(pos, JSUStreamSeekFrom_SET);
+        return pPane;
+    }
 }
 
 /* 802D0CE0-802D0D70       .text set__9J2DScreenFP20JSURandomInputStream */
-void J2DScreen::set(JSURandomInputStream*) {
-    /* Nonmatching */
+bool J2DScreen::set(JSURandomInputStream* pStream) {
+    if (!checkSignature(pStream))
+        return false;
+
+    if (!getScreenInformation(pStream))
+        return false;
+
+    if (makeHierarchyPanes(this, pStream) == 2)
+        return false;
+
+    return pStream->isGood();
 }
 
 /* 802D0D70-802D0DE8       .text checkSignature__9J2DScreenFP20JSURandomInputStream */
-void J2DScreen::checkSignature(JSURandomInputStream*) {
-    /* Nonmatching */
+bool J2DScreen::checkSignature(JSURandomInputStream* pStream) {
+    u32 header[8];
+    pStream->read(header, sizeof(header));
+    if (header[0] != 'SCRN' || header[1] != 'blo1') {
+        JUT_WARN(0xd9, "%s", "SCRN resource is broken.\n");
+        return false;
+    }
+
+    return true;
 }
 
 /* 802D0DE8-802D0F2C       .text getScreenInformation__9J2DScreenFP20JSURandomInputStream */
-void J2DScreen::getScreenInformation(JSURandomInputStream*) {
-    /* Nonmatching */
+bool J2DScreen::getScreenInformation(JSURandomInputStream* pStream) {
+    /* Nonmatching - regalloc / load order */
+
+    struct {
+        u32 mMagic;
+        u32 mSize;
+        u16 mWidth;
+        u16 mHeight;
+        GXColor mColor;
+    } header;
+
+    pStream->read(&header, sizeof(header));
+
+    if (header.mMagic != 'INF1') {
+        JUT_WARN(0xf9, "%s", "SCRN resource is broken.\n");
+        return false;
+    }
+
+    GXColor color = header.mColor;
+    JGeometry::TBox2<f32> bounds(0.0f, 0.0f, header.mWidth, header.mHeight);
+
+    mBounds = bounds;
+    calcMtx();
+    mColor = color;
+
+    if (header.mSize > sizeof(header))
+        pStream->skip(header.mSize - sizeof(header));
+
+    return true;
 }
 
 /* 802D0F2C-802D1150       .text draw__9J2DScreenFffPC14J2DGrafContext */
-void J2DScreen::draw(float, float, const J2DGrafContext*) {
-    /* Nonmatching */
+void J2DScreen::draw(f32 x, f32 y, const J2DGrafContext* pCtx) {
+    if (pCtx != NULL) {
+        J2DGrafContext ctx = *pCtx;
+        J2DPane::draw(x, y, pCtx, mbClipToParent);
+        ctx.setScissor();
+    } else {
+        J2DOrthoGraph ctx(0.0f, 0.0f, 640.0f, 480.0f, -1.0f, 1.0f);
+        ctx.setPort();
+        J2DPane::draw(x, y, &ctx, mbClipToParent);
+        ctx.setScissor();
+    }
+
+    GXSetNumTevStages(1);
+    GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetVtxDesc(GX_VA_TEX0, GX_NONE);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetNumTexGens(0);
 }
 
 /* 802D1150-802D1180       .text search__9J2DScreenFUl */
-void J2DScreen::search(unsigned long) {
-    /* Nonmatching */
+J2DPane * J2DScreen::search(u32 tag) {
+    if (tag == 0)
+        return NULL;
+
+    return J2DPane::search(tag);
 }
 
 /* 802D1180-802D12E0       .text drawSelf__9J2DScreenFffPA3_A4_f */
-void J2DScreen::drawSelf(float, float, float(*)[3][4]) {
-    /* Nonmatching */
+void J2DScreen::drawSelf(f32 x, f32 y, Mtx* pMtx) {
+    GXColor color = mColor;
+    u8 alpha = ((mColor.a * mAlpha) / 0xFF);
+    if (alpha == 0)
+        return;
+    color.a = alpha;
+
+    JUtility::TColor vtxColor(color);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3f32(0.0f, 0.0f, 0.0f);
+    GXColor1u32(vtxColor);
+    GXPosition3f32(mBounds.getWidth(), 0.0f, 0.0f);
+    GXColor1u32(vtxColor);
+    GXPosition3f32(mBounds.getWidth(), mBounds.getHeight(), 0.0f);
+    GXColor1u32(vtxColor);
+    GXPosition3f32(0.0f, mBounds.getHeight(), 0.0f);
+    GXColor1u32(vtxColor);
+    GXEnd();
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
 }

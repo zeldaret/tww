@@ -3,7 +3,6 @@
 
 #include "JSystem/JGeometry.h"
 #include "JSystem/JSupport/JSUList.h"
-#include "SSystem/SComponent/c_xyz.h"
 #include "dolphin/mtx/mtx.h"
 
 class J2DGrafContext;
@@ -30,6 +29,11 @@ struct J2DPaneHeader {
 
 class J2DPane {
 public:
+    struct J2DScrnBlockHeader {
+        /* 0x00 */ u32 mMagic;
+        /* 0x04 */ u32 mSize;
+    };
+
     J2DPane();
     J2DPane(J2DPane*, bool, u32, const JGeometry::TBox2<f32>&);
     J2DPane(u32, const JGeometry::TBox2<f32>&);
@@ -50,7 +54,7 @@ public:
     virtual void calcMtx();
     virtual void update();
     virtual void drawSelf(f32 arg1, f32 arg2);
-    virtual void drawSelf(f32 arg1, f32 arg2, Mtx* mtx){};
+    virtual void drawSelf(f32 arg1, f32 arg2, Mtx* mtx) {}
     virtual J2DPane* search(u32 tag);
     virtual void makeMatrix(f32, f32);
 
@@ -67,7 +71,7 @@ public:
     /* 0x2C */ JGeometry::TBox2<f32> mDrawBounds;
     /* 0x3C */ Mtx mMtx;
     /* 0x6C */ Mtx mDrawMtx;
-    /* 0x9C */ cXy mBasePosition;
+    /* 0x9C */ JGeometry::TVec2<f32> mBasePosition;
     /* 0xA4 */ f32 mRotation;
     /* 0xA8 */ s8 mRotationAxis;
     /* 0xA9 */ u8 m2DBasePosition;
