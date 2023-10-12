@@ -15,6 +15,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_player_link.h"
 #include "d/actor/d_a_item.h"
+#include "d/actor/d_a_sea.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_printf.h"
@@ -1065,8 +1066,31 @@ fopAc_ac_c* fopAcM_searchFromName(char* pProcName, u32 paramMask, u32 parameter)
 }
 
 /* 80028448-80028560       .text fopAcM_getWaterY__FPC4cXyzPf */
-s32 fopAcM_getWaterY(const cXyz*, float*) {
+s32 fopAcM_getWaterY(const cXyz* pPos, float* pDstWaterY) {
     /* Nonmatching */
+    static dBgS_WtrChk water_check;
+    s32 ret = 0;
+
+    *pDstWaterY = -1e09;
+
+    cXyz pos = *pPos;
+    pos.y -= 500.0f;
+    water_check.Set(pos, pos.y + 1000.0f);
+
+    bool hit = dComIfG_Bgsp()->SplGrpChk(&water_check);
+    if (hit) {
+        *pDstWaterY = water_check.GetHeight();
+        ret = 1;
+    }
+
+    if (daSea_ChkArea(pos.x, pos.z)) {
+        f32 waveY = daSea_calcWave(pos.x, pos.z);
+        if (waveY > *pDstWaterY)
+            *pDstWaterY = waveY;
+        ret = 1;
+    }
+
+    return ret;
 }
 
 /* 80028684-80028724       .text fopAcM_setGbaName__FP10fopAc_ac_cUcUcUc */
