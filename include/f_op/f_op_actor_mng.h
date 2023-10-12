@@ -292,7 +292,7 @@ inline BOOL fopAcM_isSwitch(fopAc_ac_c* pActor, int sw) {
     return dComIfGs_isSwitch(sw, fopAcM_GetHomeRoomNo(pActor));
 }
 
-inline fopAc_ac_c* fopAcM_SearchByID(unsigned int id) {
+inline fopAc_ac_c* fopAcM_SearchByID(u32 id) {
     return (fopAc_ac_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)fpcSch_JudgeByID, &id);
 }
 

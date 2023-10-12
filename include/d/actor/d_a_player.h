@@ -177,7 +177,7 @@ public:
     virtual void getBaseAnimeFrame() = 0;
     virtual void getItemID() const;
     virtual void getThrowBoomerangID() const;
-    virtual void getGrabActorID() const;
+    virtual u32 getGrabActorID() const;
     virtual void checkGrabBarrel();
     virtual void checkPlayerNoDraw();
     virtual void checkRopeTag();

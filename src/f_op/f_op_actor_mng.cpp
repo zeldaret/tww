@@ -13,6 +13,7 @@
 #include "d/d_item.h"
 #include "d/d_item_data.h"
 #include "d/actor/d_a_player.h"
+#include "d/actor/d_a_player_link.h"
 #include "d/actor/d_a_item.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_lib.h"
@@ -959,13 +960,28 @@ void fopAcM_createWarpFlower(cXyz*, csXyz*, int, unsigned char) {
 }
 
 /* 80027920-80027970       .text enemySearchJugge__FPvPv */
-void enemySearchJugge(void*, void*) {
-    /* Nonmatching */
+fopAc_ac_c * enemySearchJugge(void* ptr, void*) {
+    if (ptr != NULL && fopAc_IsActor(ptr)) {
+        fopAc_ac_c * i_ac = (fopAc_ac_c *)ptr;
+        if (i_ac->mGroup == fopAc_ENEMY_e)
+            return i_ac;
+    }
+    return NULL;
 }
 
 /* 80027970-80027A9C       .text fopAcM_myRoomSearchEnemy__FSc */
-fopAc_ac_c* fopAcM_myRoomSearchEnemy(signed char) {
-    /* Nonmatching */
+fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo) {
+    JUT_ASSERT(0xe07, roomNo >= 0);
+
+    scene_class* roomProc = fopScnM_SearchByID(dStage_roomControl_c::getStatusProcID(roomNo));
+    JUT_ASSERT(0xe0a, roomProc != 0);
+
+    u32 grabProcID = daPy_getPlayerActorClass()->getGrabActorID();
+    fopAc_ac_c* enemy = fopAcM_SearchByID(grabProcID);
+    if (enemy != NULL && fopAcM_GetGroup(enemy) == fopAc_ENEMY_e)
+        return enemy;
+
+    return (fopAc_ac_c*) fpcM_JudgeInLayer(fpcM_LayerID(roomProc), (fpcCtIt_JudgeFunc)enemySearchJugge, NULL);
 }
 
 /* 80027A9C-80027B24       .text fopAcM_createDisappear__FP10fopAc_ac_cP4cXyzUcUcUc */
@@ -1018,14 +1034,34 @@ const char * fopAcM_getProcNameString(fopAc_ac_c* i_this) {
     return "UNKOWN";
 }
 
+struct findObjectCBParam {
+    const char * mpProcName;
+    u32 mParamMask;
+    u32 mParameter;
+};
+
 /* 8002833C-80028410       .text fopAcM_findObjectCB__FP10fopAc_ac_cPv */
-fopAc_ac_c* fopAcM_findObjectCB(fopAc_ac_c*, void*) {
-    /* Nonmatching */
+fopAc_ac_c* fopAcM_findObjectCB(fopAc_ac_c* it, void* i_prm) {
+    findObjectCBParam* Prm = (findObjectCBParam*)i_prm;
+    JUT_ASSERT(4095, Prm);
+
+    dStage_objectNameInf *inf = dStage_searchName(Prm->mpProcName);
+    if (inf == NULL)
+        return NULL;
+
+    if (inf->mProcName == fopAcM_GetProfName(it) && inf->mSubtype == it->mSubtype && (Prm->mParamMask == 0 || Prm->mParameter == (fopAcM_GetParam(it) & Prm->mParamMask)))
+        return it;
+
+    return NULL;
 }
 
 /* 80028410-80028448       .text fopAcM_searchFromName__FPcUlUl */
 fopAc_ac_c* fopAcM_searchFromName(char* pProcName, u32 paramMask, u32 parameter) {
-    /* Nonmatching */
+    findObjectCBParam param;
+    param.mpProcName = pProcName;
+    param.mParamMask = paramMask;
+    param.mParameter = parameter;
+    return (fopAc_ac_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)fopAcM_findObjectCB, &param);
 }
 
 /* 80028448-80028560       .text fopAcM_getWaterY__FPC4cXyzPf */
