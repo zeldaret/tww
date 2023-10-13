@@ -276,18 +276,6 @@ public:
     static void ZXYrotM(s16 x, s16 y, s16 z) { mDoMtx_ZXYrotM(now, x, y, z); }
 
     /**
-     * Rotates a new matrix on the Y-axis then concatenates it with the `now` matrix
-     * @param y The rotation value
-     */
-    static void YrotM(s16 y) { mDoMtx_YrotM(now, y); }
-
-    /**
-     * Rotates the `now` matrix on the Y-axis
-     * @param y The rotation value
-     */
-    static void YrotS(s16 y) { mDoMtx_YrotS(now, y); }
-
-    /**
      * Rotates the `now` matrix on the X-axis
      * @param x The rotation value
      */
@@ -298,6 +286,18 @@ public:
      * @param x The rotation value
      */
     static void XrotM(s16 x) { mDoMtx_XrotM(now, x); }
+
+    /**
+     * Rotates a new matrix on the Y-axis then concatenates it with the `now` matrix
+     * @param y The rotation value
+     */
+    static void YrotM(s16 y) { mDoMtx_YrotM(now, y); }
+
+    /**
+     * Rotates the `now` matrix on the Y-axis
+     * @param y The rotation value
+     */
+    static void YrotS(s16 y) { mDoMtx_YrotS(now, y); }
 
     /**
      * Rotates a new matrix on the z-axis then concatenates it with the `now` matrix

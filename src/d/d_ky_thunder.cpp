@@ -3,46 +3,194 @@
 // Translation Unit: d_ky_thunder.cpp
 //
 
-#include "d_ky_thunder.h"
-#include "dolphin/types.h"
+#include "f_op/f_op_kankyo.h"
+#include "f_op/f_op_kankyo_mng.h"
+#include "f_op/f_op_camera.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo_rain.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/J3DGraphAnimator/J3DModel.h"
+#include "SSystem/SComponent/c_phase.h"
+#include "m_Do/m_Do_audio.h"
+#include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_mtx.h"
+
+class dThunder_c : public kankyo_class {
+public:
+    inline ~dThunder_c();
+    BOOL createHeap();
+    void adjustHeap();
+    s32 create();
+    inline BOOL draw();
+    inline BOOL execute();
+
+public:
+    /* 0x0F8 */ JKRSolidHeap * solid_heap;
+    /* 0x0FC */ J3DModel * mpModel;
+    /* 0x100 */ mDoExt_invisibleModel mInvisModel;
+    /* 0x108 */ mDoExt_btkAnm mBtk;
+    /* 0x11C */ mDoExt_brkAnm mBrk;
+    /* 0x134 */ cXyz mScale;
+    /* 0x140 */ cXyz mPos;
+    /* 0x14C */ cXyz mPosNeg;
+    /* 0x150 */ f32 mRot;
+    /* 0x154 */ f32 mBtkTime;
+};
+
+dThunder_c::~dThunder_c() {
+    mDoAud_seDeleteObject(&mPos);
+    mDoAud_seDeleteObject(&mPosNeg);
+    if (solid_heap != NULL)
+        mDoExt_destroySolidHeap(solid_heap);
+}
+
+BOOL dThunder_c::execute() {
+    mBrk.setPlaySpeed(1.0f);
+    if (mBrk.play()) {
+        mDoAud_seStart(0x69f6, &mPos, 0, 0);
+        fopKyM_Delete(this);
+    }
+    return TRUE;
+}
+
+BOOL dThunder_c::draw() {
+    static cXyz l_offsetPos(0.0f, 40.0f, -250.0f);
+    mDoMtx_stack_c::transS(mPos);
+    mDoMtx_stack_c::ZrotM(mRot);
+    mDoMtx_stack_c::XrotM(mRot);
+
+    Mtx m;
+    MTXCopy(mDoMtx_stack_c::get(), m);
+    mpModel->setBaseScale(mScale);
+    mpModel->setBaseTRMtx(m);
+
+    mBtk.entry(mpModel->getModelData(), mBtkTime);
+    mBrk.entry(mpModel->getModelData());
+
+    dComIfGd_setList();
+    mDoExt_modelUpdateDL(mpModel);
+    mInvisModel.entryMaskOff();
+    mBtk.remove(mpModel->getModelData());
+    mBrk.remove(mpModel->getModelData());
+    return TRUE;
+}
 
 /* 80198810-8019886C       .text createHeap__10dThunder_cFv */
-void dThunder_c::createHeap() {
-    /* Nonmatching */
+BOOL dThunder_c::createHeap() {
+    if (solid_heap == NULL) {
+        solid_heap = mDoExt_createSolidHeapFromGameToCurrent(0x4a0, 0x20);
+        if (solid_heap == NULL)
+            return FALSE;
+    }
+
+    return TRUE;
 }
 
 /* 8019886C-801988B8       .text adjustHeap__10dThunder_cFv */
 void dThunder_c::adjustHeap() {
-    /* Nonmatching */
+    mDoExt_restoreCurrentHeap();
+    if (mDoExt_adjustSolidHeap(solid_heap) >= 0)
+        DCStoreRangeNoSync(solid_heap->getStartAddr(), solid_heap->getHeapSize());
 }
 
 /* 801988B8-80198A38       .text dThunder_Draw__FP10dThunder_c */
-void dThunder_Draw(dThunder_c*) {
-    /* Nonmatching */
+BOOL dThunder_Draw(dThunder_c* i_this) {
+    return i_this->draw();
 }
 
 /* 80198A38-80198AB4       .text dThunder_Execute__FP10dThunder_c */
-void dThunder_Execute(dThunder_c*) {
-    /* Nonmatching */
+BOOL dThunder_Execute(dThunder_c* i_this) {
+    return i_this->execute();
 }
 
 /* 80198AB4-80198ABC       .text dThunder_IsDelete__FP10dThunder_c */
-void dThunder_IsDelete(dThunder_c*) {
-    /* Nonmatching */
+BOOL dThunder_IsDelete(dThunder_c* i_this) {
+    return TRUE;
 }
 
 /* 80198ABC-80198B68       .text dThunder_Delete__FP10dThunder_c */
-void dThunder_Delete(dThunder_c*) {
-    /* Nonmatching */
+BOOL dThunder_Delete(dThunder_c* i_this) {
+    i_this->~dThunder_c();
+    return TRUE;
 }
 
 /* 80198B68-80198BC4       .text dThunder_Create__FP12kankyo_class */
-void dThunder_Create(kankyo_class*) {
-    /* Nonmatching */
+s32 dThunder_Create(kankyo_class* i_ky) {
+    dThunder_c * i_this = (dThunder_c *)i_ky;
+    if (!i_this->createHeap())
+        return cPhs_ERROR_e;
+
+    s32 ret = i_this->create();
+    i_this->adjustHeap();
+    return ret;
 }
 
 /* 80198BC4-801990CC       .text create__10dThunder_cFv */
-void dThunder_c::create() {
-    /* Nonmatching */
-}
+s32 dThunder_c::create() {
+    s32 ret;
+    camera_class *pCamera = dComIfGp_getCamera(0);
+    new(this) dThunder_c();
+    J3DModelData *modelData = (J3DModelData *)dComIfG_getObjectRes("Always", ALWAYS_BDL_YTHDR00);
+    JUT_ASSERT(0x6e, modelData != 0);
 
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x01000200);
+    if (mpModel == NULL)
+        return cPhs_ERROR_e;
+
+    if (!mInvisModel.create(mpModel))
+        return cPhs_ERROR_e;
+
+    J3DAnmTextureSRTKey * anm = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes("Always", ALWAYS_BTK_YTHDR00);
+    JUT_ASSERT(0x7d, anm != 0);
+    if (!mBtk.init(mpModel->getModelData(), anm, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0))
+        return cPhs_ERROR_e;
+
+    J3DAnmTevRegKey * canm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Always", ALWAYS_BRK_YTHDR00);
+    JUT_ASSERT(0x8c, canm != 0);
+    if (!mBrk.init(mpModel->getModelData(), canm, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0))
+        return cPhs_ERROR_e;
+
+    mBtkTime = cM_rndF(1.0f);
+
+    f32 size = g_env_light.mThunderEff.mStateTimer < 10 ? 1.0f : 0.5f;
+    mRot = 4000.0f;
+    mRot = size * cM_rndFX(mRot);
+    mScale.x = size * (cM_rndF(15.0f) + 5.0f);
+    if (cM_rndFX(1.0) >= 0.5f)
+        mScale.x *= -1.0f;
+    mScale.y = size * (cM_rndF(60.0f) + 20.0f);
+    mScale.z = 1.0f;
+
+    cXyz fwd;
+    dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &pCamera->mLookat.mCenter, &fwd);
+
+    f32 distXZ = fwd.absXZ();
+    s16 rotX = cM_atan2s(fwd.x, fwd.z);
+    s16 rotY = cM_atan2s(fwd.y, distXZ);
+
+    if (cM_rndFX(1.0f) >= 0.0f) {
+        rotX += 0x4000;
+    } else {
+        rotX -= 0x4000;
+    }
+
+    f32 y = cM_scos(rotY);
+    f32 x = cM_ssin(rotX);
+    f32 z = cM_scos(rotX);
+
+    f32 baseXZ = cM_rndF(120000.f);
+    f32 baseY = cM_rndFX(2000.0f);
+
+    mPos.x = pCamera->mLookat.mEye.x + fwd.x * 100000.0f + y * x * baseXZ;
+    mPos.x = pCamera->mLookat.mEye.x + baseY;
+    mPos.z = pCamera->mLookat.mEye.z + fwd.z * 100000.0f + y * z * baseXZ;
+
+    if (cM_rndF(1.0f) < 0.3) {
+        mPosNeg.x = -mPos.x;
+        mPosNeg.y = -mPos.y;
+        mPosNeg.z = -mPos.z;
+        mDoAud_seStart(0x69f6, &mPosNeg, 0, 0);
+    }
+
+    return cPhs_COMPLEATE_e;
+}

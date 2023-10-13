@@ -473,7 +473,7 @@ public:
 
 class mDoExt_invisibleModel {
 public:
-    bool create(J3DModel*);
+    BOOL create(J3DModel*);
 
     void entry();
     void entryMaskOff();
@@ -554,7 +554,7 @@ s32 mDoExt_resIDToIndex(JKRArchive*, u16);
 JKRSolidHeap * mDoExt_createSolidHeapFromGameToCurrent(u32 size, u32 align);
 JKRSolidHeap * mDoExt_createSolidHeapToCurrent(u32, JKRHeap *, u32 align);
 void mDoExt_restoreCurrentHeap();
-u32 mDoExt_adjustSolidHeap(JKRSolidHeap * pHeap);
+s32 mDoExt_adjustSolidHeap(JKRSolidHeap * pHeap);
 void mDoExt_destroySolidHeap(JKRSolidHeap * pHeap);
 JKRHeap* mDoExt_setCurrentHeap(JKRHeap*);
 

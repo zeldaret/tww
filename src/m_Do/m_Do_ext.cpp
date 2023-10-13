@@ -725,7 +725,7 @@ void mDoExt_backupMaterial_c::restore(J3DModelData* i_modelData) {
 }
 
 /* 80011380-80011434       .text create__21mDoExt_invisibleModelFP8J3DModel */
-bool mDoExt_invisibleModel::create(J3DModel* model) {
+BOOL mDoExt_invisibleModel::create(J3DModel* model) {
     J3DModelData* modelData = model->getModelData();
 
     mpPackets = new mDoExt_invJntPacket[modelData->getJointNum()];
@@ -965,16 +965,13 @@ JKRSolidHeap* mDoExt_createSolidHeapFromGameToCurrent(u32 i_size, u32 i_alignmen
 }
 
 /* 80011D0C-80011D48       .text mDoExt_adjustSolidHeap__FP12JKRSolidHeap */
-u32 mDoExt_adjustSolidHeap(JKRSolidHeap* i_heap) {
-    if (i_heap == NULL) {
+s32 mDoExt_adjustSolidHeap(JKRSolidHeap* i_heap) {
+    if (i_heap == NULL)
         return 0;
-    }
 
     s32 result = i_heap->adjustSize();
-
-    if (result >= (u32)0x80) {
+    if (result >= 0x80u)
         result -= 0x80;
-    }
 
     return result;
 }
