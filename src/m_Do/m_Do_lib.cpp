@@ -4,16 +4,45 @@
 //
 
 #include "m_Do/m_Do_lib.h"
-#include "dolphin/types.h"
+#include "JSystem/JMath/JMATrigonometric.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "JSystem/JUtility/JUTTexture.h"
+#include "dolphin/gx/GX.h"
 
 /* 80017530-800176BC       .text mDoLib_setResTimgObj__FP7ResTIMGP9_GXTexObjUlP10_GXTlutObj */
-void mDoLib_setResTimgObj(ResTIMG*, _GXTexObj*, unsigned long, _GXTlutObj*) {
-    /* Nonmatching */
+u8 mDoLib_setResTimgObj(ResTIMG* i_img, GXTexObj* o_texObj, u32 i_tlut_name, GXTlutObj * o_tlutObj) {
+    if (i_img->indexTexture) {
+        JUT_ASSERT(0x2b, o_tlutObj != 0);
+        GXInitTlutObj(o_tlutObj, ((char*)i_img) + i_img->paletteOffset, (GXTlutFmt)i_img->colorFormat, i_img->numColors);
+        GXInitTexObjCI(o_texObj, ((char*)i_img) + i_img->imageOffset, i_img->width, i_img->height, (GXCITexFmt)i_img->format,
+            (GXTexWrapMode)i_img->wrapS, (GXTexWrapMode)i_img->wrapT, (GXBool)(i_img->mipmapCount > 1), i_tlut_name);
+    } else {
+        GXInitTexObj(o_texObj, ((char*)i_img) + i_img->imageOffset, i_img->width, i_img->height, (GXTexFmt)i_img->format,
+            (GXTexWrapMode)i_img->wrapS, (GXTexWrapMode)i_img->wrapT, (GXBool)(i_img->mipmapCount > 1));
+    }
+
+    GXInitTexObjLOD(o_texObj, (GXTexFilter)i_img->minFilter, (GXTexFilter)i_img->magFilter,
+                    i_img->minLOD * 0.125f, i_img->maxLOD * 0.125f, i_img->LODBias * 0.01f,
+                    (GXBool)i_img->biasClamp, (GXBool)i_img->doEdgeLOD,
+                    (GXAnisotropy)i_img->maxAnisotropy);
+    return i_img->indexTexture;
 }
 
+J3DUClipper mDoLib_clipper::mClipper;
+f32 mDoLib_clipper::mFovyRate;
+f32 mDoLib_clipper::mSystemFar;
+
 /* 800176BC-80017748       .text setup__14mDoLib_clipperFffff */
-void mDoLib_clipper::setup(float, float, float, float) {
-    /* Nonmatching */
+void mDoLib_clipper::setup(f32 fovY, f32 aspect, f32 n, f32 f) {
+    mClipper.setFovy(fovY);
+    mClipper.setAspect(aspect);
+    mClipper.setNear(n);
+    mClipper.setFar(f);
+    mSystemFar = f;
+    mClipper.calcViewFrustum();
+
+    s16 ang = (s16)(fovY * 182.0444f);
+    mFovyRate = JMASCos(ang) / JMASSin(ang);
 }
 
 /* 80017748-80017924       .text mDoLib_project__FP3VecP3Vec */
