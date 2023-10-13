@@ -30,7 +30,7 @@ public:
     static u32 m_at_type[6];
     static f32 m_jump_blur_rate[6];
     static f32 m_blur_rate[6];
-    static const u32 m_se_type[6];
+    static u8 m_se_type[6];
 };
 
 Vec daBoko_c::m_top_offset[6] = {
@@ -97,7 +97,7 @@ f32 daBoko_c::m_blur_rate[6] = {
     1.0f,
     0.2f,
 };
-const u32 daBoko_c::m_se_type[6] = {
+u8 daBoko_c::m_se_type[6] = {
     0x04,
     0x01,
     0x01,
