@@ -270,7 +270,7 @@ config.libs = [
 
             # c
             Object(NonMatching, "c/c_damagereaction.cpp"),
-            Object(NonMatching, "c/c_dylink.cpp"),
+            Object(Matching,    "c/c_dylink.cpp"),
 
             # f_ap
             Object(NonMatching, "f_ap/f_ap_game.cpp"),

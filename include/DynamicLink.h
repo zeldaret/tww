@@ -20,9 +20,7 @@ struct DynamicModuleControlBase {
     virtual int getModuleSize() const { return 0; }
     virtual const char* getModuleTypeString() const { return "Base"; }
     virtual void dump();
-    static void dump();
-    virtual void dump2() { /* empty function */
-    }
+    virtual void dump2() {}
     virtual bool do_load() { return true; }
     virtual BOOL do_load_async() { return true; }
     virtual bool do_unload() { return true; }
@@ -34,6 +32,7 @@ struct DynamicModuleControlBase {
     BOOL load_async();
     bool force_unlink();
 
+    static void dump();
     static inline DynamicModuleControlBase* getFirstClass() { return mFirst; }
     inline DynamicModuleControlBase* getNextClass() { return mNext; }
     bool isLinked() const { return mLinkCount != 0; }

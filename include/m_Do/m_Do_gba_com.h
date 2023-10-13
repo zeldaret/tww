@@ -88,7 +88,7 @@ public:
         /* 0x12C */ u8 U8;
         struct {
             /* 0x12C */ u16 _12c;
-            /* 0x12C */ u16 _12e;
+            /* 0x12E */ u16 _12e;
         } U16;
     } field_0x12c;
 };

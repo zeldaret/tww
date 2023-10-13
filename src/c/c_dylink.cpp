@@ -17,7 +17,7 @@
 #include "dolphin/OS/OS.h"
 #include "MSL_C/string.h"
 
-DynamicModuleControl * DMC[PROC_COUNT_e];
+DynamicModuleControlBase * DMC[PROC_COUNT_e];
 bool DMC_initialized = false;
 BOOL cDyl_Initialized = false;
 mDoDvdThd_callback_c * cDyl_DVD = NULL;
@@ -512,6 +512,11 @@ s32 cDyl_Unlink(s16 i_ProfName) {
     return 0;
 }
 
+static void dummy(s16 i_ProfName) {
+    OSReport_Error("cDyl_Link i_ProfName=%d\n", i_ProfName);
+    OSReport_Error("cDyl_LinkASync: リンクに失敗しました。諦めます\n");
+}
+
 /* 80022B58-80022CEC       .text cDyl_LinkASync__Fs */
 s32 cDyl_LinkASync(s16 i_ProfName) {
     JUT_ASSERT(0x101, DMC_initialized);
@@ -525,7 +530,7 @@ s32 cDyl_LinkASync(s16 i_ProfName) {
     }
 
     JUT_ASSERT(0x111, i_ProfName < (sizeof(DMC) / sizeof(DMC[0])));
-    DynamicModuleControl * d = DMC[i_ProfName];
+    DynamicModuleControlBase * d = DMC[i_ProfName];
     if (d != NULL) {
         JUT_ASSERT(0x115, cDyl_Initialized);
         if (d->load_async()) {

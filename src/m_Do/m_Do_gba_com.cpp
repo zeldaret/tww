@@ -102,12 +102,10 @@ void mDoGaC_agbCom_c::mDoGaC_Initial(mDoGaC_DataManag_c* param_0, u8 param_1) {
     }
 
     field_0x110 = param_0;
-    if (param_1 != 0) {
-        for (int i = 0; i < param_1; i++) {
-            param_0[i].field_0x0 = 0;
-            param_0[i].field_0x4 = 0;
-            param_0[i].field_0x5 = 0;
-        }
+    for (int i = 0; i < param_1; i++) {
+        param_0[i].field_0x0 = 0;
+        param_0[i].field_0x4 = 0;
+        param_0[i].field_0x5 = 0;
     }
 
     field_0x114 = -1;
@@ -508,7 +506,7 @@ void mDoGaC_agbCom_c::mDoGaC_ContextSend() {
 void mDoGaC_agbCom_c::mDoGaC_ContextRead() {
     u8 sp8[16];
     if (!JUTGba::getManager()->resultGetStatus(mDoGaC_getPortNo(), sp8) && sp8[0] == 0x38) {
-        JUTGba::getManager()->doRead(mDoGaC_getPortNo(), (u8*)&field_0x118, ContextRead, NULL);
+        JUTGba::getManager()->doRead(mDoGaC_getPortNo(), (u8*)&field_0x118, ContextCheck, NULL);
     } else {
         field_0x2 = 0;
     }
