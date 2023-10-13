@@ -9,10 +9,12 @@
 #include "d/d_kankyo_data.h"
 #include "d/d_kankyo_rain.h"
 #include "d/d_kankyo_wether.h"
+#include "d/d_procname.h"
 #include "d/d_s_play.h"
 #include "d/d_stage.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera_mng.h"
+#include "f_op/f_op_kankyo.h"
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
@@ -49,7 +51,7 @@ struct dKy_setLight__Status {
     /* 0xE4 */ f32 field_0xe4;
 };
 
-static dKy_setLight__Status lightStatusBase = {
+dKy_setLight__Status lightStatusBase = {
     {-36384.5f, 29096.7f, 17422.2f},
     {377.0f, 5207.4f, 1220.4f},
     {255, 255, 255, 255},
@@ -74,7 +76,7 @@ static dKy_setLight__Status lightStatusBase = {
     0.5f,
 };
 
-static u16 lightMaskData[] = {
+u16 lightMaskData[] = {
     GX_LIGHT0, GX_LIGHT1, GX_LIGHT2, GX_LIGHT3, GX_LIGHT4, GX_LIGHT5, GX_LIGHT6, GX_LIGHT7,
 };
 
@@ -99,22 +101,16 @@ s16 s16_data_ratio_set(s16 param_0, s16 param_1, f32 param_2) {
 }
 
 /* 8018F8E4-8018F9E8       .text kankyo_color_ratio_set__FUcUcfUcUcfsf */
-// NONMATCHING - one tiny regswap
-s16 kankyo_color_ratio_set(u8 i_b0A, u8 i_b0B, f32 i_blendAB0, u8 i_b1A, u8 i_b1B, f32 i_blendAB1,
-                           s16 i_add, f32 i_mul) {
+s16 kankyo_color_ratio_set(u8 i_b0A, u8 i_b0B, f32 i_blendAB0, u8 i_b1A, u8 i_b1B, f32 i_blendAB1, s16 i_add, f32 i_mul) {
     s16 a = s16_data_ratio_set(i_b0A, i_b0B, i_blendAB0);
     s16 b = s16_data_ratio_set(i_b1A, i_b1B, i_blendAB0);
-    s16 rt = s16_data_ratio_set(a, b, i_blendAB1) + i_add;
-
+    s16 rt = s16_data_ratio_set(a, b, i_blendAB1);
+    rt = rt + i_add;
     rt *= g_env_light.mAllColRatio * i_mul;
-    if (rt < 0) {
+    if (rt < 0)
         rt = 0;
-    }
-
-    if (rt > 0xFF) {
+    if (rt > 0xFF)
         rt = 0xFF;
-    }
-
     return rt;
 }
 
@@ -618,7 +614,6 @@ BOOL dKy_daynight_check() {
 
 /* 80190CF8-801912EC       .text
  * setLight_palno_get__18dScnKy_env_light_cFPUcPUcPUcPUcPUcPUcPUcPUcPfPiPiPfPUc */
-// NONMATCHING - not sure whats going on in the loop
 void dScnKy_env_light_c::setLight_palno_get(u8* i_envrSel0, u8* i_envrSel1, u8* i_pSelIdx0,
                                             u8* i_pSelIdx1, u8* i_palIdx0A, u8* i_palIdx0B,
                                             u8* i_palIdx1A, u8* i_palIdx1B, f32* i_blendPalAB,
@@ -640,178 +635,175 @@ void dScnKy_env_light_c::setLight_palno_get(u8* i_envrSel0, u8* i_envrSel1, u8* 
         }
     }
 
-    dKyd_Schedule* schedule_p;
     for (int i = 0; i < 11; i++) {
-        schedule_p = &mpSchejule[i];
-        if (mCurTime >= schedule_p->mTimeEnd && mCurTime <= schedule_p->mTimeBegin) {
+        if (mCurTime >= mpSchejule[i].mTimeEnd && mCurTime <= mpSchejule[i].mTimeBegin) {
+            *i_pSelPalIdx0 = mpSchejule[i].mPalIdx0;
+            *i_pSelPalIdx1 = mpSchejule[i].mPalIdx1;
+            *i_blendPalAB = get_parcent(mpSchejule[i].mTimeBegin, mpSchejule[i].mTimeEnd, mCurTime);
+
+            stage_envr_info_class* envr_p = &g_env_light.mpEnvrInfo[*i_envrSel0];
+            stage_pselect_info_class* psel_p;
+            switch (*i_pSelIdx0) {
+            case 0:
+                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[0]];
+                break;
+            case 1:
+                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[1]];
+                break;
+            case 2:
+                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[2]];
+                break;
+            case 3:
+                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[3]];
+                break;
+            case 4:
+                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[4]];
+                break;
+            case 5:
+                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[5]];
+                break;
+            case 6:
+                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[6]];
+                break;
+            case 7:
+                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[7]];
+                break;
+            }
+
+            switch (*i_pSelPalIdx0) {
+            case 0:
+                *i_palIdx0A = psel_p->mPalIdx[0];
+                break;
+            case 1:
+                *i_palIdx0A = psel_p->mPalIdx[1];
+                break;
+            case 2:
+                *i_palIdx0A = psel_p->mPalIdx[2];
+                break;
+            case 3:
+                *i_palIdx0A = psel_p->mPalIdx[3];
+                break;
+            case 4:
+                *i_palIdx0A = psel_p->mPalIdx[4];
+                break;
+            case 5:
+                *i_palIdx0A = psel_p->mPalIdx[5];
+                break;
+            }
+
+            switch (*i_pSelPalIdx1) {
+            case 0:
+                *i_palIdx0B = psel_p->mPalIdx[0];
+                break;
+            case 1:
+                *i_palIdx0B = psel_p->mPalIdx[1];
+                break;
+            case 2:
+                *i_palIdx0B = psel_p->mPalIdx[2];
+                break;
+            case 3:
+                *i_palIdx0B = psel_p->mPalIdx[3];
+                break;
+            case 4:
+                *i_palIdx0B = psel_p->mPalIdx[4];
+                break;
+            case 5:
+                *i_palIdx0B = psel_p->mPalIdx[5];
+                break;
+            }
+
+            envr_p = &g_env_light.mpEnvrInfo[*i_envrSel1];
+            switch (*i_pSelIdx1) {
+            case 0:
+                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[0]];
+                break;
+            case 1:
+                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[1]];
+                break;
+            case 2:
+                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[2]];
+                break;
+            case 3:
+                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[3]];
+                break;
+            case 4:
+                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[4]];
+                break;
+            case 5:
+                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[5]];
+                break;
+            case 6:
+                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[6]];
+                break;
+            case 7:
+                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[7]];
+                break;
+            }
+
+            if (*i_envrSel0 != *i_envrSel1 || *i_pSelIdx0 != *i_pSelIdx1) {
+                if (psel_p->mChangeRate < 0.033333335f) {
+                    psel_p->mChangeRate = 0.033333335f;
+                }
+
+                if (g_env_light.mColPatMode == 0) {
+                    if (strcmp(dComIfGp_getStartStageName(), "sea") == 0 && *i_pSelIdx0 != *i_pSelIdx1) {
+                        *i_blendPal01 += 0.0033333334f;
+                    } else if (psel_p->mChangeRate > 0.0f) {
+                        *i_blendPal01 += 0.0033333334f / psel_p->mChangeRate;
+                    }
+
+                    if (*i_blendPal01 >= 1.0f) {
+                        *i_envrSel0 = *i_envrSel1;
+                        *i_pSelIdx0 = *i_pSelIdx1;
+                        *i_blendPal01 = 1.0f;
+                    }
+                }
+            }
+
+            switch (*i_pSelPalIdx0) {
+            case 0:
+                *i_palIdx1A = psel_p->mPalIdx[0];
+                break;
+            case 1:
+                *i_palIdx1A = psel_p->mPalIdx[1];
+                break;
+            case 2:
+                *i_palIdx1A = psel_p->mPalIdx[2];
+                break;
+            case 3:
+                *i_palIdx1A = psel_p->mPalIdx[3];
+                break;
+            case 4:
+                *i_palIdx1A = psel_p->mPalIdx[4];
+                break;
+            case 5:
+                *i_palIdx1A = psel_p->mPalIdx[5];
+                break;
+            }
+
+            switch (*i_pSelPalIdx1) {
+            case 0:
+                *i_palIdx1B = psel_p->mPalIdx[0];
+                break;
+            case 1:
+                *i_palIdx1B = psel_p->mPalIdx[1];
+                break;
+            case 2:
+                *i_palIdx1B = psel_p->mPalIdx[2];
+                break;
+            case 3:
+                *i_palIdx1B = psel_p->mPalIdx[3];
+                break;
+            case 4:
+                *i_palIdx1B = psel_p->mPalIdx[4];
+                break;
+            case 5:
+                *i_palIdx1B = psel_p->mPalIdx[5];
+                break;
+            }
+
             break;
         }
-    }
-
-    *i_pSelPalIdx0 = schedule_p->mPalIdx0;
-    *i_pSelPalIdx1 = schedule_p->mPalIdx1;
-
-    *i_blendPalAB = get_parcent(schedule_p->mTimeBegin, schedule_p->mTimeEnd, mCurTime);
-
-    stage_envr_info_class* envr_p = &g_env_light.mpEnvrInfo[*i_envrSel0];
-    stage_pselect_info_class* psel_p;
-    switch (*i_pSelIdx0) {
-    case 0:
-        psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[0]];
-        break;
-    case 1:
-        psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[1]];
-        break;
-    case 2:
-        psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[2]];
-        break;
-    case 3:
-        psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[3]];
-        break;
-    case 4:
-        psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[4]];
-        break;
-    case 5:
-        psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[5]];
-        break;
-    case 6:
-        psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[6]];
-        break;
-    case 7:
-        psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[7]];
-        break;
-    }
-
-    switch (*i_pSelPalIdx0) {
-    case 0:
-        *i_palIdx0A = psel_p->mPalIdx[0];
-        break;
-    case 1:
-        *i_palIdx0A = psel_p->mPalIdx[1];
-        break;
-    case 2:
-        *i_palIdx0A = psel_p->mPalIdx[2];
-        break;
-    case 3:
-        *i_palIdx0A = psel_p->mPalIdx[3];
-        break;
-    case 4:
-        *i_palIdx0A = psel_p->mPalIdx[4];
-        break;
-    case 5:
-        *i_palIdx0A = psel_p->mPalIdx[5];
-        break;
-    }
-
-    switch (*i_pSelPalIdx1) {
-    case 0:
-        *i_palIdx0B = psel_p->mPalIdx[0];
-        break;
-    case 1:
-        *i_palIdx0B = psel_p->mPalIdx[1];
-        break;
-    case 2:
-        *i_palIdx0B = psel_p->mPalIdx[2];
-        break;
-    case 3:
-        *i_palIdx0B = psel_p->mPalIdx[3];
-        break;
-    case 4:
-        *i_palIdx0B = psel_p->mPalIdx[4];
-        break;
-    case 5:
-        *i_palIdx0B = psel_p->mPalIdx[5];
-        break;
-    }
-
-    envr_p = &g_env_light.mpEnvrInfo[*i_envrSel1];
-    switch (*i_pSelIdx1) {
-    case 0:
-        psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[0]];
-        break;
-    case 1:
-        psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[1]];
-        break;
-    case 2:
-        psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[2]];
-        break;
-    case 3:
-        psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[3]];
-        break;
-    case 4:
-        psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[4]];
-        break;
-    case 5:
-        psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[5]];
-        break;
-    case 6:
-        psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[6]];
-        break;
-    case 7:
-        psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[7]];
-        break;
-    }
-
-    if (*i_envrSel0 != *i_envrSel1 || *i_pSelIdx0 != *i_pSelIdx1) {
-        if (psel_p->mChangeRate < 0.033333335f) {
-            psel_p->mChangeRate = 0.033333335f;
-        }
-
-        if (g_env_light.mColPatMode == 0) {
-            if (strcmp(dComIfGp_getStartStageName(), "sea") == 0 && *i_pSelIdx0 != *i_pSelIdx1) {
-                *i_blendPal01 += 0.0033333334f;
-            } else if (psel_p->mChangeRate > 0.0f) {
-                *i_blendPal01 += 0.0033333334f / psel_p->mChangeRate;
-            }
-
-            if (*i_blendPal01 >= 1.0f) {
-                *i_envrSel0 = *i_envrSel1;
-                *i_pSelIdx0 = *i_pSelIdx1;
-                *i_blendPal01 = 1.0f;
-            }
-        }
-    }
-
-    switch (*i_pSelPalIdx0) {
-    case 0:
-        *i_palIdx1A = psel_p->mPalIdx[0];
-        break;
-    case 1:
-        *i_palIdx1A = psel_p->mPalIdx[1];
-        break;
-    case 2:
-        *i_palIdx1A = psel_p->mPalIdx[2];
-        break;
-    case 3:
-        *i_palIdx1A = psel_p->mPalIdx[3];
-        break;
-    case 4:
-        *i_palIdx1A = psel_p->mPalIdx[4];
-        break;
-    case 5:
-        *i_palIdx1A = psel_p->mPalIdx[5];
-        break;
-    }
-
-    switch (*i_pSelPalIdx1) {
-    case 0:
-        *i_palIdx1B = psel_p->mPalIdx[0];
-        break;
-    case 1:
-        *i_palIdx1B = psel_p->mPalIdx[1];
-        break;
-    case 2:
-        *i_palIdx1B = psel_p->mPalIdx[2];
-        break;
-    case 3:
-        *i_palIdx1B = psel_p->mPalIdx[3];
-        break;
-    case 4:
-        *i_palIdx1B = psel_p->mPalIdx[4];
-        break;
-    case 5:
-        *i_palIdx1B = psel_p->mPalIdx[5];
-        break;
     }
 }
 
@@ -1651,12 +1643,6 @@ void setLightTevColorType_sub(J3DMaterial* i_material, dKy_tevstr_c* i_tevstr) {
     }
 }
 
-/* 80193A30-80193A34       .text setLight__13J3DColorBlockFUlP11J3DLightObj */
-// probably weak function
-void J3DColorBlock::setLight(u32, J3DLightObj*) {
-    /* Nonmatching */
-}
-
 /* 80193A34-80193ADC       .text
  * setLightTevColorType__18dScnKy_env_light_cFP8J3DModelP12dKy_tevstr_c */
 void dScnKy_env_light_c::setLightTevColorType(J3DModel* i_model, dKy_tevstr_c* i_tevstr) {
@@ -2177,18 +2163,21 @@ void dKy_setLight_again() {
 
     mDoMtx_inverseTranspose(j3dSys.getViewMtx(), invView);
 
-    MTXMultVec(j3dSys.getViewMtx(), &lightStatusData[0].mPos, &tmp);
+    dKy_setLight__Status *pStts = &lightStatusData[0];
+    MTXMultVec(j3dSys.getViewMtx(), &pStts->mPos, &tmp);
     GXInitLightPos(&lightObj, tmp.x, tmp.y, tmp.z);
-    MTXMultVec(invView, &lightStatusData[0].mLightDir, &tmp);
-    GXInitLightPos(&lightObj, tmp.x, tmp.y, tmp.z);
-    GXInitLightColor(&lightObj, lightStatusData[0].mColor);
-    if (lightStatusData[0].mAttnType == 0) {
+
+    MTXMultVec(invView, &pStts->mLightDir, &tmp);
+    GXInitLightDir(&lightObj, tmp.x, tmp.y, tmp.z);
+
+    GXInitLightColor(&lightObj, pStts->mColor);
+    if (pStts->mAttnType == 0) {
         GXInitLightAttn(&lightObj,
-            lightStatusData[0].mLightA[0], lightStatusData[0].mLightA[1], lightStatusData[0].mLightA[2],
-            lightStatusData[0].mLightK[0], lightStatusData[0].mLightK[1], lightStatusData[0].mLightK[2]);
+            pStts->mLightA[0], pStts->mLightA[1], pStts->mLightA[2],
+            pStts->mLightK[0], pStts->mLightK[1], pStts->mLightK[2]);
     } else {
-        GXInitLightDistAttn(&lightObj, lightStatusData[0].mRefDistance, lightStatusData[0].mRefBrightness, lightStatusData[0].mDistAttnFn);
-        GXInitLightSpot(&lightObj, lightStatusData[0].mSpotCutoff, lightStatusData[0].mSpotFn);
+        GXInitLightDistAttn(&lightObj, pStts->mRefDistance, pStts->mRefBrightness, pStts->mDistAttnFn);
+        GXInitLightSpot(&lightObj, pStts->mSpotCutoff, pStts->mSpotFn);
     }
 
     GXLoadLightObjImm(&lightObj, GXLightID(lightMaskData[0]));
@@ -2974,3 +2963,28 @@ BOOL dKyr_player_overhead_bg_chk() {
 
     return ret;
 }
+
+class sub_kankyo__class : public kankyo_class {
+};
+
+static leafdraw_method_class l_dKy_Method = {
+    (process_method_func)dKy_Create,
+    (process_method_func)dKy_Delete,
+    (process_method_func)dKy_Execute,
+    (process_method_func)dKy_IsDelete,
+    (process_method_func)dKy_Draw,
+};
+
+extern kankyo_process_profile_definition g_profile_KANKYO = {
+    fpcLy_CURRENT_e,
+    1,
+    fpcPi_CURRENT_e,
+    PROC_KANKYO,
+    &g_fpcLf_Method.mBase,
+    sizeof(sub_kankyo__class),
+    0,
+    0,
+    &g_fopKy_Method,
+    0x002,
+    &l_dKy_Method,
+};

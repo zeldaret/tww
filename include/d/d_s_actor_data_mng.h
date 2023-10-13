@@ -11,6 +11,7 @@ public:
     u32 mIndex_ITEM[8];
 
     dADM_CharTbl();
+    ~dADM_CharTbl();
     void SetData(u32, u32, u32, u32, u32, u32, u32);
     void SetUpIndex();
     int GetNameIndex2(const char*, int) const;

@@ -10,16 +10,22 @@
 dADM_CharTbl::dADM_CharTbl() {
 }
 
-/* 800C2758-800C2844       .text SetData__12dADM_CharTblFUlUlUlUlUlUlUl */
-void dADM_CharTbl::SetData(u32 offs, u32 row_num, u32 pRow, u32 colum_num, u32 pColumn, u32 dat_size, u32 data) {
-    for (u32 i = 0; i < row_num; i++, pRow += 4)
-        *((u32*)pRow) += offs;
+dADM_CharTbl::~dADM_CharTbl() {
+}
 
-    for (u32 i = 0; i < colum_num; i++, pColumn += 4)
-        *((u32*)pColumn) += offs;
+/* 800C2758-800C2844       .text SetData__12dADM_CharTblFUlUlUlUlUlUlUl */
+void dADM_CharTbl::SetData(u32 offs, u32 row_num, u32 row_offs, u32 colum_num, u32 colum_offs, u32 dat_size, u32 data) {
+    char** row = (char**)row_offs;
+    char** colum = (char**)colum_offs;
+
+    for (u32 i = 0; i < row_num; i++, row_offs += 4)
+        *((u32*)row_offs) += offs;
+
+    for (u32 i = 0; i < colum_num; i++, colum_offs += 4)
+        *((u32*)colum_offs) += offs;
 
     JUT_ASSERT(0x39, dat_size == row_num * colum_num);
-    cDT::Set(row_num, (char**)pRow, colum_num, (char**)pColumn, (u8*)data);
+    cDT::Set(row_num, row, colum_num, colum, (u8*)data);
     SetUpIndex();
 }
 
@@ -60,7 +66,8 @@ int dADM_CharTbl::GetNameIndex2(const char* pName, int index) const {
         if (col == -1)
             return -1;
 
-        int inf = GetInf(mIndex_ARG, col);
+        start = col;
+        int inf = GetInf(mIndex_ARG, start);
         if (index == inf)
             return start;
     }

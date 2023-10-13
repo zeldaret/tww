@@ -1,5 +1,5 @@
-#ifndef F_OP_F_OP_KANKYO_H
-#define F_OP_F_OP_KANKYO_H
+#ifndef F_OP_KANKYO_H
+#define F_OP_KANKYO_H
 
 #include "SSystem/SComponent/c_xyz.h"
 #include "f_pc/f_pc_leaf.h"
@@ -17,8 +17,9 @@ public:
 struct kankyo_process_profile_definition {
     /* 0x00 */ leaf_process_profile_definition base;
     /* 0x24 */ leafdraw_method_class* mSubMtd;
-};  // Size: 0x28
+    /* 0x28 */ u32 field_0x28[8];
+};  // Size: 0x48
 
 extern leafdraw_method_class g_fopKy_Method;
 
-#endif /* F_OP_F_OP_KANKYO_H */
+#endif /* F_OP_KANKYO_H */
