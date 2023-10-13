@@ -1313,7 +1313,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_tag_kb_item"),
     ActorRel(NonMatching, "d_a_tag_kk1"),
     ActorRel(NonMatching, "d_a_tag_light"),
-    ActorRel(NonMatching, "d_a_tag_msg"),
+    ActorRel(Matching,    "d_a_tag_msg"),
     ActorRel(NonMatching, "d_a_tag_photo"),
     ActorRel(NonMatching, "d_a_tag_waterlevel"),
     ActorRel(NonMatching, "d_a_tama"),

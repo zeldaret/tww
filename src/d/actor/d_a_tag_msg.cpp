@@ -109,18 +109,14 @@ s32 daTag_Msg_c::arrivalTerms() {
 int daTag_Msg_c::rangeCheck() {
     daPy_lk_c* link;
     cXyz diff;
-    cXyz local_38;
 
     link = daPy_getPlayerLinkActorClass();
     diff = link->current.pos - current.pos;
 
     if (diff.y < 0.0f) {
-        local_38.y = -diff.y;
+        diff.y = -diff.y;
     }
-    local_38.x = diff.x;
-    local_38.y = 0.0f;
-    local_38.z = diff.z;
-    if (PSVECSquareMag(&local_38) < mScale.x * mScale.x * 10000.0f) {
+    if (diff.abs2XZ() < mScale.x * mScale.x * 10000.0f) {
         if(diff.y <= mScale.y * 100.0f) {
             return 1;
         }
@@ -255,10 +251,10 @@ static s32 daTag_Msg_Draw(daTag_Msg_c*) {
 
 s32 daTag_Msg_c::execute() {
     static s32 (*l_action[4])(daTag_Msg_c*) = {
-        daTag_Msg_actionEvent,
-        daTag_Msg_actionHunt,
+        daTag_Msg_actionWait,
         daTag_Msg_actionArrival,
-        daTag_Msg_actionWait
+        daTag_Msg_actionHunt,
+        daTag_Msg_actionEvent,
     };
     l_action[mAction](this);
     return 1;
@@ -305,7 +301,7 @@ static s32 daTag_Msg_Create(fopAc_ac_c* i_this) {
     return a_this->create();
 }
 
-static actor_method_class l_daTag_msg_Method = {
+static actor_method_class l_daTag_Msg_Method = {
     (process_method_func)daTag_Msg_Create,
     (process_method_func)daTag_Msg_Delete,
     (process_method_func)daTag_Msg_Execute,
@@ -324,7 +320,7 @@ extern actor_process_profile_definition g_profile_TAG_MSG = {
     0,
     &g_fopAc_Method.base,
     0x0121,
-    &l_daTag_msg_Method,
+    &l_daTag_Msg_Method,
     fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     fopAc_ACTOR_e,
     fopAc_CULLBOX_6_e,
