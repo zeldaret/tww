@@ -178,12 +178,10 @@ void dComIfG_play_c::itemInit() {
 }
 
 /* 80052400-8005286C       .text getLayerNo__14dComIfG_play_cFi */
-// NONMATCHING - almost
 int dComIfG_play_c::getLayerNo(int i_roomNo) {
-    int layer = dComIfGp_getStartStageLayer();
-
-    if (layer < 0) {
-        layer = dKy_getdaytime_hour();
+    int stageLayer = dComIfGp_getStartStageLayer();
+    if (stageLayer < 0) {
+        int layer = dKy_getdaytime_hour();
         if (dKy_checkEventNightStop()) {
             layer = 1;
         } else {
@@ -248,14 +246,16 @@ int dComIfG_play_c::getLayerNo(int i_roomNo) {
             if (!dComIfGs_isEventBit(0x3B02)) {
                 return 8;
             }
-        } else if (strcmp(dComIfGp_getStartStageName(), "GTower") == 0 &&
-                   !dComIfGs_isEventBit(0x4002))
-        {
-            return 8;
+        } else if (strcmp(dComIfGp_getStartStageName(), "GTower") == 0) {
+            if (!dComIfGs_isEventBit(0x4002)) {
+                return 8;
+            }
         }
+
+        return layer;
     }
 
-    return layer;
+    return stageLayer;
 }
 
 /* 8005286C-800528F4       .text createParticle__14dComIfG_play_cFv */
@@ -642,7 +642,7 @@ void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8
             i_lastMode |= 0x8000;
         }
 
-        i_lastMode |= daPy_getPlayerLinkActorClass()->field_0x354e << 0x10;
+        i_lastMode |= daPy_getPlayerLinkActorClass()->field_0x354e << 16;
 
         if (mode & daPy_lk_c::daPy_FLG1_UNK8000) {
             i_lastMode |= 0x4000;
@@ -1079,6 +1079,13 @@ int dComIfGd_setShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 par
     return sid;
 }
 
+static const char * dummy_str[] = {
+    "0 <= cam_id && cam_id < mapc->num",
+    "0 <= arrow_id && arrow_id < mapa->num",
+    "0 <= room_cam_id && room_cam_id < pcam->num",
+    "0 <= arrow_id && arrow_id < parr->num",
+};
+
 /* 8005468C-800547BC       .text getSceneList__Fi */
 stage_scls_info_class* getSceneList(int i_no) {
     stage_scls_info_dummy_class* sclsInfo = dComIfGp_getStage().getSclsInfo();
@@ -1134,7 +1141,7 @@ BOOL dComIfGs_checkSeaLandingEvent(s8 i_roomNo) {
 }
 
 /* 800548FC-80054C70       .text dComIfGs_setGameStartStage__Fv */
-// NONMATCHING - one tiny reg swap, string data
+// NONMATCHING - one tiny reg swap
 void dComIfGs_setGameStartStage() {
     struct check_data {
         /* 0x0 */ u8 mbHasEvent;

@@ -28,6 +28,8 @@ public:
     /* 0x08 */ MtxP mpMtx;
 };
 
+STATIC_ASSERT(sizeof(daPy_mtxFollowEcallBack_c) == 0x0C);
+
 class daPy_HIO_c {
 public:
 };

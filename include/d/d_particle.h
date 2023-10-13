@@ -257,7 +257,12 @@ public:
     virtual void executeAfter(JPABaseEmitter*);
     virtual void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
     void end();
+
+public:
+    /* 0x04 */ u8 field_0x04[0x0c];
 };
+
+STATIC_ASSERT(sizeof(dPa_cutTurnEcallBack_c) == 0x10);
 
 class dPa_stripesEcallBack : public dPa_levelEcallBack {
 public:

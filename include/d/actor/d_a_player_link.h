@@ -97,6 +97,8 @@ public:
     /* 0x0 */ u8 field_0x0[0x28];
 };
 
+STATIC_ASSERT(sizeof(daPy_swimTailEcallBack_c) == 0x28);
+
 class daPy_waterDropEcallBack_c {
 public:
     void execute(JPABaseEmitter*);
@@ -1177,7 +1179,7 @@ public:
     /* 0x3484 */ dAttList_c* mpAttnEntryA;
     /* 0x3488 */ dAttList_c* mpAttnEntryX;
     /* 0x348C */ dAttList_c* mpAttnEntryY;
-    /* 0x3490 */ dAttList_c* mpAttnentryZ;
+    /* 0x3490 */ dAttList_c* mpAttnEntryZ;
     /* 0x3494 */ u8 field_0x3494[0x34B9 - 0x3494];
     /* 0x34B9 */ u8 mFrontWallType;
     /* 0x34BA */ u8 field_0x34BA[0x34BD - 0x34BA];
