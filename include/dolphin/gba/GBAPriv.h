@@ -23,7 +23,7 @@ typedef struct GBASecParam {
     u32 keyA;
     s32 keyB;
     u8 _padding1[24];
-} GBASecParam;
+} GBASecParam __attribute__((aligned(32)));
 
 typedef struct GBABootInfo {
     s32 paletteColor;
