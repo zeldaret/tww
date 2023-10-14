@@ -957,6 +957,10 @@ inline const char* dComIfGs_getPlayerName() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerInfo().getPlayerName();
 }
 
+inline u8 dComIfGs_getClearCount() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerInfo().getClearCount();
+}
+
 inline u8 dComIfGs_getGbaRupeeCount() {
     return g_dComIfG_gameInfo.save.getDan().getGbaRupeeCount();
 }

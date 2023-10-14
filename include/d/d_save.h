@@ -267,6 +267,7 @@ public:
     void init();
 
     const char* getPlayerName() const { return mPlayerName; }
+    u8 getClearCount() const { return mClearCount; }
 
     /* 0x00 */ u8 field_0x0[0x10];
     /* 0x10 */ u16 field_0x10;

@@ -4,42 +4,98 @@
 //
 
 #include "f_op/f_op_scene.h"
+#include "f_op/f_op_draw_iter.h"
+#include "f_op/f_op_actor_mng.h"
+#include "f_op/f_op_overlap_mng.h"
+#include "f_op/f_op_scene_mng.h"
 #include "f_pc/f_pc_leaf.h"
 #include "f_pc/f_pc_manager.h"
-#include "f_op/f_op_draw_iter.h"
 #include "d/d_procname.h"
-#include "dolphin/types.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_meter.h"
+#include "m_Do/m_Do_controller_pad.h"
+
+namespace JAInter {
+    class BankWave {
+    public:
+        static bool checkAllWaveLoadStatus();
+    };
+};
 
 struct title_of_scene_class : public scene_class {
 public:
-    u32 pad[0x98];
+    /* 0x1C4 */ u32 pad[0x97];
+    /* 0x420 */ u32 mMoviePId;
+};
+
+class daMP_c : public fopAc_ac_c {
+public:
+    /* 0x290 */ u32 (*mpCallBack1)();
+    /* 0x294 */ u32 (*mpCallBack2)(f32);
 };
 
 /* 802372F4-80237344       .text dScnTitle_Draw__FP20title_of_scene_class */
-s32 dScnTitle_Draw(title_of_scene_class*) {  
+BOOL dScnTitle_Draw(title_of_scene_class* i_this) {  
     for (create_tag_class* pTag = fopDwIt_Begin(); pTag != NULL; pTag = fopDwIt_Next(pTag))
         fpcM_Draw(pTag->mpTagData);
-    return 1;
+    return TRUE;
 }
 
 /* 80237344-802374C8       .text dScnTitle_Execute__FP20title_of_scene_class */
-void dScnTitle_Execute(title_of_scene_class*) {
-    /* Nonmatching */
+BOOL dScnTitle_Execute(title_of_scene_class* i_this) {
+    if (!fopOvlpM_IsPeek() && !dComIfG_resetToOpening(i_this)) {
+        daMP_c *movie;
+        s32 rt = fopAcM_SearchByID(i_this->mMoviePId, (fopAc_ac_c**)&movie);
+        JUT_ASSERT(0x83, rt);
+
+        if (movie == NULL)
+            return TRUE;
+
+        if (movie->mpCallBack1 == NULL || movie->mpCallBack2 == NULL)
+            return TRUE;
+
+        if (fpcM_GetName(i_this) == PROC_ENDING_SCENE) {
+            if (movie->mpCallBack1() == 0) {
+                if (dComIfGs_getClearCount() == 0) {
+                    fopScnM_ChangeReq(i_this, PROC_NAMEEX_SCENE, 0, 5);
+                } else {
+                    dComIfG_changeOpeningScene(i_this, PROC_OPENING_SCENE);
+                }
+                movie->mpCallBack2(0.0f);
+            }
+        } else {
+            if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0) || movie->mpCallBack1() == 0) {
+                dComIfG_changeOpeningScene(i_this, PROC_OPENING_SCENE);
+                movie->mpCallBack2(0.0f);
+            }
+        }
+    }
+    return TRUE;
 }
 
 /* 802374C8-802374D0       .text dScnTitle_IsDelete__FP20title_of_scene_class */
-s32 dScnTitle_IsDelete(title_of_scene_class*) {
-    return 1;
+BOOL dScnTitle_IsDelete(title_of_scene_class* i_this) {
+    return TRUE;
 }
 
 /* 802374D0-802374D8       .text dScnTitle_Delete__FP20title_of_scene_class */
-s32 dScnTitle_Delete(title_of_scene_class*) {
-    return 1;
+BOOL dScnTitle_Delete(title_of_scene_class* i_this) {
+    return TRUE;
 }
 
 /* 802374D8-80237568       .text dScnTitle_Create__FP11scene_class */
-void dScnTitle_Create(scene_class*) {
-    /* Nonmatching */
+s32 dScnTitle_Create(scene_class* i_scn) {
+    title_of_scene_class * i_this = (title_of_scene_class*) i_scn;
+
+    if (JAInter::BankWave::checkAllWaveLoadStatus())
+        return cPhs_INIT_e;
+
+    dMenu_flagSet(0);
+    fopAc_ac_c::stopStatus = 0;
+    dComIfGp_offEnableNextStage();
+    u32 parameter = fpcM_GetName(i_this) == PROC_TITLE_SCENE ? 0 : 1;
+    i_this->mMoviePId = fopAcM_create(PROC_MP, parameter, NULL, -1, NULL, NULL, 0xFF, NULL);
+    return cPhs_COMPLEATE_e;
 }
 
 static scene_method_class l_dScnTitle_Method = {
