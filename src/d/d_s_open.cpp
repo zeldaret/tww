@@ -64,11 +64,17 @@ s32 dScnOpen_c::create() {
         JUT_ASSERT(0x48, rt == cPhs_COMPLEATE_e);
         return rt;
     }
+
+    return rt;
 }
 
 /* 80232BC4-80232CAC       .text execute__10dScnOpen_cFv */
 BOOL dScnOpen_c::execute() {
+#if VERSION != VERSION_JPN
     if (mpProc->field_0x2b0 >= 5 && !fopOvlpM_IsPeek() && !dComIfG_resetToOpening(this)) {
+#else
+    if (!fopOvlpM_IsPeek() && !dComIfG_resetToOpening(this)) {
+#endif
         if (fpcM_GetName(this) == PROC_OPEN2_SCENE && (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0))) {
             field_0x1d4 = 1;
             mDoAud_bgmStop(20);

@@ -420,7 +420,7 @@ static void dummy3() {
 
 /* 802B0D70-802B0E14       .text state_register__7JKRHeapCFPQ27JKRHeap6TStateUl */
 void JKRHeap::state_register(JKRHeap::TState* p, u32 id) const {
-#if VERSION == VERSION_JP
+#if VERSION == VERSION_JPN
     JUT_ASSERT(1034, p != 0);
     JUT_ASSERT(1035, p->getHeap() == this);
 #else
@@ -431,7 +431,7 @@ void JKRHeap::state_register(JKRHeap::TState* p, u32 id) const {
 
 /* 802B0E14-802B0E9C       .text state_compare__7JKRHeapCFRCQ27JKRHeap6TStateRCQ27JKRHeap6TState */
 bool JKRHeap::state_compare(const JKRHeap::TState& r1, const JKRHeap::TState& r2) const {
-#if VERSION == VERSION_JP
+#if VERSION == VERSION_JPN
     JUT_ASSERT(1043, r1.getHeap() == r2.getHeap());
 #else
     JUT_ASSERT(1099, r1.getHeap() == r2.getHeap());
@@ -448,7 +448,7 @@ static void dummy4() {
 
 /* 802B0E9C-802B0F24       .text state_dump__7JKRHeapCFRCQ27JKRHeap6TState */
 void JKRHeap::state_dump(const JKRHeap::TState& p) const {
-#if VERSION == VERSION_JP
+#if VERSION == VERSION_JPN
     JUT_LOG(1067, "check-code : 0x%08x", p.getCheckCode());
     JUT_LOG(1068, "id         : 0x%08x", p.getId());
     JUT_LOG(1069, "used size  : %u", p.getUsedSize());
@@ -469,7 +469,7 @@ u8 JKRHeap::do_getCurrentGroupId() {
     return 0;
 }
 
-#if VERSION == VERSION_JP
+#if VERSION == VERSION_JPN
 static void dummy5() {
     OSReport("\x1B[41;37m:::addr %08x size %08x: Freeされた領域が浸食されている (%08x=%02x)\n\x1B[m");
 }

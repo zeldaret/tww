@@ -32,7 +32,7 @@ public:
 
 /* 00000078-000000C8       .text _delete__13daTagKbItem_cFv */
 bool daTagKbItem_c::_delete() {
-#if VERSION != VERSION_JP
+#if VERSION != VERSION_JPN
     if (field_0x2a0 != 0xff && field_0x2a4 != 0xff) {
         dComIfGs_offSwitch(field_0x2a4, orig.roomNo);
     }
@@ -67,7 +67,7 @@ int daTagKbItem_c::_create() {
 
 /* 000001BC-000001C4       .text _execute__13daTagKbItem_cFv */
 bool daTagKbItem_c::_execute() {
-#if VERSION == VERSION_JP
+#if VERSION == VERSION_JPN
     if (field_0x29c != 0x1f && dComIfGs_isItem(field_0x29c, orig.roomNo) ||
         field_0x2a4 != 0xff && dComIfGs_isSwitch(field_0x2a4, orig.roomNo))
     {

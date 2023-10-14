@@ -417,7 +417,7 @@ public:
     /* 0x47EC */ JKRArchive* mpCamResArchive;
     /* 0x47F0 */ JKRArchive* mpSwimResArchive;
     /* 0x47F4 */ JKRArchive* mpWindResArchive;
-#if VERSION != VERSION_JP
+#if VERSION != VERSION_JPN
     /* 0x47F8 */ JKRArchive* mpEnglishTextArchive;
     /* 0x47FC */ JKRArchive* mpHyruleTextArchive;
     /* 0x4800 */ u8 mCARDHeap0[0x04];
@@ -565,7 +565,7 @@ public:
     /* 0x1D1C1 */ u8 field_0x1d1c1;
 };
 
-#if VERSION != VERSION_JP
+#if VERSION != VERSION_JPN
 STATIC_ASSERT(sizeof(dComIfG_inf_c) == 0x1D1C8);
 #endif
 
@@ -1456,6 +1456,10 @@ inline void dComIfGp_event_onEventFlag(s16 flag) {
 
 inline void dComIfGp_event_offEventFlag(s16 flag) {
     g_dComIfG_gameInfo.play.getEvent().offEventFlag(flag);
+}
+
+inline void dComIfGp_event_remove() {
+    g_dComIfG_gameInfo.play.getEvent().remove();
 }
 
 inline void dComIfGp_event_reset() {

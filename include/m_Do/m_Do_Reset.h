@@ -17,7 +17,7 @@ struct mDoRstData {
 
 class mDoRst {
 public:
-#if VERSION != VERSION_JP
+#if VERSION != VERSION_JPN
     static void set3ButtonResetPort(int port) { mResetData->m3ButtonResetPort = port; }
     static void off3ButtonReset() { mResetData->m3ButtonReset = 0; }
     static void offResetPrepare() { mResetData->mResetPrepare = 0; }

@@ -134,7 +134,7 @@ void* JKRArchive::getGlbResource(u32 param_0, const char* path, JKRArchive* arch
 
 /* 802B8380-802B8450       .text getResource__10JKRArchiveFPCc */
 void* JKRArchive::getResource(const char* path) {
-#if VERSION == VERSION_JP
+#if VERSION == VERSION_JPN
     JUT_ASSERT(337, isMounted());
 #else
     JUT_ASSERT(285, isMounted());
@@ -156,7 +156,7 @@ void* JKRArchive::getResource(const char* path) {
 
 /* 802B8450-802B8528       .text getResource__10JKRArchiveFUlPCc */
 void* JKRArchive::getResource(u32 type, const char* path) {
-#if VERSION == VERSION_JP
+#if VERSION == VERSION_JPN
     JUT_ASSERT(384, isMounted());
 #else
     JUT_ASSERT(332, isMounted());
@@ -198,7 +198,7 @@ u32 JKRArchive::readTypeResource(void* buffer, u32 bufferSize, u32 type, const c
 
 /* 802B85F0-802B86DC       .text readResource__10JKRArchiveFPvUlUlPCc */
 u32 JKRArchive::readResource(void* buffer, u32 bufferSize, u32 type, const char* path) {
-#if VERSION == VERSION_JP
+#if VERSION == VERSION_JPN
     JUT_ASSERT(543, isMounted());
 #else
     JUT_ASSERT(491, isMounted());
@@ -222,7 +222,7 @@ u32 JKRArchive::readResource(void* buffer, u32 bufferSize, u32 type, const char*
 
 /* 802B86DC-802B87C0       .text readResource__10JKRArchiveFPvUlPCc */
 u32 JKRArchive::readResource(void* buffer, u32 bufferSize, const char* path) {
-#if VERSION == VERSION_JP
+#if VERSION == VERSION_JPN
     JUT_ASSERT(589, isMounted());
 #else
     JUT_ASSERT(537, isMounted());
@@ -246,7 +246,7 @@ u32 JKRArchive::readResource(void* buffer, u32 bufferSize, const char* path) {
 
 /* 802B87C0-802B8878       .text readIdxResource__10JKRArchiveFPvUlUl */
 u32 JKRArchive::readIdxResource(void* buffer, u32 bufferSize, u32 index) {
-#if VERSION == VERSION_JP
+#if VERSION == VERSION_JPN
     JUT_ASSERT(645, isMounted());
 #else
     JUT_ASSERT(593, isMounted());
@@ -264,7 +264,7 @@ u32 JKRArchive::readIdxResource(void* buffer, u32 bufferSize, u32 index) {
 
 /* 802B8878-802B8930       .text readResource__10JKRArchiveFPvUlUs */
 u32 JKRArchive::readResource(void* buffer, u32 bufferSize, u16 id) {
-#if VERSION == VERSION_JP
+#if VERSION == VERSION_JPN
     JUT_ASSERT(679, isMounted());
 #else
     JUT_ASSERT(627, isMounted());
@@ -295,7 +295,7 @@ void JKRArchive::removeResourceAll() {
 
 /* 802B89B8-802B8A54       .text removeResource__10JKRArchiveFPv */
 bool JKRArchive::removeResource(void* resource) {
-#if VERSION == VERSION_JP
+#if VERSION == VERSION_JPN
     JUT_ASSERT(755, resource != 0);
 #else
     JUT_ASSERT(687, resource != 0);
@@ -312,7 +312,7 @@ bool JKRArchive::removeResource(void* resource) {
 
 /* 802B8A54-802B8AE4       .text detachResource__10JKRArchiveFPv */
 bool JKRArchive::detachResource(void* resource) {
-#if VERSION == VERSION_JP
+#if VERSION == VERSION_JPN
     JUT_ASSERT(787, resource != 0);
 #else
     JUT_ASSERT(719, resource != 0);
@@ -328,7 +328,7 @@ bool JKRArchive::detachResource(void* resource) {
 
 /* 802B8AE4-802B8B6C       .text getResSize__10JKRArchiveCFPCv */
 u32 JKRArchive::getResSize(const void* resource) const {
-#if VERSION == VERSION_JP
+#if VERSION == VERSION_JPN
     JUT_ASSERT(814, resource != 0);
 #else
     JUT_ASSERT(746, resource != 0);
