@@ -18,8 +18,8 @@ public:
     virtual void drawOut(f32, f32, f32, f32, f32, f32);
     virtual void drawOut(f32, f32, f32, f32, f32, f32, f32, f32);
 
-    void setWhite(JUtility::TColor white) { mColorWhite = white; }
-    void setBlack(JUtility::TColor black) { mColorBlack = black; }
+    void setWhite(JUtility::TColor white) { mColorWhite.set(white); }
+    void setBlack(JUtility::TColor black) { mColorBlack.set(black); }
 
 private:
     /* 0x0CC */ JUTTexture * mpTexture[2];

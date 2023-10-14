@@ -21,6 +21,7 @@
 #include "SSystem/SComponent/c_data_tbl.h"
 
 class JKRArchive;
+class JKRAramBlock;
 class JKRExpHeap;
 class dPa_control_c;
 class dDemo_manager_c;
@@ -454,13 +455,13 @@ public:
     /* 0x47F8 */ JKRArchive* mpEnglishTextArchive;
 #if VERSION != VERSION_JPN
     /* 0x47FC */ JKRArchive* mpHyruleTextArchive;
-    /* 0x4800 */ void * mAramHeap0[3];
-    /* 0x480C */ void * mAramHeap1[4];
-    /* 0x481C */ void * field_0x481c;
-    /* 0x4820 */ void * field_0x4820;
+    /* 0x4800 */ JKRAramBlock* mAramHeap0[3];
+    /* 0x480C */ JKRAramBlock* mAramHeap1[4];
+    /* 0x481C */ JKRAramBlock* field_0x481c;
+    /* 0x4820 */ JKRAramBlock* field_0x4820;
 #else
-    /* 0x47FC */ void * mAramHeap0[3];
-    /* 0x480C */ void * mAramHeap1[4];
+    /* 0x47FC */ JKRAramBlock* mAramHeap0[3];
+    /* 0x480C */ JKRAramBlock* mAramHeap1[4];
 #endif
     /* Offsets below are for USA/PAL */
 

@@ -20,6 +20,7 @@
 #include "m_Do/m_Do_dvd_thread.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRAram.h"
+#include "JSystem/JKernel/JKRAramBlock.h"
 #include "JSystem/JKernel/JKRAramHeap.h"
 #include "dolphin/vi/vi.h"
 #include "dolphin/os/OS.h"
@@ -43,7 +44,7 @@ public:
     /* 0x1EE */ u16 field_0x1ee;
     /* 0x1F0 */ u16 field_0x1f0;
     /* 0x1F2 */ u16 field_0x1f2;
-    /* 0x1F4 */ u32 field_0x1f4;
+    /* 0x1F4 */ u16 field_0x1f4;
     /* 0x1F8 */ void * field_0x1f8;
     /* 0x1FC */ u32 field_0x1fc;
 };
@@ -206,6 +207,76 @@ BOOL progSelDraw(dScnLogo_c* i_this) {
     dComIfGd_set2DOpa(i_this->progchoiceImg);
     dComIfGd_set2DOpa(i_this->progyesImg);
     dComIfGd_set2DOpa(i_this->prognoImg);
+
+    if (i_this->field_0x1eb == 0) {
+        if (i_this->mInterFlag == 0) {
+            if (CPad_CHECK_HOLD_RIGHT(0) || g_mDoCPd_cpadInfo[0].mMainStickPosX > 0.5f) {
+                mDoAud_seStart(0x83d, NULL, 0, 0);
+                i_this->mInterFlag = 1;
+                i_this->field_0x1ee = 30;
+                i_this->field_0x1f0 = i_this->field_0x1ee;
+                i_this->field_0x1f2 = 0;
+            }
+        } else {
+            if (CPad_CHECK_HOLD_LEFT(0) || g_mDoCPd_cpadInfo[0].mMainStickPosX < 0.5f) {
+                mDoAud_seStart(0x83d, NULL, 0, 0);
+                i_this->mInterFlag = 0;
+                i_this->field_0x1ee = 30;
+                i_this->field_0x1f0 = i_this->field_0x1ee;
+                i_this->field_0x1f2 = 0;
+            }
+        }
+
+        if (CPad_CHECK_TRIG_A(0) || i_this->mTimer == 0) {
+            if (i_this->mInterFlag == 0)
+                mDoAud_seStart(0x80d, NULL, 0, 0);
+            else
+                mDoAud_seStart(0x880, NULL, 0, 0);
+
+            if (i_this->mTimer > 540) {
+                i_this->field_0x1eb = 1;
+                i_this->field_0x1f4 = i_this->mTimer - 540;
+            } else {
+                i_this->mAction = ACT_progOutDraw;
+                i_this->mTimer = 30;
+                i_this->field_0x1ee = 30;
+                i_this->field_0x1f0 = i_this->field_0x1ee;
+                i_this->field_0x1f2 = 0;
+            }
+        }
+    } else {
+        if (i_this->field_0x1f4 == 0) {
+            i_this->mAction = ACT_progOutDraw;
+            i_this->mTimer = 30;
+            i_this->field_0x1ee = 30;
+            i_this->field_0x1f0 = i_this->field_0x1ee;
+            i_this->field_0x1f2 = 0;
+        } else {
+            i_this->field_0x1f4--;
+        }
+    }
+
+    f32 t = (f32)i_this->field_0x1f0 / (f32)i_this->field_0x1ee;
+    if (i_this->field_0x1f2 != 0)
+        t = 1.0f - t;
+    u8 selR = t * 0xC8;
+    u8 selG = t * 0xFF;
+
+    // this needs more work
+    if (i_this->mInterFlag) {
+        i_this->progyesImg->getPicture()->setWhite(0xA0A0A0FF);
+        i_this->progyesImg->getPicture()->setBlack(JUtility::TColor(selR, selG, 0xFF, 0xFF));
+    } else {
+        i_this->prognoImg->getPicture()->setWhite(0xA0A0A0FF);
+        i_this->progyesImg->getPicture()->setBlack(JUtility::TColor(selR, selG, 0xFF, 0xFF));
+    }
+
+    if (i_this->field_0x1f0 == 0) {
+        i_this->field_0x1f0 = i_this->field_0x1ee;
+        i_this->field_0x1f2 = i_this->field_0x1f2 ^ 1;
+    } else {
+        i_this->field_0x1f0--;
+    }
 
     return TRUE;
 }
@@ -638,8 +709,8 @@ s32 phase_2(dScnLogo_c* i_this) {
     JUT_ASSERT(VERSION_SELECT(1264, 1482, 1522), timg != 0);
     i_this->nintendoImg = new dDlst_2D_c(timg, 133, 170, 0);
     JUT_ASSERT(VERSION_SELECT(1267, 1485, 1525), i_this->nintendoImg != 0);
+    i_this->nintendoImg->setAlpha(0xFF);
     i_this->nintendoImg->getPicture()->setWhite(JUtility::TColor(0xDC, 0x00, 0x00, 0xFF));
-    i_this->nintendoImg->setAlpha(0x00);
 
 #if VERSION == VERSION_PAL
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", 29);
@@ -745,9 +816,7 @@ s32 phase_2(dScnLogo_c* i_this) {
     l_itemiconCommand = aramMount("/res/Msg/itemicon.arc");
 
 #if VERSION == VERSION_PAL
-    if (g_dComIfG_gameInfo.play.field_0x4820 != NULL) {
-        (u32)g_dComIfG_gameInfo.play.field_0x4820;
-    }
+    delete g_dComIfG_gameInfo.play.field_0x4820;
     char buf[256];
     sprintf(buf, "/res/Msg/data%d/acticon.arc", g_dComIfG_gameInfo.play.mGameLanguage);
     l_actioniconCommand = aramMount(buf);
