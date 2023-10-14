@@ -86,6 +86,7 @@ public:
 
     void setDrawDoneMethod(EDrawDone drawDone) { mDrawDoneMethod = drawDone; }
     void setFader(JUTFader* fader) { mpFader = fader; }
+    JUTFader * getFader() { return mpFader; }
     void setClearColor(JUtility::TColor color) { mClearColor = color; }
 
     static JFWDisplay* sManager;

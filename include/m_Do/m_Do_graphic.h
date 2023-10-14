@@ -32,9 +32,7 @@ public:
     static BOOL startFadeOut(int param_0) { return JFWDisplay::getManager()->startFadeOut(param_0); }
     static BOOL startFadeIn(int param_0) { return JFWDisplay::getManager()->startFadeIn(param_0); }
     static void setFadeColor(JUtility::TColor color) { mFader->mColor.set(color); }
-    static void setClearColor(JUtility::TColor color) {
-        JFWDisplay::getManager()->setClearColor(color);
-    }
+    static void setClearColor(JUtility::TColor color) { JFWDisplay::getManager()->setClearColor(color); }
     static void setBackColor(GXColor& color) { mBackColor = color; }
     static void endFrame() { JFWDisplay::getManager()->endFrame(); }
     static void offFade() { mFade = 0; }

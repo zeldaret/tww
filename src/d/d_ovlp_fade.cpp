@@ -24,14 +24,13 @@ BOOL dOvlpFd_Draw(overlap1_class* i_this) {
 
 /* 802235D4-802236AC       .text dOvlpFd_FadeOut__FP14overlap1_class */
 BOOL dOvlpFd_FadeOut(overlap1_class* i_this) {
-    /* Nonmatching - extra comparisons */
     if (i_this->mFadeOutTime == 0) {
         if (fpcM_GetProfName(i_this) != PROC_OVERLAP6) {
-            if (!mDoGph_gInf_c::startFadeIn(26))
+            if (!JFWDisplay::getManager()->getFader()->startFadeIn(26))
                 return TRUE;
             i_this->mFadeOutTime = 26;
         } else {
-            if (mDoGph_gInf_c::startFadeIn(0))
+            if (!JFWDisplay::getManager()->getFader()->startFadeIn(0))
                 return TRUE;
             i_this->mFadeOutTime = 1;
         }
