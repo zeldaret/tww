@@ -19,6 +19,10 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_printf.h"
+#include "MSL_C/math.h"
+
+class sub_kankyo__class : public kankyo_class {
+};
 
 #include "src/d/d_kankyo_dayproc.inc"
 
@@ -1309,10 +1313,7 @@ void dScnKy_env_light_c::setLight_actor(dKy_tevstr_c* i_tevstr, GXColorS10* i_fo
 /* 8019252C-8019261C       .text
  * settingTevStruct_colget_actor__18dScnKy_env_light_cFP4cXyzP12dKy_tevstr_cP11_GXColorS10P11_GXColorS10P11_GXColorS10PfPf
  */
-void dScnKy_env_light_c::settingTevStruct_colget_actor(cXyz*, dKy_tevstr_c* i_tevstr,
-                                                       GXColorS10* i_colorC0, GXColorS10* i_colorK0,
-                                                       GXColorS10* i_fogColor, f32* i_fogStartZ,
-                                                       f32* i_fogEndZ) {
+void dScnKy_env_light_c::settingTevStruct_colget_actor(cXyz*, dKy_tevstr_c* i_tevstr, GXColorS10* i_colorC0, GXColorS10* i_colorK0, GXColorS10* i_fogColor, f32* i_fogStartZ, f32* i_fogEndZ) {
     if (i_tevstr->mEnvrIdxOverride != 0xFF) {
         i_tevstr->mEnvrIdxCurr = i_tevstr->mEnvrIdxOverride;
     } else if (i_tevstr->mRoomNo >= 0) {
@@ -1362,19 +1363,155 @@ void dScnKy_env_light_c::settingTevStruct_colget_player(dKy_tevstr_c* i_tevstr) 
     }
 }
 
+cXyz dKy_light_influence_pos(int i_lightIdx);
+
 /* 801926C0-80192E04       .text
  * settingTevStruct_plightcol_plus__18dScnKy_env_light_cFP4cXyzP12dKy_tevstr_c11_GXColorS1011_GXColorS10Uc
  */
-void dScnKy_env_light_c::settingTevStruct_plightcol_plus(cXyz* i_pos, dKy_tevstr_c* i_tevstr,
-                                                         GXColorS10 param_2, GXColorS10 param_3,
-                                                         u8 param_4) {
-    /* Nonmatching */
+void dScnKy_env_light_c::settingTevStruct_plightcol_plus(cXyz* i_pos, dKy_tevstr_c* i_tevstr, GXColorS10 c0, GXColorS10 k0, u8 reset) {
+    /* Nonmatching - regalloc */
+    dScnKy_env_light_c * pEnvLight = &g_env_light;
+    J3DSys * pJ3DSys = &j3dSys;
+
+    s32 resetLight = false;
+
+    s32 lightIdx = dKy_light_influence_id(*i_pos, 0);
+    f32 lightDist, lightPower, lightYuragi;
+    cXyz lightPos;
+    s32 hasLight = false;
+
+    if (lightIdx >= 0) {
+        lightDist = dKy_light_influence_distance(*i_pos, lightIdx);
+        lightPower = dKy_light_influence_power(lightIdx);
+
+        if (lightPower < 1/1000.0f)
+            lightPower = 0.001f;
+
+        if (lightDist < lightPower + 1000.0f)
+            hasLight = true;
+    }
+
+    if (!hasLight) {
+        lightPos = pEnvLight->mBaseLightInfluence.mPos;
+        lightDist = pEnvLight->mBaseLightInfluence.mPos.abs(*i_pos);
+        lightPower = pEnvLight->mBaseLightInfluence.mPower;
+        lightYuragi = pEnvLight->mBaseLightInfluence.mFluctuation;
+        mK0.r = 0;
+        mK0.g = 0;
+        mK0.b = 0;
+    } else {
+        lightPos = dKy_light_influence_pos(lightIdx);
+        mK0 = dKy_light_influence_col(lightIdx);
+        lightYuragi = dKy_light_influence_yuragi(lightIdx);
+
+        if (g_env_light.mpPLights[lightIdx]->mIdx < 0)
+            resetLight = true;
+    }
+
+    f32 bright;
+    if (lightPower <= 0.0f || (resetLight & 0xFF) != 0)
+        bright = 1.0f;
+    else
+        bright = lightDist / lightPower;
+    if (bright > 1.0f)
+        bright = 1.0f;
+    bright *= bright;
+    f32 speed = 1.0f - bright;
+
+    if (lightYuragi < 1000.0f) {
+        f32 r = 255.0f - (lightYuragi / 3.0f) * speed;
+        i_tevstr->mLightObj.mInfo.mColor.r = r + (255.0f - r) * cM_rndF(1.0f);
+    } else {
+        i_tevstr->mLightObj.mInfo.mColor.r = (lightYuragi - 1000.0f);
+    }
+
+    mC0.r = c0.r + (s32)(mK0.r * (speed * 0.2f));
+    mC0.g = c0.g + (s32)(mK0.g * (speed * 0.2f));
+    mC0.b = c0.b + (s32)(mK0.b * (speed * 0.2f));
+    if (mC0.r > 0xFF) mC0.r = 0xFF;
+    if (mC0.g > 0xFF) mC0.g = 0xFF;
+    if (mC0.b > 0xFF) mC0.b = 0xFF;
+
+    mK0.r = k0.r + (s32)(mK0.r * speed);
+    mK0.g = k0.g + (s32)(mK0.g * speed);
+    mK0.b = k0.b + (s32)(mK0.b * speed);
+    if (mK0.r > 0xFF) mK0.r = 0xFF;
+    if (mK0.g > 0xFF) mK0.g = 0xFF;
+    if (mK0.b > 0xFF) mK0.b = 0xFF;
+
+    if (reset != 0 || resetLight) {
+        i_tevstr->mLightPosWorld = lightPos;
+    } else {
+        f32 oldDist = i_pos->abs(i_tevstr->mLightPosWorld) / 10000.0f;
+        if (oldDist > 1.0f)
+            oldDist = 1.0f;
+        oldDist *= oldDist;
+
+        f32 newDist = i_pos->abs(lightPos) / 5000.0f;
+        if (newDist > 1.0f)
+            newDist = 1.0f;
+        newDist = 1.0f - newDist;
+
+        newDist = newDist * newDist * newDist;
+        f32 speed = 10.0f + (oldDist * 10000.0f) + (newDist * 100.0f);
+        cLib_addCalc(&i_tevstr->mLightPosWorld.x, lightPos.x, 0.5f, speed, 0.001f);
+        cLib_addCalc(&i_tevstr->mLightPosWorld.y, lightPos.y, 0.5f, speed, 0.001f);
+        cLib_addCalc(&i_tevstr->mLightPosWorld.z, lightPos.z, 0.5f, speed, 0.001f);
+    }
+
+    cXyz lightDir;
+    if (toon_proc_check()) {
+        lightDir = i_tevstr->mLightPosWorld - *i_pos;
+        lightDir = *i_pos - lightDir;
+    } else {
+        lightDir = i_tevstr->mLightPosWorld;
+    }
+
+    cXyz lightDirView;
+    MTXMultVec(pJ3DSys->getViewMtx(), &lightDir, &lightDirView);
+    i_tevstr->mLightObj.mInfo.mLightPosition = lightDirView;
+    i_tevstr->mLightObj.mInfo.mLightDirection = g_env_light.mLightDir;
+    i_tevstr->mLightObj.mInfo.mColor.g = 0;
+    i_tevstr->mLightObj.mInfo.mColor.b = 0;
+    i_tevstr->mLightObj.mInfo.mColor.a = 0xFF;
+    i_tevstr->mLightObj.mInfo.mCosAtten.x = 1.0f;
+    i_tevstr->mLightObj.mInfo.mCosAtten.y = 0.0f;
+    i_tevstr->mLightObj.mInfo.mCosAtten.z = 0.0f;
+    i_tevstr->mLightObj.mInfo.mDistAtten.x = 1.0f;
+    i_tevstr->mLightObj.mInfo.mDistAtten.y = 0.0f;
+    i_tevstr->mLightObj.mInfo.mDistAtten.z = 0.0f;
 }
 
 /* 80192E04-80193028       .text
  * settingTevStruct_eflightcol_plus__18dScnKy_env_light_cFP4cXyzP12dKy_tevstr_c */
-void dScnKy_env_light_c::settingTevStruct_eflightcol_plus(cXyz*, dKy_tevstr_c*) {
-    /* Nonmatching */
+void dScnKy_env_light_c::settingTevStruct_eflightcol_plus(cXyz* i_pos, dKy_tevstr_c* i_tevstr) {
+    s32 hasEflight = false;
+    s32 efi = mPlayerEflightIdx;
+
+    if (efi >= 0 && g_env_light.mpEfLights[efi] != NULL)
+        hasEflight = true;
+
+    if (hasEflight) {
+        f32 power = dKy_eflight_influence_power(efi);
+        if (power > 0.0f) {
+            f32 bright = dKy_eflight_influence_distance(*i_pos, efi) / power;
+            if (bright < 1.0f) {
+                i_tevstr->mColorK1.a = 1;
+                GXColorS10 color = dKy_eflight_influence_col(efi);
+
+                bright = 1.0f - bright;
+                s16 r = color.r * bright;
+                s16 g = color.g * bright;
+                s16 b = color.b * bright;
+                if (r > 0xFF) r = 0xFF;
+                if (g > 0xFF) g = 0xFF;
+                if (b > 0xFF) b = 0xFF;
+                i_tevstr->mColorK1.r = r * bright;
+                i_tevstr->mColorK1.g = g * bright;
+                i_tevstr->mColorK1.b = b * bright;
+            }
+        }
+    }
 }
 
 dKy_setLight__Status lightStatusData[8];
@@ -1422,13 +1559,11 @@ void dScnKy_env_light_c::settingTevStruct(int i_lightType, cXyz* param_1, dKy_te
         fog_z_end = mFogEndZ__setLight;
 
         if (i_lightType == 0 || i_lightType == 99) {
-            settingTevStruct_colget_actor(param_1, i_tevstr, &sp98, &sp90, &sp88, &fog_z_start,
-                                          &fog_z_end);
+            settingTevStruct_colget_actor(param_1, i_tevstr, &sp98, &sp90, &sp88, &fog_z_start, &fog_z_end);
         } else if (i_lightType == 9) {
             var_r30 = g_env_light.mInitAnimTimer;
             settingTevStruct_colget_player(i_tevstr);
-            settingTevStruct_colget_actor(param_1, i_tevstr, &sp98, &sp90, &sp88, &fog_z_start,
-                                          &fog_z_end);
+            settingTevStruct_colget_actor(param_1, i_tevstr, &sp98, &sp90, &sp88, &fog_z_start, &fog_z_end);
         }
 
         mC0.r = sp98.r;
@@ -1636,8 +1771,7 @@ void setLightTevColorType_sub(J3DMaterial* i_material, dKy_tevstr_c* i_tevstr) {
 
             if (fog_p->getFogInfo()->mAdjEnable == true) {
                 fog_p->getFogInfo()->mCenter = g_env_light.mFogAdjCenter;
-                memcpy(fog_p->getFogInfo()->mFogAdjTable, &g_env_light.mFogAdjTable,
-                       sizeof(GXFogAdjTable));
+                memcpy(fog_p->getFogInfo()->mFogAdjTable, &g_env_light.mFogAdjTable, sizeof(GXFogAdjTable));
             }
         }
     }
@@ -1682,19 +1816,73 @@ void dScnKy_env_light_c::Sndpos() {
 /* 80193BA8-80193D9C       .text Eflight_flush_proc__18dScnKy_env_light_cFv */
 void dScnKy_env_light_c::Eflight_flush_proc() {
     /* Nonmatching */
-    static GXColor flush_col[] = {
+    struct ColorTable {
+        u8 f, r, g, b;
+    };
+    
+    static ColorTable flush_col[] = {
         {1, 255, 255, 255},
         {6, 30, 200, 255},
         {14, 0, 60, 60},
         {20, 0, 0, 0},
     };
 
-    static GXColor flush_col2[] = {
+    static ColorTable flush_col2[] = {
         {1, 255, 200, 60},
         {4, 240, 80, 0},
         {8, 100, 20, 0},
         {15, 0, 0, 0},
     };
+
+    ColorTable * pTbl;
+    f32 wave;
+    if (mEfLightProc.mSwordLightType == 0) {
+        pTbl = flush_col;
+        wave = 100.0f;
+    } else {
+        pTbl = flush_col2;
+        wave = 0.0f;
+    }
+
+    switch (mEfLightProc.mSwordState) {
+    case 0:
+        break;
+    case 1:
+        mEfLightProc.mSwordFrame = 0;
+        mEfLightProc.mSwordLight.mColor.r = pTbl[0].r;
+        mEfLightProc.mSwordLight.mColor.g = pTbl[0].g;
+        mEfLightProc.mSwordLight.mColor.b = pTbl[0].b;
+        mEfLightProc.mSwordLight.mPower = 1000.0f;
+        mEfLightProc.mSwordLight.mFluctuation = wave;
+        dKy_efplight_set(&mEfLightProc.mSwordLight);
+        mEfLightProc.mSwordState++;
+        break;
+    case 2:
+        {
+            for (u32 i = 0; i < 3; i++) {
+                if (mEfLightProc.mSwordFrame >= pTbl[i].f && mEfLightProc.mSwordFrame <= pTbl[i + 1].f) {
+                    f32 t = 1.0f - ((f32)(pTbl[i + 1].f - mEfLightProc.mSwordFrame) / (f32)(pTbl[i + 1].f - pTbl[i].f));
+                    mEfLightProc.mSwordLight.mColor.r = u8_data_ratio_set(pTbl[i].r, pTbl[i + 1].r, t);
+                    mEfLightProc.mSwordLight.mColor.g = u8_data_ratio_set(pTbl[i].g, pTbl[i + 1].g, t);
+                    mEfLightProc.mSwordLight.mColor.b = u8_data_ratio_set(pTbl[i].b, pTbl[i + 1].b, t);
+                    break;
+                }
+            }
+
+            if (mEfLightProc.mSwordFrame > pTbl[3].f)
+                mEfLightProc.mSwordState++;
+            mEfLightProc.mSwordFrame++;
+        }
+        break;
+    case 3:
+        dKy_efplight_cut(&mEfLightProc.mSwordLight);
+        mEfLightProc.mSwordState = 0;
+        break;
+    case 4:
+        dKy_efplight_cut(&mEfLightProc.mSwordLight);
+        mEfLightProc.mSwordState = 1;
+        break;
+    }
 }
 
 /* 80193D9C-80193EE4       .text SetBaseLight__18dScnKy_env_light_cFv */
@@ -2963,9 +3151,6 @@ BOOL dKyr_player_overhead_bg_chk() {
 
     return ret;
 }
-
-class sub_kankyo__class : public kankyo_class {
-};
 
 kankyo_method_class l_dKy_Method = {
     (process_method_func)dKy_Create,
