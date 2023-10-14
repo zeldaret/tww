@@ -161,7 +161,7 @@ public:
     void setReserveItemEmpty();
     void setReserveItem(u8);
     bool checkReserveItemEmpty();
-    bool checkReserveItem(u8);
+    u8 checkReserveItem(u8);
 
     u8 getBeast(int i_idx) const { return mBeast[i_idx]; }
     u8 getBait(int i_idx) const { return mBait[i_idx]; }

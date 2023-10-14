@@ -8,11 +8,12 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
 #include "d/d_stage.h"
+#include "m_Do/m_Do_audio.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTGamePad.h"
-#include "MSL_C/string.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "SSystem/SComponent/c_math.h"
+#include "MSL_C/string.h"
 #include "MSL_C/stdio.h"
 
 struct daNpc_Sarace_c {
@@ -392,15 +393,15 @@ void dSv_player_item_max_c::init() {
 /* 80059908-80059968       .text init__21dSv_player_bag_item_cFv */
 void dSv_player_bag_item_c::init() {
     for (int i = 0; i < 8; i++) {
-        field_0x0[i] = 0xFF;
+        mBeast[i] = 0xFF;
     }
 
     for (int i = 0; i < 8; i++) {
-        field_0x8[i] = 0xFF;
+        mBait[i] = 0xFF;
     }
 
     for (int i = 0; i < 8; i++) {
-        field_0x10[i] = 0xFF;
+        mReserve[i] = 0xFF;
     }
 }
 
@@ -408,8 +409,8 @@ void dSv_player_bag_item_c::init() {
 void dSv_player_bag_item_c::setBeastItem(u8 param_0) {
     if (!checkBeastItem(param_0)) {
         for (int i = 0; i < 8; i++) {
-            if (field_0x0[i] == 0xFF) {
-                field_0x0[i] = param_0;
+            if (mBeast[i] == 0xFF) {
+                mBeast[i] = param_0;
                 return;
             }
         }
@@ -424,7 +425,7 @@ void dSv_player_bag_item_c::setBeastItemEmpty(u8) {
 /* 80059C30-80059C60       .text checkBeastItem__21dSv_player_bag_item_cFUc */
 bool dSv_player_bag_item_c::checkBeastItem(u8 param_0) {
     for (int i = 0; i < 8; i++) {
-        if (field_0x0[i] == param_0) {
+        if (mBeast[i] == param_0) {
             return true;
         }
     }
@@ -467,7 +468,7 @@ u8 dSv_player_bag_item_c::checkBaitItem(u8 i_itemNo) {
     u8 ret = 0;
 
     for (int i = 0; i < 8; i++) {
-        if (field_0x8[i] == i_itemNo) {
+        if (mBait[i] == i_itemNo) {
             ret++;
         }
     }
@@ -499,8 +500,8 @@ void dSv_player_bag_item_c::setReserveItemEmpty(u8 param_0) {
 void dSv_player_bag_item_c::setReserveItem(u8 param_0) {
     if (checkReserveItemEmpty()) {
         for (int i = 0; i < 8; i++) {
-            if (field_0x10[i] == 0xFF) {
-                field_0x10[i] = param_0;
+            if (mReserve[i] == 0xFF) {
+                mReserve[i] = param_0;
                 return;
             }
         }
@@ -508,7 +509,7 @@ void dSv_player_bag_item_c::setReserveItem(u8 param_0) {
 }
 
 /* 8005A854-8005A878       .text checkReserveItemEmpty__21dSv_player_bag_item_cFv */
-u8 dSv_player_bag_item_c::checkReserveItemEmpty() {
+bool dSv_player_bag_item_c::checkReserveItemEmpty() {
     return checkReserveItem(NO_ITEM);
 }
 
@@ -517,7 +518,7 @@ u8 dSv_player_bag_item_c::checkReserveItem(u8 i_itemNo) {
     u8 ret = 0;
 
     for (int i = 0; i < 8; i++) {
-        if (field_0x10[i] == i_itemNo) {
+        if (mReserve[i] == i_itemNo) {
             ret++;
         }
     }
@@ -539,7 +540,7 @@ void dSv_player_get_bag_item_c::onBeast(u8 i_no) {
 }
 
 /* 8005A960-8005A9F8       .text isBeast__25dSv_player_get_bag_item_cFUc */
-bool dSv_player_get_bag_item_c::isBeast(u8 i_no) {
+BOOL dSv_player_get_bag_item_c::isBeast(u8 i_no) {
     JUT_ASSERT(1265, 0 <= i_no && i_no < 8);
     return mBeastFlags & (u8)(1 << i_no) ? true : false;
 }
@@ -551,7 +552,7 @@ void dSv_player_get_bag_item_c::onBait(u8 i_no) {
 }
 
 /* 8005AA8C-8005AB24       .text isBait__25dSv_player_get_bag_item_cFUc */
-bool dSv_player_get_bag_item_c::isBait(u8 i_no) {
+BOOL dSv_player_get_bag_item_c::isBait(u8 i_no) {
     JUT_ASSERT(1310, 0 <= i_no && i_no < 8);
     return mBaitFlags & (u8)(1 << i_no) ? true : false;
 }
@@ -563,7 +564,7 @@ void dSv_player_get_bag_item_c::onReserve(u8 i_no) {
 }
 
 /* 8005ABB4-8005AC48       .text isReserve__25dSv_player_get_bag_item_cFUc */
-bool dSv_player_get_bag_item_c::isReserve(u8 i_no) {
+BOOL dSv_player_get_bag_item_c::isReserve(u8 i_no) {
     JUT_ASSERT(1355, 0 <= i_no && i_no < 32);
     return mReserveFlags & (1 << i_no) ? true : false;
 }
@@ -571,15 +572,15 @@ bool dSv_player_get_bag_item_c::isReserve(u8 i_no) {
 /* 8005AC48-8005ACA8       .text init__28dSv_player_bag_item_record_cFv */
 void dSv_player_bag_item_record_c::init() {
     for (int i = 0; i < 8; i++) {
-        field_0x0[i] = 0;
+        mBeastNum[i] = 0;
     }
 
     for (int i = 0; i < 8; i++) {
-        field_0x8[i] = 0;
+        mBaitNum[i] = 0;
     }
 
     for (int i = 0; i < 8; i++) {
-        field_0x10[i] = 0;
+        mReserveNum[i] = 0;
     }
 }
 
@@ -824,12 +825,24 @@ void dSv_player_info_c::init() {
 
 /* 8005BF2C-8005BFA4       .text init__19dSv_player_config_cFv */
 void dSv_player_config_c::init() {
-    /* Nonmatching */
+    field_0x0 = 1;
+
+    u32 soundMode = OSGetSoundMode();
+    if (soundMode == 0) {
+        mSoundMode = 0;
+        JAIZelBasic::getInterface()->setOutputMode(0);
+    } else {
+        mSoundMode = 1;
+        JAIZelBasic::getInterface()->setOutputMode(1);
+    }
+
+    mAttentionType = 0;
+    mVibration = 1;
 }
 
 /* 8005BFA4-8005BFC8       .text checkVibration__19dSv_player_config_cFv */
 s32 dSv_player_config_c::checkVibration() {
-    if (JUTGamePad::sRumbleSupported)
+    if (JUTGamePad::sRumbleSupported & 0x80000000)
         return g_dComIfG_gameInfo.play.field_0x4963;
 
     return 0;
@@ -883,6 +896,7 @@ void dSv_memBit_c::init() {
         mVisitedRoom[i] = 0;
     }
 
+    mKeyNum = 0;
     mDungeonItem = 0;
 }
 
@@ -1038,7 +1052,7 @@ int dSv_danBit_c::init(s8 i_stageNo) {
         mSwitch[0] = 0;
         mSwitch[1] = 0;
         mStageNo = i_stageNo;
-        field_0x1 = 0;
+        mGbaRupeeCount = 0;
         return 1;
     }
 
@@ -1170,11 +1184,11 @@ void dSv_restart_c::setRestartOption(s8 param_0) {
 
 /* 8005D584-8005D5B4       .text setRestartOption__13dSv_restart_cFScP4cXyzsSc */
 void dSv_restart_c::setRestartOption(s8 param_0, cXyz* i_pos, s16 i_angle, s8 i_roomNo) {
-    mRoomPos = *i_pos;
-    mRoomAngleY = i_angle;
-    mRoomNo = i_roomNo;
-    field_0x4 = -1;
-    field_0x1 = param_0;
+    mOptionRoomPos = *i_pos;
+    mOptionRoomAngleY = i_angle;
+    mOptionRoomNo = i_roomNo;
+    mOptionPoint = -1;
+    mOption = param_0;
 }
 
 /* 8005D5B4-8005D604       .text set__17dSv_turnRestart_cFRC4cXyzsScUlRC4cXyzsi */
