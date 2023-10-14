@@ -2,6 +2,7 @@
 #define D_D_DRAWLIST_H
 
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
+#include "JSystem/J2DGraph/J2DPicture.h"
 #include "f_op/f_op_view.h"
 #include "global.h"
 #include "m_Do/m_Do_ext.h"
@@ -13,6 +14,20 @@ public:
     dDlst_base_c() {}
     virtual ~dDlst_base_c();
     virtual void draw();
+};
+
+class dDlst_2D_c : public dDlst_base_c {
+public:
+    dDlst_2D_c(ResTIMG * pTIMG, s16 w, s16 h, u8 alpha);
+    J2DPicture * getPicture() { return &mPicture; }
+    void setAlpha(u8 alpha) { mAlpha = alpha; }
+
+protected:
+    /* 0x004 */ J2DPicture mPicture;
+    /* 0x128 */ s16 mWidth;
+    /* 0x12A */ s16 mHeight;
+    /* 0x12C */ u8 mAlpha;
+    /* 0x12D */ u8 field_0x12e[3];
 };
 
 class dDlst_window_c {
@@ -139,7 +154,7 @@ public:
     int setReal2(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*);
     bool addReal(u32, J3DModel*);
     int setSimple(cXyz*, f32, f32, cXyz*, s16, f32, GXTexObj*);
-    static void setSimpleTex(ResTIMG const*);
+    static void setSimpleTex(void *);
 
     static GXTexObj* getSimpleTex() { return &mSimpleTexObj; }
 

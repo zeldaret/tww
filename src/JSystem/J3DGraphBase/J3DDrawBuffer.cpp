@@ -199,7 +199,7 @@ int J3DDrawBuffer::entryImm(J3DPacket* i_packet, u16 index) {
     return 1;
 }
 
-sortFunc J3DDrawBuffer::sortFuncTable[] = {
+J3DDrawBuffer::sortFunc J3DDrawBuffer::sortFuncTable[] = {
     &J3DDrawBuffer::entryMatSort,
     &J3DDrawBuffer::entryMatAnmSort,
     &J3DDrawBuffer::entryZSort,
@@ -208,7 +208,7 @@ sortFunc J3DDrawBuffer::sortFuncTable[] = {
     &J3DDrawBuffer::entryNonSort,
 };
 
-drawFunc J3DDrawBuffer::drawFuncTable[] = {
+J3DDrawBuffer::drawFunc J3DDrawBuffer::drawFuncTable[] = {
     &J3DDrawBuffer::drawHead,
     &J3DDrawBuffer::drawTail,
 };

@@ -11,11 +11,11 @@ class J3DMatPacket;
 class J3DShapePacket;
 class J3DCallBackPacket;
 
-typedef int (J3DDrawBuffer::*sortFunc)(J3DMatPacket*);
-typedef void (J3DDrawBuffer::*drawFunc)() const;
-
 class J3DDrawBuffer {
 public:
+    typedef int (J3DDrawBuffer::*sortFunc)(J3DMatPacket*);
+    typedef void (J3DDrawBuffer::*drawFunc)() const;
+
     enum EDrawType {
         DRAW_HEAD,
         DRAW_TAIL,

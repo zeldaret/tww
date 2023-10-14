@@ -420,22 +420,13 @@ static void dummy3() {
 
 /* 802B0D70-802B0E14       .text state_register__7JKRHeapCFPQ27JKRHeap6TStateUl */
 void JKRHeap::state_register(JKRHeap::TState* p, u32 id) const {
-#if VERSION == VERSION_JPN
-    JUT_ASSERT(1034, p != 0);
-    JUT_ASSERT(1035, p->getHeap() == this);
-#else
-    JUT_ASSERT(1090, p != 0);
-    JUT_ASSERT(1091, p->getHeap() == this);
-#endif
+    JUT_ASSERT(VERSION_SELECT(1034, 1090, 1090), p != 0);
+    JUT_ASSERT(VERSION_SELECT(1035, 1091, 1091), p->getHeap() == this);
 }
 
 /* 802B0E14-802B0E9C       .text state_compare__7JKRHeapCFRCQ27JKRHeap6TStateRCQ27JKRHeap6TState */
 bool JKRHeap::state_compare(const JKRHeap::TState& r1, const JKRHeap::TState& r2) const {
-#if VERSION == VERSION_JPN
-    JUT_ASSERT(1043, r1.getHeap() == r2.getHeap());
-#else
-    JUT_ASSERT(1099, r1.getHeap() == r2.getHeap());
-#endif
+    JUT_ASSERT(VERSION_SELECT(1043, 1099, 1099), r1.getHeap() == r2.getHeap());
     return r1.getCheckCode() == r2.getCheckCode();
 }
 
@@ -448,15 +439,9 @@ static void dummy4() {
 
 /* 802B0E9C-802B0F24       .text state_dump__7JKRHeapCFRCQ27JKRHeap6TState */
 void JKRHeap::state_dump(const JKRHeap::TState& p) const {
-#if VERSION == VERSION_JPN
-    JUT_LOG(1067, "check-code : 0x%08x", p.getCheckCode());
-    JUT_LOG(1068, "id         : 0x%08x", p.getId());
-    JUT_LOG(1069, "used size  : %u", p.getUsedSize());
-#else
-    JUT_LOG(1123, "check-code : 0x%08x", p.getCheckCode());
-    JUT_LOG(1124, "id         : 0x%08x", p.getId());
-    JUT_LOG(1125, "used size  : %u", p.getUsedSize());
-#endif
+    JUT_LOG(VERSION_SELECT(1067, 1123, 1123), "check-code : 0x%08x", p.getCheckCode());
+    JUT_LOG(VERSION_SELECT(1068, 1124, 1124), "id         : 0x%08x", p.getId());
+    JUT_LOG(VERSION_SELECT(1069, 1125, 1125), "used size  : %u", p.getUsedSize());
 }
 
 /* 802B0F24-802B0F2C       .text do_changeGroupID__7JKRHeapFUc */

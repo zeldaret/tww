@@ -62,8 +62,7 @@ class mDoDvdThd_mountXArchive_c : public mDoDvdThd_command_c {
 public:
     virtual ~mDoDvdThd_mountXArchive_c();
     mDoDvdThd_mountXArchive_c(u8 mountDirection, JKRArchive::EMountMode mountMode);
-    static mDoDvdThd_mountXArchive_c* create(char const*, u8, JKRArchive::EMountMode,
-                                                            JKRHeap*);
+    static mDoDvdThd_mountXArchive_c* create(char const*, u8, JKRArchive::EMountMode);
     virtual s32 execute();
 
     JKRArchive* getArchive() const { return mArchive; }

@@ -235,13 +235,8 @@ bool JKRSolidHeap::dump() {
 
 /* 802B3A68-802B3B4C       .text state_register__12JKRSolidHeapCFPQ27JKRHeap6TStateUl */
 void JKRSolidHeap::state_register(JKRHeap::TState* p, u32 id) const {
-#if VERSION == VERSION_JPN
-    JUT_ASSERT(610, p != 0);
-    JUT_ASSERT(611, p->getHeap() == this);
-#else
-    JUT_ASSERT(607, p != 0);
-    JUT_ASSERT(608, p->getHeap() == this);
-#endif
+    JUT_ASSERT(VERSION_SELECT(610, 607, 607), p != 0);
+    JUT_ASSERT(VERSION_SELECT(611, 608, 608), p->getHeap() == this);
 
     getState_(p);
     setState_u32ID_(p, id);
@@ -253,11 +248,7 @@ void JKRSolidHeap::state_register(JKRHeap::TState* p, u32 id) const {
 
 /* 802B3B4C-802B3BF4       .text state_compare__12JKRSolidHeapCFRCQ27JKRHeap6TStateRCQ27JKRHeap6TState */
 bool JKRSolidHeap::state_compare(const JKRHeap::TState& r1, const JKRHeap::TState& r2) const {
-#if VERSION == VERSION_JPN
-    JUT_ASSERT(638, r1.getHeap() == r2.getHeap());
-#else
-    JUT_ASSERT(635, r1.getHeap() == r2.getHeap());
-#endif
+    JUT_ASSERT(VERSION_SELECT(638, 635, 635), r1.getHeap() == r2.getHeap());
 
     bool result = true;
     if (r1.getCheckCode() != r2.getCheckCode()) {

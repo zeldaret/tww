@@ -65,6 +65,8 @@ void OSSetSoundMode(OSSoundMode mode);
 u32 OSGetProgressiveMode(void);
 void OSSetProgressiveMode(u32 mode);
 u32 OSGetEuRgb60Mode();
+void OSSetEuRgb60Mode(u32 mode);
+s32 OSGetLanguage();
 u16 OSGetWirelessID(s32 channel);
 void OSSetWirelessID(s32 channel, u16 id);
 static u16 OSGetGbsMode(void);

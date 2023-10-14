@@ -379,6 +379,40 @@ public:
     void setCurrentWindow(dDlst_window_c* i_window) { mCurrentWindow = i_window; }
     void setCurrentView(view_class* i_view) { mCurrentView = i_view; }
     void setCurrentViewport(view_port_class* i_viewport) { mCurrentViewport = i_viewport; }
+
+    void setMsgArchive(JKRArchive * pArc) { mpMsgArchive = pArc; }
+    void setDmsgArchive(JKRArchive * pArc) { mpDmsgArchive = pArc; }
+    void setTmsgArchive(JKRArchive * pArc) { mpTmsgArchive = pArc; }
+    void setMenuArchive(JKRArchive * pArc) { mpMenuArchive = pArc; }
+    void setFont0Archive(JKRArchive * pArc) { mpFont0Archive = pArc; }
+    void setFont1Archive(JKRArchive * pArc) { mpFont1Archive = pArc; }
+    void setAnmArchive(JKRArchive * pArc) { mpAnmArchive = pArc; }
+    void setLkDArc(JKRArchive * pArc) { mpLkDArc = pArc; }
+    void setFmapArchive(JKRArchive * pArc) { mpFmapArchive = pArc; }
+    void setItemResArchive(JKRArchive * pArc) { mpItemResArchive = pArc; }
+    void setClctResArchive(JKRArchive * pArc) { mpClctResArchive = pArc; }
+    void setFmapResArchive(JKRArchive * pArc) { mpFmapResArchive = pArc; }
+    void setDmapResArchive(JKRArchive * pArc) { mpDmapResArchive = pArc; }
+    void setOptResArchive(JKRArchive * pArc) { mpOptResArchive = pArc; }
+    void setClothResArchive(JKRArchive * pArc) { mpClothResArchive = pArc; }
+    void setSaveResArchive(JKRArchive * pArc) { mpSaveResArchive = pArc; }
+    void setItemIconArchive(JKRArchive * pArc) { mpItemIconArchive = pArc; }
+    void setNameResArchive(JKRArchive * pArc) { mpNameResArchive = pArc; }
+    void setErrorResArchive(JKRArchive * pArc) { mpErrorResArchive = pArc; }
+    void setActionIconArchive(JKRArchive * pArc) { mpActionIconArchive = pArc; }
+    void setScopeResArchive(JKRArchive * pArc) { mpScopeResArchive = pArc; }
+    void setCamResArchive(JKRArchive * pArc) { mpCamResArchive = pArc; }
+    void setSwimResArchive(JKRArchive * pArc) { mpSwimResArchive = pArc; }
+    void setWindResArchive(JKRArchive * pArc) { mpWindResArchive = pArc; }
+    void setFontArchive(JKRArchive * pArc) { mpFont0Archive = pArc; }
+    void setMsgDtArchive(JKRArchive * pArc) { mpEnglishTextArchive = pArc; }
+#if VERSION != VERSION_JPN
+    void setMsgDt2Archive(JKRArchive * pArc) { mpHyruleTextArchive = pArc; }
+#endif
+
+    void setItemTable(void * pData) { mpItemTable = pData; }
+    void setFmapData(void * pData) { mpFmapData = pData; }
+
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
     /* 0x3DF8 */ dADM mADM;
@@ -401,11 +435,11 @@ public:
     /* 0x47AC */ JKRArchive* mpFont1Archive;
     /* 0x47B0 */ JKRArchive* mpAnmArchive;
     /* 0x47B4 */ JKRArchive* mpLkDArc;
-    /* 0x47B8 */ JKRArchive* mpFMapArchive;
+    /* 0x47B8 */ JKRArchive* mpFmapArchive;
     /* 0x47BC */ JKRArchive* mpItemResArchive;
     /* 0x47C0 */ JKRArchive* mpClctResArchive;
-    /* 0x47C4 */ JKRArchive* mpFMapResArchive;
-    /* 0x47C8 */ JKRArchive* mpDMapResArchive;
+    /* 0x47C4 */ JKRArchive* mpFmapResArchive;
+    /* 0x47C8 */ JKRArchive* mpDmapResArchive;
     /* 0x47CC */ JKRArchive* mpOptResArchive;
     /* 0x47D0 */ JKRArchive* mpClothResArchive;
     /* 0x47D4 */ JKRArchive* mpSaveResArchive;
@@ -417,12 +451,19 @@ public:
     /* 0x47EC */ JKRArchive* mpCamResArchive;
     /* 0x47F0 */ JKRArchive* mpSwimResArchive;
     /* 0x47F4 */ JKRArchive* mpWindResArchive;
-#if VERSION != VERSION_JPN
     /* 0x47F8 */ JKRArchive* mpEnglishTextArchive;
+#if VERSION != VERSION_JPN
     /* 0x47FC */ JKRArchive* mpHyruleTextArchive;
-    /* 0x4800 */ u8 mCARDHeap0[0x04];
+    /* 0x4800 */ void * mAramHeap0[3];
+    /* 0x480C */ void * mAramHeap1[4];
+    /* 0x481C */ void * field_0x481c;
+    /* 0x4820 */ void * field_0x4820;
+#else
+    /* 0x47FC */ void * mAramHeap0[3];
+    /* 0x480C */ void * mAramHeap1[4];
 #endif
-    /* 0x4804 */ u8 mCARDHeap1[0x20];
+    /* Offsets below are for USA/PAL */
+
     /* 0x4824 */ dPa_control_c* mParticle;
     /* 0x4828 */ dDemo_manager_c* mDemo;
     /* 0x482C */ dMagma_packet_c* mpMagmaPacket;
@@ -545,8 +586,8 @@ public:
     /* 0x4A66 */ u8 mIkadaShipBeforeRoomId;
     /* 0x4A67 */ u8 mIkadaShipId;
     /* 0x4A68 */ cXyz mIkadaLinkPos;
-    /* 0x4A74 */ void* mpItemTableArchive;
-    /* 0x4A78 */ void* mpFmapDataArchive;
+    /* 0x4A74 */ void* mpItemTable;
+    /* 0x4A78 */ void* mpFmapData;
 };
 
 class dComIfG_inf_c {
@@ -1732,6 +1773,45 @@ inline void dComIfGd_setViewPort(view_port_class* pViewPort) { g_dComIfG_gameInf
 inline void dComIfGd_setView(view_class* pView) { g_dComIfG_gameInfo.drawlist.setView(pView); }
 
 /**
+ * === ARCHIVE ===
+ */
+
+
+inline void dComIfGp_setAnmArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setAnmArchive(pArc); }
+inline void dComIfGp_setMsgArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMsgArchive(pArc); }
+inline void dComIfGp_setDmsgArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setDmsgArchive(pArc); }
+inline void dComIfGp_setTmsgArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setTmsgArchive(pArc); }
+inline void dComIfGp_setMenuArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMenuArchive(pArc); }
+inline void dComIfGp_setFont0Archive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFont0Archive(pArc); }
+inline void dComIfGp_setFont1Archive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFont1Archive(pArc); }
+inline void dComIfGp_setLkDArc(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setLkDArc(pArc); }
+inline void dComIfGp_setFmapArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFmapArchive(pArc); }
+inline void dComIfGp_setItemResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setItemResArchive(pArc); }
+inline void dComIfGp_setClctResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setClctResArchive(pArc); }
+inline void dComIfGp_setFmapResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFmapResArchive(pArc); }
+inline void dComIfGp_setDmapResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setDmapResArchive(pArc); }
+inline void dComIfGp_setOptResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setOptResArchive(pArc); }
+inline void dComIfGp_setClothResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setClothResArchive(pArc); }
+inline void dComIfGp_setSaveResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setSaveResArchive(pArc); }
+inline void dComIfGp_setItemIconArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setItemIconArchive(pArc); }
+inline void dComIfGp_setNameResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setNameResArchive(pArc); }
+inline void dComIfGp_setErrorResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setErrorResArchive(pArc); }
+inline void dComIfGp_setActionIconArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setActionIconArchive(pArc); }
+inline void dComIfGp_setScopeResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setScopeResArchive(pArc); }
+inline void dComIfGp_setCamResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setCamResArchive(pArc); }
+inline void dComIfGp_setSwimResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setSwimResArchive(pArc); }
+inline void dComIfGp_setWindResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setWindResArchive(pArc); }
+inline void dComIfGp_setFontArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFontArchive(pArc); }
+inline void dComIfGp_setMsgDtArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMsgDtArchive(pArc); }
+#if VERSION != VERSION_JPN
+inline void dComIfGp_setMsgDt2Archive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMsgDt2Archive(pArc); }
+#endif
+
+inline void dComIfGp_setItemTable(void * pData) { g_dComIfG_gameInfo.play.setItemTable(pData); }
+inline void dComIfGp_setActorData(void * pData) { g_dComIfG_gameInfo.play.mADM.SetData(pData); }
+inline void dComIfGp_setFmapData(void * pData) { g_dComIfG_gameInfo.play.setFmapData(pData); }
+
+/**
  * === RESOURCE ===
  */
 
@@ -1756,11 +1836,15 @@ inline int dComIfG_syncObjectRes(const char* name) {
     return g_dComIfG_gameInfo.mResControl.syncObjectRes(name);
 }
 
+inline int dComIfG_syncAllObjectRes() {
+    return g_dComIfG_gameInfo.mResControl.syncAllObjectRes();
+}
+
 inline int dComIfG_syncStageRes(const char* name) {
     return g_dComIfG_gameInfo.mResControl.syncStageRes(name);
 }
 
-inline int dComIfG_deleteObjectResMain(const char* res) {
+inline int dComIfG_deleteObjectRes(const char* res) {
     return g_dComIfG_gameInfo.mResControl.deleteObjectRes(res);
 }
 
@@ -1917,6 +2001,10 @@ inline void dComIfGp_particle_drawModelParticle() {
 
 inline void dComIfGp_particle_readScene(u8 particle_no, mDoDvdThd_toMainRam_c** param_1) {
     g_dComIfG_gameInfo.play.getParticle()->readScene(particle_no, param_1);
+}
+
+inline void dComIfGp_particle_createCommon(const void * pArc) {
+    g_dComIfG_gameInfo.play.getParticle()->createCommon(pArc);
 }
 
 /**

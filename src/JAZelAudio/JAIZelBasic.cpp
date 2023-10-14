@@ -462,7 +462,7 @@ void JAIZelBasic::loadStaticWaves() {
 }
 
 /* 802AB888-802AB8B0       .text checkFirstWaves__11JAIZelBasicFv */
-void JAIZelBasic::checkFirstWaves() {
+BOOL JAIZelBasic::checkFirstWaves() {
     /* Nonmatching */
 }
 

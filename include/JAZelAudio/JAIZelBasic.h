@@ -100,7 +100,7 @@ public:
     BOOL check1stDynamicWave();
     void load2ndDynamicWave();
     void loadStaticWaves();
-    void checkFirstWaves();
+    BOOL checkFirstWaves();
     void setLinkHp(s32, s32);
     void setLinkSwordType(s32, s32);
     void setLinkShieldType(s32, s32);

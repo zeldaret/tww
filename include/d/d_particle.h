@@ -426,6 +426,7 @@ public:
 
     
     void drawModelParticle() { mModelCtrl->draw(); }
+    JKRHeap * getHeap() { return mpHeap; }
 
     /* 0x0000 */ JKRHeap* mpHeap;
     /* 0x0004 */ JPAResourceManager* mpCommonResMgr;

@@ -418,14 +418,6 @@ GXRenderModeObj g_ntscZeldaProg = {
 };
 #endif
 
-namespace mDoMch_render_c {
-    GXRenderModeObj* mRenderModeObj = &g_ntscZeldaIntDf;
-
-    inline GXRenderModeObj* getRenderModeObj() { return mRenderModeObj; }
-    inline void setRenderModeObj(GXRenderModeObj* obj) { mRenderModeObj = obj; }
-    inline void setProgressiveMode() { setRenderModeObj(&g_ntscZeldaProg); }
-}
-
 /* 8000C70C-8000CB48       .text mDoMch_Create__Fv */
 bool mDoMch_Create() {
     if (mDoMain::developmentMode == 0 || !(OSGetConsoleType() & 0x10000000)) {
@@ -502,13 +494,7 @@ bool mDoMch_Create() {
 
     JKRHeap* sysHeap = JKRHeap::getSystemHeap();
     s32 size = sysHeap->getFreeSize() - 0x10000;
-#if VERSION == VERSION_JPN
-    JUT_ASSERT(996, size > 0);
-#elif VERSION == VERSION_USA
-    JUT_ASSERT(1104, size > 0);
-#elif VERSION == VERSION_PAL
-    JUT_ASSERT(1143, size > 0);
-#endif
+    JUT_ASSERT(VERSION_SELECT(996, 1104, 1143), size > 0);
     JKRHeap* zeldaHeap = mDoExt_createZeldaHeap(size, sysHeap);
     zeldaHeap->becomeCurrentHeap();
 
@@ -535,3 +521,5 @@ bool mDoMch_Create() {
     mDoMemCd_ThdInit();
     return true;
 }
+
+GXRenderModeObj* mDoMch_render_c::mRenderModeObj = &g_ntscZeldaIntDf;

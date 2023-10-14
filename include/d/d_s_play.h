@@ -113,6 +113,8 @@ public:
     /* 0x10 */ int field_0x10;
 };
 
+extern dScnPly_msg_HIO_c g_msgDHIO;
+
 class dScnPly_preLoad_HIO_c : public mDoHIO_entry_c {
 public:
     virtual ~dScnPly_preLoad_HIO_c() {}

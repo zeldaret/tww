@@ -62,9 +62,8 @@ public:
     void dump();
     int getObjectResName2Index(char const*, char const*);
 
-    int setObjectRes(const char* name, u8 param_1, JKRHeap* heap) {
-        return setRes(name, &mObjectInfo[0], ARRAY_SIZE(mObjectInfo), "/res/Object/", param_1,
-                      heap);
+    int setObjectRes(const char* name, u8 direction, JKRHeap* heap) {
+        return setRes(name, &mObjectInfo[0], ARRAY_SIZE(mObjectInfo), "/res/Object/", direction, heap);
     }
 
     void* getObjectRes(const char* arcName, const char* resName) {

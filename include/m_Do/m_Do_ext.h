@@ -549,6 +549,11 @@ s32 mDoExt_getSafeGameHeapSize();
 s32 mDoExt_getSafeZeldaHeapSize();
 s32 mDoExt_getSafeCommandHeapSize();
 
+void mDoExt_setSafeArchiveHeapSize();
+void mDoExt_setSafeGameHeapSize();
+void mDoExt_setSafeZeldaHeapSize();
+void mDoExt_setSafeCommandHeapSize();
+
 s32 mDoExt_resIDToIndex(JKRArchive*, u16);
 
 JKRSolidHeap * mDoExt_createSolidHeapFromGameToCurrent(u32 size, u32 align);
@@ -557,6 +562,9 @@ void mDoExt_restoreCurrentHeap();
 s32 mDoExt_adjustSolidHeap(JKRSolidHeap * pHeap);
 void mDoExt_destroySolidHeap(JKRSolidHeap * pHeap);
 JKRHeap* mDoExt_setCurrentHeap(JKRHeap*);
+
+JUTFont* mDoExt_getMesgFont();
+JUTFont* mDoExt_getRubyFont();
 
 extern JKRExpHeap* zeldaHeap;
 extern JKRExpHeap* gameHeap;

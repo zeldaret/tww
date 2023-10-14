@@ -148,11 +148,7 @@ void* JKRDvdRipper::loadToMainRAM(JKRDvdFile* dvdFile, u8* dst, JKRExpandSwitch 
         else if (compression2 == COMPRESSION_YAZ0) {
             JKRDecompressFromDVD(dvdFile, dst, fileSizeAligned, dstLength, 0, offset);
         } else {
-#if VERSION == VERSION_JPN
-            OSPanic(__FILE__, 337, "Sorry, not prepared for SZP resource\n");
-#else
-            OSPanic(__FILE__, 314, "Sorry, not prepared for SZP resource\n");
-#endif
+            OSPanic(__FILE__, VERSION_SELECT(337, 314, 314), "Sorry, not prepared for SZP resource\n");
         }
         return dst;
     }
@@ -161,11 +157,7 @@ void* JKRDvdRipper::loadToMainRAM(JKRDvdFile* dvdFile, u8* dst, JKRExpandSwitch 
         // SZP decompression
         // s32 readoffset = startOffset;
         if (offset != 0) {
-#if VERSION == VERSION_JPN
-            OSPanic(__FILE__, 347, ":::Not support SZP with offset read");
-#else
-            OSPanic(__FILE__, 324, ":::Not support SZP with offset read");
-#endif
+            OSPanic(__FILE__, VERSION_SELECT(347, 324, 324), ":::Not support SZP with offset read");
         }
         while (true) {
             int readBytes = DVDReadPrio(dvdFile->getFileInfo(), mem, fileSizeAligned, 0, 2);
@@ -229,20 +221,12 @@ static int JKRDecompressFromDVD(JKRDvdFile* dvdFile, void* dst, u32 fileSize, u3
     OSLockMutex(&decompMutex);
     int bufSize = JKRDvdRipper::getSzpBufferSize();
     szpBuf = (u8 *)JKRAllocFromSysHeap(bufSize, -0x20);
-#if VERSION == VERSION_JPN
-    JUT_ASSERT(913, szpBuf != 0);
-#else
-    JUT_ASSERT(884, szpBuf != 0);
-#endif
+    JUT_ASSERT(VERSION_SELECT(913, 884, 884), szpBuf != 0);
 
     szpEnd = szpBuf + bufSize;
     if (inFileOffset != 0) {
         refBuf = (u8 *)JKRAllocFromSysHeap(0x1120, -4);
-#if VERSION == VERSION_JPN
-        JUT_ASSERT(922, refBuf != 0);
-#else
-        JUT_ASSERT(893, refBuf != 0);
-#endif
+        JUT_ASSERT(VERSION_SELECT(922, 893, 893), refBuf != 0);
         refEnd = refBuf + 0x1120;
         refCurrent = refBuf;
     } else {
@@ -423,11 +407,7 @@ static u8* nextSrcData(u8* src) {
     if (transSize > transLeft) {
         transSize = transLeft;
     }
-#if VERSION == VERSION_JPN
-    JUT_ASSERT(1228, transSize > 0);
-#else
-    JUT_ASSERT(1176, transSize > 0);
-#endif
+    JUT_ASSERT(VERSION_SELECT(1228, 1176, 1176), transSize > 0);
 
     while (true) {
         s32 result = DVDReadPrio(srcFile->getFileInfo(), (buf + limit), transSize, srcOffset, 2);

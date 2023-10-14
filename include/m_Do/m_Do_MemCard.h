@@ -20,8 +20,10 @@ public:
     void main();
     void update();
     void load();
+    void load2();
     void restore();
     s32 LoadSync(void*, u32, u32);
+    s32 LoadSync2();
     void save(void*, u32, u32);
     void store();
     s32 SaveSync();

@@ -44,4 +44,12 @@ inline BOOL checkEqual(s32 a, s32 b) {
 #define VERSION_USA 1
 #define VERSION_PAL 2
 
+#if VERSION == VERSION_USA
+    #define VERSION_SELECT(JPN, USA, PAL) (USA)
+#elif VERSION == VERSION_PAL
+    #define VERSION_SELECT(JPN, USA, PAL) (PAL)
+#elif VERSION == VERSION_JPN
+    #define VERSION_SELECT(JPN, USA, PAL) (JPN)
+#endif
+
 #endif

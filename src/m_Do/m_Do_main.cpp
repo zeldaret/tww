@@ -210,11 +210,7 @@ void debugDisplay() {
             return;
         }
     } else if (mHeapBriefType != 0) {
-#if VERSION == VERSION_JPN
-        JUT_ASSERT(530, mHeapBriefType < HeapCheckTableNum);
-#else
-        JUT_ASSERT(531, mHeapBriefType < HeapCheckTableNum);
-#endif
+        JUT_ASSERT(VERSION_SELECT(530, 531, 531), mHeapBriefType < HeapCheckTableNum);
 
         JUTReport(500, 100, "%s", desc1[mHeapBriefType]);
         JUTReport(500, 114, "%s", desc2[mHeapBriefType]);
