@@ -382,8 +382,6 @@ enum dKy_dice_wether_state {
     /* 3 */ DICE_STATE_NEXT_e,
 };
 
-class sub_kankyo__class;
-
 int dKy_getdaytime_hour();
 int dKy_getdaytime_minute();
 int dKy_get_dayofweek();

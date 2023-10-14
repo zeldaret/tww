@@ -331,7 +331,12 @@ struct WINDEFF_SET {
     /* 0x759 */ u8 field_0x759;
 };
 
+void dKyw_wether_init();
+void dKyw_wether_move();
+void dKyw_wether_move_draw();
+void dKyw_wether_draw();
 void dKyw_wether_proc();
+void dKyw_wether_delete();
 void dKyw_rain_set(int);
 void dKyw_wind_set();
 void dKyw_wind_init();
@@ -346,4 +351,5 @@ void dKyw_pntwind_cut(WIND_INFLUENCE*);
 void dKyw_pwind_cylinder_set(WIND_INFLUENCE*);
 void dKyw_evt_wind_set(s16 i_windX, s16 i_windY);
 void dKyw_evt_wind_set_go();
+
 #endif /* D_KANKYO_WETHER_H */

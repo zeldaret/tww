@@ -17,8 +17,7 @@ public:
 struct kankyo_process_profile_definition {
     /* 0x00 */ leaf_process_profile_definition base;
     /* 0x24 */ leafdraw_method_class* mSubMtd;
-    /* 0x28 */ u32 field_0x28[8];
-};  // Size: 0x48
+};  // Size: 0x28
 
 extern leafdraw_method_class g_fopKy_Method;
 
