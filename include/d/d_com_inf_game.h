@@ -638,6 +638,10 @@ inline void dComIfGs_initZone() {
     g_dComIfG_gameInfo.save.initZone();
 }
 
+inline u32 dComIfGs_createZone(int i_roomNo) {
+    return g_dComIfG_gameInfo.save.createZone(i_roomNo);
+}
+
 inline u8 dComIfGs_getSelectEquip(int param_0) {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getSelectEquip(param_0);
 }
@@ -1191,6 +1195,14 @@ inline s32 dComIfGp_roomControl_getStayNo() {
 
 inline dBgW* dComIfGp_roomControl_getBgW(int i_roomNo) {
     return dStage_roomControl_c::getBgW(i_roomNo);
+}
+
+inline s32 dComIfGp_roomControl_getZoneNo(int i_roomNo) {
+    return dStage_roomControl_c::getZoneNo(i_roomNo);
+}
+
+inline void dComIfGp_roomControl_setZoneNo(int i_roomNo, int i_zoneNo) {
+    dStage_roomControl_c::setZoneNo(i_roomNo, i_zoneNo);
 }
 
 inline void dComIfGp_roomControl_init() {
@@ -2000,12 +2012,20 @@ inline void dComIfGp_particle_drawModelParticle() {
     g_dComIfG_gameInfo.play.getParticle()->drawModelParticle();
 }
 
-inline void dComIfGp_particle_readScene(u8 particle_no, mDoDvdThd_toMainRam_c** param_1) {
-    g_dComIfG_gameInfo.play.getParticle()->readScene(particle_no, param_1);
+inline bool dComIfGp_particle_readScene(u8 particle_no, mDoDvdThd_toMainRam_c** param_1) {
+    return g_dComIfG_gameInfo.play.getParticle()->readScene(particle_no, param_1);
 }
 
 inline void dComIfGp_particle_createCommon(const void * pArc) {
     g_dComIfG_gameInfo.play.getParticle()->createCommon(pArc);
+}
+
+inline void dComIfGp_particle_createRoomScene(void * pData) {
+    g_dComIfG_gameInfo.play.getParticle()->createRoomScene(pData);
+}
+
+inline void dComIfGp_particle_removeRoomScene() {
+    g_dComIfG_gameInfo.play.getParticle()->removeRoomScene();
 }
 
 /**

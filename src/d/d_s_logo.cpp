@@ -634,7 +634,7 @@ s32 phase_0(dScnLogo_c* i_this) {
 
     JUT_ASSERT(VERSION_SELECT(1169, 1350, 1378), rt == 1);
 
-    rt = dComIfG_setObjectRes("Logo", (u8)2, NULL);
+    rt = dComIfG_setObjectRes("Logo", JKRArchive::MOUNT_DIRECTION_TAIL, NULL);
     JUT_ASSERT(VERSION_SELECT(1173, 1354, 1382), rt == 1);
 
 #if VERSION == VERSION_PAL

@@ -9,8 +9,8 @@ public:
     static bool isEnableDispMap();
     void getKindMapType();
     static void remove();
-    void setImage(int, int, f32);
-    void deleteImage(int);
+    static void setImage(int, int, f32);
+    static void deleteImage(int);
     void setNowRoom(int);
     void mapDrawIconFree(s16, s16, u8);
     void mapDrawIconSelf(s16, s16, u8);

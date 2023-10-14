@@ -238,7 +238,7 @@ struct dStage_SoundInfo_c {
 
 class dStage_FileList_dt_c {
 public:
-    /* 0x0 */ int mParam;
+    /* 0x0 */ u32 mParam;
     /* 0x4 */ f32 mSkyboxY;
 };
 
@@ -252,7 +252,10 @@ struct dStage_dPnt_c {
 
 struct dStage_FloorInfo_c {};
 
-struct dStage_Lbnk_c {};
+struct dStage_Lbnk_c {
+    /* 0x00 */ u32 m_num;
+    /* 0x04 */ u8 * m_bank;
+};
 
 struct dStage_MemoryConfig_data {
     /* 0x0 */ u8 m_roomNo;
@@ -820,7 +823,9 @@ public:
     static JKRExpHeap* getMemoryBlock(int);
     static void setStayNo(int);
     static s32 GetTimePass();
-    static void setZoneNo(int, int);
+    static void setZoneNo(int i_roomNo, int i_zoneNo) {
+        mStatus[i_roomNo].mZoneNo = i_zoneNo;
+    }
     static int getZoneNo(int i_roomNo);
 
     static s8 getStayNo() { return mStayNo; }
@@ -830,9 +835,7 @@ public:
     static void onStatusDraw(int i_roomNo) { mStatus[i_roomNo].mDraw = true; }
     static void setProcID(u32 id) { mProcID = id; }
     static u32 getProcID() { return mProcID; }
-    static void setStatusProcID(int i_roomNo, unsigned int i_id) {
-        mStatus[i_roomNo].mProcID = i_id;
-    }
+    static void setStatusProcID(int i_roomNo, unsigned int i_id) { mStatus[i_roomNo].mProcID = i_id; }
     static int getStatusProcID(int i_roomNo) { return mStatus[i_roomNo].mProcID; }
     static dStage_darkStatus_c& getDarkStatus(int i_idx) { return mDarkStatus[i_idx]; }
     static char* getDemoArcName() { return mDemoArcName; }
@@ -928,6 +931,9 @@ s8 dStage_roomRead_dt_c_GetReverbStage(roomRead_class&, int);
 int dStage_mapInfo_GetOceanZ(stage_map_info_class*);
 int dStage_mapInfo_GetOceanX(stage_map_info_class*);
 void dStage_infoCreate();
+void dStage_escapeRestart();
+void dStage_dt_c_roomLoader(void* i_data, dStage_dt_c* i_stage);
+void dStage_dt_c_roomReLoader(void* i_data, dStage_dt_c* i_stage, int i_roomNo);
 
 dStage_objectNameInf* dStage_searchName(const char*);
 const char* dStage_getName2(s16 i_procName, s8 i_subtype);

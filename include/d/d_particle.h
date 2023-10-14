@@ -349,7 +349,7 @@ public:
     void swapFrameBufferTexture();
     void createCommon(void const*);
     void createRoomScene(void const*);
-    void readScene(u8, mDoDvdThd_toMainRam_c**);
+    bool readScene(u8, mDoDvdThd_toMainRam_c**);
     void createScene(void const*);
     void removeRoomScene();
     void removeScene();

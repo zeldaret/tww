@@ -3,86 +3,323 @@
 // Translation Unit: d_s_room.cpp
 //
 
-#include "d_s_room.h"
-#include "dolphin/types.h"
+#include "f_op/f_op_scene.h"
+#include "f_op/f_op_scene_mng.h"
+#include "f_op/f_op_actor_mng.h"
+#include "f_pc/f_pc_layer_iter.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_com_lib_game.h"
+#include "d/d_item_data.h"
+#include "d/d_map.h"
+#include "d/d_procname.h"
+#include "d/d_stage.h"
+#include "d/actor/d_a_player.h"
+#include "m_Do/m_Do_dvd_thread.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JKernel/JKRExpHeap.h"
+#include "MSL_C/string.h"
+
+class room_of_scene_class : public scene_class {
+public:
+    /* 0x1C4 */ request_of_phase_process_class mPhs;
+    /* 0x1CC */ void * mpRoomData;
+    /* 0x1D0 */ dStage_roomStatus_c * mpRoomStatus;
+    /* 0x1D4 */ mDoDvdThd_toMainRam_c * sceneCommand;
+    /* 0x1D8 */ bool mbHasRoomParticle;
+    /* 0x1D9 */ bool mbReLoaded;
+    /* 0x1DA */ bool mbSetMap;
+    /* 0x1DB */ bool field_0x1db;
+    /* 0x1DC */ u16 field_0x1dc;
+};
 
 /* 80236938-80236998       .text setMapImage__FP19room_of_scene_class */
-void setMapImage(room_of_scene_class*) {
-    /* Nonmatching */
+void setMapImage(room_of_scene_class* i_this) {
+    if (i_this->mbSetMap)
+        return;
+
+    if (dComIfGp_roomControl_getStayNo() >= 0) {
+        f32 playerY = fopAcM_GetPosition(dComIfGp_getPlayer(0)).y;
+        s32 roomNo = fopScnM_GetParam(i_this);
+        dMap_c::setImage(roomNo, dComIfGp_roomControl_getStayNo(), playerY);
+        i_this->mbSetMap = true;
+    }
 }
 
 /* 80236998-802369C8       .text deleteMapImage__FP19room_of_scene_class */
-void deleteMapImage(room_of_scene_class*) {
-    /* Nonmatching */
+void deleteMapImage(room_of_scene_class* i_this) {
+    if (!i_this->mbSetMap)
+        return;
+
+    dMap_c::deleteImage(fopScnM_GetParam(i_this));
 }
 
 /* 802369C8-80236A0C       .text setArcName__FP19room_of_scene_class */
-void setArcName(room_of_scene_class*) {
-    /* Nonmatching */
+char* setArcName(room_of_scene_class* i_this) {
+    static char arcName[32];
+    sprintf(arcName, "Room%d", fopScnM_GetParam(i_this));
+    return arcName;
 }
 
 /* 80236A0C-80236A14       .text dScnRoom_Draw__FP19room_of_scene_class */
-void dScnRoom_Draw(room_of_scene_class*) {
-    /* Nonmatching */
+BOOL dScnRoom_Draw(room_of_scene_class* i_this) {
+    return TRUE;
 }
 
 /* 80236A14-80236A38       .text deleteJugge__FPvPv */
-void deleteJugge(void*, void*) {
-    /* Nonmatching */
+void* deleteJugge(void* i_this, void*) {
+    fpcM_Delete(i_this);
+    return NULL;
 }
 
 /* 80236A38-80236B1C       .text objectSetCheck__FP19room_of_scene_class */
-void objectSetCheck(room_of_scene_class*) {
-    /* Nonmatching */
+void objectSetCheck(room_of_scene_class* i_this) {
+    s32 roomNo = fopScnM_GetParam(i_this);
+    s32 hiddenFlag = (g_dComIfG_gameInfo.play.getRoomControl()->mStatus[roomNo].mFlags & 0x08);
+
+    if (!i_this->mbReLoaded) {
+        if (!hiddenFlag) {
+            fopAcM_create(PROC_BG, roomNo, NULL, -1, NULL, NULL, 0xFF, NULL);
+            dStage_dt_c_roomReLoader(i_this->mpRoomData, i_this->mpRoomStatus, roomNo);
+            i_this->mbReLoaded = true;
+        }
+    } else {
+        s32 roomNo = fopScnM_GetParam(i_this);
+        if (hiddenFlag) {
+            fpcLyIt_Judge(fpcM_Layer(i_this), deleteJugge, NULL);
+            dComIfGs_clearRoomSwitch(dComIfGp_roomControl_getZoneNo(roomNo));
+            i_this->mbReLoaded = false;
+        }
+    }
 }
 
 /* 80236B1C-80236BAC       .text dScnRoom_Execute__FP19room_of_scene_class */
-void dScnRoom_Execute(room_of_scene_class*) {
-    /* Nonmatching */
+BOOL dScnRoom_Execute(room_of_scene_class* i_this) {
+    setMapImage(i_this);
+
+    u8 * pStatusFlag = &(g_dComIfG_gameInfo.play.getRoomControl()->mStatus[fopScnM_GetParam(i_this)].mFlags);
+    if (*pStatusFlag & 0x04) {
+        fopScnM_DeleteReq(i_this);
+        return TRUE;
+    } else {
+        if ((*pStatusFlag & 0x02)) {
+            *pStatusFlag &= ~0x02;
+            *pStatusFlag |= 0x01;
+        } else {
+            objectSetCheck(i_this);
+        }
+    }
+
+    return TRUE;
 }
 
 /* 80236BAC-80236BB4       .text dScnRoom_IsDelete__FP19room_of_scene_class */
-void dScnRoom_IsDelete(room_of_scene_class*) {
-    /* Nonmatching */
+BOOL dScnRoom_IsDelete(room_of_scene_class* i_this) {
+    return TRUE;
 }
 
+class daNpc_Md_c {
+public:
+    static u8 m_seaTalk;
+};
+
+class daSalvage_control_c {
+public:
+    static void init_room(s8);
+};
+
 /* 80236BB4-80236D24       .text dScnRoom_Delete__FP19room_of_scene_class */
-void dScnRoom_Delete(room_of_scene_class*) {
-    /* Nonmatching */
+BOOL dScnRoom_Delete(room_of_scene_class* i_this) {
+    s32 roomNo = fopScnM_GetParam(i_this);
+    deleteMapImage(i_this);
+    const char * arcName = setArcName(i_this);
+    dComIfG_deleteStageRes(arcName);
+    dStage_roomControl_c::mStatus[roomNo].mFlags = 0;
+    dComIfGp_roomControl_getStatusRoomDt(roomNo)->init();
+    if (i_this->mbHasRoomParticle)
+        dComIfGp_particle_removeRoomScene();
+
+    if (!dComIfGp_isEnableNextStage()) {
+        if (i_this->field_0x1dc == 1) {
+            dComIfGs_onEventBit(0x1a80);
+        }
+
+        if (strcmp(dComIfGp_getStartStageName(), "sea") == 0)
+            dComIfGs_offTmpBit(0x0320);
+    }
+
+    if (i_this->field_0x1dc == 2)
+        dComIfGs_onEventBit(0x1c40);
+
+    if (strcmp(dComIfGp_getStartStageName(), "sea") == 0)
+        daNpc_Md_c::m_seaTalk = 0;
+
+    daSalvage_control_c::init_room(roomNo);
+
+    JKRHeap * pHeap = dStage_roomControl_c::getMemoryBlock(roomNo);
+    if (pHeap != NULL)
+        pHeap->freeAll();
+
+    return TRUE;
 }
 
 /* 80236D24-80236D58       .text phase_0__FP19room_of_scene_class */
-void phase_0(room_of_scene_class*) {
-    /* Nonmatching */
+s32 phase_0(room_of_scene_class* i_this) {
+    s32 roomNo = fopScnM_GetParam(i_this);
+    // g_dComIfG_gameInfo.play.getRoomControl()->setStatusProcID(roomNo, fopScnM_GetID(i_this));
+    g_dComIfG_gameInfo.play.getRoomControl()->mStatus[roomNo].mProcID = fopScnM_GetID(i_this);
+    return cPhs_NEXT_e;
 }
 
 /* 80236D58-80236DE8       .text phase_1__FP19room_of_scene_class */
-void phase_1(room_of_scene_class*) {
-    /* Nonmatching */
+s32 phase_1(room_of_scene_class* i_this) {
+    s32 roomNo = fopScnM_GetParam(i_this);
+    JKRExpHeap * pHeap = g_dComIfG_gameInfo.play.getRoomControl()->getMemoryBlock(roomNo);
+    if (pHeap != NULL && pHeap->getTotalUsedSize() != 0)
+        return cPhs_INIT_e;
+
+    const char * arcName = setArcName(i_this);
+    BOOL ret = dComIfG_setStageRes(arcName, pHeap);
+    if (!ret) {
+        dStage_escapeRestart();
+        return cPhs_ERROR_e;
+    }
+
+    return cPhs_NEXT_e;
 }
 
 /* 80236DE8-802370A0       .text phase_2__FP19room_of_scene_class */
-void phase_2(room_of_scene_class*) {
-    /* Nonmatching */
-}
+s32 phase_2(room_of_scene_class* i_this) {
+    const char * arcName = setArcName(i_this);
+    s32 rt = dComIfG_syncObjectRes(arcName);
+    if (rt < 0) {
+        dStage_escapeRestart();
+        return cPhs_ERROR_e;
+    }
 
-/* 802370A0-802370B8       .text setZoneNo__20dStage_roomControl_cFii */
-void dStage_roomControl_c::setZoneNo(int, int) {
-    /* Nonmatching */
+    JUT_ASSERT(0x1c0, rt >= 0);
+    if (rt != 0)
+        return cPhs_INIT_e;
+
+    s32 roomNo = fopScnM_GetParam(i_this);
+    s32 zoneNo = dComIfGp_roomControl_getZoneNo(roomNo);
+    if (zoneNo < 0) {
+        zoneNo = dComIfGs_createZone(roomNo);
+        dComIfGp_roomControl_setZoneNo(roomNo, zoneNo);
+    }
+
+    i_this->mpRoomStatus = dComIfGp_roomControl_getStatusRoomDt(roomNo);
+    i_this->mpRoomStatus->mRoomNo = roomNo;
+    i_this->mpRoomData = dComIfG_getStageRes(arcName, "room.dzr");
+
+    if (i_this->mpRoomData != NULL) {
+        dStage_dt_c_roomLoader(i_this->mpRoomData, i_this->mpRoomStatus);
+        if (dStage_roomControl_c::mDemoArcName[0] == '\0') {
+            dStage_Lbnk_c * lbnk = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getLbnk();
+            if (lbnk != NULL) {
+                u8 * banks = lbnk->m_bank;
+                if (banks != NULL) {
+                    u32 layerNo = g_dComIfG_gameInfo.play.getLayerNo(roomNo);
+                    s32 bank = banks[layerNo];
+                    if (bank != 0xFF) {
+                        JUT_ASSERT(0x1db, 0 <= bank && bank < 100);
+                        sprintf(dStage_roomControl_c::mDemoArcName, "Demo%02d", bank);
+                        if (!dComIfG_setObjectRes(dStage_roomControl_c::mDemoArcName, JKRArchive::UNKNOWN_MOUNT_DIRECTION, NULL))
+                            dStage_roomControl_c::mDemoArcName[0] = '\0';
+                    }
+                }
+            }
+        }
+
+        dStage_FileList_dt_c * fileList = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
+        JUT_ASSERT(499, fileList != 0);
+
+        i_this->mbHasRoomParticle = dComIfGp_particle_readScene(fileList->mParam >> 21, &i_this->sceneCommand);
+    }
+
+    return cPhs_NEXT_e;
 }
 
 /* 802370B8-802371D0       .text phase_3__FP19room_of_scene_class */
-void phase_3(room_of_scene_class*) {
-    /* Nonmatching */
+s32 phase_3(room_of_scene_class* i_this) {
+    if (dStage_roomControl_c::getDemoArcName()[0] != '\0') {
+        s32 rt = dComIfG_syncObjectRes(dStage_roomControl_c::getDemoArcName());
+        if (rt < 0) {
+            dStage_escapeRestart();
+            return cPhs_ERROR_e;
+        } else if (rt > 0) {
+            return cPhs_INIT_e;
+        }
+    }
+
+    if (i_this->sceneCommand != NULL) {
+        if (i_this->sceneCommand->sync() == 0)
+            return cPhs_INIT_e;
+
+        JUT_ASSERT(0x215, i_this->sceneCommand->getMemAddress() != 0);
+        dComIfGp_particle_createRoomScene(i_this->sceneCommand->getMemAddress());
+        delete i_this->sceneCommand;
+    }
+
+    objectSetCheck(i_this);
+    return cPhs_NEXT_e;
 }
 
 /* 802371D0-802372C4       .text phase_4__FP19room_of_scene_class */
-void phase_4(room_of_scene_class*) {
-    /* Nonmatching */
+s32 phase_4(room_of_scene_class* i_this) {
+    if (dComIfGp_getPlayer(0) == NULL)
+        return cPhs_INIT_e;
+
+    s32 roomNo = fopScnM_GetParam(i_this);
+
+    setMapImage(i_this);
+
+    if (dComIfGs_checkGetItem(PEARL2))
+        i_this->field_0x1dc = 1;
+
+    if (strcmp(dComIfGp_getStartStageName(), "Omori") == 0 && dComIfGs_checkGetItem(PEARL3))
+        i_this->field_0x1dc = 2;
+
+    if (roomNo == 13) {
+        dComIfGs_setEventReg(0xb8ff, 0);
+        if (dComIfGs_isEventBit(0x3f02))
+            dComIfGs_onEventBit(0x1580);
+    }
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 802372C4-802372F4       .text dScnRoom_Create__FP11scene_class */
-void dScnRoom_Create(scene_class*) {
-    /* Nonmatching */
+s32 dScnRoom_Create(scene_class* i_scn) {
+    static cPhs__Handler l_method[] = {
+        (cPhs__Handler)phase_0,
+        (cPhs__Handler)phase_1,
+        (cPhs__Handler)phase_2,
+        (cPhs__Handler)phase_3,
+        (cPhs__Handler)phase_4,
+    };
+
+    room_of_scene_class* i_this = (room_of_scene_class*)i_scn;
+    return dComLbG_PhaseHandler(&i_this->mPhs, l_method, i_this);
 }
 
+scene_method_class l_dScnRoom_Method = {
+    (process_method_func)dScnRoom_Create,
+    (process_method_func)dScnRoom_Delete,
+    (process_method_func)dScnRoom_Execute,
+    (process_method_func)dScnRoom_IsDelete,
+    (process_method_func)dScnRoom_Draw,
+};
+
+scene_process_profile_definition g_profile_ROOM_SCENE = {
+    fpcLy_CURRENT_e,
+    0,
+    fpcPi_CURRENT_e,
+    PROC_ROOM_SCENE,
+    &g_fpcNd_Method.mBase,
+    sizeof(room_of_scene_class),
+    0,
+    0,
+    &g_fopScn_Method.mBase,
+    &l_dScnRoom_Method,
+    NULL,
+};
