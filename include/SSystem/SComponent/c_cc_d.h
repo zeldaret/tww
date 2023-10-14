@@ -329,7 +329,11 @@ public:
     void Init(int, int, void*, unsigned int);
     virtual void Ct();
     void PlusCcMove(f32, f32, f32);
-    void ClrCcMove();
+    void ClrCcMove() {
+        mXyz.z = 0.0f;
+        mXyz.y = 0.0f;
+        mXyz.x = 0.0f;
+    }
     void PlusDmg(int);
     f32 GetWeightF() const;
     virtual void ClrAt() {}

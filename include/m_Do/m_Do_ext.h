@@ -315,7 +315,7 @@ public:
     void entry();
     void entryDL();
     void entryDL(J3DMaterialTable*);
-    void play(Vec *, u32, s8);
+    bool play(Vec *, u32, s8);
     void stopZelAnime();
 
     J3DModel* getModel() { return mpModel; }

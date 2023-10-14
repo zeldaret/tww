@@ -1052,7 +1052,7 @@ BOOL daAgbsw0_c::ExeSubMW() {
                 mEyePos.z += cM_scos(player->shape_angle.y) * 10.0f;
             }
 
-            if(dComIfGp_getEventManager().endCheckOld("DEFAULT_AGB_LOOK_ATTENTION")) {
+            if(dComIfGp_evmng_endCheck("DEFAULT_AGB_LOOK_ATTENTION")) {
                 dComIfGp_event_reset();
                 if(sw == 0xFF || getParamNo() == -1) {
                     fopAcM_delete(this);

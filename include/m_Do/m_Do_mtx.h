@@ -197,7 +197,7 @@ public:
      */
     static void XYZrotM(csXyz const& xyz);
 
-    static void ZXYrotS(csXyz const& xyz);
+    static void ZXYrotS(csXyz const& xyz) { ZXYrotS(xyz.x, xyz.y, xyz.z); }
 
     /**
      * Rotates the `now` matrix by the given csXyz in the order Z, X, Y

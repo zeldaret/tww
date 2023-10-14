@@ -217,7 +217,7 @@ namespace daBomb2 {
         mAcch.Set(&current.pos, &next.pos, this, true, &mCir, &speed, &current.angle, &shape_angle);
         mAcch.ClrWaterNone();
         mAcch.ClrRoofNone();
-        mAcch.m_roof_height = 50.0f;
+        mAcch.m_roof_crr_height = 50.0f;
         mAcch.OnLineCheck();
         field_0x51C = -1.0e9f;
         field_0x520 = -1.0e9f;

@@ -204,12 +204,12 @@ public:
 
 bool dNpc_setAnmIDRes(mDoExt_McaMorf* pMorf, int loopMode, float morf, float speed, int animResId, int soundResId, const char* arcName);
 bool dNpc_setAnmFNDirect(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, char* animFilename, char* soundFilename, const char* arcName);
-bool dNpc_setAnm(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileidx, int soundFileIdx, const char* arcName);
+bool dNpc_setAnm(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileIdx, int soundFileIdx, const char* arcName);
 void dNpc_setShadowModel(J3DModel*, J3DModelData*, J3DModel*);
 cXyz dNpc_playerEyePos(f32);
 void dNpc_calc_DisXZ_AngY(cXyz, cXyz, float*, short*);
 bool dNpc_chkArasoi();
 BOOL dNpc_chkLetterPassed();
-bool dNpc_setAnm_2(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileidx, int soundFileIdx, const char* arcName);
+bool dNpc_setAnm_2(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileIdx, int soundFileIdx, const char* arcName);
 
 #endif /* D_NPC_H */

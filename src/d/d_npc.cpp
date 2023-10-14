@@ -448,7 +448,7 @@ bool dNpc_setAnmFNDirect(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 spee
     return ret;
 }
 
-bool dNpc_setAnm(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileidx, int soundFileIdx, const char* arcName) {
+bool dNpc_setAnm(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileIdx, int soundFileIdx, const char* arcName) {
     void* pSoundAnimRes = 0;
     bool ret = false;
 
@@ -457,7 +457,7 @@ bool dNpc_setAnm(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int a
             pSoundAnimRes = dComIfG_getObjectRes(arcName, soundFileIdx);
         }
 
-        void* pAnimRes = dComIfG_getObjectRes(arcName, animFileidx);
+        void* pAnimRes = dComIfG_getObjectRes(arcName, animFileIdx);
         pMorf->setAnm((J3DAnmTransform*)pAnimRes, loopMode, morf, speed, 0.0f, -1.0f, pSoundAnimRes);
         
         ret = true;
@@ -560,15 +560,15 @@ u16 fopNpc_npc_c::talk(int param_1) {
     return mode;
 }
 
-bool dNpc_setAnm_2(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileidx, int soundFileIdx, const char* arcName) {
+bool dNpc_setAnm_2(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileIdx, int soundFileIdx, const char* arcName) {
     if(0 <= soundFileIdx) {
         void* pSoundAnimRes = dComIfG_getObjectRes(arcName, soundFileIdx);
-        void* pAnimRes = dComIfG_getObjectRes(arcName, animFileidx);
+        void* pAnimRes = dComIfG_getObjectRes(arcName, animFileIdx);
         
         pMorf->setAnm((J3DAnmTransform*)pAnimRes, loopMode, morf, speed, 0.0f, -1.0f, pSoundAnimRes);
     }
     else {
-        void* pAnimRes = dComIfG_getObjectRes(arcName, animFileidx);
+        void* pAnimRes = dComIfG_getObjectRes(arcName, animFileIdx);
 
         pMorf->setAnm((J3DAnmTransform*)pAnimRes, loopMode, morf, speed, 0.0f, -1.0f, 0);
     }
@@ -800,7 +800,7 @@ void dNpc_EventCut_c::cutTurnToActorStart() {
         mSetId = 0;
     }
 
-    Vec* pos = dComIfGp_evmng_getMyVec3dP(mEvtStaffId, "OffsetPos");
+    Vec* pos = dComIfGp_evmng_getMyXyzP(mEvtStaffId, "OffsetPos");
     if(pos) {
         mOffsetPos = *pos;
     }
@@ -930,7 +930,7 @@ void dNpc_EventCut_c::cutMoveToActorStart() {
     u32* set = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "SetId");
     f32* speed = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "Speed");
     f32* dist = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "DelDistance");
-    Vec* offs = dComIfGp_evmng_getMyVec3dP(mEvtStaffId, "OffsetPos");
+    Vec* offs = dComIfGp_evmng_getMyXyzP(mEvtStaffId, "OffsetPos");
     u32* attn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Attention");
     u32* noTurn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "NoTurn");
     u32* angle = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "ShapeAngle");
@@ -1077,7 +1077,7 @@ fopAc_ac_c* dNpc_EventCut_c::findActorCallBack(fopAc_ac_c* pActor, void* pData) 
 }
 
 void dNpc_EventCut_c::cutTurnToPosStart() {
-    Vec* pos = dComIfGp_evmng_getMyVec3dP(mEvtStaffId, "Pos");
+    Vec* pos = dComIfGp_evmng_getMyXyzP(mEvtStaffId, "Pos");
     if(pos) {
         mPos = *pos;
     }
@@ -1163,7 +1163,7 @@ void dNpc_EventCut_c::cutTurnToPosProc() {
 }
 
 void dNpc_EventCut_c::cutMoveToPosStart() {
-    Vec* pos = dComIfGp_evmng_getMyVec3dP(mEvtStaffId, "Pos");
+    Vec* pos = dComIfGp_evmng_getMyXyzP(mEvtStaffId, "Pos");
     f32* speed = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "Speed");
     f32* dist = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "DelDistance");
     u32* attn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Attention");

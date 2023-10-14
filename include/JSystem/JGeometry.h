@@ -69,15 +69,17 @@ struct TVec3<f32> {
     f32 y;
     f32 z;
 
-    // inline TVec3(const Vec& i_vec) {
-    //     setTVec3f(&i_vec.x, &x);
-    // }
+    inline TVec3(const Vec& i_vec) {
+        setTVec3f(&i_vec.x, &x);
+    }
 
-    // inline TVec3(const TVec3<f32>& i_vec) {
-    //     setTVec3f(&i_vec.x, &x);
-    // }
+    inline TVec3(const TVec3<f32>& i_vec) {
+        setTVec3f(&i_vec.x, &x);
+    }
 
-    // TVec3() {}
+    TVec3() {}
+
+    TVec3(f32 x, f32 y, f32 z) { set(x, y, z); }
 
     operator Vec*() { return (Vec*)&x; }
     operator const Vec*() const { return (Vec*)&x; }
