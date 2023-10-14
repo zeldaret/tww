@@ -185,7 +185,7 @@ static actor_method_class l_daObjYgush00_Method = {
     (process_method_func)daObjYgush00_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Ygush00 = {
+actor_process_profile_definition g_profile_Obj_Ygush00 = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

@@ -58,7 +58,7 @@ static actor_method_class daBossItem_METHODS = {
     (process_method_func)0,
 };
 
-extern actor_process_profile_definition g_profile_BOSSITEM = {
+actor_process_profile_definition g_profile_BOSSITEM = {
     fpcLy_CURRENT_e,
     7,
     fpcLy_CURRENT_e,

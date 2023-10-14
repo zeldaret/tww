@@ -259,7 +259,7 @@ static actor_method_class l_daBranch_Method = {
     (process_method_func)daBranch_Draw,
 };
 
-extern actor_process_profile_definition g_profile_BRANCH = {
+actor_process_profile_definition g_profile_BRANCH = {
     fpcLy_CURRENT_e,
     7,
     fpcLy_CURRENT_e,

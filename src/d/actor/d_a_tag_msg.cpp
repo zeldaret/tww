@@ -309,7 +309,7 @@ static actor_method_class l_daTag_Msg_Method = {
     (process_method_func)daTag_Msg_Draw,
 };
 
-extern actor_process_profile_definition g_profile_TAG_MSG = {
+actor_process_profile_definition g_profile_TAG_MSG = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

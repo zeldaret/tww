@@ -2,32 +2,32 @@
 #define F_F_OP_OVERLAP_REQ_H_
 
 #include "SSystem/SComponent/c_phase.h"
+#include "SSystem/SComponent/c_request.h"
 
-typedef struct layer_class layer_class;
-struct request_base_class;
+struct layer_class;
+class overlap_task_class;
 
-class overlap_request_class {
+class overlap_request_class : public request_base_class {
 public:
-    s8 field_0x0;
-    u8 field_0x1;
-    s16 field_0x2;
-    u16 field_0x4;
-    u16 mPeektime;
-    u32 field_0x8;
-    u32 field_0xc;
-    s16 field_0x10;
-    u8 field_0x12;
-    u8 field_0x13;
-    int field_0x14;
-    request_of_phase_process_class field_0x18;
-    u8* field_0x20;
-    layer_class* pCurrentLayer;
+    /* 0x01 */ u8 field_0x1;
+    /* 0x02 */ s16 mDelay;
+    /* 0x04 */ u16 field_0x4;
+    /* 0x06 */ u16 mPeektime;
+    /* 0x08 */ u32 mIsPeek;
+    /* 0x0C */ u32 field_0xc;
+    /* 0x10 */ s16 mProcName;
+    /* 0x12 */ u8 field_0x12;
+    /* 0x13 */ u8 field_0x13;
+    /* 0x14 */ int mPId;
+    /* 0x18 */ request_of_phase_process_class mPhs;
+    /* 0x20 */ overlap_task_class * mpTask;
+    /* 0x24 */ layer_class* pCurrentLayer;
 };
+
 int fopOvlpReq_OverlapClr(overlap_request_class* param_1);
-request_base_class* fopOvlpReq_Request(overlap_request_class*, s16, u16);
-int fopOvlpReq_Handler(overlap_request_class*);
-int fopOvlpReq_Cancel(overlap_request_class*);
-static int fopOvlpReq_phase_Done(overlap_request_class* param_1);
-int fopOvlpReq_Is_PeektimeLimit(overlap_request_class*);
+overlap_request_class* fopOvlpReq_Request(overlap_request_class*, s16, u16);
+s32 fopOvlpReq_Handler(overlap_request_class*);
+BOOL fopOvlpReq_Cancel(overlap_request_class*);
+BOOL fopOvlpReq_Is_PeektimeLimit(overlap_request_class*);
 
 #endif

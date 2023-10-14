@@ -152,7 +152,7 @@ static actor_method_class daKajiMethodTable = {
     (process_method_func)daKajiDraw,
 };
 
-extern actor_process_profile_definition g_profile_Kaji = {
+actor_process_profile_definition g_profile_Kaji = {
     fpcLy_CURRENT_e,
     3,
     fpcLy_CURRENT_e,

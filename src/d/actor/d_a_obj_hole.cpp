@@ -370,7 +370,7 @@ static actor_method_class daObj_HoleMethodTable = {
     (process_method_func)daObj_HoleDraw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_HOLE = {
+actor_process_profile_definition g_profile_OBJ_HOLE = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

@@ -1092,7 +1092,7 @@ static actor_method_class daObjTpostMethodTable = {
     (process_method_func)daObjTpostDraw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_TORIPOST = {
+actor_process_profile_definition g_profile_OBJ_TORIPOST = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

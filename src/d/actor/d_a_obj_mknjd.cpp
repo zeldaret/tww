@@ -1119,7 +1119,7 @@ namespace daObjMknjD {
     }
 }
 
-extern actor_process_profile_definition g_profile_Obj_MknjD = {
+actor_process_profile_definition g_profile_Obj_MknjD = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

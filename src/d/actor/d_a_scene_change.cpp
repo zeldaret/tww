@@ -81,7 +81,7 @@ static actor_method_class daSceneChgMethodTable = {
     (process_method_func)daSceneChgDraw,
 };
 
-extern actor_process_profile_definition g_profile_SCENECHG = {
+actor_process_profile_definition g_profile_SCENECHG = {
     fpcLy_CURRENT_e,
     3,
     fpcLy_CURRENT_e,

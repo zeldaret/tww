@@ -1074,7 +1074,7 @@ namespace daBomb2 {
     }
 }
 
-extern actor_process_profile_definition g_profile_Bomb2 = {
+actor_process_profile_definition g_profile_Bomb2 = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

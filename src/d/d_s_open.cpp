@@ -155,7 +155,7 @@ scene_method_class l_dScnOpen_Method = {
     (process_method_func)dScnOpen_Draw,
 };
 
-extern scene_process_profile_definition g_profile_OPEN_SCENE = {
+scene_process_profile_definition g_profile_OPEN_SCENE = {
     fpcLy_ROOT_e,
     1,
     fpcPi_CURRENT_e,
@@ -169,7 +169,7 @@ extern scene_process_profile_definition g_profile_OPEN_SCENE = {
     NULL,
 };
 
-extern scene_process_profile_definition g_profile_OPEN2_SCENE = {
+scene_process_profile_definition g_profile_OPEN2_SCENE = {
     fpcLy_ROOT_e,
     1,
     fpcPi_CURRENT_e,

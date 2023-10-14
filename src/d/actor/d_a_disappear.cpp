@@ -130,7 +130,7 @@ actor_method_class l_daDisappear_Method = {
     (process_method_func)daDisappear_Draw,
 };
 
-extern actor_process_profile_definition g_profile_DISAPPEAR = {
+actor_process_profile_definition g_profile_DISAPPEAR = {
     fpcLy_CURRENT_e,
     7,
     fpcLy_CURRENT_e,

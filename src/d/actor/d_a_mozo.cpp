@@ -360,7 +360,7 @@ static actor_method_class l_daMozo_Method = {
     (process_method_func)daMozo_Draw,
 };
 
-extern actor_process_profile_definition g_profile_MOZO = {
+actor_process_profile_definition g_profile_MOZO = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

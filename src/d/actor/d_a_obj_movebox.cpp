@@ -858,7 +858,7 @@ namespace daObjMovebox {
     }
 }
 
-extern actor_process_profile_definition g_profile_Obj_Movebox = {
+actor_process_profile_definition g_profile_Obj_Movebox = {
     fpcLy_CURRENT_e,
     3,
     fpcLy_CURRENT_e,

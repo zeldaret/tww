@@ -390,7 +390,7 @@ namespace daObjPaper {
         };
     }
 
-    extern actor_process_profile_definition g_profile_Obj_Paper = {
+    actor_process_profile_definition g_profile_Obj_Paper = {
         fpcLy_CURRENT_e,
         7,
         fpcLy_CURRENT_e,

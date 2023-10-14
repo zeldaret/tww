@@ -40,7 +40,7 @@ static actor_method_class l_daRct_Method = {
     (process_method_func)daRct_Draw,
 };
 
-extern actor_process_profile_definition g_profile_RECTANGLE = {
+actor_process_profile_definition g_profile_RECTANGLE = {
     fpcLy_CURRENT_e,
     7,
     fpcLy_CURRENT_e,

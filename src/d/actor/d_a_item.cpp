@@ -1071,7 +1071,7 @@ static actor_method_class l_daItem_Method = {
     (process_method_func)daItem_Draw,
 };
 
-extern actor_process_profile_definition g_profile_ITEM = {
+actor_process_profile_definition g_profile_ITEM = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,

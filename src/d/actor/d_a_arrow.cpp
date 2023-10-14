@@ -1290,7 +1290,7 @@ actor_method_class daArrowMethodTable = {
     (process_method_func)daArrowDraw,
 };
 
-extern actor_process_profile_definition g_profile_ARROW = {
+actor_process_profile_definition g_profile_ARROW = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 9,
     /* ListPrio     */ fpcLy_CURRENT_e,

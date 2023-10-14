@@ -71,13 +71,11 @@ static int fopScnRq_Cancel(scene_request_class* i_sceneReq) {
     }
 }
 
-static scene_request_class* fopScnRq_FadeRequest(s16 param_1, u16 param_2) {
+static scene_request_class* fopScnRq_FadeRequest(s16 procName, u16 peekTime) {
     request_base_class* req = NULL;
 
-    if (l_fopScnRq_IsUsingOfOverlap == 0 && (req = fopOvlpM_Request(param_1, param_2), req != NULL))
-    {
+    if (l_fopScnRq_IsUsingOfOverlap == 0 && (req = fopOvlpM_Request(procName, peekTime), req != NULL))
         l_fopScnRq_IsUsingOfOverlap = 1;
-    }
 
     return (scene_request_class*)req;
 }

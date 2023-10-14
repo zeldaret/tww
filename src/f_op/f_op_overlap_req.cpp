@@ -5,85 +5,84 @@
 
 #include "SSystem/SComponent/c_request.h"
 #include "f_op/f_op_overlap_req.h"
+#include "f_op/f_op_overlap_mng.h"
 #include "f_pc/f_pc_manager.h"
 #include "f_pc/f_pc_stdcreate_req.h"
 
 void fopOvlpReq_SetPeektime(overlap_request_class*, u16);
 
-static int fopOvlpReq_phase_Done(overlap_request_class* i_overlapReq) {
-    if (fpcM_Delete(i_overlapReq->field_0x20) == 1) {
-        i_overlapReq->field_0x20 = 0;
-        i_overlapReq->field_0x4 = 0;
-        i_overlapReq->mPeektime = 0;
-        i_overlapReq->field_0x8 = 0;
-        i_overlapReq->field_0xc = 0;
-        return 2;
+static int fopOvlpReq_phase_Done(overlap_request_class* i_this) {
+    if (fpcM_Delete(i_this->mpTask) == 1) {
+        i_this->mpTask = 0;
+        i_this->field_0x4 = 0;
+        i_this->mPeektime = 0;
+        i_this->mIsPeek = 0;
+        i_this->field_0xc = 0;
+        return cPhs_NEXT_e;
     }
 
-    return 0;
+    return cPhs_INIT_e;
 }
 
-static s32 fopOvlpReq_phase_IsDone(overlap_request_class* param_1) {
-    cReq_Done((request_base_class*)param_1);
-    return param_1->field_0x2-- <= 0 ? 2 : 0;
+static s32 fopOvlpReq_phase_IsDone(overlap_request_class* i_this) {
+    cReq_Done(i_this);
+    if (i_this->mDelay-- <= 0)
+        return cPhs_NEXT_e;
+    else
+        return cPhs_INIT_e;
 }
 
-static int fopOvlpReq_phase_IsWaitOfFadeout(overlap_request_class* i_overlapReq) {
-    if (cReq_Is_Done((request_base_class*)(i_overlapReq->field_0x20 + 0xC4))) {
-        i_overlapReq->field_0x8 = 0;
-        return 2;
+static s32 fopOvlpReq_phase_IsWaitOfFadeout(overlap_request_class* i_this) {
+    if (cReq_Is_Done(&i_this->mpTask->mRq)) {
+        i_this->mIsPeek = 0;
+        return cPhs_NEXT_e;
     }
 
-    return 0;
+    return cPhs_INIT_e;
 }
 
-static int fopOvlpReq_phase_WaitOfFadeout(overlap_request_class* i_overlapReq) {
-    if (i_overlapReq->mPeektime) {
-        i_overlapReq->mPeektime--;
+static s32 fopOvlpReq_phase_WaitOfFadeout(overlap_request_class* i_this) {
+    if (i_this->mPeektime)
+        i_this->mPeektime--;
+
+    if (i_this->flag2 == 2 && !i_this->mPeektime) {
+        cReq_Command(&i_this->mpTask->mRq, 2);
+        return cPhs_NEXT_e;
     }
 
-    if (((u8)(i_overlapReq->field_0x0 & 0x3F)) == 2 && !i_overlapReq->mPeektime) {
-        cReq_Command((request_base_class*)(i_overlapReq->field_0x20 + 0xC4), 2);
-        return 2;
-    }
-
-    i_overlapReq->field_0x8 = 1;
-    return 0;
+    i_this->mIsPeek = 1;
+    return cPhs_INIT_e;
 }
 
-static int fopOvlpReq_phase_IsComplete(overlap_request_class* i_overlapReq) {
-    if (cReq_Is_Done((request_base_class*)(i_overlapReq->field_0x20 + 0xC4))) {
-        cReq_Done((request_base_class*)i_overlapReq);
-        return 2;
+static s32 fopOvlpReq_phase_IsComplete(overlap_request_class* i_this) {
+    if (cReq_Is_Done(&i_this->mpTask->mRq)) {
+        cReq_Done(i_this);
+        return cPhs_NEXT_e;
     }
 
-    return 0;
+    return cPhs_INIT_e;
 }
 
-static int fopOvlpReq_phase_IsCreated(overlap_request_class* i_overlapReq) {
-    if (fpcM_IsCreating(i_overlapReq->field_0x14) == 0) {
-        base_process_class* pBaseProc = fpcEx_SearchByID(i_overlapReq->field_0x14);
-    
-        if (pBaseProc == NULL) {
+static s32 fopOvlpReq_phase_IsCreated(overlap_request_class* i_this) {
+    if (fpcM_IsCreating(i_this->mPId) == 0) {
+        base_process_class* pBaseProc = fpcEx_SearchByID(i_this->mPId);
+        if (pBaseProc == NULL)
             return cPhs_ERROR_e;
-        }
-    
-        i_overlapReq->field_0x20 = (u8*)pBaseProc;
-        return 2;
+
+        i_this->mpTask = (overlap_task_class*)pBaseProc;
+        return cPhs_NEXT_e;
     }
 
-    return 0;
+    return cPhs_INIT_e;
 }
 
-static int fopOvlpReq_phase_Create(overlap_request_class* i_overlapReq) {
-    fpcLy_SetCurrentLayer(i_overlapReq->pCurrentLayer);
-    i_overlapReq->field_0x14 =
-        fpcSCtRq_Request(fpcLy_CurrentLayer(), i_overlapReq->field_0x10, 0, 0, 0);
-    return 2;
+static s32 fopOvlpReq_phase_Create(overlap_request_class* i_this) {
+    fpcLy_SetCurrentLayer(i_this->pCurrentLayer);
+    i_this->mPId = fpcSCtRq_Request(fpcLy_CurrentLayer(), i_this->mProcName, 0, 0, 0);
+    return cPhs_NEXT_e;
 }
 
-request_base_class* fopOvlpReq_Request(overlap_request_class* i_overlapReq, s16 param_2,
-                                       u16 param_3) {
+overlap_request_class* fopOvlpReq_Request(overlap_request_class* i_this, s16 procName, u16 peekTime) {
     static cPhs__Handler phaseMethod[8] = {
         (cPhs__Handler)fopOvlpReq_phase_Create,
         (cPhs__Handler)fopOvlpReq_phase_IsCreated,
@@ -95,30 +94,30 @@ request_base_class* fopOvlpReq_Request(overlap_request_class* i_overlapReq, s16 
         (cPhs__Handler)NULL,
     };
 
-    if (i_overlapReq->field_0x4 == 1) {
-        i_overlapReq = 0;
-        return (request_base_class*)i_overlapReq;
+    if (i_this->field_0x4 == 1) {
+        i_this = NULL;
+        return i_this;
     }
 
-    cReq_Command((request_base_class*)i_overlapReq, 1);
-    i_overlapReq->field_0x10 = param_2;
-    cPhs_Set(&i_overlapReq->field_0x18, phaseMethod);
-    fopOvlpReq_SetPeektime(i_overlapReq, param_3);
-    i_overlapReq->field_0x4 = 1;
-    i_overlapReq->field_0x2 = 1;
-    i_overlapReq->field_0x20 = 0;
-    i_overlapReq->field_0x8 = 0;
-    i_overlapReq->field_0xc = 0;
-    i_overlapReq->pCurrentLayer = fpcLy_RootLayer();
-    return (request_base_class*)i_overlapReq;
+    cReq_Command(i_this, 1);
+    i_this->mProcName = procName;
+    cPhs_Set(&i_this->mPhs, phaseMethod);
+    fopOvlpReq_SetPeektime(i_this, peekTime);
+    i_this->field_0x4 = 1;
+    i_this->mDelay = 1;
+    i_this->mpTask = NULL;
+    i_this->mIsPeek = 0;
+    i_this->field_0xc = 0;
+    i_this->pCurrentLayer = fpcLy_RootLayer();
+    return i_this;
 }
 
-int fopOvlpReq_Handler(overlap_request_class* i_overlapReq) {
-    int phase_state = cPhs_Do(&i_overlapReq->field_0x18, i_overlapReq);
+s32 fopOvlpReq_Handler(overlap_request_class* i_this) {
+    s32 phase_state = cPhs_Do(&i_this->mPhs, i_this);
 
     switch (phase_state) {
     case cPhs_NEXT_e:
-        return fopOvlpReq_Handler(i_overlapReq);
+        return fopOvlpReq_Handler(i_this);
     case cPhs_INIT_e:
         return cPhs_INIT_e;
     case cPhs_LOADING_e:
@@ -133,28 +132,25 @@ int fopOvlpReq_Handler(overlap_request_class* i_overlapReq) {
     }
 }
 
-int fopOvlpReq_Cancel(overlap_request_class* i_overlapReq) {
-    return fopOvlpReq_phase_Done(i_overlapReq) == 2 ? 1 : 0;
+BOOL fopOvlpReq_Cancel(overlap_request_class* i_this) {
+    return (fopOvlpReq_phase_Done(i_this) == cPhs_NEXT_e) ? TRUE : FALSE;
 }
 
-int fopOvlpReq_Is_PeektimeLimit(overlap_request_class* i_overlapReq) {
-    return i_overlapReq->mPeektime == 0 ? 1 : 0;
+BOOL fopOvlpReq_Is_PeektimeLimit(overlap_request_class* i_this) {
+    return i_this->mPeektime == 0 ? TRUE : FALSE;
 }
 
-void fopOvlpReq_SetPeektime(overlap_request_class* i_overlapReq, u16 param_2) {
-    if (0x7fff < param_2) {
+void fopOvlpReq_SetPeektime(overlap_request_class* i_this, u16 peekTime) {
+    if (peekTime > 0x7fff)
         return;
-    }
 
-    i_overlapReq->mPeektime = param_2;
+    i_this->mPeektime = peekTime;
 }
 
-int fopOvlpReq_OverlapClr(overlap_request_class* i_overlapReq) {
-    if ((u8)((i_overlapReq->field_0x0 >> 7) & 1) == 1 || !fopOvlpReq_Is_PeektimeLimit(i_overlapReq))
-    {
+int fopOvlpReq_OverlapClr(overlap_request_class* i_this) {
+    if (i_this->flag0 == 1 || !fopOvlpReq_Is_PeektimeLimit(i_this))
         return 0;
-    }
 
-    cReq_Create((request_base_class*)i_overlapReq, 2);
+    cReq_Create(i_this, 2);
     return 1;
 }

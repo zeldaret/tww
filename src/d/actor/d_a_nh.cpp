@@ -616,7 +616,7 @@ actor_method_class l_daNh_Method = {
     (process_method_func)daNh_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NH = {
+actor_process_profile_definition g_profile_NH = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 7,
     /* ListPrio     */ fpcLy_CURRENT_e,

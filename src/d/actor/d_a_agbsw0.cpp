@@ -2514,7 +2514,7 @@ static actor_method_class l_daAgbsw0_Method = {
     (process_method_func)daAgbsw0_Draw,
 };
 
-extern actor_process_profile_definition g_profile_AGBSW0 = {
+actor_process_profile_definition g_profile_AGBSW0 = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

@@ -40,7 +40,7 @@ static actor_method_class l_daSeatag_Method = {
     (process_method_func)daSeatag_Draw,
 };
 
-extern actor_process_profile_definition g_profile_SEATAG = {
+actor_process_profile_definition g_profile_SEATAG = {
     fpcLy_CURRENT_e,
     2,
     fpcLy_CURRENT_e,

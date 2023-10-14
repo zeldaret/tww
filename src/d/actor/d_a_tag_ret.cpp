@@ -146,7 +146,7 @@ namespace daTagRet {
     };
 };
 
-extern actor_process_profile_definition g_profile_Tag_Ret = {
+actor_process_profile_definition g_profile_Tag_Ret = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 3,
     /* ListPrio     */ fpcLy_CURRENT_e,

@@ -3,46 +3,170 @@
 // Translation Unit: d_ovlp_fade.cpp
 //
 
-#include "d_ovlp_fade.h"
-#include "dolphin/types.h"
+#include "f_op/f_op_overlap.h"
+#include "f_op/f_op_overlap_mng.h"
+#include "f_pc/f_pc_manager.h"
+#include "d/d_procname.h"
+#include "m_Do/m_Do_graphic.h"
+
+class overlap1_class : public overlap_task_class {
+public:
+    /* 0xCC */ s32 mFadeOutTime;
+    /* 0xD0 */ s32 mFadeInTime;
+};
+
+BOOL (*dOvlpFd_execute_f)(overlap1_class*);
 
 /* 802235CC-802235D4       .text dOvlpFd_Draw__FP14overlap1_class */
-void dOvlpFd_Draw(overlap1_class*) {
-    /* Nonmatching */
+BOOL dOvlpFd_Draw(overlap1_class* i_this) {
+    return TRUE;
 }
 
 /* 802235D4-802236AC       .text dOvlpFd_FadeOut__FP14overlap1_class */
-void dOvlpFd_FadeOut(overlap1_class*) {
-    /* Nonmatching */
+BOOL dOvlpFd_FadeOut(overlap1_class* i_this) {
+    /* Nonmatching - extra comparisons */
+    if (i_this->mFadeOutTime == 0) {
+        if (fpcM_GetProfName(i_this) != PROC_OVERLAP6) {
+            if (!mDoGph_gInf_c::startFadeIn(26))
+                return TRUE;
+            i_this->mFadeOutTime = 26;
+        } else {
+            if (mDoGph_gInf_c::startFadeIn(0))
+                return TRUE;
+            i_this->mFadeOutTime = 1;
+        }
+    }
+
+    fopOvlpM_SceneIsStart();
+    if (--i_this->mFadeOutTime == 0) {
+        fopOvlpM_Done(i_this);
+        i_this->mFadeOutTime++;
+    }
+
+    return TRUE;
 }
 
 /* 802236AC-802236E4       .text dOvlpFd_Wait__FP14overlap1_class */
-void dOvlpFd_Wait(overlap1_class*) {
-    /* Nonmatching */
+BOOL dOvlpFd_Wait(overlap1_class* i_this) {
+    if (fopOvlpM_IsOutReq(i_this))
+        dOvlpFd_execute_f = dOvlpFd_FadeOut;
+    return TRUE;
 }
 
 /* 802236E4-802237A4       .text dOvlpFd_FadeIn__FP14overlap1_class */
-void dOvlpFd_FadeIn(overlap1_class*) {
-    /* Nonmatching */
+BOOL dOvlpFd_FadeIn(overlap1_class* i_this) {
+    if (i_this->mFadeInTime == 0) {
+        i_this->mFadeInTime = 26;
+        if (fpcM_GetProfName(i_this) == PROC_OVERLAP0 || fpcM_GetProfName(i_this) == PROC_OVERLAP7) {
+            mDoGph_gInf_c::startFadeOut(26);
+        }
+    }
+
+    if (--i_this->mFadeInTime == 0) {
+        dOvlpFd_execute_f = dOvlpFd_Wait;
+        mDoGph_gInf_c::startFadeOut(0);
+        fopOvlpM_Done(i_this);
+    }
+
+    return TRUE;
 }
 
 /* 802237A4-802237D0       .text dOvlpFd_Execute__FP14overlap1_class */
-void dOvlpFd_Execute(overlap1_class*) {
-    /* Nonmatching */
+BOOL dOvlpFd_Execute(overlap1_class* i_this) {
+    dOvlpFd_execute_f(i_this);
+    return TRUE;
 }
 
 /* 802237D0-802237D8       .text dOvlpFd_IsDelete__FP14overlap1_class */
-void dOvlpFd_IsDelete(overlap1_class*) {
-    /* Nonmatching */
+BOOL dOvlpFd_IsDelete(overlap1_class* i_this) {
+    return TRUE;
 }
 
 /* 802237D8-802237E0       .text dOvlpFd_Delete__FP14overlap1_class */
-void dOvlpFd_Delete(overlap1_class*) {
-    /* Nonmatching */
+BOOL dOvlpFd_Delete(overlap1_class* i_this) {
+    return TRUE;
 }
 
 /* 802237E0-802237F4       .text dOvlpFd_Create__FPv */
-void dOvlpFd_Create(void*) {
-    /* Nonmatching */
+BOOL dOvlpFd_Create(void* i_this) {
+    dOvlpFd_execute_f = dOvlpFd_FadeIn;
+    return cPhs_COMPLEATE_e;
 }
 
+overlap_method_class l_dOvlpFd_Method = {
+    (process_method_func)dOvlpFd_Create,
+    (process_method_func)dOvlpFd_Delete,
+    (process_method_func)dOvlpFd_Execute,
+    (process_method_func)dOvlpFd_IsDelete,
+    (process_method_func)dOvlpFd_Draw,
+};
+
+overlap_process_profile_definition g_profile_OVERLAP0 = {
+    fpcLy_ROOT_e,
+    0,
+    fpcPi_CURRENT_e,
+    PROC_OVERLAP0,
+    &g_fpcLf_Method.mBase,
+    sizeof(overlap1_class),
+    0,
+    0,
+    &g_fopOvlp_Method,
+    0x1E1,
+    &l_dOvlpFd_Method,
+};
+
+overlap_process_profile_definition g_profile_OVERLAP1 = {
+    fpcLy_ROOT_e,
+    0,
+    fpcPi_CURRENT_e,
+    PROC_OVERLAP1,
+    &g_fpcLf_Method.mBase,
+    sizeof(overlap1_class),
+    0,
+    0,
+    &g_fopOvlp_Method,
+    0x1E2,
+    &l_dOvlpFd_Method,
+};
+
+overlap_process_profile_definition g_profile_OVERLAP6 = {
+    fpcLy_ROOT_e,
+    0,
+    fpcPi_CURRENT_e,
+    PROC_OVERLAP6,
+    &g_fpcLf_Method.mBase,
+    sizeof(overlap1_class),
+    0,
+    0,
+    &g_fopOvlp_Method,
+    0x1E7,
+    &l_dOvlpFd_Method,
+};
+
+overlap_process_profile_definition g_profile_OVERLAP7 = {
+    fpcLy_ROOT_e,
+    0,
+    fpcPi_CURRENT_e,
+    PROC_OVERLAP7,
+    &g_fpcLf_Method.mBase,
+    sizeof(overlap1_class),
+    0,
+    0,
+    &g_fopOvlp_Method,
+    0x1E8,
+    &l_dOvlpFd_Method,
+};
+
+overlap_process_profile_definition g_profile_OVERLAP8 = {
+    fpcLy_ROOT_e,
+    0,
+    fpcPi_CURRENT_e,
+    PROC_OVERLAP8,
+    &g_fpcLf_Method.mBase,
+    sizeof(overlap1_class),
+    0,
+    0,
+    &g_fopOvlp_Method,
+    0x1E9,
+    &l_dOvlpFd_Method,
+};

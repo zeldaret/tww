@@ -622,7 +622,7 @@ static actor_method_class l_daMbdoor_Method = {
     (process_method_func)daMbdoor_Draw,
 };
 
-extern actor_process_profile_definition g_profile_MBDOOR = {
+actor_process_profile_definition g_profile_MBDOOR = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 3,
     /* ListPrio     */ fpcPi_CURRENT_e,

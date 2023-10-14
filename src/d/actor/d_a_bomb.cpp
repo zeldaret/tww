@@ -1308,7 +1308,7 @@ actor_method_class l_daBomb_Method = {
     (process_method_func)daBomb_Draw,
 };
 
-extern actor_process_profile_definition g_profile_BOMB = {
+actor_process_profile_definition g_profile_BOMB = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

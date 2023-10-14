@@ -715,7 +715,7 @@ static actor_method_class l_daObjBarrier_Method = {
     (process_method_func)daObjBarrier_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Barrier = {
+actor_process_profile_definition g_profile_Obj_Barrier = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,

@@ -354,7 +354,7 @@ static actor_method_class l_daAndsw0_Method = {
     (process_method_func)daAndsw0_Draw,
 };
 
-extern actor_process_profile_definition g_profile_ANDSW0 = {
+actor_process_profile_definition g_profile_ANDSW0 = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

@@ -1445,7 +1445,7 @@ static actor_method_class l_daAM_Method = {
     (process_method_func)daAM_Draw,
 };
 
-extern actor_process_profile_definition g_profile_AM = {
+actor_process_profile_definition g_profile_AM = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,

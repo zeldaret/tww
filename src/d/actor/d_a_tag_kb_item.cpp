@@ -113,7 +113,7 @@ static actor_method_class daTagKbItemMethodTable = {
     (process_method_func)daTagKbItem_Draw,
 };
 
-extern actor_process_profile_definition g_profile_TAG_KB_ITEM = {
+actor_process_profile_definition g_profile_TAG_KB_ITEM = {
     fpcLy_CURRENT_e,
     7,
     fpcLy_CURRENT_e,

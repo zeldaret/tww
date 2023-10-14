@@ -29,8 +29,8 @@ public:
         mFader = fader;
     }
 
-    static int startFadeOut(int param_0) { return JFWDisplay::getManager()->startFadeOut(param_0); }
-    static int startFadeIn(int param_0) { return JFWDisplay::getManager()->startFadeIn(param_0); }
+    static BOOL startFadeOut(int param_0) { return JFWDisplay::getManager()->startFadeOut(param_0); }
+    static BOOL startFadeIn(int param_0) { return JFWDisplay::getManager()->startFadeIn(param_0); }
     static void setFadeColor(JUtility::TColor color) { mFader->mColor.set(color); }
     static void setClearColor(JUtility::TColor color) {
         JFWDisplay::getManager()->setClearColor(color);

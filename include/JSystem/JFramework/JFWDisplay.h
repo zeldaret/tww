@@ -65,14 +65,14 @@ public:
 
     static JFWDisplay* getManager() { return sManager; }
 
-    int startFadeOut(int param_0) {
+    BOOL startFadeOut(int param_0) {
         if (mpFader != NULL) {
             return mpFader->startFadeOut(param_0);
         }
         return 1;
     }
 
-    int startFadeIn(int param_0) {
+    BOOL startFadeIn(int param_0) {
         if (mpFader != NULL) {
             return mpFader->startFadeIn(param_0);
         }
