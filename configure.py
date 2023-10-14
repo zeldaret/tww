@@ -480,7 +480,7 @@ config.libs = [
             Object(NonMatching, "d/d_s_logo.cpp"),
             Object(NonMatching, "d/d_s_menu.cpp"),
             Object(NonMatching, "d/d_s_name.cpp"),
-            Object(NonMatching, "d/d_s_open.cpp"),
+            Object(Matching,    "d/d_s_open.cpp"),
             Object(NonMatching, "d/d_s_open_sub.cpp"),
             Object(NonMatching, "d/d_s_play.cpp"),
             Object(NonMatching, "d/d_s_room.cpp"),

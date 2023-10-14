@@ -12,6 +12,7 @@
 #include "d/d_procname.h"
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_controller_pad.h"
+#include "m_Do/m_Do_graphic.h"
 
 class dScnOpen_message_c;
 class J2DScreen;
@@ -57,11 +58,12 @@ s32 dScnOpen_c::create() {
         field_0x1d4 = NULL;
         mDoExt_restoreCurrentHeap();
         mDoExt_adjustSolidHeap(solid_heap);
-        // mDoGph_gInf_c::setTickRate();
+        mDoGph_gInf_c::setTickRate((OS_BUS_CLOCK / 4) / 30);
+        return cPhs_COMPLEATE_e;
     } else if (rt == cPhs_ERROR_e) {
         JUT_ASSERT(0x48, rt == cPhs_COMPLEATE_e);
+        return rt;
     }
-    return rt;
 }
 
 /* 80232BC4-80232CAC       .text execute__10dScnOpen_cFv */
@@ -145,7 +147,7 @@ s32 dScnOpen_Create(scene_class* i_scn) {
     return i_this->create();
 }
 
-static scene_method_class l_dScnOpen_Method = {
+scene_method_class l_dScnOpen_Method = {
     (process_method_func)dScnOpen_Create,
     (process_method_func)dScnOpen_Delete,
     (process_method_func)dScnOpen_Execute,
@@ -158,7 +160,7 @@ extern scene_process_profile_definition g_profile_OPEN_SCENE = {
     1,
     fpcPi_CURRENT_e,
     PROC_OPEN_SCENE,
-    &g_fpcLf_Method.mBase,
+    &g_fpcNd_Method.mBase,
     sizeof(dScnOpen_c),
     0,
     0,
@@ -172,7 +174,7 @@ extern scene_process_profile_definition g_profile_OPEN2_SCENE = {
     1,
     fpcPi_CURRENT_e,
     PROC_OPEN2_SCENE,
-    &g_fpcLf_Method.mBase,
+    &g_fpcNd_Method.mBase,
     sizeof(dScnOpen_c),
     0,
     0,

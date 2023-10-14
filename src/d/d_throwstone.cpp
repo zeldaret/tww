@@ -87,7 +87,7 @@ BOOL daThrowstone_c::_execute() {
 
     mpModel->setBaseScale(mScale);
     mDoMtx_stack_c::transS(getPosition());
-    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
 
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
@@ -121,7 +121,7 @@ BOOL daThrowstoneIsDelete(void*) {
     return TRUE;
 }
 
-static actor_method_class l_daThrowstone_Method = {
+actor_method_class daThrowstoneMethodTable = {
     (process_method_func)daThrowstoneCreate,
     (process_method_func)daThrowstoneDelete,
     (process_method_func)daThrowstoneExecute,
@@ -140,7 +140,7 @@ actor_process_profile_definition g_profile_THROWSTONE = {
     0,
     &g_fopAc_Method.base,
     0x01CE,
-    &l_daThrowstone_Method,
+    &daThrowstoneMethodTable,
     fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     fopAc_ACTOR_e,
     fopAc_CULLBOX_0_e,
