@@ -448,7 +448,7 @@ config.libs = [
             Object(NonMatching, "d/d_gameover.cpp"),
             Object(NonMatching, "d/d_kankyo.cpp"),
             Object(NonMatching, "d/d_kyeff.cpp"),
-            Object(NonMatching, "d/d_kyeff2.cpp"),
+            Object(Matching,    "d/d_kyeff2.cpp"),
             Object(NonMatching, "d/d_ky_thunder.cpp"),
             Object(Matching,    "d/d_letter.cpp"),
             Object(NonMatching, "d/d_level_se.cpp"),

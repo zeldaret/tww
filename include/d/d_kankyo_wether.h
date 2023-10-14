@@ -332,11 +332,15 @@ struct WINDEFF_SET {
 };
 
 void dKyw_wether_init();
+void dKyw_wether_init2();
 void dKyw_wether_move();
 void dKyw_wether_move_draw();
+void dKyw_wether_move_draw2();
 void dKyw_wether_draw();
+void dKyw_wether_draw2();
 void dKyw_wether_proc();
 void dKyw_wether_delete();
+void dKyw_wether_delete2();
 void dKyw_rain_set(int);
 void dKyw_wind_set();
 void dKyw_wind_init();

@@ -3,36 +3,74 @@
 // Translation Unit: d_kyeff2.cpp
 //
 
-#include "d_kyeff2.h"
-#include "dolphin/types.h"
+#include "f_op/f_op_kankyo.h"
+#include "f_op/f_op_camera.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
+#include "d/d_kankyo_data.h"
+#include "d/d_kankyo_wether.h"
+#include "d/d_procname.h"
+#include "d/d_stage.h"
+#include "m_Do/m_Do_audio.h"
+#include "dolphin/os/OS.h"
+
+class dKyeff2_c : public kankyo_class {
+public:
+    BOOL execute();
+};
 
 /* 80198758-8019877C       .text dKyeff2_Draw__FP9dKyeff2_c */
-void dKyeff2_Draw(dKyeff2_c*) {
-    /* Nonmatching */
+BOOL dKyeff2_Draw(dKyeff2_c* i_this) {
+    dKyw_wether_draw2();
+    return TRUE;
 }
 
 /* 8019877C-801987A0       .text execute__9dKyeff2_cFv */
-void dKyeff2_c::execute() {
-    /* Nonmatching */
+BOOL dKyeff2_c::execute() {
+    dKyw_wether_move_draw2();
+    return TRUE;
 }
 
 /* 801987A0-801987C0       .text dKyeff2_Execute__FP9dKyeff2_c */
-void dKyeff2_Execute(dKyeff2_c*) {
-    /* Nonmatching */
+BOOL dKyeff2_Execute(dKyeff2_c* i_this) {
+    return i_this->execute();
 }
 
 /* 801987C0-801987C8       .text dKyeff2_IsDelete__FP9dKyeff2_c */
-void dKyeff2_IsDelete(dKyeff2_c*) {
-    /* Nonmatching */
+BOOL dKyeff2_IsDelete(dKyeff2_c* i_this) {
+    return TRUE;
 }
 
 /* 801987C8-801987EC       .text dKyeff2_Delete__FP9dKyeff2_c */
-void dKyeff2_Delete(dKyeff2_c*) {
-    /* Nonmatching */
+BOOL dKyeff2_Delete(dKyeff2_c* i_this) {
+    dKyw_wether_delete2();
+    return TRUE;
 }
 
 /* 801987EC-80198810       .text dKyeff2_Create__FP12kankyo_class */
-void dKyeff2_Create(kankyo_class*) {
-    /* Nonmatching */
+s32 dKyeff2_Create(kankyo_class*) {
+    dKyw_wether_init2();
+    return cPhs_COMPLEATE_e;
 }
 
+leafdraw_method_class l_dKyeff2_Method = {
+    (process_method_func)dKyeff2_Create,
+    (process_method_func)dKyeff2_Delete,
+    (process_method_func)dKyeff2_Execute,
+    (process_method_func)dKyeff2_IsDelete,
+    (process_method_func)dKyeff2_Draw,
+};
+
+extern kankyo_process_profile_definition g_profile_KYEFF2 = {
+    fpcLy_CURRENT_e,
+    12,
+    fpcPi_CURRENT_e,
+    PROC_KYEFF2,
+    &g_fpcLf_Method.mBase,
+    sizeof(dKyeff2_c),
+    0,
+    0,
+    &g_fopKy_Method,
+    0x003,
+    &l_dKyeff2_Method,
+};
