@@ -3,12 +3,23 @@
 // Translation Unit: d_envse.cpp
 //
 
-#include "d_envse.h"
-#include "dolphin/types.h"
+#include "f_op/f_op_kankyo.h"
+#include "f_op/f_op_kankyo_mng.h"
+#include "d/d_procname.h"
+#include "d/d_stage.h"
+#include "m_Do/m_Do_audio.h"
+
+class dEnvSe_c : public kankyo_class {
+public:
+    BOOL execute();
+
+    /* 0xF8 */ u32 field_0xf8;
+    /* 0xFC */ u32 field_0xfc;
+};
 
 /* 8017D4C0-8017D4C8       .text dEnvSe_Draw__FP8dEnvSe_c */
-void dEnvSe_Draw(dEnvSe_c*) {
-    /* Nonmatching */
+BOOL dEnvSe_Draw(dEnvSe_c* i_this) {
+    return TRUE;
 }
 
 /* 8017D4C8-8017D700       .text dEnvSe_getNearPathPos__FP4cXyzP4cXyzP5dPath */
@@ -17,27 +28,49 @@ void dEnvSe_getNearPathPos(cXyz*, cXyz*, dPath*) {
 }
 
 /* 8017D700-8017DAE0       .text execute__8dEnvSe_cFv */
-void dEnvSe_c::execute() {
+BOOL dEnvSe_c::execute() {
     /* Nonmatching */
 }
 
 /* 8017DAE0-8017DB00       .text dEnvSe_Execute__FP8dEnvSe_c */
-void dEnvSe_Execute(dEnvSe_c*) {
-    /* Nonmatching */
+BOOL dEnvSe_Execute(dEnvSe_c* i_this) {
+    return i_this->execute();
 }
 
 /* 8017DB00-8017DB08       .text dEnvSe_IsDelete__FP8dEnvSe_c */
-void dEnvSe_IsDelete(dEnvSe_c*) {
-    /* Nonmatching */
+BOOL dEnvSe_IsDelete(dEnvSe_c* i_this) {
+    return TRUE;
 }
 
 /* 8017DB08-8017DB38       .text dEnvSe_Delete__FP8dEnvSe_c */
-void dEnvSe_Delete(dEnvSe_c*) {
-    /* Nonmatching */
+BOOL dEnvSe_Delete(dEnvSe_c* i_this) {
+    mDoAud_seDeleteObject(&i_this->mPos);
+    return TRUE;
 }
 
 /* 8017DB38-8017DB40       .text dEnvSe_Create__FP12kankyo_class */
-void dEnvSe_Create(kankyo_class*) {
-    /* Nonmatching */
+s32 dEnvSe_Create(kankyo_class*) {
+    return cPhs_COMPLEATE_e;
 }
 
+kankyo_method_class l_dEnvSe_Method = {
+    (process_method_func)dEnvSe_Create,
+    (process_method_func)dEnvSe_Delete,
+    (process_method_func)dEnvSe_Execute,
+    (process_method_func)dEnvSe_IsDelete,
+    (process_method_func)dEnvSe_Draw,
+};
+
+kankyo_process_profile_definition g_profile_EnvSe = {
+    fpcLy_CURRENT_e,
+    2,
+    fpcPi_CURRENT_e,
+    PROC_ENVSE,
+    &g_fpcLf_Method.mBase,
+    sizeof(dEnvSe_c),
+    0,
+    0,
+    &g_fopKy_Method,
+    0xA9,
+    &l_dEnvSe_Method,
+};

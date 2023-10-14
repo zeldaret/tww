@@ -164,7 +164,7 @@ s32 dKyeff_Create(kankyo_class* i_ky) {
     return cPhs_COMPLEATE_e;
 }
 
-leafdraw_method_class l_dKyeff_Method = {
+kankyo_method_class l_dKyeff_Method = {
     (process_method_func)dKyeff_Create,
     (process_method_func)dKyeff_Delete,
     (process_method_func)dKyeff_Execute,
@@ -172,7 +172,7 @@ leafdraw_method_class l_dKyeff_Method = {
     (process_method_func)dKyeff_Draw,
 };
 
-extern kankyo_process_profile_definition g_profile_KYEFF = {
+kankyo_process_profile_definition g_profile_KYEFF = {
     fpcLy_CURRENT_e,
     12,
     fpcPi_CURRENT_e,

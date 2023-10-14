@@ -2015,7 +2015,7 @@ void dStage_Create() {
 // NONMATCHING - almost
 void dStage_Delete() {
     if (*dStage_roomControl_c::getDemoArcName() != 0) {
-        dComIfG_deleteObjectResMain(dStage_roomControl_c::getDemoArcName());
+        dComIfG_deleteObjectRes(dStage_roomControl_c::getDemoArcName());
     }
 
     dStage_roomControl_c::destroyMemoryBlock();

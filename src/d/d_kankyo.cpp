@@ -2967,7 +2967,7 @@ BOOL dKyr_player_overhead_bg_chk() {
 class sub_kankyo__class : public kankyo_class {
 };
 
-static leafdraw_method_class l_dKy_Method = {
+kankyo_method_class l_dKy_Method = {
     (process_method_func)dKy_Create,
     (process_method_func)dKy_Delete,
     (process_method_func)dKy_Execute,
@@ -2975,7 +2975,7 @@ static leafdraw_method_class l_dKy_Method = {
     (process_method_func)dKy_Draw,
 };
 
-extern kankyo_process_profile_definition g_profile_KANKYO = {
+kankyo_process_profile_definition g_profile_KANKYO = {
     fpcLy_CURRENT_e,
     1,
     fpcPi_CURRENT_e,
