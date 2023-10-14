@@ -869,7 +869,7 @@ void daObjTpost_c::modeReceiveDemoInit() {
 }
 
 void daObjTpost_c::modeReceiveDemo() {
-    if(dComIfGp_getEventManager().endCheckOld("DEFAULT_POST")) {
+    if(dComIfGp_evmng_endCheck("DEFAULT_POST")) {
         dLetter_read(m_letter[mNumReadable].mEventReg);
         mNumReadable = getReadableLetterNum();
         dComIfGp_event_onEventFlag(8);

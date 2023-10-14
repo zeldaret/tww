@@ -427,7 +427,7 @@ void daAgb_c::modeLookAttention() {
             se_flag = true;
         }
 
-        if (dComIfGp_getEventManager().endCheckOld("DEFAULT_AGB_LOOK_ATTENTION")) {
+        if (dComIfGp_evmng_endCheck("DEFAULT_AGB_LOOK_ATTENTION")) {
             dComIfGp_event_onEventFlag(8);
             mMode = 0;
             se_flag = false;
@@ -1056,7 +1056,7 @@ int daAgb_Draw(daAgb_c* i_this) {
     if (g_mDoGaC_gbaCom.mDoGaC_GbaLink()) {
         if (i_this->field_0x66f != 0 && !(daAgb_c::mFlags.field_0xa & 1) &&
             (!dComIfGp_event_runCheck() ||
-             dComIfGp_getEventManager().startCheckOld("DEFAULT_AGB_LOOK_ATTENTION") ||
+             dComIfGp_evmng_startCheck("DEFAULT_AGB_LOOK_ATTENTION") ||
              i_this->mMode == 2) &&
             (i_this->field_0x65c == 0 || i_this->mMode == 1 || i_this->field_0x66b == 0x10 ||
              i_this->field_0x66b == 3 || i_this->field_0x66b == 12 || i_this->field_0x66b == 4 ||

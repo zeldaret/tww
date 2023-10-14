@@ -375,6 +375,10 @@ public:
     bool checkPlayerStatus(int param_0, int i, u32 flag) { return flag & mPlayerStatus[param_0][i]; }
 
     u8 getSelectItem(int idx) { return mEquippedItems[idx]; }
+    
+    void setAStatus(u8 status) { mCurrButtonBAction = status; }
+    void setDoStatus(u8 status) { mCurrButtonAAction = status; }
+    void setRStatusForce(u8 status) { field_0x4930 = status; }
 
     void setCurrentGrafPort(J2DOrthoGraph* i_graf) { mCurrentGrafPort = i_graf; }
     void setCurrentWindow(dDlst_window_c* i_window) { mCurrentWindow = i_window; }
@@ -660,6 +664,10 @@ inline u8 dComIfGs_getBeast(int i_idx) {
 
 inline u8 dComIfGs_getBait(int i_idx) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getBait(i_idx);
+}
+
+inline void dComIfGs_setBaitItemEmpty() {
+    g_dComIfG_gameInfo.save.getPlayer().getBagItem().setBaitItemEmpty();
 }
 
 inline u8 dComIfGs_getReserve(int i_idx) {
@@ -1397,8 +1405,12 @@ inline daPy_py_c* daPy_getPlayerActorClass() {
     return (daPy_py_c*)dComIfGp_getPlayer(0);
 }
 
+inline fopAc_ac_c* dComIfGp_getLinkPlayer() {
+    return g_dComIfG_gameInfo.play.getPlayerPtr(0);
+}
+
 inline daPy_lk_c* daPy_getPlayerLinkActorClass() {
-    return (daPy_lk_c*)g_dComIfG_gameInfo.play.getPlayerPtr(0);
+    return (daPy_lk_c*)dComIfGp_getLinkPlayer();
 }
 
 inline s8 dComIfGp_getPlayerCameraID(int idx) {
@@ -1469,6 +1481,18 @@ inline u8 dComIfGp_getMiniGameType() {
     // TODO add enum for minigame type.
     // 0 for none, 8 for shooting the fishman, 2/6 for orca, 7 for mail sorting, etc
     return g_dComIfG_gameInfo.play.mMiniGameType;
+}
+
+inline void dComIfGp_setAStatus(u8 status) {
+    g_dComIfG_gameInfo.play.setAStatus(status);
+}
+
+inline void dComIfGp_setDoStatus(u8 status) {
+    g_dComIfG_gameInfo.play.setDoStatus(status);
+}
+
+inline void dComIfGp_setRStatusForce(u8 status) {
+    g_dComIfG_gameInfo.play.setRStatusForce(status);
 }
 
 inline dDlst_window_c * dComIfGp_getWindow(int idx) { return &g_dComIfG_gameInfo.play.mDlstWindow[idx]; }
@@ -1568,72 +1592,72 @@ inline void dComIfGp_event_setCullRate(f32 ratio) {
     g_dComIfG_gameInfo.play.getEvent().setCullRate(ratio);
 }
 
-inline dEvent_manager_c& dComIfGp_getEventManager() {
-    return g_dComIfG_gameInfo.play.getEvtManager();
+inline dEvent_manager_c* dComIfGp_getPEvtManager() {
+    return &g_dComIfG_gameInfo.play.getEvtManager();
 }
 
 inline s16 dComIfGp_evmng_getEventPrio(s16 eventIdx) {
-    return dComIfGp_getEventManager().getEventPrio(eventIdx);
+    return dComIfGp_getPEvtManager()->getEventPrio(eventIdx);
 }
 
 inline s16 dComIfGp_evmng_getEventIdx(const char* pName, u8 evNo) {
-    return dComIfGp_getEventManager().getEventIdx(pName, evNo);
+    return dComIfGp_getPEvtManager()->getEventIdx(pName, evNo);
 }
 
 inline int dComIfGp_evmng_getMyStaffId(const char* pName, fopAc_ac_c* pActor, s32 param_3) {
-    return dComIfGp_getEventManager().getMyStaffId(pName, pActor, param_3);
+    return dComIfGp_getPEvtManager()->getMyStaffId(pName, pActor, param_3);
 }
 
 inline int dComIfGp_evmng_getMyActIdx(int staffIdx, const char* const* pActions, int actionCount, int force, int param_5) {
-    return dComIfGp_getEventManager().getMyActIdx(staffIdx, pActions, actionCount, force, param_5);
+    return dComIfGp_getPEvtManager()->getMyActIdx(staffIdx, pActions, actionCount, force, param_5);
 }
 
 inline f32* dComIfGp_evmng_getMyFloatP(int staffIdx, const char* name) {
-    return reinterpret_cast<f32*>(dComIfGp_getEventManager().getMySubstanceP(staffIdx, name, 0)); //type 0 is float
+    return reinterpret_cast<f32*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, 0)); //type 0 is float
 }
 
 inline Vec* dComIfGp_evmng_getMyXyzP(int staffIdx, const char* name) {
-    return reinterpret_cast<Vec*>(dComIfGp_getEventManager().getMySubstanceP(staffIdx, name, 1)); //type 1 is vec3f
+    return reinterpret_cast<Vec*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, 1)); //type 1 is vec3f
 }
 
 inline u32* dComIfGp_evmng_getMyIntegerP(int staffIdx, const char* name) {
-    return reinterpret_cast<u32*>(dComIfGp_getEventManager().getMySubstanceP(staffIdx, name, 3)); //type 3 is int
+    return reinterpret_cast<u32*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, 3)); //type 3 is int
 }
 
 inline char* dComIfGp_evmng_getMyStringP(int staffIdx, const char* name) {
-    return reinterpret_cast<char*>(dComIfGp_getEventManager().getMySubstanceP(staffIdx, name, 4)); //type 4 is string
+    return reinterpret_cast<char*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, 4)); //type 4 is string
 }
 
 inline BOOL dComIfGp_evmng_startCheck(s16 eventID) {
-    return dComIfGp_getEventManager().startCheck(eventID);
+    return dComIfGp_getPEvtManager()->startCheck(eventID);
 }
 
 inline BOOL dComIfGp_evmng_startCheck(const char* pName) {
-    return dComIfGp_getEventManager().startCheckOld(pName);
+    return dComIfGp_getPEvtManager()->startCheckOld(pName);
 }
 
 inline BOOL dComIfGp_evmng_endCheck(const char* pName) {
-    return dComIfGp_getEventManager().endCheckOld(pName);
+    return dComIfGp_getPEvtManager()->endCheckOld(pName);
 }
 
 inline BOOL dComIfGp_evmng_endCheck(s16 eventID) {
-    return dComIfGp_getEventManager().endCheck(eventID);
+    return dComIfGp_getPEvtManager()->endCheck(eventID);
 }
 
 inline BOOL dComIfGp_evmng_ChkPresentEnd() {
-    return dComIfGp_getEventManager().ChkPresentEnd();
+    return dComIfGp_getPEvtManager()->ChkPresentEnd();
 }
 
 inline void dComIfGp_evmng_CancelPresent() {
-    return dComIfGp_getEventManager().CancelPresent();
+    return dComIfGp_getPEvtManager()->CancelPresent();
 }
 
 inline BOOL dComIfGp_evmng_getIsAddvance(s32 staffIdx) {
-    return dComIfGp_getEventManager().getIsAddvance(staffIdx);
+    return dComIfGp_getPEvtManager()->getIsAddvance(staffIdx);
 }
 
 inline void dComIfGp_evmng_cutEnd(int staffIdx) {
-    return dComIfGp_getEventManager().cutEnd(staffIdx);
+    return dComIfGp_getPEvtManager()->cutEnd(staffIdx);
 }
 
 inline void dComIfGp_evmng_execute() {
@@ -1641,15 +1665,15 @@ inline void dComIfGp_evmng_execute() {
 }
 
 inline void dComIfGp_evmng_create() {
-    g_dComIfG_gameInfo.play.getEvtManager().create();
+    dComIfGp_getPEvtManager()->create();
 }
 
 inline void dComIfGp_evmng_remove() {
-    g_dComIfG_gameInfo.play.getEvtManager().remove();
+    dComIfGp_getPEvtManager()->remove();
 }
 
 inline void dComIfGp_evmng_setGoal(cXyz* pos) {
-    g_dComIfG_gameInfo.play.getEvtManager().setGoal(pos);
+    dComIfGp_getPEvtManager()->setGoal(pos);
 }
 
 /**
@@ -1979,7 +2003,16 @@ inline JPABaseEmitter* dComIfGp_particle_set2DmenuFore(u16 particleID, const cXy
                                     pPrmColor, pEnvColor, pScale2D);
 }
 
-inline void dComIfGp_particle_setStripes(u16 particleID, cXyz* pos, csXyz* angle, cXyz* scale, u8 param_4, u16 param_5) {
+inline JPABaseEmitter* dComIfGp_particle_setSingleRipple(u16 particleID, const cXyz* pos,
+                                                         const csXyz* angle = NULL,
+                                                         const cXyz* scale = NULL,
+                                                         u8 alpha = 0xFF) {
+    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
+    return pParticle->setSingleRipple(particleID, pos, angle, scale, alpha);
+}
+
+inline void dComIfGp_particle_setStripes(u16 particleID, const cXyz* pos, const csXyz* angle,
+                                         const cXyz* scale, u8 param_4, u16 param_5) {
     dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
     pParticle->setNormalStripes(particleID, pos, angle, scale, param_4, param_5);
 }

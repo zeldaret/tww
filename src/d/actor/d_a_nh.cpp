@@ -46,8 +46,8 @@ public:
 public:
     /* 0x04 */ s8 mChildID;
     /* 0x08 */ hio_prm_c prm;
-    /* 0x44 */ daNh_c* mActor;
-};  // Size: 0x44
+    /* 0x44 */ daNh_c* mpActor;
+};  // Size: 0x48
 
 static daNh_HIO_c l_HIO;
 
@@ -243,9 +243,9 @@ s32 daNh_c::create() {
     
     if (l_HIO.mChildID < 0) {
         l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("森のほたる", &l_HIO);
-        l_HIO.mActor = this;
+        l_HIO.mpActor = this;
     }
-    if (!this->init()) {
+    if (!init()) {
         phase_state = cPhs_ERROR_e;
     }
     

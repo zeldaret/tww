@@ -135,6 +135,10 @@ inline void fopAcM_OffStatus(fopAc_ac_c* pActor, u32 flag) {
     pActor->mStatus &= ~flag;
 }
 
+inline void fopAcM_SetStatusMap(fopAc_ac_c* pActor, u32 flag) {
+    pActor->mStatus = (pActor->mStatus & ~0x3F) | fopAcStts_SHOWMAP_e | flag;
+}
+
 inline fopAc_ac_c* fopAcM_Search(fopAcIt_JudgeFunc func, void* param) {
     return (fopAc_ac_c*)fopAcIt_Judge(func, param);
 }

@@ -193,7 +193,7 @@ static s32 daTag_Msg_actionEvent(daTag_Msg_c* a_this) {
         l_msg->mMode = 0x13;
         dComIfGp_event_onEventFlag(8);
         if (a_this->getMessage() == 0x1902) {
-            daPy_getPlayerLinkActorClass()->mNoResetFlg0 &= 0xf7ffffff;
+            daPy_getPlayerLinkActorClass()->offPlayerNoDraw();
         }
         if (a_this->getType2() & 1) {
             a_this->mAction = 0;
@@ -217,7 +217,7 @@ static s32 daTag_Msg_actionHunt(daTag_Msg_c* a_this) {
         l_msg = 0;
         msg_mode = 0;
         if ((u32)a_this->getMessage() == 0x1902) {
-            daPy_getPlayerLinkActorClass()->mNoResetFlg0 |= 0x8000000;
+            daPy_getPlayerLinkActorClass()->onPlayerNoDraw();
         }
     } else if (a_this->rangeCheck() != 0 && a_this->otherCheck() != 0) {
         if ((a_this->getType2() & 1) != 0) {

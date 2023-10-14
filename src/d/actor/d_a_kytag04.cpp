@@ -61,7 +61,7 @@ int daKytag04_Create(fopAc_ac_c* i_this)  {
     a_this->mState = 0;
     a_this->mOffColPat = a_this->mBase.mParameters;
     a_this->mOnColPat = a_this->mBase.mParameters >> 8;
-    a_this->mSwitchId = a_this->current.angle.x;;
+    a_this->mSwitchId = a_this->current.angle.x;
     a_this->mScaleX = a_this->mScale.x * 100.0f;
     a_this->mScaleY = a_this->mScale.y * 100.0f;
     a_this->mTimer = 0;

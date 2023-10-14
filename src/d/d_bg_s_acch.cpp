@@ -61,8 +61,8 @@ dBgS_Acch::dBgS_Acch() {
     m_tbl_size = 0;
     pm_acch_cir = NULL;
     m_roof_y = 0.0f;
-    m_roof_height = 0.0f;
     m_roof_crr_height = 0.0f;
+    m_roof_height = 0.0f;
     field_0xc8 = 200.0f;
     pm_angle = NULL;
     pm_shape_angle = NULL;
@@ -162,15 +162,15 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
         LineCheck(i_bgs);
     }
     
-    m_roof_crr_height = 1000000000.0f;
+    m_roof_height = 1000000000.0f;
     if (!(m_flags & ROOF_NONE)) {
         m_roof.SetExtChk(*(cBgS_Chk*)this);
         ClrRoofHit();
         cXyz roofPos = *pm_pos;
         m_roof.SetPos(roofPos);
         m_roof_y = i_bgs.RoofChk(&m_roof);
-        if (m_roof_y != 1000000000.0f && pm_pos->y + m_roof_height > m_roof_y) {
-            m_roof_crr_height = m_roof_y - m_roof_height;
+        if (m_roof_y != 1000000000.0f && pm_pos->y + m_roof_crr_height > m_roof_y) {
+            m_roof_height = m_roof_y - m_roof_crr_height;
             SetRoofHit();
         }
     }
@@ -179,8 +179,8 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
         ClrGroundFind();
         GroundCheck(i_bgs);
         GroundRoofProc(i_bgs);
-    } else if (m_roof_crr_height < pm_pos->y) {
-        pm_pos->y = m_roof_crr_height;
+    } else if (m_roof_height < pm_pos->y) {
+        pm_pos->y = m_roof_height;
     }
     
     if (!(m_flags & WATER_NONE)) {

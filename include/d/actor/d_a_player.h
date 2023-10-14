@@ -161,47 +161,48 @@ public:
     
     virtual MtxP getLeftHandMatrix() = 0;
     virtual MtxP getRightHandMatrix() = 0;
-    virtual void getGroundY() = 0;
-    virtual void getTactMusic() const;
-    virtual void getTactTimerCancel() const;
-    virtual BOOL checkPlayerGuard() const;
-    virtual void getGrabMissActor();
-    virtual u32 checkPlayerFly() const;
-    virtual void checkFrontRoll() const;
-    virtual void checkBottleSwing() const;
-    virtual void checkCutCharge() const;
-    virtual void getBokoFlamePos(cXyz*);
-    virtual void checkTactWait() const;
-    virtual void setTactZev(unsigned int, int, char*);
-    virtual void onDekuSpReturnFlg(u8);
-    virtual void checkComboCutTurn() const;
+    virtual f32 getGroundY() = 0;
+    virtual int getTactMusic() const { return -1; }
+    virtual int getTactTimerCancel() const { return 0; }
+    virtual BOOL checkPlayerGuard() const { return FALSE; }
+    virtual fopAc_ac_c* getGrabMissActor() { return NULL; }
+    virtual BOOL checkPlayerFly() const { return FALSE; }
+    virtual BOOL checkFrontRoll() const { return FALSE; }
+    virtual BOOL checkBottleSwing() const { return FALSE; }
+    virtual BOOL checkCutCharge() const { return FALSE; }
+    virtual BOOL getBokoFlamePos(cXyz*) { return FALSE; }
+    virtual BOOL checkTactWait() const { return FALSE; }
+    virtual void setTactZev(unsigned int, int, char*) {}
+    virtual void onDekuSpReturnFlg(u8) {}
+    virtual bool checkComboCutTurn() const { return false; }
     virtual f32 getBaseAnimeFrameRate() = 0;
-    virtual void getBaseAnimeFrame() = 0;
-    virtual void getItemID() const;
-    virtual void getThrowBoomerangID() const;
-    virtual u32 getGrabActorID() const;
-    virtual void checkGrabBarrel();
-    virtual void checkPlayerNoDraw();
-    virtual void checkRopeTag();
-    virtual void checkRopeReadyAnime() const;
-    virtual void voiceStart(u32);
-    virtual void setOutPower(f32, s16, int);
-    virtual void onFrollCrashFlg(u32);
-    virtual void getModelJointMtx(u16);
-    virtual void getOldSpeedY();
-    virtual void setHookshotCarryOffset(unsigned int, const cXyz*);
-    virtual void setPlayerPosAndAngle(cXyz*, s16);
-    virtual void setPlayerPosAndAngle(cXyz*, csXyz*);
-    virtual void setPlayerPosAndAngle(MtxP);
-    virtual void setThrowDamage(cXyz*, s16, f32, f32, int);
-    virtual void changeTextureAnime(u16, u16, int);
-    virtual void cancelChangeTextureAnime();
+    virtual f32 getBaseAnimeFrame() = 0;
+    virtual u32 getItemID() const { return -1; }
+    virtual u32 getThrowBoomerangID() const { return -1; }
+    virtual u32 getGrabActorID() const { return -1; }
+    virtual BOOL checkGrabBarrel() { return FALSE; }
+    virtual BOOL checkPlayerNoDraw() { return FALSE; }
+    virtual BOOL checkRopeTag() { return FALSE; }
+    virtual BOOL checkRopeReadyAnime() const { return FALSE; }
+    virtual void voiceStart(u32) {}
+    virtual void setOutPower(f32, s16, int) {}
+    virtual void onFrollCrashFlg(u32) {}
+    virtual MtxP getModelJointMtx(u16) { return NULL; }
+    virtual f32 getOldSpeedY() { return 0.0f; }
+    virtual BOOL setHookshotCarryOffset(unsigned int, const cXyz*) { return FALSE; }
+    virtual void setPlayerPosAndAngle(cXyz*, s16) {}
+    virtual void setPlayerPosAndAngle(cXyz*, csXyz*) {}
+    virtual void setPlayerPosAndAngle(MtxP) {}
+    virtual BOOL setThrowDamage(cXyz*, s16, f32, f32, int) { return FALSE; }
+    virtual void changeTextureAnime(u16, u16, int) {}
+    virtual void cancelChangeTextureAnime() {}
     
     void getSwordTopPos() const;
     void getLeftHandPos() const;
     void getRopeJumpLand() const;
     void checkRopeForceEnd() const;
     cXyz getHeadTopPos() const { return mHeadTopPos; }
+    cXyz* getHeadTopPosP() { return &mHeadTopPos; }
     void changePlayer(fopAc_ac_c*);
     void objWindHitCheck(dCcD_Cyl*);
     void setDoButtonQuake();

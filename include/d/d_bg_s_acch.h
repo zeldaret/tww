@@ -116,7 +116,7 @@ public:
     cXyz* GetPos() { return pm_pos; }
     cXyz* GetOldPos() { return pm_old_pos; }
     f32 GetGroundH() { return m_ground_h; }
-    f32 GetRoofHeight() { return m_roof_height; }
+    f32 GetRoofHeight() { return m_roof_crr_height; }
     f32 GetSeaHeight() { return m_sea_height; }
     void SetLin() { m_lin.SetStartEnd(*pm_old_pos, *pm_pos); }
     bool ChkGroundFind() { return m_flags & GROUND_FIND; }
@@ -160,7 +160,9 @@ public:
     bool ChkMoveBGOnly() const { return m_flags & MOVE_BG_ONLY; }
     void SetWallHit() { m_flags |= WALL_HIT; }
     void ClrWallNone() { m_flags &= ~WALL_NONE; }
+    void OnSeaCheckOn() { m_flags |= SEA_CHECK;}
     bool ChkSeaCheckOn() { return m_flags & SEA_CHECK;}
+    void OnSeaWaterHeight() { m_flags |= SEA_WATER_HEIGHT;}
     bool ChkSeaWaterHeight() { return m_flags & SEA_WATER_HEIGHT;}
     bool ChkSeaIn() { return m_flags & SEA_IN;}
     cM3dGCyl* GetWallBmdCylP() { return &m_wall_cyl; }
@@ -189,8 +191,8 @@ public:
     /* 0x0B4 */ f32 field_0xb4;
     /* 0x0B8 */ f32 field_0xb8;
     /* 0x0BC */ f32 m_roof_y;
-    /* 0x0C0 */ f32 m_roof_height;
-    /* 0x0C4 */ f32 m_roof_crr_height;
+    /* 0x0C0 */ f32 m_roof_crr_height;
+    /* 0x0C4 */ f32 m_roof_height;
     /* 0x0C8 */ f32 field_0xc8;
     /* 0x0CC */ cBgS_PolyInfo* pm_out_poly_info;
     /* 0x0D0 */ f32 m_sea_height;

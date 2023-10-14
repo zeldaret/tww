@@ -6,7 +6,7 @@
 
 class daPy_npc_c : public daPy_py_c {
 public:
-    /* 0x320 */ dBgS_Acch mAcch;
+    /* 0x320 */ dBgS_ObjAcch mAcch;
     /* 0x4E4 */ u32 m4E4;
     /* 0x4E8 */ u8 m4E8;
     /* 0x4E9 */ u8 mDamageFogTimer;
@@ -24,7 +24,7 @@ public:
     void executeDamageFog() { cLib_calcTimer(&mDamageFogTimer); }
     
     virtual void restartPoint(s16) {}
-    virtual void isTagCheckOK() {}
+    virtual BOOL isTagCheckOK() { return TRUE; }
     virtual void setMessageAnimation(u8) {}
     
     int check_initialRoom();

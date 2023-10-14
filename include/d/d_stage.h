@@ -848,7 +848,7 @@ public:
     }
 
     void offStatusFlag(int i_roomNo, u8 flag) {
-        return cLib_offBit(mStatus[i_roomNo].mFlags, flag);
+        cLib_offBit(mStatus[i_roomNo].mFlags, flag);
     }
 
     void onStatusFlag(int i_roomNo, u8 flag) { return cLib_onBit(mStatus[i_roomNo].mFlags, flag); }

@@ -22,7 +22,9 @@ public:
         mpBgW = NULL;
         mActorId = -1;
     }
-    void SetPolyInfo(const cBgS_PolyInfo&);
+    void SetPolyInfo(const cBgS_PolyInfo& other) {
+        *this = other;
+    }
     void SetActorInfo(int, void*, unsigned int);
     bool ChkSafe(const void*, unsigned int) const;
     void SetPolyIndex(int);

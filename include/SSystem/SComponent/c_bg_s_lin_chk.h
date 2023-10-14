@@ -32,6 +32,8 @@ public:
     void SetCross(const cXyz& pos) { mLin.SetEnd(pos); }
     cXyz& i_GetCross() { return mLin.GetEnd(); }
     cM3dGLin* GetLinP() { return &mLin; }
+    void OnBackFlag() { mBackFlag = true; }
+    void OffBackFlag() { mBackFlag = false; }
     bool ChkBackFlag() const { return mBackFlag; }
     bool ChkFrontFlag() const { return mFrontFlag; }
     bool GetPreWallChk() const { return mPreWallChk; }

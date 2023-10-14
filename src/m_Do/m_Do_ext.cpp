@@ -1342,7 +1342,7 @@ void mDoExt_McaMorf::setMorf(f32 param_0) {
 }
 
 /* 8001300C-800130D0       .text play__14mDoExt_McaMorfFP3VecUlSc */
-void mDoExt_McaMorf::play(Vec*, u32, s8) {
+bool mDoExt_McaMorf::play(Vec*, u32, s8) {
     /* Nonmatching */
 }
 
