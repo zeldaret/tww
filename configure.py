@@ -346,7 +346,7 @@ config.libs = [
             Object(NonMatching, "d/d_cloth_packet.cpp"),
             Object(NonMatching, "d/actor/d_a_obj.cpp"),
             Object(NonMatching, "d/d_a_obj_tribox_static.cpp"),
-            Object(NonMatching, "d/d_a_ship_static.cpp"),
+            Object(Matching, "d/d_a_ship_static.cpp"),
             Object(Matching,    "d/d_a_boko_static.cpp"),
             Object(Matching,    "d/d_a_bomb_static.cpp"),
             Object(NonMatching, "d/d_a_branch_static.cpp"),
