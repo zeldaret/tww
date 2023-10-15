@@ -16,7 +16,14 @@ public:
 
 class JntHit_c {
 public:
-    void CreateInit();
+    JntHit_c()
+        : mpModel(NULL)
+        , field_0x08(NULL)
+        , field_0x0C(NULL)
+        , field_0x10(NULL)
+        , field_0x1C(NULL) {}
+
+    BOOL CreateInit();
     void CylHitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*, cXyz, cXyz, f32);
     void Cyl2HitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*, cXyz, cXyz, f32);
     void SphHitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*, cXyz, f32);
@@ -28,11 +35,12 @@ public:
     /* 0x00 */ __jnt_hit_data_c* mpHitData;
     /* 0x04 */ J3DModel* mpModel;
     /* 0x08 */ cXyz* field_0x08;
-    /* 0x0C */ short* field_0x0c;
+    /* 0x0C */ short* field_0x0C;
     /* 0x10 */ short* field_0x10;
     /* 0x14 */ short* mpJointIndexes;
     /* 0x18 */ s16 mHitDataCount;
-    /* 0x1A */ u8 field_0x1A[0x20 - 0x1A];
+    /* 0x1A */ u8 field_0x1A[2];
+    /* 0x1C */ void* field_0x1C;
 };
 
 class JntHit_HIO_c {

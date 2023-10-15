@@ -3,17 +3,29 @@
 // Translation Unit: d_drawlist.cpp
 //
 
-#include "d_drawlist.h"
-#include "dolphin/types.h"
+#include "d/d_drawlist.h"
+#include "d/d_com_inf_game.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "SSystem/SComponent/c_rnd.h"
+#include "SSystem/SComponent/c_bg_s_shdw_draw.h"
 
 /* 800804A4-800804C0       .text setViewPort__14dDlst_window_cFffffff */
-void dDlst_window_c::setViewPort(f32, f32, f32, f32, f32, f32) {
-    /* Nonmatching */
+void dDlst_window_c::setViewPort(f32 x, f32 y, f32 w, f32 h, f32 n, f32 f) {
+    mViewport.mXOrig = x;
+    mViewport.mYOrig = y;
+    mViewport.mWidth = w;
+    mViewport.mHeight = h;
+    mViewport.mNearZ = n;
+    mViewport.mFarZ = f;
 }
 
 /* 800804C0-800804D4       .text setScissor__14dDlst_window_cFffff */
-void dDlst_window_c::setScissor(f32, f32, f32, f32) {
-    /* Nonmatching */
+void dDlst_window_c::setScissor(f32 x, f32 y, f32 w, f32 h) {
+    mViewport.mScissor.mXOrig = x;
+    mViewport.mScissor.mYOrig = y;
+    mViewport.mScissor.mWidth = w;
+    mViewport.mScissor.mHeight = h;
 }
 
 /* 800804D4-80080694       .text draw__13dDlst_2DTri_cFv */
@@ -86,31 +98,6 @@ void dDlst_2D_c::draw() {
     /* Nonmatching */
 }
 
-/* 80082264-80082274       .text init__8cM_rnd_cFiii */
-void cM_rnd_c::init(int, int, int) {
-    /* Nonmatching */
-}
-
-/* 80082274-80082368       .text get__8cM_rnd_cFv */
-void cM_rnd_c::get() {
-    /* Nonmatching */
-}
-
-/* 80082368-800823A0       .text getF__8cM_rnd_cFf */
-void cM_rnd_c::getF(f32) {
-    /* Nonmatching */
-}
-
-/* 800823A0-800823E8       .text getFX__8cM_rnd_cFf */
-void cM_rnd_c::getFX(f32) {
-    /* Nonmatching */
-}
-
-/* 800823E8-80082424       .text getValue__8cM_rnd_cFff */
-void cM_rnd_c::getValue(f32, f32) {
-    /* Nonmatching */
-}
-
 /* 80082424-80082794       .text draw__18dDlst_effectLine_cFv */
 void dDlst_effectLine_c::draw() {
     /* Nonmatching */
@@ -122,12 +109,12 @@ void dDlst_effectLine_c::update(cXyz&, _GXColor&, u16, u16, u16, u16, f32, f32, 
 }
 
 /* 80082828-80082838       .text set__22dDlst_alphaModelData_cFUcPA4_fUc */
-void dDlst_alphaModelData_c::set(u8, f32(*)[4], u8) {
+void dDlst_alphaModelData_c::set(u8, Mtx, u8) {
     /* Nonmatching */
 }
 
 /* 80082838-80082E44       .text draw__22dDlst_alphaModelData_cFPA4_f */
-void dDlst_alphaModelData_c::draw(f32(*)[4]) {
+void dDlst_alphaModelData_c::draw(Mtx) {
     /* Nonmatching */
 }
 
@@ -137,7 +124,7 @@ dDlst_alphaModel_c::dDlst_alphaModel_c() {
 }
 
 /* 80082E58-80082EFC       .text create__18dDlst_alphaModel_cFi */
-void dDlst_alphaModel_c::create(int) {
+dDlst_alphaModel_c * dDlst_alphaModel_c::create(int) {
     /* Nonmatching */
 }
 
@@ -152,12 +139,12 @@ dDlst_alphaModelData_c::dDlst_alphaModelData_c() {
 }
 
 /* 80082F3C-80082F9C       .text set__18dDlst_alphaModel_cFUcPA4_fUc */
-void dDlst_alphaModel_c::set(u8, f32(*)[4], u8) {
+BOOL dDlst_alphaModel_c::set(u8 type, Mtx mtx, u8 alpha) {
     /* Nonmatching */
 }
 
 /* 80082F9C-80083064       .text draw__18dDlst_alphaModel_cFPA4_f */
-void dDlst_alphaModel_c::draw(f32(*)[4]) {
+void dDlst_alphaModel_c::draw(Mtx) {
     /* Nonmatching */
 }
 
@@ -167,12 +154,12 @@ void dDlst_alphaModelPacket::draw() {
 }
 
 /* 800832C4-800833CC       .text set__18dDlst_shadowPoly_cFP10cBgD_Vtx_tUsUsUsP8cM3dGPla */
-void dDlst_shadowPoly_c::set(cBgD_Vtx_t*, u16, u16, u16, cM3dGPla*) {
+int dDlst_shadowPoly_c::set(cBgD_Vtx_t*, u16, u16, u16, cM3dGPla*) {
     /* Nonmatching */
 }
 
 /* 800833CC-800834A4       .text set__18dDlst_shadowPoly_cFR4cXyzR4cXyzR4cXyz */
-void dDlst_shadowPoly_c::set(cXyz&, cXyz&, cXyz&) {
+int dDlst_shadowPoly_c::set(cXyz&, cXyz&, cXyz&) {
     /* Nonmatching */
 }
 
@@ -181,33 +168,34 @@ void dDlst_shadowPoly_c::draw() {
     /* Nonmatching */
 }
 
-/* 80083568-80083608       .text __dt__18dDlst_shadowReal_cFv */
-dDlst_shadowReal_c::~dDlst_shadowReal_c() {
-    /* Nonmatching */
-}
-
-/* 80083608-80083668       .text __dt__17dDlst_shadowTri_cFv */
-dDlst_shadowTri_c::~dDlst_shadowTri_c() {
-    /* Nonmatching */
-}
-
-/* 80083668-800836E0       .text J3DDrawBuffer__create__FUl */
-void J3DDrawBuffer__create__FUl {
-    /* Nonmatching */
-}
-
 /* 800836E0-800837F0       .text init__18dDlst_shadowReal_cFv */
 void dDlst_shadowReal_c::init() {
-    /* Nonmatching */
+    u32 texDataSize = GXGetTexBufferSize(0x80, 0x80, GX_TF_I4, GX_FALSE, 0);
+    mpTexData = new(0x20) u8[texDataSize];
+
+    GXInitTexObj(&mTexObj, mpTexData, 0x80, 0x80, GX_TF_I4, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(&mTexObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_ANISO_1);
+
+    mpCallBack = new J3DCallBackPacket();
+    mpDrawBuffer = new J3DDrawBuffer();
+    mpDrawBuffer->setInvalidSort();
 }
 
 /* 800837F0-80083850       .text reset__18dDlst_shadowReal_cFv */
 void dDlst_shadowReal_c::reset() {
-    /* Nonmatching */
+    if (mState == 1) {
+        mState = 2;
+    } else {
+        mState = 0;
+        field_0x1 = -1;
+    }
+
+    mpDrawBuffer->frameInit();
+    mModelNum = 0;
 }
 
 /* 80083850-8008398C       .text imageDraw__18dDlst_shadowReal_cFPA4_f */
-void dDlst_shadowReal_c::imageDraw(f32(*)[4]) {
+void dDlst_shadowReal_c::imageDraw(Mtx) {
     /* Nonmatching */
 }
 
@@ -231,34 +219,34 @@ void realPolygonCheck(cXyz*, f32, f32, cXyz*, dDlst_shadowPoly_c*) {
     /* Nonmatching */
 }
 
-/* 800840B0-80084138       .text __dt__14ShdwDrawPoly_cFv */
-ShdwDrawPoly_c::~ShdwDrawPoly_c() {
-    /* Nonmatching */
-}
-
 /* 80084138-800841B0       .text __dt__13cBgS_ShdwDrawFv */
 cBgS_ShdwDraw::~cBgS_ShdwDraw() {
     /* Nonmatching */
 }
 
 /* 800841B0-8008450C       .text setShadowRealMtx__FPA4_fPA4_fPA4_fP4cXyzP4cXyzffP18dDlst_shadowPoly_cf */
-void setShadowRealMtx(f32(*)[4], f32(*)[4], f32(*)[4], cXyz*, cXyz*, f32, f32, dDlst_shadowPoly_c*, f32) {
+void setShadowRealMtx(Mtx, Mtx, Mtx, cXyz*, cXyz*, f32, f32, dDlst_shadowPoly_c*, f32) {
     /* Nonmatching */
 }
 
 /* 8008450C-800846C8       .text set__18dDlst_shadowReal_cFUlScP8J3DModelP4cXyzffP12dKy_tevstr_c */
-void dDlst_shadowReal_c::set(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*) {
+u32 dDlst_shadowReal_c::set(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*) {
     /* Nonmatching */
 }
 
 /* 800846C8-80084844       .text set2__18dDlst_shadowReal_cFUlScP8J3DModelP4cXyzffP12dKy_tevstr_c */
-void dDlst_shadowReal_c::set2(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*) {
+u32 dDlst_shadowReal_c::set2(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*) {
     /* Nonmatching */
 }
 
 /* 80084844-800848E8       .text add__18dDlst_shadowReal_cFP8J3DModel */
-void dDlst_shadowReal_c::add(J3DModel*) {
-    /* Nonmatching */
+bool dDlst_shadowReal_c::add(J3DModel* model) {
+    if (mModelNum == 0 || model == NULL)
+        return false;
+
+    JUT_ASSERT(0xfe0, mModelNum < MODEL_MAX);
+    mpModels[mModelNum++] = model;
+    return true;
 }
 
 /* 800848E8-80084AC8       .text draw__20dDlst_shadowSimple_cFv */
@@ -282,32 +270,32 @@ void dDlst_shadowControl_c::reset() {
 }
 
 /* 80084DEC-80084EF0       .text imageDraw__21dDlst_shadowControl_cFPA4_f */
-void dDlst_shadowControl_c::imageDraw(f32(*)[4]) {
+void dDlst_shadowControl_c::imageDraw(Mtx) {
     /* Nonmatching */
 }
 
 /* 80084EF0-800850D4       .text draw__21dDlst_shadowControl_cFPA4_f */
-void dDlst_shadowControl_c::draw(f32(*)[4]) {
+void dDlst_shadowControl_c::draw(Mtx) {
     /* Nonmatching */
 }
 
 /* 800850D4-80085170       .text setReal__21dDlst_shadowControl_cFUlScP8J3DModelP4cXyzffP12dKy_tevstr_c */
-void dDlst_shadowControl_c::setReal(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*) {
+int dDlst_shadowControl_c::setReal(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*) {
     /* Nonmatching */
 }
 
 /* 80085170-8008520C       .text setReal2__21dDlst_shadowControl_cFUlScP8J3DModelP4cXyzffP12dKy_tevstr_c */
-void dDlst_shadowControl_c::setReal2(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*) {
+int dDlst_shadowControl_c::setReal2(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*) {
     /* Nonmatching */
 }
 
 /* 8008520C-80085274       .text addReal__21dDlst_shadowControl_cFUlP8J3DModel */
-void dDlst_shadowControl_c::addReal(u32, J3DModel*) {
+bool dDlst_shadowControl_c::addReal(u32, J3DModel*) {
     /* Nonmatching */
 }
 
 /* 80085274-800852D8       .text setSimple__21dDlst_shadowControl_cFP4cXyzffP4cXyzsfP9_GXTexObj */
-void dDlst_shadowControl_c::setSimple(cXyz*, f32, f32, cXyz*, s16, f32, _GXTexObj*) {
+int dDlst_shadowControl_c::setSimple(cXyz*, f32, f32, cXyz*, s16, f32, _GXTexObj*) {
     /* Nonmatching */
 }
 
@@ -332,7 +320,7 @@ void mirrorPolygonCheck(cXyz*, cXyz*, f32, dDlst_shadowPoly_c*) {
 }
 
 /* 80085808-800859DC       .text update__18dDlst_mirrorPacketFPA4_fUcf */
-void dDlst_mirrorPacket::update(f32(*)[4], u8, f32) {
+void dDlst_mirrorPacket::update(Mtx, u8, f32) {
     /* Nonmatching */
 }
 
@@ -347,7 +335,7 @@ void dDlst_alphaInvVolPacket::draw() {
 }
 
 /* 80085BBC-80085BFC       .text newData__13dDlst_peekZ_cFssPUl */
-void dDlst_peekZ_c::newData(s16, s16, u32*) {
+int dDlst_peekZ_c::newData(s16, s16, u32*) {
     /* Nonmatching */
 }
 
@@ -361,44 +349,57 @@ dDlst_list_c::dDlst_list_c() {
     /* Nonmatching */
 }
 
-/* 80085D74-80085DA4       .text __ct__26mDoExt_3DlineMatSortPacketFv */
-mDoExt_3DlineMatSortPacket::mDoExt_3DlineMatSortPacket() {
-    /* Nonmatching */
-}
-
-/* 80085DA4-80085E18       .text __ct__18dDlst_shadowReal_cFv */
-dDlst_shadowReal_c::dDlst_shadowReal_c() {
-    /* Nonmatching */
-}
-
-/* 80085E18-80085E9C       .text __dt__22dDlst_shadowRealPoly_cFv */
-dDlst_shadowRealPoly_c::~dDlst_shadowRealPoly_c() {
-    /* Nonmatching */
-}
-
-/* 80085E9C-80085EE4       .text __ct__17dDlst_shadowTri_cFv */
-dDlst_shadowTri_c::dDlst_shadowTri_c() {
-    /* Nonmatching */
-}
-
-/* 80085EE4-80085F2C       .text __dt__18dDlst_shadowPoly_cFv */
-dDlst_shadowPoly_c::~dDlst_shadowPoly_c() {
-    /* Nonmatching */
-}
-
-/* 80085F2C-80085F68       .text __dt__20dDlst_shadowSimple_cFv */
-dDlst_shadowSimple_c::~dDlst_shadowSimple_c() {
-    /* Nonmatching */
-}
-
-/* 80085F68-80085F6C       .text __ct__20dDlst_shadowSimple_cFv */
-dDlst_shadowSimple_c::dDlst_shadowSimple_c() {
-    /* Nonmatching */
+static J3DDrawBuffer * J3DDrawBuffer__create(u32 size) {
+    return new J3DDrawBuffer(size);
 }
 
 /* 80085F6C-800861F4       .text init__12dDlst_list_cFv */
-void dDlst_list_c::init() {
-    /* Nonmatching */
+bool dDlst_list_c::init() {
+    mpOpaListSky = J3DDrawBuffer__create(0x20);
+    mpXluListSky = J3DDrawBuffer__create(0x20);
+    mpOpaListP0 = J3DDrawBuffer__create(1);
+    mpOpaListP1 = J3DDrawBuffer__create(0x20);
+    mpXluListP1 = J3DDrawBuffer__create(0x20);
+    mpOpaListBG = J3DDrawBuffer__create(0x80);
+    mpXluListBG = J3DDrawBuffer__create(0x80);
+    mpOpaList = J3DDrawBuffer__create(0x100);
+    mpXluList = J3DDrawBuffer__create(0x100);
+    mpOpaListFilter = J3DDrawBuffer__create(0x20);
+    mpOpaListMaskOff = J3DDrawBuffer__create(0x20);
+    mpXluListMaskOff = J3DDrawBuffer__create(0x100);
+    mpOpaListInvisible = J3DDrawBuffer__create(0x20);
+    mpXluListInvisible = J3DDrawBuffer__create(0x20);
+    mpOpaList2D = J3DDrawBuffer__create(1);
+
+    if (mpOpaListSky == NULL || mpXluListSky == NULL || mpOpaListP0 == NULL || mpOpaListP1 == NULL || mpXluListP1 == NULL || mpOpaListBG == NULL || mpXluListBG == NULL || mpOpaList == NULL || mpXluList == NULL || mpOpaListFilter == NULL || mpOpaListMaskOff == NULL || mpXluListMaskOff == NULL || mpOpaListInvisible == NULL || mpXluListInvisible == NULL || mpOpaList2D == NULL)
+        return false;
+
+    mpOpaListSky->setNonSort();
+    mpXluListSky->setNonSort();
+    mpOpaListP0->setNonSort();
+    mpOpaListP1->setNonSort();
+    mpXluListP1->setNonSort();
+    mpXluListBG->setNonSort();
+    mpXluList->setZSort();
+    mpOpaListFilter->setZSort();
+    mpXluListMaskOff->setZSort();
+    mpXluListInvisible->setZSort();
+    mpOpaList2D->setNonSort();
+    setOpaList();
+    setXluList();
+    field_0x4c = &field_0x3c[0];
+    mp2DOpaTop = &mp2DOpaTopArr[0];
+    mp2DOpa = &mp2DOpaArr[0];
+    mp2DXlu = &mp2DXluArr[0];
+    mShadowControl.init();
+    mpAlphaModel = dDlst_alphaModel_c::create(0x40);
+    mpSpotModel = dDlst_alphaModel_c::create(0x08);
+    mpLightModel = dDlst_alphaModel_c::create(0x10);
+
+    if (mpAlphaModel == NULL || mpSpotModel == NULL || mpLightModel == NULL)
+        return false;
+
+    return true;
 }
 
 /* 800861F4-80086368       .text __dt__12dDlst_list_cFv */
@@ -408,22 +409,64 @@ dDlst_list_c::~dDlst_list_c() {
 
 /* 80086368-80086490       .text reset__12dDlst_list_cFv */
 void dDlst_list_c::reset() {
-    /* Nonmatching */
+    mpOpaListSky->frameInit();
+    mpXluListSky->frameInit();
+    mpOpaListP0->frameInit();
+    mpOpaListP1->frameInit();
+    mpXluListP1->frameInit();
+    mpOpaListBG->frameInit();
+    mpXluListBG->frameInit();
+    mpOpaList->frameInit();
+    mpXluList->frameInit();
+    mpOpaListFilter->frameInit();
+    mpOpaListMaskOff->frameInit();
+    mpXluListMaskOff->frameInit();
+    mpOpaListInvisible->frameInit();
+    mpXluListInvisible->frameInit();
+    mpOpaList2D->frameInit();
+    setOpaList();
+    setXluList();
+    field_0x4c = &field_0x3c[0];
+    mp2DOpaTop = &mp2DOpaTopArr[0];
+    mp2DOpa = &mp2DOpaArr[0];
+    mp2DXlu = &mp2DXluArr[0];
+    g_dComIfG_gameInfo.drawlist.mpAlphaModel->mNum = 0;
+    g_dComIfG_gameInfo.drawlist.mpSpotModel->mNum = 0;
+    g_dComIfG_gameInfo.drawlist.mpLightModel->mNum = 0;
+    mShadowControl.reset();
+    for (u32 i = 0; i < ARRAY_SIZE(m3DLineMatSortPacket); i++)
+        m3DLineMatSortPacket[i].setMat(NULL);
 }
 
 /* 80086490-80086540       .text entryZSortXluDrawList__12dDlst_list_cFP13J3DDrawBufferP9J3DPacketR4cXyz */
-void dDlst_list_c::entryZSortXluDrawList(J3DDrawBuffer*, J3DPacket*, cXyz&) {
+void dDlst_list_c::entryZSortXluDrawList(J3DDrawBuffer* pBuffer, J3DPacket* pPacket, cXyz& pos) {
     /* Nonmatching */
+    f32 z = -J3DCalcZValue(j3dSys.getViewMtx(), pos);
+    u16 idx;
+    if (z <= 40.05859) {
+        idx = 0;
+    } else if (z >= 9960.941f) {
+        idx = 0xFF;
+    } else {
+        idx = z / 39.05859;
+    }
+    pBuffer->entryImm(pPacket, 0xFF - z);
 }
 
 /* 80086540-80086570       .text set__12dDlst_list_cFRPP12dDlst_base_cRPP12dDlst_base_cP12dDlst_base_c */
-void dDlst_list_c::set(dDlst_base_c**&, dDlst_base_c**&, dDlst_base_c*) {
-    /* Nonmatching */
+bool dDlst_list_c::set(dDlst_base_c**& pList, dDlst_base_c**& pEnd, dDlst_base_c* pItem) {
+    if (pList >= pEnd)
+        return false;
+
+    *pList = pItem;
+    pList++;
+    return true;
 }
 
 /* 80086570-800865C8       .text draw__12dDlst_list_cFPP12dDlst_base_cPP12dDlst_base_c */
-void dDlst_list_c::draw(dDlst_base_c**, dDlst_base_c**) {
-    /* Nonmatching */
+void dDlst_list_c::draw(dDlst_base_c** pList, dDlst_base_c** pEnd) {
+    for (; pList < pEnd; pList++)
+        (*pList)->draw();
 }
 
 /* 800865C8-800866C8       .text wipeIn__12dDlst_list_cFfR8_GXColor */
@@ -432,8 +475,8 @@ void dDlst_list_c::wipeIn(f32, _GXColor&) {
 }
 
 /* 800866C8-800866F0       .text wipeIn__12dDlst_list_cFf */
-void dDlst_list_c::wipeIn(f32) {
-    /* Nonmatching */
+void dDlst_list_c::wipeIn(f32 time) {
+    wipeIn(-time, g_blackColor);
 }
 
 /* 800866F0-80086790       .text calcWipe__12dDlst_list_cFv */
@@ -446,77 +489,12 @@ void dDlst_texSpecmapST(const cXyz*, const dKy_tevstr_c*, J3DModelData*, f32) {
     /* Nonmatching */
 }
 
-/* 8008696C-800869C8       .text __dt__23dDlst_alphaInvVolPacketFv */
-dDlst_alphaInvVolPacket::~dDlst_alphaInvVolPacket() {
-    /* Nonmatching */
-}
-
-/* 800869C8-80086A24       .text __dt__20dDlst_alphaVolPacketFv */
-dDlst_alphaVolPacket::~dDlst_alphaVolPacket() {
-    /* Nonmatching */
-}
-
-/* 80086A24-80086AD0       .text __dt__18dDlst_mirrorPacketFv */
-dDlst_mirrorPacket::~dDlst_mirrorPacket() {
-    /* Nonmatching */
-}
-
 /* 80086AD0-80086AD8       .text getTri__22dDlst_shadowRealPoly_cFv */
-void dDlst_shadowRealPoly_c::getTri() {
-    /* Nonmatching */
+dDlst_shadowTri_c * dDlst_shadowRealPoly_c::getTri() {
+    return mShadowTri;
 }
 
 /* 80086AD8-80086AE0       .text getTriMax__22dDlst_shadowRealPoly_cFv */
-void dDlst_shadowRealPoly_c::getTriMax() {
-    /* Nonmatching */
-}
-
-/* 80086AE0-80086B3C       .text __dt__22dDlst_alphaModelPacketFv */
-dDlst_alphaModelPacket::~dDlst_alphaModelPacket() {
-    /* Nonmatching */
-}
-
-/* 80086B3C-80086B98       .text __dt__18dDlst_effectLine_cFv */
-dDlst_effectLine_c::~dDlst_effectLine_c() {
-    /* Nonmatching */
-}
-
-/* 80086B98-80086C10       .text __dt__10dDlst_2D_cFv */
-dDlst_2D_c::~dDlst_2D_c() {
-    /* Nonmatching */
-}
-
-/* 80086C10-80086C6C       .text __dt__12dDlst_2DMt_cFv */
-dDlst_2DMt_c::~dDlst_2DMt_c() {
-    /* Nonmatching */
-}
-
-/* 80086C6C-80086CC8       .text __dt__11dDlst_2Dm_cFv */
-dDlst_2Dm_c::~dDlst_2Dm_c() {
-    /* Nonmatching */
-}
-
-/* 80086CC8-80086D24       .text __dt__11dDlst_2DM_cFv */
-dDlst_2DM_c::~dDlst_2DM_c() {
-    /* Nonmatching */
-}
-
-/* 80086D24-80086D80       .text __dt__12dDlst_2DT2_cFv */
-dDlst_2DT2_c::~dDlst_2DT2_c() {
-    /* Nonmatching */
-}
-
-/* 80086D80-80086DDC       .text __dt__11dDlst_2DT_cFv */
-dDlst_2DT_c::~dDlst_2DT_c() {
-    /* Nonmatching */
-}
-
-/* 80086DDC-80086E38       .text __dt__15dDlst_2DPoint_cFv */
-dDlst_2DPoint_c::~dDlst_2DPoint_c() {
-    /* Nonmatching */
-}
-
-/* 80086E38-80086E94       .text __dt__13dDlst_2DTri_cFv */
-dDlst_2DTri_c::~dDlst_2DTri_c() {
-    /* Nonmatching */
+s32 dDlst_shadowRealPoly_c::getTriMax() {
+    return ARRAY_SIZE(mShadowTri);
 }

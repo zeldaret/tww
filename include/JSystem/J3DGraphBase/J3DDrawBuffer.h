@@ -31,6 +31,7 @@ public:
     };
 
     J3DDrawBuffer() { initialize(); }
+    J3DDrawBuffer(u32 size) { initialize(); allocBuffer(size); }
     ~J3DDrawBuffer();
     void initialize();
     J3DError allocBuffer(u32);
@@ -49,8 +50,9 @@ public:
     u32 getEntryTableSize() { return mBufSize; }
 
     inline void calcZRatio();
-    void setNonSort() { mSortType = 5; }
-    void setZSort() { mSortType = 2; }
+    void setNonSort() { mSortType = (u32)SORT_NON; }
+    void setZSort() { mSortType = (u32)SORT_Z; }
+    void setInvalidSort() { mSortType = (u32)SORT_INVALID; }
     void setZMtx(MtxP mtx) { mpZMtx = mtx; }
     void setCallBackPacket(J3DCallBackPacket* pPacket);
 

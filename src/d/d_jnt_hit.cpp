@@ -12,7 +12,7 @@ JntHit_HIO_c::JntHit_HIO_c() {
 }
 
 /* 80060C44-80060EC4       .text CreateInit__8JntHit_cFv */
-void JntHit_c::CreateInit() {
+BOOL JntHit_c::CreateInit() {
     /* Nonmatching */
 }
 
@@ -43,7 +43,17 @@ s32 JntHit_c::searchJntHitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*) {
 
 /* 800627DC-8006286C       .text JntHit_create__FP8J3DModelP16__jnt_hit_data_cs */
 JntHit_c* JntHit_create(J3DModel* model, __jnt_hit_data_c* jntHitData, s16 hitDataCount) {
-    /* Nonmatching */
+    JntHit_c * pJntHit = new JntHit_c();
+
+    if (pJntHit != NULL) {
+        pJntHit->mpHitData = jntHitData;
+        pJntHit->mpModel = model;
+        pJntHit->mHitDataCount = hitDataCount;
+        if (pJntHit->CreateInit())
+            return pJntHit;
+    }
+
+    return NULL;
 }
 
 /* 8006286C-800628B4       .text __dt__12JntHit_HIO_cFv */

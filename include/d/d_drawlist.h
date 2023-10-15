@@ -8,6 +8,7 @@
 #include "m_Do/m_Do_ext.h"
 
 class ResTIMG;
+class cM3dGPla;
 
 class dDlst_base_c {
 public:
@@ -19,6 +20,8 @@ public:
 class dDlst_2D_c : public dDlst_base_c {
 public:
     dDlst_2D_c(ResTIMG * pTIMG, s16 w, s16 h, u8 alpha);
+    virtual void draw();
+
     J2DPicture * getPicture() { return &mPicture; }
     void setAlpha(u8 alpha) { mAlpha = alpha; }
 
@@ -28,6 +31,52 @@ protected:
     /* 0x12A */ s16 mHeight;
     /* 0x12C */ u8 mAlpha;
     /* 0x12D */ u8 field_0x12e[3];
+};
+
+class dDlst_2DTri_c : public dDlst_base_c {
+public:
+    virtual void draw();
+};
+
+class dDlst_2DPoint_c : public dDlst_base_c {
+public:
+    virtual void draw();
+};
+
+class dDlst_2DT_c : public dDlst_base_c {
+public:
+    virtual void draw();
+};
+
+class dDlst_2DT2_c : public dDlst_base_c {
+public:
+    void init(ResTIMG* pTimg, f32, f32, f32, f32, u8, u8, u8, f32, f32);
+    virtual void draw();
+};
+
+class dDlst_2DM_c : public dDlst_base_c {
+public:
+    virtual void draw();
+};
+
+class dDlst_2Dm_c : public dDlst_base_c {
+public:
+    void init(ResTIMG*, ResTIMG*, f32, f32);
+    void setPos(s16, s16, s16, s16);
+    void setScale(f32, f32);
+    void setScroll(int, s16, s16);
+    virtual void draw();
+};
+
+class dDlst_2DMt_c : public dDlst_base_c {
+public:
+    virtual void draw();
+};
+
+class dDlst_effectLine_c : public dDlst_base_c {
+public:
+    void update(cXyz&, GXColor&, u16, u16, u16, u16, f32, f32, f32, f32);
+    virtual void draw();
 };
 
 class dDlst_window_c {
@@ -69,7 +118,8 @@ class dDlst_shadowSimple_c {
 public:
     void draw();
     void set(cXyz*, f32, f32, cXyz*, s16, f32, GXTexObj*);
-    dDlst_shadowSimple_c();
+    dDlst_shadowSimple_c() {}
+    ~dDlst_shadowSimple_c() {}
 
     /* 0x00 */ u8 mAlpha;
     /* 0x04 */ GXTexObj* mpTexObj;
@@ -91,13 +141,14 @@ class dDlst_shadowPoly_c {
 public:
     dDlst_shadowPoly_c() { reset(); }
 
+    virtual dDlst_shadowTri_c* getTri() = 0;
+    virtual s32 getTriMax() = 0;
+
     void reset() { mCount = 0; }
 
     int set(cBgD_Vtx_t*, u16, u16, u16, cM3dGPla*);
+    int set(cXyz&, cXyz&, cXyz&);
     void draw();
-
-    virtual dDlst_shadowTri_c* getTri() = 0;
-    virtual s32 getTriMax() = 0;
 
     /* 0x4 */ u16 mCount;
     /* 0x6 */ u8 field_0x6[2];
@@ -118,8 +169,10 @@ public:
     void reset();
     void imageDraw(f32 (*)[4]);
     void draw();
-    u32 set(u32, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*, f32, f32);
+    u32 set(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*);
+    u32 set2(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*);
     bool add(J3DModel*);
+    void init();
     ~dDlst_shadowReal_c() {}
     dDlst_shadowReal_c() { mState = 0; }
 
@@ -127,21 +180,23 @@ public:
     bool isUse() { return mState == 1; }
     bool checkKey(u32 i_key) { return mKey == i_key; }
 
+    enum { MODEL_MAX = 0x1A };
+
 private:
     /* 0x0000 */ u8 mState;
     /* 0x0001 */ u8 field_0x1;
-    /* 0x0002 */ u8 mModelNum;
-    /* 0x0003 */ u8 field_0x3;
+    /* 0x0002 */ u8 mAlpha;
+    /* 0x0003 */ u8 mModelNum;
     /* 0x0004 */ u32 mKey;
     /* 0x0008 */ Mtx mViewMtx;
     /* 0x0038 */ Mtx44 mRenderProjMtx;
     /* 0x0078 */ Mtx mReceiverProjMtx;
     /* 0x00A8 */ void* mpTexData;
     /* 0x00AC */ dDlst_shadowRealPoly_c mShadowRealPoly;
-    /* 0x24B4 */ GXTexObj mTexData;
+    /* 0x24B4 */ GXTexObj mTexObj;
     /* 0x24D4 */ J3DDrawBuffer* mpDrawBuffer;
-    /* 0x24D8 */ J3DCallBackPacket* mpPacket;
-    /* 0x24DC */ J3DModel* mpModels[26];
+    /* 0x24D8 */ J3DCallBackPacket* mpCallBack;
+    /* 0x24DC */ J3DModel* mpModels[MODEL_MAX];
 };  // Size: 0x2544
 
 class dDlst_shadowControl_c {
@@ -172,6 +227,10 @@ STATIC_ASSERT(sizeof(dDlst_shadowControl_c) == 0x15E28);
 
 class dDlst_mirrorPacket : public J3DPacket {
 public:
+    void init(ResTIMG*);
+    void update(Mtx, u8, f32);
+    virtual void draw();
+
     /* 0x0010 */ u8 field_0x0010[0x0040 - 0x0010];
     /* 0x0040 */ Mtx mPosMtx;
     /* 0x0070 */ u8 field_0x0070[0x0080 - 0x0070];
@@ -185,7 +244,13 @@ struct view_port_class;
 struct view_class;
 struct camera_class;
 
-struct dDlst_alphaModelData_c;
+struct dDlst_alphaModelData_c {
+public:
+    dDlst_alphaModelData_c();
+    ~dDlst_alphaModelData_c();
+    void set(u8, Mtx, u8);
+    void draw(Mtx);
+};
 
 struct dDlst_alphaModel_c {
 public:
@@ -199,8 +264,8 @@ public:
     };
 
     dDlst_alphaModel_c();
-    void create(int);
-    void set(u8 type, Mtx mtx, u8 alpha);
+    static dDlst_alphaModel_c * create(int);
+    BOOL set(u8 type, Mtx mtx, u8 alpha);
     void draw(MtxP);
     s32 getNum() { return mNum; }
 
@@ -211,53 +276,69 @@ public:
     /* 0x08 */ dDlst_alphaModelData_c* mpData;
 };  // Size: 0xC
 
+struct dDlst_alphaModelPacket : public J3DPacket {
+public:
+    virtual void draw();
+};
+
+struct dDlst_alphaVolPacket : public J3DPacket {
+public:
+    virtual void draw();
+};
+
+struct dDlst_alphaInvVolPacket : public J3DPacket {
+public:
+    virtual void draw();
+};
+
 class dDlst_list_c {
 public:
     dDlst_list_c();
     ~dDlst_list_c();
 
-    void init();
+    bool init();
     void reset();
     void entryZSortXluDrawList(J3DDrawBuffer*, J3DPacket*, cXyz&);
-    void set(dDlst_base_c**&, dDlst_base_c**&, dDlst_base_c*);
+    bool set(dDlst_base_c**&, dDlst_base_c**&, dDlst_base_c*);
     void draw(dDlst_base_c**, dDlst_base_c**);
-    void wipeIn(f32, GXColor&);
-    void wipeIn(f32);
+    static void wipeIn(f32, GXColor&);
+    static void wipeIn(f32);
     void calcWipe();
 
-    J3DDrawBuffer* getOpaListFilter() { return mpWetherFxBuffer; }
+    J3DDrawBuffer* getOpaListFilter() { return mpOpaListFilter; }
 
     void setXluDrawList(J3DDrawBuffer* buffer) { j3dSys.setDrawBuffer(buffer, XLU_BUFFER); }
     void setOpaDrawList(J3DDrawBuffer* buffer) { j3dSys.setDrawBuffer(buffer, OPA_BUFFER); }
-    void setOpaList() { setOpaDrawList(mpBufInvisibleModelOpa); }
-    void setXluList() { setXluDrawList(mpBufInvisibleModelXlu); }
-    void setOpaListInvisible() { setOpaDrawList(field_0x00030); }
-    void setXluListInvisible() { setXluDrawList(field_0x00034); }
-    void setOpaListMaskOff() { setOpaDrawList(mpBufInvisibleModelMaskOffOpa); }
-    void setXluListMaskOff() { setXluDrawList(mpBufInvisibleModelMaskOffXlu); }
-    void setOpaListSky() { setOpaDrawList(mpBufSkyOpa); }
-    void setXluListSky() { setXluDrawList(mpBufSkyXlu); }
-    void setOpaListP0() { setOpaDrawList(mpLinkBuf); }
-    void setXluListP0() { setXluDrawList(mpLinkBuf); }
-    void setOpaListP1() { setOpaDrawList(field_0x0000c); }
-    void setXluListP1() { setXluDrawList(field_0x00010); }
-    void setOpaListBG() { setOpaDrawList(mpBufWorldOpa); }
-    void setXluListBG() { setXluDrawList(mpBufWorldXlu); }
-    void setOpaListFilter() { setOpaDrawList(mpWetherFxBuffer); }
-    void setXluListFilter() { setXluDrawList(mpWetherFxBuffer); }
-    void setOpaList2D() { setOpaDrawList(field_0x00038); }
-    void setXluList2D() { setXluDrawList(field_0x00038); }
+    void setOpaList() { setOpaDrawList(mpOpaList); }
+    void setXluList() { setXluDrawList(mpXluList); }
+    void setOpaListInvisible() { setOpaDrawList(mpOpaListInvisible); }
+    void setXluListInvisible() { setXluDrawList(mpXluListInvisible); }
+    void setOpaListMaskOff() { setOpaDrawList(mpOpaListMaskOff); }
+    void setXluListMaskOff() { setXluDrawList(mpXluListMaskOff); }
+    void setOpaListSky() { setOpaDrawList(mpOpaListSky); }
+    void setXluListSky() { setXluDrawList(mpXluListSky); }
+    void setOpaListP0() { setOpaDrawList(mpOpaListP0); }
+    void setXluListP0() { setXluDrawList(mpOpaListP0); }
+    void setOpaListP1() { setOpaDrawList(mpOpaListP1); }
+    void setXluListP1() { setXluDrawList(mpXluListP1); }
+    void setOpaListBG() { setOpaDrawList(mpOpaListBG); }
+    void setXluListBG() { setXluDrawList(mpXluListBG); }
+    void setOpaListFilter() { setOpaDrawList(mpOpaListFilter); }
+    void setXluListFilter() { setXluDrawList(mpOpaListFilter); }
+    void setOpaList2D() { setOpaDrawList(mpOpaList2D); }
+    void setXluList2D() { setXluDrawList(mpOpaList2D); }
 
-    void entryZSortXluList(J3DPacket* i_packet, cXyz& param_1) {
-        entryZSortXluDrawList(mpBufInvisibleModelXlu, i_packet, param_1);
+    void entryZSortXluList(J3DPacket* i_packet, cXyz& pos) {
+        entryZSortXluDrawList(mpXluList, i_packet, pos);
     }
 
-    void entryZSortXluListMaskOff(J3DPacket* i_packet, cXyz& param_1) {
-        entryZSortXluDrawList(mpBufInvisibleModelMaskOffXlu, i_packet, param_1);
+    void entryZSortXluListMaskOff(J3DPacket* i_packet, cXyz& pos) {
+        entryZSortXluDrawList(mpXluListMaskOff, i_packet, pos);
     }
 
-    void set2DOpa(dDlst_base_c* pList) { set(mp2DOpa, mp2DOpaEnd, pList); }
-    void set2DXlu(dDlst_base_c* pList) { set(mp2DXlu, mp2DXluEnd, pList); }
+    void set2DOpaTop(dDlst_base_c* pItem) { set(mp2DOpaTop, mp2DOpaTopEnd, pItem); }
+    void set2DOpa(dDlst_base_c* pItem) { set(mp2DOpa, mp2DOpaEnd, pItem); }
+    void set2DXlu(dDlst_base_c* pItem) { set(mp2DXlu, mp2DXluEnd, pItem); }
 
     int setSimpleShadow(cXyz* param_0, f32 param_1, f32 param_2, cXyz* param_3, s16 param_4,
                         f32 param_5, _GXTexObj* param_6) {
@@ -283,30 +364,31 @@ public:
 
     static bool mWipe;
 
-    /* 0x00000 */ J3DDrawBuffer* mpBufSkyOpa;
-    /* 0x00004 */ J3DDrawBuffer* mpBufSkyXlu;
-    /* 0x00008 */ J3DDrawBuffer* mpLinkBuf;
-    /* 0x0000C */ J3DDrawBuffer* field_0x0000c;
-    /* 0x00010 */ J3DDrawBuffer* field_0x00010;
-    /* 0x00014 */ J3DDrawBuffer* mpBufWorldOpa;
-    /* 0x00018 */ J3DDrawBuffer* mpBufWorldXlu;
-    /* 0x0001C */ J3DDrawBuffer* mpBufInvisibleModelOpa;
-    /* 0x00020 */ J3DDrawBuffer* mpBufInvisibleModelXlu;
-    /* 0x00024 */ J3DDrawBuffer* mpWetherFxBuffer;
-    /* 0x00028 */ J3DDrawBuffer* mpBufInvisibleModelMaskOffOpa;
-    /* 0x0002C */ J3DDrawBuffer* mpBufInvisibleModelMaskOffXlu;
-    /* 0x00030 */ J3DDrawBuffer* field_0x00030;
-    /* 0x00034 */ J3DDrawBuffer* field_0x00034;
-    /* 0x00038 */ J3DDrawBuffer* field_0x00038;
-    /* 0x0003C */ u8 field_0x0003C[0x00050 - 0x0003C];
-    /* 0x00050 */ void* field_0x00050;
-    /* 0x00054 */ u8 field_0x00054[0x00094 - 0x00054];
-    /* 0x00094 */ dDlst_base_c** field_0x00094;
-    /* 0x00098 */ void* field_0x00098;
-    /* 0x0009C */ dDlst_base_c* mp2DArr[64];
+    /* 0x00000 */ J3DDrawBuffer* mpOpaListSky;
+    /* 0x00004 */ J3DDrawBuffer* mpXluListSky;
+    /* 0x00008 */ J3DDrawBuffer* mpOpaListP0;
+    /* 0x0000C */ J3DDrawBuffer* mpOpaListP1;
+    /* 0x00010 */ J3DDrawBuffer* mpXluListP1;
+    /* 0x00014 */ J3DDrawBuffer* mpOpaListBG;
+    /* 0x00018 */ J3DDrawBuffer* mpXluListBG;
+    /* 0x0001C */ J3DDrawBuffer* mpOpaList;
+    /* 0x00020 */ J3DDrawBuffer* mpXluList;
+    /* 0x00024 */ J3DDrawBuffer* mpOpaListFilter;
+    /* 0x00028 */ J3DDrawBuffer* mpOpaListMaskOff;
+    /* 0x0002C */ J3DDrawBuffer* mpXluListMaskOff;
+    /* 0x00030 */ J3DDrawBuffer* mpOpaListInvisible;
+    /* 0x00034 */ J3DDrawBuffer* mpXluListInvisible;
+    /* 0x00038 */ J3DDrawBuffer* mpOpaList2D;
+    /* 0x0003C */ dDlst_base_c* field_0x3c[4];
+    /* 0x0004C */ dDlst_base_c** field_0x4c;
+    /* 0x00050 */ dDlst_base_c** field_0x50;
+    /* 0x00054 */ dDlst_base_c* mp2DOpaTopArr[16];
+    /* 0x00094 */ dDlst_base_c** mp2DOpaTop;
+    /* 0x00098 */ dDlst_base_c** mp2DOpaTopEnd;
+    /* 0x0009C */ dDlst_base_c* mp2DOpaArr[64];
     /* 0x0019C */ dDlst_base_c** mp2DOpa;
     /* 0x001A0 */ dDlst_base_c** mp2DOpaEnd;
-    /* 0x001A4 */ u8 field_0x001A4[0x00224 - 0x001A4];
+    /* 0x001A4 */ dDlst_base_c* mp2DXluArr[32];
     /* 0x00224 */ dDlst_base_c** mp2DXlu;
     /* 0x00228 */ dDlst_base_c** mp2DXluEnd;
     /* 0x0022C */ dDlst_window_c* mpWindow;

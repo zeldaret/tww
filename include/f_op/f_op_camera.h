@@ -5,6 +5,7 @@
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_phase.h"
 #include "SSystem/SComponent/c_angle.h"
+#include "SSystem/SComponent/c_rnd.h"
 #include "d/d_cam_param.h"
 #include "global.h"
 
@@ -45,12 +46,6 @@ class d2DBSplinePath {
     /* 0x30 */ int mFrameIdx[3];
     /* 0x3C */ u8 m3C[0x40 - 0x3C];
     /* 0x40 */ void* vtbl;
-};
-
-struct cM_rnd_c {
-    /* 0x0 */ int m0;
-    /* 0x4 */ int m4;
-    /* 0x8 */ int m8;
 };
 
 class dCamForcusLine {

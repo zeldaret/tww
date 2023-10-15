@@ -68,7 +68,12 @@ public:
     dCcMassS_Mng();
     virtual ~dCcMassS_Mng() {}
     void Ct();
-    void SetAttr(f32 radius, f32 height, u8 param_2, u8 param_3);
+    void SetAttr(f32 radius, f32 height, u8 param_2, u8 param_3) {
+        mCylAttr.SetR(radius);
+        mCylAttr.SetH(height);
+        field_0x200 = param_2;
+        mResultCamBit = param_3;
+    }
     void Prepare();
     u32 Chk(cXyz* p_xyz, fopAc_ac_c** p_actor, dCcMassS_HitInf* p_hitInf);
     void Clear();

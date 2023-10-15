@@ -12,7 +12,7 @@
 #include "m_Do/m_Do_lib.h"
 #include "JSystem/JKernel/JKRHeap.h"
 
-static u32 now_room;
+static u32 now_room = -1;
 
 /* 8008AA30-8008AB3C       .text vectle_calc__FP10DOUBLE_POSP4cXyz */
 void vectle_calc(DOUBLE_POS* i_pos, cXyz* o_out) {
@@ -202,8 +202,9 @@ void dKyr_rain_init() {
 }
 
 /* 8008D0B4-8008D0DC       .text rain_bg_chk__FP19dKankyo_rain_Packeti */
-void rain_bg_chk(dKankyo_rain_Packet*, int) {
-    /* Nonmatching */
+void rain_bg_chk(dKankyo_rain_Packet* pPkt, int idx) {
+    camera_class * pCamera = g_dComIfG_gameInfo.play.mCameraInfo[0].mpCamera;
+    pPkt->mRainEff[idx].field_0x30 = pCamera->mLookat.mCenter.y + -800.0f;
 }
 
 /* 8008D0DC-8008D53C       .text overhead_bg_chk__Fv */
@@ -236,11 +237,12 @@ void dKyr_snow_init() {
         } else {
             g_env_light.mpSnowPacket->mpTexture = (u8*)dComIfG_getStageRes("Stage", "ak_kazanbai00.bti");
         }
+
+        for (u32 i = 0; i < ARRAY_SIZE(g_env_light.mpSnowPacket->mEff); i++)
+            g_env_light.mpSnowPacket->mEff[i].mStatus = 0;
+        g_env_light.mpSnowPacket->mEffCount = 0;
+        g_env_light.mpSnowPacket->mOldEyePos = pCamera->mLookat.mEye;
     }
-    for (u32 i = 0; i < ARRAY_SIZE(g_env_light.mpSnowPacket->mEff); i++)
-        g_env_light.mpSnowPacket->mEff[i].mStatus = 0;
-    g_env_light.mpSnowPacket->mEffCount = 0;
-    g_env_light.mpSnowPacket->mOldEyePos = pCamera->mLookat.mEye;
 }
 
 /* 8008F23C-8008F9FC       .text dKyr_snow_move__Fv */
@@ -297,12 +299,17 @@ void light_at_hit_check(cXyz*) {
 
 /* 80092310-80092330       .text dKyr_poison_live_check__Fv */
 BOOL dKyr_poison_live_check() {
-    /* Nonmatching */
+    BOOL ret = FALSE;
+    if (g_env_light.mPoisonCount != 0)
+        ret = TRUE;
+    return ret;
 }
 
 /* 80092330-80092448       .text dKyr_poison_light_colision__Fv */
 void dKyr_poison_light_colision() {
     /* Nonmatching */
+    if (!dKyr_poison_live_check())
+        return;
 }
 
 /* 80092448-8009258C       .text poison_init__Fv */
@@ -333,19 +340,20 @@ void vrkumo_move() {
 
 /* 800940D4-80094144       .text dKy_wave_chan_init__Fv */
 void dKy_wave_chan_init() {
+    g_env_light.mWaveChan.mWaveCount = 0;
     g_env_light.mWaveChan.field_0x0 = -1.0f;
     g_env_light.mWaveChan.field_0x4 = 0.0f;
     g_env_light.mWaveChan.field_0x8 = 0.0f;
-    g_env_light.mWaveChan.mWaveSpeed = 0.1f;
+    g_env_light.mWaveChan.mWaveSpeed = 0.3f;
     g_env_light.mWaveChan.mWaveSpawnDist = 3000.0f;
     g_env_light.mWaveChan.mWaveSpawnRadius = 3150.0f;
+    g_env_light.mWaveChan.mWaveReset = 0;
     g_env_light.mWaveChan.mWaveScale = 250.0f;
+    g_env_light.mWaveChan.mWaveScaleBottom = 5.0f;
     g_env_light.mWaveChan.mWaveScaleRand = 0.217f;
     g_env_light.mWaveChan.mWaveCounterSpeedScale = 1.6f;
-    g_env_light.mWaveChan.mWaveScaleBottom = 5.0f;
-    g_env_light.mWaveChan.mWaveCount = 0;
-    g_env_light.mWaveChan.mWaveReset = 0;
     g_env_light.mWaveChan.field_0x2f = 0;
+    g_env_light.mWaveChan.mWaveSpeed = 0.1f;
 }
 
 /* 80094144-8009428C       .text snap_sunmoon_proc__FP4cXyzi */
@@ -466,7 +474,7 @@ void dKyr_drawSibuki(Mtx drawMtx, u8** pImg) {
     }
 
     GXSetClipMode(GX_CLIP_ENABLE);
-    J3DShape::sOldVcdVatCmd = NULL;
+    J3DShape::resetVcdVatCache();
 }
 
 /* 80096D18-800973CC       .text drawPoison__FPA4_fPPUc */

@@ -532,7 +532,7 @@ int dComIfG_resDelete(request_of_phase_process_class* i_phase, const char* i_res
     JUT_ASSERT(1048, i_phase->id != 1);
 
     if (i_phase->id == cPhs_NEXT_e) {
-        dComIfG_deleteObjectResMain(i_resName);
+        dComIfG_deleteObjectRes(i_resName);
         i_phase->id = cPhs_INIT_e;
     }
 
@@ -1079,12 +1079,12 @@ int dComIfGd_setShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 par
     return sid;
 }
 
-static const char * dummy_str[] = {
-    "0 <= cam_id && cam_id < mapc->num",
-    "0 <= arrow_id && arrow_id < mapa->num",
-    "0 <= room_cam_id && room_cam_id < pcam->num",
-    "0 <= arrow_id && arrow_id < parr->num",
-};
+static void dummy() {
+    OSReport("0 <= cam_id && cam_id < mapc->num");
+    OSReport("0 <= arrow_id && arrow_id < mapa->num");
+    OSReport("0 <= room_cam_id && room_cam_id < pcam->num");
+    OSReport("0 <= arrow_id && arrow_id < parr->num");
+}
 
 /* 8005468C-800547BC       .text getSceneList__Fi */
 stage_scls_info_class* getSceneList(int i_no) {
@@ -1205,9 +1205,7 @@ void dComIfGs_setGameStartStage() {
                 room_no = scls_p->mRoom;
                 point = scls_p->mStart;
             }
-        } else if (stage_type == 1 || stage_type == 6 || stage_type == 3 || stage_type == 8 ||
-                   save_tbl == 9)
-        {
+        } else if (stage_type == 1 || stage_type == 6 || stage_type == 3 || stage_type == 8 || save_tbl == 9) {
             stage_scls_info_class* scls_p = getSceneList(0);
             strcpy(stage_name, scls_p->mStage);
             room_no = scls_p->mRoom;
@@ -1226,8 +1224,7 @@ void dComIfGs_setGameStartStage() {
             stage_map_info_class* mapInfo = dComIfGp_getStage().getMapInfo();
             JUT_ASSERT(2362, mapInfo != 0);
 
-            room_no = dStage_mapInfo_GetOceanX(mapInfo) +
-                      (((dStage_mapInfo_GetOceanZ(mapInfo) + 3) * 7) + 4);
+            room_no = 4 + dStage_mapInfo_GetOceanX(mapInfo) + ((dStage_mapInfo_GetOceanZ(mapInfo) + 3) * 7);
             point = 0;
         } else {
             strcpy(stage_name, "sea");

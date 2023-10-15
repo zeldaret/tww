@@ -403,7 +403,7 @@ public:
 
     void reset() { mp3DlineMat = NULL; }
 
-    void setMat(mDoExt_3DlineMat_c*);
+    void setMat(mDoExt_3DlineMat_c* pMat) { mp3DlineMat = pMat; }
     virtual void draw();
     virtual ~mDoExt_3DlineMatSortPacket();
 

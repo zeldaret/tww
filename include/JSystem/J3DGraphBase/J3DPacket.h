@@ -221,6 +221,8 @@ public:
 
 class J3DCallBackPacket : public J3DPacket {
 public:
+    J3DCallBackPacket()
+        : mpCallBack(NULL) {}
     virtual ~J3DCallBackPacket() {}
     virtual void draw();
 
