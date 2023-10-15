@@ -705,11 +705,6 @@ mDoExt_backupMatBlock_c::mDoExt_backupMatBlock_c() {
     /* Nonmatching */
 }
 
-/* 80010F44-8001110C       .text setTevStageInfo__11J3DTevStageFRC15J3DTevStageInfo */
-void J3DTevStage::setTevStageInfo(const J3DTevStageInfo&) {
-    /* Nonmatching */
-}
-
 /* 80011294-80011300       .text create__23mDoExt_backupMaterial_cFUs */
 bool mDoExt_backupMaterial_c::create(u16 param_0) {
     mBackupMatBlock = new mDoExt_backupMatBlock_c[param_0];
