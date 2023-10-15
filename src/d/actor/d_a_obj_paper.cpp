@@ -56,31 +56,33 @@ namespace daObjPaper {
     }
 
     static const dCcD_SrcCyl M_cyl_src = {
-        0,
-        0,
-        0,
-        0,
-        0xFF1DFEFF,
-        0xF,
-        0x79,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        3,
-        0,
-        
-        // Cylinder
-        0.0f, // X
-        0.0f, // Y
-        0.0f, // Z
-        0.0f, // Radius
-        0.0f, // Height
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt Type     */ 0,
+            /* SrcObjAt Atp      */ 0,
+            /* SrcObjAt SPrm     */ 0,
+            /* SrcObjTg Type     */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_LEAF_WIND | AT_TYPE_UNK400000 | AT_TYPE_UNK800000),
+            /* SrcObjTg SPrm     */ 0x0F,
+            /* SrcObjCo SPrm     */ 0x79,
+            /* SrcGObjAt Se      */ 0,
+            /* SrcGObjAt HitMark */ 0,
+            /* SrcGObjAt Spl     */ 0,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt GFlag   */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ 0,
+            /* SrcGObjTg Spl     */ 0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg GFlag   */ 0x03,
+            /* SrcGObjCo GFlag   */ 0,
+        },
+        // cM3dGCylS
+        {
+            /* Center */ 0.0f, 0.0f, 0.0f,
+            /* Radius */ 0.0f,
+            /* Height */ 0.0f,
+        },
     };
 
     enum Act_Mode_e {
@@ -184,7 +186,7 @@ namespace daObjPaper {
                 mAttentionInfo.mPosition.y += attributes[mType].mAttentionOffset;
                 mAttentionInfo.mDistances[1] = attributes[mType].mAttentionDist1;
                 mAttentionInfo.mDistances[3] = attributes[mType].mAttentionDist2;
-                mAttentionInfo.setFlag(0x4000000A);
+                mAttentionInfo.setFlag(fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_READ_e);
 
                 mMsgId = -1;
 

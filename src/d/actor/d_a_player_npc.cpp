@@ -16,7 +16,7 @@ int daPy_npc_c::check_initialRoom() {
         if (mAcch.GetGroundH() == -1000000000.0f || dComIfG_Bgsp()->GetGroundCode(mAcch.m_gnd) == 4) {
             return 0;
         } else {
-           int roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
+            int roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
             if (roomNo < 0 || !dComIfGp_roomControl_checkStatusFlag(roomNo, 0x10)) {
                 return 0;
             } else {

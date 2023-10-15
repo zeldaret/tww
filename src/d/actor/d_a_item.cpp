@@ -1040,7 +1040,7 @@ dCcD_SrcCyl daItem_c::m_cyl_src = {
         /* SrcObjAt Type     */ 0,
         /* SrcObjAt Atp      */ 0,
         /* SrcObjAt SPrm     */ 0,
-        /* SrcObjTg Type     */ 0xFFFFFFFF,
+        /* SrcObjTg Type     */ AT_TYPE_ALL,
         /* SrcObjTg SPrm     */ 0x09,
         /* SrcObjCo SPrm     */ 0x59,
         /* SrcGObjAt Se      */ 0,

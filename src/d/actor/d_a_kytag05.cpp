@@ -111,7 +111,7 @@ static BOOL daKytag05_Execute(kytag05_class* a_this) {
         dKyw_evt_wind_set(0, -0x32C8);
     }
 
-    mDoAud_seStart(0x106A, 0, windPow * 100.0f, 0);
+    mDoAud_seStart(JA_SE_ATM_WIND_VAR, 0, windPow * 100.0f, 0);
     
     return TRUE;
 }

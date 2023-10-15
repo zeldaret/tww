@@ -8,10 +8,10 @@
 class cBgS_GndChk : public cBgS_Chk, public cBgS_PolyInfo {
 public:
     cBgS_GndChk();
-    void SetPos(cXyz const* pos) {
+    void SetPos(cXyz* pos) {
         m_pos = *pos;
     }
-    void SetPos(Vec const*);
+    void SetPos(Vec*);
     void PreCheck();
 
     virtual ~cBgS_GndChk() {}
@@ -19,7 +19,6 @@ public:
     f32 GetNowY() const { return mNowY; }
     void SetNowY(f32 y) { mNowY = y; }
     cXyz* GetPointP() { return &m_pos; }
-    void SetPos(cXyz* pos) { m_pos.set(*pos); }
     u32 GetWallPrecheck() const { return mWallPrecheck; }
     void OffWall() { mFlags &= ~2; }
 

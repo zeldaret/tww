@@ -259,7 +259,7 @@ struct TVec3<f32> {
     }
 
     void setLength(f32 len) {
-         f32 sq = squared();
+        f32 sq = squared();
         if (sq <= FLT_EPSILON * 32.0f) {
             return;
         }

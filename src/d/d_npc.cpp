@@ -1292,29 +1292,31 @@ void dNpc_EventCut_c::cutTalkMsgProc() {
 }
 
 dCcD_SrcCyl dNpc_cyl_src = {
-    0,
-    0,
-    0,
-    0,
-    0xFFFFFFBF, // Tg damage types
-    3,
-    0x75,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    4,
-    0,
-    
-    // Cylinder
-    0.0, // X
-    0.0, // Y
-    0.0, // Z
-    0.0, // Radius
-    0.0, // Height
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt Type     */ 0,
+        /* SrcObjAt Atp      */ 0,
+        /* SrcObjAt SPrm     */ 0,
+        /* SrcObjTg Type     */ ~(AT_TYPE_BOOMERANG),
+        /* SrcObjTg SPrm     */ 0x03,
+        /* SrcObjCo SPrm     */ 0x75,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt GFlag   */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg GFlag   */ 0x04,
+        /* SrcGObjCo GFlag   */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 0.0f,
+        /* Height */ 0.0f,
+    },
 };

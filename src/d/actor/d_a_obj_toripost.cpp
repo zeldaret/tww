@@ -124,31 +124,33 @@ const daObjTpost_c__letter_data daObjTpost_c::m_letter[] = {
     {true,  0x0F77, 0x9E, 0xAF03}
 };
 const dCcD_SrcCyl daObjTpost_c::m_cyl_src = {
-    0,
-    0,
-    0,
-    0,
-    0xFFFFFFBF, // Tg damage types
-    0xF,
-    0x79,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    7,
-    0,
-    
-    // Cylinder
-    0.0, // X
-    0.0, // Y
-    0.0, // Z
-    0.0, // Radius
-    0.0, // Height
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt Type     */ 0,
+        /* SrcObjAt Atp      */ 0,
+        /* SrcObjAt SPrm     */ 0,
+        /* SrcObjTg Type     */ ~(AT_TYPE_BOOMERANG),
+        /* SrcObjTg SPrm     */ 0x0F,
+        /* SrcObjCo SPrm     */ 0x79,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt GFlag   */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg GFlag   */ 0x07,
+        /* SrcGObjCo GFlag   */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 0.0f,
+        /* Height */ 0.0f,
+    },
 };
 const s32 daObjTpost_c::m_send_price[] = {
     0x05,
@@ -719,7 +721,7 @@ void daObjTpost_c::setAnm(s8 param_1, bool param_2) {
     }
 
     if(field_0x6C8 == 0 && mMorf->getFrame() == 1.0f) {
-        mDoAud_seStart(0x6973, 0, 0, 0);
+        mDoAud_seStart(JA_SE_OBJ_POST_EAT_LUGGAGE, 0, 0, 0);
     }
 
     if(field_0x6C8 == 1) {
@@ -727,7 +729,7 @@ void daObjTpost_c::setAnm(s8 param_1, bool param_2) {
         scale.setAll(1.0f);
         if(mMorf->getFrame() == 1.0f) {
             dComIfGp_particle_set(0x8190, &current.pos, &current.angle, &scale);
-            mDoAud_seStart(0x6974, 0, 0, 0);
+            mDoAud_seStart(JA_SE_OBJ_POST_LUGGAGE_OUT, 0, 0, 0);
         }
     }
 
@@ -1013,7 +1015,7 @@ void daObjTpost_c::createInit() {
 
     mAttentionInfo.mDistances[1] = 5;
     mAttentionInfo.mDistances[3] = 6;
-    mAttentionInfo.mFlags = 0x2000000A;
+    mAttentionInfo.mFlags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_CHECK_e;
 
     setAnm(1, false);
     setMtx();

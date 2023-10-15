@@ -47,7 +47,7 @@ dThunder_c::~dThunder_c() {
 BOOL dThunder_c::execute() {
     mBrk.setPlaySpeed(1.0f);
     if (mBrk.play()) {
-        mDoAud_seStart(0x69f6, &mPos, 0, 0);
+        mDoAud_seStart(JA_SE_OBJ_THUNDER_FAR, &mPos, 0, 0);
         fopKyM_Delete(this);
     }
     return TRUE;
@@ -189,7 +189,7 @@ s32 dThunder_c::create() {
         mPosNeg.x = -mPos.x;
         mPosNeg.y = -mPos.y;
         mPosNeg.z = -mPos.z;
-        mDoAud_seStart(0x69f6, &mPosNeg, 0, 0);
+        mDoAud_seStart(JA_SE_OBJ_THUNDER_FAR, &mPosNeg, 0, 0);
     }
 
     return cPhs_COMPLEATE_e;

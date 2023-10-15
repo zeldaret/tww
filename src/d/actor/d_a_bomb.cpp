@@ -216,10 +216,10 @@ bool daBomb_c::checkExplodeCc_norm() {
     if(mSph.ChkTgHit()) {
         cCcD_Obj* obj = mSph.GetTgHitObj();
         if(obj) {
-            if(obj->ChkAtType(0x20)) { // bomb damage
+            if(obj->ChkAtType(AT_TYPE_BOMB)) {
                 explode = true;
             }
-            else if(!obj->ChkAtType(0x200000)) { // not leaf wind "damage"
+            else if(!obj->ChkAtType(AT_TYPE_LEAF_WIND)) {
                 explode = true;
             }
         }
@@ -244,10 +244,10 @@ bool daBomb_c::checkExplodeCc_nut() {
     if(mSph.ChkTgHit()) {
         cCcD_Obj* obj = mSph.GetTgHitObj();
         if(obj) {
-            if(obj->ChkAtType(0x20)) { // bomb damage
+            if(obj->ChkAtType(AT_TYPE_BOMB)) {
                 explode = true;
             }
-            else if(!obj->ChkAtType(0x200000)) { // not leaf wind "damage"
+            else if(!obj->ChkAtType(AT_TYPE_LEAF_WIND)) {
                 hit = true;
             }
         }
@@ -286,7 +286,7 @@ bool daBomb_c::checkExplodeCc_cannon() {
     if(mSph.ChkTgHit()) {
         cCcD_Obj* obj = mSph.GetTgHitObj();
         if(obj) {
-            if(!obj->ChkAtType(0x200000)) { // not leaf wind "damage"
+            if(!obj->ChkAtType(AT_TYPE_LEAF_WIND)) {
                 explode = true;
             }
         }
@@ -614,7 +614,7 @@ void daBomb_c::makeFireEffect(cXyz& pos, csXyz& rotation) {
 
 void daBomb_c::makeWaterEffect() {
     if(field_0x77D == 0) {
-        fopAcM_seStart(this, 0x6982, 0);
+        fopAcM_seStart(this, JA_SE_OBJ_BOMB_WATER, 0);
         fopKyM_createWpillar(&current.pos, 1.0f, 1.0f, 1);
         mSph.GetObjTg().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
         mSph.GetObjCo().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
@@ -765,7 +765,7 @@ int daBomb_c::procExplode_init() {
         change_state(STATE_0);
     }
 
-    mAttentionInfo.mFlags &= ~0x10;
+    mAttentionInfo.mFlags &= ~fopAc_Attn_ACTION_CARRY_e;
 
     if(field_0x6F0) {
         if(daPy_getPlayerLinkActorClass()->mActivePlayerBombs != 0) {
@@ -790,10 +790,10 @@ int daBomb_c::procExplode_init() {
     }
 
     if(temp) {
-        fopAcM_seStart(this, 0x6982, 0);
+        fopAcM_seStart(this, JA_SE_OBJ_BOMB_WATER, 0);
     }
     else {
-        fopAcM_seStart(this, 0x6901, 0);
+        fopAcM_seStart(this, JA_SE_OBJ_BOMB_EXPLODE, 0);
     }
 
     fopAcM_cancelCarryNow(this);
@@ -872,7 +872,7 @@ bool daBomb_c::procCarry_init() {
     change_state(STATE_2);
     speedF = 0.0f;
     speed.set(cXyz::Zero);
-    mAttentionInfo.mFlags &= ~0x10;
+    mAttentionInfo.mFlags &= ~fopAc_Attn_ACTION_CARRY_e;
     mSph.GetObjCo().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
 
     return true;
@@ -943,10 +943,10 @@ bool daBomb_c::procWait() {
             if(!temp && !field_0x781) {
                 bound(y_vel);
                 if((mAcch.ChkGroundHit() || chk_state(STATE_5)) && !mAcch.ChkGroundLanding()) {
-                    mAttentionInfo.setFlag(0x10);
+                    mAttentionInfo.setFlag(fopAc_Attn_ACTION_CARRY_e);
                 }
                 else {
-                    mAttentionInfo.mFlags &= ~0x10;
+                    mAttentionInfo.mFlags &= ~fopAc_Attn_ACTION_CARRY_e;
                 }
             }
 
@@ -1030,7 +1030,7 @@ BOOL daBomb_c::execute() {
         }
 
         if(chk_attrState(this, ATTR_STATE_10) || field_0x6F4 == 1) {
-            fopAcM_seStart(this, 0x6100, 0);
+            fopAcM_seStart(this, JA_SE_OBJ_BOMB_IGNITION, 0);
         }
     }
 
@@ -1082,7 +1082,7 @@ void daBomb_c::init_mtx() {
 }
 
 void daBomb_c::se_cannon_fly_set() {
-    mDoAud_seStart(0x381F, &current.pos, 0, 0);
+    mDoAud_seStart(JA_SE_LK_SHIP_CANNON_FLY, &current.pos, 0, 0);
     field_0x77F = 1;
 }
 
@@ -1103,7 +1103,7 @@ void daBomb_c::eff_water_splash() {
     //what
     u32 soundId = 0x13;
 
-    fopAcM_seStart(this, 0x6918, soundId);
+    fopAcM_seStart(this, JA_SE_OBJ_FALL_WATER_S, soundId);
 }
 
 bool daBomb_IsDelete(daBomb_c*) {
@@ -1223,7 +1223,7 @@ void daBomb_c::create_init() {
     mRestTime = 0x96;
     mInitialState = prm_get_state();
     if(!chk_state(STATE_4)) {
-        mAttentionInfo.setFlag(0x10);
+        mAttentionInfo.setFlag(fopAc_Attn_ACTION_CARRY_e);
     }
 
     field_0x77C = 0;
@@ -1320,7 +1320,7 @@ actor_process_profile_definition g_profile_BOMB = {
     &g_fopAc_Method.base,
     0x0115,
     &l_daBomb_Method,
-    0x00040100,
+    fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     fopAc_ACTOR_e,
     fopAc_CULLBOX_CUSTOM_e,
 };

@@ -239,14 +239,14 @@ static void body_atari_check(am_class* i_this) {
         switch (hitObj->GetAtType()) {
         case AT_TYPE_SWORD:
         case AT_TYPE_MACHETE:
-        case 0x00000800:
+        case AT_TYPE_UNK800:
         case AT_TYPE_DARKNUT_SWORD:
         case AT_TYPE_MOBLIN_SPEAR:
             fopAcM_seStart(i_this, JA_SE_LK_SW_HIT_S, 0x42);
             break;
         case AT_TYPE_BOOMERANG:
         case AT_TYPE_BOKO_STICK:
-        case 0x00002000:
+        case AT_TYPE_UNK2000:
         case AT_TYPE_STALFOS_MACE:
             fopAcM_seStart(i_this, JA_SE_LK_W_WEP_HIT, 0x42);
             break;
@@ -322,14 +322,14 @@ static BOOL medama_atari_check(am_class* i_this) {
         break;
     case AT_TYPE_SWORD:
     case AT_TYPE_MACHETE:
-    case 0x00000800:
+    case AT_TYPE_UNK800:
     case AT_TYPE_DARKNUT_SWORD:
     case AT_TYPE_MOBLIN_SPEAR:
         fopAcM_seStart(i_this, JA_SE_LK_SW_HIT_S, 0x42);
         break;
     case AT_TYPE_BOOMERANG:
     case AT_TYPE_BOKO_STICK:
-    case 0x00002000:
+    case AT_TYPE_UNK2000:
     case AT_TYPE_STALFOS_MACE:
         fopAcM_seStart(i_this, JA_SE_LK_W_WEP_HIT, 0x42);
         break;
@@ -349,7 +349,7 @@ static BOOL medama_atari_check(am_class* i_this) {
         ret = true;
         if (i_this->mCurrBckIdx == AM_BCK_SLEEP || i_this->mCurrBckIdx == AM_BCK_SLEEP_LOOP) {
             anm_init(i_this, AM_BCK_OKIRU, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
-            i_this->mAttentionInfo.mFlags = 0x4;
+            i_this->mAttentionInfo.mFlags = fopAc_Attn_LOCKON_ENEMY_e;
             i_this->mNeedleCyl.OnAtSPrmBit(1);
             i_this->mNeedleCyl.OnAtHitBit();
             i_this->mAction = ACTION_DOUSA;
@@ -575,7 +575,7 @@ static void action_dousa(am_class* i_this) {
             if (Line_check(i_this, player->current.pos)) {
                 anm_init(i_this, AM_BCK_OKIRU, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
                 fopAcM_monsSeStart(i_this, JA_SE_CV_AM_AWAKE, 0);
-                i_this->mAttentionInfo.mFlags = 0x4;
+                i_this->mAttentionInfo.mFlags = fopAc_Attn_LOCKON_ENEMY_e;
                 i_this->mNeedleCyl.OnAtSetBit();
                 i_this->mNeedleCyl.OnAtHitBit();
                 i_this->mState += 1;
@@ -1302,7 +1302,7 @@ static s32 daAM_Create(fopAc_ac_c* i_actor) {
             // dCcD_SrcGObjInf
             {
                 /* Flags             */ 0,
-                /* SrcObjAt Type     */ 0x1000,
+                /* SrcObjAt Type     */ AT_TYPE_UNK1000,
                 /* SrcObjAt Atp      */ 0,
                 /* SrcObjAt SPrm     */ 0,
                 /* SrcObjTg Type     */ AT_TYPE_NORMAL_ARROW | AT_TYPE_FIRE_ARROW | AT_TYPE_ICE_ARROW | AT_TYPE_LIGHT_ARROW | AT_TYPE_GRAPPLING_HOOK,
@@ -1333,7 +1333,7 @@ static s32 daAM_Create(fopAc_ac_c* i_actor) {
             // dCcD_SrcGObjInf
             {
                 /* Flags             */ 0,
-                /* SrcObjAt Type     */ 0x1000,
+                /* SrcObjAt Type     */ AT_TYPE_UNK1000,
                 /* SrcObjAt Atp      */ 0,
                 /* SrcObjAt SPrm     */ 0,
                 /* SrcObjTg Type     */ 0,
@@ -1364,10 +1364,10 @@ static s32 daAM_Create(fopAc_ac_c* i_actor) {
             // dCcD_SrcGObjInf
             {
                 /* Flags             */ 0,
-                /* SrcObjAt Type     */ 0x1000,
+                /* SrcObjAt Type     */ AT_TYPE_UNK1000,
                 /* SrcObjAt Atp      */ 0,
                 /* SrcObjAt SPrm     */ 0,
-                /* SrcObjTg Type     */ ~(0x100 | 0x20000 | AT_TYPE_LEAF_WIND | 0x400000 | 0x800000),
+                /* SrcObjTg Type     */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_LEAF_WIND | AT_TYPE_UNK400000 | AT_TYPE_UNK800000),
                 /* SrcObjTg SPrm     */ 0x03,
                 /* SrcObjCo SPrm     */ 0x75,
                 /* SrcGObjAt Se      */ 0,
@@ -1396,7 +1396,7 @@ static s32 daAM_Create(fopAc_ac_c* i_actor) {
             // dCcD_SrcGObjInf
             {
                 /* Flags             */ 0,
-                /* SrcObjAt Type     */ 0x1000,
+                /* SrcObjAt Type     */ AT_TYPE_UNK1000,
                 /* SrcObjAt Atp      */ 2,
                 /* SrcObjAt SPrm     */ 0x0F,
                 /* SrcObjTg Type     */ 0,

@@ -126,7 +126,7 @@ BOOL enemy_ice(enemyice* ei) {
             ac->mTevStr.mFogStartZ = 0.0f;
             ac->mTevStr.mFogEndZ = 2000.0f;
             fopAcM_seStart(ac, JA_SE_CM_L_ARROW_SHRINK, 0);
-            ac->mAttentionInfo.mFlags &= ~4;
+            ac->mAttentionInfo.mFlags &= ~fopAc_Attn_LOCKON_ENEMY_e;
         } else {
             ei->mLightShrinkTimer++;
             
@@ -226,10 +226,10 @@ BOOL enemy_ice(enemyice* ei) {
         frozen = TRUE;
         moveAndCollide = TRUE;
         if (ei->m00C != 1) {
-            ac->mAttentionInfo.mFlags |= 0x10;
+            ac->mAttentionInfo.mFlags |= fopAc_Attn_ACTION_CARRY_e;
             ac->mAttentionInfo.mDistances[4] = 0x12;
             if (fopAcM_checkStatus(ac, fopAcStts_CARRY_e)) {
-                ac->mAttentionInfo.mFlags &= ~0x10;
+                ac->mAttentionInfo.mFlags &= ~fopAc_Attn_ACTION_CARRY_e;
                 ei->mState = 3;
                 if (ei->m00C == 2) {
                     ei->m00C = 0;

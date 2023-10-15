@@ -275,7 +275,7 @@ s32 daTag_Msg_c::create() {
     shape_angle.x = 0;
     current.angle.z = 0;
     current.angle.x = 0;
-    mAttentionInfo.mFlags = 0x20000008;
+    mAttentionInfo.mFlags = fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_CHECK_e;
     if (getMessage() != 0x836) {
         mAttentionInfo.mPosition.y += 150;
         mEyePos.y += 150.0f;

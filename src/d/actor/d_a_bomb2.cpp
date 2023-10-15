@@ -551,15 +551,15 @@ namespace daBomb2 {
     }
 
     void Act_c::se_explode() {
-            fopAcM_seStart(this, 0x6901, 0);
+            fopAcM_seStart(this, JA_SE_OBJ_BOMB_EXPLODE, 0);
     }
 
     void Act_c::se_explode_water() {
-            fopAcM_seStart(this, 0x6982, 0);
+            fopAcM_seStart(this, JA_SE_OBJ_BOMB_WATER, 0);
     }
 
     void Act_c::se_ignition() {
-            fopAcM_seStart(this, 0x6100, 0);
+            fopAcM_seStart(this, JA_SE_OBJ_BOMB_IGNITION, 0);
     }
 
     void Act_c::set_sound_env(int param_1, int param_2) {
@@ -567,16 +567,16 @@ namespace daBomb2 {
     }
 
     bool Act_c::chk_exp_cc_nut() {
-        bool explode = false;
         bool fuse = false;
+        bool explode = false;
 
         if(mSph.ChkTgHit()) {
             cCcD_Obj* obj = mSph.GetTgHitObj();
             if(obj) {
-                if(obj->ChkAtType(0x20)) { // bomb damage
+                if(obj->ChkAtType(AT_TYPE_BOMB)) {
                     fuse = true;
                 }
-                else if(!obj->ChkAtType(0x200000)) { // not leaf wind "damage"
+                else if(!obj->ChkAtType(AT_TYPE_LEAF_WIND)) {
                     explode = true;
                 }
             }
@@ -601,7 +601,7 @@ namespace daBomb2 {
             eff_explode();
         }
 
-        return explode;
+        return fuse;
     }
 
     bool Act_c::chk_exp_cc() {
@@ -703,11 +703,11 @@ namespace daBomb2 {
     }
 
     void Act_c::on_carry() {
-        mAttentionInfo.setFlag(0x10);
+        mAttentionInfo.setFlag(fopAc_Attn_ACTION_CARRY_e);
     }
 
     void Act_c::off_carry() {
-        mAttentionInfo.mFlags &= ~0x10;
+        mAttentionInfo.mFlags &= ~fopAc_Attn_ACTION_CARRY_e;
     }
 
     void Act_c::mode_wait_init() {
@@ -1086,7 +1086,7 @@ actor_process_profile_definition g_profile_Bomb2 = {
     &g_fopAc_Method.base,
     0x0115,
     &daBomb2::Mthd_Table,
-    0x00040100,
+    fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     fopAc_ACTOR_e,
     fopAc_CULLBOX_CUSTOM_e,
 };

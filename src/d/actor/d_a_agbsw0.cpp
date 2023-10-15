@@ -56,31 +56,33 @@ struct agb_mail_struct {
 };
 
 static dCcD_SrcCyl l_cyl_src = {
-    0,
-    0,
-    0,
-    0,
-    0x00000020, // Tg damage types
-    9,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    4,
-    0,
-    
-    // Cylinder
-    0.0, // X
-    0.0, // Y
-    0.0, // Z
-    100.0, // Radius
-    100.0, // Height
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt Type     */ 0,
+        /* SrcObjAt Atp      */ 0,
+        /* SrcObjAt SPrm     */ 0,
+        /* SrcObjTg Type     */ AT_TYPE_BOMB,
+        /* SrcObjTg SPrm     */ 0x09,
+        /* SrcObjCo SPrm     */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt GFlag   */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg GFlag   */ 0x04,
+        /* SrcGObjCo GFlag   */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 100.0f,
+        /* Height */ 100.0f,
+    },
 };
 
 class daAgbsw0_c : public fopAc_ac_c {
@@ -1039,7 +1041,7 @@ BOOL daAgbsw0_c::ExeSubMW() {
         mAttentionInfo.mPosition = current.pos;
         if(mEvtInfo.checkCommandDemoAccrpt()) {
             if(!se_flag) {
-                fopAcM_seStart(this, 0x484C, 0);
+                fopAcM_seStart(this, JA_SE_CV_CHI_MEGAHORN, 0);
                 se_flag = 1;
             }
 
@@ -1197,7 +1199,7 @@ BOOL daAgbsw0_c::ExeSubR() {
             }
 
             fopAcM_fastCreateItem(&current.pos, itemID, fopAcM_GetHomeRoomNo(this), 0, 0, 0.0f, cM_rndF(10.0f) + 40.0f, -7.0f, -1, 0);
-            fopAcM_seStart(this, 0x484C, 0);
+            fopAcM_seStart(this, JA_SE_CV_CHI_MEGAHORN, 0);
             MailSend(-1, 0, 0xFF, 0xFF, 0);
 
             field_0x298 = 0;

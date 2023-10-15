@@ -46,6 +46,22 @@ enum fopAc_Group_e {
     fopAc_NPC_e,
 };
 
+enum fopAc_AttentionFlag_e {
+    fopAc_Attn_LOCKON_MISC_e        = 0x00000001,
+    fopAc_Attn_LOCKON_TALK_e        = 0x00000002,
+    fopAc_Attn_LOCKON_ENEMY_e       = 0x00000004,
+    fopAc_Attn_ACTION_TALK_e        = 0x00000008,
+    fopAc_Attn_ACTION_CARRY_e       = 0x00000010,
+    fopAc_Attn_ACTION_DOOR_e        = 0x00000020,
+    fopAc_Attn_ACTION_TREASURE_e    = 0x00000040,
+    fopAc_Attn_ACTION_SHIP_e        = 0x00000080,
+    fopAc_Attn_TALKFLAG_NOTALK_e    = 0x2000000,
+    fopAc_Attn_ENEMYFLAG_NOLOCKON_e = 0x4000000,
+    fopAc_Attn_TALKFLAG_LOOK_e      = 0x8000000,
+    fopAc_Attn_TALKFLAG_CHECK_e     = 0x20000000,
+    fopAc_Attn_TALKFLAG_READ_e      = 0x40000000,
+};
+
 enum fopAc_Cull_e {
     fopAc_CULLBOX_0_e,
     fopAc_CULLBOX_1_e,
@@ -131,7 +147,7 @@ public:
 
     bool checkCommandTalk() { return mCommand == dEvtCmd_INTALK_e; }
     bool checkCommandItem() { return mCommand == dEvtCmd_INGETITEM_e; }
-    BOOL checkCommandDoor() { return mCommand == dEvtCmd_INDOOR_e; }
+    bool checkCommandDoor() { return mCommand == dEvtCmd_INDOOR_e; }
     bool checkCommandDemoAccrpt() { return mCommand == dEvtCmd_INDEMO_e; }
     bool checkCommandCatch() { return mCommand == dEvtCmd_INCATCH_e; }
 

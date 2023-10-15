@@ -106,7 +106,7 @@ static const dCcD_SrcCyl l_cyl_at_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
-        /* SrcObjAt Type     */ 0x800,
+        /* SrcObjAt Type     */ AT_TYPE_UNK800,
         /* SrcObjAt Atp      */ 1,
         /* SrcObjAt SPrm     */ 5,
         /* SrcObjTg Type     */ 0,
@@ -126,9 +126,7 @@ static const dCcD_SrcCyl l_cyl_at_src = {
     },
     // cM3dGCylS
     {
-        /* Center */ 0.0f,
-        0.0f,
-        0.0f,
+        /* Center */ 0.0f, 0.0f, 0.0f,
         /* Radius */ 1000.0f,
         /* Height */ 10000.0f,
     },
@@ -141,7 +139,7 @@ static const dCcD_SrcCyl l_cyl_tg_src = {
         /* SrcObjAt Type     */ 0,
         /* SrcObjAt Atp      */ 0,
         /* SrcObjAt SPrm     */ 0,
-        /* SrcObjTg Type     */ 0xFF3DFEFF,
+        /* SrcObjTg Type     */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_UNK400000 | AT_TYPE_UNK800000),
         /* SrcObjTg SPrm     */ 9,
         /* SrcObjCo SPrm     */ 0,
         /* SrcGObjAt Se      */ 0,
@@ -158,9 +156,7 @@ static const dCcD_SrcCyl l_cyl_tg_src = {
     },
     // cM3dGCylS
     {
-        /* Center */ 0.0f,
-        0.0f,
-        0.0f,
+        /* Center */ 0.0f, 0.0f, 0.0f,
         /* Radius */ 1000.0f,
         /* Height */ 10000.0f,
     },

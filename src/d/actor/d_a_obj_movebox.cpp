@@ -224,31 +224,33 @@ namespace daObjMovebox {
     };
     
     const dCcD_SrcCyl Act_c::M_cyl_src = {
-        0,
-        0,
-        0,
-        0,
-        AT_TYPE_BOMB, // Tg damage types
-        0x09,
-        0x79,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        
-        // Cylinder
-        0.0, // X
-        0.0, // Y
-        0.0, // Z
-        75.0, // Radius
-        150.0, // Height
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt Type     */ 0,
+            /* SrcObjAt Atp      */ 0,
+            /* SrcObjAt SPrm     */ 0,
+            /* SrcObjTg Type     */ AT_TYPE_BOMB,
+            /* SrcObjTg SPrm     */ 0x09,
+            /* SrcObjCo SPrm     */ 0x79,
+            /* SrcGObjAt Se      */ 0,
+            /* SrcGObjAt HitMark */ 0,
+            /* SrcGObjAt Spl     */ 0,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt GFlag   */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ 0,
+            /* SrcGObjTg Spl     */ 0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg GFlag   */ 0,
+            /* SrcGObjCo GFlag   */ 0,
+        },
+        // cM3dGCylS
+        {
+            /* Center */ 0.0f, 0.0f, 0.0f,
+            /* Radius */ 75.0f,
+            /* Height */ 150.0f,
+        },
     };
     
     const Type_Attr Act_c::M_attr[13] = {
