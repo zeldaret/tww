@@ -3,12 +3,12 @@
 // Translation Unit: J3DMatBlock.cpp
 //
 
-#include "JSystem/J3DGraphBase/J3DTexture.h"
-#include "JSystem/J3DGraphBase/J3DTransform.h"
 #include "JSystem/J3DGraphBase/J3DMatBlock.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/J3DGraphBase/J3DStruct.h"
 #include "JSystem/J3DGraphBase/J3DTevs.h"
+#include "JSystem/J3DGraphBase/J3DTexture.h"
+#include "JSystem/J3DGraphBase/J3DTransform.h"
 #include "dolphin/gd/GDBase.h"
 #include "dolphin/os/OS.h"
 #include "dolphin/types.h"

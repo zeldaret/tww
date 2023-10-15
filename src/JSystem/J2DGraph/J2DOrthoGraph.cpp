@@ -8,14 +8,14 @@
 #include "dolphin/types.h"
 
 /* 802CDB78-802CDBD8       .text __ct__13J2DOrthoGraphFv */
-J2DOrthoGraph::J2DOrthoGraph() : J2DGrafContext(0, 0, 0, 0) {
+J2DOrthoGraph::J2DOrthoGraph() : J2DGrafContext(0.0f, 0.0f, 0.0f, 0.0f) {
     this->setLookat();
 }
 
 /* 802CDBD8-802CDCB4       .text __ct__13J2DOrthoGraphFffffff */
 J2DOrthoGraph::J2DOrthoGraph(f32 x, f32 y, f32 width, f32 height, f32 far, f32 near)
     : J2DGrafContext(x, y, width, height) {
-    mOrtho = JGeometry::TBox2<f32>(0, 0, width, height);
+    mOrtho = JGeometry::TBox2<f32>(0.0f, 0.0f, width, height);
     mNear = far;
     mFar = near;
     this->setLookat();
@@ -38,7 +38,7 @@ void J2DOrthoGraph::setOrtho(const JGeometry::TBox2<f32>& bounds, f32 far, f32 n
 /* 802CDD48-802CDD84       .text setLookat__13J2DOrthoGraphFv */
 void J2DOrthoGraph::setLookat() {
     MTXIdentity(mPosMtx);
-    GXLoadPosMtxImm(mPosMtx, 0);
+    GXLoadPosMtxImm(mPosMtx, GX_PNMTX0);
 }
 
 /* 802CDD84-802CDE10       .text
