@@ -117,7 +117,7 @@ JKRADCommand* JKRDvdAramRipper::callCommand_Async(JKRADCommand* command) {
 
             compression = JKRCheckCompressed(bufPtr);
             uncompressedSize = JKRDecompExpandSize(bufPtr);
-            if (command->field_0x18 && command->field_0x18 > uncompressedSize) {
+            if (command->field_0x18 && uncompressedSize > command->field_0x18) {
                 uncompressedSize = command->field_0x18;
             }
         }
@@ -131,13 +131,13 @@ JKRADCommand* JKRDvdAramRipper::callCommand_Async(JKRADCommand* command) {
                 command->mBlock =
                     JKRAram::getAramHeap()->alloc(uncompressedSize, JKRAramHeap::HEAD);
                 if (command->mBlock) {
-                    command->mAddress = command->mBlock->mAddress;
+                    command->mAddress = command->mBlock->getAddress();
                 }
                 dvdFile->mBlock = command->mBlock;
             }
 
             if (command->mBlock) {
-                command->mAddress = command->mBlock->mAddress;
+                command->mAddress = command->mBlock->getAddress();
             }
 
             if (command->mAddress == 0) {
@@ -150,7 +150,7 @@ JKRADCommand* JKRDvdAramRipper::callCommand_Async(JKRADCommand* command) {
             }
 
             if (command->mBlock) {
-                command->mAddress = command->mBlock->mAddress;
+                command->mAddress = command->mBlock->getAddress();
             }
 
             if (command->mAddress == 0) {
@@ -316,10 +316,10 @@ static int decompSZS_subroutine(u8* src, u32 dest) {
             if (refCurrent == refEnd) {
                 refCurrent = refBuf;
             }
-            readCount++;
             src++;
+            readCount++;
         } else {
-            u32 dist = ((src[0] & 0x0f) << 8) | src[1];
+            u32 dist = src[1] | (src[0] & 0x0f) << 8;
             s32 numBytes = src[0] >> 4;
             src += 2;
             u8* copySource = refCurrent - dist - 1;
@@ -327,8 +327,8 @@ static int decompSZS_subroutine(u8* src, u32 dest) {
                 copySource += refEnd - refBuf;
             }
             if (numBytes == 0) {
-                numBytes = *src + 0x12;
-                src += 1;
+                numBytes = *(src++);
+                numBytes += 0x12;
             } else {
                 numBytes += 2;
             }

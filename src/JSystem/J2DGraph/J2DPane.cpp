@@ -17,7 +17,7 @@ J2DPane::J2DPane() : mPaneTree(this) {
     mVisible = true;
     mTag = 0;
 
-    mBounds.set(0.f, 0.f, 0.f, 0.f);
+    mBounds.set(0.0f, 0.0f, 0.0f, 0.0f);
     initiate();
 }
 
@@ -49,7 +49,7 @@ void J2DPane::initiate() {
     mBasePosition.y = 0.0f;
     mRotationAxis = ROTATE_Z;
     mRotation = 0.0f;
-    mCullMode = 0;
+    mCullMode = GX_CULL_NONE;
     mAlpha = 0xFF;
     mInheritAlpha = TRUE;
     mDrawAlpha = 0xFF;
@@ -146,7 +146,7 @@ bool J2DPane::insertChild(J2DPane* pPrev, J2DPane* pChild) {
 }
 
 /* 802D0078-802D054C       .text draw__7J2DPaneFffPC14J2DGrafContextb */
-void J2DPane::draw(float x, float y, const J2DGrafContext* pCtx, bool clip) {
+void J2DPane::draw(f32 x, f32 y, const J2DGrafContext* pCtx, bool clip) {
     J2DGrafContext ctx = *pCtx;
 
     if (pCtx->getGrafType() != 1)
@@ -203,7 +203,7 @@ void J2DPane::draw(float x, float y, const J2DGrafContext* pCtx, bool clip) {
 }
 
 /* 802D054C-802D05C8       .text move__7J2DPaneFff */
-void J2DPane::move(float x, float y) {
+void J2DPane::move(f32 x, f32 y) {
     JGeometry::TBox2<f32> bounds;
     f32 width = mBounds.getWidth(), height = mBounds.getHeight();
     bounds.set(x, y, x + width, y + height);

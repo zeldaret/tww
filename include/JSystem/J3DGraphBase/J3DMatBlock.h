@@ -215,7 +215,7 @@ public:
     virtual void patchTevReg();
     virtual void patchTexNoAndTexCoordScale();
     virtual void ptrToIndex();
-    virtual void indexToPtr() { return indexToPtr_private(mTexNoOffset); }
+    virtual void indexToPtr() { indexToPtr_private(mTexNoOffset); }
     virtual u32 getType() { return 'TVPT'; }
     virtual s32 countDLSize();
     virtual void setTevStageNum(const u8* pNum) { mTevStageNum = *pNum; }
@@ -281,7 +281,7 @@ public:
     virtual void patchTevReg();
     virtual void patchTexNoAndTexCoordScale();
     virtual void ptrToIndex() {}
-    virtual void indexToPtr() { return indexToPtr_private(mTexNoOffset); }
+    virtual void indexToPtr() { indexToPtr_private(mTexNoOffset); }
     virtual u32 getType() { return 'TVB4'; }
     virtual s32 countDLSize();
     virtual void setTexNo(u32 i, const u16* pNo) { mTexNo[i] = *pNo; }
@@ -356,7 +356,7 @@ public:
     virtual void patchTevReg();
     virtual void patchTexNoAndTexCoordScale();
     virtual void ptrToIndex() {}
-    virtual void indexToPtr() { return indexToPtr_private(mTexNoOffset); }
+    virtual void indexToPtr() { indexToPtr_private(mTexNoOffset); }
     virtual u32 getType() { return 'TVB2'; }
     virtual s32 countDLSize();
     virtual void setTexNo(u32 i, const u16* pNo) { mTexNo[i] = *pNo; }
@@ -431,7 +431,7 @@ public:
     virtual void patchTevReg();
     virtual void patchTexNoAndTexCoordScale();
     virtual void ptrToIndex();
-    virtual void indexToPtr() { return indexToPtr_private(mTexNoOffset); }
+    virtual void indexToPtr() { indexToPtr_private(mTexNoOffset); }
     virtual u32 getType() { return 'TV16'; }
     virtual s32 countDLSize();
     virtual void setTexNo(u32 i, const u16* pNo) { mTexNo[i] = *pNo; }
@@ -509,7 +509,7 @@ public:
     virtual void patchTevReg();
     virtual void patchTexNoAndTexCoordScale();
     virtual void ptrToIndex() {}
-    virtual void indexToPtr() { return indexToPtr_private(mTexNoOffset); }
+    virtual void indexToPtr() { indexToPtr_private(mTexNoOffset); }
     virtual u32 getType() { return 'TVB1'; }
     virtual s32 countDLSize();
     virtual void setTexNo(u32 i, const u16* pNo) { mTexNo[i] = *pNo; }
