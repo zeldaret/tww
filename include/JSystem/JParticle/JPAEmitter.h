@@ -113,6 +113,7 @@ public:
         JPASetRMtxTVecfromMtx(mtx, mGlobalRotation, mGlobalTranslation);
     }
     void setGlobalTranslation(f32 x, f32 y, f32 z) { mGlobalTranslation.set(x, y, z); }
+    void setGlobalTranslation(const JGeometry::TVec3<float>& trans) { mGlobalTranslation.set(trans); }
     void setGlobalScale(const JGeometry::TVec3<float>& scale) {
         mGlobalDynamicsScale.set(scale);
         mGlobalParticleScale.set(scale);

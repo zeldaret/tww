@@ -9,6 +9,18 @@ class daItem_c : public daItemBase_c {
 public:
     typedef void (daItem_c::*daItem_c_ModeFunc)();
     
+    enum State {
+        STATE_WAIT_MAIN     = 0x2,
+        STATE_BRING_NEZUMI  = 0x3,
+        STATE_INIT_NORMAL   = 0x5,
+        STATE_MAIN_NORMAL   = 0x6,
+        STATE_INIT_GET_DEMO = 0x7,
+        STATE_WAIT_GET_DEMO = 0x8,
+        STATE_MAIN_GET_DEMO = 0x9,
+        STATE_WAIT_BOSS1    = 0xA,
+        STATE_WAIT_BOSS2    = 0xB,
+    };
+    
     float getYOffset();
     void set_mtx();
     void set_mtx_base(J3DModel*, cXyz, csXyz);
@@ -33,12 +45,12 @@ public:
     BOOL checkItemDisappear();
     void setItemTimer(int);
     BOOL checkPlayerGet();
-    void itemActionForRupee();
-    void itemActionForHeart();
-    void itemActionForKey();
-    void itemActionForEmono();
-    void itemActionForSword();
-    void itemActionForArrow();
+    BOOL itemActionForRupee();
+    BOOL itemActionForHeart();
+    BOOL itemActionForKey();
+    BOOL itemActionForEmono();
+    BOOL itemActionForSword();
+    BOOL itemActionForArrow();
     void checkWall();
     void set_bound_se();
     BOOL checkGetItem();
@@ -47,7 +59,7 @@ public:
     void mode_water_init();
     void mode_wait();
     void mode_water();
-    void initAction();
+    BOOL initAction();
     BOOL _daItem_isdelete();
     
     s32 checkControl();
@@ -67,18 +79,20 @@ public:
     /* 0x64C */ s32 mActivationSwitch;
     /* 0x650 */ f32 field_0x650;
     /* 0x654 */ s16 field_0x654;
-    /* 0x656 */ s16 field_0x656;
-    /* 0x658 */ s16 mItemTimer;
+    /* 0x656 */ s16 mTargetAngleX;
+    /* 0x658 */ s16 mDisappearTimer;
     /* 0x65A */ s16 field_0x65a;
     /* 0x65C */ s16 field_0x65c;
     /* 0x65E */ s16 mExtraZRot;
-    /* 0x660 */ u8 field_0x660[0x667 - 0x660];
+    /* 0x660 */ s16 field_0x660;
+    /* 0x662 */ u8 field_0x662[0x666 - 0x662];
+    /* 0x666 */ u8 field_0x666;
     /* 0x667 */ u8 mType;
     /* 0x668 */ u8 mAction;
-    /* 0x669 */ u8 mStatusFlags;
+    /* 0x669 */ u8 mStatusFlags; // TODO rename this
     /* 0x66A */ u8 mMode;
     /* 0x66B */ u8 mCurState;
-    /* 0x66C */ u8 field_0x66c;
+    /* 0x66C */ u8 mOnGroundTimer;
     /* 0x66D */ u8 field_0x66D[0x670 - 0x66D];
     /* 0x670 */ u32 mDemoItemBsPcId;
     /* 0x674 */ dPa_rippleEcallBack mPtclRippleCb;

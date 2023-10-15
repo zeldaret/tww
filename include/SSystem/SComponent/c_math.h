@@ -8,9 +8,24 @@ u16 U_GetAtanTable(float, float);
 s16 cM_atan2s(float y, float x);
 float cM_atan2f(float y, float x);
 void cM_initRnd(int, int, int);
+
+/**
+ * Returns a pseudo-random float between 0.0f and 1.0f.
+ */
 float cM_rnd(void);
-float cM_rndF(float);
-float cM_rndFX(float);
+
+/**
+ * Returns a pseudo-random float between 0.0f and max.
+ * @param max The maximum value
+ */
+float cM_rndF(float max);
+
+/**
+ * Returns a pseudo-random float between -max and max.
+ * @param max The maximum value
+ */
+float cM_rndFX(float max);
+
 void cM_initRnd2(int, int, int);
 float cM_rnd2(void);
 float cM_rndF2(float);

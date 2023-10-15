@@ -8,14 +8,14 @@
 #include "d/actor/d_a_itembase_static.h"
 #include "d/actor/d_a_item.h"
 #include "d/actor/d_a_player_link.h"
+#include "d/actor/d_a_sea.h"
 #include "d/d_com_inf_game.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_mtx.h"
 #include "f_op/f_op_camera_mng.h"
+#include "m_Do/m_Do_controller_pad.h"
 #include "dolphin/types.h"
-
-class dCcD_GObjInf;
 
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
@@ -39,7 +39,7 @@ cXyz setArrowTrans(s16 yRot, cXyz offset) {
 /* 800F4C4C-800F4CD8       .text getYOffset__8daItem_cFv */
 float daItem_c::getYOffset() {
     switch (m_itemNo) {
-    case HEART:
+    case BOKO_BELT:
         return 0.0f;
     case SKULL_NECKLACE:
         return 0.0f;
@@ -47,11 +47,12 @@ float daItem_c::getYOffset() {
         return 0.0f;
     case GOLDEN_FEATHER:
         return 0.0f;
-    case BOKO_BELT:
-        return 0.0f;
     case RED_JELLY:
     case GREEN_JELLY:
     case BLUE_JELLY:
+        return 0.0f;
+    case SMALL_KEY:
+    case BOSS_KEY:
         return 0.0f;
     case SHIELD:
         return 23.0f;
@@ -59,6 +60,9 @@ float daItem_c::getYOffset() {
         return 20.0f;
     case DROPPED_SWORD:
         return 10.0f;
+    case KAKERA_HEART:
+    case UTUWA_HEART:
+        return 0.0f;
     case GREEN_RUPEE:
     case BLUE_RUPEE:
     case YELLOW_RUPEE:
@@ -67,11 +71,7 @@ float daItem_c::getYOffset() {
     case ORANGE_RUPEE:
     case SILVER_RUPEE:
         return 0.0f;
-    case KAKERA_HEART:
-    case UTUWA_HEART:
-        return 0.0f;
-    case SMALL_KEY:
-    case BOSS_KEY:
+    case HEART:
         return 0.0f;
     default:
         return 0.0f;
@@ -158,7 +158,7 @@ void daItem_c::CreateInit() {
     mCyl.SetR(radius);
     mCyl.SetH(height);
     
-    mItemTimer = getData()->mDuration;
+    mDisappearTimer = getData()->mDuration;
     field_0x65a = getData()->field_0x18;
     field_0x650 = speedPtr->y;
     mCurState = 0;
@@ -181,14 +181,10 @@ void daItem_c::CreateInit() {
     case BOMB_10:
     case BOMB_20:
     case BOMB_30:
-        mScaleTarget.x = 0.6f;
-        mScaleTarget.y = 0.6f;
-        mScaleTarget.z = 0.6f;
+        mScaleTarget.setAll(0.6f);
         break;
     default:
-        mScaleTarget.x = 1.0f;
-        mScaleTarget.y = 1.0f;
-        mScaleTarget.z = 1.0f;
+        mScaleTarget.setAll(1.0f);
         break;
     }
     
@@ -271,7 +267,7 @@ BOOL daItem_c::_daItem_execute() {
     mAttentionInfo.mPosition = current.pos;
     
     switch (mCurState) {
-    case 3:
+    case STATE_BRING_NEZUMI:
         execBringNezumi();
         break;
     case 0:
@@ -281,25 +277,25 @@ BOOL daItem_c::_daItem_execute() {
         } else {
             mCurState = 0;
         }
-    case 2:
+    case STATE_WAIT_MAIN:
         execWaitMain();
         break;
-    case 5:
+    case STATE_INIT_NORMAL:
         execInitNormalDirection();
-    case 6:
+    case STATE_MAIN_NORMAL:
         execMainNormalDirection();
         break;
-    case 7:
+    case STATE_INIT_GET_DEMO:
         execInitGetDemoDirection();
         break;
-    case 8:
+    case STATE_WAIT_GET_DEMO:
         execWaitGetDemoDirection();
         break;
-    case 9:
+    case STATE_MAIN_GET_DEMO:
         execMainGetDemoDirection();
         break;
-    case 0xA:
-    case 0xB:
+    case STATE_WAIT_BOSS1:
+    case STATE_WAIT_BOSS2:
         execWaitMainFromBoss();
         break;
     }
@@ -374,7 +370,7 @@ void daItem_c::execInitNormalDirection() {
         mpParticleEmitter = NULL;
     }
     
-    mCurState = 6;
+    mCurState = STATE_MAIN_NORMAL;
 }
 
 /* 800F5AFC-800F5BC8       .text execMainNormalDirection__8daItem_cFv */
@@ -409,7 +405,7 @@ void daItem_c::execInitGetDemoDirection() {
         fopAcM_orderItemEvent(this);
         mEvtInfo.onCondition(dEvtCnd_CANGETITEM_e);
         mDemoItemBsPcId = fopAcM_createItemForTrBoxDemo(&current.pos, m_itemNo, -1, current.roomNo, NULL, NULL);
-        mCurState = 8;
+        mCurState = STATE_WAIT_GET_DEMO;
     }
 }
 
@@ -418,7 +414,7 @@ void daItem_c::execWaitGetDemoDirection() {
     hide();
     
     if (mEvtInfo.checkCommandItem()) {
-        mCurState = 9;
+        mCurState = STATE_MAIN_GET_DEMO;
         if (mDemoItemBsPcId != -1) {
             dComIfGp_event_setItemPartnerId(mDemoItemBsPcId);
         }
@@ -463,7 +459,7 @@ void daItem_c::execWaitMain() {
         cLib_chaseF(&mScale.z, mScaleTarget.z, temp3);
     }
     
-    if (checkItemDisappear() && mItemTimer == 0) {
+    if (checkItemDisappear() && mDisappearTimer == 0) {
         if (field_0x65a == 0) {
             fopAcM_delete(this);
         }
@@ -490,7 +486,7 @@ void daItem_c::execWaitMainFromBoss() {
     }
     mode_proc_call();
     
-    if (mCurState != 0xB) {
+    if (mCurState != STATE_WAIT_BOSS2) {
         scaleAnimFromBossItem();
     }
     
@@ -583,10 +579,10 @@ bool Reflect(cXyz& surfVec, cXyz* moveVec, f32 param_2, f32 xzMult) {
 
 /* 800F6434-800F6D24       .text itemGetExecute__8daItem_cFv */
 void daItem_c::itemGetExecute() {
-    if (mCurState == 5) {
+    if (mCurState == STATE_INIT_NORMAL) {
         return;
     }
-    mCurState = 5;
+    mCurState = STATE_INIT_NORMAL;
     
     switch (m_itemNo) {
     case HEART:
@@ -621,13 +617,13 @@ void daItem_c::itemGetExecute() {
         mDoAud_seStart(JA_SE_RED_LUPY_GET, NULL, 0, 0);
         execItemGet(m_itemNo);
         break;
-    case UTUWA_HEART:
-        mDoAud_seStart(JA_SE_HEART_PIECE, NULL, 0, 0);
-        mCurState = 7;
-        break;
     case KAKERA_HEART:
         mDoAud_seStart(JA_SE_HEART_PIECE, NULL, 0, 0);
-        mCurState = 7;
+        mCurState = STATE_INIT_GET_DEMO;
+        break;
+    case UTUWA_HEART:
+        mDoAud_seStart(JA_SE_HEART_PIECE, NULL, 0, 0);
+        mCurState = STATE_INIT_GET_DEMO;
         break;
     case S_MAGIC:
         mDoAud_seStart(JA_SE_MAGIC_POT_GET_S, NULL, 0, 0);
@@ -641,11 +637,14 @@ void daItem_c::itemGetExecute() {
     case BOMB_10:
     case BOMB_20:
     case BOMB_30:
+    case ARROW_10:
+    case ARROW_20:
+    case ARROW_30:
         mDoAud_seStart(JA_SE_CONSUMP_ITEM_GET, NULL, 0, 0);
         execItemGet(m_itemNo);
         break;
     case SMALL_KEY:
-        mCurState = 7;
+        mCurState = STATE_INIT_GET_DEMO;
         break;
     case TRIPLE_HEART:
         mDoAud_seStart(JA_SE_HEART_PIECE, NULL, 0, 0);
@@ -654,36 +653,36 @@ void daItem_c::itemGetExecute() {
     case PENDANT:
         mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
         if (!dComIfGs_isGetItemBeast(7)) {
-            mCurState = 7;
+            mCurState = STATE_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(7);
         } else {
             execItemGet(m_itemNo);
         }
         break;
     case DEKU_LEAF:
-        mCurState = 7;
+        mCurState = STATE_INIT_GET_DEMO;
         break;
     case SWORD:
         daItem_c* item = (daItem_c*)fopAcM_SearchByName(PROC_ITEM);
         if (item && item->m_itemNo == SHIELD) {
             item->itemGetExecute();
         }
-        mCurState = 7;
+        mCurState = STATE_INIT_GET_DEMO;
         break;
     case SHIELD:
         item = (daItem_c*)fopAcM_SearchByName(PROC_ITEM);
         if (item && item->m_itemNo == SWORD) {
             item->itemGetExecute();
         }
-        mCurState = 7;
+        mCurState = STATE_INIT_GET_DEMO;
         break;
     case DROPPED_SWORD:
-        mCurState = 7;
+        mCurState = STATE_INIT_GET_DEMO;
         break;
     case SKULL_NECKLACE:
         mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
         if (!dComIfGs_isGetItemBeast(0)) {
-            mCurState = 7;
+            mCurState = STATE_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(0);
         } else {
             execItemGet(m_itemNo);
@@ -692,7 +691,7 @@ void daItem_c::itemGetExecute() {
     case BOKOBABA_SEED:
         mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
         if (!dComIfGs_isGetItemBeast(1)) {
-            mCurState = 7;
+            mCurState = STATE_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(1);
         } else {
             execItemGet(m_itemNo);
@@ -701,7 +700,7 @@ void daItem_c::itemGetExecute() {
     case GOLDEN_FEATHER:
         mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
         if (!dComIfGs_isGetItemBeast(2)) {
-            mCurState = 7;
+            mCurState = STATE_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(2);
         } else {
             execItemGet(m_itemNo);
@@ -710,7 +709,7 @@ void daItem_c::itemGetExecute() {
     case BOKO_BELT:
         mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
         if (!dComIfGs_isGetItemBeast(3)) {
-            mCurState = 7;
+            mCurState = STATE_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(3);
         } else {
             execItemGet(m_itemNo);
@@ -719,7 +718,7 @@ void daItem_c::itemGetExecute() {
     case RED_JELLY:
         mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
         if (!dComIfGs_isGetItemBeast(4)) {
-            mCurState = 7;
+            mCurState = STATE_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(4);
         } else {
             execItemGet(m_itemNo);
@@ -728,7 +727,7 @@ void daItem_c::itemGetExecute() {
     case GREEN_JELLY:
         mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
         if (!dComIfGs_isGetItemBeast(5)) {
-            mCurState = 7;
+            mCurState = STATE_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(5);
         } else {
             execItemGet(m_itemNo);
@@ -737,25 +736,25 @@ void daItem_c::itemGetExecute() {
     case BLUE_JELLY:
         mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
         if (!dComIfGs_isGetItemBeast(6)) {
-            mCurState = 7;
+            mCurState = STATE_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(6);
-        } else {
-            execItemGet(m_itemNo);
-        }
-        break;
-    case ANIMAL_ESA:
-        mDoAud_seStart(JA_SE_ESA_GET, NULL, 0, 0);
-        if (!dComIfGs_isGetItemBait(0)) {
-            mCurState = 7;
-            dComIfGs_onGetItemBait(0);
         } else {
             execItemGet(m_itemNo);
         }
         break;
     case BIRD_ESA_5:
         mDoAud_seStart(JA_SE_ESA_GET, NULL, 0, 0);
+        if (!dComIfGs_isGetItemBait(0)) {
+            mCurState = STATE_INIT_GET_DEMO;
+            dComIfGs_onGetItemBait(0);
+        } else {
+            execItemGet(m_itemNo);
+        }
+        break;
+    case ANIMAL_ESA:
+        mDoAud_seStart(JA_SE_ESA_GET, NULL, 0, 0);
         if (!dComIfGs_isGetItemBait(1)) {
-            mCurState = 7;
+            mCurState = STATE_INIT_GET_DEMO;
             dComIfGs_onGetItemBait(1);
         } else {
             execItemGet(m_itemNo);
@@ -790,28 +789,28 @@ void daItem_c::itemDefaultRotateY() {
 
 /* 800F6D78-800F6E54       .text checkItemDisappear__8daItem_cFv */
 BOOL daItem_c::checkItemDisappear() {
-    BOOL disappearing = true;
-    if (mCurState == 3) {
-        disappearing = false;
+    BOOL disappearing = TRUE;
+    if (mCurState == STATE_BRING_NEZUMI) {
+        disappearing = FALSE;
         show();
     }
     if (mStatusFlags & 0x02) {
-        disappearing = false;
+        disappearing = FALSE;
     }
     if (mStatusFlags & 0x10) {
-        disappearing = false;
+        disappearing = FALSE;
     }
     if (dItem_data::chkFlag(m_itemNo, 0x01)) {
-        disappearing = false;
+        disappearing = FALSE;
     }
     if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode != 0) {
-        disappearing = false;
+        disappearing = FALSE;
     }
     if (mCurState == 4) {
-        disappearing = false;
+        disappearing = FALSE;
     }
     if ((mStatusFlags & 0x08) || (mStatusFlags & 0x40) || (mStatus & fopAcStts_HOOK_CARRY_e)) {
-        disappearing = false;
+        disappearing = FALSE;
         show();
     }
     return disappearing;
@@ -823,7 +822,7 @@ void daItem_c::setItemTimer(int timer) {
         mStatusFlags |= 0x10;
         return;
     }
-    mItemTimer = timer;
+    mDisappearTimer = timer;
 }
 
 /* 800F6E74-800F6EC8       .text checkPlayerGet__8daItem_cFv */
@@ -831,40 +830,280 @@ BOOL daItem_c::checkPlayerGet() {
     if (field_0x638 < getData()->field_0x42) {
         return FALSE;
     }
-    if (mCurState == 3) {
+    if (mCurState == STATE_BRING_NEZUMI) {
         return FALSE;
     }
     return TRUE;
 }
 
 /* 800F6EC8-800F7028       .text itemActionForRupee__8daItem_cFv */
-void daItem_c::itemActionForRupee() {
-    /* Nonmatching */
+BOOL daItem_c::itemActionForRupee() {
+    mAcch.CrrPos(*dComIfG_Bgsp());
+    checkWall();
+    
+    if (mAcch.ChkGroundLanding()) {
+        f32 temp2 = field_0x650 * getData()->field_0x04;
+        if (temp2 > mGravity - 0.5f) {
+            speedF = 0.0f;
+        } else {
+            speed.set(0.0f, -temp2, 0.0f);
+        }
+        
+        mOnGroundTimer++;
+        if (mOnGroundTimer >= 2) {
+            cLib_offBit(mStatusFlags, (u8)0x04);
+        }
+        
+        set_bound_se();
+    } else if (mAcch.ChkGroundHit()) {
+        itemDefaultRotateY();
+        speedF = 0.0f;
+        cLib_offBit(mStatusFlags, (u8)0x04);
+        mOnGroundTimer = 1;
+    }
+    
+    if (speed.y != 0.0f) {
+        field_0x650 = speed.y;
+    }
+    
+    field_0x654 = getData()->field_0x1A;
+    
+    if (mOnGroundTimer == 0) {
+        mTargetAngleX = current.angle.x + field_0x654;
+    } else {
+        mTargetAngleX = 0;
+    }
+    
+    if (!cLib_checkBit(mStatusFlags, (u8)0x02)) {
+        cLib_chaseAngleS(&current.angle.x, mTargetAngleX, field_0x654);
+    }
+    
+    return TRUE;
 }
 
 /* 800F7028-800F713C       .text itemActionForHeart__8daItem_cFv */
-void daItem_c::itemActionForHeart() {
-    /* Nonmatching */
+BOOL daItem_c::itemActionForHeart() {
+    f32 origSpeedY = speed.y;
+    if (origSpeedY < 0.0f) {
+        mGravity = 0.0f;
+        speed.set(0.0f, getData()->field_0x20, 0.0f);
+    }
+    
+    mAcch.CrrPos(*dComIfG_Bgsp());
+    
+    if (mAcch.ChkGroundLanding() || mAcch.ChkGroundHit()) {
+        cLib_offBit(mStatusFlags, (u8)0x04);
+        mExtraZRot = 0;
+        speed.set(0.0f, -1.0f, 0.0f);
+        speedF = 0.0f;
+        itemDefaultRotateY();
+    } else if (origSpeedY < 0.0f) {
+        f32 temp2 = getData()->field_0x24;
+        int temp = field_0x634 * getData()->field_0x28;
+        speedF = temp2 * cM_ssin(temp);
+    }
+    
+    return TRUE;
 }
 
 /* 800F713C-800F72A4       .text itemActionForKey__8daItem_cFv */
-void daItem_c::itemActionForKey() {
-    /* Nonmatching */
+BOOL daItem_c::itemActionForKey() {
+    mAcch.CrrPos(*dComIfG_Bgsp());
+    checkWall();
+    
+    if (mAcch.ChkGroundLanding()) {
+        f32 temp2 = field_0x650 * getData()->field_0x04;
+        if (temp2 > mGravity - 0.5f) {
+            speedF = 0.0f;
+            current.angle.x = 0x4000;
+            mTargetAngleX = current.angle.x;
+            field_0x654 = 0;
+        } else {
+            speed.set(0.0f, -temp2, 0.0f);
+        }
+        
+        mOnGroundTimer++;
+        if (mOnGroundTimer >= 2) {
+            cLib_offBit(mStatusFlags, (u8)0x04);
+        }
+    } else if (mAcch.ChkGroundHit()) {
+        mOnGroundTimer = 1;
+        mTargetAngleX = 0;
+        current.angle.x = 0;
+        cLib_offBit(mStatusFlags, (u8)0x04);
+        itemDefaultRotateY();
+    }
+    
+    if (speed.y != 0.0f) {
+        field_0x650 = speed.y;
+    }
+    
+    field_0x654 = getData()->field_0x1A;
+    
+    if (mOnGroundTimer == 0) {
+        mTargetAngleX = current.angle.x + field_0x654;
+    } else {
+        mTargetAngleX = 0;
+    }
+    
+    cLib_chaseAngleS(&current.angle.x, mTargetAngleX, field_0x654);
+    
+    return TRUE;
 }
 
 /* 800F72A4-800F73A4       .text itemActionForEmono__8daItem_cFv */
-void daItem_c::itemActionForEmono() {
-    /* Nonmatching */
+BOOL daItem_c::itemActionForEmono() {
+    mAcch.CrrPos(*dComIfG_Bgsp());
+    
+    if (mAcch.ChkGroundLanding()) {
+        f32 temp2 = field_0x650 * getData()->field_0x04;
+        if (temp2 > mGravity - 0.5f) {
+            speedF = 0.0f;
+        } else {
+            speed.set(0.0f, -temp2, 0.0f);
+        }
+        
+        set_bound_se();
+    } else if (mAcch.ChkGroundHit()) {
+        s16 rotationSpeed = 0xFFFF / getData()->mNumFramesPerFullSpin;
+        rotationSpeed = rotationSpeed / 2;
+        fopAcM_addAngleY(this, current.angle.y + rotationSpeed, rotationSpeed);
+        speedF = 0.0f;
+    }
+    
+    if (speed.y != 0.0f) {
+        field_0x650 = speed.y;
+    }
+    
+    return TRUE;
 }
 
 /* 800F73A4-800F7898       .text itemActionForSword__8daItem_cFv */
-void daItem_c::itemActionForSword() {
-    /* Nonmatching */
+BOOL daItem_c::itemActionForSword() {
+    /* Nonmatching - regalloc */
+    mAcch.CrrPos(*dComIfG_Bgsp());
+    
+    bool isQuake = dComIfGp_getDetect().chk_quake(&current.pos);
+    if (isQuake && !cLib_checkBit(mStatusFlags, (u8)0x20) && mAcch.ChkGroundHit()) {
+        speed.set(0.0f, 21.0f, 0.0f);
+        mGravity = -3.5f;
+    }
+    
+    if (mAcch.ChkGroundLanding()) {
+        f32 temp = field_0x650 * 0.9f;
+        speed.set(0.0f, -temp, 0.0f);
+        
+        if (m_itemNo == SWORD) {
+            if (field_0x638 > 15) {
+                fopAcM_seStart(this, JA_SE_OBJ_LNK_SWORD_FALL, 0);
+            }
+        } else if (m_itemNo == SHIELD) {
+            if (field_0x638 > 15) {
+                fopAcM_seStart(this, JA_SE_OBJ_LNK_SHIELD_FALL, 0);
+            }
+        }
+    }
+    
+    dBgS_ObjGndChk gndChk;
+    cXyz bottomPos(0.0f, 0.0f, 0.0f);
+    cXyz topPos(0.0f, 50.0f, 0.0f);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(current.angle);
+    mDoMtx_stack_c::multVec(&bottomPos, &bottomPos);
+    mDoMtx_stack_c::multVec(&topPos, &topPos);
+    gndChk.SetPos(&bottomPos);
+    f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
+    f32 temp3 = groundY - bottomPos.y;
+    gndChk.SetPos(&topPos);
+    groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
+    f32 temp4 = groundY - topPos.y;
+    
+    if (field_0x666 == 1) {
+        field_0x660 = 0x2000;
+    }
+    
+    if (temp3 > 0.0f || temp4 > 0.0f) {
+        if (temp3 > 0.0f) {
+            field_0x660 = -0.8f * field_0x660;
+        } else if (temp4 > 0.0f) {
+            field_0x660 = -0.8f * field_0x660;
+        }
+        field_0x666++;
+    }
+    
+    if (field_0x660 == 0) {
+        field_0x666 = 0;
+    } else {
+        cLib_addCalcAngleS2(&current.angle.x, field_0x660 + 0x4000, 10, 0x800);
+    }
+    
+    if (isQuake) {
+        cLib_onBit(mStatusFlags, (u8)0x20);
+    } else {
+        cLib_offBit(mStatusFlags, (u8)0x20);
+    }
+    
+    return TRUE;
 }
 
 /* 800F7898-800F7AF0       .text itemActionForArrow__8daItem_cFv */
-void daItem_c::itemActionForArrow() {
-    /* Nonmatching */
+BOOL daItem_c::itemActionForArrow() {
+    mAcch.CrrPos(*dComIfG_Bgsp());
+    
+    if (mOnGroundTimer == 0 && mpParticleEmitter && fopAcM_SearchByName(PROC_BST)) { // Gohdan
+        f32 transX = current.pos.x;
+        f32 transY = current.pos.y;
+        f32 transZ = current.pos.z;
+        mpParticleEmitter->setGlobalTranslation(transX, transY, transZ);
+    }
+    
+    if (mAcch.ChkGroundLanding()) {
+        f32 temp_f3 = field_0x650 * getData()->field_0x04;
+        if (temp_f3 > mGravity - 0.5f) {
+            speedF = 0.0f;
+        } else {
+            speed.set(0.0f, -temp_f3, 0.0f);
+            speedF *= 0.5f;
+        }
+        
+        mOnGroundTimer++;
+        
+        if (mOnGroundTimer == 1 && fopAcM_SearchByName(PROC_BST)) { // Gohdan
+            JPABaseEmitter* emitter = dComIfGp_particle_set(0xA1E2, &current.pos, NULL, NULL, 0xFF, &mPtclSmokeCb, fopAcM_GetRoomNo(this));
+            if (emitter) {
+                emitter->setMaxFrame(1);
+            }
+        }
+        
+        if (mpParticleEmitter) {
+            mpParticleEmitter->becomeInvalidEmitter();
+            mpParticleEmitter = NULL;
+        }
+        
+        set_bound_se();
+    } else if (mAcch.ChkGroundHit()) {
+        speedF = 0.0f;
+        
+        if (m_itemNo != UTUWA_HEART) {
+            itemDefaultRotateY();
+        }
+    }
+    
+    if (m_itemNo == UTUWA_HEART) {
+        if (mOnGroundTimer != 0) {
+            getData();
+            s16 rotationSpeed = 0xFFFF / getData()->mNumFramesPerFullSpin;
+            cLib_addCalcAngleS(&field_0x654, rotationSpeed, 10, 0x400, 0x100);
+        }
+        
+        cLib_chaseAngleS(&shape_angle.y, shape_angle.y + field_0x654, field_0x654);
+    }
+    
+    if (speed.y != 0.0f) {
+        field_0x650 = speed.y;
+    }
+    
+    return TRUE;
 }
 
 /* 800F7AF0-800F7BF8       .text checkWall__8daItem_cFv */
@@ -966,8 +1205,8 @@ BOOL daItem_c::timeCount() {
     }
     
     if (checkPlayerGet() && !dComIfGp_event_runCheck()) {
-        if (mItemTimer > 0) {
-            mItemTimer--;
+        if (mDisappearTimer > 0) {
+            mDisappearTimer--;
         } else if (field_0x65a > 0) {
             field_0x65a--;
         }
@@ -985,22 +1224,230 @@ void daItem_c::mode_wait_init() {
 
 /* 800F7F50-800F80CC       .text mode_water_init__8daItem_cFv */
 void daItem_c::mode_water_init() {
-    /* Nonmatching */
+    mMode = 2;
+    
+    if (daSea_ChkArea(current.pos.x, current.pos.z)) {
+        f32 seaH = daSea_calcWave(current.pos.x, current.pos.z);
+        if (seaH > current.pos.y) {
+            current.pos.y = seaH;
+        }
+    } else {
+        if (!mAcch.ChkWaterHit() || mAcch.m_wtr.GetHeight() < current.pos.y) {
+            mode_wait_init();
+        }
+        current.pos.y = mAcch.m_wtr.GetHeight();
+    }
+    
+    speed.setAll(0.0f);
+    speedF = 0.0f;
+    current.angle.z = 0;
+    current.angle.x = 0;
+    mExtraZRot = 0;
+    field_0x654 = 0;
+    cLib_offBit(mStatusFlags, (u8)0x04);
+    mScale.set(mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
+    
+    cXyz scale;
+    f32 temp = dItem_data::getShadowSize(m_itemNo);
+    f32 temp3 = temp / dItem_data::getShadowSize(GREEN_RUPEE);
+    temp3 *= mScale.x;
+    scale.setAll(temp3);
+    
+    dComIfGp_particle_setShipTail(0x33, &current.pos, NULL, &scale, 0xFF, &mPtclRippleCb);
+    mPtclRippleCb.mRate = 0.0f;
 }
 
 /* 800F80CC-800F844C       .text mode_wait__8daItem_cFv */
 void daItem_c::mode_wait() {
-    /* Nonmatching */
+    if (cLib_checkBit(mStatusFlags, (u8)0x04) && dItem_data::checkAppearEffect(m_itemNo)) {
+        u16 appearEffect = dItem_data::getAppearEffect(m_itemNo);
+        dComIfGp_particle_setSimple(appearEffect, &current.pos, 0xFF, g_whiteColor, g_whiteColor, 0);
+    }
+    
+    switch (m_itemNo) {
+    case HEART:
+    case TRIPLE_HEART:
+        itemActionForHeart();
+        break;
+    case KAKERA_HEART:
+    case UTUWA_HEART:
+    case BOMB_5:
+    case BOMB_10:
+    case BOMB_20:
+    case BOMB_30:
+    case ARROW_10:
+    case ARROW_20:
+    case ARROW_30:
+    case MAGIC_ARROW:
+    case LIGHT_ARROW:
+        itemActionForArrow();
+        break;
+    case SMALL_KEY:
+        itemActionForKey();
+        break;
+    case S_MAGIC:
+    case L_MAGIC:
+    case PENDANT:
+    case SKULL_NECKLACE:
+    case BOKOBABA_SEED:
+    case GOLDEN_FEATHER:
+    case BOKO_BELT:
+    case RED_JELLY:
+    case GREEN_JELLY:
+    case BLUE_JELLY:
+        itemActionForEmono();
+        break;
+    case SWORD:
+    case SHIELD:
+    case DROPPED_SWORD:
+        itemActionForSword();
+        break;
+    default:
+        itemActionForRupee();
+        break;
+    }
+    
+    if (mAcch.ChkWaterHit() && mAcch.m_wtr.GetHeight() > current.pos.y
+        || (daSea_ChkArea(current.pos.x, current.pos.z) && daSea_calcWave(current.pos.x, current.pos.z) > current.pos.y))
+    {
+        mode_water_init();
+    }
+    
+    dBgS_ObjGndChk_Yogan gndChk;
+    cXyz temp;
+    temp.set(next.pos.x, next.pos.y, next.pos.z);
+    gndChk.SetPos(&temp);
+    f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
+    if (groundY != -1000000000.0f && groundY > current.pos.y) {
+        fopAcM_delete(this);
+    }
 }
 
 /* 800F844C-800F8528       .text mode_water__8daItem_cFv */
 void daItem_c::mode_water() {
-    /* Nonmatching */
+    mAcch.CrrPos(*dComIfG_Bgsp());
+    
+    if (daSea_ChkArea(current.pos.x, current.pos.z)) {
+        f32 seaH = daSea_calcWave(current.pos.x, current.pos.z);
+        if (seaH >= current.pos.y) {
+            current.pos.y = seaH;
+        } else {
+            mode_wait_init();
+        }
+    } else if (!mAcch.ChkWaterHit() || mAcch.m_wtr.GetHeight() < current.pos.y) {
+        mode_wait_init();
+    } else {
+        current.pos.y = mAcch.m_wtr.GetHeight();
+    }
+    
+    s16 rotationSpeed = 0xFFFF / daItemBase_c::m_data.mNumFramesPerFullSpin;
+    fopAcM_addAngleY(this, current.angle.y + rotationSpeed, rotationSpeed);
 }
 
 /* 800F8528-800F8950       .text initAction__8daItem_cFv */
-void daItem_c::initAction() {
-    /* Nonmatching */
+BOOL daItem_c::initAction() {
+    /* Nonmatching - regalloc */
+    if (cLib_checkBit(mStatusFlags, (u8)0x02)) {
+        mScale.set(mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
+        
+        switch (mAction) {
+        case 4:
+            current.angle.y = cM_rndF((f32)0xFFFF);
+            f32 temp = getData()->field_0x2C + cM_rndF(5.0f);
+            speedF = cM_rndF(getData()->field_0x30);
+            speed.set(0.0f, temp, 0.0f);
+            // speedF = cM_rndF(getData()->field_0x30);
+            break;
+        case 5:
+            speed.setAll(0.0f);
+            speedF = 0.0f;
+            mScale.setAll(0.0f);
+            mCurState = STATE_WAIT_BOSS1;
+            fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
+            field_0x654 = 0x4A8;
+            break;
+        case 0xC:
+            mScale.setAll(1.0f);
+            mCurState = STATE_WAIT_BOSS2;
+            fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
+            field_0x654 = 0x4A8;
+            break;
+        }
+        
+        mGravity = getData()->mFieldItemGravity;
+        cLib_offBit(mStatusFlags, (u8)0x04);
+        mMode = 0;
+        
+        return TRUE;
+    }
+    
+    // TODO: usage of uninitialized register?
+    f32 temp_f31;
+    switch (mAction) {
+    case 1:
+        temp_f31 = getData()->field_0x08 + cM_rndFX(5.0f);
+        speedF = getData()->field_0x10 / 10.0f;
+        if (g_mDoCPd_cpadInfo[0].mMainStickValue) {
+            speedF = getData()->field_0x10;
+        }
+        current.angle.y = cM_rndF((f32)0xFFFF);
+        break;
+    case 3:
+        temp_f31 = 25.0f;
+        current.angle.y = cM_rndF((f32)0xFFFF);
+        speedF = getData()->mVelocityScale;
+        break;
+    case 7:
+        speedF = getData()->mVelocityScale * 1.5f;
+        current.angle.y = cM_rndF((f32)0xFFFF);
+        temp_f31 = getData()->field_0x08 + cM_rndFX(5.0f);
+        break;
+    case 2:
+    case 4:
+    case 9:
+        speedF = 0.0f;
+        current.angle.y = cM_rndF((f32)0xFFFF);
+        temp_f31 = getData()->field_0x08 + cM_rndFX(5.0f);
+        break;
+    case 8:
+        current.angle.y = cM_rndF((f32)0xFFFF);
+        temp_f31 = getData()->field_0x44 + cM_rndFX(5.0f);
+        speedF = getData()->mVelocityScale;
+        break;
+    case 0xA:
+        mGravity = getData()->mFieldItemGravity;
+        mScale.setAll(0.0f);
+        mMode = 0;
+        break;
+    case 0xB:
+        current.angle.y = cM_rndF((f32)0xFFFF);
+        temp_f31 = 0.0f;
+        speedF = 0.0f;
+        break;
+    case 6:
+        temp_f31 = getData()->field_0x08 + cM_rndFX(5.0f);
+        break;
+    case 0:
+    case 5:
+        break;
+    }
+    
+    mExtraZRot = 0;
+    
+    if (isHeart(m_itemNo)) {
+        speedF = 2.0f * speedF;
+        mExtraZRot = cM_rndFX(getData()->mHeartMaxRandomZRot);
+    }
+    
+    mGravity = getData()->mFieldItemGravity;
+    speed.set(0.0f, temp_f31, 0.0f);
+    mScale.setAll(0.0f);
+    
+    mMode = 0;
+    
+    cLib_onBit(mStatusFlags, (u8)0x04);
+    
+    return TRUE;
 }
 
 /* 800F8950-800F8970       .text daItem_Draw__FP8daItem_c */

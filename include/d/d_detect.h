@@ -15,7 +15,7 @@ public:
     ~dDetect_c();
 
     void proc();
-    void chk_quake(const cXyz*) const;
+    bool chk_quake(const cXyz*) const;
     void set_quake(const cXyz*);
     void chk_quake_area(const cXyz*) const;
     void search_tag_light(void*, void*);

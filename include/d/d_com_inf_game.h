@@ -619,8 +619,10 @@ STATIC_ASSERT(sizeof(dComIfG_inf_c) == 0x1D1C8);
 
 extern dComIfG_inf_c g_dComIfG_gameInfo;
 
-extern JUtility::TColor g_saftyWhiteColor;
+extern JUtility::TColor g_clearColor;
 extern JUtility::TColor g_blackColor;
+extern JUtility::TColor g_whiteColor;
+extern JUtility::TColor g_saftyWhiteColor;
 
 /**
  * === SAVE ===
@@ -2031,6 +2033,12 @@ inline void dComIfGp_particle_setStripes(u16 particleID, const cXyz* pos, const 
                                          const cXyz* scale, u8 param_4, u16 param_5) {
     dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
     pParticle->setNormalStripes(particleID, pos, angle, scale, param_4, param_5);
+}
+
+inline void dComIfGp_particle_setSimple(u16 particleID, cXyz* pos, u8 alpha, GXColor& prmColor,
+                                        GXColor& envColor, int param_6) {
+    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
+    pParticle->setSimple(particleID, pos, alpha, prmColor, envColor, param_6);
 }
 
 inline void dComIfGp_particle_calc3D() {
