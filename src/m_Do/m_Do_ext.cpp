@@ -9,6 +9,8 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JMath/JMath.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "JSystem/JUtility/JUTCacheFont.h"
+#include "JSystem/JKernel/JKRHeap.h"
 #include "SSystem/SComponent/c_m3d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
@@ -837,7 +839,7 @@ JKRExpHeap* mDoExt_getZeldaHeap() {
 s32 safeZeldaHeapSize;
 
 /* 800118C8-800118F0       .text mDoExt_setSafeZeldaHeapSize__Fv */
-int mDoExt_setSafeZeldaHeapSize() {
+void mDoExt_setSafeZeldaHeapSize() {
     safeZeldaHeapSize = mDoExt_getZeldaHeap()->getTotalFreeSize();
 }
 
@@ -1155,7 +1157,7 @@ void mDoExt_MtxCalcOldFrame::decOldFrameMorfCounter() {
 
 /* 80012650-800129E4       .text __ct__14mDoExt_McaMorfFP12J3DModelDataP25mDoExt_McaMorfCallBack1_cP25mDoExt_McaMorfCallBack2_cP15J3DAnmTransformifiiiPvUlUl */
 mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_c* callback1, mDoExt_McaMorfCallBack2_c* callback2, J3DAnmTransform* anmTransform, int param_4, f32 param_5, int param_6, int param_7, int param_8, void* param_9, u32 param_10, u32 param_11) {
-    /* Nonmatching */
+    /* Nonmatching - JGeometry::TVec3<f32> ctor */
     mpModel = NULL;
     mpSound = NULL;
     mpTransformInfo = NULL;
@@ -1184,7 +1186,7 @@ mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_
         }
     }
     if (param_8) {
-        //mpSound = new mDoExt_zelAnime();
+        mpSound = new mDoExt_zelAnime();
         if (!mpSound) {
             goto cleanup;
         }
@@ -1196,25 +1198,25 @@ mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_
         goto cleanup;
     }
     mpQuat = new Quaternion[modelData->getJointNum()];
-    if (!mpQuat) {
-        goto cleanup;
+    if (mpQuat) {
+        J3DTransformInfo* info = mpTransformInfo;
+        Quaternion* quat = mpQuat;
+        J3DModelData* r23 = mpModel->getModelData();
+        u16 jointNum = r23->getJointNum();
+        for (int i = 0; i < jointNum; i++) {
+            *info = r23->getJointNodePointer(i)->getTransformInfo();
+            JMAEulerToQuat(info->mRotation.x, info->mRotation.y, info->mRotation.z, quat);
+            info++;
+            quat++;
+        }
+        mpCallback1 = callback1;
+        mpCallback2 = callback2;
+        return;
     }
-    J3DTransformInfo* info = mpTransformInfo;
-    Quaternion* quat = mpQuat;
-    J3DModelData* r23 = mpModel->getModelData();
-    u16 jointNum = r23->getJointNum();
-    for (int i = 0; i < jointNum; i++) {
-        *info = r23->getJointNodePointer(i)->getTransformInfo();
-        JMAEulerToQuat(info->mRotation.x, info->mRotation.y, info->mRotation.z, quat);
-        info++;
-        quat++;
-    }
-    mpCallback1 = callback1;
-    mpCallback2 = callback2;
-    return;
-    cleanup:
+    
+cleanup:
     if (mpSound) {
-        //mpSound->stopAnime();
+        mpSound->stop();
         mpSound = NULL;
     }
     if (mpTransformInfo) {
@@ -1509,6 +1511,8 @@ void mDoExt_3DlineMat1_c::update(u16, f32, _GXColor&, u16, dKy_tevstr_c*) {
 /* 80015E54-80016518       .text update__19mDoExt_3DlineMat1_cFUsR8_GXColorP12dKy_tevstr_c */
 void mDoExt_3DlineMat1_c::update(u16, _GXColor&, dKy_tevstr_c*) {
     /* Nonmatching */
+    u8* size_p = mpLines->mpSize;
+    JUT_ASSERT(5243, size_p != 0);
 }
 
 /* 80016518-8001657C       .text setMat__26mDoExt_3DlineMatSortPacketFP18mDoExt_3DlineMat_c */
@@ -1522,38 +1526,117 @@ void mDoExt_3DlineMatSortPacket::draw() {
 }
 
 /* 800165E4-8001683C       .text mDoExt_initFontCommon__FPP7JUTFontPP7ResFONTP7JKRHeapPCcP10JKRArchiveUcUlUl */
-void mDoExt_initFontCommon(JUTFont**, ResFONT**, JKRHeap*, const char*, JKRArchive*, u8, u32, u32) {
-    /* Nonmatching */
+void mDoExt_initFontCommon(JUTFont** p_font, ResFONT** p_resfont, JKRHeap* p_heap, const char* param_4,
+                           JKRArchive* p_archive, u8 param_6, u32 param_7, u32 param_8) {
+    JUTFont* mDoExt_font = *p_font;
+    JUT_ASSERT(6648, mDoExt_font == 0);
+    ResFONT* mDoExt_resfont = *p_resfont;
+    JUT_ASSERT(6649, mDoExt_resfont == 0);
+    
+    *p_resfont = (ResFONT*)p_archive->getGlbResource('ROOT', param_4, p_archive);
+    mDoExt_resfont = *p_resfont;
+    JUT_ASSERT(6651, mDoExt_resfont != 0);
+    
+    if (param_6 == 0) {
+        u32 temp = (((param_8+0x1F) & ~0x1F) + 0x40) * param_7;
+        JUTCacheFont* cacheFont = new(p_heap, 0) JUTCacheFont(*p_resfont, temp, p_heap);
+        if (cacheFont->isValid()) {
+            *p_font = cacheFont;
+        }
+        JKRFileLoader::removeResource(*p_resfont, NULL);
+        *p_resfont = NULL;
+    } else {
+        JUTResFont* resFont = new JUTResFont(*p_resfont, p_heap);
+        *p_font = resFont;
+    }
+    
+    if (*p_font && !(*p_font)->isValid()) {
+        // "\nFailed to create cache font class\n"
+        OSReport_FatalError("\nキャッシュフォントクラス作成に失敗しました\n");
+        delete *p_font;
+        *p_font = NULL;
+    }
+    
+    mDoExt_font = *p_font;
+    JUT_ASSERT(6685, mDoExt_font != 0);
 }
+
+JUTFont* mDoExt_font0;
+ResFONT* mDoExt_resfont0;
+s32 mDoExt_font0_getCount;
 
 /* 80016884-800168E0       .text mDoExt_initFont0__Fv */
 void mDoExt_initFont0() {
-    /* Nonmatching */
+    static const char fontdata[] = "rock_24_20_4i_usa.bfn";
+    mDoExt_initFontCommon(&mDoExt_font0, &mDoExt_resfont0, mDoExt_getZeldaHeap(), fontdata, dComIfGp_getFontArchive(), 1, 0, 0);
 }
 
 /* 800168E0-8001691C       .text mDoExt_getMesgFont__Fv */
-void mDoExt_getMesgFont() {
-    /* Nonmatching */
+JUTFont* mDoExt_getMesgFont() {
+    if (!mDoExt_font0) {
+        mDoExt_initFont0();
+    }
+    mDoExt_font0_getCount++;
+    return mDoExt_font0;
 }
 
 /* 8001691C-80016A1C       .text mDoExt_removeMesgFont__Fv */
 void mDoExt_removeMesgFont() {
-    /* Nonmatching */
+    JUT_ASSERT(6736, mDoExt_font0_getCount > 0);
+    
+    if (mDoExt_font0_getCount > 0) {
+        mDoExt_font0_getCount--;
+        JUT_ASSERT(6739, mDoExt_font0_getCount > 0);
+        
+        if (mDoExt_font0_getCount == 0) {
+            delete mDoExt_font0;
+            mDoExt_font0 = NULL;
+            
+            if (mDoExt_resfont0) {
+                JKRHeap::free(mDoExt_resfont0, NULL);
+                mDoExt_resfont0 = NULL;
+            }
+        }
+    }
 }
+
+JUTFont* mDoExt_font1;
+ResFONT* mDoExt_resfont1;
+s32 mDoExt_font1_getCount;
 
 /* 80016A1C-80016A7C       .text mDoExt_initFont1__Fv */
 void mDoExt_initFont1() {
-    /* Nonmatching */
+    static const char fontdata[] = "hyrule.bfn";
+    mDoExt_initFontCommon(&mDoExt_font1, &mDoExt_resfont1, mDoExt_getZeldaHeap(), fontdata, dComIfGp_getRubyArchive(), 1, 1, 0x8000);
 }
 
 /* 80016A7C-80016AB8       .text mDoExt_getRubyFont__Fv */
-void mDoExt_getRubyFont() {
-    /* Nonmatching */
+JUTFont* mDoExt_getRubyFont() {
+    if (!mDoExt_font1) {
+        mDoExt_initFont1();
+    }
+    mDoExt_font1_getCount++;
+    return mDoExt_font1;
 }
 
 /* 80016AB8-80016BB8       .text mDoExt_removeRubyFont__Fv */
 void mDoExt_removeRubyFont() {
-    /* Nonmatching */
+    JUT_ASSERT(6790, mDoExt_font1_getCount > 0);
+    
+    if (mDoExt_font1_getCount > 0) {
+        mDoExt_font1_getCount--;
+        JUT_ASSERT(6793, mDoExt_font1_getCount > 0);
+        
+        if (mDoExt_font1_getCount == 0) {
+            delete mDoExt_font1;
+            mDoExt_font1 = NULL;
+            
+            if (mDoExt_resfont1) {
+                JKRHeap::free(mDoExt_resfont1, NULL);
+                mDoExt_resfont1 = NULL;
+            }
+        }
+    }
 }
 
 /* 80016BB8-80016C98       .text mDoExt_J3DModel__create__FP12J3DModelDataUlUl */

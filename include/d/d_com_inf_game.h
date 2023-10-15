@@ -391,6 +391,8 @@ public:
     void setMenuArchive(JKRArchive * pArc) { mpMenuArchive = pArc; }
     void setFont0Archive(JKRArchive * pArc) { mpFont0Archive = pArc; }
     void setFont1Archive(JKRArchive * pArc) { mpFont1Archive = pArc; }
+    JKRArchive* getFontArchive() { return mpFont0Archive; }
+    JKRArchive* getRubyArchive() { return mpFont1Archive; }
     void setAnmArchive(JKRArchive * pArc) { mpAnmArchive = pArc; }
     void setLkDArc(JKRArchive * pArc) { mpLkDArc = pArc; }
     void setFmapArchive(JKRArchive * pArc) { mpFmapArchive = pArc; }
@@ -1821,6 +1823,8 @@ inline void dComIfGp_setTmsgArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play
 inline void dComIfGp_setMenuArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMenuArchive(pArc); }
 inline void dComIfGp_setFont0Archive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFont0Archive(pArc); }
 inline void dComIfGp_setFont1Archive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFont1Archive(pArc); }
+inline JKRArchive* dComIfGp_getFontArchive() { return g_dComIfG_gameInfo.play.getFontArchive(); }
+inline JKRArchive* dComIfGp_getRubyArchive() { return g_dComIfG_gameInfo.play.getRubyArchive(); }
 inline void dComIfGp_setLkDArc(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setLkDArc(pArc); }
 inline void dComIfGp_setFmapArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFmapArchive(pArc); }
 inline void dComIfGp_setItemResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setItemResArchive(pArc); }

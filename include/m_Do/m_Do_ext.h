@@ -5,6 +5,7 @@
 #include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/JUtility/JUTFont.h"
+#include "JAZelAudio/JAIZelBasic.h"
 #include "d/d_kankyo.h"
 
 class JKRArchive;
@@ -298,7 +299,13 @@ public:
     virtual void execute(u16) = 0;
 };
 
-class mDoExt_zelAnime;
+class mDoExt_zelAnime : public JAIZelAnime {
+public:
+    mDoExt_zelAnime() { }
+
+public:
+    /* 0x98 */ u8 m8C[0x9C - 0x98];
+};  // Size: 0x9C
 
 class mDoExt_McaMorf : public J3DMtxCalcMaya {
 public:
@@ -505,6 +512,12 @@ public:
     ~mDoExt_3Dline_c();
 
     int init(u16, int, int);
+
+public:
+    /* 0x00 */ cXyz* mpSegments;
+    /* 0x04 */ u8* mpSize;
+    /* 0x08 */ cXyz* mPosArr[2];
+    /* 0x10 */ cXy* mTexArr[2];
 };
 
 class mDoExt_3DlineMat0_c {
@@ -525,6 +538,18 @@ public:
     void update(u16, f32, GXColor&, u16, dKy_tevstr_c*);
     void update(u16, GXColor&, dKy_tevstr_c*);
     int getMaterialID();
+
+public:
+    /* 0x00 */ mDoExt_3DlineMat_c parent;
+    /* 0x08 */ GXTexObj mTexObj;
+    /* 0x28 */ GXColor mColor;
+    /* 0x2C */ dKy_tevstr_c* mpTevStr;
+    /* 0x30 */ u16 mNumLines;
+    /* 0x32 */ u16 m32;
+    /* 0x34 */ u16 m34;
+    /* 0x36 */ u8 mCurArr;
+    /* 0x37 */ u8 m37[0x38 - 0x37];
+    /* 0x38 */ mDoExt_3Dline_c* mpLines;
 };
 
 J3DModel* mDoExt_J3DModel__create(J3DModelData* i_modelData, u32 i_modelFlag, u32 i_differedDlistFlag);
