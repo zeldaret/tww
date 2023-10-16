@@ -62,13 +62,13 @@ public:
     BOOL initAction();
     BOOL _daItem_isdelete();
     
-    s32 checkControl();
-    s32 startControl();
-    s32 endControl();
-    s32 checkLock();
-    s32 setLock();
-    s32 releaseLock();
-    s32 checkActionNow();
+    BOOL checkControl();
+    BOOL startControl();
+    BOOL endControl();
+    BOOL checkLock();
+    BOOL setLock();
+    BOOL releaseLock();
+    BOOL checkActionNow();
     
     static dCcD_SrcCyl m_cyl_src;
     static s32 m_timer_max;
