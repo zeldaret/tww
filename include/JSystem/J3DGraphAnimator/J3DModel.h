@@ -38,13 +38,13 @@ class J3DVisibilityManager {
 public:
     J3DVisibilityManager(J3DAnmVisibilityFull* visibility) {
         mAnmVisibility = visibility;
-        field_0x8 = 1;
+        mbActive = 1;
     }
     virtual ~J3DVisibilityManager();
     virtual void setVisibility(J3DModelData*);
 
     /* 0x04 */ J3DAnmVisibilityFull* mAnmVisibility;
-    /* 0x08 */ int field_0x8;
+    /* 0x08 */ int mbActive;
 };
 
 class J3DUnkCallBack {
