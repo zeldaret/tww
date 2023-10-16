@@ -3,127 +3,673 @@
 // Translation Unit: d_item.cpp
 //
 
-#include "d_item.h"
+#include "d/d_item.h"
 #include "dolphin/types.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_item_data.h"
+
+typedef void (ItemGetFunc)();
+typedef int (ItemGetCheckFunc)();
+
+ItemGetFunc* item_func_ptr[0x100] = {
+    /* 0x00 */ item_func_heart,
+    /* 0x01 */ item_func_green_rupee,
+    /* 0x02 */ item_func_blue_rupee,
+    /* 0x03 */ item_func_white_rupee,
+    /* 0x04 */ item_func_red_rupee,
+    /* 0x05 */ item_func_purple_rupee,
+    /* 0x06 */ item_func_orange_rupee,
+    /* 0x07 */ item_func_kakera_heart,
+    /* 0x08 */ item_func_utuwa_heart,
+    /* 0x09 */ item_func_s_magic,
+    /* 0x0A */ item_func_l_magic,
+    /* 0x0B */ item_func_bomb_5,
+    /* 0x0C */ item_func_bomb_10,
+    /* 0x0D */ item_func_bomb_20,
+    /* 0x0E */ item_func_bomb_30,
+    /* 0x0F */ item_func_silver_rupee,
+    /* 0x10 */ item_func_arrow_10,
+    /* 0x11 */ item_func_arrow_20,
+    /* 0x12 */ item_func_arrow_30,
+    /* 0x13 */ item_func_noentry,
+    /* 0x14 */ item_func_noentry,
+    /* 0x15 */ item_func_small_key,
+    /* 0x16 */ item_func_recover_faily,
+    /* 0x17 */ item_func_noentry,
+    /* 0x18 */ item_func_noentry,
+    /* 0x19 */ item_func_noentry,
+    /* 0x1A */ item_func_subdun_rupee,
+    /* 0x1B */ item_func_noentry,
+    /* 0x1C */ item_func_noentry,
+    /* 0x1D */ item_func_noentry,
+    /* 0x1E */ item_func_triple_heart,
+    /* 0x1F */ item_func_pendant,
+    /* 0x20 */ item_func_telescope,
+    /* 0x21 */ item_func_tncl_whitsl,
+    /* 0x22 */ item_func_wind_tact,
+    /* 0x23 */ item_func_camera,
+    /* 0x24 */ item_func_emono_bag,
+    /* 0x25 */ item_func_rope,
+    /* 0x26 */ item_func_camera2,
+    /* 0x27 */ item_func_bow,
+    /* 0x28 */ item_func_pwr_groove,
+    /* 0x29 */ item_func_hvy_boots,
+    /* 0x2A */ item_func_drgn_shield,
+    /* 0x2B */ item_func_water_boots,
+    /* 0x2C */ item_func_esa_bag,
+    /* 0x2D */ item_func_boomerang,
+    /* 0x2E */ item_func_bare_hand,
+    /* 0x2F */ item_func_hookshot,
+    /* 0x30 */ item_func_warasibe_bag,
+    /* 0x31 */ item_func_bomb_bag,
+    /* 0x32 */ item_func_fuku,
+    /* 0x33 */ item_func_hummer,
+    /* 0x34 */ item_func_deku_leaf,
+    /* 0x35 */ item_func_magic_arrow,
+    /* 0x36 */ item_func_light_arrow,
+    /* 0x37 */ item_func_noentry,
+    /* 0x38 */ item_func_sword,
+    /* 0x39 */ item_func_master_sword,
+    /* 0x3A */ item_func_lv3_sword,
+    /* 0x3B */ item_func_shield,
+    /* 0x3C */ item_func_mirror_shield,
+    /* 0x3D */ item_func_dropped_sword,
+    /* 0x3E */ item_func_master_sword_ex,
+    /* 0x3F */ item_func_kakera_heart,
+    /* 0x40 */ item_func_noentry,
+    /* 0x41 */ item_func_noentry,
+    /* 0x42 */ item_func_pirates_omamori,
+    /* 0x43 */ item_func_heros_omamori,
+    /* 0x44 */ item_func_grass_ball,
+    /* 0x45 */ item_func_skull_necklace,
+    /* 0x46 */ item_func_bokobaba_seed,
+    /* 0x47 */ item_func_golden_feather,
+    /* 0x48 */ item_func_boko_belt,
+    /* 0x49 */ item_func_red_jerry,
+    /* 0x4A */ item_func_green_jerry,
+    /* 0x4B */ item_func_blue_jerry,
+    /* 0x4C */ item_func_map,
+    /* 0x4D */ item_func_compass,
+    /* 0x4E */ item_func_boss_key,
+    /* 0x4F */ item_func_empty_bship,
+    /* 0x50 */ item_func_empty_bottle,
+    /* 0x51 */ item_func_red_bottle,
+    /* 0x52 */ item_func_green_bottle,
+    /* 0x53 */ item_func_blue_bottle,
+    /* 0x54 */ item_func_bottleship,
+    /* 0x55 */ item_func_soup_bottle,
+    /* 0x56 */ item_func_bin_in_water,
+    /* 0x57 */ item_func_fairy_bottle,
+    /* 0x58 */ item_func_firefly_bottle,
+    /* 0x59 */ item_func_fwater_bottle,
+    /* 0x5A */ item_func_bin,
+    /* 0x5B */ item_func_bin,
+    /* 0x5C */ item_func_bin,
+    /* 0x5D */ item_func_bin,
+    /* 0x5E */ item_func_bin,
+    /* 0x5F */ item_func_bin,
+    /* 0x60 */ item_func_bin,
+    /* 0x61 */ item_func_triforce1,
+    /* 0x62 */ item_func_triforce2,
+    /* 0x63 */ item_func_triforce3,
+    /* 0x64 */ item_func_triforce4,
+    /* 0x65 */ item_func_triforce5,
+    /* 0x66 */ item_func_triforce6,
+    /* 0x67 */ item_func_triforce7,
+    /* 0x68 */ item_func_triforce8,
+    /* 0x69 */ item_func_pearl1,
+    /* 0x6A */ item_func_pearl2,
+    /* 0x6B */ item_func_pearl3,
+    /* 0x6C */ item_func_knowledge_tf,
+    /* 0x6D */ item_func_tact_song1,
+    /* 0x6E */ item_func_tact_song2,
+    /* 0x6F */ item_func_tact_song3,
+    /* 0x70 */ item_func_tact_song4,
+    /* 0x71 */ item_func_tact_song5,
+    /* 0x72 */ item_func_tact_song6,
+    /* 0x73 */ item_func_noentry,
+    /* 0x74 */ item_func_noentry,
+    /* 0x75 */ item_func_noentry,
+    /* 0x76 */ item_func_noentry,
+    /* 0x77 */ item_func_noentry,
+    /* 0x78 */ item_func_normal_sail,
+    /* 0x79 */ item_func_triforce_map1,
+    /* 0x7A */ item_func_triforce_map2,
+    /* 0x7B */ item_func_triforce_map3,
+    /* 0x7C */ item_func_triforce_map4,
+    /* 0x7D */ item_func_triforce_map5,
+    /* 0x7E */ item_func_triforce_map6,
+    /* 0x7F */ item_func_triforce_map7,
+    /* 0x80 */ item_func_triforce_map8,
+    /* 0x81 */ item_func_noentry,
+    /* 0x82 */ item_func_bird_esa_5,
+    /* 0x83 */ item_func_animal_esa,
+    /* 0x84 */ item_func_esa1,
+    /* 0x85 */ item_func_esa2,
+    /* 0x86 */ item_func_esa3,
+    /* 0x87 */ item_func_esa4,
+    /* 0x88 */ item_func_esa5,
+    /* 0x89 */ item_func_magic_bean,
+    /* 0x8A */ item_func_bird_esa_10,
+    /* 0x8B */ item_func_noentry,
+    /* 0x8C */ item_func_flower_1,
+    /* 0x8D */ item_func_flower_2,
+    /* 0x8E */ item_func_flower_3,
+    /* 0x8F */ item_func_heros_flag,
+    /* 0x90 */ item_func_tairyo_flag,
+    /* 0x91 */ item_func_sales_flag,
+    /* 0x92 */ item_func_wind_flag,
+    /* 0x93 */ item_func_red_flag,
+    /* 0x94 */ item_func_fossil_head,
+    /* 0x95 */ item_func_water_statue,
+    /* 0x96 */ item_func_postman_statue,
+    /* 0x97 */ item_func_president_statue,
+    /* 0x98 */ item_func_letter00,
+    /* 0x99 */ item_func_magic_seed,
+    /* 0x9A */ item_func_magys_letter,
+    /* 0x9B */ item_func_mo_letter,
+    /* 0x9C */ item_func_cottage_paper,
+    /* 0x9D */ item_func_kaisen_present1,
+    /* 0x9E */ item_func_kaisen_present2,
+    /* 0x9F */ item_func_salvage_item1,
+    /* 0xA0 */ item_func_salvage_item2,
+    /* 0xA1 */ item_func_salvage_item3,
+    /* 0xA2 */ item_func_xxx_039,
+    /* 0xA3 */ item_func_tincle_statue01,
+    /* 0xA4 */ item_func_tincle_statue02,
+    /* 0xA5 */ item_func_tincle_statue03,
+    /* 0xA6 */ item_func_tincle_statue04,
+    /* 0xA7 */ item_func_tincle_statue05,
+    /* 0xA8 */ item_func_tincle_statue06,
+    /* 0xA9 */ item_func_noentry,
+    /* 0xAA */ item_func_noentry,
+    /* 0xAB */ item_func_max_rupee_up1,
+    /* 0xAC */ item_func_max_rupee_up2,
+    /* 0xAD */ item_func_max_bomb_up1,
+    /* 0xAE */ item_func_max_bomb_up2,
+    /* 0xAF */ item_func_max_arrow_up1,
+    /* 0xB0 */ item_func_max_arrow_up2,
+    /* 0xB1 */ item_func_magic_power,
+    /* 0xB2 */ item_func_max_mp_up1,
+    /* 0xB3 */ item_func_tincle_rupee1,
+    /* 0xB4 */ item_func_tincle_rupee2,
+    /* 0xB5 */ item_func_tincle_rupee3,
+    /* 0xB6 */ item_func_tincle_rupee4,
+    /* 0xB7 */ item_func_tincle_rupee5,
+    /* 0xB8 */ item_func_tincle_rupee6,
+    /* 0xB9 */ item_func_lithograph1,
+    /* 0xBA */ item_func_lithograph2,
+    /* 0xBB */ item_func_lithograph3,
+    /* 0xBC */ item_func_lithograph4,
+    /* 0xBD */ item_func_lithograph5,
+    /* 0xBE */ item_func_lithograph6,
+    /* 0xBF */ item_func_collectmap64,
+    /* 0xC0 */ item_func_collectmap63,
+    /* 0xC1 */ item_func_collectmap62,
+    /* 0xC2 */ item_func_collectmap61,
+    /* 0xC3 */ item_func_collectmap60,
+    /* 0xC4 */ item_func_collectmap59,
+    /* 0xC5 */ item_func_collectmap58,
+    /* 0xC6 */ item_func_collectmap57,
+    /* 0xC7 */ item_func_collectmap56,
+    /* 0xC8 */ item_func_collectmap55,
+    /* 0xC9 */ item_func_collectmap54,
+    /* 0xCA */ item_func_collectmap53,
+    /* 0xCB */ item_func_collectmap52,
+    /* 0xCC */ item_func_collectmap51,
+    /* 0xCD */ item_func_collectmap50,
+    /* 0xCE */ item_func_collectmap49,
+    /* 0xCF */ item_func_collectmap48,
+    /* 0xD0 */ item_func_collectmap47,
+    /* 0xD1 */ item_func_collectmap46,
+    /* 0xD2 */ item_func_collectmap45,
+    /* 0xD3 */ item_func_collectmap44,
+    /* 0xD4 */ item_func_collectmap43,
+    /* 0xD5 */ item_func_collectmap42,
+    /* 0xD6 */ item_func_collectmap41,
+    /* 0xD7 */ item_func_collectmap40,
+    /* 0xD8 */ item_func_collectmap39,
+    /* 0xD9 */ item_func_collectmap38,
+    /* 0xDA */ item_func_collectmap37,
+    /* 0xDB */ item_func_collectmap36,
+    /* 0xDC */ item_func_collectmap35,
+    /* 0xDD */ item_func_collectmap34,
+    /* 0xDE */ item_func_collectmap33,
+    /* 0xDF */ item_func_collectmap32,
+    /* 0xE0 */ item_func_collectmap31,
+    /* 0xE1 */ item_func_collectmap30,
+    /* 0xE2 */ item_func_collectmap29,
+    /* 0xE3 */ item_func_collectmap28,
+    /* 0xE4 */ item_func_collectmap27,
+    /* 0xE5 */ item_func_collectmap26,
+    /* 0xE6 */ item_func_collectmap25,
+    /* 0xE7 */ item_func_collectmap24,
+    /* 0xE8 */ item_func_collectmap23,
+    /* 0xE9 */ item_func_collectmap22,
+    /* 0xEA */ item_func_collectmap21,
+    /* 0xEB */ item_func_collectmap20,
+    /* 0xEC */ item_func_collectmap19,
+    /* 0xED */ item_func_collectmap18,
+    /* 0xEE */ item_func_collectmap17,
+    /* 0xEF */ item_func_collectmap16,
+    /* 0xF0 */ item_func_collectmap15,
+    /* 0xF1 */ item_func_collectmap14,
+    /* 0xF2 */ item_func_collectmap13,
+    /* 0xF3 */ item_func_collectmap12,
+    /* 0xF4 */ item_func_collectmap11,
+    /* 0xF5 */ item_func_collectmap10,
+    /* 0xF6 */ item_func_collectmap09,
+    /* 0xF7 */ item_func_collectmap08,
+    /* 0xF8 */ item_func_collectmap07,
+    /* 0xF9 */ item_func_collectmap06,
+    /* 0xFA */ item_func_collectmap05,
+    /* 0xFB */ item_func_collectmap04,
+    /* 0xFC */ item_func_collectmap03,
+    /* 0xFD */ item_func_collectmap02,
+    /* 0xFE */ item_func_collectmap01,
+    /* 0xFF */ item_func_noentry,
+};
+
+ItemGetCheckFunc* item_getcheck_func_ptr[0x100] = {
+    /* 0x00 */ item_getcheck_func_heart,
+    /* 0x01 */ item_getcheck_func_green_rupee,
+    /* 0x02 */ item_getcheck_func_blue_rupee,
+    /* 0x03 */ item_getcheck_func_white_rupee,
+    /* 0x04 */ item_getcheck_func_red_rupee,
+    /* 0x05 */ item_getcheck_func_purple_rupee,
+    /* 0x06 */ item_getcheck_func_silver_rupee,
+    /* 0x07 */ item_getcheck_func_kakera_heart,
+    /* 0x08 */ item_getcheck_func_utuwa_heart,
+    /* 0x09 */ item_getcheck_func_s_magic,
+    /* 0x0A */ item_getcheck_func_l_magic,
+    /* 0x0B */ item_getcheck_func_bomb_5,
+    /* 0x0C */ item_getcheck_func_bomb_10,
+    /* 0x0D */ item_getcheck_func_bomb_20,
+    /* 0x0E */ item_getcheck_func_bomb_30,
+    /* 0x0F */ item_getcheck_func_noentry,
+    /* 0x10 */ item_getcheck_func_arrow_10,
+    /* 0x11 */ item_getcheck_func_arrow_20,
+    /* 0x12 */ item_getcheck_func_arrow_30,
+    /* 0x13 */ item_getcheck_func_noentry,
+    /* 0x14 */ item_getcheck_func_noentry,
+    /* 0x15 */ item_getcheck_func_small_key,
+    /* 0x16 */ item_getcheck_func_recover_faily,
+    /* 0x17 */ item_getcheck_func_noentry,
+    /* 0x18 */ item_getcheck_func_noentry,
+    /* 0x19 */ item_getcheck_func_noentry,
+    /* 0x1A */ item_getcheck_func_noentry,
+    /* 0x1B */ item_getcheck_func_noentry,
+    /* 0x1C */ item_getcheck_func_noentry,
+    /* 0x1D */ item_getcheck_func_noentry,
+    /* 0x1E */ item_getcheck_func_triple_heart,
+    /* 0x1F */ item_getcheck_func_pendant,
+    /* 0x20 */ item_getcheck_func_telescope,
+    /* 0x21 */ item_getcheck_func_tncl_whitsl,
+    /* 0x22 */ item_getcheck_func_wind_tact,
+    /* 0x23 */ item_getcheck_func_camera,
+    /* 0x24 */ item_getcheck_func_emono_bag,
+    /* 0x25 */ item_getcheck_func_rope,
+    /* 0x26 */ item_getcheck_func_camera2,
+    /* 0x27 */ item_getcheck_func_bow,
+    /* 0x28 */ item_getcheck_func_pwr_groove,
+    /* 0x29 */ item_getcheck_func_hvy_boots,
+    /* 0x2A */ item_getcheck_func_drgn_shield,
+    /* 0x2B */ item_getcheck_func_water_boots,
+    /* 0x2C */ item_getcheck_func_esa_bag,
+    /* 0x2D */ item_getcheck_func_boomerang,
+    /* 0x2E */ item_getcheck_func_bare_hand,
+    /* 0x2F */ item_getcheck_func_hookshot,
+    /* 0x30 */ item_getcheck_func_warasibe_bag,
+    /* 0x31 */ item_getcheck_func_bomb_bag,
+    /* 0x32 */ item_getcheck_func_noentry,
+    /* 0x33 */ item_getcheck_func_hummer,
+    /* 0x34 */ item_getcheck_func_deku_leaf,
+    /* 0x35 */ item_getcheck_func_magic_arrow,
+    /* 0x36 */ item_getcheck_func_light_arrow,
+    /* 0x37 */ item_getcheck_func_noentry,
+    /* 0x38 */ item_getcheck_func_sword,
+    /* 0x39 */ item_getcheck_func_master_sword,
+    /* 0x3A */ item_getcheck_func_lv3_sword,
+    /* 0x3B */ item_getcheck_func_shield,
+    /* 0x3C */ item_getcheck_func_mirror_shield,
+    /* 0x3D */ item_getcheck_func_noentry,
+    /* 0x3E */ item_getcheck_func_master_sword_ex,
+    /* 0x3F */ item_getcheck_func_noentry,
+    /* 0x40 */ item_getcheck_func_noentry,
+    /* 0x41 */ item_getcheck_func_noentry,
+    /* 0x42 */ item_getcheck_func_pirates_omamori,
+    /* 0x43 */ item_getcheck_func_heros_omamori,
+    /* 0x44 */ item_getcheck_func_grass_ball,
+    /* 0x45 */ item_getcheck_func_skull_necklace,
+    /* 0x46 */ item_getcheck_func_bokobaba_seed,
+    /* 0x47 */ item_getcheck_func_golden_feather,
+    /* 0x48 */ item_getcheck_func_boko_belt,
+    /* 0x49 */ item_getcheck_func_red_jerry,
+    /* 0x4A */ item_getcheck_func_green_jerry,
+    /* 0x4B */ item_getcheck_func_blue_jerry,
+    /* 0x4C */ item_getcheck_func_map,
+    /* 0x4D */ item_getcheck_func_compass,
+    /* 0x4E */ item_getcheck_func_boss_key,
+    /* 0x4F */ item_getcheck_func_empty_bship,
+    /* 0x50 */ item_getcheck_func_empty_bottle,
+    /* 0x51 */ item_getcheck_func_red_bottle,
+    /* 0x52 */ item_getcheck_func_green_bottle,
+    /* 0x53 */ item_getcheck_func_blue_bottle,
+    /* 0x54 */ item_getcheck_func_bottleship,
+    /* 0x55 */ item_getcheck_func_bin_in_bottleship,
+    /* 0x56 */ item_getcheck_func_bin_in_water,
+    /* 0x57 */ item_getcheck_func_bin,
+    /* 0x58 */ item_getcheck_func_bin,
+    /* 0x59 */ item_getcheck_func_bin,
+    /* 0x5A */ item_getcheck_func_bin,
+    /* 0x5B */ item_getcheck_func_bin,
+    /* 0x5C */ item_getcheck_func_bin,
+    /* 0x5D */ item_getcheck_func_bin,
+    /* 0x5E */ item_getcheck_func_bin,
+    /* 0x5F */ item_getcheck_func_bin,
+    /* 0x60 */ item_getcheck_func_bin,
+    /* 0x61 */ item_getcheck_func_triforce1,
+    /* 0x62 */ item_getcheck_func_triforce2,
+    /* 0x63 */ item_getcheck_func_triforce3,
+    /* 0x64 */ item_getcheck_func_triforce4,
+    /* 0x65 */ item_getcheck_func_triforce5,
+    /* 0x66 */ item_getcheck_func_triforce6,
+    /* 0x67 */ item_getcheck_func_triforce7,
+    /* 0x68 */ item_getcheck_func_triforce8,
+    /* 0x69 */ item_getcheck_func_pearl1,
+    /* 0x6A */ item_getcheck_func_pearl2,
+    /* 0x6B */ item_getcheck_func_pearl3,
+    /* 0x6C */ item_getcheck_func_noentry,
+    /* 0x6D */ item_getcheck_func_tact_song1,
+    /* 0x6E */ item_getcheck_func_tact_song2,
+    /* 0x6F */ item_getcheck_func_tact_song3,
+    /* 0x70 */ item_getcheck_func_tact_song4,
+    /* 0x71 */ item_getcheck_func_tact_song5,
+    /* 0x72 */ item_getcheck_func_tact_song6,
+    /* 0x73 */ item_getcheck_func_noentry,
+    /* 0x74 */ item_getcheck_func_noentry,
+    /* 0x75 */ item_getcheck_func_noentry,
+    /* 0x76 */ item_getcheck_func_noentry,
+    /* 0x77 */ item_getcheck_func_noentry,
+    /* 0x78 */ item_getcheck_func_normal_sail,
+    /* 0x79 */ item_getcheck_func_zora_sail,
+    /* 0x7A */ item_getcheck_func_tincle_sail,
+    /* 0x7B */ item_getcheck_func_sail,
+    /* 0x7C */ item_getcheck_func_sail,
+    /* 0x7D */ item_getcheck_func_sail,
+    /* 0x7E */ item_getcheck_func_sail,
+    /* 0x7F */ item_getcheck_func_sail,
+    /* 0x80 */ item_getcheck_func_noentry,
+    /* 0x81 */ item_getcheck_func_noentry,
+    /* 0x82 */ item_getcheck_func_bird_esa_5,
+    /* 0x83 */ item_getcheck_func_animal_esa,
+    /* 0x84 */ item_getcheck_func_esa1,
+    /* 0x85 */ item_getcheck_func_esa2,
+    /* 0x86 */ item_getcheck_func_esa3,
+    /* 0x87 */ item_getcheck_func_esa4,
+    /* 0x88 */ item_getcheck_func_esa5,
+    /* 0x89 */ item_getcheck_func_magic_bean,
+    /* 0x8A */ item_getcheck_func_bird_esa_10,
+    /* 0x8B */ item_getcheck_func_noentry,
+    /* 0x8C */ item_getcheck_func_flower_1,
+    /* 0x8D */ item_getcheck_func_flower_2,
+    /* 0x8E */ item_getcheck_func_flower_3,
+    /* 0x8F */ item_getcheck_func_heros_flag,
+    /* 0x90 */ item_getcheck_func_tairyo_flag,
+    /* 0x91 */ item_getcheck_func_sales_flag,
+    /* 0x92 */ item_getcheck_func_wind_flag,
+    /* 0x93 */ item_getcheck_func_red_flag,
+    /* 0x94 */ item_getcheck_func_fossil_head,
+    /* 0x95 */ item_getcheck_func_water_statue,
+    /* 0x96 */ item_getcheck_func_postman_statue,
+    /* 0x97 */ item_getcheck_func_president_statue,
+    /* 0x98 */ item_getcheck_func_letter00,
+    /* 0x99 */ item_getcheck_func_magic_seed,
+    /* 0x9A */ item_getcheck_func_magys_letter,
+    /* 0x9B */ item_getcheck_func_mo_letter,
+    /* 0x9C */ item_getcheck_func_cottage_paper,
+    /* 0x9D */ item_getcheck_func_kaisen_present1,
+    /* 0x9E */ item_getcheck_func_kaisen_present2,
+    /* 0x9F */ item_getcheck_func_salvage_item1,
+    /* 0xA0 */ item_getcheck_func_salvage_item2,
+    /* 0xA1 */ item_getcheck_func_salvage_item3,
+    /* 0xA2 */ item_getcheck_func_xxx_039,
+    /* 0xA3 */ item_getcheck_func_noentry,
+    /* 0xA4 */ item_getcheck_func_noentry,
+    /* 0xA5 */ item_getcheck_func_noentry,
+    /* 0xA6 */ item_getcheck_func_noentry,
+    /* 0xA7 */ item_getcheck_func_noentry,
+    /* 0xA8 */ item_getcheck_func_noentry,
+    /* 0xA9 */ item_getcheck_func_noentry,
+    /* 0xAA */ item_getcheck_func_noentry,
+    /* 0xAB */ item_getcheck_func_noentry,
+    /* 0xAC */ item_getcheck_func_noentry,
+    /* 0xAD */ item_getcheck_func_noentry,
+    /* 0xAE */ item_getcheck_func_noentry,
+    /* 0xAF */ item_getcheck_func_noentry,
+    /* 0xB0 */ item_getcheck_func_noentry,
+    /* 0xB1 */ item_getcheck_func_noentry,
+    /* 0xB2 */ item_getcheck_func_noentry,
+    /* 0xB3 */ item_getcheck_func_noentry,
+    /* 0xB4 */ item_getcheck_func_noentry,
+    /* 0xB5 */ item_getcheck_func_noentry,
+    /* 0xB6 */ item_getcheck_func_noentry,
+    /* 0xB7 */ item_getcheck_func_noentry,
+    /* 0xB8 */ item_getcheck_func_noentry,
+    /* 0xB9 */ item_getcheck_func_lithograph1,
+    /* 0xBA */ item_getcheck_func_lithograph2,
+    /* 0xBB */ item_getcheck_func_lithograph3,
+    /* 0xBC */ item_getcheck_func_lithograph4,
+    /* 0xBD */ item_getcheck_func_lithograph5,
+    /* 0xBE */ item_getcheck_func_lithograph6,
+    /* 0xBF */ item_getcheck_func_lithograph7,
+    /* 0xC0 */ item_getcheck_func_lithograph8,
+    /* 0xC1 */ item_getcheck_func_lithograph9,
+    /* 0xC2 */ item_getcheck_func_lithograph10,
+    /* 0xC3 */ item_getcheck_func_lithograph11,
+    /* 0xC4 */ item_getcheck_func_lithograph12,
+    /* 0xC5 */ item_getcheck_func_lithograph13,
+    /* 0xC6 */ item_getcheck_func_lithograph14,
+    /* 0xC7 */ item_getcheck_func_lithograph15,
+    /* 0xC8 */ item_getcheck_func_lithograph16,
+    /* 0xC9 */ item_getcheck_func_noentry,
+    /* 0xCA */ item_getcheck_func_noentry,
+    /* 0xCB */ item_getcheck_func_noentry,
+    /* 0xCC */ item_getcheck_func_noentry,
+    /* 0xCD */ item_getcheck_func_noentry,
+    /* 0xCE */ item_getcheck_func_noentry,
+    /* 0xCF */ item_getcheck_func_noentry,
+    /* 0xD0 */ item_getcheck_func_noentry,
+    /* 0xD1 */ item_getcheck_func_noentry,
+    /* 0xD2 */ item_getcheck_func_noentry,
+    /* 0xD3 */ item_getcheck_func_noentry,
+    /* 0xD4 */ item_getcheck_func_noentry,
+    /* 0xD5 */ item_getcheck_func_noentry,
+    /* 0xD6 */ item_getcheck_func_noentry,
+    /* 0xD7 */ item_getcheck_func_noentry,
+    /* 0xD8 */ item_getcheck_func_noentry,
+    /* 0xD9 */ item_getcheck_func_noentry,
+    /* 0xDA */ item_getcheck_func_noentry,
+    /* 0xDB */ item_getcheck_func_noentry,
+    /* 0xDC */ item_getcheck_func_noentry,
+    /* 0xDD */ item_getcheck_func_noentry,
+    /* 0xDE */ item_getcheck_func_noentry,
+    /* 0xDF */ item_getcheck_func_noentry,
+    /* 0xE0 */ item_getcheck_func_noentry,
+    /* 0xE1 */ item_getcheck_func_noentry,
+    /* 0xE2 */ item_getcheck_func_noentry,
+    /* 0xE3 */ item_getcheck_func_noentry,
+    /* 0xE4 */ item_getcheck_func_noentry,
+    /* 0xE5 */ item_getcheck_func_noentry,
+    /* 0xE6 */ item_getcheck_func_noentry,
+    /* 0xE7 */ item_getcheck_func_noentry,
+    /* 0xE8 */ item_getcheck_func_noentry,
+    /* 0xE9 */ item_getcheck_func_noentry,
+    /* 0xEA */ item_getcheck_func_noentry,
+    /* 0xEB */ item_getcheck_func_noentry,
+    /* 0xEC */ item_getcheck_func_noentry,
+    /* 0xED */ item_getcheck_func_noentry,
+    /* 0xEE */ item_getcheck_func_noentry,
+    /* 0xEF */ item_getcheck_func_noentry,
+    /* 0xF0 */ item_getcheck_func_noentry,
+    /* 0xF1 */ item_getcheck_func_noentry,
+    /* 0xF2 */ item_getcheck_func_noentry,
+    /* 0xF3 */ item_getcheck_func_noentry,
+    /* 0xF4 */ item_getcheck_func_noentry,
+    /* 0xF5 */ item_getcheck_func_noentry,
+    /* 0xF6 */ item_getcheck_func_noentry,
+    /* 0xF7 */ item_getcheck_func_noentry,
+    /* 0xF8 */ item_getcheck_func_noentry,
+    /* 0xF9 */ item_getcheck_func_noentry,
+    /* 0xFA */ item_getcheck_func_noentry,
+    /* 0xFB */ item_getcheck_func_noentry,
+    /* 0xFC */ item_getcheck_func_noentry,
+    /* 0xFD */ item_getcheck_func_noentry,
+    /* 0xFE */ item_getcheck_func_noentry,
+    /* 0xFF */ item_getcheck_func_noentry,
+};
 
 /* 800C2DFC-800C2E30       .text execItemGet__FUc */
 void execItemGet(u8 itemNo) {
-    /* Nonmatching */
+    item_func_ptr[itemNo]();
 }
 
 /* 800C2E30-800C2E7C       .text checkItemGet__FUci */
-BOOL checkItemGet(u8, BOOL defaultVal) {
-    /* Nonmatching */
+BOOL checkItemGet(u8 itemNo, BOOL defaultVal) {
+    int result = item_getcheck_func_ptr[itemNo]();
+    if (result == -1) {
+        return defaultVal;
+    }
+    return result;
 }
 
 /* 800C2E7C-800C2E98       .text item_func_heart__Fv */
 void item_func_heart() {
-    /* Nonmatching */
+    dComIfGp_setItemLifeCount(4.0f);
 }
 
 /* 800C2E98-800C2EB0       .text item_func_green_rupee__Fv */
 void item_func_green_rupee() {
-    /* Nonmatching */
+    dComIfGp_setItemRupeeCount(1);
 }
 
 /* 800C2EB0-800C2EC8       .text item_func_blue_rupee__Fv */
 void item_func_blue_rupee() {
-    /* Nonmatching */
+    dComIfGp_setItemRupeeCount(5);
 }
 
 /* 800C2EC8-800C2EE0       .text item_func_white_rupee__Fv */
 void item_func_white_rupee() {
-    /* Nonmatching */
+    dComIfGp_setItemRupeeCount(10);
 }
 
 /* 800C2EE0-800C2EF8       .text item_func_red_rupee__Fv */
 void item_func_red_rupee() {
-    /* Nonmatching */
+    dComIfGp_setItemRupeeCount(20);
 }
 
 /* 800C2EF8-800C2F10       .text item_func_purple_rupee__Fv */
 void item_func_purple_rupee() {
-    /* Nonmatching */
+    dComIfGp_setItemRupeeCount(50);
 }
 
 /* 800C2F10-800C2F28       .text item_func_orange_rupee__Fv */
 void item_func_orange_rupee() {
-    /* Nonmatching */
+    dComIfGp_setItemRupeeCount(100);
 }
 
 /* 800C2F28-800C2F40       .text item_func_kakera_heart__Fv */
 void item_func_kakera_heart() {
-    /* Nonmatching */
+    dComIfGp_setItemMaxLifeCount(1);
 }
 
 /* 800C2F40-800C2FD8       .text item_func_utuwa_heart__Fv */
 void item_func_utuwa_heart() {
-    /* Nonmatching */
+    dComIfGp_setItemMaxLifeCount(4);
+    dComIfGp_setItemLifeCount(dComIfGs_getMaxLife());
+    
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+    if (dStage_stagInfo_GetSaveTbl(stag_info) == 0) {
+        // Didn't get the Heart Container immediately after defeating Helmaroc King.
+        // Instead got it from outside Forsaken Fortress, on the sea stage.
+        dComIfGs_onStageLife(2);
+    } else {
+        dComIfGs_onStageLife();
+    }
 }
 
 /* 800C2FD8-800C2FF0       .text item_func_s_magic__Fv */
 void item_func_s_magic() {
-    /* Nonmatching */
+    dComIfGp_setItemMagicCount(4);
 }
 
 /* 800C2FF0-800C3008       .text item_func_l_magic__Fv */
 void item_func_l_magic() {
-    /* Nonmatching */
+    dComIfGp_setItemMagicCount(8);
 }
 
 /* 800C3008-800C3060       .text item_func_bomb_5__Fv */
 void item_func_bomb_5() {
-    /* Nonmatching */
+    dComIfGs_onGetItem(0xD, 0);
+    g_dComIfG_gameInfo.play.field_0x493d = 0xD;
+    g_dComIfG_gameInfo.play.field_0x493e = 0xB;
+    dComIfGp_setItemBombNumCount(5);
 }
 
 /* 800C3060-800C30B0       .text item_func_bomb_10__Fv */
 void item_func_bomb_10() {
-    /* Nonmatching */
+    dComIfGs_onGetItem(0xD, 0);
+    dComIfGs_setItem(0xD, BOMB_BAG);
+    dComIfGp_setItemBombNumCount(10);
 }
 
 /* 800C30B0-800C3100       .text item_func_bomb_20__Fv */
 void item_func_bomb_20() {
-    /* Nonmatching */
+    dComIfGs_onGetItem(0xD, 0);
+    dComIfGs_setItem(0xD, BOMB_BAG);
+    dComIfGp_setItemBombNumCount(20);
 }
 
 /* 800C3100-800C3150       .text item_func_bomb_30__Fv */
 void item_func_bomb_30() {
-    /* Nonmatching */
+    dComIfGs_onGetItem(0xD, 0);
+    dComIfGs_setItem(0xD, BOMB_BAG);
+    dComIfGp_setItemBombNumCount(30);
 }
 
 /* 800C3150-800C3168       .text item_func_silver_rupee__Fv */
 void item_func_silver_rupee() {
-    /* Nonmatching */
+    dComIfGp_setItemRupeeCount(200);
 }
 
 /* 800C3168-800C3180       .text item_func_arrow_10__Fv */
 void item_func_arrow_10() {
-    /* Nonmatching */
+    dComIfGp_setItemArrowNumCount(10);
 }
 
 /* 800C3180-800C3198       .text item_func_arrow_20__Fv */
 void item_func_arrow_20() {
-    /* Nonmatching */
+    dComIfGp_setItemArrowNumCount(20);
 }
 
 /* 800C3198-800C31B0       .text item_func_arrow_30__Fv */
 void item_func_arrow_30() {
-    /* Nonmatching */
+    dComIfGp_setItemArrowNumCount(30);
 }
 
 /* 800C31B0-800C31C8       .text item_func_small_key__Fv */
 void item_func_small_key() {
-    /* Nonmatching */
+    dComIfGp_setItemKeyNumCount(1);
 }
 
 /* 800C31C8-800C31E4       .text item_func_recover_faily__Fv */
 void item_func_recover_faily() {
-    /* Nonmatching */
+    dComIfGp_setItemLifeCount(40.0f);
 }
 
 /* 800C31E4-800C31FC       .text item_func_subdun_rupee__Fv */
 void item_func_subdun_rupee() {
-    /* Nonmatching */
+    dComIfGp_setItemRupeeCount(10);
 }
 
 /* 800C31FC-800C3200       .text item_func_triple_heart__Fv */
@@ -1162,712 +1708,712 @@ void item_func_noentry() {
 }
 
 /* 800C6378-800C6380       .text item_getcheck_func_heart__Fv */
-void item_getcheck_func_heart() {
+int item_getcheck_func_heart() {
     /* Nonmatching */
 }
 
 /* 800C6380-800C6388       .text item_getcheck_func_green_rupee__Fv */
-void item_getcheck_func_green_rupee() {
+int item_getcheck_func_green_rupee() {
     /* Nonmatching */
 }
 
 /* 800C6388-800C6390       .text item_getcheck_func_blue_rupee__Fv */
-void item_getcheck_func_blue_rupee() {
+int item_getcheck_func_blue_rupee() {
     /* Nonmatching */
 }
 
 /* 800C6390-800C6398       .text item_getcheck_func_white_rupee__Fv */
-void item_getcheck_func_white_rupee() {
+int item_getcheck_func_white_rupee() {
     /* Nonmatching */
 }
 
 /* 800C6398-800C63A0       .text item_getcheck_func_red_rupee__Fv */
-void item_getcheck_func_red_rupee() {
+int item_getcheck_func_red_rupee() {
     /* Nonmatching */
 }
 
 /* 800C63A0-800C63A8       .text item_getcheck_func_purple_rupee__Fv */
-void item_getcheck_func_purple_rupee() {
+int item_getcheck_func_purple_rupee() {
     /* Nonmatching */
 }
 
 /* 800C63A8-800C63B0       .text item_getcheck_func_silver_rupee__Fv */
-void item_getcheck_func_silver_rupee() {
+int item_getcheck_func_silver_rupee() {
     /* Nonmatching */
 }
 
 /* 800C63B0-800C63B8       .text item_getcheck_func_kakera_heart__Fv */
-void item_getcheck_func_kakera_heart() {
+int item_getcheck_func_kakera_heart() {
     /* Nonmatching */
 }
 
 /* 800C63B8-800C63C0       .text item_getcheck_func_utuwa_heart__Fv */
-void item_getcheck_func_utuwa_heart() {
+int item_getcheck_func_utuwa_heart() {
     /* Nonmatching */
 }
 
 /* 800C63C0-800C63C8       .text item_getcheck_func_s_magic__Fv */
-void item_getcheck_func_s_magic() {
+int item_getcheck_func_s_magic() {
     /* Nonmatching */
 }
 
 /* 800C63C8-800C63D0       .text item_getcheck_func_l_magic__Fv */
-void item_getcheck_func_l_magic() {
+int item_getcheck_func_l_magic() {
     /* Nonmatching */
 }
 
 /* 800C63D0-800C6404       .text item_getcheck_func_bomb_5__Fv */
-void item_getcheck_func_bomb_5() {
+int item_getcheck_func_bomb_5() {
     /* Nonmatching */
 }
 
 /* 800C6404-800C6438       .text item_getcheck_func_bomb_10__Fv */
-void item_getcheck_func_bomb_10() {
+int item_getcheck_func_bomb_10() {
     /* Nonmatching */
 }
 
 /* 800C6438-800C646C       .text item_getcheck_func_bomb_20__Fv */
-void item_getcheck_func_bomb_20() {
+int item_getcheck_func_bomb_20() {
     /* Nonmatching */
 }
 
 /* 800C646C-800C64A0       .text item_getcheck_func_bomb_30__Fv */
-void item_getcheck_func_bomb_30() {
+int item_getcheck_func_bomb_30() {
     /* Nonmatching */
 }
 
 /* 800C64A0-800C64A8       .text item_getcheck_func_noentry__Fv */
-void item_getcheck_func_noentry() {
+int item_getcheck_func_noentry() {
     /* Nonmatching */
 }
 
 /* 800C64A8-800C64DC       .text item_getcheck_func_arrow_10__Fv */
-void item_getcheck_func_arrow_10() {
+int item_getcheck_func_arrow_10() {
     /* Nonmatching */
 }
 
 /* 800C64DC-800C6510       .text item_getcheck_func_arrow_20__Fv */
-void item_getcheck_func_arrow_20() {
+int item_getcheck_func_arrow_20() {
     /* Nonmatching */
 }
 
 /* 800C6510-800C6544       .text item_getcheck_func_arrow_30__Fv */
-void item_getcheck_func_arrow_30() {
+int item_getcheck_func_arrow_30() {
     /* Nonmatching */
 }
 
 /* 800C6544-800C654C       .text item_getcheck_func_small_key__Fv */
-void item_getcheck_func_small_key() {
+int item_getcheck_func_small_key() {
     /* Nonmatching */
 }
 
 /* 800C654C-800C6554       .text item_getcheck_func_recover_faily__Fv */
-void item_getcheck_func_recover_faily() {
+int item_getcheck_func_recover_faily() {
     /* Nonmatching */
 }
 
 /* 800C6554-800C655C       .text item_getcheck_func_triple_heart__Fv */
-void item_getcheck_func_triple_heart() {
+int item_getcheck_func_triple_heart() {
     /* Nonmatching */
 }
 
 /* 800C655C-800C658C       .text item_getcheck_func_pendant__Fv */
-void item_getcheck_func_pendant() {
+int item_getcheck_func_pendant() {
     /* Nonmatching */
 }
 
 /* 800C658C-800C65C0       .text item_getcheck_func_telescope__Fv */
-void item_getcheck_func_telescope() {
+int item_getcheck_func_telescope() {
     /* Nonmatching */
 }
 
 /* 800C65C0-800C65F4       .text item_getcheck_func_tncl_whitsl__Fv */
-void item_getcheck_func_tncl_whitsl() {
+int item_getcheck_func_tncl_whitsl() {
     /* Nonmatching */
 }
 
 /* 800C65F4-800C6628       .text item_getcheck_func_wind_tact__Fv */
-void item_getcheck_func_wind_tact() {
+int item_getcheck_func_wind_tact() {
     /* Nonmatching */
 }
 
 /* 800C6628-800C665C       .text item_getcheck_func_camera__Fv */
-void item_getcheck_func_camera() {
+int item_getcheck_func_camera() {
     /* Nonmatching */
 }
 
 /* 800C665C-800C6690       .text item_getcheck_func_emono_bag__Fv */
-void item_getcheck_func_emono_bag() {
+int item_getcheck_func_emono_bag() {
     /* Nonmatching */
 }
 
 /* 800C6690-800C66C4       .text item_getcheck_func_rope__Fv */
-void item_getcheck_func_rope() {
+int item_getcheck_func_rope() {
     /* Nonmatching */
 }
 
 /* 800C66C4-800C66F8       .text item_getcheck_func_camera2__Fv */
-void item_getcheck_func_camera2() {
+int item_getcheck_func_camera2() {
     /* Nonmatching */
 }
 
 /* 800C66F8-800C672C       .text item_getcheck_func_bow__Fv */
-void item_getcheck_func_bow() {
+int item_getcheck_func_bow() {
     /* Nonmatching */
 }
 
 /* 800C672C-800C6760       .text item_getcheck_func_pwr_groove__Fv */
-void item_getcheck_func_pwr_groove() {
+int item_getcheck_func_pwr_groove() {
     /* Nonmatching */
 }
 
 /* 800C6760-800C6794       .text item_getcheck_func_hvy_boots__Fv */
-void item_getcheck_func_hvy_boots() {
+int item_getcheck_func_hvy_boots() {
     /* Nonmatching */
 }
 
 /* 800C6794-800C67C8       .text item_getcheck_func_drgn_shield__Fv */
-void item_getcheck_func_drgn_shield() {
+int item_getcheck_func_drgn_shield() {
     /* Nonmatching */
 }
 
 /* 800C67C8-800C67D0       .text item_getcheck_func_water_boots__Fv */
-void item_getcheck_func_water_boots() {
+int item_getcheck_func_water_boots() {
     /* Nonmatching */
 }
 
 /* 800C67D0-800C6804       .text item_getcheck_func_esa_bag__Fv */
-void item_getcheck_func_esa_bag() {
+int item_getcheck_func_esa_bag() {
     /* Nonmatching */
 }
 
 /* 800C6804-800C6838       .text item_getcheck_func_boomerang__Fv */
-void item_getcheck_func_boomerang() {
+int item_getcheck_func_boomerang() {
     /* Nonmatching */
 }
 
 /* 800C6838-800C6840       .text item_getcheck_func_bare_hand__Fv */
-void item_getcheck_func_bare_hand() {
+int item_getcheck_func_bare_hand() {
     /* Nonmatching */
 }
 
 /* 800C6840-800C6874       .text item_getcheck_func_hookshot__Fv */
-void item_getcheck_func_hookshot() {
+int item_getcheck_func_hookshot() {
     /* Nonmatching */
 }
 
 /* 800C6874-800C68A8       .text item_getcheck_func_warasibe_bag__Fv */
-void item_getcheck_func_warasibe_bag() {
+int item_getcheck_func_warasibe_bag() {
     /* Nonmatching */
 }
 
 /* 800C68A8-800C68B0       .text item_getcheck_func_bomb_bag__Fv */
-void item_getcheck_func_bomb_bag() {
+int item_getcheck_func_bomb_bag() {
     /* Nonmatching */
 }
 
 /* 800C68B0-800C68E4       .text item_getcheck_func_hummer__Fv */
-void item_getcheck_func_hummer() {
+int item_getcheck_func_hummer() {
     /* Nonmatching */
 }
 
 /* 800C68E4-800C6918       .text item_getcheck_func_deku_leaf__Fv */
-void item_getcheck_func_deku_leaf() {
+int item_getcheck_func_deku_leaf() {
     /* Nonmatching */
 }
 
 /* 800C6918-800C694C       .text item_getcheck_func_magic_arrow__Fv */
-void item_getcheck_func_magic_arrow() {
+int item_getcheck_func_magic_arrow() {
     /* Nonmatching */
 }
 
 /* 800C694C-800C6980       .text item_getcheck_func_light_arrow__Fv */
-void item_getcheck_func_light_arrow() {
+int item_getcheck_func_light_arrow() {
     /* Nonmatching */
 }
 
 /* 800C6980-800C69B4       .text item_getcheck_func_sword__Fv */
-void item_getcheck_func_sword() {
+int item_getcheck_func_sword() {
     /* Nonmatching */
 }
 
 /* 800C69B4-800C69E8       .text item_getcheck_func_master_sword__Fv */
-void item_getcheck_func_master_sword() {
+int item_getcheck_func_master_sword() {
     /* Nonmatching */
 }
 
 /* 800C69E8-800C6A1C       .text item_getcheck_func_lv3_sword__Fv */
-void item_getcheck_func_lv3_sword() {
+int item_getcheck_func_lv3_sword() {
     /* Nonmatching */
 }
 
 /* 800C6A1C-800C6A50       .text item_getcheck_func_shield__Fv */
-void item_getcheck_func_shield() {
+int item_getcheck_func_shield() {
     /* Nonmatching */
 }
 
 /* 800C6A50-800C6A84       .text item_getcheck_func_mirror_shield__Fv */
-void item_getcheck_func_mirror_shield() {
+int item_getcheck_func_mirror_shield() {
     /* Nonmatching */
 }
 
 /* 800C6A84-800C6AB8       .text item_getcheck_func_master_sword_ex__Fv */
-void item_getcheck_func_master_sword_ex() {
+int item_getcheck_func_master_sword_ex() {
     /* Nonmatching */
 }
 
 /* 800C6AB8-800C6AEC       .text item_getcheck_func_pirates_omamori__Fv */
-void item_getcheck_func_pirates_omamori() {
+int item_getcheck_func_pirates_omamori() {
     /* Nonmatching */
 }
 
 /* 800C6AEC-800C6B20       .text item_getcheck_func_heros_omamori__Fv */
-void item_getcheck_func_heros_omamori() {
+int item_getcheck_func_heros_omamori() {
     /* Nonmatching */
 }
 
 /* 800C6B20-800C6B28       .text item_getcheck_func_grass_ball__Fv */
-void item_getcheck_func_grass_ball() {
+int item_getcheck_func_grass_ball() {
     /* Nonmatching */
 }
 
 /* 800C6B28-800C6B58       .text item_getcheck_func_skull_necklace__Fv */
-void item_getcheck_func_skull_necklace() {
+int item_getcheck_func_skull_necklace() {
     /* Nonmatching */
 }
 
 /* 800C6B58-800C6B88       .text item_getcheck_func_bokobaba_seed__Fv */
-void item_getcheck_func_bokobaba_seed() {
+int item_getcheck_func_bokobaba_seed() {
     /* Nonmatching */
 }
 
 /* 800C6B88-800C6BB8       .text item_getcheck_func_golden_feather__Fv */
-void item_getcheck_func_golden_feather() {
+int item_getcheck_func_golden_feather() {
     /* Nonmatching */
 }
 
 /* 800C6BB8-800C6BE8       .text item_getcheck_func_boko_belt__Fv */
-void item_getcheck_func_boko_belt() {
+int item_getcheck_func_boko_belt() {
     /* Nonmatching */
 }
 
 /* 800C6BE8-800C6C18       .text item_getcheck_func_red_jerry__Fv */
-void item_getcheck_func_red_jerry() {
+int item_getcheck_func_red_jerry() {
     /* Nonmatching */
 }
 
 /* 800C6C18-800C6C48       .text item_getcheck_func_green_jerry__Fv */
-void item_getcheck_func_green_jerry() {
+int item_getcheck_func_green_jerry() {
     /* Nonmatching */
 }
 
 /* 800C6C48-800C6C78       .text item_getcheck_func_blue_jerry__Fv */
-void item_getcheck_func_blue_jerry() {
+int item_getcheck_func_blue_jerry() {
     /* Nonmatching */
 }
 
 /* 800C6C78-800C6CA8       .text item_getcheck_func_map__Fv */
-void item_getcheck_func_map() {
+int item_getcheck_func_map() {
     /* Nonmatching */
 }
 
 /* 800C6CA8-800C6CB0       .text item_getcheck_func_compass__Fv */
-void item_getcheck_func_compass() {
+int item_getcheck_func_compass() {
     /* Nonmatching */
 }
 
 /* 800C6CB0-800C6CE0       .text item_getcheck_func_boss_key__Fv */
-void item_getcheck_func_boss_key() {
+int item_getcheck_func_boss_key() {
     /* Nonmatching */
 }
 
 /* 800C6CE0-800C6D10       .text item_getcheck_func_empty_bship__Fv */
-void item_getcheck_func_empty_bship() {
+int item_getcheck_func_empty_bship() {
     /* Nonmatching */
 }
 
 /* 800C6D10-800C6D40       .text item_getcheck_func_empty_bottle__Fv */
-void item_getcheck_func_empty_bottle() {
+int item_getcheck_func_empty_bottle() {
     /* Nonmatching */
 }
 
 /* 800C6D40-800C6D70       .text item_getcheck_func_red_bottle__Fv */
-void item_getcheck_func_red_bottle() {
+int item_getcheck_func_red_bottle() {
     /* Nonmatching */
 }
 
 /* 800C6D70-800C6DA0       .text item_getcheck_func_green_bottle__Fv */
-void item_getcheck_func_green_bottle() {
+int item_getcheck_func_green_bottle() {
     /* Nonmatching */
 }
 
 /* 800C6DA0-800C6DD0       .text item_getcheck_func_blue_bottle__Fv */
-void item_getcheck_func_blue_bottle() {
+int item_getcheck_func_blue_bottle() {
     /* Nonmatching */
 }
 
 /* 800C6DD0-800C6E00       .text item_getcheck_func_bottleship__Fv */
-void item_getcheck_func_bottleship() {
+int item_getcheck_func_bottleship() {
     /* Nonmatching */
 }
 
 /* 800C6E00-800C6E30       .text item_getcheck_func_bin_in_bottleship__Fv */
-void item_getcheck_func_bin_in_bottleship() {
+int item_getcheck_func_bin_in_bottleship() {
     /* Nonmatching */
 }
 
 /* 800C6E30-800C6E60       .text item_getcheck_func_bin_in_water__Fv */
-void item_getcheck_func_bin_in_water() {
+int item_getcheck_func_bin_in_water() {
     /* Nonmatching */
 }
 
 /* 800C6E60-800C6E90       .text item_getcheck_func_bin__Fv */
-void item_getcheck_func_bin() {
+int item_getcheck_func_bin() {
     /* Nonmatching */
 }
 
 /* 800C6E90-800C6EC0       .text item_getcheck_func_triforce1__Fv */
-void item_getcheck_func_triforce1() {
+int item_getcheck_func_triforce1() {
     /* Nonmatching */
 }
 
 /* 800C6EC0-800C6EF0       .text item_getcheck_func_triforce2__Fv */
-void item_getcheck_func_triforce2() {
+int item_getcheck_func_triforce2() {
     /* Nonmatching */
 }
 
 /* 800C6EF0-800C6F20       .text item_getcheck_func_triforce3__Fv */
-void item_getcheck_func_triforce3() {
+int item_getcheck_func_triforce3() {
     /* Nonmatching */
 }
 
 /* 800C6F20-800C6F50       .text item_getcheck_func_triforce4__Fv */
-void item_getcheck_func_triforce4() {
+int item_getcheck_func_triforce4() {
     /* Nonmatching */
 }
 
 /* 800C6F50-800C6F80       .text item_getcheck_func_triforce5__Fv */
-void item_getcheck_func_triforce5() {
+int item_getcheck_func_triforce5() {
     /* Nonmatching */
 }
 
 /* 800C6F80-800C6FB0       .text item_getcheck_func_triforce6__Fv */
-void item_getcheck_func_triforce6() {
+int item_getcheck_func_triforce6() {
     /* Nonmatching */
 }
 
 /* 800C6FB0-800C6FE0       .text item_getcheck_func_triforce7__Fv */
-void item_getcheck_func_triforce7() {
+int item_getcheck_func_triforce7() {
     /* Nonmatching */
 }
 
 /* 800C6FE0-800C7010       .text item_getcheck_func_triforce8__Fv */
-void item_getcheck_func_triforce8() {
+int item_getcheck_func_triforce8() {
     /* Nonmatching */
 }
 
 /* 800C7010-800C7040       .text item_getcheck_func_pearl1__Fv */
-void item_getcheck_func_pearl1() {
+int item_getcheck_func_pearl1() {
     /* Nonmatching */
 }
 
 /* 800C7040-800C7070       .text item_getcheck_func_pearl2__Fv */
-void item_getcheck_func_pearl2() {
+int item_getcheck_func_pearl2() {
     /* Nonmatching */
 }
 
 /* 800C7070-800C70A0       .text item_getcheck_func_pearl3__Fv */
-void item_getcheck_func_pearl3() {
+int item_getcheck_func_pearl3() {
     /* Nonmatching */
 }
 
 /* 800C70A0-800C70D0       .text item_getcheck_func_tact_song1__Fv */
-void item_getcheck_func_tact_song1() {
+int item_getcheck_func_tact_song1() {
     /* Nonmatching */
 }
 
 /* 800C70D0-800C7100       .text item_getcheck_func_tact_song2__Fv */
-void item_getcheck_func_tact_song2() {
+int item_getcheck_func_tact_song2() {
     /* Nonmatching */
 }
 
 /* 800C7100-800C7130       .text item_getcheck_func_tact_song3__Fv */
-void item_getcheck_func_tact_song3() {
+int item_getcheck_func_tact_song3() {
     /* Nonmatching */
 }
 
 /* 800C7130-800C7160       .text item_getcheck_func_tact_song4__Fv */
-void item_getcheck_func_tact_song4() {
+int item_getcheck_func_tact_song4() {
     /* Nonmatching */
 }
 
 /* 800C7160-800C7190       .text item_getcheck_func_tact_song5__Fv */
-void item_getcheck_func_tact_song5() {
+int item_getcheck_func_tact_song5() {
     /* Nonmatching */
 }
 
 /* 800C7190-800C71C0       .text item_getcheck_func_tact_song6__Fv */
-void item_getcheck_func_tact_song6() {
+int item_getcheck_func_tact_song6() {
     /* Nonmatching */
 }
 
 /* 800C71C0-800C71F4       .text item_getcheck_func_normal_sail__Fv */
-void item_getcheck_func_normal_sail() {
+int item_getcheck_func_normal_sail() {
     /* Nonmatching */
 }
 
 /* 800C71F4-800C71FC       .text item_getcheck_func_zora_sail__Fv */
-void item_getcheck_func_zora_sail() {
+int item_getcheck_func_zora_sail() {
     /* Nonmatching */
 }
 
 /* 800C71FC-800C7204       .text item_getcheck_func_tincle_sail__Fv */
-void item_getcheck_func_tincle_sail() {
+int item_getcheck_func_tincle_sail() {
     /* Nonmatching */
 }
 
 /* 800C7204-800C720C       .text item_getcheck_func_sail__Fv */
-void item_getcheck_func_sail() {
+int item_getcheck_func_sail() {
     /* Nonmatching */
 }
 
 /* 800C720C-800C723C       .text item_getcheck_func_bird_esa_5__Fv */
-void item_getcheck_func_bird_esa_5() {
+int item_getcheck_func_bird_esa_5() {
     /* Nonmatching */
 }
 
 /* 800C723C-800C726C       .text item_getcheck_func_animal_esa__Fv */
-void item_getcheck_func_animal_esa() {
+int item_getcheck_func_animal_esa() {
     /* Nonmatching */
 }
 
 /* 800C726C-800C729C       .text item_getcheck_func_esa1__Fv */
-void item_getcheck_func_esa1() {
+int item_getcheck_func_esa1() {
     /* Nonmatching */
 }
 
 /* 800C729C-800C72CC       .text item_getcheck_func_esa2__Fv */
-void item_getcheck_func_esa2() {
+int item_getcheck_func_esa2() {
     /* Nonmatching */
 }
 
 /* 800C72CC-800C72FC       .text item_getcheck_func_esa3__Fv */
-void item_getcheck_func_esa3() {
+int item_getcheck_func_esa3() {
     /* Nonmatching */
 }
 
 /* 800C72FC-800C732C       .text item_getcheck_func_esa4__Fv */
-void item_getcheck_func_esa4() {
+int item_getcheck_func_esa4() {
     /* Nonmatching */
 }
 
 /* 800C732C-800C735C       .text item_getcheck_func_esa5__Fv */
-void item_getcheck_func_esa5() {
+int item_getcheck_func_esa5() {
     /* Nonmatching */
 }
 
 /* 800C735C-800C7364       .text item_getcheck_func_magic_bean__Fv */
-void item_getcheck_func_magic_bean() {
+int item_getcheck_func_magic_bean() {
     /* Nonmatching */
 }
 
 /* 800C7364-800C7394       .text item_getcheck_func_bird_esa_10__Fv */
-void item_getcheck_func_bird_esa_10() {
+int item_getcheck_func_bird_esa_10() {
     /* Nonmatching */
 }
 
 /* 800C7394-800C73C4       .text item_getcheck_func_flower_1__Fv */
-void item_getcheck_func_flower_1() {
+int item_getcheck_func_flower_1() {
     /* Nonmatching */
 }
 
 /* 800C73C4-800C73F4       .text item_getcheck_func_flower_2__Fv */
-void item_getcheck_func_flower_2() {
+int item_getcheck_func_flower_2() {
     /* Nonmatching */
 }
 
 /* 800C73F4-800C7424       .text item_getcheck_func_flower_3__Fv */
-void item_getcheck_func_flower_3() {
+int item_getcheck_func_flower_3() {
     /* Nonmatching */
 }
 
 /* 800C7424-800C7454       .text item_getcheck_func_heros_flag__Fv */
-void item_getcheck_func_heros_flag() {
+int item_getcheck_func_heros_flag() {
     /* Nonmatching */
 }
 
 /* 800C7454-800C7484       .text item_getcheck_func_tairyo_flag__Fv */
-void item_getcheck_func_tairyo_flag() {
+int item_getcheck_func_tairyo_flag() {
     /* Nonmatching */
 }
 
 /* 800C7484-800C74B4       .text item_getcheck_func_sales_flag__Fv */
-void item_getcheck_func_sales_flag() {
+int item_getcheck_func_sales_flag() {
     /* Nonmatching */
 }
 
 /* 800C74B4-800C74E4       .text item_getcheck_func_wind_flag__Fv */
-void item_getcheck_func_wind_flag() {
+int item_getcheck_func_wind_flag() {
     /* Nonmatching */
 }
 
 /* 800C74E4-800C7514       .text item_getcheck_func_red_flag__Fv */
-void item_getcheck_func_red_flag() {
+int item_getcheck_func_red_flag() {
     /* Nonmatching */
 }
 
 /* 800C7514-800C7544       .text item_getcheck_func_fossil_head__Fv */
-void item_getcheck_func_fossil_head() {
+int item_getcheck_func_fossil_head() {
     /* Nonmatching */
 }
 
 /* 800C7544-800C7574       .text item_getcheck_func_water_statue__Fv */
-void item_getcheck_func_water_statue() {
+int item_getcheck_func_water_statue() {
     /* Nonmatching */
 }
 
 /* 800C7574-800C75A4       .text item_getcheck_func_postman_statue__Fv */
-void item_getcheck_func_postman_statue() {
+int item_getcheck_func_postman_statue() {
     /* Nonmatching */
 }
 
 /* 800C75A4-800C75D4       .text item_getcheck_func_president_statue__Fv */
-void item_getcheck_func_president_statue() {
+int item_getcheck_func_president_statue() {
     /* Nonmatching */
 }
 
 /* 800C75D4-800C7604       .text item_getcheck_func_letter00__Fv */
-void item_getcheck_func_letter00() {
+int item_getcheck_func_letter00() {
     /* Nonmatching */
 }
 
 /* 800C7604-800C7634       .text item_getcheck_func_magic_seed__Fv */
-void item_getcheck_func_magic_seed() {
+int item_getcheck_func_magic_seed() {
     /* Nonmatching */
 }
 
 /* 800C7634-800C7664       .text item_getcheck_func_magys_letter__Fv */
-void item_getcheck_func_magys_letter() {
+int item_getcheck_func_magys_letter() {
     /* Nonmatching */
 }
 
 /* 800C7664-800C7694       .text item_getcheck_func_mo_letter__Fv */
-void item_getcheck_func_mo_letter() {
+int item_getcheck_func_mo_letter() {
     /* Nonmatching */
 }
 
 /* 800C7694-800C76C4       .text item_getcheck_func_cottage_paper__Fv */
-void item_getcheck_func_cottage_paper() {
+int item_getcheck_func_cottage_paper() {
     /* Nonmatching */
 }
 
 /* 800C76C4-800C76F4       .text item_getcheck_func_kaisen_present1__Fv */
-void item_getcheck_func_kaisen_present1() {
+int item_getcheck_func_kaisen_present1() {
     /* Nonmatching */
 }
 
 /* 800C76F4-800C7724       .text item_getcheck_func_kaisen_present2__Fv */
-void item_getcheck_func_kaisen_present2() {
+int item_getcheck_func_kaisen_present2() {
     /* Nonmatching */
 }
 
 /* 800C7724-800C7754       .text item_getcheck_func_salvage_item1__Fv */
-void item_getcheck_func_salvage_item1() {
+int item_getcheck_func_salvage_item1() {
     /* Nonmatching */
 }
 
 /* 800C7754-800C7784       .text item_getcheck_func_salvage_item2__Fv */
-void item_getcheck_func_salvage_item2() {
+int item_getcheck_func_salvage_item2() {
     /* Nonmatching */
 }
 
 /* 800C7784-800C77B4       .text item_getcheck_func_salvage_item3__Fv */
-void item_getcheck_func_salvage_item3() {
+int item_getcheck_func_salvage_item3() {
     /* Nonmatching */
 }
 
 /* 800C77B4-800C77E4       .text item_getcheck_func_xxx_039__Fv */
-void item_getcheck_func_xxx_039() {
+int item_getcheck_func_xxx_039() {
     /* Nonmatching */
 }
 
 /* 800C77E4-800C7814       .text item_getcheck_func_lithograph1__Fv */
-void item_getcheck_func_lithograph1() {
+int item_getcheck_func_lithograph1() {
     /* Nonmatching */
 }
 
 /* 800C7814-800C7844       .text item_getcheck_func_lithograph2__Fv */
-void item_getcheck_func_lithograph2() {
+int item_getcheck_func_lithograph2() {
     /* Nonmatching */
 }
 
 /* 800C7844-800C7874       .text item_getcheck_func_lithograph3__Fv */
-void item_getcheck_func_lithograph3() {
+int item_getcheck_func_lithograph3() {
     /* Nonmatching */
 }
 
 /* 800C7874-800C78A4       .text item_getcheck_func_lithograph4__Fv */
-void item_getcheck_func_lithograph4() {
+int item_getcheck_func_lithograph4() {
     /* Nonmatching */
 }
 
 /* 800C78A4-800C78D4       .text item_getcheck_func_lithograph5__Fv */
-void item_getcheck_func_lithograph5() {
+int item_getcheck_func_lithograph5() {
     /* Nonmatching */
 }
 
 /* 800C78D4-800C7904       .text item_getcheck_func_lithograph6__Fv */
-void item_getcheck_func_lithograph6() {
+int item_getcheck_func_lithograph6() {
     /* Nonmatching */
 }
 
 /* 800C7904-800C7934       .text item_getcheck_func_lithograph7__Fv */
-void item_getcheck_func_lithograph7() {
+int item_getcheck_func_lithograph7() {
     /* Nonmatching */
 }
 
 /* 800C7934-800C7964       .text item_getcheck_func_lithograph8__Fv */
-void item_getcheck_func_lithograph8() {
+int item_getcheck_func_lithograph8() {
     /* Nonmatching */
 }
 
 /* 800C7964-800C7994       .text item_getcheck_func_lithograph9__Fv */
-void item_getcheck_func_lithograph9() {
+int item_getcheck_func_lithograph9() {
     /* Nonmatching */
 }
 
 /* 800C7994-800C79C4       .text item_getcheck_func_lithograph10__Fv */
-void item_getcheck_func_lithograph10() {
+int item_getcheck_func_lithograph10() {
     /* Nonmatching */
 }
 
 /* 800C79C4-800C79F4       .text item_getcheck_func_lithograph11__Fv */
-void item_getcheck_func_lithograph11() {
+int item_getcheck_func_lithograph11() {
     /* Nonmatching */
 }
 
 /* 800C79F4-800C7A24       .text item_getcheck_func_lithograph12__Fv */
-void item_getcheck_func_lithograph12() {
+int item_getcheck_func_lithograph12() {
     /* Nonmatching */
 }
 
 /* 800C7A24-800C7A54       .text item_getcheck_func_lithograph13__Fv */
-void item_getcheck_func_lithograph13() {
+int item_getcheck_func_lithograph13() {
     /* Nonmatching */
 }
 
 /* 800C7A54-800C7A84       .text item_getcheck_func_lithograph14__Fv */
-void item_getcheck_func_lithograph14() {
+int item_getcheck_func_lithograph14() {
     /* Nonmatching */
 }
 
 /* 800C7A84-800C7AB4       .text item_getcheck_func_lithograph15__Fv */
-void item_getcheck_func_lithograph15() {
+int item_getcheck_func_lithograph15() {
     /* Nonmatching */
 }
 
 /* 800C7AB4-800C7AE4       .text item_getcheck_func_lithograph16__Fv */
-void item_getcheck_func_lithograph16() {
+int item_getcheck_func_lithograph16() {
     /* Nonmatching */
 }
 
@@ -1877,57 +2423,57 @@ void getRotenItemNumInBag() {
 }
 
 /* 800C7B50-800C7B7C       .text isDaizaItem__FUc */
-void isDaizaItem(unsigned char) {
+BOOL isDaizaItem(unsigned char) {
     /* Nonmatching */
 }
 
 /* 800C7B7C-800C7BA8       .text isBomb__FUc */
-bool isBomb(unsigned char) {
+BOOL isBomb(unsigned char) {
     /* Nonmatching */
 }
 
 /* 800C7BA8-800C7BD4       .text isArrow__FUc */
-void isArrow(unsigned char) {
+BOOL isArrow(unsigned char) {
     /* Nonmatching */
 }
 
 /* 800C7BD4-800C7C08       .text isEmono__FUc */
-void isEmono(unsigned char) {
+BOOL isEmono(unsigned char) {
     /* Nonmatching */
 }
 
 /* 800C7C08-800C7C34       .text isEsa__FUc */
-void isEsa(unsigned char) {
+BOOL isEsa(unsigned char) {
     /* Nonmatching */
 }
 
 /* 800C7C34-800C7C60       .text isRupee__FUc */
-void isRupee(unsigned char) {
+BOOL isRupee(unsigned char) {
     /* Nonmatching */
 }
 
 /* 800C7C60-800C7C7C       .text isLimitedItem__FUc */
-void isLimitedItem(unsigned char) {
+BOOL isLimitedItem(unsigned char) {
     /* Nonmatching */
 }
 
 /* 800C7C7C-800C7CB0       .text isNonSavedEmono__FUc */
-void isNonSavedEmono(unsigned char) {
+BOOL isNonSavedEmono(unsigned char) {
     /* Nonmatching */
 }
 
 /* 800C7CB0-800C7CDC       .text isUseClothPacket__FUc */
-void isUseClothPacket(unsigned char) {
+BOOL isUseClothPacket(unsigned char) {
     /* Nonmatching */
 }
 
 /* 800C7CDC-800C7D08       .text isTriforce__FUc */
-void isTriforce(unsigned char) {
+BOOL isTriforce(unsigned char) {
     /* Nonmatching */
 }
 
 /* 800C7D08-800C7D28       .text isHeart__FUc */
-void isHeart(unsigned char) {
+BOOL isHeart(unsigned char) {
     /* Nonmatching */
 }
 
@@ -1937,7 +2483,7 @@ void getItemNoByLife(unsigned char) {
 }
 
 /* 800C7D70-800C7ED0       .text check_itemno__Fi */
-void check_itemno(int) {
+int check_itemno(int) {
     /* Nonmatching */
 }
 

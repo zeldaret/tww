@@ -363,10 +363,18 @@ public:
     s16 getItemMagicCount() { return mItemMagicCount; }
     void setItemMagicCount(s16 magic) { mItemMagicCount += magic; }
 
+    void setItemBombNumCount(s16 num) { mItemBombNumCount += num; }
+
+    f32 getItemLifeCount() { return mItemLifeCount; }
     void setItemLifeCount(f32 num) { mItemLifeCount += num; }
+    
+    s16 getItemMaxLifeCount() { return mItemMaxLifeCount; }
+    void setItemMaxLifeCount(s16 num) { mItemMaxLifeCount += num; }
     
     s16 getItemArrowNumCount() { return mItemArrowNumCount; }
     void setItemArrowNumCount(s16 num) { mItemArrowNumCount += num; }
+
+    void setItemKeyNumCount(s16 num) { mItemKeyNumCount += num; }
 
     u8 checkMesgCancelButton() { return field_0x4949; }
 
@@ -674,6 +682,10 @@ inline u8 dComIfGs_getItem(int param_0) {
     return g_dComIfG_gameInfo.save.getPlayer().getItem().getItem(param_0);
 }
 
+inline void dComIfGs_setItem(int i_idx, u8 i_itemNo) {
+    g_dComIfG_gameInfo.save.getPlayer().getItem().setItem(i_idx, i_itemNo);
+}
+
 inline u8 dComIfGs_getBeast(int i_idx) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getBeast(i_idx);
 }
@@ -887,6 +899,8 @@ inline void dComIfGs_onStageLife() {
     g_dComIfG_gameInfo.save.getMemory().getBit().onStageLife();
 }
 
+inline void dComIfGs_onStageLife(int i_stageNo);
+
 inline BOOL dComIfGs_isStageLife() {
     return g_dComIfG_gameInfo.save.getMemory().getBit().isStageLife();
 }
@@ -985,6 +999,10 @@ inline void dComIfGs_setTime(f32 i_time) {
 
 inline BOOL dComIfGs_isGetItem(int i_field, u8 i_item) {
     return g_dComIfG_gameInfo.save.getPlayer().getGetItem().isItem(i_field, i_item);
+}
+
+inline void dComIfGs_onGetItem(int i_field, u8 i_item) {
+    return g_dComIfG_gameInfo.save.getPlayer().getGetItem().onItem(i_field, i_item);
 }
 
 inline BOOL dComIfGs_isGetItemBeast(u8 i_beast) {
@@ -1457,8 +1475,24 @@ inline void dComIfGp_setItemRupeeCount(s32 count) {
     g_dComIfG_gameInfo.play.setItemRupeeCount(count);
 }
 
+inline f32 dComIfGp_getItemLifeCount() {
+    return g_dComIfG_gameInfo.play.getItemLifeCount();
+}
+
 inline void dComIfGp_setItemLifeCount(f32 amount) {
     g_dComIfG_gameInfo.play.setItemLifeCount(amount);
+}
+
+inline s16 dComIfGp_getItemMaxLifeCount() {
+    return g_dComIfG_gameInfo.play.getItemMaxLifeCount();
+}
+
+inline void dComIfGp_setItemMaxLifeCount(s16 num) {
+    g_dComIfG_gameInfo.play.setItemMaxLifeCount(num);
+}
+
+inline void dComIfGp_setItemKeyNumCount(s16 num) {
+    g_dComIfG_gameInfo.play.setItemKeyNumCount(num);
 }
 
 inline void dComIfGp_setMessageCountNumber(s16 num) {
@@ -1477,11 +1511,15 @@ inline void dComIfGp_setItemMagicCount(s16 magic) {
     g_dComIfG_gameInfo.play.setItemMagicCount(magic);
 }
 
+inline void dComIfGp_setItemBombNumCount(s16 num) {
+    g_dComIfG_gameInfo.play.setItemBombNumCount(num);
+}
+
 inline s16 dComIfGp_getItemArrowNumCount() {
     return g_dComIfG_gameInfo.play.getItemArrowNumCount();
 }
 
-inline void dComIfGp_getItemArrowNumCount(s16 num) {
+inline void dComIfGp_setItemArrowNumCount(s16 num) {
     return g_dComIfG_gameInfo.play.setItemArrowNumCount(num);
 }
 

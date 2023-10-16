@@ -958,6 +958,14 @@ inline u8 dStage_stagInfo_getStartSch(stage_stag_info_class* p_info) {
     return (p_info->field_0x10 >> 0x10) & 0xFF;
 }
 
+// TODO:
+// dStage_stagInfo_GetAgbCon__FP21stage_stag_info_class
+// dStage_stagInfo_GetSchSec__FP21stage_stag_info_class - field_0x0c & 0xFF
+// dStage_stagInfo_DefaultCameraType__FP21stage_stag_info_class
+// dStage_stagInfo_GetCullPoint__FP21stage_stag_info_class
+// dStage_stagInfo_GetUpButton__FP21stage_stag_info_class
+// dStage_stagInfo_ChkKeyDisp__FP21stage_stag_info_class
+
 inline u8 dStage_roomRead_dt_c_GetLoadRoomIndex(u8 param_0) {
     return param_0 & 0x3f;
 }

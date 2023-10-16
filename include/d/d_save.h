@@ -89,6 +89,7 @@ public:
     u8 checkEmptyBottle();
 
     u8 getItem(int i_idx) const { return mItems[i_idx]; }
+    void setItem(int i_idx, u8 i_itemNo) { mItems[i_idx] = i_itemNo; }
 
     /* 0x00 */ u8 mItems[21];
 };  // Size: 0x15

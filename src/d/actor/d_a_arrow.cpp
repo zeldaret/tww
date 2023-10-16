@@ -981,7 +981,7 @@ BOOL daArrow_c::procStop_BG() {
         }
         
         if (mSph.ChkCoHit()) {
-            dComIfGp_getItemArrowNumCount(1);
+            dComIfGp_setItemArrowNumCount(1);
             fopAcM_createItemForSimpleDemo(&current.pos, ARROW_10, -1, NULL, NULL, 0.0f, 0.0f);
             mDoAud_seStart(JA_SE_CONSUMP_ITEM_GET, NULL, 0, 0);
             fopAcM_delete(this);
