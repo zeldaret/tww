@@ -5,65 +5,93 @@
 
 #include "d/actor/d_a_itembase_static.h"
 #include "d/actor/d_a_itembase.h"
+#include "d/d_item_data.h"
 #include "dolphin/types.h"
 
 /* 80068650-80068658       .text getItemNo__12daItemBase_cFv */
-void daItemBase_c::getItemNo() {
-    /* Nonmatching */
+u8 daItemBase_c::getItemNo() {
+    return m_itemNo;
 }
 
 /* 80068658-80068674       .text getHeight__12daItemBase_cFv */
-void daItemBase_c::getHeight() {
-    /* Nonmatching */
+u8 daItemBase_c::getHeight() {
+    return dItem_data::getH(m_itemNo);
 }
 
 /* 80068674-80068690       .text getR__12daItemBase_cFv */
-void daItemBase_c::getR() {
-    /* Nonmatching */
+u8 daItemBase_c::getR() {
+    return dItem_data::getR(m_itemNo);
 }
 
 /* 80068690-800686A0       .text hide__12daItemBase_cFv */
 void daItemBase_c::hide() {
-    /* Nonmatching */
+    mDrawFlags &= ~0x01;
 }
 
 /* 800686A0-800686B0       .text show__12daItemBase_cFv */
 void daItemBase_c::show() {
-    /* Nonmatching */
+    mDrawFlags |= 0x01;
 }
 
 /* 800686B0-800686F8       .text changeDraw__12daItemBase_cFv */
 void daItemBase_c::changeDraw() {
-    /* Nonmatching */
+    if (chkDraw())
+        hide();
+    else
+        show();
 }
 
 /* 800686F8-80068710       .text chkDraw__12daItemBase_cFv */
 bool daItemBase_c::chkDraw() {
     /* Nonmatching */
+    return ((mDrawFlags & 0x01) == 0x01);
 }
 
 /* 80068710-80068720       .text dead__12daItemBase_cFv */
 void daItemBase_c::dead() {
-    /* Nonmatching */
+    mDrawFlags |= 0x02;
 }
 
 /* 80068720-80068738       .text chkDead__12daItemBase_cFv */
-void daItemBase_c::chkDead() {
+bool daItemBase_c::chkDead() {
     /* Nonmatching */
+    return ((mDrawFlags & 0x02) == 0x02);
 }
 
 /* 80068738-80068748       .text setLoadError__12daItemBase_cFv */
 void daItemBase_c::setLoadError() {
-    /* Nonmatching */
+    mDrawFlags |= 0x04;
 }
 
 /* 80068748-800687B4       .text CheckItemCreateHeap__FP10fopAc_ac_c */
-void CheckItemCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+int CheckItemCreateHeap(fopAc_ac_c* i_ac) {
+    daItemBase_c * i_this = (daItemBase_c *)i_ac;
+    u8 itemNo = i_this->getItemNo();
+    return i_this->CreateItemHeap(
+        dItem_data::getArcname(itemNo),
+        dItem_data::getBmdIdx(itemNo),
+        dItem_data::getSrtIdx(itemNo),
+        dItem_data::getSrtIdx2(itemNo),
+        dItem_data::getTevIdx(itemNo),
+        dItem_data::getTevIdx2(itemNo),
+        dItem_data::getBckIdx(itemNo),
+        -1
+    );
 }
 
 /* 800687B4-80068820       .text CheckFieldItemCreateHeap__FP10fopAc_ac_c */
-s32 CheckFieldItemCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+int CheckFieldItemCreateHeap(fopAc_ac_c* i_ac) {
+    daItemBase_c * i_this = (daItemBase_c *)i_ac;
+    u8 itemNo = i_this->getItemNo();
+    return i_this->CreateItemHeap(
+        dItem_data::getFieldArc(itemNo),
+        dItem_data::getFieldBmdIdx(itemNo),
+        dItem_data::getFieldSrtIdx(itemNo),
+        dItem_data::getFieldSrtIdx2(itemNo),
+        dItem_data::getFieldTevIdx(itemNo),
+        dItem_data::getFieldTevIdx2(itemNo),
+        dItem_data::getFieldBckIdx(itemNo),
+        -1
+    );
 }
 

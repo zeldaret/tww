@@ -54,15 +54,15 @@ public:
     void animPlay(float, float, float, float, float);
     virtual BOOL clothCreate();
 
-    void getItemNo();
-    void getHeight();
-    void getR();
+    u8 getItemNo();
+    u8 getHeight();
+    u8 getR();
     void hide();
     void show();
     void changeDraw();
     bool chkDraw();
     void dead();
-    void chkDead();
+    bool chkDead();
     void setLoadError();
 
     daItemBase_c_m_data* getData();

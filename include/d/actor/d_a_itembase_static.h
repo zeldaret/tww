@@ -3,16 +3,6 @@
 
 #include "f_op/f_op_actor.h"
 
-void getItemNo();
-void getHeight();
-void getR();
-void hide();
-void show();
-void changeDraw();
-void chkDraw();
-void dead();
-void chkDead();
-void setLoadError();
 int CheckItemCreateHeap(fopAc_ac_c*);
 int CheckFieldItemCreateHeap(fopAc_ac_c*);
 
