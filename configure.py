@@ -351,7 +351,7 @@ config.libs = [
             Object(Matching,    "d/d_a_bomb_static.cpp"),
             Object(NonMatching, "d/d_a_branch_static.cpp"),
             Object(NonMatching, "d/d_a_mgameboard_static.cpp"),
-            Object(NonMatching, "d/d_a_itembase_static.cpp"),
+            Object(Matching,    "d/d_a_itembase_static.cpp"),
             Object(NonMatching, "d/d_a_item_static.cpp"),
             Object(Matching,    "d/d_a_shop_item_static.cpp"),
             Object(NonMatching, "d/d_a_race_item_static.cpp"),

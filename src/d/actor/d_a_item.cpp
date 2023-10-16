@@ -24,7 +24,7 @@ static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
 s32 daItem_c::m_timer_max = 10000;
 
 /* 800F4BC8-800F4BD4       .text getData__12daItemBase_cFv */
-daItemBase_c_m_data* daItemBase_c::getData() {
+const daItemBase_c_m_data* daItemBase_c::getData() {
     return &daItemBase_c::m_data;
 }
 

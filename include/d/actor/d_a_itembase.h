@@ -22,14 +22,13 @@ struct daItemBase_c_m_data {
     /* 0x18 */ s16 field_0x18;
     /* 0x1A */ s16 field_0x1A;
     /* 0x1C */ s16 mNumFramesPerFullSpin;
-    /* 0x1E */ u8 field_0x1E[0x20 - 0x1E];
     /* 0x20 */ f32 field_0x20;
     /* 0x24 */ f32 field_0x24;
     /* 0x28 */ s16 field_0x28;
     /* 0x2A */ s16 mHeartMaxRandomZRot;
     /* 0x2C */ f32 field_0x2C;
     /* 0x30 */ f32 field_0x30;
-    /* 0x34 */ u8 field_0x34[0x38 - 0x34];
+    /* 0x34 */ f32 field_0x34;
     /* 0x38 */ f32 mPickedUpInitialSpeedY;
     /* 0x3C */ f32 mPickedUpGravity;
     /* 0x40 */ s16 field_0x40;
@@ -65,9 +64,9 @@ public:
     bool chkDead();
     void setLoadError();
 
-    daItemBase_c_m_data* getData();
+    const daItemBase_c_m_data* getData();
 
-    static daItemBase_c_m_data m_data;
+    static const daItemBase_c_m_data m_data;
 
 public:
     /* 0x294 */ request_of_phase_process_class mPhs;
