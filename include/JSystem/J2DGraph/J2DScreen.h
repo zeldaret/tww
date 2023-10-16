@@ -12,8 +12,9 @@ public:
     J2DScreen(J2DPane* parent, bool visible, u32 tag, const JGeometry::TBox2<f32>& bounds)
         : J2DPane(parent, visible, tag, bounds)
         , mColor()
-        , mbClipToParent(false)
-    {}
+    {
+        mbClipToParent = false;
+    }
 
     virtual ~J2DScreen();
     virtual u16 getTypeID() { return 0x08; }

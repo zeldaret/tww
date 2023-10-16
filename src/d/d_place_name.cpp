@@ -8,6 +8,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
 #include "d/d_meter.h"
+#include "d/d_place_name.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_ext.h"
@@ -19,6 +20,29 @@
 
 enum { dPn_stage_max_e = 19 };
 
+#if VERSION == VERSION_PAL
+const char * name_texture[] = {
+    "pn_01",
+    "pn_02",
+    "pn_03",
+    "pn_04",
+    "pn_05",
+    "pn_06",
+    "pn_07",
+    "pn_08",
+    "pn_09",
+    "pn_10",
+    "pn_11",
+    "pn_12",
+    "pn_13",
+    "pn_14",
+    "pn_15",
+    "pn_16",
+    "pn_17",
+    "pn_18",
+    "pn_19",
+};
+#else
 const char * name_texture[] = {
     "/res/placename/pn_01.bti",
     "/res/placename/pn_02.bti",
@@ -40,19 +64,7 @@ const char * name_texture[] = {
     "/res/placename/pn_18.bti",
     "/res/placename/pn_19.bti",
 };
-
-class dPlace_name_c : public dDlst_base_c {
-public:
-    ~dPlace_name_c() {}
-    void setScreen(const char*, JKRArchive*);
-    BOOL _openAnime();
-    BOOL _closeAnime();
-    virtual void draw();
-
-public:
-    /* 0x04 */ J2DScreen * scrn;
-    /* 0x08 */ fopMsgM_pane_class pane;
-};
+#endif
 
 class dPn_c : public msg_class {
 public:
@@ -74,7 +86,7 @@ public:
 /* 80160F60-801610A8       .text setScreen__13dPlace_name_cFPCcP10JKRArchive */
 void dPlace_name_c::setScreen(const char* name, JKRArchive* arc) {
     scrn = new J2DScreen(NULL, true, 0x726F6F74, JGeometry::TBox2<f32>(0.0f, 0.0f, 640.0f, 480.0f));
-    JUT_ASSERT(0x5b, scrn != 0);
+    JUT_ASSERT(VERSION_SELECT(69, 91, 91), scrn != 0);
 
     scrn->set(name, arc);
     fopMsgM_setPaneData(&pane, scrn, 0x706e);
@@ -122,33 +134,47 @@ void dPlace_name_c::draw() {
 s32 dPn_c::_create() {
     s32 rt = dComIfG_resLoad(&mPhs, "PName");
 
-    if (dMenu_flag() || g_dComIfG_gameInfo.play.field_0x4962 != 0 || g_dComIfG_gameInfo.play.field_0x4962 != 11 || g_dComIfG_gameInfo.play.field_0x492a != 0)
-        return;
+    if (dMenu_flag() || (g_dComIfG_gameInfo.play.getHeapLockFlag() != 0 && g_dComIfG_gameInfo.play.getHeapLockFlag() != 10) || g_dComIfG_gameInfo.play.field_0x492a != 0)
+        return cPhs_INIT_e;
 
     if (mState == 0) {
-        if (rt != cPhs_COMPLEATE_e)
-            return rt;
+        if (rt == cPhs_COMPLEATE_e) {
+            dRes_info_c * resInfo = dComIfG_getObjectResInfo("PName");
+            JUT_ASSERT(VERSION_SELECT(147, 169, 169), resInfo != 0);
 
-        dRes_info_c * resInfo = dComIfG_getObjectResInfo("PName");
-        JUT_ASSERT(0xa9, resInfo != 0);
+            mpHeap = g_dComIfG_gameInfo.play.getExpHeap2D();
+            g_dComIfG_gameInfo.play.setHeapLockFlag(10);
+            JKRHeap * oldHeap = mDoExt_setCurrentHeap(mpHeap);
+            dPn_scrn = new dPlace_name_c();
+            JUT_ASSERT(VERSION_SELECT(155, 177, 177), dPn_scrn != 0);
+            dPn_scrn->setScreen("place_name.blo", resInfo->getArchive());
+            mpTIMG = (ResTIMG*)mpHeap->alloc(0x3c00, 0x20);
+            mDoExt_setCurrentHeap(oldHeap);
+            mState = 1;
+            dvd = NULL;
 
-        mpHeap = g_dComIfG_gameInfo.play.field_0x497c;
-        g_dComIfG_gameInfo.play.field_0x4962 = 10;
-        JKRHeap * oldHeap = mDoExt_setCurrentHeap(mpHeap);
-        dPn_scrn = new dPlace_name_c();
-        JUT_ASSERT(0xb1, dPn_scrn != 0);
-        dPn_scrn->setScreen("place_name.blo", resInfo->getArchive());
-        mpTIMG = (ResTIMG*)mpHeap->alloc(0x3c00, 0x20);
-        mDoExt_setCurrentHeap(oldHeap);
-        mState = 1;
-        dvd = NULL;
-        if (dComIfGp_getNowStageNum() != 0)
+#if VERSION == VERSION_PAL
             return cPhs_INIT_e;
+#else
+            if (dComIfGp_getNowStageNum() != 0)
+                return cPhs_INIT_e;
+#endif
+        } else {
+            return rt;
+        }
     } else if (mState == 1) {
         JKRHeap * oldHeap = mDoExt_setCurrentHeap(mpHeap);
-        JUT_ASSERT(0xc9, dComIfGp_getNowStageNum() < dPn_stage_max_e);
+        JUT_ASSERT(VERSION_SELECT(175, 201, 201), dComIfGp_getNowStageNum() < dPn_stage_max_e);
 
+#if VERSION == VERSION_PAL
+        u32 lang = g_dComIfG_gameInfo.play.mGameLanguage;
+        char buf[32];
+        sprintf(buf, "/res/placename/PN%d/pn_%02d_%d.bti", lang, dComIfGp_getNowStageNum() + 1, lang);
+        dvd = mDoDvdThd_toMainRam_c::create(buf, 0, mpHeap);
+#else
         dvd = mDoDvdThd_toMainRam_c::create(name_texture[dComIfGp_getNowStageNum()], 0, mpHeap);
+#endif
+
         mState = 2;
         mDoExt_setCurrentHeap(oldHeap);
         return cPhs_INIT_e;
@@ -156,7 +182,11 @@ s32 dPn_c::_create() {
         JKRHeap * oldHeap = mDoExt_setCurrentHeap(mpHeap);
         if (dvd->sync()) {
             memcpy(mpTIMG, dvd->getMemAddress(), 0x3c00);
+#if VERSION == VERSION_JPN
+            DCFlushRangeNoSync(mpTIMG, 0x3c00);
+#else
             DCStoreRangeNoSync(mpTIMG, 0x3c00);
+#endif
             ((J2DPicture*)dPn_scrn->pane.scrn)->changeTexture(mpTIMG, 0);
             mState = 3;
         }
@@ -197,7 +227,7 @@ BOOL dPn_c::_delete() {
         delete dvd;
     mpHeap->free(mpTIMG);
     mpHeap->freeAll();
-    g_dComIfG_gameInfo.play.field_0x4962 = 0;
+    g_dComIfG_gameInfo.play.offHeapLockFlag();
     mDoExt_setCurrentHeap(oldHeap);
     dComIfG_resDelete(&mPhs, "PName");
     return TRUE;

@@ -387,6 +387,12 @@ public:
 
     J2DOrthoGraph* getCurrentGrafPort() { return mCurrentGrafPort; }
 
+    JKRExpHeap * getExpHeap2D() { return mpExpHeap2D; }
+
+    inline u8 getHeapLockFlag() { return mHeapLockFlag; }
+    inline void setHeapLockFlag(u8 flag) { mHeapLockFlag = flag; }
+    inline void offHeapLockFlag() { mHeapLockFlag = 0; }
+
     void setMsgArchive(JKRArchive * pArc) { mpMsgArchive = pArc; }
     void setDmsgArchive(JKRArchive * pArc) { mpDmsgArchive = pArc; }
     void setTmsgArchive(JKRArchive * pArc) { mpTmsgArchive = pArc; }
@@ -564,7 +570,7 @@ public:
     /* 0x495F */ u8 field_0x495f;
     /* 0x4960 */ u8 field_0x4960;
     /* 0x4961 */ u8 field_0x4961;
-    /* 0x4962 */ u8 field_0x4962;
+    /* 0x4962 */ u8 mHeapLockFlag;
     /* 0x4963 */ u8 field_0x4963;
     /* 0x4964 */ u8 mGameLanguage;
     /* 0x4965 */ u8 field_0x4965;
@@ -575,7 +581,7 @@ public:
     /* 0x4979 */ u8 field_0x4979;
     /* 0x497A */ u8 field_0x497a;
     /* 0x497B */ u8 field_0x497B[0x497C - 0x497B];
-    /* 0x497C */ JKRExpHeap* field_0x497c;
+    /* 0x497C */ JKRExpHeap* mpExpHeap2D;
     /* 0x4980 */ int mMesgCameraTagInfo;
     /* 0x4984 */ int field_0x4984;
     /* 0x4988 */ int field_0x4988[10];
@@ -1525,6 +1531,22 @@ inline dADM_CharTbl* dComIfGp_CharTbl() {
 
 inline J2DOrthoGraph* dComIfGp_getCurrentGrafPort() {
     return g_dComIfG_gameInfo.play.getCurrentGrafPort();
+}
+
+inline JKRExpHeap * dComIfGp_getExpHeap2D() {
+    return g_dComIfG_gameInfo.play.getExpHeap2D();
+}
+
+inline u8 dComIfGp_getHeapLockFlag() {
+    return g_dComIfG_gameInfo.play.getHeapLockFlag();
+}
+
+inline void dComIfGp_setHeapLockFlag(u8 flag) {
+    g_dComIfG_gameInfo.play.setHeapLockFlag(flag);
+}
+
+inline void dComIfGp_offHeapLockFlag() {
+    g_dComIfG_gameInfo.play.offHeapLockFlag();
 }
 
 /**
