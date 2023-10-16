@@ -27,8 +27,8 @@ public:
 
 protected:
     /* 0x004 */ J2DPicture mPicture;
-    /* 0x128 */ s16 mWidth;
-    /* 0x12A */ s16 mHeight;
+    /* 0x128 */ s16 mX;
+    /* 0x12A */ s16 mY;
     /* 0x12C */ u8 mAlpha;
     /* 0x12D */ u8 field_0x12e[3];
 };
@@ -201,6 +201,7 @@ private:
 
 class dDlst_shadowControl_c {
 public:
+    dDlst_shadowControl_c() { mRealNum = 0; }
     void init();
     void reset();
     void imageDraw(f32 (*)[4]);

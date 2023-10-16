@@ -2,6 +2,7 @@
 #define J2DPICTURE_H
 
 #include "JSystem/J2DGraph/J2DPane.h"
+#include "JSystem/JUtility/JUTTexture.h"
 #include "JSystem/JUtility/TColor.h"
 #include "dolphin/gx/GX.h"
 
@@ -38,6 +39,10 @@ public:
     int changeTexture(const char*, u8);
     void drawFullSet(f32, f32, f32, f32, J2DBinding, J2DMirror, bool, Mtx*);
     void draw(f32, f32, f32, f32, bool, bool, bool);
+    void draw(f32 x, f32 y, bool, bool, bool) {
+        if (mNumTexture > 0)
+            draw(x, y, mpTexture[0]->getWidth(), mpTexture[0]->getHeight(), false, false, false);
+    }
     void drawOut(const JGeometry::TBox2<f32>&, const JGeometry::TBox2<f32>&);
     void drawTexCoord(f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, Mtx*);
     void setTevMode();

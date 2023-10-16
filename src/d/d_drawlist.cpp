@@ -89,13 +89,17 @@ void dDlst_2DMt_c::draw() {
 }
 
 /* 80082130-800821B0       .text __ct__10dDlst_2D_cFP7ResTIMGssUc */
-dDlst_2D_c::dDlst_2D_c(ResTIMG*, s16, s16, u8) {
-    /* Nonmatching */
+dDlst_2D_c::dDlst_2D_c(ResTIMG* timg, s16 x, s16 y, u8 alpha) {
+    mPicture.initiate(timg, NULL);
+    mX = x;
+    mY = y;
+    mAlpha = alpha;
 }
 
 /* 800821B0-80082264       .text draw__10dDlst_2D_cFv */
 void dDlst_2D_c::draw() {
-    /* Nonmatching */
+    mPicture.setAlpha(mAlpha);
+    mPicture.draw(mX, mY, false, false, false);
 }
 
 /* 80082424-80082794       .text draw__18dDlst_effectLine_cFv */
@@ -335,22 +339,59 @@ void dDlst_alphaInvVolPacket::draw() {
 }
 
 /* 80085BBC-80085BFC       .text newData__13dDlst_peekZ_cFssPUl */
-int dDlst_peekZ_c::newData(s16, s16, u32*) {
-    /* Nonmatching */
+int dDlst_peekZ_c::newData(s16 x, s16 y, u32* pDst) {
+    if (mCount >= 0x40)
+        return 0;
+
+    dDlst_peekZ_entry *pEntry = &mEntries[mCount];
+    pEntry->x = x;
+    pEntry->y = y;
+    pEntry->dst = pDst;
+    mCount++;
+    return 1;
 }
 
 /* 80085BFC-80085C6C       .text peekData__13dDlst_peekZ_cFv */
 void dDlst_peekZ_c::peekData() {
-    /* Nonmatching */
+    dDlst_peekZ_entry * pEntry = &mEntries[0];
+    for (s32 i = 0; i < mCount; pEntry++, i++)
+        GXPeekZ(pEntry->x, pEntry->y, pEntry->dst);
+    mCount = 0;
 }
 
 /* 80085C6C-80085D74       .text __ct__12dDlst_list_cFv */
 dDlst_list_c::dDlst_list_c() {
-    /* Nonmatching */
+    field_0x50 = &field_0x3c[ARRAY_SIZE(field_0x3c)];
+    mp2DOpaTopEnd = &mp2DOpaTopArr[ARRAY_SIZE(mp2DOpaTopArr)];
+    mp2DOpaEnd = &mp2DOpaArr[ARRAY_SIZE(mp2DOpaArr)];
+    mp2DXluEnd = &mp2DXluArr[ARRAY_SIZE(mp2DXluArr)];
+    mpOpaListSky = NULL;
+    mpXluListSky = NULL;
+    mpOpaListP0 = NULL;
+    mpOpaListP1 = NULL;
+    mpXluListP1 = NULL;
+    mpOpaListBG = NULL;
+    mpXluListBG = NULL;
+    mpOpaList = NULL;
+    mpXluList = NULL;
+    mpOpaListFilter = NULL;
+    mpOpaListMaskOff = NULL;
+    mpXluListMaskOff = NULL;
+    mpOpaListInvisible = NULL;
+    mpXluListInvisible = NULL;
+    mpOpaList2D = NULL;
+    mpAlphaModel = NULL;
+    mpSpotModel = NULL;
 }
 
 static J3DDrawBuffer * J3DDrawBuffer__create(u32 size) {
-    return new J3DDrawBuffer(size);
+    J3DDrawBuffer * buffer = new J3DDrawBuffer();
+    if (buffer != NULL) {
+        if (buffer->allocBuffer(size) == 0)
+            return buffer;
+        delete buffer;
+    }
+    return NULL;
 }
 
 /* 80085F6C-800861F4       .text init__12dDlst_list_cFv */

@@ -67,6 +67,7 @@ public:
     JSUTree<J2DPane>* getEndChild() { return mPaneTree.getEndChild(); }
     const JSUTree<J2DPane>* getPaneTree() { return &mPaneTree; }
     u8 getAlpha() const { return mAlpha; }
+    void setAlpha(u8 alpha) { mAlpha = alpha; }
     bool isConnectParent() const { return mIsConnectParent; }
 
 public:
