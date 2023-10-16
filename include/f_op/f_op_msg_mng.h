@@ -12,7 +12,7 @@ class msg_class;
 
 struct msg_process_profile_definition {
     /* 0x00 */ leaf_process_profile_definition mBase;
-    /* 0x24 */ leafdraw_method_class* mSubMtd;  // Subclass methods
+    /* 0x24 */ msg_method_class* mSubMtd;  // Subclass methods
 };
 
 struct fopMsg_prm_class {
@@ -39,12 +39,26 @@ struct fopMsg_prm_timer {
     /* 0x34 */ f32 field_0x34;
 };  // Size: 0x38
 
+class J2DScreen;
+
+struct fopMsgM_pane_class {
+    /* 0x00 */ J2DScreen * scrn;
+    /* 0x04 */ cXy mPosTopLeftOrig;
+    /* 0x0C */ cXy mPosTopLeft;
+    /* 0x14 */ cXy mPosCenterOrig;
+    /* 0x1C */ cXy mPosCenter;
+    /* 0x24 */ cXy mSizeOrig;
+    /* 0x2C */ cXy mSize;
+    /* 0x34 */ u8 mAlphaOrig;
+    /* 0x35 */ u8 mAlpha;
+    /* 0x36 */ s16 mUserArea;
+};
+
 typedef int (*fopMsgCreateFunc)(void*);
 
 JKRExpHeap* fopMsgM_createExpHeap(u32, JKRHeap*);
 u32 fopMsgM_Create(s16, fopMsgCreateFunc, void*);
-s32 fopMsgM_create(s16 param_0, fopAc_ac_c* param_1, cXyz* param_2, u32* param_3, u32* param_4,
-                   fopMsgCreateFunc createFunc);
+s32 fopMsgM_create(s16 param_0, fopAc_ac_c* param_1, cXyz* param_2, u32* param_3, u32* param_4, fopMsgCreateFunc createFunc);
 void fopMsgM_Delete(void* process);
 fopMsg_prm_class* fopMsgM_GetAppend(void* msg);
 void fopMsgM_setMessageID(unsigned int);
@@ -65,6 +79,10 @@ inline s32 fopMsgM_Timer_create(s16 param_0, u8 param_1, u32 param_2, u8 param_3
     return fop_Timer_create(param_0, param_1, param_2, param_3, param_4, param_5, param_6, param_7,
                             param_8, createFunc);
 }
+
+void fopMsgM_setPaneData(fopMsgM_pane_class*, J2DScreen*, unsigned long);
+void fopMsgM_setNowAlpha(fopMsgM_pane_class*, f32);
+void fopMsgM_setAlpha(fopMsgM_pane_class*);
 
 u32 fopMsgM_searchMessageNumber(u32);
 void fopMsgM_messageSendOn();

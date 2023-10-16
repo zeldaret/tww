@@ -3,76 +3,250 @@
 // Translation Unit: d_place_name.cpp
 //
 
-#include "d_place_name.h"
-#include "dolphin/types.h"
+#include "f_op/f_op_msg.h"
+#include "f_op/f_op_msg_mng.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_drawlist.h"
+#include "d/d_meter.h"
+#include "d/d_procname.h"
+#include "m_Do/m_Do_dvd_thread.h"
+#include "m_Do/m_Do_ext.h"
+#include "JSystem/JKernel/JKRArchive.h"
+#include "JSystem/JKernel/JKRExpHeap.h"
+#include "JSystem/J2DGraph/J2DOrthoGraph.h"
+#include "JSystem/J2DGraph/J2DPane.h"
+#include "JSystem/J2DGraph/J2DScreen.h"
+
+enum { dPn_stage_max_e = 19 };
+
+const char * name_texture[] = {
+    "/res/placename/pn_01.bti",
+    "/res/placename/pn_02.bti",
+    "/res/placename/pn_03.bti",
+    "/res/placename/pn_04.bti",
+    "/res/placename/pn_05.bti",
+    "/res/placename/pn_06.bti",
+    "/res/placename/pn_07.bti",
+    "/res/placename/pn_08.bti",
+    "/res/placename/pn_09.bti",
+    "/res/placename/pn_10.bti",
+    "/res/placename/pn_11.bti",
+    "/res/placename/pn_12.bti",
+    "/res/placename/pn_13.bti",
+    "/res/placename/pn_14.bti",
+    "/res/placename/pn_15.bti",
+    "/res/placename/pn_16.bti",
+    "/res/placename/pn_17.bti",
+    "/res/placename/pn_18.bti",
+    "/res/placename/pn_19.bti",
+};
+
+class dPlace_name_c : public dDlst_base_c {
+public:
+    ~dPlace_name_c() {}
+    void setScreen(const char*, JKRArchive*);
+    BOOL _openAnime();
+    BOOL _closeAnime();
+    virtual void draw();
+
+public:
+    /* 0x04 */ J2DScreen * scrn;
+    /* 0x08 */ fopMsgM_pane_class pane;
+};
+
+class dPn_c : public msg_class {
+public:
+    s32 _create();
+    BOOL _execute();
+    BOOL _draw();
+    BOOL _delete();
+
+public:
+    /* 0x0FC */ JKRExpHeap * mpHeap;
+    /* 0x100 */ request_of_phase_process_class mPhs;
+    /* 0x108 */ dPlace_name_c * dPn_scrn;
+    /* 0x11C */ mDoDvdThd_toMainRam_c * dvd;
+    /* 0x114 */ ResTIMG * mpTIMG;
+    /* 0x118 */ u8 mState;
+    /* 0x119 */ u8 pad[3];
+};
 
 /* 80160F60-801610A8       .text setScreen__13dPlace_name_cFPCcP10JKRArchive */
-void dPlace_name_c::setScreen(const char*, JKRArchive*) {
-    /* Nonmatching */
+void dPlace_name_c::setScreen(const char* name, JKRArchive* arc) {
+    scrn = new J2DScreen(NULL, true, 0x726F6F74, JGeometry::TBox2<f32>(0.0f, 0.0f, 640.0f, 480.0f));
+    JUT_ASSERT(0x5b, scrn != 0);
+
+    scrn->set(name, arc);
+    fopMsgM_setPaneData(&pane, scrn, 0x706e);
+
+    scrn->search('blc1')->hide();
+    scrn->search('blc2')->hide();
 }
 
 /* 801610A8-80161100       .text _openAnime__13dPlace_name_cFv */
-void dPlace_name_c::_openAnime() {
-    /* Nonmatching */
+BOOL dPlace_name_c::_openAnime() {
+    if (pane.mUserArea < 10) {
+        pane.mUserArea++;
+        f32 alpha = fopMsgM_valueIncrease(10, pane.mUserArea, 0);
+        fopMsgM_setNowAlpha(&pane, alpha);
+    }
+
+    return TRUE;
 }
 
 /* 80161100-80161174       .text _closeAnime__13dPlace_name_cFv */
-void dPlace_name_c::_closeAnime() {
-    /* Nonmatching */
+BOOL dPlace_name_c::_closeAnime() {
+    BOOL ret = FALSE;
+
+    if (pane.mUserArea > 0) {
+        pane.mUserArea--;
+        f32 alpha = fopMsgM_valueIncrease(10, pane.mUserArea, 0);
+        fopMsgM_setNowAlpha(&pane, alpha);
+    }
+
+    if (pane.mUserArea <= 0)
+        ret = TRUE;
+
+    return ret;
 }
 
 /* 80161174-801611E0       .text draw__13dPlace_name_cFv */
 void dPlace_name_c::draw() {
-    /* Nonmatching */
+    fopMsgM_setAlpha(&pane);
+    J2DOrthoGraph * graf = dComIfGp_getCurrentGrafPort();
+    graf->setPort();
+    scrn->draw(0.0f, 0.0f, graf);
 }
 
 /* 801611E0-801614E8       .text _create__5dPn_cFv */
-void dPn_c::_create() {
-    /* Nonmatching */
+s32 dPn_c::_create() {
+    s32 rt = dComIfG_resLoad(&mPhs, "PName");
+
+    if (dMenu_flag() || g_dComIfG_gameInfo.play.field_0x4962 != 0 || g_dComIfG_gameInfo.play.field_0x4962 != 11 || g_dComIfG_gameInfo.play.field_0x492a != 0)
+        return;
+
+    if (mState == 0) {
+        if (rt != cPhs_COMPLEATE_e)
+            return rt;
+
+        dRes_info_c * resInfo = dComIfG_getObjectResInfo("PName");
+        JUT_ASSERT(0xa9, resInfo != 0);
+
+        mpHeap = g_dComIfG_gameInfo.play.field_0x497c;
+        g_dComIfG_gameInfo.play.field_0x4962 = 10;
+        JKRHeap * oldHeap = mDoExt_setCurrentHeap(mpHeap);
+        dPn_scrn = new dPlace_name_c();
+        JUT_ASSERT(0xb1, dPn_scrn != 0);
+        dPn_scrn->setScreen("place_name.blo", resInfo->getArchive());
+        mpTIMG = (ResTIMG*)mpHeap->alloc(0x3c00, 0x20);
+        mDoExt_setCurrentHeap(oldHeap);
+        mState = 1;
+        dvd = NULL;
+        if (dComIfGp_getNowStageNum() != 0)
+            return cPhs_INIT_e;
+    } else if (mState == 1) {
+        JKRHeap * oldHeap = mDoExt_setCurrentHeap(mpHeap);
+        JUT_ASSERT(0xc9, dComIfGp_getNowStageNum() < dPn_stage_max_e);
+
+        dvd = mDoDvdThd_toMainRam_c::create(name_texture[dComIfGp_getNowStageNum()], 0, mpHeap);
+        mState = 2;
+        mDoExt_setCurrentHeap(oldHeap);
+        return cPhs_INIT_e;
+    } else {
+        JKRHeap * oldHeap = mDoExt_setCurrentHeap(mpHeap);
+        if (dvd->sync()) {
+            memcpy(mpTIMG, dvd->getMemAddress(), 0x3c00);
+            DCStoreRangeNoSync(mpTIMG, 0x3c00);
+            ((J2DPicture*)dPn_scrn->pane.scrn)->changeTexture(mpTIMG, 0);
+            mState = 3;
+        }
+        mDoExt_setCurrentHeap(oldHeap);
+
+        if (mState != 3)
+            return cPhs_INIT_e;
+    }
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 801614E8-80161554       .text _execute__5dPn_cFv */
-void dPn_c::_execute() {
-    /* Nonmatching */
+BOOL dPn_c::_execute() {
+    if (g_dComIfG_gameInfo.play.mPlacenameState == 2) {
+        dPn_scrn->_openAnime();
+    } else if (g_dComIfG_gameInfo.play.mPlacenameState == 1) {
+        if (dPn_scrn->_closeAnime())
+            fopMsgM_Delete(this);
+    }
+
+    return TRUE;
 }
 
 /* 80161554-80161594       .text _draw__5dPn_cFv */
-void dPn_c::_draw() {
-    /* Nonmatching */
+BOOL dPn_c::_draw() {
+    dComIfGd_set2DOpa(dPn_scrn);
+    return TRUE;
 }
 
 /* 80161594-8016168C       .text _delete__5dPn_cFv */
-void dPn_c::_delete() {
-    /* Nonmatching */
+BOOL dPn_c::_delete() {
+    JKRHeap * oldHeap = mDoExt_setCurrentHeap(mpHeap);
+    g_dComIfG_gameInfo.play.mPlacenameState = 0;
+    delete dPn_scrn->scrn;
+    delete dPn_scrn;
+    if (dvd != NULL)
+        delete dvd;
+    mpHeap->free(mpTIMG);
+    mpHeap->freeAll();
+    g_dComIfG_gameInfo.play.field_0x4962 = 0;
+    mDoExt_setCurrentHeap(oldHeap);
+    dComIfG_resDelete(&mPhs, "PName");
+    return TRUE;
 }
 
 /* 8016168C-801616AC       .text dPn_Draw__FP5dPn_c */
-void dPn_Draw(dPn_c*) {
-    /* Nonmatching */
+BOOL dPn_Draw(dPn_c* i_this) {
+    return i_this->_draw();
 }
 
 /* 801616AC-801616CC       .text dPn_Execute__FP5dPn_c */
-void dPn_Execute(dPn_c*) {
-    /* Nonmatching */
+BOOL dPn_Execute(dPn_c* i_this) {
+    return i_this->_execute();
 }
 
 /* 801616CC-801616D4       .text dPn_IsDelete__FP5dPn_c */
-void dPn_IsDelete(dPn_c*) {
-    /* Nonmatching */
+BOOL dPn_IsDelete(dPn_c* i_this) {
+    return TRUE;
 }
 
 /* 801616D4-801616F4       .text dPn_Delete__FP5dPn_c */
-void dPn_Delete(dPn_c*) {
-    /* Nonmatching */
+BOOL dPn_Delete(dPn_c* i_this) {
+    return i_this->_delete();
 }
 
 /* 801616F4-80161714       .text dPn_Create__FP9msg_class */
-void dPn_Create(msg_class*) {
-    /* Nonmatching */
+s32 dPn_Create(msg_class* i_msg) {
+    dPn_c * i_this = (dPn_c *)i_msg;
+    return i_this->_create();
 }
 
-/* 80161714-80161770       .text __dt__13dPlace_name_cFv */
-dPlace_name_c::~dPlace_name_c() {
-    /* Nonmatching */
-}
+msg_method_class l_dPlace_name_Method = {
+    (process_method_func)dPn_Create,
+    (process_method_func)dPn_Delete,
+    (process_method_func)dPn_Execute,
+    (process_method_func)dPn_IsDelete,
+    (process_method_func)dPn_Draw,
+};
 
+msg_process_profile_definition g_profile_PLACE_NAME = {
+    fpcLy_CURRENT_e,
+    12,
+    fpcPi_CURRENT_e,
+    PROC_PLACE_NAME,
+    &g_fpcLf_Method.mBase,
+    sizeof(dPn_c),
+    0,
+    0,
+    &g_fopMsg_Method,
+    0x1DD,
+    &l_dPlace_name_Method,
+};

@@ -69,6 +69,8 @@ public:
     u8 getAlpha() const { return mAlpha; }
     void setAlpha(u8 alpha) { mAlpha = alpha; }
     bool isConnectParent() const { return mIsConnectParent; }
+    void show() { mVisible = true; }
+    void hide() { mVisible = false; }
 
 public:
     /* 0x04 */ u32 mMagic;

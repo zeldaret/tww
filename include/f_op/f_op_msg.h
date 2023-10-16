@@ -6,11 +6,15 @@
 
 class fopAc_ac_c;
 
+struct msg_method_class {
+    /* 0x00 */ leafdraw_method_class base;
+};
+
 class msg_class : public leafdraw_class {
 public:
     /* 0xC0 */ int mMsgType;
     /* 0xC4 */ create_tag_class mDwTg;
-    /* 0xD8 */ leafdraw_method_class* mSubMtd;
+    /* 0xD8 */ msg_method_class* mSubMtd;
     /* 0xDC */ fopAc_ac_c* mpActor;
     /* 0xE0 */ cXyz mPos;
     /* 0xEC */ u32 mMsgID;

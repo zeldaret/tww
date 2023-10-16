@@ -385,6 +385,8 @@ public:
     void setCurrentView(view_class* i_view) { mCurrentView = i_view; }
     void setCurrentViewport(view_port_class* i_viewport) { mCurrentViewport = i_viewport; }
 
+    J2DOrthoGraph* getCurrentGrafPort() { return mCurrentGrafPort; }
+
     void setMsgArchive(JKRArchive * pArc) { mpMsgArchive = pArc; }
     void setDmsgArchive(JKRArchive * pArc) { mpDmsgArchive = pArc; }
     void setTmsgArchive(JKRArchive * pArc) { mpTmsgArchive = pArc; }
@@ -552,7 +554,7 @@ public:
     /* 0x4955 */ u8 field_0x4955;
     /* 0x4956 */ u8 field_0x4956;
     /* 0x4957 */ u8 mPlacenameIndex;
-    /* 0x4958 */ u8 field_0x4958;
+    /* 0x4958 */ u8 mPlacenameState;
     /* 0x4959 */ u8 field_0x4959;
     /* 0x495A */ u8 field_0x495a;
     /* 0x495B */ u8 field_0x495b;
@@ -1081,6 +1083,10 @@ inline const char* dComIfGp_getStartStageName() {
     return g_dComIfG_gameInfo.play.getStartStageName();
 }
 
+inline u32 dComIfGp_getNowStageNum() {
+    return g_dComIfG_gameInfo.play.mPlacenameIndex;
+}
+
 inline s8 dComIfGp_getStartStageRoomNo() {
     return g_dComIfG_gameInfo.play.getStartStageRoomNo();
 }
@@ -1517,6 +1523,10 @@ inline dADM_CharTbl* dComIfGp_CharTbl() {
     return &g_dComIfG_gameInfo.play.mADM.mCharTbl;
 }
 
+inline J2DOrthoGraph* dComIfGp_getCurrentGrafPort() {
+    return g_dComIfG_gameInfo.play.getCurrentGrafPort();
+}
+
 /**
  * === EVENT ===*/
 
@@ -1913,6 +1923,10 @@ inline void* dComIfG_getObjectIDRes(const char* arcName, int id) {
 
 inline void* dComIfG_getObjectIDRes(const char* arcName, u16 id) {
     return g_dComIfG_gameInfo.mResControl.getObjectIDRes(arcName, id);
+}
+
+inline dRes_info_c* dComIfG_getObjectResInfo(const char* arcName) {
+    return g_dComIfG_gameInfo.mResControl.getObjectResInfo(arcName);
 }
 
 /**

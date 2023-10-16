@@ -12,7 +12,7 @@
 /* 8002A688-8002A6B0       .text fopMsg_Draw__FPv */
 int fopMsg_Draw(void* i_this) {
     msg_class* _this = static_cast<msg_class*>(i_this);
-    return fpcLf_DrawMethod(_this->mSubMtd, i_this);
+    return fpcLf_DrawMethod((leafdraw_method_class*)_this->mSubMtd, i_this);
 }
 
 /* 8002A6B0-8002A6E8       .text fopMsg_Execute__FPv */
@@ -21,7 +21,7 @@ int fopMsg_Execute(void* i_this) {
 
     int stat = 1;
     if (!dScnPly_ply_c::isPause()) {
-        stat = fpcMtd_Execute(&_this->mSubMtd->mBase, i_this);
+        stat = fpcMtd_Execute((process_method_class*)_this->mSubMtd, i_this);
     }
 
     return stat;
@@ -31,7 +31,7 @@ int fopMsg_Execute(void* i_this) {
 int fopMsg_IsDelete(void* i_this) {
     msg_class* _this = static_cast<msg_class*>(i_this);
 
-    int stat = fpcMtd_IsDelete(&_this->mSubMtd->mBase, i_this);
+    int stat = fpcMtd_IsDelete((process_method_class*)_this->mSubMtd, i_this);
     if (stat == 1) {
         fopDwTg_DrawQTo(&_this->mDwTg);
     }
@@ -43,7 +43,7 @@ int fopMsg_IsDelete(void* i_this) {
 int fopMsg_Delete(void* i_this) {
     msg_class* _this = static_cast<msg_class*>(i_this);
 
-    int stat = fpcMtd_Delete(&_this->mSubMtd->mBase, i_this);
+    int stat = fpcMtd_Delete((process_method_class*)_this->mSubMtd, i_this);
     fopDwTg_DrawQTo(&_this->mDwTg);
 
     return stat;
@@ -70,7 +70,7 @@ int fopMsg_Create(void* i_this) {
         }
     }
 
-    int status = fpcMtd_Create(&_this->mSubMtd->mBase, _this);
+    int status = fpcMtd_Create((process_method_class*)_this->mSubMtd, _this);
     if (status == cPhs_COMPLEATE_e) {
         s32 priority = fpcLf_GetPriority(_this);
         fopDwTg_ToDrawQ(&_this->mDwTg, priority);

@@ -13,7 +13,7 @@ class cM3dGPla;
 class dDlst_base_c {
 public:
     dDlst_base_c() {}
-    virtual ~dDlst_base_c();
+    virtual ~dDlst_base_c() {}
     virtual void draw();
 };
 

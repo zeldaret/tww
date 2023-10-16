@@ -9,6 +9,12 @@ class JKRArchive;
 
 class J2DScreen : public J2DPane {
 public:
+    J2DScreen(J2DPane* parent, bool visible, u32 tag, const JGeometry::TBox2<f32>& bounds)
+        : J2DPane(parent, visible, tag, bounds)
+        , mColor()
+        , mbClipToParent(false)
+    {}
+
     virtual ~J2DScreen();
     virtual u16 getTypeID() { return 0x08; }
     virtual void calcMtx() { makeMatrix(mBounds.i.x, mBounds.i.y); }
@@ -16,10 +22,11 @@ public:
     virtual J2DPane* search(u32 tag);
     virtual J2DPane* createPane(J2DPane::J2DScrnBlockHeader const & header, JSURandomInputStream * pStream, J2DPane * pParent);
 
-protected:
     void draw(f32 x, f32 y, const J2DGrafContext * pCtx);
     bool set(const char *pName, JKRArchive * pArc);
     bool set(JSURandomInputStream * pStream);
+
+protected:
     s32 makeHierarchyPanes(J2DPane * pParent, JSURandomInputStream * pStream);
     bool checkSignature(JSURandomInputStream * pStream);
     bool getScreenInformation(JSURandomInputStream * pStream);
