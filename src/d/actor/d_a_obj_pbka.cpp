@@ -3,84 +3,105 @@
 // Translation Unit: d_a_obj_pbka.cpp
 //
 #include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
+#include "d/d_kankyo.h"
 #include "dolphin/mtx/mtx.h"
 
 class daObjPbka_c : public fopAc_ac_c {
 public:
-    void CreateHeap();
+    bool CreateHeap();
     void CreateInit();
     void set_mtx();
+    inline bool draw();
 public:
     /* 0x290 */ request_of_phase_process_class mPhase;
-    /* 0x298 */ J3DModel* field_0x298;
+    /* 0x298 */ J3DModel* mpModel;
+    /* 0x29C */ int field_0x29C;
 };
 
-
+bool daObjPbka_c::draw()
+{
+    dKy_tevstr_c *tev = &mTevStr;
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, tev);
+    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(mpModel);
+    dComIfGd_setList();
+    return true;
+}
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+void CheckCreateHeap(fopAc_ac_c* i_this) {
+    daObjPbka_c* a_this = (daObjPbka_c*)i_this;
+    a_this->CreateHeap();
 }
 
 /* 00000098-0000015C       .text CreateHeap__11daObjPbka_cFv */
-void daObjPbka_c::CreateHeap() {
-    /* Nonmatching */
+bool daObjPbka_c::CreateHeap() {
+    J3DModelData *modelData = (J3DModelData *)dComIfG_getObjectRes("Pbka", 3);
+    JUT_ASSERT(0x51, modelData != 0);
+    mpModel = mDoExt_J3DModel__create(modelData,0,0x11020203);
+    if(mpModel == NULL) {
+        return false;
+    }
+    return true;
 }
 
-/* 0000015C-000001CC       .text CreateInit__11daObjPbka_cFv */
 void daObjPbka_c::CreateInit() {
-    /* Nonmatching */
+    mCullMtx =  mpModel->getBaseTRMtx();
+    fopAcM_setCullSizeBox(this,-300.0,-300.0,-300.0,300.0,300.0,300.0);
+    mCullSizeFar = 0x3f800000;
+    set_mtx();
 }
 
-/* 000001CC-0000024C       .text set_mtx__11daObjPbka_cFv */
 void daObjPbka_c::set_mtx() {
     J3DModel* model;
-
-    model = field_0x298;
-    model->setBaseTRMtx(mDoMtx_stack_c::now);
-//    mDoMtx_stack_c::transM
-//    *(undefined4 *)(mtx + 0x18) = *(undefined4 *)(this + 0x214);
-//    *(undefined4 *)(mtx + 0x1c) = *(undefined4 *)(this + 0x218);
-//    *(undefined4 *)(mtx + 0x20) = *(undefined4 *)(this + 0x21c);
-//    PSMTXTrans(*(float *)(this + 0x1f8),*(float *)(this + 0x1fc),*(float *)(this + 0x200),&mDoMtx_stack_c::now);
-        mDoMtx_YrotM(mDoMtx_stack_c::now, current.angle.y);
-//    mtx::PSMTXCopy(&mDoMtx_stack_c::now,(MTX34 *)(*(int *)(this + 0x298) + 0x24));
-//    return;
+    model = mpModel;
+    model->mBaseScale.x = mScale.x;
+    model->mBaseScale.y = mScale.y;
+    model->mBaseScale.z = mScale.z;
+    mDoMtx_trans(mDoMtx_stack_c::get(), current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_YrotM(mDoMtx_stack_c::get(), current.angle.y);
+    mDoMtx_copy(mDoMtx_stack_c::get(), mpModel->mBaseTransformMtx);
 }
 
-/* 0000024C-000002EC       .text daObjPbka_Create__FPv */
 cPhs__Step daObjPbka_Create(void* i_this) {
     daObjPbka_c* a_this = (daObjPbka_c*)i_this;
-    int PVar1;
+    int cPhsStep;
 
     fopAcM_SetupActor(a_this, daObjPbka_c);
-    PVar1 = dComIfG_resLoad(&a_this->mPhase, "Pbka");
-    if (PVar1 == cPhs_COMPLEATE_e) {
+    cPhsStep = dComIfG_resLoad(&a_this->mPhase, "Pbka");
+    if (cPhsStep == cPhs_COMPLEATE_e) {
         if ((fopAcM_entrySolidHeap(a_this, (heapCallbackFunc)CheckCreateHeap,0x680) & 0xff) == 0) {
-            PVar1 = cPhs_ERROR_e;
+            cPhsStep = cPhs_ERROR_e;
         } else {
             a_this->CreateInit();
         }
     }
-    return (cPhs__Step)PVar1;
+    return (cPhs__Step)cPhsStep;
 }
 
-/* 000002EC-0000031C       .text daObjPbka_Delete__FPv */
-void daObjPbka_Delete(void*) {
-    /* Nonmatching */
+static BOOL daObjPbka_Delete(void* i_this) {
+    daObjPbka_c* a_this = (daObjPbka_c*)i_this;
+    dComIfG_resDelete(&a_this->mPhase,"Pbka");
+    return true;
 }
 
-/* 0000031C-000003C0       .text daObjPbka_Draw__FPv */
-void daObjPbka_Draw(void*) {
-    /* Nonmatching */
+static BOOL daObjPbka_Draw(void* i_this) {
+    daObjPbka_c* a_this = (daObjPbka_c*)i_this;
+    return a_this->draw();
 }
 
-/* 000003C0-00000450       .text daObjPbka_Execute__FPv */
-void daObjPbka_Execute(void*) {
-    /* Nonmatching */
+static BOOL daObjPbka_Execute(void* i_this) {
+    daObjPbka_c* a_this = (daObjPbka_c*)i_this;
+        a_this->current.angle.y += 0x500;
+        a_this->shape_angle.y = a_this->current.angle.y;
+        mDoAud_seStart(JA_SE_OBJ_BOMB_SHOP_FAN, &a_this->current.pos, 0 , dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
+        a_this->set_mtx();
+        return true;
 }
 
 /* 00000450-00000458       .text daObjPbka_IsDelete__FPv */
