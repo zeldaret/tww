@@ -320,12 +320,12 @@ private:
 
 class cCcD_Stts {
 private:
-    /* 0x00 */ cXyz mXyz;
+    /* 0x00 */ cXyz m_cc_move;
     /* 0x0C */ fopAc_ac_c* mActor;
     /* 0x10 */ int mApid;
     /* 0x14 */ u8 mWeight;
     /* 0x15 */ u8 field_0x15;
-    /* 0x16 */ u8 mTg;
+    /* 0x16 */ u8 mDmg;
 
 public:
     cCcD_Stts() {}
@@ -336,21 +336,22 @@ public:
     virtual void Ct();
     void PlusCcMove(f32, f32, f32);
     void ClrCcMove() {
-        mXyz.z = 0.0f;
-        mXyz.y = 0.0f;
-        mXyz.x = 0.0f;
+        m_cc_move.z = 0.0f;
+        m_cc_move.y = 0.0f;
+        m_cc_move.x = 0.0f;
     }
-    void PlusDmg(int);
+    void PlusDmg(int dmg) { mDmg = dmg; }
+    u8 GetDmg() { return mDmg; }
     f32 GetWeightF() const;
     virtual void ClrAt() {}
-    virtual void ClrTg() { mTg = 0; }
+    virtual void ClrTg() { mDmg = 0; }
     
     u8 GetWeightUc() const { return mWeight; }
     void SetWeight(u8 weight) { mWeight = weight; }
     fopAc_ac_c* GetAc() { return mActor; }
     fopAc_ac_c* GetActor() const { return mActor; }
     void SetActor(void* ac) { mActor = (fopAc_ac_c*)ac; }
-    cXyz* GetCCMoveP() { return &mXyz; }
+    cXyz* GetCCMoveP() { return &m_cc_move; }
     unsigned int GetApid() const { return mApid; }
 };  // Size = 0x1C
 
@@ -399,7 +400,11 @@ public:
     cCcD_ObjAt() { mType = 0; }
     virtual ~cCcD_ObjAt() {}
     void SetHit(cCcD_Obj*);
-    void Set(cCcD_SrcObjAt const&);
+    void Set(cCcD_SrcObjAt const& src) {
+        cCcD_ObjCommonBase::Set(src.mBase);
+        mType = src.mType;
+        mAtp = src.mAtp;
+    }
     void ClrHit() { ClrRPrm(1); ClrObj(); }
     int GetType() const { return mType; }
     u32 GetGrp() const { return MskSPrm(0x1E); }
@@ -424,7 +429,10 @@ class cCcD_ObjTg : public cCcD_ObjCommonBase {
 public:
     cCcD_ObjTg() { ct(); }
     virtual ~cCcD_ObjTg() {}
-    void Set(cCcD_SrcObjTg const&);
+    void Set(cCcD_SrcObjTg const& src) {
+        cCcD_ObjCommonBase::Set(src.mBase);
+        mType = src.mType;
+    }
     void SetGrp(u32);
     void ClrHit() { ClrRPrm(1); ClrObj(); }
     void SetHit(cCcD_Obj*);
@@ -544,10 +552,10 @@ public:
     virtual cCcD_ShapeAttr* GetShapeAttr() { return NULL; }
     void ct();
     void Set(cCcD_SrcObj const&);
-    fopAc_ac_c* GetAc();
 
     cCcD_Stts* GetStts() { return mStts; }
     void SetStts(cCcD_Stts* stts) { mStts = stts; }
+    fopAc_ac_c* GetAc() { return GetStts() != NULL ? GetStts()->GetActor() : NULL; }
     cCcD_DivideInfo& GetDivideInfo() { return mDivideInfo; }
     cCcD_DivideInfo* GetPDivideInfo() { return &mDivideInfo; }
     int ChkBsRevHit() const { return mFlags & 2; }

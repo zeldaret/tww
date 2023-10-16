@@ -4,16 +4,42 @@
 //
 
 #include "SSystem/SComponent/c_cc_d.h"
+#include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/types.h"
 
+#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)) ) == 1));
+#define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);
+#define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
+
 /* 802413EC-80241428       .text Chk__15cCcD_DivideInfoCFRC15cCcD_DivideInfo */
-void cCcD_DivideInfo::Chk(const cCcD_DivideInfo&) const {
-    /* Nonmatching */
+bool cCcD_DivideInfo::Chk(const cCcD_DivideInfo& other) const {
+    u32 mask = mRangeBits & other.mRangeBits;
+    if ((mask & 0x7FF) == 0)
+        return false;
+    if ((mask & 0xFFE00000) == 0)
+        return false;
+    if ((mask & 0x1FF800) == 0)
+        return false;
+    return true;
 }
 
 /* 80241428-80241558       .text SetArea__15cCcD_DivideAreaFRC8cM3dGAab */
-void cCcD_DivideArea::SetArea(const cM3dGAab&) {
-    /* Nonmatching */
+void cCcD_DivideArea::SetArea(const cM3dGAab& aabb) {
+    *(cM3dGAab*)this = aabb;
+    mScaledXDiff = (GetMaxX() - GetMinX()) * 0.09090909f;
+    mXDiffIsZero = fabsf(mScaledXDiff) < G_CM3D_F_ABS_MIN;
+    if (!mXDiffIsZero)
+        mInvScaledXDiff = 1.0f / mScaledXDiff;
+
+    mScaledYDiff = (GetMaxY() - GetMinY()) * 0.09090909f;
+    mYDiffIsZero = fabsf(mScaledYDiff) < G_CM3D_F_ABS_MIN;
+    if (!mYDiffIsZero)
+        mInvScaledYDiff = 1.0f / mScaledYDiff;
+
+    mScaledZDiff = (GetMaxZ() - GetMinZ()) * 0.09090909f;
+    mZDiffIsZero = fabsf(mScaledZDiff) < G_CM3D_F_ABS_MIN;
+    if (!mZDiffIsZero)
+        mInvScaledZDiff = 1.0f / mScaledZDiff;
 }
 
 /* 80241558-8024170C       .text CalcDivideInfo__15cCcD_DivideAreaFP15cCcD_DivideInfoRC8cM3dGAabUl */
@@ -27,52 +53,72 @@ void cCcD_DivideArea::CalcDivideInfoOverArea(cCcD_DivideInfo*, const cM3dGAab&) 
 }
 
 /* 80241924-8024192C       .text GetGStts__9cCcD_SttsCFv */
-void cCcD_Stts::GetGStts() const {
-    /* Nonmatching */
+const cCcD_GStts* cCcD_Stts::GetGStts() const {
+    return NULL;
 }
 
 /* 8024192C-80241934       .text GetGStts__9cCcD_SttsFv */
-void cCcD_Stts::GetGStts() {
-    /* Nonmatching */
+cCcD_GStts* cCcD_Stts::GetGStts() {
+    return NULL;
 }
 
 /* 80241934-80241994       .text Init__9cCcD_SttsFiiPvUi */
-void cCcD_Stts::Init(int, int, void*, unsigned int) {
-    /* Nonmatching */
+void cCcD_Stts::Init(int weight, int param_1, void* pProc, unsigned int procID) {
+    Ct();
+    mWeight = weight;
+    field_0x15 = param_1;
+    mActor = (fopAc_ac_c*)pProc;
+    mApid = procID;
 }
 
 /* 80241994-802419C4       .text Ct__9cCcD_SttsFv */
 void cCcD_Stts::Ct() {
-    /* Nonmatching */
+    m_cc_move.x = 0.0f;
+    m_cc_move.y = 0.0f;
+    m_cc_move.z = 0.0f;
+    mActor = NULL;
+    mApid = -1;
+    mWeight = 0;
+    field_0x15 = 0;
+    mDmg = 0;
 }
 
 /* 802419C4-80241C5C       .text PlusCcMove__9cCcD_SttsFfff */
-void cCcD_Stts::PlusCcMove(float, float, float) {
-    /* Nonmatching */
+void cCcD_Stts::PlusCcMove(f32 x, f32 y, f32 z) {
+    m_cc_move.x += x;
+    m_cc_move.y += y;
+    m_cc_move.z += z;
+    CHECK_FLOAT_CLASS(0x1bb, m_cc_move.x);
+    CHECK_FLOAT_CLASS(0x1bc, m_cc_move.y);
+    CHECK_FLOAT_CLASS(0x1bd, m_cc_move.z);
+    CHECK_VEC3_RANGE(0x1c1, m_cc_move);
 }
 
 /* 80241C5C-80241C98       .text Set__8cCcD_ObjFRC11cCcD_SrcObj */
-void cCcD_Obj::Set(const cCcD_SrcObj&) {
-    /* Nonmatching */
+void cCcD_Obj::Set(const cCcD_SrcObj& src) {
+    mFlags = src.mFlags;
+    mObjAt.Set(src.mSrcObjHitInf.mObjAt);
+    mObjTg.Set(src.mSrcObjHitInf.mObjTg);
+    mObjCo.Set(src.mSrcObjHitInf.mObjCo);
 }
 
 /* 80241C98-80241D68       .text CrossAtTg__12cCcD_TriAttrCFRC12cCcD_CpsAttrP4cXyz */
-void cCcD_TriAttr::CrossAtTg(const cCcD_CpsAttr&, cXyz*) const {
+bool cCcD_TriAttr::CrossAtTg(const cCcD_CpsAttr&, cXyz*) const {
     /* Nonmatching */
 }
 
 /* 80241D68-80241DA0       .text CrossAtTg__12cCcD_TriAttrCFRC12cCcD_CylAttrP4cXyz */
-void cCcD_TriAttr::CrossAtTg(const cCcD_CylAttr&, cXyz*) const {
+bool cCcD_TriAttr::CrossAtTg(const cCcD_CylAttr&, cXyz*) const {
     /* Nonmatching */
 }
 
 /* 80241DA0-80241DDC       .text CrossAtTg__12cCcD_TriAttrCFRC12cCcD_SphAttrP4cXyz */
-void cCcD_TriAttr::CrossAtTg(const cCcD_SphAttr&, cXyz*) const {
+bool cCcD_TriAttr::CrossAtTg(const cCcD_SphAttr&, cXyz*) const {
     /* Nonmatching */
 }
 
 /* 80241DDC-80241E14       .text CrossAtTg__12cCcD_TriAttrCFRC12cCcD_TriAttrP4cXyz */
-void cCcD_TriAttr::CrossAtTg(const cCcD_TriAttr&, cXyz*) const {
+bool cCcD_TriAttr::CrossAtTg(const cCcD_TriAttr&, cXyz*) const {
     /* Nonmatching */
 }
 
@@ -82,42 +128,42 @@ void cCcD_TriAttr::CalcAabBox() {
 }
 
 /* 80241EC4-80241F60       .text GetNVec__12cCcD_TriAttrCFRC4cXyzP4cXyz */
-void cCcD_TriAttr::GetNVec(const cXyz&, cXyz*) const {
+bool cCcD_TriAttr::GetNVec(const cXyz&, cXyz*) const {
     /* Nonmatching */
 }
 
 /* 80241F60-80241FA4       .text CrossAtTg__12cCcD_CpsAttrCFRC12cCcD_CpsAttrP4cXyz */
-void cCcD_CpsAttr::CrossAtTg(const cCcD_CpsAttr&, cXyz*) const {
+bool cCcD_CpsAttr::CrossAtTg(const cCcD_CpsAttr&, cXyz*) const {
     /* Nonmatching */
 }
 
 /* 80241FA4-80241FE8       .text CrossAtTg__12cCcD_CpsAttrCFRC12cCcD_CylAttrP4cXyz */
-void cCcD_CpsAttr::CrossAtTg(const cCcD_CylAttr&, cXyz*) const {
+bool cCcD_CpsAttr::CrossAtTg(const cCcD_CylAttr&, cXyz*) const {
     /* Nonmatching */
 }
 
 /* 80241FE8-8024202C       .text CrossAtTg__12cCcD_CpsAttrCFRC12cCcD_SphAttrP4cXyz */
-void cCcD_CpsAttr::CrossAtTg(const cCcD_SphAttr&, cXyz*) const {
+bool cCcD_CpsAttr::CrossAtTg(const cCcD_SphAttr&, cXyz*) const {
     /* Nonmatching */
 }
 
 /* 8024202C-802420FC       .text CrossAtTg__12cCcD_CpsAttrCFRC12cCcD_TriAttrP4cXyz */
-void cCcD_CpsAttr::CrossAtTg(const cCcD_TriAttr&, cXyz*) const {
+bool cCcD_CpsAttr::CrossAtTg(const cCcD_TriAttr&, cXyz*) const {
     /* Nonmatching */
 }
 
 /* 802420FC-8024214C       .text CrossCo__12cCcD_CpsAttrCFRC12cCcD_CpsAttrPf */
-void cCcD_CpsAttr::CrossCo(const cCcD_CpsAttr&, float*) const {
+bool cCcD_CpsAttr::CrossCo(const cCcD_CpsAttr&, f32*) const {
     /* Nonmatching */
 }
 
 /* 8024214C-8024219C       .text CrossCo__12cCcD_CpsAttrCFRC12cCcD_CylAttrPf */
-void cCcD_CpsAttr::CrossCo(const cCcD_CylAttr&, float*) const {
+bool cCcD_CpsAttr::CrossCo(const cCcD_CylAttr&, f32*) const {
     /* Nonmatching */
 }
 
 /* 8024219C-802421EC       .text CrossCo__12cCcD_CpsAttrCFRC12cCcD_SphAttrPf */
-void cCcD_CpsAttr::CrossCo(const cCcD_SphAttr&, float*) const {
+bool cCcD_CpsAttr::CrossCo(const cCcD_SphAttr&, f32*) const {
     /* Nonmatching */
 }
 
@@ -127,42 +173,42 @@ void cCcD_CpsAttr::CalcAabBox() {
 }
 
 /* 80242294-802423FC       .text GetNVec__12cCcD_CpsAttrCFRC4cXyzP4cXyz */
-void cCcD_CpsAttr::GetNVec(const cXyz&, cXyz*) const {
+bool cCcD_CpsAttr::GetNVec(const cXyz&, cXyz*) const {
     /* Nonmatching */
 }
 
 /* 802423FC-80242448       .text CrossAtTg__12cCcD_CylAttrCFRC12cCcD_CpsAttrP4cXyz */
-void cCcD_CylAttr::CrossAtTg(const cCcD_CpsAttr&, cXyz*) const {
+bool cCcD_CylAttr::CrossAtTg(const cCcD_CpsAttr&, cXyz*) const {
     /* Nonmatching */
 }
 
 /* 80242448-8024248C       .text CrossAtTg__12cCcD_CylAttrCFRC12cCcD_CylAttrP4cXyz */
-void cCcD_CylAttr::CrossAtTg(const cCcD_CylAttr&, cXyz*) const {
+bool cCcD_CylAttr::CrossAtTg(const cCcD_CylAttr&, cXyz*) const {
     /* Nonmatching */
 }
 
 /* 8024248C-802424D0       .text CrossAtTg__12cCcD_CylAttrCFRC12cCcD_SphAttrP4cXyz */
-void cCcD_CylAttr::CrossAtTg(const cCcD_SphAttr&, cXyz*) const {
+bool cCcD_CylAttr::CrossAtTg(const cCcD_SphAttr&, cXyz*) const {
     /* Nonmatching */
 }
 
 /* 802424D0-80242508       .text CrossAtTg__12cCcD_CylAttrCFRC12cCcD_TriAttrP4cXyz */
-void cCcD_CylAttr::CrossAtTg(const cCcD_TriAttr&, cXyz*) const {
+bool cCcD_CylAttr::CrossAtTg(const cCcD_TriAttr&, cXyz*) const {
     /* Nonmatching */
 }
 
 /* 80242508-8024254C       .text CrossCo__12cCcD_CylAttrCFRC12cCcD_CylAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_CylAttr&, float*) const {
+bool cCcD_CylAttr::CrossCo(const cCcD_CylAttr&, f32*) const {
     /* Nonmatching */
 }
 
 /* 8024254C-80242590       .text CrossCo__12cCcD_CylAttrCFRC12cCcD_SphAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_SphAttr&, float*) const {
+bool cCcD_CylAttr::CrossCo(const cCcD_SphAttr&, f32*) const {
     /* Nonmatching */
 }
 
 /* 80242590-802425E8       .text CrossCo__12cCcD_CylAttrCFRC12cCcD_CpsAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_CpsAttr&, float*) const {
+bool cCcD_CylAttr::CrossCo(const cCcD_CpsAttr&, f32*) const {
     /* Nonmatching */
 }
 
@@ -172,42 +218,42 @@ void cCcD_CylAttr::CalcAabBox() {
 }
 
 /* 8024264C-80242734       .text GetNVec__12cCcD_CylAttrCFRC4cXyzP4cXyz */
-void cCcD_CylAttr::GetNVec(const cXyz&, cXyz*) const {
+bool cCcD_CylAttr::GetNVec(const cXyz&, cXyz*) const {
     /* Nonmatching */
 }
 
 /* 80242734-80242780       .text CrossAtTg__12cCcD_SphAttrCFRC12cCcD_CpsAttrP4cXyz */
-void cCcD_SphAttr::CrossAtTg(const cCcD_CpsAttr&, cXyz*) const {
+bool cCcD_SphAttr::CrossAtTg(const cCcD_CpsAttr&, cXyz*) const {
     /* Nonmatching */
 }
 
 /* 80242780-802427C4       .text CrossAtTg__12cCcD_SphAttrCFRC12cCcD_CylAttrP4cXyz */
-void cCcD_SphAttr::CrossAtTg(const cCcD_CylAttr&, cXyz*) const {
+bool cCcD_SphAttr::CrossAtTg(const cCcD_CylAttr&, cXyz*) const {
     /* Nonmatching */
 }
 
 /* 802427C4-80242808       .text CrossAtTg__12cCcD_SphAttrCFRC12cCcD_SphAttrP4cXyz */
-void cCcD_SphAttr::CrossAtTg(const cCcD_SphAttr&, cXyz*) const {
+bool cCcD_SphAttr::CrossAtTg(const cCcD_SphAttr&, cXyz*) const {
     /* Nonmatching */
 }
 
 /* 80242808-80242840       .text CrossAtTg__12cCcD_SphAttrCFRC12cCcD_TriAttrP4cXyz */
-void cCcD_SphAttr::CrossAtTg(const cCcD_TriAttr&, cXyz*) const {
+bool cCcD_SphAttr::CrossAtTg(const cCcD_TriAttr&, cXyz*) const {
     /* Nonmatching */
 }
 
 /* 80242840-80242894       .text CrossCo__12cCcD_SphAttrCFRC12cCcD_CylAttrPf */
-void cCcD_SphAttr::CrossCo(const cCcD_CylAttr&, float*) const {
+bool cCcD_SphAttr::CrossCo(const cCcD_CylAttr&, f32*) const {
     /* Nonmatching */
 }
 
 /* 80242894-802428D8       .text CrossCo__12cCcD_SphAttrCFRC12cCcD_SphAttrPf */
-void cCcD_SphAttr::CrossCo(const cCcD_SphAttr&, float*) const {
+bool cCcD_SphAttr::CrossCo(const cCcD_SphAttr&, f32*) const {
     /* Nonmatching */
 }
 
 /* 802428D8-80242930       .text CrossCo__12cCcD_SphAttrCFRC12cCcD_CpsAttrPf */
-void cCcD_SphAttr::CrossCo(const cCcD_CpsAttr&, float*) const {
+bool cCcD_SphAttr::CrossCo(const cCcD_CpsAttr&, f32*) const {
     /* Nonmatching */
 }
 
@@ -217,91 +263,6 @@ void cCcD_SphAttr::CalcAabBox() {
 }
 
 /* 802429B8-80242A54       .text GetNVec__12cCcD_SphAttrCFRC4cXyzP4cXyz */
-void cCcD_SphAttr::GetNVec(const cXyz&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 80242A54-80242A5C       .text CrossAtTg__12cCcD_TriAttrCFRC12cCcD_AabAttrP4cXyz */
-void cCcD_TriAttr::CrossAtTg(const cCcD_AabAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 80242A5C-80242A64       .text CrossAtTg__12cCcD_TriAttrCFRC12cCcD_PntAttrP4cXyz */
-void cCcD_TriAttr::CrossAtTg(const cCcD_PntAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 80242A64-80242A9C       .text CrossAtTg__12cCcD_TriAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_TriAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 80242A9C-80242AA4       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_SphAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_SphAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 80242AA4-80242AAC       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_CylAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_CylAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 80242AAC-80242AB4       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_AabAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_AabAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 80242AB4-80242ABC       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_TriAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_TriAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 80242ABC-80242AC4       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_CpsAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_CpsAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 80242AC4-80242ACC       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_PntAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_PntAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 80242ACC-80242B04       .text CrossCo__12cCcD_TriAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 80242B04-80242BA4       .text __dt__12cCcD_TriAttrFv */
-cCcD_TriAttr::~cCcD_TriAttr() {
-    /* Nonmatching */
-}
-
-/* 80242BA4-80242BA8       .text ClrAt__9cCcD_SttsFv */
-void cCcD_Stts::ClrAt() {
-    /* Nonmatching */
-}
-
-/* 80242BA8-80242BB4       .text ClrTg__9cCcD_SttsFv */
-void cCcD_Stts::ClrTg() {
-    /* Nonmatching */
-}
-
-/* 80242C08-80242C10       .text @32@__dt__12cCcD_TriAttrFv */
-void @32@__dt__12cCcD_TriAttrFv {
-    /* Nonmatching */
-}
-
-/* 80242C10-80242C18       .text @32@__dt__12cCcD_CpsAttrFv */
-void @32@__dt__12cCcD_CpsAttrFv {
-    /* Nonmatching */
-}
-
-/* 80242C18-80242C20       .text @32@__dt__12cCcD_CylAttrFv */
-void @32@__dt__12cCcD_CylAttrFv {
-    /* Nonmatching */
-}
-
-/* 80242C20-80242C28       .text @32@__dt__12cCcD_SphAttrFv */
-void @32@__dt__12cCcD_SphAttrFv {
+bool cCcD_SphAttr::GetNVec(const cXyz&, cXyz*) const {
     /* Nonmatching */
 }

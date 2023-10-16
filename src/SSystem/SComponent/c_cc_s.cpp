@@ -13,37 +13,94 @@ cCcS::cCcS() {
 
 /* 80242C50-80242CE4       .text Ct__4cCcSFv */
 void cCcS::Ct() {
-    /* Nonmatching */
+    for (u32 i = 0; i < ARRAY_SIZE(mpObjAt); i++)
+        mpObjAt[i] = NULL;
+    for (u32 i = 0; i < ARRAY_SIZE(mpObjTg); i++)
+        mpObjTg[i] = NULL;
+    for (u32 i = 0; i < ARRAY_SIZE(mpObjCo); i++)
+        mpObjCo[i] = NULL;
+    for (u32 i = 0; i < ARRAY_SIZE(mpObj); i++)
+        mpObj[i] = NULL;
+    mObjAtCount = 0;
+    mObjTgCount = 0;
+    mObjCoCount = 0;
+    mObjCount = 0;
 }
 
 /* 80242CE4-80242D04       .text Dt__4cCcSFv */
 void cCcS::Dt() {
-    /* Nonmatching */
+    Ct();
 }
 
 /* 80242D04-80242DB8       .text Set__4cCcSFP8cCcD_Obj */
-void cCcS::Set(cCcD_Obj*) {
-    /* Nonmatching */
+void cCcS::Set(cCcD_Obj* obj) {
+    if (obj->ChkAtSet() && mObjAtCount < (s32)ARRAY_SIZE(mpObjAt)) {
+        mpObjAt[mObjAtCount] = obj;
+        mObjAtCount++;
+    }
+    if (obj->ChkTgSet() && mObjTgCount < (s32)ARRAY_SIZE(mpObjTg)) {
+        mpObjTg[mObjTgCount] = obj;
+        mObjTgCount++;
+    }
+    if (obj->ChkCoSet() && mObjCoCount < (s32)ARRAY_SIZE(mpObjCo)) {
+        mpObjCo[mObjCoCount] = obj;
+        mObjCoCount++;
+    }
+    if (mObjCount < (s32)ARRAY_SIZE(mpObj)) {
+        mpObj[mObjCount] = obj;
+        mObjCount++;
+    }
 }
 
 /* 80242DB8-80242E58       .text ClrCoHitInf__4cCcSFv */
 void cCcS::ClrCoHitInf() {
-    /* Nonmatching */
+    for (s32 i = 0; i < mObjCoCount; i++) {
+        if (mpObjCo[i] != NULL) {
+            cCcD_GObjInf * pInf = mpObjCo[i]->GetGObjInf();
+            pInf->ClrCoHit();
+            cCcD_Stts * pStts = mpObjCo[i]->GetStts();
+            if (pStts != NULL)
+                pStts->ClrCcMove();
+        }
+    }
 }
 
 /* 80242E58-80242EF8       .text ClrTgHitInf__4cCcSFv */
 void cCcS::ClrTgHitInf() {
-    /* Nonmatching */
+    for (s32 i = 0; i < mObjTgCount; i++) {
+        if (mpObjTg[i] != NULL) {
+            cCcD_GObjInf * pInf = mpObjTg[i]->GetGObjInf();
+            pInf->ClrTgHit();
+            cCcD_Stts * pStts = mpObjTg[i]->GetStts();
+            if (pStts != NULL)
+                pStts->ClrTg();
+        }
+    }
 }
 
 /* 80242EF8-80242F94       .text ClrAtHitInf__4cCcSFv */
 void cCcS::ClrAtHitInf() {
-    /* Nonmatching */
+    for (s32 i = 0; i < mObjAtCount; i++) {
+        if (mpObjAt[i] != NULL) {
+            cCcD_GObjInf * pInf = mpObjAt[i]->GetGObjInf();
+            pInf->ClrAtHit();
+            cCcD_Stts * pStts = mpObjAt[i]->GetStts();
+            if (pStts != NULL)
+                pStts->ClrAt();
+        }
+    }
 }
 
 /* 80242F94-802430BC       .text ChkNoHitAtTg__4cCcSFP8cCcD_ObjP8cCcD_Obj */
-void cCcS::ChkNoHitAtTg(cCcD_Obj*, cCcD_Obj*) {
-    /* Nonmatching */
+bool cCcS::ChkNoHitAtTg(cCcD_Obj* at, cCcD_Obj* tg) {
+    /* Nonmatching - more complicated conditional */
+    fopAc_ac_c * ac_at = at->GetAc();
+    fopAc_ac_c * ac_tg = tg->GetAc();
+    if ((ac_at == NULL || ac_tg == NULL || ac_at != ac_tg) && (at->GetAtGrp() & tg->GetTgGrp()) != 0) {
+        return ChkNoHitGAtTg(at->GetGObjInf(), tg->GetGObjInf(), at->GetStts()->GetGStts(), tg->GetStts()->GetGStts());
+    }
+
+    return true;
 }
 
 /* 802430BC-802432F8       .text ChkAtTg__4cCcSFv */
@@ -52,7 +109,7 @@ void cCcS::ChkAtTg() {
 }
 
 /* 802432F8-802433A8       .text ChkNoHitCo__4cCcSFP8cCcD_ObjP8cCcD_Obj */
-void cCcS::ChkNoHitCo(cCcD_Obj*, cCcD_Obj*) {
+bool cCcS::ChkNoHitCo(cCcD_Obj*, cCcD_Obj*) {
     /* Nonmatching */
 }
 
@@ -62,8 +119,11 @@ void cCcS::ChkCo() {
 }
 
 /* 8024352C-80243544       .text CalcTgPlusDmg__4cCcSFP8cCcD_ObjP8cCcD_ObjP9cCcD_SttsP9cCcD_Stts */
-void cCcS::CalcTgPlusDmg(cCcD_Obj*, cCcD_Obj*, cCcD_Stts*, cCcD_Stts*) {
-    /* Nonmatching */
+void cCcS::CalcTgPlusDmg(cCcD_Obj* at, cCcD_Obj* tg, cCcD_Stts* at_stts, cCcD_Stts* tg_stts) {
+    s32 atp = at->GetAtAtp();
+    if (tg_stts->GetDmg() >= atp)
+        return;
+    tg_stts->PlusDmg(atp);
 }
 
 /* 80243544-80243740       .text SetAtTgCommonHitInf__4cCcSFP8cCcD_ObjP8cCcD_ObjP4cXyz */
@@ -88,40 +148,57 @@ void cCcS::CalcArea() {
 
 /* 80244894-802448F8       .text Move__4cCcSFv */
 void cCcS::Move() {
-    /* Nonmatching */
+    CalcArea();
+    ChkAtTg();
+    ChkCo();
+    MoveAfterCheck();
+    mObjAtCount = 0;
+    mObjTgCount = 0;
+    mObjCoCount = 0;
+    mObjCount = 0;
 }
 
 /* 802448F8-8024498C       .text DrawClear__4cCcSFv */
 void cCcS::DrawClear() {
-    /* Nonmatching */
+    for (u32 i = 0; i < ARRAY_SIZE(mpObjAt); i++)
+        mpObjAt[i] = NULL;
+    mObjAtCount = 0;
+
+    for (u32 i = 0; i < ARRAY_SIZE(mpObjTg); i++)
+        mpObjTg[i] = NULL;
+    mObjTgCount = 0;
+
+    for (u32 i = 0; i < ARRAY_SIZE(mpObjCo); i++)
+        mpObjCo[i] = NULL;
+    mObjCoCount = 0;
+
+    for (u32 i = 0; i < ARRAY_SIZE(mpObj); i++)
+        mpObj[i] = NULL;
+    mObjCount = 0;
 }
 
 /* 8024498C-80244990       .text SetCoGCorrectProc__4cCcSFP8cCcD_ObjP8cCcD_Obj */
 void cCcS::SetCoGCorrectProc(cCcD_Obj*, cCcD_Obj*) {
-    /* Nonmatching */
 }
 
 /* 80244990-80244998       .text ChkNoHitGCo__4cCcSFP8cCcD_ObjP8cCcD_Obj */
-void cCcS::ChkNoHitGCo(cCcD_Obj*, cCcD_Obj*) {
-    /* Nonmatching */
+bool cCcS::ChkNoHitGCo(cCcD_Obj*, cCcD_Obj*) {
+    return false;
 }
 
 /* 80244998-8024499C       .text SetAtTgGObjInf__4cCcSFbbP8cCcD_ObjP8cCcD_ObjP12cCcD_GObjInfP12cCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10cCcD_GSttsP10cCcD_GSttsP4cXyz */
 void cCcS::SetAtTgGObjInf(bool, bool, cCcD_Obj*, cCcD_Obj*, cCcD_GObjInf*, cCcD_GObjInf*, cCcD_Stts*, cCcD_Stts*, cCcD_GStts*, cCcD_GStts*, cXyz*) {
-    /* Nonmatching */
 }
 
 /* 8024499C-802449A4       .text ChkAtTgHitAfterCross__4cCcSFbbPC12cCcD_GObjInfPC12cCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10cCcD_GSttsP10cCcD_GStts */
-void cCcS::ChkAtTgHitAfterCross(bool, bool, const cCcD_GObjInf*, const cCcD_GObjInf*, cCcD_Stts*, cCcD_Stts*, cCcD_GStts*, cCcD_GStts*) {
-    /* Nonmatching */
+bool cCcS::ChkAtTgHitAfterCross(bool, bool, const cCcD_GObjInf*, const cCcD_GObjInf*, cCcD_Stts*, cCcD_Stts*, cCcD_GStts*, cCcD_GStts*) {
+    return false;
 }
 
 /* 802449A4-802449A8       .text SetCoGObjInf__4cCcSFbbP12cCcD_GObjInfP12cCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10cCcD_GSttsP10cCcD_GStts */
 void cCcS::SetCoGObjInf(bool, bool, cCcD_GObjInf*, cCcD_GObjInf*, cCcD_Stts*, cCcD_Stts*, cCcD_GStts*, cCcD_GStts*) {
-    /* Nonmatching */
 }
 
 /* 802449A8-802449AC       .text MoveAfterCheck__4cCcSFv */
 void cCcS::MoveAfterCheck() {
-    /* Nonmatching */
 }
