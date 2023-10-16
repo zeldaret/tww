@@ -3,11 +3,24 @@
 // Translation Unit: d_a_branch_static.cpp
 //
 
-#include "d_a_branch_static.h"
+#include "d/actor/d_a_branch.h"
 #include "dolphin/types.h"
+#include "JSystem/JUtility/JUTAssert.h"
 
 /* 80068510-800685F8       .text getJointMtx__10daBranch_cFPCc */
-void daBranch_c::getJointMtx(const char*) {
-    /* Nonmatching */
+MtxP daBranch_c::getJointMtx(const char* jointName) {
+    JUT_ASSERT(22, mModel[0] != 0);
+    JUTNameTab* nameTable = mModel[0]->getModelData()->getJointName();
+    u16 jointNum = mModel[0]->getModelData()->getJointNum();
+    if (nameTable == NULL || jointNum == 0) {
+        return NULL;
+    }
+    
+    for (u16 i = 0; i < jointNum; i++) {
+        if (strcmp(nameTable->getName(i), jointName) == 0) {
+            return mModel[0]->getAnmMtx(i);
+        }
+    }
+    
+    return NULL;
 }
-

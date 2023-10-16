@@ -3,51 +3,16 @@
 // Translation Unit: d_a_branch.cpp
 //
 
+#include "d/actor/d_a_branch.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
-#include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-#include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "dolphin/mtx/mtx.h"
-#include "dolphin/types.h"
 
-
-class daBranch_c : public fopAc_ac_c {
-public:
-    ~daBranch_c() {
-        for (int i = 0; i < 2; i++) {
-            mDoExt_McaMorf* anim = mAnims[i];
-            if (anim != 0) {
-                anim->stopZelAnime();
-            }
-        }
-
-        dComIfG_resDelete(&mPhs, m_arcname);
-    }
-
-    void set_mtx();
-    void set_anim(int, int, int);
-    void demoPlay(mDoExt_McaMorf*);
-
-    s32 CreateHeap();
-    static s32 solidHeapCB(fopAc_ac_c*);
-
-    /* 0x0290 */ request_of_phase_process_class mPhs;
-    /* 0x0298 */ J3DModel* mModels[2];
-    /* 0x02A0 */ u8 dummy2[0x08]; 
-    /* 0x02A8 */ mDoExt_McaMorf* mAnims[2];
-    /* 0x02B0 */ u8 dummy[0x08];
-    /* 0x02B8 */ u32 m02B8;
-    /* 0x02BC */ u8 m02BC;
-    /* 0x02BD */ u8 m02BD;
-
-    static char m_arcname[];
-};
 
 char daBranch_c::m_arcname[] = "Kwood_00";
 
@@ -56,7 +21,7 @@ void daBranch_c::set_mtx() {
     J3DModel* pMdl;
 
     for (int i = 0; i < 2; i ++) {
-        pMdl = mModels[i];
+        pMdl = mModel[i];
 
         if (pMdl) {
             pMdl->setBaseScale(mScale);
@@ -136,8 +101,8 @@ s32 daBranch_c::CreateHeap() {
             break;
         }
 
-        mModels[i] = newMorf->mpModel;
-        if (!mModels[i]) {
+        mModel[i] = newMorf->mpModel;
+        if (!mModel[i]) {
             status = FALSE;
             break;
         }
@@ -157,7 +122,7 @@ BOOL daBranch_Draw(daBranch_c* i_this) {
     }
 
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &i_this->current.pos, &i_this->mTevStr);
-    g_env_light.setLightTevColorType(i_this->mModels[activeIdx], &i_this->mTevStr);
+    g_env_light.setLightTevColorType(i_this->mModel[activeIdx], &i_this->mTevStr);
 
     i_this->mAnims[activeIdx]->updateDL();
 
@@ -227,7 +192,7 @@ s32 daBranch_Create(fopAc_ac_c* i_this) {
             state = cPhs_ERROR_e;
         }
         else {
-            branch->mCullMtx = branch->mModels[0]->mBaseTransformMtx;
+            branch->mCullMtx = branch->mModel[0]->mBaseTransformMtx;
             fopAcM_setCullSizeBox(i_this, 0.0f, 0.0f, -50.0f, 300.0f, 100.0f, 50.0f);
             
             branch->m02B8 = 6;
@@ -235,7 +200,7 @@ s32 daBranch_Create(fopAc_ac_c* i_this) {
             branch->m02BD = 0;
 
             for (int i = 0; i < 2; i++) {
-                J3DModelData* modelData = branch->mModels[i]->mModelData;
+                J3DModelData* modelData = branch->mModel[i]->mModelData;
 
                 for (int j = 0; j < modelData->getMaterialNum(); j++) {
                     J3DMaterial* mat = modelData->getMaterialNodePointer(j);
