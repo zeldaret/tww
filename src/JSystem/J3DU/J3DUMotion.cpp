@@ -7,8 +7,15 @@
 #include "JSystem/J3DGraphAnimator/J3DJoint.h"
 #include "dolphin/types.h"
 
-// The following are probably weak functions?
-// Not sure how they ended up here, exactly.
+// this puts the correct functions here when they are weak
+// however, the data from J3DMtxCalcBasic::init starts appearing in other TUs
+static void dummy(J3DMtxCalcBasic* calc1, J3DMtxCalcSoftimage* calc2) {
+    Vec vec;
+    Mtx mtx;
+    calc1->init(vec, mtx);
+    calc2->init(vec, mtx);
+    delete calc2;
+}
 
 /* 80256DBC-80256E4C       .text __dt__19J3DMtxCalcSoftimageFv */
 J3DMtxCalcSoftimage::~J3DMtxCalcSoftimage() {}

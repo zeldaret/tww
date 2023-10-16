@@ -10,10 +10,10 @@ typedef int (*J3DNodeCallBack)(J3DNode*, int);
 class J3DNode {
 public:
     virtual void init(J3DModelData*) {}
-    virtual void entryIn();
+    virtual void entryIn() {}
     virtual void calcIn() {}
     virtual void calcOut() {}
-    virtual u32 getType() const;
+    virtual u32 getType() const { return 'NNON'; }
     virtual ~J3DNode();
 
     J3DNode();

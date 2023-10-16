@@ -4,59 +4,235 @@
 //
 
 #include "JSystem/J3DGraphAnimator/J3DJoint.h"
+#include "JSystem/J3DGraphAnimator/J3DAnimation.h"
+#include "JSystem/J3DGraphAnimator/J3DModel.h"
+#include "JSystem/J3DGraphBase/J3DSys.h"
 #include "dolphin/types.h"
 
 /* 802F4DC0-802F4EB0       .text calc__13J3DMtxCalcAnmFUs */
-void J3DMtxCalcAnm::calc(u16) {
-    /* Nonmatching */
+void J3DMtxCalcAnm::calc(u16 param_0) {
+    j3dSys.setCurrentMtxCalc(this);
+    J3DTransformInfo info;
+    J3DAnmTransform* transform = mOne[0];
+    if (transform) {
+        transform->getTransform(param_0, &info);
+    } else {
+        info = j3dSys.getModel()->getModelData()->getJointNodePointer(param_0)->getTransformInfo();
+    }
+    calcTransform(param_0, info);
 }
 
 /* 802F4EB0-802F4EF8       .text __ct__15J3DMtxCalcBasicFv */
 J3DMtxCalcBasic::J3DMtxCalcBasic() {}
 
 /* 802F4EF8-802F5090       .text recursiveCalc__15J3DMtxCalcBasicFP7J3DNode */
-void J3DMtxCalcBasic::recursiveCalc(J3DNode*) {
-    /* Nonmatching */
+void J3DMtxCalcBasic::recursiveCalc(J3DNode* node) {
+    if (!node) {
+        return;
+    }
+    J3DMtxCalcBasic mtxCalc;
+    MTXCopy(J3DSys::mCurrentMtx, mtxCalc.getBackupMtx());
+    mtxCalc.setBackupS(J3DSys::mCurrentS);
+    mtxCalc.setBackupParentS(J3DSys::mParentS);
+    node->calcIn();
+    if (node->getCallBack()) {
+        node->getCallBack()(node, 0);
+    }
+    recursiveCalc(node->getChild());
+    MTXCopy(mtxCalc.getBackupMtx(), J3DSys::mCurrentMtx);
+    J3DSys::mCurrentS = mtxCalc.getBackupS();
+    J3DSys::mParentS = mtxCalc.getBackupParentS();
+    node->calcOut();
+    if (node->getCallBack()) {
+        node->getCallBack()(node, 1);
+    }
+    recursiveCalc(node->getYounger());
 }
 
 /* 802F5090-802F525C       .text calcTransform__15J3DMtxCalcBasicFUsRC16J3DTransformInfo */
-void J3DMtxCalcBasic::calcTransform(u16, const J3DTransformInfo&) {
+void J3DMtxCalcBasic::calcTransform(u16 param_0, const J3DTransformInfo& info) {
     /* Nonmatching */
+    J3DSys::mCurrentS.x *= info.mScale.x;
+    J3DSys::mCurrentS.y *= info.mScale.y;
+    J3DSys::mCurrentS.z *= info.mScale.z;
+    Vec tmp = J3DSys::mCurrentS;
+    s32 var1;
+    if (tmp.x == 1.0f && tmp.y == 1.0f && tmp.z == 1.0f) {
+        var1 = 1;
+    } else {
+        var1 = 0;
+    }
+    s32 r29;
+    if (var1) {
+        j3dSys.getModel()->setScaleFlag(param_0, 1);
+        r29 = 1;
+    } else {
+        j3dSys.getModel()->setScaleFlag(param_0, 0);
+        r29 = 0;
+    }
+    Mtx mtx;
+    J3DGetTranslateRotateMtx(info, mtx);
+    if (r29 == 0) {
+        mtx[0][0] *= info.mScale.x;
+        mtx[0][1] *= info.mScale.y;
+        mtx[0][2] *= info.mScale.z;
+        mtx[1][0] *= info.mScale.x;
+        mtx[1][1] *= info.mScale.y;
+        mtx[1][2] *= info.mScale.z;
+        mtx[2][0] *= info.mScale.x;
+        mtx[2][1] *= info.mScale.y;
+        mtx[2][2] *= info.mScale.z;
+    }
+    MTXConcat(J3DSys::mCurrentMtx, mtx, J3DSys::mCurrentMtx);
+    MTXCopy(J3DSys::mCurrentMtx, j3dSys.getModel()->getAnmMtx(param_0));
 }
 
 /* 802F525C-802F52BC       .text calc__15J3DMtxCalcBasicFUs */
-void J3DMtxCalcBasic::calc(u16) {
-    /* Nonmatching */
+void J3DMtxCalcBasic::calc(u16 param_0) {
+    j3dSys.mCurrentMtxCalc = this;
+    calcTransform(param_0, j3dSys.getModel()->getModelData()->getJointNodePointer(param_0)->getTransformInfo());
 }
 
 /* 802F52BC-802F5508       .text calcTransform__19J3DMtxCalcSoftimageFUsRC16J3DTransformInfo */
-void J3DMtxCalcSoftimage::calcTransform(u16, const J3DTransformInfo&) {
+void J3DMtxCalcSoftimage::calcTransform(u16 param_0, const J3DTransformInfo& info) {
     /* Nonmatching */
+    Mtx mtx;
+    J3DGetTranslateRotateMtx(
+        info.mRotation.x,
+        info.mRotation.y,
+        info.mRotation.z,
+        info.mTranslate.x * J3DSys::mCurrentS.x,
+        info.mTranslate.y * J3DSys::mCurrentS.y,
+        info.mTranslate.z * J3DSys::mCurrentS.z,
+        mtx
+    );
+    MTXConcat(J3DSys::mCurrentMtx, mtx, J3DSys::mCurrentMtx);
+    J3DSys::mCurrentS.x = J3DSys::mCurrentS.x * info.mScale.x;
+    J3DSys::mCurrentS.y = J3DSys::mCurrentS.y * info.mScale.y;
+    J3DSys::mCurrentS.z = J3DSys::mCurrentS.z * info.mScale.z;
+    Vec tmp = J3DSys::mCurrentS;
+    s32 var1;
+    if (tmp.x == 1.0f && tmp.y == 1.0f && tmp.z == 1.0f) {
+        var1 = 1;
+    } else {
+        var1 = 0;
+    }
+    s32 var2;
+    if (var1) {
+        j3dSys.getModel()->setScaleFlag(param_0, 1);
+        var2 = 1;
+    } else {
+        j3dSys.getModel()->setScaleFlag(param_0, 0);
+        var2 = 0;
+    }
+    if (!var2) {
+        mtx[0][0] = J3DSys::mCurrentMtx[0][0] * J3DSys::mCurrentS.x;
+        mtx[0][1] = J3DSys::mCurrentMtx[0][1] * J3DSys::mCurrentS.y;
+        mtx[0][2] = J3DSys::mCurrentMtx[0][2] * J3DSys::mCurrentS.z;
+        mtx[0][3] = J3DSys::mCurrentMtx[0][3];
+        mtx[1][0] = J3DSys::mCurrentMtx[1][0] * J3DSys::mCurrentS.x;
+        mtx[1][1] = J3DSys::mCurrentMtx[1][1] * J3DSys::mCurrentS.y;
+        mtx[1][2] = J3DSys::mCurrentMtx[1][2] * J3DSys::mCurrentS.z;
+        mtx[1][3] = J3DSys::mCurrentMtx[1][3];
+        mtx[2][0] = J3DSys::mCurrentMtx[2][0] * J3DSys::mCurrentS.x;
+        mtx[2][1] = J3DSys::mCurrentMtx[2][1] * J3DSys::mCurrentS.y;
+        mtx[2][2] = J3DSys::mCurrentMtx[2][2] * J3DSys::mCurrentS.z;
+        mtx[2][3] = J3DSys::mCurrentMtx[2][3];
+        MTXCopy(mtx, j3dSys.getModel()->getAnmMtx(param_0));
+    } else {
+        MTXCopy(J3DSys::mCurrentMtx, j3dSys.getModel()->getAnmMtx(param_0));
+    }
 }
 
 /* 802F5508-802F5724       .text calcTransform__14J3DMtxCalcMayaFUsRC16J3DTransformInfo */
-void J3DMtxCalcMaya::calcTransform(u16, const J3DTransformInfo&) {
+void J3DMtxCalcMaya::calcTransform(u16 param_1, const J3DTransformInfo& param_2) {
     /* Nonmatching */
+    J3DModel* model = j3dSys.getModel();
+    u8 scaleCompensate = model->getModelData()->getJointNodePointer(param_1)->getScaleCompensate();
+    s32 tmp;
+    if (param_2.mScale.x == 1.0f && param_2.mScale.y == 1.0f && param_2.mScale.z == 1.0f) {
+        model->setScaleFlag(param_1, 1);
+        tmp = true;
+    } else {
+        model->setScaleFlag(param_1, 0);
+        tmp = false;
+    }
+    Mtx mtx;
+    J3DGetTranslateRotateMtx(param_2, mtx);
+    if (tmp == 0) {
+        mtx[0][0] *= param_2.mScale.x;
+        mtx[0][1] *= param_2.mScale.y;
+        mtx[0][2] *= param_2.mScale.z;
+        mtx[1][0] *= param_2.mScale.x;
+        mtx[1][1] *= param_2.mScale.y;
+        mtx[1][2] *= param_2.mScale.z;
+        mtx[2][0] *= param_2.mScale.x;
+        mtx[2][1] *= param_2.mScale.y;
+        mtx[2][2] *= param_2.mScale.z;
+    }
+    if (scaleCompensate == 1) {
+        f32 x = 1.0f / J3DSys::mParentS.x;
+        f32 y = 1.0f / J3DSys::mParentS.y;
+        f32 z = 1.0f / J3DSys::mParentS.z;
+        mtx[0][0] *= x;
+        mtx[0][1] *= x;
+        mtx[0][2] *= x;
+        mtx[1][0] *= y;
+        mtx[1][1] *= y;
+        mtx[1][2] *= y;
+        mtx[2][0] *= z;
+        mtx[2][1] *= z;
+        mtx[2][2] *= z;
+    }
+    MTXConcat(J3DSys::mCurrentMtx, mtx, J3DSys::mCurrentMtx);
+    MTXCopy(J3DSys::mCurrentMtx, j3dSys.getModel()->getAnmMtx(param_1));
+    J3DSys::mParentS.x = param_2.mScale.x;
+    J3DSys::mParentS.y = param_2.mScale.y;
+    J3DSys::mParentS.z = param_2.mScale.z;
 }
 
 /* 802F5724-802F5814       .text initialize__8J3DJointFv */
 void J3DJoint::initialize() {
     /* Nonmatching */
+    mJntNo = 0;
+    mKind = 1;
+    mScaleCompensate = 0;
+    mTransformInfo = j3dDefaultTransformInfo;
+    mBoundingSphereRadius = 0.0f;
+    mMin = (Vec){0.0f, 0.0f, 0.0f};
+    mMax = (Vec){0.0f, 0.0f, 0.0f};
+    mMtxCalc = NULL;
+    mOldMtxCalc = NULL;
+    mMesh = NULL;
 }
 
 /* 802F5814-802F5834       .text addMesh__8J3DJointFP11J3DMaterial */
-void J3DJoint::addMesh(J3DMaterial*) {
-    /* Nonmatching */
+void J3DJoint::addMesh(J3DMaterial* material) {
+    if (!mMesh) {
+        mMesh = material;
+        return;
+    }
+    material->setNext(mMesh);
+    mMesh = material;
 }
 
 /* 802F5834-802F58B4       .text calcIn__8J3DJointFv */
 void J3DJoint::calcIn() {
-    /* Nonmatching */
+    if (mMtxCalc) {
+        mOldMtxCalc = j3dSys.getCurrentMtxCalc();
+        mMtxCalc->calc(mJntNo);
+    } else if (j3dSys.getCurrentMtxCalc()) {
+        j3dSys.getCurrentMtxCalc()->calc(mJntNo);
+    }
 }
 
 /* 802F58B4-802F58D8       .text calcOut__8J3DJointFv */
 void J3DJoint::calcOut() {
-    /* Nonmatching */
+    if (!mOldMtxCalc) {
+        return;
+    }
+    j3dSys.setCurrentMtxCalc(mOldMtxCalc);
+    mOldMtxCalc = NULL;
 }
 
 /* 802F58D8-802F5A78       .text entryIn__8J3DJointFv */

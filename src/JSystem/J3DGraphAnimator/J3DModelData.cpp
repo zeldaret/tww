@@ -177,8 +177,3 @@ void J3DModelData::setMaterialTable(J3DMaterialTable* pMaterialTable, J3DMateria
         setTextureName(pMaterialTable->getTextureName());
     }
 }
-
-/* 802ED4F4-802ED500       .text getType__7J3DNodeCFv */
-u32 J3DNode::getType() const {
-    return 'NNON';
-}
