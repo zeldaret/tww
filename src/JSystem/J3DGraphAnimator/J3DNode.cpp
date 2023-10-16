@@ -16,7 +16,6 @@ J3DNode::J3DNode() {
 
 /* 802F5BC8-802F5C10       .text __dt__7J3DNodeFv */
 J3DNode::~J3DNode() {
-    /* Nonmatching */
 }
 
 /* 802F5C10-802F5C44       .text appendChild__7J3DNodeFP7J3DNode */
@@ -30,9 +29,4 @@ void J3DNode::appendChild(J3DNode* pChild) {
         }
         curChild->setYounger(pChild);
     }
-}
-
-/* 802F5C44-802F5C48       .text entryIn__7J3DNodeFv */
-void J3DNode::entryIn() {
-    /* Nonmatching */
 }

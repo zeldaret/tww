@@ -42,6 +42,7 @@ public:
     virtual void change();
 
     J3DMaterial* getNext() const { return mNext; }
+    void setNext(J3DMaterial* material) {mNext = material; }
     J3DShape* getShape() const { return mShape; }
     u32 getMaterialMode() { return mMaterialMode; }
     void setMaterialMode(u32 mode) { mMaterialMode = mode; }
