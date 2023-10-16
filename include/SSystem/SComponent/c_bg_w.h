@@ -2,6 +2,9 @@
 #define C_BG_W_H
 
 #include "SSystem/SComponent/c_xyz.h"
+#include "SSystem/SComponent/c_sxyz.h"
+#include "SSystem/SComponent/c_m3d_g_aab.h"
+#include "SSystem/SComponent/c_m3d_g_pla.h"
 #include "dolphin/mtx/mtx.h"
 
 class cBgW_BgId {
@@ -27,17 +30,85 @@ public:
     }
 };
 
-class cBgW_TriElm;
-class cBgW_RwgElm;
-class cBgW_BlkElm;
-class cBgW_GrpElm;
-class cBgW_NodeTree;
-class cBgD_t;
+struct cBgD_Vtx_t;
+
+struct cBgD_Blk_t {
+    /* 0x0 */ u16 field_0x00;
+};
+
+struct cBgD_Tri_t {
+public:
+    /* 0x00 */ u16 vtx0;
+    /* 0x02 */ u16 vtx1;
+    /* 0x04 */ u16 vtx2;
+    /* 0x06 */ u16 id;
+    /* 0x08 */ u16 grp;
+};
+
+struct cBgD_Grp_t {
+    /* 0x00 */ char* m_name;
+    /* 0x04 */ cXyz m_scale;
+    /* 0x10 */ csXyz m_rotation;
+    /* 0x18 */ cXyz m_translation;
+    /* 0x24 */ u16 m_parent;
+    /* 0x26 */ u16 m_next_sibling;
+    /* 0x28 */ u16 m_first_child;
+    /* 0x2A */ u16 m_room_id;
+    /* 0x2C */ u16 m_first_vtx_idx;
+    /* 0x2E */ u16 m_tree_idx;
+    /* 0x30 */ u32 m_info;
+}; // Size: 0x34
+
+class cBgW_NodeTree : public cM3dGAab {
+public:
+    virtual ~cBgW_NodeTree();
+};
+
+class cBgD_t {
+public:
+    /* 0x00 */ s32 m_v_num;
+    /* 0x04 */ cBgD_Vtx_t* m_v_tbl;
+    /* 0x08 */ s32 m_t_num;
+    /* 0x0C */ cBgD_Tri_t* m_t_tbl;
+    /* 0x10 */ s32 m_b_num;
+    /* 0x14 */ cBgD_Blk_t* m_b_tbl;
+    /* 0x18 */ s32 m_tree_num;
+    /* 0x1C */ void* m_tree_tbl;
+    /* 0x20 */ s32 m_g_num;
+    /* 0x24 */ cBgD_Grp_t* m_g_tbl;
+    /* 0x28 */ s32 m_ti_num;
+    /* 0x2C */ void* m_ti_tbl;
+    /* 0x30 */ u32 flag;
+};
 class cBgS_LinChk;
 class cBgS_GndChk;
 class cBgS_ShdwDraw;
 class cBgS_PolyPassChk;
 class cBgS_GrpPassChk;
+
+class cBgW_RwgElm {
+public:
+    /* 0x00 */ u16 next;
+
+public:
+    virtual ~cBgW_RwgElm() {}
+};
+
+class cBgW_BlkElm;
+class cBgW_TriElm {
+public:
+    /* 0x00 */ cM3dGPla m_plane;
+
+    virtual ~cBgW_TriElm() {}
+};
+
+class cBgW_GrpElm {
+public:
+    virtual ~cBgW_GrpElm() {}
+
+public:
+    /* 0x00 */ cM3dGAab aab;
+};
 
 class cBgW : public cBgW_BgId {
 public:
@@ -54,7 +125,7 @@ public:
     void GlobalVtx();
     void SetVtx();
     
-    void SetTri();
+    bool SetTri();
     void BlckConnect(u16*, int*, int);
     void MakeBlckTransMinMax(cXyz*, cXyz*);
     void MakeBlckMinMax(int, cXyz*, cXyz*);
@@ -62,14 +133,14 @@ public:
     void MakeNodeTreeRp(int);
     void MakeNodeTreeGrpRp(int);
     void MakeNodeTree();
-    void ChkMemoryError();
+    bool ChkMemoryError();
     bool Set(cBgD_t*, u32, f32(*)[3][4]);
     void RwgLineCheck(u16, cBgS_LinChk*);
     void LineCheckRp(cBgS_LinChk*, int);
     void LineCheckGrpRp(cBgS_LinChk*, int, int);
-    void RwgGroundCheckCommon(f32, u16, cBgS_GndChk*);
-    void RwgGroundCheckGnd(u16, cBgS_GndChk*);
-    void RwgGroundCheckWall(u16, cBgS_GndChk*);
+    bool RwgGroundCheckCommon(f32, u16, cBgS_GndChk*);
+    bool RwgGroundCheckGnd(u16, cBgS_GndChk*);
+    bool RwgGroundCheckWall(u16, cBgS_GndChk*);
     void GroundCrossRp(cBgS_GndChk*, int);
     void GroundCrossGrpRp(cBgS_GndChk*, int, int);
     void CopyOldMtx();
@@ -82,14 +153,14 @@ public:
     void GetTopUnder(f32*, f32*) const;
 
     virtual ~cBgW();
-    virtual void GetGrpToRoomIndex(int) const;
+    virtual u32 GetGrpToRoomIndex(int) const;
     virtual void CalcPlane();
     virtual void ClassifyPlane();
-    virtual void ChkPolyThrough(int, cBgS_PolyPassChk*);
-    virtual void ChkShdwDrawThrough(int, cBgS_PolyPassChk*);
+    virtual bool ChkPolyThrough(int, cBgS_PolyPassChk*);
+    virtual bool ChkShdwDrawThrough(int, cBgS_PolyPassChk*);
     virtual bool ChkGrpThrough(int, cBgS_GrpPassChk*, int);
 
-    /* 0x08 */ Mtx* mpModelMtx;
+    /* 0x08 */ Mtx* pm_base;
     /* 0x0C */ Mtx mOldMtx;
     /* 0x3C */ Mtx mCurMtx;
     /* 0x6C */ u8 mFlags;
@@ -100,14 +171,14 @@ public:
     /* 0x76 */ u8 field_0x76[0x78 - 0x76];
     /* 0x78 */ int mIgnorePlaneType;
     /* 0x7C */ cXyz mTransVel;
-    /* 0x88 */ cBgW_TriElm* mpTriElm;
-    /* 0x8C */ cBgW_RwgElm* mpRwg;
-    /* 0x90 */ cXyz* mpVtxTbl;
-    /* 0x94 */ cBgD_t* mpBgDt;
-    /* 0x98 */ cBgW_BlkElm* mpBlk;
-    /* 0x9C */ cBgW_GrpElm* mpGrp;
-    /* 0xA0 */ cBgW_NodeTree* mpNodeTree;
-    /* 0xA4 */ int mRootGrpIdx;
+    /* 0x88 */ cBgW_TriElm* pm_tri;
+    /* 0x8C */ cBgW_RwgElm* pm_rwg;
+    /* 0x90 */ cXyz* pm_vtx_tbl;
+    /* 0x94 */ cBgD_t* pm_bgd;
+    /* 0x98 */ cBgW_BlkElm* pm_blk;
+    /* 0x9C */ cBgW_GrpElm* pm_grp;
+    /* 0xA0 */ cBgW_NodeTree* pm_node_tree;
+    /* 0xA4 */ int m_rootGrpIdx;
 };
 
 bool cBgW_CheckBGround(f32 a1);

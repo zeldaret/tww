@@ -15,6 +15,10 @@ public:
 
     virtual ~cM3dGAab() {}
     void SetMinMax(const cXyz&);
+    void Set(const cXyz& min, const cXyz& max) {
+        SetMin(min);
+        SetMax(max);
+    }
     void SetMin(const cXyz&);
     void SetMax(const cXyz&);
     const cXyz* GetMaxP(void) const { return &mMax; }

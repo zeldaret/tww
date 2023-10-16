@@ -4,11 +4,17 @@
 //
 
 #include "SSystem/SComponent/c_bg_w.h"
+#include "SSystem/SComponent/c_bg_s_gnd_chk.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "m_Do/m_Do_printf.h"
+#include "dolphin/mtx/mtxvec.h"
 #include "dolphin/types.h"
 
 /* 80247500-8024754C       .text ASSERT_SOLDHEAP__Fv */
 void ASSERT_SOLDHEAP() {
-    /* Nonmatching */
+    if (JKRHeap::sCurrentHeap->getHeapType() != 'SLID')
+        OSReport_Error("＊＊＊＊＊＊＊Ａバグです＊＊＊＊＊＊＊\n＊＊＊＊＊＊＊Ａバグです＊＊＊＊＊＊＊\n＊＊＊＊＊＊＊Ａバグです＊＊＊＊＊＊＊\ncBgWはカレントヒープがソリッドヒープ以外だと破綻します。\n必ず、カレントヒープをソリッドヒープにしてください。\nここでnewされた領域は二度と開放されることはありません。\n慢性的にメモリーリークを繰り返し、いずれ確実にＡバグを引き起こすことでしょう。\n必ずp修正してください。この下の水色のメッセージにアクターの名前が書いてあるはずです。\n");
 }
 
 /* 8024754C-8024760C       .text __ct__4cBgWFv */
@@ -18,17 +24,30 @@ cBgW::cBgW() {
 
 /* 8024760C-8024767C       .text __dt__4cBgWFv */
 cBgW::~cBgW() {
-    /* Nonmatching */
+    FreeArea();
 }
 
 /* 8024767C-8024769C       .text FreeArea__4cBgWFv */
 void cBgW::FreeArea() {
-    /* Nonmatching */
+    pm_tri = NULL;
+    pm_rwg = NULL;
+    pm_node_tree = NULL;
+    pm_blk = NULL;
+    pm_grp = NULL;
+    pm_vtx_tbl = NULL;
 }
 
 /* 8024769C-8024775C       .text GlobalVtx__4cBgWFv */
 void cBgW::GlobalVtx() {
-    /* Nonmatching */
+    if (pm_base != NULL) {
+        if (!mbNeedsFullTransform) {
+            for (s32 i = 0; i < pm_bgd->m_v_num; i++)
+                VECAdd(&pm_vtx_tbl[i], &mTransVel, &pm_vtx_tbl[i]);
+        } else {
+            for (s32 i = 0; i < pm_bgd->m_v_num; i++)
+                MTXMultVec(*pm_base, &pm_bgd->m_v_tbl[i], &pm_vtx_tbl[i]);
+        }
+    }
 }
 
 /* 8024775C-80247840       .text SetVtx__4cBgWFv */
@@ -42,13 +61,23 @@ void cBgW::CalcPlane() {
 }
 
 /* 80247944-802479D8       .text SetTri__4cBgWFv */
-void cBgW::SetTri() {
-    /* Nonmatching */
+bool cBgW::SetTri() {
+    ASSERT_SOLDHEAP();
+    pm_tri = new cBgW_TriElm[pm_bgd->m_t_num];
+    if (pm_tri == NULL)
+        return true;
+    CalcPlane();
+    return false;
 }
 
 /* 802479D8-80247A24       .text BlckConnect__4cBgWFPUsPii */
-void cBgW::BlckConnect(unsigned short*, int*, int) {
-    /* Nonmatching */
+void cBgW::BlckConnect(u16* rwg, int* prev, int i_no) {
+    if (*rwg == 0xFFFF)
+        *rwg = i_no;
+    if (*prev != 0xFFFF)
+        pm_rwg[*prev].next = i_no;
+    *prev = i_no;
+    pm_rwg[*prev].next = -1;
 }
 
 /* 80247A24-80247BF8       .text ClassifyPlane__4cBgWFv */
@@ -57,13 +86,20 @@ void cBgW::ClassifyPlane() {
 }
 
 /* 80247BF8-80247C4C       .text MakeBlckTransMinMax__4cBgWFP4cXyzP4cXyz */
-void cBgW::MakeBlckTransMinMax(cXyz*, cXyz*) {
-    /* Nonmatching */
+void cBgW::MakeBlckTransMinMax(cXyz* min, cXyz* max) {
+    VECAdd(min, &mTransVel, min);
+    VECAdd(max, &mTransVel, max);
 }
 
 /* 80247C4C-80247CD4       .text MakeBlckMinMax__4cBgWFiP4cXyzP4cXyz */
-void cBgW::MakeBlckMinMax(int, cXyz*, cXyz*) {
-    /* Nonmatching */
+void cBgW::MakeBlckMinMax(int i_no, cXyz* min, cXyz* max) {
+    cXyz * vtx = &pm_vtx_tbl[i_no];
+    if (min->x > vtx->x) min->x = vtx->x;
+    if (max->x < vtx->x) max->x = vtx->x;
+    if (min->y > vtx->y) min->y = vtx->y;
+    if (max->y < vtx->y) max->y = vtx->y;
+    if (min->z > vtx->z) min->z = vtx->z;
+    if (max->z < vtx->z) max->z = vtx->z;
 }
 
 /* 80247CD4-80247E48       .text MakeBlckBnd__4cBgWFiP4cXyzP4cXyz */
@@ -77,8 +113,24 @@ void cBgW::MakeNodeTreeRp(int) {
 }
 
 /* 80247F4C-80248078       .text MakeNodeTreeGrpRp__4cBgWFi */
-void cBgW::MakeNodeTreeGrpRp(int) {
+void cBgW::MakeNodeTreeGrpRp(int grp_idx) {
     /* Nonmatching */
+    u32 tree_idx = pm_bgd->m_g_tbl[grp_idx].m_tree_idx;
+    if (tree_idx != 0xFFFF) {
+        MakeNodeTreeRp(tree_idx);
+        pm_grp[grp_idx].aab.SetMin(pm_node_tree[pm_bgd->m_g_tbl[grp_idx].m_tree_idx].mMin);
+        pm_grp[grp_idx].aab.SetMax(pm_node_tree[pm_bgd->m_g_tbl[grp_idx].m_tree_idx].mMax);
+    }
+
+    u32 chld_idx = pm_bgd->m_g_tbl[grp_idx].m_first_child;
+    while (true) {
+        if (chld_idx == 0xFFFF)
+            break;
+        MakeNodeTreeGrpRp(chld_idx);
+        pm_grp[grp_idx].aab.SetMin(pm_grp[chld_idx].aab.mMin);
+        pm_grp[grp_idx].aab.SetMax(pm_grp[chld_idx].aab.mMax);
+        chld_idx = pm_bgd->m_g_tbl[chld_idx].m_next_sibling;
+    }
 }
 
 /* 80248078-80248178       .text MakeNodeTree__4cBgWFv */
@@ -87,17 +139,19 @@ void cBgW::MakeNodeTree() {
 }
 
 /* 80248178-802481C4       .text ChkMemoryError__4cBgWFv */
-void cBgW::ChkMemoryError() {
-    /* Nonmatching */
+bool cBgW::ChkMemoryError() {
+    if (pm_tri == NULL || pm_rwg == NULL || pm_blk == NULL || pm_node_tree == NULL || pm_grp == NULL)
+        return true;
+    return false;
 }
 
 /* 802481C4-80248414       .text Set__4cBgWFP6cBgD_tUlPA3_A4_f */
-void cBgW::Set(cBgD_t*, unsigned long, float(*)[3][4]) {
+bool cBgW::Set(cBgD_t*, unsigned long, Mtx*) {
     /* Nonmatching */
 }
 
 /* 80248414-802485FC       .text RwgLineCheck__4cBgWFUsP11cBgS_LinChk */
-void cBgW::RwgLineCheck(unsigned short, cBgS_LinChk*) {
+void cBgW::RwgLineCheck(u16, cBgS_LinChk*) {
     /* Nonmatching */
 }
 
@@ -112,17 +166,29 @@ void cBgW::LineCheckGrpRp(cBgS_LinChk*, int, int) {
 }
 
 /* 8024898C-80248AB8       .text RwgGroundCheckCommon__4cBgWFfUsP11cBgS_GndChk */
-void cBgW::RwgGroundCheckCommon(float, unsigned short, cBgS_GndChk*) {
+bool cBgW::RwgGroundCheckCommon(f32 y, u16 idx, cBgS_GndChk* chk) {
     /* Nonmatching */
 }
 
 /* 80248AB8-80248B68       .text RwgGroundCheckGnd__4cBgWFUsP11cBgS_GndChk */
-void cBgW::RwgGroundCheckGnd(unsigned short, cBgS_GndChk*) {
+bool cBgW::RwgGroundCheckGnd(u16 idx, cBgS_GndChk* chk) {
     /* Nonmatching */
+    bool ret = false;
+    while (true) {
+        cBgW_RwgElm * rwg = &pm_rwg[idx];
+        cBgW_TriElm * tri = &pm_tri[idx];
+        f32 y = tri->m_plane.getCrossY(*chk->GetPointP());
+        if (RwgGroundCheckCommon(y, (u16)idx, chk))
+            ret = true;
+        idx = rwg->next;
+        if (idx == 0xFFFF)
+            break;
+    }
+    return ret;
 }
 
 /* 80248B68-80248C38       .text RwgGroundCheckWall__4cBgWFUsP11cBgS_GndChk */
-void cBgW::RwgGroundCheckWall(unsigned short, cBgS_GndChk*) {
+bool cBgW::RwgGroundCheckWall(u16, cBgS_GndChk*) {
     /* Nonmatching */
 }
 
@@ -138,7 +204,10 @@ void cBgW::GroundCrossGrpRp(cBgS_GndChk*, int, int) {
 
 /* 80249368-802493B4       .text CopyOldMtx__4cBgWFv */
 void cBgW::CopyOldMtx() {
-    /* Nonmatching */
+    if (pm_base != NULL) {
+        MTXCopy(mCurMtx, mOldMtx);
+        MTXCopy(*pm_base, mCurMtx);
+    }
 }
 
 /* 802493B4-80249584       .text Move__4cBgWFv */
@@ -162,81 +231,49 @@ void cBgW::ShdwDrawGrpRp(cBgS_ShdwDraw*, int) {
 }
 
 /* 80249904-8024990C       .text ChkPolyThrough__4cBgWFiP16cBgS_PolyPassChk */
-void cBgW::ChkPolyThrough(int, cBgS_PolyPassChk*) {
-    /* Nonmatching */
+bool cBgW::ChkPolyThrough(int, cBgS_PolyPassChk*) {
+    return false;
 }
 
 /* 8024990C-80249938       .text ChkShdwDrawThrough__4cBgWFiP16cBgS_PolyPassChk */
-void cBgW::ChkShdwDrawThrough(int, cBgS_PolyPassChk*) {
-    /* Nonmatching */
+bool cBgW::ChkShdwDrawThrough(int param_0, cBgS_PolyPassChk* param_1) {
+    return ChkPolyThrough(param_0, param_1);
 }
 
 /* 80249938-80249940       .text ChkGrpThrough__4cBgWFiP15cBgS_GrpPassChki */
-void cBgW::ChkGrpThrough(int, cBgS_GrpPassChk*, int) {
-    /* Nonmatching */
+bool cBgW::ChkGrpThrough(int, cBgS_GrpPassChk*, int) {
+    return false;
 }
 
 /* 80249940-80249A18       .text GetGrpToRoomIndex__4cBgWCFi */
-void cBgW::GetGrpToRoomIndex(int) const {
-    /* Nonmatching */
+u32 cBgW::GetGrpToRoomIndex(int grp_index) const {
+    JUT_ASSERT(0xc77, 0 <= grp_index && grp_index < pm_bgd->m_g_num);
+    cBgD_Grp_t * g_tbl = pm_bgd->m_g_tbl;
+    if (g_tbl[grp_index].m_parent == 0xFFFF || g_tbl[g_tbl[grp_index].m_parent].m_parent == 0xFFFF)
+        return 0xFFFF;
+    return g_tbl[g_tbl[g_tbl[grp_index].m_parent].m_parent].m_room_id;
 }
 
 /* 80249A18-80249A58       .text GetTrans__4cBgWCFP4cXyz */
-void cBgW::GetTrans(cXyz*) const {
-    /* Nonmatching */
+void cBgW::GetTrans(cXyz* dst) const {
+    dst->x = (*pm_base)[0][3] - mOldMtx[0][3];
+    dst->y = (*pm_base)[1][3] - mOldMtx[1][3];
+    dst->z = (*pm_base)[2][3] - mOldMtx[2][3];
 }
 
 /* 80249A58-80249B64       .text GetTriPnt__4cBgWCFiP4cXyzP4cXyzP4cXyz */
-void cBgW::GetTriPnt(int, cXyz*, cXyz*, cXyz*) const {
-    /* Nonmatching */
+void cBgW::GetTriPnt(int i_no, cXyz* p0, cXyz* p1, cXyz* p2) const {
+    JUT_ASSERT(0xcb3, pm_bgd != 0);
+
+    cBgD_Tri_t * tri = &pm_bgd->m_t_tbl[i_no];
+    p0->set(pm_vtx_tbl[tri->vtx0]);
+    p1->set(pm_vtx_tbl[tri->vtx1]);
+    p2->set(pm_vtx_tbl[tri->vtx2]);
 }
 
 /* 80249B64-80249BA0       .text GetTopUnder__4cBgWCFPfPf */
-void cBgW::GetTopUnder(float*, float*) const {
+void cBgW::GetTopUnder(f32* min, f32* max) const {
     /* Nonmatching */
-}
-
-/* 80249BA0-80249BE8       .text __dt__9cBgW_BgIdFv */
-cBgW_BgId::~cBgW_BgId() {
-    /* Nonmatching */
-}
-
-/* 80249BE8-80249C48       .text __dt__11cBgW_GrpElmFv */
-cBgW_GrpElm::~cBgW_GrpElm() {
-    /* Nonmatching */
-}
-
-/* 80249C48-80249C64       .text __ct__11cBgW_GrpElmFv */
-cBgW_GrpElm::cBgW_GrpElm() {
-    /* Nonmatching */
-}
-
-/* 80249C64-80249CC0       .text __dt__13cBgW_NodeTreeFv */
-cBgW_NodeTree::~cBgW_NodeTree() {
-    /* Nonmatching */
-}
-
-/* 80249CC0-80249CDC       .text __ct__13cBgW_NodeTreeFv */
-cBgW_NodeTree::cBgW_NodeTree() {
-    /* Nonmatching */
-}
-
-/* 80249CDC-80249D24       .text __dt__11cBgW_RwgElmFv */
-cBgW_RwgElm::~cBgW_RwgElm() {
-    /* Nonmatching */
-}
-
-/* 80249D24-80249D34       .text __ct__11cBgW_RwgElmFv */
-cBgW_RwgElm::cBgW_RwgElm() {
-    /* Nonmatching */
-}
-
-/* 80249D34-80249D90       .text __dt__11cBgW_TriElmFv */
-cBgW_TriElm::~cBgW_TriElm() {
-    /* Nonmatching */
-}
-
-/* 80249D90-80249DAC       .text __ct__11cBgW_TriElmFv */
-cBgW_TriElm::cBgW_TriElm() {
-    /* Nonmatching */
+    *min = pm_grp[m_rootGrpIdx].aab.mMin.y;
+    *max = pm_grp[m_rootGrpIdx].aab.mMax.y;
 }
