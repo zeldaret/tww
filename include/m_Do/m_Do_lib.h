@@ -40,8 +40,7 @@ struct mDoLib_clipper {
 };
 
 void mDoLib_project(Vec* src, Vec* dst);
-u8 mDoLib_setResTimgObj(ResTIMG const* res, GXTexObj* o_texObj, u32 tlut_name,
-                          GXTlutObj* o_tlutObj);
+u8 mDoLib_setResTimgObj(ResTIMG* res, GXTexObj* o_texObj, u32 tlut_name, GXTlutObj* o_tlutObj);
 void mDoLib_pos2camera(Vec* src, Vec* dst);
 
 #endif /* M_DO_M_DO_LIB_H */

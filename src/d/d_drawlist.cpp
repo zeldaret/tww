@@ -5,6 +5,8 @@
 
 #include "d/d_drawlist.h"
 #include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_lib.h"
+#include "m_Do/m_Do_mtx.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "SSystem/SComponent/c_rnd.h"
@@ -59,28 +61,112 @@ void dDlst_2DM_c::draw() {
 }
 
 /* 800817CC-80081850       .text init__11dDlst_2Dm_cFP7ResTIMGP7ResTIMGff */
-void dDlst_2Dm_c::init(ResTIMG*, ResTIMG*, f32, f32) {
-    /* Nonmatching */
+void dDlst_2Dm_c::init(ResTIMG* t0, ResTIMG* t1, f32 sx, f32 sy) {
+    mTex[0].mbHasTlut = mDoLib_setResTimgObj(t0, &mTex[0].mTexObj, 0, &mTex[0].mTlutObj);
+    mTex[1].mbHasTlut = mDoLib_setResTimgObj(t1, &mTex[1].mTexObj, 1, &mTex[1].mTlutObj);
+    mScaleX = sx;
+    mScaleY = sy;
 }
 
 /* 80081850-80081864       .text setPos__11dDlst_2Dm_cFssss */
-void dDlst_2Dm_c::setPos(s16, s16, s16, s16) {
-    /* Nonmatching */
+void dDlst_2Dm_c::setPos(s16 x0, s16 y0, s16 x1, s16 y1) {
+    mX0 = x0;
+    mY0 = y0;
+    mX1 = x1;
+    mY1 = y1;
 }
 
 /* 80081864-80081870       .text setScale__11dDlst_2Dm_cFff */
-void dDlst_2Dm_c::setScale(f32, f32) {
-    /* Nonmatching */
+void dDlst_2Dm_c::setScale(f32 sx, f32 sy) {
+    mScaleX = sx;
+    mScaleY = sy;
 }
 
 /* 80081870-80081888       .text setScroll__11dDlst_2Dm_cFiss */
-void dDlst_2Dm_c::setScroll(int, s16, s16) {
-    /* Nonmatching */
+void dDlst_2Dm_c::setScroll(int idx, s16 x, s16 y) {
+    TexEntry * pTex = &mTex[idx];
+    pTex->mScrollX = x;
+    pTex->mScrollY = y;
 }
 
 /* 80081888-80081DA4       .text draw__11dDlst_2Dm_cFv */
 void dDlst_2Dm_c::draw() {
-    /* Nonmatching */
+    /* Nonmatching - scroll math isn't right */
+
+    GXVtxAttrFmtList fmtList[GX_VA_MAX_ATTR + 1];
+
+    s16 tex0_s0 = mTex[0].mScrollX;
+    s16 tex0_s1 = (tex0_s0 + 256.0f);
+    s16 tex0_t0 = mTex[0].mScrollY;
+    s16 tex0_t1 = (tex0_t0 + 256.0f);
+
+    s16 tex1_s0 = mTex[1].mScrollX;
+    s16 tex1_s1 = (tex1_s0 + 256.0f);
+    s16 tex1_t0 = mTex[1].mScrollY;
+    s16 tex1_t1 = (tex1_t0 + 256.0f);
+
+    GXGetVtxAttrFmtv(GX_VTXFMT0, fmtList);
+
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, 8);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX1, GX_DIRECT);
+    GXLoadTexObj(&this->mTex[0].mTexObj, GX_TEXMAP0);
+    if (this->mTex[0].mbHasTlut)
+        GXLoadTlut(&this->mTex[0].mTlutObj, GXGetTexObjTlut(&mTex[0].mTexObj));
+    GXLoadTexObj(&this->mTex[1].mTexObj, GX_TEXMAP1);
+    if (this->mTex[1].mbHasTlut != 0)
+        GXLoadTlut(&this->mTex[1].mTlutObj, GXGetTexObjTlut(&mTex[1].mTexObj));
+
+    GXSetNumChans(0);
+    GXSetTevColor(GX_TEVREG0, mC0);
+    GXSetTevColor(GX_TEVREG1, mC1);
+
+    GXSetNumTexGens(2);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX1, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+
+    GXSetNumTevStages(2);
+
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_A1, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_TEXA, GX_CA_APREV, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+
+    GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);                                     
+
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3f32(mX0, mY0, 0.0f);
+    GXTexCoord2s16(tex0_s0, tex0_t0);
+    GXTexCoord2s16(tex1_s0, tex1_t0);
+
+    GXPosition3f32(mX1, mY0, 0.0f);
+    GXTexCoord2s16(tex0_s1, tex0_t0);
+    GXTexCoord2s16(tex1_s1, tex1_t0);
+
+    GXPosition3f32(mX1, mY1, 0.0f);
+    GXTexCoord2s16(tex0_s1, tex0_t1);
+    GXTexCoord2s16(tex1_s1, tex1_t1);
+
+    GXPosition3f32(mX0, mY1, 0.0f);
+    GXTexCoord2s16(tex0_s0, tex0_t1);
+    GXTexCoord2s16(tex1_s0, tex1_t1);
+    GXEnd();
+
+    GXSetVtxAttrFmtv(GX_VTXFMT0, fmtList);
 }
 
 /* 80081DA4-80082130       .text draw__12dDlst_2DMt_cFv */
@@ -113,23 +199,165 @@ void dDlst_effectLine_c::update(cXyz&, _GXColor&, u16, u16, u16, u16, f32, f32, 
 }
 
 /* 80082828-80082838       .text set__22dDlst_alphaModelData_cFUcPA4_fUc */
-void dDlst_alphaModelData_c::set(u8, Mtx, u8) {
-    /* Nonmatching */
+void dDlst_alphaModelData_c::set(u8 type, Mtx mtx, u8 alpha) {
+    mType = type;
+    mpMtx = mtx;
+    mAlpha = alpha;
 }
 
+extern void GFLoadPosMtxImm(MtxP, GXPosNrmMtx);
+extern void GFSetCurrentMtx(u32, u32, u32, u32, u32, u32, u32, u32, u32);
+extern void GFSetChanMatColor(GXChannelID, GXColor);
+extern void GFSetVtxDescv(GXVtxDescList*);
+extern void GFSetVtxAttrFmtv(GXVtxFmt, GXVtxAttrFmtList*);
+extern void GFSetBlendModeEtc(GXBlendMode, GXBlendFactor, GXBlendFactor, GXLogicOp, u8, u8, u8);
+extern void GFSetArray(GXAttr, void*, u8);
+
+char l_backRevZMat[0x40] = {};
+char l_frontZMat[0x20] = {};
+char l_frontNoZSubMat[0x20] = {};
+
+Vec l_bonboriPos[0x2a] = {};
+char l_bonboriDL[0xa0] = {};
+
+Vec l_beam_checkPos[0x10] = {};
+char l_beam_checkDL[0xe0] = {};
+
+Vec l_cubePos[0x10] = {};
+char l_cubeDL[0xe0] = {};
+
+Vec l_bonbori2Pos[0x2a] = {};
+char l_bonbori2DL[0xa0] = {};
+
 /* 80082838-80082E44       .text draw__22dDlst_alphaModelData_cFPA4_f */
-void dDlst_alphaModelData_c::draw(Mtx) {
-    /* Nonmatching */
+void dDlst_alphaModelData_c::draw(Mtx viewMtx) {
+    /* Nonmatching - color and data order */
+    Mtx mtx;
+    MTXConcat(viewMtx, mpMtx, mtx);
+    GFLoadPosMtxImm(mtx, GX_PNMTX0);
+    GFSetCurrentMtx(GX_PNMTX0, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
+
+    GXColor color = { 0, 0, 0, 0 };
+    color.a = mAlpha;
+    GFSetChanMatColor(GX_ALPHA0, color);
+
+    if (mType == 0) {
+        /* Bonbori */
+        GFSetArray(GX_VA_POS, l_bonboriPos, sizeof(*l_bonboriPos));
+        GXCallDisplayList(l_backRevZMat, sizeof(l_backRevZMat));
+        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GXCallDisplayList(l_frontZMat, sizeof(l_frontZMat));
+        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GXCallDisplayList(l_frontNoZSubMat, sizeof(l_frontNoZSubMat));
+        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+    } else if (mType == 1) {
+        /* Bonborix2 */
+        GFSetArray(GX_VA_POS, l_bonboriPos, sizeof(*l_bonboriPos));
+        Mtx tmp;
+        MTXScale(tmp, 0.8f, 0.8f, 0.8f);
+        MTXConcat(mtx, tmp, tmp);
+        GFLoadPosMtxImm(tmp, GX_PNMTX1);
+
+        GXCallDisplayList(l_backRevZMat, sizeof(l_backRevZMat));
+        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GFSetCurrentMtx(GX_PNMTX1, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
+        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+
+        GXCallDisplayList(l_frontZMat, sizeof(l_frontZMat));
+        GFSetCurrentMtx(GX_PNMTX0, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
+        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GFSetCurrentMtx(GX_PNMTX1, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
+        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+
+        GXCallDisplayList(l_frontNoZSubMat, sizeof(l_frontNoZSubMat));
+        GFSetCurrentMtx(GX_PNMTX0, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
+        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GFSetCurrentMtx(GX_PNMTX1, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
+        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+    } else if (mType == 5) {
+        /* Bonborix3 */
+        GFSetArray(GX_VA_POS, l_bonboriPos, sizeof(*l_bonboriPos));
+        Mtx tmp;
+        MTXScale(tmp, 0.8f, 0.8f, 0.8f);
+        MTXConcat(mtx, tmp, tmp);
+        GFLoadPosMtxImm(tmp, GX_PNMTX1);
+
+        MTXScale(tmp, 0.6f, 0.6f, 0.6f);
+        MTXConcat(mtx, tmp, tmp);
+        GFLoadPosMtxImm(tmp, GX_PNMTX2);
+
+        GXCallDisplayList(l_backRevZMat, sizeof(l_backRevZMat));
+        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GFSetCurrentMtx(GX_PNMTX1, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
+        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GFSetCurrentMtx(GX_PNMTX2, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
+        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+
+        GXCallDisplayList(l_frontZMat, sizeof(l_frontZMat));
+        GFSetCurrentMtx(GX_PNMTX0, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
+        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GFSetCurrentMtx(GX_PNMTX1, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
+        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GFSetCurrentMtx(GX_PNMTX2, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
+        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+
+        GXCallDisplayList(l_frontNoZSubMat, sizeof(l_frontNoZSubMat));
+        GFSetCurrentMtx(GX_PNMTX0, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
+        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GFSetCurrentMtx(GX_PNMTX1, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
+        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GFSetCurrentMtx(GX_PNMTX2, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
+        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+    } else if (mType == 2) {
+        /* BeamCheck */
+        GFSetArray(GX_VA_POS, l_beam_checkPos, sizeof(*l_beam_checkPos));
+        GXCallDisplayList(l_backRevZMat, sizeof(l_backRevZMat));
+        GXCallDisplayList(l_beam_checkDL, sizeof(l_beam_checkDL));
+        GXCallDisplayList(l_frontZMat, sizeof(l_frontZMat));
+        GXCallDisplayList(l_beam_checkDL, sizeof(l_beam_checkDL));
+        GXCallDisplayList(l_frontNoZSubMat, sizeof(l_frontNoZSubMat));
+        GXCallDisplayList(l_beam_checkDL, sizeof(l_beam_checkDL));
+    } else if (mType == 3) {
+        /* Cube */
+        /* BeamCheck */
+        GFSetArray(GX_VA_POS, l_cubePos, sizeof(*l_cubePos));
+        GXCallDisplayList(l_backRevZMat, sizeof(l_backRevZMat));
+        GXCallDisplayList(l_frontZMat, sizeof(l_frontZMat));
+        GXCallDisplayList(l_cubeDL, sizeof(l_cubeDL));
+    } else if (mType == 4) {
+        /* Bonbori2 */
+        GFSetArray(GX_VA_POS, l_bonbori2Pos, sizeof(*l_bonbori2Pos));
+        GXCallDisplayList(l_backRevZMat, sizeof(l_backRevZMat));
+        GXCallDisplayList(l_bonbori2DL, sizeof(l_bonbori2DL));
+        GXCallDisplayList(l_frontZMat, sizeof(l_frontZMat));
+        GXCallDisplayList(l_bonbori2DL, sizeof(l_bonbori2DL));
+        GXCallDisplayList(l_frontNoZSubMat, sizeof(l_frontNoZSubMat));
+        GXCallDisplayList(l_bonbori2DL, sizeof(l_bonbori2DL));
+    }
 }
 
 /* 80082E44-80082E58       .text __ct__18dDlst_alphaModel_cFv */
 dDlst_alphaModel_c::dDlst_alphaModel_c() {
-    /* Nonmatching */
+    mCapacity = 0;
+    mpData = NULL;
+    mNum = 0;
 }
 
 /* 80082E58-80082EFC       .text create__18dDlst_alphaModel_cFi */
-dDlst_alphaModel_c * dDlst_alphaModel_c::create(int) {
-    /* Nonmatching */
+dDlst_alphaModel_c * dDlst_alphaModel_c::create(int num) {
+    dDlst_alphaModel_c * i_this = new dDlst_alphaModel_c();
+    if (i_this != NULL) {
+        dDlst_alphaModelData_c * pData = new dDlst_alphaModelData_c[num];
+        if (pData != NULL) {
+            i_this->mpData = pData;
+            i_this->mCapacity = num;
+            return i_this;
+        }
+
+        if (i_this != NULL)
+            delete i_this;
+    }
+    return NULL;
 }
 
 /* 80082EFC-80082F38       .text __dt__22dDlst_alphaModelData_cFv */
@@ -148,8 +376,29 @@ BOOL dDlst_alphaModel_c::set(u8 type, Mtx mtx, u8 alpha) {
 }
 
 /* 80082F9C-80083064       .text draw__18dDlst_alphaModel_cFPA4_f */
-void dDlst_alphaModel_c::draw(Mtx) {
-    /* Nonmatching */
+BOOL dDlst_alphaModel_c::draw(Mtx mtx) {
+    if (mNum == 0)
+        return FALSE;
+
+    static char l_matDL[0x60] = {};
+
+    static GXVtxDescList l_vtxDescList[2] = {
+    };
+
+    static GXVtxAttrFmtList l_vtxAttrFmtList[2] = {
+    };
+
+    GXCallDisplayList(l_matDL, sizeof(l_matDL));
+    GFSetVtxDescv(l_vtxDescList);
+    GFSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
+    GXSetClipMode(GX_CLIP_ENABLE);
+
+    dDlst_alphaModelData_c * pData = &mpData[0];
+    for (s32 i = 0; i < mNum; pData++, i++)
+        pData->draw(mtx);
+
+    GFSetBlendModeEtc(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_CLEAR, 1, 0, 1);
+    return TRUE;
 }
 
 /* 80083064-800832C4       .text draw__22dDlst_alphaModelPacketFv */
@@ -265,17 +514,36 @@ void dDlst_shadowSimple_c::set(cXyz*, f32, f32, cXyz*, s16, f32, _GXTexObj*) {
 
 /* 80084D48-80084D94       .text init__21dDlst_shadowControl_cFv */
 void dDlst_shadowControl_c::init() {
-    /* Nonmatching */
+    dDlst_shadowReal_c * pReal = &mReal[0];
+    for (s32 i = 0; i < (s32)ARRAY_SIZE(mReal); i++, pReal++)
+        pReal->init();
 }
 
 /* 80084D94-80084DEC       .text reset__21dDlst_shadowControl_cFv */
 void dDlst_shadowControl_c::reset() {
-    /* Nonmatching */
+    dDlst_shadowReal_c * pReal = &mReal[0];
+    for (s32 i = 0; i < (s32)ARRAY_SIZE(mReal); i++, pReal++)
+        pReal->reset();
+    mSimpleNum = 0;
 }
 
 /* 80084DEC-80084EF0       .text imageDraw__21dDlst_shadowControl_cFPA4_f */
-void dDlst_shadowControl_c::imageDraw(Mtx) {
-    /* Nonmatching */
+void dDlst_shadowControl_c::imageDraw(Mtx mtx) {
+    static char l_matDL[0x80] = {};
+
+    GXSetViewport(0.0f, 0.0f, 256.0f, 256.0f, 0.0f, 1.0f);
+    GXSetScissor(0, 0, 0x100, 0x100);
+    GXCallDisplayList(l_matDL, sizeof(l_matDL));
+    GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
+    GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
+    GXSetClipMode(GX_CLIP_DISABLE);
+    GXSetTexCopySrc(0, 0, 256, 256);
+    GXSetTexCopyDst(128, 128, GX_TF_I4, GX_TRUE);
+    j3dSys.setDrawModeOpaTexEdge();
+    dDlst_shadowReal_c * pReal = &mReal[0];
+    for (s32 i = 0; i < (s32)ARRAY_SIZE(mReal); i++, pReal++)
+        pReal->imageDraw(mtx);
+    GXSetClipMode(GX_CLIP_ENABLE);
 }
 
 /* 80084EF0-800850D4       .text draw__21dDlst_shadowControl_cFPA4_f */
@@ -303,9 +571,12 @@ int dDlst_shadowControl_c::setSimple(cXyz*, f32, f32, cXyz*, s16, f32, _GXTexObj
     /* Nonmatching */
 }
 
+GXTexObj dDlst_shadowControl_c::mSimpleTexObj;
+
 /* 800852D8-80085348       .text setSimpleTex__21dDlst_shadowControl_cFPv */
-void dDlst_shadowControl_c::setSimpleTex(void*) {
-    /* Nonmatching */
+void dDlst_shadowControl_c::setSimpleTex(void* pImg) {
+    GXInitTexObj(&mSimpleTexObj, pImg, 128, 128, GX_TF_I4, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(&mSimpleTexObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
 }
 
 /* 80085348-800855B4       .text draw__18dDlst_mirrorPacketFv */
@@ -314,8 +585,11 @@ void dDlst_mirrorPacket::draw() {
 }
 
 /* 800855B4-80085624       .text init__18dDlst_mirrorPacketFP7ResTIMG */
-void dDlst_mirrorPacket::init(ResTIMG*) {
-    /* Nonmatching */
+void dDlst_mirrorPacket::init(ResTIMG* pImg) {
+    if (pImg == NULL)
+        pImg = (ResTIMG*) dComIfG_getObjectRes("Always", ALWAYS_BTI_SHMREF);
+
+    mDoLib_setResTimgObj(pImg, &mTexObj, 0, NULL);
 }
 
 /* 80085624-80085808       .text mirrorPolygonCheck__FP4cXyzP4cXyzfP18dDlst_shadowPoly_c */

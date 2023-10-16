@@ -66,6 +66,26 @@ public:
     void setScale(f32, f32);
     void setScroll(int, s16, s16);
     virtual void draw();
+
+public:
+    struct TexEntry {
+        /* 0x00 */ GXTexObj mTexObj;
+        /* 0x20 */ GXTlutObj mTlutObj;
+        /* 0x2C */ s16 mScrollX;
+        /* 0x2E */ s16 mScrollY;
+        /* 0x30 */ u8 mbHasTlut;
+        /* 0x31 */ u8 pad[3];
+    };
+
+    /* 0x04 */ s16 mX0;
+    /* 0x06 */ s16 mY0;
+    /* 0x08 */ s16 mX1;
+    /* 0x0A */ s16 mY1;
+    /* 0x0C */ f32 mScaleX;
+    /* 0x10 */ f32 mScaleY;
+    /* 0x14 */ GXColor mC0;
+    /* 0x18 */ GXColor mC1;
+    /* 0x1C */ TexEntry mTex[2];
 };
 
 class dDlst_2DMt_c : public dDlst_base_c {
@@ -173,7 +193,10 @@ public:
     u32 set2(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*);
     bool add(J3DModel*);
     void init();
-    ~dDlst_shadowReal_c() {}
+    ~dDlst_shadowReal_c() {
+        delete mpTexData;
+        delete mpDrawBuffer;
+    }
     dDlst_shadowReal_c() { mState = 0; }
 
     bool isNoUse() { return mState == 0; }
@@ -251,6 +274,11 @@ public:
     ~dDlst_alphaModelData_c();
     void set(u8, Mtx, u8);
     void draw(Mtx);
+
+public:
+    /* 0x00 */ u8 mType;
+    /* 0x01 */ u8 mAlpha;
+    /* 0x04 */ MtxP mpMtx;
 };
 
 struct dDlst_alphaModel_c {
@@ -267,7 +295,7 @@ public:
     dDlst_alphaModel_c();
     static dDlst_alphaModel_c * create(int);
     BOOL set(u8 type, Mtx mtx, u8 alpha);
-    void draw(MtxP);
+    BOOL draw(Mtx);
     s32 getNum() { return mNum; }
 
 public:
