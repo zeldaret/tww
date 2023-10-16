@@ -29,7 +29,7 @@ public:
 const char daThrowstone_c::M_arcname[] = "Aisi";
 
 /* 8023B544-8023B564       .text CheckCreateHeap__FP10fopAc_ac_c */
-s32 CheckCreateHeap(fopAc_ac_c* i_actor) {
+static s32 CheckCreateHeap(fopAc_ac_c* i_actor) {
     daThrowstone_c* i_this = (daThrowstone_c*)i_actor;
     return i_this->CreateHeap();
 }
@@ -86,8 +86,10 @@ BOOL daThrowstone_c::_execute() {
     dDemo_setDemoData(this, 0x6a, NULL, NULL, 0, NULL, 0, 0);
 
     mpModel->setBaseScale(mScale);
-    mDoMtx_stack_c::transS(getPosition());
-    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    f32 pos_x = current.pos.x;
+    mDoMtx_stack_c::transS(pos_x, current.pos.y, current.pos.z);
+    s16 rot_x = shape_angle.x;
+    mDoMtx_stack_c::ZXYrotM(rot_x, shape_angle.y, shape_angle.z);
 
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);

@@ -486,7 +486,7 @@ config.libs = [
             Object(NonMatching, "d/d_s_room.cpp"),
             Object(Matching,    "d/d_s_title.cpp"),
             Object(NonMatching, "d/d_scope.cpp"),
-            Object(NonMatching, "d/d_throwstone.cpp"),
+            Object(Matching,    "d/d_throwstone.cpp"),
             Object(NonMatching, "d/d_timer.cpp"),
             Object(NonMatching, "d/d_water_mark.cpp"),
             Object(NonMatching, "d/d_wind_arrow.cpp"),
