@@ -666,9 +666,9 @@ BOOL daArrow_c::procMove() {
             if (hitActor) {
                 JntHit_c* jntHit = fopAcM_GetJntHit(hitActor);
                 if (mArrowType == TYPE_LIGHT) {
-                    if (fpcM_GetName(mCps.GetAtHitAc()) == PROC_BGN
-                     || fpcM_GetName(mCps.GetAtHitAc()) == PROC_BGN2
-                     || fpcM_GetName(mCps.GetAtHitAc()) == PROC_BGN3) {
+                    if (fpcM_GetName(mCps.GetAtHitAc()) == PROC_BGN ||
+                        fpcM_GetName(mCps.GetAtHitAc()) == PROC_BGN2 ||
+                        fpcM_GetName(mCps.GetAtHitAc()) == PROC_BGN3) {
                         // Hit Puppet Ganon.
                         if (hitWasBlocked) {
                             field_0x6a8 = hitPos;

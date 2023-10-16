@@ -654,7 +654,7 @@ inline dSv_player_bag_item_c* dComIfGs_getpBagItem() {
     return g_dComIfG_gameInfo.save.getPlayer().getpBagItem();
 }
 
-inline BOOL dComIfGs_checkReserveItem(u8 i_itemNo) {
+inline u8 dComIfGs_checkReserveItem(u8 i_itemNo) {
     return dComIfGs_getpBagItem()->checkReserveItem(i_itemNo);
 }
 
@@ -925,6 +925,14 @@ inline BOOL dComIfGs_isSymbol(u8 i_no) {
     return g_dComIfG_gameInfo.save.getPlayer().getCollect().isSymbol(i_no);
 }
 
+inline BOOL dComIfGs_isDungeonItemMap() {
+    return g_dComIfG_gameInfo.save.getMemory().getBit().isDungeonItemMap();
+}
+
+inline BOOL dComIfGs_isDungeonItemCompass() {
+    return g_dComIfG_gameInfo.save.getMemory().getBit().isDungeonItemCompass();
+}
+
 inline BOOL dComIfGs_isDungeonItemBossKey() {
     return g_dComIfG_gameInfo.save.getMemory().getBit().isDungeonItemBossKey();
 }
@@ -1019,6 +1027,10 @@ inline BOOL dComIfGs_isGetItemBait(u8 i_bait) {
 
 inline void dComIfGs_onGetItemBait(u8 i_bait) {
     g_dComIfG_gameInfo.save.getPlayer().getGetBagItem().onBait(i_bait);
+}
+
+inline BOOL dComIfGs_isGetBottleItem(u8 i_itemNo) {
+    return g_dComIfG_gameInfo.save.getPlayer().getGetItem().isBottleItem(i_itemNo);
 }
 
 inline s16 dComIfGs_getWindY() {

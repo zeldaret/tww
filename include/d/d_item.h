@@ -379,7 +379,7 @@ int item_getcheck_func_lithograph14();
 int item_getcheck_func_lithograph15();
 int item_getcheck_func_lithograph16();
 
-void getRotenItemNumInBag();
+int getRotenItemNumInBag();
 BOOL isDaizaItem(u8 itemNo);
 BOOL isBomb(u8 itemNo);
 BOOL isArrow(u8 itemNo);

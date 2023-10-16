@@ -102,7 +102,7 @@ public:
     void onItem(int, u8);
     BOOL isItem(int, u8);
     void onBottleItem(u8);
-    bool isBottleItem(u8);
+    BOOL isBottleItem(u8);
 
     /* 0x0 */ u8 mItemFlags[21];
 };  // Size: 0x15
