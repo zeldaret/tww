@@ -4,27 +4,108 @@
 //
 
 #include "JSystem/J2DGraph/J2DWindow.h"
+#include "JSystem/JSupport/JSURandomInputStream.h"
 #include "JSystem/JUtility/TColor.h"
 #include "JSystem/JUtility/JUTPalette.h"
+#include "JSystem/JUtility/JUTResource.h"
 #include "JSystem/JUtility/JUTTexture.h"
 #include "dolphin/gx/GX.h"
 
 /* 802D12E0-802D1820       .text __ct__9J2DWindowFP7J2DPaneP20JSURandomInputStream */
-J2DWindow::J2DWindow(J2DPane*, JSURandomInputStream*) {
+J2DWindow::J2DWindow(J2DPane* param_0, JSURandomInputStream* param_1) : mpFrameTexture1(NULL), mpFrameTexture2(NULL), mpFrameTexture3(NULL), mpFrameTexture4(NULL), mpContentsTexture(NULL), mpPalette(NULL) {
     /* Nonmatching */
+    s32 local_188 = param_1->getPosition();
+    u32 header[2];
+    param_1->read(header, 8);
+    mMagic = header[0];
+    s32 end = local_188 + header[1];
+    makePaneStream(param_0, param_1);
+    JUTResReference stack_178;
+    u8 r27 = param_1->readU8();
+    f32 f31 = param_1->read16b();
+    f32 f30 = param_1->read16b();
+    f32 f29 = f31 + param_1->read16b();
+    f32 f28 = f30 + param_1->read16b();
+    mWindowBox.set(f31, f30, f29, f28);
+    ResTIMG* timg = (ResTIMG*)stack_178.getResource(param_1, 'TIMG', NULL);
+    if (timg) {
+        mpFrameTexture1 = new JUTTexture(timg, 0);
+    }
+    timg = (ResTIMG*)stack_178.getResource(param_1, 'TIMG', NULL);
+    if (timg) {
+        mpFrameTexture2 = new JUTTexture(timg, 0);
+    }
+    timg = (ResTIMG*)stack_178.getResource(param_1, 'TIMG', NULL);
+    if (timg) {
+        mpFrameTexture3 = new JUTTexture(timg, 0);
+    }
+    timg = (ResTIMG*)stack_178.getResource(param_1, 'TIMG', NULL);
+    if (timg) {
+        mpFrameTexture4 = new JUTTexture(timg, 0);
+    }
+    ResTLUT* tlut = (ResTLUT*)stack_178.getResource(param_1, 'TLUT', NULL);
+    if (tlut) {
+        mpPalette = new JUTPalette(GX_TLUT0, tlut);
+    }
+    field_0x110 = param_1->read8b();
+    mColorTL.set(param_1->read32b());
+    mColorTR.set(param_1->read32b());
+    mColorBL.set(param_1->read32b());
+    mColorBR.set(param_1->read32b());
+    r27 -= 14;
+    mpContentsTexture = NULL;
+    if (r27) {
+        timg = (ResTIMG*)stack_178.getResource(param_1, 'TIMG', NULL);
+        if (timg) {
+            mpContentsTexture = new JUTTexture(timg, 0);
+        }
+        r27--;
+    }
+    mBlack = JUtility::TColor(0);
+    mWhite = JUtility::TColor(0xffffffff);
+    if (r27) {
+        mBlack = JUtility::TColor(param_1->readU32());
+        r27--;
+    }
+    if (r27) {
+        mWhite = JUtility::TColor(param_1->readU32());
+    }
+    param_1->seek(end, JSUStreamSeekFrom_SET);
+    initinfo2();
 }
 
 /* 802D1820-802D1A9C       .text initinfo2__9J2DWindowFv */
 void J2DWindow::initinfo2() {
-    /* Nonmatching */
+    if (mpFrameTexture1 && mpFrameTexture2 && mpFrameTexture3 && mpFrameTexture4) {
+        mTextureWidth = mpFrameTexture1->getWidth() + mpFrameTexture2->getWidth();
+        mTextureHeight = mpFrameTexture1->getHeight() + mpFrameTexture3->getHeight();
+    } else {
+        mTextureWidth = 1;
+        mTextureHeight = 1;
+        return;
+    }
+
+    field_0x111 = 0;
+    JUTTexture* r30 = mpFrameTexture1;
+    if (*mpFrameTexture2 != *r30) {
+        field_0x111 |= 1;
+        r30 = mpFrameTexture2;
+    }
+    if (*mpFrameTexture4 != *r30) {
+        field_0x111 |= 2;
+        r30 = mpFrameTexture4;
+    }
+    if (*mpFrameTexture3 != *r30) {
+        field_0x111 |= 4;
+    }
 }
 
 /* 802D1A9C-802D1B44       .text __dt__9J2DWindowFv */
 J2DWindow::~J2DWindow() {
-    delete mpFrameTexture[0];
-    delete mpFrameTexture[1];
-    delete mpFrameTexture[2];
-    delete mpFrameTexture[3];
+    delete mpFrameTexture1;
+    delete mpFrameTexture2;
+    delete mpFrameTexture3;
+    delete mpFrameTexture4;
     delete mpPalette;
     delete mpContentsTexture;
 }
@@ -39,49 +120,50 @@ void J2DWindow::draw_private(const JGeometry::TBox2<f32>& frameBox, const JGeome
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetNumTexGens(1);
 
-    if (mpFrameTexture[0] != NULL && mpFrameTexture[1] != NULL && mpFrameTexture[2] != NULL && mpFrameTexture[3] != NULL) {
-        f32 right = frameBox.f.x - mpFrameTexture[3]->getWidth();
-        f32 top = frameBox.f.y - mpFrameTexture[3]->getHeight();
-        f32 left = frameBox.i.x + mpFrameTexture[0]->getWidth();
-        f32 bottom = frameBox.i.y + mpFrameTexture[0]->getHeight();
+    if (mpFrameTexture1 != NULL && mpFrameTexture2 != NULL && mpFrameTexture3 != NULL && mpFrameTexture4 != NULL) {
+        f32 right = frameBox.getWidth() - mpFrameTexture4->getWidth();
+        f32 top = frameBox.getHeight() - mpFrameTexture4->getHeight();
+        f32 left = frameBox.i.x + mpFrameTexture1->getWidth();
+        f32 bottom = frameBox.i.y + mpFrameTexture1->getHeight();
 
-        drawFrameTexture(mpFrameTexture[3], 0.0f, 0.0f,
+        drawFrameTexture(mpFrameTexture1, 0.0f, 0.0f,
             ((field_0x110 >> 7) & 1),
             ((field_0x110 >> 6) & 1), true);
-        drawFrameTexture(mpFrameTexture[1], left, 0.0f,
+        drawFrameTexture(mpFrameTexture2, right, 0.0f,
             ((field_0x110 >> 5) & 1),
             ((field_0x110 >> 4) & 1), (field_0x111 & 1));
 
-        {
-            u16 s0 = ((field_0x110 >> 5) & 1) ? (u16)0x8000 : (u16)0;
-            u16 t0 = ((field_0x110 >> 4) & 1) ? (u16)0x8000 : (u16)0;
-            u16 t1 = t0 ^ 0x8000;
-            drawFrameTexture(mpFrameTexture[1], right, 0.0f, left - right, (f32)mpFrameTexture[1]->getHeight(),
-                s0, t0, s0, t1, false);
-        }
+        u16 local_a6 = ((field_0x110 >> 5) & 1) ? (u16)0x8000 : (u16)0;
+        u16 local_a8 = ((field_0x110 >> 4) & 1) ? (u16)0x8000 : (u16)0;
+        u16 local_a82 = local_a8 ^ 0x8000;
+        drawFrameTexture(mpFrameTexture2, left, 0.0f, right - left, (f32)mpFrameTexture2->getHeight(),
+            local_a6, local_a8, local_a6, local_a82, false);
 
-        drawFrameTexture(mpFrameTexture[3], left, top,
+        drawFrameTexture(mpFrameTexture4, right, top,
             ((field_0x110 >> 1) & 1),
             ((field_0x110 >> 0) & 1), (field_0x111 & 1));
 
-        drawFrameTexture(mpFrameTexture[3], right, top, left - right, (f32)mpFrameTexture[3]->getHeight(),
-            ((field_0x110 >> 1) & 1) ? (u16)0 : (u16)0x8000,
-            ((field_0x110 >> 0) & 1) ? (u16)0 : (u16)0x8000,
-            ((field_0x110 >> 1) & 1) ? (u16)0x8000 : (u16)0,
-            ((field_0x110 >> 0) & 1) ? (u16)0x8000 : (u16)0, false);
-        drawFrameTexture(mpFrameTexture[3], left, 0.0f,
-            ((field_0x110 >> 5) & 1),
-            ((field_0x110 >> 4) & 1), (field_0x111 & 1));
-        drawFrameTexture(mpFrameTexture[2], right, 0.0f, left - right, (f32)mpFrameTexture[1]->getHeight(),
-            ((field_0x110 >> 5) & 1) ? (u16)0 : (u16)0x8000,
-            ((field_0x110 >> 4) & 1) ? (u16)0 : (u16)0x8000,
-            ((field_0x110 >> 5) & 1) ? (u16)0x8000 : (u16)0,
-            ((field_0x110 >> 4) & 1) ? (u16)0x8000 : (u16)0, false);
-        drawFrameTexture(mpFrameTexture[2], 0.0f, bottom, (f32)mpFrameTexture[2]->getWidth(), top - bottom,
-            ((field_0x110 >> 3) & 1) ? (u16)0 : (u16)0x8000,
-            ((field_0x110 >> 2) & 1) ? (u16)0 : (u16)0x8000,
-            ((field_0x110 >> 3) & 1) ? (u16)0x8000 : (u16)0,
-            ((field_0x110 >> 2) & 1) ? (u16)0x8000 : (u16)0, false);
+        u16 local_aa = ((field_0x110 >> 1) & 1) ? (u16)0x8000 : (u16)0;
+        u16 local_ac = ((field_0x110 >> 0) & 1) ? (u16)0 : (u16)0x8000;
+        u16 local_ac2 = local_ac ^ 0x8000;
+        drawFrameTexture(mpFrameTexture4, left, top, right - left, (f32)mpFrameTexture4->getHeight(),
+            local_aa, local_ac, local_aa, local_ac2, false);
+
+        u16 local_ae = ((field_0x110 >> 1) & 1) ? (u16)0 : (u16)0x8000;
+        u16 local_ae2 = local_ae ^ 0x8000;
+        u16 local_b0 = ((field_0x110 >> 0) & 1) ? (u16)0x8000 : (u16)0;
+        drawFrameTexture(mpFrameTexture4, right, bottom, (f32)mpFrameTexture4->getWidth(), top - bottom,
+            local_ae, local_b0, local_ae2, local_b0, false);
+
+        drawFrameTexture(mpFrameTexture3, 0.0f, top,
+            ((field_0x110 >> 3) & 1),
+            ((field_0x110 >> 2) & 1), (field_0x111 & 1));
+
+        u16 local_b2 = ((field_0x110 >> 3) & 1) ? (u16)0 : (u16)0x8000;
+        u16 local_b22 = local_b2 ^ 0x8000;
+        u16 local_b4 = ((field_0x110 >> 2) & 1) ? (u16)0x8000 : (u16)0;
+        drawFrameTexture(mpFrameTexture3, 0.0f, bottom, (f32)mpFrameTexture3->getWidth(), top - bottom,
+            local_b2, local_b4, local_b22, local_b4, false);
     }
 
     GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
@@ -196,7 +278,7 @@ void J2DWindow::drawFrameTexture(JUTTexture* pTexture, f32 x0, f32 y0, f32 w, f3
 
     if (bSetupTev) {
         pTexture->load(GX_TEXMAP0);
-        setTevMode(pTexture, mFrameColor[1], mFrameColor[0]);
+        setTevMode(pTexture, mBlack, mWhite);
     }
 
     JUtility::TColor vtxColor(mDrawAlpha | 0xFFFFFF00);
