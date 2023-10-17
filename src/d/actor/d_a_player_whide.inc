@@ -13,7 +13,7 @@
 #include "d/actor/d_a_player_link.h"
 
 /* 8013707C-801371E0       .text setBlendWHideMoveAnime__9daPy_lk_cFf */
-void daPy_lk_c::setBlendWHideMoveAnime(float) {
+void daPy_lk_c::setBlendWHideMoveAnime(f32) {
     /* Nonmatching */
 }
 

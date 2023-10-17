@@ -35,7 +35,7 @@ public:
     enum JPADrawVisitorDefFlags {};
     
     void initialize(JPABaseEmitter*, JPATextureResource*);
-    void draw(float(*)[4]);
+    void draw(MtxP);
     void calc();
     void calcParticle(JPABaseParticle*);
     void calcChild(JPABaseParticle*);
@@ -52,7 +52,7 @@ public:
     void zDraw();
     void zDrawParticle();
     void zDrawChild();
-    void loadYBBMtx(float(*)[4]);
+    void loadYBBMtx(MtxP);
     
     /* 0x00 */ JPADrawExecEmitterVisitor* mpExecEmtrVis[1];
     /* 0x04 */ JPADrawExecEmitterVisitor* mpExecEmtrPVis[5];

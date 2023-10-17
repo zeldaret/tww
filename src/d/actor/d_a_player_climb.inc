@@ -63,7 +63,7 @@ void daPy_lk_c::procClimbUpStart() {
 }
 
 /* 8013680C-8013693C       .text procClimbDownStart_init__9daPy_lk_cFs */
-void daPy_lk_c::procClimbDownStart_init(short) {
+void daPy_lk_c::procClimbDownStart_init(s16) {
     /* Nonmatching */
 }
 

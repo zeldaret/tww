@@ -71,7 +71,7 @@ void daPy_mtxFollowEcallBack_c::makeEmitter(u16 particleID, MtxP mtx, const cXyz
 }
 
 /* 80102C84-80102D14       .text makeEmitterColor__25daPy_mtxFollowEcallBack_cFUsPA4_fPC4cXyzPC8_GXColorPC8_GXColor */
-void daPy_mtxFollowEcallBack_c::makeEmitterColor(u16 particleID, MtxP mtx, const cXyz* pos, const _GXColor* prmColor, const _GXColor* envColor) {
+void daPy_mtxFollowEcallBack_c::makeEmitterColor(u16 particleID, MtxP mtx, const cXyz* pos, const GXColor* prmColor, const GXColor* envColor) {
     end();
     mpMtx = mtx;
     dComIfGp_particle_setP1(particleID, pos, NULL, NULL, 0xFF, this, -1, prmColor, envColor);

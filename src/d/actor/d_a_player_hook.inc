@@ -18,7 +18,7 @@ void daPy_lk_c::checkHookshotReturn() {
 }
 
 /* 8014ABA0-8014ABF4       .text setHookshotCarryOffset__9daPy_lk_cFUiPC4cXyz */
-void daPy_lk_c::setHookshotCarryOffset(unsigned int, const cXyz*) {
+BOOL daPy_lk_c::setHookshotCarryOffset(unsigned int, const cXyz*) {
     /* Nonmatching */
 }
 

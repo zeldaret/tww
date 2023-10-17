@@ -130,7 +130,7 @@ public:
 
 class daPy_mtxPosFollowEcallBack_c {
 public:
-    void makeEmitterColor(unsigned short, float(*)[4], const cXyz*, const csXyz*, const GXColor*, const GXColor*);
+    void makeEmitterColor(unsigned short, MtxP, const cXyz*, const csXyz*, const GXColor*, const GXColor*);
     void execute(JPABaseEmitter*);
     daPy_mtxPosFollowEcallBack_c();
     ~daPy_mtxPosFollowEcallBack_c();
@@ -140,8 +140,8 @@ public:
 
 class daPy_swBlur_c : public J3DPacket {
 public:
-    void initSwBlur(float(*)[4], int, float, int);
-    void copySwBlur(float(*)[4], int);
+    void initSwBlur(MtxP, int, float, int);
+    void copySwBlur(MtxP, int);
     void draw();
     ~daPy_swBlur_c();
 

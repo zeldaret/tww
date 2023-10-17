@@ -18,17 +18,17 @@ void daPy_lk_c::changeBottleDrinkFace(int) {
 }
 
 /* 80151E60-80152128       .text setBottleModel__9daPy_lk_cFUs */
-void daPy_lk_c::setBottleModel(unsigned short) {
+void daPy_lk_c::setBottleModel(u16) {
     /* Nonmatching */
 }
 
 /* 80152128-801521A0       .text makeFairy__9daPy_lk_cFP4cXyzUl */
-void daPy_lk_c::makeFairy(cXyz*, unsigned long) {
+void daPy_lk_c::makeFairy(cXyz*, u32) {
     /* Nonmatching */
 }
 
 /* 801521A0-80152300       .text procBottleDrink_init__9daPy_lk_cFUs */
-void daPy_lk_c::procBottleDrink_init(unsigned short) {
+void daPy_lk_c::procBottleDrink_init(u16) {
     /* Nonmatching */
 }
 
@@ -38,7 +38,7 @@ void daPy_lk_c::procBottleDrink() {
 }
 
 /* 80152624-801527CC       .text procBottleOpen_init__9daPy_lk_cFUs */
-void daPy_lk_c::procBottleOpen_init(unsigned short) {
+void daPy_lk_c::procBottleOpen_init(u16) {
     /* Nonmatching */
 }
 

@@ -63,7 +63,7 @@ void daPy_lk_c::setSmallFanModel() {
 }
 
 /* 8014C0C0-8014C254       .text setParachuteFanModel__9daPy_lk_cFf */
-void daPy_lk_c::setParachuteFanModel(float) {
+void daPy_lk_c::setParachuteFanModel(f32) {
     /* Nonmatching */
 }
 

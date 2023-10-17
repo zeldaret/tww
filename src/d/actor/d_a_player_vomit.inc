@@ -18,7 +18,7 @@ void daPy_lk_c::checkJumpFlower() {
 }
 
 /* 8014F994-8014FA88       .text procVomitReady_init__9daPy_lk_cFsf */
-void daPy_lk_c::procVomitReady_init(short, float) {
+void daPy_lk_c::procVomitReady_init(s16, f32) {
     /* Nonmatching */
 }
 

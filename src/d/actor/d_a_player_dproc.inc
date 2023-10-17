@@ -43,7 +43,7 @@ void daPy_lk_c::setShapeAngleToTalkActor() {
 }
 
 /* 8012D08C-8012D134       .text checkEndMessage__9daPy_lk_cFUl */
-void daPy_lk_c::checkEndMessage(unsigned long) {
+void daPy_lk_c::checkEndMessage(u32) {
     /* Nonmatching */
 }
 
@@ -103,7 +103,7 @@ void daPy_lk_c::dProcOpenTreasure() {
 }
 
 /* 8012E28C-8012E418       .text setGetItemSound__9daPy_lk_cFUsi */
-void daPy_lk_c::setGetItemSound(unsigned short, int) {
+void daPy_lk_c::setGetItemSound(u16, int) {
     /* Nonmatching */
 }
 

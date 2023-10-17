@@ -13,12 +13,12 @@
 #include "d/actor/d_a_player_link.h"
 
 /* 8012901C-80129034       .text setup__24daPy_swimTailEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void daPy_swimTailEcallBack_c::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
+void daPy_swimTailEcallBack_c::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
     /* Nonmatching */
 }
 
 /* 80129034-801290D8       .text getMaxWaterY__24daPy_swimTailEcallBack_cFPQ29JGeometry8TVec3<f> */
-void daPy_swimTailEcallBack_c::getMaxWaterY(JGeometry::TVec3<float>*) {
+void daPy_swimTailEcallBack_c::getMaxWaterY(JGeometry::TVec3<f32>*) {
     /* Nonmatching */
 }
 
@@ -48,12 +48,12 @@ void daPy_sightPacket_c::setSight() {
 }
 
 /* 801296FC-801297F4       .text initSwBlur__13daPy_swBlur_cFPA4_fifi */
-void daPy_swBlur_c::initSwBlur(float(*)[4], int, float, int) {
+void daPy_swBlur_c::initSwBlur(MtxP, int, f32, int) {
     /* Nonmatching */
 }
 
 /* 801297F4-80129A78       .text copySwBlur__13daPy_swBlur_cFPA4_fi */
-void daPy_swBlur_c::copySwBlur(float(*)[4], int) {
+void daPy_swBlur_c::copySwBlur(MtxP, int) {
     /* Nonmatching */
 }
 
@@ -78,7 +78,7 @@ void daPy_followEcallBack_c::execute(JPABaseEmitter*) {
 }
 
 /* 80129F98-80129FA0       .text setup__22daPy_followEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void daPy_followEcallBack_c::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
+void daPy_followEcallBack_c::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
     /* Nonmatching */
 }
 
@@ -93,7 +93,7 @@ void daPy_waterDropEcallBack_c::execute(JPABaseEmitter*) {
 }
 
 /* 8012A040-8012A058       .text setup__25daPy_waterDropEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void daPy_waterDropEcallBack_c::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
+void daPy_waterDropEcallBack_c::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
     /* Nonmatching */
 }
 
@@ -103,7 +103,7 @@ void daPy_waterDropEcallBack_c::end() {
 }
 
 /* 8012A0B4-8012A0E0       .text makeEmitterColor__28daPy_mtxPosFollowEcallBack_cFUsPA4_fPC4cXyzPC5csXyzPC8_GXColorPC8_GXColor */
-void daPy_mtxPosFollowEcallBack_c::makeEmitterColor(unsigned short, float(*)[4], const cXyz*, const csXyz*, const _GXColor*, const _GXColor*) {
+void daPy_mtxPosFollowEcallBack_c::makeEmitterColor(u16, MtxP, const cXyz*, const csXyz*, const GXColor*, const GXColor*) {
     /* Nonmatching */
 }
 
@@ -198,6 +198,6 @@ void daPy_lk_c::endDamageEmitter() {
 }
 
 /* 8012CA44-8012CD60       .text setItemWaterEffect__9daPy_lk_cFP10fopAc_ac_cii */
-void daPy_lk_c::setItemWaterEffect(fopAc_ac_c*, int, int) {
+u32 daPy_lk_c::setItemWaterEffect(fopAc_ac_c*, int, int) {
     /* Nonmatching */
 }

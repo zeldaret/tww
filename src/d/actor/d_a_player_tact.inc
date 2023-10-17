@@ -28,12 +28,12 @@ void daPy_lk_c::checkNpcStatus() {
 }
 
 /* 8014D8F4-8014D938       .text getTactPlayRightArmAnm__9daPy_lk_cFl */
-void daPy_lk_c::getTactPlayRightArmAnm(long) {
+void daPy_lk_c::getTactPlayRightArmAnm(s32) {
     /* Nonmatching */
 }
 
 /* 8014D938-8014D97C       .text getTactPlayLeftArmAnm__9daPy_lk_cFl */
-void daPy_lk_c::getTactPlayLeftArmAnm(long) {
+void daPy_lk_c::getTactPlayLeftArmAnm(s32) {
     /* Nonmatching */
 }
 
@@ -68,12 +68,12 @@ void daPy_lk_c::getTactNormalWait() const {
 }
 
 /* 8014DB00-8014DB2C       .text getTactMusic__9daPy_lk_cCFv */
-void daPy_lk_c::getTactMusic() const {
+int daPy_lk_c::getTactMusic() const {
     /* Nonmatching */
 }
 
 /* 8014DB2C-8014DB74       .text getTactTimerCancel__9daPy_lk_cCFv */
-void daPy_lk_c::getTactTimerCancel() const {
+int daPy_lk_c::getTactTimerCancel() const {
     /* Nonmatching */
 }
 
@@ -98,7 +98,7 @@ void daPy_lk_c::procTactWait() {
 }
 
 /* 8014E9A4-8014EBA0       .text procTactPlay_init__9daPy_lk_cFlii */
-void daPy_lk_c::procTactPlay_init(long, int, int) {
+void daPy_lk_c::procTactPlay_init(s32, int, int) {
     /* Nonmatching */
 }
 

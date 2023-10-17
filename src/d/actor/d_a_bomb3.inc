@@ -1,5 +1,8 @@
 // Not sure what originally went in here but createHeap needs it for assert filenames
 
+#include "d/actor/d_a_bomb.h"
+#include "d/d_com_inf_game.h"
+
 bool daBomb_c::createHeap() {
     bool ret;
     if(mType == 1) {

@@ -53,7 +53,7 @@ void daPy_lk_c::setShipRidePos(int) {
 }
 
 /* 801403E0-80140480       .text setShipAttentionAnmSpeed__9daPy_lk_cFf */
-void daPy_lk_c::setShipAttentionAnmSpeed(float) {
+void daPy_lk_c::setShipAttentionAnmSpeed(f32) {
     /* Nonmatching */
 }
 

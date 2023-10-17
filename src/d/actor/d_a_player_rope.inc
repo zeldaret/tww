@@ -23,7 +23,7 @@ void daPy_lk_c::freeRopeItem() {
 }
 
 /* 80142E0C-80142E98       .text checkRopeRoofHit__9daPy_lk_cFs */
-void daPy_lk_c::checkRopeRoofHit(short) {
+void daPy_lk_c::checkRopeRoofHit(s16) {
     /* Nonmatching */
 }
 
@@ -48,7 +48,7 @@ void daPy_lk_c::changeRopeToHangProc() {
 }
 
 /* 8014327C-80143694       .text checkRopeSwingWall__9daPy_lk_cFP4cXyzP4cXyzPsPf */
-void daPy_lk_c::checkRopeSwingWall(cXyz*, cXyz*, short*, float*) {
+void daPy_lk_c::checkRopeSwingWall(cXyz*, cXyz*, s16*, f32*) {
     /* Nonmatching */
 }
 
@@ -98,7 +98,7 @@ void daPy_lk_c::procRopeReady() {
 }
 
 /* 80144620-80144C58       .text procRopeSwing_init__9daPy_lk_cFP10fopAc_ac_cs */
-void daPy_lk_c::procRopeSwing_init(fopAc_ac_c*, short) {
+void daPy_lk_c::procRopeSwing_init(fopAc_ac_c*, s16) {
     /* Nonmatching */
 }
 

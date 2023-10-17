@@ -18,7 +18,7 @@ void daPy_lk_c::checkGrabSpecialHeavyState() {
 }
 
 /* 8013A890-8013A8B4       .text getGrabMissActor__9daPy_lk_cFv */
-void daPy_lk_c::getGrabMissActor() {
+fopAc_ac_c* daPy_lk_c::getGrabMissActor() {
     /* Nonmatching */
 }
 

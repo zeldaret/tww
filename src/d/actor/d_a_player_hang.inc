@@ -88,7 +88,7 @@ void daPy_lk_c::procHangMove() {
 }
 
 /* 801357C0-80135874       .text procHangClimb_init__9daPy_lk_cFf */
-void daPy_lk_c::procHangClimb_init(float) {
+void daPy_lk_c::procHangClimb_init(f32) {
     /* Nonmatching */
 }
 
