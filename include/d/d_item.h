@@ -391,9 +391,9 @@ BOOL isNonSavedEmono(u8 itemNo);
 BOOL isUseClothPacket(u8 itemNo);
 BOOL isTriforce(u8 itemNo);
 BOOL isHeart(u8 itemNo);
-void getItemNoByLife(u8);
-int check_itemno(int);
-void getEmonoItemFromLifeBallTable(u16);
-void getItemFromLifeBallTableWithoutEmono(u16);
+u8 getItemNoByLife(u8);
+u8 check_itemno(int);
+int getEmonoItemFromLifeBallTable(u16);
+int getItemFromLifeBallTableWithoutEmono(u16);
 
 #endif /* D_ITEM_H */

@@ -362,6 +362,8 @@ public:
     
     s16 getItemMagicCount() { return mItemMagicCount; }
     void setItemMagicCount(s16 magic) { mItemMagicCount += magic; }
+    s16 getItemMaxMagicCount() { return mItemMaxMagicCount; }
+    void setItemMaxMagicCount(s16 magic) { mItemMaxMagicCount += magic; }
 
     void setItemBombNumCount(s16 num) { mItemBombNumCount += num; }
 
@@ -376,6 +378,8 @@ public:
 
     void setItemKeyNumCount(s16 num) { mItemKeyNumCount += num; }
 
+    void setItemBeastNumCount(int i_idx, s16 num) { mItemBeastNumCounts[i_idx] += num; }
+
     u8 checkMesgCancelButton() { return field_0x4949; }
 
     void setPlayerStatus(int param_0, int i, u32 flag) { mPlayerStatus[param_0][i] |= flag; }
@@ -383,6 +387,7 @@ public:
     bool checkPlayerStatus(int param_0, int i, u32 flag) { return flag & mPlayerStatus[param_0][i]; }
 
     u8 getSelectItem(int idx) { return mEquippedItems[idx]; }
+    void setSelectItem(int idx, u8 itemNo) { mEquippedItems[idx] = itemNo; }
     
     void setAStatus(u8 status) { mCurrButtonBAction = status; }
     void setDoStatus(u8 status) { mCurrButtonAAction = status; }
@@ -514,14 +519,13 @@ public:
     /* 0x48D6 */ s16 mItemMaxLifeCount;
     /* 0x48D8 */ s16 mItemMagicCount;
     /* 0x48DA */ s16 field_0x48da;
-    /* 0x48DC */ s16 field_0x48dc;
+    /* 0x48DC */ s16 mItemMaxMagicCount;
     /* 0x48DE */ s16 field_0x48de;
     /* 0x48E0 */ s16 mItemArrowNumCount;
     /* 0x48E2 */ s16 field_0x48e2;
     /* 0x48E4 */ s16 mItemBombNumCount;
     /* 0x48E6 */ s16 field_0x48e6;
-    /* 0x48E8 */ u8 field_0x48E8[0x48F6 - 0x48E8];
-    /* 0x48F6 */ s16 mItemPendantNumCount;
+    /* 0x48E8 */ s16 mItemBeastNumCounts[8];
     /* 0x48F8 */ u8 field_0x48F8[0x4918 - 0x48F8];
     /* 0x4918 */ u16 mMsgCountNumber;
     /* 0x491A */ s16 field_0x491a;
@@ -674,12 +678,49 @@ inline u8 dComIfGs_getWalletSize() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getWalletSize();
 }
 
+inline void dComIfGs_setWalletSize(u8 size) {
+    g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().setWalletSize(size);
+}
+
 inline int dComIfGs_getRupee() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getRupee();
 }
 
-inline u8 dComIfGs_getItem(int param_0) {
-    return g_dComIfG_gameInfo.save.getPlayer().getItem().getItem(param_0);
+inline u8 dComIfGs_getItemBeast(int param_0) {
+    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getBeast(param_0);
+}
+
+inline u8 dComIfGs_getItemBait(int param_0) {
+    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getBait(param_0);
+}
+
+inline u8 dComIfGs_getItemReserve(int param_0) {
+    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getReserve(param_0);
+}
+
+/**
+ * Returns which item is in a specific inventory slot.
+ * @param i_invIdx The index of the inventory slot.
+ * @return The item number of the item in that slot, or 0xFF for no item.
+ */
+inline u8 dComIfGs_getItem(int i_invIdx) {
+    if (i_invIdx < 0x15) {
+        return g_dComIfG_gameInfo.save.getPlayer().getItem().getItem(i_invIdx);
+    } else if (i_invIdx < 0x18) {
+        return 0xFF;
+    } else if (i_invIdx < 0x18 + 8) {
+        return dComIfGs_getItemBeast(i_invIdx - 0x18);
+    } else if (i_invIdx < 0x24) {
+        return 0xFF;
+    } else if (i_invIdx < 0x24 + 8) {
+        return dComIfGs_getItemBait(i_invIdx - 0x24);
+    } else if (i_invIdx < 0x30) {
+        return 0xFF;
+    } else if (i_invIdx < 0x30 + 8) {
+        return dComIfGs_getItemReserve(i_invIdx - 0x30);
+    } else {
+        return 0xFF;
+    }
 }
 
 inline void dComIfGs_setItem(int i_idx, u8 i_itemNo) {
@@ -690,8 +731,16 @@ inline u8 dComIfGs_getBeast(int i_idx) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getBeast(i_idx);
 }
 
+inline void dComIfGs_setBeastItem(u8 i_itemNo) {
+    g_dComIfG_gameInfo.save.getPlayer().getBagItem().setBeastItem(i_itemNo);
+}
+
 inline u8 dComIfGs_getBait(int i_idx) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getBait(i_idx);
+}
+
+inline void dComIfGs_setBaitItem(u8 i_itemNo) {
+    g_dComIfG_gameInfo.save.getPlayer().getBagItem().setBaitItem(i_itemNo);
 }
 
 inline void dComIfGs_setBaitItemEmpty() {
@@ -702,28 +751,64 @@ inline u8 dComIfGs_getReserve(int i_idx) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getReserve(i_idx);
 }
 
-inline BOOL dComIfGs_isGetItemReserve(int i_No) {
-    return g_dComIfG_gameInfo.save.getPlayer().getGetBagItem().isReserve(i_No);
+inline void dComIfGs_setReserveItem(u8 i_itemNo) {
+    g_dComIfG_gameInfo.save.getPlayer().getBagItem().setReserveItem(i_itemNo);
 }
 
-inline BOOL dComIfGs_isGetCollectMap(int i_itemNo) {
-    return g_dComIfG_gameInfo.save.getPlayer().getMap().isGetMap(i_itemNo - 1);
+inline BOOL dComIfGs_isGetItemReserve(int i_no) {
+    return g_dComIfG_gameInfo.save.getPlayer().getGetBagItem().isReserve(i_no);
 }
 
-inline BOOL dComIfGs_isCollectMapTriforce(int i_itemNo) {
-    return g_dComIfG_gameInfo.save.getPlayer().getMap().isTriforce(i_itemNo - 1);
+inline void dComIfGs_onGetItemReserve(int i_no) {
+    g_dComIfG_gameInfo.save.getPlayer().getGetBagItem().onReserve(i_no);
 }
 
-inline BOOL dComIfGs_isOpenCollectMap(int i_itemNo) {
-    return g_dComIfG_gameInfo.save.getPlayer().getMap().isOpenMap(i_itemNo - 1);
+inline BOOL dComIfGs_isGetCollectMap(int i_no) {
+    return g_dComIfG_gameInfo.save.getPlayer().getMap().isGetMap(i_no - 1);
+}
+
+inline void dComIfGs_onGetCollectMap(int i_no) {
+    g_dComIfG_gameInfo.save.getPlayer().getMap().onGetMap(i_no - 1);
+}
+
+inline BOOL dComIfGs_isCollectMapTriforce(int i_no) {
+    return g_dComIfG_gameInfo.save.getPlayer().getMap().isTriforce(i_no - 1);
+}
+
+inline void dComIfGs_offCollectMapTriforce(int i_no) {
+    g_dComIfG_gameInfo.save.getPlayer().getMap().offTriforce(i_no - 1);
+}
+
+inline BOOL dComIfGs_isOpenCollectMap(int i_no) {
+    return g_dComIfG_gameInfo.save.getPlayer().getMap().isOpenMap(i_no - 1);
+}
+
+inline void dComIfGs_onOpenCollectMap(int i_no) {
+    g_dComIfG_gameInfo.save.getPlayer().getMap().onOpenMap(i_no - 1);
+}
+
+inline void dComIfGs_offOpenCollectMap(int i_no) {
+    g_dComIfG_gameInfo.save.getPlayer().getMap().offOpenMap(i_no - 1);
+}
+
+inline void dComIfGs_offCompleteCollectMap(int i_no) {
+    g_dComIfG_gameInfo.save.getPlayer().getMap().offCompleteMap(i_no - 1);
 }
 
 inline u32 dComIfGs_getArrowNum() {
     return g_dComIfG_gameInfo.save.getPlayer().getItemRecord().getArrowNum();
 }
 
+inline void dComIfGs_setArrowNum(u8 num) {
+    g_dComIfG_gameInfo.save.getPlayer().getItemRecord().setArrowNum(num);
+}
+
 inline u32 dComIfGs_getBombNum() {
     return g_dComIfG_gameInfo.save.getPlayer().getItemRecord().getBombNum();
+}
+
+inline void dComIfGs_setBombNum(u8 num) {
+    g_dComIfG_gameInfo.save.getPlayer().getItemRecord().setBombNum(num);
 }
 
 inline u8 dComIfGs_getBeastNum(int i_idx) {
@@ -917,24 +1002,48 @@ inline BOOL dComIfGs_isTact(u8 i_no) {
     return g_dComIfG_gameInfo.save.getPlayer().getCollect().isTact(i_no);
 }
 
+inline void dComIfGs_onTact(u8 i_no) {
+    g_dComIfG_gameInfo.save.getPlayer().getCollect().onTact(i_no);
+}
+
 inline BOOL dComIfGs_isTriforce(u8 i_no) {
     return g_dComIfG_gameInfo.save.getPlayer().getCollect().isTriforce(i_no);
+}
+
+inline void dComIfGs_onTriforce(u8 i_no) {
+    g_dComIfG_gameInfo.save.getPlayer().getCollect().onTriforce(i_no);
 }
 
 inline BOOL dComIfGs_isSymbol(u8 i_no) {
     return g_dComIfG_gameInfo.save.getPlayer().getCollect().isSymbol(i_no);
 }
 
+inline void dComIfGs_onSymbol(u8 i_no) {
+    g_dComIfG_gameInfo.save.getPlayer().getCollect().onSymbol(i_no);
+}
+
 inline BOOL dComIfGs_isDungeonItemMap() {
     return g_dComIfG_gameInfo.save.getMemory().getBit().isDungeonItemMap();
+}
+
+inline void dComIfGs_onDungeonItemMap() {
+    g_dComIfG_gameInfo.save.getMemory().getBit().onDungeonItemMap();
 }
 
 inline BOOL dComIfGs_isDungeonItemCompass() {
     return g_dComIfG_gameInfo.save.getMemory().getBit().isDungeonItemCompass();
 }
 
+inline void dComIfGs_onDungeonItemCompass() {
+    g_dComIfG_gameInfo.save.getMemory().getBit().onDungeonItemCompass();
+}
+
 inline BOOL dComIfGs_isDungeonItemBossKey() {
     return g_dComIfG_gameInfo.save.getMemory().getBit().isDungeonItemBossKey();
+}
+
+inline void dComIfGs_onDungeonItemBossKey() {
+    g_dComIfG_gameInfo.save.getMemory().getBit().onDungeonItemBossKey();
 }
 
 inline void dComIfGs_onSwitch(int i_no, int i_roomNo) {
@@ -989,6 +1098,26 @@ inline BOOL dComIfGs_isActor(int i_no, int i_roomNo) {
     return g_dComIfG_gameInfo.save.isActor(i_no, i_roomNo);
 }
 
+void dComIfGs_setSelectEquip(int i_type, u8 i_itemNo);
+
+/**
+ * Returns which inventory slot the item equipped on a specific button is located in.
+ * @param i_btnIdx The index of the button. 0 for X, 1 for Y, 2 for Z.
+ * @return The index of the inventory slot for the item equipped on that button, or 0xFF for no item.
+ */
+inline u8 dComIfGs_getSelectItem(int i_btnIdx) {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getSelectItem(i_btnIdx);
+}
+
+/**
+ * Sets which inventory slot the item equipped on a specific button is located in.
+ * @param i_btnIdx The index of the button. 0 for X, 1 for Y, 2 for Z.
+ * @param i_invIdx The index of the inventory slot, or 0xFF for no item.
+ */
+inline void dComIfGs_setSelectItem(int i_btnIdx, u8 i_invIdx) {
+    g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().setSelectItem(i_btnIdx, i_invIdx);
+}
+
 inline u16 dComIfGs_getDate() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusB().getDate();
 }
@@ -1031,6 +1160,18 @@ inline void dComIfGs_onGetItemBait(u8 i_bait) {
 
 inline BOOL dComIfGs_isGetBottleItem(u8 i_itemNo) {
     return g_dComIfG_gameInfo.save.getPlayer().getGetItem().isBottleItem(i_itemNo);
+}
+
+inline void  dComIfGs_onGetBottleItem(u8 i_itemNo) {
+    g_dComIfG_gameInfo.save.getPlayer().getGetItem().onBottleItem(i_itemNo);
+}
+
+inline void dComIfGs_setEmptyBottle() {
+    g_dComIfG_gameInfo.save.getPlayer().getItem().setEmptyBottle();
+}
+
+inline void dComIfGs_setEmptyBottleItemIn(u8 i_itemNo) {
+    g_dComIfG_gameInfo.save.getPlayer().getItem().setEmptyBottleItemIn(i_itemNo);
 }
 
 inline s16 dComIfGs_getWindY() {
@@ -1077,8 +1218,16 @@ inline u8 dComIfGs_getBombMax() {
     return g_dComIfG_gameInfo.save.getPlayer().getItemMax().getBombNum();
 }
 
+inline void dComIfGs_setBombMax(u8 num) {
+    g_dComIfG_gameInfo.save.getPlayer().getItemMax().setBombNum(num);
+}
+
 inline u8 dComIfGs_getArrowMax() {
     return g_dComIfG_gameInfo.save.getPlayer().getItemMax().getArrowNum();
+}
+
+inline void dComIfGs_setArrowMax(u8 num) {
+    g_dComIfG_gameInfo.save.getPlayer().getItemMax().setArrowNum(num);
 }
 
 inline u16 dComIfGs_getLife() {
@@ -1523,6 +1672,14 @@ inline void dComIfGp_setItemMagicCount(s16 magic) {
     g_dComIfG_gameInfo.play.setItemMagicCount(magic);
 }
 
+inline s16 dComIfGp_getItemMaxMagicCount() {
+    return g_dComIfG_gameInfo.play.getItemMaxMagicCount();
+}
+
+inline void dComIfGp_setItemMaxMagicCount(s16 magic) {
+    g_dComIfG_gameInfo.play.setItemMaxMagicCount(magic);
+}
+
 inline void dComIfGp_setItemBombNumCount(s16 num) {
     g_dComIfG_gameInfo.play.setItemBombNumCount(num);
 }
@@ -1533,6 +1690,10 @@ inline s16 dComIfGp_getItemArrowNumCount() {
 
 inline void dComIfGp_setItemArrowNumCount(s16 num) {
     return g_dComIfG_gameInfo.play.setItemArrowNumCount(num);
+}
+
+inline void dComIfGp_setItemBeastNumCount(int i_idx, s16 num) {
+    g_dComIfG_gameInfo.play.setItemBeastNumCount(i_idx, num);
 }
 
 inline u8 dComIfGp_checkMesgCancelButton() {
@@ -1547,8 +1708,33 @@ inline bool dComIfGp_checkPlayerStatus1(int param_0, u32 flag) {
     return g_dComIfG_gameInfo.play.checkPlayerStatus(param_0, 1, flag);
 }
 
-inline u8 dComIfGp_getSelectItem(int idx) {
-    return g_dComIfG_gameInfo.play.getSelectItem(idx);
+/**
+ * Returns which item is on a specific button.
+ * @param i_btnIdx The index of the button. 0 for X, 1 for Y, 2 for Z.
+ * @return The item number of the item in that slot, or 0xFF for no item.
+ */
+inline u8 dComIfGp_getSelectItem(int i_btnIdx) {
+    return g_dComIfG_gameInfo.play.getSelectItem(i_btnIdx);
+}
+
+/**
+ * Updates which item is on a specific button to match which item is in the inventory slot correspond to that button.
+ * @param i_btnIdx The index of the button. 0 for X, 1 for Y, 2 for Z.
+ */
+inline void dComIfGp_setSelectItem(int i_btnIdx) {
+    if (dComIfGs_getSelectItem(i_btnIdx) != 0xFF) {
+        int invIdx = dComIfGs_getSelectItem(i_btnIdx);
+        u8 itemNo = dComIfGs_getItem(invIdx);
+        g_dComIfG_gameInfo.play.setSelectItem(i_btnIdx, itemNo);
+        
+        invIdx = dComIfGs_getSelectItem(i_btnIdx);
+        itemNo = dComIfGs_getItem(invIdx);
+        if (itemNo == 0xFF) {
+            dComIfGs_setSelectItem(i_btnIdx, 0xFF);
+        }
+    } else {
+        g_dComIfG_gameInfo.play.setSelectItem(i_btnIdx, 0xFF);
+    }
 }
 
 inline void dComIfGp_setCurrentGrafPort(J2DOrthoGraph* i_graf) {

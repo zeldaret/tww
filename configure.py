@@ -406,7 +406,7 @@ config.libs = [
             Object(Matching,    "d/d_seafightgame.cpp"),
             Object(NonMatching, "d/d_spline_path.cpp"),
             Object(NonMatching, "d/d_s_actor_data_mng.cpp"),
-            Object(NonMatching, "d/d_item.cpp"),
+            Object(Matching,    "d/d_item.cpp"),
             Object(NonMatching, "d/d_2dnumber.cpp"),
             Object(NonMatching, "d/d_a_npc_cb1_static.cpp"),
             Object(NonMatching, "d/d_a_npc_mk_static.cpp"),

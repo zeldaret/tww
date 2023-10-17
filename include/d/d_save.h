@@ -8,9 +8,12 @@ class dSv_player_status_a_c {
 public:
     void init();
   
+    u8 getSelectItem(int i_no) { return mSelectItem[i_no]; }
+    void setSelectItem(int i_no, u8 i_invIdx) { mSelectItem[i_no] = i_invIdx; }
     u8 getSelectEquip(int i_no) { return mSelectEquip[i_no]; }
     u8 getWalletSize() { return mWalletSize; }
-    int getRupee() const { return mRupee; }
+    void setWalletSize(u8 size) { mWalletSize = size; }
+    int getRupee() { return mRupee; }
     u8 getMagic() { return mMagic; }
     u8 getMaxMagic() { return mMaxMagic; }
     u16 getLife() { return mLife; }
@@ -116,8 +119,12 @@ public:
     void decTimer();
     u16 getTimer();
 
-    u32 getArrowNum() const { return mArrowNum; }
-    u32 getBombNum() const { return mBombNum; }
+    u32 getArrowNum() { return mArrowNum; }
+    void setArrowNum(u8 num) { mArrowNum = num; }
+    u32 getBombNum() { return mBombNum; }
+    void setBombNum(u8 num) { mBombNum = num; }
+    // u32 getPictureNum() { return ?; }
+    // void setPictureNum(u8 num) { ? = num; }
 
     /* 0x0 */ u16 mTimer;
     /* 0x2 */ u8 field_0x2;
@@ -133,7 +140,10 @@ public:
     void init();
 
     u8 getArrowNum() const { return mArrowNum; }
+    void setArrowNum(u8 num) { mArrowNum = num; }
     u8 getBombNum() const { return mBombNum; }
+    void setBombNum(u8 num) { mBombNum = num; }
+    // void setReserved1Num(u8 num) { ? = num; }
 
     /* 0x0 */ u8 field_0x0;
     /* 0x1 */ u8 mArrowNum;
@@ -164,9 +174,9 @@ public:
     bool checkReserveItemEmpty();
     u8 checkReserveItem(u8);
 
-    u8 getBeast(int i_idx) const { return mBeast[i_idx]; }
-    u8 getBait(int i_idx) const { return mBait[i_idx]; }
-    u8 getReserve(int i_idx) const { return mReserve[i_idx]; }
+    u8 getBeast(int i_idx) { return mBeast[i_idx]; }
+    u8 getBait(int i_idx) { return mBait[i_idx]; }
+    u8 getReserve(int i_idx) { return mReserve[i_idx]; }
 
     /* 0x00 */ u8 mBeast[8];
     /* 0x08 */ u8 mBait[8];

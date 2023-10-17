@@ -18,17 +18,17 @@ class bossitem_class : public fopAc_ac_c {
 };
 
 /* 00000078-00000080       .text daBossItem_IsDelete__FP14bossitem_class */
-BOOL daBossItem_IsDelete(bossitem_class* i_this) {
+static BOOL daBossItem_IsDelete(bossitem_class* i_this) {
     return TRUE;
 }
 
 /* 00000080-00000088       .text daBossItem_Delete__FP14bossitem_class */
-BOOL daBossItem_Delete(bossitem_class* i_this) {
+static BOOL daBossItem_Delete(bossitem_class* i_this) {
     return TRUE;
 }
 
 /* 00000088-00000128       .text daBossItem_Create__FP10fopAc_ac_c */
-s32 daBossItem_Create(fopAc_ac_c* i_this) {
+static s32 daBossItem_Create(fopAc_ac_c* i_this) {
     bossitem_class* bItem = static_cast<bossitem_class*>(i_this);
 
     fopAcM_SetupActor(bItem, bossitem_class);
