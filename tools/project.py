@@ -801,6 +801,7 @@ def generate_objdiff_config(config, build_config):
             "*.cpp",
             "*.h",
             "*.hpp",
+            "*.inc",
             "*.py",
             "*.yml",
             "*.txt",
