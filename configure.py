@@ -669,7 +669,7 @@ config.libs = [
             Object(NonMatching, "JSystem/JAudio/JASSeqParser.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASTrack.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASTrackInterrupt.cpp"),
-            Object(NonMatching, "JSystem/JAudio/JASTrackPort.cpp"),
+            Object(Matching,    "JSystem/JAudio/JASTrackPort.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASBank.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASWaveBank.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASBasicBank.cpp"),
