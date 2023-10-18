@@ -7,62 +7,247 @@
 #include "dolphin/types.h"
 
 /* 802EF5D8-802EF608       .text init__12J3DFrameCtrlFs */
-void J3DFrameCtrl::init(short) {
-    /* Nonmatching */
+void J3DFrameCtrl::init(s16 end) {
+    mAttribute = 2;
+    mState = 0;
+    mStart = 0;
+    mEnd = end;
+    mLoop = 0;
+    mRate = 1.0f;
+    mFrame = 0.0f;
 }
 
 /* 802EF608-802EFBA8       .text checkPass__12J3DFrameCtrlFf */
-BOOL J3DFrameCtrl::checkPass(float) {
-    /* Nonmatching */
+BOOL J3DFrameCtrl::checkPass(f32 pass_frame) {
+    f32 cur_frame = mFrame;
+    f32 next_frame = cur_frame + mRate;
+
+    switch (mAttribute) {
+    case LOOP_ONCE_e:
+    case LOOP_ONCE_RESET_e:
+        if (next_frame < mStart) {
+            next_frame = mStart;
+        }
+
+        if (next_frame >= mEnd) {
+            next_frame = mEnd - 0.001f;
+        }
+
+        if (cur_frame <= next_frame) {
+            if (cur_frame <= pass_frame && pass_frame < next_frame) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        if (next_frame <= pass_frame && pass_frame < cur_frame) {
+            return true;
+        }
+        return false;
+    case LOOP_REPEAT_e:
+        if (cur_frame < mStart) {
+            while (next_frame < mStart) {
+                if (mLoop - mStart <= 0.0f) {
+                    break;
+                }
+                next_frame += mLoop - mStart;
+            }
+
+            if (next_frame <= pass_frame && pass_frame < mLoop) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (mEnd <= cur_frame) {
+            while (next_frame >= mEnd) {            
+                if (mEnd - mLoop <= 0.0f) {
+                    break;
+                }
+                next_frame -= mEnd - mLoop;
+            }
+
+            if (mLoop <= pass_frame && pass_frame < next_frame) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (next_frame < mStart) {
+            while (next_frame < mStart) {            
+                if (mLoop - mStart <= 0.0f) {
+                    break;
+                }
+                next_frame += mLoop - mStart;
+            }
+
+            if ((mStart <= pass_frame && pass_frame < cur_frame) || (next_frame <= pass_frame && pass_frame < mLoop)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (mEnd <= next_frame) {
+            while (next_frame >= mEnd) {            
+                if (mEnd - mLoop <= 0.0f) {
+                    break;
+                }
+
+                next_frame -= mEnd - mLoop;
+            }
+
+            if ((cur_frame <= pass_frame && pass_frame < mEnd) || (mLoop <= pass_frame && pass_frame < next_frame)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (cur_frame <= next_frame) {
+            if (cur_frame <= pass_frame && pass_frame < next_frame) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (next_frame <= pass_frame && pass_frame < cur_frame) {
+            return true;
+        }
+        return false;
+    case LOOP_MIRROR_ONCE_e:
+    case LOOP_MIRROR_REPEAT_e:
+        if (next_frame >= mEnd) {
+            next_frame = mEnd - 0.001f;
+        }
+
+        if (next_frame < mStart) {
+            next_frame = mStart;
+        }
+
+        if (cur_frame <= next_frame) {
+            if (cur_frame <= pass_frame && pass_frame < next_frame) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        if (next_frame <= pass_frame && pass_frame < cur_frame) {
+            return true;
+        }
+        return false;
+    default:
+        return false;
+    }
 }
 
 /* 802EFBA8-802EFFE4       .text update__12J3DFrameCtrlFv */
 void J3DFrameCtrl::update() {
-    /* Nonmatching */
+    mState = 0;
+    mFrame += mRate;
+    switch (mAttribute) {
+    case LOOP_ONCE_e:
+        if (mFrame < mStart) {
+            mFrame = mStart;
+            mRate = 0.0f;
+            mState |= 1;
+        }
+        if (mFrame >= mEnd) {
+            mFrame = mEnd - 0.001f;
+            mRate = 0.0f;
+            mState |= 1;
+        }
+        break;
+    case LOOP_ONCE_RESET_e:
+        if (mFrame < mStart) {
+            mFrame = mStart;
+            mRate = 0.0f;
+            mState |= 1;
+        }
+        if (mFrame >= mEnd) {
+            mFrame = mStart;
+            mRate = 0.0f;
+            mState |= 1;
+        }
+        break;
+    case LOOP_REPEAT_e:
+        while (mFrame < mStart) {
+            mState |= 2;
+            if (mLoop - mStart <= 0.0f) {
+                break;
+            }
+            mFrame += mLoop - mStart;
+        }
+        while (mFrame >= mEnd) {
+            mState |= 2;
+            if (mEnd - mLoop <= 0.0f) {
+                break;
+            }
+            mFrame -= mEnd - mLoop;
+        }
+        break;
+    case LOOP_MIRROR_ONCE_e:
+        if (mFrame >= mEnd) {
+            mFrame = mEnd - 0.001f;
+            mRate = -mRate;
+        }
+        if (mFrame < mStart) {
+            mFrame = mStart;
+            mRate = 0.0f;
+            mState |= 1;
+        }
+        break;
+    case LOOP_MIRROR_REPEAT_e:
+        if (mFrame >= mEnd) {
+            mFrame = mEnd - 0.001f;
+            mRate = -mRate;
+        }
+        if (mFrame < mStart) {
+            mFrame = mStart;
+            mRate = -mRate;
+            mState |= 2;
+        }
+        break;
+    }
 }
 
 /* 802EFFE4-802F06D8       .text getTransform__19J3DAnmTransformFullCFUsP16J3DTransformInfo */
-void J3DAnmTransformFull::getTransform(unsigned short, J3DTransformInfo*) const {
+void J3DAnmTransformFull::getTransform(u16, J3DTransformInfo*) const {
     /* Nonmatching */
 }
 
 /* 802F06D8-802F072C       .text J3DHermiteInterpolationS__FfPsPsPsPsPsPs */
-void J3DHermiteInterpolationS(float, short*, short*, short*, short*, short*, short*) {
+f32 J3DHermiteInterpolationS(f32 t, s16* time0, s16* value0, s16* tangent0, s16* time1, s16* value1, s16* tangent1) {
     /* Nonmatching */
 }
 
 /* 802F072C-802F0954       .text J3DGetKeyFrameInterpolationS__FfP18J3DAnmKeyTableBasePs */
-void J3DGetKeyFrameInterpolationS(float, J3DAnmKeyTableBase*, short*) {
+void J3DGetKeyFrameInterpolationS(f32, J3DAnmKeyTableBase*, s16*) {
     /* Nonmatching */
 }
 
 /* 802F0954-802F0E20       .text calcTransform__18J3DAnmTransformKeyCFfUsP16J3DTransformInfo */
-void J3DAnmTransformKey::calcTransform(float, unsigned short, J3DTransformInfo*) const {
+void J3DAnmTransformKey::calcTransform(f32, u16, J3DTransformInfo*) const {
     /* Nonmatching */
 }
 
 /* 802F0E20-802F10D4       .text calcTransform__19J3DAnmTextureSRTKeyCFfUsP17J3DTextureSRTInfo */
-void J3DAnmTextureSRTKey::calcTransform(float, unsigned short, J3DTextureSRTInfo*) const {
+void J3DAnmTextureSRTKey::calcTransform(f32, u16, J3DTextureSRTInfo*) const {
     /* Nonmatching */
 }
 
 /* 802F10D4-802F1188       .text getWeight__17J3DAnmClusterFullCFUs */
-f32 J3DAnmClusterFull::getWeight(unsigned short) const {
+f32 J3DAnmClusterFull::getWeight(u16) const {
     /* Nonmatching */
 }
 
 /* 802F1188-802F120C       .text getWeight__16J3DAnmClusterKeyCFUs */
-f32 J3DAnmClusterKey::getWeight(unsigned short) const {
+f32 J3DAnmClusterKey::getWeight(u16) const {
     /* Nonmatching */
 }
 
 /* 802F120C-802F14B4       .text getColor__18J3DAnmVtxColorFullCFUcUsP8_GXColor */
-void J3DAnmVtxColorFull::getColor(unsigned char, unsigned short, _GXColor*) const {
+void J3DAnmVtxColorFull::getColor(unsigned char, u16, _GXColor*) const {
     /* Nonmatching */
 }
 
 /* 802F14B4-802F17D0       .text getColor__17J3DAnmVtxColorKeyCFUcUsP8_GXColor */
-void J3DAnmVtxColorKey::getColor(unsigned char, unsigned short, _GXColor*) const {
+void J3DAnmVtxColorKey::getColor(unsigned char, u16, _GXColor*) const {
     /* Nonmatching */
 }
 
@@ -77,17 +262,17 @@ void J3DAnmColor::searchUpdateMaterialID(J3DModelData*) {
 }
 
 /* 802F188C-802F1BDC       .text getColor__15J3DAnmColorFullCFUsP8_GXColor */
-void J3DAnmColorFull::getColor(unsigned short, _GXColor*) const {
+void J3DAnmColorFull::getColor(u16, _GXColor*) const {
     /* Nonmatching */
 }
 
 /* 802F1BDC-802F1F20       .text getColor__14J3DAnmColorKeyCFUsP8_GXColor */
-void J3DAnmColorKey::getColor(unsigned short, _GXColor*) const {
+void J3DAnmColorKey::getColor(u16, _GXColor*) const {
     /* Nonmatching */
 }
 
 /* 802F1F20-802F200C       .text getTexNo__16J3DAnmTexPatternCFUsPUs */
-void J3DAnmTexPattern::getTexNo(unsigned short, unsigned short*) const {
+void J3DAnmTexPattern::getTexNo(u16, u16*) const {
     /* Nonmatching */
 }
 
@@ -117,12 +302,12 @@ void J3DAnmTextureSRTKey::searchUpdateMaterialID(J3DModelData*) {
 }
 
 /* 802F22E0-802F2624       .text getTevColorReg__15J3DAnmTevRegKeyCFUsP11_GXColorS10 */
-void J3DAnmTevRegKey::getTevColorReg(unsigned short, _GXColorS10*) const {
+void J3DAnmTevRegKey::getTevColorReg(u16, _GXColorS10*) const {
     /* Nonmatching */
 }
 
 /* 802F2624-802F2968       .text getTevKonstReg__15J3DAnmTevRegKeyCFUsP8_GXColor */
-void J3DAnmTevRegKey::getTevKonstReg(unsigned short, _GXColor*) const {
+void J3DAnmTevRegKey::getTevKonstReg(u16, _GXColor*) const {
     /* Nonmatching */
 }
 
@@ -133,70 +318,5 @@ void J3DAnmTevRegKey::searchUpdateMaterialID(J3DMaterialTable*) {
 
 /* 802F2A64-802F2A88       .text searchUpdateMaterialID__15J3DAnmTevRegKeyFP12J3DModelData */
 void J3DAnmTevRegKey::searchUpdateMaterialID(J3DModelData*) {
-    /* Nonmatching */
-}
-
-/* 802F2EF8-802F2F7C       .text __dt__14J3DAnmColorKeyFv */
-J3DAnmColorKey::~J3DAnmColorKey() {
-    /* Nonmatching */
-}
-
-/* 802F2F7C-802F2FF0       .text __dt__11J3DAnmColorFv */
-J3DAnmColor::~J3DAnmColor() {
-    /* Nonmatching */
-}
-
-/* 802F2FF0-802F2FF4       .text getColor__11J3DAnmColorCFUsP8_GXColor */
-void J3DAnmColor::getColor(unsigned short, _GXColor*) const {
-    /* Nonmatching */
-}
-
-/* 802F2FF4-802F3078       .text __dt__15J3DAnmColorFullFv */
-J3DAnmColorFull::~J3DAnmColorFull() {
-    /* Nonmatching */
-}
-
-/* 802F3078-802F30E4       .text __dt__17J3DAnmVtxColorKeyFv */
-J3DAnmVtxColorKey::~J3DAnmVtxColorKey() {
-    /* Nonmatching */
-}
-
-/* 802F30E4-802F3140       .text __dt__14J3DAnmVtxColorFv */
-J3DAnmVtxColor::~J3DAnmVtxColor() {
-    /* Nonmatching */
-}
-
-/* 802F3140-802F3144       .text getColor__14J3DAnmVtxColorCFUcUsP8_GXColor */
-void J3DAnmVtxColor::getColor(unsigned char, unsigned short, _GXColor*) const {
-    /* Nonmatching */
-}
-
-/* 802F3144-802F31B0       .text __dt__18J3DAnmVtxColorFullFv */
-J3DAnmVtxColorFull::~J3DAnmVtxColorFull() {
-    /* Nonmatching */
-}
-
-/* 802F31B0-802F321C       .text __dt__16J3DAnmClusterKeyFv */
-J3DAnmClusterKey::~J3DAnmClusterKey() {
-    /* Nonmatching */
-}
-
-/* 802F321C-802F3278       .text __dt__13J3DAnmClusterFv */
-J3DAnmCluster::~J3DAnmCluster() {
-    /* Nonmatching */
-}
-
-/* 802F3278-802F3280       .text getWeight__13J3DAnmClusterCFUs */
-f32 J3DAnmCluster::getWeight(unsigned short) const {
-    /* Nonmatching */
-}
-
-/* 802F3280-802F32EC       .text __dt__17J3DAnmClusterFullFv */
-J3DAnmClusterFull::~J3DAnmClusterFull() {
-    /* Nonmatching */
-}
-
-/* 802F32EC-802F3358       .text __dt__19J3DAnmTransformFullFv */
-J3DAnmTransformFull::~J3DAnmTransformFull() {
     /* Nonmatching */
 }

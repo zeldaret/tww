@@ -42,7 +42,7 @@ public:
     virtual BOOL isEnableTextureAnm() = 0;
     virtual BOOL textureIsEmpty() = 0;
     virtual u32 getTextureAnmType() = 0;
-    virtual u32 getTextureAnmKeyNum() = 0;
+    virtual u8 getTextureAnmKeyNum() = 0;
     virtual u8 getTextureIndex() = 0;
     virtual u8 getTextureIndex(u8 idx) = 0;
     virtual BOOL isEnablePrm() = 0;
@@ -164,7 +164,7 @@ public:
     virtual BOOL isEnableTextureAnm() { return pBsd->mTextureFlags & 0x01; }
     virtual BOOL textureIsEmpty() { return !(pBsd->mTextureFlags & 0x02); }
     virtual u32 getTextureAnmType() { return (pBsd->mTextureFlags >> 2) & 0x07; }
-    virtual u32 getTextureAnmKeyNum() { return pBsd->mTextureAnmKeyNum; }
+    virtual u8 getTextureAnmKeyNum() { return pBsd->mTextureAnmKeyNum; }
     virtual u8 getTextureIndex() { return pBsd->mTextureIndex; }
     virtual u8 getTextureIndex(u8 idx) { return mpTexAnmIdxArr[idx]; }
     virtual BOOL isEnablePrm() { return pBsd->mColorFlags & 0x01; }

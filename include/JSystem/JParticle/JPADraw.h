@@ -4,6 +4,7 @@
 #include "dolphin/types.h"
 #include "dolphin/gx/GXStruct.h"
 #include "dolphin/gx/GXEnum.h"
+#include "dolphin/mtx/mtx.h"
 #include "JSystem/JParticle/JPAParticle.h"
 
 class JPABaseShapeArc;

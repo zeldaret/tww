@@ -7,36 +7,67 @@
 #include "dolphin/types.h"
 
 /* 802F3358-802F3394       .text calc__14J3DMatColorAnmCFP8_GXColor */
-void J3DMatColorAnm::calc(_GXColor*) const {
-    /* Nonmatching */
+void J3DMatColorAnm::calc(GXColor* pColor) const {
+    mAnmColor->getColor(mAnmIndex, pColor);
 }
 
 /* 802F3394-802F33C8       .text calc__12J3DTexMtxAnmCFP17J3DTextureSRTInfo */
-void J3DTexMtxAnm::calc(J3DTextureSRTInfo*) const {
-    /* Nonmatching */
+void J3DTexMtxAnm::calc(J3DTextureSRTInfo* pSRTInfo) const {
+    mAnmTransform->getTransform(mAnmIndex, pSRTInfo);
 }
 
 /* 802F33C8-802F33F8       .text calc__11J3DTexNoAnmCFPUs */
-void J3DTexNoAnm::calc(unsigned short*) const {
-    /* Nonmatching */
+void J3DTexNoAnm::calc(u16* pTexNo) const {
+    mAnmTexPattern->getTexNo(mAnmIndex, pTexNo);
 }
 
 /* 802F33F8-802F3428       .text calc__14J3DTevColorAnmCFP11_GXColorS10 */
-void J3DTevColorAnm::calc(_GXColorS10*) const {
-    /* Nonmatching */
+void J3DTevColorAnm::calc(GXColorS10* pColor) const {
+    mAnmTevReg->getTevColorReg(mAnmIndex, pColor);
 }
 
 /* 802F3428-802F3458       .text calc__15J3DTevKColorAnmCFP8_GXColor */
-void J3DTevKColorAnm::calc(_GXColor*) const {
-    /* Nonmatching */
+void J3DTevKColorAnm::calc(GXColor* pColor) const {
+    mAnmTevReg->getTevKonstReg(mAnmIndex, pColor);
 }
 
 /* 802F3458-802F34FC       .text initialize__14J3DMaterialAnmFv */
 void J3DMaterialAnm::initialize() {
-    /* Nonmatching */
+    for (u32 i = 0; i < ARRAY_SIZE(mMatColorAnm); i++)
+        mMatColorAnm[i] = NULL;
+    for (u32 i = 0; i < ARRAY_SIZE(mTexNoAnm); i++)
+        mTexNoAnm[i] = NULL;
+    for (u32 i = 0; i < ARRAY_SIZE(mTevColorAnm); i++)
+        mTevColorAnm[i] = NULL;
+    for (u32 i = 0; i < ARRAY_SIZE(mTevKColorAnm); i++)
+        mTevKColorAnm[i] = NULL;
+    for (u32 i = 0; i < ARRAY_SIZE(mTexMtxAnm); i++)
+        mTexMtxAnm[i] = NULL;
 }
 
 /* 802F34FC-802F36BC       .text calc__14J3DMaterialAnmCFP11J3DMaterial */
-void J3DMaterialAnm::calc(J3DMaterial*) const {
-    /* Nonmatching */
+void J3DMaterialAnm::calc(J3DMaterial* pMaterial) const {
+    for (u32 i = 0; i < ARRAY_SIZE(mMatColorAnm); i++) {
+        if (mMatColorAnm[i] != NULL)
+            mMatColorAnm[i]->calc(&pMaterial->getColorBlock()->getMatColor(i)->mColor);
+    }
+    for (u32 i = 0; i < ARRAY_SIZE(mTexNoAnm); i++) {
+        if (mTexNoAnm[i] != NULL) {
+            u16 texNo;
+            mTexNoAnm[i]->calc(&texNo);
+            pMaterial->getTevBlock()->setTexNo(i, texNo);
+        }
+    }
+    for (u32 i = 0; i < 3; i++) {
+        if (mTevColorAnm[i] != NULL)
+            mTevColorAnm[i]->calc(&pMaterial->getTevColor(i)->mColor);
+    }
+    for (u32 i = 0; i < ARRAY_SIZE(mTevKColorAnm); i++) {
+        if (mTevKColorAnm[i] != NULL)
+            mTevKColorAnm[i]->calc(&pMaterial->getTevKColor(i)->mColor);
+    }
+    for (u32 i = 0; i < ARRAY_SIZE(mTexMtxAnm); i++) {
+        if (mTexMtxAnm[i] != NULL)
+            mTexMtxAnm[i]->calc(&pMaterial->getTexMtx(i)->getTexMtxInfo().mSRT);
+    }
 }

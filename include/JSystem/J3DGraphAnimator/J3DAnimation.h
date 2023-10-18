@@ -488,7 +488,6 @@ public:
     void searchUpdateMaterialID(J3DModelData*);
 
     virtual ~J3DAnmColor();
-    virtual s32 getKind() const;
     virtual void getColor(u16, GXColor*) const;
 
     u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
@@ -544,7 +543,7 @@ public:
 
     virtual ~J3DAnmVtxColor();
     virtual s32 getKind() const;
-    virtual void getColor(u8, u16, GXColor*) const;
+    virtual void getColor(u8, u16, GXColor*) const {}
 
 private:
     /* 0x0C */ s16 mAnmTableNum[2];
@@ -576,9 +575,9 @@ private:
 
 class J3DAnmCluster : public J3DAnmBase {
 public:
-    virtual ~J3DAnmCluster();
+    virtual ~J3DAnmCluster() {}
     virtual s32 getKind() const;
-    virtual f32 getWeight(u16) const;
+    virtual f32 getWeight(u16) const { return 1.0f; }
 
 private:
     /* 0x0C */ f32* field_0xc;
@@ -586,7 +585,7 @@ private:
 
 class J3DAnmClusterFull : public J3DAnmCluster {
 public:
-    virtual ~J3DAnmClusterFull();
+    virtual ~J3DAnmClusterFull() {}
     virtual s32 getKind() const;
     virtual f32 getWeight(u16) const;
 
@@ -596,7 +595,7 @@ private:
 
 class J3DAnmClusterKey : public J3DAnmCluster {
 public:
-    virtual ~J3DAnmClusterKey();
+    virtual ~J3DAnmClusterKey() {}
     virtual s32 getKind() const;
     virtual f32 getWeight(u16) const;
 

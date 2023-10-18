@@ -102,7 +102,7 @@ JPABaseShapeArc::JPABaseShapeArc(const u8* pData, JKRHeap* pHeap) {
             bFlag1 = true;
     }
 
-    mGlobalAnmFlags = (bFlag2 ? 2 : 0) | (bFlag1 ? 1 : 0);
+    mGlobalAnmFlags = bFlag2 << 1 | bFlag1 << 0;
     if (isEnableTextureAnm() && getTextureAnmKeyNum() != 0)
         mpTexAnmIdxArr = (const u8*)(pData + 0x60);
     else
