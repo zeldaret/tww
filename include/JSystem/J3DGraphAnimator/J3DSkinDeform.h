@@ -4,6 +4,7 @@
 #include "JSystem/J3DGraphAnimator/J3DCluster.h"
 #include "JSystem/J3DGraphBase/J3DTransform.h"
 #include "dolphin/types.h"
+#include "global.h"
 
 class J3DModelData;
 class J3DVertexBuffer;
@@ -79,15 +80,12 @@ public:
 private:
     /* 0x04 */ u16* mPosData;
     /* 0x08 */ u16* mNrmData;
-    /* 0x0C */ Mtx* mPosMtx;
-    /* 0x10 */ Mtx33* mNrmMtx;
-    /* 0x14 */ u32 mFlags;
-    /* 0x18 */ u8 field_0x18;
-    /* 0x19 */ u8 field_0x19;
-    /* 0x1C */ int field_0x1c;
-    /* 0x20 */ int field_0x20;
-    /* 0x24 */ J3DSkinNList* mSkinNList;
-};
+    /* 0x0C */ Mtx33* mNrmMtx;
+    /* 0x10 */ u32 mFlags;
+    /* 0x14 */ u8 field_0x14;
+};  // Size: 0x18
+
+STATIC_ASSERT(sizeof(J3DSkinDeform) == 0x18);
 
 class J3DDeformer {
 public:

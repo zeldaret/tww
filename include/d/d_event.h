@@ -65,7 +65,7 @@ public:
     void check();
     void photoCheck();
     s32 moveApproval(void*);
-    void compulsory(void*, const char*, u16);
+    BOOL compulsory(void*, const char*, u16);
     void remove();
     void getStageEventDt();
     void nextStageEventDt(void*);

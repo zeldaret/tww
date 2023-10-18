@@ -78,18 +78,29 @@ void daPy_followEcallBack_c::execute(JPABaseEmitter*) {
 }
 
 /* 80129F98-80129FA0       .text setup__22daPy_followEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void daPy_followEcallBack_c::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
-    /* Nonmatching */
+void daPy_followEcallBack_c::setup(JPABaseEmitter* emitter, const cXyz*, const csXyz*, s8) {
+    mpEmitter = emitter;
 }
 
 /* 80129FA0-80129FD4       .text end__22daPy_followEcallBack_cFv */
 void daPy_followEcallBack_c::end() {
-    /* Nonmatching */
+    if (mpEmitter) {
+        mpEmitter->becomeInvalidEmitter();
+        mpEmitter->setEmitterCallBackPtr(NULL);
+        mpEmitter = NULL;
+    }
 }
 
 /* 80129FD4-8012A040       .text execute__25daPy_waterDropEcallBack_cFP14JPABaseEmitter */
-void daPy_waterDropEcallBack_c::execute(JPABaseEmitter*) {
-    /* Nonmatching */
+void daPy_waterDropEcallBack_c::execute(JPABaseEmitter* emitter) {
+    daPy_followEcallBack_c::execute(emitter);
+    bool shouldEnd = false;
+    if (emitter->checkStatus(0x08) && emitter->getParticleNumber() == 0) {
+        shouldEnd = true;
+    }
+    if (shouldEnd) {
+        end();
+    }
 }
 
 /* 8012A040-8012A058       .text setup__25daPy_waterDropEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */

@@ -28,7 +28,7 @@ void daPy_lk_c::setWeaponBlur() {
 }
 
 /* 8013A904-8013A97C       .text checkGrabBarrelSearch__9daPy_lk_cFi */
-void daPy_lk_c::checkGrabBarrelSearch(int) {
+BOOL daPy_lk_c::checkGrabBarrelSearch(int) {
     /* Nonmatching */
 }
 

@@ -33,7 +33,7 @@ void daPy_lk_c::checkBowReadyAnime() const {
 }
 
 /* 8014A02C-8014A080       .text checkBowAnime__9daPy_lk_cCFv */
-void daPy_lk_c::checkBowAnime() const {
+BOOL daPy_lk_c::checkBowAnime() const {
     /* Nonmatching */
 }
 

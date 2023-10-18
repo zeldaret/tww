@@ -14,7 +14,7 @@ public:
         m_pos.y = 0.0f;
         m_pos.z = 0.0f;
         SetActorPid(-1);
-        field_0x44 = 0;
+        field_0x44 = NULL;
     }
     void Init();
 
@@ -22,6 +22,8 @@ public:
 
     void SetPos(cXyz& pos) { m_pos = pos; }
     cXyz* GetPosP() { return &m_pos; }
+    f32 GetNowY() { return m_pos.y; }
+    void SetNowY(f32 y) { m_pos.y = y; }
 
 private:
     /* 0x38 */ cXyz m_pos;
@@ -33,8 +35,8 @@ STATIC_ASSERT(sizeof(dBgS_RoofChk) == 0x4C);
 
 class dBgS_LinkRoofChk : public dBgS_RoofChk {
 public:
-    dBgS_LinkRoofChk() { /* SetLink(); */ }
-    virtual ~dBgS_LinkRoofChk();
+    dBgS_LinkRoofChk() { SetLink(); }
+    virtual ~dBgS_LinkRoofChk() {}
 };  // Size: 0x4C
 
 #endif /* D_BG_D_BG_S_ROOF_CHK_H */

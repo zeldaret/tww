@@ -197,8 +197,11 @@ private:
 
 class mDoExt_AnmRatioPack {
 public:
-    ~mDoExt_AnmRatioPack();
-    mDoExt_AnmRatioPack();
+    ~mDoExt_AnmRatioPack() {}
+    mDoExt_AnmRatioPack() {
+        mRatio = 0.0f;
+        mAnmTransform = NULL;
+    }
 
     void setRatio(f32 ratio) { mRatio = ratio; }
     f32 getRatio() { return mRatio; }
@@ -223,6 +226,20 @@ private:
 
 class mDoExt_MtxCalcOldFrame {
 public:
+    mDoExt_MtxCalcOldFrame(J3DTransformInfo* param_1, Quaternion* param_2) {
+        mOldFrameTransInfo = param_1;
+        mOldFrameQuaternion = param_2;
+        mOldFrameRate = 0.0f;
+        mOldFrameFlg = false;
+        field_0x1 = true;
+        mOldFrameStartJoint = 0;
+        mOldFrameEndJoint = 0;
+        mOldFrameMorfCounter = 0.0f;
+        field_0x8 = 0.0f;
+        field_0x10 = 0.0f;
+        field_0x14 = 0.0f;
+    }
+    
     void initOldFrameMorf(f32, u16, u16);
     void decOldFrameMorfCounter();
 
@@ -236,6 +253,7 @@ public:
 
 private:
     /* 0x00 */ bool mOldFrameFlg;
+    /* 0x01 */ bool field_0x1;
     /* 0x04 */ f32 mOldFrameMorfCounter;
     /* 0x08 */ f32 field_0x8;
     /* 0x0C */ f32 mOldFrameRate;
@@ -272,6 +290,9 @@ struct mDoExt_MtxCalcAnmBlendTbl : public J3DMtxCalcMaya {
 struct mDoExt_MtxCalcAnmBlendTblOld : public mDoExt_MtxCalcAnmBlendTbl {
     mDoExt_MtxCalcAnmBlendTblOld(mDoExt_MtxCalcOldFrame* oldFrame, int num, mDoExt_AnmRatioPack* anmRatio) : mDoExt_MtxCalcAnmBlendTbl(num, anmRatio) {
         mOldFrame = oldFrame;
+        mBeforeCallback = NULL;
+        mAfterCallback = NULL;
+        field_0x58 = 0;
     }
     virtual ~mDoExt_MtxCalcAnmBlendTblOld();
     virtual void calc(u16);
@@ -284,8 +305,7 @@ struct mDoExt_MtxCalcAnmBlendTblOld : public mDoExt_MtxCalcAnmBlendTbl {
     /* 0x5C */ mDoExt_MtxCalcOldFrame* mOldFrame;
     /* 0x60 */ void (*mBeforeCallback)(u32, u16, J3DTransformInfo*, Quaternion*);
     /* 0x64 */ void (*mAfterCallback)(u32, u16, J3DTransformInfo*, Quaternion*);
-
-};  // Size: 0x5C
+};  // Size: 0x90
 
 class mDoExt_McaMorfCallBack1_c {
 public:

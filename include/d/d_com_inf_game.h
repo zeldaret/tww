@@ -1252,6 +1252,8 @@ inline u8 dComIfGs_getKeyNum() {
 
 u8 dComIfGs_checkGetItemNum(u8 i_itemNo);
 
+BOOL dComIfGs_checkSeaLandingEvent(s8 i_roomNo);
+
 /**
  * === PLAY ===
  */
@@ -1330,6 +1332,10 @@ inline fopAc_ac_c* dComIfGp_getPlayer(int idx) {
 
 inline void dComIfGp_setPlayer(int idx, fopAc_ac_c* player) {
     g_dComIfG_gameInfo.play.setPlayer(idx, player);
+}
+
+inline void dComIfGp_setPlayerPtr(int idx, fopAc_ac_c* player) {
+    g_dComIfG_gameInfo.play.setPlayerPtr(idx, player);
 }
 
 inline fopAc_ac_c* dComIfGp_getCb1Player() {
@@ -1454,6 +1460,10 @@ inline dCcS* dComIfG_Ccsp() {
 
 inline daShip_c* dComIfGp_getShipActor() {
     return (daShip_c*)g_dComIfG_gameInfo.play.getPlayerPtr(2);
+}
+
+inline void dComIfGp_setShipActor(fopAc_ac_c* player) {
+    g_dComIfG_gameInfo.play.setPlayerPtr(2, player);
 }
 
 inline void dComIfGp_getIkadaShipBeforePos(Vec* o_pos) {
@@ -1616,6 +1626,10 @@ inline fopAc_ac_c* dComIfGp_getLinkPlayer() {
     return g_dComIfG_gameInfo.play.getPlayerPtr(0);
 }
 
+inline void dComIfGp_setLinkPlayer(fopAc_ac_c* player) {
+    g_dComIfG_gameInfo.play.setPlayerPtr(0, player);
+}
+
 inline daPy_lk_c* daPy_getPlayerLinkActorClass() {
     return (daPy_lk_c*)dComIfGp_getLinkPlayer();
 }
@@ -1706,6 +1720,14 @@ inline bool dComIfGp_checkPlayerStatus0(int param_0, u32 flag) {
 
 inline bool dComIfGp_checkPlayerStatus1(int param_0, u32 flag) {
     return g_dComIfG_gameInfo.play.checkPlayerStatus(param_0, 1, flag);
+}
+
+inline void dComIfGp_clearPlayerStatus0(int param_0, u32 flag) {
+    g_dComIfG_gameInfo.play.clearPlayerStatus(param_0, 0, flag);
+}
+
+inline void dComIfGp_clearPlayerStatus1(int param_0, u32 flag) {
+    g_dComIfG_gameInfo.play.clearPlayerStatus(param_0, 1, flag);
 }
 
 /**
@@ -1834,6 +1856,10 @@ inline u8 dComIfGp_event_getGtItm() {
 
 inline s32 dComIfGp_event_moveApproval(void* actor) {
     return g_dComIfG_gameInfo.play.getEvent().moveApproval(actor);
+}
+
+inline BOOL dComIfGp_event_compulsory(void* param_1, const char* param_2, u16 param_3) {
+    return g_dComIfG_gameInfo.play.getEvent().compulsory(param_1, param_2, param_3);
 }
 
 inline s32 dComIfGp_event_order(u16 eventType, u16 priority, u16 flag, u16 hind, void* pActor1, void* pActor2, s16 eventID, u8 infoIdx) {

@@ -17,15 +17,15 @@ public:
     /* 0x0 */ u16 mIdx;
     /* 0x2 */ u16 field_0x2;
     /* 0x4 */ u32 field_0x4;
-    /* 0x8 */ u8* mBuffer;
-    /* 0xC */ JKRSolidHeap* mAnimeHeap;
+    /* 0x8 */ void* m_buffer;
+    /* 0xC */ JKRSolidHeap* mpAnimeHeap;
 };
 
 class daPy_sightPacket_c : public dDlst_base_c {
 public:
     daPy_sightPacket_c() {}
     virtual void draw();
-    virtual ~daPy_sightPacket_c();
+    virtual ~daPy_sightPacket_c() {}
 
     void setSight();
     void setSightImage(ResTIMG*);
@@ -47,16 +47,14 @@ private:
 
 class daPy_actorKeep_c {
 public:
-    daPy_actorKeep_c() { clearData(); }
+    daPy_actorKeep_c() {}
 
     void setActor();
     void setData(fopAc_ac_c*);
     void clearData();
 
     u32 getID() const { return mID; }
-    void setID(u32 id) { mID = id; }
-    fopAc_ac_c* getActor() const { return mActor; }
-    fopAc_ac_c* getActorConst() const { return mActor; }
+    fopAc_ac_c* getActor() { return mActor; }
 
 private:
     /* 0x0 */ u32 mID;
@@ -65,85 +63,98 @@ private:
 
 class daPy_footEffect_c {
 public:
-    ~daPy_footEffect_c();
-    daPy_footEffect_c();
-    /* 0x0 */ u8 field_0x0[0x4C];
+    ~daPy_footEffect_c() {}
+    daPy_footEffect_c() {}
+    
+    /* 0x00 */ dPa_smokeEcallBack mSmokeCb;
+    /* 0x20 */ dPa_followEcallBack mFollowCb;
+    /* 0x34 */ u8 field_0x34[0x4C - 0x34];
 };
 
-class daPy_fanSwingEcallBack_c {
+class daPy_fanSwingEcallBack_c : public dPa_levelEcallBack {
 public:
     void execute(JPABaseEmitter*);
-    ~daPy_fanSwingEcallBack_c();
-    void setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char);
-};
+    ~daPy_fanSwingEcallBack_c() {}
+    void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz*, s8) {
+        emitter->becomeImmortalEmitter();
+        mpEmitter = emitter;
+        field_0x4 = 0;
+    }
+    
+    /* 0x4 */ int field_0x4;
+    /* 0x8 */ JPABaseEmitter* mpEmitter;
+};  // Size: 0xC
 
-class daPy_waterDropPcallBack_c {
+class daPy_waterDropPcallBack_c : public JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*> {
 public:
     void execute(JPABaseEmitter*, JPABaseParticle*);
-    ~daPy_waterDropPcallBack_c();
+    ~daPy_waterDropPcallBack_c() {}
+    
+    /* 0x4 */ u8 field_0x4[0x4];
+    /* 0x8 */ dBgS_ObjGndChk field_0x8;
 };
 
-class daPy_swimTailEcallBack_c {
+class daPy_swimTailEcallBack_c : public dPa_levelEcallBack {
 public:
-
-    void setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char);
+    void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
     void getMaxWaterY(JGeometry::TVec3<float>*);
     void remove();
     void execute(JPABaseEmitter*);
     void draw(JPABaseEmitter*);
-    ~daPy_swimTailEcallBack_c();
-    daPy_swimTailEcallBack_c();
+    ~daPy_swimTailEcallBack_c() {}
+    daPy_swimTailEcallBack_c() {}
 
-    /* 0x0 */ u8 field_0x0[0x28];
-};
+    /* 0x4 */ u8 field_0x4[0x24];
+};  // Size: 0x28
 
 STATIC_ASSERT(sizeof(daPy_swimTailEcallBack_c) == 0x28);
 
-class daPy_waterDropEcallBack_c {
+class daPy_followEcallBack_c : public dPa_levelEcallBack {
 public:
     void execute(JPABaseEmitter*);
-    void setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char);
+    void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
     void end();
-    ~daPy_waterDropEcallBack_c();
+    ~daPy_followEcallBack_c() {}
 
-    /* 0x0 */ u8 field_0x0[0x20];
-};
+    /* 0x04 */ JPABaseEmitter* mpEmitter;
+    /* 0x08 */ cXyz field_0x08;
+    /* 0x14 */ u8 field_0x14[0x1C - 0x14];
+};  // Size: 0x1C
 
-class daPy_followEcallBack_c {
+class daPy_waterDropEcallBack_c : public daPy_followEcallBack_c {
 public:
     void execute(JPABaseEmitter*);
-    void setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char);
+    void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
     void end();
-    ~daPy_followEcallBack_c();
+    daPy_waterDropEcallBack_c() {}
+    ~daPy_waterDropEcallBack_c() {}
 
-    /* 0x0 */ u8 field_0x0[0x1C];
-};
+    /* 0x1C */ u8 field_0x1C[0x4];
+};  // Size: 0x20
 
-class daPy_dmEcallBack_c {
+class daPy_dmEcallBack_c : public daPy_mtxFollowEcallBack_c {
 public:
     void execute(JPABaseEmitter*);
-    ~daPy_dmEcallBack_c();
-    daPy_dmEcallBack_c();
+    ~daPy_dmEcallBack_c() {}
+    daPy_dmEcallBack_c() {}
+};  // Size: 0x0C
 
-    /* 0x0 */ u8 field_0x0[0xC];
-};
-
-class daPy_mtxPosFollowEcallBack_c {
+class daPy_mtxPosFollowEcallBack_c : public daPy_mtxFollowEcallBack_c {
 public:
-    void makeEmitterColor(unsigned short, MtxP, const cXyz*, const csXyz*, const GXColor*, const GXColor*);
+    void makeEmitterColor(u16, MtxP, const cXyz*, const csXyz*, const GXColor*, const GXColor*);
     void execute(JPABaseEmitter*);
-    daPy_mtxPosFollowEcallBack_c();
-    ~daPy_mtxPosFollowEcallBack_c();
+    daPy_mtxPosFollowEcallBack_c() {}
+    ~daPy_mtxPosFollowEcallBack_c() {}
 
-    /* 0x0 */ u8 field_0x0[0x10];
-};
+    /* 0xC */ u8 field_0xC[0x4];
+};  // Size: 0x10
 
 class daPy_swBlur_c : public J3DPacket {
 public:
     void initSwBlur(MtxP, int, float, int);
     void copySwBlur(MtxP, int);
     void draw();
-    ~daPy_swBlur_c();
+    ~daPy_swBlur_c() {}
 
     /* 0x010 */ u8 field_0x010[0x014 - 0x010];
     /* 0x014 */ int field_0x014;
@@ -160,23 +171,42 @@ class daPy_footData_c {
 public:
     ~daPy_footData_c();
     daPy_footData_c();
-    /* 0x0 */ u8 field_0x0[0x118];
+    
+    /* 0x000 */ u8 field_0x000[0x034 - 0x000];
+    /* 0x034 */ dBgS_LinkGndChk field_0x034;
+    /* 0x088 */ u8 field_0x088[0x118 - 0x088];
 };
 
-struct MagicArmorAuraEntry {
+struct daPy_aura_c {
     J3DModel* mpYaura00Model;
-    f32 field_0x4;
+    f32 mFrame;
+    
+    void setModel(J3DModel* model) { mpYaura00Model = model; }
+    J3DModel* getModel() { return mpYaura00Model; }
+    void setFrame(f32 frame) { mFrame = frame; }
+    f32 getFrame() { return mFrame; }
 };
 
 class daPy_anmIndex_c;
 
 class daPy_lk_c : public daPy_py_c {
 public:
+    enum daPy_PROC {};
+
     enum daPy_HEAP_TYPE {};
 
     enum daPy_ANM {};
 
     enum daPy_UPPER {};
+
+    enum {
+        PART_UNDER_e = 0,
+        PART_UPPER_e = 1,
+    };
+
+    enum {
+        UNDER_MOVE0_e = 0,
+    };
 
     void getBoomerangCatchPos() const;
     void getLineTopPos();
@@ -227,7 +257,7 @@ public:
     void drawShadow();
     void offBodyEffect();
     void onBodyEffect();
-    void draw();
+    BOOL draw();
     void setAtnList();
     void setActorPointer();
     void setTalkStatus();
@@ -312,7 +342,7 @@ public:
     void setSubjectMode();
     void checkMaskDraw();
     void checkSubjectEnd(int);
-    void checkGuardAccept();
+    BOOL checkGuardAccept();
     void cancelNoDamageMode();
     void commonProcInit(daPy_lk_c::daPy_PROC procID);
     void procScope_init(int);
@@ -436,25 +466,25 @@ public:
     void setDemoData();
     void setStickData();
     void setBgCheckParam();
-    void setParamData(int, int, int, int);
+    u32 setParamData(int, int, int, int);
     void checkLavaFace(cXyz*, int);
     void checkFallCode();
-    void startRestartRoom(u32, int, f32, int);
+    BOOL startRestartRoom(u32, int, f32, int);
     void checkSuccessGuard(int);
     void setShapeAngleOnGround();
     void setStepsOffset();
     void setBeltConveyerPower();
     void setWindAtPower();
     void checkRoofRestart();
-    void execute();
-    void playerDelete();
+    BOOL execute();
+    BOOL playerDelete();
     void initTextureAnime();
     void initTextureScroll();
-    void createHeap();
+    BOOL createHeap();
     void createAnimeHeap(JKRSolidHeap**, daPy_HEAP_TYPE);
-    void initModel(J3DModel**, int, u32);
-    void entryBtk(J3DModelData*, int);
-    void entryBrk(J3DModelData*, int);
+    J3DModelData* initModel(J3DModel**, int, u32);
+    J3DAnmTextureSRTKey* entryBtk(J3DModelData*, int);
+    J3DAnmTevRegKey* entryBrk(J3DModelData*, int);
     void playerInit();
     daPy_lk_c();
     int makeBgWait();
@@ -690,7 +720,7 @@ public:
     void procCrawlEnd();
     void checkGrabSpecialHeavyState();
     void setWeaponBlur();
-    void checkGrabBarrelSearch(int);
+    BOOL checkGrabBarrelSearch(int);
     void setGrabItemPos();
     void freeGrabItem();
     void checkNextActionGrab();
@@ -831,7 +861,7 @@ public:
     void bowJointCB(int);
     void bowButton() const;
     void checkBowReadyAnime() const;
-    void checkBowAnime() const;
+    BOOL checkBowAnime() const;
     void makeArrow();
     void deleteArrow();
     void setBowReadyAnime();
@@ -1002,30 +1032,30 @@ public:
     J3DAnmTextureSRTKey* getIceArrowBtk() { return mpIceArrowBtk; }
     J3DAnmTextureSRTKey* getLightArrowBtk() { return mpLightArrowBtk; }
 
-    virtual MtxP getLeftHandMatrix();
-    virtual MtxP getRightHandMatrix();
-    virtual f32 getGroundY();
+    virtual MtxP getLeftHandMatrix() { return mpCLModel->getAnmMtx(0x08); } // cl_LhandA joint
+    virtual MtxP getRightHandMatrix() { return mpCLModel->getAnmMtx(0x0C); } // cl_RhandA joint
+    virtual f32 getGroundY() { return mAcch.GetGroundH(); }
     virtual int getTactMusic() const;
     virtual int getTactTimerCancel() const;
     virtual BOOL checkPlayerGuard() const;
     virtual fopAc_ac_c* getGrabMissActor();
-    virtual BOOL checkPlayerFly() const;
-    virtual BOOL checkFrontRoll() const;
-    virtual BOOL checkBottleSwing() const;
-    virtual BOOL checkCutCharge() const;
+    virtual BOOL checkPlayerFly() const { return field_0x3618 & 0x10452822; } // TODO add enum
+    virtual BOOL checkFrontRoll() const { return mCurProc == 0x1E; } // TODO add enum
+    virtual BOOL checkBottleSwing() const { return mCurProc == 0xA5; }
+    virtual BOOL checkCutCharge() const { return mCurProc == 0x59; }
     virtual BOOL getBokoFlamePos(cXyz*);
-    virtual BOOL checkTactWait() const;
+    virtual BOOL checkTactWait() const { return mCurProc == 0x9A; }
     virtual void setTactZev(unsigned int, int, char*);
     virtual void onDekuSpReturnFlg(u8);
     virtual bool checkComboCutTurn() const;
-    virtual f32 getBaseAnimeFrameRate();
-    virtual f32 getBaseAnimeFrame();
-    virtual u32 getItemID() const;
-    virtual u32 getThrowBoomerangID() const;
-    virtual u32 getGrabActorID() const;
-    virtual BOOL checkGrabBarrel();
+    virtual f32 getBaseAnimeFrameRate() { return mFrameCtrlUnder[0].getRate(); }
+    virtual f32 getBaseAnimeFrame() { return mFrameCtrlUnder[0].getFrame(); }
+    virtual u32 getItemID() const { return mActorKeepEquip.getID(); }
+    virtual u32 getThrowBoomerangID() const { return mActorKeepThrow.getID(); }
+    virtual u32 getGrabActorID() const { return mActorKeepGrab.getID(); }
+    virtual BOOL checkGrabBarrel() { return checkGrabBarrelSearch(1); }
     virtual BOOL checkPlayerNoDraw();
-    virtual BOOL checkRopeTag();
+    virtual BOOL checkRopeTag() { return mActorKeepEquip.getActor() == NULL; }
     virtual BOOL checkRopeReadyAnime() const;
     virtual void voiceStart(u32);
     virtual void setOutPower(f32, s16, int);
@@ -1041,7 +1071,7 @@ public:
     virtual void cancelChangeTextureAnime();
 
     /* 0x0320 */ request_of_phase_process_class mPhsLoad;
-    /* 0x0328 */ J3DModelData* mpModelData;
+    /* 0x0328 */ J3DModelData* mpCLModelData;
     /* 0x032C */ J3DModel* mpCLModel;
     /* 0x0330 */ J3DModel* mpKatsuraModel;
     /* 0x0334 */ J3DModel* mpYamuModel;
@@ -1057,7 +1087,7 @@ public:
     /* 0x03A4 */ J3DShape* field_0x03a4;
     /* 0x03A8 */ J3DShape* field_0x03a8;
     /* 0x03AC */ dBgS_AcchCir mAcchCir[3];
-    /* 0x046C */ dBgS_Acch mAcch;
+    /* 0x046C */ dBgS_LinkAcch mAcch;
     /* 0x0630 */ dBgS_LinkLinChk mLinkLinChk;
     /* 0x069C */ dBgS_RopeLinChk mRopeLinChk;
     /* 0x0708 */ dBgS_BoomerangLinChk mBoomerangLinChk;
@@ -1065,41 +1095,41 @@ public:
     /* 0x07C8 */ dBgS_LinkRoofChk mRoofChk;
     /* 0x0814 */ dBgS_ArrowLinChk mArrowLinChk;
     /* 0x0880 */ dBgS_MirLightLinChk mMirLightLinChk;
-    /* 0x08EC */ u8 field_0x08EC[0x0910 - 0x08EC];
-    /* 0x0910 */ cXyz field_0x0910;
-    /* 0x091C */ u8 field_0x091C[0x0950 - 0x091C];
-    /* 0x0950 */ daPy_HIO_c* mpHIO;
+    /* 0x08EC */ dBgS_ObjGndChk_Spl field_0x08EC;
+    /* 0x0940 */ cBgS_PolyInfo mPolyInfo;
+    /* 0x0950 */ daPy_HIO_c* m_HIO;
     /* 0x0954 */ J3DModel* mpHandsModel;
     /* 0x0958 */ J3DModel* mpEquippedSwordModel;
     /* 0x095C */ J3DModel* mpSwgripaModel;
     /* 0x0960 */ J3DModel* mpSwgripmsModel;
     /* 0x0964 */ mDoExt_bckAnm mSwgripmsabBckAnim;
-    /* 0x0974 */ J3DAnmTevRegKey* mpTswgripmsabBrkData;
-    /* 0x0978 */ J3DAnmTextureSRTKey* mpTswgripmsBtkData;
+    /* 0x0974 */ J3DAnmTevRegKey* mpTswgripmsabBrk;
+    /* 0x0978 */ J3DAnmTextureSRTKey* mpTswgripmsBtk;
     /* 0x097C */ J3DModel* mpPodmsModel;
     /* 0x0980 */ J3DModel* mpEquippedShieldModel;
     /* 0x0984 */ J3DModel* mpShaModel;
     /* 0x0988 */ J3DModel* mpShmsModel;
-    /* 0x098C */ mDoExt_bckAnm field_0x098c;
-    /* 0x099C */ J3DAnmTextureSRTKey* field_0x099c;
+    /* 0x098C */ mDoExt_bckAnm mAtngshaBck;
+    /* 0x099C */ J3DAnmTextureSRTKey* mpTshmsBtk;
     /* 0x09A0 */ dDlst_mirrorPacket mMirrorPacket;
     /* 0x2E7C */ J3DModel* mpYmsls00Model;
-    /* 0x2E80 */ J3DAnmTextureSRTKey* mpYmsls00BtkData;
+    /* 0x2E80 */ J3DAnmTextureSRTKey* mpYmsls00Btk;
     /* 0x2E84 */ J3DModel* mpHbootsModelRightFoot;
     /* 0x2E88 */ J3DModel* mpHbootsModelLeftFoot;
     /* 0x2E8C */ J3DModel* mpPringModel;
-    /* 0x2E90 */ JKRSolidHeap* field_0x2e90;
-    /* 0x2E94 */ u8 field_0x2E94[0x2E98 - 0x2E94];
+    /* 0x2E90 */ JKRSolidHeap* mpItemHeaps[2];
     /* 0x2E98 */ J3DModel* mpHeldItemModel;
     /* 0x2E9C */ mDoExt_bckAnm mSwordAnim;
     /* 0x2EAC */ u8 field_0x2EAC[0x2EB0 - 0x2EAC];
     /* 0x2EB0 */ J3DAnmTevRegKey* mpBombBrk;
     /* 0x2EB4 */ J3DAnmTevRegKey* mpGwp00BrkData;
     /* 0x2EB8 */ J3DAnmTextureSRTKey* mpGwp00BtkData;
-    /* 0x2EBC */ u8 field_0x2EBC[0x2EC0 - 0x2EBC];
+    /* 0x2EBC */ J3DAnmTextureSRTKey* mpGicer00Btk;
     /* 0x2EC0 */ J3DAnmTextureSRTKey* mpIceArrowBtk;
     /* 0x2EC4 */ J3DAnmTextureSRTKey* mpLightArrowBtk;
-    /* 0x2EC8 */ u8 field_0x2EC8[0x2ED4 - 0x2EC8];
+    /* 0x2EC8 */ J3DAnmTextureSRTKey* mpGicer01Btk;
+    /* 0x2ECC */ JKRSolidHeap* field_0x2ECC;
+    /* 0x2ED0 */ void* m_item_bck_buffer;
     /* 0x2ED4 */ J3DAnmTextureSRTKey* mpHeldItemModelAnimTexEx;
     /* 0x2ED8 */ J3DAnmTextureSRTKey* mpSwordAnimBTK;
     /* 0x2EDC */ J3DAnmTevRegKey* mpHeldItemAnimBRK;
@@ -1112,30 +1142,29 @@ public:
     /* 0x2EF8 */ J3DAnmTevRegKey* field_0x2ef8;
     /* 0x2EFC */ mDoExt_brkAnm field_0x2efc;
     /* 0x2F14 */ J3DModel* mpSuimenMunyaModel;
-    /* 0x2F18 */ J3DAnmTextureSRTKey* field_0x2f18;
+    /* 0x2F18 */ J3DAnmTextureSRTKey* mpSuimenMunyaBtk;
     /* 0x2F1C */ J3DModel* mpYuchw00Model;
-    /* 0x2F20 */ mDoExt_bckAnm field_0x2f20;
-    /* 0x2F30 */ J3DAnmTextureSRTKey* field_0x2f30;
-    /* 0x2F34 */ J3DAnmTevRegKey* field_0x2f34;
+    /* 0x2F20 */ mDoExt_bckAnm mYuchw00Bck;
+    /* 0x2F30 */ J3DAnmTextureSRTKey* mpYuchw00Btk;
+    /* 0x2F34 */ J3DAnmTevRegKey* mpYuchw00Brk;
     /* 0x2F38 */ J3DModel* mpYbafo00Model;
-    /* 0x2F3C */ J3DAnmTextureSRTKey* field_0x2f3c;
-    /* 0x2F40 */ MagicArmorAuraEntry mMagicArmorAuraEntries[6];
-    /* 0x2F70 */ mDoExt_brkAnm field_0x2f70;
-    /* 0x2F88 */ u8 field_0x2F88[0x2F8C - 0x2F88];
+    /* 0x2F3C */ J3DAnmTextureSRTKey* mpYbafo00Btk;
+    /* 0x2F40 */ daPy_aura_c mMagicArmorAuraEntries[6];
+    /* 0x2F70 */ mDoExt_brkAnm mYaura00rBrk;
+    /* 0x2F88 */ J3DAnmTextureSRTKey* mpYaura00Btk;
     /* 0x2F8C */ J3DModel* mpYmgcs00Model;
-    /* 0x2F90 */ mDoExt_brkAnm field_0x2f90;
-    /* 0x2FA8 */ u8 field_0x2FA8[0x2FAC - 0x2FA8];
-    /* 0x2FAC */ J3DMtxCalc* field_0x2fac;
-    /* 0x2FB0 */ J3DMtxCalc* field_0x2fb0;
-    /* 0x2FB4 */ mDoExt_AnmRatioPack field_0x2fb4[2];
-    /* 0x2FC4 */ mDoExt_AnmRatioPack field_0x2fc4[3];
-    /* 0x2FDC */ daPy_anmHeap_c field_0x2fdc[2];
-    /* 0x2FFC */ daPy_anmHeap_c field_0x2ffc[3];
-    /* 0x302C */ J3DFrameCtrl field_0x302c[2];
-    /* 0x3054 */ J3DFrameCtrl field_0x3054[3];
+    /* 0x2F90 */ mDoExt_brkAnm mYmgcs00Brk;
+    /* 0x2FA8 */ J3DAnmTextureSRTKey* mpYmgcs00Btk;
+    /* 0x2FAC */ mDoExt_MtxCalcAnmBlendTblOld* m_pbCalc[2];
+    /* 0x2FB4 */ mDoExt_AnmRatioPack mAnmRatioUnder[2];
+    /* 0x2FC4 */ mDoExt_AnmRatioPack mAnmRatioUpper[3];
+    /* 0x2FDC */ daPy_anmHeap_c m_anm_heap_under[2];
+    /* 0x2FFC */ daPy_anmHeap_c m_anm_heap_upper[3];
+    /* 0x302C */ J3DFrameCtrl mFrameCtrlUnder[2];
+    /* 0x3054 */ J3DFrameCtrl mFrameCtrlUpper[3];
     /* 0x3090 */ daPy_sightPacket_c mSightPacket;
     /* 0x30E0 */ JAIZelAnime mJAIZelAnime;
-    /* 0x3178 */ u8 field_0x3178[0x317C - 0x3178];
+    /* 0x3178 */ void* m_sanm_buffer;
     /* 0x317C */ daPy_actorKeep_c mActorKeepEquip;
     /* 0x3184 */ daPy_actorKeep_c mActorKeepThrow;
     /* 0x318C */ daPy_actorKeep_c mActorKeepGrab;
@@ -1146,7 +1175,7 @@ public:
     /* 0x31A8 */ fopAc_ac_c* mpAttnActorX;
     /* 0x31AC */ fopAc_ac_c* mpAttnActorY;
     /* 0x31B0 */ fopAc_ac_c* mpAttnActorZ;
-    /* 0x31B4 */ mDoExt_MtxCalcOldFrame* field_0x31b4;
+    /* 0x31B4 */ mDoExt_MtxCalcOldFrame* m_old_fdata;
     /* 0x31B8 */ s16 mTexAnimeResIdx;
     /* 0x31BA */ s16 field_0x31ba;
     /* 0x31BC */ s16 field_0x31bc;
@@ -1159,30 +1188,42 @@ public:
     /* 0x31CE */ s16 field_0x31ce;
     /* 0x31D0 */ void* mpTextureScrollResData;
     /* 0x31D4 */ JKRSolidHeap* mpTextureScrollResHeap;
-    /* 0x31D8 */ u32 mCurProc;
+    /* 0x31D8 */ int mCurProc;
     /* 0x31DC */ int (daPy_lk_c::*field_0x31dc)();
     /* 0x31E8 */ daPy_footEffect_c field_0x31e8[2];
-    /* 0x3280 */ u8 field_0x3280[0x3294 - 0x3280];
+    /* 0x3280 */ dPa_rippleEcallBack field_0x3280;
     /* 0x3294 */ daPy_swimTailEcallBack_c mSwimTailEcallBack[2];
     /* 0x32E4 */ daPy_mtxFollowEcallBack_c field_0x32e4;
     /* 0x32F0 */ daPy_mtxFollowEcallBack_c field_0x32f0;
     /* 0x32FC */ dPa_smokeEcallBack mSmokeEcallBack;
-    /* 0x331C */ dPa_cutTurnEcallBack_c mCutTurnEcallBack[3];
-    /* 0x334C */ daPy_waterDropEcallBack_c mWaterDropEcallBack[2];
+    /* 0x331C */ dPa_cutTurnEcallBack_c field_0x331C;
+    /* 0x332C */ dPa_cutTurnEcallBack_c field_0x332C;
+    /* 0x333C */ dPa_cutTurnEcallBack_c field_0x333C;
+    /* 0x334C */ daPy_waterDropEcallBack_c field_0x334C;
+    /* 0x336C */ daPy_waterDropEcallBack_c field_0x336C;
     /* 0x338C */ daPy_followEcallBack_c field_0x338c;
-    /* 0x33A8 */ daPy_mtxFollowEcallBack_c field_0x33a8;
-    /* 0x33B4 */ u8 field_0x33B4[0x33B8 - 0x33B4];
+    /* 0x33A8 */ daPy_mtxPosFollowEcallBack_c field_0x33a8;
     /* 0x33B8 */ daPy_dmEcallBack_c field_0x33b8[4];
-    /* 0x33E8 */ u8 field_0x33E8[0x3460 - 0x33E8];
+    /* 0x33E8 */ daPy_mtxFollowEcallBack_c field_0x33E8;
+    /* 0x33F4 */ daPy_fanSwingEcallBack_c mFanSwingCb;
+    /* 0x3400 */ daPy_mtxPosFollowEcallBack_c field_0x3400;
+    /* 0x3410 */ daPy_followEcallBack_c field_0x3410;
+    /* 0x342C */ daPy_mtxFollowEcallBack_c field_0x342C;
+    /* 0x3438 */ daPy_followEcallBack_c field_0x3438;
+    /* 0x3454 */ daPy_mtxFollowEcallBack_c field_0x3454;
     /* 0x3460 */ daPy_mtxPosFollowEcallBack_c field_0x3460[2];
     /* 0x3480 */ dAttention_c* mpAttention;
     /* 0x3484 */ dAttList_c* mpAttnEntryA;
     /* 0x3488 */ dAttList_c* mpAttnEntryX;
     /* 0x348C */ dAttList_c* mpAttnEntryY;
     /* 0x3490 */ dAttList_c* mpAttnEntryZ;
-    /* 0x3494 */ u8 field_0x3494[0x34B9 - 0x3494];
+    /* 0x3494 */ u8 field_0x3494[0x3498 - 0x3494];
+    /* 0x3498 */ LIGHT_INFLUENCE field_0x3498;
+    /* 0x34B8 */ u8 field_0x34B8[0x34B9 - 0x34B8];
     /* 0x34B9 */ u8 mFrontWallType;
-    /* 0x34BA */ u8 field_0x34BA[0x34BD - 0x34BA];
+    /* 0x34BA */ u8 field_0x34BA[0x34BB - 0x34BA];
+    /* 0x34BB */ u8 mCurrItemHeapIdx;
+    /* 0x34BC */ u8 field_0x34BC[0x34BD - 0x34BC];
     /* 0x34BD */ u8 mLastUsedEquipItem;
     /* 0x34BE */ u8 field_0x34BE[0x34C0 - 0x34BE];
     /* 0x34C0 */ u8 field_0x34c0;
@@ -1194,7 +1235,9 @@ public:
     /* 0x34C6 */ u8 field_0x34C6[0x34C7 - 0x34C6];
     /* 0x34C7 */ u8 mActivePlayerBombs;
     /* 0x34C8 */ u8 mPressedButtonsBitfield;
-    /* 0x34C9 */ u8 field_0x34C9[0x34D0 - 0x34C9];
+    /* 0x34C9 */ u8 field_0x34C9[0x34CB - 0x34C9];
+    /* 0x34CB */ u8 field_0x34CB;
+    /* 0x34CC */ u8 field_0x34D0[0x34D0 - 0x34CC];
     /* 0x34D0 */ s16 field_0x34d0;
     /* 0x34D2 */ s16 field_0x34d2;
     /* 0x34D4 */ s16 field_0x34d4;
@@ -1224,7 +1267,8 @@ public:
     /* 0x3556 */ u8 field_0x3556[0x355E - 0x3556];
     /* 0x355E */ u16 field_0x355e;
     /* 0x3560 */ u16 mHeldItemType;
-    /* 0x3562 */ u8 field_0x3562[0x3566 - 0x3562];
+    /* 0x3562 */ u8 field_0x3562[0x3564 - 0x3562];
+    /* 0x3564 */ s16 field_0x3564;
     /* 0x3566 */ s16 field_0x3566;
     /* 0x3568 */ s16 field_0x3568;
     /* 0x356A */ u8 field_0x356A[0x356C - 0x356A];
@@ -1268,7 +1312,9 @@ public:
     /* 0x3634 */ int field_0x3634;
     /* 0x3638 */ u8 field_0x3638[0x3644 - 0x3638];
     /* 0x3644 */ f32 field_0x3644;
-    /* 0x3648 */ u8 field_0x3648[0x3694 - 0x3648];
+    /* 0x3648 */ u8 field_0x3648[0x3668 - 0x3648];
+    /* 0x3668 */ J3DTransformInfo field_0x3668;
+    /* 0x3688 */ u8 field_0x3688[0x3694 - 0x3688];
     /* 0x3694 */ cXyz mOldSpeed;
     /* 0x36A0 */ cXyz field_0x36a0;
     /* 0x36AC */ cXyz field_0x36ac;
@@ -1293,6 +1339,115 @@ public:
     /* 0x488C */ dCcD_Cps field_0x488c;
     /* 0x49C4 */ dCcD_Sph field_0x49c4;
     /* 0x4AF0 */ dCcD_Cps field_0x4af0;
+};  // Size: 0x4C28
+
+enum LINK_RES_FILE_ID { // IDs and indexes are synced
+    /* BCK */
+    LINK_BCK_ATNGSHA=0xA,
+    LINK_BCK_BOMB=0xB,
+    LINK_BCK_COMBO_TATE=0xC,
+    LINK_BCK_GICER01=0xD,
+    LINK_BCK_GWP00=0xE,
+    LINK_BCK_SWGRIPMSAB=0xF,
+    LINK_BCK_YUCHW00=0x10,
+    
+    /* BDL */
+    LINK_BDL_BINFAIRY=0x13,
+    LINK_BDL_BOOMERANG=0x14,
+    LINK_BDL_BOTTLECAP=0x15,
+    LINK_BDL_BOW=0x16,
+    LINK_BDL_CAMERA=0x17,
+    LINK_BDL_CL=0x18,
+    LINK_BDL_FAN=0x19,
+    LINK_BDL_FANB=0x1A,
+    LINK_BDL_FANSMALL=0x1B,
+    LINK_BDL_HAMMER=0x1C,
+    LINK_BDL_HANDS=0x1D,
+    LINK_BDL_HOOKSHOT=0x1E,
+    LINK_BDL_HYOINOMI=0x1F,
+    LINK_BDL_KATSURA=0x20,
+    LINK_BDL_LETTER=0x21,
+    LINK_BDL_PODMS=0x22,
+    LINK_BDL_PRING=0x23,
+    LINK_BDL_SHA=0x24,
+    LINK_BDL_SWA=0x25,
+    LINK_BDL_SWGRIPA=0x26,
+    LINK_BDL_TCEIVER=0x27,
+    LINK_BDL_TETOLACH=0x28,
+    LINK_BDL_YAMU=0x29,
+    
+    /* BDLC */
+    LINK_BDL_ESA=0x2C,
+    LINK_BDL_HBOOTS=0x2D,
+    LINK_BDL_ROPEEND=0x2E,
+    LINK_BDL_TELESCOPE=0x2F,
+    
+    /* BDLI */
+    LINK_BDL_GARWFI00=0x32,
+    LINK_BDL_GARWFI01=0x33,
+    LINK_BDL_GARWG00=0x34,
+    
+    /* BDLM */
+    LINK_BDL_ARROW=0x37,
+    LINK_BDL_ARROWGLITTER=0x38,
+    LINK_BDL_BINHO=0x39,
+    LINK_BDL_BINLIQUID=0x3A,
+    LINK_BDL_BINLIQUIDH=0x3B,
+    LINK_BDL_BOMB=0x3C,
+    LINK_BDL_BOTTLEEMP=0x3D,
+    LINK_BDL_CUTFH=0x3E,
+    LINK_BDL_CUTFM=0x3F,
+    LINK_BDL_GICER00=0x40,
+    LINK_BDL_GICER01=0x41,
+    LINK_BDL_GWP00=0x42,
+    LINK_BDL_SHMS=0x43,
+    LINK_BDL_SUIMEN_MUNYA=0x44,
+    LINK_BDL_SWGRIPMS=0x45,
+    LINK_BDL_SWMS=0x46,
+    LINK_BDL_TAKT=0x47,
+    LINK_BDL_YAURA00=0x48,
+    LINK_BDL_YBAFO00=0x49,
+    LINK_BDL_YHSLS00=0x4A,
+    LINK_BDL_YMGCS00=0x4B,
+    LINK_BDL_YMSLI00=0x4C,
+    LINK_BDL_YMSLS00=0x4D,
+    LINK_BDL_YUCHW00=0x4E,
+    
+    /* BRK */
+    LINK_BRK_BOMB=0x51,
+    LINK_BRK_GARWFI00=0x52,
+    LINK_BRK_GARWFI01=0x53,
+    LINK_BRK_GARWG00=0x54,
+    LINK_BRK_GWP00=0x55,
+    LINK_BRK_TSWGRIPMSAB=0x56,
+    LINK_BRK_YAURA00_G=0x57,
+    LINK_BRK_YAURA00_R=0x58,
+    LINK_BRK_YMGCS00_MS=0x59,
+    LINK_BRK_YMGCS00_TS=0x5A,
+    LINK_BRK_YUCHW00=0x5B,
+    
+    /* BTK */
+    LINK_BTK_GARWFI00=0x5E,
+    LINK_BTK_GARWFI01=0x5F,
+    LINK_BTK_GARWG00=0x60,
+    LINK_BTK_GICER00=0x61,
+    LINK_BTK_GICER01=0x62,
+    LINK_BTK_GWP00=0x63,
+    LINK_BTK_SUIMEN_MUNYA=0x64,
+    LINK_BTK_TARROWGLITTER=0x65,
+    LINK_BTK_TSHMS=0x66,
+    LINK_BTK_TSWGRIPMS=0x67,
+    LINK_BTK_TTIPICE=0x68,
+    LINK_BTK_YAURA00=0x69,
+    LINK_BTK_YBAFO00=0x6A,
+    LINK_BTK_YMGCS00=0x6B,
+    LINK_BTK_YMSLS00=0x6C,
+    LINK_BTK_YUCHW00=0x6D,
+    
+    /* TEX */
+    LINK_BTI_BLUR=0x70,
+    LINK_BTI_LINKTEXBCI4=0x71,
+    LINK_BTI_ROCK_MARK=0x72,
 };
 
 #endif /* D_A_PLAYER_LINK */

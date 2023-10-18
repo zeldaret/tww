@@ -35,7 +35,7 @@ class dPa_levelEcallBack : public JPACallBackBase<JPABaseEmitter*> {
 public:
     virtual ~dPa_levelEcallBack() {}
     virtual void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8) = 0;
-};
+};  // Size: 0x04
 
 class dPa_followEcallBack : public dPa_levelEcallBack {
 public:
@@ -56,7 +56,7 @@ public:
     /* 0x11 */ u8 field_0x11;
     /* 0x12 */ u8 field_0x12;
     /* 0x13 */ u8 field_0x13;
-};
+};  // Size: 0x14
 
 STATIC_ASSERT(sizeof(dPa_followEcallBack) == 0x14);
 
@@ -251,7 +251,7 @@ public:
 
 class dPa_cutTurnEcallBack_c : public dPa_levelEcallBack {
 public:
-    dPa_cutTurnEcallBack_c();
+    dPa_cutTurnEcallBack_c() {}
     virtual ~dPa_cutTurnEcallBack_c() {}
     
     virtual void executeAfter(JPABaseEmitter*);
@@ -259,8 +259,8 @@ public:
     void end();
 
 public:
-    /* 0x04 */ u8 field_0x04[0x0c];
-};
+    /* 0x04 */ u8 field_0x04[0x0C];
+};  // Size: 0x10
 
 STATIC_ASSERT(sizeof(dPa_cutTurnEcallBack_c) == 0x10);
 

@@ -1221,7 +1221,7 @@ void dStage_playerInitIkada(fopAcM_prm_class*, void*) {
 }
 
 /* 800419D0-80041AEC       .text dStage_chkPlayerId__Fii */
-u32 dStage_chkPlayerId(int playerId, int room_no) {
+bool dStage_chkPlayerId(int playerId, int room_no) {
     stage_actor_class * player;
 
     if (room_no == -1) {
@@ -1232,14 +1232,14 @@ u32 dStage_chkPlayerId(int playerId, int room_no) {
     }
 
     if (player == NULL)
-        return FALSE;
+        return false;
 
     stage_actor_data_class * actor = player->m_entries;
     for (int i = 0; i < player->num; i++, actor++)
         if ((u8)actor->mAngle.z == playerId)
-            return TRUE;
+            return true;
 
-    return FALSE;
+    return false;
 }
 
 /* 80041AF4-80041E84       .text dStage_playerInit__FP11dStage_dt_cPviPv */
@@ -2060,8 +2060,6 @@ int dStage_RoomCheck(cBgS_GndChk* i_gndChk) {
 void dStage_roomControl_c::SetTimePass(int i_timepass) {
     m_time_pass = i_timepass;
 }
-
-int dStage_changeScene(int i_exitId, f32 speed, u32 mode, s8 room_no);
 
 static inline s8 IkadaGetRoomNoArg0(fopAc_ac_c* i_actor) {
     return (fopAcM_GetParam(i_actor) >> 4) & 0x3F;

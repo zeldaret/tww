@@ -990,4 +990,10 @@ inline int dStage_FileList_dt_GlobalWindLevel(dStage_FileList_dt_c* i_fili) {
     return (i_fili->mParam >> 0x12) & 3;
 }
 
+bool dStage_chkPlayerId(int playerId, int room_no);
+
+int dStage_changeScene(int i_exitId, f32 speed, u32 mode, s8 room_no);
+
+void dStage_restartRoom(u32 roomParam, u32 mode);
+
 #endif /* D_D_STAGE_H */

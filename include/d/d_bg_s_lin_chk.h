@@ -22,21 +22,21 @@ public:
 
 class dBgS_LinkLinChk : public dBgS_LinChk {
 public:
-    dBgS_LinkLinChk();
+    dBgS_LinkLinChk() { SetLink(); }
 
     virtual ~dBgS_LinkLinChk();
 };
 
 class dBgS_RopeLinChk : public dBgS_LinChk {
 public:
-    dBgS_RopeLinChk();
+    dBgS_RopeLinChk() { SetRope(); }
 
     virtual ~dBgS_RopeLinChk();
 };
 
 class dBgS_BoomerangLinChk : public dBgS_LinChk {
 public:
-    dBgS_BoomerangLinChk();
+    dBgS_BoomerangLinChk() { SetBoomerang(); }
 
     virtual ~dBgS_BoomerangLinChk();
 };
@@ -82,9 +82,13 @@ public:
 
 class dBgS_MirLightLinChk : public dBgS_LinChk {
 public:
-    dBgS_MirLightLinChk();
+    dBgS_MirLightLinChk() {
+        SetArrow(); // "Arrow" also covers light
+        OnAll();
+        OnLightGrp();
+    }
 
-    virtual ~dBgS_MirLightLinChk();
+    virtual ~dBgS_MirLightLinChk() {}
 };
 
 #endif /* D_BG_D_BG_S_LIN_CHK_H */

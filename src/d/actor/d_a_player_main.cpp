@@ -12,12 +12,18 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
 #include "JSystem/JKernel/JKRHeap.h"
+#include "d/d_procname.h"
+#include "d/d_kankyo.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
 
 #include "src/d/actor/d_a_player_HIO.inc"
 
+char l_arcName[] = "Link";
+
 /* 80102E8C-80102EAC       .text daPy_createHeap__FP10fopAc_ac_c */
-void daPy_createHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL daPy_createHeap(fopAc_ac_c* i_this) {
+    return ((daPy_lk_c*)i_this)->createHeap();
 }
 
 /* 80102F64-80103074       .text calc__13daPy_matAnm_cCFP11J3DMaterial */
@@ -78,7 +84,7 @@ void daPy_lk_c::auraJointCB0(int) {
 class J3DNode;
 
 /* 80103450-80103494       .text daPy_auraCallback__FP7J3DNodei */
-void daPy_auraCallback(J3DNode*, int) {
+static BOOL daPy_auraCallback(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -88,8 +94,8 @@ void daPy_lk_c::jointBeforeCB(int, J3DTransformInfo*, Quaternion*) {
 }
 
 /* 80103A88-80103AAC       .text daPy_jointBeforeCallback__FUlUsP16J3DTransformInfoP10Quaternion */
-void daPy_jointBeforeCallback(u32, u16, J3DTransformInfo*, Quaternion*) {
-    /* Nonmatching */
+static BOOL daPy_jointBeforeCallback(u32 i_this, u16 param_1, J3DTransformInfo* param_2, Quaternion* param_3) {
+    ((daPy_lk_c*)i_this)->jointBeforeCB(param_1, param_2, param_3);
 }
 
 /* 80103AAC-80103C1C       .text jointAfterCB__9daPy_lk_cFiP16J3DTransformInfoP10Quaternion */
@@ -98,8 +104,8 @@ void daPy_lk_c::jointAfterCB(int, J3DTransformInfo*, Quaternion*) {
 }
 
 /* 80103C1C-80103C40       .text daPy_jointAfterCallback__FUlUsP16J3DTransformInfoP10Quaternion */
-void daPy_jointAfterCallback(u32, u16, J3DTransformInfo*, Quaternion*) {
-    /* Nonmatching */
+static BOOL daPy_jointAfterCallback(u32 i_this, u16 param_1, J3DTransformInfo* param_2, Quaternion* param_3) {
+    ((daPy_lk_c*)i_this)->jointAfterCB(param_1, param_2, param_3);
 }
 
 /* 80103C40-80103EE4       .text jointCB0__9daPy_lk_cFi */
@@ -108,7 +114,7 @@ void daPy_lk_c::jointCB0(int) {
 }
 
 /* 80103EE4-80103F28       .text daPy_jointCallback0__FP7J3DNodei */
-void daPy_jointCallback0(J3DNode*, int) {
+static BOOL daPy_jointCallback0(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -118,18 +124,23 @@ void daPy_lk_c::jointCB1() {
 }
 
 /* 80104178-801041B4       .text daPy_jointCallback1__FP7J3DNodei */
-void daPy_jointCallback1(J3DNode*, int) {
+static BOOL daPy_jointCallback1(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 801041B4-801041EC       .text setAnimeHeap__9daPy_lk_cFP12JKRSolidHeap */
-void daPy_lk_c::setAnimeHeap(JKRSolidHeap*) {
-    /* Nonmatching */
+void daPy_lk_c::setAnimeHeap(JKRSolidHeap* animeHeap) {
+    animeHeap->freeAll();
+    mDoExt_setCurrentHeap(animeHeap);
 }
 
 /* 801041EC-80104240       .text setItemHeap__9daPy_lk_cFv */
 void daPy_lk_c::setItemHeap() {
-    /* Nonmatching */
+    if (!checkResetFlg0(daPy_RFLG0_UNK4000)) {
+        mCurrItemHeapIdx ^= 1;
+        onResetFlg0(daPy_RFLG0_UNK4000);
+    }
+    setAnimeHeap(mpItemHeaps[mCurrItemHeapIdx]);
 }
 
 /* 80104240-80104280       .text setBlurPosResource__9daPy_lk_cFUs */
@@ -298,13 +309,13 @@ void daPy_lk_c::onBodyEffect() {
 }
 
 /* 80107308-80108204       .text draw__9daPy_lk_cFv */
-void daPy_lk_c::draw() {
+BOOL daPy_lk_c::draw() {
     /* Nonmatching */
 }
 
 /* 80108204-80108224       .text daPy_Draw__FP9daPy_lk_c */
-void daPy_Draw(daPy_lk_c*) {
-    /* Nonmatching */
+static BOOL daPy_Draw(daPy_lk_c* i_this) {
+    return ((daPy_lk_c*)i_this)->draw();
 }
 
 /* 80108224-8010841C       .text setAtnList__9daPy_lk_cFv */
@@ -743,8 +754,17 @@ void daPy_lk_c::checkSubjectEnd(int) {
 }
 
 /* 80112280-80112330       .text checkGuardAccept__9daPy_lk_cFv */
-void daPy_lk_c::checkGuardAccept() {
-    /* Nonmatching */
+BOOL daPy_lk_c::checkGuardAccept() {
+    if (field_0x3618 & 0x40 && !checkBowAnime()) {
+        u32 stageType = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo());
+        if (stageType != 2 ||
+            strcmp(dComIfGp_getStartStageName(), "Ojhous") == 0 ||
+            strcmp(dComIfGp_getStartStageName(), "Orichh") == 0)
+        {
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 /* 80112330-80112348       .text cancelNoDamageMode__9daPy_lk_cFv */
@@ -1363,7 +1383,7 @@ void daPy_lk_c::setBgCheckParam() {
 }
 
 /* 801200F8-8012010C       .text setParamData__9daPy_lk_cFiiii */
-void daPy_lk_c::setParamData(int, int, int, int) {
+u32 daPy_lk_c::setParamData(int, int, int, int) {
     /* Nonmatching */
 }
 
@@ -1378,8 +1398,102 @@ void daPy_lk_c::checkFallCode() {
 }
 
 /* 80120724-80120BBC       .text startRestartRoom__9daPy_lk_cFUlifi */
-void daPy_lk_c::startRestartRoom(u32, int, f32, int) {
-    /* Nonmatching */
+BOOL daPy_lk_c::startRestartRoom(u32 param_1, int param_2, f32 param_3, int i_point) {
+    /* Nonmatching - npc_sarace */
+    if (!checkNoResetFlg0(daPyFlg0_UNK4000) && (i_point != 0 || dComIfGp_event_compulsory(this, NULL, -1))) {
+        mDemo.setOriginalDemoType();
+        if (i_point == 0) {
+            mDemo.setDemoMode(1);
+        }
+        onNoResetFlg0(daPyFlg0_UNK4000);
+        changePlayer(this);
+        
+        if (dComIfGp_getMiniGameType() == 1) {
+            dComIfGp_setNextStage("sea", 1, 48, -1, 0.0f, 0, 1, 0);
+            mDoAud_seStart(JA_SE_FORCE_BACK, NULL, 0, 0);
+            // daNpc_Sarace_c::ship_race_result = 3;
+            field_0x354e = 0;
+            return TRUE;
+        } else {
+            u32 stageType = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo());
+            setDamagePoint(param_3);
+            field_0x354e = 0;
+            
+            if (stageType == 7 && !dComIfGs_isEventBit(0x2A08) && (current.roomNo == 11 || current.roomNo == 44) && dStage_chkPlayerId(0x80, current.roomNo)) {
+                dComIfGp_setNextStage(dComIfGp_getStartStageName(), 0x80, current.roomNo, -1, 0.0f, param_1, 1, 0);
+                u32 roomParam = setParamData(-1, 0, param_2, 0);
+                dComIfGs_setRestartRoomParam(roomParam);
+                mDoAud_seStart(JA_SE_FORCE_BACK, NULL, 0, 0);
+                return TRUE;
+            }
+            
+            if (checkNoResetFlg0(daPyFlg0_UNK10) && mCurProc != 0xB2) {
+                i_point = field_0x34CB;
+            } else {
+                i_point = field_0x3594;
+                if (i_point != 0xFF && !dComIfGs_checkSeaLandingEvent(current.roomNo)) {
+                    i_point = 0xFF;
+                }
+            }
+            
+            if (i_point == 0xFF) {
+                if (stageType == 7) {
+                    cXyz* pos;
+                    if (dComIfGp_getShipActor()) {
+                        pos = &((fopAc_ac_c*)dComIfGp_getShipActor())->current.pos;
+                    } else {
+                        pos = &current.pos;
+                    }
+                    
+                    int quad_x = (1.0f/50000.0f) * (350000.0f + pos->x);
+                    int quad_z = (1.0f/50000.0f) * (350000.0f + pos->z);
+                    if (quad_x < 0) {
+                        quad_x = 0;
+                    } else if (quad_x > 13) {
+                        quad_x = 13;
+                    }
+                    if (quad_z < 0) {
+                        quad_z = 0;
+                    } else if (quad_z > 13) {
+                        quad_z = 13;
+                    }
+                    
+                    int subsector_z = quad_z & 1;
+                    int subsector_x = quad_x & 1;
+                    int sector_z = quad_z >> 1;
+                    int sector_x = quad_x >> 1;
+                    int sector_num = sector_z*7 + sector_x;
+                    int scls_idx = subsector_x + (sector_num << 2) + (subsector_z << 1);
+                    
+                    dStage_changeScene(scls_idx, 0.0f, param_1, -1);
+                } else {
+                    if (mCurProc == 0xB2) {
+                        dStage_changeScene(0, 0.0f, param_1, -1);
+                    } else {
+                        int roomNo = dComIfGs_getRestartRoomNo();
+                        u32 roomParam = setParamData(roomNo, 0, param_2, 0);
+                        dStage_restartRoom(roomParam, param_1);
+                        mDoAud_seStart(JA_SE_FORCE_BACK, NULL, 0, 0);
+                    }
+                    return TRUE;
+                }
+            } else if (checkNoResetFlg0(daPyFlg0_UNK10)) {
+                dComIfGp_setNextStage(dComIfGp_getStartStageName(), i_point, 41, -1, 0.0f, param_1, 1, 0);
+            } else {
+                dComIfGp_setNextStage(dComIfGp_getStartStageName(), i_point, current.roomNo, -1, 0.0f, param_1, 1, 0);
+            }
+            
+            if (mCurProc != 0xB2) {
+                u32 roomParam = setParamData(-1, 0, param_2, 0);
+                dComIfGs_setRestartRoomParam(roomParam);
+                mDoAud_seStart(JA_SE_FORCE_BACK, NULL, 0, 0);
+            }
+            
+            return TRUE;
+        }
+    }
+    
+    return FALSE;
 }
 
 /* 80120BBC-80120BE0       .text checkSuccessGuard__9daPy_lk_cFi */
@@ -1413,28 +1527,89 @@ void daPy_lk_c::checkRoofRestart() {
 }
 
 /* 80121870-80122D30       .text execute__9daPy_lk_cFv */
-void daPy_lk_c::execute() {
+BOOL daPy_lk_c::execute() {
     /* Nonmatching */
 }
 
 /* 80122D30-80122D50       .text daPy_Execute__FP9daPy_lk_c */
-void daPy_Execute(daPy_lk_c*) {
-    /* Nonmatching */
+static BOOL daPy_Execute(daPy_lk_c* i_this) {
+    return ((daPy_lk_c*)i_this)->execute();
 }
 
 /* 80122D50-80122D58       .text daPy_IsDelete__FP9daPy_lk_c */
-void daPy_IsDelete(daPy_lk_c*) {
-    /* Nonmatching */
+static BOOL daPy_IsDelete(daPy_lk_c*) {
+    return TRUE;
 }
 
 /* 80122D58-80123058       .text playerDelete__9daPy_lk_cFv */
-void daPy_lk_c::playerDelete() {
+BOOL daPy_lk_c::playerDelete() {
     /* Nonmatching */
+    for (int i = 0; i < (int)ARRAY_SIZE(field_0x31e8); i++) {
+        daPy_footEffect_c* footEffect = &field_0x31e8[i];
+        footEffect->mSmokeCb.end();
+        footEffect->mFollowCb.end();
+    }
+    if (mFanSwingCb.mpEmitter) {
+        mFanSwingCb.mpEmitter->clearStatus(0x40);
+        mFanSwingCb.mpEmitter->setEmitterCallBackPtr(NULL);
+        mFanSwingCb.mpEmitter = NULL;
+    }
+    field_0x338c.end();
+    field_0x33a8.end();
+    field_0x3280.end();
+    field_0x334C.end();
+    field_0x336C.end();
+    mSwimTailEcallBack[0].remove();
+    mSwimTailEcallBack[1].remove();
+    field_0x32e4.end();
+    field_0x32f0.end();
+    field_0x33E8.end();
+    mSmokeEcallBack.end();
+    field_0x331C.end();
+    field_0x332C.end();
+    field_0x333C.end();
+    field_0x3400.end();
+    field_0x3410.end();
+    field_0x3438.end();
+    field_0x342C.end();
+    field_0x3454.end();
+    field_0x3460[0].end();
+    field_0x3460[1].end();
+    
+    endDamageEmitter();
+    dKy_plight_cut(&field_0x3498);
+    mDoAud_seDeleteObject(&mSwordTopPos);
+    mDoAud_seDeleteObject(&mRopePos);
+    mDoAud_seDeleteObject(&field_0x338c.field_0x08);
+    mDoAud_seDeleteObject(&field_0x488c.GetEndP());
+    
+    for (int i = 0; i < (int)ARRAY_SIZE(m_anm_heap_under); i++) {
+        mDoExt_destroySolidHeap(m_anm_heap_under[i].mpAnimeHeap);
+    }
+    for (int i = 0; i < (int)ARRAY_SIZE(m_anm_heap_upper); i++) {
+        mDoExt_destroySolidHeap(m_anm_heap_upper[i].mpAnimeHeap);
+    }
+    
+    mDoExt_destroySolidHeap(mpTextureAnimeResHeap);
+    mDoExt_destroySolidHeap(mpTextureScrollResHeap);
+    mDoExt_destroySolidHeap(mpItemHeaps[0]);
+    mDoExt_destroySolidHeap(mpItemHeaps[1]);
+    mDoExt_destroySolidHeap(field_0x2ECC);
+    
+    mJAIZelAnime.stop();
+    
+    dComIfGp_clearPlayerStatus0(0, 0x00400000); // Waiting for the boomerang to come back
+    dComIfGp_clearPlayerStatus1(0, 0x00040000);
+    g_dComIfG_gameInfo.play.field_0x4947 = 0;
+    
+    cancelNoDamageMode();
+    
+    return TRUE;
 }
 
 /* 80123058-80123078       .text daPy_Delete__FP9daPy_lk_c */
-void daPy_Delete(daPy_lk_c*) {
-    /* Nonmatching */
+static BOOL daPy_Delete(daPy_lk_c* i_this) {
+    return ((daPy_lk_c*)i_this)->playerDelete();
 }
 
 /* 80123078-80123360       .text initTextureAnime__9daPy_lk_cFv */
@@ -1448,8 +1623,133 @@ void daPy_lk_c::initTextureScroll() {
 }
 
 /* 80123834-8012469C       .text createHeap__9daPy_lk_cFv */
-void daPy_lk_c::createHeap() {
-    /* Nonmatching */
+BOOL daPy_lk_c::createHeap() {
+    /* Nonmatching - data offsets */
+    J3DModelData* tmp_modelData;
+    J3DAnmTransform* bck;
+    J3DAnmTevRegKey* brk;
+    int ret;
+    
+    mpCLModelData = initModel(&mpCLModel, LINK_BDL_CL, 0x37221222);
+    tmp_modelData = initModel(&mpHandsModel, LINK_BDL_HANDS, 0x37221222);
+    tmp_modelData = initModel(&mpKatsuraModel, LINK_BDL_KATSURA, 0x37221222);
+    tmp_modelData = initModel(&mpYamuModel, LINK_BDL_YAMU, 0x37221222);
+    tmp_modelData = initModel(&mpPringModel, LINK_BDL_PRING, 0x37221222);
+    tmp_modelData = initModel(&mpSwgripaModel, LINK_BDL_SWGRIPA, 0x37221222);
+    
+    tmp_modelData = initModel(&mpSwgripmsModel, LINK_BDL_SWGRIPMS, 0x37221222);
+    bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, LINK_BCK_SWGRIPMSAB);
+    ret = mSwgripmsabBckAnim.init(mpSwgripmsModel->getModelData(), bck, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false);
+    if (!ret) { JUT_ASSERT(21046, 0); }
+    mpTswgripmsabBrk = entryBrk(tmp_modelData, LINK_BRK_TSWGRIPMSAB);
+    mpTswgripmsBtk = entryBtk(tmp_modelData, LINK_BTK_TSWGRIPMS);
+    
+    tmp_modelData = initModel(&mpPodmsModel, LINK_BDL_PODMS, 0x37221222);
+    
+    tmp_modelData = initModel(&mpShaModel, LINK_BDL_SHA, 0x37221222);
+    bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, LINK_BCK_ATNGSHA);
+    ret = mAtngshaBck.init(mpShaModel->getModelData(), bck, false, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false);
+    if (!ret) { JUT_ASSERT(21063, 0); }
+    
+    tmp_modelData = initModel(&mpShmsModel, LINK_BDL_SHMS, 0x37221222);
+    mpTshmsBtk = entryBtk(tmp_modelData, LINK_BTK_TSHMS);
+    J3DSkinDeform* shmsSkinDeform = new J3DSkinDeform();
+    if (!shmsSkinDeform) { JUT_ASSERT(21077, 0); }
+    if (!mpShmsModel->setSkinDeform(shmsSkinDeform, 1)) { JUT_ASSERT(21080, 0); }
+    
+    tmp_modelData = initModel(&mpYmsls00Model, LINK_BDL_YMSLS00, 0x13000222);
+    mpYmsls00Btk = entryBtk(tmp_modelData, LINK_BTK_YMSLS00);
+    
+    tmp_modelData = initModel(&mpHbootsModelRightFoot, LINK_BDL_HBOOTS, 0x37221222);
+    tmp_modelData = initModel(&mpHbootsModelLeftFoot, LINK_BDL_HBOOTS, 0x37221222);
+    
+    tmp_modelData = initModel(&mpSuimenMunyaModel, LINK_BDL_SUIMEN_MUNYA, 0x11001222);
+    mpSuimenMunyaBtk = entryBtk(tmp_modelData, LINK_BTK_SUIMEN_MUNYA);
+    
+    tmp_modelData = initModel(&mpYuchw00Model, LINK_BDL_YUCHW00, 0x13000222);
+    bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, LINK_BCK_YUCHW00);
+    ret = mYuchw00Bck.init(tmp_modelData, bck, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false);
+    if (!ret) { JUT_ASSERT(21113, 0); }
+    mpYuchw00Btk = entryBtk(tmp_modelData, LINK_BTK_YUCHW00);
+    mpYuchw00Brk = entryBrk(tmp_modelData, LINK_BRK_YUCHW00);
+    mpYuchw00Brk->setFrame(mpYuchw00Brk->getFrameMax()-0.001f);
+    
+    tmp_modelData = initModel(&mpYbafo00Model, LINK_BDL_YBAFO00, 0x13000222);
+    mpYbafo00Btk = entryBtk(tmp_modelData, LINK_BTK_YBAFO00);
+    mpYbafo00Btk->setFrame(mpYbafo00Btk->getFrameMax()-0.001f);
+    
+    tmp_modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, LINK_BDL_YAURA00);
+    JUT_ASSERT(21130, tmp_modelData != 0);
+    daPy_aura_c* aura_p = mMagicArmorAuraEntries;
+    for (int i = 0; i < 6; i++) {
+        aura_p->setModel(mDoExt_J3DModel__create(tmp_modelData, 0x00080000, 0x11001222));
+        JUT_ASSERT(21139, aura_p->getModel() != 0);
+        aura_p++;
+    }
+    mpYaura00Btk = entryBtk(tmp_modelData, LINK_BTK_YAURA00);
+    brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, LINK_BRK_YAURA00_R);
+    ret = mYaura00rBrk.init(tmp_modelData, brk, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+    if (!ret) { JUT_ASSERT(21147, 0); }
+    mYaura00rBrk.setFrame(0.0f);
+    
+    tmp_modelData = initModel(&mpYmgcs00Model, LINK_BDL_YMGCS00, 0x11001222);
+    mpYmgcs00Btk = entryBtk(tmp_modelData, LINK_BTK_YMGCS00);
+    brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, LINK_BRK_YMGCS00_MS);
+    ret = mYmgcs00Brk.init(tmp_modelData, brk, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+    if (!ret) { JUT_ASSERT(21161, 0); }
+    mYmgcs00Brk.setFrame(0.0f);
+    
+    tmp_modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, LINK_BDL_BOMB);
+    JUT_ASSERT(21169, tmp_modelData != 0);
+    mpBombBrk = entryBrk(tmp_modelData, LINK_BRK_BOMB);
+    
+    tmp_modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, LINK_BDL_GWP00);
+    JUT_ASSERT(21176, tmp_modelData != 0);
+    mpGwp00BrkData = entryBrk(tmp_modelData, LINK_BRK_GWP00);
+    mpGwp00BtkData = entryBtk(tmp_modelData, LINK_BTK_GWP00);
+    
+    tmp_modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, LINK_BDL_ARROW);
+    JUT_ASSERT(21184, tmp_modelData != 0);
+    mpIceArrowBtk = entryBtk(tmp_modelData, LINK_BTK_TTIPICE);
+    
+    tmp_modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, LINK_BDL_ARROWGLITTER);
+    JUT_ASSERT(21191, tmp_modelData != 0);
+    mpLightArrowBtk = entryBtk(tmp_modelData, LINK_BTK_TARROWGLITTER);
+    
+    tmp_modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, LINK_BDL_GICER00);
+    JUT_ASSERT(21198, tmp_modelData != 0);
+    mpGicer00Btk = entryBtk(tmp_modelData, LINK_BTK_GICER00);
+    
+    tmp_modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, LINK_BDL_GICER01);
+    JUT_ASSERT(21198, tmp_modelData != 0);
+    mpGicer01Btk = entryBtk(tmp_modelData, LINK_BTK_GICER01);
+    
+    const int numCLJoints = 0x2A;
+    m_old_fdata = new mDoExt_MtxCalcOldFrame(new J3DTransformInfo[numCLJoints], new Quaternion[numCLJoints]);
+    JUT_ASSERT(21233, m_old_fdata != 0);
+    
+    m_pbCalc[PART_UNDER_e] = new mDoExt_MtxCalcAnmBlendTblOld(m_old_fdata, ARRAY_SIZE(mAnmRatioUnder), mAnmRatioUnder);
+    JUT_ASSERT(21239, m_pbCalc[PART_UNDER_e] != 0);
+    
+    m_pbCalc[PART_UPPER_e] = new mDoExt_MtxCalcAnmBlendTblOld(m_old_fdata, ARRAY_SIZE(mAnmRatioUpper), mAnmRatioUpper);
+    JUT_ASSERT(21245, m_pbCalc[PART_UPPER_e] != 0);
+    
+    initTextureScroll();
+    initTextureAnime();
+    
+    m_HIO = new daPy_HIO_c();
+    JUT_ASSERT(21254, m_HIO != 0);
+    
+    m_anm_heap_under[UNDER_MOVE0_e].m_buffer = new(0x20) u8[0xB400];
+    JUT_ASSERT(21259, m_anm_heap_under[UNDER_MOVE0_e].m_buffer != 0);
+    
+    m_sanm_buffer = new(0x20) u8[0x200];
+    JUT_ASSERT(21266, m_sanm_buffer != 0);
+    
+    m_item_bck_buffer = new(0x20) u8[0x1000];
+    JUT_ASSERT(21269, m_item_bck_buffer != 0);
+    
+    return TRUE;
 }
 
 /* 8012469C-801249F8       .text createAnimeHeap__9daPy_lk_cFPP12JKRSolidHeapQ29daPy_lk_c14daPy_HEAP_TYPE */
@@ -1458,17 +1758,17 @@ void daPy_lk_c::createAnimeHeap(JKRSolidHeap**, daPy_lk_c::daPy_HEAP_TYPE) {
 }
 
 /* 80124A40-80124B30       .text initModel__9daPy_lk_cFPP8J3DModeliUl */
-void daPy_lk_c::initModel(J3DModel**, int, u32) {
+J3DModelData* daPy_lk_c::initModel(J3DModel**, int, u32) {
     /* Nonmatching */
 }
 
 /* 80124B30-80124BE4       .text entryBtk__9daPy_lk_cFP12J3DModelDatai */
-void daPy_lk_c::entryBtk(J3DModelData*, int) {
+J3DAnmTextureSRTKey* daPy_lk_c::entryBtk(J3DModelData*, int) {
     /* Nonmatching */
 }
 
 /* 80124BE4-80124C98       .text entryBrk__9daPy_lk_cFP12J3DModelDatai */
-void daPy_lk_c::entryBrk(J3DModelData*, int) {
+J3DAnmTevRegKey* daPy_lk_c::entryBrk(J3DModelData*, int) {
     /* Nonmatching */
 }
 
@@ -1478,8 +1778,8 @@ void daPy_lk_c::playerInit() {
 }
 
 int phase_1(daPy_lk_c* i_this) {
-    g_dComIfG_gameInfo.play.mpPlayer[0] = i_this;
-    g_dComIfG_gameInfo.play.mpPlayerPtr[0] = i_this;
+    dComIfGp_setPlayer(0, i_this);
+    dComIfGp_setLinkPlayer(i_this);
 
     fopAcM_setStageLayer(i_this);
     i_this->mAttentionInfo.mFlags = 0xFFFFFFFF;
@@ -1494,7 +1794,7 @@ int phase_1(daPy_lk_c* i_this) {
 int phase_2(daPy_lk_c* i_this) {
     int result;
 
-    if (g_dComIfG_gameInfo.play.mCameraInfo[g_dComIfG_gameInfo.play.mCurCamera[0]].mpCamera == NULL)  {
+    if (dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0)) == NULL)  {
         result = cPhs_INIT_e;
     } else {
         fopAcM_SetupActor(i_this, daPy_lk_c);
@@ -1531,7 +1831,7 @@ int phase_3(daPy_lk_c* i_this) {
     return i_this->makeBgWait();
 }
 
-void daPy_Create(fopAc_ac_c* i_this) {
+static s32 daPy_Create(fopAc_ac_c* i_this) {
     static int (*l_method[3])(void*) = {
         (int (*)(void*))phase_1, 
         (int (*)(void*))phase_2,
@@ -1539,7 +1839,7 @@ void daPy_Create(fopAc_ac_c* i_this) {
     };
     daPy_lk_c* player_link = (daPy_lk_c*)i_this;
 
-    dComLbG_PhaseHandler(&player_link->mPhsLoad, l_method, player_link);
+    return dComLbG_PhaseHandler(&player_link->mPhsLoad, l_method, player_link);
 }
 
 /* 80127BA0-80127CC0       .text setSeAnime__9daPy_lk_cFPC14daPy_anmHeap_cP12J3DFrameCtrl */
@@ -1689,3 +1989,28 @@ BOOL daPy_lk_c::getBokoFlamePos(cXyz*) {
 #include "src/d/actor/d_a_player_food.inc"
 
 #include "src/d/actor/d_a_player_sword.inc"
+
+actor_method_class l_daPy_Method = {
+    (process_method_func)daPy_Create,
+    (process_method_func)daPy_Delete,
+    (process_method_func)daPy_Execute,
+    (process_method_func)daPy_IsDelete,
+    (process_method_func)daPy_Draw,
+};
+
+actor_process_profile_definition g_profile_PLAYER = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 5,
+    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ProcName     */ PROC_PLAYER,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daPy_lk_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0068,
+    /* Actor SubMtd */ &l_daPy_Method,
+    /* Status       */ fopAcStts_FREEZE_e,
+    /* Group        */ fopAc_PLAYER_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

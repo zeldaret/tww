@@ -12,8 +12,13 @@ public:
 
     void init();
 
-    virtual ~daPy_matAnm_c();
+    virtual ~daPy_matAnm_c() {}
     virtual void calc(J3DMaterial*) const;
+    
+    static u8 m_maba_flg;
+    static u8 m_eye_move_flg;
+    static u8 m_maba_timer;
+    static u8 m_morf_frame;
 };
 
 class daPy_mtxFollowEcallBack_c : public dPa_levelEcallBack {
@@ -26,13 +31,17 @@ public:
 
     /* 0x04 */ JPABaseEmitter* mpEmitter;
     /* 0x08 */ MtxP mpMtx;
-};
+};  // Size: 0x0C
 
 STATIC_ASSERT(sizeof(daPy_mtxFollowEcallBack_c) == 0x0C);
 
 class daPy_HIO_c {
 public:
-};
+    daPy_HIO_c();
+
+public:
+    /* 0x00 */ u8 temp[0x3F - 0x00];
+};  // Size: 0x3F
 
 class daPy_demo_c {
 public:
@@ -68,12 +77,12 @@ private:
 
 class daPy_py_c : public fopAc_ac_c {
 public:
-    enum daPy_PROC {};
-    
     enum daPy_FLG0 {
+        daPyFlg0_UNK10             = 0x00000010,
         daPyFlg0_CUT_AT_FLG        = 0x00000040,
         daPyFlg0_PUSH_PULL_KEEP    = 0x00000800,
         daPyFlg0_UNK1000           = 0x00001000,
+        daPyFlg0_UNK4000           = 0x00004000,
         daPyFlg0_UNK200000         = 0x00200000,
         daPyFlg0_EQUIP_HEAVY_BOOTS = 0x02000000,
         daPyFlg0_NO_DRAW           = 0x08000000,
@@ -86,6 +95,7 @@ public:
         daPy_FLG1_FORCE_VOMIT_JUMP     = 0x00000010,
         daPy_FLG1_NPC_NOT_CHANGE       = 0x00000040,
         daPy_FLG1_CONFUSE              = 0x00000100,
+        daPy_FLG1_FREEZE_STATE         = 0x00000800,
         daPy_FLG1_SHIP_TACT            = 0x00001000,
         daPy_FLG1_USE_ARROW_EFFECT     = 0x00002000,
         daPy_FLG1_LETTER_READ_EYE_MOVE = 0x00004000,
@@ -96,6 +106,24 @@ public:
         daPy_FLG1_LAST_COMBO_WAIT      = 0x20000000,
     };
     
+    enum daPy_RFLG0 {
+        daPy_RFLG0_ROPE_GRAB_RIGHT_HAND  = 0x00000004,
+        daPy_RFLG0_GRAB_UP_END           = 0x00000020,
+        daPy_RFLG0_AUTO_JUMP_LAND        = 0x00000040,
+        daPy_RFLG0_RIGHT_FOOT_ON_GROUND  = 0x00000400,
+        daPy_RFLG0_LEFT_FOOT_ON_GROUND   = 0x00000800,
+        daPy_RFLG0_FRONT_ROLL_CRASH      = 0x00002000,
+        daPy_RFLG0_UNK4000               = 0x00004000,
+        daPy_RFLG0_GRAB_UP_START         = 0x00008000,
+        daPy_RFLG0_ATTENTION_LOCK        = 0x00010000,
+        daPy_RFLG0_HAMMER_QUAKE          = 0x00020000,
+        daPy_RFLG0_GRAB_PUT_START        = 0x00400000,
+        daPy_RFLG0_FAIRY_USE             = 0x02000000,
+        // 0x00000001 and 0x00000002 set in daPy_lk_c::dProcLastCombo
+        // 0x00001000 set in daPy_lk_c::procCrawlMove_init, checked in checkNoCollisionCorret__9daPy_lk_cFv
+        // 0x04000000 set in daPy_lk_c::procShipPaddle
+    };
+    
     /* 0x290 */ u8 mAttackState;
     /* 0x291 */ u8 field_0x291;
     /* 0x292 */ u8 field_0x292[0x294 - 0x292];
@@ -104,7 +132,7 @@ public:
     /* 0x298 */ int field_0x298;
     /* 0x29C */ u32 mNoResetFlg0;
     /* 0x2A0 */ u32 mNoResetFlg1;
-    /* 0x2A4 */ u32 field_0x2a4;
+    /* 0x2A4 */ u32 mResetFlg0;
     /* 0x2A8 */ f32 field_0x2a8;
     /* 0x2AC */ u8 field_0x2AC[0x2B0 - 0x2AC];
     /* 0x2B0 */ f32 field_0x2b0;
@@ -149,6 +177,7 @@ public:
     void onConfuse() { onNoResetFlg1(daPy_FLG1_CONFUSE); }
     void offConfuse() { offNoResetFlg1(daPy_FLG1_CONFUSE); }
     bool checkConfuse() const { return checkNoResetFlg1(daPy_FLG1_CONFUSE); }
+    bool checkFreezeState() const { return checkNoResetFlg1(daPy_FLG1_FREEZE_STATE); }
     void onShipTact() { onNoResetFlg1(daPy_FLG1_SHIP_TACT); }
     void offShipTact() { offNoResetFlg1(daPy_FLG1_SHIP_TACT); }
     void onUseArrowEffect() { onNoResetFlg1(daPy_FLG1_USE_ARROW_EFFECT); }
@@ -158,6 +187,38 @@ public:
     void onWaterDrop() { onNoResetFlg1(daPy_FLG1_WATER_DROP); }
     void onVineCatch() { onNoResetFlg1(daPy_FLG1_VINE_CATCH); }
     bool checkLastComboWait() const { return checkNoResetFlg1(daPy_FLG1_LAST_COMBO_WAIT); }
+    
+    void onResetFlg0(daPy_RFLG0 flag) { mResetFlg0 |= flag; }
+    void offNoResetFlg0(daPy_RFLG0 flag) { mResetFlg0 &= ~flag; }
+    bool checkResetFlg0(daPy_RFLG0 flag) const { return mResetFlg0 & flag; }
+    bool getRopeGrabRightHand() const { return checkResetFlg0(daPy_RFLG0_ROPE_GRAB_RIGHT_HAND); }
+    bool getGrabUpEnd() const { return checkResetFlg0(daPy_RFLG0_GRAB_UP_END); }
+    bool getAutoJumpLand() const { return checkResetFlg0(daPy_RFLG0_AUTO_JUMP_LAND); }
+    bool getRightFootOnGround() const { return checkResetFlg0(daPy_RFLG0_RIGHT_FOOT_ON_GROUND); }
+    bool getLeftFootOnGround() const { return checkResetFlg0(daPy_RFLG0_LEFT_FOOT_ON_GROUND); }
+    bool checkFrontRollCrash() const { return checkResetFlg0(daPy_RFLG0_FRONT_ROLL_CRASH); }
+    bool getGrabUpStart() const { return checkResetFlg0(daPy_RFLG0_GRAB_UP_START); }
+    bool checkAttentionLock() const { return checkResetFlg0(daPy_RFLG0_ATTENTION_LOCK); }
+    bool checkHammerQuake() const { return checkResetFlg0(daPy_RFLG0_HAMMER_QUAKE); }
+    bool getGrabPutStart() const { return checkResetFlg0(daPy_RFLG0_GRAB_PUT_START); }
+    bool checkFairyUse() const { return checkResetFlg0(daPy_RFLG0_FAIRY_USE); }
+    
+    // checkSwordMiniGame__9daPy_py_cCFv
+    // checkNormalSwordEquip__9daPy_py_cCFv
+    // checkBowMiniGame__9daPy_py_cCFv
+    // checkUseArrowEffect__9daPy_py_cCFv
+    // checkNpcNotChange__9daPy_py_cCFv
+    // checkFinalMasterSwordEquip__9daPy_py_cCFv
+    // getHeavyState__9daPy_py_cFv
+    // checkEquipHoverBoots__9daPy_py_cCFv
+    // getHeavyStateAndBoots__9daPy_py_cFv
+    // onNpcCallCommand__9daPy_py_cFv
+    // onForceVomitJumpShort__9daPy_py_cFv
+    // onNoFallVoice__9daPy_py_cFv
+    // checkGrabWear__9daPy_py_cCFv
+    // checkArrowShoot__9daPy_py_cCFv
+    // onScopeCancel__9daPy_py_cFv
+    // getFootOnGround__9daPy_py_cCFv
     
     virtual MtxP getLeftHandMatrix() = 0;
     virtual MtxP getRightHandMatrix() = 0;
@@ -208,6 +269,7 @@ public:
     void setDoButtonQuake();
     void stopDoButtonQuake(int);
     void getRopePos() const;
+    f32 getSpeedF() const { return speedF; }
 };
 
 #endif /* D_A_PLAYER */

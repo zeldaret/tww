@@ -107,6 +107,10 @@ public:
     bool checkStatus(u32 status) { return mFlags & status; }
     void initStatus(u32 status);
 
+    int getParticleNumber() {
+        return mActiveParticles.getNumLinks() + mChildParticles.getNumLinks();
+    }
+
     u8 getGlobalAlpha() { return mGlobalPrmColor.a; }
     void setGlobalAlpha(u8 alpha) { mGlobalPrmColor.a = alpha; }
     void setGlobalRTMatrix(MtxP mtx) {

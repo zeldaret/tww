@@ -20,7 +20,7 @@ struct LIGHT_INFLUENCE {
     /* 0x14 */ f32 mPower;
     /* 0x18 */ f32 mFluctuation;
     /* 0x1C */ int mIdx;
-};
+};  // Size: 0x20
 
 struct EFLIGHT_PROC {
     /* 0x00 */ u8 mSwordState;
