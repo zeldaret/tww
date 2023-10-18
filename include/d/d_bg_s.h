@@ -3,6 +3,7 @@
 
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_xyz.h"
+#include "SSystem/SComponent/c_bg_s.h"
 #include "SSystem/SComponent/c_bg_s_gnd_chk.h"
 #include "SSystem/SComponent/c_bg_s_lin_chk.h"
 #include "SSystem/SComponent/c_m3d_g_cyl.h"
@@ -21,61 +22,6 @@ class dBgS_Acch;
 class dBgS_RoofChk;
 class dBgS_SplGrpChk;
 class dBgS_SphChk;
-
-class cBgS_ChkElm {
-public:
-    /* 0x00 */ cBgW* m_bgw_base_ptr;
-    /* 0x04 */ bool m_used;
-    /* 0x08 */ u32 m_actor_id;
-    /* 0x0C */ fopAc_ac_c* m_actor_ptr;
-    /* 0x10 vtable */
-
-public:
-    cBgS_ChkElm() { Init(); }
-    void Init();
-    void Release();
-
-    virtual ~cBgS_ChkElm() {}
-    virtual void Regist2(cBgW*, u32, void*);
-
-    bool ChkUsed() const { return m_used; }
-};  // Size: 0x14
-
-STATIC_ASSERT(sizeof(cBgS_ChkElm) == 0x14);
-
-class cBgW;
-class cBgS {
-public:
-    /* 0x0000 */ cBgS_ChkElm m_chk_element[256];
-    /* 0x1400 vtable */
-
-public:
-    cBgS() {}
-
-    cM3dGPla* GetTriPla(cBgS_PolyInfo&) const;
-    cM3dGPla* i_GetTriPla(cBgS_PolyInfo& polyInfo) const {
-        return GetTriPla(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex());
-    }
-    bool Regist(cBgW*, u32, void*);
-    int Release(cBgW*);
-    bool LineCross(cBgS_LinChk*);
-    f32 GroundCross(cBgS_GndChk*);
-    static void* ConvDzb(void*);
-    fopAc_ac_c* GetActorPointer(int) const;
-    cBgW* GetBgWPointer(cBgS_PolyInfo&) const;
-    bool ChkPolySafe(cBgS_PolyInfo&);
-    void GetTriGrp(int, int) const;
-    void GetGrpToRoomId(int, int) const;
-    cM3dGPla* GetTriPla(int, int) const;
-    bool GetTriPnt(cBgS_PolyInfo&, cXyz*, cXyz*, cXyz*) const;
-    void ShdwDraw(cBgS_ShdwDraw*);
-    u32 GetGrpInf(cBgS_PolyInfo&, int) const;
-
-    virtual ~cBgS() {}
-    virtual void Ct();
-    virtual void Dt();
-    virtual void Move();
-};  // Size: 0x1404
 
 class dBgS_Acch;
 

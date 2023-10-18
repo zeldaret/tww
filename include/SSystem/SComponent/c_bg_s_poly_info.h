@@ -25,10 +25,11 @@ public:
     void SetPolyInfo(const cBgS_PolyInfo& other) {
         *this = other;
     }
-    void SetActorInfo(int, void*, unsigned int);
-    bool ChkSafe(const void*, unsigned int) const;
-    void SetPolyIndex(int);
-    bool ChkBgIndex() const;
+    bool ChkSafe(const void* bgw, unsigned int pid) {
+        if (mpBgW == bgw && mActorId == pid)
+            return true;
+        return false;
+    }
 
     virtual ~cBgS_PolyInfo() {}
 

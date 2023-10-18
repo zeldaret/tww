@@ -1,6 +1,7 @@
 #ifndef C_BG_W_H
 #define C_BG_W_H
 
+#include "JSystem/JUtility/JUTAssert.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_m3d_g_aab.h"
@@ -21,7 +22,8 @@ public:
     cBgW_BgId() { Ct(); }
     void Ct() { m_id = 0x100; }
 
-    u16 GetId() const { return m_id; }
+    int GetId() const { return m_id; }
+    void SetId(int id) { m_id = id; }
     bool ChkUsed() const {
         if (m_id >= 0 && m_id < 0x100) {
             return true;
@@ -151,6 +153,21 @@ public:
     void GetTrans(cXyz*) const;
     void GetTriPnt(int, cXyz*, cXyz*, cXyz*) const;
     void GetTopUnder(f32*, f32*) const;
+
+    s32 GetGrpInf(s32 grp_id) {
+        JUT_ASSERT(0x2e1, 0 <= grp_id && grp_id < pm_bgd->m_g_num);
+        return pm_bgd->m_g_tbl[grp_id].m_info;
+    }
+
+    s32 GetTriGrp(s32 poly_index) {
+        JUT_ASSERT(0x2a2, 0 <= poly_index && poly_index < pm_bgd->m_t_num);
+        return pm_bgd->m_t_tbl[poly_index].grp;
+    }
+
+    cM3dGPla * GetTriPla(s32 poly_index) {
+        JUT_ASSERT(0x2af, 0 <= poly_index && poly_index < pm_bgd->m_t_num);
+        return &pm_tri[poly_index].m_plane;
+    }
 
     virtual ~cBgW();
     virtual u32 GetGrpToRoomIndex(int) const;
