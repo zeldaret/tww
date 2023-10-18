@@ -517,7 +517,7 @@ def generate_build_ninja(config, build_config):
 
             unit_src_path = config.src_dir / options["source"]
             if not unit_src_path.exists():
-                if config.warn_missing_source:
+                if config.warn_missing_source or completed:
                     print(f"Missing source file {unit_src_path}")
                 link_step.add(obj_path)
                 return
