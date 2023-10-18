@@ -8,12 +8,17 @@
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
 #include "MSL_C/math.h"
 
+// Needed for the .rodata section to match.
+static const f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
+static const f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+static const f32 dummy3[3] = {0.0f, 0.0f, 0.0f};
+
 static const f32 Deg2Rad = 0.017453292f;
 
 /* 802566B8-802566CC       .text init__11J3DUClipperFv */
 void J3DUClipper::init() {
     setNear(1.0f);
-    setFar(10000.0f);
+    setFar(100000.0f);
 }
 
 static inline void J3DVecCrossProduct(Vec* pA, Vec* pB, Vec *dst) {
@@ -26,19 +31,17 @@ static inline void J3DVecCrossProduct(Vec* pA, Vec* pB, Vec *dst) {
 void J3DUClipper::calcViewFrustum() {
     f32 tanFovY = tan(mFovY * 0.5f * Deg2Rad);
 
-    f32 nearY = tanFovY * mNear;
+    f32 nearY = mNear * tanFovY;
     f32 nearX = mAspect * nearY;
 
-    Vec corner[] = {
-        { -nearX, -nearY, -mNear },
-        { -nearX,  nearY, -mNear },
-        {  nearX,  nearY, -mNear },
-        {  nearX, -nearY, -mNear },
-    };
-    J3DVecCrossProduct(&corner[1], &corner[0], &mPlane[0]);
-    J3DVecCrossProduct(&corner[2], &corner[1], &mPlane[1]);
-    J3DVecCrossProduct(&corner[3], &corner[2], &mPlane[2]);
-    J3DVecCrossProduct(&corner[0], &corner[3], &mPlane[3]);
+    Vec corner0 = { -nearX, -nearY, -mNear };
+    Vec corner1 = { -nearX,  nearY, -mNear };
+    Vec corner2 = {  nearX,  nearY, -mNear };
+    Vec corner3 = {  nearX, -nearY, -mNear };
+    J3DVecCrossProduct(&corner1, &corner0, &mPlane[0]);
+    J3DVecCrossProduct(&corner2, &corner1, &mPlane[1]);
+    J3DVecCrossProduct(&corner3, &corner2, &mPlane[2]);
+    J3DVecCrossProduct(&corner0, &corner3, &mPlane[3]);
 
     VECNormalize(&mPlane[0], &mPlane[0]);
     VECNormalize(&mPlane[1], &mPlane[1]);
@@ -172,3 +175,9 @@ u32 J3DUClipper::clipByBox(J3DModel* pModel) {
 
     return hideJointNum;
 }
+
+// Needed for the .rodata section to match.
+static const char* const dummy4 = " J3DUClipper::mFovy = %f";
+static const char* const dummy5 = " J3DUClipper::mAspect = %f";
+static const char* const dummy6 = " J3DUClipper::mNear = %f";
+static const char* const dummy7 = " J3DUClipper::mFar = %f";
