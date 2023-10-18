@@ -1152,7 +1152,6 @@ void mDoExt_MtxCalcOldFrame::decOldFrameMorfCounter() {
 
 /* 80012650-800129E4       .text __ct__14mDoExt_McaMorfFP12J3DModelDataP25mDoExt_McaMorfCallBack1_cP25mDoExt_McaMorfCallBack2_cP15J3DAnmTransformifiiiPvUlUl */
 mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_c* callback1, mDoExt_McaMorfCallBack2_c* callback2, J3DAnmTransform* anmTransform, int param_4, f32 param_5, int param_6, int param_7, int param_8, void* param_9, u32 param_10, u32 param_11) {
-    /* Nonmatching - JGeometry::TVec3<f32> ctor */
     mpModel = NULL;
     mpSound = NULL;
     mpTransformInfo = NULL;
@@ -1510,10 +1509,10 @@ void mDoExt_3DlineMat1_c::update(u16, _GXColor&, dKy_tevstr_c*) {
     JUT_ASSERT(5243, size_p != 0);
 }
 
-/* 80016518-8001657C       .text setMat__26mDoExt_3DlineMatSortPacketFP18mDoExt_3DlineMat_c */
-void mDoExt_3DlineMatSortPacket::setMat(mDoExt_3DlineMat_c*) {
-    /* Nonmatching */
-}
+// /* 80016518-8001657C       .text setMat__26mDoExt_3DlineMatSortPacketFP18mDoExt_3DlineMat_c */
+// void mDoExt_3DlineMatSortPacket::setMat(mDoExt_3DlineMat_c*) {
+//     /* Nonmatching */
+// }
 
 /* 8001657C-800165E4       .text draw__26mDoExt_3DlineMatSortPacketFv */
 void mDoExt_3DlineMatSortPacket::draw() {
