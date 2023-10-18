@@ -77,7 +77,7 @@ void dComIfG_play_c::itemInit() {
     mItemMaxLifeCount = 0;
     mItemMagicCount = 0;
     field_0x48da = 0;
-    field_0x48dc = 0;
+    mItemMaxMagicCount = 0;
     field_0x48de = 0;
     mItemArrowNumCount = 0;
     field_0x48e2 = 0;
@@ -146,7 +146,7 @@ void dComIfG_play_c::itemInit() {
     field_0x4955 = 0;
     field_0x4956 = 0;
     mPlacenameIndex = 0;
-    field_0x4958 = 0;
+    mPlacenameState = 0;
     field_0x4959 = 0;
     field_0x495a = 0;
     field_0x495b = 0;
@@ -156,7 +156,7 @@ void dComIfG_play_c::itemInit() {
     field_0x495f = 0;
     field_0x4960 = 0;
     field_0x4961 = 0;
-    field_0x4962 = 0;
+    mHeapLockFlag = 0;
     field_0x4965 = 0;
 
     strcpy(field_0x4966, "\0");
@@ -811,27 +811,8 @@ u8 dComIfGs_checkGetItem(u8 i_itemNo) {
         }
         break;
     default:
-        u8 item = 0;
         for (int i = 0; i < 60; i++) {
-            if (i < 21) {
-                item = dComIfGs_getItem(i);
-            } else if (i < 24) {
-                item = NO_ITEM;
-            } else if (i < 32) {
-                item = dComIfGs_getBeast(i - 24);
-            } else if (i < 36) {
-                item = NO_ITEM;
-            } else if (i < 44) {
-                item = dComIfGs_getBait(i - 36);
-            } else if (i < 48) {
-                item = NO_ITEM;
-            } else if (i < 56) {
-                item = dComIfGs_getReserve(i - 48);
-            } else {
-                item = NO_ITEM;
-            }
-
-            if (i_itemNo == item) {
+            if (i_itemNo == dComIfGs_getItem(i)) {
                 get_item++;
             }
         }
@@ -1020,27 +1001,8 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
         }
         break;
     default:
-        u8 item = 0;
         for (int i = 0; i < 60; i++) {
-            if (i < 21) {
-                item = dComIfGs_getItem(i);
-            } else if (i < 24) {
-                item = NO_ITEM;
-            } else if (i < 32) {
-                item = dComIfGs_getBeast(i - 24);
-            } else if (i < 36) {
-                item = NO_ITEM;
-            } else if (i < 44) {
-                item = dComIfGs_getBait(i - 36);
-            } else if (i < 48) {
-                item = NO_ITEM;
-            } else if (i < 56) {
-                item = dComIfGs_getReserve(i - 48);
-            } else {
-                item = NO_ITEM;
-            }
-
-            if (i_itemNo == item) {
+            if (i_itemNo == dComIfGs_getItem(i)) {
                 get_item = 1;
             }
         }

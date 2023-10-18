@@ -289,7 +289,7 @@ struct mDoExt_MtxCalcAnmBlendTblOld : public mDoExt_MtxCalcAnmBlendTbl {
 
 class mDoExt_McaMorfCallBack1_c {
 public:
-    virtual ~mDoExt_McaMorfCallBack1_c();
+    virtual ~mDoExt_McaMorfCallBack1_c() {}
     virtual void execute(u16, J3DTransformInfo*) = 0;
 };
 

@@ -290,7 +290,7 @@ public:
         return mCameraInfo[idx].mCameraAttentionStatus & flag;
     }
 
-    ~dComIfG_play_c();
+    ~dComIfG_play_c() {}
 
     dStage_roomControl_c* getRoomControl() { return &mRoomCtrl; }
     dStage_stageDt_c& getStage() { return mStageData; }
@@ -984,7 +984,7 @@ inline void dComIfGs_onStageLife() {
     g_dComIfG_gameInfo.save.getMemory().getBit().onStageLife();
 }
 
-inline void dComIfGs_onStageLife(int i_stageNo);
+void dComIfGs_onStageLife(int i_stageNo);
 
 inline BOOL dComIfGs_isStageLife() {
     return g_dComIfG_gameInfo.save.getMemory().getBit().isStageLife();
