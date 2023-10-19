@@ -208,17 +208,8 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
                         SetWaterIn();
                     }
                     
-                    // JUT_ASSERT's (COND) == 0 check screws up the codegen here. Using !(COND) instead fixes it.
-                    // JUT_ASSERT(718, m_wtr.GetHeight() >= ground.y);
-                    // JUT_ASSERT(719, m_wtr.GetHeight() <= top);
-                    if (!(m_wtr.GetHeight() >= ground.y)) {
-                        JUTAssertion::showAssert(JUTAssertion::getSDevice(), __FILE__, 718, "m_wtr.GetHeight() >= ground.y");
-                        OSPanic(__FILE__, 718, "Halt");
-                    }
-                    if (!(m_wtr.GetHeight() <= top)) {
-                        JUTAssertion::showAssert(JUTAssertion::getSDevice(), __FILE__, 719, "m_wtr.GetHeight() <= top");
-                        OSPanic(__FILE__, 719, "Halt");
-                    }
+                    JUT_ASSERT_FLOAT(718, m_wtr.GetHeight() >= ground.y);
+                    JUT_ASSERT_FLOAT(719, m_wtr.GetHeight() <= top);
                 }
             }
         }

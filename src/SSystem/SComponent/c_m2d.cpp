@@ -17,7 +17,7 @@ void cM2d_CrossCirLin(cM2dGCir& circle, f32 x0, f32 y0, f32 x1, f32 y1, f32* pDs
     f32 c = (fVar1 * fVar1 + fVar15 * fVar15) - (circle.GetR() * circle.GetR());
     f32 t;
 
-    JUT_ASSERT(0x47, c < 0.0f);
+    JUT_ASSERT_FLOAT(0x47, c < 0.0f);
 
     if (cM3d_IsZero(dVar13)) {
         if (!cM3d_IsZero(dVar14)) {
@@ -48,7 +48,7 @@ void cM2d_CrossCirLin(cM2dGCir& circle, f32 x0, f32 y0, f32 x1, f32 y1, f32* pDs
         *pDstX = x0;
         *pDstY = y0;
     } else {
-        JUT_ASSERT(0x89, t >= 0.0f);
+        JUT_ASSERT_FLOAT(0x89, t >= 0.0f);
         *pDstX = x0 + (t * x1);
         *pDstY = y0 + (t * y1);
     }

@@ -326,6 +326,7 @@ private:
     /* 0x14 */ u8 mWeight;
     /* 0x15 */ u8 field_0x15;
     /* 0x16 */ u8 mDmg;
+    /* 0x18 */ /* vtable */
 
 public:
     cCcD_Stts() {}

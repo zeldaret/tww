@@ -10,6 +10,14 @@
         OSPanic(__FILE__, LINE, "Halt");                                                           \
     }
 
+// Some asserts on floats have the wrong codegen with JUT_ASSERT's (COND) == 0 check.
+// Using !(COND) instead fixes them.
+#define JUT_ASSERT_FLOAT(LINE, COND)                                                               \
+    if (!(COND)) {                                                                                 \
+        JUTAssertion::showAssert(JUTAssertion::getSDevice(), __FILE__, LINE, #COND);               \
+        OSPanic(__FILE__, LINE, "Halt");                                                           \
+    }
+
 #define JUT_PANIC(LINE)                                                                            \
     JUTAssertion::showAssert(JUTAssertion::getSDevice(), __FILE__, LINE, "0");                     \
     OSPanic(__FILE__, LINE, "Halt");
