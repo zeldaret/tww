@@ -3,76 +3,243 @@
 // Translation Unit: JASHeapCtrl.cpp
 //
 
-#include "JASHeapCtrl.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASHeapCtrl.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "dolphin/os/OS.h"
 
 /* 8027CC14-8027CC88       .text __ct__Q38JASystem6Kernel5THeapFPQ38JASystem6Kernel9TDisposer */
-JASystem::Kernel::THeap::THeap(JASystem::Kernel::TDisposer*) {
-    /* Nonmatching */
+JASystem::Kernel::THeap::THeap(TDisposer* disposer) : mTree(this) {
+    mDisposer = disposer;
+    mType = Type1;
+    mBase = NULL;
+    mSize = 0;
+    field_0x44 = NULL;
+    OSInitMutex(&mMutex);
 }
 
 /* 8027CC88-8027CD38       .text initRootHeap__Q38JASystem6Kernel5THeapFPvUlQ48JASystem6Kernel5THeap4Type */
-void JASystem::Kernel::THeap::initRootHeap(void*, unsigned long, JASystem::Kernel::THeap::Type) {
-    /* Nonmatching */
+void JASystem::Kernel::THeap::initRootHeap(void* ptr, u32 size, Type type) {
+    JUT_ASSERT(92, ! isAllocated());
+    OSLockMutex(&mMutex);
+    mBase = (u8*)OSRoundUpPtr(ptr, 0x20);
+    field_0x44 = NULL;
+    mSize = size - (u32(mBase) - u32(ptr));
+    mType = type;
+    OSUnlockMutex(&mMutex);
 }
 
 /* 8027CD38-8027CF68       .text alloc__Q38JASystem6Kernel5THeapFPQ38JASystem6Kernel5THeapUl */
-void JASystem::Kernel::THeap::alloc(JASystem::Kernel::THeap*, unsigned long) {
-    /* Nonmatching */
+bool JASystem::Kernel::THeap::alloc(THeap* mother, u32 param_2) {
+    JUT_ASSERT(118, mother != 0);
+    OSLockMutex(&mMutex);
+    if (isAllocated()) {
+        OSReport("[JASHeap::alloc] すでにヒープは確保されています。初期化してからにしてください。\n");
+        OSUnlockMutex(&mMutex);
+        return false;
+    }
+    if (!mother->isAllocated()) {
+        OSUnlockMutex(&mMutex);
+        return false;
+    }
+    param_2 = OSRoundUp32B(param_2);
+    u32 local_28 = mother->getCurOffset();
+    u32 local_2c = mother->getTailOffset();
+    if (local_28 + param_2 <= local_2c) {
+        mother->insertChild(this, mother->getTailHeap(), mother->mBase + local_28, param_2, false);
+        OSUnlockMutex(&mMutex);
+        return true;
+    }
+    s32 r27 = -1;
+    u8* r29 = mother->mBase;
+    bool local_43 = false;
+    THeap* local_30 = NULL;
+    void* local_34;
+    for (JSUTreeIterator<THeap> it = mother->mTree.getFirstChild(); it != mother->mTree.getEndChild(); it++) {
+        if (r29 >= mother->mBase + local_2c) {
+            break;
+        }
+        u32 local_3c = u32(it->mBase) - u32(r29);
+        if (local_3c >= param_2 && local_3c < r27) {
+            local_30 = *it;
+            local_34 = r29;
+            r27 = local_3c;
+            local_43 = true;
+        }
+        u32 r25 = it->mSize;
+        r29 = (u8*)it->mBase + r25;
+    }
+    if (r29 != mother->mBase && r29 < mother->mBase + local_2c) {
+        u32 local_40 = mother->mBase + mother->mSize - r29;
+        if (local_40 >= param_2 && local_40 < r27) {
+            local_30 = NULL;
+            local_34 = r29;
+            r27 = local_40;
+            local_43 = true;
+        }
+    }
+    if (!local_43) {
+        OSReport("[JASHeap::alloc] マザーメモリが足りないので確保できません。\n");
+        OSUnlockMutex(&mMutex);
+        return false;
+    }
+    mother->insertChild(this, local_30, local_34, param_2, false);
+    OSUnlockMutex(&mMutex);
+    return true;
 }
 
 /* 8027CF68-8027D088       .text free__Q38JASystem6Kernel5THeapFv */
-void JASystem::Kernel::THeap::free() {
-    /* Nonmatching */
+bool JASystem::Kernel::THeap::free() {
+    OSLockMutex(&mMutex);
+    if (!isAllocated()) {
+        OSUnlockMutex(&mMutex);
+        return false;
+    }
+    JSUTreeIterator<THeap> stack_20;
+    for (JSUTreeIterator<THeap> it(mTree.getFirstChild()); it != mTree.getEndChild(); it = stack_20) {
+        stack_20 = it;
+        stack_20++;
+        it->free();
+    }
+    JSUTree<THeap>* parentTree = mTree.getParent();
+    if (parentTree) {
+        THeap* parentHeap = parentTree->getObject();
+        if (parentHeap->field_0x44 == this) {
+            JSUTreeIterator<THeap> stack_28(mTree.getPrevChild());
+            if (stack_28 != mTree.getEndChild()) {
+                parentHeap->field_0x44 = *stack_28;
+            } else {
+                parentHeap->field_0x44 = NULL;
+            }
+        }
+        parentTree->removeChild(&mTree);
+    }
+    mBase = NULL;
+    field_0x44 = NULL;
+    mSize = 0;
+    if (mDisposer) {
+        mDisposer->onDispose();
+    }
+    OSUnlockMutex(&mMutex);
+    return true;
+}
+
+static void dummy(JASystem::Kernel::TDisposer* disposer) {
+    OSReport("------------------------------------\n");
+    OSReport("level >= 0 && level < 7");
+    OSReport("%s Heap %08x [Addr %8x , Max %8x] %c\n");
 }
 
 /* 8027D088-8027D1FC       .text insertChild__Q38JASystem6Kernel5THeapFPQ38JASystem6Kernel5THeapPQ38JASystem6Kernel5THeapPvUlb */
-void JASystem::Kernel::THeap::insertChild(JASystem::Kernel::THeap*, JASystem::Kernel::THeap*, void*, unsigned long, bool) {
-    /* Nonmatching */
+void JASystem::Kernel::THeap::insertChild(THeap* heap, THeap* next, void* param_3, u32 param_4, bool param_5) {
+    JUT_ASSERT(537, heap != 0);
+    JUT_ASSERT(538, next == 0 || &mTree == next->mTree.getParent());
+    OSLockMutex(&mMutex);
+    if (!param_5) {
+        JSUTreeIterator<THeap> it;
+        if (!next) {
+            it = mTree.getLastChild();
+        } else {
+            it = next->mTree.getPrevChild();
+        }
+        THeap* r24 = it != mTree.getEndChild() ? it.getObject() : NULL;
+        if (field_0x44 == r24) {
+            field_0x44 = heap;
+        }
+    }
+    heap->mBase = (u8*)param_3;
+    heap->mSize = param_4;
+    heap->field_0x44 = NULL;
+    heap->mType = mType;
+    mTree.insertChild(&next->mTree, &heap->mTree);
+    OSUnlockMutex(&mMutex);
 }
 
 /* 8027D1FC-8027D280       .text getTailHeap__Q38JASystem6Kernel5THeapFv */
-void JASystem::Kernel::THeap::getTailHeap() {
-    /* Nonmatching */
+JASystem::Kernel::THeap* JASystem::Kernel::THeap::getTailHeap() {
+    JSUTreeIterator<THeap> it;
+    OSLockMutex(&mMutex);
+    if (!field_0x44) {
+        it = mTree.getFirstChild();
+    } else {
+        it = field_0x44->mTree.getNextChild();
+    }
+    OSUnlockMutex(&mMutex);
+    if (it == mTree.getEndChild()) {
+        return NULL;
+    }
+    return it.getObject();
 }
 
 /* 8027D280-8027D2E8       .text getTailOffset__Q38JASystem6Kernel5THeapFv */
-void JASystem::Kernel::THeap::getTailOffset() {
-    /* Nonmatching */
+u32 JASystem::Kernel::THeap::getTailOffset() {
+    OSLockMutex(&mMutex);
+    THeap* heap = getTailHeap();
+    u32 offset = !heap ? mSize : heap->mBase - mBase;
+    OSUnlockMutex(&mMutex);
+    return offset;
 }
 
 /* 8027D2E8-8027D354       .text getCurOffset__Q38JASystem6Kernel5THeapFv */
-void JASystem::Kernel::THeap::getCurOffset() {
-    /* Nonmatching */
+u32 JASystem::Kernel::THeap::getCurOffset() {
+    OSLockMutex(&mMutex);
+    u32 offset = !field_0x44 ? 0 : field_0x44->mBase + field_0x44->mSize - mBase;
+    OSUnlockMutex(&mMutex);
+    return offset;
 }
 
 /* 8027D354-8027D370       .text __ct__Q38JASystem6Kernel10TSolidHeapFv */
 JASystem::Kernel::TSolidHeap::TSolidHeap() {
-    /* Nonmatching */
+    field_0x0 = 0;
+    field_0x4 = 0;
+    field_0x8 = 0;
+    field_0xc = 0;
+    field_0x10 = 0;
 }
 
 /* 8027D370-8027D40C       .text alloc__Q38JASystem6Kernel10TSolidHeapFl */
-void JASystem::Kernel::TSolidHeap::alloc(long) {
+int JASystem::Kernel::TSolidHeap::alloc(s32 size) {
     /* Nonmatching */
+    u32 tmp1 = OSRoundUp32B(size);
+    if (field_0x0 == 0) {
+        OSReport("[Nas_HeapAlloc] ヒープが取得できません（ヒープ取得元存在せず）。\n");
+        return 0;
+    }
+    u32 tmp2 = field_0x4;
+    if (tmp2 + tmp1 <= field_0x0 + field_0x8) {
+        field_0x4 = tmp2 + tmp1;
+    } else {
+        OSReport("[Nas_HeapAlloc] ヒープが取得できません（ヒープの取得元の残りサイズ不足）。\n");
+        return 0;
+    }
+    field_0xc++;
+    field_0x10 = tmp2;
+    return tmp2;
 }
 
 /* 8027D40C-8027D424       .text freeAll__Q38JASystem6Kernel10TSolidHeapFv */
 void JASystem::Kernel::TSolidHeap::freeAll() {
-    /* Nonmatching */
+    field_0x4 = field_0x0;
+    field_0xc = 0;
+    field_0x10 = 0;
 }
 
 /* 8027D424-8027D4AC       .text init__Q38JASystem6Kernel10TSolidHeapFPUcl */
-void JASystem::Kernel::TSolidHeap::init(unsigned char*, long) {
-    /* Nonmatching */
+void JASystem::Kernel::TSolidHeap::init(u8* param_1, s32 param_2) {
+    field_0xc = 0;
+    if (!param_1) {
+        OSReport("[Nas_HeapInit] アドレス０からヒープを初期化しようとしています。\n");
+        field_0x8 = 0;
+        field_0x4 = 0;
+        field_0x10 = 0;
+    } else {
+        field_0x0 = OSRoundUp32B(param_1);
+        field_0x4 = field_0x0;
+        field_0x8 = param_2 - (field_0x0 - u32(param_1));
+        field_0x10 = 0;
+    }
 }
 
 /* 8027D4AC-8027D4C4       .text getRemain__Q38JASystem6Kernel10TSolidHeapFv */
-void JASystem::Kernel::TSolidHeap::getRemain() {
-    /* Nonmatching */
+int JASystem::Kernel::TSolidHeap::getRemain() {
+    return field_0x8 - (field_0x4 - field_0x0);
 }
-
-/* 8027D4C4-8027D4C8       .text onDispose__Q38JASystem6Kernel9TDisposerFv */
-void JASystem::Kernel::TDisposer::onDispose() {
-    /* Nonmatching */
-}
-
