@@ -19,21 +19,19 @@ public:
 public:
     /* 0x290 */ request_of_phase_process_class mPhase;
     /* 0x298 */ J3DModel* mpModel;
-    /* 0x29C */ int field_0x29C;
 };
 
 bool daObjPbka_c::draw()
 {
-    dKy_tevstr_c *tev = &mTevStr;
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, tev);
-    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    dKy_tevstr_c * pTevStr;
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, pTevStr = &mTevStr);
+    g_env_light.setLightTevColorType(mpModel, pTevStr);
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
     return true;
 }
 
-/* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 void CheckCreateHeap(fopAc_ac_c* i_this) {
     daObjPbka_c* a_this = (daObjPbka_c*)i_this;
     a_this->CreateHeap();
@@ -69,14 +67,14 @@ void daObjPbka_c::set_mtx() {
 }
 
 cPhs__Step daObjPbka_Create(void* i_this) {
-    daObjPbka_c* a_this = (daObjPbka_c*)i_this;
     int cPhsStep;
-
+    daObjPbka_c* a_this = (daObjPbka_c*)i_this;
     fopAcM_SetupActor(a_this, daObjPbka_c);
+
     cPhsStep = dComIfG_resLoad(&a_this->mPhase, "Pbka");
     if (cPhsStep == cPhs_COMPLEATE_e) {
         if ((fopAcM_entrySolidHeap(a_this, (heapCallbackFunc)CheckCreateHeap,0x680) & 0xff) == 0) {
-            cPhsStep = cPhs_ERROR_e;
+            cPhsStep =  cPhs_ERROR_e;
         } else {
             a_this->CreateInit();
         }
@@ -104,7 +102,6 @@ static BOOL daObjPbka_Execute(void* i_this) {
         return true;
 }
 
-/* 00000450-00000458       .text daObjPbka_IsDelete__FPv */
 static BOOL daObjPbka_IsDelete(void*) {
     return true;
 }
