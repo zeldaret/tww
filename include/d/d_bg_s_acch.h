@@ -30,7 +30,6 @@ public:
     };
 
     dBgS_AcchCir();
-    void ClrWallHit();
     void SetWallR(f32);
     void CalcWallRR();
     void SetWall(f32 i_halfHeight, f32 i_radius);
@@ -44,6 +43,10 @@ public:
     void SetWallH(f32 h) { m_wall_h = h; }
     void ClrWallHDirect() { m_flags &= ~WALL_H_DIRECT; }
     bool ChkWallHit() { return m_flags & WALL_HIT; }
+    void ClrWallHit() {
+        m_flags &= ~WALL_HIT;
+        ClearPi();
+    }
 
     void SetCir(cXyz& pos) { m_cir.Set(pos.x, pos.z, pos.y + GetWallH(), m_wall_r); }
 };  // Size: 0x40
@@ -107,7 +110,6 @@ public:
     void OnWallSort();
     bool ChkWallSort();
     bool ChkLineDown();
-    void ClrGroundHit();
     f32 GetOnePolyInfo(cBgS_PolyInfo*);
     f32 GetWallAddY(Vec&, int);
 
@@ -147,6 +149,7 @@ public:
     bool ChkClrSpeedY() { return m_flags & CLR_SPEED_Y; }
     void SetGroundFind() { m_flags |= GROUND_FIND; }
     void SetGroundHit() { m_flags |= GROUND_HIT; }
+    void ClrGroundHit() { m_flags &= ~GROUND_HIT; }
     void SetGroundLanding() { m_flags |= GROUND_LANDING; }
     void SetGroundAway() { m_flags |= GROUND_AWAY; }
     const u32 MaskWaterHit() { return m_flags & WATER_HIT; }

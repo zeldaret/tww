@@ -12,6 +12,11 @@ public:
     f32 GetCx() const { return mPosX; }
     f32 GetCy() const { return mPosY; }
     f32 GetR() const { return mRadius; }
+    void Set(f32 x, f32 y, f32 r) {
+        mPosX = x;
+        mPosY = y;
+        mRadius = r;
+    }
 
     cM2dGCir() {}
     virtual ~cM2dGCir() {}
@@ -23,7 +28,10 @@ class cM3dGCir : public cM2dGCir {
 public:
     cM3dGCir(void) {}
     virtual ~cM3dGCir(void) {}
-    void Set(f32, f32, f32, f32);
+    void Set(f32 x, f32 y, f32 z, f32 r) {
+        cM2dGCir::Set(x, y, r);
+        mPosZ = z;
+    }
 };
 
 #endif /* C_M3D_G_CIR_H */

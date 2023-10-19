@@ -51,9 +51,9 @@ dBgS_Acch::dBgS_Acch() {
     pm_pos = NULL;
     pm_old_pos = NULL;
     pm_speed = NULL;
-    m_ground_h = 1000000000.0f;
+    m_ground_h = -1000000000.0f;
     m_ground_up_h = 0.0f;
-    field_0x98 = 98.0f;
+    field_0x98 = 60.0f;
     m_ground_up_h_diff = 0.0f;
     field_0xb0 = 0;
     field_0xb4 = 0.0f;
@@ -68,7 +68,7 @@ dBgS_Acch::dBgS_Acch() {
     pm_shape_angle = NULL;
     m_my_ac = NULL;
     pm_out_poly_info = NULL;
-    m_sea_height = 1000000000.0f;
+    m_sea_height = -1000000000.0f;
 }
 
 static void dummy1() {
@@ -77,7 +77,11 @@ static void dummy1() {
 
 /* 800A2CFC-800A2D78       .text Init__9dBgS_AcchFv */
 void dBgS_Acch::Init() {
-    /* Nonmatching */
+    ClrWallHit();
+    for (int i = 0; i < m_tbl_size; i++) {
+        pm_acch_cir[i].ClrWallHit();
+        pm_acch_cir[i].ClrWallHDirect();
+    }
 }
 
 /* 800A2D78-800A2E80       .text Set__9dBgS_AcchFP4cXyzP4cXyzP10fopAc_ac_ciP12dBgS_AcchCirP4cXyzP5csXyzP5csXyz */
@@ -99,7 +103,15 @@ void dBgS_Acch::Set(cXyz* pos, cXyz* old_pos, fopAc_ac_c* actor, int tbl_size, d
 
 /* 800A2E80-800A2EE8       .text GroundCheckInit__9dBgS_AcchFR4dBgS */
 void dBgS_Acch::GroundCheckInit(dBgS&) {
-    /* Nonmatching */
+    m_ground_h = -1000000000.0f;
+    if (m_flags & GRND_NONE) {
+        return;
+    }
+    m_gnd.SetExtChk(*(cBgS_Chk*)this);
+    field_0xb0 = ChkGroundHit();
+    ClrGroundHit();
+    ClrGroundLanding();
+    ClrGroundAway();
 }
 
 /* 800A2EE8-800A305C       .text GroundCheck__9dBgS_AcchFR4dBgS */
@@ -252,7 +264,9 @@ f32 dBgS_Acch::GetWallAllR() {
 
 /* 800A3F8C-800A3FE4       .text SetWallCir__9dBgS_AcchFv */
 void dBgS_Acch::SetWallCir() {
-    /* Nonmatching */
+    for (int i = 0; i < m_tbl_size; i++) {
+        pm_acch_cir[i].SetCir(*pm_pos);
+    }
 }
 
 /* 800A3FE4-800A4114       .text CalcWallBmdCyl__9dBgS_AcchFv */
