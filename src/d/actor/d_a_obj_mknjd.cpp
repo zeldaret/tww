@@ -370,7 +370,7 @@ int daObjMknjD::Act_c::Create() {
 
     mAttentionInfo.mDistances[1] = 0x3D;
     mAttentionInfo.mDistances[3] = 0x3D;
-    mAttentionInfo.mFlags |= 0x20000000 | 0x8;
+    mAttentionInfo.mFlags |= fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_CHECK_e;
 
     if (checkItemGet(mGiveItemId, 1) == 0) {
         m043F = 8;

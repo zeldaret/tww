@@ -283,7 +283,7 @@ BOOL daMbdoor_c::CreateInit() {
     field_0x2bc = 30;
     mAttentionInfo.mPosition.y += 250.0f;
     mEyePos.y += 250.0f;
-    mAttentionInfo.mFlags = 0x20;
+    mAttentionInfo.mFlags = fopAc_Attn_ACTION_DOOR_e;
     calcMtx();
     mpBgW->Move();
     mStatus = mStatus & ~0x3F | 0x2B;

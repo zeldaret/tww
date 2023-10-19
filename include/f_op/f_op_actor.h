@@ -55,9 +55,9 @@ enum fopAc_AttentionFlag_e {
     fopAc_Attn_ACTION_DOOR_e        = 0x00000020,
     fopAc_Attn_ACTION_TREASURE_e    = 0x00000040,
     fopAc_Attn_ACTION_SHIP_e        = 0x00000080,
-    fopAc_Attn_TALKFLAG_NOTALK_e    = 0x2000000,
-    fopAc_Attn_ENEMYFLAG_NOLOCKON_e = 0x4000000,
-    fopAc_Attn_TALKFLAG_LOOK_e      = 0x8000000,
+    fopAc_Attn_TALKFLAG_NOTALK_e    = 0x02000000,
+    fopAc_Attn_ENEMYFLAG_NOLOCKON_e = 0x04000000,
+    fopAc_Attn_TALKFLAG_LOOK_e      = 0x08000000,
     fopAc_Attn_TALKFLAG_CHECK_e     = 0x20000000,
     fopAc_Attn_TALKFLAG_READ_e      = 0x40000000,
 };

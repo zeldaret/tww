@@ -650,10 +650,10 @@ int daNpc_kam_c::waitNpcAction(void*) {
         mC0C = cLib_getRndValue(10, 80);
     } else if (mActionStatus != ACTION_ENDING) {
         if (changeAreaCheck()) {
-            cLib_onBit(mAttentionInfo.mFlags, 0x02000008UL);
+            mAttentionInfo.mFlags |= fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_NOTALK_e;
             mEventState = 6;
         } else {
-            cLib_offBit(mAttentionInfo.mFlags, 0x02000008UL);
+            mAttentionInfo.mFlags &= ~(fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_NOTALK_e);
             mEventState = -1;
         }
         
