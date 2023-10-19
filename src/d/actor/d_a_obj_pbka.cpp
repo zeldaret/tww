@@ -108,7 +108,7 @@ static BOOL daObjPbka_IsDelete(void*) {
     return true;
 }
 
-static actor_method_class l_daRct_Method = {
+static actor_method_class daObj_PbkaMethodTable = {
     (process_method_func)daObjPbka_Create,
     (process_method_func)daObjPbka_Delete,
     (process_method_func)daObjPbka_Execute,
@@ -127,7 +127,7 @@ actor_process_profile_definition g_profile_Obj_Pbka = {
     0,
     &g_fopAc_Method.base,
     0x70,
-    &l_daRct_Method,
+    &daObj_PbkaMethodTable,
     fopAcStts_UNK40000_e | fopAcStts_CULL_e,
     fopAc_ACTOR_e,
     fopAc_CULLBOX_CUSTOM_e,
