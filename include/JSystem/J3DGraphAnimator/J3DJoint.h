@@ -125,7 +125,7 @@ public:
     J3DMaterial* getMesh() { return mMesh; }
     u16 getJntNo() const { return mJntNo; }
     u8 getKind() const { return mKind & 0x0F; }
-    u8 getMtxType() const { return mKind >> 4; }
+    u8 getMtxType() const { return (mKind >> 4) & 0x0F; }
     u8 getScaleCompensate() const { return mScaleCompensate; }
     void setCurrentMtxCalc(J3DMtxCalc* pMtxCalc) { mCurrentMtxCalc = pMtxCalc; }
     J3DTransformInfo& getTransformInfo() { return mTransformInfo; }

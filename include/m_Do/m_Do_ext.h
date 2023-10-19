@@ -324,7 +324,7 @@ public:
     mDoExt_zelAnime() { }
 
 public:
-    /* 0x98 */ u8 m8C[0x9C - 0x98];
+    /* 0x98 */ void* mpBasAnm;
 };  // Size: 0x9C
 
 class mDoExt_McaMorf : public J3DMtxCalcMaya {
@@ -334,7 +334,7 @@ public:
 
     void calc();
     void calc(u16);
-    void setAnm(J3DAnmTransform* bckAnm, int loopMode, f32 morf, f32 speed, f32, f32, void* soundAnm);
+    void setAnm(J3DAnmTransform* bckAnm, int loopMode, f32 morf, f32 playSpeed, f32 startFrame, f32 endFrame, void* basAnm);
     void setMorf(f32);
     void update();
     void updateDL();

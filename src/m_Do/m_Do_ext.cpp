@@ -1151,7 +1151,7 @@ void mDoExt_MtxCalcOldFrame::decOldFrameMorfCounter() {
 }
 
 /* 80012650-800129E4       .text __ct__14mDoExt_McaMorfFP12J3DModelDataP25mDoExt_McaMorfCallBack1_cP25mDoExt_McaMorfCallBack2_cP15J3DAnmTransformifiiiPvUlUl */
-mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_c* callback1, mDoExt_McaMorfCallBack2_c* callback2, J3DAnmTransform* anmTransform, int param_4, f32 param_5, int param_6, int param_7, int param_8, void* param_9, u32 param_10, u32 param_11) {
+mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_c* callback1, mDoExt_McaMorfCallBack2_c* callback2, J3DAnmTransform* anmTransform, int loopMode, f32 param_5, int param_6, int param_7, int param_8, void* basAnm, u32 modelFlag, u32 differedDlistFlag) {
     mpModel = NULL;
     mpSound = NULL;
     mpTransformInfo = NULL;
@@ -1159,23 +1159,23 @@ mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_
     if (!modelData) {
         return;
     }
-    if (modelData->getModelDataType() == 1 && param_10 == 0) {
-        if (param_10 = modelData->isLocked()) {
-            param_10 = 0x20000;
+    if (modelData->getModelDataType() == 1 && modelFlag == 0) {
+        if (modelFlag = modelData->isLocked()) {
+            modelFlag = 0x20000;
         } else {
-            param_10 = 0x80000;
+            modelFlag = 0x80000;
         }
     }
-    mpModel = mDoExt_J3DModel__create(modelData, param_10, param_11);
+    mpModel = mDoExt_J3DModel__create(modelData, modelFlag, differedDlistFlag);
     if (!mpModel) {
         return;
     }
-    if (param_10 != 0x80000) {
+    if (modelFlag != 0x80000) {
         mDoExt_changeMaterial(mpModel);
     }
-    if (param_9 == NULL && anmTransform) {
-        param_9 = ((mDoExt_transAnmBas*)anmTransform)->getBas();
-        if (param_9) {
+    if (basAnm == NULL && anmTransform) {
+        basAnm = ((mDoExt_transAnmBas*)anmTransform)->getBas();
+        if (basAnm) {
             param_8 = 1;
         }
     }
@@ -1185,7 +1185,7 @@ mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_
             goto cleanup;
         }
     }
-    setAnm(anmTransform, param_4, 0.0f, param_5, param_6, param_7, param_9);
+    setAnm(anmTransform, loopMode, 0.0f, param_5, param_6, param_7, basAnm);
     mPrevMorf = -1.0f;
     mpTransformInfo = new J3DTransformInfo[modelData->getJointNum()];
     if (!mpTransformInfo) {
@@ -1286,43 +1286,40 @@ void mDoExt_McaMorf::calc(u16 param_0) {
 }
 
 /* 80012D78-80012FC8       .text setAnm__14mDoExt_McaMorfFP15J3DAnmTransformiffffPv */
-void mDoExt_McaMorf::setAnm(J3DAnmTransform* param_0, int param_1, f32 param_2, f32 param_3, f32 param_4, f32 param_5, void* param_6) {
-    /* Nonmatching */
-    mpAnm = param_0;
-    setStartFrame(param_4);
-    if (param_5 < 0.0f) {
+void mDoExt_McaMorf::setAnm(J3DAnmTransform* bckAnm, int loopMode, f32 morf, f32 playSpeed, f32 startFrame, f32 endFrame, void* basAnm) {
+    mpAnm = bckAnm;
+    setStartFrame(startFrame);
+    if (endFrame < 0.0f) {
         if (!mpAnm) {
             mFrameCtrl.init(0);
         } else {
             mFrameCtrl.init(mpAnm->getFrameMax());
         }
     } else {
-        mFrameCtrl.init(param_5);
+        mFrameCtrl.init(endFrame);
     }
-    if (param_0 && param_1 < 0) {
-        param_1 = param_0->getAttribute();
+    if (bckAnm && loopMode < 0) {
+        loopMode = bckAnm->getAttribute();
     }
-    setPlayMode(param_1);
-    setPlaySpeed(param_3);
-    if (param_3 >= 0.0f) {
-        setFrame(param_4);
+    setPlayMode(loopMode);
+    setPlaySpeed(playSpeed);
+    if (playSpeed >= 0.0f) {
+        setFrame(startFrame);
     } else {
         setFrame(getEndFrame());
     }
     setLoopFrame(getFrame());
-    setMorf(param_2);
+    setMorf(morf);
     if (mpSound) {
-        if (param_6 == NULL && param_0) {
-            param_6 = ((mDoExt_transAnmBas*)param_0)->getBas();
+        if (basAnm == NULL && bckAnm) {
+            basAnm = ((mDoExt_transAnmBas*)bckAnm)->getBas();
         }
-        /*
-        mpSound->field_0x98 = param_6;
-        if (mpSound->field_0x98) {
-            mpSound->initActorAnimSound(param_6, getPlaySpeed() >= 0.0f, getLoopFrame(), 0.0f);
+        mpSound->mpBasAnm = basAnm;
+        if (mpSound->mpBasAnm) {
+            mpSound->initActorAnimSound(basAnm, getPlaySpeed() >= 0.0f ? 1 : -1, getLoopFrame());
         } else {
             mpSound->stop();
         }
-        */
     }
 }
 
@@ -1635,7 +1632,33 @@ void mDoExt_removeRubyFont() {
 
 /* 80016BB8-80016C98       .text mDoExt_J3DModel__create__FP12J3DModelDataUlUl */
 J3DModel* mDoExt_J3DModel__create(J3DModelData* i_modelData, u32 i_modelFlag, u32 i_differedDlistFlag) {
-    /* Nonmatching */
+    J3DModel* model = new J3DModel();
+    if (model) {
+        if (i_modelData->getModelDataType() == 1 && i_modelFlag == 0) {
+            if (i_modelFlag = i_modelData->isLocked()) {
+                i_modelFlag = 0x20000;
+            } else {
+                i_modelFlag = 0x80000;
+            }
+        }
+        
+        int ret = model->entryModelData(i_modelData, i_modelFlag, 1);
+        if (ret == kJ3DError_Success) {
+            if (i_modelFlag == 0x80000) {
+                if (i_differedDlistFlag & 0x2) {
+                    i_differedDlistFlag |= 0x20;
+                }
+                
+                ret = model->newDifferedDisplayList(i_differedDlistFlag);
+                if (ret != kJ3DError_Success) {
+                    return NULL;
+                }
+            }
+            
+            return model;
+        }
+    }
+    return NULL;
 }
 
 /* 80016C98-80016CC4       .text setGX__7JUTFontFQ28JUtility6TColorQ28JUtility6TColor */

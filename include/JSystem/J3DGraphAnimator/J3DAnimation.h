@@ -614,7 +614,7 @@ public:
     };
 
     J3DFrameCtrl() { this->init(0); }
-    void init(s16);
+    void init(s16 end);
     BOOL checkPass(f32);
     void update();
     virtual ~J3DFrameCtrl() {}
