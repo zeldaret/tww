@@ -5,6 +5,7 @@
 #include "dolphin/os/OSAlloc.h"
 
 class JKRStdHeap : public JKRHeap {
+public:
     static JKRStdHeap* create(u32, JKRHeap*, bool);
     void do_destroy();
     JKRStdHeap(void*, u32, JKRHeap*, bool);
