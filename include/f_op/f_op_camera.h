@@ -271,4 +271,6 @@ struct camera_process_profile_definition {
     /* 0x3C */ leafdraw_method_class* mSubMtd; // Subclass methods
 };
 
+dCamera_c* dCam_getBody();
+
 #endif

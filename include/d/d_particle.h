@@ -172,6 +172,8 @@ public:
     void execute(JPABaseEmitter*);
     void draw(JPABaseEmitter*);
 
+    void setRate(f32 rate) { mRate = rate; }
+
     /* 0x04 */ JPABaseEmitter* mpBaseEmitter;
     /* 0x08 */ cXyz* mPos;
     /* 0x0C */ u32 mFlags;

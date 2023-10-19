@@ -339,7 +339,7 @@ public:
                 mCyl.SetStts(&mStts);
                 if(behavior == 0x8) {
                     if(0 < xRot) {
-                        mTimer = xRot2 * 0x1E & 0xFFFF;
+                        mTimer = xRot2 * 30 & 0xFFFF;
                     }
                 }
                 else if(behavior == 0xA && xRot2 == 4) {
@@ -1106,7 +1106,7 @@ BOOL daAgbsw0_c::ExeSubT() {
                         return true;
                     }
 
-                    mTimer = 0x1E;
+                    mTimer = 30;
                 }
                 else {
                     g_dComIfG_gameInfo.play.mCcS.Set(&mCyl);

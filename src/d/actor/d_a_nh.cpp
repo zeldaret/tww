@@ -434,7 +434,7 @@ BOOL daNh_c::escapeAction(void*) {
         mActionStatus += 1; // ACTION_ONGOING
         mWobbleDir = 0;
         mWobbleTimer = 0;
-        mEscapeTimer = 150;
+        mEscapeTimer = 5*30;
     } else if (mActionStatus != ACTION_ENDING) {
         if (!checkEscapeEnd()) {
             s16 targetAngle = fopAcM_searchPlayerAngleY(this) + 0x8000;
@@ -456,7 +456,7 @@ BOOL daNh_c::returnAction(void*) {
         mActionStatus += 1; // ACTION_ONGOING
         mWobbleDir = 0;
         mWobbleTimer = 0;
-        mEscapeTimer = 150;
+        mEscapeTimer = 5*30;
     } else if (mActionStatus != ACTION_ENDING) {
         if (getHomeDistance() < 50.0f) {
             setAction(&waitAction, NULL);

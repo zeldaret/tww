@@ -1047,7 +1047,7 @@ void daNpc_kam_c::initialDescendEvent(int evtStaffId) {
     
     onNoBgCheck();
     
-    mWaitTimer = 900;
+    mWaitTimer = 30*30;
 }
 
 // Needed for the .rodata section to match.

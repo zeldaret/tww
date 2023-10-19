@@ -75,7 +75,7 @@ void set_disappear(disappear_class* i_this, float scale) {
     mDoAud_seStart(JA_SE_CM_MONS_EXPLODE, &i_this->mEyePos, 0, rev);
 
     cXyz particleScale(scale, scale, scale);
-    i_this->mTimer = g_regHIO.mChild[8].mShortRegs[0] + 0x3A;
+    i_this->mTimer = 58 + g_regHIO.mChild[8].mShortRegs[0];
 
     switch (i_this->mHealth) {
         case 0:

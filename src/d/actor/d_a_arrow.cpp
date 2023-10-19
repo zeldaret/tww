@@ -400,7 +400,7 @@ bool daArrow_c::check_water_in() {
                 dKy_arrowcol_chg_on(&current.pos, 0);
             }
         } else if (mArrowType == TYPE_ICE) {
-            mInWaterTimer = 300;
+            mInWaterTimer = 10*30;
             fopAcM_createChild(
                 PROC_ARROW_ICEEFF, fpcM_GetID(this), mArrowType,
                 &waterHitPos, current.roomNo, &current.angle, NULL, -1, NULL

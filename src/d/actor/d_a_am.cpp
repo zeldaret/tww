@@ -46,7 +46,7 @@ public:
     /* 0x02C7 */ bool mbIsBodyBeingHit;
     /* 0x02C8 */ s16 mCountDownTimers[4];
     /* 0x02D0 */ s16 mCountUpTimers[5];
-    /* 0x02DA */ s16 mDesiredRotY;
+    /* 0x02DA */ s16 mTargetAngleY;
     /* 0x02DC */ s16 mSpawnRotY;
     /* 0x02DE */ u8 m02DE[0x02E0 - 0x02DE];
     /* 0x02E0 */ int mCurrBckIdx;
@@ -60,7 +60,7 @@ public:
     /* 0x0318 */ cXyz mJawPos;
     /* 0x0324 */ cXyz mSpawnPos;
     /* 0x0330 */ csXyz mEyeRot;
-    /* 0x0336 */ csXyz mDesiredEyeRot;
+    /* 0x0336 */ csXyz mTargetEyeRot;
     /* 0x033C */ JPABaseEmitter* m033C;
     /* 0x0340 */ JPABaseEmitter* m0340;
     /* 0x0344 */ dPa_smokeEcallBack mSmokeCbs[4];
@@ -495,8 +495,8 @@ static BOOL bomb_nomi_check(am_class* i_this) {
 
 /* 00001138-000011E4       .text BG_check__FP8am_class */
 static void BG_check(am_class* i_this) {
-    f32 halfHeight = g_regHIO.mChild[12].mFloatRegs[3] + 30.0f;
-    f32 radius = g_regHIO.mChild[12].mFloatRegs[4] + 150.0f;
+    f32 halfHeight = 30.0f + g_regHIO.mChild[12].mFloatRegs[3];
+    f32 radius = 150.0f + g_regHIO.mChild[12].mFloatRegs[4];
     i_this->mAcchCir.SetWall(halfHeight, radius);
 
     i_this->current.pos.y -= i_this->m02EC;
@@ -532,22 +532,22 @@ static void medama_move(am_class* i_this) {
     f32 diffY = i_this->mEyePos.y - player->current.pos.y;
     f32 diffZ = i_this->current.pos.z - player->current.pos.z;
 
-    i_this->mDesiredEyeRot.y = cM_atan2s(diffX, diffZ);
-    if (i_this->mDesiredEyeRot.y < -0x71C) {
-        i_this->mDesiredEyeRot.y = -0x71C;
-    } else if (i_this->mDesiredEyeRot.y > 0x71C) {
-        i_this->mDesiredEyeRot.y = 0x71C;
+    i_this->mTargetEyeRot.y = cM_atan2s(diffX, diffZ);
+    if (i_this->mTargetEyeRot.y < -0x71C) {
+        i_this->mTargetEyeRot.y = -0x71C;
+    } else if (i_this->mTargetEyeRot.y > 0x71C) {
+        i_this->mTargetEyeRot.y = 0x71C;
     }
 
-    i_this->mDesiredEyeRot.x = cM_atan2s(diffY, sqrtf(diffX*diffX + diffZ*diffZ));
-    if (i_this->mDesiredEyeRot.x < -0x38E) {
-        i_this->mDesiredEyeRot.x = -0x38E;
-    } else if (i_this->mDesiredEyeRot.x > 0x38E) {
-        i_this->mDesiredEyeRot.x = 0x38E;
+    i_this->mTargetEyeRot.x = cM_atan2s(diffY, sqrtf(diffX*diffX + diffZ*diffZ));
+    if (i_this->mTargetEyeRot.x < -0x38E) {
+        i_this->mTargetEyeRot.x = -0x38E;
+    } else if (i_this->mTargetEyeRot.x > 0x38E) {
+        i_this->mTargetEyeRot.x = 0x38E;
     }
 
-    cLib_addCalcAngleS2(&i_this->mEyeRot.x, i_this->mDesiredEyeRot.x, 1, 0x500);
-    cLib_addCalcAngleS2(&i_this->mEyeRot.y, i_this->mDesiredEyeRot.y, 1, 0x500);
+    cLib_addCalcAngleS2(&i_this->mEyeRot.x, i_this->mTargetEyeRot.x, 1, 0x500);
+    cLib_addCalcAngleS2(&i_this->mEyeRot.y, i_this->mTargetEyeRot.y, 1, 0x500);
 }
 
 /* 00001B00-00002564       .text action_dousa__FP8am_class */
@@ -605,7 +605,7 @@ static void action_dousa(am_class* i_this) {
             anm_init(i_this, AM_BCK_CLOSE, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
             i_this->mCountDownTimers[2] = 6;
         }
-        i_this->mDesiredRotY = fopAcM_searchPlayerAngleY(i_this);
+        i_this->mTargetAngleY = fopAcM_searchPlayerAngleY(i_this);
         i_this->mState += 1;
         // Fall-through
     case 4:
@@ -637,7 +637,7 @@ static void action_dousa(am_class* i_this) {
                 break;
             }
         }
-        s16 yRotDiff = cLib_distanceAngleS(i_this->shape_angle.y, i_this->mDesiredRotY);
+        s16 yRotDiff = cLib_distanceAngleS(i_this->shape_angle.y, i_this->mTargetAngleY);
         if (yRotDiff < 0x100) {
             i_this->mState += 1;
         }
@@ -713,7 +713,7 @@ static void action_dousa(am_class* i_this) {
             i_this->mGravity = -6.0f;
             i_this->speed.y = 15.0f;
             fopAcM_seStart(i_this, JA_SE_CM_AM_JUMP_S, 0);
-            i_this->mDesiredRotY = fopAcM_searchPlayerAngleY(i_this);
+            i_this->mTargetAngleY = fopAcM_searchPlayerAngleY(i_this);
         }
         if (i_this->mCountDownTimers[0] == 0) {
             i_this->mSmokeCbs[2].end();
@@ -763,7 +763,7 @@ static void action_modoru_move(am_class* i_this) {
 
         f32 xDistToSpawn = i_this->mSpawnPos.x - i_this->current.pos.x;
         f32 zDistToSpawn = i_this->mSpawnPos.z - i_this->current.pos.z;
-        i_this->mDesiredRotY = cM_atan2s(xDistToSpawn, zDistToSpawn);
+        i_this->mTargetAngleY = cM_atan2s(xDistToSpawn, zDistToSpawn);
         i_this->mState += 1;
         break;
     case 0x15:
@@ -784,18 +784,18 @@ static void action_modoru_move(am_class* i_this) {
 
             i_this->speed.y = 40.0f;
             i_this->speedF = 15.0f;
-            i_this->mDesiredRotY = cM_atan2s(xDistToSpawn, zDistToSpawn);
+            i_this->mTargetAngleY = cM_atan2s(xDistToSpawn, zDistToSpawn);
         }
 
         f32 xzDist = sqrtf(xDistToSpawn*xDistToSpawn + zDistToSpawn*zDistToSpawn);
         if (xzDist < 20.0f) {
-            i_this->mDesiredRotY = i_this->mSpawnRotY;
+            i_this->mTargetAngleY = i_this->mSpawnRotY;
             i_this->speedF = 0.0f;
             i_this->mState += 1;
         }
         break;
     case 0x16:
-        s16 angleDiff = cLib_distanceAngleS(i_this->shape_angle.y, i_this->mDesiredRotY);
+        s16 angleDiff = cLib_distanceAngleS(i_this->shape_angle.y, i_this->mTargetAngleY);
         if (angleDiff < 0x100) {
             i_this->mNeedleCyl.OffAtSetBit();
             i_this->mNeedleCyl.OffAtSetBit();
@@ -820,7 +820,7 @@ static void action_handou_move(am_class* i_this) {
             i_this->current.angle.y = player->shape_angle.y - 0x4000;
             i_this->speedF = 40.0f;
         }
-        i_this->mDesiredRotY = i_this->current.angle.y;
+        i_this->mTargetAngleY = i_this->current.angle.y;
         if (i_this->mCurrBckIdx != AM_BCK_CLOSE && i_this->mCurrBckIdx != AM_BCK_CLOSE_LOOP) {
             // Using the fopAcM_seStart inline multiple times makes the codegen not match.
             // fopAcM_seStart(i_this, JA_SE_CM_AM_NEEDLE_OUT, 0);
@@ -851,7 +851,7 @@ static void action_itai_move(am_class* i_this) {
         i_this->mNeedleCyl.OffAtSetBit();
         i_this->speedF = -20.0f;
         i_this->current.angle.y = fopAcM_searchPlayerAngleY(i_this);
-        i_this->mDesiredRotY = i_this->current.angle.y;
+        i_this->mTargetAngleY = i_this->current.angle.y;
         fopAcM_seStart(i_this, JA_SE_CM_AM_NEEDLE_IN, 0);
         anm_init(i_this, AM_BCK_DAMAGE, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
         i_this->mState += 1;
@@ -943,7 +943,7 @@ static void action_itai_move(am_class* i_this) {
             break;
         }
         i_this->mCountDownTimers[0] = 100;
-        i_this->mDesiredRotY = fopAcM_searchPlayerAngleY(i_this);
+        i_this->mTargetAngleY = fopAcM_searchPlayerAngleY(i_this);
         i_this->mState += 1;
         break;
     case 0x2E:
@@ -978,7 +978,7 @@ static void action_itai_move(am_class* i_this) {
         // The fopAcM_seStart inline makes the codegen not match.
         // fopAcM_seStart(i_this, JA_SE_CM_AM_BEF_EXPLODE, 0);
         mDoAud_seStart(JA_SE_CM_AM_BEF_EXPLODE, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
-        i_this->mDesiredRotY = i_this->current.angle.y;
+        i_this->mTargetAngleY = i_this->current.angle.y;
 
         if (i_this->m033C) {
             i_this->m033C->becomeInvalidEmitter();
@@ -1080,7 +1080,7 @@ static BOOL daAM_Execute(am_class* i_this) {
 
         fopAcM_seStart(i_this, JA_SE_CM_AM_BEF_EXPLODE, 0);
 
-        i_this->mDesiredRotY = i_this->current.angle.y;
+        i_this->mTargetAngleY = i_this->current.angle.y;
 
         if (i_this->m033C) {
             i_this->m033C->becomeInvalidEmitter();
@@ -1096,7 +1096,7 @@ static BOOL daAM_Execute(am_class* i_this) {
         i_this->mState = 0x2F;
     }
 
-    cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->mDesiredRotY, 1, 0x500);
+    cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->mTargetAngleY, 1, 0x500);
     if (i_this->mState != 0x2E && i_this->mState != 0x2F && i_this->mState != 0x1F) {
         cLib_addCalcAngleS2(&i_this->shape_angle.y, i_this->current.angle.y, 1, 0x500);
     }
@@ -1427,7 +1427,7 @@ static s32 daAM_Create(fopAc_ac_c* i_actor) {
         i_this->mNeedleCyl.OffAtSetBit();
         i_this->mNeedleCyl.OffAtSetBit();
 
-        i_this->mDesiredRotY = i_this->current.angle.y;
+        i_this->mTargetAngleY = i_this->current.angle.y;
         i_this->mSpawnPos = i_this->current.pos;
         i_this->mSpawnRotY = i_this->current.angle.y;
 
