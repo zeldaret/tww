@@ -19,12 +19,12 @@ public:
     /* 0x10 */ f32 mScaleY;
 };  /* size = 0x2A0 */
 
-BOOL daKytag04_Draw(kytag04_class*) {
+static BOOL daKytag04_Draw(kytag04_class*) {
     return true;
 }
 
 /* 00000080-00000138       .text daKytag04_Execute__FP13kytag04_class */
-BOOL daKytag04_Execute(kytag04_class* i_this) {
+static BOOL daKytag04_Execute(kytag04_class* i_this) {
     if (i_this->mSwitchId != 0xff && dComIfGs_isSwitch(i_this->mSwitchId, dComIfGp_roomControl_getStayNo())) {
         if (i_this->mState == 0) {
             if (i_this->mTimer >= i_this->mTimerThreshold) {
@@ -44,18 +44,18 @@ BOOL daKytag04_Execute(kytag04_class* i_this) {
 }
 
 /* 00000138-00000160       .text daKytag04_IsDelete__FP13kytag04_class */
-BOOL daKytag04_IsDelete(kytag04_class* i_this) {
+static BOOL daKytag04_IsDelete(kytag04_class* i_this) {
     dKy_change_colpat(i_this->mOffColPat);
     return true;
 }
 
 /* 00000160-00000168       .text daKytag04_Delete__FP13kytag04_class */
-BOOL daKytag04_Delete(kytag04_class*) {
+static BOOL daKytag04_Delete(kytag04_class*) {
     return true;
 }
 
 /* 00000168-00000208       .text daKytag04_Create__FP10fopAc_ac_c */
-int daKytag04_Create(fopAc_ac_c* i_this)  {
+static int daKytag04_Create(fopAc_ac_c* i_this)  {
     fopAcM_SetupActor(i_this, kytag04_class);
     kytag04_class* a_this = (kytag04_class*)i_this;
     a_this->mState = 0;

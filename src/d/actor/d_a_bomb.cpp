@@ -662,7 +662,8 @@ void daBomb_c::eff_explode_cheap(const csXyz* rotation) {
     JPABaseEmitter* emitter = dComIfGp_particle_setP1(0xB, &current.pos, rotation, &mScale, 0xFF, 0, -1, 0, 0, 0);
     if(emitter) {
         emitter->mLifeTime = 0xC;
-        emitter->mGlobalScale2D.set(0.5f, 0.67f, 1.0f);
+        JGeometry::TVec3<f32> vec(0.5f, 0.67f, 1.0f);
+        emitter->setGlobalParticleScale(vec);
     }
 
     g_dComIfG_gameInfo.play.getParticle()->setBombSmoke(0x232A, &current.pos, 0, &mScale, 0xFF);

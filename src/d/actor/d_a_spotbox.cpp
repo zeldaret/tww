@@ -8,43 +8,43 @@
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
 #include "dolphin/types.h"
+#include "d/d_procname.h"
 
 struct daSpotbox_c : public fopAc_ac_c {
 public:
-    inline int create();
-    inline int draw();
-    inline int execute();
+    inline s32 create();
+    inline BOOL draw();
+    inline BOOL execute();
     inline u32 getType();
 public:
-    Mtx mtx;
-}; /* size = 0x2A0 */
+    /* 0x290 */ Mtx mMtx;
+}; // Size: 0x2C0
 
-int daSpotbox_c::create() {
-    /* Matching 96% */
+s32 daSpotbox_c::create() {
     fopAcM_SetupActor(this, daSpotbox_c);
-    float baseScale = this->getType() != 0 ? 100.0f : 1000.0f;
-    this->mScale.x *= baseScale;
-    this->mScale.y *= baseScale;
-    this->mScale.z *= (baseScale * 1.2f);
-    this->current.pos.y += this->mScale.y * 0.5f;
-    this->mCullMtx = ((daSpotbox_c *)this)->mtx;
+    f32 baseScale = getType() != 0 ? 1000.0f : 100.0f;
+    mScale.x *= baseScale;
+    mScale.y *= baseScale;
+    mScale.z *= (baseScale * 1.2f);
+    current.pos.y += mScale.y * 0.5f;
+    fopAcM_SetMtx(this, mMtx);
     fopAcM_setCullSizeBox(this, -0.5, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f);
 
     return cPhs_COMPLEATE_e;
 }
 
-int daSpotbox_c::draw() {
+BOOL daSpotbox_c::draw() {
     if (dComIfGd_getSpotModelNum() != 0) {
-        dComIfGd_setSpotModel(dDlst_alphaModel_c::TYPE_CUBE, mtx, 0x20);
+        dComIfGd_setSpotModel(dDlst_alphaModel_c::TYPE_CUBE, mMtx, 0x20);
     }
     return TRUE;
 }
 
-int daSpotbox_c::execute() {
+BOOL daSpotbox_c::execute() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mDoMtx_stack_c::scaleM(mScale);
-    cMtx_copy(mDoMtx_stack_c::get(), mtx);
+    cMtx_copy(mDoMtx_stack_c::get(), mMtx);
     return TRUE;
 }
 
@@ -53,27 +53,53 @@ u32 daSpotbox_c::getType() {
 }
 
 /* 00000078-000000C4       .text daSpotbox_Draw__FP11daSpotbox_c */
-static int daSpotbox_Draw(daSpotbox_c* i_this) {
+static BOOL daSpotbox_Draw(daSpotbox_c* i_this) {
     return ((daSpotbox_c*)i_this)->draw();
 }
 
 /* 000000C4-00000138       .text daSpotbox_Execute__FP11daSpotbox_c */
-static int daSpotbox_Execute(daSpotbox_c* i_this) {
+static BOOL daSpotbox_Execute(daSpotbox_c* i_this) {
     return ((daSpotbox_c*)i_this)->execute();
 }
 
 /* 00000138-00000140       .text daSpotbox_IsDelete__FP11daSpotbox_c */
-static int daSpotbox_IsDelete(daSpotbox_c* i_this) {
+static BOOL daSpotbox_IsDelete(daSpotbox_c* i_this) {
     return TRUE;
 }
 
 /* 00000140-00000170       .text daSpotbox_Delete__FP11daSpotbox_c */
-static int daSpotbox_Delete(daSpotbox_c* self) {
-    self->~daSpotbox_c();
+static BOOL daSpotbox_Delete(daSpotbox_c* i_this) {
+    i_this->~daSpotbox_c();
     return true;
 }
 
 /* 00000170-00000250       .text daSpotbox_Create__FP10fopAc_ac_c */
-static int daSpotbox_Create(fopAc_ac_c* i_this) {
-    return ((daSpotbox_c*)i_this)->create();
+static s32 daSpotbox_Create(fopAc_ac_c* i_this) {
+    daSpotbox_c* spotbox = (daSpotbox_c*)i_this;
+    return spotbox->create();
 }
+
+static actor_method_class l_daSpotbox_Method = {
+    (process_method_func)daSpotbox_Create,
+    (process_method_func)daSpotbox_Delete,
+    (process_method_func)daSpotbox_Execute,
+    (process_method_func)daSpotbox_IsDelete,
+    (process_method_func)daSpotbox_Draw,
+};
+
+actor_process_profile_definition g_profile_SPOTBOX = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 7,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_SPOTBOX,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daSpotbox_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x01C9,
+    /* Actor SubMtd */ &l_daSpotbox_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};
