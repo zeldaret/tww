@@ -4,6 +4,9 @@
 #include "dolphin/os/OS.h"
 #include "dolphin/types.h"
 
+volatile u16 __DSPRegs[32] : 0xCC005000;
+volatile u32 __AIRegs[8] : 0xCC006C00;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -47,20 +50,27 @@ typedef struct STRUCT_DSP_TASK {
 
 } DSPTaskInfo;
 
+extern DSPTaskInfo* __DSP_tmp_task;
+extern DSPTaskInfo* __DSP_last_task;
+extern DSPTaskInfo* __DSP_first_task;
+extern DSPTaskInfo* __DSP_curr_task;
+
+u32 DSPCheckMailToDSP();
+u32 DSPCheckMailFromDSP();
+u32 DSPReadMailFromDSP();
+void DSPSendMailToDSP(u32 mail);
+void DSPAssertInt();
 void DSPInit();
 void DSPReset();
 void DSPHalt();
-void DSPSendMailToDSP(u32 mail);
-u32 DSPCheckMailToDSP();
-u32 DSPCheckMailFromDSP();
 u32 DSPGetDMAStatus();
-
 DSPTaskInfo* DSPAddTask(DSPTaskInfo* task);
 
 void __DSP_exec_task(DSPTaskInfo* curr, DSPTaskInfo* next);
 void __DSP_boot_task(DSPTaskInfo* task);
-void __DSP_remove_task(DSPTaskInfo* task);
+void __DSP_insert_task(DSPTaskInfo* task);
 void __DSP_add_task(DSPTaskInfo* task);
+void __DSP_remove_task(DSPTaskInfo* task);
 void __DSP_debug_printf(const char* fmt, ...);
 
 #ifdef __cplusplus
