@@ -9,6 +9,7 @@
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_kankyo.h"
 #include "dolphin/mtx/mtx.h"
+#include "d/d_procname.h"
 
 class daObjPbka_c : public fopAc_ac_c {
 public:
@@ -19,7 +20,7 @@ public:
 public:
     /* 0x290 */ request_of_phase_process_class mPhase;
     /* 0x298 */ J3DModel* mpModel;
-};
+}; //Size 0x29C
 
 bool daObjPbka_c::draw()
 {
@@ -94,6 +95,7 @@ static BOOL daObjPbka_Draw(void* i_this) {
 }
 
 static BOOL daObjPbka_Execute(void* i_this) {
+    /* Nonmatching */
     daObjPbka_c* a_this = (daObjPbka_c*)i_this;
         a_this->current.angle.y += 0x500;
         a_this->shape_angle.y = a_this->current.angle.y;
@@ -105,3 +107,28 @@ static BOOL daObjPbka_Execute(void* i_this) {
 static BOOL daObjPbka_IsDelete(void*) {
     return true;
 }
+
+static actor_method_class daObj_PbkaMethodTable = {
+    (process_method_func)daObjPbka_Create,
+    (process_method_func)daObjPbka_Delete,
+    (process_method_func)daObjPbka_Execute,
+    (process_method_func)daObjPbka_IsDelete,
+    (process_method_func)daObjPbka_Draw,
+};
+
+actor_process_profile_definition g_profile_Obj_Pbka = {
+    fpcLy_CURRENT_e,
+    7,
+    fpcLy_CURRENT_e,
+    PROC_Obj_Pbka,
+    &g_fpcLf_Method.mBase,
+    sizeof(daObjPbka_c),
+    0,
+    0,
+    &g_fopAc_Method.base,
+    0x70,
+    &daObj_PbkaMethodTable,
+    fopAcStts_UNK40000_e | fopAcStts_CULL_e,
+    fopAc_ACTOR_e,
+    fopAc_CULLBOX_CUSTOM_e,
+};
