@@ -48,11 +48,11 @@ private:
 
 public:
     J3DMtxCalcBasic();
-    virtual ~J3DMtxCalcBasic() {}
-    virtual void init(const Vec& vec, const Mtx& mtx);
     virtual void recursiveCalc(J3DNode*);
     virtual void calcTransform(u16, const J3DTransformInfo&);
     virtual void calc(u16);
+    virtual ~J3DMtxCalcBasic() {}
+    virtual void init(const Vec& vec, const Mtx& mtx);
 
     Mtx& getBackupMtx() { return mBackupMtx; }
     Vec& getBackupS() { return mBackupS; }
@@ -65,9 +65,9 @@ public:
 class J3DMtxCalcSoftimage : public J3DMtxCalcBasic {
 public:
     J3DMtxCalcSoftimage() : J3DMtxCalc() {}
+    virtual void calcTransform(u16, const J3DTransformInfo&);
     virtual ~J3DMtxCalcSoftimage();
     virtual void init(const Vec& vec, const Mtx& mtx);
-    virtual void calcTransform(u16, const J3DTransformInfo&);
 };
 
 class J3DMtxCalcMaya : public J3DMtxCalcBasic {
