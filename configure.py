@@ -1560,7 +1560,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_ojtree"),
     ActorRel(NonMatching, "d_a_obj_ospbox"),
     ActorRel(NonMatching, "d_a_obj_paper"),
-    ActorRel(NonMatching, "d_a_obj_pbka"),
+    ActorRel(Matching, "d_a_obj_pbka"),
     ActorRel(NonMatching, "d_a_obj_pfall"),
     ActorRel(NonMatching, "d_a_obj_plant"),
     ActorRel(NonMatching, "d_a_obj_rflw"),
