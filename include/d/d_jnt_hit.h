@@ -8,19 +8,19 @@
 
 struct __jnt_hit_data_c {
 public:
-    /* 0x0 */ s16 field_0x0;
+    /* 0x0 */ s16 mShapeType;
     /* 0x2 */ s16 mJointIndex;
-    /* 0x4 */ f32 field_0x4;
-    /* 0x8 */ cXyz* field_0x8;
+    /* 0x4 */ f32 mRadius;
+    /* 0x8 */ cXyz* mpOffsets;
 };
 
 class JntHit_c {
 public:
     JntHit_c()
         : mpModel(NULL)
-        , field_0x08(NULL)
-        , field_0x0C(NULL)
-        , field_0x10(NULL)
+        , mpOffsets(NULL)
+        , mpRadiuses(NULL)
+        , mpShapeTypes(NULL)
         , field_0x1C(NULL) {}
 
     BOOL CreateInit();
@@ -31,13 +31,34 @@ public:
     s32 searchJntHitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*);
     
     J3DModel* getModel() { return mpModel; }
+    // setSearchData(__jnt_hit_data_c*);
+    // setMdlPtr(J3DModel*);
+    // setMaxNum(short);
+    // isThrow(int);
+    // isDelete(int);
+    bool isCylinder(int type) {
+        if (type == 0 || (u32)type-2 <= 1 || type == 5 || type == 7) {
+            return true;
+        }
+        return false;
+    }
+    bool isSphere(int type) {
+        if (type == 1 || type == 4 || type == 6 || type == 8) {
+            return true;
+        }
+        return false;
+    }
+    // DBdraw(JntHit_HIO_c&);
+    // DBdrawCyl(MtxP, cXyz*, cXyz*, f32);
+    // DBdrawSph(MtxP, cXyz*, f32);
+    // DBdrawAll();
     
     /* 0x00 */ __jnt_hit_data_c* mpHitData;
     /* 0x04 */ J3DModel* mpModel;
-    /* 0x08 */ cXyz* field_0x08;
-    /* 0x0C */ short* field_0x0C;
-    /* 0x10 */ short* field_0x10;
-    /* 0x14 */ short* mpJointIndexes;
+    /* 0x08 */ cXyz* mpOffsets;
+    /* 0x0C */ f32* mpRadiuses;
+    /* 0x10 */ s16* mpShapeTypes;
+    /* 0x14 */ s16* mpJointIndexes;
     /* 0x18 */ s16 mHitDataCount;
     /* 0x1A */ u8 field_0x1A[2];
     /* 0x1C */ void* field_0x1C;
@@ -47,6 +68,18 @@ class JntHit_HIO_c {
 public:
     JntHit_HIO_c();
     virtual ~JntHit_HIO_c();
+
+public:
+    /* 0x04 */ s8 mChildID;
+    /* 0x05 */ u8 m05[0x06 - 0x05];
+    /* 0x06 */ s16 m06;
+    /* 0x08 */ s16 m08;
+    /* 0x0A */ u8 m0A[0x0C - 0x0A];
+    /* 0x0C */ f32 m0C;
+    /* 0x10 */ cXyz m10;
+    /* 0x1C */ f32 m1C;
+    /* 0x20 */ f32 m20;
+    /* 0x24 */ f32 m24;
 };
 
 JntHit_c* JntHit_create(J3DModel* model, __jnt_hit_data_c* jntHitData, s16 hitDataCount);

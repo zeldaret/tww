@@ -1209,10 +1209,10 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     };
     static __jnt_hit_data_c search_data[] = {
         {
-            /* field_0x0   */ 2,
+            /* mShapeType  */ 2, // Cylinder
             /* mJointIndex */ 0x05, // hitomi (pupil) joint
-            /* field_0x4   */ 5.0f,
-            /* field_0x8   */ (cXyz*)&cyl2_eye_offset,
+            /* mRadius     */ 5.0f,
+            /* mpOffsets   */ (cXyz*)&cyl2_eye_offset,
         },
     };
     i_this->mEyeJntHit = JntHit_create(i_this->mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));
