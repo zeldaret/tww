@@ -53,6 +53,13 @@ void messageSet(unsigned long status) {
     /* Nonmatching */
 }
 
+namespace JAInter {
+    class StreamLib {
+    public:
+        static void stop();
+    };
+}
+
 /* 8003E9F0-8003EBD4       .text drawDvdCondition__Fl */
 void drawDvdCondition(long status) {
     JFWDisplay::getManager()->setFader(NULL);
@@ -73,13 +80,13 @@ void drawDvdCondition(long status) {
         messageSet(1);
     } else if (status == 6) {
         messageSet(3);
-    } else if (status == 12) {
+    } else if (status == 11) {
         messageSet(4);
     } else if (status == 1) {
         messageSet(0);
     } else if (status == -1) {
         messageSet(5);
-        // JAInter::StreamLib::stop();
+        JAInter::StreamLib::stop();
     } else {
         JUT_WARN(0x1e1, "Dvd Error !! <%d>\n", status);
     }
