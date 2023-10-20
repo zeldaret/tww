@@ -670,7 +670,7 @@ config.libs = [
             Object(NonMatching, "JSystem/JAudio/JASTrack.cpp"),
             Object(Matching,    "JSystem/JAudio/JASTrackInterrupt.cpp"),
             Object(Matching,    "JSystem/JAudio/JASTrackPort.cpp"),
-            Object(NonMatching, "JSystem/JAudio/JASBank.cpp"),
+            Object(Matching,    "JSystem/JAudio/JASBank.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASWaveBank.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASBasicBank.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASBasicInst.cpp"),
