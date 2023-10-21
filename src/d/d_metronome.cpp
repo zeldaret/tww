@@ -15,15 +15,6 @@
 #include "JSystem/JUtility/TColor.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 
-class JAIZelInst {
-public:
-    f32 getMelodyPattern(s32, s32, s32*);
-
-public:
-    /* 0x00 */ u8 pad[0x1F];
-    /* 0x1F */ u8 mMelodyNum;
-};
-
 class dMetronome_c : public dDlst_base_c {
 public:
     void screenSet();
@@ -472,17 +463,15 @@ void dMetronome_c::melodyShow() {
 
 /* 80222C4C-80222DB4       .text melodyDemo__12dMetronome_cFv */
 void dMetronome_c::melodyDemo() {
-    /* Nonmatching */
     if (pane_wn[4].mUserArea != 0) {
         s32 note[6];
         s16 frames[7];
 
-        s32 melody_no = daPy_getPlayerLinkActorClass()->getTactMusic();
+        u32 melody_no = daPy_getPlayerLinkActorClass()->getTactMusic();
 
         frames[0] = 1;
         for (s32 i = 0; i < mMelodyNum; i++) {
-            f32 gframes = mDoAud_zelAudio_c::mTact.getMelodyPattern(melody_no, i, &note[i]);
-            frames[i + 1] = gframes + frames[i];
+            frames[i + 1] = frames[i] + mDoAud_tact_getMelodyPattern(melody_no, i, &note[i]);
         }
 
         if (mMelodyNum > pane_wn[5].mUserArea) {

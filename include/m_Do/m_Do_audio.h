@@ -3,7 +3,14 @@
 
 #include "JAZelAudio/JAIZelBasic.h"
 
-class JAIZelInst;
+class JAIZelInst {
+public:
+    f32 getMelodyPattern(s32, s32, s32*);
+
+public:
+    /* 0x00 */ u8 pad[0x1F];
+    /* 0x1F */ u8 mMelodyNum;
+};
 
 class mDoAud_zelAudio_c : public JAIZelBasic {
 public:
@@ -112,6 +119,10 @@ inline void mDoAud_setWeekday(s32 day) {
 
 inline void mDoAud_rainPlay(s32 param_0) {
     mDoAud_zelAudio_c::getInterface()->rainPlay(param_0);
+}
+
+inline f32 mDoAud_tact_getMelodyPattern(s32 melody_no, s32 note_no, s32 * pattern) {
+    return mDoAud_zelAudio_c::mTact.getMelodyPattern(melody_no, note_no, pattern);
 }
 
 #endif /* M_DO_AUDIO_H */
