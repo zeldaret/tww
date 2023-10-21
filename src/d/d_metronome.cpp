@@ -155,7 +155,6 @@ void dMetronome_c::screenSet() {
 
 /* 80221DF4-802222D8       .text metronomeMove__12dMetronome_cFv */
 void dMetronome_c::metronomeMove() {
-    /* Nonmatching */
     s32 timer = daPy_getPlayerLinkActorClass()->getTactMetronomeRate() * 20.0f;
     if (timer > 20)
         timer = 20;
@@ -228,15 +227,21 @@ void dMetronome_c::metronomeMove() {
                 if (i == 10) {
                     black.r = -(fade * -255.0f);
                     black.g = -(fade * -80.0f);
-                    black.b = 255.0f - (fade * 175.f);
+                    black.b = -(fade * -80.0f);
                     black.a = 0x00;
-                    white.set(black.r, black.g, black.b, 0xFF);
+                    white.r = 0xFF;
+                    white.g = 255.0f - (fade * 175.f);
+                    white.b = 255.0f - (fade * 175.f);
+                    white.a = 0xFF;
                 } else {
                     black.r = -(fade * -255.0f);
                     black.g = -(fade * -185.0f);
-                    black.b = 255.0f - (fade * 70.f);
+                    black.b = 0x00;
                     black.a = 0x00;
-                    white.set(black.r, black.g, black.b, 0xFF);
+                    white.r = 0xFF;
+                    white.g = 255.0f - (fade * 70.f);
+                    white.b = 255.0f - (fade * 255.f);
+                    white.a = 0xFF;
                 }
 
                 ((J2DPicture *)pane_timing[i].scrn)->setBlack(black);

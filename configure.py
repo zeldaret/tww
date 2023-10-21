@@ -471,7 +471,7 @@ config.libs = [
             Object(NonMatching, "d/d_name.cpp"),
             Object(NonMatching, "d/d_npc.cpp"),
             Object(NonMatching, "d/d_operate_wind.cpp"),
-            Object(NonMatching, "d/d_metronome.cpp"),
+            Object(Matching,    "d/d_metronome.cpp"),
             Object(Matching,    "d/d_ovlp_fade.cpp"),
             Object(NonMatching, "d/d_ovlp_fade2.cpp"),
             Object(NonMatching, "d/d_ovlp_fade3.cpp"),
