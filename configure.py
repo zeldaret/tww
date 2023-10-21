@@ -1303,7 +1303,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_stone2"),
     ActorRel(NonMatching, "d_a_swc00"),
     ActorRel(NonMatching, "d_a_swhit0"),
-    ActorRel(NonMatching, "d_a_swtdoor"),
+    ActorRel(Matching,    "d_a_swtdoor"),
     ActorRel(NonMatching, "d_a_tag_attention"),
     ActorRel(NonMatching, "d_a_tag_ba1"),
     ActorRel(NonMatching, "d_a_tag_event"),

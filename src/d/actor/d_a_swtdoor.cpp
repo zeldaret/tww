@@ -85,7 +85,7 @@ s32 daSwtdoor_Create(fopAc_ac_c* i_ac) {
         i_this->field_0x29c = 0;
 
     i_this->mSwitchNo = (fopAcM_GetParam(i_this) >> 24) & 0xFF;
-    if (fopAcM_entrySolidHeap(i_this, useHeapInit, 0x3000) == 0)
+    if (fopAcM_entrySolidHeap(i_ac, useHeapInit, 0x3000) == 0)
         return cPhs_ERROR_e;
 
     fopAcM_SetMin(i_this, -2000.0f, -1000.0f, -2000.0f);
