@@ -1219,7 +1219,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_demo_dk"),
     ActorRel(NonMatching, "d_a_demo_kmm"),
     ActorRel(NonMatching, "d_a_door10"),
-    ActorRel(NonMatching, "d_a_dr"),
+    ActorRel(Matching,    "d_a_dr"),
     ActorRel(NonMatching, "d_a_dr2"),
     ActorRel(NonMatching, "d_a_ep"),
     ActorRel(NonMatching, "d_a_floor"),

@@ -3,61 +3,346 @@
 // Translation Unit: d_a_dr.cpp
 //
 
-#include "d_a_dr.h"
-#include "dolphin/types.h"
+#include "f_op/f_op_actor_mng.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "d/d_procname.h"
+#include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_mtx.h"
+#include "m_Do/m_Do_hostIO.h"
+#include "d/d_snap.h"
+#include "d/d_com_inf_game.h"
+
+class dr_class;
+
+class daDr_HIO_c : public JORReflexible {
+public:
+    daDr_HIO_c();
+    virtual ~daDr_HIO_c() {}
+public:
+    /* 0x04 */ s8 mChildID;
+    /* 0x05 */ u8 m05[0x08 - 0x05];
+    /* 0x08 */ f32 mScale;
+    /* 0x0C */ bool m0C;
+    /* 0x0D */ u8 m0D[0x0E - 0x0D];
+    /* 0x0E */ s16 m0E;
+    /* 0x10 */ f32 mWait1Morf;
+    /* 0x14 */ f32 mAkubi1Morf;
+    /* 0x18 */ f32 mBiku1Morf;
+    /* 0x1C */ f32 mAbare1Morf;
+    /* 0x20 */ f32 mAbare2Morf;
+    /* 0x24 */ f32 mHo1Morf;
+};
+
+static daDr_HIO_c l_HIO;
+
+class dr_class : public fopAc_ac_c {
+public:
+    /* 0x290 */ u8 m290[0x2AC - 0x290];
+    /* 0x2AC */ request_of_phase_process_class mPhs;
+    /* 0x2B4 */ mDoExt_McaMorf* mpMorf;
+    /* 0x2B8 */ u8 mState;
+    /* 0x2B9 */ u8 m2B9[0x2BA - 0x2B9];
+    /* 0x2BA */ s16 mCountDownTimers[3];
+    /* 0x2C0 */ int mCurrBckIdx;
+    /* 0x2C4 */ JPABaseEmitter* mpBreathEmitter;
+    /* 0x2C8 */ s8 m2C8;
+    /* 0x2C9 */ s8 m2C9;
+    /* 0x2CA */ u8 field_2CA[0x2CC - 0x2CA];
+};
+
+enum DR_RES_FILE_ID { // IDs and indexes are synced
+    /* BAS */
+    DR_BAS_ABARE1=0x5,
+    DR_BAS_ABARE2=0x6,
+    DR_BAS_AKUBI1=0x7,
+    DR_BAS_BIKU1=0x8,
+    
+    /* BCK */
+    DR_BCK_DR_ABARE1=0xB,
+    DR_BCK_DR_ABARE2=0xC,
+    DR_BCK_DR_AKUBI1=0xD,
+    DR_BCK_DR_BIKU1=0xE,
+    DR_BCK_DR_HO1=0xF,
+    DR_BCK_DR_WAIT1=0x10,
+    
+    /* BMD */
+    DR_BMD_DR1=0x13,
+};
 
 /* 000000EC-00000148       .text __ct__10daDr_HIO_cFv */
 daDr_HIO_c::daDr_HIO_c() {
-    /* Nonmatching */
+    mChildID = -1;
+    mScale = 1.0f;
+    m0C = false;
+    m0E = 10*30;
+    mWait1Morf = 10.0f;
+    mAkubi1Morf = 10.0f;
+    mBiku1Morf = 2.0f;
+    mAbare1Morf = 5.0f;
+    mAbare2Morf = 5.0f;
+    mHo1Morf = 10.0f;
 }
 
 /* 00000148-000001DC       .text daDr_Draw__FP8dr_class */
-void daDr_Draw(dr_class*) {
-    /* Nonmatching */
+static BOOL daDr_Draw(dr_class* i_this) {
+    J3DModel* model = i_this->mpMorf->getModel();
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->mTevStr);
+    g_env_light.setLightTevColorType(model, &i_this->mTevStr);
+    i_this->mpMorf->entryDL();
+    dSnap_RegistFig(0x99, i_this, i_this->mEyePos, i_this->shape_angle.y, 1.0f, 1.0f, 1.0f);
+    return TRUE;
 }
 
 /* 000001DC-00000320       .text anm_init__FP8dr_classifUcfi */
-void anm_init(dr_class*, int, float, unsigned char, float, int) {
-    /* Nonmatching */
+static void anm_init(dr_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f32 speed, int soundFileIdx) {
+    if (i_this->mCurrBckIdx == bckFileIdx) {
+        morf = 0.0f;
+    }
+    if (soundFileIdx >= 0) {
+        void* soundAnm = dComIfG_getObjectRes("Dr", soundFileIdx);
+        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Dr", bckFileIdx);
+        i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, soundAnm);
+    } else {
+        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Dr", bckFileIdx);
+        i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, NULL);
+    }
+    i_this->mCurrBckIdx = bckFileIdx;
 }
 
 /* 00000320-0000091C       .text move__FP8dr_class */
-void move(dr_class*) {
-    /* Nonmatching */
+static void move(dr_class* i_this) {
+    bool isIdle = false;
+    switch (i_this->mState) {
+    case 0:
+        isIdle = true;
+        anm_init(i_this, DR_BCK_DR_WAIT1, l_HIO.mWait1Morf, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+        i_this->mState++;
+        i_this->mCountDownTimers[0] = (s16)(200.0f + cM_rndF(200.0f));
+        break;
+    case 1:
+        isIdle = true;
+        if (i_this->mCountDownTimers[0] == 0) {
+            anm_init(i_this, DR_BCK_DR_AKUBI1, l_HIO.mAkubi1Morf, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, DR_BAS_AKUBI1);
+            i_this->mState++;
+        }
+        break;
+    case 2:
+        isIdle = true;
+        // Using the mDoExt_McaMorf::isStop inline causes regswap.
+        // if (i_this->mpMorf->isStop()) {
+        mDoExt_McaMorf* morf = i_this->mpMorf;
+        bool stopped = true;
+        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (stopped) {
+            i_this->mState = 0;
+        }
+        break;
+    case 10:
+        anm_init(i_this, DR_BCK_DR_BIKU1, l_HIO.mBiku1Morf, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, DR_BAS_BIKU1);
+        i_this->mState++;
+        i_this->mCountDownTimers[0] = l_HIO.m0E;
+        i_this->mpBreathEmitter = dComIfGp_particle_set(0x81C4, &i_this->current.pos);
+        i_this->m2C9 = 0;
+        // Fall-through
+    case 11:
+        if (i_this->m2C9 == 0 && (int)i_this->mpMorf->getFrame() == 15) {
+            i_this->mCountDownTimers[1] = 5;
+        }
+        
+        // Using the mDoExt_McaMorf::isStop inline causes regswap.
+        // if (i_this->mpMorf->isStop()) {
+        morf = i_this->mpMorf;
+        stopped = true;
+        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (stopped) {
+            i_this->m2C9 = 1;
+            if (i_this->mpBreathEmitter) {
+                i_this->mpBreathEmitter->becomeInvalidEmitter();
+                i_this->mpBreathEmitter = NULL;
+            }
+            
+            if (i_this->mCountDownTimers[0] != 0) {
+                if (cM_rndF(1.0f) < 0.5f) {
+                    anm_init(i_this, DR_BCK_DR_ABARE1, l_HIO.mAbare1Morf, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, DR_BAS_ABARE1);
+                    i_this->mpBreathEmitter = dComIfGp_particle_set(0x81C5, &i_this->current.pos);
+                    i_this->mCountDownTimers[1] = 500;
+                } else {
+                    anm_init(i_this, DR_BCK_DR_ABARE2, l_HIO.mAbare2Morf, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, DR_BAS_ABARE2);
+                    
+                    cXyz rootPos;
+                    cXyz offset(0.0f, 0.0f, 0.0f);
+                    MtxP rootJntMtx = i_this->mpMorf->getModel()->getAnmMtx(0x00); // dr_all_root joint
+                    cMtx_copy(rootJntMtx, *calc_mtx);
+                    MtxPosition(&offset, &rootPos);
+                    dComIfGp_particle_set(0x81C7, &rootPos);
+                    
+                    fopAcM_seStart(i_this, JA_SE_CM_DRG_MTOP_MAGMA, 0);
+                    i_this->mCountDownTimers[1] = 0;
+                }
+            } else {
+                anm_init(i_this, DR_BCK_DR_HO1, l_HIO.mHo1Morf, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+                i_this->mpBreathEmitter = dComIfGp_particle_set(0x81C6, &i_this->current.pos);
+                i_this->mState++;
+            }
+        }
+        
+        if (i_this->mpBreathEmitter) {
+            MtxP tongueJntMtx = i_this->mpMorf->getModel()->getAnmMtx(0x20); // j_dr_sita2 (tongue) joint
+            i_this->mpBreathEmitter->setGlobalRTMatrix(tongueJntMtx);
+        }
+        break;
+    case 12:
+        if (i_this->mpBreathEmitter) {
+            MtxP tongueJntMtx = i_this->mpMorf->getModel()->getAnmMtx(0x20); // j_dr_sita2 (tongue) joint
+            i_this->mpBreathEmitter->setGlobalRTMatrix(tongueJntMtx);
+        }
+        
+        if ((int)i_this->mpMorf->getFrame() == 34) {
+            i_this->mCountDownTimers[1] = 5;
+        }
+        
+        // Using the mDoExt_McaMorf::isStop inline causes regswap.
+        // if (i_this->mpMorf->isStop()) {
+        morf = i_this->mpMorf;
+        stopped = true;
+        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (stopped) {
+            i_this->mState = 0;
+            if (i_this->mpBreathEmitter) {
+                i_this->mpBreathEmitter->becomeInvalidEmitter();
+                i_this->mpBreathEmitter = NULL;
+            }
+        }
+        break;
+    }
+    
+    if (!dComIfGs_isStageBossEnemy(3)) {
+        if ((isIdle && (l_HIO.m0C || dComIfGp_getVibration().CheckQuake())) || i_this->m2C8 != 0) {
+            l_HIO.m0C = false;
+            i_this->m2C8 = 0;
+            i_this->mState = 10;
+        }
+    }
+    
+    i_this->mpMorf->play(&i_this->current.pos, 0, 0);
+    
+    if (i_this->mCountDownTimers[1] != 0) {
+        fopAcM_seStart(i_this, JA_SE_CM_DRG_MTOP_FIRE, 0);
+    }
 }
 
 /* 0000091C-000009CC       .text daDr_setMtx__FP8dr_class */
-void daDr_setMtx(dr_class*) {
-    /* Nonmatching */
+static void daDr_setMtx(dr_class* i_this) {
+    J3DModel* model = i_this->mpMorf->getModel();
+    model->setBaseScale(i_this->mScale);
+    mDoMtx_stack_c::transS(i_this->current.pos);
+    cMtx_YrotM(mDoMtx_stack_c::get(), i_this->current.angle.y);
+    cMtx_XrotM(mDoMtx_stack_c::get(), i_this->current.angle.x);
+    cMtx_ZrotM(mDoMtx_stack_c::get(), i_this->current.angle.z);
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
+    
+    i_this->mpMorf->calc();
 }
 
 /* 000009CC-00000A8C       .text daDr_Execute__FP8dr_class */
-void daDr_Execute(dr_class*) {
-    /* Nonmatching */
+static BOOL daDr_Execute(dr_class* i_this) {
+    for (int i = 0; i < ARRAY_SIZE(i_this->mCountDownTimers); i++) {
+        if (i_this->mCountDownTimers[i] != 0) {
+            i_this->mCountDownTimers[i]--;
+        }
+    }
+    
+    move(i_this);
+    
+    i_this->mScale.x = i_this->mScale.y = i_this->mScale.z = l_HIO.mScale;
+    
+    daDr_setMtx(i_this);
+    
+    MtxP tongueJntMtx = i_this->mpMorf->getModel()->getAnmMtx(0x20); // j_dr_sita2 (tongue) joint
+    cMtx_copy(tongueJntMtx, *calc_mtx);
+    cXyz offset(0.0f, 0.0f, 0.0f);
+    MtxPosition(&offset, &i_this->mEyePos);
+    
+    return TRUE;
 }
 
 /* 00000A8C-00000A94       .text daDr_IsDelete__FP8dr_class */
-void daDr_IsDelete(dr_class*) {
-    /* Nonmatching */
+static BOOL daDr_IsDelete(dr_class* i_this) {
+    return TRUE;
 }
 
 /* 00000A94-00000AE8       .text daDr_Delete__FP8dr_class */
-void daDr_Delete(dr_class*) {
-    /* Nonmatching */
+static BOOL daDr_Delete(dr_class* i_this) {
+    dComIfG_resDelete(&i_this->mPhs, "Dr");
+    if (l_HIO.mChildID >= 0) {
+        mDoHIO_root.mDoHIO_deleteChild(l_HIO.mChildID);
+    }
+    return TRUE;
 }
 
 /* 00000AE8-00000C08       .text createHeap__FP10fopAc_ac_c */
-void createHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL createHeap(fopAc_ac_c* i_actor) {
+    dr_class* i_this = (dr_class*)i_actor;
+
+    i_this->mpMorf = new mDoExt_McaMorf(
+        (J3DModelData*)dComIfG_getObjectRes("Dr", DR_BMD_DR1),
+        NULL, NULL,
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Dr", DR_BCK_DR_BIKU1),
+        J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, 1,
+        dComIfG_getObjectRes("Dr", DR_BAS_BIKU1),
+        0x00000000,
+        0x11020203
+    );
+    if (!i_this->mpMorf || !i_this->mpMorf->getModel()) {
+        return FALSE;
+    }
+    
+    return TRUE;
 }
 
 /* 00000C08-00000CE4       .text daDr_Create__FP10fopAc_ac_c */
-void daDr_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daDr_Create(fopAc_ac_c* i_actor) {
+    fopAcM_SetupActor(i_actor, dr_class);
+    
+    dr_class* i_this = (dr_class*)i_actor;
+    
+    s32 phase_state = dComIfG_resLoad(&i_this->mPhs, "Dr");
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(i_this, createHeap, 0xF000)) {
+            return cPhs_ERROR_e;
+        }
+        
+        daDr_setMtx(i_this);
+        
+        if (l_HIO.mChildID < 0) {
+            l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("ドラゴン", &l_HIO);
+        }
+    }
+    
+    return phase_state;
 }
 
-/* 00000CE4-00000D2C       .text __dt__10daDr_HIO_cFv */
-daDr_HIO_c::~daDr_HIO_c() {
-    /* Nonmatching */
-}
+static actor_method_class l_daDr_Method = {
+    (process_method_func)daDr_Create,
+    (process_method_func)daDr_Delete,
+    (process_method_func)daDr_Execute,
+    (process_method_func)daDr_IsDelete,
+    (process_method_func)daDr_Draw,
+};
 
+actor_process_profile_definition g_profile_DR = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 7,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_DR,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(dr_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00D2,
+    /* Actor SubMtd */ &l_daDr_Method,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};
