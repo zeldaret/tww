@@ -49,6 +49,7 @@ public:
     
     JPABaseEmitter* getEmitter() { return mpEmitter; }
     void setRateOff(u8 param_0) { field_0x11 = param_0; }
+    bool isEnd() { return field_0x10 & 1; }
     
     /* 0x04 */ JPABaseEmitter* mpEmitter;
     /* 0x08 */ u8 field_0x08[0x10 - 0x08];
@@ -76,7 +77,7 @@ public:
     /* 0x16 */ GXColor field_0x16;
     /* 0x1A */ u8 field_0x1A[0x1C - 0x1A];
     /* 0x1C */ dKy_tevstr_c* mTevstr;
-};
+};  // Size: 0x20
 
 STATIC_ASSERT(sizeof(dPa_smokeEcallBack) == 0x20);
 

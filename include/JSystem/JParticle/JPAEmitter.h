@@ -128,10 +128,18 @@ public:
     void setGlobalDynamicsScale(const JGeometry::TVec3<float>& scale) {
         mGlobalDynamicsScale.set(scale);
     }
+    void setEmitterScale(const JGeometry::TVec3<float>& scale) {
+        mEmitterScale.set(scale);
+    }
     void setDirection(const JGeometry::TVec3<float>& dir) {
         mEmitterDir.set(dir);
     }
     void setMaxFrame(s32 maxFrame) { mMaxFrame = maxFrame; }
+    void setGlobalPrmColor(u8 r, u8 g, u8 b) {
+        mGlobalPrmColor.r = r;
+        mGlobalPrmColor.g = g;
+        mGlobalPrmColor.b = b;
+    }
 
     void setVolumeSweep(float i_volSweep) { mVolumeSweep = i_volSweep; }
     void setLifeTime(s16 i_lifeTime) { mLifeTime = i_lifeTime; }
@@ -156,7 +164,7 @@ public:
     static JPAEmitterInfo emtrInfo;
 
     /* 0x000 */ VolumeFunc mVolumeFunc;
-    /* 0x00C */ cXyz mEmitterScale;
+    /* 0x00C */ JGeometry::TVec3<f32> mEmitterScale;
     /* 0x018 */ cXyz mEmitterTranslation;
     /* 0x024 */ csXyz mEmitterRot;
     /* 0x02A */ u8 mVolumeType;
