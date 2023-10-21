@@ -385,9 +385,13 @@ bool fopAcM_entrySolidHeap_(fopAc_ac_c* p_actor, heapCallbackFunc p_heapCallback
 
 bool fopAcM_entrySolidHeap(fopAc_ac_c* p_actor, heapCallbackFunc p_heapCallback, u32 size);
 
-void fopAcM_SetMin(fopAc_ac_c* p_actor, f32 minX, f32 minY, f32 minZ);
+inline void fopAcM_SetMin(fopAc_ac_c* p_actor, f32 minX, f32 minY, f32 minZ) {
+    p_actor->mCull.mBox.mMin.set(minX, minY, minZ);
+}
 
-void fopAcM_SetMax(fopAc_ac_c* p_actor, f32 maxX, f32 maxY, f32 maxZ);
+inline void fopAcM_SetMax(fopAc_ac_c* p_actor, f32 maxX, f32 maxY, f32 maxZ) {
+    p_actor->mCull.mBox.mMax.set(maxX, maxY, maxZ);
+}
 
 void fopAcM_setCullSizeBox(fopAc_ac_c* p_actor, f32 minX, f32 minY, f32 minZ, f32 maxX, f32 maxY,
                            f32 maxZ);
@@ -534,109 +538,6 @@ inline void fopAcM_seStart(fopAc_ac_c* actor, u32 sfxID, u32 param_2) {
 
 inline void fopAcM_monsSeStart(fopAc_ac_c* actor, u32 sfxID, u32 param_2) {
     mDoAud_monsSeStart(sfxID, &actor->mEyePos, fopAcM_GetID(actor), 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-}
-
-extern "C" {
-void fopAcM_initManager__Fv(void);
-void fopAcM_CreateAppend__Fv(void);
-void fopAcM_DeleteHeap__FP10fopAc_ac_c(void);
-void fopAcM_FastCreate__FsPFPv_iPvPv(void);
-void fopAcM_Log__FPC10fopAc_ac_cPCc(void);
-void fopAcM_SearchByID__FUiPP10fopAc_ac_c(void);
-void fopAcM_calcSpeed__FP10fopAc_ac_c(void);
-void fopAcM_callCallback__FP10fopAc_ac_cPFP10fopAc_ac_c_iP7JKRHeap(void);
-void fopAcM_cancelCarryNow__FP10fopAc_ac_c(void);
-void fopAcM_create__FsUsUlPC4cXyziPC5csXyzPC4cXyzScPFPv_i(void);
-void fopAcM_createChild__FsUiUlPC4cXyziPC5csXyzPC4cXyzScPFPv_i(void);
-void fopAcM_createDemoItem__FPC4cXyziiPC5csXyziPC4cXyzUc(void);
-void fopAcM_createItem__FPC4cXyziiiPC5csXyzPC4cXyzi(void);
-void fopAcM_createItemForDirectGet__FPC4cXyziiPC5csXyzPC4cXyzff(void);
-void fopAcM_createItemForPresentDemo__FPC4cXyziUciiPC5csXyzPC4cXyz(void);
-void fopAcM_createItemForSimpleDemo__FPC4cXyziiPC5csXyzPC4cXyzff(void);
-void fopAcM_createItemForTrBoxDemo__FPC4cXyziiiPC5csXyzPC4cXyz(void);
-void fopAcM_createItemFromTable__FPC4cXyziiiPC5csXyziPC4cXyzPfPfb(void);
-void fopAcM_create__FsUlPC4cXyziPC5csXyzPC4cXyzSc(void);
-void fopAcM_cullingCheck__FPC10fopAc_ac_c(void);
-void fopAcM_delete__FP10fopAc_ac_c(void);
-void fopAcM_delete__FUi(void);
-void fopAcM_effHamonSet__FPUlPC4cXyzff(void);
-void fopAcM_entrySolidHeap__FP10fopAc_ac_cPFP10fopAc_ac_c_iUl(void);
-void fopAcM_entrySolidHeap___FP10fopAc_ac_cPFP10fopAc_ac_c_iUl(void);
-void fopAcM_fastCreate__FsUlPC4cXyziPC5csXyzPC4cXyzScPFPv_iPv(void);
-void fopAcM_fastCreateItem__FPC4cXyziiPC5csXyzPC4cXyzPfPfiiPFPv_i(void);
-void fopAcM_fastCreateItem2__FPC4cXyziiiiPC5csXyzPC4cXyz(void);
-void fopAcM_fastCreate__FPCcUlPC4cXyziPC5csXyzPC4cXyzPFPv_iPv(void);
-void fopAcM_findObject4EventCB__FP10fopAc_ac_cPv(void);
-void fopAcM_findObjectCB__FPC10fopAc_ac_cPv(void);
-void gndCheck__11fopAcM_gc_cFPC4cXyz(void);
-void fopAcM_getEventPartner__FPC10fopAc_ac_c(void);
-void fopAcM_getItemEventPartner__FPC10fopAc_ac_c(void);
-void fopAcM_getItemNoFromTableNo__FUc(void);
-void fopAcM_getPolygonAngle__FRC13cBgS_PolyInfos(void);
-void fopAcM_getPolygonAngle__FPC8cM3dGPlas(void);
-void fopAcM_getProcNameString__FPC10fopAc_ac_c(void);
-void fopAcM_getTalkEventPartner__FPC10fopAc_ac_c(void);
-void fopAcM_getWaterStream__FPC4cXyzRC13cBgS_PolyInfoP4cXyzPii(void);
-void fopAcM_getWaterY__FPC4cXyzPf(void);
-void lineCheck__11fopAcM_lc_cFPC4cXyzPC4cXyzPC10fopAc_ac_c(void);
-void fopAcM_orderCatchEvent__FP10fopAc_ac_cP10fopAc_ac_cUsUs(void);
-void fopAcM_orderChangeEventId__FP10fopAc_ac_csUsUs(void);
-void fopAcM_orderDoorEvent__FP10fopAc_ac_cP10fopAc_ac_cUsUs(void);
-void fopAcM_orderItemEvent__FP10fopAc_ac_cUsUs(void);
-void fopAcM_orderMapToolAutoNextEvent__FP10fopAc_ac_cUcsUsUsUs(void);
-void fopAcM_orderMapToolEvent__FP10fopAc_ac_cUcsUsUsUs(void);
-void fopAcM_orderOtherEvent__FP10fopAc_ac_cPCcUsUsUs(void);
-void fopAcM_orderOtherEventId__FP10fopAc_ac_csUcUsUsUs(void);
-void fopAcM_orderOtherEvent__FP10fopAc_ac_cP10fopAc_ac_cPCcUsUsUs(void);
-void fopAcM_orderSpeakEvent__FP10fopAc_ac_cUsUs(void);
-void fopAcM_orderTalkEvent__FP10fopAc_ac_cP10fopAc_ac_cUsUs(void);
-void fopAcM_orderTalkItemBtnEvent__FUsP10fopAc_ac_cP10fopAc_ac_cUsUs(void);
-void fopAcM_orderTreasureEvent__FP10fopAc_ac_cP10fopAc_ac_cUsUs(void);
-void fopAcM_posMove__FP10fopAc_ac_cPC4cXyz(void);
-void fopAcM_posMoveF__FP10fopAc_ac_cPC4cXyz(void);
-void fopAcM_searchActorAngleY__FPC10fopAc_ac_cPC10fopAc_ac_c(void);
-void fopAcM_searchActorDistance__FPC10fopAc_ac_cPC10fopAc_ac_c(void);
-void fopAcM_searchActorDistanceXZ__FPC10fopAc_ac_cPC10fopAc_ac_c(void);
-void fopAcM_searchActorDistanceXZ2__FPC10fopAc_ac_cPC10fopAc_ac_c(void);
-void fopAcM_searchFromName__FPCcUlUl(void);
-void fopAcM_searchFromName4Event__FPCcs(void);
-void fopAcM_seenActorAngleY__FPC10fopAc_ac_cPC10fopAc_ac_c(void);
-void fopAcM_setCarryNow__FP10fopAc_ac_ci(void);
-void fopAcM_setCullSizeBox__FP10fopAc_ac_cffffff(void);
-void fopAcM_setEffectMtx__FPC10fopAc_ac_cPC12J3DModelData(void);
-void fopAcM_setRoomLayer__FPvi(void);
-void fopAcM_setStageLayer__FPv(void);
-void waterCheck__11fopAcM_wt_cFPC4cXyz(void);
-void fpoAcM_relativePos__FPC10fopAc_ac_cPC4cXyzP4cXyz(void);
-void fopAcM_SearchByName__FsPP10fopAc_ac_c(void);
-void fopAcM_createChildFromOffset__FsUiUlPC4cXyziPC5csXyzPC4cXyzScPFPv_i(void);
-void fopAcM_SetMin__FP10fopAc_ac_cfff(void);
-void fopAcM_SetMax__FP10fopAc_ac_cfff(void);
-void fopAcM_setCullSizeSphere__FP10fopAc_ac_cffff(void);
-void fopAcM_setCullSizeBox2__FP10fopAc_ac_cP12J3DModelData(void);
-void fopAcM_addAngleY__FP10fopAc_ac_css(void);
-void fopAcM_searchActorAngleX__FPC10fopAc_ac_cPC10fopAc_ac_c(void);
-void fopAcM_searchActorDistance2__FPC10fopAc_ac_cPC10fopAc_ac_c(void);
-void fopAcM_rollPlayerCrash__FPC10fopAc_ac_cfUlffif(void);
-void fopAcM_checkCullingBox__FPA4_fffffff(void);
-void fopAcM_orderPotentialEvent__FP10fopAc_ac_cUsUsUs(void);
-void fopAcM_createItemFromEnemyID__FUcPC4cXyziiPC5csXyzPC4cXyzPfPf(void);
-void fopAcM_createItemForBoss__FPC4cXyziiPC5csXyzPC4cXyzffi(void);
-void fopAcM_createItemForMidBoss__FPC4cXyziiPC5csXyzPC4cXyzii(void);
-void fopAcM_createBokkuri__FUsPC4cXyziiiPC4cXyzii(void);
-void fopAcM_createWarpHole__FPC4cXyzPC5csXyziUcUcUc(void);
-void fopAcM_myRoomSearchEnemy__FSc(void);
-void fopAcM_createDisappear__FPC10fopAc_ac_cPC4cXyzUcUcUc(void);
-void fopAcM_otoCheck__FPC10fopAc_ac_cf(void);
-void fopAcM_otherBgCheck__FPC10fopAc_ac_cPC10fopAc_ac_c(void);
-void fopAcM_wayBgCheck__FPC10fopAc_ac_cff(void);
-void fopAcM_plAngleCheck__FPC10fopAc_ac_cs(void);
-void fopAcM_effSmokeSet1__FPUlPUlPC4cXyzPC5csXyzfPC12dKy_tevstr_ci(void);
-void fopAcM_riverStream__FP4cXyzPsPff(void);
-void fopAcM_carryOffRevise__FP10fopAc_ac_c(void);
-void fopAcM_searchFromName4Event__FPCcs(void);
-void fopAcM_GetName__FPv(void);  // mostly inlined
-void fopAcM_GetID__FPCv(void);   // mostly inlined
 }
 
 #endif

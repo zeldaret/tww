@@ -201,8 +201,8 @@ public:
     ~fopAc_cullSizeBox() {}
 #endif
 
-    /* 0x0 */ Vec mMin;
-    /* 0xC */ Vec mMax;
+    /* 0x0 */ cXyz mMin;
+    /* 0xC */ cXyz mMax;
 };
 
 class fopAc_ac_c : public leafdraw_class {
