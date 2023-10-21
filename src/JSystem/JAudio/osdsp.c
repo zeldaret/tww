@@ -3,16 +3,36 @@
 // Translation Unit: osdsp.c
 //
 
-#include "osdsp.h"
+#include "JSystem/JAudio/osdsp.h"
+#include "JSystem/JAudio/osdsp_task.h"
 #include "dolphin/types.h"
 
 /* 8028EB80-8028EC04       .text DSPAddTask */
-void DSPAddTask {
+DSPTaskInfo* DSPAddTask(DSPTaskInfo* task) {
     /* Nonmatching */
+    if (DSP_prior_task == NULL) {
+        OSReport("Prior Task is not inited\n");
+        return NULL;
+    }
+    BOOL status = OSDisableInterrupts();
+    __DSP_insert_task(task);
+    task->state = 0;
+    task->flags = 1;
+    OSRestoreInterrupts(status);
+    return task;
 }
 
 /* 8028EC20-8028EC9C       .text DSPAddPriorTask__FP15STRUCT_DSP_TASK */
-void DSPAddPriorTask(STRUCT_DSP_TASK*) {
+void DSPAddPriorTask(STRUCT_DSP_TASK* task) {
     /* Nonmatching */
+    if (DSP_prior_task != NULL) {
+        OSReport("Already inited prior DSP task\n");
+        return;
+    }
+    BOOL status = OSDisableInterrupts();
+    DSP_prior_task = (DSPTaskInfo*)task;
+    task->state = 0;
+    task->flags = 1;
+    __DSP_boot_task((DSPTaskInfo*)task);
+    OSRestoreInterrupts(status);
 }
-

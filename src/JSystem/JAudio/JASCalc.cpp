@@ -3,46 +3,160 @@
 // Translation Unit: JASCalc.cpp
 //
 
-#include "JASCalc.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASCalc.h"
+#include "JSystem/JAudio/JASSystemHeap.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "MSL_C/math.h"
+
+f32* JASystem::Calc::JASC_SINTABLE;
+f32* JASystem::Calc::JASC_DOL2TABLE;
 
 /* 8027A804-8027A9C8       .text initSinfT__Q28JASystem4CalcFv */
 void JASystem::Calc::initSinfT() {
-    /* Nonmatching */
+    JASC_SINTABLE = new (JASDram, 0) f32[257];
+    JUT_ASSERT(49, JASC_SINTABLE != 0);
+    JASC_DOL2TABLE = new (JASDram, 0) f32[257];
+    JUT_ASSERT(51, JASC_DOL2TABLE != 0);
+    for (u32 i = 0; i < 257; i++) {
+        JASC_SINTABLE[i] = sin((M_PI / 2) * i / 256.0f);
+    }
+    for (u32 i = 0; i < 257; i++) {
+        JASC_DOL2TABLE[i] = sin((M_PI / 2) * (0.32612f + 0.34776f * i / 256.0f));
+    }
 }
 
 /* 8027A9C8-8027A9F4       .text sinfT__Q28JASystem4CalcFf */
-void JASystem::Calc::sinfT(float) {
-    /* Nonmatching */
+f32 JASystem::Calc::sinfT(f32 param_1) {
+    return JASC_SINTABLE[s32(param_1 * 256.0f)];
 }
 
 /* 8027A9F4-8027AA20       .text sinfDolby2__Q28JASystem4CalcFf */
-void JASystem::Calc::sinfDolby2(float) {
-    /* Nonmatching */
+f32 JASystem::Calc::sinfDolby2(f32 param_1) {
+    return JASC_DOL2TABLE[s32(param_1 * 256.0f)];
 }
 
 /* 8027AA20-8027AA50       .text imixcopy__Q28JASystem4CalcFPCsPCsPsl */
-void JASystem::Calc::imixcopy(const short*, const short*, short*, long) {
-    /* Nonmatching */
+void JASystem::Calc::imixcopy(const s16* s1, const s16* s2, s16* dst, s32 n) {
+    for (; n > 0; n--) {
+        *dst++ = *s1++;
+        *dst++ = *s2++;
+    }
 }
 
 /* 8027AA50-8027AB68       .text bcopyfast__Q28JASystem4CalcFPCUlPUlUl */
-void JASystem::Calc::bcopyfast(const unsigned long*, unsigned long*, unsigned long) {
-    /* Nonmatching */
+void JASystem::Calc::bcopyfast(const u32* src, u32* dest, u32 size) {
+    JUT_ASSERT(280, (reinterpret_cast<u32>(src) & 0x03) == 0);
+    JUT_ASSERT(281, (reinterpret_cast<u32>(dest) & 0x03) == 0);
+    JUT_ASSERT(282, (size & 0x0f) == 0);
+    for (size /= 16; size; size--) {
+        u32 val1 = *src++;
+        u32 val2 = *src++;
+        u32 val3 = *src++;
+        u32 val4 = *src++;
+        *dest++ = val1;
+        *dest++ = val2;
+        *dest++ = val3;
+        *dest++ = val4;
+    }
 }
 
 /* 8027AB68-8027AC68       .text bcopy__Q28JASystem4CalcFPCvPvUl */
-void JASystem::Calc::bcopy(const void*, void*, unsigned long) {
+void JASystem::Calc::bcopy(const void* src, void* dest, u32 size) {
     /* Nonmatching */
+    u32 *usrc;
+    u32 *udest;
+
+    u8 *bsrc = (u8 *)src;
+    u8 *bdest = (u8 *)dest;
+
+    u8 endbitsSrc = (reinterpret_cast<u32>(bsrc) & 0x03);
+    u8 enbitsDst = (reinterpret_cast<u32>(bdest) & 0x03);
+    if ((endbitsSrc) == (enbitsDst) && (size & 0x0f) == 0) {
+        bcopyfast((u32*)src, (u32*)dest, size);
+    } else if ((endbitsSrc == enbitsDst) && (size >= 16)) {
+        if (endbitsSrc != 0) {
+            for (endbitsSrc = 4 - endbitsSrc; endbitsSrc != 0; endbitsSrc--) {
+                *bdest++ = (u32)*bsrc++;
+                size--;
+            }
+        }
+
+        udest = (u32 *)bdest;
+        usrc = (u32 *)bsrc;
+
+        for (; size >= 4; size -= 4) {
+            *udest++ = *usrc++;
+        }
+
+        if (size != 0) {
+            bdest = (u8 *)udest;
+            bsrc = (u8 *)usrc;
+
+            for (; size != 0; size--) {
+                *bdest++ = (u32)*bsrc++;
+            }
+        }
+    } else {
+        for (; size != 0; size--) {
+            *bdest++ = (u32)*bsrc++;
+        }
+    }
 }
 
 /* 8027AC68-8027AD38       .text bzerofast__Q28JASystem4CalcFPvUl */
-void JASystem::Calc::bzerofast(void*, unsigned long) {
+void JASystem::Calc::bzerofast(void* dest, u32 size) {
     /* Nonmatching */
+    JUT_ASSERT(387, (reinterpret_cast<u32>(dest) & 0x03) == 0);
+    JUT_ASSERT(388, (size & 0x0f) == 0);
+    u32* udest = (u32*)dest;
+    for (size = size / 16; size != 0; size--) {
+        *udest++ = 0;
+        *udest++ = 0;
+        *udest++ = 0;
+        *udest++ = 0;
+    }
 }
 
 /* 8027AD38-8027AE30       .text bzero__Q28JASystem4CalcFPvUl */
-void JASystem::Calc::bzero(void*, unsigned long) {
+void JASystem::Calc::bzero(void* dest, u32 size) {
     /* Nonmatching */
-}
+    u32 *udest;
+    u8 *bdest = (u8 *)dest;
+    if ((size & 0x1f) == 0 && (reinterpret_cast<u32>(dest) & 0x1f) == 0) {
+        DCZeroRange(dest, size);
+        return;
+    }
 
+    u8 alignedbitsDst = reinterpret_cast<u32>(bdest) & 0x3;
+
+    if ((size & 0xf) == 0 && alignedbitsDst == 0) {
+        bzerofast(dest, size);
+        return;
+    }
+
+    if (size >= 16) {
+        if (alignedbitsDst != 0) {
+            for (alignedbitsDst = 4 - alignedbitsDst; alignedbitsDst != 0; alignedbitsDst--) {
+                *bdest++ = 0;
+                size--;
+            }
+        }
+
+        udest = (u32 *)bdest;
+        for (; size >= 4; size -= 4) {
+            *udest++ = 0;
+        }
+
+        if (size != 0) {
+            bdest = (u8 *)udest;
+            for (; size != 0; size--) {
+                *bdest++ = 0;
+            }
+        }
+    } else {
+        for (; size != 0; size--) {
+            *bdest++ = 0;
+        }
+    }
+}
