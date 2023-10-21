@@ -182,27 +182,33 @@ class JntHit_c;
 
 struct fopAc_cullSizeSphere {
 public:
-#ifndef __INTELLISENSE__
+#ifdef __INTELLISENSE__
+    /* 0x0 */ Vec mCenter;
+    /* 0xC */ f32 mRadius;
+#else
+    /* 0x0 */ cXyz mCenter;
+    /* 0xC */ f32 mRadius;
+
     fopAc_cullSizeSphere() {}
     fopAc_cullSizeSphere(cXyz, float);
     ~fopAc_cullSizeSphere() {}
 #endif
-
-    /* 0x0 */ Vec mCenter;
-    /* 0xC */ f32 mRadius;
 };
 
 struct fopAc_cullSizeBox {
 public:
-#ifndef __INTELLISENSE__
+#ifdef __INTELLISENSE__
+    /* 0x0 */ Vec mMin;
+    /* 0xC */ Vec mMax;
+#else
     fopAc_cullSizeBox() {}
     fopAc_cullSizeBox(const fopAc_cullSizeBox&);
     fopAc_cullSizeBox(cXyz, cXyz);
     ~fopAc_cullSizeBox() {}
-#endif
 
     /* 0x0 */ cXyz mMin;
     /* 0xC */ cXyz mMax;
+#endif
 };
 
 class fopAc_ac_c : public leafdraw_class {

@@ -386,11 +386,15 @@ bool fopAcM_entrySolidHeap_(fopAc_ac_c* p_actor, heapCallbackFunc p_heapCallback
 bool fopAcM_entrySolidHeap(fopAc_ac_c* p_actor, heapCallbackFunc p_heapCallback, u32 size);
 
 inline void fopAcM_SetMin(fopAc_ac_c* p_actor, f32 minX, f32 minY, f32 minZ) {
+#ifndef __INTELLISENSE__
     p_actor->mCull.mBox.mMin.set(minX, minY, minZ);
+#endif
 }
 
 inline void fopAcM_SetMax(fopAc_ac_c* p_actor, f32 maxX, f32 maxY, f32 maxZ) {
+#ifndef __INTELLISENSE__
     p_actor->mCull.mBox.mMax.set(maxX, maxY, maxZ);
+#endif
 }
 
 void fopAcM_setCullSizeBox(fopAc_ac_c* p_actor, f32 minX, f32 minY, f32 minZ, f32 maxX, f32 maxY,

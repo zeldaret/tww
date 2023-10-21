@@ -15,6 +15,7 @@ class dBgS_MoveBgActor : public fopAc_ac_c {
 public:
     /* 0x290 */ dBgW* mpBgW;
     /* 0x294 */ Mtx mBgMtx;
+    /* 0x2C4 */ /* vtable */
 
     dBgS_MoveBgActor();
     int MoveBGCreateHeap();
@@ -36,6 +37,8 @@ public:
     static const char* m_name;
     static int m_dzb_id;
     static MoveBGActor_SetFunc m_set_func;
-};
+};  // Size: 0x2C8
+
+STATIC_ASSERT(sizeof(dBgS_MoveBgActor) == 0x2C8);
 
 #endif /* D_BG_S_MOVEBG_ACTOR_H */
