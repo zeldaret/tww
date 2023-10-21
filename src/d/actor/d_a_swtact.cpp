@@ -246,7 +246,7 @@ actor_method_class daSwTactMethodTable = {
     (process_method_func)daSwTact_Draw,
 };
 
-actor_process_profile_definition g_profile_SWTACT = {
+actor_process_profile_definition g_profile_SW_TACT = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,
