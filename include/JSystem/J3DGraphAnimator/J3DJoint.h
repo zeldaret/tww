@@ -48,6 +48,7 @@ private:
 
 public:
     J3DMtxCalcBasic();
+    // TODO: vtable is in wrong order, but fixing it breaks J3DUMotion
     virtual void recursiveCalc(J3DNode*);
     virtual void calcTransform(u16, const J3DTransformInfo&);
     virtual void calc(u16);

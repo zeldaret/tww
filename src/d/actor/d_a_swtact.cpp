@@ -16,7 +16,7 @@ class daSwTact_c : public fopAc_ac_c {
 public:
     bool _delete();
     BOOL CreateHeap();
-    s32 CreateInit();
+    void CreateInit();
     void set_mtx();
     s32 getAnswer();
     s32 _create();
@@ -74,7 +74,7 @@ BOOL daSwTact_c::CreateHeap() {
 }
 
 /* 00000194-0000024C       .text CreateInit__10daSwTact_cFv */
-s32 daSwTact_c::CreateInit() {
+void daSwTact_c::CreateInit() {
     static const f32 cull_size[] = {
         -120.0f, -10.0f, -120.0f,
         120.0f, 10.0f, 120.0f,

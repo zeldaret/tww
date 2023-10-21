@@ -7,6 +7,8 @@
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
+#include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
+#include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
 #include "dolphin/types.h"
 
 /* 802F4DC0-802F4EB0       .text calc__13J3DMtxCalcAnmFUs */
@@ -51,7 +53,6 @@ void J3DMtxCalcBasic::recursiveCalc(J3DNode* node) {
 
 /* 802F5090-802F525C       .text calcTransform__15J3DMtxCalcBasicFUsRC16J3DTransformInfo */
 void J3DMtxCalcBasic::calcTransform(u16 param_0, const J3DTransformInfo& info) {
-    /* Nonmatching */
     J3DSys::mCurrentS.x *= info.mScale.x;
     J3DSys::mCurrentS.y *= info.mScale.y;
     J3DSys::mCurrentS.z *= info.mScale.z;
@@ -84,7 +85,8 @@ void J3DMtxCalcBasic::calcTransform(u16 param_0, const J3DTransformInfo& info) {
         mtx[2][2] *= info.mScale.z;
     }
     MTXConcat(J3DSys::mCurrentMtx, mtx, J3DSys::mCurrentMtx);
-    MTXCopy(J3DSys::mCurrentMtx, j3dSys.getModel()->getAnmMtx(param_0));
+    J3DModel* model = j3dSys.getModel();
+    MTXCopy(J3DSys::mCurrentMtx, model->getAnmMtx(param_0));
 }
 
 /* 802F525C-802F52BC       .text calc__15J3DMtxCalcBasicFUs */
@@ -138,15 +140,16 @@ void J3DMtxCalcSoftimage::calcTransform(u16 param_0, const J3DTransformInfo& inf
         mtx[2][1] = J3DSys::mCurrentMtx[2][1] * J3DSys::mCurrentS.y;
         mtx[2][2] = J3DSys::mCurrentMtx[2][2] * J3DSys::mCurrentS.z;
         mtx[2][3] = J3DSys::mCurrentMtx[2][3];
-        MTXCopy(mtx, j3dSys.getModel()->getAnmMtx(param_0));
+        J3DModel* model = j3dSys.getModel();
+        MTXCopy(mtx, model->getAnmMtx(param_0));
     } else {
-        MTXCopy(J3DSys::mCurrentMtx, j3dSys.getModel()->getAnmMtx(param_0));
+        J3DModel* model = j3dSys.getModel();
+        MTXCopy(J3DSys::mCurrentMtx, model->getAnmMtx(param_0));
     }
 }
 
 /* 802F5508-802F5724       .text calcTransform__14J3DMtxCalcMayaFUsRC16J3DTransformInfo */
 void J3DMtxCalcMaya::calcTransform(u16 param_1, const J3DTransformInfo& param_2) {
-    /* Nonmatching */
     J3DModel* model = j3dSys.getModel();
     u8 scaleCompensate = model->getModelData()->getJointNodePointer(param_1)->getScaleCompensate();
     s32 tmp;
@@ -185,7 +188,8 @@ void J3DMtxCalcMaya::calcTransform(u16 param_1, const J3DTransformInfo& param_2)
         mtx[2][2] *= z;
     }
     MTXConcat(J3DSys::mCurrentMtx, mtx, J3DSys::mCurrentMtx);
-    MTXCopy(J3DSys::mCurrentMtx, j3dSys.getModel()->getAnmMtx(param_1));
+    model = j3dSys.getModel();
+    MTXCopy(J3DSys::mCurrentMtx, model->getAnmMtx(param_1));
     J3DSys::mParentS.x = param_2.mScale.x;
     J3DSys::mParentS.y = param_2.mScale.y;
     J3DSys::mParentS.z = param_2.mScale.z;
@@ -193,7 +197,6 @@ void J3DMtxCalcMaya::calcTransform(u16 param_1, const J3DTransformInfo& param_2)
 
 /* 802F5724-802F5814       .text initialize__8J3DJointFv */
 void J3DJoint::initialize() {
-    /* Nonmatching */
     mJntNo = 0;
     mKind = 1;
     mScaleCompensate = 0;
@@ -237,5 +240,32 @@ void J3DJoint::calcOut() {
 
 /* 802F58D8-802F5A78       .text entryIn__8J3DJointFv */
 void J3DJoint::entryIn() {
-    /* Nonmatching */
+    MtxP anmMtx = j3dSys.getModel()->getAnmMtx(mJntNo);
+    j3dSys.getDrawBuffer(0)->setZMtx(anmMtx);
+    j3dSys.getDrawBuffer(1)->setZMtx(anmMtx);
+    for  (J3DMaterial* mesh = mMesh; mesh != NULL; ) {
+        if (mesh->getShape()->checkFlag(1)) {
+            mesh = mesh->getNext();
+        } else {
+            J3DMatPacket* matPacket = j3dSys.getModel()->getMatPacket(mesh->getIndex());
+            J3DShapePacket* shapePacket = j3dSys.getModel()->getShapePacket(mesh->getShape()->getIndex());
+            if (!matPacket->isLocked()) {
+                if (mesh->getMaterialAnm()) {
+                    J3DMaterialAnm* piVar8 = mesh->getMaterialAnm();
+                    piVar8->calc(mesh);
+                }
+                mesh->calc(anmMtx);
+            }
+            mesh->setCurrentMtx();
+            matPacket->setMaterialAnmID(mesh->getMaterialAnm());
+            matPacket->setShapePacket(shapePacket);
+            J3DDrawBuffer* drawBuffer = j3dSys.getDrawBuffer(mesh->isDrawModeOpaTexEdge());
+            if ((u8)matPacket->entry(drawBuffer)) {
+                j3dSys.setMatPacket(matPacket);
+                J3DDrawBuffer::entryNum++;
+                mesh->makeDisplayList();
+            }
+            mesh = mesh->getNext();
+        }
+    }
 }
