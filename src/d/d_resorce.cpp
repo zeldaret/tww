@@ -142,7 +142,7 @@ static void setToonTex(J3DMaterialTable* pMaterialTable) {
 
 /* 8006DFD4-8006E7A4       .text loadResource__11dRes_info_cFv */
 int dRes_info_c::loadResource() {
-    JUT_ASSERT(0x254, mRes == 0);
+    JUT_ASSERT(0x25f, mRes == 0);
 
     s32 fileNum = mpArchive->countFile();
     mRes = new void*[fileNum];
@@ -195,7 +195,7 @@ int dRes_info_c::loadResource() {
             void * pRes = JKRArchive::getGlbResource(*pResType, pArcFinder->mEntryName, mpArchive);
             if (pRes == NULL) {
                 OSReport_Error("<%s> res == NULL !!\n", pArcFinder->mEntryName);
-                continue;
+                goto next;
             }
 
             u32 resType = *pResType;
@@ -275,7 +275,7 @@ int dRes_info_c::loadResource() {
                 if (pRes == NULL)
                     return -1;
             } else if (resType == 'BDLM') {
-                pRes = J3DModelLoaderDataBase::loadBinaryDisplayList(pRes, 0x00001020);
+                pRes = J3DModelLoaderDataBase::loadBinaryDisplayList(pRes, 0x00002020);
                 if (pRes == NULL)
                     return -1;
 
@@ -363,6 +363,7 @@ int dRes_info_c::loadResource() {
                 pRes = cBgS::ConvDzb(pRes);
             }
 
+next:
             mRes[pArcFinder->mEntryFileIndex] = pRes;
         }
 
@@ -473,7 +474,9 @@ static SArcHeader* getArcHeader(JKRArchive* pArchive) {
     return NULL;
 }
 
-static const char * dump_str = "%5.1f %5x %5.1f %5x %3d %s\n";
+static void dummy() {
+    OSReport("%5.1f %5x %5.1f %5x %3d %s\n");
+}
 
 /* 8006EBF8-8006ECF4       .text dump_long__11dRes_info_cFP11dRes_info_ci */
 void dRes_info_c::dump_long(dRes_info_c* pRes, int num) {
