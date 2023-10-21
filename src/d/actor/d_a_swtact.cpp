@@ -153,8 +153,7 @@ bool daSwTact_c::_execute() {
     if (player == NULL || dComIfGp_checkPlayerStatus0(0, 0x10000))
         return true;
 
-    cXyz delta = player->getPosition() - getPosition();
-    if (delta.absXZ() <= getR()) {
+    if ((player->getPosition() - getPosition()).absXZ() <= getR()) {
         if (mPlayerStatus != stts1 && stts1 != 0) {
             player->setTactZev(fopAcM_GetID(this), getAnswer(), NULL);
         }
@@ -186,7 +185,6 @@ bool daSwTact_c::_execute() {
                 mTrigger = true;
             break;
         case 0xFF:
-        default:
             if ((u32)tactMusic <= 4 || tactMusic == 5)
                 mTrigger = true;
             break;
