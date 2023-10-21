@@ -69,8 +69,8 @@ public:
         setBlendColorRatio(f1, f2, f3, f4);
         setBlendAlphaRatio(f1, f2, f3, f4);
     }
-    bool setWhite(JUtility::TColor white) { mColorWhite.set(white); return true; }
-    bool setBlack(JUtility::TColor black) { mColorBlack.set(black); return true; }
+    bool setWhite(JUtility::TColor white) { mColorWhite = white; return true; }
+    bool setBlack(JUtility::TColor black) { mColorBlack = black; return true; }
     bool setBlackWhite(JUtility::TColor black, JUtility::TColor white) {
         mColorBlack = black;
         mColorWhite = white;

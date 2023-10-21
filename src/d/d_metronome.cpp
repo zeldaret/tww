@@ -83,6 +83,15 @@ public:
     /* 0x1D */ u8 mTimingTrail;
 };
 
+enum {
+    ACT_INIT = 0,
+    ACT_GROW = 1,
+    ACT_WAIT = 2,
+    ACT_SHIFT = 3,
+    ACT_DEMO = 4,
+    ACT_SHRINK = 5,
+};
+
 dMn_HIO_c g_mnHIO;
 
 /* 80221C38-80221CD4       .text __ct__9dMn_HIO_cFv */
@@ -162,11 +171,11 @@ void dMetronome_c::metronomeMove() {
     else if (timer < 0)
         timer = 0;
 
-    if (mCurTimer != timer)
+    if (timer != mCurTimer)
         pane_timing[mCurTimer].mUserArea = 5;
 
     if (field_0xE38 != 0) {
-        if (daPy_getPlayerLinkActorClass()->getTactMetronomeRate() > mCurRate)
+        if (mCurRate > daPy_getPlayerLinkActorClass()->getTactMetronomeRate())
             field_0xE38 = 0;
 
         if (timer <= 10)
@@ -174,13 +183,13 @@ void dMetronome_c::metronomeMove() {
         else
             timer = timer - 10;
     } else {
-        if (daPy_getPlayerLinkActorClass()->getTactMetronomeRate() > mCurRate)
+        if (mCurRate > daPy_getPlayerLinkActorClass()->getTactMetronomeRate())
             field_0xE38 = 1;
 
         if (timer <= 10)
             timer = timer + 10;
         else
-            timer = 20 - timer;
+            timer = 30 - timer;
     }
 
     // Kick off the echo if we reach the middle.
@@ -191,8 +200,8 @@ void dMetronome_c::metronomeMove() {
     if (pane_echo.mUserArea != 0) {
         f32 scale, alpha;
         if (pane_echo.mUserArea >= 10) {
-            scale = 0.0f;
             alpha = 0.0f;
+            scale = 0.0f;
             pane_echo.mUserArea = 0;
         } else {
             alpha = fopMsgM_valueIncrease(10, 10 - pane_echo.mUserArea, 0);
@@ -210,7 +219,7 @@ void dMetronome_c::metronomeMove() {
     mCurTimer = timer;
 
     for (s32 i = 0; i < 21; i++) {
-        if (i == mCurTimer) {
+        if (i == timer) {
             if (i == 10) {
                 ((J2DPicture *)pane_timing[i].scrn)->setBlack(JUtility::TColor(0xFF505000));
                 ((J2DPicture *)pane_timing[i].scrn)->setWhite(JUtility::TColor(0xFF5050FF));
@@ -223,20 +232,24 @@ void dMetronome_c::metronomeMove() {
                 // Unused timing trail effect.
                 pane_timing[i].mUserArea--;
                 f32 fade = fopMsgM_valueIncrease(5, pane_timing[i].mUserArea, 0);
-                JUtility::TColor color, color2;
+                JUtility::TColor black, white;
 
                 if (i == 10) {
-                    color.r = -(fade * -255.0f);
-                    color.g = -(fade * -80.0f);
-                    color.b = 255.0f - (fade * 175.f);
+                    black.r = -(fade * -255.0f);
+                    black.g = -(fade * -80.0f);
+                    black.b = 255.0f - (fade * 175.f);
+                    black.a = 0x00;
+                    white.set(black.r, black.g, black.b, 0xFF);
                 } else {
-                    color.r = -(fade * -255.0f);
-                    color.g = -(fade * -185.0f);
-                    color.b = 255.0f - (fade * 70.f);
+                    black.r = -(fade * -255.0f);
+                    black.g = -(fade * -185.0f);
+                    black.b = 255.0f - (fade * 70.f);
+                    black.a = 0x00;
+                    white.set(black.r, black.g, black.b, 0xFF);
                 }
 
-                ((J2DPicture *)pane_timing[i].scrn)->setBlack(JUtility::TColor(color.r, color.g, color.b, 0x00));
-                ((J2DPicture *)pane_timing[i].scrn)->setWhite(JUtility::TColor(color.r, color.g, color.b, 0xFF));
+                ((J2DPicture *)pane_timing[i].scrn)->setBlack(black);
+                ((J2DPicture *)pane_timing[i].scrn)->setWhite(white);
             } else {
                 ((J2DPicture *)pane_timing[i].scrn)->setBlack(JUtility::TColor(0x00000000));
                 ((J2DPicture *)pane_timing[i].scrn)->setWhite(JUtility::TColor(0xFFFFFFFF));
@@ -311,9 +324,9 @@ void dMetronome_c::melodyMove() {
     sepX = sepX * (pane_bs[2].mPosCenterOrig.x - pane_bs[1].mPosCenterOrig.x);
 
     if (pane_wn[1].mUserArea >= 3) {
-        mAction = 2;
+        mAction = ACT_WAIT;
     } else if (pane_wn[1].mUserArea <= 0) {
-        mAction = 0;
+        mAction = ACT_INIT;
     }
 
     for (s32 i = 0; i < 7; i++) {
@@ -451,7 +464,7 @@ void dMetronome_c::melodyShow() {
                 pane_wn[2].mUserArea = 5;
                 pane_wn[0].mUserArea = 0;
                 pane_wn[6].mUserArea = 0;
-                mAction = 3;
+                mAction = ACT_SHIFT;
             }
         }
     }
@@ -501,7 +514,7 @@ void dMetronome_c::melodyFlash() {
                 fopMsgM_setNowAlphaZero(&pane_i11[i]);
                 fopMsgM_setNowAlphaZero(&pane_i12[i]);
             }
-            mAction = 4;
+            mAction = ACT_DEMO;
         }
     } else {
         alpha = fopMsgM_valueIncrease(g_mnHIO.mFlashTiming, g_mnHIO.mFlashTiming * 2 - pane_pk[1].mUserArea, 0);
@@ -539,7 +552,7 @@ void dMetronome_c::melodyShift() {
             fopMsgM_cposMove(&pane_bs[i]);
         }
 
-        mAction = 2;
+        mAction = ACT_WAIT;
     }
 }
 
@@ -549,7 +562,7 @@ void dMetronome_c::initialize() {
     mPosX = 0.0f;
     field_0xE38 = 0;
     mMelodyNum = mDoAud_zelAudio_c::mTact.mMelodyNum;
-    mAction = 0;
+    mAction = ACT_INIT;
     field_0xE14 = 0;
 
     for (s32 i = 0; i < 7; i++)
@@ -581,23 +594,23 @@ void dMetronome_c::_move() {
     if (pane_wn[3].mUserArea == 0 && mMelodyNum != mDoAud_zelAudio_c::mTact.mMelodyNum) {
         mMelodyNum = mDoAud_zelAudio_c::mTact.mMelodyNum;
         pane_wn[0].mUserArea = 0;
-        mAction = 5;
+        mAction = ACT_SHRINK;
     }
 
-    if (mAction == 0) {
-        mAction = 1;
+    if (mAction == ACT_INIT) {
+        mAction = ACT_GROW;
         pane_wn[1].mUserArea = 0;
         pane_wn[0].mUserArea = 0;
         melodyInit(mMelodyNum);
-    } else if (mAction == 1) {
+    } else if (mAction == ACT_GROW) {
         pane_wn[1].mUserArea++;
         melodyMove();
-    } else if (mAction == 5) {
+    } else if (mAction == ACT_SHRINK) {
         pane_wn[1].mUserArea--;
         melodyMove();
-    } else if (mAction == 3) {
+    } else if (mAction == ACT_SHIFT) {
         melodyShift();
-    } else if (mAction == 4) {
+    } else if (mAction == ACT_DEMO) {
         melodyDemo();
     }
 
