@@ -113,13 +113,13 @@ namespace daObjHomensmoke {
                 smokeEmitter->setGlobalAlpha(0xB4);
                 smokeEmitter->setRate(50.0f);
                 smokeEmitter->setMaxFrame(1);
-                JGeometry::TVec3<f32> scale1;
-                scale1.set(rate, 0.0f, rate);
-                smokeEmitter->setEmitterScale(scale1);
-                scale1.set(rate*5.0f, rate*5.0f, rate*5.0f);
-                smokeEmitter->setGlobalDynamicsScale(scale1);
-                scale1.set(rate*6.0f, rate*6.0f, rate*6.0f);
-                smokeEmitter->setGlobalParticleScale(scale1);
+                JGeometry::TVec3<f32> scale;
+                scale.set(rate, 0.0f, rate);
+                smokeEmitter->setEmitterScale(scale);
+                scale.set(rate*5.0f, rate*5.0f, rate*5.0f);
+                smokeEmitter->setGlobalDynamicsScale(scale);
+                scale.set(rate*6.0f, rate*6.0f, rate*6.0f);
+                smokeEmitter->setGlobalParticleScale(scale);
             }
             
             JPABaseEmitter* rubbleEmitter = dComIfGp_particle_setToon(0x81B1, &current.pos);
