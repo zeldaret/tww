@@ -16,6 +16,13 @@ public:
         mbClipToParent = false;
     }
 
+    J2DScreen()
+        : J2DPane(NULL, true, 'root', JGeometry::TBox2<f32>(0.0f, 0.0f, 640.0f, 480.0f))
+        , mColor()
+    {
+        mbClipToParent = false;
+    }
+
     virtual ~J2DScreen();
     virtual u16 getTypeID() { return 0x08; }
     virtual void calcMtx() { makeMatrix(mBounds.i.x, mBounds.i.y); }

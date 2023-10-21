@@ -905,11 +905,11 @@ public:
     void getTactPlayRightArmAnm(s32);
     void getTactPlayLeftArmAnm(s32);
     void checkEndTactMusic() const;
-    void getTactMetronomeRate();
-    void checkTactLastInput();
-    void getTactTopPos(cXyz*);
+    f32 getTactMetronomeRate();
+    BOOL checkTactLastInput();
+    BOOL getTactTopPos(cXyz*);
     void getTactNormalWait() const;
-    void checkTactPlayMelody();
+    BOOL checkTactPlayMelody();
     void resetTactCount();
     void procTactWait_init(int);
     void procTactWait();
@@ -1241,7 +1241,7 @@ public:
     /* 0x34D0 */ s16 field_0x34d0;
     /* 0x34D2 */ s16 field_0x34d2;
     /* 0x34D4 */ s16 field_0x34d4;
-    /* 0x34D6 */ u16 field_0x34d6;
+    /* 0x34D6 */ s16 field_0x34d6;
     /* 0x34D8 */ s16 field_0x34d8;
     /* 0x34DA */ s16 field_0x34da;
     /* 0x34DC */ u8 field_0x34DC[0x34DE - 0x34DC];

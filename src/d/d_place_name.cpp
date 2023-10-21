@@ -85,7 +85,7 @@ public:
 
 /* 80160F60-801610A8       .text setScreen__13dPlace_name_cFPCcP10JKRArchive */
 void dPlace_name_c::setScreen(const char* name, JKRArchive* arc) {
-    scrn = new J2DScreen(NULL, true, 0x726F6F74, JGeometry::TBox2<f32>(0.0f, 0.0f, 640.0f, 480.0f));
+    scrn = new J2DScreen();
     JUT_ASSERT(VERSION_SELECT(69, 91, 91), scrn != 0);
 
     scrn->set(name, arc);

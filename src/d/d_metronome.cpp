@@ -3,96 +3,668 @@
 // Translation Unit: d_metronome.cpp
 //
 
-#include "d_metronome.h"
-#include "dolphin/types.h"
+#include "d/actor/d_a_player_link.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_drawlist.h"
+#include "f_op/f_op_msg_mng.h"
+#include "m_Do/m_Do_audio.h"
+#include "m_Do/m_Do_hostIO.h"
+#include "m_Do/m_Do_lib.h"
+#include "JSystem/J2DGraph/J2DOrthoGraph.h"
+#include "JSystem/J2DGraph/J2DScreen.h"
+#include "JSystem/JUtility/TColor.h"
+#include "JSystem/JParticle/JPAEmitter.h"
+
+class JAIZelInst {
+public:
+    f32 getMelodyPattern(s32, s32, s32*);
+
+public:
+    /* 0x00 */ u8 pad[0x1F];
+    /* 0x1F */ u8 mMelodyNum;
+};
+
+class dMetronome_c : public dDlst_base_c {
+public:
+    void screenSet();
+    void metronomeMove();
+    void melodyInit(u8);
+    void melodyMove();
+    void melodyGuideShow(s32, s16);
+    void melodyShow();
+    void melodyDemo();
+    void melodyFlash();
+    void melodyShift();
+    void initialize();
+    void _create();
+    void _delete();
+    void _move();
+    void _draw();
+    BOOL _open();
+    BOOL _close();
+
+public:
+    /* 0x004 */ J2DScreen* scrn;
+    /* 0x008 */ fopMsgM_pane_class pane_cn[7];
+    /* 0x190 */ fopMsgM_pane_class pane_wn[7];
+    /* 0x318 */ fopMsgM_pane_class pane_pk[7];
+    /* 0x4A0 */ fopMsgM_pane_class pane_i12[7];
+    /* 0x628 */ fopMsgM_pane_class pane_i11[7];
+    /* 0x7B0 */ fopMsgM_pane_class pane_bs[7];
+    /* 0x938 */ fopMsgM_pane_class pane_timing[21]; // Metronome dots at the top
+    /* 0xDD0 */ fopMsgM_pane_class pane_echo; // Metronome "echo" when it hits the center dot.
+
+    /* 0xE08 */ JPABaseEmitter * mpEmitter;
+    /* 0xE0C */ f32 mCurRate;
+    /* 0xE10 */ f32 mPosX;
+    /* 0xE14 */ s32 field_0xE14;
+    /* 0xE18 */ s32 mNote[7];
+    /* 0xE34 */ s32 mCurTimer;
+    /* 0xE38 */ u8 field_0xE38;
+    /* 0xE39 */ u8 mMelodyNum;
+    /* 0xE3A */ u8 mAction;
+    /* 0xE3B */ u8 mbOpen;
+};
+
+class dMn_HIO_c : public mDoHIO_entry_c {
+public:
+    dMn_HIO_c();
+    virtual ~dMn_HIO_c() {}
+
+public:
+    /* 0x04 */ f32 mEchoScale;
+    /* 0x08 */ s16 mShiftTiming;
+    /* 0x0A */ s16 mFlashTiming;
+    /* 0x0C */ JUtility::TColor mWhiteColor0;
+    /* 0x10 */ JUtility::TColor mWhiteColor1;
+    /* 0x14 */ JUtility::TColor mBlackColor0;
+    /* 0x18 */ JUtility::TColor mBlackColor1;
+    /* 0x1C */ u8 mAlphaOrig;
+    /* 0x1D */ u8 mTimingTrail;
+};
+
+dMn_HIO_c g_mnHIO;
 
 /* 80221C38-80221CD4       .text __ct__9dMn_HIO_cFv */
 dMn_HIO_c::dMn_HIO_c() {
-    /* Nonmatching */
+    mEchoScale = 5.0f;
+    mShiftTiming = 11;
+    mFlashTiming = 5;
+    mAlphaOrig = 0xFF;
+    mTimingTrail = false;
+    mWhiteColor0.set(0xFF, 0xFF, 0xFF, 0xFF);
+    mBlackColor0.set(0xFF, 0xFF, 0xFF, 0x00);
+    mWhiteColor1.set(0xFF, 0xB9, 0x00, 0xFF);
+    mBlackColor1.set(0xFF, 0xB9, 0x00, 0x00);
 }
 
 /* 80221CD4-80221DF4       .text screenSet__12dMetronome_cFv */
 void dMetronome_c::screenSet() {
-    /* Nonmatching */
+    static const u32 cn_t2[] = { 'cn08', 'cn09', 'cn10', 'cn11', 'cn12', 'cn13' };
+    static const u32 wn_t2[] = { 'wn08', 'wn09', 'wn10', 'wn11', 'wn12', 'wn13' };
+    static const u32 i11_t2[] = { 'i081', 'i091', 'i101', 'i111', 'i121', 'i131' };
+    static const u32 i12_t2[] = { 'i082', 'i092', 'i102', 'i112', 'i122', 'i132' };
+    static const u32 bs_t2[] = { 'bs08', 'bs09', 'bs10', 'bs11', 'bs12', 'bs13' };
+
+    static const u32 cn_t1[] = { 'cn01', 'cn02', 'cn03', 'cn04', 'cn05', 'cn06', 'cn07' };
+    static const u32 wn_t1[] = { 'wn01', 'wn02', 'wn03', 'wn04', 'wn05', 'wn06', 'wn07' };
+    static const u32 pk_t1[] = { 'pk01', 'pk02', 'pk03', 'pk04', 'pk05', 'pk06', 'pk07' };
+    static const u32 i11_t1[] = { 'i011', 'i021', 'i031', 'i041', 'i051', 'i061', 'i071' };
+    static const u32 i12_t1[] = { 'i012', 'i022', 'i032', 'i042', 'i052', 'i062', 'i072' };
+    static const u32 bs_t1[] = { 'bs01', 'bs02', 'bs03', 'bs04', 'bs05', 'bs06', 'bs07' };
+
+    static const u32 timing_t[21] = {
+        '\000\00001',
+        '\000\00002',
+        '\000\00003',
+        '\000\00004',
+        '\000\00005',
+        '\000\00006',
+        '\000\00007',
+        '\000\00008',
+        '\000\00009',
+        '\000\00010',
+        '\000\00011',
+        '\000\00012',
+        '\000\00013',
+        '\000\00014',
+        '\000\00015',
+        '\000\00016',
+        '\000\00017',
+        '\000\00018',
+        '\000\00019',
+        '\000\00020',
+        '\000\00021',
+    };
+
+    for (s32 i = 0; i < 7; i++) {
+        fopMsgM_setPaneData(&pane_cn[i], scrn, cn_t1[i]);
+        fopMsgM_setPaneData(&pane_wn[i], scrn, wn_t1[i]);
+        fopMsgM_setPaneData(&pane_pk[i], scrn, pk_t1[i]);
+        fopMsgM_setPaneData(&pane_i11[i], scrn, i11_t1[i]);
+        fopMsgM_setPaneData(&pane_i12[i], scrn, i12_t1[i]);
+        fopMsgM_setPaneData(&pane_bs[i], scrn, bs_t1[i]);
+    }
+
+    for (s32 i = 0; i < 21; i++) {
+        fopMsgM_setPaneData(&pane_timing[i], scrn, timing_t[i]);
+    }
+
+    fopMsgM_setPaneData(&pane_echo, scrn, '\000112');
 }
 
 /* 80221DF4-802222D8       .text metronomeMove__12dMetronome_cFv */
 void dMetronome_c::metronomeMove() {
     /* Nonmatching */
+    s32 timer = daPy_getPlayerLinkActorClass()->getTactMetronomeRate() * 20.0f;
+    if (timer > 20)
+        timer = 20;
+    else if (timer < 0)
+        timer = 0;
+
+    if (mCurTimer != timer)
+        pane_timing[mCurTimer].mUserArea = 5;
+
+    if (field_0xE38 != 0) {
+        if (daPy_getPlayerLinkActorClass()->getTactMetronomeRate() > mCurRate)
+            field_0xE38 = 0;
+
+        if (timer <= 10)
+            timer = 10 - timer;
+        else
+            timer = timer - 10;
+    } else {
+        if (daPy_getPlayerLinkActorClass()->getTactMetronomeRate() > mCurRate)
+            field_0xE38 = 1;
+
+        if (timer <= 10)
+            timer = timer + 10;
+        else
+            timer = 20 - timer;
+    }
+
+    // Kick off the echo if we reach the middle.
+    if (pane_wn[3].mUserArea == 0 && timer == 10 && pane_echo.mUserArea == 0) {
+        pane_echo.mUserArea = 1;
+    }
+
+    if (pane_echo.mUserArea != 0) {
+        f32 scale, alpha;
+        if (pane_echo.mUserArea >= 10) {
+            scale = 0.0f;
+            alpha = 0.0f;
+            pane_echo.mUserArea = 0;
+        } else {
+            alpha = fopMsgM_valueIncrease(10, 10 - pane_echo.mUserArea, 0);
+            scale = fopMsgM_valueIncrease(10, pane_echo.mUserArea, 0);
+            scale = (g_mnHIO.mEchoScale - 1.0f) * scale;
+            scale = scale + 1.0f;
+            pane_echo.mUserArea++;
+        }
+
+        fopMsgM_paneScaleXY(&pane_echo, scale);
+        fopMsgM_setNowAlpha(&pane_echo, alpha);
+    }
+
+    mCurRate = daPy_getPlayerLinkActorClass()->getTactMetronomeRate();
+    mCurTimer = timer;
+
+    for (s32 i = 0; i < 21; i++) {
+        if (i == mCurTimer) {
+            if (i == 10) {
+                ((J2DPicture *)pane_timing[i].scrn)->setBlack(JUtility::TColor(0xFF505000));
+                ((J2DPicture *)pane_timing[i].scrn)->setWhite(JUtility::TColor(0xFF5050FF));
+            } else {
+                ((J2DPicture *)pane_timing[i].scrn)->setBlack(JUtility::TColor(0xFFB90000));
+                ((J2DPicture *)pane_timing[i].scrn)->setWhite(JUtility::TColor(0xFFB900FF));
+            }
+        } else {
+            if (pane_timing[i].mUserArea != 0 && g_mnHIO.mTimingTrail) {
+                // Unused timing trail effect.
+                pane_timing[i].mUserArea--;
+                f32 fade = fopMsgM_valueIncrease(5, pane_timing[i].mUserArea, 0);
+                JUtility::TColor color, color2;
+
+                if (i == 10) {
+                    color.r = -(fade * -255.0f);
+                    color.g = -(fade * -80.0f);
+                    color.b = 255.0f - (fade * 175.f);
+                } else {
+                    color.r = -(fade * -255.0f);
+                    color.g = -(fade * -185.0f);
+                    color.b = 255.0f - (fade * 70.f);
+                }
+
+                ((J2DPicture *)pane_timing[i].scrn)->setBlack(JUtility::TColor(color.r, color.g, color.b, 0x00));
+                ((J2DPicture *)pane_timing[i].scrn)->setWhite(JUtility::TColor(color.r, color.g, color.b, 0xFF));
+            } else {
+                ((J2DPicture *)pane_timing[i].scrn)->setBlack(JUtility::TColor(0x00000000));
+                ((J2DPicture *)pane_timing[i].scrn)->setWhite(JUtility::TColor(0xFFFFFFFF));
+            }
+        }
+    }
 }
 
 /* 802222D8-802224E4       .text melodyInit__12dMetronome_cFUc */
-void dMetronome_c::melodyInit(unsigned char) {
-    /* Nonmatching */
+void dMetronome_c::melodyInit(u8 melodyNum) {
+    pane_wn[2].mUserArea = 0;
+    pane_wn[3].mUserArea = 0;
+    pane_wn[4].mUserArea = 0;
+    pane_wn[5].mUserArea = 0;
+    pane_echo.mUserArea = 10;
+
+    mCurTimer = daPy_getPlayerLinkActorClass()->getTactMetronomeRate() * 20.0f;
+    if (mCurTimer > 20)
+        mCurTimer = 20;
+    else if (mCurTimer < 0)
+        mCurTimer = 0;
+
+    for (u32 i = 0; i < 21; i++)
+        pane_timing[i].mUserArea = 0;
+
+    switch (melodyNum) {
+    case 3:
+        mPosX = (pane_bs[1].mPosCenterOrig.x + pane_bs[2].mPosCenterOrig.x) / 2.0f;
+        break;
+    case 4:
+        mPosX = pane_bs[1].mPosCenterOrig.x;
+        break;
+    case 6:
+        mPosX = pane_bs[0].mPosCenterOrig.x;
+        break;
+    }
+
+    for (s32 i = 0; i < 7; i++) {
+        pane_bs[i].mUserArea = 0;
+        pane_cn[i].mPosCenter.x = mPosX;
+        pane_cn[i].mPosCenter.y = pane_cn[i].mPosCenterOrig.y;
+        pane_wn[i].mPosCenter.x = mPosX;
+        pane_pk[i].mPosCenter.x = mPosX;
+        pane_i11[i].mPosCenter.x = mPosX;
+        pane_i12[i].mPosCenter.x = mPosX;
+        pane_bs[i].mPosCenter.x = mPosX;
+
+        fopMsgM_cposMove(&pane_cn[i]);
+        fopMsgM_cposMove(&pane_wn[i]);
+        fopMsgM_cposMove(&pane_pk[i]);
+        fopMsgM_cposMove(&pane_i11[i]);
+        fopMsgM_cposMove(&pane_i12[i]);
+        fopMsgM_cposMove(&pane_bs[i]);
+
+        if (i < melodyNum) {
+            fopMsgM_setInitAlpha(&pane_wn[i]);
+            fopMsgM_setInitAlpha(&pane_bs[i]);
+        } else {
+            fopMsgM_setNowAlphaZero(&pane_wn[i]);
+            fopMsgM_setNowAlphaZero(&pane_bs[i]);
+        }
+        fopMsgM_setNowAlphaZero(&pane_cn[i]);
+        fopMsgM_setNowAlphaZero(&pane_pk[i]);
+        fopMsgM_setNowAlphaZero(&pane_i11[i]);
+        fopMsgM_setNowAlphaZero(&pane_i12[i]);
+    }
 }
 
 /* 802224E4-80222608       .text melodyMove__12dMetronome_cFv */
 void dMetronome_c::melodyMove() {
-    /* Nonmatching */
+    f32 sepX = fopMsgM_valueIncrease(3, pane_wn[1].mUserArea, 0);
+    sepX = sepX * (pane_bs[2].mPosCenterOrig.x - pane_bs[1].mPosCenterOrig.x);
+
+    if (pane_wn[1].mUserArea >= 3) {
+        mAction = 2;
+    } else if (pane_wn[1].mUserArea <= 0) {
+        mAction = 0;
+    }
+
+    for (s32 i = 0; i < 7; i++) {
+        f32 x = mPosX + sepX * i;
+        pane_cn[i].mPosCenter.x = x;
+        pane_wn[i].mPosCenter.x = x;
+        pane_pk[i].mPosCenter.x = x;
+        pane_i11[i].mPosCenter.x = x;
+        pane_i12[i].mPosCenter.x = x;
+        pane_bs[i].mPosCenter.x = x;
+
+        fopMsgM_cposMove(&pane_cn[i]);
+        fopMsgM_cposMove(&pane_wn[i]);
+        fopMsgM_cposMove(&pane_pk[i]);
+        fopMsgM_cposMove(&pane_i11[i]);
+        fopMsgM_cposMove(&pane_i12[i]);
+        fopMsgM_cposMove(&pane_bs[i]);
+    }
 }
 
 /* 80222608-80222854       .text melodyGuideShow__12dMetronome_cFls */
-void dMetronome_c::melodyGuideShow(long, short) {
-    /* Nonmatching */
+void dMetronome_c::melodyGuideShow(s32 note, s16 no) {
+    s16 rot[] = { 0x00E1, 0x00E1, 0x0087, 0x002D, 0x013B };
+
+    switch (note) {
+    case 1:
+        pane_cn[no].mPosCenter.y -= (s16)(pane_i11[no].mSize.y / 4.0f);
+        break;
+    case 3:
+        pane_cn[no].mPosCenter.y += (s16)(pane_i11[no].mSize.y / 4.0f);
+        break;
+    case 4:
+        pane_cn[no].mUserArea = pane_i11[no].mSize.x / 4.0f;
+        pane_cn[no].mPosCenter.x -= pane_cn[no].mUserArea;
+        break;
+    case 2:
+        pane_cn[no].mUserArea = pane_i11[no].mSize.x / 4.0f;
+        pane_cn[no].mPosCenter.x += pane_cn[no].mUserArea;
+        break;
+    }
+
+    fopMsgM_cposMove(&pane_cn[no]);
+
+    // This is almost J2DPane::setBasePosition
+    f32 centerX = pane_i11[no].mSize.x / 2.0f;
+    f32 centerY = pane_i11[no].mSize.y / 2.0f;
+    J2DScreen * scrn = pane_i11[no].scrn;
+    scrn->mBasePosition.x = centerX;
+    scrn->mBasePosition.y = centerY;
+    scrn->mRotationAxis = ROTATE_Z;
+    scrn->mRotation = rot[note];
+    scrn->calcMtx();
 }
 
 /* 80222854-80222C4C       .text melodyShow__12dMetronome_cFv */
 void dMetronome_c::melodyShow() {
-    /* Nonmatching */
+    cXyz tactTop, sparklePos;
+    if (daPy_getPlayerActorClass()->checkTactUse()) {
+        cXyz pos;
+        pos.x = 0.0f;
+        pos.y = 0.0f;
+        pos.z = 0.0f;
+
+        s32 note = daPy_getPlayerLinkActorClass()->field_0x34d6;
+        if (pane_wn[0].mUserArea < mMelodyNum) {
+            mNote[pane_wn[0].mUserArea] = note;
+            melodyGuideShow(note, pane_wn[0].mUserArea);
+            pane_bs[pane_wn[0].mUserArea].mUserArea = 1;
+            pos.x = pane_wn[pane_wn[0].mUserArea].mPosCenter.x - 320.0f;
+            pos.y = pane_wn[pane_wn[0].mUserArea].mPosCenter.y - 240.0f;
+            pane_wn[0].mUserArea++;
+        } else {
+            mNote[mMelodyNum - 1] = note;
+            melodyGuideShow(note, mMelodyNum - 1);
+            pane_bs[mMelodyNum - 1].mUserArea = 1;
+            pos.x = pane_wn[mMelodyNum - 1].mPosCenter.x - 320.0f;
+            pos.y = pane_wn[mMelodyNum - 1].mPosCenter.y - 240.0f;
+        }
+
+        dComIfGp_particle_set2Dfore(0x23e, &pos);
+
+        if (daPy_getPlayerLinkActorClass()->getTactTopPos(&tactTop)) {
+            mDoLib_project(&tactTop, &sparklePos);
+
+            sparklePos.x -= 320.0f;
+            sparklePos.y -= 240.0f;
+            mpEmitter = dComIfGp_particle_set2Dfore(0x23f, &sparklePos);
+            mpEmitter->becomeImmortalEmitter();
+        }
+
+        if (daPy_getPlayerLinkActorClass()->checkTactLastInput()) {
+            pane_pk[0].mUserArea = 1;
+            pane_pk[1].mUserArea = 0;
+            pane_wn[3].mUserArea = 1;
+        }
+    }
+
+    if (mpEmitter != NULL) {
+        if (mpEmitter->isEnableDeleteEmitter()) {
+            mpEmitter->quitImmortalEmitter();
+            mpEmitter = NULL;
+        } else {
+            if (daPy_getPlayerLinkActorClass()->getTactTopPos(&tactTop)) {
+                mDoLib_project(&tactTop, &sparklePos);
+                sparklePos.x -= 320.0f;
+                sparklePos.y -= 240.0f;
+                mpEmitter->setGlobalTranslation(sparklePos.x, sparklePos.y, sparklePos.z);
+            }
+        }
+    }
+    
+    for (s32 i = 0; i < 7; i++) {
+        if (pane_bs[i].mUserArea != 0) {
+            f32 alpha = fopMsgM_valueIncrease(5, pane_bs[i].mUserArea, 0);
+            if (i == mMelodyNum) {
+                fopMsgM_setNowAlpha(&pane_wn[i], alpha);
+                fopMsgM_setNowAlpha(&pane_bs[i], alpha);
+                fopMsgM_setNowAlphaZero(&pane_cn[i]);
+                fopMsgM_setNowAlphaZero(&pane_i11[i]);
+                fopMsgM_setNowAlphaZero(&pane_i12[i]);
+            } else {
+                fopMsgM_setNowAlpha(&pane_cn[i], alpha);
+                fopMsgM_setNowAlpha(&pane_i11[i], alpha);
+                if (mNote[i] == 0)
+                    fopMsgM_setNowAlpha(&pane_i12[i], alpha);
+            }
+
+            if (pane_bs[i].mUserArea < 5) {
+                pane_bs[i].mUserArea++;
+            } else {
+                pane_bs[i].mUserArea = 0;
+            }
+
+            if (pane_wn[0].mUserArea >= mMelodyNum && pane_wn[3].mUserArea == 0 && pane_bs[mMelodyNum - 1].mUserArea == 5) {
+                pane_wn[2].mUserArea = 5;
+                pane_wn[0].mUserArea = 0;
+                pane_wn[6].mUserArea = 0;
+                mAction = 3;
+            }
+        }
+    }
 }
 
 /* 80222C4C-80222DB4       .text melodyDemo__12dMetronome_cFv */
 void dMetronome_c::melodyDemo() {
     /* Nonmatching */
+    if (pane_wn[4].mUserArea != 0) {
+        s32 note[6];
+        s16 frames[7];
+
+        s32 melody_no = daPy_getPlayerLinkActorClass()->getTactMusic();
+
+        frames[0] = 1;
+        for (s32 i = 0; i < mMelodyNum; i++) {
+            f32 gframes = mDoAud_zelAudio_c::mTact.getMelodyPattern(melody_no, i, &note[i]);
+            frames[i + 1] = gframes + frames[i];
+        }
+
+        if (mMelodyNum > pane_wn[5].mUserArea) {
+            if (pane_wn[4].mUserArea == frames[pane_wn[5].mUserArea]) {
+                pane_bs[pane_wn[5].mUserArea].mUserArea = 1;
+                pane_wn[5].mUserArea++;
+            }
+            pane_wn[4].mUserArea++;
+        }
+    } else {
+        if (daPy_getPlayerLinkActorClass()->checkTactPlayMelody())
+            pane_wn[4].mUserArea = 1;
+    }
 }
 
 /* 80222DB4-80222EF0       .text melodyFlash__12dMetronome_cFv */
 void dMetronome_c::melodyFlash() {
-    /* Nonmatching */
+    f32 alpha = 0.0f;
+    pane_pk[1].mUserArea++;
+    if (pane_pk[1].mUserArea < g_mnHIO.mFlashTiming) {
+        alpha = fopMsgM_valueIncrease(g_mnHIO.mFlashTiming, pane_pk[1].mUserArea, 0);
+    } else if (pane_pk[1].mUserArea >= g_mnHIO.mFlashTiming * 2) {
+        pane_pk[1].mUserArea = 0;
+        pane_pk[0].mUserArea++;
+        if (pane_pk[0].mUserArea >= 3) {
+            pane_pk[0].mUserArea = 0;
+            for (s32 i = 0; i < mMelodyNum; i++) {
+                fopMsgM_setNowAlphaZero(&pane_cn[i]);
+                fopMsgM_setNowAlphaZero(&pane_i11[i]);
+                fopMsgM_setNowAlphaZero(&pane_i12[i]);
+            }
+            mAction = 4;
+        }
+    } else {
+        alpha = fopMsgM_valueIncrease(g_mnHIO.mFlashTiming, g_mnHIO.mFlashTiming * 2 - pane_pk[1].mUserArea, 0);
+    }
+
+    for (s32 i = 0; i < mMelodyNum; i++) {
+        pane_pk[i].mAlphaOrig = g_mnHIO.mAlphaOrig;
+        fopMsgM_setNowAlpha(&pane_pk[i], alpha);
+    }
 }
 
 /* 80222EF0-8022300C       .text melodyShift__12dMetronome_cFv */
 void dMetronome_c::melodyShift() {
-    /* Nonmatching */
+    if (pane_wn[6].mUserArea < g_mnHIO.mShiftTiming) {
+        pane_wn[6].mUserArea++;
+    } else {
+        melodyInit(mMelodyNum);
+
+        f32 sepX = pane_bs[2].mPosCenterOrig.x - pane_bs[1].mPosCenterOrig.x;
+
+        for (s32 i = 0; i < 7; i++) {
+            f32 x = mPosX + sepX * i;
+            pane_cn[i].mPosCenter.x = x;
+            pane_wn[i].mPosCenter.x = x;
+            pane_pk[i].mPosCenter.x = x;
+            pane_i11[i].mPosCenter.x = x;
+            pane_i12[i].mPosCenter.x = x;
+            pane_bs[i].mPosCenter.x = x;
+
+            fopMsgM_cposMove(&pane_cn[i]);
+            fopMsgM_cposMove(&pane_wn[i]);
+            fopMsgM_cposMove(&pane_pk[i]);
+            fopMsgM_cposMove(&pane_i11[i]);
+            fopMsgM_cposMove(&pane_i12[i]);
+            fopMsgM_cposMove(&pane_bs[i]);
+        }
+
+        mAction = 2;
+    }
 }
 
 /* 8022300C-8022309C       .text initialize__12dMetronome_cFv */
 void dMetronome_c::initialize() {
-    /* Nonmatching */
+    mCurRate = daPy_getPlayerLinkActorClass()->getTactMetronomeRate();
+    mPosX = 0.0f;
+    field_0xE38 = 0;
+    mMelodyNum = mDoAud_zelAudio_c::mTact.mMelodyNum;
+    mAction = 0;
+    field_0xE14 = 0;
+
+    for (s32 i = 0; i < 7; i++)
+        mNote[i] = 0;
+
+    mbOpen = false;
+    mCurTimer = NULL;
+    mpEmitter = NULL;
 }
 
 /* 8022309C-8022319C       .text _create__12dMetronome_cFv */
 void dMetronome_c::_create() {
-    /* Nonmatching */
+    scrn = new J2DScreen();
+    JUT_ASSERT(0x2db, scrn != 0);
+    scrn->set("baton_input.blo", dComIfGp_getTmsgArchive());
+    screenSet();
+    initialize();
 }
 
 /* 8022319C-802231F4       .text _delete__12dMetronome_cFv */
 void dMetronome_c::_delete() {
-    /* Nonmatching */
+    delete scrn;
+    dComIfGp_getTmsgArchive()->removeResourceAll();
 }
 
 /* 802231F4-80223314       .text _move__12dMetronome_cFv */
 void dMetronome_c::_move() {
-    /* Nonmatching */
+    metronomeMove();
+    if (pane_wn[3].mUserArea == 0 && mMelodyNum != mDoAud_zelAudio_c::mTact.mMelodyNum) {
+        mMelodyNum = mDoAud_zelAudio_c::mTact.mMelodyNum;
+        pane_wn[0].mUserArea = 0;
+        mAction = 5;
+    }
+
+    if (mAction == 0) {
+        mAction = 1;
+        pane_wn[1].mUserArea = 0;
+        pane_wn[0].mUserArea = 0;
+        melodyInit(mMelodyNum);
+    } else if (mAction == 1) {
+        pane_wn[1].mUserArea++;
+        melodyMove();
+    } else if (mAction == 5) {
+        pane_wn[1].mUserArea--;
+        melodyMove();
+    } else if (mAction == 3) {
+        melodyShift();
+    } else if (mAction == 4) {
+        melodyDemo();
+    }
+
+    if (pane_wn[1].mUserArea != 0)
+        melodyShow();
+    if (pane_pk[0].mUserArea != 0)
+        melodyFlash();
 }
 
 /* 80223314-802233E4       .text _draw__12dMetronome_cFv */
 void dMetronome_c::_draw() {
-    /* Nonmatching */
+    for (s32 i = 0; i < 7; i++) {
+        fopMsgM_setAlpha(&pane_cn[i]);
+        fopMsgM_setAlpha(&pane_wn[i]);
+        fopMsgM_setAlpha(&pane_pk[i]);
+        fopMsgM_setAlpha(&pane_i11[i]);
+        fopMsgM_setAlpha(&pane_i12[i]);
+        fopMsgM_setAlpha(&pane_bs[i]);
+    }
+
+    for (s32 i = 0; i < 21; i++)
+        fopMsgM_setAlpha(&pane_timing[0]);  // nice bug
+
+    fopMsgM_setAlpha(&pane_echo);
+
+    J2DOrthoGraph* port = dComIfGp_getCurrentGrafPort();
+    port->setPort();
+    scrn->draw(0.0f, 0.0f, port);
 }
 
 /* 802233E4-80223478       .text _open__12dMetronome_cFv */
-void dMetronome_c::_open() {
-    /* Nonmatching */
+BOOL dMetronome_c::_open() {
+    if (!mbOpen) {
+        for (s32 i = 0; i < 21; i++) {
+            fopMsgM_setInitAlpha(&pane_timing[i]);
+        }
+
+        mMelodyNum = mDoAud_zelAudio_c::mTact.mMelodyNum;
+
+        pane_wn[1].mUserArea = 0;
+        pane_wn[0].mUserArea = 0;
+
+        melodyInit(mMelodyNum);
+    }
+    mbOpen = true;
+    return TRUE;
 }
 
 /* 80223478-80223534       .text _close__12dMetronome_cFv */
-void dMetronome_c::_close() {
-    /* Nonmatching */
-}
+BOOL dMetronome_c::_close() {
+    mbOpen = false;
+    if (!mbOpen) {  // nice bug
+        for (s32 i = 0; i < 7; i++) {
+            fopMsgM_setNowAlphaZero(&pane_cn[i]);
+            fopMsgM_setNowAlphaZero(&pane_wn[i]);
+            fopMsgM_setNowAlphaZero(&pane_pk[i]);
+            fopMsgM_setNowAlphaZero(&pane_i11[i]);
+            fopMsgM_setNowAlphaZero(&pane_i12[i]);
+            fopMsgM_setNowAlphaZero(&pane_bs[i]);
+        }
 
-/* 80223534-80223590       .text __dt__9dMn_HIO_cFv */
-dMn_HIO_c::~dMn_HIO_c() {
-    /* Nonmatching */
-}
+        for (s32 i = 0; i < 21; i++) {
+            fopMsgM_setNowAlphaZero(&pane_timing[i]);
+        }
 
+        fopMsgM_setNowAlphaZero(&pane_echo);
+    }
+
+    return TRUE;
+}

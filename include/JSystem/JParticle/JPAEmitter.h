@@ -111,6 +111,8 @@ public:
         return mActiveParticles.getNumLinks() + mChildParticles.getNumLinks();
     }
 
+    bool isEnableDeleteEmitter() { return checkStatus(JPAEmtrStts_EnableDeleteEmitter) && getParticleNumber() == 0; }
+
     u8 getGlobalAlpha() { return mGlobalPrmColor.a; }
     void setGlobalAlpha(u8 alpha) { mGlobalPrmColor.a = alpha; }
     void setGlobalRTMatrix(MtxP mtx) {
@@ -146,6 +148,7 @@ public:
     void setRate(float i_rate) { mRate = i_rate; }
 
     void stopCreateParticle() { setStatus(JPAEmtrStts_StopEmit); }
+    void stopDrawParticle() { setStatus(JPAEmtrStts_StopDraw); }
     void becomeImmortalEmitter() { setStatus(JPAEmtrStts_Immortal); }
     void quitImmortalEmitter() { clearStatus(JPAEmtrStts_Immortal); }
 

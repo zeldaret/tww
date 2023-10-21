@@ -1211,6 +1211,32 @@ void dComIfGs_gameStart() {
 /* 80054CC0-80054E9C       .text dComIfGs_copyPlayerRecollectionData__Fv */
 void dComIfGs_copyPlayerRecollectionData() {
     /* Nonmatching */
+    s32 tbl;
+    u8 buf[0x70];
+
+    if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == 3) {
+        if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == 3)
+            tbl = 0;
+        else if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == 4)
+            tbl = 1;
+        else if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == 6)
+            tbl = 2;
+        else if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == 7)
+            tbl = 3;
+        else
+            return;
+    } else {
+        return;
+    }
+
+    memcpy(&buf[0x00], &g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA(), 0x18);
+    memcpy(&buf[0x18], &g_dComIfG_gameInfo.save.getPlayer().getItem(), 0x15);
+    memcpy(&buf[0x2D], &g_dComIfG_gameInfo.save.getPlayer().getItemRecord().field_0x2, 0x03);
+    memcpy(&buf[0x30], &g_dComIfG_gameInfo.save.getPlayer().getItemMax().field_0x0, 0x03);
+    memcpy(&buf[0x33], &g_dComIfG_gameInfo.save.getPlayer().getBagItem(), 0x18);
+    memcpy(&buf[0x4B], &g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord(), 0x18);
+    memcpy(&buf[0x63], &g_dComIfG_gameInfo.save.getPlayer().getCollect(), 0x0D);
+    memcpy(g_dComIfG_gameInfo.save.getPlayer().getpPlayerStatusC(tbl), buf, sizeof(buf));
 }
 
 /* 80054E9C-80055318       .text dComIfGs_setPlayerRecollectionData__Fv */

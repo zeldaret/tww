@@ -82,7 +82,11 @@ inline s32 fopMsgM_Timer_create(s16 param_0, u8 param_1, u32 param_2, u8 param_3
 
 void fopMsgM_setPaneData(fopMsgM_pane_class*, J2DScreen*, unsigned long);
 void fopMsgM_setNowAlpha(fopMsgM_pane_class*, f32);
+void fopMsgM_setNowAlphaZero(fopMsgM_pane_class*);
+void fopMsgM_setInitAlpha(fopMsgM_pane_class*);
 void fopMsgM_setAlpha(fopMsgM_pane_class*);
+void fopMsgM_paneScaleXY(fopMsgM_pane_class*, f32);
+void fopMsgM_cposMove(fopMsgM_pane_class*);
 
 u32 fopMsgM_searchMessageNumber(u32);
 void fopMsgM_messageSendOn();

@@ -3,6 +3,8 @@
 
 #include "JAZelAudio/JAIZelBasic.h"
 
+class JAIZelInst;
+
 class mDoAud_zelAudio_c : public JAIZelBasic {
 public:
     mDoAud_zelAudio_c() {}
@@ -28,6 +30,8 @@ public:
     static bool mResetFlag;
     static bool mBgmSet;
     static u8 mLoadTimer;
+
+    static JAIZelInst mTact;
 };
 
 extern mDoAud_zelAudio_c g_mDoAud_zelAudio;

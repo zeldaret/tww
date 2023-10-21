@@ -118,6 +118,7 @@ public:
         daPy_RFLG0_ATTENTION_LOCK        = 0x00010000,
         daPy_RFLG0_HAMMER_QUAKE          = 0x00020000,
         daPy_RFLG0_GRAB_PUT_START        = 0x00400000,
+        daPy_RFLG0_TACT_USE              = 0x01000000,
         daPy_RFLG0_FAIRY_USE             = 0x02000000,
         // 0x00000001 and 0x00000002 set in daPy_lk_c::dProcLastCombo
         // 0x00001000 set in daPy_lk_c::procCrawlMove_init, checked in checkNoCollisionCorret__9daPy_lk_cFv
@@ -202,6 +203,7 @@ public:
     bool checkHammerQuake() const { return checkResetFlg0(daPy_RFLG0_HAMMER_QUAKE); }
     bool getGrabPutStart() const { return checkResetFlg0(daPy_RFLG0_GRAB_PUT_START); }
     bool checkFairyUse() const { return checkResetFlg0(daPy_RFLG0_FAIRY_USE); }
+    bool checkTactUse() const { return checkResetFlg0(daPy_RFLG0_TACT_USE); }
     
     // checkSwordMiniGame__9daPy_py_cCFv
     // checkNormalSwordEquip__9daPy_py_cCFv
