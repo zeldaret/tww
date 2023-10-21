@@ -216,7 +216,7 @@ private:
 class mDoExt_transAnmBas : public J3DAnmTransformKey {
 public:
     mDoExt_transAnmBas(void* bas) { mBas = bas; }
-    virtual ~mDoExt_transAnmBas();
+    virtual ~mDoExt_transAnmBas() {}
 
     void* getBas() { return mBas; }
 

@@ -285,7 +285,7 @@ public:
         mFrameMax = i_frameMax;
     }
 
-    virtual ~J3DAnmBase();
+    virtual ~J3DAnmBase() {}
 
     u8 getAttribute() const { return mAttribute; }
     s16 getFrameMax() const { return mFrameMax; }
@@ -308,7 +308,7 @@ public:
         field_0xc = p1;
     }
 
-    virtual ~J3DAnmTransform();
+    virtual ~J3DAnmTransform() {}
     virtual void getTransform(u16, J3DTransformInfo*) const = 0;
 
 private:
