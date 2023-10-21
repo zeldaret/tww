@@ -400,7 +400,7 @@ static void bomb_move_set(am_class* i_this, u8 alwaysMoveY) {
 
     swallowedActor->mGravity = 0.0f;
     swallowedActor->speedF = 0.0f;
-    swallowedActor->speed.setAll(0.0f);
+    swallowedActor->speed.setall(0.0f);
     swallowedActor->current.angle.setall(0);
     swallowedActor->shape_angle.setall(0);
     swallowedActor->current.angle.y = i_this->shape_angle.y;
@@ -409,19 +409,19 @@ static void bomb_move_set(am_class* i_this, u8 alwaysMoveY) {
     if (fpcM_GetName(swallowedActor) == PROC_BOMB) {
         daBomb_c* bomb = (daBomb_c*)swallowedActor;
         if (i_this->mCountDownTimers[1] == 1) {
-            bomb->mScale.setAll(0.0f);
+            bomb->mScale.setall(0.0f);
             bomb->setBombNoEff();
         } else if (i_this->mCountDownTimers[1] > 1) {
-            bomb->mScale.setAll(1.0f);
+            bomb->mScale.setall(1.0f);
         }
         bomb->setBombRestTime(100);
     } else if (fpcM_GetName(swallowedActor) == PROC_Bomb2) {
         daBomb2::Act_c* bomb2 = (daBomb2::Act_c*)swallowedActor;
         if (i_this->mCountDownTimers[1] == 1) {
-            bomb2->mScale.setAll(0.0f);
+            bomb2->mScale.setall(0.0f);
             bomb2->remove_fuse_effect();
         } else if (i_this->mCountDownTimers[1] > 1) {
-            bomb2->mScale.setAll(1.0f);
+            bomb2->mScale.setall(1.0f);
         }
         bomb2->set_time(100);
     }
@@ -1006,7 +1006,7 @@ static void action_itai_move(am_class* i_this) {
         if (i_this->mSwallowedActorProcID != -1) {
             fopAc_ac_c* swallowedActor = fopAcM_SearchByID(i_this->mSwallowedActorProcID);
             if (swallowedActor) {
-                swallowedActor->mScale.setAll(1.0f);
+                swallowedActor->mScale.setall(1.0f);
                 if (fpcM_GetName(swallowedActor) == PROC_BOMB) {
                     daBomb_c* bomb = (daBomb_c*)swallowedActor;
                     bomb->setBombRestTime(1);

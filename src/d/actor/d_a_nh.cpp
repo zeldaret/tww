@@ -190,7 +190,7 @@ daNh_c::~daNh_c() {
 /* 800F9874-800F9980       .text setBaseMtx__6daNh_cFv */
 void daNh_c::setBaseMtx() {
     J3DModel* model = mpModel;
-    mScale.setAll(l_HIO.prm.mModelScale);
+    mScale.setall(l_HIO.prm.mModelScale);
     model->setBaseScale(mScale);
     mDoMtx_stack_c::transS(getPosition());
     mDoMtx_stack_c::YrotM(shape_angle.y);

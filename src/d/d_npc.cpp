@@ -492,8 +492,8 @@ cXyz dNpc_playerEyePos(f32 param_1) {
 
 void dNpc_calc_DisXZ_AngY(cXyz param_1, cXyz param_2, float* param_3, short* param_4) {
     cXyz diff;
-    diff.x = param_2.getXDiff(&param_1);
-    diff.z = param_2.getZDiff(&param_1);
+    diff.x = param_2.x - param_1.x;
+    diff.z = param_2.z - param_1.z;
 
     if(param_3 != 0) {
         f32 dist = sqrtf(diff.x * diff.x + diff.z * diff.z);

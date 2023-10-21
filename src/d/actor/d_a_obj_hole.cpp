@@ -122,7 +122,7 @@ void daObj_Hole_c::setMtx() {
         scale /= l_HIO.m0008;
 
         cXyz scaleVec;
-        scaleVec.setAll(scale);
+        scaleVec.setall(scale);
         mpMdl->setBaseScale(scaleVec);
 
         mDoMtx_stack_c::transS(adjustPos);

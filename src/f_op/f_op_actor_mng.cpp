@@ -934,7 +934,7 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* rot, cXy
 BOOL stealItem_CB(void* actor) {
     if (actor) {
         daItem_c* item = (daItem_c*)actor;
-        item->mScale.setAll(1.0f);
+        item->mScale.setall(1.0f);
         item->mStatusFlags |= 0x40;
     }
     return TRUE;

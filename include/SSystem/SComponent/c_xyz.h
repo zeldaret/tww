@@ -86,11 +86,7 @@ struct cXyz : Vec {
         z = other.z;
     }
 
-    f32 getXDiff(const Vec* other) const { return x - other->x; }
-    f32 getYDiff(const Vec* other) const { return y - other->y; }
-    f32 getZDiff(const Vec* other) const { return z - other->z; }
-
-    void setAll(f32 f) { set(f, f, f); }
+    void setall(f32 f) { set(f, f, f); }
 
     void setMin(const cXyz& other) {
         if (x > other.x) {

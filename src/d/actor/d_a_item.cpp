@@ -181,10 +181,10 @@ void daItem_c::CreateInit() {
     case BOMB_10:
     case BOMB_20:
     case BOMB_30:
-        mScaleTarget.setAll(0.6f);
+        mScaleTarget.setall(0.6f);
         break;
     default:
-        mScaleTarget.setAll(1.0f);
+        mScaleTarget.setall(1.0f);
         break;
     }
     
@@ -507,7 +507,7 @@ void daItem_c::scaleAnimFromBossItem() {
         if (field_0x638 == 30) {
             fopAcM_seStart(this, JA_SE_CM_BOSS_HEART_APPEAR, 0);
         }
-        mScale.setAll(1.0f);
+        mScale.setall(1.0f);
     }
 }
 
@@ -1238,7 +1238,7 @@ void daItem_c::mode_water_init() {
         current.pos.y = mAcch.m_wtr.GetHeight();
     }
     
-    speed.setAll(0.0f);
+    speed.setall(0.0f);
     speedF = 0.0f;
     current.angle.z = 0;
     current.angle.x = 0;
@@ -1251,7 +1251,7 @@ void daItem_c::mode_water_init() {
     f32 temp = dItem_data::getShadowSize(m_itemNo);
     f32 temp3 = temp / dItem_data::getShadowSize(GREEN_RUPEE);
     temp3 *= mScale.x;
-    scale.setAll(temp3);
+    scale.setall(temp3);
     
     dComIfGp_particle_setShipTail(0x33, &current.pos, NULL, &scale, 0xFF, &mPtclRippleCb);
     mPtclRippleCb.mRate = 0.0f;
@@ -1359,15 +1359,15 @@ BOOL daItem_c::initAction() {
             // speedF = cM_rndF(getData()->field_0x30);
             break;
         case 5:
-            speed.setAll(0.0f);
+            speed.setall(0.0f);
             speedF = 0.0f;
-            mScale.setAll(0.0f);
+            mScale.setall(0.0f);
             mCurState = STATE_WAIT_BOSS1;
             fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
             field_0x654 = 0x4A8;
             break;
         case 0xC:
-            mScale.setAll(1.0f);
+            mScale.setall(1.0f);
             mCurState = STATE_WAIT_BOSS2;
             fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
             field_0x654 = 0x4A8;
@@ -1416,7 +1416,7 @@ BOOL daItem_c::initAction() {
         break;
     case 0xA:
         mGravity = getData()->mFieldItemGravity;
-        mScale.setAll(0.0f);
+        mScale.setall(0.0f);
         mMode = 0;
         break;
     case 0xB:
@@ -1441,7 +1441,7 @@ BOOL daItem_c::initAction() {
     
     mGravity = getData()->mFieldItemGravity;
     speed.set(0.0f, temp_f31, 0.0f);
-    mScale.setAll(0.0f);
+    mScale.setall(0.0f);
     
     mMode = 0;
     

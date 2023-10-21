@@ -726,7 +726,7 @@ void daObjTpost_c::setAnm(s8 param_1, bool param_2) {
 
     if(field_0x6C8 == 1) {
         cXyz scale;
-        scale.setAll(1.0f);
+        scale.setall(1.0f);
         if(mMorf->getFrame() == 1.0f) {
             dComIfGp_particle_set(0x8190, &current.pos, &current.angle, &scale);
             mDoAud_seStart(JA_SE_OBJ_POST_LUGGAGE_OUT, 0, 0, 0);

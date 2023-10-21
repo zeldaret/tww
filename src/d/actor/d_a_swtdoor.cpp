@@ -66,8 +66,6 @@ BOOL useHeapInit(fopAc_ac_c* i_ac) {
 
 /* 00000260-00000374       .text daSwtdoor_Create__FP10fopAc_ac_c */
 s32 daSwtdoor_Create(fopAc_ac_c* i_ac) {
-    /* Nonmatching - r30/r31 regswap */
-
     swtdoor_class * i_this;
 
     fopAcM_SetupActor(i_ac, swtdoor_class);

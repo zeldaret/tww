@@ -472,7 +472,7 @@ static BOOL naraku_check(am2_class* i_this) {
         
         if (i_this->current.pos.y < -500.0f || i_this->mInAbyssTimer > 50) {
             i_this->speedF = 0.0f;
-            i_this->speed.setAll(0.0f);
+            i_this->speed.setall(0.0f);
             i_this->mGravity = 0.0f;
             return TRUE;
         }
@@ -506,7 +506,7 @@ static BOOL naraku_check(am2_class* i_this) {
         f32 waterSinkDepth = 80.0f + g_regHIO.mChild[12].mFloatRegs[0];
         if (i_this->current.pos.y < i_this->mAcch.m_wtr.GetHeight() - waterSinkDepth) {
             i_this->speedF = 0.0f;
-            i_this->speed.setAll(0.0f);
+            i_this->speed.setall(0.0f);
             i_this->mGravity = 0.0f;
             return TRUE;
         }
@@ -757,7 +757,7 @@ static void action_mahi(am2_class* i_this) {
                 fopAcM_OffStatus(actor, fopAcStts_SHOWMAP_e);
                 actor->current.angle.y = player->shape_angle.y;
                 actor->mGravity = 0.0f;
-                actor->speed.setAll(0.0f);
+                actor->speed.setall(0.0f);
                 actor->speedF = 0.0f;
                 i_this->mbNotInHomeRoom = false;
                 i_this->mBodyCyl.OffCoSetBit();
@@ -1120,14 +1120,14 @@ static void action_modoru_move(am2_class* i_this) {
         
         if (i_this->mScale.x < 0.1f) {
             i_this->speedF = 0.0f;
-            i_this->speed.setAll(0.0f);
+            i_this->speed.setall(0.0f);
             i_this->mGravity = -3.0f;
             i_this->mbMadeWaterSplash = false;
             i_this->mRippleCb.end();
             
             i_this->current.angle.y = i_this->shape_angle.y;
             i_this->current.pos = i_this->mSpawnPos;
-            i_this->mScale.setAll(0.0f);
+            i_this->mScale.setall(0.0f);
             i_this->shape_angle.y = i_this->mSpawnRotY;
             i_this->current.angle.y = i_this->shape_angle.y;
             i_this->current.pos = i_this->mSpawnPos;
@@ -1147,7 +1147,7 @@ static void action_modoru_move(am2_class* i_this) {
         
         if (i_this->mScale.x > 0.9f) {
             i_this->mCountUpTimers[1] = 0;
-            i_this->mScale.setAll(1.0f);
+            i_this->mScale.setall(1.0f);
             i_this->mWeakSph.OffTgSetBit();
             i_this->mNeedleCyl.OffAtSetBit();
             i_this->mNeedleCyl.OffCoSetBit();

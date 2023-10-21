@@ -599,7 +599,7 @@ void daBomb_c::makeFireEffect(cXyz& pos, csXyz& rotation) {
     camera_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     cXyz scale;
-    scale.setAll(0.3f);
+    scale.setall(0.3f);
     csXyz rot;
     rot.x = -cam->mAngle.x;
     rot.y = cam->mAngle.y + 0x8000;
@@ -1206,7 +1206,7 @@ void daBomb_c::create_init() {
     mAcch.m_roof_height = 50.0f;
     mAcch.OnLineCheck();
 
-    field_0x554.setAll(-1.0e9f);
+    field_0x554.setall(-1.0e9f);
     field_0x560 = 0;
     mbWaterIn = 0;
     field_0x562 = 0;
@@ -1241,7 +1241,7 @@ void daBomb_c::create_init() {
 
     mMassCounter = g_Counter.mCounter0 - 1;
     if(chk_attrState(this, ATTR_STATE_2)) {
-        mScale.setAll(0.0f);
+        mScale.setall(0.0f);
     }
     if(chk_attrState(this, ATTR_STATE_4)) {
         setFuseEffect();

@@ -113,7 +113,7 @@ BOOL enemy_ice(enemyice* ei) {
     cXyz pos;
     
     if (ei->mLightShrinkTimer != 0) { // Dying to light arrows.
-        particleScale.setAll(ei->mParticleScale);
+        particleScale.setall(ei->mParticleScale);
         pos = ac->current.pos;
         pos.y += ei->mYOffset;
         
@@ -214,7 +214,7 @@ BOOL enemy_ice(enemyice* ei) {
             }
             fopAcM_seStart(ac, JA_SE_CM_FREEZE, 0);
             
-            particleScale.setAll(ei->mParticleScale);
+            particleScale.setall(ei->mParticleScale);
             pos = ac->current.pos;
             pos.y += ei->mYOffset;
             dComIfGp_particle_set(0x274, &pos, NULL, &particleScale);
@@ -320,7 +320,7 @@ BOOL enemy_ice(enemyice* ei) {
         if (ei->mFreezeTimer != 0) {
             if (ei->mFreezeTimer < 0) {
                 // Shattered.
-                particleScale.setAll(ei->mParticleScale);
+                particleScale.setall(ei->mParticleScale);
                 pos = ac->current.pos;
                 pos.y += ei->mYOffset;
                 dComIfGp_particle_set(0x273, &pos, NULL, &particleScale);
@@ -330,7 +330,7 @@ BOOL enemy_ice(enemyice* ei) {
                     // Shattered by Skull Hammer.
                     dComIfGp_particle_set(0x10, &pos);
                     csXyz angle(0, fopAcM_searchPlayerAngleY(ac), 0);
-                    particleScale.setAll(2.0f);
+                    particleScale.setall(2.0f);
                     dComIfGp_particle_set(0xD, &pos, &angle, &particleScale);
                     dScnPly_ply_c::setPauseTimer(8);
                 }
@@ -373,7 +373,7 @@ BOOL enemy_ice(enemyice* ei) {
             }
             
             if (ei->mFreezeTimer == 20) {
-                particleScale.setAll(ei->mParticleScale);
+                particleScale.setall(ei->mParticleScale);
                 pos = ac->current.pos;
                 pos.y += ei->mYOffset;
                 dComIfGp_particle_set(0x277, &pos, NULL, &particleScale);
@@ -436,7 +436,7 @@ void enemy_fire(enemyfire* ef) {
     fopAc_ac_c* ac = ef->mpActor;
     cXyz offset;
     cXyz pos;
-    offset.setAll(0.0f);
+    offset.setall(0.0f);
     
     switch (ef->mState) {
     case 0: // Not on fire.
@@ -459,7 +459,7 @@ void enemy_fire(enemyfire* ef) {
                 continue;
             }
             cXyz scale;
-            scale.setAll(ef->mParticleScale[i]);
+            scale.setall(ef->mParticleScale[i]);
             ef->mpFlameEmitters[i] = dComIfGp_particle_set(0x3F1, &ac->current.pos, NULL, &scale);
             ef->mFlameTimers[i] = ef->mFireTimer - (s16)cM_rndF(60.0f);
             if (ef->mFlameTimers[i] < 10) {

@@ -330,11 +330,11 @@ int daObjMknjD::Act_c::Create() {
 
     fopAcM_setCullSizeBox(this, -400.0f, -1.0f, -400.0f, 400.0f, 405.0f, 400.0f);
 
-    mLeftHalfPos.setAll(0.0f);
-    mRightHalfPos.setAll(0.0f);
+    mLeftHalfPos.setall(0.0f);
+    mRightHalfPos.setall(0.0f);
 
     for (int i = 0; i < 20; i++) {
-        mShardPositions[i].setAll(0.0f);
+        mShardPositions[i].setall(0.0f);
         mShardHeights[i] = 0.0f;
     }
 
@@ -729,7 +729,7 @@ bool daObjMknjD::Act_c::daObjMknjD_break() {
         m043D = true;
 
         for (int i = 0; i < 20; i++) {
-            mShardPositions[i].setAll(0.0f);
+            mShardPositions[i].setall(0.0f);
 
             if (i == 0x02 || i == 0x03 || i == 0x06 || i == 0x07 || i == 0x0A || i == 0x0D || i == 0x0E || i == 0x12 || i == 0x13) {
                 mShardPositions[i].x += 20.0f;
