@@ -22,7 +22,9 @@ struct mDoLib_clipper {
         return mClipper.clip(m, center, radius);
     }
     
-    static s32 clip(J3DModel*);
+    static s32 clip(J3DModel* model) {
+        return mClipper.clipByBox(model);
+    }
 
     static f32 getFar() { return mSystemFar; }
     static f32 getFovyRate() { return mFovyRate; }

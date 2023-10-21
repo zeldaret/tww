@@ -367,6 +367,7 @@ public:
 
     u16 getUpdateMaterialID(u16 idx) const { return mUpdateMaterialID[idx]; }
     u16 getUpdateMaterialNum() const { return mTrackNum / 3; }
+    JUTNameTab * getUpdateMaterialName() { return &mMaterialName; }
     u16 getUpdateTexMtxID(u16 idx) const { return mUpdateTexMtxID[idx]; }
 
     u32 getTexMtxCalcType() const { return mTexMtxCalcType; }

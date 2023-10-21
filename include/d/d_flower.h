@@ -54,6 +54,7 @@ public:
     void newData(s8, cXyz&, int, s8);
     void newAnm();
     void setAnm(int, s16);
+    void deleteRoom(s32 roomNo) { mRoom[roomNo].deleteData(); }
 
     virtual void draw();
     virtual ~dFlower_packet_c();

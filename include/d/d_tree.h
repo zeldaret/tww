@@ -70,6 +70,7 @@ public:
     void newData(cXyz&, u8, int);
     void newAnm(s16);
     void setAnm(int, s16);
+    void deleteRoom(s32 roomNo) { mRoom[roomNo].deleteData(); }
 
     virtual void draw();
     virtual ~dTree_packet_c();

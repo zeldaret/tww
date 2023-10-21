@@ -47,6 +47,7 @@ public:
     void update();
     void checkYpos(cXyz&);
     void newFloor(cXyz&, cXyz&, int, s16);
+    void deleteRoom(s32 roomNo) { mRoom[roomNo].deleteFloor(); }
 
     virtual void draw();
     virtual ~dMagma_packet_c();

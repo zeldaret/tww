@@ -57,6 +57,7 @@ public:
     void newData(cXyz&, int, s8);
     void newAnm();
     void setAnm(int, s16);
+    void deleteRoom(s32 roomNo) { mGrassRoom[roomNo].deleteData(); }
 
     virtual void draw();
     virtual ~dGrass_packet_c();

@@ -188,7 +188,7 @@ public:
     /* 0x04 */ s32 mTimerNowTimeMs;
     /* 0x08 */ s32 mTimerLimitTimeMs;
     /* 0x0C */ s32 mTimerMode;
-    /* 0x10 */ u8 mTimerType;
+    /* 0x10 */ u16 mTimerType;
 };
 
 class dADM_CharTbl : public cDT {
@@ -1262,6 +1262,7 @@ BOOL dComIfGs_checkSeaLandingEvent(s8 i_roomNo);
 void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8 i_layer,
                            f32 i_lastSpeed, u32 i_lastMode, int, s8 i_wipe);
 dStage_Ship_data* dComIfGp_getShip(int i_roomNo, int param_1);
+bool dComIfGp_getMapTrans(int i_roomNo, f32* o_transX, f32* o_transY, s16* o_angle);
 
 inline camera_class* dComIfGp_getCamera(int idx) {
     return g_dComIfG_gameInfo.play.getCamera(idx);
@@ -1407,12 +1408,20 @@ inline dBgW* dComIfGp_roomControl_getBgW(int i_roomNo) {
     return dStage_roomControl_c::getBgW(i_roomNo);
 }
 
+inline void dComIfGp_roomControl_setBgW(int i_roomNo, dBgW * i_bgw) {
+    dStage_roomControl_c::setBgW(i_roomNo, i_bgw);
+}
+
 inline s32 dComIfGp_roomControl_getZoneNo(int i_roomNo) {
     return dStage_roomControl_c::getZoneNo(i_roomNo);
 }
 
 inline void dComIfGp_roomControl_setZoneNo(int i_roomNo, int i_zoneNo) {
     dStage_roomControl_c::setZoneNo(i_roomNo, i_zoneNo);
+}
+
+inline dKy_tevstr_c* dComIfGp_roomControl_getTevStr(int room_no) {
+    return g_dComIfG_gameInfo.play.getRoomControl()->getTevStr(room_no);
 }
 
 inline void dComIfGp_roomControl_init() {
@@ -1433,6 +1442,14 @@ inline void dComIfGp_roomControl_setStayNo(int stayNo) {
 
 inline void dComIfGp_roomControl_setStatusFlag(int i_roomNo, u8 i_flag) {
     g_dComIfG_gameInfo.play.getRoomControl()->setStatusFlag(i_roomNo, i_flag);
+}
+
+inline void dComIfGp_roomControl_onStatusFlag(int i_roomNo, u8 i_flag) {
+    g_dComIfG_gameInfo.play.getRoomControl()->onStatusFlag(i_roomNo, i_flag);
+}
+
+inline void dComIfGp_roomControl_offStatusFlag(int i_roomNo, u8 i_flag) {
+    g_dComIfG_gameInfo.play.getRoomControl()->offStatusFlag(i_roomNo, i_flag);
 }
 
 inline BOOL dComIfGp_roomControl_checkStatusFlag(int i_roomNo, u8 i_flag) {
