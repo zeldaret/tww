@@ -1998,7 +1998,7 @@ actor_method_class l_daPy_Method = {
     (process_method_func)daPy_Draw,
 };
 
-actor_process_profile_definition g_profile_PLAYER = {
+actor_process_profile_definition2 g_profile_PLAYER = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 5,
     /* ListPrio     */ fpcLy_CURRENT_e,
@@ -2013,4 +2013,5 @@ actor_process_profile_definition g_profile_PLAYER = {
     /* Status       */ fopAcStts_FREEZE_e,
     /* Group        */ fopAc_PLAYER_e,
     /* CullType     */ fopAc_CULLBOX_0_e,
+    /* field_0x30   */ 2,
 };

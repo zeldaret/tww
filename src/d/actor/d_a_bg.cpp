@@ -47,7 +47,7 @@ class daBg_c : public fopAc_ac_c {
 public:
     ~daBg_c();
     const char * setArcName();
-    BOOL createHeap();
+    inline BOOL createHeap();
     s32 create();
     inline BOOL execute();
     inline BOOL draw();
@@ -165,7 +165,7 @@ void daBg_brkAnm_c::play() {
 }
 
 /* 800D88D8-800D88F8       .text checkCreateHeap__FP10fopAc_ac_c */
-BOOL checkCreateHeap(fopAc_ac_c* i_ac) {
+static BOOL checkCreateHeap(fopAc_ac_c* i_ac) {
     return ((daBg_c*)i_ac)->createHeap();
 }
 
@@ -200,9 +200,8 @@ BOOL daBg_c::createHeap() {
     const char * arcName = setArcName();
     u32 roomNo = fopAcM_GetParam(this);
 
-    for (u32 i = 0; i < 4; i++) {
-        BgModel * bgm = &bg[i];
-
+    BgModel * bgm = bg;
+    for (int i = 0; i < 4; bgm++, i++) {
         J3DModelData * modelData = (J3DModelData *) dComIfG_getStageRes(arcName, l_modelName[i]);
         if (modelData == NULL)
             modelData = (J3DModelData *) dComIfG_getStageRes(arcName, l_modelName2[i]);
@@ -221,7 +220,7 @@ BOOL daBg_c::createHeap() {
                 return FALSE;
             if (!bgm->btk->create(modelData, btk))
                 return FALSE;
-            diffFlag = 0x12000000;
+            diffFlag |= 0x00001200;
         } else {
             bgm->btk = NULL;
         }
@@ -321,17 +320,25 @@ BOOL daBg_Draw(daBg_c* i_this) {
 
 BOOL daBg_c::execute() {
     if (mUnloadTimer != 0) {
+#if VERSION == VERSION_JPN
+        mUnloadTimer = 0;
+        fopAcM_delete(this);
+#else
         if (cLib_calcTimer(&mUnloadTimer) == 0)
             fopAcM_delete(this);
-
+#endif
         return TRUE;
     }
 
     if (dComIfGp_roomControl_checkStatusFlag(fopAcM_GetParam(this), 0x04)) {
+#if VERSION == VERSION_JPN
+        mUnloadTimer = 1;
+#else
         if (strcmp(dComIfGp_getStartStageName(), "sea") == 0)
             mUnloadTimer = 16;
         else
             mUnloadTimer = 1;
+#endif
     } else {
         BgModel * bgm = &bg[0];
         for (s32 i = 0; i < 4; i++, bgm++) {
@@ -446,7 +453,7 @@ actor_method_class l_daBg_Method = {
     (process_method_func)daBg_Draw,
 };
 
-actor_process_profile_definition g_profile_BG = {
+actor_process_profile_definition2 g_profile_BG = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,
@@ -461,4 +468,5 @@ actor_process_profile_definition g_profile_BG = {
     fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     fopAc_ACTOR_e,
     fopAc_CULLBOX_0_e,
+    0,
 };

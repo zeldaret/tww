@@ -43,12 +43,12 @@ void daPy_lk_c::checkEndTactMusic() const {
 }
 
 /* 8014D9A4-8014D9D0       .text getTactMetronomeRate__9daPy_lk_cFv */
-void daPy_lk_c::getTactMetronomeRate() {
+f32 daPy_lk_c::getTactMetronomeRate() {
     /* Nonmatching */
 }
 
 /* 8014D9D0-8014D9F8       .text checkTactLastInput__9daPy_lk_cFv */
-void daPy_lk_c::checkTactLastInput() {
+int daPy_lk_c::checkTactLastInput() {
     /* Nonmatching */
 }
 
@@ -58,7 +58,7 @@ void daPy_lk_c::setTactZev(unsigned int, int, char*) {
 }
 
 /* 8014DA78-8014DACC       .text getTactTopPos__9daPy_lk_cFP4cXyz */
-void daPy_lk_c::getTactTopPos(cXyz*) {
+int daPy_lk_c::getTactTopPos(cXyz*) {
     /* Nonmatching */
 }
 
@@ -78,7 +78,7 @@ int daPy_lk_c::getTactTimerCancel() const {
 }
 
 /* 8014DB74-8014DB9C       .text checkTactPlayMelody__9daPy_lk_cFv */
-void daPy_lk_c::checkTactPlayMelody() {
+int daPy_lk_c::checkTactPlayMelody() {
     /* Nonmatching */
 }
 

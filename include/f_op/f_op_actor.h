@@ -97,7 +97,7 @@ struct actor_process_profile_definition {
     /* 0x2D */ u8 mCullType;
 };
 
-// Unclear what this is. Only appears in 4 profiles (BG,DSHUTTER,PATH,SCENE_EXIT)
+// Unclear what this is. Only appears in 2 profiles (PLAYER,BG)
 struct actor_process_profile_definition2 {
     /* 0x00 */ actor_process_profile_definition def;
     /* 0x30 */ u32 field_0x30;
