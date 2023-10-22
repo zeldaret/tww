@@ -17,6 +17,80 @@
 #include "d/d_bg_s_wtr_chk.h"
 #include "d/d_bg_s_lin_chk.h"
 
+enum ECUBE_RES_FILE_ID { // IDs and indexes are synced
+    /* BDL */
+    ECUBE_BDL_ECUBE=0x4,
+    
+    /* DZB */
+    ECUBE_DZB_ECUBE=0x7,
+};
+
+enum HBOX2_RES_FILE_ID { // IDs and indexes are synced
+    /* BDL */
+    HBOX2_BDL_HBOX2=0x4,
+    
+    /* DZB */
+    HBOX2_DZB_HBOX2=0x7,
+};
+
+enum HJUMP_RES_FILE_ID { // IDs and indexes are synced
+    /* BDL */
+    HJUMP_BDL_HBOX1=0x4,
+    HJUMP_BDL_HJUMP1=0x5,
+    HJUMP_BDL_HJUMP2=0x6,
+    
+    /* DZB */
+    HJUMP_DZB_HBOX1=0x9,
+    HJUMP_DZB_HJUMP1A=0xA,
+    HJUMP_DZB_HJUMP1B=0xB,
+    HJUMP_DZB_HJUMP2=0xC,
+};
+
+enum KKIBA_00_RES_FILE_ID { // IDs and indexes are synced
+    /* BDL */
+    KKIBA_00_BDL_KKIBA_00=0x4,
+    
+    /* DZB */
+    KKIBA_00_DZB_KKIBA_00=0x7,
+};
+
+enum MMIRROR_RES_FILE_ID { // IDs and indexes are synced
+    /* BCK */
+    MMIRROR_BCK_MSUSW=0x6,
+    
+    /* BDLM */
+    MMIRROR_BDL_MMRR=0x9,
+    MMIRROR_BDL_MSUSW=0xA,
+    MMIRROR_BDL_YSSMR00=0xB,
+    
+    /* BTK */
+    MMIRROR_BTK_MMRR=0xE,
+    MMIRROR_BTK_MSUSW=0xF,
+    MMIRROR_BTK_YSSMR00=0x10,
+    
+    /* DZB */
+    MMIRROR_DZB_MMRR=0x13,
+    MMIRROR_DZB_MSUSW=0x14,
+};
+
+enum MPWRB_RES_FILE_ID { // IDs and indexes are synced
+    /* BDL */
+    MPWRB_BDL_MPWRB=0x4,
+    
+    /* DZB */
+    MPWRB_DZB_MPWRB=0x7,
+};
+
+enum OSIBLK_RES_FILE_ID { // IDs and indexes are synced
+    /* BDL */
+    OSIBLK_BDL_OBM_OSIHIKIBLK1=0x4,
+    OSIBLK_BDL_OBM_OSIHIKIBLK2=0x5,
+    
+    /* DZB */
+    OSIBLK_DZB_OBM_OSIHIKIBLK1=0x8,
+    OSIBLK_DZB_OBM_OSIHIKIBLK2=0x9,
+};
+
 namespace daObjMovebox {
     struct Act_c;
     
@@ -28,20 +102,21 @@ namespace daObjMovebox {
         /* 0x08 */ s16 m08;
         /* 0x0A */ s16 m0A;
         /* 0x0C */ f32 m0C;
-        /* 0x10 */ u8 m10[0x14 - 0x10];
+        /* 0x10 */ f32 m10;
         /* 0x14 */ f32 m14;
         /* 0x18 */ f32 m18;
         /* 0x1C */ f32 m1C;
         /* 0x20 */ f32 m20;
         /* 0x24 */ f32 m24;
         /* 0x28 */ f32 m28;
-        /* 0x2C */ u8 m2C[0x34 - 0x2C];
+        /* 0x2C */ f32 m2C;
+        /* 0x30 */ f32 m30;
         /* 0x34 */ f32 m34;
         /* 0x38 */ s16 m38;
-        /* 0x3A */ u8 m3A[0x3C - 0x3A];
         /* 0x3C */ f32 m3C;
         /* 0x40 */ f32 m40;
-        /* 0x44 */ u8 m44[0x4C - 0x44];
+        /* 0x44 */ f32 m44;
+        /* 0x48 */ f32 m48;
         /* 0x4C */ f32 m4C;
         /* 0x50 */ f32 m50;
         /* 0x54 */ f32 m54;
@@ -53,20 +128,20 @@ namespace daObjMovebox {
         /* 0x6C */ f32 m6C;
         /* 0x70 */ f32 m70;
         /* 0x74 */ f32 m74;
-        /* 0x78 */ u32 m78;
-        /* 0x7C */ u32 m7C;
-        /* 0x80 */ u32 m80;
-        /* 0x84 */ u32 m84;
-        /* 0x88 */ u8 m88[0x8C - 0x88];
-        /* 0x8C */ s16 m8C;
-        /* 0x8E */ s16 m8E;
-        /* 0x90 */ s16 m90;
-        /* 0x92 */ s16 m92;
-        /* 0x94 */ s16 m94;
-        /* 0x96 */ s16 m96;
-        /* 0x98 */ u8 m98[0x9A - 0x98];
-        /* 0x9A */ u8 m9A;
-        /* 0x9B */ u8 field_9B[0x9C - 0x9B];
+        /* 0x78 */ u32 mMoveSE;
+        /* 0x7C */ u32 mCantMoveSE;
+        /* 0x80 */ u32 mNormalFallSE;
+        /* 0x84 */ u32 mWaterFallSE;
+        /* 0x88 */ u32 mMagmaFallSE;
+        /* 0x8C */ s16 mCullMinX;
+        /* 0x8E */ s16 mCullMinY;
+        /* 0x90 */ s16 mCullMinZ;
+        /* 0x92 */ s16 mCullMaxX;
+        /* 0x94 */ s16 mCullMaxY;
+        /* 0x96 */ s16 mCullMaxZ;
+        /* 0x98 */ bool mbUseBGTevType;
+        /* 0x99 */ bool mbCastsShadow;
+        /* 0x9A */ bool m9A;
     };  // Size: 0x9C
     
     struct BgcSrc_c {
@@ -266,7 +341,7 @@ namespace daObjMovebox {
         /* 0x646 */ s16 m646;
         /* 0x648 */ s16 m648;
         /* 0x64A */ bool m64A;
-        /* 0x64B */ u8 mReverb;
+        /* 0x64B */ s8 mReverb;
         /* 0x64C */ bool mbShouldAppear;
         /* 0x64D */ bool mbPrmZInitialized;
         /* 0x64E */ bool mbPrmXInitialized;
@@ -312,7 +387,7 @@ namespace daObjMovebox {
                 path_init();
                 attr = &M_attr[mType];
                 phase_state = MoveBGCreate(M_arcname[mType], attr->mDZBFileIndex, dBgS_MoveBGProc_Trans, heapSize);
-                JUT_ASSERT(0x7CE, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
+                JUT_ASSERT(1998, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
             }
         }
         
@@ -387,8 +462,47 @@ namespace daObjMovebox {
     }
     
     /* 00000474-00000748       .text wall_pos__Q212daObjMovebox5Bgc_cFPCQ212daObjMovebox5Act_cPCQ212daObjMovebox8BgcSrc_cisf */
-    void Bgc_c::wall_pos(const Act_c*, const BgcSrc_c*, int, s16, f32) {
-        /* Nonmatching */
+    void Bgc_c::wall_pos(const Act_c* movebox, const BgcSrc_c* bgcSrc, int param_3, s16 param_4, f32 param_5) {
+        s16 angle;
+        cXyz temp_44;
+        cXyz temp_38;
+        cXyz temp_2c;
+        cXyz temp_20;
+        
+        angle = movebox->orig.angle.y + param_4;
+        m178 = -1;
+        m17C = FLOAT_MAX;
+        mDoMtx_stack_c::YrotS((s16)angle);
+        mDoMtx_stack_c::XrotM(0x4000);
+        mDoMtx_stack_c::multVec(&cXyz::BaseY, &temp_20);
+        temp_20 *= param_5 + movebox->attr()->m70 * 0.5f;
+        
+        for (int i = 0; i < param_3; i++, bgcSrc++) {
+            mDoMtx_stack_c::XrotS(0x4000);
+            cXyz temp_14(bgcSrc->m0C, 0.0f, bgcSrc->m08);
+            mDoMtx_stack_c::multVec(&temp_14, &temp_2c);
+            mDoMtx_stack_c::YrotS((s16)angle);
+            mDoMtx_stack_c::transM(temp_2c);
+            mDoMtx_stack_c::scaleM(movebox->attr()->m70, movebox->attr()->m64, movebox->attr()->m70);
+            mDoMtx_stack_c::transM(0.0f, 0.5f, 0.0f);
+            mDoMtx_stack_c::XrotM(0x4000);
+            temp_14.set(bgcSrc->m04, 0.0f, bgcSrc->m00);
+            mDoMtx_stack_c::multVec(&temp_14, &temp_44);
+            temp_44 += movebox->current.pos;
+            temp_38 = temp_44 + temp_20;
+            M_wall_work[i].Set(&temp_44, &temp_38, (fopAc_ac_c*)movebox);
+            M_wall_work[i].SetActorPid(movebox->mBase.mBsPcId);
+            if (dComIfG_Bgsp()->LineCross(&M_wall_work[i])) {
+                m064[i] = M_wall_work[i].i_GetCross();
+                f32 dist = temp_44.abs2(m064[i]);
+                if (dist < m17C) {
+                    m17C = dist;
+                    m178 = i;
+                }
+            } else {
+                m064[i] = cXyz::Zero;
+            }
+        }
     }
     
     /* 00000748-000008E8       .text proc_vertical__Q212daObjMovebox5Bgc_cFPQ212daObjMovebox5Act_c */
@@ -403,8 +517,16 @@ namespace daObjMovebox {
     }
     
     /* 00000928-00000CCC       .text chk_wall_touch__Q212daObjMovebox5Bgc_cFPCQ212daObjMovebox5Act_cPCQ212daObjMovebox8BgcSrc_cs */
-    bool Bgc_c::chk_wall_touch(const Act_c*, const BgcSrc_c*, s16) {
+    bool Bgc_c::chk_wall_touch(const Act_c* movebox, const BgcSrc_c*, s16 param_3) {
         /* Nonmatching */
+        static dBgS_ObjLinChk touch_work;
+        
+        s16 angle = movebox->orig.angle.y + param_3;
+        mDoMtx_stack_c::YrotS((s16)angle);
+        mDoMtx_stack_c::XrotM(0x4000);
+        cXyz temp_14;
+        mDoMtx_stack_c::multVec(&cXyz::BaseY, &temp_14);
+        temp_14 *= 10.0f + movebox->attr()->m70 * 0.5f;
     }
     
     /* 00001258-000012E0       .text chk_wall_touch2__Q212daObjMovebox5Bgc_cFPCQ212daObjMovebox5Act_cPCQ212daObjMovebox8BgcSrc_cis */
@@ -469,76 +591,666 @@ namespace daObjMovebox {
         // TYPE_BREAKABLE_WOODEN_CRATE
         // Arcname: Kkiba_00
         {
-            // TODO
-            /* mModelFileIndex */ 4,
-            /* mDZBFileIndex   */ 7,
-            /* mDZBMaxSize     */ 0x8A0,
+            /* m00             */ 4,
+            /* m02             */ 4,
+            /* m04             */ 20,
+            /* m06             */ 4,
+            /* m08             */ 4,
+            /* m0A             */ 20,
+            /* m0C             */ 75.0f,
+            /* m10             */ 90.0f,
+            /* m14             */ -3.0f,
+            /* m18             */ 0.005f,
+            /* m1C             */ 0.001f,
+            /* m20             */ 0.0f,
+            /* m24             */ 1.8f,
+            /* m28             */ 3.9f,
+            /* m2C             */ -0.39f,
+            /* m30             */ -0.2f,
+            /* m34             */ 0.02f,
+            /* m38             */ 1000,
+            /* m3C             */ 0.04f,
+            /* m40             */ 0.013f,
+            /* m44             */ 0.15f,
+            /* m48             */ 0.1f,
+            /* m4C             */ 0.1f,
+            /* m50             */ 0.06f,
+            /* m54             */ 0.075f,
+            /* mModelFileIndex */ KKIBA_00_BDL_KKIBA_00,
+            /* mDZBFileIndex   */ KKIBA_00_DZB_KKIBA_00,
+            /* mDZBHeapSize    */ 0x8A0,
+            /* m64             */ 150.0f,
+            /* m68             */ 150.0f,
+            /* m6C             */ 1.0f/150.0f,
+            /* m70             */ 150.0f,
+            /* m74             */ 1.0f/150.0f,
+            /* mMoveSE         */ JA_SE_LK_MOVE_WBLOCK,
+            /* mCantMoveSE     */ JA_SE_LK_MOVE_WBLOCK_LIMIT,
+            /* mNormalFallSE   */ JA_SE_OBJ_WBOX_FALL_NORMAL,
+            /* mWaterFallSE    */ JA_SE_OBJ_FALL_WATER_M,
+            /* mMagmaFallSE    */ JA_SE_OBJ_FALL_MAGMA_M,
+            /* mCullMinX       */ -90,
+            /* mCullMinY       */ -1,
+            /* mCullMinZ       */ -90,
+            /* mCullMaxX       */ 90,
+            /* mCullMaxY       */ 151,
+            /* mCullMaxZ       */ 90,
+            /* mbUseBGTevType  */ false,
+            /* mbCastsShadow   */ false,
+            /* m9A             */ false,
         },
         // TYPE_BLACK_BOX
         // Arcname: Osiblk
         {
-            // TODO
-            /* mModelFileIndex */ 4,
-            /* mDZBFileIndex   */ 8,
-            /* mDZBMaxSize     */ 0x8A0,
+            /* m00             */ 4,
+            /* m02             */ 4,
+            /* m04             */ 20,
+            /* m06             */ 4,
+            /* m08             */ 4,
+            /* m0A             */ 20,
+            /* m0C             */ 75.0f,
+            /* m10             */ 90.0f,
+            /* m14             */ -5.0f,
+            /* m18             */ 0.005f,
+            /* m1C             */ 0.001f,
+            /* m20             */ 0.0f,
+            /* m24             */ 1.8f,
+            /* m28             */ 4.5f,
+            /* m2C             */ -0.5f,
+            /* m30             */ -0.2f,
+            /* m34             */ 0.02f,
+            /* m38             */ 1000,
+            /* m3C             */ 0.04f,
+            /* m40             */ 0.013f,
+            /* m44             */ 0.15f,
+            /* m48             */ 0.1f,
+            /* m4C             */ 0.1f,
+            /* m50             */ 0.06f,
+            /* m54             */ 0.075f,
+            /* mModelFileIndex */ OSIBLK_BDL_OBM_OSIHIKIBLK1,
+            /* mDZBFileIndex   */ OSIBLK_DZB_OBM_OSIHIKIBLK1,
+            /* mDZBHeapSize    */ 0x8A0,
+            /* m64             */ 150.0f,
+            /* m68             */ 150.0f,
+            /* m6C             */ 1.0f/150.0f,
+            /* m70             */ 150.0f,
+            /* m74             */ 1.0f/150.0f,
+            /* mMoveSE         */ JA_SE_LK_MOVE_ROCK,
+            /* mCantMoveSE     */ JA_SE_LK_MOVE_ROCK_LIMIT,
+            /* mNormalFallSE   */ JA_SE_OBJ_BLOCK_FALL_NORMAL,
+            /* mWaterFallSE    */ JA_SE_OBJ_FALL_WATER_L,
+            /* mMagmaFallSE    */ JA_SE_OBJ_FALL_MAGMA_L,
+            /* mCullMinX       */ -90,
+            /* mCullMinY       */ -1,
+            /* mCullMinZ       */ -90,
+            /* mCullMaxX       */ 90,
+            /* mCullMaxY       */ 151,
+            /* mCullMaxZ       */ 90,
+            /* mbUseBGTevType  */ false,
+            /* mbCastsShadow   */ false,
+            /* m9A             */ false,
+            
         },
         // TYPE_BLACK_BOX_WITH_STATUE
         // Arcname: Osiblk
         {
-            // TODO
-            /* mModelFileIndex */ 5,
-            /* mDZBFileIndex   */ 9,
-            /* mDZBMaxSize     */ 0x1560,
+            /* m00             */ 4,
+            /* m02             */ 4,
+            /* m04             */ 20,
+            /* m06             */ 4,
+            /* m08             */ 4,
+            /* m0A             */ 20,
+            /* m0C             */ 75.0f,
+            /* m10             */ 90.0f,
+            /* m14             */ -5.0f,
+            /* m18             */ 0.005f,
+            /* m1C             */ 0.001f,
+            /* m20             */ 0.0f,
+            /* m24             */ 1.8f,
+            /* m28             */ 4.5f,
+            /* m2C             */ -0.5f,
+            /* m30             */ -0.2f,
+            /* m34             */ 0.02f,
+            /* m38             */ 1000,
+            /* m3C             */ 0.04f,
+            /* m40             */ 0.013f,
+            /* m44             */ 0.15f,
+            /* m48             */ 0.1f,
+            /* m4C             */ 0.1f,
+            /* m50             */ 0.06f,
+            /* m54             */ 0.075f,
+            /* mModelFileIndex */ OSIBLK_BDL_OBM_OSIHIKIBLK2,
+            /* mDZBFileIndex   */ OSIBLK_DZB_OBM_OSIHIKIBLK2,
+            /* mDZBHeapSize    */ 0x1560,
+            /* m64             */ 150.0f,
+            /* m68             */ 300.0f,
+            /* m6C             */ 1.0f/300.0f,
+            /* m70             */ 150.0f,
+            /* m74             */ 1.0f/150.0f,
+            /* mMoveSE         */ JA_SE_LK_MOVE_ROCK,
+            /* mCantMoveSE     */ JA_SE_LK_MOVE_ROCK_LIMIT,
+            /* mNormalFallSE   */ JA_SE_OBJ_BLOCK_FALL_NORMAL,
+            /* mWaterFallSE    */ JA_SE_OBJ_FALL_WATER_L,
+            /* mMagmaFallSE    */ JA_SE_OBJ_FALL_MAGMA_L,
+            /* mCullMinX       */ -90,
+            /* mCullMinY       */ -1,
+            /* mCullMinZ       */ -90,
+            /* mCullMaxX       */ 90,
+            /* mCullMaxY       */ 295,
+            /* mCullMaxZ       */ 90,
+            /* mbUseBGTevType  */ false,
+            /* mbCastsShadow   */ false,
+            /* m9A             */ false,
         },
         // TYPE_BIG_BLACK_BOX
         // Arcname: MpwrB
         {
-            // TODO
+            /* m00             */ 4,
+            /* m02             */ 4,
+            /* m04             */ 20,
+            /* m06             */ 4,
+            /* m08             */ 4,
+            /* m0A             */ 20,
+            /* m0C             */ 75.0f,
+            /* m10             */ 170.0f,
+            /* m14             */ -5.0f,
+            /* m18             */ 0.005f,
+            /* m1C             */ 0.001f,
+            /* m20             */ 0.0f,
+            /* m24             */ 3.6f,
+            /* m28             */ 4.5f,
+            /* m2C             */ -0.5f,
+            /* m30             */ -0.2f,
+            /* m34             */ 0.02f,
+            /* m38             */ 1000,
+            /* m3C             */ 0.04f,
+            /* m40             */ 0.013f,
+            /* m44             */ 0.15f,
+            /* m48             */ 0.1f,
+            /* m4C             */ 0.1f,
+            /* m50             */ 0.06f,
+            /* m54             */ 0.075f,
+            /* mModelFileIndex */ MPWRB_BDL_MPWRB,
+            /* mDZBFileIndex   */ MPWRB_DZB_MPWRB,
+            /* mDZBHeapSize    */ 0x8A0,
+            /* m64             */ 300.0f,
+            /* m68             */ 300.0f,
+            /* m6C             */ 1.0f/300.0f,
+            /* m70             */ 300.0f,
+            /* m74             */ 1.0f/300.0f,
+            /* mMoveSE         */ JA_SE_LK_MOVE_ROCK,
+            /* mCantMoveSE     */ JA_SE_LK_MOVE_ROCK_LIMIT,
+            /* mNormalFallSE   */ JA_SE_OBJ_BLOCK_FALL_NORMAL,
+            /* mWaterFallSE    */ JA_SE_OBJ_FALL_WATER_L,
+            /* mMagmaFallSE    */ JA_SE_OBJ_FALL_MAGMA_L,
+            /* mCullMinX       */ -180,
+            /* mCullMinY       */ -1,
+            /* mCullMinZ       */ -180,
+            /* mCullMaxX       */ 180,
+            /* mCullMaxY       */ 301,
+            /* mCullMaxZ       */ 180,
+            /* mbUseBGTevType  */ false,
+            /* mbCastsShadow   */ false,
+            /* m9A             */ true,
         },
         // TYPE_WOODEN_CRATE
         // Arcname: Kkiba_00
         {
-            // TODO
+            /* m00             */ 4,
+            /* m02             */ 4,
+            /* m04             */ 20,
+            /* m06             */ 4,
+            /* m08             */ 4,
+            /* m0A             */ 20,
+            /* m0C             */ 75.0f,
+            /* m10             */ 90.0f,
+            /* m14             */ -3.0f,
+            /* m18             */ 0.005f,
+            /* m1C             */ 0.001f,
+            /* m20             */ 0.0f,
+            /* m24             */ 1.8f,
+            /* m28             */ 3.9f,
+            /* m2C             */ -0.39f,
+            /* m30             */ -0.2f,
+            /* m34             */ 0.02f,
+            /* m38             */ 1000,
+            /* m3C             */ 0.04f,
+            /* m40             */ 0.013f,
+            /* m44             */ 0.15f,
+            /* m48             */ 0.1f,
+            /* m4C             */ 0.1f,
+            /* m50             */ 0.06f,
+            /* m54             */ 0.075f,
+            /* mModelFileIndex */ KKIBA_00_BDL_KKIBA_00,
+            /* mDZBFileIndex   */ KKIBA_00_DZB_KKIBA_00,
+            /* mDZBHeapSize    */ 0x1620,
+            /* m64             */ 150.0f,
+            /* m68             */ 150.0f,
+            /* m6C             */ 1.0f/150.0f,
+            /* m70             */ 150.0f,
+            /* m74             */ 1.0f/150.0f,
+            /* mMoveSE         */ JA_SE_LK_MOVE_WBLOCK,
+            /* mCantMoveSE     */ JA_SE_LK_MOVE_WBLOCK_LIMIT,
+            /* mNormalFallSE   */ JA_SE_OBJ_WBOX_FALL_NORMAL,
+            /* mWaterFallSE    */ JA_SE_OBJ_FALL_WATER_M,
+            /* mMagmaFallSE    */ JA_SE_OBJ_FALL_MAGMA_M,
+            /* mCullMinX       */ -90,
+            /* mCullMinY       */ -1,
+            /* mCullMinZ       */ -90,
+            /* mCullMaxX       */ 90,
+            /* mCullMaxY       */ 151,
+            /* mCullMaxZ       */ 90,
+            /* mbUseBGTevType  */ false,
+            /* mbCastsShadow   */ false,
+            /* m9A             */ false,
         },
         // TYPE_GOLDEN_CRATE
         // Arcname: Hbox2
         {
-            // TODO
+            /* m00             */ 4,
+            /* m02             */ 4,
+            /* m04             */ 20,
+            /* m06             */ 4,
+            /* m08             */ 4,
+            /* m0A             */ 20,
+            /* m0C             */ 75.0f,
+            /* m10             */ 90.0f,
+            /* m14             */ -3.0f,
+            /* m18             */ 0.005f,
+            /* m1C             */ 0.001f,
+            /* m20             */ 0.0f,
+            /* m24             */ 1.8f,
+            /* m28             */ 3.9f,
+            /* m2C             */ -0.39f,
+            /* m30             */ -0.2f,
+            /* m34             */ 0.02f,
+            /* m38             */ 1000,
+            /* m3C             */ 0.04f,
+            /* m40             */ 0.013f,
+            /* m44             */ 0.15f,
+            /* m48             */ 0.1f,
+            /* m4C             */ 0.1f,
+            /* m50             */ 0.06f,
+            /* m54             */ 0.075f,
+            /* mModelFileIndex */ HBOX2_BDL_HBOX2,
+            /* mDZBFileIndex   */ HBOX2_DZB_HBOX2,
+            /* mDZBHeapSize    */ 0x8A0,
+            /* m64             */ 150.0f,
+            /* m68             */ 150.0f,
+            /* m6C             */ 1.0f/150.0f,
+            /* m70             */ 150.0f,
+            /* m74             */ 1.0f/150.0f,
+            /* mMoveSE         */ JA_SE_LK_MOVE_WBLOCK,
+            /* mCantMoveSE     */ JA_SE_LK_MOVE_WBLOCK_LIMIT,
+            /* mNormalFallSE   */ JA_SE_OBJ_WBOX_FALL_NORMAL,
+            /* mWaterFallSE    */ JA_SE_OBJ_FALL_WATER_M,
+            /* mMagmaFallSE    */ JA_SE_OBJ_FALL_MAGMA_M,
+            /* mCullMinX       */ -90,
+            /* mCullMinY       */ -1,
+            /* mCullMinZ       */ -90,
+            /* mCullMaxX       */ 90,
+            /* mCullMaxY       */ 151,
+            /* mCullMaxZ       */ 90,
+            /* mbUseBGTevType  */ false,
+            /* mbCastsShadow   */ false,
+            /* m9A             */ false,
         },
         // TYPE_METAL_BOX
         // Arcname: Hjump
         {
-            // TODO
+            /* m00             */ 4,
+            /* m02             */ 4,
+            /* m04             */ 20,
+            /* m06             */ 4,
+            /* m08             */ 4,
+            /* m0A             */ 20,
+            /* m0C             */ 75.0f,
+            /* m10             */ 90.0f,
+            /* m14             */ -3.0f,
+            /* m18             */ 0.005f,
+            /* m1C             */ 0.001f,
+            /* m20             */ 0.0f,
+            /* m24             */ 1.8f,
+            /* m28             */ 3.9f,
+            /* m2C             */ -0.39f,
+            /* m30             */ -0.2f,
+            /* m34             */ 0.02f,
+            /* m38             */ 1000,
+            /* m3C             */ 0.04f,
+            /* m40             */ 0.013f,
+            /* m44             */ 0.15f,
+            /* m48             */ 0.1f,
+            /* m4C             */ 0.1f,
+            /* m50             */ 0.06f,
+            /* m54             */ 0.075f,
+            /* mModelFileIndex */ HJUMP_BDL_HBOX1,
+            /* mDZBFileIndex   */ HJUMP_DZB_HBOX1,
+            /* mDZBHeapSize    */ 0x7E0,
+            /* m64             */ 150.0f,
+            /* m68             */ 150.0f,
+            /* m6C             */ 1.0f/150.0f,
+            /* m70             */ 150.0f,
+            /* m74             */ 1.0f/150.0f,
+            /* mMoveSE         */ JA_SE_LK_MOVE_ROCK,
+            /* mCantMoveSE     */ JA_SE_LK_MOVE_ROCK_LIMIT,
+            /* mNormalFallSE   */ JA_SE_OBJ_BLOCK_FALL_NORMAL,
+            /* mWaterFallSE    */ JA_SE_OBJ_FALL_WATER_L,
+            /* mMagmaFallSE    */ JA_SE_OBJ_FALL_MAGMA_L,
+            /* mCullMinX       */ -90,
+            /* mCullMinY       */ -1,
+            /* mCullMinZ       */ -90,
+            /* mCullMaxX       */ 90,
+            /* mCullMaxY       */ 151,
+            /* mCullMaxZ       */ 90,
+            /* mbUseBGTevType  */ false,
+            /* mbCastsShadow   */ false,
+            /* m9A             */ false,
         },
         // TYPE_METAL_BOX_WITH_SPRING
         // Arcname: Hjump
         {
-            // TODO
+            /* m00             */ 4,
+            /* m02             */ 4,
+            /* m04             */ 20,
+            /* m06             */ 4,
+            /* m08             */ 4,
+            /* m0A             */ 20,
+            /* m0C             */ 75.0f,
+            /* m10             */ 90.0f,
+            /* m14             */ -3.0f,
+            /* m18             */ 0.005f,
+            /* m1C             */ 0.001f,
+            /* m20             */ 0.0f,
+            /* m24             */ 1.8f,
+            /* m28             */ 3.9f,
+            /* m2C             */ -0.39f,
+            /* m30             */ -0.2f,
+            /* m34             */ 0.02f,
+            /* m38             */ 1000,
+            /* m3C             */ 0.04f,
+            /* m40             */ 0.013f,
+            /* m44             */ 0.15f,
+            /* m48             */ 0.1f,
+            /* m4C             */ 0.1f,
+            /* m50             */ 0.06f,
+            /* m54             */ 0.075f,
+            /* mModelFileIndex */ -1,
+            /* mDZBFileIndex   */ HJUMP_DZB_HJUMP1A,
+            /* mDZBHeapSize    */ 0x320,
+            /* m64             */ 150.0f,
+            /* m68             */ 300.0f,
+            /* m6C             */ 1.0f/300.0f,
+            /* m70             */ 150.0f,
+            /* m74             */ 1.0f/150.0f,
+            /* mMoveSE         */ JA_SE_LK_MOVE_ROCK,
+            /* mCantMoveSE     */ JA_SE_LK_MOVE_ROCK_LIMIT,
+            /* mNormalFallSE   */ JA_SE_OBJ_BLOCK_FALL_NORMAL,
+            /* mWaterFallSE    */ JA_SE_OBJ_FALL_WATER_L,
+            /* mMagmaFallSE    */ JA_SE_OBJ_FALL_MAGMA_L,
+            /* mCullMinX       */ -90,
+            /* mCullMinY       */ -1,
+            /* mCullMinZ       */ -90,
+            /* mCullMaxX       */ 90,
+            /* mCullMaxY       */ 200,
+            /* mCullMaxZ       */ 90,
+            /* mbUseBGTevType  */ false,
+            /* mbCastsShadow   */ false,
+            /* m9A             */ false,
         },
         // TYPE_WOODEN_CRATE_2
         // Arcname: Kkiba_00
         {
-            // TODO
+            /* m00             */ 4,
+            /* m02             */ 4,
+            /* m04             */ 20,
+            /* m06             */ 4,
+            /* m08             */ 4,
+            /* m0A             */ 20,
+            /* m0C             */ 75.0f,
+            /* m10             */ 90.0f,
+            /* m14             */ -3.0f,
+            /* m18             */ 0.005f,
+            /* m1C             */ 0.001f,
+            /* m20             */ 0.0f,
+            /* m24             */ 1.8f,
+            /* m28             */ 3.9f,
+            /* m2C             */ -0.39f,
+            /* m30             */ -0.2f,
+            /* m34             */ 0.02f,
+            /* m38             */ 1000,
+            /* m3C             */ 0.04f,
+            /* m40             */ 0.013f,
+            /* m44             */ 0.15f,
+            /* m48             */ 0.1f,
+            /* m4C             */ 0.1f,
+            /* m50             */ 0.06f,
+            /* m54             */ 0.075f,
+            /* mModelFileIndex */ KKIBA_00_BDL_KKIBA_00,
+            /* mDZBFileIndex   */ KKIBA_00_DZB_KKIBA_00,
+            /* mDZBHeapSize    */ 0x1620,
+            /* m64             */ 150.0f,
+            /* m68             */ 150.0f,
+            /* m6C             */ 1.0f/150.0f,
+            /* m70             */ 150.0f,
+            /* m74             */ 1.0f/150.0f,
+            /* mMoveSE         */ JA_SE_LK_MOVE_WBLOCK,
+            /* mCantMoveSE     */ JA_SE_LK_MOVE_WBLOCK_LIMIT,
+            /* mNormalFallSE   */ JA_SE_OBJ_WBOX_FALL_NORMAL,
+            /* mWaterFallSE    */ JA_SE_OBJ_FALL_WATER_M,
+            /* mMagmaFallSE    */ JA_SE_OBJ_FALL_MAGMA_M,
+            /* mCullMinX       */ -90,
+            /* mCullMinY       */ -1,
+            /* mCullMinZ       */ -90,
+            /* mCullMaxX       */ 90,
+            /* mCullMaxY       */ 151,
+            /* mCullMaxZ       */ 90,
+            /* mbUseBGTevType  */ false,
+            /* mbCastsShadow   */ false,
+            /* m9A             */ false,
         },
         // TYPE_WOODEN_CRATE_3
         // Arcname: Kkiba_00
         {
-            // TODO
+            /* m00             */ 4,
+            /* m02             */ 4,
+            /* m04             */ 20,
+            /* m06             */ 4,
+            /* m08             */ 4,
+            /* m0A             */ 20,
+            /* m0C             */ 75.0f,
+            /* m10             */ 90.0f,
+            /* m14             */ -3.0f,
+            /* m18             */ 0.005f,
+            /* m1C             */ 0.001f,
+            /* m20             */ 0.0f,
+            /* m24             */ 1.8f,
+            /* m28             */ 3.9f,
+            /* m2C             */ -0.39f,
+            /* m30             */ -0.2f,
+            /* m34             */ 0.02f,
+            /* m38             */ 1000,
+            /* m3C             */ 0.04f,
+            /* m40             */ 0.013f,
+            /* m44             */ 0.15f,
+            /* m48             */ 0.1f,
+            /* m4C             */ 0.1f,
+            /* m50             */ 0.06f,
+            /* m54             */ 0.075f,
+            /* mModelFileIndex */ KKIBA_00_BDL_KKIBA_00,
+            /* mDZBFileIndex   */ KKIBA_00_DZB_KKIBA_00,
+            /* mDZBHeapSize    */ 0x1620,
+            /* m64             */ 150.0f,
+            /* m68             */ 150.0f,
+            /* m6C             */ 1.0f/150.0f,
+            /* m70             */ 150.0f,
+            /* m74             */ 1.0f/150.0f,
+            /* mMoveSE         */ JA_SE_LK_MOVE_WBLOCK,
+            /* mCantMoveSE     */ JA_SE_LK_MOVE_WBLOCK_LIMIT,
+            /* mNormalFallSE   */ JA_SE_OBJ_WBOX_FALL_NORMAL,
+            /* mWaterFallSE    */ JA_SE_OBJ_FALL_WATER_M,
+            /* mMagmaFallSE    */ JA_SE_OBJ_FALL_MAGMA_M,
+            /* mCullMinX       */ -90,
+            /* mCullMinY       */ -1,
+            /* mCullMinZ       */ -90,
+            /* mCullMaxX       */ 90,
+            /* mCullMaxY       */ 151,
+            /* mCullMaxZ       */ 90,
+            /* mbUseBGTevType  */ false,
+            /* mbCastsShadow   */ false,
+            /* m9A             */ false,
         },
         // TYPE_MIRROR
         // Arcname: Mmirror
         {
-            // TODO
+            /* m00             */ 4,
+            /* m02             */ 4,
+            /* m04             */ 20,
+            /* m06             */ 4,
+            /* m08             */ 4,
+            /* m0A             */ 20,
+            /* m0C             */ 75.0f,
+            /* m10             */ 170.0f,
+            /* m14             */ -5.0f,
+            /* m18             */ 0.005f,
+            /* m1C             */ 0.001f,
+            /* m20             */ 0.0f,
+            /* m24             */ 1.8f,
+            /* m28             */ 4.5f,
+            /* m2C             */ -0.5f,
+            /* m30             */ -0.2f,
+            /* m34             */ 0.02f,
+            /* m38             */ 1000,
+            /* m3C             */ 0.04f,
+            /* m40             */ 0.013f,
+            /* m44             */ 0.15f,
+            /* m48             */ 0.1f,
+            /* m4C             */ 0.1f,
+            /* m50             */ 0.06f,
+            /* m54             */ 0.075f,
+            /* mModelFileIndex */ -1,
+            /* mDZBFileIndex   */ MMIRROR_DZB_MMRR,
+            /* mDZBHeapSize    */ 0xD40,
+            /* m64             */ 300.0f,
+            /* m68             */ 450.0f,
+            /* m6C             */ 1.0f/450.0f,
+            /* m70             */ 300.0f,
+            /* m74             */ 1.0f/300.0f,
+            /* mMoveSE         */ JA_SE_LK_MOVE_ROCK,
+            /* mCantMoveSE     */ JA_SE_LK_MOVE_ROCK_LIMIT,
+            /* mNormalFallSE   */ JA_SE_OBJ_BLOCK_FALL_NORMAL,
+            /* mWaterFallSE    */ JA_SE_OBJ_FALL_WATER_L,
+            /* mMagmaFallSE    */ JA_SE_OBJ_FALL_MAGMA_L,
+            /* mCullMinX       */ -150,
+            /* mCullMinY       */ -1,
+            /* mCullMinZ       */ -150,
+            /* mCullMaxX       */ 150,
+            /* mCullMaxY       */ 681,
+            /* mCullMaxZ       */ 150,
+            /* mbUseBGTevType  */ false,
+            /* mbCastsShadow   */ false,
+            /* m9A             */ true,
         },
         // TYPE_BLACK_BOX_2
         // Arcname: Osiblk
         {
-            // TODO
+            /* m00             */ 4,
+            /* m02             */ 4,
+            /* m04             */ 20,
+            /* m06             */ 4,
+            /* m08             */ 4,
+            /* m0A             */ 20,
+            /* m0C             */ 75.0f,
+            /* m10             */ 90.0f,
+            /* m14             */ -5.0f,
+            /* m18             */ 0.005f,
+            /* m1C             */ 0.001f,
+            /* m20             */ 0.0f,
+            /* m24             */ 1.8f,
+            /* m28             */ 4.5f,
+            /* m2C             */ -0.5f,
+            /* m30             */ -0.2f,
+            /* m34             */ 0.02f,
+            /* m38             */ 1000,
+            /* m3C             */ 0.04f,
+            /* m40             */ 0.013f,
+            /* m44             */ 0.15f,
+            /* m48             */ 0.1f,
+            /* m4C             */ 0.1f,
+            /* m50             */ 0.06f,
+            /* m54             */ 0.075f,
+            /* mModelFileIndex */ OSIBLK_BDL_OBM_OSIHIKIBLK1,
+            /* mDZBFileIndex   */ OSIBLK_DZB_OBM_OSIHIKIBLK1,
+            /* mDZBHeapSize    */ 0x8A0,
+            /* m64             */ 150.0f,
+            /* m68             */ 350.0f,
+            /* m6C             */ 1.0f/350.0f,
+            /* m70             */ 150.0f,
+            /* m74             */ 1.0f/150.0f,
+            /* mMoveSE         */ JA_SE_LK_MOVE_ROCK,
+            /* mCantMoveSE     */ JA_SE_LK_MOVE_ROCK_LIMIT,
+            /* mNormalFallSE   */ JA_SE_OBJ_BLOCK_FALL_NORMAL,
+            /* mWaterFallSE    */ JA_SE_OBJ_FALL_WATER_L,
+            /* mMagmaFallSE    */ JA_SE_OBJ_FALL_MAGMA_L,
+            /* mCullMinX       */ -90,
+            /* mCullMinY       */ -1,
+            /* mCullMinZ       */ -90,
+            /* mCullMaxX       */ 90,
+            /* mCullMaxY       */ 151,
+            /* mCullMaxZ       */ 90,
+            /* mbUseBGTevType  */ false,
+            /* mbCastsShadow   */ false,
+            /* m9A             */ false,
         },
         // TYPE_MOSSY_BLACK_BOX
         // Arcname: Ecube
         {
-            // TODO
+            /* m00             */ 4,
+            /* m02             */ 4,
+            /* m04             */ 20,
+            /* m06             */ 4,
+            /* m08             */ 4,
+            /* m0A             */ 20,
+            /* m0C             */ 75.0f,
+            /* m10             */ 90.0f,
+            /* m14             */ -5.0f,
+            /* m18             */ 0.005f,
+            /* m1C             */ 0.001f,
+            /* m20             */ 0.0f,
+            /* m24             */ 1.8f,
+            /* m28             */ 4.5f,
+            /* m2C             */ -0.5f,
+            /* m30             */ -0.2f,
+            /* m34             */ 0.02f,
+            /* m38             */ 1000,
+            /* m3C             */ 0.04f,
+            /* m40             */ 0.013f,
+            /* m44             */ 0.15f,
+            /* m48             */ 0.1f,
+            /* m4C             */ 0.1f,
+            /* m50             */ 0.06f,
+            /* m54             */ 0.075f,
+            /* mModelFileIndex */ ECUBE_BDL_ECUBE,
+            /* mDZBFileIndex   */ ECUBE_DZB_ECUBE,
+            /* mDZBHeapSize    */ 0x8A0,
+            /* m64             */ 150.0f,
+            /* m68             */ 150.0f,
+            /* m6C             */ 1.0f/150.0f,
+            /* m70             */ 150.0f,
+            /* m74             */ 1.0f/150.0f,
+            /* mMoveSE         */ JA_SE_LK_MOVE_ROCK,
+            /* mCantMoveSE     */ JA_SE_LK_MOVE_ROCK_LIMIT,
+            /* mNormalFallSE   */ JA_SE_OBJ_BLOCK_FALL_NORMAL,
+            /* mWaterFallSE    */ JA_SE_OBJ_FALL_WATER_L,
+            /* mMagmaFallSE    */ JA_SE_OBJ_FALL_MAGMA_L,
+            /* mCullMinX       */ -90,
+            /* mCullMinY       */ -1,
+            /* mCullMinZ       */ -90,
+            /* mCullMaxX       */ 90,
+            /* mCullMaxY       */ 151,
+            /* mCullMaxZ       */ 90,
+            /* mbUseBGTevType  */ true,
+            /* mbCastsShadow   */ true,
+            /* m9A             */ false,
         },
     };
     
@@ -624,7 +1336,8 @@ namespace daObjMovebox {
                     // TODO: child actor members
                 }
             } else if (mType == TYPE_BLACK_BOX_2) {
-                if (buoy->current.pos.abs2(current.pos) < 0.0001f) {
+                cXyz temp_24(current.pos.x, current.pos.y + 150.0f, current.pos.z);
+                if (buoy->current.pos.abs2(temp_24) < 0.0001f) {
                     buoy->current.pos = current.pos;
                     // TODO: child actor members
                 }
@@ -739,7 +1452,7 @@ namespace daObjMovebox {
         const Type_Attr* attr = &M_attr[mType];
         if (attr->mModelFileIndex >= 0) {
             J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname[mType], attr->mModelFileIndex);
-            JUT_ASSERT(0x6BA, modelData != 0);
+            JUT_ASSERT(1722, modelData != 0);
             
             mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
             success = (mpModel != 0);
@@ -771,8 +1484,8 @@ namespace daObjMovebox {
             }
             if (unk) {
                 s16 angle = (s16)(pp_label & dBgW::PP_UNK2_e ? rot - 0x8000 : rot) - actor->orig.angle.y;
-                int pp_field = 3;
-                JUT_ASSERT(0x715, pp_label != pp_field);
+                int pp_field = dBgW::PP_UNK1_e | dBgW::PP_UNK2_e;
+                JUT_ASSERT(1813, pp_label != pp_field);
                 
                 i_this->mPPLabel = orig_pp_label;
                 
@@ -836,8 +1549,8 @@ namespace daObjMovebox {
         
         fopAcM_SetMtx(this, mMtx);
         fopAcM_setCullSizeBox(this,
-            M_attr[mType].m8C, M_attr[mType].m8E, M_attr[mType].m90,
-            M_attr[mType].m92, M_attr[mType].m94, M_attr[mType].m96
+            M_attr[mType].mCullMinX, M_attr[mType].mCullMinY, M_attr[mType].mCullMinZ,
+            M_attr[mType].mCullMaxX, M_attr[mType].mCullMaxY, M_attr[mType].mCullMaxZ
         );
         
         speedF = 0.0f;
@@ -1006,16 +1719,46 @@ namespace daObjMovebox {
     /* 00003AE0-00003BA4       .text sound_slip__Q212daObjMovebox5Act_cFv */
     void Act_c::sound_slip() {
         /* Nonmatching */
+        s32 mtrlSndId = 0;
+        if (mBgc.m05C >= 0) {
+            dBgS_ObjGndChk& gndChk = Bgc_c::M_gnd_work[mBgc.m05C];
+            if (gndChk.GetBgIndex() >= 0 && gndChk.GetBgIndex() < 0x100) {
+                mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(gndChk);
+            }
+        }
+        
+        const Type_Attr& attr = M_attr[mType];
+        mDoAud_seStart(attr.mMoveSE, &mEyePos, mtrlSndId, mReverb);
     }
     
     /* 00003BA4-00003C68       .text sound_limit__Q212daObjMovebox5Act_cFv */
     void Act_c::sound_limit() {
         /* Nonmatching */
+        s32 mtrlSndId = 0;
+        if (mBgc.m05C >= 0) {
+            dBgS_ObjLinChk& linChk = Bgc_c::M_wall_work[mBgc.m05C];
+            if (linChk.GetBgIndex() >= 0 && linChk.GetBgIndex() < 0x100) {
+                mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(linChk);
+            }
+        }
+        
+        const Type_Attr& attr = M_attr[mType];
+        mDoAud_seStart(attr.mCantMoveSE, &mEyePos, mtrlSndId, mReverb);
     }
     
     /* 00003C68-00003D2C       .text sound_land__Q212daObjMovebox5Act_cFv */
     void Act_c::sound_land() {
         /* Nonmatching */
+        s32 mtrlSndId = 0;
+        if (mBgc.m05C >= 0) {
+            dBgS_ObjGndChk& gndChk = Bgc_c::M_gnd_work[mBgc.m05C];
+            if (gndChk.GetBgIndex() >= 0 && gndChk.GetBgIndex() < 0x100) {
+                mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(gndChk);
+            }
+        }
+        
+        const Type_Attr& attr = M_attr[mType];
+        mDoAud_seStart(attr.mNormalFallSE, &mEyePos, mtrlSndId, mReverb);
     }
     
     /* 00003D2C-00003D80       .text vib_land__Q212daObjMovebox5Act_cFv */
@@ -1050,6 +1793,24 @@ namespace daObjMovebox {
     /* 000040D0-00004254       .text Draw__Q212daObjMovebox5Act_cFv */
     BOOL Act_c::Draw() {
         /* Nonmatching */
+        if (mpModel) {
+            int tevType = !M_attr[mType].mbUseBGTevType ? TEV_TYPE_ACTOR : TEV_TYPE_BG0;
+            g_env_light.settingTevStruct(tevType, &current.pos, &mTevStr);
+            g_env_light.setLightTevColorType(mpModel, &mTevStr);
+            dComIfGd_setListBG();
+            mDoExt_modelUpdateDL(mpModel);
+            dComIfGd_setList();
+        }
+        
+        if (!M_attr[mType].mbCastsShadow && mBgc.m05C >= 0) {
+            f32 groundH = mBgc.m000[mBgc.m05C];
+            cM3dGPla* triPla = dComIfG_Bgsp()->i_GetTriPla(Bgc_c::M_gnd_work[mBgc.m05C]);
+            if (triPla && groundH != -1000000000.0f) {
+                dComIfGd_setSimpleShadow(&current.pos, groundH, M_attr[mType].m10, &triPla->mNormal, shape_angle.y, 1.0f, NULL);
+            }
+        }
+        
+        return TRUE;
     }
     
     /* 00004254-000042A0       .text Delete__Q212daObjMovebox5Act_cFv */
