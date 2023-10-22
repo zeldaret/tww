@@ -99,6 +99,12 @@ public:
     virtual void draw();
 };
 
+class dDlst_snapShot_c : public dDlst_base_c {
+public:
+    ~dDlst_snapShot_c() {};
+    void draw(); 
+};
+
 class dDlst_window_c {
 public:
     dDlst_window_c() {}

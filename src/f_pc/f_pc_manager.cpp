@@ -18,10 +18,14 @@
 #include "SSystem/SComponent/c_lib.h"
 #include "SSystem/SComponent/c_API_graphic.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
+#include "JSystem/J2DGraph/J2DPicture.h"
+#include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/dvd/DVD.h"
 #include "dolphin/gx/GX.h"
+
+#include "src/f_pc/f_pc_manager_data.inc"
 
 /* 8003E318-8003E338       .text fpcM_Draw__FPv */
 void fpcM_Draw(void* i_proc) {
@@ -50,7 +54,70 @@ BOOL fpcM_IsCreating(unsigned int pID) {
 
 /* 8003E3D0-8003E9F0       .text messageSet__FUl */
 void messageSet(unsigned long status) {
-    /* Nonmatching */
+    const u32 * inf1_tbl = (u32*)&msg_data[0x30];
+    const char * msg = (const char*)((&msg_data[0x68]) + inf1_tbl[status]);
+
+    J2DTextBox * tpane = new J2DTextBox('TXT1', JGeometry::TBox2<f32>(0.0f, 0.0f, 660.0f, 200.0f), (ResFONT*)font_data, msg, HBIND_CENTER, VBIND_CENTER);
+    JUT_ASSERT(0x141, tpane != 0);
+
+    J2DTextBox * spane = new J2DTextBox('TXT2', JGeometry::TBox2<f32>(0.0f, 0.0f, 660.0f, 200.0f), (ResFONT*)font_data, msg, HBIND_CENTER, VBIND_CENTER);
+    JUT_ASSERT(0x149, spane != 0);
+
+    J2DPicture * ppane = new J2DPicture('PIC1', JGeometry::TBox2<f32>(0.0f, 0.0f, 665.0f, 530.0f), (ResTIMG*)black_tex, NULL);
+    JUT_ASSERT(0x14e, ppane != 0);
+
+    tpane->setFontSize(27.0f, 27.0f);
+    tpane->setCharColor(JUtility::TColor(0xFFC800FF));
+    tpane->setGradColor(JUtility::TColor(0xFFB400FF));
+    tpane->setCharSpace(0.0f);
+    tpane->setLineSpace(27.0f);
+    tpane->setBlack(JUtility::TColor(0xFFFFFF00));
+
+    spane->setFontSize(27.0f, 27.0f);
+    spane->setCharColor(JUtility::TColor(0x000000FF));
+    spane->setGradColor(JUtility::TColor(0x000000FF));
+    spane->setCharSpace(0.0f);
+    spane->setLineSpace(27.0f);
+
+    ppane->setAlpha(130);
+
+    JUTResFont * font = new JUTResFont((ResFONT*)font_data, NULL);
+
+    s32 height = 27;
+    s32 curLine = 0;
+    u8 ch;
+    f32 maxWidth = 0.0f;
+    f32 lineWidth[6] = {};
+    for (; ch = *msg, ch != '\0'; msg++) {
+        if (ch == '\n') {
+            height += 27;
+            curLine++;
+            continue;
+        }
+
+        JUTFont::TWidth wid;
+        font->getWidthEntry(ch, &wid);
+        lineWidth[curLine] += wid.field_0x0;
+    }
+
+    for (s32 i = 0; i < (s32)ARRAY_SIZE(lineWidth); i++) {
+        f32 width = lineWidth[curLine];
+        if (width > maxWidth)
+            maxWidth = width;
+    }
+
+    f32 x = (659.0f - maxWidth) / 2.0f + -21.0f;
+    f32 y = (524 - height) / 2.0f + -21.0f;
+
+    ppane->draw(-12.0f, -24.0f, 665.0f, 530.0f, false, false, false);
+    y += 10.0f;
+    spane->draw(x + 2.0f, y + 2.0f, 660.0f, HBIND_LEFT);
+    tpane->draw(x, y, 660.0f, HBIND_LEFT);
+
+    delete font;
+    delete ppane;
+    delete tpane;
+    delete spane;
 }
 
 namespace JAInter {

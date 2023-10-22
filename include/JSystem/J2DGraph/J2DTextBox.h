@@ -31,6 +31,29 @@ public:
 
     void initiate(const ResFONT*, const char*, J2DTextBoxHBinding, J2DTextBoxVBinding);
     void setFont(JUTFont*);
+    void setFontSize(f32 sizeX, f32 sizeY) {
+        f32 x;
+        if (sizeX > 0.0f) {
+            x = sizeX;
+        } else {
+            x = 0.0f;
+        }
+        mFontSizeX = x;
+
+        f32 y;
+        if (sizeY > 0.0f) {
+            y = sizeY;
+        } else {
+            y = 0.0f;
+        }
+        mFontSizeY = y;
+    }
+    void setCharColor(JUtility::TColor c) { mCharColor = c; }
+    void setGradColor(JUtility::TColor c) { mGradColor = c; }
+    void setBlack(JUtility::TColor c) { mBlack = c; }
+    void setWhite(JUtility::TColor c) { mBlack = c; }
+    void setLineSpace(f32 x) { mLineSpace = x; }
+    void setCharSpace(f32 x) { mCharSpace = x; }
     void draw(f32, f32, f32, J2DTextBoxHBinding);
     char* getStringPtr() const;
     s32 setString(const char*, ...);
@@ -44,17 +67,17 @@ public:
 
 private:
     /* 0xCC */ JUTResFont* mpFont;
-    /* 0xD0 */ JUtility::TColor mGradientFirst;
-    /* 0xD4 */ JUtility::TColor mGradientSecond;
+    /* 0xD0 */ JUtility::TColor mCharColor;
+    /* 0xD4 */ JUtility::TColor mGradColor;
     /* 0xD8 */ f32 field_0xd8;
     /* 0xDC */ f32 field_0xdc;
-    /* 0xD0 */ f32 field_0xe0;
-    /* 0xE4 */ f32 mFontLeading;
-    /* 0xE8 */ f32 mFontWidth;
-    /* 0xEC */ f32 mFontHeight;
+    /* 0xE0 */ f32 mCharSpace;
+    /* 0xE4 */ f32 mLineSpace;
+    /* 0xE8 */ f32 mFontSizeX;
+    /* 0xEC */ f32 mFontSizeY;
     /* 0xF0 */ char* mStringPtr;
-    /* 0xF4 */ JUtility::TColor mTextColor;
-    /* 0xF8 */ JUtility::TColor mTextBGColor;
+    /* 0xF4 */ JUtility::TColor mWhite;
+    /* 0xF8 */ JUtility::TColor mBlack;
     /* 0xFC */ u8 mBindingH;
     /* 0xFD */ u8 mBindingV;
     /* 0xFE */ bool mTextFontOwned;

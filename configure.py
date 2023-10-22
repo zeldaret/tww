@@ -474,7 +474,7 @@ config.libs = [
             Object(Matching,    "d/d_metronome.cpp"),
             Object(Matching,    "d/d_ovlp_fade.cpp"),
             Object(NonMatching, "d/d_ovlp_fade2.cpp"),
-            Object(NonMatching, "d/d_ovlp_fade3.cpp"),
+            Object(Matching,    "d/d_ovlp_fade3.cpp"),
             Object(NonMatching, "d/d_ovlp_fade4.cpp"),
             Object(NonMatching, "d/d_picture_box.cpp"),
             Object(NonMatching, "d/d_s_logo.cpp"),

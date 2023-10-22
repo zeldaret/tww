@@ -3,11 +3,15 @@
 // Translation Unit: d_ovlp_fade3.cpp
 //
 
-#include "d_ovlp_fade3.h"
-#include "dolphin/types.h"
+#include "d/d_drawlist.h"
+#include "m_Do/m_Do_graphic.h"
+#include "dolphin/gx/GX.h"
 
 /* 8022433C-80224390       .text draw__16dDlst_snapShot_cFv */
 void dDlst_snapShot_c::draw() {
-    /* Nonmatching */
+    GXSetTexCopySrc(0, 0, 640, 480);
+    GXSetTexCopyDst(320, 240, GX_TF_RGBA8, GX_TRUE);
+    GXCopyTex(mDoGph_gInf_c::getFrameBufferTex(), GX_FALSE);
+    GXPixModeSync();
 }
 
