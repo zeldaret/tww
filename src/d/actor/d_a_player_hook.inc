@@ -48,31 +48,31 @@ void daPy_lk_c::checkNextHookshotMode() {
 }
 
 /* 8014B350-8014B3F4       .text procHookshotSubject_init__9daPy_lk_cFv */
-void daPy_lk_c::procHookshotSubject_init() {
+BOOL daPy_lk_c::procHookshotSubject_init() {
     /* Nonmatching */
 }
 
 /* 8014B3F4-8014B518       .text procHookshotSubject__9daPy_lk_cFv */
-void daPy_lk_c::procHookshotSubject() {
+BOOL daPy_lk_c::procHookshotSubject() {
     /* Nonmatching */
 }
 
 /* 8014B518-8014B5E8       .text procHookshotMove_init__9daPy_lk_cFv */
-void daPy_lk_c::procHookshotMove_init() {
+BOOL daPy_lk_c::procHookshotMove_init() {
     /* Nonmatching */
 }
 
 /* 8014B5E8-8014B74C       .text procHookshotMove__9daPy_lk_cFv */
-void daPy_lk_c::procHookshotMove() {
+BOOL daPy_lk_c::procHookshotMove() {
     /* Nonmatching */
 }
 
 /* 8014B74C-8014B854       .text procHookshotFly_init__9daPy_lk_cFv */
-void daPy_lk_c::procHookshotFly_init() {
+BOOL daPy_lk_c::procHookshotFly_init() {
     /* Nonmatching */
 }
 
 /* 8014B854-8014BA84       .text procHookshotFly__9daPy_lk_cFv */
-void daPy_lk_c::procHookshotFly() {
+BOOL daPy_lk_c::procHookshotFly() {
     /* Nonmatching */
 }

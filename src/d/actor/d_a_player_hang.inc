@@ -38,71 +38,71 @@ void daPy_lk_c::setHangShapeOffset() {
 }
 
 /* 80134630-80134908       .text procHangStart_init__9daPy_lk_cFv */
-void daPy_lk_c::procHangStart_init() {
+BOOL daPy_lk_c::procHangStart_init() {
     /* Nonmatching */
 }
 
 /* 80134908-801349D8       .text procHangStart__9daPy_lk_cFv */
-void daPy_lk_c::procHangStart() {
+BOOL daPy_lk_c::procHangStart() {
     /* Nonmatching */
 }
 
 /* 801349D8-80134DF8       .text procHangFallStart_init__9daPy_lk_cFP8cM3dGPla */
-void daPy_lk_c::procHangFallStart_init(cM3dGPla*) {
+BOOL daPy_lk_c::procHangFallStart_init(cM3dGPla*) {
     /* Nonmatching */
 }
 
 /* 80134DF8-80134EF0       .text procHangFallStart__9daPy_lk_cFv */
-void daPy_lk_c::procHangFallStart() {
+BOOL daPy_lk_c::procHangFallStart() {
     /* Nonmatching */
 }
 
 /* 80134EF0-80134F74       .text procHangUp_init__9daPy_lk_cFi */
-void daPy_lk_c::procHangUp_init(int) {
+BOOL daPy_lk_c::procHangUp_init(int) {
     /* Nonmatching */
 }
 
 /* 80134F74-80135094       .text procHangUp__9daPy_lk_cFv */
-void daPy_lk_c::procHangUp() {
+BOOL daPy_lk_c::procHangUp() {
     /* Nonmatching */
 }
 
 /* 80135094-80135140       .text procHangWait_init__9daPy_lk_cFv */
-void daPy_lk_c::procHangWait_init() {
+BOOL daPy_lk_c::procHangWait_init() {
     /* Nonmatching */
 }
 
 /* 80135140-801351FC       .text procHangWait__9daPy_lk_cFv */
-void daPy_lk_c::procHangWait() {
+BOOL daPy_lk_c::procHangWait() {
     /* Nonmatching */
 }
 
 /* 801351FC-80135354       .text procHangMove_init__9daPy_lk_cFi */
-void daPy_lk_c::procHangMove_init(int) {
+BOOL daPy_lk_c::procHangMove_init(int) {
     /* Nonmatching */
 }
 
 /* 80135354-801357C0       .text procHangMove__9daPy_lk_cFv */
-void daPy_lk_c::procHangMove() {
+BOOL daPy_lk_c::procHangMove() {
     /* Nonmatching */
 }
 
 /* 801357C0-80135874       .text procHangClimb_init__9daPy_lk_cFf */
-void daPy_lk_c::procHangClimb_init(f32) {
+BOOL daPy_lk_c::procHangClimb_init(f32) {
     /* Nonmatching */
 }
 
 /* 80135874-801358D0       .text procHangClimb__9daPy_lk_cFv */
-void daPy_lk_c::procHangClimb() {
+BOOL daPy_lk_c::procHangClimb() {
     /* Nonmatching */
 }
 
 /* 801358D0-80135AE0       .text procHangWallCatch_init__9daPy_lk_cFv */
-void daPy_lk_c::procHangWallCatch_init() {
+BOOL daPy_lk_c::procHangWallCatch_init() {
     /* Nonmatching */
 }
 
 /* 80135AE0-80135B50       .text procHangWallCatch__9daPy_lk_cFv */
-void daPy_lk_c::procHangWallCatch() {
+BOOL daPy_lk_c::procHangWallCatch() {
     /* Nonmatching */
 }

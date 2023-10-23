@@ -53,12 +53,12 @@ void daPy_lk_c::setDoStatusCrawl() {
 }
 
 /* 80139424-801394F0       .text procCrawlStart_init__9daPy_lk_cFv */
-void daPy_lk_c::procCrawlStart_init() {
+BOOL daPy_lk_c::procCrawlStart_init() {
     /* Nonmatching */
 }
 
 /* 801394F0-80139640       .text procCrawlStart__9daPy_lk_cFv */
-void daPy_lk_c::procCrawlStart() {
+BOOL daPy_lk_c::procCrawlStart() {
     /* Nonmatching */
 }
 
@@ -73,31 +73,31 @@ void daPy_lk_c::checkNotCrawlStand(cXyz*, cXyz*) {
 }
 
 /* 80139760-80139878       .text procCrawlMove_init__9daPy_lk_cFss */
-void daPy_lk_c::procCrawlMove_init(s16, s16) {
+BOOL daPy_lk_c::procCrawlMove_init(s16, s16) {
     /* Nonmatching */
 }
 
 /* 80139878-8013A004       .text procCrawlMove__9daPy_lk_cFv */
-void daPy_lk_c::procCrawlMove() {
+BOOL daPy_lk_c::procCrawlMove() {
     /* Nonmatching */
 }
 
 /* 8013A004-8013A0F0       .text procCrawlAutoMove_init__9daPy_lk_cFiP4cXyz */
-void daPy_lk_c::procCrawlAutoMove_init(int, cXyz*) {
+BOOL daPy_lk_c::procCrawlAutoMove_init(int, cXyz*) {
     /* Nonmatching */
 }
 
 /* 8013A0F0-8013A630       .text procCrawlAutoMove__9daPy_lk_cFv */
-void daPy_lk_c::procCrawlAutoMove() {
+BOOL daPy_lk_c::procCrawlAutoMove() {
     /* Nonmatching */
 }
 
 /* 8013A630-8013A7C4       .text procCrawlEnd_init__9daPy_lk_cFiss */
-void daPy_lk_c::procCrawlEnd_init(int, s16, s16) {
+BOOL daPy_lk_c::procCrawlEnd_init(int, s16, s16) {
     /* Nonmatching */
 }
 
 /* 8013A7C4-8013A85C       .text procCrawlEnd__9daPy_lk_cFv */
-void daPy_lk_c::procCrawlEnd() {
+BOOL daPy_lk_c::procCrawlEnd() {
     /* Nonmatching */
 }

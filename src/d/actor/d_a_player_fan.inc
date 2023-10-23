@@ -68,21 +68,21 @@ void daPy_lk_c::setParachuteFanModel(f32) {
 }
 
 /* 8014C254-8014C34C       .text procFanSwing_init__9daPy_lk_cFv */
-void daPy_lk_c::procFanSwing_init() {
+BOOL daPy_lk_c::procFanSwing_init() {
     /* Nonmatching */
 }
 
 /* 8014C34C-8014CA1C       .text procFanSwing__9daPy_lk_cFv */
-void daPy_lk_c::procFanSwing() {
+BOOL daPy_lk_c::procFanSwing() {
     /* Nonmatching */
 }
 
 /* 8014CA1C-8014CB94       .text procFanGlide_init__9daPy_lk_cFi */
-void daPy_lk_c::procFanGlide_init(int) {
+BOOL daPy_lk_c::procFanGlide_init(int) {
     /* Nonmatching */
 }
 
 /* 8014CB94-8014D778       .text procFanGlide__9daPy_lk_cFv */
-void daPy_lk_c::procFanGlide() {
+BOOL daPy_lk_c::procFanGlide() {
     /* Nonmatching */
 }

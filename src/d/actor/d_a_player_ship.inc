@@ -78,121 +78,121 @@ void daPy_lk_c::initShipCraneAnime() {
 }
 
 /* 80140D80-80140EF0       .text procShipReady_init__9daPy_lk_cFv */
-void daPy_lk_c::procShipReady_init() {
+BOOL daPy_lk_c::procShipReady_init() {
     /* Nonmatching */
 }
 
 /* 80140EF0-8014105C       .text procShipReady__9daPy_lk_cFv */
-void daPy_lk_c::procShipReady() {
+BOOL daPy_lk_c::procShipReady() {
     /* Nonmatching */
 }
 
 /* 8014105C-80141140       .text procShipJumpRide_init__9daPy_lk_cFv */
-void daPy_lk_c::procShipJumpRide_init() {
+BOOL daPy_lk_c::procShipJumpRide_init() {
     /* Nonmatching */
 }
 
 /* 80141140-80141180       .text procShipJumpRide__9daPy_lk_cFv */
-void daPy_lk_c::procShipJumpRide() {
+BOOL daPy_lk_c::procShipJumpRide() {
     /* Nonmatching */
 }
 
 /* 80141180-8014123C       .text procShipSteer_init__9daPy_lk_cFv */
-void daPy_lk_c::procShipSteer_init() {
+BOOL daPy_lk_c::procShipSteer_init() {
     /* Nonmatching */
 }
 
 /* 8014123C-80141288       .text procShipSteer__9daPy_lk_cFv */
-void daPy_lk_c::procShipSteer() {
+BOOL daPy_lk_c::procShipSteer() {
     /* Nonmatching */
 }
 
 /* 80141288-801413A4       .text procShipPaddle_init__9daPy_lk_cFv */
-void daPy_lk_c::procShipPaddle_init() {
+BOOL daPy_lk_c::procShipPaddle_init() {
     /* Nonmatching */
 }
 
 /* 801413A4-801416BC       .text procShipPaddle__9daPy_lk_cFv */
-void daPy_lk_c::procShipPaddle() {
+BOOL daPy_lk_c::procShipPaddle() {
     /* Nonmatching */
 }
 
 /* 801416BC-801417EC       .text procShipScope_init__9daPy_lk_cFi */
-void daPy_lk_c::procShipScope_init(int) {
+BOOL daPy_lk_c::procShipScope_init(int) {
     /* Nonmatching */
 }
 
 /* 801417EC-801418B4       .text procShipScope__9daPy_lk_cFv */
-void daPy_lk_c::procShipScope() {
+BOOL daPy_lk_c::procShipScope() {
     /* Nonmatching */
 }
 
 /* 801418B4-801419B4       .text procShipBoomerang_init__9daPy_lk_cFv */
-void daPy_lk_c::procShipBoomerang_init() {
+BOOL daPy_lk_c::procShipBoomerang_init() {
     /* Nonmatching */
 }
 
 /* 801419B4-80141BB0       .text procShipBoomerang__9daPy_lk_cFv */
-void daPy_lk_c::procShipBoomerang() {
+BOOL daPy_lk_c::procShipBoomerang() {
     /* Nonmatching */
 }
 
 /* 80141BB0-80141CF8       .text procShipHookshot_init__9daPy_lk_cFv */
-void daPy_lk_c::procShipHookshot_init() {
+BOOL daPy_lk_c::procShipHookshot_init() {
     /* Nonmatching */
 }
 
 /* 80141CF8-80141F2C       .text procShipHookshot__9daPy_lk_cFv */
-void daPy_lk_c::procShipHookshot() {
+BOOL daPy_lk_c::procShipHookshot() {
     /* Nonmatching */
 }
 
 /* 80141F2C-80142084       .text procShipBow_init__9daPy_lk_cFv */
-void daPy_lk_c::procShipBow_init() {
+BOOL daPy_lk_c::procShipBow_init() {
     /* Nonmatching */
 }
 
 /* 80142084-80142250       .text procShipBow__9daPy_lk_cFv */
-void daPy_lk_c::procShipBow() {
+BOOL daPy_lk_c::procShipBow() {
     /* Nonmatching */
 }
 
 /* 80142250-80142300       .text procShipCannon_init__9daPy_lk_cFv */
-void daPy_lk_c::procShipCannon_init() {
+BOOL daPy_lk_c::procShipCannon_init() {
     /* Nonmatching */
 }
 
 /* 80142300-80142388       .text procShipCannon__9daPy_lk_cFv */
-void daPy_lk_c::procShipCannon() {
+BOOL daPy_lk_c::procShipCannon() {
     /* Nonmatching */
 }
 
 /* 80142388-80142458       .text procShipCrane_init__9daPy_lk_cFv */
-void daPy_lk_c::procShipCrane_init() {
+BOOL daPy_lk_c::procShipCrane_init() {
     /* Nonmatching */
 }
 
 /* 80142458-80142920       .text procShipCrane__9daPy_lk_cFv */
-void daPy_lk_c::procShipCrane() {
+BOOL daPy_lk_c::procShipCrane() {
     /* Nonmatching */
 }
 
 /* 80142920-80142A5C       .text procShipGetOff_init__9daPy_lk_cFv */
-void daPy_lk_c::procShipGetOff_init() {
+BOOL daPy_lk_c::procShipGetOff_init() {
     /* Nonmatching */
 }
 
 /* 80142A5C-80142C08       .text procShipGetOff__9daPy_lk_cFv */
-void daPy_lk_c::procShipGetOff() {
+BOOL daPy_lk_c::procShipGetOff() {
     /* Nonmatching */
 }
 
 /* 80142C08-80142C9C       .text procShipRestart_init__9daPy_lk_cFv */
-void daPy_lk_c::procShipRestart_init() {
+BOOL daPy_lk_c::procShipRestart_init() {
     /* Nonmatching */
 }
 
 /* 80142C9C-80142D08       .text procShipRestart__9daPy_lk_cFv */
-void daPy_lk_c::procShipRestart() {
+BOOL daPy_lk_c::procShipRestart() {
     /* Nonmatching */
 }

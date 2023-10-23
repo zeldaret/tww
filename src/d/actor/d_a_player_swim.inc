@@ -63,31 +63,31 @@ void daPy_lk_c::setSwimTimerStartStop() {
 }
 
 /* 8013D814-8013DA18       .text procSwimUp_init__9daPy_lk_cFi */
-void daPy_lk_c::procSwimUp_init(int) {
+BOOL daPy_lk_c::procSwimUp_init(int) {
     /* Nonmatching */
 }
 
 /* 8013DA18-8013DB24       .text procSwimUp__9daPy_lk_cFv */
-void daPy_lk_c::procSwimUp() {
+BOOL daPy_lk_c::procSwimUp() {
     /* Nonmatching */
 }
 
 /* 8013DB24-8013DCDC       .text procSwimWait_init__9daPy_lk_cFi */
-void daPy_lk_c::procSwimWait_init(int) {
+BOOL daPy_lk_c::procSwimWait_init(int) {
     /* Nonmatching */
 }
 
 /* 8013DCDC-8013DE8C       .text procSwimWait__9daPy_lk_cFv */
-void daPy_lk_c::procSwimWait() {
+BOOL daPy_lk_c::procSwimWait() {
     /* Nonmatching */
 }
 
 /* 8013DE8C-8013DF60       .text procSwimMove_init__9daPy_lk_cFi */
-void daPy_lk_c::procSwimMove_init(int) {
+BOOL daPy_lk_c::procSwimMove_init(int) {
     /* Nonmatching */
 }
 
 /* 8013DF60-8013E250       .text procSwimMove__9daPy_lk_cFv */
-void daPy_lk_c::procSwimMove() {
+BOOL daPy_lk_c::procSwimMove() {
     /* Nonmatching */
 }

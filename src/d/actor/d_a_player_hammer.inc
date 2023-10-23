@@ -28,41 +28,41 @@ void daPy_lk_c::setHammerWaterSplash() {
 }
 
 /* 80150B60-80150C40       .text procHammerSideSwing_init__9daPy_lk_cFv */
-void daPy_lk_c::procHammerSideSwing_init() {
+BOOL daPy_lk_c::procHammerSideSwing_init() {
     /* Nonmatching */
 }
 
 /* 80150C40-80150DDC       .text procHammerSideSwing__9daPy_lk_cFv */
-void daPy_lk_c::procHammerSideSwing() {
+BOOL daPy_lk_c::procHammerSideSwing() {
     /* Nonmatching */
 }
 
 /* 80150DDC-80150F08       .text procHammerFrontSwingReady_init__9daPy_lk_cFv */
-void daPy_lk_c::procHammerFrontSwingReady_init() {
+BOOL daPy_lk_c::procHammerFrontSwingReady_init() {
     /* Nonmatching */
 }
 
 /* 80150F08-80150F98       .text procHammerFrontSwingReady__9daPy_lk_cFv */
-void daPy_lk_c::procHammerFrontSwingReady() {
+BOOL daPy_lk_c::procHammerFrontSwingReady() {
     /* Nonmatching */
 }
 
 /* 80150F98-801510DC       .text procHammerFrontSwing_init__9daPy_lk_cFv */
-void daPy_lk_c::procHammerFrontSwing_init() {
+BOOL daPy_lk_c::procHammerFrontSwing_init() {
     /* Nonmatching */
 }
 
 /* 801510DC-801513D4       .text procHammerFrontSwing__9daPy_lk_cFv */
-void daPy_lk_c::procHammerFrontSwing() {
+BOOL daPy_lk_c::procHammerFrontSwing() {
     /* Nonmatching */
 }
 
 /* 801513D4-80151450       .text procHammerFrontSwingEnd_init__9daPy_lk_cFv */
-void daPy_lk_c::procHammerFrontSwingEnd_init() {
+BOOL daPy_lk_c::procHammerFrontSwingEnd_init() {
     /* Nonmatching */
 }
 
 /* 80151450-801514B0       .text procHammerFrontSwingEnd__9daPy_lk_cFv */
-void daPy_lk_c::procHammerFrontSwingEnd() {
+BOOL daPy_lk_c::procHammerFrontSwingEnd() {
     /* Nonmatching */
 }

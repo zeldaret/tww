@@ -18,41 +18,41 @@ void daPy_lk_c::checkJumpFlower() {
 }
 
 /* 8014F994-8014FA88       .text procVomitReady_init__9daPy_lk_cFsf */
-void daPy_lk_c::procVomitReady_init(s16, f32) {
+BOOL daPy_lk_c::procVomitReady_init(s16, f32) {
     /* Nonmatching */
 }
 
 /* 8014FA88-8014FB64       .text procVomitReady__9daPy_lk_cFv */
-void daPy_lk_c::procVomitReady() {
+BOOL daPy_lk_c::procVomitReady() {
     /* Nonmatching */
 }
 
 /* 8014FB64-8014FC20       .text procVomitWait_init__9daPy_lk_cFv */
-void daPy_lk_c::procVomitWait_init() {
+BOOL daPy_lk_c::procVomitWait_init() {
     /* Nonmatching */
 }
 
 /* 8014FC20-8014FD8C       .text procVomitWait__9daPy_lk_cFv */
-void daPy_lk_c::procVomitWait() {
+BOOL daPy_lk_c::procVomitWait() {
     /* Nonmatching */
 }
 
 /* 8014FD8C-8014FF0C       .text procVomitJump_init__9daPy_lk_cFi */
-void daPy_lk_c::procVomitJump_init(int) {
+BOOL daPy_lk_c::procVomitJump_init(int) {
     /* Nonmatching */
 }
 
 /* 8014FF0C-801500E4       .text procVomitJump__9daPy_lk_cFv */
-void daPy_lk_c::procVomitJump() {
+BOOL daPy_lk_c::procVomitJump() {
     /* Nonmatching */
 }
 
 /* 801500E4-80150164       .text procVomitLand_init__9daPy_lk_cFv */
-void daPy_lk_c::procVomitLand_init() {
+BOOL daPy_lk_c::procVomitLand_init() {
     /* Nonmatching */
 }
 
 /* 80150164-8015023C       .text procVomitLand__9daPy_lk_cFv */
-void daPy_lk_c::procVomitLand() {
+BOOL daPy_lk_c::procVomitLand() {
     /* Nonmatching */
 }

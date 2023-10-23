@@ -88,41 +88,41 @@ void daPy_lk_c::resetTactCount() {
 }
 
 /* 8014DBEC-8014E100       .text procTactWait_init__9daPy_lk_cFi */
-void daPy_lk_c::procTactWait_init(int) {
+BOOL daPy_lk_c::procTactWait_init(int) {
     /* Nonmatching */
 }
 
 /* 8014E100-8014E9A4       .text procTactWait__9daPy_lk_cFv */
-void daPy_lk_c::procTactWait() {
+BOOL daPy_lk_c::procTactWait() {
     /* Nonmatching */
 }
 
 /* 8014E9A4-8014EBA0       .text procTactPlay_init__9daPy_lk_cFlii */
-void daPy_lk_c::procTactPlay_init(s32, int, int) {
+BOOL daPy_lk_c::procTactPlay_init(s32, int, int) {
     /* Nonmatching */
 }
 
 /* 8014EBA0-8014EFD4       .text procTactPlay__9daPy_lk_cFv */
-void daPy_lk_c::procTactPlay() {
+BOOL daPy_lk_c::procTactPlay() {
     /* Nonmatching */
 }
 
 /* 8014EFD4-8014F210       .text procTactPlayEnd_init__9daPy_lk_cFi */
-void daPy_lk_c::procTactPlayEnd_init(int) {
+BOOL daPy_lk_c::procTactPlayEnd_init(int) {
     /* Nonmatching */
 }
 
 /* 8014F210-8014F4DC       .text procTactPlayEnd__9daPy_lk_cFv */
-void daPy_lk_c::procTactPlayEnd() {
+BOOL daPy_lk_c::procTactPlayEnd() {
     /* Nonmatching */
 }
 
 /* 8014F4DC-8014F690       .text procTactPlayOriginal_init__9daPy_lk_cFv */
-void daPy_lk_c::procTactPlayOriginal_init() {
+BOOL daPy_lk_c::procTactPlayOriginal_init() {
     /* Nonmatching */
 }
 
 /* 8014F690-8014F8A0       .text procTactPlayOriginal__9daPy_lk_cFv */
-void daPy_lk_c::procTactPlayOriginal() {
+BOOL daPy_lk_c::procTactPlayOriginal() {
     /* Nonmatching */
 }

@@ -53,81 +53,81 @@ void daPy_lk_c::initGrabNextMode() {
 }
 
 /* 8013B56C-8013B6F4       .text procGrabReady_init__9daPy_lk_cFv */
-void daPy_lk_c::procGrabReady_init() {
+BOOL daPy_lk_c::procGrabReady_init() {
     /* Nonmatching */
 }
 
 /* 8013B6F4-8013B8A0       .text procGrabReady__9daPy_lk_cFv */
-void daPy_lk_c::procGrabReady() {
+BOOL daPy_lk_c::procGrabReady() {
     /* Nonmatching */
 }
 
 /* 8013B8A0-8013BA50       .text procGrabUp_init__9daPy_lk_cFv */
-void daPy_lk_c::procGrabUp_init() {
+BOOL daPy_lk_c::procGrabUp_init() {
     /* Nonmatching */
 }
 
 /* 8013BA50-8013BBBC       .text procGrabUp__9daPy_lk_cFv */
-void daPy_lk_c::procGrabUp() {
+BOOL daPy_lk_c::procGrabUp() {
     /* Nonmatching */
 }
 
 /* 8013BBBC-8013BC40       .text procGrabMiss_init__9daPy_lk_cFv */
-void daPy_lk_c::procGrabMiss_init() {
+BOOL daPy_lk_c::procGrabMiss_init() {
     /* Nonmatching */
 }
 
 /* 8013BC40-8013BD30       .text procGrabMiss__9daPy_lk_cFv */
-void daPy_lk_c::procGrabMiss() {
+BOOL daPy_lk_c::procGrabMiss() {
     /* Nonmatching */
 }
 
 /* 8013BD30-8013BE10       .text procGrabThrow_init__9daPy_lk_cFi */
-void daPy_lk_c::procGrabThrow_init(int) {
+BOOL daPy_lk_c::procGrabThrow_init(int) {
     /* Nonmatching */
 }
 
 /* 8013BE10-8013C020       .text procGrabThrow__9daPy_lk_cFv */
-void daPy_lk_c::procGrabThrow() {
+BOOL daPy_lk_c::procGrabThrow() {
     /* Nonmatching */
 }
 
 /* 8013C020-8013C124       .text procGrabPut_init__9daPy_lk_cFv */
-void daPy_lk_c::procGrabPut_init() {
+BOOL daPy_lk_c::procGrabPut_init() {
     /* Nonmatching */
 }
 
 /* 8013C124-8013C504       .text procGrabPut__9daPy_lk_cFv */
-void daPy_lk_c::procGrabPut() {
+BOOL daPy_lk_c::procGrabPut() {
     /* Nonmatching */
 }
 
 /* 8013C504-8013C678       .text procGrabWait_init__9daPy_lk_cFv */
-void daPy_lk_c::procGrabWait_init() {
+BOOL daPy_lk_c::procGrabWait_init() {
     /* Nonmatching */
 }
 
 /* 8013C678-8013C914       .text procGrabWait__9daPy_lk_cFv */
-void daPy_lk_c::procGrabWait() {
+BOOL daPy_lk_c::procGrabWait() {
     /* Nonmatching */
 }
 
 /* 8013C914-8013C9AC       .text procGrabHeavyWait_init__9daPy_lk_cFv */
-void daPy_lk_c::procGrabHeavyWait_init() {
+BOOL daPy_lk_c::procGrabHeavyWait_init() {
     /* Nonmatching */
 }
 
 /* 8013C9AC-8013CB78       .text procGrabHeavyWait__9daPy_lk_cFv */
-void daPy_lk_c::procGrabHeavyWait() {
+BOOL daPy_lk_c::procGrabHeavyWait() {
     /* Nonmatching */
 }
 
 /* 8013CB78-8013CBD0       .text procGrabRebound_init__9daPy_lk_cFv */
-void daPy_lk_c::procGrabRebound_init() {
+BOOL daPy_lk_c::procGrabRebound_init() {
     /* Nonmatching */
 }
 
 /* 8013CBD0-8013CC64       .text procGrabRebound__9daPy_lk_cFv */
-void daPy_lk_c::procGrabRebound() {
+BOOL daPy_lk_c::procGrabRebound() {
     /* Nonmatching */
 }

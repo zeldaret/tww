@@ -28,41 +28,41 @@ void daPy_lk_c::makeFairy(cXyz*, u32) {
 }
 
 /* 801521A0-80152300       .text procBottleDrink_init__9daPy_lk_cFUs */
-void daPy_lk_c::procBottleDrink_init(u16) {
+BOOL daPy_lk_c::procBottleDrink_init(u16) {
     /* Nonmatching */
 }
 
 /* 80152300-80152624       .text procBottleDrink__9daPy_lk_cFv */
-void daPy_lk_c::procBottleDrink() {
+BOOL daPy_lk_c::procBottleDrink() {
     /* Nonmatching */
 }
 
 /* 80152624-801527CC       .text procBottleOpen_init__9daPy_lk_cFUs */
-void daPy_lk_c::procBottleOpen_init(u16) {
+BOOL daPy_lk_c::procBottleOpen_init(u16) {
     /* Nonmatching */
 }
 
 /* 801527CC-80152ED0       .text procBottleOpen__9daPy_lk_cFv */
-void daPy_lk_c::procBottleOpen() {
+BOOL daPy_lk_c::procBottleOpen() {
     /* Nonmatching */
 }
 
 /* 80152ED0-80153064       .text procBottleSwing_init__9daPy_lk_cFi */
-void daPy_lk_c::procBottleSwing_init(int) {
+BOOL daPy_lk_c::procBottleSwing_init(int) {
     /* Nonmatching */
 }
 
 /* 80153064-80153338       .text procBottleSwing__9daPy_lk_cFv */
-void daPy_lk_c::procBottleSwing() {
+BOOL daPy_lk_c::procBottleSwing() {
     /* Nonmatching */
 }
 
 /* 80153338-80153438       .text procBottleGet_init__9daPy_lk_cFv */
-void daPy_lk_c::procBottleGet_init() {
+BOOL daPy_lk_c::procBottleGet_init() {
     /* Nonmatching */
 }
 
 /* 80153438-80153554       .text procBottleGet__9daPy_lk_cFv */
-void daPy_lk_c::procBottleGet() {
+BOOL daPy_lk_c::procBottleGet() {
     /* Nonmatching */
 }

@@ -23,6 +23,306 @@
 
 char l_arcName[] = "Link";
 
+daPy_lk_c::ProcInitTableEntry daPy_lk_c::mProcInitTable[0xDB] = {
+    {&daPy_lk_c::procScope,                 0x00000001},
+    {&daPy_lk_c::procSubjectivity,          0x20001005},
+    {&daPy_lk_c::procCall,                  0x00000181},
+    {&daPy_lk_c::procControllWait,          0x00000001},
+    {&daPy_lk_c::procWait,                  0x000211C5},
+    {&daPy_lk_c::procFreeWait,              0x00020445},
+    {&daPy_lk_c::procMove,                  0x000211C4},
+    {&daPy_lk_c::procAtnMove,               0x000211C4},
+    {&daPy_lk_c::procAtnActorWait,          0x000211C5},
+    {&daPy_lk_c::procAtnActorMove,          0x000211C4},
+    {&daPy_lk_c::procSideStep,              0x000014C6},
+    {&daPy_lk_c::procSideStepLand,          0x000010C5},
+    {&daPy_lk_c::procCrouchDefense,         0x68800101},
+    {&daPy_lk_c::procCrouchDefenseSlip,     0x60800400},
+    {&daPy_lk_c::procCrouch,                0x00800101},
+    {&daPy_lk_c::procCrawlStart,            0x03008100},
+    {&daPy_lk_c::procCrawlMove,             0x0B008100},
+    {&daPy_lk_c::procCrawlAutoMove,         0x0F008100},
+    {&daPy_lk_c::procCrawlEnd,              0x03008000},
+    {&daPy_lk_c::procWHideReady,            0x00000011},
+    {&daPy_lk_c::procWHideWait,             0x00000115},
+    {&daPy_lk_c::procWHideMove,             0x00000014},
+    {&daPy_lk_c::procWHidePeep,             0x00000415},
+    {&daPy_lk_c::procWaitTurn,              0x00025145},
+    {&daPy_lk_c::procMoveTurn,              0x00024044},
+    {&daPy_lk_c::procSlip,                  0x00000100},
+    {&daPy_lk_c::procSlideFront,            0x00008400},
+    {&daPy_lk_c::procSlideBack,             0x00000000},
+    {&daPy_lk_c::procSlideFrontLand,        0x00000404},
+    {&daPy_lk_c::procSlideBackLand,         0x00000404},
+    {&daPy_lk_c::procFrontRoll,             0x00008400},
+    {&daPy_lk_c::procFrontRollCrash,        0x00000402},
+    {&daPy_lk_c::procNockBackEnd,           0x00008400},
+    {&daPy_lk_c::procSideRoll,              0x00008400},
+    {&daPy_lk_c::procBackJump,              0x00000446},
+    {&daPy_lk_c::procBackJumpLand,          0x00000445},
+    {&daPy_lk_c::procAutoJump,              0x00005406},
+    {&daPy_lk_c::procLand,                  0x00005005},
+    {&daPy_lk_c::procLandDamage,            0x00000409},
+    {&daPy_lk_c::procFall,                  0x00001006},
+    {&daPy_lk_c::procSlowFall,              0x00000002},
+    {&daPy_lk_c::procSmallJump,             0x00004002},
+    {&daPy_lk_c::procVerticalJump,          0x00000001},
+    {&daPy_lk_c::procHangStart,             0x00000421},
+    {&daPy_lk_c::procHangFallStart,         0x00000421},
+    {&daPy_lk_c::procHangUp,                0x00000421},
+    {&daPy_lk_c::procHangWait,              0x00000121},
+    {&daPy_lk_c::procHangMove,              0x00000120},
+    {&daPy_lk_c::procHangClimb,             0x00000420},
+    {&daPy_lk_c::procHangWallCatch,         0x00000020},
+    {&daPy_lk_c::procPushPullWait,          0x00200101},
+    {&daPy_lk_c::procPushMove,              0x00200000},
+    {&daPy_lk_c::procPullMove,              0x00200400},
+    {&daPy_lk_c::procSwimUp,                0x04040400},
+    {&daPy_lk_c::procSwimWait,              0x04040181},
+    {&daPy_lk_c::procSwimMove,              0x04040480},
+    {&daPy_lk_c::procLadderUpStart,         0x00400400},
+    {&daPy_lk_c::procLadderUpEnd,           0x00400400},
+    {&daPy_lk_c::procLadderDownStart,       0x00400400},
+    {&daPy_lk_c::procLadderDownEnd,         0x00400400},
+    {&daPy_lk_c::procLadderMove,            0x00400100},
+    {&daPy_lk_c::procClimbUpStart,          0x00010400},
+    {&daPy_lk_c::procClimbDownStart,        0x00010400},
+    {&daPy_lk_c::procClimbMoveUpDown,       0x00010100},
+    {&daPy_lk_c::procClimbMoveSide,         0x00010100},
+    {&daPy_lk_c::procCutA,                  0x00000480},
+    {&daPy_lk_c::procCutF,                  0x00000480},
+    {&daPy_lk_c::procCutR,                  0x00000480},
+    {&daPy_lk_c::procCutL,                  0x00000480},
+    {&daPy_lk_c::procCutEA,                 0x00000480},
+    {&daPy_lk_c::procCutEB,                 0x00000480},
+    {&daPy_lk_c::procCutExA,                0x00000400},
+    {&daPy_lk_c::procCutExB,                0x00000400},
+    {&daPy_lk_c::procCutExMJ,               0x08000402},
+    {&daPy_lk_c::procCutKesa,               0x00000400},
+    {&daPy_lk_c::procWeaponNormalSwing,     0x00000480},
+    {&daPy_lk_c::procWeaponSideSwing,       0x08000400},
+    {&daPy_lk_c::procWeaponFrontSwingReady, 0x08000400},
+    {&daPy_lk_c::procWeaponFrontSwing,      0x08000400},
+    {&daPy_lk_c::procWeaponFrontSwingEnd,   0x08000400},
+    {&daPy_lk_c::procWeaponThrow,           0x00000480},
+    {&daPy_lk_c::procHammerSideSwing,       0x08000400},
+    {&daPy_lk_c::procHammerFrontSwingReady, 0x08000400},
+    {&daPy_lk_c::procHammerFrontSwing,      0x08000400},
+    {&daPy_lk_c::procHammerFrontSwingEnd,   0x08000400},
+    {&daPy_lk_c::procCutTurn,               0x00000400},
+    {&daPy_lk_c::procCutRoll,               0x00000400},
+    {&daPy_lk_c::procCutRollEnd,            0x00000101},
+    {&daPy_lk_c::procCutTurnCharge,         0x00000400},
+    {&daPy_lk_c::procCutTurnMove,           0x00000080},
+    {&daPy_lk_c::procCutReverse,            0x00000400},
+    {&daPy_lk_c::procJumpCut,               0x08000402},
+    {&daPy_lk_c::procJumpCutLand,           0x08000401},
+    {&daPy_lk_c::procBtJump,                0x88000402},
+    {&daPy_lk_c::procBtJumpCut,             0x80000402},
+    {&daPy_lk_c::procBtSlide,               0x80000000},
+    {&daPy_lk_c::procBtRoll,                0x80008400},
+    {&daPy_lk_c::procBtRollCut,             0x88000402},
+    {&daPy_lk_c::procBtVerticalJump,        0x88000402},
+    {&daPy_lk_c::procBtVerticalJumpCut,     0x88000402},
+    {&daPy_lk_c::procBtVerticalJumpLand,    0x00000400},
+    {&daPy_lk_c::procGuardCrash,            0x00000000},
+    {&daPy_lk_c::procDamage,                0x00000488},
+    {&daPy_lk_c::procPolyDamage,            0x00000408},
+    {&daPy_lk_c::procLargeDamage,           0x0000000A},
+    {&daPy_lk_c::procLargeDamageUp,         0x0A008408},
+    {&daPy_lk_c::procLargeDamageWall,       0x0000040A},
+    {&daPy_lk_c::procLavaDamage,            0x0000000A},
+    {&daPy_lk_c::procElecDamage,            0x00008009},
+    {&daPy_lk_c::procGuardSlip,             0x00001480},
+    {&daPy_lk_c::procGrabReady,             0x00100401},
+    {&daPy_lk_c::procGrabUp,                0x00100401},
+    {&daPy_lk_c::procGrabMiss,              0x00100401},
+    {&daPy_lk_c::procGrabThrow,             0x00100401},
+    {&daPy_lk_c::procGrabPut,               0x00100401},
+    {&daPy_lk_c::procGrabWait,              0x00104181},
+    {&daPy_lk_c::procGrabHeavyWait,         0x00100181},
+    {&daPy_lk_c::procGrabRebound,           0x00100401},
+    {&daPy_lk_c::procRopeSubject,           0x20001005},
+    {&daPy_lk_c::procRopeReady,             0x04000800},
+    {&daPy_lk_c::procRopeSwing,             0x04000C00},
+    {&daPy_lk_c::procRopeHangWait,          0x04000901},
+    {&daPy_lk_c::procRopeUp,                0x04000800},
+    {&daPy_lk_c::procRopeDown,              0x04000800},
+    {&daPy_lk_c::procRopeSwingStart,        0x04000C00},
+    {&daPy_lk_c::procRopeMove,              0x20001104},
+    {&daPy_lk_c::procRopeThrowCatch,        0x00000401},
+    {&daPy_lk_c::procRopeUpHang,            0x04000800},
+    {&daPy_lk_c::procBoomerangSubject,      0x20021105},
+    {&daPy_lk_c::procBoomerangMove,         0x20021104},
+    {&daPy_lk_c::procBoomerangCatch,        0x00001401},
+    {&daPy_lk_c::procHookshotSubject,       0x20001305},
+    {&daPy_lk_c::procHookshotMove,          0x20001304},
+    {&daPy_lk_c::procHookshotFly,           0x00000202},
+    {&daPy_lk_c::procShipReady,             0x00002420},
+    {&daPy_lk_c::procShipJumpRide,          0x00002400},
+    {&daPy_lk_c::procShipSteer,             0x40002180},
+    {&daPy_lk_c::procShipPaddle,            0x40002180},
+    {&daPy_lk_c::procShipScope,             0x40002100},
+    {&daPy_lk_c::procShipBoomerang,         0x60022100},
+    {&daPy_lk_c::procShipHookshot,          0x60002100},
+    {&daPy_lk_c::procShipBow,               0x60002100},
+    {&daPy_lk_c::procShipCannon,            0x40002100},
+    {&daPy_lk_c::procShipCrane,             0x08002180},
+    {&daPy_lk_c::procShipGetOff,            0x00002000},
+    {&daPy_lk_c::procShipRestart,           0x00002400},
+    {&daPy_lk_c::procFanSwing,              0x08000400},
+    {&daPy_lk_c::procFanGlide,              0x00000482},
+    {&daPy_lk_c::procBowSubject,            0x20001105},
+    {&daPy_lk_c::procBowMove,               0x20001104},
+    {&daPy_lk_c::procVomitReady,            0x00000402},
+    {&daPy_lk_c::procVomitWait,             0x04008001},
+    {&daPy_lk_c::procVomitJump,             0x00000002},
+    {&daPy_lk_c::procVomitLand,             0x00000401},
+    {&daPy_lk_c::procTactWait,              0x08000101},
+    {&daPy_lk_c::procTactPlay,              0x08000401},
+    {&daPy_lk_c::procTactPlayEnd,           0x00000101},
+    {&daPy_lk_c::procTactPlayOriginal,      0x00000001},
+    {&daPy_lk_c::procIceSlipFall,           0x00000002},
+    {&daPy_lk_c::procIceSlipFallUp,         0x0A008400},
+    {&daPy_lk_c::procIceSlipAlmostFall,     0x00000001},
+    {&daPy_lk_c::procBootsEquip,            0x08004403},
+    {&daPy_lk_c::procNotUse,                0x00000401},
+    {&daPy_lk_c::procBottleDrink,           0x00000401},
+    {&daPy_lk_c::procBottleOpen,            0x00000401},
+    {&daPy_lk_c::procBottleSwing,           0x00000401},
+    {&daPy_lk_c::procBottleGet,             0x00000401},
+    {&daPy_lk_c::procFoodThrow,             0x00000101},
+    {&daPy_lk_c::procFoodSet,               0x00000401},
+    {&daPy_lk_c::dProcTool,                 0x00008000},
+    {&daPy_lk_c::dProcTalk,                 0x00080181},
+    {&daPy_lk_c::dProcDamage,               0x00000401},
+    {&daPy_lk_c::dProcHoldup,               0x00004001},
+    {&daPy_lk_c::dProcOpenTreasure,         0x00008401},
+    {&daPy_lk_c::dProcGetItem,              0x00008001},
+    {&daPy_lk_c::dProcUnequip,              0x00000101},
+    {&daPy_lk_c::dProcLavaDamage,           0x0000000A},
+    {&daPy_lk_c::dProcFreezeDamage,         0x0000400A},
+    {&daPy_lk_c::dProcDead,                 0x00008409},
+    {&daPy_lk_c::dProcLookAround,           0x00000401},
+    {&daPy_lk_c::dProcSalute,               0x00000401},
+    {&daPy_lk_c::dProcLookAround2,          0x00080401},
+    {&daPy_lk_c::dProcTalismanPickup,       0x00080401},
+    {&daPy_lk_c::dProcTalismanWait,         0x00080101},
+    {&daPy_lk_c::dProcSurprised,            0x00000401},
+    {&daPy_lk_c::dProcTurnBack,             0x00004401},
+    {&daPy_lk_c::dProcLookUp,               0x00000401},
+    {&daPy_lk_c::dProcQuakeWait,            0x00000401},
+    {&daPy_lk_c::dProcDance,                0x00000401},
+    {&daPy_lk_c::dProcCaught,               0x10000000},
+    {&daPy_lk_c::dProcLookWait,             0x00001181},
+    {&daPy_lk_c::dProcPushPullWait,         0x00200101},
+    {&daPy_lk_c::dProcPushMove,             0x00200000},
+    {&daPy_lk_c::dProcDoorOpen,             0x00000400},
+    {&daPy_lk_c::dProcNod,                  0x00080481},
+    {&daPy_lk_c::dProcPresent,              0x00080001},
+    {&daPy_lk_c::dProcWindChange,           0x00000401},
+    {&daPy_lk_c::dProcStandItemPut,         0x00000001},
+    {&daPy_lk_c::dProcVorcanoFail,          0x00000002},
+    {&daPy_lk_c::dProcSlightSurprised,      0x00000401},
+    {&daPy_lk_c::dProcSmile,                0x00000001},
+    {&daPy_lk_c::dProcBossWarp,             0x00000402},
+    {&daPy_lk_c::dProcAgbUse,               0x00000101},
+    {&daPy_lk_c::dProcLookTurn,             0x00000401},
+    {&daPy_lk_c::dProcLetterOpen,           0x00000101},
+    {&daPy_lk_c::dProcLetterRead,           0x00000101},
+    {&daPy_lk_c::dProcRedeadStop,           0x08000401},
+    {&daPy_lk_c::dProcRedeadCatch,          0x00000401},
+    {&daPy_lk_c::dProcGetDance,             0x00008401},
+    {&daPy_lk_c::dProcBottleOpenFairy,      0x00000401},
+    {&daPy_lk_c::dProcWarpShort,            0x00000102},
+    {&daPy_lk_c::dProcOpenSalvageTreasure,  0x00000401},
+    {&daPy_lk_c::dProcSurprisedWait,        0x00000001},
+    {&daPy_lk_c::dProcPowerUpWait_init,     0x00008401},
+    {&daPy_lk_c::dProcPowerUp,              0x00008401},
+    {&daPy_lk_c::dProcShipSit,              0x00082181},
+    {&daPy_lk_c::dProcLastCombo,            0x00008001},
+    {&daPy_lk_c::dProcHandUp,               0x00080181},
+    {&daPy_lk_c::dProcIceSlip,              0x00000401},
+};
+
+daPy_lk_c::daPy_ProcFunc daPy_lk_c::mDemoProcInitFuncTable[0x4B] = {
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    &daPy_lk_c::procWaitTurn_init,
+    NULL,
+    &daPy_lk_c::dProcDamage_init,
+    NULL,
+    NULL,
+    &daPy_lk_c::dProcOpenTreasure_init,
+    &daPy_lk_c::dProcGetItem_init,
+    &daPy_lk_c::dProcUnequip_init,
+    &daPy_lk_c::dProcHoldup_init,
+    NULL,
+    &daPy_lk_c::dProcLookAround_init,
+    NULL,
+    NULL,
+    NULL,
+    &daPy_lk_c::dProcSalute_init,
+    &daPy_lk_c::dProcLookAround2_init,
+    &daPy_lk_c::dProcTalismanPickup_init,
+    &daPy_lk_c::dProcTalismanWait_init,
+    NULL,
+    &daPy_lk_c::dProcSurprised_init,
+    &daPy_lk_c::dProcTurnBack_init,
+    &daPy_lk_c::dProcLookUp_init,
+    NULL,
+    &daPy_lk_c::dProcQuakeWait_init,
+    &daPy_lk_c::dProcDance_init,
+    &daPy_lk_c::dProcCaught_init,
+    NULL,
+    &daPy_lk_c::dProcPushPullWait_init,
+    &daPy_lk_c::dProcPushMove_init,
+    NULL,
+    &daPy_lk_c::dProcDoorOpen_init,
+    &daPy_lk_c::dProcNod_init,
+    &daPy_lk_c::dProcPresent_init,
+    &daPy_lk_c::dProcWindChange_init,
+    &daPy_lk_c::procShipPaddle_init,
+    &daPy_lk_c::dProcStandItemPut_init,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    &daPy_lk_c::procTactPlayOriginal_init,
+    &daPy_lk_c::dProcPowerUp_init,
+    &daPy_lk_c::dProcVorcanoFail_init,
+    &daPy_lk_c::dProcBossWarp_init,
+    &daPy_lk_c::dProcSlightSurprised_init,
+    &daPy_lk_c::dProcSmile_init,
+    NULL,
+    &daPy_lk_c::dProcAgbUse_init,
+    &daPy_lk_c::dProcLookTurn_init,
+    &daPy_lk_c::dProcLetterOpen_init,
+    &daPy_lk_c::dProcLetterRead_init,
+    &daPy_lk_c::procGrabPut_init,
+    &daPy_lk_c::dProcRedeadStop_init,
+    &daPy_lk_c::dProcRedeadCatch_init,
+    &daPy_lk_c::dProcGetDance_init,
+    &daPy_lk_c::dProcBottleOpenFairy_init,
+    NULL,
+    &daPy_lk_c::dProcWarpShort_init,
+    &daPy_lk_c::dProcOpenSalvageTreasure_init,
+    NULL,
+    &daPy_lk_c::procFoodSet_init,
+    &daPy_lk_c::dProcSurprisedWait_init,
+    &daPy_lk_c::dProcPowerUpWait_init,
+    &daPy_lk_c::procShipBow_init,
+    &daPy_lk_c::dProcShipSit_init,
+    &daPy_lk_c::dProcLastCombo_init,
+    &daPy_lk_c::procShipGetOff_init,
+    &daPy_lk_c::dProcHandUp_init,
+    &daPy_lk_c::procFoodThrow_init,
+    &daPy_lk_c::dProcIceSlip_init,
+};
+
 /* 80102E8C-80102EAC       .text daPy_createHeap__FP10fopAc_ac_c */
 static BOOL daPy_createHeap(fopAc_ac_c* i_this) {
     return ((daPy_lk_c*)i_this)->createHeap();
@@ -970,282 +1270,282 @@ BOOL daPy_lk_c::commonProcInit(daPy_lk_c::daPy_PROC procID) {
 }
 
 /* 80112954-80112A24       .text procScope_init__9daPy_lk_cFi */
-void daPy_lk_c::procScope_init(int) {
+BOOL daPy_lk_c::procScope_init(int) {
     /* Nonmatching */
 }
 
 /* 80112A24-80112AA8       .text procScope__9daPy_lk_cFv */
-void daPy_lk_c::procScope() {
+BOOL daPy_lk_c::procScope() {
     /* Nonmatching */
 }
 
 /* 80112AA8-80112B18       .text procSubjectivity_init__9daPy_lk_cFi */
-void daPy_lk_c::procSubjectivity_init(int) {
+BOOL daPy_lk_c::procSubjectivity_init(int) {
     /* Nonmatching */
 }
 
 /* 80112B18-80112BEC       .text procSubjectivity__9daPy_lk_cFv */
-void daPy_lk_c::procSubjectivity() {
+BOOL daPy_lk_c::procSubjectivity() {
     /* Nonmatching */
 }
 
 /* 80112BEC-80112C90       .text procCall_init__9daPy_lk_cFv */
-void daPy_lk_c::procCall_init() {
+BOOL daPy_lk_c::procCall_init() {
     /* Nonmatching */
 }
 
 /* 80112C90-80112D38       .text procCall__9daPy_lk_cFv */
-void daPy_lk_c::procCall() {
+BOOL daPy_lk_c::procCall() {
     /* Nonmatching */
 }
 
 /* 80112D38-80112DF4       .text procControllWait_init__9daPy_lk_cFv */
-void daPy_lk_c::procControllWait_init() {
+BOOL daPy_lk_c::procControllWait_init() {
     /* Nonmatching */
 }
 
 /* 80112DF4-80112E60       .text procControllWait__9daPy_lk_cFv */
-void daPy_lk_c::procControllWait() {
+BOOL daPy_lk_c::procControllWait() {
     /* Nonmatching */
 }
 
 /* 80112E60-80113044       .text procWait_init__9daPy_lk_cFv */
-void daPy_lk_c::procWait_init() {
+BOOL daPy_lk_c::procWait_init() {
     /* Nonmatching */
 }
 
 /* 80113044-801133FC       .text procWait__9daPy_lk_cFv */
-void daPy_lk_c::procWait() {
+BOOL daPy_lk_c::procWait() {
     /* Nonmatching */
 }
 
 /* 801133FC-801134A0       .text procFreeWait_init__9daPy_lk_cFv */
-void daPy_lk_c::procFreeWait_init() {
+BOOL daPy_lk_c::procFreeWait_init() {
     /* Nonmatching */
 }
 
 /* 801134A0-801135C4       .text procFreeWait__9daPy_lk_cFv */
-void daPy_lk_c::procFreeWait() {
+BOOL daPy_lk_c::procFreeWait() {
     /* Nonmatching */
 }
 
 /* 801135C4-80113628       .text procMove_init__9daPy_lk_cFv */
-void daPy_lk_c::procMove_init() {
+BOOL daPy_lk_c::procMove_init() {
     /* Nonmatching */
 }
 
 /* 80113628-801136D4       .text procMove__9daPy_lk_cFv */
-void daPy_lk_c::procMove() {
+BOOL daPy_lk_c::procMove() {
     /* Nonmatching */
 }
 
 /* 801136D4-80113738       .text procAtnMove_init__9daPy_lk_cFv */
-void daPy_lk_c::procAtnMove_init() {
+BOOL daPy_lk_c::procAtnMove_init() {
     /* Nonmatching */
 }
 
 /* 80113738-801137B4       .text procAtnMove__9daPy_lk_cFv */
-void daPy_lk_c::procAtnMove() {
+BOOL daPy_lk_c::procAtnMove() {
     /* Nonmatching */
 }
 
 /* 801137B4-8011388C       .text procAtnActorWait_init__9daPy_lk_cFv */
-void daPy_lk_c::procAtnActorWait_init() {
+BOOL daPy_lk_c::procAtnActorWait_init() {
     /* Nonmatching */
 }
 
 /* 8011388C-801138FC       .text procAtnActorWait__9daPy_lk_cFv */
-void daPy_lk_c::procAtnActorWait() {
+BOOL daPy_lk_c::procAtnActorWait() {
     /* Nonmatching */
 }
 
 /* 801138FC-80113960       .text procAtnActorMove_init__9daPy_lk_cFv */
-void daPy_lk_c::procAtnActorMove_init() {
+BOOL daPy_lk_c::procAtnActorMove_init() {
     /* Nonmatching */
 }
 
 /* 80113960-801139C0       .text procAtnActorMove__9daPy_lk_cFv */
-void daPy_lk_c::procAtnActorMove() {
+BOOL daPy_lk_c::procAtnActorMove() {
     /* Nonmatching */
 }
 
 /* 801139C0-80113AC4       .text procSideStep_init__9daPy_lk_cFi */
-void daPy_lk_c::procSideStep_init(int) {
+BOOL daPy_lk_c::procSideStep_init(int) {
     /* Nonmatching */
 }
 
 /* 80113AC4-80113BDC       .text procSideStep__9daPy_lk_cFv */
-void daPy_lk_c::procSideStep() {
+BOOL daPy_lk_c::procSideStep() {
     /* Nonmatching */
 }
 
 /* 80113BDC-80113CBC       .text procSideStepLand_init__9daPy_lk_cFv */
-void daPy_lk_c::procSideStepLand_init() {
+BOOL daPy_lk_c::procSideStepLand_init() {
     /* Nonmatching */
 }
 
 /* 80113CBC-80113D30       .text procSideStepLand__9daPy_lk_cFv */
-void daPy_lk_c::procSideStepLand() {
+BOOL daPy_lk_c::procSideStepLand() {
     /* Nonmatching */
 }
 
 /* 80113D30-80113DBC       .text procCrouchDefense_init__9daPy_lk_cFv */
-void daPy_lk_c::procCrouchDefense_init() {
+BOOL daPy_lk_c::procCrouchDefense_init() {
     /* Nonmatching */
 }
 
 /* 80113DBC-80114014       .text procCrouchDefense__9daPy_lk_cFv */
-void daPy_lk_c::procCrouchDefense() {
+BOOL daPy_lk_c::procCrouchDefense() {
     /* Nonmatching */
 }
 
 /* 80114014-801142F4       .text procCrouchDefenseSlip_init__9daPy_lk_cFv */
-void daPy_lk_c::procCrouchDefenseSlip_init() {
+BOOL daPy_lk_c::procCrouchDefenseSlip_init() {
     /* Nonmatching */
 }
 
 /* 801142F4-801143D4       .text procCrouchDefenseSlip__9daPy_lk_cFv */
-void daPy_lk_c::procCrouchDefenseSlip() {
+BOOL daPy_lk_c::procCrouchDefenseSlip() {
     /* Nonmatching */
 }
 
 /* 801143D4-80114440       .text procCrouch_init__9daPy_lk_cFv */
-void daPy_lk_c::procCrouch_init() {
+BOOL daPy_lk_c::procCrouch_init() {
     /* Nonmatching */
 }
 
 /* 80114440-8011476C       .text procCrouch__9daPy_lk_cFv */
-void daPy_lk_c::procCrouch() {
+BOOL daPy_lk_c::procCrouch() {
     /* Nonmatching */
 }
 
 /* 8011476C-80114804       .text procWaitTurn_init__9daPy_lk_cFv */
-void daPy_lk_c::procWaitTurn_init() {
+BOOL daPy_lk_c::procWaitTurn_init() {
     /* Nonmatching */
 }
 
 /* 80114804-80114908       .text procWaitTurn__9daPy_lk_cFv */
-void daPy_lk_c::procWaitTurn() {
+BOOL daPy_lk_c::procWaitTurn() {
     /* Nonmatching */
 }
 
 /* 80114908-801149EC       .text procMoveTurn_init__9daPy_lk_cFi */
-void daPy_lk_c::procMoveTurn_init(int) {
+BOOL daPy_lk_c::procMoveTurn_init(int) {
     /* Nonmatching */
 }
 
 /* 801149EC-80114A60       .text procMoveTurn__9daPy_lk_cFv */
-void daPy_lk_c::procMoveTurn() {
+BOOL daPy_lk_c::procMoveTurn() {
     /* Nonmatching */
 }
 
 /* 80114A60-80114B28       .text procSlip_init__9daPy_lk_cFv */
-void daPy_lk_c::procSlip_init() {
+BOOL daPy_lk_c::procSlip_init() {
     /* Nonmatching */
 }
 
 /* 80114B28-80114D2C       .text procSlip__9daPy_lk_cFv */
-void daPy_lk_c::procSlip() {
+BOOL daPy_lk_c::procSlip() {
     /* Nonmatching */
 }
 
 /* 80114D2C-80114DE4       .text procSlideFront_init__9daPy_lk_cFs */
-void daPy_lk_c::procSlideFront_init(s16) {
+BOOL daPy_lk_c::procSlideFront_init(s16) {
     /* Nonmatching */
 }
 
 /* 80114DE4-80114EE8       .text procSlideFront__9daPy_lk_cFv */
-void daPy_lk_c::procSlideFront() {
+BOOL daPy_lk_c::procSlideFront() {
     /* Nonmatching */
 }
 
 /* 80114EE8-80114FA0       .text procSlideBack_init__9daPy_lk_cFs */
-void daPy_lk_c::procSlideBack_init(s16) {
+BOOL daPy_lk_c::procSlideBack_init(s16) {
     /* Nonmatching */
 }
 
 /* 80114FA0-801150B0       .text procSlideBack__9daPy_lk_cFv */
-void daPy_lk_c::procSlideBack() {
+BOOL daPy_lk_c::procSlideBack() {
     /* Nonmatching */
 }
 
 /* 801150B0-80115118       .text procSlideFrontLand_init__9daPy_lk_cFv */
-void daPy_lk_c::procSlideFrontLand_init() {
+BOOL daPy_lk_c::procSlideFrontLand_init() {
     /* Nonmatching */
 }
 
 /* 80115118-801151C8       .text procSlideFrontLand__9daPy_lk_cFv */
-void daPy_lk_c::procSlideFrontLand() {
+BOOL daPy_lk_c::procSlideFrontLand() {
     /* Nonmatching */
 }
 
 /* 801151C8-80115220       .text procSlideBackLand_init__9daPy_lk_cFv */
-void daPy_lk_c::procSlideBackLand_init() {
+BOOL daPy_lk_c::procSlideBackLand_init() {
     /* Nonmatching */
 }
 
 /* 80115220-801152D0       .text procSlideBackLand__9daPy_lk_cFv */
-void daPy_lk_c::procSlideBackLand() {
+BOOL daPy_lk_c::procSlideBackLand() {
     /* Nonmatching */
 }
 
 /* 801152D0-80115478       .text procFrontRoll_init__9daPy_lk_cFf */
-void daPy_lk_c::procFrontRoll_init(f32) {
+BOOL daPy_lk_c::procFrontRoll_init(f32) {
     /* Nonmatching */
 }
 
 /* 80115478-80115628       .text procFrontRoll__9daPy_lk_cFv */
-void daPy_lk_c::procFrontRoll() {
+BOOL daPy_lk_c::procFrontRoll() {
     /* Nonmatching */
 }
 
 /* 80115628-801157D8       .text procFrontRollCrash_init__9daPy_lk_cFv */
-void daPy_lk_c::procFrontRollCrash_init() {
+BOOL daPy_lk_c::procFrontRollCrash_init() {
     /* Nonmatching */
 }
 
 /* 801157D8-801158AC       .text procFrontRollCrash__9daPy_lk_cFv */
-void daPy_lk_c::procFrontRollCrash() {
+BOOL daPy_lk_c::procFrontRollCrash() {
     /* Nonmatching */
 }
 
 /* 801158AC-8011590C       .text procNockBackEnd_init__9daPy_lk_cFv */
-void daPy_lk_c::procNockBackEnd_init() {
+BOOL daPy_lk_c::procNockBackEnd_init() {
     /* Nonmatching */
 }
 
 /* 8011590C-80115968       .text procNockBackEnd__9daPy_lk_cFv */
-void daPy_lk_c::procNockBackEnd() {
+BOOL daPy_lk_c::procNockBackEnd() {
     /* Nonmatching */
 }
 
 /* 80115968-80115A18       .text procSideRoll_init__9daPy_lk_cFv */
-void daPy_lk_c::procSideRoll_init() {
+BOOL daPy_lk_c::procSideRoll_init() {
     /* Nonmatching */
 }
 
 /* 80115A18-80115B08       .text procSideRoll__9daPy_lk_cFv */
-void daPy_lk_c::procSideRoll() {
+BOOL daPy_lk_c::procSideRoll() {
     /* Nonmatching */
 }
 
 /* 80115B08-80115BFC       .text procBackJump_init__9daPy_lk_cFv */
-void daPy_lk_c::procBackJump_init() {
+BOOL daPy_lk_c::procBackJump_init() {
     /* Nonmatching */
 }
 
 /* 80115BFC-80115CA0       .text procBackJump__9daPy_lk_cFv */
-void daPy_lk_c::procBackJump() {
+BOOL daPy_lk_c::procBackJump() {
     /* Nonmatching */
 }
 
 /* 80115CA0-80115DA8       .text procBackJumpLand_init__9daPy_lk_cFv */
-void daPy_lk_c::procBackJumpLand_init() {
+BOOL daPy_lk_c::procBackJumpLand_init() {
     /* Nonmatching */
 }
 
 /* 80115DA8-80115E88       .text procBackJumpLand__9daPy_lk_cFv */
-void daPy_lk_c::procBackJumpLand() {
+BOOL daPy_lk_c::procBackJumpLand() {
     /* Nonmatching */
 }
 
@@ -1255,207 +1555,207 @@ int daPy_lk_c::checkAutoJumpFlying() const {
 }
 
 /* 80115EA4-8011602C       .text procAutoJump_init__9daPy_lk_cFv */
-void daPy_lk_c::procAutoJump_init() {
+BOOL daPy_lk_c::procAutoJump_init() {
     /* Nonmatching */
 }
 
 /* 8011602C-801163D4       .text procAutoJump__9daPy_lk_cFv */
-void daPy_lk_c::procAutoJump() {
+BOOL daPy_lk_c::procAutoJump() {
     /* Nonmatching */
 }
 
 /* 801163D4-8011651C       .text procLand_init__9daPy_lk_cFfi */
-void daPy_lk_c::procLand_init(f32, int) {
+BOOL daPy_lk_c::procLand_init(f32, int) {
     /* Nonmatching */
 }
 
 /* 8011651C-801165B4       .text procLand__9daPy_lk_cFv */
-void daPy_lk_c::procLand() {
+BOOL daPy_lk_c::procLand() {
     /* Nonmatching */
 }
 
 /* 801165B4-80116768       .text procLandDamage_init__9daPy_lk_cFi */
-void daPy_lk_c::procLandDamage_init(int) {
+BOOL daPy_lk_c::procLandDamage_init(int) {
     /* Nonmatching */
 }
 
 /* 80116768-80116864       .text procLandDamage__9daPy_lk_cFv */
-void daPy_lk_c::procLandDamage() {
+BOOL daPy_lk_c::procLandDamage() {
     /* Nonmatching */
 }
 
 /* 80116864-80116A38       .text procFall_init__9daPy_lk_cFif */
-void daPy_lk_c::procFall_init(int, f32) {
+BOOL daPy_lk_c::procFall_init(int, f32) {
     /* Nonmatching */
 }
 
 /* 80116A38-80116C14       .text procFall__9daPy_lk_cFv */
-void daPy_lk_c::procFall() {
+BOOL daPy_lk_c::procFall() {
     /* Nonmatching */
 }
 
 /* 80116C14-80116CC4       .text procSlowFall_init__9daPy_lk_cFv */
-void daPy_lk_c::procSlowFall_init() {
+BOOL daPy_lk_c::procSlowFall_init() {
     /* Nonmatching */
 }
 
 /* 80116CC4-80116D3C       .text procSlowFall__9daPy_lk_cFv */
-void daPy_lk_c::procSlowFall() {
+BOOL daPy_lk_c::procSlowFall() {
     /* Nonmatching */
 }
 
 /* 80116D3C-80116EB4       .text procSmallJump_init__9daPy_lk_cFi */
-void daPy_lk_c::procSmallJump_init(int) {
+BOOL daPy_lk_c::procSmallJump_init(int) {
     /* Nonmatching */
 }
 
 /* 80116EB4-80116F54       .text procSmallJump__9daPy_lk_cFv */
-void daPy_lk_c::procSmallJump() {
+BOOL daPy_lk_c::procSmallJump() {
     /* Nonmatching */
 }
 
 /* 80116F54-80116FEC       .text procVerticalJump_init__9daPy_lk_cFv */
-void daPy_lk_c::procVerticalJump_init() {
+BOOL daPy_lk_c::procVerticalJump_init() {
     /* Nonmatching */
 }
 
 /* 80116FEC-80117088       .text procVerticalJump__9daPy_lk_cFv */
-void daPy_lk_c::procVerticalJump() {
+BOOL daPy_lk_c::procVerticalJump() {
     /* Nonmatching */
 }
 
 /* 80117088-801170F0       .text procGuardCrash__9daPy_lk_cFv */
-void daPy_lk_c::procGuardCrash() {
+BOOL daPy_lk_c::procGuardCrash() {
     /* Nonmatching */
 }
 
 /* 801170F0-80117448       .text procDamage_init__9daPy_lk_cFv */
-void daPy_lk_c::procDamage_init() {
+BOOL daPy_lk_c::procDamage_init() {
     /* Nonmatching */
 }
 
 /* 80117448-801176FC       .text procDamage__9daPy_lk_cFv */
-void daPy_lk_c::procDamage() {
+BOOL daPy_lk_c::procDamage() {
     /* Nonmatching */
 }
 
 /* 801176FC-80117794       .text procPolyDamage_init__9daPy_lk_cFv */
-void daPy_lk_c::procPolyDamage_init() {
+BOOL daPy_lk_c::procPolyDamage_init() {
     /* Nonmatching */
 }
 
 /* 80117794-801177CC       .text procPolyDamage__9daPy_lk_cFv */
-void daPy_lk_c::procPolyDamage() {
+BOOL daPy_lk_c::procPolyDamage() {
     /* Nonmatching */
 }
 
 /* 801177CC-80117EAC       .text procLargeDamage_init__9daPy_lk_cFiiss */
-void daPy_lk_c::procLargeDamage_init(int, int, s16, s16) {
+BOOL daPy_lk_c::procLargeDamage_init(int, int, s16, s16) {
     /* Nonmatching */
 }
 
 /* 80117EAC-8011810C       .text procLargeDamage__9daPy_lk_cFv */
-void daPy_lk_c::procLargeDamage() {
+BOOL daPy_lk_c::procLargeDamage() {
     /* Nonmatching */
 }
 
 /* 8011810C-80118504       .text procLargeDamageUp_init__9daPy_lk_cFiiss */
-void daPy_lk_c::procLargeDamageUp_init(int, int, s16, s16) {
+BOOL daPy_lk_c::procLargeDamageUp_init(int, int, s16, s16) {
     /* Nonmatching */
 }
 
 /* 80118504-80118640       .text procLargeDamageUp__9daPy_lk_cFv */
-void daPy_lk_c::procLargeDamageUp() {
+BOOL daPy_lk_c::procLargeDamageUp() {
     /* Nonmatching */
 }
 
 /* 80118640-801189AC       .text procLargeDamageWall_init__9daPy_lk_cFiiss */
-void daPy_lk_c::procLargeDamageWall_init(int, int, s16, s16) {
+BOOL daPy_lk_c::procLargeDamageWall_init(int, int, s16, s16) {
     /* Nonmatching */
 }
 
 /* 801189AC-801189F0       .text procLargeDamageWall__9daPy_lk_cFv */
-void daPy_lk_c::procLargeDamageWall() {
+BOOL daPy_lk_c::procLargeDamageWall() {
     /* Nonmatching */
 }
 
 /* 801189F0-80118BC4       .text procLavaDamage_init__9daPy_lk_cFv */
-void daPy_lk_c::procLavaDamage_init() {
+BOOL daPy_lk_c::procLavaDamage_init() {
     /* Nonmatching */
 }
 
 /* 80118BC4-80118C58       .text procLavaDamage__9daPy_lk_cFv */
-void daPy_lk_c::procLavaDamage() {
+BOOL daPy_lk_c::procLavaDamage() {
     /* Nonmatching */
 }
 
 /* 80118C58-80118E6C       .text procElecDamage_init__9daPy_lk_cFPC4cXyz */
-void daPy_lk_c::procElecDamage_init(const cXyz*) {
+BOOL daPy_lk_c::procElecDamage_init(const cXyz*) {
     /* Nonmatching */
 }
 
 /* 80118E6C-80118F40       .text procElecDamage__9daPy_lk_cFv */
-void daPy_lk_c::procElecDamage() {
+BOOL daPy_lk_c::procElecDamage() {
     /* Nonmatching */
 }
 
 /* 80118F40-80119248       .text procGuardSlip_init__9daPy_lk_cFv */
-void daPy_lk_c::procGuardSlip_init() {
+BOOL daPy_lk_c::procGuardSlip_init() {
     /* Nonmatching */
 }
 
 /* 80119248-80119334       .text procGuardSlip__9daPy_lk_cFv */
-void daPy_lk_c::procGuardSlip() {
+BOOL daPy_lk_c::procGuardSlip() {
     /* Nonmatching */
 }
 
 /* 80119334-80119478       .text procIceSlipFall_init__9daPy_lk_cFv */
-void daPy_lk_c::procIceSlipFall_init() {
+BOOL daPy_lk_c::procIceSlipFall_init() {
     /* Nonmatching */
 }
 
 /* 80119478-80119500       .text procIceSlipFall__9daPy_lk_cFv */
-void daPy_lk_c::procIceSlipFall() {
+BOOL daPy_lk_c::procIceSlipFall() {
     /* Nonmatching */
 }
 
 /* 80119500-80119688       .text procIceSlipFallUp_init__9daPy_lk_cFiss */
-void daPy_lk_c::procIceSlipFallUp_init(int, s16, s16) {
+BOOL daPy_lk_c::procIceSlipFallUp_init(int, s16, s16) {
     /* Nonmatching */
 }
 
 /* 80119688-8011970C       .text procIceSlipFallUp__9daPy_lk_cFv */
-void daPy_lk_c::procIceSlipFallUp() {
+BOOL daPy_lk_c::procIceSlipFallUp() {
     /* Nonmatching */
 }
 
 /* 8011970C-801197D4       .text procIceSlipAlmostFall_init__9daPy_lk_cFv */
-void daPy_lk_c::procIceSlipAlmostFall_init() {
+BOOL daPy_lk_c::procIceSlipAlmostFall_init() {
     /* Nonmatching */
 }
 
 /* 801197D4-80119864       .text procIceSlipAlmostFall__9daPy_lk_cFv */
-void daPy_lk_c::procIceSlipAlmostFall() {
+BOOL daPy_lk_c::procIceSlipAlmostFall() {
     /* Nonmatching */
 }
 
 /* 80119864-801198E0       .text procBootsEquip_init__9daPy_lk_cFUs */
-void daPy_lk_c::procBootsEquip_init(u16) {
+BOOL daPy_lk_c::procBootsEquip_init(u16) {
     /* Nonmatching */
 }
 
 /* 801198E0-80119A5C       .text procBootsEquip__9daPy_lk_cFv */
-void daPy_lk_c::procBootsEquip() {
+BOOL daPy_lk_c::procBootsEquip() {
     /* Nonmatching */
 }
 
 /* 80119A5C-80119BA0       .text procNotUse_init__9daPy_lk_cFi */
-void daPy_lk_c::procNotUse_init(int) {
+BOOL daPy_lk_c::procNotUse_init(int) {
     /* Nonmatching */
 }
 
 /* 80119BA0-80119DA0       .text procNotUse__9daPy_lk_cFv */
-void daPy_lk_c::procNotUse() {
+BOOL daPy_lk_c::procNotUse() {
     /* Nonmatching */
 }
 

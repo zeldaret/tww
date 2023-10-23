@@ -78,21 +78,21 @@ void daPy_lk_c::setBowModel() {
 }
 
 /* 8014A834-8014A8D4       .text procBowSubject_init__9daPy_lk_cFv */
-void daPy_lk_c::procBowSubject_init() {
+BOOL daPy_lk_c::procBowSubject_init() {
     /* Nonmatching */
 }
 
 /* 8014A8D4-8014A974       .text procBowSubject__9daPy_lk_cFv */
-void daPy_lk_c::procBowSubject() {
+BOOL daPy_lk_c::procBowSubject() {
     /* Nonmatching */
 }
 
 /* 8014A974-8014AA2C       .text procBowMove_init__9daPy_lk_cFv */
-void daPy_lk_c::procBowMove_init() {
+BOOL daPy_lk_c::procBowMove_init() {
     /* Nonmatching */
 }
 
 /* 8014AA2C-8014AB5C       .text procBowMove__9daPy_lk_cFv */
-void daPy_lk_c::procBowMove() {
+BOOL daPy_lk_c::procBowMove() {
     /* Nonmatching */
 }

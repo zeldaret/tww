@@ -48,31 +48,31 @@ void daPy_lk_c::changeBoomerangCatchProc() {
 }
 
 /* 80149A44-80149AF0       .text procBoomerangSubject_init__9daPy_lk_cFv */
-void daPy_lk_c::procBoomerangSubject_init() {
+BOOL daPy_lk_c::procBoomerangSubject_init() {
     /* Nonmatching */
 }
 
 /* 80149AF0-80149C00       .text procBoomerangSubject__9daPy_lk_cFv */
-void daPy_lk_c::procBoomerangSubject() {
+BOOL daPy_lk_c::procBoomerangSubject() {
     /* Nonmatching */
 }
 
 /* 80149C00-80149CC8       .text procBoomerangMove_init__9daPy_lk_cFv */
-void daPy_lk_c::procBoomerangMove_init() {
+BOOL daPy_lk_c::procBoomerangMove_init() {
     /* Nonmatching */
 }
 
 /* 80149CC8-80149DA4       .text procBoomerangMove__9daPy_lk_cFv */
-void daPy_lk_c::procBoomerangMove() {
+BOOL daPy_lk_c::procBoomerangMove() {
     /* Nonmatching */
 }
 
 /* 80149DA4-80149E1C       .text procBoomerangCatch_init__9daPy_lk_cFv */
-void daPy_lk_c::procBoomerangCatch_init() {
+BOOL daPy_lk_c::procBoomerangCatch_init() {
     /* Nonmatching */
 }
 
 /* 80149E1C-80149ECC       .text procBoomerangCatch__9daPy_lk_cFv */
-void daPy_lk_c::procBoomerangCatch() {
+BOOL daPy_lk_c::procBoomerangCatch() {
     /* Nonmatching */
 }
