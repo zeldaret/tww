@@ -3,51 +3,237 @@
 // Translation Unit: JASAiCtrl.cpp
 //
 
-#include "JASAiCtrl.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASAiCtrl.h"
+#include "JSystem/JAudio/JASCalc.h"
+#include "JSystem/JAudio/JASCallback.h"
+#include "JSystem/JAudio/JASCmdStack.h"
+#include "JSystem/JAudio/JASDSPBuf.h"
+#include "JSystem/JAudio/JASProbe.h"
+#include "JSystem/JAudio/JASRate.h"
+#include "JSystem/JAudio/JASSystemHeap.h"
+#include "dolphin/ai/ai.h"
+#include "dolphin/os/OSCache.h"
+#include "dolphin/os/OSInterrupt.h"
 
 /* 8027AE30-8027AE5C       .text init__Q28JASystem6KernelFv */
 void JASystem::Kernel::init() {
-    /* Nonmatching */
+    resetCallback();
+    initSystem();
+    portCmdInit();
+    Calc::initSinfT();
 }
+
+s16* JASystem::Kernel::dac[3];
 
 /* 8027AE5C-8027AEF8       .text initSystem__Q28JASystem6KernelFv */
 void JASystem::Kernel::initSystem() {
-    /* Nonmatching */
+    for (int i = 0; i < 3; i++) {
+        dac[i] = (s16*)allocFromSysDram(gDacSize * 2);
+        Calc::bzero(dac[i], gDacSize * 2);
+        DCStoreRange(dac[i], gDacSize * 2);
+    }
+    AIInit(NULL);
+    AIInitDMA(u32(dac[2]), gDacSize * 2);
 }
 
+int JASystem::Kernel::JASUniversalDacCounter;
+s16* JASystem::Kernel::lastRspMadep;
+s16* JASystem::Kernel::useRspMadep;
+int JASystem::Kernel::vframeWorkRunning;
+void (*JASystem::Kernel::dacCallbackFunc)(s16*, u32);
+int JASystem::Kernel::JASVframeCounter;
+s16* (*JASystem::Kernel::extMixCallback)(s32);
+u8 JASystem::Kernel::extMixMode;
+
 /* 8027AEF8-8027AF04       .text registerMixCallback__Q28JASystem6KernelFPFl_PsUc */
-void JASystem::Kernel::registerMixCallback(short* (*)(long), unsigned char) {
-    /* Nonmatching */
+void JASystem::Kernel::registerMixCallback(s16* (*param_1)(s32), u8 param_2) {
+    extMixCallback = param_1;
+    extMixMode = param_2;
 }
 
 /* 8027AF04-8027B0B8       .text vframeWork__Q28JASystem6KernelFv */
 void JASystem::Kernel::vframeWork() {
-    /* Nonmatching */
+    static u32 dacp = 0;
+    JASVframeCounter++;
+    s16* buf = TDSP_DACBuffer::mixDSP(gDacSize / 2);
+    Calc::imixcopy(buf + gFrameSamples, buf, dac[dacp], gDacSize / 2);
+    if (extMixCallback) {
+        switch(extMixMode) {
+        case 0:
+            mixMonoTrack(dac[dacp], gDacSize / 2, extMixCallback);
+            break;
+        case 1:
+            mixMonoTrackWide(dac[dacp], gDacSize / 2, extMixCallback);
+            break;
+        case 2:
+            mixExtraTrack(dac[dacp], gDacSize / 2, extMixCallback);
+            break;
+        case 3:
+            mixInterleaveTrack(dac[dacp], gDacSize / 2, extMixCallback);
+            break;
+        }
+    }
+    BOOL enable = OSDisableInterrupts();
+    DCStoreRange(dac[dacp], gDacSize * 2);
+    OSRestoreInterrupts(enable);
+    lastRspMadep = dac[dacp];
+    dacp++;
+    if (dacp == 3) {
+        dacp = 0;
+    }
+    vframeWorkRunning = 0;
 }
 
 /* 8027B0B8-8027B160       .text updateDac__Q28JASystem6KernelFv */
 void JASystem::Kernel::updateDac() {
     /* Nonmatching */
+    if (!useRspMadep) {
+        useRspMadep = lastRspMadep;
+        lastRspMadep = NULL;
+    }
+    if (useRspMadep) {
+        AIInitDMA(u32(useRspMadep), gDacSize * 2);
+        useRspMadep = NULL;
+    } else {
+        JASUniversalDacCounter++;
+    }
+    if (!lastRspMadep && vframeWorkRunning == 0) {
+        vframeWork();
+    }
+    //HardStream::main();
+    if (dacCallbackFunc) {
+        dacCallbackFunc(lastRspMadep, gDacSize / 2);
+    }
 }
 
 /* 8027B160-8027B250       .text mixMonoTrack__Q28JASystem6KernelFPslPFl_Ps */
-void JASystem::Kernel::mixMonoTrack(short*, long, short* (*)(long)) {
-    /* Nonmatching */
+void JASystem::Kernel::mixMonoTrack(s16* dest, s32 size, s16* (*cb)(s32)) {
+    probeStart(5, "MONO-MIX");
+    s16* src = cb(size);
+    if (!src) {
+        return;
+    }
+    probeFinish(5);
+    s16* destPtr = dest;
+    s16* srcPtr = src;
+    for (int i = 0; i < size; i++) {
+        s32 var1 = destPtr[0] + srcPtr[0];
+        s16 var2;
+        if (var1 < -0x8000) {
+            var2 = -0x7fff;
+        } else if (var1 > 0x7fff) {
+            var2 = 0x7fff;
+        } else {
+            var2 = var1;
+        }
+        destPtr[0] = var2;
+        var1 = destPtr[1] + srcPtr[0];
+        if (var1 < -0x8000) {
+            var2 = -0x7fff;
+        } else if (var1 > 0x7fff) {
+            var2 = 0x7fff;
+        } else {
+            var2 = var1;
+        }
+        destPtr[1] = var2;
+        destPtr += 2;
+        srcPtr++;
+    }
 }
 
 /* 8027B250-8027B344       .text mixMonoTrackWide__Q28JASystem6KernelFPslPFl_Ps */
-void JASystem::Kernel::mixMonoTrackWide(short*, long, short* (*)(long)) {
-    /* Nonmatching */
+void JASystem::Kernel::mixMonoTrackWide(s16* dest, s32 size, s16* (*cb)(s32)) {
+    probeStart(5, "MONO(W)-MIX");
+    s16* src = cb(size);
+    if (!src) {
+        return;
+    }
+    probeFinish(5);
+    s16* destPtr = dest;
+    s16* srcPtr = src;
+    for (int i = 0; i < size; i++) {
+        s32 var1 = destPtr[0] + srcPtr[0];
+        s16 var2;
+        if (var1 < -0x8000) {
+            var2 = -0x7fff;
+        } else if (var1 > 0x7fff) {
+            var2 = 0x7fff;
+        } else {
+            var2 = var1;
+        }
+        destPtr[0] = var2;
+        var1 = destPtr[1] - srcPtr[0];
+        if (var1 < -0x8000) {
+            var2 = -0x7fff;
+        } else if (var1 > 0x7fff) {
+            var2 = 0x7fff;
+        } else {
+            var2 = var1;
+        }
+        destPtr[1] = var2;
+        destPtr += 2;
+        srcPtr++;
+    }
 }
 
 /* 8027B344-8027B464       .text mixExtraTrack__Q28JASystem6KernelFPslPFl_Ps */
-void JASystem::Kernel::mixExtraTrack(short*, long, short* (*)(long)) {
-    /* Nonmatching */
+void JASystem::Kernel::mixExtraTrack(s16* dest, s32 size, s16* (*cb)(s32)) {
+    probeStart(5, "DSPMIX");
+    s16* src = cb(size);
+    if (!src) {
+        return;
+    }
+    probeFinish(5);
+    probeStart(6,"MIXING");
+    s16* destPtr = dest;
+    s16* srcPtr = src;
+    s16* srcPtr2 = src + gFrameSamples;
+    for (int i = 0; i < size; i++) {
+        s32 var1 = destPtr[0] + srcPtr2[0];
+        s16 var2;
+        if (var1 < -0x8000) {
+            var2 = -0x7fff;
+        } else if (var1 > 0x7fff) {
+            var2 = 0x7fff;
+        } else {
+            var2 = var1;
+        }
+        destPtr[0] = var2;
+        var1 = destPtr[1] + srcPtr[0];
+        if (var1 < -0x8000) {
+            var2 = -0x7fff;
+        } else if (var1 > 0x7fff) {
+            var2 = 0x7fff;
+        } else {
+            var2 = var1;
+        }
+        destPtr[1] = var2;
+        destPtr += 2;
+        srcPtr2++;
+        srcPtr++;
+    }
+    probeFinish(6);
 }
 
 /* 8027B464-8027B500       .text mixInterleaveTrack__Q28JASystem6KernelFPslPFl_Ps */
-void JASystem::Kernel::mixInterleaveTrack(short*, long, short* (*)(long)) {
-    /* Nonmatching */
+void JASystem::Kernel::mixInterleaveTrack(s16* dest, s32 size, s16* (*cb)(s32)) {
+    s16* src = cb(size);
+    if (!src) {
+        return;
+    }
+    s16* destPtr = dest;
+    for (int i = 0; i < size * 2 ; i++) {
+        s32 var1 = destPtr[0] + src[0];
+        s16 var2;
+        if (var1 < -0x8000) {
+            var2 = -0x7fff;
+        } else if (var1 > 0x7fff) {
+            var2 = 0x7fff;
+        } else {
+            var2 = var1;
+        }
+        destPtr[0] = var2;
+        destPtr++;
+        src++;
+    }
 }
-
