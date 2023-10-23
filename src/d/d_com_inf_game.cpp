@@ -638,13 +638,13 @@ void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8
     if (daPy_getPlayerLinkActorClass() != NULL) {
         u32 mode = daPy_getPlayerLinkActorClass()->mNoResetFlg1;
 
-        if (mode & daPy_lk_c::daPy_FLG1_EQUIP_DRAGON_SHIELD) {
+        if (mode & daPy_lk_c::daPyFlg1_EQUIP_DRAGON_SHIELD) {
             i_lastMode |= 0x8000;
         }
 
         i_lastMode |= daPy_getPlayerLinkActorClass()->field_0x354e << 16;
 
-        if (mode & daPy_lk_c::daPy_FLG1_UNK8000) {
+        if (mode & daPy_lk_c::daPyFlg1_UNK8000) {
             i_lastMode |= 0x4000;
         }
     }

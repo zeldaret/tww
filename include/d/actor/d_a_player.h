@@ -29,6 +29,8 @@ public:
     void makeEmitterColor(u16, MtxP, const cXyz*, const GXColor*, const GXColor*);
     void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz*, s8) { mpEmitter = emitter; }
 
+    JPABaseEmitter* getEmitter() { return mpEmitter; }
+
     /* 0x04 */ JPABaseEmitter* mpEmitter;
     /* 0x08 */ MtxP mpMtx;
 };  // Size: 0x0C
@@ -78,6 +80,7 @@ private:
 class daPy_py_c : public fopAc_ac_c {
 public:
     enum daPy_FLG0 {
+        daPyFlg0_UNK4              = 0x00000004,
         daPyFlg0_UNK10             = 0x00000010,
         daPyFlg0_CUT_AT_FLG        = 0x00000040,
         daPyFlg0_PUSH_PULL_KEEP    = 0x00000800,
@@ -90,36 +93,42 @@ public:
     };
     
     enum daPy_FLG1 {
-        daPy_FLG1_EQUIP_DRAGON_SHIELD  = 0x00000001,
-        daPy_FLG1_NPC_CALL_COMMAND     = 0x00000002,
-        daPy_FLG1_FORCE_VOMIT_JUMP     = 0x00000010,
-        daPy_FLG1_NPC_NOT_CHANGE       = 0x00000040,
-        daPy_FLG1_CONFUSE              = 0x00000100,
-        daPy_FLG1_FREEZE_STATE         = 0x00000800,
-        daPy_FLG1_SHIP_TACT            = 0x00001000,
-        daPy_FLG1_USE_ARROW_EFFECT     = 0x00002000,
-        daPy_FLG1_LETTER_READ_EYE_MOVE = 0x00004000,
-        daPy_FLG1_UNK8000              = 0x00008000,
-        daPy_FLG1_FOREST_WATER_USE     = 0x00020000,
-        daPy_FLG1_WATER_DROP           = 0x00080000,
-        daPy_FLG1_VINE_CATCH           = 0x02000000,
-        daPy_FLG1_LAST_COMBO_WAIT      = 0x20000000,
+        daPyFlg1_EQUIP_DRAGON_SHIELD  = 0x00000001,
+        daPyFlg1_NPC_CALL_COMMAND     = 0x00000002,
+        daPyFlg1_FORCE_VOMIT_JUMP     = 0x00000010,
+        daPyFlg1_NPC_NOT_CHANGE       = 0x00000040,
+        daPyFlg1_UNK80                = 0x00000080,
+        daPyFlg1_CONFUSE              = 0x00000100,
+        daPyFlg1_FREEZE_STATE         = 0x00000800,
+        daPyFlg1_SHIP_TACT            = 0x00001000,
+        daPyFlg1_USE_ARROW_EFFECT     = 0x00002000,
+        daPyFlg1_LETTER_READ_EYE_MOVE = 0x00004000,
+        daPyFlg1_UNK8000              = 0x00008000,
+        daPyFlg1_FOREST_WATER_USE     = 0x00020000,
+        daPyFlg1_WATER_DROP           = 0x00080000,
+        daPyFlg1_UNK800000            = 0x00800000,
+        daPyFlg1_UNK1000000           = 0x01000000,
+        daPyFlg1_VINE_CATCH           = 0x02000000,
+        daPyFlg1_UNK8000000           = 0x08000000,
+        daPyFlg1_LAST_COMBO_WAIT      = 0x20000000,
     };
     
     enum daPy_RFLG0 {
-        daPy_RFLG0_ROPE_GRAB_RIGHT_HAND  = 0x00000004,
-        daPy_RFLG0_GRAB_UP_END           = 0x00000020,
-        daPy_RFLG0_AUTO_JUMP_LAND        = 0x00000040,
-        daPy_RFLG0_RIGHT_FOOT_ON_GROUND  = 0x00000400,
-        daPy_RFLG0_LEFT_FOOT_ON_GROUND   = 0x00000800,
-        daPy_RFLG0_FRONT_ROLL_CRASH      = 0x00002000,
-        daPy_RFLG0_UNK4000               = 0x00004000,
-        daPy_RFLG0_GRAB_UP_START         = 0x00008000,
-        daPy_RFLG0_ATTENTION_LOCK        = 0x00010000,
-        daPy_RFLG0_HAMMER_QUAKE          = 0x00020000,
-        daPy_RFLG0_GRAB_PUT_START        = 0x00400000,
-        daPy_RFLG0_TACT_USE              = 0x01000000,
-        daPy_RFLG0_FAIRY_USE             = 0x02000000,
+        daPyRFlg0_UNK2                  = 0x00000002,
+        daPyRFlg0_ROPE_GRAB_RIGHT_HAND  = 0x00000004,
+        daPyRFlg0_GRAB_UP_END           = 0x00000020,
+        daPyRFlg0_AUTO_JUMP_LAND        = 0x00000040,
+        daPyRFlg0_RIGHT_FOOT_ON_GROUND  = 0x00000400,
+        daPyRFlg0_LEFT_FOOT_ON_GROUND   = 0x00000800,
+        daPyRFlg0_FRONT_ROLL_CRASH      = 0x00002000,
+        daPyRFlg0_UNK4000               = 0x00004000,
+        daPyRFlg0_GRAB_UP_START         = 0x00008000,
+        daPyRFlg0_ATTENTION_LOCK        = 0x00010000,
+        daPyRFlg0_HAMMER_QUAKE          = 0x00020000,
+        daPyRFlg0_GRAB_PUT_START        = 0x00400000,
+        daPyRFlg0_TACT_USE              = 0x01000000,
+        daPyRFlg0_FAIRY_USE             = 0x02000000,
+        daPyRFlg0_UNK8000000            = 0x08000000,
         // 0x00000001 and 0x00000002 set in daPy_lk_c::dProcLastCombo
         // 0x00001000 set in daPy_lk_c::procCrawlMove_init, checked in checkNoCollisionCorret__9daPy_lk_cFv
         // 0x04000000 set in daPy_lk_c::procShipPaddle
@@ -168,42 +177,42 @@ public:
     void onNoResetFlg1(daPy_FLG1 flag) { mNoResetFlg1 |= flag; }
     void offNoResetFlg1(daPy_FLG1 flag) { mNoResetFlg1 &= ~flag; }
     bool checkNoResetFlg1(daPy_FLG1 flag) const { return mNoResetFlg1 & flag; }
-    bool checkEquipDragonShield() const { return checkNoResetFlg1(daPy_FLG1_EQUIP_DRAGON_SHIELD); }
-    void onNpcCall() { onNoResetFlg1(daPy_FLG1_NPC_CALL_COMMAND); }
-    void offNpcCallCommand() { offNoResetFlg1(daPy_FLG1_NPC_CALL_COMMAND); }
-    bool checkNpcCallCommand() const { return checkNoResetFlg1(daPy_FLG1_NPC_CALL_COMMAND); }
-    void onForceVomitJump() { onNoResetFlg1(daPy_FLG1_FORCE_VOMIT_JUMP); }
-    void onNpcNotChange() { onNoResetFlg1(daPy_FLG1_NPC_NOT_CHANGE); }
-    void offNpcNotChange() { offNoResetFlg1(daPy_FLG1_NPC_NOT_CHANGE); }
-    void onConfuse() { onNoResetFlg1(daPy_FLG1_CONFUSE); }
-    void offConfuse() { offNoResetFlg1(daPy_FLG1_CONFUSE); }
-    bool checkConfuse() const { return checkNoResetFlg1(daPy_FLG1_CONFUSE); }
-    bool checkFreezeState() const { return checkNoResetFlg1(daPy_FLG1_FREEZE_STATE); }
-    void onShipTact() { onNoResetFlg1(daPy_FLG1_SHIP_TACT); }
-    void offShipTact() { offNoResetFlg1(daPy_FLG1_SHIP_TACT); }
-    void onUseArrowEffect() { onNoResetFlg1(daPy_FLG1_USE_ARROW_EFFECT); }
-    void offUseArrowEffect() { offNoResetFlg1(daPy_FLG1_USE_ARROW_EFFECT); }
-    void onLetterReadEyeMove() { onNoResetFlg1(daPy_FLG1_LETTER_READ_EYE_MOVE); }
-    bool checkForestWaterUse() const { return checkNoResetFlg1(daPy_FLG1_FOREST_WATER_USE); }
-    void onWaterDrop() { onNoResetFlg1(daPy_FLG1_WATER_DROP); }
-    void onVineCatch() { onNoResetFlg1(daPy_FLG1_VINE_CATCH); }
-    bool checkLastComboWait() const { return checkNoResetFlg1(daPy_FLG1_LAST_COMBO_WAIT); }
+    bool checkEquipDragonShield() const { return checkNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD); }
+    void onNpcCall() { onNoResetFlg1(daPyFlg1_NPC_CALL_COMMAND); }
+    void offNpcCallCommand() { offNoResetFlg1(daPyFlg1_NPC_CALL_COMMAND); }
+    bool checkNpcCallCommand() const { return checkNoResetFlg1(daPyFlg1_NPC_CALL_COMMAND); }
+    void onForceVomitJump() { onNoResetFlg1(daPyFlg1_FORCE_VOMIT_JUMP); }
+    void onNpcNotChange() { onNoResetFlg1(daPyFlg1_NPC_NOT_CHANGE); }
+    void offNpcNotChange() { offNoResetFlg1(daPyFlg1_NPC_NOT_CHANGE); }
+    void onConfuse() { onNoResetFlg1(daPyFlg1_CONFUSE); }
+    void offConfuse() { offNoResetFlg1(daPyFlg1_CONFUSE); }
+    bool checkConfuse() const { return checkNoResetFlg1(daPyFlg1_CONFUSE); }
+    bool checkFreezeState() const { return checkNoResetFlg1(daPyFlg1_FREEZE_STATE); }
+    void onShipTact() { onNoResetFlg1(daPyFlg1_SHIP_TACT); }
+    void offShipTact() { offNoResetFlg1(daPyFlg1_SHIP_TACT); }
+    void onUseArrowEffect() { onNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT); }
+    void offUseArrowEffect() { offNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT); }
+    void onLetterReadEyeMove() { onNoResetFlg1(daPyFlg1_LETTER_READ_EYE_MOVE); }
+    bool checkForestWaterUse() const { return checkNoResetFlg1(daPyFlg1_FOREST_WATER_USE); }
+    void onWaterDrop() { onNoResetFlg1(daPyFlg1_WATER_DROP); }
+    void onVineCatch() { onNoResetFlg1(daPyFlg1_VINE_CATCH); }
+    bool checkLastComboWait() const { return checkNoResetFlg1(daPyFlg1_LAST_COMBO_WAIT); }
     
     void onResetFlg0(daPy_RFLG0 flag) { mResetFlg0 |= flag; }
-    void offNoResetFlg0(daPy_RFLG0 flag) { mResetFlg0 &= ~flag; }
+    void offResetFlg0(daPy_RFLG0 flag) { mResetFlg0 &= ~flag; }
     bool checkResetFlg0(daPy_RFLG0 flag) const { return mResetFlg0 & flag; }
-    bool getRopeGrabRightHand() const { return checkResetFlg0(daPy_RFLG0_ROPE_GRAB_RIGHT_HAND); }
-    bool getGrabUpEnd() const { return checkResetFlg0(daPy_RFLG0_GRAB_UP_END); }
-    bool getAutoJumpLand() const { return checkResetFlg0(daPy_RFLG0_AUTO_JUMP_LAND); }
-    bool getRightFootOnGround() const { return checkResetFlg0(daPy_RFLG0_RIGHT_FOOT_ON_GROUND); }
-    bool getLeftFootOnGround() const { return checkResetFlg0(daPy_RFLG0_LEFT_FOOT_ON_GROUND); }
-    bool checkFrontRollCrash() const { return checkResetFlg0(daPy_RFLG0_FRONT_ROLL_CRASH); }
-    bool getGrabUpStart() const { return checkResetFlg0(daPy_RFLG0_GRAB_UP_START); }
-    bool checkAttentionLock() const { return checkResetFlg0(daPy_RFLG0_ATTENTION_LOCK); }
-    bool checkHammerQuake() const { return checkResetFlg0(daPy_RFLG0_HAMMER_QUAKE); }
-    bool getGrabPutStart() const { return checkResetFlg0(daPy_RFLG0_GRAB_PUT_START); }
-    bool checkFairyUse() const { return checkResetFlg0(daPy_RFLG0_FAIRY_USE); }
-    bool checkTactUse() const { return checkResetFlg0(daPy_RFLG0_TACT_USE); }
+    bool getRopeGrabRightHand() const { return checkResetFlg0(daPyRFlg0_ROPE_GRAB_RIGHT_HAND); }
+    bool getGrabUpEnd() const { return checkResetFlg0(daPyRFlg0_GRAB_UP_END); }
+    bool getAutoJumpLand() const { return checkResetFlg0(daPyRFlg0_AUTO_JUMP_LAND); }
+    bool getRightFootOnGround() const { return checkResetFlg0(daPyRFlg0_RIGHT_FOOT_ON_GROUND); }
+    bool getLeftFootOnGround() const { return checkResetFlg0(daPyRFlg0_LEFT_FOOT_ON_GROUND); }
+    bool checkFrontRollCrash() const { return checkResetFlg0(daPyRFlg0_FRONT_ROLL_CRASH); }
+    bool getGrabUpStart() const { return checkResetFlg0(daPyRFlg0_GRAB_UP_START); }
+    bool checkAttentionLock() const { return checkResetFlg0(daPyRFlg0_ATTENTION_LOCK); }
+    bool checkHammerQuake() const { return checkResetFlg0(daPyRFlg0_HAMMER_QUAKE); }
+    bool getGrabPutStart() const { return checkResetFlg0(daPyRFlg0_GRAB_PUT_START); }
+    bool checkFairyUse() const { return checkResetFlg0(daPyRFlg0_FAIRY_USE); }
+    bool checkTactUse() const { return checkResetFlg0(daPyRFlg0_TACT_USE); }
     
     // checkSwordMiniGame__9daPy_py_cCFv
     // checkNormalSwordEquip__9daPy_py_cCFv

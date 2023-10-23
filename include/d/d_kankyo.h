@@ -406,6 +406,7 @@ void dKy_Sound_init();
 void dKy_change_colpat(u8 param_0);
 void dKy_custom_colset(u8 param_0, u8 param_1, f32 i_blend);
 u8 dKy_pship_existense_chk();
+void dKy_Itemgetcol_chg_off();
 void dKy_Itemgetcol_chg_move();
 void dKy_arrowcol_chg_on(cXyz*, int);
 void dKy_arrowcol_chg_move();

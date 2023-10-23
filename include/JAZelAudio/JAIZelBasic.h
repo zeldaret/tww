@@ -62,7 +62,7 @@ public:
     void checkSePlaying(u32);
     void seStopActor(Vec*, u32);
     void seDeleteObject(Vec*);
-    void getLinkVoiceVowel(u32);
+    u8 getLinkVoiceVowel(u32);
     void linkVoiceStart(u32, Vec*, u8, s8);
     void monsSeInit();
     void monsSeStart(u32, Vec*, u32, u32, s8);
