@@ -46,7 +46,8 @@ Recommended `.vscode/c_cpp_properties.json`:
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/include/**"
+                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/src/**"
             ],
             "cStandard": "c99",
             "cppStandard": "c++98",
@@ -55,7 +56,8 @@ Recommended `.vscode/c_cpp_properties.json`:
             "configurationProvider": "ms-vscode.makefile-tools",
             "browse": {
                 "path": [
-                    "${workspaceFolder}/include"
+                    "${workspaceFolder}/include",
+                    "${workspaceFolder}/src"
                 ],
                 "limitSymbolsToIncludedHeaders": true
             }

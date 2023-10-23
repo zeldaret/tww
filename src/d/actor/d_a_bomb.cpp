@@ -1147,7 +1147,7 @@ BOOL daBomb_Delete(daBomb_c* i_this) {
     return true;
 }
 
-#include "src/d/actor/d_a_bomb3.inc"
+#include "d/actor/d_a_bomb3.inc"
 
 int daBomb_createHeap(fopAc_ac_c* i_this) {
     static_cast<daBomb_c*>(i_this)->createHeap();

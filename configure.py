@@ -154,6 +154,7 @@ cflags_base = [
     "-str reuse",
     "-multibyte",
     "-i include",
+    "-i src",
     f"-DVERSION={version_num}",
 ]
 if config.debug:

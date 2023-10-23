@@ -25,7 +25,7 @@
 #include "dolphin/dvd/DVD.h"
 #include "dolphin/gx/GX.h"
 
-#include "src/f_pc/f_pc_manager_data.inc"
+#include "f_pc/f_pc_manager_data.inc"
 
 /* 8003E318-8003E338       .text fpcM_Draw__FPv */
 void fpcM_Draw(void* i_proc) {

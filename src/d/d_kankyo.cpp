@@ -24,7 +24,7 @@
 class sub_kankyo__class : public kankyo_class {
 };
 
-#include "src/d/d_kankyo_dayproc.inc"
+#include "d/d_kankyo_dayproc.inc"
 
 // stripped or compiler generated?
 static Vec unused_lit_2100[] = {1.0f, 1.0f, 1.0f};

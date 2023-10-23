@@ -17,7 +17,7 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
-#include "src/d/actor/d_a_player_HIO.inc"
+#include "d/actor/d_a_player_HIO.inc"
 
 char l_arcName[] = "Link";
 
@@ -1942,53 +1942,53 @@ BOOL daPy_lk_c::getBokoFlamePos(cXyz*) {
     /* Nonmatching */
 }
 
-#include "src/d/actor/d_a_player_particle.inc"
+#include "d/actor/d_a_player_particle.inc"
 
-#include "src/d/actor/d_a_player_dproc.inc"
+#include "d/actor/d_a_player_dproc.inc"
 
-#include "src/d/actor/d_a_player_ladder.inc"
+#include "d/actor/d_a_player_ladder.inc"
 
-#include "src/d/actor/d_a_player_hang.inc"
+#include "d/actor/d_a_player_hang.inc"
 
-#include "src/d/actor/d_a_player_climb.inc"
+#include "d/actor/d_a_player_climb.inc"
 
-#include "src/d/actor/d_a_player_whide.inc"
+#include "d/actor/d_a_player_whide.inc"
 
-#include "src/d/actor/d_a_player_crawl.inc"
+#include "d/actor/d_a_player_crawl.inc"
 
-#include "src/d/actor/d_a_player_grab.inc"
+#include "d/actor/d_a_player_grab.inc"
 
-#include "src/d/actor/d_a_player_swim.inc"
+#include "d/actor/d_a_player_swim.inc"
 
-#include "src/d/actor/d_a_player_battle.inc"
+#include "d/actor/d_a_player_battle.inc"
 
-#include "src/d/actor/d_a_player_ship.inc"
+#include "d/actor/d_a_player_ship.inc"
 
-#include "src/d/actor/d_a_player_rope.inc"
+#include "d/actor/d_a_player_rope.inc"
 
-#include "src/d/actor/d_a_player_boomerang.inc"
+#include "d/actor/d_a_player_boomerang.inc"
 
-#include "src/d/actor/d_a_player_bow.inc"
+#include "d/actor/d_a_player_bow.inc"
 
-#include "src/d/actor/d_a_player_hook.inc"
+#include "d/actor/d_a_player_hook.inc"
 
-#include "src/d/actor/d_a_player_fan.inc"
+#include "d/actor/d_a_player_fan.inc"
 
-#include "src/d/actor/d_a_player_tact.inc"
+#include "d/actor/d_a_player_tact.inc"
 
-#include "src/d/actor/d_a_player_vomit.inc"
+#include "d/actor/d_a_player_vomit.inc"
 
-#include "src/d/actor/d_a_player_hammer.inc"
+#include "d/actor/d_a_player_hammer.inc"
 
-#include "src/d/actor/d_a_player_pushpull.inc"
+#include "d/actor/d_a_player_pushpull.inc"
 
-#include "src/d/actor/d_a_player_bottle.inc"
+#include "d/actor/d_a_player_bottle.inc"
 
-#include "src/d/actor/d_a_player_weapon.inc"
+#include "d/actor/d_a_player_weapon.inc"
 
-#include "src/d/actor/d_a_player_food.inc"
+#include "d/actor/d_a_player_food.inc"
 
-#include "src/d/actor/d_a_player_sword.inc"
+#include "d/actor/d_a_player_sword.inc"
 
 actor_method_class l_daPy_Method = {
     (process_method_func)daPy_Create,
