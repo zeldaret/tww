@@ -13,7 +13,7 @@
 #include "d/actor/d_a_player_link.h"
 
 /* 8013A85C-8013A890       .text checkGrabSpecialHeavyState__9daPy_lk_cFv */
-void daPy_lk_c::checkGrabSpecialHeavyState() {
+BOOL daPy_lk_c::checkGrabSpecialHeavyState() {
     /* Nonmatching */
 }
 

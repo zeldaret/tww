@@ -760,7 +760,7 @@ void daAgb_c::GbaItemUse() {
     case 3:
         daPy_lk_c* temp_r3 = daPy_getPlayerLinkActorClass();
         temp_r3->onNoResetFlg0(daPy_py_c::daPyFlg0_UNK1000);
-        temp_r3->field_0x354c = 0x96;
+        temp_r3->m354C = 5*30;
         resetCursor(false);
         field_0x65c = 0x96;
         mBrk.setPlaySpeed(6.0f);
@@ -779,7 +779,7 @@ void daAgb_c::GbaItemUse() {
             mEffect = 0;
             return;
         } else {
-            daPy_getPlayerLinkActorClass()->field_0x354e = 300;
+            daPy_getPlayerLinkActorClass()->setTinkleShield(300);
             resetCursor(false);
             field_0x65c = 300;
             mBrk.setPlaySpeed(6.0f);
@@ -792,9 +792,9 @@ void daAgb_c::GbaItemUse() {
         } else {
             daPy_lk_c* temp_r4 = daPy_getPlayerLinkActorClass();
             temp_r4->onNoResetFlg0(daPy_py_c::daPyFlg0_UNK1000);
-            temp_r4->field_0x354c = 300;
+            temp_r4->m354C = 300;
             if (!(daPy_getPlayerLinkActorClass()->checkEquipDragonShield())) {
-                temp_r4->field_0x354e = 300;
+                temp_r4->setTinkleShield(300);
             }
 
             resetCursor(false);
@@ -812,7 +812,7 @@ void daAgb_c::GbaItemUse() {
                 return;
             }
 
-            daPy_getPlayerLinkActorClass()->field_0x354e = 600;
+            daPy_getPlayerLinkActorClass()->setTinkleShield(600);
 
             resetCursor(false);
             field_0x65c = 600;
@@ -953,12 +953,11 @@ int daAgb_Execute(daAgb_c* i_this) {
             if (i_this->field_0x66b == 3 || i_this->field_0x66b == 12) {
                 daPy_lk_c* player_p = daPy_getPlayerLinkActorClass();
                 player_p->onNoResetFlg0(daPy_py_c::daPyFlg0_UNK1000);
-                player_p->field_0x354c = 10;
+                player_p->m354C = 10;
             } else if (i_this->field_0x66b == 4 || i_this->field_0x66b == 13 ||
                        i_this->field_0x66b == 12)
             {
-                daPy_lk_c* player_p = daPy_getPlayerLinkActorClass();
-                player_p->field_0x354e = 10;
+                daPy_getPlayerLinkActorClass()->setTinkleShield(10);
             }
 
             i_this->field_0x65c = 0;

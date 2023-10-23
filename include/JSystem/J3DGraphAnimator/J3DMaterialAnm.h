@@ -167,14 +167,14 @@ public:
     virtual ~J3DMaterialAnm() {};
     virtual void calc(J3DMaterial*) const;
 
-    const J3DTexMtxAnm& getTexMtxAnm(int i) const { return *mTexMtxAnm[i]; }
+    const J3DTexMtxAnm* getTexMtxAnm(int i) const { return mTexMtxAnm[i]; }
 
 private:
     /* 0x04 */ J3DMatColorAnm * mMatColorAnm[2];
-    /* 0x14 */ J3DTexMtxAnm * mTexMtxAnm[8];
-    /* 0x54 */ J3DTexNoAnm * mTexNoAnm[8];
-    /* 0xB4 */ J3DTevColorAnm * mTevColorAnm[4];
-    /* 0xD4 */ J3DTevKColorAnm * mTevKColorAnm[4];
-};  // Size: 0xF4
+    /* 0x0C */ J3DTexMtxAnm * mTexMtxAnm[8];
+    /* 0x2C */ J3DTexNoAnm * mTexNoAnm[8];
+    /* 0x4C */ J3DTevColorAnm * mTevColorAnm[4];
+    /* 0x5C */ J3DTevKColorAnm * mTevKColorAnm[4];
+};  // Size: 0x6C
 
 #endif /* J3DMATERIALANM_H */

@@ -19,6 +19,10 @@ public:
     static u8 m_eye_move_flg;
     static u8 m_maba_timer;
     static u8 m_morf_frame;
+
+public:
+    /* 0x6C */ cXy mEyePosOld;
+    /* 0x74 */ cXy mEyePos;
 };
 
 class daPy_mtxFollowEcallBack_c : public dPa_levelEcallBack {
@@ -86,6 +90,7 @@ public:
         daPyFlg0_PUSH_PULL_KEEP    = 0x00000800,
         daPyFlg0_UNK1000           = 0x00001000,
         daPyFlg0_UNK4000           = 0x00004000,
+        daPyFlg0_UNK10000          = 0x00010000,
         daPyFlg0_UNK200000         = 0x00200000,
         daPyFlg0_EQUIP_HEAVY_BOOTS = 0x02000000,
         daPyFlg0_NO_DRAW           = 0x08000000,
@@ -95,6 +100,7 @@ public:
     enum daPy_FLG1 {
         daPyFlg1_EQUIP_DRAGON_SHIELD  = 0x00000001,
         daPyFlg1_NPC_CALL_COMMAND     = 0x00000002,
+        daPyFlg1_UNK8                 = 0x00000008,
         daPyFlg1_FORCE_VOMIT_JUMP     = 0x00000010,
         daPyFlg1_NPC_NOT_CHANGE       = 0x00000040,
         daPyFlg1_UNK80                = 0x00000080,
@@ -173,6 +179,8 @@ public:
     void offPlayerNoDraw() { offNoResetFlg0(daPyFlg0_NO_DRAW); }
     void onHeavyState() { onNoResetFlg0(daPyFlg0_HEAVY_STATE); }
     void offHeavyState() { offNoResetFlg0(daPyFlg0_HEAVY_STATE); }
+    bool getHeavyState() { return checkNoResetFlg0(daPyFlg0_HEAVY_STATE); }
+    bool getHeavyStateAndBoots() { return checkNoResetFlg0(static_cast<daPy_FLG0>(daPyFlg0_HEAVY_STATE | daPyFlg0_EQUIP_HEAVY_BOOTS)); }
     
     void onNoResetFlg1(daPy_FLG1 flag) { mNoResetFlg1 |= flag; }
     void offNoResetFlg1(daPy_FLG1 flag) { mNoResetFlg1 &= ~flag; }
@@ -220,9 +228,7 @@ public:
     // checkUseArrowEffect__9daPy_py_cCFv
     // checkNpcNotChange__9daPy_py_cCFv
     // checkFinalMasterSwordEquip__9daPy_py_cCFv
-    // getHeavyState__9daPy_py_cFv
     // checkEquipHoverBoots__9daPy_py_cCFv
-    // getHeavyStateAndBoots__9daPy_py_cFv
     // onNpcCallCommand__9daPy_py_cFv
     // onForceVomitJumpShort__9daPy_py_cFv
     // onNoFallVoice__9daPy_py_cFv

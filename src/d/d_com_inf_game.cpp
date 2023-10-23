@@ -636,15 +636,15 @@ void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8
     g_dComIfG_gameInfo.play.setNextStage(i_stageName, i_roomNo, i_point, i_layer, i_wipe);
 
     if (daPy_getPlayerLinkActorClass() != NULL) {
-        u32 mode = daPy_getPlayerLinkActorClass()->mNoResetFlg1;
+        daPy_lk_c* link = daPy_getPlayerLinkActorClass();
 
-        if (mode & daPy_lk_c::daPyFlg1_EQUIP_DRAGON_SHIELD) {
+        if (link->checkEquipDragonShield()) {
             i_lastMode |= 0x8000;
         }
 
-        i_lastMode |= daPy_getPlayerLinkActorClass()->field_0x354e << 16;
+        i_lastMode |= link->checkTinkleShield() << 0x10;
 
-        if (mode & daPy_lk_c::daPyFlg1_UNK8000) {
+        if (link->checkNoResetFlg1(daPy_lk_c::daPyFlg1_UNK8000)) {
             i_lastMode |= 0x4000;
         }
     }
@@ -1148,7 +1148,7 @@ void dComIfGs_setGameStartStage() {
             dKy_set_nexttime(120.0f);
         } else if (stage_type == 7) {
             daPy_lk_c* player_p = daPy_getPlayerLinkActorClass();
-            point = player_p->field_0x3594;
+            point = player_p->m3594;
 
             s8 temp_r3 = player_p->current.roomNo;
             room_no = temp_r3;
