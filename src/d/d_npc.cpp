@@ -756,7 +756,7 @@ bool dNpc_EventCut_c::cutProc() {
                 },
             };
 
-            mCurActIdx = dComIfGp_evmng_getMyActIdx(mEvtStaffId, action_table, 7, 1, 0);
+            mCurActIdx = dComIfGp_evmng_getMyActIdx(mEvtStaffId, action_table, ARRAY_SIZE(action_table), 1, 0);
             if(mCurActIdx == -1) {
                 return false;
             }

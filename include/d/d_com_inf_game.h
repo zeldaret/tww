@@ -329,6 +329,14 @@ public:
         mNextStage.set(i_stageName, i_roomNo, i_point, i_layer, i_wipe);
     }
 
+    u8 getNowStageNum() { return mPlacenameIndex; }
+    u8 checkStageName() { return mPlacenameState; }
+    void setStageNameOn(u8 idx) {
+        mPlacenameIndex = idx;
+        mPlacenameState = 2;
+    }
+    void setStageNameOff() { mPlacenameState = 1; }
+
     fopAc_ac_c* getPlayerPtr(int idx) { return (fopAc_ac_c*)mpPlayerPtr[idx]; }
     fopAc_ac_c* getPlayer(int idx) { return (fopAc_ac_c*)mpPlayer[idx]; }
     void setPlayer(int idx, fopAc_ac_c* player) { mpPlayer[idx] = (daPy_py_c*)player; }
@@ -1273,7 +1281,19 @@ inline const char* dComIfGp_getStartStageName() {
 }
 
 inline u32 dComIfGp_getNowStageNum() {
-    return g_dComIfG_gameInfo.play.mPlacenameIndex;
+    return g_dComIfG_gameInfo.play.getNowStageNum();
+}
+
+inline u8 dComIfGp_checkStageName() {
+    return g_dComIfG_gameInfo.play.checkStageName();
+}
+
+inline void dComIfGp_setStageNameOn(u8 idx) {
+    g_dComIfG_gameInfo.play.setStageNameOn(idx);
+}
+
+inline void dComIfGp_setStageNameOff() {
+    g_dComIfG_gameInfo.play.setStageNameOff();
 }
 
 inline s8 dComIfGp_getStartStageRoomNo() {

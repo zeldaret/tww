@@ -547,7 +547,7 @@ void daObjMknjD::Act_c::privateCut() {
 
     int staffIdx = dComIfGp_evmng_getMyStaffId("MknjD", NULL, 0);
     if (staffIdx != -1) {
-        mActionIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_table, 9, 1, 0);
+        mActionIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_table, ARRAY_SIZE(cut_name_table), 1, 0);
 
         if (mActionIdx == -1) {
             dComIfGp_evmng_cutEnd(staffIdx);

@@ -323,7 +323,7 @@ s32 daMbdoor_c::getDemoAction() {
         "ADJUSTMENT",
     };
     
-    return dComIfGp_evmng_getMyActIdx(mEvtStaffId, action_table, 9, 0, 0);
+    return dComIfGp_evmng_getMyActIdx(mEvtStaffId, action_table, ARRAY_SIZE(action_table), 0, 0);
 }
 
 /* 00000B3C-00000F78       .text demoProc__10daMbdoor_cFv */
@@ -336,33 +336,33 @@ void daMbdoor_c::demoProc() {
     
     if (dComIfGp_evmng_getIsAddvance(mEvtStaffId)) {
         switch (actIdx) {
-        case 1:
+        case 1: // SET_START
             calcMtx();
             goal = field_0x2c4;
             dComIfGp_evmng_setGoal(&goal);
             break;
-        case 2:
+        case 2: // SET_ANGLE
             angle = current.angle.y + 0x7FFF;
             player->changeDemoMoveAngle(angle);
             break;
-        case 4:
+        case 4: // OPEN
             fopAcM_seStart(this, JA_SE_OBJ_MJ_GATE_OPEN, 0);
             field_0x2b4 = 0;
             break;
-        case 5:
+        case 5: // STOP_OPEN
             fopAcM_seStart(this, JA_SE_OBJ_MJ_GATE_BAR_OPEN, 0);
             field_0x2b4 = 0;
             field_0x2b6 = 1;
             break;
-        case 6:
+        case 6: // SET_GOAL
             goal = field_0x2d0;
             dComIfGp_evmng_setGoal(&goal);
             break;
-        case 7:
+        case 7: // SET_GOAL2
             goal = field_0x2dc;
             dComIfGp_evmng_setGoal(&goal);
             break;
-        case 8:
+        case 8: // ADJUSTMENT
             calcMtx();
             field_0x2b8 = 0;
             u32* timerP = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Timer");

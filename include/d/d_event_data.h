@@ -23,16 +23,61 @@ struct event_binary_data_header {
 
 class dEvDtData_c {};
 
-class dEvDtCut_c {};
+class dEvDtCut_c {
+public:
+    void startCheck();
+};
 
-class dEvDtStaff_c {};
+class dEvDtStaff_c {
+public:
+    void specialProc_WaitStart(int);
+    void specialProc_WaitProc(int);
+    void specialProc();
+    void init();
+    void advanceCut(int);
+    void specialProcLight();
+    void specialProcMessage();
+    void specialProcSound();
+    void specialProcCreate();
+    void specialProcDirector();
+    void specialProcPackage();
+    void specialProcTimekeeper();
 
-class dEvDtEvent_c {};
+public:
+    /* 0x00 */ char mName[32];
+    /* 0x20 */ int mSub;
+    /* 0x24 */ int mIndex;
+    /* 0x28 */ int m28;
+    /* 0x2C */ int mStaffType;
+    /* 0x30 */ int mFirstCutIdx;
+    /* 0x34 */ u8 m34[0x38 - 0x34];
+    /* 0x38 */ int mCurCutIdx;
+    /* 0x3C */ u32 mCurActionIdx;
+    /* 0x40 */ s16 mWipeDirection;
+    /* 0x42 */ s16 mTimer;
+    /* 0x44 */ u8 m44;
+    /* 0x45 */ u8 m45;
+    /* 0x46 */ u8 mbIsAdvance;
+    /* 0x47 */ u8 mbNeedsAction;
+    /* 0x48 */ u8 field_48[0x50 - 0x48];
+};
+
+class dEvDtEvent_c {
+public:
+    void finish_check();
+    void specialStaffProc(dEvDtStaff_c*);
+};
 
 class dEvDtFlag_c {
 public:
     dEvDtFlag_c() {}
 
+    void flagCheck(int);
+    void flagSet(int);
+    void flagMaxCheck(int);
+    void init();
+
+public:
     u32 mFlags[320];
 };  // Size = 0x500
 
@@ -45,6 +90,7 @@ public:
     void advanceCut(dEvDtEvent_c*);
     void advanceCutLocal(dEvDtStaff_c*);
 
+public:
     /* 0x00 */ event_binary_data_header* mHeaderP;
     /* 0x04 */ dEvDtEvent_c* mEventP;
     /* 0x08 */ dEvDtStaff_c* mStaffP;

@@ -3,8 +3,8 @@
 // Translation Unit: d_event_data.cpp
 //
 
-#include "d_event_data.h"
-#include "dolphin/types.h"
+#include "d/d_event_data.h"
+#include "d/d_com_inf_game.h"
 
 /* 80071778-8007195C       .text dEvDt_Next_Stage__Fii */
 void dEvDt_Next_Stage(int, int) {
@@ -73,7 +73,127 @@ void dEvDtStaff_c::specialProcLight() {
 
 /* 80071F58-80072458       .text specialProcMessage__12dEvDtStaff_cFv */
 void dEvDtStaff_c::specialProcMessage() {
-    /* Nonmatching */
+    int staffIdx = dComIfGp_evmng_getMyStaffId("MESSAGE", NULL, 0);
+    if (staffIdx == -1) {
+        JUT_ASSERT(0x1C2, 0);
+        return;
+    }
+    
+    static char* action_table[] = {
+        "WAIT",
+        "CREATE_MSG",
+        "PUSHBUTTON",
+        "FINISH",
+        "CONTINUE",
+        "END",
+        "DELETE",
+        "TELOP_ON",
+        "TELOP_OFF",
+    };
+    static u32 l_msgId;
+    static msg_class* l_msg;
+    static int l_msgNo;
+    
+    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), 0, 0);
+    if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
+        switch (actIdx) {
+        case 0: // WAIT
+            specialProc_WaitStart(staffIdx);
+            break;
+        case 1: // CREATE_MSG
+            l_msgId = -1;
+            l_msg = NULL;
+            u32* idata = dComIfGp_evmng_getMyIntegerP(staffIdx, "msgNo");
+            JUT_ASSERT(0x1D2, idata);
+            l_msgNo = *idata;
+            mWipeDirection = 0;
+            break;
+        case 3: // FINISH
+        case 5: // END
+            JUT_ASSERT(0x1D8, l_msg);
+            l_msg->mMode = 0x10;
+            break;
+        case 4: // CONTINUE
+            JUT_ASSERT(0x1DC, l_msg);
+            l_msg->mMode = 0xF;
+            idata = dComIfGp_evmng_getMyIntegerP(staffIdx, "msgNo");
+            JUT_ASSERT(0x1DF, idata);
+            l_msgNo = *idata;
+            fopMsgM_messageSet(l_msgNo);
+            break;
+        case 7: // TELOP_ON
+            idata = dComIfGp_evmng_getMyIntegerP(staffIdx, "tlpNo");
+            JUT_ASSERT(0x1E5, idata);
+            dComIfGp_setStageNameOn(*idata);
+            specialProc_WaitStart(staffIdx);
+            break;
+        case 8: // TELOP_OFF
+            dComIfGp_setStageNameOff();
+            break;
+        }
+    }
+    
+    switch (actIdx) {
+    case 0: // WAIT
+    case 7: // TELOP_ON
+        specialProc_WaitProc(staffIdx);
+        break;
+    case 1: // CREATE_MSG
+        switch (mWipeDirection) {
+        case 0:
+            l_msgId = fopMsgM_messageSet(l_msgNo);
+            if (l_msgId != -1) {
+                mWipeDirection++;
+            }
+            break;
+        case 1:
+            l_msg = fopMsgM_SearchByID(l_msgId);
+            if (l_msg) {
+                mWipeDirection++;
+            }
+            break;
+        case 2:
+            dComIfGp_evmng_cutEnd(staffIdx);
+            break;
+        }
+        break;
+    case 2: // PUSHBUTTON
+        JUT_ASSERT(0x209, l_msg);
+        if (l_msg->mMode == 0xE) {
+            dComIfGp_evmng_cutEnd(staffIdx);
+        }
+        break;
+    case 3: // FINISH
+    case 6: // DELETE
+        if (!l_msg) {
+            dComIfGp_evmng_cutEnd(staffIdx);
+        } else if (l_msg->mMode == 0x12) {
+            l_msg->mMode = 0x13;
+            l_msgId = -1;
+            l_msg = NULL;
+            dComIfGp_evmng_cutEnd(staffIdx);
+        }
+        break;
+    case 4: // CONTINUE
+        dComIfGp_evmng_cutEnd(staffIdx);
+        break;
+    case 5: // END
+        switch (l_msg->mMode) {
+        case 0x11:
+        case 0x12:
+            dComIfGp_evmng_cutEnd(staffIdx);
+            break;
+        }
+        break;
+    case 8: // TELOP_OFF
+        if (dComIfGp_checkStageName() == 0) {
+            dComIfGp_evmng_cutEnd(staffIdx);
+        }
+        break;
+    default:
+        dComIfGp_evmng_cutEnd(staffIdx);
+        break;
+    }
 }
 
 /* 80072458-80072748       .text specialProcSound__12dEvDtStaff_cFv */
