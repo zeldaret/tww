@@ -28,9 +28,40 @@ inline void mDoCPd_TRIGGER_CONV(u8 analog, f32& param_1) {
     }
 }
 
+#define MASK_INSERT_BUTTON(field, value, fieldshift, valueshift)                               \
+    temp = (bool)(((value) & (1 << valueshift)));                                              \
+    (field) = ((temp << fieldshift) & (1 << fieldshift)) | ((field) & ~(1 << fieldshift))
+
 /* 80007598-800078C0       .text mDoCPd_Convert__FP27interface_of_controller_padP10JUTGamePad */
-// NONMATCHING
 static s32 mDoCPd_Convert(interface_of_controller_pad* pInterface, JUTGamePad* pPad) {
+    // the temp var stuff is hacky but seems required for matching codegen, including the !!temp at the end
+    BOOL temp;
+    MASK_INSERT_BUTTON(pInterface->mButtonHold0, pPad->mButton.mButton,  4, 3);
+    MASK_INSERT_BUTTON(pInterface->mButtonHold0, pPad->mButton.mButton,  5, 2);
+    MASK_INSERT_BUTTON(pInterface->mButtonHold0, pPad->mButton.mButton,  7, 0);
+    MASK_INSERT_BUTTON(pInterface->mButtonHold0, pPad->mButton.mButton,  6, 1);
+    MASK_INSERT_BUTTON(pInterface->mButtonHold0, pPad->mButton.mButton,  3, 4);
+    MASK_INSERT_BUTTON(pInterface->mButtonHold0, pPad->mButton.mButton,  2, 5);
+    MASK_INSERT_BUTTON(pInterface->mButtonHold0, pPad->mButton.mButton,  1, 6);
+    MASK_INSERT_BUTTON(pInterface->mButtonHold0, pPad->mButton.mButton,  0, 8);
+    MASK_INSERT_BUTTON(pInterface->mButtonHold1, pPad->mButton.mButton,  7, 9);
+    MASK_INSERT_BUTTON(pInterface->mButtonHold1, pPad->mButton.mButton,  6, 10);
+    MASK_INSERT_BUTTON(pInterface->mButtonHold1, pPad->mButton.mButton,  5, 11);
+    MASK_INSERT_BUTTON(pInterface->mButtonHold1, pPad->mButton.mButton,  4, 12);
+    MASK_INSERT_BUTTON(pInterface->mButtonTrig0, pPad->mButton.mTrigger, 4, 3);
+    MASK_INSERT_BUTTON(pInterface->mButtonTrig0, pPad->mButton.mTrigger, 5, 2);
+    MASK_INSERT_BUTTON(pInterface->mButtonTrig0, pPad->mButton.mTrigger, 7, 0);
+    MASK_INSERT_BUTTON(pInterface->mButtonTrig0, pPad->mButton.mTrigger, 6, 1);
+    MASK_INSERT_BUTTON(pInterface->mButtonTrig0, pPad->mButton.mTrigger, 3, 4);
+    MASK_INSERT_BUTTON(pInterface->mButtonTrig0, pPad->mButton.mTrigger, 2, 5);
+    MASK_INSERT_BUTTON(pInterface->mButtonTrig0, pPad->mButton.mTrigger, 1, 6);
+    MASK_INSERT_BUTTON(pInterface->mButtonTrig0, pPad->mButton.mTrigger, 0, 8);
+    MASK_INSERT_BUTTON(pInterface->mButtonTrig1, pPad->mButton.mTrigger, 7, 9);
+    MASK_INSERT_BUTTON(pInterface->mButtonTrig1, pPad->mButton.mTrigger, 6, 10);
+    MASK_INSERT_BUTTON(pInterface->mButtonTrig1, pPad->mButton.mTrigger, 5, 11);
+    MASK_INSERT_BUTTON(pInterface->mButtonTrig1, pPad->mButton.mTrigger, 4, 12);
+    temp = !!temp;
+    
     pInterface->mMainStickPosX = pPad->getMainStickX();
     pInterface->mMainStickPosY = pPad->getMainStickY();
     pInterface->mMainStickValue = pPad->getMainStickValue();
@@ -126,10 +157,16 @@ int mDoCPd_Create() {
     }
 
     JUTGamePad::setAnalogMode(3);
+
+#if VERSION == VERSION_JPN
+    JUTGamePad::clearResetOccurred();
+    JUTGamePad::setResetCallback(mDoRst_resetCallBack, NULL);
+#else
     if (!mDoRst::isReset()) {
         JUTGamePad::clearResetOccurred();
         JUTGamePad::setResetCallback(mDoRst_resetCallBack, NULL);
     }
+#endif
 
     JUTGba::create();
     g_mDoGaC_gbaCom.mDoGaC_Initial(TestDataManager, 16);
