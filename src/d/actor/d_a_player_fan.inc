@@ -10,7 +10,7 @@
  * a function from this file.
 */
 
-#include "d/actor/d_a_player_link.h"
+#include "d/actor/d_a_player_main.h"
 
 /* 8014BAA0-8014BAEC       .text fanWindEffectDraw__9daPy_lk_cFv */
 void daPy_lk_c::fanWindEffectDraw() {

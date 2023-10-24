@@ -1,5 +1,5 @@
-#ifndef D_A_PLAYER_LINK
-#define D_A_PLAYER_LINK
+#ifndef D_A_PLAYER_MAIN
+#define D_A_PLAYER_MAIN
 
 #include "JAZelAudio/JAIZelBasic.h"
 #include "m_Do/m_Do_ext.h"
@@ -2412,4 +2412,4 @@ public:
     static daPy_ProcFunc mDemoProcInitFuncTable[0x4B];
 };  // Size: 0x4C28
 
-#endif /* D_A_PLAYER_LINK */
+#endif /* D_A_PLAYER_MAIN */

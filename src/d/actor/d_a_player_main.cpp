@@ -8,7 +8,7 @@
  * The original split locations are indicated in the map file.
 */
 
-#include "d/actor/d_a_player_link.h"
+#include "d/actor/d_a_player_main.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
 #include "JSystem/JKernel/JKRHeap.h"

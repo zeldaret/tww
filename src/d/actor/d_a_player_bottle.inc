@@ -10,7 +10,7 @@
  * based on the original names of the functions it contains.
 */
 
-#include "d/actor/d_a_player_link.h"
+#include "d/actor/d_a_player_main.h"
 
 /* 80151E40-80151E60       .text changeBottleDrinkFace__9daPy_lk_cFi */
 void daPy_lk_c::changeBottleDrinkFace(int) {

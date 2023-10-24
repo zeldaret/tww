@@ -10,7 +10,7 @@
  * based on the original names of the functions it contains.
 */
 
-#include "d/actor/d_a_player_link.h"
+#include "d/actor/d_a_player_main.h"
 
 /* 8013E250-8013E384       .text setSpecialBattle__9daPy_lk_cFi */
 void daPy_lk_c::setSpecialBattle(int) {

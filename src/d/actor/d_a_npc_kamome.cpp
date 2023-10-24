@@ -8,7 +8,7 @@
 #include "d/d_procname.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "d/d_item_data.h"
-#include "d/actor/d_a_player_link.h"
+#include "d/actor/d_a_player_main.h"
 #include "m_Do/m_Do_mtx.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "m_Do/m_Do_controller_pad.h"

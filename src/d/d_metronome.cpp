@@ -3,7 +3,7 @@
 // Translation Unit: d_metronome.cpp
 //
 
-#include "d/actor/d_a_player_link.h"
+#include "d/actor/d_a_player_main.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
 #include "f_op/f_op_msg_mng.h"

@@ -8,7 +8,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "MSL_C/string.h"
 #include "SSystem/SComponent/c_malloc.h"
-#include "d/actor/d_a_player_link.h"
+#include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_ship.h"
 #include "d/d_bg_s.h"
 #include "d/d_bg_s_gnd_chk.h"

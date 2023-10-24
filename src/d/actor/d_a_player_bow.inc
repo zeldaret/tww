@@ -10,7 +10,7 @@
  * a function from this file.
 */
 
-#include "d/actor/d_a_player_link.h"
+#include "d/actor/d_a_player_main.h"
 
 /* 80149ECC-80149F88       .text bowJointCB__9daPy_lk_cFi */
 void daPy_lk_c::bowJointCB(int) {

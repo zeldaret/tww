@@ -10,7 +10,7 @@
  * based on the original names of the functions it contains.
 */
 
-#include "d/actor/d_a_player_link.h"
+#include "d/actor/d_a_player_main.h"
 
 /* 801514B0-80151644       .text setPushPullKeepData__9daPy_lk_cFQ24dBgW13PushPullLabel */
 void daPy_lk_c::setPushPullKeepData(dBgW::PushPullLabel) {

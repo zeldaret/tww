@@ -12,7 +12,7 @@
 #include "d/d_map.h"
 #include "d/d_kankyo_wether.h"
 #include "d/actor/d_a_agb.h"
-#include "d/actor/d_a_player_link.h"
+#include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_bomb.h"
 #include "m_Do/m_Do_gba_com.h"
 

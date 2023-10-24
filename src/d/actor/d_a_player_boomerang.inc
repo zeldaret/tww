@@ -10,7 +10,7 @@
  * based on the original names of the functions it contains.
 */
 
-#include "d/actor/d_a_player_link.h"
+#include "d/actor/d_a_player_main.h"
 
 /* 8014956C-80149590       .text checkBoomerangAnime__9daPy_lk_cCFv */
 void daPy_lk_c::checkBoomerangAnime() const {

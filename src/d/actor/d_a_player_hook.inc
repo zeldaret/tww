@@ -10,7 +10,7 @@
  * a function from this file.
 */
 
-#include "d/actor/d_a_player_link.h"
+#include "d/actor/d_a_player_main.h"
 
 /* 8014AB5C-8014ABA0       .text checkHookshotReturn__9daPy_lk_cFv */
 void daPy_lk_c::checkHookshotReturn() {

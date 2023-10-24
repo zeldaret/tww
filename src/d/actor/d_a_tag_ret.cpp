@@ -9,7 +9,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
-#include "d/actor/d_a_player_link.h"
+#include "d/actor/d_a_player_main.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "dolphin/types.h"
 

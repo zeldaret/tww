@@ -5,7 +5,7 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JAZelAudio/JAIZelBasic.h"
 #include "d/actor/d_a_player.h"
-#include "d/actor/d_a_player_link.h"
+#include "d/actor/d_a_player_main.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera_mng.h"
 #include "d/d_com_inf_game.h"

@@ -10,7 +10,7 @@
  * based on the original names of the functions it contains.
 */
 
-#include "d/actor/d_a_player_link.h"
+#include "d/actor/d_a_player_main.h"
 
 /* 8014D778-8014D7D4       .text getDayNightParamData__9daPy_lk_cFv */
 u32 daPy_lk_c::getDayNightParamData() {

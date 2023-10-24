@@ -10,7 +10,7 @@
  * based on the original names of the functions it contains.
 */
 
-#include "d/actor/d_a_player_link.h"
+#include "d/actor/d_a_player_main.h"
 
 /* 8013F848-8013F8AC       .text shipSpecialDemoStart__9daPy_lk_cFv */
 void daPy_lk_c::shipSpecialDemoStart() {
