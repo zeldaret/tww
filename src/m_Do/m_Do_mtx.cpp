@@ -198,8 +198,7 @@ void mDoMtx_lookAt(Mtx mtx, const Vec* param_1, const Vec* param_2, const Vec* p
     cXyz local_4c(*(cXyz*)param_1);
     cXyz local_58(*(cXyz*)param_2);
     cXyz local_64(*(cXyz*)param_3);
-    cXyz local_70 = local_4c - local_58;
-    if (!local_70.normalizeRS()) {
+    if (!cXyz(local_4c - local_58).normalizeRS()) {
         local_58.z += 1.0f;
     }
     if (cM3d_IsZero(local_64.x) && cM3d_IsZero(local_64.y) && cM3d_IsZero(local_64.z)) {
@@ -348,9 +347,9 @@ void mDoMtx_stack_c::quatM(const Quaternion* param_0) {
     mDoMtx_concat(now, tmp, now);
 }
 
-static mDoMtx_stack_c mDoMtx_stack;
+mDoMtx_stack_c mDoMtx_stack;
 
-static mDoMtx_quatStack_c mDoMtx_quatStack;
+mDoMtx_quatStack_c mDoMtx_quatStack;
 
 extern Mtx g_mDoMtx_identity = {
     {1.0f, 0.0f, 0.0f, 0.0f},
