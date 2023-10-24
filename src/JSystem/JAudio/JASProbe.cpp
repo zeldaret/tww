@@ -3,16 +3,10 @@
 // Translation Unit: JASProbe.cpp
 //
 
-#include "JASProbe.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASProbe.h"
 
 /* 8027D6B0-8027D6B4       .text probeStart__Q28JASystem6KernelFlPc */
-void JASystem::Kernel::probeStart(long, char*) {
-    /* Nonmatching */
-}
+void JASystem::Kernel::probeStart(s32, char*) {}
 
 /* 8027D6B4-8027D6B8       .text probeFinish__Q28JASystem6KernelFl */
-void JASystem::Kernel::probeFinish(long) {
-    /* Nonmatching */
-}
-
+void JASystem::Kernel::probeFinish(s32) {}

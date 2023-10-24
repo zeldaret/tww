@@ -3,71 +3,113 @@
 // Translation Unit: JASDvdThread.cpp
 //
 
-#include "JASDvdThread.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASDvdThread.h"
+#include "JSystem/JAudio/JASCalc.h"
+#include "JSystem/JAudio/JASSystemHeap.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
 
 /* 8027B500-8027B584       .text __ct__Q213JASTaskThread10TCallStackFUl */
-JASTaskThread::TCallStack::TCallStack(unsigned long) {
-    /* Nonmatching */
+JASTaskThread::TCallStack::TCallStack(u32 param_1) {
+    field_0x0 = NULL;
+    argspace = new (JKRHeap::sSystemHeap, -4) u8[param_1];
+    JUT_ASSERT(39, argspace);
 }
 
 /* 8027B584-8027B5D8       .text __dt__Q213JASTaskThread10TCallStackFv */
 JASTaskThread::TCallStack::~TCallStack() {
-    /* Nonmatching */
+    delete[] argspace;
 }
 
 /* 8027B5D8-8027B66C       .text sendCmdMsg__13JASTaskThreadFPFPv_lPvUl */
-void JASTaskThread::sendCmdMsg(long (*)(void*), void*, unsigned long) {
-    /* Nonmatching */
+bool JASTaskThread::sendCmdMsg(s32 (*param_1)(void*), void* param_2, u32 param_3) {
+    TCallStack* stack = new(JKRGetSystemHeap(), -4) TCallStack(param_3);
+    if (!stack) {
+        return false;
+    }
+    JASystem::Calc::bcopy(param_2, stack->argspace, param_3);
+    stack->field_0x0 = param_1;
+    sendMessageBlock(stack);
 }
 
 /* 8027B66C-8027B6D4       .text run__13JASTaskThreadFv */
-void JASTaskThread::run() {
-    /* Nonmatching */
+void* JASTaskThread::run() {
+    OSMessage msg;
+    while (true) {
+        msg = waitMessageBlock();
+        TCallStack* callStack = (TCallStack*)msg;
+        if (field_0x70) {
+            OSSleepThread(&field_0x68);
+        }
+        if (!callStack) {
+            continue;
+        }
+        callStack->field_0x0(callStack->argspace);
+        delete callStack;
+    }
+    return NULL;
 }
 
 /* 8027B6D4-8027B72C       .text pause__13JASTaskThreadFb */
-void JASTaskThread::pause(bool) {
-    /* Nonmatching */
+void JASTaskThread::pause(bool param_1) {
+    if (param_1) {
+        field_0x70 = 1;
+    } else {
+        if (field_0x70) {
+            OSWakeupThread(&field_0x68);
+        }
+        field_0x70 = 0;
+    }
+
 }
 
+JASTaskThread* JASystem::Dvd::sThread;
+
 /* 8027B72C-8027B7E8       .text createThread__Q28JASystem3DvdFiiUl */
-void JASystem::Dvd::createThread(int, int, unsigned long) {
-    /* Nonmatching */
+bool JASystem::Dvd::createThread(int param_1, int param_2, u32 param_3) {
+    sThread = new (JASDram, 0) JASTaskThread(param_3, param_2, param_1);
+    JUT_ASSERT(136, sThread);
+    return true;
 }
 
 /* 8027B7E8-8027B84C       .text resumeThread__Q28JASystem3DvdFv */
 void JASystem::Dvd::resumeThread() {
-    /* Nonmatching */
+    JUT_ASSERT(143, sThread);
+    OSResumeThread(sThread->getThreadRecord());
 }
 
 /* 8027B84C-8027B8D4       .text sendCmdMsg__Q28JASystem3DvdFPFPv_lPvUl */
-void JASystem::Dvd::sendCmdMsg(long (*)(void*), void*, unsigned long) {
-    /* Nonmatching */
+void JASystem::Dvd::sendCmdMsg(s32 (*param_1)(void*), void* param_2, u32 param_3) {
+    JUT_ASSERT(152, sThread);
+    sThread->sendCmdMsg(param_1, param_2, param_3);
 }
 
 /* 8027B8D4-8027B914       .text checkPassDvdT__Q28JASystem3DvdFUlPUlPFUl_v */
-void JASystem::Dvd::checkPassDvdT(unsigned long, unsigned long*, void (*)(unsigned long)) {
+int JASystem::Dvd::checkPassDvdT(u32, u32*, void (*)(u32)) {
     /* Nonmatching */
 }
 
 /* 8027B914-8027B960       .text checkFile__Q28JASystem3DvdFPc */
-void JASystem::Dvd::checkFile(char*) {
-    /* Nonmatching */
+u32 JASystem::Dvd::checkFile(char* param_1) {
+    DVDFileInfo info;
+    if (!DVDOpen(param_1, &info)) {
+        return 0;
+    }
+    u32 r31 = info.length;
+    DVDClose(&info);
+    return r31;
 }
 
 /* 8027B960-8027B9C4       .text unpauseDvdT__Q28JASystem3DvdFv */
 void JASystem::Dvd::unpauseDvdT() {
-    /* Nonmatching */
+    JUT_ASSERT(231, sThread);
+    sThread->pause(false);
 }
 
 /* 8027B9C4-8027BA10       .text dvdThreadCheckBack__Q28JASystem3DvdFPv */
-void JASystem::Dvd::dvdThreadCheckBack(void*) {
+int JASystem::Dvd::dvdThreadCheckBack(void*) {
     /* Nonmatching */
 }
 
 /* 8027BA10-8027BA70       .text __dt__13JASTaskThreadFv */
-JASTaskThread::~JASTaskThread() {
-    /* Nonmatching */
-}
-
+JASTaskThread::~JASTaskThread() {}

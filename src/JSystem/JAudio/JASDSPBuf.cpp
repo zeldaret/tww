@@ -3,26 +3,115 @@
 // Translation Unit: JASDSPBuf.cpp
 //
 
-#include "JASDSPBuf.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASDSPBuf.h"
+#include "JSystem/JAudio/JASAudioThread.h"
+#include "JSystem/JAudio/JASCallback.h"
+#include "JSystem/JAudio/JASDSPChannel.h"
+#include "JSystem/JAudio/JASDSPInterface.h"
+#include "JSystem/JAudio/JASProbe.h"
+#include "JSystem/JAudio/JASRate.h"
+#include "JSystem/JAudio/JASSystemHeap.h"
+#include "JSystem/JAudio/osdsp_task.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+#include "dolphin/os/OS.h"
+#include "global.h"
+
+u8 JASystem::TDSP_DACBuffer::numDSPBuf = 3;
+int JASystem::TDSP_DACBuffer::isInit;
+s16** JASystem::TDSP_DACBuffer::dsp_buf;
+u8 JASystem::TDSP_DACBuffer::writeBuffer;
+u8 JASystem::TDSP_DACBuffer::readBuffer;
+u8 JASystem::TDSP_DACBuffer::dspStatus;
+
+static void dummy() {
+    OSReport("----- JASDSPBuf : DSP-DAC バッファの数を %d にしました\n");
+}
 
 /* 802892E0-802893E4       .text init__Q28JASystem14TDSP_DACBufferFv */
 void JASystem::TDSP_DACBuffer::init() {
     /* Nonmatching */
+    if (!isInit) {
+        int r30 = Kernel::gFrameSamples;
+        writeBuffer = numDSPBuf - 1;
+        readBuffer = 0;
+        dsp_buf = new (JASDram, 0x20) s16*[numDSPBuf];
+        for (int i = 0; i < numDSPBuf; i++) {
+            dsp_buf[i] = new (JASDram, 0x20) s16[r30 * 2];
+            for (u32 j = 0; j < r30 * 2; j++) {
+                dsp_buf[i][j] = 0;
+            }
+            DCStoreRange(dsp_buf[i], r30 * 4);
+        }
+        OSReport("DSP_DAC buffer size : %d\n", r30 * 2);
+        dspStatus = 0;
+        isInit = 1;
+    }
 }
+
+int JASystem::TDSP_DACBuffer::dacSyncCounter;
 
 /* 802893E4-80289438       .text updateDSP__Q28JASystem14TDSP_DACBufferFv */
 void JASystem::TDSP_DACBuffer::updateDSP() {
-    /* Nonmatching */
+    dacSyncCounter++;
+    Kernel::probeStart(3, "SFR-UPDATE");
+    DSPInterface::invalChannelAll();
+    Kernel::subframeCallback();
+    TDSPChannel::updateAll();
+    Kernel::aiCallback();
+    Kernel::probeFinish(3);
 }
 
 /* 80289438-80289568       .text mixDSP__Q28JASystem14TDSP_DACBufferFl */
-void JASystem::TDSP_DACBuffer::mixDSP(long) {
+s16* JASystem::TDSP_DACBuffer::mixDSP(s32) {
     /* Nonmatching */
+    u8 var4 = readBuffer + 1;
+    u32 frameSamples = Kernel::gFrameSamples;
+    if (var4 == numDSPBuf) {
+        var4 = 0;
+    }
+    if (var4 == writeBuffer && numDSPBuf >= 3) {
+        s16 var1 = dsp_buf[readBuffer][frameSamples / 2 - 1];
+        s16 var2 = dsp_buf[readBuffer][frameSamples - 1];
+        for (u32 i = 0; i < frameSamples; i++) {
+            dsp_buf[readBuffer][i] = var1;
+        }
+        for (u32 i = frameSamples; i < frameSamples * 2; i++) {
+            dsp_buf[readBuffer][i] = var2;
+        }
+        if (dspStatus == 0) {
+            OSReport("----- JASDSPBuf::process DACSYNC -- DSP Wait\n");
+            finishDSPFrame();
+        }
+    } else {
+        readBuffer = var4;
+        DCInvalidateRange(dsp_buf[readBuffer], frameSamples * 4);
+        if (dspStatus == 0) {
+            finishDSPFrame();
+        }
+    }
+    return dsp_buf[readBuffer];
 }
+
+void (*JASystem::TDSP_DACBuffer::callback)(s16*, u32);
 
 /* 80289568-8028963C       .text finishDSPFrame__Q28JASystem14TDSP_DACBufferFv */
 void JASystem::TDSP_DACBuffer::finishDSPFrame() {
-    /* Nonmatching */
+    u8 var2 = writeBuffer + 1;
+    u32 r31 = Kernel::gFrameSamples;
+    if (var2 == numDSPBuf) {
+        var2 = 0;
+    }
+    if (var2 == readBuffer) {
+        dspStatus = 0;
+        return;
+    }
+    writeBuffer = var2;
+    TAudioThread::snIntCount = Kernel::gSubFrames;
+    Kernel::probeStart(7, "DSP-MAIN");
+    DsyncFrame2(Kernel::gSubFrames, u32(dsp_buf[writeBuffer]), u32(&dsp_buf[writeBuffer][r31]));
+    dspStatus = 1;
+    updateDSP();
+    if (callback) {
+        callback(dsp_buf[writeBuffer], r31);
+    }
 }
-

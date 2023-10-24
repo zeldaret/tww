@@ -3,91 +3,262 @@
 // Translation Unit: JASDSPChannel.cpp
 //
 
-#include "JASDSPChannel.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASDSPChannel.h"
+#include "JSystem/JAudio/JASDSPInterface.h"
+#include "JSystem/JAudio/JASRate.h"
+#include "JSystem/JAudio/JASSystemHeap.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
 
 /* 8028963C-80289694       .text init__Q28JASystem11TDSPChannelFUc */
-void JASystem::TDSPChannel::init(unsigned char) {
-    /* Nonmatching */
+void JASystem::TDSPChannel::init(u8 param_1) {
+    mNumber = param_1;
+    field_0x1 = 1;
+    field_0x8 = 0;
+    field_0x6 = 0;
+    mCallback = NULL;
+    field_0x3 = 0;
+    field_0x4 = 0;
+    field_0xc = DSPInterface::getDSPHandle(param_1);
 }
 
 /* 80289694-80289720       .text allocate__Q28JASystem11TDSPChannelFUl */
-void JASystem::TDSPChannel::allocate(unsigned long) {
+int JASystem::TDSPChannel::allocate(u32 param_1) {
     /* Nonmatching */
+    if (field_0x1 != 1) {
+        return false;
+    }
+    if (field_0x8 == 0) {
+        OSReport("sign %x があるのにCH.%d はFREE\n", field_0x8, mNumber);
+    }
+    field_0x1 = 0;
+    field_0x8 = param_1;
+    field_0x3 = 1;
+    field_0xc->allocInit();
+    return true;
 }
 
 /* 80289720-8028973C       .text free__Q28JASystem11TDSPChannelFv */
 void JASystem::TDSPChannel::free() {
-    /* Nonmatching */
+    field_0x1 = 1;
+    field_0x3 = 0;
+    mCallback = NULL;
+    field_0x8 = 0;
 }
 
+JASystem::TDSPChannel* JASystem::TDSPChannel::DSPCH;
+int JASystem::TDSPChannel::smnUse;
+
 /* 8028973C-802897E0       .text forceStop__Q28JASystem11TDSPChannelFv */
-void JASystem::TDSPChannel::forceStop() {
-    /* Nonmatching */
+bool JASystem::TDSPChannel::forceStop() {
+    if (field_0x1 == 2) {
+        return false;
+    }
+    if (field_0x1 == 1) {
+        OSReport("----- JASDSPChannel::forceStop Warning! : CH_FREE\n");
+        return false;
+    }
+    if (field_0xc->field_0x0 == 0) {
+        return false;
+    }
+    smnUse--;
+    field_0xc->field_0x10a = 1;
+    field_0xc->flushChannel();
+    field_0x1 = 2;
+    return true;
 }
 
 /* 802897E0-802897F4       .text forceDelete__Q28JASystem11TDSPChannelFv */
 void JASystem::TDSPChannel::forceDelete() {
-    /* Nonmatching */
+    field_0x8 = 0;
+    field_0x3 = 0;
+    mCallback = NULL;
 }
 
 /* 802897F4-80289844       .text play__Q28JASystem11TDSPChannelFv */
 void JASystem::TDSPChannel::play() {
-    /* Nonmatching */
+    if (!mCallback) {
+        field_0xc->field_0x68 = 0;
+    }
+    field_0xc->playStart();
+    field_0xc->flushChannel();
 }
 
 /* 80289844-80289874       .text stop__Q28JASystem11TDSPChannelFv */
 void JASystem::TDSPChannel::stop() {
-    /* Nonmatching */
+    field_0xc->field_0x0 = 0;
+    field_0xc->flushChannel();
 }
 
 /* 80289874-80289994       .text initAll__Q28JASystem11TDSPChannelFv */
 void JASystem::TDSPChannel::initAll() {
-    /* Nonmatching */
+    static int first = 1;
+    if (first == 0) {
+        OSReport("---- DSPChannel::initAll : already initialized\n");
+        return;
+    }
+    DSPCH = new (JASDram, 0x20) TDSPChannel[64];
+    JUT_ASSERT(204, DSPCH);
+    OSReport("----- JASDSPChannel size : %d\n", 0x14);
+    for (u8 i = 0; i < 64; i++) {
+        DSPCH[i].init(i);
+    }
+    first = 0;
 }
 
+int JASystem::TDSPChannel::smnFree = 64;
+
 /* 80289994-80289A54       .text alloc__Q28JASystem11TDSPChannelFUlUl */
-void JASystem::TDSPChannel::alloc(unsigned long, unsigned long) {
+JASystem::TDSPChannel* JASystem::TDSPChannel::alloc(u32 param_1, u32 param_2) {
     /* Nonmatching */
+    if (param_1) {
+        OSReport("----- JASDSPChannel::alloc : 多チャネルモードはサポートされていません\n");
+        return NULL;
+    }
+    int i = 0;
+    do {
+        if (DSPCH[i].field_0x1 == 1 && DSPCH[i].allocate(param_2)) {
+            smnFree--;
+            smnUse++;
+            return &DSPCH[i];
+        }
+        i++;
+    } while(i < 64);
+    return NULL;
 }
 
 /* 80289A54-80289AF4       .text free__Q28JASystem11TDSPChannelFPQ28JASystem11TDSPChannelUl */
-void JASystem::TDSPChannel::free(JASystem::TDSPChannel*, unsigned long) {
-    /* Nonmatching */
+int JASystem::TDSPChannel::free(JASystem::TDSPChannel* param_1, u32 param_2) {
+    if (!param_1) {
+        OSReport("----- JASDSPChannel::free : NULL のチャネルを解放しようとしました\n");
+        return -1;
+    }
+    if (param_1->field_0x8 != param_2) {
+        OSReport("----- JASDSPChannel::free : BAD USERが開放を試みた\n");
+        return -2;
+    }
+    if (param_1->field_0x1 == 0) {
+        smnUse--;
+    }
+    if (param_1->field_0x1 != 1) {
+        smnFree++;
+    }
+    param_1->free();
+    return 0;
 }
 
 /* 80289AF4-80289C0C       .text getLower__Q28JASystem11TDSPChannelFv */
-void JASystem::TDSPChannel::getLower() {
-    /* Nonmatching */
+JASystem::TDSPChannel* JASystem::TDSPChannel::getLower() {
+    u8 r31 = 0xff;
+    u8 r30 = 0;
+    u32 r29 = 0;
+    for (u8 i = 0; i < 64; i++) {
+        u8 r27;
+        TDSPChannel* dspch = DSPCH + i;
+        if (dspch->field_0x1 == 2) {
+            continue;
+        }
+        if (dspch->field_0x1 == 1) {
+            r30 = i;
+            break;
+        }
+        if (dspch->mCallback) {
+            r27 = dspch->field_0x3;
+            if (r27 <= r31) {
+                JUT_ASSERT(305, i == dspch->getNumber());
+                if (r27 != r31 || dspch->field_0xc->field_0x10c >= r29) {
+                    r29 = dspch->field_0xc->field_0x10c;
+                    r30 = i;
+                    r31 = r27;
+                }
+            }
+        }
+    }
+    return DSPCH + r30;
 }
 
 /* 80289C0C-80289D10       .text getLowerActive__Q28JASystem11TDSPChannelFv */
-void JASystem::TDSPChannel::getLowerActive() {
+JASystem::TDSPChannel* JASystem::TDSPChannel::getLowerActive() {
     /* Nonmatching */
+    u8 r29 = 0xff;
+    u8 r28 = 0;
+    u32 r27 = 0;
+    for (u8 i = 0; i < 64; i++) {
+        TDSPChannel* dspch = DSPCH + i;
+        if (dspch->field_0x1 == 2 || dspch->field_0x1 == 1) {
+            continue;
+        }
+        u8 r30 = dspch->field_0x3;
+        if (r30 <= r29) {
+            JUT_ASSERT(345, i == dspch->getNumber());
+            if (r30 != r29 || dspch->field_0xc->field_0x10c >= r27) {
+                r27 = dspch->field_0xc->field_0x10c;
+                r28 = i;
+                r29 = r30;
+            }
+        }
+    }
+    return DSPCH + r28;
 }
 
 /* 80289D10-80289DC8       .text breakLower__Q28JASystem11TDSPChannelFUc */
-void JASystem::TDSPChannel::breakLower(unsigned char) {
-    /* Nonmatching */
+bool JASystem::TDSPChannel::breakLower(u8 param_1) {
+    TDSPChannel* dspch = getLower();
+    if (dspch->field_0x3 > param_1) {
+        return false;
+    }
+    if (dspch->field_0x1 != 1) {
+        if (dspch->mCallback) {
+            dspch->onUpdate(3);
+        } else {
+            OSReport("----- BreakLowerDSPchannel : Error:Callback is NULL\n");
+        }
+        dspch->forceStop();
+    } else {
+        OSReport("----- BreakLowerDSPchannel : DSP Ch is FREE %d \n", dspch->mNumber);
+        return false;
+    }
+    return true;
 }
 
 /* 80289DC8-80289E68       .text breakLowerActive__Q28JASystem11TDSPChannelFUc */
-void JASystem::TDSPChannel::breakLowerActive(unsigned char) {
-    /* Nonmatching */
+bool JASystem::TDSPChannel::breakLowerActive(u8 param_1) {
+    TDSPChannel* dspch = getLowerActive();
+    if (dspch->field_0x3 > param_1) {
+        return false;
+    }
+    if (dspch->field_0x1 != 1) {
+        if (dspch->mCallback) {
+            dspch->onUpdate(3);
+        }
+        dspch->forceStop();
+    } else {
+        OSReport("----- BreakLowerActiveDSPchannel : DSP Ch is FREE %d\n", dspch->mNumber);
+        return false;
+    }
+    return true;
 }
+
+f32 JASystem::DSP_LIMIT_RATIO = 1.1f;
 
 /* 80289E68-8028A04C       .text updateAll__Q28JASystem11TDSPChannelFv */
 void JASystem::TDSPChannel::updateAll() {
     /* Nonmatching */
+    if (Kernel::gSubFrames <= 10) {
+        OSTick time = OSGetTick();
+        OSTick tmp = time - old_time;
+        old_time = time;
+        history[Kernel::gSubFrames - TAudioThread::snIntCount] = tmp;
+    }
 }
 
 /* 8028A04C-8028A08C       .text onUpdate__Q28JASystem11TDSPChannelFUl */
-void JASystem::TDSPChannel::onUpdate(unsigned long) {
+void JASystem::TDSPChannel::onUpdate(u32) {
     /* Nonmatching */
 }
 
 /* 8028A08C-8028A0C0       .text getNumBreak__Q28JASystem11TDSPChannelFv */
-void JASystem::TDSPChannel::getNumBreak() {
+int JASystem::TDSPChannel::getNumBreak() {
     /* Nonmatching */
 }
 
@@ -99,5 +270,6 @@ JASystem::TDSPChannel::~TDSPChannel() {
 /* 8028A0FC-8028A10C       .text __ct__Q28JASystem11TDSPChannelFv */
 JASystem::TDSPChannel::TDSPChannel() {
     /* Nonmatching */
+    field_0xc = NULL;
+    mCallback = NULL;
 }
-
