@@ -2141,6 +2141,8 @@ inline MtxP dComIfGd_getViewRotMtx() {
 inline void dComIfGd_set2DOpa(dDlst_base_c* pBase) { g_dComIfG_gameInfo.drawlist.set2DOpa(pBase); }
 inline void dComIfGd_set2DXlu(dDlst_base_c* pBase) { g_dComIfG_gameInfo.drawlist.set2DXlu(pBase); }
 
+inline void dComIfGd_peekZ(s16 x, s16 y, u32 * data) { g_dComIfG_gameInfo.drawlist.newPeekZdata(x, y, data); }
+
 inline void dComIfGd_setWindow(dDlst_window_c* pWindow) { g_dComIfG_gameInfo.drawlist.setWindow(pWindow); }
 inline void dComIfGd_setViewPort(view_port_class* pViewPort) { g_dComIfG_gameInfo.drawlist.setViewPort(pViewPort); }
 inline void dComIfGd_setView(view_class* pView) { g_dComIfG_gameInfo.drawlist.setView(pView); }

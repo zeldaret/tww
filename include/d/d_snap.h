@@ -3,7 +3,23 @@
 
 #include "f_op/f_op_actor.h"
 
-class dSnap_Obj;
+class dSnap_Obj {
+public:
+    /* 0x00 */ cXyz field_0x00;
+    /* 0x0C */ f32 field_0x0c;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ s32 mBsPcId;
+    /* 0x18 */ u32 field_0x18[6];
+
+public:
+    dSnap_Obj();
+    virtual ~dSnap_Obj() {}
+
+    void SetGeoSph(const Vec & c, f32 r);
+    void SetInf(u8, const fopAc_ac_c*, u8, u8, s16);
+};
+
+STATIC_ASSERT(sizeof(dSnap_Obj) == 0x34);
 
 void dSnap_PhotoIndex2TableIndex(int);
 void dSnap_GetFigRoomId(int);

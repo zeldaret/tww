@@ -32,17 +32,17 @@ void dSnap_Obj::draw() {
 }
 
 /* 800CDAF8-800CDB2C       .text SetGeo__9dSnap_ObjFRC3Vecffs */
-void dSnap_Obj::SetGeo(const Vec&, float, float, short) {
+void dSnap_Obj::SetGeo(const Vec&, f32, f32, s16) {
     /* Nonmatching */
 }
 
 /* 800CDB2C-800CDB68       .text SetGeoSph__9dSnap_ObjFRC3Vecf */
-void dSnap_Obj::SetGeoSph(const Vec&, float) {
+void dSnap_Obj::SetGeoSph(const Vec&, f32) {
     /* Nonmatching */
 }
 
 /* 800CDB68-800CDB94       .text SetInf__9dSnap_ObjFUcPC10fopAc_ac_cUcUcs */
-void dSnap_Obj::SetInf(unsigned char, const fopAc_ac_c*, unsigned char, unsigned char, short) {
+void dSnap_Obj::SetInf(u8, const fopAc_ac_c*, u8, u8, s16) {
     /* Nonmatching */
 }
 
@@ -52,7 +52,7 @@ void dSnap_Obj::SetAreaClear() {
 }
 
 /* 800CDBB0-800CDC04       .text SetArea__9dSnap_ObjFss */
-void dSnap_Obj::SetArea(short, short) {
+void dSnap_Obj::SetArea(s16, s16) {
     /* Nonmatching */
 }
 
@@ -62,7 +62,7 @@ void dSnap_Obj::ChkPhoto(int) {
 }
 
 /* 800CDC18-800CDC40       .text ChkSuccess__9dSnap_ObjFlf */
-void dSnap_Obj::ChkSuccess(long, float) {
+void dSnap_Obj::ChkSuccess(long, f32) {
     /* Nonmatching */
 }
 
@@ -217,12 +217,12 @@ void dSnap_RegistSnapObj(dSnap_Obj&) {
 }
 
 /* 800CEDD0-800CEDF8       .text dSnap_RegistFig__FUcP10fopAc_ac_cfff */
-void dSnap_RegistFig(unsigned char, fopAc_ac_c*, float, float, float) {
+void dSnap_RegistFig(u8, fopAc_ac_c*, f32, f32, f32) {
     /* Nonmatching */
 }
 
 /* 800CEDF8-800CEFD4       .text dSnap_RegistFig__FUcP10fopAc_ac_cRC3Vecsfff */
-void dSnap_RegistFig(unsigned char, fopAc_ac_c*, const Vec&, short, float, float, float) {
+void dSnap_RegistFig(u8, fopAc_ac_c*, const Vec&, s16, f32, f32, f32) {
     /* Nonmatching */
 }
 

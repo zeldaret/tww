@@ -152,9 +152,13 @@ struct POISON_EFF {
     POISON_EFF();
     ~POISON_EFF();
 
-    /* 0x00 */ u8 mStatus;
-    /* 0x01 */ u8 field_0x1[0x2F];
+    /* 0x00 */ s8 mStatus;
+    /* 0x04 */ cXyz mPos;
+    /* 0x10 */ u8 field_0x10[0x1E];
+    /* 0x2E */ s16 field_0x2e;
 };
+
+STATIC_ASSERT(sizeof(POISON_EFF) == 0x30);
 
 class dKankyo_poison_Packet : public J3DPacket {
 public:
@@ -164,7 +168,7 @@ public:
     virtual ~dKankyo_poison_Packet();
 
     /* 0x0010 */ POISON_EFF mEff[1000];
-    /* 0xBB90 */ u8 field_0xbb90[0xBB9C - 0xBB90];
+    /* 0xBB90 */ cXyz field_0xbb90;
     /* 0xBB9C */ cXyz field_0xbb9c;
     /* 0xBBA8 */ u32 mCount;
     /* 0xBBAC */ u8* mpTexture;

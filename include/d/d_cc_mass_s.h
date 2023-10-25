@@ -36,6 +36,7 @@ private:
     /* 0x0C */ f32 mCoHitLen;
 
 public:
+    virtual ~dCcMassS_HitInf() {}
     void ClearPointer();
     void SetAreaHitObj(cCcD_Obj* obj) { mpArea = obj; }
     void SetCoHitObj(cCcD_Obj* obj) { mpCoObj = obj; }

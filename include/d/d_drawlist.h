@@ -397,6 +397,8 @@ public:
 
     static void offWipe() { mWipe = false; }
 
+    void newPeekZdata(s16 x, s16 y, u32 * data) { mPeekZ.newData(x, y, data); }
+
     static bool mWipe;
 
     /* 0x00000 */ J3DDrawBuffer* mpOpaListSky;

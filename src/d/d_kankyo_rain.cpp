@@ -9,6 +9,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_wether.h"
+#include "d/d_snap.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_lib.h"
 #include "JSystem/JKernel/JKRHeap.h"
@@ -178,6 +179,170 @@ BOOL dKyr_moon_arrival_check() {
 /* 8008C8B8-8008CF68       .text dKyr_sun_move__Fv */
 void dKyr_sun_move() {
     /* Nonmatching */
+    dKankyo_sun_Packet* pSunPkt = g_env_light.mpSunPacket;
+    dKankyo_sunlenz_Packet* pLenzPkt = g_env_light.mpSunlenzPacket;
+    camera_class* pCamera = dComIfGp_getCamera(0);
+
+    f32 staringAtSunAmount = 0.0f;
+    u8 numPointsVisible = 0, numCenterPointsVisible = 0;
+    u32 stType = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo());
+    cXyz lightDir;
+    if (g_env_light.mBaseLightInfluence.mColor.r == 0 && stType != 2) {
+        dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &g_env_light.mBaseLightInfluence.mPos, &lightDir);
+    } else {
+        dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &g_env_light.mSunPos2, &lightDir);
+    }
+
+    pSunPkt->mPos[0].x = pCamera->mLookat.mEye.x + lightDir.x * 8000.0f;
+    pSunPkt->mPos[0].y = pCamera->mLookat.mEye.y + lightDir.y * 8000.0f;
+    pSunPkt->mPos[0].z = pCamera->mLookat.mEye.z + lightDir.z * 8000.0f;
+
+    f32 horizonY = (pSunPkt->mPos[0].y - pCamera->mLookat.mEye.y) / 8000.0f;
+    if (horizonY < 0.0f)
+        horizonY = 0.0f;
+    if (horizonY >= 1.0f)
+        horizonY = 1.0f;
+    horizonY = 1.0f - horizonY;
+    horizonY *= horizonY;
+    f32 pulsePos = 1.0f - horizonY;
+
+    if (dComIfGp_getStageStagInfo() != NULL) {
+        dComIfGp_getStageStagInfo();
+    }
+
+    if (pSunPkt->field_0x3c != 0)
+        pSunPkt->field_0x3c--;
+    pSunPkt->field_0x3d = false;
+
+    if (g_env_light.mCurTime > 95.7f && g_env_light.mCurTime < 292.5f) {
+        f32 borderY = 0.0f;
+        s32 numPointsCulled = 0;
+
+        cLib_addCalc(&pSunPkt->mSunAlpha, 1.0f, 0.5f, 0.1f, 0.01f);
+
+        if (pCamera != NULL) {
+            borderY = pCamera->mCamera.m5F8;
+        }
+
+        cXyz projected;
+        mDoLib_project(pSunPkt->mPos, &projected);
+
+        static const cXy sun_chkpnt[] = {
+            0.0f, 0.0f,
+            -10.0f, -20.0f,
+            10.0f, 20.0f,
+            -20.0f, 10.0f,
+            20.0f, -10.0f,
+        };
+
+        for (s32 i = 0; i < 5; i++) {
+            f32 screenBottom = 490.0f - borderY;
+            cXyz chkpnt;
+            chkpnt.x = sun_chkpnt[i].x;
+            chkpnt.y = sun_chkpnt[i].y;
+            chkpnt.x = projected.x - chkpnt.x;
+            chkpnt.y = projected.y - chkpnt.y;
+
+            if (chkpnt.x > 0.0f && chkpnt.x < 640.0 && chkpnt.y > borderY && chkpnt.y < screenBottom) {
+                if (pSunPkt->mVizChkData[i] >= 0xFFFFFF) {
+                    numPointsVisible++;
+                    if (i == 0)
+                        numCenterPointsVisible++;
+                }
+
+                dComIfGd_peekZ(chkpnt.x, chkpnt.y, &pSunPkt->mVizChkData[i]);
+            } else {
+                numPointsCulled++;
+            }
+        }
+
+        if (numPointsCulled != 0 && numPointsVisible != 0 && numCenterPointsVisible != 0) {
+            numCenterPointsVisible = 1;
+            numPointsVisible = 5;
+        }
+
+        if (numPointsVisible != 0) {
+            if (pSunPkt->field_0x3c < 5)
+                pSunPkt->field_0x3c += 2;
+            pSunPkt->field_0x3d = true;
+        }
+
+        pLenzPkt->field_0x80 = pLenzPkt->field_0x88;
+        pLenzPkt->field_0x84 = pLenzPkt->field_0x8c;
+        pLenzPkt->field_0x88 = 1000000000.0f;
+        pLenzPkt->field_0x8c = 0.0f;
+
+        cXyz center;
+        center.x = 320.0f;
+        center.y = 240.0f;
+        center.z = 0.0f;
+        pLenzPkt->mDistFalloff = center.abs(projected);
+        pLenzPkt->mDistFalloff /= 450.0f;
+        if (pLenzPkt->mDistFalloff > 1.0f)
+            pLenzPkt->mDistFalloff = 1.0f;
+        pLenzPkt->mDistFalloff = 1.0f - pLenzPkt->mDistFalloff;
+        staringAtSunAmount = (pLenzPkt->mDistFalloff * pLenzPkt->mDistFalloff);
+        pLenzPkt->mDistFalloff = 1.0f - staringAtSunAmount;
+        staringAtSunAmount = staringAtSunAmount * staringAtSunAmount;
+    } else {
+        cLib_addCalc(&pSunPkt->mSunAlpha, 0.0f, 0.5f, 0.1f, 0.01f);
+        numPointsVisible = 0;
+        pSunPkt->field_0x3c = 0;
+        pSunPkt->field_0x3d = false;
+    }
+
+    if (g_env_light.mColpatWeather != 0 || (g_env_light.mColpatCurr != 0 && g_env_light.mColPatBlend > 0.5f)) {
+        numCenterPointsVisible = 0;
+        numPointsVisible = 0;
+    }
+
+    if (stType == 2) {
+        numCenterPointsVisible = 0;
+        numPointsVisible = 0;
+    }
+
+    if (g_env_light.mCurTime < 120.0f || g_env_light.mCurTime > 270.0f) {
+        numCenterPointsVisible = 0;
+        numPointsVisible = 0;
+    }
+
+    if (numCenterPointsVisible != 0) {         
+        if (numPointsVisible == 4)
+            cLib_addCalc(&pSunPkt->mVisibility, 1.0f, 0.1f, 0.1f, 0.001f);
+        if (numPointsVisible <= 3)
+            cLib_addCalc(&pSunPkt->mVisibility, 0.0f, 0.1f, 0.2f, 0.001f);
+        else
+            cLib_addCalc(&pSunPkt->mVisibility, 1.0f, 0.5f, 0.2f, 0.01f);
+    } else {
+        if (numPointsVisible < 3)
+            cLib_addCalc(&pSunPkt->mVisibility, 0.0f, 0.5f, 0.2f, 0.01f);
+        else
+            cLib_addCalc(&pSunPkt->mVisibility, 1.0f, 0.1f, 0.1f, 0.01f);
+    }
+
+    if (numPointsVisible >= 2) {
+        g_env_light.mpSunlenzPacket->mbDrawLenzInSky = false;
+    } else {
+        g_env_light.mpSunlenzPacket->mbDrawLenzInSky = true;
+    }
+
+    if (pSunPkt->mPos[0].y > 0.0f && !g_env_light.mpSunlenzPacket->mbDrawLenzInSky) {
+        dKy_set_actcol_ratio(1.0f - staringAtSunAmount * pSunPkt->mVisibility);
+        dKy_set_bgcol_ratio(1.0f - staringAtSunAmount * pSunPkt->mVisibility);
+        dKy_set_fogcol_ratio(pulsePos * staringAtSunAmount * pSunPkt->mVisibility * 0.5f + 1.0f);
+        dKy_set_vrboxcol_ratio(pulsePos * staringAtSunAmount * pSunPkt->mVisibility * 0.5f + 1.0f);
+    }
+
+    if (dKyr_moon_arrival_check()) {
+        f32 alpha = (pSunPkt->mPos[0].y - pCamera->mLookat.mEye.y) / -8000.0f;
+        alpha *= alpha;
+        alpha *= 6.0f;
+        if (alpha > 1.0f)
+            alpha = 1.0f;
+        cLib_addCalc(&pSunPkt->mMoonAlpha, alpha, 0.2f, 0.01f, 0.001f);
+    } else {
+        cLib_addCalc(&pSunPkt->mMoonAlpha, 0.0f, 0.2f, 0.01f, 0.001f);
+    }
 }
 
 /* 8008CF68-8008D0B4       .text dKyr_rain_init__Fv */
@@ -337,8 +502,14 @@ void cloud_shadow_move() {
 }
 
 /* 80092294-80092310       .text light_at_hit_check__FP4cXyz */
-void light_at_hit_check(cXyz*) {
-    /* Nonmatching */
+BOOL light_at_hit_check(cXyz* pPos) {
+    dCcMassS_HitInf hitInfo;
+    bool ret = false;
+    fopAc_ac_c * pActor;
+    u32 res = dComIfG_Ccsp()->mMass_Mng.Chk(pPos, &pActor, &hitInfo);
+    if (((res & 1) != 0) && (hitInfo.GetAtHitObj()->GetAtType() & AT_TYPE_UNK800000) != 0)
+        ret = true;
+    return ret;
 }
 
 /* 80092310-80092330       .text dKyr_poison_live_check__Fv */
@@ -352,8 +523,30 @@ BOOL dKyr_poison_live_check() {
 /* 80092330-80092448       .text dKyr_poison_light_colision__Fv */
 void dKyr_poison_light_colision() {
     /* Nonmatching */
+    dKankyo_poison_Packet * pPkt = g_env_light.mpPoisonPacket;
     if (!dKyr_poison_live_check())
         return;
+
+    // inline should match, but doesn't
+#if 0
+    dComIfG_Ccsp()->mMass_Mng.SetAttr(220.0f, 140.0f, 0x0B, 0x03);
+#else
+    dCcMassS_Mng * mass = &dComIfG_Ccsp()->mMass_Mng;
+    dComIfG_Ccsp()->mMass_Mng.mCylAttr.SetR(220.0f);
+    dComIfG_Ccsp()->mMass_Mng.mCylAttr.SetH(140.0f);
+    mass->field_0x200 = 0x0B;
+    mass->mResultCamBit = 0x03;
+#endif
+
+    f32 halfHeight = 70.0f;
+    for (s32 i = 0; i < g_env_light.mPoisonCount; i++) {
+        cXyz pos = pPkt->field_0xbb90 + pPkt->mEff[i].mPos;
+        pos.y -= halfHeight;
+        if (light_at_hit_check(&pos) && pPkt->mEff[i].mStatus == 1) {
+            pPkt->mEff[i].mStatus = 2;
+            pPkt->mEff[i].field_0x2e = 60;
+        }
+    }
 }
 
 /* 80092448-8009258C       .text poison_init__Fv */
@@ -401,8 +594,31 @@ void dKy_wave_chan_init() {
 }
 
 /* 80094144-8009428C       .text snap_sunmoon_proc__FP4cXyzi */
-void snap_sunmoon_proc(cXyz*, int) {
-    /* Nonmatching */
+void snap_sunmoon_proc(cXyz* pPos, int type) {
+    dSnap_Obj snapObj;
+    camera_class * pCamera = dComIfGp_getCamera(0);
+
+    if (dComIfGp_checkPlayerStatus1(0, 0x08) != 0) {
+        cXyz pos;
+        pos.x = (pPos->x - pCamera->mLookat.mEye.x);
+        pos.y = (pPos->y - pCamera->mLookat.mEye.y);
+        pos.z = (pPos->z - pCamera->mLookat.mEye.z);
+        pos.x *= 10.0f;
+        pos.y *= 10.0f;
+        pos.z *= 10.0f;
+        pos.x += pCamera->mLookat.mEye.x;
+        pos.y += pCamera->mLookat.mEye.y;
+        pos.z += pCamera->mLookat.mEye.z;
+
+        snapObj.SetGeoSph(pos, 8000.0f);
+        if (type == 9)
+            snapObj.SetInf(9, NULL, 0xFF, 4, 0x7FFF);
+        else if (type == 0)
+            snapObj.SetInf(7, NULL, 0xFF, 4, 0x7FFF);
+        else
+            snapObj.SetInf(8, NULL, 0xFF, 4, 0x7FFF);
+        dSnap_RegistSnapObj(snapObj);
+    }
 }
 
 /* 8009428C-8009514C       .text dKyr_drawSun__FPA4_fP4cXyzR8GXColorPPUc */
