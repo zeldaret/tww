@@ -450,9 +450,8 @@ s32 fopAcM_createItemForPresentDemo(cXyz* p_pos, int i_itemNo, u8 param_2, int i
 s32 fopAcM_createItemForTrBoxDemo(cXyz* p_pos, int i_itemNo, int i_itemBitNo, int i_roomNo,
                                   csXyz* p_angle, cXyz* p_scale);
 
-s32 fopAcM_createItemFromTable(cXyz* p_pos, int i_tableNo, int i_itemBitNo, int i_roomNo,
-                               csXyz* p_angle, int param_5, cXyz * p_scale, f32* speedF,
-                               f32* speedY, bool createDirect);
+s32 fopAcM_createItemFromTable(cXyz* p_pos, int i_tableNo, int i_itemBitNo, int i_roomNo, int,
+                               csXyz* p_angle, int, cXyz* p_scale);
 
 s32 fopAcM_createShopItem(cXyz* p_pos, int i_itemNo, csXyz* rot, int roomNo, cXyz* scale,
                           createFunc createFunc);
