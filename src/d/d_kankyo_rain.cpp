@@ -5,6 +5,7 @@
 
 #include "d/d_kankyo_rain.h"
 #include "d/d_bg_s_gnd_chk.h"
+#include "d/d_bg_s_roof_chk.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_wether.h"
@@ -208,13 +209,56 @@ void rain_bg_chk(dKankyo_rain_Packet* pPkt, int idx) {
 }
 
 /* 8008D0DC-8008D53C       .text overhead_bg_chk__Fv */
-void overhead_bg_chk() {
-    /* Nonmatching */
+bool overhead_bg_chk() {
+    /* Nonmatching - regalloc */
+    camera_class * pCamera = dComIfGp_getCamera(0);
+    bool ret = false;
+
+    dBgS_ObjGndChk_All gndChk;
+    dBgS_RoofChk roofChk;
+    cXyz pos = pCamera->mLookat.mEye;
+    pos.y += 50.0f;
+    roofChk.SetPos(pos);
+
+    if (dComIfG_Bgsp()->RoofChk(&roofChk) != 1000000000.0f)
+        ret = true;
+    pos.y += 10000.0f;
+    gndChk.SetPos(&pos);
+
+    if (dComIfG_Bgsp()->GroundCross(&gndChk) > (pCamera->mLookat.mEye.y + 50.0f))
+        ret = true;
+
+    return ret;
 }
 
 /* 8008D638-8008DAF0       .text forward_overhead_bg_chk__FP4cXyzf */
-void forward_overhead_bg_chk(cXyz*, f32) {
-    /* Nonmatching */
+bool forward_overhead_bg_chk(cXyz* pPos, f32 dist) {
+    /* Nonmatching - regalloc */
+    camera_class * pCamera = dComIfGp_getCamera(0);
+    bool ret = false;
+
+    dBgS_ObjGndChk_All gndChk;
+    dBgS_RoofChk roofChk;
+    cXyz pos;
+    cXyz lookDir;
+    dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &pCamera->mLookat.mCenter, &lookDir);
+    pos.x = pCamera->mLookat.mEye.x + lookDir.x * dist;
+    pos.y = pCamera->mLookat.mEye.y + lookDir.y * dist;
+    pos.z = pCamera->mLookat.mEye.z + lookDir.z * dist;
+    pos.y = pCamera->mLookat.mEye.y + 50.f;
+
+    *pPos = pos;
+    roofChk.SetPos(pos);
+
+    if (dComIfG_Bgsp()->RoofChk(&roofChk) != 1000000000.0f)
+        ret = true;
+    pos.y += 10000.0f;
+    gndChk.SetPos(&pos);
+
+    if (dComIfG_Bgsp()->GroundCross(&gndChk) > (pCamera->mLookat.mEye.y + 50.0f))
+        ret = true;
+
+    return ret;
 }
 
 /* 8008DAF0-8008E79C       .text dKyr_rain_move__Fv */
