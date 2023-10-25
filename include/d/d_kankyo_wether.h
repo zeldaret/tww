@@ -349,6 +349,7 @@ void dKyw_pntwind_init();
 void dKy_wave_chan_init();
 f32 dKyw_get_wind_pow();
 f32* dKyw_get_wind_power();
+cXyz dKyw_get_wind_vecpow();
 void squal_proc();
 void dKyw_pntwind_set(WIND_INFLUENCE*);
 void dKyw_pntwind_cut(WIND_INFLUENCE*);
