@@ -586,57 +586,57 @@ void wave_move() {
 
     for (s32 i = 0; i < g_env_light.mWaveChan.mWaveCount; i++) {
         if (g_env_light.mWaveChan.mWaveReset)
-            pPkt->mpWaveEff[i].mStatus = 0;
+            pPkt->mWaveEff[i].mStatus = 0;
 
-        switch (pPkt->mpWaveEff[i].mStatus) {
+        switch (pPkt->mWaveEff[i].mStatus) {
         case 0:
             {
-                pPkt->mpWaveEff[i].mBasePos.x = eyevect.x;
-                pPkt->mpWaveEff[i].mBasePos.y = seaLevel;
-                pPkt->mpWaveEff[i].mBasePos.z = eyevect.z;
-                pPkt->mpWaveEff[i].mPos.x = cM_rndFX(g_env_light.mWaveChan.mWaveSpawnRadius);
-                pPkt->mpWaveEff[i].mPos.y = 0.0f;
-                pPkt->mpWaveEff[i].mPos.z = cM_rndFX(g_env_light.mWaveChan.mWaveSpawnRadius);
-                pPkt->mpWaveEff[i].mCounter = cM_rndF(65536.0f);
-                pPkt->mpWaveEff[i].mAlpha = 0.0f;
-                pPkt->mpWaveEff[i].field_0x32 = cM_rndF(65536.0f);
-                pPkt->mpWaveEff[i].mStrengthEnv = 1.0f;
-                pPkt->mpWaveEff[i].mScale = g_env_light.mWaveChan.mWaveScaleRand + cM_rndF(1.0f - g_env_light.mWaveChan.mWaveScaleRand);
-                pPkt->mpWaveEff[i].mSpeed = pPkt->mpWaveEff[i].mScale;
-                pPkt->mpWaveEff[i].mCounterSpeed = ((1.0f - pPkt->mpWaveEff[i].mScale) * 0.05f + 0.02f) * g_env_light.mWaveChan.mWaveCounterSpeedScale;
-                pPkt->mpWaveEff[i].field_0x30 = 0;
-                pPkt->mpWaveEff[i].mStatus++;
+                pPkt->mWaveEff[i].mBasePos.x = eyevect.x;
+                pPkt->mWaveEff[i].mBasePos.y = seaLevel;
+                pPkt->mWaveEff[i].mBasePos.z = eyevect.z;
+                pPkt->mWaveEff[i].mPos.x = cM_rndFX(g_env_light.mWaveChan.mWaveSpawnRadius);
+                pPkt->mWaveEff[i].mPos.y = 0.0f;
+                pPkt->mWaveEff[i].mPos.z = cM_rndFX(g_env_light.mWaveChan.mWaveSpawnRadius);
+                pPkt->mWaveEff[i].mCounter = cM_rndF(65536.0f);
+                pPkt->mWaveEff[i].mAlpha = 0.0f;
+                pPkt->mWaveEff[i].field_0x32 = cM_rndF(65536.0f);
+                pPkt->mWaveEff[i].mStrengthEnv = 1.0f;
+                pPkt->mWaveEff[i].mScale = g_env_light.mWaveChan.mWaveScaleRand + cM_rndF(1.0f - g_env_light.mWaveChan.mWaveScaleRand);
+                pPkt->mWaveEff[i].mSpeed = pPkt->mWaveEff[i].mScale;
+                pPkt->mWaveEff[i].mCounterSpeed = ((1.0f - pPkt->mWaveEff[i].mScale) * 0.05f + 0.02f) * g_env_light.mWaveChan.mWaveCounterSpeedScale;
+                pPkt->mWaveEff[i].field_0x30 = 0;
+                pPkt->mWaveEff[i].mStatus++;
             }
             // fallthrough
         case 1:
         case 2:
             {
                 // fmuls ordering seems off
-                pPkt->mpWaveEff[i].mPos.x += (pPkt->mpWaveEff[i].mAlpha * 0.8f + 0.2f) * (pPkt->mpWaveEff[i].mStrengthEnv * 0.5f + 0.5f) * (pPkt->mpWaveEff[i].mSpeed * windPowVec.x * g_env_light.mWaveChan.mWaveSpeed);
-                pPkt->mpWaveEff[i].mPos.z += (pPkt->mpWaveEff[i].mAlpha * 0.8f + 0.2f) * (pPkt->mpWaveEff[i].mStrengthEnv * 0.5f + 0.5f) * (pPkt->mpWaveEff[i].mSpeed * windPowVec.z * g_env_light.mWaveChan.mWaveSpeed);
-                pPkt->mpWaveEff[i].mCounter += pPkt->mpWaveEff[i].mCounterSpeed;
-                pos.x = pPkt->mpWaveEff[i].mBasePos.x + pPkt->mpWaveEff[i].mPos.x;
-                pos.y = pPkt->mpWaveEff[i].mBasePos.y + pPkt->mpWaveEff[i].mPos.y;
-                pos.z = pPkt->mpWaveEff[i].mBasePos.z + pPkt->mpWaveEff[i].mPos.z;
+                pPkt->mWaveEff[i].mPos.x += (pPkt->mWaveEff[i].mAlpha * 0.8f + 0.2f) * (pPkt->mWaveEff[i].mStrengthEnv * 0.5f + 0.5f) * (pPkt->mWaveEff[i].mSpeed * windPowVec.x * g_env_light.mWaveChan.mWaveSpeed);
+                pPkt->mWaveEff[i].mPos.z += (pPkt->mWaveEff[i].mAlpha * 0.8f + 0.2f) * (pPkt->mWaveEff[i].mStrengthEnv * 0.5f + 0.5f) * (pPkt->mWaveEff[i].mSpeed * windPowVec.z * g_env_light.mWaveChan.mWaveSpeed);
+                pPkt->mWaveEff[i].mCounter += pPkt->mWaveEff[i].mCounterSpeed;
+                pos.x = pPkt->mWaveEff[i].mBasePos.x + pPkt->mWaveEff[i].mPos.x;
+                pos.y = pPkt->mWaveEff[i].mBasePos.y + pPkt->mWaveEff[i].mPos.y;
+                pos.z = pPkt->mWaveEff[i].mBasePos.z + pPkt->mWaveEff[i].mPos.z;
                 if (pos.abs(eyevect) > g_env_light.mWaveChan.mWaveSpawnRadius) {
-                    pPkt->mpWaveEff[i].mBasePos.x = eyevect.x;
-                    pPkt->mpWaveEff[i].mBasePos.z = eyevect.z;
+                    pPkt->mWaveEff[i].mBasePos.x = eyevect.x;
+                    pPkt->mWaveEff[i].mBasePos.z = eyevect.z;
                     if (pos.abs(eyevect) > (g_env_light.mWaveChan.mWaveSpawnRadius + 350.0f)) {
-                        pPkt->mpWaveEff[i].mPos.x = cM_rndFX(g_env_light.mWaveChan.mWaveSpawnRadius);
-                        pPkt->mpWaveEff[i].mPos.z = cM_rndFX(g_env_light.mWaveChan.mWaveSpawnRadius);
+                        pPkt->mWaveEff[i].mPos.x = cM_rndFX(g_env_light.mWaveChan.mWaveSpawnRadius);
+                        pPkt->mWaveEff[i].mPos.z = cM_rndFX(g_env_light.mWaveChan.mWaveSpawnRadius);
                     } else {
                         cXyz newPos;
                         get_vectle_calc(&pos, &eyevect, &newPos);
-                        pPkt->mpWaveEff[i].mPos.x = newPos.x * g_env_light.mWaveChan.mWaveSpawnRadius;
-                        pPkt->mpWaveEff[i].mPos.z = newPos.z * g_env_light.mWaveChan.mWaveSpawnRadius;
+                        pPkt->mWaveEff[i].mPos.x = newPos.x * g_env_light.mWaveChan.mWaveSpawnRadius;
+                        pPkt->mWaveEff[i].mPos.z = newPos.z * g_env_light.mWaveChan.mWaveSpawnRadius;
                     }
-                    pPkt->mpWaveEff[i].mAlpha = 0.0f;
+                    pPkt->mWaveEff[i].mAlpha = 0.0f;
                 }
-                pos.x = pPkt->mpWaveEff[i].mBasePos.x + pPkt->mpWaveEff[i].mPos.x;
-                pos.y = pPkt->mpWaveEff[i].mBasePos.y + pPkt->mpWaveEff[i].mPos.y;
-                pos.z = pPkt->mpWaveEff[i].mBasePos.z + pPkt->mpWaveEff[i].mPos.z;
+                pos.x = pPkt->mWaveEff[i].mBasePos.x + pPkt->mWaveEff[i].mPos.x;
+                pos.y = pPkt->mWaveEff[i].mBasePos.y + pPkt->mWaveEff[i].mPos.y;
+                pos.z = pPkt->mWaveEff[i].mBasePos.z + pPkt->mWaveEff[i].mPos.z;
 
-                pPkt->mpWaveEff[i].mStrengthEnv = 1.0f;
+                pPkt->mWaveEff[i].mStrengthEnv = 1.0f;
                 for (s32 j = 0; j < 10; j++) {
                     WAVE_INFO * pInf = g_env_light.mpWaveInfl[j];
                     if (pInf == NULL)
@@ -648,15 +648,15 @@ void wave_move() {
                     f32 outerRadius = pInf->mOuterRadius;
                     if (dist < outerRadius) {
                         if (dist < innerRadius) {
-                            pPkt->mpWaveEff[i].mStrengthEnv = 0.0f;
+                            pPkt->mWaveEff[i].mStrengthEnv = 0.0f;
                             break;
                         }
 
                         f32 range = outerRadius - innerRadius;
                         if (range > 0.0f) {
                             f32 fade = (dist - innerRadius) / range;
-                            if (pPkt->mpWaveEff[i].mStrengthEnv > fade)
-                                pPkt->mpWaveEff[i].mStrengthEnv = fade;
+                            if (pPkt->mWaveEff[i].mStrengthEnv > fade)
+                                pPkt->mWaveEff[i].mStrengthEnv = fade;
                         }
                     }
                 }
@@ -673,10 +673,10 @@ void wave_move() {
                     f32 range = outerRadius - innerRadius;
                     if (range > 0.0f) {
                         f32 fade = (dist - innerRadius) / range;
-                        if (pPkt->mpWaveEff[i].mStrengthEnv > fade)
-                            pPkt->mpWaveEff[i].mStrengthEnv = fade;
+                        if (pPkt->mWaveEff[i].mStrengthEnv > fade)
+                            pPkt->mWaveEff[i].mStrengthEnv = fade;
                     } else {
-                        pPkt->mpWaveEff[i].mStrengthEnv = 0.0f;
+                        pPkt->mWaveEff[i].mStrengthEnv = 0.0f;
                     }
                 }
 
@@ -691,10 +691,10 @@ void wave_move() {
                     f32 range = outerRadius - innerRadius;
                     if (dist < outerRadius) {
                         if (innerRadius < dist) {
-                            pPkt->mpWaveEff[i].mStrengthEnv = 0.0f;
+                            pPkt->mWaveEff[i].mStrengthEnv = 0.0f;
                         } else {
                             f32 fade = (dist - innerRadius) / range;
-                            pPkt->mpWaveEff[i].mStrengthEnv *= fade;
+                            pPkt->mWaveEff[i].mStrengthEnv *= fade;
                         }
                     }
                 }
@@ -702,7 +702,7 @@ void wave_move() {
             break;
         case 3:
             {
-                pPkt->mpWaveEff[i].mStatus = 0;
+                pPkt->mWaveEff[i].mStatus = 0;
             }
             break;
         default:
@@ -710,21 +710,21 @@ void wave_move() {
         }
 
         {
-            pos.x = pPkt->mpWaveEff[i].mBasePos.x + pPkt->mpWaveEff[i].mPos.x;
-            pos.y = pPkt->mpWaveEff[i].mBasePos.y + pPkt->mpWaveEff[i].mPos.y;
-            pos.z = pPkt->mpWaveEff[i].mBasePos.z + pPkt->mpWaveEff[i].mPos.z;
+            pos.x = pPkt->mWaveEff[i].mBasePos.x + pPkt->mWaveEff[i].mPos.x;
+            pos.y = pPkt->mWaveEff[i].mBasePos.y + pPkt->mWaveEff[i].mPos.y;
+            pos.z = pPkt->mWaveEff[i].mBasePos.z + pPkt->mWaveEff[i].mPos.z;
             f32 dist = pos.abs(pCamera->mLookat.mEye);
             if (dist < 0.0f)
                 dist = 0.0f;
             f32 alphaTarget = 1.03f * (1.0f - (dist / (2.0f * g_env_light.mWaveChan.mWaveSpawnDist)));
             // this is sinf
-            alphaTarget *= (f32)sin(pPkt->mpWaveEff[i].mCounter);
+            alphaTarget *= (f32)sin(pPkt->mWaveEff[i].mCounter);
             if (alphaTarget > 1.0f)
                 alphaTarget = 1.0f;
             if (alphaTarget < 0.0f)
                 alphaTarget = 0.0f;
-            cLib_addCalc(&pPkt->mpWaveEff[i].mAlpha, alphaTarget, 0.5f, 0.5f, 0.001f);
-            pPkt->mpWaveEff[i].mBasePos.y = seaLevel;
+            cLib_addCalc(&pPkt->mWaveEff[i].mAlpha, alphaTarget, 0.5f, 0.5f, 0.001f);
+            pPkt->mWaveEff[i].mBasePos.y = seaLevel;
         }
     }
 }
