@@ -275,11 +275,11 @@ struct WAVE_EFF {
     /* 0x1C */ f32 mScale;
     /* 0x20 */ f32 mCounterSpeed;
     /* 0x24 */ f32 mCounter;
-    /* 0x28 */ f32 mStrengthWind;
+    /* 0x28 */ f32 mAlpha;
     /* 0x2C */ f32 mStrengthEnv;
     /* 0x30 */ s16 field_0x30;
     /* 0x32 */ s16 field_0x32;
-    /* 0x34 */ u8 mState;
+    /* 0x34 */ s8 mStatus;
 };
 
 class dKankyo_wave_Packet : public J3DPacket {
@@ -354,6 +354,7 @@ void dKy_wave_chan_init();
 f32 dKyw_get_wind_pow();
 f32* dKyw_get_wind_power();
 cXyz dKyw_get_wind_vecpow();
+cXyz * dKyw_get_wind_vec();
 void squal_proc();
 void dKyw_pntwind_set(WIND_INFLUENCE*);
 void dKyw_pntwind_cut(WIND_INFLUENCE*);

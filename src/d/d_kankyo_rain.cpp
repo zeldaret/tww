@@ -102,6 +102,9 @@ void dKyr_set_btitex(GXTexObj* i_obj, ResTIMG* i_img) {
 /* 8008AE54-8008B44C       .text dKyr_kamome_move__Fv */
 void dKyr_kamome_move() {
     /* Nonmatching */
+    WINDEFF_SET * pWind = g_env_light.mpWind;
+    camera_class* pCamera = (camera_class*)dComIfGp_getCamera(0);
+    dKyw_get_wind_vec();
 }
 
 /* 8008B44C-8008B504       .text dKyr_wind_init__Fv */
@@ -494,6 +497,236 @@ void dKyr_star_move() {
 /* 80090DE0-80091964       .text wave_move__Fv */
 void wave_move() {
     /* Nonmatching */
+    cXyz vecpow = dKyw_get_wind_vecpow();
+
+    dKankyo_wave_Packet * pPkt = g_env_light.mpWavePacket;
+    fopAc_ac_c * pPlayer = dComIfGp_getPlayer(0);
+    camera_class * pCamera = dComIfGp_getCamera(0);
+
+    cXyz windPowVec;
+    windPowVec.x = vecpow.x;
+    windPowVec.y = 0.0f;
+    windPowVec.z = vecpow.z;
+
+    dStage_FileList_dt_c * fili_p = NULL;
+    s32 roomNo = dComIfGp_roomControl_getStayNo();
+    if (roomNo >= 0)
+        fili_p = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
+
+    f32 skyboxY = 0.0f;
+    if (fili_p != NULL)
+        skyboxY = fili_p->mSkyboxY;
+
+    if (g_env_light.mWaveChan.mWaveFlatInter >= 1.0f)
+        return;
+
+    if (dComIfGd_getView() == NULL)
+        return;
+
+    Mtx drawMtx;
+    MTXInverse(dComIfGd_getViewRotMtx(), drawMtx);
+    cXyz eyevect;
+    dKy_set_eyevect_calc2(pCamera, &eyevect, g_env_light.mWaveChan.mWaveSpawnDist, 0.0f);
+
+    cXyz * windVec = dKyw_get_wind_vec();
+    cXyz windNrmVec;
+    windNrmVec.x = windVec->x;
+    windNrmVec.y = windVec->y;
+    windNrmVec.z = windVec->z;
+    f32 windPow = dKyw_get_wind_pow();
+
+    if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == 2) {
+        s16 stageWindY = 0;
+        if (strcmp(dComIfGp_getStartStageName(), "LinkRM") == 0)
+            stageWindY = 0x4000;
+        else if (strcmp(dComIfGp_getStartStageName(), "Orichh") == 0)
+            stageWindY = -0x4000;
+        else if (strcmp(dComIfGp_getStartStageName(), "Ojhous2") == 0)
+            stageWindY = 0x7fff;
+        else if (strcmp(dComIfGp_getStartStageName(), "Omasao") == 0)
+            stageWindY = -0x4000;
+        else if (strcmp(dComIfGp_getStartStageName(), "Onobuta") == 0)
+            stageWindY = -0x4000;
+
+        s16 windX, windY;
+        if (dComIfGs_getWindX() == -1 && dComIfGs_getWindY() == -1) {
+            windX = 0;
+            windY = 0;
+        } else {
+            windX = g_env_light.mWind.mTactWindAngleX;
+            windY = g_env_light.mWind.mTactWindAngleY;
+        }
+
+        windY += stageWindY;
+
+        windNrmVec.x = cM_scos(windX) * cM_scos(windY);
+        windNrmVec.y = cM_ssin(windX);
+        windNrmVec.z = cM_scos(windX) * cM_ssin(windY);
+
+        windPow = 0.6f;
+        windPowVec.x = windNrmVec.x * 0.6f;
+        windPowVec.z = windNrmVec.z * 0.6f;
+    }
+
+    DOUBLE_POS deltaXZ;
+    deltaXZ.x = pCamera->mLookat.mCenter.x - pCamera->mLookat.mEye.x;
+    deltaXZ.y = 0.0f;
+    deltaXZ.z = pCamera->mLookat.mCenter.z - pCamera->mLookat.mEye.z;
+    cXyz lookDirXZ;
+    vectle_calc(&deltaXZ, &lookDirXZ);
+
+    pPkt->mSkewDir = (-windNrmVec.x - 0.0f) * (lookDirXZ.z - 0.0f) * (-windNrmVec.z - 0.0f) * (lookDirXZ.x - 0.0f);
+    pPkt->mSkewWidth = (1.0f - fabsf(windNrmVec.x * lookDirXZ.x + windNrmVec.z * lookDirXZ.z)) * windPow * fabsf(windNrmVec.y);
+    pPkt->mSkewWidth *= fabsf(pPkt->mSkewDir) * 0.6f;
+
+    for (s32 i = 0; i < g_env_light.mWaveChan.mWaveCount; i++) {
+        if (g_env_light.mWaveChan.mWaveReset)
+            pPkt->mpWaveEff[i].mStatus = 0;
+
+        switch (pPkt->mpWaveEff[i].mStatus) {
+        case 0:
+            {
+                pPkt->mpWaveEff[i].mBasePos.x = eyevect.x;
+                pPkt->mpWaveEff[i].mBasePos.y = skyboxY;
+                pPkt->mpWaveEff[i].mBasePos.z = eyevect.z;
+                pPkt->mpWaveEff[i].mPos.x = cM_rndFX(g_env_light.mWaveChan.mWaveSpawnRadius);
+                pPkt->mpWaveEff[i].mPos.x = 0.0f;
+                pPkt->mpWaveEff[i].mPos.z = cM_rndFX(g_env_light.mWaveChan.mWaveSpawnRadius);
+                pPkt->mpWaveEff[i].mCounter = cM_rndF(65536.0f);
+                pPkt->mpWaveEff[i].mAlpha = 0.0f;
+                pPkt->mpWaveEff[i].field_0x32 = cM_rndF(65536.0f);
+                pPkt->mpWaveEff[i].mStrengthEnv = 1.0f;
+                pPkt->mpWaveEff[i].mScale = g_env_light.mWaveChan.mWaveScaleRand + cM_rndF(1.0f - g_env_light.mWaveChan.mWaveScaleRand);
+                pPkt->mpWaveEff[i].mSpeed = pPkt->mpWaveEff[i].mScale;
+                pPkt->mpWaveEff[i].mCounterSpeed = ((1.0f - pPkt->mpWaveEff[i].mScale) * 0.05f + 0.02f) * g_env_light.mWaveChan.mWaveCounterSpeedScale;
+                pPkt->mpWaveEff[i].field_0x30 = 0;
+                pPkt->mpWaveEff[i].mStatus++;
+            }
+            // fallthrough
+        case 1:
+        case 2:
+            {
+                pPkt->mpWaveEff[i].mPos.x += (pPkt->mpWaveEff[i].mAlpha * 0.8f + 0.2f) * (pPkt->mpWaveEff[i].mStrengthEnv * 0.5f + 0.5f) * (pPkt->mpWaveEff[i].mSpeed * windPowVec.x * g_env_light.mWaveChan.mWaveSpeed);
+                pPkt->mpWaveEff[i].mPos.z += (pPkt->mpWaveEff[i].mAlpha * 0.8f + 0.2f) * (pPkt->mpWaveEff[i].mStrengthEnv * 0.5f + 0.5f) * (pPkt->mpWaveEff[i].mSpeed * windPowVec.z * g_env_light.mWaveChan.mWaveSpeed);
+                pPkt->mpWaveEff[i].mCounter += pPkt->mpWaveEff[i].mCounterSpeed;
+                cXyz pos;
+                pos.x = pPkt->mpWaveEff[i].mBasePos.x + pPkt->mpWaveEff[i].mPos.x;
+                pos.y = pPkt->mpWaveEff[i].mBasePos.y + pPkt->mpWaveEff[i].mPos.y;
+                pos.z = pPkt->mpWaveEff[i].mBasePos.z + pPkt->mpWaveEff[i].mPos.z;
+                if (pos.abs(eyevect) > g_env_light.mWaveChan.mWaveSpawnRadius) {
+                    pPkt->mpWaveEff[i].mBasePos.x = eyevect.x;
+                    pPkt->mpWaveEff[i].mBasePos.z = eyevect.z;
+                    if (pos.abs(eyevect) > (g_env_light.mWaveChan.mWaveSpawnRadius + 350.0f)) {
+                        pPkt->mpWaveEff[i].mPos.x = cM_rndFX(g_env_light.mWaveChan.mWaveSpawnRadius);
+                        pPkt->mpWaveEff[i].mPos.z = cM_rndFX(g_env_light.mWaveChan.mWaveSpawnRadius);
+                    } else {
+                        cXyz newPos;
+                        get_vectle_calc(&pos, &eyevect, &newPos);
+                        pPkt->mpWaveEff[i].mPos.x = newPos.x * g_env_light.mWaveChan.mWaveSpawnRadius;
+                        pPkt->mpWaveEff[i].mPos.z = newPos.z * g_env_light.mWaveChan.mWaveSpawnRadius;
+                    }
+                    pPkt->mpWaveEff[i].mAlpha = 0.0f;
+                }
+                pos.x = pPkt->mpWaveEff[i].mBasePos.x + pPkt->mpWaveEff[i].mPos.x;
+                pos.y = pPkt->mpWaveEff[i].mBasePos.y + pPkt->mpWaveEff[i].mPos.y;
+                pos.z = pPkt->mpWaveEff[i].mBasePos.z + pPkt->mpWaveEff[i].mPos.z;
+
+                pPkt->mpWaveEff[i].mStrengthEnv = 1.0f;
+                for (s32 j = 0; j < 10; j++) {
+                    WAVE_INFO * pInf = g_env_light.mpWaveInfl[j];
+                    if (pInf == NULL)
+                        continue;
+
+                    pInf->mPos.y = pos.y;
+                    f32 dist = pos.abs(pInf->mPos);
+                    f32 innerRadius = pInf->mInnerRadius;
+                    f32 outerRadius = pInf->mOuterRadius;
+                    if (dist < outerRadius) {
+                        if (dist < innerRadius) {
+                            pPkt->mpWaveEff[i].mStrengthEnv = 0.0f;
+                            break;
+                        }
+
+                        f32 range = outerRadius - innerRadius;
+                        if (range > 0.0f) {
+                            f32 fade = (dist - innerRadius) / range;
+                            if (pPkt->mpWaveEff[i].mStrengthEnv > fade)
+                                pPkt->mpWaveEff[i].mStrengthEnv = fade;
+                        }
+                    }
+                }
+
+                if (g_env_light.mWaveChan.mWaveFlatInter > 0.0f) {
+                    cXyz eye;
+                    eye.x = pCamera->mLookat.mEye.x;
+                    eye.y = pos.y;
+                    eye.z = pCamera->mLookat.mEye.z;
+
+                    f32 dist = pos.abs(eye);
+                    f32 innerRadius = g_env_light.mWaveChan.mWaveFlatInter * 1.5f * g_env_light.mWaveChan.mWaveSpawnRadius;
+                    f32 outerRadius = innerRadius + 1000.0f;
+                    if (dist < outerRadius) {
+                        if (dist < innerRadius) {
+                            pPkt->mpWaveEff[i].mStrengthEnv = 0.0f;
+                            break;
+                        }
+
+                        f32 range = outerRadius - innerRadius;
+                        if (range > 0.0f) {
+                            f32 fade = (dist - innerRadius) / range;
+                            if (pPkt->mpWaveEff[i].mStrengthEnv > fade)
+                                pPkt->mpWaveEff[i].mStrengthEnv = fade;
+                        }
+                    }
+                }
+
+                {
+                    f32 dist = pos.abs(pPlayer->getPosition());
+                    f32 innerRadius = 200.0f;
+                    f32 outerRadius = 2000.0f;
+                    if (dist < outerRadius) {
+                        if (dist < innerRadius) {
+                            pPkt->mpWaveEff[i].mStrengthEnv = 0.0f;
+                            break;
+                        }
+
+                        f32 range = outerRadius - innerRadius;
+                        if (range > 0.0f) {
+                            f32 fade = (dist - innerRadius) / range;
+                            if (pPkt->mpWaveEff[i].mStrengthEnv > fade)
+                                pPkt->mpWaveEff[i].mStrengthEnv = fade;
+                        }
+                    }
+                }
+            }
+            break;
+        case 3:
+            {
+                pPkt->mpWaveEff[i].mStatus = 0;
+            }
+            break;
+        default:
+            break;
+        }
+
+        {
+            cXyz pos;
+            pos.x = pPkt->mpWaveEff[i].mBasePos.x + pPkt->mpWaveEff[i].mPos.x;
+            pos.y = pPkt->mpWaveEff[i].mBasePos.y + pPkt->mpWaveEff[i].mPos.y;
+            pos.z = pPkt->mpWaveEff[i].mBasePos.z + pPkt->mpWaveEff[i].mPos.z;
+            f32 dist = pos.abs(pCamera->mLookat.mEye);
+            if (dist < 0.0f)
+                dist = 0.0f;
+            f32 alphaTarget = 1.03f * (1.0f - (dist / (2.0f * g_env_light.mWaveChan.mWaveSpawnDist)));
+            alphaTarget *= (f32)sin(pPkt->mpWaveEff[i].mCounter);
+            if (alphaTarget > 1.0f)
+                alphaTarget = 1.0f;
+            if (alphaTarget < 0.0f)
+                alphaTarget = 0.0f;
+            cLib_addCalc(&pPkt->mpWaveEff[i].mAlpha, alphaTarget, 0.5f, 0.5f, 0.001f);
+            pPkt->mpWaveEff[i].mBasePos.y = skyboxY;
+        }
+    }
 }
 
 /* 80091964-80092294       .text cloud_shadow_move__Fv */
