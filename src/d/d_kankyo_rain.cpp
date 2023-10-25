@@ -498,24 +498,24 @@ void dKyr_star_move() {
 void wave_move() {
     /* Nonmatching */
     cXyz vecpow = dKyw_get_wind_vecpow();
+    dStage_FileList_dt_c * fili_p = NULL;
 
     dKankyo_wave_Packet * pPkt = g_env_light.mpWavePacket;
     fopAc_ac_c * pPlayer = dComIfGp_getPlayer(0);
     camera_class * pCamera = dComIfGp_getCamera(0);
 
+    cXyz eyevect;
+    cXyz pos;
+    cXyz windNrmVec;
     cXyz windPowVec;
-    windPowVec.x = vecpow.x;
-    windPowVec.y = 0.0f;
-    windPowVec.z = vecpow.z;
 
-    dStage_FileList_dt_c * fili_p = NULL;
     s32 roomNo = dComIfGp_roomControl_getStayNo();
     if (roomNo >= 0)
         fili_p = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
 
-    f32 skyboxY = 0.0f;
+    f32 seaLevel;
     if (fili_p != NULL)
-        skyboxY = fili_p->mSkyboxY;
+        seaLevel = dStage_FileList_dt_SeaLevel(fili_p);
 
     if (g_env_light.mWaveChan.mWaveFlatInter >= 1.0f)
         return;
@@ -525,15 +525,15 @@ void wave_move() {
 
     Mtx drawMtx;
     MTXInverse(dComIfGd_getViewRotMtx(), drawMtx);
-    cXyz eyevect;
+    cXyz d0;
     dKy_set_eyevect_calc2(pCamera, &eyevect, g_env_light.mWaveChan.mWaveSpawnDist, 0.0f);
+    d0.z = 0.0f;
+    d0.y = 0.0f;
+    d0.x = 0.0f;
 
     cXyz * windVec = dKyw_get_wind_vec();
-    cXyz windNrmVec;
-    windNrmVec.x = windVec->x;
-    windNrmVec.y = windVec->y;
-    windNrmVec.z = windVec->z;
     f32 windPow = dKyw_get_wind_pow();
+    windNrmVec = *windVec;
 
     if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == 2) {
         s16 stageWindY = 0;
@@ -546,9 +546,9 @@ void wave_move() {
         else if (strcmp(dComIfGp_getStartStageName(), "Omasao") == 0)
             stageWindY = -0x4000;
         else if (strcmp(dComIfGp_getStartStageName(), "Onobuta") == 0)
-            stageWindY = -0x4000;
+            stageWindY = 0x4000;
 
-        s16 windX, windY;
+        s32 windX, windY;
         if (dComIfGs_getWindX() == -1 && dComIfGs_getWindY() == -1) {
             windX = 0;
             windY = 0;
@@ -568,6 +568,10 @@ void wave_move() {
         windPowVec.z = windNrmVec.z * 0.6f;
     }
 
+    d0.z = 0.0f;
+    d0.y = 0.0f;
+    d0.x = 0.0f;
+
     DOUBLE_POS deltaXZ;
     deltaXZ.x = pCamera->mLookat.mCenter.x - pCamera->mLookat.mEye.x;
     deltaXZ.y = 0.0f;
@@ -575,8 +579,9 @@ void wave_move() {
     cXyz lookDirXZ;
     vectle_calc(&deltaXZ, &lookDirXZ);
 
+    // is this an inline? how do i get it to subtract 0.0f
     pPkt->mSkewDir = (-windNrmVec.x - 0.0f) * (lookDirXZ.z - 0.0f) * (-windNrmVec.z - 0.0f) * (lookDirXZ.x - 0.0f);
-    pPkt->mSkewWidth = (1.0f - fabsf(windNrmVec.x * lookDirXZ.x + windNrmVec.z * lookDirXZ.z)) * windPow * fabsf(windNrmVec.y);
+    pPkt->mSkewWidth = (1.0f - fabsf(windNrmVec.x * lookDirXZ.x + windNrmVec.z * lookDirXZ.z)) * windPow * (1.0f - fabsf(windNrmVec.y));
     pPkt->mSkewWidth *= fabsf(pPkt->mSkewDir) * 0.6f;
 
     for (s32 i = 0; i < g_env_light.mWaveChan.mWaveCount; i++) {
@@ -587,10 +592,10 @@ void wave_move() {
         case 0:
             {
                 pPkt->mpWaveEff[i].mBasePos.x = eyevect.x;
-                pPkt->mpWaveEff[i].mBasePos.y = skyboxY;
+                pPkt->mpWaveEff[i].mBasePos.y = seaLevel;
                 pPkt->mpWaveEff[i].mBasePos.z = eyevect.z;
                 pPkt->mpWaveEff[i].mPos.x = cM_rndFX(g_env_light.mWaveChan.mWaveSpawnRadius);
-                pPkt->mpWaveEff[i].mPos.x = 0.0f;
+                pPkt->mpWaveEff[i].mPos.y = 0.0f;
                 pPkt->mpWaveEff[i].mPos.z = cM_rndFX(g_env_light.mWaveChan.mWaveSpawnRadius);
                 pPkt->mpWaveEff[i].mCounter = cM_rndF(65536.0f);
                 pPkt->mpWaveEff[i].mAlpha = 0.0f;
@@ -606,10 +611,10 @@ void wave_move() {
         case 1:
         case 2:
             {
+                // fmuls ordering seems off
                 pPkt->mpWaveEff[i].mPos.x += (pPkt->mpWaveEff[i].mAlpha * 0.8f + 0.2f) * (pPkt->mpWaveEff[i].mStrengthEnv * 0.5f + 0.5f) * (pPkt->mpWaveEff[i].mSpeed * windPowVec.x * g_env_light.mWaveChan.mWaveSpeed);
                 pPkt->mpWaveEff[i].mPos.z += (pPkt->mpWaveEff[i].mAlpha * 0.8f + 0.2f) * (pPkt->mpWaveEff[i].mStrengthEnv * 0.5f + 0.5f) * (pPkt->mpWaveEff[i].mSpeed * windPowVec.z * g_env_light.mWaveChan.mWaveSpeed);
                 pPkt->mpWaveEff[i].mCounter += pPkt->mpWaveEff[i].mCounterSpeed;
-                cXyz pos;
                 pos.x = pPkt->mpWaveEff[i].mBasePos.x + pPkt->mpWaveEff[i].mPos.x;
                 pos.y = pPkt->mpWaveEff[i].mBasePos.y + pPkt->mpWaveEff[i].mPos.y;
                 pos.z = pPkt->mpWaveEff[i].mBasePos.z + pPkt->mpWaveEff[i].mPos.z;
@@ -663,38 +668,33 @@ void wave_move() {
                     eye.z = pCamera->mLookat.mEye.z;
 
                     f32 dist = pos.abs(eye);
-                    f32 innerRadius = g_env_light.mWaveChan.mWaveFlatInter * 1.5f * g_env_light.mWaveChan.mWaveSpawnRadius;
+                    f32 innerRadius = g_env_light.mWaveChan.mWaveFlatInter * g_env_light.mWaveChan.mWaveSpawnRadius * 1.5f;
                     f32 outerRadius = innerRadius + 1000.0f;
-                    if (dist < outerRadius) {
-                        if (dist < innerRadius) {
-                            pPkt->mpWaveEff[i].mStrengthEnv = 0.0f;
-                            break;
-                        }
-
-                        f32 range = outerRadius - innerRadius;
-                        if (range > 0.0f) {
-                            f32 fade = (dist - innerRadius) / range;
-                            if (pPkt->mpWaveEff[i].mStrengthEnv > fade)
-                                pPkt->mpWaveEff[i].mStrengthEnv = fade;
-                        }
+                    f32 range = outerRadius - innerRadius;
+                    if (range > 0.0f) {
+                        f32 fade = (dist - innerRadius) / range;
+                        if (pPkt->mpWaveEff[i].mStrengthEnv > fade)
+                            pPkt->mpWaveEff[i].mStrengthEnv = fade;
+                    } else {
+                        pPkt->mpWaveEff[i].mStrengthEnv = 0.0f;
                     }
                 }
 
                 {
-                    f32 dist = pos.abs(pPlayer->getPosition());
+                    cXyz playerPos;
+                    playerPos.x = pPlayer->getPosition().x;
+                    playerPos.y = pos.y;
+                    playerPos.z = pPlayer->getPosition().z;
+                    f32 dist = pos.abs(playerPos);
                     f32 innerRadius = 200.0f;
                     f32 outerRadius = 2000.0f;
+                    f32 range = outerRadius - innerRadius;
                     if (dist < outerRadius) {
-                        if (dist < innerRadius) {
+                        if (innerRadius < dist) {
                             pPkt->mpWaveEff[i].mStrengthEnv = 0.0f;
-                            break;
-                        }
-
-                        f32 range = outerRadius - innerRadius;
-                        if (range > 0.0f) {
+                        } else {
                             f32 fade = (dist - innerRadius) / range;
-                            if (pPkt->mpWaveEff[i].mStrengthEnv > fade)
-                                pPkt->mpWaveEff[i].mStrengthEnv = fade;
+                            pPkt->mpWaveEff[i].mStrengthEnv *= fade;
                         }
                     }
                 }
@@ -710,7 +710,6 @@ void wave_move() {
         }
 
         {
-            cXyz pos;
             pos.x = pPkt->mpWaveEff[i].mBasePos.x + pPkt->mpWaveEff[i].mPos.x;
             pos.y = pPkt->mpWaveEff[i].mBasePos.y + pPkt->mpWaveEff[i].mPos.y;
             pos.z = pPkt->mpWaveEff[i].mBasePos.z + pPkt->mpWaveEff[i].mPos.z;
@@ -718,13 +717,14 @@ void wave_move() {
             if (dist < 0.0f)
                 dist = 0.0f;
             f32 alphaTarget = 1.03f * (1.0f - (dist / (2.0f * g_env_light.mWaveChan.mWaveSpawnDist)));
+            // this is sinf
             alphaTarget *= (f32)sin(pPkt->mpWaveEff[i].mCounter);
             if (alphaTarget > 1.0f)
                 alphaTarget = 1.0f;
             if (alphaTarget < 0.0f)
                 alphaTarget = 0.0f;
             cLib_addCalc(&pPkt->mpWaveEff[i].mAlpha, alphaTarget, 0.5f, 0.5f, 0.001f);
-            pPkt->mpWaveEff[i].mBasePos.y = skyboxY;
+            pPkt->mpWaveEff[i].mBasePos.y = seaLevel;
         }
     }
 }

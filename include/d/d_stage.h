@@ -239,7 +239,7 @@ struct dStage_SoundInfo_c {
 class dStage_FileList_dt_c {
 public:
     /* 0x0 */ u32 mParam;
-    /* 0x4 */ f32 mSkyboxY;
+    /* 0x4 */ f32 mSeaLevel;
 };
 
 struct dStage_dPnt_c {
@@ -988,6 +988,10 @@ inline int dStage_FileList_dt_ChkPathWindEffect(dStage_FileList_dt_c* i_fili) {
 
 inline int dStage_FileList_dt_GlobalWindLevel(dStage_FileList_dt_c* i_fili) {
     return (i_fili->mParam >> 0x12) & 3;
+}
+
+inline f32 dStage_FileList_dt_SeaLevel(dStage_FileList_dt_c* i_fili) {
+    return i_fili->mSeaLevel;
 }
 
 bool dStage_chkPlayerId(int playerId, int room_no);
