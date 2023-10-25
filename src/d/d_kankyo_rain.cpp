@@ -121,48 +121,48 @@ void dKyr_wind_move() {
 }
 
 /* 8008C624-8008C888       .text dKyr_lenzflare_move__Fv */
-// NONMATCHING
 void dKyr_lenzflare_move() {
-    dKankyo_sun_Packet* sun_p = g_env_light.mpSunPacket;
-    dKankyo_sunlenz_Packet* lenz_p = g_env_light.mpSunlenzPacket;
-    camera_class* camera_p = dComIfGp_getCamera(0);
+    dKankyo_sun_Packet* pSunPkt = g_env_light.mpSunPacket;
+    dKankyo_sunlenz_Packet* pLenzPkt = g_env_light.mpSunlenzPacket;
+    camera_class* pCamera = (camera_class*)dComIfGp_getCamera(0);
 
-    if (!(g_env_light.mpSunPacket->mVisibility < 0.0001f)) {
-        cXyz eyeVect;
-        dKy_set_eyevect_calc(dComIfGp_getCamera(0), &eyeVect, 7200.0005f, 7200.0005f);
+    if (pSunPkt->mVisibility < 0.0001f)
+        return;
 
-        cXyz sunDirSmth;
-        dKyr_get_vectle_calc(&eyeVect, sun_p->mPos, &sunDirSmth);
-        lenz_p->mPositions[0] = sun_p->mPos[0];
-        lenz_p->mPositions[1] = sun_p->mPos[0];
+    cXyz eyeVect;
+    cXyz sunDirSmth;
+    cXyz camFwd;
+    cXyz vectle;
+    cXyz projected;
+    cXyz center;
 
-        cXyz projected;
-        mDoLib_project(lenz_p->mPositions, &projected);
+    dKy_set_eyevect_calc(pCamera, &eyeVect, 7200.0005f, 7200.0005f);
 
-        cXyz center;
-        center.x = 320.0f;
-        center.y = 240.0f;
-        center.z = 0.0f;
+    dKyr_get_vectle_calc(&eyeVect, pSunPkt->mPos, &sunDirSmth);
+    pLenzPkt->mPositions[0] = pSunPkt->mPos[0];
+    pLenzPkt->mPositions[1] = pSunPkt->mPos[0];
 
-        cXyz vectle;
-        dKyr_get_vectle_calc(&center, &projected, &vectle);
-        s16 angle = cM_atan2s(vectle.x, vectle.y);
+    mDoLib_project(pLenzPkt->mPositions, &projected);
 
-        lenz_p->mAngleDeg = angle;
-        lenz_p->mAngleDeg *= 0.005493164f;
-        lenz_p->mAngleDeg += 180.0f;
+    center.x = 320.0f;
+    center.y = 240.0f;
+    center.z = 0.0f;
 
-        cXyz camFwd;
-        dKyr_get_vectle_calc(&camera_p->mLookat.mEye, &camera_p->mLookat.mCenter, &camFwd);
+    dKyr_get_vectle_calc(&center, &projected, &vectle);
+    s16 angle = cM_atan2s(vectle.x, vectle.y);
 
-        f32 var_f4 = sunDirSmth.abs(camFwd);
-        var_f4 = (var_f4 * 350.0f) + 250.0f;
+    pLenzPkt->mAngleDeg = angle;
+    pLenzPkt->mAngleDeg *= 0.005493164f;
+    pLenzPkt->mAngleDeg += 180.0f;
 
-        for (int i = 2; i < 8; i++) {
-            lenz_p->mPositions[i].x = sun_p->mPos[0].x - i * sunDirSmth.x * var_f4;
-            lenz_p->mPositions[i].y = sun_p->mPos[0].y - i * sunDirSmth.y * var_f4;
-            lenz_p->mPositions[i].z = sun_p->mPos[0].z - i * sunDirSmth.z * var_f4;
-        }
+    dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &pCamera->mLookat.mCenter, &camFwd);
+
+    f32 size = sunDirSmth.abs(camFwd) * 350.0f + 250.0f;
+
+    for (int i = 2; i < 8; i++) {
+        pLenzPkt->mPositions[i].x = pSunPkt->mPos[0].x - sunDirSmth.x * size * i;
+        pLenzPkt->mPositions[i].y = pSunPkt->mPos[0].y - sunDirSmth.y * size * i;
+        pLenzPkt->mPositions[i].z = pSunPkt->mPos[0].z - sunDirSmth.z * size * i;
     }
 }
 
