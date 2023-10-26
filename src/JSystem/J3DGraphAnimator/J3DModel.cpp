@@ -319,8 +319,57 @@ s32 J3DModel::createMatPacket(J3DModelData* pModelData, u32 flag) {
 }
 
 /* 802EDF60-802EE1D4       .text createBumpMtxArray__8J3DModelFP12J3DModelDataUl */
-s32 J3DModel::createBumpMtxArray(J3DModelData*, unsigned long) {
+s32 J3DModel::createBumpMtxArray(J3DModelData* modelData, u32 flag) {
     /* Nonmatching */
+    if (modelData->getModelDataType() == 0) {
+        u16 num = 0;
+        for (s32 matIdx = 0; matIdx < modelData->getMaterialNum(); matIdx++) {
+            J3DMaterial * pMaterial = getModelData()->getMaterialNodePointer(matIdx);
+            if (pMaterial->getNBTScale()->mbHasScale == 1)
+                num += pMaterial->getShape()->countBumpMtxNum();
+        }
+
+        if (num != 0 && flag != 0) {
+            for (s32 i = 0; i < 2; i++) {
+                mpBumpMtxArr[i] = new Mtx33**[num];
+                if (mpBumpMtxArr[i] == NULL)
+                    return kJ3DError_Alloc;
+            }
+        }
+
+        for (s32 i = 0; i < 2; i++) {
+            u32 bumpMtxOffset = 0;
+            for (s32 matIdx = 0; matIdx < modelData->getMaterialNum(); matIdx++) {
+                J3DMaterial * pMaterial = getModelData()->getMaterialNodePointer(matIdx);
+                if (pMaterial->getNBTScale()->mbHasScale == 1) {
+                    mpBumpMtxArr[i][matIdx] = new Mtx33*[num];
+                    if (mpBumpMtxArr[i][matIdx] == NULL)
+                        return kJ3DError_Alloc;
+                    pMaterial->getShape()->setBumpMtxOffset(bumpMtxOffset);
+                    bumpMtxOffset++;
+                }
+            }
+        }
+
+        for (s32 i = 0; i < 2; i++) {
+            u32 bumpMtxOffset = 0;
+            for (s32 matIdx = 0; matIdx < modelData->getMaterialNum(); matIdx++) {
+                J3DMaterial * pMaterial = getModelData()->getMaterialNodePointer(matIdx);
+                if (pMaterial->getNBTScale()->mbHasScale == 1) {
+                    for (u32 j = 0; j < flag; j++) {
+                        mpBumpMtxArr[i][matIdx][j] = new(0x20) Mtx33[modelData->getDrawMtxNum()];
+                        if (mpBumpMtxArr[i][matIdx][j] == NULL)
+                            return kJ3DError_Alloc;
+                    }
+                }
+            }
+        }
+
+        if (num != 0)
+            getModelData()->setBumpFlag(1);
+    }
+
+    return kJ3DError_Success;
 }
 
 /* 802EE1D4-802EE254       .text newDifferedDisplayList__8J3DModelFUl */
@@ -372,7 +421,7 @@ void J3DModel::calcMaterial() {
 
     for (u16 i = 0; i < mModelData->getMaterialNum(); i++) {
         j3dSys.setMatPacket(&mpMatPacket[i]);
-        
+
         J3DMaterial* pMaterial = mModelData->getMaterialNodePointer(i);
         if (pMaterial->getMaterialAnm() != NULL)
             pMaterial->getMaterialAnm()->calc(pMaterial);
