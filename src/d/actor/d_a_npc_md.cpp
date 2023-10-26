@@ -3,66 +3,167 @@
 // Translation Unit: d_a_npc_md.cpp
 //
 
-#include "d_a_npc_md.h"
-#include "dolphin/types.h"
+#include "d/actor/d_a_npc_md.h"
+#include "d/d_procname.h"
+#include "JSystem/JKernel/JKRHeap.h"
 
 /* 000000EC-0000013C       .text __ct__15daNpc_Md_HIO6_cFv */
 daNpc_Md_HIO6_c::daNpc_Md_HIO6_c() {
-    /* Nonmatching */
+    m04 = 500.0f;
+    m08 = 430;
+    m0A = 9000;
+    m0C = -5000;
+    m0E = -9000;
+    m10 = 0;
+    m12 = 0;
+    m14 = 0;
+    m16 = 0;
 }
 
 /* 0000013C-00000164       .text __ct__15daNpc_Md_HIO5_cFv */
 daNpc_Md_HIO5_c::daNpc_Md_HIO5_c() {
-    /* Nonmatching */
+    m4 = 16.0f;
+    m8 = 0.6f;
 }
 
 /* 00000164-00000188       .text __ct__15daNpc_Md_HIO4_cFv */
 daNpc_Md_HIO4_c::daNpc_Md_HIO4_c() {
     /* Nonmatching */
+    m4 = 86.0f;
+    m8 = 0;
 }
 
 /* 00000188-000001F4       .text __ct__15daNpc_Md_HIO3_cFv */
 daNpc_Md_HIO3_c::daNpc_Md_HIO3_c() {
-    /* Nonmatching */
+    m04 = 0.8f;
+    m08 = 0.2f;
+    m0C = -5.0f;
+    m10 = -5.0f;
+    m14 = 0.0f;
+    m18 = 0;
+    m1A = 0;
+    m1C = 0;
+    m1E = 3800;
+    m20 = 5800;
+    m22 = 0x7FFF;
+    m24 = -0x7FFF;
 }
 
 /* 000001F4-00000274       .text __ct__15daNpc_Md_HIO2_cFv */
 daNpc_Md_HIO2_c::daNpc_Md_HIO2_c() {
-    /* Nonmatching */
+    m26 = 0x19;
+    m28 = 0x7FFF;
+    m2A = 1;
+    m04 = 5.0f;
+    m08 = 17.0f;
+    m0C = 7.0f;
+    m10 = 6.0f;
+    m14 = 0.7f;
+    m20 = 3300;
+    m22 = 2900;
+    m24 = 5;
+    m18 = 2.6f;
+    m1C = 0.6f;
 }
 
 /* 00000274-00000574       .text __ct__14daNpc_Md_HIO_cFv */
 daNpc_Md_HIO_c::daNpc_Md_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 00000574-000005BC       .text __dt__15daNpc_Md_HIO6_cFv */
-daNpc_Md_HIO6_c::~daNpc_Md_HIO6_c() {
-    /* Nonmatching */
-}
-
-/* 000005BC-00000604       .text __dt__15daNpc_Md_HIO5_cFv */
-daNpc_Md_HIO5_c::~daNpc_Md_HIO5_c() {
-    /* Nonmatching */
-}
-
-/* 00000604-0000064C       .text __dt__15daNpc_Md_HIO4_cFv */
-daNpc_Md_HIO4_c::~daNpc_Md_HIO4_c() {
-    /* Nonmatching */
-}
-
-/* 0000064C-00000694       .text __dt__15daNpc_Md_HIO3_cFv */
-daNpc_Md_HIO3_c::~daNpc_Md_HIO3_c() {
-    /* Nonmatching */
-}
-
-/* 00000694-000006DC       .text __dt__15daNpc_Md_HIO2_cFv */
-daNpc_Md_HIO2_c::~daNpc_Md_HIO2_c() {
-    /* Nonmatching */
+    m08C.m04 = -25.0;
+    m08C.m08 = 0x2328;
+    m08C.m0C = 0x2328;
+    m08C.m0A = 0x0;
+    m08C.m0E = 0x1F40;
+    m08C.m10 = -0x2328;
+    m08C.m14 = -0x2328;
+    m08C.m12 = 0x0;
+    m08C.m16 = -0x1F40;
+    m08C.m18 = 0x1000;
+    m08C.m1A = 0x800;
+    m08C.m1C = 130.0;
+    m08C.m20 = 0x4000;
+    m08C.m22 = 0x0;
+    m08C.m24 = 150.0;
+    m0B4 = 0x0;
+    m0B8 = 770.0;
+    m0BC = 250.0;
+    m0C0 = -450.0;
+    m0C4 = 90.0;
+    m0C8 = 400.0;
+    m0CC = 600.0;
+    m0D0 = 0.05;
+    m0D4 = 17.0;
+    m0D8 = 0.0;
+    m0DC = 0.5;
+    m0E0 = 0.3;
+    m0E4 = 0.9;
+    m0E8 = 15.0;
+    m0EC = 22.0;
+    m0F0 = 9.0;
+    m0F4 = 4.0;
+    m0F8 = -1.51367;
+    m0FC = -1.09863;
+    m100 = -0.56152;
+    m104 = 0.1;
+    m108 = 0.2;
+    m10C = 10.0;
+    m110 = -50.0;
+    m114 = 1.3;
+    m128 = 1200.0;
+    m12C = 1500.0;
+    m118 = 1.0;
+    m11C = 1.5;
+    m120 = 2.0;
+    m124 = 1.6;
+    m130 = 3.0;
+    m134 = 1.25;
+    m138 = 0.2;
+    m13C = 100.0;
+    m140 = 50.0;
+    m144 = 9.0;
+    m1B4 = 0x17;
+    m1B6 = 0x14;
+    m1C7 = 0x0;
+    m148 = 0.9;
+    m1C6 = 0x1;
+    m14C = 6.0;
+    m1B8 = 0x4000;
+    m150 = 10.0;
+    m1BA = 0x78;
+    m1BC = 0x1F4;
+    m154 = 5.0;
+    m158 = 2.2;
+    m15C = -11.681;
+    m160 = 1.3;
+    m164 = 88.692;
+    m168 = 57.066;
+    m16C = 179.286;
+    m1C8 = 0x0;
+    m170 = 0.0;
+    m174 = 1.0;
+    m178 = 1.5;
+    m17C = -100.0;
+    m180 = 100.0;
+    m184 = 10.0;
+    m188 = 1.0;
+    m18C = -10.0;
+    m1BE = 0x46;
+    m1C0 = 0x5;
+    m1C2 = 0x1C2;
+    m1C4 = 0x96;
+    m190 = 43.0;
+    m194 = 14.65;
+    m198 = 13.99;
+    m19C = 0.0;
+    m1A0 = -98.0;
+    m1A4 = 0.0;
+    m1A8 = 3.0;
+    m1AC = 1000.0;
+    m1B0 = 1000.0;
+    mChildID = -0x1;
 }
 
 /* 000006DC-000006FC       .text daNpc_Md_XyCheckCB__FPvi */
-void daNpc_Md_XyCheckCB(void*, int) {
+static void daNpc_Md_XyCheckCB(void*, int) {
     /* Nonmatching */
 }
 
@@ -72,7 +173,7 @@ void daNpc_Md_c::XyCheckCB(int) {
 }
 
 /* 000007FC-0000081C       .text daNpc_Md_XyEventCB__FPvi */
-void daNpc_Md_XyEventCB(void*, int) {
+static void daNpc_Md_XyEventCB(void*, int) {
     /* Nonmatching */
 }
 
@@ -82,62 +183,48 @@ void daNpc_Md_c::XyEventCB(int) {
 }
 
 /* 00000864-00000884       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static void CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00000884-00000D80       .text create__10daNpc_Md_cFv */
-void daNpc_Md_c::create() {
+s32 daNpc_Md_c::create() {
     /* Nonmatching */
-}
-
-/* 00000D80-000012BC       .text __ct__10daNpc_Md_cFv */
-daNpc_Md_c::daNpc_Md_c() {
-    /* Nonmatching */
-}
-
-/* 000012BC-000012C0       .text __ct__4cXyzFv */
-cXyz::cXyz() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daNpc_Md_c);
 }
 
 /* 000012C0-00001444       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static void nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 00001444-0000154C       .text waistNodeCallBack__FP7J3DNodei */
-void waistNodeCallBack(J3DNode*, int) {
+static void waistNodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 0000154C-0000160C       .text armNodeCallBack__FP7J3DNodei */
-void armNodeCallBack(J3DNode*, int) {
+static void armNodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 0000160C-00001C60       .text hairCross__FP4cXyzP4cXyzP4cXyz */
-void hairCross(cXyz*, cXyz*, cXyz*) {
-    /* Nonmatching */
-}
-
-/* 00001C60-00001CBC       .text __dt__8cM3dGTriFv */
-cM3dGTri::~cM3dGTri() {
+static void hairCross(cXyz*, cXyz*, cXyz*) {
     /* Nonmatching */
 }
 
 /* 00001CBC-00001D0C       .text hairTopNodeCallBack__FP7J3DNodei */
-void hairTopNodeCallBack(J3DNode*, int) {
+static void hairTopNodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 00001D0C-00001F5C       .text vecChange__FP4cXyzP4cXyzs */
-void vecChange(cXyz*, cXyz*, short) {
+static void vecChange(cXyz*, cXyz*, short) {
     /* Nonmatching */
 }
 
 /* 00001F5C-0000240C       .text hairNodeCallBack__FP7J3DNodei */
-void hairNodeCallBack(J3DNode*, int) {
+static void hairNodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -262,7 +349,7 @@ void daNpc_Md_c::restartPoint(short) {
 }
 
 /* 00004040-00004174       .text isTagCheckOK__10daNpc_Md_cFv */
-void daNpc_Md_c::isTagCheckOK() {
+BOOL daNpc_Md_c::isTagCheckOK() {
     /* Nonmatching */
 }
 
@@ -416,16 +503,6 @@ void daNpc_Md_c::checkForwardGroundY(short) {
     /* Nonmatching */
 }
 
-/* 00008054-0000816C       .text __dt__11dBgS_GndChkFv */
-dBgS_GndChk::~dBgS_GndChk() {
-    /* Nonmatching */
-}
-
-/* 0000816C-000081EC       .text __dt__11cBgS_GndChkFv */
-cBgS_GndChk::~cBgS_GndChk() {
-    /* Nonmatching */
-}
-
 /* 000081EC-000082C0       .text checkWallJump__10daNpc_Md_cFs */
 void daNpc_Md_c::checkWallJump(short) {
     /* Nonmatching */
@@ -518,7 +595,6 @@ void daNpc_Md_c::eventProc() {
 
 /* 0000AC80-0000AC84       .text initialDefault__10daNpc_Md_cFi */
 void daNpc_Md_c::initialDefault(int) {
-    /* Nonmatching */
 }
 
 /* 0000AC84-0000ACB4       .text actionDefault__10daNpc_Md_cFi */
@@ -827,7 +903,7 @@ void daNpc_Md_c::init() {
 }
 
 /* 0000F4E0-0000F8EC       .text draw__10daNpc_Md_cFv */
-void daNpc_Md_c::draw() {
+BOOL daNpc_Md_c::draw() {
     /* Nonmatching */
 }
 
@@ -842,7 +918,7 @@ void daNpc_Md_c::checkPlayerRoom() {
 }
 
 /* 0000FC58-000108B0       .text execute__10daNpc_Md_cFv */
-void daNpc_Md_c::execute() {
+BOOL daNpc_Md_c::execute() {
     /* Nonmatching */
 }
 
@@ -867,28 +943,29 @@ daNpc_Md_c::~daNpc_Md_c() {
 }
 
 /* 000110BC-000110DC       .text daNpc_Md_Create__FP10fopAc_ac_c */
-void daNpc_Md_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daNpc_Md_Create(fopAc_ac_c* i_this) {
+    return static_cast<daNpc_Md_c*>(i_this)->create();
 }
 
 /* 000110DC-00011104       .text daNpc_Md_Delete__FP10daNpc_Md_c */
-void daNpc_Md_Delete(daNpc_Md_c*) {
-    /* Nonmatching */
+static BOOL daNpc_Md_Delete(daNpc_Md_c* i_this) {
+    i_this->~daNpc_Md_c();
+    return TRUE;
 }
 
 /* 00011104-00011124       .text daNpc_Md_Execute__FP10daNpc_Md_c */
-void daNpc_Md_Execute(daNpc_Md_c*) {
-    /* Nonmatching */
+static BOOL daNpc_Md_Execute(daNpc_Md_c* i_this) {
+    return i_this->execute();
 }
 
 /* 00011124-00011144       .text daNpc_Md_Draw__FP10daNpc_Md_c */
-void daNpc_Md_Draw(daNpc_Md_c*) {
-    /* Nonmatching */
+static BOOL daNpc_Md_Draw(daNpc_Md_c* i_this) {
+    return i_this->draw();
 }
 
 /* 00011144-0001114C       .text daNpc_Md_IsDelete__FP10daNpc_Md_c */
-void daNpc_Md_IsDelete(daNpc_Md_c*) {
-    /* Nonmatching */
+static BOOL daNpc_Md_IsDelete(daNpc_Md_c* i_this) {
+    return TRUE;
 }
 
 /* 0001114C-0001119C       .text execute__26daNpc_Md_followEcallBack_cFP14JPABaseEmitter */
@@ -906,638 +983,27 @@ void daNpc_Md_followEcallBack_c::end() {
     /* Nonmatching */
 }
 
-/* 000111D8-000111DC       .text draw__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::draw(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 000111DC-000111E0       .text executeAfter__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::executeAfter(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 000111E0-000111E4       .text init__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::init(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 000111E4-000112A8       .text __dt__14daNpc_Md_HIO_cFv */
-daNpc_Md_HIO_c::~daNpc_Md_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 000112A8-000112C4       .text cLib_calcTimer<s>__FPs */
-void cLib_calcTimer<short>(short*) {
-    /* Nonmatching */
-}
-
-/* 000112C4-000112E0       .text cLib_calcTimer<Uc>__FPUc */
-void cLib_calcTimer<unsigned char>(unsigned char*) {
-    /* Nonmatching */
-}
-
-/* 000112E0-0001135C       .text cLib_getRndValue<i>__Fii */
-void cLib_getRndValue<int>(int, int) {
-    /* Nonmatching */
-}
-
-/* 00011834-0001183C       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
-
-/* 0001183C-00011844       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
-
-/* 00011844-0001184C       .text @20@__dt__11cBgS_LinChkFv */
-void @20@__dt__11cBgS_LinChkFv {
-    /* Nonmatching */
-}
-
-/* 0001184C-00011854       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
-
-/* 00011854-0001185C       .text @20@__dt__11dBgS_LinChkFv */
-void @20@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
-
-/* 0001185C-00011864       .text @100@__dt__11dBgS_LinChkFv */
-void @100@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
-
-/* 00011864-0001186C       .text @88@__dt__11dBgS_LinChkFv */
-void @88@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
-
-/* 0001186C-00011874       .text @20@__dt__19dBgS_MirLightLinChkFv */
-void @20@__dt__19dBgS_MirLightLinChkFv {
-    /* Nonmatching */
-}
-
-/* 00011874-0001187C       .text @100@__dt__19dBgS_MirLightLinChkFv */
-void @100@__dt__19dBgS_MirLightLinChkFv {
-    /* Nonmatching */
-}
-
-/* 0001187C-00011884       .text @88@__dt__19dBgS_MirLightLinChkFv */
-void @88@__dt__19dBgS_MirLightLinChkFv {
-    /* Nonmatching */
-}
-
-/* 00011884-0001188C       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
-
-/* 0001188C-00011894       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
-
-/* 00011894-0001189C       .text @280@__dt__8dCcD_CpsFv */
-void @280@__dt__8dCcD_CpsFv {
-    /* Nonmatching */
-}
-
-/* 0001189C-000118A4       .text @248@__dt__8dCcD_CpsFv */
-void @248@__dt__8dCcD_CpsFv {
-    /* Nonmatching */
-}
-
-/* 000118A4-000118AC       .text @20@__dt__11dBgS_GndChkFv */
-void @20@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
-
-/* 000118AC-000118B4       .text @76@__dt__11dBgS_GndChkFv */
-void @76@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
-
-/* 000118B4-000118BC       .text @64@__dt__11dBgS_GndChkFv */
-void @64@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
-
-/* 000118BC-000118C4       .text @20@__dt__11cBgS_GndChkFv */
-void @20@__dt__11cBgS_GndChkFv {
-    /* Nonmatching */
-}
-
-/* 000118C4-0001190C       .text __dt__10dNpc_HIO_cFv */
-dNpc_HIO_c::~dNpc_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 0001190C-00011978       .text __dt__26daNpc_Md_followEcallBack_cFv */
-daNpc_Md_followEcallBack_c::~daNpc_Md_followEcallBack_c() {
-    /* Nonmatching */
-}
-
-/* 00011978-00011980       .text getGroundY__10daNpc_Md_cFv */
-void daNpc_Md_c::getGroundY() {
-    /* Nonmatching */
-}
-
-/* 00011980-00011988       .text getLeftHandMatrix__10daNpc_Md_cFv */
-void daNpc_Md_c::getLeftHandMatrix() {
-    /* Nonmatching */
-}
-
-/* 00011988-00011990       .text getRightHandMatrix__10daNpc_Md_cFv */
-void daNpc_Md_c::getRightHandMatrix() {
-    /* Nonmatching */
-}
-
-/* 00011990-0001199C       .text getBaseAnimeFrameRate__10daNpc_Md_cFv */
-void daNpc_Md_c::getBaseAnimeFrameRate() {
-    /* Nonmatching */
-}
-
-/* 0001199C-000119A8       .text getBaseAnimeFrame__10daNpc_Md_cFv */
-void daNpc_Md_c::getBaseAnimeFrame() {
-    /* Nonmatching */
-}
-
-/* 000119A8-00011A04       .text __dt__18dPa_levelEcallBackFv */
-dPa_levelEcallBack::~dPa_levelEcallBack() {
-    /* Nonmatching */
-}
-
-/* 00011A04-00011A4C       .text __dt__34JPACallBackBase<P14JPABaseEmitter>Fv */
-JPACallBackBase<JPABaseEmitter*>::~JPACallBackBase() {
-    /* Nonmatching */
-}
-
-/* 00011A4C-00011AD0       .text __dt__22dDlst_shadowRealPoly_cFv */
-dDlst_shadowRealPoly_c::~dDlst_shadowRealPoly_c() {
-    /* Nonmatching */
-}
-
-/* 00011AD0-00011B30       .text __dt__17dDlst_shadowTri_cFv */
-dDlst_shadowTri_c::~dDlst_shadowTri_c() {
-    /* Nonmatching */
-}
-
-/* 00011B30-00011B78       .text __ct__17dDlst_shadowTri_cFv */
-dDlst_shadowTri_c::dDlst_shadowTri_c() {
-    /* Nonmatching */
-}
-
-/* 00011B78-00011BC0       .text __dt__18dDlst_shadowPoly_cFv */
-dDlst_shadowPoly_c::~dDlst_shadowPoly_c() {
-    /* Nonmatching */
-}
-
-/* 00011BC0-00011CA0       .text __dt__8dCcD_CpsFv */
-dCcD_Cps::~dCcD_Cps() {
-    /* Nonmatching */
-}
-
-/* 00011CA0-00011CFC       .text __dt__8cM3dGCpsFv */
-cM3dGCps::~cM3dGCps() {
-    /* Nonmatching */
-}
-
-/* 00011CFC-00011DC8       .text __dt__8dCcD_CylFv */
-dCcD_Cyl::~dCcD_Cyl() {
-    /* Nonmatching */
-}
-
-/* 00011DC8-00011E10       .text __dt__8cM3dGCylFv */
-cM3dGCyl::~cM3dGCyl() {
-    /* Nonmatching */
-}
-
-/* 00011E10-00011E6C       .text __dt__14cCcD_ShapeAttrFv */
-cCcD_ShapeAttr::~cCcD_ShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 00011E6C-00011EB4       .text __dt__8cM3dGAabFv */
-cM3dGAab::~cM3dGAab() {
-    /* Nonmatching */
-}
-
-/* 00011EB4-00011F10       .text __dt__10dCcD_GSttsFv */
-dCcD_GStts::~dCcD_GStts() {
-    /* Nonmatching */
-}
-
-/* 00011F10-00012064       .text __dt__19dBgS_MirLightLinChkFv */
-dBgS_MirLightLinChk::~dBgS_MirLightLinChk() {
-    /* Nonmatching */
-}
-
-/* 00012064-00012190       .text __dt__11dBgS_LinChkFv */
-dBgS_LinChk::~dBgS_LinChk() {
-    /* Nonmatching */
-}
-
-/* 00012190-00012230       .text __dt__8dBgS_ChkFv */
-dBgS_Chk::~dBgS_Chk() {
-    /* Nonmatching */
-}
-
-/* 00012230-0001228C       .text __dt__15dBgS_GrpPassChkFv */
-dBgS_GrpPassChk::~dBgS_GrpPassChk() {
-    /* Nonmatching */
-}
-
-/* 0001228C-000122D4       .text __dt__15cBgS_GrpPassChkFv */
-cBgS_GrpPassChk::~cBgS_GrpPassChk() {
-    /* Nonmatching */
-}
-
-/* 000122D4-00012330       .text __dt__16dBgS_PolyPassChkFv */
-dBgS_PolyPassChk::~dBgS_PolyPassChk() {
-    /* Nonmatching */
-}
-
-/* 00012330-00012378       .text __dt__16cBgS_PolyPassChkFv */
-cBgS_PolyPassChk::~cBgS_PolyPassChk() {
-    /* Nonmatching */
-}
-
-/* 00012378-0001240C       .text __dt__11cBgS_LinChkFv */
-cBgS_LinChk::~cBgS_LinChk() {
-    /* Nonmatching */
-}
-
-/* 0001240C-00012454       .text __dt__8cM3dGLinFv */
-cM3dGLin::~cM3dGLin() {
-    /* Nonmatching */
-}
-
-/* 00012454-0001249C       .text __dt__13cBgS_PolyInfoFv */
-cBgS_PolyInfo::~cBgS_PolyInfo() {
-    /* Nonmatching */
-}
-
-/* 0001249C-00012524       .text __dt__12dBgS_AcchCirFv */
-dBgS_AcchCir::~dBgS_AcchCir() {
-    /* Nonmatching */
-}
-
-/* 00012524-00012580       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 00012580-000125DC       .text __dt__13mDoExt_btpAnmFv */
-mDoExt_btpAnm::~mDoExt_btpAnm() {
-    /* Nonmatching */
-}
-
-/* 000125DC-00012624       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
-/* 00012624-00012694       .text __dt__12dBgS_ObjAcchFv */
-dBgS_ObjAcch::~dBgS_ObjAcch() {
-    /* Nonmatching */
-}
-
-/* 00012694-000126D0       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
-/* 000126D0-000126D8       .text getTactMusic__9daPy_py_cCFv */
-void daPy_py_c::getTactMusic() const {
-    /* Nonmatching */
-}
-
-/* 000126D8-000126E0       .text getTactTimerCancel__9daPy_py_cCFv */
-void daPy_py_c::getTactTimerCancel() const {
-    /* Nonmatching */
-}
-
-/* 000126E0-000126E8       .text checkPlayerGuard__9daPy_py_cCFv */
-void daPy_py_c::checkPlayerGuard() const {
-    /* Nonmatching */
-}
-
-/* 000126E8-000126F0       .text getGrabMissActor__9daPy_py_cFv */
-void daPy_py_c::getGrabMissActor() {
-    /* Nonmatching */
-}
-
-/* 000126F0-000126F8       .text checkPlayerFly__9daPy_py_cCFv */
-void daPy_py_c::checkPlayerFly() const {
-    /* Nonmatching */
-}
-
-/* 000126F8-00012700       .text checkFrontRoll__9daPy_py_cCFv */
-void daPy_py_c::checkFrontRoll() const {
-    /* Nonmatching */
-}
-
-/* 00012700-00012708       .text checkBottleSwing__9daPy_py_cCFv */
-void daPy_py_c::checkBottleSwing() const {
-    /* Nonmatching */
-}
-
-/* 00012708-00012710       .text checkCutCharge__9daPy_py_cCFv */
-void daPy_py_c::checkCutCharge() const {
-    /* Nonmatching */
-}
-
-/* 00012710-00012718       .text getBokoFlamePos__9daPy_py_cFP4cXyz */
-void daPy_py_c::getBokoFlamePos(cXyz*) {
-    /* Nonmatching */
-}
-
-/* 00012718-00012720       .text checkTactWait__9daPy_py_cCFv */
-void daPy_py_c::checkTactWait() const {
-    /* Nonmatching */
-}
-
-/* 00012720-00012724       .text setTactZev__9daPy_py_cFUiiPc */
-void daPy_py_c::setTactZev(unsigned int, int, char*) {
-    /* Nonmatching */
-}
-
-/* 00012724-00012728       .text onDekuSpReturnFlg__9daPy_py_cFUc */
-void daPy_py_c::onDekuSpReturnFlg(unsigned char) {
-    /* Nonmatching */
-}
-
-/* 00012728-00012730       .text checkComboCutTurn__9daPy_py_cCFv */
-void daPy_py_c::checkComboCutTurn() const {
-    /* Nonmatching */
-}
-
-/* 00012730-00012738       .text getItemID__9daPy_py_cCFv */
-void daPy_py_c::getItemID() const {
-    /* Nonmatching */
-}
-
-/* 00012738-00012740       .text getThrowBoomerangID__9daPy_py_cCFv */
-void daPy_py_c::getThrowBoomerangID() const {
-    /* Nonmatching */
-}
-
-/* 00012740-00012748       .text getGrabActorID__9daPy_py_cCFv */
-void daPy_py_c::getGrabActorID() const {
-    /* Nonmatching */
-}
-
-/* 00012748-00012750       .text checkGrabBarrel__9daPy_py_cFv */
-void daPy_py_c::checkGrabBarrel() {
-    /* Nonmatching */
-}
-
-/* 00012750-00012758       .text checkPlayerNoDraw__9daPy_py_cFv */
-void daPy_py_c::checkPlayerNoDraw() {
-    /* Nonmatching */
-}
-
-/* 00012758-00012760       .text checkRopeTag__9daPy_py_cFv */
-void daPy_py_c::checkRopeTag() {
-    /* Nonmatching */
-}
-
-/* 00012760-00012768       .text checkRopeReadyAnime__9daPy_py_cCFv */
-void daPy_py_c::checkRopeReadyAnime() const {
-    /* Nonmatching */
-}
-
-/* 00012768-0001276C       .text voiceStart__9daPy_py_cFUl */
-void daPy_py_c::voiceStart(unsigned long) {
-    /* Nonmatching */
-}
-
-/* 0001276C-00012770       .text setOutPower__9daPy_py_cFfsi */
-void daPy_py_c::setOutPower(float, short, int) {
-    /* Nonmatching */
-}
-
-/* 00012770-00012774       .text onFrollCrashFlg__9daPy_py_cFUl */
-void daPy_py_c::onFrollCrashFlg(unsigned long) {
-    /* Nonmatching */
-}
-
-/* 00012774-0001277C       .text getModelJointMtx__9daPy_py_cFUs */
-void daPy_py_c::getModelJointMtx(unsigned short) {
-    /* Nonmatching */
-}
-
-/* 0001277C-00012788       .text getOldSpeedY__9daPy_py_cFv */
-void daPy_py_c::getOldSpeedY() {
-    /* Nonmatching */
-}
-
-/* 00012788-00012790       .text setHookshotCarryOffset__9daPy_py_cFUiPC4cXyz */
-void daPy_py_c::setHookshotCarryOffset(unsigned int, const cXyz*) {
-    /* Nonmatching */
-}
-
-/* 00012790-00012794       .text setPlayerPosAndAngle__9daPy_py_cFPA4_f */
-void daPy_py_c::setPlayerPosAndAngle(float(*)[4]) {
-    /* Nonmatching */
-}
-
-/* 00012794-00012798       .text setPlayerPosAndAngle__9daPy_py_cFP4cXyzP5csXyz */
-void daPy_py_c::setPlayerPosAndAngle(cXyz*, csXyz*) {
-    /* Nonmatching */
-}
-
-/* 00012798-0001279C       .text setPlayerPosAndAngle__9daPy_py_cFP4cXyzs */
-void daPy_py_c::setPlayerPosAndAngle(cXyz*, short) {
-    /* Nonmatching */
-}
-
-/* 0001279C-000127A4       .text setThrowDamage__9daPy_py_cFP4cXyzsffi */
-void daPy_py_c::setThrowDamage(cXyz*, short, float, float, int) {
-    /* Nonmatching */
-}
-
-/* 000127A4-000127A8       .text changeTextureAnime__9daPy_py_cFUsUsi */
-void daPy_py_c::changeTextureAnime(unsigned short, unsigned short, int) {
-    /* Nonmatching */
-}
-
-/* 000127A8-000127AC       .text cancelChangeTextureAnime__9daPy_py_cFv */
-void daPy_py_c::cancelChangeTextureAnime() {
-    /* Nonmatching */
-}
-
-/* 000127AC-000127F4       .text __dt__8cM3dGPlaFv */
-cM3dGPla::~cM3dGPla() {
-    /* Nonmatching */
-}
-
-/* 000127F4-0001283C       .text __dt__8cM2dGCirFv */
-cM2dGCir::~cM2dGCir() {
-    /* Nonmatching */
-}
-
-/* 0001283C-00012898       .text __dt__8cM3dGCirFv */
-cM3dGCir::~cM3dGCir() {
-    /* Nonmatching */
-}
-
-/* 00012898-000128E0       .text __dt__10cCcD_GSttsFv */
-cCcD_GStts::~cCcD_GStts() {
-    /* Nonmatching */
-}
-
-/* 000128E0-000128E4       .text execute__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::execute(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 000128E4-000128EC       .text getTri__22dDlst_shadowRealPoly_cFv */
-void dDlst_shadowRealPoly_c::getTri() {
-    /* Nonmatching */
-}
-
-/* 000128EC-000128F4       .text getTriMax__22dDlst_shadowRealPoly_cFv */
-void dDlst_shadowRealPoly_c::getTriMax() {
-    /* Nonmatching */
-}
-
-/* 000128F4-00012904       .text GetShapeAttr__8dCcD_CpsFv */
-void dCcD_Cps::GetShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 00012904-0001290C       .text CrossAtTg__12cCcD_CpsAttrCFRC12cCcD_AabAttrP4cXyz */
-void cCcD_CpsAttr::CrossAtTg(const cCcD_AabAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 0001290C-00012914       .text CrossAtTg__12cCcD_CpsAttrCFRC12cCcD_PntAttrP4cXyz */
-void cCcD_CpsAttr::CrossAtTg(const cCcD_PntAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00012914-0001294C       .text CrossAtTg__12cCcD_CpsAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_CpsAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 0001294C-00012954       .text CrossCo__12cCcD_CpsAttrCFRC12cCcD_AabAttrPf */
-void cCcD_CpsAttr::CrossCo(const cCcD_AabAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00012954-0001295C       .text CrossCo__12cCcD_CpsAttrCFRC12cCcD_TriAttrPf */
-void cCcD_CpsAttr::CrossCo(const cCcD_TriAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 0001295C-00012964       .text CrossCo__12cCcD_CpsAttrCFRC12cCcD_PntAttrPf */
-void cCcD_CpsAttr::CrossCo(const cCcD_PntAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00012964-0001299C       .text CrossCo__12cCcD_CpsAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_CpsAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 0001299C-000129A8       .text GetCoCP__14cCcD_ShapeAttrFv */
-void cCcD_ShapeAttr::GetCoCP() {
-    /* Nonmatching */
-}
-
-/* 000129A8-000129B4       .text GetCoCP__14cCcD_ShapeAttrCFv */
-void cCcD_ShapeAttr::GetCoCP() const {
-    /* Nonmatching */
-}
-
-/* 000129B4-000129B8       .text GetGObjInf__12cCcD_GObjInfCFv */
-void cCcD_GObjInf::GetGObjInf() const {
-    /* Nonmatching */
-}
-
-/* 000129B8-000129C0       .text GetShapeAttr__8cCcD_ObjCFv */
-void cCcD_Obj::GetShapeAttr() const {
-    /* Nonmatching */
-}
-
-/* 000129C0-000129D0       .text GetShapeAttr__8dCcD_CylFv */
-void dCcD_Cyl::GetShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 000129D0-000129D8       .text GetCoCP__12cCcD_CylAttrFv */
-void cCcD_CylAttr::GetCoCP() {
-    /* Nonmatching */
-}
-
-/* 000129D8-000129E0       .text GetCoCP__12cCcD_CylAttrCFv */
-void cCcD_CylAttr::GetCoCP() const {
-    /* Nonmatching */
-}
-
-/* 000129E0-000129E8       .text CrossAtTg__12cCcD_CylAttrCFRC12cCcD_AabAttrP4cXyz */
-void cCcD_CylAttr::CrossAtTg(const cCcD_AabAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 000129E8-000129F0       .text CrossAtTg__12cCcD_CylAttrCFRC12cCcD_PntAttrP4cXyz */
-void cCcD_CylAttr::CrossAtTg(const cCcD_PntAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 000129F0-00012A28       .text CrossAtTg__12cCcD_CylAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_CylAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00012A28-00012A30       .text CrossCo__12cCcD_CylAttrCFRC12cCcD_AabAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_AabAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00012A30-00012A38       .text CrossCo__12cCcD_CylAttrCFRC12cCcD_TriAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_TriAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00012A38-00012A40       .text CrossCo__12cCcD_CylAttrCFRC12cCcD_PntAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_PntAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00012A40-00012A78       .text CrossCo__12cCcD_CylAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00012A78-00012A80       .text CrossAtTg__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_ShapeAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00012A80-00012A88       .text CrossCo__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_ShapeAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00012A88-00012A8C       .text restartPoint__10daPy_npc_cFs */
-void daPy_npc_c::restartPoint(short) {
-    /* Nonmatching */
-}
-
-/* 00012A8C-00012A94       .text isTagCheckOK__10daPy_npc_cFv */
-void daPy_npc_c::isTagCheckOK() {
-    /* Nonmatching */
-}
-
-/* 00012A94-00012A98       .text setMessageAnimation__10daPy_npc_cFUc */
-void daPy_npc_c::setMessageAnimation(unsigned char) {
-    /* Nonmatching */
-}
-
+static actor_method_class l_daNpc_Md_Method = {
+    (process_method_func)daNpc_Md_Create,
+    (process_method_func)daNpc_Md_Delete,
+    (process_method_func)daNpc_Md_Execute,
+    (process_method_func)daNpc_Md_IsDelete,
+    (process_method_func)daNpc_Md_Draw,
+};
+
+actor_process_profile_definition g_profile_NPC_MD = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 7,
+    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ProcName     */ PROC_NPC_MD,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daNpc_Md_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0175,
+    /* Actor SubMtd */ &l_daNpc_Md_Method,
+    /* Status       */ 0x08 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK2000000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

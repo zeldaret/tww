@@ -134,7 +134,7 @@ STATIC_ASSERT(sizeof(mDoExt_bckAnm) == 0x10);
 
 class mDoExt_btpAnm : public mDoExt_baseAnm {
 public:
-    mDoExt_btpAnm() { mpAnm = NULL; }
+    mDoExt_btpAnm() { field_0xc = NULL; }
     int init(J3DMaterialTable* i_matTable, J3DAnmTexPattern* i_btk, int i_anmPlay,
                             int i_attribute, f32 i_rate, s16 i_start, s16 param_6);
     int init(J3DModelData*, J3DAnmTexPattern*, int, int, float, short, short, bool, int);

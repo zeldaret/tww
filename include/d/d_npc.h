@@ -10,6 +10,29 @@
 
 class fopNpc_npc_c;
 
+class dNpc_HIO_c {
+public:
+    virtual ~dNpc_HIO_c() {}
+
+public:
+    /* 0x04 */ f32 m04;
+    /* 0x08 */ s16 m08;
+    /* 0x0A */ s16 m0A;
+    /* 0x0C */ s16 m0C;
+    /* 0x0E */ s16 m0E;
+    /* 0x10 */ s16 m10;
+    /* 0x12 */ s16 m12;
+    /* 0x14 */ s16 m14;
+    /* 0x16 */ s16 m16;
+    /* 0x18 */ s16 m18;
+    /* 0x1A */ s16 m1A;
+    /* 0x1C */ f32 m1C;
+    /* 0x20 */ s16 m20;
+    /* 0x22 */ u8 m22;
+    /* 0x23 */ u8 m23[0x24 - 0x23];
+    /* 0x24 */ f32 m24;
+};
+
 class dNpc_JntCtrl_c {
     /* 0x00 */ s16 mHeadUpDownRot;
     /* 0x02 */ s16 mHeadLeftRightRot;

@@ -166,6 +166,7 @@ public:
 class dDlst_shadowPoly_c {
 public:
     dDlst_shadowPoly_c() { reset(); }
+    virtual ~dDlst_shadowPoly_c() {}
 
     virtual dDlst_shadowTri_c* getTri() = 0;
     virtual s32 getTriMax() = 0;
@@ -182,8 +183,10 @@ public:
 
 class dDlst_shadowRealPoly_c : public dDlst_shadowPoly_c {
 public:
-    virtual dDlst_shadowTri_c* getTri();
-    virtual s32 getTriMax();
+    virtual ~dDlst_shadowRealPoly_c() {}
+
+    virtual dDlst_shadowTri_c* getTri() { return mShadowTri; }
+    virtual s32 getTriMax() { return ARRAY_SIZE(mShadowTri); }
 
     /* 0x8 */ dDlst_shadowTri_c mShadowTri[256];
 };

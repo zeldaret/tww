@@ -28,6 +28,7 @@ enum fopAc_Status_e {
     fopAcStts_HOOK_CARRY_e  = 0x00100000,
     fopAcStts_UNK200000_e   = 0x00200000,
     fopAcStts_NODRAW_e      = 0x01000000,
+    fopAcStts_UNK2000000_e  = 0x02000000,
     fopAcStts_BOSS_e        = 0x04000000,
     fopAcStts_UNK8000000_e  = 0x08000000,
 };
