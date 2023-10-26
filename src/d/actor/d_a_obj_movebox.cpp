@@ -16,6 +16,17 @@
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_bg_s_wtr_chk.h"
 #include "d/d_bg_s_lin_chk.h"
+#include "d/actor/d_a_obj_buoyflag.h"
+#include "d/actor/d_a_obj_jump.h"
+#include "d/actor/d_a_obj_mmrr.h"
+#include "d/actor/d_a_obj_mkie.h"
+
+// Needed for the .data and .bss sections to match.
+static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
+static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
+static f64 dummy4[2] = {3.0, 0.5};
+u8 dummy5[0x4C];
 
 enum ECUBE_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
@@ -107,7 +118,7 @@ namespace daObjMovebox {
         /* 0x18 */ f32 m18;
         /* 0x1C */ f32 m1C;
         /* 0x20 */ f32 m20;
-        /* 0x24 */ f32 m24;
+        /* 0x24 */ f32 mLandSmokeScale;
         /* 0x28 */ f32 m28;
         /* 0x2C */ f32 m2C;
         /* 0x30 */ f32 m30;
@@ -123,10 +134,10 @@ namespace daObjMovebox {
         /* 0x58 */ int mModelFileIndex;
         /* 0x5C */ int mDZBFileIndex;
         /* 0x60 */ int mDZBHeapSize;
-        /* 0x64 */ f32 m64;
+        /* 0x64 */ f32 mScaleY;
         /* 0x68 */ f32 m68;
         /* 0x6C */ f32 m6C;
-        /* 0x70 */ f32 m70;
+        /* 0x70 */ f32 mScaleXZ;
         /* 0x74 */ f32 m74;
         /* 0x78 */ u32 mMoveSE;
         /* 0x7C */ u32 mCantMoveSE;
@@ -173,12 +184,12 @@ namespace daObjMovebox {
         bool chk_wall_touch2(const Act_c*, const BgcSrc_c*, int, s16);
     
     public:
-        /* 0x000 */ f32 m000[23];
-        /* 0x05C */ int m05C;
-        /* 0x060 */ f32 m060;
-        /* 0x064 */ cXyz m064[23];
-        /* 0x178 */ int m178;
-        /* 0x17C */ f32 m17C;
+        /* 0x000 */ f32 mGroundY[23];
+        /* 0x05C */ int mMaxGroundIdx;
+        /* 0x060 */ f32 mWaterY;
+        /* 0x064 */ cXyz mWallPos[23];
+        /* 0x178 */ int mWallIdx;
+        /* 0x17C */ f32 mNearestWallDist;
         /* 0x180 */ State_e mStateFlags;
         
         static dBgS_ObjGndChk M_gnd_work[23];
@@ -211,7 +222,7 @@ namespace daObjMovebox {
             TYPE_WOODEN_CRATE_2         = 0x8,  // Actor names: Hseki2
             TYPE_WOODEN_CRATE_3         = 0x9,  // Actor names: Hseki7
             TYPE_MIRROR                 = 0xA,  // Actor names: Mmrr
-            TYPE_BLACK_BOX_2            = 0xB,  // Actor names: MkieBB
+            TYPE_BLACK_BOX_WITH_MKIE    = 0xB,  // Actor names: MkieBB
             TYPE_MOSSY_BLACK_BOX        = 0xC,  // Actor names: Ecube
         };
         
@@ -249,9 +260,9 @@ namespace daObjMovebox {
         s32 prm_get_type() const { return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S); }
         s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
         s32 prm_get_swSave1() const;
-        s32 prmZ_get_swSave2() const { return mType == TYPE_BLACK_BOX_2 ? 0xFF : (u8)(mPrmZ >> 8); }
-        s32 prmZ_get_swSave2_MkieB() const { return mType == TYPE_BLACK_BOX_2 ? (u8)(mPrmZ >> 8) : 0xFF; }
-        s32 prmZ_get_pathId() const { return mType == TYPE_BLACK_BOX_2 ? 0xFF : (mPrmZ & 0x00FF) >> 0; }
+        s32 prmZ_get_swSave2() const { return mType == TYPE_BLACK_BOX_WITH_MKIE ? 0xFF : (u8)(mPrmZ >> 8); }
+        s32 prmZ_get_swSave2_MkieB() const { return mType == TYPE_BLACK_BOX_WITH_MKIE ? (u8)(mPrmZ >> 8) : 0xFF; }
+        s32 prmZ_get_pathId() const { return mType == TYPE_BLACK_BOX_WITH_MKIE ? 0xFF : (mPrmZ & 0x00FF) >> 0; }
         s32 prmX_get_evId() const { return (mPrmX & 0x00FF) >> 0; }
         s32 prm_get_itemNo() const { return daObj::PrmAbstract(this, PRM_ITEMNO_W, PRM_ITEMNO_S); }
         s32 prm_get_itemSave() const { return daObj::PrmAbstract(this, PRM_ITEMSAVE_W, PRM_ITEMSAVE_S); }
@@ -320,7 +331,7 @@ namespace daObjMovebox {
         /* 0x308 */ dCcD_Stts mStts;
         /* 0x344 */ dCcD_Cyl mCyl;
         /* 0x474 */ Bgc_c mBgc;
-        /* 0x5F8 */ s32 mType;
+        /* 0x5F8 */ int mType;
         /* 0x5FC */ u16 mPrmZ;
         /* 0x5FE */ u16 mPrmX;
         /* 0x600 */ dPath* mpPath;
@@ -359,8 +370,6 @@ namespace daObjMovebox {
     };
     
     STATIC_ASSERT(sizeof(Act_c) == 0x6C0);
-    
-    u8 dummy1[0x4C];
     
     dBgS_ObjGndChk Bgc_c::M_gnd_work[23];
     dBgS_WtrChk Bgc_c::M_wrt_work;
@@ -435,41 +444,42 @@ namespace daObjMovebox {
     
     /* 000000EC-000001B0       .text __ct__Q212daObjMovebox5Bgc_cFv */
     Bgc_c::Bgc_c() {
-        for (int i = 0; i < ARRAY_SIZE(m000); i++) {
-            m000[i] = 0.0f;
-            m064[i] = cXyz::Zero;
+        for (int i = 0; i < ARRAY_SIZE(mGroundY); i++) {
+            mGroundY[i] = 0.0f;
+            mWallPos[i] = cXyz::Zero;
         }
-        m05C = -1;
-        m178 = -1;
-        m17C = FLOAT_MAX;
-        m060 = 0.0f;
+        mMaxGroundIdx = -1;
+        mWallIdx = -1;
+        mNearestWallDist = FLOAT_MAX;
+        mWaterY = 0.0f;
         mStateFlags = (State_e)0;
     }
     
     /* 000001F0-000003A4       .text gnd_pos__Q212daObjMovebox5Bgc_cFPCQ212daObjMovebox5Act_cPCQ212daObjMovebox8BgcSrc_cif */
-    void Bgc_c::gnd_pos(const Act_c* movebox, const BgcSrc_c* bgcSrc, int param_3, f32 param_4) {
+    void Bgc_c::gnd_pos(const Act_c* movebox, const BgcSrc_c* bgcSrc, int bgcSrcCount, f32 param_4) {
         f32 tempz;
-        f32 temp3 = -1000000000.0f;
+        f32 maxGroundY = -1000000000.0f;
         
         mDoMtx_stack_c::transS(movebox->current.pos);
         mDoMtx_stack_c::YrotM(movebox->orig.angle.y);
-        m05C = -1;
+        mMaxGroundIdx = -1;
         
-        for (int i = 0; i < param_3; i++, bgcSrc++) {
-            tempz = bgcSrc->m08 + bgcSrc->m00 * movebox->attr()->m70;
-            f32 tempy = param_4;
-            f32 tempx = bgcSrc->m0C + bgcSrc->m04 * movebox->attr()->m70;
-            cXyz temp_14(tempx, tempy, tempz);
-            cXyz temp_08;
-            mDoMtx_stack_c::multVec(&temp_14, &temp_08);
-            M_gnd_work[i].SetPos(&temp_08);
+        for (int i = 0; i < bgcSrcCount; i++, bgcSrc++) {
+            cXyz offset(
+                bgcSrc->m0C + bgcSrc->m04 * movebox->attr()->mScaleXZ,
+                param_4,
+                bgcSrc->m08 + bgcSrc->m00 * movebox->attr()->mScaleXZ
+            );
+            cXyz pos;
+            mDoMtx_stack_c::multVec(&offset, &pos);
+            M_gnd_work[i].SetPos(&pos);
             M_gnd_work[i].SetActorPid(movebox->mBase.mBsPcId);
-            m000[i] = dComIfG_Bgsp()->GroundCross(&M_gnd_work[i]);
-            if (m000[i] > temp3) {
-                fopAc_ac_c* temp = dComIfG_Bgsp()->GetActorPointer(M_gnd_work[i].GetBgIndex());
-                if (!(temp && fopAcM_GetName(temp) == PROC_Obj_Movebox && ((Act_c*)temp)->mMode == Act_c::MODE_AFLOAT)) {
-                    temp3 = m000[i];
-                    m05C = i;
+            mGroundY[i] = dComIfG_Bgsp()->GroundCross(&M_gnd_work[i]);
+            if (mGroundY[i] > maxGroundY) {
+                fopAc_ac_c* groundActor = dComIfG_Bgsp()->GetActorPointer(M_gnd_work[i].GetBgIndex());
+                if (!(groundActor && fopAcM_GetName(groundActor) == PROC_Obj_Movebox && ((Act_c*)groundActor)->mMode == Act_c::MODE_AFLOAT)) {
+                    maxGroundY = mGroundY[i];
+                    mMaxGroundIdx = i;
                 }
             }
         }
@@ -482,9 +492,9 @@ namespace daObjMovebox {
         groundPos.y -= 100.0f;
         M_wrt_work.Set(groundPos, roofY);
         if (dComIfG_Bgsp()->SplGrpChk(&M_wrt_work)) {
-            m060 = M_wrt_work.GetHeight();
+            mWaterY = M_wrt_work.GetHeight();
             cLib_onBit(mStateFlags, BgcState_UNK08);
-            if (m060 > pos.y) {
+            if (mWaterY > pos.y) {
                 cLib_onBit(mStateFlags, BgcState_UNK10);
             }
         }
@@ -499,12 +509,12 @@ namespace daObjMovebox {
         cXyz temp_20;
         
         angle = movebox->orig.angle.y + param_4;
-        m178 = -1;
-        m17C = FLOAT_MAX;
+        mWallIdx = -1;
+        mNearestWallDist = FLOAT_MAX;
         mDoMtx_stack_c::YrotS((s16)angle);
         mDoMtx_stack_c::XrotM(0x4000);
         mDoMtx_stack_c::multVec(&cXyz::BaseY, &temp_20);
-        temp_20 *= param_5 + movebox->attr()->m70 * 0.5f;
+        temp_20 *= param_5 + movebox->attr()->mScaleXZ * 0.5f;
         
         for (int i = 0; i < param_3; i++, bgcSrc++) {
             mDoMtx_stack_c::XrotS(0x4000);
@@ -512,7 +522,7 @@ namespace daObjMovebox {
             mDoMtx_stack_c::multVec(&temp_14, &temp_2c);
             mDoMtx_stack_c::YrotS((s16)angle);
             mDoMtx_stack_c::transM(temp_2c);
-            mDoMtx_stack_c::scaleM(movebox->attr()->m70, movebox->attr()->m64, movebox->attr()->m70);
+            mDoMtx_stack_c::scaleM(movebox->attr()->mScaleXZ, movebox->attr()->mScaleY, movebox->attr()->mScaleXZ);
             mDoMtx_stack_c::transM(0.0f, 0.5f, 0.0f);
             mDoMtx_stack_c::XrotM(0x4000);
             temp_14.set(bgcSrc->m04, 0.0f, bgcSrc->m00);
@@ -522,14 +532,14 @@ namespace daObjMovebox {
             M_wall_work[i].Set(&temp_44, &temp_38, (fopAc_ac_c*)movebox);
             M_wall_work[i].SetActorPid(movebox->mBase.mBsPcId);
             if (dComIfG_Bgsp()->LineCross(&M_wall_work[i])) {
-                m064[i] = M_wall_work[i].i_GetCross();
-                f32 dist = temp_44.abs2(m064[i]);
-                if (dist < m17C) {
-                    m17C = dist;
-                    m178 = i;
+                mWallPos[i] = M_wall_work[i].i_GetCross();
+                f32 dist = temp_44.abs2(mWallPos[i]);
+                if (dist < mNearestWallDist) {
+                    mNearestWallDist = dist;
+                    mWallIdx = i;
                 }
             } else {
-                m064[i] = cXyz::Zero;
+                mWallPos[i] = cXyz::Zero;
             }
         }
     }
@@ -539,11 +549,16 @@ namespace daObjMovebox {
         State_e prevStateFlags = mStateFlags;
         mStateFlags = (State_e)0;
         
-        gnd_pos(movebox, movebox->attr()->m9A ? &M_lin20[0] : &M_lin5[0], movebox->attr()->m9A ? 0x15 : 0x5, 100.0f);
+        gnd_pos(
+            movebox,
+            movebox->attr()->m9A ? M_lin20 : M_lin5,
+            movebox->attr()->m9A ? ARRAY_SIZE(M_lin20)-2 : ARRAY_SIZE(M_lin5),
+            100.0f
+        );
         
-        if (m05C >= 0) {
-            if (m000[m05C] > movebox->current.pos.y) {
-                movebox->current.pos.y = m000[m05C];
+        if (mMaxGroundIdx >= 0) {
+            if (mGroundY[mMaxGroundIdx] > movebox->current.pos.y) {
+                movebox->current.pos.y = mGroundY[mMaxGroundIdx];
                 cLib_onBit(mStateFlags, BgcState_UNK01);
                 movebox->speed.y = 0.0f;
             }
@@ -551,7 +566,7 @@ namespace daObjMovebox {
         
         wrt_pos(movebox->current.pos);
         
-        if (cLib_checkBit(mStateFlags, BgcState_UNK08) && m060 > movebox->current.pos.y) {
+        if (cLib_checkBit(mStateFlags, BgcState_UNK08) && mWaterY > movebox->current.pos.y) {
             cLib_onBit(mStateFlags, BgcState_UNK10);
         }
         if (!cLib_checkBit(mStateFlags, BgcState_UNK01) && cLib_checkBit(prevStateFlags, BgcState_UNK01)) {
@@ -564,15 +579,15 @@ namespace daObjMovebox {
         if (cLib_checkBit(mStateFlags, BgcState_UNK10) && !cLib_checkBit(prevStateFlags, BgcState_UNK10)) {
             cLib_onBit(mStateFlags, BgcState_UNK20);
         }
-        if (cLib_checkBit(mStateFlags, BgcState_UNK01) && m05C >= 0) {
-            dComIfG_Bgsp()->RideCallBack(M_gnd_work[m05C], movebox);
+        if (cLib_checkBit(mStateFlags, BgcState_UNK01) && mMaxGroundIdx >= 0) {
+            dComIfG_Bgsp()->RideCallBack(M_gnd_work[mMaxGroundIdx], movebox);
         }
     }
     
     /* 000008E8-00000928       .text chk_wall_pre__Q212daObjMovebox5Bgc_cFPCQ212daObjMovebox5Act_cPCQ212daObjMovebox8BgcSrc_cis */
     bool Bgc_c::chk_wall_pre(const Act_c* movebox, const BgcSrc_c* bgcSrc, int param_3, s16 param_4) {
         wall_pos(movebox, bgcSrc, param_3, param_4, 74.0f);
-        return m178 >= 0;
+        return mWallIdx >= 0;
     }
     
     /* 00000928-00000CCC       .text chk_wall_touch__Q212daObjMovebox5Bgc_cFPCQ212daObjMovebox5Act_cPCQ212daObjMovebox8BgcSrc_cs */
@@ -589,14 +604,14 @@ namespace daObjMovebox {
         mDoMtx_stack_c::XrotM(0x4000);
         offset.set(bgcSrc->m0C, 0.0f, bgcSrc->m08);
         mDoMtx_stack_c::multVec(&cXyz::BaseY, &direction);
-        direction *= 10.0f + movebox->attr()->m70 * 0.5f;
+        direction *= 10.0f + movebox->attr()->mScaleXZ * 0.5f;
         
         mDoMtx_stack_c::XrotM(0x4000);
         offset.set(bgcSrc->m0C, 0.0f, bgcSrc->m08);
         mDoMtx_stack_c::multVec(&offset, &temp_20);
         mDoMtx_stack_c::YrotS((s16)angle);
         mDoMtx_stack_c::transM(temp_20);
-        mDoMtx_stack_c::scaleM(movebox->attr()->m70, movebox->attr()->m64, movebox->attr()->m70);
+        mDoMtx_stack_c::scaleM(movebox->attr()->mScaleXZ, movebox->attr()->mScaleY, movebox->attr()->mScaleXZ);
         mDoMtx_stack_c::transM(0.0f, 0.5f, 0.0f);
         mDoMtx_stack_c::XrotM(0x4000);
         offset.set(bgcSrc->m04, 0.0f, bgcSrc->m00);
@@ -683,7 +698,7 @@ namespace daObjMovebox {
             /* m18             */ 0.005f,
             /* m1C             */ 0.001f,
             /* m20             */ 0.0f,
-            /* m24             */ 1.8f,
+            /* mLandSmokeScale */ 1.8f,
             /* m28             */ 3.9f,
             /* m2C             */ -0.39f,
             /* m30             */ -0.2f,
@@ -699,10 +714,10 @@ namespace daObjMovebox {
             /* mModelFileIndex */ KKIBA_00_BDL_KKIBA_00,
             /* mDZBFileIndex   */ KKIBA_00_DZB_KKIBA_00,
             /* mDZBHeapSize    */ 0x8A0,
-            /* m64             */ 150.0f,
+            /* mScaleY         */ 150.0f,
             /* m68             */ 150.0f,
             /* m6C             */ 1.0f/150.0f,
-            /* m70             */ 150.0f,
+            /* mScaleXZ        */ 150.0f,
             /* m74             */ 1.0f/150.0f,
             /* mMoveSE         */ JA_SE_LK_MOVE_WBLOCK,
             /* mCantMoveSE     */ JA_SE_LK_MOVE_WBLOCK_LIMIT,
@@ -734,7 +749,7 @@ namespace daObjMovebox {
             /* m18             */ 0.005f,
             /* m1C             */ 0.001f,
             /* m20             */ 0.0f,
-            /* m24             */ 1.8f,
+            /* mLandSmokeScale */ 1.8f,
             /* m28             */ 4.5f,
             /* m2C             */ -0.5f,
             /* m30             */ -0.2f,
@@ -750,10 +765,10 @@ namespace daObjMovebox {
             /* mModelFileIndex */ OSIBLK_BDL_OBM_OSIHIKIBLK1,
             /* mDZBFileIndex   */ OSIBLK_DZB_OBM_OSIHIKIBLK1,
             /* mDZBHeapSize    */ 0x8A0,
-            /* m64             */ 150.0f,
+            /* mScaleY         */ 150.0f,
             /* m68             */ 150.0f,
             /* m6C             */ 1.0f/150.0f,
-            /* m70             */ 150.0f,
+            /* mScaleXZ        */ 150.0f,
             /* m74             */ 1.0f/150.0f,
             /* mMoveSE         */ JA_SE_LK_MOVE_ROCK,
             /* mCantMoveSE     */ JA_SE_LK_MOVE_ROCK_LIMIT,
@@ -786,7 +801,7 @@ namespace daObjMovebox {
             /* m18             */ 0.005f,
             /* m1C             */ 0.001f,
             /* m20             */ 0.0f,
-            /* m24             */ 1.8f,
+            /* mLandSmokeScale */ 1.8f,
             /* m28             */ 4.5f,
             /* m2C             */ -0.5f,
             /* m30             */ -0.2f,
@@ -802,10 +817,10 @@ namespace daObjMovebox {
             /* mModelFileIndex */ OSIBLK_BDL_OBM_OSIHIKIBLK2,
             /* mDZBFileIndex   */ OSIBLK_DZB_OBM_OSIHIKIBLK2,
             /* mDZBHeapSize    */ 0x1560,
-            /* m64             */ 150.0f,
+            /* mScaleY         */ 150.0f,
             /* m68             */ 300.0f,
             /* m6C             */ 1.0f/300.0f,
-            /* m70             */ 150.0f,
+            /* mScaleXZ        */ 150.0f,
             /* m74             */ 1.0f/150.0f,
             /* mMoveSE         */ JA_SE_LK_MOVE_ROCK,
             /* mCantMoveSE     */ JA_SE_LK_MOVE_ROCK_LIMIT,
@@ -837,7 +852,7 @@ namespace daObjMovebox {
             /* m18             */ 0.005f,
             /* m1C             */ 0.001f,
             /* m20             */ 0.0f,
-            /* m24             */ 3.6f,
+            /* mLandSmokeScale */ 3.6f,
             /* m28             */ 4.5f,
             /* m2C             */ -0.5f,
             /* m30             */ -0.2f,
@@ -853,10 +868,10 @@ namespace daObjMovebox {
             /* mModelFileIndex */ MPWRB_BDL_MPWRB,
             /* mDZBFileIndex   */ MPWRB_DZB_MPWRB,
             /* mDZBHeapSize    */ 0x8A0,
-            /* m64             */ 300.0f,
+            /* mScaleY         */ 300.0f,
             /* m68             */ 300.0f,
             /* m6C             */ 1.0f/300.0f,
-            /* m70             */ 300.0f,
+            /* mScaleXZ        */ 300.0f,
             /* m74             */ 1.0f/300.0f,
             /* mMoveSE         */ JA_SE_LK_MOVE_ROCK,
             /* mCantMoveSE     */ JA_SE_LK_MOVE_ROCK_LIMIT,
@@ -888,7 +903,7 @@ namespace daObjMovebox {
             /* m18             */ 0.005f,
             /* m1C             */ 0.001f,
             /* m20             */ 0.0f,
-            /* m24             */ 1.8f,
+            /* mLandSmokeScale */ 1.8f,
             /* m28             */ 3.9f,
             /* m2C             */ -0.39f,
             /* m30             */ -0.2f,
@@ -904,10 +919,10 @@ namespace daObjMovebox {
             /* mModelFileIndex */ KKIBA_00_BDL_KKIBA_00,
             /* mDZBFileIndex   */ KKIBA_00_DZB_KKIBA_00,
             /* mDZBHeapSize    */ 0x1620,
-            /* m64             */ 150.0f,
+            /* mScaleY         */ 150.0f,
             /* m68             */ 150.0f,
             /* m6C             */ 1.0f/150.0f,
-            /* m70             */ 150.0f,
+            /* mScaleXZ        */ 150.0f,
             /* m74             */ 1.0f/150.0f,
             /* mMoveSE         */ JA_SE_LK_MOVE_WBLOCK,
             /* mCantMoveSE     */ JA_SE_LK_MOVE_WBLOCK_LIMIT,
@@ -939,7 +954,7 @@ namespace daObjMovebox {
             /* m18             */ 0.005f,
             /* m1C             */ 0.001f,
             /* m20             */ 0.0f,
-            /* m24             */ 1.8f,
+            /* mLandSmokeScale */ 1.8f,
             /* m28             */ 3.9f,
             /* m2C             */ -0.39f,
             /* m30             */ -0.2f,
@@ -955,10 +970,10 @@ namespace daObjMovebox {
             /* mModelFileIndex */ HBOX2_BDL_HBOX2,
             /* mDZBFileIndex   */ HBOX2_DZB_HBOX2,
             /* mDZBHeapSize    */ 0x8A0,
-            /* m64             */ 150.0f,
+            /* mScaleY         */ 150.0f,
             /* m68             */ 150.0f,
             /* m6C             */ 1.0f/150.0f,
-            /* m70             */ 150.0f,
+            /* mScaleXZ        */ 150.0f,
             /* m74             */ 1.0f/150.0f,
             /* mMoveSE         */ JA_SE_LK_MOVE_WBLOCK,
             /* mCantMoveSE     */ JA_SE_LK_MOVE_WBLOCK_LIMIT,
@@ -990,7 +1005,7 @@ namespace daObjMovebox {
             /* m18             */ 0.005f,
             /* m1C             */ 0.001f,
             /* m20             */ 0.0f,
-            /* m24             */ 1.8f,
+            /* mLandSmokeScale */ 1.8f,
             /* m28             */ 3.9f,
             /* m2C             */ -0.39f,
             /* m30             */ -0.2f,
@@ -1006,10 +1021,10 @@ namespace daObjMovebox {
             /* mModelFileIndex */ HJUMP_BDL_HBOX1,
             /* mDZBFileIndex   */ HJUMP_DZB_HBOX1,
             /* mDZBHeapSize    */ 0x7E0,
-            /* m64             */ 150.0f,
+            /* mScaleY         */ 150.0f,
             /* m68             */ 150.0f,
             /* m6C             */ 1.0f/150.0f,
-            /* m70             */ 150.0f,
+            /* mScaleXZ        */ 150.0f,
             /* m74             */ 1.0f/150.0f,
             /* mMoveSE         */ JA_SE_LK_MOVE_ROCK,
             /* mCantMoveSE     */ JA_SE_LK_MOVE_ROCK_LIMIT,
@@ -1041,7 +1056,7 @@ namespace daObjMovebox {
             /* m18             */ 0.005f,
             /* m1C             */ 0.001f,
             /* m20             */ 0.0f,
-            /* m24             */ 1.8f,
+            /* mLandSmokeScale */ 1.8f,
             /* m28             */ 3.9f,
             /* m2C             */ -0.39f,
             /* m30             */ -0.2f,
@@ -1057,10 +1072,10 @@ namespace daObjMovebox {
             /* mModelFileIndex */ -1,
             /* mDZBFileIndex   */ HJUMP_DZB_HJUMP1A,
             /* mDZBHeapSize    */ 0x320,
-            /* m64             */ 150.0f,
+            /* mScaleY         */ 150.0f,
             /* m68             */ 300.0f,
             /* m6C             */ 1.0f/300.0f,
-            /* m70             */ 150.0f,
+            /* mScaleXZ        */ 150.0f,
             /* m74             */ 1.0f/150.0f,
             /* mMoveSE         */ JA_SE_LK_MOVE_ROCK,
             /* mCantMoveSE     */ JA_SE_LK_MOVE_ROCK_LIMIT,
@@ -1092,7 +1107,7 @@ namespace daObjMovebox {
             /* m18             */ 0.005f,
             /* m1C             */ 0.001f,
             /* m20             */ 0.0f,
-            /* m24             */ 1.8f,
+            /* mLandSmokeScale */ 1.8f,
             /* m28             */ 3.9f,
             /* m2C             */ -0.39f,
             /* m30             */ -0.2f,
@@ -1108,10 +1123,10 @@ namespace daObjMovebox {
             /* mModelFileIndex */ KKIBA_00_BDL_KKIBA_00,
             /* mDZBFileIndex   */ KKIBA_00_DZB_KKIBA_00,
             /* mDZBHeapSize    */ 0x1620,
-            /* m64             */ 150.0f,
+            /* mScaleY         */ 150.0f,
             /* m68             */ 150.0f,
             /* m6C             */ 1.0f/150.0f,
-            /* m70             */ 150.0f,
+            /* mScaleXZ        */ 150.0f,
             /* m74             */ 1.0f/150.0f,
             /* mMoveSE         */ JA_SE_LK_MOVE_WBLOCK,
             /* mCantMoveSE     */ JA_SE_LK_MOVE_WBLOCK_LIMIT,
@@ -1143,7 +1158,7 @@ namespace daObjMovebox {
             /* m18             */ 0.005f,
             /* m1C             */ 0.001f,
             /* m20             */ 0.0f,
-            /* m24             */ 1.8f,
+            /* mLandSmokeScale */ 1.8f,
             /* m28             */ 3.9f,
             /* m2C             */ -0.39f,
             /* m30             */ -0.2f,
@@ -1159,10 +1174,10 @@ namespace daObjMovebox {
             /* mModelFileIndex */ KKIBA_00_BDL_KKIBA_00,
             /* mDZBFileIndex   */ KKIBA_00_DZB_KKIBA_00,
             /* mDZBHeapSize    */ 0x1620,
-            /* m64             */ 150.0f,
+            /* mScaleY         */ 150.0f,
             /* m68             */ 150.0f,
             /* m6C             */ 1.0f/150.0f,
-            /* m70             */ 150.0f,
+            /* mScaleXZ        */ 150.0f,
             /* m74             */ 1.0f/150.0f,
             /* mMoveSE         */ JA_SE_LK_MOVE_WBLOCK,
             /* mCantMoveSE     */ JA_SE_LK_MOVE_WBLOCK_LIMIT,
@@ -1194,7 +1209,7 @@ namespace daObjMovebox {
             /* m18             */ 0.005f,
             /* m1C             */ 0.001f,
             /* m20             */ 0.0f,
-            /* m24             */ 1.8f,
+            /* mLandSmokeScale */ 1.8f,
             /* m28             */ 4.5f,
             /* m2C             */ -0.5f,
             /* m30             */ -0.2f,
@@ -1210,10 +1225,10 @@ namespace daObjMovebox {
             /* mModelFileIndex */ -1,
             /* mDZBFileIndex   */ MMIRROR_DZB_MMRR,
             /* mDZBHeapSize    */ 0xD40,
-            /* m64             */ 300.0f,
+            /* mScaleY         */ 300.0f,
             /* m68             */ 450.0f,
             /* m6C             */ 1.0f/450.0f,
-            /* m70             */ 300.0f,
+            /* mScaleXZ        */ 300.0f,
             /* m74             */ 1.0f/300.0f,
             /* mMoveSE         */ JA_SE_LK_MOVE_ROCK,
             /* mCantMoveSE     */ JA_SE_LK_MOVE_ROCK_LIMIT,
@@ -1230,7 +1245,7 @@ namespace daObjMovebox {
             /* mbCastsShadow   */ false,
             /* m9A             */ true,
         },
-        // TYPE_BLACK_BOX_2
+        // TYPE_BLACK_BOX_WITH_MKIE
         // Arcname: Osiblk
         {
             /* m00             */ 4,
@@ -1245,7 +1260,7 @@ namespace daObjMovebox {
             /* m18             */ 0.005f,
             /* m1C             */ 0.001f,
             /* m20             */ 0.0f,
-            /* m24             */ 1.8f,
+            /* mLandSmokeScale */ 1.8f,
             /* m28             */ 4.5f,
             /* m2C             */ -0.5f,
             /* m30             */ -0.2f,
@@ -1261,10 +1276,10 @@ namespace daObjMovebox {
             /* mModelFileIndex */ OSIBLK_BDL_OBM_OSIHIKIBLK1,
             /* mDZBFileIndex   */ OSIBLK_DZB_OBM_OSIHIKIBLK1,
             /* mDZBHeapSize    */ 0x8A0,
-            /* m64             */ 150.0f,
+            /* mScaleY         */ 150.0f,
             /* m68             */ 350.0f,
             /* m6C             */ 1.0f/350.0f,
-            /* m70             */ 150.0f,
+            /* mScaleXZ        */ 150.0f,
             /* m74             */ 1.0f/150.0f,
             /* mMoveSE         */ JA_SE_LK_MOVE_ROCK,
             /* mCantMoveSE     */ JA_SE_LK_MOVE_ROCK_LIMIT,
@@ -1296,7 +1311,7 @@ namespace daObjMovebox {
             /* m18             */ 0.005f,
             /* m1C             */ 0.001f,
             /* m20             */ 0.0f,
-            /* m24             */ 1.8f,
+            /* mLandSmokeScale */ 1.8f,
             /* m28             */ 4.5f,
             /* m2C             */ -0.5f,
             /* m30             */ -0.2f,
@@ -1312,10 +1327,10 @@ namespace daObjMovebox {
             /* mModelFileIndex */ ECUBE_BDL_ECUBE,
             /* mDZBFileIndex   */ ECUBE_DZB_ECUBE,
             /* mDZBHeapSize    */ 0x8A0,
-            /* m64             */ 150.0f,
+            /* mScaleY         */ 150.0f,
             /* m68             */ 150.0f,
             /* m6C             */ 1.0f/150.0f,
-            /* m70             */ 150.0f,
+            /* mScaleXZ        */ 150.0f,
             /* m74             */ 1.0f/150.0f,
             /* mMoveSE         */ JA_SE_LK_MOVE_ROCK,
             /* mCantMoveSE     */ JA_SE_LK_MOVE_ROCK_LIMIT,
@@ -1378,15 +1393,11 @@ namespace daObjMovebox {
     
     /* 000013C8-00001674       .text set_mtx__Q212daObjMovebox5Act_cFv */
     void Act_c::set_mtx() {
-        /* Nonmatching */
-        cXyz temp_40;
-        Quaternion temp_30;
-        Mtx temp4;
-        Vec temp5;
-        
         bool isFloating = mMode == MODE_AFLOAT;
         mDoMtx_stack_c::transS(current.pos);
         if (isFloating) {
+            cXyz temp_40;
+            Quaternion temp_30;
             temp_40.set(m614, 1.0f, m618);
             mDoMtx_stack_c::transM(0.0f, m624, 0.0f);
             daObj::quat_rotBaseY(&temp_30, temp_40);
@@ -1403,23 +1414,29 @@ namespace daObjMovebox {
         }
         MTXCopy(mDoMtx_stack_c::get(), mMtx);
         
-        fopAc_ac_c* buoy;
-        if (mChildProcId != -1 && fopAcM_SearchByID(mChildProcId, &buoy)) {
+        if (mChildProcId == -1) {
+            return;
+        }
+        fopAc_ac_c* childActor;
+        if (fopAcM_SearchByID(mChildProcId, &childActor)) {
+            if (!childActor) {
+                return;
+            }
             if (mType == TYPE_METAL_BOX_WITH_SPRING) {
-                if (buoy->current.pos.abs2(current.pos) < 0.0001f) {
-                    buoy->current.pos = current.pos;
-                    // TODO: child actor members
+                daObjJump::Act_c* jump = (daObjJump::Act_c*)childActor;
+                if (jump->current.pos.abs2(current.pos) > 0.0001f) {
+                    jump->setup(&current.pos);
                 }
             } else if (mType == TYPE_MIRROR) {
-                if (buoy->current.pos.abs2(current.pos) < 0.0001f) {
-                    buoy->current.pos = current.pos;
-                    // TODO: child actor members
+                daObjMmrr::Act_c* mmrr = (daObjMmrr::Act_c*)childActor;
+                if (mmrr->current.pos.abs2(current.pos) > 0.0001f) {
+                    mmrr->setup(&current.pos);
                 }
-            } else if (mType == TYPE_BLACK_BOX_2) {
-                cXyz temp_24(current.pos.x, current.pos.y + 150.0f, current.pos.z);
-                if (buoy->current.pos.abs2(temp_24) < 0.0001f) {
-                    buoy->current.pos = current.pos;
-                    // TODO: child actor members
+            } else if (mType == TYPE_BLACK_BOX_WITH_MKIE) {
+                daObjMkie::Act_c* mkie = (daObjMkie::Act_c*)childActor;
+                cXyz targetPos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
+                if (mkie->current.pos.abs2(targetPos) > 0.0001f) {
+                    mkie->setup(&targetPos);
                 }
             } else {
                 cXyz temp_18(0.0f, i_attr()->m68 - 5.0f, 0.0f);
@@ -1428,8 +1445,8 @@ namespace daObjMovebox {
                 mDoMtx_stack_c::now[0][3] += temp_0C.x;
                 mDoMtx_stack_c::now[1][3] += temp_0C.y;
                 mDoMtx_stack_c::now[2][3] += temp_0C.z;
-                mDoMtx_stack_c::copy(temp4);
-                // TODO: child actor members
+                daObjBuoyflag::Act_c* buoyflag = (daObjBuoyflag::Act_c*)childActor;
+                buoyflag->setup(mDoMtx_stack_c::get());
             }
         } else {
             mChildProcId = -1;
@@ -1541,8 +1558,37 @@ namespace daObjMovebox {
     }
     
     /* 00001B00-00001C64       .text RideCallBack__Q212daObjMovebox5Act_cFP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-    void Act_c::RideCallBack(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
-        /* Nonmatching */
+    void Act_c::RideCallBack(dBgW*, fopAc_ac_c* actor1, fopAc_ac_c* actor2) {
+        Act_c* movebox = (Act_c*)actor1;
+        if (movebox->mMode != MODE_AFLOAT) {
+            return;
+        }
+        const Type_Attr* attr = movebox->i_attr();
+        f32 f0 = movebox->i_attr()->m2C + movebox->i_attr()->m30;
+        f32 deltaX = actor2->current.pos.x - actor1->current.pos.x;
+        f32 deltaZ = actor2->current.pos.z - actor1->current.pos.z;
+        f32 f3;
+        f32 f4;
+        if (fopAcM_GetProfName(actor2) == PROC_PLAYER) {
+            f3 = movebox->i_attr()->m2C;
+            f4 = movebox->i_attr()->m74 * movebox->i_attr()->m44;
+        } else {
+            f3 = movebox->i_attr()->m30;
+            f4 = movebox->i_attr()->m74 * movebox->i_attr()->m48;
+        }
+        f32 f6 = sqrtf(deltaX*deltaX + deltaZ*deltaZ);
+        f6 = 1.0f - f6 * attr->m74;
+        f6 = f6 * 0.9f + 0.1f;
+        if (f6 < 0.0f) {
+            f6 = 0.0f;
+        }
+        f3 *= f6;
+        movebox->m608 += f3;
+        if (movebox->m608 < f0) {
+            movebox->m608 = f0;
+        }
+        movebox->m60C += f4 * deltaX;
+        movebox->m610 += f4 * deltaZ;
     }
     
     /* 00001C64-00001DD4       .text PPCallBack__Q212daObjMovebox5Act_cFP10fopAc_ac_cP10fopAc_ac_csQ24dBgW13PushPullLabel */
@@ -1594,7 +1640,6 @@ namespace daObjMovebox {
     
     /* 00001DD4-00002214       .text Create__Q212daObjMovebox5Act_cFv */
     int Act_c::Create() {
-        /* Nonmatching */
         m604 = 0;
         m608 = 0.0f;
         m60C = 0.0f;
@@ -1642,15 +1687,12 @@ namespace daObjMovebox {
         mChildProcId = -1;
         if (prm_get_buoy() == 0) {
             cXyz buoyPos(current.pos.x, current.pos.y + i_attr()->m68 - 5.0f, current.pos.z);
-            mChildProcId = fopAcM_createChild(
-                PROC_Obj_Buoyflag, fpcM_GetID(this),
-                0, &buoyPos,
-                fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL
-            );
+            mChildProcId = daObjBuoyflag::Act_c::make_norm(fpcM_GetID(this), &buoyPos, fopAcM_GetRoomNo(this), &shape_angle);
         } else if (mType == TYPE_METAL_BOX_WITH_SPRING) {
+            u32 jumpParams = daObjJump::Act_c::prm_make_b();
             mChildProcId = fopAcM_createChild(
                 PROC_Obj_Jump, fpcM_GetID(this),
-                1, &current.pos,
+                jumpParams, &current.pos,
                 fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL
             );
         } else if (mType == TYPE_MIRROR) {
@@ -1659,10 +1701,9 @@ namespace daObjMovebox {
                 0, &current.pos,
                 fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL
             );
-        } else if (mType == TYPE_BLACK_BOX_2) {
+        } else if (mType == TYPE_BLACK_BOX_WITH_MKIE) {
             cXyz mkiePos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
-            u32 mkieParams = prmZ_get_swSave2_MkieB() << 0x10;
-            mkieParams |= prmX_get_evId() | 0x3000;
+            u32 mkieParams = daObjMkie::Act_c::prm_make(prmX_get_evId(), prmZ_get_swSave2_MkieB());
             mChildProcId = fopAcM_createChild(
                 PROC_Obj_Mkie, fpcM_GetID(this),
                 mkieParams, &mkiePos,
@@ -1719,6 +1760,9 @@ namespace daObjMovebox {
     /* 0000290C-00002A14       .text eff_smoke_slip_start__Q212daObjMovebox5Act_cFv */
     void Act_c::eff_smoke_slip_start() {
         /* Nonmatching */
+        // emitter->setRate();
+        // emitter->setDirectionalSpeed();
+        // emitter->setSpread();
     }
     
     /* 00002A14-00002A74       .text eff_smoke_slip_end__Q212daObjMovebox5Act_cFv */
@@ -1784,6 +1828,19 @@ namespace daObjMovebox {
     /* 00003450-00003570       .text eff_break__Q212daObjMovebox5Act_cFv */
     void Act_c::eff_break() {
         /* Nonmatching */
+        static cXyz temp(0.05f, 0.05f, 1.0f);
+        cXyz particlePos;
+        particlePos.set(current.pos.x, current.pos.y + -0.5f, current.pos.z);
+        JPABaseEmitter* emitter = dComIfGp_particle_set(
+            0x3E6, &particlePos, NULL, NULL, 0xFF, NULL, -1,
+            &mTevStr.mColorK0, &mTevStr.mColorK0, &temp
+        );
+        if (emitter) {
+            emitter->setLifeTime(30);
+            emitter->setAwayFromAxisSpeed(-0.2f);
+        }
+        fopAcM_create(PROC_Obj_Eff, 0x5, &particlePos, -1, NULL, NULL, 0xFF, NULL);
+        // TODO daObjEff::Act_c::make_woodBox_smoke(cXyz*)
     }
     
     /* 00003570-00003808       .text sound_break__Q212daObjMovebox5Act_cFv */
@@ -1806,8 +1863,8 @@ namespace daObjMovebox {
     void Act_c::sound_slip() {
         /* Nonmatching */
         s32 mtrlSndId = 0;
-        if (mBgc.m05C >= 0) {
-            dBgS_ObjGndChk& gndChk = Bgc_c::M_gnd_work[mBgc.m05C];
+        if (mBgc.mMaxGroundIdx >= 0) {
+            dBgS_ObjGndChk& gndChk = Bgc_c::M_gnd_work[mBgc.mMaxGroundIdx];
             if (gndChk.GetBgIndex() >= 0 && gndChk.GetBgIndex() < 0x100) {
                 mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(gndChk);
             }
@@ -1820,8 +1877,8 @@ namespace daObjMovebox {
     void Act_c::sound_limit() {
         /* Nonmatching */
         s32 mtrlSndId = 0;
-        if (mBgc.m05C >= 0) {
-            dBgS_ObjLinChk& linChk = Bgc_c::M_wall_work[mBgc.m05C];
+        if (mBgc.mMaxGroundIdx >= 0) {
+            dBgS_ObjLinChk& linChk = Bgc_c::M_wall_work[mBgc.mMaxGroundIdx];
             if (linChk.GetBgIndex() >= 0 && linChk.GetBgIndex() < 0x100) {
                 mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(linChk);
             }
@@ -1834,8 +1891,8 @@ namespace daObjMovebox {
     void Act_c::sound_land() {
         /* Nonmatching */
         s32 mtrlSndId = 0;
-        if (mBgc.m05C >= 0) {
-            dBgS_ObjGndChk& gndChk = Bgc_c::M_gnd_work[mBgc.m05C];
+        if (mBgc.mMaxGroundIdx >= 0) {
+            dBgS_ObjGndChk& gndChk = Bgc_c::M_gnd_work[mBgc.mMaxGroundIdx];
             if (gndChk.GetBgIndex() >= 0 && gndChk.GetBgIndex() < 0x100) {
                 mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(gndChk);
             }
@@ -1852,28 +1909,69 @@ namespace daObjMovebox {
     /* 00003D80-00003E04       .text eff_land_smoke__Q212daObjMovebox5Act_cFv */
     void Act_c::eff_land_smoke() {
         cXyz smokeScale;
-        smokeScale.setall(i_attr()->m24);
+        smokeScale.setall(i_attr()->mLandSmokeScale);
         smokeScale *= 5.0f/3.0f;
         fopAcM_create(PROC_Obj_Eff, 0x3, &current.pos, -1, NULL, &smokeScale, 0xFF, NULL);
+        // TODO daObjEff::Act_c::make_land_smoke(cXyz*, float)
     }
     
     /* 00003E04-000040D0       .text Execute__Q212daObjMovebox5Act_cFPPA3_A4_f */
-    BOOL Act_c::Execute(Mtx**) {
+    BOOL Act_c::Execute(Mtx** pMtx) {
         /* Nonmatching */
-        mCyl.ChkTgHit();
-        make_item();
-        eff_break();
-        sound_break();
-        fopAcM_delete(this);
-        fopAcM_seStart(this, JA_SE_LK_SW_HIT_S, 0x35);
-        mode_afl_init();
-        mode_afl_init();
-        mode_wait_init();
-        mode_proc_call();
-        sound_land();
-        vib_land();
-        eff_land_smoke();
-        set_mtx();
+        if (mCyl.ChkTgHit() || m6BC != 0) {
+            make_item();
+            eff_break();
+            sound_break();
+            fopAcM_delete(this);
+        } else {
+            if (cLib_checkBit(mBgc.mStateFlags, Bgc_c::BgcState_UNK20)) {
+                mDoAud_seStart(i_attr()->mWaterFallSE, &mEyePos, 0, mReverb);
+            }
+            
+            if (mMode == MODE_WAIT) {
+                if (cLib_checkBit(mBgc.mStateFlags, Bgc_c::BgcState_UNK10) && m646 == 0) {
+                    if (cLib_checkBit(mBgc.mStateFlags, Bgc_c::BgcState_UNK01)) {
+                        if (i_attr()->m28 + i_attr()->m14 > 0.0f) {
+                            mode_afl_init();
+                        }
+                    } else {
+                        mode_afl_init();
+                    }
+                }
+            } else if (mMode == MODE_AFLOAT && cLib_checkBit(mBgc.mStateFlags, Bgc_c::BgcState_UNK01)) {
+                mode_wait_init();
+                m646 = 20;
+            }
+            
+            mode_proc_call();
+            mBgc.proc_vertical(this);
+            if (mBgc.mMaxGroundIdx >= 0) {
+                mTevStr.mRoomNo = current.roomNo;
+                mTevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(Bgc_c::M_gnd_work[mBgc.mMaxGroundIdx]);
+            }
+            
+            if (m648 > 0) {
+                m648--;
+            } else {
+                if (cLib_checkBit(mBgc.mStateFlags, Bgc_c::BgcState_UNK04)) {
+                    sound_land();
+                    vib_land();
+                    if (!cLib_checkBit(mBgc.mStateFlags, Bgc_c::BgcState_UNK10)) {
+                        eff_land_smoke();
+                    }
+                }
+            }
+            
+            set_mtx();
+            
+            if (mType == TYPE_BREAKABLE_WOODEN_CRATE || mType == TYPE_GOLDEN_CRATE) {
+                mCyl.MoveCTg(current.pos);
+                dComIfG_Ccsp()->Set(&mCyl);
+            }
+        }
+        
+        *pMtx = &mMtx;
+        return TRUE;
     }
     
     /* 000040D0-00004254       .text Draw__Q212daObjMovebox5Act_cFv */
@@ -1887,9 +1985,9 @@ namespace daObjMovebox {
             dComIfGd_setList();
         }
         
-        if (!i_attr()->mbCastsShadow && mBgc.m05C >= 0) {
-            int temp = mBgc.m05C;
-            f32 groundH = mBgc.m000[temp];
+        if (!i_attr()->mbCastsShadow && mBgc.mMaxGroundIdx >= 0) {
+            int temp = mBgc.mMaxGroundIdx;
+            f32 groundH = mBgc.mGroundY[temp];
             cM3dGPla* triPla = dComIfG_Bgsp()->i_GetTriPla(Bgc_c::M_gnd_work[temp]);
             if (triPla && groundH != -1000000000.0f) {
                 dComIfGd_setSimpleShadow(&current.pos, groundH, i_attr()->m10, &triPla->mNormal, shape_angle.y, 1.0f, NULL);

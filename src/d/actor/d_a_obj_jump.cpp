@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_jump.cpp
 //
 
-#include "d_a_obj_jump.h"
+#include "d/actor/d_a_obj_jump.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000184       .text CreateHeap__Q29daObjJump5Act_cFv */

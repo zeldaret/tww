@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_mkie.cpp
 //
 
-#include "d_a_obj_mkie.h"
+#include "d/actor/d_a_obj_mkie.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000250       .text CreateHeap__Q29daObjMkie5Act_cFv */

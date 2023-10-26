@@ -146,6 +146,9 @@ public:
     void setVolumeSweep(float i_volSweep) { mVolumeSweep = i_volSweep; }
     void setLifeTime(s16 i_lifeTime) { mLifeTime = i_lifeTime; }
     void setRate(float i_rate) { mRate = i_rate; }
+    void setDirectionalSpeed(float i_speed) { mInitialVelDir = i_speed; }
+    void setAwayFromAxisSpeed(float i_speed) { mInitialVelAxis = i_speed; }
+    void setSpread(float i_spread) { mSpread = i_spread; }
 
     void stopCreateParticle() { setStatus(JPAEmtrStts_StopEmit); }
     void stopDrawParticle() { setStatus(JPAEmtrStts_StopDraw); }

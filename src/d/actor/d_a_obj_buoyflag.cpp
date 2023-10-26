@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_buoyflag.cpp
 //
 
-#include "d_a_obj_buoyflag.h"
+#include "d/actor/d_a_obj_buoyflag.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000001BC       .text hasi_nrm_init__Q213daObjBuoyflag8Packet_cFv */
