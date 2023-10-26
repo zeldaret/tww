@@ -152,7 +152,7 @@ s32 dThunder_c::create() {
 
     mBtkTime = cM_rndF(1.0f);
 
-    f32 size = g_env_light.mThunderEff.mStateTimer < 10 ? 1.0f : 0.5f;
+    f32 size = g_env_light.mThunderEff.mState < 10 ? 1.0f : 0.5f;
     mRot = 4000.0f;
     mRot = size * cM_rndFX(mRot);
     mScale.x = size * (cM_rndF(15.0f) + 5.0f);

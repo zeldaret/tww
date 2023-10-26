@@ -9,8 +9,11 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_wether.h"
+#include "d/d_procname.h"
 #include "d/d_snap.h"
 #include "f_op/f_op_camera_mng.h"
+#include "f_op/f_op_kankyo_mng.h"
+#include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_lib.h"
 #include "JSystem/JKernel/JKRHeap.h"
 
@@ -1192,10 +1195,90 @@ void drawVrkumo(Mtx, GXColor&, u8**) {
 
 /* 8009B9C4-8009B9D8       .text dKyr_thunder_init__Fv */
 void dKyr_thunder_init() {
-    g_env_light.mThunderEff.mStateTimer = 0;
+    g_env_light.mThunderEff.mState = 0;
 }
 
 /* 8009B9D8-8009BDEC       .text dKyr_thunder_move__Fv */
 void dKyr_thunder_move() {
-    /* Nonmatching */
+    EF_THUNDER * pThunder = &g_env_light.mThunderEff;
+    camera_class * pCamera = dComIfGp_getCamera(0);
+
+    switch (pThunder->mState) {
+    case 0:
+        {
+            pThunder->mFlashTimer = 0.0f;
+            pThunder->field_0xc = 0.0f;
+            pThunder->field_0x10 = 0.0f;
+
+            if (cM_rndF(1.0f) < 0.007f) {
+                pThunder->mState = 11;
+            } else if (cM_rndF(1.0f) < 0.005f && g_env_light.mThunderEff.mMode < 10) {
+                pThunder->mLightInfluence.mPos.x = pCamera->mLookat.mEye.x;
+                pThunder->mLightInfluence.mPos.y = pCamera->mLookat.mEye.y;
+                pThunder->mLightInfluence.mPos.z = pCamera->mLookat.mEye.z;
+                pThunder->mLightInfluence.mColor.r = 0;
+                pThunder->mLightInfluence.mColor.g = 0;
+                pThunder->mLightInfluence.mColor.b = 0;
+                pThunder->mLightInfluence.mPower = 90000.0f;
+                pThunder->mLightInfluence.mFluctuation = 150.0f;
+                dKy_efplight_set(&pThunder->mLightInfluence);
+                pThunder->mState++;
+            }
+        }
+        break;
+    case 1:
+    case 11:
+        {
+            cLib_addCalc(&pThunder->mFlashTimer, 1.0f, 0.3f, 0.2f, 0.001f);
+            if (pThunder->mFlashTimer >= 1.0f) {
+                if (pThunder->mState < 10)
+                    mDoAud_seStart(0x69f7, NULL, 0, 0);
+                pThunder->mState++;
+            }
+
+            if (cM_rndF(1.0f) < 0.18f)
+                fopKyM_create(PROC_KY_THUNDER, -1, NULL, NULL, NULL);
+        }
+        break;
+    case 2:
+    case 12:
+        {
+            cLib_addCalc(&pThunder->mFlashTimer, 0.0f, 0.1f, 0.05f, 0.001f);
+            if (pThunder->mFlashTimer <= 0.0f) {
+                if (pThunder->mState < 10)
+                    dKy_efplight_cut(&pThunder->mLightInfluence);
+
+                pThunder->mState = 0;
+                if (g_env_light.mThunderEff.mMode == 0)
+                    pThunder->mStatus = 0;
+            }
+        }
+        break;
+    }
+
+    if (pThunder->mState != 0) {
+        if (pThunder->mState < 10) {
+            pThunder->mLightInfluence.mPos.x = pCamera->mLookat.mEye.x;
+            pThunder->mLightInfluence.mPos.y = pCamera->mLookat.mEye.y + 150.0f;
+            pThunder->mLightInfluence.mPos.z = pCamera->mLookat.mEye.z;
+            pThunder->mLightInfluence.mColor.r = (u8)(pThunder->mFlashTimer * 0.2f * 180.0f);
+            pThunder->mLightInfluence.mColor.g = (u8)(pThunder->mFlashTimer * 0.2f * 235.0f);
+            pThunder->mLightInfluence.mColor.b = (u8)(pThunder->mFlashTimer * 0.2f * 255.0f);
+            if (g_env_light.field_0xc98 == 0) {                                                     
+                dKy_actor_addcol_amb_set(0x5a, 0xa0, 0xf5, pThunder->mFlashTimer * 0.5f);
+                dKy_actor_addcol_dif_set(0x5a, 0xa0, 0xf5, pThunder->mFlashTimer * 0.5f);
+                dKy_bg_addcol_amb_set(0x32, 0x78, 0xff, pThunder->mFlashTimer * 0.7f);
+                dKy_bg_addcol_dif_set(0x32, 0x78, 0xff, pThunder->mFlashTimer * 0.7f);
+                dKy_bg1_addcol_amb_set(0x5a, 0xa0, 0xf5, pThunder->mFlashTimer * 0.35f);
+                dKy_bg1_addcol_dif_set(0x5a, 0xa0, 0xf5, pThunder->mFlashTimer * 0.35f);
+                dKy_vrbox_addcol_sky0_set(0x5a, 0xa0, 0xf5, pThunder->mFlashTimer * 0.4f);
+                dKy_vrbox_addcol_kasumi_set(0x5a, 0xa0, 0xf5, pThunder->mFlashTimer * 0.5f);
+                dKy_addcol_fog_set(0x5a, 0xa0, 0xf5, pThunder->mFlashTimer * 0.3f);
+            }
+        } else {           
+            dKy_vrbox_addcol_sky0_set(0x5a,0xa0,0xf5,(pThunder->mFlashTimer * 0.15f));
+            dKy_vrbox_addcol_kasumi_set(0x5a,0xa0,0xf5,(pThunder->mFlashTimer * 0.35f));
+            dKy_addcol_fog_set(0x5a, 0xa0, 0xf5, pThunder->mFlashTimer * 0.12f);
+        }
+    }
 }

@@ -64,7 +64,7 @@ struct GB_WIND_INFLUENCE {
 
 struct EF_THUNDER {
     /* 0x00 */ u8 mStatus;
-    /* 0x01 */ u8 mStateTimer;
+    /* 0x01 */ u8 mState;
     /* 0x02 */ u8 field_0x2;
     /* 0x04 */ int mMode;
     /* 0x08 */ f32 mFlashTimer;
@@ -392,14 +392,20 @@ void dKy_Sound_set(cXyz i_pos, int param_1, unsigned int i_actorID, int param_3)
 void dKy_itudemo_se();
 void dKy_actor_addcol_set(s16, s16, s16, f32);
 void dKy_actor_addcol_amb_set(s16, s16, s16, f32);
+void dKy_actor_addcol_dif_set(s16, s16, s16, f32);
 void dKy_bg_addcol_amb_set(s16, s16, s16, f32);
 void dKy_bg_addcol_dif_set(s16, s16, s16, f32);
+void dKy_bg1_addcol_amb_set(s16, s16, s16, f32);
+void dKy_bg1_addcol_dif_set(s16, s16, s16, f32);
+void dKy_vrbox_addcol_sky0_set(s16, s16, s16, f32);
+void dKy_vrbox_addcol_kasumi_set(s16, s16, s16, f32);
+void dKy_vrbox_addcol_set(s16, s16, s16, f32);
+void dKy_addcol_fog_set(s16, s16, s16, f32);
 void dKy_plight_set(LIGHT_INFLUENCE*);
 void dKy_efplight_set(LIGHT_INFLUENCE* param_0);
 void dKy_plight_cut(LIGHT_INFLUENCE* param_0);
 void dKy_efplight_cut(LIGHT_INFLUENCE* param_0);
 void dKy_fog_startendz_set(f32, f32, f32);
-void dKy_vrbox_addcol_set(s16, s16, s16, f32);
 BOOL dKy_daynight_check();
 void dKy_tevstr_init(dKy_tevstr_c*, s8, u8);
 void dKy_Sound_init();

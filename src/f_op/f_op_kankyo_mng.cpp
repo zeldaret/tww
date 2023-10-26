@@ -53,8 +53,7 @@ int fopKyM_Create(s16 i_procName, fopKyM_CreateFunc i_createFunc, void* i_proces
 }
 
 /* 8002A9D8-8002AA38       .text fopKyM_create__FsiP4cXyzP4cXyzPFPv_i */
-int fopKyM_create(s16 i_procName, int i_param, cXyz* i_pos, cXyz* i_scale,
-                  fopKyM_CreateFunc i_createFunc) {
+int fopKyM_create(s16 i_procName, int i_param, cXyz* i_pos, cXyz* i_scale, fopKyM_CreateFunc i_createFunc) {
     fopKyM_prm_class* params = createAppend(i_param, i_pos, i_scale);
 
     if (params == NULL) {
