@@ -253,6 +253,15 @@ public:
 };
 STATIC_ASSERT(sizeof(dComIfG_camera_info_class) == 0x34);
 
+// This is /res/ItemTable/item_table.bin
+// The real name of this struct is not currently known, this is a fake name.
+struct ItemTableList {
+    u8 mMagic[0xA]; // "ITEM_TABLE"
+    short mEntryCount; // 0x1E
+    u32 mPadding;
+    u8 mItemTables[0x1E][0x10];
+};
+
 class dComIfG_play_c {
 public:
     dComIfG_play_c() { ct(); }
@@ -447,7 +456,8 @@ public:
     void setMsgDt2Archive(JKRArchive * pArc) { mpHyruleTextArchive = pArc; }
 #endif
 
-    void setItemTable(void * pData) { mpItemTable = pData; }
+    void setItemTable(void * pData) { mpItemTable = (ItemTableList*)pData; }
+    ItemTableList* getItemTable() { return mpItemTable; }
     void setFmapData(void * pData) { mpFmapData = pData; }
 
     /* 0x0000 */ dBgS mBgS;
@@ -622,7 +632,7 @@ public:
     /* 0x4A66 */ u8 mIkadaShipBeforeRoomId;
     /* 0x4A67 */ u8 mIkadaShipId;
     /* 0x4A68 */ cXyz mIkadaLinkPos;
-    /* 0x4A74 */ void* mpItemTable;
+    /* 0x4A74 */ ItemTableList* mpItemTable;
     /* 0x4A78 */ void* mpFmapData;
 };
 
@@ -2186,6 +2196,7 @@ inline void dComIfGp_setMsgDt2Archive(JKRArchive * pArc) { g_dComIfG_gameInfo.pl
 #endif
 
 inline void dComIfGp_setItemTable(void * pData) { g_dComIfG_gameInfo.play.setItemTable(pData); }
+inline ItemTableList* dComIfGp_getItemTable() { return g_dComIfG_gameInfo.play.getItemTable(); }
 inline void dComIfGp_setActorData(void * pData) { g_dComIfG_gameInfo.play.mADM.SetData(pData); }
 inline void dComIfGp_setFmapData(void * pData) { g_dComIfG_gameInfo.play.setFmapData(pData); }
 

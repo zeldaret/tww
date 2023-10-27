@@ -70,6 +70,8 @@ public:
     BOOL releaseLock();
     BOOL checkActionNow();
     
+    u32 getItemNo() { return m_itemNo; }
+    
     static dCcD_SrcCyl m_cyl_src;
     static s32 m_timer_max;
 
