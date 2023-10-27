@@ -665,7 +665,7 @@ config.libs = [
             Object(NonMatching, "JSystem/JAudio/JASNoteMgr.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASOuterParam.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASPlayer_impl.cpp"),
-            Object(NonMatching, "JSystem/JAudio/JASRegisterParam.cpp"),
+            Object(Matching,    "JSystem/JAudio/JASRegisterParam.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASSeqCtrl.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASSeqParser.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASTrack.cpp"),

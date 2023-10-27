@@ -3,31 +3,79 @@
 // Translation Unit: JASRegisterParam.cpp
 //
 
-#include "JASRegisterParam.h"
+#include "JSystem/JAudio/JASRegisterParam.h"
 #include "dolphin/types.h"
 
 /* 8027E2C0-8027E310       .text __ct__Q28JASystem14TRegisterParamFv */
 JASystem::TRegisterParam::TRegisterParam() {
-    /* Nonmatching */
+    field_0x0 = 0;
+    field_0x2 = 0;
+    field_0x4 = 0;
+    field_0x6 = 0;
+    field_0x8 = 0;
+    field_0xa = 0;
+    field_0xc = 0;
+    field_0xe = 0;
+    field_0x1a = 0;
+    field_0x10[0] = 0;
+    field_0x10[1] = 0;
+    field_0x10[2] = 0;
+    field_0x10[3] = 0;
+    field_0x10[4] = 0;
+    field_0x20 = 0;
+    field_0x24 = 0;
+    field_0x28 = 0;
+    field_0x2c = 0;
 }
 
 /* 8027E310-8027E378       .text init__Q28JASystem14TRegisterParamFv */
 void JASystem::TRegisterParam::init() {
-    /* Nonmatching */
+    field_0x0 = 0;
+    field_0x2 = 0;
+    field_0x4 = 0;
+    field_0x6 = 0;
+    field_0x8 = 0;
+    field_0xa = 0;
+    field_0xc = 0xf0;
+    field_0xe = 0x0c;
+    field_0x1a = 0x40;
+    field_0x10[0] = 0;
+    field_0x10[1] = 1;
+    field_0x10[2] = 1;
+    field_0x10[3] = 0x7fff;
+    field_0x10[4] = 0x4000;
+    field_0x20 = 0;
+    field_0x24 = 0;
+    field_0x28 = 0;
+    field_0x2c = 0;
 }
 
 /* 8027E378-8027E3E0       .text inherit__Q28JASystem14TRegisterParamFRCQ28JASystem14TRegisterParam */
-void JASystem::TRegisterParam::inherit(const JASystem::TRegisterParam&) {
-    /* Nonmatching */
+void JASystem::TRegisterParam::inherit(const JASystem::TRegisterParam& param_1) {
+    field_0x0 = 0;
+    field_0x2 = 0;
+    field_0x4 = 0;
+    field_0x6 = 0;
+    field_0x8 = 0;
+    field_0xa = 0;
+    field_0xc = param_1.field_0xc;
+    field_0xe = param_1.field_0xe;
+    field_0x1a = param_1.field_0x1a;
+    for (int i = 0; i < 5; i++) {
+        field_0x10[i] = param_1.field_0x10[i];
+    }
+    field_0x20 = 0;
+    field_0x24 = 0;
+    field_0x28 = 0;
+    field_0x2c = 0;
 }
 
 /* 8027E3E0-8027E3EC       .text getBankNumber__Q28JASystem14TRegisterParamCFv */
-void JASystem::TRegisterParam::getBankNumber() const {
-    /* Nonmatching */
+u8 JASystem::TRegisterParam::getBankNumber() const {
+    return field_0xc >> 8 & 0xff;
 }
 
 /* 8027E3EC-8027E3F8       .text getProgramNumber__Q28JASystem14TRegisterParamCFv */
-void JASystem::TRegisterParam::getProgramNumber() const {
-    /* Nonmatching */
+u8 JASystem::TRegisterParam::getProgramNumber() const {
+    return field_0xc & 0xff;
 }
-
