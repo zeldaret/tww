@@ -1367,7 +1367,7 @@ static s32 daAM_Create(fopAc_ac_c* i_actor) {
                 /* SrcObjAt Type     */ AT_TYPE_UNK1000,
                 /* SrcObjAt Atp      */ 0,
                 /* SrcObjAt SPrm     */ 0,
-                /* SrcObjTg Type     */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_LEAF_WIND | AT_TYPE_UNK400000 | AT_TYPE_UNK800000),
+                /* SrcObjTg Type     */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_LEAF_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
                 /* SrcObjTg SPrm     */ 0x03,
                 /* SrcObjCo SPrm     */ 0x75,
                 /* SrcGObjAt Se      */ 0,

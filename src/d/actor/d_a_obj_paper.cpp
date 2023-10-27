@@ -62,7 +62,7 @@ namespace daObjPaper {
             /* SrcObjAt Type     */ 0,
             /* SrcObjAt Atp      */ 0,
             /* SrcObjAt SPrm     */ 0,
-            /* SrcObjTg Type     */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_LEAF_WIND | AT_TYPE_UNK400000 | AT_TYPE_UNK800000),
+            /* SrcObjTg Type     */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_LEAF_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
             /* SrcObjTg SPrm     */ 0x0F,
             /* SrcObjCo SPrm     */ 0x79,
             /* SrcGObjAt Se      */ 0,

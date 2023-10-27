@@ -7,6 +7,160 @@
 #include "d/d_procname.h"
 #include "JSystem/JKernel/JKRHeap.h"
 
+// Needed for the .data section to match.
+static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
+static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
+static f64 dummy4[2] = {3.0, 0.5};
+
+static char* l_arc_name = "Md";
+static char* l_arc_name_ship = "Md_ship";
+static char* l_staff_name = "Md1";
+
+static char* event_name_tbl[] = {
+    "Md_ItemGet",
+    "Md_RopeGet",
+    "MD_FLY",
+    "md_cliff",
+    "Md_Fly2",
+    "Md_Tact",
+    "Md_TactTrue",
+    "Md_HarpTalk",
+    "OPTION_CHAR_END",
+    "DEFAULT_TALK_XY",
+};
+
+static dCcD_SrcCyl l_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt Type     */ 0,
+        /* SrcObjAt Atp      */ 0,
+        /* SrcObjAt SPrm     */ 0,
+        /* SrcObjTg Type     */ ~(AT_TYPE_BOOMERANG | AT_TYPE_LEAF_WIND | AT_TYPE_LIGHT),
+        /* SrcObjTg SPrm     */ 0x05,
+        /* SrcObjCo SPrm     */ 0x75,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt GFlag   */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg GFlag   */ 0x04,
+        /* SrcGObjCo GFlag   */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 30.0f,
+        /* Height */ 80.0f,
+    },
+};
+
+static dCcD_SrcCyl l_light_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt Type     */ 0,
+        /* SrcObjAt Atp      */ 0,
+        /* SrcObjAt SPrm     */ 0,
+        /* SrcObjTg Type     */ AT_TYPE_LIGHT,
+        /* SrcObjTg SPrm     */ 0x03,
+        /* SrcObjCo SPrm     */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt GFlag   */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg GFlag   */ 0x04,
+        /* SrcGObjCo GFlag   */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 30.0f,
+        /* Height */ 80.0f,
+    },
+};
+
+static dCcD_SrcCps l_fan_light_cps_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt Type     */ AT_TYPE_LIGHT,
+        /* SrcObjAt Atp      */ 0,
+        /* SrcObjAt SPrm     */ 0x0F,
+        /* SrcObjTg Type     */ 0,
+        /* SrcObjTg SPrm     */ 0,
+        /* SrcObjCo SPrm     */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt GFlag   */ 0x02,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg GFlag   */ 0,
+        /* SrcGObjCo GFlag   */ 0,
+    },
+    // cM3dGCpsS
+    {
+        /* Start  */ 0.0f, 0.0f, 0.0f,
+        /* End    */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 70.0f,
+    },
+};
+
+static dCcD_SrcCyl l_wind_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt Type     */ 0,
+        /* SrcObjAt Atp      */ 0,
+        /* SrcObjAt SPrm     */ 0,
+        /* SrcObjTg Type     */ AT_TYPE_LEAF_WIND,
+        /* SrcObjTg SPrm     */ 0x03,
+        /* SrcObjCo SPrm     */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt GFlag   */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg GFlag   */ 0x04,
+        /* SrcGObjCo GFlag   */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 30.0f,
+        /* Height */ 80.0f,
+    },
+};
+
+static char* hairName[] = {
+    "hair1",
+    "hair2",
+    "hair3",
+    "hair4",
+    "hair5",
+    "hair6",
+    "hair7",
+};
+
+
 /* 000000EC-0000013C       .text __ct__15daNpc_Md_HIO6_cFv */
 daNpc_Md_HIO6_c::daNpc_Md_HIO6_c() {
     m04 = 500.0f;
@@ -163,8 +317,8 @@ daNpc_Md_HIO_c::daNpc_Md_HIO_c() {
 }
 
 /* 000006DC-000006FC       .text daNpc_Md_XyCheckCB__FPvi */
-static void daNpc_Md_XyCheckCB(void*, int) {
-    /* Nonmatching */
+static void daNpc_Md_XyCheckCB(void* i_this, int param_1) {
+    return static_cast<daNpc_Md_c*>(i_this)->XyCheckCB(param_1);
 }
 
 /* 000006FC-000007FC       .text XyCheckCB__10daNpc_Md_cFi */
@@ -173,8 +327,8 @@ void daNpc_Md_c::XyCheckCB(int) {
 }
 
 /* 000007FC-0000081C       .text daNpc_Md_XyEventCB__FPvi */
-static void daNpc_Md_XyEventCB(void*, int) {
-    /* Nonmatching */
+static void daNpc_Md_XyEventCB(void* i_this, int param_1) {
+    return static_cast<daNpc_Md_c*>(i_this)->XyEventCB(param_1);
 }
 
 /* 0000081C-00000864       .text XyEventCB__10daNpc_Md_cFi */
@@ -183,8 +337,8 @@ void daNpc_Md_c::XyEventCB(int) {
 }
 
 /* 00000864-00000884       .text CheckCreateHeap__FP10fopAc_ac_c */
-static void CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return static_cast<daNpc_Md_c*>(i_this)->createHeap();
 }
 
 /* 00000884-00000D80       .text create__10daNpc_Md_cFv */
@@ -194,17 +348,17 @@ s32 daNpc_Md_c::create() {
 }
 
 /* 000012C0-00001444       .text nodeCallBack__FP7J3DNodei */
-static void nodeCallBack(J3DNode*, int) {
+static int nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 00001444-0000154C       .text waistNodeCallBack__FP7J3DNodei */
-static void waistNodeCallBack(J3DNode*, int) {
+static int waistNodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 0000154C-0000160C       .text armNodeCallBack__FP7J3DNodei */
-static void armNodeCallBack(J3DNode*, int) {
+static int armNodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -214,7 +368,7 @@ static void hairCross(cXyz*, cXyz*, cXyz*) {
 }
 
 /* 00001CBC-00001D0C       .text hairTopNodeCallBack__FP7J3DNodei */
-static void hairTopNodeCallBack(J3DNode*, int) {
+static int hairTopNodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -224,37 +378,240 @@ static void vecChange(cXyz*, cXyz*, short) {
 }
 
 /* 00001F5C-0000240C       .text hairNodeCallBack__FP7J3DNodei */
-static void hairNodeCallBack(J3DNode*, int) {
+static int hairNodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 0000240C-00002F80       .text createHeap__10daNpc_Md_cFv */
-void daNpc_Md_c::createHeap() {
+BOOL daNpc_Md_c::createHeap() {
     /* Nonmatching */
+    char wait_anim_name[32];
+    char arm_wait_anim_name[32];
+    if (m3138 == 7) {
+        strcpy(wait_anim_name, "md_shipwait.bck");
+        strcpy(arm_wait_anim_name, "mdarm_shipwait.bck");
+    } else {
+        strcpy(wait_anim_name, "md_wait01.bck");
+        strcpy(arm_wait_anim_name, "mdarm_wait01.bck");
+    }
+    
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(mModelArcName, "md.bdl");
+    JUT_ASSERT(1995, modelData != 0);
+    
+    mpMorf = new mDoExt_McaMorf2(
+        modelData,
+        NULL, NULL,
+        (J3DAnmTransformKey*)dComIfG_getObjectRes(mModelArcName, wait_anim_name),
+        NULL,
+        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+        NULL,
+        0x00080000,
+        0x11020022
+    );
+    if (!mpMorf || !mpMorf->getModel()) {
+        return FALSE;
+    }
+    
+    m_backbone1_jnt_num = modelData->getJointName()->getIndex("backbone1");
+    JUT_ASSERT(2013, m_backbone1_jnt_num >= 0);
+    m_backbone2_jnt_num = modelData->getJointName()->getIndex("backbone2");
+    JUT_ASSERT(2016, m_backbone2_jnt_num >= 0);
+    m_armR_jnt_num = modelData->getJointName()->getIndex("armR");
+    JUT_ASSERT(2019, m_armR_jnt_num >= 0);
+    m_armL_jnt_num = modelData->getJointName()->getIndex("armL");
+    JUT_ASSERT(2022, m_armL_jnt_num >= 0);
+    m_neck_jnt_num = modelData->getJointName()->getIndex("neck");
+    JUT_ASSERT(2025, m_neck_jnt_num >= 0);
+    
+    s16 neck_jnt_num = modelData->getJointName()->getIndex("neck");
+    if (neck_jnt_num >= 0) {
+        modelData->getJointNodePointer(neck_jnt_num)->setCallBack(nodeCallBack);
+    }
+    modelData->getJointNodePointer(m_backbone1_jnt_num)->setCallBack(waistNodeCallBack);
+    m_hair_jnt_nums[0] = modelData->getJointName()->getIndex(hairName[0]);
+    if (m_hair_jnt_nums[0] >= 0) {
+        modelData->getJointNodePointer(m_hair_jnt_nums[0])->setCallBack(hairTopNodeCallBack);
+    }
+    for (int i = 1; i < 8; i++) {
+        m_hair_jnt_nums[i] = modelData->getJointName()->getIndex(hairName[i]);
+        if (m_hair_jnt_nums[i] >= 0) {
+            modelData->getJointNodePointer(m_hair_jnt_nums[i])->setCallBack(hairNodeCallBack);
+        }
+    }
+    
+    mpMorf->getModel()->setUserArea((u32)this);
+    
+    modelData = (J3DModelData*)dComIfG_getObjectRes(mModelArcName, "md.bdl");
+    JUT_ASSERT(2051, modelData != 0);
+    
+    mpArmMorf = new mDoExt_McaMorf2(
+        modelData,
+        NULL, NULL,
+        (J3DAnmTransformKey*)dComIfG_getObjectRes(mModelArcName, arm_wait_anim_name),
+        NULL,
+        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 0,
+        NULL,
+        0x00000000,
+        0x11020203
+    );
+    if (!mpArmMorf || !mpArmMorf->getModel()) {
+        return FALSE;
+    }
+    
+    m_armRloc_jnt_num = modelData->getJointName()->getIndex("armRloc");
+    JUT_ASSERT(2065, m_armRloc_jnt_num >= 0);
+    m_armLloc_jnt_num = modelData->getJointName()->getIndex("armLloc");
+    JUT_ASSERT(2068, m_armLloc_jnt_num >= 0);
+    m_handL_jnt_num = modelData->getJointName()->getIndex("handL");
+    JUT_ASSERT(2071, m_handL_jnt_num >= 0);
+    
+    modelData->getJointNodePointer(m_armRloc_jnt_num)->setCallBack(armNodeCallBack);
+    modelData->getJointNodePointer(m_armLloc_jnt_num)->setCallBack(armNodeCallBack);
+    
+    mpArmMorf->getModel()->setUserArea((u32)this);
+    
+    if (m3138 != 7) {
+        modelData = (J3DModelData*)dComIfG_getObjectRes(mModelArcName, "mdwing.bdl");
+        JUT_ASSERT(2077, modelData != 0);
+        
+        mpWingMorf = new mDoExt_McaMorf(
+            modelData,
+            NULL, NULL,
+            (J3DAnmTransformKey*)dComIfG_getObjectRes(mModelArcName, "mdwing_wait01.bck"),
+            J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 0,
+            NULL,
+            0x00000000,
+            0x11020203
+        );
+        if (!mpWingMorf || !mpWingMorf->getModel()) {
+            return FALSE;
+        }
+        
+        m_wingRloc_jnt_num = modelData->getJointName()->getIndex("wingRloc");
+        JUT_ASSERT(2097, m_wingRloc_jnt_num >= 0);
+        m_wingLloc_jnt_num = modelData->getJointName()->getIndex("wingLloc");
+        JUT_ASSERT(2100, m_wingLloc_jnt_num >= 0);
+        m_wingR2_jnt_num = modelData->getJointName()->getIndex("wingR2");
+        JUT_ASSERT(2103, m_wingR2_jnt_num >= 0);
+        m_wingL2_jnt_num = modelData->getJointName()->getIndex("wingL2");
+        JUT_ASSERT(2106, m_wingL2_jnt_num >= 0);
+        m_wingR3_jnt_num = modelData->getJointName()->getIndex("wingR3");
+        JUT_ASSERT(2109, m_wingR3_jnt_num >= 0);
+        m_wingL3_jnt_num = modelData->getJointName()->getIndex("wingL3");
+        JUT_ASSERT(2112, m_wingL3_jnt_num >= 0);
+        
+        modelData->getJointNodePointer(m_wingRloc_jnt_num)->setCallBack(armNodeCallBack);
+        modelData->getJointNodePointer(m_wingLloc_jnt_num)->setCallBack(armNodeCallBack);
+        
+        mpWingMorf->getModel()->setUserArea((u32)this);
+    }
+    
+    modelData = (J3DModelData*)dComIfG_getObjectRes(mModelArcName, "mdharp.bdl");
+    mpHarpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    if (!mpHarpModel) {
+        return FALSE;
+    }
+    
+    modelData = (J3DModelData*)dComIfG_getObjectRes(mModelArcName, "ymdhp00.bdl");
+    mpHarpLightModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    if (!mpHarpLightModel) {
+        return FALSE;
+    }
+    
+    if (!initLightBtkAnm(false)) {
+        return FALSE;
+    }
+    if (!initTexPatternAnm(0, 0)) {
+        return FALSE;
+    }
+    
+    mAcchCir[0].SetWall(20.0f, 20.0f);
+    mAcchCir[1].SetWall(60.0f, 20.0f);
+    mAcch.Set(&current.pos, &next.pos, this, ARRAY_SIZE(mAcchCir), mAcchCir, &speed, NULL, NULL);
+    mAcch.ClrRoofNone();
+    mAcch.SetRoofCrrHeight(120.0f);
+    mAcch.OnLineCheck();
+    mAcch.ClrWaterNone();
+    
+    return TRUE;
 }
 
 /* 00002F80-00003050       .text setAction__10daNpc_Md_cFPM10daNpc_Md_cFPCvPvPv_iM10daNpc_Md_cFPCvPvPv_iPv */
-void daNpc_Md_c::setAction(int (daNpc_Md_c::**)(void*), int (daNpc_Md_c::*)(void*), void*) {
-    /* Nonmatching */
+BOOL daNpc_Md_c::setAction(ActionFunc* pCurrActionFunc, ActionFunc newActionFunc, void* arg) {
+    if (*pCurrActionFunc != newActionFunc) {
+        if (*pCurrActionFunc) {
+            mActionStatus = ACTION_ENDING;
+            (this->**pCurrActionFunc)(arg);
+        }
+        *pCurrActionFunc = newActionFunc;
+        mActionStatus = ACTION_STARTING;
+        m3144 = 0;
+        m3146 = 0;
+        m3148 = 0;
+        m314A = 0;
+        m3150 = 0.0f;
+        (this->**pCurrActionFunc)(arg);
+    }
+    return TRUE;
 }
 
 /* 00003050-00003124       .text npcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::npcAction(void*) {
-    /* Nonmatching */
+void daNpc_Md_c::npcAction(void* arg) {
+    if (!mCurrNpcActionFunc) {
+        speedF = 0.0f;
+        if (m3104 == 0x20) {
+            setNpcAction(&mwaitNpcAction, NULL);
+        } else {
+            setNpcAction(&waitNpcAction, NULL);
+        }
+    }
+    
+    (this->*mCurrNpcActionFunc)(arg);
 }
 
 /* 00003124-00003194       .text setNpcAction__10daNpc_Md_cFM10daNpc_Md_cFPCvPvPv_iPv */
-void daNpc_Md_c::setNpcAction(int (daNpc_Md_c::*)(void*), void*) {
-    /* Nonmatching */
+void daNpc_Md_c::setNpcAction(ActionFunc actionFunc, void* arg) {
+    m_flying = false;
+    mCurrPlayerActionFunc = NULL;
+    setAction(&mCurrNpcActionFunc, actionFunc, arg);
 }
 
 /* 00003194-00003360       .text playerAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::playerAction(void*) {
+void daNpc_Md_c::playerAction(void* arg) {
     /* Nonmatching */
+    if (!mCurrPlayerActionFunc) {
+        speedF = 0.0f;
+        setPlayerAction(&waitPlayerAction, NULL);
+    }
+    
+    if (mAcch.ChkGroundHit() && isOldLightBodyHit()) {
+        dComIfGp_setRStatusForce(0x07); // Show "Return" on the R button
+        if (chkPlayerAction(mkamaePlayerAction)) {
+            dComIfGp_setDoStatus(0x00); // Show the A button without anything on it
+            dComIfGp_setAStatus(0x08); // TODO
+        } else {
+            dComIfGp_setDoStatus(0x2E); // TODO
+            dComIfGp_setAStatus(0x3E); // Do not display the B button icon at all
+            if (!m3140) {
+                dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+            }
+        }
+    } else {
+        dComIfGp_setDoStatus(0x23); // Show "Fly" on the A button
+        if (chkPlayerAction(flyPlayerAction)) {
+            dComIfGp_setRStatusForce(0x3E); // TODO
+            dComIfGp_setAStatus(0x06); // Show "Let Go" on the B button icon
+        } else {
+            dComIfGp_setRStatusForce(0x07); // Show "Return" on the R button
+            dComIfGp_setAStatus(0x3E); // Do not display the B button icon at all
+        }
+    }
+    
+    (this->*mCurrPlayerActionFunc)(arg);
 }
 
 /* 00003360-000033C4       .text setPlayerAction__10daNpc_Md_cFM10daNpc_Md_cFPCvPvPv_iPv */
-void daNpc_Md_c::setPlayerAction(int (daNpc_Md_c::*)(void*), void*) {
+void daNpc_Md_c::setPlayerAction(ActionFunc actionFunc, void* arg) {
     /* Nonmatching */
 }
 
@@ -369,12 +726,12 @@ void daNpc_Md_c::chkAdanmaeDemoOrder() {
 }
 
 /* 000043D4-00004B04       .text waitNpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::waitNpcAction(void*) {
+int daNpc_Md_c::waitNpcAction(void*) {
     /* Nonmatching */
 }
 
 /* 00004B04-00004CFC       .text harpWaitNpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::harpWaitNpcAction(void*) {
+int daNpc_Md_c::harpWaitNpcAction(void*) {
     /* Nonmatching */
 }
 
@@ -384,37 +741,37 @@ void daNpc_Md_c::XYTalkCheck() {
 }
 
 /* 00004D40-0000504C       .text talkNpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::talkNpcAction(void*) {
+int daNpc_Md_c::talkNpcAction(void*) {
     /* Nonmatching */
 }
 
 /* 0000504C-000051FC       .text shipTalkNpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::shipTalkNpcAction(void*) {
+int daNpc_Md_c::shipTalkNpcAction(void*) {
     /* Nonmatching */
 }
 
 /* 000051FC-00005308       .text kyohiNpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::kyohiNpcAction(void*) {
+int daNpc_Md_c::kyohiNpcAction(void*) {
     /* Nonmatching */
 }
 
 /* 00005308-00005534       .text shipNpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::shipNpcAction(void*) {
+int daNpc_Md_c::shipNpcAction(void*) {
     /* Nonmatching */
 }
 
 /* 00005534-000057B0       .text mwaitNpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::mwaitNpcAction(void*) {
+int daNpc_Md_c::mwaitNpcAction(void*) {
     /* Nonmatching */
 }
 
 /* 000057B0-000058E0       .text squatdownNpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::squatdownNpcAction(void*) {
+int daNpc_Md_c::squatdownNpcAction(void*) {
     /* Nonmatching */
 }
 
 /* 000058E0-00005A74       .text sqwait01NpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::sqwait01NpcAction(void*) {
+int daNpc_Md_c::sqwait01NpcAction(void*) {
     /* Nonmatching */
 }
 
@@ -424,17 +781,17 @@ void daNpc_Md_c::changeCaught02() {
 }
 
 /* 00005AB0-000061A8       .text carryNpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::carryNpcAction(void*) {
+int daNpc_Md_c::carryNpcAction(void*) {
     /* Nonmatching */
 }
 
 /* 000061A8-00006450       .text throwNpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::throwNpcAction(void*) {
+int daNpc_Md_c::throwNpcAction(void*) {
     /* Nonmatching */
 }
 
 /* 00006450-00006764       .text glidingNpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::glidingNpcAction(void*) {
+int daNpc_Md_c::glidingNpcAction(void*) {
     /* Nonmatching */
 }
 
@@ -444,47 +801,47 @@ void daNpc_Md_c::windProc() {
 }
 
 /* 00006B24-00006C80       .text fallNpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::fallNpcAction(void*) {
+int daNpc_Md_c::fallNpcAction(void*) {
     /* Nonmatching */
 }
 
 /* 00006C80-00006F70       .text fall02NpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::fall02NpcAction(void*) {
+int daNpc_Md_c::fall02NpcAction(void*) {
     /* Nonmatching */
 }
 
 /* 00006F70-000071E4       .text wallHitNpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::wallHitNpcAction(void*) {
+int daNpc_Md_c::wallHitNpcAction(void*) {
     /* Nonmatching */
 }
 
 /* 000071E4-000073BC       .text land01NpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::land01NpcAction(void*) {
+int daNpc_Md_c::land01NpcAction(void*) {
     /* Nonmatching */
 }
 
 /* 000073BC-000074C0       .text land02NpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::land02NpcAction(void*) {
+int daNpc_Md_c::land02NpcAction(void*) {
     /* Nonmatching */
 }
 
 /* 000074C0-000075C4       .text land03NpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::land03NpcAction(void*) {
+int daNpc_Md_c::land03NpcAction(void*) {
     /* Nonmatching */
 }
 
 /* 000075C4-00007824       .text piyo2NpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::piyo2NpcAction(void*) {
+int daNpc_Md_c::piyo2NpcAction(void*) {
     /* Nonmatching */
 }
 
 /* 00007824-0000786C       .text deleteNpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::deleteNpcAction(void*) {
+int daNpc_Md_c::deleteNpcAction(void*) {
     /* Nonmatching */
 }
 
 /* 0000786C-00007A98       .text demoFlyNpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::demoFlyNpcAction(void*) {
+int daNpc_Md_c::demoFlyNpcAction(void*) {
     /* Nonmatching */
 }
 
@@ -514,12 +871,12 @@ void daNpc_Md_c::routeCheck(float, short*) {
 }
 
 /* 00008858-00008CEC       .text searchNpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::searchNpcAction(void*) {
+int daNpc_Md_c::searchNpcAction(void*) {
     /* Nonmatching */
 }
 
 /* 00008CEC-00008E54       .text hitNpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::hitNpcAction(void*) {
+int daNpc_Md_c::hitNpcAction(void*) {
     /* Nonmatching */
 }
 
@@ -539,52 +896,52 @@ void daNpc_Md_c::walkProc(float, short) {
 }
 
 /* 00009180-000092E0       .text jumpNpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::jumpNpcAction(void*) {
+int daNpc_Md_c::jumpNpcAction(void*) {
     /* Nonmatching */
 }
 
 /* 000092E0-000095C8       .text escapeNpcAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::escapeNpcAction(void*) {
+int daNpc_Md_c::escapeNpcAction(void*) {
     /* Nonmatching */
 }
 
 /* 000095C8-00009894       .text waitPlayerAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::waitPlayerAction(void*) {
+int daNpc_Md_c::waitPlayerAction(void*) {
     /* Nonmatching */
 }
 
 /* 00009894-00009B08       .text walkPlayerAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::walkPlayerAction(void*) {
+int daNpc_Md_c::walkPlayerAction(void*) {
     /* Nonmatching */
 }
 
 /* 00009B08-00009CCC       .text hitPlayerAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::hitPlayerAction(void*) {
+int daNpc_Md_c::hitPlayerAction(void*) {
     /* Nonmatching */
 }
 
 /* 00009CCC-00009E7C       .text jumpPlayerAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::jumpPlayerAction(void*) {
+int daNpc_Md_c::jumpPlayerAction(void*) {
     /* Nonmatching */
 }
 
 /* 00009E7C-0000A534       .text flyPlayerAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::flyPlayerAction(void*) {
+int daNpc_Md_c::flyPlayerAction(void*) {
     /* Nonmatching */
 }
 
 /* 0000A534-0000A698       .text landPlayerAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::landPlayerAction(void*) {
+int daNpc_Md_c::landPlayerAction(void*) {
     /* Nonmatching */
 }
 
 /* 0000A698-0000A8D0       .text mkamaePlayerAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::mkamaePlayerAction(void*) {
+int daNpc_Md_c::mkamaePlayerAction(void*) {
     /* Nonmatching */
 }
 
 /* 0000A8D0-0000A9BC       .text carryPlayerAction__10daNpc_Md_cFPv */
-void daNpc_Md_c::carryPlayerAction(void*) {
+int daNpc_Md_c::carryPlayerAction(void*) {
     /* Nonmatching */
 }
 
@@ -788,7 +1145,7 @@ void daNpc_Md_c::getAnmType(unsigned char) {
 }
 
 /* 0000CDF4-0000CF18       .text initTexPatternAnm__10daNpc_Md_cFUcb */
-void daNpc_Md_c::initTexPatternAnm(unsigned char, bool) {
+BOOL daNpc_Md_c::initTexPatternAnm(unsigned char, bool) {
     /* Nonmatching */
 }
 
@@ -798,7 +1155,7 @@ void daNpc_Md_c::playTexPatternAnm() {
 }
 
 /* 0000CFCC-0000D0B8       .text initLightBtkAnm__10daNpc_Md_cFb */
-void daNpc_Md_c::initLightBtkAnm(bool) {
+BOOL daNpc_Md_c::initLightBtkAnm(bool) {
     /* Nonmatching */
 }
 

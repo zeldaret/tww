@@ -1151,7 +1151,10 @@ void mDoExt_MtxCalcOldFrame::decOldFrameMorfCounter() {
 }
 
 /* 80012650-800129E4       .text __ct__14mDoExt_McaMorfFP12J3DModelDataP25mDoExt_McaMorfCallBack1_cP25mDoExt_McaMorfCallBack2_cP15J3DAnmTransformifiiiPvUlUl */
-mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_c* callback1, mDoExt_McaMorfCallBack2_c* callback2, J3DAnmTransform* anmTransform, int loopMode, f32 param_5, int param_6, int param_7, int param_8, void* basAnm, u32 modelFlag, u32 differedDlistFlag) {
+mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_c* callback1,
+                               mDoExt_McaMorfCallBack2_c* callback2, J3DAnmTransform* anmTransform,
+                               int loopMode, f32 param_5, int param_6, int param_7, int param_8,
+                               void* basAnm, u32 modelFlag, u32 differedDlistFlag) {
     mpModel = NULL;
     mpSound = NULL;
     mpTransformInfo = NULL;
@@ -1380,7 +1383,11 @@ void mDoExt_McaMorf::stopZelAnime() {
 }
 
 /* 80013388-800136F4       .text __ct__15mDoExt_McaMorf2FP12J3DModelDataP25mDoExt_McaMorfCallBack1_cP25mDoExt_McaMorfCallBack2_cP15J3DAnmTransformP15J3DAnmTransformifiiiPvUlUl */
-mDoExt_McaMorf2::mDoExt_McaMorf2(J3DModelData*, mDoExt_McaMorfCallBack1_c*, mDoExt_McaMorfCallBack2_c*, J3DAnmTransform*, J3DAnmTransform*, int, f32, int, int, int, void*, u32, u32) {
+mDoExt_McaMorf2::mDoExt_McaMorf2(J3DModelData* modelData, mDoExt_McaMorfCallBack1_c* callback1,
+                                 mDoExt_McaMorfCallBack2_c* callback2,
+                                 J3DAnmTransform* anmTransform1, J3DAnmTransform* anmTransform2,
+                                 int loopMode, f32 param_5, int param_6, int param_7, int param_8,
+                                 void* basAnm, u32 modelFlag, u32 differedDlistFlag) {
     /* Nonmatching */
 }
 

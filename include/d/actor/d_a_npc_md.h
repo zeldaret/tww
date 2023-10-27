@@ -195,18 +195,30 @@ public:
 
 class daNpc_Md_c : public daPy_npc_c {
 public:
+    enum ActionStatus {
+        ACTION_STARTING = 0,
+        ACTION_ONGOING  = 1,
+        ACTION_ENDING   = -1,
+    };
+    
+    typedef int (daNpc_Md_c::*ActionFunc)(void*);
+    
+    bool chkPlayerAction(ActionFunc func) { return mCurrPlayerActionFunc == func; }
+    bool chkNpcAction(ActionFunc func) { return mCurrNpcActionFunc == func; }
+    bool isOldLightBodyHit() { return m30F0 & 0x8000; }
+    
     daNpc_Md_c() {}
     ~daNpc_Md_c();
     
     void XyCheckCB(int);
     void XyEventCB(int);
     s32 create();
-    void createHeap();
-    void setAction(int (daNpc_Md_c::**)(void*), int (daNpc_Md_c::*)(void*), void*);
+    BOOL createHeap();
+    BOOL setAction(ActionFunc*, ActionFunc, void*);
     void npcAction(void*);
-    void setNpcAction(int (daNpc_Md_c::*)(void*), void*);
+    void setNpcAction(ActionFunc, void*);
     void playerAction(void*);
-    void setPlayerAction(int (daNpc_Md_c::*)(void*), void*);
+    void setPlayerAction(ActionFunc, void*);
     void getStickAngY(int);
     void calcStickPos(short, cXyz*);
     void flyCheck();
@@ -228,50 +240,50 @@ public:
     void setMessageAnimation(unsigned char);
     void waitGroundCheck();
     void chkAdanmaeDemoOrder();
-    void waitNpcAction(void*);
-    void harpWaitNpcAction(void*);
+    int waitNpcAction(void*);
+    int harpWaitNpcAction(void*);
     void XYTalkCheck();
-    void talkNpcAction(void*);
-    void shipTalkNpcAction(void*);
-    void kyohiNpcAction(void*);
-    void shipNpcAction(void*);
-    void mwaitNpcAction(void*);
-    void squatdownNpcAction(void*);
-    void sqwait01NpcAction(void*);
+    int talkNpcAction(void*);
+    int shipTalkNpcAction(void*);
+    int kyohiNpcAction(void*);
+    int shipNpcAction(void*);
+    int mwaitNpcAction(void*);
+    int squatdownNpcAction(void*);
+    int sqwait01NpcAction(void*);
     void changeCaught02();
-    void carryNpcAction(void*);
-    void throwNpcAction(void*);
-    void glidingNpcAction(void*);
+    int carryNpcAction(void*);
+    int throwNpcAction(void*);
+    int glidingNpcAction(void*);
     void windProc();
-    void fallNpcAction(void*);
-    void fall02NpcAction(void*);
-    void wallHitNpcAction(void*);
-    void land01NpcAction(void*);
-    void land02NpcAction(void*);
-    void land03NpcAction(void*);
-    void piyo2NpcAction(void*);
-    void deleteNpcAction(void*);
-    void demoFlyNpcAction(void*);
+    int fallNpcAction(void*);
+    int fall02NpcAction(void*);
+    int wallHitNpcAction(void*);
+    int land01NpcAction(void*);
+    int land02NpcAction(void*);
+    int land03NpcAction(void*);
+    int piyo2NpcAction(void*);
+    int deleteNpcAction(void*);
+    int demoFlyNpcAction(void*);
     void routeAngCheck(cXyz&, short*);
     void routeWallCheck(cXyz&, cXyz&, short*);
     void checkForwardGroundY(short);
     void checkWallJump(short);
     void routeCheck(float, short*);
-    void searchNpcAction(void*);
-    void hitNpcAction(void*);
+    int searchNpcAction(void*);
+    int hitNpcAction(void*);
     void setNormalSpeedF(float, float, float, float, float);
     void setSpeedAndAngleNormal(float, short);
     void walkProc(float, short);
-    void jumpNpcAction(void*);
-    void escapeNpcAction(void*);
-    void waitPlayerAction(void*);
-    void walkPlayerAction(void*);
-    void hitPlayerAction(void*);
-    void jumpPlayerAction(void*);
-    void flyPlayerAction(void*);
-    void landPlayerAction(void*);
-    void mkamaePlayerAction(void*);
-    void carryPlayerAction(void*);
+    int jumpNpcAction(void*);
+    int escapeNpcAction(void*);
+    int waitPlayerAction(void*);
+    int walkPlayerAction(void*);
+    int hitPlayerAction(void*);
+    int jumpPlayerAction(void*);
+    int flyPlayerAction(void*);
+    int landPlayerAction(void*);
+    int mkamaePlayerAction(void*);
+    int carryPlayerAction(void*);
     void eventProc();
     void initialDefault(int);
     void actionDefault(int);
@@ -312,9 +324,9 @@ public:
     void talk_init();
     void talk(int);
     void getAnmType(unsigned char);
-    void initTexPatternAnm(unsigned char, bool);
+    BOOL initTexPatternAnm(unsigned char, bool);
     void playTexPatternAnm();
-    void initLightBtkAnm(bool);
+    BOOL initLightBtkAnm(bool);
     void playLightBtkAnm();
     void setAnm(int);
     void dNpc_Md_setAnm(mDoExt_McaMorf2*, float, int, float, float, char*, char*, const char*);
@@ -349,12 +361,18 @@ public:
     virtual MtxP getRightHandMatrix() {}
     virtual f32 getBaseAnimeFrameRate() {}
     virtual f32 getBaseAnimeFrame() {}
+    
+    static bool m_flying;
+    static short m_flyingTimer;
 
 public:
     /* 0x04EC */ request_of_phase_process_class mPhs;
-    /* 0x04F4 */ u8 m04F4[0x04FC - 0x04F4];
-    /* 0x04FC */ mDoExt_McaMorf2* m04FC;
-    /* 0x0500 */ u8 m0500[0x0520 - 0x0500];
+    /* 0x04F4 */ J3DModel* mpHarpModel;
+    /* 0x04F8 */ J3DModel* mpHarpLightModel;
+    /* 0x04FC */ mDoExt_McaMorf2* mpMorf;
+    /* 0x0500 */ mDoExt_McaMorf2* mpArmMorf;
+    /* 0x0504 */ mDoExt_McaMorf* mpWingMorf;
+    /* 0x0508 */ u8 m0508[0x0520 - 0x0508];
     /* 0x0520 */ mDoExt_btpAnm m0520;
     /* 0x0534 */ mDoExt_btkAnm m0534;
     /* 0x0548 */ u8 m0548[0x054C - 0x0548];
@@ -372,24 +390,30 @@ public:
     /* 0x3074 */ dPa_rippleEcallBack m3074;
     /* 0x3088 */ u8 m3088[0x30A0 - 0x3088];
     /* 0x30A0 */ cXyz m30A0;
-    /* 0x30AC */ u8 m30AC[0x30EC - 0x30AC];
+    /* 0x30AC */ u8 m30AC[0x30D4 - 0x30AC];
+    /* 0x30D4 */ ActionFunc mCurrPlayerActionFunc;
+    /* 0x30E0 */ ActionFunc mCurrNpcActionFunc;
     /* 0x30EC */ int mMsgId;
     /* 0x30F0 */ u32 m30F0;
     /* 0x30F4 */ u8 m30F4[0x30F8 - 0x30F4];
     /* 0x30F8 */ f32 m30F8;
     /* 0x30FC */ u8 m30FC[0x3104 - 0x30FC];
     /* 0x3104 */ int m3104;
-    /* 0x3108 */ u8 m3108[0x3120 - 0x3108];
-    /* 0x3120 */ u8 mArmRlocJointIdx;
-    /* 0x3121 */ u8 mArmLlocJointIdx;
-    /* 0x3122 */ u8 mWingRlocJointIdx;
-    /* 0x3123 */ u8 mWingLlocJointIdx;
-    /* 0x3124 */ u8 mNeckJointIdx;
-    /* 0x3125 */ u8 mWingR2JointIdx;
-    /* 0x3126 */ u8 mWingL2JointIdx;
-    /* 0x3127 */ u8 mWingR3JointIdx;
-    /* 0x3128 */ u8 mWingL3JointIdx;
-    /* 0x3129 */ u8 mHandLJointIdx;
+    /* 0x3108 */ u8 m3108[0x311C - 0x3108];
+    /* 0x311C */ s8 m_backbone1_jnt_num;
+    /* 0x311D */ s8 m_backbone2_jnt_num;
+    /* 0x311E */ s8 m_armR_jnt_num;
+    /* 0x311F */ s8 m_armL_jnt_num;
+    /* 0x3120 */ s8 m_armRloc_jnt_num;
+    /* 0x3121 */ s8 m_armLloc_jnt_num;
+    /* 0x3122 */ s8 m_wingRloc_jnt_num;
+    /* 0x3123 */ s8 m_wingLloc_jnt_num;
+    /* 0x3124 */ s8 m_neck_jnt_num;
+    /* 0x3125 */ s8 m_wingR2_jnt_num;
+    /* 0x3126 */ s8 m_wingL2_jnt_num;
+    /* 0x3127 */ s8 m_wingR3_jnt_num;
+    /* 0x3128 */ s8 m_wingL3_jnt_num;
+    /* 0x3129 */ s8 m_handL_jnt_num;
     /* 0x312A */ u8 m312A;
     /* 0x312B */ u8 m312B[0x312C - 0x312B];
     /* 0x312C */ u8 m312C;
@@ -397,18 +421,24 @@ public:
     /* 0x312E */ u8 mCurEventMode;
     /* 0x312F */ u8 m312F[0x3131 - 0x312F];
     /* 0x3131 */ u8 m3131;
-    /* 0x3132 */ u8 m3132;
+    /* 0x3132 */ s8 mActionStatus;
     /* 0x3133 */ u8 m3133[0x3138 - 0x3133];
     /* 0x3138 */ u8 m3138;
     /* 0x3139 */ u8 mCurEvent;
     /* 0x313A */ u8 m313A;
-    /* 0x313B */ u8 m313B[0x3148 - 0x313B];
+    /* 0x313B */ u8 m313B[0x3140 - 0x313B];
+    /* 0x3140 */ bool m3140;
+    /* 0x3141 */ u8 m3141[0x3144 - 0x3141];
+    /* 0x3144 */ s16 m3144;
+    /* 0x3146 */ s16 m3146;
     /* 0x3148 */ s16 m3148;
     /* 0x314A */ s16 m314A;
     /* 0x314C */ s16 m314C;
-    /* 0x314E */ u8 m314E[0x3158 - 0x314E];
+    /* 0x314E */ u8 m314E[0x3150 - 0x314E];
+    /* 0x3150 */ f32 m3150;
+    /* 0x3154 */ u8 m3154[0x3158 - 0x3154];
     /* 0x3158 */ s16 mEventIdxTable[10];
-    /* 0x316C */ u8 m316C[0x3174 - 0x316C];
+    /* 0x316C */ s8 m_hair_jnt_nums[8];
     /* 0x3174 */ cXyz m3174[8];
     /* 0x31D4 */ cXyz m31D4[8];
     /* 0x3234 */ cXyz m3234[4];

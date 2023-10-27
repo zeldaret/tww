@@ -41,7 +41,7 @@ enum cCcD_ObjAtType {
     /* 0x00100000 */ AT_TYPE_LIGHT_ARROW    = (1 << 20),
     /* 0x00200000 */ AT_TYPE_LEAF_WIND      = (1 << 21),
     /* 0x00400000 */ AT_TYPE_UNK400000      = (1 << 22),
-    /* 0x00800000 */ AT_TYPE_UNK800000      = (1 << 23),
+    /* 0x00800000 */ AT_TYPE_LIGHT          = (1 << 23),
     /* 0x01000000 */ AT_TYPE_STALFOS_MACE   = (1 << 24),
     /* 0x04000000 */ AT_TYPE_DARKNUT_SWORD  = (1 << 26),
     /* 0x08000000 */ AT_TYPE_GRAPPLING_HOOK = (1 << 27),

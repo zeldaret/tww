@@ -139,7 +139,7 @@ static const dCcD_SrcCyl l_cyl_tg_src = {
         /* SrcObjAt Type     */ 0,
         /* SrcObjAt Atp      */ 0,
         /* SrcObjAt SPrm     */ 0,
-        /* SrcObjTg Type     */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_UNK400000 | AT_TYPE_UNK800000),
+        /* SrcObjTg Type     */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
         /* SrcObjTg SPrm     */ 9,
         /* SrcObjCo SPrm     */ 0,
         /* SrcGObjAt Se      */ 0,

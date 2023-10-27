@@ -743,7 +743,7 @@ BOOL light_at_hit_check(cXyz* pPos) {
     bool ret = false;
     fopAc_ac_c * pActor;
     u32 res = dComIfG_Ccsp()->mMass_Mng.Chk(pPos, &pActor, &hitInfo);
-    if (((res & 1) != 0) && (hitInfo.GetAtHitObj()->GetAtType() & AT_TYPE_UNK800000) != 0)
+    if (((res & 1) != 0) && (hitInfo.GetAtHitObj()->GetAtType() & AT_TYPE_LIGHT) != 0)
         ret = true;
     return ret;
 }

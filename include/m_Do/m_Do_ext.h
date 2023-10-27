@@ -329,7 +329,10 @@ public:
 
 class mDoExt_McaMorf : public J3DMtxCalcMaya {
 public:
-    mDoExt_McaMorf(J3DModelData*, mDoExt_McaMorfCallBack1_c*, mDoExt_McaMorfCallBack2_c*, J3DAnmTransform*, int, float, int, int, int, void*, unsigned long, unsigned long);
+    mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_c* callback1,
+                   mDoExt_McaMorfCallBack2_c* callback2, J3DAnmTransform* anmTransform,
+                   int loopMode, f32 param_5, int param_6, int param_7, int param_8,
+                   void* basAnm, u32 modelFlag, u32 differedDlistFlag);
     virtual ~mDoExt_McaMorf();
 
     void calc();
@@ -384,7 +387,11 @@ public:
 
 class mDoExt_McaMorf2 : public J3DMtxCalcMaya {
 public:
-    mDoExt_McaMorf2(J3DModelData*, mDoExt_McaMorfCallBack1_c*, mDoExt_McaMorfCallBack2_c*, J3DAnmTransform*, J3DAnmTransform*, int, f32, int, int, int, void*, u32, u32);
+    mDoExt_McaMorf2(J3DModelData* modelData, mDoExt_McaMorfCallBack1_c* callback1,
+                    mDoExt_McaMorfCallBack2_c* callback2,
+                    J3DAnmTransform* anmTransform1, J3DAnmTransform* anmTransform2,
+                    int loopMode, f32 param_5, int param_6, int param_7, int param_8,
+                    void* basAnm, u32 modelFlag, u32 differedDlistFlag);
     ~mDoExt_McaMorf2();
 
     void ERROR_EXIT();
@@ -395,6 +402,8 @@ public:
     void entryDL();
     void calc();
     void stopZelAnime();
+
+    J3DModel* getModel() { return mpModel; }
 
     /* 0x50 */ J3DModel* mpModel;
     /* 0x54 */ J3DAnmTransform* field_0x54;
