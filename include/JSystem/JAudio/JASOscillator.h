@@ -15,6 +15,8 @@ namespace JASystem {
             /* 0x14 */ f32 field_0x14;
         };
 
+        TOscillator() { init(); }
+        ~TOscillator() {}
         void init();
         void initStart();
         f32 getOffset();

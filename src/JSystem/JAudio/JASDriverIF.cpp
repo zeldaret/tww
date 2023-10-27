@@ -4,6 +4,7 @@
 //
 
 #include "JSystem/JAudio/JASDriverIF.h"
+#include "JSystem/JAudio/JASChGlobal.h"
 #include "JSystem/JAudio/JASDSPChannel.h"
 #include "JSystem/JAudio/JASDSPInterface.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -13,7 +14,7 @@ void JASystem::Driver::init() {
     /* Nonmatching */
     DSPInterface::initBuffer();
     TDSPChannel::initAll();
-    //TGlobalChannel::init();
+    TGlobalChannel::init();
 }
 
 u16 JASystem::Driver::MAX_MIXERLEVEL = 0x2ee0;

@@ -3,76 +3,222 @@
 // Translation Unit: JASChannelMgr.cpp
 //
 
-#include "JASChannelMgr.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASChannelMgr.h"
+#include "JSystem/JAudio/JASChGlobal.h"
+#include "JSystem/JAudio/JASChannel.h"
+#include "dolphin/os/OS.h"
 
 /* 8028D3C0-8028D4D0       .text init__Q28JASystem11TChannelMgrFv */
 void JASystem::TChannelMgr::init() {
     /* Nonmatching */
+    field_0x8 = NULL;
+    field_0xc = NULL;
+    field_0x10 = NULL;
+    field_0x14 = NULL;
+    field_0x4 = 0;
+    field_0x0 = 0;
+    field_0x70 = 1;
+    field_0x18 = 1.0f;
+    field_0x1c = 1.0f;
+    field_0x20 = 0.5f;
+    field_0x24 = 0.0f;
+    field_0x28 = 0.0f;
+    for (int i = 0; i < 8; i++) {
+        field_0x2c[i] = 0;
+    }
+    field_0x2c[0] = 0x7fff;
+    field_0x4c = 0;
+    for (int i = 0; i < 4; i++) {
+        field_0x3c[i] = 0;
+    }
+    for (int i = 0; i < 6; i++) {
+        field_0x5a[i] = 0;
+    }
+    field_0x60 = 0;
+    field_0x3c[0] = 0x7fff;
+    field_0x61 = 0;
+    field_0x4e[0] = 0x150;
+    field_0x4e[1] = 0x210;
+    field_0x4e[2] = 0x352;
+    field_0x4e[3] = 0x412;
+    field_0x4e[4] = 0;
+    field_0x4e[5] = 0;
+    field_0x68 = 0x20103;
+    field_0x6c = 600;
+    field_0x62[0] = 13;
+    field_0x62[1] = 13;
+    field_0x62[2] = 13;
 }
 
 /* 8028D4D0-8028D514       .text stopAll__Q28JASystem11TChannelMgrFv */
 void JASystem::TChannelMgr::stopAll() {
-    /* Nonmatching */
+    TChannel* channel = field_0xc;
+    while (channel) {
+        TChannel* r31 = channel->field_0x24;
+        channel->stop(0);
+        channel = r31;
+    }
 }
 
 /* 8028D514-8028D558       .text stopAllRelease__Q28JASystem11TChannelMgrFv */
 void JASystem::TChannelMgr::stopAllRelease() {
-    /* Nonmatching */
+    for (TChannel* channel = field_0x10; channel; channel = channel->field_0x24) {
+        channel->forceStopOsc(0);
+    }
 }
 
 /* 8028D558-8028D5D0       .text initAllocChannel__Q28JASystem11TChannelMgrFUl */
-void JASystem::TChannelMgr::initAllocChannel(unsigned long) {
+void JASystem::TChannelMgr::initAllocChannel(u32 param_1) {
     /* Nonmatching */
+    if (field_0x0) {
+        OSReport("----- Warning JCSにボイスが %d 残っているのでグローバルに返却します\n", field_0x0);
+        TGlobalChannel::releaseAll(this);
+    }
+    init();
+    TGlobalChannel::alloc(this, param_1);
+    field_0x70 = param_1 != 0;
 }
 
 /* 8028D5D0-8028D778       .text getLogicalChannel__Q28JASystem11TChannelMgrFUl */
-void JASystem::TChannelMgr::getLogicalChannel(unsigned long) {
+JASystem::TChannel* JASystem::TChannelMgr::getLogicalChannel(u32) {
     /* Nonmatching */
 }
 
 /* 8028D778-8028D7D8       .text moveListHead__Q28JASystem11TChannelMgrFPQ28JASystem8TChannelUl */
-void JASystem::TChannelMgr::moveListHead(JASystem::TChannel*, unsigned long) {
-    /* Nonmatching */
+bool JASystem::TChannelMgr::moveListHead(TChannel* param_1, u32 param_2) {
+    if (cutList(param_1) == -1) {
+        return false;
+    }
+    addListHead(param_1, param_2);
+    return true;
 }
 
 /* 8028D7D8-8028D838       .text moveListTail__Q28JASystem11TChannelMgrFPQ28JASystem8TChannelUl */
-void JASystem::TChannelMgr::moveListTail(JASystem::TChannel*, unsigned long) {
-    /* Nonmatching */
+bool JASystem::TChannelMgr::moveListTail(TChannel* param_1, u32 param_2) {
+    if (cutList(param_1) == -1) {
+        return false;
+    }
+    addListTail(param_1, param_2);
+    return true;
 }
 
 /* 8028D838-8028D8E4       .text addListHead__Q28JASystem11TChannelMgrFPQ28JASystem8TChannelUl */
-void JASystem::TChannelMgr::addListHead(JASystem::TChannel*, unsigned long) {
+void JASystem::TChannelMgr::addListHead(TChannel* param_1, u32 param_2) {
     /* Nonmatching */
+    TChannel** r31;
+    switch (param_2) {
+    case 0:
+        r31 = &field_0x8;
+        break;
+    case 1:
+        r31 = &field_0xc;
+        break;
+    case 2:
+        r31 = &field_0x10;
+        break;
+    case 3:
+        r31 = &field_0x14;
+        break;
+    default:
+        r31 = NULL;
+        break;
+    }
+    TChannel* r30 = *r31;
+    if (param_1->field_0x8) {
+        OSReport("RootJc Error 2\n");
+    }
+    param_1->field_0x8 = r31;
+    *r31 = param_1;
+    param_1->field_0x24 = r30;
 }
 
 /* 8028D8E4-8028D9C4       .text addListTail__Q28JASystem11TChannelMgrFPQ28JASystem8TChannelUl */
-void JASystem::TChannelMgr::addListTail(JASystem::TChannel*, unsigned long) {
+void JASystem::TChannelMgr::addListTail(TChannel*param_1, u32 param_2) {
     /* Nonmatching */
+    TChannel** r31;
+    switch (param_2) {
+    case 0:
+        r31 = &field_0x8;
+        break;
+    case 1:
+        r31 = &field_0xc;
+        break;
+    case 2:
+        r31 = &field_0x10;
+        break;
+    case 3:
+        r31 = &field_0x14;
+        break;
+    default:
+        r31 = NULL;
+        break;
+    }
+    TChannel* r30 = *r31;
+    if (param_1->field_0x8) {
+        OSReport("ROOTJC Error\n");
+    }
+    param_1->field_0x8 = r31;
+    if (!r30) {
+        *r31 = param_1;
+        param_1->field_0x24 = NULL;
+        return;
+    }
+    while (true) {
+        TChannel* tmp = r30->field_0x24;
+        if (!tmp) {
+            r30->field_0x24 = param_1;
+            param_1->field_0x24 = NULL;
+            break;
+        }
+        r30 = tmp;
+    }
 }
 
 /* 8028D9C4-8028DA38       .text getListHead__Q28JASystem11TChannelMgrFUl */
-void JASystem::TChannelMgr::getListHead(unsigned long) {
-    /* Nonmatching */
+JASystem::TChannel* JASystem::TChannelMgr::getListHead(u32 param_1) {
+    TChannel** r31;
+    switch (param_1) {
+    case 0:
+        r31 = &field_0x8;
+        break;
+    case 1:
+        r31 = &field_0xc;
+        break;
+    case 2:
+        r31 = &field_0x10;
+        break;
+    case 3:
+        r31 = &field_0x14;
+        break;
+    default:
+        r31 = NULL;
+        break;
+    }
+    TChannel* r30 = *r31;
+    if (!r30) {
+        return NULL;
+    }
+    *r31 = r30->field_0x24;
+    r30->field_0x8 = NULL;
+    return r30;
 }
 
 /* 8028DA38-8028DAF0       .text cutList__Q28JASystem11TChannelMgrFPQ28JASystem8TChannel */
-void JASystem::TChannelMgr::cutList(JASystem::TChannel*) {
+int JASystem::TChannelMgr::cutList(TChannel*) {
     /* Nonmatching */
 }
 
 /* 8028DAF0-8028DC34       .text receiveAllChannels__Q28JASystem11TChannelMgrFPQ28JASystem11TChannelMgr */
-void JASystem::TChannelMgr::receiveAllChannels(JASystem::TChannelMgr*) {
+void JASystem::TChannelMgr::receiveAllChannels(TChannelMgr*) {
     /* Nonmatching */
 }
 
 /* 8028DC34-8028DDD0       .text checkLimitStart__Q28JASystem11TChannelMgrFUl */
-void JASystem::TChannelMgr::checkLimitStart(unsigned long) {
+int JASystem::TChannelMgr::checkLimitStart(u32) {
     /* Nonmatching */
 }
 
 /* 8028DDD0-8028DE94       .text checkLimitStop__Q28JASystem11TChannelMgrFPQ28JASystem8TChannelUl */
-void JASystem::TChannelMgr::checkLimitStop(JASystem::TChannel*, unsigned long) {
+void JASystem::TChannelMgr::checkLimitStop(TChannel*, u32) {
     /* Nonmatching */
 }
-

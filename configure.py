@@ -691,7 +691,7 @@ config.libs = [
             Object(NonMatching, "JSystem/JAudio/JASDSPChannel.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASDSPInterface.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASDriverIF.cpp"),
-            Object(NonMatching, "JSystem/JAudio/JASChGlobal.cpp"),
+            Object(Matching,    "JSystem/JAudio/JASChGlobal.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASChAllocQueue.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASChannel.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASChannelMgr.cpp"),

@@ -14,6 +14,11 @@ namespace JASystem {
 
     class TDSPChannel {
     public:
+        TDSPChannel() {
+            field_0xc = NULL;
+            mCallback = NULL;
+        }
+        ~TDSPChannel() {}
         void init(u8);
         int allocate(u32);
         void free();
@@ -26,13 +31,11 @@ namespace JASystem {
         static int free(TDSPChannel*, u32);
         static TDSPChannel* getLower();
         static TDSPChannel* getLowerActive();
-        static bool breakLower(u8);
+        static BOOL breakLower(u8);
         static bool breakLowerActive(u8);
         static void updateAll();
         void onUpdate(u32);
         static int getNumBreak();
-        ~TDSPChannel();
-        TDSPChannel();
 
         u8 getNumber() { return mNumber; }
         // TODO: inlines
@@ -54,11 +57,11 @@ namespace JASystem {
         /* 0x01 */ u8 field_0x1;
         /* 0x02 */ u8 field_0x2;
         /* 0x03 */ u8 field_0x3;
-        /* 0x04 */ short field_0x4;
-        /* 0x06 */ short field_0x6;
+        /* 0x04 */ u16 field_0x4;
+        /* 0x06 */ u16 field_0x6;
         /* 0x08 */ int field_0x8;
         /* 0x0C */ DSPInterface::DSPBuffer* field_0xc;
-        /* 0x10 */ void* mCallback;
+        /* 0x10 */ int (*mCallback)(TDSPChannel*, u32);
 
         static int smnFree;
         static TDSPChannel* DSPCH;

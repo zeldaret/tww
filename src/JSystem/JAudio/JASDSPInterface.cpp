@@ -136,7 +136,7 @@ void JASystem::DSPInterface::DSPBuffer::playStart() {
     field_0x10c = 0;
     field_0x60 = 0;
     field_0x8 = 1;
-    field_0x66 = 1;
+    field_0x66 = 0;
     for (int i = 0; i < 4; i++) {
         field_0x78[i] = 0;
         field_0xa8[i] = 0;
