@@ -14,7 +14,9 @@
 #include "d/d_procname.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_hostIO.h"
+#include "m_do/m_Do_mtx.h"
 #include "dolphin/types.h"
 
 
@@ -54,12 +56,12 @@ public:
 static daTbox_HIO_c l_HIO;
 
 struct modelInfo {
-    u16 modelId;
-    u16 openBckId;
-    u16 btkId;
-    u16 brkId;
-    u16 closedColId;
-    u16 openColId;
+    s16 modelId;
+    s16 openBckId;
+    s16 btkId;
+    s16 brkId;
+    s16 closedColId;
+    s16 openColId;
 };
 
 static modelInfo l_modelInfo[] = {
@@ -73,10 +75,10 @@ class daTbox_c : public fopAc_ac_c {
 public:
     daTbox_c();
 
-    void commonShapeSet();
-    void effectShapeSet();
-    void envShapeSet();
-    void bgCheckSet();
+    s32 commonShapeSet();
+    s32 effectShapeSet();
+    s32 envShapeSet();
+    s32 bgCheckSet();
 
     void searchRoomNo();
     void lightReady();
@@ -132,30 +134,28 @@ public:
     /* 0x0290 */ u32 mRoomNo;
     /* 0x0294 */ request_of_phase_process_class mPhs;
 
-    /* 0x029C */ J3DModel* mModel;
-    /* 0x02A0 */ mDoExt_bckAnm mBckAnm;
-    /* 0x02B0 */ mDoExt_btkAnm* mBtkAnm;
-    /* 0x02B4 */ mDoExt_brkAnm* mBrkAnm;
+    /* 0x029C */ J3DModel* mChestMdl;
+    /* 0x02A0 */ mDoExt_bckAnm mOpenAnm;
+    /* 0x02B0 */ mDoExt_btkAnm* mpAppearTexAnm;
+    /* 0x02B4 */ mDoExt_brkAnm* mpAppearRegAnm;
 
-    /* 0x02B8 */ cBgW* mBgWCol;
+    /* 0x02B8 */ dBgW* mpBgWClosed;
+    /* 0x02BC */ dBgW* mpBgWOpen;
+    /* 0x02C0 */ dBgW* mpBgWVines;
 
-    /* 0x02BC */ dBgW* m02BC;
-    /* 0x02C0 */ dBgW* m02C0;
     /* 0x02C4 */ dBgW* m02C4;
 
-    /* 0x02C8 */ J3DModel* mModel2;
-
-    /* 0x02CC */ mDoExt_bckAnm mBckAnm2;
-    /* 0x02DC */ mDoExt_btkAnm mBtkAnm2;
-    /* 0x02F0 */ mDoExt_brkAnm mBrkAnm2;
+    /* 0x02C8 */ J3DModel* mpFlashMdl;
+    /* 0x02CC */ mDoExt_bckAnm mFlashAnm;
+    /* 0x02DC */ mDoExt_btkAnm mFlashTexAnm;
+    /* 0x02F0 */ mDoExt_brkAnm mFlashRegAnm;
     
     /* 0x0308 */ u32 m0308;
 
     /* 0x030C */ mDoExt_brkAnm mBrkAnm3;
 
-    /* 0x0324 */ J3DModel* mModel3;
-
-    /* 0x0328 */ mDoExt_brkAnm mBrkAnm4;
+    /* 0x0324 */ J3DModel* mTactPlatformMdl;
+    /* 0x0328 */ mDoExt_brkAnm mTactPlatformBrk;
 
     typedef bool (daTbox_c::*actionFunc)();
     /* 0x0340 */ actionFunc mActionFunc;
@@ -202,23 +202,196 @@ daTbox_HIO_c::daTbox_HIO_c() {
 }
 
 /* 00000124-00000550       .text commonShapeSet__8daTbox_cFv */
-void daTbox_c::commonShapeSet() {
-    /* Nonmatching */
+s32 daTbox_c::commonShapeSet() {
+    modelInfo& mdlInfo = getModelInfo();
+
+    // Load model
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Dalways", mdlInfo.modelId);
+    JUT_ASSERT(0xA0, modelData != 0);
+
+    u32 modelFlags = 0x11000022;
+
+    // Load open animation
+    J3DAnmTransform* openAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Dalways", mdlInfo.openBckId);
+    if (mOpenAnm.init(modelData, openAnm, true, 0,  1.0f, 0, -1, false) == 0) {
+        return cPhs_ERROR_e;
+    }
+
+    // Load texture anim, if requested
+    if (mdlInfo.btkId > 0) {
+        mpAppearTexAnm = new mDoExt_btkAnm();
+        if (mpAppearTexAnm == NULL) {
+            return cPhs_ERROR_e;
+        }
+
+        J3DAnmTextureSRTKey* appearTexData = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dalways", mdlInfo.btkId);
+        if (mpAppearTexAnm->init(modelData, appearTexData, true, 2, 1.0f, 0, -1, false, 0) == 0) {
+            return cPhs_ERROR_e;
+        }
+
+        modelFlags |= 0x1200;
+    }
+
+    // Load color anim, if requested
+    if (mdlInfo.brkId > 0) {
+        mpAppearRegAnm = new mDoExt_brkAnm();
+        if (mpAppearRegAnm == NULL) {
+            return cPhs_ERROR_e;
+        }
+
+        J3DAnmTevRegKey* appearRegData = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", mdlInfo.brkId);
+        if (mpAppearRegAnm->init(modelData, appearRegData, true, 0, 1.0f, 0, -1, false, 0) == 0) {
+            return cPhs_ERROR_e;
+        }
+
+        modelFlags |= 0xF020000;
+    }
+
+    // Create model
+    mChestMdl = mDoExt_J3DModel__create(modelData, 0x80000, modelFlags);
+    if (mChestMdl == NULL) {
+        return cPhs_ERROR_e;
+    }
+
+    // Set up Triforce platform for the type that spawns via Wind Waker song
+    if (getFuncType() == FUNC_TYPE_TACT) {
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Dalways", 0x17);
+        JUT_ASSERT(0xE2, modelData);
+
+        mTactPlatformMdl = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000000);
+        if (mTactPlatformMdl == NULL) {
+            return cPhs_ERROR_e;
+        }
+
+        J3DAnmTevRegKey* tactPlatformBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", 0x1F);
+        if (mTactPlatformBrk.init(modelData, tactPlatformBrk, true, 0, 1.0f, 0, -1, false, 0) == 0) {
+            return cPhs_ERROR_e;
+        }
+    }
+
+    mChestMdl->setBaseScale(mScale);
+
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mChestMdl->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    if (getFuncType() == FUNC_TYPE_TACT) {
+        mDoMtx_stack_c::transM(0.0f, 1.0f, 0.0f);
+        mTactPlatformMdl->setBaseTRMtx(mDoMtx_stack_c::get());
+    }
+
+    mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000598-00000764       .text effectShapeSet__8daTbox_cFv */
-void daTbox_c::effectShapeSet() {
-    /* Nonmatching */
+s32 daTbox_c::effectShapeSet() {
+    J3DModelData* flashModelData = (J3DModelData*)dComIfG_getObjectRes("Dalways", 0x16);
+    JUT_ASSERT(0x117, flashModelData != 0);
+    
+    mpFlashMdl = mDoExt_J3DModel__create(flashModelData, 0x80000, 0x1000200);
+    if (mpFlashMdl == NULL) {
+        return cPhs_ERROR_e;
+    }
+
+    J3DAnmTransform* flashAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Dalways", 0x0B);
+    if (mFlashAnm.init(flashModelData, flashAnm, true, 0, 1.0f, 0, -1, false) == 0) {
+        return cPhs_ERROR_e;
+    }
+
+    J3DAnmTextureSRTKey* flashTexAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dalways", 0x25);
+    if (mFlashTexAnm.init(flashModelData, flashTexAnm, true, 0, 1.0f, 0, -1, false, 0) == 0) {
+        return cPhs_ERROR_e;
+    }
+
+    J3DAnmTevRegKey* flashRegAnm = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", 0x1E);
+
+    s32 regInit = mFlashRegAnm.init(flashModelData, flashRegAnm, true, 0, 1.0f, 0, -1, false, 0);
+    return regInit != 0 ? 4 : 5;
 }
 
 /* 00000764-00000928       .text envShapeSet__8daTbox_cFv */
-void daTbox_c::envShapeSet() {
-    /* Nonmatching */
+s32 daTbox_c::envShapeSet() {
+    modelInfo& mdlInfo = getModelInfo();
+
+    // Load model
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Dalways", mdlInfo.modelId);
+
+    J3DTexture* mdlTex = modelData->getTexture();
+    if (mdlTex == NULL) {
+        return cPhs_ERROR_e;
+    }
+
+    JUTNameTab* texNameTable = modelData->getTextureName();
+    if (texNameTable == NULL) {
+        return cPhs_ERROR_e;
+    }
+
+    for (u16 i = 0; i < mdlTex->getNum(); i++) {
+        const char* texName = texNameTable->getName(i);
+        int cmpResult = strcmp(texName, "__dummy");
+
+        if (cmpResult == 0) {
+            mdlTex->setResTIMG(i, *mDoGph_gInf_c::getFrameBufferTimg());
+        }
+    }
+
+    mDoExt_modelTexturePatch(modelData);
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000928-00000BB0       .text bgCheckSet__8daTbox_cFv */
-void daTbox_c::bgCheckSet() {
-    /* Nonmatching */
+s32 daTbox_c::bgCheckSet() {
+    modelInfo& mdlInfo = getModelInfo();
+
+    cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes("Dalways", mdlInfo.closedColId);
+    JUT_ASSERT(0x195, bgd != 0);
+
+    mpBgWClosed = new dBgW();
+    if (mpBgWClosed == NULL) {
+        return cPhs_ERROR_e;
+    }
+
+    if (mpBgWClosed->Set(bgd, 1, &mMtx) == 1) {
+        return cPhs_ERROR_e;
+    }
+
+    bgd = (cBgD_t*)dComIfG_getObjectRes("Dalways", mdlInfo.openColId);
+    JUT_ASSERT(0x1A6, bgd != 0);
+
+    mpBgWOpen = new dBgW();
+    if (mpBgWOpen == NULL) {
+        return cPhs_ERROR_e;
+    }
+
+    if (mpBgWOpen->Set(bgd, 1, &mMtx) == 1) {
+        return cPhs_ERROR_e;
+    }
+
+    if (getFuncType() == FUNC_TYPE_SWITCH_VISIBLE) {
+        bgd = (cBgD_t*)dComIfG_getObjectRes("Dalways", 0x2E);
+        JUT_ASSERT(0x1B9, bgd != 0);
+
+        mpBgWVines = new dBgW();
+        if (mpBgWVines == NULL) {
+            return cPhs_ERROR_e;
+        }
+
+        if (mpBgWVines->Set(bgd, 1, &mMtx) == 1) {
+            return cPhs_ERROR_e;
+        }
+    }
+
+    mpBgWClosed->Move();
+    mpBgWOpen->Move();
+
+    if (mpBgWVines != NULL) {
+        mpBgWVines->Move();
+    }
+
+    m02C4 = NULL;
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000BB0-00000C14       .text searchRoomNo__8daTbox_cFv */
@@ -407,7 +580,7 @@ s32 daTbox_c::demoProc() {
                 dComIfGp_evmng_cutEnd(mStaffId);
             }
             else {
-                if (mBckAnm.play() != 0) {
+                if (mOpenAnm.play() != 0) {
                     m03F4 = 1;
                     dComIfGp_evmng_cutEnd(mStaffId);
                     fopAcM_seStart(this, JA_SE_OBJ_TBOX_OPEN_S2, 0);
@@ -419,7 +592,7 @@ s32 daTbox_c::demoProc() {
                 dComIfGp_evmng_cutEnd(mStaffId);
             }
             else {
-                if (mBckAnm.play() != 0) {
+                if (mOpenAnm.play() != 0) {
                     m03F4 = 1;
                     dComIfGp_evmng_cutEnd(mStaffId);
                     fopAcM_seStart(this, JA_SE_OBJ_TBOX_OPEN_S2, 0);
