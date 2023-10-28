@@ -87,6 +87,7 @@ public:
         daPyFlg0_UNK4              = 0x00000004,
         daPyFlg0_UNK10             = 0x00000010,
         daPyFlg0_CUT_AT_FLG        = 0x00000040,
+        daPyFlg0_UNK100            = 0x00000100,
         daPyFlg0_PUSH_PULL_KEEP    = 0x00000800,
         daPyFlg0_UNK1000           = 0x00001000,
         daPyFlg0_UNK4000           = 0x00004000,
@@ -100,7 +101,7 @@ public:
     enum daPy_FLG1 {
         daPyFlg1_EQUIP_DRAGON_SHIELD  = 0x00000001,
         daPyFlg1_NPC_CALL_COMMAND     = 0x00000002,
-        daPyFlg1_UNK8                 = 0x00000008,
+        daPyFlg1_CASUAL_CLOTHES       = 0x00000008,
         daPyFlg1_FORCE_VOMIT_JUMP     = 0x00000010,
         daPyFlg1_NPC_NOT_CHANGE       = 0x00000040,
         daPyFlg1_UNK80                = 0x00000080,
@@ -150,7 +151,7 @@ public:
     /* 0x2A0 */ u32 mNoResetFlg1;
     /* 0x2A4 */ u32 mResetFlg0;
     /* 0x2A8 */ f32 field_0x2a8;
-    /* 0x2AC */ u8 field_0x2AC[0x2B0 - 0x2AC];
+    /* 0x2AC */ f32 field_0x2ac;
     /* 0x2B0 */ f32 field_0x2b0;
     /* 0x2B4 */ csXyz mBodyAngle;
     /* 0x2BA */ u8 field_0x2BA[0x2BC - 0x2BA];

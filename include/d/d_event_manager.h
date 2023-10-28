@@ -10,6 +10,7 @@ class fopAc_ac_c;
 class dEvent_exception_c {
 public:
     dEvent_exception_c() { mEventInfoIdx = -1; }
+    int setStartDemo(int eventInfoIdx);
 
     /* 0x0 */ s32 mEventInfoIdx;
     /* 0x4 */ u8 field_0x4;
@@ -64,6 +65,8 @@ public:
     BOOL ChkPresentEnd();
     void CancelPresent();
     void checkStartDemo();
+
+    int setStartDemo(int eventInfoIdx) { return mException.setStartDemo(eventInfoIdx); }
 
     /* 0x000 */ dEvDtBase_c mList;
     /* 0x020 */ int mCameraPlay;

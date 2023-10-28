@@ -2036,3 +2036,48 @@ public:
 const daPy_HIO_warp_c1 daPy_HIO_warp_c0::m = {
     53, 12, 28, 4, 1.2f, 1.6f, 0.5f, 0.1f, 1.35f,
 };
+
+class daPy_HIO_battle_c1 {
+public:
+    /* 0x00 */ f32 field_0x0;
+    /* 0x04 */ f32 field_0x4;
+};
+
+class daPy_HIO_battle_c0 {
+public:
+    static daPy_HIO_battle_c1 const m;
+};
+
+const daPy_HIO_battle_c1 daPy_HIO_battle_c0::m = {
+    0.0f, 1.5f,
+};
+
+class daPy_HIO_dam_c1 {
+public:
+    /* 0x00 */ s16 field_0x0;
+    /* 0x02 */ s16 field_0x2;
+};
+
+class daPy_HIO_dam_c0 {
+public:
+    static daPy_HIO_dam_c1 const m;
+};
+
+const daPy_HIO_dam_c1 daPy_HIO_dam_c0::m = {
+    30, 20,
+};
+
+class daPy_HIO_magicShield_c1 {
+public:
+    /* 0x00 */ s16 field_0x0;
+    /* 0x02 */ s16 field_0x2;
+};
+
+class daPy_HIO_magicShield_c0 {
+public:
+    static daPy_HIO_magicShield_c1 const m;
+};
+
+const daPy_HIO_magicShield_c1 daPy_HIO_magicShield_c0::m = {
+    60, 0,
+};

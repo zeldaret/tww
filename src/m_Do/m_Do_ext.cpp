@@ -1096,12 +1096,12 @@ void mDoExt_MtxCalcAnmBlendTblOld::calc(u16 param_0) {
     }
     Mtx mtx;
     if (mBeforeCallback) {
-        mBeforeCallback(field_0x58, param_0, &info1, &quat3);
+        mBeforeCallback(mUserArea, param_0, &info1, &quat3);
     }
     mDoMtx_quat(mtx, &quat3);
     mDoExt_setJ3DData(mtx, &info1, param_0);
     if (mAfterCallback) {
-        mAfterCallback(field_0x58, param_0, &info1, &quat3);
+        mAfterCallback(mUserArea, param_0, &info1, &quat3);
     }
     *oldQuat = quat3;
     *oldTransInfo = info1;

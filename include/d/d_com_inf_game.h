@@ -906,6 +906,10 @@ inline s16 dComIfGs_getRestartOptionAngleY() {
     return g_dComIfG_gameInfo.save.getRestart().getRestartOptionAngleY();
 }
 
+inline u32 dComIfGs_getLastSceneMode() {
+    return g_dComIfG_gameInfo.save.getRestart().getLastMode();
+}
+
 inline void dComIfGs_setRestartOption(s8 i_option) {
     g_dComIfG_gameInfo.save.getRestart().setRestartOption(i_option);
 }
@@ -2032,6 +2036,10 @@ inline void dComIfGp_evmng_remove() {
 
 inline void dComIfGp_evmng_setGoal(cXyz* pos) {
     dComIfGp_getPEvtManager()->setGoal(pos);
+}
+
+inline int dComIfGp_evmng_startDemo(int eventInfoIdx) {
+    return dComIfGp_getPEvtManager()->setStartDemo(eventInfoIdx);
 }
 
 /**

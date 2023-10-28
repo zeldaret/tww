@@ -288,23 +288,25 @@ struct mDoExt_MtxCalcAnmBlendTbl : public J3DMtxCalcMaya {
 };
 
 struct mDoExt_MtxCalcAnmBlendTblOld : public mDoExt_MtxCalcAnmBlendTbl {
+    typedef int (*CalcCallback)(u32, u16, J3DTransformInfo*, Quaternion*);
+
     mDoExt_MtxCalcAnmBlendTblOld(mDoExt_MtxCalcOldFrame* oldFrame, int num, mDoExt_AnmRatioPack* anmRatio) : mDoExt_MtxCalcAnmBlendTbl(num, anmRatio) {
         mOldFrame = oldFrame;
         mBeforeCallback = NULL;
         mAfterCallback = NULL;
-        field_0x58 = 0;
+        mUserArea = 0;
     }
     virtual ~mDoExt_MtxCalcAnmBlendTblOld();
     virtual void calc(u16);
 
-    void setAfterCalc(int (*)(u32, u16, J3DTransformInfo*, Quaternion*));
-    void setBeforeCalc(int (*)(u32, u16, J3DTransformInfo*, Quaternion*));
-    void setUserArea(u32);
+    void setUserArea(u32 area)  { mUserArea = area; }
+    void setBeforeCalc(CalcCallback callback) { mBeforeCallback = callback; }
+    void setAfterCalc(CalcCallback callback) { mAfterCallback = callback; }
 
-    /* 0x58 */ u32 field_0x58;
+    /* 0x58 */ u32 mUserArea;
     /* 0x5C */ mDoExt_MtxCalcOldFrame* mOldFrame;
-    /* 0x60 */ void (*mBeforeCallback)(u32, u16, J3DTransformInfo*, Quaternion*);
-    /* 0x64 */ void (*mAfterCallback)(u32, u16, J3DTransformInfo*, Quaternion*);
+    /* 0x60 */ CalcCallback mBeforeCallback;
+    /* 0x64 */ CalcCallback mAfterCallback;
 };  // Size: 0x90
 
 class mDoExt_McaMorfCallBack1_c {

@@ -16,7 +16,8 @@ class daPy_anmHeap_c {
 public:
     /* 0x0 */ u16 mIdx;
     /* 0x2 */ u16 field_0x2;
-    /* 0x4 */ u32 field_0x4;
+    /* 0x4 */ u16 field_0x4;
+    /* 0x6 */ u16 field_0x6;
     /* 0x8 */ void* m_buffer;
     /* 0xC */ JKRSolidHeap* mpAnimeHeap;
 };
@@ -37,6 +38,9 @@ public:
     void onLockFlg() { mLockFlag = true; }
     void offLockFlg() { mLockFlag = false; }
     void setPos(const cXyz* i_pos) { mPos = *i_pos; }
+    void setSightTex(void* sightTex) { mSightTex = sightTex; }
+    void setLockTex(void* lockTex) { mpLockTex = lockTex; }
+    void setImage(ResTIMG* image) { mpImg = image; }
 
 private:
     /* 0x04 */ bool mDrawFlag;
@@ -45,8 +49,8 @@ private:
     /* 0x08 */ cXyz mPos;
     /* 0x14 */ Mtx field_0x14;
     /* 0x44 */ ResTIMG* mpImg;
-    /* 0x48 */ u8* mpData;
-    /* 0x4C */ void* field_0x4c;
+    /* 0x48 */ void* mpLockTex;
+    /* 0x4C */ void* mSightTex;
 };
 
 class daPy_actorKeep_c {
@@ -174,7 +178,7 @@ public:
     void draw();
     ~daPy_swBlur_c() {}
 
-    /* 0x010 */ u8 field_0x010[0x014 - 0x010];
+    /* 0x010 */ ResTIMG* mpBlurTex;
     /* 0x014 */ int field_0x014;
     /* 0x018 */ int field_0x018;
     /* 0x01C */ int mBlurColorType;
@@ -1189,7 +1193,12 @@ public:
         DPROC_ICE_SLIP_e = 0xDA,
     };
 
-    enum daPy_HEAP_TYPE {};
+    enum daPy_HEAP_TYPE {
+        HEAP_TYPE_UNDER_UPPER_e = 0,
+        HEAP_TYPE_TEXTURE_ANIME_e = 1,
+        HEAP_TYPE_TEXTURE_SCROLL_e = 2,
+        HEAP_TYPE_UNK3_e = 3,
+    };
 
     enum daPy_ANM {};
 
@@ -1220,8 +1229,8 @@ public:
     void checkGroupItem(int, int);
     void checkSetItemTrigger(int, int);
     void auraJointCB0(int);
-    void jointBeforeCB(int, J3DTransformInfo*, Quaternion*);
-    void jointAfterCB(int, J3DTransformInfo*, Quaternion*);
+    BOOL jointBeforeCB(int, J3DTransformInfo*, Quaternion*);
+    BOOL jointAfterCB(int, J3DTransformInfo*, Quaternion*);
     void jointCB0(int);
     void jointCB1();
     void setAnimeHeap(JKRSolidHeap*);
@@ -1290,7 +1299,7 @@ public:
     void setAnimeUnequipSword();
     void setAnimeUnequipItem(u16);
     void setAnimeUnequip();
-    void checkBossGomaStage();
+    BOOL checkBossGomaStage();
     BOOL checkSingleItemEquipAnime() const;
     BOOL checkItemEquipAnime() const;
     BOOL checkEquipAnime() const;
@@ -1467,7 +1476,7 @@ public:
     void setStickData();
     void setBgCheckParam();
     u32 setParamData(int, int, int, int);
-    void checkLavaFace(cXyz*, int);
+    BOOL checkLavaFace(cXyz*, int);
     void checkFallCode();
     BOOL startRestartRoom(u32, int, f32, int);
     void checkSuccessGuard(int);
@@ -2040,7 +2049,12 @@ public:
     s16 checkTinkleShield() const { return mTinkleShieldTimer; }
     void setTinkleShield(s16 time) { mTinkleShieldTimer = time; }
     bool checkNoDamageMode() const { return checkEquipDragonShield() || checkTinkleShield() != 0; }
-
+    
+    int getStartRoomNo() { return fopAcM_GetParam(this) & 0x3F; }
+    int getStartMode() { return (fopAcM_GetParam(this) >> 0x0C) & 0xF; }
+    int getStartEvent() { return (fopAcM_GetParam(this) >> 0x18) & 0xFF; }
+    int getPhase() { return 0; } // TODO
+    
     virtual MtxP getLeftHandMatrix() { return mpCLModel->getAnmMtx(0x08); } // cl_LhandA joint
     virtual MtxP getRightHandMatrix() { return mpCLModel->getAnmMtx(0x0C); } // cl_RhandA joint
     virtual f32 getGroundY() { return mAcch.GetGroundH(); }
@@ -2084,8 +2098,8 @@ public:
     /* 0x032C */ J3DModel* mpCLModel;
     /* 0x0330 */ J3DModel* mpKatsuraModel;
     /* 0x0334 */ J3DModel* mpYamuModel;
-    /* 0x0338 */ ResTIMG* m0338;
-    /* 0x033C */ ResTIMG m033C;
+    /* 0x0338 */ ResTIMG* mpCurrLinktex;
+    /* 0x033C */ ResTIMG mOtherLinktex;
     /* 0x035C */ J3DAnmTexPattern* m035C;
     /* 0x0360 */ J3DTexNoAnm* mpTexNoAnm;
     /* 0x0364 */ J3DAnmTextureSRTKey* mpTexScrollResData;
@@ -2186,16 +2200,16 @@ public:
     /* 0x31AC */ fopAc_ac_c* mpAttnActorY;
     /* 0x31B0 */ fopAc_ac_c* mpAttnActorZ;
     /* 0x31B4 */ mDoExt_MtxCalcOldFrame* m_old_fdata;
-    /* 0x31B8 */ s16 mTexAnimeResIdx;
-    /* 0x31BA */ s16 m31BA;
-    /* 0x31BC */ s16 m31BC;
+    /* 0x31B8 */ u16 mTexAnimeResIdx;
+    /* 0x31BA */ u16 m31BA;
+    /* 0x31BC */ u16 m31BC;
     /* 0x31BE */ u16 m31BE;
     /* 0x31C0 */ void* mpTextureAnimeResData;
     /* 0x31C4 */ JKRSolidHeap* mpTextureAnimeResHeap;
     /* 0x31C8 */ u16 mTexScrollResIdx;
-    /* 0x31CA */ s16 m31CA;
-    /* 0x31CC */ s16 m31CC;
-    /* 0x31CE */ s16 m31CE;
+    /* 0x31CA */ u16 m31CA;
+    /* 0x31CC */ u16 m31CC;
+    /* 0x31CE */ u16 m31CE;
     /* 0x31D0 */ void* mpTextureScrollResData;
     /* 0x31D4 */ JKRSolidHeap* mpTextureScrollResHeap;
     /* 0x31D8 */ int mCurProcID;
@@ -2228,7 +2242,7 @@ public:
     /* 0x348C */ dAttList_c* mpAttnEntryY;
     /* 0x3490 */ dAttList_c* mpAttnEntryZ;
     /* 0x3494 */ char* m3494;
-    /* 0x3498 */ LIGHT_INFLUENCE m3498;
+    /* 0x3498 */ LIGHT_INFLUENCE mLightInfluence;
     /* 0x34B8 */ u8 m34B8;
     /* 0x34B9 */ u8 mFrontWallType;
     /* 0x34BA */ u8 m34BA;
@@ -2313,7 +2327,8 @@ public:
     /* 0x3548 */ u8 m3548[0x354C - 0x3548];
     /* 0x354C */ s16 m354C;
     /* 0x354E */ s16 mTinkleShieldTimer;
-    /* 0x3550 */ u8 m3550[0x3554 - 0x3550];
+    /* 0x3550 */ u8 m3550[0x3552 - 0x3550];
+    /* 0x3552 */ u16 mKeepItemType;
     /* 0x3554 */ s16 m3554;
     /* 0x3556 */ u8 m3556[0x355E - 0x3556];
     /* 0x355E */ u16 m355E;
@@ -2331,7 +2346,7 @@ public:
     /* 0x3584 */ int mCurrentGroundAttributeCode;
     /* 0x3588 */ u8 m3588[0x358C - 0x3588];
     /* 0x358C */ int mStaffIdx;
-    /* 0x3590 */ int m3590;
+    /* 0x3590 */ int mEventIdx;
     /* 0x3594 */ int m3594;
     /* 0x3598 */ f32 m3598;
     /* 0x359C */ u8 m359C[0x35A0 - 0x359C];
@@ -2344,7 +2359,7 @@ public:
     /* 0x35C8 */ f32 m35C8;
     /* 0x35CC */ u8 m35CC[0x35D0 - 0x35CC];
     /* 0x35D0 */ f32 m35D0;
-    /* 0x35D4 */ u8 m35D4[0x35D8 - 0x35D4];
+    /* 0x35D4 */ f32 m35D4;
     /* 0x35D8 */ f32 m35D8;
     /* 0x35DC */ u8 m35DC[0x35E4 - 0x35DC];
     /* 0x35E4 */ f32 m35E4;
@@ -2365,13 +2380,15 @@ public:
     /* 0x3620 */ u32 m3620;
     /* 0x3624 */ int m3624;
     /* 0x3628 */ int m3628;
-    /* 0x362C */ u8 m362C[0x3630 - 0x362C];
+    /* 0x362C */ int m362C;
     /* 0x3630 */ int m3630;
     /* 0x3634 */ int m3634;
     /* 0x3638 */ int mMsgId;
     /* 0x363C */ u8 m363C[0x3644 - 0x363C];
     /* 0x3644 */ f32 m3644;
-    /* 0x3648 */ u8 m3648[0x3668 - 0x3648];
+    /* 0x3648 */ u8 m3648[0x3654 - 0x3648];
+    /* 0x3654 */ f32 m3654;
+    /* 0x3658 */ u8 m3658[0x3668 - 0x3658];
     /* 0x3668 */ J3DTransformInfo m3668;
     /* 0x3688 */ cXyz m3688;
     /* 0x3694 */ cXyz mOldSpeed;
@@ -2394,14 +2411,14 @@ public:
     /* 0x37E4 */ daPy_swBlur_c mSwBlur;
     /* 0x3DB8 */ daPy_footData_c mFootData[2];
     /* 0x3FE8 */ dCcD_Stts mStts;
-    /* 0x4024 */ dCcD_Cyl m4024;
-    /* 0x4154 */ dCcD_Cyl m4154;
-    /* 0x4284 */ dCcD_Cyl m4284;
-    /* 0x43B4 */ dCcD_Cyl m43B4;
-    /* 0x44E4 */ dCcD_Cps m44E4[3];
-    /* 0x488C */ dCcD_Cps m488C;
-    /* 0x49C4 */ dCcD_Sph m49C4;
-    /* 0x4AF0 */ dCcD_Cps m4AF0;
+    /* 0x4024 */ dCcD_Cyl mCyl;
+    /* 0x4154 */ dCcD_Cyl mWindCyl1;
+    /* 0x4284 */ dCcD_Cyl mAtCyl;
+    /* 0x43B4 */ dCcD_Cyl mWindCyl2;
+    /* 0x44E4 */ dCcD_Cps mAtCps[3];
+    /* 0x488C */ dCcD_Cps mFanWindCps1;
+    /* 0x49C4 */ dCcD_Sph mFanWindSph;
+    /* 0x4AF0 */ dCcD_Cps mFanWindCps2;
     
     struct ProcInitTableEntry {
         /* 0x00 */ daPy_ProcFunc mProcFunc;
