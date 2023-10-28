@@ -3,51 +3,114 @@
 // Translation Unit: JASChGlobal.cpp
 //
 
-#include "JASChGlobal.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASChGlobal.h"
+#include "JSystem/JAudio/JASChAllocQueue.h"
+#include "JSystem/JAudio/JASChannel.h"
+#include "JSystem/JAudio/JASChannelMgr.h"
+#include "JSystem/JAudio/JASSystemHeap.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+
+JASystem::TChannelMgr* JASystem::TGlobalChannel::sChannelMgr;
+JASystem::TChannel* JASystem::TGlobalChannel::sChannel;
+JASystem::TOscillator* JASystem::TGlobalChannel::sOscillator;
 
 /* 8028AAEC-8028AB58       .text getChannelHandle__Q28JASystem14TGlobalChannelFUl */
-void JASystem::TGlobalChannel::getChannelHandle(unsigned long) {
-    /* Nonmatching */
+JASystem::TChannel* JASystem::TGlobalChannel::getChannelHandle(u32 ch_num) {
+    JUT_ASSERT(34, ch_num < (256));
+    return sChannel + ch_num;
 }
 
 /* 8028AB58-8028AD50       .text init__Q28JASystem14TGlobalChannelFv */
 void JASystem::TGlobalChannel::init() {
-    /* Nonmatching */
+    sChannelMgr = new (JASDram, 32) TChannelMgr();
+    JUT_ASSERT(44, sChannelMgr);
+    TChannelMgr* mgr = sChannelMgr;
+    mgr->init();
+    sChannel = new (JASDram, 32) TChannel[256];
+    JUT_ASSERT(50, sChannel);
+    sOscillator = new (JASDram, 32) TOscillator[1024];
+    JUT_ASSERT(52, sOscillator);
+    for (int i = 0; i < 256; i++) {
+        for (u32 j = 0; j < 4; j++) {
+            sChannel[i].setOscillator(j, &sOscillator[i * 4 + j]);
+        }
+        sChannel[i].init();
+        mgr->addListHead(&sChannel[i], 0);
+        sChannel[i].field_0x4 = mgr;
+    }
+    mgr->field_0x0 = 256;
+    OSReport("----- JASChannel size : %d\n", sizeof(TChannel));
 }
 
 /* 8028AD50-8028ADE8       .text alloc__Q28JASystem14TGlobalChannelFPQ28JASystem11TChannelMgrUl */
-void JASystem::TGlobalChannel::alloc(JASystem::TChannelMgr*, unsigned long) {
-    /* Nonmatching */
+int JASystem::TGlobalChannel::alloc(TChannelMgr* param_1, u32 param_2) {
+    int i;
+    for (i = 0; i < param_2; i++) {
+        TChannel* channel = sChannelMgr->getListHead(0);
+        if (!channel) {
+            break;
+        }
+        param_1->addListHead(channel, 0);
+        channel->field_0x4 = param_1;
+        channel->init();
+    }
+    param_1->field_0x0 += i;
+    sChannelMgr->field_0x0 -= i;
+    return i;
 }
 
 /* 8028ADE8-8028AE4C       .text release__Q28JASystem14TGlobalChannelFPQ28JASystem8TChannel */
-void JASystem::TGlobalChannel::release(JASystem::TChannel*) {
-    /* Nonmatching */
+int JASystem::TGlobalChannel::release(TChannel* param_1) {
+    sChannelMgr->addListHead(param_1, 0);
+    param_1->field_0x4->field_0x0--;
+    sChannelMgr->field_0x0++;
+    param_1->field_0x4 = sChannelMgr;
+    return 0;
 }
 
 /* 8028AE4C-8028AF8C       .text releaseAll__Q28JASystem14TGlobalChannelFPQ28JASystem11TChannelMgr */
-void JASystem::TGlobalChannel::releaseAll(JASystem::TChannelMgr*) {
-    /* Nonmatching */
+int JASystem::TGlobalChannel::releaseAll(TChannelMgr* param_1) {
+    TChannel* channel;
+    while (true) {
+        channel = param_1->getListHead(0);
+        if (!channel) {
+            break;
+        }
+        sChannelMgr->addListHead(channel, 0);
+        channel->field_0x4 = sChannelMgr;
+    };
+    while (true) {
+        channel = param_1->getListHead(1);
+        if (!channel) {
+            break;
+        }
+        sChannelMgr->addListHead(channel, 1);
+        channel->field_0x4 = sChannelMgr;
+        channel->field_0xd4 = 1;
+    }
+    while (true) {
+        channel = param_1->getListHead(2);
+        if (!channel) {
+            break;
+        }
+        sChannelMgr->addListHead(channel, 2);
+        channel->field_0x4 = sChannelMgr;
+        channel->field_0xd4 = 1;
+    }
+    while (true) {
+        channel = param_1->getListHead(3);
+        if (!channel) {
+            break;
+        }
+        if (TDSPQueue::deleteQueue(channel)) {
+            sChannelMgr->addListHead(channel, 0);
+        } else {
+            sChannelMgr->addListHead(channel, 3);
+        }
+        channel->field_0x4 = sChannelMgr;
+    }
+    sChannelMgr->field_0x0 += param_1->field_0x0;
+    param_1->field_0x0 = 0;
+    return 0;
 }
-
-/* 8028AF8C-8028AFC8       .text __dt__Q28JASystem11TOscillatorFv */
-JASystem::TOscillator::~TOscillator() {
-    /* Nonmatching */
-}
-
-/* 8028AFC8-8028AFF8       .text __ct__Q28JASystem11TOscillatorFv */
-JASystem::TOscillator::TOscillator() {
-    /* Nonmatching */
-}
-
-/* 8028AFF8-8028B058       .text __dt__Q28JASystem8TChannelFv */
-JASystem::TChannel::~TChannel() {
-    /* Nonmatching */
-}
-
-/* 8028B058-8028B0C4       .text __ct__Q28JASystem8TChannelFv */
-JASystem::TChannel::TChannel() {
-    /* Nonmatching */
-}
-

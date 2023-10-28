@@ -3,31 +3,76 @@
 // Translation Unit: JASChAllocQueue.cpp
 //
 
-#include "JASChAllocQueue.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASChAllocQueue.h"
+#include "JSystem/JAudio/JASChannel.h"
+#include "JSystem/JAudio/JASChannelMgr.h"
+#include "JSystem/JAudio/JASDSPChannel.h"
+#include "JSystem/JUtility/JUTAssert.h"
+
+JSUList<JASystem::TChannel> JASystem::sDspQueueList;
 
 /* 8028B0C4-8028B224       .text deQueue__Q28JASystem9TDSPQueueFv */
 void JASystem::TDSPQueue::deQueue() {
-    /* Nonmatching */
+    JSULink<TChannel>* link;
+    JSULink<TChannel>* next;
+    u32 r31 = TDSPChannel::getNumBreak();
+    for (link = sDspQueueList.getFirst(); link; link = next) {
+        next = link->getNext();
+        TChannel* channel = link->getObject();
+        TDSPChannel* dspChannel = TDSPChannel::alloc(0, u32(channel));
+        if (!dspChannel) {
+            if (r31) {
+                r31--;
+                continue;
+            }
+            if (TDSPChannel::breakLower(channel->field_0x48)) {
+                continue;
+            }
+            channel->field_0x28(channel, 6);
+            sDspQueueList.remove(&channel->field_0xd8);
+        } else {
+            channel->field_0x20 = dspChannel;
+            int status = channel->playLogicalChannel();
+            JUT_ASSERT(69, status);
+            int sst = channel->field_0x4->cutList(channel);
+            JUT_ASSERT(72, sst >= 0);
+            channel->field_0x4->addListTail(channel, 1);
+            sDspQueueList.remove(&channel->field_0xd8);
+        }
+
+    }
 }
 
 /* 8028B224-8028B288       .text enQueue__Q28JASystem9TDSPQueueFPQ28JASystem8TChannel */
-void JASystem::TDSPQueue::enQueue(JASystem::TChannel*) {
+void JASystem::TDSPQueue::enQueue(TChannel* param_1) {
     /* Nonmatching */
+    JSUListIterator<TChannel> it;
+    for (it = sDspQueueList.getFirst(); it != sDspQueueList.getEnd(); it++) {
+        if ((it->field_0x48 & 0xff) <= (param_1->field_0x48 & 0xff)) {
+            break;
+        }
+    }
+    sDspQueueList.insert(it.mLink, &param_1->field_0xd8);
 }
 
 /* 8028B288-8028B2BC       .text deleteQueue__Q28JASystem9TDSPQueueFPQ28JASystem8TChannel */
-void JASystem::TDSPQueue::deleteQueue(JASystem::TChannel*) {
-    /* Nonmatching */
+int JASystem::TDSPQueue::deleteQueue(TChannel* param_1) {
+    return sDspQueueList.remove(&param_1->field_0xd8);
 }
 
 /* 8028B2BC-8028B350       .text checkQueue__Q28JASystem9TDSPQueueFv */
 void JASystem::TDSPQueue::checkQueue() {
-    /* Nonmatching */
+    deQueue();
+    JSULink<TChannel>* next;
+    for (JSULink<TChannel>* link = sDspQueueList.getFirst(); link; link = next) {
+        next = link->getNext();
+        TChannel* channel = link->getObject();
+        if (channel->field_0x30 > 0) {
+            channel->field_0x30--;
+        }
+        if (channel->field_0x30 == 0) {
+            channel->field_0x28(channel, 6);
+            sDspQueueList.remove(&channel->field_0xd8);
+        }
+    }
 }
-
-/* 8028B394-8028B3E8       .text __dt__29JSUList<Q28JASystem8TChannel>Fv */
-JSUList<JASystem::TChannel>::~JSUList() {
-    /* Nonmatching */
-}
-

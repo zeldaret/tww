@@ -3,36 +3,60 @@
 // Translation Unit: JASOscillator.cpp
 //
 
-#include "JASOscillator.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASOscillator.h"
 
 /* 8028DE94-8028DECC       .text init__Q28JASystem11TOscillatorFv */
 void JASystem::TOscillator::init() {
-    /* Nonmatching */
+    field_0x0 = NULL;
+    field_0x4 = 1;
+    field_0x5 = 0;
+    field_0x6 = 0;
+    field_0x8 = 0.0f;
+    field_0xc = 0.0f;
+    field_0x10 = 0.0f;
+    field_0x14 = 0.0f;
+    field_0x18 = 0;
+    field_0x1c = 0.0f;
 }
 
 /* 8028DECC-8028DF2C       .text initStart__Q28JASystem11TOscillatorFv */
 void JASystem::TOscillator::initStart() {
-    /* Nonmatching */
+    field_0x4 = 2;
+    field_0x18 = 0;
+    if (!field_0x0 || !field_0x0->table) {
+        field_0xc = 0.0f;
+        return;
+    }
+    field_0x6 = 0;
+    field_0x8 = 0.0f;
+    field_0x10 = 0.0f;
+    field_0x18 = 0;
+    field_0x8 -= field_0x0->field_0x4;
 }
 
 /* 8028DF2C-8028E070       .text getOffset__Q28JASystem11TOscillatorFv */
-void JASystem::TOscillator::getOffset() {
+f32 JASystem::TOscillator::getOffset() {
     /* Nonmatching */
 }
 
 /* 8028E070-8028E0AC       .text forceStop__Q28JASystem11TOscillatorFv */
-void JASystem::TOscillator::forceStop() {
-    /* Nonmatching */
+bool JASystem::TOscillator::forceStop() {
+    if (field_0x4 == 5) {
+        return false;
+    }
+    field_0x6 = 0;
+    field_0x8 = 0.0f;
+    field_0x10 = field_0xc;
+    field_0x4 = 5;
+    return true;
 }
 
 /* 8028E0AC-8028E238       .text release__Q28JASystem11TOscillatorFv */
-void JASystem::TOscillator::release() {
+bool JASystem::TOscillator::release() {
     /* Nonmatching */
 }
 
 /* 8028E238-8028E5EC       .text calc__Q28JASystem11TOscillatorFPs */
-void JASystem::TOscillator::calc(short*) {
+void JASystem::TOscillator::calc(s16*) {
     /* Nonmatching */
 }
-

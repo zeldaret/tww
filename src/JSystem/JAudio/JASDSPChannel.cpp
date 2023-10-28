@@ -4,9 +4,12 @@
 //
 
 #include "JSystem/JAudio/JASDSPChannel.h"
+#include "JSystem/JAudio/JASAudioThread.h"
+#include "JSystem/JAudio/JASChAllocQueue.h"
 #include "JSystem/JAudio/JASDSPInterface.h"
 #include "JSystem/JAudio/JASRate.h"
 #include "JSystem/JAudio/JASSystemHeap.h"
+#include "JSystem/JAudio/dspproc.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
@@ -202,7 +205,7 @@ JASystem::TDSPChannel* JASystem::TDSPChannel::getLowerActive() {
 }
 
 /* 80289D10-80289DC8       .text breakLower__Q28JASystem11TDSPChannelFUc */
-bool JASystem::TDSPChannel::breakLower(u8 param_1) {
+BOOL JASystem::TDSPChannel::breakLower(u8 param_1) {
     TDSPChannel* dspch = getLower();
     if (dspch->field_0x3 > param_1) {
         return false;
@@ -239,6 +242,8 @@ bool JASystem::TDSPChannel::breakLowerActive(u8 param_1) {
     return true;
 }
 
+OSTick JASystem::history[10];
+OSTick JASystem::old_time;
 f32 JASystem::DSP_LIMIT_RATIO = 1.1f;
 
 /* 80289E68-8028A04C       .text updateAll__Q28JASystem11TDSPChannelFv */
@@ -246,30 +251,74 @@ void JASystem::TDSPChannel::updateAll() {
     /* Nonmatching */
     if (Kernel::gSubFrames <= 10) {
         OSTick time = OSGetTick();
-        OSTick tmp = time - old_time;
+        OSTick var3 = time - old_time;
         old_time = time;
-        history[Kernel::gSubFrames - TAudioThread::snIntCount] = tmp;
+        u32 var2 = Kernel::gSubFrames - TAudioThread::snIntCount;
+        history[var2] = var3;
+        if (var2) {
+            if (f32(history[0]) / var3 < DSP_LIMIT_RATIO) {
+                breakLowerActive(126);
+            }
+        }
     }
+    TDSPQueue::checkQueue();
+    for (u32 i = 0; i < 64; i++) {
+        if ((i & 0x0f) == 0 && i != 0) {
+            DSPReleaseHalt2(i - 1 >> 4);
+        }
+        TDSPChannel* dspChannel = DSPCH + i;
+        DSPInterface::DSPBuffer* dspBuffer = dspChannel->field_0xc;
+        if (dspChannel->field_0x1 == 1) {
+            continue;
+        }
+        if (dspBuffer->field_0x2 != 0) {
+            if (dspChannel->mCallback) {
+                dspChannel->onUpdate(2);
+            }
+            dspBuffer->field_0x2 = 0;
+            dspBuffer->field_0x0 = 0;
+            dspBuffer->flushChannel();
+            if (dspChannel->field_0x1 == 1) {
+                continue;
+            }
+        }
+        if (dspBuffer->field_0x10a == 0) {
+            dspBuffer->field_0x10c++;
+            if (dspBuffer->field_0x10c == dspChannel->field_0x4 && dspChannel->mCallback) {
+                dspChannel->mCallback(dspChannel, 4);
+            }
+        }
+        if (dspChannel->mCallback) {
+            if (dspChannel->field_0x6) {
+                dspChannel->field_0x6--;
+            }
+            if (dspChannel->field_0x6 == 0) {
+                dspChannel->onUpdate(0);
+                if (dspChannel->field_0x6 == 0) {
+                    dspBuffer->field_0x2 = 0;
+                    dspBuffer->field_0x0 = 0;
+                    dspBuffer->flushChannel();
+                }
+            }
+        }
+    }
+    DSPReleaseHalt2(3);
 }
 
 /* 8028A04C-8028A08C       .text onUpdate__Q28JASystem11TDSPChannelFUl */
-void JASystem::TDSPChannel::onUpdate(u32) {
-    /* Nonmatching */
+void JASystem::TDSPChannel::onUpdate(u32 param_1) {
+    if (mCallback) {
+        field_0x6 = mCallback(this, param_1);
+    }
 }
 
 /* 8028A08C-8028A0C0       .text getNumBreak__Q28JASystem11TDSPChannelFv */
 int JASystem::TDSPChannel::getNumBreak() {
-    /* Nonmatching */
-}
-
-/* 8028A0C0-8028A0FC       .text __dt__Q28JASystem11TDSPChannelFv */
-JASystem::TDSPChannel::~TDSPChannel() {
-    /* Nonmatching */
-}
-
-/* 8028A0FC-8028A10C       .text __ct__Q28JASystem11TDSPChannelFv */
-JASystem::TDSPChannel::TDSPChannel() {
-    /* Nonmatching */
-    field_0xc = NULL;
-    mCallback = NULL;
+    int count = 0;
+    for (int i = 0; i < 64; i++) {
+        if (DSPCH[i].field_0x1 == 2) {
+            count++;
+        }
+    }
+    return count;
 }

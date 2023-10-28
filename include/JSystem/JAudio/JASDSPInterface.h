@@ -99,7 +99,7 @@ namespace JASystem {
             /* 0x106 */ short field_0x106;
             /* 0x108 */ short field_0x108;
             /* 0x10A */ u16 field_0x10a;
-            /* 0x10C */ int field_0x10c;
+            /* 0x10C */ u32 field_0x10c;
             /* 0x110 */ int field_0x110;
             /* 0x114 */ int field_0x114;
             /* 0x118 */ int field_0x118;
