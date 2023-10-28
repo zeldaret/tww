@@ -155,11 +155,13 @@ public:
     const u32 MaskWaterHit() { return m_flags & WATER_HIT; }
     const bool ChkWaterHit() { return MaskWaterHit(); }
     void ClrWaterNone() { m_flags &= ~WATER_NONE; }
+    void SetWaterCheckOffset(f32 offset) { m_water_check_offset = offset; }
     void OnLineCheck() { m_flags |= LINE_CHECK; }
     void ClrRoofNone() { m_flags &= ~ROOF_NONE; }
     void SetRoofCrrHeight(f32 height) { m_roof_crr_height = height; }
     void SetGrndNone() { m_flags |= GRND_NONE; }
     void ClrGrndNone() { m_flags &= ~GRND_NONE; }
+    void SetGroundCheckOffset(f32 offset) { m_ground_check_offset = offset; }
     bool ChkMoveBGOnly() const { return m_flags & MOVE_BG_ONLY; }
     void SetWallHit() { m_flags |= WALL_HIT; }
     void ClrWallNone() { m_flags &= ~WALL_NONE; }
@@ -188,7 +190,7 @@ public:
     /* 0x08C */ f32 m_ground_up_h;
     /* 0x090 */ f32 m_ground_up_h_diff;
     /* 0x094 */ f32 m_ground_h;
-    /* 0x098 */ f32 field_0x98;
+    /* 0x098 */ f32 m_ground_check_offset;
     /* 0x09C */ cM3dGPla m_pla;
     /* 0x0B0 */ u8 field_0xb0;
     /* 0x0B4 */ f32 field_0xb4;
@@ -196,7 +198,7 @@ public:
     /* 0x0BC */ f32 m_roof_y;
     /* 0x0C0 */ f32 m_roof_crr_height;
     /* 0x0C4 */ f32 m_roof_height;
-    /* 0x0C8 */ f32 field_0xc8;
+    /* 0x0C8 */ f32 m_water_check_offset;
     /* 0x0CC */ cBgS_PolyInfo* pm_out_poly_info;
     /* 0x0D0 */ f32 m_sea_height;
     /* 0x0D4 */ dBgS_GndChk m_gnd;

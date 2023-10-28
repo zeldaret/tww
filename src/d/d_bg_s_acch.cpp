@@ -53,7 +53,7 @@ dBgS_Acch::dBgS_Acch() {
     pm_speed = NULL;
     m_ground_h = -1000000000.0f;
     m_ground_up_h = 0.0f;
-    field_0x98 = 60.0f;
+    m_ground_check_offset = 60.0f;
     m_ground_up_h_diff = 0.0f;
     field_0xb0 = 0;
     field_0xb4 = 0.0f;
@@ -63,7 +63,7 @@ dBgS_Acch::dBgS_Acch() {
     m_roof_y = 0.0f;
     m_roof_crr_height = 0.0f;
     m_roof_height = 0.0f;
-    field_0xc8 = 200.0f;
+    m_water_check_offset = 200.0f;
     pm_angle = NULL;
     pm_shape_angle = NULL;
     m_my_ac = NULL;
@@ -157,12 +157,12 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
     field_0xb4 = pm_pos->y;
     f32 oldY = pm_old_pos->y;
     f32 temp7 = lowH + oldY;
-    f32 temp8 = field_0x98 + pm_pos->y;
+    f32 temp8 = m_ground_check_offset + pm_pos->y;
     
     bool ranLineCheck = false;
     OffLineCheckHit();
     if (!ChkLineCheckNone() && !cM3d_IsZero(lowH_R)) {
-        if (distXZ2 > lowH_R*lowH_R || temp7 > temp8 || distY > field_0x98 || ChkLineCheck()) {
+        if (distXZ2 > lowH_R*lowH_R || temp7 > temp8 || distY > m_ground_check_offset || ChkLineCheck()) {
             ranLineCheck = true;
             LineCheck(i_bgs);
         }

@@ -541,7 +541,7 @@ inline u16 calcZModeID(u8 param_0, u8 param_1, u8 param_2) {
     return (param_1 * 2) + (param_0 * 0x10) + param_2;
 }
 
-extern J3DZModeInfo j3dZModeTable[2];
+extern J3DZModeInfo j3dZModeTable[0x20];
 
 struct J3DZMode {
     J3DZMode() { mZModeID = j3dDefaultZModeID; }

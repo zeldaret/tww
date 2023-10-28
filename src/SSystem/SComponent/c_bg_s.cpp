@@ -126,15 +126,19 @@ void* cBgS::ConvDzb(void* work) {
     JUT_ASSERT(0x219, ((int)pbgd->m_ti_tbl % 4) == 0);
 
     if (pbgd->m_v_tbl != NULL)
-        pbgd->m_v_tbl = (cBgD_Vtx_t*)((u32)pbgd + (u32)pbgd->m_v_tbl);
-    pbgd->m_t_tbl = (cBgD_Tri_t*)((u32)pbgd + (u32)pbgd->m_t_tbl);
-    pbgd->m_b_tbl = (cBgD_Blk_t*)((u32)pbgd + (u32)pbgd->m_b_tbl);
-    pbgd->m_tree_tbl = (void*)((u32)pbgd + (u32)pbgd->m_tree_tbl);
-    pbgd->m_g_tbl = (cBgD_Grp_t*)((u32)pbgd + (u32)pbgd->m_g_tbl);
-    pbgd->m_ti_tbl = (void*)((u32)pbgd + (u32)pbgd->m_ti_tbl);
+        pbgd->m_v_tbl = (cBgD_Vtx_t*)((u32)pbgd->m_v_tbl + (u32)pbgd);
 
-    for (s32 i = 0; i < pbgd->m_g_num; i++)
+    pbgd->m_t_tbl = (cBgD_Tri_t*)((u32)pbgd->m_t_tbl + (u32)pbgd);
+    pbgd->m_b_tbl = (cBgD_Blk_t*)((u32)pbgd->m_b_tbl + (u32)pbgd);
+    pbgd->m_tree_tbl = (void*)((u32)pbgd->m_tree_tbl + (u32)pbgd);
+    pbgd->m_g_tbl = (cBgD_Grp_t*)((u32)pbgd->m_g_tbl + (u32)pbgd);
+    pbgd->m_ti_tbl = (void*)((u32)pbgd->m_ti_tbl + (u32)pbgd);
+
+    for (s32 i = 0; i < pbgd->m_g_num; i++) {
         pbgd->m_g_tbl[i].m_name = (char*)((u32)pbgd + (u32)pbgd->m_g_tbl[i].m_name);
+    }
+    
+    return pbgd;
 }
 
 /* 80246C98-80246D24       .text GetActorPointer__4cBgSCFi */
