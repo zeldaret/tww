@@ -74,15 +74,16 @@ int cBgS::Release(cBgW* bgw) {
     if (bgw == NULL)
         return true;
 
-    if (bgw->ChkUsed()) {
-        if (bgw->ChkUsed() && m_chk_element[bgw->GetId()].ChkUsed()) {
-            m_chk_element[bgw->GetId()].Release();
-            bgw->SetId(256);
-            return false;
-        }
+    if (bgw->ChkUsed() && bgw->GetId() >= 0 && bgw->GetId() < 0x100 && m_chk_element[bgw->GetId()].ChkUsed()) {
+        m_chk_element[bgw->GetId()].Release();
+        bgw->SetId(256);
+        goto done;
     }
 
     return true;
+
+done:
+    return false;
 }
 
 /* 8024669C-802466F0       .text Ct__4cBgSFv */
