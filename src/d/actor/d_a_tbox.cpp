@@ -9,12 +9,29 @@
 #include "d/d_bg_w.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
 #include "d/d_particle.h"
 #include "d/d_procname.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "dolphin/types.h"
+
+
+#define DEMO_PROC_WAIT 0
+#define DEMO_PROC_OPEN 1
+#define DEMO_PROC_APPEAR 2
+#define DEMO_PROC_OPEN_SHORT 3
+
+#define FUNC_TYPE_NORMAL 0
+#define FUNC_TYPE_SWITCH 1
+#define FUNC_TYPE_ENEMIES 2
+#define FUNC_TYPE_SWITCH_VISIBLE 3
+#define FUNC_TYPE_SWITCH_TRANSPARENT 4
+#define FUNC_TYPE_GRAVITY 5
+#define FUNC_TYPE_TACT 6
+#define FUNC_TYPE_EXTRA_SAVE_INFO 7
+#define FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN 8
 
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
@@ -36,6 +53,22 @@ public:
 
 static daTbox_HIO_c l_HIO;
 
+struct modelInfo {
+    u16 modelId;
+    u16 openBckId;
+    u16 btkId;
+    u16 brkId;
+    u16 closedColId;
+    u16 openColId;
+};
+
+static modelInfo l_modelInfo[] = {
+    { 0x000E, 0x0009, 0x0022, 0x001B, 0x002A, 0x002B },
+    { 0x000F, 0x0008, 0x0023, 0x001C, 0x002A, 0x002B },
+    { 0x0010, 0x0008, 0x0024, 0x001D, 0x002A, 0x002B },
+    { 0x0014, 0x0008, 0xFFFF, 0xFFFF, 0x002C, 0x002D }
+};
+
 class daTbox_c : public fopAc_ac_c {
 public:
     daTbox_c();
@@ -50,7 +83,7 @@ public:
     
     void checkEnv();
     BOOL checkOpen();
-    void getModelInfo();
+    modelInfo& getModelInfo();
     
     void clrDzb();
     void setDzb();
@@ -58,7 +91,7 @@ public:
     void surfaceProc();
     void checkRoomDisp(int);
     u32 getShapeType();
-    void getFuncType();
+    s32 getFuncType();
     void checkNormal();
     
     s32 CreateHeap();
@@ -78,20 +111,20 @@ public:
     void demoProcAppear_Tact();
     void demoProcAppear();
 
-    void demoProc();
+    s32 demoProc();
 
     void OpenInit_com();
     void OpenInit();
 
     void setCollision();
 
-    void actionWait();
-    void actionDemo();
-    void actionDemo2();
-    void actionOpenWait();
-    void actionSwOnWait();
-    void actionSwOnWait2();
-    void actionGenocide();
+    bool actionWait();
+    bool actionDemo();
+    bool actionDemo2();
+    bool actionOpenWait();
+    bool actionSwOnWait();
+    bool actionSwOnWait2();
+    bool actionGenocide();
 
     s32 execute();
     s32 draw();
@@ -124,7 +157,7 @@ public:
 
     /* 0x0328 */ mDoExt_brkAnm mBrkAnm4;
 
-    typedef void (daTbox_c::*actionFunc)();
+    typedef bool (daTbox_c::*actionFunc)();
     /* 0x0340 */ actionFunc mActionFunc;
 
     /* 0x034C */ float m034C;
@@ -209,8 +242,8 @@ BOOL daTbox_c::checkOpen() {
 }
 
 /* 00000D48-00000D78       .text getModelInfo__8daTbox_cFv */
-void daTbox_c::getModelInfo() {
-    /* Nonmatching */
+modelInfo& daTbox_c::getModelInfo() {
+    return l_modelInfo[getShapeType()];
 }
 
 /* 00000D78-00000DD0       .text clrDzb__8daTbox_cFv */
@@ -235,12 +268,13 @@ void daTbox_c::checkRoomDisp(int) {
 
 /* 00000FC0-00000FE4       .text getShapeType__8daTbox_cFv */
 u32 daTbox_c::getShapeType() {
-    /* Nonmatching */
+    s32 shapeType = (fopAcM_GetParam(this) >> 0x14) & 0x0F;
+    return shapeType >= 4 ? 0 : shapeType;
 }
 
 /* 00000FE4-00000FF0       .text getFuncType__8daTbox_cFv */
-void daTbox_c::getFuncType() {
-    /* Nonmatching */
+s32 daTbox_c::getFuncType() {
+    return fopAcM_GetParam(this) & 0x7F;
 }
 
 /* 00000FF0-0000108C       .text checkNormal__8daTbox_cFv */
@@ -314,8 +348,98 @@ void daTbox_c::demoProcAppear() {
 }
 
 /* 00001E4C-0000210C       .text demoProc__8daTbox_cFv */
-void daTbox_c::demoProc() {
-    /* Nonmatching */
+s32 daTbox_c::demoProc() {
+    static char* action_table[] = {
+        "WAIT",
+        "OPEN",
+        "APPEAR",
+        "OPEN_SHORT"
+    };
+
+    s32 actionIdx = dComIfGp_evmng_getMyActIdx(mStaffId, action_table, 4, 0, 0);
+    bool bIsAdvance = dComIfGp_evmng_getIsAddvance(mStaffId);
+
+    if (bIsAdvance) {
+        m03F4 = 0;
+
+        switch (actionIdx) {
+            case DEMO_PROC_OPEN:
+                OpenInit();
+                lightReady();
+                mPLight.mPower = 0.0f;
+                mEfLight.mPower = 0.0f;
+                break;
+            case DEMO_PROC_APPEAR:
+                m03F0 |= 0x20;
+                m03EC = -130.0f;
+                
+                setDzb();
+
+                if (getFuncType() == FUNC_TYPE_TACT) {
+                    m03F0 &= -3;
+                    demoInitAppear_Tact();
+                }
+                else {
+                    m03F0 &= -4;
+                    demoInitAppear();
+                }
+
+                break;
+            case DEMO_PROC_OPEN_SHORT:
+                OpenInit_com();
+                break;
+        }
+    }
+
+    switch (actionIdx) {
+        case DEMO_PROC_APPEAR:
+            if (getFuncType() == FUNC_TYPE_TACT) {
+                demoProcAppear_Tact();
+            }
+            else {
+                demoProcAppear();
+            }
+
+            surfaceProc();
+            break;
+        case DEMO_PROC_OPEN:
+            if (m03F4 != 0) {
+                dComIfGp_evmng_cutEnd(mStaffId);
+            }
+            else {
+                if (mBckAnm.play() != 0) {
+                    m03F4 = 1;
+                    dComIfGp_evmng_cutEnd(mStaffId);
+                    fopAcM_seStart(this, JA_SE_OBJ_TBOX_OPEN_S2, 0);
+                }
+            }
+            break;
+        case DEMO_PROC_OPEN_SHORT:
+            if (m03F4 != 0) {
+                dComIfGp_evmng_cutEnd(mStaffId);
+            }
+            else {
+                if (mBckAnm.play() != 0) {
+                    m03F4 = 1;
+                    dComIfGp_evmng_cutEnd(mStaffId);
+                    fopAcM_seStart(this, JA_SE_OBJ_TBOX_OPEN_S2, 0);
+                }
+            }
+            break;
+        default:
+            dComIfGp_evmng_cutEnd(mStaffId);
+            break;
+    }
+
+    if (m03F0 & 0x10) {
+        demoProcOpen();
+    }
+
+    if (m03F0 & 0x08) {
+        dKy_set_allcol_ratio(mAllColRatio);
+    }
+
+    return 0;
 }
 
 /* 0000210C-00002250       .text OpenInit_com__8daTbox_cFv */
@@ -334,37 +458,37 @@ void daTbox_c::setCollision() {
 }
 
 /* 000024AC-000024B4       .text actionWait__8daTbox_cFv */
-void daTbox_c::actionWait() {
-    /* Nonmatching */
+bool daTbox_c::actionWait() {
+    return true;
 }
 
 /* 000024B4-000025A4       .text actionDemo__8daTbox_cFv */
-void daTbox_c::actionDemo() {
+bool daTbox_c::actionDemo() {
     /* Nonmatching */
 }
 
 /* 000025A4-00002634       .text actionDemo2__8daTbox_cFv */
-void daTbox_c::actionDemo2() {
+bool daTbox_c::actionDemo2() {
     /* Nonmatching */
 }
 
 /* 00002634-000027C8       .text actionOpenWait__8daTbox_cFv */
-void daTbox_c::actionOpenWait() {
+bool daTbox_c::actionOpenWait() {
     /* Nonmatching */
 }
 
 /* 000027C8-000028A0       .text actionSwOnWait__8daTbox_cFv */
-void daTbox_c::actionSwOnWait() {
+bool daTbox_c::actionSwOnWait() {
     /* Nonmatching */
 }
 
 /* 000028A0-00002914       .text actionSwOnWait2__8daTbox_cFv */
-void daTbox_c::actionSwOnWait2() {
+bool daTbox_c::actionSwOnWait2() {
     /* Nonmatching */
 }
 
 /* 00002914-00002A2C       .text actionGenocide__8daTbox_cFv */
-void daTbox_c::actionGenocide() {
+bool daTbox_c::actionGenocide() {
     /* Nonmatching */
 }
 
