@@ -275,7 +275,6 @@ u32 daTbox_c::getShapeType() {
 
 /* 00000FE4-00000FF0       .text getFuncType__8daTbox_cFv */
 s32 daTbox_c::getFuncType() {
-    /* Nonmatching */
     return fopAcM_GetParam(this) & 0x7F;
 }
 
