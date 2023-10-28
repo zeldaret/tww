@@ -12,6 +12,7 @@ class dBgS_SphChk;
 class cM3dGTri;
 class dBgS_CrrPos;
 class cBgS_PolyInfo;
+class fopAc_ac_c;
 
 class dBgW : public cBgW {
 public:
