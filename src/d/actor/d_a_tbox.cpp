@@ -351,7 +351,6 @@ void daTbox_c::demoProcAppear() {
 
 /* 00001E4C-0000210C       .text demoProc__8daTbox_cFv */
 s32 daTbox_c::demoProc() {
-    /* Nonmatching */
     static char* action_table[] = {
         "WAIT",
         "OPEN",
