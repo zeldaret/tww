@@ -683,7 +683,7 @@ BOOL daArrow_c::procMove() {
                             fopAcM_SetParam(this, 2);
                             field_0x604 = 0x28;
                             
-                            dComIfG_Bgsp()->i_GetTriPla(mLinChk);
+                            dComIfG_Bgsp()->GetTriPla(mLinChk);
                             
                             csXyz temp10;
                             temp10.x = cM_atan2s(speed.y, speed.absXZ());
@@ -783,7 +783,7 @@ BOOL daArrow_c::procMove() {
             fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
             fopAcM_SetParam(this, 2);
             field_0x604 = 0x28;
-            cM3dGPla* triPla = dComIfG_Bgsp()->i_GetTriPla(mLinChk);
+            cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mLinChk);
             
             csXyz temp10;
             temp10.x = cM_atan2s(-triPla->mNormal.y, -triPla->mNormal.absXZ());
@@ -892,7 +892,7 @@ BOOL daArrow_c::procReturn() {
     setBlur();
     
     if (dComIfG_Bgsp()->LineCross(&mLinChk)) {
-        cM3dGPla* triPla = dComIfG_Bgsp()->i_GetTriPla(mLinChk);
+        cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mLinChk);
         f32 temp2 = speed.abs();
         cXyz temp1;
         C_VECReflect(&speed, &triPla->mNormal, &temp1);
@@ -902,7 +902,7 @@ BOOL daArrow_c::procReturn() {
         
         s32 temp3 = -field_0x69c;
         field_0x69c = (temp3 / 2);
-        triPla = dComIfG_Bgsp()->i_GetTriPla(mLinChk);
+        triPla = dComIfG_Bgsp()->GetTriPla(mLinChk);
         if (triPla->mNormal.y >= 0.5f) {
             field_0x69a = 1;
         }
