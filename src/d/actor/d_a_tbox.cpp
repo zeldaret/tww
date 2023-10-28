@@ -243,7 +243,6 @@ BOOL daTbox_c::checkOpen() {
 
 /* 00000D48-00000D78       .text getModelInfo__8daTbox_cFv */
 modelInfo& daTbox_c::getModelInfo() {
-    /* Nonmatching */
     return l_modelInfo[getShapeType()];
 }
 
@@ -460,7 +459,6 @@ void daTbox_c::setCollision() {
 
 /* 000024AC-000024B4       .text actionWait__8daTbox_cFv */
 bool daTbox_c::actionWait() {
-    /* Nonmatching */
     return true;
 }
 
