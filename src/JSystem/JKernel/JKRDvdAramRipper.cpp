@@ -79,7 +79,6 @@ JSUList<JKRADCommand> JKRDvdAramRipper::sDvdAramAsyncList;
 
 /* 802BDBFC-802BDF34       .text callCommand_Async__16JKRDvdAramRipperFP12JKRADCommand */
 JKRADCommand* JKRDvdAramRipper::callCommand_Async(JKRADCommand* command) {
-    /* Nonmatching */
     s32 compression;
     s32 uncompressedSize;
     bool bVar1 = true;
@@ -116,7 +115,8 @@ JKRADCommand* JKRDvdAramRipper::callCommand_Async(JKRADCommand* command) {
             DCInvalidateRange(bufPtr, 0x20);
 
             compression = JKRCheckCompressed(bufPtr);
-            uncompressedSize = JKRDecompExpandSize(bufPtr);
+            u32 expandSize = JKRDecompExpandSize(bufPtr);
+            uncompressedSize = expandSize;
             if (command->field_0x18 && uncompressedSize > command->field_0x18) {
                 uncompressedSize = command->field_0x18;
             }
@@ -277,9 +277,15 @@ static int JKRDecompressFromDVDToAram(JKRDvdFile* dvdFile, u32 param_1, u32 file
 /* 802BE34C-802BE5C0       .text decompSZS_subroutine__FPUcUl */
 static int decompSZS_subroutine(u8* src, u32 dest) {
     u32 endAddr;
-    s32 validBitCount = 0;
-    u32 currCodeByte = 0;
-    u32 startDest = dest;
+    u8* copySource;
+    s32 validBitCount;
+    u32 currCodeByte;
+    s32 numBytes;
+    u32 startDest;
+
+    validBitCount = 0;
+    currCodeByte = 0;
+    startDest = dest;
 
     if (src[0] != 'Y' || src[1] != 'a' || src[2] != 'z' || src[3] != '0') {
         return -1;
@@ -319,10 +325,10 @@ static int decompSZS_subroutine(u8* src, u32 dest) {
             src++;
             readCount++;
         } else {
-            u32 dist = src[1] | (src[0] & 0x0f) << 8;
-            s32 numBytes = src[0] >> 4;
+            u32 dist = ((src[0] & 0x0F) << 8) | src[1];
+            numBytes = src[0] >> 4;
             src += 2;
-            u8* copySource = refCurrent - dist - 1;
+            copySource = refCurrent - dist - 1;
             if (copySource < refBuf) {
                 copySource += refEnd - refBuf;
             }
