@@ -370,6 +370,11 @@ template<> struct TBox<TVec2<f32> > {
         addPos(TVec2<f32>(x, y));
     }
 
+    void setSize(TVec2<f32> size) {
+        f.x = size.x;
+        f.y = size.y;
+    }
+
     void addPos(const TVec2<f32>& pos) {
         i.add(pos);
         f.add(pos);

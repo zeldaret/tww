@@ -3,10 +3,9 @@
 // Translation Unit: JRenderer.cpp
 //
 
-#include "JSystem/JRenderer/JRenderer.h"
-#include "dolphin/types.h"
+#include "dolphin/gx/GX.h"
 
 /* 802D5EB8-802D5F38       .text JRNLoadTexCached__F11_GXTexMapIDUl15_GXTexCacheSizeUl15_GXTexCacheSize */
-void JRNLoadTexCached(_GXTexMapID, unsigned long, _GXTexCacheSize, unsigned long, _GXTexCacheSize) {
+void JRNLoadTexCached(GXTexMapID texmap, u32, GXTexCacheSize, u32, GXTexCacheSize) {
     /* Nonmatching */
 }

@@ -481,7 +481,7 @@ d/d_cloth_packet.cpp:
 	.sbss       start:0x803EA060 end:0x803EA070
 	.sdata2     start:0x803EB8F8 end:0x803EB980
 
-d/actor/d_a_obj.cpp:
+d/d_a_obj.cpp:
 	.text       start:0x80064520 end:0x80065B50
 	.rodata     start:0x80343618 end:0x803436B8
 	.data       start:0x8036A458 end:0x8036A4B8
