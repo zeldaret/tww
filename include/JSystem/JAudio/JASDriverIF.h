@@ -23,8 +23,6 @@ namespace JASystem {
         extern u16 MAX_AUTOMIXERLEVEL;
         extern u32 JAS_SYSTEM_OUTPUT_MODE;
         extern u8 JAS_UPDATE_INTERVAL;
-
-        extern int C5BASE_PITCHTABLE;
     };
 }
 

@@ -127,10 +127,7 @@ namespace JASystem {
         extern u16 JAS_DSP_PREFIX;
         extern DSPBuffer* CH_BUF;
         extern FXBuffer* FX_BUF;
-        extern float sDSPVolume;
-
-        extern u32 DSPADPCM_FILTER[];
-        extern u32 DSPRES_FILTER[];
+        extern f32 sDSPVolume;
     };
 }
 
