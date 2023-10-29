@@ -3,30 +3,19 @@
 // Translation Unit: d_a_obj_movebox.cpp
 //
 
-#include "d/d_a_obj.h"
-#include "d/d_bg_s_movebg_actor.h"
+#include "d/actor/d_a_obj_movebox.h"
 #include "d/d_cc_d.h"
-#include "d/d_path.h"
 #include "d/d_procname.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
 #include "dolphin/types.h"
-#include "d/d_bg_s_gnd_chk.h"
-#include "d/d_bg_s_wtr_chk.h"
-#include "d/d_bg_s_lin_chk.h"
 #include "d/actor/d_a_obj_buoyflag.h"
 #include "d/actor/d_a_obj_jump.h"
 #include "d/actor/d_a_obj_mmrr.h"
 #include "d/actor/d_a_obj_mkie.h"
-
-// Needed for the .data and .bss sections to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
-u8 dummy5[0x4C];
+#include "d/actor/d_a_player.h"
 
 enum ECUBE_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
@@ -103,274 +92,6 @@ enum OSIBLK_RES_FILE_ID { // IDs and indexes are synced
 };
 
 namespace daObjMovebox {
-    struct Act_c;
-    
-    struct Type_Attr {
-        /* 0x00 */ s16 m00;
-        /* 0x02 */ s16 m02;
-        /* 0x04 */ s16 m04;
-        /* 0x06 */ s16 m06;
-        /* 0x08 */ s16 m08;
-        /* 0x0A */ s16 m0A;
-        /* 0x0C */ f32 m0C;
-        /* 0x10 */ f32 m10;
-        /* 0x14 */ f32 m14;
-        /* 0x18 */ f32 m18;
-        /* 0x1C */ f32 m1C;
-        /* 0x20 */ f32 m20;
-        /* 0x24 */ f32 mLandSmokeScale;
-        /* 0x28 */ f32 m28;
-        /* 0x2C */ f32 m2C;
-        /* 0x30 */ f32 m30;
-        /* 0x34 */ f32 m34;
-        /* 0x38 */ s16 m38;
-        /* 0x3C */ f32 m3C;
-        /* 0x40 */ f32 m40;
-        /* 0x44 */ f32 m44;
-        /* 0x48 */ f32 m48;
-        /* 0x4C */ f32 m4C;
-        /* 0x50 */ f32 m50;
-        /* 0x54 */ f32 m54;
-        /* 0x58 */ int mModelFileIndex;
-        /* 0x5C */ int mDZBFileIndex;
-        /* 0x60 */ int mDZBHeapSize;
-        /* 0x64 */ f32 mScaleY;
-        /* 0x68 */ f32 m68;
-        /* 0x6C */ f32 m6C;
-        /* 0x70 */ f32 mScaleXZ;
-        /* 0x74 */ f32 m74;
-        /* 0x78 */ u32 mMoveSE;
-        /* 0x7C */ u32 mCantMoveSE;
-        /* 0x80 */ u32 mNormalFallSE;
-        /* 0x84 */ u32 mWaterFallSE;
-        /* 0x88 */ u32 mMagmaFallSE;
-        /* 0x8C */ s16 mCullMinX;
-        /* 0x8E */ s16 mCullMinY;
-        /* 0x90 */ s16 mCullMinZ;
-        /* 0x92 */ s16 mCullMaxX;
-        /* 0x94 */ s16 mCullMaxY;
-        /* 0x96 */ s16 mCullMaxZ;
-        /* 0x98 */ bool mbUseBGTevType;
-        /* 0x99 */ bool mbCastsShadow;
-        /* 0x9A */ bool m9A;
-    };  // Size: 0x9C
-    
-    struct BgcSrc_c {
-        /* 0x00 */ f32 m00; // z
-        /* 0x04 */ f32 m04; // x
-        /* 0x08 */ f32 m08; // z
-        /* 0x0C */ f32 m0C; // x
-    };
-    
-    struct Bgc_c {
-    public:
-        enum State_e {
-            BgcState_UNK01 = 0x01,
-            BgcState_UNK02 = 0x02,
-            BgcState_UNK04 = 0x04,
-            BgcState_UNK08 = 0x08,
-            BgcState_UNK10 = 0x10,
-            BgcState_UNK20 = 0x20,
-        };
-        
-        Bgc_c();
-        ~Bgc_c();
-        void gnd_pos(const Act_c*, const BgcSrc_c*, int, f32);
-        void wrt_pos(const cXyz&);
-        void wall_pos(const Act_c*, const BgcSrc_c*, int, s16, f32);
-        void proc_vertical(Act_c*);
-        bool chk_wall_pre(const Act_c*, const BgcSrc_c*, int, s16);
-        bool chk_wall_touch(const Act_c*, const BgcSrc_c*, s16);
-        bool chk_wall_touch2(const Act_c*, const BgcSrc_c*, int, s16);
-    
-    public:
-        /* 0x000 */ f32 mGroundY[23];
-        /* 0x05C */ int mMaxGroundIdx;
-        /* 0x060 */ f32 mWaterY;
-        /* 0x064 */ cXyz mWallPos[23];
-        /* 0x178 */ int mWallIdx;
-        /* 0x17C */ f32 mNearestWallDist;
-        /* 0x180 */ State_e mStateFlags;
-        
-        static dBgS_ObjGndChk M_gnd_work[23];
-        static dBgS_WtrChk M_wrt_work;
-        static dBgS_ObjLinChk M_wall_work[23];
-        static const BgcSrc_c M_lin5[5];
-        static const BgcSrc_c M_lin20[23];
-    };  // Size: 0x184
-    
-    class EffSmokeCB : public dPa_smokeEcallBack {
-    public:
-        EffSmokeCB() {}
-        virtual ~EffSmokeCB() {}
-    
-    public:
-        /* 0x20 */ u8 field_0x20[0x34 - 0x20];
-    };  // Size: 0x34
-    
-    struct Act_c : public dBgS_MoveBgActor {
-    public:
-        enum Type {
-            TYPE_BREAKABLE_WOODEN_CRATE = 0x0,  // Actor names: Kkiba or DKkiba
-            TYPE_BLACK_BOX              = 0x1,  // Actor names: osiBLK0 or DBLK0
-            TYPE_BLACK_BOX_WITH_STATUE  = 0x2,  // Actor names: osiBLK1 or DBLK1
-            TYPE_BIG_BLACK_BOX          = 0x3,  // Actor names: MpwrB
-            TYPE_WOODEN_CRATE           = 0x4,  // Actor names: (N/A)
-            TYPE_GOLDEN_CRATE           = 0x5,  // Actor names: Hbox2
-            TYPE_METAL_BOX              = 0x6,  // Actor names: Hbox1
-            TYPE_METAL_BOX_WITH_SPRING  = 0x7,  // Actor names: Hjump1
-            TYPE_WOODEN_CRATE_2         = 0x8,  // Actor names: Hseki2
-            TYPE_WOODEN_CRATE_3         = 0x9,  // Actor names: Hseki7
-            TYPE_MIRROR                 = 0xA,  // Actor names: Mmrr
-            TYPE_BLACK_BOX_WITH_MKIE    = 0xB,  // Actor names: MkieBB
-            TYPE_MOSSY_BLACK_BOX        = 0xC,  // Actor names: Ecube
-        };
-        
-        enum Mode {
-            MODE_WAIT   = 0x0,
-            MODE_WALK   = 0x1,
-            MODE_AFLOAT = 0x2,
-        };
-        
-        enum Prm_e {
-            PRM_TYPE_W = 0x04,
-            PRM_TYPE_S = 0x18,
-            
-            PRM_SWSAVE_W = 0x01,
-            PRM_SWSAVE_S = 0x1E,
-            
-            PRM_SWSAVE1_W = 0x08,
-            PRM_SWSAVE1_S = 0x08,
-            
-            PRM_ITEMNO_W = 0x06,
-            PRM_ITEMNO_S = 0x00,
-            
-            PRM_ITEMSAVE_W = 0x07,
-            PRM_ITEMSAVE_S = 0x10,
-            
-            PRM_BUOY_W = 0x01,
-            PRM_BUOY_S = 0x1F,
-        };
-        
-        typedef void (Act_c::*ModeFunc)();
-        
-        inline s32 Mthd_Create();
-        inline BOOL Mthd_Delete();
-        
-        s32 prm_get_type() const { return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S); }
-        s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
-        s32 prm_get_swSave1() const;
-        s32 prmZ_get_swSave2() const { return mType == TYPE_BLACK_BOX_WITH_MKIE ? 0xFF : (u8)(mPrmZ >> 8); }
-        s32 prmZ_get_swSave2_MkieB() const { return mType == TYPE_BLACK_BOX_WITH_MKIE ? (u8)(mPrmZ >> 8) : 0xFF; }
-        s32 prmZ_get_pathId() const { return mType == TYPE_BLACK_BOX_WITH_MKIE ? 0xFF : (mPrmZ & 0x00FF) >> 0; }
-        s32 prmX_get_evId() const { return (mPrmX & 0x00FF) >> 0; }
-        s32 prm_get_itemNo() const { return daObj::PrmAbstract(this, PRM_ITEMNO_W, PRM_ITEMNO_S); }
-        s32 prm_get_itemSave() const { return daObj::PrmAbstract(this, PRM_ITEMSAVE_W, PRM_ITEMSAVE_S); }
-        s32 prm_get_buoy() const { return daObj::PrmAbstract(this, PRM_BUOY_W, PRM_BUOY_S); }
-        s32 prm_get_dmy() const; // Unused?
-        
-        BOOL is_switch1() const { return fopAcM_isSwitch((Act_c*)this, prm_get_swSave1()); };
-        BOOL is_switch2() const { return fopAcM_isSwitch((Act_c*)this, prmZ_get_swSave2()); };
-        void on_switch1() const { fopAcM_onSwitch((Act_c*)this, prm_get_swSave1()); };
-        void on_switch2() const { fopAcM_onSwitch((Act_c*)this, prmZ_get_swSave2()); };
-        void off_switch1() const { fopAcM_offSwitch((Act_c*)this, prm_get_swSave1()); };
-        void off_switch2() const { fopAcM_offSwitch((Act_c*)this, prmZ_get_swSave2()); };
-        
-        void mode_proc_call() {
-            static ModeFunc mode_proc[] = {
-                &mode_wait,
-                &mode_walk,
-                &mode_afl,
-            };
-            (this->*mode_proc[mMode])();
-        }
-        
-        void prmZ_init();
-        void prmX_init();
-        const Type_Attr* attr() const; // TODO weak?
-        inline const Type_Attr* i_attr() const { return &M_attr[mType]; } // TODO weak?
-        void set_mtx();
-        void init_mtx();
-        void path_init();
-        void path_save();
-        int CreateHeap();
-        static void RideCallBack(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
-        static fopAc_ac_c* PPCallBack(fopAc_ac_c*, fopAc_ac_c*, s16, dBgW::PushPullLabel);
-        int Create();
-        void afl_sway();
-        void check_to_walk();
-        void clr_moment_cnt();
-        bool chk_appear() const;
-        void eff_set_slip_smoke_pos();
-        void eff_smoke_slip_start();
-        void eff_smoke_slip_end();
-        void eff_smoke_slip_remove();
-        void mode_wait_init();
-        void mode_wait();
-        void mode_walk_init();
-        void mode_walk();
-        void mode_afl_init();
-        void mode_afl();
-        void make_item();
-        void eff_break();
-        void sound_break();
-        void sound_slip();
-        void sound_limit();
-        void sound_land();
-        void vib_land();
-        void eff_land_smoke();
-        int Execute(Mtx**);
-        int Draw();
-        int Delete();
-    
-    public:
-        /* 0x2C8 */ request_of_phase_process_class mPhs;
-        /* 0x2D0 */ Mtx mMtx;
-        /* 0x300 */ J3DModel* mpModel;
-        /* 0x304 */ int mMode;
-        /* 0x308 */ dCcD_Stts mStts;
-        /* 0x344 */ dCcD_Cyl mCyl;
-        /* 0x474 */ Bgc_c mBgc;
-        /* 0x5F8 */ int mType;
-        /* 0x5FC */ u16 mPrmZ;
-        /* 0x5FE */ u16 mPrmX;
-        /* 0x600 */ dPath* mpPath;
-        /* 0x604 */ s16 m604;
-        /* 0x606 */ u8 m606[0x608 - 0x606];
-        /* 0x608 */ f32 m608;
-        /* 0x60C */ f32 m60C;
-        /* 0x610 */ f32 m610;
-        /* 0x614 */ f32 m614;
-        /* 0x618 */ f32 m618;
-        /* 0x61C */ f32 m61C;
-        /* 0x620 */ f32 m620;
-        /* 0x624 */ f32 m624;
-        /* 0x628 */ int m628;
-        /* 0x62C */ int m62C;
-        /* 0x630 */ f32 m630;
-        /* 0x634 */ int m634;
-        /* 0x638 */ u32 mPPLabel;
-        /* 0x63C */ s16 mMomentCnt[4];
-        /* 0x644 */ s16 m644;
-        /* 0x646 */ s16 m646;
-        /* 0x648 */ s16 m648;
-        /* 0x64A */ bool m64A;
-        /* 0x64B */ s8 mReverb;
-        /* 0x64C */ bool mbShouldAppear;
-        /* 0x64D */ bool mbPrmZInitialized;
-        /* 0x64E */ bool mbPrmXInitialized;
-        /* 0x64F */ bool m64F;
-        /* 0x650 */ EffSmokeCB mSmokeCbs[2];
-        /* 0x6B8 */ u32 mChildProcId;
-        /* 0x6BC */ int m6BC;
-        
-        static const char* const M_arcname[13];
-        static const dCcD_SrcCyl M_cyl_src;
-        static const Type_Attr M_attr[13];
-    };
-    
-    STATIC_ASSERT(sizeof(Act_c) == 0x6C0);
-    
     dBgS_ObjGndChk Bgc_c::M_gnd_work[23];
     dBgS_WtrChk Bgc_c::M_wrt_work;
     dBgS_ObjLinChk Bgc_c::M_wall_work[23];
@@ -501,7 +222,7 @@ namespace daObjMovebox {
     }
     
     /* 00000474-00000748       .text wall_pos__Q212daObjMovebox5Bgc_cFPCQ212daObjMovebox5Act_cPCQ212daObjMovebox8BgcSrc_cisf */
-    void Bgc_c::wall_pos(const Act_c* movebox, const BgcSrc_c* bgcSrc, int param_3, s16 param_4, f32 param_5) {
+    void Bgc_c::wall_pos(const Act_c* movebox, const BgcSrc_c* bgcSrc, int bgcSrcCount, s16 param_4, f32 param_5) {
         s16 angle;
         cXyz temp_44;
         cXyz temp_38;
@@ -516,7 +237,7 @@ namespace daObjMovebox {
         mDoMtx_stack_c::multVec(&cXyz::BaseY, &temp_20);
         temp_20 *= param_5 + movebox->attr()->mScaleXZ * 0.5f;
         
-        for (int i = 0; i < param_3; i++, bgcSrc++) {
+        for (int i = 0; i < bgcSrcCount; i++, bgcSrc++) {
             mDoMtx_stack_c::XrotS(0x4000);
             cXyz temp_14(bgcSrc->m0C, 0.0f, bgcSrc->m08);
             mDoMtx_stack_c::multVec(&temp_14, &temp_2c);
@@ -585,8 +306,8 @@ namespace daObjMovebox {
     }
     
     /* 000008E8-00000928       .text chk_wall_pre__Q212daObjMovebox5Bgc_cFPCQ212daObjMovebox5Act_cPCQ212daObjMovebox8BgcSrc_cis */
-    bool Bgc_c::chk_wall_pre(const Act_c* movebox, const BgcSrc_c* bgcSrc, int param_3, s16 param_4) {
-        wall_pos(movebox, bgcSrc, param_3, param_4, 74.0f);
+    bool Bgc_c::chk_wall_pre(const Act_c* movebox, const BgcSrc_c* bgcSrc, int bgcSrcCount, s16 param_4) {
+        wall_pos(movebox, bgcSrc, bgcSrcCount, param_4, 74.0f);
         return mWallIdx >= 0;
     }
     
@@ -682,7 +403,7 @@ namespace daObjMovebox {
         },
     };
     
-    const Type_Attr Act_c::M_attr[13] = {
+    const Attr_c Act_c::M_attr[13] = {
         // TYPE_BREAKABLE_WOODEN_CRATE
         // Arcname: Kkiba_00
         {
@@ -1387,7 +1108,7 @@ namespace daObjMovebox {
     }
     
     /* 000013B0-000013C8       .text attr__Q212daObjMovebox5Act_cCFv */
-    const Type_Attr* Act_c::attr() const {
+    const Attr_c* Act_c::attr() const {
         return &M_attr[mType];
     }
     
@@ -1563,7 +1284,7 @@ namespace daObjMovebox {
         if (movebox->mMode != MODE_AFLOAT) {
             return;
         }
-        const Type_Attr* attr = movebox->i_attr();
+        const Attr_c* attr = movebox->i_attr();
         f32 f0 = movebox->i_attr()->m2C + movebox->i_attr()->m30;
         f32 deltaX = actor2->current.pos.x - actor1->current.pos.x;
         f32 deltaZ = actor2->current.pos.z - actor1->current.pos.z;
@@ -1653,7 +1374,7 @@ namespace daObjMovebox {
         m62C = 0;
         m630 = 0.0f;
         m634 = -1;
-        mPPLabel = 0;
+        mPPLabel = (dBgW::PushPullLabel)0;
         clr_moment_cnt();
         m644 = 0;
         m646 = 0;
@@ -1719,12 +1440,105 @@ namespace daObjMovebox {
     
     /* 00002214-000024D4       .text afl_sway__Q212daObjMovebox5Act_cFv */
     void Act_c::afl_sway() {
-        /* Nonmatching */
+        /* Nonmatching - regalloc */
+        bool r30;
+        bool r29;
+        f32 f31;
+        f32 f30;
+        f32 f1;
+        f32 f5;
+        f32 f6;
+        f32 f0;
+        BgcSrc_c* bgcSrc;
+        s32 bgcSrcCount;
+        
+        f31 = m60C*m60C + m610*m610;
+        f30 = i_attr()->m4C*i_attr()->m4C;
+        
+        bgcSrc = const_cast<BgcSrc_c*>(i_attr()->m9A ? Bgc_c::M_lin20 : Bgc_c::M_lin5);
+        bgcSrcCount = i_attr()->m9A ? ARRAY_SIZE(Bgc_c::M_lin20)-2 : ARRAY_SIZE(Bgc_c::M_lin5);
+        
+        r30 = true;
+        if (!mBgc.chk_wall_touch2(this, bgcSrc, bgcSrcCount, M_dir_base[0]) &&
+            !mBgc.chk_wall_touch2(this, bgcSrc, bgcSrcCount, M_dir_base[2]))
+        {
+            r30 = false;
+        }
+        
+        r29 = true;
+        if (!mBgc.chk_wall_touch2(this, bgcSrc, bgcSrcCount, M_dir_base[1]) &&
+            !mBgc.chk_wall_touch2(this, bgcSrc, bgcSrcCount, M_dir_base[3]))
+        {
+            r29 = false;
+        }
+        
+        if (f31 > f30) {
+            f32 f1 = i_attr()->m4C / sqrtf(f31);
+            m60C *= f1;
+            m610 *= f1;
+        }
+        
+        f5 = -(m618 - m610) * i_attr()->m50;
+        f6 = -m620 * i_attr()->m54;
+        f1 = -(m614 - m60C) * i_attr()->m50;
+        f0 = -m61C * i_attr()->m54;
+        m61C += f1 + f0;
+        m620 += f5 + f6;
+        m614 += m61C;
+        m618 += m620;
+        
+        if (r29) {
+            m614 = 0.0f;
+        }
+        if (r30) {
+            m618 = 0.0f;
+        }
+        
+        m60C = 0.0f;
+        m610 = 0.0f;
     }
     
     /* 000024D4-00002668       .text check_to_walk__Q212daObjMovebox5Act_cFv */
-    void Act_c::check_to_walk() {
-        /* Nonmatching */
+    int Act_c::check_to_walk() {
+        int r30 = -1;
+        bool r29 = true;
+        
+        if (m64A && cLib_checkBit(mBgc.mStateFlags, Bgc_c::BgcState_UNK01) && (mType != TYPE_BLACK_BOX_WITH_MKIE || mChildProcId == -1)) {
+            BOOL temp = cLib_checkBit(mPPLabel, dBgW::PP_UNK2_e);
+            BOOL r3 = cLib_checkBit(mPPLabel, dBgW::PP_UNK4_e);
+            s16 r0;
+            if (temp) {
+                if (r3) {
+                    r0 = i_attr()->m06;
+                } else {
+                    r0 = i_attr()->m08;
+                }
+            } else {
+                if (r3) {
+                    r0 = i_attr()->m00;
+                } else {
+                    r0 = i_attr()->m02;
+                }
+            }
+            
+            for (int i = 0; i < (int)ARRAY_SIZE(mMomentCnt); i++) {
+                if (mMomentCnt[i] >= r0) {
+                    BgcSrc_c* bgcSrc = const_cast<BgcSrc_c*>(i_attr()->m9A ? Bgc_c::M_lin20 : Bgc_c::M_lin5);
+                    int bgcSrcCount = i_attr()->m9A ? (mType == TYPE_MIRROR ? ARRAY_SIZE(Bgc_c::M_lin20) : ARRAY_SIZE(Bgc_c::M_lin20)-2) : ARRAY_SIZE(Bgc_c::M_lin5);
+                    if (!mBgc.chk_wall_pre(this, bgcSrc, bgcSrcCount, M_dir_base[i])) {
+                        r30 = i;
+                    }
+                } else {
+                    r29 = false;
+                }
+            }
+        }
+        
+        if (r29) {
+            clr_moment_cnt();
+        }
+        m64A = false;
+        return r30;
     }
     
     /* 00002668-0000268C       .text clr_moment_cnt__Q212daObjMovebox5Act_cFv */
@@ -1754,15 +1568,43 @@ namespace daObjMovebox {
     
     /* 00002768-0000290C       .text eff_set_slip_smoke_pos__Q212daObjMovebox5Act_cFv */
     void Act_c::eff_set_slip_smoke_pos() {
-        /* Nonmatching */
+        static cXyz base_pos[ARRAY_SIZE(mSmokeCbs)] = {
+            cXyz(-0.5f, 0.0f, -0.5f),
+            cXyz(0.5f, 0.0f, -0.5f)
+        };
+        
+        s16 angle = orig.angle.y + M_dir_base[m634];
+        
+        f32 scale = i_attr()->mScaleXZ;
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::YrotM(angle);
+        mDoMtx_stack_c::transM(0.0f, 0.0f, 10.0f);
+        mDoMtx_stack_c::scaleM(scale, scale, scale);
+        
+        for (int i = 0; i < (int)ARRAY_SIZE(mSmokeCbs); i++) {
+            mDoMtx_stack_c::multVec(&base_pos[i], &mSmokeCbs[i].field_0x20);
+            mSmokeCbs[i].field_0x2C.set(0, angle, 0);
+        }
     }
     
     /* 0000290C-00002A14       .text eff_smoke_slip_start__Q212daObjMovebox5Act_cFv */
     void Act_c::eff_smoke_slip_start() {
-        /* Nonmatching */
-        // emitter->setRate();
-        // emitter->setDirectionalSpeed();
-        // emitter->setSpread();
+        static cXyz scl(0.6f, 0.6f, 0.6f);
+        
+        eff_set_slip_smoke_pos();
+        
+        for (int i = 0; i < (int)ARRAY_SIZE(mSmokeCbs); i++) {
+            JPABaseEmitter* emitter = dComIfGp_particle_setToon(
+                0x2022, &mSmokeCbs[i].field_0x20, &mSmokeCbs[i].field_0x2C,
+                &scl, 0xB9, &mSmokeCbs[i], fopAcM_GetRoomNo(this)
+            );
+            if (emitter) {
+                emitter->setRate(2.0f);
+                emitter->setDirectionalSpeed(15.0f);
+                emitter->setSpread(0.15f);
+                emitter->setLifeTime(30);
+            }
+        }
     }
     
     /* 00002A14-00002A74       .text eff_smoke_slip_end__Q212daObjMovebox5Act_cFv */
@@ -1791,7 +1633,41 @@ namespace daObjMovebox {
     
     /* 00002B48-00002D84       .text mode_wait__Q212daObjMovebox5Act_cFv */
     void Act_c::mode_wait() {
-        /* Nonmatching */
+        if (m646 > 0) {
+            m646--;
+        }
+        
+        int r31 = check_to_walk();
+        
+        if (!m64F && cLib_checkBit(mBgc.mStateFlags, Bgc_c::BgcState_UNK01)) {
+            m64F = true;
+            path_save();
+        }
+        
+        daObj::posMoveF_stream(this, NULL, &cXyz::Zero, i_attr()->m18, i_attr()->m1C);
+        
+        mDoMtx_stack_c::transS(orig.pos);
+        mDoMtx_stack_c::YrotM(orig.angle.y);
+        mDoMtx_stack_c::transM(m628 * i_attr()->m0C, 0.0f, m62C * i_attr()->m0C);
+        cXyz pos;
+        mDoMtx_stack_c::multVec(&cXyz::Zero, &pos);
+        current.pos.x = pos.x;
+        current.pos.z = pos.z;
+        
+        if (r31 != -1) {
+            m634 = r31;
+            eff_smoke_slip_start();
+            daPy_getPlayerActorClass()->onPushPullKeep();
+            mode_walk_init();
+            
+            if (cLib_checkBit(mPPLabel, dBgW::PP_UNK2_e)) {
+                m644 = i_attr()->m0A;
+                m630 = (f32)0x8000 / i_attr()->m0A;
+            } else {
+                m644 = i_attr()->m04;
+                m630 = (f32)0x8000 / i_attr()->m04;
+            }
+        }
     }
     
     /* 00002D84-00002DA4       .text mode_walk_init__Q212daObjMovebox5Act_cFv */
@@ -1828,16 +1704,16 @@ namespace daObjMovebox {
     /* 00003450-00003570       .text eff_break__Q212daObjMovebox5Act_cFv */
     void Act_c::eff_break() {
         /* Nonmatching */
-        static cXyz temp(0.05f, 0.05f, 1.0f);
+        static cXyz particle_scale(2.0f, 2.0f, 1.0f);
         cXyz particlePos;
         particlePos.set(current.pos.x, current.pos.y + -0.5f, current.pos.z);
         JPABaseEmitter* emitter = dComIfGp_particle_set(
             0x3E6, &particlePos, NULL, NULL, 0xFF, NULL, -1,
-            &mTevStr.mColorK0, &mTevStr.mColorK0, &temp
+            &mTevStr.mColorK0, &mTevStr.mColorK0, &particle_scale
         );
         if (emitter) {
             emitter->setLifeTime(30);
-            emitter->setAwayFromAxisSpeed(-0.2f);
+            emitter->setAwayFromAxisSpeed(30.0f);
         }
         fopAcM_create(PROC_Obj_Eff, 0x5, &particlePos, -1, NULL, NULL, 0xFF, NULL);
         // TODO daObjEff::Act_c::make_woodBox_smoke(cXyz*)
