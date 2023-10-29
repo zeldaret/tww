@@ -35,6 +35,8 @@
 #define FUNC_TYPE_EXTRA_SAVE_INFO 7
 #define FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN 8
 
+extern dCcD_SrcCyl dNpc_cyl_src;
+
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
 static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
@@ -46,11 +48,11 @@ public:
     daTbox_HIO_c();
     virtual ~daTbox_HIO_c();
 
-    /* 0x0004 */ s8 m0004;
-    /* 0x0006 */ u16 m0006;
-    /* 0x0008 */ u16 m0008;
-    /* 0x000A */ u16 m000A;
-    /* 0x000C */ u16 m000C;
+    /* 0x0004 */ s8 mHioId;
+    /* 0x0006 */ s16 m0006;
+    /* 0x0008 */ s16 m0008;
+    /* 0x000A */ s16 m000A;
+    /* 0x000C */ s16 m000C;
 };
 
 static daTbox_HIO_c l_HIO;
@@ -83,18 +85,19 @@ public:
     void searchRoomNo();
     void lightReady();
     
-    void checkEnv();
+    BOOL checkEnv();
     BOOL checkOpen();
+
     modelInfo& getModelInfo();
     
     void clrDzb();
     void setDzb();
 
     void surfaceProc();
-    void checkRoomDisp(int);
+    BOOL checkRoomDisp(int);
     u32 getShapeType();
     s32 getFuncType();
-    void checkNormal();
+    BOOL checkNormal();
     
     s32 CreateHeap();
     s32 CreateInit();
@@ -131,7 +134,7 @@ public:
     s32 execute();
     s32 draw();
 
-    /* 0x0290 */ u32 mRoomNo;
+    /* 0x0290 */ s32 mRoomNo;
     /* 0x0294 */ request_of_phase_process_class mPhs;
 
     /* 0x029C */ J3DModel* mChestMdl;
@@ -143,7 +146,7 @@ public:
     /* 0x02BC */ dBgW* mpBgWOpen;
     /* 0x02C0 */ dBgW* mpBgWVines;
 
-    /* 0x02C4 */ dBgW* m02C4;
+    /* 0x02C4 */ dBgW* mpBgWCurrent;
 
     /* 0x02C8 */ J3DModel* mpFlashMdl;
     /* 0x02CC */ mDoExt_bckAnm mFlashAnm;
@@ -175,11 +178,11 @@ public:
     /* 0x03E8 */ float mAllColRatio;
     /* 0x03EC */ float m03EC;
 
-    /* 0x03F0 */ u16 m03F0;
+    /* 0x03F0 */ u16 mFlags;
     /* 0x03F2 */ s16 m03F2;
 
     /* 0x03F4 */ u8 m03F4;
-    /* 0x03F5 */ u8 m03F5;
+    /* 0x03F5 */ u8 mIsFlashPlaying;
     /* 0x03F6 */ u16 m03F6;
 
     /* 0x03F8 */ u8 m03F8;
@@ -189,12 +192,25 @@ public:
     /* 0x0600 */ dCcD_Stts mColStatus;
     /* 0x063C */ dCcD_Cyl mColCyl;
 
-    /* 0x076C */ u8 m076C;
+    /* 0x076C */ u8 mOpenedSwitch;
+
+    void flagOn(u16 flag) { mFlags |= flag; }
+    void flagOff(u16 flag) { mFlags &= ~flag; }
+    void flagClr() { mFlags = 0; }
+    BOOL flagCheck(u16 flag) { return mFlags & flag; }
+
+    request_of_phase_process_class* getPhase() { return &mPhs; }
+
+    u8 getTboxNo() { return fopAcM_GetParam(this) >> 0x07 & 0x1F; }
+    s32 getSwNo() { return fopAcM_GetParam(this) >> 0x0C & 0xFF; }
+
+    bool action() { return (this->*mActionFunc)(); }
+    void setAction(actionFunc func) { mActionFunc = func; }
 };
 
 /* 000000EC-00000124       .text __ct__12daTbox_HIO_cFv */
 daTbox_HIO_c::daTbox_HIO_c() {
-    m0004 = -1;
+    mHioId = -1;
     m0006 = 0x82;
     m0008 = 0xB4;
     m000A = 0x30;
@@ -306,8 +322,9 @@ s32 daTbox_c::effectShapeSet() {
     }
 
     J3DAnmTevRegKey* flashRegAnm = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", 0x1E);
+    int regInit = mFlashRegAnm.init(flashModelData, flashRegAnm, true, 0, 1.0f, 0, -1, false, 0);
 
-    s32 regInit = mFlashRegAnm.init(flashModelData, flashRegAnm, true, 0, 1.0f, 0, -1, false, 0);
+    // Using cPhs_COMPLEATE_e and cPhs_ERROR_e break the match here.
     return regInit != 0 ? 4 : 5;
 }
 
@@ -338,6 +355,7 @@ s32 daTbox_c::envShapeSet() {
     }
 
     mDoExt_modelTexturePatch(modelData);
+
     return cPhs_COMPLEATE_e;
 }
 
@@ -390,28 +408,61 @@ s32 daTbox_c::bgCheckSet() {
         mpBgWVines->Move();
     }
 
-    m02C4 = NULL;
+    mpBgWCurrent = NULL;
+
     return cPhs_COMPLEATE_e;
 }
 
 /* 00000BB0-00000C14       .text searchRoomNo__8daTbox_cFv */
 void daTbox_c::searchRoomNo() {
-    /* Nonmatching */
+    if (mRoomNo == -1) {
+        mRoomNo = orig.angle.x & 0x3F;
+    }
+
+    if (flagCheck(0x02)) {
+        clrDzb();
+    }
+    else if (mRoomNo != -1 && mpBgWCurrent == NULL) {
+        setDzb();
+    }
 }
 
 /* 00000C14-00000C98       .text lightReady__8daTbox_cFv */
 void daTbox_c::lightReady() {
-    /* Nonmatching */
+    mPLight.mPos.set(current.pos.x, current.pos.y + 55.0f, current.pos.z);
+    mPLight.mColor.r = 0xFF;
+    mPLight.mColor.g = 0xFF;
+    mPLight.mColor.b = 0xFF;
+    mPLight.mPower = 0.0f;
+    mPLight.mFluctuation = 0.0f;
+
+    mEfLight.mPos.set(current.pos.x, current.pos.y + 50.0f, current.pos.z);
+    mEfLight.mColor.r = 0xFF;
+    mEfLight.mColor.g = 0xFF;
+    mEfLight.mColor.b = 0x64;
+    mEfLight.mPower = 0.0f;
+    mEfLight.mFluctuation = 0.0f;
+
+    mAllColRatio = 0.0f;
 }
 
 /* 00000C98-00000CD8       .text checkEnv__8daTbox_cFv */
-void daTbox_c::checkEnv() {
-    /* Nonmatching */
+BOOL daTbox_c::checkEnv() {
+    return l_modelInfo[getShapeType()].brkId <= 0 ? FALSE : TRUE;
 }
 
 /* 00000CD8-00000D48       .text checkOpen__8daTbox_cFv */
 BOOL daTbox_c::checkOpen() {
-    /* Nonmatching */
+    if (getFuncType() == FUNC_TYPE_EXTRA_SAVE_INFO || getFuncType() == FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN) {
+        int stageNo = 1;
+        u8 tBoxNo = getTboxNo();
+
+        return dComIfGs_isStageTbox(stageNo, tBoxNo);
+    }
+    else {
+        u8 tBoxNo = getTboxNo();
+        return dComIfGs_isTbox(tBoxNo);
+    }
 }
 
 /* 00000D48-00000D78       .text getModelInfo__8daTbox_cFv */
@@ -421,22 +472,63 @@ modelInfo& daTbox_c::getModelInfo() {
 
 /* 00000D78-00000DD0       .text clrDzb__8daTbox_cFv */
 void daTbox_c::clrDzb() {
-    /* Nonmatching */
+    if (mpBgWCurrent != NULL) {
+        g_dComIfG_gameInfo.play.mBgS.Release(mpBgWCurrent);
+        mpBgWCurrent = NULL;
+
+        mColCyl.OffCoSetBit();
+    }
 }
 
 /* 00000DD0-00000ECC       .text setDzb__8daTbox_cFv */
 void daTbox_c::setDzb() {
-    /* Nonmatching */
+    clrDzb();
+
+    if (checkOpen()) {
+        mpBgWCurrent = mpBgWOpen;
+    }
+    else {
+        if (getFuncType() == FUNC_TYPE_SWITCH_VISIBLE && !dComIfGs_isSwitch(getSwNo(), mRoomNo)) {
+            mpBgWCurrent = mpBgWVines;
+        }
+        else {
+            mpBgWCurrent = mpBgWClosed;
+        }
+    }
+
+    bool rt = g_dComIfG_gameInfo.play.mBgS.Regist(mpBgWCurrent, this);
+    JUT_ASSERT(0x234, !rt);
+
+    mpBgWCurrent->mRoomNo = mRoomNo;
+    mColCyl.OnCoSetBit();
 }
 
 /* 00000ECC-00000F8C       .text surfaceProc__8daTbox_cFv */
 void daTbox_c::surfaceProc() {
-    /* Nonmatching */
+    if (mpBgWCurrent != NULL && flagCheck(0x20)) {
+        if (m03EC < -1.0f) {
+            m03EC += 1.0f;
+        }
+        else {
+            flagOff(0x20);
+            m03EC = 0.0f;
+        }
+
+        mDoMtx_stack_c::transS(current.pos.x, current.pos.y + m03EC, current.pos.z);
+        mDoMtx_stack_c::YrotM(current.angle.y);
+        mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
+
+        mpBgWCurrent->Move();
+    }
 }
 
 /* 00000F8C-00000FC0       .text checkRoomDisp__8daTbox_cFi */
-void daTbox_c::checkRoomDisp(int) {
-    /* Nonmatching */
+BOOL daTbox_c::checkRoomDisp(int i_roomNo) {
+    if (dComIfGp_roomControl_checkStatusFlag(i_roomNo, 0x08)) {
+        return FALSE;
+    }
+
+    return dComIfGp_roomControl_checkStatusFlag(i_roomNo, 0x10) ? TRUE : FALSE;
 }
 
 /* 00000FC0-00000FE4       .text getShapeType__8daTbox_cFv */
@@ -451,23 +543,153 @@ s32 daTbox_c::getFuncType() {
 }
 
 /* 00000FF0-0000108C       .text checkNormal__8daTbox_cFv */
-void daTbox_c::checkNormal() {
-    /* Nonmatching */
+BOOL daTbox_c::checkNormal() {
+    s32 funcType = getFuncType();
+
+    if (funcType == FUNC_TYPE_NORMAL || funcType == FUNC_TYPE_EXTRA_SAVE_INFO || funcType == FUNC_TYPE_SWITCH_VISIBLE || funcType == FUNC_TYPE_GRAVITY) {
+        return TRUE;
+    }
+
+    if (mRoomNo == -1 || mRoomNo == 0x3F) {
+        return FALSE;
+    }
+
+    s32 swNo = getSwNo();
+    if (swNo >= 0xC0) {
+        return FALSE;
+    }
+
+    return dComIfGs_isSwitch(swNo, mRoomNo) ? TRUE : FALSE;
 }
 
 /* 0000108C-000010AC       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+s32 CheckCreateHeap(fopAc_ac_c* i_actor) {
+    return static_cast<daTbox_c*>(i_actor)->CreateHeap();
 }
 
 /* 000010AC-0000114C       .text CreateHeap__8daTbox_cFv */
 s32 daTbox_c::CreateHeap() {
-    /* Nonmatching */
+    if (commonShapeSet() != cPhs_COMPLEATE_e) {
+        return FALSE;
+    }
+
+    if (checkEnv() && envShapeSet() != cPhs_COMPLEATE_e) {
+        return FALSE;
+    }
+
+    if (!checkOpen() && effectShapeSet() != cPhs_COMPLEATE_e) {
+        return FALSE;
+    }
+
+    return bgCheckSet() != cPhs_COMPLEATE_e ? FALSE : TRUE;
 }
 
 /* 0000114C-00001560       .text CreateInit__8daTbox_cFv */
 s32 daTbox_c::CreateInit() {
-    /* Nonmatching */
+    s32 funcType = getFuncType();
+    flagClr();
+
+    mSmokeCB.field_0x15 = 1;
+    mOpenAnm.setPlaySpeed(0.0f);
+
+    if (checkOpen()) {
+        J3DFrameCtrl* frameCtrl = mOpenAnm.getFrameCtrl();
+        frameCtrl->setFrame(frameCtrl->getEnd());
+
+        setAction(actionWait);
+
+        if (checkEnv()) {
+            m034C = 2.0;
+
+            frameCtrl = mpAppearRegAnm->getFrameCtrl();
+            frameCtrl->setFrame(frameCtrl->getEnd());
+        }
+    }
+    else {
+        if (!checkEnv()) {
+            setAction(actionOpenWait);
+        }
+        else {
+            if (checkNormal()) {
+                if (funcType == FUNC_TYPE_SWITCH_VISIBLE && !dComIfGs_isSwitch(getSwNo(), mRoomNo)) {
+                    setAction(actionOpenWait);
+                }
+                else {
+                    setAction(actionSwOnWait2);
+                }
+
+                m034C = 2.0f;
+
+                J3DFrameCtrl* frameCtrl = mpAppearRegAnm->getFrameCtrl();
+                frameCtrl->setFrame(frameCtrl->getEnd());
+            }
+            else {
+                 flagOn(0x04);
+
+                switch (funcType) {
+                    case FUNC_TYPE_SWITCH:
+                    case FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN:
+                        setAction(actionSwOnWait);
+                        m03F8 = 0x41;
+                        flagOn(0x03);
+                        m03F6 = 0x78;
+                        break;
+                    case FUNC_TYPE_ENEMIES:
+                        setAction(actionGenocide);
+                        flagOn(0x03);
+                        m03F6 = 0x78;
+                        break;
+                    case FUNC_TYPE_TACT:
+                        setAction(actionSwOnWait);
+                        flagOn(0x03);
+                        m03F6 = l_HIO.m0008;
+                        break;
+                    case FUNC_TYPE_SWITCH_TRANSPARENT:
+                        setAction(actionSwOnWait);
+                        flagOn(0x02);
+                        m03F6 = 0x5A;
+
+                        mpAppearRegAnm->setFrame(30.0f);
+                        break;
+                    default:
+                        JUT_ASSERT(0x328, 0);
+                        break;
+                }
+
+                m034C = -2.0f;
+            }
+        }
+    }
+
+    lightReady();
+    mAllColRatio = 1.0f;
+
+    if (l_HIO.mHioId < 0) {
+        l_HIO.mHioId = mDoHIO_root.mDoHIO_createChild("宝箱", (JORReflexible*)(&l_HIO));
+    }
+
+    shape_angle.z = 0;
+    shape_angle.x = 0;
+    current.angle.z = 0;
+    current.angle.x = 0;
+
+    mColStatus.Init(0xFF, 0xFF, this);
+    
+    mColCyl.Set(dNpc_cyl_src);
+    mColCyl.SetStts(&mColStatus);
+
+    setCollision();
+    mColCyl.OffCoSetBit();
+    searchRoomNo();
+
+    if (funcType == FUNC_TYPE_GRAVITY) {
+        mAcchCir.SetWall(30.0f, 0.0f);
+        mObjAcch.Set(getPositionP(), &next.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
+
+        mGravity = -2.5f;
+    }
+
+    mOpenedSwitch = getTboxNo();
 }
 
 /* 00001560-00001624       .text boxCheck__8daTbox_cFv */
@@ -543,17 +765,17 @@ s32 daTbox_c::demoProc() {
                 mEfLight.mPower = 0.0f;
                 break;
             case DEMO_PROC_APPEAR:
-                m03F0 |= 0x20;
+                flagOn(0x20);
                 m03EC = -130.0f;
                 
                 setDzb();
 
                 if (getFuncType() == FUNC_TYPE_TACT) {
-                    m03F0 &= -3;
+                    flagOff(0x02);
                     demoInitAppear_Tact();
                 }
                 else {
-                    m03F0 &= -4;
+                    flagOff(0x03);
                     demoInitAppear();
                 }
 
@@ -604,11 +826,11 @@ s32 daTbox_c::demoProc() {
             break;
     }
 
-    if (m03F0 & 0x10) {
+    if (flagCheck(0x10)) {
         demoProcOpen();
     }
 
-    if (m03F0 & 0x08) {
+    if (flagCheck(0x08)) {
         dKy_set_allcol_ratio(mAllColRatio);
     }
 
@@ -668,6 +890,49 @@ bool daTbox_c::actionGenocide() {
 /* 00002A2C-00002BF0       .text execute__8daTbox_cFv */
 s32 daTbox_c::execute() {
     /* Nonmatching */
+    if (mRoomNo == -1 || checkRoomDisp(mRoomNo) != TRUE) {
+        return TRUE;
+    }
+
+    action();
+
+    if (mpAppearTexAnm != NULL) {
+        mpAppearTexAnm->play();
+    }
+
+    if (mIsFlashPlaying) {
+        mFlashAnm.play();
+        mFlashTexAnm.play();
+
+        if (mFlashRegAnm.play()) {
+            mIsFlashPlaying = FALSE;
+        }
+
+        mpFlashMdl->setBaseScale(cXyz(10.0f / 7.0f, 1.0f, 1.0f));
+
+        mDoMtx_stack_c::transS(current.pos.x, current.pos.y + 50.0f, current.pos.z);
+        mDoMtx_stack_c::YrotM(current.angle.y + 0x7FFF);
+        mpFlashMdl->setBaseTRMtx(mDoMtx_stack_c::get());
+    }
+
+    if (getFuncType() == FUNC_TYPE_GRAVITY) {
+        fopAcM_posMoveF(this, NULL);
+        mObjAcch.CrrPos(g_dComIfG_gameInfo.play.mBgS);
+
+        mAttentionInfo.mPosition = current.pos;
+
+        mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+        mDoMtx_stack_c::YrotM(orig.angle.y);
+        
+        mChestMdl->setBaseTRMtx(mDoMtx_stack_c::get());
+        mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
+
+        if (mpBgWCurrent != NULL) {
+            mpBgWCurrent->Move();
+        }
+    }
+
+    return TRUE;
 }
 
 /* 00002BF0-00002C10       .text daTbox_Draw__FP8daTbox_c */
@@ -692,16 +957,16 @@ s32 daTbox_IsDelete(daTbox_c*) {
 
 /* 00002FD8-00003070       .text daTbox_Delete__FP8daTbox_c */
 s32 daTbox_Delete(daTbox_c* i_tbox) {
-    if (i_tbox->m02C4 != NULL) {
-        g_dComIfG_gameInfo.play.mBgS.Release(i_tbox->m02C4);
+    if (i_tbox->mpBgWCurrent != NULL) {
+        g_dComIfG_gameInfo.play.mBgS.Release(i_tbox->mpBgWCurrent);
     }
 
     i_tbox->mSmokeCB.end();
-    dComIfG_resDelete(&i_tbox->mPhs, "Dalways");
+    dComIfG_resDelete(i_tbox->getPhase(), "Dalways");
 
-    if (l_HIO.m0004 >= 0) {
-        mDoHIO_root.mDoHIO_deleteChild(l_HIO.m0004);
-        l_HIO.m0004 = -1;
+    if (l_HIO.mHioId >= 0) {
+        mDoHIO_root.mDoHIO_deleteChild(l_HIO.mHioId);
+        l_HIO.mHioId = -1;
     }
 
     return TRUE;
@@ -728,7 +993,7 @@ s32 daTbox_Create(fopAc_ac_c* i_actor) {
 
     fopAcM_SetupActor(tbox, daTbox_c);
 
-    result = dComIfG_resLoad(&tbox->mPhs, "Dalways");
+    result = dComIfG_resLoad(tbox->getPhase(), "Dalways");
 
     if (result == cPhs_COMPLEATE_e) {
         tbox->mRoomNo = tbox->orig.angle.x & 0x3F;
@@ -741,7 +1006,7 @@ s32 daTbox_Create(fopAc_ac_c* i_actor) {
         }
 
         u32 heapResult = fopAcM_entrySolidHeap(i_actor, (heapCallbackFunc)CheckCreateHeap, heapSize);
-        if ((heapResult & 0xFF) == 0) {
+        if (heapResult == FALSE) {
             return cPhs_ERROR_e;
         }
         else {
