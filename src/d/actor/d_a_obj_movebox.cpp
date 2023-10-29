@@ -1988,7 +1988,7 @@ namespace daObjMovebox {
         if (!i_attr()->mbCastsShadow && mBgc.mMaxGroundIdx >= 0) {
             int temp = mBgc.mMaxGroundIdx;
             f32 groundH = mBgc.mGroundY[temp];
-            cM3dGPla* triPla = dComIfG_Bgsp()->i_GetTriPla(Bgc_c::M_gnd_work[temp]);
+            cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(Bgc_c::M_gnd_work[temp]);
             if (triPla && groundH != -1000000000.0f) {
                 dComIfGd_setSimpleShadow(&current.pos, groundH, i_attr()->m10, &triPla->mNormal, shape_angle.y, 1.0f, NULL);
             }

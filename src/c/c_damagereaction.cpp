@@ -245,7 +245,7 @@ BOOL enemy_ice(enemyice* ei) {
                 ei->mSpeed.y = 20.0f + g_regHIO.mChild[0].mFloatRegs[6];
             } else {
                 ei->mSpeedF = 5.0f;
-                ei->mSpeed.y = -15.0;
+                ei->mSpeed.y = -15.0f;
             }
             ei->mAngleY = player->shape_angle.y;
             ei->mState = 2;

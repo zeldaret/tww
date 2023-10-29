@@ -703,7 +703,7 @@ namespace daBomb2 {
     }
 
     void Act_c::on_carry() {
-        mAttentionInfo.setFlag(fopAc_Attn_ACTION_CARRY_e);
+        mAttentionInfo.mFlags |= fopAc_Attn_ACTION_CARRY_e;
     }
 
     void Act_c::off_carry() {

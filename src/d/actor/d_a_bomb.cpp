@@ -944,7 +944,7 @@ bool daBomb_c::procWait() {
             if(!temp && !field_0x781) {
                 bound(y_vel);
                 if((mAcch.ChkGroundHit() || chk_state(STATE_5)) && !mAcch.ChkGroundLanding()) {
-                    mAttentionInfo.setFlag(fopAc_Attn_ACTION_CARRY_e);
+                    mAttentionInfo.mFlags |= fopAc_Attn_ACTION_CARRY_e;
                 }
                 else {
                     mAttentionInfo.mFlags &= ~fopAc_Attn_ACTION_CARRY_e;
@@ -1224,7 +1224,7 @@ void daBomb_c::create_init() {
     mRestTime = 0x96;
     mInitialState = prm_get_state();
     if(!chk_state(STATE_4)) {
-        mAttentionInfo.setFlag(fopAc_Attn_ACTION_CARRY_e);
+        mAttentionInfo.mFlags |= fopAc_Attn_ACTION_CARRY_e;
     }
 
     field_0x77C = 0;

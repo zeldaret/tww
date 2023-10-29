@@ -40,7 +40,7 @@ static BOOL daKytag04_Execute(kytag04_class* i_this) {
         i_this->mState = 0;
     }
 
-    return 1;
+    return TRUE;
 }
 
 /* 00000138-00000160       .text daKytag04_IsDelete__FP13kytag04_class */

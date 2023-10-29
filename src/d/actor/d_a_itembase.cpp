@@ -62,7 +62,7 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, short resIdx, short btkAn
         pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(resName, btkAnm1);
         JUT_ASSERT(140, pbtk != 0);
         mpBtkAnm1 = new mDoExt_btkAnm();
-        if (!mpBtkAnm1 || !mpBtkAnm1->init(modelData, pbtk, TRUE, 2, 1.0, 0, -1, false, 0)) {
+        if (!mpBtkAnm1 || !mpBtkAnm1->init(modelData, pbtk, TRUE, 2, 1.0f, 0, -1, false, 0)) {
             return FALSE;
         }
     }
@@ -72,7 +72,7 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, short resIdx, short btkAn
         pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(resName, btkAnm2);
         JUT_ASSERT(156, pbtk != 0);
         mpBtkAnm2 = new mDoExt_btkAnm();
-        if (!mpBtkAnm2 || !mpBtkAnm2->init(modelData, pbtk, TRUE, 2, 1.0, 0, -1, false, 0)) {
+        if (!mpBtkAnm2 || !mpBtkAnm2->init(modelData, pbtk, TRUE, 2, 1.0f, 0, -1, false, 0)) {
             return FALSE;
         }
     }
@@ -88,7 +88,7 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, short resIdx, short btkAn
             shouldAnimate = FALSE;
         }
         mpBrkAnm1 = new mDoExt_brkAnm();
-        if (!mpBrkAnm1 || !mpBrkAnm1->init(modelData, pbrk, shouldAnimate, 2, 1.0, 0, -1, false, false)) {
+        if (!mpBrkAnm1 || !mpBrkAnm1->init(modelData, pbrk, shouldAnimate, 2, 1.0f, 0, -1, false, false)) {
             return FALSE;
         }
     }
@@ -98,7 +98,7 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, short resIdx, short btkAn
         pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(resName, brkAnm2);
         JUT_ASSERT(197, pbrk != 0);
         mpBrkAnm2 = new mDoExt_brkAnm();
-        if (!mpBrkAnm2 || !mpBrkAnm2->init(modelData, pbrk, TRUE, 2, 1.0, 0, -1, false, false)) {
+        if (!mpBrkAnm2 || !mpBrkAnm2->init(modelData, pbrk, TRUE, 2, 1.0f, 0, -1, false, false)) {
             return FALSE;
         }
     }
@@ -109,7 +109,7 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, short resIdx, short btkAn
         pbck = (J3DAnmTransform*)dComIfG_getObjectRes(resName, bckAnm);
         JUT_ASSERT(212, pbck != 0);
         mpBckAnm = new mDoExt_bckAnm();
-        if (!mpBckAnm || !mpBckAnm->init(modelData, pbck, TRUE, 2, 1.0, 0, -1, false)) {
+        if (!mpBckAnm || !mpBckAnm->init(modelData, pbck, TRUE, 2, 1.0f, 0, -1, false)) {
             return FALSE;
         }
     }

@@ -172,8 +172,6 @@ struct actor_place {
 };
 
 struct actor_attention_types {
-    void setFlag(u32 flags) { mFlags |= flags; }
-
     /* 0x00 */ u8 mDistances[8];
     /* 0x08 */ cXyz mPosition;
     /* 0x14 */ u32 mFlags;
