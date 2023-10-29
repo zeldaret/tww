@@ -37,24 +37,47 @@ void J3DGDSetIndTexStageNum(u32 indTevNum) {
     J3DGDWriteBPCmd(indTevNum << 16 | 0x00 << 24);
 }
 
+inline u16 __GDLightID2Index(GXLightID id) {
+    u16 lightIdx = (31 - __cntlzw(id));
+    if (lightIdx > 7)
+        lightIdx = 0;
+    return lightIdx;
+}
+
+inline u16 __GDLightID2Offset(GXLightID id) {
+    return __GDLightID2Index(id) * 0x10;
+}
+
 /* 802D632C-802D6624       .text J3DGDSetLightAttn__F10_GXLightIDffffff */
-void J3DGDSetLightAttn(GXLightID id, f32, f32, f32, f32, f32, f32) {
-    /* Nonmatching */
+void J3DGDSetLightAttn(GXLightID id, f32 a0, f32 a1, f32 a2, f32 k0, f32 k1, f32 k2) {
+    J3DGDWriteXFCmdHdr(0x0604 + __GDLightID2Offset(id), 6);
+    J3DGDWrite_f32(a0);
+    J3DGDWrite_f32(a1);
+    J3DGDWrite_f32(a2);
+    J3DGDWrite_f32(k0);
+    J3DGDWrite_f32(k1);
+    J3DGDWrite_f32(k2);
 }
 
 /* 802D6624-802D6734       .text J3DGDSetLightColor__F10_GXLightID8_GXColor */
-void J3DGDSetLightColor(GXLightID, GXColor) {
-    /* Nonmatching */
+void J3DGDSetLightColor(GXLightID id, GXColor color) {
+    J3DGDWriteXFCmd(0x0603 + __GDLightID2Offset(id), (color.r << 24) | (color.g << 16) | (color.b << 8) | (color.a << 0));
 }
 
 /* 802D6734-802D6900       .text J3DGDSetLightPos__F10_GXLightIDfff */
-void J3DGDSetLightPos(GXLightID, f32, f32, f32) {
-    /* Nonmatching */
+void J3DGDSetLightPos(GXLightID id, f32 x, f32 y, f32 z) {
+    J3DGDWriteXFCmdHdr(0x060A + __GDLightID2Offset(id), 3);
+    J3DGDWrite_f32(x);
+    J3DGDWrite_f32(y);
+    J3DGDWrite_f32(z);
 }
 
 /* 802D6900-802D6ACC       .text J3DGDSetLightDir__F10_GXLightIDfff */
-void J3DGDSetLightDir(GXLightID, f32, f32, f32) {
-    /* Nonmatching */
+void J3DGDSetLightDir(GXLightID id, f32 x, f32 y, f32 z) {
+    J3DGDWriteXFCmdHdr(0x060D + __GDLightID2Offset(id), 3);
+    J3DGDWrite_f32(x);
+    J3DGDWrite_f32(y);
+    J3DGDWrite_f32(z);
 }
 
 /* 802D6ACC-802D702C       .text J3DGDSetVtxAttrFmtv__F9_GXVtxFmtP17_GXVtxAttrFmtListb */
@@ -138,7 +161,20 @@ void J3DGDSetIndTexCoordScale(GXIndTexStageID id, GXIndTexScale s0, GXIndTexScal
 }
 
 /* 802D7ED0-802D80D0       .text J3DGDSetIndTexOrder__FUl13_GXTexCoordID11_GXTexMapID13_GXTexCoordID11_GXTexMapID13_GXTexCoordID11_GXTexMapID13_GXTexCoordID11_GXTexMapID */
-void J3DGDSetIndTexOrder(u32, GXTexCoordID, GXTexMapID, GXTexCoordID, GXTexMapID, GXTexCoordID, GXTexMapID, GXTexCoordID, GXTexMapID) {
+void J3DGDSetIndTexOrder(u32 num, GXTexCoordID tc0, GXTexMapID tm0, GXTexCoordID tc1, GXTexMapID tm1, GXTexCoordID tc2, GXTexMapID tm2, GXTexCoordID tc3, GXTexMapID tm3) {
+    GDOverflowCheck(10);
+    J3DGDWriteBPCmd(((tm0 & 0x07) << 0) | ((tc0 & 0x07) << 3) | ((tm1 & 0x07) << 6) | ((tc1 & 0x07) << 9) | ((tm2 & 0x07) << 12) | ((tc2 & 0x07) << 15) | ((tm3 & 0x07) << 18) | ((tc3 & 0x07) << 21) | (0x27 << 24));
+
+    u32 mask = 0;
+    for (u32 i = 0; i < num; i++) {
+        switch (i) {
+        case 0: mask |= (1 << (tm0 & 0x07)); break;
+        case 1: mask |= (1 << (tm1 & 0x07)); break;
+        case 2: mask |= (1 << (tm2 & 0x07)); break;
+        case 3: mask |= (1 << (tm3 & 0x07)); break;
+        }
+    }
+    J3DGDWriteBPCmd((mask) | (0x0F << 24));
 }
 
 /* 802D80D0-802D825C       .text J3DGDSetTevOrder__F13_GXTevStageID13_GXTexCoordID11_GXTexMapID12_GXChannelID13_GXTexCoordID11_GXTexMapID12_GXChannelID */
