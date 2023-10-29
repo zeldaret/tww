@@ -48,7 +48,7 @@ public:
     daTbox_HIO_c();
     virtual ~daTbox_HIO_c();
 
-    /* 0x0004 */ s8 m0004;
+    /* 0x0004 */ s8 mHioId;
     /* 0x0006 */ s16 m0006;
     /* 0x0008 */ s16 m0008;
     /* 0x000A */ s16 m000A;
@@ -178,7 +178,7 @@ public:
     /* 0x03E8 */ float mAllColRatio;
     /* 0x03EC */ float m03EC;
 
-    /* 0x03F0 */ u16 m03F0;
+    /* 0x03F0 */ u16 mFlags;
     /* 0x03F2 */ s16 m03F2;
 
     /* 0x03F4 */ u8 m03F4;
@@ -194,13 +194,18 @@ public:
 
     /* 0x076C */ u8 mOpenedSwitch;
 
+    void flagOn(u16 flag) { mFlags |= flag; }
+    void flagOff(u16 flag) { mFlags &= ~flag; }
+    void flagClr() { mFlags = 0; }
+    BOOL flagCheck(u16 flag) { return mFlags & flag; }
+
     u8 getTboxNo() { return fopAcM_GetParam(this) >> 0x07 & 0x1F; }
     s32 getSwNo() { return fopAcM_GetParam(this) >> 0x0C & 0xFF; }
 };
 
 /* 000000EC-00000124       .text __ct__12daTbox_HIO_cFv */
 daTbox_HIO_c::daTbox_HIO_c() {
-    m0004 = -1;
+    mHioId = -1;
     m0006 = 0x82;
     m0008 = 0xB4;
     m000A = 0x30;
@@ -312,8 +317,9 @@ s32 daTbox_c::effectShapeSet() {
     }
 
     J3DAnmTevRegKey* flashRegAnm = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", 0x1E);
+    int regInit = mFlashRegAnm.init(flashModelData, flashRegAnm, true, 0, 1.0f, 0, -1, false, 0);
 
-    s32 regInit = mFlashRegAnm.init(flashModelData, flashRegAnm, true, 0, 1.0f, 0, -1, false, 0);
+    // Using cPhs_COMPLEATE_e and cPhs_ERROR_e break the match here.
     return regInit != 0 ? 4 : 5;
 }
 
@@ -344,6 +350,7 @@ s32 daTbox_c::envShapeSet() {
     }
 
     mDoExt_modelTexturePatch(modelData);
+
     return cPhs_COMPLEATE_e;
 }
 
@@ -397,6 +404,7 @@ s32 daTbox_c::bgCheckSet() {
     }
 
     mpBgWCurrent = NULL;
+
     return cPhs_COMPLEATE_e;
 }
 
@@ -406,7 +414,7 @@ void daTbox_c::searchRoomNo() {
         mRoomNo = orig.angle.x & 0x3F;
     }
 
-    if ((m03F0 & 0x02) != 0) {
+    if (flagCheck(0x02)) {
         clrDzb();
     }
     else if (mRoomNo != -1 && mpBgWCurrent == NULL) {
@@ -492,12 +500,12 @@ void daTbox_c::setDzb() {
 
 /* 00000ECC-00000F8C       .text surfaceProc__8daTbox_cFv */
 void daTbox_c::surfaceProc() {
-    if (mpBgWCurrent != NULL && (m03F0 & 0x20) != 0) {
+    if (mpBgWCurrent != NULL && flagCheck(0x20)) {
         if (m03EC < -1.0f) {
             m03EC += 1.0f;
         }
         else {
-            m03F0 &= -33;
+            flagOff(0x20);
             m03EC = 0.0f;
         }
 
@@ -557,24 +565,25 @@ s32 CheckCreateHeap(fopAc_ac_c* i_actor) {
 /* 000010AC-0000114C       .text CreateHeap__8daTbox_cFv */
 s32 daTbox_c::CreateHeap() {
     if (commonShapeSet() != cPhs_COMPLEATE_e) {
-        return 0;
+        return FALSE;
     }
 
     if (checkEnv() && envShapeSet() != cPhs_COMPLEATE_e) {
-        return 0;
+        return FALSE;
     }
 
     if (!checkOpen() && effectShapeSet() != cPhs_COMPLEATE_e) {
-        return 0;
+        return FALSE;
     }
 
-    return bgCheckSet() != 4 ? FALSE : TRUE;
+    return bgCheckSet() != cPhs_COMPLEATE_e ? FALSE : TRUE;
 }
 
 /* 0000114C-00001560       .text CreateInit__8daTbox_cFv */
 s32 daTbox_c::CreateInit() {
     s32 funcType = getFuncType();
-    m03F0 = 0;
+    flagClr();
+
     mSmokeCB.field_0x15 = 1;
     mOpenAnm.setPlaySpeed(0.0f);
 
@@ -610,29 +619,29 @@ s32 daTbox_c::CreateInit() {
                 frameCtrl->setFrame(frameCtrl->getEnd());
             }
             else {
-                 m03F0 |= 0x04;
+                 flagOn(0x04);
 
                 switch (funcType) {
                     case FUNC_TYPE_SWITCH:
                     case FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN:
                         mActionFunc = actionSwOnWait;
                         m03F8 = 0x41;
-                        m03F0 |= 0x03;
+                        flagOn(0x03);
                         m03F6 = 0x78;
                         break;
                     case FUNC_TYPE_ENEMIES:
                         mActionFunc = actionGenocide;
-                        m03F0 |= 0x03;
+                        flagOn(0x03);
                         m03F6 = 0x78;
                         break;
                     case FUNC_TYPE_TACT:
                         mActionFunc = actionSwOnWait;
-                        m03F0 |= 0x03;
+                        flagOn(0x03);
                         m03F6 = l_HIO.m0008;
                         break;
                     case FUNC_TYPE_SWITCH_TRANSPARENT:
                         mActionFunc = actionSwOnWait;
-                        m03F0 |= 0x02;
+                        flagOn(0x02);
                         m03F6 = 0x5A;
 
                         mpAppearRegAnm->setFrame(30.0f);
@@ -650,8 +659,8 @@ s32 daTbox_c::CreateInit() {
     lightReady();
     mAllColRatio = 1.0f;
 
-    if (l_HIO.m0004 < 0) {
-        l_HIO.m0004 = mDoHIO_root.mDoHIO_createChild("宝箱", (JORReflexible*)(&l_HIO));
+    if (l_HIO.mHioId < 0) {
+        l_HIO.mHioId = mDoHIO_root.mDoHIO_createChild("宝箱", (JORReflexible*)(&l_HIO));
     }
 
     shape_angle.z = 0;
@@ -751,17 +760,17 @@ s32 daTbox_c::demoProc() {
                 mEfLight.mPower = 0.0f;
                 break;
             case DEMO_PROC_APPEAR:
-                m03F0 |= 0x20;
+                flagOn(0x20);
                 m03EC = -130.0f;
                 
                 setDzb();
 
                 if (getFuncType() == FUNC_TYPE_TACT) {
-                    m03F0 &= -3;
+                    flagOff(0x02);
                     demoInitAppear_Tact();
                 }
                 else {
-                    m03F0 &= -4;
+                    flagOff(0x03);
                     demoInitAppear();
                 }
 
@@ -812,11 +821,11 @@ s32 daTbox_c::demoProc() {
             break;
     }
 
-    if (m03F0 & 0x10) {
+    if (flagCheck(0x10)) {
         demoProcOpen();
     }
 
-    if (m03F0 & 0x08) {
+    if (flagCheck(0x08)) {
         dKy_set_allcol_ratio(mAllColRatio);
     }
 
@@ -907,9 +916,9 @@ s32 daTbox_Delete(daTbox_c* i_tbox) {
     i_tbox->mSmokeCB.end();
     dComIfG_resDelete(&i_tbox->mPhs, "Dalways");
 
-    if (l_HIO.m0004 >= 0) {
-        mDoHIO_root.mDoHIO_deleteChild(l_HIO.m0004);
-        l_HIO.m0004 = -1;
+    if (l_HIO.mHioId >= 0) {
+        mDoHIO_root.mDoHIO_deleteChild(l_HIO.mHioId);
+        l_HIO.mHioId = -1;
     }
 
     return TRUE;
@@ -949,7 +958,7 @@ s32 daTbox_Create(fopAc_ac_c* i_actor) {
         }
 
         u32 heapResult = fopAcM_entrySolidHeap(i_actor, (heapCallbackFunc)CheckCreateHeap, heapSize);
-        if ((heapResult & 0xFF) == 0) {
+        if (heapResult == FALSE) {
             return cPhs_ERROR_e;
         }
         else {
