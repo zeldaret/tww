@@ -9,8 +9,8 @@ namespace JASystem {
         struct Osc_ {
             /* 0x00 */ u8 field_0x0;
             /* 0x04 */ f32 field_0x4;
-            /* 0x08 */ u32 table;
-            /* 0x0C */ int rel_table;
+            /* 0x08 */ void* table;
+            /* 0x0C */ void* rel_table;
             /* 0x10 */ f32 field_0x10;
             /* 0x14 */ f32 field_0x14;
         };
