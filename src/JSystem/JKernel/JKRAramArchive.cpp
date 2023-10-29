@@ -249,31 +249,32 @@ u32 JKRAramArchive::fetchResource_subroutine(u32 srcAram, u32 srcLength, u8* dst
 
 /* 802BA894-802BAA48       .text fetchResource_subroutine__14JKRAramArchiveFUlUlP7JKRHeapiPPUc */
 u32 JKRAramArchive::fetchResource_subroutine(u32 entryNum, u32 length, JKRHeap* pHeap, int compression, u8** out) {
-    /* Nonmatching */
-    u32 readLen;
     u32 alignedLen = ALIGN_NEXT(length, 0x20);
 
     u8* buffer;
     switch (compression) {
     case COMPRESSION_NONE:
-        buffer = static_cast<u8*>(JKRAllocFromHeap(pHeap, alignedLen, 0x20));
-        JUT_ASSERT(662, buffer != 0);
-        JKRAramToMainRam(entryNum, buffer, alignedLen, EXPAND_SWITCH_UNKNOWN0, alignedLen,
-                         NULL, -1, NULL);
-        *out = buffer;
-        return length;
+        {
+            buffer = (u8*)(JKRAllocFromHeap(pHeap, alignedLen, 0x20));
+            JUT_ASSERT(662, buffer != 0);
+            JKRAramToMainRam(entryNum, buffer, alignedLen, EXPAND_SWITCH_UNKNOWN0, alignedLen, NULL, -1, NULL);
+            *out = buffer;
+            return length;
+        }
     case COMPRESSION_YAY0:
     case COMPRESSION_YAZ0:
-        u8 tmpBuf[0x40];
-        u8* buf = (u8*)ALIGN_PREV((s32)&tmpBuf[0x1F], sizeof(SArcHeader));
-        JKRAramToMainRam(entryNum, buf, sizeof(SArcHeader), EXPAND_SWITCH_UNKNOWN0, 0, NULL, -1, NULL);
-        length = ALIGN_NEXT(JKRDecompExpandSize(buf), sizeof(SArcHeader));
-        buffer = static_cast<u8*>(JKRAllocFromHeap(pHeap, length, sizeof(SArcHeader)));
-        JUT_ASSERT(688, buffer);
-        JKRAramToMainRam(entryNum, buffer, alignedLen, EXPAND_SWITCH_UNKNOWN1, length, pHeap,
-                         -1, &readLen);
-        *out = buffer;
-        return readLen;
+        {
+            u8 headerBuf[0x40];
+            u8* alignHeader = (u8*)ALIGN_NEXT((s32)&headerBuf[0], sizeof(SArcHeader));
+            JKRAramToMainRam(entryNum, alignHeader, sizeof(SArcHeader), EXPAND_SWITCH_UNKNOWN0, 0, NULL, -1, NULL);
+            u32 decompressedLen = ALIGN_NEXT(JKRDecompExpandSize(alignHeader), sizeof(SArcHeader));
+            buffer = (u8*)(JKRAllocFromHeap(pHeap, decompressedLen, sizeof(SArcHeader)));
+            JUT_ASSERT(688, buffer);
+            u32 readLen;
+            JKRAramToMainRam(entryNum, buffer, alignedLen, EXPAND_SWITCH_UNKNOWN1, decompressedLen, pHeap, -1, &readLen);
+            *out = buffer;
+            return readLen;
+        }
     default:
         OSPanic(__FILE__, 698, ":::??? bad sequence\n");
         return 0;

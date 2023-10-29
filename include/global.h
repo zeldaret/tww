@@ -15,7 +15,6 @@
 #define JUT_EXPECT(...)
 #define ASSERT(...)
 #define LOGF(FMT, ...)
-#define FLAG_ON(V, F) (((V) & (F)) == 0)
 
 #define FLOAT_LABEL(x) (*(f32*)&x)
 #define DOUBLE_LABEL(x) (*(f64*)&x)
