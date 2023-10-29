@@ -850,7 +850,7 @@ config.libs = [
     JSystemLib(
         "JRenderer",
         [
-            Object(NonMatching, "JSystem/JRenderer/JRenderer.cpp"),
+            Object(Matching,    "JSystem/JRenderer/JRenderer.cpp"),
         ],
     ),
     JSystemLib(
