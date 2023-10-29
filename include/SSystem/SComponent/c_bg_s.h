@@ -41,8 +41,7 @@ public:
 public:
     cBgS() {}
 
-    cM3dGPla* GetTriPla(cBgS_PolyInfo&) const;
-    cM3dGPla* i_GetTriPla(cBgS_PolyInfo& polyInfo) const {
+    cM3dGPla* GetTriPla(cBgS_PolyInfo& polyInfo) const {
         return GetTriPla(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex());
     }
     bool Regist(cBgW*, unsigned int, void*);
