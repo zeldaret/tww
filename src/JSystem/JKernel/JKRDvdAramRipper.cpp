@@ -225,9 +225,9 @@ static u8* szpEnd;
 static u8* refBuf;
 static u8* refEnd;
 static u8* refCurrent;
-static u8* dmaBuf;
-static u8* dmaEnd;
-static u8* dmaCurrent;
+u8* dmaBuf;
+u8* dmaEnd;
+u8* dmaCurrent;
 static u32 srcOffset;
 static u32 transLeft;
 static u8* srcLimit;
@@ -249,14 +249,14 @@ static int JKRDecompressFromDVDToAram(JKRDvdFile* dvdFile, u32 param_1, u32 file
     OSLockMutex(&decompMutex);
     u32 bufferSize = JKRDvdAramRipper::getSzpBufferSize();
     szpBuf = (u8*)JKRAllocFromSysHeap(bufferSize, 0x20);
-    JUT_ASSERT(693, szpBuf != 0);
+    JUT_ASSERT(VERSION_SELECT(703, 693, 693), szpBuf != 0);
     szpEnd = szpBuf + bufferSize;
     refBuf = (u8*)JKRAllocFromSysHeap(0x1120, 0);
-    JUT_ASSERT(701, refBuf != 0);
+    JUT_ASSERT(VERSION_SELECT(711, 701, 701), refBuf != 0);
     refEnd = refBuf + 0x1120;
     refCurrent = refBuf;
     dmaBuf = (u8*)JKRAllocFromSysHeap(0x100, 0x20);
-    JUT_ASSERT(710, dmaBuf != 0);
+    JUT_ASSERT(VERSION_SELECT(720, 710, 710), dmaBuf != 0);
     dmaEnd = dmaBuf + 0x100;
     dmaCurrent = dmaBuf;
     srcFile = dvdFile;
@@ -398,7 +398,7 @@ static u8* nextSrcData(u8* src) {
     if (transSize > transLeft) {
         transSize = transLeft;
     }
-    JUT_ASSERT(966, transSize > 0);
+    JUT_ASSERT(VERSION_SELECT(979, 966, 966), transSize > 0);
     while (true) {
         s32 result = DVDReadPrio(&srcFile->mFileInfo, dest + size, transSize, srcOffset, 2);
         if (result >= 0) {
