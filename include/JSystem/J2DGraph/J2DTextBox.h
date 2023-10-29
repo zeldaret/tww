@@ -66,7 +66,7 @@ public:
     virtual u16 getTypeID() { return 19; };
 
 private:
-    /* 0xCC */ JUTResFont* mpFont;
+    /* 0xCC */ JUTFont* mpFont;
     /* 0xD0 */ JUtility::TColor mCharColor;
     /* 0xD4 */ JUtility::TColor mGradColor;
     /* 0xD8 */ f32 field_0xd8;

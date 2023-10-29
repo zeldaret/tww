@@ -29,14 +29,17 @@ public:
     virtual void drawSelf(f32 x, f32 y, Mtx* mtx);
     virtual void drawOut(f32, f32, f32, f32, f32, f32);
     virtual void drawOut(f32, f32, f32, f32, f32, f32, f32, f32);
+    JUTTexture * getTexture(u8 idx) const {
+        return idx < mNumTexture ? mpTexture[idx] : NULL;
+    }
     void initiate(const ResTIMG*, const ResTLUT*);
     void private_initiate(const ResTIMG*, const ResTLUT*);
     void initinfo();
     bool insert(const ResTIMG*, u8, f32);
     bool insert(const char*, u8, f32);
     bool remove(u8);
-    int changeTexture(const ResTIMG*, u8);
-    int changeTexture(const char*, u8);
+    const ResTIMG * changeTexture(const ResTIMG*, u8);
+    const ResTIMG * changeTexture(const char*, u8);
     void drawFullSet(f32, f32, f32, f32, J2DBinding, J2DMirror, bool, Mtx*);
     void draw(f32, f32, f32, f32, bool, bool, bool);
     void draw(f32 x, f32 y, bool, bool, bool) {
@@ -87,7 +90,7 @@ public:
 private:
     /* 0x0CC */ JUTTexture* mpTexture[4];
     /* 0x0DC */ u8 mNumTexture;
-    /* 0x0DD */ u8 field_0xdd;
+    /* 0x0DD */ u8 mValidTexture;
     /* 0x0DE */ u8 field_0xde;
     /* 0x0DF */ u8 field_0xdf;
     /* 0x0E0 */ f32 mBlendKonstColorF[4];
