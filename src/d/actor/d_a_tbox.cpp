@@ -182,7 +182,7 @@ public:
     /* 0x03F2 */ s16 m03F2;
 
     /* 0x03F4 */ u8 m03F4;
-    /* 0x03F5 */ u8 m03F5;
+    /* 0x03F5 */ u8 mIsFlashPlaying;
     /* 0x03F6 */ u16 m03F6;
 
     /* 0x03F8 */ u8 m03F8;
@@ -199,8 +199,13 @@ public:
     void flagClr() { mFlags = 0; }
     BOOL flagCheck(u16 flag) { return mFlags & flag; }
 
+    request_of_phase_process_class* getPhase() { return &mPhs; }
+
     u8 getTboxNo() { return fopAcM_GetParam(this) >> 0x07 & 0x1F; }
     s32 getSwNo() { return fopAcM_GetParam(this) >> 0x0C & 0xFF; }
+
+    bool action() { return (this->*mActionFunc)(); }
+    void setAction(actionFunc func) { mActionFunc = func; }
 };
 
 /* 000000EC-00000124       .text __ct__12daTbox_HIO_cFv */
@@ -591,7 +596,7 @@ s32 daTbox_c::CreateInit() {
         J3DFrameCtrl* frameCtrl = mOpenAnm.getFrameCtrl();
         frameCtrl->setFrame(frameCtrl->getEnd());
 
-        mActionFunc = actionWait;
+        setAction(actionWait);
 
         if (checkEnv()) {
             m034C = 2.0;
@@ -602,15 +607,15 @@ s32 daTbox_c::CreateInit() {
     }
     else {
         if (!checkEnv()) {
-            mActionFunc = actionOpenWait;
+            setAction(actionOpenWait);
         }
         else {
             if (checkNormal()) {
                 if (funcType == FUNC_TYPE_SWITCH_VISIBLE && !dComIfGs_isSwitch(getSwNo(), mRoomNo)) {
-                    mActionFunc = actionOpenWait;
+                    setAction(actionOpenWait);
                 }
                 else {
-                    mActionFunc = actionSwOnWait2;
+                    setAction(actionSwOnWait2);
                 }
 
                 m034C = 2.0f;
@@ -624,23 +629,23 @@ s32 daTbox_c::CreateInit() {
                 switch (funcType) {
                     case FUNC_TYPE_SWITCH:
                     case FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN:
-                        mActionFunc = actionSwOnWait;
+                        setAction(actionSwOnWait);
                         m03F8 = 0x41;
                         flagOn(0x03);
                         m03F6 = 0x78;
                         break;
                     case FUNC_TYPE_ENEMIES:
-                        mActionFunc = actionGenocide;
+                        setAction(actionGenocide);
                         flagOn(0x03);
                         m03F6 = 0x78;
                         break;
                     case FUNC_TYPE_TACT:
-                        mActionFunc = actionSwOnWait;
+                        setAction(actionSwOnWait);
                         flagOn(0x03);
                         m03F6 = l_HIO.m0008;
                         break;
                     case FUNC_TYPE_SWITCH_TRANSPARENT:
-                        mActionFunc = actionSwOnWait;
+                        setAction(actionSwOnWait);
                         flagOn(0x02);
                         m03F6 = 0x5A;
 
@@ -885,6 +890,49 @@ bool daTbox_c::actionGenocide() {
 /* 00002A2C-00002BF0       .text execute__8daTbox_cFv */
 s32 daTbox_c::execute() {
     /* Nonmatching */
+    if (mRoomNo == -1 || checkRoomDisp(mRoomNo) != TRUE) {
+        return TRUE;
+    }
+
+    action();
+
+    if (mpAppearTexAnm != NULL) {
+        mpAppearTexAnm->play();
+    }
+
+    if (mIsFlashPlaying) {
+        mFlashAnm.play();
+        mFlashTexAnm.play();
+
+        if (mFlashRegAnm.play()) {
+            mIsFlashPlaying = FALSE;
+        }
+
+        mpFlashMdl->setBaseScale(cXyz(10.0f / 7.0f, 1.0f, 1.0f));
+
+        mDoMtx_stack_c::transS(current.pos.x, current.pos.y + 50.0f, current.pos.z);
+        mDoMtx_stack_c::YrotM(current.angle.y + 0x7FFF);
+        mpFlashMdl->setBaseTRMtx(mDoMtx_stack_c::get());
+    }
+
+    if (getFuncType() == FUNC_TYPE_GRAVITY) {
+        fopAcM_posMoveF(this, NULL);
+        mObjAcch.CrrPos(g_dComIfG_gameInfo.play.mBgS);
+
+        mAttentionInfo.mPosition = current.pos;
+
+        mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+        mDoMtx_stack_c::YrotM(orig.angle.y);
+        
+        mChestMdl->setBaseTRMtx(mDoMtx_stack_c::get());
+        mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
+
+        if (mpBgWCurrent != NULL) {
+            mpBgWCurrent->Move();
+        }
+    }
+
+    return TRUE;
 }
 
 /* 00002BF0-00002C10       .text daTbox_Draw__FP8daTbox_c */
@@ -914,7 +962,7 @@ s32 daTbox_Delete(daTbox_c* i_tbox) {
     }
 
     i_tbox->mSmokeCB.end();
-    dComIfG_resDelete(&i_tbox->mPhs, "Dalways");
+    dComIfG_resDelete(i_tbox->getPhase(), "Dalways");
 
     if (l_HIO.mHioId >= 0) {
         mDoHIO_root.mDoHIO_deleteChild(l_HIO.mHioId);
@@ -945,7 +993,7 @@ s32 daTbox_Create(fopAc_ac_c* i_actor) {
 
     fopAcM_SetupActor(tbox, daTbox_c);
 
-    result = dComIfG_resLoad(&tbox->mPhs, "Dalways");
+    result = dComIfG_resLoad(tbox->getPhase(), "Dalways");
 
     if (result == cPhs_COMPLEATE_e) {
         tbox->mRoomNo = tbox->orig.angle.x & 0x3F;
