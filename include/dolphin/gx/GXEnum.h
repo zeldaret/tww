@@ -586,6 +586,8 @@ typedef enum _GXTexGenSrc {
     /* 0x10 */ GX_TG_TEXCOORD4,
     /* 0x11 */ GX_TG_TEXCOORD5,
     /* 0x12 */ GX_TG_TEXCOORD6,
+    /* 0x13 */ GX_TG_COLOR0,
+    /* 0x14 */ GX_TG_COLOR1,
 } GXTexGenSrc;
 
 typedef enum _GXZTexOp {

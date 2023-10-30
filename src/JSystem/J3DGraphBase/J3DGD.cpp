@@ -7,21 +7,21 @@
 #include "dolphin/types.h"
 #include "dolphin/os/OS.h"
 
-static u8 cm2hw[]             = { 0, 2, 1, 3 };
+/* 802D5F38-802D60B0       .text J3DGDSetGenMode__FUcUcUcUc11_GXCullMode */
+void J3DGDSetGenMode(u8 texGenNum, u8 colorChanNum, u8 tevNum, u8 indTevNum, GXCullMode cull) {
+    static u8 cm2hw[] = { 0, 2, 1, 3 };
+    GDOverflowCheck(10);
+
+    J3DGDWriteBPCmd(0x07FC3F | 0xFE << 24);
+    J3DGDWriteBPCmd(texGenNum << 0 | colorChanNum << 4 | (tevNum - 1) << 10 | cm2hw[cull] << 14 | indTevNum << 16 | 0x00 << 24);
+}
+
 u8 J3DGDTexMode0Ids[]  = { 0x80, 0x81, 0x82, 0x83, 0xa0, 0xa1, 0xa2, 0xa3 };
 u8 J3DGDTexMode1Ids[]  = { 0x84, 0x85, 0x86, 0x87, 0xa4, 0xa5, 0xa6, 0xa7 };
 u8 J3DGDTexImage0Ids[] = { 0x88, 0x89, 0x8a, 0x8b, 0xa8, 0xa9, 0xaa, 0xab };
 u8 J3DGDTexImage3Ids[] = { 0x94, 0x95, 0x96, 0x97, 0xb4, 0xb5, 0xb6, 0xb7 };
 u8 J3DGDTexTlutIds[]   = { 0x98, 0x99, 0x9a, 0x9b, 0xb8, 0xb9, 0xba, 0xbb };
 static u8 GX2HWFiltConv[]     = { 0, 4, 1, 5, 2, 6 };
-
-/* 802D5F38-802D60B0       .text J3DGDSetGenMode__FUcUcUcUc11_GXCullMode */
-void J3DGDSetGenMode(u8 texGenNum, u8 colorChanNum, u8 tevNum, u8 indTevNum, GXCullMode cull) {
-    GDOverflowCheck(10);
-
-    J3DGDWriteBPCmd(0x07FC3F | 0xFE << 24);
-    J3DGDWriteBPCmd(texGenNum << 0 | colorChanNum << 4 | (tevNum - 1) << 10 | cm2hw[cull] << 14 | indTevNum << 16 | 0x00 << 24);
-}
 
 /* 802D60B0-802D6204       .text J3DGDSetGenMode_3Param__FUcUcUc */
 void J3DGDSetGenMode_3Param(u8 texGenNum, u8 tevNum, u8 indTevNum) {
@@ -81,13 +81,197 @@ void J3DGDSetLightDir(GXLightID id, f32 x, f32 y, f32 z) {
 }
 
 /* 802D6ACC-802D702C       .text J3DGDSetVtxAttrFmtv__F9_GXVtxFmtP17_GXVtxAttrFmtListb */
-void J3DGDSetVtxAttrFmtv(GXVtxFmt, GXVtxAttrFmtList*, bool) {
-    /* Nonmatching */
+void J3DGDSetVtxAttrFmtv(GXVtxFmt fmt, GXVtxAttrFmtList* vtxAttr, bool forceNBT) {
+    GXCompCnt posCompCnt = GX_POS_XYZ;
+    GXCompType posCompType = GX_F32;
+    u32 posCompShift = 0;
+
+    GXCompCnt nrmCompCnt = GX_NRM_XYZ;
+    GXCompType nrmCompType = GX_F32;
+    bool nbt3 = false;
+
+    GXCompCnt clr0CompCnt = GX_CLR_RGBA;
+    GXCompType clr0CompType = GX_RGBA8;
+    GXCompCnt clr1CompCnt = GX_CLR_RGBA;
+    GXCompType clr1CompType = GX_RGBA8;
+
+    GXCompCnt tex0CompCnt = GX_TEX_ST;
+    GXCompType tex0CompType = GX_F32;
+    u32 tex0CompShift = 0;
+    GXCompCnt tex1CompCnt = GX_TEX_ST;
+    GXCompType tex1CompType = GX_F32;
+    u32 tex1CompShift = 0;
+    GXCompCnt tex2CompCnt = GX_TEX_ST;
+    GXCompType tex2CompType = GX_F32;
+    u32 tex2CompShift = 0;
+    GXCompCnt tex3CompCnt = GX_TEX_ST;
+    GXCompType tex3CompType = GX_F32;
+    u32 tex3CompShift = 0;
+    GXCompCnt tex4CompCnt = GX_TEX_ST;
+    GXCompType tex4CompType = GX_F32;
+    u32 tex4CompShift = 0;
+    GXCompCnt tex5CompCnt = GX_TEX_ST;
+    GXCompType tex5CompType = GX_F32;
+    u32 tex5CompShift = 0;
+    GXCompCnt tex6CompCnt = GX_TEX_ST;
+    GXCompType tex6CompType = GX_F32;
+    u32 tex6CompShift = 0;
+    GXCompCnt tex7CompCnt = GX_TEX_ST;
+    GXCompType tex7CompType = GX_F32;
+    u32 tex7CompShift = 0;
+
+    for (; vtxAttr->mAttrib != GX_VA_NULL; vtxAttr++) {
+        switch (vtxAttr->mAttrib) {
+        case GX_VA_POS:
+            posCompCnt = vtxAttr->mCompCnt;
+            posCompType = vtxAttr->mCompType;
+            posCompShift = vtxAttr->mCompShift;
+            break;
+        case GX_VA_NRM:
+        case GX_VA_NBT:
+            nrmCompType = vtxAttr->mCompType;
+            if (vtxAttr->mCompCnt == GX_NRM_NBT3) {
+                nrmCompCnt = GX_NRM_NBT;
+                nbt3 = true;
+            } else {
+                nrmCompCnt = GX_NRM_NBT;
+                if (!forceNBT)
+                    nrmCompCnt = vtxAttr->mCompCnt;
+                nbt3 = false;
+            }
+            break;
+        case GX_VA_CLR0:
+            clr0CompCnt = vtxAttr->mCompCnt;
+            clr0CompType = vtxAttr->mCompType;
+            break;
+        case GX_VA_CLR1:
+            clr1CompCnt = vtxAttr->mCompCnt;
+            clr1CompType = vtxAttr->mCompType;
+            break;
+        case GX_VA_TEX0:
+            tex0CompCnt = vtxAttr->mCompCnt;
+            tex0CompType = vtxAttr->mCompType;
+            tex0CompShift = vtxAttr->mCompShift;
+            break;
+        case GX_VA_TEX1:
+            tex1CompCnt = vtxAttr->mCompCnt;
+            tex1CompType = vtxAttr->mCompType;
+            tex1CompShift = vtxAttr->mCompShift;
+            break;
+        case GX_VA_TEX2:
+            tex2CompCnt = vtxAttr->mCompCnt;
+            tex2CompType = vtxAttr->mCompType;
+            tex2CompShift = vtxAttr->mCompShift;
+            break;
+        case GX_VA_TEX3:
+            tex3CompCnt = vtxAttr->mCompCnt;
+            tex3CompType = vtxAttr->mCompType;
+            tex3CompShift = vtxAttr->mCompShift;
+            break;
+        case GX_VA_TEX4:
+            tex4CompCnt = vtxAttr->mCompCnt;
+            tex4CompType = vtxAttr->mCompType;
+            tex4CompShift = vtxAttr->mCompShift;
+            break;
+        case GX_VA_TEX5:
+            tex5CompCnt = vtxAttr->mCompCnt;
+            tex5CompType = vtxAttr->mCompType;
+            tex5CompShift = vtxAttr->mCompShift;
+            break;
+        case GX_VA_TEX6:
+            tex6CompCnt = vtxAttr->mCompCnt;
+            tex6CompType = vtxAttr->mCompType;
+            tex6CompShift = vtxAttr->mCompShift;
+            break;
+        case GX_VA_TEX7:
+            tex7CompCnt = vtxAttr->mCompCnt;
+            tex7CompType = vtxAttr->mCompType;
+            tex7CompShift = vtxAttr->mCompShift;
+            break;
+        default:
+            break;
+        }
+    }
+
+    GDOverflowCheck(18);
+
+    J3DGDWriteCPCmd(0x70 + fmt,
+        (posCompCnt << 0) | (posCompType << 1) | (posCompShift << 4) |
+        (nrmCompCnt << 9) | (nrmCompType << 10) |
+        (clr0CompCnt << 13) | (clr0CompType << 14) |
+        (clr1CompCnt << 17) | (clr1CompType << 18) |
+        (tex0CompCnt << 21) | (tex0CompType << 22) | (tex0CompShift << 25) |
+        (1 << 30) | (nbt3 << 31));
+
+    J3DGDWriteCPCmd(0x80 + fmt,
+        (tex1CompCnt << 0) | (tex1CompType << 1) | (tex1CompShift << 4) |
+        (tex2CompCnt << 9) | (tex2CompType << 10) | (tex2CompShift << 13) |
+        (tex3CompCnt << 18) | (tex3CompType << 19) | (tex3CompShift << 22) |
+        (tex4CompCnt << 27) | (tex4CompType << 28) |
+        (1 << 31));
+
+    J3DGDWriteCPCmd(0x90 + fmt,
+        (tex4CompShift << 0) |
+        (tex5CompCnt << 5) | (tex5CompType << 6) | (tex5CompShift << 9) |
+        (tex6CompCnt << 14) | (tex6CompType << 15) | (tex6CompShift << 18) |
+        (tex7CompCnt << 23) | (tex7CompType << 24) | (tex7CompShift << 27));
 }
 
 /* 802D702C-802D71FC       .text J3DGDSetTexCoordGen__F13_GXTexGenType12_GXTexGenSrc */
-void J3DGDSetTexCoordGen(GXTexGenType, GXTexGenSrc) {
-    /* Nonmatching */
+void J3DGDSetTexCoordGen(GXTexGenType type, GXTexGenSrc src) {
+    u32 form = 0;
+    u32 proj = 0;
+    u32 row = 5;
+    u32 embossSrc = 5;
+    u32 embossLight = 0;
+
+    switch (src) {
+    case GX_TG_POS: row = 0; form = 1; break;
+    case GX_TG_NRM: row = 1; form = 1; break; 
+    case GX_TG_BINRM: row = 3; form = 1; break;
+    case GX_TG_TANGENT: row = 4; form = 1; break;
+    case GX_TG_COLOR0: row = 2; break;
+    case GX_TG_COLOR1: row = 2; break;
+    case GX_TG_TEX0: row = 5; break;
+    case GX_TG_TEX1: row = 6; break;
+    case GX_TG_TEX2: row = 7; break;
+    case GX_TG_TEX3: row = 8; break;
+    case GX_TG_TEX4: row = 9; break;
+    case GX_TG_TEX5: row = 10; break;
+    case GX_TG_TEX6: row = 11; break;
+    case GX_TG_TEX7: row = 12; break;
+    case GX_TG_TEXCOORD0: embossSrc = 0; break;
+    case GX_TG_TEXCOORD1: embossSrc = 1; break;
+    case GX_TG_TEXCOORD2: embossSrc = 2; break;
+    case GX_TG_TEXCOORD3: embossSrc = 3; break;
+    case GX_TG_TEXCOORD4: embossSrc = 4; break;
+    case GX_TG_TEXCOORD5: embossSrc = 5; break;
+    case GX_TG_TEXCOORD6: embossSrc = 6; break;
+    }
+
+    switch (type) {
+    case GX_TG_MTX2x4: src = (GXTexGenSrc) 0; break;
+    case GX_TG_MTX3x4: src = (GXTexGenSrc) 0; proj = 1; break;
+    case GX_TG_BUMP0:
+    case GX_TG_BUMP1:
+    case GX_TG_BUMP2:
+    case GX_TG_BUMP3:
+    case GX_TG_BUMP4:
+    case GX_TG_BUMP5:
+    case GX_TG_BUMP6:
+    case GX_TG_BUMP7:
+        src = (GXTexGenSrc) 1;
+        embossLight = type - GX_TG_BUMP0;
+        break;
+    case GX_TG_SRTG:
+        if (src == GX_TG_COLOR0)
+            src = (GXTexGenSrc) 2;
+        else
+            src = (GXTexGenSrc) 3;
+        break;
+    }
+
+    J3DGDWrite_u32((proj << 1) | (form << 2) | (src << 4) | (row << 7) | (embossSrc << 12) | (embossLight << 15));
 }
 
 /* 802D71FC-802D7400       .text J3DGDSetTexCoordScale2__F13_GXTexCoordIDUsUcUcUsUcUc */

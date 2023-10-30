@@ -25,9 +25,15 @@ inline void J3DGDWrite_f32(f32 param) {
     J3DGDWrite_u32(tmp);
 }
 
-inline void J3DGDWriteBPCmd(u32 param_1) {
+inline void J3DGDWriteBPCmd(u32 cmd) {
     J3DGDWrite_u8(0x61);
-    J3DGDWrite_u32(param_1);
+    J3DGDWrite_u32(cmd);
+}
+
+inline void J3DGDWriteCPCmd(u8 cmd, u32 param) {
+    J3DGDWrite_u8(0x08);
+    J3DGDWrite_u8(cmd);
+    J3DGDWrite_u32(param);
 }
 
 inline void J3DGDWriteXFCmd(u16 cmd, u32 param) {
