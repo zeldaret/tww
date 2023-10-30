@@ -3,91 +3,174 @@
 // Translation Unit: JASBasicInst.cpp
 //
 
-#include "JASBasicInst.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASBasicInst.h"
+#include "JSystem/JAudio/JASBank.h"
+#include "JSystem/JAudio/JASCalc.h"
+#include "JSystem/JAudio/JASInstEffect.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
 
 /* 80284844-80284888       .text __ct__Q28JASystem10TBasicInstFv */
 JASystem::TBasicInst::TBasicInst() {
-    /* Nonmatching */
+    field_0x4 = 1.0f;
+    field_0x8 = 1.0f;
+    mEffect = NULL;
+    mEffectCount = 0;
+    mOsc = NULL;
+    mOscCount = 0;
+    field_0x1c = 0;
+    mKeymap = NULL;
 }
 
 /* 80284888-80284914       .text __dt__Q28JASystem10TBasicInstFv */
 JASystem::TBasicInst::~TBasicInst() {
-    /* Nonmatching */
+    delete[] mKeymap;
+    delete[] mEffect;
+    delete[] mOsc;
 }
 
 /* 80284914-80284B4C       .text getParam__Q28JASystem10TBasicInstCFiiPQ28JASystem10TInstParam */
-void JASystem::TBasicInst::getParam(int, int, JASystem::TInstParam*) const {
+bool JASystem::TBasicInst::getParam(int param_1, int param_2, TInstParam* param_3) const {
     /* Nonmatching */
+    param_3->field_0x0 = 0;
+    param_3->field_0x38 = 0;
+    param_3->field_0x8 = mOsc;
+    param_3->field_0xc = mOscCount;
+    param_3->field_0x10 *= field_0x4;
+    param_3->field_0x14 *= field_0x8;
+    for (int i = 0; i < mEffectCount; i++) {
+        TInstEffect* effect = mEffect[i];
+        if (!effect) {
+            continue;
+        }
+        f32 y = effect->getY(param_1, param_2);
+        switch (effect->mTarget) {
+        case 0:
+            param_3->field_0x18 *= y;
+            break;
+        case 1:
+            param_3->field_0x1c *= y;
+            break;
+        case 2:
+            param_3->field_0x2c += y - 0.5;
+            break;
+        case 3:
+            param_3->field_0x30 += y;
+            break;
+        case 4:
+            param_3->field_0x34 += y;
+            break;
+        default:
+            JUT_ASSERT(93, 0);
+        }
+    }
+    TKeymap* keymap = NULL;
+    for (int i = 0; i < field_0x1c; i++) {
+        keymap = &mKeymap[i];
+        if (param_1 <= keymap->field_0x0) {
+            param_3->field_0x3c = i;
+            break;
+        }
+    }
+    if (!keymap) {
+        return false;
+    }
+    for (int i = 0; i < keymap->field_0x4; i++) {
+        void* region = keymap->getVeloRegion(i);
+        // TODO
+    }
+    return false;
 }
 
 /* 80284B4C-80284B54       .text getKeymapIndex__Q28JASystem10TBasicInstCFi */
-void JASystem::TBasicInst::getKeymapIndex(int) const {
-    /* Nonmatching */
+int JASystem::TBasicInst::getKeymapIndex(int param_1) const {
+    return param_1;
 }
 
 /* 80284B54-80284C10       .text setKeyRegionCount__Q28JASystem10TBasicInstFUl */
-void JASystem::TBasicInst::setKeyRegionCount(unsigned long) {
-    /* Nonmatching */
+void JASystem::TBasicInst::setKeyRegionCount(u32 param_1) {
+    delete[] mKeymap;
+    mKeymap = new (TBank::getCurrentHeap(), 0) TKeymap[param_1];
+    JUT_ASSERT(140, mKeymap != 0);
+    field_0x1c = param_1;
 }
 
 /* 80284C10-80284CC4       .text setEffectCount__Q28JASystem10TBasicInstFUl */
-void JASystem::TBasicInst::setEffectCount(unsigned long) {
-    /* Nonmatching */
+void JASystem::TBasicInst::setEffectCount(u32 param_1) {
+    delete[] mEffect;
+    mEffectCount = param_1;
+    if (param_1 == 0) {
+        mEffect = NULL;
+        return;
+    }
+    mEffect = new (TBank::getCurrentHeap(), 0) TInstEffect*[param_1];
+    JUT_ASSERT(157, mEffect != 0);
+    Calc::bzero(mEffect, param_1 * 4);
 }
 
 /* 80284CC4-80284D7C       .text setEffect__Q28JASystem10TBasicInstFiPQ28JASystem11TInstEffect */
-void JASystem::TBasicInst::setEffect(int, JASystem::TInstEffect*) {
-    /* Nonmatching */
+void JASystem::TBasicInst::setEffect(int index, TInstEffect* effect) {
+    JUT_ASSERT(164, index < mEffectCount);
+    JUT_ASSERT(165, index >= 0);
+    mEffect[index] = effect;
 }
 
 /* 80284D7C-80284E30       .text setOscCount__Q28JASystem10TBasicInstFUl */
-void JASystem::TBasicInst::setOscCount(unsigned long) {
-    /* Nonmatching */
+void JASystem::TBasicInst::setOscCount(u32 param_1) {
+    delete[] mOsc;
+    mOscCount = param_1;
+    if (param_1 == 0) {
+        mOsc = NULL;
+        return;
+    }
+    mOsc = new (TBank::getCurrentHeap(), 0) TOscillator::Osc_*[param_1];
+    JUT_ASSERT(193, mOsc != 0);
+    Calc::bzero(mOsc, param_1 * 4);
 }
 
 /* 80284E30-80284EE8       .text setOsc__Q28JASystem10TBasicInstFiPQ38JASystem11TOscillator4Osc_ */
-void JASystem::TBasicInst::setOsc(int, JASystem::TOscillator::Osc_*) {
-    /* Nonmatching */
+void JASystem::TBasicInst::setOsc(int index, TOscillator::Osc_* osc) {
+    JUT_ASSERT(199, index < mOscCount);
+    JUT_ASSERT(200, index >= 0);
+    mOsc[index] = osc;
 }
 
 /* 80284EE8-80284F70       .text getKeyRegion__Q28JASystem10TBasicInstFi */
-void JASystem::TBasicInst::getKeyRegion(int) {
-    /* Nonmatching */
+JASystem::TBasicInst::TKeymap* JASystem::TBasicInst::getKeyRegion(int index) {
+    JUT_ASSERT(217, index >= 0);
+    if (index >= field_0x1c) {
+        return NULL;
+    }
+    return &mKeymap[index];
 }
 
 /* 80284F70-80284FC4       .text __dt__Q38JASystem10TBasicInst7TKeymapFv */
 JASystem::TBasicInst::TKeymap::~TKeymap() {
-    /* Nonmatching */
+    delete[] mVelomap;
 }
 
 /* 80284FC4-80285058       .text setVeloRegionCount__Q38JASystem10TBasicInst7TKeymapFUl */
-void JASystem::TBasicInst::TKeymap::setVeloRegionCount(unsigned long) {
-    /* Nonmatching */
+void JASystem::TBasicInst::TKeymap::setVeloRegionCount(u32 param_1) {
+    delete[] mVelomap;
+    mVelomap = new (TBank::getCurrentHeap(), 0) u8[param_1 * 16];
+    JUT_ASSERT(244, mVelomap != 0);
+    field_0x4 = param_1;
 }
 
 /* 80285058-802850E0       .text getVeloRegion__Q38JASystem10TBasicInst7TKeymapFi */
-void JASystem::TBasicInst::TKeymap::getVeloRegion(int) {
-    /* Nonmatching */
+void* JASystem::TBasicInst::TKeymap::getVeloRegion(int index) {
+    JUT_ASSERT(252, index >= 0);
+    if (index >= field_0x4) {
+        return NULL;
+    }
+    return (u8*)mVelomap + index * 16;
 }
 
 /* 802850E0-80285168       .text getVeloRegion__Q38JASystem10TBasicInst7TKeymapCFi */
-void JASystem::TBasicInst::TKeymap::getVeloRegion(int) const {
-    /* Nonmatching */
+const void* JASystem::TBasicInst::TKeymap::getVeloRegion(int index) const {
+    JUT_ASSERT(261, index >= 0);
+    if (index >= field_0x4) {
+        return NULL;
+    }
+    return (u8*)mVelomap + index * 16;
 }
-
-/* 80285168-802851B0       .text __dt__Q28JASystem5TInstFv */
-JASystem::TInst::~TInst() {
-    /* Nonmatching */
-}
-
-/* 802851B0-802851C8       .text __ct__Q38JASystem10TBasicInst7TKeymapFv */
-JASystem::TBasicInst::TKeymap::TKeymap() {
-    /* Nonmatching */
-}
-
-/* 802851C8-802851D4       .text getType__Q28JASystem10TBasicInstCFv */
-void JASystem::TBasicInst::getType() const {
-    /* Nonmatching */
-}
-
