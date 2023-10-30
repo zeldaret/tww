@@ -3,56 +3,51 @@
 // Translation Unit: JSGFog.cpp
 //
 
-#include "JSGFog.h"
+#include "JSystem/JStage/JSGFog.h"
 #include "dolphin/types.h"
 
 /* 8026DDF0-8026DE50       .text __dt__Q26JStage4TFogFv */
 JStage::TFog::~TFog() {
-    /* Nonmatching */
 }
 
 /* 8026DE50-8026DE58       .text JSGFGetType__Q26JStage4TFogCFv */
-void JStage::TFog::JSGFGetType() const {
-    /* Nonmatching */
+s32 JStage::TFog::JSGFGetType() const {
+    return 6;
 }
 
 /* 8026DE58-8026DE60       .text JSGGetFogFunction__Q26JStage4TFogCFv */
-void JStage::TFog::JSGGetFogFunction() const {
-    /* Nonmatching */
+bool JStage::TFog::JSGGetFogFunction() const {
+    return false;
 }
 
 /* 8026DE60-8026DE64       .text JSGSetFogFunction__Q26JStage4TFogF10_GXFogType */
-void JStage::TFog::JSGSetFogFunction(_GXFogType) {
-    /* Nonmatching */
+void JStage::TFog::JSGSetFogFunction(GXFogType) {
 }
 
 /* 8026DE64-8026DE6C       .text JSGGetStartZ__Q26JStage4TFogCFv */
-void JStage::TFog::JSGGetStartZ() const {
-    /* Nonmatching */
+f32 JStage::TFog::JSGGetStartZ() const {
+    return 0.0f;
 }
 
 /* 8026DE6C-8026DE70       .text JSGSetStartZ__Q26JStage4TFogFf */
-void JStage::TFog::JSGSetStartZ(float) {
-    /* Nonmatching */
+void JStage::TFog::JSGSetStartZ(f32) {
 }
 
 /* 8026DE70-8026DE78       .text JSGGetEndZ__Q26JStage4TFogCFv */
-void JStage::TFog::JSGGetEndZ() const {
-    /* Nonmatching */
+f32 JStage::TFog::JSGGetEndZ() const {
+    return FLOAT_MAX;
 }
 
 /* 8026DE78-8026DE7C       .text JSGSetEndZ__Q26JStage4TFogFf */
-void JStage::TFog::JSGSetEndZ(float) {
-    /* Nonmatching */
+void JStage::TFog::JSGSetEndZ(f32) {
 }
 
 /* 8026DE7C-8026DE90       .text JSGGetColor__Q26JStage4TFogCFv */
-void JStage::TFog::JSGGetColor() const {
-    /* Nonmatching */
+GXColor JStage::TFog::JSGGetColor() const {
+    return (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
 }
 
 /* 8026DE90-8026DE94       .text JSGSetColor__Q26JStage4TFogF8_GXColor */
-void JStage::TFog::JSGSetColor(_GXColor) {
-    /* Nonmatching */
+void JStage::TFog::JSGSetColor(GXColor) {
 }
 

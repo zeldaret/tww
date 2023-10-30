@@ -582,13 +582,13 @@ config.libs = [
     JSystemLib(
         "JStage",
         [
-            Object(NonMatching, "JSystem/JStage/JSGActor.cpp"),
-            Object(NonMatching, "JSystem/JStage/JSGAmbientLight.cpp"),
-            Object(NonMatching, "JSystem/JStage/JSGCamera.cpp"),
-            Object(NonMatching, "JSystem/JStage/JSGFog.cpp"),
-            Object(NonMatching, "JSystem/JStage/JSGLight.cpp"),
-            Object(NonMatching, "JSystem/JStage/JSGObject.cpp"),
-            Object(NonMatching, "JSystem/JStage/JSGSystem.cpp"),
+            Object(Matching,    "JSystem/JStage/JSGActor.cpp"),
+            Object(Matching,    "JSystem/JStage/JSGAmbientLight.cpp"),
+            Object(Matching,    "JSystem/JStage/JSGCamera.cpp"),
+            Object(Matching,    "JSystem/JStage/JSGFog.cpp"),
+            Object(Matching,    "JSystem/JStage/JSGLight.cpp"),
+            Object(Matching,    "JSystem/JStage/JSGObject.cpp"),
+            Object(Matching,    "JSystem/JStage/JSGSystem.cpp"),
         ],
     ),
     JSystemLib(
