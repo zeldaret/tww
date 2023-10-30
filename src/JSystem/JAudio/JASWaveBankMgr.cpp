@@ -3,41 +3,88 @@
 // Translation Unit: JASWaveBankMgr.cpp
 //
 
-#include "JASWaveBankMgr.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASWaveBankMgr.h"
+#include "JSystem/JAudio/JASBasicWaveBank.h"
+#include "JSystem/JAudio/JASCalc.h"
+#include "JSystem/JAudio/JASSimpleWaveBank.h"
+#include "JSystem/JAudio/JASSystemHeap.h"
+#include "JSystem/JAudio/JASWSParser.h"
+#include "JSystem/JAudio/JASWaveArcLoader.h"
+#include "JSystem/JAudio/JASWaveBank.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+
+int JASystem::WaveBankMgr::sTableSize;
+JASystem::TWaveBank** JASystem::WaveBankMgr::sWaveBank;
 
 /* 802882CC-8028835C       .text init__Q28JASystem11WaveBankMgrFi */
-void JASystem::WaveBankMgr::init(int) {
-    /* Nonmatching */
+void JASystem::WaveBankMgr::init(int param_1) {
+    u32 size = param_1 * 4;
+    sWaveBank = (TWaveBank**) new (JASDram, 0) u8[size];
+    JUT_ASSERT(39, sWaveBank != 0);
+    Calc::bzero(sWaveBank, size);
+    sTableSize = param_1;
 }
 
 /* 8028835C-80288390       .text getWaveBank__Q28JASystem11WaveBankMgrFi */
-void JASystem::WaveBankMgr::getWaveBank(int) {
-    /* Nonmatching */
+JASystem::TWaveBank* JASystem::WaveBankMgr::getWaveBank(int banknum) {
+    if (banknum < 0) {
+        return NULL;
+    }
+    if (banknum >= sTableSize) {
+        return NULL;
+    }
+    return sWaveBank[banknum];
 }
 
 /* 80288390-80288444       .text registWaveBank__Q28JASystem11WaveBankMgrFiPQ28JASystem9TWaveBank */
-void JASystem::WaveBankMgr::registWaveBank(int, JASystem::TWaveBank*) {
+bool JASystem::WaveBankMgr::registWaveBank(int banknum, TWaveBank* param_2) {
     /* Nonmatching */
+    JUT_ASSERT(57, banknum >= 0);
+    JUT_ASSERT(58, banknum < sTableSize);
+    sWaveBank[banknum] = param_2;
+    return true;
 }
 
 /* 80288444-802884BC       .text registWaveBankWS__Q28JASystem11WaveBankMgrFiPv */
-void JASystem::WaveBankMgr::registWaveBankWS(int, void*) {
+bool JASystem::WaveBankMgr::registWaveBankWS(int param_1, void* param_2) {
     /* Nonmatching */
+    TWaveBank* bank;
+    if (WSParser::getGroupCount(param_2) == 1) {
+        bank = WSParser::createSimpleWaveBank(param_2);
+    } else {
+        bank = WSParser::createBasicWaveBank(param_2);
+    }
+    if (!bank) {
+        return false;
+    }
+    return registWaveBank(param_1, bank);
 }
 
 /* 802884BC-8028850C       .text getWaveArc__Q28JASystem11WaveBankMgrFii */
-void JASystem::WaveBankMgr::getWaveArc(int, int) {
-    /* Nonmatching */
+JASystem::TWaveArc* JASystem::WaveBankMgr::getWaveArc(int banknum, int param_2) {
+    TWaveBank* bank = getWaveBank(banknum);
+    if (bank == NULL) {
+        return NULL;
+    }
+    return bank->getWaveArc(param_2);
 }
 
 /* 8028850C-80288550       .text loadWave__Q28JASystem11WaveBankMgrFiiPQ38JASystem6Kernel5THeap */
-void JASystem::WaveBankMgr::loadWave(int, int, JASystem::Kernel::THeap*) {
-    /* Nonmatching */
+bool JASystem::WaveBankMgr::loadWave(int banknum, int param_2, Kernel::THeap* param_3) {
+    TWaveArc* arc = getWaveArc(banknum, param_2);
+    if (arc == NULL) {
+        return false;
+    }
+    return arc->load(param_3);
 }
 
 /* 80288550-80288594       .text eraseWave__Q28JASystem11WaveBankMgrFii */
-void JASystem::WaveBankMgr::eraseWave(int, int) {
+bool JASystem::WaveBankMgr::eraseWave(int banknum, int param_2) {
     /* Nonmatching */
+    TWaveArc* arc = getWaveArc(banknum, param_2);
+    if (arc == NULL) {
+        return false;
+    }
+    return arc->erase() != false;
 }
-

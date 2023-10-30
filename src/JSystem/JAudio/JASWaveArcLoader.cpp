@@ -138,7 +138,7 @@ bool JASystem::TWaveArc::sendLoadCmd() {
 }
 
 /* 80287FE4-802880A0       .text load__Q28JASystem8TWaveArcFPQ38JASystem6Kernel5THeap */
-void JASystem::TWaveArc::load(Kernel::THeap*) {
+bool JASystem::TWaveArc::load(Kernel::THeap*) {
     /* Nonmatching */
 }
 

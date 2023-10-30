@@ -24,7 +24,7 @@ namespace JASystem {
         bool eraseSetup();
         static s32 loadToAramCallback(void*);
         bool sendLoadCmd();
-        void load(Kernel::THeap*);
+        bool load(Kernel::THeap*);
         bool erase();
         void onDispose();
         void setEntryNum(s32);
