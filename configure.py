@@ -785,7 +785,7 @@ config.libs = [
             Object(NonMatching, "JSystem/JKernel/JKRDvdArchive.cpp"),
             Object(Matching,    "JSystem/JKernel/JKRCompArchive.cpp"),
             Object(Matching,    "JSystem/JKernel/JKRFile.cpp"),
-            Object(NonMatching, "JSystem/JKernel/JKRDvdFile.cpp"),
+            Object(Matching,    "JSystem/JKernel/JKRDvdFile.cpp"),
             Object(Matching,    "JSystem/JKernel/JKRDvdRipper.cpp"),
             Object(Matching,    "JSystem/JKernel/JKRDvdAramRipper.cpp", extra_cflags=["-sym off"]),
             Object(Matching,    "JSystem/JKernel/JKRDecomp.cpp"),
