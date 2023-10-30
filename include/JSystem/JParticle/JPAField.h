@@ -1,11 +1,12 @@
 #ifndef JPAFIELD_H
 #define JPAFIELD_H
 
-#include "JSystem/JParticle/JPAParticle.h"
+#include "JSystem/JSupport/JSUList.h"
 
 class JPADataBlockLinkInfo;
 class JPAEmitterInfo;
 class JPAFieldData;
+class JPABaseParticle;
 
 class JPAFieldManager {
 public:

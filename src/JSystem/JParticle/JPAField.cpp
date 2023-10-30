@@ -4,7 +4,6 @@
 //
 
 #include "JSystem/JParticle/JPAField.h"
-#include "dolphin/types.h"
 
 /* 80259EE8-8025A0D8       .text loadFieldData__12JPABaseFieldFP12JPAFieldDataP13JPAFieldBlock */
 void JPABaseField::loadFieldData(JPAFieldData*, JPAFieldBlock*) {

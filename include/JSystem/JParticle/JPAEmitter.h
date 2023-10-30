@@ -12,7 +12,42 @@
 #include "dolphin/gx/GXStruct.h"
 #include "dolphin/mtx/mtx.h"
 
-class JPADataBlockLinkInfo;
+class JPADynamicsBlock;
+class JPABaseShape;
+class JPAExtraShape;
+class JPASweepShape;
+class JPAExTexShape;
+class JPAKeyBlock;
+class JPAFieldBlock;
+
+class JPADataBlockLinkInfo {
+public:
+    JPAFieldBlock * getField() { return mpFieldBlock; }
+    u8 getFieldNum() { return mFieldNum; }
+    JPADynamicsBlock * getDynamics() { return mpDynamicsBlock; }
+    JPASweepShape * getSweepShape() { return mpSweepShape; }
+    u8 getKeyNum() { return mKeyNum; }
+    JPAKeyBlock * getKey() { return mpKeyBlock; }
+    JPAExtraShape * getExtraShape() { return mpExtraShape; }
+    u32 * getTextureDataBase() { return mpTextureDataBase; }
+    JPAExTexShape * getExTexShape() { return mpExTexShape; }
+    JPABaseShape * getBaseShape() { return mpBaseShape; }
+    u8 getTextureNum() { return mTextureNum; }
+
+public:
+    /* 0x00 */ JPADynamicsBlock * mpDynamicsBlock;
+    /* 0x04 */ JPABaseShape * mpBaseShape;
+    /* 0x08 */ JPAExtraShape * mpExtraShape;
+    /* 0x0C */ JPASweepShape * mpSweepShape;
+    /* 0x10 */ JPAExTexShape * mpExTexShape;
+    /* 0x14 */ JPAKeyBlock * mpKeyBlock;
+    /* 0x18 */ JPAFieldBlock * mpFieldBlock;
+    /* 0x1C */ u32 * mpTextureDataBase;
+    /* 0x20 */ u8 mFieldNum;
+    /* 0x21 */ u8 mTextureNum;
+    /* 0x22 */ u8 mKeyNum;
+    /* 0x23 */ u8 field_0x23;
+};
 
 enum {
     JPAEmtrStts_StopEmit = 0x01,
@@ -49,6 +84,10 @@ public:
 
 struct JPAEmitterInfo {
 public:
+    JPAEmitterInfo() : mRandom(0) {}
+    ~JPAEmitterInfo() {}
+
+public:
     /* 0x000 */ JMath::TRandom_fast_ mRandom;
     /* 0x004 */ JPABaseEmitter * mpCurEmitter;
     /* 0x008 */ Mtx mEmitterGlobalSR;
@@ -59,7 +98,9 @@ public:
     /* 0x0D4 */ JGeometry::TVec3<f32> mEmitterTranslation;
     /* 0x0E0 */ JGeometry::TVec3<f32> mEmitterGlobalCenter;
     /* 0x0EC */ JGeometry::TVec3<f32> mPublicScale;
-    /* 0x0F8 */ u8 field_0xf8[0x10c - 0xf8];
+    /* 0x0F8 */ JGeometry::TVec3<f32> mgReRDir;
+    /* 0x100 */ void* field_0x100;
+    /* 0x104 */ void* field_0x104;
     /* 0x10C */ JGeometry::TVec3<f32> mVolumePos;
     /* 0x118 */ JGeometry::TVec3<f32> mVelOmni;
     /* 0x124 */ JGeometry::TVec3<f32> mVelAxis;
@@ -94,13 +135,13 @@ public:
     void calcKey();
     void deleteParticle(JPABaseParticle*, JSUList<JPABaseParticle>*);
     void deleteAllParticle();
-    void getPtclFromVacList();
-    void doStartFrameProcess();
-    void doTerminationProcess();
+    JPABaseParticle* getPtclFromVacList();
+    bool doStartFrameProcess();
+    bool doTerminationProcess();
     void calcEmitterGlobalPosition(JGeometry::TVec3<float>&);
     void calcgReRDirection();
-    void getPivotX();
-    void getPivotY();
+    u32 getPivotX();
+    u32 getPivotY();
 
     void setStatus(u32 status) { mFlags |= status; }
     void clearStatus(u32 status) { mFlags &= ~status; }
@@ -111,6 +152,7 @@ public:
         return mActiveParticles.getNumLinks() + mChildParticles.getNumLinks();
     }
 
+    JPADataBlockLinkInfo * getEmitterDataBlockInfoPtr() const { return mpDataLinkInfo; }
     bool isEnableDeleteEmitter() { return checkStatus(JPAEmtrStts_EnableDeleteEmitter) && getParticleNumber() == 0; }
 
     u8 getGlobalAlpha() { return mGlobalPrmColor.a; }
@@ -189,8 +231,8 @@ public:
     /* 0x060 */ s32 mMaxFrame;
     /* 0x064 */ s16 mLifeTime;
     /* 0x066 */ s16 mStartFrame;
-    /* 0x068 */ s16 mVolumeSize;
-    /* 0x06A */ s16 mDivNumber;
+    /* 0x068 */ u16 mVolumeSize;
+    /* 0x06A */ u16 mDivNumber;
     /* 0x06C */ f32 mInitialVelOmni;
     /* 0x070 */ f32 mInitialVelAxis;
     /* 0x074 */ f32 mInitialVelDir;
@@ -205,8 +247,8 @@ public:
     /* 0x164 */ f32 mTick;
     /* 0x168 */ f32 mTime;
     /* 0x16C */ JPAFieldManager mFieldManager;
-    /* 0x17C */ JSUPtrList mActiveParticles;
-    /* 0x188 */ JSUPtrList mChildParticles;
+    /* 0x17C */ JSUList<JPABaseParticle> mActiveParticles;
+    /* 0x188 */ JSUList<JPABaseParticle> mChildParticles;
     /* 0x194 */ JSUPtrList* mpPtclVacList;
     /* 0x198 */ JPADataBlockLinkInfo* mpDataLinkInfo;
     /* 0x19C */ JPACallBackBase<JPABaseEmitter*>* mpEmitterCallBack;
