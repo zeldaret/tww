@@ -3,11 +3,19 @@
 // Translation Unit: d_a_agbsw0.cpp
 //
 
+#include "global.h"
+
+// need to figure out what's putting this data in front of a bunch of rels with the compiler-generated symbol names
+static f32 dummy[3] = {1.0f, 1.0f, 1.0f};
+static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
+static f64 dummy4[2] = {3.0, 0.5};
+
+#include "d/actor/d_a_agbsw0.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
-#include "d/d_cc_d.h"
 #include "d/d_item_data.h"
 #include "d/d_map.h"
 #include "d/d_kankyo_wether.h"
@@ -15,45 +23,6 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_bomb.h"
 #include "m_Do/m_Do_gba_com.h"
-
-// need to figure out what's putting this data in front of a bunch of rels with the compiler-generated symbol names
-static Vec dummy = {1.0f, 1.0f, 1.0f};
-static Vec dummy2 = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[] = {
-    2,
-    0,
-    2,
-    1,
-    0,
-    0,
-    0,
-    0,
-    0x40,
-    8,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0x3F,
-    0xE0,
-    0,
-    0,
-    0,
-    0,
-    0
-};
-
-struct agb_mail_struct {
-    /* 0x00 */ u16 msgID;
-    /* 0x02 */ u8 swToSet;
-    /* 0x03 */ u8 stagInfo;
-    /* 0x04 */ u8 roomNo;
-    /* 0x05 */ u8 reactType;
-    /* 0x06 */ u8 swToCheck;
-    /* 0x07 */ u8 sfx;
-};
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -85,303 +54,246 @@ static dCcD_SrcCyl l_cyl_src = {
     },
 };
 
-class daAgbsw0_c : public fopAc_ac_c {
-public:
-    /* 0x290 */ f32 mOrigScaleX;
-    /* 0x294 */ f32 mOrigScaleZ;
-    /* 0x298 */ u8 field_0x298;
-    /* 0x299 */ u8 field_0x299;
-    /* 0x29A */ bool mNonCircular;
-    /* 0x29B */ u8 field_0x29B;
-    /* 0x29C */ u32 mTimer;
-    /* 0x2A0 */ dCcD_Stts mStts;
-    /* 0x2DC */ dCcD_Cyl mCyl;
+BOOL daAgbsw0_c::draw() {
+    /* Nonmatching */
+    u8 toCheck = getSw0();
+    u8 behavior = getType();
+    s16 condition = getParamNo();
 
-    BOOL ExeSubA();
-    BOOL ExeSubAT();
-    BOOL ExeSubA2();
-    BOOL ExeSubF();
-    BOOL ExeSubF2();
-    BOOL ExeSubM();
-    BOOL ExeSubM2();
-    BOOL ExeSubM3();
-    u32 TriforceCheck(daAgb_c*);
-    BOOL ExeSubMW();
-    BOOL ExeSubT();
-    BOOL ExeSubS();
-    BOOL ExeSubR();
-    BOOL ExeSubB();
-    BOOL ExeSubD();
-    BOOL ExeSubFA();
-    BOOL HitCheck(fopAc_ac_c*);
-    BOOL HitCheck(cXyz, f32);
-    BOOL MoveCheck(s16);
-    void MailSend(u16, u8, u8, u8, u8);
-
-    u8 getSw0() {
-        return fopAcM_GetParam(this) >> 0x10 & 0xFF;
-    }
-    u8 getSw1() {
-        return fopAcM_GetParam(this) >> 0x18 & 0xFF;
-    }
-    u8 getType() {
-        return current.angle.z & 0xFF;
-    }
-    u16 getMsgNo() {
-        return fopAcM_GetParam(this) & 0xFFFF;
-    }
-    s16 getParamNo() {
-        return current.angle.x & 0xFFFF;
-    }
-    
-    BOOL draw() {
-        /* Nonmatching */
-        u8 toCheck = getSw0();
-        u8 behavior = getType();
-        s16 condition = getParamNo();
-
-        if(!g_mDoGaC_gbaCom.mDoGaC_GbaLink()) {
-            return true;
-        }
-        if(behavior == 3) {
-            if(toCheck != 0xFF) {
-                if(condition == 0) {
-                    if(!fopAcM_isSwitch(this, toCheck)) {
-                        return 1;
-                    }
-                }
-                else {
-                    if(fopAcM_isSwitch(this, toCheck)) {
-                        return true;
-                    }
-                }
-            }
-
-            if(MoveCheck(condition)) {
-                return true;
-            }
-        }
-        else {
-            if(behavior == 2) {
-                if(toCheck != 0xFF && !fopAcM_isSwitch(this, toCheck)) {
-                    return true;
-                }
-            }
-            else if (behavior == 9) {
-                if(toCheck != 0xFF && fopAcM_isSwitch(this, toCheck)) {
-                    return true;
-                }
-            }
-            else if(behavior == 0xD) {
-                if(!dComIfGs_checkGetItem(HUMMER) || dComIfGs_isEventBit(0x2D01)) {
-                    return true;
-                }
-            }
-            else if(behavior == 0xE) {
-                if(!dComIfGs_isEventBit(0x1820) || dComIfGs_getTriforceNum() == 8) {
-                    return true;
-                }
-            }
-            else {
-                return true;
-            }
-        }
-
-        if(behavior == 3 || (behavior == 9 && field_0x299 == 1)) {
-            s8 roomNo = fopAcM_GetHomeRoomNo(this);
-            dMap_drawPoint(7, current.pos.x, current.pos.y, current.pos.z, roomNo, -0x8000, 0, 0, 0);
-        }
-        else if(behavior == 2 || behavior == 0xD || behavior == 0xE) {
-            u8 iconType;
-            u16 iconRot;
-            u8 temp;
-            if(condition == 0) {
-                iconType = 8;
-                iconRot = -0x8000;
-                temp = 0;
-            }
-            else if(condition <= 8) {
-                iconType = 9;
-                iconRot = (4 - (condition - 1)) * 0x2000; // missing a mr after the clrlslwi
-                temp = 0;
-            }
-            else if(condition < 0x19) {
-                iconType = 10;
-                iconRot = -0x8000;
-                temp = condition - 9;
-            }
-            else if(condition == 0x22) {
-                iconType = 0x15;
-                iconRot = -0x8000;
-                temp = 0;
-            }
-            else {
-                iconType = 0xB;
-                iconRot = -0x8000;
-                temp = 0;
-            }
-
-            s8 roomNo = fopAcM_GetHomeRoomNo(this);
-            dMap_drawPoint(iconType, current.pos.x, current.pos.y, current.pos.z, roomNo, iconRot, temp, 0, 0);
-        }
-
+    if(!g_mDoGaC_gbaCom.mDoGaC_GbaLink()) {
         return true;
     }
-
-    int create() {
-        u8 behavior = current.angle.z & 0xFF;
-        u8 condition = getSw0();
-        s16 xRot = getParamNo();
-        s32 xRot2 = xRot;
-
-        if(behavior == 9) {
-            if(xRot < 0 && -3 <= xRot2) {
-                behavior = 0xA;
-                current.angle.z = 0x000A;
-                current.angle.x = -xRot;
-            }
-        }
-        else if(behavior == 2) {
-            if(0x1A <= xRot && xRot2 < 0x22) {
-                behavior = 0xD;
-                current.angle.z = 0x000D;
-                current.angle.x = xRot + -0x19;
-            }
-            else if(xRot2 == 0x22) {
-                behavior = 0xE;
-                current.angle.z = 0x000E;
-            }
-        }
-
-        if(behavior == 1) {
-            if(condition < 0x20 && getParamNo() && dComIfGs_isTbox(condition)) {
-                return cPhs_ERROR_e;
-            }
-        }
-        else if(behavior == 0xA) {
-            if(((xRot2 == 1 || xRot2 == 3) && condition != 0xFF && fopAcM_isSwitch(this, condition)) ||
-                xRot2 == 2 && condition < 0x20 && dComIfGs_isTbox(condition)) {
-                    return cPhs_ERROR_e;
+    if(behavior == 3) {
+        if(toCheck != 0xFF) {
+            if(condition == 0) {
+                if(!fopAcM_isSwitch(this, toCheck)) {
+                    return 1;
                 }
-        }
-        else if(behavior == 0xB) {
-            u8 activated = getSw1();
-
-            if((activated == 0xFF || (condition != 0xFF && fopAcM_isSwitch(this, condition))) || (activated != 0xFF && fopAcM_isSwitch(this, activated))) {
-                return cPhs_ERROR_e;
+            }
+            else {
+                if(fopAcM_isSwitch(this, toCheck)) {
+                    return true;
+                }
             }
         }
-        else if(behavior == 0x6 || behavior == 0x8 || behavior == 9) {
-            if(condition == 0xFF || (condition != 0xFF && fopAcM_isSwitch(this, condition))) {
-                return cPhs_ERROR_e;
+
+        if(MoveCheck(condition)) {
+            return true;
+        }
+    }
+    else {
+        if(behavior == 2) {
+            if(toCheck != 0xFF && !fopAcM_isSwitch(this, toCheck)) {
+                return true;
+            }
+        }
+        else if (behavior == 9) {
+            if(toCheck != 0xFF && fopAcM_isSwitch(this, toCheck)) {
+                return true;
             }
         }
         else if(behavior == 0xD) {
-            if(dComIfGs_isEventBit(0x2D01)) {
-                return cPhs_ERROR_e;
+            if(!dComIfGs_checkGetItem(HUMMER) || dComIfGs_isEventBit(0x2D01)) {
+                return true;
             }
         }
         else if(behavior == 0xE) {
-            if(dComIfGs_getTriforceNum() == 8) {
-                return cPhs_ERROR_e;
+            if(!dComIfGs_isEventBit(0x1820) || dComIfGs_getTriforceNum() == 8) {
+                return true;
             }
-        }
-        else if(behavior != 0x2 && behavior != 0x7) {
-            if(condition != 0xFF && getParamNo() != 0 && fopAcM_isSwitch(this, condition)) {
-                return cPhs_ERROR_e;
-            }
-        }
-
-        if(behavior == 0xA && getMsgNo() == 0xFFFF) {
-            fopAcM_SetParam(this, fopAcM_GetParam(this) & 0xFFFF0000 | 0xE);
-        }
-
-        if(behavior != 0x7 && behavior != 0x6 && behavior != 0x8 && behavior != 0xE && getMsgNo() == 0xFFFF) {
-            return cPhs_ERROR_e;
         }
         else {
-            if((behavior == 0x9 || behavior == 0xB) && (xRot < 0 || 0x1E < xRot2 || (u32)(xRot2 - 7 & 0xFFFF) <= 1 || xRot2 == 0x15)) {
-                    return cPhs_ERROR_e;
-            }
-            else {
-                if(mScale.x == mScale.z) {
-                    mNonCircular = false;
-                }
-                else {
-                    mNonCircular = true;
-                }
+            return true;
+        }
+    }
 
-                if(behavior == 8) {
-                    mScale.x *= 8000.0f;
-                    mScale.y *= 8000.0f;
-                    mScale.z *= 8000.0f;
-                }
-                else {
-                    mScale.x *= 200.0f;
-                    mScale.y *= 200.0f;
-                    mScale.z *= 200.0f;
-                }
-
-                mOrigScaleX = mScale.x;
-                mOrigScaleZ = mScale.z;
-                shape_angle.x = 0;
-                shape_angle.y = current.angle.y;
-                shape_angle.z = 0;
-                field_0x298 = 0;
-                field_0x299 = 0;
-                mTimer = 0;
-
-                l_cyl_src.mCylAttr.mCyl.mRadius = mScale.x;
-                l_cyl_src.mCylAttr.mCyl.mHeight = mScale.y;
-                mStts.Init(0, 0xFF, this);
-                mCyl.Set(l_cyl_src);
-                mCyl.SetC(current.pos);
-                mCyl.SetStts(&mStts);
-                if(behavior == 0x8) {
-                    if(0 < xRot) {
-                        mTimer = xRot2 * 30 & 0xFFFF;
-                    }
-                }
-                else if(behavior == 0xA && xRot2 == 4) {
-                    field_0x299 = 1;
-                    mTimer = 1;
-                }
-            }
+    if(behavior == 3 || (behavior == 9 && field_0x299 == 1)) {
+        s8 roomNo = fopAcM_GetHomeRoomNo(this);
+        dMap_drawPoint(7, current.pos.x, current.pos.y, current.pos.z, roomNo, -0x8000, 0, 0, 0);
+    }
+    else if(behavior == 2 || behavior == 0xD || behavior == 0xE) {
+        u8 iconType;
+        u16 iconRot;
+        u8 temp;
+        if(condition == 0) {
+            iconType = 8;
+            iconRot = -0x8000;
+            temp = 0;
+        }
+        else if(condition <= 8) {
+            iconType = 9;
+            iconRot = (4 - (condition - 1)) * 0x2000; // missing a mr after the clrlslwi
+            temp = 0;
+        }
+        else if(condition < 0x19) {
+            iconType = 10;
+            iconRot = -0x8000;
+            temp = condition - 9;
+        }
+        else if(condition == 0x22) {
+            iconType = 0x15;
+            iconRot = -0x8000;
+            temp = 0;
+        }
+        else {
+            iconType = 0xB;
+            iconRot = -0x8000;
+            temp = 0;
         }
 
-        return cPhs_COMPLEATE_e;
+        s8 roomNo = fopAcM_GetHomeRoomNo(this);
+        dMap_drawPoint(iconType, current.pos.x, current.pos.y, current.pos.z, roomNo, iconRot, temp, 0, 0);
     }
 
-    BOOL execute() {
-        typedef BOOL (daAgbsw0_c::*exeSubFunc)();
-        static exeSubFunc ExeSubTable[] = {
-            &daAgbsw0_c::ExeSubA,
-            &daAgbsw0_c::ExeSubAT,
-            &daAgbsw0_c::ExeSubM,
-            &daAgbsw0_c::ExeSubA2,
-            &daAgbsw0_c::ExeSubF2,
-            &daAgbsw0_c::ExeSubF,
-            &daAgbsw0_c::ExeSubT,
-            &daAgbsw0_c::ExeSubMW,
-            &daAgbsw0_c::ExeSubS,
-            &daAgbsw0_c::ExeSubR,
-            &daAgbsw0_c::ExeSubB,
-            &daAgbsw0_c::ExeSubD,
-            &daAgbsw0_c::ExeSubFA,
-            &daAgbsw0_c::ExeSubM2,
-            &daAgbsw0_c::ExeSubM3
-        };
+    return true;
+}
 
-        return (this->*ExeSubTable[current.angle.z & 0xFF])();
+int daAgbsw0_c::create() {
+    u8 behavior = current.angle.z & 0xFF;
+    u8 condition = getSw0();
+    s16 xRot = getParamNo();
+    s32 xRot2 = xRot;
+
+    if(behavior == 9) {
+        if(xRot < 0 && -3 <= xRot2) {
+            behavior = 0xA;
+            current.angle.z = 0x000A;
+            current.angle.x = -xRot;
+        }
     }
-    
-    static agb_mail_struct mMail;
-    static u32 mSE;
-    static u8 mFigureDispose;
-    static u8 mFigureBeat;
-    static u16 BeatedMsg[];
-    static u16 DisposedMsg[];
-}; // Size 0x40C
+    else if(behavior == 2) {
+        if(0x1A <= xRot && xRot2 < 0x22) {
+            behavior = 0xD;
+            current.angle.z = 0x000D;
+            current.angle.x = xRot + -0x19;
+        }
+        else if(xRot2 == 0x22) {
+            behavior = 0xE;
+            current.angle.z = 0x000E;
+        }
+    }
+
+    if(behavior == 1) {
+        if(condition < 0x20 && getParamNo() && dComIfGs_isTbox(condition)) {
+            return cPhs_ERROR_e;
+        }
+    }
+    else if(behavior == 0xA) {
+        if(((xRot2 == 1 || xRot2 == 3) && condition != 0xFF && fopAcM_isSwitch(this, condition)) ||
+            xRot2 == 2 && condition < 0x20 && dComIfGs_isTbox(condition)) {
+                return cPhs_ERROR_e;
+            }
+    }
+    else if(behavior == 0xB) {
+        u8 activated = getSw1();
+
+        if((activated == 0xFF || (condition != 0xFF && fopAcM_isSwitch(this, condition))) || (activated != 0xFF && fopAcM_isSwitch(this, activated))) {
+            return cPhs_ERROR_e;
+        }
+    }
+    else if(behavior == 0x6 || behavior == 0x8 || behavior == 9) {
+        if(condition == 0xFF || (condition != 0xFF && fopAcM_isSwitch(this, condition))) {
+            return cPhs_ERROR_e;
+        }
+    }
+    else if(behavior == 0xD) {
+        if(dComIfGs_isEventBit(0x2D01)) {
+            return cPhs_ERROR_e;
+        }
+    }
+    else if(behavior == 0xE) {
+        if(dComIfGs_getTriforceNum() == 8) {
+            return cPhs_ERROR_e;
+        }
+    }
+    else if(behavior != 0x2 && behavior != 0x7) {
+        if(condition != 0xFF && getParamNo() != 0 && fopAcM_isSwitch(this, condition)) {
+            return cPhs_ERROR_e;
+        }
+    }
+
+    if(behavior == 0xA && getMsgNo() == 0xFFFF) {
+        fopAcM_SetParam(this, fopAcM_GetParam(this) & 0xFFFF0000 | 0xE);
+    }
+
+    if(behavior != 0x7 && behavior != 0x6 && behavior != 0x8 && behavior != 0xE && getMsgNo() == 0xFFFF) {
+        return cPhs_ERROR_e;
+    }
+    else {
+        if((behavior == 0x9 || behavior == 0xB) && (xRot < 0 || 0x1E < xRot2 || (u32)(xRot2 - 7 & 0xFFFF) <= 1 || xRot2 == 0x15)) {
+                return cPhs_ERROR_e;
+        }
+        else {
+            if(mScale.x == mScale.z) {
+                mNonCircular = false;
+            }
+            else {
+                mNonCircular = true;
+            }
+
+            if(behavior == 8) {
+                mScale.x *= 8000.0f;
+                mScale.y *= 8000.0f;
+                mScale.z *= 8000.0f;
+            }
+            else {
+                mScale.x *= 200.0f;
+                mScale.y *= 200.0f;
+                mScale.z *= 200.0f;
+            }
+
+            mOrigScaleX = mScale.x;
+            mOrigScaleZ = mScale.z;
+            shape_angle.x = 0;
+            shape_angle.y = current.angle.y;
+            shape_angle.z = 0;
+            field_0x298 = 0;
+            field_0x299 = 0;
+            mTimer = 0;
+
+            l_cyl_src.mCylAttr.mCyl.mRadius = mScale.x;
+            l_cyl_src.mCylAttr.mCyl.mHeight = mScale.y;
+            mStts.Init(0, 0xFF, this);
+            mCyl.Set(l_cyl_src);
+            mCyl.SetC(current.pos);
+            mCyl.SetStts(&mStts);
+            if(behavior == 0x8) {
+                if(0 < xRot) {
+                    mTimer = xRot2 * 30 & 0xFFFF;
+                }
+            }
+            else if(behavior == 0xA && xRot2 == 4) {
+                field_0x299 = 1;
+                mTimer = 1;
+            }
+        }
+    }
+
+    return cPhs_COMPLEATE_e;
+}
+
+BOOL daAgbsw0_c::execute() {
+    typedef BOOL (daAgbsw0_c::*exeSubFunc)();
+    static exeSubFunc ExeSubTable[] = {
+        &daAgbsw0_c::ExeSubA,
+        &daAgbsw0_c::ExeSubAT,
+        &daAgbsw0_c::ExeSubM,
+        &daAgbsw0_c::ExeSubA2,
+        &daAgbsw0_c::ExeSubF2,
+        &daAgbsw0_c::ExeSubF,
+        &daAgbsw0_c::ExeSubT,
+        &daAgbsw0_c::ExeSubMW,
+        &daAgbsw0_c::ExeSubS,
+        &daAgbsw0_c::ExeSubR,
+        &daAgbsw0_c::ExeSubB,
+        &daAgbsw0_c::ExeSubD,
+        &daAgbsw0_c::ExeSubFA,
+        &daAgbsw0_c::ExeSubM2,
+        &daAgbsw0_c::ExeSubM3
+    };
+
+    return (this->*ExeSubTable[current.angle.z & 0xFF])();
+}
 
 agb_mail_struct daAgbsw0_c::mMail;
 u32 daAgbsw0_c::mSE;
@@ -654,7 +566,7 @@ BOOL daAgbsw0_c::ExeSubF() {
     }
     if(g_mDoGaC_gbaCom.mDoGaC_GbaLink() && g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5)) {
         daAgb_c* agb = dComIfGp_getAgb();
-        if(agb && (int)agb->field_0x672 != 0 && (int)agb->field_0x671 == 0 && (int)agb->field_0x677 == 0 && HitCheck(agb)) {
+        if(agb && agb->isActive() && (int)agb->field_0x671 == 0 && (int)agb->field_0x677 == 0 && HitCheck(agb)) {
             MailSend(BigLittleChange(getMsgNo()) >> 0x10, 6, getSw1(), sw, 0);
         }
     }
@@ -707,7 +619,7 @@ BOOL daAgbsw0_c::ExeSubF2() {
     if(g_mDoGaC_gbaCom.mDoGaC_GbaLink() && g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5) && agb) {
         fopAc_ac_c* player = dComIfGp_getPlayer(0);
         if(field_0x299 == 0) {
-            if((int)agb->field_0x672 != 0 && (int)agb->field_0x671 == 0 && (int)agb->field_0x677 == 0 && HitCheck(agb)) {
+            if(agb->isActive() && (int)agb->field_0x671 == 0 && (int)agb->field_0x677 == 0 && HitCheck(agb)) {
                 MailSend(0x5A00, 6, 0xFF, 0xFF, 0);
                 agb->onFree();
                 agb->onHold();
@@ -731,7 +643,7 @@ BOOL daAgbsw0_c::ExeSubF2() {
             }
         }
         else if(field_0x299 == 1) {
-            if((int)agb->field_0x672 != 0 && HitCheck(player->current.pos, 60.0f)) {
+            if(agb->isActive() && HitCheck(player->current.pos, 60.0f)) {
                 MailSend(BigLittleChange(getMsgNo()) >> 0x10, 5, getSw1(), sw, 0);
                 agb->resetCursor(false);
                 field_0x299 += 1;
@@ -772,7 +684,7 @@ BOOL daAgbsw0_c::ExeSubM() {
     else {
         if(g_mDoGaC_gbaCom.mDoGaC_GbaLink() && g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5)) {
             daAgb_c* agb = dComIfGp_getAgb();
-            if(agb && (int)agb->field_0x672 != 0 && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 != 1) && HitCheck(agb)) {
+            if(agb && agb->isActive() && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 != 1) && HitCheck(agb)) {
                 MailSend(BigLittleChange(getMsgNo()) >> 0x10, 0x3, 0xFF, 0xFF, 0);
                 field_0x298 = 1;
             }
@@ -812,7 +724,7 @@ BOOL daAgbsw0_c::ExeSubM2() {
         else {
             if(g_mDoGaC_gbaCom.mDoGaC_GbaLink() && g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5)) {
                 daAgb_c* agb = dComIfGp_getAgb();
-                if(agb && (int)agb->field_0x672 != 0 && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 != 1) && HitCheck(agb)) {
+                if(agb && agb->isActive() && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 != 1) && HitCheck(agb)) {
                     MailSend(BigLittleChange(getMsgNo()) >> 0x10, 0x3, 0xFF, 0xFF, 0);
                     field_0x298 = 1;
                 }
@@ -853,7 +765,7 @@ BOOL daAgbsw0_c::ExeSubM3() {
         else {
             if(g_mDoGaC_gbaCom.mDoGaC_GbaLink() && g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5)) {
                 daAgb_c* agb = dComIfGp_getAgb();
-                if(agb && (int)agb->field_0x672 != 0 && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 != 1) && HitCheck(agb)) {
+                if(agb && agb->isActive() && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 != 1) && HitCheck(agb)) {
                     u16 gbaMsgId = TriforceCheck(agb);
                     MailSend(BigLittleChange(gbaMsgId) >> 0x10, 0xF, 0xFF, 0xFF, 0);
                     field_0x298 = 1;
@@ -1134,7 +1046,7 @@ BOOL daAgbsw0_c::ExeSubS() {
         else if(field_0x299 == 0 && g_mDoGaC_gbaCom.mDoGaC_GbaLink()) {
             daAgb_c* agb = dComIfGp_getAgb();
             if(getParamNo() < 0) {
-                if(agb && (int)agb->field_0x672 != 0 && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 != 1) && HitCheck(agb)) {
+                if(agb && agb->isActive() && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 != 1) && HitCheck(agb)) {
                     if(getMsgNo() == 0xFFFF) {
                         fopAcM_onSwitch(this, sw);
                         if(sw1 != 0xFF) {
@@ -1206,7 +1118,7 @@ BOOL daAgbsw0_c::ExeSubR() {
             fopAcM_delete(this);
             return true;
         }
-        else if(agb && (int)agb->field_0x672 != 0) {
+        else if(agb && agb->isActive()) {
             if((int)agb->field_0x671 != 0 && HitCheck(agb)) {
                 MailSend(BigLittleChange(getMsgNo()) >> 0x10, 0xA, 0xFF, getSw0(), 0);
                 field_0x299 = 1;
@@ -1423,7 +1335,7 @@ BOOL daAgbsw0_c::ExeSubD() {
             if(g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5) && agb) {
             fopAc_ac_c* player = dComIfGp_getPlayer(0);
                 if(field_0x299 == 0) {
-                    if((int)agb->field_0x672 != 0 && (int)agb->field_0x671 != 0 && HitCheck(agb)) {
+                    if(agb->isActive() && (int)agb->field_0x671 != 0 && HitCheck(agb)) {
                         MailSend(0x5F00, 0xC, 0xFF, 0xFF, 0x19);
                         agb->onHold();
                         agb->field_0x675 = 1;
@@ -1447,7 +1359,7 @@ BOOL daAgbsw0_c::ExeSubD() {
                     }
                 }
                 else if(field_0x299 == 1) {
-                    if((int)agb->field_0x672 != 0 && HitCheck(player->current.pos, 60.0f)) {
+                    if(agb->isActive() && HitCheck(player->current.pos, 60.0f)) {
                         MailSend(BigLittleChange(getMsgNo()) >> 0x10, 0xC, getSw1(), 0xFF, 0x1B);
 
                         agb->shape_angle.x = 0x3FFF;

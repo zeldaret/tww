@@ -2,6 +2,10 @@
 #define D_DEMO_H
 
 #include "dolphin/types.h"
+#include "JSystem/JStage/JSGActor.h"
+#include "SSystem/SComponent/c_xyz.h"
+#include "SSystem/SComponent/c_sxyz.h"
+#include "JSystem/J3DGraphAnimator/J3DModel.h"
 
 class dDemo_actor_c;
 class dDemo_camera_c;
@@ -12,14 +16,13 @@ class TControl;
 class dMesg_tControl;
 class fopAc_ac_c;
 
-class dDemo_actor_c /* : public JStage::TActor */ {
+class dDemo_actor_c : public JStage::TActor {
 public:
     void setActor(fopAc_ac_c*);
     
     bool checkEnable(u16 mask) { return mFlags & mask; }
     csXyz* getRatate() { return &mRotation; }
     
-    /* 0x00 */ u8 parent_placeholder[0x04 - 0x00];
     /* 0x04 */ u16 mFlags;
     /* 0x06 */ u8 field_0x06[0x08 - 0x06];
     /* 0x08 */ cXyz mTranslation;

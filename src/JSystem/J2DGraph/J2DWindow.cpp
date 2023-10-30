@@ -112,7 +112,7 @@ J2DWindow::~J2DWindow() {
 
 /* 802D1B44-802D1F5C       .text draw_private__9J2DWindowFRCQ29JGeometry8TBox2<f>RCQ29JGeometry8TBox2<f> */
 void J2DWindow::draw_private(const JGeometry::TBox2<f32>& frameBox, const JGeometry::TBox2<f32>& contentsBox) {
-    /* Nonmatching - not finished yet */
+    /* Nonmatching */
     drawContents(contentsBox);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -123,47 +123,45 @@ void J2DWindow::draw_private(const JGeometry::TBox2<f32>& frameBox, const JGeome
     if (mpFrameTexture1 != NULL && mpFrameTexture2 != NULL && mpFrameTexture3 != NULL && mpFrameTexture4 != NULL) {
         f32 right = frameBox.getWidth() - mpFrameTexture4->getWidth();
         f32 top = frameBox.getHeight() - mpFrameTexture4->getHeight();
-        f32 left = frameBox.i.x + mpFrameTexture1->getWidth();
-        f32 bottom = frameBox.i.y + mpFrameTexture1->getHeight();
+        // This isn't right, this should be 0.0f +
+        f32 left = 1.0f + mpFrameTexture1->getWidth();
+        f32 bottom = 1.0f + mpFrameTexture1->getHeight();
+        u16 s0, s1, t0, t1;
 
-        drawFrameTexture(mpFrameTexture1, 0.0f, 0.0f,
-            ((field_0x110 >> 7) & 1),
-            ((field_0x110 >> 6) & 1), true);
-        drawFrameTexture(mpFrameTexture2, right, 0.0f,
-            ((field_0x110 >> 5) & 1),
-            ((field_0x110 >> 4) & 1), (field_0x111 & 1));
+        drawFrameTexture(mpFrameTexture1, 0.0f, 0.0f, 
+            (field_0x110 >> 7) & 1,
+            (field_0x110 >> 6) & 1, true);
+        drawFrameTexture(mpFrameTexture2, right, 0.0f, 
+            (field_0x110 >> 5) & 1, 
+            (field_0x110 >> 4) & 1, (field_0x111 >> 0) & 1);
 
-        u16 local_a6 = ((field_0x110 >> 5) & 1) ? (u16)0x8000 : (u16)0;
-        u16 local_a8 = ((field_0x110 >> 4) & 1) ? (u16)0x8000 : (u16)0;
-        u16 local_a82 = local_a8 ^ 0x8000;
-        drawFrameTexture(mpFrameTexture2, left, 0.0f, right - left, (f32)mpFrameTexture2->getHeight(),
-            local_a6, local_a8, local_a6, local_a82, false);
+        s0 = ((field_0x110 >> 5) & 1) ? (u16)0x8000 : (u16)0;
+        t0 = ((field_0x110 >> 4) & 1) ? (u16)0x8000 : (u16)0;
+        t1 = (u16)(t0 ^ 0x8000);
+        drawFrameTexture(mpFrameTexture2, left, 0.0f, right - left, (f32)mpFrameTexture2->getHeight(), s0, t0, s0, t1, false);
 
         drawFrameTexture(mpFrameTexture4, right, top,
-            ((field_0x110 >> 1) & 1),
-            ((field_0x110 >> 0) & 1), (field_0x111 & 1));
+            (field_0x110 >> 1) & 1,
+            (field_0x110 >> 0) & 1, (field_0x111 & 1));
 
-        u16 local_aa = ((field_0x110 >> 1) & 1) ? (u16)0x8000 : (u16)0;
-        u16 local_ac = ((field_0x110 >> 0) & 1) ? (u16)0 : (u16)0x8000;
-        u16 local_ac2 = local_ac ^ 0x8000;
-        drawFrameTexture(mpFrameTexture4, left, top, right - left, (f32)mpFrameTexture4->getHeight(),
-            local_aa, local_ac, local_aa, local_ac2, false);
+        s0 = ((field_0x110 >> 1) & 1) ? (u16)0x8000 : (u16)0;
+        t0 = ((field_0x110 >> 0) & 1) ? (u16)0 : (u16)0x8000;
+        t1 = (u16)(t0 ^ 0x8000);
+        drawFrameTexture(mpFrameTexture4, left, top, right - left, (f32)mpFrameTexture4->getHeight(), s0, t0, s0, t1, false);
 
-        u16 local_ae = ((field_0x110 >> 1) & 1) ? (u16)0 : (u16)0x8000;
-        u16 local_ae2 = local_ae ^ 0x8000;
-        u16 local_b0 = ((field_0x110 >> 0) & 1) ? (u16)0x8000 : (u16)0;
-        drawFrameTexture(mpFrameTexture4, right, bottom, (f32)mpFrameTexture4->getWidth(), top - bottom,
-            local_ae, local_b0, local_ae2, local_b0, false);
+        s0 = ((field_0x110 >> 1) & 1) ? (u16)0 : (u16)0x8000;
+        s1 = (u16)(s0 ^ 0x8000);
+        t0 = ((field_0x110 >> 0) & 1) ? (u16)0x8000 : (u16)0;
+        drawFrameTexture(mpFrameTexture4, right, bottom, (f32)mpFrameTexture4->getWidth(), top - bottom, s0, t0, s1, t0, false);
 
         drawFrameTexture(mpFrameTexture3, 0.0f, top,
-            ((field_0x110 >> 3) & 1),
-            ((field_0x110 >> 2) & 1), (field_0x111 & 1));
+            (field_0x110 >> 3) & 1,
+            (field_0x110 >> 2) & 1, (field_0x111 & 1));
 
-        u16 local_b2 = ((field_0x110 >> 3) & 1) ? (u16)0 : (u16)0x8000;
-        u16 local_b22 = local_b2 ^ 0x8000;
-        u16 local_b4 = ((field_0x110 >> 2) & 1) ? (u16)0x8000 : (u16)0;
-        drawFrameTexture(mpFrameTexture3, 0.0f, bottom, (f32)mpFrameTexture3->getWidth(), top - bottom,
-            local_b2, local_b4, local_b22, local_b4, false);
+        s0 = ((field_0x110 >> 3) & 1) ? (u16)0 : (u16)0x8000;
+        s1 = (u16)(s0 ^ 0x8000);
+        t0 = ((field_0x110 >> 2) & 1) ? (u16)0x8000 : (u16)0;
+        drawFrameTexture(mpFrameTexture3, 0.0f, bottom, (f32)mpFrameTexture3->getWidth(), top - bottom, s0, t0, s1, t0, false);
     }
 
     GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
@@ -308,7 +306,6 @@ void J2DWindow::drawFrameTexture(JUTTexture* pTexture, f32 x0, f32 y0, f32 w, f3
 
 /* 802D26E4-802D2784       .text drawFrameTexture__9J2DWindowFP10JUTTextureffbbb */
 void J2DWindow::drawFrameTexture(JUTTexture* pTexture, f32 x, f32 y, bool flipS, bool flipT, bool bSetupTev) {
-    /* Nonmatching */
     drawFrameTexture(pTexture, x, y, pTexture->getWidth(), pTexture->getHeight(),
         flipS ? (u16)0 : (u16)0x8000,
         flipT ? (u16)0 : (u16)0x8000,

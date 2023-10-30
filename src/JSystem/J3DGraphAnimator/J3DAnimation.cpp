@@ -232,8 +232,14 @@ void J3DAnmTextureSRTKey::calcTransform(f32, u16, J3DTextureSRTInfo*) const {
 }
 
 /* 802F10D4-802F1188       .text getWeight__17J3DAnmClusterFullCFUs */
-f32 J3DAnmClusterFull::getWeight(u16) const {
-    /* Nonmatching */
+f32 J3DAnmClusterFull::getWeight(u16 idx) const {
+    u16 maxFrame = getAnmTable()[idx].mMaxFrame;
+    if (0.0f <= getFrame() && getFrame() < maxFrame)
+        return mWeight[(s32)getFrame() + getAnmTable()[idx].mOffset];
+    if (getFrame() < 0.0f)
+        return mWeight[getAnmTable()[idx].mOffset];
+    else
+        return mWeight[maxFrame - 1 + getAnmTable()[idx].mOffset];
 }
 
 /* 802F1188-802F120C       .text getWeight__16J3DAnmClusterKeyCFUs */
@@ -242,81 +248,166 @@ f32 J3DAnmClusterKey::getWeight(u16) const {
 }
 
 /* 802F120C-802F14B4       .text getColor__18J3DAnmVtxColorFullCFUcUsP8_GXColor */
-void J3DAnmVtxColorFull::getColor(unsigned char, u16, _GXColor*) const {
+void J3DAnmVtxColorFull::getColor(u8, u16, GXColor* dst) const {
     /* Nonmatching */
 }
 
 /* 802F14B4-802F17D0       .text getColor__17J3DAnmVtxColorKeyCFUcUsP8_GXColor */
-void J3DAnmVtxColorKey::getColor(unsigned char, u16, _GXColor*) const {
+void J3DAnmVtxColorKey::getColor(u8, u16, GXColor* dst) const {
     /* Nonmatching */
 }
 
 /* 802F17D0-802F1868       .text searchUpdateMaterialID__11J3DAnmColorFP16J3DMaterialTable */
-void J3DAnmColor::searchUpdateMaterialID(J3DMaterialTable*) {
-    /* Nonmatching */
+void J3DAnmColor::searchUpdateMaterialID(J3DMaterialTable* table) {
+    for (u16 i = 0; i < getUpdateMaterialNum(); i++) {
+        s32 materialID = table->getMaterialName()->getIndex(getUpdateMaterialName()->getName(i));
+        if (materialID != -1)
+            mUpdateMaterialID[i] = materialID;
+        else
+            mUpdateMaterialID[i] = 0xFFFF;
+    }
 }
 
 /* 802F1868-802F188C       .text searchUpdateMaterialID__11J3DAnmColorFP12J3DModelData */
-void J3DAnmColor::searchUpdateMaterialID(J3DModelData*) {
-    /* Nonmatching */
+void J3DAnmColor::searchUpdateMaterialID(J3DModelData* modelData) {
+    searchUpdateMaterialID(&modelData->getMaterialTable());
 }
 
 /* 802F188C-802F1BDC       .text getColor__15J3DAnmColorFullCFUsP8_GXColor */
-void J3DAnmColorFull::getColor(u16, _GXColor*) const {
-    /* Nonmatching */
+void J3DAnmColorFull::getColor(u16 idx, GXColor* dst) const {
+    {
+        u16 maxFrame = getAnmTable()[idx].mRMaxFrame;
+        if (getFrame() < 0.0f)
+            dst->r = mColorR[getAnmTable()[idx].mROffset];
+        if (getFrame() >= maxFrame)
+            dst->r = mColorR[maxFrame - 1 + getAnmTable()[idx].mROffset];
+        if (0.0f <= getFrame() && getFrame() < maxFrame)
+            dst->r = mColorR[(s32)getFrame() + getAnmTable()[idx].mROffset];
+    }
+    {
+        u16 maxFrame = getAnmTable()[idx].mGMaxFrame;
+        if (getFrame() < 0.0f)
+            dst->g = mColorG[getAnmTable()[idx].mGOffset];
+        if (getFrame() >= maxFrame)
+            dst->g = mColorG[maxFrame - 1 + getAnmTable()[idx].mGOffset];
+        if (0.0f <= getFrame() && getFrame() < maxFrame)
+            dst->g = mColorG[(s32)getFrame() + getAnmTable()[idx].mGOffset];
+    }
+    {
+        u16 maxFrame = getAnmTable()[idx].mBMaxFrame;
+        if (getFrame() < 0.0f)
+            dst->b = mColorB[getAnmTable()[idx].mBOffset];
+        if (getFrame() >= maxFrame)
+            dst->b = mColorB[maxFrame - 1 + getAnmTable()[idx].mBOffset];
+        if (0.0f <= getFrame() && getFrame() < maxFrame)
+            dst->b = mColorB[(s32)getFrame() + getAnmTable()[idx].mBOffset];
+    }
+    {
+        u16 maxFrame = getAnmTable()[idx].mAMaxFrame;
+        if (getFrame() < 0.0f)
+            dst->a = mColorA[getAnmTable()[idx].mAOffset];
+        if (getFrame() >= maxFrame)
+            dst->a = mColorA[maxFrame - 1 + getAnmTable()[idx].mAOffset];
+        if (0.0f <= getFrame() && getFrame() < maxFrame)
+            dst->a = mColorA[(s32)getFrame() + getAnmTable()[idx].mAOffset];
+    }
 }
 
 /* 802F1BDC-802F1F20       .text getColor__14J3DAnmColorKeyCFUsP8_GXColor */
-void J3DAnmColorKey::getColor(u16, _GXColor*) const {
+void J3DAnmColorKey::getColor(u16 idx, GXColor* dst) const {
     /* Nonmatching */
 }
 
 /* 802F1F20-802F200C       .text getTexNo__16J3DAnmTexPatternCFUsPUs */
-void J3DAnmTexPattern::getTexNo(u16, u16*) const {
-    /* Nonmatching */
+void J3DAnmTexPattern::getTexNo(u16 idx, u16* dst) const {
+    u16 maxFrame = getAnmTable()[idx].mMaxFrame;
+    if (0.0f <= getFrame() && getFrame() < maxFrame)
+        *dst = mTextureIndex[(s32)getFrame() + getAnmTable()[idx].mOffset];
+    if (getFrame() < 0.0f)
+        *dst = mTextureIndex[getAnmTable()[idx].mOffset];
+    if (getFrame() >= maxFrame)
+        *dst = mTextureIndex[maxFrame - 1 + getAnmTable()[idx].mOffset];
 }
 
 /* 802F200C-802F20EC       .text getVisibility__20J3DAnmVisibilityFullCFUsPUc */
-bool J3DAnmVisibilityFull::getVisibility(u16, u8*) const {
-    /* Nonmatching */
+void J3DAnmVisibilityFull::getVisibility(u16 idx, u8* dst) const {
+    u16 maxFrame = getAnmTable()[idx].mMaxFrame;
+    if (0.0f <= getFrame() && getFrame() < maxFrame)
+        *dst = mVisibility[(s32)getFrame() + getAnmTable()[idx].mOffset];
+    if (getFrame() < 0.0f)
+        *dst = mVisibility[getAnmTable()[idx].mOffset];
+    if (getFrame() >= maxFrame)
+        *dst = mVisibility[maxFrame - 1 + getAnmTable()[idx].mOffset];
 }
 
 /* 802F20EC-802F2184       .text searchUpdateMaterialID__16J3DAnmTexPatternFP16J3DMaterialTable */
-void J3DAnmTexPattern::searchUpdateMaterialID(J3DMaterialTable*) {
-    /* Nonmatching */
+void J3DAnmTexPattern::searchUpdateMaterialID(J3DMaterialTable* table) {
+    for (u16 i = 0; i < getUpdateMaterialNum(); i++) {
+        s32 materialID = table->getMaterialName()->getIndex(getUpdateMaterialName()->getName(i));
+        if (materialID != -1)
+            mUpdateMaterialID[i] = materialID;
+        else
+            mUpdateMaterialID[i] = 0xFFFF;
+    }
 }
 
 /* 802F2184-802F21A8       .text searchUpdateMaterialID__16J3DAnmTexPatternFP12J3DModelData */
-void J3DAnmTexPattern::searchUpdateMaterialID(J3DModelData*) {
-    /* Nonmatching */
+void J3DAnmTexPattern::searchUpdateMaterialID(J3DModelData* modelData) {
+    searchUpdateMaterialID(&modelData->getMaterialTable());
 }
 
 /* 802F21A8-802F22BC       .text searchUpdateMaterialID__19J3DAnmTextureSRTKeyFP16J3DMaterialTable */
-void J3DAnmTextureSRTKey::searchUpdateMaterialID(J3DMaterialTable*) {
-    /* Nonmatching */
+void J3DAnmTextureSRTKey::searchUpdateMaterialID(J3DMaterialTable* table) {
+    for (u16 i = 0; i < getUpdateMaterialNum(); i++) {
+        s32 materialID = table->getMaterialName()->getIndex(getUpdateMaterialName()->getName(i));
+        if (materialID != -1)
+            mUpdateMaterialID[i] = materialID;
+        else
+            mUpdateMaterialID[i] = 0xFFFF;
+    }
+    for (u16 i = 0; i < getPostUpdateMaterialNum(); i++) {
+        s32 materialID = table->getMaterialName()->getIndex(getPostUpdateMaterialName()->getName(i));
+        if (materialID != -1)
+            mPostUpdateMaterialID[i] = materialID;
+        else
+            mPostUpdateMaterialID[i] = 0xFFFF;
+    }
 }
 
 /* 802F22BC-802F22E0       .text searchUpdateMaterialID__19J3DAnmTextureSRTKeyFP12J3DModelData */
-void J3DAnmTextureSRTKey::searchUpdateMaterialID(J3DModelData*) {
-    /* Nonmatching */
+void J3DAnmTextureSRTKey::searchUpdateMaterialID(J3DModelData* modelData) {
+    searchUpdateMaterialID(&modelData->getMaterialTable());
 }
 
 /* 802F22E0-802F2624       .text getTevColorReg__15J3DAnmTevRegKeyCFUsP11_GXColorS10 */
-void J3DAnmTevRegKey::getTevColorReg(u16, _GXColorS10*) const {
+void J3DAnmTevRegKey::getTevColorReg(u16 idx, GXColorS10* dst) const {
     /* Nonmatching */
 }
 
 /* 802F2624-802F2968       .text getTevKonstReg__15J3DAnmTevRegKeyCFUsP8_GXColor */
-void J3DAnmTevRegKey::getTevKonstReg(u16, _GXColor*) const {
+void J3DAnmTevRegKey::getTevKonstReg(u16 idx, GXColor* dst) const {
     /* Nonmatching */
 }
 
 /* 802F2968-802F2A64       .text searchUpdateMaterialID__15J3DAnmTevRegKeyFP16J3DMaterialTable */
-void J3DAnmTevRegKey::searchUpdateMaterialID(J3DMaterialTable*) {
-    /* Nonmatching */
+void J3DAnmTevRegKey::searchUpdateMaterialID(J3DMaterialTable* table) {
+    for (u16 i = 0; i < getCRegUpdateMaterialNum(); i++) {
+        s32 materialID = table->getMaterialName()->getIndex(getCRegUpdateMaterialName()->getName(i));
+        if (materialID != -1)
+            mCRegUpdateMaterialID[i] = materialID;
+        else
+            mCRegUpdateMaterialID[i] = 0xFFFF;
+    }
+    for (u16 i = 0; i < getKRegUpdateMaterialNum(); i++) {
+        s32 materialID = table->getMaterialName()->getIndex(getKRegUpdateMaterialName()->getName(i));
+        if (materialID != -1)
+            mKRegUpdateMaterialID[i] = materialID;
+        else
+            mKRegUpdateMaterialID[i] = 0xFFFF;
+    }
 }
 
 /* 802F2A64-802F2A88       .text searchUpdateMaterialID__15J3DAnmTevRegKeyFP12J3DModelData */
-void J3DAnmTevRegKey::searchUpdateMaterialID(J3DModelData*) {
-    /* Nonmatching */
+void J3DAnmTevRegKey::searchUpdateMaterialID(J3DModelData* modelData) {
+    searchUpdateMaterialID(&modelData->getMaterialTable());
 }

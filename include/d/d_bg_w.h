@@ -19,6 +19,7 @@ public:
     enum PushPullLabel {
         PP_UNK1_e = 0x01,
         PP_UNK2_e = 0x02,
+        PP_UNK4_e = 0x04,
         PP_UNK8_e = 0x08,
     };
     

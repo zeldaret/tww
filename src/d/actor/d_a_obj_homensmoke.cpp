@@ -71,8 +71,8 @@ namespace daObjHomensmoke {
             /* 0xC */ Vec mMax;
         };
         static daObjHomensmoke__cullbox culling_dat[2] = {
-            {-300.0, -30.0, -100.0, 300.0, 600.0, 300.0},
-            {-100.0, -30.0, -100.0, 100.0, 250.0, 120.0},
+            {-300.0f, -30.0f, -100.0f, 300.0f, 600.0f, 300.0f},
+            {-100.0f, -30.0f, -100.0f, 100.0f, 250.0f, 120.0f},
         };
         fopAcM_setCullSizeBox(this,
             culling_dat[mType].mMin.x, culling_dat[mType].mMin.y, culling_dat[mType].mMin.z,

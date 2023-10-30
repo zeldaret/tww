@@ -3,61 +3,67 @@
 // Translation Unit: JSGObject.cpp
 //
 
-#include "JSGObject.h"
+#include "JSystem/JStage/JSGObject.h"
 #include "dolphin/types.h"
 
 /* 8026DF40-8026DF88       .text __dt__Q26JStage7TObjectFv */
 JStage::TObject::~TObject() {
-    /* Nonmatching */
 }
 
 /* 8026DF88-8026DF90       .text JSGGetName__Q26JStage7TObjectCFv */
-void JStage::TObject::JSGGetName() const {
-    /* Nonmatching */
+bool JStage::TObject::JSGGetName() const {
+    return false;
 }
 
 /* 8026DF90-8026DF98       .text JSGGetFlag__Q26JStage7TObjectCFv */
-void JStage::TObject::JSGGetFlag() const {
-    /* Nonmatching */
+bool JStage::TObject::JSGGetFlag() const {
+    return false;
 }
 
 /* 8026DF98-8026DF9C       .text JSGSetFlag__Q26JStage7TObjectFUl */
-void JStage::TObject::JSGSetFlag(unsigned long) {
-    /* Nonmatching */
+void JStage::TObject::JSGSetFlag(u32) {
 }
 
 /* 8026DF9C-8026DFA4       .text JSGGetData__Q26JStage7TObjectCFUlPvUl */
-void JStage::TObject::JSGGetData(unsigned long, void*, unsigned long) const {
-    /* Nonmatching */
+bool JStage::TObject::JSGGetData(u32, void*, u32) const {
+    return false;
 }
 
 /* 8026DFA4-8026DFA8       .text JSGSetData__Q26JStage7TObjectFUlPCvUl */
-void JStage::TObject::JSGSetData(unsigned long, const void*, unsigned long) {
-    /* Nonmatching */
+void JStage::TObject::JSGSetData(u32, const void*, u32) {
 }
 
 /* 8026DFA8-8026DFAC       .text JSGGetParent__Q26JStage7TObjectCFPPQ26JStage7TObjectPUl */
-void JStage::TObject::JSGGetParent(JStage::TObject**, unsigned long*) const {
-    /* Nonmatching */
+void JStage::TObject::JSGGetParent(JStage::TObject**, u32*) const {
 }
 
 /* 8026DFAC-8026DFB0       .text JSGSetParent__Q26JStage7TObjectFPQ26JStage7TObjectUl */
-void JStage::TObject::JSGSetParent(JStage::TObject*, unsigned long) {
-    /* Nonmatching */
+void JStage::TObject::JSGSetParent(JStage::TObject*, u32) {
 }
 
 /* 8026DFB0-8026DFB4       .text JSGSetRelation__Q26JStage7TObjectFbPQ26JStage7TObjectUl */
-void JStage::TObject::JSGSetRelation(bool, JStage::TObject*, unsigned long) {
-    /* Nonmatching */
+void JStage::TObject::JSGSetRelation(bool, JStage::TObject*, u32) {
 }
 
 /* 8026DFB4-8026DFBC       .text JSGFindNodeID__Q26JStage7TObjectCFPCc */
-void JStage::TObject::JSGFindNodeID(const char*) const {
-    /* Nonmatching */
+s32 JStage::TObject::JSGFindNodeID(const char*) const {
+    return -1;
 }
 
 /* 8026DFBC-8026DFF8       .text JSGGetNodeTransformation__Q26JStage7TObjectCFUlPA4_f */
-void JStage::TObject::JSGGetNodeTransformation(unsigned long, float(*)[4]) const {
-    /* Nonmatching */
+int JStage::TObject::JSGGetNodeTransformation(u32, MtxP mtx) const {
+    mtx[0][0] = 0.0f;
+    mtx[0][1] = 0.0f;
+    mtx[0][2] = 0.0f;
+    mtx[0][3] = 0.0f;
+    mtx[1][0] = 0.0f;
+    mtx[1][1] = 0.0f;
+    mtx[1][2] = 0.0f;
+    mtx[1][3] = 0.0f;
+    mtx[2][0] = 0.0f;
+    mtx[2][1] = 0.0f;
+    mtx[2][2] = 0.0f;
+    mtx[2][3] = 0.0f;
+    return 0;
 }
 

@@ -52,10 +52,10 @@ namespace daTagRet {
         };
     
         s32 _create();
-        s32 _delete();
+        bool _delete();
         void set_mtx();
-        s32 _execute();
-        s32 _draw();
+        bool _execute();
+        bool _draw();
     
     public:
         u8 unknown_padding[0xC];
@@ -81,8 +81,8 @@ namespace daTagRet {
     }
     
     /* 0000038C-00000394       .text _delete__Q28daTagRet5Act_cFv */
-    s32 Act_c::_delete() {
-        return TRUE;
+    bool Act_c::_delete() {
+        return true;
     }
     
     /* 00000394-00000398       .text set_mtx__Q28daTagRet5Act_cFv */
@@ -91,7 +91,7 @@ namespace daTagRet {
     }
     
     /* 00000398-00000460       .text _execute__Q28daTagRet5Act_cFv */
-    s32 Act_c::_execute() {
+    bool Act_c::_execute() {
         mCyl.SetC(current.pos);
         mCyl.SetR(1000.0f*mScale.x);
         mCyl.SetH(100.0f*mScale.y);
@@ -104,12 +104,12 @@ namespace daTagRet {
         
         set_mtx();
         
-        return TRUE;
+        return true;
     }
     
     /* 00000460-00000468       .text _draw__Q28daTagRet5Act_cFv */
-    s32 Act_c::_draw() {
-        return TRUE;
+    bool Act_c::_draw() {
+        return true;
     }
     
     namespace {
@@ -119,22 +119,22 @@ namespace daTagRet {
         }
     
         /* 00000488-000004AC       .text Mthd_Delete__Q28daTagRet25@unnamed@d_a_tag_ret_cpp@FPv */
-        u8 Mthd_Delete(void* i_this) {
+        BOOL Mthd_Delete(void* i_this) {
             return ((Act_c*)i_this)->_delete();
         }
     
         /* 000004AC-000004D0       .text Mthd_Execute__Q28daTagRet25@unnamed@d_a_tag_ret_cpp@FPv */
-        u8 Mthd_Execute(void* i_this) {
+        BOOL Mthd_Execute(void* i_this) {
             return ((Act_c*)i_this)->_execute();
         }
     
         /* 000004D0-000004F4       .text Mthd_Draw__Q28daTagRet25@unnamed@d_a_tag_ret_cpp@FPv */
-        u8 Mthd_Draw(void* i_this) {
+        BOOL Mthd_Draw(void* i_this) {
             return ((Act_c*)i_this)->_draw();
         }
     
         /* 000004F4-000004FC       .text Mthd_IsDelete__Q28daTagRet25@unnamed@d_a_tag_ret_cpp@FPv */
-        u8 Mthd_IsDelete(void* i_this) {
+        BOOL Mthd_IsDelete(void* i_this) {
             return TRUE;
         }
         

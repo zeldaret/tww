@@ -65,7 +65,7 @@ static void dummy() {
 /* 802BAD98-802BB024       .text open__13JKRDvdArchiveFl */
 bool JKRDvdArchive::open(s32 entryNum) {
     mArcInfoBlock = NULL;
-    field_0x64 = NULL;
+    mDataOffset = NULL;
     mNodes = NULL;
     mFiles = NULL;
     mStringTable = NULL;
@@ -125,7 +125,7 @@ bool JKRDvdArchive::open(s32 entryNum) {
         memset(mExpandedSize, 0, sizeof(s32) * mArcInfoBlock->num_file_entries);
     }
 
-    field_0x64 = arcHeader->header_length + arcHeader->file_data_offset;
+    mDataOffset = arcHeader->header_length + arcHeader->file_data_offset;
 
 cleanup:
     if (arcHeader) {
@@ -155,7 +155,7 @@ void* JKRDvdArchive::fetchResource(SDIFileEntry* fileEntry, u32* returnSize) {
     if (!fileEntry->data) {
         u8* resourcePtr;
         u32 resourceSize = fetchResource_subroutine(
-            mEntryNum, this->field_0x64 + fileEntry->data_offset, fileEntry->data_size, mHeap,
+            mEntryNum, this->mDataOffset + fileEntry->data_offset, fileEntry->data_size, mHeap,
             fileCompression, mCompression, &resourcePtr);
         *returnSize = resourceSize;
         if (resourceSize == 0) {
@@ -182,20 +182,20 @@ void* JKRDvdArchive::fetchResource(SDIFileEntry* fileEntry, u32* returnSize) {
 void* JKRDvdArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* fileEntry, u32* returnSize) {
     /* Nonmatching */
     JUT_ASSERT(489, isMounted());
-    u32 otherSize;
+    u32 expandSize;
     u32 size = fileEntry->data_size;
     JKRCompression fileCompression = JKRConvertAttrToCompressionType(fileEntry->getAttr());
 
     if (!fileEntry->data) {
         bufferSize = ALIGN_PREV(bufferSize, 0x20);
-        size = fetchResource_subroutine(mEntryNum, field_0x64 + fileEntry->data_offset,
+        size = fetchResource_subroutine(mEntryNum, mDataOffset + fileEntry->data_offset,
                                         fileEntry->data_size, (u8*)buffer, bufferSize, fileCompression,
                                         mCompression);
     } else {
         if (fileCompression == COMPRESSION_YAZ0) {
-            otherSize = getExpandSize(fileEntry);
-            if (otherSize) {
-                size = otherSize;
+            expandSize = getExpandSize(fileEntry);
+            if (expandSize) {
+                size = expandSize;
             }
         }
 
@@ -360,7 +360,7 @@ u32 JKRDvdArchive::getExpandedResSize(const void* resource) const {
     u8* arcHeader = (u8*)ALIGN_NEXT((u32)buffer, 0x20);
     JKRDvdToMainRam(mEntryNum, arcHeader, EXPAND_SWITCH_UNKNOWN2, sizeof(SArcHeader), NULL,
                     JKRDvdRipper::ALLOC_DIRECTION_FORWARD,
-                    this->field_0x64 + fileEntry->data_offset, NULL);
+                    this->mDataOffset + fileEntry->data_offset, NULL);
     DCInvalidateRange(arcHeader, sizeof(SArcHeader));
 
     resourceSize = JKRDecompExpandSize(arcHeader);

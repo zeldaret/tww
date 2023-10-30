@@ -3,26 +3,24 @@
 // Translation Unit: JSGAmbientLight.cpp
 //
 
-#include "JSGAmbientLight.h"
+#include "JSystem/JStage/JSGAmbientLight.h"
 #include "dolphin/types.h"
 
 /* 8026DC94-8026DCF4       .text __dt__Q26JStage13TAmbientLightFv */
 JStage::TAmbientLight::~TAmbientLight() {
-    /* Nonmatching */
 }
 
 /* 8026DCF4-8026DCFC       .text JSGFGetType__Q26JStage13TAmbientLightCFv */
-void JStage::TAmbientLight::JSGFGetType() const {
-    /* Nonmatching */
+s32 JStage::TAmbientLight::JSGFGetType() const {
+    return 4;
 }
 
 /* 8026DCFC-8026DD10       .text JSGGetColor__Q26JStage13TAmbientLightCFv */
-void JStage::TAmbientLight::JSGGetColor() const {
-    /* Nonmatching */
+GXColor JStage::TAmbientLight::JSGGetColor() const {
+    return (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
 }
 
 /* 8026DD10-8026DD14       .text JSGSetColor__Q26JStage13TAmbientLightF8_GXColor */
-void JStage::TAmbientLight::JSGSetColor(_GXColor) {
-    /* Nonmatching */
+void JStage::TAmbientLight::JSGSetColor(GXColor) {
 }
 

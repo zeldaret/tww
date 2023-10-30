@@ -67,7 +67,7 @@ inline JKRCompression JKRCheckCompressed(u8 *pBuf) {
 }
 
 inline u32 JKRDecompExpandSize(u8* pBuf) {
-    return (pBuf[4] << 0x18) | (pBuf[5] << 0x10) | (pBuf[6] << 8) | pBuf[7];
+    return (pBuf[4] << 24) | (pBuf[5] << 16) | (pBuf[6] << 8) | pBuf[7];
 }
 
 #endif /* JKRDECOMP_H */

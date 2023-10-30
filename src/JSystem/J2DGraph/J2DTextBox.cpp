@@ -17,61 +17,115 @@ J2DTextBox::J2DTextBox(J2DPane*, JSURandomInputStream*) {
 }
 
 /* 802D55D4-802D5660       .text __ct__10J2DTextBoxFUlRCQ29JGeometry8TBox2<f>PC7ResFONTPCc18J2DTextBoxHBinding18J2DTextBoxVBinding */
-J2DTextBox::J2DTextBox(unsigned long, const JGeometry::TBox2<float>&, const ResFONT*, const char*, J2DTextBoxHBinding, J2DTextBoxVBinding) {
+J2DTextBox::J2DTextBox(u32, const JGeometry::TBox2<f32>&, const ResFONT*, const char*, J2DTextBoxHBinding, J2DTextBoxVBinding) {
     /* Nonmatching */
 }
 
 /* 802D5660-802D5820       .text initiate__10J2DTextBoxFPC7ResFONTPCc18J2DTextBoxHBinding18J2DTextBoxVBinding */
-void J2DTextBox::initiate(const ResFONT*, const char*, J2DTextBoxHBinding, J2DTextBoxVBinding) {
+void J2DTextBox::initiate(const ResFONT* font, const char* str, J2DTextBoxHBinding bindingH, J2DTextBoxVBinding bindingV) {
     /* Nonmatching */
+    if (font != NULL)
+        mpFont = new JUTResFont(font, NULL);
+
+    mCharColor.set(0xFFFFFFFF);
+    mGradColor.set(0xFFFFFFFF);
+    mBlack = JUtility::TColor(0x00000000);
+    mWhite = JUtility::TColor(0xFFFFFFFF);
+    mBindingH = bindingH;
+    mBindingV = bindingV;
+    mStringPtr = new char[strlen(str) + 1];
+    strcpy(mStringPtr, str);
+    field_0xd8 = 0.0f;
+    field_0xdc = 0.0f;
+    mCharSpace = 0.0f;
+    if (mpFont == NULL) {
+        mLineSpace = 0.0f;
+        mFontSizeX = 0.0f;
+        mFontSizeY = 0.0f;
+    } else {
+        mLineSpace = mpFont->getLeading();
+        mFontSizeX = mpFont->getWidth();
+        mFontSizeY = mpFont->getHeight();
+    }
+    mMagic = 'TBX1';
+    mTextFontOwned = true;
 }
 
 /* 802D5820-802D58B8       .text __dt__10J2DTextBoxFv */
 J2DTextBox::~J2DTextBox() {
-    /* Nonmatching */
+    if (mTextFontOwned)
+        delete mpFont;
+    delete[] mStringPtr;
 }
 
 /* 802D58B8-802D5928       .text setFont__10J2DTextBoxFP7JUTFont */
-void J2DTextBox::setFont(JUTFont*) {
-    /* Nonmatching */
+void J2DTextBox::setFont(JUTFont* font) {
+    if (font) {
+        if (mTextFontOwned)
+            delete mpFont;
+        mpFont = font;
+        mTextFontOwned = false;
+    }
 }
 
 /* 802D5928-802D5AA4       .text draw__10J2DTextBoxFfff18J2DTextBoxHBinding */
-void J2DTextBox::draw(float, float, float, J2DTextBoxHBinding) {
+void J2DTextBox::draw(f32, f32, f32, J2DTextBoxHBinding) {
     /* Nonmatching */
 }
 
 /* 802D5AA4-802D5AAC       .text getStringPtr__10J2DTextBoxCFv */
-void J2DTextBox::getStringPtr() const {
-    /* Nonmatching */
+char* J2DTextBox::getStringPtr() const {
+    return mStringPtr;
 }
 
 /* 802D5AAC-802D5B6C       .text setString__10J2DTextBoxFPCce */
-void J2DTextBox::setString(const char*, ...) {
-    /* Nonmatching */
+s32 J2DTextBox::setString(const char* str, ...) {
+    va_list args;
+    va_start(args, str);
+
+    delete[] mStringPtr;
+    u32 strLen = strlen(str);
+    mStringPtr = new char[strLen + 1];
+    strcpy(mStringPtr, str);
+
+    va_end(args);
+    return strLen;
 }
 
 /* 802D5B6C-802D5BE4       .text setConnectParent__10J2DTextBoxFb */
-void J2DTextBox::setConnectParent(bool) {
-    /* Nonmatching */
+bool J2DTextBox::setConnectParent(bool v) {
+    if (getPaneTree()->getParent() == NULL)
+        return false;
+    if (getPaneTree()->getParent()->getObject()->getTypeID() != 17)
+        return false;
+    mIsConnectParent = v;
+    return v;
 }
 
 /* 802D5BE4-802D5C4C       .text drawSelf__10J2DTextBoxFff */
-void J2DTextBox::drawSelf(float, float) {
-    /* Nonmatching */
+void J2DTextBox::drawSelf(f32 x, f32 y) {
+    Mtx mtx;
+    MTXIdentity(mtx);
+    drawSelf(x, y, &mtx);
 }
 
 /* 802D5C4C-802D5DA4       .text drawSelf__10J2DTextBoxFffPA3_A4_f */
-void J2DTextBox::drawSelf(float, float, float(*)[3][4]) {
+void J2DTextBox::drawSelf(f32, f32, Mtx*) {
     /* Nonmatching */
 }
 
 /* 802D5DA4-802D5EB0       .text resize__10J2DTextBoxFff */
-void J2DTextBox::resize(float, float) {
-    /* Nonmatching */
-}
+void J2DTextBox::resize(f32 w, f32 h) {
+    if (mIsConnectParent && getPaneTree() != NULL && getPaneTree()->getParent() != NULL) {
+        J2DPane * pane = getPaneTree()->getParent()->getObject();
 
-/* 802D5EB0-802D5EB8       .text getTypeID__10J2DTextBoxFv */
-void J2DTextBox::getTypeID() {
-    /* Nonmatching */
+        if (pane->getTypeID() == 17) {
+            f32 newW = pane->getWidth() + (w - getWidth());
+            f32 newH = pane->getHeight() + (h - getHeight());
+            pane->resize(newW, newH);
+            return;
+        }
+    }
+
+    J2DPane::resize(w, h);
 }

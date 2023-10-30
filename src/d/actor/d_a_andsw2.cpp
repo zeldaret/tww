@@ -34,7 +34,7 @@ public:
     u8 getTopSw();
     BOOL chkAllSw2();
     
-    inline s32 execute();
+    inline BOOL execute();
     inline s32 create();
 
 public:
@@ -105,7 +105,7 @@ BOOL daAndsw2_c::chkAllSw2() {
 }
 
 /* 000001D8-000002B0       .text daAndsw2_actionOnAll__FP10daAndsw2_c */
-static s32 daAndsw2_actionOnAll(daAndsw2_c* i_this) {
+static BOOL daAndsw2_actionOnAll(daAndsw2_c* i_this) {
     if (i_this->chkAllSw2()) {
         if (i_this->getTimer() != 0xFF) {
             i_this->mTimer = i_this->getTimer()*15;
@@ -124,11 +124,11 @@ static s32 daAndsw2_actionOnAll(daAndsw2_c* i_this) {
             }
         }
     }
-    return 1;
+    return TRUE;
 }
 
 /* 000002B0-00000380       .text daAndsw2_actionTimer__FP10daAndsw2_c */
-static s32 daAndsw2_actionTimer(daAndsw2_c* i_this) {
+static BOOL daAndsw2_actionTimer(daAndsw2_c* i_this) {
     if (i_this->getType() == TYPE_CONTINUOUS && !i_this->chkAllSw2()) {
         i_this->mAction = ACT_ON_ALL;
     } else if (i_this->mTimer > 0) {
@@ -144,11 +144,11 @@ static s32 daAndsw2_actionTimer(daAndsw2_c* i_this) {
             i_this->mAction = ACT_WAIT;
         }
     }
-    return 1;
+    return TRUE;
 }
 
 /* 00000380-00000438       .text daAndsw2_actionOrder__FP10daAndsw2_c */
-static s32 daAndsw2_actionOrder(daAndsw2_c* i_this) {
+static BOOL daAndsw2_actionOrder(daAndsw2_c* i_this) {
     if (i_this->mEvtInfo.checkCommandDemoAccrpt()) {
         i_this->mAction = ACT_EVENT;
         int room = i_this->getRoomNo();
@@ -159,11 +159,11 @@ static s32 daAndsw2_actionOrder(daAndsw2_c* i_this) {
     } else {
         fopAcM_orderOtherEventId(i_this, i_this->mEventIdx, i_this->getEventNo(), 0xFFFF, 0, 1);
     }
-    return 1;
+    return TRUE;
 }
 
 /* 00000438-000004BC       .text daAndsw2_actionEvent__FP10daAndsw2_c */
-static s32 daAndsw2_actionEvent(daAndsw2_c* i_this) {
+static BOOL daAndsw2_actionEvent(daAndsw2_c* i_this) {
     if (dComIfGp_evmng_endCheck(i_this->mEventIdx)) {
         if (i_this->getType() == TYPE_CONTINUOUS) {
             i_this->mAction = ACT_OFF;
@@ -172,27 +172,27 @@ static s32 daAndsw2_actionEvent(daAndsw2_c* i_this) {
         }
         dComIfGp_event_reset();
     }
-    return 1;
+    return TRUE;
 }
 
 /* 000004BC-00000528       .text daAndsw2_actionOff__FP10daAndsw2_c */
-static s32 daAndsw2_actionOff(daAndsw2_c* i_this) {
+static BOOL daAndsw2_actionOff(daAndsw2_c* i_this) {
     if (!i_this->chkAllSw2()) {
         i_this->mAction = ACT_ON_ALL;
         int room = i_this->getRoomNo();
         int sw = i_this->getSwbit();
         dComIfGs_offSwitch(sw, room);
     }
-    return 1;
+    return TRUE;
 }
 
 /* 00000528-00000530       .text daAndsw2_actionWait__FP10daAndsw2_c */
-static s32 daAndsw2_actionWait(daAndsw2_c* i_this) {
-    return 1;
+static BOOL daAndsw2_actionWait(daAndsw2_c* i_this) {
+    return TRUE;
 }
 
-s32 daAndsw2_c::execute() {
-    static s32 (*l_action[6])(daAndsw2_c*) = {
+BOOL daAndsw2_c::execute() {
+    static BOOL (*l_action[6])(daAndsw2_c*) = {
         daAndsw2_actionOnAll,
         daAndsw2_actionTimer,
         daAndsw2_actionOrder,
@@ -201,7 +201,7 @@ s32 daAndsw2_c::execute() {
         daAndsw2_actionWait,
     };
     l_action[mAction](this);
-    return 1;
+    return TRUE;
 }
 
 s32 daAndsw2_c::create() {
@@ -249,24 +249,24 @@ s32 daAndsw2_c::create() {
 }
 
 /* 00000530-00000538       .text daAndsw2_Draw__FP10daAndsw2_c */
-static s32 daAndsw2_Draw(daAndsw2_c* i_this) {
-    return 1;
+static BOOL daAndsw2_Draw(daAndsw2_c* i_this) {
+    return TRUE;
 }
 
 /* 00000538-00000574       .text daAndsw2_Execute__FP10daAndsw2_c */
-static s32 daAndsw2_Execute(daAndsw2_c* i_this) {
+static BOOL daAndsw2_Execute(daAndsw2_c* i_this) {
     return i_this->execute();
 }
 
 /* 00000574-0000057C       .text daAndsw2_IsDelete__FP10daAndsw2_c */
-static s32 daAndsw2_IsDelete(daAndsw2_c* i_this) {
-    return 1;
+static BOOL daAndsw2_IsDelete(daAndsw2_c* i_this) {
+    return TRUE;
 }
 
 /* 0000057C-000005AC       .text daAndsw2_Delete__FP10daAndsw2_c */
-static s32 daAndsw2_Delete(daAndsw2_c* i_this) {
+static BOOL daAndsw2_Delete(daAndsw2_c* i_this) {
     i_this->~daAndsw2_c();
-    return 1;
+    return TRUE;
 }
 
 /* 000005AC-00000724       .text daAndsw2_Create__FP10fopAc_ac_c */
@@ -283,18 +283,18 @@ static actor_method_class l_daAndsw2_Method = {
 };
 
 actor_process_profile_definition g_profile_ANDSW2 = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_ANDSW2,
-    &g_fpcLf_Method.mBase,
-    sizeof(daAndsw2_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x0136,
-    &l_daAndsw2_Method,
-    fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_6_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 7,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_ANDSW2,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daAndsw2_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0136,
+    /* Actor SubMtd */ &l_daAndsw2_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_6_e,
 };

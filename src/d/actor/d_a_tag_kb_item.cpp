@@ -3,32 +3,11 @@
  *
  */
 
-// #include "d_a_tag_kb_item.h"
+#include "d/actor/d_a_tag_kb_item.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "dolphin/types.h"
-#include "f_op/f_op_actor_mng.h"
-
-class daTagKbItem_c : public fopAc_ac_c {
-public:
-    void kb_dig(fopAc_ac_c*);
-    void dig_main();
-    bool _delete();
-    void CreateInit();
-    int _create();
-    bool _execute();
-    bool _draw();
-
-    /* 0x290 */ u8 field_0x290[0x298 - 0x290];
-    /* 0x298 */ u8 field_0x298;
-    /* 0x299 */ u8 field_0x299;
-    /* 0x29C */ s32 field_0x29c;
-    /* 0x2A0 */ u8 field_0x2a0;
-    /* 0x2A1 */ u8 field_0x2a1;
-    /* 0x2A4 */ s32 field_0x2a4;
-    /* 0x2A8 */ fopAc_ac_c* mpActor;
-};  // Size: 0x2AC
 
 /* 00000078-000000C8       .text _delete__13daTagKbItem_cFv */
 bool daTagKbItem_c::_delete() {

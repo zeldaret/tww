@@ -28,13 +28,13 @@ public:
     void incFrame();
     void calcVelocity();
     void calcPosition();
-    void checkCreateChild();
+    bool checkCreateChild();
 
     ~JPABaseParticle();
     JPABaseParticle();
 
 public:
-    /* 0x00 */ JSUPtrLink mLink;
+    /* 0x00 */ JSULink<JPABaseParticle> mLink;
     /* 0x10 */ JGeometry::TVec3<f32> mGlobalPosition;
     /* 0x1C */ JGeometry::TVec3<f32> mLocalPosition;
     /* 0x28 */ JGeometry::TVec3<f32> mPosition;

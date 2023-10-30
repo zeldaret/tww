@@ -186,7 +186,7 @@ namespace daObjPaper {
                 mAttentionInfo.mPosition.y += attributes[mType].mAttentionOffset;
                 mAttentionInfo.mDistances[1] = attributes[mType].mAttentionDist1;
                 mAttentionInfo.mDistances[3] = attributes[mType].mAttentionDist2;
-                mAttentionInfo.setFlag(fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_READ_e);
+                mAttentionInfo.mFlags |= fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_READ_e;
 
                 mMsgId = -1;
 

@@ -159,7 +159,7 @@ int daAgb_c::uploadInitCheck() {
         mUploadAction = 10;
     } else if (g_mDoGaC_gbaCom.field_0x0 == 0) {
         field_0x66f = 0;
-        field_0x678 = 0;
+        mIsMsgSend = false;
         JUTGba::getManager()->doInitProbe(1, NULL, NULL);
         JUTGba::getManager()->doInitProbe(2, NULL, NULL);
         JUTGba::getManager()->doInitProbe(3, NULL, NULL);
@@ -231,7 +231,7 @@ int daAgb_c::uploadSelect() {
             g_mDoGaC_gbaCom.mDoGaC_GbaReboot();
             g_mDoGaC_gbaCom.mPortNo = mPortNo;
             field_0x66f = 0;
-            field_0x678 = 0;
+            mIsMsgSend = false;
         }
     }
 
@@ -340,7 +340,7 @@ int daAgb_c::uploadConnect() {
 /* 800D00C8-800D01F4       .text uploadMessageSend__7daAgb_cFv */
 int daAgb_c::uploadMessageSend() {
     if (g_mDoGaC_gbaCom.field_0x110->field_0x4 == 0) {
-        field_0x678 = 1;
+        mIsMsgSend = true;
         if (field_0x67a != 0) {
             l_msgCtrl.mpMsg->mMode = 15;
             fopMsgM_messageSet(8);  // "Tingle appeared on your Game Boy Advance!"
@@ -867,7 +867,7 @@ void daAgb_c::GbaItemUse() {
         return;
     }
 
-    field_0x672 = 0;
+    mIsActive = false;
     dComIfGp_setItemRupeeCount(-mItem.field_0x1);
     mEffect = BigLittleChange(temp_r29);
     field_0x66b = temp_r29;
@@ -947,7 +947,7 @@ int daAgb_Execute(daAgb_c* i_this) {
     } else if (i_this->field_0x680) {
         i_this->field_0x680 = 0;
         i_this->resetCursor(true);
-        i_this->field_0x672 = 0;
+        i_this->mIsActive = false;
 
         if (i_this->field_0x65c != 0) {
             if (i_this->field_0x66b == 3 || i_this->field_0x66b == 12) {
@@ -1035,7 +1035,7 @@ int daAgb_Execute(daAgb_c* i_this) {
             } else {
                 i_this->mBrk.play();
             }
-        } else if ((((int)i_this->field_0x672 != 0 || i_this->field_0x676 != 0) &&
+        } else if (((i_this->isActive() || i_this->field_0x676 != 0) &&
                     ((int)i_this->field_0x671 != 0 || (int)i_this->field_0x677 == 1)) ||
                    (i_this->field_0x66b == 14 && i_this->field_0x65c > 120))
         {
@@ -1174,7 +1174,7 @@ int daAgb_Create(fopAc_ac_c* i_this) {
         a_this->field_0x65c = 0;
         a_this->field_0x66b = 0;
         a_this->field_0x66f = g_mDoGaC_gbaCom.field_0x0;
-        a_this->field_0x678 = g_mDoGaC_gbaCom.field_0x0 > 0;
+        a_this->mIsMsgSend = g_mDoGaC_gbaCom.field_0x0 > 0;
         a_this->field_0x654 = 0;
         a_this->field_0x650 = -1;
         a_this->field_0x677 = 0;

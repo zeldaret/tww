@@ -10,6 +10,8 @@ namespace daObjPirateship {
         /* 0x2CC */ u8 unk2CC;
         /* 0x2D0 */ J3DModel* mpModel;
     };
+    
+    static f32 getShipOffsetY(s16*, s16*, f32);
 }
 
 #endif /* D_A_OBJ_PIRATESHIP_H */

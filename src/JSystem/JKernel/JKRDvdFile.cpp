@@ -146,3 +146,8 @@ void JKRDvdFile::doneProcess(s32 id, DVDFileInfo* fileInfo) {
     JKRDvdFile* dvdFile = *(JKRDvdFile**)((u8*)fileInfo + 0x3c);
     OSSendMessage(&dvdFile->mMessageQueue2, (OSMessage)id, OS_MESSAGE_NOBLOCK);
 }
+
+/* 802BCCAC-802BCCB4       .text getFileSize__10JKRDvdFileCFv */
+s32 JKRDvdFile::getFileSize(void) const {
+    return mFileInfo.length;
+}

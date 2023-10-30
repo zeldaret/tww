@@ -25,10 +25,10 @@ static BOOL daKytag06_Execute(kytag06_class* i_this) {
     int date;
 
     if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode == 0) {
-        return 1;
+        return TRUE;
     }
     if(dComIfGp_evmng_startCheck("ARRIVAL_BRK") == 0) {
-        return 1;
+        return TRUE;
     }
 
     time = dComIfGs_getTime();
@@ -45,8 +45,8 @@ static BOOL daKytag06_Execute(kytag06_class* i_this) {
         dKyw_rain_set(date);
     }
     g_env_light.mThunderEff.mMode = 1;
-    cLib_addCalc(&i_this->field_0x294, 1.0f, 0.1f, 0.001f, 0.0001);
-    return 1;
+    cLib_addCalc(&i_this->field_0x294, 1.0f, 0.1f, 0.001f, 0.0001f);
+    return TRUE;
 }
 
 static BOOL daKytag06_IsDelete(kytag06_class*) {

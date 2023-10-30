@@ -62,7 +62,7 @@ J2DPicture::J2DPicture(J2DPane* param_1, JSURandomInputStream* param_2) : mpPale
     param_2->seek(r31, JSUStreamSeekFrom_SET);
     mpTexture[0] = NULL;
     mNumTexture = 0;
-    field_0xdd = 1;
+    mValidTexture = 1;
     if (r30) {
         mpTexture[0] = new JUTTexture(r30, 0);
         mNumTexture++;
@@ -115,7 +115,7 @@ void J2DPicture::initiate(const ResTIMG* pTimg, const ResTLUT* pTlut) {
 /* 802D3530-802D35FC       .text private_initiate__10J2DPictureFPC7ResTIMGPC7ResTLUT */
 void J2DPicture::private_initiate(const ResTIMG* pTimg, const ResTLUT* pTlut) {
     mpTexture[0] = NULL;
-    field_0xdd = 1;
+    mValidTexture = 1;
     mNumTexture = 0;
     if (pTimg) {
         mpTexture[0] = new JUTTexture(pTimg, 0);
@@ -143,7 +143,7 @@ void J2DPicture::initinfo() {
 /* 802D3774-802D3824       .text __dt__10J2DPictureFv */
 J2DPicture::~J2DPicture() {
     for (int i = 0; i < mNumTexture; i++) {
-        if (field_0xdd & 1 << i) {
+        if (mValidTexture & 1 << i) {
             delete mpTexture[i];
         }
     }
@@ -162,10 +162,10 @@ bool J2DPicture::insert(const ResTIMG* pTimg, u8 idx, f32 param_3) {
         mBlendKonstColorF[i] = mBlendKonstColorF[i - 1];
         mBlendKonstAlphaF[i] = mBlendKonstAlphaF[i - 1];
     }
-    s32 tmp = (1 << idx) - 1;
-    field_0xdd = (field_0xdd & tmp) | ((field_0xdd & ~tmp) << 1);
+    s32 mask = (1 << idx) - 1;
+    mValidTexture = (mValidTexture & mask) | ((mValidTexture & ~mask) << 1);
     mpTexture[idx] = texture;
-    field_0xdd |= (1 << idx);
+    mValidTexture |= (1 << idx);
     mBlendKonstColorF[idx] = param_3;
     mBlendKonstAlphaF[idx] = param_3;
     if (mNumTexture == 0 && mpTexture[0]) {
@@ -188,7 +188,7 @@ bool J2DPicture::remove(u8 idx) {
     if (mNumTexture <= idx || mNumTexture == 1) {
         return false;
     }
-    if (field_0xdd & 1 << idx) {
+    if (mValidTexture & 1 << idx) {
         delete mpTexture[idx];
     }
     for (u8 i = idx; i < mNumTexture - 1; i++) {
@@ -196,7 +196,7 @@ bool J2DPicture::remove(u8 idx) {
         mBlendKonstColorF[i] = mBlendKonstColorF[i + 1];
         mBlendKonstAlphaF[i] = mBlendKonstAlphaF[i + 1];
     }
-    field_0xdd = field_0xdd & (1 << idx) - 1 | ((field_0xdd & ~((1 << idx + 1) - 1)) >> 1);
+    mValidTexture = mValidTexture & (1 << idx) - 1 | ((mValidTexture & ~((1 << idx + 1) - 1)) >> 1);
     mNumTexture--;
     setBlendKonstColor();
     setBlendKonstAlpha();
@@ -204,12 +204,18 @@ bool J2DPicture::remove(u8 idx) {
 }
 
 /* 802D3B78-802D3C34       .text changeTexture__10J2DPictureFPC7ResTIMGUc */
-int J2DPicture::changeTexture(const ResTIMG*, u8) {
-    /* Nonmatching */
+const ResTIMG * J2DPicture::changeTexture(const ResTIMG* timg, u8 idx) {
+    if (idx >= mNumTexture)
+        return NULL;
+    if (getTexture(idx) == NULL || timg == NULL)
+        return NULL;
+    const ResTIMG * oldImg = getTexture(idx)->getTexInfo();
+    getTexture(idx)->storeTIMG(timg, (u8)0);
+    return oldImg;
 }
 
 /* 802D3C34-802D3C84       .text changeTexture__10J2DPictureFPCcUc */
-int J2DPicture::changeTexture(const char* name, u8 param_2) {
+const ResTIMG * J2DPicture::changeTexture(const char* name, u8 param_2) {
     return changeTexture((ResTIMG*)JKRGetNameResource(name, NULL), param_2);
 }
 
@@ -303,7 +309,7 @@ void J2DPicture::drawOut(const JGeometry::TBox2<f32>&, const JGeometry::TBox2<f3
 }
 
 /* 802D4874-802D4B3C       .text drawTexCoord__10J2DPictureFffffffffffffPA3_A4_f */
-void J2DPicture::drawTexCoord(f32 x, f32 y, f32 width, f32 height, f32 p5, f32 p6, f32 p7, f32 p8, f32 p9, f32 p10, f32 p11, f32 p12, Mtx* mtx) {
+void J2DPicture::drawTexCoord(f32 x, f32 y, f32 width, f32 height, f32 s0, f32 t0, f32 s1, f32 t1, f32 s3, f32 t3, f32 s2, f32 t2, Mtx* mtx) {
     for (u8 i = 0; i < mNumTexture; i++) {
         if (i < mNumTexture) {
             mpTexture[i]->load(GXTexMapID(i));
@@ -327,16 +333,16 @@ void J2DPicture::drawTexCoord(f32 x, f32 y, f32 width, f32 height, f32 p5, f32 p
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(x, y, 0.0f);
     GXColor1u32(colors[0]);
-    GXTexCoord2f32(p5, p6);
+    GXTexCoord2f32(s0, t0);
     GXPosition3f32(x2, y, 0.0f);
     GXColor1u32(colors[1]);
-    GXTexCoord2f32(p7, p8);
+    GXTexCoord2f32(s1, t1);
     GXPosition3f32(x2, y2, 0.0f);
     GXColor1u32(colors[3]);
-    GXTexCoord2f32(p11, p12);
+    GXTexCoord2f32(s2, t2);
     GXPosition3f32(x, y2, 0.0f);
     GXColor1u32(colors[2]);
-    GXTexCoord2f32(p9, p10);
+    GXTexCoord2f32(s3, t3);
     GXEnd();
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_U16, 0xf);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);

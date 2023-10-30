@@ -363,8 +363,13 @@ public:
     virtual f32 getBaseAnimeFrame() {}
     
     static bool m_flying;
-    static short m_flyingTimer;
-
+    static bool m_mirror;
+    static bool m_seaTalk;
+    static s16 m_flyingTimer;
+    static bool m_playerRoom;
+    
+    static s16 getMaxFlyingTimer();
+    
 public:
     /* 0x04EC */ request_of_phase_process_class mPhs;
     /* 0x04F4 */ J3DModel* mpHarpModel;

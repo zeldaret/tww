@@ -8,9 +8,9 @@
 #include "dolphin/types.h"
 
 /* 802DDBC4-802DDDC4       .text createColorBlock__11J3DMaterialFUl */
-J3DColorBlock * J3DMaterial::createColorBlock(u32 param_0) {
+J3DColorBlock * J3DMaterial::createColorBlock(u32 createFlag) {
     J3DColorBlock* rv = NULL;
-    switch (param_0) {
+    switch (createFlag) {
         case 0:
             rv = new J3DColorBlockLightOff();
             break;
@@ -26,8 +26,8 @@ J3DColorBlock * J3DMaterial::createColorBlock(u32 param_0) {
 }
 
 /* 802DDDC4-802DDF28       .text createTexGenBlock__11J3DMaterialFUl */
-J3DTexGenBlock * J3DMaterial::createTexGenBlock(u32 param_0) {
-    switch (param_0) {
+J3DTexGenBlock * J3DMaterial::createTexGenBlock(u32 createFlag) {
+    switch (createFlag) {
         case 0x8000000:
             return new J3DTexGenBlock4();
         case 0:
@@ -37,15 +37,15 @@ J3DTexGenBlock * J3DMaterial::createTexGenBlock(u32 param_0) {
 }
 
 /* 802DDF28-802DE29C       .text createTevBlock__11J3DMaterialFi */
-J3DTevBlock * J3DMaterial::createTevBlock(int param_0) {
+J3DTevBlock * J3DMaterial::createTevBlock(int num) {
     J3DTevBlock* rv = NULL;
-    if (param_0 <= 1) {
+    if (num <= 1) {
         rv = new J3DTevBlock1();
-    } else if (param_0 == 2) {
+    } else if (num == 2) {
         rv = new J3DTevBlock2();
-    } else if (param_0 <= 4) {
+    } else if (num <= 4) {
         rv = new J3DTevBlock4();
-    } else if (param_0 <= 16) {
+    } else if (num <= 16) {
         rv = new J3DTevBlock16();
     }
     return rv;
@@ -61,10 +61,10 @@ J3DIndBlock * J3DMaterial::createIndBlock(int param_0) {
 }
 
 /* 802DE384-802DE548       .text createPEBlock__11J3DMaterialFUlUl */
-J3DPEBlock * J3DMaterial::createPEBlock(u32 createFlags, u32 materialMode) {
+J3DPEBlock * J3DMaterial::createPEBlock(u32 createFlag, u32 materialMode) {
     J3DPEBlock* rv = NULL;
 
-    if (createFlags == 0) {
+    if (createFlag == 0) {
         if (materialMode & 1) {
             rv = new J3DPEBlockOpa();
             return rv;
@@ -77,9 +77,9 @@ J3DPEBlock * J3DMaterial::createPEBlock(u32 createFlags, u32 materialMode) {
         }
     }
 
-    if (createFlags == 0x10000000) {
+    if (createFlag == 0x10000000) {
         rv = new J3DPEBlockFull();
-    } else if (createFlags == 0x20000000) {
+    } else if (createFlag == 0x20000000) {
         rv = new J3DPEBlockFogOff();
     }
 
@@ -87,9 +87,9 @@ J3DPEBlock * J3DMaterial::createPEBlock(u32 createFlags, u32 materialMode) {
 }
 
 /* 802DE548-802DE598       .text calcSizeColorBlock__11J3DMaterialFUl */
-u32 J3DMaterial::calcSizeColorBlock(u32 param_0) {
+u32 J3DMaterial::calcSizeColorBlock(u32 createFlag) {
     u32 rv = 0;
-    switch (param_0) {
+    switch (createFlag) {
         case 0:
             rv = sizeof(J3DColorBlockLightOff);
             break;
@@ -105,8 +105,8 @@ u32 J3DMaterial::calcSizeColorBlock(u32 param_0) {
 }
 
 /* 802DE598-802DE5C4       .text calcSizeTexGenBlock__11J3DMaterialFUl */
-u32 J3DMaterial::calcSizeTexGenBlock(u32 param_0) {
-    switch (param_0) {
+u32 J3DMaterial::calcSizeTexGenBlock(u32 createFlag) {
+    switch (createFlag) {
         case 0x8000000:
             return sizeof(J3DTexGenBlock4);
         case 0:
@@ -116,15 +116,15 @@ u32 J3DMaterial::calcSizeTexGenBlock(u32 param_0) {
 }
 
 /* 802DE5C4-802DE60C       .text calcSizeTevBlock__11J3DMaterialFi */
-u32 J3DMaterial::calcSizeTevBlock(int param_0) {
+u32 J3DMaterial::calcSizeTevBlock(int num) {
     u32 rv = 0;
-    if (param_0 <= 1) {
+    if (num <= 1) {
         rv = sizeof(J3DTevBlock1);
-    } else if (param_0 == 2) {
+    } else if (num == 2) {
         rv = sizeof(J3DTevBlock2);
-    } else if (param_0 <= 4) {
+    } else if (num <= 4) {
         rv = sizeof(J3DTevBlock4);
-    } else if (param_0 <= 16) {
+    } else if (num <= 16) {
         rv = sizeof(J3DTevBlock16);
     }
     return rv;
@@ -140,20 +140,20 @@ u32 J3DMaterial::calcSizeIndBlock(int param_0) {
 }
 
 /* 802DE620-802DE688       .text calcSizePEBlock__11J3DMaterialFUlUl */
-u32 J3DMaterial::calcSizePEBlock(u32 param_0, u32 param_1) {
+u32 J3DMaterial::calcSizePEBlock(u32 createFlag, u32 materialMode) {
     u32 rv = 0;
-    if (param_0 == 0) {
-        if (param_1 & 1) {
+    if (createFlag == 0) {
+        if (materialMode & 1) {
             rv = sizeof(J3DPEBlockOpa);
-        } else if (param_1 & 2) {
+        } else if (materialMode & 2) {
             rv = sizeof(J3DPEBlockTexEdge);
-        } else if (param_1 & 4) {
+        } else if (materialMode & 4) {
             rv = sizeof(J3DPEBlockXlu);
         }
     }
-    else if (param_0 == 0x10000000) {
+    else if (createFlag == 0x10000000) {
         rv = sizeof(J3DPEBlockFull);
-    } else if (param_0 == 0x20000000) {
+    } else if (createFlag == 0x20000000) {
         rv = sizeof(J3DPEBlockFogOff);
     }
     return rv;
@@ -315,7 +315,7 @@ s32 J3DMaterial::newSharedDisplayList(u32 param_0) {
     if (mSharedDLObj == NULL) {
         mSharedDLObj = new J3DDisplayListObj();
         if (mSharedDLObj == NULL) {
-            return 4;
+            return kJ3DError_Alloc;
         }
         s32 res = mSharedDLObj->newDisplayList(param_0);
         switch (res) {
@@ -325,7 +325,7 @@ s32 J3DMaterial::newSharedDisplayList(u32 param_0) {
             return res;
         }
     }
-    return 0;
+    return kJ3DError_Success;
 }
 
 /* 802DF1AC-802DF240       .text newSingleSharedDisplayList__11J3DMaterialFUl */
@@ -333,7 +333,7 @@ s32 J3DMaterial::newSingleSharedDisplayList(u32 param_0) {
     if (mSharedDLObj == NULL) {
         mSharedDLObj = new J3DDisplayListObj();
         if (mSharedDLObj == NULL) {
-            return 4;
+            return kJ3DError_Alloc;
         }
         s32 res = mSharedDLObj->newSingleDisplayList(param_0);
         switch (res) {
@@ -343,7 +343,7 @@ s32 J3DMaterial::newSingleSharedDisplayList(u32 param_0) {
             return res;
         }
     }
-    return 0;
+    return kJ3DError_Success;
 }
 
 /* 802DF240-802DF260       .text initialize__18J3DPatchedMaterialFv */
@@ -360,7 +360,7 @@ void J3DPatchedMaterial::makeSharedDisplayList() {}
 /* 802DF268-802DF2AC       .text load__18J3DPatchedMaterialFv */
 void J3DPatchedMaterial::load() {
     j3dSys.setMaterialMode(mMaterialMode);
-    if (j3dSys.checkFlag(2)) {
+    if (j3dSys.checkFlag(0x02)) {
         return;
     }
     j3dSys.mMatPacket->callDL();
@@ -402,7 +402,7 @@ void J3DLockedMaterial::makeSharedDisplayList() {}
 /* 802DF368-802DF3AC       .text load__17J3DLockedMaterialFv */
 void J3DLockedMaterial::load() {
     j3dSys.setMaterialMode(mMaterialMode);
-    if (j3dSys.checkFlag(2)) {
+    if (j3dSys.checkFlag(0x02)) {
         return;
     }
     j3dSys.mMatPacket->callDL();

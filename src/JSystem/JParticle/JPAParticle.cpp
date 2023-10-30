@@ -78,6 +78,6 @@ void JPABaseParticle::calcPosition() {
 }
 
 /* 8025ED6C-8025EE44       .text checkCreateChild__15JPABaseParticleFv */
-void JPABaseParticle::checkCreateChild() {
+bool JPABaseParticle::checkCreateChild() {
     /* Nonmatching */
 }

@@ -345,7 +345,7 @@ config.libs = [
             Object(NonMatching, "d/d_jnt_hit.cpp"),
             Object(NonMatching, "d/d_chain.cpp"),
             Object(NonMatching, "d/d_cloth_packet.cpp"),
-            Object(NonMatching, "d/actor/d_a_obj.cpp"),
+            Object(NonMatching, "d/d_a_obj.cpp"),
             Object(NonMatching, "d/d_a_obj_tribox_static.cpp"),
             Object(Matching,    "d/d_a_ship_static.cpp"),
             Object(Matching,    "d/d_a_boko_static.cpp"),
@@ -582,13 +582,13 @@ config.libs = [
     JSystemLib(
         "JStage",
         [
-            Object(NonMatching, "JSystem/JStage/JSGActor.cpp"),
-            Object(NonMatching, "JSystem/JStage/JSGAmbientLight.cpp"),
-            Object(NonMatching, "JSystem/JStage/JSGCamera.cpp"),
-            Object(NonMatching, "JSystem/JStage/JSGFog.cpp"),
-            Object(NonMatching, "JSystem/JStage/JSGLight.cpp"),
-            Object(NonMatching, "JSystem/JStage/JSGObject.cpp"),
-            Object(NonMatching, "JSystem/JStage/JSGSystem.cpp"),
+            Object(Matching,    "JSystem/JStage/JSGActor.cpp"),
+            Object(Matching,    "JSystem/JStage/JSGAmbientLight.cpp"),
+            Object(Matching,    "JSystem/JStage/JSGCamera.cpp"),
+            Object(Matching,    "JSystem/JStage/JSGFog.cpp"),
+            Object(Matching,    "JSystem/JStage/JSGLight.cpp"),
+            Object(Matching,    "JSystem/JStage/JSGObject.cpp"),
+            Object(Matching,    "JSystem/JStage/JSGSystem.cpp"),
         ],
     ),
     JSystemLib(
@@ -785,9 +785,9 @@ config.libs = [
             Object(NonMatching, "JSystem/JKernel/JKRDvdArchive.cpp"),
             Object(Matching,    "JSystem/JKernel/JKRCompArchive.cpp"),
             Object(Matching,    "JSystem/JKernel/JKRFile.cpp"),
-            Object(NonMatching, "JSystem/JKernel/JKRDvdFile.cpp"),
+            Object(Matching,    "JSystem/JKernel/JKRDvdFile.cpp"),
             Object(Matching,    "JSystem/JKernel/JKRDvdRipper.cpp"),
-            Object(NonMatching, "JSystem/JKernel/JKRDvdAramRipper.cpp"),
+            Object(Matching,    "JSystem/JKernel/JKRDvdAramRipper.cpp", extra_cflags=["-sym off"]),
             Object(Matching,    "JSystem/JKernel/JKRDecomp.cpp"),
         ],
     ),
@@ -850,7 +850,7 @@ config.libs = [
     JSystemLib(
         "JRenderer",
         [
-            Object(NonMatching, "JSystem/JRenderer/JRenderer.cpp"),
+            Object(Matching,    "JSystem/JRenderer/JRenderer.cpp"),
         ],
     ),
     JSystemLib(
