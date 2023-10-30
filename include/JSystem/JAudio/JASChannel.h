@@ -37,7 +37,7 @@ namespace JASystem {
         void setPauseFlagReq(u8);
         void setPanPower(f32, f32, f32, f32);
         BOOL checkLogicalChannel();
-        bool play(u32);
+        BOOL play(u32);
         void stop(u16);
         void updateJcToDSP();
         bool forceStopLogicalChannel();
@@ -75,7 +75,7 @@ namespace JASystem {
         /* 0x48 */ u32 field_0x48;
         /* 0x4C */ short field_0x4c;
         /* 0x50 */ f32 field_0x50;
-        /* 0x54 */ int field_0x54;
+        /* 0x54 */ f32 field_0x54;
         /* 0x58 */ f32 field_0x58;
         /* 0x5C */ f32 field_0x5c;
         /* 0x60 */ u8 field_0x60[3];

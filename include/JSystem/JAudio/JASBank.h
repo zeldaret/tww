@@ -7,6 +7,7 @@ class JKRHeap;
 
 namespace JASystem {
     class TInst;
+    class TWaveBank;
     class TBank {
     public:
         TBank() {
@@ -20,7 +21,7 @@ namespace JASystem {
 
         static JKRHeap* sCurrentHeap;
 
-        /* 0x04 */ int field_0x4;
+        /* 0x04 */ TWaveBank* field_0x4;
     };
 }
 

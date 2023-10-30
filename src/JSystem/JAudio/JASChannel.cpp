@@ -176,7 +176,7 @@ BOOL JASystem::TChannel::checkLogicalChannel() {
 }
 
 /* 8028BEB8-8028BF40       .text play__Q28JASystem8TChannelFUl */
-bool JASystem::TChannel::play(u32 param_1) {
+BOOL JASystem::TChannel::play(u32 param_1) {
     /* Nonmatching */
     if (param_1 == 0) {
         param_1 = -1;

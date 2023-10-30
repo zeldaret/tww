@@ -3,61 +3,154 @@
 // Translation Unit: JASBankMgr.cpp
 //
 
-#include "JASBankMgr.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASBankMgr.h"
+#include "JSystem/JAudio/JASBNKParser.h"
+#include "JSystem/JAudio/JASBasicBank.h"
+#include "JSystem/JAudio/JASCalc.h"
+#include "JSystem/JAudio/JASChannel.h"
+#include "JSystem/JAudio/JASChannelMgr.h"
+#include "JSystem/JAudio/JASDriverTables.h"
+#include "JSystem/JAudio/JASRate.h"
+#include "JSystem/JAudio/JASSystemHeap.h"
+#include "JSystem/JAudio/JASWaveBankMgr.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+
+s32 JASystem::BankMgr::sTableSize;
+JASystem::TBank** JASystem::BankMgr::sBankArray;
+u16* JASystem::BankMgr::sVir2PhyTable;
 
 /* 80288594-80288698       .text init__Q28JASystem7BankMgrFi */
-void JASystem::BankMgr::init(int) {
-    /* Nonmatching */
+void JASystem::BankMgr::init(int param_1) {
+    u32 r31 = param_1 * 4;
+    sBankArray = (TBank**)new (JASDram, 0) u8[r31];
+    JUT_ASSERT(69, sBankArray != 0);
+    sVir2PhyTable = new (JASDram, 0) u16[param_1];
+    JUT_ASSERT(72, sVir2PhyTable != 0);
+    Calc::bzero(sBankArray, r31);
+    for (int i = 0; i < param_1; i++) {
+        sVir2PhyTable[i] = 0xffffffff;
+    }
+    sTableSize = param_1;
 }
 
 /* 80288698-8028874C       .text registBank__Q28JASystem7BankMgrFiPQ28JASystem5TBank */
-void JASystem::BankMgr::registBank(int, JASystem::TBank*) {
-    /* Nonmatching */
+bool JASystem::BankMgr::registBank(int banknum, TBank* bank) {
+    JUT_ASSERT(86, banknum >= 0);
+    JUT_ASSERT(87, banknum < sTableSize);
+    sBankArray[banknum] = bank;
+    return true;
 }
 
 /* 8028874C-802887AC       .text registBankBNK__Q28JASystem7BankMgrFiPv */
-void JASystem::BankMgr::registBankBNK(int, void*) {
-    /* Nonmatching */
+bool JASystem::BankMgr::registBankBNK(int banknum, void* param_2) {
+    setVir2PhyTable(*((u32*)(param_2) + 2), banknum);
+    TBasicBank* bank = BNKParser::createBasicBank(param_2);
+    if (bank == NULL) {
+        return false;
+    }
+    return registBank(banknum, bank);
 }
 
 /* 802887AC-802887E0       .text getBank__Q28JASystem7BankMgrFi */
-void JASystem::BankMgr::getBank(int) {
-    /* Nonmatching */
+JASystem::TBank* JASystem::BankMgr::getBank(int param_1) {
+    if (param_1 < 0) {
+        return NULL;
+    }
+    if (param_1 >= sTableSize) {
+        return NULL;
+    }
+    return sBankArray[param_1];
 }
 
 /* 802887E0-802887F0       .text getPhysicalNumber__Q28JASystem7BankMgrFUs */
-void JASystem::BankMgr::getPhysicalNumber(unsigned short) {
-    /* Nonmatching */
+u16 JASystem::BankMgr::getPhysicalNumber(u16 param_1) {
+    return sVir2PhyTable[param_1];
 }
 
 /* 802887F0-802888A0       .text setVir2PhyTable__Q28JASystem7BankMgrFUli */
-void JASystem::BankMgr::setVir2PhyTable(unsigned long, int) {
-    /* Nonmatching */
+void JASystem::BankMgr::setVir2PhyTable(u32 vir_id, int banknum) {
+    if (vir_id == 0xFFFF) {
+        return;
+    }
+    JUT_ASSERT(127, vir_id < sTableSize);
+    if (sVir2PhyTable[vir_id] != 0xFFFF) {
+        OSReport("Warning : Duplicated Bank vir_id ID %d (%d,%d)\n", vir_id, sVir2PhyTable[vir_id], banknum);
+    }
+    sVir2PhyTable[vir_id] = banknum;
 }
 
 /* 802888A0-80288904       .text assignWaveBank__Q28JASystem7BankMgrFii */
-void JASystem::BankMgr::assignWaveBank(int, int) {
-    /* Nonmatching */
+bool JASystem::BankMgr::assignWaveBank(int param_1, int param_2) {
+    TBank* bank = getBank(param_1);
+    if (!bank) {
+        return false;
+    }
+    TWaveBank* waveBank = WaveBankMgr::getWaveBank(param_2);
+    if (!waveBank) {
+        return false;
+    }
+    bank->field_0x4 = waveBank;
+    return true;
 }
 
 /* 80288904-8028892C       .text clamp01__Q28JASystem7BankMgrFf */
-void JASystem::BankMgr::clamp01(float) {
-    /* Nonmatching */
+f32 JASystem::BankMgr::clamp01(f32 param_1) {
+    if (param_1 < 0.0f) {
+        return 0.0f;
+    }
+    if (param_1 > 1.0f) {
+        return 1.0f;
+    }
+    return param_1;
 }
 
 /* 8028892C-80288CE8       .text noteOn__Q28JASystem7BankMgrFPQ28JASystem11TChannelMgriiUcUcUl */
-void JASystem::BankMgr::noteOn(JASystem::TChannelMgr*, int, int, unsigned char, unsigned char, unsigned long) {
+JASystem::TChannel* JASystem::BankMgr::noteOn(TChannelMgr*, int, int, u8, u8, u32) {
     /* Nonmatching */
 }
 
 /* 80288CE8-80288E44       .text noteOnOsc__Q28JASystem7BankMgrFPQ28JASystem11TChannelMgriUcUcUl */
-void JASystem::BankMgr::noteOnOsc(JASystem::TChannelMgr*, int, unsigned char, unsigned char, unsigned long) {
+JASystem::TChannel* JASystem::BankMgr::noteOnOsc(TChannelMgr* param_1, int param_2, u8 param_3, u8 param_4, u32 param_5) {
     /* Nonmatching */
+    TChannel* channel = param_1->getLogicalChannel(0);
+    if (!channel) {
+        return NULL;
+    }
+    channel->field_0x14 = param_2;
+    channel->field_0xc = 2;
+    channel->field_0x0 = param_4;
+    channel->field_0x1 = param_3;
+    channel->field_0x50 = 16736.016f / Kernel::gDacRate;
+    channel->field_0x58 = channel->field_0x50;
+    s32 var1 = param_3;
+    if (var1 < 0) {
+        var1 = 0;
+    }
+    if (var1 > 127) {
+        var1 = 127;
+    }
+    channel->field_0x58 *= Driver::C5BASE_PITCHTABLE[var1];
+    channel->field_0x54 = 1.0f;
+    channel->field_0x5c = channel->field_0x0 / 127.0f;
+    channel->field_0x5c = channel->field_0x54 * (channel->field_0x5c * channel->field_0x5c);
+    channel->field_0x70.field_0x0 = 0.5f;
+    channel->field_0x7c.field_0x0 = 0.0f;
+    channel->field_0x88.field_0x0 = 0.0f;
+    channel->field_0x70.field_0x4 = 0.5f;
+    channel->field_0x7c.field_0x4 = 0.0f;
+    channel->field_0x88.field_0x4 = 0.0f;
+    channel->field_0x94 = 1.0f;
+    channel->field_0x98 = 1.0f;
+    channel->setOscInit(0, &OSC_ENV);
+    channel->field_0xcc = 0;
+    if (!channel->play(param_5)) {
+        return NULL;
+    }
+    return channel;
 }
 
 /* 80288E44-80288F08       .text gateOn__Q28JASystem7BankMgrFPQ28JASystem8TChannelUcUcUl */
-void JASystem::BankMgr::gateOn(JASystem::TChannel*, unsigned char, unsigned char, unsigned long) {
+void JASystem::BankMgr::gateOn(JASystem::TChannel*, u8, u8, u32) {
     /* Nonmatching */
 }
-
