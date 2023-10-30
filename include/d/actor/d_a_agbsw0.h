@@ -65,6 +65,9 @@ public:
         return current.angle.x & 0xFFFF;
     }
     
+    static void incTclDispose();
+    static void incTclBeat();
+    
     inline BOOL draw();
     inline int create();
     inline BOOL execute();

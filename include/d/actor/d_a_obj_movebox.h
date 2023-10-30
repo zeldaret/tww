@@ -10,13 +10,6 @@
 #include "d/d_bg_w.h"
 #include "d/d_path.h"
 
-// Needed for the .data and .bss sections to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
-static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
-static f64 dummy4[2] = {3.0, 0.5};
-u8 dummy5[0x4C];
-
 namespace daObjMovebox {
     class Act_c;
     
@@ -192,14 +185,7 @@ namespace daObjMovebox {
         void off_switch1() const { fopAcM_offSwitch((Act_c*)this, prm_get_swSave1()); };
         void off_switch2() const { fopAcM_offSwitch((Act_c*)this, prmZ_get_swSave2()); };
         
-        void mode_proc_call() {
-            static ModeFunc mode_proc[] = {
-                &mode_wait,
-                &mode_walk,
-                &mode_afl,
-            };
-            (this->*mode_proc[mMode])();
-        }
+        inline void mode_proc_call();
         bool chk_walk(cXyz*) { /* TODO */ }
         
         void prmZ_init();
@@ -240,7 +226,7 @@ namespace daObjMovebox {
         int Draw();
         int Delete();
         
-        static s16 M_dir_base[4];
+        static const s16 M_dir_base[4];
     
     public:
         /* 0x2C8 */ request_of_phase_process_class mPhs;

@@ -73,6 +73,9 @@ public:
     daAgb_c();
 
     inline void modeProcCall();
+    
+    BOOL isMsgSend() { return mIsMsgSend; }
+    BOOL isActive() { return mIsActive; }
 
     static int mEffect;
 
@@ -165,13 +168,13 @@ public:
     /* 0x66F */ s8 field_0x66f;
     /* 0x670 */ u8 field_0x670;
     /* 0x671 */ u8 field_0x671;
-    /* 0x672 */ u8 field_0x672;
+    /* 0x672 */ bool mIsActive;
     /* 0x673 */ u8 field_0x673;
     /* 0x674 */ u8 field_0x674;
     /* 0x675 */ u8 field_0x675;
     /* 0x676 */ u8 field_0x676;
     /* 0x677 */ u8 field_0x677;
-    /* 0x678 */ u8 field_0x678;
+    /* 0x678 */ bool mIsMsgSend;
     /* 0x679 */ u8 field_0x679;
     /* 0x67A */ bool field_0x67a;
     /* 0x67B */ u8 field_0x67b;

@@ -3,6 +3,15 @@
 // Translation Unit: d_a_obj_movebox.cpp
 //
 
+#include "global.h"
+
+// Needed for the .data and .bss sections to match.
+static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
+static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
+static f64 dummy4[2] = {3.0, 0.5};
+u8 dummy5[0x4C];
+
 #include "d/actor/d_a_obj_movebox.h"
 #include "d/d_cc_d.h"
 #include "d/d_procname.h"
@@ -1070,6 +1079,15 @@ namespace daObjMovebox {
         },
     };
     
+    void Act_c::mode_proc_call() {
+        static ModeFunc mode_proc[] = {
+            &mode_wait,
+            &mode_walk,
+            &mode_afl,
+        };
+        (this->*mode_proc[mMode])();
+    }
+    
     /* 000012E0-00001308       .text prm_get_swSave1__Q212daObjMovebox5Act_cCFv */
     s32 Act_c::prm_get_swSave1() const {
         return daObj::PrmAbstract(this, PRM_SWSAVE1_W, PRM_SWSAVE1_S);
@@ -1441,16 +1459,17 @@ namespace daObjMovebox {
     /* 00002214-000024D4       .text afl_sway__Q212daObjMovebox5Act_cFv */
     void Act_c::afl_sway() {
         /* Nonmatching - regalloc */
-        bool r30;
         bool r29;
+        bool r30;
+        BgcSrc_c* bgcSrc;
+        s32 bgcSrcCount;
         f32 f31;
         f32 f30;
         f32 f1;
         f32 f5;
         f32 f6;
         f32 f0;
-        BgcSrc_c* bgcSrc;
-        s32 bgcSrcCount;
+        f32 temp;
         
         f31 = m60C*m60C + m610*m610;
         f30 = i_attr()->m4C*i_attr()->m4C;
@@ -1473,9 +1492,9 @@ namespace daObjMovebox {
         }
         
         if (f31 > f30) {
-            f32 f1 = i_attr()->m4C / sqrtf(f31);
-            m60C *= f1;
-            m610 *= f1;
+            temp = i_attr()->m4C / sqrtf(f31);
+            m60C *= temp;
+            m610 *= temp;
         }
         
         f5 = -(m618 - m610) * i_attr()->m50;

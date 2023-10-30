@@ -55,6 +55,9 @@ public:
     daArrow_c();
     BOOL _delete();
     
+    static u8 getKeepType();
+    static void setKeepType(u8 type);
+    
     // TODO inlines
     // setAtHitPosBuff__9daArrow_cFP4cXyz
     // setAtHitNormal__9daArrow_cFv

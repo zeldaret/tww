@@ -566,7 +566,7 @@ BOOL daAgbsw0_c::ExeSubF() {
     }
     if(g_mDoGaC_gbaCom.mDoGaC_GbaLink() && g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5)) {
         daAgb_c* agb = dComIfGp_getAgb();
-        if(agb && (int)agb->field_0x672 != 0 && (int)agb->field_0x671 == 0 && (int)agb->field_0x677 == 0 && HitCheck(agb)) {
+        if(agb && agb->isActive() && (int)agb->field_0x671 == 0 && (int)agb->field_0x677 == 0 && HitCheck(agb)) {
             MailSend(BigLittleChange(getMsgNo()) >> 0x10, 6, getSw1(), sw, 0);
         }
     }
@@ -619,7 +619,7 @@ BOOL daAgbsw0_c::ExeSubF2() {
     if(g_mDoGaC_gbaCom.mDoGaC_GbaLink() && g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5) && agb) {
         fopAc_ac_c* player = dComIfGp_getPlayer(0);
         if(field_0x299 == 0) {
-            if((int)agb->field_0x672 != 0 && (int)agb->field_0x671 == 0 && (int)agb->field_0x677 == 0 && HitCheck(agb)) {
+            if(agb->isActive() && (int)agb->field_0x671 == 0 && (int)agb->field_0x677 == 0 && HitCheck(agb)) {
                 MailSend(0x5A00, 6, 0xFF, 0xFF, 0);
                 agb->onFree();
                 agb->onHold();
@@ -643,7 +643,7 @@ BOOL daAgbsw0_c::ExeSubF2() {
             }
         }
         else if(field_0x299 == 1) {
-            if((int)agb->field_0x672 != 0 && HitCheck(player->current.pos, 60.0f)) {
+            if(agb->isActive() && HitCheck(player->current.pos, 60.0f)) {
                 MailSend(BigLittleChange(getMsgNo()) >> 0x10, 5, getSw1(), sw, 0);
                 agb->resetCursor(false);
                 field_0x299 += 1;
@@ -684,7 +684,7 @@ BOOL daAgbsw0_c::ExeSubM() {
     else {
         if(g_mDoGaC_gbaCom.mDoGaC_GbaLink() && g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5)) {
             daAgb_c* agb = dComIfGp_getAgb();
-            if(agb && (int)agb->field_0x672 != 0 && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 != 1) && HitCheck(agb)) {
+            if(agb && agb->isActive() && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 != 1) && HitCheck(agb)) {
                 MailSend(BigLittleChange(getMsgNo()) >> 0x10, 0x3, 0xFF, 0xFF, 0);
                 field_0x298 = 1;
             }
@@ -724,7 +724,7 @@ BOOL daAgbsw0_c::ExeSubM2() {
         else {
             if(g_mDoGaC_gbaCom.mDoGaC_GbaLink() && g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5)) {
                 daAgb_c* agb = dComIfGp_getAgb();
-                if(agb && (int)agb->field_0x672 != 0 && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 != 1) && HitCheck(agb)) {
+                if(agb && agb->isActive() && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 != 1) && HitCheck(agb)) {
                     MailSend(BigLittleChange(getMsgNo()) >> 0x10, 0x3, 0xFF, 0xFF, 0);
                     field_0x298 = 1;
                 }
@@ -765,7 +765,7 @@ BOOL daAgbsw0_c::ExeSubM3() {
         else {
             if(g_mDoGaC_gbaCom.mDoGaC_GbaLink() && g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5)) {
                 daAgb_c* agb = dComIfGp_getAgb();
-                if(agb && (int)agb->field_0x672 != 0 && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 != 1) && HitCheck(agb)) {
+                if(agb && agb->isActive() && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 != 1) && HitCheck(agb)) {
                     u16 gbaMsgId = TriforceCheck(agb);
                     MailSend(BigLittleChange(gbaMsgId) >> 0x10, 0xF, 0xFF, 0xFF, 0);
                     field_0x298 = 1;
@@ -1046,7 +1046,7 @@ BOOL daAgbsw0_c::ExeSubS() {
         else if(field_0x299 == 0 && g_mDoGaC_gbaCom.mDoGaC_GbaLink()) {
             daAgb_c* agb = dComIfGp_getAgb();
             if(getParamNo() < 0) {
-                if(agb && (int)agb->field_0x672 != 0 && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 != 1) && HitCheck(agb)) {
+                if(agb && agb->isActive() && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 != 1) && HitCheck(agb)) {
                     if(getMsgNo() == 0xFFFF) {
                         fopAcM_onSwitch(this, sw);
                         if(sw1 != 0xFF) {
@@ -1118,7 +1118,7 @@ BOOL daAgbsw0_c::ExeSubR() {
             fopAcM_delete(this);
             return true;
         }
-        else if(agb && (int)agb->field_0x672 != 0) {
+        else if(agb && agb->isActive()) {
             if((int)agb->field_0x671 != 0 && HitCheck(agb)) {
                 MailSend(BigLittleChange(getMsgNo()) >> 0x10, 0xA, 0xFF, getSw0(), 0);
                 field_0x299 = 1;
@@ -1335,7 +1335,7 @@ BOOL daAgbsw0_c::ExeSubD() {
             if(g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5) && agb) {
             fopAc_ac_c* player = dComIfGp_getPlayer(0);
                 if(field_0x299 == 0) {
-                    if((int)agb->field_0x672 != 0 && (int)agb->field_0x671 != 0 && HitCheck(agb)) {
+                    if(agb->isActive() && (int)agb->field_0x671 != 0 && HitCheck(agb)) {
                         MailSend(0x5F00, 0xC, 0xFF, 0xFF, 0x19);
                         agb->onHold();
                         agb->field_0x675 = 1;
@@ -1359,7 +1359,7 @@ BOOL daAgbsw0_c::ExeSubD() {
                     }
                 }
                 else if(field_0x299 == 1) {
-                    if((int)agb->field_0x672 != 0 && HitCheck(player->current.pos, 60.0f)) {
+                    if(agb->isActive() && HitCheck(player->current.pos, 60.0f)) {
                         MailSend(BigLittleChange(getMsgNo()) >> 0x10, 0xC, getSw1(), 0xFF, 0x1B);
 
                         agb->shape_angle.x = 0x3FFF;
