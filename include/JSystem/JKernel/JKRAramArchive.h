@@ -5,7 +5,7 @@
 #include "dolphin/types.h"
 
 class JKRAramBlock;
-class JKRDvdFile;
+class JKRFile;
 
 class JKRAramArchive : public JKRArchive {
 public:
@@ -28,7 +28,7 @@ private:
     /* 0x00 */  // vtable
     /* 0x04 */  // JKRArchive
     /* 0x64 */ JKRAramBlock* mBlock;
-    /* 0x68 */ JKRDvdFile* mDvdFile;
+    /* 0x68 */ JKRFile* mDvdFile;
 };  // Size = 0x6C
 
 #endif /* JKRARAMARCHIVE_H */
