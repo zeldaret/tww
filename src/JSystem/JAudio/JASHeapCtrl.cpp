@@ -197,7 +197,7 @@ JASystem::Kernel::TSolidHeap::TSolidHeap() {
 }
 
 /* 8027D370-8027D40C       .text alloc__Q38JASystem6Kernel10TSolidHeapFl */
-int JASystem::Kernel::TSolidHeap::alloc(s32 size) {
+void* JASystem::Kernel::TSolidHeap::alloc(s32 size) {
     /* Nonmatching */
     u32 tmp1 = OSRoundUp32B(size);
     if (field_0x0 == 0) {
@@ -213,7 +213,7 @@ int JASystem::Kernel::TSolidHeap::alloc(s32 size) {
     }
     field_0xc++;
     field_0x10 = tmp2;
-    return tmp2;
+    return (void*)tmp2;
 }
 
 /* 8027D40C-8027D424       .text freeAll__Q38JASystem6Kernel10TSolidHeapFv */

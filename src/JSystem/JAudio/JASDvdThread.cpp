@@ -22,14 +22,14 @@ JASTaskThread::TCallStack::~TCallStack() {
 }
 
 /* 8027B5D8-8027B66C       .text sendCmdMsg__13JASTaskThreadFPFPv_lPvUl */
-bool JASTaskThread::sendCmdMsg(s32 (*param_1)(void*), void* param_2, u32 param_3) {
+BOOL JASTaskThread::sendCmdMsg(s32 (*param_1)(void*), void* param_2, u32 param_3) {
     TCallStack* stack = new(JKRGetSystemHeap(), -4) TCallStack(param_3);
     if (!stack) {
         return false;
     }
     JASystem::Calc::bcopy(param_2, stack->argspace, param_3);
     stack->field_0x0 = param_1;
-    sendMessageBlock(stack);
+    return sendMessageBlock(stack);
 }
 
 /* 8027B66C-8027B6D4       .text run__13JASTaskThreadFv */
@@ -79,9 +79,9 @@ void JASystem::Dvd::resumeThread() {
 }
 
 /* 8027B84C-8027B8D4       .text sendCmdMsg__Q28JASystem3DvdFPFPv_lPvUl */
-void JASystem::Dvd::sendCmdMsg(s32 (*param_1)(void*), void* param_2, u32 param_3) {
+BOOL JASystem::Dvd::sendCmdMsg(s32 (*param_1)(void*), void* param_2, u32 param_3) {
     JUT_ASSERT(152, sThread);
-    sThread->sendCmdMsg(param_1, param_2, param_3);
+    return sThread->sendCmdMsg(param_1, param_2, param_3);
 }
 
 /* 8027B8D4-8027B914       .text checkPassDvdT__Q28JASystem3DvdFUlPUlPFUl_v */

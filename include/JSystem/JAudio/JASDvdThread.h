@@ -19,7 +19,7 @@ public:
         OSInitThreadQueue(&field_0x68);
     }
     ~JASTaskThread();
-    bool sendCmdMsg(s32 (*)(void*), void*, u32);
+    BOOL sendCmdMsg(s32 (*)(void*), void*, u32);
     void* run();
     void pause(bool);
 
@@ -31,7 +31,7 @@ namespace JASystem {
     namespace Dvd {
         bool createThread(int, int, u32);
         void resumeThread();
-        void sendCmdMsg(s32 (*)(void*), void*, u32);
+        BOOL sendCmdMsg(s32 (*)(void*), void*, u32);
         int checkPassDvdT(u32, u32*, void (*)(u32));
         u32 checkFile(char*);
         void unpauseDvdT();

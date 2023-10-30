@@ -14,7 +14,7 @@ namespace JASystem {
         void sysDramSetup(JKRSolidHeap*);
         void* allocFromSysDram(u32);
         void sysAramSetup(u32);
-        void allocFromSysAramFull(u32*);
+        void* allocFromSysAramFull(u32*);
 
         extern TSolidHeap audioAramHeap;
         extern u32 audioDramSize;
