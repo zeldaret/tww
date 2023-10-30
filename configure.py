@@ -677,7 +677,7 @@ config.libs = [
             Object(NonMatching, "JSystem/JAudio/JASBasicInst.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASDrumSet.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASBasicWaveBank.cpp"),
-            Object(NonMatching, "JSystem/JAudio/JASSimpleWaveBank.cpp"),
+            Object(Matching,    "JSystem/JAudio/JASSimpleWaveBank.cpp"),
             Object(Matching,    "JSystem/JAudio/JASInstEffect.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASInstSense.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASInstRand.cpp"),

@@ -3,66 +3,52 @@
 // Translation Unit: JASSimpleWaveBank.cpp
 //
 
-#include "JASSimpleWaveBank.h"
+#include "JSystem/JAudio/JASSimpleWaveBank.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/types.h"
 
 /* 802864C8-80286528       .text __ct__Q28JASystem15TSimpleWaveBankFv */
 JASystem::TSimpleWaveBank::TSimpleWaveBank() {
-    /* Nonmatching */
+    mWaveTable = NULL;
+    mWaveCount = 0;
 }
 
 /* 80286528-802865F4       .text __dt__Q28JASystem15TSimpleWaveBankFv */
 JASystem::TSimpleWaveBank::~TSimpleWaveBank() {
-    /* Nonmatching */
+    delete[] mWaveTable;
 }
 
 /* 802865F4-80286650       .text __dt__Q38JASystem15TSimpleWaveBank11TWaveHandleFv */
-JASystem::TSimpleWaveBank::TWaveHandle::~TWaveHandle() {
-    /* Nonmatching */
-}
+JASystem::TSimpleWaveBank::TWaveHandle::~TWaveHandle() {}
 
 /* 80286650-8028670C       .text setWaveTableSize__Q28JASystem15TSimpleWaveBankFUl */
-void JASystem::TSimpleWaveBank::setWaveTableSize(unsigned long) {
-    /* Nonmatching */
+void JASystem::TSimpleWaveBank::setWaveTableSize(u32 param_1) {
+    delete[] mWaveTable;
+    mWaveTable = new (getCurrentHeap(), 0) TWaveHandle[param_1];
+    JUT_ASSERT(34, mWaveTable != 0);
+    mWaveCount = param_1;
 }
 
 /* 8028670C-80286730       .text getWaveHandle__Q28JASystem15TSimpleWaveBankCFUl */
-void JASystem::TSimpleWaveBank::getWaveHandle(unsigned long) const {
-    /* Nonmatching */
+JASystem::TSimpleWaveBank::TWaveHandle* JASystem::TSimpleWaveBank::getWaveHandle(u32 param_1) const {
+    if (param_1 >= mWaveCount) {
+        return NULL;
+    }
+    return mWaveTable + param_1;
 }
 
 /* 80286730-802867D4       .text setWaveInfo__Q28JASystem15TSimpleWaveBankFUlRCQ28JASystem9TWaveInfo */
-void JASystem::TSimpleWaveBank::setWaveInfo(unsigned long, const JASystem::TWaveInfo&) {
-    /* Nonmatching */
+void JASystem::TSimpleWaveBank::setWaveInfo(u32 param_1, const JASystem::TWaveInfo& param_2) {
+    mWaveTable[param_1].field_0x4 = param_2;
+    mWaveTable[param_1].field_0x4.field_0x24 = &field_0x4c;
+    mWaveTable[param_1].mHeap = &field_0x4;
 }
 
 /* 802867D4-802867F4       .text getWaveArc__Q28JASystem15TSimpleWaveBankFi */
-void JASystem::TSimpleWaveBank::getWaveArc(int) {
-    /* Nonmatching */
+JASystem::TWaveArc* JASystem::TSimpleWaveBank::getWaveArc(int param_1) {
+    if (param_1 != 0) {
+        return NULL;
+    }
+    return this;
 }
-
-/* 802867F4-80286818       .text __ct__Q38JASystem15TSimpleWaveBank11TWaveHandleFv */
-JASystem::TSimpleWaveBank::TWaveHandle::TWaveHandle() {
-    /* Nonmatching */
-}
-
-/* 80286818-80286820       .text getWaveInfo__Q38JASystem15TSimpleWaveBank11TWaveHandleCFv */
-void JASystem::TSimpleWaveBank::TWaveHandle::getWaveInfo() const {
-    /* Nonmatching */
-}
-
-/* 80286820-80286844       .text getWavePtr__Q38JASystem15TSimpleWaveBank11TWaveHandleCFv */
-void JASystem::TSimpleWaveBank::TWaveHandle::getWavePtr() const {
-    /* Nonmatching */
-}
-
-/* 80286844-80286848       .text onLoadDone__Q28JASystem8TWaveArcFv */
-void JASystem::TWaveArc::onLoadDone() {
-    /* Nonmatching */
-}
-
-/* 80286848-8028684C       .text onEraseDone__Q28JASystem8TWaveArcFv */
-void JASystem::TWaveArc::onEraseDone() {
-    /* Nonmatching */
-}
-
