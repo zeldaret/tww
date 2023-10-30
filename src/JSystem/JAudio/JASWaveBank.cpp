@@ -3,11 +3,16 @@
 // Translation Unit: JASWaveBank.cpp
 //
 
-#include "JASWaveBank.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASWaveBank.h"
+#include "JSystem/JAudio/JASSystemHeap.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+
+JKRHeap* JASystem::TWaveBank::sCurrentHeap;
 
 /* 8028455C-80284570       .text getCurrentHeap__Q28JASystem9TWaveBankFv */
-void JASystem::TWaveBank::getCurrentHeap() {
-    /* Nonmatching */
+JKRHeap* JASystem::TWaveBank::getCurrentHeap() {
+    if (sCurrentHeap) {
+        return sCurrentHeap;
+    }
+    return JASDram;
 }
-
