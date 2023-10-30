@@ -102,7 +102,7 @@ public:
     s32 CreateHeap();
     s32 CreateInit();
 
-    void boxCheck();
+    BOOL boxCheck();
     void lightUpProc();
     void lightDownProc();
     void darkProc();
@@ -179,7 +179,7 @@ public:
     /* 0x03EC */ float m03EC;
 
     /* 0x03F0 */ u16 mFlags;
-    /* 0x03F2 */ s16 m03F2;
+    /* 0x03F2 */ u16 mEvTimer;
 
     /* 0x03F4 */ u8 m03F4;
     /* 0x03F5 */ u8 mIsFlashPlaying;
@@ -693,33 +693,105 @@ s32 daTbox_c::CreateInit() {
 }
 
 /* 00001560-00001624       .text boxCheck__8daTbox_cFv */
-void daTbox_c::boxCheck() {
-    /* Nonmatching */
+BOOL daTbox_c::boxCheck() {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    cXyz playerChestDiff = player->getPosition() - orig.pos;
+
+    if (playerChestDiff.abs2XZ() < 10000.0f) {
+        if (fopAcM_seenActorAngleY(this, dComIfGp_getPlayer(0)) < 0x2000 && fopAcM_seenActorAngleY(player, this) < 0x2000) {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
 }
 
 /* 00001624-00001668       .text lightUpProc__8daTbox_cFv */
 void daTbox_c::lightUpProc() {
-    /* Nonmatching */
+    if (mPLight.mPower < 130.0f) {
+        mPLight.mPower += 13.0f;
+    }
+
+    if (mEfLight.mPower < 120.0f) {
+        mEfLight.mPower += 12.0f;
+    }
 }
 
 /* 00001668-000016BC       .text lightDownProc__8daTbox_cFv */
 void daTbox_c::lightDownProc() {
-    /* Nonmatching */
+    if (mPLight.mPower > 5.2f) {
+        mPLight.mPower -= 5.2f;
+    }
+    else {
+        mPLight.mPower = 0.0f;
+    }
+
+    if (mEfLight.mPower > 4.8f) {
+        mEfLight.mPower -= 4.8f;
+    }
+    else {
+        mEfLight.mPower = 0.0f;
+    }
 }
 
 /* 000016BC-0000172C       .text darkProc__8daTbox_cFv */
 void daTbox_c::darkProc() {
-    /* Nonmatching */
+    if (mEvTimer > 0x96) {
+        mAllColRatio = 1.0f;
+    }
+    else if (mEvTimer > 0x78) {
+        mAllColRatio = ((mEvTimer - 0x78) / 30.0f) * 0.6f + 0.4f;
+    }
 }
 
 /* 0000172C-000017CC       .text volmProc__8daTbox_cFv */
 void daTbox_c::volmProc() {
-    /* Nonmatching */
+    if (mEvTimer == 0x24) {
+        mSmokeEmitter->mGlobalPrmColor.a = 0xFF;
+    }
+    else if (mEvTimer >= 0xB5) {
+        dKy_plight_cut(&mPLight);
+        dKy_efplight_cut(&mEfLight);
+
+        mSmokeEmitter->mGlobalPrmColor.a = 0;
+
+        mSmokeEmitter->becomeInvalidEmitter();
+        mSmokeEmitter = NULL;
+    }
+    else if (mEvTimer > 0x9C) {
+        mSmokeEmitter->mGlobalPrmColor.a = (0xB5 - mEvTimer) * 0x0A;
+    }
 }
 
 /* 000017CC-00001890       .text demoProcOpen__8daTbox_cFv */
 void daTbox_c::demoProcOpen() {
-    /* Nonmatching */
+    if (mEvTimer < 0x3E8) {
+        mEvTimer++;
+    }
+    
+    if (mEvTimer < 0x9C) {
+        lightUpProc();
+    }
+    else {
+        lightDownProc();
+    }
+
+    if (mEvTimer == 0x24) {
+        mOpenAnm.setPlaySpeed(1.0f);
+
+        mFlashAnm.setPlaySpeed(1.0f);
+        mFlashTexAnm.setPlaySpeed(1.0f);
+        mFlashRegAnm.setPlaySpeed(1.0f);
+
+        mAllColRatio = 0.4f;
+        flagOn(0x08);
+    }
+
+    darkProc();
+
+    if (mSmokeEmitter != NULL) {
+        volmProc();
+    }
 }
 
 /* 00001890-00001A40       .text demoInitAppear_Tact__8daTbox_cFv */
