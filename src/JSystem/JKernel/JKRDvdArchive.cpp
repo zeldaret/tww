@@ -180,14 +180,13 @@ void* JKRDvdArchive::fetchResource(SDIFileEntry* fileEntry, u32* returnSize) {
 
 /* 802BB17C-802BB2BC       .text fetchResource__13JKRDvdArchiveFPvUlPQ210JKRArchive12SDIFileEntryPUl */
 void* JKRDvdArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* fileEntry, u32* returnSize) {
-    /* Nonmatching */
     JUT_ASSERT(489, isMounted());
     u32 expandSize;
     u32 size = fileEntry->data_size;
     JKRCompression fileCompression = JKRConvertAttrToCompressionType(fileEntry->getAttr());
 
     if (!fileEntry->data) {
-        bufferSize = ALIGN_PREV(bufferSize, 0x20);
+        bufferSize = (s32)ALIGN_PREV(bufferSize, 0x20);
         size = fetchResource_subroutine(mEntryNum, mDataOffset + fileEntry->data_offset,
                                         fileEntry->data_size, (u8*)buffer, bufferSize, fileCompression,
                                         mCompression);
@@ -261,12 +260,12 @@ u32 JKRDvdArchive::fetchResource_subroutine(s32 entryNum, u32 offset, u32 size, 
     }
 
     case COMPRESSION_YAY0: {
-        OSPanic(__FILE__, 603, "Sorry, not prepared for SZP archive.\n");
+        OSPanic(__FILE__, VERSION_SELECT(610, 603, 603), "Sorry, not prepared for SZP archive.\n");
         return 0;
     }
 
     default: {
-        OSPanic(__FILE__, 609, ":::??? bad sequence\n");
+        OSPanic(__FILE__, VERSION_SELECT(616, 609, 609), ":::??? bad sequence\n");
         return 0;
     }
     }
@@ -282,7 +281,7 @@ u32 JKRDvdArchive::fetchResource_subroutine(s32 entryNum, u32 offset, u32 size, 
         switch (fileCompression) {
         case COMPRESSION_NONE:
             buffer = (u8*)JKRAllocFromHeap(heap, alignedSize, sizeof(SArcHeader));
-            JUT_ASSERT(631, buffer != 0);
+            JUT_ASSERT(VERSION_SELECT(638, 631, 631), buffer != 0);
 
             JKRDvdToMainRam(entryNum, buffer, EXPAND_SWITCH_UNKNOWN0, alignedSize, NULL,
                             JKRDvdRipper::ALLOC_DIRECTION_FORWARD, offset, NULL);
@@ -301,7 +300,7 @@ u32 JKRDvdArchive::fetchResource_subroutine(s32 entryNum, u32 offset, u32 size, 
 
             alignedSize = JKRDecompExpandSize(arcHeader);
             buffer = (u8*)JKRAllocFromHeap(heap, alignedSize, sizeof(SArcHeader));
-            JUT_ASSERT(660, buffer);
+            JUT_ASSERT(VERSION_SELECT(674, 660, 660), buffer);
             JKRDvdToMainRam(entryNum, buffer, EXPAND_SWITCH_UNKNOWN1, alignedSize, NULL,
                             JKRDvdRipper::ALLOC_DIRECTION_FORWARD, offset, NULL);
 
@@ -312,7 +311,7 @@ u32 JKRDvdArchive::fetchResource_subroutine(s32 entryNum, u32 offset, u32 size, 
 
     case COMPRESSION_YAZ0: {
         buffer = (u8*)JKRAllocFromHeap(heap, alignedSize, sizeof(SArcHeader));
-        JUT_ASSERT(672, buffer);
+        JUT_ASSERT(VERSION_SELECT(686, 672, 672), buffer);
 
         JKRDvdToMainRam(entryNum, buffer, EXPAND_SWITCH_UNKNOWN1, size, NULL,
                         JKRDvdRipper::ALLOC_DIRECTION_FORWARD, offset, NULL);
@@ -322,12 +321,12 @@ u32 JKRDvdArchive::fetchResource_subroutine(s32 entryNum, u32 offset, u32 size, 
     }
 
     case COMPRESSION_YAY0: {
-        OSPanic(__FILE__, 683, "Sorry, not prepared for SZP archive.\n");
+        OSPanic(__FILE__, VERSION_SELECT(697, 683, 683), "Sorry, not prepared for SZP archive.\n");
         return 0;
     }
 
     default: {
-        OSPanic(__FILE__, 688, ":::??? bad sequence\n");
+        OSPanic(__FILE__, VERSION_SELECT(702, 688, 688), ":::??? bad sequence\n");
         return 0;
     }
     }
