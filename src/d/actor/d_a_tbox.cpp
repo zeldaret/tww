@@ -100,7 +100,7 @@ public:
     BOOL checkNormal();
     
     s32 CreateHeap();
-    s32 CreateInit();
+    void CreateInit();
 
     s32 boxCheck();
     void lightUpProc();
@@ -586,7 +586,7 @@ s32 daTbox_c::CreateHeap() {
 }
 
 /* 0000114C-00001560       .text CreateInit__8daTbox_cFv */
-s32 daTbox_c::CreateInit() {
+void daTbox_c::CreateInit() {
     s32 funcType = getFuncType();
     flagClr();
 
@@ -597,7 +597,7 @@ s32 daTbox_c::CreateInit() {
         J3DFrameCtrl* frameCtrl = mOpenAnm.getFrameCtrl();
         frameCtrl->setFrame(frameCtrl->getEnd());
 
-        setAction(actionWait);
+        setAction(&daTbox_c::actionWait);
 
         if (checkEnv()) {
             m034C = 2.0;
@@ -608,15 +608,15 @@ s32 daTbox_c::CreateInit() {
     }
     else {
         if (!checkEnv()) {
-            setAction(actionOpenWait);
+            setAction(&daTbox_c::actionOpenWait);
         }
         else {
             if (checkNormal()) {
                 if (funcType == FUNC_TYPE_SWITCH_VISIBLE && !dComIfGs_isSwitch(getSwNo(), mRoomNo)) {
-                    setAction(actionOpenWait);
+                    setAction(&daTbox_c::actionOpenWait);
                 }
                 else {
-                    setAction(actionSwOnWait2);
+                    setAction(&daTbox_c::actionSwOnWait2);
                 }
 
                 m034C = 2.0f;
@@ -630,23 +630,23 @@ s32 daTbox_c::CreateInit() {
                 switch (funcType) {
                     case FUNC_TYPE_SWITCH:
                     case FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN:
-                        setAction(actionSwOnWait);
+                        setAction(&daTbox_c::actionSwOnWait);
                         m03F8 = 0x41;
                         flagOn(0x03);
                         mAppearEvtTimer = 0x78;
                         break;
                     case FUNC_TYPE_ENEMIES:
-                        setAction(actionGenocide);
+                        setAction(&daTbox_c::actionGenocide);
                         flagOn(0x03);
                         mAppearEvtTimer = 0x78;
                         break;
                     case FUNC_TYPE_TACT:
-                        setAction(actionSwOnWait);
+                        setAction(&daTbox_c::actionSwOnWait);
                         flagOn(0x03);
                         mAppearEvtTimer = l_HIO.m0008;
                         break;
                     case FUNC_TYPE_SWITCH_TRANSPARENT:
-                        setAction(actionSwOnWait);
+                        setAction(&daTbox_c::actionSwOnWait);
                         flagOn(0x02);
                         mAppearEvtTimer = 0x5A;
 
@@ -1054,7 +1054,7 @@ bool daTbox_c::actionDemo() {
     s16 eventId = mEvtInfo.getEventId();
 
     if (dComIfGp_evmng_endCheck(eventId)) {
-        setAction(actionWait);
+        setAction(&daTbox_c::actionWait);
         dComIfGp_event_reset();
 
         dKy_set_allcol_ratio(1.0f);
@@ -1080,7 +1080,7 @@ bool daTbox_c::actionDemo() {
 /* 000025A4-00002634       .text actionDemo2__8daTbox_cFv */
 bool daTbox_c::actionDemo2() {
     if (dComIfGp_evmng_endCheck("DEFAULT_TREASURE_APPEAR")) {
-        setAction(actionOpenWait);
+        setAction(&daTbox_c::actionOpenWait);
         dComIfGp_event_onEventFlag(0x08);
     }
     else {
@@ -1117,7 +1117,7 @@ bool daTbox_c::actionOpenWait() {
             dKy_efplight_set(&mEfLight);
         }
 
-        setAction(actionDemo);
+        setAction(&daTbox_c::actionDemo);
 
         mStaffId = dComIfGp_evmng_getMyStaffId("TREASURE", NULL, 0);
         demoProc();
@@ -1141,7 +1141,7 @@ bool daTbox_c::actionOpenWait() {
 /* 000027C8-000028A0       .text actionSwOnWait__8daTbox_cFv */
 bool daTbox_c::actionSwOnWait() {
     if (mEvtInfo.checkCommandDemoAccrpt()) {
-        setAction(actionDemo2);
+        setAction(&daTbox_c::actionDemo2);
 
         mStaffId = dComIfGp_evmng_getMyStaffId("TREASURE", NULL, 0);
         demoProc();
@@ -1159,7 +1159,7 @@ bool daTbox_c::actionSwOnWait() {
 /* 000028A0-00002914       .text actionSwOnWait2__8daTbox_cFv */
 bool daTbox_c::actionSwOnWait2() {
     if (dComIfGs_isSwitch(getSwNo(), mRoomNo)) {
-        setAction(actionOpenWait);
+        setAction(&daTbox_c::actionOpenWait);
         setDzb();
     }
 
@@ -1170,7 +1170,7 @@ bool daTbox_c::actionSwOnWait2() {
 bool daTbox_c::actionGenocide() {
     /* Nonmatching */
     if (mEvtInfo.checkCommandDemoAccrpt()) {
-        setAction(actionDemo2);
+        setAction(&daTbox_c::actionDemo2);
 
         mStaffId = dComIfGp_evmng_getMyStaffId("TREASURE", NULL, 0);
         demoProc();
