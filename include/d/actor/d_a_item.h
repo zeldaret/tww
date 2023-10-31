@@ -71,6 +71,10 @@ public:
     BOOL checkActionNow();
     
     u32 getItemNo() { return m_itemNo; }
+    void setItemTimerForIball(short param_1, short param_2) {
+        mDisappearTimer = param_1;
+        field_0x65a = param_2;
+    }
     
     static dCcD_SrcCyl m_cyl_src;
     static s32 m_timer_max;

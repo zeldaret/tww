@@ -567,7 +567,7 @@ static void action_dousa(am2_class* i_this) {
         // if (!i_this->mpMorf->isStop()) {
         mDoExt_McaMorf* morf = i_this->mpMorf;
         bool stopped = true;
-        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
         if (!stopped) {
             break;
         }
@@ -656,7 +656,7 @@ static void action_dousa(am2_class* i_this) {
         // if (!i_this->mpMorf->isStop()) {
         morf = i_this->mpMorf;
         stopped = true;
-        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
         if (stopped) {
             for (int i = 0; i < ARRAY_SIZE(i_this->mCountUpTimers); i++) {
                 i_this->mCountUpTimers[i] = 0;
@@ -724,7 +724,7 @@ static void action_mahi(am2_class* i_this) {
             // if (!i_this->mpMorf->isStop()) {
             mDoExt_McaMorf* morf = i_this->mpMorf;
             bool stopped = true;
-            if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+            if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
             if (stopped) {
                 actor->speedF = 0.0f;
                 i_this->mCountDownTimers[2] = 20*30;
@@ -969,7 +969,7 @@ static void action_itai(am2_class* i_this) {
         // if (!i_this->mpMorf->isStop()) {
         mDoExt_McaMorf* morf = i_this->mpMorf;
         bool stopped = true;
-        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
         if (!stopped) {
             break;
         }
@@ -1025,7 +1025,7 @@ static void action_itai(am2_class* i_this) {
         // if (!i_this->mpMorf->isStop()) {
         morf = i_this->mpMorf;
         stopped = true;
-        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
         if (!stopped) {
             break;
         }

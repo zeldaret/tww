@@ -993,6 +993,14 @@ inline void dComIfGs_onSaveTbox(int i_stageNo, int i_no) {
 void dComIfGs_onStageTbox(int i_stageNo, int i_no);
 BOOL dComIfGs_isStageTbox(int i_stageNo, int i_no);
 
+/**
+ * This does not appear in the demo debug maps, but it likely existed and was simply unused until the
+ * final release based on the fact that dComIfGs_onSaveSwitch does appear in the maps.
+ */
+inline BOOL dComIfGs_isSaveSwitch(int i_stageNo, int i_no) {
+    return g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().isSwitch(i_no);
+}
+
 inline void dComIfGs_onSaveSwitch(int i_stageNo, int i_no) {
     g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().onSwitch(i_no);
 }
@@ -1089,7 +1097,7 @@ inline void dComIfGs_onItem(int bitNo, int roomNo) {
     g_dComIfG_gameInfo.save.onItem(bitNo, roomNo);
 }
 
-inline bool dComIfGs_isItem(int bitNo, int roomNo) {
+inline BOOL dComIfGs_isItem(int bitNo, int roomNo) {
     return g_dComIfG_gameInfo.save.isItem(bitNo, roomNo);
 }
 

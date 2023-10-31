@@ -132,7 +132,7 @@ static void move(dr_class* i_this) {
         // if (i_this->mpMorf->isStop()) {
         mDoExt_McaMorf* morf = i_this->mpMorf;
         bool stopped = true;
-        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
         if (stopped) {
             i_this->mState = 0;
         }
@@ -153,7 +153,7 @@ static void move(dr_class* i_this) {
         // if (i_this->mpMorf->isStop()) {
         morf = i_this->mpMorf;
         stopped = true;
-        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
         if (stopped) {
             i_this->m2C9 = 1;
             if (i_this->mpBreathEmitter) {
@@ -205,7 +205,7 @@ static void move(dr_class* i_this) {
         // if (i_this->mpMorf->isStop()) {
         morf = i_this->mpMorf;
         stopped = true;
-        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
         if (stopped) {
             i_this->mState = 0;
             if (i_this->mpBreathEmitter) {

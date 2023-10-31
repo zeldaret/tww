@@ -309,8 +309,8 @@ inline void fopAcM_onItem(fopAc_ac_c* item, int bitNo) {
     dComIfGs_onItem(bitNo, fopAcM_GetHomeRoomNo(item));
 }
 
-inline bool dComIfGs_isItem(int bitNo, int roomNo);
-inline bool fopAcM_isItem(fopAc_ac_c* item, int bitNo) {
+inline BOOL dComIfGs_isItem(int bitNo, int roomNo);
+inline BOOL fopAcM_isItem(fopAc_ac_c* item, int bitNo) {
     return dComIfGs_isItem(bitNo, fopAcM_GetHomeRoomNo(item));
 }
 

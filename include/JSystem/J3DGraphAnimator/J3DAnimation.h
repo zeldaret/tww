@@ -630,6 +630,11 @@ public:
         LOOP_MIRROR_REPEAT_e,
     };
 
+    enum State_e {
+        STATE_STOP_E = 0x1,
+        STATE_LOOP_E = 0x2,
+    };
+
     J3DFrameCtrl() { this->init(0); }
     void init(s16 end);
     BOOL checkPass(f32);
