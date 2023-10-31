@@ -78,7 +78,7 @@ struct J3DIndTexMtxInfo {
         mScaleExp = other.mScaleExp;
     }
     /* 0x00 */ Mtx23 mOffsetMtx;
-    /* 0x18 */ u8 mScaleExp;
+    /* 0x18 */ s8 mScaleExp;
 };  // Size: 0x1C
 
 struct J3DFogInfo {

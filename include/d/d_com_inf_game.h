@@ -1898,6 +1898,10 @@ inline void dComIfGp_event_setItemPartnerId(u32 id) {
     g_dComIfG_gameInfo.play.getEvent().setPtI_Id(id);
 }
 
+inline void dComIfGp_event_setItemPartner(void* pt) {
+    g_dComIfG_gameInfo.play.getEvent().setPtI(pt);
+}
+
 inline void dComIfGp_event_setGtItm(u8 itemNo) {
     g_dComIfG_gameInfo.play.getEvent().setGtItm(itemNo);
 }

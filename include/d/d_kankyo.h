@@ -402,6 +402,7 @@ void dKy_vrbox_addcol_kasumi_set(s16, s16, s16, f32);
 void dKy_vrbox_addcol_set(s16, s16, s16, f32);
 void dKy_addcol_fog_set(s16, s16, s16, f32);
 void dKy_plight_set(LIGHT_INFLUENCE*);
+void dKy_plight_priority_set(LIGHT_INFLUENCE*);
 void dKy_efplight_set(LIGHT_INFLUENCE* param_0);
 void dKy_plight_cut(LIGHT_INFLUENCE* param_0);
 void dKy_efplight_cut(LIGHT_INFLUENCE* param_0);
