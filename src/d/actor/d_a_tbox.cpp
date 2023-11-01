@@ -136,18 +136,18 @@ public:
     s32 draw() {
         u8 openFlag;
 
-        if (mRoomNo != -1 && checkRoomDisp(mRoomNo) == FALSE) {
+        if (mRoomNo != -1 && !checkRoomDisp(mRoomNo)) {
             return TRUE;
         }
 
-        if (flagCheck(0x01) != FALSE || (checkEnv() != FALSE && flagCheck(0x04))) {
+        if (flagCheck(0x01) || (checkEnv() && flagCheck(0x04))) {
             openFlag = mOpenedSwitch;
         }
         else {
             openFlag = 0xFF;
         }
 
-        if (checkOpen() == FALSE) {
+        if (!checkOpen()) {
             dMap_drawPoint(5, current.pos.x, current.pos.y, current.pos.z, mRoomNo, -0x8000, openFlag, mGbaName, 0);
         }
 
@@ -178,7 +178,7 @@ public:
             mpAppearRegAnm->entry(chestMdlData);
         }
 
-        if (checkEnv() != FALSE && flagCheck(0x04)) {
+        if (checkEnv() && flagCheck(0x04)) {
             float scrollOffset = mInvisibleScrollVal - -2.0f;
             s8 offsetAsU8 = scrollOffset;
 
@@ -272,7 +272,7 @@ public:
     /* 0x03F0 */ u16 mFlags;
     /* 0x03F2 */ u16 mOpenTimer;
 
-    /* 0x03F4 */ u8 m03F4;
+    /* 0x03F4 */ bool mHasOpenAnmFinished;
     /* 0x03F5 */ bool mIsFlashPlaying;
     /* 0x03F6 */ u16 mAppearTimer;
 
@@ -704,10 +704,11 @@ void daTbox_c::CreateInit() {
         else {
             if (checkNormal()) {
                 if (funcType == FUNC_TYPE_SWITCH_VISIBLE && !dComIfGs_isSwitch(getSwNo(), mRoomNo)) {
-                    setAction(&daTbox_c::actionOpenWait);
+                    setAction(&daTbox_c::actionSwOnWait2);
+
                 }
                 else {
-                    setAction(&daTbox_c::actionSwOnWait2);
+                    setAction(&daTbox_c::actionOpenWait);
                 }
 
                 mInvisibleScrollVal = 2.0f;
@@ -719,15 +720,15 @@ void daTbox_c::CreateInit() {
                  flagOn(0x04);
 
                 switch (funcType) {
-                    case FUNC_TYPE_SWITCH:
-                    case FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN:
-                        setAction(&daTbox_c::actionSwOnWait);
+                    case FUNC_TYPE_ENEMIES:
+                        setAction(&daTbox_c::actionGenocide);
                         mGenocideDelayTimer = 0x41;
                         flagOn(0x03);
                         mAppearTimer = 0x78;
                         break;
-                    case FUNC_TYPE_ENEMIES:
-                        setAction(&daTbox_c::actionGenocide);
+                    case FUNC_TYPE_SWITCH:
+                    case FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN:
+                        setAction(&daTbox_c::actionSwOnWait);
                         flagOn(0x03);
                         mAppearTimer = 0x78;
                         break;
@@ -994,7 +995,7 @@ s32 daTbox_c::demoProc() {
     bool bIsAdvance = dComIfGp_evmng_getIsAddvance(mStaffId);
 
     if (bIsAdvance) {
-        m03F4 = 0;
+        mHasOpenAnmFinished = false;
 
         switch (actionIdx) {
             case DEMO_PROC_OPEN:
@@ -1037,24 +1038,24 @@ s32 daTbox_c::demoProc() {
             surfaceProc();
             break;
         case DEMO_PROC_OPEN:
-            if (m03F4 != 0) {
+            if (mHasOpenAnmFinished) {
                 dComIfGp_evmng_cutEnd(mStaffId);
             }
             else {
                 if (mOpenAnm.play() != 0) {
-                    m03F4 = 1;
+                    mHasOpenAnmFinished = true;
                     dComIfGp_evmng_cutEnd(mStaffId);
                     fopAcM_seStart(this, JA_SE_OBJ_TBOX_OPEN_S2, 0);
                 }
             }
             break;
         case DEMO_PROC_OPEN_SHORT:
-            if (m03F4 != 0) {
+            if (mHasOpenAnmFinished) {
                 dComIfGp_evmng_cutEnd(mStaffId);
             }
             else {
                 if (mOpenAnm.play() != 0) {
-                    m03F4 = 1;
+                    mHasOpenAnmFinished = 1;
                     dComIfGp_evmng_cutEnd(mStaffId);
                     fopAcM_seStart(this, JA_SE_OBJ_TBOX_OPEN_S2, 0);
                 }
@@ -1215,7 +1216,7 @@ bool daTbox_c::actionOpenWait() {
         demoProc();
     }
     else {
-        if (boxCheck() != FALSE) {
+        if (boxCheck()) {
             mEvtInfo.onCondition(0x04);
 
             if (getShapeType() == 0) {
@@ -1392,12 +1393,12 @@ static s32 daTbox_Create(fopAc_ac_c* i_actor) {
         u32 shapeType = tbox->getShapeType();
         u32 heapSize = heapsize_tbl[shapeType];
 
-        if (tbox->checkOpen() == FALSE) {
+        if (!tbox->checkOpen()) {
             heapSize += opensize_tbl[shapeType];
         }
 
         u32 heapResult = fopAcM_entrySolidHeap(i_actor, (heapCallbackFunc)CheckCreateHeap, heapSize);
-        if (heapResult == FALSE) {
+        if (!heapResult) {
             return cPhs_ERROR_e;
         }
         else {
