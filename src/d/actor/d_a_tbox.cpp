@@ -46,7 +46,7 @@ static f64 dummy4[2] = {3.0, 0.5};
 class daTbox_HIO_c {
 public:
     daTbox_HIO_c();
-    virtual ~daTbox_HIO_c();
+    virtual ~daTbox_HIO_c() { }
 
     /* 0x0004 */ s8 mHioId;
     /* 0x0006 */ s16 m0006;
@@ -75,7 +75,7 @@ static modelInfo l_modelInfo[] = {
 
 class daTbox_c : public fopAc_ac_c {
 public:
-    daTbox_c();
+    daTbox_c() { }
 
     s32 commonShapeSet();
     s32 effectShapeSet();
@@ -132,7 +132,98 @@ public:
     bool actionGenocide();
 
     s32 execute();
-    s32 draw();
+
+    s32 draw() {
+        u8 openFlag;
+
+        if (mRoomNo != -1 && checkRoomDisp(mRoomNo) == FALSE) {
+            return TRUE;
+        }
+
+        if (flagCheck(0x01) != FALSE || (checkEnv() != FALSE && flagCheck(0x04))) {
+            openFlag = mOpenedSwitch;
+        }
+        else {
+            openFlag = 0xFF;
+        }
+
+        if (checkOpen() == FALSE) {
+            dMap_drawPoint(5, current.pos.x, current.pos.y, current.pos.z, mRoomNo, -0x8000, openFlag, mGbaName, 0);
+        }
+
+        mTevStr.mRoomNo = mRoomNo;
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, getPositionP(), &mTevStr);
+
+        if (getFuncType() == FUNC_TYPE_TACT) {
+            J3DModelData* platMdlData = mpTactPlatformMdl->getModelData();
+
+            g_env_light.setLightTevColorType(mpTactPlatformMdl, &mTevStr);
+            mTactPlatformBrk.entry(platMdlData);
+            mDoExt_modelUpdateDL(mpTactPlatformMdl);
+        }
+
+        if (flagCheck(0x01)) {
+            return TRUE;
+        }
+
+        g_env_light.setLightTevColorType(mpChestMdl, &mTevStr);
+        
+        J3DModelData* chestMdlData = mpChestMdl->getModelData();
+        mOpenAnm.entry(chestMdlData);
+
+        if (mpAppearTexAnm != NULL) {
+            mpAppearTexAnm->entry(chestMdlData);
+        }
+        if (mpAppearRegAnm != NULL) {
+            mpAppearRegAnm->entry(chestMdlData);
+        }
+
+        if (checkEnv() != FALSE && flagCheck(0x04)) {
+            float scrollOffset = mInvisibleScrollVal - -2.0f;
+            s8 offsetAsU8 = scrollOffset;
+
+            float interpVal = (scrollOffset - offsetAsU8) * 0.5f + 0.5f;
+
+            for (u8 i = 0; i < chestMdlData->getMaterialNum(); i++) {
+                J3DMaterial* mat = chestMdlData->getMaterialNodePointer(i);
+                
+                for (u8 j = 0; j < mat->getIndTexStageNum(); j++) {
+                    J3DIndTexMtx* texMtx = mat->getIndTexMtx(j);
+                    texMtx->setScaleExp(offsetAsU8);
+
+                    Mtx3P offsetMtx = texMtx->getOffsetMtx();
+                    offsetMtx[0][0] = interpVal;
+                    offsetMtx[1][1] = interpVal;
+                }
+            }
+
+            if (flagCheck(0x04)) {
+                dComIfGd_setListInvisisble();
+                mDoExt_modelUpdateDL(mpChestMdl);
+                dComIfGd_setList();
+            }
+            else {
+                mDoExt_modelUpdateDL(mpChestMdl);
+            }
+        }
+        else {
+            mDoExt_modelUpdateDL(mpChestMdl);
+        }
+
+        if (mIsFlashPlaying != 0 && mOpenTimer >= 0x24) {
+            J3DModelData* flashMdlData = mpFlashMdl->getModelData();
+
+            mFlashAnm.entry(flashMdlData);
+            mFlashRegAnm.entry(flashMdlData);
+            mFlashTexAnm.entry(flashMdlData);
+
+            dComIfGd_setListMaskOff();
+            mDoExt_modelUpdateDL(mpFlashMdl);
+            dComIfGd_setList();
+        }
+
+        return TRUE;
+    }
 
     /* 0x0290 */ s32 mRoomNo;
     /* 0x0294 */ request_of_phase_process_class mPhs;
@@ -157,13 +248,13 @@ public:
 
     /* 0x030C */ mDoExt_brkAnm mBrkAnm3;
 
-    /* 0x0324 */ J3DModel* mTactPlatformMdl;
+    /* 0x0324 */ J3DModel* mpTactPlatformMdl;
     /* 0x0328 */ mDoExt_brkAnm mTactPlatformBrk;
 
     typedef bool (daTbox_c::*actionFunc)();
     /* 0x0340 */ actionFunc mActionFunc;
 
-    /* 0x034C */ float m034C;
+    /* 0x034C */ float mInvisibleScrollVal;
 
     /* 0x0350 */ u32 mStaffId;
 
@@ -179,13 +270,13 @@ public:
     /* 0x03EC */ float m03EC;
 
     /* 0x03F0 */ u16 mFlags;
-    /* 0x03F2 */ u16 mEvTimer;
+    /* 0x03F2 */ u16 mOpenTimer;
 
     /* 0x03F4 */ u8 m03F4;
     /* 0x03F5 */ bool mIsFlashPlaying;
-    /* 0x03F6 */ u16 mAppearEvtTimer;
+    /* 0x03F6 */ u16 mAppearTimer;
 
-    /* 0x03F8 */ u8 m03F8;
+    /* 0x03F8 */ u8 mGenocideDelayTimer;
 
     /* 0x03FC */ dBgS_ObjAcch mObjAcch;
     /* 0x05C0 */ dBgS_AcchCir mAcchCir;
@@ -275,8 +366,8 @@ s32 daTbox_c::commonShapeSet() {
         modelData = (J3DModelData*)dComIfG_getObjectRes("Dalways", 0x17);
         JUT_ASSERT(0xE2, modelData);
 
-        mTactPlatformMdl = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000000);
-        if (mTactPlatformMdl == NULL) {
+        mpTactPlatformMdl = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000000);
+        if (mpTactPlatformMdl == NULL) {
             return cPhs_ERROR_e;
         }
 
@@ -294,7 +385,7 @@ s32 daTbox_c::commonShapeSet() {
 
     if (getFuncType() == FUNC_TYPE_TACT) {
         mDoMtx_stack_c::transM(0.0f, 1.0f, 0.0f);
-        mTactPlatformMdl->setBaseTRMtx(mDoMtx_stack_c::get());
+        mpTactPlatformMdl->setBaseTRMtx(mDoMtx_stack_c::get());
     }
 
     mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
@@ -564,7 +655,7 @@ BOOL daTbox_c::checkNormal() {
 }
 
 /* 0000108C-000010AC       .text CheckCreateHeap__FP10fopAc_ac_c */
-s32 CheckCreateHeap(fopAc_ac_c* i_actor) {
+static s32 CheckCreateHeap(fopAc_ac_c* i_actor) {
     return static_cast<daTbox_c*>(i_actor)->CreateHeap();
 }
 
@@ -600,7 +691,7 @@ void daTbox_c::CreateInit() {
         setAction(&daTbox_c::actionWait);
 
         if (checkEnv()) {
-            m034C = 2.0;
+            mInvisibleScrollVal = 2.0f;
 
             frameCtrl = mpAppearRegAnm->getFrameCtrl();
             frameCtrl->setFrame(frameCtrl->getEnd());
@@ -619,7 +710,7 @@ void daTbox_c::CreateInit() {
                     setAction(&daTbox_c::actionSwOnWait2);
                 }
 
-                m034C = 2.0f;
+                mInvisibleScrollVal = 2.0f;
 
                 J3DFrameCtrl* frameCtrl = mpAppearRegAnm->getFrameCtrl();
                 frameCtrl->setFrame(frameCtrl->getEnd());
@@ -631,24 +722,24 @@ void daTbox_c::CreateInit() {
                     case FUNC_TYPE_SWITCH:
                     case FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN:
                         setAction(&daTbox_c::actionSwOnWait);
-                        m03F8 = 0x41;
+                        mGenocideDelayTimer = 0x41;
                         flagOn(0x03);
-                        mAppearEvtTimer = 0x78;
+                        mAppearTimer = 0x78;
                         break;
                     case FUNC_TYPE_ENEMIES:
                         setAction(&daTbox_c::actionGenocide);
                         flagOn(0x03);
-                        mAppearEvtTimer = 0x78;
+                        mAppearTimer = 0x78;
                         break;
                     case FUNC_TYPE_TACT:
                         setAction(&daTbox_c::actionSwOnWait);
                         flagOn(0x03);
-                        mAppearEvtTimer = l_HIO.m0008;
+                        mAppearTimer = l_HIO.m0008;
                         break;
                     case FUNC_TYPE_SWITCH_TRANSPARENT:
                         setAction(&daTbox_c::actionSwOnWait);
                         flagOn(0x02);
-                        mAppearEvtTimer = 0x5A;
+                        mAppearTimer = 0x5A;
 
                         mpAppearRegAnm->setFrame(30.0f);
                         break;
@@ -657,7 +748,7 @@ void daTbox_c::CreateInit() {
                         break;
                 }
 
-                m034C = -2.0f;
+                mInvisibleScrollVal = -2.0f;
             }
         }
     }
@@ -737,20 +828,20 @@ void daTbox_c::lightDownProc() {
 
 /* 000016BC-0000172C       .text darkProc__8daTbox_cFv */
 void daTbox_c::darkProc() {
-    if (mEvTimer > 0x96) {
+    if (mOpenTimer > 0x96) {
         mAllColRatio = 1.0f;
     }
-    else if (mEvTimer > 0x78) {
-        mAllColRatio = ((mEvTimer - 0x78) / 30.0f) * 0.6f + 0.4f;
+    else if (mOpenTimer > 0x78) {
+        mAllColRatio = ((mOpenTimer - 0x78) / 30.0f) * 0.6f + 0.4f;
     }
 }
 
 /* 0000172C-000017CC       .text volmProc__8daTbox_cFv */
 void daTbox_c::volmProc() {
-    if (mEvTimer == 0x24) {
+    if (mOpenTimer == 0x24) {
         mSmokeEmitter->mGlobalPrmColor.a = 0xFF;
     }
-    else if (mEvTimer >= 0xB5) {
+    else if (mOpenTimer >= 0xB5) {
         dKy_plight_cut(&mPLight);
         dKy_efplight_cut(&mEfLight);
 
@@ -759,25 +850,25 @@ void daTbox_c::volmProc() {
         mSmokeEmitter->becomeInvalidEmitter();
         mSmokeEmitter = NULL;
     }
-    else if (mEvTimer > 0x9C) {
-        mSmokeEmitter->mGlobalPrmColor.a = (0xB5 - mEvTimer) * 0x0A;
+    else if (mOpenTimer > 0x9C) {
+        mSmokeEmitter->mGlobalPrmColor.a = (0xB5 - mOpenTimer) * 0x0A;
     }
 }
 
 /* 000017CC-00001890       .text demoProcOpen__8daTbox_cFv */
 void daTbox_c::demoProcOpen() {
-    if (mEvTimer < 0x3E8) {
-        mEvTimer++;
+    if (mOpenTimer < 0x3E8) {
+        mOpenTimer++;
     }
     
-    if (mEvTimer < 0x9C) {
+    if (mOpenTimer < 0x9C) {
         lightUpProc();
     }
     else {
         lightDownProc();
     }
 
-    if (mEvTimer == 0x24) {
+    if (mOpenTimer == 0x24) {
         mOpenAnm.setPlaySpeed(1.0f);
 
         mFlashAnm.setPlaySpeed(1.0f);
@@ -824,9 +915,9 @@ void daTbox_c::demoInitAppear() {
 
 /* 00001B38-00001CF4       .text demoProcAppear_Tact__8daTbox_cFv */
 void daTbox_c::demoProcAppear_Tact() {
-    if (mAppearEvtTimer == l_HIO.m0008 - l_HIO.m0006) {
+    if (mAppearTimer == l_HIO.m0008 - l_HIO.m0006) {
         flagOff(1);
-        m034C = 2.0;
+        mInvisibleScrollVal = 2.0f;
 
         mpAppearRegAnm->setFrame(mpAppearRegAnm->getEndFrame());
         mpAppearRegAnm->play();
@@ -835,16 +926,16 @@ void daTbox_c::demoProcAppear_Tact() {
 
     mTactPlatformBrk.play();
 
-    if (mAppearEvtTimer != 0) {
-        mAppearEvtTimer--;
+    if (mAppearTimer != 0) {
+        mAppearTimer--;
 
-        if (mAppearEvtTimer > l_HIO.m0008 - l_HIO.m000A) {
+        if (mAppearTimer > l_HIO.m0008 - l_HIO.m000A) {
             dKy_set_allcol_ratio(
                 (0.6f / l_HIO.m000A) 
-                * (mAppearEvtTimer - (l_HIO.m0008 - l_HIO.m000A)) + 0.4f);
+                * (mAppearTimer - (l_HIO.m0008 - l_HIO.m000A)) + 0.4f);
         }
-        else if (mAppearEvtTimer < l_HIO.m000C) {
-            dKy_set_allcol_ratio((0.6f / l_HIO.m000C) * (l_HIO.m000C - mAppearEvtTimer) + 0.4f);
+        else if (mAppearTimer < l_HIO.m000C) {
+            dKy_set_allcol_ratio((0.6f / l_HIO.m000C) * (l_HIO.m000C - mAppearTimer) + 0.4f);
         }
         else {
             dKy_set_allcol_ratio(0.4f);
@@ -858,15 +949,15 @@ void daTbox_c::demoProcAppear_Tact() {
 
 /* 00001CF4-00001E4C       .text demoProcAppear__8daTbox_cFv */
 void daTbox_c::demoProcAppear() {
-    if (mAppearEvtTimer <= 0x78 && mAppearEvtTimer != 0) {
-        cLib_chaseF(&m034C, 2.0f, 1.0f / 30.0f);
+    if (mAppearTimer <= 0x78 && mAppearTimer != 0) {
+        cLib_chaseF(&mInvisibleScrollVal, 2.0f, 1.0f / 30.0f);
     }
 
-    if (mAppearEvtTimer == 0x3C) {
+    if (mAppearTimer == 0x3C) {
         mpAppearRegAnm->setFrame(150.0f);
     }
 
-    if (mAppearEvtTimer == 0x05) {
+    if (mAppearTimer == 0x05) {
         JPABaseEmitter* emitter = dComIfGp_particle_setToon(0x2022, &current.pos, NULL, NULL, 0xB9, &mSmokeCB);
 
         if (emitter != NULL) {
@@ -876,15 +967,15 @@ void daTbox_c::demoProcAppear() {
         }
     }
 
-    if (mAppearEvtTimer == 0x04 && mSmokeCB.getEmitter() != NULL) {
+    if (mAppearTimer == 0x04 && mSmokeCB.getEmitter() != NULL) {
         mSmokeCB.end();
     }
 
-    if (mAppearEvtTimer != 0x00) {
-        mAppearEvtTimer--;
+    if (mAppearTimer != 0x00) {
+        mAppearTimer--;
     }
 
-    if (mpAppearRegAnm->play() != FALSE) {
+    if (mpAppearRegAnm->play()) {
         dComIfGp_evmng_cutEnd(mStaffId);
         flagOff(4);
     }
@@ -1018,7 +1109,7 @@ void daTbox_c::OpenInit() {
     mFlashRegAnm.setPlaySpeed(1.0f);
 
     mIsFlashPlaying = TRUE;
-    mEvTimer = 0;
+    mOpenTimer = 0;
 
     flagOn(0x10);
 
@@ -1050,12 +1141,13 @@ bool daTbox_c::actionWait() {
 
 /* 000024B4-000025A4       .text actionDemo__8daTbox_cFv */
 bool daTbox_c::actionDemo() {
-    /* Nonmatching */
+    /* Fakematch - the temp variable for play is definitely not right. */
     s16 eventId = mEvtInfo.getEventId();
+    dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
 
-    if (dComIfGp_evmng_endCheck(eventId)) {
+    if (play->mEvtManager.endCheck(eventId)) {
         setAction(&daTbox_c::actionWait);
-        dComIfGp_event_reset();
+        play->mEvtCtrl.reset();
 
         dKy_set_allcol_ratio(1.0f);
 
@@ -1177,8 +1269,8 @@ bool daTbox_c::actionGenocide() {
     }
     else {
         if (mRoomNo != -1 && mRoomNo == dComIfGp_roomControl_getStayNo() && fopAcM_myRoomSearchEnemy(mRoomNo) == NULL) {
-            if (m03F8 != 0) {
-                m03F8--;
+            if (mGenocideDelayTimer != 0) {
+                mGenocideDelayTimer--;
             }
             else {
                 fopAcM_orderOtherEvent2(this, "DEFAULT_TREASURE_APPEAR", 1, 0xFFFF);
@@ -1242,115 +1334,22 @@ s32 daTbox_c::execute() {
 }
 
 /* 00002BF0-00002C10       .text daTbox_Draw__FP8daTbox_c */
-s32 daTbox_Draw(daTbox_c* i_tbox) {
+static s32 daTbox_Draw(daTbox_c* i_tbox) {
     return i_tbox->draw();
 }
 
-/* 00002C10-00002FB0       .text draw__8daTbox_cFv */
-s32 daTbox_c::draw() {
-    /* Nonmatching */
-    u8 openFlag;
-
-    if (mRoomNo != -1 && checkRoomDisp(mRoomNo) == FALSE) {
-        return TRUE;
-    }
-
-    if (flagCheck(0x01) != FALSE || (checkEnv() != FALSE && flagCheck(0x04))) {
-        openFlag = mOpenedSwitch;
-    }
-    else {
-        openFlag = 0xFF;
-    }
-
-    if (checkOpen() == FALSE) {
-        dMap_drawPoint(5, current.pos.x, current.pos.y, current.pos.z, mRoomNo, -0x8000, openFlag, mGbaName, 0);
-    }
-
-    mTevStr.mRoomNo = mRoomNo;
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, getPositionP(), &mTevStr);
-
-    if (getFuncType() == FUNC_TYPE_TACT) {
-        J3DModelData* platMdlData = mTactPlatformMdl->getModelData();
-
-        g_env_light.setLightTevColorType(mTactPlatformMdl, &mTevStr);
-        mTactPlatformBrk.entry(platMdlData);
-        mDoExt_modelUpdateDL(mTactPlatformMdl);
-    }
-
-    if (flagCheck(0x01)) {
-        return TRUE;
-    }
-
-    g_env_light.setLightTevColorType(mpChestMdl, &mTevStr);
-    
-    J3DModelData* chestMdlData = mpChestMdl->getModelData();
-    mOpenAnm.entry(chestMdlData);
-
-    if (mpAppearTexAnm != NULL) {
-        mpAppearTexAnm->entry(chestMdlData);
-    }
-    if (mpAppearRegAnm != NULL) {
-        mpAppearRegAnm->entry(chestMdlData);
-    }
-
-    if (checkEnv() != FALSE && flagCheck(0x04)) {
-        float f = m034C - -2.0f;
-        s8 x = f;
-        float t = (f - x) * 0.5f + 0.5f;
-
-        for (u8 i = 0; i < chestMdlData->getMaterialNum(); i++) {
-            J3DMaterial* mat = chestMdlData->getMaterialNodePointer(i);
-            
-            for (u8 j = 0; j < mat->mIndBlock->getIndTexStageNum(); j++) {
-                J3DIndTexMtx* texMtx = mat->getIndBlock()->getIndTexMtx(j);
-                texMtx->setScaleExp(x);
-
-                Mtx3P offsetMtx = texMtx->getOffsetMtx();
-                offsetMtx[0][0] = t;
-                offsetMtx[1][1] = t;
-            }
-        }
-
-        if (flagCheck(0x04)) {
-            dComIfGd_setListInvisisble();
-            mDoExt_modelUpdateDL(mpChestMdl);
-            dComIfGd_setList();
-        }
-        else {
-            mDoExt_modelUpdateDL(mpChestMdl);
-        }
-    }
-    else {
-        mDoExt_modelUpdateDL(mpChestMdl);
-    }
-
-    if (mIsFlashPlaying != 0 && mEvTimer >= 0x24) {
-        J3DModelData* flashMdlData = mpFlashMdl->getModelData();
-
-        mFlashAnm.entry(flashMdlData);
-        mFlashRegAnm.entry(flashMdlData);
-        mFlashTexAnm.entry(flashMdlData);
-
-        dComIfGd_setListMaskOff();
-        mDoExt_modelUpdateDL(mpFlashMdl);
-        dComIfGd_setList();
-    }
-
-    return TRUE;
-}
-
 /* 00002FB0-00002FD0       .text daTbox_Execute__FP8daTbox_c */
-s32 daTbox_Execute(daTbox_c* i_tbox) {
+static s32 daTbox_Execute(daTbox_c* i_tbox) {
     return i_tbox->execute();
 }
 
 /* 00002FD0-00002FD8       .text daTbox_IsDelete__FP8daTbox_c */
-s32 daTbox_IsDelete(daTbox_c*) {
+static s32 daTbox_IsDelete(daTbox_c*) {
     return TRUE;
 }
 
 /* 00002FD8-00003070       .text daTbox_Delete__FP8daTbox_c */
-s32 daTbox_Delete(daTbox_c* i_tbox) {
+static s32 daTbox_Delete(daTbox_c* i_tbox) {
     if (i_tbox->mpBgWCurrent != NULL) {
         g_dComIfG_gameInfo.play.mBgS.Release(i_tbox->mpBgWCurrent);
     }
@@ -1367,7 +1366,7 @@ s32 daTbox_Delete(daTbox_c* i_tbox) {
 }
 
 /* 00003070-0000315C       .text daTbox_Create__FP10fopAc_ac_c */
-s32 daTbox_Create(fopAc_ac_c* i_actor) {
+static s32 daTbox_Create(fopAc_ac_c* i_actor) {
     static const u32 heapsize_tbl[] = {
         0x2E40,
         0x2D7C,
@@ -1410,16 +1409,6 @@ s32 daTbox_Create(fopAc_ac_c* i_actor) {
     }
 
     return result;
-}
-
-/* 0000315C-000032F0       .text __ct__8daTbox_cFv */
-daTbox_c::daTbox_c() {
-
-}
-
-/* 000039E4-00003A2C       .text __dt__12daTbox_HIO_cFv */
-daTbox_HIO_c::~daTbox_HIO_c() {
-
 }
 
 static actor_method_class l_daTbox_Method = {

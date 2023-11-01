@@ -74,6 +74,8 @@ public:
     void onInvalid() { mInvalid = 1; }
     u32 getTexGenNum() const { return mTexGenBlock->getTexGenNum(); }
     u8 getTevStageNum() const { return mTevBlock->getTevStageNum(); }
+    J3DIndTexMtx* getIndTexMtx(u32 i) { return mIndBlock->getIndTexMtx(i); }
+    u8 getIndTexStageNum() const { return mIndBlock->getIndTexStageNum(); }
 
     void setTevColor(u32 i, const J3DGXColorS10* i_color) { mTevBlock->setTevColor(i, i_color); }
     void setTevKColor(u32 i, const J3DGXColor* i_color) { mTevBlock->setTevKColor(i, i_color); }
