@@ -1458,21 +1458,13 @@ namespace daObjMovebox {
     
     /* 00002214-000024D4       .text afl_sway__Q212daObjMovebox5Act_cFv */
     void Act_c::afl_sway() {
-        /* Nonmatching - regalloc */
-        bool r29;
         bool r30;
+        bool r29;
+        int bgcSrcCount;
         BgcSrc_c* bgcSrc;
-        s32 bgcSrcCount;
-        f32 f31;
-        f32 f30;
-        f32 f1;
-        f32 f5;
-        f32 f6;
-        f32 f0;
-        f32 temp;
         
-        f31 = m60C*m60C + m610*m610;
-        f30 = i_attr()->m4C*i_attr()->m4C;
+        f32 f31 = m60C*m60C + m610*m610;
+        f32 f30 = i_attr()->m4C*i_attr()->m4C;
         
         bgcSrc = const_cast<BgcSrc_c*>(i_attr()->m9A ? Bgc_c::M_lin20 : Bgc_c::M_lin5);
         bgcSrcCount = i_attr()->m9A ? ARRAY_SIZE(Bgc_c::M_lin20)-2 : ARRAY_SIZE(Bgc_c::M_lin5);
@@ -1492,15 +1484,15 @@ namespace daObjMovebox {
         }
         
         if (f31 > f30) {
-            temp = i_attr()->m4C / sqrtf(f31);
+            f32 temp = i_attr()->m4C / sqrtf(f31);
             m60C *= temp;
             m610 *= temp;
         }
         
-        f5 = -(m618 - m610) * i_attr()->m50;
-        f6 = -m620 * i_attr()->m54;
-        f1 = -(m614 - m60C) * i_attr()->m50;
-        f0 = -m61C * i_attr()->m54;
+        f32 f5 = -(m618 - m610) * i_attr()->m50;
+        f32 f6 = -m620 * i_attr()->m54;
+        f32 f1 = -(m614 - m60C) * i_attr()->m50;
+        f32 f0 = -m61C * i_attr()->m54;
         m61C += f1 + f0;
         m620 += f5 + f6;
         m614 += m61C;
@@ -1698,7 +1690,57 @@ namespace daObjMovebox {
     
     /* 00002DA4-000031AC       .text mode_walk__Q212daObjMovebox5Act_cFv */
     void Act_c::mode_walk() {
-        /* Nonmatching */
+        static cXyz dir_vec[4] = {
+            cXyz(0.0f, 0.0f, 1.0f),
+            cXyz(1.0f, 0.0f, 0.0f),
+            cXyz(0.0f, 0.0f, -1.0f),
+            cXyz(-1.0f, 0.0f, 0.0f),
+        };
+        
+        bool r28 = --m644 <= 0;
+        f32 temp = (cM_scos(m644 * m630) + 1.0f) * 0.5f;
+        mDoMtx_stack_c::transS(orig.pos);
+        mDoMtx_stack_c::YrotM(orig.angle.y);
+        mDoMtx_stack_c::transM(
+            (m628 + temp * dir_vec[m634].x) * i_attr()->m0C,
+            0.0f,
+            (m62C + temp * dir_vec[m634].z) * i_attr()->m0C
+        );
+        cXyz temp2;
+        mDoMtx_stack_c::multVec(&cXyz::Zero, &temp2);
+        current.pos.x = temp2.x;
+        current.pos.z = temp2.z;
+        mEyePos = current.pos;
+        sound_slip();
+        
+        if (r28) {
+            BgcSrc_c* bgcSrc = const_cast<BgcSrc_c*>(i_attr()->m9A ? Bgc_c::M_lin20 : Bgc_c::M_lin5);
+            int bgcSrcCount = i_attr()->m9A ? (mType == TYPE_MIRROR ? ARRAY_SIZE(Bgc_c::M_lin20) : ARRAY_SIZE(Bgc_c::M_lin20)-2) : ARRAY_SIZE(Bgc_c::M_lin5);
+            if (mBgc.chk_wall_pre(this, bgcSrc, bgcSrcCount, M_dir_base[m634])) {
+                sound_limit();
+            }
+            eff_smoke_slip_end();
+        } else {
+            eff_set_slip_smoke_pos();
+        }
+        
+        daObj::posMoveF_stream(this, NULL, &cXyz::Zero, i_attr()->m18, i_attr()->m1C);
+        current.pos.x = temp2.x;
+        current.pos.z = temp2.z;
+        
+        if (r28) {
+            if (m634 == 0) {
+                m62C++;
+            } else if (m634 == 1) {
+                m628++;
+            } else if (m634 == 2) {
+                m62C--;
+            } else if (m634 == 3) {
+                m628--;
+            }
+            daPy_getPlayerActorClass()->offPushPullKeep();
+            mode_wait_init();
+        }
     }
     
     /* 000031AC-000031D4       .text mode_afl_init__Q212daObjMovebox5Act_cFv */
@@ -1710,7 +1752,38 @@ namespace daObjMovebox {
     
     /* 000031D4-000033D8       .text mode_afl__Q212daObjMovebox5Act_cFv */
     void Act_c::mode_afl() {
-        /* Nonmatching */
+        f32 f1 = current.pos.y - mBgc.mWaterY;
+        f32 f0;
+        if (f1 >= 0.0f) {
+            f0 = 0.0f;
+        } else {
+            if (f1 <= -i_attr()->m68) {
+                f0 = 1.0f;
+            } else {
+                f1 = -f1;
+                f0 = f1 * i_attr()->m6C;
+            }
+        }
+        
+        s16 r3 = i_attr()->m38 * (1.0f + cM_rnd());
+        m604 += r3;
+        mGravity = (f0 * i_attr()->m28) + i_attr()->m14 + i_attr()->m34 * cM_ssin(m604) + m608;
+        m608 = 0.0f;
+        
+        afl_sway();
+        
+        f32 temp3 = 1.0f - f0;
+        f32 temp1 = f0*i_attr()->m3C + temp3*i_attr()->m18;
+        f32 temp2 = f0*i_attr()->m40 + temp3*i_attr()->m1C;
+        
+        m624 = mBgc.mWaterY - current.pos.y;
+        if (m624 < 0.0f) {
+            m624 = 0.0f;
+        } else if (m624 > i_attr()->m68) {
+            m624 = i_attr()->m68;
+        }
+        
+        daObj::posMoveF_stream(this, NULL, &cXyz::Zero, temp1, temp2);
     }
     
     /* 000033D8-00003450       .text make_item__Q212daObjMovebox5Act_cFv */
@@ -1722,10 +1795,9 @@ namespace daObjMovebox {
     
     /* 00003450-00003570       .text eff_break__Q212daObjMovebox5Act_cFv */
     void Act_c::eff_break() {
-        /* Nonmatching */
         static cXyz particle_scale(2.0f, 2.0f, 1.0f);
         cXyz particlePos;
-        particlePos.set(current.pos.x, current.pos.y + -0.5f, current.pos.z);
+        particlePos.set(current.pos.x, current.pos.y + 75.0f, current.pos.z);
         JPABaseEmitter* emitter = dComIfGp_particle_set(
             0x3E6, &particlePos, NULL, NULL, 0xFF, NULL, -1,
             &mTevStr.mColorK0, &mTevStr.mColorK0, &particle_scale
@@ -1740,7 +1812,6 @@ namespace daObjMovebox {
     
     /* 00003570-00003808       .text sound_break__Q212daObjMovebox5Act_cFv */
     void Act_c::sound_break() {
-        /* Nonmatching */
         cXyz centerPos(current.pos.x, current.pos.y + 100.0f, current.pos.z);
         dBgS_ObjGndChk gndChk;
         gndChk.SetPos(&centerPos);
@@ -1756,7 +1827,6 @@ namespace daObjMovebox {
     
     /* 00003AE0-00003BA4       .text sound_slip__Q212daObjMovebox5Act_cFv */
     void Act_c::sound_slip() {
-        /* Nonmatching */
         s32 mtrlSndId = 0;
         if (mBgc.mMaxGroundIdx >= 0) {
             dBgS_ObjGndChk& gndChk = Bgc_c::M_gnd_work[mBgc.mMaxGroundIdx];
@@ -1770,10 +1840,9 @@ namespace daObjMovebox {
     
     /* 00003BA4-00003C68       .text sound_limit__Q212daObjMovebox5Act_cFv */
     void Act_c::sound_limit() {
-        /* Nonmatching */
         s32 mtrlSndId = 0;
-        if (mBgc.mMaxGroundIdx >= 0) {
-            dBgS_ObjLinChk& linChk = Bgc_c::M_wall_work[mBgc.mMaxGroundIdx];
+        if (mBgc.mWallIdx >= 0) {
+            dBgS_ObjLinChk& linChk = Bgc_c::M_wall_work[mBgc.mWallIdx];
             if (linChk.GetBgIndex() >= 0 && linChk.GetBgIndex() < 0x100) {
                 mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(linChk);
             }
@@ -1784,7 +1853,6 @@ namespace daObjMovebox {
     
     /* 00003C68-00003D2C       .text sound_land__Q212daObjMovebox5Act_cFv */
     void Act_c::sound_land() {
-        /* Nonmatching */
         s32 mtrlSndId = 0;
         if (mBgc.mMaxGroundIdx >= 0) {
             dBgS_ObjGndChk& gndChk = Bgc_c::M_gnd_work[mBgc.mMaxGroundIdx];
@@ -1812,7 +1880,6 @@ namespace daObjMovebox {
     
     /* 00003E04-000040D0       .text Execute__Q212daObjMovebox5Act_cFPPA3_A4_f */
     BOOL Act_c::Execute(Mtx** pMtx) {
-        /* Nonmatching */
         if (mCyl.ChkTgHit() || m6BC != 0) {
             make_item();
             eff_break();
@@ -1920,12 +1987,12 @@ namespace daObjMovebox {
         
         /* 00004564-00004590       .text Mthd_Draw__Q212daObjMovebox29@unnamed@d_a_obj_movebox_cpp@FPv */
         BOOL Mthd_Draw(void* i_this) {
-            return ((Act_c*)i_this)->Draw();
+            return ((Act_c*)i_this)->MoveBGDraw();
         }
         
         /* 00004590-000045BC       .text Mthd_IsDelete__Q212daObjMovebox29@unnamed@d_a_obj_movebox_cpp@FPv */
         BOOL Mthd_IsDelete(void* i_this) {
-            return ((Act_c*)i_this)->IsDelete();
+            return ((Act_c*)i_this)->MoveBGIsDelete();
         }
         
         static actor_method_class Mthd_Table = {

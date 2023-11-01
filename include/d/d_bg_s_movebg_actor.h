@@ -24,6 +24,7 @@ public:
     int MoveBGExecute();
 
     int MoveBGDraw() { return Draw(); }
+    int MoveBGIsDelete() { return IsDelete(); }
 
     virtual int CreateHeap() { return 1; }
     virtual int Create() { return 1; }

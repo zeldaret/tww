@@ -12,12 +12,12 @@ public:
     /* 0x4E9 */ u8 mDamageFogTimer;
     /* 0x4EA */ u8 field_4EA[0x4EC - 0x4EA];
     
-    void returnLink() { m4E4 |= 1; }
-    void offReturnLink() { m4E4 &= ~1; }
-    bool isReturnLink() { return m4E4 & 1; }
-    void onEventAccept() { m4E4 |= 2; }
-    void offEventAccept() { m4E4 &= ~2; }
-    bool isEventAccept() { return m4E4 & 2; }
+    void returnLink() { cLib_onBit(m4E4, 0x01UL); }
+    void offReturnLink() { cLib_offBit(m4E4, 0x01UL); }
+    bool isReturnLink() { return cLib_checkBit(m4E4, 0x01UL); }
+    void onEventAccept() { cLib_onBit(m4E4, 0x02UL); }
+    void offEventAccept() { cLib_offBit(m4E4, 0x02UL); }
+    bool isEventAccept() { return cLib_checkBit(m4E4, 0x02UL); }
     
     u8 getDamageFogTimer() { return mDamageFogTimer; }
     void setDamageFogTimer(u8 timer) { mDamageFogTimer = timer; }

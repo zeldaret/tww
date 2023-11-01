@@ -50,6 +50,7 @@ BOOL daPy_npc_c::check_moveStop() {
 
 /* 8015A524-8015A590       .text setRestart__10daPy_npc_cFSc */
 void daPy_npc_c::setRestart(s8 option) {
+    /* Nonmatching (this matched at some point, what broke it?) */
     if (option == dComIfGs_getRestartOption()) {
         bool playerInDoor = dComIfGp_getPlayer(0)->mEvtInfo.checkCommandDoor();
         s8 roomNo = current.roomNo;
@@ -152,8 +153,9 @@ BOOL daPy_npc_c::initialRestartOption(s8 option, int save) {
 
 /* 8015ABD8-8015AC74       .text checkNowPosMove__10daPy_npc_cFPCc */
 BOOL daPy_npc_c::checkNowPosMove(const char* pName) {
-    /* Nonmatching (regalloc) */
-    if (!dComIfGp_event_runCheck()) {
+    // Using the dComIfGp_event_runCheck inline makes the codegen not match.
+    // if (!dComIfGp_event_runCheck()) {
+    if (!g_dComIfG_gameInfo.play.getEvent().runCheck()) {
         return TRUE;
     }
     if (mEvtInfo.checkCommandTalk()) {
