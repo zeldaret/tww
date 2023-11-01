@@ -195,7 +195,7 @@ public:
      * Rotates the `now` matrix by the given csXyz in the order X, Y, Z
      * @param xyz The xyz rotation vector
      */
-    static void XYZrotM(csXyz const& xyz);
+    static void XYZrotM(csXyz const& xyz) { XYZrotM(xyz.x, xyz.y, xyz.z); }
 
     static void ZXYrotS(csXyz const& xyz) { ZXYrotS(xyz.x, xyz.y, xyz.z); }
 

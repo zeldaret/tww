@@ -587,7 +587,7 @@ static void action_dousa(am_class* i_this) {
         // if (!i_this->mpMorf->isStop()) {
         mDoExt_McaMorf* morf = i_this->mpMorf;
         bool stopped = true;
-        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
         if (!stopped) {
             break;
         }
@@ -658,7 +658,7 @@ static void action_dousa(am_class* i_this) {
             // if (i_this->mpMorf->isStop()) {
             mDoExt_McaMorf* morf = i_this->mpMorf;
             bool stopped = true;
-            if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+            if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
             if (stopped) {
                 anm_init(i_this, AM_BCK_CLOSE_LOOP, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
             }
@@ -733,7 +733,7 @@ static void action_dousa(am_class* i_this) {
         // if (i_this->mpMorf->isStop()) {
         morf = i_this->mpMorf;
         stopped = true;
-        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
         if (stopped) {
             i_this->mState = 0;
         }
@@ -862,7 +862,7 @@ static void action_itai_move(am_class* i_this) {
         // if (!i_this->mpMorf->isStop()) {
         mDoExt_McaMorf* morf = i_this->mpMorf;
         bool stopped = true;
-        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
         if (!stopped) {
             break;
         }
@@ -888,7 +888,7 @@ static void action_itai_move(am_class* i_this) {
         // if (!i_this->mpMorf->isStop()) {
         morf = i_this->mpMorf;
         stopped = true;
-        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
         if (!stopped) {
             break;
         }
@@ -938,7 +938,7 @@ static void action_itai_move(am_class* i_this) {
         // if (!i_this->mpMorf->isStop()) {
         morf = i_this->mpMorf;
         stopped = true;
-        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
         if (!stopped) {
             break;
         }
@@ -997,7 +997,7 @@ static void action_itai_move(am_class* i_this) {
         // if (!i_this->mpMorf->isStop()) {
         morf = i_this->mpMorf;
         stopped = true;
-        if (!morf->mFrameCtrl.checkState(1) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+        if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
         if (!stopped) {
             break;
         }

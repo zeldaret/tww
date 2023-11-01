@@ -35,11 +35,12 @@ public:
     void setLoopFrame(f32 i_frame) { mFrameCtrl->setLoop(i_frame); }
     BOOL isStop() {
         bool stopped = true;
-        if (!mFrameCtrl->checkState(1) && mFrameCtrl->getRate() != 0.0f) {
+        if (!mFrameCtrl->checkState(J3DFrameCtrl::STATE_STOP_E) && mFrameCtrl->getRate() != 0.0f) {
             stopped = false;
         }
         return stopped;
     }
+    BOOL isLoop() { return mFrameCtrl->checkState(J3DFrameCtrl::STATE_LOOP_E); }
 
 private:
     /* 0x4 */ J3DFrameCtrl* mFrameCtrl;
@@ -365,7 +366,7 @@ public:
     void setFrame(f32 frame) { mFrameCtrl.setFrame((s16)frame); }
     BOOL isStop() { //regswap somewhere here
         bool stopped = true;
-        if (!mFrameCtrl.checkState(1) && mFrameCtrl.getRate() != 0.0f) {
+        if (!mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && mFrameCtrl.getRate() != 0.0f) {
             stopped = false;
         }
         return stopped;

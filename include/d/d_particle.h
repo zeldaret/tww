@@ -300,7 +300,10 @@ public:
     
     virtual void draw(JPABaseEmitter*);
     virtual void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
-};
+
+public:
+    /* 0x04 */ GXColor mColor;
+};  // Size: 0x08
 
 class dPa_modelControl_c {
 public:
@@ -435,7 +438,10 @@ public:
     void drawModelParticle() { mModelCtrl->draw(); }
     JKRHeap * getHeap() { return mpHeap; }
     
+    static dPa_setColorEcallBack* getLifeBallSetColorEcallBack(int idx) { return &mLifeBall[idx]; }
+    
     static dPa_rippleEcallBack mSingleRippleEcallBack;
+    static dPa_setColorEcallBack mLifeBall[3];
 
     /* 0x0000 */ JKRHeap* mpHeap;
     /* 0x0004 */ JPAResourceManager* mpCommonResMgr;

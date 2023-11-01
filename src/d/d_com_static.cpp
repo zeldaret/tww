@@ -9,6 +9,7 @@
 #include "d/actor/d_a_agbsw0.h"
 #include "d/actor/d_a_npc_md.h"
 #include "d/actor/d_a_arrow.h"
+#include "d/actor/d_a_ib.h"
 #include "d/actor/d_a_obj_movebox.h"
 #include "d/actor/d_a_tag_kb_item.h"
 #include "d/actor/d_a_item.h"
@@ -128,25 +129,52 @@ void daArrow_c::setKeepType(u8 type) {
     m_keep_type = type;
 }
 
-// /* 800568D0-800568F8       .text init__9daIball_cFv */
-// void daIball_c::init() {
-//     /* Nonmatching */
-// }
+u32 daIball_c::m_ib_actor[5];
 
-// /* 800568F8-80056944       .text regist__9daIball_cFP10fopAc_ac_c */
-// void daIball_c::regist(fopAc_ac_c*) {
-//     /* Nonmatching */
-// }
+/* 800568D0-800568F8       .text init__9daIball_cFv */
+void daIball_c::init() {
+    for (int i = 0; i < ARRAY_SIZE(m_ib_actor); i++) {
+        m_ib_actor[i] = -1;
+    }
+}
 
-// /* 80056944-80056990       .text remove__9daIball_cFP10fopAc_ac_c */
-// void daIball_c::remove(fopAc_ac_c*) {
-//     /* Nonmatching */
-// }
+/* 800568F8-80056944       .text regist__9daIball_cFP10fopAc_ac_c */
+void daIball_c::regist(fopAc_ac_c* i_actor) {
+    for (int i = 0; i < ARRAY_SIZE(m_ib_actor); i++) {
+        if (m_ib_actor[i] == -1) {
+            m_ib_actor[i] = fopAcM_GetID(i_actor);
+            break;
+        }
+    }
+}
 
-// /* 80056990-80056A18       .text remove_old__9daIball_cFv */
-// void daIball_c::remove_old() {
-//     /* Nonmatching */
-// }
+/* 80056944-80056990       .text remove__9daIball_cFP10fopAc_ac_c */
+void daIball_c::remove(fopAc_ac_c* i_actor) {
+    for (int i = 0; i < ARRAY_SIZE(m_ib_actor); i++) {
+        if (m_ib_actor[i] == fopAcM_GetID(i_actor)) {
+            m_ib_actor[i] = -1;
+            break;
+        }
+    }
+}
+
+/* 80056990-80056A18       .text remove_old__9daIball_cFv */
+void daIball_c::remove_old() {
+    u32 iball_id = -1;
+    for (int i = 0; i < ARRAY_SIZE(m_ib_actor); i++) {
+        if (m_ib_actor[i] == -1) {
+            return;
+        }
+        if (m_ib_actor[i] < iball_id) {
+            iball_id = m_ib_actor[i];
+        }
+    }
+    fopAc_ac_c* iball = fopAcM_SearchByID(iball_id);
+    if (iball) {
+        static_cast<daIball_c*>(iball)->dead();
+        remove(iball);
+    }
+}
 
 // /* 80056A18-80056AD0       .text getCreateCount__13daObj_Roten_cFv */
 // void daObj_Roten_c::getCreateCount() {
