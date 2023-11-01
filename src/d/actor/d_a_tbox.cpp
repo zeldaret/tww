@@ -1260,7 +1260,6 @@ bool daTbox_c::actionSwOnWait2() {
 
 /* 00002914-00002A2C       .text actionGenocide__8daTbox_cFv */
 bool daTbox_c::actionGenocide() {
-    /* Nonmatching */
     if (mEvtInfo.checkCommandDemoAccrpt()) {
         setAction(&daTbox_c::actionDemo2);
 
@@ -1287,7 +1286,6 @@ bool daTbox_c::actionGenocide() {
 
 /* 00002A2C-00002BF0       .text execute__8daTbox_cFv */
 s32 daTbox_c::execute() {
-    /* Nonmatching */
     if (mRoomNo == -1 || checkRoomDisp(mRoomNo) != TRUE) {
         return TRUE;
     }
