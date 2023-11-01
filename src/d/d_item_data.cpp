@@ -128,6 +128,121 @@ char* dItem_data::item_arcname_tbl[0x70] = {
     "Vbeso",
 };
 
+enum ItemArcnameIdx {
+    ARCNAME_IDX_ALWAYS,
+    ARCNAME_IDX_VHUTU,
+    ARCNAME_IDX_VHKAK,
+    ARCNAME_IDX_VKEYN,
+    ARCNAME_IDX_KEY_01,
+    ARCNAME_IDX_TELE_00,
+    ARCNAME_IDX_BOMB_00,
+    ARCNAME_IDX_LINK,
+    ARCNAME_IDX_VHANE,
+    ARCNAME_IDX_VBOKO,
+    ARCNAME_IDX_VCHUJ,
+    ARCNAME_IDX_VMAPC,
+    ARCNAME_IDX_VSAIM,
+    ARCNAME_IDX_VSAIL,
+    ARCNAME_IDX_VYATM,
+    ARCNAME_IDX_VYATL,
+    ARCNAME_IDX_BALL,
+    ARCNAME_IDX_BIN,
+    ARCNAME_IDX_VBOMM,
+    ARCNAME_IDX_BOOM,
+    ARCNAME_IDX_VBOOT,
+    ARCNAME_IDX_VBOML,
+    ARCNAME_IDX_BOTTLE,
+    ARCNAME_IDX_BOTTLE_E,
+    ARCNAME_IDX_VBOXN,
+    ARCNAME_IDX_VDUNC,
+    ARCNAME_IDX_VDUNM,
+    ARCNAME_IDX_VLEAF,
+    ARCNAME_IDX_VBAGH,
+    ARCNAME_IDX_VBAGE,
+    ARCNAME_IDX_VBAGF,
+    ARCNAME_IDX_VHYOI,
+    ARCNAME_IDX_VESA,
+    ARCNAME_IDX_VOBJ07,
+    ARCNAME_IDX_VOBJ06,
+    ARCNAME_IDX_VOBJ05,
+    ARCNAME_IDX_VOBJ04,
+    ARCNAME_IDX_VOBJ03,
+    ARCNAME_IDX_VOBJ00,
+    ARCNAME_IDX_VOBJ01,
+    ARCNAME_IDX_VOBJ02,
+    ARCNAME_IDX_VHOOK,
+    ARCNAME_IDX_VPOWR,
+    ARCNAME_IDX_VHO,
+    ARCNAME_IDX_VMANT,
+    ARCNAME_IDX_VOHOM,
+    ARCNAME_IDX_VCHIN,
+    ARCNAME_IDX_VHAMM,
+    ARCNAME_IDX_VAMUK,
+    ARCNAME_IDX_VAMUY,
+    ARCNAME_IDX_MED_B,
+    ARCNAME_IDX_MED_G,
+    ARCNAME_IDX_MED_R,
+    ARCNAME_IDX_VOBJ08,
+    ARCNAME_IDX_VOBJ09,
+    ARCNAME_IDX_VOBJ11,
+    ARCNAME_IDX_VOBJ10,
+    ARCNAME_IDX_VHAPP,
+    ARCNAME_IDX_VROPE,
+    ARCNAME_IDX_VMAGS,
+    ARCNAME_IDX_SHINJU_N,
+    ARCNAME_IDX_SORD_M,
+    ARCNAME_IDX_SORD_MVU,
+    ARCNAME_IDX_VSWON,
+    ARCNAME_IDX_VSHIM,
+    ARCNAME_IDX_VSHIN,
+    ARCNAME_IDX_VTRI1,
+    ARCNAME_IDX_VTACT,
+    ARCNAME_IDX_VARFI,
+    ARCNAME_IDX_VMAPQ,
+    ARCNAME_IDX_VARRL,
+    ARCNAME_IDX_VBOW,
+    ARCNAME_IDX_FA,
+    ARCNAME_IDX_SHINJU_D,
+    ARCNAME_IDX_SHINJU_F,
+    ARCNAME_IDX_FWBIN,
+    ARCNAME_IDX_VBINY,
+    ARCNAME_IDX_VBINH,
+    ARCNAME_IDX_VBINS,
+    ARCNAME_IDX_VBINW,
+    ARCNAME_IDX_VFUKU,
+    ARCNAME_IDX_VDOKU,
+    ARCNAME_IDX_VBELT,
+    ARCNAME_IDX_VLUPY,
+    ARCNAME_IDX_VLETT,
+    ARCNAME_IDX_VLEOF,
+    ARCNAME_IDX_VLEMG,
+    ARCNAME_IDX_VLEMO,
+    ARCNAME_IDX_FDAI_0x58,
+    ARCNAME_IDX_FDAI_0x59,
+    ARCNAME_IDX_FDAI_0x5A,
+    ARCNAME_IDX_FDAI_0x5B,
+    ARCNAME_IDX_FDAI_0x5C,
+    ARCNAME_IDX_VTRI2,
+    ARCNAME_IDX_VTRI3,
+    ARCNAME_IDX_VTRI4,
+    ARCNAME_IDX_VTRI5,
+    ARCNAME_IDX_VTRI6,
+    ARCNAME_IDX_VTRI7,
+    ARCNAME_IDX_VTRI8,
+    ARCNAME_IDX_FDAI_0x64,
+    ARCNAME_IDX_VMAPT,
+    ARCNAME_IDX_VMAPR,
+    ARCNAME_IDX_VMAPH,
+    ARCNAME_IDX_VMAPG,
+    ARCNAME_IDX_VBOXA,
+    ARCNAME_IDX_VTIN1,
+    ARCNAME_IDX_VTIN2,
+    ARCNAME_IDX_VTIN3,
+    ARCNAME_IDX_VTIN4,
+    ARCNAME_IDX_VTIN5,
+    ARCNAME_IDX_VBESO,
+};
+
 /* 803840E0-803842B0       .data item_texture_tbl__10dItem_data */
 char* dItem_data::item_texture_tbl[0x74] = {
     "get_rupy.bti",
@@ -248,12 +363,131 @@ char* dItem_data::item_texture_tbl[0x74] = {
     "delivery_19.bti",
 };
 
+enum ItemTextureIdx {
+    TEXTURE_IDX_GET_RUPY,
+    TEXTURE_IDX_GET_KEY,
+    TEXTURE_IDX_HEART_UP_01,
+    TEXTURE_IDX_HEART_UP_02,
+    TEXTURE_IDX_TELESCOPE,
+    TEXTURE_IDX_WHISTLE,
+    TEXTURE_IDX_BATON,
+    TEXTURE_IDX_CAMERA,
+    TEXTURE_IDX_COVEROFBEAST,
+    TEXTURE_IDX_BOOMERANG,
+    TEXTURE_IDX_ROPE,
+    TEXTURE_IDX_SAIL_00,
+    TEXTURE_IDX_FAN,
+    TEXTURE_IDX_HAMMER_01,
+    TEXTURE_IDX_BOOTS_00,
+    TEXTURE_IDX_BOOTS_01,
+    TEXTURE_IDX_COVEROFBAIT,
+    TEXTURE_IDX_BOW_01,
+    TEXTURE_IDX_BOMB_00,
+    TEXTURE_IDX_SAIL_01,
+    TEXTURE_IDX_BOTTLE_00,
+    TEXTURE_IDX_BOTTLE_01,
+    TEXTURE_IDX_BOTTLE_02,
+    TEXTURE_IDX_BOTTLE_03,
+    TEXTURE_IDX_DELIVERY,
+    TEXTURE_IDX_HOOKSHOT,
+    TEXTURE_IDX_SHIELD_02,
+    TEXTURE_IDX_SAIL_02,
+    TEXTURE_IDX_BEAST_01,
+    TEXTURE_IDX_BEAST_02,
+    TEXTURE_IDX_BEAST_03,
+    TEXTURE_IDX_BEAST_04,
+    TEXTURE_IDX_BEAST_05,
+    TEXTURE_IDX_BEAST_06,
+    TEXTURE_IDX_BEAST_07,
+    TEXTURE_IDX_BEAST_08,
+    TEXTURE_IDX_BAIT_01,
+    TEXTURE_IDX_BAIT_02,
+    TEXTURE_IDX_BAIT_03,
+    TEXTURE_IDX_BAIT_04,
+    TEXTURE_IDX_BAIT_05,
+    TEXTURE_IDX_BAIT_06,
+    TEXTURE_IDX_BAIT_07,
+    TEXTURE_IDX_BAIT_08,
+    TEXTURE_IDX_BATON_STONE_0x2C,
+    TEXTURE_IDX_GOD_SYMBOL_00,
+    TEXTURE_IDX_GOD_SYMBOL_01,
+    TEXTURE_IDX_GOD_SYMBOL_02,
+    TEXTURE_IDX_SWORD_00,
+    TEXTURE_IDX_SWORD_01,
+    TEXTURE_IDX_SHIELD_00,
+    TEXTURE_IDX_SHIELD_01,
+    TEXTURE_IDX_GLOVES_00_0x34,
+    TEXTURE_IDX_GLOVES_00_0x35,
+    TEXTURE_IDX_AMULET_00,
+    TEXTURE_IDX_AMULET_01,
+    TEXTURE_IDX_DELIVERY_01,
+    TEXTURE_IDX_DELIVERY_02,
+    TEXTURE_IDX_DELIVERY_03,
+    TEXTURE_IDX_DELIVERY_04,
+    TEXTURE_IDX_DELIVERY_05,
+    TEXTURE_IDX_DELIVERY_06,
+    TEXTURE_IDX_DELIVERY_07,
+    TEXTURE_IDX_DELIVERY_08,
+    TEXTURE_IDX_DELIVERY_09,
+    TEXTURE_IDX_DELIVERY_10,
+    TEXTURE_IDX_DELIVERY_11,
+    TEXTURE_IDX_DELIVERY_12,
+    TEXTURE_IDX_DELIVERY_13,
+    TEXTURE_IDX_DELIVERY_14,
+    TEXTURE_IDX_DELIVERY_15,
+    TEXTURE_IDX_DELIVERY_16,
+    TEXTURE_IDX_DELIVERY_17,
+    TEXTURE_IDX_DELIVERY_18,
+    TEXTURE_IDX_DUNGEON_MAP,
+    TEXTURE_IDX_COMPASS,
+    TEXTURE_IDX_BOSS_KEY,
+    TEXTURE_IDX_BOTTLE_04,
+    TEXTURE_IDX_BOTTLE_05,
+    TEXTURE_IDX_BOTTLE_06,
+    TEXTURE_IDX_BOTTLE_07,
+    TEXTURE_IDX_BOTTLE_08,
+    TEXTURE_IDX_BATON_STONE_0x52,
+    TEXTURE_IDX_TRIFORCE_00,
+    TEXTURE_IDX_TRIFORCE_01,
+    TEXTURE_IDX_TRIFORCE_02,
+    TEXTURE_IDX_TRIFORCE_03,
+    TEXTURE_IDX_TRIFORCE_04,
+    TEXTURE_IDX_TRIFORCE_05,
+    TEXTURE_IDX_TRIFORCE_06,
+    TEXTURE_IDX_TRIFORCE_07,
+    TEXTURE_IDX_ARROW_00,
+    TEXTURE_IDX_ARROW_01,
+    TEXTURE_IDX_ARROW_02,
+    TEXTURE_IDX_ARROW_03,
+    TEXTURE_IDX_BIG_PURSE,
+    TEXTURE_IDX_MAX_PURSE,
+    TEXTURE_IDX_SWORD_02,
+    TEXTURE_IDX_SWORD_03,
+    TEXTURE_IDX_CLOTHES,
+    TEXTURE_IDX_BOMBPOUCH_1,
+    TEXTURE_IDX_BOMBPOUCH_2,
+    TEXTURE_IDX_ARROWCASE_1,
+    TEXTURE_IDX_ARROWCASE_2,
+    TEXTURE_IDX_CMAP_TRI2,
+    TEXTURE_IDX_CMAP_TREASURE2_0x69,
+    TEXTURE_IDX_CMAP_TREASURE2_0x6A,
+    TEXTURE_IDX_CMAP_PHANTOMSHIP2,
+    TEXTURE_IDX_CMAP_TINGLE2,
+    TEXTURE_IDX_ARROW_POWER_01,
+    TEXTURE_IDX_ARROW_POWER_02,
+    TEXTURE_IDX_CAMERA_2,
+    TEXTURE_IDX_TINGLE_FIGURE,
+    TEXTURE_IDX_BOTTLE_09,
+    TEXTURE_IDX_CMAP_HINT2,
+    TEXTURE_IDX_DELIVERY_19,
+};
+
 /* 803842B0-803866B0       .data item_resource__10dItem_data */
 dItem_data_item_resource dItem_data::item_resource[0x100] = {
     {
         // 0x00: HEART
-        /* mArcname     */ item_arcname_tbl[0x00],
-        /* mTexture     */ item_texture_tbl[0x14],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_00],
         /* mBmdIdx      */ 0x002A,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -268,8 +502,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x01: GREEN_RUPEE
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -284,8 +518,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x02: BLUE_RUPEE
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -300,8 +534,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x03: YELLOW_RUPEE
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -316,8 +550,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x04: RED_RUPEE
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -332,8 +566,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x05: PURPLE_RUPEE
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -348,8 +582,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x06: ORANGE_RUPEE
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -364,8 +598,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x07: KAKERA_HEART
-        /* mArcname     */ item_arcname_tbl[0x02],
-        /* mTexture     */ item_texture_tbl[0x03],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHKAK],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HEART_UP_02],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -380,8 +614,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x08: UTUWA_HEART
-        /* mArcname     */ item_arcname_tbl[0x01],
-        /* mTexture     */ item_texture_tbl[0x02],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHUTU],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HEART_UP_01],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -396,8 +630,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x09: S_MAGIC
-        /* mArcname     */ item_arcname_tbl[0x00],
-        /* mTexture     */ item_texture_tbl[0x14],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_00],
         /* mBmdIdx      */ 0x0032,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -412,8 +646,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x0A: L_MAGIC
-        /* mArcname     */ item_arcname_tbl[0x00],
-        /* mTexture     */ item_texture_tbl[0x14],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_00],
         /* mBmdIdx      */ 0x0033,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -428,8 +662,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x0B: BOMB_5
-        /* mArcname     */ item_arcname_tbl[0x06],
-        /* mTexture     */ item_texture_tbl[0x12],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOMB_00],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMB_00],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -444,8 +678,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x0C: BOMB_10
-        /* mArcname     */ item_arcname_tbl[0x06],
-        /* mTexture     */ item_texture_tbl[0x12],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOMB_00],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMB_00],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -460,8 +694,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x0D: BOMB_20
-        /* mArcname     */ item_arcname_tbl[0x06],
-        /* mTexture     */ item_texture_tbl[0x12],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOMB_00],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMB_00],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -476,8 +710,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x0E: BOMB_30
-        /* mArcname     */ item_arcname_tbl[0x06],
-        /* mTexture     */ item_texture_tbl[0x12],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOMB_00],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMB_00],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -492,8 +726,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x0F: SILVER_RUPEE
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -508,8 +742,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x10: ARROW_10
-        /* mArcname     */ item_arcname_tbl[0x00],
-        /* mTexture     */ item_texture_tbl[0x11],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOW_01],
         /* mBmdIdx      */ 0x001E,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -524,8 +758,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x11: ARROW_20
-        /* mArcname     */ item_arcname_tbl[0x00],
-        /* mTexture     */ item_texture_tbl[0x11],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOW_01],
         /* mBmdIdx      */ 0x001E,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -540,8 +774,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x12: ARROW_30
-        /* mArcname     */ item_arcname_tbl[0x00],
-        /* mTexture     */ item_texture_tbl[0x11],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOW_01],
         /* mBmdIdx      */ 0x001E,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -588,8 +822,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x15: SMALL_KEY
-        /* mArcname     */ item_arcname_tbl[0x03],
-        /* mTexture     */ item_texture_tbl[0x01],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VKEYN],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_KEY],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -604,7 +838,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x16: RECOVER_FAIRY
-        /* mArcname     */ item_arcname_tbl[0x48],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_FA],
         /* mTexture     */ NULL,
         /* mBmdIdx      */ 0x001F,
         /* mSrtIdx      */ -1,
@@ -621,7 +855,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     {
         // 0x17: noentry23
         /* mArcname     */ NULL,
-        /* mTexture     */ item_texture_tbl[0x03],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HEART_UP_02],
         /* mBmdIdx      */ -1,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -637,7 +871,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     {
         // 0x18: noentry24
         /* mArcname     */ NULL,
-        /* mTexture     */ item_texture_tbl[0x03],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HEART_UP_02],
         /* mBmdIdx      */ -1,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -653,7 +887,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     {
         // 0x19: noentry25
         /* mArcname     */ NULL,
-        /* mTexture     */ item_texture_tbl[0x03],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HEART_UP_02],
         /* mBmdIdx      */ -1,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -668,8 +902,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x1A: SUB_DUN_RUPEE
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -732,8 +966,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x1E: TRIPLE_HEART
-        /* mArcname     */ item_arcname_tbl[0x00],
-        /* mTexture     */ item_texture_tbl[0x14],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_00],
         /* mBmdIdx      */ 0x002A,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -748,8 +982,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x1F: PENDANT
-        /* mArcname     */ item_arcname_tbl[0x39],
-        /* mTexture     */ item_texture_tbl[0x23],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHAPP],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_08],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -764,8 +998,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x20: TELESCOPE
-        /* mArcname     */ item_arcname_tbl[0x05],
-        /* mTexture     */ item_texture_tbl[0x04],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_TELE_00],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TELESCOPE],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -780,8 +1014,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x21: TNCL_WHITSL
-        /* mArcname     */ item_arcname_tbl[0x2E],
-        /* mTexture     */ item_texture_tbl[0x05],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VCHIN],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_WHISTLE],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -796,8 +1030,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x22: WIND_TACT
-        /* mArcname     */ item_arcname_tbl[0x43],
-        /* mTexture     */ item_texture_tbl[0x06],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTACT],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BATON],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -812,8 +1046,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x23: CAMERA
-        /* mArcname     */ item_arcname_tbl[0x18],
-        /* mTexture     */ item_texture_tbl[0x07],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOXN],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CAMERA],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -828,8 +1062,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x24: EMONO_BAG
-        /* mArcname     */ item_arcname_tbl[0x1D],
-        /* mTexture     */ item_texture_tbl[0x08],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBAGE],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_COVEROFBEAST],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -844,8 +1078,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x25: ROPE
-        /* mArcname     */ item_arcname_tbl[0x3A],
-        /* mTexture     */ item_texture_tbl[0x0A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VROPE],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_ROPE],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -860,8 +1094,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x26: CAMERA2
-        /* mArcname     */ item_arcname_tbl[0x69],
-        /* mTexture     */ item_texture_tbl[0x6F],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOXA],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CAMERA_2],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -876,8 +1110,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x27: BOW
-        /* mArcname     */ item_arcname_tbl[0x47],
-        /* mTexture     */ item_texture_tbl[0x11],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOW],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOW_01],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -892,8 +1126,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x28: PWR_GROOVE
-        /* mArcname     */ item_arcname_tbl[0x2A],
-        /* mTexture     */ item_texture_tbl[0x35],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VPOWR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GLOVES_00_0x35],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -908,8 +1142,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x29: HVY_BOOTS
-        /* mArcname     */ item_arcname_tbl[0x14],
-        /* mTexture     */ item_texture_tbl[0x0E],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOOT],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOOTS_00],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -924,8 +1158,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x2A: DRGN_SHIELD
-        /* mArcname     */ item_arcname_tbl[0x3B],
-        /* mTexture     */ item_texture_tbl[0x1A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAGS],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SHIELD_02],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -940,8 +1174,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x2B: WATER_BOOTS
-        /* mArcname     */ item_arcname_tbl[0x15],
-        /* mTexture     */ item_texture_tbl[0x0F],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOML],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOOTS_01],
         /* mBmdIdx      */ -1,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -956,8 +1190,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x2C: ESA_BAG
-        /* mArcname     */ item_arcname_tbl[0x1E],
-        /* mTexture     */ item_texture_tbl[0x10],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBAGF],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_COVEROFBAIT],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -972,8 +1206,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x2D: BOOMERANG
-        /* mArcname     */ item_arcname_tbl[0x13],
-        /* mTexture     */ item_texture_tbl[0x09],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOOM],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOOMERANG],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -988,8 +1222,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x2E: BARE_HAND
-        /* mArcname     */ item_arcname_tbl[0x50],
-        /* mTexture     */ item_texture_tbl[0x34],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VFUKU],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GLOVES_00_0x34],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -1004,8 +1238,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x2F: HOOKSHOT
-        /* mArcname     */ item_arcname_tbl[0x29],
-        /* mTexture     */ item_texture_tbl[0x19],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHOOK],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HOOKSHOT],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1020,8 +1254,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x30: WARASHIBE_BAG
-        /* mArcname     */ item_arcname_tbl[0x1C],
-        /* mTexture     */ item_texture_tbl[0x18],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBAGH],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -1036,8 +1270,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x31: BOMB_BAG
-        /* mArcname     */ item_arcname_tbl[0x06],
-        /* mTexture     */ item_texture_tbl[0x12],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BOMB_00],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMB_00],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -1052,8 +1286,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x32: FUKU
-        /* mArcname     */ item_arcname_tbl[0x50],
-        /* mTexture     */ item_texture_tbl[0x63],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VFUKU],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CLOTHES],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -1068,8 +1302,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x33: HUMMER
-        /* mArcname     */ item_arcname_tbl[0x2F],
-        /* mTexture     */ item_texture_tbl[0x0D],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHAMM],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HAMMER_01],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -1084,8 +1318,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x34: DEKU_LEAF
-        /* mArcname     */ item_arcname_tbl[0x1B],
-        /* mTexture     */ item_texture_tbl[0x0C],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLEAF],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_FAN],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -1100,8 +1334,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x35: MAGIC_ARROW
-        /* mArcname     */ item_arcname_tbl[0x44],
-        /* mTexture     */ item_texture_tbl[0x6D],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VARFI],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_ARROW_POWER_01],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1116,8 +1350,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x36: LIGHT_ARROW
-        /* mArcname     */ item_arcname_tbl[0x46],
-        /* mTexture     */ item_texture_tbl[0x6E],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VARRL],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_ARROW_POWER_02],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1133,7 +1367,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     {
         // 0x37: noentry55
         /* mArcname     */ NULL,
-        /* mTexture     */ item_texture_tbl[0x63],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CLOTHES],
         /* mBmdIdx      */ -1,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -1148,8 +1382,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x38: SWORD
-        /* mArcname     */ item_arcname_tbl[0x3F],
-        /* mTexture     */ item_texture_tbl[0x30],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSWON],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SWORD_00],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -1165,7 +1399,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     {
         // 0x39: MASTER_SWORD
         /* mArcname     */ NULL,
-        /* mTexture     */ item_texture_tbl[0x31],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SWORD_01],
         /* mBmdIdx      */ -1,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -1181,7 +1415,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     {
         // 0x3A: LV3_SWORD
         /* mArcname     */ NULL,
-        /* mTexture     */ item_texture_tbl[0x61],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SWORD_02],
         /* mBmdIdx      */ -1,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -1196,8 +1430,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x3B: SHIELD
-        /* mArcname     */ item_arcname_tbl[0x41],
-        /* mTexture     */ item_texture_tbl[0x32],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSHIN],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SHIELD_00],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -1212,8 +1446,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x3C: MIRROR_SHIELD
-        /* mArcname     */ item_arcname_tbl[0x40],
-        /* mTexture     */ item_texture_tbl[0x33],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSHIM],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SHIELD_01],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1228,8 +1462,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x3D: DROPPED_SWORD
-        /* mArcname     */ item_arcname_tbl[0x3F],
-        /* mTexture     */ item_texture_tbl[0x30],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSWON],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SWORD_00],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -1245,7 +1479,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     {
         // 0x3E: MASTER_SWORD_EX
         /* mArcname     */ NULL,
-        /* mTexture     */ item_texture_tbl[0x62],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SWORD_03],
         /* mBmdIdx      */ -1,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -1260,8 +1494,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x3F: KAKERA_HEART2
-        /* mArcname     */ item_arcname_tbl[0x02],
-        /* mTexture     */ item_texture_tbl[0x03],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHKAK],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HEART_UP_02],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1308,8 +1542,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x42: PIRATES_OMAMORI
-        /* mArcname     */ item_arcname_tbl[0x30],
-        /* mTexture     */ item_texture_tbl[0x36],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_AMULET_00],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1324,8 +1558,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x43: HEROS_OMAMORI
-        /* mArcname     */ item_arcname_tbl[0x31],
-        /* mTexture     */ item_texture_tbl[0x37],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_AMULET_01],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1341,7 +1575,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     {
         // 0x44: GRASS_BALL
         /* mArcname     */ NULL,
-        /* mTexture     */ item_texture_tbl[0x14],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_00],
         /* mBmdIdx      */ -1,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -1356,8 +1590,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x45: SKULL_NECKLACE
-        /* mArcname     */ item_arcname_tbl[0x51],
-        /* mTexture     */ item_texture_tbl[0x1C],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VDOKU],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_01],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1372,8 +1606,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x46: BOKOBABA_SEED
-        /* mArcname     */ item_arcname_tbl[0x09],
-        /* mTexture     */ item_texture_tbl[0x1D],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOKO],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_02],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -1388,8 +1622,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x47: GOLDEN_FEATHER
-        /* mArcname     */ item_arcname_tbl[0x08],
-        /* mTexture     */ item_texture_tbl[0x1E],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHANE],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_03],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -1404,8 +1638,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x48: BOKO_BELT
-        /* mArcname     */ item_arcname_tbl[0x52],
-        /* mTexture     */ item_texture_tbl[0x1F],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBELT],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_04],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1420,8 +1654,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x49: RED_JELLY
-        /* mArcname     */ item_arcname_tbl[0x0A],
-        /* mTexture     */ item_texture_tbl[0x20],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VCHUJ],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_05],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -1436,8 +1670,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x4A: GREEN_JELLY
-        /* mArcname     */ item_arcname_tbl[0x0A],
-        /* mTexture     */ item_texture_tbl[0x21],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VCHUJ],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_06],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -1452,8 +1686,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x4B: BLUE_JELLY
-        /* mArcname     */ item_arcname_tbl[0x0A],
-        /* mTexture     */ item_texture_tbl[0x22],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VCHUJ],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BEAST_07],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -1468,8 +1702,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x4C: MAP
-        /* mArcname     */ item_arcname_tbl[0x1A],
-        /* mTexture     */ item_texture_tbl[0x4A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VDUNM],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DUNGEON_MAP],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -1484,8 +1718,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x4D: COMPASS
-        /* mArcname     */ item_arcname_tbl[0x19],
-        /* mTexture     */ item_texture_tbl[0x4B],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VDUNC],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_COMPASS],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1500,8 +1734,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x4E: BOSS_KEY
-        /* mArcname     */ item_arcname_tbl[0x04],
-        /* mTexture     */ item_texture_tbl[0x4C],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_KEY_01],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOSS_KEY],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1517,7 +1751,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     {
         // 0x4F: EMPTY_BSHIP
         /* mArcname     */ NULL,
-        /* mTexture     */ item_texture_tbl[0x14],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_00],
         /* mBmdIdx      */ -1,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -1532,8 +1766,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x50: EMPTY_BOTTLE
-        /* mArcname     */ item_arcname_tbl[0x11],
-        /* mTexture     */ item_texture_tbl[0x14],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_BIN],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_00],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1548,8 +1782,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x51: RED_BOTTLE
-        /* mArcname     */ item_arcname_tbl[0x34],
-        /* mTexture     */ item_texture_tbl[0x15],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_MED_R],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_01],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1564,8 +1798,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x52: GREEN_BOTTLE
-        /* mArcname     */ item_arcname_tbl[0x33],
-        /* mTexture     */ item_texture_tbl[0x16],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_MED_G],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_02],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1580,8 +1814,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x53: BLUE_BOTTLE
-        /* mArcname     */ item_arcname_tbl[0x32],
-        /* mTexture     */ item_texture_tbl[0x17],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_MED_B],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_03],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1596,8 +1830,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x54: BOTTLESHIP
-        /* mArcname     */ item_arcname_tbl[0x4E],
-        /* mTexture     */ item_texture_tbl[0x71],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBINS],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_09],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1612,8 +1846,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x55: SOUP_BOTTLE
-        /* mArcname     */ item_arcname_tbl[0x4E],
-        /* mTexture     */ item_texture_tbl[0x4D],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBINS],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_04],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1628,8 +1862,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x56: BIN_IN_WATER
-        /* mArcname     */ item_arcname_tbl[0x4F],
-        /* mTexture     */ item_texture_tbl[0x4E],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBINW],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_05],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1644,8 +1878,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x57: FAIRY_BOTTLE
-        /* mArcname     */ item_arcname_tbl[0x4C],
-        /* mTexture     */ item_texture_tbl[0x4F],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBINY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_06],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1660,8 +1894,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x58: FIREFLY_BOTTLE
-        /* mArcname     */ item_arcname_tbl[0x4D],
-        /* mTexture     */ item_texture_tbl[0x50],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBINH],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_07],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -1676,8 +1910,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x59: FWATER_BOTTLE
-        /* mArcname     */ item_arcname_tbl[0x4B],
-        /* mTexture     */ item_texture_tbl[0x51],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_FWBIN],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOTTLE_08],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1804,8 +2038,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x61: TRIFORCE1
-        /* mArcname     */ item_arcname_tbl[0x42],
-        /* mTexture     */ item_texture_tbl[0x53],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI1],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_00],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1820,8 +2054,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x62: TRIFORCE2
-        /* mArcname     */ item_arcname_tbl[0x5D],
-        /* mTexture     */ item_texture_tbl[0x54],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI2],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_01],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1836,8 +2070,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x63: TRIFORCE3
-        /* mArcname     */ item_arcname_tbl[0x5E],
-        /* mTexture     */ item_texture_tbl[0x55],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI3],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_02],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1852,8 +2086,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x64: TRIFORCE4
-        /* mArcname     */ item_arcname_tbl[0x5F],
-        /* mTexture     */ item_texture_tbl[0x56],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI4],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_03],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1868,8 +2102,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x65: TRIFORCE5
-        /* mArcname     */ item_arcname_tbl[0x60],
-        /* mTexture     */ item_texture_tbl[0x57],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI5],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_04],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1884,8 +2118,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x66: TRIFORCE6
-        /* mArcname     */ item_arcname_tbl[0x61],
-        /* mTexture     */ item_texture_tbl[0x58],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI6],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_05],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1900,8 +2134,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x67: TRIFORCE7
-        /* mArcname     */ item_arcname_tbl[0x62],
-        /* mTexture     */ item_texture_tbl[0x59],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI7],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_06],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1916,8 +2150,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x68: TRIFORCE8
-        /* mArcname     */ item_arcname_tbl[0x63],
-        /* mTexture     */ item_texture_tbl[0x5A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTRI8],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TRIFORCE_07],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1932,8 +2166,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x69: PEARL1
-        /* mArcname     */ item_arcname_tbl[0x3C],
-        /* mTexture     */ item_texture_tbl[0x2F],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_SHINJU_N],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GOD_SYMBOL_02],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1948,8 +2182,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x6A: PEARL2
-        /* mArcname     */ item_arcname_tbl[0x49],
-        /* mTexture     */ item_texture_tbl[0x2D],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_SHINJU_D],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GOD_SYMBOL_00],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1964,8 +2198,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x6B: PEARL3
-        /* mArcname     */ item_arcname_tbl[0x4A],
-        /* mTexture     */ item_texture_tbl[0x2E],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_SHINJU_F],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GOD_SYMBOL_01],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -1980,8 +2214,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x6C: KNOWLEDGE_TF
-        /* mArcname     */ item_arcname_tbl[0x30],
-        /* mTexture     */ item_texture_tbl[0x36],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_AMULET_00],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -1996,8 +2230,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x6D: TACT_SONG1
-        /* mArcname     */ item_arcname_tbl[0x30],
-        /* mTexture     */ item_texture_tbl[0x06],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BATON],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2012,8 +2246,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x6E: TACT_SONG2
-        /* mArcname     */ item_arcname_tbl[0x30],
-        /* mTexture     */ item_texture_tbl[0x06],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BATON],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2028,8 +2262,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x6F: TACT_SONG3
-        /* mArcname     */ item_arcname_tbl[0x30],
-        /* mTexture     */ item_texture_tbl[0x06],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BATON],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2044,8 +2278,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x70: TACT_SONG4
-        /* mArcname     */ item_arcname_tbl[0x30],
-        /* mTexture     */ item_texture_tbl[0x06],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BATON],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2060,8 +2294,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x71: TACT_SONG5
-        /* mArcname     */ item_arcname_tbl[0x30],
-        /* mTexture     */ item_texture_tbl[0x06],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BATON],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2076,8 +2310,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x72: TACT_SONG6
-        /* mArcname     */ item_arcname_tbl[0x30],
-        /* mTexture     */ item_texture_tbl[0x06],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BATON],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2172,8 +2406,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x78: NORMAL_SAIL
-        /* mArcname     */ item_arcname_tbl[0x2B],
-        /* mTexture     */ item_texture_tbl[0x0B],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHO],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_SAIL_00],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2188,8 +2422,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x79: TRIFORCE_MAP1
-        /* mArcname     */ item_arcname_tbl[0x65],
-        /* mTexture     */ item_texture_tbl[0x68],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2204,8 +2438,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x7A: TRIFORCE_MAP2
-        /* mArcname     */ item_arcname_tbl[0x65],
-        /* mTexture     */ item_texture_tbl[0x68],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2220,8 +2454,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x7B: TRIFORCE_MAP3
-        /* mArcname     */ item_arcname_tbl[0x65],
-        /* mTexture     */ item_texture_tbl[0x68],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2236,8 +2470,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x7C: TRIFORCE_MAP4
-        /* mArcname     */ item_arcname_tbl[0x65],
-        /* mTexture     */ item_texture_tbl[0x68],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2252,8 +2486,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x7D: TRIFORCE_MAP5
-        /* mArcname     */ item_arcname_tbl[0x65],
-        /* mTexture     */ item_texture_tbl[0x68],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2268,8 +2502,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x7E: TRIFORCE_MAP6
-        /* mArcname     */ item_arcname_tbl[0x65],
-        /* mTexture     */ item_texture_tbl[0x68],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2284,8 +2518,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x7F: TRIFORCE_MAP7
-        /* mArcname     */ item_arcname_tbl[0x65],
-        /* mTexture     */ item_texture_tbl[0x68],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2300,8 +2534,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x80: TRIFORCE_MAP8
-        /* mArcname     */ item_arcname_tbl[0x65],
-        /* mTexture     */ item_texture_tbl[0x68],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2332,8 +2566,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x82: BIRD_ESA_5
-        /* mArcname     */ item_arcname_tbl[0x20],
-        /* mTexture     */ item_texture_tbl[0x24],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VESA],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BAIT_01],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2348,8 +2582,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x83: ANIMAL_ESA
-        /* mArcname     */ item_arcname_tbl[0x1F],
-        /* mTexture     */ item_texture_tbl[0x25],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VHYOI],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BAIT_02],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2492,8 +2726,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x8C: FLOWER_1
-        /* mArcname     */ item_arcname_tbl[0x26],
-        /* mTexture     */ item_texture_tbl[0x38],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ00],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_01],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2508,8 +2742,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x8D: FLOWER_2
-        /* mArcname     */ item_arcname_tbl[0x27],
-        /* mTexture     */ item_texture_tbl[0x39],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ01],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_02],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2524,8 +2758,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x8E: FLOWER_3
-        /* mArcname     */ item_arcname_tbl[0x28],
-        /* mTexture     */ item_texture_tbl[0x3A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ02],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_03],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2540,8 +2774,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x8F: HEROS_FLAG
-        /* mArcname     */ item_arcname_tbl[0x25],
-        /* mTexture     */ item_texture_tbl[0x3B],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ03],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_04],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2556,8 +2790,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x90: TAIRYO_FLAG
-        /* mArcname     */ item_arcname_tbl[0x24],
-        /* mTexture     */ item_texture_tbl[0x3C],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ04],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_05],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2572,8 +2806,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x91: SALES_FLAG
-        /* mArcname     */ item_arcname_tbl[0x23],
-        /* mTexture     */ item_texture_tbl[0x3D],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ05],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_06],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2588,8 +2822,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x92: WIND_FLAG
-        /* mArcname     */ item_arcname_tbl[0x22],
-        /* mTexture     */ item_texture_tbl[0x3E],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ06],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_07],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2604,8 +2838,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x93: RED_FLAG
-        /* mArcname     */ item_arcname_tbl[0x21],
-        /* mTexture     */ item_texture_tbl[0x3F],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ07],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_08],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2620,8 +2854,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x94: FOSSIL_HEAD
-        /* mArcname     */ item_arcname_tbl[0x35],
-        /* mTexture     */ item_texture_tbl[0x40],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ08],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_09],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2636,8 +2870,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x95: WATER_STATUE
-        /* mArcname     */ item_arcname_tbl[0x36],
-        /* mTexture     */ item_texture_tbl[0x41],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ09],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_10],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2652,8 +2886,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x96: POSTMAN_STATUE
-        /* mArcname     */ item_arcname_tbl[0x38],
-        /* mTexture     */ item_texture_tbl[0x42],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ10],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_11],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2668,8 +2902,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x97: PRESIDENT_STATUE
-        /* mArcname     */ item_arcname_tbl[0x37],
-        /* mTexture     */ item_texture_tbl[0x43],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOBJ11],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_12],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2684,8 +2918,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x98: LETTER00
-        /* mArcname     */ item_arcname_tbl[0x54],
-        /* mTexture     */ item_texture_tbl[0x44],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLETT],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_13],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2700,8 +2934,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x99: MAGIC_SEED
-        /* mArcname     */ item_arcname_tbl[0x55],
-        /* mTexture     */ item_texture_tbl[0x45],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLEOF],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_14],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2716,8 +2950,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x9A: MAGYS_LETTER
-        /* mArcname     */ item_arcname_tbl[0x56],
-        /* mTexture     */ item_texture_tbl[0x46],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLEMG],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_15],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2732,8 +2966,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x9B: MO_LETTER
-        /* mArcname     */ item_arcname_tbl[0x57],
-        /* mTexture     */ item_texture_tbl[0x47],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLEMO],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_16],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2748,8 +2982,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x9C: COTTAGE_PAPER
-        /* mArcname     */ item_arcname_tbl[0x6F],
-        /* mTexture     */ item_texture_tbl[0x48],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBESO],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_17],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2764,8 +2998,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x9D: KAISEN_PRESENT1
-        /* mArcname     */ item_arcname_tbl[0x2D],
-        /* mTexture     */ item_texture_tbl[0x49],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VOHOM],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_18],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2780,8 +3014,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x9E: KAISEN_PRESENT2
-        /* mArcname     */ item_arcname_tbl[0x2C],
-        /* mTexture     */ item_texture_tbl[0x73],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMANT],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_DELIVERY_19],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2796,8 +3030,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0x9F: SALVAGE_ITEM1
-        /* mArcname     */ item_arcname_tbl[0x69],
-        /* mTexture     */ item_texture_tbl[0x07],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOXA],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CAMERA],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -2812,8 +3046,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xA0: SALVAGE_ITEM2
-        /* mArcname     */ item_arcname_tbl[0x30],
-        /* mTexture     */ item_texture_tbl[0x36],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_AMULET_00],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2828,8 +3062,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xA1: SALVAGE_ITEM3
-        /* mArcname     */ item_arcname_tbl[0x30],
-        /* mTexture     */ item_texture_tbl[0x36],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_AMULET_00],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2844,8 +3078,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xA2: XXX_039
-        /* mArcname     */ item_arcname_tbl[0x30],
-        /* mTexture     */ item_texture_tbl[0x36],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VAMUK],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_AMULET_00],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2860,8 +3094,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xA3: TINGLE_STATUE1
-        /* mArcname     */ item_arcname_tbl[0x6A],
-        /* mTexture     */ item_texture_tbl[0x70],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTIN1],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TINGLE_FIGURE],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2876,8 +3110,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xA4: TINGLE_STATUE2
-        /* mArcname     */ item_arcname_tbl[0x6B],
-        /* mTexture     */ item_texture_tbl[0x70],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTIN2],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TINGLE_FIGURE],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2892,8 +3126,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xA5: TINGLE_STATUE3
-        /* mArcname     */ item_arcname_tbl[0x6C],
-        /* mTexture     */ item_texture_tbl[0x70],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTIN3],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TINGLE_FIGURE],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2908,8 +3142,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xA6: TINGLE_STATUE4
-        /* mArcname     */ item_arcname_tbl[0x6D],
-        /* mTexture     */ item_texture_tbl[0x70],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTIN4],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TINGLE_FIGURE],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2924,8 +3158,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xA7: TINGLE_STATUE5
-        /* mArcname     */ item_arcname_tbl[0x6E],
-        /* mTexture     */ item_texture_tbl[0x70],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VTIN5],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_TINGLE_FIGURE],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -2972,7 +3206,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xAA: noentry170
-        /* mArcname     */ item_arcname_tbl[0x3F],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSWON],
         /* mTexture     */ NULL,
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
@@ -2988,8 +3222,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xAB: MAX_RUPEE_UP1
-        /* mArcname     */ item_arcname_tbl[0x0C],
-        /* mTexture     */ item_texture_tbl[0x5F],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSAIM],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BIG_PURSE],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -3004,8 +3238,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xAC: MAX_RUPEE_UP2
-        /* mArcname     */ item_arcname_tbl[0x0D],
-        /* mTexture     */ item_texture_tbl[0x60],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VSAIL],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_MAX_PURSE],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -3020,8 +3254,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xAD: MAX_BOMB_UP1
-        /* mArcname     */ item_arcname_tbl[0x12],
-        /* mTexture     */ item_texture_tbl[0x64],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOMM],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMBPOUCH_1],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -3036,8 +3270,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xAE: MAX_BOMB_UP2
-        /* mArcname     */ item_arcname_tbl[0x15],
-        /* mTexture     */ item_texture_tbl[0x65],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VBOML],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_BOMBPOUCH_2],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -3052,8 +3286,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xAF: MAX_ARROW_UP1
-        /* mArcname     */ item_arcname_tbl[0x0E],
-        /* mTexture     */ item_texture_tbl[0x66],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VYATM],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_ARROWCASE_1],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -3068,8 +3302,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xB0: MAX_ARROW_UP2
-        /* mArcname     */ item_arcname_tbl[0x0F],
-        /* mTexture     */ item_texture_tbl[0x67],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VYATL],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_ARROWCASE_2],
         /* mBmdIdx      */ 0x0004,
         /* mSrtIdx      */ 0x0007,
         /* mSrtIdx2     */ -1,
@@ -3116,8 +3350,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xB3: TINCLE_RUPEE1
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -3132,8 +3366,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xB4: TINCLE_RUPEE2
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -3148,8 +3382,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xB5: TINCLE_RUPEE3
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -3164,8 +3398,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xB6: TINCLE_RUPEE4
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -3180,8 +3414,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xB7: TINCLE_RUPEE5
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -3196,8 +3430,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xB8: TINCLE_RUPEE6
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -3212,8 +3446,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xB9: LITHOGRAPH1
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -3228,8 +3462,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xBA: LITHOGRAPH2
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -3244,8 +3478,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xBB: LITHOGRAPH3
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -3260,8 +3494,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xBC: LITHOGRAPH4
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -3276,8 +3510,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xBD: LITHOGRAPH5
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -3292,8 +3526,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xBE: LITHOGRAPH6
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -3308,8 +3542,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xBF: COLLECT_MAP_64
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -3324,8 +3558,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xC0: COLLECT_MAP_63
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -3340,8 +3574,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xC1: COLLECT_MAP_62
-        /* mArcname     */ item_arcname_tbl[0x53],
-        /* mTexture     */ item_texture_tbl[0x00],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VLUPY],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_GET_RUPY],
         /* mBmdIdx      */ 0x0005,
         /* mSrtIdx      */ 0x000B,
         /* mSrtIdx2     */ -1,
@@ -3356,8 +3590,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xC2: COLLECT_MAP_61
-        /* mArcname     */ item_arcname_tbl[0x45],
-        /* mTexture     */ item_texture_tbl[0x72],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3372,8 +3606,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xC3: COLLECT_MAP_60
-        /* mArcname     */ item_arcname_tbl[0x45],
-        /* mTexture     */ item_texture_tbl[0x72],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3388,8 +3622,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xC4: COLLECT_MAP_59
-        /* mArcname     */ item_arcname_tbl[0x45],
-        /* mTexture     */ item_texture_tbl[0x72],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3404,8 +3638,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xC5: COLLECT_MAP_58
-        /* mArcname     */ item_arcname_tbl[0x45],
-        /* mTexture     */ item_texture_tbl[0x72],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3420,8 +3654,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xC6: COLLECT_MAP_57
-        /* mArcname     */ item_arcname_tbl[0x45],
-        /* mTexture     */ item_texture_tbl[0x72],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3436,8 +3670,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xC7: COLLECT_MAP_56
-        /* mArcname     */ item_arcname_tbl[0x45],
-        /* mTexture     */ item_texture_tbl[0x72],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3452,8 +3686,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xC8: COLLECT_MAP_55
-        /* mArcname     */ item_arcname_tbl[0x45],
-        /* mTexture     */ item_texture_tbl[0x72],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3468,8 +3702,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xC9: COLLECT_MAP_54
-        /* mArcname     */ item_arcname_tbl[0x45],
-        /* mTexture     */ item_texture_tbl[0x72],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3484,8 +3718,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xCA: COLLECT_MAP_53
-        /* mArcname     */ item_arcname_tbl[0x45],
-        /* mTexture     */ item_texture_tbl[0x72],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPQ],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_HINT2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3500,8 +3734,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xCB: COLLECT_MAP_52
-        /* mArcname     */ item_arcname_tbl[0x0B],
-        /* mTexture     */ item_texture_tbl[0x6C],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPC],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TINGLE2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3516,8 +3750,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xCC: COLLECT_MAP_51
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3532,8 +3766,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xCD: COLLECT_MAP_50
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3548,8 +3782,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xCE: COLLECT_MAP_49
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3564,8 +3798,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xCF: COLLECT_MAP_48
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3580,8 +3814,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xD0: COLLECT_MAP_47
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3596,8 +3830,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xD1: COLLECT_MAP_46
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3612,8 +3846,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xD2: COLLECT_MAP_45
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3628,8 +3862,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xD3: COLLECT_MAP_44
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3644,8 +3878,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xD4: COLLECT_MAP_43
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3660,8 +3894,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xD5: COLLECT_MAP_42
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3676,8 +3910,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xD6: COLLECT_MAP_41
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3692,8 +3926,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xD7: COLLECT_MAP_40
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3708,8 +3942,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xD8: COLLECT_MAP_39
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3724,8 +3958,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xD9: COLLECT_MAP_38
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3740,8 +3974,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xDA: COLLECT_MAP_37
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3756,8 +3990,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xDB: COLLECT_MAP_36
-        /* mArcname     */ item_arcname_tbl[0x68],
-        /* mTexture     */ item_texture_tbl[0x6B],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPG],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_PHANTOMSHIP2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3772,8 +4006,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xDC: COLLECT_MAP_35
-        /* mArcname     */ item_arcname_tbl[0x0B],
-        /* mTexture     */ item_texture_tbl[0x6C],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPC],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TINGLE2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3788,8 +4022,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xDD: COLLECT_MAP_34
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3804,8 +4038,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xDE: COLLECT_MAP_33
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3820,8 +4054,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xDF: COLLECT_MAP_32
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3836,8 +4070,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xE0: COLLECT_MAP_31
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3852,8 +4086,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xE1: COLLECT_MAP_30
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3868,8 +4102,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xE2: COLLECT_MAP_29
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3884,8 +4118,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xE3: COLLECT_MAP_28
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3900,8 +4134,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xE4: COLLECT_MAP_27
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3916,8 +4150,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xE5: COLLECT_MAP_26
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3932,8 +4166,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xE6: COLLECT_MAP_25
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3948,8 +4182,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xE7: COLLECT_MAP_24
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3964,8 +4198,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xE8: COLLECT_MAP_23
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3980,8 +4214,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xE9: COLLECT_MAP_22
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -3996,8 +4230,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xEA: COLLECT_MAP_21
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -4012,8 +4246,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xEB: COLLECT_MAP_20
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -4028,8 +4262,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xEC: COLLECT_MAP_19
-        /* mArcname     */ item_arcname_tbl[0x66],
-        /* mTexture     */ item_texture_tbl[0x6A],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPR],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x6A],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -4044,8 +4278,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xED: COLLECT_MAP_18
-        /* mArcname     */ item_arcname_tbl[0x67],
-        /* mTexture     */ item_texture_tbl[0x69],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -4060,8 +4294,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xEE: COLLECT_MAP_17
-        /* mArcname     */ item_arcname_tbl[0x67],
-        /* mTexture     */ item_texture_tbl[0x69],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -4076,8 +4310,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xEF: COLLECT_MAP_16
-        /* mArcname     */ item_arcname_tbl[0x67],
-        /* mTexture     */ item_texture_tbl[0x69],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -4092,8 +4326,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xF0: COLLECT_MAP_15
-        /* mArcname     */ item_arcname_tbl[0x67],
-        /* mTexture     */ item_texture_tbl[0x69],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -4108,8 +4342,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xF1: COLLECT_MAP_14
-        /* mArcname     */ item_arcname_tbl[0x67],
-        /* mTexture     */ item_texture_tbl[0x69],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -4124,8 +4358,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xF2: COLLECT_MAP_13
-        /* mArcname     */ item_arcname_tbl[0x67],
-        /* mTexture     */ item_texture_tbl[0x69],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -4140,8 +4374,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xF3: COLLECT_MAP_12
-        /* mArcname     */ item_arcname_tbl[0x67],
-        /* mTexture     */ item_texture_tbl[0x69],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -4156,8 +4390,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xF4: COLLECT_MAP_11
-        /* mArcname     */ item_arcname_tbl[0x67],
-        /* mTexture     */ item_texture_tbl[0x69],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -4172,8 +4406,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xF5: COLLECT_MAP_10
-        /* mArcname     */ item_arcname_tbl[0x67],
-        /* mTexture     */ item_texture_tbl[0x69],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -4188,8 +4422,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xF6: COLLECT_MAP_09
-        /* mArcname     */ item_arcname_tbl[0x67],
-        /* mTexture     */ item_texture_tbl[0x69],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPH],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TREASURE2_0x69],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -4204,8 +4438,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xF7: COLLECT_MAP_08
-        /* mArcname     */ item_arcname_tbl[0x65],
-        /* mTexture     */ item_texture_tbl[0x68],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -4220,8 +4454,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xF8: COLLECT_MAP_07
-        /* mArcname     */ item_arcname_tbl[0x65],
-        /* mTexture     */ item_texture_tbl[0x68],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -4236,8 +4470,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xF9: COLLECT_MAP_06
-        /* mArcname     */ item_arcname_tbl[0x65],
-        /* mTexture     */ item_texture_tbl[0x68],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -4252,8 +4486,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xFA: COLLECT_MAP_05
-        /* mArcname     */ item_arcname_tbl[0x65],
-        /* mTexture     */ item_texture_tbl[0x68],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -4268,8 +4502,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xFB: COLLECT_MAP_04
-        /* mArcname     */ item_arcname_tbl[0x65],
-        /* mTexture     */ item_texture_tbl[0x68],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -4284,8 +4518,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xFC: COLLECT_MAP_03
-        /* mArcname     */ item_arcname_tbl[0x65],
-        /* mTexture     */ item_texture_tbl[0x68],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -4300,8 +4534,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xFD: COLLECT_MAP_02
-        /* mArcname     */ item_arcname_tbl[0x65],
-        /* mTexture     */ item_texture_tbl[0x68],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -4316,8 +4550,8 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     },
     {
         // 0xFE: COLLECT_MAP_01
-        /* mArcname     */ item_arcname_tbl[0x65],
-        /* mTexture     */ item_texture_tbl[0x68],
+        /* mArcname     */ item_arcname_tbl[ARCNAME_IDX_VMAPT],
+        /* mTexture     */ item_texture_tbl[TEXTURE_IDX_CMAP_TRI2],
         /* mBmdIdx      */ 0x0003,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -4352,7 +4586,7 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
 dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     {
         // 0x00: HEART
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x002A,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -4365,7 +4599,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x01: GREEN_RUPEE
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x003A,
         /* mSrtIdx   */ 0x005D,
         /* mSrtIdx2  */ -1,
@@ -4378,7 +4612,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x02: BLUE_RUPEE
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x003A,
         /* mSrtIdx   */ 0x005D,
         /* mSrtIdx2  */ -1,
@@ -4391,7 +4625,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x03: YELLOW_RUPEE
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x003A,
         /* mSrtIdx   */ 0x005D,
         /* mSrtIdx2  */ -1,
@@ -4404,7 +4638,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x04: RED_RUPEE
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x003A,
         /* mSrtIdx   */ 0x005D,
         /* mSrtIdx2  */ -1,
@@ -4417,7 +4651,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x05: PURPLE_RUPEE
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x003A,
         /* mSrtIdx   */ 0x005D,
         /* mSrtIdx2  */ -1,
@@ -4430,7 +4664,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x06: ORANGE_RUPEE
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x003A,
         /* mSrtIdx   */ 0x005D,
         /* mSrtIdx2  */ -1,
@@ -4443,7 +4677,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x07: KAKERA_HEART
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x0038,
         /* mSrtIdx   */ 0x005B,
         /* mSrtIdx2  */ -1,
@@ -4456,7 +4690,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x08: UTUWA_HEART
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x0039,
         /* mSrtIdx   */ 0x005C,
         /* mSrtIdx2  */ -1,
@@ -4469,7 +4703,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x09: S_MAGIC
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x0032,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -4482,7 +4716,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x0A: L_MAGIC
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x0033,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -4495,7 +4729,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x0B: BOMB_5
-        /* mArc      */ item_arcname_tbl[0x07],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
         /* mBmdIdx   */ 0x003C,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -4508,7 +4742,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x0C: BOMB_10
-        /* mArc      */ item_arcname_tbl[0x07],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
         /* mBmdIdx   */ 0x003C,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -4521,7 +4755,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x0D: BOMB_20
-        /* mArc      */ item_arcname_tbl[0x07],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
         /* mBmdIdx   */ 0x003C,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -4534,7 +4768,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x0E: BOMB_30
-        /* mArc      */ item_arcname_tbl[0x07],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
         /* mBmdIdx   */ 0x003C,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -4547,7 +4781,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x0F: SILVER_RUPEE
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x003A,
         /* mSrtIdx   */ 0x005D,
         /* mSrtIdx2  */ -1,
@@ -4560,7 +4794,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x10: ARROW_10
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x001E,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -4573,7 +4807,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x11: ARROW_20
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x001E,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -4586,7 +4820,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x12: ARROW_30
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x001E,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -4625,7 +4859,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x15: SMALL_KEY
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x002B,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -4638,7 +4872,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x16: RECOVER_FAIRY
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x001F,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -4742,7 +4976,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x1E: TRIPLE_HEART
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x002A,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -4755,7 +4989,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x1F: PENDANT
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x0029,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -5028,7 +5262,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x34: DEKU_LEAF
-        /* mArc      */ item_arcname_tbl[0x1B],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_VLEAF],
         /* mBmdIdx   */ 0x0003,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -5041,7 +5275,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x35: MAGIC_ARROW
-        /* mArc      */ item_arcname_tbl[0x07],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
         /* mBmdIdx   */ 0x0037,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -5054,7 +5288,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x36: LIGHT_ARROW
-        /* mArc      */ item_arcname_tbl[0x07],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_LINK],
         /* mBmdIdx   */ 0x0037,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -5080,7 +5314,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x38: SWORD
-        /* mArc      */ item_arcname_tbl[0x3F],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_VSWON],
         /* mBmdIdx   */ 0x0003,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -5119,7 +5353,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x3B: SHIELD
-        /* mArc      */ item_arcname_tbl[0x41],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_VSHIN],
         /* mBmdIdx   */ 0x0003,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -5145,7 +5379,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x3D: DROPPED_SWORD
-        /* mArc      */ item_arcname_tbl[0x3F],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_VSWON],
         /* mBmdIdx   */ 0x0003,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -5249,7 +5483,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x45: SKULL_NECKLACE
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x0027,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -5262,7 +5496,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x46: BOKOBABA_SEED
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x0026,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -5275,7 +5509,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x47: GOLDEN_FEATHER
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x0037,
         /* mSrtIdx   */ 0x005A,
         /* mSrtIdx2  */ -1,
@@ -5288,7 +5522,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x48: BOKO_BELT
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x0025,
         /* mSrtIdx   */ 0x0059,
         /* mSrtIdx2  */ -1,
@@ -5301,7 +5535,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x49: RED_JELLY
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x0036,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -5314,7 +5548,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x4A: GREEN_JELLY
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x0036,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -5327,7 +5561,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x4B: BLUE_JELLY
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x0036,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -6042,7 +6276,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x82: BIRD_ESA_5
-        /* mArc      */ item_arcname_tbl[0x00],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_ALWAYS],
         /* mBmdIdx   */ 0x0028,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -6055,7 +6289,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x83: ANIMAL_ESA
-        /* mArc      */ item_arcname_tbl[0x1F],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_VHYOI],
         /* mBmdIdx   */ 0x0003,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -6172,7 +6406,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x8C: FLOWER_1
-        /* mArc      */ item_arcname_tbl[0x58],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x58],
         /* mBmdIdx   */ 0x0012,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -6185,7 +6419,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x8D: FLOWER_2
-        /* mArc      */ item_arcname_tbl[0x59],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x59],
         /* mBmdIdx   */ 0x0013,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -6198,7 +6432,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x8E: FLOWER_3
-        /* mArc      */ item_arcname_tbl[0x5B],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5B],
         /* mBmdIdx   */ 0x0014,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -6211,7 +6445,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x8F: HEROS_FLAG
-        /* mArc      */ item_arcname_tbl[0x5B],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5B],
         /* mBmdIdx   */ 0x0015,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -6224,7 +6458,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x90: TAIRYO_FLAG
-        /* mArc      */ item_arcname_tbl[0x5B],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5B],
         /* mBmdIdx   */ 0x0016,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -6237,7 +6471,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x91: SALES_FLAG
-        /* mArc      */ item_arcname_tbl[0x5B],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5B],
         /* mBmdIdx   */ 0x0017,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -6250,7 +6484,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x92: WIND_FLAG
-        /* mArc      */ item_arcname_tbl[0x5A],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5A],
         /* mBmdIdx   */ 0x0018,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -6263,7 +6497,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x93: RED_FLAG
-        /* mArc      */ item_arcname_tbl[0x5B],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5B],
         /* mBmdIdx   */ 0x0019,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -6276,7 +6510,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x94: FOSSIL_HEAD
-        /* mArc      */ item_arcname_tbl[0x5C],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5C],
         /* mBmdIdx   */ 0x001A,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -6289,7 +6523,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x95: WATER_STATUE
-        /* mArc      */ item_arcname_tbl[0x64],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x64],
         /* mBmdIdx   */ 0x001B,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -6302,7 +6536,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x96: POSTMAN_STATUE
-        /* mArc      */ item_arcname_tbl[0x5A],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5A],
         /* mBmdIdx   */ 0x001C,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,
@@ -6315,7 +6549,7 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
     },
     {
         // 0x97: PRESIDENT_STATUE
-        /* mArc      */ item_arcname_tbl[0x5A],
+        /* mArc      */ item_arcname_tbl[ARCNAME_IDX_FDAI_0x5A],
         /* mBmdIdx   */ 0x001D,
         /* mSrtIdx   */ -1,
         /* mSrtIdx2  */ -1,

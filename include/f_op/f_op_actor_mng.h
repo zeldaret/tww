@@ -199,6 +199,10 @@ inline s8 fopAcM_GetHomeRoomNo(fopAc_ac_c* pActor) {
     return pActor->orig.roomNo;
 }
 
+inline void fopAcM_SetHomeRoomNo(fopAc_ac_c* pActor, s8 roomNo) {
+    pActor->orig.roomNo = roomNo;
+}
+
 inline void fopAcM_SetGravity(fopAc_ac_c* actor, f32 gravity) {
     actor->mGravity = gravity;
 }
