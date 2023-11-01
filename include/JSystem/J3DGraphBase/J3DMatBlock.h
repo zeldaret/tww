@@ -803,6 +803,14 @@ struct J3DIndTexMtx : public J3DIndTexMtxInfo {
     void load(u32 param_1) {
         J3DGDSetIndTexMtx(GXIndTexMtxID(param_1 + 1), mOffsetMtx, mScaleExp);
     }
+
+    Mtx3P getOffsetMtx() {
+        return mOffsetMtx;
+    }
+
+    void setScaleExp(s8 i_scaleExp) {
+        mScaleExp = i_scaleExp;
+    }
 };  // Size: 0x1C
 
 struct J3DIndTexOrder : public J3DIndTexOrderInfo {
