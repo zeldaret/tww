@@ -50,7 +50,6 @@ BOOL daPy_npc_c::check_moveStop() {
 
 /* 8015A524-8015A590       .text setRestart__10daPy_npc_cFSc */
 void daPy_npc_c::setRestart(s8 option) {
-    /* Nonmatching (this matched at some point, what broke it?) */
     if (option == dComIfGs_getRestartOption()) {
         bool playerInDoor = dComIfGp_getPlayer(0)->mEvtInfo.checkCommandDoor();
         s8 roomNo = current.roomNo;

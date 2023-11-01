@@ -146,11 +146,11 @@ public:
     void onCondition(u16 cond) { mCondition |= cond; }
     void offCondition(u16 cond) { mCondition &= ~cond; }
 
-    bool checkCommandTalk() { return mCommand == dEvtCmd_INTALK_e; }
-    bool checkCommandItem() { return mCommand == dEvtCmd_INGETITEM_e; }
-    bool checkCommandDoor() { return mCommand == dEvtCmd_INDOOR_e; }
-    bool checkCommandDemoAccrpt() { return mCommand == dEvtCmd_INDEMO_e; }
-    bool checkCommandCatch() { return mCommand == dEvtCmd_INCATCH_e; }
+    BOOL checkCommandTalk() { return mCommand == dEvtCmd_INTALK_e; }
+    BOOL checkCommandItem() { return mCommand == dEvtCmd_INGETITEM_e; }
+    BOOL checkCommandDoor() { return mCommand == dEvtCmd_INDOOR_e; }
+    BOOL checkCommandDemoAccrpt() { return mCommand == dEvtCmd_INDEMO_e; }
+    BOOL checkCommandCatch() { return mCommand == dEvtCmd_INCATCH_e; }
 
     /* 0x04 */ u16 mCommand;
     /* 0x06 */ u16 mCondition;

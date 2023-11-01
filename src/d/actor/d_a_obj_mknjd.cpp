@@ -817,7 +817,7 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
         case 0:
             mEvtInfo.onCondition(1);
 
-            if (mEvtInfo.checkCommandTalk() == true) {
+            if (mEvtInfo.checkCommandTalk()) {
                 m0500 = 1;
                 m043F = 0x0B;
             }
@@ -943,7 +943,7 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
             mEvtInfo.onCondition(1);
             mEvtInfo.onCondition(32);
 
-            if (mEvtInfo.checkCommandTalk() == true) {
+            if (mEvtInfo.checkCommandTalk()) {
                 if (dComIfGp_event_chkTalkXY()) {
                     m0500 = 0;
                     m043F = 9;
