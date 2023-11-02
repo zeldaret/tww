@@ -3,41 +3,43 @@
 // Translation Unit: JASBasicBank.cpp
 //
 
-#include "JASBasicBank.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASBasicBank.h"
+#include "JSystem/JAudio/JASCalc.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
 
 /* 80284570-8028459C       .text __ct__Q28JASystem10TBasicBankFv */
 JASystem::TBasicBank::TBasicBank() {
-    /* Nonmatching */
+    mInstTable = NULL;
+    mInstCount = 0;
 }
 
 /* 8028459C-80284610       .text __dt__Q28JASystem10TBasicBankFv */
 JASystem::TBasicBank::~TBasicBank() {
-    /* Nonmatching */
+    delete[] mInstTable;
 }
 
 /* 80284610-802846B0       .text setInstCount__Q28JASystem10TBasicBankFUl */
-void JASystem::TBasicBank::setInstCount(unsigned long) {
-    /* Nonmatching */
+void JASystem::TBasicBank::setInstCount(u32 param_1) {
+    delete[] mInstTable;
+    mInstTable = new (getCurrentHeap(), 0) TInst*[param_1];
+    JUT_ASSERT(36, mInstTable != 0);
+    Calc::bzero(mInstTable, param_1 * 4);
+    mInstCount = param_1;
 }
 
 /* 802846B0-80284768       .text setInst__Q28JASystem10TBasicBankFiPQ28JASystem5TInst */
-void JASystem::TBasicBank::setInst(int, JASystem::TInst*) {
-    /* Nonmatching */
+void JASystem::TBasicBank::setInst(int prg_no, JASystem::TInst* param_2) {
+    JUT_ASSERT(45, prg_no < mInstCount);
+    JUT_ASSERT(46, prg_no >= 0);
+    mInstTable[prg_no] = param_2;
 }
 
 /* 80284768-802847F0       .text getInst__Q28JASystem10TBasicBankCFi */
-void JASystem::TBasicBank::getInst(int) const {
-    /* Nonmatching */
+JASystem::TInst* JASystem::TBasicBank::getInst(int prg_no) const {
+    JUT_ASSERT(53, prg_no >= 0);
+    if (prg_no >= mInstCount) {
+        return 0;
+    }
+    return mInstTable[prg_no];
 }
-
-/* 802847F0-80284838       .text __dt__Q28JASystem5TBankFv */
-JASystem::TBank::~TBank() {
-    /* Nonmatching */
-}
-
-/* 80284838-80284844       .text getType__Q28JASystem10TBasicBankCFv */
-void JASystem::TBasicBank::getType() const {
-    /* Nonmatching */
-}
-

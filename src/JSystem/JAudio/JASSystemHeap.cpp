@@ -52,8 +52,9 @@ void JASystem::Kernel::sysAramSetup(u32 param_1) {
 }
 
 /* 8027DC84-8027DCDC       .text allocFromSysAramFull__Q28JASystem6KernelFPUl */
-void JASystem::Kernel::allocFromSysAramFull(u32* param_1) {
+void* JASystem::Kernel::allocFromSysAramFull(u32* param_1) {
     u32 size = audioAramHeap.getRemain();
-    audioAramHeap.alloc(size - 0x20);
+    void* var1 = audioAramHeap.alloc(size - 0x20);
     *param_1 = size - 0x20;
+    return var1;
 }

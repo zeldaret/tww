@@ -19,6 +19,7 @@ namespace JASystem {
             };
 
             THeap(TDisposer*);
+            ~THeap() {}
             void initRootHeap(void*, u32, Type);
             bool alloc(THeap*, u32);
             bool free();
@@ -42,9 +43,9 @@ namespace JASystem {
         public:
             TSolidHeap();
             ~TSolidHeap() {}
-            int alloc(long param_1);
+            void* alloc(s32 param_1);
             void freeAll();
-            void init(u8* param_1, long param_2);
+            void init(u8* param_1, s32 param_2);
             int getRemain();
 
             /* 0x00 */ u32 field_0x0;

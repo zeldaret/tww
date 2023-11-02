@@ -3,11 +3,12 @@
 // Translation Unit: JASInstEffect.cpp
 //
 
-#include "JASInstEffect.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASInstEffect.h"
+#include "JSystem/JUtility/JUTAssert.h"
 
 /* 8028684C-802868F0       .text setTarget__Q28JASystem11TInstEffectFi */
-void JASystem::TInstEffect::setTarget(int) {
-    /* Nonmatching */
+void JASystem::TInstEffect::setTarget(int target) {
+    JUT_ASSERT(16, target >= 0);
+    JUT_ASSERT(17, target < 256);
+    mTarget = target;
 }
-

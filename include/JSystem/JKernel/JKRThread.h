@@ -31,11 +31,11 @@ public:
 
 protected:
     void resume() { OSResumeThread(mThreadRecord); }
-    void sendMessage(OSMessage message) {
-        OSSendMessage(&mMessageQueue, message, OS_MESSAGE_NOBLOCK);
+    BOOL sendMessage(OSMessage message) {
+        return OSSendMessage(&mMessageQueue, message, OS_MESSAGE_NOBLOCK);
     }
-    void sendMessageBlock(OSMessage message) {
-        OSSendMessage(&mMessageQueue, message, OS_MESSAGE_BLOCK);
+    BOOL sendMessageBlock(OSMessage message) {
+        return OSSendMessage(&mMessageQueue, message, OS_MESSAGE_BLOCK);
     }
     OSMessage waitMessage() {
         OSMessage message;

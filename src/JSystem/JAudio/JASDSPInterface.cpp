@@ -5,6 +5,7 @@
 
 #include "JSystem/JAudio/JASDSPInterface.h"
 #include "JSystem/JAudio/JASCalc.h"
+#include "JSystem/JAudio/JASDriverTables.h"
 #include "JSystem/JAudio/JASSystemHeap.h"
 #include "JSystem/JAudio/dspproc.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
