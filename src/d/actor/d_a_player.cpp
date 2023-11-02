@@ -13,7 +13,8 @@ void daPy_py_c::changePlayer(fopAc_ac_c* newPlayer) {
     if (!newPlayer) {
         return;
     }
-    if (dComIfGp_roomControl_getStayNo() != newPlayer->getRoomNo()) {
+    s8 stayNo = dComIfGp_roomControl_getStayNo();
+    if (stayNo != newPlayer->current.roomNo) {
         return;
     }
     dComIfGp_setPlayer(0, newPlayer);

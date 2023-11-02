@@ -308,7 +308,7 @@ namespace daObjPaper {
     void daObjPaper::Act_c::damage_cc_proc() {
         u32 hitResult = mCylinderCol.ChkTgHit();
         if (hitResult) {
-            daObj::HitSeStart(&mEyePos, getRoomNo(), &mCylinderCol, 0x0D);
+            daObj::HitSeStart(&mEyePos, current.roomNo, &mCylinderCol, 0x0D);
             dKy_Sound_set(getPosition(), 4, fopAcM_GetID(this), 100);
 
             daObj::HitEff_hibana(this, &mCylinderCol);

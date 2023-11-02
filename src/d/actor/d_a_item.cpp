@@ -762,7 +762,7 @@ void daItem_c::itemGetExecute() {
         break;
     }
     
-    u8 roomNo = getRoomNo();
+    u8 roomNo = current.roomNo;
     s32 flag = mPickupFlag;
     if (m_itemNo == BLUE_JELLY) {
         // Blue Chu Jelly uses mPickupFlag as if it was a switch.

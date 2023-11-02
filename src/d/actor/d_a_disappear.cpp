@@ -35,7 +35,7 @@ s32 daDisappear_Execute(disappear_class* i_this) {
 
             if (health != 1 && health != 3) {
                 if (health == 2) {
-                    fopAcM_createItemForBoss(i_this->getPositionP(), 0, i_this->getRoomNo(), &i_this->current.angle, NULL, 0);
+                    fopAcM_createItemForBoss(i_this->getPositionP(), 0, i_this->current.roomNo, &i_this->current.angle, NULL, 0);
                 }
                 else if (health >= 0x0A && health <= 0x0D) {
                     if (health < 0x0D) {
@@ -47,7 +47,7 @@ s32 daDisappear_Execute(disappear_class* i_this) {
                     }
                 }
                 else {
-                    fopAcM_createIball(i_this->getPositionP(), i_this->mItemTableIdx, i_this->getRoomNo(), &i_this->current.angle, i_this->mSwitchId);
+                    fopAcM_createIball(i_this->getPositionP(), i_this->mItemTableIdx, i_this->current.roomNo, &i_this->current.angle, i_this->mSwitchId);
                 }
             }
         }
@@ -71,7 +71,7 @@ s32 daDisappear_Delete(disappear_class*) {
 
 /* 800E7AD0-800E7DBC       .text set_disappear__FP15disappear_classf */
 void set_disappear(disappear_class* i_this, float scale) {
-    s8 rev = dComIfGp_getReverb(i_this->getRoomNo());
+    s8 rev = dComIfGp_getReverb(i_this->current.roomNo);
     mDoAud_seStart(JA_SE_CM_MONS_EXPLODE, &i_this->mEyePos, 0, rev);
 
     cXyz particleScale(scale, scale, scale);

@@ -1085,7 +1085,7 @@ inline void dComIfGs_offSwitch(int i_no, int i_roomNo) {
     g_dComIfG_gameInfo.save.offSwitch(i_no, i_roomNo);
 }
 
-inline BOOL dComIfGs_isSwitch(s32 i_no, s32 i_roomNo) {
+inline BOOL dComIfGs_isSwitch(int i_no, int i_roomNo) {
     return g_dComIfG_gameInfo.save.isSwitch(i_no, i_roomNo);
 }
 
@@ -1442,7 +1442,7 @@ inline s32 dComIfGp_roomControl_getTimePass() {
     return g_dComIfG_gameInfo.play.getRoomControl()->GetTimePass();
 }
 
-inline s32 dComIfGp_roomControl_getStayNo() {
+inline int dComIfGp_roomControl_getStayNo() {
     return dStage_roomControl_c::getStayNo();
 }
 

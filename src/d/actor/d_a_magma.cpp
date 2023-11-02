@@ -46,7 +46,7 @@ s32 daMagma_Create(fopAc_ac_c* i_this) {
         g_dComIfG_gameInfo.play.mpMagmaPacket->newFloor(
             magma->current.pos,
             magma->mScale,
-            magma->getRoomNo(),
+            magma->current.roomNo,
             magma->mBase.mParameters
         );
     }

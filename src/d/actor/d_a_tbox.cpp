@@ -293,7 +293,7 @@ public:
     request_of_phase_process_class* getPhase() { return &mPhs; }
 
     u8 getTboxNo() { return fopAcM_GetParam(this) >> 0x07 & 0x1F; }
-    s32 getSwNo() { return fopAcM_GetParam(this) >> 0x0C & 0xFF; }
+    int getSwNo() { return fopAcM_GetParam(this) >> 0x0C & 0xFF; }
     u8 getItemNo() { return orig.angle.z >> 8 & 0xFF; }
 
     bool action() { return (this->*mActionFunc)(); }
@@ -1276,8 +1276,7 @@ bool daTbox_c::actionGenocide() {
                 fopAcM_orderOtherEvent2(this, "DEFAULT_TREASURE_APPEAR", 1, 0xFFFF);
                 mEvtInfo.mCondition |= 2;
 
-                s32 swNo = getSwNo();
-                dComIfGs_onSwitch(swNo, mRoomNo);
+                dComIfGs_onSwitch(getSwNo(), mRoomNo);
             }
         }
     }

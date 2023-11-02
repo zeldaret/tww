@@ -285,7 +285,7 @@ inline f32 fopAcM_getCullSizeSphereR(fopAc_ac_c* i_actor) {
 
 inline void dComIfGs_onSwitch(int i_no, int i_roomNo);
 inline void dComIfGs_offSwitch(int i_no, int i_roomNo);
-inline BOOL dComIfGs_isSwitch(s32 i_no, s32 i_roomNo);
+inline BOOL dComIfGs_isSwitch(int i_no, int i_roomNo);
 inline void dComIfGs_offActor(int i_no, int i_roomNo);
 
 inline void fopAcM_onSwitch(fopAc_ac_c* pActor, int sw) {
