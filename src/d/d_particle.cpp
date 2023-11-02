@@ -212,7 +212,7 @@ void dPa_control_c::createRoomScene(const void*) {
 }
 
 /* 8007CE50-8007CF20       .text readScene__13dPa_control_cFUcPP21mDoDvdThd_toMainRam_c */
-void dPa_control_c::readScene(unsigned char, mDoDvdThd_toMainRam_c**) {
+bool dPa_control_c::readScene(unsigned char, mDoDvdThd_toMainRam_c**) {
     /* Nonmatching */
 }
 

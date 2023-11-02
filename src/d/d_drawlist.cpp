@@ -803,13 +803,3 @@ void dDlst_list_c::calcWipe() {
 void dDlst_texSpecmapST(const cXyz*, const dKy_tevstr_c*, J3DModelData*, f32) {
     /* Nonmatching */
 }
-
-/* 80086AD0-80086AD8       .text getTri__22dDlst_shadowRealPoly_cFv */
-dDlst_shadowTri_c * dDlst_shadowRealPoly_c::getTri() {
-    return mShadowTri;
-}
-
-/* 80086AD8-80086AE0       .text getTriMax__22dDlst_shadowRealPoly_cFv */
-s32 dDlst_shadowRealPoly_c::getTriMax() {
-    return ARRAY_SIZE(mShadowTri);
-}

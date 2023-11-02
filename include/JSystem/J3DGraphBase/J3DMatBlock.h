@@ -160,10 +160,10 @@ public:
     virtual void setTevOrder(u32, J3DTevOrder const*) {}
     virtual void setTevOrder(u32, J3DTevOrder) {}
     virtual J3DTevOrder* getTevOrder(u32) { return NULL; }
-    virtual void setTevColor(u32, J3DGXColorS10 const*);
+    virtual void setTevColor(u32, J3DGXColorS10 const*) {}
     virtual void setTevColor(u32, J3DGXColorS10) {}
     virtual J3DGXColorS10* getTevColor(u32) { return NULL; }
-    virtual void setTevKColor(u32, J3DGXColor const*);
+    virtual void setTevKColor(u32, J3DGXColor const*) {}
     virtual void setTevKColor(u32, J3DGXColor) {}
     virtual J3DGXColor* getTevKColor(u32) { return NULL; }
     virtual void setTevKColorSel(u32 i, const u8* pNum) {}

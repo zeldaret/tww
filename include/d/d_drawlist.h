@@ -396,7 +396,9 @@ public:
 
     void setWindow(dDlst_window_c* pWindow) { mpWindow = pWindow; }
     void setViewPort(view_port_class* pViewPort) { mpViewPort = pViewPort; }
+    view_port_class* getViewport() { return mpViewPort; }
     void setView(view_class* pView) { mpCamera = (camera_class*)pView; }
+    view_class* getView() { return (view_class*)mpCamera; }
 
     static void offWipe() { mWipe = false; }
 
