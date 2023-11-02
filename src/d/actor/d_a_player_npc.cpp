@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_player_npc.h"
-#include "dolphin/types.h"
+#include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_lib.h"
 #include "SSystem/SComponent/c_counter.h"
 #include "d/d_procname.h"
@@ -20,8 +20,8 @@ int daPy_npc_c::check_initialRoom() {
             if (roomNo < 0 || !dComIfGp_roomControl_checkStatusFlag(roomNo, 0x10)) {
                 return 0;
             } else {
-                orig.roomNo = roomNo;
-                current.roomNo = roomNo;
+                fopAcM_SetHomeRoomNo(this, roomNo);
+                fopAcM_SetRoomNo(this, roomNo);
                 return -1;
             }
         }
@@ -78,17 +78,24 @@ void daPy_npc_c::setOffsetHomePos() {
 /* 8015A6A4-8015AA0C       .text setPointRestart__10daPy_npc_cFsSc */
 void daPy_npc_c::setPointRestart(s16 i_point, s8 option) {
     /* Nonmatching (regswaps) */
+    stage_scls_info_dummy_class* sclsinfo;
+    stage_scls_info_class* scls_data;
+    stage_actor_data_class* player_data;
+    int scls_start_code;
+    int i;
+    s16 rotY;
+    s8 roomNo;
+    
     JUT_ASSERT(157, dComIfGp_getStagePlayer() != 0);
-    stage_scls_info_dummy_class* sclsinfo = dComIfGp_getStageSclsInfo();
+    sclsinfo = dComIfGp_getStageSclsInfo();
     JUT_ASSERT(159, sclsinfo != 0);
     
     JUT_ASSERT(161, 0 <= i_point && i_point < sclsinfo->num);
-    stage_scls_info_class* scls_data = sclsinfo->m_entries;
+    scls_data = sclsinfo->m_entries;
     JUT_ASSERT(163, scls_data != 0);
     
-    stage_actor_data_class* player_data = dComIfGp_getStagePlayer()->m_entries;
-    int scls_start_code = scls_data[i_point].mStart;
-    int i;
+    player_data = dComIfGp_getStagePlayer()->m_entries;
+    scls_start_code = scls_data[i_point].mStart;
     for (i = 0; i < dComIfGp_getStagePlayerNum(); i++) {
         u8 plyr_start_code = player_data->mAngle.z & 0xFF;
         if (plyr_start_code == scls_start_code) {
@@ -106,8 +113,8 @@ void daPy_npc_c::setPointRestart(s16 i_point, s8 option) {
     next = orig;
     shape_angle = orig.angle;
     
-    s16 rotY = orig.angle.y;
-    s8 roomNo = -1;
+    rotY = orig.angle.y;
+    roomNo = -1;
     dComIfGs_setRestartOption(&orig.pos, rotY, roomNo, option);
     dComIfGs_setPlayerPriest(option, orig.pos, rotY, roomNo);
     dComIfGs_setPlayerPriest(option, dComIfGs_getRestartOptionPos(), dComIfGs_getRestartOptionAngleY(), dComIfGs_getRestartOptionRoomNo());

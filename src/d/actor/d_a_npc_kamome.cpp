@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_npc_kamome.h"
-#include "dolphin/types.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "d/d_item_data.h"

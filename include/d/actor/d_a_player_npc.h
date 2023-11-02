@@ -3,6 +3,7 @@
 
 #include "d/actor/d_a_player.h"
 #include "d/d_bg_s_acch.h"
+#include "SSystem/SComponent/c_lib.h"
 
 class daPy_npc_c : public daPy_py_c {
 public:

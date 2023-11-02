@@ -4,6 +4,7 @@
 //
 #include "JSystem/JKernel/JKRHeap.h"
 #include "d/actor/d_a_player_main.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
 struct daTag_Msg_c : public fopAc_ac_c {
