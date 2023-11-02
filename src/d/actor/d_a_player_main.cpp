@@ -1448,7 +1448,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_lk_c::daPy_PROC procID) {
     m32F0.end();
     mSmokeEcallBack.end();
     
-    if (!(field_0x2b0 < 0.0f)) {
+    if (!checkGrabWear()) {
         m35D8 = 0.0f;
     }
     
@@ -2115,7 +2115,7 @@ void daPy_lk_c::setBgCheckParam() {
         mAcchCir[0].SetWallH(25.0f);
         mAcchCir[1].SetWallH(25.0f);
         mAcchCir[2].SetWallH(25.0f);
-    } else if (field_0x2b0 < 0.0f) {
+    } else if (checkGrabWear()) {
         mAcchCir[0].SetWallR(50.0f);
     } else {
         mAcchCir[0].SetWallR(35.0f);

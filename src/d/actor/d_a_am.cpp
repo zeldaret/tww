@@ -647,7 +647,7 @@ static void action_dousa(am_class* i_this) {
         i_this->mGravity = -11.0f;
         i_this->speed.y = 40.0f;
         fopAcM_monsSeStart(i_this, JA_SE_CV_AM_JUMP, 0);
-        if (!Line_check(i_this, player->current.pos) || player->getDamageWaitTimer()) {
+        if (!Line_check(i_this, player->current.pos) || player->getDamageWaitTimer() != 0) {
             i_this->speedF = 0.0f;
         }
         i_this->mState += 1;

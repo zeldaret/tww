@@ -94,7 +94,7 @@ static BOOL daVrbox_color_set(vrbox_class* i_this) {
 
 /* 8015E6B8-8015E864       .text dungeon_rain_proc__Fv */
 static void dungeon_rain_proc() {
-    dScnKy_env_light_c* env_light = &g_env_light;
+    dScnKy_env_light_c* env_light = &g_env_light; // Probably a fakematch
     u8 mode = 0;
     int roomNo = dComIfGp_roomControl_getStayNo();
     
@@ -126,17 +126,18 @@ static void dungeon_rain_proc() {
             if (env_light->mRainCountOrig != 250) {
                 dKy_change_colpat(1);
                 dKyw_rain_set(250);
-                g_env_light.mThunderEff.mMode = 1;
+                env_light = &g_env_light;
+                env_light->mThunderEff.mMode = 1;
             }
         } else if (mode == 2) { // Thunder, but no rain
             env_light = &g_env_light;
-            if (g_env_light.mThunderEff.mMode == 0) {
+            if (env_light->mThunderEff.mMode == 0) {
                 dKy_change_colpat(1);
                 env_light->mThunderEff.mMode = 0xA;
             }
         } else { // No rain or thunder
             env_light = &g_env_light;
-            if (g_env_light.mThunderEff.mMode != 0) {
+            if (env_light->mThunderEff.mMode != 0) {
                 dKyw_rain_set(0);
                 env_light->mThunderEff.mMode = 0;
             }
