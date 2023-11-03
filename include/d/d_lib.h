@@ -2,6 +2,9 @@
 #define D_LIB_H
 
 #include "dolphin/types.h"
+#include "SSystem/SComponent/c_xyz.h"
+
+class mDoExt_McaMorf;
 
 class STControl {
 public:
