@@ -3,306 +3,494 @@
 // Translation Unit: JASSeqParser.cpp
 //
 
-#include "JASSeqParser.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASSeqParser.h"
+#include "JSystem/JAudio/JASPlayer.h"
+#include "JSystem/JAudio/JASTrack.h"
+#include "JSystem/JSupport/JSupport.h"
+#include "JSystem/JUtility/JUTAssert.h"
 
 /* 8027E680-8027E728       .text cmdOpenTrack__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdOpenTrack(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdOpenTrack(TTrack* track, u32* params) {
     /* Nonmatching */
+    u32 param1 = params[0];
+    u32 param2 = params[1];
+    u8 b1 = param1 & 0xF;
+    u8 b2 = (param1 >> 6) & 3;
+    if (param1 & 0x20) {
+        b2 = 4;
+    }
+    TTrack* child = track->openChild(b1, b2);
+    JUT_ASSERT(255, child);
+    child->start(track->field_0x0.field_0x0, param2);
+    return 0;
 }
 
 /* 8027E728-8027E800       .text cmdOpenTrackBros__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdOpenTrackBros(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdOpenTrackBros(TTrack* track, u32* params) {
     /* Nonmatching */
+    if (!track->getParent()) {
+        JUT_WARN(268, "%s", "cannot opentrackB in ROOT Track");
+        return 0;
+    }
+    u32 param1 = params[0];
+    u32 param2 = params[1];
+    u8 b1 = param1 & 0xF;
+    u8 b2 = (param1 >> 6) & 3;
+    if (param1 & 0x20) {
+        b2 = 4;
+    }
+    TTrack* bros = track->getParent()->openChild(b1, b2);
+    JUT_ASSERT(282, bros);
+    bros->start(track->field_0x0.field_0x0, param2);
+    return 0;
 }
 
 /* 8027E800-8027E90C       .text cmdCall__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdCall(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdCall(TTrack* track, u32* params) {
     /* Nonmatching */
 }
 
 /* 8027E90C-8027E9AC       .text cmdRet__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdRet(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdRet(TTrack* track, u32* params) {
+    if (conditionCheck(track, params[0])) {
+        u32 var1 = track->field_0x0.field_0xc;
+        bool tmp;
+        if (var1 == 0) {
+            tmp = false;
+        } else {
+            u32 var2 = var1 - 1;
+            track->field_0x0.field_0xc = var2;
+            track->field_0x0.field_0x4 = track->field_0x0.field_0x10[var2];
+            tmp = true;
+        }
+        if (!tmp) {
+            JUT_WARN(335, "%s", "cannot ret for call-stack is NULL");
+            return 3;
+        }
+    }
+    return 0;
 }
 
 /* 8027E9AC-8027EAF4       .text cmdJmp__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdJmp(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdJmp(TTrack* track, u32* params) {
     /* Nonmatching */
 }
 
 /* 8027EAF4-8027EB2C       .text cmdLoopS__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdLoopS(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdLoopS(TTrack* track, u32* params) {
     /* Nonmatching */
+    u32 param1 = params[0];
+    track->field_0x0.field_0x10[track->field_0x0.field_0xc] = track->field_0x0.field_0x4;
+    track->field_0x0.field_0x30[track->field_0x0.field_0xc++] = param1;
+    return 0;
 }
 
 /* 8027EB2C-8027EB54       .text cmdLoopE__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdLoopE(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdLoopE(TTrack* track, u32* params) {
+    track->field_0x0.loopEnd();
+    return 0;
 }
 
 /* 8027EB54-8027EBAC       .text cmdReadPort__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdReadPort(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdReadPort(TTrack* track, u32* params) {
+    track->writeRegDirect(params[1], track->readSelfPort(params[0]));
+    return 0;
 }
 
 /* 8027EBAC-8027EBE0       .text cmdWritePort__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdWritePort(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdWritePort(TTrack* track, u32* params) {
+    track->writeSelfPort(params[0], params[1]);
+    return 0;
 }
 
 /* 8027EBE0-8027EC68       .text cmdParentWritePort__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdParentWritePort(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdParentWritePort(TTrack* track, u32* params) {
     /* Nonmatching */
+    TTrack* parent = track->getParent();
+    JUT_ASSERT(452, parent != 0);
+    parent->writePortAppDirect(params[0] & 0xf, params[1]);
+    return 0;
 }
 
 /* 8027EC68-8027ED80       .text cmdChildWritePort__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdChildWritePort(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdChildWritePort(TTrack* track, u32* params) {
     /* Nonmatching */
+    u8 param1 = JSULoByte(params[0]);
+    u8 b1 = JSUHiNibble(param1);
+    TTrack* child = track->getChild(b1);
+    JUT_ASSERT(462, child != 0);
+    child->writePortAppDirect(JSULoNibble(param1), params[1]);
+    return 0;
 }
 
 /* 8027ED80-8027ED98       .text cmdCheckPortImport__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdCheckPortImport(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdCheckPortImport(TTrack* track, u32* params) {
+    track->field_0x28c.field_0x6 = track->field_0x48.field_0x0[params[0]];
+    return 0;
 }
 
 /* 8027ED98-8027EDB0       .text cmdCheckPortExport__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdCheckPortExport(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdCheckPortExport(TTrack* track, u32* params) {
+    track->field_0x28c.field_0x6 = track->field_0x48.field_0x10[params[0]];
+    return 0;
 }
 
 /* 8027EDB0-8027EDC4       .text cmdWait__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdWait(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdWait(TTrack* track, u32* params) {
+    u32 param1 = params[0];
+    track->field_0x0.field_0x8 = param1;
+    return param1 != 0 ? 1 : 0;
 }
 
 /* 8027EDC4-8027EE44       .text cmdSetLastNote__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdSetLastNote(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdSetLastNote(TTrack* track, u32* params) {
+    u32 key = params[0];
+    key += track->getTranspose();
+    JUT_ASSERT(506, key < 256);
+    track->field_0xb4.field_0x35 = key;
+    return 0;
 }
 
 /* 8027EE44-8027EE5C       .text cmdTimeRelate__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdTimeRelate(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdTimeRelate(TTrack* track, u32* params) {
+    track->field_0x387 = params[0];
+    return 0;
 }
 
 /* 8027EE5C-8027EE8C       .text cmdSimpleOsc__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdSimpleOsc(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdSimpleOsc(TTrack* track, u32* params) {
+    track->oscSetupSimple(params[0]);
+    return 0;
 }
 
 /* 8027EE8C-8027EEC0       .text cmdSimpleEnv__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdSimpleEnv(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdSimpleEnv(TTrack* track, u32* params) {
+    track->oscSetupSimpleEnv(params[0], params[1]);
+    return 0;
 }
 
 /* 8027EEC0-8027EF2C       .text cmdSimpleADSR__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdSimpleADSR(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdSimpleADSR(TTrack* track, u32* params) {
+    track->field_0x2cc[0] = Player::sAdsrDef;
+    track->field_0x2cc[0].table = track->field_0x304;
+    track->field_0x304[1] = params[0];
+    track->field_0x304[4] = params[1];
+    track->field_0x304[7] = params[2];
+    track->field_0x304[8] = params[3];
+    track->field_0x374 = params[4];
+    return 0;
+
 }
 
 /* 8027EF2C-8027EF3C       .text cmdTranspose__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdTranspose(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdTranspose(TTrack* track, u32* params) {
+    track->field_0x37a = params[0];
+    return 0;
 }
 
 /* 8027EF3C-8027EFD8       .text cmdCloseTrack__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdCloseTrack(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdCloseTrack(TTrack* track, u32* params) {
+    u8 track_no = params[0];
+    JUT_ASSERT(565, track_no < TTrack::MAX_CHILDREN);
+    if (!track->mChildren[track_no]) {
+        return 0;
+    }
+    track->mChildren[track_no]->close();
+    track->mChildren[track_no] = NULL;
+    return 0;
 }
 
 /* 8027EFD8-8027F02C       .text cmdOutSwitch__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdOutSwitch(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdOutSwitch(TTrack* track, u32* params) {
+    TTrack::TOuterParam* outer = track->field_0x360;
+    if (outer) {
+        outer->setOuterSwitch(params[0]);
+        outer->setOuterUpdate(0xffff);
+    }
+    return 0;
 }
 
 /* 8027F02C-8027F058       .text cmdUpdateSync__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdUpdateSync(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdUpdateSync(TTrack* track, u32* params) {
+    track->updateTrack(params[0]);
+    return 0;
 }
 
 /* 8027F058-8027F088       .text cmdBusConnect__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdBusConnect(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdBusConnect(TTrack* track, u32* params) {
+    track->connectBus(params[0], params[1]);
+    return 0;
 }
 
 /* 8027F088-8027F098       .text cmdPauseStatus__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdPauseStatus(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdPauseStatus(TTrack* track, u32* params) {
     /* Nonmatching */
+    track->field_0x37c = params[0];
+    return 0;
 }
 
 /* 8027F098-8027F0A8       .text cmdVolumeMode__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdVolumeMode(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdVolumeMode(TTrack* track, u32* params) {
     /* Nonmatching */
+    track->field_0x37d = params[0];
+    return 0;
 }
 
 /* 8027F0A8-8027F0E0       .text cmdSetInterrupt__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdSetInterrupt(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdSetInterrupt(TTrack* track, u32* params) {
     /* Nonmatching */
+    track->field_0x88.setIntr(params[0], track->field_0x0.field_0x0 + params[1]);
+    return 0;
 }
 
 /* 8027F0E0-8027F10C       .text cmdDisInterrupt__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdDisInterrupt(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdDisInterrupt(TTrack* track, u32* params) {
+    track->field_0x88.resetInter(params[0]);
+    return 0;
 }
 
 /* 8027F10C-8027F124       .text cmdClrI__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdClrI(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdClrI(TTrack* track, u32* params) {
+    track->field_0x88.field_0x0 = 1;
+    track->field_0x0.field_0x44 = 0;
+    return 0;
 }
 
 /* 8027F124-8027F134       .text cmdSetI__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdSetI(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdSetI(TTrack* track, u32* params) {
+    track->field_0x88.field_0x0 = 0;
+    return 0;
 }
 
 /* 8027F134-8027F178       .text cmdRetI__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdRetI(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdRetI(TTrack* track, u32* params) {
+    track->field_0x88.field_0x0 = 1;
+    track->field_0x0.retIntr();
+    track->tryInterrupt();
+    return 0;
 }
 
 /* 8027F178-8027F194       .text cmdIntTimer__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdIntTimer(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdIntTimer(TTrack* track, u32* params) {
+    u32 param2 = params[1];
+    track->field_0x88.field_0x3 = params[0];
+    track->field_0x88.field_0x4 = param2;
+    track->field_0x88.field_0x8 = param2;
+    return 0;
 }
 
 /* 8027F194-8027F1EC       .text cmdSyncCPU__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdSyncCPU(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdSyncCPU(TTrack* track, u32* params) {
+    u16 var1 = 0xffff;
+    if (TTrack::sCallBackFunc) {
+        var1 = TTrack::sCallBackFunc(track, params[0]);
+    }
+    track->field_0x28c.field_0x6 = var1;
+    return 0;
 }
 
 /* 8027F1EC-8027F214       .text cmdFlushAll__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdFlushAll(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdFlushAll(TTrack* track, u32* params) {
+    track->flushAll();
+    return 0;
 }
 
 /* 8027F214-8027F23C       .text cmdFlushRelease__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdFlushRelease(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdFlushRelease(TTrack* track, u32* params) {
+    track->field_0xf8.stopAllRelease();
+    return 0;
 }
 
 /* 8027F23C-8027F26C       .text cmdTimeBase__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdTimeBase(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdTimeBase(TTrack* track, u32* params) {
+    track->setTimebase(params[0]);
+    return 0;
 }
 
 /* 8027F26C-8027F29C       .text cmdTempo__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdTempo(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdTempo(TTrack* track, u32* params) {
+    track->setTempo(params[0]);
+    return 0;
 }
 
 /* 8027F29C-8027F2A4       .text cmdFinish__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdFinish(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdFinish(TTrack* track, u32* params) {
+    return 3;
 }
 
 /* 8027F2A4-8027F2AC       .text cmdNop__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdNop(JASystem::TTrack*, unsigned long*) {
-    /* Nonmatching */
+int JASystem::TSeqParser::cmdNop(TTrack* track, u32* params) {
+    return 0;
 }
 
 /* 8027F2AC-8027F330       .text cmdPanPowSet__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdPanPowSet(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdPanPowSet(TTrack* track, u32* params) {
     /* Nonmatching */
 }
 
 /* 8027F330-8027F368       .text cmdFIRSet__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdFIRSet(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdFIRSet(TTrack* track, u32* params) {
     /* Nonmatching */
 }
 
 /* 8027F368-8027F3BC       .text cmdEXTSet__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdEXTSet(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdEXTSet(TTrack* track, u32* params) {
     /* Nonmatching */
 }
 
 /* 8027F3BC-8027F460       .text cmdPanSwSet__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdPanSwSet(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdPanSwSet(TTrack* track, u32* params) {
     /* Nonmatching */
 }
 
 /* 8027F460-8027F47C       .text cmdOscRoute__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdOscRoute(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdOscRoute(TTrack* track, u32* params) {
     /* Nonmatching */
 }
 
 /* 8027F47C-8027F4C4       .text cmdVibDepth__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdVibDepth(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdVibDepth(TTrack* track, u32* params) {
     /* Nonmatching */
 }
 
 /* 8027F4C4-8027F4FC       .text cmdVibDepthMidi__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdVibDepthMidi(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdVibDepthMidi(TTrack* track, u32* params) {
     /* Nonmatching */
 }
 
 /* 8027F4FC-8027F544       .text cmdVibPitch__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdVibPitch(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdVibPitch(TTrack* track, u32* params) {
     /* Nonmatching */
 }
 
 /* 8027F544-8027F5C8       .text cmdIIRSet__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdIIRSet(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdIIRSet(TTrack* track, u32* params) {
     /* Nonmatching */
 }
 
 /* 8027F5C8-8027F65C       .text cmdIIRCutOff__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdIIRCutOff(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdIIRCutOff(TTrack* track, u32* params) {
     /* Nonmatching */
 }
 
 /* 8027F65C-8027F698       .text cmdOscFull__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdOscFull(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdOscFull(TTrack* track, u32* params) {
     /* Nonmatching */
 }
 
 /* 8027F698-8027F6A8       .text cmdCheckWave__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdCheckWave(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdCheckWave(TTrack* track, u32* params) {
     /* Nonmatching */
 }
 
 /* 8027F6A8-8027F8F4       .text cmdPrintf__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
-void JASystem::TSeqParser::cmdPrintf(JASystem::TTrack*, unsigned long*) {
+int JASystem::TSeqParser::cmdPrintf(TTrack* track, u32* params) {
     /* Nonmatching */
 }
 
 /* 8027F8F4-8027FA48       .text Cmd_Process__Q28JASystem10TSeqParserFPQ28JASystem6TTrackUcUs */
-void JASystem::TSeqParser::Cmd_Process(JASystem::TTrack*, unsigned char, unsigned short) {
+void JASystem::TSeqParser::Cmd_Process(TTrack* track, u8, u16) {
     /* Nonmatching */
 }
 
 /* 8027FA48-8027FB08       .text RegCmd_Process__Q28JASystem10TSeqParserFPQ28JASystem6TTrackii */
-void JASystem::TSeqParser::RegCmd_Process(JASystem::TTrack*, int, int) {
+void JASystem::TSeqParser::RegCmd_Process(TTrack* track, int, int) {
     /* Nonmatching */
 }
 
 /* 8027FB08-8027FC98       .text cmdSetParam__Q28JASystem10TSeqParserFPQ28JASystem6TTrackUc */
-void JASystem::TSeqParser::cmdSetParam(JASystem::TTrack*, unsigned char) {
+int JASystem::TSeqParser::cmdSetParam(TTrack* track, u8) {
     /* Nonmatching */
 }
 
 /* 8027FC98-8027FCE4       .text cmdWait__Q28JASystem10TSeqParserFPQ28JASystem6TTrackUc */
-void JASystem::TSeqParser::cmdWait(JASystem::TTrack*, unsigned char) {
+int JASystem::TSeqParser::cmdWait(TTrack* track, u8) {
     /* Nonmatching */
 }
 
 /* 8027FCE4-8027FE08       .text cmdNoteOff__Q28JASystem10TSeqParserFPQ28JASystem6TTrackUc */
-void JASystem::TSeqParser::cmdNoteOff(JASystem::TTrack*, unsigned char) {
+int JASystem::TSeqParser::cmdNoteOff(TTrack* track, u8) {
     /* Nonmatching */
 }
 
 /* 8027FE08-80280148       .text cmdNoteOn__Q28JASystem10TSeqParserFPQ28JASystem6TTrackUc */
-void JASystem::TSeqParser::cmdNoteOn(JASystem::TTrack*, unsigned char) {
+int JASystem::TSeqParser::cmdNoteOn(TTrack* track, u8) {
     /* Nonmatching */
 }
 
 /* 80280148-8028024C       .text conditionCheck__Q28JASystem10TSeqParserFPQ28JASystem6TTrackUc */
-void JASystem::TSeqParser::conditionCheck(JASystem::TTrack*, unsigned char) {
+bool JASystem::TSeqParser::conditionCheck(TTrack* track, u8) {
     /* Nonmatching */
 }
 
 /* 8028024C-802803B0       .text parseSeq__Q28JASystem10TSeqParserFPQ28JASystem6TTrack */
-void JASystem::TSeqParser::parseSeq(JASystem::TTrack*) {
+void JASystem::TSeqParser::parseSeq(TTrack* track) {
     /* Nonmatching */
 }
 
+int (JASystem::TSeqParser::*JASystem::TSeqParser::sCmdPList[64])(JASystem::TTrack*, u32*) = {
+    NULL,
+    JASystem::TSeqParser::cmdOpenTrack,
+    JASystem::TSeqParser::cmdOpenTrackBros,
+    NULL,
+    JASystem::TSeqParser::cmdCall,
+    NULL,
+    JASystem::TSeqParser::cmdRet,
+    NULL,
+    JASystem::TSeqParser::cmdJmp,
+    JASystem::TSeqParser::cmdLoopS,
+    JASystem::TSeqParser::cmdLoopE,
+    JASystem::TSeqParser::cmdReadPort,
+    JASystem::TSeqParser::cmdWritePort,
+    JASystem::TSeqParser::cmdCheckPortImport,
+    JASystem::TSeqParser::cmdCheckPortExport,
+    JASystem::TSeqParser::cmdWait,
+    NULL,
+    JASystem::TSeqParser::cmdParentWritePort,
+    JASystem::TSeqParser::cmdChildWritePort,
+    NULL,
+    JASystem::TSeqParser::cmdSetLastNote,
+    JASystem::TSeqParser::cmdTimeRelate,
+    JASystem::TSeqParser::cmdSimpleOsc,
+    JASystem::TSeqParser::cmdSimpleEnv,
+    JASystem::TSeqParser::cmdSimpleADSR,
+    JASystem::TSeqParser::cmdTranspose,
+    JASystem::TSeqParser::cmdCloseTrack,
+    JASystem::TSeqParser::cmdOutSwitch,
+    JASystem::TSeqParser::cmdUpdateSync,
+    JASystem::TSeqParser::cmdBusConnect,
+    JASystem::TSeqParser::cmdPauseStatus,
+    JASystem::TSeqParser::cmdSetInterrupt,
+    JASystem::TSeqParser::cmdDisInterrupt,
+    JASystem::TSeqParser::cmdClrI,
+    JASystem::TSeqParser::cmdSetI,
+    JASystem::TSeqParser::cmdRetI,
+    JASystem::TSeqParser::cmdIntTimer,
+    JASystem::TSeqParser::cmdVibDepth,
+    JASystem::TSeqParser::cmdVibDepthMidi,
+    JASystem::TSeqParser::cmdSyncCPU,
+    JASystem::TSeqParser::cmdFlushAll,
+    JASystem::TSeqParser::cmdFlushRelease,
+    JASystem::TSeqParser::cmdWait,
+    JASystem::TSeqParser::cmdPanPowSet,
+    JASystem::TSeqParser::cmdIIRSet,
+    JASystem::TSeqParser::cmdFIRSet,
+    JASystem::TSeqParser::cmdEXTSet,
+    JASystem::TSeqParser::cmdPanSwSet,
+    JASystem::TSeqParser::cmdOscRoute,
+    JASystem::TSeqParser::cmdIIRCutOff,
+    JASystem::TSeqParser::cmdOscFull,
+    JASystem::TSeqParser::cmdVolumeMode,
+    JASystem::TSeqParser::cmdVibPitch,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    JASystem::TSeqParser::cmdCheckWave,
+    JASystem::TSeqParser::cmdPrintf,
+    JASystem::TSeqParser::cmdNop,
+    JASystem::TSeqParser::cmdTempo,
+    JASystem::TSeqParser::cmdTimeBase,
+    JASystem::TSeqParser::cmdFinish,
+};

@@ -82,8 +82,8 @@ bool JASystem::TSeqCtrl::retIntr() {
 }
 
 /* 8027E59C-8027E5B4       .text get16__Q28JASystem8TSeqCtrlCFUl */
-u32 JASystem::TSeqCtrl::get16(u32 param_1) const {
-    u32 result = field_0x0[param_1++] << 8;
+u16 JASystem::TSeqCtrl::get16(u32 param_1) const {
+    u16 result = field_0x0[param_1++] << 8;
     result |= field_0x0[param_1++];
     return result;
 }

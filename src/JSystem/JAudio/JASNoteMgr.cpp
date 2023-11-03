@@ -3,31 +3,63 @@
 // Translation Unit: JASNoteMgr.cpp
 //
 
-#include "JASNoteMgr.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASTrack.h"
+#include "JSystem/JAudio/JASChannel.h"
+#include "JSystem/JUtility/JUTAssert.h"
+
+static const int MULTI_MAX = 8;
 
 /* 8027DD54-8027DD94       .text init__Q38JASystem6TTrack8TNoteMgrFv */
 void JASystem::TTrack::TNoteMgr::init() {
-    /* Nonmatching */
+    field_0x30 = 0;
+    field_0x34 = 0;
+    field_0x35 = 0;
+    field_0x36 = 0;
+    for (int i = 0; i < MULTI_MAX; i++) {
+        field_0x0[i] = NULL;
+        field_0x20[i] = 0;
+    }
 }
 
 /* 8027DD94-8027DDBC       .text endProcess__Q38JASystem6TTrack8TNoteMgrFv */
 void JASystem::TTrack::TNoteMgr::endProcess() {
-    /* Nonmatching */
+    if (field_0x30 == 0xffffffff) {
+        return;
+    }
+    if (field_0x34 != 0) {
+        return;
+    }
+    field_0x0[0] = NULL;
 }
 
 /* 8027DDBC-8027DE78       .text setChannel__Q38JASystem6TTrack8TNoteMgrFiPQ28JASystem8TChannel */
-void JASystem::TTrack::TNoteMgr::setChannel(int, JASystem::TChannel*) {
-    /* Nonmatching */
+void JASystem::TTrack::TNoteMgr::setChannel(int index, JASystem::TChannel* channel) {
+    JUT_ASSERT(44, index >= 0);
+    JUT_ASSERT(45, index < MULTI_MAX);
+    field_0x0[index] = channel;
+    field_0x20[index] = channel->field_0xc8;
 }
 
 /* 8027DE78-8027DF24       .text releaseChannel__Q38JASystem6TTrack8TNoteMgrFi */
-void JASystem::TTrack::TNoteMgr::releaseChannel(int) {
-    /* Nonmatching */
+void JASystem::TTrack::TNoteMgr::releaseChannel(int index) {
+    JUT_ASSERT(53, index >= 0);
+    JUT_ASSERT(54, index < MULTI_MAX);
+    field_0x0[index] = NULL;
 }
 
 /* 8027DF24-8027DFD8       .text getChannel__Q38JASystem6TTrack8TNoteMgrFi */
-void JASystem::TTrack::TNoteMgr::getChannel(int) {
-    /* Nonmatching */
+JASystem::TChannel* JASystem::TTrack::TNoteMgr::getChannel(int index) {
+    JUT_ASSERT(61, index >= 0);
+    if (index >= MULTI_MAX) {
+        return NULL;
+    }
+    TChannel* channel = field_0x0[index];
+    if (!channel) {
+        return NULL;
+    }
+    if (field_0x20[index] != channel->field_0xc8) {
+        field_0x0[index] = NULL;
+        return NULL;
+    }
+    return channel;
 }
-

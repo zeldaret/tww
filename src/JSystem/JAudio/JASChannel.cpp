@@ -112,7 +112,7 @@ int JASystem::TChannel::getOscState(u32 oscnum) const {
 }
 
 /* 8028BB14-8028BB98       .text isOsc__Q28JASystem8TChannelFUl */
-bool JASystem::TChannel::isOsc(u32 oscnum) {
+BOOL JASystem::TChannel::isOsc(u32 oscnum) {
     /* Nonmatching */
     JUT_ASSERT(284, oscnum < (4));
     return osc[oscnum]->field_0x0 != 0;
