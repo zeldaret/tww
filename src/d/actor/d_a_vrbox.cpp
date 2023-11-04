@@ -18,41 +18,41 @@ static BOOL daVrbox_Draw(vrbox_class* i_this) {
     J3DModel* model = i_this->mpModel;
     f32 y_origin = 0.0f;
     dStage_FileList_dt_c* fili = NULL;
-    
+
     daVrbox_color_set(i_this);
-    
+
     if (g_env_light.mbVrboxInvisible != 0) {
         return TRUE;
     }
-    
+
     s32 roomNo = dComIfGp_roomControl_getStayNo();
     if (roomNo >= 0) {
         fili = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
     }
-    
+
     if (fili) {
         y_origin = fili->mSeaLevel;
     }
-    
+
     f32 y_offset;
     if (dComIfGd_getView()) {
         y_offset = (dComIfGd_getView()->mInvViewMtx[1][3] - y_origin) * 0.09f;
     } else {
         y_offset = 0.0f;
     }
-    
+
     mDoMtx_stack_c::transS(
         dComIfGd_getView()->mInvViewMtx[0][3],
         dComIfGd_getView()->mInvViewMtx[1][3] - y_offset,
         dComIfGd_getView()->mInvViewMtx[2][3]
     );
-    
+
     model->setBaseTRMtx(mDoMtx_stack_c::get());
-    
+
     dComIfGd_setListSky();
     mDoExt_modelUpdateDL(model);
     dComIfGd_setList();
-    
+
     return TRUE;
 }
 
@@ -65,13 +65,13 @@ static BOOL daVrbox_color_set(vrbox_class* i_this) {
         g_env_light.mbVrboxInvisible = 1;
         return TRUE;
     }
-    
+
     g_env_light.mbVrboxInvisible = 0;
-    
+
     J3DModelData* modelData = i_this->mpModel->getModelData();
     J3DMaterial* mat = modelData->getMaterialNodePointer(0);
     J3DGXColor color;
-    
+
     mat->setCullMode(GX_CULL_NONE);
     mat->change();
     color.mColor.r = g_env_light.mVrKasumiMaeColor.r;
@@ -79,7 +79,7 @@ static BOOL daVrbox_color_set(vrbox_class* i_this) {
     color.mColor.b = g_env_light.mVrKasumiMaeColor.b;
     color.mColor.a = 0xFF;
     mat->setTevKColor(0, &color);
-    
+
     mat = modelData->getMaterialNodePointer(1);
     mat->setCullMode(GX_CULL_NONE);
     mat->change();
@@ -88,7 +88,7 @@ static BOOL daVrbox_color_set(vrbox_class* i_this) {
     color.mColor.b = g_env_light.mVrSkyColor.b;
     color.mColor.a = 0xFF;
     mat->setTevKColor(0, &color);
-    
+
     return TRUE;
 }
 
@@ -97,11 +97,11 @@ static void dungeon_rain_proc() {
     dScnKy_env_light_c* env_light = &g_env_light; // Probably a fakematch
     u8 mode = 0;
     int roomNo = dComIfGp_roomControl_getStayNo();
-    
+
     if (!dKy_checkEventNightStop()) {
         return;
     }
-    
+
     bool inDungeon = true;
     if (strcmp(dComIfGp_getStartStageName(), "M_NewD2") == 0) {
         if (roomNo == 3) {
@@ -120,7 +120,7 @@ static void dungeon_rain_proc() {
     } else {
         inDungeon = false;
     }
-    
+
     if (inDungeon) {
         if (mode == 1) { // Rain and thunder
             if (env_light->mRainCountOrig != 250) {
@@ -164,12 +164,12 @@ static BOOL daVrbox_Delete(vrbox_class* i_this) {
 /* 8015E898-8015E968       .text daVrbox_solidHeapCB__FP10fopAc_ac_c */
 static BOOL daVrbox_solidHeapCB(fopAc_ac_c* i_actor) {
     vrbox_class* i_this = static_cast<vrbox_class*>(i_actor);
-    
+
     J3DModelData* modelData = (J3DModelData*)dComIfG_getStageRes("Stage", "vr_sky.bdl");
     JUT_ASSERT(469, modelData != 0);
-    
+
     i_this->mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11020202);
-    
+
     bool success = FALSE;
     if (modelData && i_this->mpModel) {
         success = TRUE;
@@ -181,9 +181,9 @@ static BOOL daVrbox_solidHeapCB(fopAc_ac_c* i_actor) {
 static s32 daVrbox_Create(fopAc_ac_c* i_actor) {
     fopAcM_SetupActor(i_actor, vrbox_class);
     vrbox_class* i_this = static_cast<vrbox_class*>(i_actor);
-    
+
     i_this->m29C = 0;
-    
+
     s32 phase_state = cPhs_COMPLEATE_e;
     if (fopAcM_entrySolidHeap(i_this, (heapCallbackFunc)&daVrbox_solidHeapCB, 0xC60)) {
         dComIfGp_onStatus(1);
@@ -191,7 +191,7 @@ static s32 daVrbox_Create(fopAc_ac_c* i_actor) {
     } else {
         phase_state = cPhs_ERROR_e;
     }
-    
+
     return phase_state;
 }
 

@@ -3,46 +3,307 @@
 // Translation Unit: d_a_vrbox2.cpp
 //
 
-#include "d_a_vrbox2.h"
-#include "dolphin/types.h"
+#include "f_op/f_op_actor_mng.h"
+#include "f_op/f_op_camera_mng.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_procname.h"
+#include "d/d_kankyo_rain.h"
+#include "d/d_kankyo_wether.h"
+#include "m_Do/m_Do_mtx.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/J3DGraphBase/J3DMatBlock.h"
+#include "JSystem/J3DGraphBase/J3DMaterial.h"
+
+class vrbox2_class : public fopAc_ac_c {
+public:
+    /* 0x290 */ void * field_0x290;
+    /* 0x294 */ J3DModel* mpBackCloud;
+    /* 0x298 */ void * field_0x298;
+    /* 0x29C */ J3DModel* mpKasumiMae;
+    /* 0x2A0 */ void * field_0x2a0;
+    /* 0x2A4 */ J3DModel* mpUsoUmi;
+    /* 0x2A4 */ void * field_0x2a8;
+};
 
 /* 8015EA14-8015EA5C       .text texScrollCheck__FRf */
-void texScrollCheck(float&) {
-    /* Nonmatching */
+void texScrollCheck(float& v) {
+    while (v < 0.0f)
+        v += 1.0f;
+    while (v > 1.0f)
+        v -= 1.0f;
 }
+
+BOOL daVrbox2_color_set(vrbox2_class*);
 
 /* 8015EA5C-8015EC30       .text daVrbox2_Draw__FP12vrbox2_class */
-void daVrbox2_Draw(vrbox2_class*) {
-    /* Nonmatching */
+BOOL daVrbox2_Draw(vrbox2_class* i_this) {
+    J3DModel * pBackCloud = i_this->mpBackCloud;
+    J3DModel * pKasumiMae = i_this->mpKasumiMae;
+    J3DModel * pUsoUmi = i_this->mpUsoUmi;
+    f32 y_origin = 0.0f;
+    dStage_FileList_dt_c* fili = NULL;
+
+    daVrbox2_color_set(i_this);
+
+    if (g_env_light.mVrKasumiMaeColor.r + g_env_light.mVrKasumiMaeColor.g + g_env_light.mVrKasumiMaeColor.b +
+        g_env_light.mVrSkyColor.r + g_env_light.mVrSkyColor.g + g_env_light.mVrSkyColor.b +
+        g_env_light.mVrkumoColor.r + g_env_light.mVrkumoColor.g + g_env_light.mVrkumoColor.b == 0)
+    {
+        return TRUE;
+    }
+
+    s32 roomNo = dComIfGp_roomControl_getStayNo();
+    if (roomNo >= 0) {
+        fili = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
+    }
+
+    if (fili) {
+        y_origin = fili->mSeaLevel;
+    }
+
+    f32 y_offset;
+    if (dComIfGd_getView()) {
+        y_offset = (dComIfGd_getView()->mInvViewMtx[1][3] - y_origin) * 0.09f;
+    } else {
+        y_offset = 0.0f;
+    }
+
+    mDoMtx_stack_c::transS(
+        dComIfGd_getView()->mInvViewMtx[0][3],
+        dComIfGd_getView()->mInvViewMtx[1][3] - y_offset,
+        dComIfGd_getView()->mInvViewMtx[2][3]
+    );
+
+    dComIfGd_setListSky();
+
+    if (pUsoUmi != NULL) {
+        pUsoUmi->setBaseTRMtx(mDoMtx_stack_c::get());
+        mDoExt_modelUpdateDL(pUsoUmi);
+    }
+
+    if (pKasumiMae != NULL) {
+        pKasumiMae->setBaseTRMtx(mDoMtx_stack_c::get());
+        mDoExt_modelUpdateDL(pKasumiMae);
+    }
+
+    mDoMtx_stack_c::transM(0.0f, 100.0f, 0.0f);
+    pBackCloud->setBaseTRMtx(mDoMtx_stack_c::get());
+    mDoExt_modelUpdateDL(pBackCloud);
+
+    dComIfGd_setList();
+
+    return TRUE;
 }
 
+static const J3DZModeInfo l_zmodeInfo = { GX_FALSE, GX_LEQUAL, GX_FALSE };
+
 /* 8015EC30-8015F368       .text daVrbox2_color_set__FP12vrbox2_class */
-void daVrbox2_color_set(vrbox2_class*) {
+BOOL daVrbox2_color_set(vrbox2_class* i_this) {
     /* Nonmatching */
+    camera_class * pCamera = dComIfGp_getCamera(0);
+
+    if (g_env_light.mVrKasumiMaeColor.r + g_env_light.mVrKasumiMaeColor.g + g_env_light.mVrKasumiMaeColor.b +
+        g_env_light.mVrSkyColor.r + g_env_light.mVrSkyColor.g + g_env_light.mVrSkyColor.b +
+        g_env_light.mVrkumoColor.r + g_env_light.mVrkumoColor.g + g_env_light.mVrkumoColor.b == 0)
+    {
+        return TRUE;
+    }
+
+    cXyz * windVec = dKyw_get_wind_vec();
+    f32 windPow = dKyw_get_wind_pow();
+    cXyz windNrmVec = *windVec;
+
+    if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == 2) {
+        s16 stageWindY = 0;
+        if (strcmp(dComIfGp_getStartStageName(), "LinkRM") == 0)
+            stageWindY = 0x4000;
+        else if (strcmp(dComIfGp_getStartStageName(), "Orichh") == 0)
+            stageWindY = -0x4000;
+        else if (strcmp(dComIfGp_getStartStageName(), "Ojhous2") == 0)
+            stageWindY = 0x7fff;
+        else if (strcmp(dComIfGp_getStartStageName(), "Omasao") == 0)
+            stageWindY = -0x4000;
+        else if (strcmp(dComIfGp_getStartStageName(), "Onobuta") == 0)
+            stageWindY = 0x4000;
+
+        s32 windX, windY;
+        if (dComIfGs_getWindX() == -1 && dComIfGs_getWindY() == -1) {
+            windX = 0;
+            windY = 0;
+        } else {
+            windX = g_env_light.mWind.mTactWindAngleX;
+            windY = g_env_light.mWind.mTactWindAngleY;
+        }
+
+        windY += stageWindY;
+
+        windNrmVec.x = cM_scos(windX) * cM_scos(windY);
+        windNrmVec.z = cM_scos(windX) * cM_ssin(windY);
+        windPow = 0.6f;
+    }
+
+    cXyz eyePosXZ, centerPosXZ, camFwdXZ;
+    eyePosXZ.x = pCamera->mLookat.mEye.x;
+    eyePosXZ.z = pCamera->mLookat.mEye.z;
+    centerPosXZ.x = pCamera->mLookat.mCenter.x;
+    centerPosXZ.z = pCamera->mLookat.mCenter.z;
+    eyePosXZ.y = 0.0f;
+    centerPosXZ.y = 0.0f;
+    dKyr_get_vectle_calc(&eyePosXZ, &centerPosXZ, &camFwdXZ);
+    // is this an inline? how do i get it to subtract 0.0f
+    f32 scrollSpeed = (-windNrmVec.x - 0.0f) * (camFwdXZ.z - 0.0f) * (-windNrmVec.z - 0.0f) * (camFwdXZ.x - 0.0f) * 0.0005f * windPow;
+    if (strcmp(dComIfGp_getStartStageName(), "M_DragB") == 0)
+        scrollSpeed = -0.0004f;
+
+    J3DMaterial * mat = i_this->mpBackCloud->getModelData()->getMaterialNodePointer(0);
+    mat->setCullMode(GX_CULL_NONE);
+    mat->getPEBlock()->getZMode()->setZModeInfo(l_zmodeInfo);
+    mat->change();
+
+    J3DTexMtx * mtx0 = mat->getTexMtx(0);
+    mtx0->getTexMtxInfo().mSRT.mTranslationX += scrollSpeed;
+    texScrollCheck(mtx0->getTexMtxInfo().mSRT.mTranslationX);
+    J3DTexMtx * mtx1 = mat->getTexMtx(1);
+    mtx1->getTexMtxInfo().mSRT.mTranslationX += scrollSpeed;
+    texScrollCheck(mtx1->getTexMtxInfo().mSRT.mTranslationX);
+
+    GXColor k0;
+    k0.r = g_env_light.mVrkumoColor.r;
+    k0.g = g_env_light.mVrkumoColor.g;
+    k0.b = g_env_light.mVrkumoColor.b;
+    k0.a = 0xFF;
+    mat->setTevKColor(0, (J3DGXColor*)&k0);
+
+    mat = i_this->mpBackCloud->getModelData()->getMaterialNodePointer(1);
+    mat->setCullMode(GX_CULL_NONE);
+    mat->getPEBlock()->getZMode()->setZModeInfo(l_zmodeInfo);
+    mat->change();
+
+    mtx0 = mat->getTexMtx(0);
+    mtx0->getTexMtxInfo().mSRT.mTranslationX += scrollSpeed * 0.8f;
+    texScrollCheck(mtx0->getTexMtxInfo().mSRT.mTranslationX);
+    mtx1 = mat->getTexMtx(1);
+    mtx1->getTexMtxInfo().mSRT.mTranslationX += scrollSpeed * 0.8f;
+    texScrollCheck(mtx1->getTexMtxInfo().mSRT.mTranslationX);
+    mat->setTevKColor(0, (J3DGXColor*)&k0);
+
+    mat = i_this->mpBackCloud->getModelData()->getMaterialNodePointer(2);
+    mat->setCullMode(GX_CULL_NONE);
+    mat->getPEBlock()->getZMode()->setZModeInfo(l_zmodeInfo);
+    mat->change();
+
+    mtx0 = mat->getTexMtx(0);
+    mtx0->getTexMtxInfo().mSRT.mTranslationX += scrollSpeed * 0.6f;
+    texScrollCheck(mtx0->getTexMtxInfo().mSRT.mTranslationX);
+    mtx1 = mat->getTexMtx(1);
+    mtx1->getTexMtxInfo().mSRT.mTranslationX += scrollSpeed * 0.6f;
+    texScrollCheck(mtx1->getTexMtxInfo().mSRT.mTranslationX);
+    mat->setTevKColor(0, (J3DGXColor*)&k0);
+
+    if (i_this->mpKasumiMae != NULL) {
+        mat = i_this->mpBackCloud->getModelData()->getMaterialNodePointer(0);
+        mat->setCullMode(GX_CULL_NONE);
+        mat->getPEBlock()->getZMode()->setZModeInfo(l_zmodeInfo);
+        mat->change();
+
+        GXColorS10 c0;
+        c0.r = g_env_light.mVrKasumiMaeColor.r;
+        c0.g = g_env_light.mVrKasumiMaeColor.g;
+        c0.b = g_env_light.mVrKasumiMaeColor.b;
+        k0.r = g_env_light.mVrkumoColor.r;
+        k0.g = 0x00;
+        k0.b = 0x00;
+        k0.a = 0x00;
+        mat->setTevColor(0, (J3DGXColorS10*)&c0);
+        mat->setTevKColor(0, (J3DGXColor*)&k0);
+    }
+
+    if (i_this->mpUsoUmi != NULL) {
+        mat = i_this->mpBackCloud->getModelData()->getMaterialNodePointer(0);
+        mat->setCullMode(GX_CULL_NONE);
+        mat->getPEBlock()->getZMode()->setZModeInfo(l_zmodeInfo);
+        mat->change();
+
+        k0.r = g_env_light.mVrUsoUmiColor.r;
+        k0.g = g_env_light.mVrUsoUmiColor.g;
+        k0.b = g_env_light.mVrUsoUmiColor.b;
+        k0.a = 0xFF;
+        mat->setTevKColor(0, (J3DGXColor*)&k0);
+    }
+
+    return TRUE;
 }
 
 /* 8015F368-8015F370       .text daVrbox2_Execute__FP12vrbox2_class */
-void daVrbox2_Execute(vrbox2_class*) {
-    /* Nonmatching */
+BOOL daVrbox2_Execute(vrbox2_class*) {
+    return TRUE;
 }
 
 /* 8015F370-8015F378       .text daVrbox2_IsDelete__FP12vrbox2_class */
-void daVrbox2_IsDelete(vrbox2_class*) {
-    /* Nonmatching */
+BOOL daVrbox2_IsDelete(vrbox2_class*) {
+    return TRUE;
 }
 
 /* 8015F378-8015F380       .text daVrbox2_Delete__FP12vrbox2_class */
-void daVrbox2_Delete(vrbox2_class*) {
-    /* Nonmatching */
+BOOL daVrbox2_Delete(vrbox2_class*) {
+    return TRUE;
 }
 
 /* 8015F380-8015F4D4       .text daVrbox2_solidHeapCB__FP10fopAc_ac_c */
-void daVrbox2_solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daVrbox2_solidHeapCB(fopAc_ac_c* i_actor) {
+    vrbox2_class* i_this = static_cast<vrbox2_class*>(i_actor);
+
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getStageRes("Stage", "vr_back_cloud.bdl");
+    JUT_ASSERT(0x211, modelData != 0);
+    i_this->mpBackCloud = mDoExt_J3DModel__create(modelData, 0x80000, 0x11020202);
+
+    modelData = (J3DModelData*)dComIfG_getStageRes("Stage", "vr_kasumi_mae.bdl");
+    if (modelData != NULL)
+        i_this->mpKasumiMae = mDoExt_J3DModel__create(modelData, 0x80000, 0x11020202);
+    modelData = (J3DModelData*)dComIfG_getStageRes("Stage", "vr_uso_umi.bdl");
+    if (modelData != NULL)
+        i_this->mpUsoUmi = mDoExt_J3DModel__create(modelData, 0x80000, 0x11020202);
+
+    bool success = FALSE;
+    if (i_this->mpBackCloud != NULL && i_this->mpKasumiMae != NULL && i_this->mpUsoUmi != NULL) {
+        success = TRUE;
+    }
+    return success;
 }
 
 /* 8015F4D4-8015F550       .text daVrbox2_Create__FP10fopAc_ac_c */
-void daVrbox2_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+s32 daVrbox2_Create(fopAc_ac_c* i_actor) {
+    fopAcM_SetupActor(i_actor, vrbox2_class);
+    vrbox2_class* i_this = static_cast<vrbox2_class*>(i_actor);
+
+    s32 phase_state = cPhs_COMPLEATE_e;
+    if (!fopAcM_entrySolidHeap(i_this, (heapCallbackFunc)&daVrbox2_solidHeapCB, 0x21a0))
+        phase_state = cPhs_ERROR_e;
+
+    return phase_state;
 }
 
+actor_method_class l_daVrbox2_Method = {
+    (process_method_func)daVrbox2_Create,
+    (process_method_func)daVrbox2_Delete,
+    (process_method_func)daVrbox2_Execute,
+    (process_method_func)daVrbox2_IsDelete,
+    (process_method_func)daVrbox2_Draw,
+};
+
+actor_process_profile_definition g_profile_VRBOX2 = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 7,
+    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ProcName     */ PROC_VRBOX2,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(vrbox2_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0004,
+    /* Actor SubMtd */ &l_daVrbox2_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};
