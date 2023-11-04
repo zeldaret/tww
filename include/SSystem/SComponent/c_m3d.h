@@ -105,6 +105,10 @@ inline void cM3d_VectorProduct(const Vec* p0, const Vec* p1, const Vec* p2, Vec*
     VECCrossProduct(&v01, &v02, pDst);
 }
 
+inline f32 cM3d_VectorProduct2d(f32 pX1, f32 pY1, f32 pX2, f32 pY2, f32 pX3, f32 pY3) {
+    return (pX2 - pX1) * (pY3 - pY1) - (pY2 - pY1) * (pX3 - pX1);
+}
+
 inline bool cM3d_CrossInfLineVsInfPlane_proc(f32 a, f32 b, const Vec* pA, const Vec* pB, Vec* pDst) {
     if (cM3d_IsZero(a - b)) {
         *pDst = *pB;

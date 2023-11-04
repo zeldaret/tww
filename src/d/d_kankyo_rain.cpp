@@ -582,8 +582,7 @@ void wave_move() {
     cXyz lookDirXZ;
     vectle_calc(&deltaXZ, &lookDirXZ);
 
-    // is this an inline? how do i get it to subtract 0.0f
-    pPkt->mSkewDir = (-windNrmVec.x - 0.0f) * (lookDirXZ.z - 0.0f) * (-windNrmVec.z - 0.0f) * (lookDirXZ.x - 0.0f);
+    pPkt->mSkewDir = cM3d_VectorProduct2d(0.0f, 0.0f, -windNrmVec.x, -windNrmVec.z, lookDirXZ.x, lookDirXZ.z);
     pPkt->mSkewWidth = (1.0f - fabsf(windNrmVec.x * lookDirXZ.x + windNrmVec.z * lookDirXZ.z)) * windPow * (1.0f - fabsf(windNrmVec.y));
     pPkt->mSkewWidth *= fabsf(pPkt->mSkewDir) * 0.6f;
 

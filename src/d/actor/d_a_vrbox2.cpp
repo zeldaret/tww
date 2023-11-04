@@ -95,12 +95,25 @@ BOOL daVrbox2_Draw(vrbox2_class* i_this) {
     return TRUE;
 }
 
-static const J3DZModeInfo l_zmodeInfo = { GX_FALSE, GX_LEQUAL, GX_FALSE };
+J3DZModeInfo l_zmodeInfo = { GX_FALSE, GX_LEQUAL, GX_FALSE };
 
 /* 8015EC30-8015F368       .text daVrbox2_color_set__FP12vrbox2_class */
 BOOL daVrbox2_color_set(vrbox2_class* i_this) {
     /* Nonmatching */
-    camera_class * pCamera = dComIfGp_getCamera(0);
+    camera_class * pCamera;
+    cXyz eyePosXZ;
+    cXyz centerPosXZ;
+    cXyz lookDirXZ;
+    cXyz windNrmVec;
+    GXColor k0;
+    GXColorS10 c0;
+    cXyz * windVec;
+    J3DModelData * modelData;
+    J3DMaterial * mat;
+    J3DTexMtx * mtx;
+    f32 windPow;
+    f32 windDirView;
+    f32 scrollSpeed;
 
     if (g_env_light.mVrKasumiMaeColor.r + g_env_light.mVrKasumiMaeColor.g + g_env_light.mVrKasumiMaeColor.b +
         g_env_light.mVrSkyColor.r + g_env_light.mVrSkyColor.g + g_env_light.mVrSkyColor.b +
@@ -109,9 +122,10 @@ BOOL daVrbox2_color_set(vrbox2_class* i_this) {
         return TRUE;
     }
 
-    cXyz * windVec = dKyw_get_wind_vec();
-    f32 windPow = dKyw_get_wind_pow();
-    cXyz windNrmVec = *windVec;
+    pCamera = dComIfGp_getCamera(0);
+    windVec = dKyw_get_wind_vec();
+    windPow = dKyw_get_wind_pow();
+    windNrmVec = *windVec;
 
     if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == 2) {
         s16 stageWindY = 0;
@@ -126,7 +140,9 @@ BOOL daVrbox2_color_set(vrbox2_class* i_this) {
         else if (strcmp(dComIfGp_getStartStageName(), "Onobuta") == 0)
             stageWindY = 0x4000;
 
-        s32 windX, windY;
+        s32 windY2;
+        s32 windX;
+        s16 windY;
         if (dComIfGs_getWindX() == -1 && dComIfGs_getWindY() == -1) {
             windX = 0;
             windY = 0;
@@ -136,81 +152,80 @@ BOOL daVrbox2_color_set(vrbox2_class* i_this) {
         }
 
         windY += stageWindY;
+        windY2 = windY;
 
-        windNrmVec.x = cM_scos(windX) * cM_scos(windY);
-        windNrmVec.z = cM_scos(windX) * cM_ssin(windY);
+        windNrmVec.x = cM_scos(windX) * cM_scos(windY2);
+        windNrmVec.y = cM_ssin(windX);
+        windNrmVec.z = cM_scos(windX) * cM_ssin(windY2);
         windPow = 0.6f;
     }
 
-    cXyz eyePosXZ, centerPosXZ, camFwdXZ;
-    eyePosXZ.x = pCamera->mLookat.mEye.x;
-    eyePosXZ.z = pCamera->mLookat.mEye.z;
-    centerPosXZ.x = pCamera->mLookat.mCenter.x;
-    centerPosXZ.z = pCamera->mLookat.mCenter.z;
+    eyePosXZ = pCamera->mLookat.mEye;
+    centerPosXZ = pCamera->mLookat.mCenter;
     eyePosXZ.y = 0.0f;
     centerPosXZ.y = 0.0f;
-    dKyr_get_vectle_calc(&eyePosXZ, &centerPosXZ, &camFwdXZ);
-    // is this an inline? how do i get it to subtract 0.0f
-    f32 scrollSpeed = (-windNrmVec.x - 0.0f) * (camFwdXZ.z - 0.0f) * (-windNrmVec.z - 0.0f) * (camFwdXZ.x - 0.0f) * 0.0005f * windPow;
+
+    dKyr_get_vectle_calc(&eyePosXZ, &centerPosXZ, &lookDirXZ);
+    windDirView = cM3d_VectorProduct2d(0.0f, 0.0f, -windNrmVec.x, -windNrmVec.z, lookDirXZ.x, lookDirXZ.z) * 0.0005f;
+    scrollSpeed = windDirView * windPow;
     if (strcmp(dComIfGp_getStartStageName(), "M_DragB") == 0)
         scrollSpeed = -0.0004f;
 
-    J3DMaterial * mat = i_this->mpBackCloud->getModelData()->getMaterialNodePointer(0);
+    modelData = i_this->mpBackCloud->getModelData();
+    mat = modelData->getMaterialNodePointer(0);
     mat->setCullMode(GX_CULL_NONE);
     mat->getPEBlock()->getZMode()->setZModeInfo(l_zmodeInfo);
     mat->change();
 
-    J3DTexMtx * mtx0 = mat->getTexMtx(0);
-    mtx0->getTexMtxInfo().mSRT.mTranslationX += scrollSpeed;
-    texScrollCheck(mtx0->getTexMtxInfo().mSRT.mTranslationX);
-    J3DTexMtx * mtx1 = mat->getTexMtx(1);
-    mtx1->getTexMtxInfo().mSRT.mTranslationX += scrollSpeed;
-    texScrollCheck(mtx1->getTexMtxInfo().mSRT.mTranslationX);
+    mtx = mat->getTexMtx(0);
+    mtx->getTexMtxInfo().mSRT.mTranslationX += scrollSpeed;
+    texScrollCheck(mtx->getTexMtxInfo().mSRT.mTranslationX);
+    mtx = mat->getTexMtx(1);
+    mtx->getTexMtxInfo().mSRT.mTranslationX += scrollSpeed;
+    texScrollCheck(mtx->getTexMtxInfo().mSRT.mTranslationX);
 
-    GXColor k0;
     k0.r = g_env_light.mVrkumoColor.r;
     k0.g = g_env_light.mVrkumoColor.g;
     k0.b = g_env_light.mVrkumoColor.b;
     k0.a = 0xFF;
     mat->setTevKColor(0, (J3DGXColor*)&k0);
 
-    mat = i_this->mpBackCloud->getModelData()->getMaterialNodePointer(1);
+    mat = modelData->getMaterialNodePointer(1);
     mat->setCullMode(GX_CULL_NONE);
     mat->getPEBlock()->getZMode()->setZModeInfo(l_zmodeInfo);
     mat->change();
 
-    mtx0 = mat->getTexMtx(0);
-    mtx0->getTexMtxInfo().mSRT.mTranslationX += scrollSpeed * 0.8f;
-    texScrollCheck(mtx0->getTexMtxInfo().mSRT.mTranslationX);
-    mtx1 = mat->getTexMtx(1);
-    mtx1->getTexMtxInfo().mSRT.mTranslationX += scrollSpeed * 0.8f;
-    texScrollCheck(mtx1->getTexMtxInfo().mSRT.mTranslationX);
+    mtx = mat->getTexMtx(0);
+    mtx->getTexMtxInfo().mSRT.mTranslationX += scrollSpeed * 0.8f;
+    texScrollCheck(mtx->getTexMtxInfo().mSRT.mTranslationX);
+    mtx = mat->getTexMtx(1);
+    mtx->getTexMtxInfo().mSRT.mTranslationX += scrollSpeed * 0.8f;
+    texScrollCheck(mtx->getTexMtxInfo().mSRT.mTranslationX);
     mat->setTevKColor(0, (J3DGXColor*)&k0);
 
-    mat = i_this->mpBackCloud->getModelData()->getMaterialNodePointer(2);
+    mat = modelData->getMaterialNodePointer(2);
     mat->setCullMode(GX_CULL_NONE);
     mat->getPEBlock()->getZMode()->setZModeInfo(l_zmodeInfo);
     mat->change();
 
-    mtx0 = mat->getTexMtx(0);
-    mtx0->getTexMtxInfo().mSRT.mTranslationX += scrollSpeed * 0.6f;
-    texScrollCheck(mtx0->getTexMtxInfo().mSRT.mTranslationX);
-    mtx1 = mat->getTexMtx(1);
-    mtx1->getTexMtxInfo().mSRT.mTranslationX += scrollSpeed * 0.6f;
-    texScrollCheck(mtx1->getTexMtxInfo().mSRT.mTranslationX);
+    mtx = mat->getTexMtx(0);
+    mtx->getTexMtxInfo().mSRT.mTranslationX += scrollSpeed * 0.6f;
+    texScrollCheck(mtx->getTexMtxInfo().mSRT.mTranslationX);
+    mtx = mat->getTexMtx(1);
+    mtx->getTexMtxInfo().mSRT.mTranslationX += scrollSpeed;
+    mtx->getTexMtxInfo().mSRT.mTranslationX += scrollSpeed * 0.6f;
+    texScrollCheck(mtx->getTexMtxInfo().mSRT.mTranslationX);
     mat->setTevKColor(0, (J3DGXColor*)&k0);
 
     if (i_this->mpKasumiMae != NULL) {
-        mat = i_this->mpBackCloud->getModelData()->getMaterialNodePointer(0);
-        mat->setCullMode(GX_CULL_NONE);
+        mat = i_this->mpKasumiMae->getModelData()->getMaterialNodePointer(0);
         mat->getPEBlock()->getZMode()->setZModeInfo(l_zmodeInfo);
         mat->change();
 
-        GXColorS10 c0;
         c0.r = g_env_light.mVrKasumiMaeColor.r;
         c0.g = g_env_light.mVrKasumiMaeColor.g;
         c0.b = g_env_light.mVrKasumiMaeColor.b;
-        k0.r = g_env_light.mVrkumoColor.r;
+        k0.r = g_env_light.mVrkumoColor.a;
         k0.g = 0x00;
         k0.b = 0x00;
         k0.a = 0x00;
@@ -219,8 +234,7 @@ BOOL daVrbox2_color_set(vrbox2_class* i_this) {
     }
 
     if (i_this->mpUsoUmi != NULL) {
-        mat = i_this->mpBackCloud->getModelData()->getMaterialNodePointer(0);
-        mat->setCullMode(GX_CULL_NONE);
+        mat = i_this->mpUsoUmi->getModelData()->getMaterialNodePointer(0);
         mat->getPEBlock()->getZMode()->setZModeInfo(l_zmodeInfo);
         mat->change();
 
