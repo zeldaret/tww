@@ -3,56 +3,94 @@
 // Translation Unit: JASOuterParam.cpp
 //
 
-#include "JASOuterParam.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASTrack.h"
 
 /* 8027DFD8-8027E020       .text __ct__Q38JASystem6TTrack11TOuterParamFv */
 JASystem::TTrack::TOuterParam::TOuterParam() {
-    /* Nonmatching */
+    field_0x0 = 0;
+    field_0x2 = 0;
+    field_0x4 = 0.0f;
+    field_0x8 = 0.0f;
+    field_0xc = 0.0f;
+    field_0x10 = 0.0f;
+    field_0x14 = 0.0f;
+    field_0x18 = 0.0f;
+    for (int i = 0; i < 8; i++) {
+        field_0x1c[i] = 0;
+    }
 }
 
 /* 8027E020-8027E030       .text initExtBuffer__Q38JASystem6TTrack11TOuterParamFv */
 void JASystem::TTrack::TOuterParam::initExtBuffer() {
-    /* Nonmatching */
+    field_0x0 = 0;
+    field_0x2 = 0;
 }
 
 /* 8027E030-8027E038       .text setOuterSwitch__Q38JASystem6TTrack11TOuterParamFUs */
-void JASystem::TTrack::TOuterParam::setOuterSwitch(unsigned short) {
-    /* Nonmatching */
+void JASystem::TTrack::TOuterParam::setOuterSwitch(u16 param_1) {
+    field_0x0 = param_1;
 }
 
 /* 8027E038-8027E054       .text checkOuterSwitch__Q38JASystem6TTrack11TOuterParamFUs */
-void JASystem::TTrack::TOuterParam::checkOuterSwitch(unsigned short) {
-    /* Nonmatching */
+bool JASystem::TTrack::TOuterParam::checkOuterSwitch(u16 param_1) {
+    return field_0x0 & param_1;
 }
 
 /* 8027E054-8027E05C       .text setOuterUpdate__Q38JASystem6TTrack11TOuterParamFUs */
-void JASystem::TTrack::TOuterParam::setOuterUpdate(unsigned short) {
-    /* Nonmatching */
+void JASystem::TTrack::TOuterParam::setOuterUpdate(u16 param_1) {
+    field_0x2 = param_1;
 }
 
 /* 8027E05C-8027E064       .text getOuterUpdate__Q38JASystem6TTrack11TOuterParamFv */
-void JASystem::TTrack::TOuterParam::getOuterUpdate() {
-    /* Nonmatching */
+u16 JASystem::TTrack::TOuterParam::getOuterUpdate() {
+    return field_0x2;
 }
 
 /* 8027E064-8027E074       .text getIntFirFilter__Q38JASystem6TTrack11TOuterParamFUc */
-void JASystem::TTrack::TOuterParam::getIntFirFilter(unsigned char) {
-    /* Nonmatching */
+s16 JASystem::TTrack::TOuterParam::getIntFirFilter(u8 param_1) {
+    return field_0x1c[param_1];
 }
 
 /* 8027E074-8027E110       .text setParam__Q38JASystem6TTrack11TOuterParamFUcf */
-void JASystem::TTrack::TOuterParam::setParam(unsigned char, float) {
-    /* Nonmatching */
+void JASystem::TTrack::TOuterParam::setParam(u8 param_1, f32 param_2) {
+    f32* var1;
+    switch (param_1) {
+    case 1:
+        var1 = &field_0x4;
+        break;
+    case 2:
+        var1 = &field_0x8;
+        break;
+    case 4:
+        var1 = &field_0xc;
+        break;
+    case 16:
+        var1 = &field_0x10;
+        break;
+    case 8:
+        var1 = &field_0x14;
+        break;
+    case 64:
+        var1 = &field_0x18;
+        break;
+    default:
+        return;
+    }
+    *var1 = param_2;
+    field_0x2 |= param_1;
 }
 
 /* 8027E110-8027E12C       .text onSwitch__Q38JASystem6TTrack11TOuterParamFUs */
-void JASystem::TTrack::TOuterParam::onSwitch(unsigned short) {
-    /* Nonmatching */
+void JASystem::TTrack::TOuterParam::onSwitch(u16 param_1) {
+    field_0x0 |= param_1;
+    field_0x2 |= param_1;
 }
 
 /* 8027E12C-8027E170       .text setFirFilter__Q38JASystem6TTrack11TOuterParamFPs */
-void JASystem::TTrack::TOuterParam::setFirFilter(short*) {
-    /* Nonmatching */
+void JASystem::TTrack::TOuterParam::setFirFilter(s16* param_1) {
+    field_0x2 |= 0x80;
+    field_0x0 |= 0x80;
+    for (u8 i = 0; i < 8; i++) {
+        field_0x1c[i] = param_1[i];
+    }
 }
-

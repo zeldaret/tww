@@ -29,7 +29,7 @@ namespace JASystem {
         f32 bankOscToOfs(u32);
         void effectOsc(u32, f32);
         int getOscState(u32) const;
-        bool isOsc(u32);
+        BOOL isOsc(u32);
         void copyOsc(u32, TOscillator::Osc_*);
         void overwriteOsc(u32, TOscillator::Osc_*);
         void setKeySweepTarget(u8, u32);
