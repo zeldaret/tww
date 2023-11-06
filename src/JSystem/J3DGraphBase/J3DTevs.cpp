@@ -10,7 +10,6 @@
 
 /* 802EBC94-802EBD48       .text load__11J3DLightObjCFUl */
 void J3DLightObj::load(u32 lightIdx) const {
-    /* Nonmatching */
     GDOverflowCheck(0x48);
     J3DGDSetLightPos(GXLightID(1 << lightIdx), mInfo.mLightPosition.x, mInfo.mLightPosition.y, mInfo.mLightPosition.z);
     J3DGDSetLightAttn(GXLightID(1 << lightIdx), mInfo.mCosAtten.x, mInfo.mCosAtten.y, mInfo.mCosAtten.z, mInfo.mDistAtten.x, mInfo.mDistAtten.y, mInfo.mDistAtten.z);
@@ -218,7 +217,6 @@ static u8 j3dTexCoordTable[7623];
 
 /* 802EC588-802EC630       .text makeTexCoordTable__Fv */
 void makeTexCoordTable() {
-    /* Nonmatching */
     u8 texMtx[] = {
         GX_TEXMTX0,
         GX_TEXMTX1,
@@ -237,7 +235,7 @@ void makeTexCoordTable() {
     for (u32 i = 0; i < 11; i++) {
         for (u32 j = 0; j < 21; j++) {
             for (int k = 0; k < ARRAY_SIZE(texMtx); k++) {
-                u32 idx = i * 0xe7 + j * 11 + k;
+                u32 idx = j * 11 + i * 0xe7 + k;
                 table[idx * 3 + 0] = i;
                 table[idx * 3 + 1] = j;
                 table[idx * 3 + 2] = texMtx[k];
@@ -256,7 +254,7 @@ void makeAlphaCmpTable() {
         for (int j = 0; j < 4; j++) {
             for (u32 k = 0; k < 8; k++) {
                 u32 idx = i * 32 + j * 8 + k;
-                table[idx * 3] = i;
+                table[idx * 3 + 0] = i;
                 table[idx * 3 + 1] = j;
                 table[idx * 3 + 2] = k;
             }
@@ -268,13 +266,12 @@ u8 j3dZModeTable[96];
 
 /* 802EC69C-802EC708       .text makeZModeTable__Fv */
 void makeZModeTable() {
-    /* Nonmatching */
     u8* table = j3dZModeTable;
     for (int i = 0; i < 2; i++) {
         for (u32 j = 0; j < 8; j++) {
             for (int k = 0; k < 2; k++) {
-                u32 idx = i * 16 + j * 2 + k;
-                table[idx * 3] = i;
+                u32 idx = j * 2 + i * 16 + k;
+                table[idx * 3 + 0] = i;
                 table[idx * 3 + 1] = j;
                 table[idx * 3 + 2] = k;
             }

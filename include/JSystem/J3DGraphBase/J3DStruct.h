@@ -127,7 +127,7 @@ struct J3DIndTexOrderInfo {
 };
 
 struct J3DTevSwapModeInfo {
-    /* 0x0 */ u8 field_0x0;
+    /* 0x0 */ u8 field_0x0 __attribute__((aligned(4)));
     /* 0x1 */ u8 field_0x1;
 };
 
@@ -162,7 +162,7 @@ struct J3DTevStageInfo {
 };
 
 struct J3DIndTevStageInfo {
-    /* 0x0 */ u8 mIndStage;
+    /* 0x0 */ u8 mIndStage __attribute__((aligned(4)));
     /* 0x1 */ u8 mIndFormat;
     /* 0x2 */ u8 mBiasSel;
     /* 0x3 */ u8 mMtxSel;

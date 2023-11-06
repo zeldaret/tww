@@ -865,7 +865,7 @@ config.libs = [
             Object(Matching,    "JSystem/J3DGraphBase/J3DShape.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DMaterial.cpp"),
             Object(NonMatching, "JSystem/J3DGraphBase/J3DMatBlock.cpp"),
-            Object(NonMatching, "JSystem/J3DGraphBase/J3DTevs.cpp"),
+            Object(Matching,    "JSystem/J3DGraphBase/J3DTevs.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DDrawBuffer.cpp"),
         ],
     ),
