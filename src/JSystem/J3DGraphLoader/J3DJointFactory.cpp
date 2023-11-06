@@ -4,19 +4,30 @@
 //
 
 #include "JSystem/J3DGraphLoader/J3DJointFactory.h"
-#include "dolphin/types.h"
+#include "JSystem/JSupport/JSupport.h"
+#include "JSystem/J3DGraphAnimator/J3DJoint.h"
 
 /* 802FE1A4-802FE1FC       .text __ct__15J3DJointFactoryFRC13J3DJointBlock */
-J3DJointFactory::J3DJointFactory(const J3DJointBlock&) {
+J3DJointFactory::J3DJointFactory(const J3DJointBlock& jointBlock) {
     /* Nonmatching */
+    mJointInitData = JSUConvertOffsetToPtr<J3DJointInitData>(&jointBlock, jointBlock.mJointInitData);
+    mIndexTable = JSUConvertOffsetToPtr<u16>(&jointBlock, jointBlock.mIndexTable);
 }
 
 /* 802FE1FC-802FE390       .text create__15J3DJointFactoryFi */
-void J3DJointFactory::create(int) {
-    /* Nonmatching */
-}
-
-/* 802FE390-802FE3A8       .text JSUConvertOffsetToPtr<16J3DJointInitData>__FPCvUl */
-void JSUConvertOffsetToPtr<J3DJointInitData>(const void*, unsigned long) {
-    /* Nonmatching */
+J3DJoint* J3DJointFactory::create(int jntNo) {
+    J3DJoint* joint = new J3DJoint();
+    joint->mJntNo = jntNo;
+    joint->mKind = mJointInitData[mIndexTable[jntNo]].mKind;
+    joint->mScaleCompensate = mJointInitData[mIndexTable[jntNo]].mScaleCompensate;
+    joint->mTransformInfo = mJointInitData[mIndexTable[jntNo]].mTransformInfo;
+    joint->mRadius = mJointInitData[mIndexTable[jntNo]].mRadius;
+    joint->mMin = mJointInitData[mIndexTable[jntNo]].mMin;
+    joint->mMax = mJointInitData[mIndexTable[jntNo]].mMax;
+    joint->mMtxCalc = NULL;
+    joint->mOldMtxCalc = NULL;
+    if (joint->mScaleCompensate == 0xFF) {
+        joint->mScaleCompensate = false;
+    }
+    return joint;
 }

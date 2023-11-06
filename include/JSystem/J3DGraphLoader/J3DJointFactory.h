@@ -32,8 +32,8 @@ struct J3DJointFactory {
     J3DJointFactory(J3DJointBlock const&);
     J3DJoint* create(int);
 
-    J3DJointInitData* mJointInitData;
-    u16* mIndexTable;
+    /* 0x0 */ J3DJointInitData* mJointInitData;
+    /* 0x4 */ u16* mIndexTable;
 
     u16 getKind(int no) const { return mJointInitData[mIndexTable[no]].mKind; }
     u8 getScaleCompensate(int no) const { return mJointInitData[mIndexTable[no]].mScaleCompensate; }

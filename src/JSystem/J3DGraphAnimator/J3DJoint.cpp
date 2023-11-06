@@ -201,7 +201,7 @@ void J3DJoint::initialize() {
     mKind = 1;
     mScaleCompensate = 0;
     mTransformInfo = j3dDefaultTransformInfo;
-    mBoundingSphereRadius = 0.0f;
+    mRadius = 0.0f;
     mMin = (Vec){0.0f, 0.0f, 0.0f};
     mMax = (Vec){0.0f, 0.0f, 0.0f};
     mMtxCalc = NULL;

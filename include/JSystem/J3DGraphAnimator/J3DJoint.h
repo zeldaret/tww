@@ -120,7 +120,7 @@ public:
     u32 getType() const { return 'NJNT'; }
     void recursiveCalc();
 
-    J3DJoint();
+    J3DJoint() { initialize(); }
     ~J3DJoint() {}
 
     J3DMaterial* getMesh() { return mMesh; }
@@ -148,7 +148,7 @@ private:
     /* 0x1A */ u8 mKind;
     /* 0x1B */ u8 mScaleCompensate;
     /* 0x1C */ J3DTransformInfo mTransformInfo;
-    /* 0x3C */ f32 mBoundingSphereRadius;
+    /* 0x3C */ f32 mRadius;
     /* 0x40 */ Vec mMin;
     /* 0x4C */ Vec mMax;
     /* 0x58 */ J3DMtxCalc* mMtxCalc;
