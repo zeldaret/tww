@@ -15,13 +15,57 @@ void cM2dGBox::Set(cXy& p0, cXy& p1) {
 
 /* 8024A104-8024A400       .text GetLen__8cM2dGBoxCFRC3cXy */
 f32 cM2dGBox::GetLen(const cXy& p) const {
-    // inside the box
-    if (p.x >= mP0.x && p.x <= mP1.x && p.y >= mP0.y && p.y <= mP1.y)
+    if (mP0.x < p.x && p.x < mP1.x && mP0.y < p.y && p.y < mP1.y) {
+        // Inside the box.
         return 0.0f;
-
-    // TODO: other checks
-    
-    float distX = abs(mP0.x - p.x);
-    float distY = abs(mP0.y - p.y);
-    return distX < distY ? distX : distY;
+    }
+    if (mP0.x < p.x && p.x < mP1.x) {
+        // Above or below the box.
+        f32 distY0 = fabs(mP0.y - p.y);
+        f32 distY1 = fabs(mP1.y - p.y);
+        f32 minDist = distY0;
+        if (distY0 > distY1) {
+            minDist = distY1;
+        }
+        return minDist;
+    }
+    if (mP0.y < p.y && p.y < mP1.y) {
+        // Left or right of the box.
+        f32 distX0 = fabs(mP0.x - p.x);
+        f32 distX1 = fabs(mP1.x - p.x);
+        f32 minDist = distX0;
+        if (distX0 > distX1) {
+            minDist = distX1;
+        }
+        return minDist;
+    }
+    if (p.x < mP0.x) {
+        f32 distY;
+        f32 distX;
+        if (p.y < mP0.y) {
+            // Diagonally above and to the left of the box.
+            distX = p.x - mP0.x;
+            distY = p.y - mP0.y;
+            return sqrtf(distX * distX + distY * distY);
+        } else {
+            // Diagonally below and to the left of the box.
+            distX = p.x - mP0.x;
+            distY = p.y - mP1.y;
+            return sqrtf(distX * distX + distY * distY);
+        }
+    } else {
+        f32 distY;
+        f32 distX;
+        if (p.y < mP0.y) {
+            // Diagonally above and to the right of the box.
+            distX = p.x - mP1.x;
+            distY = p.y - mP0.y;
+            return sqrtf(distX * distX + distY * distY);
+        } else {
+            // Diagonally below and to the right of the box.
+            distX = p.x - mP1.x;
+            distY = p.y - mP1.y;
+            return sqrtf(distX * distX + distY * distY);
+        }
+    }
 }
