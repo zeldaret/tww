@@ -741,14 +741,14 @@ config.libs = [
     JSystemLib(
         "JAZelAudio",
         [
-            Object(NonMatching, "JSystem/JAZelAudio/JAIZelBasic.cpp"),
-            Object(NonMatching, "JSystem/JAZelAudio/JAIZelAnime.cpp"),
-            Object(NonMatching, "JSystem/JAZelAudio/JAIZelAtmos.cpp"),
-            Object(NonMatching, "JSystem/JAZelAudio/JAIZelInst.cpp"),
-            Object(NonMatching, "JSystem/JAZelAudio/JAIZelParam.cpp"),
-            Object(NonMatching, "JSystem/JAZelAudio/JAIZelCharVoiceTable.cpp"),
-            Object(NonMatching, "JSystem/JAZelAudio/JAIZelScene.cpp"),
-            Object(NonMatching, "JSystem/JAZelAudio/JAIZelSound.cpp"),
+            Object(NonMatching, "JAZelAudio/JAIZelBasic.cpp"),
+            Object(NonMatching, "JAZelAudio/JAIZelAnime.cpp"),
+            Object(NonMatching, "JAZelAudio/JAIZelAtmos.cpp"),
+            Object(NonMatching, "JAZelAudio/JAIZelInst.cpp"),
+            Object(NonMatching, "JAZelAudio/JAIZelParam.cpp"),
+            Object(NonMatching, "JAZelAudio/JAIZelCharVoiceTable.cpp"),
+            Object(NonMatching, "JAZelAudio/JAIZelScene.cpp"),
+            Object(NonMatching, "JAZelAudio/JAIZelSound.cpp"),
         ],
     ),
     DolphinLib(

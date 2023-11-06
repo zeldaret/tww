@@ -2701,7 +2701,7 @@ dolphin/gba/GBAWrite.c:
 dolphin/gba/GBAXfer.c:
 	.text       start:0x8029F0EC end:0x8029F418
 
-JSystem/JAZelAudio/JAIZelBasic.cpp:
+JAZelAudio/JAIZelBasic.cpp:
 	.text       start:0x8029F418 end:0x802A9F50
 	.rodata     start:0x8035D5A8 end:0x8035DA58
 	.data       start:0x8038EA30 end:0x8038EA88
@@ -2709,38 +2709,38 @@ JSystem/JAZelAudio/JAIZelBasic.cpp:
 	.sbss       start:0x803EABB0 end:0x803EABB8
 	.sdata2     start:0x803EF8F8 end:0x803EFA10
 
-JSystem/JAZelAudio/JAIZelAnime.cpp:
+JAZelAudio/JAIZelAnime.cpp:
 	.text       start:0x802A9F50 end:0x802AA684
 	.data       start:0x8038EA88 end:0x8038EA98
 	.sdata2     start:0x803EFA10 end:0x803EFA58
 
-JSystem/JAZelAudio/JAIZelAtmos.cpp:
+JAZelAudio/JAIZelAtmos.cpp:
 	.text       start:0x802AA684 end:0x802AB6C8
 	.rodata     start:0x8035DA58 end:0x8035DBD8
 	.data       start:0x8038EA98 end:0x8038EAB8
 	.sdata2     start:0x803EFA58 end:0x803EFA90
 
-JSystem/JAZelAudio/JAIZelInst.cpp:
+JAZelAudio/JAIZelInst.cpp:
 	.text       start:0x802AB6C8 end:0x802AC5E0
 	.rodata     start:0x8035DBD8 end:0x8035DD28
 	.data       start:0x8038EAB8 end:0x8038EB58
 	.sdata      start:0x803E99E0 end:0x803E9A00
 	.sdata2     start:0x803EFA90 end:0x803EFAD0
 
-JSystem/JAZelAudio/JAIZelParam.cpp:
+JAZelAudio/JAIZelParam.cpp:
 	.rodata     start:0x8035DD28 end:0x8035DD90
 	.data       start:0x8038EB58 end:0x8038F158
 	.sdata      start:0x803E9A00 end:0x803E9AB0
 	.sbss       start:0x803EABB8 end:0x803EABC8
 
-JSystem/JAZelAudio/JAIZelCharVoiceTable.cpp:
+JAZelAudio/JAIZelCharVoiceTable.cpp:
 	.data       start:0x8038F158 end:0x8038F748
 
-JSystem/JAZelAudio/JAIZelScene.cpp:
+JAZelAudio/JAIZelScene.cpp:
 	.rodata     start:0x8035DD90 end:0x8035E0D0
 	.data       start:0x8038F748 end:0x8038FFE0
 
-JSystem/JAZelAudio/JAIZelSound.cpp:
+JAZelAudio/JAIZelSound.cpp:
 	.text       start:0x802AC5E0 end:0x802ACAD4
 	.data       start:0x8038FFE0 end:0x80390018
 	.sdata2     start:0x803EFAD0 end:0x803EFAF0

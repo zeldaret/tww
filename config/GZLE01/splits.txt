@@ -2701,7 +2701,7 @@ dolphin/gba/GBAWrite.c:
 dolphin/gba/GBAXfer.c:
 	.text       start:0x802A194C end:0x802A1C78
 
-JSystem/JAZelAudio/JAIZelBasic.cpp:
+JAZelAudio/JAIZelBasic.cpp:
 	.text       start:0x802A1C78 end:0x802AC7E8
 	.text       start:0x802AC7E8 end:0x802AC830
 	.rodata     start:0x8036A108 end:0x8036A5B8
@@ -2710,41 +2710,41 @@ JSystem/JAZelAudio/JAIZelBasic.cpp:
 	.sbss       start:0x803F7710 end:0x803F7718
 	.sdata2     start:0x803FC420 end:0x803FC538
 
-JSystem/JAZelAudio/JAIZelAnime.cpp:
+JAZelAudio/JAIZelAnime.cpp:
 	.text       start:0x802AC830 end:0x802AD008
 	.data       start:0x8039B560 end:0x8039B570
 	.sdata2     start:0x803FC538 end:0x803FC580
 
-JSystem/JAZelAudio/JAIZelAtmos.cpp:
+JAZelAudio/JAIZelAtmos.cpp:
 	.text       start:0x802AD008 end:0x802AE04C
 	.rodata     start:0x8036A5B8 end:0x8036A738
 	.data       start:0x8039B570 end:0x8039B590
 	.sdata2     start:0x803FC580 end:0x803FC5B8
 
-JSystem/JAZelAudio/JAIZelInst.cpp:
+JAZelAudio/JAIZelInst.cpp:
 	.text       start:0x802AE04C end:0x802AEF64
 	.rodata     start:0x8036A738 end:0x8036A888
 	.data       start:0x8039B590 end:0x8039B630
 	.sdata      start:0x803F6508 end:0x803F6528
 	.sdata2     start:0x803FC5B8 end:0x803FC5F8
 
-JSystem/JAZelAudio/JAIZelParam.cpp:
+JAZelAudio/JAIZelParam.cpp:
 	.text       start:0x802AEF64 end:0x802AEF64
 	.rodata     start:0x8036A888 end:0x8036A8F0
 	.data       start:0x8039B630 end:0x8039BC30
 	.sdata      start:0x803F6528 end:0x803F65D8
 	.sbss       start:0x803F7718 end:0x803F7728
 
-JSystem/JAZelAudio/JAIZelCharVoiceTable.cpp:
+JAZelAudio/JAIZelCharVoiceTable.cpp:
 	.text       start:0x802AEF64 end:0x802AEF64
 	.data       start:0x8039BC30 end:0x8039C220
 
-JSystem/JAZelAudio/JAIZelScene.cpp:
+JAZelAudio/JAIZelScene.cpp:
 	.text       start:0x802AEF64 end:0x802AEF64
 	.rodata     start:0x8036A8F0 end:0x8036AC30
 	.data       start:0x8039C220 end:0x8039CAB8
 
-JSystem/JAZelAudio/JAIZelSound.cpp:
+JAZelAudio/JAIZelSound.cpp:
 	.text       start:0x802AEF64 end:0x802AF458
 	.data       start:0x8039CAB8 end:0x8039CAF0
 	.sdata2     start:0x803FC5F8 end:0x803FC618
