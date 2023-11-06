@@ -4,39 +4,9 @@
 //
 
 #include "JSystem/JParticle/JPAKeyBlock.h"
-#include "dolphin/types.h"
 
 /* 8025855C-80258588       .text __ct__14JPAKeyBlockArcFPCUc */
-JPAKeyBlockArc::JPAKeyBlockArc(const unsigned char*) {
-    /* Nonmatching */
-}
-
-/* 80258588-802585D0       .text __dt__11JPAKeyBlockFv */
-JPAKeyBlock::~JPAKeyBlock() {
-    /* Nonmatching */
-}
-
-/* 802585D0-8025862C       .text __dt__14JPAKeyBlockArcFv */
-JPAKeyBlockArc::~JPAKeyBlockArc() {
-    /* Nonmatching */
-}
-
-/* 8025862C-80258638       .text getID__14JPAKeyBlockArcFv */
-void JPAKeyBlockArc::getID() {
-    /* Nonmatching */
-}
-
-/* 80258638-8025864C       .text isLoopEnable__14JPAKeyBlockArcFv */
-void JPAKeyBlockArc::isLoopEnable() {
-    /* Nonmatching */
-}
-
-/* 8025864C-80258658       .text getNumber__14JPAKeyBlockArcFv */
-void JPAKeyBlockArc::getNumber() {
-    /* Nonmatching */
-}
-
-/* 80258658-80258660       .text getKeyDataPtr__14JPAKeyBlockArcFv */
-void JPAKeyBlockArc::getKeyDataPtr() {
-    /* Nonmatching */
+JPAKeyBlockArc::JPAKeyBlockArc(const u8* data) {
+    mpData = reinterpret_cast<const JPAKeyBlockData*>(data+0x0C);
+    mpKeyData = reinterpret_cast<const f32*>(data+0x20);
 }
