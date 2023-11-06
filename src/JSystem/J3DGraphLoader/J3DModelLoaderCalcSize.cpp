@@ -12,7 +12,7 @@ void J3DModelLoader::countMaterialNum(const void*) {
 }
 
 /* 802FD868-802FDA10       .text calcLoadSize__14J3DModelLoaderFPCvUl */
-void J3DModelLoader::calcLoadSize(const void*, unsigned long) {
+void J3DModelLoader::calcLoadSize(const void*, u32) {
     /* Nonmatching */
 }
 
@@ -22,12 +22,12 @@ void J3DModelLoader::calcLoadMaterialTableSize(const void*) {
 }
 
 /* 802FDB0C-802FDD28       .text calcLoadBinaryDisplayListSize__14J3DModelLoaderFPCvUl */
-void J3DModelLoader::calcLoadBinaryDisplayListSize(const void*, unsigned long) {
+void J3DModelLoader::calcLoadBinaryDisplayListSize(const void*, u32) {
     /* Nonmatching */
 }
 
 /* 802FDD28-802FDDB4       .text calcSizeInformation__14J3DModelLoaderFPC17J3DModelInfoBlockUl */
-void J3DModelLoader::calcSizeInformation(const J3DModelInfoBlock*, unsigned long) {
+void J3DModelLoader::calcSizeInformation(const J3DModelInfoBlock*, u32) {
     /* Nonmatching */
 }
 
@@ -37,12 +37,12 @@ void J3DModelLoader::calcSizeJoint(const J3DJointBlock*) {
 }
 
 /* 802FDDE0-802FDECC       .text calcSizeMaterial__18J3DModelLoader_v26FPC16J3DMaterialBlockUl */
-void J3DModelLoader_v26::calcSizeMaterial(const J3DMaterialBlock*, unsigned long) {
+s32 J3DModelLoader_v26::calcSizeMaterial(const J3DMaterialBlock*, u32) {
     /* Nonmatching */
 }
 
 /* 802FDECC-802FDF70       .text calcSizeShape__14J3DModelLoaderFPC13J3DShapeBlockUl */
-void J3DModelLoader::calcSizeShape(const J3DShapeBlock*, unsigned long) {
+void J3DModelLoader::calcSizeShape(const J3DShapeBlock*, u32) {
     /* Nonmatching */
 }
 
@@ -52,7 +52,7 @@ void J3DModelLoader::calcSizeTexture(const J3DTextureBlock*) {
 }
 
 /* 802FDF8C-802FE01C       .text calcSizeMaterialTable__18J3DModelLoader_v26FPC16J3DMaterialBlockUl */
-void J3DModelLoader_v26::calcSizeMaterialTable(const J3DMaterialBlock*, unsigned long) {
+s32 J3DModelLoader_v26::calcSizeMaterialTable(const J3DMaterialBlock*, u32) {
     /* Nonmatching */
 }
 
@@ -62,11 +62,11 @@ void J3DModelLoader::calcSizeTextureTable(const J3DTextureBlock*) {
 }
 
 /* 802FE03C-802FE0CC       .text calcSizePatchedMaterial__14J3DModelLoaderFPC16J3DMaterialBlockUl */
-void J3DModelLoader::calcSizePatchedMaterial(const J3DMaterialBlock*, unsigned long) {
+void J3DModelLoader::calcSizePatchedMaterial(const J3DMaterialBlock*, u32) {
     /* Nonmatching */
 }
 
 /* 802FE0CC-802FE1A4       .text calcSizeMaterialDL__14J3DModelLoaderFPC18J3DMaterialDLBlockUl */
-void J3DModelLoader::calcSizeMaterialDL(const J3DMaterialDLBlock*, unsigned long) {
+void J3DModelLoader::calcSizeMaterialDL(const J3DMaterialDLBlock*, u32) {
     /* Nonmatching */
 }
