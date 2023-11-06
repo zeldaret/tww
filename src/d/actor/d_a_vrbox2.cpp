@@ -141,8 +141,8 @@ BOOL daVrbox2_color_set(vrbox2_class* i_this) {
             stageWindY = 0x4000;
 
         s32 windY2;
-        s32 windX;
         s16 windY;
+        s32 windX;
         if (dComIfGs_getWindX() == -1 && dComIfGs_getWindY() == -1) {
             windX = 0;
             windY = 0;
