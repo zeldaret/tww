@@ -2,15 +2,7 @@
 #define M_DO_AUDIO_H
 
 #include "JAZelAudio/JAIZelBasic.h"
-
-class JAIZelInst {
-public:
-    f32 getMelodyPattern(s32, s32, s32*);
-
-public:
-    /* 0x00 */ u8 pad[0x1F];
-    /* 0x1F */ u8 mMelodyNum;
-};
+#include "JAZelAudio/JAIZelInst.h"
 
 class mDoAud_zelAudio_c : public JAIZelBasic {
 public:

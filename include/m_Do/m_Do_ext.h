@@ -5,7 +5,7 @@
 #include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/JUtility/JUTFont.h"
-#include "JAZelAudio/JAIZelBasic.h"
+#include "JAZelAudio/JAIZelAnime.h"
 #include "d/d_kankyo.h"
 
 class JKRArchive;
@@ -324,7 +324,7 @@ public:
 
 class mDoExt_zelAnime : public JAIZelAnime {
 public:
-    mDoExt_zelAnime() { }
+    mDoExt_zelAnime() {}
 
 public:
     /* 0x98 */ void* mpBasAnm;

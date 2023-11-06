@@ -24,8 +24,8 @@ public:
     void setAnimSoundVec(JAIBasic*, Vec*, f32, f32, u32, u8);
     void setAnimSoundActor(JAIBasic*, JAInter::Actor*, f32, f32, u8);
     void playActorAnimSound(JAIBasic*, JAInter::Actor*, f32, u8);
-    void startAnimSound(void*, u32, JAISound**, JAInter::Actor*, u8);
-    void setSpeedModifySound(JAISound*, JAIAnimeFrameSoundData*, f32);
+    virtual void startAnimSound(void*, u32, JAISound**, JAInter::Actor*, u8);
+    virtual void setSpeedModifySound(JAISound*, JAIAnimeFrameSoundData*, f32);
     void stop();
 
 public:

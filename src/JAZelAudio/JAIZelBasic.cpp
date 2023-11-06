@@ -3,7 +3,7 @@
 // Translation Unit: JAIZelBasic.cpp
 //
 
-#include "JSystem/JAudio/JAIZelBasic.h"
+#include "JAZelAudio/JAIZelBasic.h"
 #include "dolphin/types.h"
 
 /* 802A1C78-802A1EB4       .text __ct__11JAIZelBasicFv */
@@ -42,7 +42,7 @@ void JAIZelBasic::resetRecover() {
 }
 
 /* 802A334C-802A33D0       .text bgmStreamPrepare__11JAIZelBasicFUl */
-void JAIZelBasic::bgmStreamPrepare(unsigned long) {
+void JAIZelBasic::bgmStreamPrepare(u32) {
     /* Nonmatching */
 }
 
@@ -52,22 +52,22 @@ void JAIZelBasic::bgmStreamPlay() {
 }
 
 /* 802A34A4-802A4658       .text bgmStart__11JAIZelBasicFUlUll */
-void JAIZelBasic::bgmStart(unsigned long, unsigned long, long) {
+void JAIZelBasic::bgmStart(u32, u32, s32) {
     /* Nonmatching */
 }
 
 /* 802A4658-802A4770       .text bgmStop__11JAIZelBasicFUll */
-void JAIZelBasic::bgmStop(unsigned long, long) {
+void JAIZelBasic::bgmStop(u32, s32) {
     /* Nonmatching */
 }
 
 /* 802A4770-802A47B8       .text mainBgmStopOnly__11JAIZelBasicFUl */
-void JAIZelBasic::mainBgmStopOnly(unsigned long) {
+void JAIZelBasic::mainBgmStopOnly(u32) {
     /* Nonmatching */
 }
 
 /* 802A47B8-802A4CDC       .text subBgmStart__11JAIZelBasicFUl */
-void JAIZelBasic::subBgmStart(unsigned long) {
+void JAIZelBasic::subBgmStart(u32) {
     /* Nonmatching */
 }
 
@@ -82,7 +82,7 @@ void JAIZelBasic::subBgmStopInner() {
 }
 
 /* 802A4EB8-802A53B4       .text bgmNowBattle__11JAIZelBasicFf */
-void JAIZelBasic::bgmNowBattle(float) {
+void JAIZelBasic::bgmNowBattle(f32) {
     /* Nonmatching */
 }
 
@@ -102,12 +102,12 @@ void JAIZelBasic::bgmNowKaitengiri() {
 }
 
 /* 802A564C-802A579C       .text bgmHitSound__11JAIZelBasicFl */
-void JAIZelBasic::bgmHitSound(long) {
+void JAIZelBasic::bgmHitSound(s32) {
     /* Nonmatching */
 }
 
 /* 802A579C-802A57A4       .text bgmSetSwordUsing__11JAIZelBasicFl */
-void JAIZelBasic::bgmSetSwordUsing(long) {
+void JAIZelBasic::bgmSetSwordUsing(s32) {
     /* Nonmatching */
 }
 
@@ -122,7 +122,7 @@ void JAIZelBasic::mbossBgmMuteProcess() {
 }
 
 /* 802A591C-802A59B0       .text mbossBgmNearByProcess__11JAIZelBasicFf */
-void JAIZelBasic::mbossBgmNearByProcess(float) {
+void JAIZelBasic::mbossBgmNearByProcess(f32) {
     /* Nonmatching */
 }
 
@@ -152,12 +152,12 @@ void JAIZelBasic::checkPlayingStreamBgmFlag() {
 }
 
 /* 802A5A40-802A5A78       .text changeBgmStatus__11JAIZelBasicFl */
-void JAIZelBasic::changeBgmStatus(long) {
+void JAIZelBasic::changeBgmStatus(s32) {
     /* Nonmatching */
 }
 
 /* 802A5A78-802A5AC0       .text changeSubBgmStatus__11JAIZelBasicFl */
-void JAIZelBasic::changeSubBgmStatus(long) {
+void JAIZelBasic::changeSubBgmStatus(s32) {
     /* Nonmatching */
 }
 
@@ -177,7 +177,7 @@ void JAIZelBasic::enemyNearByGFrame() {
 }
 
 /* 802A5C8C-802A5D0C       .text bgmAllMute__11JAIZelBasicFUl */
-void JAIZelBasic::bgmAllMute(unsigned long) {
+void JAIZelBasic::bgmAllMute(u32) {
     /* Nonmatching */
 }
 
@@ -212,7 +212,7 @@ void JAIZelBasic::checkCbPracticePlay() {
 }
 
 /* 802A6570-802A659C       .text prepareLandingDemo__11JAIZelBasicFl */
-void JAIZelBasic::prepareLandingDemo(long) {
+void JAIZelBasic::prepareLandingDemo(s32) {
     /* Nonmatching */
 }
 
@@ -232,22 +232,22 @@ void JAIZelBasic::initSe() {
 }
 
 /* 802A6720-802A8550       .text seStart__11JAIZelBasicFUlP3VecUlScffffUc */
-void JAIZelBasic::seStart(unsigned long, Vec*, unsigned long, signed char, float, float, float, float, unsigned char) {
+void JAIZelBasic::seStart(u32, Vec*, u32, s8, f32, f32, f32, f32, u8) {
     /* Nonmatching */
 }
 
 /* 802A8550-802A85F4       .text seStop__11JAIZelBasicFUll */
-void JAIZelBasic::seStop(unsigned long, long) {
+void JAIZelBasic::seStop(u32, s32) {
     /* Nonmatching */
 }
 
 /* 802A85F4-802A8634       .text checkSePlaying__11JAIZelBasicFUl */
-void JAIZelBasic::checkSePlaying(unsigned long) {
+void JAIZelBasic::checkSePlaying(u32) {
     /* Nonmatching */
 }
 
 /* 802A8634-802A8688       .text seStopActor__11JAIZelBasicFP3VecUl */
-void JAIZelBasic::seStopActor(Vec*, unsigned long) {
+void JAIZelBasic::seStopActor(Vec*, u32) {
     /* Nonmatching */
 }
 
@@ -257,12 +257,12 @@ void JAIZelBasic::seDeleteObject(Vec*) {
 }
 
 /* 802A86A8-802A8748       .text getLinkVoiceVowel__11JAIZelBasicFUl */
-void JAIZelBasic::getLinkVoiceVowel(unsigned long) {
+u8 JAIZelBasic::getLinkVoiceVowel(u32) {
     /* Nonmatching */
 }
 
 /* 802A8748-802A892C       .text linkVoiceStart__11JAIZelBasicFUlP3VecUcSc */
-void JAIZelBasic::linkVoiceStart(unsigned long, Vec*, unsigned char, signed char) {
+void JAIZelBasic::linkVoiceStart(u32, Vec*, u8, s8) {
     /* Nonmatching */
 }
 
@@ -272,22 +272,22 @@ void JAIZelBasic::monsSeInit() {
 }
 
 /* 802A8958-802A8B24       .text monsSeStart__11JAIZelBasicFUlP3VecUlUlSc */
-void JAIZelBasic::monsSeStart(unsigned long, Vec*, unsigned long, unsigned long, signed char) {
+void JAIZelBasic::monsSeStart(u32, Vec*, u32, u32, s8) {
     /* Nonmatching */
 }
 
 /* 802A8B24-802A8BE4       .text kuroboMotionPlay__11JAIZelBasicFUlP3VecUlSc */
-void JAIZelBasic::kuroboMotionPlay(unsigned long, Vec*, unsigned long, signed char) {
+void JAIZelBasic::kuroboMotionPlay(u32, Vec*, u32, s8) {
     /* Nonmatching */
 }
 
 /* 802A8BE4-802A8CB4       .text kuroboVoicePlay__11JAIZelBasicFUlP3VecSc */
-void JAIZelBasic::kuroboVoicePlay(unsigned long, Vec*, signed char) {
+void JAIZelBasic::kuroboVoicePlay(u32, Vec*, s8) {
     /* Nonmatching */
 }
 
 /* 802A8CB4-802A8F58       .text setLevObjSE__11JAIZelBasicFUlP3VecSc */
-void JAIZelBasic::setLevObjSE(unsigned long, Vec*, signed char) {
+void JAIZelBasic::setLevObjSE(u32, Vec*, s8) {
     /* Nonmatching */
 }
 
@@ -302,32 +302,32 @@ void JAIZelBasic::initLevObjSE() {
 }
 
 /* 802A9120-802A91CC       .text charVoicePlay__11JAIZelBasicFllP3VecSc */
-void JAIZelBasic::charVoicePlay(long, long, Vec*, signed char) {
+void JAIZelBasic::charVoicePlay(s32, s32, Vec*, s8) {
     /* Nonmatching */
 }
 
 /* 802A91CC-802A92CC       .text messageSePlay__11JAIZelBasicFUsP3VecSc */
-void JAIZelBasic::messageSePlay(unsigned short, Vec*, signed char) {
+void JAIZelBasic::messageSePlay(u16, Vec*, s8) {
     /* Nonmatching */
 }
 
 /* 802A92CC-802A965C       .text shipCruiseSePlay__11JAIZelBasicFP3Vecf */
-void JAIZelBasic::shipCruiseSePlay(Vec*, float) {
+void JAIZelBasic::shipCruiseSePlay(Vec*, f32) {
     /* Nonmatching */
 }
 
 /* 802A965C-802A9664       .text setShipSailState__11JAIZelBasicFl */
-void JAIZelBasic::setShipSailState(long) {
+void JAIZelBasic::setShipSailState(s32) {
     /* Nonmatching */
 }
 
 /* 802A9664-802A9874       .text init__11JAIZelBasicFP12JKRSolidHeapUl */
-void JAIZelBasic::init(JKRSolidHeap*, unsigned long) {
+void JAIZelBasic::init(JKRSolidHeap*, u32) {
     /* Nonmatching */
 }
 
 /* 802A9874-802A98A0       .text setOutputMode__11JAIZelBasicFUl */
-void JAIZelBasic::setOutputMode(unsigned long) {
+void JAIZelBasic::setOutputMode(u32) {
     /* Nonmatching */
 }
 
@@ -352,12 +352,12 @@ void JAIZelBasic::menuOut() {
 }
 
 /* 802A9CF8-802A9DB0       .text getCameraInfo__11JAIZelBasicFP3VecPA4_fUl */
-void JAIZelBasic::getCameraInfo(Vec*, float(*)[4], unsigned long) {
+void JAIZelBasic::getCameraInfo(Vec*, f32(*)[4], u32) {
     /* Nonmatching */
 }
 
 /* 802A9DB0-802A9DB8       .text getCameraMapInfo__11JAIZelBasicFUl */
-void JAIZelBasic::getCameraMapInfo(unsigned long) {
+void JAIZelBasic::getCameraMapInfo(u32) {
     /* Nonmatching */
 }
 
@@ -367,7 +367,7 @@ void JAIZelBasic::setCameraPolygonPos(Vec*) {
 }
 
 /* 802A9DDC-802A9F60       .text setCameraGroupInfo__11JAIZelBasicFUc */
-void JAIZelBasic::setCameraGroupInfo(unsigned char) {
+void JAIZelBasic::setCameraGroupInfo(u8) {
     /* Nonmatching */
 }
 
@@ -382,32 +382,32 @@ void JAIZelBasic::startIsleBgm() {
 }
 
 /* 802AA348-802AA378       .text setLinkGroupInfo__11JAIZelBasicFUc */
-void JAIZelBasic::setLinkGroupInfo(unsigned char) {
+void JAIZelBasic::setLinkGroupInfo(u8) {
     /* Nonmatching */
 }
 
 /* 802AA378-802AA380       .text getMapInfoFxline__11JAIZelBasicFUl */
-void JAIZelBasic::getMapInfoFxline(unsigned long) {
+void JAIZelBasic::getMapInfoFxline(u32) {
     /* Nonmatching */
 }
 
 /* 802AA380-802AA388       .text getMapInfoFxParameter__11JAIZelBasicFUl */
-void JAIZelBasic::getMapInfoFxParameter(unsigned long) {
+void JAIZelBasic::getMapInfoFxParameter(u32) {
     /* Nonmatching */
 }
 
 /* 802AA388-802AA390       .text getMapInfoGround__11JAIZelBasicFUl */
-void JAIZelBasic::getMapInfoGround(unsigned long) {
+void JAIZelBasic::getMapInfoGround(u32) {
     /* Nonmatching */
 }
 
 /* 802AA390-802AACE8       .text setScene__11JAIZelBasicFllll */
-void JAIZelBasic::setScene(long, long, long, long) {
+void JAIZelBasic::setScene(s32, s32, s32, s32) {
     /* Nonmatching */
 }
 
 /* 802AACE8-802AAD0C       .text expandSceneBgmNum__11JAIZelBasicFUl */
-void JAIZelBasic::expandSceneBgmNum(unsigned long) {
+void JAIZelBasic::expandSceneBgmNum(u32) {
     /* Nonmatching */
 }
 
@@ -422,7 +422,7 @@ void JAIZelBasic::checkLinkOnBoardSea() {
 }
 
 /* 802AAD94-802AAE80       .text setSceneName__11JAIZelBasicFPcll */
-void JAIZelBasic::setSceneName(char*, long, long) {
+void JAIZelBasic::setSceneName(char*, s32, s32) {
     /* Nonmatching */
 }
 
@@ -432,7 +432,7 @@ void JAIZelBasic::spotNameToId(char*) {
 }
 
 /* 802AAF04-802AB204       .text sceneChange__11JAIZelBasicFUlUlUll */
-void JAIZelBasic::sceneChange(unsigned long, unsigned long, unsigned long, long) {
+void JAIZelBasic::sceneChange(u32, u32, u32, s32) {
     /* Nonmatching */
 }
 
@@ -447,7 +447,7 @@ void JAIZelBasic::load1stDynamicWave() {
 }
 
 /* 802AB678-802AB6F4       .text check1stDynamicWave__11JAIZelBasicFv */
-void JAIZelBasic::check1stDynamicWave() {
+BOOL JAIZelBasic::check1stDynamicWave() {
     /* Nonmatching */
 }
 
@@ -467,37 +467,37 @@ BOOL JAIZelBasic::checkFirstWaves() {
 }
 
 /* 802AB8B0-802AB9F4       .text setLinkHp__11JAIZelBasicFll */
-void JAIZelBasic::setLinkHp(long, long) {
+void JAIZelBasic::setLinkHp(s32, s32) {
     /* Nonmatching */
 }
 
 /* 802AB9F4-802ABA44       .text setLinkSwordType__11JAIZelBasicFll */
-void JAIZelBasic::setLinkSwordType(long, long) {
+void JAIZelBasic::setLinkSwordType(s32, s32) {
     /* Nonmatching */
 }
 
 /* 802ABA44-802ABA94       .text setLinkShieldType__11JAIZelBasicFll */
-void JAIZelBasic::setLinkShieldType(long, long) {
+void JAIZelBasic::setLinkShieldType(s32, s32) {
     /* Nonmatching */
 }
 
 /* 802ABA94-802ABA9C       .text setLinkBootsType__11JAIZelBasicFl */
-void JAIZelBasic::setLinkBootsType(long) {
+void JAIZelBasic::setLinkBootsType(s32) {
     /* Nonmatching */
 }
 
 /* 802ABA9C-802ABB18       .text setLinkOnBoard__11JAIZelBasicFl */
-void JAIZelBasic::setLinkOnBoard(long) {
+void JAIZelBasic::setLinkOnBoard(s32) {
     /* Nonmatching */
 }
 
 /* 802ABB18-802ABBD0       .text bgmMute__11JAIZelBasicFPP8JAISoundUllUl */
-void JAIZelBasic::bgmMute(JAISound**, unsigned long, long, unsigned long) {
+void JAIZelBasic::bgmMute(JAISound**, u32, s32, u32) {
     /* Nonmatching */
 }
 
 /* 802ABBD0-802ABC3C       .text checkStreamPlaying__11JAIZelBasicFUl */
-void JAIZelBasic::checkStreamPlaying(unsigned long) {
+void JAIZelBasic::checkStreamPlaying(u32) {
     /* Nonmatching */
 }
 
@@ -522,7 +522,7 @@ void JAIZelBasic::stSkyCloistersProcess() {
 }
 
 /* 802ABDE0-802ABE10       .text getRandomU32__11JAIZelBasicFUl */
-void JAIZelBasic::getRandomU32(unsigned long) {
+void JAIZelBasic::getRandomU32(u32) {
     /* Nonmatching */
 }
 
@@ -532,7 +532,7 @@ void JAIZelBasic::setEventBit(void*) {
 }
 
 /* 802ABE18-802ABE50       .text checkEventBit__11JAIZelBasicFUs */
-void JAIZelBasic::checkEventBit(unsigned short) {
+void JAIZelBasic::checkEventBit(u16) {
     /* Nonmatching */
 }
 
@@ -552,17 +552,17 @@ void JAIZelBasic::processMorningToNormal() {
 }
 
 /* 802ABFC0-802AC1BC       .text checkOnOuterSea__11JAIZelBasicFPf */
-void JAIZelBasic::checkOnOuterSea(float*) {
+void JAIZelBasic::checkOnOuterSea(f32*) {
     /* Nonmatching */
 }
 
 /* 802AC1BC-802AC258       .text makeSound__11JAIZelBasicFUl */
-void JAIZelBasic::makeSound(unsigned long) {
+void JAIZelBasic::makeSound(u32) {
     /* Nonmatching */
 }
 
 /* 802AC258-802AC300       .text checkSeqIDDemoPlaying__11JAIZelBasicFUl */
-void JAIZelBasic::checkSeqIDDemoPlaying(unsigned long) {
+void JAIZelBasic::checkSeqIDDemoPlaying(u32) {
     /* Nonmatching */
 }
 
@@ -587,7 +587,7 @@ void JAIZelBasic::unmuteMainBgmAll() {
 }
 
 /* 802AC6C0-802AC758       .text demoBgmStop__11JAIZelBasicFUl */
-void JAIZelBasic::demoBgmStop(unsigned long) {
+void JAIZelBasic::demoBgmStop(u32) {
     /* Nonmatching */
 }
 
@@ -598,10 +598,5 @@ void JAIZelBasic::isDemo() {
 
 /* 802AC788-802AC7E8       .text checkSeaBgmID__11JAIZelBasicFv */
 void JAIZelBasic::checkSeaBgmID() {
-    /* Nonmatching */
-}
-
-/* 802AC7E8-802AC830       .text __dt__11JAIZelSoundFv */
-JAIZelSound::~JAIZelSound() {
     /* Nonmatching */
 }

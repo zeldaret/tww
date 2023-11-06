@@ -3,25 +3,25 @@
 // Translation Unit: JAIZelAnime.cpp
 //
 
-#include "JSystem/JAudio/JAIZelAnime.h"
+#include "JAZelAudio/JAIZelAnime.h"
 #include "dolphin/types.h"
 
 /* 802AC830-802AC888       .text setAnimSound__11JAIZelAnimeFP3VecffUlSc */
-void JAIZelAnime::setAnimSound(Vec*, float, float, unsigned long, signed char) {
+void JAIZelAnime::setAnimSound(Vec*, f32, f32, u32, s8) {
     /* Nonmatching */
 }
 
 /* 802AC888-802ACD34       .text startAnimSound__11JAIZelAnimeFPvUlPP8JAISoundPQ27JAInter5ActorUc */
-void JAIZelAnime::startAnimSound(void*, unsigned long, JAISound**, JAInter::Actor*, unsigned char) {
+void JAIZelAnime::startAnimSound(void*, u32, JAISound**, JAInter::Actor*, u8) {
     /* Nonmatching */
 }
 
 /* 802ACD34-802ACFA0       .text setSpeedModifySound__11JAIZelAnimeFP8JAISoundP22JAIAnimeFrameSoundDataf */
-void JAIZelAnime::setSpeedModifySound(JAISound*, JAIAnimeFrameSoundData*, float) {
+void JAIZelAnime::setSpeedModifySound(JAISound*, JAIAnimeFrameSoundData*, f32) {
     /* Nonmatching */
 }
 
 /* 802ACFA0-802AD008       .text setPlayPosition__11JAIZelAnimeFf */
-void JAIZelAnime::setPlayPosition(float) {
+void JAIZelAnime::setPlayPosition(f32) {
     /* Nonmatching */
 }

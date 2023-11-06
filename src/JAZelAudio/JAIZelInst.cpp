@@ -3,7 +3,7 @@
 // Translation Unit: JAIZelInst.cpp
 //
 
-#include "JSystem/JAudio/JAIZelInst.h"
+#include "JAZelAudio/JAIZelInst.h"
 #include "dolphin/types.h"
 
 /* 802AE04C-802AE0B4       .text __ct__10JAIZelInstFv */
@@ -17,7 +17,7 @@ void JAIZelInst::reset() {
 }
 
 /* 802AE1C0-802AE278       .text playArmSwing__10JAIZelInstFll */
-void JAIZelInst::playArmSwing(long, long) {
+void JAIZelInst::playArmSwing(s32, s32) {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void JAIZelInst::stopArmSwing() {
 }
 
 /* 802AE2B8-802AE444       .text setStickPos__10JAIZelInstFll */
-void JAIZelInst::setStickPos(long, long) {
+void JAIZelInst::setStickPos(s32, s32) {
     /* Nonmatching */
 }
 
@@ -37,22 +37,22 @@ void JAIZelInst::play() {
 }
 
 /* 802AE4B4-802AE590       .text setBeat__10JAIZelInstFl */
-void JAIZelInst::setBeat(long) {
+void JAIZelInst::setBeat(s32) {
     /* Nonmatching */
 }
 
 /* 802AE590-802AE5D0       .text setVolume__10JAIZelInstFf */
-void JAIZelInst::setVolume(float) {
+void JAIZelInst::setVolume(f32) {
     /* Nonmatching */
 }
 
 /* 802AE5D0-802AE864       .text metronomePlay__10JAIZelInstFll */
-void JAIZelInst::metronomePlay(long, long) {
+void JAIZelInst::metronomePlay(s32, s32) {
     /* Nonmatching */
 }
 
 /* 802AE864-802AEB5C       .text judge__10JAIZelInstFll */
-void JAIZelInst::judge(long, long) {
+void JAIZelInst::judge(s32, s32) {
     /* Nonmatching */
 }
 
@@ -62,27 +62,27 @@ void JAIZelInst::ambientPlay() {
 }
 
 /* 802AEC50-802AECC0       .text armSoundPlay__10JAIZelInstFl */
-void JAIZelInst::armSoundPlay(long) {
+void JAIZelInst::armSoundPlay(s32) {
     /* Nonmatching */
 }
 
 /* 802AECC0-802AED48       .text getMelodyPattern__10JAIZelInstFllPl */
-void JAIZelInst::getMelodyPattern(long, long, long*) {
+f32 JAIZelInst::getMelodyPattern(s32, s32, s32*) {
     /* Nonmatching */
 }
 
 /* 802AED48-802AEDB8       .text getMelodyBeat__10JAIZelInstFl */
-void JAIZelInst::getMelodyBeat(long) {
+void JAIZelInst::getMelodyBeat(s32) {
     /* Nonmatching */
 }
 
 /* 802AEDB8-802AEE1C       .text getMelodyGFrames__10JAIZelInstFl */
-void JAIZelInst::getMelodyGFrames(long) {
+void JAIZelInst::getMelodyGFrames(s32) {
     /* Nonmatching */
 }
 
 /* 802AEE1C-802AEEA8       .text melodyPlay__10JAIZelInstFl */
-void JAIZelInst::melodyPlay(long) {
+void JAIZelInst::melodyPlay(s32) {
     /* Nonmatching */
 }
 

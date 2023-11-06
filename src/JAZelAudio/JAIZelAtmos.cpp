@@ -3,7 +3,7 @@
 // Translation Unit: JAIZelAtmos.cpp
 //
 
-#include "JSystem/JAudio/JAIZelAtmos.h"
+#include "JAZelAudio/JAIZelBasic.h"
 #include "dolphin/types.h"
 
 /* 802AD008-802AD014       .text initSeaEnvPos__11JAIZelBasicFv */
@@ -17,7 +17,7 @@ void JAIZelBasic::registSeaEnvPos(Vec*) {
 }
 
 /* 802AD0A8-802AD54C       .text seaEnvSePlay__11JAIZelBasicFUlSc */
-void JAIZelBasic::seaEnvSePlay(unsigned long, signed char) {
+void JAIZelBasic::seaEnvSePlay(u32, s8) {
     /* Nonmatching */
 }
 
@@ -27,17 +27,17 @@ void JAIZelBasic::calcPosPanLR(Vec*) {
 }
 
 /* 802AD63C-802AD728       .text calcPosPanSR__11JAIZelBasicFP3Vecf */
-void JAIZelBasic::calcPosPanSR(Vec*, float) {
+void JAIZelBasic::calcPosPanSR(Vec*, f32) {
     /* Nonmatching */
 }
 
 /* 802AD728-802AD878       .text calcPosVolume__11JAIZelBasicFP3Vecf */
-void JAIZelBasic::calcPosVolume(Vec*, float) {
+void JAIZelBasic::calcPosVolume(Vec*, f32) {
     /* Nonmatching */
 }
 
 /* 802AD878-802AD98C       .text seaShoreSE__11JAIZelBasicFUlP3VecUlSc */
-void JAIZelBasic::seaShoreSE(unsigned long, Vec*, unsigned long, signed char) {
+void JAIZelBasic::seaShoreSE(u32, Vec*, u32, s8) {
     /* Nonmatching */
 }
 
@@ -52,12 +52,12 @@ void JAIZelBasic::registRiverPos(Vec*) {
 }
 
 /* 802ADB38-802ADC58       .text riverSePlay__11JAIZelBasicFUcSc */
-void JAIZelBasic::riverSePlay(unsigned char, signed char) {
+void JAIZelBasic::riverSePlay(u8, s8) {
     /* Nonmatching */
 }
 
 /* 802ADC58-802ADE68       .text waterfallSePlay__11JAIZelBasicFUcP3VecSc */
-void JAIZelBasic::waterfallSePlay(unsigned char, Vec*, signed char) {
+void JAIZelBasic::waterfallSePlay(u8, Vec*, s8) {
     /* Nonmatching */
 }
 
@@ -72,6 +72,6 @@ void JAIZelBasic::registWindowPos(Vec*) {
 }
 
 /* 802ADF20-802AE04C       .text rainPlay__11JAIZelBasicFl */
-void JAIZelBasic::rainPlay(long) {
+void JAIZelBasic::rainPlay(s32) {
     /* Nonmatching */
 }

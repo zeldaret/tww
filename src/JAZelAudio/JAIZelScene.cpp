@@ -3,5 +3,5 @@
 // Translation Unit: JAIZelScene.cpp
 //
 
-#include "JSystem/JAudio/JAIZelScene.h"
+#include "JAZelAudio/JAIZelBasic.h"
 #include "dolphin/types.h"

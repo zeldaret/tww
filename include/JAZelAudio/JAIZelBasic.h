@@ -4,9 +4,9 @@
 #include "dolphin/types.h"
 #include "JAZelAudio/JAZelAudio_SE.h"
 #include "JAZelAudio/JAZelAudio_BGM.h"
-#include "JSystem/JAudio/JAIAnimation.h"
 #include "dolphin/mtx/mtx.h"
 
+class JAISound;
 class JKRSolidHeap;
 
 class JAIZelBasic {
@@ -155,6 +155,19 @@ public:
 
     static JAIZelBasic* zel_basic;
 
+    // static m_bgm_mute_state;
+
+    // static charVoiceTable;
+    // static linkVoiceTable;
+
+    // static m_bgm_wave_info;
+    // static m_dy_wave_set_1st;
+    // static m_dy_wave_set_2nd;
+    // static m_scene_info;
+    // static m_isle_info;
+    // static spot_dir_name;
+    // static mIsleArea;
+
     /* 0x0004 */ u8 field_0x0004[0x0020 - 0x0004];
     /* 0x0020 */ u8 field_0x0020;
     /* 0x0021 */ u8 field_0x0021;
@@ -247,14 +260,6 @@ public:
     /* 0x1F3E */ u8 field_0x1F3E[0x1F40 - 0x1F3E];
     /* 0x1F40 */ f32 field_0x1f40;
     /* 0x1F44 */ u8 field_0x1F44[0x20F4 - 0x1F44];
-};
-
-class JAIZelAnime : public JAIAnimeSound {
-public:
-    JAIZelAnime() { }
-    
-    virtual void startAnimSound(void*, u32, JAISound**, JAInter::Actor*, u8);
-    virtual void setSpeedModifySound(JAISound*, JAIAnimeFrameSoundData*, f32);
 };
 
 #endif /* JAZELAUDIO_JAIZELBASIC_H */

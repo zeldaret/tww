@@ -3,5 +3,5 @@
 // Translation Unit: JAIZelCharVoiceTable.cpp
 //
 
-#include "JSystem/JAudio/JAIZelCharVoiceTable.h"
+#include "JAZelAudio/JAIZelBasic.h"
 #include "dolphin/types.h"

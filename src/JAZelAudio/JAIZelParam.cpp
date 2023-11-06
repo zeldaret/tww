@@ -3,5 +3,6 @@
 // Translation Unit: JAIZelParam.cpp
 //
 
-#include "JSystem/JAudio/JAIZelParam.h"
+#include "JAZelAudio/JAIZelParam.h"
+#include "JAZelAudio/JAIZelBasic.h"
 #include "dolphin/types.h"

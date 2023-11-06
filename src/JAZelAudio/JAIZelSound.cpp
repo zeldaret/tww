@@ -3,7 +3,7 @@
 // Translation Unit: JAIZelSound.cpp
 //
 
-#include "JSystem/JAudio/JAIZelSound.h"
+#include "JAZelAudio/JAIZelSound.h"
 #include "dolphin/types.h"
 
 /* 802AEF64-802AEFA0       .text __ct__11JAIZelSoundFv */
@@ -12,21 +12,21 @@ JAIZelSound::JAIZelSound() {
 }
 
 /* 802AEFA0-802AF19C       .text setDistanceVolumeCommon__11JAIZelSoundFfUc */
-void JAIZelSound::setDistanceVolumeCommon(float, unsigned char) {
+void JAIZelSound::setDistanceVolumeCommon(f32, u8) {
     /* Nonmatching */
 }
 
 /* 802AF19C-802AF2A0       .text setSeDistanceVolume__11JAIZelSoundFUc */
-void JAIZelSound::setSeDistanceVolume(unsigned char) {
+void JAIZelSound::setSeDistanceVolume(u8) {
     /* Nonmatching */
 }
 
 /* 802AF2A0-802AF314       .text setSeDistancePan__11JAIZelSoundFUc */
-void JAIZelSound::setSeDistancePan(unsigned char) {
+void JAIZelSound::setSeDistancePan(u8) {
     /* Nonmatching */
 }
 
 /* 802AF314-802AF458       .text setSeDistanceDolby__11JAIZelSoundFUc */
-void JAIZelSound::setSeDistanceDolby(unsigned char) {
+void JAIZelSound::setSeDistanceDolby(u8) {
     /* Nonmatching */
 }
