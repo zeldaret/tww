@@ -10,6 +10,23 @@
 #include "d/actor/d_a_shop_item.h"
 #include "d/d_item_data.h"
 #include "SSystem/SComponent/c_lib.h"
+#include "d/d_com_inf_game.h"
+#include "f_op/f_op_camera.h"
+#include "m_Do/m_Do_mtx.h"
+#include "d/actor/d_a_player.h"
+#include "d/d_item.h"
+
+u32 default_select_msg[] = {
+    0x1DC1,
+    0x2777,
+    0x2784,
+    0x0F3F,
+    0x0F3F,
+    0x0F3F,
+    0x2F48,
+    0x2F48,
+    0x2866,
+};
 
 ShopItems_c__ItemData shopItemData_Feedbag = {
     /* mItemNo           */ ESA_BAG,
@@ -542,59 +559,529 @@ __shop_items_set_data** Item_set_data_tbl[] = {
     NULL,
 };
 
+Vec Item_set_pos_data_dshop[] = {
+    {-50.0f, 75.0f, -70.0f},
+    {40.0f, 75.0f, -70.0f},
+    {130.0f, 75.0f, -70.0f},
+};
+
+Vec Item_set_pos_data_bmshop1[] = {
+    {5.0f, 157.0f, -90.0f},
+    {95.0f, 157.0f, -90.0f},
+    {185.0f, 157.0f, -90.0f},
+};
+
+Vec Item_set_pos_data_bmshop2[] = {
+    {5.0f, 157.0f, -90.0f},
+    {95.0f, 157.0f, -90.0f},
+    {185.0f, 157.0f, -90.0f},
+};
+
+Vec Item_set_pos_data_bshop_3[] = {
+    {-15.0f, 77.0f, 5.0f},
+    {50.0f, 77.0f, 5.0f},
+    {115.0f, 77.0f, 5.0f},
+};
+
+Vec Item_set_pos_data_bshop_4[] = {
+    {-15.0f, 77.0f, 5.0f},
+    {50.0f, 77.0f, 5.0f},
+    {115.0f, 77.0f, 5.0f},
+};
+
+Vec Item_set_pos_data_bshop_5[] = {
+    {-15.0f, 77.0f, 5.0f},
+    {50.0f, 77.0f, 5.0f},
+    {115.0f, 77.0f, 5.0f},
+};
+
+Vec Item_set_pos_data_bshop_6[] = {
+    {-25.0f, 75.0f, 5.0f},
+    {50.0f, 75.0f, 5.0f},
+    {125.0f, 75.0f, 5.0f},
+};
+
+Vec Item_set_pos_data_bshop_7[] = {
+    {-25.0f, 75.0f, 5.0f},
+    {50.0f, 75.0f, 5.0f},
+    {125.0f, 75.0f, 5.0f},
+};
+
+Vec Item_set_pos_data_rshop_0[] = {
+    {1423.0f, 790.0f, -204553.0f},
+    {1506.0f, 790.0f, -204494.0f},
+    {1592.0f, 790.0f, -204438.0f},
+    {1711.0f, 790.0f, -204357.0f},
+    {1783.0f, 790.0f, -204288.0f},
+    {1852.0f, 790.0f, -204220.0f},
+    {1946.0f, 790.0f, -204132.0f},
+    {2017.0f, 790.0f, -204064.0f},
+    {2084.0f, 790.0f, -203986.0f},
+    {2183.0f, 790.0f, -203872.0f},
+    {2231.0f, 790.0f, -203798.0f},
+    {2291.0f, 790.0f, -203736.0f},
+};
+
+Vec* Item_set_pos_data_tbl[] = {
+    Item_set_pos_data_dshop,
+    Item_set_pos_data_bmshop1,
+    Item_set_pos_data_bmshop2,
+    Item_set_pos_data_bshop_3,
+    Item_set_pos_data_bshop_4,
+    Item_set_pos_data_bshop_5,
+    Item_set_pos_data_bshop_6,
+    Item_set_pos_data_bshop_7,
+    Item_set_pos_data_rshop_0,
+};
+
+ShopItems_c__select_list_data select_list_data_dshop_0[4] = {
+    {2, 0, -1, -1},
+    {-1, 1, 0, 0},
+    {0, 2, 1, 1},
+    {1, -1, 2, 2},
+};
+
+ShopItems_c__select_list_data select_list_data_bshop_1[4] = {
+    {2, 0, -1, -1},
+    {-1, 1, 0, 0},
+    {0, 2, 1, 1},
+    {1, -1, 2, 2},
+};
+
+ShopItems_c__select_list_data select_list_data_bshop_2[4] = {
+    {2, 0, -1, -1},
+    {-1, 1, 0, 0},
+    {0, 2, 1, 1},
+    {1, -1, 2, 2},
+};
+
+ShopItems_c__select_list_data select_list_data_bshop_3[4] = {
+    {2, 0, -1, -1},
+    {-1, 1, 0, 0},
+    {0, 2, 1, 1},
+    {1, -1, 2, 2},
+};
+
+ShopItems_c__select_list_data select_list_data_bshop_4[4] = {
+    {2, 0, -1, -1},
+    {-1, 1, 0, 0},
+    {0, 2, 1, 1},
+    {1, -1, 2, 2},
+};
+
+ShopItems_c__select_list_data select_list_data_bshop_5[4] = {
+    {2, 0, -1, -1},
+    {-1, 1, 0, 0},
+    {0, 2, 1, 1},
+    {1, -1, 2, 2},
+};
+
+ShopItems_c__select_list_data select_list_data_bshop_6[4] = {
+    {2, 0, -1, -1},
+    {-1, 1, 0, 0},
+    {0, 2, 1, 1},
+    {1, -1, 2, 2},
+};
+
+ShopItems_c__select_list_data select_list_data_bshop_7[4] = {
+    {2, 0, -1, -1},
+    {-1, 1, 0, 0},
+    {0, 2, 1, 1},
+    {1, -1, 2, 2},
+};
+
+ShopItems_c__select_list_data select_list_data_rshop[4] = {
+    {2, 0, -1, -1},
+    {-1, 1, 0, 0},
+    {0, 2, 1, 1},
+    {1, -1, 2, 2},
+};
+
+ShopItems_c__select_list_data* select_list_data_tbl[] = {
+    select_list_data_dshop_0,
+    select_list_data_bshop_1,
+    select_list_data_bshop_2,
+    select_list_data_bshop_3,
+    select_list_data_bshop_4,
+    select_list_data_bshop_5,
+    select_list_data_bshop_6,
+    select_list_data_bshop_7,
+    select_list_data_rshop,
+};
+
+ShopItems_c__shop_cam_data cam_dshop_0[] = {
+    {
+        {-166.0f, 102.0f, -254.0f},
+        {-11.0f, 102.0f, 60.0f},
+        60.0f,
+    },
+    {
+        {0.0f, 102.0f, -254.0f},
+        {0.0f, 102.0f, 185.0f},
+        60.0f,
+    },
+};
+
+ShopItems_c__shop_cam_data cam_bmshop_0[] = {
+    {
+        {-132.0f, 145.0f, -67.0f},
+        {15.0f, 145.0f, 308.0f},
+        60.0f,
+    },
+    {
+        {35.0f, 145.0f, -94.0f},
+        {15.0f, 145.0f, 308.0f},
+        60.0f,
+    },
+};
+
+ShopItems_c__shop_cam_data cam_bmshop_1[] = {
+    {
+        {-132.0f, 145.0f, -67.0f},
+        {15.0f, 145.0f, 308.0f},
+        60.0f,
+    },
+    {
+        {35.0f, 145.0f, -94.0f},
+        {15.0f, 145.0f, 308.0f},
+        60.0f,
+    },
+};
+
+ShopItems_c__shop_cam_data cam_bshop_3[] = {
+    {
+        {-27.0f, 83.0f, -108.0f},
+        {44.0f, 83.0f, 258.0f},
+        60.0f,
+    },
+    {
+        {-21.0f, 83.0f, -108.0f},
+        {-21.0f, 83.0f, 268.0f},
+        60.0f,
+    },
+};
+
+ShopItems_c__shop_cam_data cam_bshop_4[] = {
+    {
+        {-27.0f, 83.0f, -108.0f},
+        {44.0f, 83.0f, 258.0f},
+        60.0f,
+    },
+    {
+        {-21.0f, 83.0f, -108.0f},
+        {-21.0f, 83.0f, 268.0f},
+        60.0f,
+    },
+};
+
+ShopItems_c__shop_cam_data cam_bshop_5[] = {
+    {
+        {-27.0f, 83.0f, -108.0f},
+        {44.0f, 83.0f, 258.0f},
+        60.0f,
+    },
+    {
+        {-21.0f, 83.0f, -108.0f},
+        {-21.0f, 83.0f, 268.0f},
+        60.0f,
+    },
+};
+
+ShopItems_c__shop_cam_data cam_bshop_6[] = {
+    {
+        {-27.0f, 83.0f, -108.0f},
+        {44.0f, 83.0f, 258.0f},
+        60.0f,
+    },
+    {
+        {-21.0f, 83.0f, -108.0f},
+        {-21.0f, 83.0f, 268.0f},
+        60.0f,
+    },
+};
+
+ShopItems_c__shop_cam_data cam_bshop_7[] = {
+    {
+        {-27.0f, 83.0f, -108.0f},
+        {44.0f, 83.0f, 258.0f},
+        60.0f,
+    },
+    {
+        {-21.0f, 83.0f, -108.0f},
+        {-21.0f, 83.0f, 268.0f},
+        60.0f,
+    },
+};
+
+ShopItems_c__shop_cam_data cam_rshop_0[] = {
+    {
+        {860.0f, 817.0f, -204373.0f},
+        {809.0f, 810.0f, -204277.0f},
+        45.0f,
+    },
+    {
+        {957.0f, 830.0f, -204557.0f},
+        {809.0f, 810.0f, -204277.0f},
+        45.0f,
+    },
+};
+
+ShopItems_c__shop_cam_data cam_rshop_1[] = {
+    {
+        {1422.0f, 778.0f, -204407.0f},
+        {1276.0f, 857.0f, -204086.0f},
+        60.0f,
+    },
+    {
+        {1513.0f, 803.0f, -204507.0f},
+        {1263.0f, 860.0f, -204117.0f},
+        60.0f,
+    },
+};
+
+ShopItems_c__shop_cam_data cam_rshop_2[] = {
+    {
+        {1687.0f, 782.0f, -204197.0f},
+        {1508.0f, 845.0f, -203874.0f},
+        60.0f,
+    },
+    {
+        {1746.0f, 816.0f, -204231.0f},
+        {1480.0f, 894.0f, -203907.0f},
+        60.0f,
+    },
+};
+
+ShopItems_c__shop_cam_data cam_rshop_3[] = {
+    {
+        {1899.0f, 775.0f, -204025.0f},
+        {1682.0f, 863.0f, -203732.0f},
+        60.0f,
+    },
+    {
+        {2013.0f, 810.0f, -204065.0f},
+        {1679.0f, 854.0f, -203730.0f},
+        60.0f,
+    },
+};
+
+ShopItems_c__shop_cam_data cam_rshop_4[] = {
+    {
+        {2149.0f, 759.0f, -203759.0f},
+        {1902.0f, 850.0f, -203486.0f},
+        60.0f,
+    },
+    {
+        {2209.0f, 821.0f, -203780.0f},
+        {1874.0f, 873.0f, -203524.0f},
+        60.0f,
+    },
+};
+
+ShopItems_c__shop_cam_data* shop_cam_data_tbl[] = {
+    cam_dshop_0,
+    cam_bmshop_0,
+    cam_bmshop_1,
+    cam_bshop_3,
+    cam_bshop_4,
+    cam_bshop_5,
+    cam_bshop_6,
+    cam_bshop_7,
+    cam_rshop_0,
+    cam_rshop_1,
+    cam_rshop_2,
+    cam_rshop_3,
+    cam_rshop_4,
+};
+
 /* 8005EFDC-8005F088       .text shop_cam_action_init__16ShopCam_action_cFv */
-void ShopCam_action_c::shop_cam_action_init() {
-    /* Nonmatching */
+BOOL ShopCam_action_c::shop_cam_action_init() {
+    daPy_getPlayerActorClass()->onPlayerNoDraw();
+    setCamAction(&shop_cam_action);
+    
+    m18 = shop_cam_data_tbl[mCamDataIdx][0].m00;
+    m24 = shop_cam_data_tbl[mCamDataIdx][0].m0C;
+    m30 = shop_cam_data_tbl[mCamDataIdx][0].m18;
+    m54 = -1;
+    
+    return TRUE;
 }
 
 /* 8005F088-8005F220       .text shop_cam_action__16ShopCam_action_cFv */
-void ShopCam_action_c::shop_cam_action() {
-    /* Nonmatching */
+int ShopCam_action_c::shop_cam_action() {
+    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera->mCamera.Stay();
+    camera->mCamera.SetTrimSize(1);
+    cXyz r1_2C;
+    cXyz r1_20;
+    f32 temp;
+    if (m54 < 0) {
+        r1_2C = shop_cam_data_tbl[mCamDataIdx][0].m00;
+        r1_20 = shop_cam_data_tbl[mCamDataIdx][0].m0C;
+        temp = shop_cam_data_tbl[mCamDataIdx][0].m18;
+    } else {
+        r1_2C = shop_cam_data_tbl[mCamDataIdx][1].m00;
+        r1_20 = shop_cam_data_tbl[mCamDataIdx][1].m0C;
+        temp = shop_cam_data_tbl[mCamDataIdx][1].m18;
+    }
+    cLib_addCalcPos2(&m18, r1_2C, 0.25f, 20.0f);
+    cLib_addCalcPos2(&m24, r1_20, 0.25f, 20.0f);
+    cLib_addCalc2(&m30, temp, 0.25f, 5.0f);
+    camera->mCamera.Set(m18, m24, m30, 0);
+    return TRUE;
 }
 
 /* 8005F220-8005F370       .text rsh_talk_cam_action_init__16ShopCam_action_cFP10fopAc_ac_c4cXyz4cXyzf */
-void ShopCam_action_c::rsh_talk_cam_action_init(fopAc_ac_c*, cXyz, cXyz, f32) {
-    /* Nonmatching */
+BOOL ShopCam_action_c::rsh_talk_cam_action_init(fopAc_ac_c* param_1, cXyz param_2, cXyz param_3, f32 param_4) {
+    if (checkCamAction(&rsh_talk_cam_action)) {
+        return TRUE;
+    }
+    
+    daPy_getPlayerActorClass()->onPlayerNoDraw();
+    setCamAction(&rsh_talk_cam_action);
+    
+    mDoMtx_stack_c::transS(param_1->mAttentionInfo.mPosition);
+    mDoMtx_stack_c::YrotM(param_1->current.angle.y);
+    cXyz r1_20;
+    mDoMtx_stack_c::multVec(&param_2, &r1_20);
+    cXyz r1_14;
+    mDoMtx_stack_c::multVec(&param_3, &r1_14);
+    m18 = r1_20;
+    m24 = r1_14;
+    m30 = param_4;
+    m54 = -1;
+    
+    return TRUE;
 }
 
 /* 8005F370-8005F41C       .text rsh_talk_cam_action__16ShopCam_action_cFv */
-void ShopCam_action_c::rsh_talk_cam_action() {
-    /* Nonmatching */
+int ShopCam_action_c::rsh_talk_cam_action() {
+    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera->mCamera.Stay();
+    camera->mCamera.SetTrimSize(1);
+    camera->mCamera.Set(m18, m24, m30, 0);
+    return TRUE;
 }
 
 /* 8005F41C-8005F494       .text ds_normal_cam_action_init__16ShopCam_action_cFv */
-void ShopCam_action_c::ds_normal_cam_action_init() {
-    /* Nonmatching */
+BOOL ShopCam_action_c::ds_normal_cam_action_init() {
+    daPy_getPlayerActorClass()->onPlayerNoDraw();
+    setCamAction(&ds_normal_cam_action);
+    
+    m18.set(-136.0f, 102.0f, -254.0f);
+    m24.set(-136.0f, 102.0f, 90.0f);
+    m30 = 60.0f;
+    m54 = -1;
+    
+    return TRUE;
 }
 
 /* 8005F494-8005F570       .text ds_normal_cam_action__16ShopCam_action_cFv */
-void ShopCam_action_c::ds_normal_cam_action() {
-    /* Nonmatching */
+int ShopCam_action_c::ds_normal_cam_action() {
+    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera->mCamera.Stay();
+    camera->mCamera.SetTrimSize(1);
+    
+    m18.set(-136.0f, 102.0f, -254.0f);
+    m24.set(-136.0f, 102.0f, 90.0f);
+    m30 = 60.0f;
+    
+    camera->mCamera.Set(m18, m24, m30, 0);
+    return TRUE;
 }
 
 /* 8005F570-8005F5C0       .text Save__16ShopCam_action_cFv */
 void ShopCam_action_c::Save() {
-    /* Nonmatching */
+    camera_class* camera = dComIfGp_getCamera(0);
+    if (camera) {
+        mOrigCenter = camera->mLookat.mCenter;
+        mOrigEye = camera->mLookat.mEye;
+        mOrigFovy = camera->mFovy;
+    }
 }
 
 /* 8005F5C0-8005F6C4       .text Reset__16ShopCam_action_cFv */
 void ShopCam_action_c::Reset() {
-    /* Nonmatching */
+    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera->mCamera.Set(mOrigCenter, mOrigEye, mOrigFovy, 0);
+    camera->mCamera.Stay();
+    camera->mCamera.Reset(mOrigCenter, mOrigEye, mOrigFovy, 0);
+    setCamAction(NULL);
 }
 
 /* 8005F6C4-8005F708       .text move__16ShopCam_action_cFv */
 void ShopCam_action_c::move() {
-    /* Nonmatching */
+    if (mCurrActionFunc) {
+        (this->*mCurrActionFunc)();
+    }
 }
 
 /* 8005F708-8005F91C       .text createItem__11ShopItems_cFii */
-void ShopItems_c::createItem(int, int) {
-    /* Nonmatching */
+void ShopItems_c::createItem(int numItems, int roomNo) {
+    csXyz angle = csXyz::Zero;
+    if (mItemSetListGlobalIdx == 0) {
+        cXyz pos;
+        pos.set(
+            Item_set_pos_data_tbl[mItemSetListGlobalIdx][0].x,
+            Item_set_pos_data_tbl[mItemSetListGlobalIdx][0].y,
+            Item_set_pos_data_tbl[mItemSetListGlobalIdx][0].z
+        );
+        
+        dComIfGs_isEventBit(0x0D04);
+        dComIfGs_isEventBit(0x0D02);
+        
+        mItemActorProcessIds[0] = fopAcM_createShopItem(
+            &pos, Item_set_data_tbl[mItemSetListGlobalIdx][0]->mpItemData->mItemNo,
+            &angle, roomNo, NULL, NULL
+        );
+        pos.x += 75.0f;
+        
+        if (dComIfGs_isEventBit(0x0D04)) {
+            mItemActorProcessIds[1] = fopAcM_createShopItem(
+                &pos, Item_set_data_tbl[mItemSetListGlobalIdx][1]->mpItemData->mItemNo,
+                &angle, roomNo, NULL, NULL
+            );
+            pos.x += 75.0f;
+        }
+        
+        if (dComIfGs_isEventBit(0x0D02)) {
+            mItemActorProcessIds[2] = fopAcM_createShopItem(
+                &pos, Item_set_data_tbl[mItemSetListGlobalIdx][2]->mpItemData->mItemNo,
+                &angle, roomNo, NULL, NULL
+            );
+        }
+    } else {
+        for (int i = 0; i < numItems; i++) {
+            mItemActorProcessIds[i] = fopAcM_createShopItem(
+                (cXyz*)&Item_set_pos_data_tbl[mItemSetListGlobalIdx][i],
+                Item_set_data_tbl[mItemSetListGlobalIdx][i]->mpItemData->mItemNo,
+                &angle, roomNo, NULL, NULL
+            );
+        }
+    }
+    mNumItems = numItems;
 }
 
 /* 8005F91C-8005FB68       .text Item_Select__11ShopItems_cFi */
-void ShopItems_c::Item_Select(int) {
-    /* Nonmatching */
+BOOL ShopItems_c::Item_Select(int idx) {
+    daShopItem_c* item = (daShopItem_c*)fopAcM_SearchByID(mItemActorProcessIds[idx]);
+    if (item) {
+        csXyz* pAngle = item->getRotateP();
+        cXyz* pPos = item->getPosP();
+        cXyz temp2 = item->orig.pos;
+        cXyz temp = m30;
+        temp -= item->getCenter();
+        if (m3C == 1) {
+            cXyz temp3 = temp - temp2;
+            cLib_addCalcPos2(pPos, temp, 0.5f, temp3.abs() * 0.05f);
+        } else {
+            cXyz temp3 = temp - temp2;
+            cLib_addCalcPos2(pPos, temp2, 0.5f, temp3.abs() * 0.1f);
+        }
+        pAngle->y += 0x400;
+        return TRUE;
+    }
+    return TRUE;
 }
 
 /* 8005FB68-8005FC10       .text Item_Wait__11ShopItems_cFi */
@@ -676,7 +1163,7 @@ void ShopItems_c::hideSelectItem() {
     if (item) {
         item->hide();
     }
-    m3E = 1;
+    mbIsHide = 1;
 }
 
 /* 8005FF10-8005FF7C       .text SoldOutItem__11ShopItems_cFi */
@@ -703,7 +1190,7 @@ void ShopItems_c::showItem() {
             item->getRotateP()->y = item->orig.angle.y;
         }
     }
-    m3E = 0;
+    mbIsHide = 0;
 }
 
 /* 80060058-80060078       .text getSelectItemNo__11ShopItems_cFv */
@@ -722,8 +1209,29 @@ u32 ShopItems_c::getSelectItemBuyMsg() {
 }
 
 /* 800600A8-80060138       .text dShop_get_next_select__FiP11ShopItems_c */
-static void dShop_get_next_select(int, ShopItems_c*) {
-    /* Nonmatching */
+s16 dShop_get_next_select(int param_1, ShopItems_c* shopItems) {
+    s16 dataIdx = shopItems->getItemDataIdx();
+    s16 selectedItemIdx = shopItems->mSelectedItemIdx;
+    while (true) {
+        ShopItems_c__select_list_data* selectData = &select_list_data_tbl[dataIdx][selectedItemIdx+1];
+        if (param_1 == 0) { // Left trigger
+            selectedItemIdx = selectData->mLeftIdx;
+        } else if (param_1 == 1) { // Right trigger
+            selectedItemIdx = selectData->mRightIdx;
+        }
+        if (param_1 == 2) { // Up trigger
+            selectedItemIdx = selectData->mUpIdx;
+        } else if (param_1 == 3) { // Down trigger
+            selectedItemIdx = selectData->mDownIdx;
+        }
+        if (selectedItemIdx == shopItems->mSelectedItemIdx) {
+            break;
+        }
+        if (shopItems->mItemActorProcessIds[selectedItemIdx] != -1) {
+            break;
+        }
+    }
+    return selectedItemIdx;
 }
 
 /* 80060138-80060154       .text setItemSetDataList__11ShopItems_cFv */
@@ -748,33 +1256,228 @@ BOOL ShopItems_c::isSoldOutItemAll() {
 }
 
 /* 8006019C-8006036C       .text dShop_now_triggercheck__FP9msg_classP9STControlP11ShopItems_cPUlPFPv_UlPv */
-static void dShop_now_triggercheck(msg_class*, STControl*, ShopItems_c*, u32*, dShop_DefaultMsgCallback, void*) {
-    /* Nonmatching */
+BOOL dShop_now_triggercheck(msg_class* msg, STControl* stickControl, ShopItems_c* shopItems, u32* pMsgID, dShop_DefaultMsgCallback defaultMsgCb, void* defaultMsgArg) {
+    int itemDataIdx;
+    int selectedItemIdx;
+    __shop_items_set_data** itemSetList;
+    
+    selectedItemIdx = shopItems->mSelectedItemIdx;
+    itemSetList = shopItems->mpItemSetList;
+    itemDataIdx = shopItems->getItemDataIdx();
+    
+    s16 nextIdx;
+    BOOL idxChanged = FALSE;
+    
+    stickControl->checkTrigger();
+    s16 nextIdxLeft = dShop_get_next_select(0, shopItems);
+    s16 nextIdxRight = dShop_get_next_select(1, shopItems);
+    s16 nextIdxUp = dShop_get_next_select(2, shopItems);
+    s16 nextIdxDown = dShop_get_next_select(3, shopItems);
+    
+    if (selectedItemIdx != nextIdxLeft && stickControl->checkLeftTrigger()) {
+        nextIdx = nextIdxLeft;
+        idxChanged = TRUE;
+    } else if (selectedItemIdx != nextIdxRight && stickControl->checkRightTrigger()) {
+        nextIdx = nextIdxRight;
+        idxChanged = TRUE;
+    }
+    if (selectedItemIdx != nextIdxUp && stickControl->checkUpTrigger()) {
+        nextIdx = nextIdxUp;
+        idxChanged = TRUE;
+    } else if (selectedItemIdx != nextIdxDown && stickControl->checkDownTrigger()) {
+        nextIdx = nextIdxDown;
+        idxChanged = TRUE;
+    }
+    
+    if (idxChanged) {
+        if (nextIdx < 0) {
+            if (defaultMsgCb == NULL) {
+                *pMsgID = default_select_msg[itemDataIdx];
+            } else {
+                *pMsgID = defaultMsgCb(defaultMsgArg);
+            }
+        } else {
+            if (shopItems->m28[nextIdx] == 1) {
+                *pMsgID = itemSetList[nextIdx]->m0C;
+            } else {
+                *pMsgID = itemSetList[nextIdx]->mShowMsgID;
+            }
+        }
+        
+        msg->mMode = 0xF;
+        fopMsgM_messageSet(*pMsgID);
+        fopMsgM_messageSendOn();
+        shopItems->mSelectedItemIdx = nextIdx;
+    }
+    
+    return idxChanged;
 }
 
 /* 8006036C-8006044C       .text dShop_maxCheck__Fii */
-static void dShop_maxCheck(int, int) {
-    /* Nonmatching */
+BOOL dShop_maxCheck(int itemNo, int) {
+    if (itemNo == BIRD_ESA_5 || itemNo == ANIMAL_ESA) {
+        if (!dComIfGs_checkBaitItemEmpty()) {
+            return TRUE;
+        }
+    // Bug: This check is probably supposed to be (itemNo >= FLOWER_1 && itemNo <= PRESIDENT_STATUE)
+    } else if (itemNo == FLOWER_1 && itemNo == PRESIDENT_STATUE) {
+        if (!dComIfGs_checkReserveItemEmpty()) {
+            return TRUE;
+        }
+    } else if (itemNo >= ARROW_10 && itemNo <= ARROW_30) {
+        if (dComIfGs_getArrowNum() == dComIfGs_getArrowMax()) {
+            return TRUE;
+        }
+    } else if (itemNo >= BOMB_5 && itemNo <= BOMB_30) {
+        if (dComIfGs_getBombNum() == dComIfGs_getBombMax()) {
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 /* 8006044C-800606A8       .text dShop_BoughtErrorStatus__FP11ShopItems_cii */
-static void dShop_BoughtErrorStatus(ShopItems_c*, int, int) {
-    /* Nonmatching */
+u8 dShop_BoughtErrorStatus(ShopItems_c* shopItems, int param_2, int param_3) {
+    ShopItems_c__ItemData* itemData = shopItems->mpItemSetList[shopItems->mSelectedItemIdx]->mpItemData;
+    u8 buyCond = itemData->mBuyConditions;
+    u32 itemNo = itemData->mItemNo;
+    u8 errorStatus = 0x00;
+    
+    if (buyCond & Shop_BuyCond_MUST_OWN_ITEM_e) {
+        if (itemData->mMustOwnItemNo == BOW) {
+            if (g_dComIfG_gameInfo.save.getPlayer().getItem().getItem(0xC) == 0xFF) {
+                errorStatus |= Shop_BuyCond_MUST_OWN_ITEM_e;
+            }
+        } else {
+            if (!dComIfGs_checkGetItem(itemData->mMustOwnItemNo)) {
+                errorStatus |= Shop_BuyCond_MUST_OWN_ITEM_e;
+            }
+        }
+    }
+    
+    if (buyCond & Shop_BuyCond_MUST_NOT_OWN_ITEM_e) {
+        if (dComIfGs_checkGetItem(itemData->mMustNotOwnItemNo)) {
+            errorStatus |= Shop_BuyCond_MUST_NOT_OWN_ITEM_e;
+        }
+    }
+    
+    if (buyCond & Shop_BuyCond_ANY_BOTTLE_e) {
+        if (!dComIfGs_checkGetBottle()) {
+            errorStatus |= Shop_BuyCond_ANY_BOTTLE_e;
+        }
+    }
+    
+    if (buyCond & Shop_BuyCond_EMPTY_BOTTLE_e) {
+        if (!dComIfGs_checkEmptyBottle()) {
+            errorStatus |= Shop_BuyCond_EMPTY_BOTTLE_e;
+        }
+    }
+    
+    if (buyCond & Shop_BuyCond_MAXIMUM_e) {
+        if (dShop_maxCheck(itemNo, 0)) {
+            errorStatus |= Shop_BuyCond_MAXIMUM_e;
+        }
+    }
+    
+    if (buyCond & Shop_BuyCond_RUPEES_e) {
+        if (param_3 == -1) {
+            param_3 = 0;
+        }
+        if (dComIfGs_getRupee() < param_3) {
+            errorStatus |= Shop_BuyCond_RUPEES_e;
+        } else if (param_2 == 1 && errorStatus == 0) {
+            dComIfGp_setItemRupeeCount(-param_3);
+        }
+    }
+    
+    if (param_2 == 1 && errorStatus == 0) {
+        execItemGet(itemNo);
+    }
+    
+    return errorStatus;
 }
 
 /* 800606A8-80060830       .text __ct__12ShopCursor_cFP12J3DModelDataP15J3DAnmTevRegKeyf */
-ShopCursor_c::ShopCursor_c(J3DModelData*, J3DAnmTevRegKey*, f32) {
-    /* Nonmatching */
+ShopCursor_c::ShopCursor_c(J3DModelData* modelData, J3DAnmTevRegKey* brkData, f32 param_2) {
+    static J3DZModeInfo ZModeInfo = {GX_TRUE, GX_ALWAYS, GX_TRUE};
+    for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
+        J3DMaterial* mat = modelData->getMaterialNodePointer(i);
+        mat->getPEBlock()->getZMode()->setZModeInfo(ZModeInfo);
+    }
+    
+    for (int i = 0; i < (int)ARRAY_SIZE(mpModels); i++) {
+        mpModels[i] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    }
+    
+    mpBrkData = brkData;
+    if (!mBrkAnm.init(modelData, mpBrkData, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+        mpBrkData = NULL;
+    }
+    
+    m38 = 30.0f;
+    m3C = 25.0f;
+    m40 = m38;
+    m44 = 15;
+    m48 = param_2;
+    m4C = 1.0f;
+    m50 = 1.0f;
+    m54 = 0;
 }
 
 /* 800608D4-80060960       .text anm_play__12ShopCursor_cFv */
 void ShopCursor_c::anm_play() {
-    /* Nonmatching */
+    mBrkAnm.play();
+    if (m44-- <= 0) {
+        m44 = 15 + (s16)cM_rndF(5.0f);
+        f32 temp = (m38 + m3C) * 0.5f;
+        if (m40 > temp) {
+            m40 = m3C;
+        } else {
+            m40 = m38;
+        }
+    }
 }
 
 /* 80060960-80060B2C       .text draw__12ShopCursor_cFv */
 void ShopCursor_c::draw() {
-    /* Nonmatching */
+    camera_class* camera = dComIfGp_getCamera(0);
+    s16 angleY = cLib_targetAngleY(&camera->mLookat.mCenter, &camera->mLookat.mEye);
+    s16 angleX = -cLib_targetAngleX(&camera->mLookat.mCenter, &camera->mLookat.mEye);
+    
+    if (m54 == 0) {
+        return;
+    }
+    
+    f32 temp2;
+    f32 temp = (m38 + m3C) * 0.5f;
+    if (m40 > temp) {
+        temp2 = m4C;
+    } else {
+        temp2 = m50;
+    }
+    
+    dComIfGd_setListMaskOff();
+    
+    static s16 angle_z[ARRAY_SIZE(mpModels)] = {
+        0xE000, 0x2000, 0x6000, 0xA000,
+    };
+    const f32 sqrt_2 = 1.4142f; // Approximately sqrt(2)
+    for (int i = 0; i < (int)ARRAY_SIZE(mpModels); i++) {
+        mDoMtx_stack_c::transS(mPos);
+        mDoMtx_stack_c::XYZrotM(angleX, angleY, 0);
+        mDoMtx_stack_c::ZrotM(angle_z[i]);
+        mDoMtx_stack_c::transM(0.0f, sqrt_2 * m40, 0.0f);
+        mDoMtx_stack_c::scaleM(m48, m48 * temp2, m48);
+        mpModels[i]->setBaseTRMtx(mDoMtx_stack_c::get());
+    }
+    
+    mBrkAnm.entry(mpModels[0]->getModelData());
+    mDoExt_modelUpdateDL(mpModels[0]);
+    mDoExt_modelUpdateDL(mpModels[1]);
+    mDoExt_modelUpdateDL(mpModels[2]);
+    mDoExt_modelUpdateDL(mpModels[3]);
+    
+    dComIfGd_setList();
 }
 
 /* 80060B2C-80060B48       .text setPos__12ShopCursor_cFR4cXyz */
@@ -783,6 +1486,18 @@ void ShopCursor_c::setPos(cXyz& pos) {
 }
 
 /* 80060B48-80060BE8       .text ShopCursor_create__FP12J3DModelDataP15J3DAnmTevRegKeyf */
-static void ShopCursor_create(J3DModelData*, J3DAnmTevRegKey*, f32) {
-    /* Nonmatching */
+ShopCursor_c* ShopCursor_create(J3DModelData* modelData, J3DAnmTevRegKey* brkData, f32 param_2) {
+    ShopCursor_c* cursor = new ShopCursor_c(modelData, brkData, param_2);
+    
+    // Bug: If any of the models are null these checks will crash instead of returning NULL.
+    for (int i = 0; i < 4; i++) {
+        if (cursor->getModel(i) == NULL) {
+            cursor = NULL;
+        }
+    }
+    if (cursor->getBrk() == NULL) {
+        cursor = NULL;
+    }
+    
+    return cursor;
 }

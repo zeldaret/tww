@@ -843,6 +843,10 @@ inline u8 dComIfGs_getReserveNum(int i_idx) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord().getReserveNum(i_idx);
 }
 
+inline bool dComIfGs_checkReserveItemEmpty() {
+    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().checkReserveItemEmpty();
+}
+
 inline void dComIfGs_setReserveItemEmpty() {
     g_dComIfG_gameInfo.save.getPlayer().getBagItem().setReserveItemEmpty();
 }
@@ -1198,12 +1202,26 @@ inline void  dComIfGs_onGetBottleItem(u8 i_itemNo) {
     g_dComIfG_gameInfo.save.getPlayer().getGetItem().onBottleItem(i_itemNo);
 }
 
+inline BOOL dComIfGs_checkEmptyBottle() {
+    return g_dComIfG_gameInfo.save.getPlayer().getItem().checkEmptyBottle();
+}
+
 inline void dComIfGs_setEmptyBottle() {
     g_dComIfG_gameInfo.save.getPlayer().getItem().setEmptyBottle();
 }
 
 inline void dComIfGs_setEmptyBottleItemIn(u8 i_itemNo) {
     g_dComIfG_gameInfo.save.getPlayer().getItem().setEmptyBottleItemIn(i_itemNo);
+}
+
+inline BOOL dComIfGs_checkGetBottle() {
+    u8 bottleCount = 0;
+    for (int i = 0; i < 4; i++) {
+        if (dComIfGs_getItem(0xE + i) != 0xFF) {
+            bottleCount++;
+        }
+    }
+    return bottleCount != 0;
 }
 
 inline s16 dComIfGs_getWindY() {

@@ -240,6 +240,19 @@ public:
     
 public:
     void ForceLockOff(unsigned int pcId);
+    void Reset(cXyz, cXyz, f32, s16);
+    void Set(cXyz, cXyz, f32, s16);
+    void Stay();
+    void SetTrimSize(s32);
+    
+    void CStickUse() {}
+    void CStickUseless() {}
+    void Center() {}
+    void Eye() {}
+    void StickUse() {}
+    void StickUseless() {}
+    void clrFlag(u32) {}
+    void setFlag(u32) {}
 };
 
 STATIC_ASSERT(sizeof(dCamera_c) == 0x800);

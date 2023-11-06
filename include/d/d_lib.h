@@ -15,11 +15,11 @@ public:
     void Yinit();
     void getValueStick();
     void getAngleStick();
-    void checkTrigger();
-    void checkLeftTrigger();
-    void checkRightTrigger();
-    void checkUpTrigger();
-    void checkDownTrigger();
+    bool checkTrigger();
+    bool checkLeftTrigger();
+    bool checkRightTrigger();
+    bool checkUpTrigger();
+    bool checkDownTrigger();
 
     /* 0x00 */ void* vtbl;
     /* 0x04 */ f32 field_0x04;
