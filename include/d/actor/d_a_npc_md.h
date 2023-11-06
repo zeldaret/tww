@@ -5,6 +5,7 @@
 #include "m_Do/m_Do_hostIO.h"
 #include "d/d_npc.h"
 #include "d/d_bg_s_lin_chk.h"
+#include "d/d_drawlist.h"
 
 class daNpc_Md_HIO2_c {
 public:

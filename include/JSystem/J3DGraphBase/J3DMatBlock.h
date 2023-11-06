@@ -598,7 +598,8 @@ struct J3DBlend : public J3DBlendInfo {
 extern const J3DFogInfo j3dDefaultFogInfo;
 
 struct J3DFog : public J3DFogInfo {
-    J3DFog() { *getFogInfo() = j3dDefaultFogInfo; }
+    // J3DFog() { *getFogInfo() = j3dDefaultFogInfo; } // Produces the wrong codegen for mDoExt_backupMatBlock_c's constructor
+    J3DFog() { J3DFogInfo::operator=(j3dDefaultFogInfo); }
     J3DFogInfo* getFogInfo() { return (J3DFogInfo*)this; }
 
     void load() {
