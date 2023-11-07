@@ -206,13 +206,16 @@ public:
     
     bool chkPlayerAction(ActionFunc func) { return mCurrPlayerActionFunc == func; }
     bool chkNpcAction(ActionFunc func) { return mCurrNpcActionFunc == func; }
-    bool isOldLightBodyHit() { return m30F0 & 0x8000; }
+    bool isOldLightBodyHit() { return cLib_checkBit(m30F0, 0x00008000UL); }
+    void onDefaultTalkXY() { cLib_onBit(m30F0, 0x00010000UL); }
+    void offDefaultTalkXY() { cLib_offBit(m30F0, 0x00010000UL); }
+    bool isDefaultTalkXY() { return cLib_checkBit(m30F0, 0x00010000UL); }
     
     daNpc_Md_c() {}
     ~daNpc_Md_c();
     
-    void XyCheckCB(int);
-    void XyEventCB(int);
+    s16 XyCheckCB(int);
+    s16 XyEventCB(int);
     s32 create();
     BOOL createHeap();
     BOOL setAction(ActionFunc*, ActionFunc, void*);
@@ -222,8 +225,8 @@ public:
     void setPlayerAction(ActionFunc, void*);
     void getStickAngY(int);
     void calcStickPos(short, cXyz*);
-    void flyCheck();
-    void mirrorCancelCheck();
+    BOOL flyCheck();
+    BOOL mirrorCancelCheck();
     void setWingEmitter();
     void setHane02Emitter();
     void deleteHane02Emitter();
@@ -357,11 +360,11 @@ public:
     void emitterDelete(JPABaseEmitter**);
     
     virtual BOOL isTagCheckOK();
-    virtual f32 getGroundY() {}
-    virtual MtxP getLeftHandMatrix() {}
-    virtual MtxP getRightHandMatrix() {}
-    virtual f32 getBaseAnimeFrameRate() {}
-    virtual f32 getBaseAnimeFrame() {}
+    virtual f32 getGroundY() { return mAcch.GetGroundH(); }
+    virtual MtxP getLeftHandMatrix() { return mCullMtx; }
+    virtual MtxP getRightHandMatrix() { return mCullMtx; }
+    virtual f32 getBaseAnimeFrameRate() { return 1.0f; }
+    virtual f32 getBaseAnimeFrame() { return 0.0f; }
     
     static bool m_flying;
     static bool m_mirror;
@@ -380,7 +383,7 @@ public:
     /* 0x0504 */ mDoExt_McaMorf* mpWingMorf;
     /* 0x0508 */ u8 m0508[0x0520 - 0x0508];
     /* 0x0520 */ mDoExt_btpAnm m0520;
-    /* 0x0534 */ mDoExt_btkAnm m0534;
+    /* 0x0534 */ mDoExt_btkAnm mLightBtkAnm;
     /* 0x0548 */ u8 m0548[0x054C - 0x0548];
     /* 0x054C */ dBgS_AcchCir mAcchCir[2];
     /* 0x05CC */ dBgS_MirLightLinChk mLinChk;

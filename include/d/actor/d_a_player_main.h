@@ -159,6 +159,9 @@ public:
     void execute(JPABaseEmitter*);
     ~daPy_dmEcallBack_c() {}
     daPy_dmEcallBack_c() {}
+    
+    static s16 m_timer;
+    static u16 m_type;
 };  // Size: 0x0C
 
 class daPy_mtxPosFollowEcallBack_c : public daPy_mtxFollowEcallBack_c {
@@ -1215,7 +1218,7 @@ public:
         UNDER_MOVE0_e = 0,
     };
     
-    typedef BOOL (daPy_lk_c::*daPy_ProcFunc)();
+    typedef BOOL (daPy_lk_c::*ProcFunc)();
     
     void getBoomerangCatchPos() const;
     void getLineTopPos();
@@ -1223,11 +1226,11 @@ public:
     void seStartOnlyReverb(u32);
     void seStartMapInfo(u32);
     void seStartSwordCut(u32);
-    void itemButton() const;
-    void itemTrigger() const;
+    BOOL itemButton() const;
+    BOOL itemTrigger() const;
     void getReadyItem();
-    void checkGroupItem(int, int);
-    void checkSetItemTrigger(int, int);
+    BOOL checkGroupItem(int, int);
+    BOOL checkSetItemTrigger(int, int);
     void auraJointCB0(int);
     BOOL jointBeforeCB(int, J3DTransformInfo*, Quaternion*);
     BOOL jointAfterCB(int, J3DTransformInfo*, Quaternion*);
@@ -1241,9 +1244,9 @@ public:
     void getUnderUpperAnime(daPy_anmIndex_c const*, J3DAnmTransform**, J3DAnmTransform**, int, u32);
     void setTextureAnimeResource(J3DAnmTexPattern*, int);
     void loadTextureAnimeResource(u32, int);
-    void checkBossBgm();
-    void checkMabaAnimeBtp(int);
-    void checkNormalFace();
+    BOOL checkBossBgm();
+    BOOL checkMabaAnimeBtp(int);
+    BOOL checkNormalFace();
     void setTextureAnime(u16, int);
     void setPriTextureAnime(u16, int);
     void resetPriTextureAnime();
@@ -1255,9 +1258,9 @@ public:
     void checkSightLine(f32, cXyz*);
     void setBootsModel(J3DModel**);
     void setItemModel();
-    void checkUpperReadyAnime() const;
-    void checkUpperReadyThrowAnime() const;
-    void checkNoCollisionCorret();
+    BOOL checkUpperReadyAnime() const;
+    BOOL checkUpperReadyThrowAnime() const;
+    BOOL checkNoCollisionCorret();
     void setDrawHandModel();
     void entryDLSetLight(J3DModel*, u32);
     void updateDLSetLight(J3DModel*, u32);
@@ -1281,7 +1284,7 @@ public:
     void posMove();
     void setShapeAngleToAtnActor();
     void cancelItemUpperReadyAnime();
-    void checkBodyAngleX(s16);
+    BOOL checkBodyAngleX(s16);
     void setBodyAngleToCamera();
     void setBodyAngleXReadyAnime();
     void setSpeedAndAngleNormal(s16);
@@ -1289,7 +1292,7 @@ public:
     void setSpeedAndAngleAtnBack();
     void setSpeedAndAngleAtnActor();
     void setFrameCtrl(J3DFrameCtrl*, u8, s16, s16, f32, f32);
-    void checkAtnWaitAnime();
+    BOOL checkAtnWaitAnime();
     void setBlendMoveAnime(f32);
     void setBlendAtnBackMoveAnime(f32);
     void setBlendAtnMoveAnime(f32);
@@ -1311,18 +1314,18 @@ public:
     void setScopeModel();
     void setPhotoBoxModel();
     void changeDragonShield(int);
-    void checkNewItemChange(u8);
-    void checkItemChangeFromButton();
-    void checkItemAction();
+    BOOL checkNewItemChange(u8);
+    BOOL checkItemChangeFromButton();
+    BOOL checkItemAction();
     void getSlidePolygon();
-    void checkJumpCutFromButton();
+    BOOL checkJumpCutFromButton();
     void orderTalk();
-    void checkNextActionFromButton();
+    BOOL checkNextActionFromButton();
     void setShieldGuard();
-    void checkItemModeActorPointer();
-    void checkNextActionItemFly();
-    void checkNextMode(int);
-    void checkIceSlipFall();
+    BOOL checkItemModeActorPointer();
+    BOOL checkNextActionItemFly();
+    BOOL checkNextMode(int);
+    BOOL checkIceSlipFall();
     void setFrontWallType();
     void changeFrontWallTypeProc();
     void changeSlideProc();
@@ -1343,14 +1346,14 @@ public:
     void checkRestHPAnime();
     BOOL checkHeavyStateOn();
     BOOL checkBottleItem(int) const;
-    void checkDrinkBottleItem(int) const;
-    void checkOpenBottleItem(int) const;
+    BOOL checkDrinkBottleItem(int) const;
+    BOOL checkOpenBottleItem(int) const;
     BOOL checkBowItem(int) const;
-    void checkPhotoBoxItem(int) const;
-    void checkScopeEnd();
+    BOOL checkPhotoBoxItem(int) const;
+    BOOL checkScopeEnd();
     void setSubjectMode();
-    void checkMaskDraw();
-    void checkSubjectEnd(int);
+    BOOL checkMaskDraw();
+    BOOL checkSubjectEnd(int);
     BOOL checkGuardAccept();
     void cancelNoDamageMode();
     BOOL commonProcInit(daPy_lk_c::daPy_PROC procID);
@@ -2214,7 +2217,7 @@ public:
     /* 0x31D0 */ void* mpTextureScrollResData;
     /* 0x31D4 */ JKRSolidHeap* mpTextureScrollResHeap;
     /* 0x31D8 */ int mCurProcID;
-    /* 0x31DC */ daPy_ProcFunc mCurProcFunc;
+    /* 0x31DC */ ProcFunc mCurProcFunc;
     /* 0x31E8 */ daPy_footEffect_c m31E8[2];
     /* 0x3280 */ dPa_rippleEcallBack m3280;
     /* 0x3294 */ daPy_swimTailEcallBack_c mSwimTailEcallBack[2];
@@ -2280,7 +2283,7 @@ public:
     /* 0x34E8 */ s16 m34E8;
     /* 0x34EA */ s16 m34EA;
     /* 0x34EC */ s16 m34EC;
-    /* 0x34EE */ u16 m34EE;
+    /* 0x34EE */ u16 mSeAnmIdx;
     /* 0x34F0 */ u16 m34F0;
     /* 0x34F2 */ s16 m34F2;
     /* 0x34F4 */ s16 m34F4;
@@ -2373,7 +2376,7 @@ public:
     /* 0x3600 */ f32 m3600;
     /* 0x3604 */ f32 m3604;
     /* 0x3608 */ f32 m3608;
-    /* 0x360C */ f32 m360C;
+    /* 0x360C */ f32 mSeAnmRate;
     /* 0x3610 */ f32 m3610;
     /* 0x3614 */ int m3614;
     /* 0x3618 */ u32 mProcFlags;
@@ -2385,7 +2388,9 @@ public:
     /* 0x3630 */ int m3630;
     /* 0x3634 */ int m3634;
     /* 0x3638 */ int mMsgId;
-    /* 0x363C */ u8 m363C[0x3644 - 0x363C];
+    /* 0x363C */ J3DFrameCtrl* mpSeAnmFrameCtrl;
+    /* 0x3640 */ s16 m3640;
+    /* 0x3642 */ u8 m3642[0x3644 - 0x3642];
     /* 0x3644 */ f32 m3644;
     /* 0x3648 */ u8 m3648[0x3654 - 0x3648];
     /* 0x3654 */ f32 m3654;
@@ -2422,12 +2427,12 @@ public:
     /* 0x4AF0 */ dCcD_Cps mFanWindCps2;
     
     struct ProcInitTableEntry {
-        /* 0x00 */ daPy_ProcFunc mProcFunc;
+        /* 0x00 */ ProcFunc mProcFunc;
         /* 0x0C */ u32 mProcFlags;
     };
     
     static ProcInitTableEntry mProcInitTable[0xDB];
-    static daPy_ProcFunc mDemoProcInitFuncTable[0x4B];
+    static ProcFunc mDemoProcInitFuncTable[0x4B];
 };  // Size: 0x4C28
 
 #endif /* D_A_PLAYER_MAIN */

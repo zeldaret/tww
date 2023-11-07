@@ -173,7 +173,7 @@ static s16 daNpc_kam_XyEventCB(void* i_this, int param_1) {
 }
 
 /* 0000054C-00000568       .text XyEventCB__11daNpc_kam_cFi */
-s16 daNpc_kam_c::XyEventCB(int param_1) {
+s16 daNpc_kam_c::XyEventCB(int equippedItemIdx) {
     onEventAccept();
     mCurrEventIdxIdx = 1; // "kamome_call"
     return mEventIdxs[1];

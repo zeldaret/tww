@@ -8,9 +8,7 @@
 
 class daPy_matAnm_c : public J3DMaterialAnm {
 public:
-    daPy_matAnm_c() { init(); }
-
-    void init();
+    daPy_matAnm_c();
 
     virtual ~daPy_matAnm_c() {}
     virtual void calc(J3DMaterial*) const;

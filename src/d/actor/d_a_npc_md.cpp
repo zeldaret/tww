@@ -7,6 +7,8 @@
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 #include "JSystem/JKernel/JKRHeap.h"
+#include "d/d_item_data.h"
+#include "m_Do/m_Do_controller_pad.h"
 
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
@@ -318,23 +320,48 @@ daNpc_Md_HIO_c::daNpc_Md_HIO_c() {
 }
 
 /* 000006DC-000006FC       .text daNpc_Md_XyCheckCB__FPvi */
-static void daNpc_Md_XyCheckCB(void* i_this, int param_1) {
+static s16 daNpc_Md_XyCheckCB(void* i_this, int param_1) {
     return static_cast<daNpc_Md_c*>(i_this)->XyCheckCB(param_1);
 }
 
 /* 000006FC-000007FC       .text XyCheckCB__10daNpc_Md_cFi */
-void daNpc_Md_c::XyCheckCB(int) {
-    /* Nonmatching */
+s16 daNpc_Md_c::XyCheckCB(int equippedItemIdx) {
+    u8 selectItemNo = dComIfGp_getSelectItem(equippedItemIdx);
+    if (m3138 == 3) {
+        if (selectItemNo == WIND_TACT) {
+            return TRUE;
+        }
+        if (selectItemNo == GOLDEN_FEATHER) {
+            if (!dComIfGs_isEventBit(0x2E40) || (dComIfGs_isEventBit(0x2E40) && m_seaTalk)) {
+                return TRUE;
+            }
+        }
+    } else if (m3138 == 5 || m3138 == 4) {
+        if (selectItemNo == GOLDEN_FEATHER && !dComIfGs_isEventBit(0x3B80)) {
+            return TRUE;
+        }
+    }
+    if (selectItemNo == GOLDEN_FEATHER) {
+        dComIfGs_onEventBit(0x2C08);
+    }
+    return FALSE;
 }
 
 /* 000007FC-0000081C       .text daNpc_Md_XyEventCB__FPvi */
-static void daNpc_Md_XyEventCB(void* i_this, int param_1) {
+static s16 daNpc_Md_XyEventCB(void* i_this, int param_1) {
     return static_cast<daNpc_Md_c*>(i_this)->XyEventCB(param_1);
 }
 
 /* 0000081C-00000864       .text XyEventCB__10daNpc_Md_cFi */
-void daNpc_Md_c::XyEventCB(int) {
-    /* Nonmatching */
+s16 daNpc_Md_c::XyEventCB(int equippedItemIdx) {
+    u8 selectItemNo = dComIfGp_getSelectItem(equippedItemIdx);
+    if (selectItemNo == WIND_TACT) {
+        offDefaultTalkXY();
+        return mEventIdxTable[5];
+    } else if (selectItemNo == GOLDEN_FEATHER) {
+        onDefaultTalkXY();
+    }
+    return -1;
 }
 
 /* 00000864-00000884       .text CheckCreateHeap__FP10fopAc_ac_c */
@@ -613,7 +640,8 @@ void daNpc_Md_c::playerAction(void* arg) {
 
 /* 00003360-000033C4       .text setPlayerAction__10daNpc_Md_cFM10daNpc_Md_cFPCvPvPv_iPv */
 void daNpc_Md_c::setPlayerAction(ActionFunc actionFunc, void* arg) {
-    /* Nonmatching */
+    mCurrNpcActionFunc = NULL;
+    setAction(&mCurrPlayerActionFunc, actionFunc, arg);
 }
 
 /* 000033C4-00003430       .text getStickAngY__10daNpc_Md_cFi */
@@ -627,13 +655,22 @@ void daNpc_Md_c::calcStickPos(short, cXyz*) {
 }
 
 /* 00003588-0000362C       .text flyCheck__10daNpc_Md_cFv */
-void daNpc_Md_c::flyCheck() {
-    /* Nonmatching */
+BOOL daNpc_Md_c::flyCheck() {
+    if (!CPad_CHECK_TRIG_A(0)) {
+        return FALSE;
+    }
+    if (isOldLightBodyHit()) {
+        setPlayerAction(&mkamaePlayerAction, NULL);
+    } else {
+        setPlayerAction(&flyPlayerAction, NULL);
+    }
+    return TRUE;
 }
 
 /* 0000362C-00003648       .text mirrorCancelCheck__10daNpc_Md_cFv */
-void daNpc_Md_c::mirrorCancelCheck() {
+BOOL daNpc_Md_c::mirrorCancelCheck() {
     /* Nonmatching */
+    return CPad_CHECK_TRIG_B(0);
 }
 
 /* 00003648-00003674       .text setWingEmitter__10daNpc_Md_cFv */
@@ -838,7 +875,12 @@ int daNpc_Md_c::piyo2NpcAction(void*) {
 
 /* 00007824-0000786C       .text deleteNpcAction__10daNpc_Md_cFPv */
 int daNpc_Md_c::deleteNpcAction(void*) {
-    /* Nonmatching */
+    if (mActionStatus == ACTION_STARTING) {
+        mActionStatus++; // ACTION_ONGOING
+    } else if (mActionStatus != ACTION_ENDING) {
+        fopAcM_delete(this);
+    }
+    return TRUE;
 }
 
 /* 0000786C-00007A98       .text demoFlyNpcAction__10daNpc_Md_cFPv */
@@ -1162,7 +1204,7 @@ BOOL daNpc_Md_c::initLightBtkAnm(bool) {
 
 /* 0000D0B8-0000D0DC       .text playLightBtkAnm__10daNpc_Md_cFv */
 void daNpc_Md_c::playLightBtkAnm() {
-    /* Nonmatching */
+    mLightBtkAnm.play();
 }
 
 /* 0000D0DC-0000D4CC       .text setAnm__10daNpc_Md_cFi */
