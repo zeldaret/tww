@@ -18,9 +18,6 @@ public:
     virtual bool isLoopEnable() = 0;
     virtual u8 getNumber() = 0;
     virtual const f32* getKeyDataPtr() = 0;
-
-    const JPAKeyBlockData* mpData;
-    const f32* mpKeyData;
 };
 
 class JPAKeyBlockArc : public JPAKeyBlock {
@@ -31,6 +28,10 @@ public:
     virtual bool isLoopEnable() { return mpData->mbLoopEnable != 0; }
     virtual u8 getNumber() { return mpData->mNumber; }
     virtual const f32* getKeyDataPtr() { return mpKeyData; }
+
+public:
+    /* 0x04 */ const JPAKeyBlockData* mpData;
+    /* 0x08 */ const f32* mpKeyData;
 };
 
 #endif /* JPAKEYBLOCK_H */

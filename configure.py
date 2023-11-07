@@ -561,8 +561,8 @@ config.libs = [
         [
             Object(NonMatching, "JSystem/JParticle/JPABaseShape.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPAExtraShape.cpp"),
-            Object(NonMatching, "JSystem/JParticle/JPASweepShape.cpp"),
-            Object(NonMatching, "JSystem/JParticle/JPAExTexShape.cpp"),
+            Object(Matching,    "JSystem/JParticle/JPASweepShape.cpp"),
+            Object(Matching,    "JSystem/JParticle/JPAExTexShape.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPADynamicsBlock.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPAFieldBlock.cpp"),
             Object(Matching,    "JSystem/JParticle/JPAKeyBlock.cpp"),

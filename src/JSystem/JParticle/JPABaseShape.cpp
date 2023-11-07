@@ -83,6 +83,12 @@ GXColor * makeColorTable(JPAColorRegAnmKey* pKey, int keyNum, int frmNum, JKRHea
     return colTbl;
 }
 
+static void dummy() {
+    OSReport("texTable");
+    OSReport("(*((s16*) (bin + 20))) != 0");
+    OSReport("(*((s16*) (bin + 22))) != 0");
+}
+
 /* 80257248-80257508       .text __ct__15JPABaseShapeArcFPCUcP7JKRHeap */
 JPABaseShapeArc::JPABaseShapeArc(const u8* pData, JKRHeap* pHeap) {
     /* Nonmatching */
