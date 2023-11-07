@@ -44,6 +44,12 @@ public:
     virtual void getEmitterRot(JGeometry::TVec3<s16>&) = 0;
     virtual void getEmitterTrs(JGeometry::TVec3<f32>&) = 0;
     virtual void getEmitterDir(JGeometry::TVec3<f32>&) = 0;
+    virtual f32 getInitVelOmni() = 0;
+    virtual f32 getInitVelAxis() = 0;
+    virtual f32 getInitVelRndm() = 0;
+    virtual f32 getInitVelDir() = 0;
+    virtual f32 getSpread() = 0;
+    virtual f32 getInitVelRatio() = 0;
     virtual u32 getVolumeType() = 0;
     virtual u32 getVolumeSize() = 0;
     virtual f32 getVolumeSweep() = 0;
@@ -56,12 +62,6 @@ public:
     virtual u32 getStartFrame() = 0;
     virtual u32 getLifeTime() = 0;
     virtual f32 getLifeTimeRndm() = 0;
-    virtual f32 getInitVelOmni() = 0;
-    virtual f32 getInitVelAxis() = 0;
-    virtual f32 getInitVelRndm() = 0;
-    virtual f32 getInitVelDir() = 0;
-    virtual f32 getSpread() = 0;
-    virtual f32 getInitVelRatio() = 0;
     virtual f32 getAccel() = 0;
     virtual f32 getAccelRndm() = 0;
     virtual f32 getAirResist() = 0;

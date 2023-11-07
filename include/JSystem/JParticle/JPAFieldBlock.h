@@ -24,10 +24,10 @@ class JPAFieldBlock {
 public:
     virtual ~JPAFieldBlock() {}
     virtual u32 getType() = 0;
-    virtual u32 getVelType() = 0;
-    virtual u32 getSttFlag() = 0;
-    virtual u32 getCycle() = 0;
     virtual u32 getID() = 0;
+    virtual u32 getVelType() = 0;
+    virtual u32 getCycle() = 0;
+    virtual u32 getSttFlag() = 0;
     virtual void getPos(JGeometry::TVec3<float>&) = 0;
     virtual void getDir(JGeometry::TVec3<float>&) = 0;
     virtual f32 getMag() = 0;

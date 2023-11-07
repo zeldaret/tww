@@ -25,9 +25,7 @@ struct TVec3<s16> {
     s16 x, y, z;
 
     TVec3& operator=(const TVec3& b) {
-        x = b.x;
-        y = b.y;
-        z = b.z;
+        set(b.x, b.y, b.z);
         return *this;
     }
 
@@ -142,9 +140,7 @@ struct TVec3<f32> {
     // }
 
     inline TVec3<f32>& operator=(const TVec3<f32>& b) {
-        x = b.x;
-        y = b.y;
-        z = b.z;
+        set(b.x, b.y, b.z);
         return *this;
     }
 

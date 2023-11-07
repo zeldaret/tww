@@ -10,13 +10,9 @@
 JPAExtraShapeArc::JPAExtraShapeArc(const u8* data) {
     mpData = reinterpret_cast<const JPAExtraShapeData*>(data+0x0C);
 
-    if (mpData->mAlphaInTiming != 0.0f) {
-        mAlphaIncreaseRate = (mpData->mAlphaBaseValue - mpData->mAlphaInValue) / mpData->mAlphaInTiming;
-    }
+    mAlphaIncreaseRate = mpData->mAlphaInTiming != 0.0f ? (mpData->mAlphaBaseValue - mpData->mAlphaInValue) / mpData->mAlphaInTiming : 1.0f;
 
-    if (mpData->mAlphaOutTiming != 1.0f) {
-        mAlphaDecreaseRate = (mpData->mAlphaOutValue - mpData->mAlphaBaseValue) / (1.0f - mpData->mAlphaOutTiming);
-    }
+    mAlphaDecreaseRate = mpData->mAlphaOutTiming != 1.0f ? (mpData->mAlphaOutValue - mpData->mAlphaBaseValue) / (1.0f - mpData->mAlphaOutTiming) : 1.0f;
 
     if (mpData->mScaleInTiming != 0.0f) {
         mIncreaseRateX = (1.0f - mpData->mScaleInValueX) / mpData->mScaleInTiming;
@@ -26,7 +22,7 @@ JPAExtraShapeArc::JPAExtraShapeArc(const u8* data) {
         mIncreaseRateX = 1.0f;
     }
 
-    if (mpData->mScaleOutTiming != 0.0f) {
+    if (mpData->mScaleOutTiming != 1.0f) {
         mDecreaseRateX = (mpData->mScaleOutValueX - 1.0f) / (1.0f - mpData->mScaleOutTiming);
         mDecreaseRateY = (mpData->mScaleOutValueY - 1.0f) / (1.0f - mpData->mScaleOutTiming);
     } else {
