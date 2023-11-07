@@ -58,6 +58,11 @@ struct fopAcM_search_prm {
     /* 0x0A */ s8 mSubType;
 };
 
+class l_HIO {
+public:
+    ~l_HIO() {}
+};
+
 class dKy_tevstr_c;
 typedef int (*heapCallbackFunc)(fopAc_ac_c*);
 typedef int (*createFunc)(void*);
@@ -337,10 +342,6 @@ inline bool fopAcM_IsFirstCreating(void* i_actor) {
     return fpcM_IsFirstCreating(i_actor);
 }
 
-void fopAcM_initManager();
-
-void* fopAcM_FastCreate(s16 pProcTypeID, FastCreateReqFunc param_2, void* param_3, void* pData);
-
 void fopAcM_setStageLayer(void* p_proc);
 
 void fopAcM_setRoomLayer(void* p_proc, int roomNo);
@@ -457,13 +458,13 @@ s32 fopAcM_createItemForTrBoxDemo(cXyz* p_pos, int i_itemNo, int i_itemBitNo, in
 s32 fopAcM_createItemFromTable(cXyz* p_pos, int i_tableNo, int i_itemBitNo, int i_roomNo, int,
                                csXyz* p_angle, int, cXyz* p_scale);
 
-s32 fopAcM_createShopItem(cXyz* p_pos, int i_itemNo, csXyz* rot, int roomNo, cXyz* scale,
+s32 fopAcM_createShopItem(cXyz* p_pos, int i_itemNo, csXyz* p_angle, int roomNo, cXyz* scale,
                           createFunc createFunc);
 
-s32 fopAcM_createRaceItem(cXyz* p_pos, int i_itemNo, int i_itemBitNo, csXyz* rot, int roomNo,
+s32 fopAcM_createRaceItem(cXyz* p_pos, int i_itemNo, int i_itemBitNo, csXyz* p_angle, int roomNo,
                           cXyz* scale, int param_7);
 
-s32 fopAcM_createIball(cXyz* p_pos, int itemTableIdx, int roomNo, csXyz* rot, int itemStealNum);
+s32 fopAcM_createIball(cXyz* p_pos, int itemTableIdx, int roomNo, csXyz* p_angle, int itemStealNum);
 
 s32 fopAcM_createDemoItem(cXyz* p_pos, int itemNo, int itemBitNo, csXyz* p_angle,
                           int roomNo, cXyz* scale, u8 param_7);
@@ -489,7 +490,7 @@ BOOL stealItem_CB(void* actor);
 
 fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo);
 
-s32 fopAcM_createDisappear(fopAc_ac_c*, cXyz*, u8, u8, u8);
+s32 fopAcM_createDisappear(fopAc_ac_c* i_actor, cXyz* p_pos, u8 i_scale, u8 i_health, u8 i_switchNo);
 void fopAcM_setCarryNow(fopAc_ac_c* i_this, int stageLayer);
 void fopAcM_cancelCarryNow(fopAc_ac_c* i_this);
 s32 fopAcM_otoCheck(fopAc_ac_c*, f32);

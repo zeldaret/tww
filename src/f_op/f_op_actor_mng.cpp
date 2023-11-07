@@ -25,6 +25,8 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "SSystem/SComponent/c_malloc.h"
 
+static Vec dummy_3569;
+
 /* 80024060-80024104       .text fopAcM_setStageLayer__FPv */
 void fopAcM_setStageLayer(void* pProc) {
     scene_class* stageProc = fopScnM_SearchByID(dStage_roomControl_c::getProcID());
@@ -504,7 +506,7 @@ s32 fopAcM_rollPlayerCrash(fopAc_ac_c* i_this, f32 distAdjust, u32 flag) {
     if (xzDist2 < maxDist*maxDist && yDist > -100.0f && yDist < 200.0f) {
         daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
         s16 angle = fopAcM_searchPlayerAngleY(i_this);
-        if (cM_scos(player->current.angle.y - angle) < 0.9f) {
+        if (cM_scos(player->current.angle.y - angle) < -0.9f) {
             if (fopAcM_GetName(player) == PROC_PLAYER) {
                 player->onFrollCrashFlg(flag);
                 return TRUE;
@@ -523,8 +525,45 @@ s32 fopAcM_checkCullingBox(Mtx pMtx, float x0, float y0, float z0, float x1, flo
     return mDoLib_clipper::clip(viewMtx, &p1, &p0) != 0;
 }
 
-static fopAc_cullSizeBox l_cullSizeBox[14]; // TODO
-static fopAc_cullSizeSphere l_cullSizeSphere[8]; // TODO
+static l_HIO l_hio;
+
+static fopAc_cullSizeBox l_cullSizeBox[14] = {
+#ifndef __INTELLISENSE__
+    /* fopAc_CULLBOX_0_e  */ fopAc_cullSizeBox(cXyz(-40.0f, 0.0f, -40.0f), cXyz(40.0f, 125.0f, 40.0f)),
+    /* fopAc_CULLBOX_1_e  */ fopAc_cullSizeBox(cXyz(-25.0f, 0.0f, -25.0f), cXyz(25.0f, 50.0f, 25.0f)),
+    /* fopAc_CULLBOX_2_e  */ fopAc_cullSizeBox(cXyz(-50.0f, 0.0f, -50.0f), cXyz(50.0f, 100.0f, 50.0f)),
+    /* fopAc_CULLBOX_3_e  */ fopAc_cullSizeBox(cXyz(-75.0f, 0.0f, -75.0f), cXyz(75.0f, 150.0f, 75.0f)),
+    /* fopAc_CULLBOX_4_e  */ fopAc_cullSizeBox(cXyz(-100.0f, 0.0f, -100.0f), cXyz(100.0f, 800.0f, 100.0f)),
+    /* fopAc_CULLBOX_5_e  */ fopAc_cullSizeBox(cXyz(-125.0f, 0.0f, -125.0f), cXyz(125.0f, 250.0f, 125.0f)),
+    /* fopAc_CULLBOX_6_e  */ fopAc_cullSizeBox(cXyz(-150.0f, 0.0f, -150.0f), cXyz(150.0f, 300.0f, 150.0f)),
+    /* fopAc_CULLBOX_7_e  */ fopAc_cullSizeBox(cXyz(-200.0f, 0.0f, -200.0f), cXyz(200.0f, 400.0f, 200.0f)),
+    /* fopAc_CULLBOX_8_e  */ fopAc_cullSizeBox(cXyz(-600.0f, 0.0f, -600.0f), cXyz(600.0f, 900.0f, 600.0f)),
+    /* fopAc_CULLBOX_9_e  */ fopAc_cullSizeBox(cXyz(-250.0f, 0.0f, -50.0f), cXyz(250.0f, 450.0f, 50.0f)),
+    /* fopAc_CULLBOX_10_e */ fopAc_cullSizeBox(cXyz(-60.0f, 0.0f, -20.0f), cXyz(40.0f, 130.0f, 150.0f)),
+    /* fopAc_CULLBOX_11_e */ fopAc_cullSizeBox(cXyz(-75.0f, 0.0f, -75.0f), cXyz(75.0f, 210.0f, 75.0f)),
+    /* fopAc_CULLBOX_12_e */ fopAc_cullSizeBox(cXyz(-70.0f, -100.0f, -80.0f), cXyz(70.0f, 240.0f, 100.0f)),
+    /* fopAc_CULLBOX_13_e */ fopAc_cullSizeBox(cXyz(-60.0f, -20.0f, -60.0f), cXyz(60.0f, 160.0f, 60.0f)),
+#endif
+};
+static fopAc_cullSizeSphere l_cullSizeSphere[8] = {
+#ifndef __INTELLISENSE__
+    /* fopAc_CULLSPHERE_0_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 80.0f),
+    /* fopAc_CULLSPHERE_1_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 50.0f),
+    /* fopAc_CULLSPHERE_2_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 100.0f),
+    /* fopAc_CULLSPHERE_3_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 150.0f),
+    /* fopAc_CULLSPHERE_4_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 200.0f),
+    /* fopAc_CULLSPHERE_5_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 250.0f),
+    /* fopAc_CULLSPHERE_6_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 300.0f),
+    /* fopAc_CULLSPHERE_7_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 400.0f),
+#endif
+};
+
+static void dummy() {
+    static Vec dummy_4863;
+    static Vec min;
+    static Vec dummy_4899;
+    static Vec max;
+}
 
 /* 80025660-800259A8       .text fopAcM_cullingCheck__FP10fopAc_ac_c */
 s32 fopAcM_cullingCheck(fopAc_ac_c* i_this) {
@@ -766,8 +805,93 @@ s32 fopAcM_createItemForTrBoxDemo(cXyz* pos, int i_itemNo, int roomNo, int param
 }
 
 /* 800262B4-80026694       .text fopAcM_createItemFromTable__FP4cXyziiiiP5csXyziP4cXyz */
-void fopAcM_createItemFromTable(cXyz*, int, int, int, int, csXyz*, int, cXyz*) {
-    /* Nonmatching */
+s32 fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo, int roomNo, int type, csXyz* p_angle, int action, cXyz* p_scale) {
+    JUT_ASSERT(2514, 0 <= i_itemNo && i_itemNo < 64 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
+    
+    static cXyz fairy_offset_tbl[3] = {
+        cXyz(40.0f, 0.0f, 0.0f),
+        cXyz(-40.0f, 0.0f, 0.0f),
+        cXyz(0.0f, 0.0f, 40.0f),
+    };
+    
+    cXyz pos(0.0f, 0.0f, 0.0f);
+    csXyz angle(0, 0, 0);
+    
+    if (i_itemNo >= 0x20 && i_itemNo <= 0x3E) {
+        ItemTableList* itemTableList = dComIfGp_getItemTable();
+        int tableIdx = i_itemNo - 0x20;
+        switch (tableIdx) {
+        case 0x01:
+        case 0x02:
+        case 0x03:
+        case 0x04:
+            int life = dComIfGs_getLife() * 100;
+            int max = dComIfGs_getMaxLife() & 0xFC;
+            u8 lifePercent = life / max;
+            if (lifePercent != 0 && lifePercent <= 20) {
+                tableIdx = 4;
+            } else if (lifePercent > 20 && lifePercent <= 40) {
+                tableIdx = 3;
+            } else if (lifePercent > 40 && lifePercent <= 80) {
+                tableIdx = 2;
+            } else if (lifePercent > 80 && lifePercent <= 100) {
+                tableIdx = 1;
+            }
+            break;
+        case 0x0B:
+        case 0x0C:
+        case 0x0D:
+        case 0x0E:
+        case 0x0F:
+        case 0x10:
+        case 0x11:
+        case 0x12:
+        case 0x13:
+        case 0x14:
+            if (itemTableList == NULL) {
+                return -1;
+            }
+            u8* pItemTable = itemTableList->mItemTables[tableIdx];
+            u32 itemNo;
+            u32 lastItemPcId;
+            for (int i = 0; (itemNo = *pItemTable) != NO_ITEM && i < 0x10; pItemTable++, i++) {
+                if (p_pos) {
+                    pos = *p_pos;
+                }
+                if (p_angle) {
+                    angle = *p_angle;
+                }
+                
+                if (tableIdx == RECOVER_FAIRY) {
+                    // Bug: This condition never gets triggered. They meant to check if (itemNo == RECOVER_FAIRY) so
+                    // that the 3x fairies drop table (table 0x14) spawns them in a triangle. But nstead they check if
+                    // the table index is equal to 0x16/RECOVER_FAIRY, which will never be true.
+                    pos += fairy_offset_tbl[i];
+                    angle.y = cM_rndF((f32)0x7FFE);
+                }
+                
+                itemNo = getItemNoByLife((s8)itemNo);
+                daItem_c* item = (daItem_c*)fopAcM_fastCreateItem2(&pos, itemNo, i_itemBitNo, roomNo, type, &angle, 8, NULL);
+                
+                lastItemPcId = fopAcM_GetID(item);
+                if (lastItemPcId == -1) {
+                    break;
+                }
+            }
+            return lastItemPcId;
+        }
+        
+        int itemIdx = (int)cM_rndF(15.9999f);
+        i_itemNo = itemTableList->mItemTables[tableIdx][itemIdx];
+    }
+    
+    if (i_itemNo == 0x3F || i_itemNo == 0xFF) {
+        return -1;
+    } else {
+        u32 itemNo = getItemNoByLife(i_itemNo);
+        daItem_c* item = (daItem_c*)fopAcM_fastCreateItem2(p_pos, itemNo, i_itemBitNo, roomNo, type, p_angle, action, p_scale);
+        return fopAcM_GetID(item);
+    }
 }
 
 /* 80026694-800267C8       .text fopAcM_createRaceItemFromTable__FP4cXyziiiP5csXyzP4cXyzi */
@@ -788,14 +912,13 @@ s32 fopAcM_createShopItem(cXyz* pos, int i_itemNo, csXyz* rot, int roomNo, cXyz*
 
 /* 8002688C-80026980       .text fopAcM_createRaceItem__FP4cXyziiP5csXyziP4cXyzi */
 s32 fopAcM_createRaceItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* rot, int roomNo, cXyz* scale, int param_7) {
-    /* Nonmatching */
     JUT_ASSERT(2763, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
     if (i_itemNo == NO_ITEM) {
         return -1;
     }
     
-    i_itemNo = (u8)check_itemno(i_itemNo);
-    u32 params = (i_itemBitNo & 0x7F) << 0x08 | i_itemNo | (param_7 & 0xF) << 0xF;
+    i_itemNo = check_itemno(i_itemNo);
+    u32 params = (i_itemBitNo & 0x7F) << 0x08 | i_itemNo & 0xFF | (param_7 & 0xF) << 0xF;
     fopAcM_create(PROC_RACEITEM, params, pos, roomNo, rot, scale, 0xFF, NULL);
 }
 
@@ -956,8 +1079,9 @@ s32 fopAcM_createIball(cXyz*, int, int, csXyz*, int) {
 }
 
 /* 800278D8-80027920       .text fopAcM_createWarpFlower__FP4cXyzP5csXyziUc */
-void fopAcM_createWarpFlower(cXyz*, csXyz*, int, unsigned char) {
-    /* Nonmatching */
+void fopAcM_createWarpFlower(cXyz* p_pos, csXyz* p_angle, int i_roomNo, u8 param_4) {
+    u32 params = param_4;
+    fopAcM_create(PROC_WARPFLOWER, params, p_pos, i_roomNo, p_angle, NULL, 0xFF, NULL);
 }
 
 /* 80027920-80027970       .text enemySearchJugge__FPvPv */
@@ -986,8 +1110,13 @@ fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo) {
 }
 
 /* 80027A9C-80027B24       .text fopAcM_createDisappear__FP10fopAc_ac_cP4cXyzUcUcUc */
-s32 fopAcM_createDisappear(fopAc_ac_c*, cXyz*, unsigned char, unsigned char, unsigned char) {
-    /* Nonmatching */
+s32 fopAcM_createDisappear(fopAc_ac_c* i_actor, cXyz* p_pos, u8 i_scale, u8 i_health, u8 i_switchNo) {
+    u32 params = (i_switchNo & 0xFF) << 0x10 | (i_scale & 0xFF) << 0x08 | i_health & 0xFF;
+    fopAc_ac_c* disappear = (fopAc_ac_c*)fopAcM_fastCreate(PROC_DISAPPEAR, params, p_pos, fopAcM_GetRoomNo(i_actor), &i_actor->current.angle, NULL, -1, NULL, NULL);
+    if (disappear) {
+        disappear->mItemTableIdx = i_actor->mItemTableIdx;
+    }
+    return fopAcM_GetID(disappear);
 }
 
 /* 80027B24-80027E28       .text fopAcM_getGroundAngle__FP10fopAc_ac_cP5csXyz */
@@ -1067,14 +1196,15 @@ fopAc_ac_c* fopAcM_searchFromName(char* pProcName, u32 paramMask, u32 parameter)
 
 /* 80028448-80028560       .text fopAcM_getWaterY__FPC4cXyzPf */
 s32 fopAcM_getWaterY(const cXyz* pPos, float* pDstWaterY) {
-    /* Nonmatching */
     static dBgS_WtrChk water_check;
     s32 ret = 0;
 
     *pDstWaterY = -1e09;
 
-    cXyz pos = *pPos;
-    pos.y -= 500.0f;
+    cXyz pos;
+    pos.x = pPos->x;
+    pos.y = pPos->y - 500.0f;
+    pos.z = pPos->z;
     water_check.Set(pos, pos.y + 1000.0f);
 
     bool hit = dComIfG_Bgsp()->SplGrpChk(&water_check);
@@ -1083,8 +1213,8 @@ s32 fopAcM_getWaterY(const cXyz* pPos, float* pDstWaterY) {
         ret = 1;
     }
 
-    if (daSea_ChkArea(pos.x, pos.z)) {
-        f32 waveY = daSea_calcWave(pos.x, pos.z);
+    if (daSea_ChkArea(pPos->x, pPos->z)) {
+        f32 waveY = daSea_calcWave(pPos->x, pPos->z);
         if (waveY > *pDstWaterY)
             *pDstWaterY = waveY;
         ret = 1;
