@@ -141,7 +141,7 @@ public:
     /* 0x014 */ u32 mUserArea;
     /* 0x018 */ Vec mBaseScale;
     /* 0x024 */ Mtx mBaseTransformMtx;
-    /* 0x054 */ Mtx mInternalView;
+    /* 0x054 */ Mtx mViewBaseMtx;
     /* 0x084 */ u8* mpScaleFlagArr;
     /* 0x088 */ u8* mpEvlpScaleFlagArr;
     /* 0x08C */ Mtx* mpNodeMtx;

@@ -4,21 +4,78 @@
 //
 
 #include "JSystem/J2DGraph/J2DTextBox.h"
-#include "dolphin/types.h"
+#include "JSystem/JKernel/JKRFileLoader.h"
+#include "JSystem/JSupport/JSURandomInputStream.h"
+#include "JSystem/JUtility/JUTResource.h"
 
 /* 802D51D8-802D5268       .text __ct__10J2DTextBoxFPCcPCc */
-J2DTextBox::J2DTextBox(const char*, const char*) {
-    /* Nonmatching */
+J2DTextBox::J2DTextBox(const char* font, const char* str) : mpFont(NULL), mStringPtr(NULL) {
+    void * font_res = JKRFileLoader::getGlbResource(font, NULL);
+    initiate((ResFONT*) font_res, str, HBIND_LEFT, VBIND_TOP);
 }
 
 /* 802D5268-802D55D4       .text __ct__10J2DTextBoxFP7J2DPaneP20JSURandomInputStream */
-J2DTextBox::J2DTextBox(J2DPane*, JSURandomInputStream*) {
-    /* Nonmatching */
+J2DTextBox::J2DTextBox(J2DPane* parent, JSURandomInputStream* stream) : mpFont(NULL), mStringPtr(NULL) {
+    s32 streamPos = stream->getPosition();
+    J2DPaneHeader header;
+    s32 endPos;
+    u8 num;
+    stream->read(&header, sizeof(header));
+    mMagic = header.mMagic;
+    endPos = streamPos + header.mSize;
+    makePaneStream(parent, stream);
+    JUTResReference resRef;
+    num = stream->readU8();
+    ResFONT * font_res = (ResFONT *) resRef.getResource(stream, 'FONT', NULL);
+    if (font_res != NULL)
+        mpFont = new JUTResFont(font_res, NULL);
+
+    mCharColor.set(stream->readU32());
+    mGradColor.set(stream->readU32());
+    u8 bindingFlag = stream->readU8();
+    mBindingH = (bindingFlag >> 2) & 0x03;
+    mBindingV = (bindingFlag >> 0) & 0x03;
+
+    mCharSpace = stream->readS16();
+    mLineSpace = stream->readS16();
+    mFontSizeX = stream->readU16();
+    mFontSizeY = stream->readU16();
+
+    s16 stringLen = stream->readU16();
+    mStringPtr = new char[stringLen + 1];
+    stream->read(mStringPtr, stringLen);
+    mStringPtr[stringLen] = '\0';
+
+    num -= 10;
+    if (num) {
+        u8 isConnectParent = stream->readU8();
+        if (isConnectParent)
+            setConnectParent(true);
+        num--;
+    }
+
+    mBlack = JUtility::TColor(0);
+    mWhite = JUtility::TColor(0xffffffff);
+
+    if (num) {
+        mBlack.set(stream->readU32());
+        num--;
+    }
+    if (num) {
+        mWhite.set(stream->readU32());
+        num--;
+    }
+
+    field_0xd8 = 0.0f;
+    field_0xdc = 0.0f;
+
+    stream->seek(endPos, JSUStreamSeekFrom_SET);
+    mTextFontOwned = true;
 }
 
 /* 802D55D4-802D5660       .text __ct__10J2DTextBoxFUlRCQ29JGeometry8TBox2<f>PC7ResFONTPCc18J2DTextBoxHBinding18J2DTextBoxVBinding */
-J2DTextBox::J2DTextBox(u32, const JGeometry::TBox2<f32>&, const ResFONT*, const char*, J2DTextBoxHBinding, J2DTextBoxVBinding) {
-    /* Nonmatching */
+J2DTextBox::J2DTextBox(u32 tag, const JGeometry::TBox2<f32>& bounds, const ResFONT* font_res, const char* str, J2DTextBoxHBinding hbind, J2DTextBoxVBinding vbind) : J2DPane(tag, bounds), mpFont(NULL), mStringPtr(NULL) {
+    initiate(font_res, str, hbind, vbind);
 }
 
 /* 802D5660-802D5820       .text initiate__10J2DTextBoxFPC7ResFONTPCc18J2DTextBoxHBinding18J2DTextBoxVBinding */

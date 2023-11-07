@@ -38,7 +38,7 @@ void J3DModel::initialize() {
     mBaseScale.z = 1.0f;
 
     MTXIdentity(mBaseTransformMtx);
-    MTXIdentity(mInternalView);
+    MTXIdentity(mViewBaseMtx);
 
     mpScaleFlagArr = NULL;
     mpEvlpScaleFlagArr = NULL;
@@ -319,19 +319,19 @@ s32 J3DModel::createMatPacket(J3DModelData* pModelData, u32 flag) {
 }
 
 /* 802EDF60-802EE1D4       .text createBumpMtxArray__8J3DModelFP12J3DModelDataUl */
-s32 J3DModel::createBumpMtxArray(J3DModelData* modelData, u32 flag) {
+s32 J3DModel::createBumpMtxArray(J3DModelData* modelData, u32 bufferNum) {
     /* Nonmatching */
     if (modelData->getModelDataType() == 0) {
-        u16 num = 0;
+        u16 bumpMtxNum = 0;
         for (s32 matIdx = 0; matIdx < modelData->getMaterialNum(); matIdx++) {
             J3DMaterial * pMaterial = getModelData()->getMaterialNodePointer(matIdx);
             if (pMaterial->getNBTScale()->mbHasScale == 1)
-                num += pMaterial->getShape()->countBumpMtxNum();
+                bumpMtxNum += pMaterial->getShape()->countBumpMtxNum();
         }
 
-        if (num != 0 && flag != 0) {
+        if (bumpMtxNum != 0 && bufferNum != 0) {
             for (s32 i = 0; i < 2; i++) {
-                mpBumpMtxArr[i] = new Mtx33**[num];
+                mpBumpMtxArr[i] = new Mtx33**[bumpMtxNum];
                 if (mpBumpMtxArr[i] == NULL)
                     return kJ3DError_Alloc;
             }
@@ -342,8 +342,8 @@ s32 J3DModel::createBumpMtxArray(J3DModelData* modelData, u32 flag) {
             for (s32 matIdx = 0; matIdx < modelData->getMaterialNum(); matIdx++) {
                 J3DMaterial * pMaterial = getModelData()->getMaterialNodePointer(matIdx);
                 if (pMaterial->getNBTScale()->mbHasScale == 1) {
-                    mpBumpMtxArr[i][matIdx] = new Mtx33*[num];
-                    if (mpBumpMtxArr[i][matIdx] == NULL)
+                    mpBumpMtxArr[i][bumpMtxOffset] = new Mtx33*[bufferNum];
+                    if (mpBumpMtxArr[i][bumpMtxOffset] == NULL)
                         return kJ3DError_Alloc;
                     pMaterial->getShape()->setBumpMtxOffset(bumpMtxOffset);
                     bumpMtxOffset++;
@@ -356,16 +356,17 @@ s32 J3DModel::createBumpMtxArray(J3DModelData* modelData, u32 flag) {
             for (s32 matIdx = 0; matIdx < modelData->getMaterialNum(); matIdx++) {
                 J3DMaterial * pMaterial = getModelData()->getMaterialNodePointer(matIdx);
                 if (pMaterial->getNBTScale()->mbHasScale == 1) {
-                    for (u32 j = 0; j < flag; j++) {
-                        mpBumpMtxArr[i][matIdx][j] = new(0x20) Mtx33[modelData->getDrawMtxNum()];
-                        if (mpBumpMtxArr[i][matIdx][j] == NULL)
+                    for (u32 j = 0; j < bufferNum; j++) {
+                        mpBumpMtxArr[i][bumpMtxOffset][j] = new(0x20) Mtx33[modelData->getDrawMtxNum()];
+                        if (mpBumpMtxArr[i][bumpMtxOffset][j] == NULL)
                             return kJ3DError_Alloc;
                     }
+                    bumpMtxOffset++;
                 }
             }
         }
 
-        if (num != 0)
+        if (bumpMtxNum != 0)
             getModelData()->setBumpFlag(1);
     }
 
@@ -403,7 +404,6 @@ void J3DModel::unlock() {
 
 /* 802EE2C4-802EE42C       .text calcMaterial__8J3DModelFv */
 void J3DModel::calcMaterial() {
-    /* Nonmatching - regswap */
     j3dSys.setModel(this);
     j3dSys.setTexture(mModelData->getTexture());
 
@@ -419,10 +419,10 @@ void J3DModel::calcMaterial() {
         j3dSys.offFlag(8);
     }
 
-    for (u16 i = 0; i < mModelData->getMaterialNum(); i++) {
+    for (u16 i = 0; i < getModelData()->getMaterialNum(); i++) {
         j3dSys.setMatPacket(&mpMatPacket[i]);
 
-        J3DMaterial* pMaterial = mModelData->getMaterialNodePointer(i);
+        J3DMaterial* pMaterial = getModelData()->getMaterialNodePointer(i);
         if (pMaterial->getMaterialAnm() != NULL)
             pMaterial->getMaterialAnm()->calc(pMaterial);
 
@@ -488,8 +488,8 @@ s32 J3DModel::setSkinDeform(J3DSkinDeform* pSkinDeform, u32 flags) {
 
 /* 802EE5D8-802EE67C       .text calcAnmMtx__8J3DModelFv */
 void J3DModel::calcAnmMtx() {
-    j3dSys.setCurrentMtxCalc(getModelData()->getJointTree().getBasicMtxCalc());
     j3dSys.setModel(this);
+    j3dSys.setCurrentMtxCalc(getModelData()->getJointTree().getBasicMtxCalc());
 
     if (checkFlag(J3DMdlFlag_Unk00002))
         j3dSys.getCurrentMtxCalc()->init(j3dDefaultScale, j3dDefaultMtx);
@@ -601,25 +601,25 @@ extern void J3DPSMtxArrayConcat(f32(*)[4], f32(*)[4], f32(*)[4], u32);
 
 /* 802EEBDC-802EEE30       .text calcDrawMtx__8J3DModelFv */
 void J3DModel::calcDrawMtx() {
-    switch (mFlags & 0x03) {
-    case 1:
-        for (u32 i = 0; i < getModelData()->getDrawFullWgtMtxNum(); i++)
+    switch (getMtxCalcMode()) {
+    case 0:
+        for (u16 i = 0; i < getModelData()->getDrawFullWgtMtxNum(); i++)
             MTXConcat(j3dSys.getViewMtx(), getAnmMtx(getModelData()->getDrawMtxIndex(i)), getDrawMtxPtr()[i]);
-        if (getModelData()->getDrawFullWgtMtxNum() < getModelData()->getDrawMtxNum())
+        if (getModelData()->getDrawFullWgtMtxNum() > getModelData()->getDrawMtxNum())
             J3DPSMtxArrayConcat(j3dSys.getViewMtx(), (MtxP)mpWeightEnvMtx, (MtxP)getDrawMtxPtr(), getModelData()->getWEvlpMtxNum());
         break;
-    case 0:
-        for (u32 i = 0; i < getModelData()->getDrawFullWgtMtxNum(); i++)
+    case 1:
+        for (u16 i = 0; i < getModelData()->getDrawFullWgtMtxNum(); i++)
             MTXCopy(getAnmMtx(getModelData()->getDrawMtxIndex(i)), getDrawMtxPtr()[i]);
-        for (u32 i = 0; i < getModelData()->getWEvlpMtxNum(); i++)
+        for (u16 i = 0; i < getModelData()->getWEvlpMtxNum(); i++)
             MTXCopy(getWeightAnmMtx(i), getDrawMtxPtr()[getModelData()->getDrawFullWgtMtxNum() + i]);
         break;
     case 2:
-        calcViewBaseMtx(j3dSys.getViewMtx(), mBaseScale, mBaseTransformMtx, mInternalView);
-        for (u32 i = 0; i < getModelData()->getDrawFullWgtMtxNum(); i++)
-            MTXConcat(mInternalView, getAnmMtx(getModelData()->getDrawMtxIndex(i)), getDrawMtxPtr()[i]);
-        if (getModelData()->getDrawFullWgtMtxNum() < getModelData()->getDrawMtxNum())
-            J3DPSMtxArrayConcat(mInternalView, (MtxP)mpWeightEnvMtx, (MtxP)getDrawMtxPtr(), getModelData()->getWEvlpMtxNum());
+        calcViewBaseMtx(j3dSys.getViewMtx(), mBaseScale, mBaseTransformMtx, mViewBaseMtx);
+        for (u16 i = 0; i < getModelData()->getDrawFullWgtMtxNum(); i++)
+            MTXConcat(mViewBaseMtx, getAnmMtx(getModelData()->getDrawMtxIndex(i)), getDrawMtxPtr()[i]);
+        if (getModelData()->getDrawFullWgtMtxNum() > getModelData()->getDrawMtxNum())
+            J3DPSMtxArrayConcat(mViewBaseMtx, (MtxP)mpWeightEnvMtx, (MtxP)getDrawMtxPtr(), getModelData()->getWEvlpMtxNum());
         break;
     }
 }
@@ -631,12 +631,12 @@ void J3DModel::viewCalc() {
 
     if (mModelData->checkFlag(0x20)) {
         if (getMtxCalcMode() == 2)
-            calcViewBaseMtx(j3dSys.getViewMtx(), mBaseScale, mBaseTransformMtx, (MtxP)&mInternalView);
+            calcViewBaseMtx(j3dSys.getViewMtx(), mBaseScale, mBaseTransformMtx, (MtxP)&mViewBaseMtx);
 
         prepareShapePackets();
     } else if (isCpuSkinningOn()) {
         if (getMtxCalcMode() == 2)
-            calcViewBaseMtx(j3dSys.getViewMtx(), mBaseScale, mBaseTransformMtx, (MtxP)&mInternalView);
+            calcViewBaseMtx(j3dSys.getViewMtx(), mBaseScale, mBaseTransformMtx, (MtxP)&mViewBaseMtx);
 
         prepareShapePackets();
     } else {
@@ -737,6 +737,7 @@ void J3DModel::calcBBoard() {
 void J3DModel::prepareShapePackets() {
     /* Nonmatching */
     u16 shapeNum = getModelData()->getShapeNum();
+
     for (u16 i = 0; i < shapeNum; i++) {
         J3DShapePacket* pkt = getShapePacket(i);
         pkt->setScaleFlagArray(mpScaleFlagArr);
@@ -760,7 +761,7 @@ void J3DModel::prepareShapePackets() {
             pShape->offFlag(J3DSysFlag_SkinNrmCpu);
 
         if (getMtxCalcMode() == 2)
-            pkt->setBaseMtxPtr(&mInternalView);
+            pkt->setBaseMtxPtr(&mViewBaseMtx);
         else
             pkt->setBaseMtxPtr(&j3dSys.mViewMtx);
     }

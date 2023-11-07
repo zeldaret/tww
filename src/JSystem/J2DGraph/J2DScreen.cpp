@@ -4,24 +4,14 @@
 //
 
 #include "JSystem/J2DGraph/J2DScreen.h"
+#include "JSystem/J2DGraph/J2DPicture.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
+#include "JSystem/J2DGraph/J2DWindow.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JKernel/JKRArchive.h"
 #include "JSystem/JKernel/JKRFileLoader.h"
 #include "JSystem/JSupport/JSUMemoryStream.h"
 #include "JSystem/JUtility/JUTAssert.h"
-
-class J2DWindow : public J2DPane {
-public:
-    J2DWindow(J2DPane * pPane, JSURandomInputStream * pStream);
-    u8 pad[0x114 - 0x0cc];
-};
-
-class J2DPicture : public J2DPane {
-public:
-    J2DPicture(J2DPane * pPane, JSURandomInputStream * pStream);
-    u8 pad[0x124 - 0x0cc];
-};
 
 /* 802D08E4-802D0944       .text __dt__9J2DScreenFv */
 J2DScreen::~J2DScreen() {

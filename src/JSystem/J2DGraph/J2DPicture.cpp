@@ -152,7 +152,6 @@ J2DPicture::~J2DPicture() {
 
 /* 802D3824-802D3A08       .text insert__10J2DPictureFPC7ResTIMGUcf */
 bool J2DPicture::insert(const ResTIMG* pTimg, u8 idx, f32 param_3) {
-    /* Nonmatching */
     if (!pTimg || mNumTexture >= 4 || idx >= 4 || idx > mNumTexture) {
         return false;
     }
@@ -162,8 +161,7 @@ bool J2DPicture::insert(const ResTIMG* pTimg, u8 idx, f32 param_3) {
         mBlendKonstColorF[i] = mBlendKonstColorF[i - 1];
         mBlendKonstAlphaF[i] = mBlendKonstAlphaF[i - 1];
     }
-    s32 mask = (1 << idx) - 1;
-    mValidTexture = (mValidTexture & mask) | ((mValidTexture & ~mask) << 1);
+    mValidTexture = (mValidTexture & ((1 << idx) - 1)) | ((mValidTexture & ~((1 << idx) - 1)) << 1);
     mpTexture[idx] = texture;
     mValidTexture |= (1 << idx);
     mBlendKonstColorF[idx] = param_3;
