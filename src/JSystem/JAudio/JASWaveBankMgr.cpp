@@ -39,7 +39,6 @@ JASystem::TWaveBank* JASystem::WaveBankMgr::getWaveBank(int banknum) {
 
 /* 80288390-80288444       .text registWaveBank__Q28JASystem11WaveBankMgrFiPQ28JASystem9TWaveBank */
 bool JASystem::WaveBankMgr::registWaveBank(int banknum, TWaveBank* param_2) {
-    /* Nonmatching */
     JUT_ASSERT(57, banknum >= 0);
     JUT_ASSERT(58, banknum < sTableSize);
     sWaveBank[banknum] = param_2;
@@ -48,7 +47,6 @@ bool JASystem::WaveBankMgr::registWaveBank(int banknum, TWaveBank* param_2) {
 
 /* 80288444-802884BC       .text registWaveBankWS__Q28JASystem11WaveBankMgrFiPv */
 bool JASystem::WaveBankMgr::registWaveBankWS(int param_1, void* param_2) {
-    /* Nonmatching */
     TWaveBank* bank;
     if (WSParser::getGroupCount(param_2) == 1) {
         bank = WSParser::createSimpleWaveBank(param_2);
@@ -81,10 +79,9 @@ bool JASystem::WaveBankMgr::loadWave(int banknum, int param_2, Kernel::THeap* pa
 
 /* 80288550-80288594       .text eraseWave__Q28JASystem11WaveBankMgrFii */
 bool JASystem::WaveBankMgr::eraseWave(int banknum, int param_2) {
-    /* Nonmatching */
     TWaveArc* arc = getWaveArc(banknum, param_2);
     if (arc == NULL) {
         return false;
     }
-    return arc->erase() != false;
+    return !!arc->erase();
 }
