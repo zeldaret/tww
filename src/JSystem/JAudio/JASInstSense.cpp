@@ -12,7 +12,6 @@ void JASystem::TInstSense::getY(int, int) const {
 }
 
 /* 80286A1C-80286B58       .text setParams__Q28JASystem10TInstSenseFiiff */
-void JASystem::TInstSense::setParams(int, int, float, float) {
+void JASystem::TInstSense::setParams(int trigger, int centerkey, float, float) {
     /* Nonmatching */
 }
-

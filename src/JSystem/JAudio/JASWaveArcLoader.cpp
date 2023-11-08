@@ -52,11 +52,11 @@ char* JASystem::WaveArcLoader::getCurrentDir() {
 }
 
 /* 80287D30-80287DA4       .text __ct__Q28JASystem8TWaveArcFv */
-JASystem::TWaveArc::TWaveArc() : field_0x4(this) {
+JASystem::TWaveArc::TWaveArc() : mHeap(this) {
     field_0x4c = 0;
     field_0x68 = 0;
-    field_0x6c = -1;
-    field_0x70 = 0;
+    mFileNo = -1;
+    mSize = 0;
     field_0x74 = 0;
     OSInitMutex(&mMutex);
 }
@@ -97,20 +97,19 @@ bool JASystem::TWaveArc::eraseSetup() {
 }
 
 struct unk_message {
-    JASystem::TWaveArc* field_0x0;
-    int field_0x4;
+    JASystem::TWaveArc* mpWaveArc;
+    int mFileNo;
     void* field_0x8;
     u32 field_0xc;
 };
 
 /* 80287EB8-80287F48       .text loadToAramCallback__Q28JASystem8TWaveArcFPv */
 s32 JASystem::TWaveArc::loadToAramCallback(void* param_1) {
-    /* Nonmatching */
     unk_message* msg = (unk_message*)param_1;
-    if (JKRDvdAramRipper::loadToAram(msg->field_0x4, u32(msg->field_0x8), EXPAND_SWITCH_UNKNOWN0, 0, 0) == 0) {
+    if (JKRDvdAramRipper::loadToAram(msg->mFileNo, u32(msg->field_0x8), EXPAND_SWITCH_UNKNOWN0, 0, 0) == 0) {
         return -1;
     }
-    TWaveArc* waveArc = msg->field_0x0;
+    TWaveArc* waveArc = msg->mpWaveArc;
     if (!waveArc->loadSetup(msg->field_0xc)) {
         return 0;
     }
@@ -120,31 +119,49 @@ s32 JASystem::TWaveArc::loadToAramCallback(void* param_1) {
 
 /* 80287F48-80287FE4       .text sendLoadCmd__Q28JASystem8TWaveArcFv */
 bool JASystem::TWaveArc::sendLoadCmd() {
-    /* Nonmatching */
     OSLockMutex(&mMutex);
     field_0x4c = 0;
     field_0x68 = 1;
     unk_message msg;
-    msg.field_0x0 = this;
-    msg.field_0x4 = field_0x6c;
-    msg.field_0x8 = field_0x4.mBase;
+    msg.mpWaveArc = this;
+    msg.mFileNo = mFileNo;
+    msg.field_0x8 = mHeap.mBase;
     msg.field_0xc = ++field_0x74;
     OSUnlockMutex(&mMutex);
     if (!Dvd::sendCmdMsg(loadToAramCallback, &msg, sizeof(msg))) {
-        field_0x4.free();
+        mHeap.free();
         return false;
     }
     return true;
 }
 
 /* 80287FE4-802880A0       .text load__Q28JASystem8TWaveArcFPQ38JASystem6Kernel5THeap */
-bool JASystem::TWaveArc::load(Kernel::THeap*) {
-    /* Nonmatching */
+bool JASystem::TWaveArc::load(Kernel::THeap* heap) {
+    if (mFileNo < 0)
+        return false;
+
+    OSLockMutex(&mMutex);
+    if (field_0x68 != 0) {
+        OSUnlockMutex(&mMutex);
+        return false;
+    }
+
+    if (heap == NULL)
+        heap = WaveArcLoader::getRootHeap();
+
+    if (!mHeap.alloc(heap, mSize)) {
+        OSUnlockMutex(&mMutex);
+        return false;
+    }
+
+    bool ret = sendLoadCmd();
+    OSUnlockMutex(&mMutex);
+    return ret;
 }
 
 /* 802880A0-802880C4       .text erase__Q28JASystem8TWaveArcFv */
 bool JASystem::TWaveArc::erase() {
-    return field_0x4.free();
+    return mHeap.free();
 }
 
 /* 802880C4-8028810C       .text onDispose__Q28JASystem8TWaveArcFv */
@@ -155,8 +172,13 @@ void JASystem::TWaveArc::onDispose() {
 }
 
 /* 8028810C-8028816C       .text setEntryNum__Q28JASystem8TWaveArcFl */
-void JASystem::TWaveArc::setEntryNum(s32) {
-    /* Nonmatching */
+void JASystem::TWaveArc::setEntryNum(s32 entryNum) {
+    DVDFileInfo file;
+    if (entryNum >= 0 && DVDFastOpen(entryNum, &file)) {
+        mSize = file.length;
+        DVDClose(&file);
+        mFileNo = entryNum;
+    }
 }
 
 /* 8028816C-80288214       .text setFileName__Q28JASystem8TWaveArcFPCc */

@@ -15,16 +15,16 @@ public:
     };
 
     JASTaskThread(u32 param_1, int param_2, s32 param_3) : JKRThread(param_1, param_2, param_3) {
-        field_0x70 = 0;
-        OSInitThreadQueue(&field_0x68);
+        mPaused = 0;
+        OSInitThreadQueue(&mQ);
     }
     ~JASTaskThread();
     BOOL sendCmdMsg(s32 (*)(void*), void*, u32);
     void* run();
     void pause(bool);
 
-    /* 0x68 */ OSThreadQueue field_0x68;
-    /* 0x70 */ u8 field_0x70;
+    /* 0x68 */ OSThreadQueue mQ;
+    /* 0x70 */ u8 mPaused;
 };
 
 namespace JASystem {
@@ -35,7 +35,7 @@ namespace JASystem {
         int checkPassDvdT(u32, u32*, void (*)(u32));
         u32 checkFile(char*);
         void unpauseDvdT();
-        int dvdThreadCheckBack(void*);
+        s32 dvdThreadCheckBack(void*);
 
         extern JASTaskThread* sThread;
     }

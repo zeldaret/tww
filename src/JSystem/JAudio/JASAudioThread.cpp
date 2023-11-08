@@ -114,26 +114,25 @@ void JASystem::TAudioThread::syncDSP(void*) {
 }
 
 /* 802891F0-8028920C       .text setPriority__Q28JASystem12TAudioThreadFUcUc */
-void JASystem::TAudioThread::setPriority(u8 param_1, u8 param_2) {
+void JASystem::TAudioThread::setPriority(u8 dspPrio, u8 dvdPrio) {
     sbIsPrioritySet = 1;
-    sDSPPrio = param_1;
-    sDVDPrio = param_2;
+    sDSPPrio = dspPrio;
+    sDVDPrio = dvdPrio;
 }
 
 /* 8028920C-802892E0       .text start__Q28JASystem12TAudioThreadFP12JKRSolidHeapUlUl */
-void JASystem::TAudioThread::start(JKRSolidHeap* param_1, u32 param_2, u32 param_3) {
-    /* Nonmatching */
+void JASystem::TAudioThread::start(JKRSolidHeap* heap, u32 aramSize, u32 flag) {
     if (!sbIsPrioritySet) {
-        s32 priority = OSGetThreadPriority(OSGetCurrentThread());
-        sDSPPrio = priority - 3;
+        s32 priority = OSGetThreadPriority(OSGetCurrentThread()) - 3;
+        sDSPPrio = priority;
         sDVDPrio = priority - 1;
     }
-    Kernel::sysDramSetup(param_1);
-    Kernel::sysAramSetup(param_2);
+    Kernel::sysDramSetup(heap);
+    Kernel::sysAramSetup(aramSize);
     Dvd::createThread(sDVDPrio, 0x5a, 0x1000);
     Dvd::resumeThread();
     Kernel::stackInit((u64*)saAudioStack, 0x200);
-    if ((param_3 & 2)) {
+    if ((flag & 2)) {
         OSCreateThread(&sAudioThread, audioproc, NULL, &saAudioStack[sizeof(saAudioStack)], sizeof(saAudioStack), sDSPPrio, 1);
         OSResumeThread(&sAudioThread);
     }

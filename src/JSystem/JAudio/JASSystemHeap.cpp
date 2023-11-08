@@ -16,7 +16,6 @@ JKRSolidHeap* JASDram;
 
 /* 8027DB38-8027DB9C       .text sysDramSetup__Q28JASystem6KernelFP12JKRSolidHeap */
 void JASystem::Kernel::sysDramSetup(JKRSolidHeap* heap) {
-    /* Nonmatching */
     if (heap) {
         JASDram = heap;
         return;
@@ -41,20 +40,19 @@ int JASystem::Kernel::audioAramTop;
 int JASystem::Kernel::CARD_SECURITY_BUFFER;
 
 /* 8027DC30-8027DC84       .text sysAramSetup__Q28JASystem6KernelFUl */
-void JASystem::Kernel::sysAramSetup(u32 param_1) {
-    /* Nonmatching */
-    if (!param_1) {
-        param_1 = audioAramSize;
+void JASystem::Kernel::sysAramSetup(u32 size) {
+    if (!size) {
+        size = audioAramSize;
     }
     audioAramTop = ARGetBaseAddress();
     CARD_SECURITY_BUFFER = 0x40;
-    audioAramHeap.init((u8*)audioAramTop, param_1 - audioAramTop);
+    audioAramHeap.init((u8*)audioAramTop, size - audioAramTop);
 }
 
 /* 8027DC84-8027DCDC       .text allocFromSysAramFull__Q28JASystem6KernelFPUl */
-void* JASystem::Kernel::allocFromSysAramFull(u32* param_1) {
+void* JASystem::Kernel::allocFromSysAramFull(u32* bufSize) {
     u32 size = audioAramHeap.getRemain();
-    void* var1 = audioAramHeap.alloc(size - 0x20);
-    *param_1 = size - 0x20;
-    return var1;
+    void* buf = audioAramHeap.alloc(size - 0x20);
+    *bufSize = size - 0x20;
+    return buf;
 }

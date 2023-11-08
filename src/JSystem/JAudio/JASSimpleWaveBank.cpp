@@ -23,31 +23,31 @@ JASystem::TSimpleWaveBank::~TSimpleWaveBank() {
 JASystem::TSimpleWaveBank::TWaveHandle::~TWaveHandle() {}
 
 /* 80286650-8028670C       .text setWaveTableSize__Q28JASystem15TSimpleWaveBankFUl */
-void JASystem::TSimpleWaveBank::setWaveTableSize(u32 param_1) {
+void JASystem::TSimpleWaveBank::setWaveTableSize(u32 size) {
     delete[] mWaveTable;
-    mWaveTable = new (getCurrentHeap(), 0) TWaveHandle[param_1];
+    mWaveTable = new (getCurrentHeap(), 0) TWaveHandle[size];
     JUT_ASSERT(34, mWaveTable != 0);
-    mWaveCount = param_1;
+    mWaveCount = size;
 }
 
 /* 8028670C-80286730       .text getWaveHandle__Q28JASystem15TSimpleWaveBankCFUl */
-JASystem::TSimpleWaveBank::TWaveHandle* JASystem::TSimpleWaveBank::getWaveHandle(u32 param_1) const {
-    if (param_1 >= mWaveCount) {
+JASystem::TSimpleWaveBank::TWaveHandle* JASystem::TSimpleWaveBank::getWaveHandle(u32 no) const {
+    if (no >= mWaveCount) {
         return NULL;
     }
-    return mWaveTable + param_1;
+    return &mWaveTable[no];
 }
 
 /* 80286730-802867D4       .text setWaveInfo__Q28JASystem15TSimpleWaveBankFUlRCQ28JASystem9TWaveInfo */
-void JASystem::TSimpleWaveBank::setWaveInfo(u32 param_1, const JASystem::TWaveInfo& param_2) {
-    mWaveTable[param_1].field_0x4 = param_2;
-    mWaveTable[param_1].field_0x4.field_0x24 = &field_0x4c;
-    mWaveTable[param_1].mHeap = &field_0x4;
+void JASystem::TSimpleWaveBank::setWaveInfo(u32 no, const JASystem::TWaveInfo& waveInfo) {
+    mWaveTable[no].mWaveInfo = waveInfo;
+    mWaveTable[no].mWaveInfo.field_0x24 = &field_0x4c;
+    mWaveTable[no].mHeap = &mHeap;
 }
 
 /* 802867D4-802867F4       .text getWaveArc__Q28JASystem15TSimpleWaveBankFi */
-JASystem::TWaveArc* JASystem::TSimpleWaveBank::getWaveArc(int param_1) {
-    if (param_1 != 0) {
+JASystem::TWaveArc* JASystem::TSimpleWaveBank::getWaveArc(int no) {
+    if (no != 0) {
         return NULL;
     }
     return this;

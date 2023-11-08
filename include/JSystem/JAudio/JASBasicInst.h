@@ -8,21 +8,28 @@ namespace JASystem {
     class TInstEffect;
     class TBasicInst : public TInst {
     public:
+        struct TVeloRegion {
+            /* 0x00 */ s32 mBaseVel;
+            /* 0x04 */ s32 field_0x04;
+            /* 0x08 */ f32 field_0x08;
+            /* 0x0C */ f32 field_0x0c;
+        };
+
         class TKeymap {
         public:
             TKeymap() {
-                field_0x0 = -1;
-                field_0x4 = 0;
+                mBaseKey = -1;
+                mVeloRegionCount = 0;
                 mVelomap = NULL;
             }
             ~TKeymap();
             void setVeloRegionCount(u32);
-            void* getVeloRegion(int);
-            const void* getVeloRegion(int) const;
+            TVeloRegion* getVeloRegion(int);
+            const TVeloRegion* getVeloRegion(int) const;
 
-            /* 0x00 */ int field_0x0;
-            /* 0x04 */ u32 field_0x4;
-            /* 0x08 */ void* mVelomap;
+            /* 0x00 */ int mBaseKey;
+            /* 0x04 */ u32 mVeloRegionCount;
+            /* 0x08 */ TVeloRegion* mVelomap;
         };
 
         TBasicInst();
@@ -43,7 +50,7 @@ namespace JASystem {
         /* 0x10 */ u32 mEffectCount;
         /* 0x14 */ TOscillator::Osc_** mOsc;
         /* 0x18 */ u32 mOscCount;
-        /* 0x1C */ u32 field_0x1c;
+        /* 0x1C */ u32 mKeyRegionCount;
         /* 0x20 */ TKeymap* mKeymap;
     };
 }

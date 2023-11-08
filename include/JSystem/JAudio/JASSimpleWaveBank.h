@@ -12,15 +12,15 @@ namespace JASystem {
         public:
             TWaveHandle() { mHeap = NULL; }
             ~TWaveHandle();
-            const TWaveInfo* getWaveInfo() const { return &field_0x4; };
+            const TWaveInfo* getWaveInfo() const { return &mWaveInfo; }
             const void* getWavePtr() const {
                 if (mHeap->mBase == NULL) {
                     return NULL;
                 }
-                return (u8*)mHeap->mBase + field_0x4.field_0x8;
+                return (u8*)mHeap->mBase + mWaveInfo.mWavePtrOffs;
             }
 
-            /* 0x04 */ TWaveInfo field_0x4;
+            /* 0x04 */ TWaveInfo mWaveInfo;
             /* 0x30 */ Kernel::THeap* mHeap;
         };
 

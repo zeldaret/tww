@@ -13,7 +13,7 @@ namespace JASystem {
         /* 0x01 */ u8 field_0x1;
         /* 0x02 */ u8 field_0x2;
         /* 0x04 */ f32 field_0x4;
-        /* 0x08 */ int field_0x8;
+        /* 0x08 */ int mWavePtrOffs;
         /* 0x0C */ int field_0xc;
         /* 0x10 */ int field_0x10;
         /* 0x14 */ int field_0x14;

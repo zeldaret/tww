@@ -66,10 +66,10 @@ void JASystem::TBasicWaveBank::incWaveTable(const TWaveGroup* param_1) {
         u32 waveID = param_1->getWaveID(i);
         TWaveInfo** table = mWaveTable;
         TWaveInfo* waveInfo = &param_1->mCtrlWaveArray[i];
-        waveInfo->field_0x3c = 0;
-        waveInfo->field_0x38 = table[waveID];
+        waveInfo->mNext = NULL;
+        waveInfo->mPrev = table[waveID];
         if (table[waveID]) {
-            table[waveID]->field_0x3c = waveInfo;
+            table[waveID]->mNext = waveInfo;
         }
         table[waveID] = waveInfo;
     }
@@ -87,7 +87,7 @@ JASystem::TWaveHandle* JASystem::TBasicWaveBank::getWaveHandle(u32 param_1) cons
         return NULL;
     }
     if (mWaveTable[param_1]) {
-        return &mWaveTable[param_1]->field_0x0;
+        return &mWaveTable[param_1]->mWaveHandle;
     }
     return NULL;
 }
@@ -108,24 +108,24 @@ JASystem::TBasicWaveBank::TWaveGroup::~TWaveGroup() {
 JASystem::TBasicWaveBank::TWaveInfo::~TWaveInfo() {}
 
 /* 80285FC4-802860B8       .text setWaveCount__Q38JASystem14TBasicWaveBank10TWaveGroupFUl */
-void JASystem::TBasicWaveBank::TWaveGroup::setWaveCount(u32 param_1) {
+void JASystem::TBasicWaveBank::TWaveGroup::setWaveCount(u32 num) {
     delete[] mCtrlWaveArray;
-    mWaveCount = param_1;
-    mCtrlWaveArray = new (getCurrentHeap(), 0) TWaveInfo[param_1];
+    mWaveCount = num;
+    mCtrlWaveArray = new (getCurrentHeap(), 0) TWaveInfo[num];
     JUT_ASSERT(180, mCtrlWaveArray != 0);
-    for (int i = 0; i < param_1; i++) {
-        mCtrlWaveArray[i].field_0x0.mHeap = &field_0x4;
-        mCtrlWaveArray[i].field_0x0.field_0x4.field_0x24 = &field_0x4c;
+    for (int i = 0; i < num; i++) {
+        mCtrlWaveArray[i].mWaveHandle.mHeap = &mHeap;
+        mCtrlWaveArray[i].mWaveHandle.mWaveInfo.field_0x24 = &field_0x4c;
     }
 }
 
 /* 802860B8-80286204       .text setWaveInfo__Q38JASystem14TBasicWaveBank10TWaveGroupFiUlRCQ28JASystem9TWaveInfo */
-void JASystem::TBasicWaveBank::TWaveGroup::setWaveInfo(int index, u32 param_2, const JASystem::TWaveInfo& param_3) {
+void JASystem::TBasicWaveBank::TWaveGroup::setWaveInfo(int index, u32 waveID, const JASystem::TWaveInfo& waveInfo) {
     JUT_ASSERT(190, index < mWaveCount);
     JUT_ASSERT(191, index >= 0);
-    mCtrlWaveArray[index].field_0x34 = param_2;
-    mCtrlWaveArray[index].field_0x0.field_0x4 = param_3;
-    mCtrlWaveArray[index].field_0x0.field_0x4.field_0x24 = &field_0x4c;
+    mCtrlWaveArray[index].mWaveID = waveID;
+    mCtrlWaveArray[index].mWaveHandle.mWaveInfo = waveInfo;
+    mCtrlWaveArray[index].mWaveHandle.mWaveInfo.field_0x24 = &field_0x4c;
 }
 
 /* 80286204-80286274       .text onLoadDone__Q38JASystem14TBasicWaveBank10TWaveGroupFv */
@@ -141,6 +141,6 @@ void JASystem::TBasicWaveBank::TWaveGroup::onEraseDone() {
 }
 
 /* 802862E4-802862F8       .text getWaveID__Q38JASystem14TBasicWaveBank10TWaveGroupCFi */
-u32 JASystem::TBasicWaveBank::TWaveGroup::getWaveID(int param_1) const {
-    return mCtrlWaveArray[param_1].field_0x34;
+u32 JASystem::TBasicWaveBank::TWaveGroup::getWaveID(int index) const {
+    return mCtrlWaveArray[index].mWaveID;
 }

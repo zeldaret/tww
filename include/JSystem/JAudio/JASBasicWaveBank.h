@@ -13,34 +13,34 @@ namespace JASystem {
         public:
             ~TWaveHandle() {}
             const JASystem::TWaveInfo* getWaveInfo() const {
-                return &field_0x4;
+                return &mWaveInfo;
             }
             const void* getWavePtr() const {
                 JUT_ASSERT(77, mHeap);
                 if (!mHeap->mBase) {
                     return NULL;
                 }
-                return (u8*)mHeap->mBase + field_0x4.field_0x8;
+                return (u8*)mHeap->mBase + mWaveInfo.mWavePtrOffs;
             }
 
-            /* 0x04 */ JASystem::TWaveInfo field_0x4;
+            /* 0x04 */ JASystem::TWaveInfo mWaveInfo;
             /* 0x30 */ Kernel::THeap* mHeap;
         };
 
         class TWaveInfo {
         public:
             TWaveInfo() {
-                field_0x0.mHeap = NULL;
-                field_0x34 = 0;
-                field_0x38 = NULL;
-                field_0x3c = NULL;
+                mWaveHandle.mHeap = NULL;
+                mWaveID = 0;
+                mPrev = NULL;
+                mNext = NULL;
             }
             ~TWaveInfo();
 
-            /* 0x00 */ TWaveHandle field_0x0;
-            /* 0x34 */ u32 field_0x34;
-            /* 0x38 */ TWaveInfo* field_0x38;
-            /* 0x3C */ TWaveInfo* field_0x3c;
+            /* 0x00 */ TWaveHandle mWaveHandle;
+            /* 0x34 */ u32 mWaveID;
+            /* 0x38 */ TWaveInfo* mPrev;
+            /* 0x3C */ TWaveInfo* mNext;
         };
 
         class TWaveGroup : public TWaveArc {

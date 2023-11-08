@@ -6,9 +6,8 @@
 #include "JSystem/JAudio/JASKernelDebug.h"
 
 /* 8027D6B8-8027D6F4       .text stackInit__Q28JASystem6KernelFPUxUl */
-void JASystem::Kernel::stackInit(u64* param_1, u32 param_2) {
-    /* Nonmatching */
-    for (int i = 1; i < param_2; i++) {
-        param_1[i] = 0xfadebabe12345678;
+void JASystem::Kernel::stackInit(u64* stack, u32 num) {
+    for (int i = 1; i < num; i++) {
+        stack[i] = 0xfadebabe12345678;
     }
 }

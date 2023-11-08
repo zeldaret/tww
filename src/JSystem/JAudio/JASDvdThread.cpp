@@ -38,8 +38,8 @@ void* JASTaskThread::run() {
     while (true) {
         msg = waitMessageBlock();
         TCallStack* callStack = (TCallStack*)msg;
-        if (field_0x70) {
-            OSSleepThread(&field_0x68);
+        if (mPaused) {
+            OSSleepThread(&mQ);
         }
         if (!callStack) {
             continue;
@@ -53,14 +53,13 @@ void* JASTaskThread::run() {
 /* 8027B6D4-8027B72C       .text pause__13JASTaskThreadFb */
 void JASTaskThread::pause(bool param_1) {
     if (param_1) {
-        field_0x70 = 1;
+        mPaused = 1;
     } else {
-        if (field_0x70) {
-            OSWakeupThread(&field_0x68);
+        if (mPaused) {
+            OSWakeupThread(&mQ);
         }
-        field_0x70 = 0;
+        mPaused = 0;
     }
-
 }
 
 JASTaskThread* JASystem::Dvd::sThread;
@@ -84,20 +83,31 @@ BOOL JASystem::Dvd::sendCmdMsg(s32 (*param_1)(void*), void* param_2, u32 param_3
     return sThread->sendCmdMsg(param_1, param_2, param_3);
 }
 
+struct dvd_msg {
+    u32 field_0x00;
+    u32 * field_0x04;
+    void(* field_0x08)(u32);
+};
+
 /* 8027B8D4-8027B914       .text checkPassDvdT__Q28JASystem3DvdFUlPUlPFUl_v */
-int JASystem::Dvd::checkPassDvdT(u32, u32*, void (*)(u32)) {
-    /* Nonmatching */
+int JASystem::Dvd::checkPassDvdT(u32 p1, u32* p2, void (*p3)(u32)) {
+    dvd_msg msg;
+    msg.field_0x00 = p1;
+    msg.field_0x04 = p2;
+    msg.field_0x08 = p3;
+    sendCmdMsg(dvdThreadCheckBack, &msg, sizeof(msg));
+    return 0;
 }
 
 /* 8027B914-8027B960       .text checkFile__Q28JASystem3DvdFPc */
-u32 JASystem::Dvd::checkFile(char* param_1) {
+u32 JASystem::Dvd::checkFile(char* name) {
     DVDFileInfo info;
-    if (!DVDOpen(param_1, &info)) {
+    if (!DVDOpen(name, &info)) {
         return 0;
     }
-    u32 r31 = info.length;
+    u32 size = info.length;
     DVDClose(&info);
-    return r31;
+    return size;
 }
 
 /* 8027B960-8027B9C4       .text unpauseDvdT__Q28JASystem3DvdFv */
@@ -107,8 +117,13 @@ void JASystem::Dvd::unpauseDvdT() {
 }
 
 /* 8027B9C4-8027BA10       .text dvdThreadCheckBack__Q28JASystem3DvdFPv */
-int JASystem::Dvd::dvdThreadCheckBack(void*) {
-    /* Nonmatching */
+s32 JASystem::Dvd::dvdThreadCheckBack(void* unk) {
+    const dvd_msg* msg = (const dvd_msg*)unk;
+    if (msg->field_0x04 != 0x00)
+        msg->field_0x04[0] = msg->field_0x00;
+    if (msg->field_0x08 != NULL)
+        msg->field_0x08(msg->field_0x00);
+    return 0;
 }
 
 /* 8027BA10-8027BA70       .text __dt__13JASTaskThreadFv */
