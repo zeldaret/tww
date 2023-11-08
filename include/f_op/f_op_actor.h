@@ -31,6 +31,7 @@ enum fopAc_Status_e {
     fopAcStts_UNK2000000_e  = 0x02000000,
     fopAcStts_BOSS_e        = 0x04000000,
     fopAcStts_UNK8000000_e  = 0x08000000,
+    fopAcStts_UNK10000000_e = 0x10000000,
 };
 
 enum fopAc_Condition_e {

@@ -343,7 +343,9 @@ public:
     static void wipeIn(f32);
     void calcWipe();
 
+    J3DDrawBuffer* getOpaListP1() { return mpOpaListP1; }
     J3DDrawBuffer* getOpaListFilter() { return mpOpaListFilter; }
+    J3DDrawBuffer* getOpaList2D() { return mpOpaList2D; }
 
     void setXluDrawList(J3DDrawBuffer* buffer) { j3dSys.setDrawBuffer(buffer, XLU_BUFFER); }
     void setOpaDrawList(J3DDrawBuffer* buffer) { j3dSys.setDrawBuffer(buffer, OPA_BUFFER); }

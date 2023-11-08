@@ -2122,8 +2122,16 @@ inline s32 dComIfGd_getLightModelNum() {
     return g_dComIfG_gameInfo.drawlist.getLightModelNum();
 }
 
+inline J3DDrawBuffer* dComIfGd_getOpaListP1() {
+    return g_dComIfG_gameInfo.drawlist.getOpaListP1();
+}
+
 inline J3DDrawBuffer* dComIfGd_getListFilter() {
     return g_dComIfG_gameInfo.drawlist.getOpaListFilter();
+}
+
+inline J3DDrawBuffer* dComIfGd_getList2D() {
+    return g_dComIfG_gameInfo.drawlist.getOpaList2D();
 }
 
 inline void dComIfGd_setList() {

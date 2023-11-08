@@ -34,7 +34,7 @@ enum cCcD_ObjAtType {
     /* 0x00001000 */ AT_TYPE_UNK1000        = (1 << 12),
     /* 0x00002000 */ AT_TYPE_UNK2000        = (1 << 13),
     /* 0x00004000 */ AT_TYPE_NORMAL_ARROW   = (1 << 14),
-    /* 0x00008000 */ AT_TYPE_UNK8000        = (1 << 15),
+    /* 0x00008000 */ AT_TYPE_HOOKSHOT       = (1 << 15),
     /* 0x00010000 */ AT_TYPE_SKULL_HAMMER   = (1 << 16),
     /* 0x00020000 */ AT_TYPE_UNK20000       = (1 << 17),
     /* 0x00040000 */ AT_TYPE_FIRE_ARROW     = (1 << 18),

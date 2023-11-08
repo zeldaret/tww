@@ -31,7 +31,7 @@ class dBgS_RopeLinChk : public dBgS_LinChk {
 public:
     dBgS_RopeLinChk() { SetRope(); }
 
-    virtual ~dBgS_RopeLinChk();
+    virtual ~dBgS_RopeLinChk() {}
 };
 
 class dBgS_BoomerangLinChk : public dBgS_LinChk {

@@ -26,9 +26,10 @@ public:
 
     virtual ~cBgS_LinChk() {}
 
-    void ClrHit() { field_0x4c &= ~16; }
-    void SetHit() { field_0x4c |= 16; }
-    u32 ChkHit() const { return field_0x4c & 16; }
+    void ClrHit() { field_0x4c &= ~0x10; }
+    void SetHit() { field_0x4c |= 0x10; }
+    u32 ChkHit() const { return field_0x4c & 0x10; }
+    void ClrSttsRoofOff() { field_0x4c &= ~0x20000000; }
     void SetCross(const cXyz& pos) { mLin.SetEnd(pos); }
     cXyz& i_GetCross() { return mLin.GetEnd(); }
     cM3dGLin* GetLinP() { return &mLin; }

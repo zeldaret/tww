@@ -24,6 +24,6 @@ void cBgS_LinChk::Set2(cXyz* pStart, cXyz* pEnd, unsigned int actorPid) {
     mLin.mEnd.set(*pEnd);
     field_0x40 = *pEnd;
     SetActorPid(actorPid);
-    field_0x4c &= ~0x10;
+    ClrHit();
     ClearPi();
 }

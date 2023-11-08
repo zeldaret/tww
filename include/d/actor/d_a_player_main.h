@@ -1222,7 +1222,7 @@ public:
     
     void getBoomerangCatchPos() const;
     void getLineTopPos();
-    void getHookshotRootPos() const;
+    cXyz getHookshotRootPos() const { return mHookshotRootPos; }
     void seStartOnlyReverb(u32);
     void seStartMapInfo(u32);
     void seStartSwordCut(u32);
@@ -2087,7 +2087,7 @@ public:
     virtual void voiceStart(u32);
     virtual void setOutPower(f32, s16, int);
     virtual void onFrollCrashFlg(u32);
-    virtual MtxP getModelJointMtx(u16);
+    virtual MtxP getModelJointMtx(u16 idx) { return mpCLModel->getAnmMtx(idx); }
     virtual f32 getOldSpeedY();
     virtual BOOL setHookshotCarryOffset(unsigned int, const cXyz*);
     virtual void setPlayerPosAndAngle(cXyz*, s16);
@@ -2404,7 +2404,7 @@ public:
     /* 0x36C4 */ cXyz m36C4;
     /* 0x36D0 */ cXyz m36D0;
     /* 0x36DC */ cXyz m36DC;
-    /* 0x36E8 */ cXyz m36E8;
+    /* 0x36E8 */ cXyz mHookshotRootPos;
     /* 0x36F4 */ u8 m36F4[0x3700 - 0x36F4];
     /* 0x3700 */ cXyz m3700;
     /* 0x370C */ cXyz m370C;

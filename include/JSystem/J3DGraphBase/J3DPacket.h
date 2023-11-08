@@ -109,6 +109,7 @@ public:
     }
 
     void setUserArea(u32 area) { mpUserData = (void*)area; }
+    u32 getUserArea() const { return (u32)mpUserData; }
 
     virtual bool isSame(J3DMatPacket*) const;
     virtual int entry(J3DDrawBuffer*);

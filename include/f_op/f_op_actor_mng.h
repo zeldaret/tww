@@ -95,15 +95,6 @@ inline u32 fopAcM_checkCarryNow(fopAc_ac_c* pActor) {
     return pActor->mStatus & fopAcStts_CARRY_e;
 }
 
-enum fopAcM_CARRY {
-    /* 0x01 */ fopAcM_CARRY_TYPE_1 = 1,
-    /* 0x02 */ fopAcM_CARRY_HEAVY = 2,
-    /* 0x04 */ fopAcM_CARRY_SIDE = 4,
-    /* 0x08 */ fopAcM_CARRY_TYPE_8 = 8,
-    /* 0x10 */ fopAcM_CARRY_LIGHT = 16, // guess based on context
-    /* 0x30 */ fopAcM_CARRY_UNK_30 = 0x30,
-};
-
 inline u32 fopAcM_checkHookCarryNow(fopAc_ac_c* pActor) {
     return fopAcM_checkStatus(pActor, fopAcStts_HOOK_CARRY_e);
 }

@@ -313,7 +313,7 @@ void daIball_c::damage() {
             if (atType & AT_TYPE_SWORD || atType & AT_TYPE_BOKO_STICK ||
                 atType & AT_TYPE_MACHETE || atType & AT_TYPE_SKULL_HAMMER ||
                 atType & AT_TYPE_UNK2000000 || atType & AT_TYPE_STALFOS_MACE ||
-                atType & AT_TYPE_DARKNUT_SWORD || atType & AT_TYPE_UNK8000 ||
+                atType & AT_TYPE_DARKNUT_SWORD || atType & AT_TYPE_HOOKSHOT ||
                 atType & AT_TYPE_BOOMERANG || atType & AT_TYPE_NORMAL_ARROW ||
                 atType & AT_TYPE_FIRE_ARROW || atType & AT_TYPE_ICE_ARROW ||
                 atType & AT_TYPE_LIGHT_ARROW || atType & AT_TYPE_MOBLIN_SPEAR)

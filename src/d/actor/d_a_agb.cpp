@@ -1088,11 +1088,6 @@ int daAgb_Draw(daAgb_c* i_this) {
     return 1;
 }
 
-/* 800D38EC-800D38F0       .text setTevColor__11J3DTevBlockFUlPC13J3DGXColorS10 */
-void J3DTevBlock::setTevColor(u32, const J3DGXColorS10*) {
-    /* Nonmatching */
-}
-
 /* 800D38F0-800D38F8       .text daAgb_IsDelete__FP7daAgb_c */
 int daAgb_IsDelete(daAgb_c* i_this) {
     return 1;
