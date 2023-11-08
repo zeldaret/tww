@@ -651,7 +651,7 @@ config.libs = [
         "JAudio",
         [
             Object(Matching,    "JSystem/JAudio/JASCalc.cpp"),
-            Object(NonMatching, "JSystem/JAudio/JASAiCtrl.cpp"),
+            Object(Matching,    "JSystem/JAudio/JASAiCtrl.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASDvdThread.cpp"),
             Object(Matching,    "JSystem/JAudio/JASCallback.cpp"),
             Object(Matching,    "JSystem/JAudio/JASRate.cpp"),

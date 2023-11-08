@@ -69,14 +69,13 @@ void JASystem::TChannelMgr::stopAllRelease() {
 
 /* 8028D558-8028D5D0       .text initAllocChannel__Q28JASystem11TChannelMgrFUl */
 void JASystem::TChannelMgr::initAllocChannel(u32 param_1) {
-    /* Nonmatching */
     if (field_0x0) {
         OSReport("----- Warning JCSにボイスが %d 残っているのでグローバルに返却します\n", field_0x0);
         TGlobalChannel::releaseAll(this);
     }
     init();
     TGlobalChannel::alloc(this, param_1);
-    field_0x70 = param_1 != 0;
+    field_0x70 = (param_1 != 0) ? 1 : 0;
 }
 
 /* 8028D5D0-8028D778       .text getLogicalChannel__Q28JASystem11TChannelMgrFUl */

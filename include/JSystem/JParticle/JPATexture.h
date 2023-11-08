@@ -37,6 +37,7 @@ public:
 };
 
 struct JPADefaultTexture {
+    JPADefaultTexture() : imgBuf(NULL) {}
     void initialize(JKRHeap *);
     u8 * imgBuf;
     GXTexObj mTexObj;

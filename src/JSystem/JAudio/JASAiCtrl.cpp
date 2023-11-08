@@ -15,6 +15,12 @@
 #include "dolphin/os/OSCache.h"
 #include "dolphin/os/OSInterrupt.h"
 
+namespace JASystem {
+    namespace HardStream {
+        void main();
+    }
+};
+
 /* 8027AE30-8027AE5C       .text init__Q28JASystem6KernelFv */
 void JASystem::Kernel::init() {
     resetCallback();
@@ -100,7 +106,7 @@ void JASystem::Kernel::updateDac() {
     if (!lastRspMadep && vframeWorkRunning == 0) {
         vframeWork();
     }
-    //HardStream::main();
+    HardStream::main();
     if (dacCallbackFunc) {
         dacCallbackFunc(lastRspMadep, gDacSize / 2);
     }

@@ -13,7 +13,6 @@
 
 /* 8028B3E8-8028B5A4       .text init__Q28JASystem8TChannelFv */
 void JASystem::TChannel::init() {
-    /* Nonmatching */
     field_0x28 = 0;
     field_0x2c = 0;
     field_0x30 = 0;
@@ -291,19 +290,17 @@ f32 JASystem::TChannel::calcPan(const Driver::PanMatrix_*, const Driver::PanMatr
 /* 8028CC90-8028CD90       .text updateJcToDSPInit__Q28JASystem8TChannelFv */
 void JASystem::TChannel::updateJcToDSPInit() {
     /* Nonmatching */
+    JASystem::DSPInterface::DSPBuffer * pBuffer = field_0x20->field_0xc;
+    if (pBuffer->field_0xb0[0] == 0xFFFF) {
+        pBuffer->initAutoMixer();
+        pBuffer->setMixerInitDelayMax(field_0x4->field_0x60);
+    }
 }
 
 /* 8028CD90-8028CEA8       .text updateAutoMixer__Q28JASystem8TChannelFffff */
 void JASystem::TChannel::updateAutoMixer(f32 param_1, f32 param_2, f32 param_3, f32 param_4) {
-    /* Nonmatching */
-    f32 f31 = 0.0f;
-    if (param_1 > f31) {
-        f31 = 1.0f;
-        if (param_1 >= f31) {
-            f31 = param_1;
-        }
-    }
-    field_0x20->field_0xc->setAutoMixer(f31 * Driver::getAutoLevel(), param_2 * 127.5f, param_4 * 127.5f, param_3 * 127.5f, field_0xb0[1]);
+    f32 level = param_1 <= 0.0f ? 0.0f : param_1 >= 1.0f ? 1.0f : param_1;
+    field_0x20->field_0xc->setAutoMixer(level * Driver::getAutoLevel(), param_2 * 127.5f, param_4 * 127.5f, param_3 * 127.5f, field_0xb0[1]);
 }
 
 /* 8028CEA8-8028D128       .text updateMixer__Q28JASystem8TChannelFffff */

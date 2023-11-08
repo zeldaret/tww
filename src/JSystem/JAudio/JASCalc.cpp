@@ -63,7 +63,6 @@ void JASystem::Calc::bcopyfast(const u32* src, u32* dest, u32 size) {
 
 /* 8027AB68-8027AC68       .text bcopy__Q28JASystem4CalcFPCvPvUl */
 void JASystem::Calc::bcopy(const void* src, void* dest, u32 size) {
-    /* Nonmatching */
     u32 *usrc;
     u32 *udest;
 
@@ -106,7 +105,6 @@ void JASystem::Calc::bcopy(const void* src, void* dest, u32 size) {
 
 /* 8027AC68-8027AD38       .text bzerofast__Q28JASystem4CalcFPvUl */
 void JASystem::Calc::bzerofast(void* dest, u32 size) {
-    /* Nonmatching */
     JUT_ASSERT(387, (reinterpret_cast<u32>(dest) & 0x03) == 0);
     JUT_ASSERT(388, (size & 0x0f) == 0);
     u32* udest = (u32*)dest;
@@ -120,7 +118,6 @@ void JASystem::Calc::bzerofast(void* dest, u32 size) {
 
 /* 8027AD38-8027AE30       .text bzero__Q28JASystem4CalcFPvUl */
 void JASystem::Calc::bzero(void* dest, u32 size) {
-    /* Nonmatching */
     u32 *udest;
     u8 *bdest = (u8 *)dest;
     if ((size & 0x1f) == 0 && (reinterpret_cast<u32>(dest) & 0x1f) == 0) {

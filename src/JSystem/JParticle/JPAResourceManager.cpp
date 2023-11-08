@@ -4,44 +4,88 @@
 //
 
 #include "JSystem/JParticle/JPAResourceManager.h"
-#include "dolphin/types.h"
+#include "JSystem/JParticle/JPAEmitterLoader.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "JSystem/JUtility/JUTTexture.h"
+#include "MSL_C/string.h"
 
 /* 80258CAC-80258D54       .text __ct__18JPATextureResourceFUlP7JKRHeap */
-JPATextureResource::JPATextureResource(unsigned long, JKRHeap*) {
-    /* Nonmatching */
+JPATextureResource::JPATextureResource(u32 num, JKRHeap* heap) {
+    registNum = 0;
+    maxNum = num;
+    pTexResArray = new(heap, 0) JPATexture*[maxNum];
+    JUT_ASSERT(24, pTexResArray);
+    defaultTex.initialize(heap);
 }
 
 /* 80258D54-80258DE4       .text registration__18JPATextureResourceFP10JPATexture */
-void JPATextureResource::registration(JPATexture*) {
-    /* Nonmatching */
+void JPATextureResource::registration(JPATexture* res) {
+    JUT_ASSERT(76, registNum < maxNum);
+    pTexResArray[registNum] = res;
+    registNum++;
+}
+
+static void dummy() {
+    OSReport("pTexResArray[registNum]");
 }
 
 /* 80258DE4-80258E70       .text __ct__18JPAEmitterResourceFUlP7JKRHeap */
-JPAEmitterResource::JPAEmitterResource(unsigned long, JKRHeap*) {
-    /* Nonmatching */
+JPAEmitterResource::JPAEmitterResource(u32 num, JKRHeap* heap) {
+    registNum = 0;
+    maxNum = num;
+    pEmtrResArray = new(heap, 0) JPAEmitterData*[maxNum];
+    JUT_ASSERT(93, pEmtrResArray);
 }
 
 /* 80258E70-80258F18       .text registration__18JPAEmitterResourceFP14JPAEmitterDataUs */
-void JPAEmitterResource::registration(JPAEmitterData*, unsigned short) {
-    /* Nonmatching */
+void JPAEmitterResource::registration(JPAEmitterData* res, u16 userIndex) {
+    JUT_ASSERT(107, registNum < maxNum);
+    if (registNum < maxNum) {
+        res->userIndex = userIndex;
+        pEmtrResArray[registNum] = res;
+    }
+    registNum++;
 }
 
 /* 80258F18-80258F5C       .text getByUserIndex__18JPAEmitterResourceFUs */
-void JPAEmitterResource::getByUserIndex(unsigned short) {
-    /* Nonmatching */
+JPAEmitterData * JPAEmitterResource::getByUserIndex(u16 userIndex) {
+    for (u32 i = 0; i < registNum; i++) {
+        JPAEmitterData * data = pEmtrResArray[i];
+        if (data->userIndex == userIndex)
+            return data;
+    }
+    return NULL;
 }
 
 /* 80258F5C-80258FA0       .text checkUserIndexDuplication__18JPAEmitterResourceFUs */
-void JPAEmitterResource::checkUserIndexDuplication(unsigned short) {
-    /* Nonmatching */
+BOOL JPAEmitterResource::checkUserIndexDuplication(u16 userIndex) {
+    for (u32 i = 0; i < registNum; i++) {
+        JPAEmitterData * data = pEmtrResArray[i];
+        if (data->userIndex == userIndex)
+            return TRUE;
+    }
+    return FALSE;
 }
 
 /* 80258FA0-80258FF4       .text __ct__18JPAResourceManagerFPCvP7JKRHeap */
-JPAResourceManager::JPAResourceManager(const void*, JKRHeap*) {
-    /* Nonmatching */
+JPAResourceManager::JPAResourceManager(const void* data, JKRHeap* heap) {
+    pHeap = heap != NULL ? heap : JKRHeap::getCurrentHeap();
+    JPAEmitterArchiveLoaderDataBase::load((const u8*)data, pHeap, &pEmtrRes, &pTexRes);
 }
 
 /* 80258FF4-802590B4       .text swapTexture__18JPAResourceManagerFPC7ResTIMGPCc */
-void JPAResourceManager::swapTexture(const ResTIMG*, const char*) {
-    /* Nonmatching */
+const ResTIMG* JPAResourceManager::swapTexture(const ResTIMG* timg, const char* name) {
+    const ResTIMG * oldTimg = NULL;
+
+    for (u32 i = 0; i < pTexRes->registNum; i++) {
+        if (strcmp(name, pTexRes->pTexResArray[i]->getName()) == 0) {
+            JUTTexture* tex = pTexRes->pTexResArray[i]->getJUTTexture();
+            oldTimg = tex->getTexInfo();
+            tex->storeTIMG(timg, (u8)0);
+            break;
+        }
+    }
+
+    return oldTimg;
 }

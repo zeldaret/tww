@@ -22,30 +22,44 @@ class JPAFieldBlock;
 
 class JPADataBlockLinkInfo {
 public:
-    JPAFieldBlock * getField() { return mpFieldBlock; }
-    u8 getFieldNum() { return mFieldNum; }
-    JPADynamicsBlock * getDynamics() { return mpDynamicsBlock; }
-    JPASweepShape * getSweepShape() { return mpSweepShape; }
-    u8 getKeyNum() { return mKeyNum; }
-    JPAKeyBlock * getKey() { return mpKeyBlock; }
-    JPAExtraShape * getExtraShape() { return mpExtraShape; }
-    u32 * getTextureDataBase() { return mpTextureDataBase; }
-    JPAExTexShape * getExTexShape() { return mpExTexShape; }
-    JPABaseShape * getBaseShape() { return mpBaseShape; }
+    JPADataBlockLinkInfo() {
+        dynBlock = NULL;
+        bspBlock = NULL;
+        espBlock = NULL;
+        sspBlock = NULL;
+        etxBlock = NULL;
+        keyBlocks = NULL;
+        fldBlocks = NULL;
+        texDataBase = NULL;
+        fldNum = NULL;
+        mTextureNum = NULL;
+        keyNum = 0;
+    }
+
+    JPAFieldBlock ** getField() { return fldBlocks; }
+    u8 getFieldNum() { return fldNum; }
+    JPADynamicsBlock * getDynamics() { return dynBlock; }
+    JPASweepShape * getSweepShape() { return sspBlock; }
+    u8 getKeyNum() { return keyNum; }
+    JPAKeyBlock ** getKey() { return keyBlocks; }
+    JPAExtraShape * getExtraShape() { return espBlock; }
+    u32 * getTextureDataBase() { return texDataBase; }
+    JPAExTexShape * getExTexShape() { return etxBlock; }
+    JPABaseShape * getBaseShape() { return bspBlock; }
     u8 getTextureNum() { return mTextureNum; }
 
 public:
-    /* 0x00 */ JPADynamicsBlock * mpDynamicsBlock;
-    /* 0x04 */ JPABaseShape * mpBaseShape;
-    /* 0x08 */ JPAExtraShape * mpExtraShape;
-    /* 0x0C */ JPASweepShape * mpSweepShape;
-    /* 0x10 */ JPAExTexShape * mpExTexShape;
-    /* 0x14 */ JPAKeyBlock * mpKeyBlock;
-    /* 0x18 */ JPAFieldBlock * mpFieldBlock;
-    /* 0x1C */ u32 * mpTextureDataBase;
-    /* 0x20 */ u8 mFieldNum;
+    /* 0x00 */ JPADynamicsBlock * dynBlock;
+    /* 0x04 */ JPABaseShape * bspBlock;
+    /* 0x08 */ JPAExtraShape * espBlock;
+    /* 0x0C */ JPASweepShape * sspBlock;
+    /* 0x10 */ JPAExTexShape * etxBlock;
+    /* 0x14 */ JPAKeyBlock ** keyBlocks;
+    /* 0x18 */ JPAFieldBlock ** fldBlocks;
+    /* 0x1C */ u32 * texDataBase;
+    /* 0x20 */ u8 fldNum;
     /* 0x21 */ u8 mTextureNum;
-    /* 0x22 */ u8 mKeyNum;
+    /* 0x22 */ u8 keyNum;
     /* 0x23 */ u8 field_0x23;
 };
 

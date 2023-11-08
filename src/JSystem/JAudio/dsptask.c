@@ -513,13 +513,17 @@ void DspBoot(void (*param_1)(void*)) {
 }
 
 /* 8028E960-8028EA48       .text DSPSendCommands2__FPUlUlPFUs_v */
-int DSPSendCommands2(u32* param_1, u32 param_2, void (*param_3)(u16)) {
+int DSPSendCommands2(u32* param_1, u32 param_2, void (*callBack)(u16)) {
     /* Nonmatching */
-    while (Dsp_Running_Check() == 0);
+    s32 startWorkStatus;
+    BOOL interruptFlag;
+    s32 i;
 
-    BOOL status = OSDisableInterrupts();
+    while (Dsp_Running_Check() == 0) {};
+
+    interruptFlag = OSDisableInterrupts();
     if (DSPCheckMailToDSP()) {
-        OSRestoreInterrupts(status);
+        OSRestoreInterrupts(interruptFlag);
         return -1;
     }
 
@@ -527,21 +531,20 @@ int DSPSendCommands2(u32* param_1, u32 param_2, void (*param_3)(u16)) {
     DSPAssertInt();
     while(DSPCheckMailToDSP() != 0);
 
-    if (param_1 == 0) {
+    if (param_2 == 0) {
         param_2 = 1;
     }
 
-    int startWorkStatus;
-    if (param_3 != NULL) {
-        startWorkStatus = DspStartWork(param_1[0], param_3);
+    if (callBack != NULL) {
+        startWorkStatus = DspStartWork(param_1[0], callBack);
     }
 
-    for (int i = 0; i < param_2; i++) {
+    for (i = 0; i < param_2; i++) {
         DSPSendMailToDSP(param_1[i]);
         while (DSPCheckMailToDSP() != 0);
     }
 
-    OSRestoreInterrupts(status);
+    OSRestoreInterrupts(interruptFlag);
     return startWorkStatus;
 }
 
@@ -555,7 +558,6 @@ static TaskWorkStruct taskwork[16];
 
 /* 8028EA60-8028EA8C       .text DspInitWork__Fv */
 void DspInitWork() {
-    /* Nonmatching */
     for (int i = 0; i < 16; i++) {
         taskwork[i].field_0x4 = NULL;
     }

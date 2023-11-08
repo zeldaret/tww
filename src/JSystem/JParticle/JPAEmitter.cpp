@@ -99,7 +99,6 @@ void JPABaseEmitter::calcEmitterInfo() {
 
 /* 8025D294-8025D3C0       .text calc__14JPABaseEmitterFv */
 void JPABaseEmitter::calc() {
-    /* Nonmatching */
     emtrInfo.mVolumeEmitCount = 0;
     if (!checkStatus(JPAEmtrStts_StopCalc)) {
         calcKey();
