@@ -82,20 +82,20 @@ private:
 class daPy_py_c : public fopAc_ac_c {
 public:
     enum daPy_FLG0 {
-        daPyFlg0_UNK4              = 0x00000004,
-        daPyFlg0_UNK10             = 0x00000010,
-        daPyFlg0_CUT_AT_FLG        = 0x00000040,
-        daPyFlg0_UNK100            = 0x00000100,
-        daPyFlg0_PUSH_PULL_KEEP    = 0x00000800,
-        daPyFlg0_UNK1000           = 0x00001000,
-        daPyFlg0_UNK4000           = 0x00004000,
-        daPyFlg0_UNK10000          = 0x00010000,
-        daPyFlg0_NO_FALL_VOICE     = 0x00040000,
-        daPyFlg0_SCOPE_CANCEL      = 0x00080000,
-        daPyFlg0_UNK200000         = 0x00200000,
-        daPyFlg0_EQUIP_HEAVY_BOOTS = 0x02000000,
-        daPyFlg0_NO_DRAW           = 0x08000000,
-        daPyFlg0_HEAVY_STATE       = 0x40000000,
+        daPyFlg0_UNK4               = 0x00000004,
+        daPyFlg0_DEKU_SP_RETURN_FLG = 0x00000010,
+        daPyFlg0_CUT_AT_FLG         = 0x00000040,
+        daPyFlg0_UNK100             = 0x00000100,
+        daPyFlg0_PUSH_PULL_KEEP     = 0x00000800,
+        daPyFlg0_UNK1000            = 0x00001000,
+        daPyFlg0_UNK4000            = 0x00004000,
+        daPyFlg0_UNK10000           = 0x00010000,
+        daPyFlg0_NO_FALL_VOICE      = 0x00040000,
+        daPyFlg0_SCOPE_CANCEL       = 0x00080000,
+        daPyFlg0_UNK200000          = 0x00200000,
+        daPyFlg0_EQUIP_HEAVY_BOOTS  = 0x02000000,
+        daPyFlg0_NO_DRAW            = 0x08000000,
+        daPyFlg0_HEAVY_STATE        = 0x40000000,
     };
     
     enum daPy_FLG1 {
@@ -204,8 +204,6 @@ public:
     void offConfuse() { offNoResetFlg1(daPyFlg1_CONFUSE); }
     bool checkConfuse() const { return checkNoResetFlg1(daPyFlg1_CONFUSE); }
     bool checkFreezeState() const { return checkNoResetFlg1(daPyFlg1_FREEZE_STATE); }
-    void onShipTact() { onNoResetFlg1(daPyFlg1_SHIP_TACT); }
-    void offShipTact() { offNoResetFlg1(daPyFlg1_SHIP_TACT); }
     void onUseArrowEffect() { onNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT); }
     void offUseArrowEffect() { offNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT); }
     void onLetterReadEyeMove() { onNoResetFlg1(daPyFlg1_LETTER_READ_EYE_MOVE); }

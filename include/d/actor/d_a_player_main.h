@@ -2038,7 +2038,6 @@ public:
     BOOL procCutExMJ();
     BOOL procCutKesa_init();
     BOOL procCutKesa();
-    void checkNoControll() const;
     
     J3DAnmTevRegKey* getBombBrk() { return mpBombBrk; }
     J3DAnmTextureSRTKey* getIceArrowBtk() { return mpIceArrowBtk; }
@@ -2052,6 +2051,22 @@ public:
     s16 checkTinkleShield() const { return mTinkleShieldTimer; }
     void setTinkleShield(s16 time) { mTinkleShieldTimer = time; }
     bool checkNoDamageMode() const { return checkEquipDragonShield() || checkTinkleShield() != 0; }
+    void onShipTact() { onNoResetFlg1(daPyFlg1_SHIP_TACT); }
+    void offShipTact() { offNoResetFlg1(daPyFlg1_SHIP_TACT); }
+    void checkShipGetOff() {}
+    void onShipDrop(s16) {}
+    void checkCarryActionNow() const {}
+    void checkNoControll() const {}
+    void clearDamageWait() {}
+    void exchangeGrabActor(fopAc_ac_c*) {}
+    void getDekuLeafWindPos() const {}
+    void getIceParticleBtk() {}
+    void getIceWaterParticleBtk() {}
+    void getShadowID() const {}
+    void npcStartRestartRoom() {}
+    void offModeFlg(u32) {}
+    void setDaiokutaEnd() {}
+    void setWhirlId(unsigned int) {}
     
     int getStartRoomNo() { return fopAcM_GetParam(this) & 0x3F; }
     int getStartMode() { return (fopAcM_GetParam(this) >> 0x0C) & 0xF; }
@@ -2073,7 +2088,7 @@ public:
     virtual BOOL getBokoFlamePos(cXyz*);
     virtual BOOL checkTactWait() const { return mCurProcID == PROC_TACT_WAIT_e; }
     virtual void setTactZev(unsigned int, int, char*);
-    virtual void onDekuSpReturnFlg(u8);
+    virtual void onDekuSpReturnFlg(u8 i_point);
     virtual bool checkComboCutTurn() const;
     virtual f32 getBaseAnimeFrameRate() { return mFrameCtrlUnder[0].getRate(); }
     virtual f32 getBaseAnimeFrame() { return mFrameCtrlUnder[0].getFrame(); }
@@ -2255,8 +2270,8 @@ public:
     /* 0x34BD */ u8 mLastUsedEquipItem;
     /* 0x34BE */ u8 m34BE;
     /* 0x34BF */ s8 mReverb;
-    /* 0x34C0 */ u8 m34C0;
-    /* 0x34C1 */ u8 m34C1;
+    /* 0x34C0 */ u8 mLeftHandIdx;
+    /* 0x34C1 */ u8 mRightHandIdx;
     /* 0x34C2 */ u8 m34C2;
     /* 0x34C3 */ u8 m34C3;
     /* 0x34C4 */ u8 m34C4;
@@ -2266,7 +2281,7 @@ public:
     /* 0x34C8 */ u8 mPressedButtonsBitfield;
     /* 0x34C9 */ u8 m34C9;
     /* 0x34CA */ u8 m34CA;
-    /* 0x34CB */ u8 m34CB;
+    /* 0x34CB */ u8 mDekuSpRestartPoint;
     /* 0x34CC */ u8 m34CC[0x34D0 - 0x34CC];
     /* 0x34D0 */ s16 m34D0;
     /* 0x34D2 */ s16 m34D2;
@@ -2351,7 +2366,7 @@ public:
     /* 0x3588 */ u8 m3588[0x358C - 0x3588];
     /* 0x358C */ int mStaffIdx;
     /* 0x3590 */ int mEventIdx;
-    /* 0x3594 */ int m3594;
+    /* 0x3594 */ int mRestartPoint;
     /* 0x3598 */ f32 m3598;
     /* 0x359C */ u8 m359C[0x35A0 - 0x359C];
     /* 0x35A0 */ f32 m35A0;
@@ -2429,10 +2444,25 @@ public:
     struct ProcInitTableEntry {
         /* 0x00 */ ProcFunc mProcFunc;
         /* 0x0C */ u32 mProcFlags;
-    };
+    };  // Size: 0x10
+    static ProcInitTableEntry mProcInitTable[];
     
-    static ProcInitTableEntry mProcInitTable[0xDB];
-    static ProcFunc mDemoProcInitFuncTable[0x4B];
+    static ProcFunc mDemoProcInitFuncTable[];
+    
+    struct TexAnmTableEntry {
+        /* 0x00 */ u16 mBtpIdx;
+        /* 0x04 */ u16 mBtkIdx;
+    };  // Size: 0x04
+    static const TexAnmTableEntry mTexAnmIndexTable[];
+    
+    struct AnmDataTableEntry {
+        /* 0x00 */ u16 mUpperBckIdx;
+        /* 0x02 */ u16 mUnderBckIdx;
+        /* 0x04 */ u8 mLeftHandIdx;
+        /* 0x05 */ u8 mRightHandIdx;
+        /* 0x06 */ u16 mTexAnmIdx;
+    };  // Size: 0x08
+    static const AnmDataTableEntry mAnmDataTable[];
 };  // Size: 0x4C28
 
 #endif /* D_A_PLAYER_MAIN */

@@ -47,18 +47,20 @@ namespace daTagRet {
     struct Act_c : public fopAc_ac_c {
     public:
         enum Prm_e {
-            PRM_PLAYER_ID_W = 8,
-            PRM_PLAYER_ID_S = 0,
+            PRM_LINK_ID_W = 8,
+            PRM_LINK_ID_S = 0,
         };
-    
+        
         s32 _create();
         bool _delete();
         void set_mtx();
         bool _execute();
         bool _draw();
-    
+        
+        u32 prm_get_linkID() const { return daObj::PrmAbstract(this, PRM_LINK_ID_W, PRM_LINK_ID_S); }
+        
     public:
-        u8 unknown_padding[0xC];
+        /* 0x290 */ u8 m290[0x29C - 0x290];
         /* 0x29C */ dCcD_Stts mStts;
         /* 0x2D8 */ dCcD_Cyl mCyl;
     };
@@ -98,8 +100,8 @@ namespace daTagRet {
         dComIfG_Ccsp()->Set(&mCyl);
         
         if (mCyl.ChkCoHit()) {
-            u32 playerId = daObj::PrmAbstract(this, PRM_PLAYER_ID_W, PRM_PLAYER_ID_S);
-            daPy_getPlayerLinkActorClass()->onDekuSpReturnFlg(playerId);
+            u32 linkId = prm_get_linkID();
+            daPy_getPlayerLinkActorClass()->onDekuSpReturnFlg(linkId);
         }
         
         set_mtx();

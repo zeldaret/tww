@@ -1103,7 +1103,6 @@ BOOL dComIfGs_checkSeaLandingEvent(s8 i_roomNo) {
 }
 
 /* 800548FC-80054C70       .text dComIfGs_setGameStartStage__Fv */
-// NONMATCHING - one tiny reg swap
 void dComIfGs_setGameStartStage() {
     struct check_data {
         /* 0x0 */ u8 mbHasEvent;
@@ -1148,7 +1147,7 @@ void dComIfGs_setGameStartStage() {
             dKy_set_nexttime(120.0f);
         } else if (stage_type == 7) {
             daPy_lk_c* player_p = daPy_getPlayerLinkActorClass();
-            point = player_p->m3594;
+            point = player_p->mRestartPoint;
 
             s8 temp_r3 = player_p->current.roomNo;
             room_no = temp_r3;
