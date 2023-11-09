@@ -171,7 +171,7 @@ public:
     void setReserveItemEmpty(u8);
     void setReserveItemEmpty();
     void setReserveItem(u8);
-    bool checkReserveItemEmpty();
+    u8 checkReserveItemEmpty();
     u8 checkReserveItem(u8);
 
     u8 getBeast(int i_idx) { return mBeast[i_idx]; }

@@ -199,7 +199,7 @@ u32 dCcD_GObjInf::ChkTgHit() {
 
 /* 800ABA08-800ABA48       .text ResetTgHit__12dCcD_GObjInfFv */
 void dCcD_GObjInf::ResetTgHit() {
-    // cCcD_ObjHitInf::ResetTgHit();
+    ClrTgHit();
     ClrTgEffCounter();
 }
 

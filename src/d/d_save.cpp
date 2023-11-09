@@ -300,7 +300,7 @@ void dSv_player_get_item_c::onBottleItem(u8 i_item) {
 }
 
 /* 80059740-80059848       .text isBottleItem__21dSv_player_get_item_cFUc */
-bool dSv_player_get_item_c::isBottleItem(u8 i_item) {
+BOOL dSv_player_get_item_c::isBottleItem(u8 i_item) {
     switch (i_item) {
     case EMPTY_BSHIP:
         return mItemFlags[0] & 0x02;
@@ -509,7 +509,7 @@ void dSv_player_bag_item_c::setReserveItem(u8 param_0) {
 }
 
 /* 8005A854-8005A878       .text checkReserveItemEmpty__21dSv_player_bag_item_cFv */
-bool dSv_player_bag_item_c::checkReserveItemEmpty() {
+u8 dSv_player_bag_item_c::checkReserveItemEmpty() {
     return checkReserveItem(NO_ITEM);
 }
 
