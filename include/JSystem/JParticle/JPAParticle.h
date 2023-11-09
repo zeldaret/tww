@@ -66,6 +66,7 @@ public:
     /* 0xC6 */ u16 mTexIdx;
     /* 0xC8 */ JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>* mpCallBack2;
     /* 0xCC */ u32 mStatus;
+    /* 0xD0 */ u32 field_0xd0;
 };
 
 class JPAParticleCallBack {

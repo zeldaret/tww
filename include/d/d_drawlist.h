@@ -41,6 +41,11 @@ public:
 class dDlst_2DPoint_c : public dDlst_base_c {
 public:
     virtual void draw();
+
+    /* 0x04 */ s16 mPosX;
+    /* 0x06 */ s16 mPosY;
+    /* 0x08 */ GXColor mColor;
+    /* 0x0C */ u8 mPointSize;
 };
 
 class dDlst_2DT_c : public dDlst_base_c {
@@ -52,6 +57,19 @@ class dDlst_2DT2_c : public dDlst_base_c {
 public:
     void init(ResTIMG* pTimg, f32, f32, f32, f32, u8, u8, u8, f32, f32);
     virtual void draw();
+
+public:
+    /* 0x04 */ GXTexObj mTex;
+    /* 0x24 */ f32 mX;
+    /* 0x28 */ f32 mY;
+    /* 0x2C */ f32 mW;
+    /* 0x30 */ f32 mH;
+    /* 0x34 */ f32 mScrollS;
+    /* 0x38 */ f32 mScrollT;
+    /* 0x3C */ GXColor mColor;
+    /* 0x40 */ u8 mMirrorS;
+    /* 0x41 */ u8 mMirrorT;
+    /* 0x42 */ u8 mAlpha;
 };
 
 class dDlst_2DM_c : public dDlst_base_c {
@@ -209,14 +227,14 @@ public:
     dDlst_shadowReal_c() { mState = 0; }
 
     bool isNoUse() { return mState == 0; }
-    bool isUse() { return mState == 1; }
+    bool isUse() { return mState != 0; }
     bool checkKey(u32 i_key) { return mKey == i_key; }
 
     enum { MODEL_MAX = 0x1A };
 
 private:
     /* 0x0000 */ u8 mState;
-    /* 0x0001 */ u8 field_0x1;
+    /* 0x0001 */ s8 field_0x1;
     /* 0x0002 */ u8 mAlpha;
     /* 0x0003 */ u8 mModelNum;
     /* 0x0004 */ u32 mKey;
@@ -322,11 +340,19 @@ public:
 struct dDlst_alphaVolPacket : public J3DPacket {
 public:
     virtual void draw();
+
+public:
+    /* 0x04 */ u32 field_0x04[3];
+    /* 0x10 */ Mtx mtx;
 };
 
 struct dDlst_alphaInvVolPacket : public J3DPacket {
 public:
     virtual void draw();
+
+public:
+    /* 0x04 */ u32 field_0x04[3];
+    /* 0x10 */ Mtx mtx;
 };
 
 class dDlst_list_c {
@@ -407,6 +433,10 @@ public:
     void newPeekZdata(s16 x, s16 y, u32 * data) { mPeekZ.newData(x, y, data); }
 
     static bool mWipe;
+    static GXColor mWipeColor;
+    static f32 mWipeRate;
+    static f32 mWipeSpeed;
+    static dDlst_2DT2_c mWipeDlst;
 
     /* 0x00000 */ J3DDrawBuffer* mpOpaListSky;
     /* 0x00004 */ J3DDrawBuffer* mpXluListSky;

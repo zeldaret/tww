@@ -429,6 +429,7 @@ public:
     void setTmsgArchive(JKRArchive * pArc) { mpTmsgArchive = pArc; }
     JKRArchive* getTmsgArchive() { return mpTmsgArchive; }
     void setMenuArchive(JKRArchive * pArc) { mpMenuArchive = pArc; }
+    JKRArchive* getMenuArchive() { return mpMenuArchive; }
     void setFont0Archive(JKRArchive * pArc) { mpFont0Archive = pArc; }
     void setFont1Archive(JKRArchive * pArc) { mpFont1Archive = pArc; }
     JKRArchive* getFontArchive() { return mpFont0Archive; }
@@ -2214,6 +2215,7 @@ inline void dComIfGp_setDmsgArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play
 inline void dComIfGp_setTmsgArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setTmsgArchive(pArc); }
 inline JKRArchive* dComIfGp_getTmsgArchive() { return g_dComIfG_gameInfo.play.getTmsgArchive(); }
 inline void dComIfGp_setMenuArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMenuArchive(pArc); }
+inline JKRArchive* dComIfGp_getMenuArchive() { return g_dComIfG_gameInfo.play.getMenuArchive(); }
 inline void dComIfGp_setFont0Archive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFont0Archive(pArc); }
 inline void dComIfGp_setFont1Archive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFont1Archive(pArc); }
 inline JKRArchive* dComIfGp_getFontArchive() { return g_dComIfG_gameInfo.play.getFontArchive(); }

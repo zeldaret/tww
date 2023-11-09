@@ -9,8 +9,17 @@
 #include "m_Do/m_Do_mtx.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "SSystem/SComponent/c_rnd.h"
 #include "SSystem/SComponent/c_bg_s_shdw_draw.h"
+
+GXTexObj dDlst_shadowControl_c::mSimpleTexObj;
+
+bool dDlst_list_c::mWipe;
+f32 dDlst_list_c::mWipeRate = 0.0f;
+f32 dDlst_list_c::mWipeSpeed = 0.0f;
+GXColor dDlst_list_c::mWipeColor = { 0, 0, 0, 0 };
+dDlst_2DT2_c dDlst_list_c::mWipeDlst;
 
 /* 800804A4-800804C0       .text setViewPort__14dDlst_window_cFffffff */
 void dDlst_window_c::setViewPort(f32 x, f32 y, f32 w, f32 h, f32 n, f32 f) {
@@ -37,7 +46,20 @@ void dDlst_2DTri_c::draw() {
 
 /* 80080694-80080784       .text draw__15dDlst_2DPoint_cFv */
 void dDlst_2DPoint_c::draw() {
-    /* Nonmatching */
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanMatColor(GX_COLOR0A0, mColor);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+    GXSetPointSize(mPointSize, GX_TO_ZERO);
+    GXBegin(GX_POINTS, GX_VTXFMT0, 1);
+    GXPosition3s16(mPosX, mPosY, 0);
+    GXEnd();
 }
 
 /* 80080784-80080A50       .text draw__11dDlst_2DT_cFv */
@@ -48,11 +70,250 @@ void dDlst_2DT_c::draw() {
 /* 80080A50-800811E8       .text draw__12dDlst_2DT2_cFv */
 void dDlst_2DT2_c::draw() {
     /* Nonmatching */
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XY, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXLoadTexObj(&mTex, GX_TEXMAP0);
+    GXSetNumChans(0);
+    GXSetTevColor(GX_TEVREG0, mColor);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1,true, GX_TEVPREV);
+    if (mAlpha)
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+    else
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1,true, GX_TEVPREV);
+    GXSetZCompLoc(0);
+    GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
+    GXSetBlendMode(GX_BM_NONE, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
+    GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
+    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, g_clearColor);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetDither(GX_TRUE);
+    GXSetClipMode(GX_CLIP_DISABLE);
+    GXLoadPosMtxImm(g_mDoMtx_identity, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+
+    f32 x0 = mX, x1 = x0 + mW;
+    f32 y0 = mY, y1 = y0 + mH;
+
+    if (mMirrorS && mMirrorT) {
+        f32 xH = mX + mW * 0.5f;
+        f32 yH = mY + mH * 0.5f;
+
+        f32 s0, s1, t0, t1;
+
+        if (mScrollS == 0.0f) {
+            s0 = 0.0f;
+            s1 = 0.0f;
+        } else {
+            s0 = 1.0f - 1.0f / mScrollS;
+            s1 = 1.0f;
+        }
+
+        if (mScrollT == 0.0f) {
+            t0 = 0.0f;
+            t1 = 0.0f;
+        } else {
+            t0 = 1.0f - 1.0f / mScrollT;
+            t1 = 1.0f;
+        }
+
+        GXBegin(GX_QUADS, GX_VTXFMT0, 16);
+
+        // TL
+        GXPosition2f32(mX, mY);
+        GXTexCoord2f32(s0, t0);
+        GXPosition2f32(xH, mY);
+        GXTexCoord2f32(s1, t0);
+        GXPosition2f32(xH, yH);
+        GXTexCoord2f32(s1, t1);
+        GXPosition2f32(mX, yH);
+        GXTexCoord2f32(s0, t1);
+
+        // TR
+        GXPosition2f32(xH, mY);
+        GXTexCoord2f32(s1, t0);
+        GXPosition2f32(x1, mY);
+        GXTexCoord2f32(s0, t0);
+        GXPosition2f32(x1, yH);
+        GXTexCoord2f32(s0, t1);
+        GXPosition2f32(xH, yH);
+        GXTexCoord2f32(s1, t1);
+
+        // BL
+        GXPosition2f32(mX, yH);
+        GXTexCoord2f32(s0, t1);
+        GXPosition2f32(xH, yH);
+        GXTexCoord2f32(s1, t1);
+        GXPosition2f32(xH, y1);
+        GXTexCoord2f32(s1, t0);
+        GXPosition2f32(mX, y1);
+        GXTexCoord2f32(s0, t0);
+
+        // BR
+        GXPosition2f32(xH, yH);
+        GXTexCoord2f32(s1, t1);
+        GXPosition2f32(x1, yH);
+        GXTexCoord2f32(s0, t1);
+        GXPosition2f32(x1, y1);
+        GXTexCoord2f32(s0, t0);
+        GXPosition2f32(xH, y1);
+        GXTexCoord2f32(s1, t0);
+
+        GXEnd();
+    } else if (mMirrorS) {
+        f32 xH = mX + mW * 0.5f;
+
+        f32 s0, s1, t0, t1;
+
+        if (mScrollS == 0.0f) {
+            s0 = 0.0f;
+            s1 = 0.0f;
+        } else {
+            s0 = 1.0f - 1.0f / mScrollS;
+            s1 = 1.0f;
+        }
+
+        if (mScrollT == 0.0f) {
+            t0 = 0.0f;
+            t1 = 0.0f;
+        } else {
+            f32 h = (1.0f / mScrollT) * 0.5f;
+            t0 = 0.5f - h;
+            t1 = 0.5f + h;
+        }
+
+        GXBegin(GX_QUADS, GX_VTXFMT0, 8);
+
+        // L
+        GXPosition2f32(mX, mY);
+        GXTexCoord2f32(s0, t0);
+        GXPosition2f32(xH, mY);
+        GXTexCoord2f32(s1, t0);
+        GXPosition2f32(xH, y1);
+        GXTexCoord2f32(s1, t1);
+        GXPosition2f32(mX, y1);
+        GXTexCoord2f32(s0, t1);
+
+        // R
+        GXPosition2f32(xH, mY);
+        GXTexCoord2f32(s1, t0);
+        GXPosition2f32(x1, mY);
+        GXTexCoord2f32(s0, t0);
+        GXPosition2f32(x1, y1);
+        GXTexCoord2f32(s0, t1);
+        GXPosition2f32(xH, y1);
+        GXTexCoord2f32(s1, t1);
+
+        GXEnd();
+    } else if (mMirrorT) {
+        f32 yH = mY + mH * 0.5f;
+
+        f32 s0, s1, t0, t1;
+
+        if (mScrollS == 0.0f) {
+            s0 = 0.0f;
+            s1 = 0.0f;
+        } else {
+            f32 h = 0.5f - (1.0f / mScrollS) * 0.5f;
+            s0 = 0.5f - h;
+            s1 = 0.5f + h;
+        }
+
+        if (mScrollT == 0.0f) {
+            t0 = 0.0f;
+            t1 = 0.0f;
+        } else {
+            t0 = 1.0f - 1.0f / mScrollT;
+            t1 = 1.0f;
+        }
+
+        GXBegin(GX_QUADS, GX_VTXFMT0, 8);
+
+        // T
+        GXPosition2f32(mX, mY);
+        GXTexCoord2f32(s0, t0);
+        GXPosition2f32(x1, mY);
+        GXTexCoord2f32(s1, t0);
+        GXPosition2f32(x1, yH);
+        GXTexCoord2f32(s1, t1);
+        GXPosition2f32(mX, yH);
+        GXTexCoord2f32(s0, t1);
+
+        // B
+        GXPosition2f32(mX, yH);
+        GXTexCoord2f32(s0, t1);
+        GXPosition2f32(x1, yH);
+        GXTexCoord2f32(s1, t1);
+        GXPosition2f32(x1, y1);
+        GXTexCoord2f32(s1, t0);
+        GXPosition2f32(mX, y1);
+        GXTexCoord2f32(s0, t0);
+
+        GXEnd();
+    } else {
+        f32 s0, s1, t0, t1;
+
+        if (mScrollS == 0.0f) {
+            s0 = 0.0f;
+            s1 = 0.0f;
+        } else {
+            f32 h = (1.0f / mScrollS) * 0.5f;
+            s0 = 0.5f - h;
+            s1 = 0.5f + h;
+        }
+
+        if (mScrollT == 0.0f) {
+            t0 = 0.0f;
+            t1 = 0.0f;
+        } else {
+            f32 h = (1.0f / mScrollT) * 0.5f;
+            t0 = 0.5f - h;
+            t1 = 0.5f + h;
+        }
+
+        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+        GXPosition2f32(mX, mY);
+        GXTexCoord2f32(s0, t0);
+        GXPosition2f32(x1, mY);
+        GXTexCoord2f32(s1, t0);
+        GXPosition2f32(x1, y1);
+        GXTexCoord2f32(s1, t1);
+        GXPosition2f32(mX, y1);
+        GXTexCoord2f32(s0, t1);
+        GXEnd();
+    }
+
+    GXSetClipMode(GX_CLIP_ENABLE);
+    dComIfGp_getCurrentGrafPort()->setup2D();
 }
 
 /* 800811E8-800812F4       .text init__12dDlst_2DT2_cFP7ResTIMGffffUcUcUcff */
-void dDlst_2DT2_c::init(ResTIMG*, f32, f32, f32, f32, u8, u8, u8, f32, f32) {
-    /* Nonmatching */
+void dDlst_2DT2_c::init(ResTIMG* tex, f32 x, f32 y, f32 w, f32 h, u8 p0, u8 p1, u8 p2, f32 f0, f32 f1) {
+    mDoLib_setResTimgObj(tex, &mTex, 0, NULL);
+    mX = x;
+    mY = y;
+    mW = w;
+    mH = h;
+    mScrollS = f0;
+    mScrollT = f1;
+    GXColor black = { 0x00, 0x00, 0x00, 0xFF };
+    mColor = black;
+
+    mMirrorS = p1;
+    if (mMirrorS && GXGetTexObjWrapS(&mTex) == GX_MIRROR)
+        mMirrorS = 0;
+    mMirrorT = p2;
+    if (mMirrorT && GXGetTexObjWrapT(&mTex) == GX_MIRROR)
+        mMirrorT = 0;
+    mAlpha = p0;
 }
 
 /* 800812F4-800817CC       .text draw__11dDlst_2DM_cFv */
@@ -401,6 +662,46 @@ BOOL dDlst_alphaModel_c::draw(Mtx mtx) {
     return TRUE;
 }
 
+char l_frontMat[] = {
+    0x61, 0x28, 0x38, 0x00, 0x00, 0x61, 0xc0, 0x08, 0xff, 0xff, 0x61, 0xc1, 0x08, 0xff, 0x90, 0x61,
+    0x43, 0x00, 0x00, 0x41, 0x61, 0x40, 0x00, 0x00, 0x07, 0x61, 0x41, 0x00, 0x01, 0x15, 0x10, 0x00,
+    0x00, 0x10, 0x3f, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x10, 0x09, 0x00, 0x00, 0x00, 0x01,
+    0x61, 0x00, 0x00, 0x40, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
+char l_backSubMat[] = {
+    0x61, 0x41, 0x00, 0x09, 0x35, 0x10, 0x00, 0x00, 0x10, 0x3f, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00,
+    0x00, 0x10, 0x09, 0x00, 0x00, 0x00, 0x01, 0x61, 0x00, 0x00, 0x80, 0x10, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
+Vec l_simpleShadowPos[] = {
+    { 0.0f, -1.0f, 0.0f },
+    { 0.0f, 0.0f, 0.0f },
+    { 1.0f, -1.0f, -1.0f },
+    { 1.0f, 0.0f, -1.0f },
+    { -1.0f, -1.0f, -1.0f },
+    { -1.0f, 0.0f, -1.0f },
+    { -1.0f, -1.0f, 1.0f },
+    { -1.0f, 0.0f, 1.0f },
+    { 1.0f, -1.0f, 1.0f },
+    { 1.0f, 0.0f, 1.0f },
+    { -1.0f, 1.0f, -1.0f },
+    { 1.0f, 1.0f, -1.0f },
+};
+
+char l_shadowVolumeDL[] = {
+    0x98, 0x00, 0x05, 0x03, 0x09, 0x01, 0x07, 0x05, 0x98, 0x00, 0x05, 0x04, 0x06, 0x00, 0x08, 0x02,
+    0x98, 0x00, 0x04, 0x04, 0x05, 0x06, 0x07, 0x98, 0x00, 0x04, 0x02, 0x03, 0x04, 0x05, 0x98, 0x00,
+    0x04, 0x08, 0x09, 0x02, 0x03, 0x98, 0x00, 0x04, 0x06, 0x07, 0x08, 0x09, 0x98, 0x00, 0x03, 0x01,
+    0x05, 0x03, 0x98, 0x00, 0x03, 0x00, 0x02, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
 /* 80083064-800832C4       .text draw__22dDlst_alphaModelPacketFv */
 void dDlst_alphaModelPacket::draw() {
     /* Nonmatching */
@@ -430,7 +731,7 @@ void dDlst_shadowReal_c::init() {
     GXInitTexObjLOD(&mTexObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_ANISO_1);
 
     mpCallBack = new J3DCallBackPacket();
-    mpDrawBuffer = new J3DDrawBuffer();
+    mpDrawBuffer = new J3DDrawBuffer(0x20);
     mpDrawBuffer->setInvalidSort();
 }
 
@@ -552,8 +853,25 @@ void dDlst_shadowControl_c::draw(Mtx) {
 }
 
 /* 800850D4-80085170       .text setReal__21dDlst_shadowControl_cFUlScP8J3DModelP4cXyzffP12dKy_tevstr_c */
-int dDlst_shadowControl_c::setReal(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*) {
+int dDlst_shadowControl_c::setReal(u32 key, s8 size, J3DModel* model, cXyz* pos, f32 f0, f32 f1, dKy_tevstr_c* tevstr) {
     /* Nonmatching */
+    if (key != 0) {
+        dDlst_shadowReal_c * real = &mReal[0];
+        for (s32 i = 0; i < (s32)ARRAY_SIZE(mReal); i++, real++) {
+            if (real->isUse() && real->checkKey(key)) {
+                return real->set(key, size, model, pos, f0, f1, tevstr);
+            }
+        }
+    }
+
+    dDlst_shadowReal_c * real = &mReal[0];
+    for (s32 i = 0; i < (s32)ARRAY_SIZE(mReal); i++, real++) {
+        if (real->isNoUse()) {
+            return real->set(i, size, model, pos, f0, f1, tevstr);
+        }
+    }
+
+    return 0;
 }
 
 /* 80085170-8008520C       .text setReal2__21dDlst_shadowControl_cFUlScP8J3DModelP4cXyzffP12dKy_tevstr_c */
@@ -562,16 +880,30 @@ int dDlst_shadowControl_c::setReal2(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tev
 }
 
 /* 8008520C-80085274       .text addReal__21dDlst_shadowControl_cFUlP8J3DModel */
-bool dDlst_shadowControl_c::addReal(u32, J3DModel*) {
-    /* Nonmatching */
+bool dDlst_shadowControl_c::addReal(u32 key, J3DModel* model) {
+    if (key == 0)
+        return false;
+
+    dDlst_shadowReal_c * real = &mReal[0];
+    for (s32 i = 0; i < (s32)ARRAY_SIZE(mReal); i++, real++) {
+        if (real->isUse() && real->checkKey(key)) {
+            return real->add(model);
+        }
+    }
+
+    return false;
 }
 
 /* 80085274-800852D8       .text setSimple__21dDlst_shadowControl_cFP4cXyzffP4cXyzsfP9_GXTexObj */
-int dDlst_shadowControl_c::setSimple(cXyz*, f32, f32, cXyz*, s16, f32, _GXTexObj*) {
+int dDlst_shadowControl_c::setSimple(cXyz* pos, f32 f0, f32 f1, cXyz* floor_nrm, s16 rotY, f32 f2, GXTexObj* tex) {
     /* Nonmatching */
-}
+    if (floor_nrm == NULL || mSimpleNum >= ARRAY_SIZE(mSimple))
+        return false;
 
-GXTexObj dDlst_shadowControl_c::mSimpleTexObj;
+    mSimple[mSimpleNum].set(pos, f0, f1, floor_nrm, rotY, f2, tex);
+    mSimpleNum++;
+    return true;
+}
 
 /* 800852D8-80085348       .text setSimpleTex__21dDlst_shadowControl_cFPv */
 void dDlst_shadowControl_c::setSimpleTex(void* pImg) {
@@ -604,12 +936,41 @@ void dDlst_mirrorPacket::update(Mtx, u8, f32) {
 
 /* 800859DC-80085AF4       .text draw__20dDlst_alphaVolPacketFv */
 void dDlst_alphaVolPacket::draw() {
-    /* Nonmatching */
+    GXSetChanCtrl(GX_ALPHA0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+    GXSetTevColor(GX_TEVREG0, g_whiteColor);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetArray(GX_VA_POS, (void*)l_simpleShadowPos, ARRAY_SIZE(l_simpleShadowPos));
+    GXLoadPosMtxImm(mtx, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+    GXCallDisplayList(l_frontMat, 0x40);
+    GXCallDisplayList(l_shadowVolumeDL, 0x40);
+    GXCallDisplayList(l_backSubMat, 0x20);
+    GXCallDisplayList(l_shadowVolumeDL, 0x40);
+    GXSetColorUpdate(GX_TRUE);
+    GXSetAlphaUpdate(GX_FALSE);
+    J3DShape::resetVcdVatCache();
 }
 
 /* 80085AF4-80085BBC       .text draw__23dDlst_alphaInvVolPacketFv */
 void dDlst_alphaInvVolPacket::draw() {
-    /* Nonmatching */
+    static char l_backMat[0x60] = {
+    };
+
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetArray(GX_VA_POS, (void*)l_simpleShadowPos, ARRAY_SIZE(l_simpleShadowPos));
+    GXLoadPosMtxImm(mtx, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+    GXSetTevColor(GX_TEVREG0, g_whiteColor);
+    GXCallDisplayList(l_backMat, 0x60);
+    GXCallDisplayList(l_shadowVolumeDL, 0x40);
+    GXSetColorUpdate(GX_TRUE);
+    GXSetAlphaUpdate(GX_FALSE);
+    J3DShape::resetVcdVatCache();
 }
 
 /* 80085BBC-80085BFC       .text newData__13dDlst_peekZ_cFssPUl */
@@ -719,7 +1080,25 @@ bool dDlst_list_c::init() {
 
 /* 800861F4-80086368       .text __dt__12dDlst_list_cFv */
 dDlst_list_c::~dDlst_list_c() {
-    /* Nonmatching */
+    delete mpOpaListSky;
+    delete mpXluListSky;
+    delete mpOpaListP0;
+    delete mpOpaListP1;
+    delete mpXluListP1;
+    delete mpOpaListBG;
+    delete mpXluListBG;
+    delete mpOpaList;
+    delete mpXluList;
+    delete mpOpaListFilter;
+    delete mpOpaListMaskOff;
+    delete mpXluListMaskOff;
+    delete mpOpaListInvisible;
+    delete mpXluListInvisible;
+    delete mpOpaList2D;
+    if (mpAlphaModel != NULL)
+        delete mpAlphaModel;
+    if (mpSpotModel != NULL)
+        delete mpSpotModel;
 }
 
 /* 80086368-80086490       .text reset__12dDlst_list_cFv */
@@ -785,8 +1164,14 @@ void dDlst_list_c::draw(dDlst_base_c** pList, dDlst_base_c** pEnd) {
 }
 
 /* 800865C8-800866C8       .text wipeIn__12dDlst_list_cFfR8_GXColor */
-void dDlst_list_c::wipeIn(f32, _GXColor&) {
-    /* Nonmatching */
+void dDlst_list_c::wipeIn(f32 speed, GXColor& color) {
+    mWipe = true;
+    mWipeSpeed = speed;
+    mWipeColor = color;
+    mWipeRate = speed >= 0.0f ? 1.0f : 0.0f;
+    ResTIMG* texture = (ResTIMG*)JKRGetResource('TIMG', "wipe_00.bti", dComIfGp_getMenuArchive());
+    JUT_ASSERT(0x1637, texture != 0);
+    mWipeDlst.init(texture, -9.0f, -21.0f, 659.0f, 524.0f, 0, 1, 1, 2.0f, 2.436f);
 }
 
 /* 800866C8-800866F0       .text wipeIn__12dDlst_list_cFf */
@@ -796,7 +1181,21 @@ void dDlst_list_c::wipeIn(f32 time) {
 
 /* 800866F0-80086790       .text calcWipe__12dDlst_list_cFv */
 void dDlst_list_c::calcWipe() {
-    /* Nonmatching */
+    if (mWipe) {
+        mWipeRate += mWipeSpeed;
+        if (mWipeRate < 0.0f) {
+            mWipeRate = 0.0f;
+        } else {
+            if (mWipeRate > 1.0f) {
+                mWipeRate = 1.0f;
+                mWipe = false;
+            }
+        }
+
+        mWipeDlst.mScrollS = mWipeRate * 2.0f;
+        mWipeDlst.mScrollT = mWipeDlst.mScrollS * 1.218f;
+        set2DXlu(&mWipeDlst);
+    }
 }
 
 /* 80086790-8008696C       .text dDlst_texSpecmapST__FPC4cXyzPC12dKy_tevstr_cP12J3DModelDataf */

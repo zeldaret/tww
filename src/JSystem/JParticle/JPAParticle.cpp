@@ -5,15 +5,28 @@
 
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAEmitter.h"
-#include "dolphin/types.h"
+#include "JSystem/JParticle/JPASweepShape.h"
+#include "dolphin/mtx/mtxvec.h"
 
 /* 8025DEF4-8025E62C       .text initParticle__15JPABaseParticleFv */
 void JPABaseParticle::initParticle() {
-    /* Nonmatching */
+    JPABaseEmitter * emtr = JPABaseEmitter::emtrInfo.mpCurEmitter;
+    mStatus = 0x01;
+    mFieldAccel.set(1.0f, 1.0f, 1.0f);
+    mFieldDrag = 1.0f;
+    mDrag = 1.0f;
+    MTXMultVec(JPABaseEmitter::emtrInfo.mEmitterGlobalSR, JPABaseEmitter::emtrInfo.mVolumePos, mLocalPosition);
+    if ((emtr->mDataFlag & 0x08) != 0)
+        mStatus |= 0x20;
+    mGlobalPosition = JPABaseEmitter::emtrInfo.mEmitterGlobalCenter;
+    // TODO: calculate vel/pos
+    mpCallBack2 = emtr->mpParticleCallBack;
+    emtr->mFieldManager.init(this);
+    field_0xd0 = 0;
 }
 
 /* 8025E62C-8025EB28       .text initChild__15JPABaseParticleFP15JPABaseParticle */
-void JPABaseParticle::initChild(JPABaseParticle*) {
+void JPABaseParticle::initChild(JPABaseParticle* parent) {
     /* Nonmatching */
 }
 
@@ -35,10 +48,9 @@ void JPABaseParticle::incFrame() {
 
 /* 8025EB90-8025ECE8       .text calcVelocity__15JPABaseParticleFv */
 void JPABaseParticle::calcVelocity() {
-    /* Nonmatching */
     mFieldVel.zero();
     if (mStatus & 0x20)
-        mGlobalPosition = JPABaseEmitter::emtrInfo.mEmitterGlobalCenter;
+        mGlobalPosition.set(JPABaseEmitter::emtrInfo.mEmitterGlobalCenter);
     mBaseVel.x += mAccel.x;
     mBaseVel.y += mAccel.y;
     mBaseVel.z += mAccel.z;
@@ -64,20 +76,27 @@ void JPABaseParticle::calcVelocity() {
 
 /* 8025ECE8-8025ED6C       .text calcPosition__15JPABaseParticleFv */
 void JPABaseParticle::calcPosition() {
-    /* Nonmatching */
     mLocalPosition.x += mVelocity.x;
     mLocalPosition.y += mVelocity.y;
     mLocalPosition.z += mVelocity.z;
 
-    JGeometry::TVec3<f32> pos;
-    pos.x = mGlobalPosition.x + JPABaseEmitter::emtrInfo.mPublicScale.x * mLocalPosition.x;
-    pos.y = mGlobalPosition.y + JPABaseEmitter::emtrInfo.mPublicScale.y * mLocalPosition.y;
-    pos.z = mGlobalPosition.z + JPABaseEmitter::emtrInfo.mPublicScale.z * mLocalPosition.z;
-
-    mPosition = pos;
+    mPosition.set(
+        mLocalPosition.x * JPABaseEmitter::emtrInfo.mPublicScale.x + mGlobalPosition.x,
+        mLocalPosition.y * JPABaseEmitter::emtrInfo.mPublicScale.y + mGlobalPosition.y,
+        mLocalPosition.z * JPABaseEmitter::emtrInfo.mPublicScale.z + mGlobalPosition.z
+    );
 }
 
 /* 8025ED6C-8025EE44       .text checkCreateChild__15JPABaseParticleFv */
 bool JPABaseParticle::checkCreateChild() {
-    /* Nonmatching */
+    JPASweepShape * ssp = JPABaseEmitter::emtrInfo.mpCurEmitter->mpDataLinkInfo->getSweepShape();
+    bool ret = false;
+    f32 time = mLifeTime > 1.0f ? (mCurFrame / (mLifeTime - 1.0f)) : 1.0f;
+    if (time >= ssp->getTiming()) {
+        f32 frame = mCurFrame;
+        s32 step = (ssp->getStep() & 0xFF) + 1;
+        if (((s32)frame % step) == 0)
+            ret = true;
+    }
+    return ret;
 }

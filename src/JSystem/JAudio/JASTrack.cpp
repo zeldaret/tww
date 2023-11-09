@@ -513,7 +513,8 @@ bool JASystem::TTrack::stopSeq() {
 
 /* 80282908-80282944       .text stopSeqMain__Q28JASystem6TTrackFv */
 void JASystem::TTrack::stopSeqMain() {
-    /* Nonmatching */
+    updateSeq(0, 1);
+    close();
 }
 
 /* 80282944-802829DC       .text noteOffAll__Q28JASystem6TTrackFv */

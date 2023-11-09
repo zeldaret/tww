@@ -12,7 +12,7 @@ dPa_modelEmitter_c::dPa_modelEmitter_c() {
 }
 
 /* 8007A514-8007A804       .text __ct__21dPa_J3DmodelEmitter_cFP14JPABaseEmitterP12J3DModelDataR12dKy_tevstr_cP16J3DAnmTexPatternUsi */
-dPa_J3DmodelEmitter_c::dPa_J3DmodelEmitter_c(JPABaseEmitter*, J3DModelData*, dKy_tevstr_c&, J3DAnmTexPattern*, unsigned short, int) {
+dPa_J3DmodelEmitter_c::dPa_J3DmodelEmitter_c(JPABaseEmitter*, J3DModelData*, dKy_tevstr_c&, J3DAnmTexPattern*, u16, int) {
     /* Nonmatching */
 }
 
@@ -61,7 +61,7 @@ void dPa_modelControl_c::draw() {
 }
 
 /* 8007B158-8007B194       .text __ct__19dPa_followEcallBackFUcUc */
-dPa_followEcallBack::dPa_followEcallBack(unsigned char, unsigned char) {
+dPa_followEcallBack::dPa_followEcallBack(u8, u8) {
     /* Nonmatching */
 }
 
@@ -76,7 +76,7 @@ void dPa_followEcallBack::draw(JPABaseEmitter*) {
 }
 
 /* 8007B2C8-8007B360       .text setup__19dPa_followEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void dPa_followEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
+void dPa_followEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
     /* Nonmatching */
 }
 
@@ -86,22 +86,22 @@ void dPa_followEcallBack::end() {
 }
 
 /* 8007B3B0-8007B444       .text __ct__18dPa_smokeEcallBackFUc */
-dPa_smokeEcallBack::dPa_smokeEcallBack(unsigned char) {
+dPa_smokeEcallBack::dPa_smokeEcallBack(u8) {
     /* Nonmatching */
 }
 
 /* 8007B4B0-8007B558       .text __ct__18dPa_smokeEcallBackFUcUcUcUc */
-dPa_smokeEcallBack::dPa_smokeEcallBack(unsigned char, unsigned char, unsigned char, unsigned char) {
+dPa_smokeEcallBack::dPa_smokeEcallBack(u8, u8, u8, u8) {
     /* Nonmatching */
 }
 
 /* 8007B558-8007B5E8       .text __ct__18dPa_smokeEcallBackFRC8_GXColorP12dKy_tevstr_cUc */
-dPa_smokeEcallBack::dPa_smokeEcallBack(const _GXColor&, dKy_tevstr_c*, unsigned char) {
+dPa_smokeEcallBack::dPa_smokeEcallBack(const _GXColor&, dKy_tevstr_c*, u8) {
     /* Nonmatching */
 }
 
 /* 8007B5E8-8007B698       .text setup__18dPa_smokeEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void dPa_smokeEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
+void dPa_smokeEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
     /* Nonmatching */
 }
 
@@ -111,7 +111,7 @@ void initiateLighting(_GXColorS10&, _GXColor&, _GXColor&) {
 }
 
 /* 8007B804-8007BB44       .text smokeEcallBack__FP14JPABaseEmitterP12dKy_tevstr_cSc8_GXColor */
-void smokeEcallBack(JPABaseEmitter*, dKy_tevstr_c*, signed char, _GXColor) {
+void smokeEcallBack(JPABaseEmitter*, dKy_tevstr_c*, s8, _GXColor) {
     /* Nonmatching */
 }
 
@@ -167,7 +167,7 @@ void dPa_simpleEcallBack::draw(JPABaseEmitter*) {
 }
 
 /* 8007C6EC-8007C774       .text create__19dPa_simpleEcallBackFP17JPAEmitterManagerUsUc */
-void dPa_simpleEcallBack::create(JPAEmitterManager*, unsigned short, unsigned char) {
+void dPa_simpleEcallBack::create(JPAEmitterManager*, u16, u8) {
     /* Nonmatching */
 }
 
@@ -177,7 +177,7 @@ void dPa_simpleEcallBack::createEmitter(JPAEmitterManager*) {
 }
 
 /* 8007C840-8007C8C4       .text set__19dPa_simpleEcallBackFPC4cXyzUcRC8_GXColorRC8_GXColori */
-void dPa_simpleEcallBack::set(const cXyz*, unsigned char, const _GXColor&, const _GXColor&, int) {
+void dPa_simpleEcallBack::set(const cXyz*, u8, const _GXColor&, const _GXColor&, int) {
     /* Nonmatching */
 }
 
@@ -192,7 +192,7 @@ dPa_control_c::dPa_control_c() {
 }
 
 /* 8007CA28-8007CA30       .text getRM_ID__13dPa_control_cFUs */
-void dPa_control_c::getRM_ID(unsigned short) {
+void dPa_control_c::getRM_ID(u16) {
     /* Nonmatching */
 }
 
@@ -212,7 +212,7 @@ void dPa_control_c::createRoomScene(const void*) {
 }
 
 /* 8007CE50-8007CF20       .text readScene__13dPa_control_cFUcPP21mDoDvdThd_toMainRam_c */
-bool dPa_control_c::readScene(unsigned char, mDoDvdThd_toMainRam_c**) {
+bool dPa_control_c::readScene(u8, mDoDvdThd_toMainRam_c**) {
     /* Nonmatching */
 }
 
@@ -247,17 +247,17 @@ void dPa_control_c::calcMenu() {
 }
 
 /* 8007D16C-8007D1DC       .text draw__13dPa_control_cFP11JPADrawInfoUc */
-void dPa_control_c::draw(JPADrawInfo*, unsigned char) {
+void dPa_control_c::draw(JPADrawInfo*, u8) {
     /* Nonmatching */
 }
 
 /* 8007D1DC-8007D378       .text set__13dPa_control_cFUcUsPC4cXyzPC5csXyzPC4cXyzUcP18dPa_levelEcallBackScPC8_GXColorPC8_GXColorPC4cXyz */
-JPABaseEmitter* dPa_control_c::set(unsigned char, unsigned short, const cXyz*, const csXyz*, const cXyz*, unsigned char, dPa_levelEcallBack*, signed char, const _GXColor*, const _GXColor*, const cXyz*) {
+JPABaseEmitter* dPa_control_c::set(u8, u16, const cXyz*, const csXyz*, const cXyz*, u8, dPa_levelEcallBack*, s8, const _GXColor*, const _GXColor*, const cXyz*) {
     /* Nonmatching */
 }
 
 /* 8007D378-8007D414       .text setBombSmoke__13dPa_control_cFUsPC4cXyzPC5csXyzPC4cXyzUc */
-JPABaseEmitter* dPa_control_c::setBombSmoke(unsigned short, const cXyz*, const csXyz*, const cXyz*, unsigned char) {
+JPABaseEmitter* dPa_control_c::setBombSmoke(u16, const cXyz*, const csXyz*, const cXyz*, u8) {
     /* Nonmatching */
 }
 
@@ -277,27 +277,27 @@ void dPa_control_c::checkAtrCodeEffect(int) {
 }
 
 /* 8007DAA8-8007DB34       .text setNormalStripes__13dPa_control_cFUsPC4cXyzPC5csXyzPC4cXyzUcUs */
-void dPa_control_c::setNormalStripes(unsigned short, const cXyz*, const csXyz*, const cXyz*, unsigned char, unsigned short) {
+void dPa_control_c::setNormalStripes(u16, const cXyz*, const csXyz*, const cXyz*, u8, u16) {
     /* Nonmatching */
 }
 
 /* 8007DB34-8007DBC4       .text newSimple__13dPa_control_cFUsUc */
-void dPa_control_c::newSimple(unsigned short, unsigned char) {
+void dPa_control_c::newSimple(u16, u8) {
     /* Nonmatching */
 }
 
 /* 8007DBC4-8007DC30       .text setSimple__13dPa_control_cFUsPC4cXyzUcRC8_GXColorRC8_GXColori */
-void dPa_control_c::setSimple(unsigned short, const cXyz*, unsigned char, const _GXColor&, const _GXColor&, int) {
+void dPa_control_c::setSimple(u16, const cXyz*, u8, const _GXColor&, const _GXColor&, int) {
     /* Nonmatching */
 }
 
 /* 8007DC30-8007DC6C       .text getSimple__13dPa_control_cFUs */
-void dPa_control_c::getSimple(unsigned short) {
+void dPa_control_c::getSimple(u16) {
     /* Nonmatching */
 }
 
 /* 8007DC6C-8007DC94       .text setup__19dPa_rippleEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void dPa_rippleEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
+void dPa_rippleEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
     /* Nonmatching */
 }
 
@@ -317,7 +317,7 @@ void dPa_rippleEcallBack::draw(JPABaseEmitter*) {
 }
 
 /* 8007DDA8-8007DDB4       .text setup__25dPa_singleRippleEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void dPa_singleRippleEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
+void dPa_singleRippleEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
     /* Nonmatching */
 }
 
@@ -342,7 +342,7 @@ void dPa_ripplePcallBack::draw(JPABaseEmitter*, JPABaseParticle*) {
 }
 
 /* 8007E254-8007E288       .text setup__17dPa_waveEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void dPa_waveEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
+void dPa_waveEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
     /* Nonmatching */
 }
 
@@ -362,7 +362,7 @@ void dPa_waveEcallBack::draw(JPABaseEmitter*) {
 }
 
 /* 8007E804-8007E81C       .text setup__19dPa_splashEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void dPa_splashEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
+void dPa_splashEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
     /* Nonmatching */
 }
 
@@ -377,7 +377,7 @@ void dPa_splashEcallBack::execute(JPABaseEmitter*) {
 }
 
 /* 8007E9B8-8007E9D4       .text setup__22dPa_cutTurnEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void dPa_cutTurnEcallBack_c::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
+void dPa_cutTurnEcallBack_c::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
     /* Nonmatching */
 }
 
@@ -412,7 +412,7 @@ void dPa_trackEcallBack::getMaxWaterY(JGeometry::TVec3<float>*) {
 }
 
 /* 8007F1A8-8007F1C0       .text setup__18dPa_trackEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void dPa_trackEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
+void dPa_trackEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
     /* Nonmatching */
 }
 
@@ -432,26 +432,22 @@ void dPa_trackEcallBack::draw(JPABaseEmitter*) {
 }
 
 /* 8007F704-8007F708       .text setup__22dPa_bombSmokeEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void dPa_bombSmokeEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
-    /* Nonmatching */
+void dPa_bombSmokeEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
 }
 
 /* 8007F7D0-8007F7D4       .text setup__20dPa_stripesEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void dPa_stripesEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
-    /* Nonmatching */
+void dPa_stripesEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
 }
 
 /* 8007FAE8-8007FAEC       .text setup__22dPa_selectTexEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void dPa_selectTexEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
-    /* Nonmatching */
+void dPa_selectTexEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
 }
 
 /* 8007FF78-8007FFA8       .text draw__21dPa_setColorEcallBackFP14JPABaseEmitter */
 void dPa_setColorEcallBack::draw(JPABaseEmitter*) {
-    /* Nonmatching */
+    GXSetTevColor(GX_TEVREG1, mColor);
 }
 
 /* 8007FFA8-8007FFAC       .text setup__21dPa_setColorEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void dPa_setColorEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
-    /* Nonmatching */
+void dPa_setColorEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
 }
