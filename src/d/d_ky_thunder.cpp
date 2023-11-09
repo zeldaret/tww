@@ -8,6 +8,7 @@
 #include "f_op/f_op_camera.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_rain.h"
+#include "d/d_procname.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "SSystem/SComponent/c_phase.h"
@@ -194,3 +195,25 @@ s32 dThunder_c::create() {
 
     return cPhs_COMPLEATE_e;
 }
+
+kankyo_method_class l_dThunder_Method = {
+    (process_method_func)dThunder_Create,
+    (process_method_func)dThunder_Delete,
+    (process_method_func)dThunder_Execute,
+    (process_method_func)dThunder_IsDelete,
+    (process_method_func)dThunder_Draw,
+};
+
+kankyo_process_profile_definition g_profile_THUNDER = {
+    fpcLy_CURRENT_e,
+    7,
+    fpcPi_CURRENT_e,
+    PROC_KY_THUNDER,
+    &g_fpcLf_Method.mBase,
+    sizeof(dThunder_c),
+    0,
+    0,
+    &g_fopKy_Method,
+    0x006,
+    &l_dThunder_Method,
+};

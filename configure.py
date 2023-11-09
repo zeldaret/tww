@@ -452,7 +452,7 @@ config.libs = [
             Object(Matching,    "d/d_kyeff2.cpp"),
             Object(NonMatching, "d/d_ky_thunder.cpp"),
             Object(Matching,    "d/d_letter.cpp"),
-            Object(NonMatching, "d/d_level_se.cpp"),
+            Object(Matching,    "d/d_level_se.cpp"),
             Object(NonMatching, "d/d_menu_cloth.cpp"),
             Object(NonMatching, "d/d_menu_collect.cpp"),
             Object(NonMatching, "d/d_menu_dmap.cpp"),
