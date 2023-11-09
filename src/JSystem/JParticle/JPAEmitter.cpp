@@ -144,10 +144,10 @@ void JPABaseEmitter::createChildren(JPABaseParticle* ptcl) {
 
 /* 8025D670-8025D6E0       .text createParticle__14JPABaseEmitterFv */
 JPABaseParticle * JPABaseEmitter::createParticle() {
-    /* Nonmatching - PTMF */
     JPABaseParticle * ptcl = getPtclFromVacList();
     if (ptcl != NULL) {
         mActiveParticles.prepend(&ptcl->mLink);
+        (this->*mVolumeFunc)();
         ptcl->initParticle();
         mDraw.initParticle(ptcl);
     }

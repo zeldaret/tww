@@ -62,6 +62,4 @@ public:
     /* 0x54C */ ProcFunc mCurrProcFunc;
 };
 
-// dBgS_RopeLinChk
-
 #endif /* D_A_HOOKSHOT_H */

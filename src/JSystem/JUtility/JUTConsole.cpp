@@ -105,7 +105,6 @@ void JUTConsole::clear() {
 
 /* 802CA6D4-802CAC1C       .text doDraw__10JUTConsoleCFQ210JUTConsole12EConsoleType */
 void JUTConsole::doDraw(JUTConsole::EConsoleType consoleType) const {
-    /* Nonmatching */
     f32 font_yOffset;
 
     if (mVisible && (mFont != NULL || consoleType == CONSOLE_TYPE_2)) {
@@ -167,7 +166,7 @@ void JUTConsole::doDraw(JUTConsole::EConsoleType consoleType) const {
                         JUTDirectPrint::getManager()->drawString(mPositionX, ((y * font_yOffset) + mPositionY), linePtr);
                     }
 
-                    curLine = ((curLine + 1) <= mMaxLines) ? 0 : (curLine + 1);
+                    curLine = nextIndex(curLine);
                     y++;
                 } else {
                     break;
@@ -258,7 +257,6 @@ void JUTConsole_print_f_va_(JUTConsole* console, const char* fmt, va_list args) 
 
 /* 802CB03C-802CB19C       .text dumpToTerminal__10JUTConsoleFUi */
 void JUTConsole::dumpToTerminal(unsigned int param_0) {
-    /* Nonmatching */
     if (param_0 == 0) {
         return;
     }

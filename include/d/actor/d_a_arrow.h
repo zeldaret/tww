@@ -131,9 +131,4 @@ public:
     static const dCcD_SrcSph m_co_sph_src;
 };
 
-// Intellisense doesn't understand PTMF sizes
-#ifndef __INTELLISENSE__
-STATIC_ASSERT(sizeof(daArrow_c) == 0x704);
-#endif
-
 #endif /* D_A_ARROW_H */

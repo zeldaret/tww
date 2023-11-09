@@ -4,6 +4,9 @@
 #include "JSystem/J3DGraphBase/J3DPacket.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/JUtility/JUTTexture.h"
+#include "SSystem/SComponent/c_xyz.h"
+
+class dKy_tevstr_c;
 
 class dCloth_packet_c : public J3DPacket {
     /* 0x10 */ s32 mFlyGridSize;
