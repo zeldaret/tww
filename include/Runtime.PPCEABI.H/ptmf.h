@@ -10,4 +10,9 @@ typedef struct __ptmf {
     } f_data;
 } __ptmf;
 
+const __ptmf __ptmf_null;
+long __ptmf_test(__ptmf* ptmf);
+void __ptmf_cmpr(register __ptmf* this, register __ptmf* other);
+void __ptmf_scall(...);
+
 #endif /* PTMF_H */
