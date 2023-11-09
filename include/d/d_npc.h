@@ -34,24 +34,27 @@ public:
 };
 
 class dNpc_JntCtrl_c {
-    /* 0x00 */ s16 mHeadUpDownRot;
-    /* 0x02 */ s16 mHeadLeftRightRot;
-    /* 0x04 */ s16 mBackboneUpDownRot;
-    /* 0x06 */ s16 mBackboneLeftRightRot;
+    /* 0x0E */ s16 mAngles[2][2];
+    // /* 0x00 */ s16 mHeadUpDownRot;
+    // /* 0x02 */ s16 mHeadLeftRightRot;
+    // /* 0x04 */ s16 mBackboneUpDownRot;
+    // /* 0x06 */ s16 mBackboneLeftRightRot;
     /* 0x08 */ u8 mHeadJntNum;
     /* 0x09 */ u8 mBackboneJntNum;
     /* 0x0A */ bool field_0x0A;
     /* 0x0B */ u8 field_0x0B;
     /* 0x0C */ u8 field_0x0C;
     /* 0x0D */ u8 field_0x0D;
-    /* 0x0E */ s16 field_0x0E;
-    /* 0x10 */ s16 mMinHeadRot;
-    /* 0x12 */ s16 field_0x12;
-    /* 0x14 */ s16 mMinSpineRot;
-    /* 0x16 */ s16 field_0x16;
-    /* 0x18 */ s16 mMaxHeadRot;
-    /* 0x1A */ s16 field_0x1A;
-    /* 0x1C */ s16 mMaxSpineRot;
+    // /* 0x0E */ s16 field_0x0E;
+    // /* 0x10 */ s16 mMinHeadRot;
+    // /* 0x12 */ s16 field_0x12;
+    // /* 0x14 */ s16 mMinSpineRot;
+    // /* 0x16 */ s16 field_0x16;
+    // /* 0x18 */ s16 mMaxHeadRot;
+    // /* 0x1A */ s16 field_0x1A;
+    // /* 0x1C */ s16 mMaxSpineRot;
+    /* 0x0E */ s16 mMinAngles[2][2];
+    /* 0x16 */ s16 mMaxAngles[2][2];
     /* 0x1E */ s16 field_0x1E;
     /* 0x20 */ s16 field_0x20;
     /* 0x22 */ s16 field_0x22;
@@ -139,7 +142,7 @@ public:
     bool setInf(u8 pathIdx, s8 roomNo, u8 forwards);
     dPath* nextPath(s8 roomNo);
     cXyz getPoint(u8 pointIdx);
-    void chkPointPass(cXyz, bool);
+    bool chkPointPass(cXyz, bool);
     bool incIdx();
     bool incIdxLoop();
     bool incIdxAuto();

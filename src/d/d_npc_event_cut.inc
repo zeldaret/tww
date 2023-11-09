@@ -203,9 +203,8 @@ void dNpc_EventCut_c::cutTurnToActorProc() {
         mPos = dNpc_playerEyePos(0.0f) + mOffsetPos;
     }
     else {
-        s16 addAngle = mAddAngle;
-        if(addAngle && pDelDistance) {
-            u16 angle = mpTargetActor->shape_angle.y + addAngle;
+        if(mAddAngle && pDelDistance) {
+            u16 angle = mpTargetActor->shape_angle.y + mAddAngle;
             mPos = mpTargetActor->current.pos;
             mPos.x -= pDelDistance * cM_ssin(angle);
             mPos.z -= pDelDistance * cM_scos(angle);
@@ -218,8 +217,9 @@ void dNpc_EventCut_c::cutTurnToActorProc() {
     mbAttention = 1;
 
     s16 tAngle = cLib_targetAngleY(&mpActor->current.pos, &mPos);
-    u32 temp = abs(tAngle - fopAcM_GetAngle_p(mpActor).y);
-    if(fabsf2(field_0x44) == temp && temp < 5376.0f) {
+    int temp2 = tAngle - mpActor->current.angle.y;
+    f32 temp = fabsf(temp2);
+    if(field_0x44 == temp && fabsf(temp2) < 5376.0f) {
         cLib_calcTimer(&mTimer);
     }
 
@@ -228,7 +228,7 @@ void dNpc_EventCut_c::cutTurnToActorProc() {
         dComIfGp_evmng_cutEnd(mEvtStaffId);
     }
     
-    field_0x44 = fabsf2(tAngle - mpActor->current.angle.y);
+    field_0x44 = fabsf(tAngle - mpActor->current.angle.y);
 }
 
 void dNpc_EventCut_c::cutMoveToActorStart() {
@@ -454,9 +454,9 @@ void dNpc_EventCut_c::cutTurnToPosProc() {
         }
     }
 
-    //not sure what this section is doing
-    u32 temp = abs(tAngle - fopAcM_GetAngle_p(mpActor).y);
-    if(fabsf2(field_0x44) == temp && temp < 5376.0f) {
+    int temp2 = tAngle - mpActor->current.angle.y;
+    f32 temp = fabsf(temp2);
+    if(field_0x44 == temp && fabsf(temp2) < 5376.0f) {
         cLib_calcTimer(&mTimer);
     }
 
@@ -465,7 +465,7 @@ void dNpc_EventCut_c::cutTurnToPosProc() {
         dComIfGp_evmng_cutEnd(mEvtStaffId);
     }
     
-    field_0x44 = fabsf2(tAngle - mpActor->current.angle.y);
+    field_0x44 = fabsf(tAngle - mpActor->current.angle.y);
 }
 
 void dNpc_EventCut_c::cutMoveToPosStart() {

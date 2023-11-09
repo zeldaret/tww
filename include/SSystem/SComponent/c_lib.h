@@ -73,17 +73,12 @@ inline T cLib_minMaxLimit(T val, T min, T max) {
 
 template <typename T>
 inline T cLib_maxLimit(T val, T max) {
-    T ret;
-    T var_r30;
+    return (T)((T)val > (T)max ? (T)max : (T)val);
+}
 
-    if (val > max) {
-        var_r30 = max;
-    } else {
-        var_r30 = val;
-    }
-
-    ret = var_r30;
-    return (T)ret;
+template <typename T>
+inline T cLib_minLimit(T val, T min) {
+    return (T)((T)val < (T)min ? (T)min : (T)val);
 }
 
 template <typename T>

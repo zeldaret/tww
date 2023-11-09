@@ -16,14 +16,12 @@
 static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
 static Vec dummy_2080 = {1.0f, 1.0f, 1.0f};
 
-#include "d/d_npc_event_cut.inc"
-
 bool dNpc_JntCtrl_c::angCalcS(s16* out, s16 targetY, s16 speed, s16 maxVel) {
-    s16 origY = *out;
-    s16 diff = origY - targetY;
+    s16 diff = *out - targetY;
+    int origDiff = diff;
     cLib_addCalcAngleS(&diff, 0, speed, maxVel, 0x60);
     if(abs(diff) > speed) {
-        *out += (diff - (origY - targetY));
+        *out += diff - origDiff;
     }
     else {
         *out = targetY;
@@ -41,10 +39,25 @@ void dNpc_JntCtrl_c::limitter(s16* targetDiff, s16 maxDiff, s16 minDiff) {
     }
 }
 
+/* 8021A884-8021A97C       .text follow__14dNpc_JntCtrl_cFPsssi */
 bool dNpc_JntCtrl_c::follow(s16* outY, s16 targetY, s16 maxVel, int param_4) {
+    s16 origY = *outY;
     angCalcS(outY, targetY, 4, maxVel);
-
-    return *outY != targetY;
+    s16 deltaY = *outY - origY;
+    
+    s16 sVar6 = 0;
+    s16 sVar5 = 0;
+    s16 sVar1 = targetY - *outY;
+    for (int i = 1; i >= 0; i--) {
+        sVar5 += mAngles[i][param_4];
+        if ((deltaY > 0 && sVar5 > sVar1) || (deltaY < 0 && sVar5 < sVar1)) {
+            mAngles[i][param_4] = sVar1 - sVar6;
+            limitter(&mAngles[i][param_4], mMaxAngles[i][param_4], mMinAngles[i][param_4]);
+        }
+        sVar6 += mAngles[i][param_4];
+    }
+    
+    return targetY != *outY;
 }
 
 /* 8021A97C-8021AABC       .text move__14dNpc_JntCtrl_cFsi */
@@ -58,14 +71,14 @@ void dNpc_JntCtrl_c::lookAtTarget(short*, cXyz*, cXyz, short, short, bool) {
 }
 
 void dNpc_JntCtrl_c::setParam(s16 param_1, s16 maxSpineRot, s16 param_3, s16 minSpineRot, s16 param_5, s16 maxHeadRot, s16 param_7, s16 minHeadRot, s16 param_9) {
-    field_0x1A = param_1;
-    mMaxSpineRot = maxSpineRot;
-    field_0x12 = param_3;
-    mMinSpineRot = minSpineRot;
-    field_0x16 = param_5;
-    mMaxHeadRot = maxHeadRot;
-    field_0x0E = param_7;
-    mMinHeadRot = minHeadRot;
+    mMaxAngles[1][0] = param_1;
+    mMaxAngles[1][1] = maxSpineRot;
+    mMinAngles[1][0] = param_3;
+    mMinAngles[1][1] = minSpineRot;
+    mMaxAngles[0][0] = param_5;
+    mMaxAngles[0][1] = maxHeadRot;
+    mMinAngles[0][0] = param_7;
+    mMinAngles[0][1] = minHeadRot;
     field_0x22 = param_9;
     field_0x24 = param_9;
     field_0x1E = param_9;
@@ -115,8 +128,36 @@ cXyz dNpc_PathRun_c::getPoint(u8 pointIdx) {
 }
 
 /* 8021ADD0-8021AFA8       .text chkPointPass__14dNpc_PathRun_cF4cXyzb */
-void dNpc_PathRun_c::chkPointPass(cXyz, bool) {
-    /* Nonmatching */
+bool dNpc_PathRun_c::chkPointPass(cXyz currPos, bool goingForwards) {
+    bool passed = false;
+    if (mPath) {
+        cXyz target;
+        target.x = mPath->mpPnt[mCurrPointIndex].mPos.x;
+        target.z = mPath->mpPnt[mCurrPointIndex].mPos.z;
+        f32 deltaX;
+        f32 deltaZ;
+        if (mCurrPointIndex == 0) {
+            deltaX = mPath->mpPnt[1].mPos.x - mPath->mpPnt[0].mPos.x;
+            deltaZ = mPath->mpPnt[1].mPos.z - mPath->mpPnt[0].mPos.z;
+        } else if (mCurrPointIndex == mPath->m_num - 1) {
+            deltaX = mPath->mpPnt[mPath->m_num - 1].mPos.x - mPath->mpPnt[mPath->m_num - 2].mPos.x;
+            deltaZ = mPath->mpPnt[mPath->m_num - 1].mPos.z - mPath->mpPnt[mPath->m_num - 2].mPos.z;
+        } else {
+            deltaX = mPath->mpPnt[mCurrPointIndex + 1].mPos.x - mPath->mpPnt[mCurrPointIndex - 1].mPos.x;
+            deltaZ = mPath->mpPnt[mCurrPointIndex + 1].mPos.z - mPath->mpPnt[mCurrPointIndex - 1].mPos.z;
+        }
+        
+        f32 f29 = cM_ssin(cM_atan2s(deltaX, deltaZ)) * (f32)0x7FFF;
+        f32 f2 = cM_scos(cM_atan2s(deltaX, deltaZ)) * (f32)0x7FFF;
+        f32 f3 = -(f29 * target.x + f2 * target.z);
+        
+        if (goingForwards) {
+            passed = f29 * currPos.x + f2 * currPos.z + f3 > 0.0f;
+        } else {
+            passed = f29 * currPos.x + f2 * currPos.z + f3 <= 0.0f;
+        }
+    }
+    return passed;
 }
 
 bool dNpc_PathRun_c::incIdx() {
@@ -398,6 +439,8 @@ bool dNpc_PathRun_c::chkInside(cXyz* param_1) {
     return false;
 }
 
+#include "d/d_npc_event_cut.inc"
+
 void dNpc_EventCut_c::setActorInfo(char* staffName, fopAc_ac_c* pActor) {
     mpEvtStaffName = staffName;
     mpActor = pActor;
@@ -623,15 +666,12 @@ void dNpc_HeadAnm_c::move() {
     }
 }
 
+/* 8021C5D8-8021C620       .text chkLim__14dNpc_JntCtrl_cFsii */
 s32 dNpc_JntCtrl_c::chkLim(s16 param_1, int param_2, int param_3) {
-    //if(maxRotations[param_2][param_3] > param_1) {
-    //    param_1 = maxRotations[param_2][param_3];
-    //}
-    //if(param_1 < minRotations[param_2][param_3]) {
-    //    param_1 = minRotations[param_2][param_3];
-    //}
+    param_1 = cLib_maxLimit(param_1, mMaxAngles[param_2][param_3]);
+    param_1 = cLib_minLimit(param_1, mMinAngles[param_2][param_3]);
 
-    //return param_1;
+    return param_1;
 }
 
 void dNpc_JntCtrl_c::turn_fromBackbone2Head(s16 param_1, s16* param_2, s16* param_3, bool param_4) {
