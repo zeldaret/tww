@@ -284,7 +284,7 @@ public:
     /* 0x2A4 */ f32 m2A4;
     /* 0x2A8 */ u8 mCurrParryOpeningType;
     /* 0x2A9 */ u8 field_2A9[0x2AC - 0x2A9];
-};
+};  // Size: 0x2AC
 
 STATIC_ASSERT(sizeof(fopEn_enemy_c) == 0x2AC);
 

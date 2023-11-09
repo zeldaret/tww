@@ -67,7 +67,7 @@ public:
 class JntHit_HIO_c {
 public:
     JntHit_HIO_c();
-    virtual ~JntHit_HIO_c();
+    virtual ~JntHit_HIO_c() {}
 
 public:
     /* 0x04 */ s8 mChildID;
