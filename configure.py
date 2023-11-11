@@ -567,7 +567,7 @@ config.libs = [
             Object(Matching,    "JSystem/JParticle/JPAFieldBlock.cpp"),
             Object(Matching,    "JSystem/JParticle/JPAKeyBlock.cpp"),
             Object(Matching,    "JSystem/JParticle/JPATexture.cpp"),
-            Object(NonMatching, "JSystem/JParticle/JPAResourceManager.cpp"),
+            Object(Matching,    "JSystem/JParticle/JPAResourceManager.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPAEmitterLoader.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPAMath.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPAField.cpp"),

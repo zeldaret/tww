@@ -38,6 +38,13 @@ JPAEmitterResource::JPAEmitterResource(u32 num, JKRHeap* heap) {
     JUT_ASSERT(93, pEmtrResArray);
 }
 
+static void dummy2() {
+    OSReport("(eArraySize != 0) && (tArraySize != 0)");
+    OSReport("pEmtrResMgr && pTexResMgr");
+    OSReport("jpa file %s was not found\n");
+    OSReport("binData");
+}
+
 /* 80258E70-80258F18       .text registration__18JPAEmitterResourceFP14JPAEmitterDataUs */
 void JPAEmitterResource::registration(JPAEmitterData* res, u16 userIndex) {
     JUT_ASSERT(107, registNum < maxNum);
@@ -51,9 +58,8 @@ void JPAEmitterResource::registration(JPAEmitterData* res, u16 userIndex) {
 /* 80258F18-80258F5C       .text getByUserIndex__18JPAEmitterResourceFUs */
 JPAEmitterData * JPAEmitterResource::getByUserIndex(u16 userIndex) {
     for (u32 i = 0; i < registNum; i++) {
-        JPAEmitterData * data = pEmtrResArray[i];
-        if (data->userIndex == userIndex)
-            return data;
+        if (pEmtrResArray[i]->getUserIndex() == userIndex)
+            return pEmtrResArray[i];
     }
     return NULL;
 }
@@ -61,8 +67,7 @@ JPAEmitterData * JPAEmitterResource::getByUserIndex(u16 userIndex) {
 /* 80258F5C-80258FA0       .text checkUserIndexDuplication__18JPAEmitterResourceFUs */
 BOOL JPAEmitterResource::checkUserIndexDuplication(u16 userIndex) {
     for (u32 i = 0; i < registNum; i++) {
-        JPAEmitterData * data = pEmtrResArray[i];
-        if (data->userIndex == userIndex)
+        if (pEmtrResArray[i]->getUserIndex() == userIndex)
             return TRUE;
     }
     return FALSE;
