@@ -1675,8 +1675,20 @@ inline dDemo_manager_c* dComIfGp_demo_get() {
     return g_dComIfG_gameInfo.play.getDemo();
 }
 
+inline void dComIfGp_demo_create(const u8* demo_data, cXyz* offsetPos, f32 offsetAngleY) {
+    g_dComIfG_gameInfo.play.getDemo()->create(demo_data, offsetPos, offsetAngleY);
+}
+
+inline void dComIfGp_demo_remove() {
+    g_dComIfG_gameInfo.play.getDemo()->remove();
+}
+
 inline void dComIfGp_demo_update() {
     g_dComIfG_gameInfo.play.getDemo()->update();
+}
+
+inline s32 dComIfGp_demo_mode() {
+    return g_dComIfG_gameInfo.play.getDemo()->getMode();
 }
 
 inline dDemo_actor_c* dComIfGp_demo_getActor(u8 id) {

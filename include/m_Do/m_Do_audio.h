@@ -50,8 +50,28 @@ inline void mDoAud_subBgmStart(u32 param_0) {
     mDoAud_zelAudio_c::getInterface()->subBgmStart(param_0);
 }
 
+inline void mDoAud_bgmStreamPrepare(u32 id) {
+    mDoAud_zelAudio_c::getInterface()->bgmStreamPrepare(id);
+}
+
+inline void mDoAud_bgmStreamPlay() {
+    mDoAud_zelAudio_c::getInterface()->bgmStreamPlay();
+}
+
 inline void mDoAud_bgmStop(u32 param_0) {
     mDoAud_zelAudio_c::getInterface()->bgmStop(param_0, 0);
+}
+
+inline void mDoAud_prepareLandingDemo(u32 idx) {
+    mDoAud_zelAudio_c::getInterface()->prepareLandingDemo(idx);
+}
+
+inline void mDoAud_startLandingDemo() {
+    mDoAud_zelAudio_c::getInterface()->startLandingDemo();
+}
+
+inline void mDoAud_endLandingDemo() {
+    mDoAud_zelAudio_c::getInterface()->endLandingDemo();
 }
 
 inline void mDoAud_sceneBgmStart() {

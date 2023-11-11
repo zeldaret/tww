@@ -65,11 +65,13 @@ public:
     BOOL ChkPresentEnd();
     void CancelPresent();
     void checkStartDemo();
+    dEvDtFlag_c& getFlags() { return mFlag; }
 
     int setStartDemo(int eventInfoIdx) { return mException.setStartDemo(eventInfoIdx); }
+    void setCameraPlay(u32 v) { mCameraPlay = v; }
 
     /* 0x000 */ dEvDtBase_c mList;
-    /* 0x020 */ int mCameraPlay;
+    /* 0x020 */ u32 mCameraPlay;
     /* 0x024 */ dEvent_exception_c mException;
     /* 0x030 */ cXyz mGoal;
     /* 0x03C */ dEvDtFlag_c mFlag;

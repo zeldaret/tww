@@ -429,6 +429,7 @@ public:
     view_class* getView() { return (view_class*)mpCamera; }
 
     static void offWipe() { mWipe = false; }
+    static f32 getWipeRate() { return mWipeRate; }
 
     void newPeekZdata(s16 x, s16 y, u32 * data) { mPeekZ.newData(x, y, data); }
 

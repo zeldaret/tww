@@ -81,6 +81,8 @@ public:
     void update();
     
     int getFrame() { return mFrame; }
+    u32 getFrameNoMsg() { return mFrameNoMsg; }
+    s32 getMode() { return mMode; }
 
     /* 0x00 */ dDemo_system_c* mpSystem;
     /* 0x04 */ TControl* mpControl;
@@ -93,8 +95,8 @@ public:
     /* 0x20 */ dDemo_object_c mDemoObj;
     /* 0xD0 */ void* field_0xd0;
     /* 0xD4 */ int mFrame;
-    /* 0xD8 */ int field_0xd8;
-    /* 0xDC */ int mState;
+    /* 0xD8 */ int mFrameNoMsg;
+    /* 0xDC */ int mMode;
 };
 
 class mDoExt_McaMorf;
