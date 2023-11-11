@@ -18,7 +18,6 @@ public:
     inline bool _execute();
     inline bool _draw();
     inline bool _delete();
-    inline bool create_heap();
     BOOL CreateHeap();
     void CreateInit();
     void set_mtx();

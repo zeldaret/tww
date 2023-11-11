@@ -108,7 +108,7 @@ namespace daObjPaper {
 
         void mode_talk0_init();
         void mode_talk0();
-        
+
         void mode_talk1_init();
         void mode_talk1();
 
@@ -156,7 +156,7 @@ namespace daObjPaper {
     /* 0000009C-00000170       .text create_heap__Q210daObjPaper5Act_cFv */
     bool Act_c::create_heap() {
         J3DModelData* mdl_data;
-        bool val = false;
+        bool ret = false;
 
         mdl_data = (J3DModelData*)dComIfG_getObjectRes(attr(mType).mResName, attr(mType).mModelId);
 
@@ -164,15 +164,15 @@ namespace daObjPaper {
 
         mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000022);
         if (mpModel)
-            val = true;
+            ret = true;
 
-        return val;
+        return ret;
     }
 
     /* 00000170-000004E0       .text _create__Q210daObjPaper5Act_cFv */
     s32 Act_c::_create() {
         fopAcM_SetupActor(this, Act_c);
-        
+
         mType = prm_get_type();
 
         s32 result = dComIfG_resLoad(&mPhs, attr(mType).mResName);
@@ -195,7 +195,7 @@ namespace daObjPaper {
                 if (attr(mType).mColCylinderRadius != 0) {
                     mbHasCc = true;
 
-                    mColStatus.Init(0xFF, 0xFF, this);    
+                    mColStatus.Init(0xFF, 0xFF, this);
                     mCylinderCol.Set(M_cyl_src);
 
                     mCylinderCol.SetStts(&mColStatus);
@@ -207,7 +207,7 @@ namespace daObjPaper {
                 }
 
                 fopAcM_setCullSizeSphere(this, 0.0f, attr(mType).mCullSphereYOffset, 0.0f, attr(mType).mCullSphereRadius);
-                mCullMtx = mpModel->mBaseTransformMtx;
+                fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
 
                 init_mtx();
                 mode_wait_init();
@@ -293,7 +293,7 @@ namespace daObjPaper {
     void daObjPaper::Act_c::set_mtx() {
         mDoMtx_stack_c::transS(getPosition());
         mDoMtx_stack_c::ZXYrotM(shape_angle);
-        
+
         mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     }
 
@@ -323,10 +323,10 @@ namespace daObjPaper {
     /* 00000A38-00000B58       .text _execute__Q210daObjPaper5Act_cFv */
     bool daObjPaper::Act_c::_execute() {
         static const daObjPaper_mode_t mode_proc[] = {
-            Act_c::mode_wait,
-            Act_c::mode_talk0,
-            Act_c::mode_talk1,
-            Act_c::mode_talk2,
+            &Act_c::mode_wait,
+            &Act_c::mode_talk0,
+            &Act_c::mode_talk1,
+            &Act_c::mode_talk2,
         };
 
         if (mbHasCc) {

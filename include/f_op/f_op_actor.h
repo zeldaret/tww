@@ -15,6 +15,8 @@ struct actor_method_class {
 };
 
 enum fopAc_Status_e {
+    fopAcStts_UNK8_e        = 0x00000008,
+    fopAcStts_UNK10_e       = 0x00000010,
     fopAcStts_SHOWMAP_e     = 0x00000020,
     fopAcStts_NOCULLEXEC_e  = 0x00000080,
     fopAcStts_CULL_e        = 0x00000100,

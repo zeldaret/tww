@@ -1269,7 +1269,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_kanat"),
     ActorRel(NonMatching, "d_a_obj_leaves"),
     ActorRel(NonMatching, "d_a_obj_lpalm"),
-    ActorRel(NonMatching, "d_a_obj_monument"),
+    ActorRel(Matching,    "d_a_obj_monument"),
     ActorRel(NonMatching, "d_a_obj_movebox"),
     ActorRel(NonMatching, "d_a_obj_mshokki"),
     ActorRel(NonMatching, "d_a_obj_ohatch"),

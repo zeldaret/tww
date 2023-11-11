@@ -3,76 +3,211 @@
 // Translation Unit: d_a_obj_monument.cpp
 //
 
-#include "d_a_obj_monument.h"
-#include "dolphin/types.h"
+#include "f_op/f_op_actor_mng.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "d/d_a_obj.h"
+#include "d/d_bg_w.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_procname.h"
+#include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_mtx.h"
+
+namespace daObjMonument {
+    namespace {
+        enum Type_e {
+            ONE_e,
+            TWO_e,
+        };
+
+        struct L_attr_entry {
+            /* 0x00 */ s16 mModelId;
+            /* 0x01 */ s16 mBgWId;
+        };
+
+        static L_attr_entry L_attr[2] = {
+            { 0x04, 0x08 },
+            { 0x05, 0x09 },
+        };
+
+        inline const L_attr_entry & attr(Type_e type) { return L_attr[type]; }
+    }
+
+    class Act_c : fopAc_ac_c {
+    public:
+        s32 _create();
+        bool _execute();
+        bool _draw();
+        bool _delete();
+        bool create_heap();
+        void init_mtx();
+        void set_mtx();
+        static BOOL solidHeapCB(fopAc_ac_c *i_this);
+        static const char M_arcname[6];
+
+    public:
+        /* 0x290 */ request_of_phase_process_class mPhs;
+        /* 0x298 */ J3DModel * mpModel;
+        /* 0x29C */ Type_e mType;
+        /* 0x2A0 */ dBgW * mpBgW;
+        /* 0x2A4 */ Mtx mtx;
+
+        enum Prm_e {
+            PRM_TYPE_W = 0x01,
+            PRM_TYPE_S = 0x00,
+
+            PRM_SWSAVE_W = 0x08,
+            PRM_SWSAVE_S = 0x08,
+        };
+
+        Type_e prm_get_type() const { return (Type_e)daObj::PrmAbstract<Prm_e>(this, PRM_TYPE_W, PRM_TYPE_S); }
+        u32 prm_get_swSave() const { return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
+    };
+}
+
+const char daObjMonument::Act_c::M_arcname[6] = "Esekh";
 
 /* 00000078-0000009C       .text solidHeapCB__Q213daObjMonument5Act_cFP10fopAc_ac_c */
-void daObjMonument::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daObjMonument::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((Act_c*)i_this)->create_heap();
 }
 
 /* 0000009C-00000238       .text create_heap__Q213daObjMonument5Act_cFv */
-void daObjMonument::Act_c::create_heap() {
-    /* Nonmatching */
+bool daObjMonument::Act_c::create_heap() {
+    bool ret = true;
+
+    void* modelData = dComIfG_getObjectRes(M_arcname, attr(mType).mModelId);
+    JUT_ASSERT(0x81, modelData != 0);
+
+    mpModel = mDoExt_J3DModel__create((J3DModelData*)modelData, 0x00, 0x11020203);
+    if (!mpModel)
+        return false;
+
+    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    MTXCopy(mDoMtx_stack_c::get(), mtx);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    mpBgW = new dBgW();
+    if (mpBgW && mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(M_arcname, attr(mType).mBgWId), cBgW::MOVE_BG_e, &mtx))
+        return false;
+
+    return true;
 }
 
 /* 00000238-00000318       .text _create__Q213daObjMonument5Act_cFv */
-void daObjMonument::Act_c::_create() {
-    /* Nonmatching */
+s32 daObjMonument::Act_c::_create() {
+    fopAcM_SetupActor(this, Act_c);
+
+    s32 ret = dComIfG_resLoad(&mPhs, M_arcname);
+
+    mpBgW = NULL;
+    if (ret == cPhs_COMPLEATE_e) {
+        mType = prm_get_type();
+
+        if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, 0xd20)) {
+            fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+            dComIfG_Bgsp()->Regist(mpBgW, this);
+            init_mtx();
+        } else {
+            ret = cPhs_ERROR_e;
+        }
+    }
+
+    return ret;
 }
 
 /* 00000318-00000398       .text _delete__Q213daObjMonument5Act_cFv */
-void daObjMonument::Act_c::_delete() {
-    /* Nonmatching */
+bool daObjMonument::Act_c::_delete() {
+    if (mpBgW != NULL && mpBgW->ChkUsed())
+        dComIfG_Bgsp()->Release(mpBgW);
+    dComIfG_resDelete(&mPhs, M_arcname);
+    return true;
 }
 
 /* 00000398-00000404       .text set_mtx__Q213daObjMonument5Act_cFv */
 void daObjMonument::Act_c::set_mtx() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000404-00000440       .text init_mtx__Q213daObjMonument5Act_cFv */
 void daObjMonument::Act_c::init_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(mScale);
+    set_mtx();
 }
 
 /* 00000440-00000464       .text _execute__Q213daObjMonument5Act_cFv */
-void daObjMonument::Act_c::_execute() {
-    /* Nonmatching */
+bool daObjMonument::Act_c::_execute() {
+    set_mtx();
+    return true;
 }
 
 /* 00000464-00000538       .text _draw__Q213daObjMonument5Act_cFv */
-void daObjMonument::Act_c::_draw() {
-    /* Nonmatching */
+bool daObjMonument::Act_c::_draw() {
+    u32 swSave = prm_get_swSave();
+    if (dComIfGs_isSwitch(swSave, fopAcM_GetHomeRoomNo(this)))
+        return true;
+
+    g_env_light.settingTevStruct(TEV_TYPE_BG1, getPositionP(), &mTevStr);
+    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(mpModel);
+    dComIfGd_setList();
+    return true;
 }
 
-/* 00000538-00000558       .text Mthd_Create__Q213daObjMonument30@unnamed@d_a_obj_monument_cpp@FPv */
-void daObjMonument::@unnamed@d_a_obj_monument_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
+namespace daObjMonument {
+    namespace {
+        /* 00000538-00000558       .text Mthd_Create__Q213daObjMonument30@unnamed@d_a_obj_monument_cpp@FPv */
+        s32 Mthd_Create(void* i_this) {
+            return ((Act_c*)i_this)->_create();
+        }
+
+        /* 00000558-0000057C       .text Mthd_Delete__Q213daObjMonument30@unnamed@d_a_obj_monument_cpp@FPv */
+        BOOL Mthd_Delete(void* i_this) {
+            return ((Act_c*)i_this)->_delete();
+        }
+
+        /* 0000057C-000005A0       .text Mthd_Execute__Q213daObjMonument30@unnamed@d_a_obj_monument_cpp@FPv */
+        BOOL Mthd_Execute(void* i_this) {
+            return ((Act_c*)i_this)->_execute();
+        }
+
+        /* 000005A0-000005C4       .text Mthd_Draw__Q213daObjMonument30@unnamed@d_a_obj_monument_cpp@FPv */
+        BOOL Mthd_Draw(void* i_this) {
+            return ((Act_c*)i_this)->_draw();
+        }
+
+        /* 000005C4-000005CC       .text Mthd_IsDelete__Q213daObjMonument30@unnamed@d_a_obj_monument_cpp@FPv */
+        BOOL Mthd_IsDelete(void* i_this) {
+            return TRUE;
+        }
+
+        static actor_method_class Mthd_Table = {
+            (process_method_func)daObjMonument::Mthd_Create,
+            (process_method_func)daObjMonument::Mthd_Delete,
+            (process_method_func)daObjMonument::Mthd_Execute,
+            (process_method_func)daObjMonument::Mthd_IsDelete,
+            (process_method_func)daObjMonument::Mthd_Draw,
+        };
+    }
 }
 
-/* 00000558-0000057C       .text Mthd_Delete__Q213daObjMonument30@unnamed@d_a_obj_monument_cpp@FPv */
-void daObjMonument::@unnamed@d_a_obj_monument_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
-
-/* 0000057C-000005A0       .text Mthd_Execute__Q213daObjMonument30@unnamed@d_a_obj_monument_cpp@FPv */
-void daObjMonument::@unnamed@d_a_obj_monument_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
-
-/* 000005A0-000005C4       .text Mthd_Draw__Q213daObjMonument30@unnamed@d_a_obj_monument_cpp@FPv */
-void daObjMonument::@unnamed@d_a_obj_monument_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
-
-/* 000005C4-000005CC       .text Mthd_IsDelete__Q213daObjMonument30@unnamed@d_a_obj_monument_cpp@FPv */
-void daObjMonument::@unnamed@d_a_obj_monument_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 000005CC-000005E8       .text PrmAbstract<Q313daObjMonument5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ313daObjMonument5Act_c5Prm_eQ313daObjMonument5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjMonument::Act_c::Prm_e>(const fopAc_ac_c*, daObjMonument::Act_c::Prm_e, daObjMonument::Act_c::Prm_e) {
-    /* Nonmatching */
-}
-
+actor_process_profile_definition g_profile_Obj_Monument = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 7,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Monument,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daObjMonument::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0086,
+    /* Actor SubMtd */ &daObjMonument::Mthd_Table,
+    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e | fopAcStts_SHOWMAP_e | fopAcStts_UNK10_e | fopAcStts_UNK8_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};
