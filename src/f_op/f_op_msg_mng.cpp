@@ -4,15 +4,40 @@
 //
 
 #include "f_op/f_op_msg_mng.h"
+#include "f_op/f_op_scene_mng.h"
+#include "f_pc/f_pc_manager.h"
+#include "f_pc/f_pc_layer_iter.h"
+#include "f_pc/f_pc_searcher.h"
+#include "d/d_com_inf_game.h"
+#include "JSystem/J2DGraph/J2DPicture.h"
+#include "JSystem/J2DGraph/J2DScreen.h"
 #include "dolphin/types.h"
+#include "SSystem/SComponent/c_malloc.h"
+
+class mesg_header;
+class fopMsgM_pane_alpha_class;
+
+class fopMsgM_f2d_class {
+};
+
+class MyPicture : public J2DPicture {
+public:
+    virtual ~MyPicture() {}
+    virtual void drawSelf(f32, f32);
+    virtual void drawSelf(f32, f32, Mtx*);
+    void drawFullSet2(f32, f32, f32, f32, J2DBinding, J2DMirror, bool, Mtx);
+};
 
 /* 8002ABB4-8002AC1C       .text drawSelf__9MyPictureFff */
-void MyPicture::drawSelf(f32, f32) {
+void MyPicture::drawSelf(f32 x, f32 y) {
     /* Nonmatching */
+    Mtx mtx;
+    MTXIdentity(mtx);
+    drawSelf(x, y, &mtx);
 }
 
 /* 8002AC1C-8002AC90       .text drawSelf__9MyPictureFffPA3_A4_f */
-void MyPicture::drawSelf(f32, f32, Mtx) {
+void MyPicture::drawSelf(f32, f32, Mtx*) {
     /* Nonmatching */
 }
 
@@ -27,38 +52,60 @@ void fopMsgM_hyrule_language_check(u32) {
 }
 
 /* 8002AE28-8002AED4       .text fopMsgM_setStageLayer__FPv */
-void fopMsgM_setStageLayer(void*) {
-    /* Nonmatching */
+s32 fopMsgM_setStageLayer(void* proc) {
+    scene_class* stageProc = fopScnM_SearchByID(g_dComIfG_gameInfo.play.getRoomControl()->mProcID);
+    JUT_ASSERT(0x189, stageProc != 0);
+    u32 layer = fpcM_LayerID(stageProc);
+    fpcM_ChangeLayerID(proc, layer);
 }
 
 /* 8002AED4-8002AEF4       .text fopMsgM_SearchByID__FUi */
-void fopMsgM_SearchByID(unsigned int) {
-    /* Nonmatching */
+msg_class* fopMsgM_SearchByID(unsigned int pid) {
+    return (msg_class*)fpcEx_SearchByID(pid);
 }
 
 /* 8002AEF4-8002AF24       .text fopMsgM_SearchByName__Fs */
-void fopMsgM_SearchByName(s16) {
-    /* Nonmatching */
+msg_class* fopMsgM_SearchByName(s16 proc_name) {
+    return (msg_class*)fpcLyIt_AllJudge(fpcSch_JudgeForPName, &proc_name);
 }
 
 /* 8002AF24-8002AF44       .text fopMsgM_IsExecuting__FUi */
-void fopMsgM_IsExecuting(unsigned int) {
+bool fopMsgM_IsExecuting(u32) {
     /* Nonmatching */
 }
 
 /* 8002AF44-8002AF4C       .text fopMsgM_GetAppend__FPv */
-void fopMsgM_GetAppend(void*) {
-    /* Nonmatching */
+fopMsg_prm_class* fopMsgM_GetAppend(void* i_this) {
+    return (fopMsg_prm_class*) fpcM_GetAppend(i_this);
 }
 
 /* 8002AF4C-8002AF6C       .text fopMsgM_Delete__FPv */
-void fopMsgM_Delete(void*) {
-    /* Nonmatching */
+void fopMsgM_Delete(void* i_this) {
+    fpcM_Delete(i_this);
 }
 
 /* 8002AF6C-8002B030       .text createAppend__FP10fopAc_ac_cP4cXyzPUlPUlUi */
-void createAppend(fopAc_ac_c*, cXyz*, u32*, u32*, unsigned int) {
-    /* Nonmatching */
+fopMsg_prm_class* createAppend(fopAc_ac_c* actor, cXyz* pos, u32* msg_id, u32* p4, unsigned int p5) {
+    fopMsg_prm_class* params = (fopMsg_prm_class*) cMl::memalignB(-4, sizeof(fopMsg_prm_class));
+    if (params == NULL)
+        return NULL;
+
+    params->mpActor = actor;
+    if (msg_id != NULL)
+        params->mMsgID = *msg_id;
+    if (p4 != NULL)
+        params->field_0x14 = *p4;
+
+    if (pos != NULL) {
+        params->mPos = *pos;
+    } else {
+        cXyz zero;
+        zero.setall(0.0f);
+        params->mPos = zero;
+    }
+    params->field_0x18 = p5;
+
+    return params;
 }
 
 /* 8002B030-8002B0CC       .text createMGameTermAppend__FssiiUi */
@@ -72,7 +119,7 @@ void createTimerAppend(int, u16, u8, u8, f32, f32, f32, f32, unsigned int) {
 }
 
 /* 8002B1C8-8002B23C       .text fopMsgM_create__FsP10fopAc_ac_cP4cXyzPUlPUlPFPv_i */
-void fopMsgM_create(s16, fopAc_ac_c*, cXyz*, u32*, u32*, int (*)(void*)) {
+s32 fopMsgM_create(s16, fopAc_ac_c*, cXyz*, u32*, u32*, int (*)(void*)) {
     /* Nonmatching */
 }
 
@@ -91,28 +138,23 @@ void fopMsgM_messageTypeSelect(fopAc_ac_c*, cXyz*, u32*, u32*) {
     /* Nonmatching */
 }
 
-/* 8002B520-8002B568       .text __dt__16fopMsgM_msgGet_cFv */
-fopMsgM_msgGet_c::~fopMsgM_msgGet_c() {
-    /* Nonmatching */
-}
-
 /* 8002B568-8002B634       .text fopMsgM_searchMessageNumber__FUl */
-void fopMsgM_searchMessageNumber(u32) {
+u32 fopMsgM_searchMessageNumber(u32) {
     /* Nonmatching */
 }
 
 /* 8002B634-8002B778       .text fopMsgM_messageSet__FUlP10fopAc_ac_c */
-void fopMsgM_messageSet(u32, fopAc_ac_c*) {
+int fopMsgM_messageSet(u32, fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 8002B778-8002B8A4       .text fopMsgM_messageSet__FUlP4cXyz */
-void fopMsgM_messageSet(u32, cXyz*) {
+int fopMsgM_messageSet(u32, cXyz*) {
     /* Nonmatching */
 }
 
 /* 8002B8A4-8002B9C4       .text fopMsgM_messageSet__FUl */
-void fopMsgM_messageSet(u32) {
+int fopMsgM_messageSet(u32) {
     /* Nonmatching */
 }
 
@@ -127,12 +169,7 @@ void fopMsgM_tactMessageSet() {
 }
 
 /* 8002BB78-8002BDBC       .text fopMsgM_messageGet__FPcUl */
-void fopMsgM_messageGet(char*, u32) {
-    /* Nonmatching */
-}
-
-/* 8002BDBC-8002BE04       .text __dt__20fopMsgM_itemMsgGet_cFv */
-fopMsgM_itemMsgGet_c::~fopMsgM_itemMsgGet_c() {
+char* fopMsgM_messageGet(char*, u32) {
     /* Nonmatching */
 }
 
@@ -256,16 +293,6 @@ void fopMsgM_outFontStickAnimePiece(J2DPicture*, s16, s16) {
     /* Nonmatching */
 }
 
-/* 8002D088-8002D0C8       .text calcMtx__7J2DPaneFv */
-void J2DPane::calcMtx() {
-    /* Nonmatching */
-}
-
-/* 8002D0C8-8002D0E4       .text resize__7J2DPaneFff */
-void J2DPane::resize(f32, f32) {
-    /* Nonmatching */
-}
-
 /* 8002D0E4-8002D2B8       .text fopMsgM_outFontStickAnime__FP10J2DPictureP10J2DPicturePiPiiPs */
 void fopMsgM_outFontStickAnime(J2DPicture*, J2DPicture*, int*, int*, int, s16*) {
     /* Nonmatching */
@@ -317,69 +344,171 @@ void fopMsgM_outFontDraw2(J2DPicture*, J2DPicture*, int, int, int, int, s16*, u8
 }
 
 /* 8002E204-8002E254       .text fopMsgM_Create__FsPFPv_iPv */
-void fopMsgM_Create(s16, int (*)(void*), void*) {
+u32 fopMsgM_Create(s16, int (*)(void*), void*) {
     /* Nonmatching */
 }
 
+class fopMsgM_msgGet_c {
+public:
+    virtual ~fopMsgM_msgGet_c() {};
+    mesg_header* getMesgHeader(u32);
+    void* getMesgInfo(mesg_header*);
+    void* getMesgData(mesg_header*);
+    void* getMesgEntry(mesg_header*);
+    void* getMessage(mesg_header*);
+};
+
 /* 8002E254-8002E2D8       .text getMesgHeader__16fopMsgM_msgGet_cFUl */
-void fopMsgM_msgGet_c::getMesgHeader(u32) {
+mesg_header* fopMsgM_msgGet_c::getMesgHeader(u32) {
     /* Nonmatching */
 }
 
 /* 8002E2D8-8002E2E0       .text getMesgInfo__16fopMsgM_msgGet_cFP11mesg_header */
-void fopMsgM_msgGet_c::getMesgInfo(mesg_header*) {
+void* fopMsgM_msgGet_c::getMesgInfo(mesg_header*) {
     /* Nonmatching */
 }
 
 /* 8002E2E0-8002E308       .text getMesgData__16fopMsgM_msgGet_cFP11mesg_header */
-void fopMsgM_msgGet_c::getMesgData(mesg_header*) {
+void* fopMsgM_msgGet_c::getMesgData(mesg_header*) {
     /* Nonmatching */
 }
 
 /* 8002E308-8002E378       .text getMesgEntry__16fopMsgM_msgGet_cFP11mesg_header */
-void fopMsgM_msgGet_c::getMesgEntry(mesg_header*) {
+void* fopMsgM_msgGet_c::getMesgEntry(mesg_header*) {
     /* Nonmatching */
 }
 
 /* 8002E378-8002E430       .text getMessage__16fopMsgM_msgGet_cFP11mesg_header */
-void fopMsgM_msgGet_c::getMessage(mesg_header*) {
+void* fopMsgM_msgGet_c::getMessage(mesg_header*) {
     /* Nonmatching */
 }
 
+class fopMsgM_itemMsgGet_c {
+public:
+    virtual ~fopMsgM_itemMsgGet_c() {};
+    mesg_header* getMesgHeader(u32);
+    void* getMesgInfo(mesg_header*);
+    void* getMesgData(mesg_header*);
+    void* getMesgEntry(mesg_header*);
+    void* getMessage(mesg_header*);
+};
+
 /* 8002E430-8002E4AC       .text getMesgHeader__20fopMsgM_itemMsgGet_cFUl */
-void fopMsgM_itemMsgGet_c::getMesgHeader(u32) {
+mesg_header* fopMsgM_itemMsgGet_c::getMesgHeader(u32) {
     /* Nonmatching */
 }
 
 /* 8002E4AC-8002E4B4       .text getMesgInfo__20fopMsgM_itemMsgGet_cFP11mesg_header */
-void fopMsgM_itemMsgGet_c::getMesgInfo(mesg_header*) {
+void* fopMsgM_itemMsgGet_c::getMesgInfo(mesg_header*) {
     /* Nonmatching */
 }
 
 /* 8002E4B4-8002E4DC       .text getMesgData__20fopMsgM_itemMsgGet_cFP11mesg_header */
-void fopMsgM_itemMsgGet_c::getMesgData(mesg_header*) {
+void* fopMsgM_itemMsgGet_c::getMesgData(mesg_header*) {
     /* Nonmatching */
 }
 
 /* 8002E4DC-8002E54C       .text getMesgEntry__20fopMsgM_itemMsgGet_cFP11mesg_header */
-void fopMsgM_itemMsgGet_c::getMesgEntry(mesg_header*) {
+void* fopMsgM_itemMsgGet_c::getMesgEntry(mesg_header*) {
     /* Nonmatching */
 }
 
 /* 8002E54C-8002E5FC       .text getMessage__20fopMsgM_itemMsgGet_cFP11mesg_header */
-void fopMsgM_itemMsgGet_c::getMessage(mesg_header*) {
+void* fopMsgM_itemMsgGet_c::getMessage(mesg_header*) {
     /* Nonmatching */
 }
 
-/* 8002E5FC-8002E794       .text __ct__21fopMsgM_msgDataProc_cFv */
-fopMsgM_msgDataProc_c::fopMsgM_msgDataProc_c() {
-    /* Nonmatching */
-}
-
-/* 8002E794-8002E7DC       .text __dt__21fopMsgM_msgDataProc_cFv */
-fopMsgM_msgDataProc_c::~fopMsgM_msgDataProc_c() {
-    /* Nonmatching */
-}
+class fopMsgM_msgDataProc_c {
+public:
+    fopMsgM_msgDataProc_c() {}
+    virtual ~fopMsgM_msgDataProc_c() {};
+    void dataInit();
+    void charLength(int, int, bool);
+    void rubyLength(int, bool);
+    void stringLength();
+    void stringShift();
+    void iconSelect(int, u8);
+    void iconIdxRefresh();
+    void selectCheck2(J2DPane*, int, int, int);
+    void selectCheck3(J2DPane*, int, int, int);
+    void selectCheckYoko(J2DPane*, int, int, int);
+    void inputNumber(int);
+    void selectArrow(J2DPicture*, f32, f32, f32, f32);
+    void selectArrow(J2DPicture*, f32, f32);
+    void colorAnime(J2DPicture*);
+    void stringSet();
+    void setSelectFlagYokoOn();
+    void setSelectFlagOn();
+    void setHandSendFlagOn();
+    void setAutoSendFlagOn();
+    void getHandSendFlag();
+    void getAutoSendFlag();
+    void getString(char*, u32);
+    void getString(char*, char*, char*, char*, u32, f32*, f32*, int*);
+    void getRubyString(char*, char*, char*, char*, char*, char*, f32*, f32*, int*);
+    void tag_len_kaisen_game(int*, f32*, int*, int*, int*);
+    void tag_len_rupee(int*, f32*, int*, int*, int*);
+    void tag_len_num_input(int*, f32*, int*, int*, int*);
+    void tag_len_sword_game(int*, f32*, int*, int*, int*);
+    void tag_len_letter_game(int*, f32*, int*, int*, int*);
+    void tag_len_letter_game_max(int*, f32*, int*, int*, int*);
+    void tag_len_fish(int*, f32*, int*, int*, int*);
+    void tag_len_fish_rupee(int*, f32*, int*, int*, int*);
+    void tag_len_letter(int*, f32*, int*, int*, int*);
+    void tag_len_rescue(int*, f32*, int*, int*, int*);
+    void tag_len_forest_timer(int*, f32*, int*, int*, int*);
+    void tag_len_birdman(int*, f32*, int*, int*, int*);
+    void tag_len_point(int*, f32*, int*, int*, int*);
+    void tag_len_get_pendant(int*, f32*, int*, int*, int*);
+    void tag_len_rev_pendant(int*, f32*, int*, int*, int*);
+    void tag_len_pig_timer(int*, f32*, int*, int*, int*);
+    void tag_len_get_bomb(int*, f32*, int*, int*, int*);
+    void tag_len_get_arrow(int*, f32*, int*, int*, int*);
+    void tag_len_stock_bokobaba(int*, f32*, int*, int*, int*);
+    void tag_len_stock_dokuro(int*, f32*, int*, int*, int*);
+    void tag_len_stock_chuchu(int*, f32*, int*, int*, int*);
+    void tag_len_stock_pendant(int*, f32*, int*, int*, int*);
+    void tag_len_stock_hane(int*, f32*, int*, int*, int*);
+    void tag_len_stock_kenshi(int*, f32*, int*, int*, int*);
+    void tag_len_terry_rupee(int*, f32*, int*, int*, int*);
+    void tag_len_input_bokobaba(int*, f32*, int*, int*, int*);
+    void tag_len_input_dokuro(int*, f32*, int*, int*, int*);
+    void tag_len_input_chuchu(int*, f32*, int*, int*, int*);
+    void tag_len_input_pendant(int*, f32*, int*, int*, int*);
+    void tag_len_input_hane(int*, f32*, int*, int*, int*);
+    void tag_len_input_kenshi(int*, f32*, int*, int*, int*);
+    void tag_kaisen_game();
+    void tag_rupee();
+    void tag_num_input();
+    void tag_sword_game();
+    void tag_letter_game();
+    void tag_letter_game_max();
+    void tag_fish();
+    void tag_fish_rupee();
+    void tag_letter();
+    void tag_rescue();
+    void tag_forest_timer();
+    void tag_birdman();
+    void tag_point();
+    void tag_get_pendant();
+    void tag_rev_pendant();
+    void tag_pig_timer();
+    void tag_get_bomb();
+    void tag_get_arrow();
+    void tag_stock_bokobaba();
+    void tag_stock_dokuro();
+    void tag_stock_chuchu();
+    void tag_stock_pendant();
+    void tag_stock_hane();
+    void tag_stock_kenshi();
+    void tag_terry_rupee();
+    void tag_input_bokobaba();
+    void tag_input_dokuro();
+    void tag_input_chuchu();
+    void tag_input_pendant();
+    void tag_input_hane();
+    void tag_input_kenshi();
+};
 
 /* 8002E7DC-8002E95C       .text dataInit__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::dataInit() {
@@ -398,36 +527,6 @@ void fopMsgM_msgDataProc_c::rubyLength(int, bool) {
 
 /* 8002EB4C-80031064       .text stringLength__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::stringLength() {
-    /* Nonmatching */
-}
-
-/* 80031064-80031074       .text dComIfGs_getClearCount__Fv */
-void dComIfGs_getClearCount() {
-    /* Nonmatching */
-}
-
-/* 80031074-800310A4       .text dComIfGs_getEventReg__FUs */
-void dComIfGs_getEventReg(u16) {
-    /* Nonmatching */
-}
-
-/* 800310A4-800310B4       .text dComIfGp_getItemNameMessageID__Fv */
-void dComIfGp_getItemNameMessageID() {
-    /* Nonmatching */
-}
-
-/* 800310B4-800310C4       .text dComIfGp_getNpcNameMessageID__Fv */
-void dComIfGp_getNpcNameMessageID() {
-    /* Nonmatching */
-}
-
-/* 800310C4-800310D4       .text dComIfGs_getPalLanguage__Fv */
-void dComIfGs_getPalLanguage() {
-    /* Nonmatching */
-}
-
-/* 800310D4-800310E4       .text dComIfGs_getPlayerName__Fv */
-void dComIfGs_getPlayerName() {
     /* Nonmatching */
 }
 
@@ -491,16 +590,6 @@ void fopMsgM_msgDataProc_c::stringSet() {
     /* Nonmatching */
 }
 
-/* 80034F3C-80034F4C       .text dComIfGp_setMesgAnimeTagInfo__FUc */
-void dComIfGp_setMesgAnimeTagInfo(u8) {
-    /* Nonmatching */
-}
-
-/* 80034F4C-80034F5C       .text dComIfGp_setMesgCameraTagInfo__Fi */
-void dComIfGp_setMesgCameraTagInfo(int) {
-    /* Nonmatching */
-}
-
 /* 80034F5C-80034F68       .text setSelectFlagYokoOn__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::setSelectFlagYokoOn() {
     /* Nonmatching */
@@ -528,16 +617,6 @@ void fopMsgM_msgDataProc_c::getHandSendFlag() {
 
 /* 80034F94-80034F9C       .text getAutoSendFlag__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::getAutoSendFlag() {
-    /* Nonmatching */
-}
-
-/* 80034F9C-80034FD4       .text mDoAud_messageSePlay__FUsP3VecSc */
-void mDoAud_messageSePlay(u16, Vec*, s8) {
-    /* Nonmatching */
-}
-
-/* 80034FD4-80034FE0       .text dComIfGp_roomControl_getStayNo__Fv */
-void dComIfGp_roomControl_getStayNo() {
     /* Nonmatching */
 }
 
@@ -897,118 +976,137 @@ void fopMsgM_centerPosCalc(fopMsgM_f2d_class, fopMsgM_f2d_class) {
 }
 
 /* 8003BA40-8003BB34       .text fopMsgM_pane_parts_set__FP18fopMsgM_pane_class */
-void fopMsgM_pane_parts_set(fopMsgM_pane_class*) {
+void fopMsgM_pane_parts_set(fopMsgM_pane_class* pane) {
     /* Nonmatching */
 }
 
 /* 8003BB34-8003BB4C       .text fopMsgM_pane_parts_set__FP24fopMsgM_pane_alpha_class */
-void fopMsgM_pane_parts_set(fopMsgM_pane_alpha_class*) {
+void fopMsgM_pane_parts_set(fopMsgM_pane_alpha_class* paneAlpha) {
     /* Nonmatching */
 }
 
 /* 8003BB4C-8003BB78       .text fopMsgM_setPaneData__FP18fopMsgM_pane_classP7J2DPane */
-void fopMsgM_setPaneData(fopMsgM_pane_class*, J2DPane*) {
+void fopMsgM_setPaneData(fopMsgM_pane_class* pane, J2DPane*) {
     /* Nonmatching */
 }
 
 /* 8003BB78-8003BBCC       .text fopMsgM_setPaneData__FP18fopMsgM_pane_classP9J2DScreenUl */
-void fopMsgM_setPaneData(fopMsgM_pane_class*, J2DScreen*, u32) {
+void fopMsgM_setPaneData(fopMsgM_pane_class* pane, J2DScreen*, u32) {
     /* Nonmatching */
 }
 
 /* 8003BBCC-8003BBF8       .text fopMsgM_setPaneData__FP24fopMsgM_pane_alpha_classP7J2DPane */
-void fopMsgM_setPaneData(fopMsgM_pane_alpha_class*, J2DPane*) {
+void fopMsgM_setPaneData(fopMsgM_pane_alpha_class* paneAlpha, J2DPane*) {
     /* Nonmatching */
 }
 
 /* 8003BBF8-8003BC88       .text fopMsgM_setPaneData__FP24fopMsgM_pane_alpha_classP9J2DScreenUl */
-void fopMsgM_setPaneData(fopMsgM_pane_alpha_class*, J2DScreen*, u32) {
+void fopMsgM_setPaneData(fopMsgM_pane_alpha_class* paneAlpha, J2DScreen*, u32) {
     /* Nonmatching */
 }
 
 /* 8003BC88-8003BCC0       .text fopMsgM_paneTrans__FP18fopMsgM_pane_classff */
-void fopMsgM_paneTrans(fopMsgM_pane_class*, f32, f32) {
+void fopMsgM_paneTrans(fopMsgM_pane_class* pane, f32, f32) {
     /* Nonmatching */
 }
 
 /* 8003BCC0-8003BCEC       .text fopMsgM_paneScaleX__FP18fopMsgM_pane_classf */
-void fopMsgM_paneScaleX(fopMsgM_pane_class*, f32) {
-    /* Nonmatching */
+void fopMsgM_paneScaleX(fopMsgM_pane_class* pane, f32 s) {
+    pane->mSize.x = pane->mSizeOrig.x * s;
+    fopMsgM_cposMove(pane);
 }
 
 /* 8003BCEC-8003BD18       .text fopMsgM_paneScaleY__FP18fopMsgM_pane_classf */
-void fopMsgM_paneScaleY(fopMsgM_pane_class*, f32) {
-    /* Nonmatching */
+void fopMsgM_paneScaleY(fopMsgM_pane_class* pane, f32 s) {
+    pane->mSize.y = pane->mSizeOrig.y * s;
+    fopMsgM_cposMove(pane);
 }
 
 /* 8003BD18-8003BD50       .text fopMsgM_paneScale__FP18fopMsgM_pane_classff */
-void fopMsgM_paneScale(fopMsgM_pane_class*, f32, f32) {
-    /* Nonmatching */
+void fopMsgM_paneScale(fopMsgM_pane_class* pane, f32 sx, f32 sy) {
+    pane->mSize.x = pane->mSizeOrig.x * sx;
+    pane->mSize.y = pane->mSizeOrig.y * sy;
+    fopMsgM_cposMove(pane);
 }
 
 /* 8003BD50-8003BD88       .text fopMsgM_paneScaleXY__FP18fopMsgM_pane_classf */
-void fopMsgM_paneScaleXY(fopMsgM_pane_class*, f32) {
-    /* Nonmatching */
+void fopMsgM_paneScaleXY(fopMsgM_pane_class* pane, f32 s) {
+    pane->mSize.x = pane->mSizeOrig.x * s;
+    pane->mSize.y = pane->mSizeOrig.y * s;
+    fopMsgM_cposMove(pane);
 }
 
 /* 8003BD88-8003BE14       .text fopMsgM_cposMove__FP18fopMsgM_pane_class */
-void fopMsgM_cposMove(fopMsgM_pane_class*) {
-    /* Nonmatching */
+void fopMsgM_cposMove(fopMsgM_pane_class* pane) {
+    pane->mPosTopLeft.x = pane->mPosCenter.x - pane->mSize.x / 2.0f;
+    pane->mPosTopLeft.y = pane->mPosCenter.y - pane->mSize.y / 2.0f;
+    pane->scrn->move(pane->mPosTopLeft.x, pane->mPosTopLeft.y);
+    pane->scrn->resize(pane->mSize.x, pane->mSize.y);
 }
 
 /* 8003BE14-8003BE24       .text fopMsgM_setAlpha__FP18fopMsgM_pane_class */
-void fopMsgM_setAlpha(fopMsgM_pane_class*) {
-    /* Nonmatching */
+void fopMsgM_setAlpha(fopMsgM_pane_class* pane) {
+    pane->scrn->setAlpha(pane->mAlpha);
 }
 
 /* 8003BE24-8003BE30       .text fopMsgM_setInitAlpha__FP18fopMsgM_pane_class */
-void fopMsgM_setInitAlpha(fopMsgM_pane_class*) {
-    /* Nonmatching */
+void fopMsgM_setInitAlpha(fopMsgM_pane_class* pane) {
+    pane->mAlpha = pane->mAlphaOrig;
 }
 
 /* 8003BE30-8003BE6C       .text fopMsgM_setNowAlpha__FP18fopMsgM_pane_classf */
-void fopMsgM_setNowAlpha(fopMsgM_pane_class*, f32) {
-    /* Nonmatching */
+void fopMsgM_setNowAlpha(fopMsgM_pane_class* pane, f32 v) {
+    pane->mAlpha = pane->mAlphaOrig * v;
 }
 
 /* 8003BE6C-8003BE78       .text fopMsgM_setNowAlphaZero__FP18fopMsgM_pane_class */
-void fopMsgM_setNowAlphaZero(fopMsgM_pane_class*) {
-    /* Nonmatching */
+void fopMsgM_setNowAlphaZero(fopMsgM_pane_class* pane) {
+    pane->mAlpha = 0;
 }
 
 /* 8003BE78-8003BE88       .text fopMsgM_setAlpha__FP24fopMsgM_pane_alpha_class */
-void fopMsgM_setAlpha(fopMsgM_pane_alpha_class*) {
+void fopMsgM_setAlpha(fopMsgM_pane_alpha_class* paneAlpha) {
     /* Nonmatching */
 }
 
 /* 8003BE88-8003BEC4       .text fopMsgM_setNowAlpha__FP24fopMsgM_pane_alpha_classf */
-void fopMsgM_setNowAlpha(fopMsgM_pane_alpha_class*, f32) {
+void fopMsgM_setNowAlpha(fopMsgM_pane_alpha_class* paneAlpha, f32) {
     /* Nonmatching */
 }
 
 /* 8003BEC4-8003C07C       .text fopMsgM_valueIncrease__FiiUc */
-void fopMsgM_valueIncrease(int, int, u8) {
+f32 fopMsgM_valueIncrease(int, int, u8) {
     /* Nonmatching */
 }
 
 /* 8003C07C-8003C0F8       .text fopMsgM_blendInit__FP18fopMsgM_pane_classPCc */
-void fopMsgM_blendInit(fopMsgM_pane_class*, const char*) {
-    /* Nonmatching */
+void fopMsgM_blendInit(fopMsgM_pane_class* pane, const char* data) {
+    ((J2DPicture*)pane->scrn)->insert(data, ((J2DPicture*)pane->scrn)->getNumTexture(), 1.0f);
+    J2DPicture* pic = (J2DPicture*)pane->scrn;
+    pic->setBlendColorRatio(0.0f, 1.0f, 1.0f, 1.0f);
+    pic->setBlendAlphaRatio(0.0f, 1.0f, 1.0f, 1.0f);
 }
 
 /* 8003C0F8-8003C16C       .text fopMsgM_blendInit__FP10J2DPicturePCc */
-void fopMsgM_blendInit(J2DPicture*, const char*) {
-    /* Nonmatching */
+void fopMsgM_blendInit(J2DPicture* pic, const char* data) {
+    pic->insert(data, pic->getNumTexture(), 1.0f);
+    pic->setBlendColorRatio(0.0f, 1.0f, 1.0f, 1.0f);
+    pic->setBlendAlphaRatio(0.0f, 1.0f, 1.0f, 1.0f);
 }
 
 /* 8003C16C-8003C1D4       .text fopMsgM_blendDraw__FP18fopMsgM_pane_classPCc */
-void fopMsgM_blendDraw(fopMsgM_pane_class*, const char*) {
-    /* Nonmatching */
+void fopMsgM_blendDraw(fopMsgM_pane_class* pane, const char* data) {
+    J2DPicture* pic = (J2DPicture*)pane->scrn;
+    pic->show();
+    pic->remove(pic->getNumTexture() - 1);
+    pic->insert(data, pic->getNumTexture(), 1.0f);
 }
 
 /* 8003C1D4-8003C234       .text fopMsgM_blendDraw__FP10J2DPicturePCc */
-void fopMsgM_blendDraw(J2DPicture*, const char*) {
-    /* Nonmatching */
+void fopMsgM_blendDraw(J2DPicture* pic, const char* data) {
+    pic->show();
+    pic->remove(pic->getNumTexture() - 1);
+    pic->insert(data, pic->getNumTexture(), 1.0f);
 }
 
 /* 8003C234-8003C380       .text fopMsgM_setFontsizeCenter__FPcPcPcPcii */
@@ -1028,35 +1126,5 @@ void fopMsgM_createExpHeap(u32) {
 
 /* 8003C450-8003C470       .text fopMsgM_destroyExpHeap__FP10JKRExpHeap */
 void fopMsgM_destroyExpHeap(JKRExpHeap*) {
-    /* Nonmatching */
-}
-
-/* 8003C470-8003C4D0       .text __dt__9MyPictureFv */
-MyPicture::~MyPicture() {
-    /* Nonmatching */
-}
-
-/* 8003C4D0-8003C4D8       .text getTypeID__10J2DPictureFv */
-void J2DPicture::getTypeID() {
-    /* Nonmatching */
-}
-
-/* 8003C4D8-8003C530       .text drawOut__10J2DPictureFffffffff */
-void J2DPicture::drawOut(f32, f32, f32, f32, f32, f32, f32, f32) {
-    /* Nonmatching */
-}
-
-/* 8003C530-8003C5D0       .text drawOut__10J2DPictureFffffff */
-void J2DPicture::drawOut(f32, f32, f32, f32, f32, f32) {
-    /* Nonmatching */
-}
-
-/* 8003C5D0-8003C5E0       .text setConnectParent__7J2DPaneFb */
-void J2DPane::setConnectParent(bool) {
-    /* Nonmatching */
-}
-
-/* 8003C5E0-8003C5E4       .text update__7J2DPaneFv */
-void J2DPane::update() {
     /* Nonmatching */
 }

@@ -87,6 +87,8 @@ public:
     }
     void setCornerColor(JUtility::TColor c) { setCornerColor(c, c, c, c); }
 
+    u8 getNumTexture() { return mNumTexture; }
+
 private:
     /* 0x0CC */ JUTTexture* mpTexture[4];
     /* 0x0DC */ u8 mNumTexture;
