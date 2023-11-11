@@ -63,7 +63,7 @@ bool daObjYgush00_c::create_heap() {
     static u32 bck_table[] = { 0x06, 0x05, 0x05, 0x05 };
 
     bool ret = true;
-    
+
     void* pModelData = dComIfG_getObjectRes(l_arcname, mdl_table[mType]);
     J3DAnmTextureSRTKey * pBtk = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes(l_arcname, btk_table[mType]);
     J3DAnmTransform * pBck = (J3DAnmTransform *)dComIfG_getObjectRes(l_arcname, bck_table[mType]);
@@ -117,7 +117,7 @@ s32 daObjYgush00_c::_create() {
 /* 000004F4-00000524       .text _delete__14daObjYgush00_cFv */
 bool daObjYgush00_c::_delete() {
     dComIfG_resDelete(&mPhs, l_arcname);
-    return 1;
+    return true;
 }
 
 /* 00000524-0000066C       .text _execute__14daObjYgush00_cFv */
@@ -139,7 +139,7 @@ bool daObjYgush00_c::_execute() {
         fopAcM_seStartCurrent(this, 0x61fe, 0);
     }
 
-    return TRUE;
+    return true;
 }
 
 /* 0000066C-000006FC       .text _draw__14daObjYgush00_cFv */
@@ -149,7 +149,7 @@ bool daObjYgush00_c::_draw() {
     mBtkAnm.entry(mpModel->getModelData());
     mBckAnm.entry(mpModel->getModelData());
     mDoExt_modelUpdateDL(mpModel);
-    return 1;
+    return true;
 }
 
 /* 000006FC-0000071C       .text daObjYgush00_Create__FP14daObjYgush00_c */
@@ -158,23 +158,23 @@ static s32 daObjYgush00_Create(daObjYgush00_c* i_this) {
 }
 
 /* 0000071C-00000740       .text daObjYgush00_Delete__FP14daObjYgush00_c */
-static s32 daObjYgush00_Delete(daObjYgush00_c* i_this) {
+static BOOL daObjYgush00_Delete(daObjYgush00_c* i_this) {
     return i_this->_delete();
 }
 
 /* 00000740-00000764       .text daObjYgush00_Execute__FP14daObjYgush00_c */
-static s32 daObjYgush00_Execute(daObjYgush00_c* i_this) {
+static BOOL daObjYgush00_Execute(daObjYgush00_c* i_this) {
     return i_this->_execute();
 }
 
 /* 00000764-00000788       .text daObjYgush00_Draw__FP14daObjYgush00_c */
-static s32 daObjYgush00_Draw(daObjYgush00_c* i_this) {
+static BOOL daObjYgush00_Draw(daObjYgush00_c* i_this) {
     return i_this->_draw();
 }
 
 /* 00000788-00000790       .text daObjYgush00_IsDelete__FP14daObjYgush00_c */
-static s32 daObjYgush00_IsDelete(daObjYgush00_c* i_this) {
-    return 1;
+static BOOL daObjYgush00_IsDelete(daObjYgush00_c* i_this) {
+    return TRUE;
 }
 
 static actor_method_class l_daObjYgush00_Method = {
@@ -186,18 +186,18 @@ static actor_method_class l_daObjYgush00_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Ygush00 = {
-    fpcLy_CURRENT_e,
-    3,
-    fpcPi_CURRENT_e,
-    PROC_Obj_Ygush00,
-    &g_fpcLf_Method.mBase,
-    sizeof(daObjYgush00_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x005E,
-    &l_daObjYgush00_Method,
-    fopAcStts_CULL_e | fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 3,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Ygush00,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daObjYgush00_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x005E,
+    /* Actor SubMtd */ &l_daObjYgush00_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };
