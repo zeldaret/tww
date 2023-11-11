@@ -142,7 +142,6 @@ BOOL daObjGbed_IsDelete(daObjGbed_c* i_this) {
     return TRUE;
 }
 
-
 static actor_method_class l_daObjGbed_Method = {
     (process_method_func)daObjGbed_Create,
     (process_method_func)daObjGbed_Delete,
