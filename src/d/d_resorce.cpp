@@ -375,8 +375,6 @@ next:
 
 /* 8006E8FC-8006EBD0       .text setRes__11dRes_info_cFv */
 int dRes_info_c::setRes() {
-    // nonmatching
-
     if (mpArchive == NULL) {
         if (mpDMCommand == NULL) {
             return -1;
@@ -481,17 +479,19 @@ static void dummy() {
 /* 8006EBF8-8006ECF4       .text dump_long__11dRes_info_cFP11dRes_info_ci */
 void dRes_info_c::dump_long(dRes_info_c* pRes, int num) {
     // regalloc
+    s32 size;
+    JKRArchive* archive;
+    mDoDvdThd_command_c* command;
     void* header;
-    int size;
-    int heapSize;
-    JKRArchive * archive;
-    mDoDvdThd_command_c * command;
+    s32 refCount;
+    s32 heapSize;
+    s32 i;
 
     JUTReportConsole_f("dRes_info_c::dump %08x %d\n", pRes, num);
     JUTReportConsole_f("No Command  Archive  ArcHeader(size) SolidHeap(size) Resource Count ArchiveName\n");
 
-    for (s32 i = 0; i < num; i++) {
-        s32 refCount = pRes->getCount();
+    for (i = 0; i < num; i++) {
+        refCount = pRes->getCount();
         if (refCount != 0) {
             heapSize = JKRHeap::getSize(pRes->mDataHeap, NULL);
             size = JKRHeap::getSize(getArcHeader(pRes->getArchive()), NULL);
@@ -547,20 +547,18 @@ dRes_control_c::~dRes_control_c() {
 
 /* 8006EF34-8006F01C       .text setRes__14dRes_control_cFPCcP11dRes_info_ciPCcUcP7JKRHeap */
 int dRes_control_c::setRes(const char* pArcName, dRes_info_c* pInfoArr, int infoNum, const char* pArcPath, u8 direction, JKRHeap* pHeap) {
-    // small regalloc issue
-
     dRes_info_c * pInfo = getResInfo(pArcName, pInfoArr, infoNum);
 
     if (pInfo == NULL) {
         pInfo = newResInfo(pInfoArr, infoNum);
         if (pInfo == NULL) {
-            OSReport_Error("<%s.arc> dRes_control_c::setRes: 空きリソース情報ポインタがありません\n", pInfo);
+            OSReport_Error("<%s.arc> dRes_control_c::setRes: 空きリソース情報ポインタがありません\n", pArcName);
             pInfo->~dRes_info_c();
             return FALSE;
         }
 
         if (!pInfo->set(pArcName, pArcPath, direction, pHeap)) {
-            OSReport_Error("<%s.arc> dRes_control_c::setRes: res info set error !!\n", pInfo);
+            OSReport_Error("<%s.arc> dRes_control_c::setRes: res info set error !!\n", pArcName);
             pInfo->~dRes_info_c();
             return FALSE;
         }
