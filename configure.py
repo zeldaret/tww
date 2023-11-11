@@ -274,7 +274,7 @@ config.libs = [
             Object(Matching,    "c/c_dylink.cpp"),
 
             # f_ap
-            Object(NonMatching, "f_ap/f_ap_game.cpp"),
+            Object(Matching,    "f_ap/f_ap_game.cpp"),
 
             # f_op
             Object(Matching,    "f_op/f_op_actor.cpp", extra_cflags=['-pragma "nosyminline on"']),

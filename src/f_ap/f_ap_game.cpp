@@ -10,11 +10,70 @@
 #include "f_op/f_op_draw_tag.h"
 #include "f_pc/f_pc_manager.h"
 #include "SSystem/SComponent/c_counter.h"
+#include "m_Do/m_Do_main.h"
 #include "dolphin/types.h"
+
+fapGm_HIO_c g_HIO;
 
 /* 8002306C-800231BC       .text __ct__11fapGm_HIO_cFv */
 fapGm_HIO_c::fapGm_HIO_c() {
-    /* Nonmatching */
+    field_0x05 = 1;
+
+    if (mDoMain::developmentMode) {
+        mDisplayMeter = true;
+        field_0x07 = 1;
+    } else {
+        mDisplayMeter = false;
+        field_0x07 = 0;
+    }
+
+    field_0x09 = 1;
+    field_0x0a = 1;
+    field_0x0c = 0.96f;
+    field_0x10 = 0;
+    field_0x11 = 0;
+    field_0x12 = 8;
+    field_0x13 = 8;
+    field_0x14 = 10;
+    field_0x15 = 0xc;
+    field_0x16 = 10;
+    field_0x17 = 8;
+    field_0x18 = 8;
+    field_0x19 = -1;
+    field_0x1a = 0;
+    field_0x1b = 1;
+    field_0x1c = 0;
+    field_0x2c = 0x280;
+    field_0x2e = 0x1e0;
+    field_0x30 = 0;
+    field_0x20.r = 0xff;
+    field_0x20.g = 0xff;
+    field_0x20.b = 0xff;
+    field_0x20.a = 0xff;
+    mTriggerThreshLo = 0.9f;
+    mTriggerThreshHi = 0.6f;
+    field_0x3c.r = 0xff;
+    field_0x3c.g = 0x96;
+    field_0x3c.b = 0;
+    field_0x3c.a = 0xff;
+    field_0x40.r = 0xff;
+    field_0x40.g = 0x78;
+    field_0x40.b = 0;
+    field_0x40.a = 0xff;
+    field_0x44.r = 0;
+    field_0x44.g = 0;
+    field_0x44.b = 0;
+    field_0x44.a = 0xff;
+    field_0x48.r = 0;
+    field_0x48.g = 0;
+    field_0x48.b = 0;
+    field_0x48.a = 0xff;
+    field_0x4c = 0;
+    field_0x4e = 10;
+    field_0x54 = 0x1b;
+    field_0x50 = 0;
+    field_0x52 = 0;
+    field_0x56 = 0x82;
 }
 
 /* 800231BC-800231E4       .text fapGm_After__Fv */
@@ -38,7 +97,8 @@ void fapGm_Create() {
     fopCamM_Init();
     fopDwTg_CreateQueue();
     fopScnM_CreateReq(5, 0x7FFF, 0, 0);
-    // HIO
+    
+    g_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("ゲームシステム", &g_HIO);
 }
 
 /* 80023288-800232D0       .text __dt__11fapGm_HIO_cFv */
