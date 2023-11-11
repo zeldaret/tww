@@ -29,6 +29,7 @@ public:
     void calcVelocity();
     void calcPosition();
     bool checkCreateChild();
+    JSULink<JPABaseParticle>* getLinkBufferPtr() { return &mLink; }
 
     ~JPABaseParticle();
     JPABaseParticle();

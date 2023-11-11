@@ -16,6 +16,7 @@
 class J3DModelData;  // placeholder
 class JKRHeap;
 class cM3dGPla;
+class daItem_c;
 
 struct fopAcM_prmBase_class {
     /* 0x00 */ u32 field_0x00;
@@ -463,9 +464,7 @@ s32 fopAcM_createDemoItem(cXyz* p_pos, int itemNo, int itemBitNo, csXyz* p_angle
 s32 fopAcM_createItemForBoss(cXyz* p_pos, int param_2, int roomNo, csXyz* p_angle,
                              cXyz* p_scale, int param_8);
 
-void* fopAcM_createItemForSimpleDemo(cXyz* p_pos, int i_itemNo, int i_roomNo,
-                                     csXyz* p_angle, cXyz* p_scale, f32 speedF,
-                                     f32 speedY);
+daItem_c* fopAcM_createItemForSimpleDemo(cXyz* p_pos, int i_itemNo, int i_roomNo, csXyz* p_angle, cXyz* p_scale, f32 speedF, f32 speedY);
 
 s32 fopAcM_createItem(cXyz* p_pos, int itemNo, int param_3, int roomNo, int type, csXyz* p_angle,
                       int action, cXyz* p_scale);

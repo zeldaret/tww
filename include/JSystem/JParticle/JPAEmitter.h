@@ -113,8 +113,8 @@ public:
     /* 0x0E0 */ JGeometry::TVec3<f32> mEmitterGlobalCenter;
     /* 0x0EC */ JGeometry::TVec3<f32> mPublicScale;
     /* 0x0F8 */ JGeometry::TVec3<f32> mgReRDir;
-    /* 0x100 */ void* field_0x100;
-    /* 0x104 */ void* field_0x104;
+    /* 0x100 */ f32 mFovy;
+    /* 0x104 */ f32 mAspect;
     /* 0x10C */ JGeometry::TVec3<f32> mVolumePos;
     /* 0x118 */ JGeometry::TVec3<f32> mVelOmni;
     /* 0x124 */ JGeometry::TVec3<f32> mVelAxis;
@@ -129,6 +129,8 @@ public:
 
 class JPABaseEmitter {
 public:
+    JPABaseEmitter();
+
     typedef void (JPABaseEmitter::*VolumeFunc)();
 
     void calcVolumePoint();
@@ -165,6 +167,9 @@ public:
     int getParticleNumber() {
         return mActiveParticles.getNumLinks() + mChildParticles.getNumLinks();
     }
+
+    u8 getGroupID() { return mGroupID; }
+    u8 getResourceManagerID() { return mResMgrID; }
 
     JPADataBlockLinkInfo * getEmitterDataBlockInfoPtr() const { return mpDataLinkInfo; }
     bool isEnableDeleteEmitter() { return checkStatus(JPAEmtrStts_EnableDeleteEmitter) && getParticleNumber() == 0; }
@@ -204,10 +209,14 @@ public:
     void setRate(float i_rate) { mRate = i_rate; }
     void setDirectionalSpeed(float i_speed) { mInitialVelDir = i_speed; }
     void setAwayFromAxisSpeed(float i_speed) { mInitialVelAxis = i_speed; }
+    void setAwayFromCenterSpeed(float i_speed) { mInitialVelOmni = i_speed; }
     void setSpread(float i_spread) { mSpread = i_spread; }
 
     void stopCreateParticle() { setStatus(JPAEmtrStts_StopEmit); }
+    void playCreateParticle() { clearStatus(JPAEmtrStts_StopEmit); }
     void stopDrawParticle() { setStatus(JPAEmtrStts_StopDraw); }
+    void playDrawParticle() { clearStatus(JPAEmtrStts_StopDraw); }
+    bool isDraw() { return !checkStatus(JPAEmtrStts_StopDraw); }
     void becomeImmortalEmitter() { setStatus(JPAEmtrStts_Immortal); }
     void quitImmortalEmitter() { clearStatus(JPAEmtrStts_Immortal); }
 
@@ -222,6 +231,11 @@ public:
     void setParticleCallBackPtr(JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>* callback) {
         mpParticleCallBack = callback;
     }
+    void setParticleList(JSUList<JPABaseParticle>* list) { mpPtclVacList = list; }
+    void setFieldList(JSUList<JPAFieldData>* list) { mFieldManager.mVacList = list; }
+    JSULink<JPABaseEmitter>* getLinkBufferPtr() { return &mLink; }
+    void initDrawMgr(JPATextureResource* texRes) { mDraw.initialize(this, texRes); }
+    void draw(MtxP cameraMtxP) { mDraw.draw(cameraMtxP); }
 
     static JPAEmitterInfo emtrInfo;
 
@@ -256,14 +270,14 @@ public:
     /* 0x084 */ f32 mVolumeMinRad;
     /* 0x088 */ s32 mDataFlag;
     /* 0x08C */ s32 mUseKeyFlag;
-    /* 0x090 */ JSUPtrLink mLink;
+    /* 0x090 */ JSULink<JPABaseEmitter> mLink;
     /* 0x0A0 */ JPADraw mDraw;
     /* 0x164 */ f32 mTick;
     /* 0x168 */ f32 mTime;
     /* 0x16C */ JPAFieldManager mFieldManager;
     /* 0x17C */ JSUList<JPABaseParticle> mActiveParticles;
     /* 0x188 */ JSUList<JPABaseParticle> mChildParticles;
-    /* 0x194 */ JSUPtrList* mpPtclVacList;
+    /* 0x194 */ JSUList<JPABaseParticle>* mpPtclVacList;
     /* 0x198 */ JPADataBlockLinkInfo* mpDataLinkInfo;
     /* 0x19C */ JPACallBackBase<JPABaseEmitter*>* mpEmitterCallBack;
     /* 0x1A0 */ JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>* mpParticleCallBack;
@@ -280,7 +294,7 @@ public:
     /* 0x210 */ u32 mUserData;
     /* 0x214 */ u8 mGroupID;
     /* 0x215 */ u8 mResMgrID;
-    /* 0x216 */ u8 field_0x216[0x218 - 0x216];
+    /* 0x216 */ u16 field_0x216;
 };
 
 void JPACallBackBase<JPABaseEmitter*>::init(JPABaseEmitter*) {}

@@ -41,16 +41,16 @@ class dPa_followEcallBack : public dPa_levelEcallBack {
 public:
     dPa_followEcallBack(u8=0, u8=0);
     virtual ~dPa_followEcallBack() {}
-    
+
     virtual void execute(JPABaseEmitter*);
     virtual void draw(JPABaseEmitter*);
     virtual void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
     virtual void end();
-    
+
     JPABaseEmitter* getEmitter() { return mpEmitter; }
     void setRateOff(u8 param_0) { field_0x11 = param_0; }
     bool isEnd() { return field_0x10 & 1; }
-    
+
     /* 0x04 */ JPABaseEmitter* mpEmitter;
     /* 0x08 */ u8 field_0x08[0x10 - 0x08];
     /* 0x10 */ u8 field_0x10;
@@ -67,11 +67,11 @@ public:
     dPa_smokeEcallBack(u8, u8, u8, u8);
     dPa_smokeEcallBack(const GXColor&, dKy_tevstr_c*, u8);
     virtual ~dPa_smokeEcallBack() {}
-    
+
     virtual void draw(JPABaseEmitter*);
     virtual void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
     virtual void end();
-    
+
     /* 0x14 */ s8 field_0x14;
     /* 0x15 */ u8 field_0x15;
     /* 0x16 */ GXColor field_0x16;
@@ -167,7 +167,7 @@ class dPa_rippleEcallBack : public dPa_levelEcallBack {
 public:
     dPa_rippleEcallBack() { mpBaseEmitter = NULL; }
     virtual ~dPa_rippleEcallBack() {}
-    
+
     void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
     void end();
     void execute(JPABaseEmitter*);
@@ -181,10 +181,8 @@ public:
     /* 0x10 */ f32 mRate;
 };
 
-class dPa_modelEmitter_c {
+class dPa_modelEmitter_c : public node_class {
 public:
-    u8 temp[0xC];
-    
     dPa_modelEmitter_c();
     virtual ~dPa_modelEmitter_c() {}
 };
@@ -195,23 +193,27 @@ class dPa_J3DmodelEmitter_c : public dPa_modelEmitter_c {
 public:
     u8 temp2[4];
     JKRSolidHeap* mpHeap;
-    
+
     dPa_J3DmodelEmitter_c(JPABaseEmitter*, J3DModelData*, dKy_tevstr_c&, J3DAnmTexPattern*, unsigned short, int);
     virtual ~dPa_J3DmodelEmitter_c();
-    
+
     virtual void draw();
 };
 
 class dPa_J3Dmodel_c {
 public:
     dPa_J3Dmodel_c();
+
+public:
+    /* 0x00 */ u8 mInit;
+    /* 0x04 */ J3DModel* mModel;
 };
 
 class dPa_smokePcallBack : public JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*> {
 public:
     dPa_smokePcallBack();
     virtual ~dPa_smokePcallBack() {}
-    
+
     virtual void execute(JPABaseEmitter*, JPABaseParticle*);
     virtual void draw(JPABaseEmitter*, JPABaseParticle*);
 };
@@ -220,7 +222,7 @@ class dPa_selectTexEcallBack : public dPa_levelEcallBack {
 public:
     dPa_selectTexEcallBack();
     virtual ~dPa_selectTexEcallBack() {}
-    
+
     virtual void draw(JPABaseEmitter*);
     virtual void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
 };
@@ -229,7 +231,7 @@ class dPa_windPcallBack : public JPACallBackBase2<JPABaseEmitter*, JPABasePartic
 public:
     dPa_windPcallBack();
     virtual ~dPa_windPcallBack() {}
-    
+
     virtual void execute(JPABaseEmitter*, JPABaseParticle*);
 };
 
@@ -237,7 +239,7 @@ class dPa_singleRippleEcallBack : public dPa_levelEcallBack {
 public:
     dPa_singleRippleEcallBack();
     virtual ~dPa_singleRippleEcallBack() {}
-    
+
     virtual void execute(JPABaseEmitter*);
     virtual void draw(JPABaseEmitter*);
     virtual void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
@@ -247,7 +249,7 @@ class dPa_ripplePcallBack : public JPACallBackBase2<JPABaseEmitter*, JPABasePart
 public:
     dPa_ripplePcallBack();
     virtual ~dPa_ripplePcallBack() {}
-    
+
     virtual void execute(JPABaseEmitter*, JPABaseParticle*);
     virtual void draw(JPABaseEmitter*, JPABaseParticle*);
 };
@@ -256,7 +258,7 @@ class dPa_cutTurnEcallBack_c : public dPa_levelEcallBack {
 public:
     dPa_cutTurnEcallBack_c() {}
     virtual ~dPa_cutTurnEcallBack_c() {}
-    
+
     virtual void executeAfter(JPABaseEmitter*);
     virtual void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
     void end();
@@ -271,7 +273,7 @@ class dPa_stripesEcallBack : public dPa_levelEcallBack {
 public:
     dPa_stripesEcallBack();
     virtual ~dPa_stripesEcallBack() {}
-    
+
     virtual void draw(JPABaseEmitter*);
     virtual void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
 };
@@ -280,7 +282,7 @@ class dPa_kageroEcallBack : public JPACallBackBase<JPABaseEmitter*> {
 public:
     dPa_kageroEcallBack();
     virtual ~dPa_kageroEcallBack() {}
-    
+
     virtual void draw(JPABaseEmitter*);
 };
 
@@ -288,7 +290,7 @@ class dPa_bombSmokeEcallBack : public dPa_levelEcallBack {
 public:
     dPa_bombSmokeEcallBack();
     virtual ~dPa_bombSmokeEcallBack() {}
-    
+
     virtual void execute(JPABaseEmitter*);
     virtual void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
 };
@@ -297,7 +299,7 @@ class dPa_setColorEcallBack : public dPa_levelEcallBack {
 public:
     dPa_setColorEcallBack();
     virtual ~dPa_setColorEcallBack() {}
-    
+
     virtual void draw(JPABaseEmitter*);
     virtual void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
 
@@ -305,53 +307,22 @@ public:
     /* 0x04 */ GXColor mColor;
 };  // Size: 0x08
 
-class dPa_modelControl_c {
+class dPa_modelControl_c : public node_list_class {
 public:
     dPa_modelControl_c(J3DModelData*);
     ~dPa_modelControl_c();
 
-    void newModel(J3DModelData*);
+    static J3DModel * newModel(J3DModelData*);
     void draw();
 
-    /* 0x00 */ node_list_class parent;
-    /* 0x0C */ void* field_0x0c;
-    /* 0x10 */ void* field_0x10;
-    /* 0x14 */ void* field_0x14;
-    /* 0x18 */ void* field_0x18;
-    /* 0x1C */ void* field_0x1c;
-    /* 0x20 */ void* field_0x20;
-    /* 0x24 */ void* field_0x24;
-    /* 0x28 */ void* field_0x28;
-    /* 0x2C */ void* field_0x2c;
-    /* 0x30 */ void* field_0x30;
-    /* 0x34 */ void* field_0x34;
-    /* 0x38 */ void* field_0x38;
-    /* 0x3C */ void* field_0x3c;
-    /* 0x40 */ void* field_0x40;
-    /* 0x44 */ void* field_0x44;
-    /* 0x48 */ void* field_0x48;
-    /* 0x4C */ void* field_0x4c;
-    /* 0x50 */ void* field_0x50;
-    /* 0x54 */ void* field_0x54;
-    /* 0x58 */ void* field_0x58;
-    /* 0x5C */ void* field_0x5c;
-    /* 0x60 */ void* field_0x60;
-    /* 0x64 */ void* field_0x64;
-    /* 0x68 */ void* field_0x68;
-    /* 0x6C */ void* field_0x6c;
-    /* 0x70 */ void* field_0x70;
-    /* 0x74 */ void* field_0x74;
-    /* 0x78 */ void* field_0x78;
-    /* 0x7C */ void* field_0x7c;
-    /* 0x80 */ void* field_0x80;
-    // /* 0x84 */ J3DVertexData mVertexData;
+    static dPa_J3Dmodel_c * mModel;
 };
 
 class dPa_control_c {
 public:
     dPa_control_c();
 
-    void getRM_ID(u16);
+    static u16 getRM_ID(u16);
     void swapFrameBufferTexture();
     void createCommon(void const*);
     void createRoomScene(void const*);
@@ -434,16 +405,18 @@ public:
         return set(5, particleID, pos, angle, scale, alpha, &mSingleRippleEcallBack, -1, NULL, NULL, NULL);
     }
 
-    
+
     void drawModelParticle() { mModelCtrl->draw(); }
-    JKRHeap * getHeap() { return mpHeap; }
-    
+    JKRHeap * getHeap() { return mHeap; }
+
     static dPa_setColorEcallBack* getLifeBallSetColorEcallBack(int idx) { return &mLifeBall[idx]; }
-    
+
     static dPa_rippleEcallBack mSingleRippleEcallBack;
     static dPa_setColorEcallBack mLifeBall[3];
 
-    /* 0x0000 */ JKRHeap* mpHeap;
+    static JPAEmitterManager * mEmitterMng;
+
+    /* 0x0000 */ JKRHeap* mHeap;
     /* 0x0004 */ JPAResourceManager* mpCommonResMgr;
     /* 0x0008 */ dPa_modelControl_c* mModelCtrl;
     /* 0x000C */ JKRHeap* mpSceneHeap;

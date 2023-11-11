@@ -4,11 +4,16 @@
 //
 
 #include "d/d_particle.h"
-#include "dolphin/types.h"
+#include "JSystem/JParticle/JPAParticle.h"
+#include "JSystem/JParticle/JPAEmitter.h"
+#include "JSystem/JParticle/JPAEmitterManager.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "SSystem/SComponent/c_malloc.h"
 
 /* 8007A4D8-8007A514       .text __ct__18dPa_modelEmitter_cFv */
 dPa_modelEmitter_c::dPa_modelEmitter_c() {
-    /* Nonmatching */
+    cNd_ForcedClear(this);
 }
 
 /* 8007A514-8007A804       .text __ct__21dPa_J3DmodelEmitter_cFP14JPABaseEmitterP12J3DModelDataR12dKy_tevstr_cP16J3DAnmTexPatternUsi */
@@ -29,19 +34,28 @@ void dPa_J3DmodelEmitter_c::draw() {
 }
 
 /* 8007ADC4-8007AECC       .text __ct__18dPa_modelControl_cFP12J3DModelData */
-dPa_modelControl_c::dPa_modelControl_c(J3DModelData*) {
-    /* Nonmatching */
+dPa_modelControl_c::dPa_modelControl_c(J3DModelData* modelData) {
+    mModel = new dPa_J3Dmodel_c[0x80];
+    JUT_ASSERT(0x10f, mModel != 0);
+
+    dPa_J3Dmodel_c * model = mModel;
+    for (s32 i = 0; i < 0x80; i++, model++) {
+        model->mModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x37221223);
+        JUT_ASSERT(0x120, model->mModel != 0);
+    }
+
+    cLs_Create(this);
 }
 
 /* 8007AECC-8007AED8       .text __ct__14dPa_J3Dmodel_cFv */
 dPa_J3Dmodel_c::dPa_J3Dmodel_c() {
-    /* Nonmatching */
+    mInit = 0;
 }
 
 /* 8007AED8-8007AF64       .text __dt__18dPa_modelControl_cFv */
 dPa_modelControl_c::~dPa_modelControl_c() {
     /* Nonmatching (node_class has no virtual destructor) */
-    node_class* node = parent.mpHead;
+    node_class* node = mpHead;
     while (node) {
         node_class* nextNode = node->mpNextNode;
         cLs_SingleCut(node);
@@ -50,14 +64,56 @@ dPa_modelControl_c::~dPa_modelControl_c() {
     }
 }
 
+dPa_J3Dmodel_c * dPa_modelControl_c::mModel;
+
 /* 8007AF64-8007B074       .text newModel__18dPa_modelControl_cFP12J3DModelData */
-void dPa_modelControl_c::newModel(J3DModelData*) {
-    /* Nonmatching */
+J3DModel * dPa_modelControl_c::newModel(J3DModelData* modelData) {
+    dPa_J3Dmodel_c * model = mModel;
+    for (s32 i = 0; i < 0x80; i++, model++) {
+        if (model->mInit == 0) {
+            model->mInit = 1;
+            J3DModel * j3dmodel = model->mModel;
+            j3dmodel->mModelData = modelData;
+
+            J3DShapePacket * shapePacket = j3dmodel->getShapePacket(0);
+            for (u16 j = 0; j < modelData->getShapeNum(); shapePacket++, j++) {
+                shapePacket->setShape(modelData->getShapeNodePointer(j));
+            }
+
+            J3DMatPacket * matPacket = j3dmodel->getMatPacket(0);
+            for (u16 j = 0; j < modelData->getMaterialNum(); matPacket++, j++) {
+                J3DMaterial* mat = modelData->getMaterialNodePointer(j);
+                matPacket->setMaterial(mat);
+                J3DShapePacket * shapePacket = j3dmodel->getShapePacket(mat->getShape()->getIndex());
+                matPacket->setInitShapePacket(shapePacket);
+                matPacket->addShapePacket(shapePacket);
+                matPacket->setTexture(modelData->getTexture());
+                matPacket->setDisplayListObj(mat->getSharedDisplayListObj());
+            }
+
+            j3dmodel->mVertexBuffer.setVertexData(&modelData->getVertexData());
+            return model->mModel;
+        }
+    }
+
+    return NULL;
 }
 
 /* 8007B074-8007B158       .text draw__18dPa_modelControl_cFv */
 void dPa_modelControl_c::draw() {
     /* Nonmatching */
+    for (u32 i = 0; i < 0x80; i++)
+        mModel[i].mInit = 0;
+
+    dKy_GxFog_set();
+
+    for (node_class * nd = LIST_GET_HEAD(this); nd != NULL;) {
+        node_class* pNext = NODE_GET_NEXT(nd);
+
+        // TODO
+
+        nd = pNext;
+    }
 }
 
 /* 8007B158-8007B194       .text __ct__19dPa_followEcallBackFUcUc */
@@ -186,14 +242,23 @@ void dPa_windPcallBack::execute(JPABaseEmitter*, JPABaseParticle*) {
     /* Nonmatching */
 }
 
+JPAEmitterManager * dPa_control_c::mEmitterMng;
+
 /* 8007C8E8-8007C9A4       .text __ct__13dPa_control_cFv */
 dPa_control_c::dPa_control_c() {
-    /* Nonmatching */
+    mHeap = mDoExt_createSolidHeapFromSystem(0x16e800, 0);
+    JUT_ASSERT(0x4d8, mHeap != 0);
+    mSceneNo = 0xFF;
+    mCount = 0;
+    mEmitterMng = NULL;
+    mNumSimple = 0;
+    mpCommonResMgr = NULL;
+    mpSceneResMgr = NULL;
 }
 
 /* 8007CA28-8007CA30       .text getRM_ID__13dPa_control_cFUs */
-void dPa_control_c::getRM_ID(u16) {
-    /* Nonmatching */
+u16 dPa_control_c::getRM_ID(u16 uid) {
+    return (uid >> 15) & 0x01;
 }
 
 /* 8007CA30-8007CA98       .text swapFrameBufferTexture__13dPa_control_cFv */

@@ -14,7 +14,11 @@ public:
 };
 
 struct JPAEmitterData {
+public:
     JPAEmitterData() : pLinkInfoArray(NULL) {}
+    JPADataBlockLinkInfo** getLinkInfo() { return pLinkInfoArray; }
+
+public:
     /* 0x00 */ JPADataBlockLinkInfo** pLinkInfoArray;
     /* 0x04 */ u16 infoNum;
     /* 0x06 */ u16 userIndex;

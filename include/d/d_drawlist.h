@@ -335,6 +335,11 @@ public:
 struct dDlst_alphaModelPacket : public J3DPacket {
 public:
     virtual void draw();
+
+public:
+    /* 0x10 */ u8 mType;
+    /* 0x11 */ GXColor mColor;
+    /* 0x18 */ Mtx* mMtxP;
 };
 
 struct dDlst_alphaVolPacket : public J3DPacket {

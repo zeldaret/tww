@@ -38,6 +38,8 @@ class JPAResourceManager {
 public:
     JPAResourceManager(const void*, JKRHeap*);
     const ResTIMG* swapTexture(const ResTIMG*, const char*);
+    JPATextureResource * getTextureResource() { return pTexRes; }
+    JPAEmitterResource * getEmitterResource() { return pEmtrRes; }
 
 public:
     /* 0x00 */ JKRHeap * pHeap;

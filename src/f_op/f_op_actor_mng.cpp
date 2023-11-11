@@ -575,18 +575,18 @@ s32 fopAcM_cullingCheck(fopAc_ac_c* i_this) {
         cMtx_concat(j3dSys.getViewMtx(), i_this->mCullMtx, mtx);
         pMtx = mtx;
     }
-    
+
     f32 cullFar = i_this->mCullSizeFar;
     if (dComIfGp_event_runCheck()) {
         cullFar *= dComIfGp_event_getCullRate();
     }
-    
+
     int cullType = i_this->mCullType;
     bool isBox = false;
     if ((cullType >= 0 && cullType < fopAc_CULLBOX_CUSTOM_e) || cullType == fopAc_CULLBOX_CUSTOM_e) {
         isBox = true;
     }
-    
+
     if (isBox) {
         if (cullType == fopAc_CULLBOX_CUSTOM_e) {
             if (i_this->mCullSizeFar > 0.0f) {
@@ -781,42 +781,42 @@ fopAc_ac_c* fopAcM_getEventPartner(fopAc_ac_c* i_this) {
 /* 80026118-800261E8       .text fopAcM_createItemForPresentDemo__FP4cXyziUciiP5csXyzP4cXyz */
 s32 fopAcM_createItemForPresentDemo(cXyz* pos, int i_itemNo, u8 param_3, int roomNo, int param_5, csXyz* rot, cXyz* scale) {
     JUT_ASSERT(2413, 0 <= i_itemNo && i_itemNo < 256);
-    
+
     dComIfGp_event_setGtItm(i_itemNo);
-    
+
     if (i_itemNo == NO_ITEM) {
         return -1;
     }
-    
+
     return fopAcM_createDemoItem(pos, i_itemNo, roomNo, rot, param_5, scale, param_3);
 }
 
 /* 800261E8-800262B4       .text fopAcM_createItemForTrBoxDemo__FP4cXyziiiP5csXyzP4cXyz */
 s32 fopAcM_createItemForTrBoxDemo(cXyz* pos, int i_itemNo, int roomNo, int param_5, csXyz* rot, cXyz* scale) {
     JUT_ASSERT(2458, 0 <= i_itemNo && i_itemNo < 256);
-    
+
     dComIfGp_event_setGtItm(i_itemNo);
-    
+
     if (i_itemNo == NO_ITEM) {
         return -1;
     }
-    
+
     return fopAcM_createDemoItem(pos, i_itemNo, roomNo, rot, param_5, scale, 0);
 }
 
 /* 800262B4-80026694       .text fopAcM_createItemFromTable__FP4cXyziiiiP5csXyziP4cXyz */
 s32 fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo, int roomNo, int type, csXyz* p_angle, int action, cXyz* p_scale) {
     JUT_ASSERT(2514, 0 <= i_itemNo && i_itemNo < 64 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
-    
+
     static cXyz fairy_offset_tbl[3] = {
         cXyz(40.0f, 0.0f, 0.0f),
         cXyz(-40.0f, 0.0f, 0.0f),
         cXyz(0.0f, 0.0f, 40.0f),
     };
-    
+
     cXyz pos(0.0f, 0.0f, 0.0f);
     csXyz angle(0, 0, 0);
-    
+
     if (i_itemNo >= 0x20 && i_itemNo <= 0x3E) {
         ItemTableList* itemTableList = dComIfGp_getItemTable();
         int tableIdx = i_itemNo - 0x20;
@@ -861,7 +861,7 @@ s32 fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo, int r
                 if (p_angle) {
                     angle = *p_angle;
                 }
-                
+
                 if (tableIdx == RECOVER_FAIRY) {
                     // Bug: This condition never gets triggered. They meant to check if (itemNo == RECOVER_FAIRY) so
                     // that the 3x fairies drop table (table 0x14) spawns them in a triangle. But nstead they check if
@@ -869,10 +869,10 @@ s32 fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo, int r
                     pos += fairy_offset_tbl[i];
                     angle.y = cM_rndF((f32)0x7FFE);
                 }
-                
+
                 itemNo = getItemNoByLife((s8)itemNo);
                 daItem_c* item = (daItem_c*)fopAcM_fastCreateItem2(&pos, itemNo, i_itemBitNo, roomNo, type, &angle, 8, NULL);
-                
+
                 lastItemPcId = fopAcM_GetID(item);
                 if (lastItemPcId == -1) {
                     break;
@@ -880,11 +880,11 @@ s32 fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo, int r
             }
             return lastItemPcId;
         }
-        
+
         int itemIdx = (int)cM_rndF(15.9999f);
         i_itemNo = itemTableList->mItemTables[tableIdx][itemIdx];
     }
-    
+
     if (i_itemNo == 0x3F || i_itemNo == 0xFF) {
         return -1;
     } else {
@@ -906,7 +906,7 @@ s32 fopAcM_createShopItem(cXyz* pos, int i_itemNo, csXyz* rot, int roomNo, cXyz*
     if (i_itemNo == NO_ITEM) {
         return -1;
     }
-    
+
     return fopAcM_create(PROC_ShopItem, i_itemNo, pos, roomNo, rot, scale, 0xFF, createFunc);
 }
 
@@ -916,7 +916,7 @@ s32 fopAcM_createRaceItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* rot, 
     if (i_itemNo == NO_ITEM) {
         return -1;
     }
-    
+
     i_itemNo = check_itemno(i_itemNo);
     u32 params = (i_itemBitNo & 0x7F) << 0x08 | i_itemNo & 0xFF | (param_7 & 0xF) << 0xF;
     fopAcM_create(PROC_RACEITEM, params, pos, roomNo, rot, scale, 0xFF, NULL);
@@ -928,7 +928,7 @@ s32 fopAcM_createDemoItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* rot, 
     if (i_itemNo == NO_ITEM) {
         return -1;
     }
-    
+
     u32 params = i_itemNo & 0xFF | (i_itemBitNo & 0x7F) << 0x08 | (param_7 & 0xFF) << 0x10;
     fopAcM_create(PROC_Demo_Item, params, pos, roomNo, rot, scale, 0xFF, NULL);
 }
@@ -945,8 +945,7 @@ s32 fopAcM_createItemForBoss(cXyz* pos, int, int roomNo, csXyz* rot, cXyz* scale
 }
 
 /* 80026ADC-80026C90       .text fopAcM_createItem__FP4cXyziiiiP5csXyziP4cXyz */
-s32 fopAcM_createItem(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomNo, int type, csXyz* rot,
-                      int action, cXyz* scale) {
+s32 fopAcM_createItem(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomNo, int type, csXyz* rot, int action, cXyz* scale) {
     /* Nonmatching */
 }
 
@@ -955,21 +954,21 @@ void* fopAcM_fastCreateItem2(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomN
                              csXyz* rot, int action, cXyz* scale) {
     /* Nonmatching (regswap) */
     JUT_ASSERT(2995, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
-    
+
     csXyz prmRot = csXyz::Zero;
-    
+
     if (i_itemNo == NO_ITEM) {
         return NULL;
     }
-    
+
     if (rot) {
         prmRot = *rot;
     }
     prmRot.z = 0xFF;
-    
+
     u32 params = check_itemno(i_itemNo);
-    params = (i_itemBitNo & 0xFF) << 0x08 | params & 0xFF | 0x00FF0000 | (type & 3) << 0x18 | action << 0x1A;
-    
+    params = (i_itemBitNo & 0xFF) << 0x08 | params & 0xFF | 0x00FF0000 | (type & 3) << 24 | action << 26;
+
     daItem_c* item;
     switch (i_itemNo) {
     case RECOVER_FAIRY:
@@ -986,13 +985,26 @@ void* fopAcM_fastCreateItem2(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomN
 }
 
 /* 80026E5C-80026F5C       .text fopAcM_createItemForKP2__FP4cXyziiP5csXyzP4cXyzfffUs */
-void fopAcM_createItemForKP2(cXyz*, int, int, csXyz*, cXyz*, float, float, float, u16) {
-    /* Nonmatching */
+fopAc_ac_c* fopAcM_createItemForKP2(cXyz* pos, int i_itemNo, int roomNo, csXyz* rot, cXyz* scale, f32 speedF, f32 speedY, f32 gravity, u16 i_itemBitNo) {
+    JUT_ASSERT(0xc25, 0 <= i_itemNo && i_itemNo < 256);
+    if (i_itemNo == NO_ITEM)
+        return NULL;
+
+    fopAc_ac_c* ac = (fopAc_ac_c*)fopAcM_fastCreate(PROC_SPC_ITEM01, i_itemNo | (i_itemBitNo & 0xFFFF) << 8, pos, roomNo, rot, scale, 0xFF, NULL, NULL);
+    if (ac != NULL) {
+        fopAcM_SetSpeedF(ac, speedF);
+        ac->speed.y = speedY;
+        fopAcM_SetGravity(ac, gravity);
+    }
+    return ac;
 }
 
 /* 80026F5C-80026F98       .text fopAcM_createItemForSimpleDemo__FP4cXyziiP5csXyzP4cXyzff */
-void* fopAcM_createItemForSimpleDemo(cXyz*, int, int, csXyz*, cXyz*, float, float) {
-    /* Nonmatching */
+daItem_c* fopAcM_createItemForSimpleDemo(cXyz* pos, int i_itemNo, int roomNo, csXyz* rot, cXyz* scale, f32 speedF, f32 speedY) {
+    daItem_c* item = (daItem_c*)fopAcM_fastCreateItem(pos, i_itemNo, roomNo, rot, scale, speedF, speedY, -7.0f, 0xFFFFFFFF, NULL);
+    if (item != NULL)
+        item->mCurState = 5;
+    return item;
 }
 
 /* 80026F98-80027254       .text fopAcM_fastCreateItem__FP4cXyziiP5csXyzP4cXyzfffiPFPv_i */
@@ -1003,13 +1015,13 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* rot, cXy
     if (i_itemNo == NO_ITEM) {
         return NULL;
     }
-    
+
     u32 params = (u8)check_itemno(i_itemNo) & 0xFF | (i_itemBitNo & 0xFF) << 0x08 | 0x28FF0000;
-    
+
     if (isHeart(i_itemNo)) {
         speedF = 2.0f * speedF;
     }
-    
+
     daItem_c* item;
     csXyz prmRot;
     switch (i_itemNo) {
@@ -1026,7 +1038,7 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* rot, cXy
             }
             prmRot.z = 0xFF;
             prmRot.y += (int)cM_rndFX(0x2000);
-            
+
             item = (daItem_c*)fopAcM_fastCreate(PROC_ITEM, params, pos, roomNo, &prmRot, scale, 0xFF, createFunc, NULL);
             if (item) {
                 item->speedF = speedF * (1.0f + cM_rndFX(0.3f));
@@ -1042,7 +1054,7 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* rot, cXy
             prmRot = csXyz::Zero;
         }
         prmRot.z = 0xFF;
-        
+
         item = (daItem_c*)fopAcM_fastCreate(PROC_ITEM, params, pos, roomNo, &prmRot, scale, 0xFF, createFunc, NULL);
         if (item) {
             item->speedF = speedF;
@@ -1064,7 +1076,7 @@ BOOL stealItem_CB(void* actor) {
 }
 
 /* 80027280-800273D4       .text fopAcM_createStealItem__FP4cXyziiP5csXyzi */
-void fopAcM_createStealItem(cXyz*, int, int, csXyz*, int) {
+void fopAcM_createStealItem(cXyz* p_pos, int i_tblNo, int, csXyz*, int) {
     /* Nonmatching */
 }
 
@@ -1138,7 +1150,7 @@ void fopAcM_cancelCarryNow(fopAc_ac_c* i_this) {
         fopAcM_OffStatus(i_this, fopAcStts_CARRY_e);
         fopAcM_setRoomLayer(i_this, fopAcM_GetRoomNo(i_this));
         i_this->shape_angle.z = 0;
-        
+
         if (dComIfGp_event_runCheck() && i_this->mGroup != fopAc_ENEMY_e) {
             fopAcM_OnStatus(i_this, fopAcStts_UNK800_e);
         }

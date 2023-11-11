@@ -5,6 +5,8 @@
 
 #include "d/d_drawlist.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_kankyo_rain.h"
+#include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_mtx.h"
 #include "JSystem/JKernel/JKRHeap.h"
@@ -20,6 +22,9 @@ f32 dDlst_list_c::mWipeRate = 0.0f;
 f32 dDlst_list_c::mWipeSpeed = 0.0f;
 GXColor dDlst_list_c::mWipeColor = { 0, 0, 0, 0 };
 dDlst_2DT2_c dDlst_list_c::mWipeDlst;
+
+static Vec dummy1 = { 1.0f, 1.0f, 1.0f };
+static Vec dummy2 = { 1.0f, 1.0f, 1.0f };
 
 /* 800804A4-800804C0       .text setViewPort__14dDlst_window_cFffffff */
 void dDlst_window_c::setViewPort(f32 x, f32 y, f32 w, f32 h, f32 n, f32 f) {
@@ -83,12 +88,12 @@ void dDlst_2DT2_c::draw() {
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1,true, GX_TEVPREV);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     if (mAlpha)
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
     else
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1,true, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetZCompLoc(0);
     GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
     GXSetBlendMode(GX_BM_NONE, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
@@ -474,21 +479,21 @@ extern void GFSetVtxAttrFmtv(GXVtxFmt, GXVtxAttrFmtList*);
 extern void GFSetBlendModeEtc(GXBlendMode, GXBlendFactor, GXBlendFactor, GXLogicOp, u8, u8, u8);
 extern void GFSetArray(GXAttr, void*, u8);
 
-char l_backRevZMat[0x40] = {};
-char l_frontZMat[0x20] = {};
-char l_frontNoZSubMat[0x20] = {};
+char l_backRevZMat[0x41] __attribute__((aligned(32))) = {};
+char l_frontZMat[0x3c] __attribute__((aligned(32))) = {};
+char l_frontNoZSubMat[0x2a] __attribute__((aligned(32))) = {};
 
 Vec l_bonboriPos[0x2a] = {};
-char l_bonboriDL[0xa0] = {};
+char l_bonboriDL[0xa7] __attribute__((aligned(32))) = {};
 
-Vec l_beam_checkPos[0x10] = {};
-char l_beam_checkDL[0xe0] = {};
+Vec l_s_beam_checkPos[0x28] = {};
+char l_s_beam_checkDL[0xf8] __attribute__((aligned(32))) = {};
 
-Vec l_cubePos[0x10] = {};
-char l_cubeDL[0xe0] = {};
+Vec l_cubePos[0x08] = {};
+char l_cubeDL[0x4a] __attribute__((aligned(32))) = {};
 
-Vec l_bonbori2Pos[0x2a] = {};
-char l_bonbori2DL[0xa0] = {};
+Vec l_bonbori2Pos[0x56] = {};
+char l_bonbori2DL[0x2a8] __attribute__((aligned(32))) = {};
 
 /* 80082838-80082E44       .text draw__22dDlst_alphaModelData_cFPA4_f */
 void dDlst_alphaModelData_c::draw(Mtx viewMtx) {
@@ -505,12 +510,12 @@ void dDlst_alphaModelData_c::draw(Mtx viewMtx) {
     if (mType == 0) {
         /* Bonbori */
         GFSetArray(GX_VA_POS, l_bonboriPos, sizeof(*l_bonboriPos));
-        GXCallDisplayList(l_backRevZMat, sizeof(l_backRevZMat));
-        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
-        GXCallDisplayList(l_frontZMat, sizeof(l_frontZMat));
-        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
-        GXCallDisplayList(l_frontNoZSubMat, sizeof(l_frontNoZSubMat));
-        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GXCallDisplayList(l_backRevZMat, 0x40);
+        GXCallDisplayList(l_bonboriDL, 0xa0);
+        GXCallDisplayList(l_frontZMat, 0x20);
+        GXCallDisplayList(l_bonboriDL, 0xa0);
+        GXCallDisplayList(l_frontNoZSubMat, 0x20);
+        GXCallDisplayList(l_bonboriDL, 0xa0);
     } else if (mType == 1) {
         /* Bonborix2 */
         GFSetArray(GX_VA_POS, l_bonboriPos, sizeof(*l_bonboriPos));
@@ -519,22 +524,22 @@ void dDlst_alphaModelData_c::draw(Mtx viewMtx) {
         MTXConcat(mtx, tmp, tmp);
         GFLoadPosMtxImm(tmp, GX_PNMTX1);
 
-        GXCallDisplayList(l_backRevZMat, sizeof(l_backRevZMat));
-        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GXCallDisplayList(l_backRevZMat, 0x40);
+        GXCallDisplayList(l_bonboriDL, 0xa0);
         GFSetCurrentMtx(GX_PNMTX1, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
-        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GXCallDisplayList(l_bonboriDL, 0xa0);
 
-        GXCallDisplayList(l_frontZMat, sizeof(l_frontZMat));
+        GXCallDisplayList(l_frontZMat, 0x20);
         GFSetCurrentMtx(GX_PNMTX0, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
-        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GXCallDisplayList(l_bonboriDL, 0xa0);
         GFSetCurrentMtx(GX_PNMTX1, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
-        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GXCallDisplayList(l_bonboriDL, 0xa0);
 
-        GXCallDisplayList(l_frontNoZSubMat, sizeof(l_frontNoZSubMat));
+        GXCallDisplayList(l_frontNoZSubMat, 0x20);
         GFSetCurrentMtx(GX_PNMTX0, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
-        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GXCallDisplayList(l_bonboriDL, 0xa0);
         GFSetCurrentMtx(GX_PNMTX1, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
-        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GXCallDisplayList(l_bonboriDL, 0xa0);
     } else if (mType == 5) {
         /* Bonborix3 */
         GFSetArray(GX_VA_POS, l_bonboriPos, sizeof(*l_bonboriPos));
@@ -547,53 +552,53 @@ void dDlst_alphaModelData_c::draw(Mtx viewMtx) {
         MTXConcat(mtx, tmp, tmp);
         GFLoadPosMtxImm(tmp, GX_PNMTX2);
 
-        GXCallDisplayList(l_backRevZMat, sizeof(l_backRevZMat));
-        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GXCallDisplayList(l_backRevZMat, 0x40);
+        GXCallDisplayList(l_bonboriDL, 0xa0);
         GFSetCurrentMtx(GX_PNMTX1, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
-        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GXCallDisplayList(l_bonboriDL, 0xa0);
         GFSetCurrentMtx(GX_PNMTX2, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
-        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GXCallDisplayList(l_bonboriDL, 0xa0);
 
-        GXCallDisplayList(l_frontZMat, sizeof(l_frontZMat));
+        GXCallDisplayList(l_frontZMat, 0x20);
         GFSetCurrentMtx(GX_PNMTX0, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
-        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GXCallDisplayList(l_bonboriDL, 0xa0);
         GFSetCurrentMtx(GX_PNMTX1, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
-        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GXCallDisplayList(l_bonboriDL, 0xa0);
         GFSetCurrentMtx(GX_PNMTX2, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
-        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GXCallDisplayList(l_bonboriDL, 0xa0);
 
-        GXCallDisplayList(l_frontNoZSubMat, sizeof(l_frontNoZSubMat));
+        GXCallDisplayList(l_frontNoZSubMat, 0x20);
         GFSetCurrentMtx(GX_PNMTX0, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
-        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GXCallDisplayList(l_bonboriDL, 0xa0);
         GFSetCurrentMtx(GX_PNMTX1, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
-        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GXCallDisplayList(l_bonboriDL, 0xa0);
         GFSetCurrentMtx(GX_PNMTX2, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
-        GXCallDisplayList(l_bonboriDL, sizeof(l_bonboriDL));
+        GXCallDisplayList(l_bonboriDL, 0xa0);
     } else if (mType == 2) {
         /* BeamCheck */
-        GFSetArray(GX_VA_POS, l_beam_checkPos, sizeof(*l_beam_checkPos));
-        GXCallDisplayList(l_backRevZMat, sizeof(l_backRevZMat));
-        GXCallDisplayList(l_beam_checkDL, sizeof(l_beam_checkDL));
-        GXCallDisplayList(l_frontZMat, sizeof(l_frontZMat));
-        GXCallDisplayList(l_beam_checkDL, sizeof(l_beam_checkDL));
-        GXCallDisplayList(l_frontNoZSubMat, sizeof(l_frontNoZSubMat));
-        GXCallDisplayList(l_beam_checkDL, sizeof(l_beam_checkDL));
+        GFSetArray(GX_VA_POS, l_s_beam_checkPos, sizeof(*l_s_beam_checkPos));
+        GXCallDisplayList(l_backRevZMat, 0x40);
+        GXCallDisplayList(l_s_beam_checkDL, 0xe0);
+        GXCallDisplayList(l_frontZMat, 0x20);
+        GXCallDisplayList(l_s_beam_checkDL, 0xe0);
+        GXCallDisplayList(l_frontNoZSubMat, 0x20);
+        GXCallDisplayList(l_s_beam_checkDL, 0xe0);
     } else if (mType == 3) {
         /* Cube */
         /* BeamCheck */
         GFSetArray(GX_VA_POS, l_cubePos, sizeof(*l_cubePos));
-        GXCallDisplayList(l_backRevZMat, sizeof(l_backRevZMat));
-        GXCallDisplayList(l_frontZMat, sizeof(l_frontZMat));
-        GXCallDisplayList(l_cubeDL, sizeof(l_cubeDL));
+        GXCallDisplayList(l_backRevZMat, 0x40);
+        GXCallDisplayList(l_frontZMat, 0x20);
+        GXCallDisplayList(l_cubeDL, 0xe0);
     } else if (mType == 4) {
         /* Bonbori2 */
         GFSetArray(GX_VA_POS, l_bonbori2Pos, sizeof(*l_bonbori2Pos));
-        GXCallDisplayList(l_backRevZMat, sizeof(l_backRevZMat));
-        GXCallDisplayList(l_bonbori2DL, sizeof(l_bonbori2DL));
-        GXCallDisplayList(l_frontZMat, sizeof(l_frontZMat));
-        GXCallDisplayList(l_bonbori2DL, sizeof(l_bonbori2DL));
-        GXCallDisplayList(l_frontNoZSubMat, sizeof(l_frontNoZSubMat));
-        GXCallDisplayList(l_bonbori2DL, sizeof(l_bonbori2DL));
+        GXCallDisplayList(l_backRevZMat, 0x40);
+        GXCallDisplayList(l_bonbori2DL, 0x2a0);
+        GXCallDisplayList(l_frontZMat, 0x20);
+        GXCallDisplayList(l_bonbori2DL, 0x2a0);
+        GXCallDisplayList(l_frontNoZSubMat, 0x20);
+        GXCallDisplayList(l_bonbori2DL, 0x2a0);
     }
 }
 
@@ -623,17 +628,20 @@ dDlst_alphaModel_c * dDlst_alphaModel_c::create(int num) {
 
 /* 80082EFC-80082F38       .text __dt__22dDlst_alphaModelData_cFv */
 dDlst_alphaModelData_c::~dDlst_alphaModelData_c() {
-    /* Nonmatching */
 }
 
 /* 80082F38-80082F3C       .text __ct__22dDlst_alphaModelData_cFv */
 dDlst_alphaModelData_c::dDlst_alphaModelData_c() {
-    /* Nonmatching */
 }
 
 /* 80082F3C-80082F9C       .text set__18dDlst_alphaModel_cFUcPA4_fUc */
 BOOL dDlst_alphaModel_c::set(u8 type, Mtx mtx, u8 alpha) {
-    /* Nonmatching */
+    if (mNum >= mCapacity)
+        return FALSE;
+
+    mpData[mNum].set(type, mtx, alpha);
+    mNum++;
+    return TRUE;
 }
 
 /* 80082F9C-80083064       .text draw__18dDlst_alphaModel_cFPA4_f */
@@ -641,7 +649,7 @@ BOOL dDlst_alphaModel_c::draw(Mtx mtx) {
     if (mNum == 0)
         return FALSE;
 
-    static char l_matDL[0x60] = {};
+    static char l_matDL[0x64] __attribute__((aligned(32))) = {};
 
     static GXVtxDescList l_vtxDescList[2] = {
     };
@@ -649,7 +657,7 @@ BOOL dDlst_alphaModel_c::draw(Mtx mtx) {
     static GXVtxAttrFmtList l_vtxAttrFmtList[2] = {
     };
 
-    GXCallDisplayList(l_matDL, sizeof(l_matDL));
+    GXCallDisplayList(l_matDL, 0x60);
     GFSetVtxDescv(l_vtxDescList);
     GFSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
     GXSetClipMode(GX_CLIP_ENABLE);
@@ -705,6 +713,43 @@ char l_shadowVolumeDL[] = {
 /* 80083064-800832C4       .text draw__22dDlst_alphaModelPacketFv */
 void dDlst_alphaModelPacket::draw() {
     /* Nonmatching */
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanMatColor(GX_COLOR0A0, mColor);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_RASC);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_RASA);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetZCompLoc(GX_TRUE);
+    GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
+    GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
+    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, g_clearColor);
+    GXSetCullMode(GX_CULL_FRONT);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    Mtx mtx;
+    MTXConcat(j3dSys.getViewMtx(), *mMtxP, mtx);
+    GXLoadPosMtxImm(mtx, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+
+    if (mType == 0) {
+        GXSetArray(GX_VA_POS, l_bonboriPos, sizeof(*l_bonboriPos));
+        GXCallDisplayList(l_bonboriDL, 0xa0);
+    } else if (mType == 1) {
+        GXSetArray(GX_VA_POS, l_bonboriPos, sizeof(*l_bonboriPos));
+        GXCallDisplayList(l_bonboriDL, 0xa0);
+    } else if (mType == 2) {
+        GXSetArray(GX_VA_POS, l_s_beam_checkPos, sizeof(*l_s_beam_checkPos));
+        GXCallDisplayList(l_s_beam_checkDL, 0xe0);
+    } else if (mType == 3) {
+        GXSetArray(GX_VA_POS, l_cubePos, sizeof(*l_cubePos));
+        GXCallDisplayList(l_cubeDL, 0x40);
+    }
 }
 
 /* 800832C4-800833CC       .text set__18dDlst_shadowPoly_cFP10cBgD_Vtx_tUsUsUsP8cM3dGPla */
@@ -1194,11 +1239,46 @@ void dDlst_list_c::calcWipe() {
 
         mWipeDlst.mScrollS = mWipeRate * 2.0f;
         mWipeDlst.mScrollT = mWipeDlst.mScrollS * 1.218f;
-        set2DXlu(&mWipeDlst);
+        dComIfGd_set2DXlu(&mWipeDlst);
     }
 }
 
+camera_class * dCam_getCamera();
+
 /* 80086790-8008696C       .text dDlst_texSpecmapST__FPC4cXyzPC12dKy_tevstr_cP12J3DModelDataf */
-void dDlst_texSpecmapST(const cXyz*, const dKy_tevstr_c*, J3DModelData*, f32) {
-    /* Nonmatching */
+void dDlst_texSpecmapST(const cXyz* pos, const dKy_tevstr_c* tevStr, J3DModelData* modelData, f32 scale) {
+    static Mtx mtx_adj = {
+        0.5f, 0.0f, 0.0f, 0.5f,
+        0.0f, -0.5f, 0.0f, 0.5f,
+        0.0f, 0.0f, 1.0f, 0.0f,
+    };
+
+    f32 inv = 1.0f / scale;
+    camera_class * camera = dCam_getCamera();
+    cXyz lookDir = *pos - camera->mLookat.mEye;
+    cXyz refl;
+    cXyz lightDir;
+
+    dKyr_get_vectle_calc((cXyz*)&tevStr->mLightPosWorld, (cXyz*)pos, &lightDir);
+
+    C_VECHalfAngle(&lookDir, &lightDir, &refl);
+    Mtx reflMtx, effMtx;
+    C_MTXLookAt(reflMtx, &cXyz::Zero, &cXyz::BaseY, &refl);
+    MTXScale(effMtx, inv, inv, 1.0f);
+    MTXConcat(effMtx, mtx_adj, effMtx);
+    MTXConcat(effMtx, reflMtx, effMtx);
+    effMtx[0][3] = 0.0f;
+    effMtx[1][3] = 0.0f;
+    effMtx[2][3] = 0.0f;
+
+    s32 materialNum = modelData->getMaterialNum();
+    for (s32 i = 0; i < materialNum; i++) {
+        J3DMaterial* mat = modelData->getMaterialNodePointer(i);
+        for (s32 j = 0; j < 8; j++) {
+            J3DTexMtx* texMtx = mat->getTexMtx(j);
+            if (texMtx != NULL && texMtx->getTexMtxInfo().mInfo == 10) {
+                texMtx->getTexMtxInfo().setEffectMtx(effMtx);
+            }
+        }
+    }
 }

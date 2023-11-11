@@ -34,7 +34,7 @@ class JPADrawContext {
 class JPADraw {
 public:
     enum JPADrawVisitorDefFlags {};
-    
+
     void initialize(JPABaseEmitter*, JPATextureResource*);
     void draw(MtxP);
     void calc();
@@ -54,7 +54,7 @@ public:
     void zDrawParticle();
     void zDrawChild();
     void loadYBBMtx(MtxP);
-    
+
     /* 0x00 */ JPADrawExecEmitterVisitor* mpExecEmtrVis[1];
     /* 0x04 */ JPADrawExecEmitterVisitor* mpExecEmtrPVis[5];
     /* 0x18 */ JPADrawExecEmitterVisitor* mpExecEmtrCVis[3];
@@ -77,7 +77,9 @@ public:
     /* 0xBC */ GXColor mEnvColor;
     /* 0xC0 */ s16 mTexIdx;
     /* 0xC2 */ u8 field_0xc2;
-    /* 0xC3 */ u8 field_0xC3[0xC4 - 0xC3];
+    /* 0xC3 */ u8 field_0xc3;
 };
+
+STATIC_ASSERT(sizeof(JPADraw) == 0xC4);
 
 #endif /* JPADRAW_H */
