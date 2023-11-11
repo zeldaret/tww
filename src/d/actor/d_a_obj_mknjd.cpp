@@ -664,11 +664,9 @@ void daObjMknjD::manage_friend_draw(int i_param1) {
 
     if (judgeResult != NULL) {
         if (i_param1 == 1) {
-            u32 prio = fpcLf_GetPriority(judgeResult);
-            fopDwTg_ToDrawQ(&judgeResult->mDwTg, prio);
-        }
-        else {
-            fopDwTg_DrawQTo(&judgeResult->mDwTg);
+            fopAcM_onDraw(judgeResult);
+        } else {
+            fopAcM_offDraw(judgeResult);
         }
     }
 
@@ -676,11 +674,9 @@ void daObjMknjD::manage_friend_draw(int i_param1) {
     
     if (judgeResult != NULL) {
         if (i_param1 == 1) {
-            u32 prio = fpcLf_GetPriority(judgeResult);
-            fopDwTg_ToDrawQ(&judgeResult->mDwTg, prio);
-        }
-        else {
-            fopDwTg_DrawQTo(&judgeResult->mDwTg);
+            fopAcM_onDraw(judgeResult);
+        } else {
+            fopAcM_offDraw(judgeResult);
         }
     }
 }

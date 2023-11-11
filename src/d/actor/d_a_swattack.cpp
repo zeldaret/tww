@@ -3,166 +3,197 @@
 // Translation Unit: d_a_swattack.cpp
 //
 
-#include "d_a_swattack.h"
-#include "dolphin/types.h"
+#include "f_op/f_op_actor_mng.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "d/d_cc_d.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_procname.h"
+
+class daSwAt_c : public fopAc_ac_c {
+public:
+    s32 _create();
+    bool _execute();
+    bool _draw();
+    bool _delete();
+    void CreateInit();
+
+public:
+    /* 0x290 */ u32 field_0x290[3];
+    /* 0x29C */ dCcD_Stts mStts;
+    /* 0x2D8 */ dCcD_Cyl mCyl;
+    /* 0x408 */ u8 mAtType;
+    /* 0x40C */ u32 mSwitchNo;
+};
+
+namespace daSwAt_prm {
+    inline u8 getAtType(daSwAt_c* ac) { return (fopAcM_GetParam(ac) >> 0) & 0xFF; }
+    inline u8 getSwitchNo(daSwAt_c* ac) { return (fopAcM_GetParam(ac) >> 8) & 0xFF; }
+};
+
+static dCcD_SrcCyl l_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt Type     */ 0,
+        /* SrcObjAt Atp      */ 0,
+        /* SrcObjAt SPrm     */ 0,
+        /* SrcObjTg Type     */ AT_TYPE_ALL,
+        /* SrcObjTg SPrm     */ 0x09,
+        /* SrcObjCo SPrm     */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt GFlag   */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg GFlag   */ 0,
+        /* SrcGObjCo GFlag   */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 50.0f,
+        /* Height */ 50.0f,
+    },
+};
 
 /* 00000078-00000080       .text _delete__8daSwAt_cFv */
-void daSwAt_c::_delete() {
-    /* Nonmatching */
+bool daSwAt_c::_delete() {
+    return true;
 }
 
 /* 00000080-00000120       .text CreateInit__8daSwAt_cFv */
 void daSwAt_c::CreateInit() {
-    /* Nonmatching */
+    mStts.Init(0xFF, 0xFF, this);
+    mCyl.Set(l_cyl_src);
+    mCyl.SetStts(&mStts);
+    mCyl.SetR(mScale.x * 25.0f);
+    mCyl.SetH(mScale.y * 50.0f);
+    mAtType = daSwAt_prm::getAtType(this);
+    mSwitchNo = daSwAt_prm::getSwitchNo(this);
+    fopAcM_offDraw(this);
 }
 
 /* 00000120-0000020C       .text _create__8daSwAt_cFv */
-void daSwAt_c::_create() {
-    /* Nonmatching */
-}
-
-/* 0000020C-000002D8       .text __dt__8dCcD_CylFv */
-dCcD_Cyl::~dCcD_Cyl() {
-    /* Nonmatching */
-}
-
-/* 000002D8-00000320       .text __dt__8cM3dGCylFv */
-cM3dGCyl::~cM3dGCyl() {
-    /* Nonmatching */
-}
-
-/* 00000320-0000037C       .text __dt__14cCcD_ShapeAttrFv */
-cCcD_ShapeAttr::~cCcD_ShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 0000037C-000003C4       .text __dt__8cM3dGAabFv */
-cM3dGAab::~cM3dGAab() {
-    /* Nonmatching */
+s32 daSwAt_c::_create() {
+    fopAcM_SetupActor(this, daSwAt_c);
+    CreateInit();
+    return cPhs_COMPLEATE_e;
 }
 
 /* 000003C4-0000055C       .text _execute__8daSwAt_cFv */
-void daSwAt_c::_execute() {
-    /* Nonmatching */
+bool daSwAt_c::_execute() {
+    bool triggered = false;
+    if (mCyl.ChkTgHit()) {
+        cCcD_Obj* obj = mCyl.GetTgHitObj();
+        if(obj) {
+            switch (mAtType) {
+            case 0xFF:
+                triggered = true;
+                break;
+            case 0:
+                if (obj->ChkAtType(AT_TYPE_SWORD) || obj->ChkAtType(AT_TYPE_BOKO_STICK) ||
+                    obj->ChkAtType(AT_TYPE_STALFOS_MACE) || obj->ChkAtType(AT_TYPE_MACHETE) ||
+                    obj->ChkAtType(AT_TYPE_DARKNUT_SWORD))
+                {
+                    triggered = true;
+                }
+                break;
+            case 1:
+                if (obj->ChkAtType(AT_TYPE_BOMB)) {
+                    triggered = true;
+                }
+                break;
+            case 2:
+                if (obj->ChkAtType(AT_TYPE_BOOMERANG)) {
+                    triggered = true;
+                }
+                break;
+            case 3:
+                if (obj->ChkAtType(AT_TYPE_SKULL_HAMMER)) {
+                    triggered = true;
+                }
+                break;
+            case 4:
+                if (obj->ChkAtType(AT_TYPE_FIRE_ARROW) || obj->ChkAtType(AT_TYPE_ICE_ARROW) ||
+                    obj->ChkAtType(AT_TYPE_LIGHT_ARROW) || obj->ChkAtType(AT_TYPE_NORMAL_ARROW))
+                {
+                    triggered = true;
+                }
+                break;
+            case 5:
+                if (obj->ChkAtType(0x8000)) {
+                    triggered = true;
+                }
+                break;
+            }
+        }
+    }
+
+    if (triggered) {
+        dComIfGs_onSwitch(mSwitchNo, fopAcM_GetHomeRoomNo(this));
+    }
+
+    mCyl.SetC(current.pos);
+    dComIfG_Ccsp()->Set(&mCyl);
+    return true;
 }
 
 /* 0000055C-00000564       .text _draw__8daSwAt_cFv */
-void daSwAt_c::_draw() {
-    /* Nonmatching */
+bool daSwAt_c::_draw() {
+    return true;
 }
 
 /* 00000564-00000584       .text daSwAt_Create__FPv */
-void daSwAt_Create(void*) {
-    /* Nonmatching */
+s32 daSwAt_Create(void* i_this) {
+    return ((daSwAt_c*)i_this)->_create();
 }
 
 /* 00000584-000005A8       .text daSwAt_Delete__FPv */
-void daSwAt_Delete(void*) {
-    /* Nonmatching */
+BOOL daSwAt_Delete(void* i_this) {
+    return ((daSwAt_c*)i_this)->_delete();
 }
 
 /* 000005A8-000005CC       .text daSwAt_Draw__FPv */
-void daSwAt_Draw(void*) {
-    /* Nonmatching */
+BOOL daSwAt_Draw(void* i_this) {
+    return ((daSwAt_c*)i_this)->_draw();
 }
 
 /* 000005CC-000005F0       .text daSwAt_Execute__FPv */
-void daSwAt_Execute(void*) {
-    /* Nonmatching */
+BOOL daSwAt_Execute(void* i_this) {
+    return ((daSwAt_c*)i_this)->_execute();
 }
 
 /* 000005F0-000005F8       .text daSwAt_IsDelete__FPv */
-void daSwAt_IsDelete(void*) {
-    /* Nonmatching */
+BOOL daSwAt_IsDelete(void* i_this) {
+    return TRUE;
 }
 
-/* 000005F8-00000608       .text GetShapeAttr__8dCcD_CylFv */
-void dCcD_Cyl::GetShapeAttr() {
-    /* Nonmatching */
-}
+static actor_method_class daSwAtMethodTable = {
+    (process_method_func)daSwAt_Create,
+    (process_method_func)daSwAt_Delete,
+    (process_method_func)daSwAt_Execute,
+    (process_method_func)daSwAt_IsDelete,
+    (process_method_func)daSwAt_Draw,
+};
 
-/* 00000608-00000610       .text GetCoCP__12cCcD_CylAttrFv */
-void cCcD_CylAttr::GetCoCP() {
-    /* Nonmatching */
-}
-
-/* 00000610-00000618       .text GetCoCP__12cCcD_CylAttrCFv */
-void cCcD_CylAttr::GetCoCP() const {
-    /* Nonmatching */
-}
-
-/* 00000618-00000620       .text CrossAtTg__12cCcD_CylAttrCFRC12cCcD_AabAttrP4cXyz */
-void cCcD_CylAttr::CrossAtTg(const cCcD_AabAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00000620-00000628       .text CrossAtTg__12cCcD_CylAttrCFRC12cCcD_PntAttrP4cXyz */
-void cCcD_CylAttr::CrossAtTg(const cCcD_PntAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00000628-00000660       .text CrossAtTg__12cCcD_CylAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_CylAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00000660-00000668       .text CrossCo__12cCcD_CylAttrCFRC12cCcD_AabAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_AabAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00000668-00000670       .text CrossCo__12cCcD_CylAttrCFRC12cCcD_TriAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_TriAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00000670-00000678       .text CrossCo__12cCcD_CylAttrCFRC12cCcD_PntAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_PntAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00000678-000006B0       .text CrossCo__12cCcD_CylAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 000006B0-000006B4       .text GetGObjInf__12cCcD_GObjInfCFv */
-void cCcD_GObjInf::GetGObjInf() const {
-    /* Nonmatching */
-}
-
-/* 000006B4-000006BC       .text GetShapeAttr__8cCcD_ObjCFv */
-void cCcD_Obj::GetShapeAttr() const {
-    /* Nonmatching */
-}
-
-/* 000006BC-000006C4       .text CrossAtTg__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_ShapeAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 000006C4-000006CC       .text CrossCo__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_ShapeAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 000006CC-000006D8       .text GetCoCP__14cCcD_ShapeAttrFv */
-void cCcD_ShapeAttr::GetCoCP() {
-    /* Nonmatching */
-}
-
-/* 000006D8-000006E4       .text GetCoCP__14cCcD_ShapeAttrCFv */
-void cCcD_ShapeAttr::GetCoCP() const {
-    /* Nonmatching */
-}
-
-/* 000006E4-000006EC       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
-
-/* 000006EC-000006F4       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
-
+actor_process_profile_definition g_profile_SW_ATTACK = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 7,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_SW_ATTACK,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daSwAt_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0139,
+    /* Actor SubMtd */ &daSwAtMethodTable,
+    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

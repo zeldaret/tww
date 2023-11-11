@@ -539,4 +539,15 @@ inline void fopAcM_monsSeStart(fopAc_ac_c* actor, u32 sfxID, u32 param_2) {
     mDoAud_monsSeStart(sfxID, &actor->mEyePos, fopAcM_GetID(actor), 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
 }
 
+void fopDwTg_ToDrawQ(create_tag_class*, int);
+void fopDwTg_DrawQTo(create_tag_class*);
+
+inline void fopAcM_onDraw(fopAc_ac_c* actor) {
+    fopDwTg_ToDrawQ(&actor->mDwTg, fpcLf_GetPriority(actor));
+}
+
+inline void fopAcM_offDraw(fopAc_ac_c* actor) {
+    fopDwTg_DrawQTo(&actor->mDwTg);
+}
+
 #endif

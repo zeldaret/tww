@@ -1596,7 +1596,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_shutter2"),
     ActorRel(NonMatching, "d_a_st"),
     ActorRel(NonMatching, "d_a_steam_tag"),
-    ActorRel(NonMatching, "d_a_swattack"),
+    ActorRel(NonMatching, "d_a_swattack", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_switem", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_swpropeller"),
     ActorRel(Matching,    "d_a_swtact"),

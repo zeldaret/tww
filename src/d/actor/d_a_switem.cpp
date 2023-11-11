@@ -75,17 +75,17 @@ bool daSwItem_c::_delete() {
 BOOL daSwItem_c::CreateInit() {
     int itemBitNo = daSwItem_prm::getItemBitNo(this);
     mAtTypeTrigger = daSwItem_prm::getAtType(this);
-    
+
     mStts.Init(0xFF, 0xFF, this);
     mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);
     mCyl.SetR(mScale.x * 25.0f);
     mCyl.SetH(mScale.y * 50.0f);
-    
+
     if (fopAcM_isItem(this, itemBitNo) && itemBitNo != 0x7F) {
         return FALSE;
     }
-    
+
     fopDwTg_DrawQTo(&mDwTg);
     return TRUE;
 }
@@ -93,11 +93,11 @@ BOOL daSwItem_c::CreateInit() {
 /* 00000154-00000250       .text _create__10daSwItem_cFv */
 s32 daSwItem_c::_create() {
     fopAcM_SetupActor(this, daSwItem_c);
-    
+
     if (!CreateInit()) {
         return cPhs_ERROR_e;
     }
-    
+
     return cPhs_COMPLEATE_e;
 }
 
@@ -150,20 +150,20 @@ bool daSwItem_c::_execute() {
             }
         }
     }
-    
+
     if (triggered && !mSpawnedItem) {
         int itemTbl = daSwItem_prm::getItemTbl(this);
         int itemBitNo = daSwItem_prm::getItemBitNo(this);
         if (fopAcM_isItem(this, daSwItem_prm::getItemBitNo(this))) {
             itemBitNo = 0x7F;
         }
-        
+
         csXyz angle(0, orig.angle.y, 0);
         u32 itemProcId = fopAcM_createItemFromTable(
             &current.pos, itemTbl, itemBitNo,
             fopAcM_GetHomeRoomNo(this), 0, &angle, 1, NULL
         );
-        
+
         daItem_c* item = (daItem_c*)fopAcM_SearchByID(itemProcId);
         if(item) {
             if (isRupee(item->getItemNo()) || isRupeeInAllCreateTable(itemTbl)) {
@@ -172,13 +172,13 @@ bool daSwItem_c::_execute() {
                 fopAcM_seStart(this, JA_SE_OBJ_ITEM_OUT, 0);
             }
         }
-        
+
         mSpawnedItem = true;
     }
-    
+
     mCyl.SetC(current.pos);
     dComIfG_Ccsp()->Set(&mCyl);
-    
+
     return true;
 }
 
