@@ -224,6 +224,7 @@ public:
     void onCollect(int, u8);
     void offCollect(int, u8);
     BOOL isCollect(int, u8);
+    void setCollect(int idx, u8 byte) { mCollect[idx] = byte; }
     void onTact(u8);
     BOOL isTact(u8);
     void onTriforce(u8);
@@ -232,7 +233,7 @@ public:
     BOOL isSymbol(u8);
     int getTriforceNum();
 
-    /* 0x0 */ u8 field_0x0[8];
+    /* 0x0 */ u8 mCollect[8];
     /* 0x8 */ u8 field_0x8;
     /* 0x9 */ u8 mTact;
     /* 0xA */ u8 mTriforce;

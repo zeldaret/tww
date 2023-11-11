@@ -587,7 +587,7 @@ void dSv_player_bag_item_record_c::init() {
 /* 8005ACA8-8005ACE0       .text init__20dSv_player_collect_cFv */
 void dSv_player_collect_c::init() {
     for (int i = 0; i < 8; i++) {
-        field_0x0[i] = 0;
+        mCollect[i] = 0;
     }
 
     field_0x8 = 0;
@@ -600,19 +600,19 @@ void dSv_player_collect_c::init() {
 /* 8005ACE0-8005AD78       .text onCollect__20dSv_player_collect_cFiUc */
 void dSv_player_collect_c::onCollect(int i_idx, u8 i_item) {
     JUT_ASSERT(1412, 0 <= i_item && i_item < 8);
-    field_0x0[i_idx] |= (u8)(1 << i_item);
+    mCollect[i_idx] |= (u8)(1 << i_item);
 }
 
 /* 8005AD78-8005AE10       .text offCollect__20dSv_player_collect_cFiUc */
 void dSv_player_collect_c::offCollect(int i_idx, u8 i_item) {
     JUT_ASSERT(1427, 0 <= i_item && i_item < 8);
-    field_0x0[i_idx] &= ~(u8)(1 << i_item);
+    mCollect[i_idx] &= ~(u8)(1 << i_item);
 }
 
 /* 8005AE10-8005AEAC       .text isCollect__20dSv_player_collect_cFiUc */
 BOOL dSv_player_collect_c::isCollect(int i_idx, u8 i_item) {
     JUT_ASSERT(1442, 0 <= i_item && i_item < 8);
-    return field_0x0[i_idx] & (u8)(1 << i_item) ? TRUE : FALSE;
+    return mCollect[i_idx] & (u8)(1 << i_item) ? TRUE : FALSE;
 }
 
 /* 8005AEAC-8005AF40       .text onTact__20dSv_player_collect_cFUc */

@@ -366,6 +366,10 @@ public:
     u8 getShipId() { return mShipId; }
     u8 getShipRoomId() { return mShipRoomId; }
 
+    u8* getPlayerInfoBuffer() { return mPlayerInfoBuffer; }
+    void setPlayerInfoBufferStageNo(u8 i_stageno) { mPlayerInfoBufferStageNo = i_stageno; }
+    u8 getPlayerInfoBufferStageNo() { return mPlayerInfoBufferStageNo; }
+
     void setAgb(fopAc_ac_c* i_agb) { mpAgb = (daAgb_c*)i_agb; }
     daAgb_c* getAgb() { return mpAgb; }
 
@@ -618,7 +622,8 @@ public:
     /* 0x4980 */ int mMesgCameraTagInfo;
     /* 0x4984 */ int field_0x4984;
     /* 0x4988 */ int field_0x4988[10];
-    /* 0x49B0 */ u8 field_0x49B0[0x4A24 - 0x49B0];
+    /* 0x49B0 */ u8 mPlayerInfoBuffer[0x4A20 - 0x49B0];
+    /* 0x4A20 */ u8 mPlayerInfoBufferStageNo;
     /* 0x4A24 */ daAgb_c* mpAgb;
     /* 0x4A28 */ u32 mPlayerStatus[2][2];
     /* 0x4A38 */ u8 field_0x4A38[0x4A3A - 0x4A38];
@@ -1301,6 +1306,18 @@ inline u8 dComIfGs_getKeyNum() {
     return g_dComIfG_gameInfo.save.getMemory().getBit().getKeyNum();
 }
 
+inline dSv_player_status_c_c * dComIfGs_getpPlayerStatusC(u32 i_idx) {
+    return g_dComIfG_gameInfo.save.getPlayer().getpPlayerStatusC(i_idx);
+}
+
+inline dSv_player_collect_c * dComIfGs_getpCollect() {
+    return g_dComIfG_gameInfo.save.getPlayer().getpCollect();
+}
+
+inline dSv_player_bag_item_record_c * dComIfGs_getpBagItemRecord() {
+    return g_dComIfG_gameInfo.save.getPlayer().getpBagItemRecord();
+}
+
 u8 dComIfGs_checkGetItemNum(u8 i_itemNo);
 
 BOOL dComIfGs_checkSeaLandingEvent(s8 i_roomNo);
@@ -1692,6 +1709,18 @@ inline u8 dComIfGp_getShipId() {
 
 inline u8 dComIfGp_getShipRoomId() {
     return g_dComIfG_gameInfo.play.getShipRoomId();
+}
+
+inline u8* dComIfGp_getPlayerInfoBuffer() {
+    return g_dComIfG_gameInfo.play.getPlayerInfoBuffer();
+}
+
+inline void dComIfGp_setPlayerInfoBufferStageNo(u8 i_stageno) {
+    g_dComIfG_gameInfo.play.setPlayerInfoBufferStageNo(i_stageno);
+}
+
+inline u8 dComIfGp_getPlayerInfoBufferStageNo() {
+    return g_dComIfG_gameInfo.play.getPlayerInfoBufferStageNo();
 }
 
 inline void dComIfGp_setAgb(fopAc_ac_c* i_agb) {

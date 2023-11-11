@@ -1211,7 +1211,7 @@ void dComIfGs_gameStart() {
 void dComIfGs_copyPlayerRecollectionData() {
     /* Nonmatching */
     s32 tbl;
-    u8 buf[0x70];
+    dSv_player_status_c_c stts;
 
     if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == 3) {
         if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == 3)
@@ -1228,19 +1228,41 @@ void dComIfGs_copyPlayerRecollectionData() {
         return;
     }
 
-    memcpy(&buf[0x00], &g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA(), 0x18);
-    memcpy(&buf[0x18], &g_dComIfG_gameInfo.save.getPlayer().getItem(), 0x15);
-    memcpy(&buf[0x2D], &g_dComIfG_gameInfo.save.getPlayer().getItemRecord().field_0x2, 0x03);
-    memcpy(&buf[0x30], &g_dComIfG_gameInfo.save.getPlayer().getItemMax().field_0x0, 0x03);
-    memcpy(&buf[0x33], &g_dComIfG_gameInfo.save.getPlayer().getBagItem(), 0x18);
-    memcpy(&buf[0x4B], &g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord(), 0x18);
-    memcpy(&buf[0x63], &g_dComIfG_gameInfo.save.getPlayer().getCollect(), 0x0D);
-    memcpy(g_dComIfG_gameInfo.save.getPlayer().getpPlayerStatusC(tbl), buf, sizeof(buf));
+    memcpy(&stts.mRecollectStatusA, g_dComIfG_gameInfo.save.getPlayer().getpPlayerStatusA(), sizeof(stts.mRecollectStatusA));
+    memcpy(&stts.mRecollectItem, g_dComIfG_gameInfo.save.getPlayer().getpItem(), sizeof(stts.mRecollectItem));
+    memcpy(&stts.mRecollectItemRecord, &g_dComIfG_gameInfo.save.getPlayer().getpItemRecord()->field_0x2, sizeof(stts.mRecollectItemRecord));
+    memcpy(&stts.mRecollectItemMax, &g_dComIfG_gameInfo.save.getPlayer().getpItemMax()->field_0x0, sizeof(stts.mRecollectItemMax));
+    memcpy(&stts.mRecollectBagItem, g_dComIfG_gameInfo.save.getPlayer().getpBagItem(), sizeof(stts.mRecollectBagItem));
+    memcpy(&stts.mRecollectBagItemRecord, dComIfGs_getpBagItemRecord(), sizeof(stts.mRecollectBagItemRecord));
+    memcpy(&stts.mRecollectCollect, dComIfGs_getpCollect(), sizeof(stts.mRecollectCollect));
+    memcpy(dComIfGs_getpPlayerStatusC(tbl), &stts, sizeof(stts));
 }
 
 /* 80054E9C-80055318       .text dComIfGs_setPlayerRecollectionData__Fv */
 void dComIfGs_setPlayerRecollectionData() {
     /* Nonmatching */
+    daArrow_c::setKeepType(0);
+    u32 tbl;
+    if (strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0 && dComIfGs_isEventBit(0x3d80) != 0) {
+        tbl = 0;
+        dComIfGp_setPlayerInfoBufferStageNo(1);
+    } else if (strcmp(dComIfGp_getStartStageName(), "Xboss1") == 0 && dComIfGs_isEventBit(0x3d40) != 0) {
+        tbl = 1;
+        dComIfGp_setPlayerInfoBufferStageNo(2);
+    } else if (strcmp(dComIfGp_getStartStageName(), "Xboss2") == 0 && dComIfGs_isEventBit(0x3d20) != 0) {
+        tbl = 2;
+        dComIfGp_setPlayerInfoBufferStageNo(3);
+    } else if (strcmp(dComIfGp_getStartStageName(), "Xboss3") == 0 && dComIfGs_isEventBit(0x3d10) != 0) {
+        tbl = 3;
+        dComIfGp_setPlayerInfoBufferStageNo(4);
+    } else {
+        dComIfGs_setSelectItem(0, NO_ITEM);
+        dComIfGs_setSelectItem(1, NO_ITEM);
+        dComIfGs_setSelectItem(2, NO_ITEM);
+        return;
+    }
+
+    // TODO: The rest of the checks
 }
 
 /* 80055318-80055580       .text dComIfGs_revPlayerRecollectionData__Fv */
