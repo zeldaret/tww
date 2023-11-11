@@ -1560,7 +1560,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_nest"),
     ActorRel(NonMatching, "d_a_obj_ojtree"),
     ActorRel(NonMatching, "d_a_obj_ospbox"),
-    ActorRel(NonMatching, "d_a_obj_paper"),
+    ActorRel(Matching,    "d_a_obj_paper", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_obj_pbka"),
     ActorRel(NonMatching, "d_a_obj_pfall"),
     ActorRel(NonMatching, "d_a_obj_plant"),

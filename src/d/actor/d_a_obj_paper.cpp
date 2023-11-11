@@ -19,40 +19,44 @@
 #include "m_Do/m_Do_mtx.h"
 #include "dolphin/types.h"
 
+// Needed for the .data section to match.
+static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
+static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
+static f64 dummy4[2] = {3.0f, 0.5f};
+
 namespace daObjPaper {
     namespace {
+        enum Type_e {
+            Opaper_e,
+            Ppos_e,
+            Piwa_e,
+        };
+
         struct L_attr_entry {
-            char* ResName;
-            int mHeapSize;
-            short mModelId;
-            short mEyeOffset;
-            short mAttentionOffset;
-            short mCullSphereRadius;
-            short mCullSphereYOffset;
+            /* 0x00 */ char* mResName;
+            /* 0x04 */ s32 mHeapSize;
+            /* 0x06 */ s16 mModelId;
+            /* 0x08 */ s16 mEyeOffset;
+            /* 0x0A */ s16 mAttentionOffset;
+            /* 0x0C */ s16 mCullSphereRadius;
+            /* 0x0E */ s16 mCullSphereYOffset;
 
-            s8 mAttentionDist1;
-            s8 mAttentionDist2;
+            /* 0x10 */ s8 mAttentionDist1;
+            /* 0x11 */ s8 mAttentionDist2;
+            /* 0x12 */ u8 mTevType;
 
-            bool TevType;
-            short mHasCc;
-
-            short mColCylinderRadius;
-            short mColCylinderHeight;
-
-            const char* getResName() const { return ResName; }
-            int getHeapSize() const { return mHeapSize; }
-            int getModelId() const { return mModelId; }
-            int getTevType() const { return TevType == 0 ? TEV_TYPE_BG0 : TEV_TYPE_ACTOR; }
+            /* 0x14 */ s16 mColCylinderRadius;
+            /* 0x16 */ s16 mColCylinderHeight;
         };
 
         static const L_attr_entry L_attr[3] = {
-            { "Opaper", 0x04C0, 3, 0x00, 0x28, 0x28, 0x00, 0x1D, 0x1E, 0x100, 0x00, 0x00 },
-            { "Ppos",   0x04C0, 3, 0x00, 0x32, 0x3C, 0x00, 0x1F, 0x20, 0x100, 0x00, 0x00 },
-            { "Piwa",   0x04C0, 3, 0x3C, 0x82, 0x50, 0x3C, 0x1D, 0x1E, 0x000, 0x37, 0x73 }
+            { "Opaper", 0x04C0, 3, 0x00, 0x28, 0x28, 0x00, 0x1D, 0x1E, 0x01, 0x00, 0x00 },
+            { "Ppos",   0x04C0, 3, 0x00, 0x32, 0x3C, 0x00, 0x1F, 0x20, 0x00, 0x00, 0x00 },
+            { "Piwa",   0x04C0, 3, 0x3C, 0x82, 0x50, 0x3C, 0x1D, 0x1E, 0x00, 0x37, 0x73 }
         };
 
-        inline static const char* getEntryResName(int idx) { return L_attr[idx].getResName(); }
-        inline static int getEntryModelId(int idx) { return L_attr[idx].getModelId(); }
+        inline const L_attr_entry & attr(Type_e type) { return L_attr[type]; }
     }
 
     static const dCcD_SrcCyl M_cyl_src = {
@@ -119,17 +123,17 @@ namespace daObjPaper {
         bool _draw();
 
     public:
-        /* 0x0290 */ request_of_phase_process_class mPhs;
-        /* 0x0298 */ J3DModel* mpModel;
+        /* 0x290 */ request_of_phase_process_class mPhs;
+        /* 0x298 */ J3DModel* mpModel;
 
-        /* 0x029C */ dCcD_Cyl mCylinderCol;
-        /* 0x03CC */ dCcD_Stts mColStatus;
-        /* 0x0408 */ bool mbHasCc;
+        /* 0x29C */ dCcD_Cyl mCylinderCol;
+        /* 0x3CC */ dCcD_Stts mColStatus;
+        /* 0x408 */ bool mbHasCc;
 
-        /* 0x040C */ int mMode;
-        /* 0x0410 */ int mMsgId;
-        /* 0x0414 */ msg_class* mpMsg;
-        /* 0x0418 */ int mType;
+        /* 0x40C */ int mMode;
+        /* 0x410 */ int mMsgId;
+        /* 0x414 */ msg_class* mpMsg;
+        /* 0x418 */ Type_e mType;
 
         int getMsgId() const { return mMsgId; }
 
@@ -140,6 +144,8 @@ namespace daObjPaper {
             PRM_TYPE_W = 0x04,
             PRM_TYPE_S = 0x10,
         };
+
+        Type_e prm_get_type() const { return (Type_e)daObj::PrmAbstract<Prm_e>(this, PRM_TYPE_W, PRM_TYPE_S); }
     };
 
     /* 00000078-0000009C       .text solidHeapCB__Q210daObjPaper5Act_cFP10fopAc_ac_c */
@@ -149,55 +155,44 @@ namespace daObjPaper {
 
     /* 0000009C-00000170       .text create_heap__Q210daObjPaper5Act_cFv */
     bool Act_c::create_heap() {
-        /* Nonmatching */
+        J3DModelData* mdl_data;
         bool val = false;
 
-        const L_attr_entry* f = &L_attr[mType];
-        J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(L_attr[mType].getResName(), L_attr[mType].getModelId());
+        mdl_data = (J3DModelData*)dComIfG_getObjectRes(attr(mType).mResName, attr(mType).mModelId);
 
         JUT_ASSERT(0x13E, mdl_data != 0);
 
         mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000022);
-        val = mpModel != 0;
+        if (mpModel)
+            val = true;
 
         return val;
     }
 
     /* 00000170-000004E0       .text _create__Q210daObjPaper5Act_cFv */
     s32 Act_c::_create() {
-        /* Nonmatching */
-        const L_attr_entry* attributes = L_attr;
-
         fopAcM_SetupActor(this, Act_c);
         
-        mType = daObj::PrmAbstract<Prm_e>(this, PRM_TYPE_W, PRM_TYPE_S);
+        mType = prm_get_type();
 
-        s32 result = dComIfG_resLoad(&mPhs, attributes[mType].getResName());
+        s32 result = dComIfG_resLoad(&mPhs, attr(mType).mResName);
 
         if (result == cPhs_COMPLEATE_e) {
-            s32 solidHeapStatus = fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, attributes[mType].getHeapSize());
+            if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, attr(mType).mHeapSize)) {
+                mEyePos.y += attr(mType).mEyeOffset;
 
-            if (solidHeapStatus & 0xFF == 0) {
-                result = cPhs_ERROR_e;
-            }
-            else {
-                mEyePos.y += attributes[mType].mEyeOffset;
-
-                mAttentionInfo.mPosition.y += attributes[mType].mAttentionOffset;
-                mAttentionInfo.mDistances[1] = attributes[mType].mAttentionDist1;
-                mAttentionInfo.mDistances[3] = attributes[mType].mAttentionDist2;
+                mAttentionInfo.mPosition.y += attr(mType).mAttentionOffset;
+                mAttentionInfo.mDistances[1] = attr(mType).mAttentionDist1;
+                mAttentionInfo.mDistances[3] = attr(mType).mAttentionDist2;
                 mAttentionInfo.mFlags |= fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_READ_e;
 
                 mMsgId = -1;
 
                 if (mType == 2) {
-                    mStatus &= 0xFFFFFFC0 | 0x38;
+                    mStatus = mStatus & 0xFFFFFFC0 | 0x38;
                 }
 
-                if (attributes[mType].mHasCc == 0) {
-                    mbHasCc = false;
-                }
-                else {
+                if (attr(mType).mColCylinderRadius != 0) {
                     mbHasCc = true;
 
                     mColStatus.Init(0xFF, 0xFF, this);    
@@ -205,15 +200,19 @@ namespace daObjPaper {
 
                     mCylinderCol.SetStts(&mColStatus);
 
-                    mCylinderCol.SetR(attributes[mType].mColCylinderRadius);
-                    mCylinderCol.SetH(attributes[mType].mColCylinderHeight);
+                    mCylinderCol.SetR(attr(mType).mColCylinderRadius);
+                    mCylinderCol.SetH(attr(mType).mColCylinderHeight);
+                } else {
+                    mbHasCc = false;
                 }
 
-                fopAcM_setCullSizeSphere(this, 0.0f, attributes[mType].mCullSphereYOffset, 0.0f, attributes[mType].mCullSphereRadius);
+                fopAcM_setCullSizeSphere(this, 0.0f, attr(mType).mCullSphereYOffset, 0.0f, attr(mType).mCullSphereRadius);
                 mCullMtx = mpModel->mBaseTransformMtx;
 
                 init_mtx();
                 mode_wait_init();
+            } else {
+                result = cPhs_ERROR_e;
             }
         }
 
@@ -222,7 +221,7 @@ namespace daObjPaper {
 
     /* 000006F4-00000730       .text _delete__Q210daObjPaper5Act_cFv */
     bool daObjPaper::Act_c::_delete() {
-        dComIfG_resDelete(&mPhs, L_attr[mType].getResName());
+        dComIfG_resDelete(&mPhs, attr(mType).mResName);
         return TRUE;
     }
 
@@ -323,12 +322,11 @@ namespace daObjPaper {
 
     /* 00000A38-00000B58       .text _execute__Q210daObjPaper5Act_cFv */
     bool daObjPaper::Act_c::_execute() {
-        /* Nonmatching */
         static const daObjPaper_mode_t mode_proc[] = {
-            &Act_c::mode_wait,
-            &Act_c::mode_talk0,
-            &Act_c::mode_talk1,
-            &Act_c::mode_talk2
+            Act_c::mode_wait,
+            Act_c::mode_talk0,
+            Act_c::mode_talk1,
+            Act_c::mode_talk2,
         };
 
         if (mbHasCc) {
@@ -348,8 +346,7 @@ namespace daObjPaper {
 
     /* 00000B58-00000BD4       .text _draw__Q210daObjPaper5Act_cFv */
     bool daObjPaper::Act_c::_draw() {
-        /* Nonmatching */
-        g_env_light.settingTevStruct(L_attr[mType].getTevType(), getPositionP(), &mTevStr);
+        g_env_light.settingTevStruct(attr(mType).mTevType == 0 ? TEV_TYPE_BG0 : TEV_TYPE_ACTOR, &current.pos, &mTevStr);
         g_env_light.setLightTevColorType(mpModel, &mTevStr);
 
         mDoExt_modelUpdateDL(mpModel);
@@ -391,21 +388,21 @@ namespace daObjPaper {
             (process_method_func)Mthd_Draw,
         };
     }
-
-    actor_process_profile_definition g_profile_Obj_Paper = {
-        fpcLy_CURRENT_e,
-        7,
-        fpcLy_CURRENT_e,
-        PROC_Obj_Paper,
-        &g_fpcLf_Method.mBase,
-        sizeof(Act_c),
-        0,
-        0,
-        &g_fopAc_Method.base,
-        0x0108,
-        &Mthd_Table,
-        fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
-        fopAc_ACTOR_e,
-        fopAc_CULLSPHERE_CUSTOM_e,
-    };
 }
+
+actor_process_profile_definition g_profile_Obj_Paper = {
+    fpcLy_CURRENT_e,
+    7,
+    fpcLy_CURRENT_e,
+    PROC_Obj_Paper,
+    &g_fpcLf_Method.mBase,
+    sizeof(daObjPaper::Act_c),
+    0,
+    0,
+    &g_fopAc_Method.base,
+    0x0108,
+    &daObjPaper::Mthd_Table,
+    fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+    fopAc_ACTOR_e,
+    fopAc_CULLSPHERE_CUSTOM_e,
+};
