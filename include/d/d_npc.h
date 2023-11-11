@@ -55,11 +55,11 @@ class dNpc_JntCtrl_c {
     // /* 0x18 */ s16 mMaxHeadRot;
     // /* 0x1A */ s16 field_0x1A;
     // /* 0x1C */ s16 mMaxSpineRot;
-    /* 0x1E */ s16 field_0x1E;
-    /* 0x20 */ s16 field_0x20;
-    /* 0x22 */ s16 field_0x22;
-    /* 0x24 */ s16 field_0x24;
-    /* 0x26 */ u8 pad_0x26[0x32 - 0x26];
+    /* 0x1E */ s16 field_0x1E[2][2];
+    /* 0x26 */ u8 pad_0x26[0x2C - 0x26];
+    /* 0x2C */ s16 field_0x2C;
+    /* 0x2E */ s16 field_0x2E;
+    /* 0x30 */ s16 field_0x30;
     /* 0x32 */ s16 field_0x32;
 
 public:
@@ -68,14 +68,34 @@ public:
         field_0x0B = 0;
     }
 
+    void clrTrn() {}
+    void getBackboneJntNum() {}
+    void getBackbone_x() {}
+    void getBackbone_y() {}
+    void getHeadJntNum() {}
+    void getHead_x() {}
+    void getHead_y() {}
+    void offBackBoneLock() {}
+    void offHeadLock() {}
+    void onBackBoneLock() {}
+    void onHeadLock() {}
+    void setBackBone_x(s16) {}
+    void setBackBone_y(s16) {}
+    void setBackboneJntNum(s8) {}
+    void setHeadJntNum(s8) {}
+    void setHead_x(s16) {}
+    void setHead_y(s16) {}
+    void setTrn() {}
+    void trnChk() {}
+
     bool angCalcS(s16*, s16, s16, s16);
     void limitter(s16*, s16, s16);
     bool follow(s16*, s16, s16, int);
-    void move(s16, int);
+    bool move(s16, int);
     void lookAtTarget(s16*, cXyz*, cXyz, s16, s16, bool);
     void setParam(s16, s16, s16, s16, s16, s16, s16, s16, s16);
 
-    s32 chkLim(s16, int, int);
+    int chkLim(s16, int, int);
     void turn_fromBackbone2Head(s16, s16*, s16*, bool);
     void turn_fromHead2Backbone(s16, s16*, s16*);
     s16 follow_current(s16*, s16);

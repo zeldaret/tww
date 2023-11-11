@@ -16,6 +16,7 @@
 static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
 static Vec dummy_2080 = {1.0f, 1.0f, 1.0f};
 
+/* 8021A7B4-8021A858       .text angCalcS__14dNpc_JntCtrl_cFPssss */
 bool dNpc_JntCtrl_c::angCalcS(s16* out, s16 targetY, s16 speed, s16 maxVel) {
     s16 diff = *out - targetY;
     int origDiff = diff;
@@ -30,6 +31,7 @@ bool dNpc_JntCtrl_c::angCalcS(s16* out, s16 targetY, s16 speed, s16 maxVel) {
     return (s16)targetY - *out == 0;
 }
 
+/* 8021A858-8021A884       .text limitter__14dNpc_JntCtrl_cFPsss */
 void dNpc_JntCtrl_c::limitter(s16* targetDiff, s16 maxDiff, s16 minDiff) {
     if(*targetDiff > maxDiff) {
         *targetDiff = maxDiff;
@@ -61,15 +63,71 @@ bool dNpc_JntCtrl_c::follow(s16* outY, s16 targetY, s16 maxVel, int param_4) {
 }
 
 /* 8021A97C-8021AABC       .text move__14dNpc_JntCtrl_cFsi */
-void dNpc_JntCtrl_c::move(short, int) {
-    /* Nonmatching */
+bool dNpc_JntCtrl_c::move(s16 param_1, int param_2) {
+    s16 angle;
+    s32 angleL;
+    s16 angles[2];
+    int r25;
+    int i;
+    
+    for (i = 0; i < 2; i++) {
+        if ((i == 0 && field_0x0B == 1) || (i == 1 && field_0x0C == 1)) {
+            angle = 0;
+        } else {
+            angle = param_1;
+        }
+        limitter(&angle, mMaxAngles[i][param_2], mMinAngles[i][param_2]);
+        param_1 -= (int)angle;
+        angles[i] = angle;
+        angleL = mAngles[i][param_2];
+        cLib_addCalcAngleL(&angleL, angle, 4, field_0x1E[i][param_2], 1);
+        mAngles[i][param_2] = angleL;
+    }
+    
+    for (i = 0, r25 = 0; i < 2; i++) {
+        if (cLib_distanceAngleS(angles[i], mAngles[i][param_2]) <= field_0x1E[i][param_2]/2) {
+            r25++;
+        }
+    }
+    
+    return r25 == i;
 }
 
 /* 8021AABC-8021AC6C       .text lookAtTarget__14dNpc_JntCtrl_cFPsP4cXyz4cXyzssb */
-void dNpc_JntCtrl_c::lookAtTarget(short*, cXyz*, cXyz, short, short, bool) {
-    /* Nonmatching */
+void dNpc_JntCtrl_c::lookAtTarget(s16* outY, cXyz* param_2, cXyz param_3, s16 param_4, s16 maxVel, bool param_6) {
+    s16 deltaY;
+    s32 maxY;
+    s32 minY;
+    s16 r23;
+    s16 targetY;
+    
+    if (param_2) {
+        cXyz temp;
+        temp.x = param_2->x - param_3.x;
+        temp.y = param_2->y - param_3.y;
+        temp.z = param_2->z - param_3.z;
+        f32 temp2 = sqrtf(temp.x * temp.x + temp.z * temp.z);
+        targetY = cM_atan2s(temp.x, temp.z);
+        r23 = cM_atan2s(temp.y, temp2);
+    } else {
+        targetY = param_4;
+        r23 = 0;
+    }
+    
+    deltaY = targetY - (s32)*outY;
+    maxY = mMaxAngles[1][1];
+    maxY += mMaxAngles[0][1];
+    minY = mMinAngles[1][1];
+    minY += mMinAngles[0][1];
+    bool r3 = move(deltaY, 1);
+    if ((field_0x0A || ((deltaY >= maxY || deltaY <= minY) && r3)) && !param_6) {
+        field_0x0A = follow(outY, targetY, maxVel, 1);
+    }
+    
+    move(r23, 0);
 }
 
+/* 8021AC6C-8021ACA8       .text setParam__14dNpc_JntCtrl_cFsssssssss */
 void dNpc_JntCtrl_c::setParam(s16 param_1, s16 maxSpineRot, s16 param_3, s16 minSpineRot, s16 param_5, s16 maxHeadRot, s16 param_7, s16 minHeadRot, s16 param_9) {
     mMaxAngles[1][0] = param_1;
     mMaxAngles[1][1] = maxSpineRot;
@@ -79,12 +137,13 @@ void dNpc_JntCtrl_c::setParam(s16 param_1, s16 maxSpineRot, s16 param_3, s16 min
     mMaxAngles[0][1] = maxHeadRot;
     mMinAngles[0][0] = param_7;
     mMinAngles[0][1] = minHeadRot;
-    field_0x22 = param_9;
-    field_0x24 = param_9;
-    field_0x1E = param_9;
-    field_0x20 = param_9;
+    field_0x1E[1][0] = param_9;
+    field_0x1E[1][1] = param_9;
+    field_0x1E[0][0] = param_9;
+    field_0x1E[0][1] = param_9;
 }
 
+/* 8021ACA8-8021ACBC       .text setInfDrct__14dNpc_PathRun_cFP5dPath */
 bool dNpc_PathRun_c::setInfDrct(dPath* pPath) {
     mPath = pPath;
     mCurrPointIndex = 0;
@@ -92,6 +151,7 @@ bool dNpc_PathRun_c::setInfDrct(dPath* pPath) {
     return true;
 }
 
+/* 8021ACBC-8021AD1C       .text setInf__14dNpc_PathRun_cFUcScUc */
 bool dNpc_PathRun_c::setInf(u8 pathIdx, s8 roomNo, u8 forwards) {
     bool setPath = false;
 
@@ -107,6 +167,7 @@ bool dNpc_PathRun_c::setInf(u8 pathIdx, s8 roomNo, u8 forwards) {
     return setPath;
 }
 
+/* 8021AD1C-8021AD58       .text nextPath__14dNpc_PathRun_cFSc */
 dPath* dNpc_PathRun_c::nextPath(s8 roomNo) {
     dPath* pPath = 0;
 
@@ -117,6 +178,7 @@ dPath* dNpc_PathRun_c::nextPath(s8 roomNo) {
     return pPath;
 }
 
+/* 8021AD58-8021ADD0       .text getPoint__14dNpc_PathRun_cFUc */
 cXyz dNpc_PathRun_c::getPoint(u8 pointIdx) {
     cXyz point(0.0f, 0.0f, 0.0f);
 
@@ -160,6 +222,7 @@ bool dNpc_PathRun_c::chkPointPass(cXyz currPos, bool goingForwards) {
     return passed;
 }
 
+/* 8021AFA8-8021AFEC       .text incIdx__14dNpc_PathRun_cFv */
 bool dNpc_PathRun_c::incIdx() {
     bool ret = true;
 
@@ -174,6 +237,7 @@ bool dNpc_PathRun_c::incIdx() {
     return ret;
 }
 
+/* 8021AFEC-8021B030       .text incIdxLoop__14dNpc_PathRun_cFv */
 bool dNpc_PathRun_c::incIdxLoop() {
     bool ret = true;
 
@@ -188,6 +252,7 @@ bool dNpc_PathRun_c::incIdxLoop() {
     return ret;
 }
 
+/* 8021B030-8021B0AC       .text incIdxAuto__14dNpc_PathRun_cFv */
 bool dNpc_PathRun_c::incIdxAuto() {
     bool hitEnd = true;
 
@@ -210,6 +275,7 @@ bool dNpc_PathRun_c::incIdxAuto() {
     return hitEnd;
 }
 
+/* 8021B0AC-8021B0F0       .text decIdx__14dNpc_PathRun_cFv */
 bool dNpc_PathRun_c::decIdx() {
     bool ret = true;
 
@@ -337,6 +403,7 @@ u8 dNpc_PathRun_c::pointArg(u8 idx) {
     return arg;
 }
 
+/* 8021B384-8021B514       .text setNearPathIndx__14dNpc_PathRun_cFP4cXyzf */
 bool dNpc_PathRun_c::setNearPathIndx(cXyz* param_1, f32 param_2) {
     bool set = false;
     if(mPath != 0) {
@@ -346,7 +413,7 @@ bool dNpc_PathRun_c::setNearPathIndx(cXyz* param_1, f32 param_2) {
             cXyz point = getPoint(i);
     
             cXyz diff = (*param_1 - point);
-            f32 xz_mag = diff.getMagXZ();
+            f32 xz_mag = diff.abs2XZ();
             f32 y_mag = param_2 * (diff.y * diff.y);
             f32 dist = sqrtf(y_mag + xz_mag);
 
@@ -363,6 +430,7 @@ bool dNpc_PathRun_c::setNearPathIndx(cXyz* param_1, f32 param_2) {
     return set;
 }
 
+/* 8021B514-8021B670       .text setNearPathIndxMk__14dNpc_PathRun_cFP4cXyz */
 f32 dNpc_PathRun_c::setNearPathIndxMk(cXyz* param_1) {
     f32 max_dist;
     if(mPath != 0) {
@@ -371,8 +439,7 @@ f32 dNpc_PathRun_c::setNearPathIndxMk(cXyz* param_1) {
         for(int i = 0; i < maxPoint(); i++) {
             cXyz point = getPoint(i);
             cXyz diff = (*param_1 - point);
-            f32 temp = diff.getSquareMag();
-            f32 dist = sqrtf(temp);
+            f32 dist = diff.abs();
             if(max_dist > dist) {
                 max_dist = dist;
                 pointIdx = i;
@@ -385,6 +452,7 @@ f32 dNpc_PathRun_c::setNearPathIndxMk(cXyz* param_1) {
     return max_dist;
 }
 
+/* 8021B670-8021B818       .text setNearPathIndxMk2__14dNpc_PathRun_cFP4cXyzUcUc */
 bool dNpc_PathRun_c::setNearPathIndxMk2(cXyz* param_1, u8 param_2, u8 param_3) {
     u8 pointIdx;
     bool set = false;
@@ -394,8 +462,7 @@ bool dNpc_PathRun_c::setNearPathIndxMk2(cXyz* param_1, u8 param_2, u8 param_3) {
         for(int i = 0; i < maxPoint(); i++) {
             cXyz point = getPoint(i);
             cXyz diff = (*param_1 - point);
-            f32 temp = diff.getSquareMag();
-            f32 dist = sqrtf(temp);
+            f32 dist = diff.abs();
             s32 idx = absIdx(param_2, i);
             if(idx <= param_3 && param_2 != i && max_dist > dist) {
                 max_dist = dist;
@@ -410,6 +477,7 @@ bool dNpc_PathRun_c::setNearPathIndxMk2(cXyz* param_1, u8 param_2, u8 param_3) {
     return set;
 }
 
+/* 8021B818-8021B95C       .text chkInside__14dNpc_PathRun_cFP4cXyz */
 bool dNpc_PathRun_c::chkInside(cXyz* param_1) {
     cXyz point, point2, point3;
 
@@ -478,18 +546,19 @@ bool dNpc_setAnmIDRes(mDoExt_McaMorf* pMorf, int loopMode, float morf, float spe
     return ret;
 }
 
+/* 8021BABC-8021BBA8       .text dNpc_setAnmFNDirect__FP14mDoExt_McaMorfiffPcPcPCc */
 bool dNpc_setAnmFNDirect(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, char* animFilename, char* soundFilename, const char* arcName) {
     bool ret = false;
 
     if(pMorf != 0 && animFilename != 0 && arcName != 0) {
-        void* pAnimRes = dComIfG_getObjectRes(arcName, animFilename);
+        J3DAnmTransform* pAnimRes = (J3DAnmTransform*)dComIfG_getObjectRes(arcName, animFilename);
 
         void* pSoundAnimRes = 0;
         if(soundFilename != 0) {
             pSoundAnimRes = dComIfG_getObjectRes(arcName, soundFilename);
         }
 
-        pMorf->setAnm((J3DAnmTransform*)pAnimRes, loopMode, morf, speed, 0.0f, -1.0f, pSoundAnimRes);
+        pMorf->setAnm(pAnimRes, loopMode, morf, speed, 0.0f, -1.0f, pSoundAnimRes);
         
         ret = true;
     }
@@ -539,7 +608,8 @@ cXyz dNpc_playerEyePos(f32 param_1) {
     return out;
 }
 
-void dNpc_calc_DisXZ_AngY(cXyz param_1, cXyz param_2, float* param_3, short* param_4) {
+/* 8021BDE8-8021BEC4       .text dNpc_calc_DisXZ_AngY__F4cXyz4cXyzPfPs */
+void dNpc_calc_DisXZ_AngY(cXyz param_1, cXyz param_2, float* param_3, s16* param_4) {
     cXyz diff;
     diff.x = param_2.x - param_1.x;
     diff.z = param_2.z - param_1.z;
@@ -626,8 +696,9 @@ bool dNpc_setAnm_2(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int
     return true;
 }
 
+/* 8021C238-8021C2E8       .text swing_vertical_init__14dNpc_HeadAnm_cFsssi */
 void dNpc_HeadAnm_c::swing_vertical_init(s16 param_1, s16 param_2, s16 param_3, int param_4) {
-    if(param_4 == 0 || mFunc != &swing_horizone) {
+    if(param_4 == 0 || mFunc != &swing_vertical) {
         field_0x1C = 0;
         field_0x20 = param_1;
         field_0x1E = param_2;
@@ -638,9 +709,18 @@ void dNpc_HeadAnm_c::swing_vertical_init(s16 param_1, s16 param_2, s16 param_3, 
 
 /* 8021C2E8-8021C3C8       .text swing_vertical__14dNpc_HeadAnm_cFv */
 void dNpc_HeadAnm_c::swing_vertical() {
-    /* Nonmatching */
+    s16 temp2 = field_0x1C;
+    field_0x1C += field_0x1E;
+    s16 temp = cM_ssin(field_0x1C) * field_0x14;
+    cLib_addCalcAngleS(&field_0x00, temp, 4, 0x1000, 0x100);
+    cLib_addCalcAngleS(&field_0x02, 0, 4, 0x1000, 0x100);
+    
+    if (temp2 < 0 && field_0x1C >= 0 && --field_0x20 <= 0) {
+        mFunc = NULL;
+    }
 }
 
+/* 8021C3C8-8021C478       .text swing_horizone_init__14dNpc_HeadAnm_cFsssi */
 void dNpc_HeadAnm_c::swing_horizone_init(s16 param_1, s16 param_2, s16 param_3, int param_4) {
     if(param_4 == 0 || mFunc != &swing_vertical) {
         field_0x1C = 0;
@@ -653,7 +733,15 @@ void dNpc_HeadAnm_c::swing_horizone_init(s16 param_1, s16 param_2, s16 param_3, 
 
 /* 8021C478-8021C55C       .text swing_horizone__14dNpc_HeadAnm_cFv */
 void dNpc_HeadAnm_c::swing_horizone() {
-    /* Nonmatching */
+    s16 temp2 = field_0x1C;
+    field_0x1C += field_0x1E;
+    s16 temp = cM_ssin(field_0x1C) * field_0x18;
+    cLib_addCalcAngleS(&field_0x00, 0, 4, 0x1000, 0x100);
+    cLib_addCalcAngleS(&field_0x02, temp, 4, 0x1000, 0x100);
+    
+    if (temp2 < 0 && field_0x1C >= 0 && --field_0x20 <= 0) {
+        mFunc = NULL;
+    }
 }
 
 void dNpc_HeadAnm_c::move() {
@@ -667,13 +755,13 @@ void dNpc_HeadAnm_c::move() {
 }
 
 /* 8021C5D8-8021C620       .text chkLim__14dNpc_JntCtrl_cFsii */
-s32 dNpc_JntCtrl_c::chkLim(s16 param_1, int param_2, int param_3) {
-    param_1 = cLib_maxLimit(param_1, mMaxAngles[param_2][param_3]);
-    param_1 = cLib_minLimit(param_1, mMinAngles[param_2][param_3]);
-
-    return param_1;
+int dNpc_JntCtrl_c::chkLim(s16 angle, int param_2, int param_3) {
+    angle = cLib_maxLimit(angle, mMaxAngles[param_2][param_3]);
+    angle = cLib_minLimit(angle, mMinAngles[param_2][param_3]);
+    return angle;
 }
 
+/* 8021C620-8021C6D8       .text turn_fromBackbone2Head__14dNpc_JntCtrl_cFsPsPsb */
 void dNpc_JntCtrl_c::turn_fromBackbone2Head(s16 param_1, s16* param_2, s16* param_3, bool param_4) {
     *param_3 = 0;
     if(field_0x0C == 0) {
@@ -718,31 +806,118 @@ s16 dNpc_JntCtrl_c::follow_current(s16* orig, s16 diff) {
 }
 
 /* 8021C7D0-8021CAB8       .text lookAtTarget_2__14dNpc_JntCtrl_cFPsP4cXyz4cXyzssb */
-void dNpc_JntCtrl_c::lookAtTarget_2(short*, cXyz*, cXyz, short, short, bool) {
-    /* Nonmatching */
+void dNpc_JntCtrl_c::lookAtTarget_2(s16* r26, cXyz* r29, cXyz r24, s16 r7, s16 r27, bool r28) {
+    s16 targetY;
+    s16 targetX;
+    s32 r1_10;
+    s32 temp6;
+    s16 temp;
+    s16 temp2;
+    s32 temp4;
+    s32 r1_0C;
+    s16 r1_08[2];
+    s16 deltaY;
+    s32 temp10;
+    s32 temp11;
+    s32 temp5;
+    int temp9;
+    s32 temp7;
+    
+    if (r29) {
+        targetY = cLib_targetAngleY(&r24, r29);
+        targetX = cLib_targetAngleX(&r24, r29);
+    } else {
+        targetY = r7;
+        targetX = 0;
+    }
+    
+    deltaY = targetY - *r26;
+    if (0 <= field_0x32) {
+        if (deltaY >= field_0x32 || field_0x32 == 0) {
+            turn_fromHead2Backbone(deltaY, &r1_08[1], &r1_08[0]);
+        } else {
+            turn_fromBackbone2Head(deltaY, &r1_08[1], &r1_08[0], 0 <= field_0x32);
+        }
+    } else {
+        if (deltaY <= field_0x32 || field_0x32 == 0) {
+            turn_fromHead2Backbone(deltaY, &r1_08[1], &r1_08[0]);
+        } else {
+            turn_fromBackbone2Head(deltaY, &r1_08[1], &r1_08[0], 0 <= field_0x32);
+        }
+    }
+    
+    field_0x2E = r1_08[1];
+    field_0x32 = r1_08[0];
+    temp10 = field_0x2E;
+    temp11 = field_0x32;
+    r1_10 = mAngles[0][1];
+    r1_0C = mAngles[1][1];
+    cLib_addCalcAngleL(&r1_10, temp10, 4, field_0x1E[0][0], 4);
+    cLib_addCalcAngleL(&r1_0C, temp11, 4, field_0x1E[0][0], 4);
+    mAngles[0][1] = r1_10;
+    mAngles[1][1] = r1_0C;
+    
+    if (field_0x0A && !r28) {
+        temp = *r26;
+        cLib_addCalcAngleS(r26, targetY, 4, r27, 0x100);
+        temp2 = *r26 - temp;
+        field_0x0A = temp2 != 0;
+        if (field_0x0C == 0) {
+            temp2 = follow_current(&mAngles[1][1], temp2);
+        }
+        if (field_0x0B == 0) {
+            follow_current(&mAngles[0][1], temp2);
+        }
+    } else {
+        temp4 = field_0x2E + field_0x32;
+        if (deltaY >= 0) {
+            field_0x0A = deltaY > temp4;
+        } else {
+            field_0x0A = deltaY < temp4;
+        }
+    }
+    
+    temp5 = targetX;
+    temp5 = chkLim(temp5, 0, 0);
+    targetX = targetX - (int)temp5;
+    temp9 = chkLim(targetX, 1, 0);
+    field_0x2C = temp5;
+    field_0x30 = temp9;
+    targetX = field_0x30;
+    temp7 = field_0x2C;
+    temp6 = field_0x30;
+    r1_10 = mAngles[0][0];
+    r1_0C = mAngles[1][0];
+    cLib_addCalcAngleL(&r1_10, temp7, 4, field_0x1E[0][0], 4);
+    cLib_addCalcAngleL(&r1_0C, temp6, 4, field_0x1E[0][0], 4);
+    mAngles[0][0] = r1_10;
+    mAngles[1][0] = r1_0C;
 }
 
-bool dNpc_chkAttn(fopAc_ac_c* i_this, cXyz destPos, float param_3, float param_4, float param_5, bool param_6) {
+/* 8021CAB8-8021CC4C       .text dNpc_chkAttn__FP10fopAc_ac_c4cXyzfffb */
+bool dNpc_chkAttn(fopAc_ac_c* i_this, cXyz destPos, f32 param_3, f32 param_4, f32 param_5, bool param_6) {
     s16 angle = cLib_targetAngleY(&i_this->current.pos, &destPos);
-    f32 dist = sqrtf((i_this->current.pos - destPos).getMagXZ()); //this is gross but I haven't found a better way (temp destroys stack)
+    f32 dist = (i_this->current.pos - destPos).absXZ();
+    f32 temp = param_3;
     s16 angle_diff = angle - i_this->current.angle.y;
 
-    if(param_5 > 359.0f) {
-        param_5 = 359.0f;
-    }
-    if (param_5 < 0.0f) {
-        param_5 = 0.0f;
-    }
+    param_5 = cLib_maxLimit(param_5, 359.0f);
+    param_5 = cLib_minLimit(param_5, 0.0f);
+    
     if(param_6) {
-        param_3 += param_4;
+        temp += param_4;
     }
 
     bool ret = false;
-    if(dist <= param_3 && abs(angle_diff) <= cM_deg2s(param_5)) {
+    if(dist <= temp && abs(angle_diff) <= cM_deg2s(param_5)) {
         ret = true;
     }
 
     return ret;
+}
+
+static void dummyfunc(int i_pathInf) {
+    JUT_ASSERT(0, i_pathInf != 0);
 }
 
 dCcD_SrcCyl dNpc_cyl_src = {

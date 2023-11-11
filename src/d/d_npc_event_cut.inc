@@ -291,6 +291,7 @@ void dNpc_EventCut_c::cutMoveToActorStart() {
     }
 }
 
+/* 8021D730-8021D9DC       .text cutMoveToActorProc__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutMoveToActorProc() {
     if(mSetId != 0) {
         mTargetActorPos.set(0.0f, 0.0f, 0.0f);
@@ -324,9 +325,7 @@ void dNpc_EventCut_c::cutMoveToActorProc() {
         dComIfGp_evmng_cutEnd(mEvtStaffId);
     }
 
-    cXyz diff = temp - mPos;
-    f32 tempf = diff.getSquareMag();
-    f32 dist = sqrtf(tempf);
+    f32 dist = (temp - mpActor->current.pos).absXZ();
 
     cLib_addCalc2(&mpActor->current.pos.x, temp.x, 0.1f, mSpeed);
     cLib_addCalc2(&mpActor->current.pos.z, temp.z, 0.1f, mSpeed);
@@ -360,15 +359,13 @@ fopAc_ac_c* dNpc_EventCut_c::findActorCallBack(fopAc_ac_c* pActor, void* pData) 
             }
             else {
                 if(obj->mProcName == fopAcM_GetProfName(pActor) && obj->mSubtype == pActor->mSubtype) {
-                    f32 mag = sqrtf(cut->mTargetActorPos.getSquareMag());
-
-                    if(mag == 0.0f) {
+                    if(cut->mTargetActorPos.abs() == 0.0f) {
                         cut->mTargetActorPos = pActor->current.pos;
                         cut->mpTargetActor = pActor;
                     }
                     else {
-                        f32 mag1 = sqrtf((cut->mTargetActorPos - cut->mpActor->current.pos).getSquareMag());
-                        f32 mag2 = sqrtf((pActor->current.pos - cut->mpActor->current.pos).getSquareMag());
+                        f32 mag1 = (cut->mTargetActorPos - cut->mpActor->current.pos).abs();
+                        f32 mag2 = (pActor->current.pos - cut->mpActor->current.pos).abs();
                         if(mag2 < mag1) {
                             cut->mTargetActorPos = pActor->current.pos;
                             cut->mpTargetActor = pActor;
@@ -519,17 +516,23 @@ void dNpc_EventCut_c::cutMoveToPosStart() {
     }
 }
 
+/* 8021E168-8021E338       .text cutMoveToPosProc__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutMoveToPosProc() {
     s16 angle = cLib_targetAngleY(&mpActor->current.pos, &mPos);
 
-    cXyz temp(pDelDistance * cM_ssin(angle), mPos.y, pDelDistance * cM_scos(angle));
+    cXyz temp;
+    temp.x = mPos.x;
+    temp.y = mPos.y;
+    temp.z = mPos.z;
+    temp.x -= pDelDistance * cM_ssin(angle);
+    temp.z -= pDelDistance * cM_scos(angle);
 
     if(mSpeed == 0.0f) {
         mpActor->current.pos = temp;
         dComIfGp_evmng_cutEnd(mEvtStaffId);
     }
 
-    f32 dist = sqrtf((temp - mpActor->current.pos).getMagXZ());
+    f32 dist = sqrtf((temp - mpActor->current.pos).abs2XZ());
 
     cLib_addCalc2(&mpActor->current.pos.x, temp.x, 0.1f, mSpeed);
     cLib_addCalc2(&mpActor->current.pos.z, temp.z, 0.1f, mSpeed);
