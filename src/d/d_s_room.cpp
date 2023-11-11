@@ -23,7 +23,7 @@ class room_of_scene_class : public scene_class {
 public:
     /* 0x1C4 */ request_of_phase_process_class mPhs;
     /* 0x1CC */ void * mpRoomData;
-    /* 0x1D0 */ dStage_roomStatus_c * mpRoomStatus;
+    /* 0x1D0 */ dStage_roomDt_c * mpRoomDt;
     /* 0x1D4 */ mDoDvdThd_toMainRam_c * sceneCommand;
     /* 0x1D8 */ bool mbHasRoomParticle;
     /* 0x1D9 */ bool mbReLoaded;
@@ -79,7 +79,7 @@ void objectSetCheck(room_of_scene_class* i_this) {
     if (!i_this->mbReLoaded) {
         if (!hiddenFlag) {
             fopAcM_create(PROC_BG, roomNo, NULL, -1, NULL, NULL, 0xFF, NULL);
-            dStage_dt_c_roomReLoader(i_this->mpRoomData, i_this->mpRoomStatus, roomNo);
+            dStage_dt_c_roomReLoader(i_this->mpRoomData, i_this->mpRoomDt, roomNo);
             i_this->mbReLoaded = true;
         }
     } else {
@@ -207,12 +207,12 @@ s32 phase_2(room_of_scene_class* i_this) {
         dComIfGp_roomControl_setZoneNo(roomNo, zoneNo);
     }
 
-    i_this->mpRoomStatus = dComIfGp_roomControl_getStatusRoomDt(roomNo);
-    i_this->mpRoomStatus->mRoomNo = roomNo;
+    i_this->mpRoomDt = dComIfGp_roomControl_getStatusRoomDt(roomNo);
+    i_this->mpRoomDt->mRoomNo = roomNo;
     i_this->mpRoomData = dComIfG_getStageRes(arcName, "room.dzr");
 
     if (i_this->mpRoomData != NULL) {
-        dStage_dt_c_roomLoader(i_this->mpRoomData, i_this->mpRoomStatus);
+        dStage_dt_c_roomLoader(i_this->mpRoomData, i_this->mpRoomDt);
         if (dStage_roomControl_c::mDemoArcName[0] == '\0') {
             dStage_Lbnk_c * lbnk = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getLbnk();
             if (lbnk != NULL) {

@@ -7,8 +7,10 @@
 #include "d/d_kankyo.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "global.h"
+#include "f_op/f_op_actor_mng.h"
 
 void dStage_SetErrorRoom();
+void dStage_SetErrorStage();
 
 class JKRExpHeap;
 
@@ -25,19 +27,23 @@ public:
     /* 0x1E */ color_RGB_class mKasumiMaeColor;
 };
 
-class stage_tresure_class {
+class stage_tresure_data_class {
 public:
     /* 0x00 */ char mName[8];
-    /* 0x08 */ u8 field_0x8;
-    /* 0x09 */ u8 mTypeFlag;
-    /* 0x0A */ u8 field_0xa;  // part of flag
-    /* 0x0B */ u8 mAppearType;
-    /* 0x0C */ Vec mPosition;
-    /* 0x18 */ s16 mRoomNo;
-    /* 0x1A */ s16 mRotation;
-    /* 0x1C */ u8 mItem;
-    /* 0x1D */ u8 mFlagID;
+    /* 0x08 */ u32 mParameter;
+    /* 0x0C */ cXyz mSpawnPos;
+    /* 0x18 */ csXyz mAngle;
+    /* 0x1E */ u16 mSetId;
+
+    stage_tresure_data_class() {}
+    ~stage_tresure_data_class() {}
 };  // Size: 0x20
+
+class stage_tresure_class {
+public:
+    /* 0x00 */ int num;
+    /* 0x04 */ stage_tresure_data_class* m_entries;
+};
 
 struct stage_stag_info_class {
     /* 0x00 */ f32 field_0x0;
@@ -56,7 +62,7 @@ struct stage_scls_info_class {
     /* 0x0 */ char mStage[8];
     /* 0x8 */ u8 mStart;
     /* 0x9 */ u8 mRoom;
-    /* 0xA */ s8 mWipe;
+    /* 0xA */ u8 mWipe;
     /* 0xB */ u8 field_0xb;
 };
 
@@ -171,10 +177,12 @@ public:
     /* 0x4 */ stage_actor_data_class* m_entries;
 };
 
-struct stage_tgsc_data_class : public stage_actor_data_class {
-    /* 0x20 */ u8 field_0x20;
-    /* 0x21 */ u8 field_0x21;
-    /* 0x22 */ u8 field_0x22;
+class stage_tgsc_data_class : public stage_actor_data_class {
+public:
+    fopAcM_prmScale_class mScale;
+
+    stage_tgsc_data_class() {}
+    ~stage_tgsc_data_class() {}
 };  // Size: 0x24
 
 class stage_tgsc_class {
@@ -184,10 +192,10 @@ public:
 };
 
 struct roomRead_data_class {
-    /* 0x0 */ u8 field_0x0;
+    /* 0x0 */ u8 mRoomCount;
     /* 0x1 */ u8 field_0x1;
     /* 0x2 */ u8 field_0x2;
-    /* 0x4 */ u8* field_0x4;
+    /* 0x4 */ u8* mpRooms;
 };
 
 struct roomRead_class {
@@ -423,7 +431,7 @@ public:
     /* vt[37] */ virtual void setPlightNumInfo(int i_plightNum) { mPlightInfoNum = i_plightNum; }
     /* vt[38] */ virtual int getPlightNumInfo() const { return mPlightInfoNum; }
     /* vt[39] */ virtual void setLightVecInfo(stage_lightvec_info_class*) {
-        dStage_SetErrorRoom();
+        dStage_SetErrorStage();
         OSReport("stage non LightVec data !!\n");
         JUT_ASSERT(2380, 0);
     }
@@ -433,7 +441,7 @@ public:
         return NULL;
     }
     /* vt[41] */ virtual void setLightVecInfoNum(int) {
-        dStage_SetErrorRoom();
+        dStage_SetErrorStage();
         OSReport("stage non LightVecNum data !!\n");
         JUT_ASSERT(2391, 0);
     }
@@ -459,7 +467,7 @@ public:
     /* vt[57] */ virtual void setEventInfo(dStage_EventInfo_c* i_eventInfo) { mpEventInfo = i_eventInfo; }
     /* vt[58] */ virtual dStage_EventInfo_c* getEventInfo() const { return mpEventInfo; }
     /* vt[59] */ virtual void setFileListInfo(dStage_FileList_dt_c*) {
-        dStage_SetErrorRoom();
+        dStage_SetErrorStage();
         OSReport("stage non filelist data!\n");
         JUT_ASSERT(2490, 0);
     }
@@ -475,7 +483,7 @@ public:
     /* vt[65] */ virtual void setMemoryMap(dStage_MemoryMap_c* i_map) { mpMemoryMap = i_map; }
     /* vt[66] */ virtual dStage_MemoryMap_c* getMemoryMap() const { return mpMemoryMap; }
     /* vt[67] */ virtual void setShip(dStage_Ship_c*) {
-        dStage_SetErrorRoom();
+        dStage_SetErrorStage();
         OSReport("stage non SHIP data!\n");
         JUT_ASSERT(2561, 0);
     }
@@ -487,7 +495,7 @@ public:
     /* vt[69] */ virtual void setMulti(dStage_Multi_c* i_multi) { mpMulti = i_multi; }
     /* vt[70] */ virtual dStage_Multi_c* getMulti() const { return mpMulti; }
     /* vt[71] */ virtual void setLbnk(dStage_Lbnk_c*) {
-        dStage_SetErrorRoom();
+        dStage_SetErrorStage();
         OSReport("stage non Lbnk data!\n");
         JUT_ASSERT(2590, 0);
     }
@@ -773,20 +781,24 @@ public:
 
 class dStage_darkStatus_c {
 public:
-    // name to offset relation is guessed based on debug map
-    // may need to be fixed
-
-    /* 0x00 */ u8 mRatio;
-    /* 0x01 */ u8 mNonAlpha[2];
-    /* 0x04 */ f32 mNonScale[2];
+    /* 0x00 */ u8 mEnvAlpha;
+    /* 0x01 */ u8 mBokoAlpha[2];
+    /* 0x04 */ f32 mBokoScale[2];
     /* 0x0C */ int field_0xc;
-    /* 0x10 */ int field_0x10[2];
-    /* 0x18 */ int field_0x18[2];
+    /* 0x10 */ f32 field_0x10[2];
+    /* 0x18 */ f32 field_0x18[2];
+
+    u8 getEnvAlpha() const { return mEnvAlpha; }
+    u8 getBokoAlpha(int i) const { return mBokoAlpha[i]; }
+    f32 getBokoScale(int i) const { return mBokoScale[i]; }
+    // void getNonAlpha(int i) const {}
+    // void getNonScale(int i) const {}
 };
 
 class dBgW;
-class dStage_roomStatus_c : public dStage_roomDt_c {
+class dStage_roomStatus_c {
 public:
+    /* 0x000 */ dStage_roomDt_c mRoomDt;
     /* 0x054 */ dKy_tevstr_c mTevStr;
     /* 0x104 */ u8 mFlags;
     /* 0x105 */ bool mDraw;
@@ -796,7 +808,6 @@ public:
     /* 0x10C */ int mProcID;
     /* 0x110 */ dBgW* mpBgW;
 
-    int getZoneNo() const { return mZoneNo; }
     ~dStage_roomStatus_c() {}
     dStage_roomStatus_c() {}
 };  // Size: 0x114
@@ -808,7 +819,7 @@ public:
     dStage_roomControl_c() {}
 
     void init();
-    dStage_roomStatus_c* getStatusRoomDt(int);
+    dStage_roomDt_c* getStatusRoomDt(int);
     bool checkRoomDisp(int) const;
     int loadRoom(int, u8*);
     void zoneCountCheck(int) const;
@@ -823,10 +834,9 @@ public:
     static JKRExpHeap* getMemoryBlock(int);
     static void setStayNo(int);
     static s32 GetTimePass();
-    static void setZoneNo(int i_roomNo, int i_zoneNo) {
-        mStatus[i_roomNo].mZoneNo = i_zoneNo;
-    }
+    static void setZoneNo(int i_roomNo, int i_zoneNo) { mStatus[i_roomNo].mZoneNo = i_zoneNo; }
     static int getZoneNo(int i_roomNo);
+    static void setZoneCount(int i_roomNo, int count) { mStatus[i_roomNo].mZoneCount = count; }
 
     static s8 getStayNo() { return mStayNo; }
     static s8 getMemoryBlockID(int i_roomNo) { return mStatus[i_roomNo].mMemBlockID; }
@@ -839,6 +849,8 @@ public:
     static int getStatusProcID(int i_roomNo) { return mStatus[i_roomNo].mProcID; }
     static dStage_darkStatus_c& getDarkStatus(int i_idx) { return mDarkStatus[i_idx]; }
     static char* getDemoArcName() { return mDemoArcName; }
+    static u8 getDarkRatio() { return mDarkRatio; }
+    static u8* getDarkRatio_p() { return &mDarkRatio; }
 
     static void setMemoryBlockID(int i_roomNo, int i_blockID) {
         mStatus[i_roomNo].mMemBlockID = i_blockID;
@@ -846,14 +858,8 @@ public:
 
     static void setBgW(int i_roomNo, dBgW* i_bgw) { mStatus[i_roomNo].mpBgW = i_bgw; }
 
-    BOOL checkStatusFlag(int i_roomNo, u8 flag) const {
-        return cLib_checkBit(mStatus[i_roomNo].mFlags, flag);
-    }
-
-    void offStatusFlag(int i_roomNo, u8 flag) {
-        cLib_offBit(mStatus[i_roomNo].mFlags, flag);
-    }
-
+    BOOL checkStatusFlag(int i_roomNo, u8 flag) const { return cLib_checkBit(mStatus[i_roomNo].mFlags, flag); }
+    void offStatusFlag(int i_roomNo, u8 flag) { cLib_offBit(mStatus[i_roomNo].mFlags, flag); }
     void onStatusFlag(int i_roomNo, u8 flag) { return cLib_onBit(mStatus[i_roomNo].mFlags, flag); }
 
     static JKRExpHeap* mMemoryBlock[16];
@@ -900,6 +906,24 @@ private:
     /* 0xC */ s8 mEnable;
     /* 0xD */ s8 mWipe;
 };  // Size: 0xE
+
+class dStage_KeepTresureInfo {
+public:
+    /* 0x00 */ int num;
+    /* 0x04 */ stage_tresure_data_class mTresureData[0x20];
+
+    dStage_KeepTresureInfo() {}
+    ~dStage_KeepTresureInfo() {}
+};
+
+class dStage_KeepDoorInfo {
+public:
+    /* 0x00 */ int num;
+    /* 0x04 */ stage_tgsc_data_class mDrTgData[0x40];
+
+    dStage_KeepDoorInfo() {}
+    ~dStage_KeepDoorInfo() {}
+};
 
 // unknown name
 struct dStage_objectNameInf {
@@ -967,7 +991,11 @@ inline u8 dStage_stagInfo_getStartSch(stage_stag_info_class* p_info) {
 // dStage_stagInfo_ChkKeyDisp__FP21stage_stag_info_class
 
 inline u8 dStage_roomRead_dt_c_GetLoadRoomIndex(u8 param_0) {
-    return param_0 & 0x3f;
+    return param_0 & 0x3F;
+}
+
+inline u8 dStage_roomRead_dt_c_ChkBg(u8 param_0) {
+    return param_0 & 0x80;
 }
 
 inline u8 dStage_roomRead_dt_c_GetReverb(roomRead_data_class& room) {
@@ -975,11 +1003,11 @@ inline u8 dStage_roomRead_dt_c_GetReverb(roomRead_data_class& room) {
 }
 
 inline s32 dStage_roomRead_dt_c_GetTimePass(roomRead_data_class& data) {
-    return data.field_0x2 & 3;
+    return data.field_0x2 & 0x03;
 }
 
 inline s32 dStage_sclsInfo_getWipe(stage_scls_info_class* p_info) {
-    return p_info->mWipe;
+    return p_info->mWipe & 0xF;
 }
 
 inline int dStage_FileList_dt_ChkPathWindEffect(dStage_FileList_dt_c* i_fili) {
@@ -993,6 +1021,38 @@ inline int dStage_FileList_dt_GlobalWindLevel(dStage_FileList_dt_c* i_fili) {
 inline f32 dStage_FileList_dt_SeaLevel(dStage_FileList_dt_c* i_fili) {
     return i_fili->mSeaLevel;
 }
+
+// inline u8 dStage_FileList_dt_PhotoDepth(dStage_FileList_dt_c* i_fili) {
+    // maybe 0x00007F80?
+// }
+
+inline s32 dStage_FileList_dt_CheckDarkOn(dStage_FileList_dt_c* i_fili) {
+    return i_fili->mParam & 1;
+}
+
+inline u8 dStage_FileList_dt_DarkNo(dStage_FileList_dt_c* i_fili) {
+    return (i_fili->mParam & 0x78) >> 3;
+}
+
+// inline u8 dStage_FileList_dt_CheckAgbCom(dStage_FileList_dt_c* i_fili) {
+    
+// }
+
+// inline u8 dStage_FileList_dt_CheckAgbHover(dStage_FileList_dt_c* i_fili) {
+    
+// }
+
+// inline u8 dStage_FileList_dt_GetSongOk(dStage_FileList_dt_c* i_fili) {
+    // maybe 0x40000000?
+// }
+
+// inline u8 dStage_FileList_dt_GetToonsw(dStage_FileList_dt_c* i_fili) {
+    
+// }
+
+// inline u8 dStage_FileList_dt_GetParticleNo(dStage_FileList_dt_c* i_fili) {
+    // 0x1FE00000
+// }
 
 bool dStage_chkPlayerId(int playerId, int room_no);
 

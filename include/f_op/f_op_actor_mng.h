@@ -25,12 +25,18 @@ struct fopAcM_prmBase_class {
     /* 0x16 */ u16 field_0x16;
 };  // Size = 0x18
 
+struct fopAcM_prmScale_class {
+    u8 x;
+    u8 y;
+    u8 z;
+};
+
 struct fopAcM_prm_class {
     /* 0x00 */ u32 mParameter;  // single U32 Parameter
     /* 0x04 */ cXyz mPos;
     /* 0x10 */ csXyz mAngle;  // rotation
     /* 0x16 */ u16 mSetId;
-    /* 0x18 */ u8 mScale[3];
+    /* 0x18 */ fopAcM_prmScale_class mScale;
     /* 0x1B */ u8 mGbaName;
     /* 0x1C */ s32 mParentPcId;  // parent process ID
     /* 0x20 */ s8 mSubtype;

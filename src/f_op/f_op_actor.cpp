@@ -163,7 +163,7 @@ s32 fopAc_Create(void* pProc) {
             actor->mParentPcId = prm->mParentPcId;
             actor->mSubtype = prm->mSubtype;
             actor->mGbaName = prm->mGbaName;
-            actor->mScale.set(prm->mScale[0] * 0.1f, prm->mScale[1] * 0.1f, prm->mScale[2] * 0.1f);
+            actor->mScale.set(prm->mScale.x * 0.1f, prm->mScale.y * 0.1f, prm->mScale.z * 0.1f);
             actor->mSetId = prm->mSetId;
             actor->orig.roomNo = prm->mRoomNo;
         }

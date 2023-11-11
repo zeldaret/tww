@@ -77,9 +77,9 @@ fopAcM_prm_class* fopAcM_CreateAppend() {
         cLib_memSet(params, 0, sizeof(fopAcM_prm_class));
         params->mSetId = 0xFFFF;
         params->mRoomNo = -1;
-        params->mScale[0] = 10;
-        params->mScale[1] = 10;
-        params->mScale[2] = 10;
+        params->mScale.x = 10;
+        params->mScale.y = 10;
+        params->mScale.z = 10;
         params->mParentPcId = -1;
         params->mSubtype = -1;
     }
@@ -105,13 +105,13 @@ fopAcM_prm_class * createAppend(u32 parameter, cXyz* pPos, int roomNo, csXyz* pA
         params->mAngle = csXyz::Zero;
 
     if (pScale != NULL) {
-        params->mScale[0] = 10.0f * pScale->x;
-        params->mScale[1] = 10.0f * pScale->y;
-        params->mScale[2] = 10.0f * pScale->z;
+        params->mScale.x = 10.0f * pScale->x;
+        params->mScale.y = 10.0f * pScale->y;
+        params->mScale.z = 10.0f * pScale->z;
     } else {
-        params->mScale[0] = 10.0f;
-        params->mScale[1] = 10.0f;
-        params->mScale[2] = 10.0f;
+        params->mScale.x = 10.0f;
+        params->mScale.y = 10.0f;
+        params->mScale.z = 10.0f;
     }
 
     params->mParameter = parameter;

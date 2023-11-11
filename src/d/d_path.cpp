@@ -25,7 +25,7 @@ dPath* dPath_GetRoomPath(int path_index, int room_no) {
         pd = dComIfGp_getStage().getPath2Inf();
     } else {
         JUT_ASSERT(0x3d, 0 <= room_no && room_no < 64);
-        dStage_roomStatus_c * pRoom = dComIfGp_roomControl_getStatusRoomDt(room_no);
+        dStage_roomDt_c * pRoom = dComIfGp_roomControl_getStatusRoomDt(room_no);
         if (pRoom == NULL)
             return NULL;
         pd = pRoom->getPath2Inf();
@@ -43,7 +43,7 @@ dPath* dPath_GetNextRoomPath(dPath* path, int room_no) {
     if (room_no == -1) {
         pd = dComIfGp_getStage().getPath2Inf();
     } else {
-        dStage_roomStatus_c * pRoom = dComIfGp_roomControl_getStatusRoomDt(room_no);
+        dStage_roomDt_c * pRoom = dComIfGp_roomControl_getStatusRoomDt(room_no);
         if (pRoom == NULL)
             return NULL;
         pd = pRoom->getPath2Inf();

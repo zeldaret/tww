@@ -561,7 +561,7 @@ int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 param_1, f32 param_2, cBgS_PolyIn
 
 /* 800535B8-80053678       .text dComIfGp_getShip__Fii */
 dStage_Ship_data* dComIfGp_getShip(int i_roomNo, int param_1) {
-    dStage_roomStatus_c* roomSt_p = dComIfGp_roomControl_getStatusRoomDt(i_roomNo);
+    dStage_roomDt_c* roomSt_p = dComIfGp_roomControl_getStatusRoomDt(i_roomNo);
     if (roomSt_p == NULL) {
         return NULL;
     }
@@ -610,7 +610,7 @@ bool dComIfGp_getMapTrans(int i_roomNo, f32* o_transX, f32* o_transY, s16* o_ang
 
 /* 80053728-80053778       .text dComIfGp_getRoomCamera__Fi */
 stage_camera_class* dComIfGp_getRoomCamera(int i_roomNo) {
-    dStage_roomStatus_c* status = dComIfGp_roomControl_getStatusRoomDt(i_roomNo);
+    dStage_roomDt_c* status = dComIfGp_roomControl_getStatusRoomDt(i_roomNo);
 
     if (status == NULL) {
         return NULL;
@@ -621,7 +621,7 @@ stage_camera_class* dComIfGp_getRoomCamera(int i_roomNo) {
 
 /* 80053778-800537C8       .text dComIfGp_getRoomArrow__Fi */
 stage_arrow_class* dComIfGp_getRoomArrow(int i_roomNo) {
-    dStage_roomStatus_c* status = dComIfGp_roomControl_getStatusRoomDt(i_roomNo);
+    dStage_roomDt_c* status = dComIfGp_roomControl_getStatusRoomDt(i_roomNo);
 
     if (status == NULL) {
         return NULL;

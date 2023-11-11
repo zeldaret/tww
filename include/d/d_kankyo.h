@@ -412,6 +412,7 @@ void dKy_fog_startendz_set(f32, f32, f32);
 BOOL dKy_daynight_check();
 void dKy_tevstr_init(dKy_tevstr_c*, s8, u8);
 void dKy_Sound_init();
+void dKy_change_colset(u8 param_0, u8 param_1, f32 param_2);
 void dKy_change_colpat(u8 param_0);
 void dKy_custom_colset(u8 param_0, u8 param_1, f32 i_blend);
 u8 dKy_pship_existense_chk();

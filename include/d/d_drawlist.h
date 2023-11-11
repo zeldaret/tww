@@ -324,6 +324,7 @@ public:
     BOOL set(u8 type, Mtx mtx, u8 alpha);
     BOOL draw(Mtx);
     s32 getNum() { return mNum; }
+    void setColor(GXColor& color) { mColor = color; }
 
 public:
     /* 0x00 */ GXColor mColor;
@@ -426,6 +427,7 @@ public:
     void setLightModel(u8 type, Mtx mtx, u8 alpha) { mpLightModel->set(type, mtx, alpha); }
     s32 getSpotModelNum() { return mpSpotModel->getNum(); }
     s32 getLightModelNum() { return mpLightModel->getNum(); }
+    void setSpotModelColor(GXColor& color) { mpSpotModel->setColor(color); }
 
     void setWindow(dDlst_window_c* pWindow) { mpWindow = pWindow; }
     void setViewPort(view_port_class* pViewPort) { mpViewPort = pViewPort; }

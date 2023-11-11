@@ -20,6 +20,23 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_msg_mng.h"
 #include "f_op/f_op_scene_mng.h"
+#include "m_Do/m_Do_mtx.h"
+
+const char dummy_4720[13][8] = {
+    "ACTR",
+    "ACT0",
+    "ACT1",
+    "ACT2",
+    "ACT3",
+    "ACT4",
+    "ACT5",
+    "ACT6",
+    "ACT7",
+    "ACT8",
+    "ACT9",
+    "ACTa",
+    "ACTb",
+};
 
 /* 80040900-80040938       .text set__18dStage_nextStage_cFPCcScsScSc */
 void dStage_nextStage_c::set(const char* i_stage, s8 i_roomId, s16 i_point, s8 i_layer, s8 i_wipe) {
@@ -36,13 +53,7 @@ void dStage_SetErrorRoom() {}
 /* 8004093C-80040940       .text dStage_SetErrorStage__Fv */
 void dStage_SetErrorStage() {}
 
-class dStage_KeepTresureInfo {
-    u8 unk[0x404];
-};
-
-class dStage_KeepDoorInfo {
-    u8 unk[0x904];
-};
+Vec dummy;
 
 dStage_KeepTresureInfo TresureInfo;
 dStage_KeepDoorInfo DoorInfo;
@@ -57,15 +68,64 @@ dStage_KeepDoorInfo * dStage_GetKeepDoorInfo() {
     return &DoorInfo;
 }
 
-/* 80040958-80040A78       .text dStage_KeepTresureInfoProc__FP11dStage_dt_cP19stage_tresure_class
- */
-void dStage_KeepTresureInfoProc(dStage_dt_c*, stage_tresure_class*) {
-    /* Nonmatching */
+/* 80040958-80040A78       .text dStage_KeepTresureInfoProc__FP11dStage_dt_cP19stage_tresure_class */
+void dStage_KeepTresureInfoProc(dStage_dt_c* i_stage, stage_tresure_class* i_tresure) {
+    stage_stag_info_class* stagInfo = i_stage->getStagInfo();
+    if (stagInfo == NULL) {
+        return;
+    }
+    u32 stageType = dStage_stagInfo_GetSTType(stagInfo);
+    if (stageType == 3 || stageType == 6) {
+        // Boss or miniboss room.
+        return;
+    }
+    if (i_tresure == NULL) {
+        TresureInfo.num = 0;
+        return;
+    }
+    if (i_tresure->num >= (int)ARRAY_SIZE(TresureInfo.mTresureData) || i_tresure->num < 0) {
+        TresureInfo.num = 0;
+        return;
+    }
+    TresureInfo.num = i_tresure->num;
+    if (TresureInfo.num == 0) {
+        return;
+    }
+    stage_tresure_data_class* pSrcEntry = i_tresure->m_entries;
+    stage_tresure_data_class* pDstEntry = TresureInfo.mTresureData;
+    for (int i = 0; i < TresureInfo.num; pDstEntry++, pSrcEntry++, i++) {
+        *pDstEntry = *pSrcEntry;
+    }
 }
 
 /* 80040A78-80040BA8       .text dStage_KeepDoorInfoProc__FP11dStage_dt_cP16stage_tgsc_class */
-void dStage_KeepDoorInfoProc(dStage_dt_c*, stage_tgsc_class*) {
-    /* Nonmatching */
+void dStage_KeepDoorInfoProc(dStage_dt_c* i_stage, stage_tgsc_class* i_drtg) {
+    stage_stag_info_class* stagInfo = i_stage->getStagInfo();
+    if (stagInfo == NULL) {
+        return;
+    }
+    u32 stageType = dStage_stagInfo_GetSTType(stagInfo);
+    if (stageType == 3 || stageType == 6) {
+        // Boss or miniboss room.
+        return;
+    }
+    if (i_drtg == NULL) {
+        DoorInfo.num = 0;
+        return;
+    }
+    if (i_drtg->num >= (int)ARRAY_SIZE(DoorInfo.mDrTgData) || i_drtg->num < 0) {
+        DoorInfo.num = 0;
+        return;
+    }
+    DoorInfo.num = i_drtg->num;
+    if (DoorInfo.num == 0) {
+        return;
+    }
+    stage_tgsc_data_class* pSrcEntry = i_drtg->m_entries;
+    stage_tgsc_data_class* pDstEntry = DoorInfo.mDrTgData;
+    for (int i = 0; i < DoorInfo.num; pDstEntry++, pSrcEntry++, i++) {
+        *pDstEntry = *pSrcEntry;
+    }
 }
 
 /* 80040BA8-80040BF4       .text set__19dStage_startStage_cFPCcScsSc */
@@ -75,17 +135,6 @@ void dStage_startStage_c::set(const char* i_name, s8 i_roomNo, s16 i_point, s8 i
     mPoint = i_point;
     mLayer = i_layer;
 }
-
-dStage_roomStatus_c dStage_roomControl_c::mStatus[64];
-JKRExpHeap* dStage_roomControl_c::mMemoryBlock[16];
-dStage_darkStatus_c dStage_roomControl_c::mDarkStatus[8];
-
-u32 dStage_roomControl_c::mProcID;
-s8 dStage_roomControl_c::mStayNo;
-s8 dStage_roomControl_c::mOldStayNo;
-u8 dStage_roomControl_c::mDarkRatio;
-char dStage_roomControl_c::mDemoArcName[8];
-s8 dStage_roomControl_c::m_time_pass;
 
 /* 80040BF4-80040D0C       .text init__20dStage_roomControl_cFv */
 void dStage_roomControl_c::init() {
@@ -98,7 +147,7 @@ void dStage_roomControl_c::init() {
 
     dStage_roomStatus_c* status = mStatus;
     for (int i = 0; i < 64; i++) {
-        status->init();
+        status->mRoomDt.init();
         setStatusFlag(i, 0);
         status->mDraw = false;
 
@@ -121,11 +170,11 @@ void dStage_roomControl_c::init() {
 }
 
 /* 80040D0C-80040D38       .text getStatusRoomDt__20dStage_roomControl_cFi */
-dStage_roomStatus_c* dStage_roomControl_c::getStatusRoomDt(int i_statusIdx) {
+dStage_roomDt_c* dStage_roomControl_c::getStatusRoomDt(int i_statusIdx) {
     if (i_statusIdx < 0 || i_statusIdx >= 0x40) {
         return NULL;
     }
-    return &mStatus[i_statusIdx];
+    return &mStatus[i_statusIdx].mRoomDt;
 }
 
 /* 80040D38-80040D70       .text getMemoryBlock__20dStage_roomControl_cFi */
@@ -151,12 +200,12 @@ void dStage_roomControl_c::setStayNo(int i_roomNo) {
 }
 
 /* 80040DA8-80040DDC       .text stayRoomCheck__FiPUci */
-int stayRoomCheck(int param_0, u8* param_1, int param_2) {
-    for (; param_0 > 0; param_0--) {
-        if (param_2 == dStage_roomRead_dt_c_GetLoadRoomIndex(*param_1)) {
+int stayRoomCheck(int roomCount, u8* rooms, int roomNo) {
+    for (; roomCount > 0; roomCount--) {
+        if (roomNo == dStage_roomRead_dt_c_GetLoadRoomIndex(*rooms)) {
             return 1;
         }
-        param_1++;
+        rooms++;
     }
     return 0;
 }
@@ -182,8 +231,39 @@ bool dStage_roomControl_c::checkRoomDisp(int i_roomNo) const {
 }
 
 /* 80040E6C-80040FD8       .text loadRoom__20dStage_roomControl_cFiPUc */
-int dStage_roomControl_c::loadRoom(int, u8*) {
-    /* Nonmatching */
+int dStage_roomControl_c::loadRoom(int roomCount, u8* rooms) {
+    for (int roomNo = 0; roomNo < ARRAY_SIZE(mStatus); roomNo++) {
+        if (dStage_roomControl_c::checkStatusFlag(roomNo, 0x02 | 0x04)) {
+            return 0;
+        }
+    }
+    
+    BOOL r26 = TRUE;
+    for (int roomNo = 0; roomNo < (int)ARRAY_SIZE(mStatus); roomNo++) {
+        if (dStage_roomControl_c::checkStatusFlag(roomNo, 0x01)) {
+            if (!stayRoomCheck(roomCount, rooms, roomNo)) {
+                dStage_roomControl_c::onStatusFlag(roomNo, 0x04);
+                r26 = FALSE;
+            }
+        }
+    }
+    if (!r26) {
+        return FALSE;
+    }
+    
+    for (int i = 0; i < roomCount; i++) {
+        u8 roomNo = dStage_roomRead_dt_c_GetLoadRoomIndex(rooms[i]);
+        dStage_roomControl_c::setZoneCount(roomNo, 2);
+        if (!dStage_roomControl_c::checkStatusFlag(roomNo, 0x01)) {
+            if (createRoomScene(roomNo)) {
+                u8 flag = dStage_roomRead_dt_c_ChkBg(rooms[i]) ? 0x02 : 0x0A;
+                dStage_roomControl_c::onStatusFlag(roomNo, flag);
+            }
+            return TRUE;
+        }
+    }
+    
+    return TRUE;
 }
 
 /* 80040FD8-800410AC       .text zoneCountCheck__20dStage_roomControl_cCFi */
@@ -208,26 +288,81 @@ void dStage_roomControl_c::zoneCountCheck(int i_roomNo) const {
 
 /* 800410AC-800412EC       .text checkDrawArea__20dStage_roomControl_cCFv */
 void dStage_roomControl_c::checkDrawArea() const {
-    /* Nonmatching */
+    if (mStayNo < 0) {
+        return;
+    }
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    if (player == NULL) {
+        return;
+    }
+    
+    dStage_roomStatus_c * pRoomStatus = &mStatus[mStayNo];
+    dStage_FileList_dt_c* plist_p = pRoomStatus->mRoomDt.mpFileList;
+    BOOL darkOn;
+    u8 targetRatio = 0xFF;
+    if (plist_p == NULL) {
+        return;
+    }
+    dStage_darkStatus_c& darkStatus = dStage_roomControl_c::getDarkStatus(dStage_FileList_dt_DarkNo(plist_p));
+    darkOn = dStage_FileList_dt_CheckDarkOn(plist_p);
+    if (darkOn) {
+        targetRatio = darkStatus.getEnvAlpha();
+    }
+    cLib_chaseUC(dStage_roomControl_c::getDarkRatio_p(), targetRatio, 8);
+    u8 darkRatio = dStage_roomControl_c::getDarkRatio();
+    if (darkRatio == 0xFF) {
+        return;
+    }
+    f32 ratio = darkRatio / 128.0f;
+    if (ratio > 1.0f) {
+        ratio = 1.0f;
+    }
+    if (darkOn) {
+        if (targetRatio == darkRatio) {
+            dKy_change_colset(0, 4, 1.0f - ratio);
+        }
+    } else {
+        dKy_change_colset(4, 0, ratio);
+    }
+    
+    cXyz bokoFlamePos;
+    if (daPy_getPlayerActorClass()->getBokoFlamePos(&bokoFlamePos)) {
+        return;
+    }
+    
+    static cXyz l_offset(0.0f, 60.0f, 0.0f);
+    static GXColor l_spotColor = {0x00, 0x00, 0x00, 0xFF};
+    l_spotColor.a = dStage_roomControl_c::getDarkRatio();
+    dComIfGd_setSpotModelColor(l_spotColor);
+    cXyz pos;
+    cLib_offsetPos(&pos, &player->current.pos, player->shape_angle.y, &l_offset);
+    
+    static Mtx l_m[2];
+    for (int i = 0; i < 2; i++) {
+        mDoMtx_stack_c::transS(pos);
+        f32 scale = darkStatus.getBokoScale(i);
+        mDoMtx_stack_c::scaleM(scale, scale, scale);
+        cMtx_copy(mDoMtx_stack_c::get(), l_m[i]);
+        dComIfGd_setSpotModel(0, l_m[i], darkStatus.getBokoAlpha(i));
+    }
 }
 
 /* 800412EC-80041330       .text getDarkStatus__20dStage_roomControl_cFv */
-// NONMATCHING
 dStage_darkStatus_c* dStage_roomControl_c::getDarkStatus() {
     dStage_roomStatus_c * pRoomStatus = &mStatus[mStayNo];
-    dStage_FileList_dt_c* plist_p = pRoomStatus->mpFileList;
+    dStage_FileList_dt_c* plist_p = pRoomStatus->mRoomDt.mpFileList;
 
     if (plist_p == NULL)
         return NULL;
 
-    // pointer math here seems wrong...
-    return &mDarkStatus[(plist_p->mParam & 0x78) >> 3];
+    int idx = (plist_p->mParam & 0x78) >> 3;
+    return &mDarkStatus[idx];
 }
 
 /* 80041330-80041370       .text getDarkMode__20dStage_roomControl_cFv */
 u32 dStage_roomControl_c::getDarkMode() {
     dStage_roomStatus_c * pRoomStatus = &mStatus[mStayNo];
-    dStage_FileList_dt_c* plist_p = pRoomStatus->mpFileList;
+    dStage_FileList_dt_c* plist_p = pRoomStatus->mRoomDt.mpFileList;
 
     u8 mode = 0;
     if (plist_p != NULL && (plist_p->mParam & 1) != 0)
@@ -1213,6 +1348,11 @@ int dStage_cameraCreate(stage_camera2_data_class* i_cameraData, int i_cameraIdx,
 /* 80041708-8004184C       .text dStage_decodeSearchIkada__FPvi */
 void dStage_decodeSearchIkada(void*, int) {
     /* Nonmatching */
+    static const char* x = "ikada_h";
+    static const char* y = "ikada_u";
+    static const char* z = "ikadaS";
+    int ikada_data = 0;
+    JUT_ASSERT(0, ikada_data != 0);
 }
 
 /* 8004184C-800419D0       .text dStage_playerInitIkada__FP16fopAcM_prm_classPv */
@@ -1243,7 +1383,7 @@ bool dStage_chkPlayerId(int playerId, int room_no) {
 }
 
 /* 80041AF4-80041E84       .text dStage_playerInit__FP11dStage_dt_cPviPv */
-int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* param_3) {
+int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* i_file) {
     stage_actor_class* player = (stage_actor_class*)((int*)i_data + 1);
     stage_actor_data_class* player_data = player->m_entries;
 
@@ -1260,7 +1400,7 @@ int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* param_3
     int point = dComIfGp_getStartStagePoint();
     u32 roomParam = dComIfGs_getRestartRoomParam();
     if (point == -2) {
-        dStage_playerInitIkada(appen, param_3);
+        dStage_playerInitIkada(appen, i_file);
     } else if (point == -3) {
         appen->mParameter = dComIfGs_getTurnRestartParam();
         appen->mPos = dComIfGs_getTurnRestartPos();
@@ -1346,7 +1486,6 @@ int dStage_mapInfo_GetOceanX(stage_map_info_class* i_mapInfo) {
 }
 
 /* 80041F54-80041F6C       .text dStage_mapInfo_GetOceanZ__FP20stage_map_info_class */
-// NONMATCHING
 int dStage_mapInfo_GetOceanZ(stage_map_info_class* i_mapInfo) {
     int rt = (i_mapInfo->mOceanXZ >> 4) & 0x0F;
     if (rt & 8)
@@ -1532,9 +1671,7 @@ int dStage_tgscInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
             appen->mAngle = actor_data->mAngle;
             appen->mSetId = actor_data->mSetId;
             appen->mRoomNo = i_stage->getRoomNo();
-            appen->mScale[0] = actor_data->field_0x20;
-            appen->mScale[1] = actor_data->field_0x21;
-            appen->mScale[2] = actor_data->field_0x22;
+            appen->mScale = actor_data->mScale;
             dStage_actorCreate(actor_data, appen);
         }
         actor_data++;
@@ -1545,16 +1682,14 @@ int dStage_tgscInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
 
 /* 8004259C-80042628       .text dStage_roomReadInit__FP11dStage_dt_cPviPv */
 int dStage_roomReadInit(dStage_dt_c* i_stage, void* i_data, int i_num, void* i_file) {
-    // logic is bad
-    dStage_nodeHeader* room_info = (dStage_nodeHeader*)(i_data);
-    roomRead_class* pRoom = (roomRead_class*)room_info->m_offset;
-    i_stage->setRoom(pRoom);
+    roomRead_class* rtbl = (roomRead_class*)((int*)i_data + 1);
+    roomRead_data_class** rtbl_entries = rtbl->m_entries;
+    i_stage->setRoom(rtbl);
 
-    roomRead_data_class ** ppEntry = pRoom->m_entries;
-    for (s32 i = 0; i < room_info->m_entryNum; i++, ppEntry++) {
-        // (u8*)(*ppEntry) = (u8*)(i_file) + (u32)ppEntry;
-        roomRead_data_class * pEntry = *ppEntry;
-        pEntry->field_0x4 = (u8*)(i_file) + ((u32)pEntry->field_0x4);
+    for (int i = 0; i < rtbl->num; i++) {
+        rtbl_entries[i] = (roomRead_data_class*)((u32)i_file + (u32)rtbl_entries[i]);
+        roomRead_data_class * pEntry = rtbl_entries[i];
+        rtbl_entries[i]->mpRooms = (u8*)((u32)i_file + (u32)rtbl_entries[i]->mpRooms);
     }
 
     return 1;
@@ -1581,8 +1716,8 @@ int dStage_pathInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
     dPath* pPath = pStagePath->m_path;
 
     i_stage->setPathInfo(pStagePath);
-    for (s32 i = 0; i < pStagePath->num; i++, pPath++)
-        *(u32*)pPath->mpPnt += (u32)i_stage->getPntInf();
+    for (s32 i = 0; i < pStagePath->num; pPath++, i++)
+        pPath->mpPnt = (dPath__Point*)((u32)*((int*)i_stage->getPntInf()+1) + (u32)pPath->mpPnt); // TODO clean this up
     return 1;
 }
 
@@ -1594,7 +1729,13 @@ int dStage_rppnInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
 
 /* 80042750-800427E0       .text dStage_rpatInfoInit__FP11dStage_dt_cPviPv */
 int dStage_rpatInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
-    /* Nonmatching */
+    dStage_dPath_c* pStagePath = (dStage_dPath_c*)((char*)i_data + 4);
+    dPath* pPath = pStagePath->m_path;
+
+    i_stage->setPath2Info(pStagePath);
+    for (s32 i = 0; i < pStagePath->num; pPath++, i++)
+        pPath->mpPnt = (dPath__Point*)((u32)*((int*)i_stage->getPnt2Inf()+1) + (u32)pPath->mpPnt); // TODO clean this up
+    return 1;
 }
 
 /* 800427E0-80042814       .text dStage_soundInfoInit__FP11dStage_dt_cPviPv */
@@ -1652,10 +1793,10 @@ int dStage_mecoInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
 
 /* 800429C0-80042B10       .text dStage_setShipPos__Fii */
 // NONMATCHING - close
-bool dStage_setShipPos(int param_0, int param_1) {
+bool dStage_setShipPos(int param_0, int i_roomNo) {
     if (strcmp(dComIfGp_getStartStageName(), "GanonM") == 0 && !dComIfGs_isEventBit(0x3D02)) {
         param_0 = 0xFF;
-        param_1 = 0xFF;
+        i_roomNo = 0xFF;
         dComIfGp_setShipId(0xFF);
         dComIfGp_setShipRoomId(0xFF);
     }
@@ -1674,11 +1815,8 @@ bool dStage_setShipPos(int param_0, int param_1) {
     }
 
     if (param_0 != 0xFF) {
-        if (param_1 == 0xFF) {
-            param_1 = dComIfGp_roomControl_getStayNo();
-        }
-
-        dStage_Ship_data* ship_data_p = dComIfGp_getShip(param_1, param_0);
+        i_roomNo = i_roomNo == 0xFF ? dComIfGp_roomControl_getStayNo() : i_roomNo;
+        dStage_Ship_data* ship_data_p = dComIfGp_getShip(i_roomNo, param_0);
         if (ship_data_p != NULL) {
             daShip_c* ship_p = (daShip_c*)fopAcM_SearchByName(PROC_SHIP);
             if (ship_p != NULL) {
@@ -1985,7 +2123,6 @@ void dStage_infoCreate() {
 }
 
 /* 800432EC-80043464       .text dStage_Create__Fv */
-// NONMATCHING - regalloc / string offsets
 void dStage_Create() {
     dKankyo_create();
 
@@ -2012,10 +2149,10 @@ void dStage_Create() {
 }
 
 /* 80043464-80043514       .text dStage_Delete__Fv */
-// NONMATCHING - almost
 void dStage_Delete() {
-    if (*dStage_roomControl_c::getDemoArcName() != 0) {
-        dComIfG_deleteObjectRes(dStage_roomControl_c::getDemoArcName());
+    char* demoArcName = dStage_roomControl_c::getDemoArcName();
+    if (*demoArcName != 0) {
+        dComIfG_deleteObjectRes(demoArcName);
     }
 
     dStage_roomControl_c::destroyMemoryBlock();
@@ -2050,7 +2187,7 @@ int dStage_RoomCheck(cBgS_GndChk* i_gndChk) {
         dComIfGp_roomControl_setTimePass(timePass);
 
         roomRead_data_class* room_data = room->m_entries[roomReadId];
-        return dComIfGp_roomControl_loadRoom(room_data->field_0x0, room_data->field_0x4);
+        return dComIfGp_roomControl_loadRoom(room_data->mRoomCount, room_data->mpRooms);
     }
 
     return 1;
@@ -2061,11 +2198,11 @@ void dStage_roomControl_c::SetTimePass(int i_timepass) {
     m_time_pass = i_timepass;
 }
 
-static inline s8 IkadaGetRoomNoArg0(fopAc_ac_c* i_actor) {
+static inline u8 IkadaGetRoomNoArg0(fopAc_ac_c* i_actor) {
     return (fopAcM_GetParam(i_actor) >> 4) & 0x3F;
 }
 
-static inline s16 IkadaGetLinkIdArg1(fopAc_ac_c* i_actor) {
+static inline u8 IkadaGetLinkIdArg1(fopAc_ac_c* i_actor) {
     return (fopAcM_GetParam(i_actor) >> 10) & 0xFF;
 }
 
@@ -2074,7 +2211,6 @@ static inline u8 IkadaGetIkadaIdArg2(fopAc_ac_c* i_actor) {
 }
 
 /* 8004360C-80043900       .text dStage_changeSceneExitId__FR13cBgS_PolyInfofUlSc */
-// NONMATCHING - regalloc / extra extsh
 int dStage_changeSceneExitId(cBgS_PolyInfo& i_poly, f32 i_speed, u32 i_mode, s8 i_roomNo) {
     int exit_id = dComIfG_Bgsp()->GetExitId(i_poly);
     if (exit_id == 0x3E || exit_id == 0x3B) {
@@ -2119,7 +2255,6 @@ int dStage_changeSceneExitId(cBgS_PolyInfo& i_poly, f32 i_speed, u32 i_mode, s8 
 }
 
 /* 80043900-80043AA8       .text dStage_changeScene__FifUlSc */
-// NONMATCHING - almost
 int dStage_changeScene(int i_exitId, f32 speed, u32 mode, s8 room_no) {
     stage_scls_info_dummy_class* scls;
 
@@ -2145,7 +2280,6 @@ int dStage_changeScene(int i_exitId, f32 speed, u32 mode, s8 room_no) {
 }
 
 /* 80043AB0-80043B10       .text dStage_restartRoom__FUlUl */
-// NONMATCHING - extra extsb
 void dStage_restartRoom(u32 roomParam, u32 mode) {
     dComIfGp_setNextStage(dComIfGp_getStartStageName(), -1, dComIfGs_getRestartRoomNo(), -1, 0.0f,
                           mode, 0, 0);
@@ -2154,6 +2288,7 @@ void dStage_restartRoom(u32 roomParam, u32 mode) {
 
 /* 80043B10-80043BD0       .text dStage_turnRestart__Fv */
 void dStage_turnRestart() {
+    /* Nonmatching - regalloc */
     s8 layerNo = dComIfGp_getStartStageLayer();
     if (layerNo >= 0)
         layerNo = dComIfGp_getStartStageLayer() ^ 1;
@@ -2188,7 +2323,6 @@ void dStage_escapeRestart() {
 }
 
 /* 80043C84-80043CD0       .text dStage_checkRestart__Fv */
-// NONMATCHING - extra extsh
 bool dStage_checkRestart() {
     if (dComIfGp_isEnableNextStage()) {
         if (dComIfGp_getStartStagePoint() == -2 || dComIfGp_getStartStagePoint() == -3) {
@@ -2202,3 +2336,24 @@ bool dStage_checkRestart() {
 
     return false;
 }
+
+dStage_roomStatus_c dStage_roomControl_c::mStatus[64];
+JKRExpHeap* dStage_roomControl_c::mMemoryBlock[16];
+dStage_darkStatus_c dStage_roomControl_c::mDarkStatus[8] = {
+    // TODO: member names need to be documented
+    {0x19, 0x06, 0x06, 0.8f, 0.8f, 0x08080206, 0.8f, 1.0f, 2.0f, 5.0f},
+    {0x32, 0x06, 0x06, 0.8f, 2.6f, 0x08080309, 0.8f, 2.6f, 4.0f, 144.0f},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+};
+
+u32 dStage_roomControl_c::mProcID;
+s8 dStage_roomControl_c::mStayNo;
+s8 dStage_roomControl_c::mOldStayNo;
+u8 dStage_roomControl_c::mDarkRatio;
+char dStage_roomControl_c::mDemoArcName[8];
+s8 dStage_roomControl_c::m_time_pass;

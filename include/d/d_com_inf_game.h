@@ -1355,7 +1355,7 @@ inline void dComIfGp_setStageNameOff() {
     g_dComIfG_gameInfo.play.setStageNameOff();
 }
 
-inline s8 dComIfGp_getStartStageRoomNo() {
+inline int dComIfGp_getStartStageRoomNo() {
     return g_dComIfG_gameInfo.play.getStartStageRoomNo();
 }
 
@@ -1507,7 +1507,7 @@ inline void dComIfGp_roomControl_init() {
     g_dComIfG_gameInfo.play.getRoomControl()->init();
 }
 
-inline dStage_roomStatus_c* dComIfGp_roomControl_getStatusRoomDt(int room_no) {
+inline dStage_roomDt_c* dComIfGp_roomControl_getStatusRoomDt(int room_no) {
     return g_dComIfG_gameInfo.play.getRoomControl()->getStatusRoomDt(room_no);
 }
 
@@ -1543,8 +1543,8 @@ inline void dComIfGp_roomControl_setTimePass(int isPassing) {
     g_dComIfG_gameInfo.play.getRoomControl()->SetTimePass(isPassing);
 }
 
-inline int dComIfGp_roomControl_loadRoom(int param_0, u8* param_1) {
-    return g_dComIfG_gameInfo.play.getRoomControl()->loadRoom(param_0, param_1);
+inline int dComIfGp_roomControl_loadRoom(int roomCount, u8* rooms) {
+    return g_dComIfG_gameInfo.play.getRoomControl()->loadRoom(roomCount, rooms);
 }
 
 inline dBgS* dComIfG_Bgsp() {
@@ -2162,6 +2162,10 @@ inline s32 dComIfGd_getSpotModelNum() {
 
 inline s32 dComIfGd_getLightModelNum() {
     return g_dComIfG_gameInfo.drawlist.getLightModelNum();
+}
+
+inline void dComIfGd_setSpotModelColor(GXColor& color) {
+    g_dComIfG_gameInfo.drawlist.setSpotModelColor(color);
 }
 
 inline J3DDrawBuffer* dComIfGd_getOpaListP1() {
