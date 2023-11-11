@@ -126,7 +126,7 @@ void JPAEmitterArchiveLoader_v10::load() {
                 JUT_ASSERT(300, pLinkInfo->etxBlock);
                 break;
             case 'TDB1':
-                pLinkInfo->texDataBase = (u32*)(block + 0x0c);
+                pLinkInfo->texDataBase = (u16*)(block + 0x0c);
                 break;
             }
 

@@ -4,8 +4,24 @@
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "dolphin/gx/GX.h"
 
+class JKRHeap;
+
 class JPABaseShape {
 public:
+    enum Type {
+        JPAType_Point,
+        JPAType_Line,
+        JPAType_Billboard,
+        JPAType_Direction,
+        JPAType_DirectionCross,
+        JPAType_Stripe,
+        JPAType_StripeCross,
+        JPAType_Rotation,
+        JPAType_RotationCross,
+        JPAType_DirBillboard,
+        JPAType_YBillboard,
+    };
+
     virtual ~JPABaseShape() {}
     virtual u8 getType() = 0;
     virtual u8 getDirType() = 0;
@@ -19,7 +35,7 @@ public:
     virtual BOOL isEnableGlobalColAnm() = 0;
     virtual BOOL isEnableGlobalTexAnm() = 0;
     virtual BOOL getListOrder() = 0;
-    virtual BOOL getChildOrder() = 0;
+    virtual u32 getChildOrder() = 0;
     virtual GXTevColorArg* getTevColorArg() = 0;
     virtual GXTevAlphaArg* getTevAlphaArg() = 0;
     virtual BOOL isEnableAlphaUpdate() = 0;
@@ -113,20 +129,6 @@ public:
     static GXTevColorArg stTevColorArg[6][4];
     static GXTevAlphaArg stTevAlphaArg[2][4];
 
-    enum Type {
-        JPAType_Point,
-        JPAType_Line,
-        JPAType_Billboard,
-        JPAType_Direction,
-        JPAType_DirectionCross,
-        JPAType_Stripe,
-        JPAType_StripeCross,
-        JPAType_Rotation,
-        JPAType_RotationCross,
-        JPAType_DirBillboard,
-        JPAType_YBillboard,
-    };
-
     JPABaseShapeArc(const u8 * pData, JKRHeap * pHeap);
     virtual ~JPABaseShapeArc() {}
     virtual u8 getType() { return pBsd->mFlags & 0x0F; }
@@ -141,7 +143,7 @@ public:
     virtual BOOL isEnableGlobalColAnm() { return mGlobalAnmFlags & 0x02; }
     virtual BOOL isEnableGlobalTexAnm() { return mGlobalAnmFlags & 0x01; }
     virtual BOOL getListOrder() { return pBsd->mFlags & 0x200000; }
-    virtual BOOL getChildOrder() { return pBsd->mFlags & 0x400000; }
+    virtual u32 getChildOrder() { return pBsd->mFlags & 0x400000; }
     virtual GXTevColorArg* getTevColorArg() { return stTevColorArg[(pBsd->mFlags >> 15) & 0x07]; }
     virtual GXTevAlphaArg* getTevAlphaArg() { return stTevAlphaArg[(pBsd->mFlags >> 18) & 0x01]; }
     virtual BOOL isEnableAlphaUpdate() { return (pBsd->mBlendFlags >> 14) & 0x01; }

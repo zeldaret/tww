@@ -4,11 +4,111 @@
 //
 
 #include "JSystem/JParticle/JPADraw.h"
+#include "JSystem/JParticle/JPABaseShape.h"
+#include "JSystem/JParticle/JPAExtraShape.h"
+#include "JSystem/JParticle/JPASweepShape.h"
+#include "JSystem/JParticle/JPAResourceManager.h"
+#include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/types.h"
 
+class JPADrawClipBoard {
+public:
+    ~JPADrawClipBoard();
+};
+
+class JPADrawVisitorContainer {
+public:
+    JPADrawVisitorContainer();
+    ~JPADrawVisitorContainer();
+};
+
+JPADrawVisitorContainer JPADraw::vc;
+JPADrawClipBoard JPADraw::cb;
+
 /* 80267F40-80268634       .text initialize__7JPADrawFP14JPABaseEmitterP18JPATextureResource */
-void JPADraw::initialize(JPABaseEmitter*, JPATextureResource*) {
+bool JPADraw::initialize(JPABaseEmitter* emtr, JPATextureResource* texRes) {
     /* Nonmatching */
+    JPADrawContext::pcb = &cb;
+    dc.pbe = emtr;
+    dc.pbsp = dc.pbe->getEmitterDataBlockInfoPtr()->getBaseShape();
+    dc.pesp = dc.pbe->getEmitterDataBlockInfoPtr()->getExtraShape();
+    dc.pssp = dc.pbe->getEmitterDataBlockInfoPtr()->getSweepShape();
+    dc.petx = dc.pbe->getEmitterDataBlockInfoPtr()->getExTexShape();
+    dc.mpDraw = this;
+    dc.mpTextureResource = texRes;
+    dc.pTexIdx = dc.pbe->getEmitterDataBlockInfoPtr()->getTextureDataBase();
+    dc.mpActiveParticles = &dc.pbe->mActiveParticles;
+    field_0xc2 = 0;
+    mScaleOut = 1.0f;
+
+    GXColor white = { 0xFF, 0xFF, 0xFF, 0xFF };
+    if (dc.pbsp->isEnablePrm()) {
+        if (!dc.pbsp->isEnablePrmAnm()) {
+            mPrmColor = dc.pbsp->getPrmColor();
+        }
+    } else {
+        mPrmColor = white;
+    }
+
+    if (dc.pbsp->isEnableEnv()) {
+        if (!dc.pbsp->isEnableEnvAnm()) {
+            mEnvColor = dc.pbsp->getEnvColor();
+        }
+    } else {
+        mEnvColor = white;
+    }
+
+    calcChldVisNum = 0;
+    calcPtclVisNum = 0;
+    execChldVisNum = 0;
+    execPtclVisNum = 0;
+    calcEmtrVisNum = 0;
+    execEmtrCVisNum = 0;
+    execEmtrPVisNum = 0;
+    execEmtrVisNum = 0;
+
+    for (u32 i = 0; i < ARRAY_SIZE(mpExecEmtrVis); i++)
+        mpExecEmtrVis[i] = NULL;
+    for (u32 i = 0; i < ARRAY_SIZE(mpExecEmtrPVis); i++)
+        mpExecEmtrPVis[i] = NULL;
+    for (u32 i = 0; i < ARRAY_SIZE(mpExecEmtrCVis); i++)
+        mpExecEmtrCVis[i] = NULL;
+    for (u32 i = 0; i < ARRAY_SIZE(mpCalcEmtrVis); i++)
+        mpCalcEmtrVis[i] = NULL;
+    for (u32 i = 0; i < ARRAY_SIZE(mpExecPtclVis); i++)
+        mpExecPtclVis[i] = NULL;
+    for (u32 i = 0; i < ARRAY_SIZE(mpExecChldVis); i++)
+        mpExecChldVis[i] = NULL;
+    for (u32 i = 0; i < ARRAY_SIZE(mpCalcPtclVis); i++)
+        mpCalcPtclVis[i] = NULL;
+    for (u32 i = 0; i < ARRAY_SIZE(mpCalcChldVis); i++)
+        mpCalcChldVis[i] = NULL;
+
+    JPADrawVisitorDefFlags flags;
+    flags.mbIsEnableDrawParent = dc.pssp != NULL && dc.pssp->isEnableDrawParent();
+    flags.mbHasPrmAnm = dc.pbsp->isEnablePrm() && dc.pbsp->isEnablePrmAnm();
+    flags.mbHasEnvAnm = dc.pbsp->isEnableEnv() && dc.pbsp->isEnableEnvAnm();
+    flags.mbIsStripe = dc.pbsp->getType() == JPABaseShape::JPAType_Stripe || dc.pbsp->getType() == JPABaseShape::JPAType_StripeCross;
+    flags.mbIsPointOrLine = dc.pbsp->getType() == JPABaseShape::JPAType_Point || dc.pbsp->getType() == JPABaseShape::JPAType_Line;
+    flags.mbIsEnableAlpha = dc.pesp != NULL && dc.pesp->isEnableAlpha();
+
+    setDrawExecVisitorsBeforeCB(flags);
+
+    // TODO: setup visitor container
+    // mpExecEmtrPVis[execEmtrVisNum++] = vc.something;
+
+    setDrawExecVisitorsAfterCB(flags);
+    setDrawCalcVisitors(flags);
+
+    JUT_ASSERT(0x65, execEmtrVisNum <= 1);
+    JUT_ASSERT(0x66, execEmtrPVisNum <= 5);
+    JUT_ASSERT(0x67, execEmtrCVisNum <= 3);
+    JUT_ASSERT(0x68, calcEmtrVisNum <= 4);
+    JUT_ASSERT(0x69, execPtclVisNum <= 5);
+    JUT_ASSERT(0x6a, execChldVisNum <= 4);
+    JUT_ASSERT(0x6b, calcPtclVisNum <= 10);
+    JUT_ASSERT(0x6c, calcChldVisNum <= 2);
+    return true;
 }
 
 /* 80268634-802688D4       .text draw__7JPADrawFPA4_f */
@@ -42,8 +142,11 @@ void JPADraw::initChild(JPABaseParticle*, JPABaseParticle*) {
 }
 
 /* 802692A4-80269358       .text loadTexture__7JPADrawFUc11_GXTexMapID */
-void JPADraw::loadTexture(unsigned char, _GXTexMapID) {
-    /* Nonmatching */
+bool JPADraw::loadTexture(u8 tex_no, GXTexMapID texMap) {
+    JUT_ASSERT(0x17e, dc.pbe->getEmitterDataBlockInfoPtr()->getTextureNum() > tex_no);
+    JPATexture * tex = dc.mpTextureResource->pTexResArray[dc.pTexIdx[tex_no]];
+    tex->load(texMap);
+    return TRUE;
 }
 
 /* 80269358-80269C08       .text setDrawExecVisitorsBeforeCB__7JPADrawFRCQ27JPADraw22JPADrawVisitorDefFlags */
@@ -84,6 +187,12 @@ void JPADraw::drawChild() {
 /* 8026BF88-8026C024       .text zDraw__7JPADrawFv */
 void JPADraw::zDraw() {
     /* Nonmatching */
+    field_0xc2 |= 0x01;
+    if (dc.pbsp->getChildOrder() && dc.pssp != NULL)
+        zDrawChild();
+    zDrawParticle();
+    if (!dc.pbsp->getChildOrder() && dc.pssp != NULL)
+        zDrawChild();
 }
 
 /* 8026C024-8026C24C       .text zDrawParticle__7JPADrawFv */
@@ -103,11 +212,6 @@ void JPADraw::loadYBBMtx(float(*)[4]) {
 
 /* 8026C6C0-8026C6FC       .text __dt__16JPADrawClipBoardFv */
 JPADrawClipBoard::~JPADrawClipBoard() {
-    /* Nonmatching */
-}
-
-/* 8026C6FC-8026C700       .text __ct__Q29JGeometry8TVec2<f>Fv */
-JGeometry::TVec2<float>::TVec2() {
     /* Nonmatching */
 }
 

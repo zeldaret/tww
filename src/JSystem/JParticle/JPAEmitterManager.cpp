@@ -5,12 +5,14 @@
 
 #include "JSystem/JParticle/JPAEmitterManager.h"
 #include "JSystem/JParticle/JPAEmitterLoader.h"
+#include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAResourceManager.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
 /* 8025EE44-8025F0E4       .text __ct__17JPAEmitterManagerFP18JPAResourceManagerUlUlUlP7JKRHeap */
 JPAEmitterManager::JPAEmitterManager(JPAResourceManager* resMgr, u32 ptclNum, u32 emtrNum, u32 fieldNum, JKRHeap* heap) {
+    /* Nonmatching */
     heap = heap != NULL ? heap : JKRHeap::getCurrentHeap();
     mPtclNum = ptclNum;
     mEmtrNum = emtrNum;
