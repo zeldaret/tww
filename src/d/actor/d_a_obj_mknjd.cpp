@@ -178,7 +178,7 @@ namespace daObjMknjD {
 Mtx daObjMknjD::Act_c::M_tmp_mtx;
 
 /* 00000078-0000012C       .text nodeCallBackL__FP7J3DNodei */
-static u32 nodeCallBackL(J3DNode* i_node, int i_param2) {
+static BOOL nodeCallBackL(J3DNode* i_node, int i_param2) {
     if (i_param2 == 0) {
         int jntNo = static_cast<J3DJoint*>(i_node)->getJntNo();
         
@@ -195,11 +195,11 @@ static u32 nodeCallBackL(J3DNode* i_node, int i_param2) {
         }
     }
 
-    return 1;
+    return TRUE;
 }
 
 /* 0000012C-000001E0       .text nodeCallBackR__FP7J3DNodei */
-static u32 nodeCallBackR(J3DNode* i_node, int i_param2) {
+static BOOL nodeCallBackR(J3DNode* i_node, int i_param2) {
     if (i_param2 == 0) {
         int jntNo = static_cast<J3DJoint*>(i_node)->getJntNo();
 
@@ -216,11 +216,11 @@ static u32 nodeCallBackR(J3DNode* i_node, int i_param2) {
         }
     }
 
-    return 1;
+    return TRUE;
 }
 
 /* 000001E0-000002B0       .text nodeCallBack_Hahen__FP7J3DNodei */
-static s32 nodeCallBack_Hahen(J3DNode* i_node, int i_param2) {
+static BOOL nodeCallBack_Hahen(J3DNode* i_node, int i_param2) {
     if (i_param2 == 0) {
         int jntNo = static_cast<J3DJoint*>(i_node)->getJntNo();
         u16 shardIdx = joint_number_table[jntNo - 1];
@@ -238,7 +238,7 @@ static s32 nodeCallBack_Hahen(J3DNode* i_node, int i_param2) {
         }
     }
 
-    return 1;
+    return TRUE;
 }
 
 /* 000002B0-000002D0       .text daObjMknjD_XyCheckCB__FPvi */
@@ -287,10 +287,10 @@ int daObjMknjD::Act_c::CreateHeap() {
             const char* jntName = nameTable->getName(i);
 
             if (strcmp("MknjL", jntName) == 0) {
-                mMainMdl->getModelData()->getJointNodePointer(i)->setCallBack((J3DNodeCallBack)nodeCallBackL);
+                mMainMdl->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBackL);
             }
             else if (strcmp("MknjR", jntName) == 0) {
-                mMainMdl->getModelData()->getJointNodePointer(i)->setCallBack((J3DNodeCallBack)nodeCallBackR);
+                mMainMdl->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBackR);
             }
         }
 
@@ -304,7 +304,7 @@ int daObjMknjD::Act_c::CreateHeap() {
 
             for (u16 j = 0; j < 20; j++) {
                 if (strcmp(daObjMknjD_jointName[j], jntName) == 0) {
-                    mBreakMdl->getModelData()->getJointNodePointer(i)->setCallBack((J3DNodeCallBack)nodeCallBack_Hahen);
+                    mBreakMdl->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Hahen);
                     joint_number_table[curTblIdx++] = j;
 
                     break;
@@ -1029,20 +1029,20 @@ void daObjMknjD::setMaterial(J3DMaterial* i_mat, u8 i_alpha) {
             if (i_alpha == 0xFF) {
                 i_mat->setMaterialMode(1);
 
-                i_mat->getPEBlock()->getZMode()->setUpdateEnable(1);
-                i_mat->getPEBlock()->getZMode()->setCompareEnable(1);
+                i_mat->getZMode()->setUpdateEnable(1);
+                i_mat->getZMode()->setCompareEnable(1);
 
-                i_mat->getPEBlock()->getBlend()->setType(0);
+                i_mat->getBlend()->setType(0);
             }
             else {
                 i_mat->setMaterialMode(1);
 
-                i_mat->getPEBlock()->getZMode()->setUpdateEnable(0);
-                i_mat->getPEBlock()->getZMode()->setCompareEnable(0);
+                i_mat->getZMode()->setUpdateEnable(0);
+                i_mat->getZMode()->setCompareEnable(0);
 
-                i_mat->getPEBlock()->getBlend()->setType(1);
-                i_mat->getPEBlock()->getBlend()->setSrcFactor(4);
-                i_mat->getPEBlock()->getBlend()->setDstFactor(5);
+                i_mat->getBlend()->setType(1);
+                i_mat->getBlend()->setSrcFactor(4);
+                i_mat->getBlend()->setDstFactor(5);
             }
 
             i_mat->getTevKColor(3)->mColor.a = i_alpha;

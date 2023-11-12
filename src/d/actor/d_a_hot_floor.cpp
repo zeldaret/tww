@@ -42,7 +42,7 @@ public:
     /* 0x3D4 */ u32 field_0x3d4;
 };
 
-static const char daHot_Floor_c::M_arcname[8] = "Ylesr00";
+const char daHot_Floor_c::M_arcname[8] = "Ylesr00";
 
 /* 00000078-00000108       .text set_mtx_init__13daHot_Floor_cFv */
 void daHot_Floor_c::set_mtx_init() {

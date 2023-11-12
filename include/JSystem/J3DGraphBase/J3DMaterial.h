@@ -67,6 +67,8 @@ public:
     J3DFog* getFog() { return mPEBlock->getFog(); }
     J3DZMode* getZMode() { return mPEBlock->getZMode(); }
     J3DBlend* getBlend() { return mPEBlock->getBlend(); }
+    J3DAlphaComp* getAlphaComp() { return mPEBlock->getAlphaComp(); }
+    u8 getZCompLoc() { return mPEBlock->getZCompLoc(); }
     J3DTexMtx* getTexMtx(u32 idx) { return mTexGenBlock->getTexMtx(idx); }
     u16 getIndex() { return mIndex; }
     bool isDrawModeOpaTexEdge() { return (mMaterialMode & 3) == 0; }

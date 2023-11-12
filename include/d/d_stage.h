@@ -860,7 +860,7 @@ public:
 
     BOOL checkStatusFlag(int i_roomNo, u8 flag) const { return cLib_checkBit(mStatus[i_roomNo].mFlags, flag); }
     void offStatusFlag(int i_roomNo, u8 flag) { cLib_offBit(mStatus[i_roomNo].mFlags, flag); }
-    void onStatusFlag(int i_roomNo, u8 flag) { return cLib_onBit(mStatus[i_roomNo].mFlags, flag); }
+    void onStatusFlag(int i_roomNo, u8 flag) { cLib_onBit(mStatus[i_roomNo].mFlags, flag); }
 
     static JKRExpHeap* mMemoryBlock[16];
     static dStage_roomStatus_c mStatus[64];

@@ -233,7 +233,7 @@ struct J3DColorChanInfo {
 };
 
 struct J3DZModeInfo {
-    /* 0x0 */ u8 mCompareEnable __attribute__((aligned(4)));
+    /* 0x0 */ u8 mCompareEnable;
     /* 0x1 */ u8 mFunc;
     /* 0x2 */ u8 mUpdateEnable;
 };

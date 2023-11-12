@@ -174,7 +174,7 @@ BOOL daVrbox2_color_set(vrbox2_class* i_this) {
     modelData = i_this->mpBackCloud->getModelData();
     mat = modelData->getMaterialNodePointer(0);
     mat->setCullMode(GX_CULL_NONE);
-    mat->getPEBlock()->getZMode()->setZModeInfo(l_zmodeInfo);
+    mat->getZMode()->setZModeInfo(l_zmodeInfo);
     mat->change();
 
     mtx = mat->getTexMtx(0);
@@ -192,7 +192,7 @@ BOOL daVrbox2_color_set(vrbox2_class* i_this) {
 
     mat = modelData->getMaterialNodePointer(1);
     mat->setCullMode(GX_CULL_NONE);
-    mat->getPEBlock()->getZMode()->setZModeInfo(l_zmodeInfo);
+    mat->getZMode()->setZModeInfo(l_zmodeInfo);
     mat->change();
 
     mtx = mat->getTexMtx(0);
@@ -205,7 +205,7 @@ BOOL daVrbox2_color_set(vrbox2_class* i_this) {
 
     mat = modelData->getMaterialNodePointer(2);
     mat->setCullMode(GX_CULL_NONE);
-    mat->getPEBlock()->getZMode()->setZModeInfo(l_zmodeInfo);
+    mat->getZMode()->setZModeInfo(l_zmodeInfo);
     mat->change();
 
     mtx = mat->getTexMtx(0);
@@ -219,7 +219,7 @@ BOOL daVrbox2_color_set(vrbox2_class* i_this) {
 
     if (i_this->mpKasumiMae != NULL) {
         mat = i_this->mpKasumiMae->getModelData()->getMaterialNodePointer(0);
-        mat->getPEBlock()->getZMode()->setZModeInfo(l_zmodeInfo);
+        mat->getZMode()->setZModeInfo(l_zmodeInfo);
         mat->change();
 
         c0.r = g_env_light.mVrKasumiMaeColor.r;
@@ -235,7 +235,7 @@ BOOL daVrbox2_color_set(vrbox2_class* i_this) {
 
     if (i_this->mpUsoUmi != NULL) {
         mat = i_this->mpUsoUmi->getModelData()->getMaterialNodePointer(0);
-        mat->getPEBlock()->getZMode()->setZModeInfo(l_zmodeInfo);
+        mat->getZMode()->setZModeInfo(l_zmodeInfo);
         mat->change();
 
         k0.r = g_env_light.mVrUsoUmiColor.r;

@@ -1399,10 +1399,11 @@ u8 dShop_BoughtErrorStatus(ShopItems_c* shopItems, int param_2, int param_3) {
 
 /* 800606A8-80060830       .text __ct__12ShopCursor_cFP12J3DModelDataP15J3DAnmTevRegKeyf */
 ShopCursor_c::ShopCursor_c(J3DModelData* modelData, J3DAnmTevRegKey* brkData, f32 param_2) {
-    static J3DZModeInfo ZModeInfo = {GX_TRUE, GX_ALWAYS, GX_TRUE};
+    // TODO: this should be a J3DZModeInfo, but that's 3 bytes when inside arrays, while this is supposed to be 4 bytes, with 1-byte alignment.
+    static u8 ZModeInfo[4] = {GX_TRUE, GX_ALWAYS, GX_TRUE};
     for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
         J3DMaterial* mat = modelData->getMaterialNodePointer(i);
-        mat->getPEBlock()->getZMode()->setZModeInfo(ZModeInfo);
+        mat->getZMode()->setZModeInfo(*(J3DZModeInfo*)&ZModeInfo);
     }
     
     for (int i = 0; i < (int)ARRAY_SIZE(mpModels); i++) {
