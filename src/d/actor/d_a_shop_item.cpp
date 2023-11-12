@@ -19,7 +19,7 @@ const char daShopItem_c::m_cloth_arcname[] = "Cloth";
 const f32 daShopItem_c::m_cullfar_max = 5000.0f;
 
 char* daShopItem_c::getShopArcname() {
-    u8 type = fopAcM_GetParamBit(this, 8, 4);
+    u8 type = fopAcM_GetParamBit(fopAcM_GetParam(this), 8, 4);
     if(type == 1 || (type == 0 && mModelType[m_itemNo] == 0x01)) {
         return dItem_data::getFieldArc(m_itemNo);
     }
@@ -29,7 +29,7 @@ char* daShopItem_c::getShopArcname() {
 }
 
 s16 daShopItem_c::getShopBmdIdx() {
-    u8 type = fopAcM_GetParamBit(this, 8, 4);
+    u8 type = fopAcM_GetParamBit(fopAcM_GetParam(this), 8, 4);
     if(type == 1 || (type == 0 && mModelType[m_itemNo] == 0x01)) {
         return dItem_data::getFieldBmdIdx(m_itemNo);
     }
@@ -172,7 +172,7 @@ static int daShopItem_Create(void* i_this) {
 int daShopItem_c::_create() {
     fopAcM_SetupActor(this, daShopItem_c);
     
-    m_itemNo = fopAcM_GetParamBit(this, 0, 8);
+    m_itemNo = fopAcM_GetParamBit(fopAcM_GetParam(this), 0, 8);
     
     const char* arcName = getShopArcname();
     if (getShopBmdIdx() == -1 || arcName == 0) {
@@ -194,7 +194,7 @@ int daShopItem_c::_create() {
             return result2;
         }
         else if(result == cPhs_COMPLEATE_e && result2 == cPhs_COMPLEATE_e) {
-            u8 type = fopAcM_GetParamBit(this, 8, 4);
+            u8 type = fopAcM_GetParamBit(fopAcM_GetParam(this), 8, 4);
             if(type == 2 || (type == 0 && mModelType[m_itemNo] == 0x02)) {
                 if(fopAcM_entrySolidHeap(this, &CheckItemCreateHeap, dItem_data::getHeapSize(m_itemNo)) == 0) {
                     return cPhs_ERROR_e;

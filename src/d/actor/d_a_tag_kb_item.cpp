@@ -22,10 +22,10 @@ bool daTagKbItem_c::_delete() {
 /* 000000C8-0000010C       .text CreateInit__13daTagKbItem_cFv */
 void daTagKbItem_c::CreateInit() {
     field_0x2a0 = fopAcM_GetParam(this);
-    s8 paramBit = fopAcM_GetParamBit(this, 8, 8);
+    s8 paramBit = fopAcM_GetParamBit(fopAcM_GetParam(this), 8, 8);
     field_0x29c = paramBit;
-    field_0x2a1 = fopAcM_GetParamBit(this, 0x10, 8);
-    field_0x2a4 = fopAcM_GetParamBit(this, 0x18, 8);
+    field_0x2a1 = fopAcM_GetParamBit(fopAcM_GetParam(this), 0x10, 8);
+    field_0x2a4 = fopAcM_GetParamBit(fopAcM_GetParam(this), 0x18, 8);
     field_0x298 = 0;
     field_0x299 = 0;
     mpActor = NULL;

@@ -110,8 +110,8 @@ inline u32 fopAcM_GetParam(void* pActor) {
     return fpcM_GetParam(pActor);
 }
 
-inline u32 fopAcM_GetParamBit(void* ac, u8 shift, u8 bit) {
-    return (fopAcM_GetParam(ac) >> shift) & ((1 << bit) - 1);
+inline u32 fopAcM_GetParamBit(u32 param, u8 shift, u8 bit) {
+    return (param >> shift) & ((1 << bit) - 1);
 }
 
 inline void fopAcM_SetParam(void* p_actor, u32 param) {

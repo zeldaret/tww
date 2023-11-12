@@ -295,7 +295,7 @@ s32 daObj_Hole_c::_createHeap() {
 
 /* 00000928-0000096C       .text getArg__12daObj_Hole_cFv */
 void daObj_Hole_c::getArg() {
-    u32 param = fopAcM_GetParamBit(this, 0, 0xFFFF);
+    u32 param = fopAcM_GetParamBit(fopAcM_GetParam(this), 0, 0xFFFF);
     mExitIdx = param & 0xFF;
     mHasModel = param >> 8;
 

@@ -47,8 +47,11 @@ public:
 class daRd_c : public fopEn_enemy_c {
 public:
     enum Proc_e {
-        
+        PROC_INIT = 0,
+        PROC_EXEC = 1
     };
+    
+    typedef void (daRd_c::*ModeFunc)();
     
     static const u32 m_heapsize;
     static const char m_arc_name[];
@@ -56,16 +59,16 @@ public:
     
     daRd_c() {}
     void isAnm(s8) {}
-    void isIkari() {}
-    void modeProcInit(int) {}
-    void offIkari() {}
-    void onIkari() {}
+    bool isIkari() { return mbIkari; }
+    void modeProcInit(int newMode) { modeProc(PROC_INIT, newMode); }
+    void offIkari() { mbIkari = false; }
+    void onIkari() { mbIkari = true; }
     
-    void _searchNearDeadRd(fopAc_ac_c*);
-    void _nodeControl(J3DNode*, J3DModel*);
-    void _nodeHeadControl(J3DNode*, J3DModel*);
+    fopAc_ac_c* _searchNearDeadRd(fopAc_ac_c*);
+    BOOL _nodeControl(J3DNode*, J3DModel*);
+    BOOL _nodeHeadControl(J3DNode*, J3DModel*);
     BOOL _createHeap();
-    void createArrowHeap();
+    bool createArrowHeap();
     void checkPlayerInAttack();
     void checkPlayerInCry();
     void lookBack();
@@ -105,7 +108,7 @@ public:
     bool _execute();
     void debugDraw();
     bool _draw();
-    void isLinkControl();
+    bool isLinkControl();
     void createInit();
     void getArg();
     s32 _create();
@@ -127,7 +130,7 @@ public:
     /* 0x300 */ u8 m300[0x310 - 0x300];
     /* 0x310 */ int m310;
     /* 0x314 */ int m314;
-    /* 0x318 */ u8 m318[0x31C - 0x318];
+    /* 0x318 */ int m318;
     /* 0x31C */ dBgS_ObjAcch mAcch;
     /* 0x4E0 */ dBgS_AcchCir mAcchCir;
     /* 0x520 */ dCcD_Stts mStts;
@@ -159,7 +162,7 @@ public:
     /* 0xD1C */ s16 mD1C;
     /* 0xD1E */ s16 mD1E;
     /* 0xD20 */ u8 mD20[0xD34 - 0xD20];
-    /* 0xD34 */ bool mD34;
+    /* 0xD34 */ bool mbIkari;
     /* 0xD35 */ u8 mD35[0xD44 - 0xD35];
 };
 
