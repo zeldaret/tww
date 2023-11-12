@@ -85,13 +85,6 @@ u32 JUTDirectPrint::sFontData2[77] = {
     0xF8000000, 0x10000000, 0x20000000, 0x40000000, 0xF8000000,
 };
 
-static u32 twiceBit[4] = {
-    0,
-    3,
-    12,
-    15,
-};
-
 /* 802C7074-802C71E0       .text drawChar__14JUTDirectPrintFiii */
 void JUTDirectPrint::drawChar(int position_x, int position_y, int ch) {
     int codepoint = (100 <= ch) ? ch - 100 : ch;

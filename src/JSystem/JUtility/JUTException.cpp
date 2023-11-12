@@ -863,18 +863,25 @@ bool JUTException::queryMapAddress_single(char* mapPath, u32 address, s32 sectio
     char section_name[16];
     char buffer[0x200];
     JUTDirectFile file;
-    int i = 0;
+    int section_idx = 0;
     if (!file.fopen(mapPath)) {
         return false;
     }
 
-    int result = 0;
+    bool result = false;
+
     do {
-        char* src = buffer;
-        int found_section = 0;
+        bool found_section;
+        u32 addr;
+        int size;
+
         do {
-            i++;
+            found_section = false;
+            section_idx++;
             while (true) {
+                char* src;
+                char* dst;
+
                 while (true) {
                     int length = file.fgets(buffer, ARRAY_SIZE(buffer));
                     if (length < 0)
@@ -883,9 +890,9 @@ bool JUTException::queryMapAddress_single(char* mapPath, u32 address, s32 sectio
                         break;
                 }
 
-                char* dst = section_name;
                 int i = 0;
-                char* src = buffer + 1;
+                src = buffer + 1;
+                dst = section_name;
                 for (; *src != '\0'; i++, dst++, src++) {
                     *dst = *src;
                     if (*src == ' ' || i == 0xf)
@@ -901,13 +908,13 @@ bool JUTException::queryMapAddress_single(char* mapPath, u32 address, s32 sectio
                     break;
                 }
             }
-            if ((found_section & 0xFF) == 0)
-                goto end;
-        } while (section_id >= 0 && section_id != i);
-    next_section:;
 
-        u32 addr;
-        int size;
+next_section:
+
+            if (!found_section)
+                goto end;
+        } while (section_id >= 0 && section_id != section_idx);
+
         do {
             int length;
             do {
@@ -928,9 +935,10 @@ bool JUTException::queryMapAddress_single(char* mapPath, u32 address, s32 sectio
             *out_size = size;
 
         if (out_line) {
-            src = buffer + 0x1e;
+            char* src = buffer + 0x1e;
             char* dst = out_line;
             u32 length = 0;
+
             for (; length < line_length - 1; src++) {
                 u32 ch = *(u8*)src;
                 if (ch < ' ' && ch != '\t')
@@ -962,8 +970,8 @@ bool JUTException::queryMapAddress_single(char* mapPath, u32 address, s32 sectio
 
         result = true;
 
-    next_symbol:;
-    } while (section_id >= 0 && section_id != i);
+next_symbol: ;
+    } while (section_id < 0 || section_id != section_idx);
 
     if (print && begin_with_newline) {
         sConsole->print("\n");
@@ -971,7 +979,7 @@ bool JUTException::queryMapAddress_single(char* mapPath, u32 address, s32 sectio
 
 end:
     file.fclose();
-    bool bresult = (result & 0xff) != 0;
+    bool bresult = result != false;
     return bresult;
 }
 

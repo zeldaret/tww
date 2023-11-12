@@ -817,7 +817,7 @@ bool JKRExpHeap::dump() {
 }
 
 /* 802B2D5C-802B2F5C       .text dump_sort_by_address__10JKRExpHeapFv */
-// regalloc, stack
+// regalloc
 bool JKRExpHeap::dump_sort_by_address() {
     /* Nonmatching */
     lock();
@@ -828,16 +828,17 @@ bool JKRExpHeap::dump_sort_by_address() {
     JUTReportConsole(" attr  address:   size    gid aln   prev_ptr next_ptr\n");
 
     CMemBlock* block;
-    for (CMemBlock* var1 = NULL; true; var1 = block) {
-        CMemBlock* block = (CMemBlock*)0xffffffff;
+    for (CMemBlock* nextBlock = NULL; ; nextBlock = block) {
+        block = (CMemBlock*)0xffffffff;
+
         for (CMemBlock* iterBlock = mHeadFreeList; iterBlock; iterBlock = iterBlock->getNextBlock()) {
-            if (var1 < iterBlock && iterBlock < block) {
+            if (nextBlock < iterBlock && iterBlock < block) {
                 block = iterBlock;
             }
         }
 
         for (CMemBlock* iterBlock = mHeadUsedList; iterBlock; iterBlock = iterBlock->getNextBlock()) {
-            if (var1 < iterBlock && iterBlock < block) {
+            if (nextBlock < iterBlock && iterBlock < block) {
                 block = iterBlock;
             }
         }
@@ -860,15 +861,13 @@ bool JKRExpHeap::dump_sort_by_address() {
         int offset = block->getAlignment();
         void* content = block->getContent();
         const char* type = block->_isTempMemBlock() ? " temp" : "alloc";
-        JUTReportConsole_f("%s %08x: %08x  %3d %3d  (%08x %08x)\n", type, content, block->getSize(),
-                            block->getGroupId(), offset, block->getPrevBlock(), block->getNextBlock());
+        JUTReportConsole_f("%s %08x: %08x  %3d %3d  (%08x %08x)\n", type, content, block->getSize(), block->getGroupId(), offset, block->getPrevBlock(), block->getNextBlock());
         usedBytes += sizeof(CMemBlock) + block->size + block->getAlignment();
         usedCount++;
     }
 
     float percent = ((float)usedBytes / (float)mSize) * 100.0f;
-    JUTReportConsole_f("%d / %d bytes (%6.2f%%) used (U:%d F:%d)\n", usedBytes, mSize, percent,
-                       usedCount, freeCount);
+    JUTReportConsole_f("%d / %d bytes (%6.2f%%) used (U:%d F:%d)\n", usedBytes, mSize, percent, usedCount, freeCount);
     unlock();
     return result;
 }
