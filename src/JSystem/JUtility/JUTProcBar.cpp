@@ -16,7 +16,7 @@ JUTProcBar::JUTProcBar() {
     mVisible = true;
     mHeapBarVisible = true;
     field_0x108 = 0;
-    u16 height = JUTVideo::getManager()->getXfbHeight();
+    u32 height = JUTVideo::getManager()->getXfbHeight();
     if (height > 400) {
         mParams.setBarWidth(2);
         mParams.setPosition(39, height - 40);
