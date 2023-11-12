@@ -62,6 +62,12 @@ public:
         PROC_BREAK_ORDER,
         PROC_BREAK_END_WAIT,
     };
+    enum Param_e {
+        PRM_DAMAGE_W = 0x01,
+        PRM_DAMAGE_S = 0x10,
+        PRM_MOYA_W = 0x01,
+        PRM_MOYA_S = 0x08,
+    };
 
     daObjBarrier_c();
 
@@ -81,8 +87,8 @@ public:
     bool _execute();
     bool _draw();
 
-    bool param_get_damage() const { return daObj::PrmAbstract(this, 1, 0x10); }
-    int param_get_moya() const { return daObj::PrmAbstract(this, 1, 8); }
+    bool param_get_damage() const { return daObj::PrmAbstract(this, PRM_DAMAGE_W, PRM_DAMAGE_S); }
+    int param_get_moya() const { return daObj::PrmAbstract(this, PRM_MOYA_W, PRM_MOYA_S); }
 
     /* 0x290 */ daObjBarrier_anm_c mAnm;
     /* 0x2C4 */ request_of_phase_process_class mPhase;
@@ -100,7 +106,7 @@ public:
 };
 
 namespace {
-static const char l_arcName[] = "Ycage";
+static const char l_arcname[] = "Ycage";
 
 static const dCcD_SrcCyl l_cyl_at_src = {
     // dCcD_SrcGObjInf
@@ -162,16 +168,15 @@ static const dCcD_SrcCyl l_cyl_tg_src = {
     },
 };
 
-static cXyz l_ef_scale;
+static cXyz l_ef_scale(1.0f, 1.0f, 1.0f);
 }  // namespace
 
 /* 000000EC-0000018C       .text init_mtx__14daObjBarrier_cFv */
-// NONMATCHING - load order flipped
 void daObjBarrier_c::init_mtx() {
-    mAnm.mpModel->setBaseScale(mScale);
+    mAnm.getMdlP()->setBaseScale(mScale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
-    mAnm.mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    mAnm.getMdlP()->setBaseTRMtx(mDoMtx_stack_c::get());
 
     mDoMtx_stack_c::scaleM(mScale);
     cMtx_copy(mDoMtx_stack_c::get(), mBgMtx);
@@ -185,21 +190,19 @@ int daObjBarrier_c::solidHeapCB(fopAc_ac_c* i_this) {
 /* 000001B0-00000340       .text init__18daObjBarrier_anm_cFv */
 bool daObjBarrier_anm_c::init() {
     bool rt = true;
-    void* modelData = dComIfG_getObjectRes(l_arcName, 10);
-    void* pbtk = dComIfG_getObjectRes(l_arcName, 18);
-    void* pbrk = dComIfG_getObjectRes(l_arcName, 14);
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, 10));
+    J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, 18));
+    J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, 14));
 
     if (modelData == NULL || pbtk == NULL || pbrk == NULL) {
         JUT_PANIC(407);
         rt = false;
     } else {
-        mpModel = mDoExt_J3DModel__create((J3DModelData*)modelData, 0x80000, 0x1000200);
-        BOOL btk_init = mBtk.init(
-            (J3DModelData*)modelData, (J3DAnmTextureSRTKey*)pbtk,
-            TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
-        BOOL brk_init = mBrk.init(
-            (J3DModelData*)modelData, (J3DAnmTevRegKey*)pbrk,
-            TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+        mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x1000200);
+        BOOL btk_init =
+            mBtk.init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+        BOOL brk_init =
+            mBrk.init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
 
         if (mpModel == NULL || !btk_init || !brk_init) {
             rt = false;
@@ -218,7 +221,7 @@ bool daObjBarrier_c::create_heap() {
     if (!anm_init || !eff_init) {
         rt = false;
     } else {
-        cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes(l_arcName, 22);
+        cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes(l_arcname, 22);
         mpBgW = dBgW_NewSet(dzb, cBgW::MOVE_BG_e, &mBgMtx);
         if (mpBgW == NULL) {
             rt = false;
@@ -415,7 +418,6 @@ bool daObjBarrier_ef_c::checkHitActor(fopAc_ac_c* i_checkActor) {
 }
 
 /* 00000D5C-000011B8       .text birth__17daObjBarrier_ef_cFP10fopAc_ac_cf4cXyz4cXyzi */
-// NONMATCHING
 void daObjBarrier_ef_c::birth(fopAc_ac_c* i_hitActor, f32 i_radius, cXyz i_center, cXyz i_hitPos,
                               int i_isNoEff) {
     if (!i_isNoEff || !checkHitActor(i_hitActor)) {
@@ -428,8 +430,9 @@ void daObjBarrier_ef_c::birth(fopAc_ac_c* i_hitActor, f32 i_radius, cXyz i_cente
         pos.z = i_center.z + i_radius * -cM_scos(angle.y);
         pos.y = i_hitPos.y;
 
+        int i;
         int active_flags = mActiveEffFlags;
-        for (int i = 0; i < 4; i++) {
+        for (i = 0; i < 4; i++) {
             if (!((active_flags >> i) & 1)) {
                 effect_idx = i;
                 break;
@@ -438,7 +441,7 @@ void daObjBarrier_ef_c::birth(fopAc_ac_c* i_hitActor, f32 i_radius, cXyz i_cente
 
         if (effect_idx == -1) {
             f32 var_f1 = -1.0f;
-            for (int i = 0; i < 4; i++) { // nonmatching
+            for (i = 0; i < 4; i++) {
                 if (mBtk[i].getFrame() > var_f1) {
                     var_f1 = mBtk[i].getFrame();
                     effect_idx = i;
@@ -446,7 +449,8 @@ void daObjBarrier_ef_c::birth(fopAc_ac_c* i_hitActor, f32 i_radius, cXyz i_cente
             }
         }
 
-        for (int i = 0; i < 4; i++) {
+        active_flags = mActiveEffFlags;
+        for (i = 0; i < 4; i++) {
             if ((int)((active_flags >> i) & 1) == true) {
                 if (i != effect_idx) {
                     mBtk[i].setPlaySpeed((mBtk[i].getEndFrame() - mBtk[i].getFrame()) / 3.0f);
@@ -462,21 +466,21 @@ void daObjBarrier_ef_c::birth(fopAc_ac_c* i_hitActor, f32 i_radius, cXyz i_cente
 
         J3DModelData* modelData = mpModel[effect_idx]->getModelData();
 
-        void* btk_anm_p = dComIfG_getObjectRes(l_arcName, 19);
+        J3DAnmTextureSRTKey* btk_anm_p = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, 19));
         JUT_ASSERT(937, btk_anm_p != 0);
 
-        void* bck_anm_p = dComIfG_getObjectRes(l_arcName, 7);
+        J3DAnmTransform* bck_anm_p = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(l_arcname, 7));
         JUT_ASSERT(942, bck_anm_p != 0);
 
-        void* brk_anm_p = dComIfG_getObjectRes(l_arcName, 15);
+        J3DAnmTevRegKey* brk_anm_p = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, 15));
         JUT_ASSERT(947, brk_anm_p != 0);
 
-        mBtk[effect_idx].init(modelData, (J3DAnmTextureSRTKey*)btk_anm_p, TRUE,
-                              J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, true, 0);
-        mBck[effect_idx].init(modelData, (J3DAnmTransform*)bck_anm_p, TRUE,
-                              J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1, true);
-        mBrk[effect_idx].init(modelData, (J3DAnmTevRegKey*)brk_anm_p, TRUE,
-                              J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1, true, 0);
+        mBtk[effect_idx].init(modelData, btk_anm_p, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1,
+                              true, 0);
+        mBck[effect_idx].init(modelData, bck_anm_p, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1,
+                              true);
+        mBrk[effect_idx].init(modelData, brk_anm_p, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1,
+                              true, 0);
 
         mDoMtx_stack_c::transS(pos.x, pos.y, pos.z);
         mDoMtx_stack_c::ZXYrotM(0, angle.y, 0);
@@ -489,10 +493,10 @@ void daObjBarrier_ef_c::birth(fopAc_ac_c* i_hitActor, f32 i_radius, cXyz i_cente
 /* 000011B8-000013E0       .text init__17daObjBarrier_ef_cFv */
 bool daObjBarrier_ef_c::init() {
     bool rt = true;
-    void* modelData = dComIfG_getObjectRes(l_arcName, 11);
-    void* pbtk = dComIfG_getObjectRes(l_arcName, 19);
-    void* pbck = dComIfG_getObjectRes(l_arcName, 7);
-    void* pbrk = dComIfG_getObjectRes(l_arcName, 15);
+    void* modelData = dComIfG_getObjectRes(l_arcname, 11);
+    void* pbtk = dComIfG_getObjectRes(l_arcname, 19);
+    void* pbck = dComIfG_getObjectRes(l_arcname, 7);
+    void* pbrk = dComIfG_getObjectRes(l_arcname, 15);
 
     if (modelData == NULL || pbtk == NULL || pbck == NULL || pbrk == NULL) {
         JUT_PANIC(1016);
@@ -584,7 +588,7 @@ int daObjBarrier_c::_create() {
     }
 
     if (mBarrierActive == true) {
-        phase = dComIfG_resLoad(&mPhase, l_arcName);
+        phase = dComIfG_resLoad(&mPhase, l_arcname);
     }
 
     if (phase == cPhs_COMPLEATE_e) {
@@ -594,7 +598,7 @@ int daObjBarrier_c::_create() {
             } else {
                 mpBgW->SetCrrFunc(NULL);
                 mScale.z = mScale.x;
-                fopAcM_SetMtx(this, mAnm.mpModel->getBaseTRMtx());
+                fopAcM_SetMtx(this, mAnm.getMdlP()->getBaseTRMtx());
                 init_mtx();
 
                 mAtStts.Init(0xFF, 0xFF, this);
@@ -629,7 +633,7 @@ daObjBarrier_c::daObjBarrier_c() {
 /* 00001A38-00001AD8       .text _delete__14daObjBarrier_cFv */
 bool daObjBarrier_c::_delete() {
     if (mBarrierActive == true) {
-        dComIfG_resDelete(&mPhase, l_arcName);
+        dComIfG_resDelete(&mPhase, l_arcname);
 
         if (heap != NULL && mpBgW != NULL) {
             if (mpBgW->ChkUsed()) {
