@@ -4,30 +4,81 @@
 //
 
 #include "JSystem/JParticle/JPAField.h"
+#include "JSystem/JParticle/JPAEmitter.h"
+#include "JSystem/JParticle/JPAParticle.h"
+#include "JSystem/JParticle/JPAFieldBlock.h"
+#include "JSystem/JUtility/JUTAssert.h"
+
+JPAFieldContainer fc;
+JPAEmitterInfo * JPAFieldData::pEmtrInfo;
 
 /* 80259EE8-8025A0D8       .text loadFieldData__12JPABaseFieldFP12JPAFieldDataP13JPAFieldBlock */
-void JPABaseField::loadFieldData(JPAFieldData*, JPAFieldBlock*) {
-    /* Nonmatching */
+void JPABaseField::loadFieldData(JPAFieldData* data, JPAFieldBlock* block) {
+    data->mType = block->getType();
+    data->mID = block->getID();
+    data->mVelType = block->getVelType();
+    data->mCycle = block->getCycle();
+    data->mSttFlag = block->getSttFlag();
+    data->mMag = block->getMag();
+    data->mMagRndm = block->getMagRndm();
+    data->mMaxDist = block->getMaxDist();
+    block->getPos(data->mPos);
+    block->getDir(data->mDir);
+    data->mVal1 = block->getVal1();
+    data->mVal2 = block->getVal2();
+    data->mVal3 = block->getVal3();
+    data->mFadeIn = block->getFadeIn();
+    data->mFadeOut = block->getFadeOut();
+    data->mEnTime = block->getEnTime();
+    data->mDisTime = block->getDisTime();
+    if (!(data->mSttFlag & 0x10))
+        data->mDisTime = 1.0f;
+    data->mVel.zero();
 }
 
 /* 8025A0D8-8025A21C       .text calcVel__12JPABaseFieldFP12JPAFieldDataP15JPABaseParticle */
-void JPABaseField::calcVel(JPAFieldData*, JPABaseParticle*) {
-    /* Nonmatching */
+void JPABaseField::calcVel(JPAFieldData* data, JPABaseParticle* ptcl) {
+    /* Nonmatching - copy of vel shouldn't be using PS */
+    JGeometry::TVec3<f32> vel = data->mVel;
+
+    if (!(ptcl->mStatus & 0x04)) {
+        f32 fadeAffect = calcFadeAffect(data, ptcl->mCurNormTime);
+        vel.scale(fadeAffect);
+    }
+
+    switch (data->mVelType) {
+    case 0: ptcl->mFieldAccel.add(vel); break;
+    case 1: ptcl->mBaseVel += vel; break;
+    case 2: ptcl->mFieldVel += vel; break;
+    }
 }
 
 /* 8025A21C-8025A2B0       .text calcFadeAffect__12JPABaseFieldFP12JPAFieldDataf */
-void JPABaseField::calcFadeAffect(JPAFieldData*, float) {
+f32 JPABaseField::calcFadeAffect(JPAFieldData* data, f32 t) {
     /* Nonmatching */
 }
 
 /* 8025A2B0-8025A330       .text preCalc__12JPABaseFieldFP12JPAFieldData */
-void JPABaseField::preCalc(JPAFieldData*) {
-    /* Nonmatching */
+void JPABaseField::preCalc(JPAFieldData* data) {
+    data->mMaxDistSq = data->mMaxDist * data->mMaxDist;
+
+    data->mFadeOutRate = data->mDisTime - data->mFadeOut;
+    if (data->mFadeOutRate == 0.0f) {
+        data->mFadeOutRate = 1.0f;
+    } else {
+        data->mFadeOutRate = 1.0f / data->mFadeOutRate;
+    }
+    data->mFadeInRate = data->mFadeIn - data->mEnTime;
+    if (data->mFadeInRate == 0.0f) {
+        data->mFadeInRate = 1.0f;
+    } else {
+        data->mFadeInRate = 1.0f / data->mFadeInRate;
+    }
 }
 
 /* 8025A330-8025A344       .text isItinRange__12JPABaseFieldFP12JPAFieldDataf */
-void JPABaseField::isItinRange(JPAFieldData*, float) {
-    /* Nonmatching */
+bool JPABaseField::isItinRange(JPAFieldData* data, f32 v) {
+    return v < data->mMaxDistSq;
 }
 
 /* 8025A344-8025A3E4       .text preCalc__15JPAGravityFieldFP12JPAFieldData */
@@ -116,111 +167,76 @@ void JPASpinField::calc(JPAFieldData*, JPABaseParticle*) {
 }
 
 /* 8025B7F8-8025B960       .text initField__15JPAFieldManagerFP20JPADataBlockLinkInfoP14JPAEmitterInfo */
-void JPAFieldManager::initField(JPADataBlockLinkInfo*, JPAEmitterInfo*) {
+void JPAFieldManager::initField(JPADataBlockLinkInfo* dataInfo, JPAEmitterInfo* emtrInfo) {
     /* Nonmatching */
+    u8 fieldNum = dataInfo->getFieldNum();
+    JPAFieldBlock** fieldBlock = dataInfo->getField();
+    for (u8 i = 0; i < fieldNum; i++) {
+        if (mVacList->getNumLinks() != 0) {
+            JPAFieldData* field = mVacList->getFirst()->getObject();
+            mVacList->remove(field->getLinkBufferPtr());
+            mList.append(field->getLinkBufferPtr());
+
+            switch (fieldBlock[i]->getType()) {
+            case 0: field->mpBaseField = &fc.mGravity; break;
+            case 1: field->mpBaseField = &fc.mAir; break;
+            case 2: field->mpBaseField = &fc.mMagnet; break;
+            case 3: field->mpBaseField = &fc.mNewton; break;
+            case 4: field->mpBaseField = &fc.mVortex; break;
+            case 5: field->mpBaseField = &fc.mConvection; break;
+            case 6: field->mpBaseField = &fc.mRandom; break;
+            case 7: field->mpBaseField = &fc.mDrag; break;
+            case 8: field->mpBaseField = &fc.mSpin; break;
+            default: break;
+            }
+
+            JPAFieldData::pEmtrInfo = emtrInfo;
+            field->mpBaseField->loadFieldData(field, fieldBlock[i]);
+        } else {
+            JUT_WARN(0x25c, "%s", "JPariticle::Entry Over!!! (Field Number)");
+        }
+    }
 }
 
 /* 8025B960-8025B9C0       .text init__15JPAFieldManagerFP15JPABaseParticle */
-void JPAFieldManager::init(JPABaseParticle*) {
-    /* Nonmatching */
+void JPAFieldManager::init(JPABaseParticle* ptcl) {
+    for (JSULink<JPAFieldData>* link = mList.getFirst(); link != NULL; link = link->getNext()) {
+        JPAFieldData* data = link->getObject();
+        data->mpBaseField->init(data, ptcl);
+    }
 }
 
 /* 8025B9C0-8025BA10       .text preCalc__15JPAFieldManagerFv */
 void JPAFieldManager::preCalc() {
-    /* Nonmatching */
+    for (JSULink<JPAFieldData>* link = mList.getFirst(); link != NULL; link = link->getNext()) {
+        JPAFieldData* data = link->getObject();
+        data->mpBaseField->preCalc(data);
+    }
 }
 
 /* 8025BA10-8025BAD8       .text calc__15JPAFieldManagerFP15JPABaseParticle */
-void JPAFieldManager::calc(JPABaseParticle*) {
+void JPAFieldManager::calc(JPABaseParticle* ptcl) {
     /* Nonmatching */
+    for (JSULink<JPAFieldData>* link = mList.getFirst(); link != NULL; link = link->getNext()) {
+        JPAFieldData* data = link->getObject();
+        data->mpBaseField->calc(data, ptcl);
+        // more to do here
+    }
 }
 
 /* 8025BAD8-8025BB20       .text deleteField__15JPAFieldManagerFP12JPAFieldData */
-void JPAFieldManager::deleteField(JPAFieldData*) {
-    /* Nonmatching */
+void JPAFieldManager::deleteField(JPAFieldData* data) {
+    mList.remove(data->getLinkBufferPtr());
+    mVacList->prepend(data->getLinkBufferPtr());
 }
 
 /* 8025BB20-8025BB74       .text deleteAllField__15JPAFieldManagerFv */
 void JPAFieldManager::deleteAllField() {
     /* Nonmatching */
-}
-
-/* 8025BB74-8025BB78       .text init__12JPABaseFieldFP12JPAFieldDataP15JPABaseParticle */
-void JPABaseField::init(JPAFieldData*, JPABaseParticle*) {
-    /* Nonmatching */
-}
-
-/* 8025BB78-8025BB7C       .text calc__12JPABaseFieldFP12JPAFieldDataP15JPABaseParticle */
-void JPABaseField::calc(JPAFieldData*, JPABaseParticle*) {
-    /* Nonmatching */
-}
-
-/* 8025BB7C-8025BBD8       .text __dt__12JPASpinFieldFv */
-JPASpinField::~JPASpinField() {
-    /* Nonmatching */
-}
-
-/* 8025BBD8-8025BBE0       .text isItinRange__12JPASpinFieldFP12JPAFieldDataf */
-void JPASpinField::isItinRange(JPAFieldData*, float) {
-    /* Nonmatching */
-}
-
-/* 8025BBE0-8025BC3C       .text __dt__12JPADragFieldFv */
-JPADragField::~JPADragField() {
-    /* Nonmatching */
-}
-
-/* 8025BC3C-8025BC98       .text __dt__14JPARandomFieldFv */
-JPARandomField::~JPARandomField() {
-    /* Nonmatching */
-}
-
-/* 8025BC98-8025BCF4       .text __dt__18JPAConvectionFieldFv */
-JPAConvectionField::~JPAConvectionField() {
-    /* Nonmatching */
-}
-
-/* 8025BCF4-8025BCFC       .text isItinRange__18JPAConvectionFieldFP12JPAFieldDataf */
-void JPAConvectionField::isItinRange(JPAFieldData*, float) {
-    /* Nonmatching */
-}
-
-/* 8025BCFC-8025BD58       .text __dt__14JPAVortexFieldFv */
-JPAVortexField::~JPAVortexField() {
-    /* Nonmatching */
-}
-
-/* 8025BD58-8025BD60       .text isItinRange__14JPAVortexFieldFP12JPAFieldDataf */
-void JPAVortexField::isItinRange(JPAFieldData*, float) {
-    /* Nonmatching */
-}
-
-/* 8025BD60-8025BDBC       .text __dt__14JPANewtonFieldFv */
-JPANewtonField::~JPANewtonField() {
-    /* Nonmatching */
-}
-
-/* 8025BDBC-8025BE18       .text __dt__14JPAMagnetFieldFv */
-JPAMagnetField::~JPAMagnetField() {
-    /* Nonmatching */
-}
-
-/* 8025BE18-8025BE74       .text __dt__11JPAAirFieldFv */
-JPAAirField::~JPAAirField() {
-    /* Nonmatching */
-}
-
-/* 8025BE74-8025BED0       .text __dt__15JPAGravityFieldFv */
-JPAGravityField::~JPAGravityField() {
-    /* Nonmatching */
-}
-
-/* 8025BED0-8025BF18       .text __dt__12JPABaseFieldFv */
-JPABaseField::~JPABaseField() {
-    /* Nonmatching */
-}
-
-/* 8025BFC4-8025C128       .text __dt__17JPAFieldContainerFv */
-JPAFieldContainer::~JPAFieldContainer() {
-    /* Nonmatching */
+    for (JSULink<JPAFieldData>* link = mList.getFirst(); link != NULL;) {
+        JSULink<JPAFieldData>* next = link->getNext();
+        JPAFieldData* data = link->getObject();
+        deleteField(data);
+        link = next;
+    }
 }

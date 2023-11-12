@@ -58,7 +58,7 @@ public:
     virtual f32 getRate() = 0;
     virtual f32 getRateRndm() = 0;
     virtual u32 getRateStep() = 0;
-    virtual u32 getMaxFrame() = 0;
+    virtual s16 getMaxFrame() = 0;
     virtual u32 getStartFrame() = 0;
     virtual u32 getLifeTime() = 0;
     virtual f32 getLifeTimeRndm() = 0;
@@ -88,7 +88,7 @@ public:
     virtual f32 getRate() { return mpData->mRate; }
     virtual f32 getRateRndm() { return mpData->mRateRndm; }
     virtual u32 getRateStep() { return mpData->mRateStep; }
-    virtual u32 getMaxFrame() { return mpData->mMaxFrame; }
+    virtual s16 getMaxFrame() { return mpData->mMaxFrame; }
     virtual u32 getStartFrame() { return mpData->mStartFrame; }
     virtual u32 getLifeTime() { return mpData->mLifeTime; }
     virtual f32 getLifeTimeRndm() { return mpData->mLifeTimeRndm; }

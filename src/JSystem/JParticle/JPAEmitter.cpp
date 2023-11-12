@@ -4,8 +4,10 @@
 //
 
 #include "JSystem/JParticle/JPAEmitter.h"
+#include "JSystem/JParticle/JPADynamicsBlock.h"
 #include "JSystem/JParticle/JPAExtraShape.h"
 #include "JSystem/JParticle/JPASweepShape.h"
+#include "JSystem/JParticle/JPAKeyBlock.h"
 #include "dolphin/mtx/mtx.h"
 #include "dolphin/mtx/mtxvec.h"
 
@@ -58,8 +60,71 @@ void JPABaseEmitter::calcVolumeTorus() {
 }
 
 /* 8025CB54-8025D0B0       .text create__14JPABaseEmitterFP20JPADataBlockLinkInfo */
-void JPABaseEmitter::create(JPADataBlockLinkInfo*) {
-    /* Nonmatching */
+void JPABaseEmitter::create(JPADataBlockLinkInfo* info) {
+    mpDataLinkInfo = info;
+
+    JPADynamicsBlock * dyn = getEmitterDataBlockInfoPtr()->getDynamics();
+    dyn->getEmitterScl(mEmitterScale);
+    dyn->getEmitterTrs(mEmitterTranslation);
+    dyn->getEmitterRot(mEmitterRot);
+    mVolumeType = dyn->getVolumeType();
+    mRateStep = dyn->getRateStep();
+    mDivNumber = dyn->getDivNumber();
+    mRate = dyn->getRate();
+    mRateRndm = dyn->getRateRndm();
+    mMaxFrame = dyn->getMaxFrame();
+    mStartFrame = dyn->getStartFrame();
+    mVolumeSize = dyn->getVolumeSize();
+    mVolumeSweep = dyn->getVolumeSweep();
+    mVolumeMinRad = dyn->getVolumeMinRad();
+    mLifeTime = dyn->getLifeTime();
+    mLifeTimeRndm = dyn->getLifeTimeRndm();
+    mMoment = dyn->getMoment();
+    mMomentRndm = dyn->getMomentRndm();
+    mInitialVelRatio = dyn->getInitVelRatio();
+    mAccelRndm = dyn->getAccelRndm();
+    mAirResist = dyn->getAirResist();
+    mAirResistRndm = dyn->getAirResistRndm();
+    mInitialVelOmni = dyn->getInitVelOmni();
+    mInitialVelAxis = dyn->getInitVelAxis();
+    mInitialVelRndm = dyn->getInitVelRndm();
+    mInitialVelDir = dyn->getInitVelDir();
+    mAccel = dyn->getAccel();
+    dyn->getEmitterDir(mEmitterDir);
+    // This appears to be an attempt at a normalize, but it scales by the length instead (???)
+    mEmitterDir.normalize_broken();
+    mSpread = dyn->getSpread();
+    mDataFlag = dyn->getDataFlag();
+    mUseKeyFlag = dyn->getUseKeyFlag();
+    mFlags = JPAEmtrStts_FirstEmit | JPAEmtrStts_RateStepEmit;
+    MTXIdentity(mGlobalRotation);
+    mGlobalDynamicsScale.x = 1.0f;
+    mGlobalDynamicsScale.y = 1.0f;
+    mGlobalDynamicsScale.z = 1.0f;
+    mGlobalTranslation.zero();
+    mGlobalParticleScale.x = 1.0f;
+    mGlobalParticleScale.y = 1.0f;
+    mGlobalParticleScale.z = 1.0f;
+    mGlobalEnvColor.r = mGlobalEnvColor.g = mGlobalEnvColor.b = mGlobalEnvColor.a = 0xFF;
+    mGlobalPrmColor.r = mGlobalPrmColor.g = mGlobalPrmColor.b = mGlobalPrmColor.a = 0xFF;
+    mEmitCount = 0.0f;
+    mRateStepTimer = 0.0f;
+    mTick = 0.0f;
+    mTime = 0.0f;
+    mUserData = 0;
+    mRandomSeed.setSeed(emtrInfo.mRandom.get());
+    mFieldManager.initField(info, &emtrInfo);
+
+    switch (mVolumeType) {
+    case 0: mVolumeFunc = &JPABaseEmitter::calcVolumeCube; break;
+    case 1: mVolumeFunc = &JPABaseEmitter::calcVolumeSphere; break;
+    case 2: mVolumeFunc = &JPABaseEmitter::calcVolumeCylinder; break;
+    case 3: mVolumeFunc = &JPABaseEmitter::calcVolumeTorus; break;
+    case 4: mVolumeFunc = &JPABaseEmitter::calcVolumePoint; break;
+    case 5: mVolumeFunc = &JPABaseEmitter::calcVolumeCircle; break;
+    case 6: mVolumeFunc = &JPABaseEmitter::calcVolumeLine; break;
+    default: mVolumeFunc = NULL; break;
+    }
 }
 
 /* 8025D0B0-8025D294       .text calcEmitterInfo__14JPABaseEmitterFv */
@@ -94,7 +159,7 @@ void JPABaseEmitter::calcEmitterInfo() {
     emtrInfo.mPublicScale.x = mGlobalDynamicsScale.x * 1.0f;
     emtrInfo.mPublicScale.y = mGlobalDynamicsScale.y * 1.0f;
     emtrInfo.mPublicScale.z = mGlobalDynamicsScale.z * 1.0f;
-    MTXMultVec(mtx, &mEmitterTranslation, emtrInfo.mEmitterGlobalCenter);
+    MTXMultVec(mtx, mEmitterTranslation, emtrInfo.mEmitterGlobalCenter);
 }
 
 /* 8025D294-8025D3C0       .text calc__14JPABaseEmitterFv */
@@ -210,6 +275,31 @@ void JPABaseEmitter::calcChild() {
 /* 8025D8CC-8025DA90       .text calcKey__14JPABaseEmitterFv */
 void JPABaseEmitter::calcKey() {
     /* Nonmatching */
+    for (u32 i = 0; i < getEmitterDataBlockInfoPtr()->getKeyNum(); i++) {
+        JPAKeyBlock* key = getEmitterDataBlockInfoPtr()->getKey()[i];
+        f32 tick = mTick;
+        const f32* dataPtr = key->getKeyDataPtr();
+        u32 dataNum = key->getNumber();
+        if (key->isLoopEnable()) {
+            s32 tickMax = (s32)(dataPtr[(dataNum - 1) * 4]) + 1;
+            tick -= (s32)tick % (s32)tickMax;
+        }
+        f32 value = JPAGetKeyFrameValue(tick, dataNum, dataPtr);
+
+        switch (key->getID()) {
+        case 0: mRate = value; break;
+        case 1: mVolumeSize = value; break;
+        case 2: mVolumeSweep = value; break;
+        case 3: mVolumeMinRad = value; break;
+        case 4: mLifeTime = value; break;
+        case 5: mMoment = value; break;
+        case 6: mInitialVelOmni = value; break;
+        case 7: mInitialVelAxis = value; break;
+        case 8: mInitialVelDir = value; break;
+        case 9: mSpread = value; break;
+        case 10: mDraw.mScaleOut = value; break;
+        }
+    }
 }
 
 /* 8025DA90-8025DAD8       .text deleteParticle__14JPABaseEmitterFP15JPABaseParticleP26JSUList<15JPABaseParticle> */
@@ -286,7 +376,7 @@ void JPABaseEmitter::calcEmitterGlobalPosition(JGeometry::TVec3<float>& dst) {
     mtx[0][3] = mGlobalTranslation.x;
     mtx[1][3] = mGlobalTranslation.y;
     mtx[2][3] = mGlobalTranslation.z;
-    MTXMultVec(mtx, &mEmitterTranslation, dst);
+    MTXMultVec(mtx, mEmitterTranslation, dst);
 }
 
 /* 8025DD5C-8025DDE8       .text calcgReRDirection__14JPABaseEmitterFv */

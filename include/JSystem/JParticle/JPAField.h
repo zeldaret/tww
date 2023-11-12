@@ -9,6 +9,7 @@ class JPAEmitterInfo;
 class JPAFieldData;
 class JPABaseParticle;
 class JPABaseField;
+class JPAFieldBlock;
 
 class JPAFieldManager {
 public:
@@ -30,6 +31,8 @@ public:
     virtual ~JPAFieldData();
     JSULink<JPAFieldData>* getLinkBufferPtr() { return &mLink; }
 
+    static JPAEmitterInfo * pEmtrInfo;
+
 public:
     /* 0x04 */ JPABaseField * mpBaseField;
     /* 0x08 */ JSULink<JPAFieldData> mLink;
@@ -39,7 +42,7 @@ public:
     /* 0x34 */ u32 field_0x34;
     /* 0x38 */ u32 field_0x38;
     /* 0x3C */ JGeometry::TVec3<f32> mAirDir;
-    /* 0x48 */ u32 field_0x48;
+    /* 0x48 */ f32 mMaxDistSq;
     /* 0x4C */ f32 mFadeOutRate;
     /* 0x50 */ f32 mFadeInRate;
     /* 0x54 */ JGeometry::TVec3<f32> mPos;
@@ -59,6 +62,101 @@ public:
     /* 0x97 */ u8 mID;
     /* 0x98 */ u8 mVelType;
     /* 0x99 */ u8 mCycle;
+};
+
+class JPABaseField {
+public:
+    virtual ~JPABaseField() {}
+    virtual void init(JPAFieldData*, JPABaseParticle*) {}
+    virtual void preCalc(JPAFieldData*);
+    virtual void calc(JPAFieldData*, JPABaseParticle*) {}
+    virtual bool isItinRange(JPAFieldData*, f32);
+
+    void loadFieldData(JPAFieldData*, JPAFieldBlock*);
+    f32 calcFadeAffect(JPAFieldData*, f32);
+    void calcVel(JPAFieldData*, JPABaseParticle*);
+};
+
+class JPAGravityField : public JPABaseField {
+public:
+    virtual ~JPAGravityField() {}
+    virtual void preCalc(JPAFieldData*);
+    virtual void calc(JPAFieldData*, JPABaseParticle*);
+};
+
+class JPAAirField : public JPABaseField {
+public:
+    virtual ~JPAAirField() {}
+    virtual void preCalc(JPAFieldData*);
+    virtual void calc(JPAFieldData*, JPABaseParticle*);
+};
+
+class JPAMagnetField : public JPABaseField {
+public:
+    virtual ~JPAMagnetField() {}
+    virtual void preCalc(JPAFieldData*);
+    virtual void calc(JPAFieldData*, JPABaseParticle*);
+};
+
+class JPANewtonField : public JPABaseField {
+public:
+    virtual ~JPANewtonField() {}
+    virtual void preCalc(JPAFieldData*);
+    virtual void calc(JPAFieldData*, JPABaseParticle*);
+};
+
+class JPAVortexField : public JPABaseField {
+public:
+    virtual ~JPAVortexField() {}
+    virtual void preCalc(JPAFieldData*);
+    virtual void calc(JPAFieldData*, JPABaseParticle*);
+    virtual bool isItinRange(JPAFieldData*, f32) { return true; }
+};
+
+class JPAConvectionField : public JPABaseField {
+public:
+    virtual ~JPAConvectionField() {}
+    virtual void preCalc(JPAFieldData*);
+    virtual void calc(JPAFieldData*, JPABaseParticle*);
+    virtual bool isItinRange(JPAFieldData*, f32) { return true; }
+};
+
+class JPARandomField : public JPABaseField {
+public:
+    virtual ~JPARandomField() {}
+    virtual void calc(JPAFieldData*, JPABaseParticle*);
+};
+
+class JPADragField : public JPABaseField {
+public:
+    virtual ~JPADragField() {}
+    virtual void init(JPAFieldData*, JPABaseParticle*);
+    virtual void preCalc(JPAFieldData*);
+    virtual void calc(JPAFieldData*, JPABaseParticle*);
+};
+
+class JPASpinField : public JPABaseField {
+public:
+    virtual ~JPASpinField() {}
+    virtual void preCalc(JPAFieldData*);
+    virtual void calc(JPAFieldData*, JPABaseParticle*);
+    virtual bool isItinRange(JPAFieldData*, f32) { return true; }
+};
+
+class JPAFieldContainer {
+public:
+    ~JPAFieldContainer() {}
+
+public:
+    /* 0x00 */ JPAGravityField mGravity;
+    /* 0x04 */ JPAAirField mAir;
+    /* 0x08 */ JPAMagnetField mMagnet;
+    /* 0x0C */ JPANewtonField mNewton;
+    /* 0x10 */ JPAVortexField mVortex;
+    /* 0x14 */ JPAConvectionField mConvection;
+    /* 0x18 */ JPARandomField mRandom;
+    /* 0x1C */ JPADragField mDrag;
+    /* 0x20 */ JPASpinField mSpin;
 };
 
 #endif /* JPAFIELD_H */

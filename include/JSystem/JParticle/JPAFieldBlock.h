@@ -23,7 +23,7 @@ struct JPAFieldBlockData {
 class JPAFieldBlock {
 public:
     virtual ~JPAFieldBlock() {}
-    virtual u32 getType() = 0;
+    virtual u8 getType() = 0;
     virtual u32 getID() = 0;
     virtual u32 getVelType() = 0;
     virtual u32 getCycle() = 0;
@@ -47,7 +47,7 @@ public:
     JPAFieldBlockArc(const u8*);
     virtual ~JPAFieldBlockArc() {}
 
-    virtual u32 getType() { return (mpData->mFlag >> 0) & 0x0F; }
+    virtual u8 getType() { return (mpData->mFlag >> 0) & 0x0F; }
     virtual u32 getVelType() { return (mpData->mFlag >> 8) & 0x03; }
     virtual u32 getSttFlag() { return (mpData->mFlag >> 16) & 0xFFFF; }
     virtual u32 getCycle() { return mpData->mCycle; }

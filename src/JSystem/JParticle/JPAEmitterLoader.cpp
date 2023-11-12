@@ -20,6 +20,8 @@
 class JPAEmitterArchiveLoader_v10 {
 public:
     void load();
+    JPAEmitterResource* getEmitterResource() { return mpEmtrRes; }
+    JPATextureResource* getTextureResource() { return mpTexRes; }
 
 public:
     /* 0x00 */ JKRHeap* pHeap;
@@ -41,8 +43,8 @@ void JPAEmitterArchiveLoaderDataBase::load(const u8* data, JKRHeap* heap, JPAEmi
             loader.mpEmtrRes = NULL;
             loader.mpTexRes = NULL;
             loader.load();
-            *dstEmtrRes = loader.mpEmtrRes;
-            *dstTexRes = loader.mpTexRes;
+            *dstEmtrRes = loader.getEmitterResource();
+            *dstTexRes = loader.getTextureResource();
         } else {
             JUT_WARN(201, "%s", "This is WRONG Version File\n");
         }
@@ -65,7 +67,9 @@ void JPAEmitterArchiveLoader_v10::load() {
     mpTexRes = new(pHeap, 0) JPATextureResource(header->texResNum, pHeap);
 
     u32 offs = 0x20;
-    for (u32 i = 0; i < header->emtrResNum; i++) {
+    for (s32 i = 0; i < header->emtrResNum; i++) {
+        const u8* data = &pData[offs];
+
         JPAEmitterData* pEmtrRes = new(pHeap, 0) JPAEmitterData();
         JUT_ASSERT(234, pEmtrRes);
 
@@ -77,21 +81,22 @@ void JPAEmitterArchiveLoader_v10::load() {
         JUT_ASSERT(243, pEmtrRes->pLinkInfoArray);
         pEmtrRes->pLinkInfoArray[0] = pLinkInfo;
 
-        pLinkInfo->keyNum = pData[offs + 0x14];
+        pLinkInfo->keyNum = data[0x14];
         pLinkInfo->keyBlocks = (JPAKeyBlock**) (pLinkInfo->keyNum != 0 ? new(pHeap, 0) JPAKeyBlockArc*[pLinkInfo->keyNum] : NULL);
         JUT_ASSERT(250, pLinkInfo->keyBlocks || pLinkInfo->keyNum == 0);
 
-        pLinkInfo->fldNum = pData[offs + 0x15];
+        pLinkInfo->fldNum = data[0x15];
         pLinkInfo->fldBlocks = (JPAFieldBlock**) (pLinkInfo->fldNum != 0 ? new(pHeap, 0) JPAFieldBlockArc*[pLinkInfo->fldNum] : NULL);
         JUT_ASSERT(256, pLinkInfo->fldBlocks || pLinkInfo->fldNum == 0);
 
-        pLinkInfo->mTextureNum = pData[offs + 0x16];
+        pLinkInfo->mTextureNum = data[0x16];
         pLinkInfo->texDataBase = NULL;
 
         u32 fld_cntr = 0;
         u32 key_cntr = 0;
+        u32 j = 0;
         u32 blockOffs = offs + 0x20;
-        for (u32 j = 0; j < *((u32*)(pData + offs + 0x0C)); j++) {
+        for (; j < *((u32*)(data + 0x0C)); j++) {
             const u8* block = (const u8*)(pData + blockOffs);
             u32 size = ((u32*)block)[1];
             switch (((u32*)block)[0]) {
@@ -133,15 +138,15 @@ void JPAEmitterArchiveLoader_v10::load() {
             blockOffs += size;
         }
 
-        mpEmtrRes->registration(pEmtrRes, *(u16*)(pData + 0x18));
+        getEmitterResource()->registration(pEmtrRes, *(u16*)(data + 0x18));
         offs = blockOffs;
     }
 
-    for (u32 i = 0; i < header->texResNum; i++) {
+    for (s32 i = 0; i < header->texResNum; i++) {
         u32 size = *(u32*)(pData + offs + 0x04);
-        JPATextureArc * pTex = new(pHeap, 0) JPATextureArc(pData + offs);
+        JPATextureArc* pTex = new(pHeap, 0) JPATextureArc(pData + offs);
         JUT_ASSERT(319, pTex);
-        mpTexRes->registration(pTex);
+        getTextureResource()->registration(pTex);
         offs += size;
     }
 }

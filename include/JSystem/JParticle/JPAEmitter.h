@@ -243,8 +243,8 @@ public:
 
     /* 0x000 */ VolumeFunc mVolumeFunc;
     /* 0x00C */ JGeometry::TVec3<f32> mEmitterScale;
-    /* 0x018 */ cXyz mEmitterTranslation;
-    /* 0x024 */ csXyz mEmitterRot;
+    /* 0x018 */ JGeometry::TVec3<f32> mEmitterTranslation;
+    /* 0x024 */ JGeometry::TVec3<s16> mEmitterRot;
     /* 0x02A */ u8 mVolumeType;
     /* 0x02B */ u8 mRateStep;
     /* 0x02C */ JGeometry::TVec3<f32> mEmitterDir;

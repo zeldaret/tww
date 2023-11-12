@@ -153,9 +153,24 @@ struct TVec3<f32> {
         return C_VECSquareMag((Vec*)&x);
     }
 
+    f32 normalize_broken() {
+        f32 sq = squared();
+        if (sq <= 3.814697e-06f) {
+            return 0.0f;
+        }
+        f32 norm;
+        if (sq <= 0.0f) {
+            norm = sq;
+        } else {
+            norm = fsqrt_step(sq);
+        }
+        scale(norm);
+        return norm;
+    }
+
     f32 normalize() {
         f32 sq = squared();
-        if (sq <= FLT_EPSILON * 32.0f) {
+        if (sq <= 3.814697e-06f) {
             return 0.0f;
         }
         f32 norm;
@@ -170,7 +185,7 @@ struct TVec3<f32> {
 
     f32 normalize(const TVec3<f32>& other) {
         f32 sq = other.squared();
-        if (sq <= FLT_EPSILON * 32.0f) {
+        if (sq <= 3.814697e-06f) {
             zero();
             return 0.0f;
         }
@@ -189,18 +204,9 @@ struct TVec3<f32> {
     }
 
     void scale(register f32 sc) {
-        register f32 z;
-        register f32 x_y;
-        register f32* dst = &x;
-        register f32 zres;
-        asm {
-            psq_l    x_y, 0(dst),  0, 0
-            psq_l    z,   8(dst),  1, 0
-            ps_muls0 x_y,    x_y, sc
-            psq_st   x_y, 0(dst),  0, 0
-            ps_muls0 zres,       z, sc
-            psq_st   zres,  8(dst),  1, 0
-        };
+        x *= sc;
+        y *= sc;
+        z *= sc;
     }
 
     void scale(register f32 sc, const TVec3<f32>& other) {
@@ -247,7 +253,7 @@ struct TVec3<f32> {
     }
 
     bool isZero() const {
-        return squared() <= 32.0f * FLT_EPSILON;
+        return squared() <= 32.0f * 3.814697e-06f;
     }
 
     void cross(const TVec3<f32>& a, const TVec3<f32>& b) {
@@ -256,7 +262,7 @@ struct TVec3<f32> {
 
     void setLength(f32 len) {
         f32 sq = squared();
-        if (sq <= FLT_EPSILON * 32.0f) {
+        if (sq <= 3.814697e-06f * 32.0f) {
             return;
         }
         f32 norm;

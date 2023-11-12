@@ -90,40 +90,31 @@ static void dummy() {
 }
 
 /* 80257248-80257508       .text __ct__15JPABaseShapeArcFPCUcP7JKRHeap */
-JPABaseShapeArc::JPABaseShapeArc(const u8* pData, JKRHeap* pHeap) {
+JPABaseShapeArc::JPABaseShapeArc(const u8* data, JKRHeap* pHeap) {
     /* Nonmatching */
-    pBsd = (const JPABaseShapeData*) pData;
-    mColLoopOffset = -((u16)(pBsd->mFlags >> 11) & 1);
-    mTexLoopOffset = -((u16)(pBsd->mFlags >> 13) & 1);
+    pBsd = reinterpret_cast<const JPABaseShapeData*>(data+0x0C);
+    mColLoopOffset = -((pBsd->mFlags >> 11) & 0x01);
+    mTexLoopOffset = -((pBsd->mFlags >> 13) & 0x01);
 
-    bool bFlag2 = false;
-    if (!(pBsd->mFlags & 0x1000)) {
-        if (getType() == JPAType_Stripe || getType() == JPAType_StripeCross)
-            bFlag2 = true;
-    }
+    bool isEnableGlobalColAnm = (!(pBsd->mFlags & 0x1000) && (getType() == JPAType_Stripe || getType() == JPAType_StripeCross)) ? true : false;
+    bool isEnableGlobalTexAnm = (!(pBsd->mFlags & 0x4000) && (getType() == JPAType_Stripe || getType() == JPAType_StripeCross)) ? true : false;
+    mGlobalAnmFlags = isEnableGlobalColAnm << 1 | isEnableGlobalTexAnm << 0;
 
-    bool bFlag1 = false;
-    if (!(pBsd->mFlags & 0x4000)) {
-        if (getType() == JPAType_Stripe || getType() == JPAType_StripeCross)
-            bFlag1 = true;
-    }
-
-    mGlobalAnmFlags = bFlag2 << 1 | bFlag1 << 0;
     if (isEnableTextureAnm() && getTextureAnmKeyNum() != 0)
-        mpTexAnmIdxArr = (const u8*)(pData + 0x60);
+        mpTexAnmIdxArr = (const u8*)(data + 0x60);
     else
         mpTexAnmIdxArr = NULL;
 
     if (isEnablePrmAnm()) {
         JUT_ASSERT(0x11f, pBsd->prmAnmKeyNum != 0);
-        mpPrmColorArr = makeColorTable((JPAColorRegAnmKey*)(pData + pBsd->mPrmAnimDataOffs), pBsd->prmAnmKeyNum, pBsd->mColorRegAnmMaxFrm, pHeap);
+        mpPrmColorArr = makeColorTable((JPAColorRegAnmKey*)(data + pBsd->mPrmAnimDataOffs), pBsd->prmAnmKeyNum, pBsd->mColorRegAnmMaxFrm, pHeap);
     } else {
         mpPrmColorArr = NULL;
     }
 
     if (isEnableEnvAnm()) {
         JUT_ASSERT(0x127, pBsd->envAnmKeyNum != 0);
-        mpEnvColorArr = makeColorTable((JPAColorRegAnmKey*)(pData + pBsd->mEnvAnimDataOffs), pBsd->envAnmKeyNum, pBsd->mColorRegAnmMaxFrm, pHeap);
+        mpEnvColorArr = makeColorTable((JPAColorRegAnmKey*)(data + pBsd->mEnvAnimDataOffs), pBsd->envAnmKeyNum, pBsd->mColorRegAnmMaxFrm, pHeap);
     } else {
         mpEnvColorArr = NULL;
     }
