@@ -1226,7 +1226,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_floor"),
     ActorRel(Matching,    "d_a_grass"),
     ActorRel(NonMatching, "d_a_hitobj"),
-    ActorRel(NonMatching, "d_a_hot_floor"),
+    ActorRel(Matching,    "d_a_hot_floor", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_ikari"),
     ActorRel(NonMatching, "d_a_jbo"),
     ActorRel(Matching,    "d_a_kaji"),
