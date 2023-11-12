@@ -30,6 +30,31 @@ public:
     /* 0x0C */ JPATextureResource* mpTexRes;
 };
 
+static void dummy() {
+    OSReport("JPAEmitterLoader.cpp");
+    OSReport("%s");
+    OSReport("This is WRONG Version File\n");
+    OSReport("This is NO JPA File\n");
+    OSReport("pEmtrRes");
+    OSReport("Halt");
+    OSReport("pEmtrRes->pLinkInfoArray");
+    OSReport("pLinkInfo");
+    OSReport("pLinkInfo->keyBlocks || pLinkInfo->keyNum == 0");
+    OSReport("pLinkInfo->fldBlocks || pLinkInfo->fldNum == 0");
+    OSReport("pLinkInfo->texDataBase || texNum == 0");
+    OSReport("pLinkInfo->fldBlocks[fldCntr]");
+    OSReport("pLinkInfo->keyBlocks[keyCntr]");
+    OSReport("pLinkInfo->dynBlock");
+    OSReport("pLinkInfo->bspBlock");
+    OSReport("pLinkInfo->espBlock");
+    OSReport("pLinkInfo->sspBlock");
+    OSReport("pLinkInfo->etxBlock");
+    OSReport("This is WRONG File\n");
+    OSReport("pLinkInfo->fldBlocks[fld_cntr]");
+    OSReport("pLinkInfo->keyBlocks[key_cntr]");
+    OSReport("pTex");
+}
+
 /* 802590B4-8025917C       .text load__31JPAEmitterArchiveLoaderDataBaseFPCUcP7JKRHeapPP18JPAEmitterResourcePP18JPATextureResource */
 void JPAEmitterArchiveLoaderDataBase::load(const u8* data, JKRHeap* heap, JPAEmitterResource** dstEmtrRes, JPATextureResource** dstTexRes) {
     u32 magic = ((const u32*)data)[0];
@@ -107,7 +132,7 @@ void JPAEmitterArchiveLoader_v10::load() {
                 break;
             case 'KFA1':
                 pLinkInfo->keyBlocks[key_cntr] = (JPAKeyBlock*) new(pHeap, 0) JPAKeyBlockArc(pData + blockOffs);
-                JUT_ASSERT(278, pLinkInfo->keyBlocks[key_cntr]);
+                JUT_ASSERT(279, pLinkInfo->keyBlocks[key_cntr]);
                 key_cntr++;
                 break;
             case 'BEM1':
@@ -144,7 +169,7 @@ void JPAEmitterArchiveLoader_v10::load() {
 
     for (s32 i = 0; i < header->texResNum; i++) {
         u32 size = *(u32*)(pData + offs + 0x04);
-        JPATextureArc* pTex = new(pHeap, 0) JPATextureArc(pData + offs);
+        JPATexture* pTex = new(pHeap, 0) JPATextureArc(pData + offs);
         JUT_ASSERT(319, pTex);
         getTextureResource()->registration(pTex);
         offs += size;

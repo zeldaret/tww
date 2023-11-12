@@ -31,8 +31,8 @@ public:
     bool checkCreateChild();
     JSULink<JPABaseParticle>* getLinkBufferPtr() { return &mLink; }
 
-    ~JPABaseParticle();
-    JPABaseParticle();
+    ~JPABaseParticle() {}
+    JPABaseParticle() : mLink(this), mCurFrame(0.0f) {}
 
 public:
     /* 0x00 */ JSULink<JPABaseParticle> mLink;

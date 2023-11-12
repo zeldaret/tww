@@ -12,26 +12,26 @@
 
 /* 8025EE44-8025F0E4       .text __ct__17JPAEmitterManagerFP18JPAResourceManagerUlUlUlP7JKRHeap */
 JPAEmitterManager::JPAEmitterManager(JPAResourceManager* resMgr, u32 ptclNum, u32 emtrNum, u32 fieldNum, JKRHeap* heap) {
-    /* Nonmatching */
     heap = heap != NULL ? heap : JKRHeap::getCurrentHeap();
     mPtclNum = ptclNum;
     mEmtrNum = emtrNum;
     mFieldNum = fieldNum;
     pResMgrArray[0] = resMgr;
 
-    for (u32 i = 1; i < 8; i++)
+    u32 i;
+    for (i = 1; i < 8; i++)
         pResMgrArray[i] = 0;
 
     JPABaseParticle* pPtclArray = new(heap, 0) JPABaseParticle[mPtclNum];
     JUT_ASSERT(0x2e, pPtclArray);
-    for (u32 i = 0; i < mPtclNum; i++) {
+    for (i = 0; i < mPtclNum; i++) {
         JPABaseParticle* ptcl = &pPtclArray[i];
         mPtclPool.prepend(ptcl->getLinkBufferPtr());
     }
 
     JPABaseEmitter* pEmtrArray = new(heap, 0) JPABaseEmitter[mEmtrNum];
     JUT_ASSERT(0x35, pEmtrArray);
-    for (u32 i = 0; i < mEmtrNum; i++) {
+    for (i = 0; i < mEmtrNum; i++) {
         JPABaseEmitter* emtr = &pEmtrArray[i];
         emtr->setParticleList(&mPtclPool);
         emtr->setFieldList(&mFieldPool);
@@ -40,7 +40,7 @@ JPAEmitterManager::JPAEmitterManager(JPAResourceManager* resMgr, u32 ptclNum, u3
 
     JPAFieldData* pFieldArray = new(heap, 0) JPAFieldData[mFieldNum];
     JUT_ASSERT(0x3e, pFieldArray);
-    for (u32 i = 0; i < mFieldNum; i++) {
+    for (i = 0; i < mFieldNum; i++) {
         JPAFieldData* field = &pFieldArray[i];
         mFieldPool.prepend(field->getLinkBufferPtr());
     }
@@ -48,7 +48,7 @@ JPAEmitterManager::JPAEmitterManager(JPAResourceManager* resMgr, u32 ptclNum, u3
 
 /* 8025F0E4-8025F2F4       .text createSimpleEmitterID__17JPAEmitterManagerFRCQ29JGeometry8TVec3<f>UsUcUcP34JPACallBackBase<P14JPABaseEmitter>P54JPACallBackBase2<P14JPABaseEmitter,P15JPABaseParticle> */
 JPABaseEmitter* JPAEmitterManager::createSimpleEmitterID(const JGeometry::TVec3<float>& pos, u16 userID, u8 groupID, u8 rmID, JPACallBackBase<JPABaseEmitter*>* pEmtrCallBack, JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>* pPtclCallBack) {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
     JUT_ASSERT(0x56, groupID < 16);
     JUT_ASSERT(0x57, rmID < 8);
     JUT_ASSERT(0x58, pResMgrArray[rmID] != 0);
@@ -127,12 +127,10 @@ void JPAEmitterManager::forceDeleteEmitter(JPABaseEmitter* emtr) {
 
 /* 8025F53C-8025F5B4       .text forceDeleteAllEmitter__17JPAEmitterManagerFv */
 void JPAEmitterManager::forceDeleteAllEmitter() {
-    /* Nonmatching */
-    for (u32 i = 0; i < 16; i++) {
+    for (u8 i = 0; i < 16; i++) {
         for (JSULink<JPABaseEmitter>* link = mEmtrGroup[i].getFirst(); link != NULL;) {
             JSULink<JPABaseEmitter>* next = link->getNext();
-            JPABaseEmitter* emtr = link->getObject();
-            forceDeleteEmitter(emtr);
+            forceDeleteEmitter(link->getObject());
             link = next;
         }
     }
@@ -140,9 +138,8 @@ void JPAEmitterManager::forceDeleteAllEmitter() {
 
 /* 8025F5B4-8025F68C       .text clearResourceManager__17JPAEmitterManagerFUc */
 void JPAEmitterManager::clearResourceManager(u8 rmID) {
-    /* Nonmatching */
     JUT_ASSERT(0x14b, rmID < 8);
-    for (u32 i = 0; i < 16; i++) {
+    for (u8 i = 0; i < 16; i++) {
         for (JSULink<JPABaseEmitter>* link = mEmtrGroup[i].getFirst(); link != NULL;) {
             JSULink<JPABaseEmitter>* next = link->getNext();
             JPABaseEmitter* emtr = link->getObject();

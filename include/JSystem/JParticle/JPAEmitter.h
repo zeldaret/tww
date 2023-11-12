@@ -131,7 +131,8 @@ public:
 
 class JPABaseEmitter {
 public:
-    JPABaseEmitter();
+    JPABaseEmitter() : mLink(this), mRandomSeed(0), mTick(0.0f), mTime(0.0f) {}
+    ~JPABaseEmitter() {}
 
     typedef void (JPABaseEmitter::*VolumeFunc)();
 

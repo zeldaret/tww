@@ -27,8 +27,8 @@ public:
 
 class JPAFieldData {
 public:
-    JPAFieldData();
-    virtual ~JPAFieldData();
+    JPAFieldData() : mLink(this) {}
+    virtual ~JPAFieldData() {}
     JSULink<JPAFieldData>* getLinkBufferPtr() { return &mLink; }
 
     static JPAEmitterInfo * pEmtrInfo;
