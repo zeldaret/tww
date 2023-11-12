@@ -148,9 +148,9 @@ void JFWDisplay::exchangeXfb_double() {
             }
         }
 
-        const u32 idx = xfbMng->getDrawingXfbIndex();
+        s16 idx = xfbMng->getDrawingXfbIndex();
         xfbMng->setDrawnXfbIndex(idx);
-        xfbMng->setDrawingXfbIndex(((idx >> 31) - 1) & (idx ^ 1)); //not sure what this math is doing
+        xfbMng->setDrawingXfbIndex(idx >= 0 ? idx ^ 1 : 0);
     }
     else {
         clearEfb(mClearColor);

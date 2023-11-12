@@ -544,7 +544,7 @@ config.libs = [
     JSystemLib(
         "JFramework",
         [
-            Object(NonMatching, "JSystem/JFramework/JFWDisplay.cpp"),
+            Object(Matching,    "JSystem/JFramework/JFWDisplay.cpp"),
             Object(NonMatching, "JSystem/JFramework/JFWSystem.cpp"),
         ],
     ),
