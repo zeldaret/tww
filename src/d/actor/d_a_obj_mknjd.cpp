@@ -263,15 +263,15 @@ s16 daObjMknjD::Act_c::XyEventCB(int) {
 
 /* 0000031C-00000620       .text CreateHeap__Q210daObjMknjD5Act_cFv */
 int daObjMknjD::Act_c::CreateHeap() {
-    /* Nonmatching */
-    J3DModelData* model_data_d;
+    const void* temp_r26; // Fakematch to get it to use the same register for model_data_d and jntName
     if (m043E == true) {
-        model_data_d = (J3DModelData*)dComIfG_getObjectRes(M_arcname, ID_WIND_MDL);
+        temp_r26 = dComIfG_getObjectRes(M_arcname, ID_WIND_MDL);
     }
     else {
-        model_data_d = (J3DModelData*)dComIfG_getObjectRes(M_arcname, ID_EARTH_MDL);
+        temp_r26 = dComIfG_getObjectRes(M_arcname, ID_EARTH_MDL);
     }
 
+    J3DModelData* model_data_d = (J3DModelData*)temp_r26;
     J3DModelData* model_data_h = (J3DModelData*)dComIfG_getObjectRes(M_arcname, ID_BREAK_MDL);
 
     JUT_ASSERT(0x123, model_data_d != 0)
@@ -284,12 +284,13 @@ int daObjMknjD::Act_c::CreateHeap() {
         JUTNameTab* nameTable = mMainMdl->getModelData()->getJointName();
         
         for (u16 i = 0; i < mMainMdl->getModelData()->getJointNum(); i++) {
-            const char* jntName = nameTable->getName(i);
+            // const char* jntName = nameTable->getName(i);
+            temp_r26 = nameTable->getName(i);
 
-            if (strcmp("MknjL", jntName) == 0) {
+            if (strcmp("MknjL", (const char*)temp_r26) == 0) {
                 mMainMdl->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBackL);
             }
-            else if (strcmp("MknjR", jntName) == 0) {
+            else if (strcmp("MknjR", (const char*)temp_r26) == 0) {
                 mMainMdl->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBackR);
             }
         }
@@ -300,10 +301,11 @@ int daObjMknjD::Act_c::CreateHeap() {
         nameTable = mBreakMdl->getModelData()->getJointName();
 
         for (u16 i = 0; i < mBreakMdl->getModelData()->getJointNum(); i++) {
-            const char* jntName = nameTable->getName(i);
+            // const char* jntName = nameTable->getName(i);
+            temp_r26 = nameTable->getName(i);
 
             for (u16 j = 0; j < 20; j++) {
-                if (strcmp(daObjMknjD_jointName[j], jntName) == 0) {
+                if (strcmp(daObjMknjD_jointName[j], (const char*)temp_r26) == 0) {
                     mBreakMdl->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Hahen);
                     joint_number_table[curTblIdx++] = j;
 
@@ -944,7 +946,9 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
                     m0500 = 0;
                     m043F = 9;
 
+#if VERSION != VERSION_JPN
                     fopAcM_seStart(this, JA_SE_PRE_TAKT, 0);
+#endif
                 }
                 else {
                     m0500 = 1;
