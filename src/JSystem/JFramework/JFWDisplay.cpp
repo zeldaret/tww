@@ -549,7 +549,3 @@ void diagnoseGpHang() {
         OSReport("GP is in unknown state.\n");
     }
 }
-
-static void dummyFunc2() {
-    OSReport("\0\0\0\0\0\0");
-}
