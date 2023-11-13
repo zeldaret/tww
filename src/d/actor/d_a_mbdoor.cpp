@@ -176,24 +176,24 @@ BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000002FC-0000060C       .text CreateHeap__10daMbdoor_cFv */
 BOOL daMbdoor_c::CreateHeap() {
-    void* modelData = dComIfG_getObjectRes(getArcName(), getFuBdl());
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(getArcName(), getFuBdl()));
     JUT_ASSERT(198, modelData != 0)
-    mpFuModel = mDoExt_J3DModel__create((J3DModelData*)modelData, 0x80000, 0x11000022);
+    mpFuModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (!mpFuModel) { return FALSE; }
     
-    modelData = dComIfG_getObjectRes(getArcName(), getLBdl());
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(getArcName(), getLBdl()));
     JUT_ASSERT(209, modelData != 0)
-    mpLModel = mDoExt_J3DModel__create((J3DModelData*)modelData, 0x80000, 0x11000022);
+    mpLModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (!mpLModel) { return FALSE; }
     
-    modelData = dComIfG_getObjectRes(getArcName(), getRBdl());
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(getArcName(), getRBdl()));
     JUT_ASSERT(220, modelData != 0)
-    mpRModel = mDoExt_J3DModel__create((J3DModelData*)modelData, 0x80000, 0x11000022);
+    mpRModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (!mpRModel) { return FALSE; }
     
-    modelData = dComIfG_getObjectRes(getArcName(), getToBdl());
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(getArcName(), getToBdl()));
     JUT_ASSERT(231, modelData != 0)
-    mpToModel = mDoExt_J3DModel__create((J3DModelData*)modelData, 0x80000, 0x11000022);
+    mpToModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (!mpToModel) { return FALSE; }
     
     mpBgW = new dBgW();

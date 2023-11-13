@@ -49,13 +49,13 @@ BOOL daObjGbed_c::solidHeapCB(fopAc_ac_c* i_this) {
 bool daObjGbed_c::create_heap() {
     bool ret = true;
 
-    void* pModelData = dComIfG_getObjectRes(l_arcname, 0x04);
+    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, 0x04));
 
     if (!pModelData) {
         JUT_ASSERT(0xb1, 0);
         ret = false;
     } else {
-        mpModel = mDoExt_J3DModel__create((J3DModelData*)pModelData, 0x80000, 0x11000022);
+        mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000022);
         mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, 0x07), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
 
         if (!mpModel || !mpBgW)

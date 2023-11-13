@@ -13,7 +13,7 @@ void cBgS_LinChk::ct() {
     mLin.mEnd = zero;
     field_0x40 = zero;
     SetActorPid(-1);
-    field_0x4c = 0;
+    mFlag = 0;
     mFrontFlag = 1;
     mBackFlag = 0;
 }

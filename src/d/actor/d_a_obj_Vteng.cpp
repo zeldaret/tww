@@ -54,14 +54,14 @@ BOOL daObjVteng_c::solidHeapCB(fopAc_ac_c* i_this) {
 bool daObjVteng_c::create_heap() {
     bool ret = true;
 
-    void* pModelData = dComIfG_getObjectRes(l_arcname, 0x08);
+    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, 0x08));
     J3DAnmTransform * pAnm = (J3DAnmTransform *)dComIfG_getObjectRes(l_arcname, 0x05);
 
     if (!pModelData || !pAnm) {
         JUT_ASSERT(0xb7, 0);
         ret = false;
     } else {
-        mpMorf = new mDoExt_McaMorf((J3DModelData*)pModelData, NULL, NULL, pAnm, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0x3B, -1, 0, NULL, 0x00, 0x11020203);
+        mpMorf = new mDoExt_McaMorf(pModelData, NULL, NULL, pAnm, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0x3B, -1, 0, NULL, 0x00, 0x11020203);
         if (!mpMorf) {
             ret = false;
         } else {

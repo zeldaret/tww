@@ -20,11 +20,11 @@ public:
     void SetNowY(f32 y) { mNowY = y; }
     cXyz* GetPointP() { return &m_pos; }
     u32 GetWallPrecheck() const { return mWallPrecheck; }
-    void OffWall() { mFlags &= ~2; }
+    void OffWall() { mFlag &= ~2; }
 
-private:
+public:
     /* 0x24 */ cXyz m_pos;
-    /* 0x30 */ u32 mFlags;
+    /* 0x30 */ u32 mFlag;
     /* 0x34 */ f32 mNowY;
     /* 0x38 */ u32 mWallPrecheck;
     /* 0x3C */ u32 mGndPrecheck;
