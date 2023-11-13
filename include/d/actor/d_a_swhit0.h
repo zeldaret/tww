@@ -8,7 +8,9 @@
 
 class daSwhit0_c : public fopAc_ac_c {
 public:
-    ~daSwhit0_c();
+    ~daSwhit0_c() {
+        
+    }
 
     inline s32 draw();
 

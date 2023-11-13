@@ -18,7 +18,7 @@ static dCcD_SrcSph l_sph_src = {
         /* SrcObjAt Type     */ 0,
         /* SrcObjAt Atp      */ 0,
         /* SrcObjAt SPrm     */ 0,
-        /* SrcObjTg Type     */ 0xFF1DFEFF,
+        /* SrcObjTg Type     */ ~(AT_TYPE_LIGHT | AT_TYPE_UNK400000 | AT_TYPE_LEAF_WIND | AT_TYPE_UNK20000 | AT_TYPE_WATER), // 0xFF1DFEFF
         /* SrcObjTg SPrm     */ 9,
         /* SrcObjCo SPrm     */ 0,
         /* SrcGObjAt Se      */ 0,
@@ -464,10 +464,6 @@ static s32 daSwhit0_Delete(daSwhit0_c* i_swhit) {
 /* 00001450-00001470       .text daSwhit0_Create__FP10fopAc_ac_c */
 static s32 daSwhit0_Create(fopAc_ac_c* i_swhit) {
     return static_cast<daSwhit0_c*>(i_swhit)->create();
-}
-
-daSwhit0_c::~daSwhit0_c() {
-        
 }
 
 static actor_method_class l_daSwhit0_Method = {
