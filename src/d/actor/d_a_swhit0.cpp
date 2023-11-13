@@ -86,15 +86,14 @@ u8 daSwhit0_c::getType() {
 }
 
 /* 0000009C-000000B8       .text getTimer__10daSwhit0_cFv */
-u8 daSwhit0_c::getTimer() {
-    /* Nonmatching */
-    u32 timer = fopAcM_GetParamBit(mBase.mParameters, 0x14, 0xFF);
-
-    if (timer != 0xFF) {
-        return timer;
+s32 daSwhit0_c::getTimer() {
+    u8 param = (fopAcM_GetParam(this) >> 0x14);
+    s32 timer = param;
+   
+    if (param == 0xFF) {
+        timer = 0;
     }
-    
-    return 0;
+    return timer; 
 }
 
 /* 000000B8-000000C4       .text getSwNo2__10daSwhit0_cFv */
@@ -332,8 +331,9 @@ s32 daSwhit0_c::actionOnWait() {
         }
     }
 
-    if (getTimer() != 0) {
-        mOnTimer = getTimer() * 0x0F;
+    u8 timer = getTimer();
+    if (timer != 0) {
+        mOnTimer = (u8)getTimer() * 0x0F;
         mState = 5;
     }
 
@@ -372,7 +372,6 @@ void daSwhit0_c::setDrawMtx() {
 }
 
 s32 daSwhit0_c::draw() {
-    /* Nonmatching */
     static GXColorS10 l_color[] = {
         { 0xF0, 0xF5, 0xFF, 0x6E },
         { 0xB4, 0xC8, 0xD2, 0x64 },
@@ -386,7 +385,7 @@ s32 daSwhit0_c::draw() {
 
     J3DModelData* modelData = mpModel->getModelData();
     s32 flag = checkFlag(0x01);
-    
+
     GXColorS10* colors = l_color;
     if (flag) {
         colors = l_color + 2;
@@ -465,6 +464,10 @@ static s32 daSwhit0_Delete(daSwhit0_c* i_swhit) {
 /* 00001450-00001470       .text daSwhit0_Create__FP10fopAc_ac_c */
 static s32 daSwhit0_Create(fopAc_ac_c* i_swhit) {
     return static_cast<daSwhit0_c*>(i_swhit)->create();
+}
+
+daSwhit0_c::~daSwhit0_c() {
+        
 }
 
 static actor_method_class l_daSwhit0_Method = {

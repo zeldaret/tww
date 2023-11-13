@@ -8,16 +8,14 @@
 
 class daSwhit0_c : public fopAc_ac_c {
 public:
-    ~daSwhit0_c() {
-        
-    }
+    ~daSwhit0_c();
 
     inline s32 draw();
 
     s32 getSwNo();
     u8 getEvNo();
     u8 getType();
-    u8 getTimer();
+    s32 getTimer();
     s32 getSwNo2();
 
     s32 CreateHeap();
