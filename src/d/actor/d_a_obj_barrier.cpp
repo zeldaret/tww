@@ -3,107 +3,16 @@
 // Translation Unit: d_a_obj_barrier.cpp
 //
 
+#include "d/actor/d_a_obj_barrier.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/actor/d_a_player_main.h"
-#include "d/d_a_obj.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
 #include "d/d_procname.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_mtx.h"
-
-class daObjBarrier_anm_c {
-public:
-    daObjBarrier_anm_c() { mBrkFrame = 0.0f; }
-
-    bool init();
-
-    J3DModel* getMdlP() { return mpModel; }
-    mDoExt_btkAnm* getBtkAnmP() { return &mBtk; }
-    mDoExt_brkAnm* getBrkAnmP() { return &mBrk; }
-
-    f32 getBrkFrame() { return mBrkFrame; }
-    void setBrkFrame(f32 i_frame) { mBrkFrame = i_frame; }
-
-    /* 0x00 */ J3DModel* mpModel;
-    /* 0x04 */ mDoExt_btkAnm mBtk;
-    /* 0x18 */ mDoExt_brkAnm mBrk;
-    /* 0x30 */ f32 mBrkFrame;
-};
-
-class daObjBarrier_ef_c {
-public:
-    void setDummyTexture(int);
-    bool checkHitActor(fopAc_ac_c*);
-    void birth(fopAc_ac_c*, f32, cXyz, cXyz, int);
-    bool init();
-    void create();
-    void execute();
-    void draw();
-
-    f32 getBtkFrame(int i_idx) { return mBtk[i_idx].getFrame(); }
-
-    /* 0x000 */ u32 mActiveEffFlags;
-    /* 0x004 */ J3DModel* mpModel[4];
-    /* 0x014 */ mDoExt_btkAnm mBtk[4];
-    /* 0x064 */ mDoExt_bckAnm mBck[4];
-    /* 0x0A4 */ mDoExt_brkAnm mBrk[4];
-    /* 0x104 */ cXyz mPos[4];
-    /* 0x134 */ s16 mAngle[4];
-    /* 0x13C */ fopAc_ac_c* mHitActor[4];
-};
-
-class daObjBarrier_c : public fopAc_ac_c {
-public:
-    enum PROC_e {
-        PROC_BREAK_START_WAIT,
-        PROC_BREAK_ORDER,
-        PROC_BREAK_END_WAIT,
-    };
-    enum Param_e {
-        PRM_DAMAGE_W = 0x01,
-        PRM_DAMAGE_S = 0x10,
-        PRM_MOYA_W = 0x01,
-        PRM_MOYA_S = 0x08,
-    };
-
-    daObjBarrier_c();
-
-    void init_mtx();
-    static int solidHeapCB(fopAc_ac_c*);
-    bool create_heap();
-    bool checkCollision_Tg();
-    void checkCollision_At();
-    void registCollisionTable();
-    void brkAnmPlay();
-    void break_start_wait_proc();
-    void break_order_proc();
-    void break_end_wait_proc();
-    bool break_check();
-    int _create();
-    bool _delete();
-    bool _execute();
-    bool _draw();
-
-    bool param_get_damage() const { return daObj::PrmAbstract(this, PRM_DAMAGE_W, PRM_DAMAGE_S); }
-    int param_get_moya() const { return daObj::PrmAbstract(this, PRM_MOYA_W, PRM_MOYA_S); }
-
-    /* 0x290 */ daObjBarrier_anm_c mAnm;
-    /* 0x2C4 */ request_of_phase_process_class mPhase;
-    /* 0x2CC */ dBgW* mpBgW;
-    /* 0x2D0 */ Mtx mBgMtx;
-    /* 0x300 */ dCcD_Stts mAtStts;
-    /* 0x33C */ dCcD_Stts mTgStts;
-    /* 0x378 */ dCcD_Cyl mAtCyl;
-    /* 0x4A8 */ dCcD_Cyl mTgCyl;
-    /* 0x5D8 */ daObjBarrier_ef_c mEffect;
-    /* 0x724 */ u8 mBarrierActive;
-    /* 0x728 */ int mMoya;
-    /* 0x72C */ s16 mEventID;
-    /* 0x730 */ int mBarrierProc;
-};
 
 namespace {
 static const char l_arcname[] = "Ycage";
@@ -625,11 +534,6 @@ int daObjBarrier_c::_create() {
     return phase;
 }
 
-/* 0000182C-00001A38       .text __ct__14daObjBarrier_cFv */
-daObjBarrier_c::daObjBarrier_c() {
-    mEffect.mActiveEffFlags = 0;
-}
-
 /* 00001A38-00001AD8       .text _delete__14daObjBarrier_cFv */
 bool daObjBarrier_c::_delete() {
     if (mBarrierActive == true) {
@@ -685,27 +589,27 @@ bool daObjBarrier_c::_draw() {
 }
 
 /* 00001C1C-00001C3C       .text daObjBarrier_Create__FP10fopAc_ac_c */
-int daObjBarrier_Create(fopAc_ac_c* i_this) {
+static int daObjBarrier_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjBarrier_c*>(i_this)->_create();
 }
 
 /* 00001C3C-00001C60       .text daObjBarrier_Delete__FP14daObjBarrier_c */
-int daObjBarrier_Delete(daObjBarrier_c* i_this) {
+static int daObjBarrier_Delete(daObjBarrier_c* i_this) {
     return static_cast<daObjBarrier_c*>(i_this)->_delete();
 }
 
 /* 00001C60-00001C84       .text daObjBarrier_Execute__FP14daObjBarrier_c */
-int daObjBarrier_Execute(daObjBarrier_c* i_this) {
+static int daObjBarrier_Execute(daObjBarrier_c* i_this) {
     return static_cast<daObjBarrier_c*>(i_this)->_execute();
 }
 
 /* 00001C84-00001CA8       .text daObjBarrier_Draw__FP14daObjBarrier_c */
-int daObjBarrier_Draw(daObjBarrier_c* i_this) {
+static int daObjBarrier_Draw(daObjBarrier_c* i_this) {
     return static_cast<daObjBarrier_c*>(i_this)->_draw();
 }
 
 /* 00001CA8-00001CB0       .text daObjBarrier_IsDelete__FP14daObjBarrier_c */
-int daObjBarrier_IsDelete(daObjBarrier_c* i_this) {
+static int daObjBarrier_IsDelete(daObjBarrier_c* i_this) {
     return 1;
 }
 
