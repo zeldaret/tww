@@ -161,7 +161,7 @@ void cBgW::LineCheckRp(cBgS_LinChk*, int) {
 }
 
 /* 80248868-8024898C       .text LineCheckGrpRp__4cBgWFP11cBgS_LinChkii */
-void cBgW::LineCheckGrpRp(cBgS_LinChk*, int, int) {
+bool cBgW::LineCheckGrpRp(cBgS_LinChk*, int, int) {
     /* Nonmatching */
 }
 
@@ -198,7 +198,7 @@ void cBgW::GroundCrossRp(cBgS_GndChk*, int) {
 }
 
 /* 802491F4-80249368       .text GroundCrossGrpRp__4cBgWFP11cBgS_GndChkii */
-void cBgW::GroundCrossGrpRp(cBgS_GndChk*, int, int) {
+bool cBgW::GroundCrossGrpRp(cBgS_GndChk*, int, int) {
     /* Nonmatching */
 }
 

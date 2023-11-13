@@ -55,7 +55,7 @@ public:
     s32 GetTriGrp(int, int) const;
     s32 GetGrpToRoomId(int, int) const;
     cM3dGPla* GetTriPla(int, int) const;
-    bool GetTriPnt(cBgS_PolyInfo&, cXyz*, cXyz*, cXyz*) const;
+    void GetTriPnt(cBgS_PolyInfo&, cXyz*, cXyz*, cXyz*) const;
     void ShdwDraw(cBgS_ShdwDraw*);
     s32 GetGrpInf(cBgS_PolyInfo&, int) const;
 

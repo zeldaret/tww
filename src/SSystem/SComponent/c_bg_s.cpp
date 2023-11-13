@@ -4,6 +4,8 @@
 //
 
 #include "SSystem/SComponent/c_bg_s.h"
+#include "SSystem/SComponent/c_bg_s_gnd_chk.h"
+#include "SSystem/SComponent/c_bg_s_lin_chk.h"
 #include "SSystem/SComponent/c_bg_w.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/types.h"
@@ -69,6 +71,10 @@ bool cBgS::Regist(cBgW* bgw, unsigned int pid, void* actor) {
     return true;
 }
 
+static void dummy() {
+    OSReport("c_bg_s_poly_info.h");
+}
+
 /* 80246600-8024669C       .text Release__4cBgSFP4cBgW */
 int cBgS::Release(cBgW* bgw) {
     if (bgw == NULL)
@@ -103,13 +109,42 @@ void cBgS::Dt() {
 }
 
 /* 8024676C-802468E4       .text LineCross__4cBgSFP11cBgS_LinChk */
-bool cBgS::LineCross(cBgS_LinChk*) {
-    /* Nonmatching */
+bool cBgS::LineCross(cBgS_LinChk* chk) {
+    bool ret = false;
+    chk->ClearPi();
+    chk->ClrHit();
+    for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
+        cBgS_ChkElm* elm = &m_chk_element[bg_index];
+        if (elm->ChkUsed() && elm->m_bgw_base_ptr->pm_vtx_tbl != NULL && !chk->ChkSameActorPid(elm->m_actor_id)) {
+            chk->mPreWallChk = !(chk->mFlag & 0x40000000);
+            chk->mPreGroundChk = !(chk->mFlag & 0x80000000);
+            chk->mPreRoofChk = !(chk->mFlag & 0x20000000);
+            if (elm->m_bgw_base_ptr->LineCheckGrpRp(chk, elm->m_bgw_base_ptr->m_rootGrpIdx, 1)) {
+                chk->SetActorInfo(bg_index, elm->m_bgw_base_ptr, elm->m_actor_id);
+                ret = true;
+            }
+        }
+    }
+    if (ret)
+        chk->SetHit();
+    return ret;
 }
 
 /* 802468E4-80246A14       .text GroundCross__4cBgSFP11cBgS_GndChk */
-f32 cBgS::GroundCross(cBgS_GndChk*) {
-    /* Nonmatching */
+f32 cBgS::GroundCross(cBgS_GndChk* chk) {
+    chk->SetNowY(-1e+09);
+    chk->ClearPi();
+    chk->mWallPrecheck = (chk->mFlag & 0x02);
+    chk->mGndPrecheck = (chk->mFlag & 0x01);
+    for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
+        cBgS_ChkElm* elm = &m_chk_element[bg_index];
+        if (elm->ChkUsed() && elm->m_bgw_base_ptr->pm_vtx_tbl != NULL && !chk->ChkSameActorPid(elm->m_actor_id)) {
+            if (elm->m_bgw_base_ptr->GroundCrossGrpRp(chk, elm->m_bgw_base_ptr->m_rootGrpIdx, 1)) {
+                chk->SetActorInfo(bg_index, elm->m_bgw_base_ptr, elm->m_actor_id);
+            }
+        }
+    }
+    return chk->GetNowY();
 }
 
 /* 80246A14-80246C98       .text ConvDzb__4cBgSFPv */
@@ -203,8 +238,13 @@ cM3dGPla* cBgS::GetTriPla(int bg_index, int poly_index) const {
     return m_chk_element[bg_index].m_bgw_base_ptr->GetTriPla(poly_index);
 }
 
+static void dummy2() {
+    // from c_bg_s_poly_info.h
+    OSReport("0 <= grp_index && grp_index < pm_bgd->m_g_num");
+}
+
 /* 802470B8-80247178       .text GetTriPnt__4cBgSCFR13cBgS_PolyInfoP4cXyzP4cXyzP4cXyz */
-bool cBgS::GetTriPnt(cBgS_PolyInfo& poly, cXyz* p0, cXyz* p1, cXyz* p2) const {
+void cBgS::GetTriPnt(cBgS_PolyInfo& poly, cXyz* p0, cXyz* p1, cXyz* p2) const {
     s32 id = poly.GetBgIndex();
     JUT_ASSERT(0x2f6, 0 <= id && id < 256);
     if (m_chk_element[id].ChkUsed())

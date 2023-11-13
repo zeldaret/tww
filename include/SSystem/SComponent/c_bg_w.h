@@ -139,12 +139,12 @@ public:
     bool Set(cBgD_t*, u32, f32(*)[3][4]);
     void RwgLineCheck(u16, cBgS_LinChk*);
     void LineCheckRp(cBgS_LinChk*, int);
-    void LineCheckGrpRp(cBgS_LinChk*, int, int);
+    bool LineCheckGrpRp(cBgS_LinChk*, int, int);
     bool RwgGroundCheckCommon(f32, u16, cBgS_GndChk*);
     bool RwgGroundCheckGnd(u16, cBgS_GndChk*);
     bool RwgGroundCheckWall(u16, cBgS_GndChk*);
     void GroundCrossRp(cBgS_GndChk*, int);
-    void GroundCrossGrpRp(cBgS_GndChk*, int, int);
+    bool GroundCrossGrpRp(cBgS_GndChk*, int, int);
     void CopyOldMtx();
     void Move();
     void RwgShdwDraw(int, cBgS_ShdwDraw*);

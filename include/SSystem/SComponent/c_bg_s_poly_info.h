@@ -2,6 +2,7 @@
 #define C_BG_S_POLY_INFO_H
 
 #include "dolphin/types.h"
+#include "JSystem/JUtility/JUTAssert.h"
 #include "global.h"
 
 class cBgW;
@@ -24,6 +25,12 @@ public:
     }
     void SetPolyInfo(const cBgS_PolyInfo& other) {
         *this = other;
+    }
+    void SetActorInfo(int bg_index, void* bgw, unsigned int actor_id) {
+        JUT_ASSERT(0x59, 0 <= bg_index);
+        mBgIndex = bg_index;
+        mpBgW = (cBgW*)bgw;
+        mActorId = actor_id;
     }
     bool ChkSafe(const void* bgw, unsigned int pid) {
         if (mpBgW == bgw && mActorId == pid)
