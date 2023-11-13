@@ -537,8 +537,8 @@ bool dNpc_setAnmIDRes(mDoExt_McaMorf* pMorf, int loopMode, float morf, float spe
             pSoundAnimRes = dComIfG_getObjectIDRes(arcName, soundResId);
         }
 
-        void* pAnimRes = dComIfG_getObjectIDRes(arcName, animResId);
-        pMorf->setAnm((J3DAnmTransform*)pAnimRes, loopMode, morf, speed, 0.0f, -1.0f, pSoundAnimRes);
+        J3DAnmTransform* pAnimRes = static_cast<J3DAnmTransform*>(dComIfG_getObjectIDRes(arcName, animResId));
+        pMorf->setAnm(pAnimRes, loopMode, morf, speed, 0.0f, -1.0f, pSoundAnimRes);
         
         ret = true;
     }
@@ -575,8 +575,8 @@ bool dNpc_setAnm(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int a
             pSoundAnimRes = dComIfG_getObjectRes(arcName, soundFileIdx);
         }
 
-        void* pAnimRes = dComIfG_getObjectRes(arcName, animFileIdx);
-        pMorf->setAnm((J3DAnmTransform*)pAnimRes, loopMode, morf, speed, 0.0f, -1.0f, pSoundAnimRes);
+        J3DAnmTransform* pAnimRes = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(arcName, animFileIdx));
+        pMorf->setAnm(pAnimRes, loopMode, morf, speed, 0.0f, -1.0f, pSoundAnimRes);
         
         ret = true;
     }
@@ -682,14 +682,14 @@ u16 fopNpc_npc_c::talk(int param_1) {
 bool dNpc_setAnm_2(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileIdx, int soundFileIdx, const char* arcName) {
     if(0 <= soundFileIdx) {
         void* pSoundAnimRes = dComIfG_getObjectRes(arcName, soundFileIdx);
-        void* pAnimRes = dComIfG_getObjectRes(arcName, animFileIdx);
+        J3DAnmTransform* pAnimRes = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(arcName, animFileIdx));
         
-        pMorf->setAnm((J3DAnmTransform*)pAnimRes, loopMode, morf, speed, 0.0f, -1.0f, pSoundAnimRes);
+        pMorf->setAnm(pAnimRes, loopMode, morf, speed, 0.0f, -1.0f, pSoundAnimRes);
     }
     else {
-        void* pAnimRes = dComIfG_getObjectRes(arcName, animFileIdx);
+        J3DAnmTransform* pAnimRes = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(arcName, animFileIdx));
 
-        pMorf->setAnm((J3DAnmTransform*)pAnimRes, loopMode, morf, speed, 0.0f, -1.0f, 0);
+        pMorf->setAnm(pAnimRes, loopMode, morf, speed, 0.0f, -1.0f, 0);
     }
 
 

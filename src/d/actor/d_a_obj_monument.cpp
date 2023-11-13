@@ -76,10 +76,10 @@ BOOL daObjMonument::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 bool daObjMonument::Act_c::create_heap() {
     bool ret = true;
 
-    void* modelData = dComIfG_getObjectRes(M_arcname, attr(mType).mModelId);
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, attr(mType).mModelId));
     JUT_ASSERT(0x81, modelData != 0);
 
-    mpModel = mDoExt_J3DModel__create((J3DModelData*)modelData, 0x00, 0x11020203);
+    mpModel = mDoExt_J3DModel__create(modelData, 0x00, 0x11020203);
     if (!mpModel)
         return false;
 

@@ -41,15 +41,15 @@ BOOL daObjAjavW_c::solidHeapCB(fopAc_ac_c* i_this) {
 bool daObjAjavW_c::create_heap() {
     bool ret = true;
 
-    void* pModelData = dComIfG_getObjectRes(l_arcname, 0x05);
+    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, 0x05));
     J3DAnmTextureSRTKey * pBtk = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes(l_arcname, 0x08);
 
     if (!pModelData || !pBtk) {
         JUT_ASSERT(0xa7, 0);
         ret = false;
     } else {
-        mpModel = mDoExt_J3DModel__create((J3DModelData*)pModelData, 0x80000, 0x11000222);
-        s32 btkRet = mBtkAnm.init((J3DModelData*)pModelData, pBtk, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+        mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000222);
+        s32 btkRet = mBtkAnm.init(pModelData, pBtk, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
         mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, 0x0B), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
 
         if (!mpModel || !btkRet || !mpBgW)

@@ -402,28 +402,25 @@ void daObjBarrier_ef_c::birth(fopAc_ac_c* i_hitActor, f32 i_radius, cXyz i_cente
 /* 000011B8-000013E0       .text init__17daObjBarrier_ef_cFv */
 bool daObjBarrier_ef_c::init() {
     bool rt = true;
-    void* modelData = dComIfG_getObjectRes(l_arcname, 11);
-    void* pbtk = dComIfG_getObjectRes(l_arcname, 19);
-    void* pbck = dComIfG_getObjectRes(l_arcname, 7);
-    void* pbrk = dComIfG_getObjectRes(l_arcname, 15);
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, 11));
+    J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, 19));
+    J3DAnmTransform* pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(l_arcname, 7));
+    J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, 15));
 
     if (modelData == NULL || pbtk == NULL || pbck == NULL || pbrk == NULL) {
         JUT_PANIC(1016);
         rt = false;
     } else {
         for (int i = 0; i < 4; i++) {
-            mpModel[i] = mDoExt_J3DModel__create((J3DModelData*)modelData, 0x80000, 0x5020200);
+            mpModel[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x5020200);
             setDummyTexture(i);
 
-            BOOL btk_init = mBtk[i].init(
-                (J3DModelData*)modelData, (J3DAnmTextureSRTKey*)pbtk,
-                TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0);
-            BOOL bck_init = mBck[i].init(
-                (J3DModelData*)modelData, (J3DAnmTransform*)pbck,
-                TRUE, J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1, false);
-            BOOL brk_init = mBrk[i].init(
-                (J3DModelData*)modelData, (J3DAnmTevRegKey*)pbrk,
-                TRUE, J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1, false, 0);
+            BOOL btk_init = mBtk[i].init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0,
+                                         -1, false, 0);
+            BOOL bck_init =
+                mBck[i].init(modelData, pbck, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1, false);
+            BOOL brk_init = mBrk[i].init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0,
+                                         -1, false, 0);
 
             if (mpModel[i] == NULL || !btk_init || !bck_init || !brk_init) {
                 rt = false;
