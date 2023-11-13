@@ -12,6 +12,8 @@ public:
         
     }
 
+    inline s32 draw();
+
     s32 getSwNo();
     u8 getEvNo();
     u8 getType();

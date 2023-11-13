@@ -371,8 +371,7 @@ void daSwhit0_c::setDrawMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 000011E4-00001334       .text daSwhit0_Draw__FP10daSwhit0_c */
-static s32 daSwhit0_Draw(daSwhit0_c* i_swhit) {
+s32 daSwhit0_c::draw() {
     /* Nonmatching */
     static GXColorS10 l_color[] = {
         { 0xF0, 0xF5, 0xFF, 0x6E },
@@ -382,11 +381,16 @@ static s32 daSwhit0_Draw(daSwhit0_c* i_swhit) {
         { 0x78, 0x64, 0x32, 0x64 }
     };
 
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, i_swhit->getPositionP(), &i_swhit->mTevStr);
-    g_env_light.setLightTevColorType(i_swhit->mpModel, &i_swhit->mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, getPositionP(), &mTevStr);
+    g_env_light.setLightTevColorType(mpModel, &mTevStr);
 
-    J3DModelData* modelData = i_swhit->mpModel->getModelData();
-    GXColorS10* colors = i_swhit->checkFlag(0x01) ? l_color + 2 : l_color;
+    J3DModelData* modelData = mpModel->getModelData();
+    s32 flag = checkFlag(0x01);
+    
+    GXColorS10* colors = l_color;
+    if (flag) {
+        colors = l_color + 2;
+    }
 
     for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
         J3DMaterial* mat = modelData->getMaterialNodePointer(i);
@@ -400,12 +404,17 @@ static s32 daSwhit0_Draw(daSwhit0_c* i_swhit) {
         }
     }
     
-    i_swhit->mAnm.entry(modelData);
-    i_swhit->mTexAnm.entry(modelData);
+    mAnm.entry(modelData);
+    mTexAnm.entry(modelData);
 
-    mDoExt_modelUpdateDL(i_swhit->mpModel);
+    mDoExt_modelUpdateDL(mpModel);
 
     return TRUE;
+}
+
+/* 000011E4-00001334       .text daSwhit0_Draw__FP10daSwhit0_c */
+static s32 daSwhit0_Draw(daSwhit0_c* i_swhit) {
+    return i_swhit->draw();
 }
 
 /* 00001334-00001420       .text daSwhit0_Execute__FP10daSwhit0_c */
