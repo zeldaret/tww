@@ -80,7 +80,8 @@ public:
     /* 0x1C */ f32 m1C;
     /* 0x20 */ f32 m20;
     /* 0x24 */ f32 m24;
-};
+    /* 0x28 */ u8 m28[0x2C - 0x28];
+};  // Size: 0x2C
 
 JntHit_c* JntHit_create(J3DModel* model, __jnt_hit_data_c* jntHitData, s16 hitDataCount);
 

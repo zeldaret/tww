@@ -8,12 +8,18 @@
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_mtx.h"
+#include "d/d_lib.h"
+#include "d/d_material.h"
+#include "d/d_snap.h"
 
 // Needed for the .data section to match.
 static Vec dummy1 = {1.0f, 1.0f, 1.0f};
 static Vec dummy2 = {1.0f, 1.0f, 1.0f};
 static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
 static f64 dummy4[2] = {3.0, 0.5};
+
+static u8 dummy5[0x4C];
 
 static daRd_HIO_c l_HIO;
 
@@ -160,7 +166,27 @@ static BOOL nodeControl_CB(J3DNode* node, int param_1) {
 
 /* 00000358-00000514       .text _nodeControl__6daRd_cFP7J3DNodeP8J3DModel */
 BOOL daRd_c::_nodeControl(J3DNode* node, J3DModel* model) {
-    /* Nonmatching */
+    J3DJoint* joint = static_cast<J3DJoint*>(node);
+    int jntNo = joint->getJntNo();
+    cMtx_copy(model->getAnmMtx(jntNo), mDoMtx_stack_c::get());
+    
+    if (mJntCtrl.getHeadJntNum() == jntNo) {
+        static cXyz l_offsetAttPos(0.0f, 0.0f, 0.0f);
+        static cXyz l_offsetEyePos(24.0f, -16.0f, 0.0f);
+        mDoMtx_stack_c::multVec(&l_offsetAttPos, &mCC4);
+        mDoMtx_stack_c::XrotM(mJntCtrl.getHead_y());
+        mDoMtx_stack_c::ZrotM(mJntCtrl.getHead_x());
+        mDoMtx_stack_c::multVec(&l_offsetEyePos, &mCD0);
+        mDoMtx_stack_c::XrotM(mD1A);
+        mDoMtx_stack_c::ZrotM(mD1C);
+        mDoMtx_stack_c::YrotM(mD1E);
+    } else if (mJntCtrl.getBackboneJntNum() == jntNo) {
+        mDoMtx_stack_c::XrotM(mJntCtrl.getBackbone_y());
+        mDoMtx_stack_c::ZrotM(mJntCtrl.getBackbone_x());
+    }
+    
+    cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+    model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
 }
 
 /* 00000550-0000059C       .text nodeHeadControl_CB__FP7J3DNodei */
@@ -177,7 +203,24 @@ static BOOL nodeHeadControl_CB(J3DNode* node, int param_1) {
 
 /* 0000059C-000006A0       .text _nodeHeadControl__6daRd_cFP7J3DNodeP8J3DModel */
 BOOL daRd_c::_nodeHeadControl(J3DNode* node, J3DModel* model) {
-    /* Nonmatching */
+    J3DJoint* joint = static_cast<J3DJoint*>(node);
+    int jntNo = joint->getJntNo();
+    
+    cXyz temp4(mD38, 0.0f, 0.0f);
+    cMtx_copy(model->getAnmMtx(jntNo), mDoMtx_stack_c::get());
+    mDoMtx_stack_c::transM(temp4);
+    
+    cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+    cXyz temp3(0.0f, 0.0f, 50.0f);
+    mDoMtx_stack_c::multVec(&temp3, &mCD0);
+    model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
+    cMtx_copy(mDoMtx_stack_c::get(), mCE8);
+    
+    Mtx mtx;
+    csXyz angle;
+    mDoMtx_inverseTranspose(mDoMtx_stack_c::get(), mtx);
+    mDoMtx_MtxToRot(mtx, &angle);
+    mD18 = angle.y;
 }
 
 /* 000006A0-000006C0       .text createHeap_CB__FP10fopAc_ac_c */
@@ -387,13 +430,13 @@ bool daRd_c::createArrowHeap() {
 }
 
 /* 000009D0-00000A38       .text checkPlayerInAttack__6daRd_cFv */
-void daRd_c::checkPlayerInAttack() {
-    /* Nonmatching */
+bool daRd_c::checkPlayerInAttack() {
+    return dLib_checkActorInFan(current.pos, dComIfGp_getLinkPlayer(), shape_angle.y, l_HIO.m44, l_HIO.m3C, 100.0f);
 }
 
 /* 00000A38-00000AA0       .text checkPlayerInCry__6daRd_cFv */
-void daRd_c::checkPlayerInCry() {
-    /* Nonmatching */
+bool daRd_c::checkPlayerInCry() {
+    return dLib_checkActorInFan(current.pos, dComIfGp_getLinkPlayer(), mD18, l_HIO.m42, l_HIO.m38, 100.0f);
 }
 
 /* 00000AA0-00000D78       .text lookBack__6daRd_cFv */
@@ -469,7 +512,9 @@ void daRd_c::modeParalysis() {
 
 /* 000021F0-0000223C       .text modeMoveInit__6daRd_cFv */
 void daRd_c::modeMoveInit() {
-    /* Nonmatching */
+    if (m2B4 == 1 && (m6D9 == 2 || m6D9 == 0xA)) {
+        setAnm(9, false);
+    }
 }
 
 /* 0000223C-000024B0       .text modeMove__6daRd_cFv */
@@ -538,17 +583,26 @@ void daRd_c::modeSwWaitInit() {
 
 /* 00003428-00003480       .text modeSwWait__6daRd_cFv */
 void daRd_c::modeSwWait() {
-    /* Nonmatching */
+    if (dComIfGs_isSwitch(mSwNo, current.roomNo)) {
+        modeProcInit(MODE_KANOKE);
+    }
 }
 
 /* 00003480-00003514       .text modeKanokeInit__6daRd_cFv */
 void daRd_c::modeKanokeInit() {
-    /* Nonmatching */
+    setAnm(0xB, false);
+    m310 = 90;
+    cXyz offset(0.0f, 0.0f, 150.0f);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
+    mDoMtx_stack_c::multVec(&offset, &m300);
 }
 
 /* 00003514-0000355C       .text modeKanoke__6daRd_cFv */
 void daRd_c::modeKanoke() {
-    /* Nonmatching */
+    if (cLib_calcTimer(&m310) == 0) {
+        modeProcInit(MODE_RETURN);
+    }
 }
 
 /* 0000355C-000038D4       .text modeProc__6daRd_cFQ26daRd_c6Proc_ei */
@@ -657,9 +711,51 @@ void daRd_c::setBtkAnm(s8) {
     /* Nonmatching */
 }
 
+const int a_anm_bcks_tbl[] = {
+    RD_BCK_TACHIP,
+    RD_BCK_SUWARIP,
+    RD_BCK_WALK2ATACK,
+    RD_BCK_ATACK,
+    RD_BCK_ATACK2WALK,
+    RD_BCK_WALK,
+    RD_BCK_DAMAGE,
+    RD_BCK_DEAD,
+    RD_BCK_TATSU,
+    RD_BCK_SUWARU,
+    RD_BCK_KANOKEP,
+    RD_BCK_BEAM_HIT,
+    RD_BCK_BEAM,
+    RD_BCK_BEAM_END,
+};
+const dLib_anm_prm_c a_anm_prm_tbl[] = {
+    {
+        // TODO
+    },
+};
+
 /* 00003B3C-00003C48       .text setAnm__6daRd_cFScb */
-void daRd_c::setAnm(s8, bool) {
-    /* Nonmatching */
+void daRd_c::setAnm(s8 param_1, bool param_2) {
+    if (param_1 != 0xF) {
+        m6D9 = param_1;
+    }
+    
+    if (m6DA != m6D9) {
+        if (m6D9 == 0xC) {
+            setBrkAnm(0x1);
+        } else if (m6D9 == 0xD) {
+            setBrkAnm(0x2);
+        } else if (m6D9 == 0xE) {
+            setBrkAnm(0x3);
+        } else {
+            setBrkAnm(0x0);
+        }
+    }
+    
+    if (m6D8 == 0xB || m6D8 == 0xC || m6D8 == 0xD) {
+        mBrkAnm.setFrame(mpMorf->getFrame());
+    }
+    
+    dLib_bcks_setAnm(m_arc_name, mpMorf, &m6D8, &m6D9, &m6DA, a_anm_bcks_tbl, a_anm_prm_tbl, param_2);
 }
 
 /* 00003C48-000040A8       .text _execute__6daRd_cFv */
@@ -675,6 +771,38 @@ void daRd_c::debugDraw() {
 /* 000041A8-00004318       .text _draw__6daRd_cFv */
 bool daRd_c::_draw() {
     /* Nonmatching */
+    if (mMode == 0xA) {
+        return true;
+    }
+    
+    if (l_HIO.m2C != 0) {
+        debugDraw();
+    }
+    
+    J3DModel* model = mpMorf->getModel();
+    J3DModelData* modelData = model->getModelData();
+    g_env_light.setLightTevColorType(model, &mTevStr);
+    
+    if (mEnemyIce.mFreezeTimer > 20) {
+        dMat_control_c::iceEntryDL(mpMorf, -1, &mInvisModel);
+    } else {
+        mBrkAnm.entry(modelData);
+        mBtkAnm.entry(modelData);
+        mpMorf->updateDL();
+        mBtkAnm.remove(modelData);
+        mBrkAnm.remove(modelData);
+    }
+    
+    cXyz shadowPos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
+    mShadowId = dComIfGd_setShadow(
+        mShadowId, 1, mpMorf->getModel(), &shadowPos, 800.0f, 40.0f,
+        current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &mTevStr,
+        0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
+    );
+    
+    dSnap_RegistFig(0xB9, this, 1.0f, 1.0f, 1.0f);
+    
+    return true;
 }
 
 /* 00004318-00004338       .text isLinkControl__6daRd_cFv */
@@ -685,17 +813,93 @@ bool daRd_c::isLinkControl() {
 /* 00004338-000046A4       .text createInit__6daRd_cFv */
 void daRd_c::createInit() {
     /* Nonmatching */
+    mStts.Init(0xFF, 0, this);
+    mCyl.Set(m_cyl_src);
+    mCyl.SetStts(&mStts);
+    mAcchCir.SetWall(30.0f, 30.0f);
+    mAcch.Set(&fopAcM_GetPosition_p(this), &fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, &fopAcM_GetSpeed_p(this), NULL, NULL);
+    mAcch.SetRoofNone();
+    J3DModelData* modelData = mpMorf->getModel()->getModelData();
+    mJntCtrl.setHeadJntNum(0x0A);
+    mJntCtrl.setBackboneJntNum(0x08);
+    modelData->getJointNodePointer(0x0A)->setCallBack(nodeControl_CB);
+    modelData->getJointNodePointer(0x08)->setCallBack(nodeControl_CB);
+    setBtkAnm(2);
+    
+    if (m2BC == 0) {
+        modeProcInit(MODE_SW_WAIT);
+        cXyz offset(0.0f, 40.0f, 10.0f);
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::YrotM(shape_angle.y);
+        mDoMtx_stack_c::multVec(&offset, &current.pos);
+    } else {
+        modeProcInit(MODE_WAIT);
+        switch (m2B4) {
+        case 0:
+            setAnm(1, false);
+            break;
+        case 1:
+            setAnm(2, false);
+            break;
+        }
+    }
+    
+    setBrkAnm(0);
+    setMtx();
+    mBtkAnm.play();
+    mBrkAnm.play();
+    mpMorf->play(&current.pos, 0, 0);
+    mBrkAnm.setFrame(0.0f);
+    mpMorf->calc();
+    g_env_light.settingTevStruct(0, &current.pos, &mTevStr);
+    fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -100.0f, -10.0f, -100.0f, 100.0f, 250.0f, 150.0f);
+    
+    mD3C = 1;
+    mD40 = 1;
+    mItemStealLeft = 5;
+    
+    mEnemyFire.mpMcaMorf = mpMorf;
+    mEnemyFire.mpActor = this;
+    static u8 fire_j[ARRAY_SIZE(mEnemyFire.mFlameJntIdxs)] = {
+        0x0C, 0x01, 0x0F, 0x11, 0x13, 0x15, 0x02, 0x04, 0x05, 0x07,
+    };
+    static f32 fire_sc[ARRAY_SIZE(mEnemyFire.mParticleScale)] = {
+        2.0f, 2.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    };
+    for (int i = 0; i < ARRAY_SIZE(mEnemyFire.mFlameJntIdxs); i++) {
+        mEnemyFire.mFlameJntIdxs[i] = fire_j[i];
+        mEnemyFire.mParticleScale[i] = fire_sc[i];
+    }
+    
+    mEnemyIce.mpActor = this;
+    mEnemyIce.m00C = 1;
+    mEnemyIce.mWallRadius = 50.0f;
+    mEnemyIce.mCylHeight = 250.0f;
+    
+    mMaxHealth = l_HIO.m46;
+    mHealth = mMaxHealth;
+    m300 = current.pos;
+    m30C = shape_angle.y;
+    mGravity = -4.5f;
+    
+    if (m2B4 == 0) {
+        mItemTableIdx = dComIfGp_CharTbl()->GetNameIndex("Rdead1", 0);
+    }
+    if (m2B4 == 1) {
+        mItemTableIdx = dComIfGp_CharTbl()->GetNameIndex("Rdead2", 0);
+    }
 }
 
 /* 000046A4-00004720       .text getArg__6daRd_cFv */
 void daRd_c::getArg() {
-    /* Nonmatching */
     u32 params = fopAcM_GetParam(this);
     m2B4 = fopAcM_GetParamBit(params, 0x00, 1);
-    int areaRadius = fopAcM_GetParamBit(params, 0x01, 7);
+    u8 param = fopAcM_GetParamBit(params, 0x01, 7);
+    s32 areaRadius = param;
     m2BC = fopAcM_GetParamBit(params, 0x08, 8);
     mSwNo = fopAcM_GetParamBit(params, 0x18, 8);
-    if (areaRadius == 0x7F) {
+    if ((s32)param == 0x7F) {
         areaRadius = 0;
     }
     mAreaRadius = l_HIO.m30 + areaRadius;

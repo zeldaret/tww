@@ -51,6 +51,21 @@ public:
         PROC_EXEC = 1
     };
     
+    enum Mode {
+        MODE_WAIT        = 0x0,
+        MODE_DAMAGE      = 0x1,
+        MODE_PARALYSIS   = 0x2,
+        MODE_DEATH       = 0x3,
+        MODE_MOVE        = 0x4,
+        MODE_CRY         = 0x5,
+        MODE_CRY_WAIT    = 0x6,
+        MODE_ATTACK      = 0x7,
+        MODE_RETURN      = 0x8,
+        MODE_SILENT_PRAY = 0x9,
+        MODE_SW_WAIT     = 0xA,
+        MODE_KANOKE      = 0xB,
+    };
+    
     typedef void (daRd_c::*ModeFunc)();
     
     static const u32 m_heapsize;
@@ -69,8 +84,8 @@ public:
     BOOL _nodeHeadControl(J3DNode*, J3DModel*);
     BOOL _createHeap();
     bool createArrowHeap();
-    void checkPlayerInAttack();
-    void checkPlayerInCry();
+    bool checkPlayerInAttack();
+    bool checkPlayerInCry();
     void lookBack();
     void checkTgHit();
     void setCollision();
@@ -127,7 +142,9 @@ public:
     /* 0x2D0 */ mDoExt_McaMorf* mpMorf;
     /* 0x2D4 */ mDoExt_btkAnm mBtkAnm;
     /* 0x2E8 */ mDoExt_brkAnm mBrkAnm;
-    /* 0x300 */ u8 m300[0x310 - 0x300];
+    /* 0x300 */ cXyz m300;
+    /* 0x30C */ s16 m30C;
+    /* 0x30E */ u8 m30E[0x310 - 0x30E];
     /* 0x310 */ int m310;
     /* 0x314 */ int m314;
     /* 0x318 */ int m318;
@@ -141,9 +158,9 @@ public:
     /* 0x69C */ dNpc_JntCtrl_c mJntCtrl;
     /* 0x6D0 */ u32 m6D0;
     /* 0x6D4 */ int m6D4;
-    /* 0x6D8 */ u8 m6D8;
-    /* 0x6D9 */ u8 m6D9;
-    /* 0x6DA */ u8 m6DA;
+    /* 0x6D8 */ s8 m6D8;
+    /* 0x6D9 */ s8 m6D9;
+    /* 0x6DA */ s8 m6DA;
     /* 0x6DB */ u8 m6DB;
     /* 0x6DC */ u8 m6DC;
     /* 0x6DD */ u8 m6DD[0x6E0 - 0x6DD];
@@ -163,7 +180,10 @@ public:
     /* 0xD1E */ s16 mD1E;
     /* 0xD20 */ u8 mD20[0xD34 - 0xD20];
     /* 0xD34 */ bool mbIkari;
-    /* 0xD35 */ u8 mD35[0xD44 - 0xD35];
+    /* 0xD35 */ u8 mD35[0xD38 - 0xD35];
+    /* 0xD38 */ f32 mD38;
+    /* 0xD3C */ int mD3C;
+    /* 0xD40 */ int mD40;
 };
 
 #endif /* D_A_RD_H */

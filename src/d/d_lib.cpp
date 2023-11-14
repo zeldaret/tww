@@ -3,8 +3,7 @@
 // Translation Unit: d_lib.cpp
 //
 
-#include "d_lib.h"
-#include "dolphin/types.h"
+#include "d/d_lib.h"
 
 /* 80057000-800570CC       .text dLib_setCirclePath__FP18dLib_circle_path_c */
 void dLib_setCirclePath(dLib_circle_path_c*) {
@@ -17,17 +16,17 @@ void dLib_getWaterY(cXyz&, dBgS_ObjAcch&) {
 }
 
 /* 8005716C-80057368       .text dLib_waveRot__FP3VecfP11dLib_wave_c */
-void dLib_waveRot(Vec*, float, dLib_wave_c*) {
+void dLib_waveRot(Vec*, f32, dLib_wave_c*) {
     /* Nonmatching */
 }
 
 /* 80057368-8005746C       .text dLib_debugDrawAxis__FRA3_A4_ff */
-void dLib_debugDrawAxis(float(&)[3][4], float) {
+void dLib_debugDrawAxis(Mtx&, f32) {
     /* Nonmatching */
 }
 
 /* 8005746C-80057510       .text dLib_debugDrawFan__FR4cXyzssfRC8_GXColor */
-void dLib_debugDrawFan(cXyz&, short, short, float, const _GXColor&) {
+void dLib_debugDrawFan(cXyz&, s16, s16, f32, const GXColor&) {
     /* Nonmatching */
 }
 
@@ -42,67 +41,67 @@ void dLib_btkInit(J3DModelData*, mDoExt_btkAnm*, const char*, int) {
 }
 
 /* 800576B0-80057844       .text dLib_setAnm__FPCcP14mDoExt_McaMorfPScPScPScPC14dLib_anm_idx_cPC14dLib_anm_prm_cb */
-void dLib_setAnm(const char*, mDoExt_McaMorf*, signed char*, signed char*, signed char*, const dLib_anm_idx_c*, const dLib_anm_prm_c*, bool) {
+void dLib_setAnm(const char*, mDoExt_McaMorf*, s8*, s8*, s8*, const dLib_anm_idx_c*, const dLib_anm_prm_c*, bool) {
     /* Nonmatching */
 }
 
 /* 80057844-80057988       .text dLib_bcks_setAnm__FPCcP14mDoExt_McaMorfPScPScPScPCiPC14dLib_anm_prm_cb */
-void dLib_bcks_setAnm(const char*, mDoExt_McaMorf*, signed char*, signed char*, signed char*, const int*, const dLib_anm_prm_c*, bool) {
+void dLib_bcks_setAnm(const char*, mDoExt_McaMorf*, s8*, s8*, s8*, const int*, const dLib_anm_prm_c*, bool) {
     /* Nonmatching */
 }
 
 /* 80057988-80057A14       .text dLib_scaleAnime__FPfPfiPifff */
-void dLib_scaleAnime(float*, float*, int, int*, float, float, float) {
+void dLib_scaleAnime(f32*, f32*, int, int*, f32, f32, f32) {
     /* Nonmatching */
 }
 
 /* 80057A14-80057A30       .text dLib_getPosFromMtx__FPA4_fP4cXyz */
-void dLib_getPosFromMtx(float(*)[4], cXyz*) {
+void dLib_getPosFromMtx(MtxP, cXyz*) {
     /* Nonmatching */
 }
 
 /* 80057A30-80057AA4       .text dLib_pathInfo__FPP5dPathUc */
-void dLib_pathInfo(dPath**, unsigned char) {
+void dLib_pathInfo(dPath**, u8) {
     /* Nonmatching */
 }
 
 /* 80057AA4-80057D1C       .text dLib_pathMove__FP4cXyzPScP5dPathfPFP4cXyzP4cXyzP4cXyzPv_iPv */
-void dLib_pathMove(cXyz*, signed char*, dPath*, float, int (*)(cXyz*, cXyz*, cXyz*, void*), void*) {
+void dLib_pathMove(cXyz*, s8*, dPath*, f32, int (*)(cXyz*, cXyz*, cXyz*, void*), void*) {
     /* Nonmatching */
 }
 
 /* 80057D1C-80057EC0       .text dLib_setNextStageBySclsNum__FUcSc */
-void dLib_setNextStageBySclsNum(unsigned char, signed char) {
+void dLib_setNextStageBySclsNum(u8, s8) {
     /* Nonmatching */
 }
 
 /* 80057EC0-80057F30       .text dLib_setFirstMsg__FUsUlUl */
-void dLib_setFirstMsg(unsigned short, unsigned long, unsigned long) {
+void dLib_setFirstMsg(u16, u32, u32) {
     /* Nonmatching */
 }
 
 /* 80057F30-80057F78       .text dLib_checkPlayerInCircle__F4cXyzff */
-void dLib_checkPlayerInCircle(cXyz, float, float) {
+bool dLib_checkPlayerInCircle(cXyz, f32, f32) {
     /* Nonmatching */
 }
 
 /* 80057F78-80058098       .text dLib_checkActorInCircle__F4cXyzP10fopAc_ac_cff */
-void dLib_checkActorInCircle(cXyz, fopAc_ac_c*, float, float) {
+bool dLib_checkActorInCircle(cXyz, fopAc_ac_c*, f32, f32) {
     /* Nonmatching */
 }
 
 /* 80058098-8005820C       .text dLib_checkActorInFan__F4cXyzP10fopAc_ac_cssff */
-void dLib_checkActorInFan(cXyz, fopAc_ac_c*, short, short, float, float) {
+bool dLib_checkActorInFan(cXyz, fopAc_ac_c*, s16, s16, f32, f32) {
     /* Nonmatching */
 }
 
 /* 8005820C-80058250       .text __ct__9STControlFssssffss */
-STControl::STControl(short, short, short, short, float, float, short, short) {
+STControl::STControl(s16, s16, s16, s16, f32, f32, s16, s16) {
     /* Nonmatching */
 }
 
 /* 80058250-80058274       .text setWaitParm__9STControlFssssffss */
-void STControl::setWaitParm(short, short, short, short, float, float, short, short) {
+void STControl::setWaitParm(s16, s16, s16, s16, f32, f32, s16, s16) {
     /* Nonmatching */
 }
 
@@ -142,27 +141,27 @@ void CSTControl::getAngleStick() {
 }
 
 /* 80058340-800585D0       .text checkTrigger__9STControlFv */
-void STControl::checkTrigger() {
+bool STControl::checkTrigger() {
     /* Nonmatching */
 }
 
 /* 800585D0-8005863C       .text checkLeftTrigger__9STControlFv */
-void STControl::checkLeftTrigger() {
+bool STControl::checkLeftTrigger() {
     /* Nonmatching */
 }
 
 /* 8005863C-800586A8       .text checkRightTrigger__9STControlFv */
-void STControl::checkRightTrigger() {
+bool STControl::checkRightTrigger() {
     /* Nonmatching */
 }
 
 /* 800586A8-80058714       .text checkUpTrigger__9STControlFv */
-void STControl::checkUpTrigger() {
+bool STControl::checkUpTrigger() {
     /* Nonmatching */
 }
 
 /* 80058714-80058780       .text checkDownTrigger__9STControlFv */
-void STControl::checkDownTrigger() {
+bool STControl::checkDownTrigger() {
     /* Nonmatching */
 }
 
@@ -177,7 +176,7 @@ void dLib_get_QuatFromTriangle(cXyz*, cXyz*, cXyz*) {
 }
 
 /* 80058910-800589A8       .text dLib_calc_QuatFromTriangle__FP10QuaternionfP4cXyzP4cXyzP4cXyz */
-void dLib_calc_QuatFromTriangle(Quaternion*, float, cXyz*, cXyz*, cXyz*) {
+void dLib_calc_QuatFromTriangle(Quaternion*, f32, cXyz*, cXyz*, cXyz*) {
     /* Nonmatching */
 }
 

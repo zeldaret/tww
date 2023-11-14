@@ -34,13 +34,14 @@ public:
 };
 
 class dNpc_JntCtrl_c {
+public:
     /* 0x00 */ s16 mAngles[2][2];
     // /* 0x00 */ s16 mHeadUpDownRot;
     // /* 0x02 */ s16 mHeadLeftRightRot;
     // /* 0x04 */ s16 mBackboneUpDownRot;
     // /* 0x06 */ s16 mBackboneLeftRightRot;
-    /* 0x08 */ u8 mHeadJntNum;
-    /* 0x09 */ u8 mBackboneJntNum;
+    /* 0x08 */ s8 mHeadJntNum;
+    /* 0x09 */ s8 mBackboneJntNum;
     /* 0x0A */ bool field_0x0A;
     /* 0x0B */ u8 field_0x0B;
     /* 0x0C */ u8 field_0x0C;
@@ -68,24 +69,24 @@ public:
         field_0x0B = 0;
     }
 
-    void clrTrn() {}
-    void getBackboneJntNum() {}
-    void getBackbone_x() {}
-    void getBackbone_y() {}
-    void getHeadJntNum() {}
-    void getHead_x() {}
-    void getHead_y() {}
-    void offBackBoneLock() {}
-    void offHeadLock() {}
-    void onBackBoneLock() {}
+    s8 getHeadJntNum() { return mHeadJntNum; }
+    s8 getBackboneJntNum() { return mBackboneJntNum; }
+    void setHeadJntNum(s8 jnt) { mHeadJntNum = jnt; }
+    void setBackboneJntNum(s8 jnt) { mBackboneJntNum = jnt; }
+    int getHead_x() { return mAngles[0][0]; }
+    int getHead_y() { return mAngles[0][1]; }
+    int getBackbone_x() { return mAngles[1][0]; }
+    int getBackbone_y() { return mAngles[1][1]; }
+    void setHead_x(s16 angle) { mAngles[0][0] = angle; }
+    void setHead_y(s16 angle) { mAngles[0][1] = angle; }
+    void setBackBone_x(s16 angle) { mAngles[1][0] = angle; }
+    void setBackBone_y(s16 angle) { mAngles[1][1] = angle; }
     void onHeadLock() {}
-    void setBackBone_x(s16) {}
-    void setBackBone_y(s16) {}
-    void setBackboneJntNum(s8) {}
-    void setHeadJntNum(s8) {}
-    void setHead_x(s16) {}
-    void setHead_y(s16) {}
+    void onBackBoneLock() {}
+    void offHeadLock() {}
+    void offBackBoneLock() {}
     void setTrn() {}
+    void clrTrn() {}
     void trnChk() {}
 
     bool angCalcS(s16*, s16, s16, s16);
