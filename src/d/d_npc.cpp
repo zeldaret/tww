@@ -71,7 +71,7 @@ bool dNpc_JntCtrl_c::move(s16 param_1, int param_2) {
     int i;
     
     for (i = 0; i < 2; i++) {
-        if ((i == 0 && field_0x0B == 1) || (i == 1 && field_0x0C == 1)) {
+        if ((i == 0 && mbHeadLock == true) || (i == 1 && mbBackBoneLock == true)) {
             angle = 0;
         } else {
             angle = param_1;
@@ -120,8 +120,8 @@ void dNpc_JntCtrl_c::lookAtTarget(s16* outY, cXyz* param_2, cXyz param_3, s16 pa
     minY = mMinAngles[1][1];
     minY += mMinAngles[0][1];
     bool r3 = move(deltaY, 1);
-    if ((field_0x0A || ((deltaY >= maxY || deltaY <= minY) && r3)) && !param_6) {
-        field_0x0A = follow(outY, targetY, maxVel, 1);
+    if ((mbTrn || ((deltaY >= maxY || deltaY <= minY) && r3)) && !param_6) {
+        mbTrn = follow(outY, targetY, maxVel, 1);
     }
     
     move(r23, 0);
@@ -764,7 +764,7 @@ int dNpc_JntCtrl_c::chkLim(s16 angle, int param_2, int param_3) {
 /* 8021C620-8021C6D8       .text turn_fromBackbone2Head__14dNpc_JntCtrl_cFsPsPsb */
 void dNpc_JntCtrl_c::turn_fromBackbone2Head(s16 param_1, s16* param_2, s16* param_3, bool param_4) {
     *param_3 = 0;
-    if(field_0x0C == 0) {
+    if(!mbBackBoneLock) {
         *param_3 = chkLim(param_1, 1, 1);
         if(field_0x32 && *param_3 < 0) {
             *param_3 = 0;
@@ -772,7 +772,7 @@ void dNpc_JntCtrl_c::turn_fromBackbone2Head(s16 param_1, s16* param_2, s16* para
     }
     
     *param_2 = 0;
-    if(field_0x0B == 0) {
+    if(!mbHeadLock) {
         *param_2 = param_1 - *param_3;
         *param_2 = chkLim(*param_2, 0, 1);
     }
@@ -780,13 +780,13 @@ void dNpc_JntCtrl_c::turn_fromBackbone2Head(s16 param_1, s16* param_2, s16* para
 
 void dNpc_JntCtrl_c::turn_fromHead2Backbone(s16 param_1, s16* param_2, s16* param_3) {
     *param_2 = 0;
-    if(field_0x0B == 0) {
+    if(!mbHeadLock) {
         *param_2 = param_1 - field_0x32;
         *param_2 = chkLim(*param_2, 0, 1);
     }
 
     *param_3 = 0;
-    if(field_0x0C == 0) {
+    if(!mbBackBoneLock) {
         *param_3 = param_1 - *param_2;
         *param_3 = chkLim(*param_3, 1, 1);
     }
@@ -857,23 +857,23 @@ void dNpc_JntCtrl_c::lookAtTarget_2(s16* r26, cXyz* r29, cXyz r24, s16 r7, s16 r
     mAngles[0][1] = r1_10;
     mAngles[1][1] = r1_0C;
     
-    if (field_0x0A && !r28) {
+    if (mbTrn && !r28) {
         temp = *r26;
         cLib_addCalcAngleS(r26, targetY, 4, r27, 0x100);
         temp2 = *r26 - temp;
-        field_0x0A = temp2 != 0;
-        if (field_0x0C == 0) {
+        mbTrn = temp2 != 0;
+        if (!mbBackBoneLock) {
             temp2 = follow_current(&mAngles[1][1], temp2);
         }
-        if (field_0x0B == 0) {
+        if (!mbHeadLock) {
             follow_current(&mAngles[0][1], temp2);
         }
     } else {
         temp4 = field_0x2E + field_0x32;
         if (deltaY >= 0) {
-            field_0x0A = deltaY > temp4;
+            mbTrn = deltaY > temp4;
         } else {
-            field_0x0A = deltaY < temp4;
+            mbTrn = deltaY < temp4;
         }
     }
     

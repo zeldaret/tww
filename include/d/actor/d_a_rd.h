@@ -87,7 +87,7 @@ public:
     bool checkPlayerInAttack();
     bool checkPlayerInCry();
     void lookBack();
-    void checkTgHit();
+    bool checkTgHit();
     void setCollision();
     void setIceCollision();
     void setAttention();
@@ -161,8 +161,8 @@ public:
     /* 0x6D8 */ s8 m6D8;
     /* 0x6D9 */ s8 m6D9;
     /* 0x6DA */ s8 m6DA;
-    /* 0x6DB */ u8 m6DB;
-    /* 0x6DC */ u8 m6DC;
+    /* 0x6DB */ s8 m6DB;
+    /* 0x6DC */ s8 m6DC;
     /* 0x6DD */ u8 m6DD[0x6E0 - 0x6DD];
     /* 0x6E0 */ enemyice mEnemyIce;
     /* 0xA98 */ enemyfire mEnemyFire;
@@ -178,7 +178,9 @@ public:
     /* 0xD1A */ s16 mD1A;
     /* 0xD1C */ s16 mD1C;
     /* 0xD1E */ s16 mD1E;
-    /* 0xD20 */ u8 mD20[0xD34 - 0xD20];
+    /* 0xD20 */ u8 mD20[0xD2E - 0xD20];
+    /* 0xD2E */ s16 mD2E;
+    /* 0xD30 */ u8 mD30[0xD34 - 0xD30];
     /* 0xD34 */ bool mbIkari;
     /* 0xD35 */ u8 mD35[0xD38 - 0xD35];
     /* 0xD38 */ f32 mD38;

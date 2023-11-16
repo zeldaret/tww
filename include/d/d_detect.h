@@ -17,10 +17,10 @@ public:
     void proc();
     bool chk_quake(const cXyz*) const;
     void set_quake(const cXyz*);
-    void chk_quake_area(const cXyz*) const;
+    bool chk_quake_area(const cXyz*) const;
     void search_tag_light(void*, void*);
-    void chk_light(const cXyz*) const;
-    void chk_attention(cXyz*) const;
+    bool chk_light(const cXyz*) const;
+    bool chk_attention(cXyz*) const;
 
     /* 0x00 */ dDetectPlace_c mPlace[1];
     /* 0x10 */ s16 mTimer;

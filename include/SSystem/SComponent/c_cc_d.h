@@ -518,6 +518,7 @@ public:
     void OffCoSetBit() { mObjCo.ClrSet(); }
     void SetTgType(u32 type) { mObjTg.SetType(type); }
     void OnTgSPrmBit(u32 flag) { mObjTg.OnSPrmBit(flag); }
+    void OffTgSPrmBit(u32 flag) { mObjTg.OffSPrmBit(flag); }
     void OffAtSetBit() { mObjAt.ClrSet(); }
     void OnAtHitBit() { mObjAt.OnHitBit(); }
     void OffAtHitBit() { mObjAt.OffHitBit(); }

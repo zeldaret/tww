@@ -42,9 +42,9 @@ public:
     // /* 0x06 */ s16 mBackboneLeftRightRot;
     /* 0x08 */ s8 mHeadJntNum;
     /* 0x09 */ s8 mBackboneJntNum;
-    /* 0x0A */ bool field_0x0A;
-    /* 0x0B */ u8 field_0x0B;
-    /* 0x0C */ u8 field_0x0C;
+    /* 0x0A */ bool mbTrn;
+    /* 0x0B */ bool mbHeadLock;
+    /* 0x0C */ bool mbBackBoneLock;
     /* 0x0D */ u8 field_0x0D;
     /* 0x0E */ s16 mMinAngles[2][2];
     /* 0x16 */ s16 mMaxAngles[2][2];
@@ -65,8 +65,8 @@ public:
 
 public:
     dNpc_JntCtrl_c() {
-        field_0x0C = 0;
-        field_0x0B = 0;
+        mbBackBoneLock = false;
+        mbHeadLock = false;
     }
 
     s8 getHeadJntNum() { return mHeadJntNum; }
@@ -81,13 +81,13 @@ public:
     void setHead_y(s16 angle) { mAngles[0][1] = angle; }
     void setBackBone_x(s16 angle) { mAngles[1][0] = angle; }
     void setBackBone_y(s16 angle) { mAngles[1][1] = angle; }
-    void onHeadLock() {}
-    void onBackBoneLock() {}
-    void offHeadLock() {}
-    void offBackBoneLock() {}
-    void setTrn() {}
-    void clrTrn() {}
-    void trnChk() {}
+    bool trnChk() { return mbTrn; }
+    void setTrn() { mbTrn = true; }
+    void clrTrn() { mbTrn = false; }
+    void onHeadLock() { mbHeadLock = true; }
+    void onBackBoneLock() { mbBackBoneLock = true; }
+    void offHeadLock() { mbHeadLock = false; }
+    void offBackBoneLock() { mbBackBoneLock = false; }
 
     bool angCalcS(s16*, s16, s16, s16);
     void limitter(s16*, s16, s16);

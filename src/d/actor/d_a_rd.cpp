@@ -12,6 +12,10 @@
 #include "d/d_lib.h"
 #include "d/d_material.h"
 #include "d/d_snap.h"
+#include "d/actor/d_a_player.h"
+#include "d/d_cc_uty.h"
+#include "d/d_s_play.h"
+#include "d/d_item_data.h"
 
 // Needed for the .data section to match.
 static Vec dummy1 = {1.0f, 1.0f, 1.0f};
@@ -441,22 +445,287 @@ bool daRd_c::checkPlayerInCry() {
 
 /* 00000AA0-00000D78       .text lookBack__6daRd_cFv */
 void daRd_c::lookBack() {
-    /* Nonmatching */
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
+    bool r29 = false;
+    if (cLib_calcTimer(&mCE4) != 0 && mMode != 7 && mMode != 5 && mMode != 3) {
+        mJntCtrl.clrTrn();
+        mJntCtrl.offHeadLock();
+        mJntCtrl.offBackBoneLock();
+        mCC4 = player->getHeadTopPos();
+    } else {
+        switch (mMode) {
+        case 0:
+        case 3:
+        case 7:
+            r29 = false;
+            mJntCtrl.clrTrn();
+            mJntCtrl.onHeadLock();
+            mJntCtrl.onBackBoneLock();
+            break;
+        case 4:
+        case 5:
+        case 8:
+        case 9:
+            mJntCtrl.setTrn();
+            // Fall-through
+        default:
+            mJntCtrl.offHeadLock();
+            mJntCtrl.offBackBoneLock();
+            break;
+        }
+        
+        switch (m6D9) {
+        case 0x2:
+        case 0x9:
+        case 0xA:
+            r29 = false;
+            mJntCtrl.clrTrn();
+            mJntCtrl.onHeadLock();
+            mJntCtrl.onBackBoneLock();
+        }
+        
+        switch (mMode) {
+        case 5:
+            if (dLib_checkActorInFan(current.pos, player, shape_angle.y, l_HIO.m42, 150.0f, 100.0f)) {
+                mJntCtrl.clrTrn();
+                mJntCtrl.onHeadLock();
+                mJntCtrl.onBackBoneLock();
+            }
+            mCC4 = player->getHeadTopPos();
+            break;
+        case 8:
+            if (dLib_checkActorInCircle(m300, this, 100.0f, 1000.0f)) {
+                mJntCtrl.clrTrn();
+                mJntCtrl.onHeadLock();
+                mJntCtrl.onBackBoneLock();
+            }
+            mCC4 = m300;
+            break;
+        case 9:
+            break;
+        default:
+            mCC4 = player->getHeadTopPos();
+            break;
+        }
+    }
+    
+    if (mJntCtrl.trnChk()) {
+        cLib_addCalcAngleS2(&mCDC, l_HIO.m04.m1A, 4, 0x800);
+    } else {
+        mCDC = 0;
+    }
+    
+    mJntCtrl.lookAtTarget(&shape_angle.y, &mCC4, mCD0, shape_angle.y, mCDC, r29);
 }
 
 /* 00000D78-00001650       .text checkTgHit__6daRd_cFv */
-void daRd_c::checkTgHit() {
-    /* Nonmatching */
+bool daRd_c::checkTgHit() {
+    if (mMode == 3 || mMode == 0xB || mMode == 0xA) {
+        return false;
+    }
+    
+    cCcD_Obj* hitObj;
+    
+    if (mCyl.ChkTgHit()) {
+        hitObj = mCyl.GetTgHitObj();
+        if (hitObj->GetAtType() == AT_TYPE_LIGHT) {
+            fopAcM_seStart(this, JA_SE_CM_PW_BECOME_SOLID, 0);
+            modeProcInit(2);
+            return true;
+        }
+    }
+    
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
+    mStts.Move();
+    if (cLib_calcTimer(&m2C4) == 0 && mCyl.ChkTgHit()) {
+        bool r29 = true;
+        hitObj = mCyl.GetTgHitObj();
+        m2C4 = l_HIO.m48;
+        if (hitObj == NULL) {
+            return false;
+        }
+        
+        
+        switch (hitObj->GetAtType()) {
+        case AT_TYPE_SWORD:
+        case AT_TYPE_MACHETE:
+        case AT_TYPE_UNK800:
+        case AT_TYPE_DARKNUT_SWORD:
+        case AT_TYPE_MOBLIN_SPEAR:
+            fopAcM_seStart(this, JA_SE_LK_SW_HIT_S, 0x20);
+            
+            switch (player->getCutType()) {
+            case 0x05:
+            case 0x06:
+            case 0x07:
+            case 0x08:
+            case 0x09:
+            case 0x0A:
+            case 0x0C:
+            case 0x0E:
+            case 0x0F:
+            case 0x10:
+            case 0x15:
+            case 0x19:
+            case 0x1A:
+            case 0x1B:
+                m2C5 = 1;
+                break;
+            default:
+                m2C5 = 0;
+                break;
+            }
+            break;
+        case AT_TYPE_LEAF_WIND:
+            r29 = false;
+            m2C5 = 3;
+            mCE0 = 40;
+            break;
+        case AT_TYPE_BOOMERANG:
+        case AT_TYPE_BOKO_STICK:
+            r29 = false;
+            fopAcM_seStart(this, JA_SE_LK_W_WEP_HIT, 0x44);
+            m2C5 = 4;
+            mCE0 = 40;
+            break;
+        case AT_TYPE_HOOKSHOT:
+            fopAcM_seStart(this, JA_SE_LK_HS_SPIKE, 0x44);
+            r29 = false;
+            m2C5 = 12;
+            break;
+        case AT_TYPE_SKULL_HAMMER:
+        case AT_TYPE_STALFOS_MACE:
+            fopAcM_seStart(this, JA_SE_LK_HAMMER_HIT, 0x20);
+            m2C5 = 7;
+            if (player->getCutType() == 0x11) {
+                m2C5 = 8;
+            }
+            break;
+        case AT_TYPE_BOMB:
+            m2C5 = 6;
+            break;
+        case AT_TYPE_ICE_ARROW:
+            r29 = false;
+            fopAcM_seStart(this, JA_SE_LK_ARROW_HIT, 0x44);
+            mEnemyIce.mFreezeDuration = l_HIO.m4A;
+            enemy_fire_remove(&mEnemyFire);
+            mHealth += 4;
+            m2C5 = 9;
+            break;
+        case AT_TYPE_FIRE_ARROW:
+            r29 = false;
+            fopAcM_seStart(this, JA_SE_LK_ARROW_HIT, 0x44);
+            mEnemyFire.mFireDuration = l_HIO.m4C;
+            m2C5 = 0xA;
+            break;
+        case AT_TYPE_LIGHT_ARROW:
+            r29 = false;
+            fopAcM_seStart(this, JA_SE_LK_ARROW_HIT, 0x20);
+            mEnemyIce.mLightShrinkTimer = 1;
+            m2C5 = 0xB;
+            break;
+        case AT_TYPE_NORMAL_ARROW:
+            m2C5 = 5;
+            if (!dLib_checkActorInCircle(current.pos, player, l_HIO.m38, 1000.0f)) {
+                fopAcM_seStart(this, JA_SE_LK_ARROW_HIT, 0x44);
+                mCE0 = 40;
+                r29 = false;
+            } else {
+                fopAcM_seStart(this, JA_SE_LK_ARROW_HIT, 0x20);
+            }
+            break;
+        case AT_TYPE_FIRE:
+        case AT_TYPE_UNK20000:
+            r29 = false;
+            if (mEnemyFire.mState == 0) {
+                mEnemyFire.mFireDuration = l_HIO.m4C;
+            } else {
+                m2C5 = 0xD;
+            }
+            break;
+        case AT_TYPE_GRAPPLING_HOOK:
+            dComIfGp_particle_set(0x27B, &mAttentionInfo.mPosition);
+            fopAcM_seStart(this, JA_SE_LK_W_WEP_HIT, 0x44);
+            m2C5 = 0xE;
+            r29 = false;
+            mCE0 = 40;
+            break;
+        }
+        
+        CcAtInfo atInfo;
+        atInfo.pParticlePos = NULL;
+        atInfo.mpObj = mCyl.GetTgHitObj();
+        if (r29) {
+            cXyz* temp = mCyl.GetTgHitPosP();
+            cc_at_check(this, &atInfo);
+            if (m2C5 == 1 || m2C5 == 7 || m2C5 == 8 || mHealth <= 0) {
+                dComIfGp_particle_set(0x10, mCyl.GetTgHitPosP());
+                cXyz scale(2.0f, 2.0f, 2.0f);
+                dComIfGp_particle_set(0xF, temp, &player->shape_angle, &scale);
+                if (mHealth <= 0) {
+                    modeProcInit(3);
+                } else {
+                    modeProcInit(1);
+                }
+            } else {
+                dComIfGp_particle_set(0xD, temp, &player->shape_angle);
+                modeProcInit(1);
+            }
+        } else if (m2C5 == 0xE) {
+            s8 origHealth = mHealth;
+            mHealth = 0xA;
+            cc_at_check(this, &atInfo);
+            mHealth = origHealth;
+        }
+        
+        return true;
+    }
+    
+    if (dComIfGp_getDetect().chk_light(&current.pos)) {
+        fopAcM_seStart(this, JA_SE_CM_PW_BECOME_SOLID, 0);
+        modeProcInit(2);
+        return true;
+    }
+    
+    return false;
 }
 
 /* 00001650-000017D0       .text setCollision__6daRd_cFv */
 void daRd_c::setCollision() {
-    /* Nonmatching */
+    if (mMode == 3) {
+        mCyl.OffCoSPrmBit(0x10);
+        mCyl.OffCoSPrmBit(0x02);
+        mCyl.OffTgSPrmBit(0x01);
+        mCyl.OffTgSPrmBit(0x08);
+    } else if (mMode == 7 || mMode == 5 || dComIfGp_evmng_startCheck("DEFAULT_RD_CRY")) {
+        mCyl.OffCoSPrmBit(0x10);
+        mCyl.OffCoSPrmBit(0x02);
+    } else {
+        mCyl.OnCoSPrmBit(0x10);
+        mCyl.OnCoSPrmBit(0x02);
+    }
+    
+    if (m6D9 == 2) {
+        mCyl.SetR(80.0f + g_regHIO.mChild[8].mFloatRegs[1]);
+        mCyl.SetH(170.0f + g_regHIO.mChild[8].mFloatRegs[0]);
+    } else {
+        mCyl.SetR(80.0f + g_regHIO.mChild[8].mFloatRegs[1]);
+        mCyl.SetH(250.0f + g_regHIO.mChild[8].mFloatRegs[0]);
+    }
+    
+    mCyl.SetC(current.pos);
+    dComIfG_Ccsp()->Set(&mCyl);
 }
 
 /* 000017D0-0000180C       .text setIceCollision__6daRd_cFv */
 void daRd_c::setIceCollision() {
-    /* Nonmatching */
+    if (m6D9 == 2) {
+        mEnemyIce.mWallRadius = 50.0f;
+        mEnemyIce.mCylHeight = 170.0f;
+    } else {
+        mEnemyIce.mWallRadius = 50.0f;
+        mEnemyIce.mCylHeight = 250.0f;
+    }
 }
 
 /* 0000180C-00001970       .text setAttention__6daRd_cFv */
@@ -466,7 +735,11 @@ void daRd_c::setAttention() {
 
 /* 00001970-000019F8       .text setMtx__6daRd_cFv */
 void daRd_c::setMtx() {
-    /* Nonmatching */
+    J3DModel* model = mpMorf->getModel();
+    model->setBaseScale(mScale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 000019F8-00001A3C       .text modeWaitInit__6daRd_cFv */
@@ -702,13 +975,63 @@ void daRd_c::modeProc(daRd_c::Proc_e proc, int newMode) {
 }
 
 /* 000038D4-000039AC       .text setBrkAnm__6daRd_cFSc */
-void daRd_c::setBrkAnm(s8) {
-    /* Nonmatching */
+void daRd_c::setBrkAnm(s8 idx) {
+    static const int a_anm_idx_tbl[] = {
+        RD_BRK_NML,
+        RD_BRK_BEAM_HIT,
+        RD_BRK_BEAM,
+        RD_BRK_BEAM_END,
+    };
+    static const int a_play_mod_tbl[] = {
+        0, 0, 2, 0,
+    };
+    
+    J3DModel* model = mpMorf->getModel();
+    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, a_anm_idx_tbl[idx]));
+	JUT_ASSERT(1890, brk != 0);
+    mBrkAnm.init(model->getModelData(), brk, true, a_play_mod_tbl[idx], 1.0f, 0, -1, true, 0);
 }
 
 /* 000039AC-00003B3C       .text setBtkAnm__6daRd_cFSc */
-void daRd_c::setBtkAnm(s8) {
-    /* Nonmatching */
+void daRd_c::setBtkAnm(s8 idx) {
+    static const int a_anm_idx_tbl[] = {
+        RD_BTK_RD_IKARI,
+        RD_BTK_RD_NML,
+        RD_BTK_RD_OPEN,
+        RD_BTK_RD_CLOSE,
+    };
+    struct play_prm_struct {
+        s8 m00;
+        s8 m01;
+        s32 m04;
+    };
+    static const play_prm_struct a_play_prm_tbl[] = {
+        {0x01,   -1, 0x00},
+        {0x00,   -1, 0x02},
+        {0x01,   -1, 0x02},
+        {0x02, 0x01, 0x00},
+        {0x03, 0x02, 0x00},
+    };
+    
+    if (idx != 5) {
+        m6DB = idx;
+    }
+    
+    int r5 = a_play_prm_tbl[m6DB].m00;
+    if (m6DC != m6DB && r5 != -1) {
+        J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, a_anm_idx_tbl[r5]));
+        JUT_ASSERT(1930, btk != 0);
+        J3DModelData* modelData = mpMorf->getModel()->getModelData();
+        mBtkAnm.init(modelData, btk, true, a_play_prm_tbl[m6DB].m04, 1.0f, 0, -1, true, 0);
+        
+        if (mBtkAnm.isStop()) {
+            if (a_play_prm_tbl[m6DB].m01 != -1 && a_play_prm_tbl[m6DB].m04 == 0) {
+                m6DB = a_play_prm_tbl[m6DB].m01;
+            }
+        }
+    }
+    
+    m6DC = m6DB;
 }
 
 const int a_anm_bcks_tbl[] = {
@@ -760,7 +1083,103 @@ void daRd_c::setAnm(s8 param_1, bool param_2) {
 
 /* 00003C48-000040A8       .text _execute__6daRd_cFv */
 bool daRd_c::_execute() {
-    /* Nonmatching */
+    if (mMode == 0xA) {
+        fopAcM_posMoveF(this, mStts.GetCCMoveP());
+        mAcch.CrrPos(*dComIfG_Bgsp());
+        setMtx();
+        mpMorf->play(NULL, 0, 0);
+        mpMorf->calc();
+        modeProc(PROC_EXEC, 0xC);
+        return true;
+    }
+    
+    fopAcM_setGbaName(this, MIRROR_SHIELD, 0x12, 0x30);
+    setIceCollision();
+    if (mMode != 9 && mMode != 3 && mMode != 1 && mMode != 7 && mMode != 5 && mMode != 6) {
+        daRd_c* redead = (daRd_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)&searchNeadDeadRd_CB, this);
+        if (redead != NULL) {
+            m6D0 = fopAcM_GetID(redead);
+            modeProcInit(0x9);
+        }
+    }
+    if (mMode != 7 && mMode != 0 && mMode != 3 && mMode != 8) {
+        if (dComIfGp_evmng_startCheck("DEFAULT_RD_ATTACK")) {
+            modeProcInit(0x8);
+        }
+    }
+    current.angle = shape_angle;
+    
+    if (mEnemyFire.mState == 0) { // Not on fire (TODO enum)
+        mCyl.SetAtType(0);
+        m6D4 = l_HIO.m4E;
+    } else {
+        mCyl.SetAtType(AT_TYPE_FIRE);
+        if (mMode != 3 && mMode != 5 && mMode != 7) {
+            if (cLib_calcTimer(&m6D4) == 0) {
+                modeProcInit(0x3);
+            }
+        }
+    }
+    
+    if (enemy_ice(&mEnemyIce)) {
+        mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+        mpMorf->calc();
+        speedF = 0.0f;
+        setAttention();
+        return true;
+    }
+    
+    if (mCE0 == 1) {
+        mCE4 = 4*30;
+    }
+    
+    if (cLib_calcTimer(&mCE0) == 0) {
+        cLib_addCalcAngleS2(&mD1E, 0, 0xC, 0x100);
+        cLib_addCalcAngleS2(&mD2E, 0, 0xC, 0x100);
+    } else {
+        cLib_addCalcAngleS2(&mD1E, 0x2000, 0x4, 0x800);
+        cLib_addCalcAngleS2(&mD2E, 0x500, 0x4, 0x200);
+    }
+    
+    mJntCtrl.setParam(
+        l_HIO.m04.m0A, l_HIO.m04.m0E, l_HIO.m04.m12, l_HIO.m04.m16,
+        l_HIO.m04.m08, l_HIO.m04.m0C, l_HIO.m04.m10, l_HIO.m04.m14, l_HIO.m04.m18
+    );
+    
+    if (mMode != 2) {
+        lookBack();
+    }
+    
+    if (mbIkari) {
+        cLib_addCalc2(&mD38, l_HIO.m60, 0.1f, l_HIO.m64);
+    } else {
+        cLib_addCalc2(&mD38, 0.0f, 0.1f, l_HIO.m64);
+    }
+    
+    if (m6D9 == 6) {
+        f32 temp = speedF * l_HIO.m70;
+        mpMorf->setPlaySpeed(temp < l_HIO.m74 ? l_HIO.m74 : temp);
+        if (mMode == 7) {
+            mpMorf->setPlaySpeed(3.0f);
+        }
+    }
+    
+    setAttention();
+    setCollision();
+    fopAcM_posMoveF(this, mStts.GetCCMoveP());
+    mAcch.CrrPos(*dComIfG_Bgsp());
+    setMtx();
+    mBtkAnm.play();
+    mBrkAnm.play();
+    mpMorf->play(&current.pos, 0, 0);
+    mpMorf->calc();
+    enemy_fire(&mEnemyFire);
+    modeProc(PROC_EXEC, 0xC);
+    setAnm(0xF, false);
+    setBtkAnm(0x5);
+    g_env_light.settingTevStruct(0, &current.pos, &mTevStr);
+    
+    return false;
 }
 
 /* 000040A8-000041A8       .text debugDraw__6daRd_cFv */
