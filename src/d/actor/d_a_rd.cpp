@@ -147,7 +147,7 @@ static fopAc_ac_c* searchNeadDeadRd_CB(void* i_actor, void* i_this) {
 fopAc_ac_c* daRd_c::_searchNearDeadRd(fopAc_ac_c* i_actor) {
     if (fopAcM_GetName(i_actor) == PROC_RD) {
         daRd_c* other = static_cast<daRd_c*>(i_actor);
-        if (other->mMode == 3) {
+        if (other->mMode == MODE_DEATH) {
             if (fopAcM_searchActorDistanceXZ(this, i_actor) < l_HIO.m34) {
                 return i_actor;
             }
@@ -447,25 +447,25 @@ bool daRd_c::checkPlayerInCry() {
 void daRd_c::lookBack() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
     bool r29 = false;
-    if (cLib_calcTimer(&mCE4) != 0 && mMode != 7 && mMode != 5 && mMode != 3) {
+    if (cLib_calcTimer(&mCE4) != 0 && mMode != MODE_ATTACK && mMode != MODE_CRY && mMode != MODE_DEATH) {
         mJntCtrl.clrTrn();
         mJntCtrl.offHeadLock();
         mJntCtrl.offBackBoneLock();
         mCC4 = player->getHeadTopPos();
     } else {
         switch (mMode) {
-        case 0:
-        case 3:
-        case 7:
+        case MODE_WAIT:
+        case MODE_DEATH:
+        case MODE_ATTACK:
             r29 = false;
             mJntCtrl.clrTrn();
             mJntCtrl.onHeadLock();
             mJntCtrl.onBackBoneLock();
             break;
-        case 4:
-        case 5:
-        case 8:
-        case 9:
+        case MODE_MOVE:
+        case MODE_CRY:
+        case MODE_RETURN:
+        case MODE_SILENT_PRAY:
             mJntCtrl.setTrn();
             // Fall-through
         default:
@@ -482,10 +482,11 @@ void daRd_c::lookBack() {
             mJntCtrl.clrTrn();
             mJntCtrl.onHeadLock();
             mJntCtrl.onBackBoneLock();
+            break;
         }
         
         switch (mMode) {
-        case 5:
+        case MODE_CRY:
             if (dLib_checkActorInFan(current.pos, player, shape_angle.y, l_HIO.m42, 150.0f, 100.0f)) {
                 mJntCtrl.clrTrn();
                 mJntCtrl.onHeadLock();
@@ -493,7 +494,7 @@ void daRd_c::lookBack() {
             }
             mCC4 = player->getHeadTopPos();
             break;
-        case 8:
+        case MODE_RETURN:
             if (dLib_checkActorInCircle(m300, this, 100.0f, 1000.0f)) {
                 mJntCtrl.clrTrn();
                 mJntCtrl.onHeadLock();
@@ -501,7 +502,7 @@ void daRd_c::lookBack() {
             }
             mCC4 = m300;
             break;
-        case 9:
+        case MODE_SILENT_PRAY:
             break;
         default:
             mCC4 = player->getHeadTopPos();
@@ -520,7 +521,7 @@ void daRd_c::lookBack() {
 
 /* 00000D78-00001650       .text checkTgHit__6daRd_cFv */
 bool daRd_c::checkTgHit() {
-    if (mMode == 3 || mMode == 0xB || mMode == 0xA) {
+    if (mMode == MODE_DEATH || mMode == MODE_KANOKE || mMode == MODE_SW_WAIT) {
         return false;
     }
     
@@ -530,7 +531,7 @@ bool daRd_c::checkTgHit() {
         hitObj = mCyl.GetTgHitObj();
         if (hitObj->GetAtType() == AT_TYPE_LIGHT) {
             fopAcM_seStart(this, JA_SE_CM_PW_BECOME_SOLID, 0);
-            modeProcInit(2);
+            modeProcInit(MODE_PARALYSIS);
             return true;
         }
     }
@@ -663,13 +664,13 @@ bool daRd_c::checkTgHit() {
                 cXyz scale(2.0f, 2.0f, 2.0f);
                 dComIfGp_particle_set(0xF, temp, &player->shape_angle, &scale);
                 if (mHealth <= 0) {
-                    modeProcInit(3);
+                    modeProcInit(MODE_DEATH);
                 } else {
-                    modeProcInit(1);
+                    modeProcInit(MODE_DAMAGE);
                 }
             } else {
                 dComIfGp_particle_set(0xD, temp, &player->shape_angle);
-                modeProcInit(1);
+                modeProcInit(MODE_DAMAGE);
             }
         } else if (m2C5 == 0xE) {
             s8 origHealth = mHealth;
@@ -683,7 +684,7 @@ bool daRd_c::checkTgHit() {
     
     if (dComIfGp_getDetect().chk_light(&current.pos)) {
         fopAcM_seStart(this, JA_SE_CM_PW_BECOME_SOLID, 0);
-        modeProcInit(2);
+        modeProcInit(MODE_PARALYSIS);
         return true;
     }
     
@@ -692,12 +693,12 @@ bool daRd_c::checkTgHit() {
 
 /* 00001650-000017D0       .text setCollision__6daRd_cFv */
 void daRd_c::setCollision() {
-    if (mMode == 3) {
+    if (mMode == MODE_DEATH) {
         mCyl.OffCoSPrmBit(0x10);
         mCyl.OffCoSPrmBit(0x02);
         mCyl.OffTgSPrmBit(0x01);
         mCyl.OffTgSPrmBit(0x08);
-    } else if (mMode == 7 || mMode == 5 || dComIfGp_evmng_startCheck("DEFAULT_RD_CRY")) {
+    } else if (mMode == MODE_ATTACK || mMode == MODE_CRY || dComIfGp_evmng_startCheck("DEFAULT_RD_CRY")) {
         mCyl.OffCoSPrmBit(0x10);
         mCyl.OffCoSPrmBit(0x02);
     } else {
@@ -730,7 +731,27 @@ void daRd_c::setIceCollision() {
 
 /* 0000180C-00001970       .text setAttention__6daRd_cFv */
 void daRd_c::setAttention() {
-    /* Nonmatching */
+    cXyz attnPos(60.0f, 0.0f, 0.0f);
+    cXyz eyePos(60.0f, 0.0f, 0.0f);
+    mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(0x0C)); // ree_atama_1 joint
+    mDoMtx_stack_c::multVec(&attnPos, &mAttentionInfo.mPosition);
+    mDoMtx_stack_c::multVecZero(&eyePos);
+    mEyePos = eyePos;
+    mAttentionInfo.mPosition.y += l_HIO.m58;
+    mEyePos.y += l_HIO.m5C;
+    
+    if (dComIfGp_event_runCheck()) {
+        mAttentionInfo.mPosition = current.pos;
+        mEyePos = current.pos;
+        mAttentionInfo.mPosition.y += 150.0f;
+        mEyePos.y += 150.0f;
+    }
+    
+    if (mEnemyIce.mFreezeTimer > 20) {
+        fopAcM_OffStatus(this, fopAcStts_UNK200000_e);
+    } else {
+        fopAcM_OnStatus(this, fopAcStts_UNK200000_e);
+    }
 }
 
 /* 00001970-000019F8       .text setMtx__6daRd_cFv */
@@ -750,37 +771,132 @@ void daRd_c::modeWaitInit() {
 
 /* 00001A3C-00001DDC       .text modeWait__6daRd_cFv */
 void daRd_c::modeWait() {
-    /* Nonmatching */
+    if (checkTgHit()) {
+        return;
+    }
+    
+    speedF = 0.0f;
+    fopAc_ac_c* player = dComIfGp_getLinkPlayer();
+    BOOL isOto = fopAcM_otoCheck(this, mAreaRadius);
+    if (!isLinkControl()) {
+        if (dLib_checkActorInCircle(m300, this, mAreaRadius, 1000.0f)) {
+            if (dLib_checkActorInCircle(m300, player, mAreaRadius, 100.0f)) {
+                if ((dLib_checkActorInCircle(m300, player, mAreaRadius, 100.0f) && player->speedF > 10.0f + g_regHIO.mChild[12].mFloatRegs[4]) ||
+                    isOto ||
+                    dLib_checkActorInFan(current.pos, player, shape_angle.y, l_HIO.m40, l_HIO.m34, 100.0f)
+                ) {
+                    modeProcInit(MODE_MOVE);
+                    return;
+                }
+            }
+        }
+    }
+    
+    if (dLib_checkActorInCircle(m300, this, 100.0f, 1000.0f)) {
+        cLib_addCalcAngleS2(&shape_angle.y, m30C, 0x4, 0x200);
+        if (cLib_distanceAngleS(shape_angle.y, m30C) <= 0x200) {
+            shape_angle.y = m30C;
+            if (m2B4 == 1 && !isAnm(2)) {
+                setAnm(0xA, false);
+            }
+            if (m2B4 == 0) {
+                setAnm(0x1, false);
+            }
+        }
+    } else {
+        if (!dLib_checkActorInCircle(m300, this, mAreaRadius, 1000.0f) ||
+            !dLib_checkActorInCircle(m300, player, mAreaRadius, 100.0f)
+        ) {
+            modeProcInit(MODE_RETURN);
+            return;
+        }
+    }
+    if (!isLinkControl() && checkPlayerInAttack() && isAnm(1)) {
+        modeProcInit(MODE_ATTACK);
+    }
 }
 
 /* 00001DDC-00001E68       .text modeDeathInit__6daRd_cFv */
 void daRd_c::modeDeathInit() {
-    /* Nonmatching */
+    fopAcM_monsSeStart(this, JA_SE_CV_RD_DIE, 0);
+    setAnm(8, false);
+    speedF = 0.0f;
+    m310 = 10*30;
 }
 
 /* 00001E68-00001F14       .text modeDeath__6daRd_cFv */
 void daRd_c::modeDeath() {
-    /* Nonmatching */
+    // Using the mDoExt_McaMorf::isStop inline causes regswap.
+    // if (!mpMorf->isStop()) {
+    mDoExt_McaMorf* morf = mpMorf;
+    bool stopped = true;
+    if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+    if (!stopped) {
+        return;
+    }
+    
+    fopAcM_onActor(this);
+    
+    // Do not consider the ReDead to be a living enemy while its death animation is playing out.
+    mGroup = fopAc_ENV_e;
+    
+    if (cLib_calcTimer(&m310) == 0) {
+        fopAcM_createDisappear(this, &current.pos, 5, 0, 0xFF);
+        fopAcM_delete(this);
+    }
 }
 
 /* 00001F14-00001F98       .text modeDamageInit__6daRd_cFv */
 void daRd_c::modeDamageInit() {
-    /* Nonmatching */
+    fopAcM_monsSeStart(this, JA_SE_CV_RD_DAMAGE, 0);
+    setAnm(7, true);
+    speedF = 0.0f;
 }
 
 /* 00001F98-00002084       .text modeDamage__6daRd_cFv */
 void daRd_c::modeDamage() {
-    /* Nonmatching */
+    if (checkTgHit()) {
+        return;
+    }
+    fopAc_ac_c* player = dComIfGp_getLinkPlayer();
+    // Using the mDoExt_McaMorf::isStop inline causes regswap.
+    // if (!mpMorf->isStop()) {
+    mDoExt_McaMorf* morf = mpMorf;
+    bool stopped = true;
+    if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
+    if (!stopped) {
+        return;
+    }
+    
+    if (dLib_checkActorInCircle(m300, player, mAreaRadius, 100.0f)) {
+        modeProcInit(MODE_MOVE);
+    } else {
+        modeProcInit(MODE_WAIT);
+    }
 }
 
 /* 00002084-000020EC       .text modeParalysisInit__6daRd_cFv */
 void daRd_c::modeParalysisInit() {
-    /* Nonmatching */
+    if (!isAnm(0xC) && !isAnm(0xD)) {
+        setAnm(0xC, false);
+    }
+    m310 = l_HIO.m7A;
+    speedF = 0.0f;
 }
 
 /* 000020EC-000021F0       .text modeParalysis__6daRd_cFv */
 void daRd_c::modeParalysis() {
-    /* Nonmatching */
+    /* Nonmatching: isStop inline regalloc + modeParalysis return value? */
+    if (isAnm(0xC) && mpMorf->isStop()) {
+        setAnm(0xD, false);
+    } else if (isAnm(0xD)) {
+        if (cLib_calcTimer(&m310) == 0) {
+            setAnm(0xE, false);
+        }
+    } else if (isAnm(0xE) && mpMorf->isStop()) {
+        modeProcInit(MODE_WAIT);
+    }
+    checkTgHit();
 }
 
 /* 000021F0-0000223C       .text modeMoveInit__6daRd_cFv */
@@ -792,12 +908,58 @@ void daRd_c::modeMoveInit() {
 
 /* 0000223C-000024B0       .text modeMove__6daRd_cFv */
 void daRd_c::modeMove() {
-    /* Nonmatching */
+    if (!checkTgHit() && !isAnm(9)) {
+        if (!isLinkControl() && checkPlayerInCry()) {
+            modeProcInit(MODE_CRY);
+            return;
+        }
+        daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
+        if (!dLib_checkActorInCircle(m300, this, mAreaRadius, 1000.0f) || !dLib_checkActorInCircle(m300, player, mAreaRadius, 100.0f)) {
+            modeProcInit(MODE_RETURN);
+            return;
+        }
+        int angle = cLib_distanceAngleS(fopAcM_searchPlayerAngleY(this), mD18);
+        if (angle < 0x50) {
+            f32 dist = fopAcM_searchPlayerDistanceXZ(this);
+            f32 temp = (dist / 100.0f) + g_regHIO.mChild[12].mFloatRegs[3];
+            if (temp > 1.0f) {
+                temp = 1.0f;
+            }
+            if (temp < 0.1f) {
+                temp = 0.1f;
+            }
+            f32 temp2 = l_HIO.m68;
+            if (mEnemyFire.mState != 0) {
+                temp2 *= 2.0f;
+            }
+            cLib_addCalc2(&speedF, temp2*temp, 0.1f, 0.1f + g_regHIO.mChild[12].mFloatRegs[0]);
+        } else {
+            cLib_addCalc2(&speedF, 0.0f, 0.1f, 0.1f + g_regHIO.mChild[12].mFloatRegs[0]);
+        }
+        if (speedF < 0.1f) {
+            setAnm(1, false);
+        } else {
+            setAnm(6, false);
+        }
+        if (!isLinkControl() && checkPlayerInAttack()) {
+            modeProcInit(MODE_ATTACK);
+        }
+    }
 }
 
 /* 000024B0-000025A8       .text modeCryInit__6daRd_cFv */
 void daRd_c::modeCryInit() {
-    /* Nonmatching */
+    if (isLinkControl()) {
+        modeProcInit(MODE_RETURN);
+        return;
+    }
+    if (dComIfGp_evmng_startCheck("DEFAULT_RD_CRY")) {
+        dComIfGp_event_reset();
+    }
+    fopAcM_orderOtherEvent2(this, "DEFAULT_RD_CRY", 1, -1);
+    fopAcM_monsSeStart(this, JA_SE_CV_RD_SCREAM, 0);
+    m310 = l_HIO.m54;
+    m318 = l_HIO.m78;
 }
 
 /* 000025A8-000028B8       .text modeCry__6daRd_cFv */
@@ -880,7 +1042,6 @@ void daRd_c::modeKanoke() {
 
 /* 0000355C-000038D4       .text modeProc__6daRd_cFQ26daRd_c6Proc_ei */
 void daRd_c::modeProc(daRd_c::Proc_e proc, int newMode) {
-    /* Nonmatching */
     struct ModeEntry {
         ModeFunc init;
         ModeFunc run;
@@ -951,15 +1112,15 @@ void daRd_c::modeProc(daRd_c::Proc_e proc, int newMode) {
     };
     
     if (proc == PROC_INIT) {
-        if (newMode == 5 || newMode == 7) {
+        if (newMode == MODE_CRY || newMode == MODE_ATTACK) {
             onIkari();
             setBtkAnm(3);
-        } else if (newMode != 1) {
+        } else if (newMode != MODE_DAMAGE) {
             offIkari();
             setBtkAnm(4);
         }
         
-        if (newMode == 3 || newMode == 0xA) {
+        if (newMode == MODE_DEATH || newMode == MODE_SW_WAIT) {
             fopAcM_OffStatus(this, fopAcStts_SHOWMAP_e);
             cLib_offBit<u32>(mAttentionInfo.mFlags, fopAc_Attn_LOCKON_ENEMY_e);
         } else {
@@ -1051,9 +1212,21 @@ const int a_anm_bcks_tbl[] = {
     RD_BCK_BEAM_END,
 };
 const dLib_anm_prm_c a_anm_prm_tbl[] = {
-    {
-        // TODO
-    },
+    {0x0, -1, 0, 8.0f, 1.0f, 2},
+    {0x0, -1, 0, 8.0f, 1.0f, 2},
+    {0x1, -1, 0, 8.0f, 1.0f, 2},
+    {0x2,  4, 0, 8.0f, 1.0f, 0},
+    {0x3, -1, 0, 8.0f, 1.0f, 2},
+    {0x4,  6, 0, 8.0f, 1.0f, 0},
+    {0x5, -1, 0, 8.0f, 1.0f, 2},
+    {0x6,  1, 0, 2.0f, 1.0f, 0},
+    {0x7, -1, 0, 2.0f, 1.0f, 0},
+    {0x8,  1, 0, 8.0f, 0.5f, 0},
+    {0x9,  2, 0, 8.0f, 0.5f, 0},
+    {0xA, -1, 0, 8.0f, 1.0f, 2},
+    {0xB, -1, 0, 2.0f, 1.0f, 0},
+    {0xC, -1, 0, 2.0f, 1.0f, 2},
+    {0xD, -1, 0, 2.0f, 1.0f, 0},
 };
 
 /* 00003B3C-00003C48       .text setAnm__6daRd_cFScb */
@@ -1083,28 +1256,30 @@ void daRd_c::setAnm(s8 param_1, bool param_2) {
 
 /* 00003C48-000040A8       .text _execute__6daRd_cFv */
 bool daRd_c::_execute() {
-    if (mMode == 0xA) {
+    if (mMode == MODE_SW_WAIT) {
         fopAcM_posMoveF(this, mStts.GetCCMoveP());
         mAcch.CrrPos(*dComIfG_Bgsp());
         setMtx();
         mpMorf->play(NULL, 0, 0);
         mpMorf->calc();
-        modeProc(PROC_EXEC, 0xC);
+        modeProc(PROC_EXEC, MODE_NULL);
         return true;
     }
     
     fopAcM_setGbaName(this, MIRROR_SHIELD, 0x12, 0x30);
     setIceCollision();
-    if (mMode != 9 && mMode != 3 && mMode != 1 && mMode != 7 && mMode != 5 && mMode != 6) {
+    if (mMode != MODE_SILENT_PRAY && mMode != MODE_DEATH && mMode != MODE_DAMAGE &&
+        mMode != MODE_ATTACK && mMode != MODE_CRY && mMode != MODE_CRY_WAIT)
+    {
         daRd_c* redead = (daRd_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)&searchNeadDeadRd_CB, this);
         if (redead != NULL) {
             m6D0 = fopAcM_GetID(redead);
-            modeProcInit(0x9);
+            modeProcInit(MODE_SILENT_PRAY);
         }
     }
-    if (mMode != 7 && mMode != 0 && mMode != 3 && mMode != 8) {
+    if (mMode != MODE_ATTACK && mMode != MODE_WAIT && mMode != MODE_DEATH && mMode != MODE_RETURN) {
         if (dComIfGp_evmng_startCheck("DEFAULT_RD_ATTACK")) {
-            modeProcInit(0x8);
+            modeProcInit(MODE_RETURN);
         }
     }
     current.angle = shape_angle;
@@ -1114,9 +1289,9 @@ bool daRd_c::_execute() {
         m6D4 = l_HIO.m4E;
     } else {
         mCyl.SetAtType(AT_TYPE_FIRE);
-        if (mMode != 3 && mMode != 5 && mMode != 7) {
+        if (mMode != MODE_DEATH && mMode != MODE_CRY && mMode != MODE_ATTACK) {
             if (cLib_calcTimer(&m6D4) == 0) {
-                modeProcInit(0x3);
+                modeProcInit(MODE_DEATH);
             }
         }
     }
@@ -1146,7 +1321,7 @@ bool daRd_c::_execute() {
         l_HIO.m04.m08, l_HIO.m04.m0C, l_HIO.m04.m10, l_HIO.m04.m14, l_HIO.m04.m18
     );
     
-    if (mMode != 2) {
+    if (mMode != MODE_PARALYSIS) {
         lookBack();
     }
     
@@ -1156,10 +1331,10 @@ bool daRd_c::_execute() {
         cLib_addCalc2(&mD38, 0.0f, 0.1f, l_HIO.m64);
     }
     
-    if (m6D9 == 6) {
+    if (isAnm(6)) {
         f32 temp = speedF * l_HIO.m70;
         mpMorf->setPlaySpeed(temp < l_HIO.m74 ? l_HIO.m74 : temp);
-        if (mMode == 7) {
+        if (mMode == MODE_ATTACK) {
             mpMorf->setPlaySpeed(3.0f);
         }
     }
@@ -1174,7 +1349,7 @@ bool daRd_c::_execute() {
     mpMorf->play(&current.pos, 0, 0);
     mpMorf->calc();
     enemy_fire(&mEnemyFire);
-    modeProc(PROC_EXEC, 0xC);
+    modeProc(PROC_EXEC, MODE_NULL);
     setAnm(0xF, false);
     setBtkAnm(0x5);
     g_env_light.settingTevStruct(0, &current.pos, &mTevStr);
@@ -1184,13 +1359,19 @@ bool daRd_c::_execute() {
 
 /* 000040A8-000041A8       .text debugDraw__6daRd_cFv */
 void daRd_c::debugDraw() {
-    /* Nonmatching */
+    cXyz temp = m300;
+    temp.y += 10.0f;
+    cXyz pos = current.pos;
+    pos.y += 10.0f;
+    dLib_debugDrawFan(pos, mD18, l_HIO.m42, l_HIO.m38, (GXColor){0xFF, 0xFF, 0x00, 0x80});
+    dLib_debugDrawFan(pos, shape_angle.y, l_HIO.m44, l_HIO.m3C, (GXColor){0xFF, 0x00, 0x00, 0x80});
+    dLib_debugDrawFan(pos, shape_angle.y, l_HIO.m40, l_HIO.m34, (GXColor){0xFF, 0x00, 0xFF, 0x80});
+    dLib_debugDrawAxis(mCE8, 50.0f);
 }
 
 /* 000041A8-00004318       .text _draw__6daRd_cFv */
 bool daRd_c::_draw() {
-    /* Nonmatching */
-    if (mMode == 0xA) {
+    if (mMode == MODE_SW_WAIT) {
         return true;
     }
     
@@ -1231,7 +1412,6 @@ bool daRd_c::isLinkControl() {
 
 /* 00004338-000046A4       .text createInit__6daRd_cFv */
 void daRd_c::createInit() {
-    /* Nonmatching */
     mStts.Init(0xFF, 0, this);
     mCyl.Set(m_cyl_src);
     mCyl.SetStts(&mStts);

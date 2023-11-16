@@ -64,6 +64,7 @@ public:
         MODE_SILENT_PRAY = 0x9,
         MODE_SW_WAIT     = 0xA,
         MODE_KANOKE      = 0xB,
+        MODE_NULL,
     };
     
     typedef void (daRd_c::*ModeFunc)();
@@ -73,7 +74,7 @@ public:
     static const dCcD_SrcCyl m_cyl_src;
     
     daRd_c() {}
-    void isAnm(s8) {}
+    bool isAnm(s8 idx) { return m6D9 == idx; }
     bool isIkari() { return mbIkari; }
     void modeProcInit(int newMode) { modeProc(PROC_INIT, newMode); }
     void offIkari() { mbIkari = false; }
