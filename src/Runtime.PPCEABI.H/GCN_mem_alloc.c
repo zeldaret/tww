@@ -6,11 +6,8 @@ inline static void InitDefaultHeap() {
     void* arenaLo;
     void* arenaHi;
 
-    // This is to force the two strings be two separate rodata entries with padding instead of a single stringbase.
-    static const char dummy1[] = "GCN_Mem_Alloc.c : InitDefaultHeap. No Heap Available\n";
-    static const char dummy2[] = "Metrowerks CW runtime library initializing default heap\n";
-    OSReport(dummy1);
-    OSReport(dummy2);
+    OSReport("GCN_Mem_Alloc.c : InitDefaultHeap. No Heap Available\n");
+    OSReport("Metrowerks CW runtime library initializing default heap\n");
 
     arenaLo = OSGetArenaLo();
     arenaHi = OSGetArenaHi();
