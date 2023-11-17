@@ -127,12 +127,15 @@ BOOL DVDChangeDir(const char* dirname);
 BOOL DVDCloseDir(DVDDirectory* dir);
 BOOL DVDOpenDir(const char*, DVDDirectory* dir);
 BOOL DVDReadDir(DVDDirectory* dir, DVDDirectoryEntry* entry);
+BOOL DVDPrepareStreamAsync(DVDFileInfo* fileinfo, u32 length, u32 offset, DVDCallback callback);
 BOOL DVDReadAbsAsyncPrio(DVDCommandBlock* block, void* addr, s32 length, s32 offset,
                          DVDCBCallback callback, s32 prio);
 BOOL DVDReadAbsAsyncForBS(DVDCommandBlock* block, void* addr, s32 length, s32 offset,
                           DVDCBCallback callback);
 BOOL DVDReadDiskID(DVDCommandBlock* block, DVDDiskID* diskID, DVDCBCallback callback);
 BOOL DVDCancelStreamAsync(DVDCommandBlock* block, DVDCBCallback callback);
+BOOL DVDStopStreamAtEndAsync(DVDCommandBlock* block, DVDCBCallback callback);
+BOOL DVDGetStreamPlayAddrAsync(DVDCommandBlock* block, DVDCBCallback callback);
 BOOL DVDInquiryAsync(DVDCommandBlock* block, DVDDriveInfo* info, DVDCBCallback callback);
 void DVDReset(void);
 BOOL DVDSetAutoInvalidation(BOOL autoInval);
