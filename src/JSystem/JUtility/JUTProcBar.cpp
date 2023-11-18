@@ -12,12 +12,11 @@
 /* 802C882C-802C8944       .text __ct__10JUTProcBarFv */
 // missing instruction
 JUTProcBar::JUTProcBar() {
-    /* Nonmatching */
     mVisible = true;
     mHeapBarVisible = true;
     field_0x108 = 0;
-    u32 height = JUTVideo::getManager()->getXfbHeight();
-    if (height > 400) {
+    u16 height = JUTVideo::getManager()->getXfbHeight();
+    if (JUTVideo::getManager()->getXfbHeight() > 400) {
         mParams.setBarWidth(2);
         mParams.setPosition(39, height - 40);
         mParams.setWidth(562);

@@ -33,7 +33,7 @@ public:
         width = (u16)getFbWidth();
         height = (u16)getEfbHeight();
     }
-    u32 getXfbHeight() const { return mRenderObj->xfb_height; }
+    u32 getXfbHeight() const { return mRenderObj->xfb_height & 0xFFFF; }
     u32 isAntiAliasing() const { return mRenderObj->antialiasing; }
     Pattern getSamplePattern() const { return mRenderObj->sample_pattern; }
     u8* getVFilter() const { return mRenderObj->vfilter; }
