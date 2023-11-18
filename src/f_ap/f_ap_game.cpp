@@ -21,10 +21,10 @@ fapGm_HIO_c::fapGm_HIO_c() {
 
     if (mDoMain::developmentMode) {
         mDisplayMeter = true;
-        field_0x07 = 1;
+        mDisplayFlag = 1;
     } else {
         mDisplayMeter = false;
-        field_0x07 = 0;
+        mDisplayFlag = 0;
     }
 
     field_0x09 = 1;
@@ -43,8 +43,8 @@ fapGm_HIO_c::fapGm_HIO_c() {
     field_0x1a = 0;
     field_0x1b = 1;
     field_0x1c = 0;
-    field_0x2c = 0x280;
-    field_0x2e = 0x1e0;
+    mFbWidth = 0x280;
+    mEfbHeight = 0x1e0;
     field_0x30 = 0;
     field_0x20.r = 0xff;
     field_0x20.g = 0xff;

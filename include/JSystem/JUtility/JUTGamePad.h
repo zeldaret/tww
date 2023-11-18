@@ -124,7 +124,7 @@ public:
     void stopMotor() { mRumble.stopMotor(mPortNum); }
     void stopMotorHard() { mRumble.stopMotorHard(mPortNum); }
 
-    static s8 getPortStatus(u32 port) { return mPadStatus[port].error; }
+    static PADStatus & getPortStatus(u32 port) { return mPadStatus[port]; }
 
     struct CButton {
         CButton() { clear(); }

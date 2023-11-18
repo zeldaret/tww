@@ -4,14 +4,14 @@
 #include "JSystem/JFramework/JFWDisplay.h"
 #include "dolphin/mtx/mtx.h"
 
-void mDoGph_Create();
+bool mDoGph_Create();
 
 struct ResTIMG;
 class mDoGph_gInf_c {
 public:
     static void create();
     static void createHeap();
-    static void alloc(u32, int);
+    static void* alloc(u32, int);
     static void free();
     static void fadeOut(f32, GXColor&);
     static void onBlure();
@@ -41,8 +41,8 @@ public:
     static bool isBlure() { return mBlureFlag; }
     static u8 getBlureRate() { return mBlureRate; }
     static MtxP getBlureMtx() { return mBlureMtx; }
-    /* static void offAutoForcus() { data_80450BE7 = 0; }
-    static bool isAutoForcus() { return data_80450BE7; } */
+    static void offAutoForcus() { mAutoForcus = false; }
+    static bool isAutoForcus() { return mAutoForcus; }
     static void setTickRate(u32 rate) { JFWDisplay::getManager()->setTickRate(rate); }
     static void waitBlanking(int wait) { JFWDisplay::getManager()->waitBlanking(wait); }
     static BOOL isMonotone() { return mMonotone; }
@@ -66,16 +66,18 @@ public:
     static JUTFader* mFader;
     static ResTIMG* mFrameBufferTimg;
     static void* mFrameBufferTex;
-    static ResTIMG* mZbufferTimg;
     static void* mZbufferTex;
     static f32 mFadeRate;
     static f32 mFadeSpeed;
     static bool mBlureFlag;
     static u8 mBlureRate;
     static u8 mFade;
+    static bool mAutoForcus;
     static u8 mMonotone;
     static s16 mMonotoneRate;
     static s16 mMonotoneRateSpeed;
+    static JKRHeap * mHeap[2];
+    static u8 mCurrentHeap;
 };
 
 #endif /* M_DO_M_DO_GRAPHIC_H */

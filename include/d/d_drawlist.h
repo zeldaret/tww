@@ -439,6 +439,7 @@ public:
     static f32 getWipeRate() { return mWipeRate; }
 
     void newPeekZdata(s16 x, s16 y, u32 * data) { mPeekZ.newData(x, y, data); }
+    void peekZdata() { mPeekZ.peekData(); }
 
     static bool mWipe;
     static GXColor mWipeColor;

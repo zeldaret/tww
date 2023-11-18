@@ -98,7 +98,7 @@ private:
     /* 0x10 */ u32 mZClear;
     /* 0x14 */ JUTXfb* mXfbManager;
     /* 0x18 */ u16 mGamma;
-    /* 0x1C */ EDrawDone  mDrawDoneMethod;
+    /* 0x1C */ EDrawDone mDrawDoneMethod;
     /* 0x20 */ u16 mFrameRate;
     /* 0x24 */ u32 mTickRate;
     /* 0x28 */ bool mEnableAlpha;

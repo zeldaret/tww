@@ -4,201 +4,696 @@
 //
 
 #include "m_Do/m_Do_graphic.h"
-#include "dolphin/types.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_drawlist.h"
+#include "f_ap/f_ap_game.h"
+#include "m_Do/m_Do_controller_pad.h"
+#include "m_Do/m_Do_machine.h"
+#include "m_Do/m_Do_main.h"
+#include "m_Do/m_Do_mtx.h"
+#include "m_Do/m_Do_printf.h"
+#include "JSystem/JFramework/JFWDisplay.h"
+#include "JSystem/JFramework/JFWSystem.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "JSystem/JUtility/JUTConsole.h"
+#include "JSystem/JUtility/JUTDbPrint.h"
+#include "JSystem/JUtility/JUTGamePad.h"
+#include "JSystem/JUtility/JUTProcBar.h"
+#include "JSystem/JUtility/JUTVideo.h"
+#include "JSystem/JUtility/JUTXfb.h"
+
+namespace J2DPrint {
+    void setBuffer(u32);
+}
+
+JUTFader * mDoGph_gInf_c::mFader;
+ResTIMG * mDoGph_gInf_c::mFrameBufferTimg;
+GXTexObj mDoGph_gInf_c::mFrameBufferTexObj;
+void * mDoGph_gInf_c::mFrameBufferTex;
+GXTexObj mDoGph_gInf_c::mZbufferTexObj;
+void * mDoGph_gInf_c::mZbufferTex;
+u8 mDoGph_gInf_c::mCurrentHeap;
+Mtx mDoGph_gInf_c::mBlureMtx;
+bool mDoGph_gInf_c::mBlureFlag;
+u8 mDoGph_gInf_c::mBlureRate;
+u8 mDoGph_gInf_c::mFade;
+f32 mDoGph_gInf_c::mFadeRate;
+f32 mDoGph_gInf_c::mFadeSpeed;
+bool mDoGph_gInf_c::mAutoForcus;
+u8 mDoGph_gInf_c::mMonotone;
+s16 mDoGph_gInf_c::mMonotoneRate;
+s16 mDoGph_gInf_c::mMonotoneRateSpeed;
+
+mDoGph_gInf_c g_mDoGph_graphicInfo;
+
+OSThread mCaptureThread;
+OSAlarm mCaptureTimeOutAlarm;
+s16 mCaptureStep;
+bool mCaptureCansel;
+bool mCaptureEnableGXSetCopyFilter;
+void* mCaptureThreadStackHead;
+u8* mCaptureCaptureBuffer;
+u8* mCaptureTextureBuffer;
+u32 mCaptureTextureSize;
+u32 mCaptureCaptureSize;
+GXDrawSyncCallback mCaptureOldCB;
+OSThreadQueue mCaptureThreadQueue;
+OSTick mCaptureTimeOutTicks;
+
+JKRHeap * mDoGph_gInf_c::mHeap[2] = {};
+GXColor mDoGph_gInf_c::mBackColor = {};
+GXColor mDoGph_gInf_c::mFadeColor = {};
+static GXColorS10 l_tevColor = {};
+bool mCaptureDraw = true;
+u8 mCaptureTextureFormat = GX_TF_CMPR;
+u8 mCaptureCaptureFormat = GX_TF_RGB565;
+u8 mCaptureSizeWidth = 152;
+u8 mCaptureSizeHeight = 104;
+s16 mCaptureCenterX = 320;
+s16 mCaptureCenterY = 180;
+GXColor mCaptureMonoColor0 = { 0x00, 0x00, 0x00, 0x00 };
+GXColor mCaptureMonoColor1 = { 0xFF, 0xFF, 0xFF, 0xFF };
+u32 mCaptureThreadStackSize = 0x2000;
+u32 mCaptureThreadPriority = 30;
 
 /* 80007BBC-80007DDC       .text create__13mDoGph_gInf_cFv */
 void mDoGph_gInf_c::create() {
-    /* Nonmatching */
+    JFWDisplay::createManager(JKRHeap::getCurrentHeap(), JUTXfb::UNK_2, true);
+    JFWDisplay::getManager()->setDrawDoneMethod(JFWDisplay::UNK_METHOD_1);
+    JUTFader* faderPtr = new JUTFader(0, 0, JUTVideo::getManager()->getRenderMode()->fb_width, JUTVideo::getManager()->getRenderMode()->efb_height, JUtility::TColor(0, 0, 0, 0));
+    JUT_ASSERT(0x1a0, faderPtr != 0);
+    setFader(faderPtr);
+    JFWDisplay::getManager()->setFader(faderPtr);
+    JUTProcBar::getManager()->setVisibleHeapBar(false);
+    JUTProcBar::getManager()->setVisible(false);
+    JUTDbPrint::getManager()->setVisible(false);
+    createHeap();
+
+    u32 framebufferSize = GXGetTexBufferSize(0x140, 0xf0, GX_TF_RGBA8, GX_FALSE, GX_FALSE) + 0x20;
+    mFrameBufferTimg = (ResTIMG*) JKRAllocFromHeap(NULL, framebufferSize, 0x20);
+    mFrameBufferTex = (void*)(&mFrameBufferTimg[1]);
+    cLib_memSet(mFrameBufferTimg, 0, framebufferSize);
+    mFrameBufferTimg->format = GX_TF_RGBA8;
+    mFrameBufferTimg->alphaEnabled = false;
+    mFrameBufferTimg->width = 0x140;
+    mFrameBufferTimg->height = 0xf0;
+    mFrameBufferTimg->minFilter = GX_LINEAR;
+    mFrameBufferTimg->magFilter = GX_LINEAR;
+    mFrameBufferTimg->imageOffset = sizeof(ResTIMG);
+
+    u32 zbufferSize = GXGetTexBufferSize(0x140, 0xf0, GX_TF_IA8, GX_FALSE, GX_FALSE);
+    mZbufferTex = JKRAllocFromHeap(NULL, zbufferSize, 0x20);
+    cLib_memSet(mZbufferTex, 0, zbufferSize);
+
+    J2DPrint::setBuffer(0x400);
+    mBlureFlag = 0;
+    mFade = 0;
+    mBackColor = g_clearColor;
+    mFadeColor = g_clearColor;
+    VISetBlack(TRUE);
 }
 
 /* 80007DDC-80007EA8       .text createHeap__13mDoGph_gInf_cFv */
 void mDoGph_gInf_c::createHeap() {
-    /* Nonmatching */
+    JKRHeap* parentHeap = JKRHeap::getCurrentHeap();
+
+    mHeap[0] = JKRSolidHeap::create(0x10000, parentHeap, false);
+    JUT_ASSERT(0x1eb, mHeap[0] != 0);
+
+    mHeap[1] = JKRSolidHeap::create(0x10000, parentHeap, false);
+    JUT_ASSERT(0x1ed, mHeap[1] != 0);
+
+    mCurrentHeap = 0;
 }
 
 /* 80007EA8-80007EE4       .text alloc__13mDoGph_gInf_cFUli */
-void mDoGph_gInf_c::alloc(unsigned long, int) {
-    /* Nonmatching */
+void* mDoGph_gInf_c::alloc(u32 size, int align) {
+    return mHeap[mCurrentHeap]->alloc(size, align);
 }
 
 /* 80007EE4-80007F1C       .text free__13mDoGph_gInf_cFv */
 void mDoGph_gInf_c::free() {
-    /* Nonmatching */
+    u8 heap = mCurrentHeap;
+    mCurrentHeap ^= 1;
+    mHeap[heap]->freeAll();
 }
 
 /* 80007F1C-80007F6C       .text fadeOut__13mDoGph_gInf_cFfR8_GXColor */
-void mDoGph_gInf_c::fadeOut(float, _GXColor&) {
-    /* Nonmatching */
+void mDoGph_gInf_c::fadeOut(f32 speed, GXColor& color) {
+    mFade = true;
+    mFadeSpeed = speed;
+    mFadeColor = color;
+    mFadeRate = speed >= 0.0f ? 0.0f : 1.0f;
 }
 
 /* 80007F6C-80007F94       .text onBlure__13mDoGph_gInf_cFv */
 void mDoGph_gInf_c::onBlure() {
-    /* Nonmatching */
+    onBlure(mDoMtx_getIdentity());
 }
 
 /* 80007F94-80007FC4       .text onBlure__13mDoGph_gInf_cFPA4_Cf */
-void mDoGph_gInf_c::onBlure(const float(*)[4]) {
-    /* Nonmatching */
+void mDoGph_gInf_c::onBlure(const Mtx mtx) {
+    mBlureFlag = true;
+    mDoMtx_copy(mtx, mBlureMtx);
 }
 
 /* 80007FC4-80007FE8       .text fadeOut__13mDoGph_gInf_cFf */
-void mDoGph_gInf_c::fadeOut(float) {
-    /* Nonmatching */
+void mDoGph_gInf_c::fadeOut(f32 speed) {
+    fadeOut(speed, g_clearColor);
 }
 
 /* 80007FE8-800082D8       .text calcFade__13mDoGph_gInf_cFv */
 void mDoGph_gInf_c::calcFade() {
-    /* Nonmatching */
+    if (mFade) {
+        mFadeRate += mFadeSpeed;
+        if (mFadeRate < 0.0f) {
+            mFadeRate = 0.0f;
+            mFade = false;
+        } else if (mFadeRate > 1.0f) {
+            mFadeRate = 1.0f;
+        }
+
+        mFadeColor.a = mFadeRate * 255.0f;
+    } else {
+        if (dComIfG_getBrightness() != 0xFF) {
+            mFadeColor.r = 0;
+            mFadeColor.g = 0;
+            mFadeColor.b = 0;
+            mFadeColor.a = 0xFF - dComIfG_getBrightness();
+        } else {
+            mFadeColor.a = 0;
+        }
+    }
+
+    if (mFadeColor.a != 0) {
+        GXSetNumChans(1);
+        GXSetChanCtrl(GX_COLOR0A0, false, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+        GXSetChanMatColor(GX_COLOR0A0, mFadeColor);
+        GXSetNumTexGens(0);
+        GXSetNumTevStages(1);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_RASC);
+        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_RASA);
+        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetZCompLoc(GX_TRUE);
+        GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_OR);
+        GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+        GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, g_clearColor);
+        GXSetFogRangeAdj(GX_FALSE, 0, NULL);
+        GXSetCullMode(GX_CULL_NONE);
+        GXSetDither(GX_TRUE);
+        GXSetNumIndStages(0);
+        Mtx44 mtx;
+        C_MTXOrtho(mtx, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 10.0f);
+        GXSetProjection(mtx, GX_ORTHOGRAPHIC);
+        GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
+        GXClearVtxDesc();
+        GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S8, 0);
+        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+        GXPosition3s8(0, 0, -5);
+        GXPosition3s8(1, 0, -5);
+        GXPosition3s8(1, 1, -5);
+        GXPosition3s8(0, 1, -5);
+        GXEnd();
+    }
 }
 
 /* 800082D8-80008314       .text onMonotone__13mDoGph_gInf_cFv */
 void mDoGph_gInf_c::onMonotone() {
-    /* Nonmatching */
+    mMonotone = true;
+    mFrameBufferTimg->format = GX_TF_I8;
+    dComIfGp_particle_swapFrameBufferTexture();
 }
 
 /* 80008314-80008354       .text offMonotone__13mDoGph_gInf_cFv */
 void mDoGph_gInf_c::offMonotone() {
-    /* Nonmatching */
+    mMonotone = false;
+    mFrameBufferTimg->format = GX_TF_RGBA8;
+    dComIfGp_particle_swapFrameBufferTexture();
 }
 
 /* 80008354-800083B8       .text calcMonotone__13mDoGph_gInf_cFv */
 void mDoGph_gInf_c::calcMonotone() {
-    /* Nonmatching */
+    if (cLib_chaseS(&mMonotoneRate, mMonotoneRateSpeed < 0 ? 400 : -600, abs(mMonotoneRateSpeed)) != 0 && mMonotoneRateSpeed > 0)
+        offMonotone();
 }
 
 /* 800083B8-800083BC       .text mDoGph_BlankingON__Fv */
 void mDoGph_BlankingON() {
-    /* Nonmatching */
 }
 
 /* 800083BC-800083C0       .text mDoGph_BlankingOFF__Fv */
 void mDoGph_BlankingOFF() {
-    /* Nonmatching */
 }
 
 /* 800083C0-800083EC       .text dScnPly_BeforeOfPaint__Fv */
 void dScnPly_BeforeOfPaint() {
-    /* Nonmatching */
+    dComIfGd_reset();
 }
 
 /* 800083EC-80008410       .text mDoGph_BeforeOfDraw__Fv */
-void mDoGph_BeforeOfDraw() {
-    /* Nonmatching */
+bool mDoGph_BeforeOfDraw() {
+    dScnPly_BeforeOfPaint();
+    return true;
 }
 
 /* 80008410-80008600       .text mDoGph_AfterOfDraw__Fv */
-void mDoGph_AfterOfDraw() {
+bool mDoGph_AfterOfDraw() {
     /* Nonmatching */
+    if (!fapGmHIO_isMenu()) {
+        if (JUTGamePad::getPortStatus(0).button == 0 && fapGmHIO_getMeter() != 0 && !JFWSystem::getSystemConsole()->isVisible()) {
+        }
+    }  
+
+    GXSetZCompLoc(GX_TRUE);
+    GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
+    GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
+    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, g_clearColor);
+    GXSetFogRangeAdj(GX_FALSE, 0, NULL);
+    GXSetCoPlanar(GX_FALSE);
+    GXSetZTexture(GX_ZT_DISABLE, GX_TF_Z8, 0);
+    GXSetDither(GX_TRUE);
+    GXSetClipMode(GX_CLIP_ENABLE);
+    GXSetCullMode(GX_CULL_NONE);
+    mDoMch_render_c::setFbWidth(fapGmHIO_getFbWidth());
+    mDoMch_render_c::setEfbHeight(fapGmHIO_getEfbHeight());
+    JUTVideo::getManager()->setRenderMode(mDoMch_render_c::getRenderModeObj());
+    dComIfGd_peekZdata();
+    mDoGph_gInf_c::endFrame();
+    return true;
 }
 
 /* 80008600-80008880       .text clearAlphaBuffer__FP10view_classUc */
-void clearAlphaBuffer(view_class*, unsigned char) {
-    /* Nonmatching */
+void clearAlphaBuffer(view_class* view, u8 alpha) {
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0, false, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetZCompLoc(GX_TRUE);
+    GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
+    GXSetBlendMode(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_OR);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, g_clearColor);
+    GXSetFogRangeAdj(GX_FALSE, 0, NULL);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetDither(GX_TRUE);
+    GXSetColorUpdate(GX_FALSE);
+    GXSetAlphaUpdate(GX_TRUE);
+    GXSetNumIndStages(0);
+    GXColor color = { 0xFF, 0xFF, 0xFF, 0xFF };
+    color.a = alpha;
+    GXSetTevColor(GX_TEVREG0, color);
+    Mtx44 mtx;
+    C_MTXOrtho(mtx, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 10.0f);
+    GXSetProjection(mtx, GX_ORTHOGRAPHIC);
+    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S8, 0);
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3s8(0, 0, -5);
+    GXPosition3s8(1, 0, -5);
+    GXPosition3s8(1, 1, -5);
+    GXPosition3s8(0, 1, -5);
+    GXEnd();
+    GXSetColorUpdate(GX_TRUE);
+    GXSetAlphaUpdate(GX_FALSE);
+    GXSetProjection(view->mProjMtx, GX_PERSPECTIVE);
 }
 
 /* 80008880-80008B0C       .text drawAlphaBuffer__FP10view_class8_GXColor */
-void drawAlphaBuffer(view_class*, _GXColor) {
-    /* Nonmatching */
+void drawAlphaBuffer(view_class* view, GXColor color) {
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0, false, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanMatColor(GX_COLOR0, color);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_RASC);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetZCompLoc(GX_TRUE);
+    GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_DST_ALPHA, GX_BL_ONE, GX_LO_OR);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, g_clearColor);
+    GXSetFogRangeAdj(GX_FALSE, 0, NULL);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetDstAlpha(GX_TRUE, 0);
+    GXSetDither(GX_TRUE);
+    GXSetColorUpdate(GX_TRUE);
+    GXSetAlphaUpdate(GX_TRUE);
+    GXSetNumIndStages(0);
+    Mtx44 mtx;
+    C_MTXOrtho(mtx, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 10.0f);
+    GXSetProjection(mtx, GX_ORTHOGRAPHIC);
+    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S8, 0);
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3s8(0, 0, -5);
+    GXPosition3s8(1, 0, -5);
+    GXPosition3s8(1, 1, -5);
+    GXPosition3s8(0, 1, -5);
+    GXEnd();
+    GXSetColorUpdate(GX_TRUE);
+    GXSetAlphaUpdate(GX_FALSE);
+    GXSetDstAlpha(GX_FALSE, 0);
+    GXSetProjection(view->mProjMtx, GX_PERSPECTIVE);
 }
 
 /* 80008B0C-80008F34       .text drawSpot__FP10view_class */
-void drawSpot(view_class*) {
-    /* Nonmatching */
+void drawSpot(view_class* view) {
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0, false, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanAmbColor(GX_COLOR0A0, g_clearColor);
+    GXSetChanMatColor(GX_COLOR0A0, g_clearColor);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevColor(GX_TEVREG0, g_whiteColor);
+    GXSetZCompLoc(GX_TRUE);
+    GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_DST_ALPHA, GX_BL_ONE, GX_LO_OR);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, g_clearColor);
+    GXSetFogRangeAdj(GX_FALSE, 0, NULL);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetDither(GX_TRUE);
+    GXSetColorUpdate(GX_FALSE);
+    GXSetAlphaUpdate(GX_TRUE);
+    Mtx44 mtx;
+    C_MTXOrtho(mtx, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 10.0f);
+    GXSetProjection(mtx, GX_ORTHOGRAPHIC);
+    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S8, 0);
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3s8(0, 0, -5);
+    GXPosition3s8(1, 0, -5);
+    GXPosition3s8(1, 1, -5);
+    GXPosition3s8(0, 1, -5);
+    GXEnd();
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_RASA);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_LO_OR);
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3s8(0, 0, -5);
+    GXPosition3s8(1, 0, -5);
+    GXPosition3s8(1, 1, -5);
+    GXPosition3s8(0, 1, -5);
+    GXEnd();
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_RASC);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_DST_ALPHA, GX_BL_DST_ALPHA, GX_LO_OR);
+    GXSetNumIndStages(0);
+    GXSetColorUpdate(GX_TRUE);
+    GXSetAlphaUpdate(GX_FALSE);
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3s8(0, 0, -5);
+    GXPosition3s8(1, 0, -5);
+    GXPosition3s8(1, 1, -5);
+    GXPosition3s8(0, 1, -5);
+    GXEnd();
+    GXSetProjection(view->mProjMtx, GX_PERSPECTIVE);
 }
 
 /* 80008F34-8000990C       .text drawDepth__FP10view_classP15view_port_classi */
-void drawDepth(view_class*, view_port_class*, int) {
-    /* Nonmatching */
-}
-
-/* 8000990C-80009914       .text getFileListInfo__15dStage_roomDt_cCFv */
-void dStage_roomDt_c::getFileListInfo() const {
+void drawDepth(view_class* view, view_port_class* viewport, int) {
     /* Nonmatching */
 }
 
 /* 80009914-80009BBC       .text motionBlure__FP10view_class */
-void motionBlure(view_class*) {
-    /* Nonmatching */
+void motionBlure(view_class* view) {
+    if (mDoGph_gInf_c::isBlure()) {
+        GXLoadTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), GX_TEXMAP0);
+        GXColor color;
+        color.a = mDoGph_gInf_c::getBlureRate();
+        GXSetNumChans(0);
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
+        GXLoadTexMtxImm(mDoGph_gInf_c::getBlureMtx(), GX_TEXMTX0, GX_MTX2x4);
+        GXSetNumTevStages(1);
+        GXSetTevColor(GX_TEVREG0, color);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
+        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetZCompLoc(GX_TRUE);
+        GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
+        GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+        GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, g_clearColor);
+        GXSetCullMode(GX_CULL_NONE);
+        GXSetDither(GX_TRUE);
+        Mtx44 mtx;
+        C_MTXOrtho(mtx, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 10.0f);
+        GXSetProjection(mtx, GX_ORTHOGRAPHIC);
+        GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
+        GXClearVtxDesc();
+        GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+        GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S8, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S8, 0);
+        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+        GXPosition3s8(0, 0, -5);
+        GXTexCoord2s8(0, 0);
+        GXPosition3s8(1, 0, -5);
+        GXTexCoord2s8(1, 0);
+        GXPosition3s8(1, 1, -5);
+        GXTexCoord2s8(1, 1);
+        GXPosition3s8(0, 1, -5);
+        GXTexCoord2s8(0, 1);
+        GXEnd();
+        GXSetProjection(view->mProjMtx, GX_PERSPECTIVE);
+    }
 }
 
 /* 80009BBC-80009BE0       .text mCaptureAlarmHandler__FP7OSAlarmP9OSContext */
 void mCaptureAlarmHandler(OSAlarm*, OSContext*) {
-    /* Nonmatching */
+    OSWakeupThread(&mCaptureThreadQueue);
 }
 
 /* 80009BE0-80009BE8       .text mDoGph_setCaptureStep__Fs */
-void mDoGph_setCaptureStep(short) {
-    /* Nonmatching */
+void mDoGph_setCaptureStep(s16 step) {
+    mCaptureStep = step;
 }
 
 /* 80009BE8-80009BF0       .text mDoGph_getCaptureStep__Fv */
-void mDoGph_getCaptureStep() {
-    /* Nonmatching */
+s16 mDoGph_getCaptureStep() {
+    return mCaptureStep;
 }
 
 /* 80009BF0-80009BF8       .text mDoGph_getCaptureTextureBuffer__Fv */
-void mDoGph_getCaptureTextureBuffer() {
-    /* Nonmatching */
+void* mDoGph_getCaptureTextureBuffer() {
+    return mCaptureTextureBuffer;
 }
 
 /* 80009BF8-80009C00       .text mDoGph_setCaptureTextureFormat__FUc */
-void mDoGph_setCaptureTextureFormat(unsigned char) {
-    /* Nonmatching */
+void mDoGph_setCaptureTextureFormat(u8 fmt) {
+    mCaptureTextureFormat = fmt;
 }
 
 /* 80009C00-80009C08       .text mDoGph_setCaptureCaptureFormat__FUc */
-void mDoGph_setCaptureCaptureFormat(unsigned char) {
-    /* Nonmatching */
+void mDoGph_setCaptureCaptureFormat(u8 fmt) {
+    mCaptureCaptureFormat = fmt;
 }
 
 /* 80009C08-80009C38       .text mDoGph_CaptureCansel__Fv */
 void mDoGph_CaptureCansel() {
-    /* Nonmatching */
+    if (mCaptureStep < 0) {
+        mCaptureStep = 0;
+        mCaptureCansel = false;
+    } else if (mCaptureStep != 0) {
+        mCaptureCansel = true;
+    }
 }
 
 /* 80009C38-8000A180       .text blockenc__FPUc */
-void blockenc(unsigned char*) {
+void blockenc(u8*) {
     /* Nonmatching */
 }
 
 /* 8000A180-8000A530       .text encode_s3tc__FPUcPUcii9_GXTexFmt */
-void encode_s3tc(unsigned char*, unsigned char*, int, int, _GXTexFmt) {
+void encode_s3tc(u8*, u8*, int, int, GXTexFmt) {
     /* Nonmatching */
+    OSReport("16 <= i8low && i8high <= 235");
 }
 
 /* 8000A530-8000A744       .text setUpRectangle__Fv */
-void setUpRectangle() {
-    /* Nonmatching */
+void setUpRectangle() { 
+    GXSetNumChans(0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetNumTevStages(1);
+    GXSetTevColor(GX_TEVREG0, mCaptureMonoColor0);
+    GXSetTevColor(GX_TEVREG1, mCaptureMonoColor1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_C1, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_KONST);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetZCompLoc(GX_TRUE);
+    GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_COPY);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, g_clearColor);
+    GXSetClipMode(GX_CLIP_DISABLE);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetDither(GX_TRUE);
+    GXSetNumIndStages(0);
+    GXSetTevDirect(GX_TEVSTAGE0);
+    Mtx44 mtx;
+    C_MTXOrtho(mtx, -21.0f, 503.0f, -9.0f, 650.0f, 0.0f, 10.0f);
+    GXSetProjection(mtx, GX_ORTHOGRAPHIC);
+    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S8, 0);
 }
 
 /* 8000A744-8000A7F0       .text drawRectangle__Fiiii */
-void drawRectangle(int, int, int, int) {
-    /* Nonmatching */
+void drawRectangle(int x0, int y0, int x1, int y1) {
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3s16(x0, y0, -5);
+    GXTexCoord2s8(0, 0);
+    GXPosition3s16(x1, y0, -5);
+    GXTexCoord2s8(1, 0);
+    GXPosition3s16(x1, y1, -5);
+    GXTexCoord2s8(1, 1);
+    GXPosition3s16(x0, y1, -5);
+    GXTexCoord2s8(0, 1);
+    GXEnd();
 }
 
 /* 8000A7F0-8000A8B8       .text mDoGph_allocFromAny__FUli */
-void mDoGph_allocFromAny(unsigned long, int) {
-    /* Nonmatching */
+void* mDoGph_allocFromAny(u32 size, int align) {
+    void* mem = JKRAllocFromHeap(mDoExt_getZeldaHeap(), size, align);
+    if (mem == NULL)
+        mem = JKRAllocFromHeap(mDoExt_getGameHeap(), size, align);
+    if (mem == NULL)
+        mem = JKRAllocFromHeap(mDoExt_getArchiveHeap(), size, align);
+    if (mem == NULL)
+        mem = JKRAllocFromSysHeap(size, align);
+    if (mem == NULL)
+        mem = mDoGph_gInf_c::getZbufferTex();
+    memset(mem, 0, size);
+    return mem;
 }
 
 /* 8000A8B8-8000AAC4       .text mDoGph_screenCaptureDraw__Fv */
 void mDoGph_screenCaptureDraw() {
-    /* Nonmatching */
+    s32 sizeW = mCaptureSizeWidth;
+    s32 sizeH = mCaptureSizeHeight;
+    s32 centerX = mCaptureCenterX;
+    s32 centerY = mCaptureCenterY;
+
+    f32 projv[7];
+    f32 viewv[4];
+    u32 left, top, width, height;
+    GXTexObj texObj;
+
+    GXGetProjectionv(projv);
+    GXGetViewportv(viewv);
+    GXGetScissor(&left, &top, &width, &height);
+    GXSetViewport(0.0f, 0.0f, 640.0f, 480.0f, 0.0f, 1.0f);
+    setUpRectangle();
+
+    if (mCaptureCaptureBuffer != NULL) {
+        GXInitTexObj(&texObj, mCaptureCaptureBuffer, sizeW, sizeH, (GXTexFmt)mCaptureCaptureFormat, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    } else if (mCaptureTextureBuffer != NULL) {
+        GXInitTexObj(&texObj, mCaptureTextureBuffer, sizeW, sizeH, (GXTexFmt)mCaptureTextureFormat, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    } else {
+        goto out;
+    }
+
+    GXLoadTexObj(&texObj, GX_TEXMAP0);
+
+    if (mCaptureDraw == 1) {
+        drawRectangle(centerX - sizeW, centerY - sizeH, centerX + sizeW, centerY + sizeH);
+    } else if (mCaptureDraw == 2) {
+        drawRectangle(centerX - (sizeW >> 1), centerY - (sizeH >> 1), centerX + (sizeW >> 1), centerY + (sizeH >> 1));
+    } else if (mCaptureDraw == 3) {
+        drawRectangle(centerX + sizeW * -2, centerY + sizeH * -2, centerX + sizeW * 2, centerY + sizeH * 2);
+    } else if (mCaptureDraw == 4) {
+        drawRectangle(centerX - sizeW, centerY - sizeH, centerX, centerY);
+        drawRectangle(centerX, centerY - sizeH, centerX + sizeW, centerY);
+        drawRectangle(centerX - sizeW, centerY, centerX, centerY + sizeH);
+        drawRectangle(centerX, centerY, centerX + sizeW, centerY + sizeH);
+    }             
+
+out:
+    GXSetProjectionv(projv);
+    GXSetViewport(viewv[0], viewv[1], viewv[2], viewv[3], viewv[4], viewv[5]);
+    GXSetScissor(left, top, width, height);
+    GXSetClipMode(GX_CLIP_ENABLE);
 }
 
 /* 8000AAC4-8000AB1C       .text mCaptureProc__FPv */
-void mCaptureProc(void*) {
-    /* Nonmatching */
+void* mCaptureProc(void* thd) {
+    encode_s3tc(mCaptureCaptureBuffer, mCaptureTextureBuffer, mCaptureSizeWidth, mCaptureSizeHeight, (GXTexFmt)mCaptureCaptureFormat);
+    DCStoreRange(mCaptureTextureBuffer, mCaptureTextureSize);
+    OSExitThread(thd);
+    return thd;
 }
 
 /* 8000AB1C-8000ABC4       .text mCaptureGXDrawSyncCallback__FUs */
-void mCaptureGXDrawSyncCallback(unsigned short) {
-    /* Nonmatching */
+void mCaptureGXDrawSyncCallback(u16) {
+    OSCancelAlarm(&mCaptureTimeOutAlarm);
+    BOOL interrupt = OSDisableInterrupts();
+    if (mCaptureStep == 2) {
+        void * oldcb = GXSetDrawSyncCallback(mCaptureOldCB);
+        JUT_ASSERT(0xa5f, oldcb == mCaptureGXDrawSyncCallback);
+        mCaptureOldCB = NULL;
+        mCaptureStep++;
+    }
+    OSRestoreInterrupts(interrupt);
 }
 
 /* 8000ABC4-8000AC3C       .text mCaptureGXDrawSyncTimeOut__FP7OSAlarmP9OSContext */
 void mCaptureGXDrawSyncTimeOut(OSAlarm*, OSContext*) {
-    /* Nonmatching */
+    OSReport_Error("キャプチャタイムアウト\n");
+    mCaptureGXDrawSyncCallback(0);
+    if (mCaptureCaptureBuffer != NULL) {
+        JKRFreeToHeap(NULL, mCaptureCaptureBuffer);
+        mCaptureCaptureBuffer = NULL;
+    }
+    if (mCaptureTextureBuffer != NULL) {
+        JKRFreeToHeap(NULL, mCaptureTextureBuffer);
+        mCaptureTextureBuffer = NULL;
+    }
+    mCaptureStep = -1;
 }
 
 /* 8000AC3C-8000AEA4       .text mDoGph_screenCapture__Fv */
@@ -208,7 +703,13 @@ void mDoGph_screenCapture() {
 
 /* 8000AEA4-8000AF2C       .text setLight__Fv */
 void setLight() {
-    /* Nonmatching */
+    GXLightObj lightObj;
+    GXInitLightPos(&lightObj, -35000.0f, 0.0f,-30000.0f);
+    GXInitLightDir(&lightObj, 0.0f, 0.0f, 0.0f);
+    GXInitLightColor(&lightObj, g_whiteColor);
+    GXInitLightDistAttn(&lightObj, 0.0f, 0.0f, GX_DA_GENTLE);
+    GXInitLightSpot(&lightObj, 0.0f, GX_SP_FLAT);
+    GXLoadLightObjImm(&lightObj, GX_LIGHT0);
 }
 
 /* 8000AF2C-8000BC38       .text mDoGph_Painter__Fv */
@@ -216,12 +717,13 @@ void mDoGph_Painter() {
     /* Nonmatching */
 }
 
-/* 8000BC38-8000BC94       .text __dt__13J2DOrthoGraphFv */
-J2DOrthoGraph::~J2DOrthoGraph() {
-    /* Nonmatching */
-}
-
 /* 8000BC94-8000BD08       .text mDoGph_Create__Fv */
-void mDoGph_Create() {
-    /* Nonmatching */
+bool mDoGph_Create() {
+    JKRSolidHeap * solidHeap = mDoExt_createSolidHeapToCurrent(0, NULL, 0);
+    mDoGph_gInf_c::create();
+    dComIfGd_init();
+    mDoExt_adjustSolidHeap(solidHeap);
+    mDoExt_restoreCurrentHeap();
+    JFWAutoAbortGfx = mDoMain::developmentMode ? 0x02 : 0x01;
+    return true;
 }

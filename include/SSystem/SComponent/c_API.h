@@ -3,7 +3,7 @@
 
 #include "dolphin/types.h"
 
-typedef void (*cAPIGph_Mthd)(void);
+typedef bool (*cAPIGph_Mthd)(void);
 
 struct cAPIGph__Iface
 {

@@ -16,7 +16,7 @@ public:
     /* 0x04 */ u8 mChildID;
     /* 0x05 */ u8 field_0x05;
     /* 0x06 */ u8 mDisplayMeter;
-    /* 0x07 */ u8 field_0x07;
+    /* 0x07 */ u8 mDisplayFlag;
     /* 0x08 */ u8 field_0x08;
     /* 0x09 */ u8 field_0x09;
     /* 0x0A */ u8 field_0x0a;
@@ -41,8 +41,8 @@ public:
     /* 0x20 */ JUtility::TColor field_0x20;
     /* 0x24 */ f32 mTriggerThreshLo;
     /* 0x28 */ f32 mTriggerThreshHi;
-    /* 0x2C */ u16 field_0x2c;
-    /* 0x2E */ u16 field_0x2e;
+    /* 0x2C */ s16 mFbWidth;
+    /* 0x2E */ s16 mEfbHeight;
     /* 0x30 */ u8 field_0x30;
     /* 0x31 */ u8 field_0x31;
     /* 0x32 */ u8 field_0x32;
@@ -68,5 +68,11 @@ public:
 };  // Size: 0x58
 
 extern fapGm_HIO_c g_HIO;
+
+inline bool fapGmHIO_isPrint() { return !!(g_HIO.mDisplayFlag & 0x01); }
+inline bool fapGmHIO_isMenu() { return !!(g_HIO.mDisplayFlag & 0x02); }
+inline bool fapGmHIO_getMeter() { return g_HIO.mDisplayMeter; }
+inline s16 fapGmHIO_getFbWidth() { return g_HIO.mFbWidth; }
+inline s16 fapGmHIO_getEfbHeight() { return g_HIO.mEfbHeight; }
 
 #endif /* F_AP_GAME_H */

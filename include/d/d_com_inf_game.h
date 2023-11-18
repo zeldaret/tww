@@ -656,7 +656,7 @@ public:
     /* 0x1BF50 */ u8 field_0x1BF50[0x1BFC0 - 0x1BF50];
     /* 0x1BFC0 */ dRes_control_c mResControl;
     /* 0x1D1C0 */ u8 field_0x1d1c0;
-    /* 0x1D1C1 */ u8 field_0x1d1c1;
+    /* 0x1D1C1 */ u8 mBrightness;
 };
 
 #if VERSION != VERSION_JPN
@@ -2273,6 +2273,7 @@ inline void dComIfGd_set2DOpa(dDlst_base_c* pBase) { g_dComIfG_gameInfo.drawlist
 inline void dComIfGd_set2DXlu(dDlst_base_c* pBase) { g_dComIfG_gameInfo.drawlist.set2DXlu(pBase); }
 
 inline void dComIfGd_peekZ(s16 x, s16 y, u32 * data) { g_dComIfG_gameInfo.drawlist.newPeekZdata(x, y, data); }
+inline void dComIfGd_peekZdata() { g_dComIfG_gameInfo.drawlist.peekZdata(); }
 
 inline void dComIfGd_setWindow(dDlst_window_c* pWindow) { g_dComIfG_gameInfo.drawlist.setWindow(pWindow); }
 inline void dComIfGd_setViewPort(view_port_class* pViewPort) { g_dComIfG_gameInfo.drawlist.setViewPort(pViewPort); }
@@ -2280,11 +2281,12 @@ inline view_port_class* dComIfGd_getViewport() { return g_dComIfG_gameInfo.drawl
 inline void dComIfGd_setView(view_class* pView) { g_dComIfG_gameInfo.drawlist.setView(pView); }
 inline view_class* dComIfGd_getView() { return g_dComIfG_gameInfo.drawlist.getView(); }
 inline MtxP dComIfGd_getViewRotMtx() { return dComIfGd_getView()->mViewMtxNoTrans; }
+inline void dComIfGd_init() { g_dComIfG_gameInfo.drawlist.init(); }
+inline void dComIfGd_reset() { g_dComIfG_gameInfo.drawlist.reset(); }
 
 /**
  * === ARCHIVE ===
  */
-
 
 inline void dComIfGp_setAnmArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setAnmArchive(pArc); }
 inline void dComIfGp_setMsgArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMsgArchive(pArc); }
@@ -2548,6 +2550,10 @@ inline void dComIfGp_particle_removeRoomScene() {
     g_dComIfG_gameInfo.play.getParticle()->removeRoomScene();
 }
 
+inline void dComIfGp_particle_swapFrameBufferTexture() {
+    g_dComIfG_gameInfo.play.getParticle()->swapFrameBufferTexture();
+}
+
 /**
  * === ATTENTION ===
  */
@@ -2575,6 +2581,10 @@ inline dTimer_c* dComIfG_getTimerPtr() {
 
 inline void dComIfG_TimerDeleteRequest() {
     dComIfG_getTimerPtr()->deleteRequest();
+}
+
+inline u8 dComIfG_getBrightness() {
+    return g_dComIfG_gameInfo.mBrightness;
 }
 
 int dComIfG_changeOpeningScene(scene_class* i_scene, s16 i_procName);
