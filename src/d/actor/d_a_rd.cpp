@@ -805,13 +805,11 @@ void daRd_c::modeWait() {
                 setAnm(0x1, false);
             }
         }
-    } else {
-        if (!dLib_checkActorInCircle(m300, this, mAreaRadius, 1000.0f) ||
-            !dLib_checkActorInCircle(m300, player, mAreaRadius, 100.0f)
-        ) {
-            modeProcInit(MODE_RETURN);
-            return;
-        }
+    } else if (!dLib_checkActorInCircle(m300, this, mAreaRadius, 1000.0f) ||
+               !dLib_checkActorInCircle(m300, player, mAreaRadius, 100.0f)
+    ) {
+        modeProcInit(MODE_RETURN);
+        return;
     }
     if (!isLinkControl() && checkPlayerInAttack() && isAnm(1)) {
         modeProcInit(MODE_ATTACK);
@@ -1161,7 +1159,43 @@ void daRd_c::modeReturnInit() {
 
 /* 00002F34-00003208       .text modeReturn__6daRd_cFv */
 void daRd_c::modeReturn() {
-    /* Nonmatching */
+    if (checkTgHit()) {
+        return;
+    }
+    
+    setAnm(6, false);
+    
+    if (dLib_checkActorInCircle(m300, this, 100.0f, 1000.0f)) {
+        speedF = 0.0f;
+        cLib_addCalcAngleS2(&shape_angle.y, m30C, 0xA, 0x200);
+        if (cLib_distanceAngleS(shape_angle.y, m30C) <= 0x200) {
+            shape_angle.y = m30C;
+            modeProcInit(MODE_WAIT);
+            return;
+        }
+    } else {
+        cLib_addCalc2(&speedF, l_HIO.m6C, 0.1f, 0.1f + g_regHIO.mChild[12].mFloatRegs[0]);
+    }
+    
+    if (dComIfGp_evmng_startCheck("DEFAULT_RD_ATTACK")) {
+        return;
+    }
+    
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
+    BOOL isOto = fopAcM_otoCheck(this, mAreaRadius);
+    if (!isLinkControl()) {
+        if (dLib_checkActorInCircle(m300, this, mAreaRadius, 1000.0f)) {
+            if (dLib_checkActorInCircle(m300, player, mAreaRadius, 100.0f)) {
+                if ((dLib_checkActorInCircle(m300, player, mAreaRadius, 100.0f) && player->speedF > 10.0f + g_regHIO.mChild[12].mFloatRegs[4]) ||
+                    isOto ||
+                    dLib_checkActorInFan(current.pos, player, shape_angle.y, l_HIO.m40, l_HIO.m34, 100.0f)
+                ) {
+                    modeProcInit(MODE_MOVE);
+                    return;
+                }
+            }
+        }
+    }
 }
 
 /* 00003208-0000320C       .text modeSilentPrayInit__6daRd_cFv */
@@ -1170,7 +1204,40 @@ void daRd_c::modeSilentPrayInit() {
 
 /* 0000320C-00003400       .text modeSilentPray__6daRd_cFv */
 void daRd_c::modeSilentPray() {
-    /* Nonmatching */
+    if (checkTgHit()) {
+        return;
+    }
+    
+    setAnm(6, false);
+    
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
+    fopAc_ac_c* dyingReDead;
+    if (fopAcM_SearchByID(m6D0, &dyingReDead)) {
+        mCC4 = dyingReDead->current.pos;
+        if (dLib_checkActorInCircle(mCC4, this, 200.0f, 1000.0f)) {
+            setAnm(1, false);
+            speedF = 0.0f;
+        } else {
+            cLib_addCalc2(&speedF, l_HIO.m6C, 0.1f, 0.1f + g_regHIO.mChild[12].mFloatRegs[0]);
+        }
+    } else if (!isLinkControl()) {
+        if (dLib_checkActorInCircle(m300, player, mAreaRadius, 100.0f)) {
+            modeProcInit(MODE_MOVE);
+        } else {
+            modeProcInit(MODE_WAIT);
+        }
+    } else {
+        modeProcInit(MODE_RETURN);
+    }
+    
+    if (!isLinkControl()) {
+        if (checkPlayerInCry()) {
+            modeProcInit(MODE_CRY);
+        }
+        if (checkPlayerInAttack()) {
+            modeProcInit(MODE_ATTACK);
+        }
+    }
 }
 
 /* 00003400-00003428       .text modeSwWaitInit__6daRd_cFv */
@@ -1357,42 +1424,42 @@ void daRd_c::setBtkAnm(s8 idx) {
     m6DC = m6DB;
 }
 
-const int a_anm_bcks_tbl[] = {
-    RD_BCK_TACHIP,
-    RD_BCK_SUWARIP,
-    RD_BCK_WALK2ATACK,
-    RD_BCK_ATACK,
-    RD_BCK_ATACK2WALK,
-    RD_BCK_WALK,
-    RD_BCK_DAMAGE,
-    RD_BCK_DEAD,
-    RD_BCK_TATSU,
-    RD_BCK_SUWARU,
-    RD_BCK_KANOKEP,
-    RD_BCK_BEAM_HIT,
-    RD_BCK_BEAM,
-    RD_BCK_BEAM_END,
-};
-const dLib_anm_prm_c a_anm_prm_tbl[] = {
-    {0x0, -1, 0, 8.0f, 1.0f, 2},
-    {0x0, -1, 0, 8.0f, 1.0f, 2},
-    {0x1, -1, 0, 8.0f, 1.0f, 2},
-    {0x2,  4, 0, 8.0f, 1.0f, 0},
-    {0x3, -1, 0, 8.0f, 1.0f, 2},
-    {0x4,  6, 0, 8.0f, 1.0f, 0},
-    {0x5, -1, 0, 8.0f, 1.0f, 2},
-    {0x6,  1, 0, 2.0f, 1.0f, 0},
-    {0x7, -1, 0, 2.0f, 1.0f, 0},
-    {0x8,  1, 0, 8.0f, 0.5f, 0},
-    {0x9,  2, 0, 8.0f, 0.5f, 0},
-    {0xA, -1, 0, 8.0f, 1.0f, 2},
-    {0xB, -1, 0, 2.0f, 1.0f, 0},
-    {0xC, -1, 0, 2.0f, 1.0f, 2},
-    {0xD, -1, 0, 2.0f, 1.0f, 0},
-};
-
 /* 00003B3C-00003C48       .text setAnm__6daRd_cFScb */
 void daRd_c::setAnm(s8 param_1, bool param_2) {
+    static const int a_anm_bcks_tbl[] = {
+        RD_BCK_TACHIP,
+        RD_BCK_SUWARIP,
+        RD_BCK_WALK2ATACK,
+        RD_BCK_ATACK,
+        RD_BCK_ATACK2WALK,
+        RD_BCK_WALK,
+        RD_BCK_DAMAGE,
+        RD_BCK_DEAD,
+        RD_BCK_TATSU,
+        RD_BCK_SUWARU,
+        RD_BCK_KANOKEP,
+        RD_BCK_BEAM_HIT,
+        RD_BCK_BEAM,
+        RD_BCK_BEAM_END,
+    };
+    static const dLib_anm_prm_c a_anm_prm_tbl[] = {
+        {0x0, -1, 0, 8.0f, 1.0f, 2},
+        {0x0, -1, 0, 8.0f, 1.0f, 2},
+        {0x1, -1, 0, 8.0f, 1.0f, 2},
+        {0x2,  4, 0, 8.0f, 1.0f, 0},
+        {0x3, -1, 0, 8.0f, 1.0f, 2},
+        {0x4,  6, 0, 8.0f, 1.0f, 0},
+        {0x5, -1, 0, 8.0f, 1.0f, 2},
+        {0x6,  1, 0, 2.0f, 1.0f, 0},
+        {0x7, -1, 0, 2.0f, 1.0f, 0},
+        {0x8,  1, 0, 8.0f, 0.5f, 0},
+        {0x9,  2, 0, 8.0f, 0.5f, 0},
+        {0xA, -1, 0, 8.0f, 1.0f, 2},
+        {0xB, -1, 0, 2.0f, 1.0f, 0},
+        {0xC, -1, 0, 2.0f, 1.0f, 2},
+        {0xD, -1, 0, 2.0f, 1.0f, 0},
+    };
+    
     if (param_1 != 0xF) {
         m6D9 = param_1;
     }
@@ -1433,9 +1500,9 @@ bool daRd_c::_execute() {
     if (mMode != MODE_SILENT_PRAY && mMode != MODE_DEATH && mMode != MODE_DAMAGE &&
         mMode != MODE_ATTACK && mMode != MODE_CRY && mMode != MODE_CRY_WAIT)
     {
-        daRd_c* redead = (daRd_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)&searchNeadDeadRd_CB, this);
-        if (redead != NULL) {
-            m6D0 = fopAcM_GetID(redead);
+        daRd_c* dyingReDead = (daRd_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)&searchNeadDeadRd_CB, this);
+        if (dyingReDead != NULL) {
+            m6D0 = fopAcM_GetID(dyingReDead);
             modeProcInit(MODE_SILENT_PRAY);
         }
     }
@@ -1525,6 +1592,7 @@ void daRd_c::debugDraw() {
     temp.y += 10.0f;
     cXyz pos = current.pos;
     pos.y += 10.0f;
+    (GXColor){0x00, 0xFF, 0x00, 0x80}; // Unused color, needed for the .rodata section to match.
     dLib_debugDrawFan(pos, mD18, l_HIO.m42, l_HIO.m38, (GXColor){0xFF, 0xFF, 0x00, 0x80});
     dLib_debugDrawFan(pos, shape_angle.y, l_HIO.m44, l_HIO.m3C, (GXColor){0xFF, 0x00, 0x00, 0x80});
     dLib_debugDrawFan(pos, shape_angle.y, l_HIO.m40, l_HIO.m34, (GXColor){0xFF, 0x00, 0xFF, 0x80});
