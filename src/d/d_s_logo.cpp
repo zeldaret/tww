@@ -49,6 +49,50 @@ public:
     /* 0x1FC */ u32 field_0x1fc;
 };
 
+#if VERSION == VERSION_PAL
+enum LOGO_RES_FILE_ID { // IDs and indexes are synced
+    /* DAT */
+    LOGO_BTI_NINTENDO_376X104=0x3,
+    LOGO_BTI_PROGRESSIVE_CHOICE=0x4,
+    LOGO_BTI_PROGRESSIVE_CHOICE_FR=0x5,
+    LOGO_BTI_PROGRESSIVE_CHOICE_GM=0x6,
+    LOGO_BTI_PROGRESSIVE_CHOICE_IT=0x7,
+    LOGO_BTI_PROGRESSIVE_CHOICE_SP=0x8,
+    LOGO_BTI_PROGRESSIVE_INTER=0x9,
+    LOGO_BTI_PROGRESSIVE_INTER_FR=0xA,
+    LOGO_BTI_PROGRESSIVE_INTER_GM=0xB,
+    LOGO_BTI_PROGRESSIVE_INTER_IT=0xC,
+    LOGO_BTI_PROGRESSIVE_INTER_SP=0xD,
+    LOGO_BTI_PROGRESSIVE_NO=0xE,
+    LOGO_BTI_PROGRESSIVE_NO_FR=0xF,
+    LOGO_BTI_PROGRESSIVE_NO_GM=0x10,
+    LOGO_BTI_PROGRESSIVE_NO_IT=0x11,
+    LOGO_BTI_PROGRESSIVE_NO_SP=0x12,
+    LOGO_BTI_PROGRESSIVE_PRO=0x13,
+    LOGO_BTI_PROGRESSIVE_PRO_FR=0x14,
+    LOGO_BTI_PROGRESSIVE_PRO_GM=0x15,
+    LOGO_BTI_PROGRESSIVE_PRO_IT=0x16,
+    LOGO_BTI_PROGRESSIVE_PRO_SP=0x17,
+    LOGO_BTI_PROGRESSIVE_YES=0x18,
+    LOGO_BTI_PROGRESSIVE_YES_FR=0x19,
+    LOGO_BTI_PROGRESSIVE_YES_GM=0x1A,
+    LOGO_BTI_PROGRESSIVE_YES_IT=0x1B,
+    LOGO_BTI_PROGRESSIVE_YES_SP=0x1C,
+    LOGO_BTI_TITLE_DOLBY_MARK=0x1D,
+};
+#else
+enum LOGO_RES_FILE_ID { // IDs and indexes are synced
+    /* DAT */
+    LOGO_BTI_NINTENDO_376X104=0x3,
+    LOGO_BTI_PROGRESSIVE_CHOICE=0x4,
+    LOGO_BTI_PROGRESSIVE_INTER=0x5,
+    LOGO_BTI_PROGRESSIVE_NO=0x6,
+    LOGO_BTI_PROGRESSIVE_PRO=0x7,
+    LOGO_BTI_PROGRESSIVE_YES=0x8,
+    LOGO_BTI_TITLE_DOLBY_MARK=0x9,
+};
+#endif
+
 mDoDvdThd_mountXArchive_c * l_anmCommand;
 mDoDvdThd_mountXArchive_c * l_fmapCommand;
 mDoDvdThd_mountXArchive_c * l_itemResCommand;
@@ -711,7 +755,7 @@ s32 phase_2(dScnLogo_c* i_this) {
 
     ResTIMG * timg;
     
-    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", 3);
+    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_NINTENDO_376X104);
     JUT_ASSERT(VERSION_SELECT(1264, 1482, 1522), timg != 0);
     i_this->nintendoImg = new dDlst_2D_c(timg, 133, 170, 0);
     JUT_ASSERT(VERSION_SELECT(1267, 1485, 1525), i_this->nintendoImg != 0);
@@ -724,11 +768,7 @@ s32 phase_2(dScnLogo_c* i_this) {
     i_this->nintendoImg->getPicture()->setWhite((GXColor){0xDC, 0x00, 0x00, 0xFF});
 #endif
 
-#if VERSION == VERSION_PAL
-    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", 29);
-#else
-    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", 9);
-#endif
+    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_TITLE_DOLBY_MARK);
     JUT_ASSERT(VERSION_SELECT(1276, 1498, 1538), timg != 0);
     i_this->dolbyImg = new dDlst_2D_c(timg, 218, 166, 0);
     JUT_ASSERT(VERSION_SELECT(1280, 1502, 1542), i_this->dolbyImg != 0);
@@ -736,26 +776,46 @@ s32 phase_2(dScnLogo_c* i_this) {
 
 #if VERSION == VERSION_PAL
     static const u8 choice[] = {
-        0x04, 0x06, 0x05, 0x08, 0x07,
+        LOGO_BTI_PROGRESSIVE_CHOICE,
+        LOGO_BTI_PROGRESSIVE_CHOICE_GM,
+        LOGO_BTI_PROGRESSIVE_CHOICE_FR,
+        LOGO_BTI_PROGRESSIVE_CHOICE_SP,
+        LOGO_BTI_PROGRESSIVE_CHOICE_IT,
     };
     static const u8 yes[] = {
-        0x18, 0x1A, 0x19, 0x1C, 0x1B,
+        LOGO_BTI_PROGRESSIVE_YES,
+        LOGO_BTI_PROGRESSIVE_YES_GM,
+        LOGO_BTI_PROGRESSIVE_YES_FR,
+        LOGO_BTI_PROGRESSIVE_YES_SP,
+        LOGO_BTI_PROGRESSIVE_YES_IT,
     };
     static const u8 no[] = {
-        0x0E, 0x10, 0x0F, 0x12, 0x11,
+        LOGO_BTI_PROGRESSIVE_NO,
+        LOGO_BTI_PROGRESSIVE_NO_GM,
+        LOGO_BTI_PROGRESSIVE_NO_FR,
+        LOGO_BTI_PROGRESSIVE_NO_SP,
+        LOGO_BTI_PROGRESSIVE_NO_IT,
     };
     static const u8 prog[] = {
-        0x13, 0x15, 0x14, 0x17, 0x16,
+        LOGO_BTI_PROGRESSIVE_PRO,
+        LOGO_BTI_PROGRESSIVE_PRO_GM,
+        LOGO_BTI_PROGRESSIVE_PRO_FR,
+        LOGO_BTI_PROGRESSIVE_PRO_SP,
+        LOGO_BTI_PROGRESSIVE_PRO_IT,
     };
     static const u8 intr[] = {
-        0x09, 0x0B, 0x0A, 0x0D, 0x0C,
+        LOGO_BTI_PROGRESSIVE_INTER,
+        LOGO_BTI_PROGRESSIVE_INTER_GM,
+        LOGO_BTI_PROGRESSIVE_INTER_FR,
+        LOGO_BTI_PROGRESSIVE_INTER_SP,
+        LOGO_BTI_PROGRESSIVE_INTER_IT,
     };
 #endif
 
 #if VERSION == VERSION_PAL
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", choice[g_dComIfG_gameInfo.play.mGameLanguage]);
 #else
-    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", 4);
+    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_CHOICE);
 #endif
     JUT_ASSERT(VERSION_SELECT(1286, 1565, 1605), timg != 0);
     i_this->progchoiceImg = new dDlst_2D_c(timg, 113, 281, 0);
@@ -765,7 +825,7 @@ s32 phase_2(dScnLogo_c* i_this) {
 #if VERSION == VERSION_PAL
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", yes[g_dComIfG_gameInfo.play.mGameLanguage]);
 #else
-    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", 8);
+    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_YES);
 #endif
     JUT_ASSERT(VERSION_SELECT(1295, 1579, 1619), timg != 0);
     i_this->progyesImg = new dDlst_2D_c(timg, 211, 372, 0);
@@ -776,7 +836,7 @@ s32 phase_2(dScnLogo_c* i_this) {
 #if VERSION == VERSION_PAL
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", no[g_dComIfG_gameInfo.play.mGameLanguage]);
 #else
-    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", 6);
+    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_NO);
 #endif
     JUT_ASSERT(VERSION_SELECT(1305, 1594, 1634), timg != 0);
     i_this->prognoImg = new dDlst_2D_c(timg, 350, 372, 0);
@@ -787,7 +847,7 @@ s32 phase_2(dScnLogo_c* i_this) {
 #if VERSION == VERSION_PAL
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", prog[g_dComIfG_gameInfo.play.mGameLanguage]);
 #else
-    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", 7);
+    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_PRO);
 #endif
     JUT_ASSERT(VERSION_SELECT(1315, 1609, 1649), timg != 0);
     i_this->progImg = new dDlst_2D_c(timg, 153, 309, 0);
@@ -797,7 +857,7 @@ s32 phase_2(dScnLogo_c* i_this) {
 #if VERSION == VERSION_PAL
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", intr[g_dComIfG_gameInfo.play.mGameLanguage]);
 #else
-    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", 5);
+    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_INTER);
 #endif
     JUT_ASSERT(VERSION_SELECT(1324, 1623, 1663), timg != 0);
     i_this->interImg = new dDlst_2D_c(timg, 153, 309, 0);
