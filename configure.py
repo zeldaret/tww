@@ -340,7 +340,7 @@ config.libs = [
             Object(NonMatching, "d/d_com_static.cpp"),
             Object(NonMatching, "d/d_lib.cpp"),
             Object(NonMatching, "d/d_save.cpp"),
-            Object(NonMatching, "d/d_save_init.cpp"),
+            Object(Matching,    "d/d_save_init.cpp"),
             Object(Matching,    "d/d_shop.cpp", extra_cflags=['-pragma "nosyminline on"']),
             Object(NonMatching, "d/d_jnt_hit.cpp"),
             Object(NonMatching, "d/d_chain.cpp"),
