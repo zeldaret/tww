@@ -44,7 +44,10 @@ public:
     /* 0x0000 */ u8 mData[0x1650];
     /* 0x1650 */ s32 mCardCommand;
     /* 0x1654 */ s32 mCardState;
-    /* 0x1658 */ s32 field_0x1658;
+    /* 0x1658 */ u8 field_0x1658;
+    /* 0x1659 */ u8 field_0x1659;
+    /* 0x165A */ u8 field_0x165A;
+    /* 0x165B */ u8 field_0x165B;
     /* 0x165C */ s32 field_0x165c;
     /* 0x1660 */ s32 field_0x1660;
     /* 0x1664 */ OSMutex mMutex;

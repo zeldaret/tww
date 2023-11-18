@@ -201,8 +201,6 @@ BOOL progInDraw(dScnLogo_c* i_this) {
 
 /* 8022C484-8022CAA8       .text progSelDraw__FP10dScnLogo_c */
 BOOL progSelDraw(dScnLogo_c* i_this) {
-    /* Nonmatching */
-
     dComIfGd_set2DOpa(i_this->nintendoImg);
     dComIfGd_set2DOpa(i_this->progchoiceImg);
     dComIfGd_set2DOpa(i_this->progyesImg);
@@ -218,7 +216,7 @@ BOOL progSelDraw(dScnLogo_c* i_this) {
                 i_this->field_0x1f2 = 0;
             }
         } else {
-            if (CPad_CHECK_HOLD_LEFT(0) || g_mDoCPd_cpadInfo[0].mMainStickPosX < 0.5f) {
+            if (CPad_CHECK_HOLD_LEFT(0) || g_mDoCPd_cpadInfo[0].mMainStickPosX < -0.5f) {
                 mDoAud_seStart(JA_SE_TALK_CURSOR, NULL, 0, 0);
                 i_this->mInterFlag = 0;
                 i_this->field_0x1ee = 30;
@@ -233,9 +231,10 @@ BOOL progSelDraw(dScnLogo_c* i_this) {
             else
                 mDoAud_seStart(JA_SE_TALK_SEL_CANCEL, NULL, 0, 0);
 
-            if (i_this->mTimer > 540) {
+            const int temp = VERSION_SELECT(240, 540, 540);
+            if (i_this->mTimer > temp) {
                 i_this->field_0x1eb = 1;
-                i_this->field_0x1f4 = i_this->mTimer - 540;
+                i_this->field_0x1f4 = i_this->mTimer - temp;
             } else {
                 i_this->mAction = ACT_progOutDraw;
                 i_this->mTimer = 30;
@@ -259,16 +258,19 @@ BOOL progSelDraw(dScnLogo_c* i_this) {
     f32 t = (f32)i_this->field_0x1f0 / (f32)i_this->field_0x1ee;
     if (i_this->field_0x1f2 != 0)
         t = 1.0f - t;
-    u8 selR = t * 0xC8;
-    u8 selG = t * 0xFF;
+    u8 selR = t * 0xFF;
+    u8 selG = t * 0xC8;
 
-    // this needs more work
     if (i_this->mInterFlag) {
-        i_this->progyesImg->getPicture()->setWhite(0xA0A0A0FF);
-        i_this->progyesImg->getPicture()->setBlack(JUtility::TColor(selR, selG, 0xFF, 0xFF));
+        i_this->progyesImg->getPicture()->setWhite((GXColor){0xA0, 0xA0, 0xA0, 0xFF});
+        i_this->progyesImg->getPicture()->setBlack((GXColor){0x00, 0x00, 0x00, 0x00});
+        i_this->prognoImg->getPicture()->setWhite((GXColor){0xFF, 0xC8, 0x00, 0xFF});
+        i_this->prognoImg->getPicture()->setBlack((GXColor){selR, selG, 0x00, 0x00});
     } else {
-        i_this->prognoImg->getPicture()->setWhite(0xA0A0A0FF);
-        i_this->progyesImg->getPicture()->setBlack(JUtility::TColor(selR, selG, 0xFF, 0xFF));
+        i_this->progyesImg->getPicture()->setWhite((GXColor){0xFF, 0xC8, 0x00, 0xFF});
+        i_this->progyesImg->getPicture()->setBlack((GXColor){selR, selG, 0x00, 0x00});
+        i_this->prognoImg->getPicture()->setWhite((GXColor){0xA0, 0xA0, 0xA0, 0xFF});
+        i_this->prognoImg->getPicture()->setBlack((GXColor){0x00, 0x00, 0x00, 0x00});
     }
 
     if (i_this->field_0x1f0 == 0) {
@@ -652,16 +654,21 @@ s32 phase_1(dScnLogo_c* i_this) {
         return cPhs_INIT_e;
 
 #if VERSION == VERSION_PAL
-    // some PAL junk here
     s32 rt = g_mDoMemCd_control.LoadSync2();
     if (rt == 0) {
         return cPhs_INIT_e;
     } else if (rt == 1) {
-        /* field_0x165b */
-        if (g_mDoMemCd_control.field_0x165c >= 5)
-            return cPhs_INIT_e;
-    } else if (rt == 2) {
-        OSGetLanguage();
+        if (g_mDoMemCd_control.field_0x165B >= 5) {
+            g_mDoMemCd_control.field_0x165B = 0;
+        }
+        g_dComIfG_gameInfo.play.mGameLanguage = g_mDoMemCd_control.field_0x165B;
+    } else {
+        u8 language = OSGetLanguage();
+        if (language >= 5) {
+            language = 0;
+        }
+        g_dComIfG_gameInfo.play.mGameLanguage = language;
+        g_mDoMemCd_control.field_0x165B = language;
     }
 #endif
 
@@ -692,7 +699,6 @@ mDoDvdThd_mountXArchive_c * onMemMount(const char* pArc) {
 
 /* 8022DCA8-8022E9B4       .text phase_2__FP10dScnLogo_c */
 s32 phase_2(dScnLogo_c* i_this) {
-    /* Nonmatching - color assignment. */
     s32 rt;
     
     rt = dComIfG_syncObjectRes("Logo");
@@ -710,7 +716,13 @@ s32 phase_2(dScnLogo_c* i_this) {
     i_this->nintendoImg = new dDlst_2D_c(timg, 133, 170, 0);
     JUT_ASSERT(VERSION_SELECT(1267, 1485, 1525), i_this->nintendoImg != 0);
     i_this->nintendoImg->setAlpha(0xFF);
-    i_this->nintendoImg->getPicture()->setWhite(JUtility::TColor(0xDC, 0x00, 0x00, 0xFF));
+#if VERSION == VERSION_JPN
+    // Blue Nintendo logo for JPN.
+    i_this->nintendoImg->getPicture()->setWhite((GXColor){0x00, 0x46, 0xFF, 0xFF});
+#else
+    // Red Nintendo logo for other regions.
+    i_this->nintendoImg->getPicture()->setWhite((GXColor){0xDC, 0x00, 0x00, 0xFF});
+#endif
 
 #if VERSION == VERSION_PAL
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", 29);
@@ -723,9 +735,24 @@ s32 phase_2(dScnLogo_c* i_this) {
     i_this->dolbyImg->setAlpha(0xFF);
 
 #if VERSION == VERSION_PAL
-    static u8 choice[] = {
-        1, 2, 3, 4,
+    static const u8 choice[] = {
+        0x04, 0x06, 0x05, 0x08, 0x07,
     };
+    static const u8 yes[] = {
+        0x18, 0x1A, 0x19, 0x1C, 0x1B,
+    };
+    static const u8 no[] = {
+        0x0E, 0x10, 0x0F, 0x12, 0x11,
+    };
+    static const u8 prog[] = {
+        0x13, 0x15, 0x14, 0x17, 0x16,
+    };
+    static const u8 intr[] = {
+        0x09, 0x0B, 0x0A, 0x0D, 0x0C,
+    };
+#endif
+
+#if VERSION == VERSION_PAL
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", choice[g_dComIfG_gameInfo.play.mGameLanguage]);
 #else
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", 4);
@@ -736,9 +763,6 @@ s32 phase_2(dScnLogo_c* i_this) {
     i_this->progchoiceImg->setAlpha(0x00);
 
 #if VERSION == VERSION_PAL
-    static u8 yes[] = {
-        1, 2, 3, 4,
-    };
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", yes[g_dComIfG_gameInfo.play.mGameLanguage]);
 #else
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", 8);
@@ -746,27 +770,21 @@ s32 phase_2(dScnLogo_c* i_this) {
     JUT_ASSERT(VERSION_SELECT(1295, 1579, 1619), timg != 0);
     i_this->progyesImg = new dDlst_2D_c(timg, 211, 372, 0);
     JUT_ASSERT(VERSION_SELECT(1297, 1581, 1621), i_this->progyesImg != 0);
-    i_this->progyesImg->getPicture()->setWhite(JUtility::TColor(0xFFC800FF));
+    i_this->progyesImg->getPicture()->setWhite((GXColor){0xFF, 0xC8, 0x00, 0xFF});
     i_this->progyesImg->setAlpha(0x00);
 
 #if VERSION == VERSION_PAL
-    static u8 no[] = {
-        1, 2, 3, 4,
-    };
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", no[g_dComIfG_gameInfo.play.mGameLanguage]);
 #else
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", 6);
 #endif
     JUT_ASSERT(VERSION_SELECT(1305, 1594, 1634), timg != 0);
     i_this->prognoImg = new dDlst_2D_c(timg, 350, 372, 0);
-    JUT_ASSERT(VERSION_SELECT(1307, 1611, 1611), i_this->prognoImg != 0);
-    i_this->prognoImg->getPicture()->setWhite(JUtility::TColor(0xA0A0A0FF));
+    JUT_ASSERT(VERSION_SELECT(1307, 1596, 1636), i_this->prognoImg != 0);
+    i_this->prognoImg->getPicture()->setWhite((GXColor){0xA0, 0xA0, 0xA0, 0xFF});
     i_this->prognoImg->setAlpha(0x00);
 
 #if VERSION == VERSION_PAL
-    static u8 prog[] = {
-        1, 2, 3, 4,
-    };
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", prog[g_dComIfG_gameInfo.play.mGameLanguage]);
 #else
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", 7);
@@ -777,9 +795,6 @@ s32 phase_2(dScnLogo_c* i_this) {
     i_this->progImg->setAlpha(0x00);
 
 #if VERSION == VERSION_PAL
-    static u8 intr[] = {
-        1, 2, 3, 4,
-    };
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", intr[g_dComIfG_gameInfo.play.mGameLanguage]);
 #else
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", 5);
@@ -817,7 +832,7 @@ s32 phase_2(dScnLogo_c* i_this) {
 
 #if VERSION == VERSION_PAL
     delete g_dComIfG_gameInfo.play.field_0x4820;
-    char buf[256];
+    char buf[40];
     sprintf(buf, "/res/Msg/data%d/acticon.arc", g_dComIfG_gameInfo.play.mGameLanguage);
     l_actioniconCommand = aramMount(buf);
 #else
@@ -897,7 +912,7 @@ scene_method_class l_dScnLogo_Method = {
     (process_method_func)dScnLogo_Draw,
 };
 
-scene_process_profile_definition g_profile_Logo_SCENE = {
+scene_process_profile_definition g_profile_LOGO_SCENE = {
     fpcLy_ROOT_e,
     1,
     fpcPi_CURRENT_e,
