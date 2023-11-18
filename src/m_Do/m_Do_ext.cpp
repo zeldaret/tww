@@ -1650,14 +1650,14 @@ J3DModel* mDoExt_J3DModel__create(J3DModelData* i_modelData, u32 i_modelFlag, u3
         }
         
         int ret = model->entryModelData(i_modelData, i_modelFlag, 1);
-        if (ret == kJ3DError_Success) {
+        if (ret == J3DErrType_Success) {
             if (i_modelFlag == 0x80000) {
                 if (i_differedDlistFlag & 0x2) {
                     i_differedDlistFlag |= 0x20;
                 }
                 
                 ret = model->newDifferedDisplayList(i_differedDlistFlag);
-                if (ret != kJ3DError_Success) {
+                if (ret != J3DErrType_Success) {
                     return NULL;
                 }
             }

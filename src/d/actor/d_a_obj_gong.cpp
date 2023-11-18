@@ -3,76 +3,194 @@
 // Translation Unit: d_a_obj_gong.cpp
 //
 
-#include "d_a_obj_gong.h"
-#include "dolphin/types.h"
+#include "f_op/f_op_actor_mng.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "d/d_a_obj.h"
+#include "d/d_bg_w.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_drawlist.h"
+#include "d/d_procname.h"
+#include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_mtx.h"
+
+namespace daObjGong {
+    namespace {
+        struct L_attr_entry {
+            /* 0x00 */ f32 spec;
+            /* 0x04 */ f32 offsetY;
+        };
+
+        static const L_attr_entry L_attr = {
+            0.75f, 125.0f,
+        };
+
+        inline const L_attr_entry & attr() { return L_attr; }
+    }
+
+    class Act_c : fopAc_ac_c {
+    public:
+        s32 _create();
+        bool _execute();
+        bool _draw();
+        bool _delete();
+        bool create_heap();
+        void init_mtx();
+        void set_mtx();
+        bool demo_move();
+        static BOOL solidHeapCB(fopAc_ac_c *i_this);
+        static const char M_arcname[6];
+
+    public:
+        /* 0x290 */ request_of_phase_process_class mPhs;
+        /* 0x298 */ mDoExt_McaMorf * mpMorf;
+    };
+}
+
+const char daObjGong::Act_c::M_arcname[6] = "Vdora";
 
 /* 00000078-0000009C       .text solidHeapCB__Q29daObjGong5Act_cFP10fopAc_ac_c */
-void daObjGong::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daObjGong::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((Act_c*)i_this)->create_heap();
 }
 
 /* 0000009C-0000028C       .text create_heap__Q29daObjGong5Act_cFv */
-void daObjGong::Act_c::create_heap() {
-    /* Nonmatching */
+bool daObjGong::Act_c::create_heap() {
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, 0x04));
+    J3DAnmTransformKey* bck = static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(M_arcname, 0x07));
+    JUT_ASSERT(0xbd, (modelData != 0) && (bck != 0));
+
+    mpMorf = new mDoExt_McaMorf(modelData, NULL, NULL, bck, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 0, NULL, 0, 0x11020203);
+    J3DModel * model = mpMorf != NULL ? mpMorf->getModel() : NULL;
+
+    bool ret = false;
+    if (model != NULL) {
+        J3DSkinDeform * deform = new J3DSkinDeform();
+        if (deform != NULL) {
+            s32 err = model->setSkinDeform(deform, 1);
+            JUT_ASSERT(0xd7, (err == J3DErrType_Success) || (err == J3DErrType_OutOfMemory));
+            if (err == J3DErrType_Success)
+                ret = true;
+        }
+    }
+
+    return model != NULL && ret;
 }
 
 /* 0000028C-00000374       .text _create__Q29daObjGong5Act_cFv */
-void daObjGong::Act_c::_create() {
-    /* Nonmatching */
+s32 daObjGong::Act_c::_create() {
+    fopAcM_SetupActor(this, Act_c);
+
+    s32 ret = dComIfG_resLoad(&mPhs, M_arcname);
+
+    if (ret == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, 0x0)) {
+            fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
+            init_mtx();
+            fopAcM_setCullSizeBox(this, -100.0f, -1.0f, -50.0f, 100.0f, 230.0f, 50.0f);
+            mEyePos.y += attr().offsetY;
+        } else {
+            ret = cPhs_ERROR_e;
+        }
+    }
+
+    return ret;
 }
 
 /* 00000374-000003A4       .text _delete__Q29daObjGong5Act_cFv */
-void daObjGong::Act_c::_delete() {
-    /* Nonmatching */
+bool daObjGong::Act_c::_delete() {
+    dComIfG_resDelete(&mPhs, M_arcname);
+    return true;
 }
 
 /* 000003A4-00000414       .text set_mtx__Q29daObjGong5Act_cFv */
 void daObjGong::Act_c::set_mtx() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000414-00000454       .text init_mtx__Q29daObjGong5Act_cFv */
 void daObjGong::Act_c::init_mtx() {
-    /* Nonmatching */
+    mpMorf->getModel()->setBaseScale(mScale);
+    set_mtx();
 }
 
 /* 00000454-000004A4       .text demo_move__Q29daObjGong5Act_cFv */
-void daObjGong::Act_c::demo_move() {
-    /* Nonmatching */
+bool daObjGong::Act_c::demo_move() {
+    return dDemo_setDemoData(this, 0x6A, mpMorf, "Vdora", 0, NULL, 0, 0);
 }
 
 /* 000004A4-000004F0       .text _execute__Q29daObjGong5Act_cFv */
-void daObjGong::Act_c::_execute() {
-    /* Nonmatching */
+bool daObjGong::Act_c::_execute() {
+    demo_move();
+    mpMorf->play(NULL, 0, 0);
+    set_mtx();
+    return true;
 }
 
 /* 000004F0-00000580       .text _draw__Q29daObjGong5Act_cFv */
-void daObjGong::Act_c::_draw() {
-    /* Nonmatching */
+bool daObjGong::Act_c::_draw() {
+    /* Nonmatching - just some tiny regalloc */
+    J3DModel* model = mpMorf->getModel();
+    J3DModelData* modelData = model->getModelData();
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, getPositionP(), &mTevStr);
+    g_env_light.setLightTevColorType(model, &mTevStr);
+    dDlst_texSpecmapST(&mEyePos, &mTevStr, modelData, attr().spec);
+    mpMorf->updateDL();
+    return true;
 }
 
-/* 00000580-000005A0       .text Mthd_Create__Q29daObjGong26@unnamed@d_a_obj_gong_cpp@FPv */
-void daObjGong::@unnamed@d_a_obj_gong_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
+namespace daObjGong {
+    namespace {
+        /* 00000580-000005A0       .text Mthd_Create__Q29daObjGong26@unnamed@d_a_obj_gong_cpp@FPv */
+        s32 Mthd_Create(void* i_this) {
+            return ((Act_c*)i_this)->_create();
+        }
+
+        /* 000005A0-000005C4       .text Mthd_Delete__Q29daObjGong26@unnamed@d_a_obj_gong_cpp@FPv */
+        BOOL Mthd_Delete(void* i_this) {
+            return ((Act_c*)i_this)->_delete();
+        }
+
+        /* 000005C4-000005E8       .text Mthd_Execute__Q29daObjGong26@unnamed@d_a_obj_gong_cpp@FPv */
+        BOOL Mthd_Execute(void* i_this) {
+            return ((Act_c*)i_this)->_execute();
+        }
+
+        /* 000005E8-0000060C       .text Mthd_Draw__Q29daObjGong26@unnamed@d_a_obj_gong_cpp@FPv */
+        BOOL Mthd_Draw(void* i_this) {
+            return ((Act_c*)i_this)->_draw();
+        }
+
+        /* 0000060C-00000614       .text Mthd_IsDelete__Q29daObjGong26@unnamed@d_a_obj_gong_cpp@FPv */
+        BOOL Mthd_IsDelete(void* i_this) {
+            return TRUE;
+        }
+
+        static actor_method_class Mthd_Table = {
+            (process_method_func)Mthd_Create,
+            (process_method_func)Mthd_Delete,
+            (process_method_func)Mthd_Execute,
+            (process_method_func)Mthd_IsDelete,
+            (process_method_func)Mthd_Draw,
+        };
+    }
 }
 
-/* 000005A0-000005C4       .text Mthd_Delete__Q29daObjGong26@unnamed@d_a_obj_gong_cpp@FPv */
-void daObjGong::@unnamed@d_a_obj_gong_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
-
-/* 000005C4-000005E8       .text Mthd_Execute__Q29daObjGong26@unnamed@d_a_obj_gong_cpp@FPv */
-void daObjGong::@unnamed@d_a_obj_gong_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
-
-/* 000005E8-0000060C       .text Mthd_Draw__Q29daObjGong26@unnamed@d_a_obj_gong_cpp@FPv */
-void daObjGong::@unnamed@d_a_obj_gong_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
-
-/* 0000060C-00000614       .text Mthd_IsDelete__Q29daObjGong26@unnamed@d_a_obj_gong_cpp@FPv */
-void daObjGong::@unnamed@d_a_obj_gong_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
-
+actor_process_profile_definition g_profile_Obj_Gong = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 3,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Gong,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daObjGong::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x004C,
+    /* Actor SubMtd */ &daObjGong::Mthd_Table,
+    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

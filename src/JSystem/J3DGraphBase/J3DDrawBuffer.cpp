@@ -32,12 +32,12 @@ void J3DDrawBuffer::initialize() {
 J3DError J3DDrawBuffer::allocBuffer(u32 bufSize) {
     mpBuf = new (0x20) J3DPacket*[bufSize];
     if (mpBuf == NULL)
-        return kJ3DError_Alloc;
+        return J3DErrType_OutOfMemory;
 
     mBufSize = bufSize;
     frameInit();
     calcZRatio();
-    return kJ3DError_Success;
+    return J3DErrType_Success;
 }
 
 /* 802EC84C-802EC8AC       .text __dt__13J3DDrawBufferFv */

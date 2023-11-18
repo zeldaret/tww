@@ -20,9 +20,9 @@ J3DError J3DDisplayListObj::newDisplayList(u32 capacity) {
     mSize = 0;
 
     if (mpData[0] == NULL || mpData[1] == NULL)
-        return kJ3DError_Alloc;
+        return J3DErrType_OutOfMemory;
 
-    return kJ3DError_Success;
+    return J3DErrType_Success;
 }
 
 /* 802DAE9C-802DAF00       .text newSingleDisplayList__17J3DDisplayListObjFUl */
@@ -33,9 +33,9 @@ J3DError J3DDisplayListObj::newSingleDisplayList(u32 capacity) {
     mSize = 0;
 
     if (mpData[0] == NULL)
-        return kJ3DError_Alloc;
+        return J3DErrType_OutOfMemory;
 
-    return kJ3DError_Success;
+    return J3DErrType_Success;
 }
 
 /* 802DAF00-802DAF78       .text single_To_Double__17J3DDisplayListObjFv */
@@ -44,13 +44,13 @@ J3DError J3DDisplayListObj::single_To_Double() {
         mpData[1] = new (0x20) char[mCapacity];
 
         if (mpData[1] == NULL)
-            return kJ3DError_Alloc;
+            return J3DErrType_OutOfMemory;
 
         memcpy(mpData[1], mpData[0], mCapacity);
         DCStoreRange(mpData[1], mCapacity);
     }
 
-    return kJ3DError_Success;
+    return J3DErrType_Success;
 }
 
 /* 802DAF78-802DAF98       .text setSingleDisplayList__17J3DDisplayListObjFPvUl */
@@ -153,13 +153,13 @@ J3DError J3DDrawPacket::newDisplayList(u32 size) {
     mpDisplayListObj = new J3DDisplayListObj();
 
     if (mpDisplayListObj == NULL)
-        return kJ3DError_Alloc;
+        return J3DErrType_OutOfMemory;
 
     J3DError ret = mpDisplayListObj->newDisplayList(size);
-    if (ret != kJ3DError_Success)
+    if (ret != J3DErrType_Success)
         return ret;
 
-    return kJ3DError_Success;
+    return J3DErrType_Success;
 }
 
 /* 802DB2BC-802DB348       .text newSingleDisplayList__13J3DDrawPacketFUl */
@@ -167,13 +167,13 @@ J3DError J3DDrawPacket::newSingleDisplayList(u32 size) {
     mpDisplayListObj = new J3DDisplayListObj();
 
     if (mpDisplayListObj == NULL)
-        return kJ3DError_Alloc;
+        return J3DErrType_OutOfMemory;
 
     J3DError ret = mpDisplayListObj->newSingleDisplayList(size);
-    if (ret != kJ3DError_Success)
+    if (ret != J3DErrType_Success)
         return ret;
 
-    return kJ3DError_Success;
+    return J3DErrType_Success;
 }
 
 /* 802DB348-802DB36C       .text draw__13J3DDrawPacketFv */
@@ -326,12 +326,12 @@ J3DError J3DShapePacket::newDifferedDisplayList(u32 flag) {
     u32 bufSize = calcDifferedBufferSize(flag);
     J3DError error = newDisplayList(bufSize);
 
-    if (error != kJ3DError_Success) {
+    if (error != J3DErrType_Success) {
         return error;
     }
 
     setDisplayListObj(getDisplayListObj());
-    return kJ3DError_Success;
+    return J3DErrType_Success;
 }
 
 /* 802DB818-802DB890       .text prepareDraw__14J3DShapePacketCFv */

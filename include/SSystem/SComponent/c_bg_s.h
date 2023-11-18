@@ -45,7 +45,7 @@ public:
         return GetTriPla(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex());
     }
     bool Regist(cBgW*, unsigned int, void*);
-    int Release(cBgW*);
+    bool Release(cBgW*);
     bool LineCross(cBgS_LinChk*);
     f32 GroundCross(cBgS_GndChk*);
     static void* ConvDzb(void*);

@@ -3,51 +3,165 @@
 // Translation Unit: d_a_obj_adnno.cpp
 //
 
-#include "d_a_obj_adnno.h"
-#include "dolphin/types.h"
+#include "f_op/f_op_actor_mng.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "d/d_bg_w.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_procname.h"
+#include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_mtx.h"
+
+class daObjAdnno_c : public fopAc_ac_c {
+public:
+    inline s32 _create();
+    inline bool _execute();
+    inline bool _draw();
+    inline bool _delete();
+    BOOL CreateHeap();
+    void CreateInit();
+    void set_mtx();
+
+public:
+    /* 0x290 */ request_of_phase_process_class mPhs;
+    /* 0x298 */ J3DModel * mpModel[16];
+};
+
+static const u32 daObjAdnno_bmt_table[16] = {
+    0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16,
+};
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daObjAdnno_c*)i_this)->CreateHeap();
 }
 
 /* 00000098-00000178       .text CreateHeap__12daObjAdnno_cFv */
-void daObjAdnno_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daObjAdnno_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Adnno", 0x04));
+    JUT_ASSERT(0x5c, modelData != 0);
+    for (s32 i = 0; i < 16; i++) {
+        mpModel[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x37441422);
+        if (!mpModel[i])
+            return FALSE;
+    }
+    return TRUE;
 }
 
 /* 00000178-000001E8       .text CreateInit__12daObjAdnno_cFv */
 void daObjAdnno_c::CreateInit() {
-    /* Nonmatching */
+    fopAcM_SetMtx(this, mpModel[0]->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -600.0f, -0.0f, -600.0f, 600.0f, 900.0f, 600.0f);
+    fopAcM_setCullSizeFar(this, 1.0f);
+    set_mtx();
 }
 
 /* 000001E8-00000330       .text set_mtx__12daObjAdnno_cFv */
 void daObjAdnno_c::set_mtx() {
-    /* Nonmatching */
+    for (s32 i = 0; i < 16; i++) {
+        J3DModel * model = mpModel[i];
+        model->setBaseScale(mScale);
+
+        mDoMtx_stack_c::transS(getPosition());
+        mDoMtx_stack_c::YrotM(current.angle.y);
+        /* Nonmatching - this translation code is wrong */
+        mDoMtx_stack_c::transM(40.0f + i * 60.0f, 60.0f - 40.0f * i, 0.0f);
+        mpModel[i]->setBaseTRMtx(mDoMtx_stack_c::get());
+    }
+}
+
+s32 daObjAdnno_c::_create() {
+    fopAcM_SetupActor(this, daObjAdnno_c);
+
+    s32 ret = dComIfG_resLoad(&mPhs, "Adnno");
+
+    if (ret == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)CheckCreateHeap, 0x9C00) == 0) {
+            ret = cPhs_ERROR_e;
+        } else {
+            CreateInit();
+        }
+    }
+
+    return ret;
+}
+
+bool daObjAdnno_c::_delete() {
+    dComIfG_resDelete(&mPhs, "Adnno");
+    return true;
+}
+
+bool daObjAdnno_c::_execute() {
+    set_mtx();
+    return true;
+}
+
+static const u16 daObjAdnno_event_bit_table[16] = {
+    0x3508, 0x3504, 0x3502, 0x3501,
+    0x3680, 0x3640, 0x3620, 0x3610,
+    0x3608, 0x3604, 0x3602, 0x3601,
+    0x3780, 0x3740, 0x3720, 0x3710,
+};
+
+bool daObjAdnno_c::_draw() {
+    dComIfGd_setListBG();
+    for (s32 i = 0; i < 16; i++) {
+        if (dComIfGs_isEventBit(daObjAdnno_event_bit_table[i])) {
+            J3DMaterialTable* pBmt = (J3DMaterialTable*)dComIfG_getObjectRes("Adnno", daObjAdnno_bmt_table[i]);
+            mpModel[i]->getModelData()->setMaterialTable(pBmt, J3DMatCopyFlag_All);
+            mDoExt_modelUpdateDL(mpModel[i]);
+        }
+    }
+    dComIfGd_setList();
+    return true;
 }
 
 /* 00000330-000003D4       .text daObjAdnno_Create__FPv */
-void daObjAdnno_Create(void*) {
-    /* Nonmatching */
+s32 daObjAdnno_Create(void* i_this) {
+    return ((daObjAdnno_c*)i_this)->_create();
 }
 
 /* 000003D4-00000404       .text daObjAdnno_Delete__FPv */
-void daObjAdnno_Delete(void*) {
-    /* Nonmatching */
+BOOL daObjAdnno_Delete(void* i_this) {
+    return ((daObjAdnno_c*)i_this)->_delete();
 }
 
 /* 00000404-000004F8       .text daObjAdnno_Draw__FPv */
-void daObjAdnno_Draw(void*) {
-    /* Nonmatching */
+BOOL daObjAdnno_Draw(void* i_this) {
+    return ((daObjAdnno_c*)i_this)->_draw();
 }
 
 /* 000004F8-0000051C       .text daObjAdnno_Execute__FPv */
-void daObjAdnno_Execute(void*) {
-    /* Nonmatching */
+BOOL daObjAdnno_Execute(void* i_this) {
+    return ((daObjAdnno_c*)i_this)->_execute();
 }
 
 /* 0000051C-00000524       .text daObjAdnno_IsDelete__FPv */
-void daObjAdnno_IsDelete(void*) {
-    /* Nonmatching */
+BOOL daObjAdnno_IsDelete(void* i_this) {
+    return TRUE;
 }
 
+static actor_method_class daObj_AdnnoMethodTable = {
+    (process_method_func)daObjAdnno_Create,
+    (process_method_func)daObjAdnno_Delete,
+    (process_method_func)daObjAdnno_Execute,
+    (process_method_func)daObjAdnno_IsDelete,
+    (process_method_func)daObjAdnno_Draw,
+};
+
+actor_process_profile_definition g_profile_Obj_Adnno = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 7,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Adnno,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daObjAdnno_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x007E,
+    /* Actor SubMtd */ &daObj_AdnnoMethodTable,
+    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

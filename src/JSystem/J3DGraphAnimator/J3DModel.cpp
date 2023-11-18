@@ -73,7 +73,7 @@ static inline u32 getMdlDataFlag_MtxLoadType(u32 flag) {
 
 /* 802ED6C4-802ED8D8       .text entryModelData__8J3DModelFP12J3DModelDataUlUl */
 s32 J3DModel::entryModelData(J3DModelData* pModelData, u32 modelFlag, u32 mtxBufferFlag) {
-    s32 ret = kJ3DError_Success;
+    s32 ret = J3DErrType_Success;
 
     mModelData = pModelData;
     mMtxBufferFlag = mtxBufferFlag;
@@ -90,16 +90,16 @@ s32 J3DModel::entryModelData(J3DModelData* pModelData, u32 modelFlag, u32 mtxBuf
     }
 
     if (mpScaleFlagArr == NULL)
-        return kJ3DError_Alloc;
+        return J3DErrType_OutOfMemory;
 
     if (pModelData->getWEvlpMtxNum() != 0 && mpEvlpScaleFlagArr == NULL)
-        return kJ3DError_Alloc;
+        return J3DErrType_OutOfMemory;
 
     if (mpNodeMtx == NULL)
-        return kJ3DError_Alloc;
+        return J3DErrType_OutOfMemory;
 
     if (pModelData->getWEvlpMtxNum() != 0 && mpWeightEnvMtx == NULL)
-        return kJ3DError_Alloc;
+        return J3DErrType_OutOfMemory;
 
     if (pModelData->checkFlag(J3DMdlDataFlag_NoAnimation)) {
         setNoUseDrawMtx();
@@ -118,28 +118,28 @@ s32 J3DModel::entryModelData(J3DModelData* pModelData, u32 modelFlag, u32 mtxBuf
         }
     }
 
-    if (ret != kJ3DError_Success)
+    if (ret != J3DErrType_Success)
         return ret;
 
     ret = createShapePacket(pModelData);
-    if (ret != kJ3DError_Success)
+    if (ret != J3DErrType_Success)
         return ret;
 
     ret = createMatPacket(pModelData, modelFlag);
-    if (ret != kJ3DError_Success)
+    if (ret != J3DErrType_Success)
         return ret;
 
     if (pModelData->checkFlag(J3DMdlDataFlag_ConcatView)) {
         mModelData->setBumpFlag(0);
     } else {
         ret = createBumpMtxArray(pModelData, mtxBufferFlag);
-        if (ret != kJ3DError_Success)
+        if (ret != J3DErrType_Success)
             return ret;
     }
 
     mVertexBuffer.setVertexData(&pModelData->getVertexData());
     prepareShapePackets();
-    ret = kJ3DError_Success;
+    ret = J3DErrType_Success;
 
     return ret;
 }
@@ -152,7 +152,7 @@ s32 J3DModel::setNoUseDrawMtx() {
     mpNrmMtxBuf[0] = &sNoUseNrmMtxPtr;
     mpBumpMtxArr[1] = NULL;
     mpBumpMtxArr[0] = NULL;
-    return kJ3DError_Success;
+    return J3DErrType_Success;
 }
 
 /* 802ED904-802EDA14       .text createSingleDrawMtx__8J3DModelFP12J3DModelData */
@@ -165,9 +165,9 @@ s32 J3DModel::createSingleDrawMtx(J3DModelData* pModelData) {
     mpBumpMtxArr[1] = NULL;
 
     if (mpDrawMtxBuf[0] == NULL)
-        return kJ3DError_Alloc;
+        return J3DErrType_OutOfMemory;
     if (mpNrmMtxBuf[0] == NULL)
-        return kJ3DError_Alloc;
+        return J3DErrType_OutOfMemory;
 
     if (pModelData->getDrawMtxNum() != 0) {
         mpDrawMtxBuf[0][0] = new (0x20) Mtx[pModelData->getDrawMtxNum()];
@@ -177,9 +177,9 @@ s32 J3DModel::createSingleDrawMtx(J3DModelData* pModelData) {
     }
 
     if (pModelData->getDrawMtxNum() != 0 && mpDrawMtxBuf[0][0] == NULL)
-        return kJ3DError_Alloc;
+        return J3DErrType_OutOfMemory;
 
-    return kJ3DError_Success;
+    return J3DErrType_Success;
 }
 
 /* 802EDA14-802EDBC0       .text createDoubleDrawMtx__8J3DModelFP12J3DModelDataUl */
@@ -195,9 +195,9 @@ s32 J3DModel::createDoubleDrawMtx(J3DModelData* pModelData, u32 num) {
     if (num != 0) {
         for (u32 i = 0; i < 2; i++) {
             if (mpDrawMtxBuf[i] == NULL)
-                return kJ3DError_Alloc;
+                return J3DErrType_OutOfMemory;
             if (mpNrmMtxBuf[i] == NULL)
-                return kJ3DError_Alloc;
+                return J3DErrType_OutOfMemory;
         }
     }
 
@@ -214,14 +214,14 @@ s32 J3DModel::createDoubleDrawMtx(J3DModelData* pModelData, u32 num) {
         for (u32 j = 0; j < num; j++) {
             if (pModelData->getDrawMtxNum() != 0) {
                 if (mpDrawMtxBuf[i][j] == NULL)
-                    return kJ3DError_Alloc;
+                    return J3DErrType_OutOfMemory;
                 if (mpNrmMtxBuf[i][j] == NULL)
-                    return kJ3DError_Alloc;
+                    return J3DErrType_OutOfMemory;
             }
         }
     }
 
-    return kJ3DError_Success;
+    return J3DErrType_Success;
 }
 
 /* 802EDBC0-802EDC8C       .text createShapePacket__8J3DModelFP12J3DModelData */
@@ -231,7 +231,7 @@ s32 J3DModel::createShapePacket(J3DModelData* pModelData) {
 
         mpShapePacket = new J3DShapePacket[shapeNum];
         if (mpShapePacket == NULL)
-            return kJ3DError_Alloc;
+            return J3DErrType_OutOfMemory;
 
         for (int i = 0; i < pModelData->getShapeNum(); i++) {
             J3DShape* shapeNode = pModelData->getShapeNodePointer(i);
@@ -240,7 +240,7 @@ s32 J3DModel::createShapePacket(J3DModelData* pModelData) {
         }
     }
 
-    return kJ3DError_Success;
+    return J3DErrType_Success;
 }
 
 /* 802EDC8C-802EDF60       .text createMatPacket__8J3DModelFP12J3DModelDataUl */
@@ -249,7 +249,7 @@ s32 J3DModel::createMatPacket(J3DModelData* pModelData, u32 flag) {
         mpMatPacket = new J3DMatPacket[pModelData->getMaterialNum()];
 
         if (mpMatPacket == NULL)
-            return kJ3DError_Alloc;
+            return J3DErrType_OutOfMemory;
     }
 
     s32 ret;
@@ -275,7 +275,7 @@ s32 J3DModel::createMatPacket(J3DModelData* pModelData, u32 flag) {
                 } else {
                     J3DDisplayListObj* sharedDL = pModelData->getMaterialNodePointer(i)->getSharedDisplayListObj();
                     ret = sharedDL->single_To_Double();
-                    if (ret != kJ3DError_Success)
+                    if (ret != J3DErrType_Success)
                         return ret;
 
                     mpMatPacket[i].mpDisplayListObj = sharedDL;
@@ -283,18 +283,18 @@ s32 J3DModel::createMatPacket(J3DModelData* pModelData, u32 flag) {
             } else if (!!(flag & 0x20000)) {
                 if (!!(flag & 0x40000)) {
                     ret = pModelData->getMaterialNodePointer(i)->newSingleSharedDisplayList(pModelData->getMaterialNodePointer(i)->countDLSize());
-                    if (ret != kJ3DError_Success)
+                    if (ret != J3DErrType_Success)
                         return ret;
 
                     mpMatPacket[i].mpDisplayListObj = pModelData->getMaterialNodePointer(i)->getSharedDisplayListObj();
                 } else {
                     ret = pModelData->getMaterialNodePointer(i)->newSharedDisplayList(pModelData->getMaterialNodePointer(i)->countDLSize());
-                    if (ret != kJ3DError_Success)
+                    if (ret != J3DErrType_Success)
                         return ret;
 
                     J3DDisplayListObj* sharedDL = pModelData->getMaterialNodePointer(i)->getSharedDisplayListObj();
                     ret = sharedDL->single_To_Double();
-                    if (ret != kJ3DError_Success)
+                    if (ret != J3DErrType_Success)
                         return ret;
 
                     mpMatPacket[i].mpDisplayListObj = sharedDL;
@@ -303,19 +303,19 @@ s32 J3DModel::createMatPacket(J3DModelData* pModelData, u32 flag) {
                 if (!!(flag & 0x40000)) {
                     u32 size = pModelData->getMaterialNodePointer(i)->countDLSize();
                     ret = mpMatPacket[i].newSingleDisplayList(size);
-                    if (ret != kJ3DError_Success)
+                    if (ret != J3DErrType_Success)
                         return ret;
                 } else {
                     u32 size = pModelData->getMaterialNodePointer(i)->countDLSize();
                     ret = mpMatPacket[i].newDisplayList(size);
-                    if (ret != kJ3DError_Success)
+                    if (ret != J3DErrType_Success)
                         return ret;
                 }
             }
         }
     }
 
-    return kJ3DError_Success;
+    return J3DErrType_Success;
 }
 
 /* 802EDF60-802EE1D4       .text createBumpMtxArray__8J3DModelFP12J3DModelDataUl */
@@ -333,7 +333,7 @@ s32 J3DModel::createBumpMtxArray(J3DModelData* modelData, u32 bufferNum) {
             for (s32 i = 0; i < 2; i++) {
                 mpBumpMtxArr[i] = new Mtx33**[bumpMtxNum];
                 if (mpBumpMtxArr[i] == NULL)
-                    return kJ3DError_Alloc;
+                    return J3DErrType_OutOfMemory;
             }
         }
 
@@ -344,7 +344,7 @@ s32 J3DModel::createBumpMtxArray(J3DModelData* modelData, u32 bufferNum) {
                 if (pMaterial->getNBTScale()->mbHasScale == 1) {
                     mpBumpMtxArr[i][bumpMtxOffset] = new Mtx33*[bufferNum];
                     if (mpBumpMtxArr[i][bumpMtxOffset] == NULL)
-                        return kJ3DError_Alloc;
+                        return J3DErrType_OutOfMemory;
                     pMaterial->getShape()->setBumpMtxOffset(bumpMtxOffset);
                     bumpMtxOffset++;
                 }
@@ -359,7 +359,7 @@ s32 J3DModel::createBumpMtxArray(J3DModelData* modelData, u32 bufferNum) {
                     for (u32 j = 0; j < bufferNum; j++) {
                         mpBumpMtxArr[i][bumpMtxOffset][j] = new(0x20) Mtx33[modelData->getDrawMtxNum()];
                         if (mpBumpMtxArr[i][bumpMtxOffset][j] == NULL)
-                            return kJ3DError_Alloc;
+                            return J3DErrType_OutOfMemory;
                     }
                     bumpMtxOffset++;
                 }
@@ -370,7 +370,7 @@ s32 J3DModel::createBumpMtxArray(J3DModelData* modelData, u32 bufferNum) {
             getModelData()->setBumpFlag(1);
     }
 
-    return kJ3DError_Success;
+    return J3DErrType_Success;
 }
 
 /* 802EE1D4-802EE254       .text newDifferedDisplayList__8J3DModelFUl */
@@ -378,10 +378,10 @@ s32 J3DModel::newDifferedDisplayList(u32 flag) {
     mDiffFlag = flag;
     for (u16 i = 0; i < getModelData()->getShapeNum(); i++) {
         s32 ret = getShapePacket(i)->newDifferedDisplayList(flag);
-        if (ret != kJ3DError_Success)
+        if (ret != J3DErrType_Success)
             return ret;
     }
-    return kJ3DError_Success;
+    return J3DErrType_Success;
 }
 
 /* 802EE254-802EE28C       .text lock__8J3DModelFv */
@@ -443,7 +443,7 @@ void J3DModel::diff() {
 s32 J3DModel::setSkinDeform(J3DSkinDeform* pSkinDeform, u32 flags) {
     mpSkinDeform = pSkinDeform;
 
-    s32 ret = kJ3DError_Success;
+    s32 ret = J3DErrType_Success;
 
     if (pSkinDeform == NULL) {
         offFlag(J3DMdlFlag_SkinPosCpu);
@@ -453,7 +453,7 @@ s32 J3DModel::setSkinDeform(J3DSkinDeform* pSkinDeform, u32 flags) {
         mpSkinDeform->initMtxIndexArray(mModelData);
 
         ret = mModelData->checkFlag(0x100);
-        if (ret != kJ3DError_Success) {
+        if (ret != J3DErrType_Success) {
             mpSkinDeform->changeFastSkinDL(mModelData);
             flags &= ~2;
             flags &= ~4;
@@ -462,7 +462,7 @@ s32 J3DModel::setSkinDeform(J3DSkinDeform* pSkinDeform, u32 flags) {
         ret = 0;
         if ((~flags & 2)) {
             ret = mVertexBuffer.allocTransformedVtxPosArray();
-            if (ret != kJ3DError_Success) {
+            if (ret != J3DErrType_Success) {
                 offFlag(J3DMdlFlag_SkinPosCpu);
                 return ret;
             }
@@ -473,7 +473,7 @@ s32 J3DModel::setSkinDeform(J3DSkinDeform* pSkinDeform, u32 flags) {
 
         if ((~flags & 4)) {
             ret = mVertexBuffer.allocTransformedVtxNrmArray();
-            if (ret != kJ3DError_Success) {
+            if (ret != J3DErrType_Success) {
                 offFlag(J3DMdlFlag_SkinNrmCpu);
                 return ret;
             }

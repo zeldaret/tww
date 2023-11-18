@@ -6,8 +6,8 @@
 
 // Perhaps move to a new J3DEnum.h?
 enum J3DError {
-    kJ3DError_Success = 0,
-    kJ3DError_Alloc = 4,
+    J3DErrType_Success = 0,
+    J3DErrType_OutOfMemory = 4,
 };
 
 enum J3DSysDrawBuffer {

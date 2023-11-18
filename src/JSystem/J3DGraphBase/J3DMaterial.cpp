@@ -315,17 +315,17 @@ s32 J3DMaterial::newSharedDisplayList(u32 param_0) {
     if (mSharedDLObj == NULL) {
         mSharedDLObj = new J3DDisplayListObj();
         if (mSharedDLObj == NULL) {
-            return kJ3DError_Alloc;
+            return J3DErrType_OutOfMemory;
         }
         s32 res = mSharedDLObj->newDisplayList(param_0);
         switch (res) {
-        case kJ3DError_Success:
+        case J3DErrType_Success:
             break;
         default:
             return res;
         }
     }
-    return kJ3DError_Success;
+    return J3DErrType_Success;
 }
 
 /* 802DF1AC-802DF240       .text newSingleSharedDisplayList__11J3DMaterialFUl */
@@ -333,17 +333,17 @@ s32 J3DMaterial::newSingleSharedDisplayList(u32 param_0) {
     if (mSharedDLObj == NULL) {
         mSharedDLObj = new J3DDisplayListObj();
         if (mSharedDLObj == NULL) {
-            return kJ3DError_Alloc;
+            return J3DErrType_OutOfMemory;
         }
         s32 res = mSharedDLObj->newSingleDisplayList(param_0);
         switch (res) {
-        case kJ3DError_Success:
+        case J3DErrType_Success:
             break;
         default:
             return res;
         }
     }
-    return kJ3DError_Success;
+    return J3DErrType_Success;
 }
 
 /* 802DF240-802DF260       .text initialize__18J3DPatchedMaterialFv */

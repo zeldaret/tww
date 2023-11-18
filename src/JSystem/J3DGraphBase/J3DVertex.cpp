@@ -94,33 +94,33 @@ void J3DVertexBuffer::setArray() const {
 /* 802D9EF0-802D9FA4       .text allocTransformedVtxPosArray__15J3DVertexBufferFv */
 s32 J3DVertexBuffer::allocTransformedVtxPosArray() {
     if (mTransformedVtxPosArray[0] != NULL && mTransformedVtxPosArray[1] != NULL)
-        return kJ3DError_Success;
+        return J3DErrType_Success;
 
     for (int i = 0; i < 2; i++) {
         if (i == 0 || mTransformedVtxPosArray[i] == NULL) {
             mTransformedVtxPosArray[i] = new (0x20) Vec[mVtxData->getVtxNum()];
             if (mTransformedVtxPosArray[i] == NULL)
-                return kJ3DError_Alloc;
+                return J3DErrType_OutOfMemory;
         }
     }
 
-    return kJ3DError_Success;
+    return J3DErrType_Success;
 }
 
 /* 802D9FA4-802DA058       .text allocTransformedVtxNrmArray__15J3DVertexBufferFv */
 s32 J3DVertexBuffer::allocTransformedVtxNrmArray() {
     if (mTransformedVtxNrmArray[0] != NULL && mTransformedVtxNrmArray[1] != NULL)
-        return kJ3DError_Success;
+        return J3DErrType_Success;
 
     for (int i = 0; i < 2; i++) {
         if (i == 0 || mTransformedVtxNrmArray[i] == NULL) {
             mTransformedVtxNrmArray[i] = new (0x20) VertexNormal[mVtxData->getNrmNum()];
             if (mTransformedVtxNrmArray[i] == NULL)
-                return kJ3DError_Alloc;
+                return J3DErrType_OutOfMemory;
         }
     }
 
-    return kJ3DError_Success;
+    return J3DErrType_Success;
 }
 
 /* 802DA058-802DA06C       .text __ct__14J3DDrawMtxDataFv */
