@@ -35,7 +35,7 @@ public:
     void endProc(s16, int);
     void mainProc();
     void runProc();
-    void getEventData(s16);
+    dEvDtEvent_c* getEventData(s16);
     s16 getEventIdx(const char*, u8);
     void order(s16);
     BOOL startCheck(s16);
@@ -45,8 +45,8 @@ public:
     int getMyStaffId(const char*, fopAc_ac_c*, int);
     BOOL getIsAddvance(int);
     int getMyActIdx(int, const char* const*, int, int, int);
-    void getMyActName(int);
-    void getMyNowCutName(int);
+    char* getMyActName(int);
+    char* getMyNowCutName(int);
     void getMyDataP(int, const char*, int);
     void* getMySubstanceP(int, const char*, int);
     void getMySubstanceNum(int, const char*);
@@ -57,17 +57,18 @@ public:
     void issueStaff(const char*);
     void cancelStaff(const char*);
     void setGoal(cXyz*);
-    void getGoal();
+    cXyz* getGoal();
     void specialCast_Shutter(s16, int);
     void specialCast(const char*, int);
     void setPrmStaff(void*, int);
     void getToolId(u8, int);
     BOOL ChkPresentEnd();
     void CancelPresent();
-    void checkStartDemo();
+    BOOL checkStartDemo();
     dEvDtFlag_c& getFlags() { return mFlag; }
 
     int setStartDemo(int eventInfoIdx) { return mException.setStartDemo(eventInfoIdx); }
+    void cancelStartDemo() { /* TODO */ }
     void setCameraPlay(u32 v) { mCameraPlay = v; }
 
     /* 0x000 */ dEvDtBase_c mList;

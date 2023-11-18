@@ -2035,52 +2035,63 @@ inline dEvent_manager_c* dComIfGp_getPEvtManager() {
     return &g_dComIfG_gameInfo.play.getEvtManager();
 }
 
+// Note: Some of the below functions call g_dComIfG_gameInfo.play.getEvtManager(), while others use
+// dComIfGp_getPEvtManager(), without a clear pattern for which was chosen.
+
 inline s16 dComIfGp_evmng_getEventPrio(s16 eventIdx) {
-    return dComIfGp_getPEvtManager()->getEventPrio(eventIdx);
+    return g_dComIfG_gameInfo.play.getEvtManager().getEventPrio(eventIdx);
 }
 
 inline s16 dComIfGp_evmng_getEventIdx(const char* pName, u8 evNo) {
-    return dComIfGp_getPEvtManager()->getEventIdx(pName, evNo);
+    return g_dComIfG_gameInfo.play.getEvtManager().getEventIdx(pName, evNo);
 }
 
-inline int dComIfGp_evmng_getMyStaffId(const char* pName, fopAc_ac_c* pActor, s32 param_3) {
+inline int dComIfGp_evmng_getMyStaffId(const char* pName, fopAc_ac_c* pActor, int param_3) {
     return dComIfGp_getPEvtManager()->getMyStaffId(pName, pActor, param_3);
 }
 
-inline int dComIfGp_evmng_getMyActIdx(int staffIdx, const char* const* pActions, int actionCount, int force, int param_5) {
+inline int dComIfGp_evmng_getMyActIdx(int staffIdx, char** pActions, int actionCount, int force, int param_5) {
     return dComIfGp_getPEvtManager()->getMyActIdx(staffIdx, pActions, actionCount, force, param_5);
 }
 
-inline f32* dComIfGp_evmng_getMyFloatP(int staffIdx, const char* name) {
+inline char* dComIfGp_evmng_getMyActName(int staffIdx) {
+    return dComIfGp_getPEvtManager()->getMyActName(staffIdx);
+}
+
+inline f32* dComIfGp_evmng_getMyFloatP(int staffIdx, char* name) {
     return reinterpret_cast<f32*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, 0)); //type 0 is float
 }
 
-inline Vec* dComIfGp_evmng_getMyXyzP(int staffIdx, const char* name) {
+inline Vec* dComIfGp_evmng_getMyVec3dP(int staffIdx, char* name) {
     return reinterpret_cast<Vec*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, 1)); //type 1 is vec3f
 }
 
-inline u32* dComIfGp_evmng_getMyIntegerP(int staffIdx, const char* name) {
+inline cXyz* dComIfGp_evmng_getMyXyzP(int staffIdx, char* name) {
+    return reinterpret_cast<cXyz*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, 1)); //type 1 is vec3f
+}
+
+inline u32* dComIfGp_evmng_getMyIntegerP(int staffIdx, char* name) {
     return reinterpret_cast<u32*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, 3)); //type 3 is int
 }
 
-inline char* dComIfGp_evmng_getMyStringP(int staffIdx, const char* name) {
+inline char* dComIfGp_evmng_getMyStringP(int staffIdx, char* name) {
     return reinterpret_cast<char*>(dComIfGp_getPEvtManager()->getMySubstanceP(staffIdx, name, 4)); //type 4 is string
 }
 
 inline BOOL dComIfGp_evmng_startCheck(s16 eventID) {
-    return dComIfGp_getPEvtManager()->startCheck(eventID);
+    return g_dComIfG_gameInfo.play.getEvtManager().startCheck(eventID);
 }
 
 inline BOOL dComIfGp_evmng_startCheck(const char* pName) {
-    return dComIfGp_getPEvtManager()->startCheckOld(pName);
+    return g_dComIfG_gameInfo.play.getEvtManager().startCheckOld(pName);
 }
 
 inline BOOL dComIfGp_evmng_endCheck(const char* pName) {
-    return dComIfGp_getPEvtManager()->endCheckOld(pName);
+    return g_dComIfG_gameInfo.play.getEvtManager().endCheckOld(pName);
 }
 
 inline BOOL dComIfGp_evmng_endCheck(s16 eventID) {
-    return dComIfGp_getPEvtManager()->endCheck(eventID);
+    return g_dComIfG_gameInfo.play.getEvtManager().endCheck(eventID);
 }
 
 inline BOOL dComIfGp_evmng_ChkPresentEnd() {
@@ -2088,15 +2099,15 @@ inline BOOL dComIfGp_evmng_ChkPresentEnd() {
 }
 
 inline void dComIfGp_evmng_CancelPresent() {
-    return dComIfGp_getPEvtManager()->CancelPresent();
+    dComIfGp_getPEvtManager()->CancelPresent();
 }
 
-inline BOOL dComIfGp_evmng_getIsAddvance(s32 staffIdx) {
+inline BOOL dComIfGp_evmng_getIsAddvance(int staffIdx) {
     return dComIfGp_getPEvtManager()->getIsAddvance(staffIdx);
 }
 
 inline void dComIfGp_evmng_cutEnd(int staffIdx) {
-    return dComIfGp_getPEvtManager()->cutEnd(staffIdx);
+    dComIfGp_getPEvtManager()->cutEnd(staffIdx);
 }
 
 inline void dComIfGp_evmng_execute() {
@@ -2104,11 +2115,15 @@ inline void dComIfGp_evmng_execute() {
 }
 
 inline void dComIfGp_evmng_create() {
-    dComIfGp_getPEvtManager()->create();
+    g_dComIfG_gameInfo.play.getEvtManager().create();
 }
 
 inline void dComIfGp_evmng_remove() {
-    dComIfGp_getPEvtManager()->remove();
+    g_dComIfG_gameInfo.play.getEvtManager().remove();
+}
+
+inline cXyz* dComIfGp_evmng_getGoal() {
+    return dComIfGp_getPEvtManager()->getGoal();
 }
 
 inline void dComIfGp_evmng_setGoal(cXyz* pos) {
@@ -2117,6 +2132,23 @@ inline void dComIfGp_evmng_setGoal(cXyz* pos) {
 
 inline int dComIfGp_evmng_startDemo(int eventInfoIdx) {
     return dComIfGp_getPEvtManager()->setStartDemo(eventInfoIdx);
+}
+
+inline BOOL dComIfGp_evmng_checkStartDemo() {
+    return dComIfGp_getPEvtManager()->checkStartDemo();
+}
+
+inline void dComIfGp_evmng_cancelStartDemo() {
+    dComIfGp_getPEvtManager()->cancelStartDemo();
+}
+
+inline BOOL dComIfGp_evmng_existence(const char* pName) {
+    s16 eventIdx = dComIfGp_evmng_getEventIdx(pName, 0xFF);
+    return g_dComIfG_gameInfo.play.getEvtManager().getEventData(eventIdx) != NULL;
+}
+
+inline BOOL dComIfGp_evmng_existence(s16 eventIdx) {
+    return g_dComIfG_gameInfo.play.getEvtManager().getEventData(eventIdx) != NULL;
 }
 
 /**
