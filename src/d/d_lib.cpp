@@ -4,10 +4,21 @@
 //
 
 #include "d/d_lib.h"
+#include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_mtx.h"
+#include "SSystem/SComponent/c_math.h"
 
 /* 80057000-800570CC       .text dLib_setCirclePath__FP18dLib_circle_path_c */
-void dLib_setCirclePath(dLib_circle_path_c*) {
+void dLib_setCirclePath(dLib_circle_path_c* path) {
     /* Nonmatching */
+    path->mAngle += path->mAngleSpeed;
+    f32 rad = path->mRadius + path->mWobbleAmplitude * cM_ssin(path->mAngle);
+    mDoMtx_stack_c::transS(path->mTranslation);
+    mDoMtx_stack_c::YrotM(path->mAngle);
+    mDoMtx_stack_c::transM(rad, 0.0f, 0.0f);
+    path->mPos.x = mDoMtx_stack_c::get()[0][3];
+    path->mPos.y = mDoMtx_stack_c::get()[1][3];
+    path->mPos.z = mDoMtx_stack_c::get()[2][3];
 }
 
 /* 800570CC-8005716C       .text dLib_getWaterY__FR4cXyzR12dBgS_ObjAcch */
@@ -31,13 +42,21 @@ void dLib_debugDrawFan(cXyz&, s16, s16, f32, const GXColor&) {
 }
 
 /* 80057510-800575E0       .text dLib_brkInit__FP12J3DModelDataP13mDoExt_brkAnmPCci */
-void dLib_brkInit(J3DModelData*, mDoExt_brkAnm*, const char*, int) {
-    /* Nonmatching */
+bool dLib_brkInit(J3DModelData* modelData, mDoExt_brkAnm* anm, const char* arcName, int fileno) {
+    J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(arcName, fileno);
+    JUT_ASSERT(0xae, brk != NULL);
+    if (anm->init(modelData, brk, 1, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0) == 0)
+        return false;
+    return true;
 }
 
 /* 800575E0-800576B0       .text dLib_btkInit__FP12J3DModelDataP13mDoExt_btkAnmPCci */
-void dLib_btkInit(J3DModelData*, mDoExt_btkAnm*, const char*, int) {
-    /* Nonmatching */
+bool dLib_btkInit(J3DModelData* modelData, mDoExt_btkAnm* anm, const char* arcName, int fileno) {
+    J3DAnmTextureSRTKey* btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(arcName, fileno);
+    JUT_ASSERT(0xbb, btk != NULL);
+    if (anm->init(modelData, btk, 1, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0) == 0)
+        return false;
+    return true;
 }
 
 /* 800576B0-80057844       .text dLib_setAnm__FPCcP14mDoExt_McaMorfPScPScPScPC14dLib_anm_idx_cPC14dLib_anm_prm_cb */
@@ -56,18 +75,42 @@ void dLib_scaleAnime(f32*, f32*, int, int*, f32, f32, f32) {
 }
 
 /* 80057A14-80057A30       .text dLib_getPosFromMtx__FPA4_fP4cXyz */
-void dLib_getPosFromMtx(MtxP, cXyz*) {
-    /* Nonmatching */
+void dLib_getPosFromMtx(MtxP mtx, cXyz* pos) {
+    pos->set(mtx[0][3], mtx[1][3], mtx[2][3]);
 }
 
 /* 80057A30-80057AA4       .text dLib_pathInfo__FPP5dPathUc */
-void dLib_pathInfo(dPath**, u8) {
-    /* Nonmatching */
+bool dLib_pathInfo(dPath** dst, u8 no) {
+    dStage_dPath_c * path = dComIfGp_getStage().getPathInf();
+    if (path != NULL) {
+        *dst = path->m_path + no;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /* 80057AA4-80057D1C       .text dLib_pathMove__FP4cXyzPScP5dPathfPFP4cXyzP4cXyzP4cXyzPv_iPv */
-void dLib_pathMove(cXyz*, s8*, dPath*, f32, int (*)(cXyz*, cXyz*, cXyz*, void*), void*) {
+void dLib_pathMove(cXyz* pos, s8* pPntNo, dPath* pPath, f32 speed, int (*pCallBack)(cXyz*, cXyz*, cXyz*, void*), void* pCallBackData) {
     /* Nonmatching */
+    s8 pnt_no = *pPntNo;
+    s8 pnt_next_no = pnt_no > (pPath->m_num - 1) ? 0 : pnt_no + 1;
+    cXyz pnt_pos = pPath->mpPnt[pnt_no].mPos;
+    cXyz pnt_next_pos = pPath->mpPnt[pnt_next_no].mPos;
+
+    cXyz move = (pnt_next_pos - pnt_pos).normZP();
+    if (pCallBack == NULL) {
+        *pos = *pos + move * speed;
+        f32 dist = pnt_pos.abs(*pos);
+        f32 pnt_dist = pnt_pos.abs(pnt_next_pos);
+        if (dist > pnt_dist) {
+            *pPntNo = pnt_next_no;
+            *pos = pnt_next_pos;
+        }
+    } else {
+        if (pCallBack(pos, &pnt_pos, &pnt_next_pos, pCallBackData))
+            *pPntNo = pnt_next_no;
+    }
 }
 
 /* 80057D1C-80057EC0       .text dLib_setNextStageBySclsNum__FUcSc */
@@ -166,8 +209,14 @@ bool STControl::checkDownTrigger() {
 }
 
 /* 80058780-80058834       .text dLib_getIplDaysFromSaveTime__Fv */
-void dLib_getIplDaysFromSaveTime() {
+u32 dLib_getIplDaysFromSaveTime() {
     /* Nonmatching */
+    OSTime dateIpl = dComIfGs_getDateIpl();
+    if (dateIpl == 0)
+        return 0;
+
+    OSTime curTime = OSGetTime();
+    return (curTime - dateIpl);
 }
 
 /* 80058834-80058910       .text dLib_get_QuatFromTriangle__FP4cXyzP4cXyzP4cXyz */

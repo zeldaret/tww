@@ -461,7 +461,7 @@ void dComIfG_play_c::drawWood() {
 
 /* 80053178-800531A8       .text ct__13dComIfG_inf_cFv */
 void dComIfG_inf_c::ct() {
-    field_0x1d1c1 = 0xFF;
+    mBrightness = 0xFF;
     play.ct();
 }
 

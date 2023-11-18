@@ -724,6 +724,10 @@ inline u8 dComIfGs_getItemReserve(int param_0) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getReserve(param_0);
 }
 
+inline OSTime dComIfGs_getDateIpl() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusB().getDateIpl();
+}
+
 /**
  * Returns which item is in a specific inventory slot.
  * @param i_invIdx The index of the inventory slot.

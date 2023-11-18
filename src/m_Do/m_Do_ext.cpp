@@ -1431,14 +1431,16 @@ void mDoExt_McaMorf2::stopZelAnime() {
     /* Nonmatching */
 }
 
+extern void GFSetBlendModeEtc(GXBlendMode, GXBlendFactor, GXBlendFactor, GXLogicOp, u8, u8, u8);
+
 /* 8001427C-800142B8       .text draw__24mDoExt_offCupOnAupPacketFv */
 void mDoExt_offCupOnAupPacket::draw() {
-    /* Nonmatching */
+    GFSetBlendModeEtc(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_CLEAR, 0, 1, 1);
 }
 
 /* 800142B8-800142F4       .text draw__24mDoExt_onCupOffAupPacketFv */
 void mDoExt_onCupOffAupPacket::draw() {
-    /* Nonmatching */
+    GFSetBlendModeEtc(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_CLEAR, 1, 0, 1);
 }
 
 /* 800142F4-800143B8       .text draw__19mDoExt_invJntPacketFv */
