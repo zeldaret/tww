@@ -144,6 +144,10 @@ public:
         // 0x04000000 set in daPy_lk_c::procShipPaddle
     };
     
+    enum daPy_FACE {
+        
+    };
+    
     /* 0x290 */ u8 mAttackState;
     /* 0x291 */ u8 field_0x291;
     /* 0x292 */ u8 field_0x292[0x294 - 0x292];
@@ -170,7 +174,20 @@ public:
     s16 getDamageWaitTimer() const { return mDamageWaitTimer; }
     s16 getBodyAngleX() { return mBodyAngle.x; }
     s16 getBodyAngleY() { return mBodyAngle.y; }
+    void getLeftHandPos() const {}
+    void getRightHandPos() const {}
+    void getSwordTopPos() const {}
+    cXyz getHeadTopPos() const { return mHeadTopPos; }
+    cXyz* getHeadTopPosP() { return &mHeadTopPos; }
+    f32 getSpeedF() const { return speedF; }
+    
+    void changeDemoMode(u32) {}
     void changeDemoMoveAngle(s16 angle) { mDemo.setMoveAngle(angle); }
+    void changeDemoParam0(int) {}
+    void changeOriginalDemo() {
+        mDemo.setOriginalDemoType();
+        mDemo.setParam0(0);
+    }
 
     void onNoResetFlg0(daPy_FLG0 flag) { mNoResetFlg0 |= flag; }
     void offNoResetFlg0(daPy_FLG0 flag) { mNoResetFlg0 &= ~flag; }
@@ -233,6 +250,7 @@ public:
     bool checkArrowShoot() const { return checkResetFlg0(daPyRFlg0_ARROW_SHOOT); }
     
     bool checkGrabWear() const { return field_0x2b0 < 0.0f; }
+    void checkMasterSwordEquip() const {}
     
     // checkSwordMiniGame__9daPy_py_cCFv
     // checkNormalSwordEquip__9daPy_py_cCFv
@@ -279,18 +297,14 @@ public:
     virtual void changeTextureAnime(u16, u16, int) {}
     virtual void cancelChangeTextureAnime() {}
     
-    void getSwordTopPos() const;
-    void getLeftHandPos() const;
     void getRopeJumpLand() const;
     void checkRopeForceEnd() const;
-    cXyz getHeadTopPos() const { return mHeadTopPos; }
-    cXyz* getHeadTopPosP() { return &mHeadTopPos; }
     void changePlayer(fopAc_ac_c*);
     void objWindHitCheck(dCcD_Cyl*);
     void setDoButtonQuake();
     void stopDoButtonQuake(int);
     void getRopePos() const;
-    f32 getSpeedF() const { return speedF; }
+    void setFace(daPy_py_c::daPy_FACE) {}
 };
 
 #endif /* D_A_PLAYER */

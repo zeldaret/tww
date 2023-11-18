@@ -13,9 +13,11 @@
 #include "d/d_material.h"
 #include "d/d_snap.h"
 #include "d/actor/d_a_player.h"
+#include "d/actor/d_a_player_main.h"
 #include "d/d_cc_uty.h"
 #include "d/d_s_play.h"
 #include "d/d_item_data.h"
+#include "m_Do/m_Do_controller_pad.h"
 
 // Needed for the .data section to match.
 static Vec dummy1 = {1.0f, 1.0f, 1.0f};
@@ -964,7 +966,63 @@ void daRd_c::modeCryInit() {
 
 /* 000025A8-000028B8       .text modeCry__6daRd_cFv */
 void daRd_c::modeCry() {
-    /* Nonmatching */
+    setAnm(6, false);
+    
+    f32 stickPosX = g_mDoCPd_cpadInfo[0].mMainStickPosX;
+    f32 stickPosY = g_mDoCPd_cpadInfo[0].mMainStickPosY;
+    if (mEvtInfo.checkCommandDemoAccrpt() || dComIfGp_evmng_startCheck("DEFAULT_RD_CRY")) {
+        if (isLinkControl()) {
+            dComIfGp_event_reset();
+            modeProcInit(MODE_RETURN);
+        } else if (checkTgHit()) {
+            dComIfGp_event_reset();
+        } else {
+            s16 targetY = fopAcM_searchPlayerAngleY(this);
+            f32 dist = fopAcM_searchPlayerDistanceXZ(this);
+            f32 temp = (dist / 100.0f) + g_regHIO.mChild[12].mFloatRegs[3];
+            if (temp > 1.0f) {
+                temp = 1.0f;
+            }
+            if (temp < 0.1f) {
+                temp = 0.1f;
+            }
+            f32 temp2 = l_HIO.m68;
+            if (mEnemyFire.mState != 0) {
+                temp2 *= 2.0f;
+            }
+            cLib_addCalc2(&speedF, temp2*temp, 0.1f, 0.1f + g_regHIO.mChild[12].mFloatRegs[0]);
+            
+            if (mD3C > 0 && stickPosX < 0.0f) {
+                mD3C = -1;
+                m318--;
+            } else if (mD3C < 0 && stickPosX > 0.0f) {
+                mD3C = 1;
+                m318--;
+            }
+            
+            if (mD40 > 0 && stickPosY < 0.0f) {
+                mD40 = -1;
+                m318--;
+            } else if (mD40 < 0 && stickPosY > 0.0f) {
+                mD40 = 1;
+                m318--;
+            }
+            
+            if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_X(0) || CPad_CHECK_TRIG_Y(0)) {
+                m318--;
+            }
+            
+            if (cLib_calcTimer(&m310) == 0 || m318 < 0) {
+                dComIfGp_event_reset();
+                modeProcInit(MODE_CRY_WAIT);
+            } else if (checkPlayerInAttack()) {
+                dComIfGp_event_reset();
+                modeProcInit(MODE_ATTACK);
+            }
+        }
+    } else {
+        modeProcInit(MODE_CRY_WAIT);
+    }
 }
 
 /* 000028B8-000028CC       .text modeCryWaitInit__6daRd_cFv */
@@ -975,7 +1033,29 @@ void daRd_c::modeCryWaitInit() {
 
 /* 000028CC-000029E4       .text modeCryWait__6daRd_cFv */
 void daRd_c::modeCryWait() {
-    /* Nonmatching */
+    if (checkTgHit()) {
+        return;
+    }
+    if (isLinkControl()) {
+        modeProcInit(MODE_RETURN);
+        return;
+    }
+    if (dComIfGp_evmng_startCheck("DEFAULT_RD_CRY")) {
+        onIkari();
+        setBtkAnm(3);
+    }
+    // The dComIfGp_event_runCheck inline breaks the codegen here.
+    // if (dComIfGp_event_runCheck()) {
+    if (g_dComIfG_gameInfo.play.getEvent().runCheck()) {
+        m310 = 60;
+        m314 = 45;
+    } else if (m6D9 == 6) {
+        if (cLib_calcTimer(&m310) == 0) {
+            modeProcInit(MODE_MOVE);
+        } else if (cLib_calcTimer(&m314) == 0 && checkPlayerInAttack()) {
+            modeProcInit(MODE_ATTACK);
+        }
+    }
 }
 
 /* 000029E4-00002A58       .text modeAttackInit__6daRd_cFv */
@@ -990,7 +1070,89 @@ void daRd_c::modeAttackInit() {
 
 /* 00002A58-00002F30       .text modeAttack__6daRd_cFv */
 void daRd_c::modeAttack() {
-    /* Nonmatching */
+    if (dComIfGp_evmng_startCheck("DEFAULT_RD_CRY")) {
+        dComIfGp_event_reset();
+    }
+    if ((dComIfGp_evmng_startCheck("DEFAULT_RD_CRY") || dComIfGp_evmng_startCheck("DEFAULT_RD_ATTACK")) && isLinkControl()) {
+        dComIfGp_event_reset();
+        modeProcInit(MODE_RETURN);
+        return;
+    }
+    
+    f32 stickPosX = g_mDoCPd_cpadInfo[0].mMainStickPosX;
+    f32 stickPosY = g_mDoCPd_cpadInfo[0].mMainStickPosY;
+    if (mEvtInfo.checkCommandDemoAccrpt()) {
+        daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
+        if (m6D9 == 4) {
+            f32 frame = player->getBaseAnimeFrame();
+            mpMorf->setFrame(frame);
+            cLib_addCalcAngleS2(&shape_angle.y, player->shape_angle.y, 0x4, 0x2000);
+        } else {
+            s16 targetY = fopAcM_searchPlayerAngleY(this);
+            cLib_addCalcAngleS2(&shape_angle.y, targetY, 0x4, 0x2000);
+        }
+        
+        if (checkTgHit()) {
+            dComIfGp_event_reset();
+            return;
+        }
+        f32 dist = fopAcM_searchPlayerDistanceXZ(this);
+        if (dist <= 50.0f + g_regHIO.mChild[12].mFloatRegs[5] && m6D9 != 4) {
+            offIkari();
+            setAnm(3, false);
+        }
+        if (dist <= 20.0f + g_regHIO.mChild[12].mFloatRegs[2]) {
+            cLib_addCalcPosXZ2(&current.pos, player->current.pos, 0.3f, 1.0f);
+            if (cLib_calcTimer(&m314) == 0) {
+                if (!daPy_getPlayerLinkActorClass()->checkNoDamageMode()) {
+                    daPy_getPlayerLinkActorClass()->setDamagePoint(-1.0f);
+                }
+                m314 = 30;
+            }
+        } else if (mAcch.ChkWallHit()) {
+            player->changeOriginalDemo();
+            cXyz pos = player->current.pos;
+            cLib_addCalcPosXZ2(&pos, current.pos, 0.3f, 10.0f);
+            player->setPlayerPosAndAngle(&pos, player->shape_angle.y);
+        } else {
+            cLib_addCalcPosXZ2(&current.pos, player->current.pos, 0.3f, 10.0f);
+        }
+        
+        if (dComIfGs_getLife() == 0) {
+            dComIfGp_event_reset();
+            setAnm(5, false);
+            modeProcInit(MODE_WAIT);
+            return;
+        }
+        
+        if (mD3C > 0 && stickPosX < 0.0f) {
+            mD3C = -1;
+            m318--;
+        } else if (mD3C < 0 && stickPosX > 0.0f) {
+            mD3C = 1;
+            m318--;
+        }
+        
+        if (mD40 > 0 && stickPosY < 0.0f) {
+            mD40 = -1;
+            m318--;
+        } else if (mD40 < 0 && stickPosY > 0.0f) {
+            mD40 = 1;
+            m318--;
+        }
+        
+        if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_X(0) || CPad_CHECK_TRIG_Y(0)) {
+            m318--;
+        }
+        
+        if (cLib_calcTimer(&m310) == 0 || m318 < 0) {
+            dComIfGp_event_reset();
+            setAnm(5, false);
+            modeProcInit(MODE_CRY_WAIT);
+        }
+    } else if (!checkTgHit()) {
+        fopAcM_orderOtherEvent2(this, "DEFAULT_RD_ATTACK", 1, 0x1CF);
+    }
 }
 
 /* 00002F30-00002F34       .text modeReturnInit__6daRd_cFv */
