@@ -87,6 +87,7 @@ struct cXyz : Vec {
     }
 
     void setall(f32 f) { set(f, f, f); }
+    void zero() { x = y = z = 0.0f; }
 
     void setMin(const cXyz& other) {
         if (x > other.x) {

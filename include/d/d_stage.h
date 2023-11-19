@@ -219,6 +219,7 @@ struct dStage_Mult_info {
     /* 0x4 */ f32 mTransY;
     /* 0x8 */ s16 mAngle;
     /* 0xA */ u8 mRoomNo;
+    /* 0xB */ u8 mWaveMax;
 };  // Size: 0xC
 
 class dStage_Multi_c {

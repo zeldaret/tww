@@ -307,8 +307,8 @@ inline fopAc_ac_c* fopAcM_SearchByID(u32 id) {
     return (fopAc_ac_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)fpcSch_JudgeByID, &id);
 }
 
-inline fopAc_ac_c* fopAcM_SearchByName(s16 proc_id) {
-    return (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeForPName, &proc_id);
+inline fopAc_ac_c* fopAcM_SearchByName(s16 procName) {
+    return (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeForPName, &procName);
 }
 
 inline void dComIfGs_onItem(int bitNo, int roomNo);
