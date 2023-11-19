@@ -991,7 +991,7 @@ s32 daTbox_c::demoProc() {
         "OPEN_SHORT"
     };
 
-    s32 actionIdx = dComIfGp_evmng_getMyActIdx(mStaffId, action_table, 4, 0, 0);
+    s32 actionIdx = dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), 0, 0);
     bool bIsAdvance = dComIfGp_evmng_getIsAddvance(mStaffId);
 
     if (bIsAdvance) {

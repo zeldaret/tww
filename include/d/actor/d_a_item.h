@@ -70,11 +70,17 @@ public:
     BOOL releaseLock();
     BOOL checkActionNow();
     
-    u32 getItemNo() { return m_itemNo; }
-    void setItemTimerForIball(short param_1, short param_2) {
+    u32 getItemNo() const { return m_itemNo; }
+    void setItemTimerForIball(s16 param_1, s16 param_2) {
         mDisappearTimer = param_1;
         field_0x65a = param_2;
     }
+    // TODO
+    void setFlag(u8) {}
+    void clrFlag(u8) {}
+    void checkFlag(u8) {}
+    void setStatus(u8) {}
+    void printStatus() {}
     
     static dCcD_SrcCyl m_cyl_src;
     static s32 m_timer_max;

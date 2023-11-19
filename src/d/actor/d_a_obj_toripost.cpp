@@ -3,13 +3,13 @@
 // Translation Unit: d_a_obj_toripost.cpp
 //
 
+#include "d/actor/d_a_obj_toripost.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
-#include "d/d_npc.h"
 #include "d/d_letter.h"
 #include "d/d_item_data.h"
 #include "d/d_s_play.h"
@@ -19,93 +19,6 @@
 #include "m_Do/m_Do_mtx.h"
 
 extern dScnPly_reg_HIO_c g_regHIO;
-
-struct daObjTpost_c__letter_data {
-    /* 0x00 */ bool field_0x00;
-    /* 0x04 */ u32 mMsgId;
-    /* 0x08 */ u8 mItemId;
-    /* 0x0A */ u16 mEventReg;
-};
-
-class daObjTpost_c : public fopNpc_npc_c {
-public:
-    enum Proc_e {
-        PROC_INIT = 0,
-        PROC_EXEC = 1
-    };
-
-    bool _createHeap();
-    bool cutProc();
-    void cutPresentStart(int staffIdx);
-    void cutPresentProc(int staffIdx);
-    void cutSetAnmStart(int staffIdx);
-    void cutSetAnmProc(int staffIdx);
-    void cutDispLetterStart(int staffIdx);
-    void cutDispLetterProc(int staffIdx);
-    void deliverLetter();
-    s16 getReceiveLetterNum();
-    s32 getReadableLetterNum();
-    u8 checkSendPrice();
-    int getMsgXY();
-    int getMsgNormal();
-    u32 getMsg();
-    u16 next_msgStatus(u32* msgId);
-    bool checkTalk();
-    void eventOrder();
-    void checkOrder();
-    void setAttention();
-    void setAnm(s8 param_1, bool param_2);
-    void setMtx();
-    void modeWaitInit();
-    void modeWait();
-    void modeTalkInit();
-    void modeTalk();
-    void modeTalkXYInit();
-    void modeTalkXY();
-    void modeReceiveInit();
-    void modeReceive();
-    void modeReceiveDemoInit();
-    void modeReceiveDemo();
-    void modeProc(Proc_e proc, int newMode);
-    bool _execute();
-    void debugDraw();
-    bool _draw();
-    void createInit();
-    void getArg();
-    int _create();
-    bool _delete();
-
-    inline s32 getSendPrice() { return m_send_price[mPayType]; }
-
-    static const char m_arc_name[];
-    static const daObjTpost_c__letter_data m_letter[];
-    static const dCcD_SrcCyl m_cyl_src;
-
-private:
-    static const s32 m_send_price[];
-
-    /* 0x6C4 */ u32 mCurMode;
-    /* 0x6C8 */ s8 field_0x6C8;
-    /* 0x6C9 */ s8 field_0x6C9;
-    /* 0x6CA */ s8 field_0x6CA;
-    /* 0x6CC */ request_of_phase_process_class mPhs;
-    /* 0x6D4 */ mDoExt_McaMorf* mMorf;
-    /* 0x6D8 */ dBgS_ObjAcch mAcch;
-    /* 0x89C */ dBgS_AcchCir mAcchCir;
-    /* 0x8DC */ int field_0x8DC;
-    /* 0x8E0 */ int field_0x8E0;
-    /* 0x8E4 */ int field_0x8E4;
-    /* 0x8E8 */ u8 mPayType;
-    /* 0x8E9 */ u8 field_0x8E9;
-    /* 0x8EA */ u8 field_0x8EA;
-    /* 0x8EB */ u8 field_0x8EB;
-    /* 0x8EC */ s32 mNumReadable;
-    /* 0x8F0 */ u32 field_0x8F0;
-    /* 0x8F4 */ u8 field_0x8F4;
-    /* 0x8F5 */ u8 field_0x8F5;
-    /* 0x8F6 */ u8 field_0x8F6;
-    /* 0x8F7 */ s8 field_0x8F7;
-};
 
 const char daObjTpost_c::m_arc_name[] = "Toripost";
 const daObjTpost_c__letter_data daObjTpost_c::m_letter[] = {
@@ -158,22 +71,6 @@ const s32 daObjTpost_c::m_send_price[] = {
     0x14
 };
 
-class daObjTpost_HIO_c {
-public:
-    daObjTpost_HIO_c();
-    virtual ~daObjTpost_HIO_c() {}
-
-    /* 0x04 */ s8 field_0x04;
-    /* 0x05 */ bool debug_draw;
-    /* 0x06 */ s8 field_0x06;
-    /* 0x07 */ u8 field_0x07;
-    /* 0x08 */ f32 attn_pos_offset;
-    /* 0x0C */ f32 eye_pos_offset;
-    /* 0x10 */ f32 talk_distance;
-    /* 0x14 */ s16 field_0x14;
-    /* 0x16 */ s16 field_0x16;
-};
-
 static daObjTpost_HIO_c l_HIO;
 
 // need to figure out what's putting this data in front of a bunch of rels with the compiler-generated symbol names
@@ -206,10 +103,10 @@ static u8 dummy3[] = {
 };
 
 static int createHeap_CB(fopAc_ac_c* i_this) {
-    static_cast<daObjTpost_c*>(i_this)->_createHeap();
+    return static_cast<daObjTpost_c*>(i_this)->_createHeap();
 }
 
-bool daObjTpost_c::_createHeap() {
+BOOL daObjTpost_c::_createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, 9);
     JUT_ASSERT(132, modelData != 0);
 
@@ -237,8 +134,8 @@ daObjTpost_HIO_c::daObjTpost_HIO_c() {
     field_0x16 = 30;
 }
 
-bool daObjTpost_c::cutProc() {
-    static const char* action_table[3] = {
+void daObjTpost_c::cutProc() {
+    static char* action_table[3] = {
         "PRESENT",
         "SET_ANM",
         "DISP_LETTER"

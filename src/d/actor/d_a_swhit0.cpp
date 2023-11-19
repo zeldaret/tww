@@ -222,7 +222,7 @@ s32 daSwhit0_c::DemoProc() {
 
     if (dComIfGp_evmng_getIsAddvance(mStaffId))
     {
-        switch(dComIfGp_evmng_getMyActIdx(mStaffId, action_table, 2, 0, 0)) {
+        switch(dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), 0, 0)) {
             case 1:
                 dComIfGs_onSwitch(getSwNo(), fopAcM_GetRoomNo(this));
                 onFlag(0x01);

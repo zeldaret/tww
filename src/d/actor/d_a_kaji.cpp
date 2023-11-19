@@ -20,6 +20,9 @@ public:
     inline BOOL _delete();
     inline BOOL _execute();
     inline bool _draw();
+    
+    void setAnm(int, f32) {}
+    void set_mtx() {}
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhs;

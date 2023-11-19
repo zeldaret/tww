@@ -59,17 +59,17 @@ public:
     static void setKeepType(u8 type);
     
     // TODO inlines
-    // setAtHitPosBuff__9daArrow_cFP4cXyz
-    // setAtHitNormal__9daArrow_cFv
-    // setAtHitNormalActor__9daArrow_cFP10fopAc_ac_c
-    // clrAtHitNormal__9daArrow_cFv
-    // isSetByZelda__9daArrow_cFv
-    // clrAtHitPosBuff__9daArrow_cFP4cXyz
-    // getAtHitPosBuffP__9daArrow_cFv
-    // getAtHitNormalActor__9daArrow_cFv
-    // chkAtHitNormal__9daArrow_cFv
-    // isLinkReflect__9daArrow_cFv
-    // ArrowAtOff__9daArrow_cFv
+    void ArrowAtOff() {}
+    void chkAtHitNormal() {}
+    void clrAtHitNormal() {}
+    void clrAtHitPosBuff(cXyz*) {}
+    void getAtHitNormalActor() {}
+    void getAtHitPosBuffP() {}
+    void isLinkReflect() {}
+    void isSetByZelda() {}
+    void setAtHitNormal() {}
+    void setAtHitNormalActor(fopAc_ac_c*) {}
+    void setAtHitPosBuff(cXyz*) {}
 
 public:
     /* 0x290 */ bool mbShotByZelda;
