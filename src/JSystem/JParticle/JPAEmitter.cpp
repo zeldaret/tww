@@ -8,6 +8,7 @@
 #include "JSystem/JParticle/JPAExtraShape.h"
 #include "JSystem/JParticle/JPASweepShape.h"
 #include "JSystem/JParticle/JPAKeyBlock.h"
+#include "JSystem/JMath/JMATrigonometric.h"
 #include "dolphin/mtx/mtx.h"
 #include "dolphin/mtx/mtxvec.h"
 
@@ -15,33 +16,50 @@ JPAEmitterInfo JPABaseEmitter::emtrInfo;
 
 /* 8025C128-8025C254       .text calcVolumePoint__14JPABaseEmitterFv */
 void JPABaseEmitter::calcVolumePoint() {
-    /* Nonmatching */
-    emtrInfo.mVolumePos.z = 0.0f;
-    emtrInfo.mVolumePos.y = 0.0f;
-    emtrInfo.mVolumePos.x = 0.0f;
-
-    emtrInfo.mVelOmni.z = mRandomSeed.get_ufloat_1() - 0.5f;
-    emtrInfo.mVelOmni.y = mRandomSeed.get_ufloat_1() - 0.5f;
-    emtrInfo.mVelOmni.x = mRandomSeed.get_ufloat_1() - 0.5f;
-
-    emtrInfo.mVelAxis.x = mRandomSeed.get_ufloat_1() - 0.5f;
-    emtrInfo.mVelAxis.y = 0.0f;
-    emtrInfo.mVelAxis.z = mRandomSeed.get_ufloat_1() - 0.5f;
+    emtrInfo.mVolumePos.zero();
+    emtrInfo.mVelOmni.set(getRandomSF(), getRandomSF(), getRandomSF());
+    emtrInfo.mVelAxis.set(getRandomSF(), 0.0f, getRandomSF());
 }
 
 /* 8025C254-8025C394       .text calcVolumeLine__14JPABaseEmitterFv */
 void JPABaseEmitter::calcVolumeLine() {
-    /* Nonmatching */
+    if (mDataFlag & 2) {
+        emtrInfo.mVolumePos.set(0.0f, 0.0f, emtrInfo.mVolumeSize * ((f32)emtrInfo.mVolumeEmitIdx / ((f32)emtrInfo.mVolumeEmitCount - 1.0f) - 0.5f));
+        emtrInfo.mVolumeEmitIdx++;
+    } else {
+        emtrInfo.mVolumePos.set(0.0f, 0.0f, emtrInfo.mVolumeSize * getRandomSF());
+    }
+
+    emtrInfo.mVelOmni.mul(emtrInfo.mVolumePos, emtrInfo.mEmitterGlobalScale);
+    emtrInfo.mVelAxis.set(emtrInfo.mVolumePos.x, 0.0f, emtrInfo.mVolumePos.z);
 }
 
 /* 8025C394-8025C538       .text calcVolumeCircle__14JPABaseEmitterFv */
 void JPABaseEmitter::calcVolumeCircle() {
-    /* Nonmatching */
+    s16 angle;
+    if (mDataFlag & 0x02) {
+        s16 idx = (0x10000 * emtrInfo.mVolumeEmitIdx / emtrInfo.mVolumeEmitCount);
+        angle = idx * mVolumeSweep;
+        emtrInfo.mVolumeEmitIdx++;
+    } else {
+        angle = mVolumeSweep * getRandomSS();
+    }
+
+    f32 rad = getRandomF();
+    if (mDataFlag & 0x01)
+        rad = 1.0f - rad * rad;
+    rad = emtrInfo.mVolumeSize * (mVolumeMinRad + rad * (1.0f - mVolumeMinRad));
+
+    emtrInfo.mVolumePos.set(rad * JMASSin(angle), 0.0f, rad * JMASCos(angle));
+    emtrInfo.mVelOmni.mul(emtrInfo.mVolumePos, emtrInfo.mEmitterGlobalScale);
+    emtrInfo.mVelAxis.set(emtrInfo.mVolumePos.x, 0.0f, emtrInfo.mVolumePos.z);
 }
 
 /* 8025C538-8025C63C       .text calcVolumeCube__14JPABaseEmitterFv */
 void JPABaseEmitter::calcVolumeCube() {
-    /* Nonmatching */
+    emtrInfo.mVolumePos.set(emtrInfo.mVolumeSize * getRandomSF(), emtrInfo.mVolumeSize * getRandomSF(), emtrInfo.mVolumeSize * getRandomSF());
+    emtrInfo.mVelOmni.mul(emtrInfo.mVolumePos, emtrInfo.mEmitterGlobalScale);
+    emtrInfo.mVelAxis.set(emtrInfo.mVolumePos.x, 0.0f, emtrInfo.mVolumePos.z);
 }
 
 /* 8025C63C-8025C8A4       .text calcVolumeSphere__14JPABaseEmitterFv */
@@ -52,11 +70,27 @@ void JPABaseEmitter::calcVolumeSphere() {
 /* 8025C8A4-8025CA28       .text calcVolumeCylinder__14JPABaseEmitterFv */
 void JPABaseEmitter::calcVolumeCylinder() {
     /* Nonmatching */
+    s16 angle = mVolumeSweep * getRandomSS();
+
+    f32 rad = getRandomF();
+    if (mDataFlag & 0x01)
+        rad = 1.0f - rad * rad;
+    rad = emtrInfo.mVolumeSize * (mVolumeMinRad + rad * (1.0f - mVolumeMinRad));
+
+    emtrInfo.mVolumePos.set(rad * JMASSin(angle), emtrInfo.mVolumeSize * getRandomRF(), rad * JMASCos(angle));
+    emtrInfo.mVelOmni.mul(emtrInfo.mVolumePos, emtrInfo.mEmitterGlobalScale);
+    emtrInfo.mVelAxis.set(emtrInfo.mVolumePos.x, 0.0f, emtrInfo.mVolumePos.z);
 }
 
 /* 8025CA28-8025CB54       .text calcVolumeTorus__14JPABaseEmitterFv */
 void JPABaseEmitter::calcVolumeTorus() {
-    /* Nonmatching */
+    s16 angle1 = mVolumeSweep * getRandomSS();
+    s16 angle2 = getRandomSS();
+    f32 rad = mVolumeMinRad * emtrInfo.mVolumeSize;
+
+    emtrInfo.mVelAxis.set(rad * JMASSin(angle1) * JMASCos(angle2), rad * JMASSin(angle2), rad * JMASCos(angle1) * JMASCos(angle2));
+    emtrInfo.mVolumePos.set(emtrInfo.mVelAxis.x + emtrInfo.mVolumeSize * JMASSin(angle1), emtrInfo.mVelAxis.y, emtrInfo.mVelAxis.z + emtrInfo.mVolumeSize * JMASCos(angle1));
+    emtrInfo.mVelOmni.mul(emtrInfo.mVolumePos, emtrInfo.mEmitterGlobalScale);
 }
 
 /* 8025CB54-8025D0B0       .text create__14JPABaseEmitterFP20JPADataBlockLinkInfo */
@@ -275,7 +309,7 @@ void JPABaseEmitter::calcChild() {
 /* 8025D8CC-8025DA90       .text calcKey__14JPABaseEmitterFv */
 void JPABaseEmitter::calcKey() {
     /* Nonmatching */
-    for (u32 i = 0; i < getEmitterDataBlockInfoPtr()->getKeyNum(); i++) {
+    for (s32 i = 0; i < getEmitterDataBlockInfoPtr()->getKeyNum(); i++) {
         JPAKeyBlock* key = getEmitterDataBlockInfoPtr()->getKey()[i];
         f32 tick = mTick;
         const f32* dataPtr = key->getKeyDataPtr();

@@ -121,8 +121,8 @@ public:
     /* 0x118 */ JGeometry::TVec3<f32> mVelOmni;
     /* 0x124 */ JGeometry::TVec3<f32> mVelAxis;
     /* 0x130 */ f32 mVolumeSize;
-    /* 0x134 */ u32 mVolumeEmitCount;
-    /* 0x138 */ u32 mVolumeEmitIdx;
+    /* 0x134 */ s32 mVolumeEmitCount;
+    /* 0x138 */ s32 mVolumeEmitIdx;
     /* 0x13C */ u32 mVolumeEmitAngleCount;
     /* 0x140 */ u32 mVolumeEmitXCount;
     /* 0x144 */ u32 mVolumeEmitAngleMax;
@@ -239,6 +239,11 @@ public:
     JSULink<JPABaseEmitter>* getLinkBufferPtr() { return &mLink; }
     void initDrawMgr(JPATextureResource* texRes) { mDraw.initialize(this, texRes); }
     void draw(MtxP cameraMtxP) { mDraw.draw(cameraMtxP); }
+
+    f32 getRandomF() { return mRandomSeed.get_ufloat_1(); }
+    f32 getRandomRF() { f32 x = mRandomSeed.get_ufloat_1(); return x + x - 1.0f; }
+    f32 getRandomSF() { return mRandomSeed.get_ufloat_1() - 0.5f; }
+    s16 getRandomSS() { return mRandomSeed.get_bit16(); }
 
     static JPAEmitterInfo emtrInfo;
 

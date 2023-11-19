@@ -14,6 +14,7 @@ struct TRandom_fast_ {
     }
 
     u32 get_bit32(void) { return this->get(); }
+    u16 get_bit16(void) { return this->get() >> 16; }
 
     // due to the float constant, having this function inlined adds that float to data,
     // making it not match

@@ -8,6 +8,8 @@
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAFieldBlock.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "JSystem/JMath/JMATrigonometric.h"
+#include "dolphin/mtx/mtxvec.h"
 
 JPAFieldContainer fc;
 JPAEmitterInfo * JPAFieldData::pEmtrInfo;
@@ -82,93 +84,153 @@ bool JPABaseField::isItinRange(JPAFieldData* data, f32 v) {
 }
 
 /* 8025A344-8025A3E4       .text preCalc__15JPAGravityFieldFP12JPAFieldData */
-void JPAGravityField::preCalc(JPAFieldData*) {
-    /* Nonmatching */
+void JPAGravityField::preCalc(JPAFieldData* data) {
+    JPABaseField::preCalc(data);
+    if (data->mSttFlag & 0x02) {
+        f32 mag = data->mMag;
+        data->mVel.x = data->mDir.x * mag;
+        data->mVel.y = data->mDir.y * mag;
+        data->mVel.z = data->mDir.z * mag;
+    } else {
+        JGeometry::TVec3<f32> rotDir;
+        MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mDir, rotDir);
+        f32 mag = data->mMag;
+        data->mVel.x = rotDir.x * mag;
+        data->mVel.y = rotDir.y * mag;
+        data->mVel.z = rotDir.z * mag;
+    }
 }
 
 /* 8025A3E4-8025A404       .text calc__15JPAGravityFieldFP12JPAFieldDataP15JPABaseParticle */
-void JPAGravityField::calc(JPAFieldData*, JPABaseParticle*) {
-    /* Nonmatching */
+void JPAGravityField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
+    calcVel(data, ptcl);
 }
 
 /* 8025A404-8025A510       .text preCalc__11JPAAirFieldFP12JPAFieldData */
-void JPAAirField::preCalc(JPAFieldData*) {
-    /* Nonmatching */
+void JPAAirField::preCalc(JPAFieldData* data) {
+    JPABaseField::preCalc(data);
+    if (data->mSttFlag & 0x02) {
+        data->mLocalDir.set(data->mDir);
+    } else {
+        MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mDir, data->mLocalDir);
+    }
+
+    f32 mag = data->mMag;
+    data->mVel.x = data->mLocalDir.x * mag;
+    data->mVel.y = data->mLocalDir.y * mag;
+    data->mVel.z = data->mLocalDir.z * mag;
+    if (data->mSttFlag & 0x01) {
+        data->mAirMinDist = JMASCos(data->mVal1 * 0xFFFF);
+        if (data->mSttFlag & 0x02) {
+            data->mLocalPos.set(data->mPos);
+        } else {
+            MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mLocalPos, data->mPos);
+        }
+    }
 }
 
 /* 8025A510-8025A6EC       .text calc__11JPAAirFieldFP12JPAFieldDataP15JPABaseParticle */
-void JPAAirField::calc(JPAFieldData*, JPABaseParticle*) {
+void JPAAirField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 8025A6EC-8025A788       .text preCalc__14JPAMagnetFieldFP12JPAFieldData */
-void JPAMagnetField::preCalc(JPAFieldData*) {
-    /* Nonmatching */
+void JPAMagnetField::preCalc(JPAFieldData* data) {
+    JPABaseField::preCalc(data);
+    if (data->mSttFlag & 0x02) {
+        data->mLocalPos.set(data->mPos);
+    } else {
+        const JGeometry::TVec3<f32>& emtrTrans = JPAFieldData::pEmtrInfo->mEmitterTranslation;
+        data->mLocalPos.x = data->mPos.x - emtrTrans.x;
+        data->mLocalPos.y = data->mPos.y - emtrTrans.y;
+        data->mLocalPos.z = data->mPos.z - emtrTrans.z;
+        MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mLocalPos, data->mLocalPos);
+    }
 }
 
 /* 8025A788-8025A8AC       .text calc__14JPAMagnetFieldFP12JPAFieldDataP15JPABaseParticle */
-void JPAMagnetField::calc(JPAFieldData*, JPABaseParticle*) {
+void JPAMagnetField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     /* Nonmatching */
+    if (data->mSttFlag & 0x02) {
+        data->mVel.x = data->mLocalPos.x - ptcl->mPosition.x;
+        data->mVel.y = data->mLocalPos.y - ptcl->mPosition.y;
+        data->mVel.z = data->mLocalPos.z - ptcl->mPosition.z;
+    } else {
+        data->mVel.x = data->mLocalPos.x - ptcl->mLocalPosition.x;
+        data->mVel.y = data->mLocalPos.y - ptcl->mLocalPosition.y;
+        data->mVel.z = data->mLocalPos.z - ptcl->mLocalPosition.z;
+    }
+    data->mVel.normalize();
+    calcVel(data, ptcl);
 }
 
 /* 8025A8AC-8025A954       .text preCalc__14JPANewtonFieldFP12JPAFieldData */
-void JPANewtonField::preCalc(JPAFieldData*) {
-    /* Nonmatching */
+void JPANewtonField::preCalc(JPAFieldData* data) {
+    JPABaseField::preCalc(data);
+    if (data->mSttFlag & 0x02) {
+        data->mLocalPos.set(data->mPos);
+    } else {
+        const JGeometry::TVec3<f32>& emtrTrans = JPAFieldData::pEmtrInfo->mEmitterTranslation;
+        data->mLocalPos.x = data->mPos.x - emtrTrans.x;
+        data->mLocalPos.y = data->mPos.y - emtrTrans.y;
+        data->mLocalPos.z = data->mPos.z - emtrTrans.z;
+        MTXMultVec(JPAFieldData::pEmtrInfo->mGlobalRot, data->mLocalPos, data->mLocalPos);
+    }
+    data->mVal2 = data->mVal1 * data->mVal1;
 }
 
 /* 8025A954-8025ABB8       .text calc__14JPANewtonFieldFP12JPAFieldDataP15JPABaseParticle */
-void JPANewtonField::calc(JPAFieldData*, JPABaseParticle*) {
+void JPANewtonField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 8025ABB8-8025ACA0       .text preCalc__14JPAVortexFieldFP12JPAFieldData */
-void JPAVortexField::preCalc(JPAFieldData*) {
+void JPAVortexField::preCalc(JPAFieldData* data) {
     /* Nonmatching */
 }
 
 /* 8025ACA0-8025AE04       .text calc__14JPAVortexFieldFP12JPAFieldDataP15JPABaseParticle */
-void JPAVortexField::calc(JPAFieldData*, JPABaseParticle*) {
+void JPAVortexField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 8025AE04-8025B114       .text preCalc__18JPAConvectionFieldFP12JPAFieldData */
-void JPAConvectionField::preCalc(JPAFieldData*) {
+void JPAConvectionField::preCalc(JPAFieldData* data) {
     /* Nonmatching */
 }
 
 /* 8025B114-8025B3CC       .text calc__18JPAConvectionFieldFP12JPAFieldDataP15JPABaseParticle */
-void JPAConvectionField::calc(JPAFieldData*, JPABaseParticle*) {
+void JPAConvectionField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 8025B3CC-8025B50C       .text calc__14JPARandomFieldFP12JPAFieldDataP15JPABaseParticle */
-void JPARandomField::calc(JPAFieldData*, JPABaseParticle*) {
+void JPARandomField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 8025B50C-8025B584       .text init__12JPADragFieldFP12JPAFieldDataP15JPABaseParticle */
-void JPADragField::init(JPAFieldData*, JPABaseParticle*) {
+void JPADragField::init(JPAFieldData* data, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 8025B584-8025B5F4       .text calc__12JPADragFieldFP12JPAFieldDataP15JPABaseParticle */
-void JPADragField::calc(JPAFieldData*, JPABaseParticle*) {
+void JPADragField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 8025B5F4-8025B718       .text preCalc__12JPASpinFieldFP12JPAFieldData */
-void JPASpinField::preCalc(JPAFieldData*) {
+void JPASpinField::preCalc(JPAFieldData* data) {
     /* Nonmatching */
 }
 
 /* 8025B718-8025B7F8       .text calc__12JPASpinFieldFP12JPAFieldDataP15JPABaseParticle */
-void JPASpinField::calc(JPAFieldData*, JPABaseParticle*) {
+void JPASpinField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 8025B7F8-8025B960       .text initField__15JPAFieldManagerFP20JPADataBlockLinkInfoP14JPAEmitterInfo */
 void JPAFieldManager::initField(JPADataBlockLinkInfo* dataInfo, JPAEmitterInfo* emtrInfo) {
-    /* Nonmatching */
     u8 fieldNum = dataInfo->getFieldNum();
     JPAFieldBlock** fieldBlock = dataInfo->getField();
     for (u8 i = 0; i < fieldNum; i++) {
@@ -219,8 +281,16 @@ void JPAFieldManager::calc(JPABaseParticle* ptcl) {
     /* Nonmatching */
     for (JSULink<JPAFieldData>* link = mList.getFirst(); link != NULL; link = link->getNext()) {
         JPAFieldData* data = link->getObject();
+        if (data->mSttFlag & 0x80) {
+            // This isn't quite right, probably a TVec3 inline?
+            f32 z = ptcl->mPosition.z - data->mPos.z; z *= z;
+            f32 x = ptcl->mPosition.x - data->mPos.x; x *= x;
+            f32 y = ptcl->mPosition.y - data->mPos.y; y *= y;
+            f32 dist = z + y + x;
+            if (!data->mpBaseField->isItinRange(data, dist))
+                continue;
+        }
         data->mpBaseField->calc(data, ptcl);
-        // more to do here
     }
 }
 

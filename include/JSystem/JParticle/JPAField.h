@@ -37,11 +37,11 @@ public:
     /* 0x04 */ JPABaseField * mpBaseField;
     /* 0x08 */ JSULink<JPAFieldData> mLink;
     /* 0x18 */ JGeometry::TVec3<f32> mVel;
-    /* 0x24 */ JGeometry::TVec3<f32> mAirPos;
+    /* 0x24 */ JGeometry::TVec3<f32> mLocalPos;
     /* 0x30 */ f32 mAirMinDist;
     /* 0x34 */ u32 field_0x34;
     /* 0x38 */ u32 field_0x38;
-    /* 0x3C */ JGeometry::TVec3<f32> mAirDir;
+    /* 0x3C */ JGeometry::TVec3<f32> mLocalDir;
     /* 0x48 */ f32 mMaxDistSq;
     /* 0x4C */ f32 mFadeOutRate;
     /* 0x50 */ f32 mFadeInRate;
