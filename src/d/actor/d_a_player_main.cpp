@@ -2517,18 +2517,18 @@ static BOOL daPy_jointCallback1(J3DNode*, int) {
 }
 
 /* 801041B4-801041EC       .text setAnimeHeap__9daPy_lk_cFP12JKRSolidHeap */
-void daPy_lk_c::setAnimeHeap(JKRSolidHeap* animeHeap) {
+JKRHeap* daPy_lk_c::setAnimeHeap(JKRSolidHeap* animeHeap) {
     animeHeap->freeAll();
-    mDoExt_setCurrentHeap(animeHeap);
+    return mDoExt_setCurrentHeap(animeHeap);
 }
 
 /* 801041EC-80104240       .text setItemHeap__9daPy_lk_cFv */
-void daPy_lk_c::setItemHeap() {
+JKRHeap* daPy_lk_c::setItemHeap() {
     if (!checkResetFlg0(daPyRFlg0_UNK4000)) {
         mCurrItemHeapIdx ^= 1;
         onResetFlg0(daPyRFlg0_UNK4000);
     }
-    setAnimeHeap(mpItemHeaps[mCurrItemHeapIdx]);
+    return setAnimeHeap(mpItemHeaps[mCurrItemHeapIdx]);
 }
 
 /* 80104240-80104280       .text setBlurPosResource__9daPy_lk_cFUs */
@@ -2630,7 +2630,7 @@ void daPy_lk_c::setOutPower(f32, s16, int) {
 }
 
 /* 801056E4-80105814       .text checkSightLine__9daPy_lk_cFfP4cXyz */
-void daPy_lk_c::checkSightLine(f32, cXyz*) {
+BOOL daPy_lk_c::checkSightLine(f32, cXyz*) {
     /* Nonmatching */
 }
 
@@ -3064,7 +3064,7 @@ void daPy_lk_c::setDamagePoint(f32) {
 }
 
 /* 80110338-80110448       .text checkNormalDamage__9daPy_lk_cFi */
-void daPy_lk_c::checkNormalDamage(int) {
+BOOL daPy_lk_c::checkNormalDamage(int) {
     /* Nonmatching */
 }
 
@@ -3074,17 +3074,17 @@ void daPy_lk_c::setDashDamage() {
 }
 
 /* 801104E4-8011054C       .text checkAtHitEnemy__9daPy_lk_cFP12dCcD_GObjInf */
-void daPy_lk_c::checkAtHitEnemy(dCcD_GObjInf*) {
+BOOL daPy_lk_c::checkAtHitEnemy(dCcD_GObjInf*) {
     /* Nonmatching */
 }
 
 /* 8011054C-801105D8       .text checkElecReturnDamage__9daPy_lk_cFP12dCcD_GObjInfP4cXyz */
-void daPy_lk_c::checkElecReturnDamage(dCcD_GObjInf*, cXyz*) {
+BOOL daPy_lk_c::checkElecReturnDamage(dCcD_GObjInf*, cXyz*) {
     /* Nonmatching */
 }
 
 /* 801105D8-80110654       .text checkWallAtributeDamage__9daPy_lk_cFP12dBgS_AcchCir */
-void daPy_lk_c::checkWallAtributeDamage(dBgS_AcchCir*) {
+BOOL daPy_lk_c::checkWallAtributeDamage(dBgS_AcchCir*) {
     /* Nonmatching */
 }
 
@@ -3119,7 +3119,7 @@ void daPy_lk_c::setOldRootQuaternion(s16, s16, s16) {
 }
 
 /* 80111E54-80111EFC       .text checkRestHPAnime__9daPy_lk_cFv */
-void daPy_lk_c::checkRestHPAnime() {
+BOOL daPy_lk_c::checkRestHPAnime() {
     /* Nonmatching */
 }
 
@@ -3887,7 +3887,7 @@ void daPy_lk_c::autoGroundHit() {
 }
 
 /* 8011AD9C-8011AE20       .text checkAttentionPosAngle__9daPy_lk_cFP10fopAc_ac_cPP4cXyz */
-void daPy_lk_c::checkAttentionPosAngle(fopAc_ac_c*, cXyz**) {
+BOOL daPy_lk_c::checkAttentionPosAngle(fopAc_ac_c*, cXyz**) {
     /* Nonmatching */
 }
 
@@ -3897,7 +3897,7 @@ void daPy_lk_c::setNeckAngle() {
 }
 
 /* 8011BE08-8011BEA4       .text checkOriginalHatAnimation__9daPy_lk_cFv */
-void daPy_lk_c::checkOriginalHatAnimation() {
+BOOL daPy_lk_c::checkOriginalHatAnimation() {
     /* Nonmatching */
 }
 
@@ -3932,7 +3932,7 @@ void daPy_lk_c::resetCurse() {
 }
 
 /* 8011D110-8011D4D0       .text checkLightHit__9daPy_lk_cFv */
-void daPy_lk_c::checkLightHit() {
+BOOL daPy_lk_c::checkLightHit() {
     /* Nonmatching */
 }
 
@@ -4057,7 +4057,7 @@ BOOL daPy_lk_c::checkLavaFace(cXyz* param_1, int attributeCode) {
 }
 
 /* 8012024C-80120724       .text checkFallCode__9daPy_lk_cFv */
-void daPy_lk_c::checkFallCode() {
+BOOL daPy_lk_c::checkFallCode() {
     /* Nonmatching */
 }
 
@@ -4161,7 +4161,7 @@ BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int
 }
 
 /* 80120BBC-80120BE0       .text checkSuccessGuard__9daPy_lk_cFi */
-void daPy_lk_c::checkSuccessGuard(int) {
+BOOL daPy_lk_c::checkSuccessGuard(int) {
     /* Nonmatching */
 }
 
@@ -4186,7 +4186,7 @@ void daPy_lk_c::setWindAtPower() {
 }
 
 /* 801216A8-80121870       .text checkRoofRestart__9daPy_lk_cFv */
-void daPy_lk_c::checkRoofRestart() {
+BOOL daPy_lk_c::checkRoofRestart() {
     /* Nonmatching */
 }
 

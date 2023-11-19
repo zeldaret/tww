@@ -18,12 +18,12 @@ void daPy_lk_c::shipSpecialDemoStart() {
 }
 
 /* 8013F8AC-8013F984       .text checkJumpRideShip__9daPy_lk_cFv */
-void daPy_lk_c::checkJumpRideShip() {
+BOOL daPy_lk_c::checkJumpRideShip() {
     /* Nonmatching */
 }
 
 /* 8013F984-8013F9B0       .text checkShipNotNormalMode__9daPy_lk_cFv */
-void daPy_lk_c::checkShipNotNormalMode() {
+BOOL daPy_lk_c::checkShipNotNormalMode() {
     /* Nonmatching */
 }
 
@@ -33,7 +33,7 @@ void daPy_lk_c::setShipRideArmAngle(int, J3DTransformInfo*) {
 }
 
 /* 8013FE78-8013FEF4       .text checkShipRideUseItem__9daPy_lk_cFi */
-void daPy_lk_c::checkShipRideUseItem(int) {
+int daPy_lk_c::checkShipRideUseItem(int) {
     /* Nonmatching */
 }
 

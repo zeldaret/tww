@@ -48,7 +48,7 @@ void daPy_lk_c::setShapeFanLeaf() {
 }
 
 /* 8014BE50-8014BEEC       .text checkFanGlideProc__9daPy_lk_cFi */
-void daPy_lk_c::checkFanGlideProc(int) {
+BOOL daPy_lk_c::checkFanGlideProc(int) {
     /* Nonmatching */
 }
 

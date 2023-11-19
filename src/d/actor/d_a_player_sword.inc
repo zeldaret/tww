@@ -23,22 +23,22 @@ void daPy_lk_c::setLightSaver() {
 }
 
 /* 80155490-801554C8       .text checkDemoShieldNoDraw__9daPy_lk_cFv */
-void daPy_lk_c::checkDemoShieldNoDraw() {
+BOOL daPy_lk_c::checkDemoShieldNoDraw() {
     /* Nonmatching */
 }
 
 /* 801554C8-80155544       .text checkDemoSwordNoDraw__9daPy_lk_cFi */
-void daPy_lk_c::checkDemoSwordNoDraw(int) {
+BOOL daPy_lk_c::checkDemoSwordNoDraw(int) {
     /* Nonmatching */
 }
 
 /* 80155544-80155574       .text checkChanceMode__9daPy_lk_cFv */
-void daPy_lk_c::checkChanceMode() {
+BOOL daPy_lk_c::checkChanceMode() {
     /* Nonmatching */
 }
 
 /* 80155574-8015559C       .text checkCutRollChange__9daPy_lk_cCFv */
-void daPy_lk_c::checkCutRollChange() const {
+BOOL daPy_lk_c::checkCutRollChange() const {
     /* Nonmatching */
 }
 

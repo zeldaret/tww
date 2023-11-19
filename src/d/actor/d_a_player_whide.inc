@@ -33,17 +33,17 @@ void daPy_lk_c::getWHideNextPos(cXyz*, cXyz*) {
 }
 
 /* 8013769C-80137754       .text checkWHideBackWall__9daPy_lk_cFP4cXyz */
-void daPy_lk_c::checkWHideBackWall(cXyz*) {
+BOOL daPy_lk_c::checkWHideBackWall(cXyz*) {
     /* Nonmatching */
 }
 
 /* 80137754-80137828       .text checkWHideFrontFloor__9daPy_lk_cFP4cXyz */
-void daPy_lk_c::checkWHideFrontFloor(cXyz*) {
+BOOL daPy_lk_c::checkWHideFrontFloor(cXyz*) {
     /* Nonmatching */
 }
 
 /* 80137828-80137914       .text checkWHideModeChange__9daPy_lk_cFP4cXyz */
-void daPy_lk_c::checkWHideModeChange(cXyz*) {
+BOOL daPy_lk_c::checkWHideModeChange(cXyz*) {
     /* Nonmatching */
 }
 

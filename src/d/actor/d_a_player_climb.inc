@@ -38,12 +38,12 @@ void daPy_lk_c::setMoveBGCorrectClimb() {
 }
 
 /* 80136154-80136200       .text checkBgCorrectClimbMove__9daPy_lk_cFP4cXyzP4cXyz */
-void daPy_lk_c::checkBgCorrectClimbMove(cXyz*, cXyz*) {
+BOOL daPy_lk_c::checkBgCorrectClimbMove(cXyz*, cXyz*) {
     /* Nonmatching */
 }
 
 /* 80136200-80136588       .text checkBgClimbMove__9daPy_lk_cFv */
-void daPy_lk_c::checkBgClimbMove() {
+BOOL daPy_lk_c::checkBgClimbMove() {
     /* Nonmatching */
 }
 

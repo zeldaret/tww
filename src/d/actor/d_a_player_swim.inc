@@ -18,7 +18,7 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
 }
 
 /* 8013CF2C-8013CFC0       .text checkNextModeSwim__9daPy_lk_cFv */
-void daPy_lk_c::checkNextModeSwim() {
+BOOL daPy_lk_c::checkNextModeSwim() {
     /* Nonmatching */
 }
 
@@ -38,7 +38,7 @@ void daPy_lk_c::swimOutAfter(int) {
 }
 
 /* 8013D314-8013D354       .text checkSwimFallCheck__9daPy_lk_cFv */
-void daPy_lk_c::checkSwimFallCheck() {
+BOOL daPy_lk_c::checkSwimFallCheck() {
     /* Nonmatching */
 }
 

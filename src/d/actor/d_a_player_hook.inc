@@ -13,7 +13,7 @@
 #include "d/actor/d_a_player_main.h"
 
 /* 8014AB5C-8014ABA0       .text checkHookshotReturn__9daPy_lk_cFv */
-void daPy_lk_c::checkHookshotReturn() {
+BOOL daPy_lk_c::checkHookshotReturn() {
     /* Nonmatching */
 }
 
@@ -38,12 +38,12 @@ void daPy_lk_c::freeHookshotItem() {
 }
 
 /* 8014B05C-8014B2B8       .text checkNextActionHookshotReady__9daPy_lk_cFv */
-void daPy_lk_c::checkNextActionHookshotReady() {
+BOOL daPy_lk_c::checkNextActionHookshotReady() {
     /* Nonmatching */
 }
 
 /* 8014B2B8-8014B350       .text checkNextHookshotMode__9daPy_lk_cFv */
-void daPy_lk_c::checkNextHookshotMode() {
+BOOL daPy_lk_c::checkNextHookshotMode() {
     /* Nonmatching */
 }
 

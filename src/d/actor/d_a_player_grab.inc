@@ -43,7 +43,7 @@ void daPy_lk_c::freeGrabItem() {
 }
 
 /* 8013B05C-8013B458       .text checkNextActionGrab__9daPy_lk_cFv */
-void daPy_lk_c::checkNextActionGrab() {
+BOOL daPy_lk_c::checkNextActionGrab() {
     /* Nonmatching */
 }
 

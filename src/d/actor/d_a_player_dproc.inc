@@ -33,7 +33,7 @@ void daPy_lk_c::setLetterModel() {
 }
 
 /* 8012CFE8-8012D010       .text checkCaughtShapeHide__9daPy_lk_cFv */
-void daPy_lk_c::checkCaughtShapeHide() {
+BOOL daPy_lk_c::checkCaughtShapeHide() {
     /* Nonmatching */
 }
 
@@ -43,7 +43,7 @@ void daPy_lk_c::setShapeAngleToTalkActor() {
 }
 
 /* 8012D08C-8012D134       .text checkEndMessage__9daPy_lk_cFUl */
-void daPy_lk_c::checkEndMessage(u32) {
+BOOL daPy_lk_c::checkEndMessage(u32) {
     /* Nonmatching */
 }
 

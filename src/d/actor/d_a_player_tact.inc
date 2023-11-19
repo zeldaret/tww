@@ -23,7 +23,7 @@ void daPy_lk_c::setTactModel() {
 }
 
 /* 8014D8AC-8014D8F4       .text checkNpcStatus__9daPy_lk_cFv */
-void daPy_lk_c::checkNpcStatus() {
+BOOL daPy_lk_c::checkNpcStatus() {
     /* Nonmatching */
 }
 
@@ -38,7 +38,7 @@ void daPy_lk_c::getTactPlayLeftArmAnm(s32) {
 }
 
 /* 8014D97C-8014D9A4       .text checkEndTactMusic__9daPy_lk_cCFv */
-void daPy_lk_c::checkEndTactMusic() const {
+BOOL daPy_lk_c::checkEndTactMusic() const {
     /* Nonmatching */
 }
 

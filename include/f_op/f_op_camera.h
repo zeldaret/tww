@@ -244,6 +244,7 @@ public:
     void Set(cXyz, cXyz, f32, s16);
     void Stay();
     void SetTrimSize(s32);
+    void StartEventCamera(int, int, ...);
     
     void CStickUse() {}
     void CStickUseless() {}

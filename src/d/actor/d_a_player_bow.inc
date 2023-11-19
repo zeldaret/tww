@@ -28,7 +28,7 @@ void daPy_lk_c::bowButton() const {
 }
 
 /* 8014A008-8014A02C       .text checkBowReadyAnime__9daPy_lk_cCFv */
-void daPy_lk_c::checkBowReadyAnime() const {
+BOOL daPy_lk_c::checkBowReadyAnime() const {
     /* Nonmatching */
 }
 
@@ -58,17 +58,17 @@ void daPy_lk_c::setBowReloadAnime() {
 }
 
 /* 8014A328-8014A60C       .text checkNextActionBowReady__9daPy_lk_cFv */
-void daPy_lk_c::checkNextActionBowReady() {
+BOOL daPy_lk_c::checkNextActionBowReady() {
     /* Nonmatching */
 }
 
 /* 8014A60C-8014A680       .text checkNextActionBowFly__9daPy_lk_cFv */
-void daPy_lk_c::checkNextActionBowFly() {
+BOOL daPy_lk_c::checkNextActionBowFly() {
     /* Nonmatching */
 }
 
 /* 8014A680-8014A6F4       .text checkNextBowMode__9daPy_lk_cFv */
-void daPy_lk_c::checkNextBowMode() {
+BOOL daPy_lk_c::checkNextBowMode() {
     /* Nonmatching */
 }
 

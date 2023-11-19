@@ -43,7 +43,7 @@ void daPy_lk_c::crawlBgCheck(cXyz*, cXyz*) {
 }
 
 /* 801390B8-801392BC       .text checkCrawlSideWall__9daPy_lk_cFP4cXyzP4cXyzP4cXyzP4cXyzPsPs */
-void daPy_lk_c::checkCrawlSideWall(cXyz*, cXyz*, cXyz*, cXyz*, s16*, s16*) {
+BOOL daPy_lk_c::checkCrawlSideWall(cXyz*, cXyz*, cXyz*, cXyz*, s16*, s16*) {
     /* Nonmatching */
 }
 
@@ -63,12 +63,12 @@ BOOL daPy_lk_c::procCrawlStart() {
 }
 
 /* 80139640-801396B0       .text checkNotCrawlStand__9daPy_lk_cFP4cXyz */
-void daPy_lk_c::checkNotCrawlStand(cXyz*) {
+BOOL daPy_lk_c::checkNotCrawlStand(cXyz*) {
     /* Nonmatching */
 }
 
 /* 801396B0-80139760       .text checkNotCrawlStand__9daPy_lk_cFP4cXyzP4cXyz */
-void daPy_lk_c::checkNotCrawlStand(cXyz*, cXyz*) {
+BOOL daPy_lk_c::checkNotCrawlStand(cXyz*, cXyz*) {
     /* Nonmatching */
 }
 

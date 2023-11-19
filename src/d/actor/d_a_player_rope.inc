@@ -13,7 +13,7 @@
 #include "d/actor/d_a_player_main.h"
 
 /* 80142D08-80142D68       .text checkRopeAnime__9daPy_lk_cCFv */
-void daPy_lk_c::checkRopeAnime() const {
+BOOL daPy_lk_c::checkRopeAnime() const {
     /* Nonmatching */
 }
 
@@ -23,7 +23,7 @@ void daPy_lk_c::freeRopeItem() {
 }
 
 /* 80142E0C-80142E98       .text checkRopeRoofHit__9daPy_lk_cFs */
-void daPy_lk_c::checkRopeRoofHit(s16) {
+BOOL daPy_lk_c::checkRopeRoofHit(s16) {
     /* Nonmatching */
 }
 
@@ -38,7 +38,7 @@ void daPy_lk_c::changeRopeEndProc(int) {
 }
 
 /* 801430D4-80143138       .text checkSpecialRope__9daPy_lk_cFv */
-void daPy_lk_c::checkSpecialRope() {
+BOOL daPy_lk_c::checkSpecialRope() {
     /* Nonmatching */
 }
 
@@ -48,7 +48,7 @@ void daPy_lk_c::changeRopeToHangProc() {
 }
 
 /* 8014327C-80143694       .text checkRopeSwingWall__9daPy_lk_cFP4cXyzP4cXyzPsPf */
-void daPy_lk_c::checkRopeSwingWall(cXyz*, cXyz*, s16*, f32*) {
+BOOL daPy_lk_c::checkRopeSwingWall(cXyz*, cXyz*, s16*, f32*) {
     /* Nonmatching */
 }
 
@@ -63,17 +63,17 @@ void daPy_lk_c::throwRope() {
 }
 
 /* 80143C5C-80143DF4       .text checkNextActionRopeReady__9daPy_lk_cFv */
-void daPy_lk_c::checkNextActionRopeReady() {
+BOOL daPy_lk_c::checkNextActionRopeReady() {
     /* Nonmatching */
 }
 
 /* 80143DF4-80143EAC       .text checkNextRopeMode__9daPy_lk_cFv */
-void daPy_lk_c::checkNextRopeMode() {
+BOOL daPy_lk_c::checkNextRopeMode() {
     /* Nonmatching */
 }
 
 /* 80143EAC-80143F3C       .text checkHangRopeActorNull__9daPy_lk_cFv */
-void daPy_lk_c::checkHangRopeActorNull() {
+BOOL daPy_lk_c::checkHangRopeActorNull() {
     /* Nonmatching */
 }
 

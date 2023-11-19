@@ -13,7 +13,7 @@
 #include "d/actor/d_a_player_main.h"
 
 /* 8014956C-80149590       .text checkBoomerangAnime__9daPy_lk_cCFv */
-void daPy_lk_c::checkBoomerangAnime() const {
+BOOL daPy_lk_c::checkBoomerangAnime() const {
     /* Nonmatching */
 }
 
@@ -28,17 +28,17 @@ void daPy_lk_c::returnBoomerang() {
 }
 
 /* 801497A4-8014984C       .text checkNextActionBoomerangReady__9daPy_lk_cFv */
-void daPy_lk_c::checkNextActionBoomerangReady() {
+BOOL daPy_lk_c::checkNextActionBoomerangReady() {
     /* Nonmatching */
 }
 
 /* 8014984C-801498D8       .text checkNextActionBoomerangFly__9daPy_lk_cFv */
-void daPy_lk_c::checkNextActionBoomerangFly() {
+BOOL daPy_lk_c::checkNextActionBoomerangFly() {
     /* Nonmatching */
 }
 
 /* 801498D8-80149964       .text checkNextBoomerangMode__9daPy_lk_cFv */
-void daPy_lk_c::checkNextBoomerangMode() {
+BOOL daPy_lk_c::checkNextBoomerangMode() {
     /* Nonmatching */
 }
 
