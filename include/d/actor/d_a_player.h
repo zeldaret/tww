@@ -86,8 +86,9 @@ public:
         daPyFlg0_DEKU_SP_RETURN_FLG = 0x00000010,
         daPyFlg0_CUT_AT_FLG         = 0x00000040,
         daPyFlg0_UNK100             = 0x00000100,
+        daPyFlg0_SHIP_DROP          = 0x00000200,
         daPyFlg0_PUSH_PULL_KEEP     = 0x00000800,
-        daPyFlg0_UNK1000            = 0x00001000,
+        daPyFlg0_HOVER_BOOTS        = 0x00001000,
         daPyFlg0_UNK4000            = 0x00004000,
         daPyFlg0_UNK10000           = 0x00010000,
         daPyFlg0_NO_FALL_VOICE      = 0x00040000,
@@ -196,6 +197,7 @@ public:
     bool getCutAtFlg() const { return checkNoResetFlg0(daPyFlg0_CUT_AT_FLG); }
     void onPushPullKeep() { onNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP); }
     void offPushPullKeep() { offNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP); }
+    bool checkEquipHoverBoots() const { return checkNoResetFlg0(daPyFlg0_HOVER_BOOTS); }
     void onNoFallVoice() { onNoResetFlg0(daPyFlg0_NO_FALL_VOICE); }
     void onScopeCancel() { onNoResetFlg0(daPyFlg0_SCOPE_CANCEL); }
     bool checkEquipHeavyBoots() const { return checkNoResetFlg0(daPyFlg0_EQUIP_HEAVY_BOOTS); }
@@ -258,7 +260,6 @@ public:
     // checkBowMiniGame__9daPy_py_cCFv
     // checkUseArrowEffect__9daPy_py_cCFv
     // checkFinalMasterSwordEquip__9daPy_py_cCFv
-    // checkEquipHoverBoots__9daPy_py_cCFv
     
     virtual MtxP getLeftHandMatrix() = 0;
     virtual MtxP getRightHandMatrix() = 0;
@@ -267,7 +268,7 @@ public:
     virtual int getTactTimerCancel() const { return 0; }
     virtual BOOL checkPlayerGuard() const { return FALSE; }
     virtual fopAc_ac_c* getGrabMissActor() { return NULL; }
-    virtual BOOL checkPlayerFly() const { return FALSE; }
+    virtual u32 checkPlayerFly() const { return 0; }
     virtual BOOL checkFrontRoll() const { return FALSE; }
     virtual BOOL checkBottleSwing() const { return FALSE; }
     virtual BOOL checkCutCharge() const { return FALSE; }

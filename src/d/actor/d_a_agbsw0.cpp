@@ -23,6 +23,7 @@ static f64 dummy4[2] = {3.0, 0.5};
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_bomb.h"
 #include "m_Do/m_Do_gba_com.h"
+#include "d/actor/d_a_npc_md.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -55,7 +56,6 @@ static dCcD_SrcCyl l_cyl_src = {
 };
 
 BOOL daAgbsw0_c::draw() {
-    /* Nonmatching */
     u8 toCheck = getSw0();
     u8 behavior = getType();
     s16 condition = getParamNo();
@@ -113,31 +113,31 @@ BOOL daAgbsw0_c::draw() {
     }
     else if(behavior == 2 || behavior == 0xD || behavior == 0xE) {
         u8 iconType;
-        u16 iconRot;
+        s32 iconRot;
         u8 temp;
         if(condition == 0) {
             iconType = 8;
-            iconRot = -0x8000;
+            iconRot = 0x8000;
             temp = 0;
         }
         else if(condition <= 8) {
             iconType = 9;
-            iconRot = (4 - (condition - 1)) * 0x2000; // missing a mr after the clrlslwi
+            iconRot = (u16)((4 - (condition - 1)) * 0x2000);
             temp = 0;
         }
         else if(condition < 0x19) {
             iconType = 10;
-            iconRot = -0x8000;
+            iconRot = 0x8000;
             temp = condition - 9;
         }
         else if(condition == 0x22) {
             iconType = 0x15;
-            iconRot = -0x8000;
+            iconRot = 0x8000;
             temp = 0;
         }
         else {
             iconType = 0xB;
-            iconRot = -0x8000;
+            iconRot = 0x8000;
             temp = 0;
         }
 
@@ -359,7 +359,7 @@ BOOL daAgbsw0_c::ExeSubA() {
     if(g_mDoGaC_gbaCom.mDoGaC_GbaLink()) {
         if(g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5)) {
             daAgb_c* agb = dComIfGp_getAgb();
-            if(agb && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 != 1) && HitCheck(agb)) {
+            if(agb && (agb->isFree() || agb->getFollowTarget() != 1) && HitCheck(agb)) {
                 u32 param = fopAcM_GetParam(this);
                 MailSend(BigLittleChange(getMsgNo()) >> 0x10, 1, getSw1(), 0xFF, 0);
                 field_0x298 = 1;
@@ -439,7 +439,7 @@ BOOL daAgbsw0_c::ExeSubAT() {
     if(g_mDoGaC_gbaCom.mDoGaC_GbaLink()) {
         if(g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5)) {
             daAgb_c* agb = dComIfGp_getAgb();
-            if(agb && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 != 1) && HitCheck(agb)) {
+            if(agb && (agb->isFree() || agb->getFollowTarget() != 1) && HitCheck(agb)) {
                 if(flag < 0x20) {
                     MailSend(BigLittleChange(getMsgNo()) >> 0x10, 2, getSw1(), 0xFF, 0);
                 }
@@ -522,7 +522,7 @@ BOOL daAgbsw0_c::ExeSubA2() {
         if(g_mDoGaC_gbaCom.mDoGaC_GbaLink()) {
             if(g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5)) {
                 daAgb_c* agb = dComIfGp_getAgb();
-                if(agb && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 == 0) && HitCheck(agb)) {
+                if(agb && (agb->isFree() || agb->getFollowTarget() == 0) && HitCheck(agb)) {
                     MailSend(BigLittleChange(getMsgNo()) >> 0x10, 4, getSw1(), sw, 0);
                     field_0x298 = 1;
                 }
@@ -566,7 +566,7 @@ BOOL daAgbsw0_c::ExeSubF() {
     }
     if(g_mDoGaC_gbaCom.mDoGaC_GbaLink() && g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5)) {
         daAgb_c* agb = dComIfGp_getAgb();
-        if(agb && agb->isActive() && (int)agb->field_0x671 == 0 && (int)agb->field_0x677 == 0 && HitCheck(agb)) {
+        if(agb && agb->isActive() && !agb->isFree() && agb->getFollowTarget() == 0 && HitCheck(agb)) {
             MailSend(BigLittleChange(getMsgNo()) >> 0x10, 6, getSw1(), sw, 0);
         }
     }
@@ -619,7 +619,7 @@ BOOL daAgbsw0_c::ExeSubF2() {
     if(g_mDoGaC_gbaCom.mDoGaC_GbaLink() && g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5) && agb) {
         fopAc_ac_c* player = dComIfGp_getPlayer(0);
         if(field_0x299 == 0) {
-            if(agb->isActive() && (int)agb->field_0x671 == 0 && (int)agb->field_0x677 == 0 && HitCheck(agb)) {
+            if(agb->isActive() && !agb->isFree() && agb->getFollowTarget() == 0 && HitCheck(agb)) {
                 MailSend(0x5A00, 6, 0xFF, 0xFF, 0);
                 agb->onFree();
                 agb->onHold();
@@ -684,7 +684,7 @@ BOOL daAgbsw0_c::ExeSubM() {
     else {
         if(g_mDoGaC_gbaCom.mDoGaC_GbaLink() && g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5)) {
             daAgb_c* agb = dComIfGp_getAgb();
-            if(agb && agb->isActive() && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 != 1) && HitCheck(agb)) {
+            if(agb && agb->isActive() && (agb->isFree() || agb->getFollowTarget() != 1) && HitCheck(agb)) {
                 MailSend(BigLittleChange(getMsgNo()) >> 0x10, 0x3, 0xFF, 0xFF, 0);
                 field_0x298 = 1;
             }
@@ -724,7 +724,7 @@ BOOL daAgbsw0_c::ExeSubM2() {
         else {
             if(g_mDoGaC_gbaCom.mDoGaC_GbaLink() && g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5)) {
                 daAgb_c* agb = dComIfGp_getAgb();
-                if(agb && agb->isActive() && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 != 1) && HitCheck(agb)) {
+                if(agb && agb->isActive() && (agb->isFree() || agb->getFollowTarget() != 1) && HitCheck(agb)) {
                     MailSend(BigLittleChange(getMsgNo()) >> 0x10, 0x3, 0xFF, 0xFF, 0);
                     field_0x298 = 1;
                 }
@@ -765,7 +765,7 @@ BOOL daAgbsw0_c::ExeSubM3() {
         else {
             if(g_mDoGaC_gbaCom.mDoGaC_GbaLink() && g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5)) {
                 daAgb_c* agb = dComIfGp_getAgb();
-                if(agb && agb->isActive() && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 != 1) && HitCheck(agb)) {
+                if(agb && agb->isActive() && (agb->isFree() || agb->getFollowTarget() != 1) && HitCheck(agb)) {
                     u16 gbaMsgId = TriforceCheck(agb);
                     MailSend(BigLittleChange(gbaMsgId) >> 0x10, 0xF, 0xFF, 0xFF, 0);
                     field_0x298 = 1;
@@ -933,11 +933,10 @@ u16 daAgbsw0_c::BeatedMsg[] = {
     0x0031,
     0x004F,
     0x0058,
-    0x0059
-}; 
-//no idea why this is getting pused out an extra 2 bytes
+};
 u16 daAgbsw0_c::DisposedMsg[] = {
-    0x005C
+    0x0059,
+    0x005C,
 };
 
 BOOL daAgbsw0_c::ExeSubMW() {
@@ -1046,7 +1045,7 @@ BOOL daAgbsw0_c::ExeSubS() {
         else if(field_0x299 == 0 && g_mDoGaC_gbaCom.mDoGaC_GbaLink()) {
             daAgb_c* agb = dComIfGp_getAgb();
             if(getParamNo() < 0) {
-                if(agb && agb->isActive() && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 != 1) && HitCheck(agb)) {
+                if(agb && agb->isActive() && (agb->isFree() || agb->getFollowTarget() != 1) && HitCheck(agb)) {
                     if(getMsgNo() == 0xFFFF) {
                         fopAcM_onSwitch(this, sw);
                         if(sw1 != 0xFF) {
@@ -1119,7 +1118,7 @@ BOOL daAgbsw0_c::ExeSubR() {
             return true;
         }
         else if(agb && agb->isActive()) {
-            if((int)agb->field_0x671 != 0 && HitCheck(agb)) {
+            if(agb->isFree() && HitCheck(agb)) {
                 MailSend(BigLittleChange(getMsgNo()) >> 0x10, 0xA, 0xFF, getSw0(), 0);
                 field_0x299 = 1;
                 field_0x298 = 1;
@@ -1213,7 +1212,7 @@ BOOL daAgbsw0_c::ExeSubB() {
             return true;
         }
         else {
-            if(agb && (int)agb->field_0x671 != 0 && HitCheck(agb)) {
+            if(agb && agb->isFree() && HitCheck(agb)) {
                 f32 xzDiff = fopAcM_searchActorDistanceXZ(agb, this);
                 cXyz posDiff = current.pos - agb->current.pos;
 
@@ -1274,7 +1273,7 @@ BOOL daAgbsw0_c::ExeSubB() {
     else if((restriction != 2 && sw != 0xFF && fopAcM_isSwitch(this, sw)) || (restriction  == 2 && sw < 0x20 && dComIfGs_isTbox(sw))) {
         if(agb) {
             if(restriction == 3) {
-                agb->field_0x67c = 0;
+                agb->offBombDeny();
             }
             else if(restriction != 6) {
                 agb->field_0x67b = 0;
@@ -1288,13 +1287,13 @@ BOOL daAgbsw0_c::ExeSubB() {
         if(agb) {
             if(restriction == 3) {
                 if(HitCheck(player->current.pos, 60.0f)) {
-                    agb->field_0x67c = 1;
-                    agb->field_0x660 = fopAcM_GetParam(this);
+                    agb->onBombDeny();
+                    agb->setDenyMessage(fopAcM_GetParam(this));
                     field_0x298 = 1;
                 }
                 else {
                     if(field_0x298 == 1) {
-                        agb->field_0x67c = 0;
+                        agb->offBombDeny();
                         field_0x298 = 0;
                     }
                 }
@@ -1335,7 +1334,7 @@ BOOL daAgbsw0_c::ExeSubD() {
             if(g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5) && agb) {
             fopAc_ac_c* player = dComIfGp_getPlayer(0);
                 if(field_0x299 == 0) {
-                    if(agb->isActive() && (int)agb->field_0x671 != 0 && HitCheck(agb)) {
+                    if(agb->isActive() && agb->isFree() && HitCheck(agb)) {
                         MailSend(0x5F00, 0xC, 0xFF, 0xFF, 0x19);
                         agb->onHold();
                         agb->field_0x675 = 1;
@@ -1481,7 +1480,7 @@ BOOL daAgbsw0_c::ExeSubFA() {
         if(g_mDoGaC_gbaCom.mDoGaC_GbaLink()) {
             if(g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5)) {
                 daAgb_c* agb = dComIfGp_getAgb();
-                if(agb && ((int)agb->field_0x671 != 0 || (int)agb->field_0x677 == 0) && HitCheck(agb)) {
+                if(agb && (agb->isFree() || agb->getFollowTarget() == 0) && HitCheck(agb)) {
                     MailSend(BigLittleChange(getMsgNo()) >> 0x10, 0xD, getSw1(), sw, 0);
                     field_0x298 = 1;
                 }
@@ -2275,59 +2274,59 @@ BOOL daAgbsw0_c::MoveCheck(s16 param_1) {
 
             break;
         case 0x7B:
-            if(fpcM_GetName(dComIfGp_getPlayer(0)) == 0x171/* && m_flying*/) {
+            if(fpcM_GetName(dComIfGp_getPlayer(0)) == 0x171  && daNpc_Md_c::isFlying()) {
                 return 0;
             }
 
             break;
         case 0x7C:
-            if(!fpcM_GetName(dComIfGp_getPlayer(0)) == 0x171/* || !m_flying*/) {
+            if(fpcM_GetName(dComIfGp_getPlayer(0)) != 0x171 || !daNpc_Md_c::isFlying()) {
                 return 0;
             }
 
             break;
         case 0x7D:
-            if(!fopAcM_isSwitch(this, 0x7C)) {
+            if(fpcM_GetName(dComIfGp_getPlayer(0)) == 0x171/* && daNpc_Cb1_c::isFlying()*/) {
                 return 0;
             }
 
             break;
         case 0x7E:
-            if(dComIfGs_checkGetItem(HUMMER) && !dComIfGs_isEventBit(0x2D01)) {
+            if(!fpcM_GetName(dComIfGp_getPlayer(0)) != 0x171/* || !daNpc_Cb1_c::isFlying()*/) {
                 return 0;
             }
 
             break;
         case 0x7F:
-            if(fpcM_GetName(dComIfGp_getPlayer(0)) == 0x171/* && m_flying*/) {
+            if(!fopAcM_isSwitch(this, 0x7C)) {
                 return 0;
             }
 
             break;
         case 0x80:
-            if(!fpcM_GetName(dComIfGp_getPlayer(0)) != 0x171/* || !m_flying*/) {
+            if(dComIfGs_checkGetItem(HUMMER) && !dComIfGs_isEventBit(0x2D01)) {
                 return 0;
             }
 
             break;
         case 0x82:
             if(field_0x29B == 0) {
-                if(field_0x298 /* daNpc_Md_c::isPlayerRoom() */) {
+                if(daNpc_Md_c::isPlayerRoom()) {
                     field_0x29B = 1;
                 }
             }
-            else if(!field_0x298 /* !daNpc_Md_c::isPlayerRoom() */) {
+            else if(!daNpc_Md_c::isPlayerRoom()) {
                 return 0;
             }
 
             break;
         case 0x83:
             if(field_0x29B == 0) {
-                if(field_0x298 /* daNpc_Md_c::isPlayerRoom() */) {
+                if(field_0x298 /* daNpc_Cb1_c::isPlayerRoom() */) {
                     field_0x29B = 1;
                 }
             }
-            else if(!field_0x298 /* !daNpc_Md_c::isPlayerRoom() */) {
+            else if(!field_0x298 /* !daNpc_Cb1_c::isPlayerRoom() */) {
                 return 0;
             }
 
@@ -2372,7 +2371,7 @@ static BOOL daAgbsw0_Delete(daAgbsw0_c* i_this) {
         if(id == 0xA) {
             s16 temp = i_this->current.angle.x & 0xFFFF;
             if(temp == 3) {
-                agb->field_0x67c = 0;
+                agb->offBombDeny();
             }
             else if(temp == 4) {
                 daAgb_c::mFlags.field_0x3 = 0; //has an extra stb + mr but at least it does rlwimi on 0 now

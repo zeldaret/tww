@@ -38,6 +38,8 @@ public:
 
 class daAgb_c : public fopAc_ac_c {
 public:
+    // daAgb_BmRp_c struct?
+
     void NameConv();
     int uploadInitCheck();
     int uploadPortCheckWait();
@@ -76,6 +78,18 @@ public:
     
     BOOL isMsgSend() { return mIsMsgSend; }
     BOOL isActive() { return mIsActive; }
+    void onActive() { mIsActive = true; }
+    void offActive() { mIsActive = false; }
+    void onBombDeny() { mBombDeny = true; }
+    void offBombDeny() { mBombDeny = false; }
+    void setDenyMessage(u16 msg) { mDenyMessage = msg; }
+    BOOL isFree() { return mIsFree; }
+    void offFree() {}
+    void isHold() {}
+    s32 getFollowTarget() { return mFollowTarget; }
+    void setFollowTarget(bool) {}
+    void getTargetID() {}
+    void setTargetID(unsigned int) {}
 
     static int mEffect;
 
@@ -154,7 +168,7 @@ public:
     /* 0x65A */ u16 field_0x65a;
     /* 0x65C */ u16 field_0x65c;
     /* 0x65E */ u16 field_0x65e;
-    /* 0x660 */ u16 field_0x660;
+    /* 0x660 */ u16 mDenyMessage;
     /* 0x662 */ u16 field_0x662;
     /* 0x664 */ u16 field_0x664;
     /* 0x666 */ u8 mPortNo;
@@ -167,18 +181,18 @@ public:
     /* 0x66E */ u8 field_0x66e;
     /* 0x66F */ s8 field_0x66f;
     /* 0x670 */ u8 field_0x670;
-    /* 0x671 */ u8 field_0x671;
+    /* 0x671 */ bool mIsFree;
     /* 0x672 */ bool mIsActive;
     /* 0x673 */ u8 field_0x673;
     /* 0x674 */ u8 field_0x674;
     /* 0x675 */ u8 field_0x675;
     /* 0x676 */ u8 field_0x676;
-    /* 0x677 */ u8 field_0x677;
+    /* 0x677 */ u8 mFollowTarget;
     /* 0x678 */ bool mIsMsgSend;
     /* 0x679 */ u8 field_0x679;
     /* 0x67A */ bool field_0x67a;
     /* 0x67B */ u8 field_0x67b;
-    /* 0x67C */ u8 field_0x67c;
+    /* 0x67C */ bool mBombDeny;
     /* 0x67D */ u8 field_0x67d;
     /* 0x67E */ u8 field_0x67e;
     /* 0x67F */ u8 field_0x67f;

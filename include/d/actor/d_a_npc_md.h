@@ -185,7 +185,7 @@ public:
     ~daNpc_Md_followEcallBack_c() {}
     
     void execute(JPABaseEmitter*);
-    void setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char);
+    void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
     void end();
 
 public:
@@ -224,7 +224,7 @@ public:
     void playerAction(void*);
     void setPlayerAction(ActionFunc, void*);
     void getStickAngY(int);
-    void calcStickPos(short, cXyz*);
+    void calcStickPos(s16, cXyz*);
     BOOL flyCheck();
     BOOL mirrorCancelCheck();
     void setWingEmitter();
@@ -240,8 +240,8 @@ public:
     void wallHitCheck();
     void NpcCall(int*);
     void checkCollision(int);
-    void restartPoint(short);
-    void setMessageAnimation(unsigned char);
+    void restartPoint(s16);
+    void setMessageAnimation(u8);
     void waitGroundCheck();
     void chkAdanmaeDemoOrder();
     int waitNpcAction(void*);
@@ -268,16 +268,16 @@ public:
     int piyo2NpcAction(void*);
     int deleteNpcAction(void*);
     int demoFlyNpcAction(void*);
-    void routeAngCheck(cXyz&, short*);
-    void routeWallCheck(cXyz&, cXyz&, short*);
-    void checkForwardGroundY(short);
-    void checkWallJump(short);
-    void routeCheck(float, short*);
+    void routeAngCheck(cXyz&, s16*);
+    void routeWallCheck(cXyz&, cXyz&, s16*);
+    void checkForwardGroundY(s16);
+    void checkWallJump(s16);
+    void routeCheck(f32, s16*);
     int searchNpcAction(void*);
     int hitNpcAction(void*);
-    void setNormalSpeedF(float, float, float, float, float);
-    void setSpeedAndAngleNormal(float, short);
-    void walkProc(float, short);
+    void setNormalSpeedF(f32, f32, f32, f32, f32);
+    void setSpeedAndAngleNormal(f32, s16);
+    void walkProc(f32, s16);
     int jumpNpcAction(void*);
     int escapeNpcAction(void*);
     int waitPlayerAction(void*);
@@ -327,27 +327,27 @@ public:
     void actionLookDown(int);
     void talk_init();
     void talk(int);
-    void getAnmType(unsigned char);
-    BOOL initTexPatternAnm(unsigned char, bool);
+    void getAnmType(u8);
+    BOOL initTexPatternAnm(u8, bool);
     void playTexPatternAnm();
     BOOL initLightBtkAnm(bool);
     void playLightBtkAnm();
     void setAnm(int);
-    void dNpc_Md_setAnm(mDoExt_McaMorf2*, float, int, float, float, char*, char*, const char*);
-    void dNpc_Md_setAnm(mDoExt_McaMorf*, int, float, float, char*, const char*);
-    void chkAttention(cXyz, short, int);
+    void dNpc_Md_setAnm(mDoExt_McaMorf2*, f32, int, f32, f32, char*, char*, const char*);
+    void dNpc_Md_setAnm(mDoExt_McaMorf*, int, f32, f32, char*, const char*);
+    void chkAttention(cXyz, s16, int);
     void chkArea(cXyz*);
     void carryCheck();
     void eventOrder();
     void checkOrder();
     void checkCommandTalk();
-    void next_msgStatus(unsigned long*);
+    void next_msgStatus(u32*);
     void getMsg();
     void setCollision();
     void setAttention(bool);
     void lookBack(int, int, int);
     void lookBack(cXyz*, int, int);
-    void lookBackWaist(short, float);
+    void lookBackWaist(s16, f32);
     void setBaseMtx();
     void deletePiyoPiyo();
     void init();
@@ -355,8 +355,8 @@ public:
     void animationPlay();
     void checkPlayerRoom();
     BOOL execute();
-    void particle_set(JPABaseEmitter**, unsigned short);
-    void emitterTrace(JPABaseEmitter*, float(*)[4], csXyz*);
+    void particle_set(JPABaseEmitter**, u16);
+    void emitterTrace(JPABaseEmitter*, MtxP, csXyz*);
     void emitterDelete(JPABaseEmitter**);
     
     virtual BOOL isTagCheckOK();
@@ -372,7 +372,9 @@ public:
     static s16 m_flyingTimer;
     static bool m_playerRoom;
     
+    static bool isFlying() { return m_flying; }
     static s16 getMaxFlyingTimer();
+    static bool isPlayerRoom() { return m_playerRoom; }
     
 public:
     /* 0x04EC */ request_of_phase_process_class mPhs;

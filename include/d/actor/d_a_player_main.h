@@ -2056,12 +2056,19 @@ public:
     s16 checkTinkleShield() const { return mTinkleShieldTimer; }
     void setTinkleShield(s16 time) { mTinkleShieldTimer = time; }
     bool checkNoDamageMode() const { return checkEquipDragonShield() || checkTinkleShield() != 0; }
+    void setHoverBoots(s16 time) {
+        onNoResetFlg0(daPyFlg0_HOVER_BOOTS);
+        m354C = time;
+    }
     void onShipTact() { onNoResetFlg1(daPyFlg1_SHIP_TACT); }
     void offShipTact() { offNoResetFlg1(daPyFlg1_SHIP_TACT); }
     void checkShipGetOff() {}
-    void onShipDrop(s16) {}
+    void onShipDrop(s16 param_1) {
+        onNoResetFlg0(daPyFlg0_SHIP_DROP);
+        m3550 = param_1;
+    }
     void checkCarryActionNow() const {}
-    void checkNoControll() const {}
+    bool checkNoControll() const { return dComIfGp_getPlayer(0) != this; }
     void clearDamageWait() {}
     void exchangeGrabActor(fopAc_ac_c*) {}
     void getDekuLeafWindPos() const {}
@@ -2078,7 +2085,7 @@ public:
     
     void onModeFlg(u32 flag) { mModeFlg |= flag; }
     void offModeFlg(u32 flag) { mModeFlg &= ~flag; }
-    BOOL checkModeFlg(u32 flag) const { return mModeFlg & flag; }
+    u32 checkModeFlg(u32 flag) const { return mModeFlg & flag; }
     
     request_of_phase_process_class* getPhase() { return &mPhsLoad; }
     
@@ -2089,7 +2096,7 @@ public:
     virtual int getTactTimerCancel() const;
     virtual BOOL checkPlayerGuard() const;
     virtual fopAc_ac_c* getGrabMissActor();
-    virtual BOOL checkPlayerFly() const { return checkModeFlg(0x10452822); } // TODO add enum
+    virtual u32 checkPlayerFly() const { return checkModeFlg(0x10452822); } // TODO add enum
     virtual BOOL checkFrontRoll() const { return mCurProcID == PROC_FRONT_ROLL_e; }
     virtual BOOL checkBottleSwing() const { return mCurProcID == PROC_BOTTLE_SWING_e; }
     virtual BOOL checkCutCharge() const { return mCurProcID == PROC_CUT_TURN_MOVE_e; }

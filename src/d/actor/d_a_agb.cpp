@@ -17,29 +17,17 @@
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_gba_com.h"
 #include "m_Do/m_Do_mtx.h"
+#include "d/actor/d_a_npc_md.h"
+#include "d/actor/d_a_bomb.h"
 
 // stripped or compiler generated?
 static u32 unused_lit_2100[] = {0x3F800000, 0x3F800000, 0x3F800000,
                                 0x3F800000, 0x3F800000, 0x3F800000};
 
 // temp
-class daNpc_Md_c {
-public:
-    static bool m_flying;
-};
-
 class daNpc_Cb1_c {
 public:
     static bool m_flying;
-};
-
-class daBomb_c {
-public:
-    enum State_e {
-        STATE_8_e = 8,
-    };
-
-    static u32 prm_make(State_e, bool, bool);
 };
 
 static mDoDvdThd_toMainRam_c* l_gbaCommand;
@@ -445,10 +433,6 @@ void daAgb_c::modeLookAttention() {
     }
 }
 
-u8 daAgb_c::DungeonNoTable[] = {
-    0, 11, 11, 1, 2, 3, 4, 5, 17, 17, 17, 17, 17, 17, 17, 17,
-};
-
 /* 800D0490-800D0580       .text DungeonNoGet__7daAgb_cFv */
 u8 daAgb_c::DungeonNoGet() {
     u8 var_r0 = DungeonNoTable[field_0x66c];
@@ -499,6 +483,10 @@ u8 daAgb_c::DungeonNoGet() {
     return dungeon_no;
 }
 
+u8 daAgb_c::DungeonNoTable[] = {
+    0, 11, 11, 1, 2, 3, 4, 5, 17, 17, 17, 17, 17, 17, 17, 17,
+};
+
 /* 800D0580-800D05D4       .text MapNoSet__7daAgb_cFUcUcUc */
 void daAgb_c::MapNoSet(u8 param_0, u8 param_1, u8 param_2) {
     field_0x66c = param_0;
@@ -511,9 +499,9 @@ void daAgb_c::MapNoSet(u8 param_0, u8 param_1, u8 param_2) {
 
 /* 800D05D4-800D05F0       .text onFree__7daAgb_cFv */
 void daAgb_c::onFree() {
-    field_0x671 = 1;
+    mIsFree = true;
     field_0x650 = -1;
-    field_0x677 = 0;
+    mFollowTarget = 0;
 }
 
 /* 800D05F0-800D0608       .text onHold__7daAgb_cFv */
@@ -531,8 +519,8 @@ void daAgb_c::offHold() {
 /* 800D0620-800D070C       .text resetCursor__7daAgb_cFb */
 void daAgb_c::resetCursor(bool param_0) {
     fopAc_ac_c* player_p = dComIfGp_getPlayer(0);
-    field_0x671 = 0;
-    field_0x677 = 0;
+    mIsFree = false;
+    mFollowTarget = 0;
     field_0x650 = -1;
 
     if (fopAcM_GetName(player_p) != PROC_NPC_KAM) {
@@ -563,7 +551,7 @@ void daAgb_c::resetCursor(bool param_0) {
 
 /* 800D070C-800D0734       .text FlashCheck__7daAgb_cFv */
 bool daAgb_c::FlashCheck() {
-    if (field_0x671 != 0 || field_0x677 == 1) {
+    if (mIsFree != 0 || mFollowTarget == 1) {
         return true;
     }
 
@@ -646,7 +634,6 @@ void daAgb_c::SwitchOn() {
 }
 
 /* 800D0A54-800D1188       .text GbaItemUse__7daAgb_cFv */
-// NONMATCHING - mostly done, some regswaps
 void daAgb_c::GbaItemUse() {
     u32 temp_r29 = mItem.field_0x0;
     u32 var_r28 = 0;
@@ -658,8 +645,8 @@ void daAgb_c::GbaItemUse() {
             dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
 
         if (fili_p != NULL && fili_p->mParam & 4) {
-            if (field_0x67c != 0) {
-                mEffect = BigLittleChange((field_0x660 << 0x10) | 0x300);
+            if (mBombDeny) {
+                mEffect = BigLittleChange((mDenyMessage << 0x10) | 0x300);
                 return;
             } else if (temp_r29 == 5) {
                 f32 temp_f1 = cM_rndF(100.0f);
@@ -695,9 +682,9 @@ void daAgb_c::GbaItemUse() {
 
     switch (temp_r29) {
     case 16:
-        if (daPy_getPlayerLinkActorClass() != dComIfGp_getPlayer(0) ||
+        if (daPy_getPlayerLinkActorClass()->checkNoControll() ||
             dComIfGp_checkPlayerStatus0(0, 0x8000000) ||
-            (daPy_getPlayerLinkActorClass()->checkPlayerFly() &&
+            (daPy_getPlayerActorClass()->checkPlayerFly() &&
              !dComIfGp_checkPlayerStatus0(0, 0x100000) && !dComIfGp_checkPlayerStatus0(0, 0x10000)))
         {
             mEffect = BigLittleChange(0x1F0300);
@@ -714,15 +701,15 @@ void daAgb_c::GbaItemUse() {
             return;
         }
 
-        if (daPy_getPlayerLinkActorClass() != dComIfGp_getPlayer(0) &&
-            fopAcM_searchPlayerDistanceXZ(this) < 232.0f)
+        if (daPy_getPlayerLinkActorClass()->checkNoControll() &&
+            fopAcM_searchActorDistanceXZ(this, daPy_getPlayerLinkActorClass()) < 232.0f)
         {
             mEffect = 0;
             return;
         }
 
-        if ((int)field_0x671 != 0 || (int)field_0x677 == 1) {
-            if ((int)field_0x671 == 0 && dComIfGs_getGbaRupeeCount() < 24 &&
+        if (isFree() || getFollowTarget() == 1) {
+            if (!isFree() && dComIfGs_getGbaRupeeCount() < 24 &&
                 fopAcM_IsExecuting(field_0x650))
             {
                 fopAc_ac_c* actor_p = fopAcM_SearchByID(field_0x650);
@@ -738,7 +725,7 @@ void daAgb_c::GbaItemUse() {
                 temp_r29 = 15;
             }
 
-            fopAcM_create(0x128, daBomb_c::prm_make(daBomb_c::STATE_8_e, false, false),
+            fopAcM_create(0x128, daBomb_c::prm_make(daBomb_c::STATE_8, false, false),
                           &current.pos, -1, NULL, NULL, -1, NULL);
             field_0x65c = 0x78;
         } else {
@@ -750,7 +737,7 @@ void daAgb_c::GbaItemUse() {
         break;
     case 0x15:
         resetCursor(false);
-        fopAcM_create(0x128, daBomb_c::prm_make(daBomb_c::STATE_8_e, false, false), &current.pos,
+        fopAcM_create(0x128, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos,
                       -1, NULL, NULL, -1, NULL);
         field_0x65c = 0x78;
         break;
@@ -758,9 +745,7 @@ void daAgb_c::GbaItemUse() {
         mEffect = BigLittleChange(temp_r29);
         return;
     case 3:
-        daPy_lk_c* temp_r3 = daPy_getPlayerLinkActorClass();
-        temp_r3->onNoResetFlg0(daPy_py_c::daPyFlg0_UNK1000);
-        temp_r3->m354C = 5*30;
+        daPy_getPlayerLinkActorClass()->setHoverBoots(5*30);
         resetCursor(false);
         field_0x65c = 0x96;
         mBrk.setPlaySpeed(6.0f);
@@ -786,15 +771,13 @@ void daAgb_c::GbaItemUse() {
         }
         break;
     case 12:
-        if (field_0x67c != 0) {
-            mEffect = BigLittleChange((field_0x660 << 0x10) | 0x300);
+        if (mBombDeny) {
+            mEffect = BigLittleChange((mDenyMessage << 0x10) | 0x300);
             return;
         } else {
-            daPy_lk_c* temp_r4 = daPy_getPlayerLinkActorClass();
-            temp_r4->onNoResetFlg0(daPy_py_c::daPyFlg0_UNK1000);
-            temp_r4->m354C = 300;
-            if (!(daPy_getPlayerLinkActorClass()->checkEquipDragonShield())) {
-                temp_r4->setTinkleShield(300);
+            daPy_getPlayerLinkActorClass()->setHoverBoots(10*30);
+            if (!daPy_getPlayerLinkActorClass()->checkEquipDragonShield()) {
+                daPy_getPlayerLinkActorClass()->setTinkleShield(300);
             }
 
             resetCursor(false);
@@ -803,11 +786,11 @@ void daAgb_c::GbaItemUse() {
         }
         break;
     case 13:
-        if (field_0x67c != 0) {
-            mEffect = BigLittleChange((field_0x660 << 0x10) | 0x300);
+        if (mBombDeny) {
+            mEffect = BigLittleChange((mDenyMessage << 0x10) | 0x300);
             return;
         } else {
-            if ((daPy_getPlayerLinkActorClass()->checkEquipDragonShield())) {
+            if (daPy_getPlayerLinkActorClass()->checkEquipDragonShield()) {
                 mEffect = 0;
                 return;
             }
@@ -951,12 +934,8 @@ int daAgb_Execute(daAgb_c* i_this) {
 
         if (i_this->field_0x65c != 0) {
             if (i_this->field_0x66b == 3 || i_this->field_0x66b == 12) {
-                daPy_lk_c* player_p = daPy_getPlayerLinkActorClass();
-                player_p->onNoResetFlg0(daPy_py_c::daPyFlg0_UNK1000);
-                player_p->m354C = 10;
-            } else if (i_this->field_0x66b == 4 || i_this->field_0x66b == 13 ||
-                       i_this->field_0x66b == 12)
-            {
+                daPy_getPlayerLinkActorClass()->setHoverBoots(10);
+            } else if (i_this->field_0x66b == 4 || i_this->field_0x66b == 13 || i_this->field_0x66b == 12) {
                 daPy_getPlayerLinkActorClass()->setTinkleShield(10);
             }
 
@@ -972,7 +951,7 @@ int daAgb_Execute(daAgb_c* i_this) {
     i_this->modeProcCall();
 
     if (g_mDoGaC_gbaCom.mDoGaC_GbaLink()) {
-        if ((int)i_this->field_0x671 != 0) {
+        if (i_this->isFree()) {
             if (i_this->current.pos.x != i_this->next.pos.x ||
                 i_this->current.pos.z != i_this->next.pos.z)
             {
@@ -983,7 +962,7 @@ int daAgb_Execute(daAgb_c* i_this) {
         } else {
             daPy_lk_c* player_p2 = daPy_getPlayerLinkActorClass();
             if ((dComIfGp_getPlayer(0) == player_p2 && !temp_r29->checkPlayerFly()) ||
-                ((fopAcM_GetName(temp_r29) == PROC_NPC_MD && !daNpc_Md_c::m_flying) ||
+                ((fopAcM_GetName(temp_r29) == PROC_NPC_MD && !daNpc_Md_c::isFlying()) ||
                  (fopAcM_GetName(temp_r29) == PROC_NPC_CB1 && !daNpc_Cb1_c::m_flying) ||
                  fopAcM_GetName(temp_r29) == PROC_NPC_OS))
             {
@@ -1036,7 +1015,7 @@ int daAgb_Execute(daAgb_c* i_this) {
                 i_this->mBrk.play();
             }
         } else if (((i_this->isActive() || i_this->field_0x676 != 0) &&
-                    ((int)i_this->field_0x671 != 0 || (int)i_this->field_0x677 == 1)) ||
+                    (i_this->isFree() || i_this->getFollowTarget() == 1)) ||
                    (i_this->field_0x66b == 14 && i_this->field_0x65c > 120))
         {
             i_this->mBrk.play();
@@ -1172,7 +1151,7 @@ int daAgb_Create(fopAc_ac_c* i_this) {
         a_this->mIsMsgSend = g_mDoGaC_gbaCom.field_0x0 > 0;
         a_this->field_0x654 = 0;
         a_this->field_0x650 = -1;
-        a_this->field_0x677 = 0;
+        a_this->mFollowTarget = 0;
         a_this->field_0x67b = 0;
         a_this->field_0x680 = 1;
 
