@@ -1851,6 +1851,14 @@ inline bool dComIfGp_checkPlayerStatus1(int param_0, u32 flag) {
     return g_dComIfG_gameInfo.play.checkPlayerStatus(param_0, 1, flag);
 }
 
+inline void dComIfGp_setPlayerStatus0(int param_0, u32 flag) {
+    g_dComIfG_gameInfo.play.setPlayerStatus(param_0, 0, flag);
+}
+
+inline void dComIfGp_setPlayerStatus1(int param_0, u32 flag) {
+    g_dComIfG_gameInfo.play.setPlayerStatus(param_0, 1, flag);
+}
+
 inline void dComIfGp_clearPlayerStatus0(int param_0, u32 flag) {
     g_dComIfG_gameInfo.play.clearPlayerStatus(param_0, 0, flag);
 }

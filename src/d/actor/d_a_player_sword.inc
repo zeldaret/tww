@@ -8,7 +8,7 @@
  * 
  * The original name of this file is known because of an assert contained within
  * a function from this file.
-*/
+ */
 
 #include "d/actor/d_a_player_main.h"
 

@@ -8,7 +8,7 @@
  * 
  * The original name of this file is not known, but a best guess was taken 
  * based on the original names of the functions it contains.
-*/
+ */
 
 #include "d/actor/d_a_player_main.h"
 

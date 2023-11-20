@@ -110,7 +110,7 @@ public:
 class daPy_swimTailEcallBack_c : public dPa_levelEcallBack {
 public:
     void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
-    void getMaxWaterY(JGeometry::TVec3<float>*);
+    void getMaxWaterY(JGeometry::TVec3<f32>*);
     void remove();
     void execute(JPABaseEmitter*);
     void draw(JPABaseEmitter*);
@@ -176,7 +176,7 @@ public:
 
 class daPy_swBlur_c : public J3DPacket {
 public:
-    void initSwBlur(MtxP, int, float, int);
+    void initSwBlur(MtxP, int, f32, int);
     void copySwBlur(MtxP, int);
     void draw();
     ~daPy_swBlur_c() {}
@@ -212,7 +212,10 @@ struct daPy_aura_c {
     f32 getFrame() { return mFrame; }
 };
 
-class daPy_anmIndex_c;
+class daPy_anmIndex_c {
+public:
+    
+};
 
 enum LINK_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
@@ -1506,13 +1509,13 @@ public:
     void initSeAnime();
     void resetSeAnime();
     void setMoveAnime(f32, f32, f32, daPy_lk_c::daPy_ANM, daPy_lk_c::daPy_ANM, int, f32);
-    void setSingleMoveAnime(daPy_lk_c::daPy_ANM, float, float, short, float);
+    BOOL setSingleMoveAnime(daPy_lk_c::daPy_ANM, f32, f32, s16, f32);
     void setActAnimeUpper(u16, daPy_lk_c::daPy_UPPER, f32, f32, s16, f32);
-    void resetActAnimeUpper(daPy_lk_c::daPy_UPPER, float);
+    void resetActAnimeUpper(daPy_lk_c::daPy_UPPER, f32);
     void animeUpdate();
     void simpleAnmPlay(J3DAnmBase*);
     void setHandModel(daPy_lk_c::daPy_ANM);
-    void getAnmData(daPy_lk_c::daPy_ANM) const;
+    daPy_anmIndex_c* getAnmData(daPy_lk_c::daPy_ANM) const;
     BOOL checkGrabWeapon(int);
     void endDemoMode();
     void setAuraEffect();
@@ -2066,13 +2069,16 @@ public:
     void getIceWaterParticleBtk() {}
     void getShadowID() const {}
     void npcStartRestartRoom() {}
-    void offModeFlg(u32) {}
     void setDaiokutaEnd() {}
     void setWhirlId(unsigned int) {}
     
     int getStartRoomNo() { return fopAcM_GetParam(this) & 0x3F; }
     int getStartMode() { return (fopAcM_GetParam(this) >> 0x0C) & 0xF; }
     int getStartEvent() { return (fopAcM_GetParam(this) >> 0x18) & 0xFF; }
+    
+    void onModeFlg(u32 flag) { mModeFlg |= flag; }
+    void offModeFlg(u32 flag) { mModeFlg &= ~flag; }
+    BOOL checkModeFlg(u32 flag) const { return mModeFlg & flag; }
     
     request_of_phase_process_class* getPhase() { return &mPhsLoad; }
     
@@ -2083,7 +2089,7 @@ public:
     virtual int getTactTimerCancel() const;
     virtual BOOL checkPlayerGuard() const;
     virtual fopAc_ac_c* getGrabMissActor();
-    virtual BOOL checkPlayerFly() const { return mProcFlags & 0x10452822; } // TODO add enum
+    virtual BOOL checkPlayerFly() const { return checkModeFlg(0x10452822); } // TODO add enum
     virtual BOOL checkFrontRoll() const { return mCurProcID == PROC_FRONT_ROLL_e; }
     virtual BOOL checkBottleSwing() const { return mCurProcID == PROC_BOTTLE_SWING_e; }
     virtual BOOL checkCutCharge() const { return mCurProcID == PROC_CUT_TURN_MOVE_e; }
@@ -2109,7 +2115,7 @@ public:
     virtual BOOL setHookshotCarryOffset(unsigned int, const cXyz*);
     virtual void setPlayerPosAndAngle(cXyz*, s16);
     virtual void setPlayerPosAndAngle(cXyz*, csXyz*);
-    virtual void setPlayerPosAndAngle(float (*)[4]);
+    virtual void setPlayerPosAndAngle(MtxP);
     virtual BOOL setThrowDamage(cXyz*, s16, f32, f32, int);
     virtual void changeTextureAnime(u16, u16, int);
     virtual void cancelChangeTextureAnime();
@@ -2165,7 +2171,7 @@ public:
     /* 0x2E90 */ JKRSolidHeap* mpItemHeaps[2];
     /* 0x2E98 */ J3DModel* mpHeldItemModel;
     /* 0x2E9C */ mDoExt_bckAnm mSwordAnim;
-    /* 0x2EAC */ u8 m2EAC[0x2EB0 - 0x2EAC];
+    /* 0x2EAC */ mDoExt_McaMorf* m2EAC;
     /* 0x2EB0 */ J3DAnmTevRegKey* mpBombBrk;
     /* 0x2EB4 */ J3DAnmTevRegKey* mpGwp00BrkData;
     /* 0x2EB8 */ J3DAnmTextureSRTKey* mpGwp00BtkData;
@@ -2284,7 +2290,10 @@ public:
     /* 0x34C9 */ u8 m34C9;
     /* 0x34CA */ u8 m34CA;
     /* 0x34CB */ u8 mDekuSpRestartPoint;
-    /* 0x34CC */ u8 m34CC[0x34D0 - 0x34CC];
+    /* 0x34CC */ u8 m34CC;
+    /* 0x34CD */ u8 m34CD;
+    /* 0x34CE */ u8 m34CE;
+    /* 0x34CF */ u8 m34CF[0x34D0 - 0x34CF];
     /* 0x34D0 */ s16 m34D0;
     /* 0x34D2 */ s16 m34D2;
     /* 0x34D4 */ s16 m34D4;
@@ -2342,16 +2351,20 @@ public:
     /* 0x353C */ s16 m353C;
     /* 0x353E */ s16 m353E;
     /* 0x3540 */ s16 m3540;
-    /* 0x3542 */ u8 m3542[0x3544 - 0x3542];
+    /* 0x3542 */ s16 m3542;
     /* 0x3544 */ s16 m3544;
     /* 0x3546 */ s16 mShieldFrontRangeYAngle;
-    /* 0x3548 */ u8 m3548[0x354C - 0x3548];
+    /* 0x3548 */ s16 m3548;
+    /* 0x354A */ u8 m354A[0x354C - 0x354A];
     /* 0x354C */ s16 m354C;
     /* 0x354E */ s16 mTinkleShieldTimer;
-    /* 0x3550 */ u8 m3550[0x3552 - 0x3550];
+    /* 0x3550 */ s16 m3550;
     /* 0x3552 */ u16 mKeepItemType;
     /* 0x3554 */ s16 m3554;
-    /* 0x3556 */ u8 m3556[0x355E - 0x3556];
+    /* 0x3556 */ u8 m3556[0x3558 - 0x3556];
+    /* 0x3558 */ s16 m3558;
+    /* 0x355A */ s16 m355A;
+    /* 0x355C */ s16 m355C;
     /* 0x355E */ u16 m355E;
     /* 0x3560 */ u16 mHeldItemType;
     /* 0x3562 */ u8 m3562[0x3564 - 0x3562];
@@ -2362,7 +2375,8 @@ public:
     /* 0x356C */ int mCameraInfoIdx;
     /* 0x3570 */ int m3570;
     /* 0x3574 */ int m3574;
-    /* 0x3578 */ u8 m3578[0x3580 - 0x3578];
+    /* 0x3578 */ int m3578;
+    /* 0x357C */ u8 m357C[0x3580 - 0x357C];
     /* 0x3580 */ int m3580;
     /* 0x3584 */ int mCurrentGroundAttributeCode;
     /* 0x3588 */ u8 m3588[0x358C - 0x3588];
@@ -2373,7 +2387,9 @@ public:
     /* 0x359C */ u8 m359C[0x35A0 - 0x359C];
     /* 0x35A0 */ f32 m35A0;
     /* 0x35A4 */ f32 m35A4;
-    /* 0x35A8 */ u8 m35A8[0x35BC - 0x35A8];
+    /* 0x35A8 */ u8 m35A8[0x35B0 - 0x35A8];
+    /* 0x35B0 */ f32 m35B0;
+    /* 0x35B4 */ u8 m35B4[0x35BC - 0x35B4];
     /* 0x35BC */ f32 mVelocity;
     /* 0x35C0 */ u8 m35C0[0x35C4 - 0x35C0];
     /* 0x35C4 */ f32 m35C4;
@@ -2396,7 +2412,7 @@ public:
     /* 0x360C */ f32 mSeAnmRate;
     /* 0x3610 */ f32 m3610;
     /* 0x3614 */ int m3614;
-    /* 0x3618 */ u32 mProcFlags;
+    /* 0x3618 */ u32 mModeFlg;
     /* 0x361C */ u32 mMtrlSndId;
     /* 0x3620 */ u32 m3620;
     /* 0x3624 */ int m3624;
@@ -2409,9 +2425,8 @@ public:
     /* 0x3640 */ s16 m3640;
     /* 0x3642 */ u8 m3642[0x3644 - 0x3642];
     /* 0x3644 */ f32 m3644;
-    /* 0x3648 */ u8 m3648[0x3654 - 0x3648];
-    /* 0x3654 */ f32 m3654;
-    /* 0x3658 */ u8 m3658[0x3668 - 0x3658];
+    /* 0x3648 */ Quaternion m3648;
+    /* 0x3658 */ Quaternion m3658;
     /* 0x3668 */ J3DTransformInfo m3668;
     /* 0x3688 */ cXyz m3688;
     /* 0x3694 */ cXyz mOldSpeed;
@@ -2422,15 +2437,16 @@ public:
     /* 0x36D0 */ cXyz m36D0;
     /* 0x36DC */ cXyz m36DC;
     /* 0x36E8 */ cXyz mHookshotRootPos;
-    /* 0x36F4 */ u8 m36F4[0x3700 - 0x36F4];
+    /* 0x36F4 */ cXyz m36F4;
     /* 0x3700 */ cXyz m3700;
     /* 0x370C */ cXyz m370C;
-    /* 0x3718 */ u8 m3718[0x3724 - 0x3718];
+    /* 0x3718 */ cXyz m3718;
     /* 0x3724 */ cXyz m3724;
     /* 0x3730 */ cXyz m3730;
-    /* 0x373C */ u8 m373C[0x3748 - 0x373C];
+    /* 0x373C */ cXyz m373C;
     /* 0x3748 */ cXyz m3748;
-    /* 0x3754 */ u8 m3754[0x37E4 - 0x3754];
+    /* 0x3754 */ u8 m3754[0x37B4 - 0x3754];
+    /* 0x37B4 */ Mtx m37B4;
     /* 0x37E4 */ daPy_swBlur_c mSwBlur;
     /* 0x3DB8 */ daPy_footData_c mFootData[2];
     /* 0x3FE8 */ dCcD_Stts mStts;

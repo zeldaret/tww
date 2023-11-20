@@ -1,6 +1,7 @@
 /**
-* d_a_kytag06.cpp
-*/
+ * d_a_kytag06.cpp
+ */
+
 #include "JSystem/JKernel/JKRHeap.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"

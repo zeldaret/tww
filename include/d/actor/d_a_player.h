@@ -114,6 +114,7 @@ public:
         daPyFlg1_FORCE_VOMIT_JUMP_SHORT = 0x00010000,
         daPyFlg1_FOREST_WATER_USE       = 0x00020000,
         daPyFlg1_WATER_DROP             = 0x00080000,
+        daPyFlg1_UNK200000              = 0x00200000,
         daPyFlg1_UNK800000              = 0x00800000,
         daPyFlg1_UNK1000000             = 0x01000000,
         daPyFlg1_VINE_CATCH             = 0x02000000,

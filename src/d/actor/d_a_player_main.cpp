@@ -6,7 +6,7 @@
  * Much of Link's code is spread across various `.inc` files and included directly
  * into this one to make the file size more managable.
  * The original split locations are indicated in the map file.
-*/
+ */
 
 #include "d/actor/d_a_player_main.h"
 #include "d/d_com_inf_game.h"
@@ -2716,17 +2716,26 @@ void daPy_lk_c::setAtnList() {
 
 /* 8010841C-8010848C       .text setActor__16daPy_actorKeep_cFv */
 void daPy_actorKeep_c::setActor() {
-    /* Nonmatching */
+    if (mID != -1) {
+        mActor = fopAcM_SearchByID(mID);
+        if (mActor == NULL) {
+            mID = -1;
+        }
+    } else {
+        mActor = NULL;
+    }
 }
 
 /* 8010848C-801084AC       .text setData__16daPy_actorKeep_cFP10fopAc_ac_c */
-void daPy_actorKeep_c::setData(fopAc_ac_c*) {
-    /* Nonmatching */
+void daPy_actorKeep_c::setData(fopAc_ac_c* actor) {
+    mActor = actor;
+    mID = fopAcM_GetID(actor);
 }
 
 /* 801084AC-801084C0       .text clearData__16daPy_actorKeep_cFv */
 void daPy_actorKeep_c::clearData() {
-    /* Nonmatching */
+    mID = -1;
+    mActor = NULL;
 }
 
 /* 801084C0-80108564       .text setActorPointer__9daPy_lk_cFv */
@@ -2910,8 +2919,53 @@ BOOL daPy_lk_c::checkEquipAnime() const {
 }
 
 /* 8010C570-8010C71C       .text deleteEquipItem__9daPy_lk_cFi */
-void daPy_lk_c::deleteEquipItem(int) {
-    /* Nonmatching */
+void daPy_lk_c::deleteEquipItem(int param_1) {
+    fopAc_ac_c* equipActor = mActorKeepEquip.getActor();
+    if (param_1 != 0 && (mHeldItemType != 0x100 && mHeldItemType != 0x101)) {
+        if (mHeldItemType == 0x103) {
+            seStartOnlyReverb(JA_SE_LK_SW_PUTIN_S);
+        } else {
+            seStartOnlyReverb(JA_SE_LK_ITEM_TAKEOUT);
+        }
+    }
+    
+    if (mHeldItemType == 0x103) {
+        mDoAud_bgmSetSwordUsing(0);
+    } else if (mHeldItemType == 0x101) {
+        if (equipActor != NULL) {
+            fopAcM_cancelCarryNow(equipActor);
+        }
+    } else if (equipActor != NULL) {
+        fopAcM_delete(equipActor);
+    }
+    
+    if ((mHeldItemType == ROPE && checkRopeAnime()) ||
+        (mHeldItemType == BOOMERANG && checkBoomerangAnime()) ||
+        (mHeldItemType == HOOKSHOT && m_anm_heap_upper[2].mIdx == LKANM_BCK_HOOKSHOTWAIT) || 
+        (checkBowItem(mHeldItemType) && checkBowAnime()))
+    {
+        resetActAnimeUpper(UPPER_UNK2, -1.0f);
+    }
+    
+    mActorKeepEquip.clearData();
+    mHeldItemType = 0x100;
+    mpHeldItemModel = NULL;
+    if (mSwordAnim.getBckAnm() != NULL) {
+        mSwordAnim.changeBckOnly(NULL);
+    }
+    m2EAC = NULL;
+    mpHeldItemModelAnimTexEx = NULL;
+    mpBottleContentsModel = NULL;
+    mpBottleCapModel = NULL;
+    mpHeldItemAnimBRK = NULL;
+    mpSwordAnimBTK = NULL;
+    mpSwordModel1 = NULL;
+    m3454.end();
+    mpSwordTipStabModel = NULL;
+    m2EF8 = 0;
+    m2EF4 = 0;
+    m2EF0 = 0;
+    offNoResetFlg1(daPyFlg1_UNK200000);
 }
 
 /* 8010C71C-8010C7F4       .text setFallVoice__9daPy_lk_cFv */
@@ -3180,7 +3234,7 @@ BOOL daPy_lk_c::checkSubjectEnd(int) {
 
 /* 80112280-80112330       .text checkGuardAccept__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkGuardAccept() {
-    if (mProcFlags & 0x40 && !checkBowAnime()) {
+    if (checkModeFlg(0x40) && !checkBowAnime()) {
         u32 stageType = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo());
         if (stageType != 2 ||
             strcmp(dComIfGp_getStartStageName(), "Ojhous") == 0 ||
@@ -3250,28 +3304,28 @@ BOOL daPy_lk_c::commonProcInit(daPy_lk_c::daPy_PROC procID) {
     
     returnKeepItemData();
     
-    temp_r28 = (mProcFlags & 0x40000) >> 0x12;
+    temp_r28 = checkModeFlg(0x40000) >> 0x12;
     
-    if (mProcFlags & 0x10040820) {
+    if (checkModeFlg(0x10040820)) {
         m34C2 = 0xA;
     }
     
-    temp_r29 = ((mProcFlags & 0x2) >> 1) ^ 1;
+    temp_r29 = (checkModeFlg(0x2) >> 1) ^ 1;
     
     mCurProcID = procID;
     mCurProcFunc = procInit.mProcFunc;
     m3598 = 0.0f;
-    mProcFlags = procInit.mProcFlags;
+    mModeFlg = procInit.mProcFlags;
     
     if (m34C2 == 1) {
         m34C2 = 2;
     }
     
-    if (mProcFlags & 0x10040820) {
+    if (checkModeFlg(0x10040820)) {
         m34C2 = 0xB;
     }
     
-    if (mProcFlags & 0x20) {
+    if (checkModeFlg(0x20)) {
         mAcch.OffLineCheck();
     } else {
         mAcch.OnLineCheck();
@@ -3298,20 +3352,20 @@ BOOL daPy_lk_c::commonProcInit(daPy_lk_c::daPy_PROC procID) {
     shape_angle.z = 0;
     m34EC = 0;
     
-    if (!(checkEquipAnime() && (mProcFlags & 0x4)) && !(mProcFlags & 0x1000)) {
-        if (!(checkGrabAnime() || checkBoomerangThrowAnime()) || !(mProcFlags & 0x4000)) {
+    if (!(checkEquipAnime() && checkModeFlg(0x4)) && !checkModeFlg(0x1000)) {
+        if (!(checkGrabAnime() || checkBoomerangThrowAnime()) || !checkModeFlg(0x4000)) {
             resetActAnimeUpper(UPPER_UNK2, -1.0f);
-            if (!(mProcFlags & 0x00100000)) {
+            if (!checkModeFlg(0x00100000)) {
                 freeGrabItem();
             }
         }
     }
     
-    if (!(mProcFlags & 0x00100000) && !checkGrabAnime() && mActorKeepGrab.getActor()) {
+    if (!checkModeFlg(0x00100000) && !checkGrabAnime() && mActorKeepGrab.getActor()) {
         freeGrabItem();
     }
     
-    if (temp_r29 && (mProcFlags & 2)) {
+    if (temp_r29 && checkModeFlg(0x2)) {
         m3688 = current.pos;
         m35F0 = m3688.y;
         m35F4 = m3688.y;
@@ -3322,7 +3376,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_lk_c::daPy_PROC procID) {
         mSwimTailEcallBack[1].onEnd();
     }
     
-    if (!(mProcFlags & 0x40000)) {
+    if (!checkModeFlg(0x40000)) {
         m3608 = 0.0f;
     }
     
@@ -3354,13 +3408,13 @@ BOOL daPy_lk_c::commonProcInit(daPy_lk_c::daPy_PROC procID) {
     
     m35E8 = 0.0f;
     
-    if (!(mProcFlags & 0x800) && mCurProcID != PROC_ROPE_SUBJECT_e && mCurProcID != PROC_ROPE_MOVE_e) {
+    if (!checkModeFlg(0x800) && mCurProcID != PROC_ROPE_SUBJECT_e && mCurProcID != PROC_ROPE_MOVE_e) {
         freeRopeItem();
     }
-    if (!(mProcFlags & 0x200)) {
+    if (!checkModeFlg(0x200)) {
         freeHookshotItem();
     }
-    if (temp_r28 && !(mProcFlags & 0x40000)) {
+    if (temp_r28 && !checkModeFlg(0x40000)) {
         swimOutAfter(0);
     }
     
@@ -3981,26 +4035,26 @@ void daPy_lk_c::setBgCheckParam() {
         mAcchCir[0].SetWallH(-125.0f);
         mAcchCir[1].SetWallH(-89.9f);
         mAcchCir[2].SetWallH(0.0f);
-    } else if (mCurProcID == PROC_LARGE_DAMAGE_WALL_e || mProcFlags & 0x410000) {
+    } else if (mCurProcID == PROC_LARGE_DAMAGE_WALL_e || checkModeFlg(0x410000)) {
         mAcchCir[0].SetWallR(5.0f);
-    } else if (mProcFlags & 0x200000) {
+    } else if (checkModeFlg(0x200000)) {
         mAcchCir[0].SetWallR(40.0f);
-    } else if (mProcFlags & 0x10) {
+    } else if (checkModeFlg(0x10)) {
         mAcchCir[0].SetWallR(daPy_HIO_wall_c0::m.field_0x50);
         if (checkNoResetFlg0(daPyFlg0_UNK10000)) {
             mAcchCir[2].SetWallH(89.9f);
         }
-    } else if (mProcFlags & 0x40000) {
+    } else if (checkModeFlg(0x40000)) {
         mAcchCir[0].SetWallR(67.5f);
         mAcchCir[0].SetWallH(-5.0f);
         mAcchCir[1].SetWallH(0.0f);
         mAcchCir[2].SetWallH(20.0f);
-    } else if (mProcFlags & 0x1000000 && mCurProcID != PROC_CRAWL_END_e) {
+    } else if (checkModeFlg(0x1000000) && mCurProcID != PROC_CRAWL_END_e) {
         mAcchCir[0].SetWallR(30.0f);
         mAcchCir[0].SetWallH(10.0f);
         mAcchCir[1].SetWallH(50.0f);
         mAcchCir[2].SetWallH(50.0f);
-    } else if (mProcFlags & 0x20) {
+    } else if (checkModeFlg(0x20)) {
         mAcchCir[0].SetWallR(12.5f);
         mAcchCir[0].SetWallH(25.0f);
         mAcchCir[1].SetWallH(25.0f);
@@ -4161,8 +4215,11 @@ BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int
 }
 
 /* 80120BBC-80120BE0       .text checkSuccessGuard__9daPy_lk_cFi */
-BOOL daPy_lk_c::checkSuccessGuard(int) {
-    /* Nonmatching */
+BOOL daPy_lk_c::checkSuccessGuard(int param_1) {
+    if (!mCyl.ChkTgShieldHit() || param_1 >= 8) {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 /* 80120BE0-80120F94       .text setShapeAngleOnGround__9daPy_lk_cFv */
@@ -4425,8 +4482,13 @@ void daPy_lk_c::createAnimeHeap(JKRSolidHeap**, daPy_lk_c::daPy_HEAP_TYPE) {
 }
 
 /* 80124A40-80124B30       .text initModel__9daPy_lk_cFPP8J3DModeliUl */
-J3DModelData* daPy_lk_c::initModel(J3DModel**, int, u32) {
-    /* Nonmatching */
+J3DModelData* daPy_lk_c::initModel(J3DModel** i_model, int i_fileIndex, u32 i_differedDlistFlag) {
+    J3DModelData* tmp_modelData;
+    tmp_modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, i_fileIndex);
+    JUT_ASSERT(21340, tmp_modelData != 0);
+    *i_model = mDoExt_J3DModel__create(tmp_modelData, 0x00080000, i_differedDlistFlag);
+    JUT_ASSERT(21344, *i_model != 0);
+    return tmp_modelData;
 }
 
 /* 80124B30-80124BE4       .text entryBtk__9daPy_lk_cFP12J3DModelDatai */
@@ -4619,7 +4681,7 @@ void daPy_lk_c::playerInit() {
     current.angle.z = 0;
     shape_angle.z = 0;
     m3526 = 8;
-    m3654 = 1.0f;
+    m3648.w = 1.0f;
     resetSeAnime();
     
     ResTIMG* tmp_tex = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_I4_BALL128B);
@@ -4831,8 +4893,47 @@ void daPy_lk_c::setMoveAnime(f32, f32, f32, daPy_lk_c::daPy_ANM, daPy_lk_c::daPy
 }
 
 /* 8012821C-80128494       .text setSingleMoveAnime__9daPy_lk_cFQ29daPy_lk_c8daPy_ANMffsf */
-void daPy_lk_c::setSingleMoveAnime(daPy_lk_c::daPy_ANM, f32, f32, s16, f32) {
-    /* Nonmatching */
+BOOL daPy_lk_c::setSingleMoveAnime(daPy_lk_c::daPy_ANM param_1, f32 param_2, f32 param_3, s16 param_4, f32 param_5) {
+    const daPy_anmIndex_c* anmData = getAnmData(param_1);
+    J3DAnmTransform* under_bck;
+    J3DAnmTransform* upper_bck;
+    getUnderUpperAnime(anmData, &under_bck, &upper_bck, 0, 0xB400);
+    m_anm_heap_under[1].mIdx = -1;
+    m_anm_heap_upper[1].mIdx = -1;
+    mAnmRatioUpper[0].setRatio(1.0f);
+    mAnmRatioUpper[1].setRatio(0.0f);
+    mAnmRatioUnder[0].setRatio(1.0f);
+    mAnmRatioUnder[1].setRatio(0.0f);
+    mAnmRatioUnder[0].setAnmTransform(under_bck);
+    mAnmRatioUnder[1].setAnmTransform(NULL);
+    
+    s16 maxFrame = param_4 < 0 ? under_bck->getFrameMax() : param_4;
+    f32 f29 = param_2 < 0.0f ? maxFrame-0.001f : param_3;
+    setFrameCtrl(&mFrameCtrlUnder[0], under_bck->getAttribute(), param_3, maxFrame, param_2, f29);
+    under_bck->setFrame(f29);
+    
+    if (upper_bck) {
+        mAnmRatioUpper[0].setAnmTransform(upper_bck);
+        maxFrame = param_4 < 0 ? upper_bck->getFrameMax() : param_4;
+        f29 = param_2 < 0.0f ? maxFrame-0.001f : param_3;
+        // Note: It uses under_bck->getAttribute() again here instead of using upper_bck->getAttribute().
+        setFrameCtrl(&mFrameCtrlUpper[0], under_bck->getAttribute(), param_3, maxFrame, param_2, f29);
+        upper_bck->setFrame(f29);
+    } else {
+        mAnmRatioUpper[0].setAnmTransform(under_bck);
+    }
+    mAnmRatioUpper[1].setAnmTransform(NULL);
+    
+    if (param_5 >= 0.0f) {
+        m_old_fdata->initOldFrameMorf(param_5, 0, 0x2A);
+    }
+    
+    setTextureAnime(mAnmDataTable[param_1].mTexAnmIdx, 0);
+    setHandModel(param_1);
+    setSeAnime(&m_anm_heap_under[0], &mFrameCtrlUnder[0]);
+    m34C3 = 0;
+    
+    return TRUE;
 }
 
 /* 80128494-801285F8       .text setActAnimeUpper__9daPy_lk_cFUsQ29daPy_lk_c10daPy_UPPERffsf */
@@ -4862,7 +4963,7 @@ void daPy_lk_c::setHandModel(daPy_lk_c::daPy_ANM anmIdx) {
 }
 
 /* 801288A0-8012894C       .text getAnmData__9daPy_lk_cCFQ29daPy_lk_c8daPy_ANM */
-void daPy_lk_c::getAnmData(daPy_lk_c::daPy_ANM) const {
+daPy_anmIndex_c* daPy_lk_c::getAnmData(daPy_lk_c::daPy_ANM) const {
     /* Nonmatching */
 }
 

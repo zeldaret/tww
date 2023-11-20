@@ -292,7 +292,6 @@ public:
     void SetAtMtrl(u8 mtrl) { mGObjAt.SetMtrl(mtrl); }
     void SetTgMtrl(u8 mtrl) { mGObjTg.SetMtrl(mtrl); }
     fopAc_ac_c* GetAtHitAc() { return mGObjAt.GetAc(); }
-    bool ChkAtShieldHit() { return mGObjAt.ChkRPrm(1); }
     cXyz* GetAtVecP() { return mGObjAt.GetVecP(); }
     cXyz* GetTgVecP() { return mGObjTg.GetVecP(); }
     cXyz* GetTgRVecP() { return mGObjTg.GetRVecP(); }
@@ -361,9 +360,10 @@ public:
     void SubtractCoEffCounter() { mGObjCo.SubtractEffCounter(); }
     void OnTgShieldHit() { mGObjTg.OnRPrm(2); }
     void OffTgShieldHit() { mGObjTg.OffRPrm(2); }
+    bool ChkTgShieldHit() { return mGObjTg.ChkRPrm(2); }
     void OnAtShieldHit() { mGObjAt.OnRPrm(1); }
     void OffAtShieldHit() { mGObjAt.OffRPrm(1); }
-    void OffTgMagneHit() { mGObjTg.OffRPrm(4); }
+    bool ChkAtShieldHit() { return mGObjAt.ChkRPrm(1); }
     void SetTgRVec(cXyz& vec) { mGObjTg.SetRVec(vec); }
     void SetAtRVec(cXyz& vec) { mGObjAt.SetRVec(vec); }
     void SetTgHitPos(cXyz& pos) { mGObjTg.SetHitPos(pos); }

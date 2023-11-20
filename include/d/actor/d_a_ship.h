@@ -100,10 +100,11 @@ public:
     /* 0x0304 */ J3DModel* mpSalvageArmModel;
     /* 0x0308 */ J3DModel* field_0x308;
     /* 0x030C */ mDoExt_3DlineMat1_c mRopeLine;
-    /* 0x0341 */ u8 field_0x0348[0x034d - 0x0341];
-    /* 0x034d */ u8 field_0x034d;
+    /* 0x0348 */ u8 field_0x0348[0x034D - 0x0348];
+    /* 0x034D */ u8 field_0x034D;
     /* 0x034E */ u8 mShipMode;
-    /* 0x0358 */ u32 field_0x0358; //showing 390
+    /* 0x034F */ u8 field_0x034F[0x0358 - 0x034F];
+    /* 0x0358 */ u32 field_0x0358;
     /* 0x035C */ int mNextMessageID;
     /* 0x0360 */ int mShadowId;
     /* 0x0364 */ u8 field_0x0364[0x183C - 0x0364];

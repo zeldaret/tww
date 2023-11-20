@@ -619,7 +619,7 @@ JKRSolidHeap * mDoExt_createSolidHeapFromSystem(u32 i_size, u32 i_alignment);
 void mDoExt_restoreCurrentHeap();
 s32 mDoExt_adjustSolidHeap(JKRSolidHeap * pHeap);
 void mDoExt_destroySolidHeap(JKRSolidHeap * pHeap);
-JKRHeap* mDoExt_setCurrentHeap(JKRHeap*);
+JKRHeap* mDoExt_setCurrentHeap(JKRHeap* pHeap);
 
 JUTFont* mDoExt_getMesgFont();
 JUTFont* mDoExt_getRubyFont();

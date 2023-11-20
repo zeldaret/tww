@@ -8,9 +8,10 @@
  * 
  * The original name of this file is not known, but a best guess was taken 
  * based on the original names of the functions it contains.
-*/
+ */
 
 #include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_ship.h"
 
 /* 8013F848-8013F8AC       .text shipSpecialDemoStart__9daPy_lk_cFv */
 void daPy_lk_c::shipSpecialDemoStart() {
@@ -33,13 +34,40 @@ void daPy_lk_c::setShipRideArmAngle(int, J3DTransformInfo*) {
 }
 
 /* 8013FE78-8013FEF4       .text checkShipRideUseItem__9daPy_lk_cFi */
-int daPy_lk_c::checkShipRideUseItem(int) {
-    /* Nonmatching */
+int daPy_lk_c::checkShipRideUseItem(int param_1) {
+    if (dComIfGp_checkPlayerStatus0(0, 0x10000) && dComIfGp_getShipActor() != NULL) {
+        if (param_1 != 0) {
+            deleteEquipItem(0);
+        }
+        if (checkShipNotNormalMode()) {
+            return 2;
+        } else {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 /* 8013FEF4-8013FFC0       .text initShipRideUseItem__9daPy_lk_cFii */
-void daPy_lk_c::initShipRideUseItem(int, int) {
-    /* Nonmatching */
+void daPy_lk_c::initShipRideUseItem(int param_1, int param_2) {
+    if (param_1 == 0) {
+        return;
+    }
+    dComIfGp_getShipActor()->field_0x034D = 2; // TODO probably inline setter
+    mGravity = 0.0f;
+    speed.y = 0.0f;
+    if (param_1 == 1) {
+        setOldRootQuaternion(0, 0x4000, 0);
+    }
+    dComIfGp_setPlayerStatus0(0, 0x10000);
+    if (param_2 == 2) {
+        setShipRidePosUseItem();
+    } else if (param_2 == 1) {
+        setShipRidePos(1);
+    } else {
+        setShipRidePos(0);
+    }
+    onModeFlg(0x2000);
 }
 
 /* 8013FFC0-80140018       .text setShipRidePosUseItem__9daPy_lk_cFv */

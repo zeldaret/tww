@@ -1,6 +1,7 @@
 /**
-* d_a_kytag04.cpp
-*/
+ * d_a_kytag04.cpp
+ */
+
 #include "JSystem/JKernel/JKRHeap.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
