@@ -12,16 +12,16 @@ public:
     daRd_HIO_c();
     virtual ~daRd_HIO_c() {}
     
-    /* 0x04 */ dNpc_HIO_c m04;
+    /* 0x04 */ dNpc_HIO_c mNpc;
     /* 0x2C */ u8 m2C;
     /* 0x2D */ u8 m2D[0x30 - 0x2D];
     /* 0x30 */ f32 m30;
     /* 0x34 */ f32 m34;
     /* 0x38 */ f32 m38;
-    /* 0x3C */ f32 m3C;
+    /* 0x3C */ f32 mAttackRadius;
     /* 0x40 */ s16 m40;
     /* 0x42 */ s16 m42;
-    /* 0x44 */ s16 m44;
+    /* 0x44 */ s16 mAttackSpreadAngle;
     /* 0x46 */ s16 m46;
     /* 0x48 */ s16 m48;
     /* 0x4A */ s16 m4A;
@@ -40,7 +40,7 @@ public:
     /* 0x70 */ f32 m70;
     /* 0x74 */ f32 m74;
     /* 0x78 */ s16 m78;
-    /* 0x7A */ s16 m7A;
+    /* 0x7A */ s16 mParalysisDuration;
     /* 0x7C */ JntHit_HIO_c m7C;
 };
 
@@ -137,7 +137,7 @@ public:
     /* 0x2BC */ int m2BC;
     /* 0x2C0 */ int mSwNo;
     /* 0x2C4 */ u8 m2C4;
-    /* 0x2C5 */ u8 m2C5;
+    /* 0x2C5 */ u8 mHitType; // TODO enum
     /* 0x2C6 */ u8 m2C6[0x2C8 - 0x2C6];
     /* 0x2C8 */ request_of_phase_process_class mPhs;
     /* 0x2D0 */ mDoExt_McaMorf* mpMorf;
@@ -146,9 +146,9 @@ public:
     /* 0x300 */ cXyz m300;
     /* 0x30C */ s16 m30C;
     /* 0x30E */ u8 m30E[0x310 - 0x30E];
-    /* 0x310 */ int m310;
-    /* 0x314 */ int m314;
-    /* 0x318 */ int m318;
+    /* 0x310 */ int mTimer1;
+    /* 0x314 */ int mTimer2;
+    /* 0x318 */ int mBreakFreeCounter;
     /* 0x31C */ dBgS_ObjAcch mAcch;
     /* 0x4E0 */ dBgS_AcchCir mAcchCir;
     /* 0x520 */ dCcD_Stts mStts;
@@ -168,9 +168,9 @@ public:
     /* 0x6E0 */ enemyice mEnemyIce;
     /* 0xA98 */ enemyfire mEnemyFire;
     /* 0xCC0 */ JntHit_c* mpJntHit;
-    /* 0xCC4 */ cXyz mCC4;
-    /* 0xCD0 */ cXyz mCD0;
-    /* 0xCDC */ s16 mCDC;
+    /* 0xCC4 */ cXyz mAttPos;
+    /* 0xCD0 */ cXyz mRdEyePos;
+    /* 0xCDC */ s16 mMaxHeadTurnVel;
     /* 0xCDE */ u8 mCDE[0xCE0 - 0xCDE];
     /* 0xCE0 */ int mCE0;
     /* 0xCE4 */ int mCE4;

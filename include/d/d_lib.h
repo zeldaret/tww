@@ -90,9 +90,18 @@ bool dLib_pathInfo(dPath**, u8);
 void dLib_pathMove(cXyz*, s8*, dPath*, f32, int (*)(cXyz*, cXyz*, cXyz*, void*), void*);
 void dLib_setNextStageBySclsNum(u8, s8);
 void dLib_setFirstMsg(u16, u32, u32);
-bool dLib_checkPlayerInCircle(cXyz, f32, f32);
-bool dLib_checkActorInCircle(cXyz, fopAc_ac_c*, f32, f32);
-bool dLib_checkActorInFan(cXyz, fopAc_ac_c*, s16, s16, f32, f32);
+/**
+ * Checks if Link is with a circular area.
+ */
+bool dLib_checkPlayerInCircle(cXyz center, f32 radius, f32 halfHeight);
+/**
+ * Checks if an actor is with a circular area.
+ */
+bool dLib_checkActorInCircle(cXyz center, fopAc_ac_c* actor, f32 radius, f32 halfHeight);
+/**
+ * Checks if an actor is with a fan-shaped area (sector of a circle).
+ */
+bool dLib_checkActorInFan(cXyz center, fopAc_ac_c* actor, s16 angleY, s16 fanSpreadAngle, f32 radius, f32 halfHeight);
 u32 dLib_getIplDaysFromSaveTime();
 void dLib_get_QuatFromTriangle(cXyz*, cXyz*, cXyz*);
 void dLib_calc_QuatFromTriangle(Quaternion*, f32, cXyz*, cXyz*, cXyz*);

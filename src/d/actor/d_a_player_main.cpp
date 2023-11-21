@@ -3941,8 +3941,19 @@ void daPy_lk_c::autoGroundHit() {
 }
 
 /* 8011AD9C-8011AE20       .text checkAttentionPosAngle__9daPy_lk_cFP10fopAc_ac_cPP4cXyz */
-BOOL daPy_lk_c::checkAttentionPosAngle(fopAc_ac_c*, cXyz**) {
-    /* Nonmatching */
+BOOL daPy_lk_c::checkAttentionPosAngle(fopAc_ac_c* actor, cXyz** pOutPos) {
+    if (actor) {
+        s16 targetAngle = cLib_targetAngleY(&current.pos, &actor->mEyePos);
+        int angleDiff = cLib_distanceAngleS(targetAngle, m34DE);
+        if (angleDiff <= 0x6000) {
+            *pOutPos = &actor->mEyePos;
+            if (actor->mGroup == fopAc_ENEMY_e) {
+                onNoResetFlg1(daPyFlg1_UNK400);
+            }
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 /* 8011AE20-8011BE08       .text setNeckAngle__9daPy_lk_cFv */

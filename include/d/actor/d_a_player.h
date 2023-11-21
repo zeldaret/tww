@@ -107,6 +107,7 @@ public:
         daPyFlg1_NPC_NOT_CHANGE         = 0x00000040,
         daPyFlg1_UNK80                  = 0x00000080,
         daPyFlg1_CONFUSE                = 0x00000100,
+        daPyFlg1_UNK400                 = 0x00000400,
         daPyFlg1_FREEZE_STATE           = 0x00000800,
         daPyFlg1_SHIP_TACT              = 0x00001000,
         daPyFlg1_USE_ARROW_EFFECT       = 0x00002000,

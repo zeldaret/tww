@@ -218,21 +218,21 @@ daNpc_Md_HIO2_c::daNpc_Md_HIO2_c() {
 
 /* 00000274-00000574       .text __ct__14daNpc_Md_HIO_cFv */
 daNpc_Md_HIO_c::daNpc_Md_HIO_c() {
-    m08C.m04 = -25.0f;
-    m08C.m08 = 0x2328;
-    m08C.m0C = 0x2328;
-    m08C.m0A = 0x0;
-    m08C.m0E = 0x1F40;
-    m08C.m10 = -0x2328;
-    m08C.m14 = -0x2328;
-    m08C.m12 = 0x0;
-    m08C.m16 = -0x1F40;
-    m08C.m18 = 0x1000;
-    m08C.m1A = 0x800;
-    m08C.m1C = 130.0f;
-    m08C.m20 = 0x4000;
-    m08C.m22 = 0x0;
-    m08C.m24 = 150.0f;
+    mNpc.m04 = -25.0f;
+    mNpc.m08 = 0x2328;
+    mNpc.mMaxHeadRot = 0x2328;
+    mNpc.m0A = 0x0;
+    mNpc.mMaxBackBoneRot = 0x1F40;
+    mNpc.m10 = -0x2328;
+    mNpc.mMinHeadRot = -0x2328;
+    mNpc.m12 = 0x0;
+    mNpc.mMinBackBoneRot = -0x1F40;
+    mNpc.m18 = 0x1000;
+    mNpc.mMaxHeadTurnVel = 0x800;
+    mNpc.m1C = 130.0f;
+    mNpc.m20 = 0x4000;
+    mNpc.m22 = 0x0;
+    mNpc.m24 = 150.0f;
     mpActor = NULL;
     m0B8 = 770.0f;
     m0BC = 250.0f;

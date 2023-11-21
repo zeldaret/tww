@@ -124,18 +124,31 @@ void dLib_setFirstMsg(u16, u32, u32) {
 }
 
 /* 80057F30-80057F78       .text dLib_checkPlayerInCircle__F4cXyzff */
-bool dLib_checkPlayerInCircle(cXyz, f32, f32) {
-    /* Nonmatching */
+bool dLib_checkPlayerInCircle(cXyz center, f32 radius, f32 halfHeight) {
+    fopAc_ac_c* link = dComIfGp_getLinkPlayer();
+    dLib_checkActorInCircle(center, link, radius, halfHeight);
 }
 
 /* 80057F78-80058098       .text dLib_checkActorInCircle__F4cXyzP10fopAc_ac_cff */
-bool dLib_checkActorInCircle(cXyz, fopAc_ac_c*, f32, f32) {
-    /* Nonmatching */
+bool dLib_checkActorInCircle(cXyz center, fopAc_ac_c* actor, f32 radius, f32 halfHeight) {
+    f32 distXZ = (center - actor->current.pos).absXZ();
+    f32 distY = fabsf(center.y - actor->current.pos.y);
+    if (distXZ < radius && distY < halfHeight) {
+        return true;
+    }
+    return false;
 }
 
 /* 80058098-8005820C       .text dLib_checkActorInFan__F4cXyzP10fopAc_ac_cssff */
-bool dLib_checkActorInFan(cXyz, fopAc_ac_c*, s16, s16, f32, f32) {
-    /* Nonmatching */
+bool dLib_checkActorInFan(cXyz center, fopAc_ac_c* actor, s16 angleY, s16 fanSpreadAngle, f32 radius, f32 halfHeight) {
+    f32 distXZ = (center - actor->current.pos).absXZ();
+    f32 distY = fabsf(center.y - actor->current.pos.y);
+    s16 targetY = cLib_targetAngleY(&center, &actor->current.pos);
+    int angleDistY = cLib_distanceAngleS(angleY, targetY);
+    if (distXZ < radius && distY < halfHeight && angleDistY < fanSpreadAngle) {
+        return true;
+    }
+    return false;
 }
 
 /* 8005820C-80058250       .text __ct__9STControlFssssffss */

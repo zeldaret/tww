@@ -100,7 +100,7 @@ public:
     /* 0x05C */ daNpc_Md_HIO4_c m05C;
     /* 0x068 */ daNpc_Md_HIO5_c m068;
     /* 0x074 */ daNpc_Md_HIO6_c m074;
-    /* 0x08C */ dNpc_HIO_c m08C;
+    /* 0x08C */ dNpc_HIO_c mNpc;
     /* 0x0B4 */ fopAc_ac_c* mpActor;
     /* 0x0B8 */ f32 m0B8;
     /* 0x0BC */ f32 m0BC;

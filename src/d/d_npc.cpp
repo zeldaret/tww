@@ -95,23 +95,23 @@ bool dNpc_JntCtrl_c::move(s16 param_1, int param_2) {
 }
 
 /* 8021AABC-8021AC6C       .text lookAtTarget__14dNpc_JntCtrl_cFPsP4cXyz4cXyzssb */
-void dNpc_JntCtrl_c::lookAtTarget(s16* outY, cXyz* param_2, cXyz param_3, s16 param_4, s16 maxVel, bool param_6) {
+void dNpc_JntCtrl_c::lookAtTarget(s16* outY, cXyz* pDstPos, cXyz srcPos, s16 defaultY, s16 maxVel, bool param_6) {
     s16 deltaY;
     s32 maxY;
     s32 minY;
     s16 r23;
     s16 targetY;
     
-    if (param_2) {
-        cXyz temp;
-        temp.x = param_2->x - param_3.x;
-        temp.y = param_2->y - param_3.y;
-        temp.z = param_2->z - param_3.z;
-        f32 temp2 = sqrtf(temp.x * temp.x + temp.z * temp.z);
-        targetY = cM_atan2s(temp.x, temp.z);
-        r23 = cM_atan2s(temp.y, temp2);
+    if (pDstPos) {
+        cXyz delta;
+        delta.x = pDstPos->x - srcPos.x;
+        delta.y = pDstPos->y - srcPos.y;
+        delta.z = pDstPos->z - srcPos.z;
+        f32 distXZ = sqrtf(delta.x * delta.x + delta.z * delta.z);
+        targetY = cM_atan2s(delta.x, delta.z);
+        r23 = cM_atan2s(delta.y, distXZ);
     } else {
-        targetY = param_4;
+        targetY = defaultY;
         r23 = 0;
     }
     
@@ -129,11 +129,14 @@ void dNpc_JntCtrl_c::lookAtTarget(s16* outY, cXyz* param_2, cXyz param_3, s16 pa
 }
 
 /* 8021AC6C-8021ACA8       .text setParam__14dNpc_JntCtrl_cFsssssssss */
-void dNpc_JntCtrl_c::setParam(s16 param_1, s16 maxSpineRot, s16 param_3, s16 minSpineRot, s16 param_5, s16 maxHeadRot, s16 param_7, s16 minHeadRot, s16 param_9) {
+void dNpc_JntCtrl_c::setParam(s16 param_1, s16 maxBackBoneRot, s16 param_3, s16 minBackBoneRot,
+                              s16 param_5, s16 maxHeadRot, s16 param_7, s16 minHeadRot,
+                              s16 param_9)
+{
     mMaxAngles[1][0] = param_1;
-    mMaxAngles[1][1] = maxSpineRot;
+    mMaxAngles[1][1] = maxBackBoneRot;
     mMinAngles[1][0] = param_3;
-    mMinAngles[1][1] = minSpineRot;
+    mMinAngles[1][1] = minBackBoneRot;
     mMaxAngles[0][0] = param_5;
     mMaxAngles[0][1] = maxHeadRot;
     mMinAngles[0][0] = param_7;
