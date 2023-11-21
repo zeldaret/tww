@@ -70,8 +70,19 @@ void dLib_bcks_setAnm(const char*, mDoExt_McaMorf*, s8*, s8*, s8*, const int*, c
 }
 
 /* 80057988-80057A14       .text dLib_scaleAnime__FPfPfiPifff */
-void dLib_scaleAnime(f32*, f32*, int, int*, f32, f32, f32) {
-    /* Nonmatching */
+void dLib_scaleAnime(f32* o_value, f32* p_targets, int targetNum, int* p_targetIdx, f32 scale, f32 maxStep, f32 minStep) {
+    if (*p_targetIdx < targetNum) {
+        f32 temp = cLib_addCalc(o_value, p_targets[*p_targetIdx], scale, maxStep, minStep);
+        if (temp != 0.0f) {
+            return;
+        }
+        (*p_targetIdx)--;
+        if (*p_targetIdx < 0) {
+            *p_targetIdx = 0;
+        }
+    } else {
+        (*p_targetIdx)--;
+    }
 }
 
 /* 80057A14-80057A30       .text dLib_getPosFromMtx__FPA4_fP4cXyz */
@@ -114,13 +125,36 @@ void dLib_pathMove(cXyz* pos, s8* pPntNo, dPath* pPath, f32 speed, int (*pCallBa
 }
 
 /* 80057D1C-80057EC0       .text dLib_setNextStageBySclsNum__FUcSc */
-void dLib_setNextStageBySclsNum(u8, s8) {
-    /* Nonmatching */
+void dLib_setNextStageBySclsNum(u8 i_sclsnum, s8 room_no) {
+    stage_scls_info_dummy_class* sclsinfo;
+    if (room_no == -1) {
+        sclsinfo = dComIfGp_getStageSclsInfo();
+    } else {
+        JUT_ASSERT(452, 0 <= room_no && room_no < 64);
+        sclsinfo = dComIfGp_roomControl_getStatusRoomDt(room_no)->getSclsInfo();
+    }
+    if (sclsinfo == NULL) {
+        return;
+    }
+    
+    stage_scls_info_class* scls_data = sclsinfo->m_entries;
+    JUT_ASSERT(462, scls_data != 0);
+    JUT_ASSERT(463, 0 <= i_sclsnum && i_sclsnum < sclsinfo->num);
+    
+    stage_scls_info_class* scls_entry = &scls_data[i_sclsnum];
+    s32 wipe = dStage_sclsInfo_getWipe(scls_entry);
+    wipe = wipe == 0xFF ? 0 : wipe;
+    dComIfGp_setNextStage(scls_entry->mStage, scls_entry->mStart, scls_entry->mRoom, -1, 0.0f, 0, 1, wipe);
 }
 
 /* 80057EC0-80057F30       .text dLib_setFirstMsg__FUsUlUl */
-void dLib_setFirstMsg(u16, u32, u32) {
-    /* Nonmatching */
+u32 dLib_setFirstMsg(u16 eventBit, u32 firstMsgID, u32 secondMsgID) {
+    if (!dComIfGs_isEventBit(eventBit)) {
+        dComIfGs_onEventBit(eventBit);
+        return firstMsgID;
+    } else {
+        return secondMsgID;
+    }
 }
 
 /* 80057F30-80057F78       .text dLib_checkPlayerInCircle__F4cXyzff */

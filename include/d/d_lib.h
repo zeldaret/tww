@@ -84,22 +84,22 @@ bool dLib_brkInit(J3DModelData*, mDoExt_brkAnm*, const char*, int);
 bool dLib_btkInit(J3DModelData*, mDoExt_btkAnm*, const char*, int);
 void dLib_setAnm(const char*, mDoExt_McaMorf*, s8*, s8*, s8*, const dLib_anm_idx_c*, const dLib_anm_prm_c*, bool);
 void dLib_bcks_setAnm(const char*, mDoExt_McaMorf*, s8*, s8*, s8*, const int*, const dLib_anm_prm_c*, bool);
-void dLib_scaleAnime(f32*, f32*, int, int*, f32, f32, f32);
+void dLib_scaleAnime(f32* o_value, f32* p_targets, int targetNum, int* p_targetIdx, f32 scale, f32 maxStep, f32 minStep);
 void dLib_getPosFromMtx(f32(*)[4], cXyz*);
 bool dLib_pathInfo(dPath**, u8);
 void dLib_pathMove(cXyz*, s8*, dPath*, f32, int (*)(cXyz*, cXyz*, cXyz*, void*), void*);
-void dLib_setNextStageBySclsNum(u8, s8);
-void dLib_setFirstMsg(u16, u32, u32);
+void dLib_setNextStageBySclsNum(u8 i_sclsnum, s8 room_no);
+u32 dLib_setFirstMsg(u16 eventBit, u32 firstMsgID, u32 secondMsgID);
 /**
- * Checks if Link is with a circular area.
+ * Checks if Link is within a circular area.
  */
 bool dLib_checkPlayerInCircle(cXyz center, f32 radius, f32 halfHeight);
 /**
- * Checks if an actor is with a circular area.
+ * Checks if an actor is within a circular area.
  */
 bool dLib_checkActorInCircle(cXyz center, fopAc_ac_c* actor, f32 radius, f32 halfHeight);
 /**
- * Checks if an actor is with a fan-shaped area (sector of a circle).
+ * Checks if an actor is within a fan-shaped area (sector of a circle).
  */
 bool dLib_checkActorInFan(cXyz center, fopAc_ac_c* actor, s16 angleY, s16 fanSpreadAngle, f32 radius, f32 halfHeight);
 u32 dLib_getIplDaysFromSaveTime();
