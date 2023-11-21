@@ -1321,7 +1321,7 @@ BOOL dShop_maxCheck(int itemNo, int) {
         }
     // Bug: This check is probably supposed to be (itemNo >= FLOWER_1 && itemNo <= PRESIDENT_STATUE)
     } else if (itemNo == FLOWER_1 && itemNo == PRESIDENT_STATUE) {
-        if (!dComIfGs_checkReserveItemEmpty()) {
+        if (dComIfGs_checkReserveItemEmpty() == 0) {
             return TRUE;
         }
     } else if (itemNo >= ARROW_10 && itemNo <= ARROW_30) {

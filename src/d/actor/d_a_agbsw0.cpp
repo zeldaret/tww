@@ -818,7 +818,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb) {
             return agb->field_0x66d == 0x21 ? 0x30A : 0x30B;
         }
         else {
-            u8 num = dComIfGs_checkGetItemNum(0x1F);
+            u8 num = dComIfGs_checkGetItemNum(PENDANT);
             return num >= 0x14 ? 0x30C : 0x30D;
         }
     }

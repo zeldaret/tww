@@ -316,6 +316,11 @@ public:
     void init();
     void set(u8, cXyz&, s16, s8);
 
+    u8 getFlag() { return field_0xf; }
+    cXyz& getPos() { return field_0x0; }
+    s16 getRotate() { return field_0xc; }
+    s8 getRoomNo() { return field_0xe; }
+
     /* 0x0 */ cXyz field_0x0;
     /* 0xC */ s16 field_0xc;
     /* 0xE */ s8 field_0xe;

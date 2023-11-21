@@ -384,8 +384,6 @@ void fopAcM_DeleteHeap(fopAc_ac_c* p_actor);
 
 s32 fopAcM_callCallback(fopAc_ac_c* p_actor, heapCallbackFunc p_callbackFunc, JKRHeap* p_heap);
 
-bool fopAcM_entrySolidHeap_(fopAc_ac_c* p_actor, heapCallbackFunc p_heapCallback, u32 size);
-
 bool fopAcM_entrySolidHeap(fopAc_ac_c* p_actor, heapCallbackFunc p_heapCallback, u32 size);
 
 inline void fopAcM_SetMin(fopAc_ac_c* p_actor, f32 minX, f32 minY, f32 minZ) {

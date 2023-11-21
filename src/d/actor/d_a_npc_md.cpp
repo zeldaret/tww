@@ -9,12 +9,15 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "d/d_item_data.h"
 #include "m_Do/m_Do_controller_pad.h"
+#include "m_Do/m_Do_mtx.h"
 
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
 static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
 static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
 static f64 dummy4[2] = {3.0, 0.5};
+
+static daNpc_Md_HIO_c l_HIO;
 
 static char* l_arc_name = "Md";
 static char* l_arc_name_ship = "Md_ship";
@@ -153,16 +156,6 @@ static dCcD_SrcCyl l_wind_cyl_src = {
     },
 };
 
-static char* hairName[] = {
-    "hair1",
-    "hair2",
-    "hair3",
-    "hair4",
-    "hair5",
-    "hair6",
-    "hair7",
-};
-
 
 /* 000000EC-0000013C       .text __ct__15daNpc_Md_HIO6_cFv */
 daNpc_Md_HIO6_c::daNpc_Md_HIO6_c() {
@@ -240,7 +233,7 @@ daNpc_Md_HIO_c::daNpc_Md_HIO_c() {
     m08C.m20 = 0x4000;
     m08C.m22 = 0x0;
     m08C.m24 = 150.0f;
-    m0B4 = 0x0;
+    mpActor = NULL;
     m0B8 = 770.0f;
     m0BC = 250.0f;
     m0C0 = -450.0f;
@@ -371,22 +364,119 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000884-00000D80       .text create__10daNpc_Md_cFv */
 s32 daNpc_Md_c::create() {
-    /* Nonmatching */
+    m313D = 0;
+    strcpy(mModelArcName, l_arc_name);
+    int heapSizeIdx = 0;
+    
     fopAcM_SetupActor(this, daNpc_Md_c);
+    
+    m3138 = fopAcM_GetParam(this) >> 0x08;
+    if (m3138 == -2) {
+        dComIfGs_onEventBit(0x1620);
+    } else {
+        if (dComIfGs_isCollect(0, 2)) {
+            if (strcmp(dComIfGp_getStartStageName(), "M_DaiB") != 0) {
+                return cPhs_ERROR_e;
+            } else {
+                setTypeM_DaiB();
+            }
+        } else if (strcmp(dComIfGp_getStartStageName(), "sea") == 0) {
+            if (dComIfGs_isEventBit(0x2E04) || !dComIfGs_isEventBit(0x1820) || !dComIfGs_isStageBossEnemy(3)) {
+                return cPhs_ERROR_e;
+            }
+        } else if (strcmp(dComIfGp_getStartStageName(), "Atorizk") == 0) {
+            if (dComIfGs_isEventBit(0x2E04) || dNpc_chkLetterPassed()) {
+                return cPhs_ERROR_e;
+            }
+        } else if (strcmp(dComIfGp_getStartStageName(), "Adanmae") == 0) {
+            if (dComIfGs_isEventBit(0x2E04) || !dNpc_chkLetterPassed()) {
+                return cPhs_ERROR_e;
+            }
+        } else if (strcmp(dComIfGp_getStartStageName(), "M_Dra09") == 0) {
+            if (dComIfGs_isEventBit(0x2E04) || dComIfGs_isEventBit(0x1101)) {
+                return cPhs_ERROR_e;
+            }
+        } else if (strcmp(dComIfGp_getStartStageName(), "Edaichi") == 0) {
+            if (!dComIfGs_isEventBit(0x2E04) || dComIfGs_isEventBit(0x2920)) {
+                return cPhs_ERROR_e;
+            }
+            setTypeEdaichi();
+        } else if (strcmp(dComIfGp_getStartStageName(), "M_Dai") == 0) {
+            if (!dComIfGs_isEventBit(0x2E04) || !dComIfGs_isEventBit(0x2920)) {
+                return cPhs_ERROR_e;
+            }
+            setTypeM_Dai();
+        } else if (strcmp(dComIfGp_getStartStageName(), "M_DaiB") == 0) {
+            return cPhs_ERROR_e;
+        }
+    }
+    
+    if (!dComIfGs_isEventBit(0x2E04) && dComIfGs_isEventBit(0x1608)) {
+        setTypeShipRide();
+        strcpy(mModelArcName, l_arc_name_ship);
+        heapSizeIdx = 1;
+    }
+    
+    s32 phase_state = dComIfG_resLoad(&mPhs, mModelArcName);
+    m313D = 1;
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (dComIfGp_getCb1Player() != NULL) {
+            return cPhs_ERROR_e;
+        }
+        
+        static int l_heep_size[] = {
+            0x7660,
+            0x61C0,
+        };
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, l_heep_size[heapSizeIdx])) {
+            mpMorf = NULL;
+            mpArmMorf = NULL;
+            mpWingMorf = NULL;
+            return cPhs_ERROR_e;
+        }
+        
+        if (m3138 == 5) {
+            u8 flag = dComIfGs_getPlayerPriestFlag();
+            if (flag == 2) {
+                s8 roomNo = dComIfGs_getPlayerPriestRoomNo();
+                s16 angle = dComIfGs_getPlayerPriestRotate();
+                cXyz& pos = dComIfGs_getPlayerPriestPos();
+                dComIfGs_setRestartOption(&pos, angle, roomNo, 2);
+                dComIfGs_setPlayerPriest(2, pos, angle, roomNo);
+            }
+            checkRestart(2);
+        }
+        
+        fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
+        
+        if (l_HIO.mChildID < 0) {
+            l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("リト族（メドリ）", &l_HIO);
+            l_HIO.mpActor = this;
+        }
+        
+        if (!init()) {
+            return cPhs_ERROR_e;
+        }
+        
+        setBaseMtx();
+        fopAcM_setStageLayer(this);
+    }
+    
+    return phase_state;
 }
 
 /* 000012C0-00001444       .text nodeCallBack__FP7J3DNodei */
-static int nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode* node, int param_1) {
     /* Nonmatching */
 }
 
 /* 00001444-0000154C       .text waistNodeCallBack__FP7J3DNodei */
-static int waistNodeCallBack(J3DNode*, int) {
+static BOOL waistNodeCallBack(J3DNode* node, int param_1) {
     /* Nonmatching */
 }
 
 /* 0000154C-0000160C       .text armNodeCallBack__FP7J3DNodei */
-static int armNodeCallBack(J3DNode*, int) {
+static BOOL armNodeCallBack(J3DNode* node, int param_1) {
     /* Nonmatching */
 }
 
@@ -396,8 +486,18 @@ static void hairCross(cXyz*, cXyz*, cXyz*) {
 }
 
 /* 00001CBC-00001D0C       .text hairTopNodeCallBack__FP7J3DNodei */
-static int hairTopNodeCallBack(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL hairTopNodeCallBack(J3DNode* node, int param_1) {
+    if (!param_1) {
+        J3DModel* model = j3dSys.getModel();
+        daNpc_Md_c* i_this = (daNpc_Md_c*)model->getUserArea();
+        if (i_this) {
+            J3DJoint* joint = (J3DJoint*)node;
+            s32 jntNo = joint->getJntNo();
+            MtxP mtx = model->getAnmMtx(jntNo);
+            i_this->m3174[0].set(mtx[0][3], mtx[1][3], mtx[2][3]);
+        }
+    }
+    return TRUE;
 }
 
 /* 00001D0C-00001F5C       .text vecChange__FP4cXyzP4cXyzs */
@@ -406,9 +506,20 @@ static void vecChange(cXyz*, cXyz*, s16) {
 }
 
 /* 00001F5C-0000240C       .text hairNodeCallBack__FP7J3DNodei */
-static int hairNodeCallBack(J3DNode*, int) {
+static BOOL hairNodeCallBack(J3DNode* node, int param_1) {
     /* Nonmatching */
 }
+
+static char* hairName[] = {
+    "hair1",
+    "hair2",
+    "hair3",
+    "hair4",
+    "hair5",
+    "hair6",
+    "hair7",
+    "hair8",
+};
 
 /* 0000240C-00002F80       .text createHeap__10daNpc_Md_cFv */
 BOOL daNpc_Md_c::createHeap() {
@@ -460,7 +571,7 @@ BOOL daNpc_Md_c::createHeap() {
     if (m_hair_jnt_nums[0] >= 0) {
         modelData->getJointNodePointer(m_hair_jnt_nums[0])->setCallBack(hairTopNodeCallBack);
     }
-    for (int i = 1; i < 8; i++) {
+    for (int i = 1; i < (int)ARRAY_SIZE(hairName); i++) {
         m_hair_jnt_nums[i] = modelData->getJointName()->getIndex(hairName[i]);
         if (m_hair_jnt_nums[i] >= 0) {
             modelData->getJointNodePointer(m_hair_jnt_nums[i])->setCallBack(hairNodeCallBack);
@@ -1298,7 +1409,7 @@ void daNpc_Md_c::deletePiyoPiyo() {
 }
 
 /* 0000F160-0000F4E0       .text init__10daNpc_Md_cFv */
-void daNpc_Md_c::init() {
+BOOL daNpc_Md_c::init() {
     /* Nonmatching */
 }
 
@@ -1339,7 +1450,24 @@ void daNpc_Md_c::emitterDelete(JPABaseEmitter**) {
 
 /* 000109DC-000110BC       .text __dt__10daNpc_Md_cFv */
 daNpc_Md_c::~daNpc_Md_c() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhs, mModelArcName);
+    if (heap) {
+        mpMorf->stopZelAnime();
+    }
+    deletePiyoPiyo();
+    emitterDelete(m0508);
+    deleteHane02Emitter();
+    deleteHane03Emitter();
+    m3058.end();
+    m304C.end();
+    m3074.remove();
+    if (l_HIO.mChildID >= 0) {
+        mDoHIO_root.mDoHIO_deleteChild(l_HIO.mChildID);
+        l_HIO.mChildID = -1;
+    }
+    m_flying = false;
+    m_mirror = false;
+    m_playerRoom = false;
 }
 
 /* 000110BC-000110DC       .text daNpc_Md_Create__FP10fopAc_ac_c */
@@ -1369,18 +1497,23 @@ static BOOL daNpc_Md_IsDelete(daNpc_Md_c* i_this) {
 }
 
 /* 0001114C-0001119C       .text execute__26daNpc_Md_followEcallBack_cFP14JPABaseEmitter */
-void daNpc_Md_followEcallBack_c::execute(JPABaseEmitter*) {
-    /* Nonmatching */
+void daNpc_Md_followEcallBack_c::execute(JPABaseEmitter* emitter) {
+    emitter->setGlobalTranslation(mPos.x, mPos.y, mPos.z);
+    JPAGetXYZRotateMtx(mAngle.x, mAngle.y, mAngle.z, emitter->mGlobalRotation);
 }
 
 /* 0001119C-000111A4       .text setup__26daNpc_Md_followEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void daNpc_Md_followEcallBack_c::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
-    /* Nonmatching */
+void daNpc_Md_followEcallBack_c::setup(JPABaseEmitter* emitter, const cXyz*, const csXyz*, s8) {
+    mpEmitter = emitter;
 }
 
 /* 000111A4-000111D8       .text end__26daNpc_Md_followEcallBack_cFv */
 void daNpc_Md_followEcallBack_c::end() {
-    /* Nonmatching */
+    if (mpEmitter) {
+        mpEmitter->becomeInvalidEmitter();
+        mpEmitter->setEmitterCallBackPtr(NULL);
+        mpEmitter = NULL;
+    }
 }
 
 static actor_method_class l_daNpc_Md_Method = {

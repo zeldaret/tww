@@ -2,6 +2,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_letter.h"
 #include "SSystem/SComponent/c_lib.h"
+#include "d/d_item_data.h"
 
 /* 80197AB8-80197FE4       .text dKankyo_DayProc__Fv */
 static void dKankyo_DayProc() {
@@ -17,11 +18,15 @@ static void dKankyo_DayProc() {
     dLetter_delivery(0xaf03);
     dLetter_delivery(0x9d03);
 
-    dComIfGs_setEventReg(0xcf03, cLib_maxLimit(dComIfGs_getEventReg(0xcf03) + 1, 3));
-    dComIfGs_setEventReg(0xab03, cLib_maxLimit(dComIfGs_getEventReg(0xab03) + 1, 3));
+    u8 clamped = cLib_maxLimit(dComIfGs_getEventReg(0xcf03) + 1, 3);
+    dComIfGs_setEventReg(0xcf03, clamped);
+    clamped = cLib_maxLimit(dComIfGs_getEventReg(0xab03) + 1, 3);
+    dComIfGs_setEventReg(0xab03, clamped);
 
-    if (dComIfGs_isGetItemReserve(0x0F) && !dComIfGs_checkReserveItem(0x9B))
-        dComIfGs_setEventReg(0xccff, cLib_maxLimit(dComIfGs_getEventReg(0xccff) + 1, 2));
+    if (dComIfGs_isGetItemReserve(0x0F) && dComIfGs_checkReserveItem(MO_LETTER) == 0) {
+        clamped = cLib_maxLimit(dComIfGs_getEventReg(0xccff) + 1, 2);
+        dComIfGs_setEventReg(0xccff, clamped);
+    }
 
     dComIfGs_setEventReg(0xbcff, 0);
     dComIfGs_setEventReg(0xcb03, 0);
@@ -51,7 +56,8 @@ static void dKankyo_DayProc() {
         if (reg == 7) {
             dComIfGs_onEventBit(0x1f08);
         } else {
-            dComIfGs_setEventReg(0xbb07, cLib_maxLimit(reg + 1, 7));
+            clamped = cLib_maxLimit(reg + 1, 7);
+            dComIfGs_setEventReg(0xbb07, clamped);
         }
     }
 
@@ -64,8 +70,10 @@ static void dKankyo_DayProc() {
 
     dComIfGs_offEventBit(0x2680);
 
-    if (dComIfGs_isEventBit(0x2a20))
-        dComIfGs_setEventReg(0xa60f, cLib_maxLimit(dComIfGs_getEventReg(0xa60f) + 1, 3));
+    if (dComIfGs_isEventBit(0x2a20)) {
+        clamped = cLib_maxLimit(dComIfGs_getEventReg(0xa60f) + 1, 3);
+        dComIfGs_setEventReg(0xa60f, clamped);
+    }
 
     if (dKy_get_dayofweek() == 5) {                   
         dComIfGs_offEventBit(0x2080);

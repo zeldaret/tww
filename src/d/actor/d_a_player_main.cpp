@@ -4604,11 +4604,11 @@ void daPy_lk_c::playerInit() {
     mCyl.OnTgShieldFrontRange();
     mShieldFrontRangeYAngle = shape_angle.y + mBodyAngle.y;
     mCyl.SetTgShieldFrontRangeYAngle(&mShieldFrontRangeYAngle);
-    mWindCyl1.Set(l_wind_cyl_src);
-    mWindCyl1.SetStts(&mStts);
-    mWindCyl2.Set(l_wind_cyl_src);
-    mWindCyl2.SetStts(&mStts);
-    mWindCyl2.SetTgType(AT_TYPE_LIGHT);
+    mWindCyl.Set(l_wind_cyl_src);
+    mWindCyl.SetStts(&mStts);
+    mLightCyl.Set(l_wind_cyl_src);
+    mLightCyl.SetStts(&mStts);
+    mLightCyl.SetTgType(AT_TYPE_LIGHT);
     mAtCps[0].Set(l_at_cps_src);
     mAtCps[0].SetStts(&mStts);
     mAtCps[1].Set(l_at_cps_src);

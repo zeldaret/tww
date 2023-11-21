@@ -87,7 +87,7 @@ public:
     /* 0x16 */ s16 m16;
 };
 
-class daNpc_Md_HIO_c {
+class daNpc_Md_HIO_c : public JORReflexible {
 public:
     daNpc_Md_HIO_c();
     virtual ~daNpc_Md_HIO_c() {}
@@ -101,7 +101,7 @@ public:
     /* 0x068 */ daNpc_Md_HIO5_c m068;
     /* 0x074 */ daNpc_Md_HIO6_c m074;
     /* 0x08C */ dNpc_HIO_c m08C;
-    /* 0x0B4 */ int m0B4;
+    /* 0x0B4 */ fopAc_ac_c* mpActor;
     /* 0x0B8 */ f32 m0B8;
     /* 0x0BC */ f32 m0BC;
     /* 0x0C0 */ f32 m0C0;
@@ -188,6 +188,10 @@ public:
     void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
     void end();
 
+    JPABaseEmitter* getEmitter() { return mpEmitter; }
+    cXyz& getPos() { return mPos; }
+    void setAngle(s16 x, s16 y, s16 z) { mAngle.set(x, y, z); }
+
 public:
     /* 0x04 */ JPABaseEmitter* mpEmitter;
     /* 0x08 */ cXyz mPos;
@@ -206,10 +210,94 @@ public:
     
     bool chkPlayerAction(ActionFunc func) { return mCurrPlayerActionFunc == func; }
     bool chkNpcAction(ActionFunc func) { return mCurrNpcActionFunc == func; }
+    
     bool isOldLightBodyHit() { return cLib_checkBit(m30F0, 0x00008000UL); }
     void onDefaultTalkXY() { cLib_onBit(m30F0, 0x00010000UL); }
     void offDefaultTalkXY() { cLib_offBit(m30F0, 0x00010000UL); }
     bool isDefaultTalkXY() { return cLib_checkBit(m30F0, 0x00010000UL); }
+    
+    void setTypeEdaichi() { m3138 = 4; }
+    void setTypeM_Dai() { m3138 = 5; }
+    void setTypeM_DaiB() { m3138 = 6; }
+    void setTypeShipRide() { m3138 = 7; }
+    
+    void calcFlyingTimer() {}
+    void checkBitEffectStatus(u8) {}
+    void checkBitHairMode(u8) {}
+    void checkStatus(u32) {}
+    void checkStatusCamTagIn() {}
+    void checkStatusFly() {}
+    void clearJntAng() {}
+    void clearStatus() {}
+    void clearStatus(u32) {}
+    void countPiyo2TalkCNT() {}
+    void getArmLJntNum() {}
+    void getArmLlocJntNum() {}
+    void getArmRJntNum() {}
+    void getArmRlocJntNum() {}
+    void getAttentionBasePos() {}
+    void getBackbone_x() {}
+    void getBackbone_y() {}
+    void getEyePos() {}
+    void getFlyingTimer() {}
+    void getHairJntNum(int) {}
+    void getHead_x() {}
+    void getHead_y() {}
+    void getModel() {}
+    void getPHairDist(int) {}
+    void getPHairPos(int) {}
+    void getPHairVec(int) {}
+    void getPHairWall() {}
+    void getPiyo2TalkCNT() {}
+    void getTalkType() {}
+    void getWaistRotX() {}
+    void getWaistRotY() {}
+    void incAttnSetCount() {}
+    void isLightBodyHit() {}
+    void isLightHit() {}
+    void isMirror() {}
+    void isNoCarryAction() {}
+    void isSeaTalk() {}
+    void isShipRide() {}
+    void isTypeAdanmae() {}
+    void isTypeAtorizk() {}
+    void isTypeEdaichi() {}
+    void isTypeM_Dai() {}
+    void isTypeM_DaiB() {}
+    void isTypeM_Dra09() {}
+    void isTypeSea() {}
+    void isTypeShipRide() {}
+    void isXYTalk() {}
+    void noCarryAction() {}
+    void offBitCamTagIn() {}
+    void offFlying() {}
+    void offLightBodyHit() {}
+    void offLightHit() {}
+    void offMirror() {}
+    void offNoCarryAction() {}
+    void offPlayerRoom() {}
+    void offSeaTalk() {}
+    void offShipRide() {}
+    void offXYTalk() {}
+    void onBitCamTagIn() {}
+    void onFlying() {}
+    void onLightBodyHit() {}
+    void onLightHit() {}
+    void onMirror() {}
+    void onPlayerRoom() {}
+    void onSeaTalk() {}
+    void onShipRide() {}
+    void onXYTalk() {}
+    void setBitEffectStatus(u8) {}
+    void setBitHairMode(u8) {}
+    void setBitStatus(u32) {}
+    void setEffectStatus(u8) {}
+    void setFlyingTimer(s16) {}
+    void setOldLightBodyHit() {}
+    void setPiyo2TalkCNT(u8) {}
+    void setRunRate(f32) {}
+    void setStatus(u32) {}
+    void setTalkType(u8) {}
     
     daNpc_Md_c() {}
     ~daNpc_Md_c();
@@ -350,7 +438,7 @@ public:
     void lookBackWaist(s16, f32);
     void setBaseMtx();
     void deletePiyoPiyo();
-    void init();
+    BOOL init();
     BOOL draw();
     void animationPlay();
     void checkPlayerRoom();
@@ -383,7 +471,7 @@ public:
     /* 0x04FC */ mDoExt_McaMorf2* mpMorf;
     /* 0x0500 */ mDoExt_McaMorf2* mpArmMorf;
     /* 0x0504 */ mDoExt_McaMorf* mpWingMorf;
-    /* 0x0508 */ u8 m0508[0x0520 - 0x0508];
+    /* 0x0508 */ JPABaseEmitter* m0508[6];
     /* 0x0520 */ mDoExt_btpAnm m0520;
     /* 0x0534 */ mDoExt_btkAnm mLightBtkAnm;
     /* 0x0548 */ u8 m0548[0x054C - 0x0548];
@@ -437,7 +525,9 @@ public:
     /* 0x3138 */ u8 m3138;
     /* 0x3139 */ u8 mCurEvent;
     /* 0x313A */ u8 m313A;
-    /* 0x313B */ u8 m313B[0x3140 - 0x313B];
+    /* 0x313B */ u8 m313B[0x313D - 0x313B];
+    /* 0x313D */ u8 m313D;
+    /* 0x313E */ u8 m313E[0x3140 - 0x313E];
     /* 0x3140 */ bool m3140;
     /* 0x3141 */ u8 m3141[0x3144 - 0x3141];
     /* 0x3144 */ s16 m3144;

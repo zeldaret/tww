@@ -173,6 +173,11 @@ public:
     void execute(JPABaseEmitter*);
     void draw(JPABaseEmitter*);
 
+    JPABaseEmitter* getEmitter() { return mpBaseEmitter; }
+    void isStatus(u8) {}
+    void offStatus(int) {}
+    void onStatus(int) {}
+    void remove() { end(); }
     void setRate(f32 rate) { mRate = rate; }
 
     /* 0x04 */ JPABaseEmitter* mpBaseEmitter;

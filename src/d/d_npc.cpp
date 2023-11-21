@@ -11,6 +11,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "JSystem/JGeometry.h"
 #include "m_Do/m_Do_mtx.h"
+#include "d/d_item_data.h"
 
 // Needed for the .data section to match.
 static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
@@ -628,12 +629,12 @@ bool dNpc_chkArasoi() {
     return dComIfGs_isEventBit(0x1220) && !dComIfGs_isEventBit(0x1808);
 }
 
-BOOL dNpc_chkLetterPassed() {
-    BOOL ret = false;
+/* 8021BF30-8021BF98       .text dNpc_chkLetterPassed__Fv */
+bool dNpc_chkLetterPassed() {
+    bool ret = false;
     if(dComIfGs_isGetItemReserve(0xC)) {
-        ret = dComIfGs_checkReserveItem(0x98) ? 0 : 1;
+        ret = dComIfGs_checkReserveItem(LETTER00) == 0;
     }
-
     return ret;
 }
 

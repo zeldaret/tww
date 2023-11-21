@@ -853,7 +853,7 @@ inline u8 dComIfGs_getReserveNum(int i_idx) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord().getReserveNum(i_idx);
 }
 
-inline bool dComIfGs_checkReserveItemEmpty() {
+inline u8 dComIfGs_checkReserveItemEmpty() {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItem().checkReserveItemEmpty();
 }
 
@@ -975,6 +975,22 @@ inline s16 dComIfGs_getTurnRestartShipAngleY() {
 
 inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param) {
     g_dComIfG_gameInfo.save.getTurnRestart().set(i_pos, i_angle, i_roomNo, i_param, i_pos, i_angle, 0);
+}
+
+inline u8 dComIfGs_getPlayerPriestFlag() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPriest().getFlag();
+}
+
+inline cXyz& dComIfGs_getPlayerPriestPos() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPriest().getPos();
+}
+
+inline s16 dComIfGs_getPlayerPriestRotate() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPriest().getRotate();
+}
+
+inline s8 dComIfGs_getPlayerPriestRoomNo() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPriest().getRoomNo();
 }
 
 inline void dComIfGs_setPlayerPriest(u8 i_option, cXyz& i_pos, s16 i_angle, s8 i_roomNo) {

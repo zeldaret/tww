@@ -2458,9 +2458,9 @@ public:
     /* 0x3DB8 */ daPy_footData_c mFootData[2];
     /* 0x3FE8 */ dCcD_Stts mStts;
     /* 0x4024 */ dCcD_Cyl mCyl;
-    /* 0x4154 */ dCcD_Cyl mWindCyl1;
+    /* 0x4154 */ dCcD_Cyl mWindCyl;
     /* 0x4284 */ dCcD_Cyl mAtCyl;
-    /* 0x43B4 */ dCcD_Cyl mWindCyl2;
+    /* 0x43B4 */ dCcD_Cyl mLightCyl;
     /* 0x44E4 */ dCcD_Cps mAtCps[3];
     /* 0x488C */ dCcD_Cps mFanWindCps1;
     /* 0x49C4 */ dCcD_Sph mFanWindSph;
