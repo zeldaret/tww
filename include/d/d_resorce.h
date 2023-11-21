@@ -22,6 +22,7 @@ public:
     static void dump(dRes_info_c*, int);
 
     void* getRes(u32 resIdx) { return *(mRes + resIdx); }
+    int getResNum() { return mpArchive->countFile(); }
     int getCount() { return mCount; }
     char* getArchiveName() { return mArchiveName; }
     mDoDvdThd_mountArchive_c* getDMCommand() { return mpDMCommand; }

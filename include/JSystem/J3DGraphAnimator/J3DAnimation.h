@@ -328,9 +328,9 @@ public:
         field_0x28 = 0;
     }
 
-    void calcTransform(f32, u16, J3DTransformInfo*) const;
+    virtual void calcTransform(f32, u16, J3DTransformInfo*) const;
 
-    virtual ~J3DAnmTransformKey();
+    virtual ~J3DAnmTransformKey() {}
     virtual void getTransform(u16, J3DTransformInfo*) const;
 
 private:

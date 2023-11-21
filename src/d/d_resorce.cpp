@@ -144,7 +144,7 @@ static void setToonTex(J3DMaterialTable* pMaterialTable) {
 int dRes_info_c::loadResource() {
     JUT_ASSERT(0x25f, mRes == 0);
 
-    s32 fileNum = mpArchive->countFile();
+    s32 fileNum = getResNum();
     mRes = new void*[fileNum];
     if (mRes == NULL) {
         OSReport_Error("<%s.arc> setRes: res pointer buffer nothing !!\n", this);
@@ -192,13 +192,14 @@ int dRes_info_c::loadResource() {
         JKRArcFinder * pArcFinder = mpArchive->getFirstResource(*pResType);
 
         for (; pArcFinder->isAvailable(); pArcFinder->findNextFile()) {
+            u32 resType;
             void * pRes = JKRArchive::getGlbResource(*pResType, pArcFinder->mEntryName, mpArchive);
             if (pRes == NULL) {
                 OSReport_Error("<%s> res == NULL !!\n", pArcFinder->mEntryName);
                 goto next;
             }
 
-            u32 resType = *pResType;
+            resType = *pResType;
             if (resType == 'BMD ') {
                 pRes = J3DModelLoaderDataBase::load(pRes, 0x51240020);
                 if (pRes == NULL)
@@ -482,7 +483,7 @@ void dRes_info_c::dump_long(dRes_info_c* pRes, int num) {
     s32 size;
     JKRArchive* archive;
     mDoDvdThd_command_c* command;
-    void* header;
+    SArcHeader* header;
     s32 refCount;
     s32 heapSize;
     s32 i;
@@ -507,9 +508,13 @@ void dRes_info_c::dump_long(dRes_info_c* pRes, int num) {
     }
 }
 
+// This hack fixes the .sdata2 section, since dRes_info_c::dump puts the floats in the wrong order
+static f32 dummy(int i) {
+    return i;
+}
+
 /* 8006ECF4-8006EE6C       .text dump__11dRes_info_cFP11dRes_info_ci */
 void dRes_info_c::dump(dRes_info_c* pRes, int num) {
-    // sda
     int totalArcHeaderSize;
     int totalHeapSize;
     int arcHeaderSize;
@@ -640,8 +645,7 @@ void* dRes_control_c::getRes(char const* pArcName, s32 resIdx, dRes_info_c* pInf
     if (resInfo == NULL)
         return resInfo;
 
-    JKRArchive* archive = resInfo->getArchive();
-    u32 fileCount = archive->countFile();
+    u32 fileCount = resInfo->getResNum();
 
     if (resIdx >= (int)fileCount) {
         OSReport_Error("<%s.arc> getRes: res index over !! index=%d count=%d\n", pArcName, resIdx,
@@ -658,7 +662,7 @@ void* dRes_control_c::getRes(char const* pArcName, char const* resName, dRes_inf
     if (resInfo == NULL)
         return resInfo;
 
-    s32 fileNum = resInfo->getArchive()->countFile();
+    s32 fileNum = resInfo->getResNum();
     for (s32 i = 0; i < fileNum; i++) {
         if (resInfo->getRes(i) != NULL) {
             JKRArchive::SDirEntry dirEntry;
