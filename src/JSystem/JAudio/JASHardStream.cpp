@@ -13,19 +13,17 @@
 JASystem::HardStream::TControl JASystem::HardStream::strCtrl;
 bool JASystem::HardStream::useHardStreaming;
 char* JASystem::HardStream::streamFiles;
-u32* JASystem::HardStream::playList;
+JASystem::HardStream::TPlayList* JASystem::HardStream::playList;
 int JASystem::HardStream::playListMax = 32;
 
 /* 8027BE44-8027BEA4       .text unregistBgmAll__Q28JASystem10HardStreamFv */
 int JASystem::HardStream::unregistBgmAll() {
-    /* Nonmatching */
-    if (strCtrl.field_0x4 == NULL) {
+    if (strCtrl.getList() == NULL) {
         return 0;
     }
-    strCtrl.field_0x4 = NULL;
+    strCtrl.setList(NULL);
     for (int i = 0; i < playListMax; i++) {
-        u32* list = playList + i * 3;
-        list[2] = list[1] = list[0] = 0;
+        playList[i].clear();
     }
     return 1;
 }
@@ -34,7 +32,6 @@ char JASystem::HardStream::rootDir[32] = "";
 
 /* 8027BEA4-8027C318       .text main__Q28JASystem10HardStreamFv */
 void JASystem::HardStream::main() {
-    /* Nonmatching */
     static DVDFileInfo finfo[3];
     static u32 cur_finfo = 0;
     static u8 cur_addr_cmd = 0;
@@ -48,7 +45,7 @@ void JASystem::HardStream::main() {
         u16 introNum;
         switch (strCtrl.field_0xb) {
         case 1:
-            if (!strCtrl.field_0x4) {
+            if (!strCtrl.getList()) {
                 return;
             }
             introNum = strCtrl.getIntroNum();
@@ -83,7 +80,7 @@ void JASystem::HardStream::main() {
                 }
             }
             strCtrl.clearListOne();
-            if (strCtrl.field_0x4 == 0) {
+            if (!strCtrl.getList()) {
                 if (strCtrl.field_0x8 == 0) {
                     DVDStopStreamAtEndAsync(&stop_cmd, 0);
                     strCtrl.field_0xb = 4;
@@ -120,7 +117,8 @@ void JASystem::HardStream::main() {
             cur_addr_cmd %= 16;
             return;
         case 5:
-            if (!strCtrl.field_0x4) {
+            TPlayList* list = strCtrl.getList();
+            if (!list) {
                 if (strCtrl.field_0x8 != 2) {
                     strCtrl.field_0x8 = 3;
                 }
@@ -128,8 +126,8 @@ void JASystem::HardStream::main() {
                 return;
             }
             if (strCtrl.field_0x8 == 0) {
-                if (((u16**)strCtrl.field_0x4)[0][3] == 0xffff) {
-                    if (((u32*)strCtrl.field_0x4)[1] == 0) {
+                if (list->getPair()->getLoop() == 0xffff) {
+                    if (list->getNext() == NULL) {
                         DVDStopStreamAtEndAsync(&stop_cmd, 0);
                         strCtrl.clearListOne();
                         strCtrl.field_0x8 = 2;
@@ -146,7 +144,7 @@ void JASystem::HardStream::main() {
                     strCtrl.clearListOne();
                     strCtrl.field_0x8 = 1;
                 }
-            } else if (!strCtrl.field_0x4) {
+            } else if (!list) {
                 strCtrl.field_0x8 = 3;
                 strCtrl.field_0xb = 4;
             } else {
@@ -237,7 +235,7 @@ float dummy1() {
 /* 8027C4E4-8027C544       .text __ct__Q38JASystem10HardStream8TControlFv */
 JASystem::HardStream::TControl::TControl() {
     field_0x0 = 0;
-    field_0x4 = NULL;
+    mpList = NULL;
     field_0xa = 0;
     field_0x8 = 0;
     field_0xb = 0;
@@ -260,26 +258,24 @@ JASystem::HardStream::TControl::TControl() {
 
 /* 8027C544-8027C57C       .text getIntroNum__Q38JASystem10HardStream8TControlFv */
 u16 JASystem::HardStream::TControl::getIntroNum() {
-    if (!field_0x4) {
+    if (!mpList) {
         return 0xffff;
     }
-    u16* ptr = *(u16**)field_0x4;
-    if (ptr == NULL) {
+    if (mpList->getPair() == NULL) {
         return 0xffff;
     }
-    return ptr[2];
+    return mpList->getPair()->getIntro();
 }
 
 /* 8027C57C-8027C5B4       .text getLoopNum__Q38JASystem10HardStream8TControlFv */
 u16 JASystem::HardStream::TControl::getLoopNum() {
-    if (!field_0x4) {
+    if (!mpList) {
         return 0xffff;
     }
-    u16* ptr = *(u16**)field_0x4;
-    if (ptr == NULL) {
+    if (mpList->getPair() == NULL) {
         return 0xffff;
     }
-    return ptr[3];
+    return mpList->getPair()->getLoop();
 }
 
 void dummy2() {
@@ -315,8 +311,14 @@ BOOL JASystem::HardStream::TControl::fileOpen(u16 param_1, DVDFileInfo* fileinfo
 }
 
 /* 8027C648-8027C67C       .text clearListOne__Q38JASystem10HardStream8TControlFv */
-void JASystem::HardStream::TControl::clearListOne() {
-    /* Nonmatching */
+BOOL JASystem::HardStream::TControl::clearListOne() {
+    if (mpList == NULL) {
+        return FALSE;
+    }
+    TPlayList* oldList = mpList;
+    mpList = mpList->getNext();
+    oldList->clear();
+    return TRUE;
 }
 
 /* 8027C67C-8027C710       .text setLastAddr__Q38JASystem10HardStream8TControlFP11DVDFileInfo */

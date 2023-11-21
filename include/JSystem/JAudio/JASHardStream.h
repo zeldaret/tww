@@ -14,6 +14,34 @@ namespace JASystem {
         void secondBgmCallback(s32, DVDFileInfo*);
         void getAddrCallback(s32, DVDCommandBlock*);
 
+        class TPlayPair {
+        public:
+            u16 getIntro() { return mIntroNum; }
+            u16 getLoop() { return mLoopNum; }
+
+        public:
+            /* 0x00 */ u16 field_0x0;
+            /* 0x02 */ u16 field_0x2;
+            /* 0x04 */ u16 mIntroNum;
+            /* 0x06 */ u16 mLoopNum;
+        };
+
+        class TPlayList {
+        public:
+            void clear() {
+                mpPair = NULL;
+                mpNextList = NULL;
+                field_0x8 = 0;
+            }
+            TPlayPair* getPair() { return mpPair; }
+            TPlayList* getNext() { return mpNextList; }
+
+        public:
+            /* 0x00 */ TPlayPair* mpPair;
+            /* 0x04 */ TPlayList* mpNextList;
+            /* 0x08 */ u32 field_0x8;
+        };
+
         class TControl {
         public:
             TControl();
@@ -21,7 +49,7 @@ namespace JASystem {
             u16 getIntroNum();
             u16 getLoopNum();
             BOOL fileOpen(u16, DVDFileInfo*);
-            void clearListOne();
+            BOOL clearListOne();
             void setLastAddr(DVDFileInfo*);
             u32 getLastAddr();
             BOOL startFirst(u16, DVDFileInfo*, u32*);
@@ -31,8 +59,18 @@ namespace JASystem {
             void calcCurVolume();
             u8 volFloatToU8(f32);
 
+            void getLastAddrBefore() {}
+            TPlayList* getList() { return mpList; }
+            void getPlayArea() {}
+            void getRestart() {}
+            void getState() {}
+            void setList(TPlayList* list) { mpList = list; }
+            void setPlayArea(u16) {}
+            void setRestart(u8) {}
+            void setState(u8) {}
+
             /* 0x00 */ int field_0x0;
-            /* 0x04 */ void* field_0x4;
+            /* 0x04 */ TPlayList* mpList;
             /* 0x08 */ u16 field_0x8;
             /* 0x0A */ u8 field_0xa;
             /* 0x0B */ u8 field_0xb;
@@ -57,7 +95,7 @@ namespace JASystem {
         extern TControl strCtrl;
         extern bool useHardStreaming;
         extern char* streamFiles;
-        extern u32* playList;
+        extern TPlayList* playList;
         extern int playListMax;
         extern char rootDir[];
     }
