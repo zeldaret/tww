@@ -4,7 +4,7 @@
 //
 
 #include "SSystem/SComponent/c_bg_s_lin_chk.h"
-#include "dolphin/types.h"
+#include "f_pc/f_pc_manager.h"
 
 /* 80247418-80247480       .text ct__11cBgS_LinChkFv */
 void cBgS_LinChk::ct() {
@@ -12,7 +12,7 @@ void cBgS_LinChk::ct() {
     mLin.mStart = zero;
     mLin.mEnd = zero;
     field_0x40 = zero;
-    SetActorPid(-1);
+    SetActorPid(fpcM_ERROR_PROCESS_ID_e);
     mFlag = 0;
     mFrontFlag = 1;
     mBackFlag = 0;

@@ -2716,10 +2716,10 @@ void daPy_lk_c::setAtnList() {
 
 /* 8010841C-8010848C       .text setActor__16daPy_actorKeep_cFv */
 void daPy_actorKeep_c::setActor() {
-    if (mID != -1) {
+    if (mID != fpcM_ERROR_PROCESS_ID_e) {
         mActor = fopAcM_SearchByID(mID);
         if (mActor == NULL) {
-            mID = -1;
+            mID = fpcM_ERROR_PROCESS_ID_e;
         }
     } else {
         mActor = NULL;
@@ -2734,7 +2734,7 @@ void daPy_actorKeep_c::setData(fopAc_ac_c* actor) {
 
 /* 801084AC-801084C0       .text clearData__16daPy_actorKeep_cFv */
 void daPy_actorKeep_c::clearData() {
-    mID = -1;
+    mID = fpcM_ERROR_PROCESS_ID_e;
     mActor = NULL;
 }
 

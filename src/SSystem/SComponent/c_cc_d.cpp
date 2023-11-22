@@ -5,6 +5,7 @@
 
 #include "SSystem/SComponent/c_cc_d.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "f_pc/f_pc_manager.h"
 #include "dolphin/types.h"
 
 #define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)) ) == 1));
@@ -77,7 +78,7 @@ void cCcD_Stts::Ct() {
     m_cc_move.y = 0.0f;
     m_cc_move.z = 0.0f;
     mActor = NULL;
-    mApid = -1;
+    mApid = fpcM_ERROR_PROCESS_ID_e;
     mWeight = 0;
     field_0x15 = 0;
     mDmg = 0;

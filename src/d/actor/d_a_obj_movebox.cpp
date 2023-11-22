@@ -1153,11 +1153,11 @@ namespace daObjMovebox {
         }
         MTXCopy(mDoMtx_stack_c::get(), mMtx);
         
-        if (mChildProcId == -1) {
+        if (mChildPID == fpcM_ERROR_PROCESS_ID_e) {
             return;
         }
         fopAc_ac_c* childActor;
-        if (fopAcM_SearchByID(mChildProcId, &childActor)) {
+        if (fopAcM_SearchByID(mChildPID, &childActor)) {
             if (!childActor) {
                 return;
             }
@@ -1188,7 +1188,7 @@ namespace daObjMovebox {
                 buoyflag->setup(mDoMtx_stack_c::get());
             }
         } else {
-            mChildProcId = -1;
+            mChildPID = fpcM_ERROR_PROCESS_ID_e;
         }
     }
     
@@ -1423,28 +1423,28 @@ namespace daObjMovebox {
         m64F = true;
         mReverb = dComIfGp_getReverb(fopAcM_GetHomeRoomNo(this));
         
-        mChildProcId = -1;
+        mChildPID = fpcM_ERROR_PROCESS_ID_e;
         if (prm_get_buoy() == 0) {
             cXyz buoyPos(current.pos.x, current.pos.y + i_attr()->m68 - 5.0f, current.pos.z);
-            mChildProcId = daObjBuoyflag::Act_c::make_norm(fpcM_GetID(this), &buoyPos, fopAcM_GetRoomNo(this), &shape_angle);
+            mChildPID = daObjBuoyflag::Act_c::make_norm(fopAcM_GetID(this), &buoyPos, fopAcM_GetRoomNo(this), &shape_angle);
         } else if (mType == TYPE_METAL_BOX_WITH_SPRING) {
             u32 jumpParams = daObjJump::Act_c::prm_make_b();
-            mChildProcId = fopAcM_createChild(
-                PROC_Obj_Jump, fpcM_GetID(this),
+            mChildPID = fopAcM_createChild(
+                PROC_Obj_Jump, fopAcM_GetID(this),
                 jumpParams, &current.pos,
                 fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL
             );
         } else if (mType == TYPE_MIRROR) {
-            mChildProcId = fopAcM_createChild(
-                PROC_Obj_Mmrr, fpcM_GetID(this),
+            mChildPID = fopAcM_createChild(
+                PROC_Obj_Mmrr, fopAcM_GetID(this),
                 0, &current.pos,
                 fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL
             );
         } else if (mType == TYPE_BLACK_BOX_WITH_MKIE) {
             cXyz mkiePos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
             u32 mkieParams = daObjMkie::Act_c::prm_make(prmX_get_evId(), prmZ_get_swSave2_MkieB());
-            mChildProcId = fopAcM_createChild(
-                PROC_Obj_Mkie, fpcM_GetID(this),
+            mChildPID = fopAcM_createChild(
+                PROC_Obj_Mkie, fopAcM_GetID(this),
                 mkieParams, &mkiePos,
                 fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL
             );
@@ -1514,7 +1514,7 @@ namespace daObjMovebox {
         int r30 = -1;
         bool r29 = true;
         
-        if (m64A && cLib_checkBit(mBgc.mStateFlags, Bgc_c::BgcState_UNK01) && (mType != TYPE_BLACK_BOX_WITH_MKIE || mChildProcId == -1)) {
+        if (m64A && cLib_checkBit(mBgc.mStateFlags, Bgc_c::BgcState_UNK01) && (mType != TYPE_BLACK_BOX_WITH_MKIE || mChildPID == -1)) {
             BOOL temp = cLib_checkBit(mPPLabel, dBgW::PP_UNK2_e);
             BOOL r3 = cLib_checkBit(mPPLabel, dBgW::PP_UNK4_e);
             s16 r0;

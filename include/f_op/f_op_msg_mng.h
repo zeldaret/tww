@@ -65,7 +65,7 @@ void fopMsgM_setMessageID(unsigned int);
 void fopMsgM_destroyExpHeap(JKRExpHeap*);
 f32 fopMsgM_valueIncrease(int param_0, int param_1, u8 param_2);
 s32 fopMsgM_setStageLayer(void*);
-int fopMsgM_messageSet(u32 i_msgIdx, fopAc_ac_c* i_actorP);
+int fopMsgM_messageSet(u32 i_msgNo, fopAc_ac_c* i_actorP);
 int fopMsgM_messageSet(u32 param_0, cXyz*);
 int fopMsgM_messageSet(u32 param_0);
 int fopMsgM_messageSetDemo(u32 param_0);

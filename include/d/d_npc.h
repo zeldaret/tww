@@ -225,7 +225,7 @@ enum dNpc_MessageStatus_e {
 class fopNpc_npc_c : public fopAc_ac_c {
 public:
     fopNpc_npc_c() {
-        mCurrMsgBsPcId = -1;
+        mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
         mpCurrMsg = 0;
     }
     /* 0x290 */ dNpc_JntCtrl_c mJntCtrl;
@@ -235,9 +235,9 @@ public:
     /* 0x4F8 */ dBgS_AcchCir mAcchCir;
     /* 0x538 */ dCcD_Stts mStts;
     /* 0x574 */ dCcD_Cyl mCyl;
-    /* 0x6A4 */ u32 mCurrMsgID;
-    /* 0x6A8 */ u32 mEndMsgID;
-    /* 0x6AC */ s32 mCurrMsgBsPcId;
+    /* 0x6A4 */ u32 mCurrMsgNo;
+    /* 0x6A8 */ u32 mEndMsgNo;
+    /* 0x6AC */ u32 mCurrMsgBsPcId;
     /* 0x6B0 */ msg_class* mpCurrMsg;
     /* 0x6B4 */ u8 pad_0x6B4[0x6C0 - 0x6B4];
 

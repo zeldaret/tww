@@ -266,7 +266,7 @@ namespace daObjMovebox {
         /* 0x64E */ bool mbPrmXInitialized;
         /* 0x64F */ bool m64F;
         /* 0x650 */ EffSmokeCB mSmokeCbs[2];
-        /* 0x6B8 */ u32 mChildProcId;
+        /* 0x6B8 */ u32 mChildPID;
         /* 0x6BC */ int m6BC;
         
         static const char* const M_arcname[13];

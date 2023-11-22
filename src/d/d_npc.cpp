@@ -651,26 +651,26 @@ void fopNpc_npc_c::setCollision(f32 radius, f32 height) {
 u16 fopNpc_npc_c::talk(int param_1) {
     u16 mode = 0xFF;
 
-    if(mCurrMsgBsPcId == 0xFFFFFFFF) {
+    if(mCurrMsgBsPcId == fpcM_ERROR_PROCESS_ID_e) {
         if(param_1 == 1) {
-            mCurrMsgID = getMsg();
+            mCurrMsgNo = getMsg();
         }
 
-        mCurrMsgBsPcId = fopMsgM_messageSet(mCurrMsgID, this);
+        mCurrMsgBsPcId = fopMsgM_messageSet(mCurrMsgNo, this);
         mpCurrMsg = 0;
     }
     else {
         if(mpCurrMsg) {
             mode = mpCurrMsg->mMode;
             if(mode == dNpcMsgStts_MSG_DISPLAYED_e) {
-                mpCurrMsg->mMode = next_msgStatus(&mCurrMsgID);
+                mpCurrMsg->mMode = next_msgStatus(&mCurrMsgNo);
                 if(mpCurrMsg->mMode == dNpcMsgStts_MSG_CONTINUES_e) {
-                    fopMsgM_messageSet(mCurrMsgID);
+                    fopMsgM_messageSet(mCurrMsgNo);
                 }
             }
             else if (mode == dNpcMsgStts_BOX_CLOSED_e) {
                 mpCurrMsg->mMode = dNpcMsgStts_MSG_DESTROYED_e;
-                mCurrMsgBsPcId = -1;
+                mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
             }
 
             anmAtr(mode);

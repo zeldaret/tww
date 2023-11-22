@@ -131,15 +131,13 @@ namespace daObjPaper {
         /* 0x408 */ bool mbHasCc;
 
         /* 0x40C */ int mMode;
-        /* 0x410 */ int mMsgId;
+        /* 0x410 */ u32 mMsgId;
         /* 0x414 */ msg_class* mpMsg;
         /* 0x418 */ Type_e mType;
 
-        int getMsgId() const { return mMsgId; }
-
         enum Prm_e {
-            PRM_MSG_ID_W = 0x10,
-            PRM_MSG_ID_S = 0x00,
+            PRM_MSG_NO_W = 0x10,
+            PRM_MSG_NO_S = 0x00,
 
             PRM_TYPE_W = 0x04,
             PRM_TYPE_S = 0x10,
@@ -186,7 +184,7 @@ namespace daObjPaper {
                 mAttentionInfo.mDistances[3] = attr(mType).mAttentionDist2;
                 mAttentionInfo.mFlags |= fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_READ_e;
 
-                mMsgId = -1;
+                mMsgId = fpcM_ERROR_PROCESS_ID_e;
 
                 if (mType == 2) {
                     mStatus = mStatus & 0xFFFFFFC0 | 0x38;
@@ -244,17 +242,16 @@ namespace daObjPaper {
     /* 00000784-000007A4       .text mode_talk0_init__Q210daObjPaper5Act_cFv */
     void daObjPaper::Act_c::mode_talk0_init() {
         mStatus &= ~fopAcStts_NOCULLEXEC_e;
-        mMsgId = -1;
+        mMsgId = fpcM_ERROR_PROCESS_ID_e;
         mMode = ActMode_TALKBEGIN_e;
     }
 
     /* 000007A4-00000820       .text mode_talk0__Q210daObjPaper5Act_cFv */
     void daObjPaper::Act_c::mode_talk0() {
-        if (getMsgId() == 0xFFFFFFFF && dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 4)) {
-            int msgId = daObj::PrmAbstract<Prm_e>(this, PRM_MSG_ID_W, PRM_MSG_ID_S);
-            msgId = fopMsgM_messageSet(msgId, &mEyePos);
+        if (mMsgId == fpcM_ERROR_PROCESS_ID_e && dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 4)) {
+            int msgNo = daObj::PrmAbstract<Prm_e>(this, PRM_MSG_NO_W, PRM_MSG_NO_S);
+            mMsgId = fopMsgM_messageSet(msgNo, &mEyePos);
 
-            mMsgId = msgId;
             mode_talk1_init();
         }
     }
@@ -282,7 +279,7 @@ namespace daObjPaper {
         if (mpMsg->mMode == dNpcMsgStts_BOX_CLOSED_e) {
             mpMsg->mMode = dNpcMsgStts_MSG_DESTROYED_e;
             mpMsg = 0;
-            mMsgId = -1;
+            mMsgId = fpcM_ERROR_PROCESS_ID_e;
 
             g_dComIfG_gameInfo.play.mEvtCtrl.mEventFlag |= 8;
             mode_wait_init();

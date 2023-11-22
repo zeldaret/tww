@@ -144,12 +144,12 @@ namespace daObjMknjD {
         
         /* 0x04E4 */ s8 mActionIdx;
         /* 0x04E5 */ u8 mTactMode;
-        /* 0x04E6 */ u8 mGiveItemId;
+        /* 0x04E6 */ u8 mGiveItemNo;
 
         /* 0x04E8 */ cXyz mGoalPos;
 
-        /* 0x04F4 */ u32 mMsgId;
-        /* 0x04F8 */ u32 mMsgInstId;
+        /* 0x04F4 */ u32 mMsgNo;
+        /* 0x04F8 */ u32 mMsgPID;
         /* 0x04FC */ msg_class* mMsgPtr;
 
         /* 0x0500 */ s32 m0500;
@@ -354,7 +354,7 @@ int daObjMknjD::Act_c::Create() {
         mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[7], 0xFF);
 
         mTactMode = 4;
-        mGiveItemId = TACT_SONG5;
+        mGiveItemNo = TACT_SONG5;
         mEvtInfo.setEventName("MKNJD_K_TALK");
         m0430 = 0x2910;
     }
@@ -365,7 +365,7 @@ int daObjMknjD::Act_c::Create() {
         mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[6], 0xFF);
 
         mTactMode = 3;
-        mGiveItemId = TACT_SONG4;
+        mGiveItemNo = TACT_SONG4;
         mEvtInfo.setEventName("MKNJD_D_TALK");
         m0430 = 0x2920;
     }
@@ -374,7 +374,7 @@ int daObjMknjD::Act_c::Create() {
     mAttentionInfo.mDistances[3] = 0x3D;
     mAttentionInfo.mFlags |= fopAc_Attn_ACTION_TALK_e | fopAc_Attn_TALKFLAG_CHECK_e;
 
-    if (checkItemGet(mGiveItemId, 1) == 0) {
+    if (checkItemGet(mGiveItemNo, 1) == 0) {
         m043F = 8;
         mEvtInfo.mpCheckCB = daObjMknjD_XyCheckCB;
         mEvtInfo.mpEventCB = daObjMknjD_XyEventCB;
@@ -384,7 +384,7 @@ int daObjMknjD::Act_c::Create() {
     }
 
     mMsgPtr = NULL;
-    mMsgInstId = 0xFFFFFFFF;
+    mMsgPID = fpcM_ERROR_PROCESS_ID_e;
     m0504 = false;
 
     return 1;
@@ -488,7 +488,7 @@ void daObjMknjD::Act_c::setPlayerAngle(int i_staffIdx) {
 u16 daObjMknjD::Act_c::talk(int i_param1) {
     u16 msgMode = 0xFF;
 
-    if (mMsgInstId == 0xFFFFFFFF) {
+    if (mMsgPID == fpcM_ERROR_PROCESS_ID_e) {
         if (i_param1 == 1) {
             u32 msgId;
 
@@ -500,10 +500,10 @@ u16 daObjMknjD::Act_c::talk(int i_param1) {
                 msgId = 0x1901;
             }
             
-            mMsgId = msgId;
+            mMsgNo = msgId;
         }
 
-        mMsgInstId = fopMsgM_messageSet(mMsgId, this);
+        mMsgPID = fopMsgM_messageSet(mMsgNo, this);
         mMsgPtr = NULL;
     }
     else {
@@ -520,11 +520,11 @@ u16 daObjMknjD::Act_c::talk(int i_param1) {
             }
             else if (msgMode == 0x12) {
                 mMsgPtr->mMode = 0x13;
-                mMsgInstId = 0xFFFFFFFF;
+                mMsgPID = fpcM_ERROR_PROCESS_ID_e;
             }
         }
         else {
-            mMsgPtr = fopMsgM_SearchByID(mMsgInstId);
+            mMsgPtr = fopMsgM_SearchByID(mMsgPID);
         }
     }
 
@@ -589,7 +589,7 @@ void daObjMknjD::Act_c::privateCut() {
                     case ACT_LESSON:
                         m0504 = false;
                         m0500 = 0;
-                        mMsgInstId = 0xFFFFFFFF;
+                        mMsgPID = fpcM_ERROR_PROCESS_ID_e;
                         break;
                     case ACT_TACT:
                         break;
@@ -964,7 +964,7 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
             privateCut();
 
             if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode == 0) {
-                if (checkItemGet(mGiveItemId, 1) != 0) {
+                if (checkItemGet(mGiveItemNo, 1) != 0) {
                     m043F = 0;
                 }
                 else {
@@ -982,7 +982,7 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
                 player->offPlayerNoDraw();
                 g_dComIfG_gameInfo.play.mEvtCtrl.mEventFlag |= 8;
 
-                if (checkItemGet(mGiveItemId, 1) != 0) {
+                if (checkItemGet(mGiveItemNo, 1) != 0) {
                     m043F = 0;
                 }
                 else {

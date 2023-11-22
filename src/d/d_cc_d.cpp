@@ -10,13 +10,13 @@
 
 /* 800AB2AC-800AB328       .text GetAc__22dCcD_GAtTgCoCommonBaseFv */
 fopAc_ac_c* dCcD_GAtTgCoCommonBase::GetAc() {
-    if (mApid == -1) {
+    if (mApid == fpcM_ERROR_PROCESS_ID_e) {
         return NULL;
     }
     if (mAc == NULL) {
         mAc = fopAcM_SearchByID(mApid);
         if (mAc == NULL) {
-            mApid = -1;
+            mApid = fpcM_ERROR_PROCESS_ID_e;
         }
     }
     return mAc;
@@ -67,7 +67,7 @@ void dCcD_Stts::Init(int param_0, int param_1, fopAc_ac_c* pActor) {
     if (pActor) {
         procId = fpcM_GetID(pActor);
     } else {
-        procId = -1;
+        procId = fpcM_ERROR_PROCESS_ID_e;
     }
     cCcD_Stts::Init(param_0, param_1, pActor, procId);
     

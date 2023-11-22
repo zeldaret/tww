@@ -106,7 +106,7 @@ void dNpc_EventCut_c::cutTurnToActorStart() {
         mSetId = 0;
     }
 
-    Vec* pos = dComIfGp_evmng_getMyXyzP(mEvtStaffId, "OffsetPos");
+    cXyz* pos = dComIfGp_evmng_getMyXyzP(mEvtStaffId, "OffsetPos");
     if(pos) {
         mOffsetPos = *pos;
     }
@@ -236,7 +236,7 @@ void dNpc_EventCut_c::cutMoveToActorStart() {
     u32* set = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "SetId");
     f32* speed = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "Speed");
     f32* dist = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "DelDistance");
-    Vec* offs = dComIfGp_evmng_getMyXyzP(mEvtStaffId, "OffsetPos");
+    cXyz* offs = dComIfGp_evmng_getMyXyzP(mEvtStaffId, "OffsetPos");
     u32* attn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Attention");
     u32* noTurn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "NoTurn");
     u32* angle = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "ShapeAngle");
@@ -380,7 +380,7 @@ fopAc_ac_c* dNpc_EventCut_c::findActorCallBack(fopAc_ac_c* pActor, void* pData) 
 }
 
 void dNpc_EventCut_c::cutTurnToPosStart() {
-    Vec* pos = dComIfGp_evmng_getMyXyzP(mEvtStaffId, "Pos");
+    cXyz* pos = dComIfGp_evmng_getMyXyzP(mEvtStaffId, "Pos");
     if(pos) {
         mPos = *pos;
     }
@@ -466,7 +466,7 @@ void dNpc_EventCut_c::cutTurnToPosProc() {
 }
 
 void dNpc_EventCut_c::cutMoveToPosStart() {
-    Vec* pos = dComIfGp_evmng_getMyXyzP(mEvtStaffId, "Pos");
+    cXyz* pos = dComIfGp_evmng_getMyXyzP(mEvtStaffId, "Pos");
     f32* speed = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "Speed");
     f32* dist = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "DelDistance");
     u32* attn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Attention");
@@ -552,19 +552,19 @@ void dNpc_EventCut_c::cutTalkMsgStart() {
             mbAttention = 1;
         }
 
-        u32* firstMsg = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "msg_num");
-        u32* endMsg = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "end_msg");
-        if(firstMsg == 0) {
-            mpTalkActor->mCurrMsgID = 0;
+        u32* firstMsgNo = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "msg_num");
+        u32* endMsgNo = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "end_msg");
+        if(firstMsgNo == 0) {
+            mpTalkActor->mCurrMsgNo = 0;
         }
         else {
-            mpTalkActor->mCurrMsgID = *firstMsg;
+            mpTalkActor->mCurrMsgNo = *firstMsgNo;
         }
-        if(endMsg) {
-            mpTalkActor->mEndMsgID = *endMsg;
+        if(endMsgNo) {
+            mpTalkActor->mEndMsgNo = *endMsgNo;
         }
         else {
-            mpTalkActor->mEndMsgID = -1;
+            mpTalkActor->mEndMsgNo = -1;
         }
 
         field_0x52 = 1;
@@ -575,10 +575,10 @@ void dNpc_EventCut_c::cutContinueTalkStart() {
     if(mpTalkActor != 0) {
         u32* endMsg = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "end_num");
         if(endMsg) {
-            mpTalkActor->mEndMsgID = *endMsg;
+            mpTalkActor->mEndMsgNo = *endMsg;
         }
         else {
-            mpTalkActor->mEndMsgID = -1;
+            mpTalkActor->mEndMsgNo = -1;
         }
     }
 }
@@ -593,8 +593,8 @@ void dNpc_EventCut_c::cutTalkMsgProc() {
             field_0x52 = 0;
             dComIfGp_evmng_cutEnd(mEvtStaffId);
         }
-        else if((status == 2 || status == 6) && mpTalkActor->mEndMsgID == mpTalkActor->mCurrMsgID) {
-            mpTalkActor->mEndMsgID = -1;
+        else if((status == 2 || status == 6) && mpTalkActor->mEndMsgNo == mpTalkActor->mCurrMsgNo) {
+            mpTalkActor->mEndMsgNo = -1;
             dComIfGp_evmng_cutEnd(mEvtStaffId);
         }
     }

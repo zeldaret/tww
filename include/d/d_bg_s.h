@@ -10,6 +10,7 @@
 #include "d/d_bg_s_chk.h"
 #include "d/d_bg_w.h"
 #include "global.h"
+#include "f_pc/f_pc_manager.h"
 
 class cBgS_LinChk;
 class cBgS_GndChk;
@@ -86,7 +87,7 @@ public:
         mpLine0 = i_line;
         pm_pos = i_pos;
         field_0x058 = param_2;
-        SetActorPid(-1);
+        SetActorPid(fpcM_ERROR_PROCESS_ID_e);
         field_0x3c = param_3->y;
         field_0x40 = param_3->z;
     }

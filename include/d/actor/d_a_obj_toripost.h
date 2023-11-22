@@ -6,8 +6,8 @@
 
 struct daObjTpost_c__letter_data {
     /* 0x00 */ bool field_0x00;
-    /* 0x04 */ u32 mMsgId;
-    /* 0x08 */ u8 mItemId;
+    /* 0x04 */ u32 mMsgNo;
+    /* 0x08 */ u8 mItemNo;
     /* 0x0A */ u16 mEventReg;
 };
 

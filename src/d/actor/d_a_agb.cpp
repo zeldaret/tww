@@ -66,14 +66,14 @@ static daAgb_HIO_c l_HIO;
 /* 800CF700-800CF71C       .text init__10dMsgCtrl_cFUs */
 int dMsgCtrl_c::init(u16 param_0) {
     field_0x0 = param_0;
-    mMsgID = -1;
+    mMsgID = fpcM_ERROR_PROCESS_ID_e;
     mpMsg = NULL;
     return 1;
 }
 
 /* 800CF71C-800CF7B4       .text execute__10dMsgCtrl_cFv */
 int dMsgCtrl_c::execute() {
-    if (mMsgID == -1) {
+    if (mMsgID == fpcM_ERROR_PROCESS_ID_e) {
         mMsgID = fopMsgM_messageSet(field_0x0);
     } else if (mpMsg == NULL) {
         mpMsg = fopMsgM_SearchByID(mMsgID);
@@ -1127,7 +1127,7 @@ int daAgb_Create(fopAc_ac_c* i_this) {
         a_this->mCrrPos.mpLine0 = &a_this->current.pos;
         a_this->mCrrPos.pm_pos = &a_this->next.pos;
         a_this->mCrrPos.field_0x058 = NULL;
-        a_this->mCrrPos.SetActorPid(-1);
+        a_this->mCrrPos.SetActorPid(fpcM_ERROR_PROCESS_ID_e);
         a_this->mCrrPos.field_0x3c = 171.0f;
         a_this->mCrrPos.field_0x40 = 50.0f;
 

@@ -4,6 +4,7 @@
 #include "SSystem/SComponent/c_bg_s_poly_info.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "d/d_bg_s_chk.h"
+#include "f_pc/f_pc_manager.h"
 
 class dBgS_RoofChk : public cBgS_PolyInfo, public cBgS_Chk, public dBgS_Chk {
 public:
@@ -13,7 +14,7 @@ public:
         m_pos.x = 0.0f;
         m_pos.y = 0.0f;
         m_pos.z = 0.0f;
-        SetActorPid(-1);
+        SetActorPid(fpcM_ERROR_PROCESS_ID_e);
         field_0x44 = NULL;
     }
     void Init();

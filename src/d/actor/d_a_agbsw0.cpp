@@ -1100,16 +1100,16 @@ BOOL daAgbsw0_c::ExeSubR() {
 
     if(g_mDoGaC_gbaCom.mDoGaC_GbaLink() && g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(5)) {
         if(sw != 0xFF && fopAcM_isSwitch(this, sw)) {
-            s32 itemID = getParamNo();
-            if(itemID < 0 || 0x1E < itemID) {
-                itemID = 0;
+            s32 itemNo = getParamNo();
+            if(itemNo < 0 || 0x1E < itemNo) {
+                itemNo = 0;
             }
 
-            if(itemID != 0x16) {
+            if(itemNo != RECOVER_FAIRY) {
                 current.pos.y += mScale.y / 2.0f;
             }
 
-            fopAcM_fastCreateItem(&current.pos, itemID, fopAcM_GetHomeRoomNo(this), 0, 0, 0.0f, cM_rndF(10.0f) + 40.0f, -7.0f, -1, 0);
+            fopAcM_fastCreateItem(&current.pos, itemNo, fopAcM_GetHomeRoomNo(this), 0, 0, 0.0f, cM_rndF(10.0f) + 40.0f, -7.0f, -1, 0);
             fopAcM_seStart(this, JA_SE_CV_CHI_MEGAHORN, 0);
             MailSend(-1, 0, 0xFF, 0xFF, 0);
 
@@ -1370,14 +1370,14 @@ BOOL daAgbsw0_c::ExeSubD() {
                     }
                 }
                 else if(field_0x299 == 2 && fopAcM_isSwitch(this, getSw1())) {
-                    s32 itemID = getParamNo();
-                    if(itemID != 0x16) {
+                    s32 itemNo = getParamNo();
+                    if(itemNo != RECOVER_FAIRY) {
                         current.pos.y += mScale.y / 2;
                     }
-                    if(0 <= itemID && itemID < 0x1F && itemID != 0x7 && itemID != 0x8 && itemID != 0x15) {
+                    if(0 <= itemNo && itemNo < 0x1F && itemNo != KAKERA_HEART && itemNo != UTUWA_HEART && itemNo != SMALL_KEY) {
                         s8 roomNo = fopAcM_GetHomeRoomNo(this);
                         f32 rnd = cM_rndF(10.0f) + 40.0f;
-                        fopAcM_fastCreateItem(&current.pos, itemID, roomNo, 0, 0, 0.0f, rnd, -7.0f, -1, 0);
+                        fopAcM_fastCreateItem(&current.pos, itemNo, roomNo, 0, 0, 0.0f, rnd, -7.0f, -1, 0);
                         MailSend(-1, 0, 0xFF, 0xFF, 0x11);
                     }
 

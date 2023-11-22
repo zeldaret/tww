@@ -6,6 +6,7 @@
 #include "f_pc/f_pc_stdcreate_req.h"
 #include "f_pc/f_pc_load.h"
 #include "f_pc/f_pc_node.h"
+#include "f_pc/f_pc_manager.h"
 
 /* 80040648-8004069C       .text fpcSCtRq_phase_Load__FP29standard_create_request_class */
 s32 fpcSCtRq_phase_Load(standard_create_request_class* i_SCtReq) {
@@ -110,11 +111,11 @@ s32 fpcSCtRq_Request(layer_class* i_layer, s16 i_procName, stdCreateFunc i_creat
     };
 
     if (i_procName >= 0x7FFF) {
-        return -1;
+        return fpcM_ERROR_PROCESS_ID_e;
     } else {
         standard_create_request_class* request = (standard_create_request_class*)fpcCtRq_Create(i_layer, sizeof(standard_create_request_class), &submethod);
         if (request == NULL) {
-            return -1;
+            return fpcM_ERROR_PROCESS_ID_e;
         } else {
             cPhs_Set(&request->mPhase, method);
             request->mProcName = i_procName;

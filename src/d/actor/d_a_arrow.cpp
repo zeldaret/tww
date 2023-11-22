@@ -124,7 +124,7 @@ void daArrow_c::_atHit(dCcD_GObjInf* thisObjInf, fopAc_ac_c* hitActor, dCcD_GObj
     f32 hitDist = (hitPos - current.pos).abs();
     if (hitDist < mNearestHitDist) {
         mNearestHitDist = hitDist;
-        mHitActorProcID = fpcM_GetID(hitActor);
+        mHitActorProcID = fopAcM_GetID(hitActor);
         if (hitObjInf->ChkTgShield()) {
             mbHitActor = false;
             field_0x6ec = NULL;
@@ -155,7 +155,7 @@ void daArrow_c::setLightEffect() {
         }
         if (!field_0x688) {
             field_0x684 = fopAcM_createChild(
-                PROC_ARROW_LIGHTEFF, fpcM_GetID(this),
+                PROC_ARROW_LIGHTEFF, fopAcM_GetID(this),
                 mArrowType, &field_0x6a8,
                 current.roomNo, &shape_angle, NULL, -1, NULL
             );
@@ -402,7 +402,7 @@ bool daArrow_c::check_water_in() {
         } else if (mArrowType == TYPE_ICE) {
             mInWaterTimer = 10*30;
             fopAcM_createChild(
-                PROC_ARROW_ICEEFF, fpcM_GetID(this), mArrowType,
+                PROC_ARROW_ICEEFF, fopAcM_GetID(this), mArrowType,
                 &waterHitPos, current.roomNo, &current.angle, NULL, -1, NULL
             );
             if (field_0x6e4 == 0) {
@@ -805,7 +805,7 @@ BOOL daArrow_c::procMove() {
                     dComIfGp_particle_setP1(0x29E, &field_0x6a8, &temp10);
                     
                     fopAcM_createChild(
-                        PROC_ARROW_ICEEFF, fpcM_GetID(this),
+                        PROC_ARROW_ICEEFF, fopAcM_GetID(this),
                         mArrowType, &field_0x6a8,
                         current.roomNo, &field_0x6e6, NULL, -1, NULL
                     );

@@ -182,9 +182,9 @@ void daObjTpost_c::cutPresentStart(int staffIdx) {
 }
 
 void daObjTpost_c::cutPresentProc(int staffIdx) {
-    u32 item = fopAcM_createItemForPresentDemo(&current.pos, m_letter[mNumReadable].mItemId, 0, -1, -1, 0, 0);
-    if(item != 0xFFFFFFFF) {
-        dComIfGp_event_setItemPartnerId(item);
+    u32 itemPID = fopAcM_createItemForPresentDemo(&current.pos, m_letter[mNumReadable].mItemNo, 0, -1, -1, 0, 0);
+    if(itemPID != fpcM_ERROR_PROCESS_ID_e) {
+        dComIfGp_event_setItemPartnerId(itemPID);
         dComIfGp_evmng_cutEnd(staffIdx);
     }
     else {
@@ -214,7 +214,7 @@ void daObjTpost_c::cutSetAnmProc(int staffIdx) {
 }
 
 void daObjTpost_c::cutDispLetterStart(int staffIdx) {
-    mCurrMsgID = m_letter[mNumReadable].mMsgId;
+    mCurrMsgNo = m_letter[mNumReadable].mMsgNo;
 }
 
 void daObjTpost_c::cutDispLetterProc(int staffIdx) {
@@ -507,7 +507,7 @@ u16 daObjTpost_c::next_msgStatus(u32* msgId) {
             break;
     }
 
-    if(mCurrMsgID == m_letter[mNumReadable].mMsgId && status == dNpcMsgStts_MSG_ENDS_e) {
+    if(mCurrMsgNo == m_letter[mNumReadable].mMsgNo && status == dNpcMsgStts_MSG_ENDS_e) {
         status = dNpcMsgStts_MSG_DISPLAYED_e;
     }
 
@@ -717,7 +717,7 @@ void daObjTpost_c::modeTalkXY() {
             field_0x8E4 = -1;
         }
 
-        switch(mCurrMsgID) {
+        switch(mCurrMsgNo) {
             case 0xCE9:
             case 0xCEA:
             case 0xCF0:
@@ -907,7 +907,7 @@ void daObjTpost_c::createInit() {
     }
 
     field_0x8F0 = 1;
-    mCurrMsgBsPcId = -1;
+    mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
     mpCurrMsg = 0;
 
     mAttentionInfo.mDistances[1] = 5;

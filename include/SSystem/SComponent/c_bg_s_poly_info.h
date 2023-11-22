@@ -3,6 +3,7 @@
 
 #include "dolphin/types.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "f_pc/f_pc_manager.h"
 #include "global.h"
 
 class cBgW;
@@ -21,7 +22,7 @@ public:
         mPolyIndex = -1;
         mBgIndex = 0x100;
         mpBgW = NULL;
-        mActorId = -1;
+        mActorId = fpcM_ERROR_PROCESS_ID_e;
     }
     void SetPolyInfo(const cBgS_PolyInfo& other) {
         *this = other;

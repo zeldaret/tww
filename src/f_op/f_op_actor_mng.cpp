@@ -853,7 +853,7 @@ s32 fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo, int r
             }
             u8* pItemTable = itemTableList->mItemTables[tableIdx];
             u32 itemNo;
-            u32 lastItemPcId;
+            u32 lastItemPID;
             for (int i = 0; (itemNo = *pItemTable) != NO_ITEM && i < 0x10; pItemTable++, i++) {
                 if (p_pos) {
                     pos = *p_pos;
@@ -873,12 +873,12 @@ s32 fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo, int r
                 itemNo = getItemNoByLife((s8)itemNo);
                 daItem_c* item = (daItem_c*)fopAcM_fastCreateItem2(&pos, itemNo, i_itemBitNo, roomNo, type, &angle, 8, NULL);
 
-                lastItemPcId = fopAcM_GetID(item);
-                if (lastItemPcId == -1) {
+                lastItemPID = fopAcM_GetID(item);
+                if (lastItemPID == fpcM_ERROR_PROCESS_ID_e) {
                     break;
                 }
             }
-            return lastItemPcId;
+            return lastItemPID;
         }
 
         int itemIdx = (int)cM_rndF(15.9999f);
@@ -930,7 +930,7 @@ s32 fopAcM_createDemoItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* rot, 
     }
 
     u32 params = i_itemNo & 0xFF | (i_itemBitNo & 0x7F) << 0x08 | (param_7 & 0xFF) << 0x10;
-    fopAcM_create(PROC_Demo_Item, params, pos, roomNo, rot, scale, 0xFF, NULL);
+    return fopAcM_create(PROC_Demo_Item, params, pos, roomNo, rot, scale, 0xFF, NULL);
 }
 
 /* 80026A68-80026ADC       .text fopAcM_createItemForBoss__FP4cXyziiP5csXyzP4cXyzi */

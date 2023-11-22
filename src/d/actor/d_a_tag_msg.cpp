@@ -166,7 +166,7 @@ static s32 daTag_Msg_actionEvent(daTag_Msg_c* a_this) {
         break;
     case 1:
         l_msgId = fopMsgM_messageSet(message, &a_this->mAttentionInfo.mPosition);
-        if (l_msgId != 0xffffffff) {
+        if (l_msgId != fpcM_ERROR_PROCESS_ID_e) {
             msg_mode++;
         }
         break;
@@ -214,7 +214,7 @@ static s32 daTag_Msg_actionHunt(daTag_Msg_c* a_this) {
         if ((swBit & 0xff) != 0xff) {
             dComIfGs_onSwitch(swBit,a_this->current.roomNo);
         }
-        l_msgId = 0xffffffff;
+        l_msgId = fpcM_ERROR_PROCESS_ID_e;
         l_msg = 0;
         msg_mode = 0;
         if ((u32)a_this->getMessage() == 0x1902) {

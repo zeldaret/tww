@@ -1189,10 +1189,10 @@ bool daTbox_c::actionOpenWait() {
         dComIfGp_event_onEventFlag(0x04);
 
         u8 itemNo = getItemNo();
-        s32 itemId = fopAcM_createItemForTrBoxDemo(&current.pos, itemNo, -1, -1, NULL, NULL);
+        u32 itemPID = fopAcM_createItemForTrBoxDemo(&current.pos, itemNo, -1, -1, NULL, NULL);
 
-        if (itemId != 0xFFFFFFFF) {
-            dComIfGp_event_setItemPartnerId(itemId);
+        if (itemPID != fpcM_ERROR_PROCESS_ID_e) {
+            dComIfGp_event_setItemPartnerId(itemPID);
         }
 
         if (getShapeType() != 0) {

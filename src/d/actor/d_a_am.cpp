@@ -50,7 +50,7 @@ public:
     /* 0x02DC */ s16 mSpawnRotY;
     /* 0x02DE */ u8 m02DE[0x02E0 - 0x02DE];
     /* 0x02E0 */ int mCurrBckIdx;
-    /* 0x02E4 */ u32 mSwallowedActorProcID;
+    /* 0x02E4 */ u32 mSwallowedActorPID;
     /* 0x02E8 */ f32 mAreaRadius;
     /* 0x02EC */ f32 m02EC;
     /* 0x02F0 */ f32 mSpawnPosY;
@@ -376,10 +376,10 @@ static BOOL medama_atari_check(am_class* i_this) {
 
 /* 00000D14-00000F04       .text bomb_move_set__FP8am_classUc */
 static void bomb_move_set(am_class* i_this, u8 alwaysMoveY) {
-    if (i_this->mSwallowedActorProcID == -1) {
+    if (i_this->mSwallowedActorPID == fpcM_ERROR_PROCESS_ID_e) {
         return;
     }
-    fopAc_ac_c* swallowedActor = fopAcM_SearchByID(i_this->mSwallowedActorProcID);
+    fopAc_ac_c* swallowedActor = fopAcM_SearchByID(i_this->mSwallowedActorPID);
     if (!swallowedActor) {
         return;
     }
@@ -462,7 +462,7 @@ static BOOL bomb_nomi_check(am_class* i_this) {
                             // Swallow the bomb.
                             bomb->setBombCheck_Flag();
                             bomb->change_state((daBomb_c::State_e)2);
-                            i_this->mSwallowedActorProcID = fopAcM_GetID(bomb);
+                            i_this->mSwallowedActorPID = fopAcM_GetID(bomb);
                             bomb->setBombNoHit();
                             bomb_move_set(i_this, 0);
                             i_this->mAction = ACTION_ITAI_MOVE;
@@ -477,7 +477,7 @@ static BOOL bomb_nomi_check(am_class* i_this) {
                         if (i_this->mMouthPos.y - offsetY < bomb2->current.pos.y) {
                             // Swallow the bomb.
                             bomb2->set_eat();
-                            i_this->mSwallowedActorProcID = fopAcM_GetID(bomb2);
+                            i_this->mSwallowedActorPID = fopAcM_GetID(bomb2);
                             bomb2->set_no_hit();
                             bomb_move_set(i_this, 0);
                             i_this->mAction = ACTION_ITAI_MOVE;
@@ -1003,8 +1003,8 @@ static void action_itai_move(am_class* i_this) {
         }
         cXyz centerPos = i_this->current.pos;
         centerPos.y += 150.0f;
-        if (i_this->mSwallowedActorProcID != -1) {
-            fopAc_ac_c* swallowedActor = fopAcM_SearchByID(i_this->mSwallowedActorProcID);
+        if (i_this->mSwallowedActorPID != fpcM_ERROR_PROCESS_ID_e) {
+            fopAc_ac_c* swallowedActor = fopAcM_SearchByID(i_this->mSwallowedActorPID);
             if (swallowedActor) {
                 swallowedActor->mScale.setall(1.0f);
                 if (fpcM_GetName(swallowedActor) == PROC_BOMB) {
@@ -1263,7 +1263,7 @@ static s32 daAM_Create(fopAc_ac_c* i_actor) {
             i_this->mAreaRadius = i_this->mPrmAreaRadius * 100.0f;
         }
         i_this->mSpawnPosY = i_this->current.pos.y;
-        i_this->mSwallowedActorProcID = -1;
+        i_this->mSwallowedActorPID = fpcM_ERROR_PROCESS_ID_e;
 
         if (i_this->mStartsInactive == 0 && i_this->mSwitch != 0xFF && dComIfGs_isSwitch(i_this->mSwitch, dComIfGp_roomControl_getStayNo())) {
             // When mStartsInactive is 0, the Armos Knight starts active and attacking the player.

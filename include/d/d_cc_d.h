@@ -7,6 +7,7 @@
  */
 
 #include "SSystem/SComponent/c_cc_d.h"
+#include "f_pc/f_pc_manager.h"
 
 enum dCcD_hitSe {};
 
@@ -138,7 +139,7 @@ public:
 public:
     dCcD_GAtTgCoCommonBase() { ct(); }
     void ClrActorInfo() {
-        mApid = -1;
+        mApid = fpcM_ERROR_PROCESS_ID_e;
         mAc = NULL;
     }
     void ct();
