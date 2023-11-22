@@ -52,6 +52,22 @@ enum cCcD_ObjAtType {
     /* 0xFFFFFFFF */ AT_TYPE_ALL            = ~0,
 };
 
+enum AtSPrm_e {
+    AT_SPRM_SET = 1,
+    AT_SPRM_NO_TG_HIT_INF_SET = 0x10,
+};
+
+enum TgSPrm_e {
+    TG_SPRM_SET = 1,
+    TG_SPRM_NO_AT_HIT_INF_SET = 0x10,
+};
+
+enum CoSPrm_e {
+    CO_SPRM_SET = 1,
+    CO_SPRM_NO_CRR = 0x100,
+    CO_SPRM_NO_CO_HIT_INF_SET = 0x200,
+};
+
 class cCcD_ShapeAttr {
 public:
     /* 0x00 */ cM3dGAab mAab;
@@ -345,7 +361,7 @@ public:
     }
     void PlusDmg(int dmg) { mDmg = dmg; }
     u8 GetDmg() { return mDmg; }
-    f32 GetWeightF() const;
+    f32 GetWeightF() const { return (s32)mWeight; }
     virtual void ClrAt() {}
     virtual void ClrTg() { mDmg = 0; }
     
@@ -369,13 +385,6 @@ protected:
     /* 0x08 */ cCcD_Obj* mHitObj;
     /* 0x0C vtable */
 public:
-    enum CoSPrm_e {
-        CO_SPRM_SET = 1,
-        CO_SPRM_NO_CRR = 0x100,
-        CO_SPRM_NO_CO_HIT_INF_SET = 0x200,
-        CO_SPRM_SAME_ACTOR_HIT = 0x400,
-    };
-
     cCcD_ObjCommonBase() { ct(); }
     virtual ~cCcD_ObjCommonBase() {}
     void ct();
@@ -390,6 +399,7 @@ public:
     void OnSPrmBit(u32 flag) { mSPrm |= flag; }
     void OffSPrmBit(u32 flag) { mSPrm &= ~flag; }
     void ClrRPrm(u32 flag) { mRPrm &= ~flag; }
+    void SetHitObj(cCcD_Obj* obj) { mHitObj = obj; }
 
     void Set(cCcD_SrcObjCommonBase const& src) {
         mSPrm = src.mSPrm;
@@ -402,7 +412,10 @@ class cCcD_ObjAt : public cCcD_ObjCommonBase {
 public:
     cCcD_ObjAt() { mType = 0; }
     virtual ~cCcD_ObjAt() {}
-    void SetHit(cCcD_Obj*);
+    void SetHit(cCcD_Obj* obj) {
+        SetRPrm(1);
+        SetHitObj(obj);
+    }
     void Set(cCcD_SrcObjAt const& src) {
         cCcD_ObjCommonBase::Set(src.mBase);
         mType = src.mType;
@@ -410,13 +423,13 @@ public:
     }
     void ClrHit() { ClrRPrm(1); ClrObj(); }
     int GetType() const { return mType; }
-    u32 GetGrp() const { return MskSPrm(0x1E); }
-    bool ChkSet() const { return MskSPrm(1); }
+    u32 GetGrp() const { return MskSPrm(0xE); }
+    bool ChkSet() const { return MskSPrm(AT_SPRM_SET); }
     u8 GetAtp() const { return mAtp; }
     u32 MskType(u32 msk) const { return mType & msk; }
     void SetType(u32 type) { mType = type; }
     void SetAtp(int atp) { mAtp = atp; }
-    void ClrSet() { OffSPrmBit(1); }
+    void ClrSet() { OffSPrmBit(AT_SPRM_SET); }
     void OnHitBit() { SetRPrm(1); }
     void OffHitBit() { ClrRPrm(1); }
     u32 ChkHit() { return MskRPrm(1); }
@@ -438,12 +451,15 @@ public:
     }
     void SetGrp(u32);
     void ClrHit() { ClrRPrm(1); ClrObj(); }
-    void SetHit(cCcD_Obj*);
+    void SetHit(cCcD_Obj* obj) {
+        SetRPrm(1);
+        SetHitObj(obj);
+    }
     int GetType() const { return mType; }
     void SetType(u32 type) { mType = type; }
-    u32 GetGrp() const { return MskSPrm(0x1E); }
-    bool ChkSet() const { return MskSPrm(1); }
-    void ClrSet() { OffSPrmBit(1); }
+    u32 GetGrp() const { return MskSPrm(0xE); }
+    bool ChkSet() const { return MskSPrm(TG_SPRM_SET); }
+    void ClrSet() { OffSPrmBit(TG_SPRM_SET); }
     u32 ChkHit() { return MskRPrm(1); }
 
 private:
@@ -455,17 +471,20 @@ STATIC_ASSERT(0x14 == sizeof(cCcD_ObjTg));
 class cCcD_ObjCo : public cCcD_ObjCommonBase {
 public:
     virtual ~cCcD_ObjCo() {}
-    void SetHit(cCcD_Obj*);
+    void SetHit(cCcD_Obj* obj) {
+        SetRPrm(1);
+        SetHitObj(obj);
+    }
     void ClrHit() { ClrRPrm(1); ClrObj(); }
     void SetIGrp(u32);
     void SetVsGrp(u32);
     u32 GetGrp() const { return MskSPrm(0x1E); }
-    bool ChkSet() const { return MskSPrm(1); }
+    bool ChkSet() const { return MskSPrm(CO_SPRM_SET); }
     u32 GetVsGrp() const { return MskSPrm(0x70); }
     u32 GetIGrp() const { return MskSPrm(0xE); }
-    u32 ChkNoCrr() const { return MskSPrm(0x100); }
+    u32 ChkNoCrr() const { return MskSPrm(CO_SPRM_NO_CRR); }
     u32 ChkSph3DCrr() const { return MskSPrm(0x80); }
-    void ClrSet() { OffSPrmBit(1); }
+    void ClrSet() { OffSPrmBit(CO_SPRM_SET); }
     u32 ChkHit() { return MskRPrm(1); }
 
     void Set(cCcD_SrcObjCo const& src) {
@@ -495,14 +514,12 @@ public:
     bool ChkTgSet() const { return mObjTg.ChkSet(); }
     bool ChkAtSet() const { return mObjAt.ChkSet(); }
     bool ChkCoSet() const { return mObjCo.ChkSet(); }
-    u32 ChkCoSameActorHit() const { return mObjCo.MskSPrm(0x400); }
     u32 GetCoVsGrp() const { return mObjCo.GetVsGrp(); }
     u32 GetCoIGrp() const { return mObjCo.GetIGrp(); }
     u8 GetAtAtp() const { return mObjAt.GetAtp(); }
-    u32 ChkAtNoTgHitInfSet() const { return mObjAt.MskSPrm(0x20); }
-    u32 ChkTgNoAtHitInfSet() const { return mObjTg.MskSPrm(0x20); }
-    u32 ChkCoNoCoHitInfSet() const { return mObjCo.MskSPrm(0x200); }
-    bool ChkTgNoSlingHitInfSet() const { return mObjTg.MskSPrm(0x40); }
+    u32 ChkAtNoTgHitInfSet() const { return mObjAt.MskSPrm(AT_SPRM_NO_TG_HIT_INF_SET); }
+    u32 ChkTgNoAtHitInfSet() const { return mObjTg.MskSPrm(TG_SPRM_NO_AT_HIT_INF_SET); }
+    u32 ChkCoNoCoHitInfSet() const { return mObjCo.MskSPrm(CO_SPRM_NO_CO_HIT_INF_SET); }
     void SetAtHit(cCcD_Obj* obj) { mObjAt.SetHit(obj); }
     void SetTgHit(cCcD_Obj* obj) { mObjTg.SetHit(obj); }
     void SetCoHit(cCcD_Obj* obj) { mObjCo.SetHit(obj); }
@@ -513,7 +530,7 @@ public:
     void OffAtSPrmBit(u32 flag) { mObjAt.OffSPrmBit(flag); }
     void OffCoSPrmBit(u32 flag) { mObjCo.OffSPrmBit(flag); }
     void SetAtType(u32 type) { mObjAt.SetType(type); }
-    void OnAtSetBit() { mObjAt.OnSPrmBit(1); }
+    void OnAtSetBit() { mObjAt.OnSPrmBit(AT_SPRM_SET); }
     void SetAtAtp(int atp) { mObjAt.SetAtp(atp); }
     void OffCoSetBit() { mObjCo.ClrSet(); }
     void SetTgType(u32 type) { mObjTg.SetType(type); }
@@ -522,9 +539,9 @@ public:
     void OffAtSetBit() { mObjAt.ClrSet(); }
     void OnAtHitBit() { mObjAt.OnHitBit(); }
     void OffAtHitBit() { mObjAt.OffHitBit(); }
-    void OnTgSetBit() { mObjTg.OnSPrmBit(1); }
+    void OnTgSetBit() { mObjTg.OnSPrmBit(TG_SPRM_SET); }
     void OffTgSetBit() { mObjTg.ClrSet(); }
-    void OnCoSetBit() { mObjCo.OnSPrmBit(1); }
+    void OnCoSetBit() { mObjCo.OnSPrmBit(CO_SPRM_SET); }
     void OffAtVsPlayerBit() { mObjAt.OffSPrmBit(0xC); }
     void OnAtVsPlayerBit() { mObjAt.OnSPrmBit(0xC); }
     void OnCoSPrmBit(u32 flag) { mObjCo.OnSPrmBit(flag); }
@@ -559,7 +576,7 @@ public:
 
     cCcD_Stts* GetStts() { return mStts; }
     void SetStts(cCcD_Stts* stts) { mStts = stts; }
-    fopAc_ac_c* GetAc() { return GetStts() != NULL ? GetStts()->GetActor() : NULL; }
+    fopAc_ac_c* GetAc() { return GetStts() == NULL ? NULL : GetStts()->GetActor(); }
     cCcD_DivideInfo& GetDivideInfo() { return mDivideInfo; }
     cCcD_DivideInfo* GetPDivideInfo() { return &mDivideInfo; }
     int ChkBsRevHit() const { return mFlags & 2; }

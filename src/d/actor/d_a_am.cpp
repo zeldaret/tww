@@ -350,7 +350,7 @@ static BOOL medama_atari_check(am_class* i_this) {
         if (i_this->mCurrBckIdx == AM_BCK_SLEEP || i_this->mCurrBckIdx == AM_BCK_SLEEP_LOOP) {
             anm_init(i_this, AM_BCK_OKIRU, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
             i_this->mAttentionInfo.mFlags = fopAc_Attn_LOCKON_ENEMY_e;
-            i_this->mNeedleCyl.OnAtSPrmBit(1);
+            i_this->mNeedleCyl.OnAtSPrmBit(AT_SPRM_SET);
             i_this->mNeedleCyl.OnAtHitBit();
             i_this->mAction = ACTION_DOUSA;
             i_this->mState = 2;
@@ -610,7 +610,7 @@ static void action_dousa(am_class* i_this) {
         // Fall-through
     case 4:
         if (i_this->mCountDownTimers[2] == 1) {
-            i_this->mNeedleCyl.OnAtSPrmBit(1);
+            i_this->mNeedleCyl.OnAtSPrmBit(AT_SPRM_SET);
             i_this->mNeedleCyl.OnAtHitBit();
         }
         if (i_this->mCountDownTimers[2] != 0) {

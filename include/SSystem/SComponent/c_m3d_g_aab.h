@@ -38,6 +38,18 @@ public:
     bool Cross(const cM3dGSph *param_1) {
         return cM3d_Cross_AabSph(this, param_1);
     }
+    void CalcCenter(cXyz* pOut) const {
+        VECAdd(&mMin, &mMax, pOut);
+        VECScale(pOut, pOut, 0.5f);
+    }
+    void ClearForMinMax() {
+        mMin.z = 1000000000.0f;
+        mMin.y = 1000000000.0f;
+        mMin.x = 1000000000.0f;
+        mMax.z = -1000000000.0f;
+        mMax.y = -1000000000.0f;
+        mMax.x = -1000000000.0f;
+    }
 };  // Size = 0x1C
 
 STATIC_ASSERT(0x1C == sizeof(cM3dGAab));

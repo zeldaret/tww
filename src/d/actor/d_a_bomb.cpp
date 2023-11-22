@@ -616,9 +616,9 @@ void daBomb_c::makeWaterEffect() {
     if(field_0x77D == 0) {
         fopAcM_seStart(this, JA_SE_OBJ_BOMB_WATER, 0);
         fopKyM_createWpillar(&current.pos, 1.0f, 1.0f, 1);
-        mSph.GetObjTg().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
-        mSph.GetObjCo().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
-        mSph.GetObjAt().OnSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
+        mSph.OffTgSPrmBit(TG_SPRM_SET);
+        mSph.OffCoSPrmBit(CO_SPRM_SET);
+        mSph.OnAtSPrmBit(AT_SPRM_SET);
         mSph.SetR(200.0f);
         mSph.SetC(current.pos);
         if(mMassCounter != g_Counter.mCounter0) {
@@ -762,7 +762,7 @@ int daBomb_c::procExplode_init() {
     speed = cXyz::Zero;
     mGravity = 0.0f;
 
-    if(chk_state(STATE_8)) {
+    if(!chk_state(STATE_8)) {
         change_state(STATE_0);
     }
 
@@ -776,9 +776,9 @@ int daBomb_c::procExplode_init() {
         field_0x6F0 = 0;
     }
 
-    mSph.GetObjTg().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
-    mSph.GetObjCo().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
-    mSph.GetObjAt().OnSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
+    mSph.OffTgSPrmBit(TG_SPRM_SET);
+    mSph.OffCoSPrmBit(CO_SPRM_SET);
+    mSph.OnAtSPrmBit(AT_SPRM_SET);
     mSph.SetR(200.0f);
     mSph.SetC(current.pos);
     if(mMassCounter != g_Counter.mCounter0) {
@@ -874,7 +874,7 @@ bool daBomb_c::procCarry_init() {
     speedF = 0.0f;
     speed.set(cXyz::Zero);
     mAttentionInfo.mFlags &= ~fopAc_Attn_ACTION_CARRY_e;
-    mSph.GetObjCo().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
+    mSph.OffCoSPrmBit(CO_SPRM_SET);
 
     return true;
 }
@@ -908,7 +908,7 @@ bool daBomb_c::procWait_init() {
         change_state(STATE_1);
     }
 
-    mSph.GetObjCo().OnSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
+    mSph.OnCoSPrmBit(CO_SPRM_SET);
     return true;
 }
 

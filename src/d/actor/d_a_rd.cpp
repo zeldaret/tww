@@ -698,7 +698,7 @@ void daRd_c::setCollision() {
     if (mMode == MODE_DEATH) {
         mCyl.OffCoSPrmBit(0x10);
         mCyl.OffCoSPrmBit(0x02);
-        mCyl.OffTgSPrmBit(0x01);
+        mCyl.OffTgSPrmBit(TG_SPRM_SET);
         mCyl.OffTgSPrmBit(0x08);
     } else if (mMode == MODE_ATTACK || mMode == MODE_CRY || dComIfGp_evmng_startCheck("DEFAULT_RD_CRY")) {
         mCyl.OffCoSPrmBit(0x10);

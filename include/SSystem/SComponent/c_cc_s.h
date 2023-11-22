@@ -26,7 +26,15 @@ public:
     cCcS();
     void Ct();
     void Dt();
-    WeightType GetWt(u8) const;
+    WeightType GetWt(u8 weight) const {
+        if (weight == 0xFF) {
+            return WeightType_0;
+        }
+        if (weight == 0xFE) {
+            return WeightType_1;
+        }
+        return WeightType_2;
+    }
     void Set(cCcD_Obj*);
     void ClrCoHitInf();
     void ClrTgHitInf();

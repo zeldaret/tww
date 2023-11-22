@@ -36,10 +36,10 @@ void daBomb_c::setBombFire_ON() {
 void daBomb_c::setBombNoHit() {
     _prm_chk_version();
 
-    mSph.GetObjTg().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
-    mSph.GetObjCo().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
-    mSph.GetObjAt().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
-    mSph.GetObjAt().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
+    mSph.OffTgSPrmBit(TG_SPRM_SET);
+    mSph.OffCoSPrmBit(CO_SPRM_SET);
+    mSph.OffAtSPrmBit(AT_SPRM_SET);
+    mSph.OffAtSPrmBit(AT_SPRM_SET);
 
     field_0x6F3 = true;
 }
@@ -47,13 +47,13 @@ void daBomb_c::setBombNoHit() {
 void daBomb_c::setBombOffCoSet() {
     _prm_chk_version();
 
-    mSph.GetObjCo().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
+    mSph.OffCoSPrmBit(CO_SPRM_SET);
 }
 
 void daBomb_c::setBombOnCoSet() {
     _prm_chk_version();
 
-    mSph.GetObjCo().OnSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
+    mSph.OnCoSPrmBit(CO_SPRM_SET);
 }
 
 void daBomb_c::setBombNoEff() {
@@ -153,10 +153,10 @@ void daBomb2::Act_c::set_eat() {
 }
 
 void daBomb2::Act_c::set_no_hit() {
-    mSph.GetObjTg().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
-    mSph.GetObjCo().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
-    mSph.GetObjAt().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
-    mSph.GetObjAt().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
+    mSph.OffTgSPrmBit(TG_SPRM_SET);
+    mSph.OffCoSPrmBit(CO_SPRM_SET);
+    mSph.OffAtSPrmBit(AT_SPRM_SET);
+    mSph.OffAtSPrmBit(AT_SPRM_SET);
 }
 
 bool daBomb2::Act_c::chk_explode() {

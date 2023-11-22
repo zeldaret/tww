@@ -713,7 +713,7 @@ namespace daBomb2 {
     void Act_c::mode_wait_init() {
         field_0x694 = 0;
         mGravity = L_attr.gravity;
-        mSph.GetObjCo().OnSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
+        mSph.OnCoSPrmBit(CO_SPRM_SET);
     }
 
     void Act_c::mode_wait() {
@@ -771,7 +771,7 @@ namespace daBomb2 {
         speedF = 0.0f;
         speed = cXyz::Zero;
         off_carry();
-        mSph.GetObjCo().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
+        mSph.OffCoSPrmBit(CO_SPRM_SET);
     }
 
     void Act_c::mode_carry() {
@@ -807,9 +807,9 @@ namespace daBomb2 {
         speed = cXyz::Zero;
         mGravity = 0.0f;
         off_carry();
-        mSph.GetObjTg().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
-        mSph.GetObjCo().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
-        mSph.GetObjAt().OnSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
+        mSph.OffTgSPrmBit(TG_SPRM_SET);
+        mSph.OffCoSPrmBit(CO_SPRM_SET);
+        mSph.OnAtSPrmBit(AT_SPRM_SET);
         fopAcM_cancelCarryNow(this);
         field_0x738 = 0;
         field_0x73C = 4;
@@ -827,9 +827,9 @@ namespace daBomb2 {
         field_0x694 = 3;
         speed.y *= 0.8f;
         speedF *= 0.8f;
-        mSph.GetObjAt().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
-        mSph.GetObjTg().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
-        mSph.GetObjCo().OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SET);
+        mSph.OffAtSPrmBit(AT_SPRM_SET);
+        mSph.OffTgSPrmBit(TG_SPRM_SET);
+        mSph.OffCoSPrmBit(CO_SPRM_SET);
         off_carry();
         fopAcM_cancelCarryNow(this);
         field_0x698 = 4;

@@ -362,7 +362,7 @@ void daItem_c::execInitNormalDirection() {
     show();
     
     mCyl.SetTgType(0);
-    mCyl.OffCoSPrmBit(1);
+    mCyl.OffCoSetBit();
     
     mPtclSmokeCb.end();
     if (mpParticleEmitter) {
@@ -775,7 +775,7 @@ void daItem_c::itemGetExecute() {
     mStatusFlags &= ~0x4;
     
     mCyl.SetTgType(0);
-    mCyl.OffCoSPrmBit(1);
+    mCyl.OffCoSetBit();
     mCyl.ClrTgHit();
     mCyl.ClrCoHit();
 }

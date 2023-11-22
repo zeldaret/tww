@@ -507,7 +507,7 @@ config.libs = [
             Object(Matching,    "SSystem/SComponent/c_API.cpp"),
             Object(Matching,    "SSystem/SComponent/c_API_graphic.cpp"),
             Object(NonMatching, "SSystem/SComponent/c_cc_d.cpp"),
-            Object(NonMatching, "SSystem/SComponent/c_cc_s.cpp"),
+            Object(Matching,    "SSystem/SComponent/c_cc_s.cpp"),
             Object(Matching,    "SSystem/SComponent/c_counter.cpp"),
             Object(Matching,    "SSystem/SComponent/c_list.cpp"),
             Object(Matching,    "SSystem/SComponent/c_list_iter.cpp"),

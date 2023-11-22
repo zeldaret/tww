@@ -305,11 +305,7 @@ public:
     u8 GetTgMtrl() { return mGObjTg.GetMtrl(); }
     fopAc_ac_c* GetTgHitAc() { return mGObjTg.GetAc(); }
     void SetTgShieldFrontRangeYAngle(s16* angle) { mGObjTg.SetShieldFrontRangeYAngle(angle); }
-    void OffTgWolfSpNoDamage() { mGObjTg.OffSPrm(0x800); }
-    void OnTgWolfSpNoDamage() { mGObjTg.OnSPrm(0x800); }
     void SetTgHitMark(CcG_Tg_HitMark mark) { mGObjTg.SetHitMark(mark); }
-    void OnTgSpShield() { mGObjTg.OnSPrm(0x40); }
-    void OffTgSpShield() { mGObjTg.OffSPrm(0x40); }
     void OnTgShield() { mGObjTg.OnSPrm(0x1); }
     void OffTgShield() { mGObjTg.OffSPrm(0x1); }
     void OnTgShieldFrontRange() { mGObjTg.OnSPrm(0x8); }
@@ -324,7 +320,8 @@ public:
     bool ChkAtStopNoConHit() { return mGObjAt.ChkSPrm(0x4); }
     bool ChkTgNoConHit() { return mGObjTg.ChkSPrm(2); }
     bool ChkTgStopNoConHit() { return mGObjTg.ChkSPrm(0x2000); }
-    bool ChkCoNoCamHit() { return mGObjCo.ChkSPrm(2); }
+    bool ChkCoAtLasso() { return mGObjCo.ChkSPrm(1); }
+    bool ChkCoTgLasso() { return mGObjCo.ChkSPrm(2); }
     dCcD_HitCallback GetCoHitCallback() { return mGObjCo.GetHitCallback(); }
     dCcD_HitCallback GetAtHitCallback() { return mGObjAt.GetHitCallback(); }
     dCcD_HitCallback GetTgHitCallback() { return mGObjTg.GetHitCallback(); }

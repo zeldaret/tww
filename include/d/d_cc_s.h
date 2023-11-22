@@ -13,14 +13,14 @@ public:
     dCcS() {}
     void Ct();
     void Dt();
-    bool ChkShieldFrontRange(cCcD_Obj*, cCcD_Obj*, int, cXyz const*);
-    bool ChkShield(cCcD_Obj*, cCcD_Obj*, dCcD_GObjInf*, dCcD_GObjInf*, cXyz const*);
+    bool ChkShieldFrontRange(cCcD_Obj*, cCcD_Obj*);
+    bool ChkShield(cCcD_Obj*, cCcD_Obj*, dCcD_GObjInf*, dCcD_GObjInf*);
     void CalcTgPlusDmg(cCcD_Obj*, cCcD_Obj*, cCcD_Stts*, cCcD_Stts*);
     int GetRank(u8);
     void ProcAtTgHitmark(bool, bool, cCcD_Obj*, cCcD_Obj*, dCcD_GObjInf*,
                                         dCcD_GObjInf*, cCcD_Stts*, cCcD_Stts*, dCcD_GStts*,
-                                        dCcD_GStts*, cXyz*, bool);
-    bool ChkCamera(cXyz&, cXyz&, f32, fopAc_ac_c*, fopAc_ac_c*, fopAc_ac_c*);
+                                        dCcD_GStts*, cXyz*);
+    bool ChkCamera(cXyz&, cXyz&, f32, fopAc_ac_c*, fopAc_ac_c*);
     bool chkCameraPoint(cXyz const&, cCcD_ShapeAttr::Shape*, fopAc_ac_c*,
                                        fopAc_ac_c*);
     void DrawAfter();

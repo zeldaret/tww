@@ -4,11 +4,15 @@
 //
 
 #include "SSystem/SComponent/c_cc_s.h"
-#include "dolphin/types.h"
+#include "JSystem/JUtility/JUTAssert.h"
+
+#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)) ) == 1));
+#define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);
+#define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
+#define CHECK_PVEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v->x && v->x < 1.0e32f && -1.0e32f < v->y && v->y < 1.0e32f && -1.0e32f < v->z && v->z < 1.0e32f)
 
 /* 80242C28-80242C50       .text __ct__4cCcSFv */
 cCcS::cCcS() {
-    /* Nonmatching */
 }
 
 /* 80242C50-80242CE4       .text Ct__4cCcSFv */
@@ -93,29 +97,102 @@ void cCcS::ClrAtHitInf() {
 
 /* 80242F94-802430BC       .text ChkNoHitAtTg__4cCcSFP8cCcD_ObjP8cCcD_Obj */
 bool cCcS::ChkNoHitAtTg(cCcD_Obj* at, cCcD_Obj* tg) {
-    /* Nonmatching - more complicated conditional */
     fopAc_ac_c * ac_at = at->GetAc();
     fopAc_ac_c * ac_tg = tg->GetAc();
-    if ((ac_at == NULL || ac_tg == NULL || ac_at != ac_tg) && (at->GetAtGrp() & tg->GetTgGrp()) != 0) {
-        return ChkNoHitGAtTg(at->GetGObjInf(), tg->GetGObjInf(), at->GetStts()->GetGStts(), tg->GetStts()->GetGStts());
+    if ((ac_at != NULL && ac_tg != NULL && ac_at == ac_tg) ||
+        (at->GetAtGrp() & tg->GetTgGrp()) == 0 ||
+        (at->GetAtType() & tg->GetTgType()) == 0)
+    {
+        return true;
     }
 
-    return true;
+    return ChkNoHitGAtTg(at->GetGObjInf(), tg->GetGObjInf(), at->GetStts()->GetGStts(), tg->GetStts()->GetGStts());
 }
 
 /* 802430BC-802432F8       .text ChkAtTg__4cCcSFv */
 void cCcS::ChkAtTg() {
-    /* Nonmatching */
+    cCcD_Obj** objTgEnd = mpObjTg + mObjTgCount;
+    ClrAtHitInf();
+    ClrTgHitInf();
+    for (cCcD_Obj** pObjAt = mpObjAt; pObjAt < mpObjAt + mObjAtCount; ++pObjAt) {
+        if (*pObjAt == NULL || !(*pObjAt)->ChkAtSet())
+            continue;
+        cCcD_ShapeAttr* atShapeAttr = (*pObjAt)->GetShapeAttr();
+        if (atShapeAttr == NULL)
+            continue;
+        for (cCcD_Obj** pObjTg = mpObjTg; pObjTg < objTgEnd; ++pObjTg) {
+            if (*pObjTg == NULL || !(*pObjTg)->ChkTgSet())
+                continue;
+            if (!(*pObjAt)->GetDivideInfo().Chk((*pObjTg)->GetDivideInfo()))
+                continue;
+            if (ChkNoHitAtTg(*pObjAt, *pObjTg))
+                continue;
+            cCcD_ShapeAttr* tgShapeAttr = (*pObjTg)->GetShapeAttr();
+            if (tgShapeAttr == NULL)
+                continue;
+            static cXyz cross;
+            bool didCross = atShapeAttr->CrossAtTg(*tgShapeAttr, &cross);
+            bool anyBsRevHit = (*pObjAt)->ChkBsRevHit() || (*pObjTg)->ChkBsRevHit();
+            if (!anyBsRevHit && didCross) {
+                SetAtTgCommonHitInf(*pObjAt, *pObjTg, &cross);
+            } else if (anyBsRevHit && !didCross) {
+                cCcD_ShapeAttr* atShape2 = (*pObjAt)->GetShapeAttr();
+                if (atShape2 == NULL) {
+                    cross.set(0.0f, 0.0f, 0.0f);
+                } else {
+                    atShape2->GetWorkAab().CalcCenter(&cross);
+                }
+                SetAtTgCommonHitInf(*pObjAt, *pObjTg, &cross);
+            }
+        }
+    }
 }
 
 /* 802432F8-802433A8       .text ChkNoHitCo__4cCcSFP8cCcD_ObjP8cCcD_Obj */
-bool cCcS::ChkNoHitCo(cCcD_Obj*, cCcD_Obj*) {
-    /* Nonmatching */
+bool cCcS::ChkNoHitCo(cCcD_Obj* obj1, cCcD_Obj* obj2) {
+    fopAc_ac_c* ac1 = obj1->GetAc();
+    fopAc_ac_c* ac2 = obj2->GetAc();
+    if (!(
+        ((ac1 == NULL || ac2 == NULL) || ac1 != ac2) &&
+        (obj1->GetCoIGrp() & (obj2->GetCoVsGrp() >> 3)) &&
+        ((obj1->GetCoVsGrp() >> 3) & obj2->GetCoIGrp() && !ChkNoHitGCo(obj1, obj2))
+    )) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /* 802433A8-8024352C       .text ChkCo__4cCcSFv */
 void cCcS::ChkCo() {
-    /* Nonmatching */
+    ClrCoHitInf();
+    if (mObjCoCount <= 1)
+        return;
+    cCcD_Obj** objCoEnd = mpObjCo + mObjCoCount;
+    for (cCcD_Obj** objCo1 = mpObjCo; objCo1 < objCoEnd - 1; ++objCo1) {
+        if (*objCo1 == NULL || !(*objCo1)->ChkCoSet())
+            continue;
+        cCcD_ShapeAttr* co1ShapeAttr = (*objCo1)->GetShapeAttr();
+        if (co1ShapeAttr == NULL)
+            continue;
+        for (cCcD_Obj** objCo2 = objCo1 + 1; objCo2 < objCoEnd; ++objCo2) {
+            if (*objCo2 == NULL || !(*objCo2)->ChkCoSet())
+                continue;
+            if (!(*objCo1)->GetDivideInfo().Chk((*objCo2)->GetDivideInfo()))
+                continue;
+            if (ChkNoHitCo(*objCo1, *objCo2))
+                continue;
+            cCcD_ShapeAttr* co2ShapeAttr = (*objCo2)->GetShapeAttr();
+            if (objCo2 == NULL)
+                continue;
+            f32 cross_len = 0.0f;
+            if (co1ShapeAttr->CrossCo(*co2ShapeAttr, &cross_len)) {
+                cXyz& obj2CoCP = co2ShapeAttr->GetCoCP();
+                cXyz& obj1CoCP = co1ShapeAttr->GetCoCP();
+                SetCoCommonHitInf(*objCo1, &obj1CoCP, *objCo2, &obj2CoCP, cross_len);
+            }
+        }
+    }
 }
 
 /* 8024352C-80243544       .text CalcTgPlusDmg__4cCcSFP8cCcD_ObjP8cCcD_ObjP9cCcD_SttsP9cCcD_Stts */
@@ -127,23 +204,215 @@ void cCcS::CalcTgPlusDmg(cCcD_Obj* at, cCcD_Obj* tg, cCcD_Stts* at_stts, cCcD_St
 }
 
 /* 80243544-80243740       .text SetAtTgCommonHitInf__4cCcSFP8cCcD_ObjP8cCcD_ObjP4cXyz */
-void cCcS::SetAtTgCommonHitInf(cCcD_Obj*, cCcD_Obj*, cXyz*) {
-    /* Nonmatching */
+void cCcS::SetAtTgCommonHitInf(cCcD_Obj* obj1, cCcD_Obj* obj2, cXyz* pXyz) {
+    cCcD_Stts* obj1Stts = obj1->GetStts();
+    cCcD_Stts* obj2Stts = obj2->GetStts();
+    bool hit = ChkAtTgHitAfterCross(
+        !obj2->ChkTgNoAtHitInfSet(), !obj1->ChkAtNoTgHitInfSet(),
+        obj1->GetGObjInf(), obj2->GetGObjInf(), obj1Stts, obj2Stts,
+        obj1Stts->GetGStts(), obj2Stts->GetGStts()
+    );
+    if (!hit) {
+        if (!obj2->ChkTgNoAtHitInfSet()) {
+            obj1->SetAtHit(obj2);
+        }
+        if (!obj1->ChkAtNoTgHitInfSet()) {
+            obj2->SetTgHit(obj1);
+            CalcTgPlusDmg(obj1, obj2, obj1Stts, obj2Stts);
+        }
+        SetAtTgGObjInf(
+            !obj2->ChkTgNoAtHitInfSet(), !obj1->ChkAtNoTgHitInfSet(),
+            obj1, obj2, obj1->GetGObjInf(), obj2->GetGObjInf(),
+            obj1Stts, obj2Stts, obj1Stts->GetGStts(), obj2Stts->GetGStts(),
+            pXyz
+        );
+    }
 }
 
 /* 80243740-8024388C       .text SetCoCommonHitInf__4cCcSFP8cCcD_ObjP4cXyzP8cCcD_ObjP4cXyzf */
-void cCcS::SetCoCommonHitInf(cCcD_Obj*, cXyz*, cCcD_Obj*, cXyz*, float) {
-    /* Nonmatching */
+void cCcS::SetCoCommonHitInf(cCcD_Obj* obj1, cXyz* ppos1, cCcD_Obj* obj2, cXyz* ppos2, f32 cross_len) {
+    bool obj2CoHitInfSet = !obj2->ChkCoNoCoHitInfSet();
+    bool obj1CoHitInfSet = !obj1->ChkCoNoCoHitInfSet();
+    if (obj2CoHitInfSet) {
+        obj1->SetCoHit(obj2);
+    }
+    if (obj1CoHitInfSet) {
+        obj2->SetCoHit(obj1);
+    }
+    if (obj2CoHitInfSet && obj1CoHitInfSet) {
+        SetPosCorrect(obj1, ppos1, obj2, ppos2, cross_len);
+    }
+    cCcD_Stts* obj1Stts = obj1->GetStts();
+    cCcD_Stts* obj2Stts = obj2->GetStts();
+    SetCoGObjInf(obj2CoHitInfSet, obj1CoHitInfSet, obj1->GetGObjInf(), obj2->GetGObjInf(),
+                       obj1Stts, obj2Stts, obj1Stts->GetGStts(), obj2Stts->GetGStts());
 }
 
 /* 8024388C-80244750       .text SetPosCorrect__4cCcSFP8cCcD_ObjP4cXyzP8cCcD_ObjP4cXyzf */
-void cCcS::SetPosCorrect(cCcD_Obj*, cXyz*, cCcD_Obj*, cXyz*, float) {
-    /* Nonmatching */
+void cCcS::SetPosCorrect(cCcD_Obj* obj1, cXyz* ppos1, cCcD_Obj* obj2, cXyz* ppos2, f32 cross_len) {
+    CHECK_FLOAT_CLASS(604, cross_len);
+    CHECK_FLOAT_RANGE(605, cross_len);
+    
+    if (obj1->ChkCoNoCrr() || obj2->ChkCoNoCrr()) {
+        return;
+    }
+    if (obj1->GetStts() == NULL || obj2->GetStts() == NULL) {
+        return;
+    }
+    if (obj1->GetStts()->GetAc() != NULL && obj1->GetStts()->GetAc() == obj2->GetStts()->GetAc()) {
+        return;
+    }
+    if (fabsf(cross_len) < (1.0f / 125.0f)) {
+        return;
+    }
+    
+    SetCoGCorrectProc(obj1, obj2);
+    
+    bool correctY = false;
+    if (obj1->ChkCoSph3DCrr() && obj2->ChkCoSph3DCrr()) {
+        correctY = true;
+    }
+    WeightType obj1WeightType = GetWt(obj1->GetStts()->GetWeightUc());
+    WeightType obj2WeightType = GetWt(obj2->GetStts()->GetWeightUc());
+    f32 obj1SrcWeight = obj1->GetStts()->GetWeightF();
+    f32 obj2SrcWeight = obj2->GetStts()->GetWeightF();
+    f32 combinedWeight = obj1SrcWeight + obj2SrcWeight;
+
+    f32 obj2Weight, obj1Weight;
+    if (cM3d_IsZero(combinedWeight)) {
+        obj1SrcWeight = 1;
+        obj2SrcWeight = 1;
+        combinedWeight = 2;
+    }
+    f32 invCombinedWeight = 1 / combinedWeight;
+    if (obj1WeightType == WeightType_0) {
+        if (obj2WeightType == WeightType_0) {
+            return;
+        } else {
+            obj2Weight = 0;
+            obj1Weight = 1;
+        }
+    } else if (obj1WeightType == WeightType_1) {
+        if (obj2WeightType == WeightType_0) {
+            obj2Weight = 1;
+            obj1Weight = 0;
+        } else if (obj2WeightType == WeightType_1) {
+            obj2Weight = 0.5;
+            obj1Weight = 0.5;
+        } else {
+            obj2Weight = 0;
+            obj1Weight = 1;
+        }
+    } else {
+        if (obj2WeightType == WeightType_2) {
+            obj2Weight = obj2SrcWeight * invCombinedWeight;
+            obj1Weight = obj1SrcWeight * invCombinedWeight;
+        } else {
+            obj2Weight = 1;
+            obj1Weight = 0;
+        }
+    }
+    f32 objDistLen;
+    Vec vec1;
+    Vec vec2;
+    Vec objsDist;
+    if (correctY) {
+        objsDist.x = ppos2->x - ppos1->x;
+        objsDist.y = ppos2->y - ppos1->y;
+        objsDist.z = ppos2->z - ppos1->z;
+        objDistLen = sqrtf(objsDist.x*objsDist.x + objsDist.y*objsDist.y + objsDist.z*objsDist.z);
+    } else {
+        objsDist.x = ppos2->x - ppos1->x;
+        objsDist.y = 0.0f;
+        objsDist.z = ppos2->z - ppos1->z;
+        objDistLen = sqrtf(objsDist.x*objsDist.x + objsDist.z*objsDist.z);
+    }
+    if (!cM3d_IsZero(objDistLen)) {
+        if (correctY) {
+            f32 pushFactor = cross_len / objDistLen;
+            objsDist.x *= pushFactor;
+            objsDist.y *= pushFactor;
+            objsDist.z *= pushFactor;
+            vec1.x = -objsDist.x * obj2Weight;
+            vec1.y = -objsDist.y * obj2Weight;
+            vec1.z = -objsDist.z * obj2Weight;
+            vec2.x = objsDist.x * obj1Weight;
+            vec2.y = objsDist.y * obj1Weight;
+            vec2.z = objsDist.z * obj1Weight;
+        } else {
+            f32 pushFactor = cross_len / objDistLen;
+            objsDist.x *= pushFactor;
+            objsDist.z *= pushFactor;
+            vec1.x = -objsDist.x * obj2Weight;
+            vec1.y = 0;
+            vec1.z = -objsDist.z * obj2Weight;
+            vec2.x = objsDist.x * obj1Weight;
+            vec2.y = 0;
+            vec2.z = objsDist.z * obj1Weight;
+        }
+    } else {
+        vec1.y = 0;
+        vec1.z = 0;
+        vec2.y = 0;
+        vec2.z = 0;
+        if (!cM3d_IsZero(cross_len)) {
+            vec1.x = -cross_len * obj2Weight;
+            vec2.x = cross_len * obj1Weight;
+        } else {
+            vec1.x = -obj2Weight;
+            vec2.x = obj1Weight;
+        }
+    }
+    
+    CHECK_FLOAT_CLASS(794, vec1.x);
+    CHECK_FLOAT_CLASS(795, vec1.y);
+    CHECK_FLOAT_CLASS(796, vec1.z);
+    CHECK_FLOAT_CLASS(798, vec2.x);
+    CHECK_FLOAT_CLASS(799, vec2.y);
+    CHECK_FLOAT_CLASS(800, vec2.z);
+    CHECK_VEC3_RANGE(804, vec1);
+    CHECK_VEC3_RANGE(808, vec2);
+    
+    obj1->GetStts()->PlusCcMove(vec1.x, vec1.y, vec1.z);
+    obj2->GetStts()->PlusCcMove(vec2.x, vec2.y, vec2.z);
+    (*ppos1) += vec1;
+    (*ppos2) += vec2;
+    
+    CHECK_FLOAT_CLASS(817, ppos1->x);
+    CHECK_FLOAT_CLASS(818, ppos1->y);
+    CHECK_FLOAT_CLASS(819, ppos1->z);
+    CHECK_FLOAT_CLASS(821, ppos2->x);
+    CHECK_FLOAT_CLASS(822, ppos2->y);
+    CHECK_FLOAT_CLASS(823, ppos2->z);
+    CHECK_PVEC3_RANGE(827, ppos1);
+    CHECK_PVEC3_RANGE(831, ppos2);
 }
 
 /* 80244750-80244894       .text CalcArea__4cCcSFv */
 void cCcS::CalcArea() {
-    /* Nonmatching */
+    cM3dGAab aab;
+    aab.ClearForMinMax();
+    for (cCcD_Obj** pObj = mpObj; pObj < mpObj + mObjCount; ++pObj) {
+        if (*pObj == NULL)
+            continue;
+        cCcD_ShapeAttr* objShape = (*pObj)->GetShapeAttr();
+        if (objShape == NULL)
+            continue;
+        objShape->CalcAabBox();
+        cM3dGAab& shapeAab = objShape->GetWorkAab();
+        aab.SetMinMax(*shapeAab.GetMinP());
+        aab.SetMinMax(*shapeAab.GetMaxP());
+    }
+    mDivideArea.SetArea(aab);
+    for (cCcD_Obj** pObj = mpObj; pObj < mpObj + mObjCount; ++pObj) {
+        if (*pObj != NULL) {
+            const cCcD_ShapeAttr* objShape = (*pObj)->GetShapeAttr();
+            if (objShape == NULL)
+                continue;
+            cCcD_DivideInfo* divideInfo = &(*pObj)->GetDivideInfo();
+            mDivideArea.CalcDivideInfo(divideInfo, objShape->GetWorkAab(), (*pObj)->ChkBsRevHit());
+        }
+    }
 }
 
 /* 80244894-802448F8       .text Move__4cCcSFv */

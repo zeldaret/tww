@@ -3,26 +3,27 @@
 // Translation Unit: d_cc_s.cpp
 //
 
-#include "d_cc_s.h"
-#include "dolphin/types.h"
+#include "d/d_cc_s.h"
+#include "d/d_cc_d.h"
 
 /* 800AD5B0-800AD5E4       .text Ct__4dCcSFv */
 void dCcS::Ct() {
-    /* Nonmatching */
+    cCcS::Ct();
+    mMass_Mng.Ct();
 }
 
 /* 800AD5E4-800AD604       .text Dt__4dCcSFv */
 void dCcS::Dt() {
-    /* Nonmatching */
+    cCcS::Dt();
 }
 
 /* 800AD604-800AD748       .text ChkShieldFrontRange__4dCcSFP8cCcD_ObjP8cCcD_Obj */
-void dCcS::ChkShieldFrontRange(cCcD_Obj*, cCcD_Obj*) {
+bool dCcS::ChkShieldFrontRange(cCcD_Obj*, cCcD_Obj*) {
     /* Nonmatching */
 }
 
 /* 800AD748-800AD7D0       .text ChkShield__4dCcSFP8cCcD_ObjP8cCcD_ObjP12dCcD_GObjInfP12dCcD_GObjInf */
-void dCcS::ChkShield(cCcD_Obj*, cCcD_Obj*, dCcD_GObjInf*, dCcD_GObjInf*) {
+bool dCcS::ChkShield(cCcD_Obj*, cCcD_Obj*, dCcD_GObjInf*, dCcD_GObjInf*) {
     /* Nonmatching */
 }
 
@@ -32,7 +33,7 @@ void dCcS::CalcTgPlusDmg(cCcD_Obj*, cCcD_Obj*, cCcD_Stts*, cCcD_Stts*) {
 }
 
 /* 800AD86C-800AD8EC       .text ChkAtTgHitAfterCross__4dCcSFbbPC12cCcD_GObjInfPC12cCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10cCcD_GSttsP10cCcD_GStts */
-void dCcS::ChkAtTgHitAfterCross(bool, bool, const cCcD_GObjInf*, const cCcD_GObjInf*, cCcD_Stts*, cCcD_Stts*, cCcD_GStts*, cCcD_GStts*) {
+bool dCcS::ChkAtTgHitAfterCross(bool, bool, const cCcD_GObjInf*, const cCcD_GObjInf*, cCcD_Stts*, cCcD_Stts*, cCcD_GStts*, cCcD_GStts*) {
     /* Nonmatching */
 }
 
@@ -42,12 +43,12 @@ void dCcS::SetCoGObjInf(bool, bool, cCcD_GObjInf*, cCcD_GObjInf*, cCcD_Stts*, cC
 }
 
 /* 800ADA30-800ADAD4       .text GetRank__4dCcSFUc */
-void dCcS::GetRank(unsigned char) {
+int dCcS::GetRank(u8) {
     /* Nonmatching */
 }
 
 /* 800ADAD4-800ADEF0       .text SetPosCorrect__4dCcSFP8cCcD_ObjP4cXyzP8cCcD_ObjP4cXyzf */
-void dCcS::SetPosCorrect(cCcD_Obj*, cXyz*, cCcD_Obj*, cXyz*, float) {
+void dCcS::SetPosCorrect(cCcD_Obj*, cXyz*, cCcD_Obj*, cXyz*, f32) {
     /* Nonmatching */
 }
 
@@ -67,7 +68,7 @@ void dCcS::SetAtTgGObjInf(bool, bool, cCcD_Obj*, cCcD_Obj*, cCcD_GObjInf*, cCcD_
 }
 
 /* 800AE5AC-800AE814       .text ChkCamera__4dCcSFR4cXyzR4cXyzfP10fopAc_ac_cP10fopAc_ac_c */
-void dCcS::ChkCamera(cXyz&, cXyz&, float, fopAc_ac_c*, fopAc_ac_c*) {
+bool dCcS::ChkCamera(cXyz&, cXyz&, f32, fopAc_ac_c*, fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -83,26 +84,33 @@ void dCcS::DrawAfter() {
 
 /* 800AE81C-800AE83C       .text Move__4dCcSFv */
 void dCcS::Move() {
-    /* Nonmatching */
+    cCcS::Move();
 }
 
 /* 800AE83C-800AE878       .text Draw__4dCcSFv */
 void dCcS::Draw() {
-    /* Nonmatching */
+    DrawAfter();
+    DrawClear();
+    mMass_Mng.Clear();
 }
 
 /* 800AE878-800AE89C       .text MassClear__4dCcSFv */
 void dCcS::MassClear() {
-    /* Nonmatching */
+    mMass_Mng.Clear();
 }
 
 /* 800AE89C-800AE930       .text ChkNoHitGCo__4dCcSFP8cCcD_ObjP8cCcD_Obj */
-void dCcS::ChkNoHitGCo(cCcD_Obj*, cCcD_Obj*) {
-    /* Nonmatching */
+bool dCcS::ChkNoHitGCo(cCcD_Obj* obj1, cCcD_Obj* obj2) {
+    dCcD_GObjInf* inf1 = (dCcD_GObjInf*)obj1->GetGObjInf();
+    dCcD_GObjInf* inf2 = (dCcD_GObjInf*)obj2->GetGObjInf();
+    if ((inf1->ChkCoAtLasso() && !inf2->ChkCoTgLasso()) || (inf2->ChkCoAtLasso() && !inf1->ChkCoTgLasso())) {
+        return true;
+    }
+    return false;
 }
 
 /* 800AE930-800AE938       .text ChkNoHitGAtTg__4cCcSFPC12cCcD_GObjInfPC12cCcD_GObjInfP10cCcD_GSttsP10cCcD_GStts */
-void cCcS::ChkNoHitGAtTg(const cCcD_GObjInf*, const cCcD_GObjInf*, cCcD_GStts*, cCcD_GStts*) {
-    /* Nonmatching */
+bool cCcS::ChkNoHitGAtTg(const cCcD_GObjInf*, const cCcD_GObjInf*, cCcD_GStts*, cCcD_GStts*) {
+    return false;
 }
 
