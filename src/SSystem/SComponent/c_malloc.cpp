@@ -15,7 +15,7 @@ void cMl::init(JKRHeap* heap) {
 }
 
 /* 802412F8-80241330       .text memalignB__3cMlFiUl */
-void* cMl::memalignB(int alignment, unsigned long size) {
+void* cMl::memalignB(int alignment, u32 size) {
     if (size == 0)
         return NULL;
     else

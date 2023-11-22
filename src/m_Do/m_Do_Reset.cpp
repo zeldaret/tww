@@ -33,7 +33,7 @@ mDoRstData* mDoRst::mResetData;
 #endif
 
 /* 80017D7C-80017E40       .text mDoRst_reset__FiUli */
-void mDoRst_reset(int param_0, unsigned long param_1, int param_2) {
+void mDoRst_reset(int param_0, u32 param_1, int param_2) {
     if (DVDGetDriveStatus() == DVD_STATE_FATAL_ERROR) {
         do {
         } while (true);

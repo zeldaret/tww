@@ -15,7 +15,7 @@ class JKRDvdFile : public JKRFile {
 public:
     JKRDvdFile();
     JKRDvdFile(const char*);
-    JKRDvdFile(long);
+    JKRDvdFile(s32);
     virtual ~JKRDvdFile();
 
     void initiate(void);

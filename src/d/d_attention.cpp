@@ -12,7 +12,7 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 
 /* 8009D220-8009D268       .text __ct__11dAttParam_cFl */
-dAttParam_c::dAttParam_c(long) {
+dAttParam_c::dAttParam_c(s32) {
     /* Nonmatching */
     field_0x04 = 45.0f;
     field_0x08 = 30.0f;
@@ -95,7 +95,7 @@ dAttention_c::~dAttention_c() {
 }
 
 /* 8009D6EC-8009D728       .text GetActionList__12dAttention_cFl */
-dAttList_c* dAttention_c::GetActionList(long idx) {
+dAttList_c* dAttention_c::GetActionList(s32 idx) {
     if (mActionNum != 0)
         return &mActionList[(mActionOffs + idx) % mActionNum];
     else
@@ -103,7 +103,7 @@ dAttList_c* dAttention_c::GetActionList(long idx) {
 }
 
 /* 8009D728-8009D764       .text GetLockonList__12dAttention_cFl */
-dAttList_c* dAttention_c::GetLockonList(long idx) {
+dAttList_c* dAttention_c::GetLockonList(s32 idx) {
     if (mLockOnNum != 0)
         return &mLockOnList[(mLockOnOffs + idx) % mLockOnNum];
     else
@@ -145,43 +145,43 @@ dAttList_c* dAttention_c::getActionBtnZ() {
 }
 
 /* 8009DAA4-8009DAF4       .text chkAttMask__12dAttention_cFUlUl */
-void dAttention_c::chkAttMask(unsigned long, unsigned long) {
+void dAttention_c::chkAttMask(u32, u32) {
     /* Nonmatching */
 }
 
 /* 8009DAF4-8009DB60       .text check_event_condition__FUlUs */
-void check_event_condition(unsigned long, unsigned short) {
+void check_event_condition(u32, u16) {
     /* Nonmatching */
 }
 
 /* 8009DB60-8009DC28       .text check_flontofplayer__FUlss */
-void check_flontofplayer(unsigned long, short, short) {
+void check_flontofplayer(u32, s16, s16) {
     /* Nonmatching */
 }
 
 /* 8009DC28-8009DC74       .text distace_weight__Ffsf */
-void distace_weight(float, short, float) {
+void distace_weight(f32, s16, f32) {
     /* Nonmatching */
 }
 
 /* 8009DC74-8009DCD4       .text distace_angle_adjust__Ffsf */
-void distace_angle_adjust(float, short, float) {
+void distace_angle_adjust(f32, s16, f32) {
     /* Nonmatching */
 }
 
 /* 8009DCD4-8009DE44       .text check_distace__FP4cXyzsP4cXyzffff */
-void check_distace(cXyz*, short, cXyz*, float, float, float, float) {
+void check_distace(cXyz*, s16, cXyz*, f32, f32, f32, f32) {
     /* Nonmatching */
 }
 
 /* 8009DE44-8009E03C       .text calcWeight__12dAttention_cFiP10fopAc_ac_cfssPUl */
-f32 dAttention_c::calcWeight(int, fopAc_ac_c*, float, short, short, unsigned long*) {
+f32 dAttention_c::calcWeight(int, fopAc_ac_c*, f32, s16, s16, u32*) {
     /* Nonmatching */
 }
 
 /* 8009E03C-8009E128       .text setLList__12dAttention_cFP10fopAc_ac_cffUl */
-void dAttention_c::setLList(fopAc_ac_c* i_actor, float weight, float distance, unsigned long type) {
-    float bestWeight = 0.0f;
+void dAttention_c::setLList(fopAc_ac_c* i_actor, f32 weight, f32 distance, u32 type) {
+    f32 bestWeight = 0.0f;
 
     if (weight > 0.0f) {
         int bestIdx;
@@ -206,8 +206,8 @@ void dAttention_c::setLList(fopAc_ac_c* i_actor, float weight, float distance, u
 }
 
 /* 8009E128-8009E214       .text setAList__12dAttention_cFP10fopAc_ac_cffUl */
-void dAttention_c::setAList(fopAc_ac_c* i_actor, float weight, float distance, unsigned long type) {
-    float bestWeight = 0.0f;
+void dAttention_c::setAList(fopAc_ac_c* i_actor, f32 weight, f32 distance, u32 type) {
+    f32 bestWeight = 0.0f;
 
     if (weight > 0.0f) {
         int bestIdx;
@@ -232,7 +232,7 @@ void dAttention_c::setAList(fopAc_ac_c* i_actor, float weight, float distance, u
 }
 
 /* 8009E214-8009E2CC       .text initList__12dAttention_cFUl */
-void dAttention_c::initList(unsigned long flagMask) {
+void dAttention_c::initList(u32 flagMask) {
     int i;
 
     mFlagMask = flagMask;
@@ -292,7 +292,7 @@ void dAttention_c::sortList() {
 }
 
 /* 8009E5C4-8009E684       .text stockAttention__12dAttention_cFUl */
-void dAttention_c::stockAttention(unsigned long interactMask) {
+void dAttention_c::stockAttention(u32 interactMask) {
     fopAc_ac_c * pTarget = LockonTarget(0);
     initList(interactMask);
     if (makeList())
@@ -313,7 +313,7 @@ void dAttention_c::stockAttention(unsigned long interactMask) {
 }
 
 /* 8009E684-8009E728       .text nextAttention__12dAttention_cFUl */
-void dAttention_c::nextAttention(unsigned long interactMask) {
+void dAttention_c::nextAttention(u32 interactMask) {
     fopAc_ac_c * pTarget = fopAcM_SearchByID(mLockOnTargetBsPcID);
     initList(interactMask);
     if (makeList())
@@ -386,17 +386,17 @@ void dAttention_c::judgementLostCheck() {
 }
 
 /* 8009EF40-8009F0A4       .text judgementStatusSw__12dAttention_cFUl */
-void dAttention_c::judgementStatusSw(unsigned long) {
+void dAttention_c::judgementStatusSw(u32) {
     /* Nonmatching */
 }
 
 /* 8009F0A4-8009F1D4       .text judgementStatusHd__12dAttention_cFUl */
-void dAttention_c::judgementStatusHd(unsigned long) {
+void dAttention_c::judgementStatusHd(u32) {
     /* Nonmatching */
 }
 
 /* 8009F1D4-8009F460       .text Run__12dAttention_cFUl */
-void dAttention_c::Run(unsigned long) {
+void dAttention_c::Run(u32) {
     /* Nonmatching */
 }
 
@@ -411,7 +411,7 @@ void dAttDraw_c::setAnm(int, int, int) {
 }
 
 /* 8009F6B4-8009F834       .text draw__10dAttDraw_cFR4cXyzPA4_f */
-void dAttDraw_c::draw(cXyz&, float(*)[4]) {
+void dAttDraw_c::draw(cXyz&, f32(*)[4]) {
     /* Nonmatching */
 }
 
@@ -531,7 +531,7 @@ void dAttCatch_c::proc() {
 }
 
 /* 8009FC08-8009FE10       .text request__11dAttCatch_cFP10fopAc_ac_cUcfffsi */
-void dAttCatch_c::request(fopAc_ac_c*, unsigned char, float, float, float, short, int) {
+void dAttCatch_c::request(fopAc_ac_c*, u8, f32, f32, f32, s16, int) {
     /* Nonmatching */
 }
 
@@ -555,12 +555,12 @@ void dAttLook_c::proc() {
 }
 
 /* 8009FE74-800A009C       .text request__10dAttLook_cFP10fopAc_ac_cfffsi */
-void dAttLook_c::request(fopAc_ac_c*, float, float, float, short, int) {
+void dAttLook_c::request(fopAc_ac_c*, f32, f32, f32, s16, int) {
     /* Nonmatching */
 }
 
 /* 800A009C-800A0270       .text requestF__10dAttLook_cFP10fopAc_ac_csi */
-void dAttLook_c::requestF(fopAc_ac_c*, short, int) {
+void dAttLook_c::requestF(fopAc_ac_c*, s16, int) {
     /* Nonmatching */
 }
 

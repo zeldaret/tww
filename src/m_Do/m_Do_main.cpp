@@ -447,7 +447,7 @@ void main() {
     u8 ALIGN_DECL(0x20) stack[0xF000];
 
     mDoMain::sPowerOnTime = OSGetTime();
-    OSReportInit__Fv();
+    OSReportInit();
     version_check();
 #if VERSION != VERSION_JPN
     mDoRstData* reset_data = (mDoRstData*)OSAllocFromArenaLo(0x10, 4);

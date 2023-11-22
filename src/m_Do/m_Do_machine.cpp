@@ -188,7 +188,7 @@ int developKeyCheck(u32 btnTrig, u32 btnHold) {
 }
 
 /* 8000C23C-8000C3C0       .text myExceptionCallback__FUsP9OSContextUlUl */
-void myExceptionCallback(unsigned short, OSContext*, unsigned long, unsigned long) {
+void myExceptionCallback(OSError, OSContext*, u32, u32) {
     u32 btnHold;
     u32 btnTrig;
 

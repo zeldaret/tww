@@ -10,7 +10,7 @@ class JKRAMCommand;
 class JKRAramBlock;
 class JKRAram : public JKRThread {
 private:
-    JKRAram(u32, u32, long);
+    JKRAram(u32, u32, s32);
     virtual ~JKRAram();
 
     /* vt[03] */ void* run(void); /* override */

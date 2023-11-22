@@ -146,7 +146,7 @@ bool cBgW::ChkMemoryError() {
 }
 
 /* 802481C4-80248414       .text Set__4cBgWFP6cBgD_tUlPA3_A4_f */
-bool cBgW::Set(cBgD_t*, unsigned long, Mtx*) {
+bool cBgW::Set(cBgD_t*, u32, Mtx*) {
     /* Nonmatching */
 }
 
