@@ -5,6 +5,7 @@
 #include "dolphin/mtx/mtx.h"
 #include "dolphin/mtx/mtx44.h"
 #include "dolphin/mtx/vec.h"
+#include "global.h"
 
 class J3DLightInfo {
 public:
@@ -144,7 +145,7 @@ struct J3DIndTexOrderInfo {
 };
 
 struct J3DTevSwapModeInfo {
-    /* 0x0 */ u8 field_0x0 __attribute__((aligned(4)));
+    /* 0x0 */ u8 field_0x0 ALIGN_DECL(4);
     /* 0x1 */ u8 field_0x1;
 };
 
@@ -179,7 +180,7 @@ struct J3DTevStageInfo {
 };
 
 struct J3DIndTevStageInfo {
-    /* 0x0 */ u8 mIndStage __attribute__((aligned(4)));
+    /* 0x0 */ u8 mIndStage ALIGN_DECL(4);
     /* 0x1 */ u8 mIndFormat;
     /* 0x2 */ u8 mBiasSel;
     /* 0x3 */ u8 mMtxSel;
@@ -191,7 +192,7 @@ struct J3DIndTevStageInfo {
 };
 
 struct J3DTexCoordInfo {
-    /* 0x0 */ u8 mTexGenType __attribute__((aligned(4)));
+    /* 0x0 */ u8 mTexGenType ALIGN_DECL(4);
     /* 0x1 */ u8 mTexGenSrc;
     /* 0x2 */ u8 mTexGenMtx;
 };
@@ -216,7 +217,7 @@ struct J3DBlendInfo {
 };
 
 struct J3DTevOrderInfo {
-    /* 0x0 */ u8 mTexCoord __attribute__((aligned(2)));
+    /* 0x0 */ u8 mTexCoord ALIGN_DECL(2);
     /* 0x1 */ u8 mTexMap;
     /* 0x2 */ u8 mColorChan;
 };

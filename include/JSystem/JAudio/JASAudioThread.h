@@ -3,6 +3,7 @@
 
 #include <dolphin/os/OSMessage.h>
 #include <dolphin/os/OSThread.h>
+#include "global.h"
 
 class JKRSolidHeap;
 
@@ -15,7 +16,7 @@ namespace JASystem {
         void start(JKRSolidHeap*, u32, u32);
 
         extern OSThread sAudioThread;
-        extern u8 saAudioStack[4096] __attribute__((aligned(32)));
+        extern u8 saAudioStack[4096] ALIGN_DECL(32);
         extern OSMessageQueue sAudioprocMQ;
         extern OSMessage saAudioMsgBuf[16];
         extern u32 sAudioprocMQInit;

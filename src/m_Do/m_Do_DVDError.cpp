@@ -6,11 +6,12 @@
 #include "m_Do/m_Do_DVDError.h"
 #include "JSystem/JKernel/JKRThread.h"
 #include "dolphin/os/OS.h"
+#include "global.h"
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_ext.h"
 
 OSThread DvdErr_thread;
-u8 DvdErr_stack[0x1000] __attribute__((aligned(32)));
+u8 DvdErr_stack[0x1000] ALIGN_DECL(32);
 
 static OSAlarm Alarm;
 bool mDoDvdErr_initialized;
