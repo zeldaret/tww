@@ -10,9 +10,9 @@
 #include "d/d_kankyo.h"
 #include "d/d_procname.h"
 #include "d/d_cc_d.h"
+#include "d/d_lib.h"
 #include "m_do/m_Do_mtx.h"
 #include "m_Do/m_Do_ext.h"
-#include "dolphin/types.h"
 
 
 /*** HIO ***/
@@ -76,6 +76,8 @@ public:
     J3DAnmTextureSRTKey* m_btk;
 
     // TODO: insert missing members
+
+    Quaternion mQuatRotation;
 
     dCcD_Stts mColStatus;
     dCcD_Cps mCapsuleCol;
@@ -245,8 +247,7 @@ s32 daMozo_c::CreateInit() {
         }
     }
 
-    // TODO: find out where d_lib::ZeroQuat lives
-    //mQuatRotation = ZeroQuat;
+    mQuatRotation = ZeroQuat;
 
     fopAcM_setCullSizeBox(this, -1000.f, -1000.f, -1000.f, 1000.0f, 1000.0f, 1000.0f);
     mCullMtx = mAnimMorf->getModel()->getBaseTRMtx();

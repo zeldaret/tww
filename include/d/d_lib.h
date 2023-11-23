@@ -10,6 +10,8 @@
 #include "m_Do/m_Do_ext.h"
 #include "d/d_path.h"
 
+extern Quaternion ZeroQuat;
+
 class STControl {
 public:
     STControl(s16, s16, s16, s16, f32, f32, s16, s16);
@@ -17,48 +19,47 @@ public:
     void init();
     void Xinit();
     void Yinit();
-    void getValueStick();
-    void getAngleStick();
+    virtual f32 getValueStick();
+    virtual s16 getAngleStick();
     bool checkTrigger();
     bool checkLeftTrigger();
     bool checkRightTrigger();
     bool checkUpTrigger();
     bool checkDownTrigger();
 
-    /* 0x00 */ void* vtbl;
     /* 0x04 */ f32 field_0x04;
     /* 0x08 */ f32 field_0x08;
     /* 0x0C */ u8 field_0x0c;
     /* 0x0D */ u8 field_0x0d;
-    /* 0x0E */ u16 field_0x0e;
-    /* 0x10 */ u16 field_0x10;
-    /* 0x12 */ u16 field_0x12;
+    /* 0x0E */ s16 field_0x0e;
+    /* 0x10 */ s16 field_0x10;
+    /* 0x12 */ s16 field_0x12;
     /* 0x14 */ s16 field_0x14;
     /* 0x16 */ s16 field_0x16;
-    /* 0x18 */ u16 field_0x18;
-    /* 0x1A */ u16 field_0x1a;
-    /* 0x1C */ u16 field_0x1c;
-    /* 0x1E */ u16 field_0x1e;
-    /* 0x20 */ u16 field_0x20;
-    /* 0x22 */ u16 field_0x22;
+    /* 0x18 */ s16 field_0x18;
+    /* 0x1A */ s16 field_0x1a;
+    /* 0x1C */ s16 field_0x1c;
+    /* 0x1E */ s16 field_0x1e;
+    /* 0x20 */ s16 field_0x20;
+    /* 0x22 */ s16 field_0x22;
     /* 0x24 */ s16 field_0x24;
     /* 0x26 */ s16 field_0x26;
 };
 
-class CSTControl {
+class CSTControl : public STControl {
 public:
-    void getValueStick();
-    void getAngleStick();
+    virtual f32 getValueStick();
+    virtual s16 getAngleStick();
 };
 
 class dLib_anm_prm_c {
 public:
-    /* 0x00 */ s8 field_0x00;
-    /* 0x01 */ s8 field_0x01;
+    /* 0x00 */ s8 mBckIdx;
+    /* 0x01 */ s8 mNextPrmIdx;
     /* 0x02 */ s16 field_0x02;
-    /* 0x04 */ f32 field_0x04;
-    /* 0x08 */ f32 field_0x08;
-    /* 0x0C */ u32 loopMode;
+    /* 0x04 */ f32 mMorf;
+    /* 0x08 */ f32 mPlaySpeed;
+    /* 0x0C */ int mLoopMode;
 };
 
 class dLib_circle_path_c {
@@ -76,14 +77,15 @@ class dLib_wave_c;
 class dLib_anm_idx_c;
 
 void dLib_setCirclePath(dLib_circle_path_c*);
-void dLib_getWaterY(cXyz&, dBgS_ObjAcch&);
+f32 dLib_getWaterY(cXyz& pos, dBgS_ObjAcch& acch);
 void dLib_waveRot(Vec*, f32, dLib_wave_c*);
-void dLib_debugDrawAxis(Mtx&, f32);
-void dLib_debugDrawFan(cXyz&, s16, s16, f32, const GXColor&);
+void dLib_debugDrawAxis(Mtx& mtx, f32 length);
+void dLib_debugDrawFan(cXyz& center, s16 angleY, s16 fanSpreadAngle, f32 radius, const GXColor& color);
 bool dLib_brkInit(J3DModelData*, mDoExt_brkAnm*, const char*, int);
 bool dLib_btkInit(J3DModelData*, mDoExt_btkAnm*, const char*, int);
 void dLib_setAnm(const char*, mDoExt_McaMorf*, s8*, s8*, s8*, const dLib_anm_idx_c*, const dLib_anm_prm_c*, bool);
-void dLib_bcks_setAnm(const char*, mDoExt_McaMorf*, s8*, s8*, s8*, const int*, const dLib_anm_prm_c*, bool);
+void dLib_bcks_setAnm(const char* arcName, mDoExt_McaMorf* morf, s8* pBckIdx, s8* pPrmIdx,
+                      s8* param_5, const int* bcksTbl, const dLib_anm_prm_c* anmPrmTbl, bool param_8);
 void dLib_scaleAnime(f32* o_value, f32* p_targets, int targetNum, int* p_targetIdx, f32 scale, f32 maxStep, f32 minStep);
 void dLib_getPosFromMtx(f32(*)[4], cXyz*);
 bool dLib_pathInfo(dPath**, u8);

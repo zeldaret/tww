@@ -100,10 +100,10 @@ daRd_HIO_c::daRd_HIO_c() {
     m2C = 0x0;
     m30 = 650.0f;
     m34 = 650.0f;
-    m38 = 500.0f;
+    mCryRadius = 500.0f;
     mAttackRadius = 125.0f;
     m40 = 0x2000;
-    m42 = 0x1B58;
+    mCrySpreadAngle = 0x1B58;
     mAttackSpreadAngle = 0x6000;
     m46 = 0xA;
     m48 = 0x5;
@@ -115,7 +115,7 @@ daRd_HIO_c::daRd_HIO_c() {
     m60 = 50.0f;
     m64 = 30.0f;
     m68 = 1.8;
-    m6C = 2.0f;
+    mReturnWalkSpeed = 2.0f;
     m70 = 1.25;
     m74 = 0.9;
     m50 = 0x28;
@@ -141,7 +141,7 @@ daRd_HIO_c::daRd_HIO_c() {
 }
 
 /* 0000027C-000002A8       .text searchNeadDeadRd_CB__FPvPv */
-static fopAc_ac_c* searchNeadDeadRd_CB(void* i_actor, void* i_this) {
+static void* searchNeadDeadRd_CB(void* i_actor, void* i_this) {
     return static_cast<daRd_c*>(i_this)->_searchNearDeadRd(static_cast<fopAc_ac_c*>(i_actor));
 }
 
@@ -179,7 +179,7 @@ BOOL daRd_c::_nodeControl(J3DNode* node, J3DModel* model) {
     if (mJntCtrl.getHeadJntNum() == jntNo) {
         static cXyz l_offsetAttPos(0.0f, 0.0f, 0.0f);
         static cXyz l_offsetEyePos(24.0f, -16.0f, 0.0f);
-        mDoMtx_stack_c::multVec(&l_offsetAttPos, &mAttPos);
+        mDoMtx_stack_c::multVec(&l_offsetAttPos, &mTargetPos);
         mDoMtx_stack_c::XrotM(mJntCtrl.getHead_y());
         mDoMtx_stack_c::ZrotM(mJntCtrl.getHead_x());
         mDoMtx_stack_c::multVec(&l_offsetEyePos, &mRdEyePos);
@@ -226,7 +226,7 @@ BOOL daRd_c::_nodeHeadControl(J3DNode* node, J3DModel* model) {
     csXyz angle;
     mDoMtx_inverseTranspose(mDoMtx_stack_c::get(), mtx);
     mDoMtx_MtxToRot(mtx, &angle);
-    mD18 = angle.y;
+    mHeadAngle = angle.y;
 }
 
 /* 000006A0-000006C0       .text createHeap_CB__FP10fopAc_ac_c */
@@ -263,7 +263,7 @@ BOOL daRd_c::_createHeap() {
         return FALSE;
     }
     
-    modelData->getJointNodePointer(0x0C)->setCallBack(nodeHeadControl_CB);
+    modelData->getJointNodePointer(0x0C)->setCallBack(nodeHeadControl_CB); // ree_atama_1
     
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, RD_BRK_NML));
 	JUT_ASSERT(550, brk != 0);
@@ -442,7 +442,7 @@ bool daRd_c::checkPlayerInAttack() {
 
 /* 00000A38-00000AA0       .text checkPlayerInCry__6daRd_cFv */
 bool daRd_c::checkPlayerInCry() {
-    return dLib_checkActorInFan(current.pos, dComIfGp_getLinkPlayer(), mD18, l_HIO.m42, l_HIO.m38, 100.0f);
+    return dLib_checkActorInFan(current.pos, dComIfGp_getLinkPlayer(), mHeadAngle, l_HIO.mCrySpreadAngle, l_HIO.mCryRadius, 100.0f);
 }
 
 /* 00000AA0-00000D78       .text lookBack__6daRd_cFv */
@@ -453,7 +453,7 @@ void daRd_c::lookBack() {
         mJntCtrl.clrTrn();
         mJntCtrl.offHeadLock();
         mJntCtrl.offBackBoneLock();
-        mAttPos = player->getHeadTopPos();
+        mTargetPos = player->getHeadTopPos();
     } else {
         switch (mMode) {
         case MODE_WAIT:
@@ -476,10 +476,10 @@ void daRd_c::lookBack() {
             break;
         }
         
-        switch (m6D9) {
-        case 0x2:
-        case 0x9:
-        case 0xA:
+        switch (mAnmPrmIdx) {
+        case AnmPrm_SUWARIP:
+        case AnmPrm_TATSU:
+        case AnmPrm_SUWARU:
             r29 = false;
             mJntCtrl.clrTrn();
             mJntCtrl.onHeadLock();
@@ -489,25 +489,25 @@ void daRd_c::lookBack() {
         
         switch (mMode) {
         case MODE_CRY:
-            if (dLib_checkActorInFan(current.pos, player, shape_angle.y, l_HIO.m42, 150.0f, 100.0f)) {
+            if (dLib_checkActorInFan(current.pos, player, shape_angle.y, l_HIO.mCrySpreadAngle, 150.0f, 100.0f)) {
                 mJntCtrl.clrTrn();
                 mJntCtrl.onHeadLock();
                 mJntCtrl.onBackBoneLock();
             }
-            mAttPos = player->getHeadTopPos();
+            mTargetPos = player->getHeadTopPos();
             break;
         case MODE_RETURN:
-            if (dLib_checkActorInCircle(m300, this, 100.0f, 1000.0f)) {
+            if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, 1000.0f)) {
                 mJntCtrl.clrTrn();
                 mJntCtrl.onHeadLock();
                 mJntCtrl.onBackBoneLock();
             }
-            mAttPos = m300;
+            mTargetPos = mSpawnPos;
             break;
         case MODE_SILENT_PRAY:
             break;
         default:
-            mAttPos = player->getHeadTopPos();
+            mTargetPos = player->getHeadTopPos();
             break;
         }
     }
@@ -518,7 +518,7 @@ void daRd_c::lookBack() {
         mMaxHeadTurnVel = 0;
     }
     
-    mJntCtrl.lookAtTarget(&shape_angle.y, &mAttPos, mRdEyePos, shape_angle.y, mMaxHeadTurnVel, r29);
+    mJntCtrl.lookAtTarget(&shape_angle.y, &mTargetPos, mRdEyePos, shape_angle.y, mMaxHeadTurnVel, r29);
 }
 
 /* 00000D78-00001650       .text checkTgHit__6daRd_cFv */
@@ -547,7 +547,6 @@ bool daRd_c::checkTgHit() {
         if (hitObj == NULL) {
             return false;
         }
-        
         
         switch (hitObj->GetAtType()) {
         case AT_TYPE_SWORD:
@@ -629,7 +628,7 @@ bool daRd_c::checkTgHit() {
             break;
         case AT_TYPE_NORMAL_ARROW:
             mHitType = 5;
-            if (!dLib_checkActorInCircle(current.pos, player, l_HIO.m38, 1000.0f)) {
+            if (!dLib_checkActorInCircle(current.pos, player, l_HIO.mCryRadius, 1000.0f)) {
                 fopAcM_seStart(this, JA_SE_LK_ARROW_HIT, 0x44);
                 mCE0 = 40;
                 r29 = false;
@@ -708,7 +707,7 @@ void daRd_c::setCollision() {
         mCyl.OnCoSPrmBit(0x02);
     }
     
-    if (m6D9 == 2) {
+    if (isAnm(AnmPrm_SUWARIP)) {
         mCyl.SetR(80.0f + g_regHIO.mChild[8].mFloatRegs[1]);
         mCyl.SetH(170.0f + g_regHIO.mChild[8].mFloatRegs[0]);
     } else {
@@ -722,7 +721,7 @@ void daRd_c::setCollision() {
 
 /* 000017D0-0000180C       .text setIceCollision__6daRd_cFv */
 void daRd_c::setIceCollision() {
-    if (m6D9 == 2) {
+    if (isAnm(AnmPrm_SUWARIP)) {
         mEnemyIce.mWallRadius = 50.0f;
         mEnemyIce.mCylHeight = 170.0f;
     } else {
@@ -781,9 +780,12 @@ void daRd_c::modeWait() {
     fopAc_ac_c* player = dComIfGp_getLinkPlayer();
     BOOL isOto = fopAcM_otoCheck(this, mAreaRadius);
     if (!isLinkControl()) {
-        if (dLib_checkActorInCircle(m300, this, mAreaRadius, 1000.0f)) {
-            if (dLib_checkActorInCircle(m300, player, mAreaRadius, 100.0f)) {
-                if ((dLib_checkActorInCircle(m300, player, mAreaRadius, 100.0f) && player->speedF > 10.0f + g_regHIO.mChild[12].mFloatRegs[4]) ||
+        if (dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, 1000.0f)) {
+            // The ReDead will only wake up if the player is in a 200-unit-tall cylinder around its spawn point.
+            // Bug: If the ReDead spawned high up in the air, its spawn point will remain there even after the ReDead
+            // itself has fallen down to ground level. This means it will not be able to notice the player properly.
+            if (dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f)) {
+                if ((dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f) && player->speedF > 10.0f + g_regHIO.mChild[12].mFloatRegs[4]) ||
                     isOto ||
                     dLib_checkActorInFan(current.pos, player, shape_angle.y, l_HIO.m40, l_HIO.m34, 100.0f)
                 ) {
@@ -794,24 +796,24 @@ void daRd_c::modeWait() {
         }
     }
     
-    if (dLib_checkActorInCircle(m300, this, 100.0f, 1000.0f)) {
-        cLib_addCalcAngleS2(&shape_angle.y, m30C, 0x4, 0x200);
-        if (cLib_distanceAngleS(shape_angle.y, m30C) <= 0x200) {
-            shape_angle.y = m30C;
-            if (m2B4 == 1 && !isAnm(2)) {
-                setAnm(0xA, false);
+    if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, 1000.0f)) {
+        cLib_addCalcAngleS2(&shape_angle.y, mSpawnAngle, 0x4, 0x200);
+        if (cLib_distanceAngleS(shape_angle.y, mSpawnAngle) <= 0x200) {
+            shape_angle.y = mSpawnAngle;
+            if (mWhichIdleAnm == 1 && !isAnm(AnmPrm_SUWARIP)) {
+                setAnm(AnmPrm_SUWARU, false);
             }
-            if (m2B4 == 0) {
-                setAnm(0x1, false);
+            if (mWhichIdleAnm == 0) {
+                setAnm(AnmPrm_TACHIP1, false);
             }
         }
-    } else if (!dLib_checkActorInCircle(m300, this, mAreaRadius, 1000.0f) ||
-               !dLib_checkActorInCircle(m300, player, mAreaRadius, 100.0f)
+    } else if (!dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, 1000.0f) ||
+               !dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f)
     ) {
         modeProcInit(MODE_RETURN);
         return;
     }
-    if (!isLinkControl() && checkPlayerInAttack() && isAnm(1)) {
+    if (!isLinkControl() && checkPlayerInAttack() && isAnm(AnmPrm_TACHIP1)) {
         modeProcInit(MODE_ATTACK);
     }
 }
@@ -819,7 +821,7 @@ void daRd_c::modeWait() {
 /* 00001DDC-00001E68       .text modeDeathInit__6daRd_cFv */
 void daRd_c::modeDeathInit() {
     fopAcM_monsSeStart(this, JA_SE_CV_RD_DIE, 0);
-    setAnm(8, false);
+    setAnm(AnmPrm_DEAD, false);
     speedF = 0.0f;
     mTimer1 = 10*30;
 }
@@ -849,7 +851,7 @@ void daRd_c::modeDeath() {
 /* 00001F14-00001F98       .text modeDamageInit__6daRd_cFv */
 void daRd_c::modeDamageInit() {
     fopAcM_monsSeStart(this, JA_SE_CV_RD_DAMAGE, 0);
-    setAnm(7, true);
+    setAnm(AnmPrm_DAMAGE, true);
     speedF = 0.0f;
 }
 
@@ -868,7 +870,7 @@ void daRd_c::modeDamage() {
         return;
     }
     
-    if (dLib_checkActorInCircle(m300, player, mAreaRadius, 100.0f)) {
+    if (dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f)) {
         modeProcInit(MODE_MOVE);
     } else {
         modeProcInit(MODE_WAIT);
@@ -877,8 +879,8 @@ void daRd_c::modeDamage() {
 
 /* 00002084-000020EC       .text modeParalysisInit__6daRd_cFv */
 void daRd_c::modeParalysisInit() {
-    if (!isAnm(0xC) && !isAnm(0xD)) {
-        setAnm(0xC, false);
+    if (!isAnm(AnmPrm_BEAM_HIT) && !isAnm(AnmPrm_BEAM)) {
+        setAnm(AnmPrm_BEAM_HIT, false);
     }
     mTimer1 = l_HIO.mParalysisDuration;
     speedF = 0.0f;
@@ -887,13 +889,13 @@ void daRd_c::modeParalysisInit() {
 /* 000020EC-000021F0       .text modeParalysis__6daRd_cFv */
 void daRd_c::modeParalysis() {
     /* Nonmatching: isStop inline regalloc + checkTgHit() clrlwi. missing? */
-    if (isAnm(0xC) && mpMorf->isStop()) {
-        setAnm(0xD, false);
-    } else if (isAnm(0xD)) {
+    if (isAnm(AnmPrm_BEAM_HIT) && mpMorf->isStop()) {
+        setAnm(AnmPrm_BEAM, false);
+    } else if (isAnm(AnmPrm_BEAM)) {
         if (cLib_calcTimer(&mTimer1) == 0) {
-            setAnm(0xE, false);
+            setAnm(AnmPrm_BEAM_END, false);
         }
-    } else if (isAnm(0xE) && mpMorf->isStop()) {
+    } else if (isAnm(AnmPrm_BEAM_END) && mpMorf->isStop()) {
         modeProcInit(MODE_WAIT);
     }
     
@@ -904,24 +906,24 @@ void daRd_c::modeParalysis() {
 
 /* 000021F0-0000223C       .text modeMoveInit__6daRd_cFv */
 void daRd_c::modeMoveInit() {
-    if (m2B4 == 1 && (m6D9 == 2 || m6D9 == 0xA)) {
-        setAnm(9, false);
+    if (mWhichIdleAnm == 1 && (isAnm(AnmPrm_SUWARIP) || isAnm(AnmPrm_SUWARU))) {
+        setAnm(AnmPrm_TATSU, false);
     }
 }
 
 /* 0000223C-000024B0       .text modeMove__6daRd_cFv */
 void daRd_c::modeMove() {
-    if (!checkTgHit() && !isAnm(9)) {
+    if (!checkTgHit() && !isAnm(AnmPrm_TATSU)) {
         if (!isLinkControl() && checkPlayerInCry()) {
             modeProcInit(MODE_CRY);
             return;
         }
         daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
-        if (!dLib_checkActorInCircle(m300, this, mAreaRadius, 1000.0f) || !dLib_checkActorInCircle(m300, player, mAreaRadius, 100.0f)) {
+        if (!dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, 1000.0f) || !dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f)) {
             modeProcInit(MODE_RETURN);
             return;
         }
-        int angle = cLib_distanceAngleS(fopAcM_searchPlayerAngleY(this), mD18);
+        int angle = cLib_distanceAngleS(fopAcM_searchPlayerAngleY(this), mHeadAngle);
         if (angle < 0x50) {
             f32 dist = fopAcM_searchPlayerDistanceXZ(this);
             f32 temp = (dist / 100.0f) + g_regHIO.mChild[12].mFloatRegs[3];
@@ -940,9 +942,9 @@ void daRd_c::modeMove() {
             cLib_addCalc2(&speedF, 0.0f, 0.1f, 0.1f + g_regHIO.mChild[12].mFloatRegs[0]);
         }
         if (speedF < 0.1f) {
-            setAnm(1, false);
+            setAnm(AnmPrm_TACHIP1, false);
         } else {
-            setAnm(6, false);
+            setAnm(AnmPrm_WALK, false);
         }
         if (!isLinkControl() && checkPlayerInAttack()) {
             modeProcInit(MODE_ATTACK);
@@ -967,7 +969,7 @@ void daRd_c::modeCryInit() {
 
 /* 000025A8-000028B8       .text modeCry__6daRd_cFv */
 void daRd_c::modeCry() {
-    setAnm(6, false);
+    setAnm(AnmPrm_WALK, false);
     
     f32 stickPosX = g_mDoCPd_cpadInfo[0].mMainStickPosX;
     f32 stickPosY = g_mDoCPd_cpadInfo[0].mMainStickPosY;
@@ -1050,7 +1052,7 @@ void daRd_c::modeCryWait() {
     if (g_dComIfG_gameInfo.play.getEvent().runCheck()) {
         mTimer1 = 60;
         mTimer2 = 45;
-    } else if (m6D9 == 6) {
+    } else if (isAnm(AnmPrm_WALK)) {
         if (cLib_calcTimer(&mTimer1) == 0) {
             modeProcInit(MODE_MOVE);
         } else if (cLib_calcTimer(&mTimer2) == 0 && checkPlayerInAttack()) {
@@ -1065,7 +1067,7 @@ void daRd_c::modeAttackInit() {
     mTimer1 = l_HIO.m52;
     mBreakFreeCounter = l_HIO.m50;
     mTimer2 = 30;
-    setAnm(6, false);
+    setAnm(AnmPrm_WALK, false);
     speedF = 0.0f;
 }
 
@@ -1084,7 +1086,7 @@ void daRd_c::modeAttack() {
     f32 stickPosY = g_mDoCPd_cpadInfo[0].mMainStickPosY;
     if (mEvtInfo.checkCommandDemoAccrpt()) {
         daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
-        if (m6D9 == 4) {
+        if (isAnm(AnmPrm_ATACK)) {
             f32 frame = player->getBaseAnimeFrame();
             mpMorf->setFrame(frame);
             cLib_addCalcAngleS2(&shape_angle.y, player->shape_angle.y, 0x4, 0x2000);
@@ -1098,9 +1100,9 @@ void daRd_c::modeAttack() {
             return;
         }
         f32 dist = fopAcM_searchPlayerDistanceXZ(this);
-        if (dist <= 50.0f + g_regHIO.mChild[12].mFloatRegs[5] && m6D9 != 4) {
+        if (dist <= 50.0f + g_regHIO.mChild[12].mFloatRegs[5] && !isAnm(AnmPrm_ATACK)) {
             offIkari();
-            setAnm(3, false);
+            setAnm(AnmPrm_WALK2ATACK, false);
         }
         if (dist <= 20.0f + g_regHIO.mChild[12].mFloatRegs[2]) {
             cLib_addCalcPosXZ2(&current.pos, player->current.pos, 0.3f, 1.0f);
@@ -1121,7 +1123,7 @@ void daRd_c::modeAttack() {
         
         if (dComIfGs_getLife() == 0) {
             dComIfGp_event_reset();
-            setAnm(5, false);
+            setAnm(AnmPrm_ATACK2WALK, false);
             modeProcInit(MODE_WAIT);
             return;
         }
@@ -1148,7 +1150,7 @@ void daRd_c::modeAttack() {
         
         if (cLib_calcTimer(&mTimer1) == 0 || mBreakFreeCounter < 0) {
             dComIfGp_event_reset();
-            setAnm(5, false);
+            setAnm(AnmPrm_ATACK2WALK, false);
             modeProcInit(MODE_CRY_WAIT);
         }
     } else if (!checkTgHit()) {
@@ -1166,18 +1168,18 @@ void daRd_c::modeReturn() {
         return;
     }
     
-    setAnm(6, false);
+    setAnm(AnmPrm_WALK, false);
     
-    if (dLib_checkActorInCircle(m300, this, 100.0f, 1000.0f)) {
+    if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, 1000.0f)) {
         speedF = 0.0f;
-        cLib_addCalcAngleS2(&shape_angle.y, m30C, 0xA, 0x200);
-        if (cLib_distanceAngleS(shape_angle.y, m30C) <= 0x200) {
-            shape_angle.y = m30C;
+        cLib_addCalcAngleS2(&shape_angle.y, mSpawnAngle, 0xA, 0x200);
+        if (cLib_distanceAngleS(shape_angle.y, mSpawnAngle) <= 0x200) {
+            shape_angle.y = mSpawnAngle;
             modeProcInit(MODE_WAIT);
             return;
         }
     } else {
-        cLib_addCalc2(&speedF, l_HIO.m6C, 0.1f, 0.1f + g_regHIO.mChild[12].mFloatRegs[0]);
+        cLib_addCalc2(&speedF, l_HIO.mReturnWalkSpeed, 0.1f, 0.1f + g_regHIO.mChild[12].mFloatRegs[0]);
     }
     
     if (dComIfGp_evmng_startCheck("DEFAULT_RD_ATTACK")) {
@@ -1187,9 +1189,9 @@ void daRd_c::modeReturn() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
     BOOL isOto = fopAcM_otoCheck(this, mAreaRadius);
     if (!isLinkControl()) {
-        if (dLib_checkActorInCircle(m300, this, mAreaRadius, 1000.0f)) {
-            if (dLib_checkActorInCircle(m300, player, mAreaRadius, 100.0f)) {
-                if ((dLib_checkActorInCircle(m300, player, mAreaRadius, 100.0f) && player->speedF > 10.0f + g_regHIO.mChild[12].mFloatRegs[4]) ||
+        if (dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, 1000.0f)) {
+            if (dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f)) {
+                if ((dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f) && player->speedF > 10.0f + g_regHIO.mChild[12].mFloatRegs[4]) ||
                     isOto ||
                     dLib_checkActorInFan(current.pos, player, shape_angle.y, l_HIO.m40, l_HIO.m34, 100.0f)
                 ) {
@@ -1211,20 +1213,20 @@ void daRd_c::modeSilentPray() {
         return;
     }
     
-    setAnm(6, false);
+    setAnm(AnmPrm_WALK, false);
     
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
-    fopAc_ac_c* dyingReDead;
-    if (fopAcM_SearchByID(m6D0, &dyingReDead)) {
-        mAttPos = dyingReDead->current.pos;
-        if (dLib_checkActorInCircle(mAttPos, this, 200.0f, 1000.0f)) {
-            setAnm(1, false);
+    fopAc_ac_c* corpse;
+    if (fopAcM_SearchByID(mCorpseID, &corpse)) {
+        mTargetPos = corpse->current.pos;
+        if (dLib_checkActorInCircle(mTargetPos, this, 200.0f, 1000.0f)) {
+            setAnm(AnmPrm_TACHIP1, false);
             speedF = 0.0f;
         } else {
-            cLib_addCalc2(&speedF, l_HIO.m6C, 0.1f, 0.1f + g_regHIO.mChild[12].mFloatRegs[0]);
+            cLib_addCalc2(&speedF, l_HIO.mReturnWalkSpeed, 0.1f, 0.1f + g_regHIO.mChild[12].mFloatRegs[0]);
         }
     } else if (!isLinkControl()) {
-        if (dLib_checkActorInCircle(m300, player, mAreaRadius, 100.0f)) {
+        if (dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f)) {
             modeProcInit(MODE_MOVE);
         } else {
             modeProcInit(MODE_WAIT);
@@ -1245,7 +1247,7 @@ void daRd_c::modeSilentPray() {
 
 /* 00003400-00003428       .text modeSwWaitInit__6daRd_cFv */
 void daRd_c::modeSwWaitInit() {
-    setAnm(0xB, false);
+    setAnm(AnmPrm_KANOKEP, false);
 }
 
 /* 00003428-00003480       .text modeSwWait__6daRd_cFv */
@@ -1257,12 +1259,12 @@ void daRd_c::modeSwWait() {
 
 /* 00003480-00003514       .text modeKanokeInit__6daRd_cFv */
 void daRd_c::modeKanokeInit() {
-    setAnm(0xB, false);
+    setAnm(AnmPrm_KANOKEP, false);
     mTimer1 = 90;
     cXyz offset(0.0f, 0.0f, 150.0f);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
-    mDoMtx_stack_c::multVec(&offset, &m300);
+    mDoMtx_stack_c::multVec(&offset, &mSpawnPos);
 }
 
 /* 00003514-0000355C       .text modeKanoke__6daRd_cFv */
@@ -1428,7 +1430,7 @@ void daRd_c::setBtkAnm(s8 idx) {
 }
 
 /* 00003B3C-00003C48       .text setAnm__6daRd_cFScb */
-void daRd_c::setAnm(s8 param_1, bool param_2) {
+void daRd_c::setAnm(s8 anmIdx, bool param_2) {
     static const int a_anm_bcks_tbl[] = {
         RD_BCK_TACHIP,
         RD_BCK_SUWARIP,
@@ -1446,44 +1448,164 @@ void daRd_c::setAnm(s8 param_1, bool param_2) {
         RD_BCK_BEAM_END,
     };
     static const dLib_anm_prm_c a_anm_prm_tbl[] = {
-        {0x0, -1, 0, 8.0f, 1.0f, 2},
-        {0x0, -1, 0, 8.0f, 1.0f, 2},
-        {0x1, -1, 0, 8.0f, 1.0f, 2},
-        {0x2,  4, 0, 8.0f, 1.0f, 0},
-        {0x3, -1, 0, 8.0f, 1.0f, 2},
-        {0x4,  6, 0, 8.0f, 1.0f, 0},
-        {0x5, -1, 0, 8.0f, 1.0f, 2},
-        {0x6,  1, 0, 2.0f, 1.0f, 0},
-        {0x7, -1, 0, 2.0f, 1.0f, 0},
-        {0x8,  1, 0, 8.0f, 0.5f, 0},
-        {0x9,  2, 0, 8.0f, 0.5f, 0},
-        {0xA, -1, 0, 8.0f, 1.0f, 2},
-        {0xB, -1, 0, 2.0f, 1.0f, 0},
-        {0xC, -1, 0, 2.0f, 1.0f, 2},
-        {0xD, -1, 0, 2.0f, 1.0f, 0},
+        {
+            // AnmPrm_TACHIP0
+            /* mBckIdx     */ BckIdx_TACHIP,
+            /* mNextPrmIdx */ -1,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 8.0f,
+            /* mPlaySpeed  */ 1.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+        },
+        {
+            // AnmPrm_TACHIP1
+            /* mBckIdx     */ BckIdx_TACHIP,
+            /* mNextPrmIdx */ -1,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 8.0f,
+            /* mPlaySpeed  */ 1.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+        },
+        {
+            // AnmPrm_SUWARIP
+            /* mBckIdx     */ BckIdx_SUWARIP,
+            /* mNextPrmIdx */ -1,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 8.0f,
+            /* mPlaySpeed  */ 1.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+        },
+        {
+            // AnmPrm_WALK2ATACK
+            /* mBckIdx     */ BckIdx_WALK2ATACK,
+            /* mNextPrmIdx */ AnmPrm_ATACK,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 8.0f,
+            /* mPlaySpeed  */ 1.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+        },
+        {
+            // AnmPrm_ATACK
+            /* mBckIdx     */ BckIdx_ATACK,
+            /* mNextPrmIdx */ -1,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 8.0f,
+            /* mPlaySpeed  */ 1.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+        },
+        {
+            // AnmPrm_ATACK2WALK
+            /* mBckIdx     */ BckIdx_ATACK2WALK,
+            /* mNextPrmIdx */ AnmPrm_WALK,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 8.0f,
+            /* mPlaySpeed  */ 1.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+        },
+        {
+            // AnmPrm_WALK
+            /* mBckIdx     */ BckIdx_WALK,
+            /* mNextPrmIdx */ -1,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 8.0f,
+            /* mPlaySpeed  */ 1.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+        },
+        {
+            // AnmPrm_DAMAGE
+            /* mBckIdx     */ BckIdx_DAMAGE,
+            /* mNextPrmIdx */ AnmPrm_TACHIP1,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 2.0f,
+            /* mPlaySpeed  */ 1.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+        },
+        {
+            // AnmPrm_DEAD
+            /* mBckIdx     */ BckIdx_DEAD,
+            /* mNextPrmIdx */ -1,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 2.0f,
+            /* mPlaySpeed  */ 1.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+        },
+        {
+            // AnmPrm_TATSU
+            /* mBckIdx     */ BckIdx_TATSU,
+            /* mNextPrmIdx */ AnmPrm_TACHIP1,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 8.0f,
+            /* mPlaySpeed  */ 0.5f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+        },
+        {
+            // AnmPrm_SUWARU
+            /* mBckIdx     */ BckIdx_SUWARU,
+            /* mNextPrmIdx */ AnmPrm_SUWARIP,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 8.0f,
+            /* mPlaySpeed  */ 0.5f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+        },
+        {
+            // AnmPrm_KANOKEP
+            /* mBckIdx     */ BckIdx_KANOKEP,
+            /* mNextPrmIdx */ -1,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 8.0f,
+            /* mPlaySpeed  */ 1.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+        },
+        {
+            // AnmPrm_BEAM_HIT
+            /* mBckIdx     */ BckIdx_BEAM_HIT,
+            /* mNextPrmIdx */ -1,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 2.0f,
+            /* mPlaySpeed  */ 1.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+        },
+        {
+            // AnmPrm_BEAM
+            /* mBckIdx     */ BckIdx_BEAM,
+            /* mNextPrmIdx */ -1,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 2.0f,
+            /* mPlaySpeed  */ 1.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+        },
+        {
+            // AnmPrm_BEAM_END
+            /* mBckIdx     */ BckIdx_BEAM_END,
+            /* mNextPrmIdx */ -1,
+            /* field_0x02  */ 0,
+            /* mMorf       */ 2.0f,
+            /* mPlaySpeed  */ 1.0f,
+            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+        },
     };
     
-    if (param_1 != 0xF) {
-        m6D9 = param_1;
+    if (anmIdx != AnmPrm_NULL) {
+        mAnmPrmIdx = anmIdx;
     }
     
-    if (m6DA != m6D9) {
-        if (m6D9 == 0xC) {
+    if (m6DA != mAnmPrmIdx) {
+        if (isAnm(AnmPrm_BEAM_HIT)) {
             setBrkAnm(0x1);
-        } else if (m6D9 == 0xD) {
+        } else if (isAnm(AnmPrm_BEAM)) {
             setBrkAnm(0x2);
-        } else if (m6D9 == 0xE) {
+        } else if (isAnm(AnmPrm_BEAM_END)) {
             setBrkAnm(0x3);
         } else {
             setBrkAnm(0x0);
         }
     }
     
-    if (m6D8 == 0xB || m6D8 == 0xC || m6D8 == 0xD) {
+    if (mBckIdx == RD_BCK_DAMAGE || mBckIdx == RD_BCK_DEAD || mBckIdx == RD_BCK_IKARI_SAMPLE) {
         mBrkAnm.setFrame(mpMorf->getFrame());
     }
     
-    dLib_bcks_setAnm(m_arc_name, mpMorf, &m6D8, &m6D9, &m6DA, a_anm_bcks_tbl, a_anm_prm_tbl, param_2);
+    dLib_bcks_setAnm(m_arc_name, mpMorf, &mBckIdx, &mAnmPrmIdx, &m6DA, a_anm_bcks_tbl, a_anm_prm_tbl, param_2);
 }
 
 /* 00003C48-000040A8       .text _execute__6daRd_cFv */
@@ -1503,9 +1625,9 @@ bool daRd_c::_execute() {
     if (mMode != MODE_SILENT_PRAY && mMode != MODE_DEATH && mMode != MODE_DAMAGE &&
         mMode != MODE_ATTACK && mMode != MODE_CRY && mMode != MODE_CRY_WAIT)
     {
-        daRd_c* dyingReDead = (daRd_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)&searchNeadDeadRd_CB, this);
-        if (dyingReDead != NULL) {
-            m6D0 = fopAcM_GetID(dyingReDead);
+        daRd_c* corpse = (daRd_c*)fopAcIt_Judge(&searchNeadDeadRd_CB, this);
+        if (corpse != NULL) {
+            mCorpseID = fopAcM_GetID(corpse);
             modeProcInit(MODE_SILENT_PRAY);
         }
     }
@@ -1564,7 +1686,7 @@ bool daRd_c::_execute() {
         cLib_addCalc2(&mD38, 0.0f, 0.1f, l_HIO.m64);
     }
     
-    if (isAnm(6)) {
+    if (isAnm(AnmPrm_WALK)) {
         f32 temp = speedF * l_HIO.m70;
         mpMorf->setPlaySpeed(temp < l_HIO.m74 ? l_HIO.m74 : temp);
         if (mMode == MODE_ATTACK) {
@@ -1583,7 +1705,7 @@ bool daRd_c::_execute() {
     mpMorf->calc();
     enemy_fire(&mEnemyFire);
     modeProc(PROC_EXEC, MODE_NULL);
-    setAnm(0xF, false);
+    setAnm(AnmPrm_NULL, false);
     setBtkAnm(0x5);
     g_env_light.settingTevStruct(0, &current.pos, &mTevStr);
     
@@ -1592,12 +1714,12 @@ bool daRd_c::_execute() {
 
 /* 000040A8-000041A8       .text debugDraw__6daRd_cFv */
 void daRd_c::debugDraw() {
-    cXyz temp = m300;
-    temp.y += 10.0f;
+    cXyz spawnPos = mSpawnPos;
+    spawnPos.y += 10.0f;
     cXyz pos = current.pos;
     pos.y += 10.0f;
     (GXColor){0x00, 0xFF, 0x00, 0x80}; // Unused color, needed for the .rodata section to match.
-    dLib_debugDrawFan(pos, mD18, l_HIO.m42, l_HIO.m38, (GXColor){0xFF, 0xFF, 0x00, 0x80});
+    dLib_debugDrawFan(pos, mHeadAngle, l_HIO.mCrySpreadAngle, l_HIO.mCryRadius, (GXColor){0xFF, 0xFF, 0x00, 0x80});
     dLib_debugDrawFan(pos, shape_angle.y, l_HIO.mAttackSpreadAngle, l_HIO.mAttackRadius, (GXColor){0xFF, 0x00, 0x00, 0x80});
     dLib_debugDrawFan(pos, shape_angle.y, l_HIO.m40, l_HIO.m34, (GXColor){0xFF, 0x00, 0xFF, 0x80});
     dLib_debugDrawAxis(mCE8, 50.0f);
@@ -1659,7 +1781,7 @@ void daRd_c::createInit() {
     modelData->getJointNodePointer(0x08)->setCallBack(nodeControl_CB); // ree_mune_1
     setBtkAnm(2);
     
-    if (m2BC == 0) {
+    if (mChecksSwitch == 0) {
         modeProcInit(MODE_SW_WAIT);
         cXyz offset(0.0f, 40.0f, 10.0f);
         mDoMtx_stack_c::transS(current.pos);
@@ -1667,12 +1789,12 @@ void daRd_c::createInit() {
         mDoMtx_stack_c::multVec(&offset, &current.pos);
     } else {
         modeProcInit(MODE_WAIT);
-        switch (m2B4) {
+        switch (mWhichIdleAnm) {
         case 0:
-            setAnm(1, false);
+            setAnm(AnmPrm_TACHIP1, false);
             break;
         case 1:
-            setAnm(2, false);
+            setAnm(AnmPrm_SUWARIP, false);
             break;
         }
     }
@@ -1712,14 +1834,15 @@ void daRd_c::createInit() {
     
     mMaxHealth = l_HIO.m46;
     mHealth = mMaxHealth;
-    m300 = current.pos;
-    m30C = shape_angle.y;
+    mSpawnPos = current.pos;
+    mSpawnAngle = shape_angle.y;
     mGravity = -4.5f;
     
-    if (m2B4 == 0) {
+    // TODO: figure out if 1 and 2 actually drop different items
+    if (mWhichIdleAnm == 0) {
         mItemTableIdx = dComIfGp_CharTbl()->GetNameIndex("Rdead1", 0);
     }
-    if (m2B4 == 1) {
+    if (mWhichIdleAnm == 1) {
         mItemTableIdx = dComIfGp_CharTbl()->GetNameIndex("Rdead2", 0);
     }
 }
@@ -1727,12 +1850,12 @@ void daRd_c::createInit() {
 /* 000046A4-00004720       .text getArg__6daRd_cFv */
 void daRd_c::getArg() {
     u32 params = fopAcM_GetParam(this);
-    m2B4 = fopAcM_GetParamBit(params, 0x00, 1);
-    u8 param = fopAcM_GetParamBit(params, 0x01, 7);
-    s32 areaRadius = param;
-    m2BC = fopAcM_GetParamBit(params, 0x08, 8);
+    mWhichIdleAnm = fopAcM_GetParamBit(params, 0x00, 1);
+    u8 radiusParam = fopAcM_GetParamBit(params, 0x01, 7);
+    s32 areaRadius = radiusParam;
+    mChecksSwitch = fopAcM_GetParamBit(params, 0x08, 8);
     mSwNo = fopAcM_GetParamBit(params, 0x18, 8);
-    if ((s32)param == 0x7F) {
+    if ((s32)radiusParam == 0x7F) {
         areaRadius = 0;
     }
     mAreaRadius = l_HIO.m30 + areaRadius;

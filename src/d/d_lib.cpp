@@ -5,8 +5,12 @@
 
 #include "d/d_lib.h"
 #include "d/d_com_inf_game.h"
+#include "d/actor/d_a_sea.h"
 #include "m_Do/m_Do_mtx.h"
 #include "SSystem/SComponent/c_math.h"
+#include "m_Do/m_Do_controller_pad.h"
+
+Quaternion ZeroQuat = {0.0f, 0.0f, 0.0f, 1.0f};
 
 /* 80057000-800570CC       .text dLib_setCirclePath__FP18dLib_circle_path_c */
 void dLib_setCirclePath(dLib_circle_path_c* path) {
@@ -22,8 +26,16 @@ void dLib_setCirclePath(dLib_circle_path_c* path) {
 }
 
 /* 800570CC-8005716C       .text dLib_getWaterY__FR4cXyzR12dBgS_ObjAcch */
-void dLib_getWaterY(cXyz&, dBgS_ObjAcch&) {
-    /* Nonmatching */
+f32 dLib_getWaterY(cXyz& pos, dBgS_ObjAcch& acch) {
+    BOOL waterHit = acch.ChkWaterHit();
+    f32 waterHeight = waterHit ? acch.m_wtr.GetHeight() : -1e+09f;
+    if (daSea_ChkArea(pos.x, pos.z)) {
+        f32 seaHeight = daSea_calcWave(pos.x, pos.z);
+        if (!waterHit || seaHeight > waterHeight) {
+            return seaHeight;
+        }
+    }
+    return waterHit ? waterHeight : 0.0f;
 }
 
 /* 8005716C-80057368       .text dLib_waveRot__FP3VecfP11dLib_wave_c */
@@ -32,19 +44,52 @@ void dLib_waveRot(Vec*, f32, dLib_wave_c*) {
 }
 
 /* 80057368-8005746C       .text dLib_debugDrawAxis__FRA3_A4_ff */
-void dLib_debugDrawAxis(Mtx&, f32) {
-    /* Nonmatching */
+void dLib_debugDrawAxis(Mtx& mtx, f32 length) {
+    cXyz r1_98(length, 0.0f, 0.0f);
+    cXyz r1_8c(0.0f, length, 0.0f);
+    cXyz r1_80(0.0f, 0.0f, length);
+    cXyz r1_74(0.0f, 0.0f, 0.0f);
+    cXyz r1_68(0.0f, 0.0f, 0.0f);
+    cXyz r1_5c(0.0f, 0.0f, 0.0f);
+    cXyz r1_50;
+    cXyz r1_4c;
+    cXyz r1_40;
+    cXyz r1_34;
+    cXyz r1_28;
+    cXyz r1_1c;
+    cXyz r1_14;
+    cXyz r1_08;
+    mDoMtx_stack_c::copy(mtx);
+    mDoMtx_stack_c::multVecZero(&r1_08);
+    mDoMtx_stack_c::multVec(&r1_98, &r1_50);
+    mDoMtx_stack_c::multVec(&r1_8c, &r1_40);
+    mDoMtx_stack_c::multVec(&r1_80, &r1_34);
+    mDoMtx_stack_c::multVec(&r1_74, &r1_28);
+    mDoMtx_stack_c::multVec(&r1_68, &r1_1c);
+    mDoMtx_stack_c::multVec(&r1_5c, &r1_14);
+    
+    // The rest of this function may have been commented out for release builds.
 }
 
 /* 8005746C-80057510       .text dLib_debugDrawFan__FR4cXyzssfRC8_GXColor */
-void dLib_debugDrawFan(cXyz&, s16, s16, f32, const GXColor&) {
-    /* Nonmatching */
+void dLib_debugDrawFan(cXyz& center, s16 angleY, s16 fanSpreadAngle, f32 radius, const GXColor& color) {
+    int angle1 = angleY + fanSpreadAngle;
+    cXyz corner1(center);
+    corner1.z += cM_scos(angle1) * radius;
+    corner1.x += cM_ssin(angle1) * radius;
+    
+    int angle2 = angleY - fanSpreadAngle;
+    cXyz corner2(center);
+    corner2.z += cM_scos(angle2) * radius;
+    corner2.x += cM_ssin(angle2) * radius;
+    
+    // The rest of this function may have been commented out for release builds.
 }
 
 /* 80057510-800575E0       .text dLib_brkInit__FP12J3DModelDataP13mDoExt_brkAnmPCci */
 bool dLib_brkInit(J3DModelData* modelData, mDoExt_brkAnm* anm, const char* arcName, int fileno) {
     J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(arcName, fileno);
-    JUT_ASSERT(0xae, brk != NULL);
+    JUT_ASSERT(0xae, brk != 0);
     if (anm->init(modelData, brk, 1, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0) == 0)
         return false;
     return true;
@@ -53,20 +98,36 @@ bool dLib_brkInit(J3DModelData* modelData, mDoExt_brkAnm* anm, const char* arcNa
 /* 800575E0-800576B0       .text dLib_btkInit__FP12J3DModelDataP13mDoExt_btkAnmPCci */
 bool dLib_btkInit(J3DModelData* modelData, mDoExt_btkAnm* anm, const char* arcName, int fileno) {
     J3DAnmTextureSRTKey* btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(arcName, fileno);
-    JUT_ASSERT(0xbb, btk != NULL);
+    JUT_ASSERT(0xbb, btk != 0);
     if (anm->init(modelData, btk, 1, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0) == 0)
         return false;
     return true;
 }
 
 /* 800576B0-80057844       .text dLib_setAnm__FPCcP14mDoExt_McaMorfPScPScPScPC14dLib_anm_idx_cPC14dLib_anm_prm_cb */
-void dLib_setAnm(const char*, mDoExt_McaMorf*, s8*, s8*, s8*, const dLib_anm_idx_c*, const dLib_anm_prm_c*, bool) {
+void dLib_setAnm(const char* arcName, mDoExt_McaMorf* morf, s8*, s8*,
+                 s8*, const dLib_anm_idx_c*, const dLib_anm_prm_c* anmPrmTbl, bool param_8)
+{
     /* Nonmatching */
 }
 
 /* 80057844-80057988       .text dLib_bcks_setAnm__FPCcP14mDoExt_McaMorfPScPScPScPCiPC14dLib_anm_prm_cb */
-void dLib_bcks_setAnm(const char*, mDoExt_McaMorf*, s8*, s8*, s8*, const int*, const dLib_anm_prm_c*, bool) {
-    /* Nonmatching */
+void dLib_bcks_setAnm(const char* arcName, mDoExt_McaMorf* morf, s8* pBckIdx, s8* pPrmIdx,
+                      s8* param_5, const int* bcksTbl, const dLib_anm_prm_c* anmPrmTbl, bool param_8)
+{
+    if ((*param_5 != *pPrmIdx && anmPrmTbl[*pPrmIdx].mBckIdx != -1) || param_8 == true) {
+        *pBckIdx = anmPrmTbl[*pPrmIdx].mBckIdx;
+        J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes(arcName, bcksTbl[*pBckIdx]);
+        morf->setAnm(bck, anmPrmTbl[*pPrmIdx].mLoopMode, anmPrmTbl[*pPrmIdx].mMorf, anmPrmTbl[*pPrmIdx].mPlaySpeed, 0.0f, -1.0f, NULL);
+    }
+    
+    *param_5 = *pPrmIdx;
+    
+    if (morf->isStop()) {
+        if (anmPrmTbl[*pPrmIdx].mNextPrmIdx != -1 && anmPrmTbl[*pPrmIdx].mLoopMode == J3DFrameCtrl::LOOP_ONCE_e) {
+            *pPrmIdx = anmPrmTbl[*pPrmIdx].mNextPrmIdx;
+        }
+    }
 }
 
 /* 80057988-80057A14       .text dLib_scaleAnime__FPfPfiPifff */
@@ -197,7 +258,15 @@ void STControl::setWaitParm(s16, s16, s16, s16, f32, f32, s16, s16) {
 
 /* 80058274-800582B0       .text init__9STControlFv */
 void STControl::init() {
-    /* Nonmatching */
+    field_0x0e = 0;
+    field_0x10 = 0;
+    field_0x0d = 0;
+    field_0x0c = 0;
+    field_0x22 = 0;
+    field_0x18 = field_0x12;
+    field_0x1a = field_0x12;
+    field_0x1e = field_0x1c;
+    field_0x20 = field_0x1c;
 }
 
 /* 800582B0-800582D8       .text Xinit__9STControlFv */
@@ -211,23 +280,23 @@ void STControl::Yinit() {
 }
 
 /* 80058300-80058310       .text getValueStick__9STControlFv */
-void STControl::getValueStick() {
-    /* Nonmatching */
+f32 STControl::getValueStick() {
+    return g_mDoCPd_cpadInfo[0].mMainStickValue;
 }
 
 /* 80058310-80058320       .text getAngleStick__9STControlFv */
-void STControl::getAngleStick() {
-    /* Nonmatching */
+s16 STControl::getAngleStick() {
+    return g_mDoCPd_cpadInfo[0].mMainStickAngle;
 }
 
 /* 80058320-80058330       .text getValueStick__10CSTControlFv */
-void CSTControl::getValueStick() {
-    /* Nonmatching */
+f32 CSTControl::getValueStick() {
+    return g_mDoCPd_cpadInfo[0].mCStickValue;
 }
 
 /* 80058330-80058340       .text getAngleStick__10CSTControlFv */
-void CSTControl::getAngleStick() {
-    /* Nonmatching */
+s16 CSTControl::getAngleStick() {
+    return g_mDoCPd_cpadInfo[0].mCStickAngle;
 }
 
 /* 80058340-800585D0       .text checkTrigger__9STControlFv */
