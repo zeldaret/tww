@@ -55,29 +55,27 @@ BOOL dEvDt_Next_Stage(int staffIdx, int wipePrm) {
         JUT_ASSERT(0x88, 0);
     }
 
-    return true;
+    return TRUE;
 }
 
 /* 8007195C-800719C4       .text flagCheck__11dEvDtFlag_cFi */
 BOOL dEvDtFlag_c::flagCheck(int flag_id) {
-    /* Nonmatching */
     if (flagMaxCheck(flag_id))
         return FALSE;
 
-    u32 byteNo = (flag_id >> 3);
+    u32 byteNo = ((u32)flag_id / 0x20);
     u32 bitNo = 1 << (flag_id & 0x1F);
     if (mFlag[byteNo] & bitNo)
-        return true;
+        return TRUE;
     return FALSE;
 }
 
 /* 800719C4-80071A2C       .text flagSet__11dEvDtFlag_cFi */
 BOOL dEvDtFlag_c::flagSet(int flag_id) {
-    /* Nonmatching */
     if (flagMaxCheck(flag_id))
         return FALSE;
 
-    u32 byteNo = (flag_id >> 3);
+    u32 byteNo = ((u32)flag_id / 0x20);
     u32 bitNo = 1 << (flag_id & 0x1F);
     mFlag[byteNo] |= bitNo;
     return TRUE;
@@ -106,7 +104,7 @@ inline BOOL dEvDtFlagCheck(int flag_id) {
 }
 
 inline BOOL dEvDtFlagSet(int flag_id) {
-    dComIfGp_getPEvtManager()->getFlags().flagSet(flag_id);
+    return dComIfGp_getPEvtManager()->getFlags().flagSet(flag_id);
 }
 
 /* 80071AC8-80071B4C       .text finish_check__12dEvDtEvent_cFv */
@@ -240,9 +238,10 @@ void dEvDtStaff_c::specialProcLight() {
             {
                 f32 * pHour = dComIfGp_evmng_getMyFloatP(staffIdx, "Hour");
                 if (pHour != NULL) {
-                    f32 hour = *pHour + dComIfGs_getTime() * (1.0f / 15.0f);
-                    while (hour >= 24.0f)
-                        hour -= 24.0f;
+                    f32 hour = dComIfGs_getTime() * (1.0f / 15.0f);
+                    hour += *pHour;
+                    while (hour >= 24.0)
+                        hour -= 24.0;
                     dKy_instant_timechg(hour * 15.0f);
                 }
             }
@@ -496,7 +495,7 @@ void dEvDtStaff_c::specialProcCreate() {
                     arg = *pArg;
                 }
 
-                Vec* pPos = dComIfGp_evmng_getMyXyzP(staffIdx, "POS");
+                cXyz* pPos = dComIfGp_evmng_getMyXyzP(staffIdx, "POS");
                 cXyz pos;
                 if (pPos == NULL) {
                     pos = dComIfGp_getPlayer(0)->getPosition();
@@ -517,7 +516,7 @@ void dEvDtStaff_c::specialProcCreate() {
                     angle.z = z;
                 }
 
-                Vec* pScale = dComIfGp_evmng_getMyXyzP(staffIdx, "SCALE");
+                cXyz* pScale = dComIfGp_evmng_getMyXyzP(staffIdx, "SCALE");
                 cXyz scale;
                 if (pScale == NULL) {
                     scale.setall(1.0f);
@@ -637,7 +636,7 @@ void dEvDtStaff_c::specialProcDirector() {
             case 6: // WIPE
                 {
                     f32* rate = dComIfGp_evmng_getMyFloatP(staffIdx, "Rate");
-                    JUT_ASSERT(0x343, rate);
+                    JUT_ASSERT(0x384, rate);
                     dDlst_list_c::wipeIn(-*rate);
                     if (*rate > 0.0f)
                         mWipeDirection = 0;
@@ -712,7 +711,7 @@ void dEvDtStaff_c::specialProcDirector() {
 void dEvDtStaff_c::specialProcPackage() {
     int staffIdx = dComIfGp_evmng_getMyStaffId("PACKAGE", NULL, 0);
     if (staffIdx == -1) {
-        JUT_ASSERT(0x254, 0);
+        JUT_ASSERT(0x3f2, 0);
         return;
     }
 
@@ -732,7 +731,7 @@ void dEvDtStaff_c::specialProcPackage() {
         case 2: // PLAY2
             {
                 const char* filename = dComIfGp_evmng_getMyStringP(staffIdx, "FileName");
-                Vec* pOffsetPos = dComIfGp_evmng_getMyXyzP(staffIdx, "OffsetPos");
+                cXyz* pOffsetPos = dComIfGp_evmng_getMyXyzP(staffIdx, "OffsetPos");
                 f32* pOffsetAngY = dComIfGp_evmng_getMyFloatP(staffIdx, "OffsetAngY");
 
                 f32 offsetAngY;
@@ -748,7 +747,7 @@ void dEvDtStaff_c::specialProcPackage() {
                 if (demo_data == NULL)
                     demo_data = dComIfG_getStageRes("Stage", filename);
                 JUT_ASSERT(0x42e, demo_data);
-                dComIfGp_demo_create((const u8*)demo_data, (cXyz*)pOffsetPos, offsetAngY);
+                dComIfGp_demo_create((const u8*)demo_data, pOffsetPos, offsetAngY);
                 dComIfGp_event_setCullRate(10.0f);
                 u32* eventFlag = dComIfGp_evmng_getMyIntegerP(staffIdx, "EventFlag");
                 if (eventFlag != NULL)
@@ -827,7 +826,7 @@ void dEvDtStaff_c::specialProcTimekeeper() {
         dComIfGp_evmng_cutEnd(staffIdx);
         break;
     case -1:
-        JUT_ASSERT(0x45c, 0);
+        JUT_ASSERT(0x49f, 0);
         dComIfGp_evmng_cutEnd(staffIdx);
         break;
     }
@@ -866,18 +865,21 @@ void dEvDtBase_c::advanceCut(dEvDtEvent_c* evt) {
 
 /* 800736E4-800737DC       .text advanceCutLocal__11dEvDtBase_cFP12dEvDtStaff_c */
 bool dEvDtBase_c::advanceCutLocal(dEvDtStaff_c* staff) {
-    u32 currentCut = staff->getCurrentCut();
-    dEvDtCut_c * cutP = mCutP;
+    dEvDtCut_c * cutP = &mCutP[staff->getCurrentCut()];
 
-    if (cutP[currentCut].getNext() != -1) {
-        switch (cutP[cutP[currentCut].getNext()].startCheck()) {
+    if (cutP->getNext() != -1) {
+        switch (mCutP[cutP->getNext()].startCheck()) {
         case -1:
-            if (dEvDtFlagCheck(cutP[currentCut].getFlagId()))
-                staff->advanceCut(cutP[currentCut].getNext());
-            return true;
+            u32 flag_id = cutP->getFlagId();
+            if (dEvDtFlagCheck(flag_id)) {
+                staff->advanceCut(cutP->getNext());
+                return true;
+            }
+            break;
         case 1:
-            dEvDtFlagSet(cutP[currentCut].getFlagId());
-            staff->advanceCut(cutP[currentCut].getNext());
+            flag_id = cutP->getFlagId();
+            dEvDtFlagSet(flag_id);
+            staff->advanceCut(cutP->getNext());
             return true;
         }
     }
