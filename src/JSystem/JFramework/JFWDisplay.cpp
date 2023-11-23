@@ -484,7 +484,7 @@ void JFWGXDrawDoneAutoAbort() {
     if(JFWAutoAbortGfx != 0) {
         OSAlarm alarm;
         OSCreateAlarm(&alarm);
-        OSSetAlarm(&alarm, __OSBusClock >> 2, JFWGXAbortAlarmHandler);
+        OSSetAlarm(&alarm, OS_TIMER_CLOCK, JFWGXAbortAlarmHandler);
         GXDrawDone();
         OSCancelAlarm(&alarm);
     }
