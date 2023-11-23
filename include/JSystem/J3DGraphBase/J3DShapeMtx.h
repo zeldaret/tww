@@ -33,7 +33,6 @@ public:
 
     J3DShapeMtx(u16 useMtxIndex) : mUseMtxIndex(useMtxIndex) {}
 
-    void resetMtxLoadCache();
     void loadMtxIndx_PNGP(int, u16) const;
     void loadMtxIndx_PCPU(int, u16) const;
     void loadMtxIndx_NCPU(int, u16) const;
@@ -52,7 +51,6 @@ public:
     static u8 sNBTFlag;
 
     static void setCurrentPipeline(u32 pipeline) { sCurrentPipeline = pipeline; }
-    static void resetMtxLoadCache();
 
 protected:
     /* 0x04 */ u16 mUseMtxIndex;

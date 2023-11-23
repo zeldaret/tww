@@ -35,8 +35,6 @@ public:
     virtual void SetAtTgGObjInf(bool, bool, cCcD_Obj*, cCcD_Obj*, cCcD_GObjInf*,
                                                cCcD_GObjInf*, cCcD_Stts*, cCcD_Stts*, cCcD_GStts*,
                                                cCcD_GStts*, cXyz*);
-    virtual bool ChkNoHitGAtTg(cCcD_GObjInf const*, cCcD_GObjInf const*, cCcD_GStts*,
-                                              cCcD_GStts*);
     virtual bool ChkAtTgHitAfterCross(bool, bool, cCcD_GObjInf const*,
                                                      cCcD_GObjInf const*, cCcD_Stts*, cCcD_Stts*,
                                                      cCcD_GStts*, cCcD_GStts*);

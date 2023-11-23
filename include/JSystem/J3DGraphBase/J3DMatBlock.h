@@ -70,9 +70,6 @@ public:
 
     virtual void reset(J3DTexGenBlock*);
     virtual void calc(f32 const (*)[4]);
-    virtual void calcWithoutViewMtx(f32 const (*)[4]);
-    virtual void calcPostTexMtx(f32 const (*)[4]);
-    virtual void calcPostTexMtxWithoutViewMtx(f32 const (*)[4]);
     virtual void load() {}
     virtual void patch();
     virtual void diff(u32);

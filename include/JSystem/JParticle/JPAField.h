@@ -131,7 +131,6 @@ class JPADragField : public JPABaseField {
 public:
     virtual ~JPADragField() {}
     virtual void init(JPAFieldData*, JPABaseParticle*);
-    virtual void preCalc(JPAFieldData*);
     virtual void calc(JPAFieldData*, JPABaseParticle*);
 };
 
