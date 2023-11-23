@@ -204,8 +204,8 @@ BOOL daIball_c::dead() {
 /* 800F3A48-800F3E78       .text checkGeo__9daIball_cFv */
 void daIball_c::checkGeo() {
     static ModeFunc mode_proc[] = {
-        &mode_wait,
-        &mode_water,
+        &daIball_c::mode_wait,
+        &daIball_c::mode_water,
     };
     
     mPrevSpeedY = speed.y;

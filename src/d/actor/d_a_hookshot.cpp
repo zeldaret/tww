@@ -204,7 +204,7 @@ void daHookshot_rockLineCallback(fopAc_ac_c* hookshot_actor, dCcD_GObjInf* objIn
 BOOL daHookshot_c::procWait_init(int param_1) {
     daPy_lk_c* link = daPy_getPlayerLinkActorClass();
     fopAcM_SetParam(this, 0);
-    mCurrProcFunc = &procWait;
+    mCurrProcFunc = &daHookshot_c::procWait;
     mChainCnt = 0;
     current.pos = link->getHookshotRootPos();
     m518 = -1;

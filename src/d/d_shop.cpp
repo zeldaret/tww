@@ -897,7 +897,7 @@ ShopItems_c__shop_cam_data* shop_cam_data_tbl[] = {
 /* 8005EFDC-8005F088       .text shop_cam_action_init__16ShopCam_action_cFv */
 BOOL ShopCam_action_c::shop_cam_action_init() {
     daPy_getPlayerActorClass()->onPlayerNoDraw();
-    setCamAction(&shop_cam_action);
+    setCamAction(&ShopCam_action_c::shop_cam_action);
     
     m18 = shop_cam_data_tbl[mCamDataIdx][0].m00;
     m24 = shop_cam_data_tbl[mCamDataIdx][0].m0C;
@@ -933,12 +933,12 @@ int ShopCam_action_c::shop_cam_action() {
 
 /* 8005F220-8005F370       .text rsh_talk_cam_action_init__16ShopCam_action_cFP10fopAc_ac_c4cXyz4cXyzf */
 BOOL ShopCam_action_c::rsh_talk_cam_action_init(fopAc_ac_c* param_1, cXyz param_2, cXyz param_3, f32 param_4) {
-    if (checkCamAction(&rsh_talk_cam_action)) {
+    if (checkCamAction(&ShopCam_action_c::rsh_talk_cam_action)) {
         return TRUE;
     }
     
     daPy_getPlayerActorClass()->onPlayerNoDraw();
-    setCamAction(&rsh_talk_cam_action);
+    setCamAction(&ShopCam_action_c::rsh_talk_cam_action);
     
     mDoMtx_stack_c::transS(param_1->mAttentionInfo.mPosition);
     mDoMtx_stack_c::YrotM(param_1->current.angle.y);
@@ -966,7 +966,7 @@ int ShopCam_action_c::rsh_talk_cam_action() {
 /* 8005F41C-8005F494       .text ds_normal_cam_action_init__16ShopCam_action_cFv */
 BOOL ShopCam_action_c::ds_normal_cam_action_init() {
     daPy_getPlayerActorClass()->onPlayerNoDraw();
-    setCamAction(&ds_normal_cam_action);
+    setCamAction(&ShopCam_action_c::ds_normal_cam_action);
     
     m18.set(-136.0f, 102.0f, -254.0f);
     m24.set(-136.0f, 102.0f, 90.0f);

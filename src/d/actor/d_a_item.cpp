@@ -307,9 +307,9 @@ BOOL daItem_c::_daItem_execute() {
 /* 800F5834-800F59CC       .text mode_proc_call__8daItem_cFv */
 void daItem_c::mode_proc_call() {
     static ModeFunc mode_proc[] = {
-        &mode_wait,
-        &mode_wait,
-        &mode_water,
+        &daItem_c::mode_wait,
+        &daItem_c::mode_wait,
+        &daItem_c::mode_water,
     };
     
     if (mType == 1) {
