@@ -5,12 +5,12 @@
 
 class daObjHat_c : public fopAc_ac_c {
 public:
-    void _create();
+    s32 _create();
     void createHeap();
     void createInit();
-    void _delete();
-    void _draw();
-    void _execute();
+    BOOL _delete();
+    BOOL _draw();
+    BOOL _execute();
     void executeNormal();
     void getPrmHatNo();
     void setMtx();

@@ -12,15 +12,15 @@ public:
     void solidHeapCB(fopAc_ac_c*);
     void create_bdl_brk(int);
     void create_heap();
-    void _create();
-    void _delete();
+    s32 _create();
+    BOOL _delete();
     void get_start_demo_idx();
     void check_fin();
     void on_fin();
     void init_mtx();
     void set_timer();
-    void _execute();
-    void _draw();
+    BOOL _execute();
+    BOOL _draw();
 
 public:
     /* Place member variables here */

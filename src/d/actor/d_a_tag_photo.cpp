@@ -27,7 +27,7 @@ void phase_2(daTagPhoto_c*) {
 }
 
 /* 00000198-000001C8       .text _create__12daTagPhoto_cFv */
-void daTagPhoto_c::_create() {
+s32 daTagPhoto_c::_create() {
     /* Nonmatching */
 }
 
@@ -42,12 +42,12 @@ void daTagPhoto_c::createInit() {
 }
 
 /* 00000298-000002A0       .text _delete__12daTagPhoto_cFv */
-void daTagPhoto_c::_delete() {
+BOOL daTagPhoto_c::_delete() {
     /* Nonmatching */
 }
 
 /* 000002A0-000002A8       .text _draw__12daTagPhoto_cFv */
-void daTagPhoto_c::_draw() {
+BOOL daTagPhoto_c::_draw() {
     /* Nonmatching */
 }
 
@@ -57,7 +57,7 @@ void daTagPhoto_c::setMode(unsigned char) {
 }
 
 /* 000002CC-00000368       .text _execute__12daTagPhoto_cFv */
-void daTagPhoto_c::_execute() {
+BOOL daTagPhoto_c::_execute() {
     /* Nonmatching */
 }
 

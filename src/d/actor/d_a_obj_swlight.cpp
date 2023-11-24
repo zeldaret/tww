@@ -22,7 +22,7 @@ void daObjSwlight::Act_c::create_heap() {
 }
 
 /* 0000045C-00000704       .text _create__Q212daObjSwlight5Act_cFv */
-void daObjSwlight::Act_c::_create() {
+s32 daObjSwlight::Act_c::_create() {
     /* Nonmatching */
 }
 
@@ -37,7 +37,7 @@ cM3dGPla::~cM3dGPla() {
 }
 
 /* 00000C38-00000CB8       .text _delete__Q212daObjSwlight5Act_cFv */
-void daObjSwlight::Act_c::_delete() {
+BOOL daObjSwlight::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -132,7 +132,7 @@ void daObjSwlight::Act_c::mode_active_sun() {
 }
 
 /* 0000162C-00001714       .text _execute__Q212daObjSwlight5Act_cFv */
-void daObjSwlight::Act_c::_execute() {
+BOOL daObjSwlight::Act_c::_execute() {
     /* Nonmatching */
 }
 
@@ -147,7 +147,7 @@ void daObjSwlight::setMaterial_Before_mirror(J3DMaterial*, unsigned char) {
 }
 
 /* 00001970-00001AC4       .text _draw__Q212daObjSwlight5Act_cFv */
-void daObjSwlight::Act_c::_draw() {
+BOOL daObjSwlight::Act_c::_draw() {
     /* Nonmatching */
 }
 

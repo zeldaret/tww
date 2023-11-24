@@ -22,7 +22,7 @@ void daObjBuoyflag::Packet_c::draw_hasi(daObjBuoyflag::Act_c*) {
 }
 
 /* 00000C4C-00000CB8       .text draw__Q213daObjBuoyflag8Packet_cFv */
-void daObjBuoyflag::Packet_c::draw() {
+BOOL daObjBuoyflag::Packet_c::draw() {
     /* Nonmatching */
 }
 
@@ -88,7 +88,7 @@ void daObjBuoyflag::Act_c::mode_jumpToSea() {
 
 
 /* 000027AC-000029FC       .text _create__Q213daObjBuoyflag5Act_cFv */
-void daObjBuoyflag::Act_c::_create() {
+s32 daObjBuoyflag::Act_c::_create() {
     /* Nonmatching */
 }
 

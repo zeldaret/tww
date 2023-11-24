@@ -42,7 +42,7 @@ void daObjLpalmExecute(void*) {
 }
 
 /* 0000054C-000008C4       .text _execute__12daObjLpalm_cFv */
-void daObjLpalm_c::_execute() {
+BOOL daObjLpalm_c::_execute() {
     /* Nonmatching */
 }
 

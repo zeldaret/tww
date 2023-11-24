@@ -22,7 +22,7 @@ void daObjMkie::Act_c::set_cc_pos() {
 }
 
 /* 00000420-00000568       .text Create__Q29daObjMkie5Act_cFv */
-void daObjMkie::Act_c::Create() {
+s32 daObjMkie::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -42,7 +42,7 @@ cM3dGPla::~cM3dGPla() {
 }
 
 /* 00000BF0-00000BF8       .text Delete__Q29daObjMkie5Act_cFv */
-void daObjMkie::Act_c::Delete() {
+BOOL daObjMkie::Act_c::Delete() {
     /* Nonmatching */
 }
 
@@ -122,7 +122,7 @@ void daObjMkie::Act_c::Execute(float(**)[3][4]) {
 }
 
 /* 000014A0-000015B8       .text Draw__Q29daObjMkie5Act_cFv */
-void daObjMkie::Act_c::Draw() {
+BOOL daObjMkie::Act_c::Draw() {
     /* Nonmatching */
 }
 

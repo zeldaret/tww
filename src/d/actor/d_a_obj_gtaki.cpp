@@ -37,7 +37,7 @@ void daObjGtaki_Create(void*) {
 }
 
 /* 000006A4-0000087C       .text _create__12daObjGtaki_cFv */
-void daObjGtaki_c::_create() {
+s32 daObjGtaki_c::_create() {
     /* Nonmatching */
 }
 

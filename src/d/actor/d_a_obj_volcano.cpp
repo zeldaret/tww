@@ -22,7 +22,7 @@ void daObjVolcano::Act_c::CreateHeap() {
 }
 
 /* 00000758-000009C8       .text Create__Q212daObjVolcano5Act_cFv */
-void daObjVolcano::Act_c::Create() {
+s32 daObjVolcano::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -32,7 +32,7 @@ void daObjVolcano::Act_c::Mthd_Create() {
 }
 
 /* 00000E58-00000E60       .text Delete__Q212daObjVolcano5Act_cFv */
-void daObjVolcano::Act_c::Delete() {
+BOOL daObjVolcano::Act_c::Delete() {
     /* Nonmatching */
 }
 
@@ -102,7 +102,7 @@ void daObjVolcano::Act_c::set_material(J3DMaterial*, unsigned char) {
 }
 
 /* 00001A2C-00001B8C       .text Draw__Q212daObjVolcano5Act_cFv */
-void daObjVolcano::Act_c::Draw() {
+BOOL daObjVolcano::Act_c::Draw() {
     /* Nonmatching */
 }
 

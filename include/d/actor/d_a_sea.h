@@ -60,7 +60,7 @@ public:
     void SetCullStopFlag();
     void CheckRoomChange();
     void execute(cXyz&);
-    void draw();
+    BOOL draw();
     ~daSea_packet_c() {}
 
 public:

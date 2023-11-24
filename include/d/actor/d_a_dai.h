@@ -12,18 +12,18 @@ public:
     void incNowItemNum() {}
     void init() {}
 
-    void _delete();
+    BOOL _delete();
     void CreateHeap();
     void CreateInit();
-    void _create();
+    s32 _create();
     void set_mtx();
     void eventOrder();
     void checkOrder();
     void XyCheckCB(int);
     void XyEventCB(int);
-    void _execute();
+    BOOL _execute();
     void proc();
-    void _draw();
+    BOOL _draw();
     void getMsg();
     void next_msgStatus(unsigned long*);
 

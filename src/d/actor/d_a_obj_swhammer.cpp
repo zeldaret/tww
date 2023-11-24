@@ -17,22 +17,22 @@ void daObjSwhammer::Act_c::CreateHeap() {
 }
 
 /* 0000058C-0000070C       .text Create__Q213daObjSwhammer5Act_cFv */
-void daObjSwhammer::Act_c::Create() {
+s32 daObjSwhammer::Act_c::Create() {
     /* Nonmatching */
 }
 
 /* 0000070C-000007F8       .text _create__Q213daObjSwhammer5Act_cFv */
-void daObjSwhammer::Act_c::_create() {
+s32 daObjSwhammer::Act_c::_create() {
     /* Nonmatching */
 }
 
 /* 000007F8-00000828       .text Delete__Q213daObjSwhammer5Act_cFv */
-void daObjSwhammer::Act_c::Delete() {
+BOOL daObjSwhammer::Act_c::Delete() {
     /* Nonmatching */
 }
 
 /* 00000828-0000087C       .text _delete__Q213daObjSwhammer5Act_cFv */
-void daObjSwhammer::Act_c::_delete() {
+BOOL daObjSwhammer::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -132,7 +132,7 @@ void daObjSwhammer::Act_c::Execute(float(**)[3][4]) {
 }
 
 /* 00001504-00001564       .text Draw__Q213daObjSwhammer5Act_cFv */
-void daObjSwhammer::Act_c::Draw() {
+BOOL daObjSwhammer::Act_c::Draw() {
     /* Nonmatching */
 }
 

@@ -5,13 +5,13 @@
 
 class daDitem_c : public fopAc_ac_c {
 public:
-    void Delete() {}
+    inline BOOL Delete();
     void chkArgFlag(unsigned char) {}
     void clrFlag() {}
-    void create() {}
-    void draw() {}
-    void execute() {}
-    void isdelete() {}
+    inline s32 create();
+    inline BOOL draw();
+    inline BOOL execute();
+    inline BOOL isdelete();
     void setOffsetPos(cXyz) {}
 
     void setParticle();

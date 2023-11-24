@@ -122,7 +122,7 @@ void daObj_Canon_c::modeProc(daObj_Canon_c::Proc_e, int) {
 }
 
 /* 00001410-000015AC       .text _execute__13daObj_Canon_cFv */
-void daObj_Canon_c::_execute() {
+BOOL daObj_Canon_c::_execute() {
     /* Nonmatching */
 }
 
@@ -132,7 +132,7 @@ void daObj_Canon_c::debugDraw() {
 }
 
 /* 000015B0-00001688       .text _draw__13daObj_Canon_cFv */
-void daObj_Canon_c::_draw() {
+BOOL daObj_Canon_c::_draw() {
     /* Nonmatching */
 }
 
@@ -147,12 +147,12 @@ void daObj_Canon_c::getArg() {
 }
 
 /* 00001880-000019D8       .text _create__13daObj_Canon_cFv */
-void daObj_Canon_c::_create() {
+s32 daObj_Canon_c::_create() {
     /* Nonmatching */
 }
 
 /* 00001BEC-00001C50       .text _delete__13daObj_Canon_cFv */
-void daObj_Canon_c::_delete() {
+BOOL daObj_Canon_c::_delete() {
     /* Nonmatching */
 }
 

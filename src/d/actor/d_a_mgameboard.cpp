@@ -37,7 +37,7 @@ void daMgBoard_c::set_mtx() {
 }
 
 /* 00000E28-00000FD8       .text _execute__11daMgBoard_cFv */
-void daMgBoard_c::_execute() {
+BOOL daMgBoard_c::_execute() {
     /* Nonmatching */
 }
 
@@ -77,7 +77,7 @@ void daMgBoard_Draw(void*) {
 }
 
 /* 0000153C-00001850       .text _draw__11daMgBoard_cFv */
-void daMgBoard_c::_draw() {
+BOOL daMgBoard_c::_draw() {
     /* Nonmatching */
 }
 

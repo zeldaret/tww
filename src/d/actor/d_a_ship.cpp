@@ -57,7 +57,7 @@ void daShip_headJointCallBack1(J3DNode*, int) {
 }
 
 /* 00000628-00000AD8       .text draw__8daShip_cFv */
-void daShip_c::draw() {
+BOOL daShip_c::draw() {
     /* Nonmatching */
 }
 
@@ -417,7 +417,7 @@ void daShip_c::setHeadAnm() {
 }
 
 /* 00009B4C-0000B978       .text execute__8daShip_cFv */
-void daShip_c::execute() {
+BOOL daShip_c::execute() {
     /* Nonmatching */
 }
 
@@ -452,7 +452,7 @@ void daShip_createHeap(fopAc_ac_c*) {
 }
 
 /* 0000BFD8-0000C790       .text create__8daShip_cFv */
-void daShip_c::create() {
+s32 daShip_c::create() {
     /* Nonmatching */
 }
 

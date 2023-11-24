@@ -15,10 +15,10 @@ public:
     void co_hitCallback(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
     void break_proc();
     void set_se();
-    void _create();
-    void _delete();
-    void _execute();
-    void _draw();
+    s32 _create();
+    BOOL _delete();
+    BOOL _execute();
+    BOOL _draw();
 
 public:
     /* Place member variables here */

@@ -13,7 +13,7 @@ public:
     }
 
     inline s32 draw();
-    void execute() {}
+    inline BOOL execute();
 
     s32 getSwNo();
     u8 getEvNo();

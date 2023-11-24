@@ -12,22 +12,22 @@ void daTama_c::createInit() {
 }
 
 /* 00000114-0000011C       .text _draw__8daTama_cFv */
-void daTama_c::_draw() {
+BOOL daTama_c::_draw() {
     /* Nonmatching */
 }
 
 /* 0000011C-000002D4       .text _execute__8daTama_cFv */
-void daTama_c::_execute() {
+BOOL daTama_c::_execute() {
     /* Nonmatching */
 }
 
 /* 000002D4-000002DC       .text _delete__8daTama_cFv */
-void daTama_c::_delete() {
+BOOL daTama_c::_delete() {
     /* Nonmatching */
 }
 
 /* 000002DC-00000410       .text _create__8daTama_cFv */
-void daTama_c::_create() {
+s32 daTama_c::_create() {
     /* Nonmatching */
 }
 

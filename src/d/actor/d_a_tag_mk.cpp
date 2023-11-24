@@ -152,7 +152,7 @@ void daTag_Mk_c::actionDaichi() {
 }
 
 /* 00000E0C-00000E9C       .text execute__10daTag_Mk_cFv */
-void daTag_Mk_c::execute() {
+BOOL daTag_Mk_c::execute() {
     /* Nonmatching */
 }
 
@@ -182,7 +182,7 @@ void daTag_Mk_Create(fopAc_ac_c*) {
 }
 
 /* 00000F20-000011E4       .text create__10daTag_Mk_cFv */
-void daTag_Mk_c::create() {
+s32 daTag_Mk_c::create() {
     /* Nonmatching */
 }
 

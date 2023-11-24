@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-000000F0       .text _delete__9daWfall_cFv */
-void daWfall_c::_delete() {
+BOOL daWfall_c::_delete() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void daWfall_c::CreateInit() {
 }
 
 /* 00000708-00000838       .text _create__9daWfall_cFv */
-void daWfall_c::_create() {
+s32 daWfall_c::_create() {
     /* Nonmatching */
 }
 
@@ -47,7 +47,7 @@ void daWfall_c::set_minamo_mtx() {
 }
 
 /* 00000AD0-00000C94       .text _execute__9daWfall_cFv */
-void daWfall_c::_execute() {
+BOOL daWfall_c::_execute() {
     /* Nonmatching */
 }
 

@@ -17,7 +17,7 @@ void CheckCreateHeap(fopAc_ac_c*) {
 }
 
 /* 00000664-00000700       .text _create__13daObjKanoke_cFv */
-void daObjKanoke_c::_create() {
+s32 daObjKanoke_c::_create() {
     /* Nonmatching */
 }
 
@@ -32,17 +32,17 @@ void daObjKanoke_c::createInit() {
 }
 
 /* 00000B28-00000C0C       .text _delete__13daObjKanoke_cFv */
-void daObjKanoke_c::_delete() {
+BOOL daObjKanoke_c::_delete() {
     /* Nonmatching */
 }
 
 /* 00000C0C-00000CE0       .text _draw__13daObjKanoke_cFv */
-void daObjKanoke_c::_draw() {
+BOOL daObjKanoke_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00000CE0-00000E7C       .text _execute__13daObjKanoke_cFv */
-void daObjKanoke_c::_execute() {
+BOOL daObjKanoke_c::_execute() {
     /* Nonmatching */
 }
 

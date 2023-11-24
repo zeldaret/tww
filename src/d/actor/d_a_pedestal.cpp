@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-000000DC       .text _delete__Q210daPedestal7daPds_cFv */
-void daPedestal::daPds_c::_delete() {
+BOOL daPedestal::daPds_c::_delete() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void daPedestal::daPds_c::CreateInit() {
 }
 
 /* 00000380-00000474       .text _create__Q210daPedestal7daPds_cFv */
-void daPedestal::daPds_c::_create() {
+s32 daPedestal::daPds_c::_create() {
     /* Nonmatching */
 }
 
@@ -112,12 +112,12 @@ void daPedestal::daPds_c::playBrkAnm() {
 }
 
 /* 00000D98-00000E48       .text _execute__Q210daPedestal7daPds_cFv */
-void daPedestal::daPds_c::_execute() {
+BOOL daPedestal::daPds_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000E48-00000F10       .text _draw__Q210daPedestal7daPds_cFv */
-void daPedestal::daPds_c::_draw() {
+BOOL daPedestal::daPds_c::_draw() {
     /* Nonmatching */
 }
 

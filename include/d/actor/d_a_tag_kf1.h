@@ -26,10 +26,10 @@ public:
     void wait01();
     void wait02();
     void wait_action1(void*);
-    void _draw();
-    void _execute();
-    void _delete();
-    void _create();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
+    s32 _create();
 
 public:
     /* Place member variables here */

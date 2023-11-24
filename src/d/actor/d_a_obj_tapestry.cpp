@@ -217,7 +217,7 @@ void daObjTapestryPacket_c::setup_tevColReg(daObjTapestry_c*) {
 }
 
 /* 000044B8-000045C8       .text draw__21daObjTapestryPacket_cFv */
-void daObjTapestryPacket_c::draw() {
+BOOL daObjTapestryPacket_c::draw() {
     /* Nonmatching */
 }
 
@@ -272,7 +272,7 @@ void daObjTapestry_c::set_eye_pos() {
 }
 
 /* 00004F2C-00005168       .text _create__15daObjTapestry_cFv */
-void daObjTapestry_c::_create() {
+s32 daObjTapestry_c::_create() {
     /* Nonmatching */
 }
 
@@ -287,7 +287,7 @@ cM3dGPla::~cM3dGPla() {
 }
 
 /* 00005560-00005628       .text _delete__15daObjTapestry_cFv */
-void daObjTapestry_c::_delete() {
+BOOL daObjTapestry_c::_delete() {
     /* Nonmatching */
 }
 
@@ -322,12 +322,12 @@ void daObjTapestry_c::setup_action(int) {
 }
 
 /* 00005B30-00005BD0       .text _execute__15daObjTapestry_cFv */
-void daObjTapestry_c::_execute() {
+BOOL daObjTapestry_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00005BD0-00005C44       .text _draw__15daObjTapestry_cFv */
-void daObjTapestry_c::_draw() {
+BOOL daObjTapestry_c::_draw() {
     /* Nonmatching */
 }
 

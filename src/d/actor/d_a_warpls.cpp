@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-000000E0       .text _delete__10daWarpls_cFv */
-void daWarpls_c::_delete() {
+BOOL daWarpls_c::_delete() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void daWarpls_c::CreateInit() {
 }
 
 /* 00000764-0000082C       .text _create__10daWarpls_cFv */
-void daWarpls_c::_create() {
+s32 daWarpls_c::_create() {
     /* Nonmatching */
 }
 
@@ -37,7 +37,7 @@ void daWarpls_c::set_mtx() {
 }
 
 /* 0000089C-00000984       .text _execute__10daWarpls_cFv */
-void daWarpls_c::_execute() {
+BOOL daWarpls_c::_execute() {
     /* Nonmatching */
 }
 

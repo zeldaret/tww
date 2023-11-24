@@ -57,7 +57,7 @@ void daLodbg_c::execDeleteWait() {
 }
 
 /* 00000FC4-00001274       .text draw__9daLodbg_cFv */
-void daLodbg_c::draw() {
+BOOL daLodbg_c::draw() {
     /* Nonmatching */
 }
 

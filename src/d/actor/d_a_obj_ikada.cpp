@@ -237,7 +237,7 @@ void daObj_Ikada_c::epProc() {
 }
 
 /* 00003750-00003CA0       .text _execute__13daObj_Ikada_cFv */
-void daObj_Ikada_c::_execute() {
+BOOL daObj_Ikada_c::_execute() {
     /* Nonmatching */
 }
 
@@ -247,7 +247,7 @@ void daObj_Ikada_c::debugDraw() {
 }
 
 /* 00003CD4-00003EE0       .text _draw__13daObj_Ikada_cFv */
-void daObj_Ikada_c::_draw() {
+BOOL daObj_Ikada_c::_draw() {
     /* Nonmatching */
 }
 
@@ -267,7 +267,7 @@ void daObj_Ikada_c::_createHeap() {
 }
 
 /* 00004B60-00004C18       .text _create__13daObj_Ikada_cFv */
-void daObj_Ikada_c::_create() {
+s32 daObj_Ikada_c::_create() {
     /* Nonmatching */
 }
 
@@ -282,7 +282,7 @@ JGeometry::TVec3<float>::TVec3() {
 }
 
 /* 00005320-0000543C       .text _delete__13daObj_Ikada_cFv */
-void daObj_Ikada_c::_delete() {
+BOOL daObj_Ikada_c::_delete() {
     /* Nonmatching */
 }
 

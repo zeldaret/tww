@@ -227,7 +227,7 @@ void daKddoor_c::CreateInit() {
 }
 
 /* 0000220C-000023CC       .text create__10daKddoor_cFv */
-void daKddoor_c::create() {
+s32 daKddoor_c::create() {
     /* Nonmatching */
 }
 
@@ -257,7 +257,7 @@ void daKddoor_actionInit(daKddoor_c*) {
 }
 
 /* 000028F8-000029E0       .text draw__10daKddoor_cFv */
-void daKddoor_c::draw() {
+BOOL daKddoor_c::draw() {
     /* Nonmatching */
 }
 

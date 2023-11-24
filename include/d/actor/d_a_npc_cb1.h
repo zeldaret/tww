@@ -69,7 +69,7 @@ public:
 
     void isTagCheckOK();
     void setMessageAnimation(unsigned char);
-    void create();
+    s32 create();
     void createHeap();
     void setAction(int (daNpc_Cb1_c::**)(void*), int (daNpc_Cb1_c::*)(void*), void*);
     void setWaitAction(void*);
@@ -163,8 +163,8 @@ public:
     void lookBack(int);
     void setBaseMtx();
     void init();
-    void draw();
-    void execute();
+    BOOL draw();
+    BOOL execute();
 
 public:
     /* 0x4EC */ request_of_phase_process_class m4EC;

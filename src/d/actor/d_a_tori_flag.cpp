@@ -37,7 +37,7 @@ void daTori_FlagCreate(void*) {
 }
 
 /* 000003C4-00000478       .text _create__13daTori_Flag_cFv */
-void daTori_Flag_c::_create() {
+s32 daTori_Flag_c::_create() {
     /* Nonmatching */
 }
 
@@ -57,7 +57,7 @@ void daTori_FlagExecute(void*) {
 }
 
 /* 00000878-00000B1C       .text _execute__13daTori_Flag_cFv */
-void daTori_Flag_c::_execute() {
+BOOL daTori_Flag_c::_execute() {
     /* Nonmatching */
 }
 

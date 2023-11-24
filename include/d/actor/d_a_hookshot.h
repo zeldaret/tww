@@ -9,7 +9,7 @@
 
 class daHookshot_shape : public J3DPacket {
 public:
-    void draw();
+    BOOL draw();
     daHookshot_shape() {}
     ~daHookshot_shape() {}
 };

@@ -10,11 +10,11 @@ namespace daTagWaterlevel {
         void get_state() {}
         void prm_get_sch() const {}
     
-        void _create();
-        void _delete();
+        s32 _create();
+        BOOL _delete();
         void bgm_proc();
-        void _execute();
-        void _draw();
+        BOOL _execute();
+        BOOL _draw();
     
     public:
         /* Place member variables here */

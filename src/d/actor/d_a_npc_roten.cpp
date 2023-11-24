@@ -32,7 +32,7 @@ void phase_2(daNpcRoten_c*) {
 }
 
 /* 000009F4-00000A24       .text _create__12daNpcRoten_cFv */
-void daNpcRoten_c::_create() {
+s32 daNpcRoten_c::_create() {
     /* Nonmatching */
 }
 
@@ -52,17 +52,17 @@ void daNpcRoten_c::createInit() {
 }
 
 /* 000011C8-0000122C       .text _delete__12daNpcRoten_cFv */
-void daNpcRoten_c::_delete() {
+BOOL daNpcRoten_c::_delete() {
     /* Nonmatching */
 }
 
 /* 0000122C-000013F8       .text _draw__12daNpcRoten_cFv */
-void daNpcRoten_c::_draw() {
+BOOL daNpcRoten_c::_draw() {
     /* Nonmatching */
 }
 
 /* 000013F8-00001604       .text _execute__12daNpcRoten_cFv */
-void daNpcRoten_c::_execute() {
+BOOL daNpcRoten_c::_execute() {
     /* Nonmatching */
 }
 

@@ -12,16 +12,16 @@ namespace daObjVmc {
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
         void CreateInit();
-        void _create();
-        void _delete();
+        s32 _create();
+        BOOL _delete();
         void set_mtx();
         void init_mtx();
         void daObjVmc_base_main();
         void daObjVmc_tree_demo_wait();
         void daObjVmc_tree_demo_main();
         void daObjVmc_tree_main();
-        void _execute();
-        void _draw();
+        BOOL _execute();
+        BOOL _draw();
     
     public:
         /* Place member variables here */

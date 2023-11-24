@@ -137,7 +137,7 @@ void daDoor12_c::CreateInit() {
 }
 
 /* 0000134C-0000144C       .text create__10daDoor12_cFv */
-void daDoor12_c::create() {
+s32 daDoor12_c::create() {
     /* Nonmatching */
 }
 
@@ -167,7 +167,7 @@ void daDoor12_actionInit(daDoor12_c*) {
 }
 
 /* 000019A0-00001AD0       .text draw__10daDoor12_cFv */
-void daDoor12_c::draw() {
+BOOL daDoor12_c::draw() {
     /* Nonmatching */
 }
 

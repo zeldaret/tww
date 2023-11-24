@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-000000E8       .text _delete__12daWindMill_cFv */
-void daWindMill_c::_delete() {
+BOOL daWindMill_c::_delete() {
     /* Nonmatching */
 }
 
@@ -37,7 +37,7 @@ void daWindMill_c::search_wind() {
 }
 
 /* 00000670-00000804       .text _create__12daWindMill_cFv */
-void daWindMill_c::_create() {
+s32 daWindMill_c::_create() {
     /* Nonmatching */
 }
 
@@ -47,7 +47,7 @@ void daWindMill_c::set_mtx() {
 }
 
 /* 00000E4C-00000ECC       .text _execute__12daWindMill_cFv */
-void daWindMill_c::_execute() {
+BOOL daWindMill_c::_execute() {
     /* Nonmatching */
 }
 
@@ -67,7 +67,7 @@ void daWindMill_c::set_co() {
 }
 
 /* 000016DC-000017A4       .text _draw__12daWindMill_cFv */
-void daWindMill_c::_draw() {
+BOOL daWindMill_c::_draw() {
     /* Nonmatching */
 }
 

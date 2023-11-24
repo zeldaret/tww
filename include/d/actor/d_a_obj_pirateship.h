@@ -6,10 +6,10 @@
 namespace daObjPirateship {
     class Act_c : public fopAc_ac_c {
     public:
-        void _create() {}
-        void _delete() {}
-        void _draw() {}
-        void _execute() {}
+        inline s32 _create();
+        inline BOOL _delete();
+        inline BOOL _draw();
+        inline BOOL _execute();
         void getKajiID() {}
     
         void set_mtx();
@@ -20,10 +20,10 @@ namespace daObjPirateship {
         void CreateWave();
         void SetWave();
         void DeleteWave();
-        void Create();
+        s32 Create();
         void Execute(float(**)[3][4]);
-        void Draw();
-        void Delete();
+        BOOL Draw();
+        BOOL Delete();
         void demo_move();
     
     public:

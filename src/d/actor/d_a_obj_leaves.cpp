@@ -42,12 +42,12 @@ void daObjLeaves_c::tg_hitCallback(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD
 }
 
 /* 000008C0-00000B08       .text _create__13daObjLeaves_cFv */
-void daObjLeaves_c::_create() {
+s32 daObjLeaves_c::_create() {
     /* Nonmatching */
 }
 
 /* 00000CC0-00000D74       .text _delete__13daObjLeaves_cFv */
-void daObjLeaves_c::_delete() {
+BOOL daObjLeaves_c::_delete() {
     /* Nonmatching */
 }
 
@@ -72,7 +72,7 @@ void daObjLeaves_c::retire_wait_proc() {
 }
 
 /* 00001010-0000107C       .text _execute__13daObjLeaves_cFv */
-void daObjLeaves_c::_execute() {
+BOOL daObjLeaves_c::_execute() {
     /* Nonmatching */
 }
 
@@ -87,7 +87,7 @@ void set_material(J3DModel*, unsigned char) {
 }
 
 /* 00001218-00001290       .text _draw__13daObjLeaves_cFv */
-void daObjLeaves_c::_draw() {
+BOOL daObjLeaves_c::_draw() {
     /* Nonmatching */
 }
 

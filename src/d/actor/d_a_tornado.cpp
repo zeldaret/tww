@@ -17,7 +17,7 @@ void daTornado_jointCallBack(J3DNode*, int) {
 }
 
 /* 000002A4-00000464       .text draw__11daTornado_cFv */
-void daTornado_c::draw() {
+BOOL daTornado_c::draw() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void daTornado_Draw(daTornado_c*) {
 }
 
 /* 00000484-00000C4C       .text execute__11daTornado_cFv */
-void daTornado_c::execute() {
+BOOL daTornado_c::execute() {
     /* Nonmatching */
 }
 
@@ -62,7 +62,7 @@ void daTornado_createHeap(fopAc_ac_c*) {
 }
 
 /* 000010BC-000014D0       .text create__11daTornado_cFv */
-void daTornado_c::create() {
+s32 daTornado_c::create() {
     /* Nonmatching */
 }
 

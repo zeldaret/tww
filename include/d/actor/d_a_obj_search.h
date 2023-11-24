@@ -38,9 +38,9 @@ namespace daObj_Search {
         void attr() const;
         void SetArgData();
         void CreateInit();
-        void _create();
+        s32 _create();
         void smoke_set(float, int);
-        void _execute();
+        BOOL _execute();
         void check_bk_control();
         void set_mtx_base();
         void set_mtx_light_A();
@@ -52,9 +52,9 @@ namespace daObj_Search {
         void player_check();
         void set_path_info();
         void is_path_info();
-        void _draw();
-        void _delete();
-        void _isdelete();
+        BOOL _draw();
+        BOOL _delete();
+        BOOL _isdelete();
     
     public:
         /* Place member variables here */

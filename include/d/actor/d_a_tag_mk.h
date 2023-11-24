@@ -5,8 +5,8 @@
 
 class daTag_Mk_c : public fopAc_ac_c {
 public:
-    void create() {}
-    void draw() {}
+    inline s32 create();
+    inline BOOL draw();
     void setAction(unsigned char) {}
 
     void getSwbit();
@@ -38,7 +38,7 @@ public:
     void actionTagWp2();
     void actionTagWp();
     void actionDaichi();
-    void execute();
+    BOOL execute();
 
 public:
     /* Place member variables here */

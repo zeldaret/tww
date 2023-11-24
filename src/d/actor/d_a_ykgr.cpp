@@ -17,7 +17,7 @@ void daYkgrCreate(void*) {
 }
 
 /* 00000428-00000680       .text _create__8daYkgr_cFv */
-void daYkgr_c::_create() {
+s32 daYkgr_c::_create() {
     /* Nonmatching */
 }
 

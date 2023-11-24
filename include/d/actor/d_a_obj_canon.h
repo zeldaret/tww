@@ -28,13 +28,13 @@ public:
     void modeAppearInit();
     void modeAppear();
     void modeProc(daObj_Canon_c::Proc_e, int);
-    void _execute();
+    BOOL _execute();
     void debugDraw();
-    void _draw();
+    BOOL _draw();
     void createInit();
     void getArg();
-    void _create();
-    void _delete();
+    s32 _create();
+    BOOL _delete();
 
 public:
     /* Place member variables here */

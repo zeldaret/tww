@@ -21,12 +21,12 @@ public:
     void co_hitCallback(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
     void particle_set();
     void make_item();
-    void _create();
-    void _delete();
+    s32 _create();
+    BOOL _delete();
     void wait_act_proc();
     void fall_act_proc();
-    void _execute();
-    void _draw();
+    BOOL _execute();
+    BOOL _draw();
 
 public:
     /* Place member variables here */

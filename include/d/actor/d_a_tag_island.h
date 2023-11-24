@@ -7,9 +7,9 @@ class daTag_Island_c : public fopAc_ac_c {
 public:
     void chkFlag(unsigned short) {}
     void clrFlag(unsigned short) {}
-    void create() {}
-    void draw() {}
-    void execute() {}
+    inline s32 create();
+    inline BOOL draw();
+    inline BOOL execute();
     void setActio(unsigned char) {}
     void setFlag(unsigned short) {}
 

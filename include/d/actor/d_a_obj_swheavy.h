@@ -17,8 +17,8 @@ namespace daObjSwheavy {
     
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
-        void _create();
-        void _delete();
+        s32 _create();
+        BOOL _delete();
         void set_mtx();
         void init_mtx();
         void rideCB(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
@@ -33,8 +33,8 @@ namespace daObjSwheavy {
         void mode_lower();
         void mode_l_u_init();
         void mode_l_u();
-        void _execute();
-        void _draw();
+        BOOL _execute();
+        BOOL _draw();
     
     public:
         /* Place member variables here */

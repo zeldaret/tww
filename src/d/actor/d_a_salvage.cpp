@@ -32,17 +32,17 @@ void daSalvage_c::CreateInit() {
 }
 
 /* 00000570-00000728       .text _create__11daSalvage_cFv */
-void daSalvage_c::_create() {
+s32 daSalvage_c::_create() {
     /* Nonmatching */
 }
 
 /* 00000728-00000824       .text _delete__11daSalvage_cFv */
-void daSalvage_c::_delete() {
+BOOL daSalvage_c::_delete() {
     /* Nonmatching */
 }
 
 /* 00000824-000008A4       .text _execute__11daSalvage_cFv */
-void daSalvage_c::_execute() {
+BOOL daSalvage_c::_execute() {
     /* Nonmatching */
 }
 
@@ -132,7 +132,7 @@ void daSalvage_c::debug_print2() {
 }
 
 /* 00001FAC-00002158       .text _draw__11daSalvage_cFv */
-void daSalvage_c::_draw() {
+BOOL daSalvage_c::_draw() {
     /* Nonmatching */
 }
 

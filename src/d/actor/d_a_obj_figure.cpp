@@ -27,7 +27,7 @@ void phase_2(daObjFigure_c*) {
 }
 
 /* 000006F0-00000720       .text _create__13daObjFigure_cFv */
-void daObjFigure_c::_create() {
+s32 daObjFigure_c::_create() {
     /* Nonmatching */
 }
 
@@ -42,17 +42,17 @@ void daObjFigure_c::createInit() {
 }
 
 /* 00000BF4-00000C78       .text _delete__13daObjFigure_cFv */
-void daObjFigure_c::_delete() {
+BOOL daObjFigure_c::_delete() {
     /* Nonmatching */
 }
 
 /* 00000C78-00000DE8       .text _draw__13daObjFigure_cFv */
-void daObjFigure_c::_draw() {
+BOOL daObjFigure_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00000DE8-00000F10       .text _execute__13daObjFigure_cFv */
-void daObjFigure_c::_execute() {
+BOOL daObjFigure_c::_execute() {
     /* Nonmatching */
 }
 

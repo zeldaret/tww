@@ -37,7 +37,7 @@ void daTag_Etc_c::demoInitProc() {
 }
 
 /* 00000368-00000458       .text create__11daTag_Etc_cFv */
-void daTag_Etc_c::create() {
+s32 daTag_Etc_c::create() {
     /* Nonmatching */
 }
 

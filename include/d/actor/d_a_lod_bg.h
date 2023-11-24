@@ -9,8 +9,8 @@
 class daLodbg_c : public fopAc_ac_c {
 public:
     void createHeap() {}
-    void draw() {}
-    void execute() {}
+    inline BOOL draw();
+    inline BOOL execute();
     void setExecute(int (daLodbg_c::*)()) {}
 
     void deleteModelData();

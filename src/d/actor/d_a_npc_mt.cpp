@@ -32,7 +32,7 @@ void phase_2(daNpcMt_c*) {
 }
 
 /* 000008D8-00000908       .text _create__9daNpcMt_cFv */
-void daNpcMt_c::_create() {
+s32 daNpcMt_c::_create() {
     /* Nonmatching */
 }
 
@@ -52,17 +52,17 @@ void daNpcMt_c::createInit() {
 }
 
 /* 00000DEC-00000F6C       .text _delete__9daNpcMt_cFv */
-void daNpcMt_c::_delete() {
+BOOL daNpcMt_c::_delete() {
     /* Nonmatching */
 }
 
 /* 00000F6C-0000107C       .text _draw__9daNpcMt_cFv */
-void daNpcMt_c::_draw() {
+BOOL daNpcMt_c::_draw() {
     /* Nonmatching */
 }
 
 /* 0000107C-000011D0       .text _execute__9daNpcMt_cFv */
-void daNpcMt_c::_execute() {
+BOOL daNpcMt_c::_execute() {
     /* Nonmatching */
 }
 

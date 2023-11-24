@@ -22,12 +22,12 @@ void daTagLight::Act_c::create_heap() {
 }
 
 /* 0000035C-000006F0       .text _create__Q210daTagLight5Act_cFv */
-void daTagLight::Act_c::_create() {
+s32 daTagLight::Act_c::_create() {
     /* Nonmatching */
 }
 
 /* 000008A8-000008E4       .text _delete__Q210daTagLight5Act_cFv */
-void daTagLight::Act_c::_delete() {
+BOOL daTagLight::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -82,7 +82,7 @@ void daTagLight::Act_c::init_spot() {
 }
 
 /* 00001B20-00001C90       .text _execute__Q210daTagLight5Act_cFv */
-void daTagLight::Act_c::_execute() {
+BOOL daTagLight::Act_c::_execute() {
     /* Nonmatching */
 }
 
@@ -92,7 +92,7 @@ void daTagLight::Act_c::set_material(J3DMaterial*, unsigned char) {
 }
 
 /* 00001D20-00001EAC       .text _draw__Q210daTagLight5Act_cFv */
-void daTagLight::Act_c::_draw() {
+BOOL daTagLight::Act_c::_draw() {
     /* Nonmatching */
 }
 

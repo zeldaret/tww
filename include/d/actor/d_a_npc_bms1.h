@@ -50,10 +50,10 @@ public:
     void privateCut();
     void demo_move();
     void demo_end_init();
-    void _draw();
-    void _execute();
-    void _delete();
-    void _create();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
+    s32 _create();
     void CreateHeap();
 
 public:

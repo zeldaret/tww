@@ -137,7 +137,7 @@ void daObjEff::Act_c::eff_set() {
 }
 
 /* 00000F6C-00001030       .text _create__Q28daObjEff5Act_cFv */
-void daObjEff::Act_c::_create() {
+s32 daObjEff::Act_c::_create() {
     /* Nonmatching */
 }
 
@@ -177,7 +177,7 @@ void daObjEff::Act_c::remove() {
 }
 
 /* 0000126C-00001290       .text _delete__Q28daObjEff5Act_cFv */
-void daObjEff::Act_c::_delete() {
+BOOL daObjEff::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -217,7 +217,7 @@ void daObjEff::Act_c::die() {
 }
 
 /* 0000149C-000014C0       .text _execute__Q28daObjEff5Act_cFv */
-void daObjEff::Act_c::_execute() {
+BOOL daObjEff::Act_c::_execute() {
     /* Nonmatching */
 }
 

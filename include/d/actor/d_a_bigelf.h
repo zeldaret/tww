@@ -77,10 +77,10 @@ public:
     void event0();
     void dead();
     void wait_action(void*);
-    void _draw();
-    void _execute();
-    void _delete();
-    void _create();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
+    s32 _create();
     void CreateHeap();
 
 public:

@@ -27,7 +27,7 @@ void daBFlower_c::init_bck_anm(short) {
 }
 
 /* 0000080C-000008AC       .text _create__11daBFlower_cFv */
-void daBFlower_c::_create() {
+s32 daBFlower_c::_create() {
     /* Nonmatching */
 }
 
@@ -42,7 +42,7 @@ void daBFlower_c::set_mtx() {
 }
 
 /* 00000F4C-00001078       .text _execute__11daBFlower_cFv */
-void daBFlower_c::_execute() {
+BOOL daBFlower_c::_execute() {
     /* Nonmatching */
 }
 
@@ -67,7 +67,7 @@ void daBFlower_c::setCollision() {
 }
 
 /* 000019AC-00001AC4       .text _draw__11daBFlower_cFv */
-void daBFlower_c::_draw() {
+BOOL daBFlower_c::_draw() {
     /* Nonmatching */
 }
 

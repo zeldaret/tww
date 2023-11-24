@@ -302,17 +302,17 @@ void daBigelf_c::wait_action(void*) {
 }
 
 /* 00002C8C-00002DB4       .text _draw__10daBigelf_cFv */
-void daBigelf_c::_draw() {
+BOOL daBigelf_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00002DB4-00002F5C       .text _execute__10daBigelf_cFv */
-void daBigelf_c::_execute() {
+BOOL daBigelf_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00002F5C-00002FAC       .text _delete__10daBigelf_cFv */
-void daBigelf_c::_delete() {
+BOOL daBigelf_c::_delete() {
     /* Nonmatching */
 }
 
@@ -322,7 +322,7 @@ void CheckCreateHeap(fopAc_ac_c*) {
 }
 
 /* 00002FCC-00003124       .text _create__10daBigelf_cFv */
-void daBigelf_c::_create() {
+s32 daBigelf_c::_create() {
     /* Nonmatching */
 }
 

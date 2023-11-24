@@ -17,12 +17,12 @@ void daBoomerang_blur_c::copyBlur(float(*)[4], short) {
 }
 
 /* 800E101C-800E13A4       .text draw__18daBoomerang_blur_cFv */
-void daBoomerang_blur_c::draw() {
+BOOL daBoomerang_blur_c::draw() {
     /* Nonmatching */
 }
 
 /* 800E13A4-800E14F0       .text draw__25daBoomerang_sightPacket_cFv */
-void daBoomerang_sightPacket_c::draw() {
+BOOL daBoomerang_sightPacket_c::draw() {
     /* Nonmatching */
 }
 
@@ -37,7 +37,7 @@ void daBoomerang_sightPacket_c::play(int) {
 }
 
 /* 800E1754-800E1998       .text draw__13daBoomerang_cFv */
-void daBoomerang_c::draw() {
+BOOL daBoomerang_c::draw() {
     /* Nonmatching */
 }
 
@@ -107,7 +107,7 @@ void daBoomerang_c::procMove() {
 }
 
 /* 800E2AF4-800E2BD0       .text execute__13daBoomerang_cFv */
-void daBoomerang_c::execute() {
+BOOL daBoomerang_c::execute() {
     /* Nonmatching */
 }
 
@@ -137,7 +137,7 @@ void daBoomerang_createHeap(fopAc_ac_c*) {
 }
 
 /* 800E2CE8-800E2EF0       .text create__13daBoomerang_cFv */
-void daBoomerang_c::create() {
+s32 daBoomerang_c::create() {
     /* Nonmatching */
 }
 

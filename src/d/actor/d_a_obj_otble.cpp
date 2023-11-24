@@ -17,12 +17,12 @@ void daObj_Otble::Act_c::set_mtx() {
 }
 
 /* 00000168-000001BC       .text _execute__Q211daObj_Otble5Act_cFv */
-void daObj_Otble::Act_c::_execute() {
+BOOL daObj_Otble::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 000001BC-000002E8       .text _draw__Q211daObj_Otble5Act_cFv */
-void daObj_Otble::Act_c::_draw() {
+BOOL daObj_Otble::Act_c::_draw() {
     /* Nonmatching */
 }
 

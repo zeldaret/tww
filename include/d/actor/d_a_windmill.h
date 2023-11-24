@@ -9,17 +9,17 @@ public:
     void getRotSpeed() const {}
     void getType() const {}
 
-    void _delete();
+    BOOL _delete();
     void CreateHeap();
     void CreateInit();
     void search_wind();
-    void _create();
+    s32 _create();
     void set_mtx();
-    void _execute();
+    BOOL _execute();
     void hane_move();
     void set_at();
     void set_co();
-    void _draw();
+    BOOL _draw();
 
 public:
     /* Place member variables here */

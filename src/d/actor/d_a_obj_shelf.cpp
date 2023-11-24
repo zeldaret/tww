@@ -12,7 +12,7 @@ void daObjShelf::Act_c::CreateHeap() {
 }
 
 /* 0000012C-000001A0       .text Create__Q210daObjShelf5Act_cFv */
-void daObjShelf::Act_c::Create() {
+s32 daObjShelf::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void daObjShelf::Act_c::Mthd_Create() {
 }
 
 /* 0000029C-000002A4       .text Delete__Q210daObjShelf5Act_cFv */
-void daObjShelf::Act_c::Delete() {
+BOOL daObjShelf::Act_c::Delete() {
     /* Nonmatching */
 }
 
@@ -102,7 +102,7 @@ void daObjShelf::Act_c::Execute(float(**)[3][4]) {
 }
 
 /* 000009B0-00000A50       .text Draw__Q210daObjShelf5Act_cFv */
-void daObjShelf::Act_c::Draw() {
+BOOL daObjShelf::Act_c::Draw() {
     /* Nonmatching */
 }
 

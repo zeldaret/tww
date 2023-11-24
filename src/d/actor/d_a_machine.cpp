@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-000000A8       .text _delete__11daMachine_cFv */
-void daMachine_c::_delete() {
+BOOL daMachine_c::_delete() {
     /* Nonmatching */
 }
 
@@ -52,7 +52,7 @@ void daMachine_c::set_speed() {
 }
 
 /* 000007F8-00000898       .text _create__11daMachine_cFv */
-void daMachine_c::_create() {
+s32 daMachine_c::_create() {
     /* Nonmatching */
 }
 
@@ -67,7 +67,7 @@ void daMachine_c::set_mtx() {
 }
 
 /* 0000100C-000010F8       .text _execute__11daMachine_cFv */
-void daMachine_c::_execute() {
+BOOL daMachine_c::_execute() {
     /* Nonmatching */
 }
 
@@ -92,7 +92,7 @@ void daMachine_c::set_at() {
 }
 
 /* 000014D4-0000154C       .text _draw__11daMachine_cFv */
-void daMachine_c::_draw() {
+BOOL daMachine_c::_draw() {
     /* Nonmatching */
 }
 

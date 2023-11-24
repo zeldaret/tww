@@ -137,7 +137,7 @@ void daObjFlame::Method::Create(void*) {
 }
 
 /* 00001ECC-00002200       .text _create__Q210daObjFlame5Act_cFv */
-void daObjFlame::Act_c::_create() {
+s32 daObjFlame::Act_c::_create() {
     /* Nonmatching */
 }
 

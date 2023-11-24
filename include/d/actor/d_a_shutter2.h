@@ -5,15 +5,15 @@
 
 class daShutter2_c : public fopAc_ac_c {
 public:
-    void Delete();
+    BOOL Delete();
     void CreateHeap();
-    void Create();
-    void _create();
+    s32 Create();
+    s32 _create();
     void set_mtx();
     void Execute(float(**)[3][4]);
     void shutter_move();
     void demo();
-    void Draw();
+    BOOL Draw();
 
 public:
     /* Place member variables here */

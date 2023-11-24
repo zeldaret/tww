@@ -39,10 +39,10 @@ namespace daComing2 {
         void coming_game_main();
         void coming_process_init(short);
         void coming_process_main();
-        void _create();
-        void _delete();
-        void _execute();
-        void _draw();
+        s32 _create();
+        BOOL _delete();
+        BOOL _execute();
+        BOOL _draw();
     
     public:
         /* Place member variables here */

@@ -5,10 +5,10 @@
 
 class daObjIceisland_c : public fopAc_ac_c {
 public:
-    void _create() {}
-    void _delete() {}
-    void _draw() {}
-    void _execute() {}
+    inline s32 _create();
+    inline BOOL _delete();
+    inline BOOL _draw();
+    inline BOOL _execute();
 
     void CreateHeap();
     void daObjIceisland_particle_set();

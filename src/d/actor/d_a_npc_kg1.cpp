@@ -117,7 +117,7 @@ void daNpc_Kg1Create(void*) {
 }
 
 /* 00001FAC-0000203C       .text _create__11daNpc_Kg1_cFv */
-void daNpc_Kg1_c::_create() {
+s32 daNpc_Kg1_c::_create() {
     /* Nonmatching */
 }
 

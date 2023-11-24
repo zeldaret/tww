@@ -5,8 +5,8 @@
 
 class daTag_Etc_c : public fopAc_ac_c {
 public:
-    void draw() {}
-    void execute() {}
+    inline BOOL draw();
+    inline BOOL execute();
     void setActio(unsigned char) {}
 
     void getEventNo();
@@ -15,7 +15,7 @@ public:
     void otherCheck(fopAc_ac_c*);
     void demoProc();
     void demoInitProc();
-    void create();
+    s32 create();
 
 public:
     /* Place member variables here */

@@ -97,7 +97,7 @@ void daObjApzl_Draw(void*) {
 }
 
 /* 000018B8-00001B00       .text _draw__11daObjApzl_cFv */
-void daObjApzl_c::_draw() {
+BOOL daObjApzl_c::_draw() {
     /* Nonmatching */
 }
 
@@ -107,7 +107,7 @@ void daObjApzl_Execute(void*) {
 }
 
 /* 00001B24-00001E8C       .text _execute__11daObjApzl_cFv */
-void daObjApzl_c::_execute() {
+BOOL daObjApzl_c::_execute() {
     /* Nonmatching */
 }
 

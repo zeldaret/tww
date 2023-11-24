@@ -74,15 +74,15 @@ public:
     void modeFollowInit();
     void modeFollow();
     void modeProc(daPz_c::Proc_e, int);
-    void _execute();
+    BOOL _execute();
     void bowDraw();
     void bodyDraw();
     void drawShadow();
-    void _draw();
+    BOOL _draw();
     void bodyCreateInit();
     void createInit();
-    void _create();
-    void _delete();
+    s32 _create();
+    BOOL _delete();
 
 public:
     /* 0x06C4 */ int mMode;

@@ -27,22 +27,22 @@ void daIkari_c::getArg() {
 }
 
 /* 000002F8-000003CC       .text _execute__9daIkari_cFv */
-void daIkari_c::_execute() {
+BOOL daIkari_c::_execute() {
     /* Nonmatching */
 }
 
 /* 000003CC-00000494       .text _draw__9daIkari_cFv */
-void daIkari_c::_draw() {
+BOOL daIkari_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00000494-000005B0       .text _create__9daIkari_cFv */
-void daIkari_c::_create() {
+s32 daIkari_c::_create() {
     /* Nonmatching */
 }
 
 /* 000005B0-000005E0       .text _delete__9daIkari_cFv */
-void daIkari_c::_delete() {
+BOOL daIkari_c::_delete() {
     /* Nonmatching */
 }
 

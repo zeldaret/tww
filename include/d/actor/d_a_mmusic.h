@@ -10,13 +10,13 @@ namespace daMmusic {
         void create_heap();
         void Macore_is_playing();
         void set_mtx();
-        void _create();
-        void _delete();
+        s32 _create();
+        BOOL _delete();
         void init_se();
         void manage_se(int);
         void delete_se();
-        void _execute();
-        void _draw();
+        BOOL _execute();
+        BOOL _draw();
     
     public:
         /* Place member variables here */

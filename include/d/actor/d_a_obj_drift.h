@@ -10,12 +10,12 @@ namespace daObjDrift {
         void prm_get_type() const {}
     
         void CreateHeap();
-        void Create();
+        s32 Create();
         void Mthd_Create();
         void make_flower();
         void calc_flower_param(cXyz*, csXyz*);
         void set_flower_current();
-        void Delete();
+        BOOL Delete();
         void Mthd_Delete();
         void mode_wait_init();
         void mode_wait();
@@ -26,7 +26,7 @@ namespace daObjDrift {
         void rideCB(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
         void set_current();
         void Execute(float(**)[3][4]);
-        void Draw();
+        BOOL Draw();
     
     public:
         /* Place member variables here */

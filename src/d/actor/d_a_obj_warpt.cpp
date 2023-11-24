@@ -172,12 +172,12 @@ void daObj_Warpt_c::modeProc(daObj_Warpt_c::Proc_e, int) {
 }
 
 /* 000019D8-00001BCC       .text _execute__13daObj_Warpt_cFv */
-void daObj_Warpt_c::_execute() {
+BOOL daObj_Warpt_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00001BCC-00001D7C       .text _draw__13daObj_Warpt_cFv */
-void daObj_Warpt_c::_draw() {
+BOOL daObj_Warpt_c::_draw() {
     /* Nonmatching */
 }
 
@@ -192,12 +192,12 @@ void daObj_Warpt_c::createInit() {
 }
 
 /* 0000215C-00002378       .text _create__13daObj_Warpt_cFv */
-void daObj_Warpt_c::_create() {
+s32 daObj_Warpt_c::_create() {
     /* Nonmatching */
 }
 
 /* 00002728-00002858       .text _delete__13daObj_Warpt_cFv */
-void daObj_Warpt_c::_delete() {
+BOOL daObj_Warpt_c::_delete() {
     /* Nonmatching */
 }
 

@@ -10,8 +10,8 @@ namespace daObjLight {
         void create_heap();
         void init_collision();
         void set_collision();
-        void _create();
-        void _delete();
+        s32 _create();
+        BOOL _delete();
         void set_fire(int);
         void draw_fire();
         void exe_fire();
@@ -23,8 +23,8 @@ namespace daObjLight {
         void renew_angle();
         void control_light();
         void control_treasure();
-        void _execute();
-        void _draw();
+        BOOL _execute();
+        BOOL _draw();
     
     public:
         /* Place member variables here */

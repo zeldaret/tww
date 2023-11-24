@@ -47,7 +47,7 @@ void daObjYboil_Draw(void*) {
 }
 
 /* 00000A50-00000C6C       .text _draw__12daObjYboil_cFv */
-void daObjYboil_c::_draw() {
+BOOL daObjYboil_c::_draw() {
     /* Nonmatching */
 }
 

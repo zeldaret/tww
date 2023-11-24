@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-000000C4       .text _delete__7daDai_cFv */
-void daDai_c::_delete() {
+BOOL daDai_c::_delete() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void daDai_c::CreateInit() {
 }
 
 /* 000003A8-00000494       .text _create__7daDai_cFv */
-void daDai_c::_create() {
+s32 daDai_c::_create() {
     /* Nonmatching */
 }
 
@@ -72,7 +72,7 @@ void daDai_c::XyEventCB(int) {
 }
 
 /* 00000C18-00000C78       .text _execute__7daDai_cFv */
-void daDai_c::_execute() {
+BOOL daDai_c::_execute() {
     /* Nonmatching */
 }
 
@@ -82,7 +82,7 @@ void daDai_c::proc() {
 }
 
 /* 00000DE8-00000E48       .text _draw__7daDai_cFv */
-void daDai_c::_draw() {
+BOOL daDai_c::_draw() {
     /* Nonmatching */
 }
 

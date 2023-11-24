@@ -12,8 +12,8 @@ public:
     void set_mtx();
     void CreateHeap();
     void CreateInit();
-    void _create();
-    void _delete();
+    s32 _create();
+    BOOL _delete();
     void cutProc();
     void cutWaitStart(int);
     void cutWaitProc(int);
@@ -26,9 +26,9 @@ public:
     void mode_event_init();
     void mode_event();
     void mode_proc_call();
-    void _execute();
+    BOOL _execute();
     void nz_draw();
-    void _draw();
+    BOOL _draw();
 
 public:
     /* 0x290 */ void* m290;

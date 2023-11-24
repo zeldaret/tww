@@ -107,7 +107,7 @@ void daGhostshipExecute(void*) {
 }
 
 /* 00001048-0000182C       .text _execute__13daGhostship_cFv */
-void daGhostship_c::_execute() {
+BOOL daGhostship_c::_execute() {
     /* Nonmatching */
 }
 
@@ -117,7 +117,7 @@ void daGhostshipDraw(void*) {
 }
 
 /* 00001850-000019A4       .text _draw__13daGhostship_cFv */
-void daGhostship_c::_draw() {
+BOOL daGhostship_c::_draw() {
     /* Nonmatching */
 }
 

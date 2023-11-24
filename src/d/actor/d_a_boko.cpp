@@ -22,7 +22,7 @@ void daBoko_c::keCalc() {
 }
 
 /* 00000B2C-00000DC4       .text draw__8daBoko_cFv */
-void daBoko_c::draw() {
+BOOL daBoko_c::draw() {
     /* Nonmatching */
 }
 
@@ -92,7 +92,7 @@ void daBoko_c::procCarry() {
 }
 
 /* 00002624-00002A04       .text execute__8daBoko_cFv */
-void daBoko_c::execute() {
+BOOL daBoko_c::execute() {
     /* Nonmatching */
 }
 
@@ -137,7 +137,7 @@ ke_c_s::ke_c_s() {
 }
 
 /* 00002DE4-00003154       .text create__8daBoko_cFv */
-void daBoko_c::create() {
+s32 daBoko_c::create() {
     /* Nonmatching */
 }
 

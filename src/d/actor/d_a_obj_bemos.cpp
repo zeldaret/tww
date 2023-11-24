@@ -192,7 +192,7 @@ void daBemosCreate(void*) {
 }
 
 /* 00003F90-0000403C       .text _create__9daBemos_cFv */
-void daBemos_c::_create() {
+s32 daBemos_c::_create() {
     /* Nonmatching */
 }
 

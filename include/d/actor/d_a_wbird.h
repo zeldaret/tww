@@ -5,14 +5,14 @@
 
 class daWbird_c : public fopAc_ac_c {
 public:
-    void draw() {}
-    void execute() {}
+    inline BOOL draw();
+    inline BOOL execute();
     void setAction(unsigned char) {}
 
     void calcMtx();
     void setStartPos();
     void CreateInit();
-    void create();
+    s32 create();
     void actionWait();
     void actionEnd();
     void actionMove();

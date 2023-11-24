@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-000002B4       .text _create__Q212daTagvolcano5Act_cFv */
-void daTagvolcano::Act_c::_create() {
+s32 daTagvolcano::Act_c::_create() {
     /* Nonmatching */
 }
 
@@ -17,17 +17,17 @@ void daTagvolcano::Act_c::check_timer_clear() {
 }
 
 /* 00000338-000003BC       .text _delete__Q212daTagvolcano5Act_cFv */
-void daTagvolcano::Act_c::_delete() {
+BOOL daTagvolcano::Act_c::_delete() {
     /* Nonmatching */
 }
 
 /* 000003BC-00000998       .text _execute__Q212daTagvolcano5Act_cFv */
-void daTagvolcano::Act_c::_execute() {
+BOOL daTagvolcano::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000998-000009A0       .text _draw__Q212daTagvolcano5Act_cFv */
-void daTagvolcano::Act_c::_draw() {
+BOOL daTagvolcano::Act_c::_draw() {
     /* Nonmatching */
 }
 

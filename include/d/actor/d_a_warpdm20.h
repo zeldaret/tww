@@ -7,11 +7,11 @@ class daWarpdm20_c : public fopAc_ac_c {
 public:
     void set_mtx() {}
 
-    void _delete();
+    BOOL _delete();
     void CreateHeap();
     void CreateInit();
-    void _create();
-    void _execute();
+    s32 _create();
+    BOOL _execute();
     void normal_execute();
     void demo_execute();
     void demo_proc();
@@ -36,7 +36,7 @@ public:
     void set_wpsenko();
     void init_bck_anm(int);
     void check_warp();
-    void _draw();
+    BOOL _draw();
 
 public:
     /* Place member variables here */

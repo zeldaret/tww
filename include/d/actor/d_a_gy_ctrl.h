@@ -26,15 +26,15 @@ public:
     void modeHideInit();
     void modeHide();
     void deadCheckGy();
-    void _execute();
-    void _draw();
+    BOOL _execute();
+    BOOL _draw();
     void createInitNoArer();
     void createInit();
     void getParam(unsigned long, unsigned char, unsigned char);
     void getArg();
     void checkGyCtrlExist();
-    void _create();
-    void _delete();
+    s32 _create();
+    BOOL _delete();
 
 public:
     /* Place member variables here */

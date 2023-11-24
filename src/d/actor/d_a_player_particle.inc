@@ -38,7 +38,7 @@ void daPy_swimTailEcallBack_c::draw(JPABaseEmitter*) {
 }
 
 /* 80129348-8012952C       .text draw__18daPy_sightPacket_cFv */
-void daPy_sightPacket_c::draw() {
+BOOL daPy_sightPacket_c::draw() {
     /* Nonmatching */
 }
 
@@ -58,7 +58,7 @@ void daPy_swBlur_c::copySwBlur(MtxP, int) {
 }
 
 /* 80129A78-80129DD0       .text draw__13daPy_swBlur_cFv */
-void daPy_swBlur_c::draw() {
+BOOL daPy_swBlur_c::draw() {
     /* Nonmatching */
 }
 

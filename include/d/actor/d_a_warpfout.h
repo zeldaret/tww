@@ -5,12 +5,12 @@
 
 class daWarpfout_c : public fopAc_ac_c {
 public:
-    void _draw() {}
+    inline BOOL _draw();
 
-    void _delete();
+    BOOL _delete();
     void CreateInit();
-    void _create();
-    void _execute();
+    s32 _create();
+    BOOL _execute();
     void checkOrder();
     void eventOrder();
     void demo_proc();

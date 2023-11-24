@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-000000BC       .text _delete__12daWarpdm20_cFv */
-void daWarpdm20_c::_delete() {
+BOOL daWarpdm20_c::_delete() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void daWarpdm20_c::CreateInit() {
 }
 
 /* 000005C8-000006A0       .text _create__12daWarpdm20_cFv */
-void daWarpdm20_c::_create() {
+s32 daWarpdm20_c::_create() {
     /* Nonmatching */
 }
 
@@ -37,7 +37,7 @@ void daWarpdm20_c::set_mtx() {
 }
 
 /* 00000820-00000988       .text _execute__12daWarpdm20_cFv */
-void daWarpdm20_c::_execute() {
+BOOL daWarpdm20_c::_execute() {
     /* Nonmatching */
 }
 
@@ -162,7 +162,7 @@ void daWarpdm20_c::check_warp() {
 }
 
 /* 000016EC-000017C0       .text _draw__12daWarpdm20_cFv */
-void daWarpdm20_c::_draw() {
+BOOL daWarpdm20_c::_draw() {
     /* Nonmatching */
 }
 

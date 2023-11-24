@@ -32,7 +32,7 @@ void daStone2::Act_c::CreateHeap() {
 }
 
 /* 00000704-000009C8       .text Create__Q28daStone25Act_cFv */
-void daStone2::Act_c::Create() {
+s32 daStone2::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -47,7 +47,7 @@ void daStone2::Act_c::Mthd_Create() {
 }
 
 /* 00000B3C-00000B84       .text Delete__Q28daStone25Act_cFv */
-void daStone2::Act_c::Delete() {
+BOOL daStone2::Act_c::Delete() {
     /* Nonmatching */
 }
 
@@ -237,7 +237,7 @@ void daStone2::Act_c::draw_shadow() {
 }
 
 /* 00002688-0000273C       .text Draw__Q28daStone25Act_cFv */
-void daStone2::Act_c::Draw() {
+BOOL daStone2::Act_c::Draw() {
     /* Nonmatching */
 }
 

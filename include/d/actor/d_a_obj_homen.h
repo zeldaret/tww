@@ -16,8 +16,8 @@ namespace daObjHomen {
     
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
-        void _create();
-        void _delete();
+        s32 _create();
+        BOOL _delete();
         void set_mtx();
         void init_mtx();
         void exe_event();
@@ -42,8 +42,8 @@ namespace daObjHomen {
         void set_co_collision();
         void set_at_collision();
         void adjust_hookshot();
-        void _execute();
-        void _draw();
+        BOOL _execute();
+        BOOL _draw();
     
     public:
         /* Place member variables here */

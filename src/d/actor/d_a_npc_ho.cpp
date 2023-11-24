@@ -162,17 +162,17 @@ void daNpc_Ho_c::wait_action(void*) {
 }
 
 /* 00001B2C-00001C94       .text _draw__10daNpc_Ho_cFv */
-void daNpc_Ho_c::_draw() {
+BOOL daNpc_Ho_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00001C94-00001EB0       .text _execute__10daNpc_Ho_cFv */
-void daNpc_Ho_c::_execute() {
+BOOL daNpc_Ho_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00001EB0-00001EFC       .text _delete__10daNpc_Ho_cFv */
-void daNpc_Ho_c::_delete() {
+BOOL daNpc_Ho_c::_delete() {
     /* Nonmatching */
 }
 
@@ -182,7 +182,7 @@ void CheckCreateHeap(fopAc_ac_c*) {
 }
 
 /* 00001F1C-00002124       .text _create__10daNpc_Ho_cFv */
-void daNpc_Ho_c::_create() {
+s32 daNpc_Ho_c::_create() {
     /* Nonmatching */
 }
 

@@ -47,7 +47,7 @@ void daArrow_Iceeff_Execute(void*) {
 }
 
 /* 00000ABC-00001050       .text _execute__16daArrow_Iceeff_cFv */
-void daArrow_Iceeff_c::_execute() {
+BOOL daArrow_Iceeff_c::_execute() {
     /* Nonmatching */
 }
 

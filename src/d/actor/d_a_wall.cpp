@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000100       .text _delete__8daWall_cFv */
-void daWall_c::_delete() {
+BOOL daWall_c::_delete() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void daWall_c::CreateInit() {
 }
 
 /* 00000380-000004EC       .text _create__8daWall_cFv */
-void daWall_c::_create() {
+s32 daWall_c::_create() {
     /* Nonmatching */
 }
 
@@ -52,7 +52,7 @@ void daWall_c::setMoveBGMtx() {
 }
 
 /* 000008F0-00000980       .text _execute__8daWall_cFv */
-void daWall_c::_execute() {
+BOOL daWall_c::_execute() {
     /* Nonmatching */
 }
 
@@ -82,7 +82,7 @@ void daWall_c::set_se() {
 }
 
 /* 00000FE4-00001044       .text _draw__8daWall_cFv */
-void daWall_c::_draw() {
+BOOL daWall_c::_draw() {
     /* Nonmatching */
 }
 

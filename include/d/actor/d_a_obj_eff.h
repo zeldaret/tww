@@ -29,7 +29,7 @@ namespace daObjEff {
         void eff_set_pinecone_smoke();
         void eff_set_woodBox_smoke();
         void eff_set();
-        void _create();
+        s32 _create();
         void remove_barrel_smoke();
         void remove_stool_smoke();
         void remove_skull_smoke();
@@ -37,7 +37,7 @@ namespace daObjEff {
         void remove_pinecone_smoke();
         void remove_woodBox_smoke();
         void remove();
-        void _delete();
+        BOOL _delete();
         void die_barrel_smoke();
         void die_stool_smoke();
         void die_skull_smoke();
@@ -45,7 +45,7 @@ namespace daObjEff {
         void die_pinecone_smoke();
         void die_woodBox_smoke();
         void die();
-        void _execute();
+        BOOL _execute();
     
     public:
         /* Place member variables here */

@@ -18,9 +18,9 @@ public:
 
         dComIfG_resDelete(&mPhs, m_arcname);
     }
-    void create() {}
-    void draw() {}
-    void execute() {}
+    inline s32 create();
+    inline BOOL draw();
+    inline BOOL execute();
 
     void set_mtx();
     void set_anim(int, int, int);

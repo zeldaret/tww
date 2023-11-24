@@ -12,15 +12,15 @@ public:
     void init_mtx();
     void solidHeapCB(fopAc_ac_c*);
     void create_heap();
-    void _create();
-    void _delete();
+    s32 _create();
+    BOOL _delete();
     void wait_act_proc();
     void clouds_lift_start_wait_act_proc();
     void clouds_lift_act_proc();
     void setup_action(int);
-    void _execute();
+    BOOL _execute();
     void setTexMtx();
-    void _draw();
+    BOOL _draw();
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhsBVkumo;

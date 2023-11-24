@@ -5,15 +5,15 @@
 
 class daLStair_c : public fopAc_ac_c {
 public:
-    void _draw() {}
+    inline BOOL _draw();
 
-    void _delete();
+    BOOL _delete();
     void CreateHeap();
     void CreateInit();
-    void _create();
+    s32 _create();
     void set_mtx();
     void setMoveBGMtx();
-    void _execute();
+    BOOL _execute();
     void demoMove();
     void checkAppear();
     void moveBG();

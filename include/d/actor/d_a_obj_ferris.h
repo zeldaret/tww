@@ -14,8 +14,8 @@ namespace daObjFerris {
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
         void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
-        void _create();
-        void _delete();
+        s32 _create();
+        BOOL _delete();
         void set_mtx(int);
         void init_mtx();
         void now_event(short);
@@ -25,8 +25,8 @@ namespace daObjFerris {
         void rot_mng();
         void set_collision();
         void make_lean();
-        void _execute();
-        void _draw();
+        BOOL _execute();
+        BOOL _draw();
     
     public:
         /* Place member variables here */

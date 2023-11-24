@@ -12,7 +12,7 @@ void daObjTable::Act_c::CreateHeap() {
 }
 
 /* 000001B8-00000284       .text Create__Q210daObjTable5Act_cFv */
-void daObjTable::Act_c::Create() {
+s32 daObjTable::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void daObjTable::Act_c::Mthd_Create() {
 }
 
 /* 000003B4-000003BC       .text Delete__Q210daObjTable5Act_cFv */
-void daObjTable::Act_c::Delete() {
+BOOL daObjTable::Act_c::Delete() {
     /* Nonmatching */
 }
 
@@ -47,7 +47,7 @@ void daObjTable::Act_c::Execute(float(**)[3][4]) {
 }
 
 /* 00000500-00000608       .text Draw__Q210daObjTable5Act_cFv */
-void daObjTable::Act_c::Draw() {
+BOOL daObjTable::Act_c::Draw() {
     /* Nonmatching */
 }
 

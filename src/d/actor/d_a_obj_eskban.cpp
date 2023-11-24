@@ -12,7 +12,7 @@ void daObjEskban::Act_c::CreateHeap() {
 }
 
 /* 000001FC-00000368       .text Create__Q211daObjEskban5Act_cFv */
-void daObjEskban::Act_c::Create() {
+s32 daObjEskban::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ daObjEskban::Act_c::Act_c() {
 }
 
 /* 000009C0-00000A10       .text Delete__Q211daObjEskban5Act_cFv */
-void daObjEskban::Act_c::Delete() {
+BOOL daObjEskban::Act_c::Delete() {
     /* Nonmatching */
 }
 
@@ -67,7 +67,7 @@ void daObjEskban::Act_c::Execute(float(**)[3][4]) {
 }
 
 /* 00001400-000014B4       .text Draw__Q211daObjEskban5Act_cFv */
-void daObjEskban::Act_c::Draw() {
+BOOL daObjEskban::Act_c::Draw() {
     /* Nonmatching */
 }
 

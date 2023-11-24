@@ -17,12 +17,12 @@ void daObjGnntakis_c::create_heap() {
 }
 
 /* 000001F4-00000308       .text _create__15daObjGnntakis_cFv */
-void daObjGnntakis_c::_create() {
+s32 daObjGnntakis_c::_create() {
     /* Nonmatching */
 }
 
 /* 000003AC-000003DC       .text _delete__15daObjGnntakis_cFv */
-void daObjGnntakis_c::_delete() {
+BOOL daObjGnntakis_c::_delete() {
     /* Nonmatching */
 }
 
@@ -32,12 +32,12 @@ void daObjGnntakis_c::init_mtx() {
 }
 
 /* 000003FC-00000514       .text _execute__15daObjGnntakis_cFv */
-void daObjGnntakis_c::_execute() {
+BOOL daObjGnntakis_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000514-0000058C       .text _draw__15daObjGnntakis_cFv */
-void daObjGnntakis_c::_draw() {
+BOOL daObjGnntakis_c::_draw() {
     /* Nonmatching */
 }
 

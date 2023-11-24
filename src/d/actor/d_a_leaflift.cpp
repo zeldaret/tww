@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 000000EC-000001C0       .text _delete__9daLlift_cFv */
-void daLlift_c::_delete() {
+BOOL daLlift_c::_delete() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void daLlift_c::CreateInit() {
 }
 
 /* 00000634-00000760       .text _create__9daLlift_cFv */
-void daLlift_c::_create() {
+s32 daLlift_c::_create() {
     /* Nonmatching */
 }
 
@@ -52,7 +52,7 @@ void daLlift_c::setMoveBGMtx() {
 }
 
 /* 00000D9C-00000F24       .text _execute__9daLlift_cFv */
-void daLlift_c::_execute() {
+BOOL daLlift_c::_execute() {
     /* Nonmatching */
 }
 
@@ -67,7 +67,7 @@ void daLlift_c::MoveDownLift() {
 }
 
 /* 000010E0-00001180       .text _draw__9daLlift_cFv */
-void daLlift_c::_draw() {
+BOOL daLlift_c::_draw() {
     /* Nonmatching */
 }
 

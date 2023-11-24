@@ -27,12 +27,12 @@ void daObjOhatch_c::create_heap() {
 }
 
 /* 000003CC-00000548       .text _create__13daObjOhatch_cFv */
-void daObjOhatch_c::_create() {
+s32 daObjOhatch_c::_create() {
     /* Nonmatching */
 }
 
 /* 00000548-00000628       .text _delete__13daObjOhatch_cFv */
-void daObjOhatch_c::_delete() {
+BOOL daObjOhatch_c::_delete() {
     /* Nonmatching */
 }
 
@@ -62,12 +62,12 @@ void daObjOhatch_c::open_wait_act_proc() {
 }
 
 /* 00000A50-00000B04       .text _execute__13daObjOhatch_cFv */
-void daObjOhatch_c::_execute() {
+BOOL daObjOhatch_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000B04-00000B64       .text _draw__13daObjOhatch_cFv */
-void daObjOhatch_c::_draw() {
+BOOL daObjOhatch_c::_draw() {
     /* Nonmatching */
 }
 

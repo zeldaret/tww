@@ -6,13 +6,13 @@
 namespace daObj_Otble {
     class Act_c : public fopAc_ac_c {
     public:
-        void _create() {}
-        void _delete() {}
+        inline s32 _create();
+        inline BOOL _delete();
         void attr() const {}
     
         void set_mtx();
-        void _execute();
-        void _draw();
+        BOOL _execute();
+        BOOL _draw();
         void _createHeap();
         void CreateInit();
     

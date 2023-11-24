@@ -22,12 +22,12 @@ void daObjBuoyrace::Act_c::create_load() {
 }
 
 /* 00000238-00000374       .text _create__Q213daObjBuoyrace5Act_cFv */
-void daObjBuoyrace::Act_c::_create() {
+s32 daObjBuoyrace::Act_c::_create() {
     /* Nonmatching */
 }
 
 /* 00000374-000003C0       .text _delete__Q213daObjBuoyrace5Act_cFv */
-void daObjBuoyrace::Act_c::_delete() {
+BOOL daObjBuoyrace::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -62,12 +62,12 @@ void daObjBuoyrace::Act_c::set_rope_pos() {
 }
 
 /* 00000A6C-00000AAC       .text _execute__Q213daObjBuoyrace5Act_cFv */
-void daObjBuoyrace::Act_c::_execute() {
+BOOL daObjBuoyrace::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000AAC-00000B28       .text _draw__Q213daObjBuoyrace5Act_cFv */
-void daObjBuoyrace::Act_c::_draw() {
+BOOL daObjBuoyrace::Act_c::_draw() {
     /* Nonmatching */
 }
 

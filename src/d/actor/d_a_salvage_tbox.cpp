@@ -27,7 +27,7 @@ void getWaterY(cXyz) {
 }
 
 /* 000005D8-000006E8       .text _delete__9daSTBox_cFv */
-void daSTBox_c::_delete() {
+BOOL daSTBox_c::_delete() {
     /* Nonmatching */
 }
 
@@ -47,7 +47,7 @@ void daSTBox_c::CreateInit() {
 }
 
 /* 00000ADC-00000BFC       .text _create__9daSTBox_cFv */
-void daSTBox_c::_create() {
+s32 daSTBox_c::_create() {
     /* Nonmatching */
 }
 
@@ -57,7 +57,7 @@ void daSTBox_c::set_mtx() {
 }
 
 /* 00000C7C-00000EB8       .text _execute__9daSTBox_cFv */
-void daSTBox_c::_execute() {
+BOOL daSTBox_c::_execute() {
     /* Nonmatching */
 }
 

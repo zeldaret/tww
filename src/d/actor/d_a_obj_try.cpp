@@ -37,12 +37,12 @@ void daObjTry::Act_c::chk_appear() const {
 }
 
 /* 00000528-000008D8       .text _create__Q28daObjTry5Act_cFv */
-void daObjTry::Act_c::_create() {
+s32 daObjTry::Act_c::_create() {
     /* Nonmatching */
 }
 
 /* 00000C88-00000D5C       .text _delete__Q28daObjTry5Act_cFv */
-void daObjTry::Act_c::_delete() {
+BOOL daObjTry::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -217,12 +217,12 @@ dBgS_WtrChk::~dBgS_WtrChk() {
 }
 
 /* 00002BB4-00002DA8       .text _execute__Q28daObjTry5Act_cFv */
-void daObjTry::Act_c::_execute() {
+BOOL daObjTry::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00002DA8-00002EA4       .text _draw__Q28daObjTry5Act_cFv */
-void daObjTry::Act_c::_draw() {
+BOOL daObjTry::Act_c::_draw() {
     /* Nonmatching */
 }
 

@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-000000B8       .text Delete__7daHys_cFv */
-void daHys_c::Delete() {
+BOOL daHys_c::Delete() {
     /* Nonmatching */
 }
 
@@ -17,7 +17,7 @@ void daHys_c::CreateHeap() {
 }
 
 /* 00000250-00000368       .text Create__7daHys_cFv */
-void daHys_c::Create() {
+s32 daHys_c::Create() {
     /* Nonmatching */
 }
 
@@ -57,7 +57,7 @@ void daHys_c::mode_wait_init() {
 }
 
 /* 00000704-00000778       .text Draw__7daHys_cFv */
-void daHys_c::Draw() {
+BOOL daHys_c::Draw() {
     /* Nonmatching */
 }
 

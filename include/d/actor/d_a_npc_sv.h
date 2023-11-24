@@ -11,12 +11,12 @@ public:
     void getPhaseP() {}
     void setResFlag(unsigned char) {}
 
-    void _create();
+    s32 _create();
     void createHeap();
     void createInit();
-    void _delete();
-    void _draw();
-    void _execute();
+    BOOL _delete();
+    BOOL _draw();
+    BOOL _execute();
     void executeCommon();
     void executeSetMode(unsigned char);
     void executeWaitInit();

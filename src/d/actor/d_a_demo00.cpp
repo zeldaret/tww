@@ -67,7 +67,7 @@ void daDemo00_Draw(daDemo00_c*) {
 }
 
 /* 800E6EB0-800E7204       .text draw__10daDemo00_cFv */
-void daDemo00_c::draw() {
+BOOL daDemo00_c::draw() {
     /* Nonmatching */
 }
 
@@ -77,7 +77,7 @@ void daDemo00_Execute(daDemo00_c*) {
 }
 
 /* 800E7224-800E78A0       .text execute__10daDemo00_cFv */
-void daDemo00_c::execute() {
+BOOL daDemo00_c::execute() {
     /* Nonmatching */
 }
 

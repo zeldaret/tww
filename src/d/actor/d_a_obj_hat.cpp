@@ -17,7 +17,7 @@ void CheckCreateHeap(fopAc_ac_c*) {
 }
 
 /* 000003CC-0000045C       .text _create__10daObjHat_cFv */
-void daObjHat_c::_create() {
+s32 daObjHat_c::_create() {
     /* Nonmatching */
 }
 
@@ -32,17 +32,17 @@ void daObjHat_c::createInit() {
 }
 
 /* 000006AC-000006DC       .text _delete__10daObjHat_cFv */
-void daObjHat_c::_delete() {
+BOOL daObjHat_c::_delete() {
     /* Nonmatching */
 }
 
 /* 000006DC-0000073C       .text _draw__10daObjHat_cFv */
-void daObjHat_c::_draw() {
+BOOL daObjHat_c::_draw() {
     /* Nonmatching */
 }
 
 /* 0000073C-00000884       .text _execute__10daObjHat_cFv */
-void daObjHat_c::_execute() {
+BOOL daObjHat_c::_execute() {
     /* Nonmatching */
 }
 

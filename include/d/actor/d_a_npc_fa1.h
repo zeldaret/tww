@@ -39,8 +39,8 @@ public:
 
     void setPointLightParam();
     void createInit();
-    void _draw();
-    void _execute();
+    BOOL _draw();
+    BOOL _execute();
     void checkBinCatch();
     void position_move(float, float);
     void BGCheck();
@@ -81,8 +81,8 @@ public:
     void init_bigelf_change();
     void bigelf_change();
     void findPlayer();
-    void _delete();
-    void _create();
+    BOOL _delete();
+    s32 _create();
     void CreateHeap();
     void setMtx();
 

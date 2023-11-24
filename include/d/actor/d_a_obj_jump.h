@@ -20,9 +20,9 @@ namespace daObjJump {
         void prm_get_type() const {}
     
         void CreateHeap();
-        void Create();
+        s32 Create();
         void Mthd_Create();
-        void Delete();
+        BOOL Delete();
         void Mthd_Delete();
         void set_mtx();
         void init_mtx();
@@ -44,7 +44,7 @@ namespace daObjJump {
         void mode_u_w_init();
         void mode_u_w();
         void Execute(float(**)[3][4]);
-        void Draw();
+        BOOL Draw();
     
     public:
         /* 0x290 */ u8 m290[0x336 - 0x290];

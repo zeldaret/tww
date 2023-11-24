@@ -62,7 +62,7 @@ void daArrow_Lighteff_Execute(void*) {
 }
 
 /* 00000D44-000011A4       .text _execute__18daArrow_Lighteff_cFv */
-void daArrow_Lighteff_c::_execute() {
+BOOL daArrow_Lighteff_c::_execute() {
     /* Nonmatching */
 }
 

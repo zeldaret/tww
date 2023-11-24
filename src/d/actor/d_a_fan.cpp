@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-000000F0       .text Delete__7daFan_cFv */
-void daFan_c::Delete() {
+BOOL daFan_c::Delete() {
     /* Nonmatching */
 }
 
@@ -17,7 +17,7 @@ void daFan_c::CreateHeap() {
 }
 
 /* 0000040C-00000640       .text Create__7daFan_cFv */
-void daFan_c::Create() {
+s32 daFan_c::Create() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void nodeCallBack(J3DNode*, int) {
 }
 
 /* 000006F4-00000900       .text _create__7daFan_cFv */
-void daFan_c::_create() {
+s32 daFan_c::_create() {
     /* Nonmatching */
 }
 
@@ -52,7 +52,7 @@ void daFan_c::Execute(float(**)[3][4]) {
 }
 
 /* 00001088-0000118C       .text Draw__7daFan_cFv */
-void daFan_c::Draw() {
+BOOL daFan_c::Draw() {
     /* Nonmatching */
 }
 

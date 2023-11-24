@@ -5,12 +5,12 @@
 
 class daDekuItem_c : public fopAc_ac_c {
 public:
-    void _delete();
+    BOOL _delete();
     void CreateHeap();
     void CreateInit();
-    void _create();
+    s32 _create();
     void set_mtx();
-    void _execute();
+    BOOL _execute();
     void mode_proc_call();
     void mode_wait();
     void mode_getdemo_init();
@@ -18,7 +18,7 @@ public:
     void mode_getdemo();
     void eventOrder();
     void checkOrder();
-    void _draw();
+    BOOL _draw();
 
 public:
     /* Place member variables here */

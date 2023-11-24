@@ -12,9 +12,9 @@ namespace daObjHlift {
         void prm_get_swSave() const {}
     
         void CreateHeap();
-        void Create();
+        s32 Create();
         void Mthd_Create();
-        void Delete();
+        BOOL Delete();
         void Mthd_Delete();
         void mode_lower_init();
         void mode_lower();
@@ -34,7 +34,7 @@ namespace daObjHlift {
         void chk_demo_end();
         void se_whole();
         void Execute(float(**)[3][4]);
-        void Draw();
+        BOOL Draw();
     
     public:
         /* Place member variables here */

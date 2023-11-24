@@ -67,7 +67,7 @@ void daBalanceliftExecute(void*) {
 }
 
 /* 0000133C-000016F0       .text _execute__15daBalancelift_cFv */
-void daBalancelift_c::_execute() {
+BOOL daBalancelift_c::_execute() {
     /* Nonmatching */
 }
 

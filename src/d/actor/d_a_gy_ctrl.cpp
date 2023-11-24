@@ -102,12 +102,12 @@ void daGy_Ctrl_c::deadCheckGy() {
 }
 
 /* 0000109C-00001100       .text _execute__11daGy_Ctrl_cFv */
-void daGy_Ctrl_c::_execute() {
+BOOL daGy_Ctrl_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00001100-00001210       .text _draw__11daGy_Ctrl_cFv */
-void daGy_Ctrl_c::_draw() {
+BOOL daGy_Ctrl_c::_draw() {
     /* Nonmatching */
 }
 
@@ -137,12 +137,12 @@ void daGy_Ctrl_c::checkGyCtrlExist() {
 }
 
 /* 00001458-000016AC       .text _create__11daGy_Ctrl_cFv */
-void daGy_Ctrl_c::_create() {
+s32 daGy_Ctrl_c::_create() {
     /* Nonmatching */
 }
 
 /* 00001C3C-00001C44       .text _delete__11daGy_Ctrl_cFv */
-void daGy_Ctrl_c::_delete() {
+BOOL daGy_Ctrl_c::_delete() {
     /* Nonmatching */
 }
 

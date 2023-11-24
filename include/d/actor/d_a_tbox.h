@@ -11,7 +11,7 @@ class daTbox_c : public fopAc_ac_c {
 public:
     void action() {}
     void deleteProc() {}
-    void draw() {}
+    inline BOOL draw();
     void flagCheck(unsigned short) {}
     void flagClr() {}
     void flagOff(unsigned short) {}

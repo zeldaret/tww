@@ -11,8 +11,8 @@ public:
 
     void solidHeapCB(fopAc_ac_c*);
     void create_heap();
-    void _create();
-    void _delete();
+    s32 _create();
+    BOOL _delete();
     void init_mtx();
     void set_co_pos();
     void get_ground();
@@ -27,8 +27,8 @@ public:
     void bound();
     void set_shine();
     void shine_move();
-    void _execute();
-    void _draw();
+    BOOL _execute();
+    BOOL _draw();
 
 public:
     /* Place member variables here */

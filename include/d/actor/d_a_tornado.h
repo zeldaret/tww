@@ -13,11 +13,11 @@ public:
     void setScaleOn() {}
 
     void jointCallBack(int);
-    void draw();
-    void execute();
+    BOOL draw();
+    BOOL execute();
     void tornado_delete();
     void createHeap();
-    void create();
+    s32 create();
 
 public:
     /* Place member variables here */

@@ -92,7 +92,7 @@ void checkCreateHeap(fopAc_ac_c*) {
 }
 
 /* 00000930-00000B44       .text create__11daObj_hsh_cFv */
-void daObj_hsh_c::create() {
+s32 daObj_hsh_c::create() {
     /* Nonmatching */
 }
 
@@ -242,12 +242,12 @@ void daObj_hsh_c::next_msgStatus(unsigned long*) {
 }
 
 /* 00001F78-00002098       .text execute__11daObj_hsh_cFv */
-void daObj_hsh_c::execute() {
+BOOL daObj_hsh_c::execute() {
     /* Nonmatching */
 }
 
 /* 00002098-00002158       .text draw__11daObj_hsh_cFv */
-void daObj_hsh_c::draw() {
+BOOL daObj_hsh_c::draw() {
     /* Nonmatching */
 }
 

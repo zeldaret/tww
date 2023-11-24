@@ -57,10 +57,10 @@ public:
     void dummy_action(void*);
     void RoomEffectSet();
     void RoomEffectDelete();
-    void _draw();
-    void _execute();
-    void _delete();
-    void _create();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
+    s32 _create();
     void CreateHeap();
 
 public:

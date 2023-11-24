@@ -12,12 +12,12 @@ void daRaceItem_c::set_mtx() {
 }
 
 /* 000000F8-0000012C       .text Delete__12daRaceItem_cFv */
-void daRaceItem_c::Delete() {
+BOOL daRaceItem_c::Delete() {
     /* Nonmatching */
 }
 
 /* 0000012C-00000318       .text create__12daRaceItem_cFv */
-void daRaceItem_c::create() {
+s32 daRaceItem_c::create() {
     /* Nonmatching */
 }
 
@@ -42,7 +42,7 @@ void daRaceItem_Execute(daRaceItem_c*) {
 }
 
 /* 0000073C-00000C44       .text execute__12daRaceItem_cFv */
-void daRaceItem_c::execute() {
+BOOL daRaceItem_c::execute() {
     /* Nonmatching */
 }
 

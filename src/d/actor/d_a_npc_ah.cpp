@@ -32,7 +32,7 @@ void phase_2(daNpcAh_c*) {
 }
 
 /* 000008D8-00000908       .text _create__9daNpcAh_cFv */
-void daNpcAh_c::_create() {
+s32 daNpcAh_c::_create() {
     /* Nonmatching */
 }
 
@@ -47,17 +47,17 @@ void daNpcAh_c::createInit() {
 }
 
 /* 00000D60-00000DCC       .text _delete__9daNpcAh_cFv */
-void daNpcAh_c::_delete() {
+BOOL daNpcAh_c::_delete() {
     /* Nonmatching */
 }
 
 /* 00000DCC-00000EDC       .text _draw__9daNpcAh_cFv */
-void daNpcAh_c::_draw() {
+BOOL daNpcAh_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00000EDC-00001134       .text _execute__9daNpcAh_cFv */
-void daNpcAh_c::_execute() {
+BOOL daNpcAh_c::_execute() {
     /* Nonmatching */
 }
 

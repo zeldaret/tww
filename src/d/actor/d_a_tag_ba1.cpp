@@ -37,22 +37,22 @@ void daTag_Ba1_c::createInit() {
 }
 
 /* 00000288-00000290       .text _draw__11daTag_Ba1_cFv */
-void daTag_Ba1_c::_draw() {
+BOOL daTag_Ba1_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00000290-00000340       .text _execute__11daTag_Ba1_cFv */
-void daTag_Ba1_c::_execute() {
+BOOL daTag_Ba1_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000340-00000394       .text _delete__11daTag_Ba1_cFv */
-void daTag_Ba1_c::_delete() {
+BOOL daTag_Ba1_c::_delete() {
     /* Nonmatching */
 }
 
 /* 00000394-00000454       .text _create__11daTag_Ba1_cFv */
-void daTag_Ba1_c::_create() {
+s32 daTag_Ba1_c::_create() {
     /* Nonmatching */
 }
 

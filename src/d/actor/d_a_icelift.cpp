@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-000000E0       .text _delete__9daIlift_cFv */
-void daIlift_c::_delete() {
+BOOL daIlift_c::_delete() {
     /* Nonmatching */
 }
 
@@ -32,7 +32,7 @@ void daIlift_c::CreateInit() {
 }
 
 /* 00000680-00000794       .text _create__9daIlift_cFv */
-void daIlift_c::_create() {
+s32 daIlift_c::_create() {
     /* Nonmatching */
 }
 
@@ -42,7 +42,7 @@ void daIlift_c::set_mtx() {
 }
 
 /* 0000089C-000009C8       .text _execute__9daIlift_cFv */
-void daIlift_c::_execute() {
+BOOL daIlift_c::_execute() {
     /* Nonmatching */
 }
 
@@ -67,7 +67,7 @@ void daIlift_c::set_next_pnt() {
 }
 
 /* 00000F58-00000FF8       .text _draw__9daIlift_cFv */
-void daIlift_c::_draw() {
+BOOL daIlift_c::_draw() {
     /* Nonmatching */
 }
 

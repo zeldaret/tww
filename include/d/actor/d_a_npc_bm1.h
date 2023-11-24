@@ -144,10 +144,10 @@ public:
     void wait_actionA(void*);
     void demo();
     void shadowDraw();
-    void _draw();
-    void _execute();
-    void _delete();
-    void _create();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
+    s32 _create();
     void create_Anm();
     void create_hed_Anm();
     void create_wng_Anm();

@@ -42,22 +42,22 @@ void daObjMshokki_c::set_se() {
 }
 
 /* 00000740-00000A1C       .text _create__14daObjMshokki_cFv */
-void daObjMshokki_c::_create() {
+s32 daObjMshokki_c::_create() {
     /* Nonmatching */
 }
 
 /* 00000C44-00000C74       .text _delete__14daObjMshokki_cFv */
-void daObjMshokki_c::_delete() {
+BOOL daObjMshokki_c::_delete() {
     /* Nonmatching */
 }
 
 /* 00000C74-00000E24       .text _execute__14daObjMshokki_cFv */
-void daObjMshokki_c::_execute() {
+BOOL daObjMshokki_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000E24-00000E84       .text _draw__14daObjMshokki_cFv */
-void daObjMshokki_c::_draw() {
+BOOL daObjMshokki_c::_draw() {
     /* Nonmatching */
 }
 

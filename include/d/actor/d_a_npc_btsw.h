@@ -29,10 +29,10 @@ public:
     void TimerCountDown();
     void shiwake_game_action(void*);
     void getdemo_action(void*);
-    void _draw();
-    void _execute();
-    void _delete();
-    void _create();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
+    s32 _create();
     void CreateHeap();
 
 public:

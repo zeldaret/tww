@@ -32,7 +32,7 @@ void CheckCreateHeap(fopAc_ac_c*) {
 }
 
 /* 00000374-00000538       .text create__10daNpc_Os_cFv */
-void daNpc_Os_c::create() {
+s32 daNpc_Os_c::create() {
     /* Nonmatching */
 }
 
@@ -462,7 +462,7 @@ void daNpc_Os_c::init() {
 }
 
 /* 00005B58-00005CC8       .text draw__10daNpc_Os_cFv */
-void daNpc_Os_c::draw() {
+BOOL daNpc_Os_c::draw() {
     /* Nonmatching */
 }
 
@@ -477,7 +477,7 @@ void daNpc_Os_c::smokeSet(unsigned short) {
 }
 
 /* 00005E5C-00006AF8       .text execute__10daNpc_Os_cFv */
-void daNpc_Os_c::execute() {
+BOOL daNpc_Os_c::execute() {
     /* Nonmatching */
 }
 

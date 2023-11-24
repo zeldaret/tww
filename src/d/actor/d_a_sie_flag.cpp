@@ -32,7 +32,7 @@ void daSie_Flag_c::CreateInit() {
 }
 
 /* 000003D4-00000488       .text _create__12daSie_Flag_cFv */
-void daSie_Flag_c::_create() {
+s32 daSie_Flag_c::_create() {
     /* Nonmatching */
 }
 
@@ -42,17 +42,17 @@ daSie_Flag_c::daSie_Flag_c() {
 }
 
 /* 00000814-00000864       .text _delete__12daSie_Flag_cFv */
-void daSie_Flag_c::_delete() {
+BOOL daSie_Flag_c::_delete() {
     /* Nonmatching */
 }
 
 /* 00000864-00000B08       .text _execute__12daSie_Flag_cFv */
-void daSie_Flag_c::_execute() {
+BOOL daSie_Flag_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000B08-00000B94       .text _draw__12daSie_Flag_cFv */
-void daSie_Flag_c::_draw() {
+BOOL daSie_Flag_c::_draw() {
     /* Nonmatching */
 }
 

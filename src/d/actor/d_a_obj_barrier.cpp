@@ -433,14 +433,14 @@ bool daObjBarrier_ef_c::init() {
 }
 
 /* 000013E0-00001420       .text create__17daObjBarrier_ef_cFv */
-void daObjBarrier_ef_c::create() {
+s32 daObjBarrier_ef_c::create() {
     for (int i = 0; i < 4; i++) {
         mpModel[i]->setBaseScale(l_ef_scale);
     }
 }
 
 /* 00001420-000014E0       .text execute__17daObjBarrier_ef_cFv */
-void daObjBarrier_ef_c::execute() {
+BOOL daObjBarrier_ef_c::execute() {
     int active_flags = mActiveEffFlags;
     for (int i = 0; i < 4; i++) {
         if (((active_flags >> i) & 1)) {
@@ -457,7 +457,7 @@ void daObjBarrier_ef_c::execute() {
 }
 
 /* 000014E0-00001638       .text draw__17daObjBarrier_ef_cFv */
-void daObjBarrier_ef_c::draw() {
+BOOL daObjBarrier_ef_c::draw() {
     J3DModel* model_p;
 
     int active_flags = mActiveEffFlags;

@@ -29,13 +29,13 @@ public:
     void deleteShopItem();
     void next_msgStatus(unsigned long*);
     void anmAtr(unsigned short);
-    void _execute();
-    void _draw();
+    BOOL _execute();
+    BOOL _draw();
     void createInit();
     void setSmokeParticle();
     void getArg();
-    void _create();
-    void _delete();
+    s32 _create();
+    BOOL _delete();
     void _searchEsa(fopAc_ac_c*);
     void cutProc();
     void cutEatesaStart();

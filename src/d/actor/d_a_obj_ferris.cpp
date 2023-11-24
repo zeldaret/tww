@@ -22,12 +22,12 @@ void daObjFerris::Act_c::ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
 }
 
 /* 000004DC-00000898       .text _create__Q211daObjFerris5Act_cFv */
-void daObjFerris::Act_c::_create() {
+s32 daObjFerris::Act_c::_create() {
     /* Nonmatching */
 }
 
 /* 00000DE8-00000EA8       .text _delete__Q211daObjFerris5Act_cFv */
-void daObjFerris::Act_c::_delete() {
+BOOL daObjFerris::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -77,12 +77,12 @@ void daObjFerris::Act_c::make_lean() {
 }
 
 /* 00001C30-00001D58       .text _execute__Q211daObjFerris5Act_cFv */
-void daObjFerris::Act_c::_execute() {
+BOOL daObjFerris::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00001D58-00001E18       .text _draw__Q211daObjFerris5Act_cFv */
-void daObjFerris::Act_c::_draw() {
+BOOL daObjFerris::Act_c::_draw() {
     /* Nonmatching */
 }
 

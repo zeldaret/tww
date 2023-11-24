@@ -17,7 +17,7 @@ void daObjHomen::Act_c::create_heap() {
 }
 
 /* 000002B4-000005B0       .text _create__Q210daObjHomen5Act_cFv */
-void daObjHomen::Act_c::_create() {
+s32 daObjHomen::Act_c::_create() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ daObjHomen::Act_c::Act_c() {
 }
 
 /* 000011A4-00001230       .text _delete__Q210daObjHomen5Act_cFv */
-void daObjHomen::Act_c::_delete() {
+BOOL daObjHomen::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -152,12 +152,12 @@ void daObjHomen::Act_c::adjust_hookshot() {
 }
 
 /* 00002810-000028E0       .text _execute__Q210daObjHomen5Act_cFv */
-void daObjHomen::Act_c::_execute() {
+BOOL daObjHomen::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 000028E0-00002954       .text _draw__Q210daObjHomen5Act_cFv */
-void daObjHomen::Act_c::_draw() {
+BOOL daObjHomen::Act_c::_draw() {
     /* Nonmatching */
 }
 

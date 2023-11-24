@@ -30,10 +30,10 @@ namespace daObjBuoyflag {
         }
     
         void setup(MtxP mtx) { cMtx_copy(mtx, m1090); }
-        void _create() {}
-        void _delete() {}
-        void _draw() {}
-        void _execute() {}
+        inline s32 _create();
+        inline BOOL _delete();
+        inline BOOL _draw();
+        inline BOOL _execute();
         void jump_to_sea(float, float, short) {}
         void make_barrel2_mine(unsigned int, cXyz*, int, csXyz*, daObjBuoyflag::Texture_e, bool) {}
         void make_barrel2_norm(unsigned int, cXyz*, int, csXyz*, daObjBuoyflag::Texture_e) {}

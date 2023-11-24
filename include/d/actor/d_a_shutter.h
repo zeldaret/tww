@@ -6,15 +6,15 @@
 
 class daShutter_c : public fopAc_ac_c {
 public:
-    void _delete();
+    BOOL _delete();
     void CreateHeap();
-    void Create();
-    void _create();
+    s32 Create();
+    s32 _create();
     void set_mtx();
-    void _execute();
+    BOOL _execute();
     void shutter_move();
     void demo();
-    void _draw();
+    BOOL _draw();
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhs;

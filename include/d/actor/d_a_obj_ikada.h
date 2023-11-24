@@ -69,14 +69,14 @@ public:
     void modeStopBombTerryInit();
     void modeStopBombTerry();
     void epProc();
-    void _execute();
+    BOOL _execute();
     void debugDraw();
-    void _draw();
+    BOOL _draw();
     void getArg();
     void createInit();
     void _createHeap();
-    void _create();
-    void _delete();
+    s32 _create();
+    BOOL _delete();
 
 public:
     /* 0x0290 */ u32 mType;

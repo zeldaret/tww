@@ -32,7 +32,7 @@ void daFallRock_Execute(daFallRock_c*) {
 }
 
 /* 000002D0-00000810       .text execute__12daFallRock_cFv */
-void daFallRock_c::execute() {
+BOOL daFallRock_c::execute() {
     /* Nonmatching */
 }
 
@@ -62,7 +62,7 @@ void daFallRock_Create(fopAc_ac_c*) {
 }
 
 /* 00001050-0000127C       .text create__12daFallRock_cFv */
-void daFallRock_c::create() {
+s32 daFallRock_c::create() {
     /* Nonmatching */
 }
 

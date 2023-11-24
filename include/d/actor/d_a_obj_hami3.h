@@ -11,9 +11,9 @@ namespace daObjHami3 {
         void prm_get_swSave2() const {}
     
         void CreateHeap();
-        void Create();
+        s32 Create();
         void Mthd_Create();
-        void Delete();
+        BOOL Delete();
         void Mthd_Delete();
         void set_mtx();
         void init_mtx();
@@ -24,7 +24,7 @@ namespace daObjHami3 {
         void daObjHami3_close_demo_wait();
         void daObjHami3_close_demo();
         void Execute(float(**)[3][4]);
-        void Draw();
+        BOOL Draw();
     
     public:
         /* Place member variables here */

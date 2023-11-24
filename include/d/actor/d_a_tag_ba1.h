@@ -8,10 +8,10 @@ public:
     void XyCheck_cB(int);
     void XyEvent_cB(int);
     void createInit();
-    void _draw();
-    void _execute();
-    void _delete();
-    void _create();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
+    s32 _create();
 
 public:
     /* Place member variables here */

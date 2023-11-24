@@ -12,7 +12,7 @@ void daObjLadder::Act_c::CreateHeap() {
 }
 
 /* 0000013C-000002F0       .text Create__Q211daObjLadder5Act_cFv */
-void daObjLadder::Act_c::Create() {
+s32 daObjLadder::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void daObjLadder::Act_c::Mthd_Create() {
 }
 
 /* 000009B8-000009C0       .text Delete__Q211daObjLadder5Act_cFv */
-void daObjLadder::Act_c::Delete() {
+BOOL daObjLadder::Act_c::Delete() {
     /* Nonmatching */
 }
 
@@ -102,7 +102,7 @@ void daObjLadder::Act_c::Execute(float(**)[3][4]) {
 }
 
 /* 000010A0-00001140       .text Draw__Q211daObjLadder5Act_cFv */
-void daObjLadder::Act_c::Draw() {
+BOOL daObjLadder::Act_c::Draw() {
     /* Nonmatching */
 }
 

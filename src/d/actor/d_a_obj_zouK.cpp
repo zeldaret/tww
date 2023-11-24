@@ -17,7 +17,7 @@ void daObjZouk::Act_c::create_heap() {
 }
 
 /* 00000468-00000724       .text _create__Q29daObjZouk5Act_cFv */
-void daObjZouk::Act_c::_create() {
+s32 daObjZouk::Act_c::_create() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ daObjZouk::Act_c::Act_c() {
 }
 
 /* 00001094-00001164       .text _delete__Q29daObjZouk5Act_cFv */
-void daObjZouk::Act_c::_delete() {
+BOOL daObjZouk::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -52,12 +52,12 @@ void daObjZouk::Act_c::jokai_demo() {
 }
 
 /* 000012F0-00001510       .text _execute__Q29daObjZouk5Act_cFv */
-void daObjZouk::Act_c::_execute() {
+BOOL daObjZouk::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00001510-000015F0       .text _draw__Q29daObjZouk5Act_cFv */
-void daObjZouk::Act_c::_draw() {
+BOOL daObjZouk::Act_c::_draw() {
     /* Nonmatching */
 }
 

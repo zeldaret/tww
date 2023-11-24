@@ -30,10 +30,10 @@ public:
     void wait_action(void*);
     void event_endCheck_action(void*);
     void set_mtx();
-    void _draw();
-    void _execute();
-    void _delete();
-    void _create();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
+    s32 _create();
     void CreateHeap();
 
 public:

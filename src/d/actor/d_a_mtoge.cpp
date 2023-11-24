@@ -32,7 +32,7 @@ void daMtoge_c::CreateInit() {
 }
 
 /* 00000384-0000041C       .text create__9daMtoge_cFv */
-void daMtoge_c::create() {
+s32 daMtoge_c::create() {
     /* Nonmatching */
 }
 

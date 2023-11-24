@@ -12,11 +12,11 @@ public:
     void modeClearEventInit();
     void modeClearEvent();
     void modeProc(daTag_Gship_c::Proc_e, int);
-    void _execute();
-    void _draw();
+    BOOL _execute();
+    BOOL _draw();
     void getArg();
-    void _create();
-    void _delete();
+    s32 _create();
+    BOOL _delete();
 
 public:
     /* 0x290 */ PTMF* m290;

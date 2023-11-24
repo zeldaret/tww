@@ -10,9 +10,9 @@ namespace daObjTide {
         void prm_get_type() const {}
     
         void CreateHeap();
-        void Create();
+        s32 Create();
         void Mthd_Create();
-        void Delete();
+        BOOL Delete();
         void Mthd_Delete();
         void set_mtx();
         void init_mtx();
@@ -37,7 +37,7 @@ namespace daObjTide {
         void se_stop_up();
         void se_pos_up();
         void Execute(float(**)[3][4]);
-        void Draw();
+        BOOL Draw();
     
     public:
         /* Place member variables here */

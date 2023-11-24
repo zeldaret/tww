@@ -57,7 +57,7 @@ void daMdoor_c::CreateInit() {
 }
 
 /* 000005E0-00000698       .text create__9daMdoor_cFv */
-void daMdoor_c::create() {
+s32 daMdoor_c::create() {
     /* Nonmatching */
 }
 

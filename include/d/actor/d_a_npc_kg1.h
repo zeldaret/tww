@@ -7,10 +7,10 @@
 
 class daNpc_Kg1_c : public fopAc_ac_c {
 public:
-    void _create() {}
-    void _delete() {}
-    void _draw() {}
-    void _execute() {}
+    inline s32 _create();
+    inline BOOL _delete();
+    inline BOOL _draw();
+    inline BOOL _execute();
     void getAttentionBasePos() {}
     void getEyePos() {}
     void setAction(void (daNpc_Kg1_c::*)()) {}

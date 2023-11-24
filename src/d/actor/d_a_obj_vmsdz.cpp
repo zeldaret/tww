@@ -17,12 +17,12 @@ void daObjVmsdz_c::create_heap() {
 }
 
 /* 0000015C-00000208       .text _create__12daObjVmsdz_cFv */
-void daObjVmsdz_c::_create() {
+s32 daObjVmsdz_c::_create() {
     /* Nonmatching */
 }
 
 /* 00000208-00000238       .text _delete__12daObjVmsdz_cFv */
-void daObjVmsdz_c::_delete() {
+BOOL daObjVmsdz_c::_delete() {
     /* Nonmatching */
 }
 
@@ -32,12 +32,12 @@ void daObjVmsdz_c::init_mtx() {
 }
 
 /* 00000258-00000260       .text _execute__12daObjVmsdz_cFv */
-void daObjVmsdz_c::_execute() {
+BOOL daObjVmsdz_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000260-00000300       .text _draw__12daObjVmsdz_cFv */
-void daObjVmsdz_c::_draw() {
+BOOL daObjVmsdz_c::_draw() {
     /* Nonmatching */
 }
 

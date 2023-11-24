@@ -8,10 +8,10 @@
 namespace daPedestal {
     class daPds_c : public fopAc_ac_c {
     public:
-        void _delete();
+        BOOL _delete();
         void CreateHeap();
         void CreateInit();
-        void _create();
+        s32 _create();
         void getMyStaffId();
         void wakeupCheck();
         void finishCheck();
@@ -28,8 +28,8 @@ namespace daPedestal {
         void set_mtx();
         void initBrkAnm(unsigned char, bool);
         void playBrkAnm();
-        void _execute();
-        void _draw();
+        BOOL _execute();
+        BOOL _draw();
     
     public:
         /* 0x290 */ u8 m290[0x298 - 0x290];

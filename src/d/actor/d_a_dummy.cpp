@@ -17,12 +17,12 @@ void daDummy::Act_c::create_heap() {
 }
 
 /* 000000A4-0000015C       .text _create__Q27daDummy5Act_cFv */
-void daDummy::Act_c::_create() {
+s32 daDummy::Act_c::_create() {
     /* Nonmatching */
 }
 
 /* 0000015C-00000164       .text _delete__Q27daDummy5Act_cFv */
-void daDummy::Act_c::_delete() {
+BOOL daDummy::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -32,12 +32,12 @@ void daDummy::Act_c::set_mtx() {
 }
 
 /* 000001CC-000001D4       .text _execute__Q27daDummy5Act_cFv */
-void daDummy::Act_c::_execute() {
+BOOL daDummy::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 000001D4-000001DC       .text _draw__Q27daDummy5Act_cFv */
-void daDummy::Act_c::_draw() {
+BOOL daDummy::Act_c::_draw() {
     /* Nonmatching */
 }
 

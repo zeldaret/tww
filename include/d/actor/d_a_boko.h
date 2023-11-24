@@ -45,7 +45,7 @@ public:
     void keDraw();
     void keCalc1(ke_c_s*, int);
     void keCalc();
-    void draw();
+    BOOL draw();
     void setTopRootPos(int);
     void setBaseMatrix();
     void checkNoDraw();
@@ -58,10 +58,10 @@ public:
     void procMove();
     void procThrow();
     void procCarry();
-    void execute();
+    BOOL execute();
     void bokoDelete();
     void createHeap();
-    void create();
+    s32 create();
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhs;

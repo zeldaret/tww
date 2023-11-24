@@ -77,7 +77,7 @@ void daKnob00_c::CreateInit() {
 }
 
 /* 00000D84-00000E70       .text create__10daKnob00_cFv */
-void daKnob00_c::create() {
+s32 daKnob00_c::create() {
     /* Nonmatching */
 }
 
@@ -157,7 +157,7 @@ void daKnob00_c::actionDead() {
 }
 
 /* 00001B0C-00001CA0       .text draw__10daKnob00_cFv */
-void daKnob00_c::draw() {
+BOOL daKnob00_c::draw() {
     /* Nonmatching */
 }
 

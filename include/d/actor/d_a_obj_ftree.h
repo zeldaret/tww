@@ -77,11 +77,11 @@ namespace daObjFtree {
         void solidHeapCB(fopAc_ac_c*);
         void NodeCallBack_Effect(J3DNode*, int);
         void create_heap();
-        void _create();
-        void _delete();
+        s32 _create();
+        BOOL _delete();
         void set_mtx();
-        void _execute();
-        void _draw();
+        BOOL _execute();
+        BOOL _draw();
     
     public:
         /* 0x290 */ void* m290;

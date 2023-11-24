@@ -9,8 +9,8 @@ public:
 
     void solidHeapCB(fopAc_ac_c*);
     void create_heap();
-    void _create();
-    void _delete();
+    s32 _create();
+    BOOL _delete();
     void set_tex(float, float, int);
     void init_mtx();
     void init_co();
@@ -21,8 +21,8 @@ public:
     void water_manager();
     void part_manager();
     void ygush_manager();
-    void _execute();
-    void _draw();
+    BOOL _execute();
+    BOOL _draw();
 
 public:
     /* Place member variables here */

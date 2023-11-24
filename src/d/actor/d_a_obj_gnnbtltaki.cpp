@@ -17,12 +17,12 @@ void daObjGnnbtaki_c::create_heap() {
 }
 
 /* 000001F4-00000348       .text _create__15daObjGnnbtaki_cFv */
-void daObjGnnbtaki_c::_create() {
+s32 daObjGnnbtaki_c::_create() {
     /* Nonmatching */
 }
 
 /* 000003EC-0000041C       .text _delete__15daObjGnnbtaki_cFv */
-void daObjGnnbtaki_c::_delete() {
+BOOL daObjGnnbtaki_c::_delete() {
     /* Nonmatching */
 }
 
@@ -32,12 +32,12 @@ void daObjGnnbtaki_c::init_mtx() {
 }
 
 /* 0000043C-00000548       .text _execute__15daObjGnnbtaki_cFv */
-void daObjGnnbtaki_c::_execute() {
+BOOL daObjGnnbtaki_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000548-000005CC       .text _draw__15daObjGnnbtaki_cFv */
-void daObjGnnbtaki_c::_draw() {
+BOOL daObjGnnbtaki_c::_draw() {
     /* Nonmatching */
 }
 

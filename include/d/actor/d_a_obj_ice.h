@@ -16,12 +16,12 @@ public:
     void solidHeapCB(fopAc_ac_c*);
     void create_heap();
     void tg_hitCallback(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
-    void _create();
-    void _delete();
+    s32 _create();
+    BOOL _delete();
     void wait_act_proc();
     void fade_out_retire_act_proc();
-    void _execute();
-    void _draw();
+    BOOL _execute();
+    BOOL _draw();
 
 public:
     /* Place member variables here */

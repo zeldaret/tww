@@ -32,7 +32,7 @@ void daDemo_Kmm_c::CreateInit() {
 }
 
 /* 00000308-000003A0       .text create__12daDemo_Kmm_cFv */
-void daDemo_Kmm_c::create() {
+s32 daDemo_Kmm_c::create() {
     /* Nonmatching */
 }
 

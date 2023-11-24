@@ -12,7 +12,7 @@ daTag_So_HIO_c::daTag_So_HIO_c() {
 }
 
 /* 0000010C-00000114       .text _execute__10daTag_So_cFv */
-void daTag_So_c::_execute() {
+BOOL daTag_So_c::_execute() {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void daTag_So_c::debugDraw() {
 }
 
 /* 0000018C-000001C4       .text _draw__10daTag_So_cFv */
-void daTag_So_c::_draw() {
+BOOL daTag_So_c::_draw() {
     /* Nonmatching */
 }
 
@@ -32,12 +32,12 @@ void daTag_So_c::getArg() {
 }
 
 /* 00000224-0000027C       .text _create__10daTag_So_cFv */
-void daTag_So_c::_create() {
+s32 daTag_So_c::_create() {
     /* Nonmatching */
 }
 
 /* 0000027C-00000284       .text _delete__10daTag_So_cFv */
-void daTag_So_c::_delete() {
+BOOL daTag_So_c::_delete() {
     /* Nonmatching */
 }
 

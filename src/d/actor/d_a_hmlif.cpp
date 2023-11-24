@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000080       .text Delete__9daHmlif_cFv */
-void daHmlif_c::Delete() {
+BOOL daHmlif_c::Delete() {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void daHmlif_c::CreateHeap() {
 }
 
 /* 00000474-000007C8       .text Create__9daHmlif_cFv */
-void daHmlif_c::Create() {
+s32 daHmlif_c::Create() {
     /* Nonmatching */
 }
 
@@ -87,7 +87,7 @@ void daHmlif_c::chkSwitchPathType() {
 }
 
 /* 00001534-00001610       .text Draw__9daHmlif_cFv */
-void daHmlif_c::Draw() {
+BOOL daHmlif_c::Draw() {
     /* Nonmatching */
 }
 

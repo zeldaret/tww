@@ -9,10 +9,10 @@ public:
     void setMtx();
     void _createHeap();
     void getArg();
-    void _execute();
-    void _draw();
-    void _create();
-    void _delete();
+    BOOL _execute();
+    BOOL _draw();
+    s32 _create();
+    BOOL _delete();
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhs;

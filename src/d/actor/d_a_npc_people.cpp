@@ -32,7 +32,7 @@ void phase_2(daNpcPeople_c*) {
 }
 
 /* 00000960-00000990       .text _create__13daNpcPeople_cFv */
-void daNpcPeople_c::_create() {
+s32 daNpcPeople_c::_create() {
     /* Nonmatching */
 }
 
@@ -62,17 +62,17 @@ void daNpcPeople_c::createInit() {
 }
 
 /* 00001518-0000158C       .text _delete__13daNpcPeople_cFv */
-void daNpcPeople_c::_delete() {
+BOOL daNpcPeople_c::_delete() {
     /* Nonmatching */
 }
 
 /* 0000158C-000018B8       .text _draw__13daNpcPeople_cFv */
-void daNpcPeople_c::_draw() {
+BOOL daNpcPeople_c::_draw() {
     /* Nonmatching */
 }
 
 /* 000018B8-00001E48       .text _execute__13daNpcPeople_cFv */
-void daNpcPeople_c::_execute() {
+BOOL daNpcPeople_c::_execute() {
     /* Nonmatching */
 }
 

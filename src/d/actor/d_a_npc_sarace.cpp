@@ -107,17 +107,17 @@ void daNpc_Sarace_c::set_mtx() {
 }
 
 /* 000017E0-00001938       .text _draw__14daNpc_Sarace_cFv */
-void daNpc_Sarace_c::_draw() {
+BOOL daNpc_Sarace_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00001938-00001A68       .text _execute__14daNpc_Sarace_cFv */
-void daNpc_Sarace_c::_execute() {
+BOOL daNpc_Sarace_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00001A68-00001AE0       .text _delete__14daNpc_Sarace_cFv */
-void daNpc_Sarace_c::_delete() {
+BOOL daNpc_Sarace_c::_delete() {
     /* Nonmatching */
 }
 
@@ -127,7 +127,7 @@ void CallbackCreateHeap(fopAc_ac_c*) {
 }
 
 /* 00001B00-00001D1C       .text _create__14daNpc_Sarace_cFv */
-void daNpc_Sarace_c::_create() {
+s32 daNpc_Sarace_c::_create() {
     /* Nonmatching */
 }
 

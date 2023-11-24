@@ -29,7 +29,7 @@ public:
     void drawStart();
     void setBaseMtx();
     void createHeap();
-    void create();
+    s32 create();
     void init();
     void action(void*);
     void setAction(int (daObj_hsh_c::*)(void*), void*);
@@ -59,8 +59,8 @@ public:
     void talk(int);
     void getMsg();
     void next_msgStatus(unsigned long*);
-    void execute();
-    void draw();
+    BOOL execute();
+    BOOL draw();
 
 public:
     /* Place member variables here */

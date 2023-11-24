@@ -10,10 +10,10 @@ public:
     void setSpd(float) {}
 
     void createInit();
-    void _draw();
-    void _execute();
-    void _delete();
-    void _create();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
+    s32 _create();
 
 public:
     /* Place member variables here */

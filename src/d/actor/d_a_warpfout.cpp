@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000080       .text _delete__12daWarpfout_cFv */
-void daWarpfout_c::_delete() {
+BOOL daWarpfout_c::_delete() {
     /* Nonmatching */
 }
 
@@ -17,12 +17,12 @@ void daWarpfout_c::CreateInit() {
 }
 
 /* 0000008C-000000E4       .text _create__12daWarpfout_cFv */
-void daWarpfout_c::_create() {
+s32 daWarpfout_c::_create() {
     /* Nonmatching */
 }
 
 /* 000000E4-00000124       .text _execute__12daWarpfout_cFv */
-void daWarpfout_c::_execute() {
+BOOL daWarpfout_c::_execute() {
     /* Nonmatching */
 }
 

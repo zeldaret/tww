@@ -17,14 +17,14 @@ namespace daObjZouk {
     
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
-        void _create();
-        void _delete();
+        s32 _create();
+        BOOL _delete();
         void set_mtx();
         void texture_scroll();
         void play_stop_joint_anime();
         void jokai_demo();
-        void _execute();
-        void _draw();
+        BOOL _execute();
+        BOOL _draw();
     
     public:
         /* 0x290 */ void* vtbl;

@@ -37,7 +37,7 @@ void daSteamTag_Execute(daSteamTag_c*) {
 }
 
 /* 000003DC-000006FC       .text execute__12daSteamTag_cFv */
-void daSteamTag_c::execute() {
+BOOL daSteamTag_c::execute() {
     /* Nonmatching */
 }
 

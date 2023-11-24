@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-000000D4       .text _delete__11daAmiProp_cFv */
-void daAmiProp_c::_delete() {
+BOOL daAmiProp_c::_delete() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void daAmiProp_c::CreateInit() {
 }
 
 /* 00000318-00000444       .text _create__11daAmiProp_cFv */
-void daAmiProp_c::_create() {
+s32 daAmiProp_c::_create() {
     /* Nonmatching */
 }
 
@@ -42,12 +42,12 @@ void daAmiProp_c::setMoveBGMtx() {
 }
 
 /* 0000070C-00000884       .text _execute__11daAmiProp_cFv */
-void daAmiProp_c::_execute() {
+BOOL daAmiProp_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000884-00000924       .text _draw__11daAmiProp_cFv */
-void daAmiProp_c::_draw() {
+BOOL daAmiProp_c::_draw() {
     /* Nonmatching */
 }
 

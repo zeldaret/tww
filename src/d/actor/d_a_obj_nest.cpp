@@ -12,7 +12,7 @@ void daObjNest::Act_c::CreateHeap() {
 }
 
 /* 0000012C-000001F0       .text Create__Q29daObjNest5Act_cFv */
-void daObjNest::Act_c::Create() {
+s32 daObjNest::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void daObjNest::Act_c::Mthd_Create() {
 }
 
 /* 000002E8-000002F0       .text Delete__Q29daObjNest5Act_cFv */
-void daObjNest::Act_c::Delete() {
+BOOL daObjNest::Act_c::Delete() {
     /* Nonmatching */
 }
 
@@ -62,7 +62,7 @@ void daObjNest::Act_c::Execute(float(**)[3][4]) {
 }
 
 /* 0000075C-000007FC       .text Draw__Q29daObjNest5Act_cFv */
-void daObjNest::Act_c::Draw() {
+BOOL daObjNest::Act_c::Draw() {
     /* Nonmatching */
 }
 

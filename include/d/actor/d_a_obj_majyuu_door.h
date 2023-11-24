@@ -11,16 +11,16 @@ public:
     void _createHeap();
     void getArg();
     void CreateInit();
-    void _create();
-    void _delete();
+    s32 _create();
+    BOOL _delete();
     void setCollision();
     void modeWaitInit();
     void modeWait();
     void smoke_set();
     void modeDeleteInit();
     void modeDelete();
-    void _execute();
-    void _draw();
+    BOOL _execute();
+    BOOL _draw();
 
 public:
     /* Place member variables here */

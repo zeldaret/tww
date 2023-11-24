@@ -32,7 +32,7 @@ void daAleaf_c::create_acorn_sub(bool) {
 }
 
 /* 0000049C-000005EC       .text _create__9daAleaf_cFv */
-void daAleaf_c::_create() {
+s32 daAleaf_c::_create() {
     /* Nonmatching */
 }
 
@@ -42,12 +42,12 @@ void daAleaf_c::set_mtx() {
 }
 
 /* 000008D0-00000C44       .text _execute__9daAleaf_cFv */
-void daAleaf_c::_execute() {
+BOOL daAleaf_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000C44-00000CD4       .text _draw__9daAleaf_cFv */
-void daAleaf_c::_draw() {
+BOOL daAleaf_c::_draw() {
     /* Nonmatching */
 }
 

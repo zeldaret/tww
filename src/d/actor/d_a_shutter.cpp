@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000108       .text _delete__11daShutter_cFv */
-void daShutter_c::_delete() {
+BOOL daShutter_c::_delete() {
     /* Nonmatching */
 }
 
@@ -22,12 +22,12 @@ void daShutter_c::CreateHeap() {
 }
 
 /* 000002B8-000004B4       .text Create__11daShutter_cFv */
-void daShutter_c::Create() {
+s32 daShutter_c::Create() {
     /* Nonmatching */
 }
 
 /* 000004B4-000005A0       .text _create__11daShutter_cFv */
-void daShutter_c::_create() {
+s32 daShutter_c::_create() {
     /* Nonmatching */
 }
 
@@ -37,7 +37,7 @@ void daShutter_c::set_mtx() {
 }
 
 /* 000006F0-00000788       .text _execute__11daShutter_cFv */
-void daShutter_c::_execute() {
+BOOL daShutter_c::_execute() {
     /* Nonmatching */
 }
 
@@ -52,7 +52,7 @@ void daShutter_c::demo() {
 }
 
 /* 00000CF0-00000DD8       .text _draw__11daShutter_cFv */
-void daShutter_c::_draw() {
+BOOL daShutter_c::_draw() {
     /* Nonmatching */
 }
 

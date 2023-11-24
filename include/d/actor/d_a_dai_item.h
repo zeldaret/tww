@@ -13,12 +13,12 @@ class daStandItem_c : public fopAc_ac_c {
 public:
     void getItemNo() const {}
 
-    void _delete();
+    BOOL _delete();
     void CreateHeap();
     void CreateInit();
-    void _create();
+    s32 _create();
     void set_mtx();
-    void _execute();
+    BOOL _execute();
     void itemProc();
     void actionFobj00();
     void actionFobj01();
@@ -41,7 +41,7 @@ public:
     void mode_wait();
     void mode_drop_init();
     void mode_drop();
-    void _draw();
+    BOOL _draw();
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhsDai;

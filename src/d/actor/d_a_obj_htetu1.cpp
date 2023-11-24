@@ -22,7 +22,7 @@ void daObjHtetu1_c::create_heap() {
 }
 
 /* 00000298-00000460       .text _create__13daObjHtetu1_cFv */
-void daObjHtetu1_c::_create() {
+s32 daObjHtetu1_c::_create() {
     /* Nonmatching */
 }
 
@@ -37,7 +37,7 @@ daObjHtetu1Splash_c::daObjHtetu1Splash_c() {
 }
 
 /* 00000508-00000610       .text _delete__13daObjHtetu1_cFv */
-void daObjHtetu1_c::_delete() {
+BOOL daObjHtetu1_c::_delete() {
     /* Nonmatching */
 }
 
@@ -72,12 +72,12 @@ void daObjHtetu1_c::splash_manager() {
 }
 
 /* 00000BCC-0000101C       .text _execute__13daObjHtetu1_cFv */
-void daObjHtetu1_c::_execute() {
+BOOL daObjHtetu1_c::_execute() {
     /* Nonmatching */
 }
 
 /* 0000101C-0000107C       .text _draw__13daObjHtetu1_cFv */
-void daObjHtetu1_c::_draw() {
+BOOL daObjHtetu1_c::_draw() {
     /* Nonmatching */
 }
 

@@ -17,7 +17,7 @@ void daGFlag_packet_c::setToonTexObj() {
 }
 
 /* 00000330-00000978       .text draw__16daGFlag_packet_cFv */
-void daGFlag_packet_c::draw() {
+BOOL daGFlag_packet_c::draw() {
     /* Nonmatching */
 }
 
@@ -102,7 +102,7 @@ void daGoal_FlagCreate(void*) {
 }
 
 /* 00002400-00002968       .text _create__13daGoal_Flag_cFv */
-void daGoal_Flag_c::_create() {
+s32 daGoal_Flag_c::_create() {
     /* Nonmatching */
 }
 

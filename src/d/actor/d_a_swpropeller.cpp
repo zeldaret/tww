@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-000000B8       .text _delete__10daSwProp_cFv */
-void daSwProp_c::_delete() {
+BOOL daSwProp_c::_delete() {
     /* Nonmatching */
 }
 
@@ -32,7 +32,7 @@ void nodeCallBack(J3DNode*, int) {
 }
 
 /* 00000404-00000590       .text _create__10daSwProp_cFv */
-void daSwProp_c::_create() {
+s32 daSwProp_c::_create() {
     /* Nonmatching */
 }
 
@@ -42,12 +42,12 @@ void daSwProp_c::set_mtx() {
 }
 
 /* 00000838-00000B60       .text _execute__10daSwProp_cFv */
-void daSwProp_c::_execute() {
+BOOL daSwProp_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000B60-00000C00       .text _draw__10daSwProp_cFv */
-void daSwProp_c::_draw() {
+BOOL daSwProp_c::_draw() {
     /* Nonmatching */
 }
 

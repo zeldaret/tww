@@ -32,7 +32,7 @@ void daAtdoor_c::CreateInit() {
 }
 
 /* 0000036C-00000418       .text create__10daAtdoor_cFv */
-void daAtdoor_c::create() {
+s32 daAtdoor_c::create() {
     /* Nonmatching */
 }
 

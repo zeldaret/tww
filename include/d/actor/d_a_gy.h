@@ -45,12 +45,12 @@ public:
     void lineCheck(cXyz*, cXyz*);
     void checkTgHit();
     void getWaterY();
-    void _execute();
+    BOOL _execute();
     void drawDebug();
-    void _draw();
+    BOOL _draw();
     void createInit();
-    void _create();
-    void _delete();
+    s32 _create();
+    BOOL _delete();
 
 public:
     /* 0x2AC */ u8 m2AC[0x2D4 - 0x2AC];

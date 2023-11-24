@@ -5,10 +5,10 @@
 
 class daObjQuake_c : public fopAc_ac_c {
 public:
-    void _create();
-    void _delete();
+    s32 _create();
+    BOOL _delete();
     void _is_delete();
-    void _execute();
+    BOOL _execute();
     void getPrmType();
     void getPrmSch();
     void getPrmPower();

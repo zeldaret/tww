@@ -17,12 +17,12 @@ void daObjVmsms_c::create_heap() {
 }
 
 /* 0000015C-0000021C       .text _create__12daObjVmsms_cFv */
-void daObjVmsms_c::_create() {
+s32 daObjVmsms_c::_create() {
     /* Nonmatching */
 }
 
 /* 0000021C-0000024C       .text _delete__12daObjVmsms_cFv */
-void daObjVmsms_c::_delete() {
+BOOL daObjVmsms_c::_delete() {
     /* Nonmatching */
 }
 
@@ -37,12 +37,12 @@ void daObjVmsms_c::check_demo() const {
 }
 
 /* 000002A8-0000030C       .text _execute__12daObjVmsms_cFv */
-void daObjVmsms_c::_execute() {
+BOOL daObjVmsms_c::_execute() {
     /* Nonmatching */
 }
 
 /* 0000030C-0000036C       .text _draw__12daObjVmsms_cFv */
-void daObjVmsms_c::_draw() {
+BOOL daObjVmsms_c::_draw() {
     /* Nonmatching */
 }
 

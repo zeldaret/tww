@@ -7,7 +7,7 @@ class daBoomerang_blur_c : public fopAc_ac_c {
 public:
     void initBlur(float(*)[4], short);
     void copyBlur(float(*)[4], short);
-    void draw();
+    BOOL draw();
 
 public:
     /* Place member variables here */

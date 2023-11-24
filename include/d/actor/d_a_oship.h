@@ -48,13 +48,13 @@ public:
     void modeDeleteInit();
     void modeDelete();
     void modeProc(daOship_c::Proc_e, int);
-    void _execute();
-    void _draw();
+    BOOL _execute();
+    BOOL _draw();
     void createInit();
     void _createHeap();
     void getArg();
-    void _create();
-    void _delete();
+    s32 _create();
+    BOOL _delete();
 
 public:
     /* 0x290 */ u8 m290[0x2AC - 0x290];

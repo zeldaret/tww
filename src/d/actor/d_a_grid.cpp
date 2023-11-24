@@ -27,7 +27,7 @@ void daHo_packet_c::setTopNrmVtx(cXyz*) {
 }
 
 /* 800E93B8-800E9BE8       .text draw__13daHo_packet_cFv */
-void daHo_packet_c::draw() {
+BOOL daHo_packet_c::draw() {
     /* Nonmatching */
 }
 
@@ -62,22 +62,22 @@ void daGrid_Create(fopAc_ac_c*) {
 }
 
 /* 800EA998-800EAEAC       .text _create__8daGrid_cFv */
-void daGrid_c::_create() {
+s32 daGrid_c::_create() {
     /* Nonmatching */
 }
 
 /* 800EAEAC-800EAF28       .text _delete__8daGrid_cFv */
-void daGrid_c::_delete() {
+BOOL daGrid_c::_delete() {
     /* Nonmatching */
 }
 
 /* 800EAF28-800EB0EC       .text _execute__8daGrid_cFv */
-void daGrid_c::_execute() {
+BOOL daGrid_c::_execute() {
     /* Nonmatching */
 }
 
 /* 800EB0EC-800EB328       .text _draw__8daGrid_cFv */
-void daGrid_c::_draw() {
+BOOL daGrid_c::_draw() {
     /* Nonmatching */
 }
 

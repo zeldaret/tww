@@ -12,12 +12,12 @@ daObjQuake_HIO_c::daObjQuake_HIO_c() {
 }
 
 /* 00000134-000002C4       .text _create__12daObjQuake_cFv */
-void daObjQuake_c::_create() {
+s32 daObjQuake_c::_create() {
     /* Nonmatching */
 }
 
 /* 000002C4-000002CC       .text _delete__12daObjQuake_cFv */
-void daObjQuake_c::_delete() {
+BOOL daObjQuake_c::_delete() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void daObjQuake_c::_is_delete() {
 }
 
 /* 00000390-00000674       .text _execute__12daObjQuake_cFv */
-void daObjQuake_c::_execute() {
+BOOL daObjQuake_c::_execute() {
     /* Nonmatching */
 }
 

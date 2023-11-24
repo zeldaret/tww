@@ -20,8 +20,8 @@ public:
     void set_tri(int);
     void chk_event_flg();
     void set_em_set_offsetY();
-    void _create();
-    void _delete();
+    s32 _create();
+    BOOL _delete();
     void trap_off_wait_act_proc();
     void trap_on_wait_act_proc();
     void demo_regist_wait_act_proc();
@@ -36,8 +36,8 @@ public:
     void demo_wait2_act_init_proc();
     void demo_end_wait_act_init_proc();
     void setup_action(int);
-    void _execute();
-    void _draw();
+    BOOL _execute();
+    BOOL _draw();
 
 public:
     /* Place member variables here */

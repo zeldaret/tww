@@ -147,7 +147,7 @@ void daCanonCreate(void*) {
 }
 
 /* 00002094-000023C0       .text _create__9daCanon_cFv */
-void daCanon_c::_create() {
+s32 daCanon_c::_create() {
     /* Nonmatching */
 }
 

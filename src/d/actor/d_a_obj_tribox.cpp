@@ -72,12 +72,12 @@ void daObjTribox::Act_c::create_correct_after() {
 }
 
 /* 00000A28-00000BC4       .text _create__Q211daObjTribox5Act_cFv */
-void daObjTribox::Act_c::_create() {
+s32 daObjTribox::Act_c::_create() {
     /* Nonmatching */
 }
 
 /* 00000CA4-00000D68       .text _delete__Q211daObjTribox5Act_cFv */
-void daObjTribox::Act_c::_delete() {
+BOOL daObjTribox::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -327,12 +327,12 @@ void daObjTribox::Act_c::execute_correct() {
 }
 
 /* 00003324-000033D8       .text _execute__Q211daObjTribox5Act_cFv */
-void daObjTribox::Act_c::_execute() {
+BOOL daObjTribox::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 000033D8-00003538       .text _draw__Q211daObjTribox5Act_cFv */
-void daObjTribox::Act_c::_draw() {
+BOOL daObjTribox::Act_c::_draw() {
     /* Nonmatching */
 }
 

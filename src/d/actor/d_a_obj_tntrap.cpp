@@ -57,7 +57,7 @@ void daObjTnTrap_c::set_em_set_offsetY() {
 }
 
 /* 00000A98-00000C78       .text _create__13daObjTnTrap_cFv */
-void daObjTnTrap_c::_create() {
+s32 daObjTnTrap_c::_create() {
     /* Nonmatching */
 }
 
@@ -72,7 +72,7 @@ cM3dGPla::~cM3dGPla() {
 }
 
 /* 00000F8C-00001050       .text _delete__13daObjTnTrap_cFv */
-void daObjTnTrap_c::_delete() {
+BOOL daObjTnTrap_c::_delete() {
     /* Nonmatching */
 }
 
@@ -147,12 +147,12 @@ void daObjTnTrap_c::setup_action(int) {
 }
 
 /* 00001AE4-00001BE8       .text _execute__13daObjTnTrap_cFv */
-void daObjTnTrap_c::_execute() {
+BOOL daObjTnTrap_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00001BE8-00001BF0       .text _draw__13daObjTnTrap_cFv */
-void daObjTnTrap_c::_draw() {
+BOOL daObjTnTrap_c::_draw() {
     /* Nonmatching */
 }
 

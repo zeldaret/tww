@@ -167,7 +167,7 @@ void daComing2::Act_c::coming_process_main() {
 }
 
 /* 00002154-00002264       .text _create__Q29daComing25Act_cFv */
-void daComing2::Act_c::_create() {
+s32 daComing2::Act_c::_create() {
     /* Nonmatching */
 }
 
@@ -192,17 +192,17 @@ daComing2::_barrel_info_::_barrel_info_() {
 }
 
 /* 000022E4-000022EC       .text _delete__Q29daComing25Act_cFv */
-void daComing2::Act_c::_delete() {
+BOOL daComing2::Act_c::_delete() {
     /* Nonmatching */
 }
 
 /* 000022EC-000023B0       .text _execute__Q29daComing25Act_cFv */
-void daComing2::Act_c::_execute() {
+BOOL daComing2::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 000023B0-000023B8       .text _draw__Q29daComing25Act_cFv */
-void daComing2::Act_c::_draw() {
+BOOL daComing2::Act_c::_draw() {
     /* Nonmatching */
 }
 

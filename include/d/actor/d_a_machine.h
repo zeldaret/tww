@@ -5,21 +5,21 @@
 
 class daMachine_c : public fopAc_ac_c {
 public:
-    void _delete();
+    BOOL _delete();
     void CreateHeap();
     void CreateInit();
     void path_move();
     void set_next_pnt();
     void search_wind_mill();
     void set_speed();
-    void _create();
+    s32 _create();
     void set_mtx();
-    void _execute();
+    BOOL _execute();
     void attack();
     void set_cube();
     void set_body();
     void set_at();
-    void _draw();
+    BOOL _draw();
 
 public:
     /* Place member variables here */

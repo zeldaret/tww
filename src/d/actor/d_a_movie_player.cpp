@@ -567,7 +567,7 @@ void daMP_c::daMP_c_Main() {
 }
 
 /* 0000661C-0000663C       .text draw__16daMP_Dlst_base_cFv */
-void daMP_Dlst_base_c::draw() {
+BOOL daMP_Dlst_base_c::draw() {
     /* Nonmatching */
 }
 

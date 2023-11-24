@@ -25,8 +25,8 @@ namespace daObjTribox {
         void create_block_after();
         void create_correct_before();
         void create_correct_after();
-        void _create();
-        void _delete();
+        s32 _create();
+        BOOL _delete();
         void set_mtx();
         void init_mtx();
         void push_pullCB(fopAc_ac_c*, fopAc_ac_c*, short, dBgW::PushPullLabel);
@@ -76,8 +76,8 @@ namespace daObjTribox {
         void mode_proc_call();
         void execute_block();
         void execute_correct();
-        void _execute();
-        void _draw();
+        BOOL _execute();
+        BOOL _draw();
     
     public:
         /* Place member variables here */

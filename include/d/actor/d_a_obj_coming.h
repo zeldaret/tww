@@ -15,8 +15,8 @@ namespace daObjComing {
         void prm_get_waitTime() const {}
     
         void chk_switch();
-        void _create();
-        void _delete();
+        s32 _create();
+        BOOL _delete();
         void get_aqua_y(const cXyz*);
         void chk_ship_range(const fopAc_ac_c*) const;
         void chk_ship_spd(const fopAc_ac_c*) const;
@@ -33,8 +33,8 @@ namespace daObjComing {
         void mode_barrel2_wait(daObjComing::Ctrl_c*);
         void mode_barrel2_appear(daObjComing::Ctrl_c*);
         void mode_barrel2_leave(daObjComing::Ctrl_c*);
-        void _execute();
-        void _draw();
+        BOOL _execute();
+        BOOL _draw();
     
     public:
         /* Place member variables here */

@@ -327,7 +327,7 @@ void daPz_c::modeProc(daPz_c::Proc_e, int) {
 }
 
 /* 00005C58-000060D8       .text _execute__6daPz_cFv */
-void daPz_c::_execute() {
+BOOL daPz_c::_execute() {
     /* Nonmatching */
 }
 
@@ -347,7 +347,7 @@ void daPz_c::drawShadow() {
 }
 
 /* 000066D8-0000676C       .text _draw__6daPz_cFv */
-void daPz_c::_draw() {
+BOOL daPz_c::_draw() {
     /* Nonmatching */
 }
 
@@ -362,7 +362,7 @@ void daPz_c::createInit() {
 }
 
 /* 00006BAC-00006CB0       .text _create__6daPz_cFv */
-void daPz_c::_create() {
+s32 daPz_c::_create() {
     /* Nonmatching */
 }
 
@@ -372,7 +372,7 @@ daPz_c::daPz_c() {
 }
 
 /* 00007DA0-00007E20       .text _delete__6daPz_cFv */
-void daPz_c::_delete() {
+BOOL daPz_c::_delete() {
     /* Nonmatching */
 }
 

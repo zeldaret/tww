@@ -82,7 +82,7 @@ void daObjDoguu_Create(void*) {
 }
 
 /* 000016C4-0000178C       .text _create__12daObjDoguu_cFv */
-void daObjDoguu_c::_create() {
+s32 daObjDoguu_c::_create() {
     /* Nonmatching */
 }
 
@@ -102,7 +102,7 @@ void daObjDoguu_Draw(void*) {
 }
 
 /* 00001D30-00001F64       .text _draw__12daObjDoguu_cFv */
-void daObjDoguu_c::_draw() {
+BOOL daObjDoguu_c::_draw() {
     /* Nonmatching */
 }
 
@@ -117,7 +117,7 @@ void daObjDoguu_Execute(void*) {
 }
 
 /* 00002288-000027AC       .text _execute__12daObjDoguu_cFv */
-void daObjDoguu_c::_execute() {
+BOOL daObjDoguu_c::_execute() {
     /* Nonmatching */
 }
 

@@ -7,13 +7,13 @@ class daTagPhoto_c : public fopAc_ac_c {
 public:
     void getTagNo() {}
 
-    void _create();
+    s32 _create();
     void createHeap();
     void createInit();
-    void _delete();
-    void _draw();
+    BOOL _delete();
+    BOOL _draw();
     void setMode(unsigned char);
-    void _execute();
+    BOOL _execute();
     void executeWait();
     void executeTalk();
     void checkOrder();

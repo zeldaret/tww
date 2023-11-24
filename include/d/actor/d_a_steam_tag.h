@@ -7,9 +7,9 @@
 
 class daSteamTag_c : public fopAc_ac_c {
 public:
-    void create() {}
-    void draw() {}
-    void execute() {}
+    inline s32 create();
+    inline BOOL draw();
+    inline BOOL execute();
 
     void getData();
     void CreateInit();

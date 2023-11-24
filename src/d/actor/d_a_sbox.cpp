@@ -52,7 +52,7 @@ void daSbox_c::CreateInit() {
 }
 
 /* 000008F0-000009F0       .text create__8daSbox_cFv */
-void daSbox_c::create() {
+s32 daSbox_c::create() {
     /* Nonmatching */
 }
 

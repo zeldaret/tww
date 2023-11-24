@@ -262,7 +262,7 @@ void daNpc_Tc_c::set_mtx() {
 }
 
 /* 000038A0-00003A40       .text _draw__10daNpc_Tc_cFv */
-void daNpc_Tc_c::_draw() {
+BOOL daNpc_Tc_c::_draw() {
     /* Nonmatching */
 }
 
@@ -272,12 +272,12 @@ void daNpc_Tc_c::setTower() {
 }
 
 /* 00003BE0-00003E90       .text _execute__10daNpc_Tc_cFv */
-void daNpc_Tc_c::_execute() {
+BOOL daNpc_Tc_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00003E90-00003F1C       .text _delete__10daNpc_Tc_cFv */
-void daNpc_Tc_c::_delete() {
+BOOL daNpc_Tc_c::_delete() {
     /* Nonmatching */
 }
 
@@ -292,7 +292,7 @@ void daNpc_Tc_c::isCreate() {
 }
 
 /* 00003FC0-00004090       .text _create__10daNpc_Tc_cFv */
-void daNpc_Tc_c::_create() {
+s32 daNpc_Tc_c::_create() {
     /* Nonmatching */
 }
 

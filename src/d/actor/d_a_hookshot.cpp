@@ -127,7 +127,7 @@ static u8 l_matDL[] __attribute__((aligned(32))) = {
 };
 
 /* 800F104C-800F12C8       .text draw__16daHookshot_shapeFv */
-void daHookshot_shape::draw() {
+BOOL daHookshot_shape::draw() {
     daHookshot_c* hookshot = reinterpret_cast<daHookshot_c*>(mpUserData);
     int chain_count = hookshot->getChainCnt();
     if (chain_count < 1) {

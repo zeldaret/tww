@@ -23,9 +23,9 @@ namespace daObjMkie {
         void CreateHeap();
         void init_cc();
         void set_cc_pos();
-        void Create();
+        s32 Create();
         void Mthd_Create();
-        void Delete();
+        BOOL Delete();
         void Mthd_Delete();
         void set_mtx();
         void init_mtx();
@@ -41,7 +41,7 @@ namespace daObjMkie {
         void mode_demo();
         void mode_proc_call();
         void Execute(float(**)[3][4]);
-        void Draw();
+        BOOL Draw();
     
     public:
         /* 0x290 */ u8 m290[0xF58 - 0x290];

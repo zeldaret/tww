@@ -17,7 +17,7 @@ void daObjMtest::Act_c::CreateHeap() {
 }
 
 /* 00000284-000003E8       .text Create__Q210daObjMtest5Act_cFv */
-void daObjMtest::Act_c::Create() {
+s32 daObjMtest::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void daObjMtest::Act_c::Mthd_Create() {
 }
 
 /* 00000958-00000960       .text Delete__Q210daObjMtest5Act_cFv */
-void daObjMtest::Act_c::Delete() {
+BOOL daObjMtest::Act_c::Delete() {
     /* Nonmatching */
 }
 
@@ -52,7 +52,7 @@ void daObjMtest::Act_c::Execute(float(**)[3][4]) {
 }
 
 /* 00000B80-00000C64       .text Draw__Q210daObjMtest5Act_cFv */
-void daObjMtest::Act_c::Draw() {
+BOOL daObjMtest::Act_c::Draw() {
     /* Nonmatching */
 }
 

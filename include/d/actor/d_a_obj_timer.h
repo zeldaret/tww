@@ -10,13 +10,13 @@ namespace daObjTimer {
         void prm_get_time() const {}
         void stopTimer() {}
     
-        void _create();
-        void _delete();
+        s32 _create();
+        BOOL _delete();
         void mode_wait_init();
         void mode_wait();
         void mode_count_init();
         void mode_count();
-        void _execute();
+        BOOL _execute();
     
     public:
         /* Place member variables here */

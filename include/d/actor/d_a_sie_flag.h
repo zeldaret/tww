@@ -11,10 +11,10 @@ public:
     void set_mtx();
     void CreateHeap();
     void CreateInit();
-    void _create();
-    void _delete();
-    void _execute();
-    void _draw();
+    s32 _create();
+    BOOL _delete();
+    BOOL _execute();
+    BOOL _draw();
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhsEshata;

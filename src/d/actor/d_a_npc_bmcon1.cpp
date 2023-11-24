@@ -42,7 +42,7 @@ void phase_2(daNpcBmcon_c*) {
 }
 
 /* 00000A14-00000A44       .text _create__12daNpcBmcon_cFv */
-void daNpcBmcon_c::_create() {
+s32 daNpcBmcon_c::_create() {
     /* Nonmatching */
 }
 
@@ -62,17 +62,17 @@ void daNpcBmcon_c::createInit() {
 }
 
 /* 00001468-000014D8       .text _delete__12daNpcBmcon_cFv */
-void daNpcBmcon_c::_delete() {
+BOOL daNpcBmcon_c::_delete() {
     /* Nonmatching */
 }
 
 /* 000014D8-00001694       .text _draw__12daNpcBmcon_cFv */
-void daNpcBmcon_c::_draw() {
+BOOL daNpcBmcon_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00001694-00001878       .text _execute__12daNpcBmcon_cFv */
-void daNpcBmcon_c::_execute() {
+BOOL daNpcBmcon_c::_execute() {
     /* Nonmatching */
 }
 

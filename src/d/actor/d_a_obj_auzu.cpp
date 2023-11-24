@@ -17,12 +17,12 @@ void daObjAuzu::Act_c::create_heap() {
 }
 
 /* 000001F8-000003B8       .text _create__Q29daObjAuzu5Act_cFv */
-void daObjAuzu::Act_c::_create() {
+s32 daObjAuzu::Act_c::_create() {
     /* Nonmatching */
 }
 
 /* 0000045C-00000498       .text _delete__Q29daObjAuzu5Act_cFv */
-void daObjAuzu::Act_c::_delete() {
+BOOL daObjAuzu::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -57,7 +57,7 @@ void daObjAuzu::Act_c::bgm_start() {
 }
 
 /* 000007DC-00000AF8       .text _execute__Q29daObjAuzu5Act_cFv */
-void daObjAuzu::Act_c::_execute() {
+BOOL daObjAuzu::Act_c::_execute() {
     /* Nonmatching */
 }
 
@@ -67,7 +67,7 @@ void daObjAuzu::Act_c::set_material(J3DMaterial*, unsigned char) {
 }
 
 /* 00000B88-00000C38       .text _draw__Q29daObjAuzu5Act_cFv */
-void daObjAuzu::Act_c::_draw() {
+BOOL daObjAuzu::Act_c::_draw() {
     /* Nonmatching */
 }
 

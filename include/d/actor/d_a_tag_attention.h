@@ -10,8 +10,8 @@ namespace daTagAttention {
         void prm_get_Type() const {}
         void prm_get_swSave() const {}
     
-        void _create();
-        void _execute();
+        s32 _create();
+        BOOL _execute();
     
     public:
         /* Place member variables here */

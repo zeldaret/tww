@@ -37,12 +37,12 @@ void daObjIce_c::tg_hitCallback(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GO
 }
 
 /* 000005F4-000008C0       .text _create__10daObjIce_cFv */
-void daObjIce_c::_create() {
+s32 daObjIce_c::_create() {
     /* Nonmatching */
 }
 
 /* 00000A78-00000B18       .text _delete__10daObjIce_cFv */
-void daObjIce_c::_delete() {
+BOOL daObjIce_c::_delete() {
     /* Nonmatching */
 }
 
@@ -57,7 +57,7 @@ void daObjIce_c::fade_out_retire_act_proc() {
 }
 
 /* 00000DFC-00000EB8       .text _execute__10daObjIce_cFv */
-void daObjIce_c::_execute() {
+BOOL daObjIce_c::_execute() {
     /* Nonmatching */
 }
 
@@ -72,7 +72,7 @@ void set_material(J3DModel*, unsigned char) {
 }
 
 /* 00000FB0-00001070       .text _draw__10daObjIce_cFv */
-void daObjIce_c::_draw() {
+BOOL daObjIce_c::_draw() {
     /* Nonmatching */
 }
 

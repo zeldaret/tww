@@ -152,12 +152,12 @@ void daNpc_Nz_c::anmAtr(unsigned short) {
 }
 
 /* 000022C0-00002390       .text _execute__10daNpc_Nz_cFv */
-void daNpc_Nz_c::_execute() {
+BOOL daNpc_Nz_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00002390-0000254C       .text _draw__10daNpc_Nz_cFv */
-void daNpc_Nz_c::_draw() {
+BOOL daNpc_Nz_c::_draw() {
     /* Nonmatching */
 }
 
@@ -177,7 +177,7 @@ void daNpc_Nz_c::getArg() {
 }
 
 /* 00002830-000028FC       .text _create__10daNpc_Nz_cFv */
-void daNpc_Nz_c::_create() {
+s32 daNpc_Nz_c::_create() {
     /* Nonmatching */
 }
 
@@ -187,7 +187,7 @@ daNpc_Nz_c::daNpc_Nz_c() {
 }
 
 /* 00002E00-00002E6C       .text _delete__10daNpc_Nz_cFv */
-void daNpc_Nz_c::_delete() {
+BOOL daNpc_Nz_c::_delete() {
     /* Nonmatching */
 }
 

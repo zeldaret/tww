@@ -92,7 +92,7 @@ public:
     void craneJointCallBack();
     void headJointCallBack0();
     void headJointCallBack1(int);
-    void draw();
+    BOOL draw();
     void checkForceMessage();
     void setInitMessage();
     void setNextMessage(msg_class*);
@@ -163,10 +163,10 @@ public:
     void setTornadoActor();
     void setWhirlActor();
     void setHeadAnm();
-    void execute();
+    BOOL execute();
     void shipDelete();
     void createHeap();
-    void create();
+    s32 create();
     void checkForceMove() const;
     void initStartPos(cXyz const*, s16);
 

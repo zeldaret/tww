@@ -28,12 +28,12 @@ public:
     void setNpcID(int, unsigned int) {}
     void setStart(unsigned char) {}
 
-    void _create();
+    s32 _create();
     void createHeap();
     void createInit();
-    void _delete();
-    void _draw();
-    void _execute();
+    BOOL _delete();
+    BOOL _draw();
+    BOOL _execute();
     void executeWait();
     void executeNormal();
     void executeStart();

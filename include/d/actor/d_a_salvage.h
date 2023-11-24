@@ -40,9 +40,9 @@ public:
 
     void CreateHeap();
     void CreateInit();
-    void _create();
-    void _delete();
-    void _execute();
+    s32 _create();
+    BOOL _delete();
+    BOOL _execute();
     void checkOrder();
     void eventOrder();
     void proc_wait_init();
@@ -59,7 +59,7 @@ public:
     void getDistance(int, float*);
     void send_agb();
     void debug_print2();
-    void _draw();
+    BOOL _draw();
     void set_mtx(J3DModel*, int);
     void isEffectKind(int);
     void debugDraw();

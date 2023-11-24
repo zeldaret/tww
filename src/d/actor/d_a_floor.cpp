@@ -12,7 +12,7 @@ void rideCallBack(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
 }
 
 /* 000000DC-0000012C       .text Delete__9daFloor_cFv */
-void daFloor_c::Delete() {
+BOOL daFloor_c::Delete() {
     /* Nonmatching */
 }
 
@@ -22,12 +22,12 @@ void daFloor_c::CreateHeap() {
 }
 
 /* 000001E8-0000025C       .text Create__9daFloor_cFv */
-void daFloor_c::Create() {
+s32 daFloor_c::Create() {
     /* Nonmatching */
 }
 
 /* 0000025C-00000354       .text _create__9daFloor_cFv */
-void daFloor_c::_create() {
+s32 daFloor_c::_create() {
     /* Nonmatching */
 }
 
@@ -47,7 +47,7 @@ void daFloor_c::set_effect() {
 }
 
 /* 00000640-000006E0       .text Draw__9daFloor_cFv */
-void daFloor_c::Draw() {
+BOOL daFloor_c::Draw() {
     /* Nonmatching */
 }
 

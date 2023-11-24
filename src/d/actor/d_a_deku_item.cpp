@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-000000D0       .text _delete__12daDekuItem_cFv */
-void daDekuItem_c::_delete() {
+BOOL daDekuItem_c::_delete() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void daDekuItem_c::CreateInit() {
 }
 
 /* 000003A8-00000598       .text _create__12daDekuItem_cFv */
-void daDekuItem_c::_create() {
+s32 daDekuItem_c::_create() {
     /* Nonmatching */
 }
 
@@ -37,7 +37,7 @@ void daDekuItem_c::set_mtx() {
 }
 
 /* 000009C8-00000A74       .text _execute__12daDekuItem_cFv */
-void daDekuItem_c::_execute() {
+BOOL daDekuItem_c::_execute() {
     /* Nonmatching */
 }
 
@@ -77,7 +77,7 @@ void daDekuItem_c::checkOrder() {
 }
 
 /* 00000E54-00000ECC       .text _draw__12daDekuItem_cFv */
-void daDekuItem_c::_draw() {
+BOOL daDekuItem_c::_draw() {
     /* Nonmatching */
 }
 

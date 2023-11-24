@@ -22,7 +22,7 @@ void daLbridge_c::CreateInit() {
 }
 
 /* 00000544-0000063C       .text _create__11daLbridge_cFv */
-void daLbridge_c::_create() {
+s32 daLbridge_c::_create() {
     /* Nonmatching */
 }
 
@@ -37,7 +37,7 @@ void daLbridge_c::setMoveBGMtx() {
 }
 
 /* 00000888-00000914       .text _execute__11daLbridge_cFv */
-void daLbridge_c::_execute() {
+BOOL daLbridge_c::_execute() {
     /* Nonmatching */
 }
 
@@ -72,7 +72,7 @@ void daLbridge_c::set_off_se() {
 }
 
 /* 00000F10-00000FF8       .text _draw__11daLbridge_cFv */
-void daLbridge_c::_draw() {
+BOOL daLbridge_c::_draw() {
     /* Nonmatching */
 }
 

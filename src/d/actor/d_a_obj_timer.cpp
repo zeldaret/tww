@@ -7,12 +7,12 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000114       .text _create__Q210daObjTimer5Act_cFv */
-void daObjTimer::Act_c::_create() {
+s32 daObjTimer::Act_c::_create() {
     /* Nonmatching */
 }
 
 /* 00000114-0000011C       .text _delete__Q210daObjTimer5Act_cFv */
-void daObjTimer::Act_c::_delete() {
+BOOL daObjTimer::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -37,7 +37,7 @@ void daObjTimer::Act_c::mode_count() {
 }
 
 /* 00000304-00000394       .text _execute__Q210daObjTimer5Act_cFv */
-void daObjTimer::Act_c::_execute() {
+BOOL daObjTimer::Act_c::_execute() {
     /* Nonmatching */
 }
 

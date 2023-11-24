@@ -7,12 +7,12 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000128       .text _create__Q215daTagWaterlevel5Act_cFv */
-void daTagWaterlevel::Act_c::_create() {
+s32 daTagWaterlevel::Act_c::_create() {
     /* Nonmatching */
 }
 
 /* 00000128-00000130       .text _delete__Q215daTagWaterlevel5Act_cFv */
-void daTagWaterlevel::Act_c::_delete() {
+BOOL daTagWaterlevel::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -22,12 +22,12 @@ void daTagWaterlevel::Act_c::bgm_proc() {
 }
 
 /* 000001D8-00000364       .text _execute__Q215daTagWaterlevel5Act_cFv */
-void daTagWaterlevel::Act_c::_execute() {
+BOOL daTagWaterlevel::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000364-0000036C       .text _draw__Q215daTagWaterlevel5Act_cFv */
-void daTagWaterlevel::Act_c::_draw() {
+BOOL daTagWaterlevel::Act_c::_draw() {
     /* Nonmatching */
 }
 

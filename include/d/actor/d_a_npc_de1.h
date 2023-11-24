@@ -49,10 +49,10 @@ public:
     void wait_action1(void*);
     void wait_action2(void*);
     void demo();
-    void _draw();
-    void _execute();
-    void _delete();
-    void _create();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
+    s32 _create();
     void CreateHeap();
 
 public:

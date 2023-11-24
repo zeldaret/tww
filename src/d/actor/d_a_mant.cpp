@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 000000EC-000003EC       .text draw__15daMant_packet_cFv */
-void daMant_packet_c::draw() {
+BOOL daMant_packet_c::draw() {
     /* Nonmatching */
 }
 

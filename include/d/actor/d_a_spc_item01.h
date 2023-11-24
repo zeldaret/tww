@@ -6,17 +6,17 @@
 class daSpcItem01_c : public fopAc_ac_c {
 public:
     void set_mtx();
-    void _delete();
-    void _create();
+    BOOL _delete();
+    s32 _create();
     void CreateInit();
-    void _execute();
+    BOOL _execute();
     void set_effect();
     void scale_anim();
     void anim_play();
     void move();
     void rotate_item();
     void setCol();
-    void _draw();
+    BOOL _draw();
     void setTevStr();
 
 public:

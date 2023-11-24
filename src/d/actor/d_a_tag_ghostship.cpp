@@ -37,12 +37,12 @@ void daTag_Gship_c::modeProc(daTag_Gship_c::Proc_e, int) {
 }
 
 /* 00000508-00000534       .text _execute__13daTag_Gship_cFv */
-void daTag_Gship_c::_execute() {
+BOOL daTag_Gship_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000534-0000053C       .text _draw__13daTag_Gship_cFv */
-void daTag_Gship_c::_draw() {
+BOOL daTag_Gship_c::_draw() {
     /* Nonmatching */
 }
 
@@ -52,12 +52,12 @@ void daTag_Gship_c::getArg() {
 }
 
 /* 00000594-000005EC       .text _create__13daTag_Gship_cFv */
-void daTag_Gship_c::_create() {
+s32 daTag_Gship_c::_create() {
     /* Nonmatching */
 }
 
 /* 000005EC-000005F4       .text _delete__13daTag_Gship_cFv */
-void daTag_Gship_c::_delete() {
+BOOL daTag_Gship_c::_delete() {
     /* Nonmatching */
 }
 

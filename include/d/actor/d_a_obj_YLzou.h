@@ -18,8 +18,8 @@ public:
     void eff_smoke_slip_remove();
     void eff_smoke_proc();
     void vib_proc();
-    void _create();
-    void _delete();
+    s32 _create();
+    BOOL _delete();
     void move_ylzou_demo_start_wait_act_proc();
     void demo_regist_wait_act_proc();
     void demo_vib_start_wait_act_proc();
@@ -39,8 +39,8 @@ public:
     void go_up_stairs_demo_move_start_wait_act_init_proc();
     void go_up_stairs_demo_move_act_init_proc();
     void setup_action(int);
-    void _execute();
-    void _draw();
+    BOOL _execute();
+    BOOL _draw();
 
 public:
     /* Place member variables here */

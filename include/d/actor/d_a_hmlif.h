@@ -5,10 +5,10 @@
 
 class daHmlif_c : public fopAc_ac_c {
 public:
-    void Delete();
+    BOOL Delete();
     void daHmlifDelete();
     void CreateHeap();
-    void Create();
+    s32 Create();
     void daHmlifCreate();
     void set_mtx();
     void Execute(float(**)[3][4]);
@@ -21,7 +21,7 @@ public:
     void set_next_pnt();
     void setNextPath();
     void chkSwitchPathType();
-    void Draw();
+    BOOL Draw();
 
 public:
     /* Place member variables here */

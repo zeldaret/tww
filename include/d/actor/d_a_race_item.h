@@ -6,13 +6,13 @@
 
 class daRaceItem_c : public fopAc_ac_c {
 public:
-    void draw() {}
-    void execute() {}
+    inline BOOL draw();
+    inline BOOL execute();
     void setListStart() {}
 
     void set_mtx();
-    void Delete();
-    void create();
+    BOOL Delete();
+    s32 create();
     void CreateInit();
     void checkGet();
 

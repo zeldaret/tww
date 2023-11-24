@@ -37,12 +37,12 @@ public:
     void modeEventOpenInit();
     void modeEventOpen();
     void modeProc(daObj_Warpt_c::Proc_e, int);
-    void _execute();
-    void _draw();
+    BOOL _execute();
+    BOOL _draw();
     void getArg();
     void createInit();
-    void _create();
-    void _delete();
+    s32 _create();
+    BOOL _delete();
 
 public:
     /* Place member variables here */

@@ -32,7 +32,7 @@ void phase_2(daNpcPhoto_c*) {
 }
 
 /* 000009D4-00000A04       .text _create__12daNpcPhoto_cFv */
-void daNpcPhoto_c::_create() {
+s32 daNpcPhoto_c::_create() {
     /* Nonmatching */
 }
 
@@ -57,17 +57,17 @@ void daNpcPhoto_c::createInit() {
 }
 
 /* 00001048-000010A4       .text _delete__12daNpcPhoto_cFv */
-void daNpcPhoto_c::_delete() {
+BOOL daNpcPhoto_c::_delete() {
     /* Nonmatching */
 }
 
 /* 000010A4-0000125C       .text _draw__12daNpcPhoto_cFv */
-void daNpcPhoto_c::_draw() {
+BOOL daNpcPhoto_c::_draw() {
     /* Nonmatching */
 }
 
 /* 0000125C-0000151C       .text _execute__12daNpcPhoto_cFv */
-void daNpcPhoto_c::_execute() {
+BOOL daNpcPhoto_c::_execute() {
     /* Nonmatching */
 }
 

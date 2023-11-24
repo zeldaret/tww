@@ -40,7 +40,7 @@ public:
     void onWaterHit() {}
     void setCattleRoomNo(signed char) {}
 
-    void create();
+    s32 create();
     void createHeap();
     void jointCheck(signed char);
     void wakeupCheck();
@@ -123,10 +123,10 @@ public:
     void lookBack(int, int, int);
     void setBaseMtx();
     void init();
-    void draw();
+    BOOL draw();
     void animationPlay();
     void smokeSet(unsigned short);
-    void execute();
+    BOOL execute();
 
 public:
     /* 0x4EC */ request_of_phase_process_class mPhs;

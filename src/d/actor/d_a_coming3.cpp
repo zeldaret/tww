@@ -107,22 +107,22 @@ void daComing3::Act_c::create_heap() {
 }
 
 /* 000018CC-00001A24       .text _create__Q29daComing35Act_cFv */
-void daComing3::Act_c::_create() {
+s32 daComing3::Act_c::_create() {
     /* Nonmatching */
 }
 
 /* 00001C38-00001C68       .text _delete__Q29daComing35Act_cFv */
-void daComing3::Act_c::_delete() {
+BOOL daComing3::Act_c::_delete() {
     /* Nonmatching */
 }
 
 /* 00001C68-00001CA0       .text _execute__Q29daComing35Act_cFv */
-void daComing3::Act_c::_execute() {
+BOOL daComing3::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00001CA0-00001D14       .text _draw__Q29daComing35Act_cFv */
-void daComing3::Act_c::_draw() {
+BOOL daComing3::Act_c::_draw() {
     /* Nonmatching */
 }
 

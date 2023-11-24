@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-000000D4       .text _delete__10daLStair_cFv */
-void daLStair_c::_delete() {
+BOOL daLStair_c::_delete() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void daLStair_c::CreateInit() {
 }
 
 /* 00000638-00000758       .text _create__10daLStair_cFv */
-void daLStair_c::_create() {
+s32 daLStair_c::_create() {
     /* Nonmatching */
 }
 
@@ -42,7 +42,7 @@ void daLStair_c::setMoveBGMtx() {
 }
 
 /* 00000A1C-00000ACC       .text _execute__10daLStair_cFv */
-void daLStair_c::_execute() {
+BOOL daLStair_c::_execute() {
     /* Nonmatching */
 }
 

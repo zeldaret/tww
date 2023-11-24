@@ -207,17 +207,17 @@ void daNpc_Bms1_c::demo_end_init() {
 }
 
 /* 000030B0-00003314       .text _draw__12daNpc_Bms1_cFv */
-void daNpc_Bms1_c::_draw() {
+BOOL daNpc_Bms1_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00003314-00003474       .text _execute__12daNpc_Bms1_cFv */
-void daNpc_Bms1_c::_execute() {
+BOOL daNpc_Bms1_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00003474-00003514       .text _delete__12daNpc_Bms1_cFv */
-void daNpc_Bms1_c::_delete() {
+BOOL daNpc_Bms1_c::_delete() {
     /* Nonmatching */
 }
 
@@ -227,7 +227,7 @@ void CheckCreateHeap(fopAc_ac_c*) {
 }
 
 /* 00003534-00003718       .text _create__12daNpc_Bms1_cFv */
-void daNpc_Bms1_c::_create() {
+s32 daNpc_Bms1_c::_create() {
     /* Nonmatching */
 }
 

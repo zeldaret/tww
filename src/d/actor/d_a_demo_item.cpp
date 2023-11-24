@@ -72,7 +72,7 @@ void daDitem_Draw(daDitem_c*) {
 }
 
 /* 00000E84-00000E8C       .text isdelete__9daDitem_cFv */
-void daDitem_c::isdelete() {
+BOOL daDitem_c::isdelete() {
     /* Nonmatching */
 }
 

@@ -167,17 +167,17 @@ void daNpc_Jb1_c::demo() {
 }
 
 /* 00000D58-00000E74       .text _draw__11daNpc_Jb1_cFv */
-void daNpc_Jb1_c::_draw() {
+BOOL daNpc_Jb1_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00000E74-00000FBC       .text _execute__11daNpc_Jb1_cFv */
-void daNpc_Jb1_c::_execute() {
+BOOL daNpc_Jb1_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000FBC-00001054       .text _delete__11daNpc_Jb1_cFv */
-void daNpc_Jb1_c::_delete() {
+BOOL daNpc_Jb1_c::_delete() {
     /* Nonmatching */
 }
 
@@ -187,7 +187,7 @@ void CheckCreateHeap(fopAc_ac_c*) {
 }
 
 /* 00001074-000011B8       .text _create__11daNpc_Jb1_cFv */
-void daNpc_Jb1_c::_create() {
+s32 daNpc_Jb1_c::_create() {
     /* Nonmatching */
 }
 

@@ -52,12 +52,12 @@ void daNpc_Fa1_c::createInit() {
 }
 
 /* 800FB514-800FB5D8       .text _draw__11daNpc_Fa1_cFv */
-void daNpc_Fa1_c::_draw() {
+BOOL daNpc_Fa1_c::_draw() {
     /* Nonmatching */
 }
 
 /* 800FB5D8-800FB6AC       .text _execute__11daNpc_Fa1_cFv */
-void daNpc_Fa1_c::_execute() {
+BOOL daNpc_Fa1_c::_execute() {
     /* Nonmatching */
 }
 
@@ -262,7 +262,7 @@ void daNpc_Fa1_c::findPlayer() {
 }
 
 /* 800FD050-800FD0F0       .text _delete__11daNpc_Fa1_cFv */
-void daNpc_Fa1_c::_delete() {
+BOOL daNpc_Fa1_c::_delete() {
     /* Nonmatching */
 }
 
@@ -272,7 +272,7 @@ void CheckCreateHeap(fopAc_ac_c*) {
 }
 
 /* 800FD110-800FD224       .text _create__11daNpc_Fa1_cFv */
-void daNpc_Fa1_c::_create() {
+s32 daNpc_Fa1_c::_create() {
     /* Nonmatching */
 }
 

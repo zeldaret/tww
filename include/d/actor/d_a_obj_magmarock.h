@@ -7,10 +7,10 @@ namespace daObjMagmarock {
     class Act_c : public fopAc_ac_c {
     public:
         void MeltDownRequest() {}
-        void _create() {}
-        void _delete() {}
-        void _draw() {}
-        void _execute() {}
+        inline s32 _create();
+        inline BOOL _delete();
+        inline BOOL _draw();
+        inline BOOL _execute();
         void checkProcess(void (daObjMagmarock::Act_c::*)()) {}
         void setProcess(void (daObjMagmarock::Act_c::*)()) {}
     

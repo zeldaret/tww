@@ -11,11 +11,11 @@ namespace daTagvolcano {
         void prm_get_timer() const {}
         void prm_get_type() const {}
     
-        void _create();
+        s32 _create();
         void check_timer_clear();
-        void _delete();
-        void _execute();
-        void _draw();
+        BOOL _delete();
+        BOOL _execute();
+        BOOL _draw();
     
     public:
         /* Place member variables here */

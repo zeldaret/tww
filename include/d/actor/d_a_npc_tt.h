@@ -64,10 +64,10 @@ public:
     void wait_action(void*);
     void set_ke_root(int, int, int);
     void ke_execute();
-    void _draw();
-    void _execute();
-    void _delete();
-    void _create();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
+    s32 _create();
     void CreateHeap();
 
 public:

@@ -11,7 +11,7 @@ struct daShopItem_c_m_data {
 };
 
 struct daShopItem_c : public daItemBase_c {
-    void _delete() {}
+    inline BOOL _delete();
     void setTevType(int) {}
 
     char* getShopArcname();

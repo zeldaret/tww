@@ -12,9 +12,9 @@ namespace daObjVolcano {
         void StartFire();
         void StopFire();
         void CreateHeap();
-        void Create();
+        s32 Create();
         void Mthd_Create();
-        void Delete();
+        BOOL Delete();
         void Mthd_Delete();
         void set_mtx();
         void init_mtx();
@@ -28,7 +28,7 @@ namespace daObjVolcano {
         void daObjVolcano_fail_demo_main();
         void Execute(float(**)[3][4]);
         void set_material(J3DMaterial*, unsigned char);
-        void Draw();
+        BOOL Draw();
     
     public:
         /* Place member variables here */

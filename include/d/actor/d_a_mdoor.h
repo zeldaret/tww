@@ -7,8 +7,8 @@ class daMdoor_c : public fopAc_ac_c {
 public:
     void chkFlag(unsigned short) {}
     void clrFlag(unsigned short) {}
-    void draw() {}
-    void execute() {}
+    inline BOOL draw();
+    inline BOOL execute();
     void nextAction() {}
     void setAction(unsigned char) {}
     void setFlag(unsigned short) {}
@@ -22,7 +22,7 @@ public:
     void smokeInit();
     void smokeEnd();
     void CreateInit();
-    void create();
+    s32 create();
     void demoProc();
 
 public:

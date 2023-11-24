@@ -11,15 +11,15 @@ public:
     void init_mtx();
     void solidHeapCB(fopAc_ac_c*);
     void create_heap();
-    void _create();
-    void _delete();
+    s32 _create();
+    BOOL _delete();
     void close_wait_act_proc();
     void tremor_act_proc();
     void open_act_proc();
     void vibrate_act_proc();
     void open_wait_act_proc();
-    void _execute();
-    void _draw();
+    BOOL _execute();
+    BOOL _draw();
 
 public:
     /* Place member variables here */

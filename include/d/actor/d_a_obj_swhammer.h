@@ -14,10 +14,10 @@ namespace daObjSwhammer {
         void prm_get_swSave2() const {}
     
         void CreateHeap();
-        void Create();
-        void _create();
-        void Delete();
-        void _delete();
+        s32 Create();
+        s32 _create();
+        BOOL Delete();
+        BOOL _delete();
         void set_mtx();
         void init_mtx();
         void set_damage();
@@ -37,7 +37,7 @@ namespace daObjSwhammer {
         void mode_l_u_init();
         void mode_l_u();
         void Execute(float(**)[3][4]);
-        void Draw();
+        BOOL Draw();
     
     public:
         /* Place member variables here */

@@ -9,19 +9,19 @@ namespace daWindTag {
         void getCurLength() const {}
         void getMaxLength() const {}
     
-        void _delete();
+        BOOL _delete();
         void CreateHeap();
         void CreateInit();
         void set_wind_angle();
-        void _create();
+        s32 _create();
         void set_mtx();
         void checkSizeSpecialBig();
         void set_wind_se_sub(unsigned long, cXyz*);
         void set_wind_se();
-        void _execute();
+        BOOL _execute();
         void path_move();
         void set_next_pnt();
-        void _draw();
+        BOOL _draw();
         void MoveEmitter();
     
     public:

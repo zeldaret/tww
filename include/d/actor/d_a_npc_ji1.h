@@ -99,12 +99,12 @@ public:
     void checkCutType(int, int);
     void setAnimFromMsgNo(unsigned long);
     void setAnm(int, float, int);
-    void _create();
+    s32 _create();
     void CreateHeap();
     void CreateInit();
-    void _delete();
-    void _execute();
-    void _draw();
+    BOOL _delete();
+    BOOL _execute();
+    BOOL _draw();
     void chkAttention(cXyz, short);
     void lookBack();
     void setHitParticle(cXyz*, unsigned long);

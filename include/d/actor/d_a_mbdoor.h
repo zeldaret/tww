@@ -7,8 +7,8 @@
 
 class daMbdoor_c : public fopAc_ac_c {
 public:
-    void draw() {}
-    void execute() {}
+    inline BOOL draw();
+    inline BOOL execute();
     void setAction(unsigned char) {}
 
     void calcMtx();

@@ -19,17 +19,17 @@ namespace daObjAuzu {
     
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
-        void _create();
-        void _delete();
+        s32 _create();
+        BOOL _delete();
         void is_exist() const;
         void set_mtx();
         void init_mtx();
         void set_state_map();
         void ship_whirl();
         void bgm_start();
-        void _execute();
+        BOOL _execute();
         void set_material(J3DMaterial*, unsigned char);
-        void _draw();
+        BOOL _draw();
     
     public:
         /* Place member variables here */

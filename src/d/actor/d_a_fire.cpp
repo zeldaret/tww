@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-000000F8       .text _delete__8daFire_cFv */
-void daFire_c::_delete() {
+BOOL daFire_c::_delete() {
     /* Nonmatching */
 }
 
@@ -17,12 +17,12 @@ void daFire_c::CreateInit() {
 }
 
 /* 00000518-00000758       .text _create__8daFire_cFv */
-void daFire_c::_create() {
+s32 daFire_c::_create() {
     /* Nonmatching */
 }
 
 /* 000009F0-00000A70       .text _execute__8daFire_cFv */
-void daFire_c::_execute() {
+BOOL daFire_c::_execute() {
     /* Nonmatching */
 }
 
@@ -82,7 +82,7 @@ void daFire_c::checkCol() {
 }
 
 /* 000015A4-000015AC       .text _draw__8daFire_cFv */
-void daFire_c::_draw() {
+BOOL daFire_c::_draw() {
     /* Nonmatching */
 }
 

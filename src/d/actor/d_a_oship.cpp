@@ -177,12 +177,12 @@ void daOship_c::modeProc(daOship_c::Proc_e, int) {
 }
 
 /* 0000263C-00002AD4       .text _execute__9daOship_cFv */
-void daOship_c::_execute() {
+BOOL daOship_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00002AD4-00002B54       .text _draw__9daOship_cFv */
-void daOship_c::_draw() {
+BOOL daOship_c::_draw() {
     /* Nonmatching */
 }
 
@@ -202,7 +202,7 @@ void daOship_c::getArg() {
 }
 
 /* 00002F90-000030EC       .text _create__9daOship_cFv */
-void daOship_c::_create() {
+s32 daOship_c::_create() {
     /* Nonmatching */
 }
 
@@ -217,7 +217,7 @@ JGeometry::TVec3<float>::TVec3() {
 }
 
 /* 00003E78-00003F20       .text _delete__9daOship_cFv */
-void daOship_c::_delete() {
+BOOL daOship_c::_delete() {
     /* Nonmatching */
 }
 

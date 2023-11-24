@@ -157,22 +157,22 @@ void daNpc_Kg2_c::event_wait_action(void*) {
 }
 
 /* 00002590-000027BC       .text _create__11daNpc_Kg2_cFv */
-void daNpc_Kg2_c::_create() {
+s32 daNpc_Kg2_c::_create() {
     /* Nonmatching */
 }
 
 /* 00002B6C-00002BFC       .text _delete__11daNpc_Kg2_cFv */
-void daNpc_Kg2_c::_delete() {
+BOOL daNpc_Kg2_c::_delete() {
     /* Nonmatching */
 }
 
 /* 00002BFC-00002D14       .text _execute__11daNpc_Kg2_cFv */
-void daNpc_Kg2_c::_execute() {
+BOOL daNpc_Kg2_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00002D14-00002E74       .text _draw__11daNpc_Kg2_cFv */
-void daNpc_Kg2_c::_draw() {
+BOOL daNpc_Kg2_c::_draw() {
     /* Nonmatching */
 }
 

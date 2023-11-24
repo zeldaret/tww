@@ -8,7 +8,7 @@
 class daKnob00_c : public fopAc_ac_c {
 public:
     void checkFlag(unsigned short) {}
-    void execute() {}
+    inline BOOL execute();
     void nextAction() {}
     void offFlag(unsigned short) {}
     void onFlag(unsigned short) {}
@@ -26,7 +26,7 @@ public:
     void chkException();
     void calcMtx();
     void CreateInit();
-    void create();
+    s32 create();
     void setStart(float, float);
     void setAngle();
     void adjustmentProc();
@@ -42,7 +42,7 @@ public:
     void actionInit();
     void actionFigure();
     void actionDead();
-    void draw();
+    BOOL draw();
 
 public:
     /* 0x000 */ dDoor_info_c parent;

@@ -15,10 +15,10 @@ public:
     static JPABaseEmitter* m_emitter;
     static u8 m_alpha_flag;
     
-    void _create() {}
-    void _delete() {}
-    void _draw() {}
-    void _execute() {}
+    inline s32 _create();
+    inline BOOL _delete();
+    inline BOOL _draw();
+    inline BOOL _execute();
     void hide() {}
     void init() {}
     void setAimRate(float) {}

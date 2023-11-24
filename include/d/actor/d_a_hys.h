@@ -5,19 +5,19 @@
 
 class daHys_c : public fopAc_ac_c {
 public:
-    void _create() {}
+    inline s32 _create();
     void set_mtx() {}
 
-    void Delete();
+    BOOL Delete();
     void CreateHeap();
-    void Create();
+    s32 Create();
     void Execute(float(**)[3][4]);
     void mode_proc_call();
     void mode_wait();
     void mode_sw_on_init();
     void mode_sw_on();
     void mode_wait_init();
-    void Draw();
+    BOOL Draw();
 
 public:
     /* Place member variables here */

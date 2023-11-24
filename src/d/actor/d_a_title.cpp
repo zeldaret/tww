@@ -82,7 +82,7 @@ void daTitle_Create(fopAc_ac_c*) {
 }
 
 /* 00001E28-00001E48       .text draw__14daTitle_proc_cFv */
-void daTitle_proc_c::draw() {
+BOOL daTitle_proc_c::draw() {
     /* Nonmatching */
 }
 

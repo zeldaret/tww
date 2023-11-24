@@ -9,9 +9,9 @@ namespace daObjShelf {
         void prm_get_groundma() const {}
     
         void CreateHeap();
-        void Create();
+        s32 Create();
         void Mthd_Create();
-        void Delete();
+        BOOL Delete();
         void Mthd_Delete();
         void hold_event() const;
         void mode_wait_init();
@@ -27,7 +27,7 @@ namespace daObjShelf {
         void set_mtx();
         void init_mtx();
         void Execute(float(**)[3][4]);
-        void Draw();
+        BOOL Draw();
     
     public:
         /* Place member variables here */

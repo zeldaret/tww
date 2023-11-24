@@ -57,7 +57,7 @@ void daObjPirateship::Act_c::DeleteWave() {
 }
 
 /* 00000D38-00000DA4       .text Create__Q215daObjPirateship5Act_cFv */
-void daObjPirateship::Act_c::Create() {
+s32 daObjPirateship::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -67,12 +67,12 @@ void daObjPirateship::Act_c::Execute(float(**)[3][4]) {
 }
 
 /* 00000DB4-00000E68       .text Draw__Q215daObjPirateship5Act_cFv */
-void daObjPirateship::Act_c::Draw() {
+BOOL daObjPirateship::Act_c::Draw() {
     /* Nonmatching */
 }
 
 /* 00000E68-00000E70       .text Delete__Q215daObjPirateship5Act_cFv */
-void daObjPirateship::Act_c::Delete() {
+BOOL daObjPirateship::Act_c::Delete() {
     /* Nonmatching */
 }
 
@@ -87,12 +87,12 @@ void daObjPirateship::Method::Create(void*) {
 }
 
 /* 00000F10-000012A4       .text _create__Q215daObjPirateship5Act_cFv */
-void daObjPirateship::Act_c::_create() {
+s32 daObjPirateship::Act_c::_create() {
     /* Nonmatching */
 }
 
 /* 000012A4-000017E0       .text _execute__Q215daObjPirateship5Act_cFv */
-void daObjPirateship::Act_c::_execute() {
+BOOL daObjPirateship::Act_c::_execute() {
     /* Nonmatching */
 }
 

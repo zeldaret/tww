@@ -27,12 +27,12 @@ void daObjLight::Act_c::set_collision() {
 }
 
 /* 000004A4-0000070C       .text _create__Q210daObjLight5Act_cFv */
-void daObjLight::Act_c::_create() {
+s32 daObjLight::Act_c::_create() {
     /* Nonmatching */
 }
 
 /* 000008C4-00000964       .text _delete__Q210daObjLight5Act_cFv */
-void daObjLight::Act_c::_delete() {
+BOOL daObjLight::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -92,12 +92,12 @@ void daObjLight::Act_c::control_treasure() {
 }
 
 /* 00001398-00001400       .text _execute__Q210daObjLight5Act_cFv */
-void daObjLight::Act_c::_execute() {
+BOOL daObjLight::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00001400-00001528       .text _draw__Q210daObjLight5Act_cFv */
-void daObjLight::Act_c::_draw() {
+BOOL daObjLight::Act_c::_draw() {
     /* Nonmatching */
 }
 

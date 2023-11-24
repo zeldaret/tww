@@ -22,7 +22,7 @@ void daWbird_c::CreateInit() {
 }
 
 /* 00000388-000003E0       .text create__9daWbird_cFv */
-void daWbird_c::create() {
+s32 daWbird_c::create() {
     /* Nonmatching */
 }
 

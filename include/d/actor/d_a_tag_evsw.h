@@ -10,10 +10,10 @@ namespace daTagEvsw {
         void prm_get_eventbitID() const {}
         void prm_get_swSave() const {}
     
-        void _create();
-        void _delete();
-        void _execute();
-        void _draw();
+        s32 _create();
+        BOOL _delete();
+        BOOL _execute();
+        BOOL _draw();
     
     public:
         /* Place member variables here */

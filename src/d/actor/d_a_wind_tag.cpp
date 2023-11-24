@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-000000F0       .text _delete__Q29daWindTag11daWindTag_cFv */
-void daWindTag::daWindTag_c::_delete() {
+BOOL daWindTag::daWindTag_c::_delete() {
     /* Nonmatching */
 }
 
@@ -32,7 +32,7 @@ void daWindTag::daWindTag_c::set_wind_angle() {
 }
 
 /* 000008D4-0000099C       .text _create__Q29daWindTag11daWindTag_cFv */
-void daWindTag::daWindTag_c::_create() {
+s32 daWindTag::daWindTag_c::_create() {
     /* Nonmatching */
 }
 
@@ -62,7 +62,7 @@ void daWindTag::daWindTag_c::set_wind_se() {
 }
 
 /* 00001234-000015C8       .text _execute__Q29daWindTag11daWindTag_cFv */
-void daWindTag::daWindTag_c::_execute() {
+BOOL daWindTag::daWindTag_c::_execute() {
     /* Nonmatching */
 }
 
@@ -77,7 +77,7 @@ void daWindTag::daWindTag_c::set_next_pnt() {
 }
 
 /* 00001700-00001814       .text _draw__Q29daWindTag11daWindTag_cFv */
-void daWindTag::daWindTag_c::_draw() {
+BOOL daWindTag::daWindTag_c::_draw() {
     /* Nonmatching */
 }
 

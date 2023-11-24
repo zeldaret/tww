@@ -47,7 +47,7 @@ void daBeam_c::CreateInit() {
 }
 
 /* 00000F24-000015A4       .text _execute__8daBeam_cFv */
-void daBeam_c::_execute() {
+BOOL daBeam_c::_execute() {
     /* Nonmatching */
 }
 
@@ -82,7 +82,7 @@ void daBeamCreate(void*) {
 }
 
 /* 00001CA4-00001D34       .text _create__8daBeam_cFv */
-void daBeam_c::_create() {
+s32 daBeam_c::_create() {
     /* Nonmatching */
 }
 

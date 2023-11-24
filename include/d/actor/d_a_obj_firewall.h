@@ -20,8 +20,8 @@ public:
     void set_pl_se();
     void setup_burn_up();
     void setup_put_the_fire_out();
-    void _create();
-    void _delete();
+    s32 _create();
+    BOOL _delete();
     void wait_act_proc();
     void wait2_act_proc();
     void wait3_act_proc();
@@ -29,8 +29,8 @@ public:
     void demo_end_wait_act_proc();
     void burn_wait_act_proc();
     void retire_act_proc();
-    void _execute();
-    void _draw();
+    BOOL _execute();
+    BOOL _draw();
 
 public:
     /* Place member variables here */

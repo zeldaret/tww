@@ -5,14 +5,14 @@
 
 class daSTBox_c : public fopAc_ac_c {
 public:
-    void _draw() {}
+    inline BOOL _draw();
 
-    void _delete();
+    BOOL _delete();
     void CreateHeap();
     void CreateInit();
-    void _create();
+    s32 _create();
     void set_mtx();
-    void _execute();
+    BOOL _execute();
     void initWait(int);
     void initWait02(int);
     void initWaitGetItem(int);

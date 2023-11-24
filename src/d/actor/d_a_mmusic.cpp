@@ -27,12 +27,12 @@ void daMmusic::Act_c::set_mtx() {
 }
 
 /* 000001A4-00000268       .text _create__Q28daMmusic5Act_cFv */
-void daMmusic::Act_c::_create() {
+s32 daMmusic::Act_c::_create() {
     /* Nonmatching */
 }
 
 /* 00000268-000002B4       .text _delete__Q28daMmusic5Act_cFv */
-void daMmusic::Act_c::_delete() {
+BOOL daMmusic::Act_c::_delete() {
     /* Nonmatching */
 }
 
@@ -52,12 +52,12 @@ void daMmusic::Act_c::delete_se() {
 }
 
 /* 000003FC-00000554       .text _execute__Q28daMmusic5Act_cFv */
-void daMmusic::Act_c::_execute() {
+BOOL daMmusic::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000554-0000055C       .text _draw__Q28daMmusic5Act_cFv */
-void daMmusic::Act_c::_draw() {
+BOOL daMmusic::Act_c::_draw() {
     /* Nonmatching */
 }
 

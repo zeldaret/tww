@@ -72,12 +72,12 @@ void daObjFirewall_c::setup_put_the_fire_out() {
 }
 
 /* 00000EAC-000011F8       .text _create__15daObjFirewall_cFv */
-void daObjFirewall_c::_create() {
+s32 daObjFirewall_c::_create() {
     /* Nonmatching */
 }
 
 /* 00001550-000015F4       .text _delete__15daObjFirewall_cFv */
-void daObjFirewall_c::_delete() {
+BOOL daObjFirewall_c::_delete() {
     /* Nonmatching */
 }
 
@@ -117,12 +117,12 @@ void daObjFirewall_c::retire_act_proc() {
 }
 
 /* 00001BEC-00001C70       .text _execute__15daObjFirewall_cFv */
-void daObjFirewall_c::_execute() {
+BOOL daObjFirewall_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00001C70-00001CD4       .text _draw__15daObjFirewall_cFv */
-void daObjFirewall_c::_draw() {
+BOOL daObjFirewall_c::_draw() {
     /* Nonmatching */
 }
 

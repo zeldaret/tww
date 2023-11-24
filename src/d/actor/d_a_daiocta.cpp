@@ -217,7 +217,7 @@ void daDaiocta_c::setWater() {
 }
 
 /* 00003B20-00003D20       .text _execute__11daDaiocta_cFv */
-void daDaiocta_c::_execute() {
+BOOL daDaiocta_c::_execute() {
     /* Nonmatching */
 }
 
@@ -237,7 +237,7 @@ void daDaiocta_c::drawDebug() {
 }
 
 /* 0000412C-00004244       .text _draw__11daDaiocta_cFv */
-void daDaiocta_c::_draw() {
+BOOL daDaiocta_c::_draw() {
     /* Nonmatching */
 }
 
@@ -252,12 +252,12 @@ void daDaiocta_c::createInit() {
 }
 
 /* 00004660-00004918       .text _create__11daDaiocta_cFv */
-void daDaiocta_c::_create() {
+s32 daDaiocta_c::_create() {
     /* Nonmatching */
 }
 
 /* 00005098-0000513C       .text _delete__11daDaiocta_cFv */
-void daDaiocta_c::_delete() {
+BOOL daDaiocta_c::_delete() {
     /* Nonmatching */
 }
 

@@ -7,7 +7,7 @@
 class daDoor10_c : public fopAc_ac_c {
 public:
     void checkFlag(unsigned short) {}
-    void execute() {}
+    inline BOOL execute();
     void offFlag(unsigned short) {}
     void onFlag(unsigned short) {}
     void setAction(unsigned char) {}
@@ -34,9 +34,9 @@ public:
     void closeEnd();
     void calcMtx();
     void CreateInit();
-    void create();
+    s32 create();
     void demoProc();
-    void draw();
+    BOOL draw();
 
 public:
     /* 0x000 */ dDoor_info_c parent;

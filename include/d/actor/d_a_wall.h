@@ -5,19 +5,19 @@
 
 class daWall_c : public fopAc_ac_c {
 public:
-    void _delete();
+    BOOL _delete();
     void CreateHeap();
     void CreateInit();
-    void _create();
+    s32 _create();
     void set_mtx();
     void setMoveBGMtx();
-    void _execute();
+    BOOL _execute();
     void mode_wait();
     void mode_break();
     void set_tri();
     void set_effect();
     void set_se();
-    void _draw();
+    BOOL _draw();
 
 public:
     /* Place member variables here */

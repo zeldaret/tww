@@ -17,7 +17,7 @@ void CheckCreateHeap(fopAc_ac_c*) {
 }
 
 /* 00000664-000006F4       .text _create__11daAuction_cFv */
-void daAuction_c::_create() {
+s32 daAuction_c::_create() {
     /* Nonmatching */
 }
 
@@ -32,17 +32,17 @@ void daAuction_c::createInit() {
 }
 
 /* 000008C4-0000092C       .text _delete__11daAuction_cFv */
-void daAuction_c::_delete() {
+BOOL daAuction_c::_delete() {
     /* Nonmatching */
 }
 
 /* 0000092C-00000998       .text _draw__11daAuction_cFv */
-void daAuction_c::_draw() {
+BOOL daAuction_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00000998-00000B10       .text _execute__11daAuction_cFv */
-void daAuction_c::_execute() {
+BOOL daAuction_c::_execute() {
     /* Nonmatching */
 }
 

@@ -6,10 +6,10 @@
 class daTag_Kk1_c : public fopAc_ac_c {
 public:
     void createInit();
-    void _draw();
-    void _execute();
-    void _delete();
-    void _create();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
+    s32 _create();
 
 public:
     /* Place member variables here */

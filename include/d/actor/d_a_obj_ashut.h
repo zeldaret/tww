@@ -11,9 +11,9 @@ namespace daObjAshut {
         void prm_get_swSave() const {}
     
         void CreateHeap();
-        void Create();
+        s32 Create();
         void Mthd_Create();
-        void Delete();
+        BOOL Delete();
         void Mthd_Delete();
         void set_mtx();
         void init_mtx();
@@ -29,7 +29,7 @@ namespace daObjAshut {
         void mode_demoreq_init(daObjAshut::Act_c::Mode_e);
         void mode_demoreq();
         void Execute(float(**)[3][4]);
-        void Draw();
+        BOOL Draw();
     
     public:
         /* Place member variables here */

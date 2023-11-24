@@ -58,12 +58,12 @@ public:
     void wait_action(void*);
     void calc_sitpos();
     void set_mtx();
-    void _draw();
+    BOOL _draw();
     void setTower();
-    void _execute();
-    void _delete();
+    BOOL _execute();
+    BOOL _delete();
     void isCreate();
-    void _create();
+    s32 _create();
     void _createHeap();
     void next_msgStatusNormal2(unsigned long*);
     void getMsgNormal2();

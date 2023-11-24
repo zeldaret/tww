@@ -9,7 +9,7 @@ public:
     void onEventAccept() {}
     void setTimer(short) {}
 
-    void create();
+    s32 create();
     void init();
     void checkTimer();
     void checkEventFinish();
@@ -35,8 +35,8 @@ public:
     void checkCommandTalk();
     void checkAreaIn(fopAc_ac_c*);
     void checkCondition();
-    void execute();
-    void draw();
+    BOOL execute();
+    BOOL draw();
 
 public:
     /* Place member variables here */

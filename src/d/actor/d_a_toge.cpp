@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-0000013C       .text _delete__8daToge_cFv */
-void daToge_c::_delete() {
+BOOL daToge_c::_delete() {
     /* Nonmatching */
 }
 
@@ -27,12 +27,12 @@ void nodeCallBack(J3DNode*, int) {
 }
 
 /* 00000348-000004F4       .text Create__8daToge_cFv */
-void daToge_c::Create() {
+s32 daToge_c::Create() {
     /* Nonmatching */
 }
 
 /* 000004F4-00000620       .text _create__8daToge_cFv */
-void daToge_c::_create() {
+s32 daToge_c::_create() {
     /* Nonmatching */
 }
 
@@ -42,7 +42,7 @@ void daToge_c::set_mtx() {
 }
 
 /* 00000868-000009F4       .text _execute__8daToge_cFv */
-void daToge_c::_execute() {
+BOOL daToge_c::_execute() {
     /* Nonmatching */
 }
 
@@ -67,7 +67,7 @@ void daToge_c::toge_seStart(unsigned long) {
 }
 
 /* 00000CA4-00000D44       .text _draw__8daToge_cFv */
-void daToge_c::_draw() {
+BOOL daToge_c::_draw() {
     /* Nonmatching */
 }
 

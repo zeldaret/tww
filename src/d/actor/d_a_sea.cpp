@@ -347,7 +347,7 @@ void daSea_packet_c::execute(cXyz&) {
 }
 
 /* 8015C75C-8015D80C       .text draw__14daSea_packet_cFv */
-void daSea_packet_c::draw() {
+BOOL daSea_packet_c::draw() {
     /* Nonmatching */
 }
 

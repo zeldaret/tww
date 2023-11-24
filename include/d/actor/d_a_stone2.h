@@ -19,10 +19,10 @@ namespace daStone2 {
         void is_switch() const;
         void on_switch() const;
         void CreateHeap();
-        void Create();
+        s32 Create();
         void chk_appear();
         void Mthd_Create();
-        void Delete();
+        BOOL Delete();
         void Mthd_Delete();
         void set_mtx();
         void init_mtx();
@@ -60,7 +60,7 @@ namespace daStone2 {
         void demo_proc_call();
         void Execute(float(**)[3][4]);
         void draw_shadow();
-        void Draw();
+        BOOL Draw();
     
     public:
         /* Place member variables here */

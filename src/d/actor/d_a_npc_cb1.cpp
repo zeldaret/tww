@@ -27,7 +27,7 @@ void CheckCreateHeap(fopAc_ac_c*) {
 }
 
 /* 000004F8-00000814       .text create__11daNpc_Cb1_cFv */
-void daNpc_Cb1_c::create() {
+s32 daNpc_Cb1_c::create() {
     /* Nonmatching */
 }
 
@@ -522,12 +522,12 @@ void daNpc_Cb1_c::init() {
 }
 
 /* 00008104-000084A4       .text draw__11daNpc_Cb1_cFv */
-void daNpc_Cb1_c::draw() {
+BOOL daNpc_Cb1_c::draw() {
     /* Nonmatching */
 }
 
 /* 000084A4-00009090       .text execute__11daNpc_Cb1_cFv */
-void daNpc_Cb1_c::execute() {
+BOOL daNpc_Cb1_c::execute() {
     /* Nonmatching */
 }
 
