@@ -113,11 +113,9 @@ void dCcD_GObjTg::Set(const dCcD_SrcGObjTg& src) {
 
 /* 800AB520-800AB63C       .text __ct__12dCcD_GObjInfFv */
 dCcD_GObjInf::dCcD_GObjInf() {
-    /* Nonmatching */
 }
 
 dCcD_GObjInf::~dCcD_GObjInf() {
-    /* Nonmatching */
 }
 
 /* 800AB7C0-800AB7C4       .text GetGObjInf__12dCcD_GObjInfFv */
@@ -265,7 +263,7 @@ void dCcD_GObjInf::Set(const dCcD_SrcGObjInf& src) {
 
 /* 800ABC54-800ABCC4       .text dCcD_GetGObjInf__FP8cCcD_Obj */
 dCcD_GObjInf* dCcD_GetGObjInf(cCcD_Obj* pobj) {
-    JUT_ASSERT(531, pobj != 0);
+    JUT_ASSERT(VERSION_SELECT(466, 531, 531), pobj != 0);
     return (dCcD_GObjInf*)pobj->GetGObjInf();
 }
 
@@ -302,7 +300,8 @@ void dCcD_Cyl::StartCTg(cXyz& pos) {
 
 /* 800ABE64-800ABEE0       .text MoveCAtTg__8dCcD_CylFR4cXyz */
 void dCcD_Cyl::MoveCAtTg(cXyz& pos) {
-    cXyz vel = pos - GetC();
+    cXyz& center = GetC();
+    cXyz vel = pos - center;
     SetAtVec(vel);
     SetTgVec(vel);
     SetC(pos);
@@ -310,14 +309,16 @@ void dCcD_Cyl::MoveCAtTg(cXyz& pos) {
 
 /* 800ABEE0-800ABF50       .text MoveCAt__8dCcD_CylFR4cXyz */
 void dCcD_Cyl::MoveCAt(cXyz& pos) {
-    cXyz vel = pos - GetC();
+    cXyz& center = GetC();
+    cXyz vel = pos - center;
     SetAtVec(vel);
     SetC(pos);
 }
 
 /* 800ABF50-800ABFC0       .text MoveCTg__8dCcD_CylFR4cXyz */
 void dCcD_Cyl::MoveCTg(cXyz& pos) {
-    cXyz vel = pos - GetC();
+    cXyz& center = GetC();
+    cXyz vel = pos - center;
     SetTgVec(vel);
     SetC(pos);
 }
@@ -337,7 +338,8 @@ void dCcD_Sph::StartCAt(cXyz& pos) {
 
 /* 800AC078-800AC0E8       .text MoveCAt__8dCcD_SphFR4cXyz */
 void dCcD_Sph::MoveCAt(cXyz& pos) {
-    cXyz atVec = pos - *GetCP();
+    const cXyz* center = GetCP();
+    cXyz atVec = pos - *center;
     SetAtVec(atVec);
     SetC(pos);
 }

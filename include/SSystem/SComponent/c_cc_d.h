@@ -387,7 +387,11 @@ protected:
 public:
     cCcD_ObjCommonBase() { ct(); }
     virtual ~cCcD_ObjCommonBase() {}
-    void ct();
+    void ct() {
+        SetSPrm(0);
+        SetRPrm(0);
+        ClrObj();
+    }
     void SetSPrm(u32 sprm) { mSPrm = sprm; }
     u32 getSPrm() const { return mSPrm; }
     void SetRPrm(u32 rprm) { mRPrm = rprm; }
@@ -571,7 +575,9 @@ public:
     virtual cCcD_GObjInf* GetGObjInf() { return NULL; }
     virtual cCcD_ShapeAttr const* GetShapeAttr() const { return NULL; }
     virtual cCcD_ShapeAttr* GetShapeAttr() { return NULL; }
-    void ct();
+    void ct() {
+        mFlags = 0;
+    }
     void Set(cCcD_SrcObj const&);
 
     cCcD_Stts* GetStts() { return mStts; }
@@ -593,7 +599,7 @@ STATIC_ASSERT(0x50 == sizeof(cCcD_Obj));
 class cCcD_GObjInf : public cCcD_Obj {
 public:
     cCcD_GObjInf() {}
-    virtual ~cCcD_GObjInf();
+    virtual ~cCcD_GObjInf() {}
     virtual void ClrAtHit() { mObjAt.ClrHit(); }
     virtual void ClrTgHit() { mObjTg.ClrHit(); }
     virtual void ClrCoHit() { mObjCo.ClrHit(); }

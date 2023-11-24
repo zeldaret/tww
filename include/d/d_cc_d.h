@@ -142,7 +142,12 @@ public:
         mApid = fpcM_ERROR_PROCESS_ID_e;
         mAc = NULL;
     }
-    void ct();
+    void ct() {
+        mSPrm = 0;
+        mRPrm = 0;
+        mHitCallback = NULL;
+        mEffCounter = 0;
+    }
     void SetHitApid(unsigned int);
     fopAc_ac_c* GetAc();
     void Set(dCcD_SrcGAtTgCoCommonBase const& base) {
@@ -177,6 +182,7 @@ public:
 class dCcD_GObjAt : public dCcD_GAtTgCoCommonBase {
 public:
     void Set(dCcD_SrcGObjAt const&);
+    dCcD_GObjAt() {}
     virtual ~dCcD_GObjAt() {}
     void SetVec(cXyz& vec) { mVec = vec; }
     cXyz& GetVec() { return mVec; }
