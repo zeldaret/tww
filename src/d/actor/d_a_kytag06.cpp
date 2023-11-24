@@ -2,6 +2,7 @@
  * d_a_kytag06.cpp
  */
 
+#include "d/actor/d_a_kytag06.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
@@ -10,12 +11,6 @@
 #include "d/d_kankyo_wether.h"
 #include "d/d_procname.h"
 #include "dolphin/types.h"
-
-class kytag06_class : public fopAc_ac_c {
-public:
-    /* 0x290 */ int field_0x290;
-    /* 0x294 */ float field_0x294;
-};
 
 static bool daKytag06_Draw(kytag06_class*) {
     return true;

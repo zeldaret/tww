@@ -3,6 +3,7 @@
 // Translation Unit: d_a_tag_ret.cpp
 //
 
+#include "d/actor/d_a_tag_ret.h"
 #include "d/d_a_obj.h"
 #include "d/d_item.h"
 #include "d/d_item_data.h"
@@ -44,27 +45,6 @@ static dCcD_SrcCyl cyl_check_src = {
 };
 
 namespace daTagRet {
-    struct Act_c : public fopAc_ac_c {
-    public:
-        enum Prm_e {
-            PRM_LINK_ID_W = 8,
-            PRM_LINK_ID_S = 0,
-        };
-
-        s32 _create();
-        bool _delete();
-        void set_mtx();
-        bool _execute();
-        bool _draw();
-
-        u32 prm_get_linkID() const { return daObj::PrmAbstract(this, PRM_LINK_ID_W, PRM_LINK_ID_S); }
-
-    public:
-        /* 0x290 */ u8 m290[0x29C - 0x290];
-        /* 0x29C */ dCcD_Stts mStts;
-        /* 0x2D8 */ dCcD_Cyl mCyl;
-    };
-
     /* 00000078-000001D4       .text _create__Q28daTagRet5Act_cFv */
     s32 Act_c::_create() {
         fopAcM_SetupActor(this, daTagRet::Act_c);

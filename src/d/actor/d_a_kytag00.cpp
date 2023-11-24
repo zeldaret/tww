@@ -3,6 +3,7 @@
 // Translation Unit: d_a_kytag00.cpp
 //
 
+#include "d/actor/d_a_kytag00.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_com_inf_game.h"
@@ -14,24 +15,6 @@
 #include "SSystem/SComponent/c_lib.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
-
-class kytag00_class : public fopAc_ac_c {
-public:
-    /* 0x290 */ u32 field_0x290;
-    /* 0x294 */ u8 mbEfSet;
-    /* 0x295 */ u8 mbPselSet;
-    /* 0x296 */ u8 field_0x296;
-    /* 0x297 */ u8 mPselIdx;
-    /* 0x298 */ u8 mEfMode;
-    /* 0x29C */ s32 mThickness;
-    /* 0x2A0 */ s32 mInnerFadeY;
-    /* 0x2A4 */ f32 mInnerRadius;
-    /* 0x2A8 */ f32 mOuterRadius;
-    /* 0x2AC */ f32 mTarget;
-    /* 0x2B0 */ u8 mSwitchNo;
-    /* 0x2B1 */ u8 mbInvert;
-    /* 0x2B2 */ u8 mMode;
-};
 
 /* 00000078-0000024C       .text get_check_pos__FP13kytag00_class */
 cXyz get_check_pos(kytag00_class* i_this) {

@@ -2,14 +2,16 @@
 #define D_A_MAGMA_H
 
 #include "f_op/f_op_actor.h"
+#include "SSystem/SComponent/c_phase.h"
 
 class daMagma_c : public fopAc_ac_c {
 public:
-    void create() {}
-    void getPathNo() {}
+    inline ~daMagma_c();
+    inline s32 create();
+    inline s32 getPathNo();
 
 public:
-    /* Place member variables here */
+    /* 0x290 */ request_of_phase_process_class mPhs;
 };
 
 #endif /* D_A_MAGMA_H */

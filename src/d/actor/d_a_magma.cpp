@@ -3,6 +3,7 @@
 // Translation Unit: d_a_magma.cpp
 //
 
+#include "d/actor/d_a_magma.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
@@ -10,15 +11,33 @@
 #include "d/d_magma.h"
 #include "dolphin/types.h"
 
+daMagma_c::~daMagma_c() {
+    dComIfG_resDelete(&mPhs, "Magma");
+}
 
-class daMagma_c : public fopAc_ac_c {
-public:
-    ~daMagma_c() {
-        dComIfG_resDelete(&mPhs, "Magma");
+s32 daMagma_c::getPathNo() {
+    return fopAcM_GetParam(this);
+}
+
+s32 daMagma_c::create() {
+    fopAcM_SetupActor(this, daMagma_c);
+
+    int result = dComIfG_resLoad(&mPhs, "Magma");
+    if (result != cPhs_COMPLEATE_e) {
+        return result;
     }
 
-    request_of_phase_process_class mPhs;
-};
+    if (g_dComIfG_gameInfo.play.createMagma()) {
+        g_dComIfG_gameInfo.play.mpMagmaPacket->newFloor(
+            current.pos,
+            mScale,
+            current.roomNo,
+            getPathNo()
+        );
+    }
+
+    return cPhs_ERROR_e;
+}
 
 /* 00000078-00000080       .text daMagma_IsDelete__FP9daMagma_c */
 BOOL daMagma_IsDelete(daMagma_c* i_this) {
@@ -33,25 +52,7 @@ BOOL daMagma_Delete(daMagma_c* i_this) {
 
 /* 000000CC-00000178       .text daMagma_Create__FP10fopAc_ac_c */
 s32 daMagma_Create(fopAc_ac_c* i_this) {
-    daMagma_c* magma = static_cast<daMagma_c*>(i_this);
-
-    fopAcM_SetupActor(magma, daMagma_c);
-
-    int result = dComIfG_resLoad(&magma->mPhs, "Magma");
-    if (result != cPhs_COMPLEATE_e) {
-        return result;
-    }
-
-    if (g_dComIfG_gameInfo.play.createMagma()) {
-        g_dComIfG_gameInfo.play.mpMagmaPacket->newFloor(
-            magma->current.pos,
-            magma->mScale,
-            magma->current.roomNo,
-            magma->mBase.mParameters
-        );
-    }
-
-    return cPhs_ERROR_e;
+    return ((daMagma_c*)i_this)->create();
 }
 
 static actor_method_class l_daMagma_Method = {

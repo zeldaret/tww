@@ -3,6 +3,7 @@
 // Translation Unit: d_a_grass.cpp
 //
 
+#include "d/actor/d_a_grass.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
@@ -13,12 +14,6 @@
 #include "d/d_tree.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "SSystem/SComponent/c_sxyz.h"
-
-class grass_class : public fopAc_ac_c {
-public:
-    /* 0x290 */ u32 field_0x00;
-    /* 0x294 */ u32 field_0x04;
-};
 
 namespace daGrass_prm {
     inline s8 getItemNo(grass_class* ac) { return (fopAcM_GetParam(ac) >> 6) & 0x3F; }
