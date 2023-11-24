@@ -94,7 +94,10 @@ public:
     static f32 BASE_HEIGHT;
 };
 
-class sea_class;
+class sea_class : public fopAc_ac_c {
+    /* 0x290 */ u32 field_0x290;
+    /* 0x294 */ u32 field_0x294;
+};
 
 void daSea_Init();
 void daSea_ChkAreaBeforePos(f32, f32);

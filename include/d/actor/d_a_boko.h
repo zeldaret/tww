@@ -9,8 +9,22 @@
 #include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_phase.h"
 
+struct ke_c_s {
+    
+};
+
 class daBoko_c : public fopAc_ac_c {
 public:
+    static Vec m_top_offset[6];
+    static Vec m_blur_root_offset[6];
+    static Vec m_root_offset[6];
+    static f32 m_cps_r[6];
+    static s32 m_at_point[6];
+    static u32 m_at_type[6];
+    static f32 m_jump_blur_rate[6];
+    static f32 m_blur_rate[6];
+    static u8 m_se_type[6];
+
     void getAtPoint() {}
     void getAtType() {}
     void getBlurRate() {}
@@ -26,6 +40,8 @@ public:
     void setRotAngleSpeed(short) {}
     void setThrow(short) {}
 
+    void getTopPos(cXyz *);
+    void getBlurRootPos(cXyz *);
     void keDraw();
     void keCalc1(ke_c_s*, int);
     void keCalc();

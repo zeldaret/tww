@@ -6,7 +6,15 @@
 
 class daDaiocta_c : public fopAc_ac_c {
 public:
-    void getSw() {}
+    enum Proc_e {
+        
+    };
+
+    enum Mode_e {
+        
+    };
+
+    u8 getSw() { return mSwitchNo; }
 
     void _coHit(fopAc_ac_c*);
     void _nodeControl(J3DNode*, J3DModel*);
@@ -43,7 +51,7 @@ public:
     void modeDemo();
     void modeDeleteInit();
     void modeDelete();
-    void modeProc(daDaiocta_c::Proc_e, daDaiocta_c::Mode_e);
+    void modeProc(Proc_e, Mode_e);
     void setAnm();
     void setWater();
     void _execute();
@@ -57,7 +65,8 @@ public:
     void _delete();
 
 public:
-    /* Place member variables here */
+    /* 0x290 */ u8 field_0x290[0x574 - 0x290];
+    /* 0x574 */ u8 mSwitchNo;
 };
 
 #endif /* D_A_DAIOCTA_H */

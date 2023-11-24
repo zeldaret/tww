@@ -3,22 +3,13 @@
 // Translation Unit: d_a_spotbox.cpp
 //
 
+#include "d/actor/d_a_spotbox.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
 #include "dolphin/types.h"
 #include "d/d_procname.h"
-
-struct daSpotbox_c : public fopAc_ac_c {
-public:
-    inline s32 create();
-    inline BOOL draw();
-    inline BOOL execute();
-    inline u32 getType();
-public:
-    /* 0x290 */ Mtx mMtx;
-}; // Size: 0x2C0
 
 s32 daSpotbox_c::create() {
     fopAcM_SetupActor(this, daSpotbox_c);

@@ -3,6 +3,7 @@
 // Translation Unit: d_a_kaji.cpp
 //
 
+#include "d/actor/d_a_kaji.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -12,26 +13,6 @@
 #include "d/actor/d_a_obj_pirateship.h"
 #include "d/d_procname.h"
 #include "dolphin/types.h"
-
-struct daKaji_c : fopAc_ac_c {
-public:
-    BOOL CreateHeap();
-    inline s32 _create();
-    inline BOOL _delete();
-    inline BOOL _execute();
-    inline bool _draw();
-    
-    void setAnm(int, f32) {}
-    void set_mtx() {}
-
-public:
-    /* 0x290 */ request_of_phase_process_class mPhs;
-    /* 0x298 */ u8 pad[0x29C - 0x298];
-    /* 0x29C */ mDoExt_McaMorf* mpMorf;
-    /* 0x2A0 */ Mtx mMtx;
-    
-    static const char M_arcname[];
-};
 
 static daObjPirateship::Act_c* l_p_ship;
 

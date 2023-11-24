@@ -3,19 +3,27 @@
 
 #include "f_op/f_op_actor.h"
 
-class daAndsw2_c : public fopAc_ac_c {
+struct daAndsw2_c : public fopAc_ac_c {
 public:
-    void create() {}
-    void draw() {}
-    void execute() {}
-    void setActio(unsigned char) {}
+    void setActio(u8 action) { mAction = action; }
+
+    u8 getEventNo();
+    u8 getSwbit();
+    u8 getSwbit2();
+    u8 getType();
+    u8 getTimer();
+    u8 getNum();
+    u8 getTopSw();
+    BOOL chkAllSw2();
+    
+    inline BOOL execute();
+    inline s32 create();
+    inline BOOL draw();
 
 public:
     /* 0x290 */ u8 mAction;
-    /* 0x291 */ u8 m291[0x292 - 0x291];
     /* 0x292 */ s16 mTimer;
     /* 0x294 */ s16 mEventIdx;
-    /* 0x296 */ u8 m296[0x298 - 0x296];
 };
 
 #endif /* D_A_ANDSW2_H */

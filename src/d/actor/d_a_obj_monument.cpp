@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_monument.cpp
 //
 
+#include "d/actor/d_a_obj_monument.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -15,16 +16,6 @@
 
 namespace daObjMonument {
     namespace {
-        enum Type_e {
-            ONE_e,
-            TWO_e,
-        };
-
-        struct Attr_c {
-            /* 0x00 */ s16 mModelId;
-            /* 0x01 */ s16 mBgWId;
-        };
-
         static Attr_c L_attr[2] = {
             { 0x04, 0x08 },
             { 0x05, 0x09 },
@@ -32,37 +23,6 @@ namespace daObjMonument {
 
         inline const Attr_c & attr(Type_e type) { return L_attr[type]; }
     }
-
-    class Act_c : fopAc_ac_c {
-    public:
-        s32 _create();
-        bool _execute();
-        bool _draw();
-        bool _delete();
-        bool create_heap();
-        void init_mtx();
-        void set_mtx();
-        static BOOL solidHeapCB(fopAc_ac_c *i_this);
-        static const char M_arcname[6];
-
-    public:
-        /* 0x290 */ request_of_phase_process_class mPhs;
-        /* 0x298 */ J3DModel * mpModel;
-        /* 0x29C */ Type_e mType;
-        /* 0x2A0 */ dBgW * mpBgW;
-        /* 0x2A4 */ Mtx mtx;
-
-        enum Prm_e {
-            PRM_TYPE_W = 0x01,
-            PRM_TYPE_S = 0x00,
-
-            PRM_SWSAVE_W = 0x08,
-            PRM_SWSAVE_S = 0x08,
-        };
-
-        Type_e prm_get_type() const { return (Type_e)daObj::PrmAbstract<Prm_e>(this, PRM_TYPE_W, PRM_TYPE_S); }
-        u32 prm_get_swSave() const { return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
-    };
 }
 
 const char daObjMonument::Act_c::M_arcname[6] = "Esekh";

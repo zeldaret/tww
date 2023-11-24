@@ -3,15 +3,15 @@
 
 #include "f_op/f_op_actor.h"
 
-class daSpotbox_c : public fopAc_ac_c {
+struct daSpotbox_c : public fopAc_ac_c {
 public:
-    void create() {}
-    void draw() {}
-    void execute() {}
-    void getType() {}
+    inline s32 create();
+    inline BOOL draw();
+    inline BOOL execute();
+    inline u32 getType();
 
 public:
-    /* Place member variables here */
-};
+    /* 0x290 */ Mtx mMtx;
+}; // Size: 0x2C0
 
 #endif /* D_A_SPOTBOX_H */

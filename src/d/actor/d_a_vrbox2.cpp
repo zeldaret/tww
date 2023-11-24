@@ -3,6 +3,7 @@
 // Translation Unit: d_a_vrbox2.cpp
 //
 
+#include "d/actor/d_a_vrbox2.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera_mng.h"
 #include "d/d_com_inf_game.h"
@@ -13,17 +14,6 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/J3DGraphBase/J3DMatBlock.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
-
-class vrbox2_class : public fopAc_ac_c {
-public:
-    /* 0x290 */ void * field_0x290;
-    /* 0x294 */ J3DModel* mpBackCloud;
-    /* 0x298 */ void * field_0x298;
-    /* 0x29C */ J3DModel* mpKasumiMae;
-    /* 0x2A0 */ void * field_0x2a0;
-    /* 0x2A4 */ J3DModel* mpUsoUmi;
-    /* 0x2A4 */ void * field_0x2a8;
-};
 
 /* 8015EA14-8015EA5C       .text texScrollCheck__FRf */
 void texScrollCheck(float& v) {
