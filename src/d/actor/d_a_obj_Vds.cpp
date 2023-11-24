@@ -31,11 +31,6 @@ void daObjVds::Act_c::search_switchCB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 000002B0-000002EC       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
 /* 000002EC-000003C8       .text process_off_init__Q28daObjVds5Act_cFv */
 void daObjVds::Act_c::process_off_init() {
     /* Nonmatching */
@@ -111,31 +106,6 @@ void daObjVds::Act_c::_create() {
     /* Nonmatching */
 }
 
-/* 000011EC-000011F0       .text __ct__4cXyzFv */
-cXyz::cXyz() {
-    /* Nonmatching */
-}
-
-/* 000011F0-0000122C       .text __dt__15LIGHT_INFLUENCEFv */
-LIGHT_INFLUENCE::~LIGHT_INFLUENCE() {
-    /* Nonmatching */
-}
-
-/* 0000122C-00001230       .text __ct__15LIGHT_INFLUENCEFv */
-LIGHT_INFLUENCE::LIGHT_INFLUENCE() {
-    /* Nonmatching */
-}
-
-/* 00001230-0000128C       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 0000128C-000012D4       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 000012D4-00001368       .text _delete__Q28daObjVds5Act_cFv */
 void daObjVds::Act_c::_delete() {
     /* Nonmatching */
@@ -163,11 +133,6 @@ void daObjVds::Act_c::_draw() {
 
 /* 0000163C-00001720       .text __dt__Q28daObjVds5Act_cFv */
 daObjVds::Act_c::~Act_c() {
-    /* Nonmatching */
-}
-
-/* 00001720-0000173C       .text PrmAbstract<i>__5daObjFPC10fopAc_ac_cii */
-void daObj::PrmAbstract<int>(const fopAc_ac_c*, int, int) {
     /* Nonmatching */
 }
 

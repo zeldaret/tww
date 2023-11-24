@@ -21,11 +21,6 @@ void daWarphr_c::CreateHeap() {
     /* Nonmatching */
 }
 
-/* 0000059C-000005E4       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 000005E4-000006BC       .text CreateInit__10daWarphr_cFv */
 void daWarphr_c::CreateInit() {
     /* Nonmatching */
@@ -93,11 +88,6 @@ void daWarphr_c::actWarp(int) {
 
 /* 00000E14-00000F70       .text initWarpArrive__10daWarphr_cFi */
 void daWarphr_c::initWarpArrive(int) {
-    /* Nonmatching */
-}
-
-/* 00000F70-00000FAC       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
     /* Nonmatching */
 }
 
@@ -173,16 +163,6 @@ void daWarphr_Execute(void*) {
 
 /* 0000176C-00001774       .text daWarphr_IsDelete__FPv */
 void daWarphr_IsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 00001774-000017D0       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 000017D0-0000182C       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
     /* Nonmatching */
 }
 

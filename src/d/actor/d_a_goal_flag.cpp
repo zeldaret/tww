@@ -31,11 +31,6 @@ void daGFlag_packet_c::setNrmVtx(cXyz*, int, int) {
     /* Nonmatching */
 }
 
-/* 00000E78-00000EB4       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
 /* 00000EB4-00000F80       .text getRacePath__13daGoal_Flag_cFUc */
 void daGoal_Flag_c::getRacePath(unsigned char) {
     /* Nonmatching */
@@ -111,16 +106,6 @@ void daGoal_Flag_c::_create() {
     /* Nonmatching */
 }
 
-/* 00002968-000029B0       .text __dt__19mDoExt_3DlineMat0_cFv */
-mDoExt_3DlineMat0_c::~mDoExt_3DlineMat0_c() {
-    /* Nonmatching */
-}
-
-/* 000029B0-000029CC       .text __ct__19mDoExt_3DlineMat0_cFv */
-mDoExt_3DlineMat0_c::mDoExt_3DlineMat0_c() {
-    /* Nonmatching */
-}
-
 /* 000029CC-00002AAC       .text daGoal_FlagDelete__FPv */
 void daGoal_FlagDelete(void*) {
     /* Nonmatching */
@@ -148,11 +133,6 @@ daGFlag_HIO_c::~daGFlag_HIO_c() {
 
 /* 00002DC8-00002EAC       .text __dt__16daGFlag_packet_cFv */
 daGFlag_packet_c::~daGFlag_packet_c() {
-    /* Nonmatching */
-}
-
-/* 00002EAC-00002EB0       .text __ct__4cXyzFv */
-cXyz::cXyz() {
     /* Nonmatching */
 }
 

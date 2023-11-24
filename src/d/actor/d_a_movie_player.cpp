@@ -576,11 +576,6 @@ void daMP_c::daMP_c_Draw() {
     /* Nonmatching */
 }
 
-/* 00006668-00006698       .text dComIfGd_set2DOpa__FP12dDlst_base_c */
-void dComIfGd_set2DOpa(dDlst_base_c*) {
-    /* Nonmatching */
-}
-
 /* 00006698-000066C4       .text set2DOpa__12dDlst_list_cFP12dDlst_base_c */
 void dDlst_list_c::set2DOpa(dDlst_base_c*) {
     /* Nonmatching */
@@ -616,38 +611,13 @@ daMP_Dlst_base_c::~daMP_Dlst_base_c() {
     /* Nonmatching */
 }
 
-/* 00006820-00006868       .text __dt__12dDlst_base_cFv */
-dDlst_base_c::~dDlst_base_c() {
-    /* Nonmatching */
-}
-
-/* 00006868-0000686C       .text draw__12dDlst_base_cFv */
-void dDlst_base_c::draw() {
-    /* Nonmatching */
-}
-
 /* 000068A8-000068E4       .text __ct__16daMP_Dlst_base_cFv */
 daMP_Dlst_base_c::daMP_Dlst_base_c() {
     /* Nonmatching */
 }
 
-/* 000068E4-000068F4       .text __ct__12dDlst_base_cFv */
-dDlst_base_c::dDlst_base_c() {
-    /* Nonmatching */
-}
-
-/* 000068F4-00006914       .text fopAcM_GetParam__FPv */
-void fopAcM_GetParam(void*) {
-    /* Nonmatching */
-}
-
 /* 00006914-0000691C       .text fpcM_GetParam__FPv */
 void fpcM_GetParam(void*) {
-    /* Nonmatching */
-}
-
-/* 0000691C-0000692C       .text fopAcM_OnCondition__FP10fopAc_ac_cUl */
-void fopAcM_OnCondition(fopAc_ac_c*, unsigned long) {
     /* Nonmatching */
 }
 
@@ -658,11 +628,6 @@ daMP_c::daMP_c() {
 
 /* 0000695C-00006964       .text __nw__FUlPv */
 void operator new(unsigned long, void*) {
-    /* Nonmatching */
-}
-
-/* 00006964-00006970       .text fopAcM_CheckCondition__FP10fopAc_ac_cUl */
-void fopAcM_CheckCondition(fopAc_ac_c*, unsigned long) {
     /* Nonmatching */
 }
 

@@ -11,11 +11,6 @@ void set_mtx(daMajuu_Flag_c*) {
     /* Nonmatching */
 }
 
-/* 00000374-000003B0       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
 /* 000003B0-000003E4       .text setNrmMtx__21daMajuu_Flag_packet_cFv */
 void daMajuu_Flag_packet_c::setNrmMtx() {
     /* Nonmatching */
@@ -81,18 +76,8 @@ daMajuu_Flag_HIO_c::~daMajuu_Flag_HIO_c() {
     /* Nonmatching */
 }
 
-/* 00001BF0-00001C38       .text __dt__14mDoHIO_entry_cFv */
-mDoHIO_entry_c::~mDoHIO_entry_c() {
-    /* Nonmatching */
-}
-
 /* 00001C38-00001D04       .text __dt__21daMajuu_Flag_packet_cFv */
 daMajuu_Flag_packet_c::~daMajuu_Flag_packet_c() {
-    /* Nonmatching */
-}
-
-/* 00001D04-00001D08       .text __ct__4cXyzFv */
-cXyz::cXyz() {
     /* Nonmatching */
 }
 

@@ -61,16 +61,6 @@ void daObjTnTrap_c::_create() {
     /* Nonmatching */
 }
 
-/* 00000C78-00000D58       .text __dt__8dCcD_TriFv */
-dCcD_Tri::~dCcD_Tri() {
-    /* Nonmatching */
-}
-
-/* 00000D58-00000DE8       .text __ct__8dCcD_TriFv */
-dCcD_Tri::dCcD_Tri() {
-    /* Nonmatching */
-}
-
 /* 00000DE8-00000E44       .text __dt__8cM3dGTriFv */
 cM3dGTri::~cM3dGTri() {
     /* Nonmatching */
@@ -78,21 +68,6 @@ cM3dGTri::~cM3dGTri() {
 
 /* 00000E44-00000E8C       .text __dt__8cM3dGPlaFv */
 cM3dGPla::~cM3dGPla() {
-    /* Nonmatching */
-}
-
-/* 00000E8C-00000EE8       .text __dt__14cCcD_ShapeAttrFv */
-cCcD_ShapeAttr::~cCcD_ShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 00000EE8-00000F30       .text __dt__8cM3dGAabFv */
-cM3dGAab::~cM3dGAab() {
-    /* Nonmatching */
-}
-
-/* 00000F30-00000F8C       .text __dt__10dCcD_GSttsFv */
-dCcD_GStts::~dCcD_GStts() {
     /* Nonmatching */
 }
 
@@ -203,101 +178,6 @@ void daObjTnTrap_Draw(daObjTnTrap_c*) {
 
 /* 00001C7C-00001C84       .text daObjTnTrap_IsDelete__FP13daObjTnTrap_c */
 void daObjTnTrap_IsDelete(daObjTnTrap_c*) {
-    /* Nonmatching */
-}
-
-/* 00001C84-00001CCC       .text __dt__10cCcD_GSttsFv */
-cCcD_GStts::~cCcD_GStts() {
-    /* Nonmatching */
-}
-
-/* 00001CCC-00001CD4       .text CrossAtTg__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_ShapeAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00001CD4-00001CDC       .text CrossCo__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_ShapeAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001CDC-00001CE8       .text GetCoCP__14cCcD_ShapeAttrFv */
-void cCcD_ShapeAttr::GetCoCP() {
-    /* Nonmatching */
-}
-
-/* 00001CE8-00001CF4       .text GetCoCP__14cCcD_ShapeAttrCFv */
-void cCcD_ShapeAttr::GetCoCP() const {
-    /* Nonmatching */
-}
-
-/* 00001CF4-00001D04       .text GetShapeAttr__8dCcD_TriFv */
-void dCcD_Tri::GetShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 00001D04-00001D0C       .text CrossAtTg__12cCcD_TriAttrCFRC12cCcD_AabAttrP4cXyz */
-void cCcD_TriAttr::CrossAtTg(const cCcD_AabAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00001D0C-00001D14       .text CrossAtTg__12cCcD_TriAttrCFRC12cCcD_PntAttrP4cXyz */
-void cCcD_TriAttr::CrossAtTg(const cCcD_PntAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00001D14-00001D4C       .text CrossAtTg__12cCcD_TriAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_TriAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00001D4C-00001D54       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_SphAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_SphAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001D54-00001D5C       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_CylAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_CylAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001D5C-00001D64       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_AabAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_AabAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001D64-00001D6C       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_TriAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_TriAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001D6C-00001D74       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_CpsAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_CpsAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001D74-00001D7C       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_PntAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_PntAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001D7C-00001DB4       .text CrossCo__12cCcD_TriAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001DB4-00001DB8       .text GetGObjInf__12cCcD_GObjInfCFv */
-void cCcD_GObjInf::GetGObjInf() const {
-    /* Nonmatching */
-}
-
-/* 00001DB8-00001DC0       .text GetShapeAttr__8cCcD_ObjCFv */
-void cCcD_Obj::GetShapeAttr() const {
-    /* Nonmatching */
-}
-
-/* 00001DC0-00001DDC       .text PrmAbstract<Q213daObjTnTrap_c7Param_e>__5daObjFPC10fopAc_ac_cQ213daObjTnTrap_c7Param_eQ213daObjTnTrap_c7Param_e */
-void daObj::PrmAbstract<daObjTnTrap_c::Param_e>(const fopAc_ac_c*, daObjTnTrap_c::Param_e, daObjTnTrap_c::Param_e) {
     /* Nonmatching */
 }
 

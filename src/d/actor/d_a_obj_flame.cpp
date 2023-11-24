@@ -21,11 +21,6 @@ void daObjFlame::Act_c::create_heap() {
     /* Nonmatching */
 }
 
-/* 00000414-0000045C       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 0000045C-000007D8       .text create_mode_init__Q210daObjFlame5Act_cFv */
 void daObjFlame::Act_c::create_mode_init() {
     /* Nonmatching */
@@ -146,36 +141,6 @@ void daObjFlame::Act_c::_create() {
     /* Nonmatching */
 }
 
-/* 00002200-000022E0       .text __dt__8dCcD_CpsFv */
-dCcD_Cps::~dCcD_Cps() {
-    /* Nonmatching */
-}
-
-/* 000022E0-0000233C       .text __dt__8cM3dGCpsFv */
-cM3dGCps::~cM3dGCps() {
-    /* Nonmatching */
-}
-
-/* 0000233C-00002384       .text __dt__8cM3dGLinFv */
-cM3dGLin::~cM3dGLin() {
-    /* Nonmatching */
-}
-
-/* 00002384-000023E0       .text __dt__14cCcD_ShapeAttrFv */
-cCcD_ShapeAttr::~cCcD_ShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 000023E0-00002428       .text __dt__8cM3dGAabFv */
-cM3dGAab::~cM3dGAab() {
-    /* Nonmatching */
-}
-
-/* 00002428-00002484       .text __dt__10dCcD_GSttsFv */
-dCcD_GStts::~dCcD_GStts() {
-    /* Nonmatching */
-}
-
 /* 00002484-000024B4       .text Delete__Q210daObjFlame6MethodFPv */
 void daObjFlame::Method::Delete(void*) {
     /* Nonmatching */
@@ -193,96 +158,6 @@ void daObjFlame::Method::Draw(void*) {
 
 /* 00002710-000027B0       .text IsDelete__Q210daObjFlame6MethodFPv */
 void daObjFlame::Method::IsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 000027B0-000027F8       .text __dt__10cCcD_GSttsFv */
-cCcD_GStts::~cCcD_GStts() {
-    /* Nonmatching */
-}
-
-/* 000027F8-00002808       .text GetShapeAttr__8dCcD_CpsFv */
-void dCcD_Cps::GetShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 00002808-00002810       .text CrossAtTg__12cCcD_CpsAttrCFRC12cCcD_AabAttrP4cXyz */
-void cCcD_CpsAttr::CrossAtTg(const cCcD_AabAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00002810-00002818       .text CrossAtTg__12cCcD_CpsAttrCFRC12cCcD_PntAttrP4cXyz */
-void cCcD_CpsAttr::CrossAtTg(const cCcD_PntAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00002818-00002850       .text CrossAtTg__12cCcD_CpsAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_CpsAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00002850-00002858       .text CrossCo__12cCcD_CpsAttrCFRC12cCcD_AabAttrPf */
-void cCcD_CpsAttr::CrossCo(const cCcD_AabAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00002858-00002860       .text CrossCo__12cCcD_CpsAttrCFRC12cCcD_TriAttrPf */
-void cCcD_CpsAttr::CrossCo(const cCcD_TriAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00002860-00002868       .text CrossCo__12cCcD_CpsAttrCFRC12cCcD_PntAttrPf */
-void cCcD_CpsAttr::CrossCo(const cCcD_PntAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00002868-000028A0       .text CrossCo__12cCcD_CpsAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_CpsAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 000028A0-000028AC       .text GetCoCP__14cCcD_ShapeAttrFv */
-void cCcD_ShapeAttr::GetCoCP() {
-    /* Nonmatching */
-}
-
-/* 000028AC-000028B8       .text GetCoCP__14cCcD_ShapeAttrCFv */
-void cCcD_ShapeAttr::GetCoCP() const {
-    /* Nonmatching */
-}
-
-/* 000028B8-000028BC       .text GetGObjInf__12cCcD_GObjInfCFv */
-void cCcD_GObjInf::GetGObjInf() const {
-    /* Nonmatching */
-}
-
-/* 000028BC-000028C4       .text GetShapeAttr__8cCcD_ObjCFv */
-void cCcD_Obj::GetShapeAttr() const {
-    /* Nonmatching */
-}
-
-/* 000028C4-000028CC       .text CrossAtTg__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_ShapeAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 000028CC-000028D4       .text CrossCo__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_ShapeAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 000028D4-00002930       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 00002930-0000298C       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 0000298C-000029A8       .text PrmAbstract<Q310daObjFlame5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ310daObjFlame5Act_c5Prm_eQ310daObjFlame5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjFlame::Act_c::Prm_e>(const fopAc_ac_c*, daObjFlame::Act_c::Prm_e, daObjFlame::Act_c::Prm_e) {
     /* Nonmatching */
 }
 

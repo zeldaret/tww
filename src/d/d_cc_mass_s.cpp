@@ -56,26 +56,6 @@ void dCcMassS_Mng::GetCamTopPos(Vec*) {
     /* Nonmatching */
 }
 
-/* 800AD3F8-800AD498       .text __dt__12cCcD_CpsAttrFv */
-cCcD_CpsAttr::~cCcD_CpsAttr() {
-    /* Nonmatching */
-}
-
-/* 800AD498-800AD524       .text __dt__12cCcD_CylAttrFv */
-cCcD_CylAttr::~cCcD_CylAttr() {
-    /* Nonmatching */
-}
-
-/* 800AD524-800AD55C       .text CrossAtTg__12cCcD_CylAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_CylAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 800AD55C-800AD594       .text CrossCo__12cCcD_CylAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
 /* 800AD594-800AD5B0       .text __ct__12dCcMassS_ObjFv */
 dCcMassS_Obj::dCcMassS_Obj() {
     /* Nonmatching */

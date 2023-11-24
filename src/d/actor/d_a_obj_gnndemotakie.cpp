@@ -21,16 +21,6 @@ void daObjGnntakie_c::_create() {
     /* Nonmatching */
 }
 
-/* 00000300-0000035C       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 0000035C-000003A4       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 000003A4-000003D4       .text _delete__15daObjGnntakie_cFv */
 void daObjGnntakie_c::_delete() {
     /* Nonmatching */

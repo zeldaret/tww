@@ -166,48 +166,8 @@ daPedestal::daPds_infiniteEcallBack_c::~daPds_infiniteEcallBack_c() {
     /* Nonmatching */
 }
 
-/* 00001140-0000119C       .text __dt__18dPa_levelEcallBackFv */
-dPa_levelEcallBack::~dPa_levelEcallBack() {
-    /* Nonmatching */
-}
-
-/* 0000119C-000011E4       .text __dt__34JPACallBackBase<P14JPABaseEmitter>Fv */
-JPACallBackBase<JPABaseEmitter*>::~JPACallBackBase() {
-    /* Nonmatching */
-}
-
-/* 000011E4-00001240       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 00001240-00001288       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 00001288-00001290       .text setup__Q210daPedestal25daPds_infiniteEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
 void daPedestal::daPds_infiniteEcallBack_c::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
-    /* Nonmatching */
-}
-
-/* 00001290-00001294       .text draw__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::draw(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 00001294-00001298       .text executeAfter__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::executeAfter(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 00001298-0000129C       .text init__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::init(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 0000129C-000012A0       .text execute__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::execute(JPABaseEmitter*) {
     /* Nonmatching */
 }
 

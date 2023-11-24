@@ -116,51 +116,6 @@ dBgS_CamLinChk::~dBgS_CamLinChk() {
     /* Nonmatching */
 }
 
-/* 00001244-00001370       .text __dt__11dBgS_LinChkFv */
-dBgS_LinChk::~dBgS_LinChk() {
-    /* Nonmatching */
-}
-
-/* 00001370-00001410       .text __dt__8dBgS_ChkFv */
-dBgS_Chk::~dBgS_Chk() {
-    /* Nonmatching */
-}
-
-/* 00001410-0000146C       .text __dt__15dBgS_GrpPassChkFv */
-dBgS_GrpPassChk::~dBgS_GrpPassChk() {
-    /* Nonmatching */
-}
-
-/* 0000146C-000014B4       .text __dt__15cBgS_GrpPassChkFv */
-cBgS_GrpPassChk::~cBgS_GrpPassChk() {
-    /* Nonmatching */
-}
-
-/* 000014B4-00001510       .text __dt__16dBgS_PolyPassChkFv */
-dBgS_PolyPassChk::~dBgS_PolyPassChk() {
-    /* Nonmatching */
-}
-
-/* 00001510-00001558       .text __dt__16cBgS_PolyPassChkFv */
-cBgS_PolyPassChk::~cBgS_PolyPassChk() {
-    /* Nonmatching */
-}
-
-/* 00001558-000015EC       .text __dt__11cBgS_LinChkFv */
-cBgS_LinChk::~cBgS_LinChk() {
-    /* Nonmatching */
-}
-
-/* 000015EC-00001634       .text __dt__8cM3dGLinFv */
-cM3dGLin::~cM3dGLin() {
-    /* Nonmatching */
-}
-
-/* 00001634-0000167C       .text __dt__13cBgS_PolyInfoFv */
-cBgS_PolyInfo::~cBgS_PolyInfo() {
-    /* Nonmatching */
-}
-
 /* 0000167C-00001744       .text darkProc__12daTag_Hint_cFv */
 void daTag_Hint_c::darkProc() {
     /* Nonmatching */
@@ -241,10 +196,6 @@ void daTag_Hint_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 000021E8-00002224       .text __dt__15LIGHT_INFLUENCEFv */
-LIGHT_INFLUENCE::~LIGHT_INFLUENCE() {
-    /* Nonmatching */
-}
 
 
 
@@ -252,10 +203,4 @@ LIGHT_INFLUENCE::~LIGHT_INFLUENCE() {
 
 
 
-
-
-/* 00002264-00002280       .text getRightHandPos__9daPy_py_cCFv */
-void daPy_py_c::getRightHandPos() const {
-    /* Nonmatching */
-}
 

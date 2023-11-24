@@ -86,18 +86,3 @@ yg_awa_data::yg_awa_data() {
     /* Nonmatching */
 }
 
-/* 00000B1C-00000B78       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000B78-00000BD4       .text __dt__13mDoExt_bckAnmFv */
-mDoExt_bckAnm::~mDoExt_bckAnm() {
-    /* Nonmatching */
-}
-
-/* 00000BD4-00000C1C       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-

@@ -76,18 +76,3 @@ void daFloor_IsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 00000774-0000077C       .text IsDelete__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::IsDelete() {
-    /* Nonmatching */
-}
-
-/* 0000077C-00000784       .text ToFore__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToFore() {
-    /* Nonmatching */
-}
-
-/* 00000784-0000078C       .text ToBack__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToBack() {
-    /* Nonmatching */
-}
-

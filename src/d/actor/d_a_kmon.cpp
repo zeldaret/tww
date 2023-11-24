@@ -36,26 +36,6 @@ void daKmonCreate(void*) {
     /* Nonmatching */
 }
 
-/* 000007F8-00000868       .text __dt__12dBgS_ObjAcchFv */
-dBgS_ObjAcch::~dBgS_ObjAcch() {
-    /* Nonmatching */
-}
-
-/* 00000868-000008C4       .text __dt__13mDoExt_bckAnmFv */
-mDoExt_bckAnm::~mDoExt_bckAnm() {
-    /* Nonmatching */
-}
-
-/* 000008C4-00000920       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000920-00000968       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 00000968-00000998       .text daKmonDelete__FPv */
 void daKmonDelete(void*) {
     /* Nonmatching */

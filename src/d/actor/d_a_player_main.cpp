@@ -2536,11 +2536,6 @@ void daPy_lk_c::setBlurPosResource(u16) {
     /* Nonmatching */
 }
 
-/* 80104280-80104364       .text getItemAnimeResource__9daPy_lk_cFUs */
-J3DAnmTransform* daPy_lk_c::getItemAnimeResource(u16) {
-    /* Nonmatching */
-}
-
 /* 80104364-801043F0       .text getAnimeResource__9daPy_lk_cFP14daPy_anmHeap_cUsUl */
 void daPy_lk_c::getAnimeResource(daPy_anmHeap_c*, u16, u32) {
     /* Nonmatching */
@@ -4500,16 +4495,6 @@ J3DModelData* daPy_lk_c::initModel(J3DModel** i_model, int i_fileIndex, u32 i_di
     *i_model = mDoExt_J3DModel__create(tmp_modelData, 0x00080000, i_differedDlistFlag);
     JUT_ASSERT(21344, *i_model != 0);
     return tmp_modelData;
-}
-
-/* 80124B30-80124BE4       .text entryBtk__9daPy_lk_cFP12J3DModelDatai */
-J3DAnmTextureSRTKey* daPy_lk_c::entryBtk(J3DModelData*, int) {
-    /* Nonmatching */
-}
-
-/* 80124BE4-80124C98       .text entryBrk__9daPy_lk_cFP12J3DModelDatai */
-J3DAnmTevRegKey* daPy_lk_c::entryBrk(J3DModelData*, int) {
-    /* Nonmatching */
 }
 
 /* 80124C98-80125CC8       .text playerInit__9daPy_lk_cFv */

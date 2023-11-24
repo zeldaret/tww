@@ -31,31 +31,6 @@ void daObjMkie::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
-/* 00000754-000007E4       .text __dt__9dCcD_SttsFv */
-dCcD_Stts::~dCcD_Stts() {
-    /* Nonmatching */
-}
-
-/* 000007E4-00000838       .text __ct__9dCcD_SttsFv */
-dCcD_Stts::dCcD_Stts() {
-    /* Nonmatching */
-}
-
-/* 00000838-00000894       .text __dt__10dCcD_GSttsFv */
-dCcD_GStts::~dCcD_GStts() {
-    /* Nonmatching */
-}
-
-/* 00000894-00000974       .text __dt__8dCcD_TriFv */
-dCcD_Tri::~dCcD_Tri() {
-    /* Nonmatching */
-}
-
-/* 00000974-00000A04       .text __ct__8dCcD_TriFv */
-dCcD_Tri::dCcD_Tri() {
-    /* Nonmatching */
-}
-
 /* 00000A04-00000A60       .text __dt__8cM3dGTriFv */
 cM3dGTri::~cM3dGTri() {
     /* Nonmatching */
@@ -63,26 +38,6 @@ cM3dGTri::~cM3dGTri() {
 
 /* 00000A60-00000AA8       .text __dt__8cM3dGPlaFv */
 cM3dGPla::~cM3dGPla() {
-    /* Nonmatching */
-}
-
-/* 00000AA8-00000B04       .text __dt__14cCcD_ShapeAttrFv */
-cCcD_ShapeAttr::~cCcD_ShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 00000B04-00000B4C       .text __dt__8cM3dGAabFv */
-cM3dGAab::~cM3dGAab() {
-    /* Nonmatching */
-}
-
-/* 00000B4C-00000BA8       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000BA8-00000BF0       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
     /* Nonmatching */
 }
 
@@ -175,141 +130,6 @@ void daObjMkie::Act_c::Draw() {
 
 
 
-
-/* 00001670-00001678       .text Draw__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::Draw() {
-    /* Nonmatching */
-}
-
-/* 00001678-00001680       .text IsDelete__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::IsDelete() {
-    /* Nonmatching */
-}
-
-/* 00001680-00001688       .text CreateHeap__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::CreateHeap() {
-    /* Nonmatching */
-}
-
-/* 00001688-00001690       .text Create__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::Create() {
-    /* Nonmatching */
-}
-
-/* 00001690-00001698       .text Execute__16dBgS_MoveBgActorFPPA3_A4_f */
-void dBgS_MoveBgActor::Execute(float(**)[3][4]) {
-    /* Nonmatching */
-}
-
-/* 00001698-000016A0       .text Delete__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::Delete() {
-    /* Nonmatching */
-}
-
-/* 000016A0-000016A8       .text ToFore__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToFore() {
-    /* Nonmatching */
-}
-
-/* 000016A8-000016B0       .text ToBack__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToBack() {
-    /* Nonmatching */
-}
-
-/* 000016B0-000016B8       .text CrossAtTg__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_ShapeAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 000016B8-000016C0       .text CrossCo__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_ShapeAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 000016C0-000016CC       .text GetCoCP__14cCcD_ShapeAttrFv */
-void cCcD_ShapeAttr::GetCoCP() {
-    /* Nonmatching */
-}
-
-/* 000016CC-000016D8       .text GetCoCP__14cCcD_ShapeAttrCFv */
-void cCcD_ShapeAttr::GetCoCP() const {
-    /* Nonmatching */
-}
-
-/* 000016D8-000016E8       .text GetShapeAttr__8dCcD_TriFv */
-void dCcD_Tri::GetShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 000016E8-000016F0       .text CrossAtTg__12cCcD_TriAttrCFRC12cCcD_AabAttrP4cXyz */
-void cCcD_TriAttr::CrossAtTg(const cCcD_AabAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 000016F0-000016F8       .text CrossAtTg__12cCcD_TriAttrCFRC12cCcD_PntAttrP4cXyz */
-void cCcD_TriAttr::CrossAtTg(const cCcD_PntAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 000016F8-00001730       .text CrossAtTg__12cCcD_TriAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_TriAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00001730-00001738       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_SphAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_SphAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001738-00001740       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_CylAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_CylAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001740-00001748       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_AabAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_AabAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001748-00001750       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_TriAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_TriAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001750-00001758       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_CpsAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_CpsAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001758-00001760       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_PntAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_PntAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001760-00001798       .text CrossCo__12cCcD_TriAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001798-0000179C       .text GetGObjInf__12cCcD_GObjInfCFv */
-void cCcD_GObjInf::GetGObjInf() const {
-    /* Nonmatching */
-}
-
-/* 0000179C-000017A4       .text GetShapeAttr__8cCcD_ObjCFv */
-void cCcD_Obj::GetShapeAttr() const {
-    /* Nonmatching */
-}
-
-/* 000017A4-000017EC       .text __dt__10cCcD_GSttsFv */
-cCcD_GStts::~cCcD_GStts() {
-    /* Nonmatching */
-}
-
-/* 000017EC-00001808       .text PrmAbstract<Q39daObjMkie5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ39daObjMkie5Act_c5Prm_eQ39daObjMkie5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjMkie::Act_c::Prm_e>(const fopAc_ac_c*, daObjMkie::Act_c::Prm_e, daObjMkie::Act_c::Prm_e) {
-    /* Nonmatching */
-}
 
 
 

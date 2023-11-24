@@ -76,21 +76,6 @@ void daObjIceisland_Create(void*) {
     /* Nonmatching */
 }
 
-/* 00000B2C-00000B88       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000B88-00000BE4       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000BE4-00000C2C       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 00000C2C-00000C5C       .text daObjIceisland_Delete__FPv */
 void daObjIceisland_Delete(void*) {
     /* Nonmatching */

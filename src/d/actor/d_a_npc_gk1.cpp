@@ -11,11 +11,6 @@ daNpc_Gk1_HIO_c::daNpc_Gk1_HIO_c() {
     /* Nonmatching */
 }
 
-/* 00000150-00000198       .text __dt__14mDoHIO_entry_cFv */
-mDoHIO_entry_c::~mDoHIO_entry_c() {
-    /* Nonmatching */
-}
-
 /* 00000198-000001E4       .text nodeCB_Head__FP7J3DNodei */
 void nodeCB_Head(J3DNode*, int) {
     /* Nonmatching */
@@ -23,11 +18,6 @@ void nodeCB_Head(J3DNode*, int) {
 
 /* 000001E4-000002D8       .text _nodeCB_Head__11daNpc_Gk1_cFP7J3DNodeP8J3DModel */
 void daNpc_Gk1_c::_nodeCB_Head(J3DNode*, J3DModel*) {
-    /* Nonmatching */
-}
-
-/* 000002D8-00000314       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
     /* Nonmatching */
 }
 
@@ -281,41 +271,6 @@ void daNpc_Gk1_c::_create() {
     /* Nonmatching */
 }
 
-/* 00002520-0000257C       .text __dt__13mDoExt_btpAnmFv */
-mDoExt_btpAnm::~mDoExt_btpAnm() {
-    /* Nonmatching */
-}
-
-/* 0000257C-000025C4       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
-/* 000025C4-00002690       .text __dt__8dCcD_CylFv */
-dCcD_Cyl::~dCcD_Cyl() {
-    /* Nonmatching */
-}
-
-/* 00002690-000026D8       .text __dt__8cM3dGCylFv */
-cM3dGCyl::~cM3dGCyl() {
-    /* Nonmatching */
-}
-
-/* 000026D8-00002734       .text __dt__14cCcD_ShapeAttrFv */
-cCcD_ShapeAttr::~cCcD_ShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 00002734-0000277C       .text __dt__8cM3dGAabFv */
-cM3dGAab::~cM3dGAab() {
-    /* Nonmatching */
-}
-
-/* 0000277C-000027EC       .text __dt__12dBgS_ObjAcchFv */
-dBgS_ObjAcch::~dBgS_ObjAcch() {
-    /* Nonmatching */
-}
-
 /* 000027EC-00002AE8       .text bodyCreateHeap__11daNpc_Gk1_cFv */
 void daNpc_Gk1_c::bodyCreateHeap() {
     /* Nonmatching */
@@ -361,93 +316,8 @@ void daNpc_Gk1_IsDelete(daNpc_Gk1_c*) {
     /* Nonmatching */
 }
 
-/* 00002DB4-00002DC4       .text GetShapeAttr__8dCcD_CylFv */
-void dCcD_Cyl::GetShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 00002DC4-00002DCC       .text GetCoCP__12cCcD_CylAttrFv */
-void cCcD_CylAttr::GetCoCP() {
-    /* Nonmatching */
-}
-
-/* 00002DCC-00002DD4       .text GetCoCP__12cCcD_CylAttrCFv */
-void cCcD_CylAttr::GetCoCP() const {
-    /* Nonmatching */
-}
-
-/* 00002DD4-00002DDC       .text CrossAtTg__12cCcD_CylAttrCFRC12cCcD_AabAttrP4cXyz */
-void cCcD_CylAttr::CrossAtTg(const cCcD_AabAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00002DDC-00002DE4       .text CrossAtTg__12cCcD_CylAttrCFRC12cCcD_PntAttrP4cXyz */
-void cCcD_CylAttr::CrossAtTg(const cCcD_PntAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00002DE4-00002E1C       .text CrossAtTg__12cCcD_CylAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_CylAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00002E1C-00002E24       .text CrossCo__12cCcD_CylAttrCFRC12cCcD_AabAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_AabAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00002E24-00002E2C       .text CrossCo__12cCcD_CylAttrCFRC12cCcD_TriAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_TriAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00002E2C-00002E34       .text CrossCo__12cCcD_CylAttrCFRC12cCcD_PntAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_PntAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00002E34-00002E6C       .text CrossCo__12cCcD_CylAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00002E6C-00002E70       .text GetGObjInf__12cCcD_GObjInfCFv */
-void cCcD_GObjInf::GetGObjInf() const {
-    /* Nonmatching */
-}
-
-/* 00002E70-00002E78       .text GetShapeAttr__8cCcD_ObjCFv */
-void cCcD_Obj::GetShapeAttr() const {
-    /* Nonmatching */
-}
-
-/* 00002E78-00002E80       .text CrossAtTg__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_ShapeAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00002E80-00002E88       .text CrossCo__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_ShapeAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00002E88-00002E94       .text GetCoCP__14cCcD_ShapeAttrFv */
-void cCcD_ShapeAttr::GetCoCP() {
-    /* Nonmatching */
-}
-
-/* 00002E94-00002EA0       .text GetCoCP__14cCcD_ShapeAttrCFv */
-void cCcD_ShapeAttr::GetCoCP() const {
-    /* Nonmatching */
-}
-
 /* 00002EA0-00002EFC       .text __dt__15daNpc_Gk1_HIO_cFv */
 daNpc_Gk1_HIO_c::~daNpc_Gk1_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 00002EFC-00002F18       .text cLib_calcTimer<s>__FPs */
-void cLib_calcTimer<short>(short*) {
     /* Nonmatching */
 }
 
@@ -459,19 +329,4 @@ void cLib_getRndValue<int>(int, int) {
 
 
 
-
-/* 00002FF0-00002FF8       .text next_msgStatus__12fopNpc_npc_cFPUl */
-void fopNpc_npc_c::next_msgStatus(unsigned long*) {
-    /* Nonmatching */
-}
-
-/* 00002FF8-00003000       .text getMsg__12fopNpc_npc_cFv */
-void fopNpc_npc_c::getMsg() {
-    /* Nonmatching */
-}
-
-/* 00003000-00003004       .text anmAtr__12fopNpc_npc_cFUs */
-void fopNpc_npc_c::anmAtr(unsigned short) {
-    /* Nonmatching */
-}
 

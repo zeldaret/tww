@@ -26,11 +26,6 @@ void wave_cont(bwdg_class*, unsigned char) {
     /* Nonmatching */
 }
 
-/* 000006F8-00000734       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
 /* 00000734-00000780       .text boss_a_d_sub__FPvPv */
 void boss_a_d_sub(void*, void*) {
     /* Nonmatching */
@@ -63,11 +58,6 @@ void daBwdg_Create(fopAc_ac_c*) {
 
 /* 00000B88-00000C28       .text __dt__15daBwdg_packet_cFv */
 daBwdg_packet_c::~daBwdg_packet_c() {
-    /* Nonmatching */
-}
-
-/* 00000C28-00000C2C       .text __ct__4cXyzFv */
-cXyz::cXyz() {
     /* Nonmatching */
 }
 

@@ -86,21 +86,6 @@ void daObjApzl_Create(void*) {
     /* Nonmatching */
 }
 
-/* 00001780-000017DC       .text __dt__13mDoExt_btpAnmFv */
-mDoExt_btpAnm::~mDoExt_btpAnm() {
-    /* Nonmatching */
-}
-
-/* 000017DC-00001804       .text __ct__13mDoExt_btpAnmFv */
-mDoExt_btpAnm::mDoExt_btpAnm() {
-    /* Nonmatching */
-}
-
-/* 00001804-0000184C       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 0000184C-00001894       .text daObjApzl_Delete__FPv */
 void daObjApzl_Delete(void*) {
     /* Nonmatching */

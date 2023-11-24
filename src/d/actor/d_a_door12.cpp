@@ -196,13 +196,3 @@ void daDoor12_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00001D3C-00001D98       .text __dt__13mDoExt_bckAnmFv */
-mDoExt_bckAnm::~mDoExt_bckAnm() {
-    /* Nonmatching */
-}
-
-/* 00001D98-00001DE0       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-

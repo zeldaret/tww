@@ -616,16 +616,6 @@ dMap_Dmap_c::~dMap_Dmap_c() {
     /* Nonmatching */
 }
 
-/* 80051808-80051850       .text __dt__12dDlst_base_cFv */
-dDlst_base_c::~dDlst_base_c() {
-    /* Nonmatching */
-}
-
-/* 80051850-80051854       .text draw__12dDlst_base_cFv */
-void dDlst_base_c::draw() {
-    /* Nonmatching */
-}
-
 /* 80051854-800518B0       .text __dt__11dMap_2DT2_cFv */
 dMap_2DT2_c::~dMap_2DT2_c() {
     /* Nonmatching */

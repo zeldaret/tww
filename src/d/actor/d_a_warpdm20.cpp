@@ -21,11 +21,6 @@ void daWarpdm20_c::CreateHeap() {
     /* Nonmatching */
 }
 
-/* 0000046C-000004B4       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 000004B4-000005C8       .text CreateInit__12daWarpdm20_cFv */
 void daWarpdm20_c::CreateInit() {
     /* Nonmatching */
@@ -33,16 +28,6 @@ void daWarpdm20_c::CreateInit() {
 
 /* 000005C8-000006A0       .text _create__12daWarpdm20_cFv */
 void daWarpdm20_c::_create() {
-    /* Nonmatching */
-}
-
-/* 000006A0-000006FC       .text __dt__18dPa_levelEcallBackFv */
-dPa_levelEcallBack::~dPa_levelEcallBack() {
-    /* Nonmatching */
-}
-
-/* 000006FC-00000744       .text __dt__34JPACallBackBase<P14JPABaseEmitter>Fv */
-JPACallBackBase<JPABaseEmitter*>::~JPACallBackBase() {
     /* Nonmatching */
 }
 
@@ -203,41 +188,6 @@ void daWarpdm20_Execute(void*) {
 
 /* 0000184C-00001854       .text daWarpdm20_IsDelete__FPv */
 void daWarpdm20_IsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 00001854-00001858       .text draw__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::draw(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 00001858-0000185C       .text executeAfter__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::executeAfter(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 0000185C-00001860       .text execute__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::execute(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 00001860-00001864       .text init__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::init(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 00001864-000018C0       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 000018C0-0000191C       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 0000191C-00001978       .text __dt__13mDoExt_bckAnmFv */
-mDoExt_bckAnm::~mDoExt_bckAnm() {
     /* Nonmatching */
 }
 

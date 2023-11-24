@@ -66,8 +66,3 @@ void daKui_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 000018C8-000018E4       .text getLeftHandPos__9daPy_py_cCFv */
-void daPy_py_c::getLeftHandPos() const {
-    /* Nonmatching */
-}
-

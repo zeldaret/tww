@@ -76,8 +76,3 @@ void daObjBuoyrace::Act_c::_draw() {
 
 
 
-/* 00000BBC-00000BD8       .text PrmAbstract<Q313daObjBuoyrace5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ313daObjBuoyrace5Act_c5Prm_eQ313daObjBuoyrace5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjBuoyrace::Act_c::Prm_e>(const fopAc_ac_c*, daObjBuoyrace::Act_c::Prm_e, daObjBuoyrace::Act_c::Prm_e) {
-    /* Nonmatching */
-}
-

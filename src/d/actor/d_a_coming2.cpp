@@ -26,56 +26,6 @@ void daComing2::Act_c::no_ship_obstacle(cXyz*) {
     /* Nonmatching */
 }
 
-/* 0000052C-00000680       .text __dt__14dBgS_ObjLinChkFv */
-dBgS_ObjLinChk::~dBgS_ObjLinChk() {
-    /* Nonmatching */
-}
-
-/* 00000680-000007AC       .text __dt__11dBgS_LinChkFv */
-dBgS_LinChk::~dBgS_LinChk() {
-    /* Nonmatching */
-}
-
-/* 000007AC-0000084C       .text __dt__8dBgS_ChkFv */
-dBgS_Chk::~dBgS_Chk() {
-    /* Nonmatching */
-}
-
-/* 0000084C-000008A8       .text __dt__15dBgS_GrpPassChkFv */
-dBgS_GrpPassChk::~dBgS_GrpPassChk() {
-    /* Nonmatching */
-}
-
-/* 000008A8-000008F0       .text __dt__15cBgS_GrpPassChkFv */
-cBgS_GrpPassChk::~cBgS_GrpPassChk() {
-    /* Nonmatching */
-}
-
-/* 000008F0-0000094C       .text __dt__16dBgS_PolyPassChkFv */
-dBgS_PolyPassChk::~dBgS_PolyPassChk() {
-    /* Nonmatching */
-}
-
-/* 0000094C-00000994       .text __dt__16cBgS_PolyPassChkFv */
-cBgS_PolyPassChk::~cBgS_PolyPassChk() {
-    /* Nonmatching */
-}
-
-/* 00000994-00000A28       .text __dt__11cBgS_LinChkFv */
-cBgS_LinChk::~cBgS_LinChk() {
-    /* Nonmatching */
-}
-
-/* 00000A28-00000A70       .text __dt__8cM3dGLinFv */
-cM3dGLin::~cM3dGLin() {
-    /* Nonmatching */
-}
-
-/* 00000A70-00000AB8       .text __dt__13cBgS_PolyInfoFv */
-cBgS_PolyInfo::~cBgS_PolyInfo() {
-    /* Nonmatching */
-}
-
 /* 00000AB8-00000B50       .text position_is_safety_call_back__9daComing2FPvPv */
 void daComing2::position_is_safety_call_back(void*, void*) {
     /* Nonmatching */
@@ -93,21 +43,6 @@ void daComing2::Act_c::check_in_large_sea(const cXyz*) {
 
 /* 00000BD8-00000E60       .text get_water_height__Q29daComing25Act_cFPfPC4cXyz */
 void daComing2::Act_c::get_water_height(float*, const cXyz*) {
-    /* Nonmatching */
-}
-
-/* 00000E60-00000FA0       .text __dt__14dBgS_ObjGndChkFv */
-dBgS_ObjGndChk::~dBgS_ObjGndChk() {
-    /* Nonmatching */
-}
-
-/* 00000FA0-000010B8       .text __dt__11dBgS_GndChkFv */
-dBgS_GndChk::~dBgS_GndChk() {
-    /* Nonmatching */
-}
-
-/* 000010B8-00001138       .text __dt__11cBgS_GndChkFv */
-cBgS_GndChk::~cBgS_GndChk() {
     /* Nonmatching */
 }
 

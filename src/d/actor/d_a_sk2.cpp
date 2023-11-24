@@ -11,11 +11,6 @@ void nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
-/* 00000194-000001D0       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
 /* 000001D0-00000278       .text daSk2_Draw__FP9sk2_class */
 void daSk2_Draw(sk2_class*) {
     /* Nonmatching */
@@ -48,26 +43,6 @@ void useHeapInit(fopAc_ac_c*) {
 
 /* 00000918-00000BC4       .text daSk2_Create__FP10fopAc_ac_c */
 void daSk2_Create(fopAc_ac_c*) {
-    /* Nonmatching */
-}
-
-/* 00000BC4-00000C34       .text __dt__12dBgS_ObjAcchFv */
-dBgS_ObjAcch::~dBgS_ObjAcch() {
-    /* Nonmatching */
-}
-
-/* 00000C34-00000C38       .text __ct__4cXyzFv */
-cXyz::cXyz() {
-    /* Nonmatching */
-}
-
-/* 00000C38-00000C74       .text __dt__5csXyzFv */
-csXyz::~csXyz() {
-    /* Nonmatching */
-}
-
-/* 00000C74-00000C78       .text __ct__5csXyzFv */
-csXyz::csXyz() {
     /* Nonmatching */
 }
 

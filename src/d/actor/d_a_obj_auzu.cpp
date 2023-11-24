@@ -21,16 +21,6 @@ void daObjAuzu::Act_c::_create() {
     /* Nonmatching */
 }
 
-/* 000003B8-00000414       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000414-0000045C       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 0000045C-00000498       .text _delete__Q29daObjAuzu5Act_cFv */
 void daObjAuzu::Act_c::_delete() {
     /* Nonmatching */
@@ -85,9 +75,4 @@ void daObjAuzu::Act_c::_draw() {
 
 
 
-
-/* 00000CCC-00000CE8       .text PrmAbstract<Q39daObjAuzu5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ39daObjAuzu5Act_c5Prm_eQ39daObjAuzu5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjAuzu::Act_c::Prm_e>(const fopAc_ac_c*, daObjAuzu::Act_c::Prm_e, daObjAuzu::Act_c::Prm_e) {
-    /* Nonmatching */
-}
 

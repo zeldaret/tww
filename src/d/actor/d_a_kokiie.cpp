@@ -6,11 +6,6 @@
 #include "d/actor/d_a_kokiie.h"
 #include "dolphin/types.h"
 
-/* 00000078-000000B4       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
 /* 000000B4-00000154       .text daKokiie_Draw__FP12kokiie_class */
 void daKokiie_Draw(kokiie_class*) {
     /* Nonmatching */
@@ -53,11 +48,6 @@ void CallbackCreateHeap(fopAc_ac_c*) {
 
 /* 00001250-000014E4       .text daKokiie_Create__FP10fopAc_ac_c */
 void daKokiie_Create(fopAc_ac_c*) {
-    /* Nonmatching */
-}
-
-/* 000014E4-000014E8       .text __ct__4cXyzFv */
-cXyz::cXyz() {
     /* Nonmatching */
 }
 

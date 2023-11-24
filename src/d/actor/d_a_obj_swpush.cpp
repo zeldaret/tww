@@ -36,16 +36,6 @@ void daObjSwpush::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
-/* 000008C4-00000920       .text __dt__13mDoExt_btpAnmFv */
-mDoExt_btpAnm::~mDoExt_btpAnm() {
-    /* Nonmatching */
-}
-
-/* 00000920-00000968       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 00000968-000009F8       .text Mthd_Delete__Q211daObjSwpush5Act_cFv */
 void daObjSwpush::Act_c::Mthd_Delete() {
     /* Nonmatching */
@@ -78,11 +68,6 @@ cM3dGTri::~cM3dGTri() {
 
 /* 00000F38-00000F80       .text __dt__8cM3dGPlaFv */
 cM3dGPla::~cM3dGPla() {
-    /* Nonmatching */
-}
-
-/* 00000F80-00000FBC       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
     /* Nonmatching */
 }
 
@@ -215,9 +200,4 @@ void daObjSwpush::Act_c::Mthd_Draw() {
 
 
 
-
-/* 00002080-0000209C       .text PrmAbstract<Q311daObjSwpush5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ311daObjSwpush5Act_c5Prm_eQ311daObjSwpush5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjSwpush::Act_c::Prm_e>(const fopAc_ac_c*, daObjSwpush::Act_c::Prm_e, daObjSwpush::Act_c::Prm_e) {
-    /* Nonmatching */
-}
 

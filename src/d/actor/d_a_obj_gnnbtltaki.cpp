@@ -21,16 +21,6 @@ void daObjGnnbtaki_c::_create() {
     /* Nonmatching */
 }
 
-/* 00000348-000003A4       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 000003A4-000003EC       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 000003EC-0000041C       .text _delete__15daObjGnnbtaki_cFv */
 void daObjGnnbtaki_c::_delete() {
     /* Nonmatching */

@@ -11,11 +11,6 @@ void daObjTide::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
-/* 00000644-0000068C       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 0000068C-000007BC       .text Create__Q29daObjTide5Act_cFv */
 void daObjTide::Act_c::Create() {
     /* Nonmatching */
@@ -160,64 +155,4 @@ void daObjTide::Act_c::Draw() {
 
 
 
-
-/* 00001E88-00001E90       .text Draw__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::Draw() {
-    /* Nonmatching */
-}
-
-/* 00001E90-00001E98       .text IsDelete__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::IsDelete() {
-    /* Nonmatching */
-}
-
-/* 00001E98-00001EA0       .text CreateHeap__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::CreateHeap() {
-    /* Nonmatching */
-}
-
-/* 00001EA0-00001EA8       .text Create__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::Create() {
-    /* Nonmatching */
-}
-
-/* 00001EA8-00001EB0       .text Execute__16dBgS_MoveBgActorFPPA3_A4_f */
-void dBgS_MoveBgActor::Execute(float(**)[3][4]) {
-    /* Nonmatching */
-}
-
-/* 00001EB0-00001EB8       .text Delete__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::Delete() {
-    /* Nonmatching */
-}
-
-/* 00001EB8-00001EC0       .text ToFore__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToFore() {
-    /* Nonmatching */
-}
-
-/* 00001EC0-00001EC8       .text ToBack__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToBack() {
-    /* Nonmatching */
-}
-
-/* 00001EC8-00001F24       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 00001F24-00001F80       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 00001F80-00001FDC       .text __dt__13mDoExt_bckAnmFv */
-mDoExt_bckAnm::~mDoExt_bckAnm() {
-    /* Nonmatching */
-}
-
-/* 00001FDC-00001FF8       .text PrmAbstract<Q39daObjTide5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ39daObjTide5Act_c5Prm_eQ39daObjTide5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjTide::Act_c::Prm_e>(const fopAc_ac_c*, daObjTide::Act_c::Prm_e, daObjTide::Act_c::Prm_e) {
-    /* Nonmatching */
-}
 

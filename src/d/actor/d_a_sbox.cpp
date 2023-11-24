@@ -56,26 +56,6 @@ void daSbox_c::create() {
     /* Nonmatching */
 }
 
-/* 000009F0-00000A4C       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000A4C-00000AA8       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000AA8-00000B04       .text __dt__13mDoExt_bckAnmFv */
-mDoExt_bckAnm::~mDoExt_bckAnm() {
-    /* Nonmatching */
-}
-
-/* 00000B04-00000B4C       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 00000B4C-00000BB4       .text demoInitWait__8daSbox_cFv */
 void daSbox_c::demoInitWait() {
     /* Nonmatching */

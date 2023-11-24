@@ -36,51 +36,6 @@ void daObjYboil_Create(void*) {
     /* Nonmatching */
 }
 
-/* 000007D8-00000814       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
-/* 00000814-00000818       .text __ct__4cXyzFv */
-cXyz::cXyz() {
-    /* Nonmatching */
-}
-
-/* 00000818-00000874       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000874-000008A0       .text __ct__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 000008A0-000008E8       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
-/* 000008E8-00000944       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000944-0000096C       .text __ct__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 0000096C-000009C8       .text __dt__13mDoExt_bckAnmFv */
-mDoExt_bckAnm::~mDoExt_bckAnm() {
-    /* Nonmatching */
-}
-
-/* 000009C8-000009F0       .text __ct__13mDoExt_bckAnmFv */
-mDoExt_bckAnm::mDoExt_bckAnm() {
-    /* Nonmatching */
-}
-
 /* 000009F0-00000A2C       .text daObjYboil_Delete__FPv */
 void daObjYboil_Delete(void*) {
     /* Nonmatching */
@@ -103,11 +58,6 @@ void daObjYboil_Execute(void*) {
 
 /* 00000DF4-00000DFC       .text daObjYboil_IsDelete__FPv */
 void daObjYboil_IsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 00000DFC-00000E18       .text PrmAbstract<Q212daObjYboil_c5Prm_e>__5daObjFPC10fopAc_ac_cQ212daObjYboil_c5Prm_eQ212daObjYboil_c5Prm_e */
-void daObj::PrmAbstract<daObjYboil_c::Prm_e>(const fopAc_ac_c*, daObjYboil_c::Prm_e, daObjYboil_c::Prm_e) {
     /* Nonmatching */
 }
 

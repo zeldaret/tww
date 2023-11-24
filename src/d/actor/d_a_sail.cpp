@@ -26,11 +26,6 @@ void daSail_packet_c::setNrmVtx(cXyz*, int, int) {
     /* Nonmatching */
 }
 
-/* 00000834-00000870       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
 /* 00000870-000010D8       .text draw__15daSail_packet_cFv */
 void daSail_packet_c::draw() {
     /* Nonmatching */
@@ -88,11 +83,6 @@ daSail_HIO_c::~daSail_HIO_c() {
 
 /* 0000259C-00002668       .text __dt__15daSail_packet_cFv */
 daSail_packet_c::~daSail_packet_c() {
-    /* Nonmatching */
-}
-
-/* 00002668-0000266C       .text __ct__4cXyzFv */
-cXyz::cXyz() {
     /* Nonmatching */
 }
 

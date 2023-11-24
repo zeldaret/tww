@@ -91,11 +91,6 @@ void useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00002458-000024A0       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 000024A0-00002668       .text daDr2_Create__FP10fopAc_ac_c */
 void daDr2_Create(fopAc_ac_c*) {
     /* Nonmatching */
@@ -111,23 +106,8 @@ iwa_hahen_s::iwa_hahen_s() {
     /* Nonmatching */
 }
 
-/* 000026A8-00002704       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 00002704-00002760       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
 /* 00002760-000027A8       .text __dt__11daDr2_HIO_cFv */
 daDr2_HIO_c::~daDr2_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 000027E4-00002800       .text getLeftHandPos__9daPy_py_cCFv */
-void daPy_py_c::getLeftHandPos() const {
     /* Nonmatching */
 }
 

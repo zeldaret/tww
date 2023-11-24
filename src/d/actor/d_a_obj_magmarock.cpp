@@ -21,11 +21,6 @@ void daObjMagmarock::Act_c::ControlEffect() {
     /* Nonmatching */
 }
 
-/* 00000410-0000044C       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
 /* 0000044C-00000560       .text play_anim__Q214daObjMagmarock5Act_cFv */
 void daObjMagmarock::Act_c::play_anim() {
     /* Nonmatching */
@@ -118,26 +113,6 @@ void daObjMagmarock::Act_c::calc_ground_quat() {
 
 /* 000017DC-0000198C       .text Create__Q214daObjMagmarock6MethodFPv */
 void daObjMagmarock::Method::Create(void*) {
-    /* Nonmatching */
-}
-
-/* 0000198C-00001990       .text __ct__4cXyzFv */
-cXyz::cXyz() {
-    /* Nonmatching */
-}
-
-/* 00001990-000019EC       .text __dt__13mDoExt_bckAnmFv */
-mDoExt_bckAnm::~mDoExt_bckAnm() {
-    /* Nonmatching */
-}
-
-/* 000019EC-00001A48       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 00001A48-00001A90       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
     /* Nonmatching */
 }
 

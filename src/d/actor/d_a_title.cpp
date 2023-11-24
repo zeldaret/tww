@@ -21,31 +21,6 @@ daTitle_proc_c::daTitle_proc_c() {
     /* Nonmatching */
 }
 
-/* 00000A78-00000AD4       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000AD4-00000B30       .text __dt__13mDoExt_bpkAnmFv */
-mDoExt_bpkAnm::~mDoExt_bpkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000B30-00000B8C       .text __dt__13mDoExt_bckAnmFv */
-mDoExt_bckAnm::~mDoExt_bckAnm() {
-    /* Nonmatching */
-}
-
-/* 00000B8C-00000BD4       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
-/* 00000BD4-00000C1C       .text __dt__12dDlst_base_cFv */
-dDlst_base_c::~dDlst_base_c() {
-    /* Nonmatching */
-}
-
 /* 00000C1C-00000D7C       .text __dt__14daTitle_proc_cFv */
 daTitle_proc_c::~daTitle_proc_c() {
     /* Nonmatching */
@@ -108,11 +83,6 @@ void daTitle_Create(fopAc_ac_c*) {
 
 /* 00001E28-00001E48       .text draw__14daTitle_proc_cFv */
 void daTitle_proc_c::draw() {
-    /* Nonmatching */
-}
-
-/* 00001E48-00001E4C       .text draw__12dDlst_base_cFv */
-void dDlst_base_c::draw() {
     /* Nonmatching */
 }
 

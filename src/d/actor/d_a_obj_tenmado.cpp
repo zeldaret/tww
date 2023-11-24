@@ -56,23 +56,3 @@ void daObjTenmado::Act_c::Draw() {
 
 
 
-/* 00000808-00000810       .text IsDelete__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::IsDelete() {
-    /* Nonmatching */
-}
-
-/* 00000810-00000818       .text ToFore__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToFore() {
-    /* Nonmatching */
-}
-
-/* 00000818-00000820       .text ToBack__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToBack() {
-    /* Nonmatching */
-}
-
-/* 00000820-0000083C       .text PrmAbstract<Q312daObjTenmado5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ312daObjTenmado5Act_c5Prm_eQ312daObjTenmado5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjTenmado::Act_c::Prm_e>(const fopAc_ac_c*, daObjTenmado::Act_c::Prm_e, daObjTenmado::Act_c::Prm_e) {
-    /* Nonmatching */
-}
-

@@ -61,11 +61,6 @@ void dOvlpFd2_Create(void*) {
     /* Nonmatching */
 }
 
-/* 80224268-80224284       .text cLib_calcTimer<Sc>__FPSc */
-void cLib_calcTimer<signed char>(signed char*) {
-    /* Nonmatching */
-}
-
 /* 80224284-802242E0       .text __dt__15dOvlpFd2_dlst_cFv */
 dOvlpFd2_dlst_c::~dOvlpFd2_dlst_c() {
     /* Nonmatching */

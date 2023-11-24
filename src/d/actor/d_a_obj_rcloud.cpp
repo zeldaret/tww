@@ -26,16 +26,6 @@ void daObjRcloud_c::_create() {
     /* Nonmatching */
 }
 
-/* 000003B4-00000410       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000410-00000458       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 00000458-00000494       .text _delete__13daObjRcloud_cFv */
 void daObjRcloud_c::_delete() {
     /* Nonmatching */
@@ -98,11 +88,6 @@ void daObjRcloud_Draw(daObjRcloud_c*) {
 
 /* 000008D4-000008DC       .text daObjRcloud_IsDelete__FP13daObjRcloud_c */
 void daObjRcloud_IsDelete(daObjRcloud_c*) {
-    /* Nonmatching */
-}
-
-/* 000008DC-000008F8       .text PrmAbstract<Q213daObjRcloud_c7Param_e>__5daObjFPC10fopAc_ac_cQ213daObjRcloud_c7Param_eQ213daObjRcloud_c7Param_e */
-void daObj::PrmAbstract<daObjRcloud_c::Param_e>(const fopAc_ac_c*, daObjRcloud_c::Param_e, daObjRcloud_c::Param_e) {
     /* Nonmatching */
 }
 

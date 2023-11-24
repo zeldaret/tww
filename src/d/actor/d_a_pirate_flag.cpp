@@ -21,11 +21,6 @@ void daPirate_Flag_packet_c::setNrmVtx(cXyz*, int, int) {
     /* Nonmatching */
 }
 
-/* 00000800-0000083C       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
 /* 0000083C-00000E44       .text draw__22daPirate_Flag_packet_cFv */
 void daPirate_Flag_packet_c::draw() {
     /* Nonmatching */
@@ -78,11 +73,6 @@ daPirate_Flag_HIO_c::~daPirate_Flag_HIO_c() {
 
 /* 00001D6C-00001E38       .text __dt__22daPirate_Flag_packet_cFv */
 daPirate_Flag_packet_c::~daPirate_Flag_packet_c() {
-    /* Nonmatching */
-}
-
-/* 00001E38-00001E3C       .text __ct__4cXyzFv */
-cXyz::cXyz() {
     /* Nonmatching */
 }
 

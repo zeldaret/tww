@@ -56,23 +56,3 @@ void daObjAygr::Act_c::Draw() {
 
 
 
-/* 00000854-0000085C       .text IsDelete__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::IsDelete() {
-    /* Nonmatching */
-}
-
-/* 0000085C-00000864       .text ToFore__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToFore() {
-    /* Nonmatching */
-}
-
-/* 00000864-0000086C       .text ToBack__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToBack() {
-    /* Nonmatching */
-}
-
-/* 0000086C-00000888       .text PrmAbstract<Q39daObjAygr5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ39daObjAygr5Act_c5Prm_eQ39daObjAygr5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjAygr::Act_c::Prm_e>(const fopAc_ac_c*, daObjAygr::Act_c::Prm_e, daObjAygr::Act_c::Prm_e) {
-    /* Nonmatching */
-}
-

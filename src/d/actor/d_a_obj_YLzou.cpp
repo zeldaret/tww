@@ -36,11 +36,6 @@ void daObjYLzou_c::eff_set_slip_smoke_pos() {
     /* Nonmatching */
 }
 
-/* 00000668-000006A4       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
 /* 000006A4-000007AC       .text eff_smoke_slip_start__12daObjYLzou_cFv */
 void daObjYLzou_c::eff_smoke_slip_start() {
     /* Nonmatching */
@@ -206,36 +201,6 @@ void daObjYLzou_IsDelete(daObjYLzou_c*) {
     /* Nonmatching */
 }
 
-/* 000018C8-000018CC       .text draw__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::draw(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 000018CC-000018D0       .text executeAfter__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::executeAfter(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 000018D0-000018D4       .text execute__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::execute(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 000018D4-000018D8       .text init__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::init(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 000018D8-00001920       .text __dt__34JPACallBackBase<P14JPABaseEmitter>Fv */
-JPACallBackBase<JPABaseEmitter*>::~JPACallBackBase() {
-    /* Nonmatching */
-}
-
-/* 00001920-0000197C       .text __dt__18dPa_levelEcallBackFv */
-dPa_levelEcallBack::~dPa_levelEcallBack() {
-    /* Nonmatching */
-}
-
 /* 0000197C-00001A08       .text __dt__10EffSmokeCBFv */
 EffSmokeCB::~EffSmokeCB() {
     /* Nonmatching */
@@ -243,11 +208,6 @@ EffSmokeCB::~EffSmokeCB() {
 
 /* 00001A08-00001A48       .text __ct__10EffSmokeCBFv */
 EffSmokeCB::EffSmokeCB() {
-    /* Nonmatching */
-}
-
-/* 00001A48-00001A64       .text PrmAbstract<Q212daObjYLzou_c7Param_e>__5daObjFPC10fopAc_ac_cQ212daObjYLzou_c7Param_eQ212daObjYLzou_c7Param_e */
-void daObj::PrmAbstract<daObjYLzou_c::Param_e>(const fopAc_ac_c*, daObjYLzou_c::Param_e, daObjYLzou_c::Param_e) {
     /* Nonmatching */
 }
 

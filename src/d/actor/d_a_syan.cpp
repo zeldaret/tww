@@ -11,11 +11,6 @@ void nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
-/* 000002D4-00000310       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
 /* 00000310-00000440       .text syan_draw__FP10syan_class */
 void syan_draw(syan_class*) {
     /* Nonmatching */
@@ -48,61 +43,6 @@ void daSyan_solidHeapCB(fopAc_ac_c*) {
 
 /* 00000E10-00000FE0       .text daSyan_Create__FP10fopAc_ac_c */
 void daSyan_Create(fopAc_ac_c*) {
-    /* Nonmatching */
-}
-
-/* 00000FE0-0000104C       .text __dt__19dPa_followEcallBackFv */
-dPa_followEcallBack::~dPa_followEcallBack() {
-    /* Nonmatching */
-}
-
-/* 0000104C-00001074       .text __defctor__19dPa_followEcallBackFv */
-void dPa_followEcallBack::__defctor() {
-    /* Nonmatching */
-}
-
-/* 00001074-00001078       .text __ct__4cXyzFv */
-cXyz::cXyz() {
-    /* Nonmatching */
-}
-
-/* 00001078-000010B4       .text __dt__5csXyzFv */
-csXyz::~csXyz() {
-    /* Nonmatching */
-}
-
-/* 000010B4-000010B8       .text __ct__5csXyzFv */
-csXyz::csXyz() {
-    /* Nonmatching */
-}
-
-/* 000010B8-000010BC       .text draw__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::draw(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 000010BC-000010C0       .text executeAfter__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::executeAfter(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 000010C0-000010C4       .text execute__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::execute(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 000010C4-000010C8       .text init__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::init(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 000010C8-00001110       .text __dt__34JPACallBackBase<P14JPABaseEmitter>Fv */
-JPACallBackBase<JPABaseEmitter*>::~JPACallBackBase() {
-    /* Nonmatching */
-}
-
-/* 00001110-0000116C       .text __dt__18dPa_levelEcallBackFv */
-dPa_levelEcallBack::~dPa_levelEcallBack() {
     /* Nonmatching */
 }
 

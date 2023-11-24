@@ -71,8 +71,3 @@ void daObjHami4_IsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 00000A60-00000A7C       .text PrmAbstract<Q212daObjHami4_c5Prm_e>__5daObjFPC10fopAc_ac_cQ212daObjHami4_c5Prm_eQ212daObjHami4_c5Prm_e */
-void daObj::PrmAbstract<daObjHami4_c::Prm_e>(const fopAc_ac_c*, daObjHami4_c::Prm_e, daObjHami4_c::Prm_e) {
-    /* Nonmatching */
-}
-

@@ -61,10 +61,5 @@ void daKN_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 000012B0-00001320       .text __dt__12dBgS_ObjAcchFv */
-dBgS_ObjAcch::~dBgS_ObjAcch() {
-    /* Nonmatching */
-}
-
 
 

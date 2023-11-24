@@ -51,21 +51,6 @@ void daObjGryw00_c::Mthd_Create() {
     /* Nonmatching */
 }
 
-/* 0000090C-00000968       .text __dt__13mDoExt_bckAnmFv */
-mDoExt_bckAnm::~mDoExt_bckAnm() {
-    /* Nonmatching */
-}
-
-/* 00000968-000009C4       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 000009C4-00000A0C       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 00000A0C-00000A30       .text Delete__13daObjGryw00_cFv */
 void daObjGryw00_c::Delete() {
     /* Nonmatching */
@@ -133,26 +118,6 @@ void daObjGryw00_Draw(daObjGryw00_c*) {
 
 /* 00000F58-00000F84       .text daObjGryw00_IsDelete__FP13daObjGryw00_c */
 void daObjGryw00_IsDelete(daObjGryw00_c*) {
-    /* Nonmatching */
-}
-
-/* 00000F84-00000F8C       .text IsDelete__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::IsDelete() {
-    /* Nonmatching */
-}
-
-/* 00000F8C-00000F94       .text ToFore__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToFore() {
-    /* Nonmatching */
-}
-
-/* 00000F94-00000F9C       .text ToBack__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToBack() {
-    /* Nonmatching */
-}
-
-/* 00000F9C-00000FB8       .text PrmAbstract<Q213daObjGryw00_c7Param_e>__5daObjFPC10fopAc_ac_cQ213daObjGryw00_c7Param_eQ213daObjGryw00_c7Param_e */
-void daObj::PrmAbstract<daObjGryw00_c::Param_e>(const fopAc_ac_c*, daObjGryw00_c::Param_e, daObjGryw00_c::Param_e) {
     /* Nonmatching */
 }
 

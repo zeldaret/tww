@@ -326,11 +326,6 @@ daNpc_Fa1_HIO_c::~daNpc_Fa1_HIO_c() {
     /* Nonmatching */
 }
 
-/* 800FD7D8-800FD7F4       .text cLib_calcTimer<Us>__FPUs */
-void cLib_calcTimer<unsigned short>(unsigned short*) {
-    /* Nonmatching */
-}
-
 /* 800FD7F4-800FD868       .text cLib_getRndValue<Uc>__FUcUc */
 void cLib_getRndValue<unsigned char>(unsigned char, unsigned char) {
     /* Nonmatching */
@@ -338,21 +333,6 @@ void cLib_getRndValue<unsigned char>(unsigned char, unsigned char) {
 
 /* 800FD868-800FD8DC       .text cLib_getRndValue<Us>__FUsUs */
 void cLib_getRndValue<unsigned short>(unsigned short, unsigned short) {
-    /* Nonmatching */
-}
-
-/* 800FDAE8-800FDAF0       .text next_msgStatus__12fopNpc_npc_cFPUl */
-void fopNpc_npc_c::next_msgStatus(unsigned long*) {
-    /* Nonmatching */
-}
-
-/* 800FDAF0-800FDAF8       .text getMsg__12fopNpc_npc_cFv */
-void fopNpc_npc_c::getMsg() {
-    /* Nonmatching */
-}
-
-/* 800FDAF8-800FDAFC       .text anmAtr__12fopNpc_npc_cFUs */
-void fopNpc_npc_c::anmAtr(unsigned short) {
     /* Nonmatching */
 }
 

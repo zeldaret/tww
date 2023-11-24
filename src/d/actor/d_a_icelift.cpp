@@ -36,11 +36,6 @@ void daIlift_c::_create() {
     /* Nonmatching */
 }
 
-/* 00000794-00000804       .text __dt__12dBgS_ObjAcchFv */
-dBgS_ObjAcch::~dBgS_ObjAcch() {
-    /* Nonmatching */
-}
-
 /* 00000804-0000089C       .text set_mtx__9daIlift_cFv */
 void daIlift_c::set_mtx() {
     /* Nonmatching */

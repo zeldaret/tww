@@ -11,26 +11,6 @@ void daTpota_c::_create() {
     /* Nonmatching */
 }
 
-/* 000001D0-0000020C       .text __dt__5csXyzFv */
-csXyz::~csXyz() {
-    /* Nonmatching */
-}
-
-/* 0000020C-00000210       .text __ct__5csXyzFv */
-csXyz::csXyz() {
-    /* Nonmatching */
-}
-
-/* 00000210-0000024C       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
-/* 0000024C-00000250       .text __ct__4cXyzFv */
-cXyz::cXyz() {
-    /* Nonmatching */
-}
-
 /* 00000250-00000298       .text _delete__9daTpota_cFv */
 void daTpota_c::_delete() {
     /* Nonmatching */

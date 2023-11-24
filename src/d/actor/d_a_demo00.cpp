@@ -96,8 +96,3 @@ void daDemo00_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 800E7964-800E79C0       .text __dt__13mDoExt_btpAnmFv */
-mDoExt_btpAnm::~mDoExt_btpAnm() {
-    /* Nonmatching */
-}
-

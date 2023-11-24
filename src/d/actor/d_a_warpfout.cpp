@@ -126,8 +126,3 @@ void daWarpfout_IsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 000006E8-00000704       .text cLib_calcTimer<i>__FPi */
-void cLib_calcTimer<int>(int*) {
-    /* Nonmatching */
-}
-

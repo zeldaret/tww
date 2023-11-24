@@ -106,11 +106,6 @@ void daObjEff::Act_c::eff_set_barrel_smoke() {
     /* Nonmatching */
 }
 
-/* 00000998-000009D4       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
 /* 000009D4-00000AD0       .text eff_set_stool_smoke__Q28daObjEff5Act_cFv */
 void daObjEff::Act_c::eff_set_stool_smoke() {
     /* Nonmatching */
@@ -236,16 +231,6 @@ daObjEff::WoodBoxSmokeCB::~WoodBoxSmokeCB() {
     /* Nonmatching */
 }
 
-/* 000015C4-000015C8       .text executeAfter__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::executeAfter(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 000015C8-000015CC       .text init__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::init(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
 /* 000015CC-00001658       .text __dt__Q28daObjEff15PineconeSmokeCBFv */
 daObjEff::PineconeSmokeCB::~PineconeSmokeCB() {
     /* Nonmatching */
@@ -268,31 +253,6 @@ daObjEff::StoolSmokeCB::~StoolSmokeCB() {
 
 /* 000017FC-00001888       .text __dt__Q28daObjEff13BarrelSmokeCBFv */
 daObjEff::BarrelSmokeCB::~BarrelSmokeCB() {
-    /* Nonmatching */
-}
-
-/* 00001888-0000188C       .text draw__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::draw(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 0000188C-00001890       .text execute__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::execute(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 00001890-000018D8       .text __dt__34JPACallBackBase<P14JPABaseEmitter>Fv */
-JPACallBackBase<JPABaseEmitter*>::~JPACallBackBase() {
-    /* Nonmatching */
-}
-
-/* 000018D8-00001934       .text __dt__18dPa_levelEcallBackFv */
-dPa_levelEcallBack::~dPa_levelEcallBack() {
-    /* Nonmatching */
-}
-
-/* 00001934-00001950       .text PrmAbstract<Q38daObjEff5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ38daObjEff5Act_c5Prm_eQ38daObjEff5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjEff::Act_c::Prm_e>(const fopAc_ac_c*, daObjEff::Act_c::Prm_e, daObjEff::Act_c::Prm_e) {
     /* Nonmatching */
 }
 

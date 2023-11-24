@@ -41,11 +41,6 @@ daNpc_Os_c::daNpc_Os_c() {
     /* Nonmatching */
 }
 
-/* 00000700-00000748       .text __dt__13cBgS_PolyInfoFv */
-cBgS_PolyInfo::~cBgS_PolyInfo() {
-    /* Nonmatching */
-}
-
 /* 00000748-000008CC       .text nodeCallBack__FP7J3DNodei */
 void nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
@@ -231,58 +226,8 @@ void daNpc_Os_c::routeWallCheck(cXyz&, cXyz&, short*) {
     /* Nonmatching */
 }
 
-/* 00002920-00002A4C       .text __dt__11dBgS_LinChkFv */
-dBgS_LinChk::~dBgS_LinChk() {
-    /* Nonmatching */
-}
-
-/* 00002A4C-00002AEC       .text __dt__8dBgS_ChkFv */
-dBgS_Chk::~dBgS_Chk() {
-    /* Nonmatching */
-}
-
-/* 00002AEC-00002B48       .text __dt__15dBgS_GrpPassChkFv */
-dBgS_GrpPassChk::~dBgS_GrpPassChk() {
-    /* Nonmatching */
-}
-
-/* 00002B48-00002B90       .text __dt__15cBgS_GrpPassChkFv */
-cBgS_GrpPassChk::~cBgS_GrpPassChk() {
-    /* Nonmatching */
-}
-
-/* 00002B90-00002BEC       .text __dt__16dBgS_PolyPassChkFv */
-dBgS_PolyPassChk::~dBgS_PolyPassChk() {
-    /* Nonmatching */
-}
-
-/* 00002BEC-00002C34       .text __dt__16cBgS_PolyPassChkFv */
-cBgS_PolyPassChk::~cBgS_PolyPassChk() {
-    /* Nonmatching */
-}
-
-/* 00002C34-00002CC8       .text __dt__11cBgS_LinChkFv */
-cBgS_LinChk::~cBgS_LinChk() {
-    /* Nonmatching */
-}
-
-/* 00002CC8-00002D10       .text __dt__8cM3dGLinFv */
-cM3dGLin::~cM3dGLin() {
-    /* Nonmatching */
-}
-
 /* 00002D10-00002FA4       .text checkForwardGroundY__10daNpc_Os_cFs */
 void daNpc_Os_c::checkForwardGroundY(short) {
-    /* Nonmatching */
-}
-
-/* 00002FA4-000030BC       .text __dt__11dBgS_GndChkFv */
-dBgS_GndChk::~dBgS_GndChk() {
-    /* Nonmatching */
-}
-
-/* 000030BC-0000313C       .text __dt__11cBgS_GndChkFv */
-cBgS_GndChk::~cBgS_GndChk() {
     /* Nonmatching */
 }
 
@@ -576,33 +521,8 @@ void daNpc_Os_infiniteEcallBack_c::makeEmitter(unsigned short, const cXyz*, cons
     /* Nonmatching */
 }
 
-/* 00006F8C-00006FD4       .text __dt__8cM2dGCirFv */
-cM2dGCir::~cM2dGCir() {
-    /* Nonmatching */
-}
-
-/* 00006FD4-00007030       .text __dt__8cM3dGCirFv */
-cM3dGCir::~cM3dGCir() {
-    /* Nonmatching */
-}
-
-/* 00007030-00007078       .text __dt__10cCcD_GSttsFv */
-cCcD_GStts::~cCcD_GStts() {
-    /* Nonmatching */
-}
-
 /* 00007078-000070EC       .text __dt__14daNpc_Os_HIO_cFv */
 daNpc_Os_HIO_c::~daNpc_Os_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 000070EC-00007108       .text cLib_calcTimer<s>__FPs */
-void cLib_calcTimer<short>(short*) {
-    /* Nonmatching */
-}
-
-/* 00007108-00007124       .text cLib_calcTimer<Uc>__FPUc */
-void cLib_calcTimer<unsigned char>(unsigned char*) {
     /* Nonmatching */
 }
 
@@ -624,73 +544,8 @@ void cLib_getRndValue<int>(int, int) {
 
 
 
-/* 000074CC-00007514       .text __dt__10dNpc_HIO_cFv */
-dNpc_HIO_c::~dNpc_HIO_c() {
-    /* Nonmatching */
-}
-
 /* 00007514-00007580       .text __dt__28daNpc_Os_infiniteEcallBack_cFv */
 daNpc_Os_infiniteEcallBack_c::~daNpc_Os_infiniteEcallBack_c() {
-    /* Nonmatching */
-}
-
-/* 00007580-000075DC       .text __dt__18dPa_levelEcallBackFv */
-dPa_levelEcallBack::~dPa_levelEcallBack() {
-    /* Nonmatching */
-}
-
-/* 000075DC-00007624       .text __dt__34JPACallBackBase<P14JPABaseEmitter>Fv */
-JPACallBackBase<JPABaseEmitter*>::~JPACallBackBase() {
-    /* Nonmatching */
-}
-
-/* 00007624-000076F0       .text __dt__8dCcD_CylFv */
-dCcD_Cyl::~dCcD_Cyl() {
-    /* Nonmatching */
-}
-
-/* 000076F0-00007738       .text __dt__8cM3dGCylFv */
-cM3dGCyl::~cM3dGCyl() {
-    /* Nonmatching */
-}
-
-/* 00007738-00007794       .text __dt__14cCcD_ShapeAttrFv */
-cCcD_ShapeAttr::~cCcD_ShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 00007794-000077DC       .text __dt__8cM3dGAabFv */
-cM3dGAab::~cM3dGAab() {
-    /* Nonmatching */
-}
-
-/* 000077DC-00007838       .text __dt__10dCcD_GSttsFv */
-dCcD_GStts::~dCcD_GStts() {
-    /* Nonmatching */
-}
-
-/* 00007838-000078C0       .text __dt__12dBgS_AcchCirFv */
-dBgS_AcchCir::~dBgS_AcchCir() {
-    /* Nonmatching */
-}
-
-/* 000078C0-0000791C       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 0000791C-00007964       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
-/* 00007964-000079D4       .text __dt__12dBgS_ObjAcchFv */
-dBgS_ObjAcch::~dBgS_ObjAcch() {
-    /* Nonmatching */
-}
-
-/* 000079D4-00007A10       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
     /* Nonmatching */
 }
 
@@ -701,106 +556,6 @@ void daNpc_Os_infiniteEcallBack_c::execute(JPABaseEmitter*) {
 
 /* 00007A14-00007A1C       .text setup__28daNpc_Os_infiniteEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
 void daNpc_Os_infiniteEcallBack_c::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
-    /* Nonmatching */
-}
-
-/* 00007A1C-00007A20       .text draw__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::draw(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 00007A20-00007A24       .text executeAfter__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::executeAfter(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 00007A24-00007A28       .text init__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::init(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 00007A28-00007A2C       .text execute__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::execute(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 00007A2C-00007A3C       .text GetShapeAttr__8dCcD_CylFv */
-void dCcD_Cyl::GetShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 00007A3C-00007A44       .text GetCoCP__12cCcD_CylAttrFv */
-void cCcD_CylAttr::GetCoCP() {
-    /* Nonmatching */
-}
-
-/* 00007A44-00007A4C       .text GetCoCP__12cCcD_CylAttrCFv */
-void cCcD_CylAttr::GetCoCP() const {
-    /* Nonmatching */
-}
-
-/* 00007A4C-00007A54       .text CrossAtTg__12cCcD_CylAttrCFRC12cCcD_AabAttrP4cXyz */
-void cCcD_CylAttr::CrossAtTg(const cCcD_AabAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00007A54-00007A5C       .text CrossAtTg__12cCcD_CylAttrCFRC12cCcD_PntAttrP4cXyz */
-void cCcD_CylAttr::CrossAtTg(const cCcD_PntAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00007A5C-00007A94       .text CrossAtTg__12cCcD_CylAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_CylAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00007A94-00007A9C       .text CrossCo__12cCcD_CylAttrCFRC12cCcD_AabAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_AabAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00007A9C-00007AA4       .text CrossCo__12cCcD_CylAttrCFRC12cCcD_TriAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_TriAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00007AA4-00007AAC       .text CrossCo__12cCcD_CylAttrCFRC12cCcD_PntAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_PntAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00007AAC-00007AE4       .text CrossCo__12cCcD_CylAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00007AE4-00007AE8       .text GetGObjInf__12cCcD_GObjInfCFv */
-void cCcD_GObjInf::GetGObjInf() const {
-    /* Nonmatching */
-}
-
-/* 00007AE8-00007AF0       .text GetShapeAttr__8cCcD_ObjCFv */
-void cCcD_Obj::GetShapeAttr() const {
-    /* Nonmatching */
-}
-
-/* 00007AF0-00007AF8       .text CrossAtTg__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_ShapeAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00007AF8-00007B00       .text CrossCo__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_ShapeAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00007B00-00007B0C       .text GetCoCP__14cCcD_ShapeAttrFv */
-void cCcD_ShapeAttr::GetCoCP() {
-    /* Nonmatching */
-}
-
-/* 00007B0C-00007B18       .text GetCoCP__14cCcD_ShapeAttrCFv */
-void cCcD_ShapeAttr::GetCoCP() const {
     /* Nonmatching */
 }
 
@@ -841,166 +596,6 @@ void daPy_npc_c::isTagCheckOK() {
 
 /* 00007B54-00007B58       .text setMessageAnimation__10daPy_npc_cFUc */
 void daPy_npc_c::setMessageAnimation(unsigned char) {
-    /* Nonmatching */
-}
-
-/* 00007B58-00007B60       .text getTactMusic__9daPy_py_cCFv */
-void daPy_py_c::getTactMusic() const {
-    /* Nonmatching */
-}
-
-/* 00007B60-00007B68       .text getTactTimerCancel__9daPy_py_cCFv */
-void daPy_py_c::getTactTimerCancel() const {
-    /* Nonmatching */
-}
-
-/* 00007B68-00007B70       .text checkPlayerGuard__9daPy_py_cCFv */
-void daPy_py_c::checkPlayerGuard() const {
-    /* Nonmatching */
-}
-
-/* 00007B70-00007B78       .text getGrabMissActor__9daPy_py_cFv */
-void daPy_py_c::getGrabMissActor() {
-    /* Nonmatching */
-}
-
-/* 00007B78-00007B80       .text checkPlayerFly__9daPy_py_cCFv */
-void daPy_py_c::checkPlayerFly() const {
-    /* Nonmatching */
-}
-
-/* 00007B80-00007B88       .text checkFrontRoll__9daPy_py_cCFv */
-void daPy_py_c::checkFrontRoll() const {
-    /* Nonmatching */
-}
-
-/* 00007B88-00007B90       .text checkBottleSwing__9daPy_py_cCFv */
-void daPy_py_c::checkBottleSwing() const {
-    /* Nonmatching */
-}
-
-/* 00007B90-00007B98       .text checkCutCharge__9daPy_py_cCFv */
-void daPy_py_c::checkCutCharge() const {
-    /* Nonmatching */
-}
-
-/* 00007B98-00007BA0       .text getBokoFlamePos__9daPy_py_cFP4cXyz */
-void daPy_py_c::getBokoFlamePos(cXyz*) {
-    /* Nonmatching */
-}
-
-/* 00007BA0-00007BA8       .text checkTactWait__9daPy_py_cCFv */
-void daPy_py_c::checkTactWait() const {
-    /* Nonmatching */
-}
-
-/* 00007BA8-00007BAC       .text setTactZev__9daPy_py_cFUiiPc */
-void daPy_py_c::setTactZev(unsigned int, int, char*) {
-    /* Nonmatching */
-}
-
-/* 00007BAC-00007BB0       .text onDekuSpReturnFlg__9daPy_py_cFUc */
-void daPy_py_c::onDekuSpReturnFlg(unsigned char) {
-    /* Nonmatching */
-}
-
-/* 00007BB0-00007BB8       .text checkComboCutTurn__9daPy_py_cCFv */
-void daPy_py_c::checkComboCutTurn() const {
-    /* Nonmatching */
-}
-
-/* 00007BB8-00007BC0       .text getItemID__9daPy_py_cCFv */
-void daPy_py_c::getItemID() const {
-    /* Nonmatching */
-}
-
-/* 00007BC0-00007BC8       .text getThrowBoomerangID__9daPy_py_cCFv */
-void daPy_py_c::getThrowBoomerangID() const {
-    /* Nonmatching */
-}
-
-/* 00007BC8-00007BD0       .text getGrabActorID__9daPy_py_cCFv */
-void daPy_py_c::getGrabActorID() const {
-    /* Nonmatching */
-}
-
-/* 00007BD0-00007BD8       .text checkGrabBarrel__9daPy_py_cFv */
-void daPy_py_c::checkGrabBarrel() {
-    /* Nonmatching */
-}
-
-/* 00007BD8-00007BE0       .text checkPlayerNoDraw__9daPy_py_cFv */
-void daPy_py_c::checkPlayerNoDraw() {
-    /* Nonmatching */
-}
-
-/* 00007BE0-00007BE8       .text checkRopeTag__9daPy_py_cFv */
-void daPy_py_c::checkRopeTag() {
-    /* Nonmatching */
-}
-
-/* 00007BE8-00007BF0       .text checkRopeReadyAnime__9daPy_py_cCFv */
-void daPy_py_c::checkRopeReadyAnime() const {
-    /* Nonmatching */
-}
-
-/* 00007BF0-00007BF4       .text voiceStart__9daPy_py_cFUl */
-void daPy_py_c::voiceStart(unsigned long) {
-    /* Nonmatching */
-}
-
-/* 00007BF4-00007BF8       .text setOutPower__9daPy_py_cFfsi */
-void daPy_py_c::setOutPower(float, short, int) {
-    /* Nonmatching */
-}
-
-/* 00007BF8-00007BFC       .text onFrollCrashFlg__9daPy_py_cFUl */
-void daPy_py_c::onFrollCrashFlg(unsigned long) {
-    /* Nonmatching */
-}
-
-/* 00007BFC-00007C04       .text getModelJointMtx__9daPy_py_cFUs */
-void daPy_py_c::getModelJointMtx(unsigned short) {
-    /* Nonmatching */
-}
-
-/* 00007C04-00007C10       .text getOldSpeedY__9daPy_py_cFv */
-void daPy_py_c::getOldSpeedY() {
-    /* Nonmatching */
-}
-
-/* 00007C10-00007C18       .text setHookshotCarryOffset__9daPy_py_cFUiPC4cXyz */
-void daPy_py_c::setHookshotCarryOffset(unsigned int, const cXyz*) {
-    /* Nonmatching */
-}
-
-/* 00007C18-00007C1C       .text setPlayerPosAndAngle__9daPy_py_cFPA4_f */
-void daPy_py_c::setPlayerPosAndAngle(float(*)[4]) {
-    /* Nonmatching */
-}
-
-/* 00007C1C-00007C20       .text setPlayerPosAndAngle__9daPy_py_cFP4cXyzP5csXyz */
-void daPy_py_c::setPlayerPosAndAngle(cXyz*, csXyz*) {
-    /* Nonmatching */
-}
-
-/* 00007C20-00007C24       .text setPlayerPosAndAngle__9daPy_py_cFP4cXyzs */
-void daPy_py_c::setPlayerPosAndAngle(cXyz*, short) {
-    /* Nonmatching */
-}
-
-/* 00007C24-00007C2C       .text setThrowDamage__9daPy_py_cFP4cXyzsffi */
-void daPy_py_c::setThrowDamage(cXyz*, short, float, float, int) {
-    /* Nonmatching */
-}
-
-/* 00007C2C-00007C30       .text changeTextureAnime__9daPy_py_cFUsUsi */
-void daPy_py_c::changeTextureAnime(unsigned short, unsigned short, int) {
-    /* Nonmatching */
-}
-
-/* 00007C30-00007C34       .text cancelChangeTextureAnime__9daPy_py_cFv */
-void daPy_py_c::cancelChangeTextureAnime() {
     /* Nonmatching */
 }
 

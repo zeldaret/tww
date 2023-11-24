@@ -66,16 +66,6 @@ void dDoor_info_c::frontCheckOld() {
     /* Nonmatching */
 }
 
-/* 8006B5E4-8006B620       .text __dt__7cSAngleFv */
-cSAngle::~cSAngle() {
-    /* Nonmatching */
-}
-
-/* 8006B620-8006B65C       .text __dt__7cSGlobeFv */
-cSGlobe::~cSGlobe() {
-    /* Nonmatching */
-}
-
 /* 8006B65C-8006B6F4       .text frontCheck__12dDoor_info_cFv */
 void dDoor_info_c::frontCheck() {
     /* Nonmatching */
@@ -318,11 +308,6 @@ void dDoor_hkyo_c::onFirst() {
 
 /* 8006D7E8-8006D800       .text chkStart__12dDoor_hkyo_cFv */
 void dDoor_hkyo_c::chkStart() {
-    /* Nonmatching */
-}
-
-/* 8006D800-8006D804       .text setPlayerPosAndAngle__9daPy_py_cFP4cXyzs */
-void daPy_py_c::setPlayerPosAndAngle(cXyz*, short) {
     /* Nonmatching */
 }
 

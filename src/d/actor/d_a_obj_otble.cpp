@@ -41,11 +41,6 @@ void daObj_Otble::Mthd::Create(void*) {
     /* Nonmatching */
 }
 
-/* 000006AC-0000071C       .text __dt__12dBgS_ObjAcchFv */
-dBgS_ObjAcch::~dBgS_ObjAcch() {
-    /* Nonmatching */
-}
-
 /* 0000071C-0000079C       .text Delete__Q211daObj_Otble4MthdFPv */
 void daObj_Otble::Mthd::Delete(void*) {
     /* Nonmatching */

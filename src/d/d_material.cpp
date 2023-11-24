@@ -51,11 +51,6 @@ void dMat_control_c::create(J3DMaterialTable*, J3DAnmTextureSRTKey*) {
     /* Nonmatching */
 }
 
-/* 8006FCF0-8006FD4C       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
 /* 8006FD4C-8006FD88       .text __dt__13dMat_backup_cFv */
 dMat_backup_c::~dMat_backup_c() {
     /* Nonmatching */

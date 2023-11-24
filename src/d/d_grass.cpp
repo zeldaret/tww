@@ -21,11 +21,6 @@ void dGrass_data_c::WorkAt_NoCutAnim(fopAc_ac_c*, unsigned long, int, dCcMassS_H
     /* Nonmatching */
 }
 
-/* 800775E4-800775EC       .text GetShapeAttr__8cCcD_ObjFv */
-void cCcD_Obj::GetShapeAttr() {
-    /* Nonmatching */
-}
-
 /* 800775EC-800777CC       .text WorkAt__13dGrass_data_cFP10fopAc_ac_cUliP15dCcMassS_HitInf */
 void dGrass_data_c::WorkAt(fopAc_ac_c*, unsigned long, int, dCcMassS_HitInf*) {
     /* Nonmatching */
@@ -33,11 +28,6 @@ void dGrass_data_c::WorkAt(fopAc_ac_c*, unsigned long, int, dCcMassS_HitInf*) {
 
 /* 800777CC-800779D4       .text hitCheck__13dGrass_data_cFi */
 void dGrass_data_c::hitCheck(int) {
-    /* Nonmatching */
-}
-
-/* 800779D4-80077A1C       .text __dt__15dCcMassS_HitInfFv */
-dCcMassS_HitInf::~dCcMassS_HitInf() {
     /* Nonmatching */
 }
 

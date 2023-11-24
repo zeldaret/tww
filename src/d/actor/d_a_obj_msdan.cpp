@@ -26,8 +26,3 @@ void daObjMsdan::Act_c::Mthd_Delete() {
 
 
 
-/* 00000660-0000067C       .text PrmAbstract<Q310daObjMsdan5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ310daObjMsdan5Act_c5Prm_eQ310daObjMsdan5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjMsdan::Act_c::Prm_e>(const fopAc_ac_c*, daObjMsdan::Act_c::Prm_e, daObjMsdan::Act_c::Prm_e) {
-    /* Nonmatching */
-}
-

@@ -66,8 +66,3 @@ void dDetect_c::chk_attention(cXyz*) const {
     /* Nonmatching */
 }
 
-/* 8009C620-8009C63C       .text PrmAbstract<Q310daTagLight5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ310daTagLight5Act_c5Prm_eQ310daTagLight5Act_c5Prm_e */
-void daObj::PrmAbstract<daTagLight::Act_c::Prm_e>(const fopAc_ac_c*, daTagLight::Act_c::Prm_e, daTagLight::Act_c::Prm_e) {
-    /* Nonmatching */
-}
-

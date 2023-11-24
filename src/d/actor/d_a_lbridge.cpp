@@ -26,26 +26,6 @@ void daLbridge_c::_create() {
     /* Nonmatching */
 }
 
-/* 0000063C-00000698       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000698-000006F4       .text __dt__13mDoExt_bpkAnmFv */
-mDoExt_bpkAnm::~mDoExt_bpkAnm() {
-    /* Nonmatching */
-}
-
-/* 000006F4-00000750       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000750-00000798       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 00000798-00000818       .text set_mtx__11daLbridge_cFv */
 void daLbridge_c::set_mtx() {
     /* Nonmatching */
@@ -118,11 +98,6 @@ void daLbridge_Execute(void*) {
 
 /* 0000111C-00001124       .text daLbridge_IsDelete__FPv */
 void daLbridge_IsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 00001124-00001140       .text cLib_calcTimer<Uc>__FPUc */
-void cLib_calcTimer<unsigned char>(unsigned char*) {
     /* Nonmatching */
 }
 

@@ -21,16 +21,6 @@ void daKomore::Act_c::_create() {
     /* Nonmatching */
 }
 
-/* 000002F8-00000354       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000354-0000039C       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 0000039C-000003CC       .text _delete__Q28daKomore5Act_cFv */
 void daKomore::Act_c::_delete() {
     /* Nonmatching */

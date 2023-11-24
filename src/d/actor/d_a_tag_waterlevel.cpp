@@ -36,8 +36,3 @@ void daTagWaterlevel::Act_c::_draw() {
 
 
 
-/* 00000400-0000041C       .text PrmAbstract<Q315daTagWaterlevel5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ315daTagWaterlevel5Act_c5Prm_eQ315daTagWaterlevel5Act_c5Prm_e */
-void daObj::PrmAbstract<daTagWaterlevel::Act_c::Prm_e>(const fopAc_ac_c*, daTagWaterlevel::Act_c::Prm_e, daTagWaterlevel::Act_c::Prm_e) {
-    /* Nonmatching */
-}
-

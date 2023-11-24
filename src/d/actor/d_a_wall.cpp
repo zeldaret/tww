@@ -31,16 +31,6 @@ void daWall_c::_create() {
     /* Nonmatching */
 }
 
-/* 000004EC-000005CC       .text __dt__8dCcD_TriFv */
-dCcD_Tri::~dCcD_Tri() {
-    /* Nonmatching */
-}
-
-/* 000005CC-0000065C       .text __ct__8dCcD_TriFv */
-dCcD_Tri::dCcD_Tri() {
-    /* Nonmatching */
-}
-
 /* 0000065C-000006B8       .text __dt__8cM3dGTriFv */
 cM3dGTri::~cM3dGTri() {
     /* Nonmatching */
@@ -48,21 +38,6 @@ cM3dGTri::~cM3dGTri() {
 
 /* 000006B8-00000700       .text __dt__8cM3dGPlaFv */
 cM3dGPla::~cM3dGPla() {
-    /* Nonmatching */
-}
-
-/* 00000700-0000075C       .text __dt__14cCcD_ShapeAttrFv */
-cCcD_ShapeAttr::~cCcD_ShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 0000075C-000007A4       .text __dt__8cM3dGAabFv */
-cM3dGAab::~cM3dGAab() {
-    /* Nonmatching */
-}
-
-/* 000007A4-00000800       .text __dt__10dCcD_GSttsFv */
-dCcD_GStts::~dCcD_GStts() {
     /* Nonmatching */
 }
 
@@ -133,126 +108,6 @@ void daWall_Execute(void*) {
 
 /* 000010D0-000010D8       .text daWall_IsDelete__FPv */
 void daWall_IsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 000010D8-00001120       .text __dt__10cCcD_GSttsFv */
-cCcD_GStts::~cCcD_GStts() {
-    /* Nonmatching */
-}
-
-/* 00001120-00001128       .text CrossAtTg__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_ShapeAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00001128-00001130       .text CrossCo__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_ShapeAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001130-0000113C       .text GetCoCP__14cCcD_ShapeAttrFv */
-void cCcD_ShapeAttr::GetCoCP() {
-    /* Nonmatching */
-}
-
-/* 0000113C-00001148       .text GetCoCP__14cCcD_ShapeAttrCFv */
-void cCcD_ShapeAttr::GetCoCP() const {
-    /* Nonmatching */
-}
-
-/* 00001148-00001158       .text GetShapeAttr__8dCcD_TriFv */
-void dCcD_Tri::GetShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 00001158-00001160       .text CrossAtTg__12cCcD_TriAttrCFRC12cCcD_AabAttrP4cXyz */
-void cCcD_TriAttr::CrossAtTg(const cCcD_AabAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00001160-00001168       .text CrossAtTg__12cCcD_TriAttrCFRC12cCcD_PntAttrP4cXyz */
-void cCcD_TriAttr::CrossAtTg(const cCcD_PntAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00001168-000011A0       .text CrossAtTg__12cCcD_TriAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_TriAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 000011A0-000011A8       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_SphAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_SphAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 000011A8-000011B0       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_CylAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_CylAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 000011B0-000011B8       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_AabAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_AabAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 000011B8-000011C0       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_TriAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_TriAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 000011C0-000011C8       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_CpsAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_CpsAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 000011C8-000011D0       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_PntAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_PntAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 000011D0-00001208       .text CrossCo__12cCcD_TriAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001208-0000120C       .text GetGObjInf__12cCcD_GObjInfCFv */
-void cCcD_GObjInf::GetGObjInf() const {
-    /* Nonmatching */
-}
-
-/* 0000120C-00001214       .text GetShapeAttr__8cCcD_ObjCFv */
-void cCcD_Obj::GetShapeAttr() const {
-    /* Nonmatching */
-}
-
-/* 00001214-00001218       .text draw__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::draw(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 00001218-0000121C       .text executeAfter__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::executeAfter(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 0000121C-00001220       .text execute__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::execute(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 00001220-00001224       .text init__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::init(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 00001224-0000126C       .text __dt__34JPACallBackBase<P14JPABaseEmitter>Fv */
-JPACallBackBase<JPABaseEmitter*>::~JPACallBackBase() {
-    /* Nonmatching */
-}
-
-/* 0000126C-000012C8       .text __dt__18dPa_levelEcallBackFv */
-dPa_levelEcallBack::~dPa_levelEcallBack() {
     /* Nonmatching */
 }
 

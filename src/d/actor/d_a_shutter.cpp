@@ -31,16 +31,6 @@ void daShutter_c::_create() {
     /* Nonmatching */
 }
 
-/* 000005A0-000005DC       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
-/* 000005DC-000005E0       .text __ct__4cXyzFv */
-cXyz::cXyz() {
-    /* Nonmatching */
-}
-
 /* 000005E0-000006F0       .text set_mtx__11daShutter_cFv */
 void daShutter_c::set_mtx() {
     /* Nonmatching */
@@ -88,11 +78,6 @@ void daShutter_Execute(void*) {
 
 /* 00000E58-00000E60       .text daShutter_IsDelete__FPv */
 void daShutter_IsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 00000E60-00000E7C       .text cLib_calcTimer<Uc>__FPUc */
-void cLib_calcTimer<unsigned char>(unsigned char*) {
     /* Nonmatching */
 }
 

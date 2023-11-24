@@ -41,46 +41,6 @@ daWindTag::daWindTag_c::daWindTag_c() {
     /* Nonmatching */
 }
 
-/* 00000B38-00000B94       .text __dt__13mDoExt_bckAnmFv */
-mDoExt_bckAnm::~mDoExt_bckAnm() {
-    /* Nonmatching */
-}
-
-/* 00000B94-00000BF0       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000BF0-00000C38       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
-/* 00000C38-00000D18       .text __dt__8dCcD_CpsFv */
-dCcD_Cps::~dCcD_Cps() {
-    /* Nonmatching */
-}
-
-/* 00000D18-00000D74       .text __dt__8cM3dGCpsFv */
-cM3dGCps::~cM3dGCps() {
-    /* Nonmatching */
-}
-
-/* 00000D74-00000DBC       .text __dt__8cM3dGLinFv */
-cM3dGLin::~cM3dGLin() {
-    /* Nonmatching */
-}
-
-/* 00000DBC-00000E18       .text __dt__14cCcD_ShapeAttrFv */
-cCcD_ShapeAttr::~cCcD_ShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 00000E18-00000E60       .text __dt__8cM3dGAabFv */
-cM3dGAab::~cM3dGAab() {
-    /* Nonmatching */
-}
-
 /* 00000E60-00000F74       .text set_mtx__Q29daWindTag11daWindTag_cFv */
 void daWindTag::daWindTag_c::set_mtx() {
     /* Nonmatching */
@@ -98,16 +58,6 @@ void daWindTag::daWindTag_c::set_wind_se_sub(unsigned long, cXyz*) {
 
 /* 00001044-000011CC       .text set_wind_se__Q29daWindTag11daWindTag_cFv */
 void daWindTag::daWindTag_c::set_wind_se() {
-    /* Nonmatching */
-}
-
-/* 000011CC-000011EC       .text NearPos__8cM3dGCpsCF4cXyzP4cXyz */
-void cM3dGCps::NearPos(cXyz, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 000011EC-00001234       .text __dt__8cM3dGSphFv */
-cM3dGSph::~cM3dGSph() {
     /* Nonmatching */
 }
 
@@ -168,76 +118,6 @@ void daWindTag_IsDelete(void*) {
 
 /* 00001B94-00001BDC       .text __dt__8cM3dGPlaFv */
 cM3dGPla::~cM3dGPla() {
-    /* Nonmatching */
-}
-
-/* 00001BDC-00001BEC       .text GetShapeAttr__8dCcD_CpsFv */
-void dCcD_Cps::GetShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 00001BEC-00001BF4       .text CrossAtTg__12cCcD_CpsAttrCFRC12cCcD_AabAttrP4cXyz */
-void cCcD_CpsAttr::CrossAtTg(const cCcD_AabAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00001BF4-00001BFC       .text CrossAtTg__12cCcD_CpsAttrCFRC12cCcD_PntAttrP4cXyz */
-void cCcD_CpsAttr::CrossAtTg(const cCcD_PntAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00001BFC-00001C34       .text CrossAtTg__12cCcD_CpsAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_CpsAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00001C34-00001C3C       .text CrossCo__12cCcD_CpsAttrCFRC12cCcD_AabAttrPf */
-void cCcD_CpsAttr::CrossCo(const cCcD_AabAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001C3C-00001C44       .text CrossCo__12cCcD_CpsAttrCFRC12cCcD_TriAttrPf */
-void cCcD_CpsAttr::CrossCo(const cCcD_TriAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001C44-00001C4C       .text CrossCo__12cCcD_CpsAttrCFRC12cCcD_PntAttrPf */
-void cCcD_CpsAttr::CrossCo(const cCcD_PntAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001C4C-00001C84       .text CrossCo__12cCcD_CpsAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_CpsAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001C84-00001C90       .text GetCoCP__14cCcD_ShapeAttrFv */
-void cCcD_ShapeAttr::GetCoCP() {
-    /* Nonmatching */
-}
-
-/* 00001C90-00001C9C       .text GetCoCP__14cCcD_ShapeAttrCFv */
-void cCcD_ShapeAttr::GetCoCP() const {
-    /* Nonmatching */
-}
-
-/* 00001C9C-00001CA0       .text GetGObjInf__12cCcD_GObjInfCFv */
-void cCcD_GObjInf::GetGObjInf() const {
-    /* Nonmatching */
-}
-
-/* 00001CA0-00001CA8       .text GetShapeAttr__8cCcD_ObjCFv */
-void cCcD_Obj::GetShapeAttr() const {
-    /* Nonmatching */
-}
-
-/* 00001CA8-00001CB0       .text CrossAtTg__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_ShapeAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00001CB0-00001CB8       .text CrossCo__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_ShapeAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
     /* Nonmatching */
 }
 

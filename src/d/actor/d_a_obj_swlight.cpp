@@ -26,36 +26,6 @@ void daObjSwlight::Act_c::_create() {
     /* Nonmatching */
 }
 
-/* 00000704-00000794       .text __dt__9dCcD_SttsFv */
-dCcD_Stts::~dCcD_Stts() {
-    /* Nonmatching */
-}
-
-/* 00000794-000007E8       .text __ct__9dCcD_SttsFv */
-dCcD_Stts::dCcD_Stts() {
-    /* Nonmatching */
-}
-
-/* 000007E8-00000844       .text __dt__10dCcD_GSttsFv */
-dCcD_GStts::~dCcD_GStts() {
-    /* Nonmatching */
-}
-
-/* 00000844-00000880       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
-/* 00000880-00000960       .text __dt__8dCcD_TriFv */
-dCcD_Tri::~dCcD_Tri() {
-    /* Nonmatching */
-}
-
-/* 00000960-000009F0       .text __ct__8dCcD_TriFv */
-dCcD_Tri::dCcD_Tri() {
-    /* Nonmatching */
-}
-
 /* 000009F0-00000A4C       .text __dt__8cM3dGTriFv */
 cM3dGTri::~cM3dGTri() {
     /* Nonmatching */
@@ -63,31 +33,6 @@ cM3dGTri::~cM3dGTri() {
 
 /* 00000A4C-00000A94       .text __dt__8cM3dGPlaFv */
 cM3dGPla::~cM3dGPla() {
-    /* Nonmatching */
-}
-
-/* 00000A94-00000AF0       .text __dt__14cCcD_ShapeAttrFv */
-cCcD_ShapeAttr::~cCcD_ShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 00000AF0-00000B38       .text __dt__8cM3dGAabFv */
-cM3dGAab::~cM3dGAab() {
-    /* Nonmatching */
-}
-
-/* 00000B38-00000B94       .text __dt__13mDoExt_bckAnmFv */
-mDoExt_bckAnm::~mDoExt_bckAnm() {
-    /* Nonmatching */
-}
-
-/* 00000B94-00000BF0       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000BF0-00000C38       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
     /* Nonmatching */
 }
 
@@ -210,101 +155,6 @@ void daObjSwlight::Act_c::_draw() {
 
 
 
-
-/* 00001B58-00001B60       .text CrossAtTg__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_ShapeAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00001B60-00001B68       .text CrossCo__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_ShapeAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001B68-00001B74       .text GetCoCP__14cCcD_ShapeAttrFv */
-void cCcD_ShapeAttr::GetCoCP() {
-    /* Nonmatching */
-}
-
-/* 00001B74-00001B80       .text GetCoCP__14cCcD_ShapeAttrCFv */
-void cCcD_ShapeAttr::GetCoCP() const {
-    /* Nonmatching */
-}
-
-/* 00001B80-00001B90       .text GetShapeAttr__8dCcD_TriFv */
-void dCcD_Tri::GetShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 00001B90-00001B98       .text CrossAtTg__12cCcD_TriAttrCFRC12cCcD_AabAttrP4cXyz */
-void cCcD_TriAttr::CrossAtTg(const cCcD_AabAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00001B98-00001BA0       .text CrossAtTg__12cCcD_TriAttrCFRC12cCcD_PntAttrP4cXyz */
-void cCcD_TriAttr::CrossAtTg(const cCcD_PntAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00001BA0-00001BD8       .text CrossAtTg__12cCcD_TriAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_TriAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00001BD8-00001BE0       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_SphAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_SphAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001BE0-00001BE8       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_CylAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_CylAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001BE8-00001BF0       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_AabAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_AabAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001BF0-00001BF8       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_TriAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_TriAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001BF8-00001C00       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_CpsAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_CpsAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001C00-00001C08       .text CrossCo__12cCcD_TriAttrCFRC12cCcD_PntAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_PntAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001C08-00001C40       .text CrossCo__12cCcD_TriAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_TriAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00001C40-00001C44       .text GetGObjInf__12cCcD_GObjInfCFv */
-void cCcD_GObjInf::GetGObjInf() const {
-    /* Nonmatching */
-}
-
-/* 00001C44-00001C4C       .text GetShapeAttr__8cCcD_ObjCFv */
-void cCcD_Obj::GetShapeAttr() const {
-    /* Nonmatching */
-}
-
-/* 00001C4C-00001C94       .text __dt__10cCcD_GSttsFv */
-cCcD_GStts::~cCcD_GStts() {
-    /* Nonmatching */
-}
-
-/* 00001C94-00001CB0       .text PrmAbstract<Q312daObjSwlight5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ312daObjSwlight5Act_c5Prm_eQ312daObjSwlight5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjSwlight::Act_c::Prm_e>(const fopAc_ac_c*, daObjSwlight::Act_c::Prm_e, daObjSwlight::Act_c::Prm_e) {
-    /* Nonmatching */
-}
 
 
 

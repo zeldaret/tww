@@ -186,8 +186,3 @@ daTag_MdCb_HIO_c::~daTag_MdCb_HIO_c() {
     /* Nonmatching */
 }
 
-/* 000019F8-00001A14       .text cLib_calcTimer<s>__FPs */
-void cLib_calcTimer<short>(short*) {
-    /* Nonmatching */
-}
-

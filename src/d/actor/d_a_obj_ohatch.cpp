@@ -96,8 +96,3 @@ void daObjOhatch_IsDelete(daObjOhatch_c*) {
     /* Nonmatching */
 }
 
-/* 00000BF8-00000C14       .text PrmAbstract<Q213daObjOhatch_c7Param_e>__5daObjFPC10fopAc_ac_cQ213daObjOhatch_c7Param_eQ213daObjOhatch_c7Param_e */
-void daObj::PrmAbstract<daObjOhatch_c::Param_e>(const fopAc_ac_c*, daObjOhatch_c::Param_e, daObjOhatch_c::Param_e) {
-    /* Nonmatching */
-}
-

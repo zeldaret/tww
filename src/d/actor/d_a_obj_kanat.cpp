@@ -56,23 +56,3 @@ void daObjKanat::Act_c::Draw() {
 
 
 
-/* 000006FC-00000704       .text IsDelete__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::IsDelete() {
-    /* Nonmatching */
-}
-
-/* 00000704-0000070C       .text ToFore__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToFore() {
-    /* Nonmatching */
-}
-
-/* 0000070C-00000714       .text ToBack__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToBack() {
-    /* Nonmatching */
-}
-
-/* 00000714-00000730       .text PrmAbstract<Q310daObjKanat5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ310daObjKanat5Act_c5Prm_eQ310daObjKanat5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjKanat::Act_c::Prm_e>(const fopAc_ac_c*, daObjKanat::Act_c::Prm_e, daObjKanat::Act_c::Prm_e) {
-    /* Nonmatching */
-}
-

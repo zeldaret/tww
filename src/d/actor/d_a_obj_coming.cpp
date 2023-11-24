@@ -151,78 +151,8 @@ void daObjComing::Act_c::_draw() {
 
 
 
-/* 000013AC-000013F4       .text __dt__13cBgS_PolyInfoFv */
-cBgS_PolyInfo::~cBgS_PolyInfo() {
-    /* Nonmatching */
-}
-
-/* 000013F4-0000143C       .text __dt__16cBgS_PolyPassChkFv */
-cBgS_PolyPassChk::~cBgS_PolyPassChk() {
-    /* Nonmatching */
-}
-
-/* 0000143C-00001498       .text __dt__16dBgS_PolyPassChkFv */
-dBgS_PolyPassChk::~dBgS_PolyPassChk() {
-    /* Nonmatching */
-}
-
-/* 00001498-000014E0       .text __dt__15cBgS_GrpPassChkFv */
-cBgS_GrpPassChk::~cBgS_GrpPassChk() {
-    /* Nonmatching */
-}
-
-/* 000014E0-0000153C       .text __dt__15dBgS_GrpPassChkFv */
-dBgS_GrpPassChk::~dBgS_GrpPassChk() {
-    /* Nonmatching */
-}
-
-/* 0000153C-000015DC       .text __dt__8dBgS_ChkFv */
-dBgS_Chk::~dBgS_Chk() {
-    /* Nonmatching */
-}
-
 /* 000015DC-000016D8       .text __dt__14dBgS_SplGrpChkFv */
 dBgS_SplGrpChk::~dBgS_SplGrpChk() {
-    /* Nonmatching */
-}
-
-/* 000016D8-000016F4       .text PrmAbstract<Q311daObjComing5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ311daObjComing5Act_c5Prm_eQ311daObjComing5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjComing::Act_c::Prm_e>(const fopAc_ac_c*, daObjComing::Act_c::Prm_e, daObjComing::Act_c::Prm_e) {
-    /* Nonmatching */
-}
-
-/* 00001980-00001AD4       .text __dt__14dBgS_ObjLinChkFv */
-dBgS_ObjLinChk::~dBgS_ObjLinChk() {
-    /* Nonmatching */
-}
-
-/* 00001AD4-00001C00       .text __dt__11dBgS_LinChkFv */
-dBgS_LinChk::~dBgS_LinChk() {
-    /* Nonmatching */
-}
-
-/* 00001C00-00001C94       .text __dt__11cBgS_LinChkFv */
-cBgS_LinChk::~cBgS_LinChk() {
-    /* Nonmatching */
-}
-
-/* 00001C94-00001CDC       .text __dt__8cM3dGLinFv */
-cM3dGLin::~cM3dGLin() {
-    /* Nonmatching */
-}
-
-/* 00001CDC-00001E1C       .text __dt__14dBgS_ObjGndChkFv */
-dBgS_ObjGndChk::~dBgS_ObjGndChk() {
-    /* Nonmatching */
-}
-
-/* 00001E1C-00001F34       .text __dt__11dBgS_GndChkFv */
-dBgS_GndChk::~dBgS_GndChk() {
-    /* Nonmatching */
-}
-
-/* 00001F34-00001FB4       .text __dt__11cBgS_GndChkFv */
-cBgS_GndChk::~cBgS_GndChk() {
     /* Nonmatching */
 }
 

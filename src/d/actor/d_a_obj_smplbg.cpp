@@ -61,23 +61,3 @@ void daObjSmplbg::Act_c::Draw() {
 
 
 
-/* 0000081C-00000824       .text IsDelete__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::IsDelete() {
-    /* Nonmatching */
-}
-
-/* 00000824-0000082C       .text ToFore__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToFore() {
-    /* Nonmatching */
-}
-
-/* 0000082C-00000834       .text ToBack__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToBack() {
-    /* Nonmatching */
-}
-
-/* 00000834-00000850       .text PrmAbstract<Q311daObjSmplbg5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ311daObjSmplbg5Act_c5Prm_eQ311daObjSmplbg5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjSmplbg::Act_c::Prm_e>(const fopAc_ac_c*, daObjSmplbg::Act_c::Prm_e, daObjSmplbg::Act_c::Prm_e) {
-    /* Nonmatching */
-}
-

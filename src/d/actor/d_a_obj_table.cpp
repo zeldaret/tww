@@ -56,23 +56,3 @@ void daObjTable::Act_c::Draw() {
 
 
 
-/* 000006C0-000006C8       .text IsDelete__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::IsDelete() {
-    /* Nonmatching */
-}
-
-/* 000006C8-000006D0       .text ToFore__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToFore() {
-    /* Nonmatching */
-}
-
-/* 000006D0-000006D8       .text ToBack__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToBack() {
-    /* Nonmatching */
-}
-
-/* 000006D8-000006F4       .text PrmAbstract<Q310daObjTable5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ310daObjTable5Act_c5Prm_eQ310daObjTable5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjTable::Act_c::Prm_e>(const fopAc_ac_c*, daObjTable::Act_c::Prm_e, daObjTable::Act_c::Prm_e) {
-    /* Nonmatching */
-}
-

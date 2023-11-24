@@ -96,31 +96,6 @@ void dCamera_c::uniformTransEvCamera() {
     /* Nonmatching */
 }
 
-/* 800B3CC8-800B3D04       .text U__7cSGlobeFRC7cSAngle */
-void cSGlobe::U(const cSAngle&) {
-    /* Nonmatching */
-}
-
-/* 800B3D04-800B3D20       .text __as__7cSGlobeFRC7cSGlobe */
-void cSGlobe::operator=(const cSGlobe&) {
-    /* Nonmatching */
-}
-
-/* 800B3D20-800B3DA4       .text abs__4cXyzCFv */
-void cXyz::abs() const {
-    /* Nonmatching */
-}
-
-/* 800B3DA4-800B3DC0       .text __as__4cXyzFRC4cXyz */
-void cXyz::operator=(const cXyz&) {
-    /* Nonmatching */
-}
-
-/* 800B3DC0-800B3DDC       .text __ct__4cXyzFRC4cXyz */
-cXyz::cXyz(const cXyz&) {
-    /* Nonmatching */
-}
-
 /* 800B3DDC-800B3E18       .text __dt__Q29dCamera_c26@class$5621d_ev_camera_cppFv */
 dCamera_c::@class$5621d_ev_camera_cpp::~@class$5621d_ev_camera_cpp() {
     /* Nonmatching */
@@ -148,11 +123,6 @@ dCamera_c::@class$6993d_ev_camera_cpp::~@class$6993d_ev_camera_cpp() {
 
 /* 800B6470-800B7640       .text watchActorEvCamera__9dCamera_cFv */
 void dCamera_c::watchActorEvCamera() {
-    /* Nonmatching */
-}
-
-/* 800B7640-800B767C       .text V__7cSGlobeFRC7cSAngle */
-void cSGlobe::V(const cSAngle&) {
     /* Nonmatching */
 }
 

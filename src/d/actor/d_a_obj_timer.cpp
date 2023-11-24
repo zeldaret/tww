@@ -46,8 +46,3 @@ void daObjTimer::Act_c::_execute() {
 
 
 
-/* 0000040C-00000428       .text PrmAbstract<Q310daObjTimer5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ310daObjTimer5Act_c5Prm_eQ310daObjTimer5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjTimer::Act_c::Prm_e>(const fopAc_ac_c*, daObjTimer::Act_c::Prm_e, daObjTimer::Act_c::Prm_e) {
-    /* Nonmatching */
-}
-

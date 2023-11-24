@@ -156,26 +156,6 @@ daObj_Search::Act_c::Act_c() {
     /* Nonmatching */
 }
 
-/* 80100D60-80100EB4       .text __dt__14dBgS_ObjLinChkFv */
-dBgS_ObjLinChk::~dBgS_ObjLinChk() {
-    /* Nonmatching */
-}
-
-/* 80100EB4-80100EB8       .text __ct__5csXyzFv */
-csXyz::csXyz() {
-    /* Nonmatching */
-}
-
-/* 80100EB8-80100F0C       .text __ct__9dCcD_SttsFv */
-dCcD_Stts::dCcD_Stts() {
-    /* Nonmatching */
-}
-
-/* 80100F0C-80100F9C       .text __ct__8dCcD_CpsFv */
-dCcD_Cps::dCcD_Cps() {
-    /* Nonmatching */
-}
-
 /* 80100F9C-801010C4       .text smoke_set__Q212daObj_Search5Act_cFfi */
 void daObj_Search::Act_c::smoke_set(float, int) {
     /* Nonmatching */

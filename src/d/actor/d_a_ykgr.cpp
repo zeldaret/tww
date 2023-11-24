@@ -6,16 +6,6 @@
 #include "d/actor/d_a_ykgr.h"
 #include "dolphin/types.h"
 
-/* 000000EC-00000134       .text draw__17dPa_YkgrPcallBackFP14JPABaseEmitterP15JPABaseParticle */
-void dPa_YkgrPcallBack::draw(JPABaseEmitter*, JPABaseParticle*) {
-    /* Nonmatching */
-}
-
-/* 00000134-00000234       .text setParam__17dPa_YkgrPcallBackFf */
-void dPa_YkgrPcallBack::setParam(float) {
-    /* Nonmatching */
-}
-
 /* 00000234-00000408       .text getPosRate__8daYkgr_cFv */
 void daYkgr_c::getPosRate() {
     /* Nonmatching */
@@ -53,16 +43,6 @@ void daYkgrIsDelete(void*) {
 
 /* 000008FC-00000958       .text __dt__12daYkgr_HIO_cFv */
 daYkgr_HIO_c::~daYkgr_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 00000958-000009A0       .text __dt__14mDoHIO_entry_cFv */
-mDoHIO_entry_c::~mDoHIO_entry_c() {
-    /* Nonmatching */
-}
-
-/* 000009A0-000009FC       .text __dt__17dPa_YkgrPcallBackFv */
-dPa_YkgrPcallBack::~dPa_YkgrPcallBack() {
     /* Nonmatching */
 }
 

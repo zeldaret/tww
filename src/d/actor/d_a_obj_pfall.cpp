@@ -26,11 +26,6 @@ void daObj_Pfall_c::set_mtx() {
     /* Nonmatching */
 }
 
-/* 000004DC-00000518       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
 /* 00000518-00000858       .text CreateHeap__13daObj_Pfall_cFv */
 void daObj_Pfall_c::CreateHeap() {
     /* Nonmatching */
@@ -43,11 +38,6 @@ void daObj_Pfall_c::CreateInit() {
 
 /* 000008CC-000009E8       .text _create__13daObj_Pfall_cFv */
 void daObj_Pfall_c::_create() {
-    /* Nonmatching */
-}
-
-/* 000009E8-000009EC       .text __ct__4cXyzFv */
-cXyz::cXyz() {
     /* Nonmatching */
 }
 
@@ -158,11 +148,6 @@ void daObj_PfallIsDelete(void*) {
 
 /* 00001578-000015C8       .text __dt__16daObj_PfallHIO_cFv */
 daObj_PfallHIO_c::~daObj_PfallHIO_c() {
-    /* Nonmatching */
-}
-
-/* 000015C8-000015E4       .text cLib_calcTimer<i>__FPi */
-void cLib_calcTimer<int>(int*) {
     /* Nonmatching */
 }
 

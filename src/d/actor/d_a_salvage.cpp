@@ -16,11 +16,6 @@ void daSalvage_c::CreateHeap() {
     /* Nonmatching */
 }
 
-/* 0000039C-000003E4       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 000003E4-00000420       .text __dt__15dSalvage_info_cFv */
 dSalvage_info_c::~dSalvage_info_c() {
     /* Nonmatching */
@@ -183,16 +178,6 @@ void daSalvageIsDelete(void*) {
 
 /* 000024A4-000024EC       .text __dt__8cM3dGPlaFv */
 cM3dGPla::~cM3dGPla() {
-    /* Nonmatching */
-}
-
-/* 000024EC-00002548       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 00002548-000025A4       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
     /* Nonmatching */
 }
 

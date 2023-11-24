@@ -11,11 +11,6 @@ void body_nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
-/* 00000258-00000294       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
 /* 00000294-000003C4       .text kantera_nodeCallBack__FP7J3DNodei */
 void kantera_nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
@@ -156,51 +151,6 @@ void action_dousa(bpw_class*) {
     /* Nonmatching */
 }
 
-/* 000035F8-00003724       .text __dt__11dBgS_LinChkFv */
-dBgS_LinChk::~dBgS_LinChk() {
-    /* Nonmatching */
-}
-
-/* 00003724-000037C4       .text __dt__8dBgS_ChkFv */
-dBgS_Chk::~dBgS_Chk() {
-    /* Nonmatching */
-}
-
-/* 000037C4-00003820       .text __dt__15dBgS_GrpPassChkFv */
-dBgS_GrpPassChk::~dBgS_GrpPassChk() {
-    /* Nonmatching */
-}
-
-/* 00003820-00003868       .text __dt__15cBgS_GrpPassChkFv */
-cBgS_GrpPassChk::~cBgS_GrpPassChk() {
-    /* Nonmatching */
-}
-
-/* 00003868-000038C4       .text __dt__16dBgS_PolyPassChkFv */
-dBgS_PolyPassChk::~dBgS_PolyPassChk() {
-    /* Nonmatching */
-}
-
-/* 000038C4-0000390C       .text __dt__16cBgS_PolyPassChkFv */
-cBgS_PolyPassChk::~cBgS_PolyPassChk() {
-    /* Nonmatching */
-}
-
-/* 0000390C-000039A0       .text __dt__11cBgS_LinChkFv */
-cBgS_LinChk::~cBgS_LinChk() {
-    /* Nonmatching */
-}
-
-/* 000039A0-000039E8       .text __dt__8cM3dGLinFv */
-cM3dGLin::~cM3dGLin() {
-    /* Nonmatching */
-}
-
-/* 000039E8-00003A30       .text __dt__13cBgS_PolyInfoFv */
-cBgS_PolyInfo::~cBgS_PolyInfo() {
-    /* Nonmatching */
-}
-
 /* 00003A30-00004870       .text action_kougeki__FP9bpw_class */
 void action_kougeki(bpw_class*) {
     /* Nonmatching */
@@ -218,41 +168,6 @@ void action_damage(bpw_class*) {
 
 /* 000062D8-00008BAC       .text action_bunri_dousa__FP9bpw_class */
 void action_bunri_dousa(bpw_class*) {
-    /* Nonmatching */
-}
-
-/* 00008BAC-00008BDC       .text dComIfGs_onStageBossEnemy__Fv */
-void dComIfGs_onStageBossEnemy() {
-    /* Nonmatching */
-}
-
-/* 00008BDC-00008C00       .text cM_scos__Fs */
-void cM_scos(short) {
-    /* Nonmatching */
-}
-
-/* 00008C00-00008C10       .text setGlobalPrmColor__14JPABaseEmitterFUcUcUc */
-void JPABaseEmitter::setGlobalPrmColor(unsigned char, unsigned char, unsigned char) {
-    /* Nonmatching */
-}
-
-/* 00008C10-00008C98       .text dComIfGp_particle_set__FUsPC4cXyzPC5csXyzPC4cXyzUcP18dPa_levelEcallBackScPC8_GXColorPC8_GXColorPC4cXyz */
-void dComIfGp_particle_set(unsigned short, const cXyz*, const csXyz*, const cXyz*, unsigned char, dPa_levelEcallBack*, signed char, const _GXColor*, const _GXColor*, const cXyz*) {
-    /* Nonmatching */
-}
-
-/* 00008C98-00008CA0       .text setPlaySpeed__14mDoExt_McaMorfFf */
-void mDoExt_McaMorf::setPlaySpeed(float) {
-    /* Nonmatching */
-}
-
-/* 00008CA0-00008CC4       .text cM_ssin__Fs */
-void cM_ssin(short) {
-    /* Nonmatching */
-}
-
-/* 00008CC4-00008D3C       .text sqrtf__3stdFf */
-void std::sqrtf(float) {
     /* Nonmatching */
 }
 
@@ -331,11 +246,6 @@ void boss_useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 0000CC40-0000CC88       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 0000CC88-0000CDF0       .text body_create_init__FP9bpw_class */
 void body_create_init(bpw_class*) {
     /* Nonmatching */
@@ -381,160 +291,6 @@ bpw_class::bpw_class() {
     /* Nonmatching */
 }
 
-/* 0000DDF8-0000DEC4       .text __dt__8dCcD_SphFv */
-dCcD_Sph::~dCcD_Sph() {
-    /* Nonmatching */
-}
-
-/* 0000DEC4-0000DF0C       .text __dt__8cM3dGSphFv */
-cM3dGSph::~cM3dGSph() {
-    /* Nonmatching */
-}
-
-/* 0000DF0C-0000DF68       .text __dt__14cCcD_ShapeAttrFv */
-cCcD_ShapeAttr::~cCcD_ShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 0000DF68-0000DFB0       .text __dt__8cM3dGAabFv */
-cM3dGAab::~cM3dGAab() {
-    /* Nonmatching */
-}
-
-/* 0000DFB0-0000E020       .text __dt__12dBgS_ObjAcchFv */
-dBgS_ObjAcch::~dBgS_ObjAcch() {
-    /* Nonmatching */
-}
-
-/* 0000E020-0000E044       .text __defctor__18dPa_smokeEcallBackFv */
-void dPa_smokeEcallBack::__defctor() {
-    /* Nonmatching */
-}
-
-/* 0000E044-0000E0C0       .text __dt__18dPa_smokeEcallBackFv */
-dPa_smokeEcallBack::~dPa_smokeEcallBack() {
-    /* Nonmatching */
-}
-
-/* 0000E0C0-0000E0C4       .text __ct__4cXyzFv */
-cXyz::cXyz() {
-    /* Nonmatching */
-}
-
-/* 0000E0C4-0000E0C8       .text draw__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::draw(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 0000E0C8-0000E0CC       .text executeAfter__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::executeAfter(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 0000E0CC-0000E0D0       .text execute__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::execute(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 0000E0D0-0000E0D4       .text init__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::init(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 0000E0D4-0000E11C       .text __dt__34JPACallBackBase<P14JPABaseEmitter>Fv */
-JPACallBackBase<JPABaseEmitter*>::~JPACallBackBase() {
-    /* Nonmatching */
-}
-
-/* 0000E11C-0000E178       .text __dt__18dPa_levelEcallBackFv */
-dPa_levelEcallBack::~dPa_levelEcallBack() {
-    /* Nonmatching */
-}
-
-/* 0000E178-0000E188       .text GetShapeAttr__8dCcD_SphFv */
-void dCcD_Sph::GetShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 0000E188-0000E190       .text GetCoCP__12cCcD_SphAttrFv */
-void cCcD_SphAttr::GetCoCP() {
-    /* Nonmatching */
-}
-
-/* 0000E190-0000E198       .text GetCoCP__12cCcD_SphAttrCFv */
-void cCcD_SphAttr::GetCoCP() const {
-    /* Nonmatching */
-}
-
-/* 0000E198-0000E1A0       .text CrossAtTg__12cCcD_SphAttrCFRC12cCcD_AabAttrP4cXyz */
-void cCcD_SphAttr::CrossAtTg(const cCcD_AabAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 0000E1A0-0000E1A8       .text CrossAtTg__12cCcD_SphAttrCFRC12cCcD_PntAttrP4cXyz */
-void cCcD_SphAttr::CrossAtTg(const cCcD_PntAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 0000E1A8-0000E1E0       .text CrossAtTg__12cCcD_SphAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_SphAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 0000E1E0-0000E1E8       .text CrossCo__12cCcD_SphAttrCFRC12cCcD_AabAttrPf */
-void cCcD_SphAttr::CrossCo(const cCcD_AabAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 0000E1E8-0000E1F0       .text CrossCo__12cCcD_SphAttrCFRC12cCcD_TriAttrPf */
-void cCcD_SphAttr::CrossCo(const cCcD_TriAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 0000E1F0-0000E1F8       .text CrossCo__12cCcD_SphAttrCFRC12cCcD_PntAttrPf */
-void cCcD_SphAttr::CrossCo(const cCcD_PntAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 0000E1F8-0000E230       .text CrossCo__12cCcD_SphAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_SphAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 0000E230-0000E234       .text GetGObjInf__12cCcD_GObjInfCFv */
-void cCcD_GObjInf::GetGObjInf() const {
-    /* Nonmatching */
-}
-
-/* 0000E234-0000E23C       .text GetShapeAttr__8cCcD_ObjCFv */
-void cCcD_Obj::GetShapeAttr() const {
-    /* Nonmatching */
-}
-
-/* 0000E23C-0000E244       .text CrossAtTg__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_ShapeAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 0000E244-0000E24C       .text CrossCo__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_ShapeAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 0000E24C-0000E258       .text GetCoCP__14cCcD_ShapeAttrFv */
-void cCcD_ShapeAttr::GetCoCP() {
-    /* Nonmatching */
-}
-
-/* 0000E258-0000E264       .text GetCoCP__14cCcD_ShapeAttrCFv */
-void cCcD_ShapeAttr::GetCoCP() const {
-    /* Nonmatching */
-}
-
-/* 0000E264-0000E2C0       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
-    /* Nonmatching */
-}
 
 
 
@@ -543,105 +299,4 @@ mDoExt_brkAnm::~mDoExt_brkAnm() {
 
 
 
-
-
-/* 0000E308-0000E324       .text getHeadTopPos__9daPy_py_cCFv */
-void daPy_py_c::getHeadTopPos() const {
-    /* Nonmatching */
-}
-
-/* 0000E324-0000E338       .text cancelOriginalDemo__9daPy_py_cFv */
-void daPy_py_c::cancelOriginalDemo() {
-    /* Nonmatching */
-}
-
-/* 0000E338-0000E354       .text __ct__4cXyzFRC4cXyz */
-cXyz::cXyz(const cXyz&) {
-    /* Nonmatching */
-}
-
-/* 0000E354-0000E35C       .text changeDemoMode__9daPy_py_cFUl */
-void daPy_py_c::changeDemoMode(unsigned long) {
-    /* Nonmatching */
-}
-
-/* 0000E35C-0000E370       .text changeOriginalDemo__9daPy_py_cFv */
-void daPy_py_c::changeOriginalDemo() {
-    /* Nonmatching */
-}
-
-/* 0000E370-0000E388       .text dComIfGp_event_onEventFlag__FUs */
-void dComIfGp_event_onEventFlag(unsigned short) {
-    /* Nonmatching */
-}
-
-/* 0000E388-0000E3EC       .text mDoAud_seStart__FUlP3VecUlSc */
-void mDoAud_seStart(unsigned long, Vec*, unsigned long, signed char) {
-    /* Nonmatching */
-}
-
-/* 0000E3EC-0000E408       .text __as__4cXyzFRC4cXyz */
-void cXyz::operator=(const cXyz&) {
-    /* Nonmatching */
-}
-
-/* 0000E408-0000E418       .text setall__4cXyzFf */
-void cXyz::setall(float) {
-    /* Nonmatching */
-}
-
-/* 0000E418-0000E428       .text ClrCoSet__14cCcD_ObjHitInfFv */
-void cCcD_ObjHitInf::ClrCoSet() {
-    /* Nonmatching */
-}
-
-/* 0000E428-0000E438       .text OffTgSetBit__14cCcD_ObjHitInfFv */
-void cCcD_ObjHitInf::OffTgSetBit() {
-    /* Nonmatching */
-}
-
-/* 0000E438-0000E448       .text ClrAtSet__14cCcD_ObjHitInfFv */
-void cCcD_ObjHitInf::ClrAtSet() {
-    /* Nonmatching */
-}
-
-/* 0000E448-0000E460       .text dComIfGp_getCamera__Fi */
-void dComIfGp_getCamera(int) {
-    /* Nonmatching */
-}
-
-/* 0000E460-0000E47C       .text dComIfGp_getPlayerCameraID__Fi */
-void dComIfGp_getPlayerCameraID(int) {
-    /* Nonmatching */
-}
-
-/* 0000E47C-0000E494       .text dComIfGp_getPlayer__Fi */
-void dComIfGp_getPlayer(int) {
-    /* Nonmatching */
-}
-
-/* 0000E494-0000E50C       .text fopAcM_monsSeStart__FP10fopAc_ac_cUlUl */
-void fopAcM_monsSeStart(fopAc_ac_c*, unsigned long, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 0000E50C-0000E524       .text dComIfGp_event_reset__Fv */
-void dComIfGp_event_reset() {
-    /* Nonmatching */
-}
-
-/* 0000E524-0000E5A4       .text fopAcM_seStart__FP10fopAc_ac_cUlUl */
-void fopAcM_seStart(fopAc_ac_c*, unsigned long, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 0000E5A4-0000E5D4       .text isStop__14mDoExt_McaMorfFv */
-void mDoExt_McaMorf::isStop() {
-    /* Nonmatching */
-}
-
-/* 0000E5D4-0000E600       .text fopAcM_searchPlayerAngleY__FP10fopAc_ac_c */
-void fopAcM_searchPlayerAngleY(fopAc_ac_c*) {
-    /* Nonmatching */
-}
 

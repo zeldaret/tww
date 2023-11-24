@@ -31,11 +31,6 @@ void daTornado_c::execute() {
     /* Nonmatching */
 }
 
-/* 00000C4C-00000C88       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
 /* 00000C88-00000CA8       .text daTornado_Execute__FP11daTornado_c */
 void daTornado_Execute(daTornado_c*) {
     /* Nonmatching */
@@ -68,26 +63,6 @@ void daTornado_createHeap(fopAc_ac_c*) {
 
 /* 000010BC-000014D0       .text create__11daTornado_cFv */
 void daTornado_c::create() {
-    /* Nonmatching */
-}
-
-/* 000014D0-0000152C       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 0000152C-00001588       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 00001588-000015E4       .text __dt__13mDoExt_bckAnmFv */
-mDoExt_bckAnm::~mDoExt_bckAnm() {
-    /* Nonmatching */
-}
-
-/* 000015E4-0000162C       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
     /* Nonmatching */
 }
 

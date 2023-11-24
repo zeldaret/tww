@@ -31,31 +31,6 @@ void daLStair_c::_create() {
     /* Nonmatching */
 }
 
-/* 00000758-000007B4       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 000007B4-00000810       .text __dt__13mDoExt_bpkAnmFv */
-mDoExt_bpkAnm::~mDoExt_bpkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000810-0000086C       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 0000086C-000008C8       .text __dt__13mDoExt_bckAnmFv */
-mDoExt_bckAnm::~mDoExt_bckAnm() {
-    /* Nonmatching */
-}
-
-/* 000008C8-00000910       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 00000910-00000998       .text set_mtx__10daLStair_cFv */
 void daLStair_c::set_mtx() {
     /* Nonmatching */
@@ -128,11 +103,6 @@ void daLStair_Execute(void*) {
 
 /* 000012B0-000012B8       .text daLStair_IsDelete__FPv */
 void daLStair_IsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 000012B8-000012D4       .text cLib_calcTimer<Uc>__FPUc */
-void cLib_calcTimer<unsigned char>(unsigned char*) {
     /* Nonmatching */
 }
 

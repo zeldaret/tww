@@ -36,11 +36,6 @@ void daStandItem_c::_create() {
     /* Nonmatching */
 }
 
-/* 800E4048-800E4114       .text __dt__8dCcD_CylFv */
-dCcD_Cyl::~dCcD_Cyl() {
-    /* Nonmatching */
-}
-
 /* 800E4114-800E443C       .text set_mtx__13daStandItem_cFv */
 void daStandItem_c::set_mtx() {
     /* Nonmatching */
@@ -188,41 +183,6 @@ void daStandItem_Execute(void*) {
 
 /* 800E5444-800E544C       .text daStandItem_IsDelete__FPv */
 void daStandItem_IsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 800E544C-800E545C       .text GetShapeAttr__8dCcD_CylFv */
-void dCcD_Cyl::GetShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 800E545C-800E5464       .text GetCoCP__12cCcD_CylAttrCFv */
-void cCcD_CylAttr::GetCoCP() const {
-    /* Nonmatching */
-}
-
-/* 800E5464-800E546C       .text CrossAtTg__12cCcD_CylAttrCFRC12cCcD_AabAttrP4cXyz */
-void cCcD_CylAttr::CrossAtTg(const cCcD_AabAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 800E546C-800E5474       .text CrossAtTg__12cCcD_CylAttrCFRC12cCcD_PntAttrP4cXyz */
-void cCcD_CylAttr::CrossAtTg(const cCcD_PntAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 800E5474-800E547C       .text CrossCo__12cCcD_CylAttrCFRC12cCcD_AabAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_AabAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 800E547C-800E5484       .text CrossCo__12cCcD_CylAttrCFRC12cCcD_TriAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_TriAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 800E5484-800E548C       .text CrossCo__12cCcD_CylAttrCFRC12cCcD_PntAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_PntAttr&, float*) const {
     /* Nonmatching */
 }
 

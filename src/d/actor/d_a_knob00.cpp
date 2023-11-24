@@ -186,13 +186,3 @@ void daKnob00_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00001F70-00001FCC       .text __dt__13mDoExt_bckAnmFv */
-mDoExt_bckAnm::~mDoExt_bckAnm() {
-    /* Nonmatching */
-}
-
-/* 00001FCC-00002014       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-

@@ -326,21 +326,6 @@ void daBigelf_c::_create() {
     /* Nonmatching */
 }
 
-/* 00003124-00003180       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 00003180-000031DC       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 000031DC-00003224       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 00003224-00003808       .text CreateHeap__10daBigelf_cFv */
 void daBigelf_c::CreateHeap() {
     /* Nonmatching */

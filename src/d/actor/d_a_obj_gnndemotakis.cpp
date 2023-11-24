@@ -21,16 +21,6 @@ void daObjGnntakis_c::_create() {
     /* Nonmatching */
 }
 
-/* 00000308-00000364       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000364-000003AC       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 000003AC-000003DC       .text _delete__15daObjGnntakis_cFv */
 void daObjGnntakis_c::_delete() {
     /* Nonmatching */

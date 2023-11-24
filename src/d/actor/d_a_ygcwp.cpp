@@ -21,21 +21,6 @@ void daYgcwp_c::_create() {
     /* Nonmatching */
 }
 
-/* 000003A0-000003FC       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 000003FC-00000428       .text __ct__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000428-00000470       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 00000470-000004A0       .text _delete__9daYgcwp_cFv */
 void daYgcwp_c::_delete() {
     /* Nonmatching */

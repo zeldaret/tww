@@ -16,11 +16,6 @@ void nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
-/* 000001EC-00000228       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
 /* 00000228-00000720       .text tail_control__FP8dk_classP6tail_s */
 void tail_control(dk_class*, tail_s*) {
     /* Nonmatching */
@@ -81,33 +76,13 @@ void daDk_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 000011EC-0000125C       .text __dt__12dBgS_ObjAcchFv */
-dBgS_ObjAcch::~dBgS_ObjAcch() {
-    /* Nonmatching */
-}
-
 /* 0000125C-00001308       .text __dt__6tail_sFv */
 tail_s::~tail_s() {
     /* Nonmatching */
 }
 
-/* 00001308-00001344       .text __dt__5csXyzFv */
-csXyz::~csXyz() {
-    /* Nonmatching */
-}
-
 /* 00001344-000013F0       .text __ct__6tail_sFv */
 tail_s::tail_s() {
-    /* Nonmatching */
-}
-
-/* 000013F0-000013F4       .text __ct__5csXyzFv */
-csXyz::csXyz() {
-    /* Nonmatching */
-}
-
-/* 000013F4-000013F8       .text __ct__4cXyzFv */
-cXyz::cXyz() {
     /* Nonmatching */
 }
 

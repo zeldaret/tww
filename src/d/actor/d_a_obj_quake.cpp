@@ -76,8 +76,3 @@ daObjQuake_HIO_c::~daObjQuake_HIO_c() {
     /* Nonmatching */
 }
 
-/* 000007C8-000007E4       .text PrmAbstract<Q212daObjQuake_c5Prm_e>__5daObjFPC10fopAc_ac_cQ212daObjQuake_c5Prm_eQ212daObjQuake_c5Prm_e */
-void daObj::PrmAbstract<daObjQuake_c::Prm_e>(const fopAc_ac_c*, daObjQuake_c::Prm_e, daObjQuake_c::Prm_e) {
-    /* Nonmatching */
-}
-

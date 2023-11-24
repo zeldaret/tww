@@ -21,11 +21,6 @@ void daWarpmj_c::CreateHeap() {
     /* Nonmatching */
 }
 
-/* 00000454-0000049C       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 0000049C-00000630       .text CreateInit__10daWarpmj_cFv */
 void daWarpmj_c::CreateInit() {
     /* Nonmatching */
@@ -148,21 +143,6 @@ void daWarpmj_Execute(void*) {
 
 /* 000011D8-000011E0       .text daWarpmj_IsDelete__FPv */
 void daWarpmj_IsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 000011E0-0000123C       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 0000123C-00001298       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 00001298-000012F4       .text __dt__13mDoExt_bckAnmFv */
-mDoExt_bckAnm::~mDoExt_bckAnm() {
     /* Nonmatching */
 }
 

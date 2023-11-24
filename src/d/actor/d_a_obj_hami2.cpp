@@ -91,23 +91,3 @@ void daObjHami2::Act_c::Draw() {
 
 
 
-/* 00000C10-00000C18       .text IsDelete__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::IsDelete() {
-    /* Nonmatching */
-}
-
-/* 00000C18-00000C20       .text ToFore__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToFore() {
-    /* Nonmatching */
-}
-
-/* 00000C20-00000C28       .text ToBack__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToBack() {
-    /* Nonmatching */
-}
-
-/* 00000C28-00000C44       .text PrmAbstract<Q310daObjHami25Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ310daObjHami25Act_c5Prm_eQ310daObjHami25Act_c5Prm_e */
-void daObj::PrmAbstract<daObjHami2::Act_c::Prm_e>(const fopAc_ac_c*, daObjHami2::Act_c::Prm_e, daObjHami2::Act_c::Prm_e) {
-    /* Nonmatching */
-}
-

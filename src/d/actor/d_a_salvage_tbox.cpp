@@ -136,26 +136,6 @@ void daSTBox_IsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 00001498-0000149C       .text draw__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::draw(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 0000149C-000014A0       .text executeAfter__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::executeAfter(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 000014A0-000014A4       .text execute__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::execute(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 000014A4-000014A8       .text init__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::init(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
 /* 000014A8-00001514       .text __dt__25daSTBox_shadowEcallBack_cFv */
 daSTBox_shadowEcallBack_c::~daSTBox_shadowEcallBack_c() {
     /* Nonmatching */
@@ -163,16 +143,6 @@ daSTBox_shadowEcallBack_c::~daSTBox_shadowEcallBack_c() {
 
 /* 00001514-00001518       .text __ct__Q29JGeometry8TVec3<f>Fv */
 JGeometry::TVec3<float>::TVec3() {
-    /* Nonmatching */
-}
-
-/* 00001518-00001574       .text __dt__18dPa_levelEcallBackFv */
-dPa_levelEcallBack::~dPa_levelEcallBack() {
-    /* Nonmatching */
-}
-
-/* 00001574-000015BC       .text __dt__34JPACallBackBase<P14JPABaseEmitter>Fv */
-JPACallBackBase<JPABaseEmitter*>::~JPACallBackBase() {
     /* Nonmatching */
 }
 

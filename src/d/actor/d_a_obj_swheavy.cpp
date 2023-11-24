@@ -111,8 +111,3 @@ void daObjSwheavy::Act_c::_draw() {
 
 
 
-/* 00001254-00001270       .text PrmAbstract<Q312daObjSwheavy5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ312daObjSwheavy5Act_c5Prm_eQ312daObjSwheavy5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjSwheavy::Act_c::Prm_e>(const fopAc_ac_c*, daObjSwheavy::Act_c::Prm_e, daObjSwheavy::Act_c::Prm_e) {
-    /* Nonmatching */
-}
-

@@ -11,16 +11,6 @@ void daObjGaship::Act_c::birth_flag() {
     /* Nonmatching */
 }
 
-/* 000002DC-00000318       .text __dt__5csXyzFv */
-csXyz::~csXyz() {
-    /* Nonmatching */
-}
-
-/* 00000318-00000354       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
 /* 00000354-00000378       .text solidHeapCB__Q211daObjGaship5Act_cFP10fopAc_ac_c */
 void daObjGaship::Act_c::solidHeapCB(fopAc_ac_c*) {
     /* Nonmatching */

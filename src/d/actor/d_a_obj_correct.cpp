@@ -131,18 +131,3 @@ void daObjCorrect::Act_c::_execute() {
 
 
 
-/* 00000E50-00000E6C       .text PrmAbstract<Q312daObjCorrect5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ312daObjCorrect5Act_c5Prm_eQ312daObjCorrect5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjCorrect::Act_c::Prm_e>(const fopAc_ac_c*, daObjCorrect::Act_c::Prm_e, daObjCorrect::Act_c::Prm_e) {
-    /* Nonmatching */
-}
-
-/* 00000E6C-00000E88       .text PrmAbstract<Q38daObjTry5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ38daObjTry5Act_c5Prm_eQ38daObjTry5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjTry::Act_c::Prm_e>(const fopAc_ac_c*, daObjTry::Act_c::Prm_e, daObjTry::Act_c::Prm_e) {
-    /* Nonmatching */
-}
-
-/* 00000E88-00000EA4       .text PrmAbstract<Q312daObjMovebox5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ312daObjMovebox5Act_c5Prm_eQ312daObjMovebox5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjMovebox::Act_c::Prm_e>(const fopAc_ac_c*, daObjMovebox::Act_c::Prm_e, daObjMovebox::Act_c::Prm_e) {
-    /* Nonmatching */
-}
-

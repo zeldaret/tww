@@ -151,8 +151,3 @@ void daTagPhotoIsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 000009B0-000009CC       .text PrmAbstract<Q212daTagPhoto_c5Prm_e>__5daObjFPC10fopAc_ac_cQ212daTagPhoto_c5Prm_eQ212daTagPhoto_c5Prm_e */
-void daObj::PrmAbstract<daTagPhoto_c::Prm_e>(const fopAc_ac_c*, daTagPhoto_c::Prm_e, daTagPhoto_c::Prm_e) {
-    /* Nonmatching */
-}
-

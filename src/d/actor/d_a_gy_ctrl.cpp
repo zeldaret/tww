@@ -11,11 +11,6 @@ daGy_Ctrl_HIO_c::daGy_Ctrl_HIO_c() {
     /* Nonmatching */
 }
 
-/* 00000170-000001B8       .text __dt__14mDoHIO_entry_cFv */
-mDoHIO_entry_c::~mDoHIO_entry_c() {
-    /* Nonmatching */
-}
-
 /* 000001B8-000001E4       .text searchNearActor_CB__FPvPv */
 void searchNearActor_CB(void*, void*) {
     /* Nonmatching */
@@ -33,11 +28,6 @@ void daGy_Ctrl_c::setTarget() {
 
 /* 00000450-00000638       .text setPathTargetPos__11daGy_Ctrl_cFv */
 void daGy_Ctrl_c::setPathTargetPos() {
-    /* Nonmatching */
-}
-
-/* 00000638-00000674       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
     /* Nonmatching */
 }
 
@@ -151,61 +141,6 @@ void daGy_Ctrl_c::_create() {
     /* Nonmatching */
 }
 
-/* 000016AC-00001800       .text __dt__14dBgS_ObjLinChkFv */
-dBgS_ObjLinChk::~dBgS_ObjLinChk() {
-    /* Nonmatching */
-}
-
-/* 00001800-0000192C       .text __dt__11dBgS_LinChkFv */
-dBgS_LinChk::~dBgS_LinChk() {
-    /* Nonmatching */
-}
-
-/* 0000192C-000019CC       .text __dt__8dBgS_ChkFv */
-dBgS_Chk::~dBgS_Chk() {
-    /* Nonmatching */
-}
-
-/* 000019CC-00001A28       .text __dt__15dBgS_GrpPassChkFv */
-dBgS_GrpPassChk::~dBgS_GrpPassChk() {
-    /* Nonmatching */
-}
-
-/* 00001A28-00001A70       .text __dt__15cBgS_GrpPassChkFv */
-cBgS_GrpPassChk::~cBgS_GrpPassChk() {
-    /* Nonmatching */
-}
-
-/* 00001A70-00001ACC       .text __dt__16dBgS_PolyPassChkFv */
-dBgS_PolyPassChk::~dBgS_PolyPassChk() {
-    /* Nonmatching */
-}
-
-/* 00001ACC-00001B14       .text __dt__16cBgS_PolyPassChkFv */
-cBgS_PolyPassChk::~cBgS_PolyPassChk() {
-    /* Nonmatching */
-}
-
-/* 00001B14-00001BA8       .text __dt__11cBgS_LinChkFv */
-cBgS_LinChk::~cBgS_LinChk() {
-    /* Nonmatching */
-}
-
-/* 00001BA8-00001BF0       .text __dt__8cM3dGLinFv */
-cM3dGLin::~cM3dGLin() {
-    /* Nonmatching */
-}
-
-/* 00001BF0-00001C38       .text __dt__13cBgS_PolyInfoFv */
-cBgS_PolyInfo::~cBgS_PolyInfo() {
-    /* Nonmatching */
-}
-
-/* 00001C38-00001C3C       .text __ct__4cXyzFv */
-cXyz::cXyz() {
-    /* Nonmatching */
-}
-
 /* 00001C3C-00001C44       .text _delete__11daGy_Ctrl_cFv */
 void daGy_Ctrl_c::_delete() {
     /* Nonmatching */
@@ -238,11 +173,6 @@ void daGy_CtrlIsDelete(void*) {
 
 /* 00001CD8-00001D34       .text __dt__15daGy_Ctrl_HIO_cFv */
 daGy_Ctrl_HIO_c::~daGy_Ctrl_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 00001D34-00001D50       .text cLib_calcTimer<i>__FPi */
-void cLib_calcTimer<int>(int*) {
     /* Nonmatching */
 }
 

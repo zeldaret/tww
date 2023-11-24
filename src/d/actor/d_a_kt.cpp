@@ -46,58 +46,8 @@ void daKt_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00001530-00001578       .text __dt__12J3DFrameCtrlFv */
-J3DFrameCtrl::~J3DFrameCtrl() {
-    /* Nonmatching */
-}
-
-/* 00001578-000015C0       .text __dt__13cBgS_PolyInfoFv */
-cBgS_PolyInfo::~cBgS_PolyInfo() {
-    /* Nonmatching */
-}
 
 
 
 
-
-
-/* 000015E8-00001604       .text getHeadTopPos__9daPy_py_cCFv */
-void daPy_py_c::getHeadTopPos() const {
-    /* Nonmatching */
-}
-
-/* 00001604-0000171C       .text __dt__11dBgS_GndChkFv */
-dBgS_GndChk::~dBgS_GndChk() {
-    /* Nonmatching */
-}
-
-/* 0000171C-000017BC       .text __dt__8dBgS_ChkFv */
-dBgS_Chk::~dBgS_Chk() {
-    /* Nonmatching */
-}
-
-/* 000017BC-00001818       .text __dt__15dBgS_GrpPassChkFv */
-dBgS_GrpPassChk::~dBgS_GrpPassChk() {
-    /* Nonmatching */
-}
-
-/* 00001818-00001860       .text __dt__15cBgS_GrpPassChkFv */
-cBgS_GrpPassChk::~cBgS_GrpPassChk() {
-    /* Nonmatching */
-}
-
-/* 00001860-000018BC       .text __dt__16dBgS_PolyPassChkFv */
-dBgS_PolyPassChk::~dBgS_PolyPassChk() {
-    /* Nonmatching */
-}
-
-/* 000018BC-00001904       .text __dt__16cBgS_PolyPassChkFv */
-cBgS_PolyPassChk::~cBgS_PolyPassChk() {
-    /* Nonmatching */
-}
-
-/* 00001904-00001984       .text __dt__11cBgS_GndChkFv */
-cBgS_GndChk::~cBgS_GndChk() {
-    /* Nonmatching */
-}
 

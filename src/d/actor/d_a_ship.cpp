@@ -61,11 +61,6 @@ void daShip_c::draw() {
     /* Nonmatching */
 }
 
-/* 00000AD8-00000B14       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
 /* 00000B14-00000B34       .text daShip_Draw__FP8daShip_c */
 void daShip_Draw(daShip_c*) {
     /* Nonmatching */
@@ -426,21 +421,6 @@ void daShip_c::execute() {
     /* Nonmatching */
 }
 
-/* 0000B978-0000B998       .text dComIfGp_clearPlayerStatus1__FiUl */
-void dComIfGp_clearPlayerStatus1(int, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 0000B998-0000B9B8       .text dComIfGp_setPlayerStatus1__FiUl */
-void dComIfGp_setPlayerStatus1(int, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 0000B9B8-0000B9D4       .text SetTgGrp__14cCcD_ObjHitInfFUl */
-void cCcD_ObjHitInf::SetTgGrp(unsigned long) {
-    /* Nonmatching */
-}
-
 /* 0000B9D4-0000B9F4       .text daShip_Execute__FP8daShip_c */
 void daShip_Execute(daShip_c*) {
     /* Nonmatching */
@@ -486,248 +466,8 @@ JGeometry::TVec3<float>::TVec3() {
     /* Nonmatching */
 }
 
-/* 0000CA84-0000CAE0       .text __dt__18dPa_levelEcallBackFv */
-dPa_levelEcallBack::~dPa_levelEcallBack() {
-    /* Nonmatching */
-}
-
-/* 0000CAE0-0000CB28       .text __dt__34JPACallBackBase<P14JPABaseEmitter>Fv */
-JPACallBackBase<JPABaseEmitter*>::~JPACallBackBase() {
-    /* Nonmatching */
-}
-
-/* 0000CB28-0000CBF4       .text __dt__8dCcD_SphFv */
-dCcD_Sph::~dCcD_Sph() {
-    /* Nonmatching */
-}
-
-/* 0000CBF4-0000CC3C       .text __dt__8cM3dGSphFv */
-cM3dGSph::~cM3dGSph() {
-    /* Nonmatching */
-}
-
-/* 0000CC3C-0000CC98       .text __dt__14cCcD_ShapeAttrFv */
-cCcD_ShapeAttr::~cCcD_ShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 0000CC98-0000CCE0       .text __dt__8cM3dGAabFv */
-cM3dGAab::~cM3dGAab() {
-    /* Nonmatching */
-}
-
-/* 0000CCE0-0000CDAC       .text __dt__8dCcD_CylFv */
-dCcD_Cyl::~dCcD_Cyl() {
-    /* Nonmatching */
-}
-
-/* 0000CDAC-0000CE30       .text __ct__8dCcD_CylFv */
-dCcD_Cyl::dCcD_Cyl() {
-    /* Nonmatching */
-}
-
-/* 0000CE30-0000CE78       .text __dt__8cM3dGCylFv */
-cM3dGCyl::~cM3dGCyl() {
-    /* Nonmatching */
-}
-
-/* 0000CE78-0000CED4       .text __dt__10dCcD_GSttsFv */
-dCcD_GStts::~dCcD_GStts() {
-    /* Nonmatching */
-}
-
-/* 0000CED4-0000CF44       .text __dt__12dBgS_ObjAcchFv */
-dBgS_ObjAcch::~dBgS_ObjAcch() {
-    /* Nonmatching */
-}
-
-/* 0000CF44-0000CFCC       .text __dt__12dBgS_AcchCirFv */
-dBgS_AcchCir::~dBgS_AcchCir() {
-    /* Nonmatching */
-}
-
-/* 0000CFCC-0000CFD0       .text __ct__4cXyzFv */
-cXyz::cXyz() {
-    /* Nonmatching */
-}
-
-/* 0000CFD0-0000D018       .text __dt__12J3DFrameCtrlFv */
-J3DFrameCtrl::~J3DFrameCtrl() {
-    /* Nonmatching */
-}
-
 /* 0000D018-0000D038       .text daShip_Create__FP10fopAc_ac_c */
 void daShip_Create(fopAc_ac_c*) {
-    /* Nonmatching */
-}
-
-/* 0000D038-0000D080       .text __dt__13cBgS_PolyInfoFv */
-cBgS_PolyInfo::~cBgS_PolyInfo() {
-    /* Nonmatching */
-}
-
-/* 0000D080-0000D0C8       .text __dt__8cM2dGCirFv */
-cM2dGCir::~cM2dGCir() {
-    /* Nonmatching */
-}
-
-/* 0000D0C8-0000D124       .text __dt__8cM3dGCirFv */
-cM3dGCir::~cM3dGCir() {
-    /* Nonmatching */
-}
-
-/* 0000D124-0000D16C       .text __dt__10cCcD_GSttsFv */
-cCcD_GStts::~cCcD_GStts() {
-    /* Nonmatching */
-}
-
-/* 0000D16C-0000D17C       .text GetShapeAttr__8dCcD_CylFv */
-void dCcD_Cyl::GetShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 0000D17C-0000D184       .text GetCoCP__12cCcD_CylAttrFv */
-void cCcD_CylAttr::GetCoCP() {
-    /* Nonmatching */
-}
-
-/* 0000D184-0000D18C       .text GetCoCP__12cCcD_CylAttrCFv */
-void cCcD_CylAttr::GetCoCP() const {
-    /* Nonmatching */
-}
-
-/* 0000D18C-0000D194       .text CrossAtTg__12cCcD_CylAttrCFRC12cCcD_AabAttrP4cXyz */
-void cCcD_CylAttr::CrossAtTg(const cCcD_AabAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 0000D194-0000D19C       .text CrossAtTg__12cCcD_CylAttrCFRC12cCcD_PntAttrP4cXyz */
-void cCcD_CylAttr::CrossAtTg(const cCcD_PntAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 0000D19C-0000D1D4       .text CrossAtTg__12cCcD_CylAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_CylAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 0000D1D4-0000D1DC       .text CrossCo__12cCcD_CylAttrCFRC12cCcD_AabAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_AabAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 0000D1DC-0000D1E4       .text CrossCo__12cCcD_CylAttrCFRC12cCcD_TriAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_TriAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 0000D1E4-0000D1EC       .text CrossCo__12cCcD_CylAttrCFRC12cCcD_PntAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_PntAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 0000D1EC-0000D224       .text CrossCo__12cCcD_CylAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_CylAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 0000D224-0000D228       .text GetGObjInf__12cCcD_GObjInfCFv */
-void cCcD_GObjInf::GetGObjInf() const {
-    /* Nonmatching */
-}
-
-/* 0000D228-0000D230       .text GetShapeAttr__8cCcD_ObjCFv */
-void cCcD_Obj::GetShapeAttr() const {
-    /* Nonmatching */
-}
-
-/* 0000D230-0000D234       .text draw__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::draw(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 0000D234-0000D238       .text executeAfter__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::executeAfter(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 0000D238-0000D23C       .text execute__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::execute(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 0000D23C-0000D240       .text init__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
-void JPACallBackBase<JPABaseEmitter*>::init(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 0000D240-0000D250       .text GetShapeAttr__8dCcD_SphFv */
-void dCcD_Sph::GetShapeAttr() {
-    /* Nonmatching */
-}
-
-/* 0000D250-0000D258       .text GetCoCP__12cCcD_SphAttrFv */
-void cCcD_SphAttr::GetCoCP() {
-    /* Nonmatching */
-}
-
-/* 0000D258-0000D260       .text GetCoCP__12cCcD_SphAttrCFv */
-void cCcD_SphAttr::GetCoCP() const {
-    /* Nonmatching */
-}
-
-/* 0000D260-0000D268       .text CrossAtTg__12cCcD_SphAttrCFRC12cCcD_AabAttrP4cXyz */
-void cCcD_SphAttr::CrossAtTg(const cCcD_AabAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 0000D268-0000D270       .text CrossAtTg__12cCcD_SphAttrCFRC12cCcD_PntAttrP4cXyz */
-void cCcD_SphAttr::CrossAtTg(const cCcD_PntAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 0000D270-0000D2A8       .text CrossAtTg__12cCcD_SphAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_SphAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 0000D2A8-0000D2B0       .text CrossCo__12cCcD_SphAttrCFRC12cCcD_AabAttrPf */
-void cCcD_SphAttr::CrossCo(const cCcD_AabAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 0000D2B0-0000D2B8       .text CrossCo__12cCcD_SphAttrCFRC12cCcD_TriAttrPf */
-void cCcD_SphAttr::CrossCo(const cCcD_TriAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 0000D2B8-0000D2C0       .text CrossCo__12cCcD_SphAttrCFRC12cCcD_PntAttrPf */
-void cCcD_SphAttr::CrossCo(const cCcD_PntAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 0000D2C0-0000D2F8       .text CrossCo__12cCcD_SphAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_SphAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 0000D2F8-0000D300       .text CrossAtTg__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_ShapeAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 0000D300-0000D308       .text CrossCo__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_ShapeAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 0000D308-0000D314       .text GetCoCP__14cCcD_ShapeAttrFv */
-void cCcD_ShapeAttr::GetCoCP() {
-    /* Nonmatching */
-}
-
-/* 0000D314-0000D320       .text GetCoCP__14cCcD_ShapeAttrCFv */
-void cCcD_ShapeAttr::GetCoCP() const {
     /* Nonmatching */
 }
 
@@ -752,21 +492,6 @@ void daPy_getPlayerLinkActorClass() {
     /* Nonmatching */
 }
 
-/* 0000D42C-0000D46C       .text dComIfGp_evmng_getMyStaffId__FPCcP10fopAc_ac_ci */
-void dComIfGp_evmng_getMyStaffId(const char*, fopAc_ac_c*, int) {
-    /* Nonmatching */
-}
-
-/* 0000D46C-0000D488       .text dComIfGp_event_runCheck__Fv */
-void dComIfGp_event_runCheck() {
-    /* Nonmatching */
-}
-
-/* 0000D488-0000D498       .text __ct__4cXyzFfff */
-cXyz::cXyz(float, float, float) {
-    /* Nonmatching */
-}
-
 /* 0000D498-0000D4CC       .text Center__9dCamera_cFv */
 void dCamera_c::Center() {
     /* Nonmatching */
@@ -774,31 +499,6 @@ void dCamera_c::Center() {
 
 /* 0000D4CC-0000D500       .text Eye__9dCamera_cFv */
 void dCamera_c::Eye() {
-    /* Nonmatching */
-}
-
-/* 0000D500-0000D544       .text checkMasterSwordEquip__9daPy_py_cCFv */
-void daPy_py_c::checkMasterSwordEquip() const {
-    /* Nonmatching */
-}
-
-/* 0000D544-0000D570       .text fopAcM_seenPlayerAngleY__FP10fopAc_ac_c */
-void fopAcM_seenPlayerAngleY(fopAc_ac_c*) {
-    /* Nonmatching */
-}
-
-/* 0000D570-0000D5B0       .text abs2XZ__4cXyzCFv */
-void cXyz::abs2XZ() const {
-    /* Nonmatching */
-}
-
-/* 0000D5B0-0000D5DC       .text fopAcM_searchPlayerDistanceXZ2__FP10fopAc_ac_c */
-void fopAcM_searchPlayerDistanceXZ2(fopAc_ac_c*) {
-    /* Nonmatching */
-}
-
-/* 0000D5DC-0000D5EC       .text set__4cXyzFfff */
-void cXyz::set(float, float, float) {
     /* Nonmatching */
 }
 
@@ -814,21 +514,6 @@ void cMtx_multVecSR(const float(*)[4], const Vec*, Vec*) {
 
 /* 0000D61C-0000D638       .text __as__5csXyzFRC5csXyz */
 void csXyz::operator=(const csXyz&) {
-    /* Nonmatching */
-}
-
-/* 0000D638-0000D678       .text setFrame__14mDoExt_McaMorfFf */
-void mDoExt_McaMorf::setFrame(float) {
-    /* Nonmatching */
-}
-
-/* 0000D678-0000D680       .text setPlaySpeed__14mDoExt_McaMorfFf */
-void mDoExt_McaMorf::setPlaySpeed(float) {
-    /* Nonmatching */
-}
-
-/* 0000D680-0000D698       .text dComIfGp_setItemBombNumCount__Fs */
-void dComIfGp_setItemBombNumCount(short) {
     /* Nonmatching */
 }
 
@@ -852,16 +537,6 @@ void mDoMtx_multVecZero(const float(*)[4], Vec*) {
     /* Nonmatching */
 }
 
-/* 0000D6FC-0000D714       .text ClrCcMove__9cCcD_SttsFv */
-void cCcD_Stts::ClrCcMove() {
-    /* Nonmatching */
-}
-
-/* 0000D714-0000D7A8       .text abs__4cXyzCFv */
-void cXyz::abs() const {
-    /* Nonmatching */
-}
-
 /* 0000D7A8-0000D7CC       .text cM_scos__Fs */
 void cM_scos(short) {
     /* Nonmatching */
@@ -869,16 +544,6 @@ void cM_scos(short) {
 
 /* 0000D7CC-0000D7F0       .text cM_ssin__Fs */
 void cM_ssin(short) {
-    /* Nonmatching */
-}
-
-/* 0000D7F0-0000D8A0       .text absXZ__4cXyzCFv */
-void cXyz::absXZ() const {
-    /* Nonmatching */
-}
-
-/* 0000D8A0-0000D8BC       .text __ct__4cXyzFRC4cXyz */
-cXyz::cXyz(const cXyz&) {
     /* Nonmatching */
 }
 
@@ -892,33 +557,8 @@ void cM_fsin(float) {
     /* Nonmatching */
 }
 
-/* 0000D93C-0000D94C       .text dComIfGs_getBombNum__Fv */
-void dComIfGs_getBombNum() {
-    /* Nonmatching */
-}
-
-/* 0000D94C-0000D968       .text dComIfGp_checkCameraAttentionStatus__FiUl */
-void dComIfGp_checkCameraAttentionStatus(int, unsigned long) {
-    /* Nonmatching */
-}
-
 /* 0000D968-0000D990       .text checkForceMove__8daShip_cCFv */
 void daShip_c::checkForceMove() const {
-    /* Nonmatching */
-}
-
-/* 0000D990-0000D9AC       .text __as__4cXyzFRC4cXyz */
-void cXyz::operator=(const cXyz&) {
-    /* Nonmatching */
-}
-
-/* 0000D9AC-0000D9E0       .text dComIfGp_demo_getActor__FUc */
-void dComIfGp_demo_getActor(unsigned char) {
-    /* Nonmatching */
-}
-
-/* 0000D9E0-0000D9FC       .text dComIfGp_checkPlayerStatus0__FiUl */
-void dComIfGp_checkPlayerStatus0(int, unsigned long) {
     /* Nonmatching */
 }
 

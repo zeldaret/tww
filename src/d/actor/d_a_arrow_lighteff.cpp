@@ -46,21 +46,6 @@ void daArrow_Lighteff_Create(void*) {
     /* Nonmatching */
 }
 
-/* 00000A70-00000ACC       .text __dt__13mDoExt_btkAnmFv */
-mDoExt_btkAnm::~mDoExt_btkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000ACC-00000B28       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
-    /* Nonmatching */
-}
-
-/* 00000B28-00000B70       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 00000B70-00000C10       .text daArrow_Lighteff_Delete__FPv */
 void daArrow_Lighteff_Delete(void*) {
     /* Nonmatching */

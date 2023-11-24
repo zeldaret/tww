@@ -21,11 +21,6 @@ void daWarpls_c::CreateHeap() {
     /* Nonmatching */
 }
 
-/* 000003D8-00000420       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
 /* 00000420-00000764       .text CreateInit__10daWarpls_cFv */
 void daWarpls_c::CreateInit() {
     /* Nonmatching */
@@ -103,16 +98,6 @@ void daWarpls_Execute(void*) {
 
 /* 000011F4-000011FC       .text daWarpls_IsDelete__FPv */
 void daWarpls_IsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 000011FC-00001258       .text __dt__13mDoExt_bckAnmFv */
-mDoExt_bckAnm::~mDoExt_bckAnm() {
-    /* Nonmatching */
-}
-
-/* 00001258-000012B4       .text __dt__13mDoExt_brkAnmFv */
-mDoExt_brkAnm::~mDoExt_brkAnm() {
     /* Nonmatching */
 }
 

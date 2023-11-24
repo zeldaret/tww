@@ -36,8 +36,3 @@ void daTagvolcano::Act_c::_draw() {
 
 
 
-/* 00000A34-00000A50       .text PrmAbstract<Q312daTagvolcano5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ312daTagvolcano5Act_c5Prm_eQ312daTagvolcano5Act_c5Prm_e */
-void daObj::PrmAbstract<daTagvolcano::Act_c::Prm_e>(const fopAc_ac_c*, daTagvolcano::Act_c::Prm_e, daTagvolcano::Act_c::Prm_e) {
-    /* Nonmatching */
-}
-

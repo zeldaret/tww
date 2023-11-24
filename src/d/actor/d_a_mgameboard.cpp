@@ -16,11 +16,6 @@ void daMgBoard_c::CreateHeap() {
     /* Nonmatching */
 }
 
-/* 000007BC-00000804       .text __dt__12dDlst_base_cFv */
-dDlst_base_c::~dDlst_base_c() {
-    /* Nonmatching */
-}
-
 /* 00000804-00000904       .text set_2dposition__11daMgBoard_cFv */
 void daMgBoard_c::set_2dposition() {
     /* Nonmatching */
@@ -38,11 +33,6 @@ void daMgBoard_c::MiniGameInit() {
 
 /* 00000AE8-00000DEC       .text set_mtx__11daMgBoard_cFv */
 void daMgBoard_c::set_mtx() {
-    /* Nonmatching */
-}
-
-/* 00000DEC-00000E28       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
     /* Nonmatching */
 }
 
@@ -98,21 +88,6 @@ void daMgBoard_Execute(void*) {
 
 /* 00001874-0000187C       .text daMgBoard_IsDelete__FPv */
 void daMgBoard_IsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 0000187C-00001880       .text draw__12dDlst_base_cFv */
-void dDlst_base_c::draw() {
-    /* Nonmatching */
-}
-
-/* 00001880-0000189C       .text cLib_calcTimer<Uc>__FPUc */
-void cLib_calcTimer<unsigned char>(unsigned char*) {
-    /* Nonmatching */
-}
-
-/* 00002C94-00002CB0       .text __ct__4cXyzFRC4cXyz */
-cXyz::cXyz(const cXyz&) {
     /* Nonmatching */
 }
 

@@ -21,46 +21,6 @@ void daObjLadder::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
-/* 000004F8-00000638       .text __dt__14dBgS_ObjGndChkFv */
-dBgS_ObjGndChk::~dBgS_ObjGndChk() {
-    /* Nonmatching */
-}
-
-/* 00000638-00000750       .text __dt__11dBgS_GndChkFv */
-dBgS_GndChk::~dBgS_GndChk() {
-    /* Nonmatching */
-}
-
-/* 00000750-000007F0       .text __dt__8dBgS_ChkFv */
-dBgS_Chk::~dBgS_Chk() {
-    /* Nonmatching */
-}
-
-/* 000007F0-0000084C       .text __dt__15dBgS_GrpPassChkFv */
-dBgS_GrpPassChk::~dBgS_GrpPassChk() {
-    /* Nonmatching */
-}
-
-/* 0000084C-00000894       .text __dt__15cBgS_GrpPassChkFv */
-cBgS_GrpPassChk::~cBgS_GrpPassChk() {
-    /* Nonmatching */
-}
-
-/* 00000894-000008F0       .text __dt__16dBgS_PolyPassChkFv */
-dBgS_PolyPassChk::~dBgS_PolyPassChk() {
-    /* Nonmatching */
-}
-
-/* 000008F0-00000938       .text __dt__16cBgS_PolyPassChkFv */
-cBgS_PolyPassChk::~cBgS_PolyPassChk() {
-    /* Nonmatching */
-}
-
-/* 00000938-000009B8       .text __dt__11cBgS_GndChkFv */
-cBgS_GndChk::~cBgS_GndChk() {
-    /* Nonmatching */
-}
-
 /* 000009B8-000009C0       .text Delete__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::Delete() {
     /* Nonmatching */
@@ -150,56 +110,6 @@ void daObjLadder::Act_c::Draw() {
 
 
 
-
-/* 000011F8-00001200       .text Draw__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::Draw() {
-    /* Nonmatching */
-}
-
-/* 00001200-00001208       .text IsDelete__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::IsDelete() {
-    /* Nonmatching */
-}
-
-/* 00001208-00001210       .text CreateHeap__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::CreateHeap() {
-    /* Nonmatching */
-}
-
-/* 00001210-00001218       .text Create__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::Create() {
-    /* Nonmatching */
-}
-
-/* 00001218-00001220       .text Execute__16dBgS_MoveBgActorFPPA3_A4_f */
-void dBgS_MoveBgActor::Execute(float(**)[3][4]) {
-    /* Nonmatching */
-}
-
-/* 00001220-00001228       .text Delete__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::Delete() {
-    /* Nonmatching */
-}
-
-/* 00001228-00001230       .text ToFore__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToFore() {
-    /* Nonmatching */
-}
-
-/* 00001230-00001238       .text ToBack__16dBgS_MoveBgActorFv */
-void dBgS_MoveBgActor::ToBack() {
-    /* Nonmatching */
-}
-
-/* 00001238-00001280       .text __dt__13cBgS_PolyInfoFv */
-cBgS_PolyInfo::~cBgS_PolyInfo() {
-    /* Nonmatching */
-}
-
-/* 00001280-0000129C       .text PrmAbstract<Q311daObjLadder5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ311daObjLadder5Act_c5Prm_eQ311daObjLadder5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjLadder::Act_c::Prm_e>(const fopAc_ac_c*, daObjLadder::Act_c::Prm_e, daObjLadder::Act_c::Prm_e) {
-    /* Nonmatching */
-}
 
 
 

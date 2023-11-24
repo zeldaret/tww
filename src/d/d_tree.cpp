@@ -101,8 +101,3 @@ void dTree_packet_c::setAnm(int, short) {
     /* Nonmatching */
 }
 
-/* 8007A4BC-8007A4D8       .text getSwordTopPos__9daPy_py_cCFv */
-void daPy_py_c::getSwordTopPos() const {
-    /* Nonmatching */
-}
-

@@ -358,11 +358,6 @@ void dCamera_c::heightOf(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 8016C5D0-8016C5E0       .text __ct__4cXyzFfff */
-cXyz::cXyz(float, float, float) {
-    /* Nonmatching */
-}
-
 
 
 /* 8016C618-8016D824       .text lockonCamera__9dCamera_cFl */
@@ -727,11 +722,6 @@ dCamera_c::@class$4017d_camera_cpp::~@class$4017d_camera_cpp() {
     /* Nonmatching */
 }
 
-/* 8017D10C-8017D128       .text getRopePos__9daPy_py_cCFv */
-void daPy_py_c::getRopePos() const {
-    /* Nonmatching */
-}
-
 /* 8017D128-8017D13C       .text setFlag__9dCamera_cFUl */
 void dCamera_c::setFlag(unsigned long) {
     /* Nonmatching */
@@ -762,18 +752,8 @@ void dCamParam_c::Flag(long, unsigned short) {
     /* Nonmatching */
 }
 
-/* 8017D1F4-8017D200       .text __as__7cSAngleFRC7cSAngle */
-void cSAngle::operator=(const cSAngle&) {
-    /* Nonmatching */
-}
-
 /* 8017D200-8017D220       .text Val__11dCamParam_cFli */
 void dCamParam_c::Val(long, int) {
-    /* Nonmatching */
-}
-
-/* 8017D220-8017D230       .text dComIfGp_evmng_cameraPlay__Fv */
-void dComIfGp_evmng_cameraPlay() {
     /* Nonmatching */
 }
 

@@ -96,21 +96,6 @@ void daObj_hsh_c::create() {
     /* Nonmatching */
 }
 
-/* 00000B44-00000B8C       .text __dt__13cBgS_PolyInfoFv */
-cBgS_PolyInfo::~cBgS_PolyInfo() {
-    /* Nonmatching */
-}
-
-/* 00000B8C-00000C14       .text __dt__12dBgS_AcchCirFv */
-dBgS_AcchCir::~dBgS_AcchCir() {
-    /* Nonmatching */
-}
-
-/* 00000C14-00000C84       .text __dt__12dBgS_ObjAcchFv */
-dBgS_ObjAcch::~dBgS_ObjAcch() {
-    /* Nonmatching */
-}
-
 /* 00000C84-00000E60       .text init__11daObj_hsh_cFv */
 void daObj_hsh_c::init() {
     /* Nonmatching */
@@ -291,23 +276,8 @@ void daObj_hsh_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 000021E8-00002230       .text __dt__8cM2dGCirFv */
-cM2dGCir::~cM2dGCir() {
-    /* Nonmatching */
-}
-
-/* 00002230-0000228C       .text __dt__8cM3dGCirFv */
-cM3dGCir::~cM3dGCir() {
-    /* Nonmatching */
-}
-
 /* 0000228C-000022D4       .text __dt__15daObj_hsh_HIO_cFv */
 daObj_hsh_HIO_c::~daObj_hsh_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 000022D4-000022F0       .text cLib_calcTimer<Uc>__FPUc */
-void cLib_calcTimer<unsigned char>(unsigned char*) {
     /* Nonmatching */
 }
 

@@ -76,8 +76,3 @@ daObjIkariHIO_c::~daObjIkariHIO_c() {
     /* Nonmatching */
 }
 
-/* 00000734-0000077C       .text __dt__14mDoHIO_entry_cFv */
-mDoHIO_entry_c::~mDoHIO_entry_c() {
-    /* Nonmatching */
-}
-

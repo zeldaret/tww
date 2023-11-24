@@ -159,11 +159,6 @@ void daBoomerang_Create(fopAc_ac_c*) {
 
 
 
-/* 800E34A4-800E34AC       .text checkPlayerNoDraw__9daPy_py_cFv */
-void daPy_py_c::checkPlayerNoDraw() {
-    /* Nonmatching */
-}
-
 /* 800E34AC-800E34C8       .text getBoomerangCatchPos__9daPy_lk_cCFv */
 void daPy_lk_c::getBoomerangCatchPos() const {
     /* Nonmatching */

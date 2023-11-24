@@ -31,26 +31,6 @@ void daArrow_Iceeff_Create(void*) {
     /* Nonmatching */
 }
 
-/* 00000854-000008B0       .text __dt__13mDoExt_bckAnmFv */
-mDoExt_bckAnm::~mDoExt_bckAnm() {
-    /* Nonmatching */
-}
-
-/* 000008B0-000008F8       .text __dt__14mDoExt_baseAnmFv */
-mDoExt_baseAnm::~mDoExt_baseAnm() {
-    /* Nonmatching */
-}
-
-/* 000008F8-00000934       .text __dt__4cXyzFv */
-cXyz::~cXyz() {
-    /* Nonmatching */
-}
-
-/* 00000934-00000938       .text __ct__4cXyzFv */
-cXyz::cXyz() {
-    /* Nonmatching */
-}
-
 /* 00000938-00000940       .text daArrow_Iceeff_Delete__FPv */
 void daArrow_Iceeff_Delete(void*) {
     /* Nonmatching */
