@@ -225,6 +225,7 @@ public:
     void offCollect(int, u8);
     BOOL isCollect(int, u8);
     void setCollect(int idx, u8 byte) { mCollect[idx] = byte; }
+    u8 checkCollect(int idx) { return mCollect[idx]; }
     void onTact(u8);
     BOOL isTact(u8);
     void onTriforce(u8);

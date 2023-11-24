@@ -25,7 +25,7 @@ public:
     virtual ~MyPicture() {}
     virtual void drawSelf(f32, f32);
     virtual void drawSelf(f32, f32, Mtx*);
-    void drawFullSet2(f32, f32, f32, f32, J2DBinding, J2DMirror, bool, Mtx);
+    void drawFullSet2(f32, f32, f32, f32, J2DBinding, J2DMirror, bool, Mtx*);
 };
 
 /* 8002ABB4-8002AC1C       .text drawSelf__9MyPictureFff */
@@ -42,7 +42,7 @@ void MyPicture::drawSelf(f32, f32, Mtx*) {
 }
 
 /* 8002AC90-8002AD4C       .text drawFullSet2__9MyPictureFffff10J2DBinding9J2DMirrorbPA3_A4_f */
-void MyPicture::drawFullSet2(f32, f32, f32, f32, J2DBinding, J2DMirror, bool, Mtx) {
+void MyPicture::drawFullSet2(f32, f32, f32, f32, J2DBinding, J2DMirror, bool, Mtx*) {
     /* Nonmatching */
 }
 

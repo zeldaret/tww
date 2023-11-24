@@ -3,81 +3,239 @@
 // Translation Unit: d_a_obj_akabe.cpp
 //
 
-#include "d_a_obj_akabe.h"
-#include "dolphin/types.h"
+#include "d/d_a_obj.h"
+#include "d/d_item.h"
+#include "d/d_item_data.h"
+#include "d/d_cc_d.h"
+#include "d/d_procname.h"
+#include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_mtx.h"
+#include "JSystem/JKernel/JKRHeap.h"
 
-/* 00000078-0000009C       .text solidHeapCB__Q210daObjAkabe5Act_cFP10fopAc_ac_c */
-void daObjAkabe::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
-}
+namespace daObjAkabe {
+    struct Act_c : public fopAc_ac_c {
+    public:
+        enum Prm_e {
+            PRM_SWSAVE_W = 8,
+            PRM_SWSAVE_S = 0,
 
-/* 0000009C-000001A4       .text create_heap__Q210daObjAkabe5Act_cFv */
-void daObjAkabe::Act_c::create_heap() {
-    /* Nonmatching */
-}
+            PRM_SCL_W = 2,
+            PRM_SCL_S = 8,
 
-/* 000001A4-00000360       .text _create__Q210daObjAkabe5Act_cFv */
-void daObjAkabe::Act_c::_create() {
-    /* Nonmatching */
-}
+            PRM_ALWAYS_W = 1,
+            PRM_ALWAYS_S = 12,
 
-/* 00000360-000003F8       .text _delete__Q210daObjAkabe5Act_cFv */
-void daObjAkabe::Act_c::_delete() {
-    /* Nonmatching */
-}
+            PRM_ARG0_W = 4,
+            PRM_ARG0_S = 16,
+        };
 
-/* 000003F8-00000498       .text init_scale__Q210daObjAkabe5Act_cFv */
-void daObjAkabe::Act_c::init_scale() {
-    /* Nonmatching */
-}
+        s32 _create();
+        bool create_heap();
+        bool _delete();
+        void init_scale();
+        void init_mtx();
+        bool chk_appear();
+        bool _execute();
+        bool _draw();
 
-/* 00000498-00000510       .text init_mtx__Q210daObjAkabe5Act_cFv */
-void daObjAkabe::Act_c::init_mtx() {
-    /* Nonmatching */
-}
+        static BOOL solidHeapCB(fopAc_ac_c*);
+        static const char* const M_arcname[4];
 
-/* 00000510-000005A4       .text chk_appear__Q210daObjAkabe5Act_cFv */
-void daObjAkabe::Act_c::chk_appear() {
-    /* Nonmatching */
-}
+        s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
+        s32 prm_get_scl() const { return daObj::PrmAbstract(this, PRM_SCL_W, PRM_SCL_S); }
+        s32 prm_get_always() const { return daObj::PrmAbstract(this, PRM_ALWAYS_W, PRM_ALWAYS_S); }
+        s32 prm_get_arg0() const { return daObj::PrmAbstract(this, PRM_ARG0_W, PRM_ARG0_S); }
 
-/* 000005A4-000005E4       .text _execute__Q210daObjAkabe5Act_cFv */
-void daObjAkabe::Act_c::_execute() {
-    /* Nonmatching */
-}
+    public:
+        /* 0x290 */ request_of_phase_process_class mPhs;
+        /* 0x298 */ dBgW * mpBgW;
+        /* 0x29C */ Mtx mMtx;
+        /* 0x2CC */ s32 mType;
+        /* 0x2D0 */ u8 mbAppear;
+    };
 
-/* 000005E4-000005EC       .text _draw__Q210daObjAkabe5Act_cFv */
-void daObjAkabe::Act_c::_draw() {
-    /* Nonmatching */
-}
+    const char* const Act_c::M_arcname[4] = {
+        "Akabe",
+        "AkabeD",
+        "AkabeK",
+        "NBOX",
+    };
 
-/* 000005EC-0000060C       .text Mthd_Create__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
-void daObjAkabe::@unnamed@d_a_obj_akabe_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
+    /* 00000078-0000009C       .text solidHeapCB__Q210daObjAkabe5Act_cFP10fopAc_ac_c */
+    BOOL Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+        return ((Act_c*)i_this)->create_heap();
+    }
 
-/* 0000060C-00000630       .text Mthd_Delete__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
-void daObjAkabe::@unnamed@d_a_obj_akabe_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
+    /* 0000009C-000001A4       .text create_heap__Q210daObjAkabe5Act_cFv */
+    bool Act_c::create_heap() {
+        bool rt = false;
 
-/* 00000630-00000654       .text Mthd_Execute__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
-void daObjAkabe::@unnamed@d_a_obj_akabe_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
+        mpBgW = new dBgW();
+        if (mpBgW != NULL) {
+            static const s16 dzb[4] = { 3, 3, 3, 3, };
+            cBgD_t * bgw_data = (cBgD_t*)dComIfG_getObjectRes(M_arcname[mType], dzb[mType]);
+            JUT_ASSERT(0x82, bgw_data != 0);
+            if (!mpBgW->Set(bgw_data, cBgW::MOVE_BG_e, &mMtx))
+                rt = true;
+        }
 
-/* 00000654-00000678       .text Mthd_Draw__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
-void daObjAkabe::@unnamed@d_a_obj_akabe_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
+        if (!rt)
+            mpBgW = NULL;
 
-/* 00000678-00000680       .text Mthd_IsDelete__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
-void daObjAkabe::@unnamed@d_a_obj_akabe_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
+        return rt;
+    }
 
-/* 00000680-0000069C       .text PrmAbstract<Q310daObjAkabe5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ310daObjAkabe5Act_c5Prm_eQ310daObjAkabe5Act_c5Prm_e */
-void daObj::PrmAbstract<daObjAkabe::Act_c::Prm_e>(const fopAc_ac_c*, daObjAkabe::Act_c::Prm_e, daObjAkabe::Act_c::Prm_e) {
-    /* Nonmatching */
-}
+    /* 000001A4-00000360       .text _create__Q210daObjAkabe5Act_cFv */
+    s32 Act_c::_create() {
+        s32 rt = cPhs_ERROR_e;
 
+        s32 arg0 = prm_get_arg0();
+        if (arg0 == 1)
+            mType = 1;
+        else if (arg0 == 2)
+            mType = 2;
+        else if (arg0 == 3)
+            mType = 3;
+        else
+            mType = 0;
+
+        fopAcM_SetupActor(this, daObjAkabe::Act_c);
+
+        mbAppear = chk_appear();
+        if (mbAppear) {
+            rt = dComIfG_resLoad(&mPhs, M_arcname[mType]);
+            if (rt == cPhs_COMPLEATE_e) {
+                init_scale();
+                init_mtx();
+
+                static const u32 heap_size[4] = { 0x200, 0x200, 0x200, 0x3E0, };
+                if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, heap_size[mType])) {
+                    dComIfG_Bgsp()->Regist(mpBgW, this);
+                    mpBgW->SetCrrFunc(NULL);
+                    mpBgW->SetPriority(1);
+                    fopAcM_SetMtx(this, mMtx);
+                    if (mType == 3) {
+                        fopAcM_setCullSizeBox(this, -51.0f, -1.0f, -51.0f, 51.0f, 101.0f, 51.0f);
+                    } else {
+                        fopAcM_setCullSizeBox(this, -51.0f, -1.0f, -1.0f, 51.0f, 101.0f, 1.0f);
+                    }
+                } else {
+                    rt = cPhs_ERROR_e;
+                }
+            }
+        }
+
+        return rt;
+    }
+
+    /* 00000360-000003F8       .text _delete__Q210daObjAkabe5Act_cFv */
+    bool Act_c::_delete() {
+        if (mbAppear) {
+            if (mpBgW != NULL && mpBgW->ChkUsed())
+            dComIfG_Bgsp()->Release(mpBgW);
+
+            dComIfG_resDelete(&mPhs, M_arcname[mType]);
+        }
+
+        return true;
+    }
+
+    /* 000003F8-00000498       .text init_scale__Q210daObjAkabe5Act_cFv */
+    void Act_c::init_scale() {
+        s32 scl = prm_get_scl();
+        if (scl == 1) {
+            mScale.x *= 10.0f;
+            mScale.y *= 10.0f;
+            mScale.z = 1.0f;
+        } else if (scl == 2) {
+        } else if (scl == 3) {
+            mScale *= 10.0f;
+        } else {
+            mScale.z = 1.0f;
+        }
+    }
+
+    /* 00000498-00000510       .text init_mtx__Q210daObjAkabe5Act_cFv */
+    void Act_c::init_mtx() {
+        mDoMtx_stack_c::transS(getPosition());
+        mDoMtx_stack_c::ZXYrotM(shape_angle);
+        mDoMtx_stack_c::scaleM(mScale);
+        mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
+    }
+
+    /* 00000510-000005A4       .text chk_appear__Q210daObjAkabe5Act_cFv */
+    bool Act_c::chk_appear() {
+        if (prm_get_always())
+            return true;
+        s32 swSaveNo = prm_get_swSave();
+        if (swSaveNo == 0xFF) {
+            return dComIfGs_checkCollect(0) == 0;
+        } else {
+            return !fopAcM_isSwitch(this, swSaveNo);
+        }
+    }
+
+    /* 000005A4-000005E4       .text _execute__Q210daObjAkabe5Act_cFv */
+    bool Act_c::_execute() {
+        if (!chk_appear())
+            fopAcM_delete(this);
+        return true;
+    }
+
+    /* 000005E4-000005EC       .text _draw__Q210daObjAkabe5Act_cFv */
+    bool Act_c::_draw() {
+        return true;
+    }
+
+    namespace {
+        /* 000005EC-0000060C       .text Mthd_Create__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
+        s32 Mthd_Create(void* i_this) {
+            return ((Act_c*)i_this)->_create();
+        }
+
+        /* 0000060C-00000630       .text Mthd_Delete__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
+        BOOL Mthd_Delete(void* i_this) {
+            return ((Act_c*)i_this)->_delete();
+        }
+
+        /* 00000630-00000654       .text Mthd_Execute__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
+        BOOL Mthd_Execute(void* i_this) {
+            return ((Act_c*)i_this)->_execute();
+        }
+
+        /* 00000654-00000678       .text Mthd_Draw__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
+        BOOL Mthd_Draw(void* i_this) {
+            return ((Act_c*)i_this)->_draw();
+        }
+
+        /* 00000678-00000680       .text Mthd_IsDelete__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
+        BOOL Mthd_IsDelete(void* i_this) {
+            return TRUE;
+        }
+
+        static actor_method_class Mthd_Table = {
+            (process_method_func)Mthd_Create,
+            (process_method_func)Mthd_Delete,
+            (process_method_func)Mthd_Execute,
+            (process_method_func)Mthd_IsDelete,
+            (process_method_func)Mthd_Draw,
+        };
+    };
+};
+
+actor_process_profile_definition g_profile_Obj_Akabe = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 3,
+    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Akabe,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daObjAkabe::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0033,
+    /* Actor SubMtd */ &daObjAkabe::Mthd_Table,
+    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

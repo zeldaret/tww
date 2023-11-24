@@ -724,6 +724,10 @@ inline u8 dComIfGs_getItemReserve(int param_0) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getReserve(param_0);
 }
 
+inline u8 dComIfGs_checkCollect(int no) {
+    return g_dComIfG_gameInfo.save.getPlayer().getCollect().checkCollect(no);
+}
+
 inline OSTime dComIfGs_getDateIpl() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusB().getDateIpl();
 }

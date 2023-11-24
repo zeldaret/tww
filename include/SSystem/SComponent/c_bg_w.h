@@ -169,6 +169,8 @@ public:
         return &pm_tri[poly_index].m_plane;
     }
 
+    void SetPriority(u8 priority) { mWallCorrectPriority = priority; }
+
     virtual ~cBgW();
     virtual u32 GetGrpToRoomIndex(int) const;
     virtual void CalcPlane();
