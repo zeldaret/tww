@@ -7,6 +7,14 @@
 namespace daObjSwlight {
     class Act_c : public fopAc_ac_c {
     public:
+        void get_power() const {}
+        void is_switch() const {}
+        void off_switch() const {}
+        void on_switch() const {}
+        void prm_get_swSave() const {}
+        void prm_get_swSave2() const {}
+        void prm_get_type() const {}
+    
         void is_switch2() const;
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();

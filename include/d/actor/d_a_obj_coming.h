@@ -6,7 +6,14 @@
 namespace daObjComing {
     class Act_c : public fopAc_ac_c {
     public:
-        void prm_get_waitTime() const;
+        void prm_get_always() const {}
+        void prm_get_makeNum() const {}
+        void prm_get_range() const {}
+        void prm_get_swSave() const {}
+        void prm_get_tblNum() const {}
+        void prm_get_type() const {}
+        void prm_get_waitTime() const {}
+    
         void chk_switch();
         void _create();
         void _delete();

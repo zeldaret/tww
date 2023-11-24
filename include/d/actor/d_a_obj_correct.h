@@ -7,6 +7,10 @@
 namespace daObjCorrect {
     class Act_c : public fopAc_ac_c {
     public:
+        void prm_get_evId() const {}
+        void prm_get_swSave() const {}
+        void prm_get_type() const {}
+    
         void _create();
         void _delete();
         void chk_try_actor0(fopAc_ac_c*);

@@ -8,6 +8,7 @@ namespace daTagWaterlevel {
     public:
         void get_now() {}
         void get_state() {}
+        void prm_get_sch() const {}
     
         void _create();
         void _delete();

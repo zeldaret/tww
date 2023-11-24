@@ -8,6 +8,12 @@
 namespace daObjAkabe {
     class Act_c : public fopAc_ac_c {
     public:
+        void prm_get_always() const {}
+        void prm_get_arg0() const {}
+        void prm_get_scl() const {}
+        void prm_get_swSave() const {}
+    
+    public:
         /* 0x290 */ request_of_phase_process_class mPhs;
         /* 0x298 */ dBgW* mpBgW;
         /* 0x29C */ Mtx mCollMtx;

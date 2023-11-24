@@ -7,6 +7,12 @@
 namespace daObjAuzu {
     class Act_c : public fopAc_ac_c {
     public:
+        void attr() const {}
+        void is_appear() const {}
+        void prm_get_appear() const {}
+        void prm_get_linkID() const {}
+        void prm_get_swSave() const {}
+        void prm_get_type() const {}
         void prm_make_squid() {}
         void to_appear() {}
         void to_disappear() {}

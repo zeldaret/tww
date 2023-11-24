@@ -16,6 +16,8 @@ namespace daObjJump {
             current.pos = *pos;
             m336 = 1;
         }
+        void attr() const {}
+        void prm_get_type() const {}
     
         void CreateHeap();
         void Create();

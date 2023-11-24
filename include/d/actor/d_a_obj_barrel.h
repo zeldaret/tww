@@ -6,8 +6,10 @@
 namespace daObjBarrel {
     class Act_c : public fopAc_ac_c {
     public:
+        void attr() const {}
         void get_slant_angle() {}
         void pos_init() {}
+        void prm_get_cull() const {}
         void set_slant_angle(short) {}
     
         void solidHeapCB(fopAc_ac_c*);

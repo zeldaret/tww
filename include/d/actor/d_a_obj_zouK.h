@@ -12,6 +12,7 @@
 namespace daObjZouk {
     class Act_c : public fopAc_ac_c {
     public:
+        void param_get_arg0() const {}
         void setEffectMtx(const cXyz*, float) {}
     
         void solidHeapCB(fopAc_ac_c*);

@@ -6,9 +6,11 @@
 namespace daObjSmplbg {
     class Act_c : public fopAc_ac_c {
     public:
+        void attr() const {}
         void isStop() {}
         void offStop() {}
         void onStop() {}
+        void prm_get_type() const {}
     
         void CreateHeap();
         void Create();

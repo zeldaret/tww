@@ -6,9 +6,12 @@
 namespace daTagAttention {
     class Act_c : public fopAc_ac_c {
     public:
+        void chk_inside(cXyz*) const {}
+        void prm_get_Type() const {}
+        void prm_get_swSave() const {}
+    
         void _create();
         void _execute();
-        void chk_inside(cXyz*) const;
     
     public:
         /* Place member variables here */

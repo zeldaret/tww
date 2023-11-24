@@ -5,6 +5,8 @@
 
 class daObjEayogn_c : public fopAc_ac_c {
 public:
+    void check_ev_bit() const {}
+
     void init_mtx();
 
 public:

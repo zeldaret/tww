@@ -7,6 +7,10 @@
 namespace daObjItnak {
     class Act_c : public fopAc_ac_c {
     public:
+        void is_switch() const {}
+        void param_get_arg0() const {}
+        void param_get_swbit() const {}
+    
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
         void _create();

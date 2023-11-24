@@ -6,6 +6,8 @@
 
 class daObjIce_c : public fopAc_ac_c {
 public:
+    void param_get_swSave() const {}
+    void param_on_swSave() const {}
     void setEffectMtx() {}
 
     void chk_appear();

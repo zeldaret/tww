@@ -12,6 +12,7 @@ namespace daObjEff {
         void make_skull_smoke(cXyz*) {}
         void make_stool_smoke(cXyz*) {}
         void make_woodBox_smoke(cXyz*) {}
+        void prm_get_type() const {}
     
         void solidHeapCB(fopAc_ac_c*);
         void create_heap_barrel_smoke();

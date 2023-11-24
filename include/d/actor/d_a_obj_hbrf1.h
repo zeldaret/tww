@@ -6,6 +6,10 @@
 namespace daObjHbrf1 {
     class Act_c : public fopAc_ac_c {
     public:
+        void prm_get_Event() const {}
+        void prm_get_Type() const {}
+        void prm_get_swSave() const {}
+    
         void CreateHeap();
         void Create();
         void Mthd_Create();

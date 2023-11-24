@@ -5,6 +5,8 @@
 
 class daObjOhatch_c : public fopAc_ac_c {
 public:
+    void param_get_swSave() const {}
+
     void set_mtx();
     void init_mtx();
     void solidHeapCB(fopAc_ac_c*);

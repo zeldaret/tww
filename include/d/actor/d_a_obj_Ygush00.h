@@ -13,6 +13,8 @@ public:
         PRM_TYPE_S = 0,
     };
 
+    void param_get_arg() const {}
+
     s32 _create();
     bool _delete();
     bool _execute();

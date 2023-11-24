@@ -12,6 +12,11 @@ class msg_class;
 namespace daObjMknjD {
     class Act_c : public dBgS_MoveBgActor {
     public:
+        void anmAtr(unsigned short) {}
+        void getMsg() {}
+        void prm_get_Type() const {}
+        void prm_get_swSave() const {}
+    
         s32 Mthd_Create();
         s32 Mthd_Delete();
 

@@ -6,6 +6,10 @@
 namespace daObjHomensmoke {
     class Act_c : public fopAc_ac_c {
     public:
+        void param_get_arg0() const {}
+        void param_get_axis() const {}
+    
+    public:
         /* Place member variables here */
     };
 };

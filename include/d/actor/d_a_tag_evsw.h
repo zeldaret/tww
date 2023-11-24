@@ -6,6 +6,10 @@
 namespace daTagEvsw {
     class Act_c : public fopAc_ac_c {
     public:
+        void prm_get_Type() const {}
+        void prm_get_eventbitID() const {}
+        void prm_get_swSave() const {}
+    
         void _create();
         void _delete();
         void _execute();

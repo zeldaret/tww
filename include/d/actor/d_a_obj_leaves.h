@@ -6,6 +6,11 @@
 
 class daObjLeaves_c : public fopAc_ac_c {
 public:
+    void param_get_itemNo() const {}
+    void param_get_itemSaveBitNo() const {}
+    void param_get_swSave() const {}
+    void param_on_swSave() const {}
+
     void chk_appear();
     void init_mtx();
     void birthEffect(int, cXyz*, csXyz*, _GXColor*);

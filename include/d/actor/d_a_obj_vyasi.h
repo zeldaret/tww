@@ -10,6 +10,8 @@
 namespace daObjVyasi {
     class Act_c : public fopAc_ac_c {
     public:
+        void is_switch() const {}
+    
         void SetStopJointAnimation(J3DAnmTransformKey*, float, float);
         void PlayStopJointAnimation();
         void set_first_process();

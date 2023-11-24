@@ -5,12 +5,13 @@
 
 class daObjVmsms_c : public fopAc_ac_c {
 public:
+    void check_demo() const {}
+
     void solidHeapCB(fopAc_ac_c*);
     void create_heap();
     void _create();
     void _delete();
     void init_mtx();
-    void check_demo() const;
     void _execute();
     void _draw();
 

@@ -14,6 +14,11 @@ namespace daObjMkie {
             current.pos = *pos;
             mF58 = 1;
         }
+        void attr() const {}
+        void prm_get_correct() const {}
+        void prm_get_evId() const {}
+        void prm_get_swSave() const {}
+        void prm_get_type() const {}
     
         void CreateHeap();
         void init_cc();

@@ -10,6 +10,9 @@ namespace daObjBuoyrace {
         void _delete() {}
         void _draw() {}
         void _execute() {}
+        void attr() const {}
+        void prm_get_id() const {}
+        void prm_get_line() const {}
     
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();

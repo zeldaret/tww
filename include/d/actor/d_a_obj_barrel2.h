@@ -7,11 +7,19 @@
 namespace daObjBarrel2 {
     class Act_c : public fopAc_ac_c {
     public:
+        void attr() const {}
+        void chk_item_give() const {}
         void delete_req() {}
         void exit_req() {}
         void get_item_id() {}
         void make_coming(cXyz*, int, daObjBarrel2::Type_e, int, bool, short, daObjBuoyflag::Texture_e) {}
         void make_prm(daObjBarrel2::Type_e, int, bool, bool, daObjBuoyflag::Texture_e) {}
+        void prm_get_buoy() const {}
+        void prm_get_coming() const {}
+        void prm_get_itemNo() const {}
+        void prm_get_itemSave() const {}
+        void prm_get_texture() const {}
+        void prm_get_type() const {}
     
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();

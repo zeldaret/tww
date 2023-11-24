@@ -9,6 +9,10 @@
 namespace daObjPaper {
     class Act_c : public fopAc_ac_c {
     public:
+        void prm_get_msgNo() const {}
+        void prm_get_type() const {}
+    
+    public:
         /* 0x290 */ request_of_phase_process_class mPhs;
         /* 0x298 */ J3DModel* mpModel;
         /* 0x29C */ dCcD_Cyl mCyl;

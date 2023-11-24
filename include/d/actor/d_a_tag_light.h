@@ -7,6 +7,15 @@
 namespace daTagLight {
     class Act_c : public fopAc_ac_c {
     public:
+        void chk_inside(const cXyz*) const {}
+        void prm_get_ccR() const {}
+        void prm_get_coneRatio() const {}
+        void prm_get_fadeType() const {}
+        void prm_get_sch() const {}
+        void prm_get_swSave() const {}
+        void prm_get_swSave2() const {}
+        void prm_get_type() const {}
+    
         void get_cc_r() const;
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();

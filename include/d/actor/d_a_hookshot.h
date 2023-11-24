@@ -23,6 +23,19 @@ public:
     void offObjHookFlg() {}
     void setObjSightCrossPos(const cXyz*) {}
     void getObjSightCrossPos() {}
+    void checkPull() {}
+    void checkReturn() {}
+    void checkShipRideFlg() const {}
+    void checkShot() {}
+    void checkWait() {}
+    void getCarryActorID() const {}
+    void getHookAngle() {}
+    void getMtxTop() {}
+    void getObjHookFlg() const {}
+    void getSightHit() const {}
+    void setCarryOffset(const cXyz*) {}
+    void setReturn() {}
+    void setShot() {}
     
     daHookshot_c() {}
     BOOL draw();

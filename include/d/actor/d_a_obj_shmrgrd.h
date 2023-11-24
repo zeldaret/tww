@@ -7,6 +7,9 @@
 class daObjShmrgrd_c : public fopAc_ac_c {
 public:
     void get_mode() {}
+    void is_switch() const {}
+    void on_switch() const {}
+    void prm_get_swSave() const {}
 
     void solidHeapCB(fopAc_ac_c*);
     void create_heap();

@@ -7,6 +7,7 @@ namespace daObjVmc {
     class Act_c : public fopAc_ac_c {
     public:
         void daObjVmc_ChangeGrow() {}
+        void prm_get_swSave() const {}
     
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();

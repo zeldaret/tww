@@ -5,6 +5,10 @@
 
 class daWindMill_c : public fopAc_ac_c {
 public:
+    void getMaxRotSpeed() const {}
+    void getRotSpeed() const {}
+    void getType() const {}
+
     void _delete();
     void CreateHeap();
     void CreateInit();

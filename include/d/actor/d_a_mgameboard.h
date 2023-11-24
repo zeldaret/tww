@@ -11,6 +11,12 @@ class dDlst_2DObject_c;
 
 class daMgBoard_c : public fopAc_ac_c {
 public:
+    void _create() {}
+    void _delete() {}
+    void _draw() {}
+    void reqClearGame() {}
+    void set_mtx() {}
+
     void checkClearGame();
     void getScore();
     void reqStartGame();
@@ -21,13 +27,11 @@ public:
     void set_2dposition();
     void CreateInit();
     void MiniGameInit();
-    void set_mtx();
     void _execute();
     void execGameMain();
     void execEndGame();
     void MinigameMain();
     void CursorMove();
-    void _draw();
 
     /* 0x290 */ request_of_phase_process_class mPhase;
     /* 0x298 */ J3DModel* mpBoardModel;

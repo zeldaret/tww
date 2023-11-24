@@ -6,6 +6,10 @@
 namespace daObjAshut {
     class Act_c : public fopAc_ac_c {
     public:
+        void is_switch() const {}
+        void prm_get_evId() const {}
+        void prm_get_swSave() const {}
+    
         void CreateHeap();
         void Create();
         void Mthd_Create();

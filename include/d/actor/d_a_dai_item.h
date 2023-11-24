@@ -11,6 +11,8 @@
 
 class daStandItem_c : public fopAc_ac_c {
 public:
+    void getItemNo() const {}
+
     void _delete();
     void CreateHeap();
     void CreateInit();

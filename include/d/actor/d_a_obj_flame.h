@@ -15,6 +15,14 @@ namespace daObjFlame {
         void _draw() {}
         void _execute() {}
         void _is_delete() {}
+        void attr_base() const {}
+        void attr_scl() const {}
+        void prm_get_haze() const {}
+        void prm_get_kiCycle() const {}
+        void prm_get_kiNum() const {}
+        void prm_get_sch() const {}
+        void prm_get_scl() const {}
+        void prm_get_swSave() const {}
     
         void set_switch();
         void solidHeapCB(fopAc_ac_c*);

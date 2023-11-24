@@ -5,6 +5,11 @@
 
 class daObjTnTrap_c : public fopAc_ac_c {
 public:
+    void param_get_arg0() const {}
+    void param_get_mapType() const {}
+    void param_get_swSave() const {}
+    void param_get_swSave2() const {}
+
     void chk_appear();
     void set_mtx();
     void solidHeapCB(fopAc_ac_c*);

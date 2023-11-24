@@ -15,8 +15,19 @@ namespace daTsubo {
     class Act_c : public fopAc_ac_c {
     public:
         void attrSpine() {}
+        void data() const {}
         void data_spec_boko(int) {}
+        void is_switch() const {}
         void pos_init() {}
+        void prmZ_get_swSave() const {}
+        void prm_chk_type_kutani() const {}
+        void prm_get_cull() const {}
+        void prm_get_itemNo() const {}
+        void prm_get_itemSave() const {}
+        void prm_get_moveBg() const {}
+        void prm_get_spec() const {}
+        void prm_get_stick() const {}
+        void prm_get_type() const {}
         void prm_make_acorn(bool, int, int) {}
         void prm_make_skull() {}
         void prm_make_yw1() {}
@@ -25,6 +36,7 @@ namespace daTsubo {
         void prm_set_cull_non() {}
         void prm_set_itemNo(int) {}
         void set_drop_spd_y0(float) {}
+        void spec_chk_prm_boko() const {}
     
         void prmZ_init();
         void solidHeapCB(fopAc_ac_c*);

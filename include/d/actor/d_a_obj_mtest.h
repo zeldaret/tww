@@ -6,6 +6,11 @@
 namespace daObjMtest {
     class Act_c : public fopAc_ac_c {
     public:
+        void prm_get_arg0() const {}
+        void prm_get_arg1() const {}
+        void prm_get_swSave() const {}
+        void prm_get_type() const {}
+    
         void chk_appear();
         void CreateHeap();
         void Create();

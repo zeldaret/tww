@@ -5,12 +5,13 @@
 
 class daYgcwp_c : public fopAc_ac_c {
 public:
+    void check_ev() const {}
+    void off_ev() const {}
+
     void solidHeapCB(fopAc_ac_c*);
     void create_heap();
     void _create();
     void _delete();
-    void check_ev() const;
-    void off_ev() const;
     void init_mtx();
     void make_shine();
     void set_timer();

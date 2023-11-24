@@ -6,6 +6,10 @@
 namespace daObjMsdanSub {
     class Act_c : public fopAc_ac_c {
     public:
+        void prm_get_objNo() const {}
+        void prm_get_size() const {}
+        void prm_get_swSave() const {}
+    
         void CreateHeap();
         void Create();
         void Mthd_Create();

@@ -5,6 +5,8 @@
 
 class daObjYLzou_c : public fopAc_ac_c {
 public:
+    void param_get_swSave() const {}
+
     void set_start_type();
     void set_mtx();
     void init_mtx();

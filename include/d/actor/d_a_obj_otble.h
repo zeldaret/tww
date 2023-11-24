@@ -8,6 +8,7 @@ namespace daObj_Otble {
     public:
         void _create() {}
         void _delete() {}
+        void attr() const {}
     
         void set_mtx();
         void _execute();

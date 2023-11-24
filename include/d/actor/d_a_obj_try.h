@@ -6,6 +6,11 @@
 namespace daObjTry {
     class Act_c : public fopAc_ac_c {
     public:
+        void attr() const {}
+        void prm_chk_type_tryStatue() const {}
+        void prm_get_dummy() const {}
+        void prm_get_swSave() const {}
+        void prm_get_type() const {}
         void to_correct_pos(const cXyz*, short, bool, bool) {}
     
         void prm_set_swSave(int);

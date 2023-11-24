@@ -11,6 +11,7 @@ public:
     void _delete() {}
     void _draw() {}
     void _execute() {}
+    void attr() const {}
     void set_mtx() {}
 
     void CreateHeap();

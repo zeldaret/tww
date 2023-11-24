@@ -6,6 +6,11 @@
 
 class daObjHcbh_c : public fopAc_ac_c {
 public:
+    void param_get_itemNo() const {}
+    void param_get_itemSaveBitNo() const {}
+    void param_get_swSave() const {}
+    void param_on_swSave() const {}
+
     void chk_appear();
     void set_mtx();
     void init_mtx();

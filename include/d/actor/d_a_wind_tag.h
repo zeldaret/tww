@@ -6,6 +6,9 @@
 namespace daWindTag {
     class daWindTag_c : public fopAc_ac_c {
     public:
+        void getCurLength() const {}
+        void getMaxLength() const {}
+    
         void _delete();
         void CreateHeap();
         void CreateInit();

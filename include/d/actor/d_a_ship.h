@@ -16,16 +16,41 @@ public:
         
     };
     
+    void checkCraneMode() const {}
+    void checkCraneUpEnd() const {}
     void checkForceMove() {}
+    void checkHeadNoDraw() const {}
+    void checkJumpOkFlg() const {}
+    void checkRopeCntMax() const {}
+    void checkRopeDownStart() const {}
+    void checkSalvageDemo() const {}
+    void checkShootCannon() const {}
+    void checkStateFlg(daSHIP_SFLG) const {}
+    void checkTornadoFlg() const {}
+    void checkTornadoUp() const {}
+    void getBeltSpeed() const {}
     void getBodyMtx() {}
+    void getCannonAngleX() const {}
+    void getCannonAngleY() const {}
+    void getCraneAngle() const {}
+    void getCraneBaseAngle() const {}
+    void getCraneHookAngleY() const {}
+    void getCraneRipplePosX() const {}
+    void getCraneRipplePosY() const {}
+    void getCraneRipplePosZ() const {}
     void getCraneTop() {}
     void getFlyFlg() {}
     void getHeadJntMtx() {}
+    void getJumpFlg() const {}
     void getJumpRate() {}
+    void getLandFlg() const {}
+    void getPart() const {}
+    void getRopeCnt() const {}
     void getSailAngle() {}
     void getSailOn() {}
     void getTactJntMtx() {}
     void getTactWarpID() {}
+    void getTactWarpPosNum() const {}
     void getTillerAngleRate() {}
     void getTillerTopPosP() {}
     void getTornadoActor() {}
@@ -142,7 +167,6 @@ public:
     void shipDelete();
     void createHeap();
     void create();
-    void getCannonAngleX() const;
     void checkForceMove() const;
     void initStartPos(cXyz const*, s16);
 

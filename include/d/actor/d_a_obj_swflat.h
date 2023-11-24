@@ -6,6 +6,10 @@
 namespace daObjSwflat {
     class Act_c : public fopAc_ac_c {
     public:
+        void prmGetSwNo() const {}
+        void prmGetSwNo2() const {}
+        void prmGetType() const {}
+    
         void CreateHeap();
         void Create();
         void Mthd_Create();

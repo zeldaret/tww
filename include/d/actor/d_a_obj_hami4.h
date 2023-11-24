@@ -9,6 +9,7 @@ public:
     void _delete() {}
     void _draw() {}
     void _execute() {}
+    void prm_get_swSave() const {}
 
     void CreateHeap();
     void CreateInit();

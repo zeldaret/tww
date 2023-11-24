@@ -136,6 +136,8 @@ public:
         PRM_VERSION_S = 0x1F,
     };
 
+    void attrType() const {}
+
     s16 getBombRestTime();
     s16 getBombCheck_Flag();
     void setBombCheck_Flag();

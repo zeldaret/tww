@@ -10,6 +10,7 @@ public:
     void _delete() {}
     void _draw() {}
     void _execute() {}
+    void prm_get_swSave() const {}
     void set_sea_material(J3DMaterial*) {}
 
     void CreateHeap();

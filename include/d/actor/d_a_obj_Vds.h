@@ -7,6 +7,8 @@
 namespace daObjVds {
     class Act_c : public fopAc_ac_c {
     public:
+        void is_switch() const {}
+    
         void SetLoopJointAnimation(J3DAnmTransformKey*, J3DAnmTransformKey*, float, float);
         void PlayLoopJointAnimation();
         void set_first_process();

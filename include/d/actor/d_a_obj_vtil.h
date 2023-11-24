@@ -6,12 +6,13 @@
 class daObjVtil_c : public fopAc_ac_c {
 public:
     void camera_off() {}
+    void check_ev_bit() const {}
+    void prm_get_type() const {}
 
     void solidHeapCB(fopAc_ac_c*);
     void create_heap();
     void _create();
     void _delete();
-    void check_ev_bit() const;
     void tell_agb_attack();
     void tell_agb_sink();
     void init_mtx();

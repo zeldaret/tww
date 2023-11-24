@@ -9,6 +9,8 @@ public:
     void _delete() {}
     void _draw() {}
     void _execute() {}
+    void getYureScale() const {}
+    void getYureTimer() const {}
     void setMoveBGMtx() {}
     void set_mtx() {}
 

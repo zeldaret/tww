@@ -7,6 +7,14 @@
 namespace daObjSwheavy {
     class Act_c : public fopAc_ac_c {
     public:
+        void attr() const {}
+        void is_switch() const {}
+        void off_switch() const {}
+        void on_switch() const {}
+        void prm_get_swSave() const {}
+        void prm_get_type() const {}
+        void rev_switch() const {}
+    
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
         void _create();

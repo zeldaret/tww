@@ -64,6 +64,8 @@ public:
     s16 getParamNo() {
         return current.angle.x & 0xFFFF;
     }
+
+    void deleteSub() {}
     
     static void incTclDispose();
     static void incTclBeat();

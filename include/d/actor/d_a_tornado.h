@@ -5,6 +5,9 @@
 
 class daTornado_c : public fopAc_ac_c {
 public:
+    void getJointXPos(int) const {}
+    void getJointYPos(int) const {}
+    void getJointZPos(int) const {}
     void getScaleEnd() {}
     void getSmallScaleEnd() {}
     void setScaleOn() {}

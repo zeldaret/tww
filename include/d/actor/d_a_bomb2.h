@@ -66,8 +66,16 @@ namespace daBomb2 {
         /* 0x50 */ f32 field_0x50;
     }; // Size 0x54
 
+    enum Start_e {
+        
+    };
+
     class Act_c : public fopAc_ac_c { 
     public:
+        void prm_get_start() const {}
+        void prm_get_stick() const {}
+        void prm_make(Start_e, bool) {}
+    
         Act_c();
         
         //d_a_bomb_static functions

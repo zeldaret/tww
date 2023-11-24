@@ -6,6 +6,8 @@
 namespace daObjMsdan2 {
     class Act_c : public fopAc_ac_c {
     public:
+        void prm_get_swSave() const {}
+    
         void Mthd_Create();
         void Mthd_Execute();
         void Mthd_Delete();

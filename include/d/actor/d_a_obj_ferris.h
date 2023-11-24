@@ -7,6 +7,10 @@
 namespace daObjFerris {
     class Act_c : public fopAc_ac_c {
     public:
+        void is_switch() const {}
+        void off_switch() const {}
+        void param_get_swSave() const {}
+    
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
         void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*);

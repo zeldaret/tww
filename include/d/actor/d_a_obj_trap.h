@@ -5,6 +5,7 @@
 
 class daObjTrap_c : public fopAc_ac_c {
 public:
+    void check_shine() const {}
     void start_shine() {}
     void stop_shine() {}
 

@@ -37,9 +37,11 @@ namespace daObjBuoyflag {
         void jump_to_sea(float, float, short) {}
         void make_barrel2_mine(unsigned int, cXyz*, int, csXyz*, daObjBuoyflag::Texture_e, bool) {}
         void make_barrel2_norm(unsigned int, cXyz*, int, csXyz*, daObjBuoyflag::Texture_e) {}
+        void attr_type() const {}
+        void prm_get_noCull() const {}
+        void prm_get_texture() const {}
+        void prm_get_type() const {}
     
-        void prm_get_texture() const;
-        void attr_type() const;
         void mtx_init();
         void mode_afl();
         void mode_jumpToSea();

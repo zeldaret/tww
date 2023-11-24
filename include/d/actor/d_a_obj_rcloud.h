@@ -7,6 +7,8 @@
 
 class daObjRcloud_c : public fopAc_ac_c {
 public:
+    void param_get_arg() const {}
+
     void init_mtx();
     void solidHeapCB(fopAc_ac_c*);
     void create_heap();

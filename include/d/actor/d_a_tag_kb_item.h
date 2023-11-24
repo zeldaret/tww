@@ -5,6 +5,8 @@
 
 class daTagKbItem_c : public fopAc_ac_c {
 public:
+    void getR() {}
+
     void kb_dig(fopAc_ac_c*);
     void dig_main();
     bool _delete();

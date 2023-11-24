@@ -6,6 +6,8 @@
 namespace daObjTimer {
     class Act_c : public fopAc_ac_c {
     public:
+        void prm_get_swSave() const {}
+        void prm_get_time() const {}
         void stopTimer() {}
     
         void _create();

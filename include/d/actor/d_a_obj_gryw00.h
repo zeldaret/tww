@@ -5,6 +5,8 @@
 
 class daObjGryw00_c : public fopAc_ac_c {
 public:
+    void param_get_swSave() const {}
+
     f32 get_draw_water_lv(void*);
     void setup_high_water_level_btk_anm();
     void particle_set();

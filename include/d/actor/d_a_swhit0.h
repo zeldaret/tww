@@ -13,6 +13,7 @@ public:
     }
 
     inline s32 draw();
+    void execute() {}
 
     s32 getSwNo();
     u8 getEvNo();
@@ -60,6 +61,7 @@ public:
     void onFlag(u16 flag) { mFlags |= flag; }
     void offFlag(u16 flag) { mFlags &= ~flag; }
     s32 checkFlag(u16 flag) { return mFlags & flag; }
+    void setActio(unsigned char) {}
 };
 
 #endif

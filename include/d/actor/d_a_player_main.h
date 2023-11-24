@@ -2089,6 +2089,103 @@ public:
     
     request_of_phase_process_class* getPhase() { return &mPhsLoad; }
     
+    // void allTrigger() const {}
+    // void cancelTrigger() const {}
+    // void checkAttentionLock() {}
+    // void checkBoomerangCatchAnime() const {}
+    // void checkBoomerangReadyAnime() const {}
+    // void checkBoomerangRock() {}
+    // void checkBoomerangThrowAnime() const {}
+    // void checkBothItemEquipAnime() const {}
+    // void checkBowReloadAnime() const {}
+    // void checkBowShootAnime() const {}
+    // void checkBowWaitAnime() const {}
+    // void checkCarryActionNow() const {}
+    // void checkCrawlWaterIn() {}
+    // void checkDashDamageAnime() const {}
+    // void checkDoubleItemEquipAnime() const {}
+    // void checkFaceTypeNot() const {}
+    // void checkGrabAnime() const {}
+    // void checkGrabAnimeHeavy() const {}
+    // void checkGrabAnimeLight() const {}
+    // void checkGuardSlip() const {}
+    // void checkHookshotReadyAnime() const {}
+    // void checkIsland() const {}
+    // void checkMirrorShieldEquip() const {}
+    // void checkModeFlg(unsigned long) const {}
+    // void checkNoControll() const {}
+    // void checkNoDamageMode() const {}
+    // void checkNoUpperAnime() const {}
+    // void checkPlayerDemoMode() const {}
+    // void checkPowerGloveEquip() const {}
+    // void checkRopeThrowAnime() const {}
+    // void checkShieldEquip() const {}
+    // void checkShipGetOff() {}
+    // void checkSpecialDemoMode() const {}
+    // void checkSwordEquip() const {}
+    // void checkSwordEquipAnime() const {}
+    // void checkTinkleHover() const {}
+    // void checkTinkleShield() const {}
+    // void checkUpperAnime(unsigned short) const {}
+    // void checkUpperGuardAnime() const {}
+    // void clearDamageWait() {}
+    // void decrementBombCnt() {}
+    // void doButton() const {}
+    // void doTrigger() const {}
+    // void exchangeGrabActor(fopAc_ac_c*) {}
+    // void getAnmSpeedStickRate(float, float) {}
+    // void getBombBrk() {}
+    // void getBombWaterPillarBrk() {}
+    // void getBombWaterPillarBtk() {}
+    // void getBoomerangCatchPos() const {}
+    // void getDekuLeafWindPos() const {}
+    // void getHookshotRootPos() const {}
+    // void getIceArrowBtk() {}
+    // void getIceParticleBtk() {}
+    // void getIceWaterParticleBtk() {}
+    // void getLightArrowBtk() {}
+    // void getLineTopPos() {}
+    // void getModelJointMtx(unsigned short) {}
+    // void getNowAnmPackUnder(daPy_lk_c::daPy_UNDER) {}
+    // void getNowAnmPackUpper(daPy_lk_c::daPy_UPPER) {}
+    // void getPhase() {}
+    // void getShadowID() const {}
+    // void getStartEvent() {}
+    // void getStartMode() {}
+    // void getStartModeFromParam(unsigned long) {}
+    // void getStartRoomNo() {}
+    // void getTactLeftHandPos() const {}
+    // void itemButtonX() const {}
+    // void itemButtonY() const {}
+    // void itemButtonZ() const {}
+    // void itemTriggerX() const {}
+    // void itemTriggerY() const {}
+    // void itemTriggerZ() const {}
+    // void npcStartRestartRoom() {}
+    // void offModeFlg(unsigned long) {}
+    // void offShipTact() {}
+    // void onModeFlg(unsigned long) {}
+    // void onShipDrop(short) {}
+    // void onShipTact() {}
+    // void otherWeaponTrigger() const {}
+    // void seStartSystem(unsigned long) {}
+    // void setDaiokutaEnd() {}
+    // void setFootEffectPosType(unsigned char) {}
+    // void setHoverBoots(short) {}
+    // void setSpeedAndAngleBoomerang() {}
+    // void setSpeedAndAngleBow() {}
+    // void setSpeedAndAngleHookshot() {}
+    // void setSpeedAndAngleRope() {}
+    // void setTinkleShield(short) {}
+    // void setWhirlId(unsigned int) {}
+    // void spActionButton() const {}
+    // void spActionTrigger() const {}
+    // void spBattleTrigger() const {}
+    // void spLTrigger() const {}
+    // void swordButton() const {}
+    // void swordTrigger() const {}
+    // void talkTrigger() const {}
+    
     virtual MtxP getLeftHandMatrix() { return mpCLModel->getAnmMtx(0x08); } // cl_LhandA joint
     virtual MtxP getRightHandMatrix() { return mpCLModel->getAnmMtx(0x0C); } // cl_RhandA joint
     virtual f32 getGroundY() { return mAcch.GetGroundH(); }

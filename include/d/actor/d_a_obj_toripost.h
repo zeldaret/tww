@@ -18,6 +18,11 @@ public:
         PROC_EXEC = 1
     };
 
+    void eventSet(signed char) {}
+    inline s32 getSendPrice() { return m_send_price[mPayType]; }
+    void isAnm(signed char) {}
+    void modeProcInit(int) {}
+
     BOOL _createHeap();
     void cutProc();
     void cutPresentStart(int staffIdx);
@@ -58,8 +63,6 @@ public:
     void getArg();
     int _create();
     bool _delete();
-
-    inline s32 getSendPrice() { return m_send_price[mPayType]; }
 
     static const char m_arc_name[];
     static const daObjTpost_c__letter_data m_letter[];

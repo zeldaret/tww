@@ -17,6 +17,7 @@ namespace daObjFtree {
         void check_heart() {}
         void check_water() {}
         void init_water() {}
+        void param_get_tree_idx() const {}
         void set_heart(short) {}
         void set_water(short) {}
         void tree_brouht(int) {}
@@ -29,7 +30,6 @@ namespace daObjFtree {
         void XyEvent_init();
         void XyEvent_set(short);
         void XyEvent_exe();
-        void param_get_tree_idx() const;
         void SetJointAnimation(int, float, float, int);
         void PlayStopJointAnimation();
         void PlayStopColorAnimation();
