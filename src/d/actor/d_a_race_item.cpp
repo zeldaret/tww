@@ -3,7 +3,7 @@
 // Translation Unit: d_a_race_item.cpp
 //
 
-#include "d_a_race_item.h"
+#include "d/actor/d_a_race_item.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000F8       .text set_mtx__12daRaceItem_cFv */

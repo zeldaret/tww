@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_hat.cpp
 //
 
-#include "d_a_obj_hat.h"
+#include "d/actor/d_a_obj_hat.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000184       .text __ct__10daObjHat_cFv */

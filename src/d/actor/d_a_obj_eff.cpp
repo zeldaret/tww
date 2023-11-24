@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_eff.cpp
 //
 
-#include "d_a_obj_eff.h"
+#include "d/actor/d_a_obj_eff.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000140       .text __ct__Q28daObjEff13BarrelSmokeCBFv */

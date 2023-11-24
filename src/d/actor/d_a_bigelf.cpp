@@ -3,7 +3,7 @@
 // Translation Unit: d_a_bigelf.cpp
 //
 
-#include "d_a_bigelf.h"
+#include "d/actor/d_a_bigelf.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000016C       .text oct_delete__10daBigelf_cFv */

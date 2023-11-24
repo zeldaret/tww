@@ -3,7 +3,7 @@
 // Translation Unit: d_a_boomerang.cpp
 //
 
-#include "d_a_boomerang.h"
+#include "d/actor/d_a_boomerang.h"
 #include "dolphin/types.h"
 
 /* 800E0C08-800E0D44       .text initBlur__18daBoomerang_blur_cFPA4_fs */

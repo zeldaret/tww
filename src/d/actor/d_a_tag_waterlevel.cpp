@@ -3,7 +3,7 @@
 // Translation Unit: d_a_tag_waterlevel.cpp
 //
 
-#include "d_a_tag_waterlevel.h"
+#include "d/actor/d_a_tag_waterlevel.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000128       .text _create__Q215daTagWaterlevel5Act_cFv */

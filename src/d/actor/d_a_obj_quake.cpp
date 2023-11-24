@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_quake.cpp
 //
 
-#include "d_a_obj_quake.h"
+#include "d/actor/d_a_obj_quake.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000134       .text __ct__16daObjQuake_HIO_cFv */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_spc_item01.cpp
 //
 
-#include "d_a_spc_item01.h"
+#include "d/actor/d_a_spc_item01.h"
 #include "dolphin/types.h"
 
 /* 8015DAF4-8015DBC0       .text set_mtx__13daSpcItem01_cFv */

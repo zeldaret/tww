@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_ferris.cpp
 //
 
-#include "d_a_obj_ferris.h"
+#include "d/actor/d_a_obj_ferris.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000110       .text solidHeapCB__Q211daObjFerris5Act_cFP10fopAc_ac_c */

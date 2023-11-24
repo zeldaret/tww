@@ -3,7 +3,7 @@
 // Translation Unit: d_a_npc_mk_static.cpp
 //
 
-#include "d_a_npc_mk_static.h"
+#include "d/actor/d_a_npc_mk_static.h"
 #include "dolphin/types.h"
 
 /* 800CB5CC-800CB778       .text aroundWalk__17daNpc_Mk_Static_cFP10fopAc_ac_cP10fopAc_ac_cUc */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_bemos.cpp
 //
 
-#include "d_a_obj_bemos.h"
+#include "d/actor/d_a_obj_bemos.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000194       .text __ct__13daBemos_HIO_cFv */

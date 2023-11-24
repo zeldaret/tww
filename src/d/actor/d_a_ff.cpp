@@ -3,7 +3,7 @@
 // Translation Unit: d_a_ff.cpp
 //
 
-#include "d_a_ff.h"
+#include "d/actor/d_a_ff.h"
 #include "dolphin/types.h"
 
 /* 00000078-000001E4       .text fire_fly_draw__FP8ff_class */

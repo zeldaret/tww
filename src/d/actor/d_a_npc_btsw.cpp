@@ -3,7 +3,7 @@
 // Translation Unit: d_a_npc_btsw.cpp
 //
 
-#include "d_a_npc_btsw.h"
+#include "d/actor/d_a_npc_btsw.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000001E8       .text __ct__16daNpc_Btsw_HIO_cFv */

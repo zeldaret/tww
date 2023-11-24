@@ -3,7 +3,7 @@
 // Translation Unit: d_a_sss.cpp
 //
 
-#include "d_a_sss.h"
+#include "d/actor/d_a_sss.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000001F0       .text hand_draw__FP9sss_class */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_npc_roten.cpp
 //
 
-#include "d_a_npc_roten.h"
+#include "d/actor/d_a_npc_roten.h"
 #include "dolphin/types.h"
 
 /* 00000078-000002F0       .text __ct__12daNpcRoten_cFv */

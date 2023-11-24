@@ -3,7 +3,7 @@
 // Translation Unit: d_a_himo3.cpp
 //
 
-#include "d_a_himo3.h"
+#include "d/actor/d_a_himo3.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000C58       .text himo3_control__FP11himo3_classP7himo3_s */

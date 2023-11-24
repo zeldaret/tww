@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_ohatch.cpp
 //
 
-#include "d_a_obj_ohatch.h"
+#include "d/actor/d_a_obj_ohatch.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000018C       .text set_mtx__13daObjOhatch_cFv */

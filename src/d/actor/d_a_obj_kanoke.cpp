@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_kanoke.cpp
 //
 
-#include "d_a_obj_kanoke.h"
+#include "d/actor/d_a_obj_kanoke.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000002F4       .text __ct__13daObjKanoke_cFv */

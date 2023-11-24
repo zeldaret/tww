@@ -3,7 +3,7 @@
 // Translation Unit: d_a_kb.cpp
 //
 
-#include "d_a_kb.h"
+#include "d/actor/d_a_kb.h"
 #include "dolphin/types.h"
 
 /* 00000078-000001A4       .text anm_init__FP8kb_classifUcfi */

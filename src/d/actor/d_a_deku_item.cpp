@@ -3,7 +3,7 @@
 // Translation Unit: d_a_deku_item.cpp
 //
 
-#include "d_a_deku_item.h"
+#include "d/actor/d_a_deku_item.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000D0       .text _delete__12daDekuItem_cFv */

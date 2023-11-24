@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_stair.cpp
 //
 
-#include "d_a_obj_stair.h"
+#include "d/actor/d_a_obj_stair.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000130       .text __ct__16daobj_stairHIO_cFv */

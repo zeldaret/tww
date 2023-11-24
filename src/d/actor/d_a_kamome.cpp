@@ -3,7 +3,7 @@
 // Translation Unit: d_a_kamome.cpp
 //
 
-#include "d_a_kamome.h"
+#include "d/actor/d_a_kamome.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000001E4       .text anm_init__FP12kamome_classifUcfi */

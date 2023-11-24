@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_barrel2.cpp
 //
 
-#include "d_a_obj_barrel2.h"
+#include "d/actor/d_a_obj_barrel2.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000110       .text solidHeapCB__Q212daObjBarrel25Act_cFP10fopAc_ac_c */

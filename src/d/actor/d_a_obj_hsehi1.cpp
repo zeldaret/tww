@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_hsehi1.cpp
 //
 
-#include "d_a_obj_hsehi1.h"
+#include "d/actor/d_a_obj_hsehi1.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000130       .text __ct__15daObj_hsh_HIO_cFv */

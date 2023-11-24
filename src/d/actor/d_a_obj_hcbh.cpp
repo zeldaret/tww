@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_hcbh.cpp
 //
 
-#include "d_a_obj_hcbh.h"
+#include "d/actor/d_a_obj_hcbh.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000D8       .text chk_appear__11daObjHcbh_cFv */

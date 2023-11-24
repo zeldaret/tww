@@ -3,7 +3,7 @@
 // Translation Unit: d_a_komore.cpp
 //
 
-#include "d_a_komore.h"
+#include "d/actor/d_a_komore.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000009C       .text solidHeapCB__Q28daKomore5Act_cFP10fopAc_ac_c */

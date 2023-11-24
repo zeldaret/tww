@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_ajav.cpp
 //
 
-#include "d_a_obj_ajav.h"
+#include "d/actor/d_a_obj_ajav.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000170       .text daObjAjav_make_splash__9daObjAjavF4cXyzf */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_ospbox.cpp
 //
 
-#include "d_a_obj_ospbox.h"
+#include "d/actor/d_a_obj_ospbox.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000001A0       .text CreateHeap__Q211daObjOspbox5Act_cFv */

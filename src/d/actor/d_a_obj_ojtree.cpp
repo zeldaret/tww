@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_ojtree.cpp
 //
 
-#include "d_a_obj_ojtree.h"
+#include "d/actor/d_a_obj_ojtree.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000012C       .text CreateHeap__Q211daObjOjtree5Act_cFv */

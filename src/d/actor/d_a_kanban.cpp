@@ -3,7 +3,7 @@
 // Translation Unit: d_a_kanban.cpp
 //
 
-#include "d_a_kanban.h"
+#include "d/actor/d_a_kanban.h"
 #include "dolphin/types.h"
 
 /* 000000EC-0000012C       .text __ct__14daKanban_HIO_cFv */

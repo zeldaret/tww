@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_ikada.cpp
 //
 
-#include "d_a_obj_ikada.h"
+#include "d/actor/d_a_obj_ikada.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000254       .text __ct__17daObj_Ikada_HIO_cFv */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_saku.cpp
 //
 
-#include "d_a_saku.h"
+#include "d/actor/d_a_saku.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000200       .text CreateInit__8daSaku_cFv */

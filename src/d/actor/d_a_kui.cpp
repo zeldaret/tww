@@ -3,7 +3,7 @@
 // Translation Unit: d_a_kui.cpp
 //
 
-#include "d_a_kui.h"
+#include "d/actor/d_a_kui.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000C4       .text s_a_i_sub__FPvPv */

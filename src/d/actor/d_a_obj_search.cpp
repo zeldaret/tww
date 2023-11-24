@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_search.cpp
 //
 
-#include "d_a_obj_search.h"
+#include "d/actor/d_a_obj_search.h"
 #include "dolphin/types.h"
 
 /* 800FDAFC-800FDB1C       .text createHeap_CB__FP10fopAc_ac_c */

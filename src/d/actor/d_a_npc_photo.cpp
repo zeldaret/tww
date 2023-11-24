@@ -3,7 +3,7 @@
 // Translation Unit: d_a_npc_photo.cpp
 //
 
-#include "d_a_npc_photo.h"
+#include "d/actor/d_a_npc_photo.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000002D0       .text __ct__12daNpcPhoto_cFv */

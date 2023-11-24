@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_ftree.cpp
 //
 
-#include "d_a_obj_ftree.h"
+#include "d/actor/d_a_obj_ftree.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000DC       .text search_heart_part__Q210daObjFtree5Act_cFv */

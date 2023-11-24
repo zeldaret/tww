@@ -3,7 +3,7 @@
 // Translation Unit: d_a_tag_evsw.cpp
 //
 
-#include "d_a_tag_evsw.h"
+#include "d/actor/d_a_tag_evsw.h"
 #include "dolphin/types.h"
 
 /* 00000078-000001F8       .text _create__Q29daTagEvsw5Act_cFv */

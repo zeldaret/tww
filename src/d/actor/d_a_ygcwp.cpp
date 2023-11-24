@@ -3,7 +3,7 @@
 // Translation Unit: d_a_ygcwp.cpp
 //
 
-#include "d_a_ygcwp.h"
+#include "d/actor/d_a_ygcwp.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text solidHeapCB__9daYgcwp_cFP10fopAc_ac_c */

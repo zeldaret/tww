@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_coming.cpp
 //
 
-#include "d_a_obj_coming.h"
+#include "d/actor/d_a_obj_coming.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000128       .text init__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */

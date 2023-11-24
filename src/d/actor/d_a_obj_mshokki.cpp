@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_mshokki.cpp
 //
 
-#include "d_a_obj_mshokki.h"
+#include "d/actor/d_a_obj_mshokki.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000108       .text set_mtx__14daObjMshokki_cFv */

@@ -1,0 +1,43 @@
+#ifndef D_A_GY_CTRL_H
+#define D_A_GY_CTRL_H
+
+#include "f_op/f_op_actor.h"
+
+class daGy_Ctrl_c : public fopAc_ac_c {
+public:
+    void getMode() {}
+    void isTargetPlayer() {}
+    void isTargetPlayerShip() {}
+
+    void searchNearActor(fopAc_ac_c*);
+    void setTarget();
+    void setPathTargetPos();
+    void getWaterY(cXyz&);
+    void lineCheck(cXyz*, cXyz*);
+    void checkPath();
+    void setPathPos();
+    void modeProc(daGy_Ctrl_c::Proc_e, int);
+    void modeSwWaitInit();
+    void modeSwWait();
+    void modeCreateInit();
+    void modeCreate();
+    void modeWaitInit();
+    void modeWait();
+    void modeHideInit();
+    void modeHide();
+    void deadCheckGy();
+    void _execute();
+    void _draw();
+    void createInitNoArer();
+    void createInit();
+    void getParam(unsigned long, unsigned char, unsigned char);
+    void getArg();
+    void checkGyCtrlExist();
+    void _create();
+    void _delete();
+
+public:
+    /* Place member variables here */
+};
+
+#endif /* D_A_GY_CTRL_H */

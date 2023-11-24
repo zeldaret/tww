@@ -3,7 +3,7 @@
 // Translation Unit: d_a_kmon.cpp
 //
 
-#include "d_a_kmon.h"
+#include "d/actor/d_a_kmon.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000118       .text set_mtx__8daKmon_cFv */

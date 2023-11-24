@@ -3,7 +3,7 @@
 // Translation Unit: d_a_kn.cpp
 //
 
-#include "d_a_kn.h"
+#include "d/actor/d_a_kn.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000120       .text daKN_Draw__FP8kn_class */

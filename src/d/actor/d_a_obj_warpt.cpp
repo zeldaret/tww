@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_warpt.cpp
 //
 
-#include "d_a_obj_warpt.h"
+#include "d/actor/d_a_obj_warpt.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000190       .text __ct__17daObj_Warpt_HIO_cFv */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_volcano.cpp
 //
 
-#include "d_a_obj_volcano.h"
+#include "d/actor/d_a_obj_volcano.h"
 #include "dolphin/types.h"
 
 /* 00000078-000003CC       .text StartFire__Q212daObjVolcano5Act_cFv */

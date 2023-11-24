@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_correct.cpp
 //
 
-#include "d_a_obj_correct.h"
+#include "d/actor/d_a_obj_correct.h"
 #include "dolphin/types.h"
 
 /* 00000078-000001B0       .text _create__Q212daObjCorrect5Act_cFv */

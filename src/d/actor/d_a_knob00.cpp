@@ -3,7 +3,7 @@
 // Translation Unit: d_a_knob00.cpp
 //
 
-#include "d_a_knob00.h"
+#include "d/actor/d_a_knob00.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000B4       .text daKnob00_charactorExchange__FPc */

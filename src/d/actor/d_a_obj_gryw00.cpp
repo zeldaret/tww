@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_gryw00.cpp
 //
 
-#include "d_a_obj_gryw00.h"
+#include "d/actor/d_a_obj_gryw00.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000090       .text get_draw_water_lv__13daObjGryw00_cFPv */

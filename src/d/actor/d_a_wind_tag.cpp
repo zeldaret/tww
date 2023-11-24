@@ -3,7 +3,7 @@
 // Translation Unit: d_a_wind_tag.cpp
 //
 
-#include "d_a_wind_tag.h"
+#include "d/actor/d_a_wind_tag.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000F0       .text _delete__Q29daWindTag11daWindTag_cFv */

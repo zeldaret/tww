@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_vmc.cpp
 //
 
-#include "d_a_obj_vmc.h"
+#include "d/actor/d_a_obj_vmc.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000009C       .text solidHeapCB__Q28daObjVmc5Act_cFP10fopAc_ac_c */

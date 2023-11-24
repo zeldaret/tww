@@ -3,7 +3,7 @@
 // Translation Unit: d_a_boko.cpp
 //
 
-#include "d_a_boko.h"
+#include "d/actor/d_a_boko.h"
 #include "dolphin/types.h"
 
 /* 000000EC-0000017C       .text keDraw__8daBoko_cFv */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_leaflift_static.cpp
 //
 
-#include "d_a_leaflift_static.h"
+#include "d/actor/d_a_leaflift_static.h"
 #include "dolphin/types.h"
 
 /* 800690E4-80069100       .text checkEndDownLift__9daLlift_cFv */

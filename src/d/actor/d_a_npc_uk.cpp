@@ -3,7 +3,7 @@
 // Translation Unit: d_a_npc_uk.cpp
 //
 
-#include "d_a_npc_uk.h"
+#include "d/actor/d_a_npc_uk.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000000F8       .text getType__10daNpc_Uk_cFv */

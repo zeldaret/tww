@@ -3,7 +3,7 @@
 // Translation Unit: d_a_amiprop.cpp
 //
 
-#include "d_a_amiprop.h"
+#include "d/actor/d_a_amiprop.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000D4       .text _delete__11daAmiProp_cFv */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_tag_hint.cpp
 //
 
-#include "d_a_tag_hint.h"
+#include "d/actor/d_a_tag_hint.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000000F8       .text getEventNo__12daTag_Hint_cFv */

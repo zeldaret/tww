@@ -3,7 +3,7 @@
 // Translation Unit: d_a_demo00.cpp
 //
 
-#include "d_a_demo00.h"
+#include "d/actor/d_a_demo00.h"
 #include "dolphin/types.h"
 
 /* 800E595C-800E598C       .text reset__16daDemo00_resID_cFv */

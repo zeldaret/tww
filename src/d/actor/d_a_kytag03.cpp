@@ -3,7 +3,7 @@
 // Translation Unit: d_a_kytag03.cpp
 //
 
-#include "d_a_kytag03.h"
+#include "d/actor/d_a_kytag03.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000015C       .text useHeapInit__FP10fopAc_ac_c */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_ykgr.cpp
 //
 
-#include "d_a_ykgr.h"
+#include "d/actor/d_a_ykgr.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000134       .text draw__17dPa_YkgrPcallBackFP14JPABaseEmitterP15JPABaseParticle */

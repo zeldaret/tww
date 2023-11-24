@@ -3,7 +3,7 @@
 // Translation Unit: d_a_yougan.cpp
 //
 
-#include "d_a_yougan.h"
+#include "d/actor/d_a_yougan.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000158       .text __ct__14daYOUGAN_HIO_cFv */

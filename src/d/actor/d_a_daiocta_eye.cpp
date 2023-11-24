@@ -3,7 +3,7 @@
 // Translation Unit: d_a_daiocta_eye.cpp
 //
 
-#include "d_a_daiocta_eye.h"
+#include "d/actor/d_a_daiocta_eye.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000001B0       .text __ct__19daDaiocta_Eye_HIO_cFv */

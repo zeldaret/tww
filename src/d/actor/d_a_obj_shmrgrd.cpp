@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_shmrgrd.cpp
 //
 
-#include "d_a_obj_shmrgrd.h"
+#include "d/actor/d_a_obj_shmrgrd.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000358       .text __ct__14daObjShmrgrd_cFv */

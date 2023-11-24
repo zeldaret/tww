@@ -3,7 +3,7 @@
 // Translation Unit: d_a_npc_mt.cpp
 //
 
-#include "d_a_npc_mt.h"
+#include "d/actor/d_a_npc_mt.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000228       .text __ct__9daNpcMt_cFv */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_wall.cpp
 //
 
-#include "d_a_wall.h"
+#include "d/actor/d_a_wall.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000100       .text _delete__8daWall_cFv */

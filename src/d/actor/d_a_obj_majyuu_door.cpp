@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_majyuu_door.cpp
 //
 
-#include "d_a_obj_majyuu_door.h"
+#include "d/actor/d_a_obj_majyuu_door.h"
 #include "dolphin/types.h"
 
 /* 000000EC-0000010C       .text createHeap_CB__FP10fopAc_ac_c */

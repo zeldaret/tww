@@ -3,7 +3,7 @@
 // Translation Unit: d_a_tag_island.cpp
 //
 
-#include "d_a_tag_island.h"
+#include "d/actor/d_a_tag_island.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000084       .text getEventNo__14daTag_Island_cFv */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_timer.cpp
 //
 
-#include "d_a_obj_timer.h"
+#include "d/actor/d_a_obj_timer.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000114       .text _create__Q210daObjTimer5Act_cFv */

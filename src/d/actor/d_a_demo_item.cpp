@@ -3,7 +3,7 @@
 // Translation Unit: d_a_demo_item.cpp
 //
 
-#include "d_a_demo_item.h"
+#include "d/actor/d_a_demo_item.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000320       .text setParticle__9daDitem_cFv */

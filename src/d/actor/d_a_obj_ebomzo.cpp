@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_ebomzo.cpp
 //
 
-#include "d_a_obj_ebomzo.h"
+#include "d/actor/d_a_obj_ebomzo.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000012C       .text CreateHeap__Q211daObjEbomzo5Act_cFv */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_warpmj.cpp
 //
 
-#include "d_a_warpmj.h"
+#include "d/actor/d_a_warpmj.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000A8       .text _delete__10daWarpmj_cFv */

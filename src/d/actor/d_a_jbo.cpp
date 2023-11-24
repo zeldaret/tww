@@ -3,7 +3,7 @@
 // Translation Unit: d_a_jbo.cpp
 //
 
-#include "d_a_jbo.h"
+#include "d/actor/d_a_jbo.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000108       .text nodeCallBack__FP7J3DNodei */

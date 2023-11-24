@@ -3,7 +3,7 @@
 // Translation Unit: d_a_bmdhand.cpp
 //
 
-#include "d_a_bmdhand.h"
+#include "d/actor/d_a_bmdhand.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000118       .text __ct__15daBmdhand_HIO_cFv */

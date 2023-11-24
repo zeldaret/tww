@@ -3,7 +3,7 @@
 // Translation Unit: d_a_pw.cpp
 //
 
-#include "d_a_pw.h"
+#include "d/actor/d_a_pw.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000158       .text nodeCallBack__FP7J3DNodei */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_swpush.cpp
 //
 
-#include "d_a_obj_swpush.h"
+#include "d/actor/d_a_obj_swpush.h"
 #include "dolphin/types.h"
 
 /* 000000EC-0000011C       .text prmZ_init__Q211daObjSwpush5Act_cFv */

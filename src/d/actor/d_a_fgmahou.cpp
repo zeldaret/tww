@@ -3,7 +3,7 @@
 // Translation Unit: d_a_fgmahou.cpp
 //
 
-#include "d_a_fgmahou.h"
+#include "d/actor/d_a_fgmahou.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000E4       .text daFgmahou_Draw__FP13fgmahou_class */

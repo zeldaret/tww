@@ -3,7 +3,7 @@
 // Translation Unit: d_a_arrow_lighteff.cpp
 //
 
-#include "d_a_arrow_lighteff.h"
+#include "d/actor/d_a_arrow_lighteff.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000108       .text setTopPos__18daArrow_Lighteff_cFv */

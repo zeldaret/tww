@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_swhammer.cpp
 //
 
-#include "d_a_obj_swhammer.h"
+#include "d/actor/d_a_obj_swhammer.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000260       .text __ct__Q213daObjSwhammer5Act_cFv */

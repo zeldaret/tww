@@ -3,7 +3,7 @@
 // Translation Unit: d_a_hys.cpp
 //
 
-#include "d_a_hys.h"
+#include "d/actor/d_a_hys.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000B8       .text Delete__7daHys_cFv */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_tapestry.cpp
 //
 
-#include "d_a_obj_tapestry.h"
+#include "d/actor/d_a_obj_tapestry.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000001E0       .text __ct__19daObjTapestry_HIO_cFv */

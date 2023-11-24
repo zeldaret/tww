@@ -3,7 +3,7 @@
 // Translation Unit: d_a_steam_tag.cpp
 //
 
-#include "d_a_steam_tag.h"
+#include "d/actor/d_a_steam_tag.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000084       .text getData__12daSteamTag_cFv */

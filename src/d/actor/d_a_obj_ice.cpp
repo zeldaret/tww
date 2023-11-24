@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_ice.cpp
 //
 
-#include "d_a_obj_ice.h"
+#include "d/actor/d_a_obj_ice.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000F0       .text chk_appear__10daObjIce_cFv */

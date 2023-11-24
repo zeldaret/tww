@@ -3,7 +3,7 @@
 // Translation Unit: d_a_dai.cpp
 //
 
-#include "d_a_dai.h"
+#include "d/actor/d_a_dai.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000C4       .text _delete__7daDai_cFv */

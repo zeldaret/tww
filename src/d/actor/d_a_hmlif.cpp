@@ -3,7 +3,7 @@
 // Translation Unit: d_a_hmlif.cpp
 //
 
-#include "d_a_hmlif.h"
+#include "d/actor/d_a_hmlif.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000080       .text Delete__9daHmlif_cFv */

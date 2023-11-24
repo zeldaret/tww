@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_doguu.cpp
 //
 
-#include "d_a_obj_doguu.h"
+#include "d/actor/d_a_obj_doguu.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000168       .text setPointLight__12daObjDoguu_cFv */

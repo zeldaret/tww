@@ -3,7 +3,7 @@
 // Translation Unit: d_a_beam.cpp
 //
 
-#include "d_a_beam.h"
+#include "d/actor/d_a_beam.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000118       .text __ct__12daBeam_HIO_cFv */

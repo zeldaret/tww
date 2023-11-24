@@ -3,7 +3,7 @@
 // Translation Unit: d_a_att.cpp
 //
 
-#include "d_a_att.h"
+#include "d/actor/d_a_att.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000000F4       .text daAtt_Draw__FP9att_class */

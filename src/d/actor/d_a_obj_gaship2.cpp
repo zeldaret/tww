@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_gaship2.cpp
 //
 
-#include "d_a_obj_gaship2.h"
+#include "d/actor/d_a_obj_gaship2.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000009C       .text solidHeapCB__Q212daObjGaship25Act_cFP10fopAc_ac_c */

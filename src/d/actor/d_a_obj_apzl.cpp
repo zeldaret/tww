@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_apzl.cpp
 //
 
-#include "d_a_obj_apzl.h"
+#include "d/actor/d_a_obj_apzl.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000025C       .text move_piece__11daObjApzl_cFv */

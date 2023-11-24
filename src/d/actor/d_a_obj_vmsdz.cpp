@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_vmsdz.cpp
 //
 
-#include "d_a_obj_vmsdz.h"
+#include "d/actor/d_a_obj_vmsdz.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text solidHeapCB__12daObjVmsdz_cFP10fopAc_ac_c */

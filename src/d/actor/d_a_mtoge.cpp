@@ -3,7 +3,7 @@
 // Translation Unit: d_a_mtoge.cpp
 //
 
-#include "d_a_mtoge.h"
+#include "d/actor/d_a_mtoge.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000084       .text getSwbit__9daMtoge_cFv */

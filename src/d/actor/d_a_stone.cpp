@@ -3,7 +3,7 @@
 // Translation Unit: d_a_stone.cpp
 //
 
-#include "d_a_stone.h"
+#include "d/actor/d_a_stone.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000110       .text CreateHeapCB__7daStoneFP10fopAc_ac_c */

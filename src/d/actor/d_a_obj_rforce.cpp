@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_rforce.cpp
 //
 
-#include "d_a_obj_rforce.h"
+#include "d/actor/d_a_obj_rforce.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000009C       .text solidHeapCB__Q211daObjRforce5Act_cFP10fopAc_ac_c */

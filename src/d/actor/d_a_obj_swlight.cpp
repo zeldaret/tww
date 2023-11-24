@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_swlight.cpp
 //
 
-#include "d_a_obj_swlight.h"
+#include "d/actor/d_a_obj_swlight.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000154       .text is_switch2__Q212daObjSwlight5Act_cCFv */

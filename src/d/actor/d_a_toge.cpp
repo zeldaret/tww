@@ -3,7 +3,7 @@
 // Translation Unit: d_a_toge.cpp
 //
 
-#include "d_a_toge.h"
+#include "d/actor/d_a_toge.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000013C       .text _delete__8daToge_cFv */

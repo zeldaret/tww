@@ -3,7 +3,7 @@
 // Translation Unit: d_a_ship.cpp
 //
 
-#include "d_a_ship.h"
+#include "d/actor/d_a_ship.h"
 #include "dolphin/types.h"
 
 /* 000000EC-0000023C       .text bodyJointCallBack__8daShip_cFi */

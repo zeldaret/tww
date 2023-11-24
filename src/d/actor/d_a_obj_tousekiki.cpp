@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_tousekiki.cpp
 //
 
-#include "d_a_obj_tousekiki.h"
+#include "d/actor/d_a_obj_tousekiki.h"
 #include "dolphin/types.h"
 
 /* 000000EC-0000010C       .text CheckCreateHeap__FP10fopAc_ac_c */

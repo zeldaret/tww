@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_YLzou.cpp
 //
 
-#include "d_a_obj_YLzou.h"
+#include "d/actor/d_a_obj_YLzou.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000002B8       .text set_start_type__12daObjYLzou_cFv */

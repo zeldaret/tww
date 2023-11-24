@@ -3,7 +3,7 @@
 // Translation Unit: d_a_nzg.cpp
 //
 
-#include "d_a_nzg.h"
+#include "d/actor/d_a_nzg.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000E4       .text daNZG_Draw__FP9nzg_class */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_kytag07.cpp
 //
 
-#include "d_a_kytag07.h"
+#include "d/actor/d_a_kytag07.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000080       .text daKytag07_Draw__FP13kytag07_class */

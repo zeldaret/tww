@@ -3,7 +3,7 @@
 // Translation Unit: d_a_warpfout.cpp
 //
 
-#include "d_a_warpfout.h"
+#include "d/actor/d_a_warpfout.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000080       .text _delete__12daWarpfout_cFv */

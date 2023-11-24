@@ -3,7 +3,7 @@
 // Translation Unit: d_a_tornado.cpp
 //
 
-#include "d_a_tornado.h"
+#include "d/actor/d_a_tornado.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000260       .text jointCallBack__11daTornado_cFi */

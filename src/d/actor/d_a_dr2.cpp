@@ -3,7 +3,7 @@
 // Translation Unit: d_a_dr2.cpp
 //
 
-#include "d_a_dr2.h"
+#include "d/actor/d_a_dr2.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000110       .text __ct__11daDr2_HIO_cFv */

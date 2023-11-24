@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_vfan.cpp
 //
 
-#include "d_a_obj_vfan.h"
+#include "d/actor/d_a_obj_vfan.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000134       .text CreateHeap__Q29daObjVfan5Act_cFv */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_sitem.cpp
 //
 
-#include "d_a_sitem.h"
+#include "d/actor/d_a_sitem.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000001FC       .text hand_draw__FP11sitem_class */

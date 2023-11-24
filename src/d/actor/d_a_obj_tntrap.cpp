@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_tntrap.cpp
 //
 
-#include "d_a_obj_tntrap.h"
+#include "d/actor/d_a_obj_tntrap.h"
 #include "dolphin/types.h"
 
 /* 00000078-000002AC       .text chk_appear__13daObjTnTrap_cFv */

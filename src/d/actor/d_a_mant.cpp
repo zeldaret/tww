@@ -3,7 +3,7 @@
 // Translation Unit: d_a_mant.cpp
 //
 
-#include "d_a_mant.h"
+#include "d/actor/d_a_mant.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000003EC       .text draw__15daMant_packet_cFv */

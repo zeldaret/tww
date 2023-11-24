@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_hbrf1.cpp
 //
 
-#include "d_a_obj_hbrf1.h"
+#include "d/actor/d_a_obj_hbrf1.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000012C       .text CreateHeap__Q210daObjHbrf15Act_cFv */

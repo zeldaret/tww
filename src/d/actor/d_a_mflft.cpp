@@ -3,7 +3,7 @@
 // Translation Unit: d_a_mflft.cpp
 //
 
-#include "d_a_mflft.h"
+#include "d/actor/d_a_mflft.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000170       .text setLiftUp__11mflft_classF4cXyz */

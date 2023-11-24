@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_ashut.cpp
 //
 
-#include "d_a_obj_ashut.h"
+#include "d/actor/d_a_obj_ashut.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000012C       .text CreateHeap__Q210daObjAshut5Act_cFv */

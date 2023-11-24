@@ -3,7 +3,7 @@
 // Translation Unit: d_a_himo2.cpp
 //
 
-#include "d_a_himo2.h"
+#include "d/actor/d_a_himo2.h"
 #include "dolphin/types.h"
 
 /* 800EB60C-800EBABC       .text spin_draw__FP11himo2_class */

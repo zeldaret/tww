@@ -3,7 +3,7 @@
 // Translation Unit: d_a_bmd.cpp
 //
 
-#include "d_a_bmd.h"
+#include "d/actor/d_a_bmd.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000134       .text __ct__11daBmd_HIO_cFv */

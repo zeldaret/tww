@@ -1,0 +1,43 @@
+#ifndef D_A_NPC_P1_H
+#define D_A_NPC_P1_H
+
+#include "f_op/f_op_actor.h"
+
+class daNpc_P1_c : public fopAc_ac_c {
+public:
+    void checkAction(int (daNpc_P1_c::*)(void*)) {}
+    void setAction(int (daNpc_P1_c::*)(void*), void*, int) {}
+
+    void setAnimFromMsg();
+    void setAnm(int, float);
+    void normalAction(void*);
+    void confuseAction(void*);
+    void talkAction(void*);
+    void p1c_speakAction(void*);
+    void speakAction(void*);
+    void explainAction(void*);
+    void getNextMsgNo(int);
+    void playTexPatternAnm();
+    void demo_end_init();
+    void demo_move();
+    void event_move();
+    void evn_setAnm_init(int);
+    void evn_talk_init(int);
+    void evn_talk();
+    void minigameExplainCut();
+    void privateCut();
+    void setAttentionPos(cXyz*);
+    void _create();
+    void CreateHeap();
+    void _delete();
+    void getKajiID();
+    void kaji_anm();
+    void _execute();
+    void _draw();
+    void lookBack();
+
+public:
+    /* Place member variables here */
+};
+
+#endif /* D_A_NPC_P1_H */

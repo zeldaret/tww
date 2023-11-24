@@ -3,7 +3,7 @@
 // Translation Unit: d_a_npc_hr.cpp
 //
 
-#include "d_a_npc_hr.h"
+#include "d/actor/d_a_npc_hr.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000A0       .text init__14daNpc_Wind_EffFv */

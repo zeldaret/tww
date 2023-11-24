@@ -3,7 +3,7 @@
 // Translation Unit: d_a_fm.cpp
 //
 
-#include "d_a_fm.h"
+#include "d/actor/d_a_fm.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000003EC       .text __ct__10daFm_HIO_cFv */

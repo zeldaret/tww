@@ -3,7 +3,7 @@
 // Translation Unit: d_a_gnd.cpp
 //
 
-#include "d_a_gnd.h"
+#include "d/actor/d_a_gnd.h"
 #include "dolphin/types.h"
 
 /* 000000EC-0000023C       .text __ct__11daGnd_HIO_cFv */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_light.cpp
 //
 
-#include "d_a_obj_light.h"
+#include "d/actor/d_a_obj_light.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000110       .text solidHeapCB__Q210daObjLight5Act_cFP10fopAc_ac_c */

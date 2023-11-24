@@ -3,7 +3,7 @@
 // Translation Unit: d_a_swpropeller.cpp
 //
 
-#include "d_a_swpropeller.h"
+#include "d/actor/d_a_swpropeller.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000B8       .text _delete__10daSwProp_cFv */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_npc_tt.cpp
 //
 
-#include "d_a_npc_tt.h"
+#include "d/actor/d_a_npc_tt.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text daNpc_tt_XyCheckCB__FPvi */

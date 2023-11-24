@@ -3,7 +3,7 @@
 // Translation Unit: d_a_dai_item.cpp
 //
 
-#include "d_a_dai_item.h"
+#include "d/actor/d_a_dai_item.h"
 #include "dolphin/types.h"
 
 /* 800E3638-800E36C8       .text convItemNo__FUc */

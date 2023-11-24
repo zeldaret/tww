@@ -3,7 +3,7 @@
 // Translation Unit: d_a_demo_dk.cpp
 //
 
-#include "d_a_demo_dk.h"
+#include "d/actor/d_a_demo_dk.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000E8       .text daDEMO_DK_Draw__FP13demo_dk_class */

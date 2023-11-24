@@ -3,7 +3,7 @@
 // Translation Unit: d_a_tag_light.cpp
 //
 
-#include "d_a_tag_light.h"
+#include "d/actor/d_a_tag_light.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000D0       .text get_cc_r__Q210daTagLight5Act_cCFv */

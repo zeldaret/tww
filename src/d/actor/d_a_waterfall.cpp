@@ -3,7 +3,7 @@
 // Translation Unit: d_a_waterfall.cpp
 //
 
-#include "d_a_waterfall.h"
+#include "d/actor/d_a_waterfall.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000F0       .text _delete__9daWfall_cFv */

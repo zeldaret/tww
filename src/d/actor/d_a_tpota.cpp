@@ -3,7 +3,7 @@
 // Translation Unit: d_a_tpota.cpp
 //
 
-#include "d_a_tpota.h"
+#include "d/actor/d_a_tpota.h"
 #include "dolphin/types.h"
 
 /* 00000078-000001D0       .text _create__9daTpota_cFv */

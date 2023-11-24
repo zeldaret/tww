@@ -3,7 +3,7 @@
 // Translation Unit: d_a_goal_flag.cpp
 //
 
-#include "d_a_goal_flag.h"
+#include "d/actor/d_a_goal_flag.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000210       .text setTexObj__16daGFlag_packet_cFUc */

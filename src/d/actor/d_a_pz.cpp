@@ -3,7 +3,7 @@
 // Translation Unit: d_a_pz.cpp
 //
 
-#include "d_a_pz.h"
+#include "d/actor/d_a_pz.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000310       .text __ct__10daPz_HIO_cFv */
