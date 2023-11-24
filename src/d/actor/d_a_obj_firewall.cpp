@@ -301,13 +301,5 @@ void daObj::PrmAbstract<daObjFirewall_c::Param_e>(const fopAc_ac_c*, daObjFirewa
     /* Nonmatching */
 }
 
-/* 00001EE4-00001EEC       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00001EEC-00001EF4       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

@@ -436,48 +436,12 @@ void daObj::PrmAbstract<daObjBarrel2::Act_c::Prm_e>(const fopAc_ac_c*, daObjBarr
     /* Nonmatching */
 }
 
-/* 000034E4-000034EC       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 000034EC-000034F4       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 000034F4-000034FC       .text @16@__dt__11dBgS_WtrChkFv */
-void @16@__dt__11dBgS_WtrChkFv {
-    /* Nonmatching */
-}
 
-/* 000034FC-00003504       .text @48@__dt__11dBgS_WtrChkFv */
-void @48@__dt__11dBgS_WtrChkFv {
-    /* Nonmatching */
-}
 
-/* 00003504-0000350C       .text @36@__dt__11dBgS_WtrChkFv */
-void @36@__dt__11dBgS_WtrChkFv {
-    /* Nonmatching */
-}
 
-/* 0000350C-00003514       .text @16@__dt__14dBgS_SplGrpChkFv */
-void @16@__dt__14dBgS_SplGrpChkFv {
-    /* Nonmatching */
-}
 
-/* 00003514-0000351C       .text @48@__dt__14dBgS_SplGrpChkFv */
-void @48@__dt__14dBgS_SplGrpChkFv {
-    /* Nonmatching */
-}
 
-/* 0000351C-00003524       .text @36@__dt__14dBgS_SplGrpChkFv */
-void @36@__dt__14dBgS_SplGrpChkFv {
-    /* Nonmatching */
-}
 
-/* 00003524-0000352C       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 

@@ -126,30 +126,10 @@ void daObjCorrect::Act_c::_execute() {
     /* Nonmatching */
 }
 
-/* 00000DD8-00000DF8       .text Mthd_Create__Q212daObjCorrect29@unnamed@d_a_obj_correct_cpp@FPv */
-void daObjCorrect::@unnamed@d_a_obj_correct_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00000DF8-00000E1C       .text Mthd_Delete__Q212daObjCorrect29@unnamed@d_a_obj_correct_cpp@FPv */
-void daObjCorrect::@unnamed@d_a_obj_correct_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00000E1C-00000E40       .text Mthd_Execute__Q212daObjCorrect29@unnamed@d_a_obj_correct_cpp@FPv */
-void daObjCorrect::@unnamed@d_a_obj_correct_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00000E40-00000E48       .text Mthd_Draw__Q212daObjCorrect29@unnamed@d_a_obj_correct_cpp@FPv */
-void daObjCorrect::@unnamed@d_a_obj_correct_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00000E48-00000E50       .text Mthd_IsDelete__Q212daObjCorrect29@unnamed@d_a_obj_correct_cpp@FPv */
-void daObjCorrect::@unnamed@d_a_obj_correct_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00000E50-00000E6C       .text PrmAbstract<Q312daObjCorrect5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ312daObjCorrect5Act_c5Prm_eQ312daObjCorrect5Act_c5Prm_e */
 void daObj::PrmAbstract<daObjCorrect::Act_c::Prm_e>(const fopAc_ac_c*, daObjCorrect::Act_c::Prm_e, daObjCorrect::Act_c::Prm_e) {

@@ -246,13 +246,5 @@ void cCcD_ShapeAttr::GetCoCP() const {
     /* Nonmatching */
 }
 
-/* 00000DA4-00000DAC       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 00000DAC-00000DB4       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 

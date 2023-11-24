@@ -456,58 +456,14 @@ mDoExt_btpAnm::~mDoExt_btpAnm() {
     /* Nonmatching */
 }
 
-/* 000076AC-000076B4       .text @20@__dt__11cBgS_LinChkFv */
-void @20@__dt__11cBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 000076B4-000076BC       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 
-/* 000076BC-000076C4       .text @20@__dt__11dBgS_LinChkFv */
-void @20@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 000076C4-000076CC       .text @100@__dt__11dBgS_LinChkFv */
-void @100@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 000076CC-000076D4       .text @88@__dt__11dBgS_LinChkFv */
-void @88@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 000076D4-000076DC       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 000076DC-000076E4       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 000076E4-000076EC       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 000076EC-000076F4       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 000076F4-000076FC       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 000076FC-00007704       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 

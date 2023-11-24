@@ -431,78 +431,18 @@ void daObj::PrmAbstract<daStone::Act_c::Prm_e>(const fopAc_ac_c*, daStone::Act_c
     /* Nonmatching */
 }
 
-/* 00003770-00003778       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00003778-00003780       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00003780-00003788       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 
-/* 00003788-00003790       .text @20@__dt__11dBgS_GndChkFv */
-void @20@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00003790-00003798       .text @76@__dt__11dBgS_GndChkFv */
-void @76@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00003798-000037A0       .text @64@__dt__11dBgS_GndChkFv */
-void @64@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 000037A0-000037A8       .text @20@__dt__14dBgS_ObjGndChkFv */
-void @20@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 000037A8-000037B0       .text @76@__dt__14dBgS_ObjGndChkFv */
-void @76@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 000037B0-000037B8       .text @64@__dt__14dBgS_ObjGndChkFv */
-void @64@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 000037B8-000037C0       .text @20@__dt__20dBgS_ObjGndChk_YoganFv */
-void @20@__dt__20dBgS_ObjGndChk_YoganFv {
-    /* Nonmatching */
-}
 
-/* 000037C0-000037C8       .text @76@__dt__20dBgS_ObjGndChk_YoganFv */
-void @76@__dt__20dBgS_ObjGndChk_YoganFv {
-    /* Nonmatching */
-}
 
-/* 000037C8-000037D0       .text @64@__dt__20dBgS_ObjGndChk_YoganFv */
-void @64@__dt__20dBgS_ObjGndChk_YoganFv {
-    /* Nonmatching */
-}
 
-/* 000037D0-000037D8       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 000037D8-000037E0       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 000037E0-000037E8       .text @20@__dt__11cBgS_GndChkFv */
-void @20@__dt__11cBgS_GndChkFv {
-    /* Nonmatching */
-}
 

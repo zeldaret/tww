@@ -66,13 +66,5 @@ void daObj_Otble::Mthd::IsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 000007E4-000007EC       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 000007EC-000007F4       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 

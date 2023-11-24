@@ -66,13 +66,5 @@ dBgS_ObjAcch::~dBgS_ObjAcch() {
     /* Nonmatching */
 }
 
-/* 00001320-00001328       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00001328-00001330       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 

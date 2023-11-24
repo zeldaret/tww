@@ -336,13 +336,5 @@ void cLib_calcTimer<int>(int*) {
     /* Nonmatching */
 }
 
-/* 00001F80-00001F88       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 00001F88-00001F90       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 

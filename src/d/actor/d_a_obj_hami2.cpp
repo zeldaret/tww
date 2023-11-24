@@ -86,30 +86,10 @@ void daObjHami2::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 00000B58-00000B78       .text Mthd_Create__Q210daObjHami227@unnamed@d_a_obj_hami2_cpp@FPv */
-void daObjHami2::@unnamed@d_a_obj_hami2_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00000B78-00000B98       .text Mthd_Delete__Q210daObjHami227@unnamed@d_a_obj_hami2_cpp@FPv */
-void daObjHami2::@unnamed@d_a_obj_hami2_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00000B98-00000BB8       .text Mthd_Execute__Q210daObjHami227@unnamed@d_a_obj_hami2_cpp@FPv */
-void daObjHami2::@unnamed@d_a_obj_hami2_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00000BB8-00000BE4       .text Mthd_Draw__Q210daObjHami227@unnamed@d_a_obj_hami2_cpp@FPv */
-void daObjHami2::@unnamed@d_a_obj_hami2_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00000BE4-00000C10       .text Mthd_IsDelete__Q210daObjHami227@unnamed@d_a_obj_hami2_cpp@FPv */
-void daObjHami2::@unnamed@d_a_obj_hami2_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00000C10-00000C18       .text IsDelete__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::IsDelete() {

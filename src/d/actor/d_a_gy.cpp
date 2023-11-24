@@ -591,83 +591,19 @@ void cLib_calcTimer<int>(int*) {
     /* Nonmatching */
 }
 
-/* 00005F64-00005F6C       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00005F6C-00005F74       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00005F74-00005F7C       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 00005F7C-00005F84       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 00005F84-00005F8C       .text @280@__dt__8dCcD_CpsFv */
-void @280@__dt__8dCcD_CpsFv {
-    /* Nonmatching */
-}
 
-/* 00005F8C-00005F94       .text @248@__dt__8dCcD_CpsFv */
-void @248@__dt__8dCcD_CpsFv {
-    /* Nonmatching */
-}
 
-/* 00005F94-00005F9C       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00005F9C-00005FA4       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00005FA4-00005FAC       .text @20@__dt__11cBgS_LinChkFv */
-void @20@__dt__11cBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00005FAC-00005FB4       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 
-/* 00005FB4-00005FBC       .text @20@__dt__11dBgS_LinChkFv */
-void @20@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00005FBC-00005FC4       .text @100@__dt__11dBgS_LinChkFv */
-void @100@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00005FC4-00005FCC       .text @88@__dt__11dBgS_LinChkFv */
-void @88@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00005FCC-00005FD4       .text @20@__dt__14dBgS_ObjLinChkFv */
-void @20@__dt__14dBgS_ObjLinChkFv {
-    /* Nonmatching */
-}
 
-/* 00005FD4-00005FDC       .text @100@__dt__14dBgS_ObjLinChkFv */
-void @100@__dt__14dBgS_ObjLinChkFv {
-    /* Nonmatching */
-}
 
-/* 00005FDC-00005FE4       .text @88@__dt__14dBgS_ObjLinChkFv */
-void @88@__dt__14dBgS_ObjLinChkFv {
-    /* Nonmatching */
-}
 

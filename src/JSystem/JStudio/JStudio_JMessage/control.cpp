@@ -6,10 +6,6 @@
 #include "control.h"
 #include "dolphin/types.h"
 
-/* 8027A3F4-8027A4A8       .text createObject_MESSAGE_JMS___Q216JStudio_JMessage21@unnamed@control_cpp@FRCQ47JStudio3stb4data20TParse_TBlock_objectPQ28JMessage8TControl */
-void createObject_MESSAGE_JMS___Q216JStudio_JMessage21@unnamed@control_cpp@FRCQ47JStudio3stb4data20TParse_TBlock_objectPQ28JMessage8TControl {
-    /* Nonmatching */
-}
 
 /* 8027A4A8-8027A508       .text __dt__Q216JStudio_JMessage18TCreateObject_baseFv */
 JStudio_JMessage::TCreateObject_base::~TCreateObject_base() {

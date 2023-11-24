@@ -176,13 +176,5 @@ void cCcD_Obj::GetShapeAttr() const {
     /* Nonmatching */
 }
 
-/* 0000119C-000011A4       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 000011A4-000011AC       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 

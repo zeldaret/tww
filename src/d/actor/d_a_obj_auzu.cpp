@@ -81,30 +81,10 @@ void daObjAuzu::Act_c::_draw() {
     /* Nonmatching */
 }
 
-/* 00000C38-00000C58       .text Mthd_Create__Q29daObjAuzu26@unnamed@d_a_obj_auzu_cpp@FPv */
-void daObjAuzu::@unnamed@d_a_obj_auzu_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00000C58-00000C7C       .text Mthd_Delete__Q29daObjAuzu26@unnamed@d_a_obj_auzu_cpp@FPv */
-void daObjAuzu::@unnamed@d_a_obj_auzu_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00000C7C-00000CA0       .text Mthd_Execute__Q29daObjAuzu26@unnamed@d_a_obj_auzu_cpp@FPv */
-void daObjAuzu::@unnamed@d_a_obj_auzu_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00000CA0-00000CC4       .text Mthd_Draw__Q29daObjAuzu26@unnamed@d_a_obj_auzu_cpp@FPv */
-void daObjAuzu::@unnamed@d_a_obj_auzu_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00000CC4-00000CCC       .text Mthd_IsDelete__Q29daObjAuzu26@unnamed@d_a_obj_auzu_cpp@FPv */
-void daObjAuzu::@unnamed@d_a_obj_auzu_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00000CCC-00000CE8       .text PrmAbstract<Q39daObjAuzu5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ39daObjAuzu5Act_c5Prm_eQ39daObjAuzu5Act_c5Prm_e */
 void daObj::PrmAbstract<daObjAuzu::Act_c::Prm_e>(const fopAc_ac_c*, daObjAuzu::Act_c::Prm_e, daObjAuzu::Act_c::Prm_e) {

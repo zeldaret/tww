@@ -911,80 +911,20 @@ void cLib_getRndValue<int>(int, int) {
     /* Nonmatching */
 }
 
-/* 00007C28-00007C30       .text @20@__dt__11cBgS_LinChkFv */
-void @20@__dt__11cBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00007C30-00007C38       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 
-/* 00007C38-00007C40       .text @20@__dt__11dBgS_LinChkFv */
-void @20@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00007C40-00007C48       .text @100@__dt__11dBgS_LinChkFv */
-void @100@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00007C48-00007C50       .text @88@__dt__11dBgS_LinChkFv */
-void @88@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00007C50-00007C58       .text @16@__dt__12dBgS_RoofChkFv */
-void @16@__dt__12dBgS_RoofChkFv {
-    /* Nonmatching */
-}
 
-/* 00007C58-00007C60       .text @48@__dt__12dBgS_RoofChkFv */
-void @48@__dt__12dBgS_RoofChkFv {
-    /* Nonmatching */
-}
 
-/* 00007C60-00007C68       .text @36@__dt__12dBgS_RoofChkFv */
-void @36@__dt__12dBgS_RoofChkFv {
-    /* Nonmatching */
-}
 
-/* 00007C68-00007C70       .text @16@__dt__15dBgS_ObjRoofChkFv */
-void @16@__dt__15dBgS_ObjRoofChkFv {
-    /* Nonmatching */
-}
 
-/* 00007C70-00007C78       .text @48@__dt__15dBgS_ObjRoofChkFv */
-void @48@__dt__15dBgS_ObjRoofChkFv {
-    /* Nonmatching */
-}
 
-/* 00007C78-00007C80       .text @36@__dt__15dBgS_ObjRoofChkFv */
-void @36@__dt__15dBgS_ObjRoofChkFv {
-    /* Nonmatching */
-}
 
-/* 00007C80-00007C88       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00007C88-00007C90       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00007C90-00007C98       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00007C98-00007CA0       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
 /* 00007CA0-00007CBC       .text getRightHandPos__9daPy_py_cCFv */
 void daPy_py_c::getRightHandPos() const {

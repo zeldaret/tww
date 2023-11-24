@@ -196,13 +196,5 @@ daBalancelift_HIO_c::~daBalancelift_HIO_c() {
     /* Nonmatching */
 }
 
-/* 000018EC-000018F4       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 000018F4-000018FC       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

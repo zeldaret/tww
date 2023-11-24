@@ -521,25 +521,9 @@ void cLib_calcTimer<int>(int*) {
     /* Nonmatching */
 }
 
-/* 00005820-00005828       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00005828-00005830       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00005830-00005838       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 00005838-00005840       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
 /* 00005840-0000585C       .text getSwordTopPos__9daPy_py_cCFv */
 void daPy_py_c::getSwordTopPos() const {

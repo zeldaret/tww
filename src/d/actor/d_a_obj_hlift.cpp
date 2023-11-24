@@ -126,30 +126,10 @@ void daObjHlift::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 00001090-000010B0       .text Mthd_Create__Q210daObjHlift27@unnamed@d_a_obj_hlift_cpp@FPv */
-void daObjHlift::@unnamed@d_a_obj_hlift_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 000010B0-000010D0       .text Mthd_Delete__Q210daObjHlift27@unnamed@d_a_obj_hlift_cpp@FPv */
-void daObjHlift::@unnamed@d_a_obj_hlift_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 000010D0-000010F0       .text Mthd_Execute__Q210daObjHlift27@unnamed@d_a_obj_hlift_cpp@FPv */
-void daObjHlift::@unnamed@d_a_obj_hlift_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 000010F0-0000111C       .text Mthd_Draw__Q210daObjHlift27@unnamed@d_a_obj_hlift_cpp@FPv */
-void daObjHlift::@unnamed@d_a_obj_hlift_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 0000111C-00001148       .text Mthd_IsDelete__Q210daObjHlift27@unnamed@d_a_obj_hlift_cpp@FPv */
-void daObjHlift::@unnamed@d_a_obj_hlift_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00001148-00001150       .text Draw__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::Draw() {

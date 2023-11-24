@@ -296,15 +296,7 @@ daDaiocta_Eye_HIO_c::~daDaiocta_Eye_HIO_c() {
     /* Nonmatching */
 }
 
-/* 00001AE0-00001AE8       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 00001AE8-00001AF0       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
 /* 00001AF0-00001B38       .text __dt__12JntHit_HIO_cFv */
 JntHit_HIO_c::~JntHit_HIO_c() {

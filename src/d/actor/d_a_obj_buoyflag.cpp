@@ -91,35 +91,15 @@ void daObjBuoyflag::Act_c::mode_jumpToSea() {
     /* Nonmatching */
 }
 
-/* 0000278C-000027AC       .text Mthd_Create__Q213daObjBuoyflag30@unnamed@d_a_obj_buoyflag_cpp@FPv */
-void daObjBuoyflag::@unnamed@d_a_obj_buoyflag_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
 /* 000027AC-000029FC       .text _create__Q213daObjBuoyflag5Act_cFv */
 void daObjBuoyflag::Act_c::_create() {
     /* Nonmatching */
 }
 
-/* 000029FC-00002A2C       .text Mthd_Delete__Q213daObjBuoyflag30@unnamed@d_a_obj_buoyflag_cpp@FPv */
-void daObjBuoyflag::@unnamed@d_a_obj_buoyflag_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00002A2C-00002B04       .text Mthd_Execute__Q213daObjBuoyflag30@unnamed@d_a_obj_buoyflag_cpp@FPv */
-void daObjBuoyflag::@unnamed@d_a_obj_buoyflag_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00002B04-00002B54       .text Mthd_Draw__Q213daObjBuoyflag30@unnamed@d_a_obj_buoyflag_cpp@FPv */
-void daObjBuoyflag::@unnamed@d_a_obj_buoyflag_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00002B54-00002B5C       .text Mthd_IsDelete__Q213daObjBuoyflag30@unnamed@d_a_obj_buoyflag_cpp@FPv */
-void daObjBuoyflag::@unnamed@d_a_obj_buoyflag_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00002B5C-00002BA4       .text __dt__10cCcD_GSttsFv */
 cCcD_GStts::~cCcD_GStts() {
@@ -261,13 +241,5 @@ void __arraydtor$3997 {
     /* Nonmatching */
 }
 
-/* 00003114-0000311C       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 0000311C-00003124       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

@@ -811,152 +811,32 @@ JPADrawExecLoadExTex::~JPADrawExecLoadExTex() {
     /* Nonmatching */
 }
 
-/* 80267E50-80267E58       .text @4@exec__20JPADrawExecSetTexMtxFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecSetTexMtx::@4@exec(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
-}
 
-/* 80267E58-80267E60       .text @4@__dt__20JPADrawExecSetTexMtxFv */
-void @4@__dt__20JPADrawExecSetTexMtxFv {
-    /* Nonmatching */
-}
 
-/* 80267E60-80267E68       .text @4@exec__22JPADrawExecLoadTextureFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecLoadTexture::@4@exec(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
-}
 
-/* 80267E68-80267E70       .text @4@__dt__22JPADrawExecLoadTextureFv */
-void @4@__dt__22JPADrawExecLoadTextureFv {
-    /* Nonmatching */
-}
 
-/* 80267E70-80267E78       .text @4@calc__19JPADrawCalcColorPrmFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcColorPrm::@4@calc(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
-}
 
-/* 80267E78-80267E80       .text @4@__dt__19JPADrawCalcColorPrmFv */
-void @4@__dt__19JPADrawCalcColorPrmFv {
-    /* Nonmatching */
-}
 
-/* 80267E80-80267E88       .text @4@calc__19JPADrawCalcColorEnvFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcColorEnv::@4@calc(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
-}
 
-/* 80267E88-80267E90       .text @4@__dt__19JPADrawCalcColorEnvFv */
-void @4@__dt__19JPADrawCalcColorEnvFv {
-    /* Nonmatching */
-}
 
-/* 80267E90-80267E98       .text @4@calc__30JPADrawCalcColorAnmFrameNormalFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcColorAnmFrameNormal::@4@calc(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
-}
 
-/* 80267E98-80267EA0       .text @4@__dt__30JPADrawCalcColorAnmFrameNormalFv */
-void @4@__dt__30JPADrawCalcColorAnmFrameNormalFv {
-    /* Nonmatching */
-}
 
-/* 80267EA0-80267EA8       .text @4@calc__30JPADrawCalcColorAnmFrameRepeatFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcColorAnmFrameRepeat::@4@calc(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
-}
 
-/* 80267EA8-80267EB0       .text @4@__dt__30JPADrawCalcColorAnmFrameRepeatFv */
-void @4@__dt__30JPADrawCalcColorAnmFrameRepeatFv {
-    /* Nonmatching */
-}
 
-/* 80267EB0-80267EB8       .text @4@calc__31JPADrawCalcColorAnmFrameReverseFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcColorAnmFrameReverse::@4@calc(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
-}
 
-/* 80267EB8-80267EC0       .text @4@__dt__31JPADrawCalcColorAnmFrameReverseFv */
-void @4@__dt__31JPADrawCalcColorAnmFrameReverseFv {
-    /* Nonmatching */
-}
 
-/* 80267EC0-80267EC8       .text @4@calc__29JPADrawCalcColorAnmFrameMergeFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcColorAnmFrameMerge::@4@calc(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
-}
 
-/* 80267EC8-80267ED0       .text @4@__dt__29JPADrawCalcColorAnmFrameMergeFv */
-void @4@__dt__29JPADrawCalcColorAnmFrameMergeFv {
-    /* Nonmatching */
-}
 
-/* 80267ED0-80267ED8       .text @4@calc__30JPADrawCalcColorAnmFrameRandomFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcColorAnmFrameRandom::@4@calc(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
-}
 
-/* 80267ED8-80267EE0       .text @4@__dt__30JPADrawCalcColorAnmFrameRandomFv */
-void @4@__dt__30JPADrawCalcColorAnmFrameRandomFv {
-    /* Nonmatching */
-}
 
-/* 80267EE0-80267EE8       .text @4@calc__32JPADrawCalcTextureAnmIndexNormalFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcTextureAnmIndexNormal::@4@calc(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
-}
 
-/* 80267EE8-80267EF0       .text @4@__dt__32JPADrawCalcTextureAnmIndexNormalFv */
-void @4@__dt__32JPADrawCalcTextureAnmIndexNormalFv {
-    /* Nonmatching */
-}
 
-/* 80267EF0-80267EF8       .text @4@calc__32JPADrawCalcTextureAnmIndexRepeatFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcTextureAnmIndexRepeat::@4@calc(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
-}
 
-/* 80267EF8-80267F00       .text @4@__dt__32JPADrawCalcTextureAnmIndexRepeatFv */
-void @4@__dt__32JPADrawCalcTextureAnmIndexRepeatFv {
-    /* Nonmatching */
-}
 
-/* 80267F00-80267F08       .text @4@calc__33JPADrawCalcTextureAnmIndexReverseFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcTextureAnmIndexReverse::@4@calc(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
-}
 
-/* 80267F08-80267F10       .text @4@__dt__33JPADrawCalcTextureAnmIndexReverseFv */
-void @4@__dt__33JPADrawCalcTextureAnmIndexReverseFv {
-    /* Nonmatching */
-}
 
-/* 80267F10-80267F18       .text @4@calc__31JPADrawCalcTextureAnmIndexMergeFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcTextureAnmIndexMerge::@4@calc(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
-}
 
-/* 80267F18-80267F20       .text @4@__dt__31JPADrawCalcTextureAnmIndexMergeFv */
-void @4@__dt__31JPADrawCalcTextureAnmIndexMergeFv {
-    /* Nonmatching */
-}
 
-/* 80267F20-80267F28       .text @4@calc__32JPADrawCalcTextureAnmIndexRandomFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcTextureAnmIndexRandom::@4@calc(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
-}
 
-/* 80267F28-80267F30       .text @4@__dt__32JPADrawCalcTextureAnmIndexRandomFv */
-void @4@__dt__32JPADrawCalcTextureAnmIndexRandomFv {
-    /* Nonmatching */
-}
 
-/* 80267F30-80267F38       .text @4@exec__19JPADrawExecCallBackFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecCallBack::@4@exec(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
-}
 
-/* 80267F38-80267F40       .text @4@__dt__19JPADrawExecCallBackFv */
-void @4@__dt__19JPADrawExecCallBackFv {
-    /* Nonmatching */
-}

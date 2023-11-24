@@ -331,33 +331,9 @@ void cCcD_ShapeAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
     /* Nonmatching */
 }
 
-/* 00001ACC-00001AD4       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00001AD4-00001ADC       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00001ADC-00001AE4       .text @280@__dt__8dCcD_CpsFv */
-void @280@__dt__8dCcD_CpsFv {
-    /* Nonmatching */
-}
 
-/* 00001AE4-00001AEC       .text @248@__dt__8dCcD_CpsFv */
-void @248@__dt__8dCcD_CpsFv {
-    /* Nonmatching */
-}
 
-/* 00001AEC-00001AF4       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 00001AF4-00001AFC       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 

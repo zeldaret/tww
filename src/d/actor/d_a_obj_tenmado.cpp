@@ -51,30 +51,10 @@ void daObjTenmado::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 00000750-00000770       .text Mthd_Create__Q212daObjTenmado29@unnamed@d_a_obj_tenmado_cpp@FPv */
-void daObjTenmado::@unnamed@d_a_obj_tenmado_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00000770-00000790       .text Mthd_Delete__Q212daObjTenmado29@unnamed@d_a_obj_tenmado_cpp@FPv */
-void daObjTenmado::@unnamed@d_a_obj_tenmado_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00000790-000007B0       .text Mthd_Execute__Q212daObjTenmado29@unnamed@d_a_obj_tenmado_cpp@FPv */
-void daObjTenmado::@unnamed@d_a_obj_tenmado_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 000007B0-000007DC       .text Mthd_Draw__Q212daObjTenmado29@unnamed@d_a_obj_tenmado_cpp@FPv */
-void daObjTenmado::@unnamed@d_a_obj_tenmado_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 000007DC-00000808       .text Mthd_IsDelete__Q212daObjTenmado29@unnamed@d_a_obj_tenmado_cpp@FPv */
-void daObjTenmado::@unnamed@d_a_obj_tenmado_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00000808-00000810       .text IsDelete__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::IsDelete() {

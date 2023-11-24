@@ -736,35 +736,11 @@ daShip_HIO_c0::~daShip_HIO_c0() {
     /* Nonmatching */
 }
 
-/* 0000D3CC-0000D3D4       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 0000D3D4-0000D3DC       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 0000D3DC-0000D3E4       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 0000D3E4-0000D3EC       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 0000D3EC-0000D3F4       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 0000D3F4-0000D3FC       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
 /* 0000D3FC-0000D41C       .text checkNoControll__9daPy_lk_cCFv */
 void daPy_lk_c::checkNoControll() const {

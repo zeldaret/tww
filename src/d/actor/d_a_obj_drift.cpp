@@ -126,30 +126,10 @@ void daObjDrift::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 00001270-00001290       .text Mthd_Create__Q210daObjDrift27@unnamed@d_a_obj_drift_cpp@FPv */
-void daObjDrift::@unnamed@d_a_obj_drift_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00001290-000012B0       .text Mthd_Delete__Q210daObjDrift27@unnamed@d_a_obj_drift_cpp@FPv */
-void daObjDrift::@unnamed@d_a_obj_drift_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 000012B0-000012D0       .text Mthd_Execute__Q210daObjDrift27@unnamed@d_a_obj_drift_cpp@FPv */
-void daObjDrift::@unnamed@d_a_obj_drift_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 000012D0-000012FC       .text Mthd_Draw__Q210daObjDrift27@unnamed@d_a_obj_drift_cpp@FPv */
-void daObjDrift::@unnamed@d_a_obj_drift_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 000012FC-00001328       .text Mthd_IsDelete__Q210daObjDrift27@unnamed@d_a_obj_drift_cpp@FPv */
-void daObjDrift::@unnamed@d_a_obj_drift_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00001328-00001330       .text Draw__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::Draw() {
@@ -281,13 +261,5 @@ void daObj::PrmAbstract<daObjDrift::Act_c::Prm_e>(const fopAc_ac_c*, daObjDrift:
     /* Nonmatching */
 }
 
-/* 000014B8-000014C0       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 000014C0-000014C8       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

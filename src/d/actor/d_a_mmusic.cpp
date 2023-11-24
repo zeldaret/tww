@@ -61,28 +61,8 @@ void daMmusic::Act_c::_draw() {
     /* Nonmatching */
 }
 
-/* 0000055C-0000057C       .text Mthd_Create__Q28daMmusic24@unnamed@d_a_mmusic_cpp@FPv */
-void daMmusic::@unnamed@d_a_mmusic_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 0000057C-000005A0       .text Mthd_Delete__Q28daMmusic24@unnamed@d_a_mmusic_cpp@FPv */
-void daMmusic::@unnamed@d_a_mmusic_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 000005A0-000005C4       .text Mthd_Execute__Q28daMmusic24@unnamed@d_a_mmusic_cpp@FPv */
-void daMmusic::@unnamed@d_a_mmusic_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 000005C4-000005E8       .text Mthd_Draw__Q28daMmusic24@unnamed@d_a_mmusic_cpp@FPv */
-void daMmusic::@unnamed@d_a_mmusic_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 000005E8-000005F0       .text Mthd_IsDelete__Q28daMmusic24@unnamed@d_a_mmusic_cpp@FPv */
-void daMmusic::@unnamed@d_a_mmusic_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 

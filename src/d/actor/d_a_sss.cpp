@@ -221,40 +221,12 @@ cBgS_PolyInfo::~cBgS_PolyInfo() {
     /* Nonmatching */
 }
 
-/* 00002F9C-00002FA4       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 
-/* 00002FA4-00002FAC       .text @20@__dt__11dBgS_GndChkFv */
-void @20@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00002FAC-00002FB4       .text @76@__dt__11dBgS_GndChkFv */
-void @76@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00002FB4-00002FBC       .text @64@__dt__11dBgS_GndChkFv */
-void @64@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00002FBC-00002FC4       .text @20@__dt__11cBgS_GndChkFv */
-void @20@__dt__11cBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00002FC4-00002FCC       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 00002FCC-00002FD4       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
 /* 00002FD4-000030EC       .text __dt__11dBgS_GndChkFv */
 dBgS_GndChk::~dBgS_GndChk() {

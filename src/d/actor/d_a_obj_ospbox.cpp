@@ -141,30 +141,10 @@ void daObjOspbox::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 000011A4-000011C4       .text Mthd_Create__Q211daObjOspbox28@unnamed@d_a_obj_ospbox_cpp@FPv */
-void daObjOspbox::@unnamed@d_a_obj_ospbox_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 000011C4-000011E4       .text Mthd_Delete__Q211daObjOspbox28@unnamed@d_a_obj_ospbox_cpp@FPv */
-void daObjOspbox::@unnamed@d_a_obj_ospbox_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 000011E4-00001204       .text Mthd_Execute__Q211daObjOspbox28@unnamed@d_a_obj_ospbox_cpp@FPv */
-void daObjOspbox::@unnamed@d_a_obj_ospbox_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00001204-00001230       .text Mthd_Draw__Q211daObjOspbox28@unnamed@d_a_obj_ospbox_cpp@FPv */
-void daObjOspbox::@unnamed@d_a_obj_ospbox_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00001230-0000125C       .text Mthd_IsDelete__Q211daObjOspbox28@unnamed@d_a_obj_ospbox_cpp@FPv */
-void daObjOspbox::@unnamed@d_a_obj_ospbox_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 0000125C-00001264       .text IsDelete__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::IsDelete() {
@@ -271,53 +251,13 @@ void daObj::PrmAbstract<daObjOspbox::Act_c::Prm_e>(const fopAc_ac_c*, daObjOspbo
     /* Nonmatching */
 }
 
-/* 000013C4-000013CC       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 000013CC-000013D4       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 000013D4-000013DC       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 
-/* 000013DC-000013E4       .text @20@__dt__11dBgS_GndChkFv */
-void @20@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 000013E4-000013EC       .text @76@__dt__11dBgS_GndChkFv */
-void @76@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 000013EC-000013F4       .text @64@__dt__11dBgS_GndChkFv */
-void @64@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 000013F4-000013FC       .text @20@__dt__14dBgS_ObjGndChkFv */
-void @20@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 000013FC-00001404       .text @76@__dt__14dBgS_ObjGndChkFv */
-void @76@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 00001404-0000140C       .text @64@__dt__14dBgS_ObjGndChkFv */
-void @64@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 0000140C-00001414       .text @20@__dt__11cBgS_GndChkFv */
-void @20@__dt__11cBgS_GndChkFv {
-    /* Nonmatching */
-}
 

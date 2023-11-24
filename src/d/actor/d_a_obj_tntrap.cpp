@@ -301,13 +301,5 @@ void daObj::PrmAbstract<daObjTnTrap_c::Param_e>(const fopAc_ac_c*, daObjTnTrap_c
     /* Nonmatching */
 }
 
-/* 00001DDC-00001DE4       .text @280@__dt__8dCcD_TriFv */
-void @280@__dt__8dCcD_TriFv {
-    /* Nonmatching */
-}
 
-/* 00001DE4-00001DEC       .text @248@__dt__8dCcD_TriFv */
-void @248@__dt__8dCcD_TriFv {
-    /* Nonmatching */
-}
 

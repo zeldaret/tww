@@ -301,13 +301,5 @@ void daObj::PrmAbstract<daObjKanoke_c::Prm_e>(const fopAc_ac_c*, daObjKanoke_c::
     /* Nonmatching */
 }
 
-/* 00002360-00002368       .text @280@__dt__8dCcD_CpsFv */
-void @280@__dt__8dCcD_CpsFv {
-    /* Nonmatching */
-}
 
-/* 00002368-00002370       .text @248@__dt__8dCcD_CpsFv */
-void @248@__dt__8dCcD_CpsFv {
-    /* Nonmatching */
-}
 

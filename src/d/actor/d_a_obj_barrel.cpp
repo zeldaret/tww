@@ -366,23 +366,7 @@ void daObj::PrmAbstract<daObjBarrel::Act_c::Prm_e>(const fopAc_ac_c*, daObjBarre
     /* Nonmatching */
 }
 
-/* 000026EC-000026F4       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 000026F4-000026FC       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 000026FC-00002704       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00002704-0000270C       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

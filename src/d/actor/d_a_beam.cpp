@@ -286,53 +286,13 @@ daBeam_HIO_c::~daBeam_HIO_c() {
     /* Nonmatching */
 }
 
-/* 00002C50-00002C58       .text @280@__dt__8dCcD_CpsFv */
-void @280@__dt__8dCcD_CpsFv {
-    /* Nonmatching */
-}
 
-/* 00002C58-00002C60       .text @248@__dt__8dCcD_CpsFv */
-void @248@__dt__8dCcD_CpsFv {
-    /* Nonmatching */
-}
 
-/* 00002C60-00002C68       .text @20@__dt__11cBgS_LinChkFv */
-void @20@__dt__11cBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00002C68-00002C70       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 
-/* 00002C70-00002C78       .text @20@__dt__11dBgS_LinChkFv */
-void @20@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00002C78-00002C80       .text @100@__dt__11dBgS_LinChkFv */
-void @100@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00002C80-00002C88       .text @88@__dt__11dBgS_LinChkFv */
-void @88@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00002C88-00002C90       .text @20@__dt__14dBgS_ObjLinChkFv */
-void @20@__dt__14dBgS_ObjLinChkFv {
-    /* Nonmatching */
-}
 
-/* 00002C90-00002C98       .text @100@__dt__14dBgS_ObjLinChkFv */
-void @100@__dt__14dBgS_ObjLinChkFv {
-    /* Nonmatching */
-}
 
-/* 00002C98-00002CA0       .text @88@__dt__14dBgS_ObjLinChkFv */
-void @88@__dt__14dBgS_ObjLinChkFv {
-    /* Nonmatching */
-}
 

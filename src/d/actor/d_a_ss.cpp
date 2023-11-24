@@ -266,58 +266,14 @@ void cCcD_ShapeAttr::GetCoCP() const {
     /* Nonmatching */
 }
 
-/* 00003824-0000382C       .text @20@__dt__11cBgS_LinChkFv */
-void @20@__dt__11cBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 0000382C-00003834       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 
-/* 00003834-0000383C       .text @20@__dt__11dBgS_LinChkFv */
-void @20@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 0000383C-00003844       .text @100@__dt__11dBgS_LinChkFv */
-void @100@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00003844-0000384C       .text @88@__dt__11dBgS_LinChkFv */
-void @88@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 0000384C-00003854       .text @20@__dt__11dBgS_GndChkFv */
-void @20@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00003854-0000385C       .text @76@__dt__11dBgS_GndChkFv */
-void @76@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 0000385C-00003864       .text @64@__dt__11dBgS_GndChkFv */
-void @64@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00003864-0000386C       .text @20@__dt__11cBgS_GndChkFv */
-void @20@__dt__11cBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 0000386C-00003874       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 00003874-0000387C       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 

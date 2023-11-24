@@ -146,30 +146,10 @@ void daObjLadder::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 00001140-00001160       .text Mthd_Create__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
-void daObjLadder::@unnamed@d_a_obj_ladder_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00001160-00001180       .text Mthd_Delete__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
-void daObjLadder::@unnamed@d_a_obj_ladder_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00001180-000011A0       .text Mthd_Execute__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
-void daObjLadder::@unnamed@d_a_obj_ladder_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 000011A0-000011CC       .text Mthd_Draw__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
-void daObjLadder::@unnamed@d_a_obj_ladder_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 000011CC-000011F8       .text Mthd_IsDelete__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
-void daObjLadder::@unnamed@d_a_obj_ladder_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 000011F8-00001200       .text Draw__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::Draw() {
@@ -221,43 +201,11 @@ void daObj::PrmAbstract<daObjLadder::Act_c::Prm_e>(const fopAc_ac_c*, daObjLadde
     /* Nonmatching */
 }
 
-/* 0000129C-000012A4       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 
-/* 000012A4-000012AC       .text @20@__dt__11dBgS_GndChkFv */
-void @20@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 000012AC-000012B4       .text @76@__dt__11dBgS_GndChkFv */
-void @76@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 000012B4-000012BC       .text @64@__dt__11dBgS_GndChkFv */
-void @64@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 000012BC-000012C4       .text @20@__dt__14dBgS_ObjGndChkFv */
-void @20@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 000012C4-000012CC       .text @76@__dt__14dBgS_ObjGndChkFv */
-void @76@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 000012CC-000012D4       .text @64@__dt__14dBgS_ObjGndChkFv */
-void @64@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 000012D4-000012DC       .text @20@__dt__11cBgS_GndChkFv */
-void @20@__dt__11cBgS_GndChkFv {
-    /* Nonmatching */
-}
 

@@ -621,25 +621,9 @@ void cLib_getRndValue<int>(int, int) {
     /* Nonmatching */
 }
 
-/* 000042BC-000042C4       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 000042C4-000042CC       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 000042CC-000042D4       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 000042D4-000042DC       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
 /* 000042DC-000042E4       .text next_msgStatus__12fopNpc_npc_cFPUl */
 void fopNpc_npc_c::next_msgStatus(unsigned long*) {

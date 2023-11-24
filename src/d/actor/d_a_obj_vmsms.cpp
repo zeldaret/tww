@@ -46,28 +46,8 @@ void daObjVmsms_c::_draw() {
     /* Nonmatching */
 }
 
-/* 0000036C-0000038C       .text Mthd_Create__27@unnamed@d_a_obj_vmsms_cpp@FPv */
-void @unnamed@d_a_obj_vmsms_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 0000038C-000003B0       .text Mthd_Delete__27@unnamed@d_a_obj_vmsms_cpp@FPv */
-void @unnamed@d_a_obj_vmsms_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 000003B0-000003D4       .text Mthd_Execute__27@unnamed@d_a_obj_vmsms_cpp@FPv */
-void @unnamed@d_a_obj_vmsms_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 000003D4-000003F8       .text Mthd_Draw__27@unnamed@d_a_obj_vmsms_cpp@FPv */
-void @unnamed@d_a_obj_vmsms_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 000003F8-00000400       .text Mthd_IsDelete__27@unnamed@d_a_obj_vmsms_cpp@FPv */
-void @unnamed@d_a_obj_vmsms_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 

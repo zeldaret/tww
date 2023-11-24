@@ -466,25 +466,9 @@ void cLib_calcTimer<short>(short*) {
     /* Nonmatching */
 }
 
-/* 00005748-00005750       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00005750-00005758       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00005758-00005760       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00005760-00005768       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
 /* 00005768-000057B0       .text __dt__10dNpc_HIO_cFv */
 dNpc_HIO_c::~dNpc_HIO_c() {

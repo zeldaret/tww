@@ -226,30 +226,10 @@ void daObjEff::Act_c::_execute() {
     /* Nonmatching */
 }
 
-/* 000014C0-000014E0       .text Mthd_Create__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
-void daObjEff::@unnamed@d_a_obj_eff_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 000014E0-00001504       .text Mthd_Delete__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
-void daObjEff::@unnamed@d_a_obj_eff_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00001504-00001528       .text Mthd_Execute__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
-void daObjEff::@unnamed@d_a_obj_eff_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00001528-00001530       .text Mthd_Draw__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
-void daObjEff::@unnamed@d_a_obj_eff_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00001530-00001538       .text Mthd_IsDelete__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
-void daObjEff::@unnamed@d_a_obj_eff_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00001538-000015C4       .text __dt__Q28daObjEff14WoodBoxSmokeCBFv */
 daObjEff::WoodBoxSmokeCB::~WoodBoxSmokeCB() {

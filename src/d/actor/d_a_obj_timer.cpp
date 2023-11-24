@@ -41,30 +41,10 @@ void daObjTimer::Act_c::_execute() {
     /* Nonmatching */
 }
 
-/* 00000394-000003B4       .text Mthd_Create__Q210daObjTimer27@unnamed@d_a_obj_timer_cpp@FPv */
-void daObjTimer::@unnamed@d_a_obj_timer_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 000003B4-000003D8       .text Mthd_Delete__Q210daObjTimer27@unnamed@d_a_obj_timer_cpp@FPv */
-void daObjTimer::@unnamed@d_a_obj_timer_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 000003D8-000003FC       .text Mthd_Execute__Q210daObjTimer27@unnamed@d_a_obj_timer_cpp@FPv */
-void daObjTimer::@unnamed@d_a_obj_timer_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 000003FC-00000404       .text Mthd_Draw__Q210daObjTimer27@unnamed@d_a_obj_timer_cpp@FPv */
-void daObjTimer::@unnamed@d_a_obj_timer_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00000404-0000040C       .text Mthd_IsDelete__Q210daObjTimer27@unnamed@d_a_obj_timer_cpp@FPv */
-void daObjTimer::@unnamed@d_a_obj_timer_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 0000040C-00000428       .text PrmAbstract<Q310daObjTimer5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ310daObjTimer5Act_c5Prm_eQ310daObjTimer5Act_c5Prm_e */
 void daObj::PrmAbstract<daObjTimer::Act_c::Prm_e>(const fopAc_ac_c*, daObjTimer::Act_c::Prm_e, daObjTimer::Act_c::Prm_e) {

@@ -291,13 +291,5 @@ void daObj::PrmAbstract<daObjFigure_c::Prm_e>(const fopAc_ac_c*, daObjFigure_c::
     /* Nonmatching */
 }
 
-/* 00002390-00002398       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00002398-000023A0       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

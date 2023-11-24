@@ -6,10 +6,6 @@
 #include "d_camera.h"
 #include "dolphin/types.h"
 
-/* 80161770-80161790       .text limitf__22@unnamed@d_camera_cpp@Ffff */
-void @unnamed@d_camera_cpp@::limitf(float, float, float) {
-    /* Nonmatching */
-}
 
 /* 80161790-801618B8       .text __ct__9dCamera_cFP12camera_class */
 dCamera_c::dCamera_c(camera_class*) {
@@ -341,10 +337,6 @@ void dCamera_c::followCamera(long) {
     /* Nonmatching */
 }
 
-/* 8016C4F8-8016C53C       .text isPlayerFlying__22@unnamed@d_camera_cpp@FUl */
-void @unnamed@d_camera_cpp@::isPlayerFlying(unsigned long) {
-    /* Nonmatching */
-}
 
 /* 8016C53C-8016C55C       .text d2s__6cAngleFf */
 void cAngle::d2s(float) {
@@ -371,15 +363,7 @@ cXyz::cXyz(float, float, float) {
     /* Nonmatching */
 }
 
-/* 8016C5E0-8016C5FC       .text check_owner_action1__22@unnamed@d_camera_cpp@FUlUl */
-void @unnamed@d_camera_cpp@::check_owner_action1(unsigned long, unsigned long) {
-    /* Nonmatching */
-}
 
-/* 8016C5FC-8016C618       .text check_owner_action__22@unnamed@d_camera_cpp@FUlUl */
-void @unnamed@d_camera_cpp@::check_owner_action(unsigned long, unsigned long) {
-    /* Nonmatching */
-}
 
 /* 8016C618-8016D824       .text lockonCamera__9dCamera_cFl */
 void dCamera_c::lockonCamera(long) {
@@ -401,15 +385,7 @@ void dCamera_c::talktoCamera(long) {
     /* Nonmatching */
 }
 
-/* 80170434-80170444       .text hideActor__22@unnamed@d_camera_cpp@FP10fopAc_ac_c */
-void @unnamed@d_camera_cpp@::hideActor(fopAc_ac_c*) {
-    /* Nonmatching */
-}
 
-/* 80170444-80170490       .text lineCollisionCheck__22@unnamed@d_camera_cpp@F4cXyz4cXyzP10fopAc_ac_cP10fopAc_ac_c */
-void @unnamed@d_camera_cpp@::lineCollisionCheck(cXyz, cXyz, fopAc_ac_c*, fopAc_ac_c*) {
-    /* Nonmatching */
-}
 
 /* 80170490-801708E0       .text CalcSubjectAngle__9dCamera_cFPsPs */
 void dCamera_c::CalcSubjectAngle(short*, short*) {
@@ -801,103 +777,23 @@ void dComIfGp_evmng_cameraPlay() {
     /* Nonmatching */
 }
 
-/* 8017D420-8017D428       .text @20@__dt__14dBgS_CamGndChkFv */
-void @20@__dt__14dBgS_CamGndChkFv {
-    /* Nonmatching */
-}
 
-/* 8017D428-8017D430       .text @76@__dt__14dBgS_CamGndChkFv */
-void @76@__dt__14dBgS_CamGndChkFv {
-    /* Nonmatching */
-}
 
-/* 8017D430-8017D438       .text @64@__dt__14dBgS_CamGndChkFv */
-void @64@__dt__14dBgS_CamGndChkFv {
-    /* Nonmatching */
-}
 
-/* 8017D438-8017D440       .text @20@__dt__14dBgS_CamLinChkFv */
-void @20@__dt__14dBgS_CamLinChkFv {
-    /* Nonmatching */
-}
 
-/* 8017D440-8017D448       .text @100@__dt__14dBgS_CamLinChkFv */
-void @100@__dt__14dBgS_CamLinChkFv {
-    /* Nonmatching */
-}
 
-/* 8017D448-8017D450       .text @88@__dt__14dBgS_CamLinChkFv */
-void @88@__dt__14dBgS_CamLinChkFv {
-    /* Nonmatching */
-}
 
-/* 8017D450-8017D458       .text @20@__dt__21dBgS_CamLinChk_NorWtrFv */
-void @20@__dt__21dBgS_CamLinChk_NorWtrFv {
-    /* Nonmatching */
-}
 
-/* 8017D458-8017D460       .text @100@__dt__21dBgS_CamLinChk_NorWtrFv */
-void @100@__dt__21dBgS_CamLinChk_NorWtrFv {
-    /* Nonmatching */
-}
 
-/* 8017D460-8017D468       .text @88@__dt__21dBgS_CamLinChk_NorWtrFv */
-void @88@__dt__21dBgS_CamLinChk_NorWtrFv {
-    /* Nonmatching */
-}
 
-/* 8017D468-8017D470       .text @20@__dt__18dBgS_CamGndChk_WtrFv */
-void @20@__dt__18dBgS_CamGndChk_WtrFv {
-    /* Nonmatching */
-}
 
-/* 8017D470-8017D478       .text @76@__dt__18dBgS_CamGndChk_WtrFv */
-void @76@__dt__18dBgS_CamGndChk_WtrFv {
-    /* Nonmatching */
-}
 
-/* 8017D478-8017D480       .text @64@__dt__18dBgS_CamGndChk_WtrFv */
-void @64@__dt__18dBgS_CamGndChk_WtrFv {
-    /* Nonmatching */
-}
 
-/* 8017D480-8017D488       .text @20@__dt__11dBgS_SphChkFv */
-void @20@__dt__11dBgS_SphChkFv {
-    /* Nonmatching */
-}
 
-/* 8017D488-8017D490       .text @36@__dt__11dBgS_SphChkFv */
-void @36@__dt__11dBgS_SphChkFv {
-    /* Nonmatching */
-}
 
-/* 8017D490-8017D498       .text @68@__dt__11dBgS_SphChkFv */
-void @68@__dt__11dBgS_SphChkFv {
-    /* Nonmatching */
-}
 
-/* 8017D498-8017D4A0       .text @56@__dt__11dBgS_SphChkFv */
-void @56@__dt__11dBgS_SphChkFv {
-    /* Nonmatching */
-}
 
-/* 8017D4A0-8017D4A8       .text @20@__dt__14dBgS_CamSphChkFv */
-void @20@__dt__14dBgS_CamSphChkFv {
-    /* Nonmatching */
-}
 
-/* 8017D4A8-8017D4B0       .text @36@__dt__14dBgS_CamSphChkFv */
-void @36@__dt__14dBgS_CamSphChkFv {
-    /* Nonmatching */
-}
 
-/* 8017D4B0-8017D4B8       .text @68@__dt__14dBgS_CamSphChkFv */
-void @68@__dt__14dBgS_CamSphChkFv {
-    /* Nonmatching */
-}
 
-/* 8017D4B8-8017D4C0       .text @56@__dt__14dBgS_CamSphChkFv */
-void @56@__dt__14dBgS_CamSphChkFv {
-    /* Nonmatching */
-}
 

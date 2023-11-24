@@ -336,30 +336,10 @@ void cLib_calcTimer<short>(short*) {
     /* Nonmatching */
 }
 
-/* 00002F2C-00002F34       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00002F34-00002F3C       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00002F3C-00002F44       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00002F44-00002F4C       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00002F4C-00002F54       .text @196@__dt__10dBgWDeformFv */
-void @196@__dt__10dBgWDeformFv {
-    /* Nonmatching */
-}
 
 /* 00002F54-00002F58       .text MatrixCrrPos__6dBgWSvFR13cBgS_PolyInfoPvbP4cXyzP5csXyzP5csXyz */
 void dBgWSv::MatrixCrrPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*) {

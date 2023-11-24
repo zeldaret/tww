@@ -106,30 +106,10 @@ void daObjShelf::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 00000A50-00000A70       .text Mthd_Create__Q210daObjShelf27@unnamed@d_a_obj_shelf_cpp@FPv */
-void daObjShelf::@unnamed@d_a_obj_shelf_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00000A70-00000A90       .text Mthd_Delete__Q210daObjShelf27@unnamed@d_a_obj_shelf_cpp@FPv */
-void daObjShelf::@unnamed@d_a_obj_shelf_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00000A90-00000AB0       .text Mthd_Execute__Q210daObjShelf27@unnamed@d_a_obj_shelf_cpp@FPv */
-void daObjShelf::@unnamed@d_a_obj_shelf_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00000AB0-00000ADC       .text Mthd_Draw__Q210daObjShelf27@unnamed@d_a_obj_shelf_cpp@FPv */
-void daObjShelf::@unnamed@d_a_obj_shelf_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00000ADC-00000B08       .text Mthd_IsDelete__Q210daObjShelf27@unnamed@d_a_obj_shelf_cpp@FPv */
-void daObjShelf::@unnamed@d_a_obj_shelf_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00000B08-00000B10       .text Draw__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::Draw() {

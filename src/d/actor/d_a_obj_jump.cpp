@@ -176,30 +176,10 @@ void daObjJump::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 00001594-000015B4       .text Mthd_Create__Q29daObjJump26@unnamed@d_a_obj_jump_cpp@FPv */
-void daObjJump::@unnamed@d_a_obj_jump_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 000015B4-000015D4       .text Mthd_Delete__Q29daObjJump26@unnamed@d_a_obj_jump_cpp@FPv */
-void daObjJump::@unnamed@d_a_obj_jump_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 000015D4-000015F4       .text Mthd_Execute__Q29daObjJump26@unnamed@d_a_obj_jump_cpp@FPv */
-void daObjJump::@unnamed@d_a_obj_jump_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 000015F4-00001620       .text Mthd_Draw__Q29daObjJump26@unnamed@d_a_obj_jump_cpp@FPv */
-void daObjJump::@unnamed@d_a_obj_jump_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00001620-0000164C       .text Mthd_IsDelete__Q29daObjJump26@unnamed@d_a_obj_jump_cpp@FPv */
-void daObjJump::@unnamed@d_a_obj_jump_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 0000164C-00001654       .text Draw__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::Draw() {
@@ -251,43 +231,11 @@ void daObj::PrmAbstract<daObjJump::Act_c::Prm_e>(const fopAc_ac_c*, daObjJump::A
     /* Nonmatching */
 }
 
-/* 000016F0-000016F8       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 
-/* 000016F8-00001700       .text @20@__dt__11dBgS_GndChkFv */
-void @20@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00001700-00001708       .text @76@__dt__11dBgS_GndChkFv */
-void @76@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00001708-00001710       .text @64@__dt__11dBgS_GndChkFv */
-void @64@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00001710-00001718       .text @20@__dt__14dBgS_ObjGndChkFv */
-void @20@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 00001718-00001720       .text @76@__dt__14dBgS_ObjGndChkFv */
-void @76@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 00001720-00001728       .text @64@__dt__14dBgS_ObjGndChkFv */
-void @64@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 00001728-00001730       .text @20@__dt__11cBgS_GndChkFv */
-void @20@__dt__11cBgS_GndChkFv {
-    /* Nonmatching */
-}
 

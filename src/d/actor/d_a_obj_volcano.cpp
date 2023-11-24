@@ -141,30 +141,10 @@ void daObjVolcano::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 00001B8C-00001BAC       .text Mthd_Create__Q212daObjVolcano29@unnamed@d_a_obj_volcano_cpp@FPv */
-void daObjVolcano::@unnamed@d_a_obj_volcano_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00001BAC-00001BCC       .text Mthd_Delete__Q212daObjVolcano29@unnamed@d_a_obj_volcano_cpp@FPv */
-void daObjVolcano::@unnamed@d_a_obj_volcano_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00001BCC-00001BEC       .text Mthd_Execute__Q212daObjVolcano29@unnamed@d_a_obj_volcano_cpp@FPv */
-void daObjVolcano::@unnamed@d_a_obj_volcano_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00001BEC-00001C18       .text Mthd_Draw__Q212daObjVolcano29@unnamed@d_a_obj_volcano_cpp@FPv */
-void daObjVolcano::@unnamed@d_a_obj_volcano_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00001C18-00001C44       .text Mthd_IsDelete__Q212daObjVolcano29@unnamed@d_a_obj_volcano_cpp@FPv */
-void daObjVolcano::@unnamed@d_a_obj_volcano_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00001C44-00001C4C       .text IsDelete__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::IsDelete() {
@@ -266,13 +246,5 @@ void daObj::PrmAbstract<daObjVolcano::Act_c::Prm_e>(const fopAc_ac_c*, daObjVolc
     /* Nonmatching */
 }
 
-/* 00001D64-00001D6C       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00001D6C-00001D74       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

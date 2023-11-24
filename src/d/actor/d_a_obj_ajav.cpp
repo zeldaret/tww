@@ -256,30 +256,10 @@ void daObjAjav::Act_c::_draw() {
     /* Nonmatching */
 }
 
-/* 00002DCC-00002DEC       .text Mthd_Create__Q29daObjAjav26@unnamed@d_a_obj_ajav_cpp@FPv */
-void daObjAjav::@unnamed@d_a_obj_ajav_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00002DEC-00002E10       .text Mthd_Delete__Q29daObjAjav26@unnamed@d_a_obj_ajav_cpp@FPv */
-void daObjAjav::@unnamed@d_a_obj_ajav_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00002E10-00002E34       .text Mthd_Execute__Q29daObjAjav26@unnamed@d_a_obj_ajav_cpp@FPv */
-void daObjAjav::@unnamed@d_a_obj_ajav_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00002E34-00002E58       .text Mthd_Draw__Q29daObjAjav26@unnamed@d_a_obj_ajav_cpp@FPv */
-void daObjAjav::@unnamed@d_a_obj_ajav_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00002E58-00002E60       .text Mthd_IsDelete__Q29daObjAjav26@unnamed@d_a_obj_ajav_cpp@FPv */
-void daObjAjav::@unnamed@d_a_obj_ajav_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00002E60-00002EA8       .text __dt__10cCcD_GSttsFv */
 cCcD_GStts::~cCcD_GStts() {
@@ -416,23 +396,7 @@ void cCcD_ShapeAttr::GetCoCP() const {
     /* Nonmatching */
 }
 
-/* 00003560-00003568       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 00003568-00003570       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 00003570-00003578       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00003578-00003580       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

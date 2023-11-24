@@ -6,10 +6,6 @@
 #include "control.h"
 #include "dolphin/types.h"
 
-/* 80278B98-80278C4C       .text createObject_SOUND_JAI___Q214JStudio_JAudio21@unnamed@control_cpp@FRCQ47JStudio3stb4data20TParse_TBlock_objectP8JAIBasic */
-void createObject_SOUND_JAI___Q214JStudio_JAudio21@unnamed@control_cpp@FRCQ47JStudio3stb4data20TParse_TBlock_objectP8JAIBasic {
-    /* Nonmatching */
-}
 
 /* 80278C4C-80278CAC       .text __dt__Q214JStudio_JAudio13TCreateObjectFv */
 JStudio_JAudio::TCreateObject::~TCreateObject() {

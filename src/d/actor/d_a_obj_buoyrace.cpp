@@ -71,30 +71,10 @@ void daObjBuoyrace::Act_c::_draw() {
     /* Nonmatching */
 }
 
-/* 00000B28-00000B48       .text Mthd_Create__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-void daObjBuoyrace::@unnamed@d_a_obj_buoyrace_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00000B48-00000B6C       .text Mthd_Delete__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-void daObjBuoyrace::@unnamed@d_a_obj_buoyrace_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00000B6C-00000B90       .text Mthd_Execute__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-void daObjBuoyrace::@unnamed@d_a_obj_buoyrace_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00000B90-00000BB4       .text Mthd_Draw__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-void daObjBuoyrace::@unnamed@d_a_obj_buoyrace_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00000BB4-00000BBC       .text Mthd_IsDelete__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-void daObjBuoyrace::@unnamed@d_a_obj_buoyrace_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00000BBC-00000BD8       .text PrmAbstract<Q313daObjBuoyrace5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ313daObjBuoyrace5Act_c5Prm_eQ313daObjBuoyrace5Act_c5Prm_e */
 void daObj::PrmAbstract<daObjBuoyrace::Act_c::Prm_e>(const fopAc_ac_c*, daObjBuoyrace::Act_c::Prm_e, daObjBuoyrace::Act_c::Prm_e) {

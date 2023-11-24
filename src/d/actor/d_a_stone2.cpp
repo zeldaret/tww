@@ -281,30 +281,10 @@ void daStone2::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 0000273C-0000275C       .text Mthd_Create__Q28daStone224@unnamed@d_a_stone2_cpp@FPv */
-void daStone2::@unnamed@d_a_stone2_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 0000275C-0000277C       .text Mthd_Delete__Q28daStone224@unnamed@d_a_stone2_cpp@FPv */
-void daStone2::@unnamed@d_a_stone2_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 0000277C-0000279C       .text Mthd_Execute__Q28daStone224@unnamed@d_a_stone2_cpp@FPv */
-void daStone2::@unnamed@d_a_stone2_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 0000279C-000027C8       .text Mthd_Draw__Q28daStone224@unnamed@d_a_stone2_cpp@FPv */
-void daStone2::@unnamed@d_a_stone2_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 000027C8-000027F4       .text Mthd_IsDelete__Q28daStone224@unnamed@d_a_stone2_cpp@FPv */
-void daStone2::@unnamed@d_a_stone2_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 000027F4-000027FC       .text Draw__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::Draw() {
@@ -486,23 +466,7 @@ void daObj::PrmAbstract<daStone2::Act_c::Prm_e>(const fopAc_ac_c*, daStone2::Act
     /* Nonmatching */
 }
 
-/* 00002D9C-00002DA4       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00002DA4-00002DAC       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00002DAC-00002DB4       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00002DB4-00002DBC       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

@@ -366,25 +366,9 @@ daNpc_Jb1_HIO_c::~daNpc_Jb1_HIO_c() {
     /* Nonmatching */
 }
 
-/* 00001E18-00001E20       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00001E20-00001E28       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00001E28-00001E30       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00001E30-00001E38       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
 /* 00001E38-00001E40       .text next_msgStatus__12fopNpc_npc_cFPUl */
 void fopNpc_npc_c::next_msgStatus(unsigned long*) {

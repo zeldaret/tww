@@ -266,13 +266,5 @@ void __arraydtor$4057 {
     /* Nonmatching */
 }
 
-/* 800E594C-800E5954       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 800E5954-800E595C       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

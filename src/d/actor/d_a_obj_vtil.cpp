@@ -206,30 +206,10 @@ void daObjVtil_c::_draw() {
     /* Nonmatching */
 }
 
-/* 00001864-00001884       .text Mthd_Create__26@unnamed@d_a_obj_vtil_cpp@FPv */
-void @unnamed@d_a_obj_vtil_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00001884-000018A8       .text Mthd_Delete__26@unnamed@d_a_obj_vtil_cpp@FPv */
-void @unnamed@d_a_obj_vtil_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 000018A8-000018CC       .text Mthd_Execute__26@unnamed@d_a_obj_vtil_cpp@FPv */
-void @unnamed@d_a_obj_vtil_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 000018CC-000018F0       .text Mthd_Draw__26@unnamed@d_a_obj_vtil_cpp@FPv */
-void @unnamed@d_a_obj_vtil_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 000018F0-000018F8       .text Mthd_IsDelete__26@unnamed@d_a_obj_vtil_cpp@FPv */
-void @unnamed@d_a_obj_vtil_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 000018F8-00001940       .text __dt__13cBgS_PolyInfoFv */
 cBgS_PolyInfo::~cBgS_PolyInfo() {
@@ -336,23 +316,7 @@ void daObj::PrmAbstract<daObjVtil_c::Prm_e>(const fopAc_ac_c*, daObjVtil_c::Prm_
     /* Nonmatching */
 }
 
-/* 00001B34-00001B3C       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00001B3C-00001B44       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00001B44-00001B4C       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00001B4C-00001B54       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

@@ -711,75 +711,19 @@ void cLib_calcTimer<unsigned char>(unsigned char*) {
     /* Nonmatching */
 }
 
-/* 0000823C-00008244       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00008244-0000824C       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 0000824C-00008254       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00008254-0000825C       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 0000825C-00008264       .text @20@__dt__11cBgS_LinChkFv */
-void @20@__dt__11cBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00008264-0000826C       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 
-/* 0000826C-00008274       .text @20@__dt__11dBgS_LinChkFv */
-void @20@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00008274-0000827C       .text @100@__dt__11dBgS_LinChkFv */
-void @100@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 0000827C-00008284       .text @88@__dt__11dBgS_LinChkFv */
-void @88@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00008284-0000828C       .text @20@__dt__14dBgS_ObjLinChkFv */
-void @20@__dt__14dBgS_ObjLinChkFv {
-    /* Nonmatching */
-}
 
-/* 0000828C-00008294       .text @100@__dt__14dBgS_ObjLinChkFv */
-void @100@__dt__14dBgS_ObjLinChkFv {
-    /* Nonmatching */
-}
 
-/* 00008294-0000829C       .text @88@__dt__14dBgS_ObjLinChkFv */
-void @88@__dt__14dBgS_ObjLinChkFv {
-    /* Nonmatching */
-}
 
-/* 0000829C-000082A4       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 000082A4-000082AC       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
 /* 000082AC-000082F4       .text __dt__10dNpc_HIO_cFv */
 dNpc_HIO_c::~dNpc_HIO_c() {

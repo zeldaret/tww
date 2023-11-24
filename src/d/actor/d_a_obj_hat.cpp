@@ -206,23 +206,7 @@ void daObj::PrmAbstract<daObjHat_c::Prm_e>(const fopAc_ac_c*, daObjHat_c::Prm_e,
     /* Nonmatching */
 }
 
-/* 00000BF8-00000C00       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00000C00-00000C08       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00000C08-00000C10       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00000C10-00000C18       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

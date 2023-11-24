@@ -86,30 +86,10 @@ void daObjEbomzo::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 00000B9C-00000BBC       .text Mthd_Create__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv */
-void daObjEbomzo::@unnamed@d_a_obj_ebomzo_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00000BBC-00000BDC       .text Mthd_Delete__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv */
-void daObjEbomzo::@unnamed@d_a_obj_ebomzo_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00000BDC-00000BFC       .text Mthd_Execute__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv */
-void daObjEbomzo::@unnamed@d_a_obj_ebomzo_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00000BFC-00000C28       .text Mthd_Draw__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv */
-void daObjEbomzo::@unnamed@d_a_obj_ebomzo_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00000C28-00000C54       .text Mthd_IsDelete__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv */
-void daObjEbomzo::@unnamed@d_a_obj_ebomzo_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00000C54-00000C5C       .text IsDelete__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::IsDelete() {
@@ -211,13 +191,5 @@ void daObj::PrmAbstract<daObjEbomzo::Act_c::Prm_e>(const fopAc_ac_c*, daObjEbomz
     /* Nonmatching */
 }
 
-/* 00000D74-00000D7C       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 00000D7C-00000D84       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 

@@ -156,10 +156,6 @@ void cSGlobe::V(const cSAngle&) {
     /* Nonmatching */
 }
 
-/* 800B767C-800B76C8       .text lineCollisionCheck__25@unnamed@d_ev_camera_cpp@F4cXyz4cXyzP10fopAc_ac_cP10fopAc_ac_c */
-void @unnamed@d_ev_camera_cpp@::lineCollisionCheck(cXyz, cXyz, fopAc_ac_c*, fopAc_ac_c*) {
-    /* Nonmatching */
-}
 
 /* 800B76C8-800B7E00       .text restorePosEvCamera__9dCamera_cFv */
 void dCamera_c::restorePosEvCamera() {

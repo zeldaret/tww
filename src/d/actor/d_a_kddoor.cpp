@@ -426,15 +426,7 @@ void cCcD_ShapeAttr::GetCoCP() const {
     /* Nonmatching */
 }
 
-/* 00002E4C-00002E54       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00002E54-00002E5C       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
 /* 00002E5C-00002FD8       .text __dt__15dDoor_ssk_sub_cFv */
 dDoor_ssk_sub_c::~dDoor_ssk_sub_c() {

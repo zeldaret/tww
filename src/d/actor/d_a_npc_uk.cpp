@@ -511,25 +511,9 @@ void cLib_calcTimer<short>(short*) {
     /* Nonmatching */
 }
 
-/* 000059EC-000059F4       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 000059F4-000059FC       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 000059FC-00005A04       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00005A04-00005A0C       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
 /* 00005A0C-00005A28       .text setEyePos__10daNpc_Uk_cF4cXyz */
 void daNpc_Uk_c::setEyePos(cXyz) {

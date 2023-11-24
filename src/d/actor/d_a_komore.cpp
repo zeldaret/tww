@@ -51,30 +51,10 @@ void daKomore::Act_c::_draw() {
     /* Nonmatching */
 }
 
-/* 00000518-00000538       .text Mthd_Create__Q28daKomore24@unnamed@d_a_komore_cpp@FPv */
-void daKomore::@unnamed@d_a_komore_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00000538-0000055C       .text Mthd_Delete__Q28daKomore24@unnamed@d_a_komore_cpp@FPv */
-void daKomore::@unnamed@d_a_komore_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 0000055C-00000580       .text Mthd_Execute__Q28daKomore24@unnamed@d_a_komore_cpp@FPv */
-void daKomore::@unnamed@d_a_komore_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00000580-000005A4       .text Mthd_Draw__Q28daKomore24@unnamed@d_a_komore_cpp@FPv */
-void daKomore::@unnamed@d_a_komore_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 000005A4-000005AC       .text Mthd_IsDelete__Q28daKomore24@unnamed@d_a_komore_cpp@FPv */
-void daKomore::@unnamed@d_a_komore_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 000005AC-00000638       .text __dt__Q28daKomore5Act_cFv */
 daKomore::Act_c::~Act_c() {

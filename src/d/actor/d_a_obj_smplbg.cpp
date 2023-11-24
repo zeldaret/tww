@@ -56,30 +56,10 @@ void daObjSmplbg::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 00000764-00000784       .text Mthd_Create__Q211daObjSmplbg28@unnamed@d_a_obj_smplbg_cpp@FPv */
-void daObjSmplbg::@unnamed@d_a_obj_smplbg_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00000784-000007A4       .text Mthd_Delete__Q211daObjSmplbg28@unnamed@d_a_obj_smplbg_cpp@FPv */
-void daObjSmplbg::@unnamed@d_a_obj_smplbg_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 000007A4-000007C4       .text Mthd_Execute__Q211daObjSmplbg28@unnamed@d_a_obj_smplbg_cpp@FPv */
-void daObjSmplbg::@unnamed@d_a_obj_smplbg_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 000007C4-000007F0       .text Mthd_Draw__Q211daObjSmplbg28@unnamed@d_a_obj_smplbg_cpp@FPv */
-void daObjSmplbg::@unnamed@d_a_obj_smplbg_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 000007F0-0000081C       .text Mthd_IsDelete__Q211daObjSmplbg28@unnamed@d_a_obj_smplbg_cpp@FPv */
-void daObjSmplbg::@unnamed@d_a_obj_smplbg_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 0000081C-00000824       .text IsDelete__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::IsDelete() {

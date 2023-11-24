@@ -91,25 +91,9 @@ daTag_Kk1_HIO_c::~daTag_Kk1_HIO_c() {
     /* Nonmatching */
 }
 
-/* 000007A0-000007A8       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 000007A8-000007B0       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 000007B0-000007B8       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 000007B8-000007C0       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
 /* 000007C0-000007C8       .text next_msgStatus__12fopNpc_npc_cFPUl */
 void fopNpc_npc_c::next_msgStatus(unsigned long*) {

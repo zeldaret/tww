@@ -166,30 +166,10 @@ void daObjSwhammer::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 00001564-00001584       .text Mthd_Create__Q213daObjSwhammer30@unnamed@d_a_obj_swhammer_cpp@FPv */
-void daObjSwhammer::@unnamed@d_a_obj_swhammer_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00001584-000015A8       .text Mthd_Delete__Q213daObjSwhammer30@unnamed@d_a_obj_swhammer_cpp@FPv */
-void daObjSwhammer::@unnamed@d_a_obj_swhammer_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 000015A8-000015C8       .text Mthd_Execute__Q213daObjSwhammer30@unnamed@d_a_obj_swhammer_cpp@FPv */
-void daObjSwhammer::@unnamed@d_a_obj_swhammer_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 000015C8-000015F4       .text Mthd_Draw__Q213daObjSwhammer30@unnamed@d_a_obj_swhammer_cpp@FPv */
-void daObjSwhammer::@unnamed@d_a_obj_swhammer_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 000015F4-00001620       .text Mthd_IsDelete__Q213daObjSwhammer30@unnamed@d_a_obj_swhammer_cpp@FPv */
-void daObjSwhammer::@unnamed@d_a_obj_swhammer_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00001620-00001628       .text Draw__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::Draw() {
@@ -356,13 +336,5 @@ void daObj::PrmAbstract<daObjSwhammer::Act_c::Prm_e>(const fopAc_ac_c*, daObjSwh
     /* Nonmatching */
 }
 
-/* 00001AEC-00001AF4       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00001AF4-00001AFC       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

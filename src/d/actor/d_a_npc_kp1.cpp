@@ -401,25 +401,9 @@ void cLib_calcTimer<short>(short*) {
     /* Nonmatching */
 }
 
-/* 00002D3C-00002D44       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00002D44-00002D4C       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00002D4C-00002D54       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00002D54-00002D5C       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
 /* 00002D5C-00002D64       .text next_msgStatus__12fopNpc_npc_cFPUl */
 void fopNpc_npc_c::next_msgStatus(unsigned long*) {

@@ -401,90 +401,22 @@ mDoExt_brkAnm::~mDoExt_brkAnm() {
     /* Nonmatching */
 }
 
-/* 00008FE0-00008FE8       .text @20@__dt__11cBgS_LinChkFv */
-void @20@__dt__11cBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00008FE8-00008FF0       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 
-/* 00008FF0-00008FF8       .text @20@__dt__11dBgS_LinChkFv */
-void @20@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00008FF8-00009000       .text @100@__dt__11dBgS_LinChkFv */
-void @100@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00009000-00009008       .text @88@__dt__11dBgS_LinChkFv */
-void @88@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00009008-00009010       .text @20@__dt__14dBgS_CamLinChkFv */
-void @20@__dt__14dBgS_CamLinChkFv {
-    /* Nonmatching */
-}
 
-/* 00009010-00009018       .text @100@__dt__14dBgS_CamLinChkFv */
-void @100@__dt__14dBgS_CamLinChkFv {
-    /* Nonmatching */
-}
 
-/* 00009018-00009020       .text @88@__dt__14dBgS_CamLinChkFv */
-void @88@__dt__14dBgS_CamLinChkFv {
-    /* Nonmatching */
-}
 
-/* 00009020-00009028       .text @20@__dt__21dBgS_CamLinChk_NorWtrFv */
-void @20@__dt__21dBgS_CamLinChk_NorWtrFv {
-    /* Nonmatching */
-}
 
-/* 00009028-00009030       .text @100@__dt__21dBgS_CamLinChk_NorWtrFv */
-void @100@__dt__21dBgS_CamLinChk_NorWtrFv {
-    /* Nonmatching */
-}
 
-/* 00009030-00009038       .text @88@__dt__21dBgS_CamLinChk_NorWtrFv */
-void @88@__dt__21dBgS_CamLinChk_NorWtrFv {
-    /* Nonmatching */
-}
 
-/* 00009038-00009040       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00009040-00009048       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00009048-00009050       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00009050-00009058       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00009058-00009060       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 00009060-00009068       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
 /* 00009068-000091E4       .text __dt__21dBgS_CamLinChk_NorWtrFv */
 dBgS_CamLinChk_NorWtr::~dBgS_CamLinChk_NorWtr() {

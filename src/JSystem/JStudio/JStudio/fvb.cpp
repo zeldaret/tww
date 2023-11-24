@@ -16,45 +16,13 @@ void JStudio::fvb::TObject::prepare(const JStudio::fvb::data::TParse_TBlock&, JS
     /* Nonmatching */
 }
 
-/* 80273BD0-80273BDC       .text getCompositeData_raw___Q37JStudio3fvb17@unnamed@fvb_cpp@FPCv */
-void getCompositeData_raw___Q37JStudio3fvb17@unnamed@fvb_cpp@FPCv {
-    /* Nonmatching */
-}
 
-/* 80273BDC-80273BE8       .text getCompositeData_index___Q37JStudio3fvb17@unnamed@fvb_cpp@FPCv */
-void getCompositeData_index___Q37JStudio3fvb17@unnamed@fvb_cpp@FPCv {
-    /* Nonmatching */
-}
 
-/* 80273BE8-80273BF4       .text getCompositeData_parameter___Q37JStudio3fvb17@unnamed@fvb_cpp@FPCv */
-void getCompositeData_parameter___Q37JStudio3fvb17@unnamed@fvb_cpp@FPCv {
-    /* Nonmatching */
-}
 
-/* 80273BF4-80273C00       .text getCompositeData_add___Q37JStudio3fvb17@unnamed@fvb_cpp@FPCv */
-void getCompositeData_add___Q37JStudio3fvb17@unnamed@fvb_cpp@FPCv {
-    /* Nonmatching */
-}
 
-/* 80273C00-80273C0C       .text getCompositeData_subtract___Q37JStudio3fvb17@unnamed@fvb_cpp@FPCv */
-void getCompositeData_subtract___Q37JStudio3fvb17@unnamed@fvb_cpp@FPCv {
-    /* Nonmatching */
-}
 
-/* 80273C0C-80273C18       .text getCompositeData_multiply___Q37JStudio3fvb17@unnamed@fvb_cpp@FPCv */
-void getCompositeData_multiply___Q37JStudio3fvb17@unnamed@fvb_cpp@FPCv {
-    /* Nonmatching */
-}
 
-/* 80273C18-80273C24       .text getCompositeData_divide___Q37JStudio3fvb17@unnamed@fvb_cpp@FPCv */
-void getCompositeData_divide___Q37JStudio3fvb17@unnamed@fvb_cpp@FPCv {
-    /* Nonmatching */
-}
 
-/* 80273C24-80273C38       .text getCompositeOperation___Q37JStudio3fvb17@unnamed@fvb_cpp@FQ47JStudio3fvb4data11TEComposite */
-void getCompositeOperation___Q37JStudio3fvb17@unnamed@fvb_cpp@FQ47JStudio3fvb4data11TEComposite {
-    /* Nonmatching */
-}
 
 /* 80273C38-80273CB8       .text __ct__Q37JStudio3fvb17TObject_compositeFRCQ47JStudio3fvb4data13TParse_TBlock */
 JStudio::fvb::TObject_composite::TObject_composite(const JStudio::fvb::data::TParse_TBlock&) {

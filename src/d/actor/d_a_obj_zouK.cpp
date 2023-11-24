@@ -131,30 +131,10 @@ void daObjZouk::Act_c::setEffectMtx(const cXyz*, float) {
     /* Nonmatching */
 }
 
-/* 00001804-00001824       .text Mthd_Create__Q29daObjZouk26@unnamed@d_a_obj_zouK_cpp@FPv */
-void daObjZouk::@unnamed@d_a_obj_zouK_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00001824-00001848       .text Mthd_Delete__Q29daObjZouk26@unnamed@d_a_obj_zouK_cpp@FPv */
-void daObjZouk::@unnamed@d_a_obj_zouK_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00001848-0000186C       .text Mthd_Execute__Q29daObjZouk26@unnamed@d_a_obj_zouK_cpp@FPv */
-void daObjZouk::@unnamed@d_a_obj_zouK_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 0000186C-00001890       .text Mthd_Draw__Q29daObjZouk26@unnamed@d_a_obj_zouK_cpp@FPv */
-void daObjZouk::@unnamed@d_a_obj_zouK_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00001890-00001898       .text Mthd_IsDelete__Q29daObjZouk26@unnamed@d_a_obj_zouK_cpp@FPv */
-void daObjZouk::@unnamed@d_a_obj_zouK_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00001898-000018E0       .text __dt__13cBgS_PolyInfoFv */
 cBgS_PolyInfo::~cBgS_PolyInfo() {
@@ -256,53 +236,13 @@ void daObj::PrmAbstract<int>(const fopAc_ac_c*, int, int) {
     /* Nonmatching */
 }
 
-/* 00001E34-00001E3C       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 
-/* 00001E3C-00001E44       .text @20@__dt__11dBgS_GndChkFv */
-void @20@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00001E44-00001E4C       .text @76@__dt__11dBgS_GndChkFv */
-void @76@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00001E4C-00001E54       .text @64@__dt__11dBgS_GndChkFv */
-void @64@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00001E54-00001E5C       .text @20@__dt__14dBgS_ObjGndChkFv */
-void @20@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 00001E5C-00001E64       .text @76@__dt__14dBgS_ObjGndChkFv */
-void @76@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 00001E64-00001E6C       .text @64@__dt__14dBgS_ObjGndChkFv */
-void @64@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 00001E6C-00001E74       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00001E74-00001E7C       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00001E7C-00001E84       .text @20@__dt__11cBgS_GndChkFv */
-void @20@__dt__11cBgS_GndChkFv {
-    /* Nonmatching */
-}
 

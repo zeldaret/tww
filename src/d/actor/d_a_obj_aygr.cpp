@@ -51,30 +51,10 @@ void daObjAygr::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 0000079C-000007BC       .text Mthd_Create__Q29daObjAygr26@unnamed@d_a_obj_aygr_cpp@FPv */
-void daObjAygr::@unnamed@d_a_obj_aygr_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 000007BC-000007DC       .text Mthd_Delete__Q29daObjAygr26@unnamed@d_a_obj_aygr_cpp@FPv */
-void daObjAygr::@unnamed@d_a_obj_aygr_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 000007DC-000007FC       .text Mthd_Execute__Q29daObjAygr26@unnamed@d_a_obj_aygr_cpp@FPv */
-void daObjAygr::@unnamed@d_a_obj_aygr_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 000007FC-00000828       .text Mthd_Draw__Q29daObjAygr26@unnamed@d_a_obj_aygr_cpp@FPv */
-void daObjAygr::@unnamed@d_a_obj_aygr_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00000828-00000854       .text Mthd_IsDelete__Q29daObjAygr26@unnamed@d_a_obj_aygr_cpp@FPv */
-void daObjAygr::@unnamed@d_a_obj_aygr_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00000854-0000085C       .text IsDelete__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::IsDelete() {

@@ -81,30 +81,10 @@ void daObjHtetu1_c::_draw() {
     /* Nonmatching */
 }
 
-/* 0000107C-0000109C       .text Mthd_Create__28@unnamed@d_a_obj_htetu1_cpp@FPv */
-void @unnamed@d_a_obj_htetu1_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 0000109C-000010C0       .text Mthd_Delete__28@unnamed@d_a_obj_htetu1_cpp@FPv */
-void @unnamed@d_a_obj_htetu1_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 000010C0-000010E4       .text Mthd_Execute__28@unnamed@d_a_obj_htetu1_cpp@FPv */
-void @unnamed@d_a_obj_htetu1_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 000010E4-00001108       .text Mthd_Draw__28@unnamed@d_a_obj_htetu1_cpp@FPv */
-void @unnamed@d_a_obj_htetu1_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00001108-00001110       .text Mthd_IsDelete__28@unnamed@d_a_obj_htetu1_cpp@FPv */
-void @unnamed@d_a_obj_htetu1_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00001110-00001158       .text __dt__13cBgS_PolyInfoFv */
 cBgS_PolyInfo::~cBgS_PolyInfo() {
@@ -171,38 +151,10 @@ dPa_levelEcallBack::~dPa_levelEcallBack() {
     /* Nonmatching */
 }
 
-/* 000014F0-000014F8       .text @16@__dt__11dBgS_WtrChkFv */
-void @16@__dt__11dBgS_WtrChkFv {
-    /* Nonmatching */
-}
 
-/* 000014F8-00001500       .text @48@__dt__11dBgS_WtrChkFv */
-void @48@__dt__11dBgS_WtrChkFv {
-    /* Nonmatching */
-}
 
-/* 00001500-00001508       .text @36@__dt__11dBgS_WtrChkFv */
-void @36@__dt__11dBgS_WtrChkFv {
-    /* Nonmatching */
-}
 
-/* 00001508-00001510       .text @16@__dt__14dBgS_SplGrpChkFv */
-void @16@__dt__14dBgS_SplGrpChkFv {
-    /* Nonmatching */
-}
 
-/* 00001510-00001518       .text @48@__dt__14dBgS_SplGrpChkFv */
-void @48@__dt__14dBgS_SplGrpChkFv {
-    /* Nonmatching */
-}
 
-/* 00001518-00001520       .text @36@__dt__14dBgS_SplGrpChkFv */
-void @36@__dt__14dBgS_SplGrpChkFv {
-    /* Nonmatching */
-}
 
-/* 00001520-00001528       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 

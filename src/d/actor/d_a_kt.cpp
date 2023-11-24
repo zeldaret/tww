@@ -56,30 +56,10 @@ cBgS_PolyInfo::~cBgS_PolyInfo() {
     /* Nonmatching */
 }
 
-/* 000015C0-000015C8       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 
-/* 000015C8-000015D0       .text @20@__dt__11dBgS_GndChkFv */
-void @20@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 000015D0-000015D8       .text @76@__dt__11dBgS_GndChkFv */
-void @76@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 000015D8-000015E0       .text @64@__dt__11dBgS_GndChkFv */
-void @64@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 000015E0-000015E8       .text @20@__dt__11cBgS_GndChkFv */
-void @20@__dt__11cBgS_GndChkFv {
-    /* Nonmatching */
-}
 
 /* 000015E8-00001604       .text getHeadTopPos__9daPy_py_cCFv */
 void daPy_py_c::getHeadTopPos() const {

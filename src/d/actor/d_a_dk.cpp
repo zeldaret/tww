@@ -116,13 +116,5 @@ daDk_HIO_c::~daDk_HIO_c() {
     /* Nonmatching */
 }
 
-/* 0000147C-00001484       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00001484-0000148C       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 

@@ -171,30 +171,10 @@ void daTagLight::Act_c::_draw() {
     /* Nonmatching */
 }
 
-/* 00001EAC-00001ECC       .text Mthd_Create__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
-void daTagLight::@unnamed@d_a_tag_light_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00001ECC-00001EF0       .text Mthd_Delete__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
-void daTagLight::@unnamed@d_a_tag_light_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00001EF0-00001F14       .text Mthd_Execute__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
-void daTagLight::@unnamed@d_a_tag_light_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00001F14-00001F38       .text Mthd_Draw__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
-void daTagLight::@unnamed@d_a_tag_light_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00001F38-00001F40       .text Mthd_IsDelete__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
-void daTagLight::@unnamed@d_a_tag_light_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00001F40-00001F50       .text GetShapeAttr__8dCcD_SphFv */
 void dCcD_Sph::GetShapeAttr() {
@@ -286,53 +266,13 @@ void daObj::PrmAbstract<daTagLight::Act_c::Prm_e>(const fopAc_ac_c*, daTagLight:
     /* Nonmatching */
 }
 
-/* 000020A4-000020AC       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 000020AC-000020B4       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 000020B4-000020BC       .text @20@__dt__11cBgS_LinChkFv */
-void @20@__dt__11cBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 000020BC-000020C4       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 
-/* 000020C4-000020CC       .text @20@__dt__11dBgS_LinChkFv */
-void @20@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 000020CC-000020D4       .text @100@__dt__11dBgS_LinChkFv */
-void @100@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 000020D4-000020DC       .text @88@__dt__11dBgS_LinChkFv */
-void @88@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 000020DC-000020E4       .text @20@__dt__14dBgS_ObjLinChkFv */
-void @20@__dt__14dBgS_ObjLinChkFv {
-    /* Nonmatching */
-}
 
-/* 000020E4-000020EC       .text @100@__dt__14dBgS_ObjLinChkFv */
-void @100@__dt__14dBgS_ObjLinChkFv {
-    /* Nonmatching */
-}
 
-/* 000020EC-000020F4       .text @88@__dt__14dBgS_ObjLinChkFv */
-void @88@__dt__14dBgS_ObjLinChkFv {
-    /* Nonmatching */
-}
 

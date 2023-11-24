@@ -421,35 +421,11 @@ mDoExt_brkAnm::~mDoExt_brkAnm() {
     /* Nonmatching */
 }
 
-/* 00007CA8-00007CB0       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00007CB0-00007CB8       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00007CB8-00007CC0       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00007CC0-00007CC8       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00007CC8-00007CD0       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 00007CD0-00007CD8       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
 /* 00007CD8-00007CF4       .text getSwordTopPos__9daPy_py_cCFv */
 void daPy_py_c::getSwordTopPos() const {

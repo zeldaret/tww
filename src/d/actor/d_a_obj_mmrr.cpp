@@ -146,30 +146,10 @@ void daObjMmrr::Act_c::_draw() {
     /* Nonmatching */
 }
 
-/* 000017E8-00001808       .text Mthd_Create__Q29daObjMmrr26@unnamed@d_a_obj_mmrr_cpp@FPv */
-void daObjMmrr::@unnamed@d_a_obj_mmrr_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00001808-0000182C       .text Mthd_Delete__Q29daObjMmrr26@unnamed@d_a_obj_mmrr_cpp@FPv */
-void daObjMmrr::@unnamed@d_a_obj_mmrr_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 0000182C-00001850       .text Mthd_Execute__Q29daObjMmrr26@unnamed@d_a_obj_mmrr_cpp@FPv */
-void daObjMmrr::@unnamed@d_a_obj_mmrr_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00001850-00001874       .text Mthd_Draw__Q29daObjMmrr26@unnamed@d_a_obj_mmrr_cpp@FPv */
-void daObjMmrr::@unnamed@d_a_obj_mmrr_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00001874-0000187C       .text Mthd_IsDelete__Q29daObjMmrr26@unnamed@d_a_obj_mmrr_cpp@FPv */
-void daObjMmrr::@unnamed@d_a_obj_mmrr_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 0000187C-0000188C       .text GetShapeAttr__8dCcD_TriFv */
 void dCcD_Tri::GetShapeAttr() {
@@ -331,65 +311,17 @@ void cCcD_ShapeAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
     /* Nonmatching */
 }
 
-/* 00001B14-00001B1C       .text @20@__dt__11cBgS_LinChkFv */
-void @20@__dt__11cBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00001B1C-00001B24       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 
-/* 00001B24-00001B2C       .text @20@__dt__11dBgS_LinChkFv */
-void @20@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00001B2C-00001B34       .text @100@__dt__11dBgS_LinChkFv */
-void @100@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00001B34-00001B3C       .text @88@__dt__11dBgS_LinChkFv */
-void @88@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00001B3C-00001B44       .text @20@__dt__19dBgS_MirLightLinChkFv */
-void @20@__dt__19dBgS_MirLightLinChkFv {
-    /* Nonmatching */
-}
 
-/* 00001B44-00001B4C       .text @100@__dt__19dBgS_MirLightLinChkFv */
-void @100@__dt__19dBgS_MirLightLinChkFv {
-    /* Nonmatching */
-}
 
-/* 00001B4C-00001B54       .text @88@__dt__19dBgS_MirLightLinChkFv */
-void @88@__dt__19dBgS_MirLightLinChkFv {
-    /* Nonmatching */
-}
 
-/* 00001B54-00001B5C       .text @280@__dt__8dCcD_CpsFv */
-void @280@__dt__8dCcD_CpsFv {
-    /* Nonmatching */
-}
 
-/* 00001B5C-00001B64       .text @248@__dt__8dCcD_CpsFv */
-void @248@__dt__8dCcD_CpsFv {
-    /* Nonmatching */
-}
 
-/* 00001B64-00001B6C       .text @280@__dt__8dCcD_TriFv */
-void @280@__dt__8dCcD_TriFv {
-    /* Nonmatching */
-}
 
-/* 00001B6C-00001B74       .text @248@__dt__8dCcD_TriFv */
-void @248@__dt__8dCcD_TriFv {
-    /* Nonmatching */
-}
 
 /* 00001B74-00001BF0       .text __dt__Q29daObjMmrr5Eff_cFv */
 daObjMmrr::Eff_c::~Eff_c() {

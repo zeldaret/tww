@@ -51,28 +51,8 @@ void daObjGnntakie_c::_draw() {
     /* Nonmatching */
 }
 
-/* 00000494-000004B4       .text Mthd_Create__34@unnamed@d_a_obj_gnndemotakie_cpp@FPv */
-void @unnamed@d_a_obj_gnndemotakie_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 000004B4-000004D8       .text Mthd_Delete__34@unnamed@d_a_obj_gnndemotakie_cpp@FPv */
-void @unnamed@d_a_obj_gnndemotakie_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 000004D8-000004FC       .text Mthd_Execute__34@unnamed@d_a_obj_gnndemotakie_cpp@FPv */
-void @unnamed@d_a_obj_gnndemotakie_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 000004FC-00000520       .text Mthd_Draw__34@unnamed@d_a_obj_gnndemotakie_cpp@FPv */
-void @unnamed@d_a_obj_gnndemotakie_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00000520-00000528       .text Mthd_IsDelete__34@unnamed@d_a_obj_gnndemotakie_cpp@FPv */
-void @unnamed@d_a_obj_gnndemotakie_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 

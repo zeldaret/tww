@@ -206,30 +206,10 @@ void daObjSwlight::Act_c::_draw() {
     /* Nonmatching */
 }
 
-/* 00001AC4-00001AE4       .text Mthd_Create__Q212daObjSwlight29@unnamed@d_a_obj_swlight_cpp@FPv */
-void daObjSwlight::@unnamed@d_a_obj_swlight_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00001AE4-00001B08       .text Mthd_Delete__Q212daObjSwlight29@unnamed@d_a_obj_swlight_cpp@FPv */
-void daObjSwlight::@unnamed@d_a_obj_swlight_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00001B08-00001B2C       .text Mthd_Execute__Q212daObjSwlight29@unnamed@d_a_obj_swlight_cpp@FPv */
-void daObjSwlight::@unnamed@d_a_obj_swlight_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00001B2C-00001B50       .text Mthd_Draw__Q212daObjSwlight29@unnamed@d_a_obj_swlight_cpp@FPv */
-void daObjSwlight::@unnamed@d_a_obj_swlight_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00001B50-00001B58       .text Mthd_IsDelete__Q212daObjSwlight29@unnamed@d_a_obj_swlight_cpp@FPv */
-void daObjSwlight::@unnamed@d_a_obj_swlight_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00001B58-00001B60       .text CrossAtTg__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrP4cXyz */
 void cCcD_ShapeAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
@@ -326,13 +306,5 @@ void daObj::PrmAbstract<daObjSwlight::Act_c::Prm_e>(const fopAc_ac_c*, daObjSwli
     /* Nonmatching */
 }
 
-/* 00001CB0-00001CB8       .text @280@__dt__8dCcD_TriFv */
-void @280@__dt__8dCcD_TriFv {
-    /* Nonmatching */
-}
 
-/* 00001CB8-00001CC0       .text @248@__dt__8dCcD_TriFv */
-void @248@__dt__8dCcD_TriFv {
-    /* Nonmatching */
-}
 

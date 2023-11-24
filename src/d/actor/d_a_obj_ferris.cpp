@@ -146,30 +146,10 @@ void daObjFerris::Act_c::_draw() {
     /* Nonmatching */
 }
 
-/* 00001E18-00001E38       .text Mthd_Create__Q211daObjFerris28@unnamed@d_a_obj_ferris_cpp@FPv */
-void daObjFerris::@unnamed@d_a_obj_ferris_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00001E38-00001E5C       .text Mthd_Delete__Q211daObjFerris28@unnamed@d_a_obj_ferris_cpp@FPv */
-void daObjFerris::@unnamed@d_a_obj_ferris_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00001E5C-00001E80       .text Mthd_Execute__Q211daObjFerris28@unnamed@d_a_obj_ferris_cpp@FPv */
-void daObjFerris::@unnamed@d_a_obj_ferris_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00001E80-00001EA4       .text Mthd_Draw__Q211daObjFerris28@unnamed@d_a_obj_ferris_cpp@FPv */
-void daObjFerris::@unnamed@d_a_obj_ferris_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00001EA4-00001EAC       .text Mthd_IsDelete__Q211daObjFerris28@unnamed@d_a_obj_ferris_cpp@FPv */
-void daObjFerris::@unnamed@d_a_obj_ferris_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00001EAC-00001EF4       .text __dt__10cCcD_GSttsFv */
 cCcD_GStts::~cCcD_GStts() {
@@ -311,23 +291,7 @@ void daObj::PrmAbstract<daObjFerris::Act_c::Param_e>(const fopAc_ac_c*, daObjFer
     /* Nonmatching */
 }
 
-/* 000020B4-000020BC       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 000020BC-000020C4       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 000020C4-000020CC       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 000020CC-000020D4       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

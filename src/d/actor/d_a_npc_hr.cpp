@@ -666,15 +666,7 @@ void cLib_calcTimer<short>(short*) {
     /* Nonmatching */
 }
 
-/* 00005F74-00005F7C       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00005F7C-00005F84       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
 /* 00005F84-00005FA0       .text setEyePos__10daNpc_Hr_cF4cXyz */
 void daNpc_Hr_c::setEyePos(cXyz) {

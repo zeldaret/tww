@@ -41,30 +41,10 @@ void daDummy::Act_c::_draw() {
     /* Nonmatching */
 }
 
-/* 000001DC-000001FC       .text Mthd_Create__Q27daDummy23@unnamed@d_a_dummy_cpp@FPv */
-void daDummy::@unnamed@d_a_dummy_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 000001FC-00000220       .text Mthd_Delete__Q27daDummy23@unnamed@d_a_dummy_cpp@FPv */
-void daDummy::@unnamed@d_a_dummy_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00000220-00000244       .text Mthd_Execute__Q27daDummy23@unnamed@d_a_dummy_cpp@FPv */
-void daDummy::@unnamed@d_a_dummy_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00000244-00000268       .text Mthd_Draw__Q27daDummy23@unnamed@d_a_dummy_cpp@FPv */
-void daDummy::@unnamed@d_a_dummy_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00000268-00000270       .text Mthd_IsDelete__Q27daDummy23@unnamed@d_a_dummy_cpp@FPv */
-void daDummy::@unnamed@d_a_dummy_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00000270-000002D0       .text __dt__Q27daDummy5Act_cFv */
 daDummy::Act_c::~Act_c() {

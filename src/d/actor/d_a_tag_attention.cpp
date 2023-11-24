@@ -36,30 +36,10 @@ void daTagAttention::Act_c::_execute() {
     /* Nonmatching */
 }
 
-/* 00000480-000004A0       .text Mthd_Create__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
-void daTagAttention::@unnamed@d_a_tag_attention_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 000004A0-000004A8       .text Mthd_Delete__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
-void daTagAttention::@unnamed@d_a_tag_attention_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 000004A8-000004C8       .text Mthd_Execute__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
-void daTagAttention::@unnamed@d_a_tag_attention_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 000004C8-000004D0       .text Mthd_Draw__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
-void daTagAttention::@unnamed@d_a_tag_attention_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 000004D0-000004D8       .text Mthd_IsDelete__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
-void daTagAttention::@unnamed@d_a_tag_attention_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 000004D8-000004E8       .text GetShapeAttr__8dCcD_SphFv */
 void dCcD_Sph::GetShapeAttr() {
@@ -151,13 +131,5 @@ void daObj::PrmAbstract<daTagAttention::Act_c::Prm_e>(const fopAc_ac_c*, daTagAt
     /* Nonmatching */
 }
 
-/* 000007FC-00000804       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 00000804-0000080C       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 

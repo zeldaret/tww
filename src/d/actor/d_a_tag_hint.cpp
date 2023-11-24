@@ -246,45 +246,13 @@ LIGHT_INFLUENCE::~LIGHT_INFLUENCE() {
     /* Nonmatching */
 }
 
-/* 00002224-0000222C       .text @20@__dt__11cBgS_LinChkFv */
-void @20@__dt__11cBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 0000222C-00002234       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 
-/* 00002234-0000223C       .text @20@__dt__11dBgS_LinChkFv */
-void @20@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 0000223C-00002244       .text @100@__dt__11dBgS_LinChkFv */
-void @100@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00002244-0000224C       .text @88@__dt__11dBgS_LinChkFv */
-void @88@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 0000224C-00002254       .text @20@__dt__14dBgS_CamLinChkFv */
-void @20@__dt__14dBgS_CamLinChkFv {
-    /* Nonmatching */
-}
 
-/* 00002254-0000225C       .text @100@__dt__14dBgS_CamLinChkFv */
-void @100@__dt__14dBgS_CamLinChkFv {
-    /* Nonmatching */
-}
 
-/* 0000225C-00002264       .text @88@__dt__14dBgS_CamLinChkFv */
-void @88@__dt__14dBgS_CamLinChkFv {
-    /* Nonmatching */
-}
 
 /* 00002264-00002280       .text getRightHandPos__9daPy_py_cCFv */
 void daPy_py_c::getRightHandPos() const {

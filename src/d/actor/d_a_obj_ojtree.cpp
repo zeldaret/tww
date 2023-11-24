@@ -51,30 +51,10 @@ void daObjOjtree::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 000004FC-0000051C       .text Mthd_Create__Q211daObjOjtree28@unnamed@d_a_obj_ojtree_cpp@FPv */
-void daObjOjtree::@unnamed@d_a_obj_ojtree_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 0000051C-0000053C       .text Mthd_Delete__Q211daObjOjtree28@unnamed@d_a_obj_ojtree_cpp@FPv */
-void daObjOjtree::@unnamed@d_a_obj_ojtree_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 0000053C-0000055C       .text Mthd_Execute__Q211daObjOjtree28@unnamed@d_a_obj_ojtree_cpp@FPv */
-void daObjOjtree::@unnamed@d_a_obj_ojtree_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 0000055C-00000588       .text Mthd_Draw__Q211daObjOjtree28@unnamed@d_a_obj_ojtree_cpp@FPv */
-void daObjOjtree::@unnamed@d_a_obj_ojtree_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00000588-000005B4       .text Mthd_IsDelete__Q211daObjOjtree28@unnamed@d_a_obj_ojtree_cpp@FPv */
-void daObjOjtree::@unnamed@d_a_obj_ojtree_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 000005B4-000005BC       .text IsDelete__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::IsDelete() {

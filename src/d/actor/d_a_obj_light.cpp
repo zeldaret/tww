@@ -126,30 +126,10 @@ void daObjLight::Act_c::_draw() {
     /* Nonmatching */
 }
 
-/* 00001528-00001548       .text Mthd_Create__Q210daObjLight27@unnamed@d_a_obj_light_cpp@FPv */
-void daObjLight::@unnamed@d_a_obj_light_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00001548-0000156C       .text Mthd_Delete__Q210daObjLight27@unnamed@d_a_obj_light_cpp@FPv */
-void daObjLight::@unnamed@d_a_obj_light_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 0000156C-00001590       .text Mthd_Execute__Q210daObjLight27@unnamed@d_a_obj_light_cpp@FPv */
-void daObjLight::@unnamed@d_a_obj_light_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00001590-000015B4       .text Mthd_Draw__Q210daObjLight27@unnamed@d_a_obj_light_cpp@FPv */
-void daObjLight::@unnamed@d_a_obj_light_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 000015B4-000015BC       .text Mthd_IsDelete__Q210daObjLight27@unnamed@d_a_obj_light_cpp@FPv */
-void daObjLight::@unnamed@d_a_obj_light_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 000015BC-000015CC       .text GetShapeAttr__8dCcD_CylFv */
 void dCcD_Cyl::GetShapeAttr() {
@@ -231,13 +211,5 @@ void cCcD_ShapeAttr::GetCoCP() const {
     /* Nonmatching */
 }
 
-/* 000016A8-000016B0       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 000016B0-000016B8       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

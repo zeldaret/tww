@@ -171,13 +171,5 @@ daGhostship_HIO_c::~daGhostship_HIO_c() {
     /* Nonmatching */
 }
 
-/* 00001B30-00001B38       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00001B38-00001B40       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 

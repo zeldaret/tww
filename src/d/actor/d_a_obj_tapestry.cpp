@@ -601,53 +601,13 @@ void daObj::PrmAbstract<daObjTapestry_c::Param_e>(const fopAc_ac_c*, daObjTapest
     /* Nonmatching */
 }
 
-/* 00006348-00006350       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 
-/* 00006350-00006358       .text @20@__dt__11dBgS_GndChkFv */
-void @20@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00006358-00006360       .text @76@__dt__11dBgS_GndChkFv */
-void @76@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00006360-00006368       .text @64@__dt__11dBgS_GndChkFv */
-void @64@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00006368-00006370       .text @20@__dt__14dBgS_ObjGndChkFv */
-void @20@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 00006370-00006378       .text @76@__dt__14dBgS_ObjGndChkFv */
-void @76@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 00006378-00006380       .text @64@__dt__14dBgS_ObjGndChkFv */
-void @64@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 00006380-00006388       .text @20@__dt__11cBgS_GndChkFv */
-void @20@__dt__11cBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00006388-00006390       .text @280@__dt__8dCcD_TriFv */
-void @280@__dt__8dCcD_TriFv {
-    /* Nonmatching */
-}
 
-/* 00006390-00006398       .text @248@__dt__8dCcD_TriFv */
-void @248@__dt__8dCcD_TriFv {
-    /* Nonmatching */
-}
 

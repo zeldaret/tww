@@ -286,13 +286,5 @@ daBmdfoot_HIO_c::~daBmdfoot_HIO_c() {
     /* Nonmatching */
 }
 
-/* 0000347C-00003484       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 00003484-0000348C       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 

@@ -76,28 +76,8 @@ void daYgcwp_c::_draw() {
     /* Nonmatching */
 }
 
-/* 000008DC-000008FC       .text Mthd_Create__23@unnamed@d_a_ygcwp_cpp@FPv */
-void @unnamed@d_a_ygcwp_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 000008FC-00000920       .text Mthd_Delete__23@unnamed@d_a_ygcwp_cpp@FPv */
-void @unnamed@d_a_ygcwp_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00000920-00000944       .text Mthd_Execute__23@unnamed@d_a_ygcwp_cpp@FPv */
-void @unnamed@d_a_ygcwp_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00000944-00000968       .text Mthd_Draw__23@unnamed@d_a_ygcwp_cpp@FPv */
-void @unnamed@d_a_ygcwp_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00000968-00000970       .text Mthd_IsDelete__23@unnamed@d_a_ygcwp_cpp@FPv */
-void @unnamed@d_a_ygcwp_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 

@@ -146,30 +146,10 @@ void daObjComing::Act_c::_draw() {
     /* Nonmatching */
 }
 
-/* 00001318-00001338       .text Mthd_Create__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
-void daObjComing::@unnamed@d_a_obj_coming_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00001338-0000135C       .text Mthd_Delete__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
-void daObjComing::@unnamed@d_a_obj_coming_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 0000135C-00001380       .text Mthd_Execute__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
-void daObjComing::@unnamed@d_a_obj_coming_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00001380-000013A4       .text Mthd_Draw__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
-void daObjComing::@unnamed@d_a_obj_coming_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 000013A4-000013AC       .text Mthd_IsDelete__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
-void daObjComing::@unnamed@d_a_obj_coming_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 000013AC-000013F4       .text __dt__13cBgS_PolyInfoFv */
 cBgS_PolyInfo::~cBgS_PolyInfo() {
@@ -246,108 +226,24 @@ cBgS_GndChk::~cBgS_GndChk() {
     /* Nonmatching */
 }
 
-/* 00001FB4-00001FBC       .text @20@__dt__11dBgS_GndChkFv */
-void @20@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00001FBC-00001FC4       .text @76@__dt__11dBgS_GndChkFv */
-void @76@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00001FC4-00001FCC       .text @64@__dt__11dBgS_GndChkFv */
-void @64@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00001FCC-00001FD4       .text @20@__dt__14dBgS_ObjGndChkFv */
-void @20@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 00001FD4-00001FDC       .text @76@__dt__14dBgS_ObjGndChkFv */
-void @76@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 00001FDC-00001FE4       .text @64@__dt__14dBgS_ObjGndChkFv */
-void @64@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 00001FE4-00001FEC       .text @20@__dt__11cBgS_LinChkFv */
-void @20@__dt__11cBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00001FEC-00001FF4       .text @20@__dt__11dBgS_LinChkFv */
-void @20@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00001FF4-00001FFC       .text @100@__dt__11dBgS_LinChkFv */
-void @100@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00001FFC-00002004       .text @88@__dt__11dBgS_LinChkFv */
-void @88@__dt__11dBgS_LinChkFv {
-    /* Nonmatching */
-}
 
-/* 00002004-0000200C       .text @20@__dt__11cBgS_GndChkFv */
-void @20@__dt__11cBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 0000200C-00002014       .text @20@__dt__14dBgS_ObjLinChkFv */
-void @20@__dt__14dBgS_ObjLinChkFv {
-    /* Nonmatching */
-}
 
-/* 00002014-0000201C       .text @100@__dt__14dBgS_ObjLinChkFv */
-void @100@__dt__14dBgS_ObjLinChkFv {
-    /* Nonmatching */
-}
 
-/* 0000201C-00002024       .text @88@__dt__14dBgS_ObjLinChkFv */
-void @88@__dt__14dBgS_ObjLinChkFv {
-    /* Nonmatching */
-}
 
-/* 00002024-0000202C       .text @16@__dt__11dBgS_WtrChkFv */
-void @16@__dt__11dBgS_WtrChkFv {
-    /* Nonmatching */
-}
 
-/* 0000202C-00002034       .text @48@__dt__11dBgS_WtrChkFv */
-void @48@__dt__11dBgS_WtrChkFv {
-    /* Nonmatching */
-}
 
-/* 00002034-0000203C       .text @36@__dt__11dBgS_WtrChkFv */
-void @36@__dt__11dBgS_WtrChkFv {
-    /* Nonmatching */
-}
 
-/* 0000203C-00002044       .text @16@__dt__14dBgS_SplGrpChkFv */
-void @16@__dt__14dBgS_SplGrpChkFv {
-    /* Nonmatching */
-}
 
-/* 00002044-0000204C       .text @48@__dt__14dBgS_SplGrpChkFv */
-void @48@__dt__14dBgS_SplGrpChkFv {
-    /* Nonmatching */
-}
 
-/* 0000204C-00002054       .text @36@__dt__14dBgS_SplGrpChkFv */
-void @36@__dt__14dBgS_SplGrpChkFv {
-    /* Nonmatching */
-}
 
-/* 00002054-0000205C       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 

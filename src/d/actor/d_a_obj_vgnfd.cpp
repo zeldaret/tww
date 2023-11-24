@@ -91,30 +91,10 @@ void daObjVgnfd_c::_draw() {
     /* Nonmatching */
 }
 
-/* 000013F0-00001410       .text Mthd_Create__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
-void @unnamed@d_a_obj_vgnfd_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00001410-00001434       .text Mthd_Delete__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
-void @unnamed@d_a_obj_vgnfd_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00001434-00001458       .text Mthd_Execute__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
-void @unnamed@d_a_obj_vgnfd_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00001458-0000147C       .text Mthd_Draw__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
-void @unnamed@d_a_obj_vgnfd_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 0000147C-00001484       .text Mthd_IsDelete__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
-void @unnamed@d_a_obj_vgnfd_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00001484-00001488       .text draw__34JPACallBackBase<P14JPABaseEmitter>FP14JPABaseEmitter */
 void JPACallBackBase<JPABaseEmitter*>::draw(JPABaseEmitter*) {

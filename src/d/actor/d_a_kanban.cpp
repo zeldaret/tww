@@ -251,25 +251,9 @@ daKanban_HIO_c::~daKanban_HIO_c() {
     /* Nonmatching */
 }
 
-/* 00002EBC-00002EC4       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00002EC4-00002ECC       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00002ECC-00002ED4       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00002ED4-00002EDC       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
 /* 00002EDC-00002EF8       .text getSwordTopPos__9daPy_py_cCFv */
 void daPy_py_c::getSwordTopPos() const {

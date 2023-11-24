@@ -271,30 +271,10 @@ void daObjTry::Act_c::_draw() {
     /* Nonmatching */
 }
 
-/* 00002EA4-00002EC4       .text Mthd_Create__Q28daObjTry25@unnamed@d_a_obj_try_cpp@FPv */
-void daObjTry::@unnamed@d_a_obj_try_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00002EC4-00002EE8       .text Mthd_Delete__Q28daObjTry25@unnamed@d_a_obj_try_cpp@FPv */
-void daObjTry::@unnamed@d_a_obj_try_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00002EE8-00002F0C       .text Mthd_Execute__Q28daObjTry25@unnamed@d_a_obj_try_cpp@FPv */
-void daObjTry::@unnamed@d_a_obj_try_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00002F0C-00002F30       .text Mthd_Draw__Q28daObjTry25@unnamed@d_a_obj_try_cpp@FPv */
-void daObjTry::@unnamed@d_a_obj_try_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00002F30-00002F38       .text Mthd_IsDelete__Q28daObjTry25@unnamed@d_a_obj_try_cpp@FPv */
-void daObjTry::@unnamed@d_a_obj_try_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00002F38-00002F80       .text __dt__16cBgS_PolyPassChkFv */
 cBgS_PolyPassChk::~cBgS_PolyPassChk() {
@@ -461,58 +441,14 @@ void daObj::PrmAbstract<daObjTry::Act_c::Prm_e>(const fopAc_ac_c*, daObjTry::Act
     /* Nonmatching */
 }
 
-/* 0000350C-00003514       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00003514-0000351C       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 0000351C-00003524       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00003524-0000352C       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 0000352C-00003534       .text @16@__dt__11dBgS_WtrChkFv */
-void @16@__dt__11dBgS_WtrChkFv {
-    /* Nonmatching */
-}
 
-/* 00003534-0000353C       .text @48@__dt__11dBgS_WtrChkFv */
-void @48@__dt__11dBgS_WtrChkFv {
-    /* Nonmatching */
-}
 
-/* 0000353C-00003544       .text @36@__dt__11dBgS_WtrChkFv */
-void @36@__dt__11dBgS_WtrChkFv {
-    /* Nonmatching */
-}
 
-/* 00003544-0000354C       .text @16@__dt__14dBgS_SplGrpChkFv */
-void @16@__dt__14dBgS_SplGrpChkFv {
-    /* Nonmatching */
-}
 
-/* 0000354C-00003554       .text @48@__dt__14dBgS_SplGrpChkFv */
-void @48@__dt__14dBgS_SplGrpChkFv {
-    /* Nonmatching */
-}
 
-/* 00003554-0000355C       .text @36@__dt__14dBgS_SplGrpChkFv */
-void @36@__dt__14dBgS_SplGrpChkFv {
-    /* Nonmatching */
-}
 
-/* 0000355C-00003564       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 

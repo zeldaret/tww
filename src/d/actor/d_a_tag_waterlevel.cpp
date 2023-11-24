@@ -31,30 +31,10 @@ void daTagWaterlevel::Act_c::_draw() {
     /* Nonmatching */
 }
 
-/* 0000036C-0000038C       .text Mthd_Create__Q215daTagWaterlevel32@unnamed@d_a_tag_waterlevel_cpp@FPv */
-void daTagWaterlevel::@unnamed@d_a_tag_waterlevel_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 0000038C-000003B0       .text Mthd_Delete__Q215daTagWaterlevel32@unnamed@d_a_tag_waterlevel_cpp@FPv */
-void daTagWaterlevel::@unnamed@d_a_tag_waterlevel_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 000003B0-000003D4       .text Mthd_Execute__Q215daTagWaterlevel32@unnamed@d_a_tag_waterlevel_cpp@FPv */
-void daTagWaterlevel::@unnamed@d_a_tag_waterlevel_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 000003D4-000003F8       .text Mthd_Draw__Q215daTagWaterlevel32@unnamed@d_a_tag_waterlevel_cpp@FPv */
-void daTagWaterlevel::@unnamed@d_a_tag_waterlevel_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 000003F8-00000400       .text Mthd_IsDelete__Q215daTagWaterlevel32@unnamed@d_a_tag_waterlevel_cpp@FPv */
-void daTagWaterlevel::@unnamed@d_a_tag_waterlevel_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00000400-0000041C       .text PrmAbstract<Q315daTagWaterlevel5Act_c5Prm_e>__5daObjFPC10fopAc_ac_cQ315daTagWaterlevel5Act_c5Prm_eQ315daTagWaterlevel5Act_c5Prm_e */
 void daObj::PrmAbstract<daTagWaterlevel::Act_c::Prm_e>(const fopAc_ac_c*, daTagWaterlevel::Act_c::Prm_e, daTagWaterlevel::Act_c::Prm_e) {

@@ -66,30 +66,10 @@ void daObjNest::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 000007FC-0000081C       .text Mthd_Create__Q29daObjNest26@unnamed@d_a_obj_nest_cpp@FPv */
-void daObjNest::@unnamed@d_a_obj_nest_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 0000081C-0000083C       .text Mthd_Delete__Q29daObjNest26@unnamed@d_a_obj_nest_cpp@FPv */
-void daObjNest::@unnamed@d_a_obj_nest_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 0000083C-0000085C       .text Mthd_Execute__Q29daObjNest26@unnamed@d_a_obj_nest_cpp@FPv */
-void daObjNest::@unnamed@d_a_obj_nest_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 0000085C-00000888       .text Mthd_Draw__Q29daObjNest26@unnamed@d_a_obj_nest_cpp@FPv */
-void daObjNest::@unnamed@d_a_obj_nest_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00000888-000008B4       .text Mthd_IsDelete__Q29daObjNest26@unnamed@d_a_obj_nest_cpp@FPv */
-void daObjNest::@unnamed@d_a_obj_nest_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 000008B4-000008BC       .text IsDelete__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::IsDelete() {

@@ -86,30 +86,10 @@ void daObjSwflat::Act_c::IsDelete() {
     /* Nonmatching */
 }
 
-/* 000012DC-000012FC       .text Mthd_Create__Q211daObjSwflat28@unnamed@d_a_obj_swflat_cpp@FPv */
-void daObjSwflat::@unnamed@d_a_obj_swflat_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 000012FC-0000131C       .text Mthd_Delete__Q211daObjSwflat28@unnamed@d_a_obj_swflat_cpp@FPv */
-void daObjSwflat::@unnamed@d_a_obj_swflat_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 0000131C-0000133C       .text Mthd_Execute__Q211daObjSwflat28@unnamed@d_a_obj_swflat_cpp@FPv */
-void daObjSwflat::@unnamed@d_a_obj_swflat_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 0000133C-00001368       .text Mthd_Draw__Q211daObjSwflat28@unnamed@d_a_obj_swflat_cpp@FPv */
-void daObjSwflat::@unnamed@d_a_obj_swflat_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00001368-00001394       .text Mthd_IsDelete__Q211daObjSwflat28@unnamed@d_a_obj_swflat_cpp@FPv */
-void daObjSwflat::@unnamed@d_a_obj_swflat_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00001394-000013DC       .text __dt__17daObjSwflat_HIO_cFv */
 daObjSwflat_HIO_c::~daObjSwflat_HIO_c() {
@@ -216,13 +196,5 @@ void daObj::PrmAbstract<daObjSwflat::Act_c::Prm_e>(const fopAc_ac_c*, daObjSwfla
     /* Nonmatching */
 }
 
-/* 0000158C-00001594       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00001594-0000159C       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

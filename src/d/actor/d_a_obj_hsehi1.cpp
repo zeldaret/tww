@@ -311,13 +311,5 @@ void cLib_calcTimer<unsigned char>(unsigned char*) {
     /* Nonmatching */
 }
 
-/* 000024C4-000024CC       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 000024CC-000024D4       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 

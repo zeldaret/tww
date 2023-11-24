@@ -246,13 +246,5 @@ mDoExt_btpAnm::~mDoExt_btpAnm() {
     /* Nonmatching */
 }
 
-/* 00001860-00001868       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 00001868-00001870       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 

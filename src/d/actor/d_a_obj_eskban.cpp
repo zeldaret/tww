@@ -111,30 +111,10 @@ void daObjEskban::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 000014B4-000014D4       .text Mthd_Create__Q211daObjEskban28@unnamed@d_a_obj_eskban_cpp@FPv */
-void daObjEskban::@unnamed@d_a_obj_eskban_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 000014D4-000014F4       .text Mthd_Delete__Q211daObjEskban28@unnamed@d_a_obj_eskban_cpp@FPv */
-void daObjEskban::@unnamed@d_a_obj_eskban_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 000014F4-00001514       .text Mthd_Execute__Q211daObjEskban28@unnamed@d_a_obj_eskban_cpp@FPv */
-void daObjEskban::@unnamed@d_a_obj_eskban_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00001514-00001540       .text Mthd_Draw__Q211daObjEskban28@unnamed@d_a_obj_eskban_cpp@FPv */
-void daObjEskban::@unnamed@d_a_obj_eskban_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00001540-0000156C       .text Mthd_IsDelete__Q211daObjEskban28@unnamed@d_a_obj_eskban_cpp@FPv */
-void daObjEskban::@unnamed@d_a_obj_eskban_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 0000156C-00001574       .text Draw__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::Draw() {
@@ -316,23 +296,7 @@ void daObj::PrmAbstract<daObjEskban::Act_c::Prm_e>(const fopAc_ac_c*, daObjEskba
     /* Nonmatching */
 }
 
-/* 000017B4-000017BC       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 000017BC-000017C4       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 000017C4-000017CC       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 000017CC-000017D4       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 

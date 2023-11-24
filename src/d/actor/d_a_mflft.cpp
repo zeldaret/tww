@@ -241,68 +241,16 @@ cBgS_PolyInfo::~cBgS_PolyInfo() {
     /* Nonmatching */
 }
 
-/* 00002DA8-00002DB0       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 
-/* 00002DB0-00002DB8       .text @20@__dt__11dBgS_GndChkFv */
-void @20@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00002DB8-00002DC0       .text @76@__dt__11dBgS_GndChkFv */
-void @76@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00002DC0-00002DC8       .text @64@__dt__11dBgS_GndChkFv */
-void @64@__dt__11dBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00002DC8-00002DD0       .text @20@__dt__11cBgS_GndChkFv */
-void @20@__dt__11cBgS_GndChkFv {
-    /* Nonmatching */
-}
 
-/* 00002DD0-00002DD8       .text @20@__dt__14dBgS_ObjGndChkFv */
-void @20@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 00002DD8-00002DE0       .text @76@__dt__14dBgS_ObjGndChkFv */
-void @76@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 00002DE0-00002DE8       .text @64@__dt__14dBgS_ObjGndChkFv */
-void @64@__dt__14dBgS_ObjGndChkFv {
-    /* Nonmatching */
-}
 
-/* 00002DE8-00002DF0       .text @20@__dt__20dBgS_ObjGndChk_YoganFv */
-void @20@__dt__20dBgS_ObjGndChk_YoganFv {
-    /* Nonmatching */
-}
 
-/* 00002DF0-00002DF8       .text @76@__dt__20dBgS_ObjGndChk_YoganFv */
-void @76@__dt__20dBgS_ObjGndChk_YoganFv {
-    /* Nonmatching */
-}
 
-/* 00002DF8-00002E00       .text @64@__dt__20dBgS_ObjGndChk_YoganFv */
-void @64@__dt__20dBgS_ObjGndChk_YoganFv {
-    /* Nonmatching */
-}
 
-/* 00002E00-00002E08       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00002E08-00002E10       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

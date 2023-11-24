@@ -156,20 +156,8 @@ void daBoomerang_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 800E348C-800E3494       .text @20@__dt__20dBgS_BoomerangLinChkFv */
-void @20@__dt__20dBgS_BoomerangLinChkFv {
-    /* Nonmatching */
-}
 
-/* 800E3494-800E349C       .text @100@__dt__20dBgS_BoomerangLinChkFv */
-void @100@__dt__20dBgS_BoomerangLinChkFv {
-    /* Nonmatching */
-}
 
-/* 800E349C-800E34A4       .text @88@__dt__20dBgS_BoomerangLinChkFv */
-void @88@__dt__20dBgS_BoomerangLinChkFv {
-    /* Nonmatching */
-}
 
 /* 800E34A4-800E34AC       .text checkPlayerNoDraw__9daPy_py_cFv */
 void daPy_py_c::checkPlayerNoDraw() {

@@ -51,30 +51,10 @@ void daObjKanat::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 00000644-00000664       .text Mthd_Create__Q210daObjKanat27@unnamed@d_a_obj_kanat_cpp@FPv */
-void daObjKanat::@unnamed@d_a_obj_kanat_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00000664-00000684       .text Mthd_Delete__Q210daObjKanat27@unnamed@d_a_obj_kanat_cpp@FPv */
-void daObjKanat::@unnamed@d_a_obj_kanat_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00000684-000006A4       .text Mthd_Execute__Q210daObjKanat27@unnamed@d_a_obj_kanat_cpp@FPv */
-void daObjKanat::@unnamed@d_a_obj_kanat_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 000006A4-000006D0       .text Mthd_Draw__Q210daObjKanat27@unnamed@d_a_obj_kanat_cpp@FPv */
-void daObjKanat::@unnamed@d_a_obj_kanat_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 000006D0-000006FC       .text Mthd_IsDelete__Q210daObjKanat27@unnamed@d_a_obj_kanat_cpp@FPv */
-void daObjKanat::@unnamed@d_a_obj_kanat_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 000006FC-00000704       .text IsDelete__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::IsDelete() {

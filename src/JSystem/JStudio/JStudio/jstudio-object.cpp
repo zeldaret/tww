@@ -356,28 +356,8 @@ JStudio::@unnamed@jstudio_object_cpp@::TOutputVariableValue_BOOL_<JStudio::TAdap
     /* Nonmatching */
 }
 
-/* 80270E54-80270EB0       .text __cl__Q37JStudio28@unnamed@jstudio_object_cpp@54TOutputVariableValue_BOOL_<Q27JStudio14TAdaptor_sound>CFfPQ27JStudio8TAdaptor */
-void JStudio::@unnamed@jstudio_object_cpp@::TOutputVariableValue_BOOL_<JStudio::TAdaptor_sound>::operator()(float, JStudio::TAdaptor*) const {
-    /* Nonmatching */
-}
 
-/* 80270EB0-80270F0C       .text __cl__Q37JStudio28@unnamed@jstudio_object_cpp@57TOutputVariableValue_BOOL_<Q27JStudio17TAdaptor_particle>CFfPQ27JStudio8TAdaptor */
-void JStudio::@unnamed@jstudio_object_cpp@::TOutputVariableValue_BOOL_<JStudio::TAdaptor_particle>::operator()(float, JStudio::TAdaptor*) const {
-    /* Nonmatching */
-}
 
-/* 80270F0C-80270F68       .text __cl__Q37JStudio28@unnamed@jstudio_object_cpp@54TOutputVariableValue_BOOL_<Q27JStudio14TAdaptor_light>CFfPQ27JStudio8TAdaptor */
-void JStudio::@unnamed@jstudio_object_cpp@::TOutputVariableValue_BOOL_<JStudio::TAdaptor_light>::operator()(float, JStudio::TAdaptor*) const {
-    /* Nonmatching */
-}
 
-/* 80270F68-80270FC4       .text __cl__Q37JStudio28@unnamed@jstudio_object_cpp@55TOutputVariableValue_BOOL_<Q27JStudio15TAdaptor_camera>CFfPQ27JStudio8TAdaptor */
-void JStudio::@unnamed@jstudio_object_cpp@::TOutputVariableValue_BOOL_<JStudio::TAdaptor_camera>::operator()(float, JStudio::TAdaptor*) const {
-    /* Nonmatching */
-}
 
-/* 80270FC4-80271020       .text __cl__Q37JStudio28@unnamed@jstudio_object_cpp@54TOutputVariableValue_BOOL_<Q27JStudio14TAdaptor_actor>CFfPQ27JStudio8TAdaptor */
-void JStudio::@unnamed@jstudio_object_cpp@::TOutputVariableValue_BOOL_<JStudio::TAdaptor_actor>::operator()(float, JStudio::TAdaptor*) const {
-    /* Nonmatching */
-}
 

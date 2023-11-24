@@ -76,13 +76,5 @@ void daKmonIsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 00000AA4-00000AAC       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00000AAC-00000AB4       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 

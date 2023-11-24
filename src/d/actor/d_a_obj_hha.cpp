@@ -236,30 +236,10 @@ void daObjHha_c::_draw() {
     /* Nonmatching */
 }
 
-/* 000029F4-00002A14       .text Mthd_Create__25@unnamed@d_a_obj_hha_cpp@FPv */
-void @unnamed@d_a_obj_hha_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00002A14-00002A38       .text Mthd_Delete__25@unnamed@d_a_obj_hha_cpp@FPv */
-void @unnamed@d_a_obj_hha_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00002A38-00002A5C       .text Mthd_Execute__25@unnamed@d_a_obj_hha_cpp@FPv */
-void @unnamed@d_a_obj_hha_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00002A5C-00002A80       .text Mthd_Draw__25@unnamed@d_a_obj_hha_cpp@FPv */
-void @unnamed@d_a_obj_hha_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00002A80-00002A88       .text Mthd_IsDelete__25@unnamed@d_a_obj_hha_cpp@FPv */
-void @unnamed@d_a_obj_hha_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00002A88-00002AD0       .text __dt__13cBgS_PolyInfoFv */
 cBgS_PolyInfo::~cBgS_PolyInfo() {
@@ -456,60 +436,16 @@ void cCcD_ShapeAttr::GetCoCP() const {
     /* Nonmatching */
 }
 
-/* 0000300C-00003014       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00003014-0000301C       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 0000301C-00003024       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 00003024-0000302C       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 0000302C-00003034       .text @16@__dt__11dBgS_WtrChkFv */
-void @16@__dt__11dBgS_WtrChkFv {
-    /* Nonmatching */
-}
 
-/* 00003034-0000303C       .text @48@__dt__11dBgS_WtrChkFv */
-void @48@__dt__11dBgS_WtrChkFv {
-    /* Nonmatching */
-}
 
-/* 0000303C-00003044       .text @36@__dt__11dBgS_WtrChkFv */
-void @36@__dt__11dBgS_WtrChkFv {
-    /* Nonmatching */
-}
 
-/* 00003044-0000304C       .text @16@__dt__14dBgS_SplGrpChkFv */
-void @16@__dt__14dBgS_SplGrpChkFv {
-    /* Nonmatching */
-}
 
-/* 0000304C-00003054       .text @48@__dt__14dBgS_SplGrpChkFv */
-void @48@__dt__14dBgS_SplGrpChkFv {
-    /* Nonmatching */
-}
 
-/* 00003054-0000305C       .text @36@__dt__14dBgS_SplGrpChkFv */
-void @36@__dt__14dBgS_SplGrpChkFv {
-    /* Nonmatching */
-}
 
-/* 0000305C-00003064       .text @12@__dt__8dBgS_ChkFv */
-void @12@__dt__8dBgS_ChkFv {
-    /* Nonmatching */
-}
 
 /* 00003064-00003080       .text get_base_pos__16daObjHhaSplash_cFv */
 void daObjHhaSplash_c::get_base_pos() {

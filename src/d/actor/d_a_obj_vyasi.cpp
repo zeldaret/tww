@@ -231,30 +231,10 @@ void daObjVyasi::Act_c::_draw() {
     /* Nonmatching */
 }
 
-/* 00002A6C-00002A8C       .text Mthd_Create__Q210daObjVyasi27@unnamed@d_a_obj_vyasi_cpp@FPv */
-void daObjVyasi::@unnamed@d_a_obj_vyasi_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00002A8C-00002AB0       .text Mthd_Delete__Q210daObjVyasi27@unnamed@d_a_obj_vyasi_cpp@FPv */
-void daObjVyasi::@unnamed@d_a_obj_vyasi_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00002AB0-00002AD4       .text Mthd_Execute__Q210daObjVyasi27@unnamed@d_a_obj_vyasi_cpp@FPv */
-void daObjVyasi::@unnamed@d_a_obj_vyasi_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00002AD4-00002AF8       .text Mthd_Draw__Q210daObjVyasi27@unnamed@d_a_obj_vyasi_cpp@FPv */
-void daObjVyasi::@unnamed@d_a_obj_vyasi_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00002AF8-00002B00       .text Mthd_IsDelete__Q210daObjVyasi27@unnamed@d_a_obj_vyasi_cpp@FPv */
-void daObjVyasi::@unnamed@d_a_obj_vyasi_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00002B00-00002B48       .text __dt__10cCcD_GSttsFv */
 cCcD_GStts::~cCcD_GStts() {
@@ -441,33 +421,9 @@ void daObj::PrmAbstract<int>(const fopAc_ac_c*, int, int) {
     /* Nonmatching */
 }
 
-/* 00002F84-00002F8C       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00002F8C-00002F94       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00002F94-00002F9C       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 00002F9C-00002FA4       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
 
-/* 00002FA4-00002FAC       .text @280@__dt__8dCcD_CpsFv */
-void @280@__dt__8dCcD_CpsFv {
-    /* Nonmatching */
-}
 
-/* 00002FAC-00002FB4       .text @248@__dt__8dCcD_CpsFv */
-void @248@__dt__8dCcD_CpsFv {
-    /* Nonmatching */
-}
 

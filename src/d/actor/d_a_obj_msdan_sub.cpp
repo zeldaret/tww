@@ -51,30 +51,10 @@ void daObjMsdanSub::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 00000C54-00000C74       .text Mthd_Create__Q213daObjMsdanSub31@unnamed@d_a_obj_msdan_sub_cpp@FPv */
-void daObjMsdanSub::@unnamed@d_a_obj_msdan_sub_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00000C74-00000C94       .text Mthd_Delete__Q213daObjMsdanSub31@unnamed@d_a_obj_msdan_sub_cpp@FPv */
-void daObjMsdanSub::@unnamed@d_a_obj_msdan_sub_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00000C94-00000CB4       .text Mthd_Execute__Q213daObjMsdanSub31@unnamed@d_a_obj_msdan_sub_cpp@FPv */
-void daObjMsdanSub::@unnamed@d_a_obj_msdan_sub_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00000CB4-00000CE0       .text Mthd_Draw__Q213daObjMsdanSub31@unnamed@d_a_obj_msdan_sub_cpp@FPv */
-void daObjMsdanSub::@unnamed@d_a_obj_msdan_sub_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00000CE0-00000D0C       .text Mthd_IsDelete__Q213daObjMsdanSub31@unnamed@d_a_obj_msdan_sub_cpp@FPv */
-void daObjMsdanSub::@unnamed@d_a_obj_msdan_sub_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00000D0C-00000D14       .text IsDelete__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::IsDelete() {

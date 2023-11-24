@@ -86,30 +86,10 @@ void daObjMtest::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 00000C64-00000C84       .text Mthd_Create__Q210daObjMtest27@unnamed@d_a_obj_mtest_cpp@FPv */
-void daObjMtest::@unnamed@d_a_obj_mtest_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00000C84-00000CA4       .text Mthd_Delete__Q210daObjMtest27@unnamed@d_a_obj_mtest_cpp@FPv */
-void daObjMtest::@unnamed@d_a_obj_mtest_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00000CA4-00000CC4       .text Mthd_Execute__Q210daObjMtest27@unnamed@d_a_obj_mtest_cpp@FPv */
-void daObjMtest::@unnamed@d_a_obj_mtest_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00000CC4-00000CF0       .text Mthd_Draw__Q210daObjMtest27@unnamed@d_a_obj_mtest_cpp@FPv */
-void daObjMtest::@unnamed@d_a_obj_mtest_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00000CF0-00000D1C       .text Mthd_IsDelete__Q210daObjMtest27@unnamed@d_a_obj_mtest_cpp@FPv */
-void daObjMtest::@unnamed@d_a_obj_mtest_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00000D1C-00000D24       .text Draw__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::Draw() {
@@ -241,13 +221,5 @@ void daObj::PrmAbstract<daObjMtest::Act_c::Prm_e>(const fopAc_ac_c*, daObjMtest:
     /* Nonmatching */
 }
 
-/* 00001090-00001098       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00001098-000010A0       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

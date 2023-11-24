@@ -101,30 +101,10 @@ void daObjVmc::Act_c::_draw() {
     /* Nonmatching */
 }
 
-/* 000012CC-000012EC       .text Mthd_Create__Q28daObjVmc25@unnamed@d_a_obj_vmc_cpp@FPv */
-void daObjVmc::@unnamed@d_a_obj_vmc_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 000012EC-00001310       .text Mthd_Delete__Q28daObjVmc25@unnamed@d_a_obj_vmc_cpp@FPv */
-void daObjVmc::@unnamed@d_a_obj_vmc_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00001310-00001334       .text Mthd_Execute__Q28daObjVmc25@unnamed@d_a_obj_vmc_cpp@FPv */
-void daObjVmc::@unnamed@d_a_obj_vmc_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00001334-00001358       .text Mthd_Draw__Q28daObjVmc25@unnamed@d_a_obj_vmc_cpp@FPv */
-void daObjVmc::@unnamed@d_a_obj_vmc_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00001358-00001360       .text Mthd_IsDelete__Q28daObjVmc25@unnamed@d_a_obj_vmc_cpp@FPv */
-void daObjVmc::@unnamed@d_a_obj_vmc_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00001360-00001370       .text GetShapeAttr__8dCcD_CylFv */
 void dCcD_Cyl::GetShapeAttr() {
@@ -211,13 +191,5 @@ void daObj::PrmAbstract<daObjVmc::Act_c::Prm_e>(const fopAc_ac_c*, daObjVmc::Act
     /* Nonmatching */
 }
 
-/* 00001468-00001470       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00001470-00001478       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

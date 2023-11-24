@@ -286,13 +286,5 @@ void daObj::PrmAbstract<daObjFlame::Act_c::Prm_e>(const fopAc_ac_c*, daObjFlame:
     /* Nonmatching */
 }
 
-/* 000029A8-000029B0       .text @280@__dt__8dCcD_CpsFv */
-void @280@__dt__8dCcD_CpsFv {
-    /* Nonmatching */
-}
 
-/* 000029B0-000029B8       .text @248@__dt__8dCcD_CpsFv */
-void @248@__dt__8dCcD_CpsFv {
-    /* Nonmatching */
-}
 

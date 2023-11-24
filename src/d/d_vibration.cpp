@@ -6,25 +6,9 @@
 #include "d_vibration.h"
 #include "dolphin/types.h"
 
-/* 8009C63C-8009C658       .text makedata__25@unnamed@d_vibration_cpp@FPUsUll */
-void @unnamed@d_vibration_cpp@::makedata(unsigned short*, unsigned long, long) {
-    /* Nonmatching */
-}
 
-/* 8009C658-8009C678       .text rollshift__25@unnamed@d_vibration_cpp@FUlll */
-void @unnamed@d_vibration_cpp@::rollshift(unsigned long, long, long) {
-    /* Nonmatching */
-}
 
-/* 8009C678-8009C6AC       .text makebits__25@unnamed@d_vibration_cpp@FUlll */
-void @unnamed@d_vibration_cpp@::makebits(unsigned long, long, long) {
-    /* Nonmatching */
-}
 
-/* 8009C6AC-8009C73C       .text randombit__25@unnamed@d_vibration_cpp@Fll */
-void @unnamed@d_vibration_cpp@::randombit(long, long) {
-    /* Nonmatching */
-}
 
 /* 8009C73C-8009CCCC       .text Run__12dVibration_cFv */
 void dVibration_c::Run() {

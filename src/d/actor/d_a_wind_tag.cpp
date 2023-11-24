@@ -241,13 +241,5 @@ void cCcD_ShapeAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
     /* Nonmatching */
 }
 
-/* 00001CB8-00001CC0       .text @280@__dt__8dCcD_CpsFv */
-void @280@__dt__8dCcD_CpsFv {
-    /* Nonmatching */
-}
 
-/* 00001CC0-00001CC8       .text @248@__dt__8dCcD_CpsFv */
-void @248@__dt__8dCcD_CpsFv {
-    /* Nonmatching */
-}
 

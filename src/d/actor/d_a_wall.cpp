@@ -256,13 +256,5 @@ dPa_levelEcallBack::~dPa_levelEcallBack() {
     /* Nonmatching */
 }
 
-/* 000012C8-000012D0       .text @280@__dt__8dCcD_TriFv */
-void @280@__dt__8dCcD_TriFv {
-    /* Nonmatching */
-}
 
-/* 000012D0-000012D8       .text @248@__dt__8dCcD_TriFv */
-void @248@__dt__8dCcD_TriFv {
-    /* Nonmatching */
-}
 

@@ -156,30 +156,10 @@ void daObjTide::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 00001DD0-00001DF0       .text Mthd_Create__Q29daObjTide26@unnamed@d_a_obj_tide_cpp@FPv */
-void daObjTide::@unnamed@d_a_obj_tide_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00001DF0-00001E10       .text Mthd_Delete__Q29daObjTide26@unnamed@d_a_obj_tide_cpp@FPv */
-void daObjTide::@unnamed@d_a_obj_tide_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00001E10-00001E30       .text Mthd_Execute__Q29daObjTide26@unnamed@d_a_obj_tide_cpp@FPv */
-void daObjTide::@unnamed@d_a_obj_tide_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00001E30-00001E5C       .text Mthd_Draw__Q29daObjTide26@unnamed@d_a_obj_tide_cpp@FPv */
-void daObjTide::@unnamed@d_a_obj_tide_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00001E5C-00001E88       .text Mthd_IsDelete__Q29daObjTide26@unnamed@d_a_obj_tide_cpp@FPv */
-void daObjTide::@unnamed@d_a_obj_tide_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00001E88-00001E90       .text Draw__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::Draw() {

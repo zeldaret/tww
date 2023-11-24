@@ -211,13 +211,5 @@ void daObj::PrmAbstract<daObjIce_c::Param_e>(const fopAc_ac_c*, daObjIce_c::Para
     /* Nonmatching */
 }
 
-/* 0000153C-00001544       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00001544-0000154C       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

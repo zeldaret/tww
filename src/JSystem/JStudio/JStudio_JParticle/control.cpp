@@ -6,10 +6,6 @@
 #include "control.h"
 #include "dolphin/types.h"
 
-/* 802796E4-802797A0       .text createObject_PARTICLE_JPA___Q217JStudio_JParticle21@unnamed@control_cpp@FRCQ47JStudio3stb4data20TParse_TBlock_objectP17JPAEmitterManagerPCQ26JStage7TSystem */
-void createObject_PARTICLE_JPA___Q217JStudio_JParticle21@unnamed@control_cpp@FRCQ47JStudio3stb4data20TParse_TBlock_objectP17JPAEmitterManagerPCQ26JStage7TSystem {
-    /* Nonmatching */
-}
 
 /* 802797A0-80279800       .text __dt__Q217JStudio_JParticle13TCreateObjectFv */
 JStudio_JParticle::TCreateObject::~TCreateObject() {

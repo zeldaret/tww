@@ -106,15 +106,7 @@ daobj_stairHIO_c::~daobj_stairHIO_c() {
     /* Nonmatching */
 }
 
-/* 00001428-00001430       .text @280@__dt__8dCcD_CpsFv */
-void @280@__dt__8dCcD_CpsFv {
-    /* Nonmatching */
-}
 
-/* 00001430-00001438       .text @248@__dt__8dCcD_CpsFv */
-void @248@__dt__8dCcD_CpsFv {
-    /* Nonmatching */
-}
 
 /* 00001438-00001440       .text IsDelete__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::IsDelete() {

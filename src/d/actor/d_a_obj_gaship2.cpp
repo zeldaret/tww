@@ -41,30 +41,10 @@ void daObjGaship2::Act_c::_draw() {
     /* Nonmatching */
 }
 
-/* 00000508-00000528       .text Mthd_Create__Q212daObjGaship229@unnamed@d_a_obj_gaship2_cpp@FPv */
-void daObjGaship2::@unnamed@d_a_obj_gaship2_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00000528-0000054C       .text Mthd_Delete__Q212daObjGaship229@unnamed@d_a_obj_gaship2_cpp@FPv */
-void daObjGaship2::@unnamed@d_a_obj_gaship2_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 0000054C-00000570       .text Mthd_Execute__Q212daObjGaship229@unnamed@d_a_obj_gaship2_cpp@FPv */
-void daObjGaship2::@unnamed@d_a_obj_gaship2_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00000570-00000594       .text Mthd_Draw__Q212daObjGaship229@unnamed@d_a_obj_gaship2_cpp@FPv */
-void daObjGaship2::@unnamed@d_a_obj_gaship2_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00000594-0000059C       .text Mthd_IsDelete__Q212daObjGaship229@unnamed@d_a_obj_gaship2_cpp@FPv */
-void daObjGaship2::@unnamed@d_a_obj_gaship2_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 0000059C-000005FC       .text __dt__Q212daObjGaship25Act_cFv */
 daObjGaship2::Act_c::~Act_c() {

@@ -76,30 +76,10 @@ void daObjVfan::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 00000D20-00000D40       .text Mthd_Create__Q29daObjVfan26@unnamed@d_a_obj_vfan_cpp@FPv */
-void daObjVfan::@unnamed@d_a_obj_vfan_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00000D40-00000D60       .text Mthd_Delete__Q29daObjVfan26@unnamed@d_a_obj_vfan_cpp@FPv */
-void daObjVfan::@unnamed@d_a_obj_vfan_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00000D60-00000D80       .text Mthd_Execute__Q29daObjVfan26@unnamed@d_a_obj_vfan_cpp@FPv */
-void daObjVfan::@unnamed@d_a_obj_vfan_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00000D80-00000DAC       .text Mthd_Draw__Q29daObjVfan26@unnamed@d_a_obj_vfan_cpp@FPv */
-void daObjVfan::@unnamed@d_a_obj_vfan_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00000DAC-00000DD8       .text Mthd_IsDelete__Q29daObjVfan26@unnamed@d_a_obj_vfan_cpp@FPv */
-void daObjVfan::@unnamed@d_a_obj_vfan_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00000DD8-00000DE0       .text IsDelete__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::IsDelete() {
@@ -201,13 +181,5 @@ void daObj::PrmAbstract<daObjVfan::Act_c::Prm_e>(const fopAc_ac_c*, daObjVfan::A
     /* Nonmatching */
 }
 
-/* 00000EF8-00000F00       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00000F00-00000F08       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

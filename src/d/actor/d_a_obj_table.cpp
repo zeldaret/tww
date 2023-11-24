@@ -51,30 +51,10 @@ void daObjTable::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 00000608-00000628       .text Mthd_Create__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
-void daObjTable::@unnamed@d_a_obj_table_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00000628-00000648       .text Mthd_Delete__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
-void daObjTable::@unnamed@d_a_obj_table_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00000648-00000668       .text Mthd_Execute__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
-void daObjTable::@unnamed@d_a_obj_table_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00000668-00000694       .text Mthd_Draw__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
-void daObjTable::@unnamed@d_a_obj_table_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00000694-000006C0       .text Mthd_IsDelete__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
-void daObjTable::@unnamed@d_a_obj_table_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 000006C0-000006C8       .text IsDelete__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::IsDelete() {

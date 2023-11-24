@@ -171,30 +171,10 @@ void daObjMkie::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 000015B8-000015D8       .text Mthd_Create__Q29daObjMkie26@unnamed@d_a_obj_mkie_cpp@FPv */
-void daObjMkie::@unnamed@d_a_obj_mkie_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 000015D8-000015F8       .text Mthd_Delete__Q29daObjMkie26@unnamed@d_a_obj_mkie_cpp@FPv */
-void daObjMkie::@unnamed@d_a_obj_mkie_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 000015F8-00001618       .text Mthd_Execute__Q29daObjMkie26@unnamed@d_a_obj_mkie_cpp@FPv */
-void daObjMkie::@unnamed@d_a_obj_mkie_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00001618-00001644       .text Mthd_Draw__Q29daObjMkie26@unnamed@d_a_obj_mkie_cpp@FPv */
-void daObjMkie::@unnamed@d_a_obj_mkie_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00001644-00001670       .text Mthd_IsDelete__Q29daObjMkie26@unnamed@d_a_obj_mkie_cpp@FPv */
-void daObjMkie::@unnamed@d_a_obj_mkie_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00001670-00001678       .text Draw__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::Draw() {
@@ -331,13 +311,5 @@ void daObj::PrmAbstract<daObjMkie::Act_c::Prm_e>(const fopAc_ac_c*, daObjMkie::A
     /* Nonmatching */
 }
 
-/* 00001808-00001810       .text @280@__dt__8dCcD_TriFv */
-void @280@__dt__8dCcD_TriFv {
-    /* Nonmatching */
-}
 
-/* 00001810-00001818       .text @248@__dt__8dCcD_TriFv */
-void @248@__dt__8dCcD_TriFv {
-    /* Nonmatching */
-}
 

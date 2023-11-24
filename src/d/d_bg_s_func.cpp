@@ -36,18 +36,6 @@ dBgS_ObjGndChk_Wtr::~dBgS_ObjGndChk_Wtr() {
     /* Nonmatching */
 }
 
-/* 800A5660-800A5668       .text @20@__dt__18dBgS_ObjGndChk_WtrFv */
-void @20@__dt__18dBgS_ObjGndChk_WtrFv {
-    /* Nonmatching */
-}
 
-/* 800A5668-800A5670       .text @76@__dt__18dBgS_ObjGndChk_WtrFv */
-void @76@__dt__18dBgS_ObjGndChk_WtrFv {
-    /* Nonmatching */
-}
 
-/* 800A5670-800A5678       .text @64@__dt__18dBgS_ObjGndChk_WtrFv */
-void @64@__dt__18dBgS_ObjGndChk_WtrFv {
-    /* Nonmatching */
-}
 

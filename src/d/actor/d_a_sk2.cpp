@@ -81,18 +81,6 @@ dBgWDeform::~dBgWDeform() {
     /* Nonmatching */
 }
 
-/* 00000D20-00000D28       .text @196@__dt__10dBgWDeformFv */
-void @196@__dt__10dBgWDeformFv {
-    /* Nonmatching */
-}
 
-/* 00000D28-00000D30       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00000D30-00000D38       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 

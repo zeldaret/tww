@@ -296,23 +296,7 @@ void daObj::PrmAbstract<daTsubo::Act_c::Prm_e>(const fopAc_ac_c*, daTsubo::Act_c
     /* Nonmatching */
 }
 
-/* 000012E8-000012F0       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 000012F0-000012F8       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 000012F8-00001300       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00001300-00001308       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

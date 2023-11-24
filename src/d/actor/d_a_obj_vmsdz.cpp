@@ -41,28 +41,8 @@ void daObjVmsdz_c::_draw() {
     /* Nonmatching */
 }
 
-/* 00000300-00000320       .text Mthd_Create__27@unnamed@d_a_obj_vmsdz_cpp@FPv */
-void @unnamed@d_a_obj_vmsdz_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00000320-00000344       .text Mthd_Delete__27@unnamed@d_a_obj_vmsdz_cpp@FPv */
-void @unnamed@d_a_obj_vmsdz_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00000344-00000368       .text Mthd_Execute__27@unnamed@d_a_obj_vmsdz_cpp@FPv */
-void @unnamed@d_a_obj_vmsdz_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00000368-0000038C       .text Mthd_Draw__27@unnamed@d_a_obj_vmsdz_cpp@FPv */
-void @unnamed@d_a_obj_vmsdz_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 0000038C-00000394       .text Mthd_IsDelete__27@unnamed@d_a_obj_vmsdz_cpp@FPv */
-void @unnamed@d_a_obj_vmsdz_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 

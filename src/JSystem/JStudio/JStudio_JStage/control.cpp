@@ -21,28 +21,8 @@ void JStudio_JStage::TCreateObject::find(const JStudio::stb::data::TParse_TBlock
     /* Nonmatching */
 }
 
-/* 80275DDC-80275E98       .text createObject_JSG_<Q214JStudio_JStage14TAdaptor_actor,Q26JStage6TActor>__Q214JStudio_JStage21@unnamed@control_cpp@FRCQ47JStudio3stb4data20TParse_TBlock_objectPQ26JStage7TObjectPCQ26JStage7TSystem */
-void JStudio_JStage::@unnamed@control_cpp@::createObject_JSG_<JStudio_JStage::TAdaptor_actor, JStage::TActor>(const JStudio::stb::data::TParse_TBlock_object&, JStage::TObject*, const JStage::TSystem*) {
-    /* Nonmatching */
-}
 
-/* 80275E98-80275F54       .text createObject_JSG_<Q214JStudio_JStage15TAdaptor_camera,Q26JStage7TCamera>__Q214JStudio_JStage21@unnamed@control_cpp@FRCQ47JStudio3stb4data20TParse_TBlock_objectPQ26JStage7TObjectPCQ26JStage7TSystem */
-void JStudio_JStage::@unnamed@control_cpp@::createObject_JSG_<JStudio_JStage::TAdaptor_camera, JStage::TCamera>(const JStudio::stb::data::TParse_TBlock_object&, JStage::TObject*, const JStage::TSystem*) {
-    /* Nonmatching */
-}
 
-/* 80275F54-80276010       .text createObject_JSG_<Q214JStudio_JStage21TAdaptor_ambientLight,Q26JStage13TAmbientLight>__Q214JStudio_JStage21@unnamed@control_cpp@FRCQ47JStudio3stb4data20TParse_TBlock_objectPQ26JStage7TObjectPCQ26JStage7TSystem */
-void JStudio_JStage::@unnamed@control_cpp@::createObject_JSG_<JStudio_JStage::TAdaptor_ambientLight, JStage::TAmbientLight>(const JStudio::stb::data::TParse_TBlock_object&, JStage::TObject*, const JStage::TSystem*) {
-    /* Nonmatching */
-}
 
-/* 80276010-802760CC       .text createObject_JSG_<Q214JStudio_JStage14TAdaptor_light,Q26JStage6TLight>__Q214JStudio_JStage21@unnamed@control_cpp@FRCQ47JStudio3stb4data20TParse_TBlock_objectPQ26JStage7TObjectPCQ26JStage7TSystem */
-void JStudio_JStage::@unnamed@control_cpp@::createObject_JSG_<JStudio_JStage::TAdaptor_light, JStage::TLight>(const JStudio::stb::data::TParse_TBlock_object&, JStage::TObject*, const JStage::TSystem*) {
-    /* Nonmatching */
-}
 
-/* 802760CC-80276188       .text createObject_JSG_<Q214JStudio_JStage12TAdaptor_fog,Q26JStage4TFog>__Q214JStudio_JStage21@unnamed@control_cpp@FRCQ47JStudio3stb4data20TParse_TBlock_objectPQ26JStage7TObjectPCQ26JStage7TSystem */
-void JStudio_JStage::@unnamed@control_cpp@::createObject_JSG_<JStudio_JStage::TAdaptor_fog, JStage::TFog>(const JStudio::stb::data::TParse_TBlock_object&, JStage::TObject*, const JStage::TSystem*) {
-    /* Nonmatching */
-}
 

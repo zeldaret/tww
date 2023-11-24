@@ -6,20 +6,8 @@
 #include "processor.h"
 #include "dolphin/types.h"
 
-/* 8029EDA4-8029EDCC       .text process_setMessageIndex_reserved___Q28JMessage23@unnamed@processor_cpp@FUs */
-void process_setMessageIndex_reserved___Q28JMessage23@unnamed@processor_cpp@FUs {
-    /* Nonmatching */
-}
 
-/* 8029EDCC-8029EE18       .text process_setMessage_index___Q28JMessage23@unnamed@processor_cpp@FPQ28JMessage8TControlUs */
-void process_setMessage_index___Q28JMessage23@unnamed@processor_cpp@FPQ28JMessage8TControlUs {
-    /* Nonmatching */
-}
 
-/* 8029EE18-8029EE6C       .text process_setMessage_code___Q28JMessage23@unnamed@processor_cpp@FPQ28JMessage8TControlUl */
-void process_setMessage_code___Q28JMessage23@unnamed@processor_cpp@FPQ28JMessage8TControlUl {
-    /* Nonmatching */
-}
 
 /* 8029EE6C-8029EEA4       .text pushCurrent__Q28JMessage10TProcessorFPCc */
 void JMessage::TProcessor::pushCurrent(const char*) {

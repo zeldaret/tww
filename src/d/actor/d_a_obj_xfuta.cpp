@@ -41,30 +41,10 @@ void daObjXfuta::Act_c::_draw() {
     /* Nonmatching */
 }
 
-/* 0000040C-0000042C       .text Mthd_Create__Q210daObjXfuta27@unnamed@d_a_obj_xfuta_cpp@FPv */
-void daObjXfuta::@unnamed@d_a_obj_xfuta_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 0000042C-00000450       .text Mthd_Delete__Q210daObjXfuta27@unnamed@d_a_obj_xfuta_cpp@FPv */
-void daObjXfuta::@unnamed@d_a_obj_xfuta_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00000450-00000474       .text Mthd_Execute__Q210daObjXfuta27@unnamed@d_a_obj_xfuta_cpp@FPv */
-void daObjXfuta::@unnamed@d_a_obj_xfuta_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00000474-00000498       .text Mthd_Draw__Q210daObjXfuta27@unnamed@d_a_obj_xfuta_cpp@FPv */
-void daObjXfuta::@unnamed@d_a_obj_xfuta_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00000498-000004A0       .text Mthd_IsDelete__Q210daObjXfuta27@unnamed@d_a_obj_xfuta_cpp@FPv */
-void daObjXfuta::@unnamed@d_a_obj_xfuta_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 000004A0-00000500       .text __dt__Q210daObjXfuta5Act_cFv */
 daObjXfuta::Act_c::~Act_c() {

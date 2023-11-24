@@ -291,13 +291,5 @@ LIGHT_INFLUENCE::~LIGHT_INFLUENCE() {
     /* Nonmatching */
 }
 
-/* 00002A00-00002A08       .text @280@__dt__8dCcD_CylFv */
-void @280@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 
-/* 00002A08-00002A10       .text @248@__dt__8dCcD_CylFv */
-void @248@__dt__8dCcD_CylFv {
-    /* Nonmatching */
-}
 

@@ -101,13 +101,5 @@ void daIlift_IsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 0000108C-00001094       .text @32@__dt__12dBgS_ObjAcchFv */
-void @32@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 
-/* 00001094-0000109C       .text @20@__dt__12dBgS_ObjAcchFv */
-void @20@__dt__12dBgS_ObjAcchFv {
-    /* Nonmatching */
-}
 

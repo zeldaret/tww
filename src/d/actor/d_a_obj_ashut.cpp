@@ -106,30 +106,10 @@ void daObjAshut::Act_c::Draw() {
     /* Nonmatching */
 }
 
-/* 00000D6C-00000D8C       .text Mthd_Create__Q210daObjAshut27@unnamed@d_a_obj_ashut_cpp@FPv */
-void daObjAshut::@unnamed@d_a_obj_ashut_cpp@::Mthd_Create(void*) {
-    /* Nonmatching */
-}
 
-/* 00000D8C-00000DAC       .text Mthd_Delete__Q210daObjAshut27@unnamed@d_a_obj_ashut_cpp@FPv */
-void daObjAshut::@unnamed@d_a_obj_ashut_cpp@::Mthd_Delete(void*) {
-    /* Nonmatching */
-}
 
-/* 00000DAC-00000DCC       .text Mthd_Execute__Q210daObjAshut27@unnamed@d_a_obj_ashut_cpp@FPv */
-void daObjAshut::@unnamed@d_a_obj_ashut_cpp@::Mthd_Execute(void*) {
-    /* Nonmatching */
-}
 
-/* 00000DCC-00000DF8       .text Mthd_Draw__Q210daObjAshut27@unnamed@d_a_obj_ashut_cpp@FPv */
-void daObjAshut::@unnamed@d_a_obj_ashut_cpp@::Mthd_Draw(void*) {
-    /* Nonmatching */
-}
 
-/* 00000DF8-00000E24       .text Mthd_IsDelete__Q210daObjAshut27@unnamed@d_a_obj_ashut_cpp@FPv */
-void daObjAshut::@unnamed@d_a_obj_ashut_cpp@::Mthd_IsDelete(void*) {
-    /* Nonmatching */
-}
 
 /* 00000E24-00000E2C       .text Draw__16dBgS_MoveBgActorFv */
 void dBgS_MoveBgActor::Draw() {
