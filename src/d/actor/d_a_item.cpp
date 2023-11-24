@@ -415,7 +415,7 @@ void daItem_c::execWaitGetDemoDirection() {
     
     if (mEvtInfo.checkCommandItem()) {
         mCurState = STATE_MAIN_GET_DEMO;
-        if (mDemoItemBsPcId != -1) {
+        if (mDemoItemBsPcId != fpcM_ERROR_PROCESS_ID_e) {
             dComIfGp_event_setItemPartnerId(mDemoItemBsPcId);
         }
     } else {

@@ -20,17 +20,17 @@ namespace daObjMonument {
             TWO_e,
         };
 
-        struct L_attr_entry {
+        struct Attr_c {
             /* 0x00 */ s16 mModelId;
             /* 0x01 */ s16 mBgWId;
         };
 
-        static L_attr_entry L_attr[2] = {
+        static Attr_c L_attr[2] = {
             { 0x04, 0x08 },
             { 0x05, 0x09 },
         };
 
-        inline const L_attr_entry & attr(Type_e type) { return L_attr[type]; }
+        inline const Attr_c & attr(Type_e type) { return L_attr[type]; }
     }
 
     class Act_c : fopAc_ac_c {

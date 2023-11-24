@@ -1108,11 +1108,11 @@ BOOL ShopItems_c::Item_ZoomUp(cXyz& pos) {
 BOOL ShopItems_c::Item_Move() {
     for (int i = 0; i < mNumItems; i++) {
         if (i == mSelectedItemIdx) {
-            if (mItemActorProcessIds[i] != -1) {
+            if (mItemActorProcessIds[i] != fpcM_ERROR_PROCESS_ID_e) {
                 Item_Select(i);
             }
         } else {
-            if (mItemActorProcessIds[i] != -1) {
+            if (mItemActorProcessIds[i] != fpcM_ERROR_PROCESS_ID_e) {
                 Item_Wait(i);
             }
         }
@@ -1227,7 +1227,7 @@ s16 dShop_get_next_select(int param_1, ShopItems_c* shopItems) {
         if (selectedItemIdx == shopItems->mSelectedItemIdx) {
             break;
         }
-        if (shopItems->mItemActorProcessIds[selectedItemIdx] != -1) {
+        if (shopItems->mItemActorProcessIds[selectedItemIdx] != fpcM_ERROR_PROCESS_ID_e) {
             break;
         }
     }

@@ -15,17 +15,17 @@ dADM_CharTbl::~dADM_CharTbl() {
 
 /* 800C2758-800C2844       .text SetData__12dADM_CharTblFUlUlUlUlUlUlUl */
 void dADM_CharTbl::SetData(u32 offs, u32 row_num, u32 row_offs, u32 colum_num, u32 colum_offs, u32 dat_size, u32 data) {
-    char** row = (char**)row_offs;
-    char** colum = (char**)colum_offs;
+    /* Nonmatching - regalloc */
+    u32* row = (u32*)row_offs;
+    for (u32 i = 0; i < row_num; i++, row++)
+        *row += offs;
 
-    for (u32 i = 0; i < row_num; i++, row_offs += 4)
-        *((u32*)row_offs) += offs;
-
-    for (u32 i = 0; i < colum_num; i++, colum_offs += 4)
-        *((u32*)colum_offs) += offs;
+    u32* colum = (u32*)colum_offs;
+    for (u32 i = 0; i < colum_num; i++, colum++)
+        *colum += offs;
 
     JUT_ASSERT(0x39, dat_size == row_num * colum_num);
-    cDT::Set(row_num, row, colum_num, colum, (u8*)data);
+    cDT::Set(row_num, (char**)row_offs, colum_num, (char**)colum_offs, (u8*)data);
     SetUpIndex();
 }
 

@@ -187,6 +187,7 @@ namespace daObjMovebox {
         
         inline void mode_proc_call();
         bool chk_walk(cXyz*) { /* TODO */ }
+        void set_rollCrash() { mbRollCrash = TRUE; }
         
         void prmZ_init();
         void prmX_init();
@@ -267,7 +268,7 @@ namespace daObjMovebox {
         /* 0x64F */ bool m64F;
         /* 0x650 */ EffSmokeCB mSmokeCbs[2];
         /* 0x6B8 */ u32 mChildPID;
-        /* 0x6BC */ int m6BC;
+        /* 0x6BC */ BOOL mbRollCrash;
         
         static const char* const M_arcname[13];
         static const dCcD_SrcCyl M_cyl_src;

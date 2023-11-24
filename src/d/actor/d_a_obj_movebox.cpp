@@ -1451,7 +1451,7 @@ namespace daObjMovebox {
         }
         
         init_mtx();
-        m6BC = 0;
+        mbRollCrash = FALSE;
         mode_wait_init();
         return TRUE;
     }
@@ -1514,7 +1514,7 @@ namespace daObjMovebox {
         int r30 = -1;
         bool r29 = true;
         
-        if (m64A && cLib_checkBit(mBgc.mStateFlags, Bgc_c::BgcState_UNK01) && (mType != TYPE_BLACK_BOX_WITH_MKIE || mChildPID == -1)) {
+        if (m64A && cLib_checkBit(mBgc.mStateFlags, Bgc_c::BgcState_UNK01) && (mType != TYPE_BLACK_BOX_WITH_MKIE || mChildPID == fpcM_ERROR_PROCESS_ID_e)) {
             BOOL temp = cLib_checkBit(mPPLabel, dBgW::PP_UNK2_e);
             BOOL r3 = cLib_checkBit(mPPLabel, dBgW::PP_UNK4_e);
             s16 r0;
@@ -1880,7 +1880,7 @@ namespace daObjMovebox {
     
     /* 00003E04-000040D0       .text Execute__Q212daObjMovebox5Act_cFPPA3_A4_f */
     BOOL Act_c::Execute(Mtx** pMtx) {
-        if (mCyl.ChkTgHit() || m6BC != 0) {
+        if (mCyl.ChkTgHit() || mbRollCrash) {
             make_item();
             eff_break();
             sound_break();

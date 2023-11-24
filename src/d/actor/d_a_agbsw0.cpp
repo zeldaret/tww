@@ -1936,49 +1936,49 @@ BOOL daAgbsw0_c::MoveCheck(s16 param_1) {
 
             return 0;
         case 0x44:
-            if(fpcM_GetName(dComIfGp_getPlayer(0)) == 0x13C) {
+            if(fpcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_OS) {
                 return 0;
             }
 
             break;
         case 0x45:
-            if(fpcM_GetName(dComIfGp_getPlayer(0)) != 0x13C) {
+            if(fpcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_OS) {
                 return 0;
             }
 
             break;
         case 0x46:
-            if(fpcM_GetName(dComIfGp_getPlayer(0)) == 0x171) {
+            if(fpcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_MD) {
                 return 0;
             }
 
             break;
         case 0x47:
-            if(fpcM_GetName(dComIfGp_getPlayer(0)) != 0x171) {
+            if(fpcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_MD) {
                 return 0;
             }
 
             break;
         case 0x48:
-            if(fpcM_GetName(dComIfGp_getPlayer(0)) == 0x150) {
+            if(fpcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_CB1) {
                 return 0;
             }
 
             break;
         case 0x49:
-            if(fpcM_GetName(dComIfGp_getPlayer(0)) != 0x150) {
+            if(fpcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_CB1) {
                 return 0;
             }
 
             break;
         case 0x4A:
-            if(fpcM_GetName(dComIfGp_getPlayer(0)) == 0xC4) {
+            if(fpcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_KAM) {
                 return 0;
             }
 
             break;
         case 0x4B:
-            if(fpcM_GetName(dComIfGp_getPlayer(0)) != 0xC4) {
+            if(fpcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_KAM) {
                 return 0;
             }
 
@@ -2274,25 +2274,27 @@ BOOL daAgbsw0_c::MoveCheck(s16 param_1) {
 
             break;
         case 0x7B:
-            if(fpcM_GetName(dComIfGp_getPlayer(0)) == 0x171  && daNpc_Md_c::isFlying()) {
+            if(fpcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_MD  && daNpc_Md_c::isFlying()) {
                 return 0;
             }
 
             break;
         case 0x7C:
-            if(fpcM_GetName(dComIfGp_getPlayer(0)) != 0x171 || !daNpc_Md_c::isFlying()) {
+            if(fpcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_MD || !daNpc_Md_c::isFlying()) {
                 return 0;
             }
 
             break;
         case 0x7D:
-            if(fpcM_GetName(dComIfGp_getPlayer(0)) == 0x171/* && daNpc_Cb1_c::isFlying()*/) {
+            // Potential bug: This seems to check if the current player is Medli, but that Makar is flying?
+            if(fpcM_GetName(dComIfGp_getPlayer(0)) == PROC_NPC_MD/* && daNpc_Cb1_c::isFlying()*/) {
                 return 0;
             }
 
             break;
         case 0x7E:
-            if(!fpcM_GetName(dComIfGp_getPlayer(0)) != 0x171/* || !daNpc_Cb1_c::isFlying()*/) {
+            // Potential bug: This seems to check if the current player is Medli, but that Makar is flying?
+            if(!fpcM_GetName(dComIfGp_getPlayer(0)) != PROC_NPC_MD/* || !daNpc_Cb1_c::isFlying()*/) {
                 return 0;
             }
 

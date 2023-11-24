@@ -33,7 +33,7 @@ namespace daObjPaper {
             Piwa_e,
         };
 
-        struct L_attr_entry {
+        struct Attr_c {
             /* 0x00 */ char* mResName;
             /* 0x04 */ s32 mHeapSize;
             /* 0x06 */ s16 mModelId;
@@ -50,13 +50,13 @@ namespace daObjPaper {
             /* 0x16 */ s16 mColCylinderHeight;
         };
 
-        static const L_attr_entry L_attr[3] = {
+        static const Attr_c L_attr[3] = {
             { "Opaper", 0x04C0, 3, 0x00, 0x28, 0x28, 0x00, 0x1D, 0x1E, 0x01, 0x00, 0x00 },
             { "Ppos",   0x04C0, 3, 0x00, 0x32, 0x3C, 0x00, 0x1F, 0x20, 0x00, 0x00, 0x00 },
             { "Piwa",   0x04C0, 3, 0x3C, 0x82, 0x50, 0x3C, 0x1D, 0x1E, 0x00, 0x37, 0x73 }
         };
 
-        inline const L_attr_entry & attr(Type_e type) { return L_attr[type]; }
+        inline const Attr_c & attr(Type_e type) { return L_attr[type]; }
     }
 
     static const dCcD_SrcCyl M_cyl_src = {
@@ -143,6 +143,7 @@ namespace daObjPaper {
             PRM_TYPE_S = 0x10,
         };
 
+        u32 prm_get_msgNo() const { return daObj::PrmAbstract<Prm_e>(this, PRM_MSG_NO_W, PRM_MSG_NO_S); }
         Type_e prm_get_type() const { return (Type_e)daObj::PrmAbstract<Prm_e>(this, PRM_TYPE_W, PRM_TYPE_S); }
     };
 
@@ -249,8 +250,7 @@ namespace daObjPaper {
     /* 000007A4-00000820       .text mode_talk0__Q210daObjPaper5Act_cFv */
     void daObjPaper::Act_c::mode_talk0() {
         if (mMsgId == fpcM_ERROR_PROCESS_ID_e && dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 4)) {
-            int msgNo = daObj::PrmAbstract<Prm_e>(this, PRM_MSG_NO_W, PRM_MSG_NO_S);
-            mMsgId = fopMsgM_messageSet(msgNo, &mEyePos);
+            mMsgId = fopMsgM_messageSet(prm_get_msgNo(), &mEyePos);
 
             mode_talk1_init();
         }
