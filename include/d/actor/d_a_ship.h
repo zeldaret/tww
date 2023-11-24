@@ -12,6 +12,10 @@
 
 class daShip_c : public fopAc_ac_c {
 public:
+    enum daSHIP_SFLG {
+        
+    };
+    
     void checkForceMove() {}
     void getBodyMtx() {}
     void getCraneTop() {}
@@ -28,7 +32,7 @@ public:
     void getWhirlActor() {}
     void offCraneHookFlg() {}
     void offFantomGanonBattle() {}
-    void offStateFlg(daShip_c::daSHIP_SFLG) {}
+    void offStateFlg(daSHIP_SFLG) {}
     void offTornadoFlg() {}
     void offWhirlFlg() {}
     void onCb1Ride() {}
@@ -39,7 +43,7 @@ public:
     void onLinkSit() {}
     void onSceneChange() {}
     void onShortHitFlg() {}
-    void onStateFlg(daShip_c::daSHIP_SFLG) {}
+    void onStateFlg(daSHIP_SFLG) {}
     void onTornadoFlg(unsigned long) {}
     void onWhirlFlg(unsigned long, short) {}
     void onWhirlFlgDirect(unsigned long, short) {}
@@ -67,24 +71,24 @@ public:
     void checkForceMessage();
     void setInitMessage();
     void setNextMessage(msg_class*);
-    void seStart(unsigned long, cXyz*);
+    void seStart(u32, cXyz*);
     void setSailAngle();
-    void setControllAngle(short);
+    void setControllAngle(s16);
     void getMaxWaterY(cXyz*);
-    void setWaveAngle(short*, short*);
+    void setWaveAngle(s16*, s16*);
     void getWaterY();
     void setYPos();
     void checkOutRange();
-    void decrementShipSpeed(float);
-    void firstDecrementShipSpeed(float);
-    void getAimControllAngle(short);
-    void setMoveAngle(short);
+    void decrementShipSpeed(f32);
+    void firstDecrementShipSpeed(f32);
+    void getAimControllAngle(s16);
+    void setMoveAngle(s16);
     void changeDemoEndProc();
-    void setCrashData(short);
+    void setCrashData(s16);
     void checkNextMode(int);
-    void setPartOnAnime(unsigned char);
+    void setPartOnAnime(u8);
     void setPartOffAnime();
-    void setPartAnimeInit(unsigned char);
+    void setPartAnimeInit(u8);
     void setSelfMove(int);
     void procWait_init();
     void procWait();
@@ -126,7 +130,7 @@ public:
     void procWhirlDown();
     void procStartModeThrow_init();
     void procStartModeThrow();
-    void setEffectData(float, short);
+    void setEffectData(f32, s16);
     void setRoomInfo();
     void incRopeCnt(int, int);
     void setRopePos();
@@ -140,6 +144,7 @@ public:
     void create();
     void getCannonAngleX() const;
     void checkForceMove() const;
+    void initStartPos(cXyz const*, s16);
 
 public:
     /* 0x0290 */ request_of_phase_process_class mPhs;
@@ -155,7 +160,7 @@ public:
     /* 0x030C */ mDoExt_3DlineMat1_c mRopeLine;
     /* 0x0348 */ u8 m0348[0x034D - 0x0348];
     /* 0x034D */ u8 m034D;
-    /* 0x034E */ daShip_c__ShipMode mShipMode;
+    /* 0x034E */ u8 mShipMode;
     /* 0x034F */ u8 m034F[0x0354 - 0x034F];
     /* 0x0354 */ int mEvtStaffId;
     /* 0x0358 */ u32 m0358;
@@ -221,7 +226,6 @@ public:
     /* 0x1180 */ dBgS_Acch mAcch;
     /* 0x1344 */ dCcD_Stts mStts;
     /* 0x1380 */ dCcD_Cyl mCyl[3];
-    /* 0x14B0 */ u8 m14B0[0x1710 - 0x14B0];
     /* 0x1710 */ dCcD_Sph m1710;
     /* 0x183C */ dPa_waveEcallBack mWaveR;
     /* 0x18A0 */ dPa_waveEcallBack mWaveL;

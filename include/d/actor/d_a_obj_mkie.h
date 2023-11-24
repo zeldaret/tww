@@ -6,8 +6,14 @@
 namespace daObjMkie {
     class Act_c : public fopAc_ac_c {
     public:
-        void prm_make(unsigned char, int) {}
-        void setup(const cXyz*) {}
+        static u32 prm_make(u8 eventId, int swNo) {
+            return swNo << 0x10 | (eventId | 0x3000);
+        }
+    
+        void setup(const cXyz* pos) {
+            current.pos = *pos;
+            mF58 = 1;
+        }
     
         void CreateHeap();
         void init_cc();

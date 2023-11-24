@@ -6,7 +6,10 @@
 namespace daObjMmrr {
     class Act_c : public fopAc_ac_c {
     public:
-        void setup(const cXyz*) {}
+        void setup(const cXyz* pos) {
+            current.pos = *pos;
+            mBF8 = 1;
+        }
     
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();

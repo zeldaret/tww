@@ -2,9 +2,19 @@
 #define D_A_YKGR_H
 
 #include "f_op/f_op_actor.h"
+#include "JSystem/JParticle/JPAEmitter.h"
 
 class daYkgr_c : public fopAc_ac_c {
 public:
+    static void stop() {
+        if (m_emitter) {
+            m_alpha_flag = 0;
+        }
+    };
+    
+    static JPABaseEmitter* m_emitter;
+    static u8 m_alpha_flag;
+    
     void _create() {}
     void _delete() {}
     void _draw() {}
@@ -16,7 +26,6 @@ public:
     void set_mtx() {}
     void show() {}
     void start() {}
-    void stop() {}
 
     void getPosRate();
 

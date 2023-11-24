@@ -2,10 +2,34 @@
 #define D_A_OBJ_BUOYFLAG_H
 
 #include "f_op/f_op_actor.h"
+#include "m_Do/m_Do_mtx.h"
+#include "d/d_procname.h"
+#include "f_op/f_op_actor_mng.h"
 
 namespace daObjBuoyflag {
+    enum Type_e {
+        
+    };
+    enum Texture_e {
+        
+    };
+    
     class Act_c : public fopAc_ac_c {
     public:
+        static s32 make_norm(unsigned int parentPId, cXyz* pos, int roomNo, csXyz* angle) {
+            u32 params = prm_make(static_cast<Type_e>(0), static_cast<Texture_e>(0), false); // TODO: placeholder
+            return fopAcM_createChild(
+                PROC_Obj_Buoyflag, parentPId,
+                params, pos,
+                roomNo, angle, NULL, -1, NULL
+            );
+        }
+        static u32 prm_make(daObjBuoyflag::Type_e, daObjBuoyflag::Texture_e, bool) {
+            // TODO: placeholder function
+            return 0;
+        }
+    
+        void setup(MtxP mtx) { cMtx_copy(mtx, m1090); }
         void _create() {}
         void _delete() {}
         void _draw() {}
@@ -13,9 +37,6 @@ namespace daObjBuoyflag {
         void jump_to_sea(float, float, short) {}
         void make_barrel2_mine(unsigned int, cXyz*, int, csXyz*, daObjBuoyflag::Texture_e, bool) {}
         void make_barrel2_norm(unsigned int, cXyz*, int, csXyz*, daObjBuoyflag::Texture_e) {}
-        void make_norm(unsigned int, cXyz*, int, csXyz*) {}
-        void prm_make(daObjBuoyflag::Type_e, daObjBuoyflag::Texture_e, bool) {}
-        void setup(float(*)[4]) {}
     
         void prm_get_texture() const;
         void attr_type() const;

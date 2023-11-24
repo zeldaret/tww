@@ -8,8 +8,14 @@
 namespace daObjJump {
     class Act_c : public fopAc_ac_c {
     public:
-        void prm_make_b() {}
-        void setup(const cXyz*) {}
+        static u32 prm_make_b() {
+            return 1;
+        }
+    
+        void setup(const cXyz* pos) {
+            current.pos = *pos;
+            m336 = 1;
+        }
     
         void CreateHeap();
         void Create();

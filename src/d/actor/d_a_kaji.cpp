@@ -113,7 +113,7 @@ BOOL daKaji_c::_execute() {
 }
 
 bool daKaji_c::_draw() {
-    if (!l_p_ship->unk2CC) {
+    if (!l_p_ship->m2CC) {
         return true;
     }
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
