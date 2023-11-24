@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000090       .text get_draw_water_lv__13daObjGryw00_cFPv */
-void daObjGryw00_c::get_draw_water_lv(void*) {
+f32 daObjGryw00_c::get_draw_water_lv(void*) {
     /* Nonmatching */
 }
 
