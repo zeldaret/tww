@@ -31,7 +31,6 @@ JASystem::TBasicInst::~TBasicInst() {
 
 /* 80284914-80284B4C       .text getParam__Q28JASystem10TBasicInstCFiiPQ28JASystem10TInstParam */
 bool JASystem::TBasicInst::getParam(int key, int velo, TInstParam* param) const {
-    /* Nonmatching */
     param->field_0x0 = 0;
     param->field_0x38 = 0;
     param->field_0x8 = mOsc;
@@ -66,8 +65,8 @@ bool JASystem::TBasicInst::getParam(int key, int velo, TInstParam* param) const 
     }
     const TKeymap* keymap = NULL;
     for (int i = 0; i < mKeyRegionCount; i++) {
-        keymap = &mKeymap[i];
-        if (key <= keymap->mBaseKey) {
+        if (key <= mKeymap[i].mBaseKey) {
+            keymap = &mKeymap[i];
             param->field_0x3c = i;
             break;
         }

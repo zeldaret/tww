@@ -198,14 +198,13 @@ JASystem::Kernel::TSolidHeap::TSolidHeap() {
 
 /* 8027D370-8027D40C       .text alloc__Q38JASystem6Kernel10TSolidHeapFl */
 void* JASystem::Kernel::TSolidHeap::alloc(s32 size) {
-    /* Nonmatching */
     u32 tmp1 = OSRoundUp32B(size);
     if (field_0x0 == 0) {
         OSReport("[Nas_HeapAlloc] ヒープが取得できません（ヒープ取得元存在せず）。\n");
         return 0;
     }
     u32 tmp2 = field_0x4;
-    if (tmp2 + tmp1 <= field_0x0 + field_0x8) {
+    if (field_0x4 + tmp1 <= field_0x0 + field_0x8) {
         field_0x4 = tmp2 + tmp1;
     } else {
         OSReport("[Nas_HeapAlloc] ヒープが取得できません（ヒープの取得元の残りサイズ不足）。\n");

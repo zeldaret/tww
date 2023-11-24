@@ -32,10 +32,13 @@ JASystem::Kernel::THeap* JASystem::WaveArcLoader::getRootHeap() {
 
 char JASystem::WaveArcLoader::sCurrentDir[DIR_MAX] = "/Banks/";
 
+namespace std {
+    using ::strlen;
+};
+
 /* 80287C30-80287D24       .text setCurrentDir__Q28JASystem13WaveArcLoaderFPCc */
 void JASystem::WaveArcLoader::setCurrentDir(const char* dir) {
-    /* Nonmatching */
-    //JUT_ASSERT(60, std::strlen(dir) < DIR_MAX);
+    JUT_ASSERT(60, std::strlen(dir) < DIR_MAX);
     strcpy(sCurrentDir, dir);
     int len = strlen(sCurrentDir);
     if (sCurrentDir[len - 1] == '/') {

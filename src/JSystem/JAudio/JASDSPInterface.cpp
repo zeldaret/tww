@@ -133,16 +133,16 @@ void JASystem::DSPInterface::DSPBuffer::allocInit() {
 
 /* 8028A574-8028A5D8       .text playStart__Q38JASystem12DSPInterface9DSPBufferFv */
 void JASystem::DSPInterface::DSPBuffer::playStart() {
-    /* Nonmatching */
     field_0x10c = 0;
     field_0x60 = 0;
     field_0x8 = 1;
     field_0x66 = 0;
-    for (int i = 0; i < 4; i++) {
+    int i;
+    for (i = 0; i < 4; i++) {
         field_0x78[i] = 0;
         field_0xa8[i] = 0;
     }
-    for (int i = 0; i < 20; i++) {
+    for (i = 0; i < 20; i++) {
         field_0x80[i] = 0;
     }
     field_0x0 = 1;
@@ -275,12 +275,12 @@ void JASystem::DSPInterface::DSPBuffer::flushChannel() {
 
 /* 8028A828-8028A884       .text initFilter__Q38JASystem12DSPInterface9DSPBufferFv */
 void JASystem::DSPInterface::DSPBuffer::initFilter() {
-    /* Nonmatching */
-    for (int i = 0; i < 8; i++) {
+    int i;
+    for (i = 0; i < 8; i++) {
         field_0x120[i] = 0;
     }
     field_0x120[0] = 0x7fff;
-    for (int i = 0; i < 4; i++) {
+    for (i = 0; i < 4; i++) {
         field_0x148[i] = 0;
     }
     field_0x148[0] = 0x7fff;

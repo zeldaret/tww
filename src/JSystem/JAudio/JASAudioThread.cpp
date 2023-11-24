@@ -22,6 +22,7 @@
 OSThread JASystem::TAudioThread::sAudioThread;
 u8 JASystem::TAudioThread::saAudioStack[4096];
 OSMessageQueue JASystem::TAudioThread::sAudioprocMQ;
+OSMessage JASystem::TAudioThread::saAudioMsgBuf[16];
 
 u32 JASystem::TAudioThread::sAudioprocMQInit;
 int JASystem::TAudioThread::sbIsPrioritySet;
@@ -41,12 +42,10 @@ void JASystem::TAudioThread::syncAudio() {
     if (sAudioprocMQInit) {
         OSSendMessage(&sAudioprocMQ, NULL, OS_MESSAGE_NOBLOCK);
     }
-    /* Nonmatching */
 }
 
 /* 80288F88-80289130       .text audioproc__Q28JASystem12TAudioThreadFPv */
 void* JASystem::TAudioThread::audioproc(void*) {
-    /* Nonmatching */
     JKRThread thread(&sAudioThread, 0);
     i_OSInitFastCast();
     OSInitMessageQueue(&sAudioprocMQ, saAudioMsgBuf, 16);
@@ -93,14 +92,14 @@ void* JASystem::TAudioThread::audioproc(void*) {
 
 /* 80289130-802891F0       .text syncDSP__Q28JASystem12TAudioThreadFPv */
 void JASystem::TAudioThread::syncDSP(void*) {
-    /* Nonmatching */
     while (!DSPCheckMailFromDSP()) {}
     u32 var1 = DSPReadMailFromDSP();
     if (var1 >> 16 != DSPInterface::JAS_DSP_PREFIX) {
-        OSReport("----- syncDSP : Mail format error %x\n");
+        OSReport("----- syncDSP : Mail format error %x\n", var1);
         return;
     }
-    if ((var1 & 0xff00) == 0xff00) {
+    switch (var1 & 0xff00) {
+    case 0xff00:
         if (sAudioprocMQInit) {
             if (!OSSendMessage(&sAudioprocMQ, OSMessage(1), OS_MESSAGE_NOBLOCK)) {
                 OSReport("----- syncDSP : Send Miss\n");
@@ -108,8 +107,10 @@ void JASystem::TAudioThread::syncDSP(void*) {
         } else {
             DSPReleaseHalt();
         }
-    } else {
+        break;
+    default:
         DspFinishWork(var1);
+        break;
     }
 }
 

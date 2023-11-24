@@ -29,7 +29,6 @@ namespace JASystem {
         virtual ~TInst() {}
         virtual bool getParam(int, int, TInstParam*) const = 0;
         virtual u32 getType() const = 0;
-        virtual int getKeymapIndex(int) const = 0;
     };
 }
 

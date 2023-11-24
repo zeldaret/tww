@@ -35,7 +35,7 @@ namespace JASystem {
         TBasicInst();
         ~TBasicInst();
         bool getParam(int, int, TInstParam*) const;
-        int getKeymapIndex(int) const;
+        virtual int getKeymapIndex(int) const;
         void setKeyRegionCount(u32);
         void setEffectCount(u32);
         void setEffect(int, TInstEffect*);
