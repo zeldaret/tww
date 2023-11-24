@@ -261,9 +261,8 @@ public:
 
     static u32 stopStatus;
 
-    const cXyz& getPosition() const { return current.pos; }
-    cXyz* getPositionP() { return &current.pos; }
-    const csXyz& getAngle() const { return current.angle; }
+    static u32 getStopStatus() { return stopStatus; }
+    static void setStopStatus(u32 status) { stopStatus = status; }
 };  // Size: 0x290
 
 STATIC_ASSERT(sizeof(fopAc_ac_c) == 0x290);

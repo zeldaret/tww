@@ -162,8 +162,8 @@ void daMozo_c::set_mtx() {
     J3DModel* mdl = mAnimMorf->getModel();
     mdl->setBaseScale(mScale);
 
-    mDoMtx_stack_c::transS(getPosition());
-    mDoMtx_stack_c::YrotM(getAngle().y);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
         
     mdl->setBaseTRMtx(mDoMtx_stack_c::get());
 }
@@ -313,7 +313,7 @@ bool daMozo_c::_execute() {
 bool daMozo_c::_draw() {
     /* Nonmatching */
     J3DModelData* mdlData = mAnimMorf->getModel()->getModelData();
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, getPositionP(), &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mAnimMorf->getModel(), &mTevStr);
 
     mBrkAnm.entry(mdlData);

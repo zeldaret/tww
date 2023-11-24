@@ -684,9 +684,9 @@ void wave_move() {
 
                 {
                     cXyz playerPos;
-                    playerPos.x = pPlayer->getPosition().x;
+                    playerPos.x = pPlayer->current.pos.x;
                     playerPos.y = pos.y;
-                    playerPos.z = pPlayer->getPosition().z;
+                    playerPos.z = pPlayer->current.pos.z;
                     f32 dist = pos.abs(playerPos);
                     f32 innerRadius = 200.0f;
                     f32 outerRadius = 2000.0f;

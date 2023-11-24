@@ -521,7 +521,7 @@ BOOL daItem_c::_daItem_draw() {
 
 /* 800F6110-800F61C8       .text setTevStr__8daItem_cFv */
 void daItem_c::setTevStr() {
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, getPositionP(), &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
     
     mTevStr.mColorC0.r = 0x96;
     mTevStr.mColorC0.g = 0x96;

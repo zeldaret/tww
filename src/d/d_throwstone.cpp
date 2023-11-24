@@ -53,7 +53,7 @@ s32 daThrowstone_c::_create() {
         if (!fopAcM_entrySolidHeap(this, (heapCallbackFunc)CheckCreateHeap, 0x4C0)) {
             result = cPhs_ERROR_e;
         } else {
-            mDoMtx_stack_c::transS(getPosition());
+            mDoMtx_stack_c::transS(current.pos);
             mDoMtx_stack_c::YrotM(shape_angle.y);
             mDoMtx_stack_c::scaleM(mScale);
 
@@ -106,7 +106,7 @@ bool daThrowstone_c::_draw() {
     if (!dComIfGs_isEventBit(0x0310))
         return TRUE;
 
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, getPositionP(), &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &mTevStr);
     mDoExt_modelUpdateDL(mpModel);
 

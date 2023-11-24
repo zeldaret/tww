@@ -88,7 +88,7 @@ bool daObj_Bscurtain_c::_execute() {
 
 bool daObj_Bscurtain_c::_draw() {
     dComIfGd_setListBG();
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, getPositionP(), &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &mTevStr);
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();

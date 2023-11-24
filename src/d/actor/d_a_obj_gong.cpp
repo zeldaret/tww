@@ -88,7 +88,7 @@ bool daObjGong::Act_c::_delete() {
 
 /* 000003A4-00000414       .text set_mtx__Q29daObjGong5Act_cFv */
 void daObjGong::Act_c::set_mtx() {
-    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
 }
@@ -117,7 +117,7 @@ bool daObjGong::Act_c::_draw() {
     /* Nonmatching - just some tiny regalloc */
     J3DModel* model = mpMorf->getModel();
     J3DModelData* modelData = model->getModelData();
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, getPositionP(), &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(model, &mTevStr);
     dDlst_texSpecmapST(&mEyePos, &mTevStr, modelData, attr().spec);
     mpMorf->updateDL();

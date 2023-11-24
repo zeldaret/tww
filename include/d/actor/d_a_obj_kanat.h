@@ -12,13 +12,13 @@ namespace daObjKanat {
     public:
         enum Prm_e {
             PRM_SWSAVE_W = 0x08,
-            PRM_UNK_S = 0x00,
+            PRM_SWSAVE_S = 0x00,
         };
 
         static Mtx M_tmp_mtx;
         static const char M_arcname[];
     
-        int prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_UNK_S); }
+        int prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
     
         int CreateHeap();
         int Create();

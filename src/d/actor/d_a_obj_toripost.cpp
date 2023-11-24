@@ -877,10 +877,10 @@ bool daObjTpost_c::_draw() {
     }
 
     J3DModel* pModel = mMorf->getModel();
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, getPositionP(), &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(pModel, &mTevStr);
     mMorf->entryDL();
-    dComIfGd_setSimpleShadow2(getPositionP(), mAcch.GetGroundH(), 40.0f, mAcch.m_gnd, shape_angle.y, 1.0f, 0);
+    dComIfGd_setSimpleShadow2(&current.pos, mAcch.GetGroundH(), 40.0f, mAcch.m_gnd, shape_angle.y, 1.0f, 0);
 
     return 1;
 }

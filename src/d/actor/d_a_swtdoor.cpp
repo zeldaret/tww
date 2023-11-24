@@ -31,7 +31,7 @@ BOOL daSwtdoor_Draw(swtdoor_class* i_this) {
 
 /* 000000C4-000001BC       .text daSwtdoor_Execute__FP13swtdoor_class */
 BOOL daSwtdoor_Execute(swtdoor_class* i_this) {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, i_this->getPositionP(), &i_this->mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &i_this->current.pos, &i_this->mTevStr);
     if (dComIfGs_isSwitch(i_this->mSwitchNo, fopAcM_GetRoomNo(i_this)) && i_this->orig.pos.y > -300.0f)
         i_this->orig.pos.y -= 10.0f;
 

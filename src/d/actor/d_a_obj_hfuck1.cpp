@@ -71,7 +71,7 @@ namespace {
 /* 00000078-00000100       .text init_mtx__13daObjHfuck1_cFv */
 void daObjHfuck1_c::init_mtx() {
     mpModel->setBaseScale(mScale);
-    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::XYZrotM(shape_angle);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
@@ -132,7 +132,7 @@ s32 daObjHfuck1_c::_create() {
                 mSph.Set(l_sph_src);
                 mSph.SetStts(&mStts);
 
-                mDoMtx_stack_c::transS(getPosition());
+                mDoMtx_stack_c::transS(current.pos);
                 mDoMtx_stack_c::XYZrotM(shape_angle);
                 mDoMtx_stack_c::transM(0.0f, 0.0f, -50.0f);
                 cXyz center;
@@ -184,7 +184,7 @@ bool daObjHfuck1_c::_execute() {
 
 /* 000007CC-0000082C       .text _draw__13daObjHfuck1_cFv */
 bool daObjHfuck1_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, getPositionP(), &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &mTevStr);
     mDoExt_modelUpdateDL(mpModel);
     return true;

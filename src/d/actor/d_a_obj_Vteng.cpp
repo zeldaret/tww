@@ -38,7 +38,7 @@ namespace {
 /* 00000078-00000120       .text init_mtx__12daObjVteng_cFv */
 void daObjVteng_c::init_mtx() {
     mpModel->setBaseScale(mScale);
-    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::XYZrotM(shape_angle);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mDoMtx_stack_c::scaleM(mScale);
@@ -133,7 +133,7 @@ bool daObjVteng_c::_execute() {
 
 /* 00000510-00000578       .text _draw__12daObjVteng_cFv */
 bool daObjVteng_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG3, getPositionP(), &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG3, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &mTevStr);
     mpMorf->updateDL();
     fopAcM_SetModel(this, mpModel);

@@ -152,7 +152,7 @@ public:
         }
 
         mTevStr.mRoomNo = mRoomNo;
-        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, getPositionP(), &mTevStr);
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
 
         if (getFuncType() == FUNC_TYPE_TACT) {
             J3DModelData* platMdlData = mpTactPlatformMdl->getModelData();
@@ -777,7 +777,7 @@ void daTbox_c::CreateInit() {
 
     if (funcType == FUNC_TYPE_GRAVITY) {
         mAcchCir.SetWall(30.0f, 0.0f);
-        mObjAcch.Set(getPositionP(), &next.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
+        mObjAcch.Set(&current.pos, &next.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
 
         mGravity = -2.5f;
     }
@@ -788,7 +788,7 @@ void daTbox_c::CreateInit() {
 /* 00001560-00001624       .text boxCheck__8daTbox_cFv */
 s32 daTbox_c::boxCheck() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
-    cXyz playerChestDiff = player->getPosition() - orig.pos;
+    cXyz playerChestDiff = player->current.pos - orig.pos;
 
     if (playerChestDiff.abs2XZ() < 10000.0f) {
         if (fopAcM_seenActorAngleY(this, dComIfGp_getPlayer(0)) < 0x2000 && fopAcM_seenActorAngleY(player, this) < 0x2000) {

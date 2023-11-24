@@ -349,7 +349,7 @@ s32 daObjMknjD::Act_c::Mthd_Delete() {
 
 /* 00000C34-00000CC8       .text set_mtx__Q210daObjMknjD5Act_cFv */
 void daObjMknjD::Act_c::set_mtx() {
-    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
 
     mMainMdl->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -370,7 +370,7 @@ void daObjMknjD::Act_c::init_mtx() {
 void daObjMknjD::Act_c::setGoal(int i_staffIdx) {
     cXyz pos = *dComIfGp_evmng_getMyXyzP(i_staffIdx, "Posion");
 
-    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::transS(current.pos);
     mDoMtx_YrotM(mDoMtx_stack_c::get(), current.angle.y);
 
     mDoMtx_stack_c::transM(pos);
@@ -387,7 +387,7 @@ void daObjMknjD::Act_c::setPlayerAngle(int i_staffIdx) {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     
     player->setPlayerPosAndAngle(
-        player->getPositionP(),
+        &player->current.pos,
         current.angle.y + (s16)angle
     );
 }
@@ -964,10 +964,10 @@ void daObjMknjD::setMaterial(J3DMaterial* i_mat, u8 i_alpha) {
 
 /* 000022FC-00002430       .text Draw__Q210daObjMknjD5Act_cFv */
 int daObjMknjD::Act_c::Draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, getPositionP(), &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mBreakMdl, &mTevStr);
 
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, getPositionP(), &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mMainMdl, &mTevStr);
 
     dComIfGd_setListBG();

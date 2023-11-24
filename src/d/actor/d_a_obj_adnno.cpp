@@ -62,7 +62,7 @@ void daObjAdnno_c::set_mtx() {
         J3DModel * model = mpModel[i];
         model->setBaseScale(mScale);
 
-        mDoMtx_stack_c::transS(getPosition());
+        mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::YrotM(current.angle.y);
         /* Nonmatching - this translation code is wrong */
         mDoMtx_stack_c::transM(40.0f + i * 60.0f, 60.0f - 40.0f * i, 0.0f);

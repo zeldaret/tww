@@ -24,17 +24,17 @@ cXyz get_check_pos(kytag00_class* i_this) {
     camera_class * pCamera = dComIfGp_getCamera(0);
     fopAc_ac_c * pPlayer = dComIfGp_getPlayer(0);
 
-    f32 cameraDist = i_this->getPosition().abs(pCamera->mLookat.mEye);
-    f32 playerDist = i_this->getPosition().abs(pPlayer->current.pos);
+    f32 cameraDist = i_this->current.pos.abs(pCamera->mLookat.mEye);
+    f32 playerDist = i_this->current.pos.abs(pPlayer->current.pos);
 
     if (dComIfGp_event_runCheck() && i_this->mMode == 0) {
         if (cameraDist < playerDist) {
             ret = pCamera->mLookat.mEye;
         } else {
-            ret = pPlayer->getPosition();
+            ret = pPlayer->current.pos;
         }
     } else {
-        ret = pPlayer->getPosition();
+        ret = pPlayer->current.pos;
     }
 
     return ret;
@@ -44,11 +44,11 @@ cXyz get_check_pos(kytag00_class* i_this) {
 void wether_tag_move(kytag00_class* i_this) {
     /* Nonmatching */
     cXyz chk_pos = get_check_pos(i_this);
-    cXyz chk_pos_xz(chk_pos.x, i_this->getPosition().y, chk_pos.z);
+    cXyz chk_pos_xz(chk_pos.x, i_this->current.pos.y, chk_pos.z);
     f32 fade_y = i_this->mInnerFadeY * 100.0f;
-    f32 dist_xz = i_this->getPosition().abs(chk_pos_xz);
+    f32 dist_xz = i_this->current.pos.abs(chk_pos_xz);
 
-    if (dist_xz <= i_this->mOuterRadius && (chk_pos.y > (i_this->getPosition().y - fade_y) && chk_pos.y < (i_this->getPosition().y + i_this->mScale.y * 5000.0f + fade_y)) && i_this->mTarget > 0.0f) {
+    if (dist_xz <= i_this->mOuterRadius && (chk_pos.y > (i_this->current.pos.y - fade_y) && chk_pos.y < (i_this->current.pos.y + i_this->mScale.y * 5000.0f + fade_y)) && i_this->mTarget > 0.0f) {
         
     } else {
         if (i_this->mbPselSet) {

@@ -97,7 +97,7 @@ void daSwTact_c::CreateInit() {
 void daSwTact_c::set_mtx() {
     if (daSwTact_prm::getModel(this) == 1) {
         model->setBaseScale(mScale);
-        mDoMtx_stack_c::transS(getPosition());
+        mDoMtx_stack_c::transS(current.pos);
         model->setBaseTRMtx(mDoMtx_stack_c::get());
     }
 }
@@ -153,7 +153,7 @@ bool daSwTact_c::_execute() {
     if (player == NULL || dComIfGp_checkPlayerStatus0(0, 0x10000))
         return true;
 
-    if ((player->getPosition() - getPosition()).absXZ() <= getR()) {
+    if ((player->current.pos - current.pos).absXZ() <= getR()) {
         if (mPlayerStatus != stts1 && stts1 != 0) {
             player->setTactZev(fopAcM_GetID(this), getAnswer(), NULL);
         }
@@ -207,7 +207,7 @@ bool daSwTact_c::_draw() {
     if (daSwTact_prm::getModel(this) == 0)
         return TRUE;
 
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, getPositionP(), &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(model, &mTevStr);
     mDoExt_modelUpdateDL(model);
     return TRUE;

@@ -103,7 +103,7 @@ BOOL daObjEayogn_c::check_ev_bit() const {
 /* 00000360-000003E8       .text init_mtx__13daObjEayogn_cFv */
 void daObjEayogn_c::init_mtx() {
     mpModel->setBaseScale(mScale);
-    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
@@ -115,7 +115,7 @@ bool daObjEayogn_c::_execute() {
 
 /* 000003F0-00000490       .text _draw__13daObjEayogn_cFv */
 bool daObjEayogn_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, getPositionP(), &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &mTevStr);
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);

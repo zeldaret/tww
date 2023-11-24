@@ -35,7 +35,7 @@ namespace {
 /* 00000078-00000100       .text init_mtx__11daObjGbed_cFv */
 void daObjGbed_c::init_mtx() {
     mpModel->setBaseScale(mScale);
-    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::XYZrotM(shape_angle);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
@@ -111,7 +111,7 @@ bool daObjGbed_c::_execute() {
 
 /* 000003E4-00000444       .text _draw__11daObjGbed_cFv */
 bool daObjGbed_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, getPositionP(), &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &mTevStr);
     mDoExt_modelUpdateDL(mpModel);
     return true;

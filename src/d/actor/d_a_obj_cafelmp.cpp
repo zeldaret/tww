@@ -54,7 +54,7 @@ void daObjCafelmp_c::CreateInit() {
 /* 000001CC-0000024C       .text set_mtx__14daObjCafelmp_cFv */
 void daObjCafelmp_c::set_mtx() {
     mpModel->setBaseScale(mScale);
-    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
@@ -87,7 +87,7 @@ bool daObjCafelmp_c::_execute() {
 }
 
 bool daObjCafelmp_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, getPositionP(), &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &mTevStr);
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);

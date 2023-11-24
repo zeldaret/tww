@@ -252,7 +252,7 @@ s32 daObj_Hole_c::_draw() {
     }
 
     if (mHasModel == 0xFF) {
-        g_env_light.settingTevStruct(TEV_TYPE_BG0, getPositionP(), &mTevStr);
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
         g_env_light.setLightTevColorType(mpMdl, &mTevStr);
 
         mDoExt_modelUpdateDL(mpMdl);

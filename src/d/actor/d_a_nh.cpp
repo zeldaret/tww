@@ -86,7 +86,7 @@ void daNh_c::setBaseMtx() {
     J3DModel* model = mpModel;
     mScale.setall(l_HIO.prm.mModelScale);
     model->setBaseScale(mScale);
-    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     MTXCopy(mDoMtx_stack_c::get(), model->getBaseTRMtx());
     

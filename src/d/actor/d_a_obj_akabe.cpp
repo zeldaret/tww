@@ -157,7 +157,7 @@ namespace daObjAkabe {
 
     /* 00000498-00000510       .text init_mtx__Q210daObjAkabe5Act_cFv */
     void Act_c::init_mtx() {
-        mDoMtx_stack_c::transS(getPosition());
+        mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::ZXYrotM(shape_angle);
         mDoMtx_stack_c::scaleM(mScale);
         mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);

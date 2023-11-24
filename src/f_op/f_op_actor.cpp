@@ -41,7 +41,7 @@ s32 fopAc_Draw(void* pProc) {
             (
                 moveApproval == 2
                 || (
-                    !fopAcM_checkStatus(actor, fopAc_ac_c::stopStatus)
+                    !fopAcM_checkStatus(actor, fopAc_ac_c::getStopStatus())
                     && !(
                         fopAcM_checkStatus(actor, fopAcStts_CULL_e)
                         && fopAcM_cullingCheck(actor)
@@ -88,7 +88,7 @@ s32 fopAc_Execute(void* pProc) {
                 || (
                     (
                         moveApproval != 0
-                        && !fopAcM_checkStatus(actor, fopAc_ac_c::stopStatus)
+                        && !fopAcM_checkStatus(actor, fopAc_ac_c::getStopStatus())
                     )
                     && (
                         !fopAcM_checkStatus(actor, fopAcStts_NOCULLEXEC_e)

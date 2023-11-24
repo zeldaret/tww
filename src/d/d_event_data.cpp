@@ -498,7 +498,7 @@ void dEvDtStaff_c::specialProcCreate() {
                 cXyz* pPos = dComIfGp_evmng_getMyXyzP(staffIdx, "POS");
                 cXyz pos;
                 if (pPos == NULL) {
-                    pos = dComIfGp_getPlayer(0)->getPosition();
+                    pos = dComIfGp_getPlayer(0)->current.pos;
                 } else {
                     pos = *pPos;
                 }

@@ -288,7 +288,7 @@ namespace daObjPaper {
 
     /* 000008DC-00000948       .text set_mtx__Q210daObjPaper5Act_cFv */
     void daObjPaper::Act_c::set_mtx() {
-        mDoMtx_stack_c::transS(getPosition());
+        mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::ZXYrotM(shape_angle);
 
         mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -305,7 +305,7 @@ namespace daObjPaper {
         u32 hitResult = mCylinderCol.ChkTgHit();
         if (hitResult) {
             daObj::HitSeStart(&mEyePos, current.roomNo, &mCylinderCol, 0x0D);
-            dKy_Sound_set(getPosition(), 4, fopAcM_GetID(this), 100);
+            dKy_Sound_set(current.pos, 4, fopAcM_GetID(this), 100);
 
             daObj::HitEff_hibana(this, &mCylinderCol);
 
@@ -334,7 +334,7 @@ namespace daObjPaper {
 
         set_mtx();
         if (mbHasCc) {
-            mCylinderCol.SetC(getPosition());
+            mCylinderCol.SetC(current.pos);
             g_dComIfG_gameInfo.play.mCcS.Set(&mCylinderCol);
         }
 

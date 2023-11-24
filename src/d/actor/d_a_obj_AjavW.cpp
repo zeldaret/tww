@@ -72,7 +72,7 @@ s32 daObjAjavW_c::_create() {
             } else {
                 fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
                 mpModel->setBaseScale(mScale);
-                mDoMtx_stack_c::transS(getPosition());
+                mDoMtx_stack_c::transS(current.pos);
                 mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
                 fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
             }
@@ -109,7 +109,7 @@ bool daObjAjavW_c::_execute() {
 
 /* 000004F4-0000056C       .text _draw__12daObjAjavW_cFv */
 bool daObjAjavW_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG1, getPositionP(), &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &mTevStr);
     mBtkAnm.entry(mpModel->getModelData());
     mDoExt_modelUpdateDL(mpModel);

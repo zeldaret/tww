@@ -155,7 +155,7 @@ void daShopItem_c::settingBeforeDraw() {
 }
 
 void daShopItem_c::setTevStr() {
-    g_env_light.settingTevStruct(tevType, getPositionP(), &mTevStr);
+    g_env_light.settingTevStruct(tevType, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &mTevStr);
     for(int i = 0; i < 2; i++) {
         if(mpModelArrow[i] != 0) {

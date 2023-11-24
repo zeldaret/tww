@@ -155,7 +155,7 @@ s32 daSwhit0_c::CreateInit() {
     if (mRetType == 0) {
         mColCyl.Set(l_cyl_src);
         mColCyl.SetStts(&mColStatus);
-        mColCyl.SetC(getPosition());
+        mColCyl.SetC(current.pos);
 
         onFlag(0x02);
     }
@@ -366,7 +366,7 @@ s32 daSwhit0_c::actionOnTimer() {
 void daSwhit0_c::setDrawMtx() {
     mpModel->setBaseScale(mScale);
 
-    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::XYZrotM(current.angle);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
@@ -380,7 +380,7 @@ s32 daSwhit0_c::draw() {
         { 0x78, 0x64, 0x32, 0x64 }
     };
 
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, getPositionP(), &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &mTevStr);
 
     J3DModelData* modelData = mpModel->getModelData();

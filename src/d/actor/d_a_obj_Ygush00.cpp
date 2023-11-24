@@ -73,7 +73,7 @@ s32 daObjYgush00_c::_create() {
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, 0x740) == 1) {
             mpModel->setBaseScale(mScale);
-            mDoMtx_stack_c::transS(getPosition());
+            mDoMtx_stack_c::transS(current.pos);
             mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
             fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
 
@@ -103,7 +103,7 @@ bool daObjYgush00_c::_execute() {
 
     if (mType == 1) {
         if (mpGryw00 != NULL) {
-            if (mpGryw00->get_draw_water_lv(mpGryw00) <= getPosition().y) {
+            if (mpGryw00->get_draw_water_lv(mpGryw00) <= current.pos.y) {
                 fopAcM_seStartCurrent(this, 0x61fe, 0);
             }
         } else {
@@ -118,7 +118,7 @@ bool daObjYgush00_c::_execute() {
 
 /* 0000066C-000006FC       .text _draw__14daObjYgush00_cFv */
 bool daObjYgush00_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG1, getPositionP(), &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &mTevStr);
     mBtkAnm.entry(mpModel->getModelData());
     mBckAnm.entry(mpModel->getModelData());

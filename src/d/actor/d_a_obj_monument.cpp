@@ -43,7 +43,7 @@ bool daObjMonument::Act_c::create_heap() {
     if (!mpModel)
         return false;
 
-    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     MTXCopy(mDoMtx_stack_c::get(), mtx);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -87,7 +87,7 @@ bool daObjMonument::Act_c::_delete() {
 
 /* 00000398-00000404       .text set_mtx__Q213daObjMonument5Act_cFv */
 void daObjMonument::Act_c::set_mtx() {
-    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
@@ -110,7 +110,7 @@ bool daObjMonument::Act_c::_draw() {
     if (dComIfGs_isSwitch(swSave, fopAcM_GetHomeRoomNo(this)))
         return true;
 
-    g_env_light.settingTevStruct(TEV_TYPE_BG1, getPositionP(), &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &mTevStr);
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);

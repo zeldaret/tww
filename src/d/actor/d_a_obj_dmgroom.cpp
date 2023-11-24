@@ -60,7 +60,7 @@ void daObjDmgroom_c::CreateInit() {
 /* 0000026C-000002EC       .text set_mtx__14daObjDmgroom_cFv */
 void daObjDmgroom_c::set_mtx() {
     mpModel->setBaseScale(mScale);
-    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
@@ -97,7 +97,7 @@ bool daObjDmgroom_c::_execute() {
 }
 
 bool daObjDmgroom_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, getPositionP(), &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &mTevStr);
     dComIfGd_setListBG();
     mBrkAnm.entry(mpModel->getModelData());

@@ -120,7 +120,7 @@ s32 dScnTitle_Create(scene_class* i_scn) {
         return cPhs_INIT_e;
 
     dMenu_flagSet(0);
-    fopAc_ac_c::stopStatus = 0;
+    fopAc_ac_c::setStopStatus(0);
     dComIfGp_offEnableNextStage();
     u32 parameter = fpcM_GetName(i_this) == PROC_TITLE_SCENE ? 0 : 1;
 

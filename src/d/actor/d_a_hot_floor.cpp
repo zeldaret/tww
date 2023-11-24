@@ -18,7 +18,7 @@ const char daHot_Floor_c::M_arcname[8] = "Ylesr00";
 
 /* 00000078-00000108       .text set_mtx_init__13daHot_Floor_cFv */
 void daHot_Floor_c::set_mtx_init() {
-    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     for (s32 i = 0; i < 5; i++)
         mDoMtx_copy(mDoMtx_stack_c::get(), mtx[i]);

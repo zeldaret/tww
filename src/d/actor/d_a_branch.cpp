@@ -26,8 +26,8 @@ void daBranch_c::set_mtx() {
         if (pMdl) {
             pMdl->setBaseScale(mScale);
 
-            mDoMtx_stack_c::transS(getPosition());
-            mDoMtx_stack_c::XYZrotM(getAngle().x, getAngle().y, getAngle().z);
+            mDoMtx_stack_c::transS(current.pos);
+            mDoMtx_stack_c::XYZrotM(current.angle);
             
             pMdl->setBaseTRMtx(mDoMtx_stack_c::get());
         }

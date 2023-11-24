@@ -84,7 +84,7 @@ BOOL daObjDragonhead_c::CreateHeap() {
 
     s32 ret = 1;
 
-    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mDoMtx_stack_c::scaleM(mScale);
     mDoMtx_copy(mDoMtx_stack_c::get(), mtx);
@@ -127,7 +127,7 @@ void daObjDragonhead_c::CreateInit() {
 /* 0000034C-000003CC       .text set_mtx__17daObjDragonhead_cFv */
 void daObjDragonhead_c::set_mtx() {
     mpModel->setBaseScale(mScale);
-    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
@@ -203,7 +203,7 @@ bool daObjDragonhead_c::_execute() {
 }
 
 bool daObjDragonhead_c::_draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, getPositionP(), &mTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &mTevStr);
     dComIfGd_setListBG();
     J3DModelData* modelData = mpModel->getModelData();
