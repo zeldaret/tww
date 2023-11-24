@@ -1266,7 +1266,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_hole", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_ice"),
     ActorRel(NonMatching, "d_a_obj_ikada"),
-    ActorRel(NonMatching, "d_a_obj_kanat"),
+    ActorRel(Matching,    "d_a_obj_kanat"),
     ActorRel(NonMatching, "d_a_obj_leaves"),
     ActorRel(NonMatching, "d_a_obj_lpalm"),
     ActorRel(Matching,    "d_a_obj_monument"),

@@ -13,7 +13,7 @@
 
 daSea_packet_c l_cloth;
 
-f32 daSea_packet_c::BASE_HEIGHT = 1.0;
+f32 daSea_packet_c::BASE_HEIGHT = 1.0f;
 
 daSea_WaveInfo__Table wi_prm_ocean[4] = {
     {

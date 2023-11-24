@@ -48,13 +48,13 @@ public:
     virtual void end();
 
     JPABaseEmitter* getEmitter() { return mpEmitter; }
-    void setRateOff(u8 param_0) { field_0x11 = param_0; }
-    bool isEnd() { return field_0x10 & 1; }
+    void setRateOff(u8 param_0) { mRateOff = param_0; }
+    bool isEnd() { return mFlag & 1; }
 
     /* 0x04 */ JPABaseEmitter* mpEmitter;
     /* 0x08 */ u8 field_0x08[0x10 - 0x08];
-    /* 0x10 */ u8 field_0x10;
-    /* 0x11 */ u8 field_0x11;
+    /* 0x10 */ u8 mFlag;
+    /* 0x11 */ u8 mRateOff;
     /* 0x12 */ u8 field_0x12;
     /* 0x13 */ u8 field_0x13;
 };  // Size: 0x14
