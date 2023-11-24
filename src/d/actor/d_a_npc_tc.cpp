@@ -3,7 +3,7 @@
 // Translation Unit: d_a_npc_tc.cpp
 //
 
-#include "d_a_npc_tc.h"
+#include "d/actor/d_a_npc_tc.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000394       .text __ct__14daNpc_Tc_HIO_cFv */

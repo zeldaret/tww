@@ -3,7 +3,7 @@
 // Translation Unit: d_a_hitobj.cpp
 //
 
-#include "d_a_hitobj.h"
+#include "d/actor/d_a_hitobj.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000080       .text daHitobj_Draw__FP12hitobj_class */

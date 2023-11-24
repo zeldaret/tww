@@ -3,7 +3,7 @@
 // Translation Unit: d_a_wbird.cpp
 //
 
-#include "d_a_wbird.h"
+#include "d/actor/d_a_wbird.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000AC       .text calcMtx__9daWbird_cFv */

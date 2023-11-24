@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_flame.cpp
 //
 
-#include "d_a_obj_flame.h"
+#include "d/actor/d_a_obj_flame.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000110       .text set_switch__Q210daObjFlame5Act_cFv */

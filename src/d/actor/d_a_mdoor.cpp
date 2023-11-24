@@ -3,7 +3,7 @@
 // Translation Unit: d_a_mdoor.cpp
 //
 
-#include "d_a_mdoor.h"
+#include "d/actor/d_a_mdoor.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000084       .text getSwbit__9daMdoor_cFv */

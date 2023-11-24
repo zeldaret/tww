@@ -3,7 +3,7 @@
 // Translation Unit: d_a_shutter.cpp
 //
 
-#include "d_a_shutter.h"
+#include "d/actor/d_a_shutter.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000108       .text _delete__11daShutter_cFv */

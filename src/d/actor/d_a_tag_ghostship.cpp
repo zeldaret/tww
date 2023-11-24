@@ -3,7 +3,7 @@
 // Translation Unit: d_a_tag_ghostship.cpp
 //
 
-#include "d_a_tag_ghostship.h"
+#include "d/actor/d_a_tag_ghostship.h"
 #include "dolphin/types.h"
 
 /* 000000EC-0000010C       .text __ct__17daTag_Gship_HIO_cFv */

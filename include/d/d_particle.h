@@ -120,7 +120,7 @@ public:
     /* 0x1C */ cXyz mCollapsePos[2];
     /* 0x34 */ cXyz* mpPos;
     /* 0x38 */ csXyz* mpRot;
-    // /* 0x3C */ cXyz mRotMtx[3];
+    /* 0x3C */ cXyz mRotMtx[3];
     /* 0x60 */ JPABaseEmitter* mpBaseEmitter;
 };
 
@@ -153,7 +153,7 @@ public:
     /* 0x04 */ s16 mState;
     /* 0x08 */ f32 mBaseY;
     /* 0x0C */ f32 mMinY;
-    // /* 0x10 */ cXyz mPos[3];
+    /* 0x10 */ cXyz mPos[3];
     /* 0x34 */ cXyz* mpPos;
     /* 0x38 */ csXyz* mpRot;
     /* 0x3C */ f32 mExTransY;

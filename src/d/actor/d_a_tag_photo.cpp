@@ -3,7 +3,7 @@
 // Translation Unit: d_a_tag_photo.cpp
 //
 
-#include "d_a_tag_photo.h"
+#include "d/actor/d_a_tag_photo.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000D0       .text __ct__12daTagPhoto_cFv */

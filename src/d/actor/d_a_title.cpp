@@ -3,7 +3,7 @@
 // Translation Unit: d_a_title.cpp
 //
 
-#include "d_a_title.h"
+#include "d/actor/d_a_title.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000638       .text proc_init3D__14daTitle_proc_cFv */

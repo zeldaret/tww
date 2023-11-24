@@ -3,7 +3,7 @@
 // Translation Unit: d_a_bwdg.cpp
 //
 
-#include "d_a_bwdg.h"
+#include "d/actor/d_a_bwdg.h"
 #include "dolphin/types.h"
 
 /* 00000078-000001C4       .text draw__15daBwdg_packet_cFv */

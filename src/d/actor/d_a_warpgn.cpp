@@ -3,7 +3,7 @@
 // Translation Unit: d_a_warpgn.cpp
 //
 
-#include "d_a_warpgn.h"
+#include "d/actor/d_a_warpgn.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000120       .text _delete__10daWarpgn_cFv */

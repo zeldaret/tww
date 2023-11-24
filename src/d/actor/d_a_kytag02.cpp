@@ -3,7 +3,7 @@
 // Translation Unit: d_a_kytag02.cpp
 //
 
-#include "d_a_kytag02.h"
+#include "d/actor/d_a_kytag02.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000C0       .text set_path_info__FP10fopAc_ac_c */

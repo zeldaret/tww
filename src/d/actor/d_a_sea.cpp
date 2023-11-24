@@ -9,11 +9,7 @@
 #include "d/d_stage.h"
 #include "m_Do/m_Do_lib.h"
 #include "JSystem/JKernel/JKRHeap.h"
-
-class sea_class : public fopAc_ac_c {
-    /* 0x290 */ u32 field_0x290;
-    /* 0x294 */ u32 field_0x294;
-};
+#include "d/actor/d_a_daiocta.h"
 
 daSea_packet_c l_cloth;
 
@@ -318,12 +314,6 @@ void daSea_packet_c::SetCullStopFlag() {
     }
 }
 
-class daDaiocta_c : public fopAc_ac_c {
-public:
-    /* 0x298 */ u32 field_0x298[0xB9];
-    /* 0x574 */ u8 mSwitchNo;
-};
-
 /* 8015C11C-8015C1DC       .text CheckRoomChange__14daSea_packet_cFv */
 void daSea_packet_c::CheckRoomChange() {
     dStage_roomDt_c * room = dComIfGp_roomControl_getStatusRoomDt(dComIfGp_roomControl_getStayNo());
@@ -336,7 +326,7 @@ void daSea_packet_c::CheckRoomChange() {
                 ClrFlat();
             }
         } else {
-            if (!dComIfGs_isSwitch(octa->mSwitchNo, fopAcM_GetHomeRoomNo(octa))) {
+            if (!dComIfGs_isSwitch(octa->getSw(), fopAcM_GetHomeRoomNo(octa))) {
                 SetFlat();
             } else {
                 ClrFlat();

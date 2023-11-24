@@ -3,7 +3,7 @@
 // Translation Unit: d_a_tn.cpp
 //
 
-#include "d_a_tn.h"
+#include "d/actor/d_a_tn.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000220       .text anm_init__FP8tn_classifUcfi */

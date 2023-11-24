@@ -3,7 +3,7 @@
 // Translation Unit: d_a_fan.cpp
 //
 
-#include "d_a_fan.h"
+#include "d/actor/d_a_fan.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000F0       .text Delete__7daFan_cFv */

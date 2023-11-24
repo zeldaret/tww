@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_xfuta.cpp
 //
 
-#include "d_a_obj_xfuta.h"
+#include "d/actor/d_a_obj_xfuta.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000009C       .text solidHeapCB__Q210daObjXfuta5Act_cFP10fopAc_ac_c */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_race_item_static.cpp
 //
 
-#include "d_a_race_item_static.h"
+#include "d/actor/d_a_race_item_static.h"
 #include "dolphin/types.h"
 
 /* 80068A58-80068AA4       .text raceItemForceGet__12daRaceItem_cFv */

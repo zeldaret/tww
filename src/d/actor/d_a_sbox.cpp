@@ -3,7 +3,7 @@
 // Translation Unit: d_a_sbox.cpp
 //
 
-#include "d_a_sbox.h"
+#include "d/actor/d_a_sbox.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */

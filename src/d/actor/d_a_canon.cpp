@@ -3,7 +3,7 @@
 // Translation Unit: d_a_canon.cpp
 //
 
-#include "d_a_canon.h"
+#include "d/actor/d_a_canon.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000002C8       .text set_mtx__9daCanon_cFv */

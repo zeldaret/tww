@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_gaship.cpp
 //
 
-#include "d_a_obj_gaship.h"
+#include "d/actor/d_a_obj_gaship.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000002DC       .text birth_flag__Q211daObjGaship5Act_cFv */

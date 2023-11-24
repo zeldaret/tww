@@ -3,7 +3,7 @@
 // Translation Unit: d_a_coming3.cpp
 //
 
-#include "d_a_coming3.h"
+#include "d/actor/d_a_coming3.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000404       .text get_water_height__Q29daComing35Act_cFPfPiPC4cXyz */

@@ -12,18 +12,18 @@ void daShip_c::initStartPos(const cXyz* pos, short rotY) {
     next.pos.z = pos->z;
     shape_angle.y = rotY;
     current.angle.y = shape_angle.y;
-    field_0x0358 &= 0xffffffef;
+    m0358 &= 0xffffffef;
     mGravity = -2.5f;
 
-    mWaveR.remove();
     mWaveL.remove();
+    mWaveR.remove();
 
     mSplash.remove();
     mTrack.remove();
-    field_0x1970.end();
-    field_0x1984.end();
-    field_0x1998.end();
-    field_0x19ac.end();
-    field_0x19c0.end();
+    m1970.end();
+    m1984.end();
+    m1998.end();
+    m19AC.end();
+    m19C0.end();
 }
 

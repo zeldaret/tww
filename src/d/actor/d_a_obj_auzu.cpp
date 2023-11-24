@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_auzu.cpp
 //
 
-#include "d_a_obj_auzu.h"
+#include "d/actor/d_a_obj_auzu.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000009C       .text solidHeapCB__Q29daObjAuzu5Act_cFP10fopAc_ac_c */

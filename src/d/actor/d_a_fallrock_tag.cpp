@@ -3,7 +3,7 @@
 // Translation Unit: d_a_fallrock_tag.cpp
 //
 
-#include "d_a_fallrock_tag.h"
+#include "d/actor/d_a_fallrock_tag.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000080       .text daFallRockTag_Draw__FP15daFallRockTag_c */

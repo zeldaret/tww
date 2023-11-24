@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_magmarock.cpp
 //
 
-#include "d_a_obj_magmarock.h"
+#include "d/actor/d_a_obj_magmarock.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000128       .text set_mtx__Q214daObjMagmarock5Act_cFv */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_syan.cpp
 //
 
-#include "d_a_syan.h"
+#include "d/actor/d_a_syan.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000002D4       .text nodeCallBack__FP7J3DNodei */

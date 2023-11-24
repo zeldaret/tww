@@ -3,7 +3,7 @@
 // Translation Unit: d_a_pedestal.cpp
 //
 
-#include "d_a_pedestal.h"
+#include "d/actor/d_a_pedestal.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000DC       .text _delete__Q210daPedestal7daPds_cFv */

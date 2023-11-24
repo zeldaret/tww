@@ -3,7 +3,7 @@
 // Translation Unit: d_a_bgn.cpp
 //
 
-#include "d_a_bgn.h"
+#include "d/actor/d_a_bgn.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000003F0       .text __ct__11daBgn_HIO_cFv */

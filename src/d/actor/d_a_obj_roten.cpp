@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_roten.cpp
 //
 
-#include "d_a_obj_roten.h"
+#include "d/actor/d_a_obj_roten.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000118       .text __ct__17daObj_Roten_HIO_cFv */

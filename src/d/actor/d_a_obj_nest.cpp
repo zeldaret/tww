@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_nest.cpp
 //
 
-#include "d_a_obj_nest.h"
+#include "d/actor/d_a_obj_nest.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000012C       .text CreateHeap__Q29daObjNest5Act_cFv */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_tide.cpp
 //
 
-#include "d_a_obj_tide.h"
+#include "d/actor/d_a_obj_tide.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000644       .text CreateHeap__Q29daObjTide5Act_cFv */

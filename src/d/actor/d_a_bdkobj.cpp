@@ -3,7 +3,7 @@
 // Translation Unit: d_a_bdkobj.cpp
 //
 
-#include "d_a_bdkobj.h"
+#include "d/actor/d_a_bdkobj.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000104       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */

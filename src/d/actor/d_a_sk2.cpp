@@ -3,7 +3,7 @@
 // Translation Unit: d_a_sk2.cpp
 //
 
-#include "d_a_sk2.h"
+#include "d/actor/d_a_sk2.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000194       .text nodeCallBack__FP7J3DNodei */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_sie_flag.cpp
 //
 
-#include "d_a_sie_flag.h"
+#include "d/actor/d_a_sie_flag.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000118       .text __ct__16daSie_Flag_HIO_cFv */

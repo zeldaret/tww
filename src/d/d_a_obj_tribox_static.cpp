@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_tribox_static.cpp
 //
 
-#include "d_a_obj_tribox_static.h"
+#include "d/actor/d_a_obj_tribox_static.h"
 #include "dolphin/types.h"
 
 /* 80067D1C-80067D5C       .text reset__Q211daObjTribox5Act_cFv */

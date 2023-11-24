@@ -1,11 +1,10 @@
-//
-// Created by kris on 04/10/23.
-//
+#ifndef D_A_YKGR_H
+#define D_A_YKGR_H
 
-#ifndef TWW_D_A_YKGR_H
-#define TWW_D_A_YKGR_H
+#include "f_op/f_op_actor.h"
+#include "JSystem/JParticle/JPAEmitter.h"
 
-struct daYkgr_c {
+class daYkgr_c : public fopAc_ac_c {
 public:
     static void stop() {
         if (m_emitter) {
@@ -15,12 +14,23 @@ public:
     
     static JPABaseEmitter* m_emitter;
     static u8 m_alpha_flag;
-public:
+    
+    void _create() {}
+    void _delete() {}
+    void _draw() {}
+    void _execute() {}
+    void hide() {}
+    void init() {}
+    void setAimRate(float) {}
+    void setAlpha(unsigned char) {}
+    void set_mtx() {}
+    void show() {}
+    void start() {}
 
+    void getPosRate();
+
+public:
+    /* Place member variables here */
 };
 
-extern daYkgr_c daYkgr_c_class;
-
-
-
-#endif  // TWW_D_A_YKGR_H
+#endif /* D_A_YKGR_H */

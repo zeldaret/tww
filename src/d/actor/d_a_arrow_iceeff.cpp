@@ -3,7 +3,7 @@
 // Translation Unit: d_a_arrow_iceeff.cpp
 //
 
-#include "d_a_arrow_iceeff.h"
+#include "d/actor/d_a_arrow_iceeff.h"
 #include "dolphin/types.h"
 
 /* 000000EC-0000010C       .text CheckCreateHeap__FP10fopAc_ac_c */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_Vds.cpp
 //
 
-#include "d_a_obj_Vds.h"
+#include "d/actor/d_a_obj_Vds.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000134       .text SetLoopJointAnimation__Q28daObjVds5Act_cFP18J3DAnmTransformKeyP18J3DAnmTransformKeyff */

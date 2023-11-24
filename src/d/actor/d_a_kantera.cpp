@@ -3,7 +3,7 @@
 // Translation Unit: d_a_kantera.cpp
 //
 
-#include "d_a_kantera.h"
+#include "d/actor/d_a_kantera.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000001E8       .text kantera_nodeCallBack__FP7J3DNodei */

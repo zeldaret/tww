@@ -3,7 +3,7 @@
 // Translation Unit: d_a_stone2.cpp
 //
 
-#include "d_a_stone2.h"
+#include "d/actor/d_a_stone2.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000208       .text __ct__Q28daStone25Act_cFv */

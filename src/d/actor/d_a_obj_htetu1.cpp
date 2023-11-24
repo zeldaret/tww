@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_htetu1.cpp
 //
 
-#include "d_a_obj_htetu1.h"
+#include "d/actor/d_a_obj_htetu1.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000178       .text create_s__19daObjHtetu1Splash_cFUsP4cXyzP5csXyzP12dKy_tevstr_c */

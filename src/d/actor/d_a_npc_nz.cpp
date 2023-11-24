@@ -3,7 +3,7 @@
 // Translation Unit: d_a_npc_nz.cpp
 //
 
-#include "d_a_npc_nz.h"
+#include "d/actor/d_a_npc_nz.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000128       .text daNpcNz_NodeCallBack__FP7J3DNodei */

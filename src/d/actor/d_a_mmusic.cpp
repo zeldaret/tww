@@ -3,7 +3,7 @@
 // Translation Unit: d_a_mmusic.cpp
 //
 
-#include "d_a_mmusic.h"
+#include "d/actor/d_a_mmusic.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000009C       .text solidHeapCB__Q28daMmusic5Act_cFP10fopAc_ac_c */

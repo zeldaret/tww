@@ -3,7 +3,7 @@
 // Translation Unit: d_a_leaflift.cpp
 //
 
-#include "d_a_leaflift.h"
+#include "d/actor/d_a_leaflift.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000001C0       .text _delete__9daLlift_cFv */

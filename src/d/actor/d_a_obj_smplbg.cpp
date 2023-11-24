@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_smplbg.cpp
 //
 
-#include "d_a_obj_smplbg.h"
+#include "d/actor/d_a_obj_smplbg.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000144       .text CreateHeap__Q211daObjSmplbg5Act_cFv */

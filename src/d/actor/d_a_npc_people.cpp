@@ -3,7 +3,7 @@
 // Translation Unit: d_a_npc_people.cpp
 //
 
-#include "d_a_npc_people.h"
+#include "d/actor/d_a_npc_people.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000274       .text __ct__13daNpcPeople_cFv */

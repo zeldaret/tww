@@ -3,7 +3,7 @@
 // Translation Unit: d_a_windmill.cpp
 //
 
-#include "d_a_windmill.h"
+#include "d/actor/d_a_windmill.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000E8       .text _delete__12daWindMill_cFv */

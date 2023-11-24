@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_gong.cpp
 //
 
+#include "d/actor/d_a_obj_gong.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -16,35 +17,17 @@
 
 namespace daObjGong {
     namespace {
-        struct L_attr_entry {
+        struct Attr_c {
             /* 0x00 */ f32 spec;
             /* 0x04 */ f32 offsetY;
         };
 
-        static const L_attr_entry L_attr = {
+        static const Attr_c L_attr = {
             0.75f, 125.0f,
         };
 
-        inline const L_attr_entry & attr() { return L_attr; }
+        inline const Attr_c & attr() { return L_attr; }
     }
-
-    class Act_c : fopAc_ac_c {
-    public:
-        s32 _create();
-        bool _execute();
-        bool _draw();
-        bool _delete();
-        bool create_heap();
-        void init_mtx();
-        void set_mtx();
-        bool demo_move();
-        static BOOL solidHeapCB(fopAc_ac_c *i_this);
-        static const char M_arcname[6];
-
-    public:
-        /* 0x290 */ request_of_phase_process_class mPhs;
-        /* 0x298 */ mDoExt_McaMorf * mpMorf;
-    };
 }
 
 const char daObjGong::Act_c::M_arcname[6] = "Vdora";

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_majuu_flag.cpp
 //
 
-#include "d_a_majuu_flag.h"
+#include "d/actor/d_a_majuu_flag.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000374       .text set_mtx__FP14daMajuu_Flag_c */

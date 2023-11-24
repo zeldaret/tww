@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_pbco.cpp
 //
 
-#include "d_a_obj_pbco.h"
+#include "d/actor/d_a_obj_pbco.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000104       .text __ct__16daObj_Pbco_HIO_cFv */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_msdan2.cpp
 //
 
-#include "d_a_obj_msdan2.h"
+#include "d/actor/d_a_obj_msdan2.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000024C       .text Mthd_Create__Q211daObjMsdan25Act_cFv */

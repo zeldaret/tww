@@ -3,7 +3,7 @@
 // Translation Unit: d_a_bdk.cpp
 //
 
-#include "d_a_bdk.h"
+#include "d/actor/d_a_bdk.h"
 #include "dolphin/types.h"
 
 /* 000000EC-0000015C       .text __ct__11daBdk_HIO_cFv */

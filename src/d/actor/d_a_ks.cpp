@@ -3,7 +3,7 @@
 // Translation Unit: d_a_ks.cpp
 //
 
-#include "d_a_ks.h"
+#include "d/actor/d_a_ks.h"
 #include "dolphin/types.h"
 
 /* 00000078-000002CC       .text draw_SUB__FP8ks_class */

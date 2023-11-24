@@ -3,7 +3,7 @@
 // Translation Unit: d_a_icelift.cpp
 //
 
-#include "d_a_icelift.h"
+#include "d/actor/d_a_icelift.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000E0       .text _delete__9daIlift_cFv */

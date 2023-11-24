@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_tenmado.cpp
 //
 
-#include "d_a_obj_tenmado.h"
+#include "d/actor/d_a_obj_tenmado.h"
 #include "dolphin/types.h"
 
 /* 00000078-000001B4       .text CreateHeap__Q212daObjTenmado5Act_cFv */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_gnndemotakie.cpp
 //
 
-#include "d_a_obj_gnndemotakie.h"
+#include "d/actor/d_a_obj_gnndemotakie.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text solidHeapCB__15daObjGnntakie_cFP10fopAc_ac_c */

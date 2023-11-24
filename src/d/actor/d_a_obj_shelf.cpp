@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_shelf.cpp
 //
 
-#include "d_a_obj_shelf.h"
+#include "d/actor/d_a_obj_shelf.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000012C       .text CreateHeap__Q210daObjShelf5Act_cFv */

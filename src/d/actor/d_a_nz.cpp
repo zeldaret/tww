@@ -3,7 +3,7 @@
 // Translation Unit: d_a_nz.cpp
 //
 
-#include "d_a_nz.h"
+#include "d/actor/d_a_nz.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000138       .text __ct__10daNZ_HIO_cFv */

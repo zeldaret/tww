@@ -3,6 +3,7 @@
 // Translation Unit: d_a_boko_static.cpp
 //
 
+#include "d/actor/d_a_boko.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_cc_d.h"
@@ -10,28 +11,6 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "m_Do/m_Do_mtx.h"
-
-class daBoko_c : fopAc_ac_c {
-public:
-    /* 0x290 */ request_of_phase_process_class mPhs;
-    /* 0x298 */ J3DModel * mpModel;
-
-    /* TODO The entire rest of daBoko_c */
-
-public:
-    void getTopPos(cXyz *);
-    void getBlurRootPos(cXyz *);
-
-    static Vec m_top_offset[6];
-    static Vec m_blur_root_offset[6];
-    static Vec m_root_offset[6];
-    static f32 m_cps_r[6];
-    static s32 m_at_point[6];
-    static u32 m_at_type[6];
-    static f32 m_jump_blur_rate[6];
-    static f32 m_blur_rate[6];
-    static u8 m_se_type[6];
-};
 
 Vec daBoko_c::m_top_offset[6] = {
     { 0.0f, 0.0f, 85.0f },

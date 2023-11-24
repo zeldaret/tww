@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_demo_barrel.cpp
 //
 
-#include "d_a_obj_demo_barrel.h"
+#include "d/actor/d_a_obj_demo_barrel.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000144       .text setParticleHahen__19daObj_Demo_Barrel_cFv */

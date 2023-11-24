@@ -3,7 +3,7 @@
 // Translation Unit: d_a_floor.cpp
 //
 
-#include "d_a_floor.h"
+#include "d/actor/d_a_floor.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000DC       .text rideCallBack__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_balancelift.cpp
 //
 
-#include "d_a_obj_balancelift.h"
+#include "d/actor/d_a_obj_balancelift.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000160       .text __ct__19daBalancelift_HIO_cFv */

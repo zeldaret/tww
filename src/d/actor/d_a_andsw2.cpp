@@ -3,13 +3,14 @@
 // Translation Unit: d_a_andsw2.cpp
 //
 
+#include "d/actor/d_a_andsw2.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "dolphin/types.h"
 
-enum {
+enum Action {
     ACT_ON_ALL,
     ACT_TIMER,
     ACT_ORDER,
@@ -18,29 +19,9 @@ enum {
     ACT_WAIT,
 };
 
-enum {
+enum Type {
     TYPE_ONE_OFF,
     TYPE_CONTINUOUS,
-};
-
-struct daAndsw2_c : public fopAc_ac_c {
-public:
-    u8 getEventNo();
-    u8 getSwbit();
-    u8 getSwbit2();
-    u8 getType();
-    u8 getTimer();
-    u8 getNum();
-    u8 getTopSw();
-    BOOL chkAllSw2();
-    
-    inline BOOL execute();
-    inline s32 create();
-
-public:
-    u8 mAction;
-    s16 mTimer;
-    s16 mEventIdx;
 };
 
 /* 00000078-00000084       .text getEventNo__10daAndsw2_cFv */
@@ -109,18 +90,18 @@ static BOOL daAndsw2_actionOnAll(daAndsw2_c* i_this) {
     if (i_this->chkAllSw2()) {
         if (i_this->getTimer() != 0xFF) {
             i_this->mTimer = i_this->getTimer()*15;
-            i_this->mAction = ACT_TIMER;
+            i_this->setActio(ACT_TIMER);
         } else if (i_this->mEventIdx != -1) {
-            i_this->mAction = ACT_ORDER;
+            i_this->setActio(ACT_ORDER);
         } else {
             int room = i_this->current.roomNo;
             int sw = i_this->getSwbit();
             dComIfGs_onSwitch(sw, room);
 
             if (i_this->getType() == TYPE_CONTINUOUS) {
-                i_this->mAction = ACT_OFF;
+                i_this->setActio(ACT_OFF);
             } else {
-                i_this->mAction = ACT_WAIT;
+                i_this->setActio(ACT_WAIT);
             }
         }
     }
@@ -130,18 +111,18 @@ static BOOL daAndsw2_actionOnAll(daAndsw2_c* i_this) {
 /* 000002B0-00000380       .text daAndsw2_actionTimer__FP10daAndsw2_c */
 static BOOL daAndsw2_actionTimer(daAndsw2_c* i_this) {
     if (i_this->getType() == TYPE_CONTINUOUS && !i_this->chkAllSw2()) {
-        i_this->mAction = ACT_ON_ALL;
+        i_this->setActio(ACT_ON_ALL);
     } else if (i_this->mTimer > 0) {
         i_this->mTimer -= 1;
     } else if (i_this->mEventIdx != -1) {
-        i_this->mAction = ACT_ORDER;
+        i_this->setActio(ACT_ORDER);
     } else {
         int room = i_this->current.roomNo;
         int sw = i_this->getSwbit();
         dComIfGs_onSwitch(sw, room);
         
         if (i_this->getType() == TYPE_CONTINUOUS) {
-            i_this->mAction = ACT_WAIT;
+            i_this->setActio(ACT_WAIT);
         }
     }
     return TRUE;
@@ -150,12 +131,12 @@ static BOOL daAndsw2_actionTimer(daAndsw2_c* i_this) {
 /* 00000380-00000438       .text daAndsw2_actionOrder__FP10daAndsw2_c */
 static BOOL daAndsw2_actionOrder(daAndsw2_c* i_this) {
     if (i_this->mEvtInfo.checkCommandDemoAccrpt()) {
-        i_this->mAction = ACT_EVENT;
+        i_this->setActio(ACT_EVENT);
         int room = i_this->current.roomNo;
         int sw = i_this->getSwbit();
         dComIfGs_onSwitch(sw, room);
     } else if (i_this->getType() == TYPE_CONTINUOUS && !i_this->chkAllSw2()) {
-        i_this->mAction = ACT_ON_ALL;
+        i_this->setActio(ACT_ON_ALL);
     } else {
         fopAcM_orderOtherEventId(i_this, i_this->mEventIdx, i_this->getEventNo(), 0xFFFF, 0, 1);
     }
@@ -166,9 +147,9 @@ static BOOL daAndsw2_actionOrder(daAndsw2_c* i_this) {
 static BOOL daAndsw2_actionEvent(daAndsw2_c* i_this) {
     if (dComIfGp_evmng_endCheck(i_this->mEventIdx)) {
         if (i_this->getType() == TYPE_CONTINUOUS) {
-            i_this->mAction = ACT_OFF;
+            i_this->setActio(ACT_OFF);
         } else {
-            i_this->mAction = ACT_WAIT;
+            i_this->setActio(ACT_WAIT);
         }
         dComIfGp_event_reset();
     }
@@ -178,7 +159,7 @@ static BOOL daAndsw2_actionEvent(daAndsw2_c* i_this) {
 /* 000004BC-00000528       .text daAndsw2_actionOff__FP10daAndsw2_c */
 static BOOL daAndsw2_actionOff(daAndsw2_c* i_this) {
     if (!i_this->chkAllSw2()) {
-        i_this->mAction = ACT_ON_ALL;
+        i_this->setActio(ACT_ON_ALL);
         int room = i_this->current.roomNo;
         int sw = i_this->getSwbit();
         dComIfGs_offSwitch(sw, room);
@@ -213,29 +194,29 @@ s32 daAndsw2_c::create() {
     case TYPE_ONE_OFF:
         if (sw == 0xFF || dComIfGs_isSwitch(sw, current.roomNo)) {
             // Switch invalid or already set.
-            mAction = ACT_WAIT;
+            setActio(ACT_WAIT);
         } else {
             // Switch not yet set, check for the condition to be met.
-            mAction = ACT_ON_ALL;
+            setActio(ACT_ON_ALL);
         }
         mEventIdx = dComIfGp_evmng_getEventIdx(NULL, getEventNo());
         break;
     case TYPE_CONTINUOUS:
         if (sw == 0xFF) {
             // Switch invalid.
-            mAction = ACT_WAIT;
+            setActio(ACT_WAIT);
         } else if (dComIfGs_isSwitch(sw, current.roomNo)) {
             // Switch already set, wait for the condition to no longer be met.
-            mAction = ACT_OFF;
+            setActio(ACT_OFF);
         } else {
             // Switch not yet set, check for the condition to be met.
-            mAction = ACT_ON_ALL;
+            setActio(ACT_ON_ALL);
         }
         mEventIdx = dComIfGp_evmng_getEventIdx(NULL, getEventNo());
         break;
     default:
         // Invalid type, do nothing.
-        mAction = ACT_WAIT;
+        setActio(ACT_WAIT);
         break;
     }
     

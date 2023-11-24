@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_trap.cpp
 //
 
-#include "d_a_obj_trap.h"
+#include "d/actor/d_a_obj_trap.h"
 #include "dolphin/types.h"
 
 /* 000000EC-0000010C       .text solidHeapCB__11daObjTrap_cFP10fopAc_ac_c */

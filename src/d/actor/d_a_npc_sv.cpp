@@ -3,7 +3,7 @@
 // Translation Unit: d_a_npc_sv.cpp
 //
 
-#include "d_a_npc_sv.h"
+#include "d/actor/d_a_npc_sv.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000021C       .text __ct__9daNpcSv_cFv */

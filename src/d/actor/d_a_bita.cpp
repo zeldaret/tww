@@ -3,7 +3,7 @@
 // Translation Unit: d_a_bita.cpp
 //
 
-#include "d_a_bita.h"
+#include "d/actor/d_a_bita.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000C4       .text b_a_sub__FPvPv */

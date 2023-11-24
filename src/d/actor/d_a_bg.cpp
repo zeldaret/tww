@@ -3,6 +3,7 @@
 // Translation Unit: d_a_bg.cpp
 //
 
+#include "d/actor/d_a_bg.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -20,50 +21,6 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
-
-class daBg_btkAnm_c {
-public:
-    BOOL create(J3DModelData*, J3DAnmTextureSRTKey*);
-    void entry(J3DModelData*);
-    void play();
-
-public:
-    /* 0x00 */ mDoExt_btkAnm * anm;
-    /* 0x04 */ u8 special;
-};
-
-class daBg_brkAnm_c {
-public:
-    BOOL create(J3DModelData*, J3DAnmTevRegKey*);
-    void entry(J3DModelData*);
-    void play();
-
-public:
-    /* 0x00 */ mDoExt_brkAnm * anm;
-    /* 0x04 */ u8 special;
-};
-
-class daBg_c : public fopAc_ac_c {
-public:
-    ~daBg_c();
-    const char * setArcName();
-    inline BOOL createHeap();
-    s32 create();
-    inline BOOL execute();
-    inline BOOL draw();
-    inline BOOL isDelete();
-
-public:
-    /* 0x290 */ request_of_phase_process_class mPhs;
-    /* 0x298 */ struct BgModel {
-        J3DModel * model;
-        daBg_btkAnm_c * btk;
-        daBg_brkAnm_c * brk;
-        dKy_tevstr_c * mpTevStr;
-    } bg[4];
-    /* 0x2D8 */ dBgW * bgw;
-    /* 0x2DC */ u8 mUnloadTimer;
-};
 
 /* 800D8434-800D8478       .text setArcName__6daBg_cFv */
 const char* daBg_c::setArcName() {

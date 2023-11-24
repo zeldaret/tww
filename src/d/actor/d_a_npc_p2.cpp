@@ -3,7 +3,7 @@
 // Translation Unit: d_a_npc_p2.cpp
 //
 
-#include "d_a_npc_p2.h"
+#include "d/actor/d_a_npc_p2.h"
 #include "dolphin/types.h"
 
 /* 000000EC-0000020C       .text __ct__19daNpc_P2_childHIO_cFv */

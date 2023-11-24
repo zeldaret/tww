@@ -3,7 +3,7 @@
 // Translation Unit: d_a_tag_mk.cpp
 //
 
-#include "d_a_tag_mk.h"
+#include "d/actor/d_a_tag_mk.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000084       .text getSwbit__10daTag_Mk_cFv */

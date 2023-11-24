@@ -3,7 +3,7 @@
 // Translation Unit: d_a_btd.cpp
 //
 
-#include "d_a_btd.h"
+#include "d/actor/d_a_btd.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000001C8       .text __ct__11daBtd_HIO_cFv */

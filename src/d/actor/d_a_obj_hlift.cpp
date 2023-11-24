@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_hlift.cpp
 //
 
-#include "d_a_obj_hlift.h"
+#include "d/actor/d_a_obj_hlift.h"
 #include "dolphin/types.h"
 
 /* 00000078-000001BC       .text CreateHeap__Q210daObjHlift5Act_cFv */

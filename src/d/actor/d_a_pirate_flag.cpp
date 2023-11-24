@@ -3,7 +3,7 @@
 // Translation Unit: d_a_pirate_flag.cpp
 //
 
-#include "d_a_pirate_flag.h"
+#include "d/actor/d_a_pirate_flag.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000364       .text setCorrectNrmAngle__22daPirate_Flag_packet_cFsf */

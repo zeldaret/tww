@@ -3,7 +3,7 @@
 // Translation Unit: d_a_st.cpp
 //
 
-#include "d_a_st.h"
+#include "d/actor/d_a_st.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000005B4       .text smoke_set_s__FP8st_classf */

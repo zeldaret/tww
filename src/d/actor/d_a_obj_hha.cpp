@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_hha.cpp
 //
 
-#include "d_a_obj_hha.h"
+#include "d/actor/d_a_obj_hha.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000170       .text init_data__14daObjHhaPart_cFffUsUcUc */

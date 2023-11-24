@@ -3,7 +3,7 @@
 // Translation Unit: d_a_warpdm20.cpp
 //
 
-#include "d_a_warpdm20.h"
+#include "d/actor/d_a_warpdm20.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000BC       .text _delete__12daWarpdm20_cFv */

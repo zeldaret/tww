@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_ekskz.cpp
 //
 
-#include "d_a_obj_ekskz.h"
+#include "d/actor/d_a_obj_ekskz.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000368       .text CreateHeap__Q210daObjEkskz5Act_cFv */

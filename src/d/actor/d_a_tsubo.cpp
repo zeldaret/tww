@@ -3,7 +3,7 @@
 // Translation Unit: d_a_tsubo.cpp
 //
 
-#include "d_a_tsubo.h"
+#include "d/actor/d_a_tsubo.h"
 #include "dolphin/types.h"
 
 /* 000000EC-0000011C       .text prmZ_init__Q27daTsubo5Act_cFv */

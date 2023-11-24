@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_swflat.cpp
 //
 
-#include "d_a_obj_swflat.h"
+#include "d/actor/d_a_obj_swflat.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000138       .text __ct__17daObjSwflat_HIO_cFv */

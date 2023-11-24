@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_otble.cpp
 //
 
-#include "d_a_obj_otble.h"
+#include "d/actor/d_a_obj_otble.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text createHeap_CB__FP10fopAc_ac_c */

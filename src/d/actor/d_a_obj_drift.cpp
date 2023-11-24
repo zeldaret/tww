@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_drift.cpp
 //
 
-#include "d_a_obj_drift.h"
+#include "d/actor/d_a_obj_drift.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000001A0       .text CreateHeap__Q210daObjDrift5Act_cFv */

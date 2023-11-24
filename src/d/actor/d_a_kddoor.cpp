@@ -3,7 +3,7 @@
 // Translation Unit: d_a_kddoor.cpp
 //
 
-#include "d_a_kddoor.h"
+#include "d/actor/d_a_kddoor.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000A8       .text chkMakeKey__10daKddoor_cFv */

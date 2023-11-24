@@ -3,7 +3,7 @@
 // Translation Unit: d_a_bo.cpp
 //
 
-#include "d_a_bo.h"
+#include "d/actor/d_a_bo.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000001E8       .text smoke_set__FP8bo_class */

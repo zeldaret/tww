@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_vgnfd.cpp
 //
 
-#include "d_a_obj_vgnfd.h"
+#include "d/actor/d_a_obj_vgnfd.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text solidHeapCB__12daObjVgnfd_cFP10fopAc_ac_c */

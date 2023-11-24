@@ -3,7 +3,7 @@
 // Translation Unit: d_a_fganon.cpp
 //
 
-#include "d_a_fganon.h"
+#include "d/actor/d_a_fganon.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000001A0       .text __ct__14daFganon_HIO_cFv */

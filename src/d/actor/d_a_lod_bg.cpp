@@ -3,7 +3,7 @@
 // Translation Unit: d_a_lod_bg.cpp
 //
 
-#include "d_a_lod_bg.h"
+#include "d/actor/d_a_lod_bg.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000204       .text __ct__9daLodbg_cFv */

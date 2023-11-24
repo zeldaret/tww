@@ -3,7 +3,7 @@
 // Translation Unit: d_a_tag_volcano.cpp
 //
 
-#include "d_a_tag_volcano.h"
+#include "d/actor/d_a_tag_volcano.h"
 #include "dolphin/types.h"
 
 /* 00000078-000002B4       .text _create__Q212daTagvolcano5Act_cFv */

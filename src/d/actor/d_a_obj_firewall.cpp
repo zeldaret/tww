@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_firewall.cpp
 //
 
-#include "d_a_obj_firewall.h"
+#include "d/actor/d_a_obj_firewall.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000EC       .text init_mtx__15daObjFirewall_cFv */

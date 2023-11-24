@@ -3,7 +3,7 @@
 // Translation Unit: d_a_mt.cpp
 //
 
-#include "d_a_mt.h"
+#include "d/actor/d_a_mt.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000001E8       .text __ct__10daMt_HIO_cFv */

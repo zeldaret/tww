@@ -3,7 +3,7 @@
 // Translation Unit: d_a_sail.cpp
 //
 
-#include "d_a_sail.h"
+#include "d/actor/d_a_sail.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000364       .text setCorrectNrmAngle__15daSail_packet_cFsf */

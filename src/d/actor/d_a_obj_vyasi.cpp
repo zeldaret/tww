@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_vyasi.cpp
 //
 
-#include "d_a_obj_vyasi.h"
+#include "d/actor/d_a_obj_vyasi.h"
 #include "dolphin/types.h"
 
 /* 000000EC-0000015C       .text SetStopJointAnimation__Q210daObjVyasi5Act_cFP18J3DAnmTransformKeyff */

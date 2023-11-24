@@ -3,7 +3,7 @@
 // Translation Unit: d_a_oship.cpp
 //
 
-#include "d_a_oship.h"
+#include "d/actor/d_a_oship.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000234       .text __ct__13daOship_HIO_cFv */

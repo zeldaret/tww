@@ -3,7 +3,7 @@
 // Translation Unit: d_a_lamp.cpp
 //
 
-#include "d_a_lamp.h"
+#include "d/actor/d_a_lamp.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000158       .text daLamp_Draw__FP10lamp_class */

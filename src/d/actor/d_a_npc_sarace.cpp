@@ -3,7 +3,7 @@
 // Translation Unit: d_a_npc_sarace.cpp
 //
 
-#include "d_a_npc_sarace.h"
+#include "d/actor/d_a_npc_sarace.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000198       .text __ct__18daNpc_Sarace_HIO_cFv */

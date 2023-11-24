@@ -3,7 +3,7 @@
 // Translation Unit: d_a_mo2.cpp
 //
 
-#include "d_a_mo2.h"
+#include "d/actor/d_a_mo2.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000001E8       .text tex_anm_set__FP9mo2_classUs */

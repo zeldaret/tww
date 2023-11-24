@@ -3,7 +3,7 @@
 // Translation Unit: d_a_kytag01.cpp
 //
 
-#include "d_a_kytag01.h"
+#include "d/actor/d_a_kytag01.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000007C       .text wether_tag_move__FP13kytag01_class */

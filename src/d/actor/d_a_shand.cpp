@@ -3,7 +3,7 @@
 // Translation Unit: d_a_shand.cpp
 //
 
-#include "d_a_shand.h"
+#include "d/actor/d_a_shand.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000114       .text __ct__13daShand_HIO_cFv */

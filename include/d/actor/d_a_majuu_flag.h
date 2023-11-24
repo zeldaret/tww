@@ -1,0 +1,33 @@
+#ifndef D_A_MAJUU_FLAG_H
+#define D_A_MAJUU_FLAG_H
+
+#include "f_op/f_op_actor.h"
+#include "SSystem/SComponent/c_phase.h"
+
+class daMajuu_Flag_c : public fopAc_ac_c {
+public:
+    void setBaseScale(float) {}
+    void setOtherMatrix(float(*)[3][4]) {}
+    void setOtherOffset(cXyz*) {}
+
+public:
+    /* 0x290 */ u8 m290[0x2A0 - 0x290];
+    /* 0x2A0 */ daMajuu_Flag_packet_c mPacket;
+    /* 0xA3D */ u8 mA3D[0xA40 - 0xA3D];
+    /* 0xA40 */ request_of_phase_process_class mPhsCloth;
+    /* 0xA48 */ request_of_phase_process_class mPhsFlag;
+    /* 0xA50 */ u8 mA50[0xA58 - 0xA50];
+    /* 0xA58 */ s16 mWave;
+    /* 0xA5A */ u8 mA5A[0xA60 - 0xA5A];
+    /* 0xA60 */ f32 mFlagScale;
+    /* 0xA64 */ u8 mFlagType;
+    /* 0xA65 */ u8 mTexType;
+    /* 0xA66 */ u8 mbUsePlayerTevStr;
+    /* 0xA67 */ u8 mA67[0xA68 - 0xA67];
+    /* 0xA68 */ Mtx mMtx;
+    /* 0xA98 */ MtxP mpParentMtx;
+    /* 0xA9C */ cXyz* mpParentPos;
+    /* 0xAA0 */ u8 mAA0[0xB00 - 0xAA0];
+};
+
+#endif /* D_A_MAJUU_FLAG_H */

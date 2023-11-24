@@ -3,7 +3,7 @@
 // Translation Unit: d_a_kokiie.cpp
 //
 
-#include "d_a_kokiie.h"
+#include "d/actor/d_a_kokiie.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000B4       .text __dt__4cXyzFv */

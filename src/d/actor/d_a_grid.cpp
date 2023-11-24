@@ -3,7 +3,7 @@
 // Translation Unit: d_a_grid.cpp
 //
 
-#include "d_a_grid.h"
+#include "d/actor/d_a_grid.h"
 #include "dolphin/types.h"
 
 /* 800E8CC0-800E8D48       .text setBackNrm__13daHo_packet_cFv */

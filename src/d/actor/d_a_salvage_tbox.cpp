@@ -3,7 +3,7 @@
 // Translation Unit: d_a_salvage_tbox.cpp
 //
 
-#include "d_a_salvage_tbox.h"
+#include "d/actor/d_a_salvage_tbox.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000128       .text getMaxWaterY__25daSTBox_shadowEcallBack_cFPQ29JGeometry8TVec3<f> */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_npc_mk.cpp
 //
 
-#include "d_a_npc_mk.h"
+#include "d/actor/d_a_npc_mk.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000230       .text nodeCallBack_Mk__FP7J3DNodei */

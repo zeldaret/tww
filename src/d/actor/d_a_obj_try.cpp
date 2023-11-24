@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_try.cpp
 //
 
-#include "d_a_obj_try.h"
+#include "d/actor/d_a_obj_try.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000090       .text prm_set_swSave__Q28daObjTry5Act_cFi */

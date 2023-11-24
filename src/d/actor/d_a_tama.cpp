@@ -3,7 +3,7 @@
 // Translation Unit: d_a_tama.cpp
 //
 
-#include "d_a_tama.h"
+#include "d/actor/d_a_tama.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000114       .text createInit__8daTama_cFv */

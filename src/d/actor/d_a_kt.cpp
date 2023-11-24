@@ -3,7 +3,7 @@
 // Translation Unit: d_a_kt.cpp
 //
 
-#include "d_a_kt.h"
+#include "d/actor/d_a_kt.h"
 #include "dolphin/types.h"
 
 /* 00000078-000001BC       .text kotori_draw__FP8kt_class */

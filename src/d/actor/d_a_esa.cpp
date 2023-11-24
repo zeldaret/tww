@@ -3,7 +3,7 @@
 // Translation Unit: d_a_esa.cpp
 //
 
-#include "d_a_esa.h"
+#include "d/actor/d_a_esa.h"
 #include "dolphin/types.h"
 
 /* 800E7E60-800E7EA8       .text daEsa_Draw__FP9esa_class */

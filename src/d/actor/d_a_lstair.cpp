@@ -3,7 +3,7 @@
 // Translation Unit: d_a_lstair.cpp
 //
 
-#include "d_a_lstair.h"
+#include "d/actor/d_a_lstair.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000D4       .text _delete__10daLStair_cFv */

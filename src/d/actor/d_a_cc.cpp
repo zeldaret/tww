@@ -3,7 +3,7 @@
 // Translation Unit: d_a_cc.cpp
 //
 
-#include "d_a_cc.h"
+#include "d/actor/d_a_cc.h"
 #include "dolphin/types.h"
 
 /* 00000078-000002AC       .text nodeCallBack__FP7J3DNodei */

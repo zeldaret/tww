@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_hami2.cpp
 //
 
-#include "d_a_obj_hami2.h"
+#include "d/actor/d_a_obj_hami2.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000012C       .text nodeCallBack__FP7J3DNodei */

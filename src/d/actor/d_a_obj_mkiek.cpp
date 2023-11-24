@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_mkiek.cpp
 //
 
-#include "d_a_obj_mkiek.h"
+#include "d/actor/d_a_obj_mkiek.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000240       .text CreateHeap__Q210daObjMkiek5Act_cFv */

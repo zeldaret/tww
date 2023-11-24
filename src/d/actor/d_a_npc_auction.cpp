@@ -3,7 +3,7 @@
 // Translation Unit: d_a_npc_auction.cpp
 //
 
-#include "d_a_npc_auction.h"
+#include "d/actor/d_a_npc_auction.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000268       .text __ct__14daNpcAuction_cFv */

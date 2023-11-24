@@ -3,7 +3,7 @@
 // Translation Unit: d_a_door12.cpp
 //
 
-#include "d_a_door12.h"
+#include "d/actor/d_a_door12.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000C0       .text chkMakeKey__10daDoor12_cFv */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_homen.cpp
 //
 
-#include "d_a_obj_homen.h"
+#include "d/actor/d_a_obj_homen.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000110       .text solidHeapCB__Q210daObjHomen5Act_cFP10fopAc_ac_c */

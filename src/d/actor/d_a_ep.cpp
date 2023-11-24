@@ -3,7 +3,7 @@
 // Translation Unit: d_a_ep.cpp
 //
 
-#include "d_a_ep.h"
+#include "d/actor/d_a_ep.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000158       .text ga_draw__FP8ep_class */

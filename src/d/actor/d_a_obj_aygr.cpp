@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_aygr.cpp
 //
 
-#include "d_a_obj_aygr.h"
+#include "d/actor/d_a_obj_aygr.h"
 #include "dolphin/types.h"
 
 /* 00000078-000002A4       .text CreateHeap__Q29daObjAygr5Act_cFv */

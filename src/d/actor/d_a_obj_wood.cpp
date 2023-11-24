@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_wood.cpp
 //
 
-#include "d_a_obj_wood.h"
+#include "d/actor/d_a_obj_wood.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000190       .text Create__Q29daObjWood6MethodFPv */

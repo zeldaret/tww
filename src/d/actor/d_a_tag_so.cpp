@@ -3,7 +3,7 @@
 // Translation Unit: d_a_tag_so.cpp
 //
 
-#include "d_a_tag_so.h"
+#include "d/actor/d_a_tag_so.h"
 #include "dolphin/types.h"
 
 /* 000000EC-0000010C       .text __ct__14daTag_So_HIO_cFv */

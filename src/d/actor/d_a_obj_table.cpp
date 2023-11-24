@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_table.cpp
 //
 
-#include "d_a_obj_table.h"
+#include "d/actor/d_a_obj_table.h"
 #include "dolphin/types.h"
 
 /* 00000078-000001B8       .text CreateHeap__Q210daObjTable5Act_cFv */

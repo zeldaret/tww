@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_eskban.cpp
 //
 
-#include "d_a_obj_eskban.h"
+#include "d/actor/d_a_obj_eskban.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000001FC       .text CreateHeap__Q211daObjEskban5Act_cFv */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_pfall.cpp
 //
 
-#include "d_a_obj_pfall.h"
+#include "d/actor/d_a_obj_pfall.h"
 #include "dolphin/types.h"
 
 /* 000000EC-0000010C       .text CallbackCreateHeap__FP10fopAc_ac_c */

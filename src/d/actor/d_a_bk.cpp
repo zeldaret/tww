@@ -3,7 +3,7 @@
 // Translation Unit: d_a_bk.cpp
 //
 
-#include "d_a_bk.h"
+#include "d/actor/d_a_bk.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000234       .text anm_init__FP8bk_classifUcfi */

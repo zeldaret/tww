@@ -3,7 +3,7 @@
 // Translation Unit: d_a_bl.cpp
 //
 
-#include "d_a_bl.h"
+#include "d/actor/d_a_bl.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000178       .text draw_SUB__FP8bl_class */

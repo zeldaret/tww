@@ -3,7 +3,7 @@
 // Translation Unit: d_a_fire.cpp
 //
 
-#include "d_a_fire.h"
+#include "d/actor/d_a_fire.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000F8       .text _delete__8daFire_cFv */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_ladder.cpp
 //
 
-#include "d_a_obj_ladder.h"
+#include "d/actor/d_a_obj_ladder.h"
 #include "dolphin/types.h"
 
 /* 00000078-0000013C       .text CreateHeap__Q211daObjLadder5Act_cFv */

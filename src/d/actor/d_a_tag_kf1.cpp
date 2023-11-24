@@ -3,7 +3,7 @@
 // Translation Unit: d_a_tag_kf1.cpp
 //
 
-#include "d_a_tag_kf1.h"
+#include "d/actor/d_a_tag_kf1.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000120       .text __ct__15daTag_Kf1_HIO_cFv */

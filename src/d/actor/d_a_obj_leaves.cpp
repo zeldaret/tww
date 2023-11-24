@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_leaves.cpp
 //
 
-#include "d_a_obj_leaves.h"
+#include "d/actor/d_a_obj_leaves.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000D8       .text chk_appear__13daObjLeaves_cFv */

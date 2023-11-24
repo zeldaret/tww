@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_mtest.cpp
 //
 
-#include "d_a_obj_mtest.h"
+#include "d/actor/d_a_obj_mtest.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000198       .text chk_appear__Q210daObjMtest5Act_cFv */

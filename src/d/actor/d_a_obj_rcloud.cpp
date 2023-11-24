@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_rcloud.cpp
 //
 
-#include "d_a_obj_rcloud.h"
+#include "d/actor/d_a_obj_rcloud.h"
 #include "dolphin/types.h"
 
 /* 00000078-000000E8       .text init_mtx__13daObjRcloud_cFv */

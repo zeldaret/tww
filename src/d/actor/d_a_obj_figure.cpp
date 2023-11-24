@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_figure.cpp
 //
 
-#include "d_a_obj_figure.h"
+#include "d/actor/d_a_obj_figure.h"
 #include "dolphin/types.h"
 
 /* 000000EC-0000032C       .text __ct__13daObjFigure_cFv */

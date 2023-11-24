@@ -3,7 +3,7 @@
 // Translation Unit: d_a_npc_bms1.cpp
 //
 
-#include "d_a_npc_bms1.h"
+#include "d/actor/d_a_npc_bms1.h"
 #include "dolphin/types.h"
 
 /* 000000EC-00000108       .text __ct__21daNpc_Bms1_childHIO_cFv */

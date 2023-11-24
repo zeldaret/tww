@@ -3,7 +3,7 @@
 // Translation Unit: d_a_gy.cpp
 //
 
-#include "d_a_gy.h"
+#include "d/actor/d_a_gy.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000003CC       .text __ct__10daGy_HIO_cFv */

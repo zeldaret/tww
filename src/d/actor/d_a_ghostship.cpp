@@ -3,7 +3,7 @@
 // Translation Unit: d_a_ghostship.cpp
 //
 
-#include "d_a_ghostship.h"
+#include "d/actor/d_a_ghostship.h"
 #include "dolphin/types.h"
 
 /* 000000EC-000000F8       .text daGhostship_SailVtxFactorCB__FP15dCloth_packet_cii */

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_lwood.cpp
 //
 
-#include "d_a_lwood.h"
+#include "d/actor/d_a_lwood.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */

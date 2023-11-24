@@ -3,7 +3,7 @@
 // Translation Unit: d_a_tag_etc.cpp
 //
 
-#include "d_a_tag_etc.h"
+#include "d/actor/d_a_tag_etc.h"
 #include "dolphin/types.h"
 
 /* 00000078-00000084       .text getEventNo__11daTag_Etc_cFv */
