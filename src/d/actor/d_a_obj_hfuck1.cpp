@@ -3,181 +3,239 @@
 // Translation Unit: d_a_obj_hfuck1.cpp
 //
 
-#include "d_a_obj_hfuck1.h"
-#include "dolphin/types.h"
+#include "f_op/f_op_actor_mng.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "d/d_cc_d.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_procname.h"
+#include "d/actor/d_a_player.h"
+#include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_mtx.h"
+
+class daObjHfuck1_c : public fopAc_ac_c {
+public:
+    void init_mtx();
+    s32 _create();
+    bool _execute();
+    bool _draw();
+    bool _delete();
+    bool create_heap();
+    bool checkCollision();
+    static BOOL solidHeapCB(fopAc_ac_c *i_this);
+
+public:
+    /* 0x290 */ request_of_phase_process_class mPhs;
+    /* 0x298 */ J3DModel * mpModel;
+    /* 0x29C */ dBgW * mpBgW;
+    /* 0x2A0 */ dCcD_Stts mStts;
+    /* 0x408 */ dCcD_Sph mSph;
+    /* 0x40C */ fopAc_ac_c * mpHookshotActor;
+};
+
+namespace {
+    static const char l_arcname[] = "Hfuck1";
+
+    static const dCcD_SrcSph l_sph_src = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt Type     */ 0,
+            /* SrcObjAt Atp      */ 0,
+            /* SrcObjAt SPrm     */ 0,
+            /* SrcObjTg Type     */ AT_TYPE_HOOKSHOT,
+            /* SrcObjTg SPrm     */ 9,
+            /* SrcObjCo SPrm     */ 0,
+            /* SrcGObjAt Se      */ 0,
+            /* SrcGObjAt HitMark */ 0,
+            /* SrcGObjAt Spl     */ 0,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt GFlag   */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ 0,
+            /* SrcGObjTg Spl     */ 0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg GFlag   */ 6,
+            /* SrcGObjCo GFlag   */ 0,
+        },
+        // cM3dGSphS
+        {
+            /* Center */ 0.0f, 0.0f, 0.0f,
+            /* Radius */ 90.0f,
+        },
+    };
+
+    static const Vec l_hook_offset = { 0.0f, 0.0f, 0.0f };
+};
 
 /* 00000078-00000100       .text init_mtx__13daObjHfuck1_cFv */
 void daObjHfuck1_c::init_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(mScale);
+    mDoMtx_stack_c::transS(getPosition());
+    mDoMtx_stack_c::XYZrotM(shape_angle);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000100-00000124       .text solidHeapCB__13daObjHfuck1_cFP10fopAc_ac_c */
-void daObjHfuck1_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daObjHfuck1_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((daObjHfuck1_c*)i_this)->create_heap();
 }
 
 /* 00000124-00000224       .text create_heap__13daObjHfuck1_cFv */
-void daObjHfuck1_c::create_heap() {
-    /* Nonmatching */
+bool daObjHfuck1_c::create_heap() {
+    bool ret = true;
+
+    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, 0x04));
+
+    if (!pModelData) {
+        JUT_ASSERT(0xf5, 0);
+        ret = false;
+    } else {
+        mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000022);
+        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, 0x07), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
+
+        if (!mpModel || !mpBgW)
+            ret = false;
+    }
+
+    return ret;
 }
 
 /* 00000224-000002AC       .text checkCollision__13daObjHfuck1_cFv */
-void daObjHfuck1_c::checkCollision() {
-    /* Nonmatching */
+bool daObjHfuck1_c::checkCollision() {
+    bool ret = false;
+    if (mSph.ChkTgHit()) {
+        cCcD_Obj* at = mSph.GetTgHitObj();
+        if (at != NULL && at->ChkAtType(AT_TYPE_HOOKSHOT)) {
+            mpHookshotActor = mSph.GetTgHitAc();
+            ret = true;
+        }
+        mSph.ClrTgHit();
+    }
+    return ret;
 }
 
 /* 000002AC-000004B0       .text _create__13daObjHfuck1_cFv */
-void daObjHfuck1_c::_create() {
-    /* Nonmatching */
-}
+s32 daObjHfuck1_c::_create() {
+    fopAcM_SetupActor(this, daObjHfuck1_c);
 
-/* 000004B0-0000057C       .text __dt__8dCcD_SphFv */
-dCcD_Sph::~dCcD_Sph() {
-    /* Nonmatching */
-}
+    s32 ret = dComIfG_resLoad(&mPhs, l_arcname);
 
-/* 0000057C-000005C4       .text __dt__8cM3dGSphFv */
-cM3dGSph::~cM3dGSph() {
-    /* Nonmatching */
-}
+    if (ret == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, 0xc20)) {
+            if (dComIfG_Bgsp()->Regist(mpBgW, this)) {
+                ret = cPhs_ERROR_e;
+            } else {
+                fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+                init_mtx();
+                mStts.Init(0xFF, 0xFF, this);
+                mSph.Set(l_sph_src);
+                mSph.SetStts(&mStts);
 
-/* 000005C4-00000620       .text __dt__14cCcD_ShapeAttrFv */
-cCcD_ShapeAttr::~cCcD_ShapeAttr() {
-    /* Nonmatching */
-}
+                mDoMtx_stack_c::transS(getPosition());
+                mDoMtx_stack_c::XYZrotM(shape_angle);
+                mDoMtx_stack_c::transM(0.0f, 0.0f, -50.0f);
+                cXyz center;
+                mDoMtx_stack_c::multVecZero(&center);
+                mSph.SetC(center);
+                mSph.SetR(90.0f);
+            }
+        } else {
+            ret = cPhs_ERROR_e;
+        }
+    }
 
-/* 00000620-00000668       .text __dt__8cM3dGAabFv */
-cM3dGAab::~cM3dGAab() {
-    /* Nonmatching */
+    return ret;
 }
 
 /* 00000668-000006FC       .text _delete__13daObjHfuck1_cFv */
-void daObjHfuck1_c::_delete() {
-    /* Nonmatching */
+bool daObjHfuck1_c::_delete() {
+    dComIfG_resDelete(&mPhs, l_arcname);
+
+    if (heap != NULL && mpBgW != NULL) {
+        if (mpBgW->ChkUsed()) {
+            dComIfG_Bgsp()->Release(mpBgW);
+        }
+
+        mpBgW = NULL;
+    }
+
+    return true;
 }
 
 /* 000006FC-000007CC       .text _execute__13daObjHfuck1_cFv */
-void daObjHfuck1_c::_execute() {
-    /* Nonmatching */
+bool daObjHfuck1_c::_execute() {
+    mpBgW->Move();
+    mStts.Move();
+    if (mpHookshotActor != NULL) {
+        if (fopAcM_IsActor(mpHookshotActor) == TRUE && fopAcM_GetName(mpHookshotActor) == PROC_HOOKSHOT) {
+            if (daPy_getPlayerActorClass() != NULL) {
+                daPy_getPlayerActorClass()->setHookshotCarryOffset(fopAcM_GetID(this), (const cXyz*)&l_hook_offset);
+            }
+        }
+        mpHookshotActor = NULL;
+    }
+
+    if (!checkCollision())
+        dComIfG_Ccsp()->Set(&mSph);
+
+    return true;
 }
 
 /* 000007CC-0000082C       .text _draw__13daObjHfuck1_cFv */
-void daObjHfuck1_c::_draw() {
-    /* Nonmatching */
+bool daObjHfuck1_c::_draw() {
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, getPositionP(), &mTevStr);
+    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    mDoExt_modelUpdateDL(mpModel);
+    return true;
 }
 
 /* 0000082C-0000084C       .text daObjHfuck1_Create__FP10fopAc_ac_c */
-void daObjHfuck1_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daObjHfuck1_Create(fopAc_ac_c* i_this) {
+    return ((daObjHfuck1_c*)i_this)->_create();
 }
 
 /* 0000084C-00000870       .text daObjHfuck1_Delete__FP13daObjHfuck1_c */
-void daObjHfuck1_Delete(daObjHfuck1_c*) {
-    /* Nonmatching */
+BOOL daObjHfuck1_Delete(daObjHfuck1_c* i_this) {
+    return i_this->_delete();
 }
 
 /* 00000870-00000894       .text daObjHfuck1_Execute__FP13daObjHfuck1_c */
-void daObjHfuck1_Execute(daObjHfuck1_c*) {
-    /* Nonmatching */
+BOOL daObjHfuck1_Execute(daObjHfuck1_c* i_this) {
+    return i_this->_execute();
 }
 
 /* 00000894-000008B8       .text daObjHfuck1_Draw__FP13daObjHfuck1_c */
-void daObjHfuck1_Draw(daObjHfuck1_c*) {
-    /* Nonmatching */
+BOOL daObjHfuck1_Draw(daObjHfuck1_c* i_this) {
+    return i_this->_draw();
 }
 
 /* 000008B8-000008C0       .text daObjHfuck1_IsDelete__FP13daObjHfuck1_c */
-void daObjHfuck1_IsDelete(daObjHfuck1_c*) {
-    /* Nonmatching */
+BOOL daObjHfuck1_IsDelete(daObjHfuck1_c* i_this) {
+    return TRUE;
 }
 
-/* 000008C0-000008D0       .text GetShapeAttr__8dCcD_SphFv */
-void dCcD_Sph::GetShapeAttr() {
-    /* Nonmatching */
-}
+static actor_method_class l_daObjHfuck1_Method = {
+    (process_method_func)daObjHfuck1_Create,
+    (process_method_func)daObjHfuck1_Delete,
+    (process_method_func)daObjHfuck1_Execute,
+    (process_method_func)daObjHfuck1_IsDelete,
+    (process_method_func)daObjHfuck1_Draw,
+};
 
-/* 000008D0-000008D8       .text GetCoCP__12cCcD_SphAttrFv */
-void cCcD_SphAttr::GetCoCP() {
-    /* Nonmatching */
-}
-
-/* 000008D8-000008E0       .text GetCoCP__12cCcD_SphAttrCFv */
-void cCcD_SphAttr::GetCoCP() const {
-    /* Nonmatching */
-}
-
-/* 000008E0-000008E8       .text CrossAtTg__12cCcD_SphAttrCFRC12cCcD_AabAttrP4cXyz */
-void cCcD_SphAttr::CrossAtTg(const cCcD_AabAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 000008E8-000008F0       .text CrossAtTg__12cCcD_SphAttrCFRC12cCcD_PntAttrP4cXyz */
-void cCcD_SphAttr::CrossAtTg(const cCcD_PntAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 000008F0-00000928       .text CrossAtTg__12cCcD_SphAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_SphAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 00000928-00000930       .text CrossCo__12cCcD_SphAttrCFRC12cCcD_AabAttrPf */
-void cCcD_SphAttr::CrossCo(const cCcD_AabAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00000930-00000938       .text CrossCo__12cCcD_SphAttrCFRC12cCcD_TriAttrPf */
-void cCcD_SphAttr::CrossCo(const cCcD_TriAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00000938-00000940       .text CrossCo__12cCcD_SphAttrCFRC12cCcD_PntAttrPf */
-void cCcD_SphAttr::CrossCo(const cCcD_PntAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00000940-00000978       .text CrossCo__12cCcD_SphAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_SphAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00000978-0000097C       .text GetGObjInf__12cCcD_GObjInfCFv */
-void cCcD_GObjInf::GetGObjInf() const {
-    /* Nonmatching */
-}
-
-/* 0000097C-00000984       .text GetShapeAttr__8cCcD_ObjCFv */
-void cCcD_Obj::GetShapeAttr() const {
-    /* Nonmatching */
-}
-
-/* 00000984-0000098C       .text CrossAtTg__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrP4cXyz */
-void cCcD_ShapeAttr::CrossAtTg(const cCcD_ShapeAttr&, cXyz*) const {
-    /* Nonmatching */
-}
-
-/* 0000098C-00000994       .text CrossCo__14cCcD_ShapeAttrCFRC14cCcD_ShapeAttrPf */
-void cCcD_ShapeAttr::CrossCo(const cCcD_ShapeAttr&, float*) const {
-    /* Nonmatching */
-}
-
-/* 00000994-000009A0       .text GetCoCP__14cCcD_ShapeAttrFv */
-void cCcD_ShapeAttr::GetCoCP() {
-    /* Nonmatching */
-}
-
-/* 000009A0-000009AC       .text GetCoCP__14cCcD_ShapeAttrCFv */
-void cCcD_ShapeAttr::GetCoCP() const {
-    /* Nonmatching */
-}
-
-/* 000009AC-000009B4       .text @280@__dt__8dCcD_SphFv */
-void @280@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
-
-/* 000009B4-000009BC       .text @248@__dt__8dCcD_SphFv */
-void @248@__dt__8dCcD_SphFv {
-    /* Nonmatching */
-}
-
+actor_process_profile_definition g_profile_Obj_Hfuck1 = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 3,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Hfuck1,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daObjHfuck1_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x005B,
+    /* Actor SubMtd */ &l_daObjHfuck1_Method,
+    /* Status       */ fopAcStts_UNK200000_e | fopAcStts_UNK40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_3_e,
+};
