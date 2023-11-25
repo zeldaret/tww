@@ -3,7 +3,7 @@
 // Translation Unit: d_tree.cpp
 //
 
-#include "d_tree.h"
+#include "d/d_tree.h"
 #include "dolphin/types.h"
 
 /* 800787BC-80078960       .text WorkCo__12dTree_data_cFP10fopAc_ac_cUli */
@@ -11,7 +11,8 @@ void dTree_data_c::WorkCo(fopAc_ac_c*, unsigned long, int) {
     /* Nonmatching */
 }
 
-/* 80078960-80078CC0       .text WorkAt_NoCutAnim__12dTree_data_cFP10fopAc_ac_cUliP15dCcMassS_HitInfP8cCcD_Obj */
+/* 80078960-80078CC0       .text
+ * WorkAt_NoCutAnim__12dTree_data_cFP10fopAc_ac_cUliP15dCcMassS_HitInfP8cCcD_Obj */
 void dTree_data_c::WorkAt_NoCutAnim(fopAc_ac_c*, unsigned long, int, dCcMassS_HitInf*, cCcD_Obj*) {
     /* Nonmatching */
 }
@@ -32,8 +33,10 @@ void dTree_data_c::animation(int) {
 }
 
 /* 8007945C-8007946C       .text newData__12dTree_room_cFP12dTree_data_c */
-void dTree_room_c::newData(dTree_data_c*) {
-    /* Nonmatching */
+void dTree_room_c::newData(dTree_data_c* data) {
+    data->mpNext = this->mpHead;
+    this->mpHead = data;
+    return;
 }
 
 /* 8007946C-800794D0       .text deleteData__12dTree_room_cFv */
@@ -100,4 +103,3 @@ void dTree_packet_c::newAnm(short) {
 void dTree_packet_c::setAnm(int, short) {
     /* Nonmatching */
 }
-
