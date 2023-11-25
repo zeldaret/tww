@@ -108,7 +108,7 @@ dScnOpen_c::~dScnOpen_c() {
     if (solid_heap != NULL)
         mDoExt_destroySolidHeap(solid_heap);
     dComIfG_resDelete(&mPhs, "Opening");
-    g_dComIfG_gameInfo.play.field_0x4841 = 0;
+    dComIfGp_setWindowNum(0);
 }
 
 /* 80232DD8-80232E6C       .text changeGameScene__10dScnOpen_cFv */

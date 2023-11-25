@@ -138,5 +138,6 @@ public:
 };
 
 extern dScnPly_reg_HIO_c g_regHIO;
+extern dScnPly_env_HIO_c g_envHIO;
 
 #endif /* D_S_PLAY */

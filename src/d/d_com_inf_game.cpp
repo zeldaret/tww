@@ -34,7 +34,7 @@ dComIfG_inf_c g_dComIfG_gameInfo;
 
 /* 80052134-800521A4       .text ct__14dComIfG_play_cFv */
 void dComIfG_play_c::ct() {
-    field_0x4841 = 0;
+    mDlstWindowNum = 0;
     mParticle = NULL;
     mDemo = NULL;
     mpMagmaPacket = NULL;

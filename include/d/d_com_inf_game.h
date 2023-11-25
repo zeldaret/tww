@@ -311,6 +311,7 @@ public:
     dDetect_c& getDetect() { return mDetect; }
     dDemo_manager_c* getDemo() { return mDemo; }
     camera_class* getCamera(int idx) { return mCameraInfo[idx].mpCamera; }
+    f32 getCamZoomForcus(int idx) { return mCameraInfo[idx].mCameraZoomForcus; }
 
     dMagma_packet_c* getMagma() { return mpMagmaPacket; }
     dGrass_packet_c* getGrass() { return mpGrassPacket; }
@@ -419,6 +420,9 @@ public:
     void setCurrentWindow(dDlst_window_c* i_window) { mCurrentWindow = i_window; }
     void setCurrentView(view_class* i_view) { mCurrentView = i_view; }
     void setCurrentViewport(view_port_class* i_viewport) { mCurrentViewport = i_viewport; }
+    s32 getWindowNum() { return mDlstWindowNum; }
+    void setWindowNum(u8 num) { mDlstWindowNum = num; }
+    dDlst_window_c * getWindow(int idx) { return &mDlstWindow[idx]; }
 
     J2DOrthoGraph* getCurrentGrafPort() { return mCurrentGrafPort; }
 
@@ -525,7 +529,7 @@ public:
     /* 0x4838 */ dWood::Packet_c* mpWoodPacket;
     /* 0x483C */ dFlower_packet_c* mpFlowerPacket;
     /* 0x4840 */ s8 mLkDArcIdx;
-    /* 0x4841 */ u8 field_0x4841;
+    /* 0x4841 */ u8 mDlstWindowNum;
     /* 0x4842 */ u16 mStatus;
     /* 0x4844 */ dDlst_window_c mDlstWindow[1];
     /* 0x4870 */ dComIfG_camera_info_class mCameraInfo[1];
@@ -1357,9 +1361,8 @@ void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8
 dStage_Ship_data* dComIfGp_getShip(int i_roomNo, int param_1);
 bool dComIfGp_getMapTrans(int i_roomNo, f32* o_transX, f32* o_transY, s16* o_angle);
 
-inline camera_class* dComIfGp_getCamera(int idx) {
-    return g_dComIfG_gameInfo.play.getCamera(idx);
-}
+inline camera_class* dComIfGp_getCamera(int idx) { return g_dComIfG_gameInfo.play.getCamera(idx); }
+inline f32 dComIfGp_getCamZoomForcus(int idx) { return g_dComIfG_gameInfo.play.getCamZoomForcus(idx); }
 
 inline const char* dComIfGp_getStartStageName() {
     return g_dComIfG_gameInfo.play.getStartStageName();
@@ -1940,14 +1943,16 @@ inline void dComIfGp_setRStatusForce(u8 status) {
     g_dComIfG_gameInfo.play.setRStatusForce(status);
 }
 
-inline dDlst_window_c * dComIfGp_getWindow(int idx) { return &g_dComIfG_gameInfo.play.mDlstWindow[idx]; }
+inline s32 dComIfGp_getWindowNum() { return g_dComIfG_gameInfo.play.getWindowNum(); }
+inline void dComIfGp_setWindowNum(u8 num) { g_dComIfG_gameInfo.play.setWindowNum(num); }
+inline dDlst_window_c * dComIfGp_getWindow(int idx) { return g_dComIfG_gameInfo.play.getWindow(idx); }
+inline J2DOrthoGraph* dComIfGp_getCurrentGrafPort() { return g_dComIfG_gameInfo.play.getCurrentGrafPort(); }
+inline void dComIfGp_setCurrentWindow(dDlst_window_c* window) { return g_dComIfG_gameInfo.play.setCurrentWindow(window); }
+inline void dComIfGp_setCurrentView(view_class* view) { return g_dComIfG_gameInfo.play.setCurrentView(view); }
+inline void dComIfGp_setCurrentViewport(view_port_class* viewport) { return g_dComIfG_gameInfo.play.setCurrentViewport(viewport); }
 
 inline dADM_CharTbl* dComIfGp_CharTbl() {
     return &g_dComIfG_gameInfo.play.mADM.mCharTbl;
-}
-
-inline J2DOrthoGraph* dComIfGp_getCurrentGrafPort() {
-    return g_dComIfG_gameInfo.play.getCurrentGrafPort();
 }
 
 inline JKRExpHeap * dComIfGp_getExpHeap2D() {
@@ -2208,31 +2213,26 @@ inline int dComIfGd_setRealShadow2(u32 id, s8 param_2, J3DModel* pModel, cXyz* p
                                                       pTevStr);
 }
 
+inline void dComIfGd_imageDrawShadow(Mtx mtx) {
+    g_dComIfG_gameInfo.drawlist.imageDrawShadow(mtx);
+}
+
 int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 param_1, f32 param_2, cBgS_PolyInfo& i_floorPoly, s16 i_angle, f32 param_5, GXTexObj* i_tex);
 
-inline void dComIfGd_setAlphaModel(u8 type, Mtx mtx, u8 alpha) {
-    g_dComIfG_gameInfo.drawlist.setAlphaModel(type, mtx, alpha);
-}
+inline void dComIfGd_setAlphaModel(u8 type, Mtx mtx, u8 alpha) { g_dComIfG_gameInfo.drawlist.setAlphaModel(type, mtx, alpha); }
+inline void dComIfGd_setSpotModel(u8 type, Mtx mtx, u8 alpha) { g_dComIfG_gameInfo.drawlist.setSpotModel(type, mtx, alpha); }
+inline void dComIfGd_setLightModel(u8 type, Mtx mtx, u8 alpha) { g_dComIfG_gameInfo.drawlist.setLightModel(type, mtx, alpha); }
 
-inline void dComIfGd_setSpotModel(u8 type, Mtx mtx, u8 alpha) {
-    g_dComIfG_gameInfo.drawlist.setSpotModel(type, mtx, alpha);
-}
+inline void dComIfGd_drawAlphaModel(Mtx mtx) { g_dComIfG_gameInfo.drawlist.drawAlphaModel(mtx); }
+inline void dComIfGd_drawSpotModel(Mtx mtx) { g_dComIfG_gameInfo.drawlist.drawSpotModel(mtx); }
+inline void dComIfGd_drawLightModel(Mtx mtx) { g_dComIfG_gameInfo.drawlist.drawLightModel(mtx); }
 
-inline void dComIfGd_setLightModel(u8 type, Mtx mtx, u8 alpha) {
-    g_dComIfG_gameInfo.drawlist.setLightModel(type, mtx, alpha);
-}
-
-inline s32 dComIfGd_getSpotModelNum() {
-    return g_dComIfG_gameInfo.drawlist.getSpotModelNum();
-}
-
-inline s32 dComIfGd_getLightModelNum() {
-    return g_dComIfG_gameInfo.drawlist.getLightModelNum();
-}
-
-inline void dComIfGd_setSpotModelColor(GXColor& color) {
-    g_dComIfG_gameInfo.drawlist.setSpotModelColor(color);
-}
+inline s32 dComIfGd_getSpotModelNum() { return g_dComIfG_gameInfo.drawlist.getSpotModelNum(); }
+inline s32 dComIfGd_getLightModelNum() { return g_dComIfG_gameInfo.drawlist.getLightModelNum(); }
+inline void dComIfGd_setSpotModelColor(GXColor& color) { g_dComIfG_gameInfo.drawlist.setSpotModelColor(color); }
+inline GXColor & dComIfGd_getAlphaModelColor() { return g_dComIfG_gameInfo.drawlist.getAlphaModelColor(); }
+inline GXColor & dComIfGd_getLightModelColor() { return g_dComIfG_gameInfo.drawlist.getLightModelColor(); }
+inline GXColor & dComIfGd_getSpotModelColor() { return g_dComIfG_gameInfo.drawlist.getSpotModelColor(); }
 
 inline J3DDrawBuffer* dComIfGd_getOpaListP1() {
     return g_dComIfG_gameInfo.drawlist.getOpaListP1();
@@ -2305,6 +2305,29 @@ inline void dComIfGd_entryZSortXluListMaskOff(J3DPacket* i_packet, cXyz& param_1
 
 inline void dComIfGd_set2DOpa(dDlst_base_c* pBase) { g_dComIfG_gameInfo.drawlist.set2DOpa(pBase); }
 inline void dComIfGd_set2DXlu(dDlst_base_c* pBase) { g_dComIfG_gameInfo.drawlist.set2DXlu(pBase); }
+
+inline void dComIfGd_drawCopy2D() { g_dComIfG_gameInfo.drawlist.drawCopy2D(); }
+inline void dComIfGd_draw2DOpa() { g_dComIfG_gameInfo.drawlist.draw2DOpa(); }
+inline void dComIfGd_draw2DOpaTop() { g_dComIfG_gameInfo.drawlist.draw2DOpaTop(); }
+inline void dComIfGd_draw2DXlu() { g_dComIfG_gameInfo.drawlist.draw2DXlu(); }
+
+inline void dComIfGd_drawOpaListSky() { g_dComIfG_gameInfo.drawlist.drawOpaListSky(); }
+inline void dComIfGd_drawXluListSky() { g_dComIfG_gameInfo.drawlist.drawXluListSky(); }
+inline void dComIfGd_drawOpaListP0() { g_dComIfG_gameInfo.drawlist.drawOpaListP0(); }
+inline void dComIfGd_drawOpaListP1() { g_dComIfG_gameInfo.drawlist.drawOpaListP1(); }
+inline void dComIfGd_drawXluListP1() { g_dComIfG_gameInfo.drawlist.drawXluListP1(); }
+inline void dComIfGd_drawOpaListBG() { g_dComIfG_gameInfo.drawlist.drawOpaListBG(); }
+inline void dComIfGd_drawXluListBG() { g_dComIfG_gameInfo.drawlist.drawXluListBG(); }
+inline void dComIfGd_drawOpaList() { g_dComIfG_gameInfo.drawlist.drawOpaList(); }
+inline void dComIfGd_drawXluList() { g_dComIfG_gameInfo.drawlist.drawXluList(); }
+inline void dComIfGd_drawOpaListFilter() { g_dComIfG_gameInfo.drawlist.drawOpaListFilter(); }
+inline void dComIfGd_drawOpaListMaskOff() { g_dComIfG_gameInfo.drawlist.drawOpaListMaskOff(); }
+inline void dComIfGd_drawXluListMaskOff() { g_dComIfG_gameInfo.drawlist.drawXluListMaskOff(); }
+inline void dComIfGd_drawOpaListInvisible() { g_dComIfG_gameInfo.drawlist.drawOpaListInvisible(); }
+inline void dComIfGd_drawXluListInvisible() { g_dComIfG_gameInfo.drawlist.drawXluListInvisible(); }
+inline void dComIfGd_drawOpaList2D() { g_dComIfG_gameInfo.drawlist.drawOpaList2D(); }
+
+inline void dComIfGd_drawShadow(Mtx mtx) { g_dComIfG_gameInfo.drawlist.drawShadow(mtx); }
 
 inline void dComIfGd_peekZ(s16 x, s16 y, u32 * data) { g_dComIfG_gameInfo.drawlist.newPeekZdata(x, y, data); }
 inline void dComIfGd_peekZdata() { g_dComIfG_gameInfo.drawlist.peekZdata(); }
@@ -2587,6 +2610,18 @@ inline void dComIfGp_particle_removeRoomScene() {
 inline void dComIfGp_particle_swapFrameBufferTexture() {
     g_dComIfG_gameInfo.play.getParticle()->swapFrameBufferTexture();
 }
+
+inline void dComIfGp_particle_draw(JPADrawInfo* inf) { if (g_dComIfG_gameInfo.play.getParticle() != NULL) g_dComIfG_gameInfo.play.getParticle()->draw(inf); }
+inline void dComIfGp_particle_drawP1(JPADrawInfo* inf) { if (g_dComIfG_gameInfo.play.getParticle() != NULL) g_dComIfG_gameInfo.play.getParticle()->drawP1(inf); }
+inline void dComIfGp_particle_drawToon(JPADrawInfo* inf) { if (g_dComIfG_gameInfo.play.getParticle() != NULL) g_dComIfG_gameInfo.play.getParticle()->drawToon(inf); }
+inline void dComIfGp_particle_drawToonP1(JPADrawInfo* inf) { if (g_dComIfG_gameInfo.play.getParticle() != NULL) g_dComIfG_gameInfo.play.getParticle()->drawToonP1(inf); }
+inline void dComIfGp_particle_drawProjection(JPADrawInfo* inf) { if (g_dComIfG_gameInfo.play.getParticle() != NULL) g_dComIfG_gameInfo.play.getParticle()->drawProjection(inf); }
+inline void dComIfGp_particle_drawShipTail(JPADrawInfo* inf) { if (g_dComIfG_gameInfo.play.getParticle() != NULL) g_dComIfG_gameInfo.play.getParticle()->drawShipTail(inf); }
+inline void dComIfGp_particle_drawWind(JPADrawInfo* inf) { if (g_dComIfG_gameInfo.play.getParticle() != NULL) g_dComIfG_gameInfo.play.getParticle()->drawWind(inf); }
+inline void dComIfGp_particle_draw2Dfore(JPADrawInfo* inf) { if (g_dComIfG_gameInfo.play.getParticle() != NULL) g_dComIfG_gameInfo.play.getParticle()->draw2Dfore(inf); }
+inline void dComIfGp_particle_draw2Dback(JPADrawInfo* inf) { if (g_dComIfG_gameInfo.play.getParticle() != NULL) g_dComIfG_gameInfo.play.getParticle()->draw2Dback(inf); }
+inline void dComIfGp_particle_draw2DmenuFore(JPADrawInfo* inf) { if (g_dComIfG_gameInfo.play.getParticle() != NULL) g_dComIfG_gameInfo.play.getParticle()->draw2DmenuFore(inf); }
+inline void dComIfGp_particle_draw2DmenuBack(JPADrawInfo* inf) { if (g_dComIfG_gameInfo.play.getParticle() != NULL) g_dComIfG_gameInfo.play.getParticle()->draw2DmenuBack(inf); }
 
 /**
  * === ATTENTION ===

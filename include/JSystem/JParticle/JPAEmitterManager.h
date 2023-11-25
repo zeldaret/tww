@@ -11,6 +11,7 @@ class JKRHeap;
 
 class JPADrawInfo {
 public:
+    JPADrawInfo(MtxP cameraMtxPtr, f32 fovy, f32 aspect) : mCameraMtxPtr(cameraMtxPtr), mFovy(fovy), mAspect(aspect) {}
     MtxP getCameraMtxPtr() { return mCameraMtxPtr; }
     f32 getFovy() { return mFovy; }
     f32 getAspect() { return mAspect; }

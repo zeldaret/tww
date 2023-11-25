@@ -1041,7 +1041,7 @@ void dDlst_peekZ_c::peekData() {
 
 /* 80085C6C-80085D74       .text __ct__12dDlst_list_cFv */
 dDlst_list_c::dDlst_list_c() {
-    field_0x50 = &field_0x3c[ARRAY_SIZE(field_0x3c)];
+    mpCopy2DEnd = &mpCopy2DArr[ARRAY_SIZE(mpCopy2DArr)];
     mp2DOpaTopEnd = &mp2DOpaTopArr[ARRAY_SIZE(mp2DOpaTopArr)];
     mp2DOpaEnd = &mp2DOpaArr[ARRAY_SIZE(mp2DOpaArr)];
     mp2DXluEnd = &mp2DXluArr[ARRAY_SIZE(mp2DXluArr)];
@@ -1108,7 +1108,7 @@ bool dDlst_list_c::init() {
     mpOpaList2D->setNonSort();
     setOpaList();
     setXluList();
-    field_0x4c = &field_0x3c[0];
+    mpCopy2D = &mpCopy2DArr[0];
     mp2DOpaTop = &mp2DOpaTopArr[0];
     mp2DOpa = &mp2DOpaArr[0];
     mp2DXlu = &mp2DXluArr[0];
@@ -1165,7 +1165,7 @@ void dDlst_list_c::reset() {
     mpOpaList2D->frameInit();
     setOpaList();
     setXluList();
-    field_0x4c = &field_0x3c[0];
+    mpCopy2D = &mpCopy2DArr[0];
     mp2DOpaTop = &mp2DOpaTopArr[0];
     mp2DOpa = &mp2DOpaArr[0];
     mp2DXlu = &mp2DXluArr[0];
