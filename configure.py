@@ -262,7 +262,7 @@ config.libs = [
             Object(NonMatching, "m_Do/m_Do_lib.cpp"),
             Object(Matching,    "m_Do/m_Do_hostIO.cpp"),
             Object(Matching,    "m_Do/m_Do_Reset.cpp"),
-            Object(NonMatching, "m_Do/m_Do_dvd_thread.cpp"),
+            Object(Matching,    "m_Do/m_Do_dvd_thread.cpp"),
             Object(Matching,    "m_Do/m_Do_DVDError.cpp"),
             Object(NonMatching, "m_Do/m_Do_MemCard.cpp"),
             Object(NonMatching, "m_Do/m_Do_MemCardRWmng.cpp"),

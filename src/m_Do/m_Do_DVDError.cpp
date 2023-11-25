@@ -10,7 +10,7 @@
 #include "m_Do/m_Do_ext.h"
 
 OSThread DvdErr_thread;
-u8 DvdErr_stack[0x1000] __attribute__((aligned(16)));
+u8 DvdErr_stack[0x1000] __attribute__((aligned(32)));
 
 static OSAlarm Alarm;
 bool mDoDvdErr_initialized;
