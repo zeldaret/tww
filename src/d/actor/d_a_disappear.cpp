@@ -3,6 +3,7 @@
 // Translation Unit: d_a_disappear.cpp
 //
 
+#include "d/actor/d_a_disappear.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
@@ -12,21 +13,13 @@
 #include "m_Do/m_Do_ext.h"
 #include "dolphin/types.h"
 
-class disappear_class : public fopAc_ac_c {
-public:
-    int m0000;
-    int m0004;
-    s32 mSwitchId;
-    s16 mTimer;
-};
-
 /* 800E79C0-800E79C8       .text daDisappear_Draw__FP15disappear_class */
-s32 daDisappear_Draw(disappear_class*) {
+BOOL daDisappear_Draw(disappear_class*) {
     return TRUE;
 }
 
 /* 800E79C8-800E7AC0       .text daDisappear_Execute__FP15disappear_class */
-s32 daDisappear_Execute(disappear_class* i_this) {
+BOOL daDisappear_Execute(disappear_class* i_this) {
     if (i_this->mTimer != 0) {
         i_this->mTimer--;
         
@@ -47,7 +40,7 @@ s32 daDisappear_Execute(disappear_class* i_this) {
                     }
                 }
                 else {
-                    fopAcM_createIball(&i_this->current.pos, i_this->mItemTableIdx, i_this->current.roomNo, &i_this->current.angle, i_this->mSwitchId);
+                    fopAcM_createIball(&i_this->current.pos, i_this->mItemTableIdx, i_this->current.roomNo, &i_this->current.angle, i_this->mSwitchNo);
                 }
             }
         }
@@ -60,12 +53,12 @@ s32 daDisappear_Execute(disappear_class* i_this) {
 }
 
 /* 800E7AC0-800E7AC8       .text daDisappear_IsDelete__FP15disappear_class */
-s32 daDisappear_IsDelete(disappear_class*) {
+BOOL daDisappear_IsDelete(disappear_class*) {
     return TRUE;
 }
 
 /* 800E7AC8-800E7AD0       .text daDisappear_Delete__FP15disappear_class */
-s32 daDisappear_Delete(disappear_class*) {
+BOOL daDisappear_Delete(disappear_class*) {
     return TRUE;
 }
 
@@ -113,9 +106,9 @@ s32 daDisappear_Create(fopAc_ac_c* i_this) {
     dis->mHealth = dis->mBase.mParameters & 0xFF;
     float scale = ((dis->mBase.mParameters >> 8) & 0xFF) * 0.1f;
 
-    dis->mSwitchId = (dis->mBase.mParameters >> 0x10) & 0xFF;
-    if (dis->mSwitchId == 0xFF) {
-        dis->mSwitchId = -1;
+    dis->mSwitchNo = (dis->mBase.mParameters >> 0x10) & 0xFF;
+    if (dis->mSwitchNo == 0xFF) {
+        dis->mSwitchNo = -1;
     }
 
     set_disappear(dis, scale);

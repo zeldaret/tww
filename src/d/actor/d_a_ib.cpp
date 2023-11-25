@@ -453,15 +453,15 @@ BOOL daIball_c::_daIball_delete() {
 }
 
 /* 800F4678-800F4698       .text CheckCreateHeap__FP10fopAc_ac_c */
-static void CheckCreateHeap(fopAc_ac_c* i_this) {
-    static_cast<daIball_c*>(i_this)->CreateHeap();
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return static_cast<daIball_c*>(i_this)->CreateHeap();
 }
 
 /* 800F4698-800F4870       .text _daIball_create__9daIball_cFv */
 s32 daIball_c::_daIball_create() {
     fopAcM_SetupActor(this, daIball_c);
     
-    if (!fopAcM_entrySolidHeap(this, (heapCallbackFunc)CheckCreateHeap, 0x3500)) {
+    if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x3500)) {
         return cPhs_ERROR_e;
     }
     

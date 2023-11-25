@@ -7,11 +7,15 @@ class daAlldie_c : public fopAc_ac_c {
 public:
     inline s32 create();
     inline BOOL draw();
-    void setActio(unsigned char) {}
+    void setActio(u8 action) { mAction = action; }
 
+    u8 getSwbit();
+    BOOL actionWait();
+    BOOL actionCheck();
+    BOOL actionTimer();
+    BOOL execute();
 public:
-    /* 0x290 */ u8 mState;
-    /* 0x291 */ u8 m291[0x292 - 0x291];
+    /* 0x290 */ u8 mAction;
     /* 0x292 */ s16 mTimer;
 };
 

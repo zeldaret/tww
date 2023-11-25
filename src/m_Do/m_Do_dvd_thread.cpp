@@ -68,8 +68,8 @@ void mDoDvdThd_param_c::kick() {
 }
 
 /* 800180F0-80018118       .text waitForKick__17mDoDvdThd_param_cFv */
-s32 mDoDvdThd_param_c::waitForKick() {
-    OSReceiveMessage(&mMessageQueue, NULL, 1);
+BOOL mDoDvdThd_param_c::waitForKick() {
+    return OSReceiveMessage(&mMessageQueue, NULL, 1);
 }
 
 /* 80018118-80018120       .text getFirstCommand__17mDoDvdThd_param_cFv */

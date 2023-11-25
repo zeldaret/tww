@@ -58,7 +58,7 @@ void daBranch_c::demoPlay(mDoExt_McaMorf*) {
 }
 
 /* 00000228-00000248       .text solidHeapCB__10daBranch_cFP10fopAc_ac_c */
-s32 daBranch_c::solidHeapCB(fopAc_ac_c* i_this) {
+BOOL daBranch_c::solidHeapCB(fopAc_ac_c* i_this) {
     daBranch_c* branch = static_cast<daBranch_c*>(i_this);
     return branch->CreateHeap();
 }
@@ -182,7 +182,7 @@ s32 daBranch_Create(fopAc_ac_c* i_this) {
 
     s32 state = dComIfG_resLoad(&branch->mPhs, daBranch_c::m_arcname);
     if (state == cPhs_COMPLEATE_e) {
-        int solidHeapResult = fopAcM_entrySolidHeap(i_this, (heapCallbackFunc)daBranch_c::solidHeapCB, 0x4000);
+        int solidHeapResult = fopAcM_entrySolidHeap(i_this, daBranch_c::solidHeapCB, 0x4000);
 
         if (solidHeapResult & 0xFF == 0) {
             for (int i = 0; i < 2; i++) {

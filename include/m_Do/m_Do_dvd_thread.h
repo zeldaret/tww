@@ -27,7 +27,7 @@ class mDoDvdThd_param_c {
 public:
     mDoDvdThd_param_c();
     void kick();
-    s32 waitForKick();
+    BOOL waitForKick();
     mDoDvdThd_command_c* getFirstCommand();
     void addition(mDoDvdThd_command_c*);
     void cut(mDoDvdThd_command_c*);

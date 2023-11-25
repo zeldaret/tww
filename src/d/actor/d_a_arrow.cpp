@@ -1239,7 +1239,7 @@ s32 daArrow_c::_create() {
         0x1300,
         0x820,
     };
-    if (!fopAcM_entrySolidHeap(this, (heapCallbackFunc)&createHeap_CB, heap_size[mArrowType])) {
+    if (!fopAcM_entrySolidHeap(this, createHeap_CB, heap_size[mArrowType])) {
         return cPhs_ERROR_e;
     }
     

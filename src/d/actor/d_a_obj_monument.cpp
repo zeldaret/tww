@@ -65,7 +65,7 @@ s32 daObjMonument::Act_c::_create() {
     if (ret == cPhs_COMPLEATE_e) {
         mType = prm_get_type();
 
-        if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, 0xd20)) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0xd20)) {
             fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
             dComIfG_Bgsp()->Regist(mpBgW, this);
             init_mtx();

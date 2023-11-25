@@ -29,7 +29,7 @@ public:
 const char daThrowstone_c::M_arcname[] = "Aisi";
 
 /* 8023B544-8023B564       .text CheckCreateHeap__FP10fopAc_ac_c */
-static s32 CheckCreateHeap(fopAc_ac_c* i_actor) {
+static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
     daThrowstone_c* i_this = (daThrowstone_c*)i_actor;
     return i_this->CreateHeap();
 }
@@ -50,7 +50,7 @@ s32 daThrowstone_c::_create() {
     if (result == cPhs_COMPLEATE_e) {
         fopAcM_SetupActor(this, daThrowstone_c);
 
-        if (!fopAcM_entrySolidHeap(this, (heapCallbackFunc)CheckCreateHeap, 0x4C0)) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x4C0)) {
             result = cPhs_ERROR_e;
         } else {
             mDoMtx_stack_c::transS(current.pos);

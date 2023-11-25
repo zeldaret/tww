@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_homensmoke.cpp
 //
 
-#include "d/d_a_obj.h"
+#include "d/actor/d_a_obj_homensmoke.h"
 #include "d/d_procname.h"
 #include "d/d_particle.h"
 #include "JSystem/JKernel/JKRHeap.h"
@@ -13,27 +13,6 @@
 static u8 temp[0x4C];
 
 namespace daObjHomensmoke {
-    class Act_c : public fopAc_ac_c {
-    public:
-        virtual ~Act_c() {}
-        void set_mtx();
-        s32 _create();
-        bool _delete();
-        bool _execute();
-        bool _draw();
-        
-        int param_get_arg0() const { return daObj::PrmAbstract(this, 1, 0) & 0x1; }
-        int param_get_axis() const { return daObj::PrmAbstract(this, 1, 1) & 0x1; }
-        
-        /* 0x290 */ /* vtable */
-        /* 0x294 */ u8 m294[0x29C - 0x294];
-        /* 0x29C */ Mtx mMtx;
-        /* 0x2CC */ int mType;
-        /* 0x2D0 */ dPa_smokeEcallBack mSmokeCb;
-        /* 0x2F0 */ BOOL mbInitialized;
-        /* 0x2F4 */ cXyz mSmokePos;
-    };
-
     /* 000000EC-00000230       .text set_mtx__Q215daObjHomensmoke5Act_cFv */
     void Act_c::set_mtx() {
         if (param_get_axis() != 0) {

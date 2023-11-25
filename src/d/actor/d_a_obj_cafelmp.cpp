@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_cafelmp.cpp
 //
 
+#include "d/actor/d_a_obj_cafelmp.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -11,21 +12,6 @@
 #include "d/d_procname.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-class daObjCafelmp_c : public fopAc_ac_c {
-public:
-    inline s32 _create();
-    inline bool _execute();
-    inline bool _draw();
-    inline bool _delete();
-    BOOL CreateHeap();
-    void CreateInit();
-    void set_mtx();
-
-public:
-    /* 0x290 */ request_of_phase_process_class mPhs;
-    /* 0x298 */ J3DModel * mpModel;
-};
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
@@ -75,18 +61,18 @@ s32 daObjCafelmp_c::_create() {
     return ret;
 }
 
-bool daObjCafelmp_c::_delete() {
+BOOL daObjCafelmp_c::_delete() {
     dComIfG_resDelete(&mPhs, "Cafelmp");
     return true;
 }
 
-bool daObjCafelmp_c::_execute() {
+BOOL daObjCafelmp_c::_execute() {
     current.angle.y += 0xda;
     set_mtx();
     return true;
 }
 
-bool daObjCafelmp_c::_draw() {
+BOOL daObjCafelmp_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &mTevStr);
     dComIfGd_setListBG();
