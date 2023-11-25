@@ -41,27 +41,44 @@ void dTree_room_c::newData(dTree_data_c* data) {
 
 /* 8007946C-800794D0       .text deleteData__12dTree_room_cFv */
 void dTree_room_c::deleteData() {
-    /* Nonmatching */
+    while (this->mpHead != (dTree_data_c*)0x0) {
+        this->mpHead->field_0x000 = 0;
+        // JAIZelBasic::seDeleteObject(JAIZelBasic::zel_basic, &this->mpHead->mPos);
+        this->mpHead = this->mpHead->mpNext;
+    }
+    return;
 }
 
 /* 800794D0-800795E8       .text __ct__14dTree_packet_cFv */
 dTree_packet_c::dTree_packet_c() {
-    /* Nonmatching */
+    dTree_data_c* pdVar1;
+    dTree_anm_c* pdVar2;
+    short sVar3;
+    int iVar4;
+
+    this->field_0x0010 = 0;
+    this->field_0x6734 = 0;
+    this->field_0x6736 = 0;
+    pdVar1 = this->mData;
+    iVar4 = 0x40;
+    return;
 }
 
 /* 800795E8-800795F4       .text __ct__12dTree_room_cFv */
 dTree_room_c::dTree_room_c() {
-    /* Nonmatching */
+    this->mpHead = (dTree_data_c*)0x0;
+    return;
 }
 
 /* 800795F4-80079600       .text __ct__11dTree_anm_cFv */
 dTree_anm_c::dTree_anm_c() {
-    /* Nonmatching */
+    return;
 }
 
 /* 80079600-8007960C       .text __ct__12dTree_data_cFv */
 dTree_data_c::dTree_data_c() {
-    /* Nonmatching */
+    this->field_0x000 = 0;
+    return;
 }
 
 /* 8007960C-80079898       .text draw__14dTree_packet_cFv */
