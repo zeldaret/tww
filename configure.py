@@ -1529,7 +1529,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_gnnbtltaki"),
     ActorRel(NonMatching, "d_a_obj_gnndemotakie"),
     ActorRel(NonMatching, "d_a_obj_gnndemotakis"),
-    ActorRel(NonMatching, "d_a_obj_gong"),
+    ActorRel(Matching,    "d_a_obj_gong"),
     ActorRel(NonMatching, "d_a_obj_gtaki"),
     ActorRel(NonMatching, "d_a_obj_hami2"),
     ActorRel(NonMatching, "d_a_obj_hami3"),
