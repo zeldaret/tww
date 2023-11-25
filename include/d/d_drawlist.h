@@ -131,6 +131,7 @@ public:
     void setScissor(f32, f32, f32, f32);
 
     view_port_class* getViewPort() { return &mViewport; }
+    s8 getCameraID() { return mCameraID; }
 
 private:
     /* 0x00 */ view_port_class mViewport;
@@ -325,6 +326,7 @@ public:
     BOOL draw(Mtx);
     s32 getNum() { return mNum; }
     void setColor(GXColor& color) { mColor = color; }
+    GXColor & getColor() { return mColor; }
 
 public:
     /* 0x00 */ GXColor mColor;
@@ -373,7 +375,7 @@ public:
     void draw(dDlst_base_c**, dDlst_base_c**);
     static void wipeIn(f32, GXColor&);
     static void wipeIn(f32);
-    void calcWipe();
+    static void calcWipe();
 
     J3DDrawBuffer* getOpaListP1() { return mpOpaListP1; }
     J3DDrawBuffer* getOpaListFilter() { return mpOpaListFilter; }
@@ -412,6 +414,29 @@ public:
     void set2DOpa(dDlst_base_c* pItem) { set(mp2DOpa, mp2DOpaEnd, pItem); }
     void set2DXlu(dDlst_base_c* pItem) { set(mp2DXlu, mp2DXluEnd, pItem); }
 
+    void drawCopy2D() { draw(mpCopy2DArr, mpCopy2D); }
+    void draw2DOpaTop() { draw(mp2DOpaTopArr, mp2DOpaTop); }
+    void draw2DOpa() { draw(mp2DOpaArr, mp2DOpa); }
+    void draw2DXlu() { draw(mp2DXluArr, mp2DXlu); }
+
+    void drawOpaDrawList(J3DDrawBuffer * drawBuffer) { j3dSys.setDrawModeOpaTexEdge(); drawBuffer->draw(); }
+    void drawXluDrawList(J3DDrawBuffer * drawBuffer) { j3dSys.setDrawModeXlu(); drawBuffer->draw(); }
+    void drawOpaListSky() { drawOpaDrawList(mpOpaListSky); }
+    void drawXluListSky() { drawXluDrawList(mpXluListSky); }
+    void drawOpaListP0() { drawOpaDrawList(mpOpaListP0); }
+    void drawOpaListP1() { drawOpaDrawList(mpOpaListP1); }
+    void drawXluListP1() { drawOpaDrawList(mpXluListP1); }
+    void drawOpaListBG() { drawOpaDrawList(mpOpaListBG); }
+    void drawXluListBG() { drawXluDrawList(mpXluListBG); }
+    void drawOpaList() { drawOpaDrawList(mpOpaList); }
+    void drawXluList() { drawXluDrawList(mpXluList); }
+    void drawOpaListFilter() { drawOpaDrawList(mpOpaListFilter); }
+    void drawOpaListMaskOff() { drawOpaDrawList(mpOpaListMaskOff); }
+    void drawXluListMaskOff() { drawXluDrawList(mpXluListMaskOff); }
+    void drawOpaListInvisible() { drawOpaDrawList(mpOpaListInvisible); }
+    void drawXluListInvisible() { drawXluDrawList(mpXluListInvisible); }
+    void drawOpaList2D() { drawOpaDrawList(mpOpaList2D); }
+
     int setSimpleShadow(cXyz* param_0, f32 param_1, f32 param_2, cXyz* param_3, s16 param_4,
                         f32 param_5, _GXTexObj* param_6) {
         return mShadowControl.setSimple(param_0, param_1, param_2, param_3, param_4, param_5,
@@ -422,12 +447,23 @@ public:
         return mShadowControl.setReal2(id, param_2, pModel, pPos, param_5, param_6, pTevStr);
     }
 
+    void drawShadow(Mtx mtx) { mShadowControl.draw(mtx); }
+    void imageDrawShadow(Mtx mtx) { mShadowControl.imageDraw(mtx); }
+
     void setAlphaModel(u8 type, Mtx mtx, u8 alpha) { mpAlphaModel->set(type, mtx, alpha); }
     void setSpotModel(u8 type, Mtx mtx, u8 alpha) { mpSpotModel->set(type, mtx, alpha); }
     void setLightModel(u8 type, Mtx mtx, u8 alpha) { mpLightModel->set(type, mtx, alpha); }
+
+    void drawAlphaModel(Mtx mtx) { mpAlphaModel->draw(mtx); }
+    void drawSpotModel(Mtx mtx) { mpSpotModel->draw(mtx); }
+    void drawLightModel(Mtx mtx) { mpLightModel->draw(mtx); }
+
     s32 getSpotModelNum() { return mpSpotModel->getNum(); }
     s32 getLightModelNum() { return mpLightModel->getNum(); }
     void setSpotModelColor(GXColor& color) { mpSpotModel->setColor(color); }
+    GXColor& getAlphaModelColor() { return mpAlphaModel->getColor(); }
+    GXColor& getSpotModelColor() { return mpSpotModel->getColor(); }
+    GXColor& getLightModelColor() { return mpLightModel->getColor(); }
 
     void setWindow(dDlst_window_c* pWindow) { mpWindow = pWindow; }
     void setViewPort(view_port_class* pViewPort) { mpViewPort = pViewPort; }
@@ -462,9 +498,9 @@ public:
     /* 0x00030 */ J3DDrawBuffer* mpOpaListInvisible;
     /* 0x00034 */ J3DDrawBuffer* mpXluListInvisible;
     /* 0x00038 */ J3DDrawBuffer* mpOpaList2D;
-    /* 0x0003C */ dDlst_base_c* field_0x3c[4];
-    /* 0x0004C */ dDlst_base_c** field_0x4c;
-    /* 0x00050 */ dDlst_base_c** field_0x50;
+    /* 0x0003C */ dDlst_base_c* mpCopy2DArr[4];
+    /* 0x0004C */ dDlst_base_c** mpCopy2D;
+    /* 0x00050 */ dDlst_base_c** mpCopy2DEnd;
     /* 0x00054 */ dDlst_base_c* mp2DOpaTopArr[16];
     /* 0x00094 */ dDlst_base_c** mp2DOpaTop;
     /* 0x00098 */ dDlst_base_c** mp2DOpaTopEnd;

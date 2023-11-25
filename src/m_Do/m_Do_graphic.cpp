@@ -6,16 +6,21 @@
 #include "m_Do/m_Do_graphic.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
+#include "d/d_meter.h"
+#include "d/d_s_play.h"
 #include "f_ap/f_ap_game.h"
+#include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_machine.h"
 #include "m_Do/m_Do_main.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_printf.h"
+#include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JFramework/JFWDisplay.h"
 #include "JSystem/JFramework/JFWSystem.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/JParticle/JPAEmitterManager.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTDbPrint.h"
@@ -23,6 +28,7 @@
 #include "JSystem/JUtility/JUTProcBar.h"
 #include "JSystem/JUtility/JUTVideo.h"
 #include "JSystem/JUtility/JUTXfb.h"
+#include "dolphin/base/PPCArch.h"
 
 namespace J2DPrint {
     void setBuffer(u32);
@@ -53,20 +59,20 @@ OSAlarm mCaptureTimeOutAlarm;
 s16 mCaptureStep;
 bool mCaptureCansel;
 bool mCaptureEnableGXSetCopyFilter;
-void* mCaptureThreadStackHead;
+u8* mCaptureThreadStackHead;
 u8* mCaptureCaptureBuffer;
 u8* mCaptureTextureBuffer;
 u32 mCaptureTextureSize;
 u32 mCaptureCaptureSize;
 GXDrawSyncCallback mCaptureOldCB;
 OSThreadQueue mCaptureThreadQueue;
-OSTick mCaptureTimeOutTicks;
+u64 mCaptureTimeOutTicks;
 
 JKRHeap * mDoGph_gInf_c::mHeap[2] = {};
 GXColor mDoGph_gInf_c::mBackColor = {};
 GXColor mDoGph_gInf_c::mFadeColor = {};
 static GXColorS10 l_tevColor = {};
-bool mCaptureDraw = true;
+u8 mCaptureDraw = 1;
 u8 mCaptureTextureFormat = GX_TF_CMPR;
 u8 mCaptureCaptureFormat = GX_TF_RGB565;
 u8 mCaptureSizeWidth = 152;
@@ -445,8 +451,48 @@ void drawSpot(view_class* view) {
 }
 
 /* 80008F34-8000990C       .text drawDepth__FP10view_classP15view_port_classi */
-void drawDepth(view_class* view, view_port_class* viewport, int) {
+void drawDepth(view_class* view, view_port_class* viewport, int depth) {
     /* Nonmatching */
+    if (mDoGph_gInf_c::isAutoForcus()) {
+        f32 projv[7];
+        f32 viewv[4];
+        f32 x, y, z;
+
+        GXGetProjectionv(projv);
+        GXGetViewportv(viewv);
+        GXProject(view->mLookat.mCenter.x, view->mLookat.mCenter.y, view->mLookat.mCenter.z, view->mViewMtx, projv, viewv, &x, &y, &z);
+    }
+
+    static GXColorS10 l_tevColor0 = { 0, 0, 0, 0 };
+    if (mDoGph_gInf_c::isMonotone()) {
+        mDoGph_gInf_c::calcMonotone();
+        l_tevColor0.a = mDoGph_gInf_c::mMonotoneRate;
+    } else {
+        dStage_FileList_dt_c * fili_p = NULL;
+        s32 roomNo = dComIfGp_roomControl_getStayNo();
+        if (roomNo >= 0)
+            fili_p = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
+
+        if (fili_p != NULL) {
+            if (mDoGph_gInf_c::isAutoForcus()) {
+                l_tevColor0.a = depth - dStage_FileList_dt_PhotoDepth(fili_p);
+            } else {
+                s16 photoDepth = -dStage_FileList_dt_PhotoDepth(fili_p);
+                if (depth < -dStage_FileList_dt_PhotoDepth(fili_p))
+                    depth = photoDepth;
+                l_tevColor0.a = photoDepth;
+            }
+        } else {
+            if (mDoGph_gInf_c::isAutoForcus()) {
+                s16 photoDepth = -g_envHIO.mOther.field_0x40;
+                if (depth < -g_envHIO.mOther.field_0x40)
+                    depth = photoDepth;
+                l_tevColor0.a = photoDepth;
+            } else {
+                l_tevColor0.a = depth - g_envHIO.mOther.field_0x40;
+            }
+        }
+    }
 }
 
 /* 80009914-80009BBC       .text motionBlure__FP10view_class */
@@ -598,7 +644,7 @@ void drawRectangle(int x0, int y0, int x1, int y1) {
 }
 
 /* 8000A7F0-8000A8B8       .text mDoGph_allocFromAny__FUli */
-void* mDoGph_allocFromAny(u32 size, int align) {
+u8* mDoGph_allocFromAny(u32 size, int align) {
     void* mem = JKRAllocFromHeap(mDoExt_getZeldaHeap(), size, align);
     if (mem == NULL)
         mem = JKRAllocFromHeap(mDoExt_getGameHeap(), size, align);
@@ -609,7 +655,7 @@ void* mDoGph_allocFromAny(u32 size, int align) {
     if (mem == NULL)
         mem = mDoGph_gInf_c::getZbufferTex();
     memset(mem, 0, size);
-    return mem;
+    return (u8*)mem;
 }
 
 /* 8000A8B8-8000AAC4       .text mDoGph_screenCaptureDraw__Fv */
@@ -697,8 +743,66 @@ void mCaptureGXDrawSyncTimeOut(OSAlarm*, OSContext*) {
 }
 
 /* 8000AC3C-8000AEA4       .text mDoGph_screenCapture__Fv */
-void mDoGph_screenCapture() {
+bool mDoGph_screenCapture() {
     /* Nonmatching */
+    s32 sizeW = mCaptureSizeWidth;
+    s32 sizeH = mCaptureSizeHeight;
+    s32 sizeW2 = sizeW << 1;
+    s32 sizeH2 = sizeH << 1;
+    s32 centerX = mCaptureCenterX;
+    s32 centerY = mCaptureCenterY;
+
+    f32 projv[7];
+    f32 viewv[4];
+    u32 left, top, width, height;
+
+    mCaptureTextureSize = GXGetTexBufferSize(sizeW, sizeH, mCaptureTextureFormat, GX_FALSE, 0);
+    mCaptureTextureBuffer = mDoGph_allocFromAny(mCaptureTextureSize, 0x20);
+    if (mCaptureTextureBuffer == NULL) {
+        mCaptureStep = -1;
+        return false;
+    }
+
+    if (mCaptureTextureFormat == GX_TF_CMPR) {
+        mCaptureCaptureSize = GXGetTexBufferSize(sizeW, sizeH, mCaptureCaptureFormat, GX_FALSE, 0);
+        mCaptureCaptureBuffer = mDoGph_allocFromAny(mCaptureCaptureSize, 0x20);
+        if (mCaptureCaptureBuffer == NULL) {
+            JKRFreeToHeap(NULL, mCaptureTextureBuffer);
+            mCaptureTextureBuffer = NULL;
+            mCaptureStep = -1;
+            return false;
+        }
+    } else {
+        mCaptureCaptureFormat = mCaptureTextureFormat;
+        mCaptureCaptureBuffer = mCaptureTextureBuffer;
+    }
+
+    GXGetProjectionv(projv);
+    GXGetViewportv(viewv);
+    GXGetScissor(&left, &top, &width, &height);
+    GXSetViewport(0.0f, 0.0f, 640.0f, 480.0f, 0.0f, 1.0f);
+
+    if (mCaptureEnableGXSetCopyFilter)
+        GXSetCopyFilter(GX_FALSE, NULL, GX_FALSE, NULL);
+
+    setUpRectangle();
+    GXSetTexCopySrc(centerX - sizeW, centerY - sizeH, sizeW2, sizeH2);
+    GXSetTexCopyDst(sizeW, sizeH, mCaptureCaptureFormat, GX_TRUE);
+    DCInvalidateRange(mCaptureCaptureBuffer, mCaptureCaptureSize);
+    GXCopyTex(mCaptureCaptureBuffer, GX_FALSE);
+    GXPixModeSync();
+
+    JUT_ASSERT(0xac1, mCaptureOldCB == 0);
+    mCaptureOldCB = GXSetDrawSyncCallback(mCaptureGXDrawSyncCallback);
+    OSCreateAlarm(&mCaptureTimeOutAlarm);
+    OSSetAlarm(&mCaptureTimeOutAlarm, mCaptureTimeOutTicks, mCaptureGXDrawSyncTimeOut);
+    mCaptureStep++;
+    GXSetDrawSync(GX_FALSE);
+    GXSetProjectionv(projv);
+    GXSetViewport(viewv[0], viewv[1], viewv[2], viewv[3], viewv[4], viewv[5]);
+    GXSetScissor(left, top, width, height);
+    GXSetClipMode(GX_CLIP_ENABLE);
+    return true;
 }
 
 /* 8000AEA4-8000AF2C       .text setLight__Fv */
@@ -713,8 +817,287 @@ void setLight() {
 }
 
 /* 8000AF2C-8000BC38       .text mDoGph_Painter__Fv */
-void mDoGph_Painter() {
+bool mDoGph_Painter() {
     /* Nonmatching */
+    JFWDisplay::getManager()->setFader(mDoGph_gInf_c::mFader);
+    JFWDisplay::getManager()->setClearColor(mDoGph_gInf_c::getBackColor());
+    JFWDisplay::getManager()->beginRender();
+
+    GXSetAlphaUpdate(GX_FALSE);
+    mDoGph_gInf_c::setBackColor(g_clearColor);
+    mDoGph_gInf_c::free();
+
+    if (mCaptureEnableGXSetCopyFilter)
+        GXSetCopyFilter(GX_FALSE, NULL, GX_FALSE, NULL);
+
+    j3dSys.drawInit();
+    GXSetDither(GX_TRUE);
+
+    J2DOrthoGraph graf(0.0f, 0.0f, 640.0f, 480.0f, -1.0f, 1.0f);
+    JGeometry::TBox2<f32> viewport;
+    viewport.i.x = -9.0f;
+    viewport.i.y = -21.0f;
+    viewport.f.x = 650.0f;
+    viewport.f.y = 503.0f;
+    graf.setOrtho(viewport, -1.0f, 1.0f);
+    graf.setPort();
+
+    dComIfGp_setCurrentGrafPort(&graf);
+    dComIfGd_drawCopy2D();
+    if (dComIfGp_getWindowNum() != 0) {
+        dDlst_window_c* window = dComIfGp_getWindow(0);
+        camera_class* camera = dComIfGp_getCamera(window->getCameraID());
+
+        if (camera != NULL) {
+            dComIfGd_imageDrawShadow(camera->mViewMtx);
+
+            view_port_class viewport_crop;
+            view_port_class* viewport_p = window->getViewPort();
+            if (viewport_p->mXOrig != 0.0f || viewport_p->mYOrig != 0.0f) {
+                viewport_crop.mXOrig = viewport_p->mXOrig * 2.0f + viewport_p->mWidth / 2.0f - 320.0f;
+                viewport_crop.mYOrig = viewport_p->mYOrig * 2.0f + viewport_p->mHeight / 2.0f - 240.0f;
+                viewport_crop.mWidth = 640.0f;
+                viewport_crop.mHeight = 480.0f;
+                viewport_crop.mNearZ = viewport_p->mNearZ;
+                viewport_crop.mFarZ = viewport_p->mFarZ;
+                viewport_crop.mScissor = viewport_p->mScissor;
+                viewport_p = &viewport_crop;
+            }
+
+            GXSetViewport(viewport_p->mXOrig, viewport_p->mYOrig, viewport_p->mWidth, viewport_p->mHeight, viewport_p->mNearZ, viewport_p->mFarZ);
+            GXSetScissor(viewport_p->mScissor.mXOrig, viewport_p->mScissor.mYOrig, viewport_p->mScissor.mWidth, viewport_p->mScissor.mHeight);
+
+            JPADrawInfo jpaDrawInfo(camera->mViewMtx, camera->mFovy, camera->mAspect);
+
+            bool isTower9 = strcmp(dComIfGp_getStartStageName(), "GTower") == 0 && dComIfGp_getStartStageLayer() == 9;
+            dComIfGp_setCurrentWindow(window);
+            dComIfGp_setCurrentView(camera);
+            dComIfGp_setCurrentViewport(viewport_p);
+            GXSetProjection(camera->mProjMtx, GX_PERSPECTIVE);
+            PPCSync();
+            j3dSys.setViewMtx(camera->mViewMtx);
+            dKy_setLight();
+            dComIfGd_drawOpaListSky();
+            dComIfGd_drawXluListSky();
+
+            if (!dMenu_flag() && dPa_control_c::isStatus(0x01))
+                dComIfGp_particle_drawShipTail(&jpaDrawInfo);
+
+            GXSetClipMode(GX_CLIP_ENABLE);
+            dComIfGd_drawOpaListBG();
+            dComIfGd_drawShadow(camera->mViewMtx);
+            dComIfGd_drawAlphaModel(camera->mViewMtx);
+            drawAlphaBuffer(camera, dComIfGd_getAlphaModelColor());
+            if (dComIfGd_getLightModelNum() != 0) {
+                clearAlphaBuffer(camera, 0);
+                dComIfGd_drawLightModel(camera->mViewMtx);
+                drawAlphaBuffer(camera, dComIfGd_getLightModelColor());
+            }
+
+            if (!mDoGph_gInf_c::isMonotone()) {
+                dComIfGd_drawOpaListP0();
+                dComIfGd_drawOpaListP1();
+            }
+
+            dComIfGd_drawOpaListInvisible();
+            dComIfGd_drawXluListBG();
+
+            if (dComIfGd_getSpotModelNum() != 0)
+                clearAlphaBuffer(camera, dComIfGd_getSpotModelColor().a);
+
+            if (!dMenu_flag() && !dPa_control_c::isStatus(0x01))
+                dComIfGp_particle_drawShipTail(&jpaDrawInfo);
+
+            if (!mDoGph_gInf_c::isMonotone())
+                dComIfGd_drawXluListP1();
+
+            dComIfGd_drawXluListInvisible();
+
+            if (!dMenu_flag()) {
+                dComIfGp_particle_draw(&jpaDrawInfo);
+
+                if (!mDoGph_gInf_c::isMonotone())
+                    dComIfGp_particle_drawP1(&jpaDrawInfo);
+
+                JPADrawInfo windDrawInfo(dPa_control_c::getWindViewMatrix(), camera->mFovy, camera->mAspect);
+                dComIfGp_particle_drawWind(&windDrawInfo);
+
+                dComIfGp_particle_drawToon(&jpaDrawInfo);
+
+                if (!mDoGph_gInf_c::isMonotone())
+                    dComIfGp_particle_drawToonP1(&jpaDrawInfo);
+
+                GXSetClipMode(GX_CLIP_ENABLE);
+            }
+
+            dComIfGd_drawOpaListFilter();
+
+            j3dSys.reinitGX();
+            GXSetNumIndStages(0);
+
+            if (dComIfGd_getSpotModelNum() != 0) {
+                dComIfGd_drawAlphaModel(camera->mViewMtx);
+                dComIfGd_drawSpotModel(camera->mViewMtx);
+                drawSpot(camera);
+            }
+
+            GXSetClipMode(GX_CLIP_ENABLE);
+            dComIfGd_drawOpaListMaskOff();
+            dComIfGd_drawXluListMaskOff();
+
+            if (!dMenu_flag()) {
+                motionBlure(camera);
+                drawDepth(camera, viewport_p, dComIfGp_getCamZoomForcus(window->getCameraID()));
+                dComIfGp_particle_drawProjection(&jpaDrawInfo);
+            
+                GXSetClipMode(GX_CLIP_ENABLE);
+                dComIfGd_drawOpaListInvisible();
+                dComIfGd_drawXluListInvisible();
+
+                j3dSys.reinitGX();
+                GXSetNumIndStages(0);
+
+                if (isTower9)
+                    dComIfGp_particle_draw(&jpaDrawInfo);
+            }
+
+            if (mDoGph_gInf_c::isMonotone()) {
+                clearAlphaBuffer(camera, 0);
+                dComIfGd_drawOpaListP0();
+                dComIfGd_drawOpaListP1();
+                dComIfGd_drawXluListP1();
+                dComIfGp_particle_drawP1(&jpaDrawInfo);
+                dComIfGp_particle_drawToonP1(&jpaDrawInfo);
+            }
+
+            mDoGph_gInf_c::calcFade();
+            if (mCaptureStep == 1) {
+                if (!mCaptureCansel)
+                    mDoGph_screenCapture();
+                else
+                    mCaptureStep = 0;
+            }
+        }
+    }
+  
+    if (mCaptureStep == 3) {
+        if (mCaptureCansel) {
+            if (mCaptureCaptureBuffer != NULL) {
+                JKRFreeToHeap(NULL, mCaptureCaptureBuffer);
+                mCaptureCaptureBuffer = NULL;
+            }
+            if (mCaptureTextureBuffer != NULL) {
+                JKRFreeToHeap(NULL, mCaptureTextureBuffer);
+                mCaptureTextureBuffer = NULL;
+            }
+            mCaptureStep = 0;
+        } else {
+            if (mCaptureTextureFormat == GX_TF_CMPR) {
+                mCaptureThreadStackHead = mDoGph_allocFromAny(mCaptureThreadStackSize, 0x20);
+                if (mCaptureThreadStackHead == NULL) {
+                    mCaptureProc(0);
+                    if (mCaptureCaptureBuffer != NULL) {
+                        JKRFreeToHeap(NULL, mCaptureCaptureBuffer);
+                        mCaptureCaptureBuffer = NULL;
+                    }
+                    mCaptureStep = 5;
+                } else {
+                    OSCreateThread(&mCaptureThread, mCaptureProc, NULL, mCaptureThreadStackHead + mCaptureThreadStackSize, mCaptureThreadStackSize, mCaptureThreadPriority, 0);
+                    OSResumeThread(&mCaptureThread);
+                    mCaptureStep++;
+                }
+            } else {
+                mCaptureCaptureBuffer = NULL;
+                mCaptureStep = 5;
+            }
+        }
+    }
+
+    if (mCaptureStep == 4) {
+        if (mCaptureCansel) {
+            OSCancelThread(&mCaptureThread);
+        }
+
+        if (OSIsThreadTerminated(&mCaptureThread)) {
+            if (mCaptureCaptureBuffer != NULL) {
+                JKRFreeToHeap(NULL, mCaptureCaptureBuffer);
+                mCaptureCaptureBuffer = NULL;
+            }
+
+            if (mCaptureThreadStackHead != NULL) {
+                JKRFreeToHeap(NULL, mCaptureThreadStackHead);
+                mCaptureThreadStackHead = NULL;
+            }
+
+            OSJoinThread(&mCaptureThread, NULL);
+            mCaptureStep++;
+        } else {
+            OSAlarm alarm;
+            OSCreateAlarm(&alarm);
+            OSInitThreadQueue(&mCaptureThreadQueue);
+            OSSetAlarm(&alarm, (12345 / 1000) * 10, mCaptureAlarmHandler);
+            OSSleepThread(&mCaptureThreadQueue);
+            OSCancelAlarm(&alarm);
+        }
+    }
+
+    if ((mCaptureStep == 3 || mCaptureStep == 4 || mCaptureStep == 5) && mCaptureDraw != 0 && !mCaptureCansel) {
+        mDoGph_screenCaptureDraw();
+    }
+
+    if (mCaptureStep == 5 && mCaptureCansel) {
+        mCaptureStep = 6;
+    }
+
+    if (mCaptureStep == 6) {
+        if (mCaptureTextureBuffer != NULL) {
+            JKRFreeToHeap(NULL, mCaptureTextureBuffer);
+            mCaptureTextureBuffer = NULL;
+        }
+
+        mCaptureStep = 0;
+        mCaptureCansel = false;
+    }
+
+    dDlst_list_c::calcWipe();
+    j3dSys.reinitGX();
+    GXSetNumIndStages(0);
+
+    viewport.i.x = -9.0f;
+    viewport.i.y = -21.0f;
+    viewport.f.x = 650.0f;
+    viewport.f.y = 503.0f;
+    graf.setOrtho(viewport, 100000.0f, -100000.0f);
+    graf.setPort();
+    Mtx viewMtx;
+    mDoMtx_trans(viewMtx, 320.0f, 240.0f, 0.0f);
+    JPADrawInfo jpaDrawInfo2D(viewMtx, 0.0f, 1.333333f);
+    if (!dMenu_flag())
+        dComIfGp_particle_draw2Dback(&jpaDrawInfo2D);
+    dComIfGp_particle_draw2DmenuBack(&jpaDrawInfo2D);
+
+    if (dComIfGd_getList2D()->mpBuf[0] != NULL) {
+        mDoMtx_copy(j3dSys.getViewMtx(), viewMtx);
+        setLight();
+        mDoMtx_stack_c::transS(320.0f, 240.0f, 1000.0f);
+        mDoMtx_stack_c::ZrotM(-0x8000);
+        j3dSys.setViewMtx(mDoMtx_stack_c::get());
+        dComIfGd_drawOpaList2D();
+        j3dSys.reinitGX();
+        GXSetNumIndStages(0);
+        j3dSys.setViewMtx(viewMtx);
+    }
+
+    dComIfGd_draw2DOpa();
+    dComIfGd_draw2DOpaTop();
+    dComIfGd_draw2DXlu();
+
+    if (!dMenu_flag())
+        dComIfGp_particle_draw2Dfore(&jpaDrawInfo2D);
+    dComIfGp_particle_draw2DmenuFore(&jpaDrawInfo2D);
+    JFWDisplay::getManager()->endFrame();
+
+    return true;
 }
 
 /* 8000BC94-8000BD08       .text mDoGph_Create__Fv */

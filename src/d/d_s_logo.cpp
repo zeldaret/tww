@@ -627,7 +627,7 @@ BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
     ResTIMG * timg = (ResTIMG *)dComIfG_getObjectRes("Always", ALWAYS_I4_BALL128B);
     g_dComIfG_gameInfo.drawlist.mShadowControl.setSimpleTex(timg);
     dComIfG_deleteObjectRes("Logo");
-    g_dComIfG_gameInfo.play.field_0x4841 = 0;
+    dComIfGp_setWindowNum(0);
 
     for (s32 i = 0; i < 3; i++) {
         g_dComIfG_gameInfo.play.mAramHeap0[i] = JKRAram::getAramHeap()->alloc(0x2000, JKRAramHeap::HEAD);

@@ -410,6 +410,17 @@ public:
         return set(5, particleID, pos, angle, scale, alpha, &mSingleRippleEcallBack, -1, NULL, NULL, NULL);
     }
 
+    void draw(JPADrawInfo* inf) { draw(inf, 0); }
+    void drawP1(JPADrawInfo* inf) { draw(inf, 1); }
+    void drawToon(JPADrawInfo* inf) { draw(inf, 2); }
+    void drawToonP1(JPADrawInfo* inf) { draw(inf, 3); }
+    void drawProjection(JPADrawInfo* inf) { draw(inf, 4); }
+    void drawShipTail(JPADrawInfo* inf) { draw(inf, 5); }
+    void drawWind(JPADrawInfo* inf) { draw(inf, 6); }
+    void draw2Dfore(JPADrawInfo* inf) { draw(inf, 7); }
+    void draw2Dback(JPADrawInfo* inf) { draw(inf, 8); }
+    void draw2DmenuFore(JPADrawInfo* inf) { draw(inf, 9); }
+    void draw2DmenuBack(JPADrawInfo* inf) { draw(inf, 10); }
 
     void drawModelParticle() { mModelCtrl->draw(); }
     JKRHeap * getHeap() { return mHeap; }
@@ -420,6 +431,12 @@ public:
     static dPa_setColorEcallBack mLifeBall[3];
 
     static JPAEmitterManager * mEmitterMng;
+
+    static bool isStatus(u8 b) { return !!(mStatus & b); }
+    static u8 mStatus;
+
+    static Mtx mWindViewMatrix;
+    static MtxP getWindViewMatrix() { return mWindViewMatrix; }
 
     /* 0x0000 */ JKRHeap* mHeap;
     /* 0x0004 */ JPAResourceManager* mpCommonResMgr;

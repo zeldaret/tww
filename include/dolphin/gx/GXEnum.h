@@ -394,20 +394,6 @@ typedef enum _GXTlut {
     /* 0x13 */ GX_BIGTLUT3,
 } GXTlut;
 
-/* 8-bit version of GXTexFmt for use in structures */
-typedef enum _GXTexFmt8 {
-    /* 0x20 */ GX_CTF_R4 = (0x0 | _GX_TF_CTF),
-    /* 0x22 */ GX_CTF_RA4 = (0x2 | _GX_TF_CTF),
-    /* 0x23 */ GX_CTF_RA8 = (0x3 | _GX_TF_CTF),
-    /* 0x26 */ GX_CTF_YUVA8 = (0x6 | _GX_TF_CTF),
-    /* 0x27 */ GX_CTF_A8 = (0x7 | _GX_TF_CTF),
-    /* 0x28 */ GX_CTF_R8 = (0x8 | _GX_TF_CTF),
-    /* 0x29 */ GX_CTF_G8 = (0x9 | _GX_TF_CTF),
-    /* 0x2A */ GX_CTF_B8 = (0xA | _GX_TF_CTF),
-    /* 0x2B */ GX_CTF_RG8 = (0xB | _GX_TF_CTF),
-    /* 0x2C */ GX_CTF_GB8 = (0xC | _GX_TF_CTF),
-} GXTexFmt8;
-
 typedef enum _GXTexWrapMode {
     /* 0x0 */ GX_CLAMP,
     /* 0x1 */ GX_REPEAT,

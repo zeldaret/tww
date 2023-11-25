@@ -1016,16 +1016,16 @@ inline int dStage_FileList_dt_ChkPathWindEffect(dStage_FileList_dt_c* i_fili) {
 }
 
 inline int dStage_FileList_dt_GlobalWindLevel(dStage_FileList_dt_c* i_fili) {
-    return (i_fili->mParam >> 0x12) & 3;
+    return (i_fili->mParam >> 18) & 3;
 }
 
 inline f32 dStage_FileList_dt_SeaLevel(dStage_FileList_dt_c* i_fili) {
     return i_fili->mSeaLevel;
 }
 
-// inline u8 dStage_FileList_dt_PhotoDepth(dStage_FileList_dt_c* i_fili) {
-    // maybe 0x00007F80?
-// }
+inline u8 dStage_FileList_dt_PhotoDepth(dStage_FileList_dt_c* i_fili) {
+    return (i_fili->mParam >> 7) & 0xFF;
+}
 
 inline s32 dStage_FileList_dt_CheckDarkOn(dStage_FileList_dt_c* i_fili) {
     return i_fili->mParam & 1;

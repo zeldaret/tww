@@ -98,6 +98,7 @@ BOOL OSCreateThread(OSThread* thread, void* func, void* param, void* stackBase, 
 void OSExitThread(void* exitValue);
 void OSCancelThread(OSThread* thread);
 void OSDetachThread(OSThread* thread);
+BOOL OSJoinThread(OSThread* thread, void**);
 s32 OSResumeThread(OSThread* thread);
 s32 OSSuspendThread(OSThread* thread);
 void OSSleepThread(OSThreadQueue* queue);

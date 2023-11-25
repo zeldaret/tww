@@ -8,8 +8,7 @@
 extern "C" {
 #endif
 
-void GXProject(f32 model_x, f32 model_y, f32 model_z, Mtx model_mtx, f32* proj_mtx, f32* viewpoint,
-               f32* screen_x, f32* screen_y, f32* screen_z);
+void GXProject(f32 model_x, f32 model_y, f32 model_z, Mtx model_mtx, f32* proj, f32* viewpoint, f32* screen_x, f32* screen_y, f32* screen_z);
 void GXSetProjection(Mtx44 mtx, GXProjectionType type);
 void GXSetProjectionv(f32* p);
 void GXGetProjectionv(f32* p);
