@@ -386,7 +386,7 @@ void JUTConsoleManager::removeConsole(JUTConsole* console) {
         if (soLink_.size() <= 1) {
             mActiveConsole = NULL;
         } else {
-            mActiveConsole = console != soLink_.back() ? soLink_.Element_toValue(console->getNext()) : soLink_.front();
+            mActiveConsole = console != soLink_.back() ? soLink_.Element_toValue(console->mLinkNode.getNext()) : soLink_.front();
         }
     }
 

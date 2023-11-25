@@ -108,8 +108,8 @@ template <typename T, int I>
 struct TLinkList : public TNodeLinkList {
     TLinkList() : TNodeLinkList() {}
 
-    static TLinkListNode* Element_toNode(T* element) { return static_cast<TLinkListNode*>(element); }
-    static T* Element_toValue(TLinkListNode* node) { return static_cast<T*>(node); }
+    static TLinkListNode* Element_toNode(T* element) { return reinterpret_cast<TLinkListNode*>(((char*)element) - I); }
+    static T* Element_toValue(TLinkListNode* node) { return reinterpret_cast<T*>(((char*)node) + I); }
 
     struct iterator : TNodeLinkList::iterator {
         iterator(TNodeLinkList::iterator iter) : TNodeLinkList::iterator(iter) {}
@@ -190,6 +190,14 @@ struct TLinkList : public TNodeLinkList {
     void Push_back(T* element) {
         TLinkList::iterator iter(TLinkList::end());
         this->Insert(iter, element);
+    }
+
+    iterator Find(T* element) {
+        return TNodeLinkList::Find(Element_toNode(element));
+    }
+
+    void Remove(T* element) {
+        TNodeLinkList::Remove(Element_toNode(element));
     }
 
     T* front() {
