@@ -855,8 +855,8 @@ bool mDoGph_Painter() {
             view_port_class viewport_crop;
             view_port_class* viewport_p = window->getViewPort();
             if (viewport_p->mXOrig != 0.0f || viewport_p->mYOrig != 0.0f) {
-                viewport_crop.mXOrig = viewport_p->mXOrig * 2.0f + viewport_p->mWidth / 2.0f - 320.0f;
-                viewport_crop.mYOrig = viewport_p->mYOrig * 2.0f + viewport_p->mHeight / 2.0f - 240.0f;
+                viewport_crop.mXOrig = viewport_p->mWidth / 2.0f + viewport_p->mXOrig * 2.0f - 320.0f;
+                viewport_crop.mYOrig = viewport_p->mHeight / 2.0f + viewport_p->mYOrig * 2.0f - 240.0f;
                 viewport_crop.mWidth = 640.0f;
                 viewport_crop.mHeight = 480.0f;
                 viewport_crop.mNearZ = viewport_p->mNearZ;
@@ -868,9 +868,13 @@ bool mDoGph_Painter() {
             GXSetViewport(viewport_p->mXOrig, viewport_p->mYOrig, viewport_p->mWidth, viewport_p->mHeight, viewport_p->mNearZ, viewport_p->mFarZ);
             GXSetScissor(viewport_p->mScissor.mXOrig, viewport_p->mScissor.mYOrig, viewport_p->mScissor.mWidth, viewport_p->mScissor.mHeight);
 
-            JPADrawInfo jpaDrawInfo(camera->mViewMtx, camera->mFovy, camera->mAspect);
+            JPADrawInfo jpaDrawInfo(camera->mViewMtx, 45.0f, 1.218f);
+            jpaDrawInfo.setFovy(camera->mFovy);
+            jpaDrawInfo.setAspect(camera->mAspect);
 
-            s32 isTower9 = strcmp(dComIfGp_getStartStageName(), "GTower") == 0 && dComIfGp_getStartStageLayer() == 9;
+            BOOL isTower9 = FALSE;
+            if (strcmp(dComIfGp_getStartStageName(), "GTower") == 0 && dComIfGp_getStartStageLayer() == 9)
+                isTower9 = TRUE;
             dComIfGp_setCurrentWindow(window);
             dComIfGp_setCurrentView(camera);
             dComIfGp_setCurrentViewport(viewport_p);
@@ -920,7 +924,9 @@ bool mDoGph_Painter() {
                 if (!mDoGph_gInf_c::isMonotone())
                     dComIfGp_particle_drawP1(&jpaDrawInfo);
 
-                JPADrawInfo windDrawInfo(dPa_control_c::getWindViewMatrix(), camera->mFovy, camera->mAspect);
+                JPADrawInfo windDrawInfo(dPa_control_c::getWindViewMatrix(), 45.0f, 1.218f);
+                windDrawInfo.setFovy(camera->mFovy);
+                windDrawInfo.setAspect(camera->mAspect);
                 dComIfGp_particle_drawWind(&windDrawInfo);
 
                 dComIfGp_particle_drawToon(&jpaDrawInfo);
@@ -1030,13 +1036,15 @@ bool mDoGph_Painter() {
                 mCaptureThreadStackHead = NULL;
             }
 
-            OSJoinThread(&mCaptureThread, NULL);
+            void *exitVal;
+            OSJoinThread(&mCaptureThread, &exitVal);
             mCaptureStep++;
         } else {
             OSAlarm alarm;
+            u64 tickNum = OSMillisecondsToTicks(10);
             OSCreateAlarm(&alarm);
             OSInitThreadQueue(&mCaptureThreadQueue);
-            OSSetAlarm(&alarm, (12345 / 1000) * 10, mCaptureAlarmHandler);
+            OSSetAlarm(&alarm, tickNum, mCaptureAlarmHandler);
             OSSleepThread(&mCaptureThreadQueue);
             OSCancelAlarm(&alarm);
         }
@@ -1072,7 +1080,9 @@ bool mDoGph_Painter() {
     graf.setPort();
     Mtx viewMtx;
     mDoMtx_trans(viewMtx, 320.0f, 240.0f, 0.0f);
-    JPADrawInfo jpaDrawInfo2D(viewMtx, 0.0f, 1.333333f);
+    JPADrawInfo jpaDrawInfo2D(viewMtx, 45.0f, 1.218f);
+    jpaDrawInfo2D.setFovy(0.0f);
+    jpaDrawInfo2D.setAspect(1.333333f);
     if (!dMenu_flag())
         dComIfGp_particle_draw2Dback(&jpaDrawInfo2D);
     dComIfGp_particle_draw2DmenuBack(&jpaDrawInfo2D);
