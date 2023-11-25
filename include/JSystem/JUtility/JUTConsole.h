@@ -7,7 +7,7 @@
 #include "Runtime.PPCEABI.H/__va_arg.h"
 #include "dolphin/types.h"
 
-class JUTConsole : public JKRDisposer {
+class JUTConsole : public JKRDisposer, public JGadget::TLinkListNode {
 public:
     enum EConsoleType {
         ACTIVE = 0,
@@ -89,9 +89,6 @@ public:
     void scrollToLastLine() { scroll(mMaxLines); }
     void scrollToFirstLine() { scroll(-mMaxLines); }
 
-public:
-    /* 0x18 */ JGadget::TLinkListNode mListNode;
-
 private:
     /* 0x20 */ u32 field_0x20;
     /* 0x24 */ s32 mMaxLines;
@@ -133,7 +130,7 @@ public:
     static JUTConsoleManager* sManager;
 
 private:
-    /* 0x00 */ JGadget::TLinkList<JUTConsole, 4> mLinkList;
+    /* 0x00 */ JGadget::TLinkList<JUTConsole, 4> soLink_;
     /* 0x0C */ JUTConsole* mActiveConsole;
     /* 0x10 */ JUTConsole* mDirectConsole;
 };  // Size: 0x14

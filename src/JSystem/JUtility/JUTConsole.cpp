@@ -368,13 +368,34 @@ void JUTConsoleManager::appendConsole(JUTConsole* console) {
     JUT_ASSERT(0x3bf, sManager != 0 && console != 0);
 
     // need to figure out how TLinkList works
-    JGadget::TLinkListNode node = console->mListNode;
-    mLinkList.Find(&node);
+    JUT_ASSERT(0x3c2, soLink_.Find( console ) == soLink_.end());
+
+    soLink_.Push_back(console);
+
+    if (mActiveConsole == NULL)
+        mActiveConsole = console;
 }
 
 /* 802CB4C4-802CB674       .text removeConsole__17JUTConsoleManagerFP10JUTConsole */
 void JUTConsoleManager::removeConsole(JUTConsole* console) {
     /* Nonmatching */
+    JUT_ASSERT(0x3d6, sManager != 0 && console != 0);
+    JUT_ASSERT(0x3d9, soLink_.Find( console ) != soLink_.end());
+
+    if (mActiveConsole == console) {
+        if (soLink_.size() <= 1) {
+            mActiveConsole = NULL;
+        } else {
+            mActiveConsole = console != soLink_.back() ? soLink_.Element_toValue(console->getNext()) : soLink_.front();
+        }
+    }
+
+    if (JUTGetWarningConsole() == console)
+        JUTSetWarningConsole(NULL);
+    if (JUTGetReportConsole() == console)
+        JUTSetReportConsole(NULL);
+
+    soLink_.Remove(console);
 }
 
 /* 802CB674-802CB740       .text draw__17JUTConsoleManagerCFv */
@@ -382,8 +403,10 @@ void JUTConsoleManager::draw() const {
     /* Nonmatching */
 
     // need to figure out how TLinkList works
-    for (JGadget::TLinkList<JUTConsole, 4>::const_iterator iter = mLinkList.begin(); iter; ++iter) {
-        const JUTConsole * pConsole = (const JUTConsole*) (&iter.node - offsetof(JUTConsole, mListNode));
+    JGadget::TLinkList<JUTConsole, 4>::const_iterator iter = soLink_.begin();
+    JGadget::TLinkList<JUTConsole, 4>::const_iterator end = soLink_.end();
+    for (; iter != end; ++iter) {
+        JUTConsole* pConsole = *iter;
         if (pConsole != mActiveConsole)
             pConsole->doDraw(JUTConsole::INACTIVE);
     }
