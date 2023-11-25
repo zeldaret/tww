@@ -6,7 +6,7 @@
 #include "c/c_damagereaction.h"
 #include "SSystem/SComponent/c_phase.h"
 
-class bk_class : public fopAc_ac_c {
+class bk_class : public fopEn_enemy_c {
 public:
     /* 0x02AC */ request_of_phase_process_class mPhsBk;
     /* 0x02B4 */ u8 mMode;
@@ -30,7 +30,9 @@ public:
     /* 0x0370 */ damagereaction mDamageReaction;
     /* 0x0B2C */ u8 m0B2C[0x11FC - 0x0B2C];
     /* 0x11FC */ int m11FC;
-    /* 0x1200 */ u8 m1200[0x1264 - 0x1200];
+    /* 0x1200 */ u8 m1200[0x121C - 0x1200];
+    /* 0x121C */ u8 m121C;
+    /* 0x121D */ u8 m121D[0x1264 - 0x121D];
     /* 0x1264 */ enemyice mEnemyIce;
     /* 0x161C */ u8 m161C[0x1848 - 0x161C];
 };

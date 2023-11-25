@@ -9,17 +9,17 @@
 #include "m_Do/m_Do_ext.h"
 #include "c/c_damagereaction.h"
 
-class pw_class : public fopAc_ac_c {
+class pw_class : public fopEn_enemy_c {
 public:
     /* 0x2AC */ u8 m2AC[0x2B4 - 0x2AC];
     /* 0x2B4 */ mDoExt_McaMorf* m2B4;
     /* 0x2B8 */ u8 m2B8[0x32C - 0x2B8];
     /* 0x32C */ csXyz m32C[2];
-    /* 0x338 */ daPW__BehaviorType mBehaviorType;
+    /* 0x338 */ u8 mBehaviorType;
     /* 0x339 */ bool mHoversAtInitialYPos;
     /* 0x33A */ u8 mNoticeRangeParam;
     /* 0x33B */ u8 mColorIndex;
-    /* 0x33C */ pw_class__HitByWhat mHitByWhat;
+    /* 0x33C */ u8 mHitByWhat;
     /* 0x33D */ u8 m33D[0x33E - 0x33D];
     /* 0x33E */ u8 m33E;
     /* 0x33F */ u8 m33F[0x344 - 0x33F];

@@ -7,7 +7,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "c/c_damagereaction.h"
 
-class pt_class : public fopAc_ac_c {
+class pt_class : public fopEn_enemy_c {
 public:
     /* 0x2AC */ u8 m2AC[0x2B4 - 0x2AC];
     /* 0x2B4 */ u8 mBehaviorType;

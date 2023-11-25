@@ -3,6 +3,7 @@
 // Translation Unit: d_a_dr.cpp
 //
 
+#include "d/actor/d_a_dr.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "d/d_procname.h"
@@ -12,43 +13,7 @@
 #include "d/d_snap.h"
 #include "d/d_com_inf_game.h"
 
-class dr_class;
-
-class daDr_HIO_c : public JORReflexible {
-public:
-    daDr_HIO_c();
-    virtual ~daDr_HIO_c() {}
-public:
-    /* 0x04 */ s8 mChildID;
-    /* 0x05 */ u8 m05[0x08 - 0x05];
-    /* 0x08 */ f32 mScale;
-    /* 0x0C */ bool m0C;
-    /* 0x0D */ u8 m0D[0x0E - 0x0D];
-    /* 0x0E */ s16 m0E;
-    /* 0x10 */ f32 mWait1Morf;
-    /* 0x14 */ f32 mAkubi1Morf;
-    /* 0x18 */ f32 mBiku1Morf;
-    /* 0x1C */ f32 mAbare1Morf;
-    /* 0x20 */ f32 mAbare2Morf;
-    /* 0x24 */ f32 mHo1Morf;
-};
-
 static daDr_HIO_c l_HIO;
-
-class dr_class : public fopAc_ac_c {
-public:
-    /* 0x290 */ u8 m290[0x2AC - 0x290];
-    /* 0x2AC */ request_of_phase_process_class mPhs;
-    /* 0x2B4 */ mDoExt_McaMorf* mpMorf;
-    /* 0x2B8 */ u8 mState;
-    /* 0x2B9 */ u8 m2B9[0x2BA - 0x2B9];
-    /* 0x2BA */ s16 mCountDownTimers[3];
-    /* 0x2C0 */ int mCurrBckIdx;
-    /* 0x2C4 */ JPABaseEmitter* mpBreathEmitter;
-    /* 0x2C8 */ s8 m2C8;
-    /* 0x2C9 */ s8 m2C9;
-    /* 0x2CA */ u8 field_2CA[0x2CC - 0x2CA];
-};
 
 enum DR_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */

@@ -1,15 +1,10 @@
 /*
  * d_a_seatag.cpp
  */
+#include "d/actor/d_a_seatag.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
-
-struct daSeatag_c : public fopAc_ac_c {
-public:
-    /* 0x00 */ int field_0x00;
-    /* 0x04 */ int field_0x04;
-}; // size 0x298
 
 static BOOL daSeatag_Draw(daSeatag_c*) {
     return true;

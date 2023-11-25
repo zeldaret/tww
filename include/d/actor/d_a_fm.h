@@ -6,8 +6,12 @@
 #include "c/c_damagereaction.h"
 #include "JSystem/J3DGraphAnimator/J3DNode.h"
 
-class daFm_c : public fopAc_ac_c {
+class daFm_c : public fopEn_enemy_c {
 public:
+    enum Proc_e {
+        
+    };
+
     void isBodyAppear() {}
     void isHoleAppear() {}
     void modeProcInit(int) {}
@@ -81,7 +85,7 @@ public:
     void modeDelete();
     void modeBikubikuInit();
     void modeBikubiku();
-    void modeProc(daFm_c::Proc_e, int);
+    void modeProc(Proc_e, int);
     void setAnm(signed char, bool);
     void cancelGrab();
     void calcInvKine(fopAc_ac_c*);

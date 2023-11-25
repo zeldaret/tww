@@ -7,7 +7,7 @@
 
 class daItem_c : public daItemBase_c {
 public:
-    typedef void (daItem_c::*daItem_c_ModeFunc)();
+    typedef void (daItem_c::*ModeFunc)();
     
     enum State {
         STATE_WAIT_MAIN     = 0x2,

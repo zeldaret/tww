@@ -3,6 +3,7 @@
 // Translation Unit: d_a_swtdoor.cpp
 //
 
+#include "d/actor/d_a_swtdoor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -12,14 +13,6 @@
 #include "SSystem/SComponent/c_lib.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
-
-class swtdoor_class : public fopAc_ac_c {
-public:
-    /* 0x290 */ request_of_phase_process_class mPhs;
-    /* 0x298 */ J3DModel * model;
-    /* 0x29C */ u8 field_0x29c;
-    /* 0x29D */ u8 mSwitchNo;
-};
 
 /* 00000078-000000C4       .text daSwtdoor_Draw__FP13swtdoor_class */
 BOOL daSwtdoor_Draw(swtdoor_class* i_this) {

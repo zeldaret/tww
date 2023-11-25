@@ -179,7 +179,7 @@ void daNh_c::action(void* arg) {
 }
 
 /* 800F9DF4-800F9EB8       .text setAction__6daNh_cFM6daNh_cFPCvPvPv_iPv */
-BOOL daNh_c::setAction(daNh_c_ActionFunc actionFunc, void* arg) {
+BOOL daNh_c::setAction(ActionFunc actionFunc, void* arg) {
     if (mCurrActionFunc != actionFunc) {
         if (mCurrActionFunc != NULL) {
             mActionStatus = ACTION_ENDING;

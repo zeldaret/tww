@@ -3,6 +3,7 @@
 // Translation Unit: d_a_mbdoor.cpp
 //
 
+#include "d/actor/d_a_mbdoor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "d/d_procname.h"
@@ -10,59 +11,6 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/actor/d_a_player.h"
-
-class daMbdoor_c : public fopAc_ac_c {
-public:
-    inline BOOL draw();
-    inline BOOL execute();
-    s32 create();
-    
-    u8 getSwbit();
-    u8 getType();
-    u8 getShapeType();
-    const char* getArcName();
-    u32 getFuBdl();
-    u32 getLBdl();
-    u32 getRBdl();
-    u32 getToBdl();
-    u32 getDzb();
-    f32 getLOffset();
-    f32 getROffset();
-    f32 getToOffset();
-    BOOL CreateHeap();
-    void calcMtx();
-    BOOL CreateInit();
-    s32 getDemoAction();
-    void demoProc();
-    BOOL checkArea();
-    BOOL checkUnlock();
-
-public:
-    /* 0x290 */ request_of_phase_process_class mPhs;
-    /* 0x298 */ J3DModel* mpFuModel;
-    /* 0x29C */ J3DModel* mpLModel;
-    /* 0x2A0 */ J3DModel* mpRModel;
-    /* 0x2A4 */ J3DModel* mpToModel;
-    /* 0x2A8 */ dBgW* mpBgW;
-    /* 0x2AC */ bool field_0x2ac;
-    /* 0x2AD */ u8 field_0x2ad;
-    /* 0x2AE */ u8 mCurActionIdx;
-    /* 0x2AF */ u8 field_0x2AF[0x2B0 - 0x2AF];
-    /* 0x2B0 */ s16 field_0x2b0;
-    /* 0x2B2 */ s16 field_0x2b2;
-    /* 0x2B4 */ s16 field_0x2b4;
-    /* 0x2B6 */ u8 field_0x2b6;
-    /* 0x2B7 */ u8 field_0x2B7[0x2B8 - 0x2B7];
-    /* 0x2B8 */ s16 field_0x2b8;
-    /* 0x2BA */ u8 field_0x2BA[0x2BC - 0x2BA];
-    /* 0x2BC */ s32 field_0x2bc;
-    /* 0x2C0 */ s32 mEvtStaffId;
-    /* 0x2C4 */ cXyz field_0x2c4;
-    /* 0x2D0 */ cXyz field_0x2d0;
-    /* 0x2DC */ cXyz field_0x2dc;
-};
-
-typedef BOOL (daMbdoor_c_ActionFunc)(daMbdoor_c*);
 
 /* 00000078-00000084       .text getSwbit__10daMbdoor_cFv */
 u8 daMbdoor_c::getSwbit() {
@@ -266,16 +214,16 @@ BOOL daMbdoor_c::CreateInit() {
     mTevStr.mRoomNo = current.roomNo;
     
     if (type == 2) {
-        mCurActionIdx = 1;
+        setAction(1);
         field_0x2b0 = 0;
         field_0x2b2 = 0;
     } else if ((type == 0 && (swbit != 0xFF && !dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(this)))) ||
                (type == 1 && (swbit == 0xFF || dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(this))))) {
-        mCurActionIdx = 1;
+        setAction(1);
         field_0x2b0 = 0;
         field_0x2b2 = 0;
     } else {
-        mCurActionIdx = 4;
+        setAction(4);
         field_0x2b0 = -0x3F65;
         field_0x2b2 = 0;
     }
@@ -490,7 +438,7 @@ BOOL daMbdoor_actionWait(daMbdoor_c* i_this) {
 /* 000011BC-0000121C       .text daMbdoor_actionLockWait__FP10daMbdoor_c */
 BOOL daMbdoor_actionLockWait(daMbdoor_c* i_this) {
     if (i_this->checkUnlock()) {
-        i_this->mCurActionIdx = 2;
+        i_this->setAction(2);
         fopAcM_orderOtherEvent2(i_this, "MBDOOR_STOP_OPEN", 1, -1);
     }
     return TRUE;
@@ -501,7 +449,7 @@ BOOL daMbdoor_actionLockOff(daMbdoor_c* i_this) {
     if (i_this->mEvtInfo.checkCommandDemoAccrpt()) {
         i_this->mEvtStaffId = dComIfGp_evmng_getMyStaffId("MBDOOR", NULL, 0);
         i_this->demoProc();
-        i_this->mCurActionIdx = 3;
+        i_this->setAction(3);
     } else {
         fopAcM_orderOtherEvent2(i_this, "MBDOOR_STOP_OPEN", 1, -1);
     }
@@ -512,7 +460,7 @@ BOOL daMbdoor_actionLockOff(daMbdoor_c* i_this) {
 BOOL daMbdoor_actionLockDemo(daMbdoor_c* i_this) {
     if (dComIfGp_evmng_endCheck("MBDOOR_STOP_OPEN")) {
         dComIfGp_event_reset();
-        i_this->mCurActionIdx = 4;
+        i_this->setAction(4);
     } else {
         i_this->demoProc();
     }
@@ -524,7 +472,7 @@ BOOL daMbdoor_actionCloseWait(daMbdoor_c* i_this) {
     if (i_this->mEvtInfo.checkCommandDoor()) {
         i_this->mEvtStaffId = dComIfGp_evmng_getMyStaffId("MBDOOR", NULL, 0);
         i_this->demoProc();
-        i_this->mCurActionIdx = 5;
+        i_this->setAction(5);
         dComIfG_Bgsp()->Release(i_this->mpBgW);
         i_this->field_0x2ac = false;
     } else {
@@ -566,7 +514,7 @@ BOOL daMbdoor_Draw(daMbdoor_c* i_this) {
 }
 
 BOOL daMbdoor_c::execute() {
-    static daMbdoor_c_ActionFunc* l_action[] = {
+    static ActionFunc* l_action[] = {
         &daMbdoor_actionWait,
         &daMbdoor_actionLockWait,
         &daMbdoor_actionLockOff,

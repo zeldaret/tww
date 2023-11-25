@@ -10,7 +10,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "JSystem/J3DGraphAnimator/J3DNode.h"
 
-class daGy_c : public fopAc_ac_c {
+class daGy_c : public fopEn_enemy_c {
 public:
     void _nodeControl(J3DNode*, J3DModel*);
     void _createHeap();

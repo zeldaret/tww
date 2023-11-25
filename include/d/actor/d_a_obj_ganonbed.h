@@ -8,11 +8,17 @@
 class daObjGbed_c : public fopAc_ac_c {
 public:
     void init_mtx();
+    s32 _create();
+    bool _execute();
+    bool _draw();
+    bool _delete();
+    bool create_heap();
+    static BOOL solidHeapCB(fopAc_ac_c *i_this);
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhs;
-    /* 0x298 */ J3DModel* mpModel;
-    /* 0x29C */ dBgW* mpBgW;
+    /* 0x298 */ J3DModel * mpModel;
+    /* 0x29C */ dBgW * mpBgW;
 };
 
 #endif /* D_A_OBJ_GANONBED_H */

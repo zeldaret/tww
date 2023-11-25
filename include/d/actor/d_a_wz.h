@@ -5,14 +5,14 @@
 #include "d/d_cc_d.h"
 #include "m_Do/m_Do_ext.h"
 
-class wz_class : public fopAc_ac_c {
+class wz_class : public fopEn_enemy_c {
 public:
     /* 0x2AC */ u8 m2AC[0x2B4 - 0x2AC];
     /* 0x2B4 */ mDoExt_McaMorf* m2B4;
     /* 0x2B8 */ u8 m2B8[0x314 - 0x2B8];
     /* 0x314 */ cXyz m314;
     /* 0x320 */ u8 m320[0x348 - 0x320];
-    /* 0x348 */ daWZ__BehaviorTypes mBehaviorType;
+    /* 0x348 */ u8 mBehaviorType;
     /* 0x349 */ u8 mEnemySummonTableIndex;
     /* 0x34A */ u8 mEnableSpawnSwitch;
     /* 0x34B */ u8 mDisableSpawnOnDeathSwitch;

@@ -24,7 +24,7 @@ public:
         ACTION_ENDING   = -1,
     };
     
-    typedef BOOL (daNh_c::*daNh_c_ActionFunc)(void*);
+    typedef BOOL (daNh_c::*ActionFunc)(void*);
     
     bool isTypeBottle() { return mType == TYPE_BOTTLE; }
     
@@ -34,7 +34,7 @@ public:
     s32 create();
     BOOL init();
     void action(void*);
-    BOOL setAction(daNh_c_ActionFunc, void*);
+    BOOL setAction(ActionFunc, void*);
     BOOL checkBinCatch();
     BOOL searchPlayer();
     BOOL moveProc(f32, f32, s16);
@@ -61,7 +61,7 @@ public:
     /* 0x60C */ mDoExt_brkAnm mBrkAnm;
     /* 0x624 */ u8 temp2[0x630 - 0x624];
     /* 0x630 */ cBgS_PolyInfo mPolyInfo;
-    /* 0x640 */ daNh_c_ActionFunc mCurrActionFunc;
+    /* 0x640 */ ActionFunc mCurrActionFunc;
     /* 0x64C */ Mtx mGlowMtx;
     /* 0x67C */ f32 mPlayerDist;
     /* 0x680 */ f32 mGroundY;

@@ -4,7 +4,7 @@
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
 
-class ki_class : public fopAc_ac_c {
+class ki_class : public fopEn_enemy_c {
 public:
     /* 0x2AC */ u8 m2AC[0x2B4 - 0x2AC];
     /* 0x2B4 */ mDoExt_McaMorf* mpMorf;

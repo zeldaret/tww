@@ -3,10 +3,13 @@
 // Translation Unit: d_a_andsw0.cpp
 //
 
+#include "d/actor/d_a_andsw0.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/actor/d_a_bk.h"
+#include "d/actor/d_a_bb.h"
 
 enum {
     ACT_ON_ALL = 0,
@@ -16,29 +19,6 @@ enum {
     ACT_TIMER2,
     ACT_TIMER_SET = 30,
 };
-
-struct andsw0_class : public fopAc_ac_c {
-public:
-    /* 0x290 */ u32 _pad[2];
-    /* 0x298 */ s8 mAction;
-    /* 0x299 */ u8 mNumSwitchesToCheck;
-    /* 0x29A */ u8 mBehaviorType;
-    /* 0x29B */ u8 mSwitchToSet;
-    /* 0x29C */ u8 mFirstSwitchToCheck;
-    /* 0x29E */ u16 mTimer;
-    /* 0x2A0 */ s16 mEventIdx;
-    /* 0x2A2 */ u8 mEventNo;
-    /* 0x2A3 */ s8 mEventState;
-};
-
-// Bokoblin. TODO: Include d_a_bk.h once implemented.
-struct bk_class : public fopAc_ac_c {
-    u8 temp[0x121C - 0x290];
-    u8 field_0x121C;
-};
-
-// Kargaroc. TODO: Include d_a_bb.h once implemented.
-struct bb_class : public fopAc_ac_c {};
 
 static s32 daAndsw0_Draw(andsw0_class*) {
     return 1;
@@ -254,28 +234,28 @@ static void hajimarinomori_check(andsw0_class* i_this) {
             fopAcM_delete(kargaroc);
             
             bk_class* bokoblin = (bk_class*)ac[3];
-            bokoblin->field_0x121C = 1;
+            bokoblin->m121C = 1;
             bokoblin = (bk_class*)ac[4];
-            bokoblin->field_0x121C = 1;
+            bokoblin->m121C = 1;
             
             if (dComIfGs_isEventBit(0x301)) {
                 bokoblin = (bk_class*)ac[0];
-                bokoblin->field_0x121C = 1;
+                bokoblin->m121C = 1;
             }
             if (dComIfGs_isEventBit(0x480)) {
                 bokoblin = (bk_class*)ac[1];
-                bokoblin->field_0x121C = 1;
+                bokoblin->m121C = 1;
             }
             if (dComIfGs_isEventBit(0x301) && dComIfGs_isEventBit(0x480)) {
                 bokoblin = (bk_class*)ac[2];
-                bokoblin->field_0x121C = 1;
+                bokoblin->m121C = 1;
             }
         }
         else {
             bk_class* bokoblin = (bk_class*)ac[0];
-            bokoblin->field_0x121C = 1;
+            bokoblin->m121C = 1;
             bokoblin = (bk_class*)ac[1];
-            bokoblin->field_0x121C = 1;
+            bokoblin->m121C = 1;
         }
         
         fopAcM_delete(actor);

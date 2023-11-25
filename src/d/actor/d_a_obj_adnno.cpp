@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_adnno.cpp
 //
 
+#include "d/actor/d_a_obj_adnno.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -11,21 +12,6 @@
 #include "d/d_procname.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-class daObjAdnno_c : public fopAc_ac_c {
-public:
-    inline s32 _create();
-    inline bool _execute();
-    inline bool _draw();
-    inline bool _delete();
-    BOOL CreateHeap();
-    void CreateInit();
-    void set_mtx();
-
-public:
-    /* 0x290 */ request_of_phase_process_class mPhs;
-    /* 0x298 */ J3DModel * mpModel[16];
-};
 
 static const u32 daObjAdnno_bmt_table[16] = {
     0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16,

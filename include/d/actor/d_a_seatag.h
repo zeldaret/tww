@@ -10,7 +10,7 @@ public:
     inline BOOL execute();
 
 public:
-    /* Place member variables here */
+    /* 0x290 */ u8 m290[0x298 - 0x290];
 };
 
 #endif /* D_A_SEATAG_H */

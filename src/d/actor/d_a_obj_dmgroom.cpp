@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_dmgroom.cpp
 //
 
+#include "d/actor/d_a_obj_dmgroom.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -11,22 +12,6 @@
 #include "d/d_procname.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-class daObjDmgroom_c : public fopAc_ac_c {
-public:
-    inline s32 _create();
-    inline bool _execute();
-    inline bool _draw();
-    inline bool _delete();
-    BOOL CreateHeap();
-    void CreateInit();
-    void set_mtx();
-
-public:
-    /* 0x290 */ request_of_phase_process_class mPhs;
-    /* 0x298 */ J3DModel * mpModel;
-    /* 0x29C */ mDoExt_brkAnm mBrkAnm;
-};
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 BOOL CheckCreateHeap(fopAc_ac_c* i_this) {

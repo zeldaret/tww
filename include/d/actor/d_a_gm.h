@@ -3,7 +3,7 @@
 
 #include "f_op/f_op_actor.h"
 
-class gm_class : public fopAc_ac_c {
+class gm_class : public fopEn_enemy_c {
 public:
     /* 0x2AC */ u8 m2AC[0x2CD - 0x2AC];
     /* 0x2CD */ u8 m2CD;

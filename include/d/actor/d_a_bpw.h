@@ -8,7 +8,7 @@
 #include "d/d_particle.h"
 #include "m_Do/m_Do_ext.h"
 
-class bpw_class : public fopAc_ac_c {
+class bpw_class : public fopEn_enemy_c {
 public:
     /* 0x2AC */ u8 m2AC[0x2B4 - 0x2AC];
     /* 0x2B4 */ mDoExt_McaMorf* m2B4;

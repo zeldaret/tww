@@ -3,19 +3,13 @@
 // Translation Unit: d_a_boss_item.cpp
 //
 
+#include "d/actor/d_a_boss_item.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
 #include "dolphin/types.h"
-
-extern BOOL dComIfGs_isStageBossEnemy(int i_stageNo);
-extern BOOL dComIfGs_isStageLife(int i_stageNo);
-
-class bossitem_class : public fopAc_ac_c {
-    s32 m0000;
-    s32 m0004;
-};
+#include "d/d_com_inf_game.h"
 
 /* 00000078-00000080       .text daBossItem_IsDelete__FP14bossitem_class */
 static BOOL daBossItem_IsDelete(bossitem_class* i_this) {

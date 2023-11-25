@@ -1052,6 +1052,8 @@ inline void dComIfGs_onStageLife() {
 
 void dComIfGs_onStageLife(int i_stageNo);
 
+BOOL dComIfGs_isStageLife(int i_stageNo);
+
 inline BOOL dComIfGs_isStageLife() {
     return g_dComIfG_gameInfo.save.getMemory().getBit().isStageLife();
 }
