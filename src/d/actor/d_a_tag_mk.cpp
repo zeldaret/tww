@@ -7,18 +7,18 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000084       .text getSwbit__10daTag_Mk_cFv */
-void daTag_Mk_c::getSwbit() {
-    /* Nonmatching */
+unsigned int daTag_Mk_c::getSwbit() {
+    return this->mBase.mParameters & 0xff;
 }
 
 /* 00000084-00000090       .text getSwbit2__10daTag_Mk_cFv */
-void daTag_Mk_c::getSwbit2() {
-    /* Nonmatching */
+unsigned int daTag_Mk_c::getSwbit2() {
+    return this->mBase.mParameters & 0xff;
 }
 
 /* 00000090-0000009C       .text getType__10daTag_Mk_cFv */
-void daTag_Mk_c::getType() {
-    /* Nonmatching */
+unsigned int daTag_Mk_c::getType() {
+    return this->mBase.mParameters & 0xff;
 }
 
 /* 0000009C-000001F8       .text checkArea__10daTag_Mk_cFfff */
@@ -122,8 +122,8 @@ void daTag_Mk_c::actionArrival() {
 }
 
 /* 00000A48-00000A50       .text actionWait__10daTag_Mk_cFv */
-void daTag_Mk_c::actionWait() {
-    /* Nonmatching */
+int daTag_Mk_c::actionWait() {
+    return 1;
 }
 
 /* 00000A50-00000AF4       .text actionVillaTalk__10daTag_Mk_cFv */
@@ -157,27 +157,28 @@ BOOL daTag_Mk_c::execute() {
 }
 
 /* 00000E9C-00000EA4       .text daTag_Mk_Draw__FP10daTag_Mk_c */
-void daTag_Mk_Draw(daTag_Mk_c*) {
-    /* Nonmatching */
+int daTag_Mk_Draw(daTag_Mk_c*) {
+    return 1;
 }
 
 /* 00000EA4-00000EC8       .text daTag_Mk_Execute__FP10daTag_Mk_c */
-void daTag_Mk_Execute(daTag_Mk_c*) {
-    /* Nonmatching */
+int daTag_Mk_Execute(daTag_Mk_c* param) {
+    param->execute();
+    return 1;
 }
 
 /* 00000EC8-00000ED0       .text daTag_Mk_IsDelete__FP10daTag_Mk_c */
-void daTag_Mk_IsDelete(daTag_Mk_c*) {
-    /* Nonmatching */
+int daTag_Mk_IsDelete(daTag_Mk_c*) {
+    return 1;
 }
 
 /* 00000ED0-00000F00       .text daTag_Mk_Delete__FP10daTag_Mk_c */
-void daTag_Mk_Delete(daTag_Mk_c*) {
+void daTag_Mk_Delete(daTag_Mk_c* param_1) {
     /* Nonmatching */
 }
 
 /* 00000F00-00000F20       .text daTag_Mk_Create__FP10fopAc_ac_c */
-void daTag_Mk_Create(fopAc_ac_c*) {
+void daTag_Mk_Create(fopAc_ac_c* param) {
     /* Nonmatching */
 }
 
@@ -185,4 +186,3 @@ void daTag_Mk_Create(fopAc_ac_c*) {
 s32 daTag_Mk_c::create() {
     /* Nonmatching */
 }
-

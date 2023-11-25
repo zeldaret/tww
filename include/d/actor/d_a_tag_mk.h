@@ -9,9 +9,9 @@ public:
     inline BOOL draw();
     void setAction(unsigned char) {}
 
-    void getSwbit();
-    void getSwbit2();
-    void getType();
+    unsigned int getSwbit();
+    unsigned int getSwbit2();
+    unsigned int getType();
     void checkArea(float, float, float);
     void next_msgStatus(unsigned long*);
     void getMsg();
@@ -32,7 +32,7 @@ public:
     void actionReady();
     void actionHunt();
     void actionArrival();
-    void actionWait();
+    int actionWait();
     void actionVillaTalk();
     void actionVilla();
     void actionTagWp2();

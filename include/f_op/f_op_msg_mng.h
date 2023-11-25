@@ -2,8 +2,8 @@
 #define F_F_OP_MSG_MNG_H_
 
 #include "SSystem/SComponent/c_xyz.h"
-#include "f_pc/f_pc_leaf.h"
 #include "f_op/f_op_msg.h"
+#include "f_pc/f_pc_leaf.h"
 
 class JKRExpHeap;
 class JKRHeap;
@@ -42,7 +42,7 @@ struct fopMsg_prm_timer {
 class J2DScreen;
 
 struct fopMsgM_pane_class {
-    /* 0x00 */ J2DScreen * scrn;
+    /* 0x00 */ J2DScreen* scrn;
     /* 0x04 */ cXy mPosTopLeftOrig;
     /* 0x0C */ cXy mPosTopLeft;
     /* 0x14 */ cXy mPosCenterOrig;
@@ -58,7 +58,8 @@ typedef int (*fopMsgCreateFunc)(void*);
 
 JKRExpHeap* fopMsgM_createExpHeap(u32, JKRHeap*);
 u32 fopMsgM_Create(s16, fopMsgCreateFunc, void*);
-s32 fopMsgM_create(s16 param_0, fopAc_ac_c* param_1, cXyz* param_2, u32* param_3, u32* param_4, fopMsgCreateFunc createFunc);
+s32 fopMsgM_create(s16 param_0, fopAc_ac_c* param_1, cXyz* param_2, u32* param_3, u32* param_4,
+                   fopMsgCreateFunc createFunc);
 void fopMsgM_Delete(void* process);
 fopMsg_prm_class* fopMsgM_GetAppend(void* msg);
 void fopMsgM_setMessageID(unsigned int);
@@ -90,5 +91,7 @@ void fopMsgM_cposMove(fopMsgM_pane_class*);
 
 u32 fopMsgM_searchMessageNumber(u32);
 void fopMsgM_messageSendOn();
+
+void fopMsgM_paneTrans(fopMsgM_pane_class* pane, f32, f32);
 
 #endif

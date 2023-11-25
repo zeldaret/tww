@@ -3,8 +3,9 @@
 // Translation Unit: d_timer.cpp
 //
 
-#include "d_timer.h"
+#include "d/d_timer.h"
 #include "dolphin/types.h"
+#include "f_op/f_op_msg_mng.h"
 
 /* 8023B860-8023BCD8       .text _create__8dTimer_cFv */
 void dTimer_c::_create() {
@@ -18,7 +19,7 @@ void dTimer_c::_execute() {
 
 /* 8023BF88-8023BFE4       .text _draw__8dTimer_cFv */
 void dTimer_c::_draw() {
-    /* Nonmatching */
+
 }
 
 /* 8023BFE4-8023C0B8       .text _delete__8dTimer_cFv */
@@ -32,8 +33,10 @@ void dTimer_c::RestTimeCheck(int) {
 }
 
 /* 8023C110-8023C124       .text deleteCheck__8dTimer_cFv */
-void dTimer_c::deleteCheck() {
-    /* Nonmatching */
+unsigned int dTimer_c::deleteCheck() {
+    unsigned int uVar1;
+    // uVar1 = std::countl_zero(5 - (unsigned int)(char)this->field_0x164);
+    return uVar1 >> 5 & 0xff;
 }
 
 /* 8023C124-8023C268       .text SetSE__8dTimer_cFv */
@@ -77,8 +80,9 @@ void dTimer_c::end(int) {
 }
 
 /* 8023C56C-8023C57C       .text deleteRequest__8dTimer_cFv */
-void dTimer_c::deleteRequest() {
-    /* Nonmatching */
+int dTimer_c::deleteRequest() {
+    this->field_0x164 = 6;
+    return 1;
 }
 
 /* 8023C57C-8023C5E0       .text getTimeMs__8dTimer_cFv */
@@ -127,8 +131,12 @@ void dTm_parentPaneScale(fopMsgM_pane_class*, fopMsgM_pane_class*, float) {
 }
 
 /* 8023CF48-8023CF98       .text setPaneInitialPos__21dDlst_TimerScrnDraw_cFP18fopMsgM_pane_classff */
-void dDlst_TimerScrnDraw_c::setPaneInitialPos(fopMsgM_pane_class*, float, float) {
-    /* Nonmatching */
+void dDlst_TimerScrnDraw_c::setPaneInitialPos(fopMsgM_pane_class* param_1, float param_2,
+                                              float param_3) {
+    (param_1->mPosCenterOrig).x = param_2 + (param_1->mSizeOrig).x * 0.5;
+    (param_1->mPosCenterOrig).y = param_3 + (param_1->mSizeOrig).y * 0.5;
+    fopMsgM_paneTrans(param_1, 0.0, 0.0);
+    return;
 }
 
 /* 8023CF98-8023D0CC       .text setTimerPos__21dDlst_TimerScrnDraw_cFff */
@@ -172,27 +180,29 @@ void dDlst_TimerScrnDraw_c::draw() {
 }
 
 /* 8023D9A0-8023D9C0       .text dTimer_Draw__FP8dTimer_c */
-void dTimer_Draw(dTimer_c*) {
-    /* Nonmatching */
+void dTimer_Draw(dTimer_c* timer) {
+    timer->_draw();
+    return;
 }
 
 /* 8023D9C0-8023D9E0       .text dTimer_Execute__FP8dTimer_c */
-void dTimer_Execute(dTimer_c*) {
-    /* Nonmatching */
+void dTimer_Execute(dTimer_c* timer) {
+    timer->_execute();
 }
 
 /* 8023D9E0-8023D9E8       .text dTimer_IsDelete__FP8dTimer_c */
-void dTimer_IsDelete(dTimer_c*) {
-    /* Nonmatching */
+int dTimer_IsDelete(dTimer_c*) {
+    return 1;
 }
 
 /* 8023D9E8-8023DA08       .text dTimer_Delete__FP8dTimer_c */
-void dTimer_Delete(dTimer_c*) {
-    /* Nonmatching */
+void dTimer_Delete(dTimer_c* timer) {
+    timer->_delete();
+    return;
 }
 
 /* 8023DA08-8023DA28       .text dTimer_Create__FP9msg_class */
-void dTimer_Create(msg_class*) {
+void dTimer_Create(msg_class* timer) {
     /* Nonmatching */
 }
 
@@ -208,6 +218,15 @@ void dTimer_createStockTimer() {
 
 /* 8023DAEC-8023DB48       .text __dt__21dDlst_TimerScrnDraw_cFv */
 dDlst_TimerScrnDraw_c::~dDlst_TimerScrnDraw_c() {
-    /* Nonmatching */
+    short in_r4;
+    if (this != (dDlst_TimerScrnDraw_c*)0x0) {
+        // (this->parent).vtbl = &__vt;
+        if (this != (dDlst_TimerScrnDraw_c*)0x0) {
+            // (this->parent).vtbl = (undefined*)&dDlst_base_c::__vt;
+        }
+        if (0 < in_r4) {
+            // delete((JKRHeap*)this);
+        }
+    }
+    return;
 }
-
