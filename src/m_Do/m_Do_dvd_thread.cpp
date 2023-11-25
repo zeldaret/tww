@@ -4,154 +4,311 @@
 //
 
 #include "m_Do/m_Do_dvd_thread.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_printf.h"
+#include "JSystem/JAudio/JASDvdThread.h"
+#include "JSystem/JKernel/JKRDvdRipper.h"
+#include "JSystem/JKernel/JKRMemArchive.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "SSystem/SComponent/c_list.h"
+#include "dolphin/dvd/dvd.h"
+
+u8 dummy[0x0c];
+OSThread mDoDvdThd::l_thread;
+mDoDvdThdStack mDoDvdThd::l_threadStack;
+mDoDvdThd_param_c mDoDvdThd::l_param;
+bool mDoDvdThd::SyncWidthSound;
+u8 mDoDvdThd::sDefaultDirection;
 
 /* 80017EF8-80017F54       .text main__9mDoDvdThdFPv */
-void mDoDvdThd::main(void*) {
-    /* Nonmatching */
+s32 mDoDvdThd::main(void* userData) {
+    { JKRThread thread(OSGetCurrentThread(), 0); }
+
+    JKRHeap* heap = NULL;
+    heap->becomeCurrentHeap();
+
+    mDoDvdThd_param_c* param = (mDoDvdThd_param_c*)userData;
+    param->mainLoop();
+    return 0;
 }
 
 /* 80017F54-80017FB0       .text create__9mDoDvdThdFl */
-void mDoDvdThd::create(long) {
-    /* Nonmatching */
+void mDoDvdThd::create(s32 priority) {
+    OSCreateThread(&l_thread, main, &l_param, l_threadStack.stack + sizeof(l_threadStack), sizeof(l_threadStack), priority, 1);
+    OSResumeThread(&l_thread);
 }
 
 /* 80017FB0-80017FD8       .text suspend__9mDoDvdThdFv */
 void mDoDvdThd::suspend() {
-    /* Nonmatching */
+    OSSuspendThread(&l_thread);
 }
 
 /* 80017FD8-80018038       .text my_DVDConvertPathToEntrynum__FPCc */
-void my_DVDConvertPathToEntrynum(const char*) {
-    /* Nonmatching */
+s32 my_DVDConvertPathToEntrynum(const char* path) {
+    s32 entryNo = DVDConvertPathToEntrynum(path);
+    if (entryNo < 0)
+        JUT_WARN(0x240, "can't open:[%s]\n", path);
+    return entryNo;
 }
 
 /* 80018038-80018080       .text __dt__19mDoDvdThd_command_cFv */
 mDoDvdThd_command_c::~mDoDvdThd_command_c() {
-    /* Nonmatching */
 }
 
 /* 80018080-800180C8       .text __ct__17mDoDvdThd_param_cFv */
 mDoDvdThd_param_c::mDoDvdThd_param_c() {
-    /* Nonmatching */
+    OSInitMessageQueue(&mMessageQueue, mMessageBuf, ARRAY_SIZE(mMessageBuf));
+    OSInitMutex(&mMutex);
+    cLs_Create(&mCommandList);
 }
 
 /* 800180C8-800180F0       .text kick__17mDoDvdThd_param_cFv */
 void mDoDvdThd_param_c::kick() {
-    /* Nonmatching */
+    OSSendMessage(&mMessageQueue, NULL, 0);
 }
 
 /* 800180F0-80018118       .text waitForKick__17mDoDvdThd_param_cFv */
-void mDoDvdThd_param_c::waitForKick() {
-    /* Nonmatching */
+s32 mDoDvdThd_param_c::waitForKick() {
+    OSReceiveMessage(&mMessageQueue, NULL, 1);
 }
 
 /* 80018118-80018120       .text getFirstCommand__17mDoDvdThd_param_cFv */
-void mDoDvdThd_param_c::getFirstCommand() {
-    /* Nonmatching */
+mDoDvdThd_command_c* mDoDvdThd_param_c::getFirstCommand() {
+    return (mDoDvdThd_command_c*) LIST_GET_HEAD(&mCommandList);
 }
 
 /* 80018120-80018178       .text addition__17mDoDvdThd_param_cFP19mDoDvdThd_command_c */
-void mDoDvdThd_param_c::addition(mDoDvdThd_command_c*) {
-    /* Nonmatching */
+void mDoDvdThd_param_c::addition(mDoDvdThd_command_c* cmd) {
+    OSLockMutex(&mMutex);
+    cLs_Addition(&mCommandList, cmd);
+    OSUnlockMutex(&mMutex);
+    kick();
 }
 
 /* 80018178-800181CC       .text cut__17mDoDvdThd_param_cFP19mDoDvdThd_command_c */
-void mDoDvdThd_param_c::cut(mDoDvdThd_command_c*) {
-    /* Nonmatching */
+void mDoDvdThd_param_c::cut(mDoDvdThd_command_c* cmd) {
+    OSLockMutex(&mMutex);
+    cLs_SingleCut(cmd);
+    OSUnlockMutex(&mMutex);
+    kick();
 }
 
 /* 800181CC-8001821C       .text cb__FPv */
-void cb(void*) {
-    /* Nonmatching */
+static s32 cb(void* userData) {
+    mDoDvdThd_command_c** cmd = (mDoDvdThd_command_c**)userData;
+    if ((*cmd)->execute() != 1) {
+        OSReport_Error("mDoDvdThd_param_c::mainLoop() コマンドの実行が失敗しました。\n");
+    }
+    return false;
 }
 
 /* 8001821C-800182B4       .text mainLoop__17mDoDvdThd_param_cFv */
 void mDoDvdThd_param_c::mainLoop() {
-    /* Nonmatching */
+    while (waitForKick()) {
+        while (mDoDvdThd_command_c* cmd = this->getFirstCommand()) {
+            cut(cmd);
+            if (mDoDvdThd::SyncWidthSound) {
+                JASystem::Dvd::sendCmdMsg(cb, &cmd, 0x04);
+            } else {
+                cb(&cmd);
+            }
+        }
+    }
 }
 
 /* 800182B4-800182F8       .text __ct__19mDoDvdThd_command_cFv */
 mDoDvdThd_command_c::mDoDvdThd_command_c() {
-    /* Nonmatching */
+    mIsDone = false;
+    cNd_ForcedClear(this);
 }
 
 /* 800182F8-80018358       .text __dt__20mDoDvdThd_callback_cFv */
 mDoDvdThd_callback_c::~mDoDvdThd_callback_c() {
-    /* Nonmatching */
 }
 
 /* 80018358-800183B4       .text __ct__20mDoDvdThd_callback_cFPFPv_PvPv */
-mDoDvdThd_callback_c::mDoDvdThd_callback_c(void* (*)(void*), void*) {
-    /* Nonmatching */
+mDoDvdThd_callback_c::mDoDvdThd_callback_c(mDoDvdThd_callback_func func, void* userData) {
+    mFunc = func;
+    mUserData = userData;
+    mResult = NULL;
 }
 
 /* 800183B4-80018430       .text create__20mDoDvdThd_callback_cFPFPv_PvPv */
-void mDoDvdThd_callback_c::create(void* (*)(void*), void*) {
-    /* Nonmatching */
+mDoDvdThd_callback_c* mDoDvdThd_callback_c::create(mDoDvdThd_callback_func func, void* userData) {
+    mDoDvdThd_callback_c* cmd = new (mDoExt_getCommandHeap(), -4) mDoDvdThd_callback_c(func, userData);
+    if (cmd != NULL)
+        mDoDvdThd::l_param.addition(cmd);
+    return cmd;
 }
 
 /* 80018430-80018484       .text execute__20mDoDvdThd_callback_cFv */
-void mDoDvdThd_callback_c::execute() {
-    /* Nonmatching */
+BOOL mDoDvdThd_callback_c::execute() {
+    mResult = mFunc(mUserData);
+    mIsDone = true;
+    return mResult != NULL;
 }
 
 /* 80018484-800184E4       .text __dt__24mDoDvdThd_mountArchive_cFv */
 mDoDvdThd_mountArchive_c::~mDoDvdThd_mountArchive_c() {
-    /* Nonmatching */
 }
 
 /* 800184E4-80018554       .text __ct__24mDoDvdThd_mountArchive_cFUc */
-mDoDvdThd_mountArchive_c::mDoDvdThd_mountArchive_c(unsigned char) {
-    /* Nonmatching */
+mDoDvdThd_mountArchive_c::mDoDvdThd_mountArchive_c(u8 direction) {
+    mMountDirection = direction;
+    mEntryNum = -1;
+    mArchive = NULL;
+    mHeap = NULL;
+    if (direction == 0)
+        mMountDirection = mDoDvdThd::sDefaultDirection;
 }
 
 /* 80018554-8001861C       .text create__24mDoDvdThd_mountArchive_cFPCcUcP7JKRHeap */
-void mDoDvdThd_mountArchive_c::create(const char*, unsigned char, JKRHeap*) {
-    /* Nonmatching */
+mDoDvdThd_mountArchive_c* mDoDvdThd_mountArchive_c::create(const char* path, u8 direction, JKRHeap* heap) {
+    mDoDvdThd_mountArchive_c* cmd = new (mDoExt_getCommandHeap(), -4) mDoDvdThd_mountArchive_c(direction);
+    if (cmd != NULL) {
+        s32 entryNumber = my_DVDConvertPathToEntrynum(path);
+        cmd->mEntryNum = entryNumber;
+        if (cmd->mEntryNum == -1) {
+            cmd->mIsDone = true;
+            delete cmd;
+            cmd = NULL;
+        } else {
+            cmd->mHeap = heap;
+            mDoDvdThd::l_param.addition(cmd);
+        }
+    }
+    return cmd;
 }
 
 /* 8001861C-80018770       .text execute__24mDoDvdThd_mountArchive_cFv */
-void mDoDvdThd_mountArchive_c::execute() {
-    /* Nonmatching */
+BOOL mDoDvdThd_mountArchive_c::execute() {
+    JKRHeap* heap = mHeap != NULL ? mHeap : mDoExt_getArchiveHeap();
+
+    while (true) {
+        JKRMemArchive* arc;
+        if (mMountDirection == 0) {
+            arc = new (heap, 0) JKRMemArchive(mEntryNum, JKRArchive::MOUNT_DIRECTION_HEAD);
+        } else {
+            arc = new (heap, -4) JKRMemArchive(mEntryNum, JKRArchive::MOUNT_DIRECTION_TAIL);
+        }
+
+        if (arc != NULL && arc->isMounted()) {
+            mArchive = arc;
+            break;
+        }
+
+        OSReport_Error("mDoDvdThd_mountArchive_c::execute マウント失敗\n");
+        if (arc != NULL)
+            delete arc;
+
+        if (heap != mDoExt_getZeldaHeap()) {
+            OSReport_Error("mDoDvdThd_mountArchive_c::execute システムヒープで再チャレンジ！\n");
+            heap = mDoExt_getZeldaHeap();
+            continue;
+        }
+
+        OSReport_FatalError("mDoDvdThd_mountArchive_c::execute ヒープが致命的に足りません！\n");
+        break;
+    }
+
+    mIsDone = true;
+    return mArchive != NULL;
 }
 
 /* 80018770-800187D0       .text __dt__25mDoDvdThd_mountXArchive_cFv */
 mDoDvdThd_mountXArchive_c::~mDoDvdThd_mountXArchive_c() {
-    /* Nonmatching */
 }
 
 /* 800187D0-80018844       .text __ct__25mDoDvdThd_mountXArchive_cFUcQ210JKRArchive10EMountMode */
-mDoDvdThd_mountXArchive_c::mDoDvdThd_mountXArchive_c(unsigned char, JKRArchive::EMountMode) {
-    /* Nonmatching */
+mDoDvdThd_mountXArchive_c::mDoDvdThd_mountXArchive_c(u8 direction, JKRArchive::EMountMode mountMode) {
+    mMountDirection = direction;
+    mEntryNum = -1;
+    mArchive = NULL;
+    mMountMode = mountMode;
+    if (direction == 0)
+        mMountDirection = mDoDvdThd::sDefaultDirection;
 }
 
 /* 80018844-8001890C       .text create__25mDoDvdThd_mountXArchive_cFPCcUcQ210JKRArchive10EMountMode */
-void mDoDvdThd_mountXArchive_c::create(const char*, unsigned char, JKRArchive::EMountMode) {
-    /* Nonmatching */
+mDoDvdThd_mountXArchive_c* mDoDvdThd_mountXArchive_c::create(const char* path, u8 direction, JKRArchive::EMountMode mountMode) {
+    mDoDvdThd_mountXArchive_c* cmd = new (mDoExt_getCommandHeap(), -4) mDoDvdThd_mountXArchive_c(direction, mountMode);
+    if (cmd != NULL) {
+        s32 entryNumber = my_DVDConvertPathToEntrynum(path);
+        cmd->mEntryNum = entryNumber;
+        if (cmd->mEntryNum == -1) {
+            cmd->mIsDone = true;
+            delete cmd;
+            cmd = NULL;
+        } else {
+            mDoDvdThd::l_param.addition(cmd);
+        }
+    }
+    return cmd;
 }
 
 /* 8001890C-80018984       .text execute__25mDoDvdThd_mountXArchive_cFv */
-void mDoDvdThd_mountXArchive_c::execute() {
-    /* Nonmatching */
+BOOL mDoDvdThd_mountXArchive_c::execute() {
+    JKRArchive::EMountDirection mountDir = mMountDirection == 0 ? JKRArchive::MOUNT_DIRECTION_HEAD : JKRArchive::MOUNT_DIRECTION_TAIL;
+    mArchive = JKRArchive::mount(mEntryNum, mMountMode, mDoExt_getArchiveHeap(), mountDir);
+    BOOL ret = getArchive() != NULL;
+    mIsDone = true;
+    return ret;
 }
 
 /* 80018984-800189E0       .text __ct__21mDoDvdThd_toMainRam_cFUc */
-mDoDvdThd_toMainRam_c::mDoDvdThd_toMainRam_c(unsigned char) {
-    /* Nonmatching */
+mDoDvdThd_toMainRam_c::mDoDvdThd_toMainRam_c(u8 direction) {
+    mAllocDirection = direction;
+    if (direction == 0)
+        mAllocDirection = mDoDvdThd::sDefaultDirection;
 }
 
 /* 800189E0-80018AA8       .text create__21mDoDvdThd_toMainRam_cFPCcUcP7JKRHeap */
-void mDoDvdThd_toMainRam_c::create(const char*, unsigned char, JKRHeap*) {
-    /* Nonmatching */
+mDoDvdThd_toMainRam_c* mDoDvdThd_toMainRam_c::create(const char* path, u8 direction, JKRHeap* heap) {
+    mDoDvdThd_toMainRam_c* cmd = new (mDoExt_getCommandHeap(), -4) mDoDvdThd_toMainRam_c(direction);
+    if (cmd != NULL) {
+        s32 entryNumber = my_DVDConvertPathToEntrynum(path);
+        cmd->mEntryNum = entryNumber;
+        if (cmd->mEntryNum == -1) {
+            cmd->mIsDone = true;
+            delete cmd;
+            cmd = NULL;
+        } else {
+            cmd->mHeap = heap;
+            mDoDvdThd::l_param.addition(cmd);
+        }
+    }
+    return cmd;
 }
 
 /* 80018AA8-80018B08       .text __dt__21mDoDvdThd_toMainRam_cFv */
 mDoDvdThd_toMainRam_c::~mDoDvdThd_toMainRam_c() {
-    /* Nonmatching */
 }
 
 /* 80018B08-80018BB8       .text execute__21mDoDvdThd_toMainRam_cFv */
-void mDoDvdThd_toMainRam_c::execute() {
-    /* Nonmatching */
+BOOL mDoDvdThd_toMainRam_c::execute() {
+    JKRHeap* heap;
+    if (mHeap != NULL) {
+        heap = mHeap;
+    } else {
+        heap = mDoExt_getArchiveHeap();
+    }
+
+    JKRDvdRipper::EAllocDirection allocDir = mAllocDirection == 0 ? JKRDvdRipper::ALLOC_DIRECTION_FORWARD : JKRDvdRipper::ALLOC_DIRECTION_BACKWARD;
+    mData = JKRDvdRipper::loadToMainRAM(mEntryNum, NULL, EXPAND_SWITCH_UNKNOWN1, 0, heap, allocDir, 0, NULL);
+    if (mData != NULL)
+        mDataSize = heap->getSize(mData);
+    mIsDone = true;
+    return mData != NULL;
+}
+
+static void dummy2() {
+    OSReport("mArchive != 0");
+    OSReport("Halt");
+    OSReport("archive");
+    OSReport("mDoDvdThd_getResource_c::create() クラス生成に失敗\n");
+    OSReport("mDoDvdThd_getResource_c::create() リソース取得に失敗\n");
+    OSReport("entry");
+    OSReport("mArchive");
+    OSReport("mDoDvdThd_getResource_c::execute() リソース取得に失敗\n");
+    OSReport("mEntryNum != -1");
 }
