@@ -182,7 +182,6 @@ void dDlst_TimerScrnDraw_c::draw() {
 /* 8023D9A0-8023D9C0       .text dTimer_Draw__FP8dTimer_c */
 void dTimer_Draw(dTimer_c* timer) {
     timer->_draw();
-    return;
 }
 
 /* 8023D9C0-8023D9E0       .text dTimer_Execute__FP8dTimer_c */
@@ -198,7 +197,6 @@ int dTimer_IsDelete(dTimer_c*) {
 /* 8023D9E8-8023DA08       .text dTimer_Delete__FP8dTimer_c */
 void dTimer_Delete(dTimer_c* timer) {
     timer->_delete();
-    return;
 }
 
 /* 8023DA08-8023DA28       .text dTimer_Create__FP9msg_class */
