@@ -119,14 +119,17 @@ public:
     
     void onEnd() {
         field_0x04 = true;
-        field_0x20 = 0;
+        field_0x20 = NULL;
     }
 
     /* 0x04 */ bool field_0x04;
     /* 0x05 */ bool field_0x05;
-    /* 0x08 */ u8 field_0x08[0x20 - 0x08];
-    /* 0x20 */ int field_0x20;
-    /* 0x24 */ u8 field_0x24[0x28 - 0x24];
+    /* 0x08 */ u8 field_0x08[0x0C - 0x08];
+    /* 0x0C */ f32 field_0x0C;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ u8 field_0x14[0x20 - 0x14];
+    /* 0x20 */ const csXyz* field_0x20;
+    /* 0x24 */ JPABaseEmitter* mpEmitter;
 };  // Size: 0x28
 
 STATIC_ASSERT(sizeof(daPy_swimTailEcallBack_c) == 0x28);
@@ -159,6 +162,9 @@ public:
     void execute(JPABaseEmitter*);
     ~daPy_dmEcallBack_c() {}
     daPy_dmEcallBack_c() {}
+    
+    static void setTimer(s16 timer) { m_timer = timer; }
+    static void setType(u16 type) { m_type = type; }
     
     static s16 m_timer;
     static u16 m_type;
@@ -1210,6 +1216,10 @@ public:
         ANM_UNK_C4 = 0xC4,
     };
 
+    enum daPy_UNDER {
+        
+    };
+
     enum daPy_UPPER {
         UPPER_UNK2 = 2,
     };
@@ -1225,9 +1235,6 @@ public:
     
     typedef BOOL (daPy_lk_c::*ProcFunc)();
     
-    void getBoomerangCatchPos() const;
-    void getLineTopPos();
-    cXyz getHookshotRootPos() const { return mHookshotRootPos; }
     void seStartOnlyReverb(u32);
     void seStartMapInfo(u32);
     void seStartSwordCut(u32);
@@ -1281,9 +1288,9 @@ public:
     void setHintActor();
     void setDoStatusBasic();
     void setDoStatus();
-    void getDirectionFromAngle(s16);
-    void getDirectionFromShapeAngle();
-    void getDirectionFromCurrentAngle();
+    int getDirectionFromAngle(s16);
+    int getDirectionFromShapeAngle();
+    int getDirectionFromCurrentAngle();
     void setNormalSpeedF(f32, f32, f32, f32);
     void posMoveFromFootPos();
     void posMove();
@@ -2072,6 +2079,9 @@ public:
     void clearDamageWait() {}
     void exchangeGrabActor(fopAc_ac_c*) {}
     void getDekuLeafWindPos() const {}
+    void getBoomerangCatchPos() const {}
+    void getLineTopPos() {}
+    cXyz getHookshotRootPos() const { return mHookshotRootPos; }
     void getIceParticleBtk() {}
     void getIceWaterParticleBtk() {}
     void getShadowID() const {}
@@ -2089,102 +2099,63 @@ public:
     
     request_of_phase_process_class* getPhase() { return &mPhsLoad; }
     
-    // void allTrigger() const {}
-    // void cancelTrigger() const {}
-    // void checkAttentionLock() {}
-    // void checkBoomerangCatchAnime() const {}
-    // void checkBoomerangReadyAnime() const {}
-    // void checkBoomerangRock() {}
-    // void checkBoomerangThrowAnime() const {}
-    // void checkBothItemEquipAnime() const {}
-    // void checkBowReloadAnime() const {}
-    // void checkBowShootAnime() const {}
-    // void checkBowWaitAnime() const {}
-    // void checkCarryActionNow() const {}
-    // void checkCrawlWaterIn() {}
-    // void checkDashDamageAnime() const {}
-    // void checkDoubleItemEquipAnime() const {}
-    // void checkFaceTypeNot() const {}
-    // void checkGrabAnime() const {}
-    // void checkGrabAnimeHeavy() const {}
-    // void checkGrabAnimeLight() const {}
-    // void checkGuardSlip() const {}
-    // void checkHookshotReadyAnime() const {}
-    // void checkIsland() const {}
-    // void checkMirrorShieldEquip() const {}
-    // void checkModeFlg(unsigned long) const {}
-    // void checkNoControll() const {}
-    // void checkNoDamageMode() const {}
-    // void checkNoUpperAnime() const {}
-    // void checkPlayerDemoMode() const {}
-    // void checkPowerGloveEquip() const {}
-    // void checkRopeThrowAnime() const {}
-    // void checkShieldEquip() const {}
-    // void checkShipGetOff() {}
-    // void checkSpecialDemoMode() const {}
-    // void checkSwordEquip() const {}
-    // void checkSwordEquipAnime() const {}
-    // void checkTinkleHover() const {}
-    // void checkTinkleShield() const {}
-    // void checkUpperAnime(unsigned short) const {}
-    // void checkUpperGuardAnime() const {}
-    // void clearDamageWait() {}
-    // void decrementBombCnt() {}
-    // void doButton() const {}
-    // void doTrigger() const {}
-    // void exchangeGrabActor(fopAc_ac_c*) {}
-    // void getAnmSpeedStickRate(float, float) {}
-    // void getBombBrk() {}
-    // void getBombWaterPillarBrk() {}
-    // void getBombWaterPillarBtk() {}
-    // void getBoomerangCatchPos() const {}
-    // void getDekuLeafWindPos() const {}
-    // void getHookshotRootPos() const {}
-    // void getIceArrowBtk() {}
-    // void getIceParticleBtk() {}
-    // void getIceWaterParticleBtk() {}
-    // void getLightArrowBtk() {}
-    // void getLineTopPos() {}
-    // void getModelJointMtx(unsigned short) {}
-    // void getNowAnmPackUnder(daPy_lk_c::daPy_UNDER) {}
-    // void getNowAnmPackUpper(daPy_lk_c::daPy_UPPER) {}
-    // void getPhase() {}
-    // void getShadowID() const {}
-    // void getStartEvent() {}
-    // void getStartMode() {}
-    // void getStartModeFromParam(unsigned long) {}
-    // void getStartRoomNo() {}
-    // void getTactLeftHandPos() const {}
-    // void itemButtonX() const {}
-    // void itemButtonY() const {}
-    // void itemButtonZ() const {}
-    // void itemTriggerX() const {}
-    // void itemTriggerY() const {}
-    // void itemTriggerZ() const {}
-    // void npcStartRestartRoom() {}
-    // void offModeFlg(unsigned long) {}
-    // void offShipTact() {}
-    // void onModeFlg(unsigned long) {}
-    // void onShipDrop(short) {}
-    // void onShipTact() {}
-    // void otherWeaponTrigger() const {}
-    // void seStartSystem(unsigned long) {}
-    // void setDaiokutaEnd() {}
-    // void setFootEffectPosType(unsigned char) {}
-    // void setHoverBoots(short) {}
-    // void setSpeedAndAngleBoomerang() {}
-    // void setSpeedAndAngleBow() {}
-    // void setSpeedAndAngleHookshot() {}
-    // void setSpeedAndAngleRope() {}
-    // void setTinkleShield(short) {}
-    // void setWhirlId(unsigned int) {}
-    // void spActionButton() const {}
-    // void spActionTrigger() const {}
-    // void spBattleTrigger() const {}
-    // void spLTrigger() const {}
-    // void swordButton() const {}
-    // void swordTrigger() const {}
-    // void talkTrigger() const {}
+    void allTrigger() const {}
+    void cancelTrigger() const {}
+    void checkAttentionLock() {}
+    void checkBoomerangRock() {}
+    void checkBothItemEquipAnime() const {}
+    void checkBowReloadAnime() const {}
+    void checkBowShootAnime() const {}
+    void checkBowWaitAnime() const {}
+    void checkCrawlWaterIn() {}
+    void checkDashDamageAnime() const {}
+    void checkDoubleItemEquipAnime() const {}
+    void checkFaceTypeNot() const {}
+    void checkGuardSlip() const {}
+    void checkHookshotReadyAnime() const {}
+    void checkIsland() const {}
+    void checkMirrorShieldEquip() const {}
+    void checkNoUpperAnime() const {}
+    void checkPlayerDemoMode() const {}
+    void checkPowerGloveEquip() const {}
+    void checkRopeThrowAnime() const {}
+    void checkShieldEquip() const {}
+    void checkSpecialDemoMode() const {}
+    void checkSwordEquip() const {}
+    void checkSwordEquipAnime() const {}
+    void checkTinkleHover() const {}
+    void checkUpperAnime(u16) const {}
+    void checkUpperGuardAnime() const {}
+    void decrementBombCnt() {}
+    void doButton() const {}
+    void doTrigger() const {}
+    void getAnmSpeedStickRate(f32, f32) {}
+    void getBombWaterPillarBrk() {}
+    void getBombWaterPillarBtk() {}
+    void getNowAnmPackUnder(daPy_UNDER) {}
+    void getNowAnmPackUpper(daPy_UPPER) {}
+    void getStartModeFromParam(u32) {}
+    void getTactLeftHandPos() const {}
+    void itemButtonX() const {}
+    void itemButtonY() const {}
+    void itemButtonZ() const {}
+    void itemTriggerX() const {}
+    void itemTriggerY() const {}
+    void itemTriggerZ() const {}
+    void otherWeaponTrigger() const {}
+    void seStartSystem(u32) {}
+    void setFootEffectPosType(u8) {}
+    void setSpeedAndAngleBoomerang() {}
+    void setSpeedAndAngleBow() {}
+    void setSpeedAndAngleHookshot() {}
+    void setSpeedAndAngleRope() {}
+    void spActionButton() const {}
+    void spActionTrigger() const {}
+    void spBattleTrigger() const {}
+    void spLTrigger() const {}
+    void swordButton() const {}
+    void swordTrigger() const {}
+    void talkTrigger() const {}
     
     virtual MtxP getLeftHandMatrix() { return mpCLModel->getAnmMtx(0x08); } // cl_LhandA joint
     virtual MtxP getRightHandMatrix() { return mpCLModel->getAnmMtx(0x0C); } // cl_RhandA joint
