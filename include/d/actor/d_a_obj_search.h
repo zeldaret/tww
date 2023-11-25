@@ -7,6 +7,10 @@
 namespace daObj_Search {
     class Act_c : public fopAc_ac_c {
     public:
+        enum Proc_e {
+            
+        };
+    
         void getFindFlag() {}
         void isSecond() {}
         void modeProcInit(int) {}
@@ -34,7 +38,7 @@ namespace daObj_Search {
         void modeFind2nd();
         void modeSearchBdkInit();
         void modeSearchBdk();
-        void modeProc(daObj_Search::Act_c::Proc_e, int);
+        void modeProc(Proc_e, int);
         void attr() const;
         void SetArgData();
         void CreateInit();
@@ -58,6 +62,11 @@ namespace daObj_Search {
     
     public:
         /* Place member variables here */
+    };
+
+    class Bgc_c {
+    public:
+        void wall_pos(const daObj_Search::Act_c*, cXyz*, cXyz*, bool*, float*);
     };
 };
 

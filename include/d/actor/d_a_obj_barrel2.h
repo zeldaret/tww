@@ -3,17 +3,23 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
+#include "d/actor/d_a_obj_buoyflag.h"
 
 namespace daObjBarrel2 {
+    enum Type_e {
+        
+    };
+
     class Act_c : public fopAc_ac_c {
     public:
+    
         void attr() const {}
         void chk_item_give() const {}
         void delete_req() {}
         void exit_req() {}
         void get_item_id() {}
-        void make_coming(cXyz*, int, daObjBarrel2::Type_e, int, bool, short, daObjBuoyflag::Texture_e) {}
-        void make_prm(daObjBarrel2::Type_e, int, bool, bool, daObjBuoyflag::Texture_e) {}
+        void make_coming(cXyz*, int, Type_e, int, bool, short, daObjBuoyflag::Texture_e) {}
+        void make_prm(Type_e, int, bool, bool, daObjBuoyflag::Texture_e) {}
         void prm_get_buoy() const {}
         void prm_get_coming() const {}
         void prm_get_itemNo() const {}

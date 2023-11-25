@@ -6,6 +6,10 @@
 
 class daNpc_Co1_c : public fopAc_ac_c {
 public:
+    struct anm_prm_c {
+        
+    };
+
     void nodeCo1Control(J3DNode*, J3DModel*);
     void init_CO1_0();
     void createInit();
@@ -18,7 +22,7 @@ public:
     void iniTexPttrnAnm(bool);
     void plyTexPttrnAnm();
     void setAnm_tex(signed char);
-    void setAnm_anm(daNpc_Co1_c::anm_prm_c*);
+    void setAnm_anm(anm_prm_c*);
     void setAnm_NUM(int, int);
     void setAnm();
     void chg_anmTag();

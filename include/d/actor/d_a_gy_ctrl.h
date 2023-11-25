@@ -5,6 +5,10 @@
 
 class daGy_Ctrl_c : public fopAc_ac_c {
 public:
+    enum Proc_e {
+        
+    };
+
     void getMode() {}
     void isTargetPlayer() {}
     void isTargetPlayerShip() {}
@@ -16,7 +20,7 @@ public:
     void lineCheck(cXyz*, cXyz*);
     void checkPath();
     void setPathPos();
-    void modeProc(daGy_Ctrl_c::Proc_e, int);
+    void modeProc(Proc_e, int);
     void modeSwWaitInit();
     void modeSwWait();
     void modeCreateInit();

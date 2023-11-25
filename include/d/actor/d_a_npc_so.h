@@ -6,6 +6,10 @@
 
 class daNpc_So_c : public fopAc_ac_c {
 public:
+    enum Proc_e {
+        
+    };
+
     void cutAppearProc() {}
     void cutAppearStart() {}
     void cutDisappearProc() {}
@@ -107,7 +111,7 @@ public:
     void modeGetRupee();
     void modeEventTriForceInit();
     void modeEventTriForce();
-    void modeProc(daNpc_So_c::Proc_e, int);
+    void modeProc(Proc_e, int);
     void eventOrder();
     void checkOrder();
     void setScale();

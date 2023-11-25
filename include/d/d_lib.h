@@ -72,8 +72,16 @@ public:
     /* 0x22 */ s16 mAngleSpeed;
 };
 
-class dLib_circle_path_c;
-class dLib_wave_c;
+class dLib_wave_c {
+public:
+    /* 0x00 */ s16 mAngX;
+    /* 0x02 */ s16 mAngZ;
+    /* 0x04 */ s16 mAnimX;
+    /* 0x06 */ s16 mAnimZ;
+    /* 0x08 */ s16 mRotX;
+    /* 0x0A */ s16 mRotZ;
+};
+
 class dLib_anm_idx_c;
 
 void dLib_setCirclePath(dLib_circle_path_c*);

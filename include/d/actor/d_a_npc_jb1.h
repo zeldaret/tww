@@ -9,12 +9,18 @@
 
 class daNpc_Jb1_c : public fopAc_ac_c {
 public:
+    struct anm_prm_c {
+        
+    };
+
+    typedef BOOL (daNpc_Jb1_c::*ActionFunc)(void*);
+
     void init_JB1_0();
     void createInit();
     void setMtx();
     void playBrkAnm(J3DAnmTevRegKey*, short*);
     void anmNum_toResID(int);
-    void setAnm_anm(daNpc_Jb1_c::anm_prm_c*);
+    void setAnm_anm(anm_prm_c*);
     void setAnm();
     void chg_anmTag();
     void control_anmTag();
@@ -59,7 +65,7 @@ public:
     /* 0x83C */ u8 m83C[0x848 - 0x83C];
     /* 0x848 */ J3DAnmTevRegKey* mCurrentBrkAnim;
     /* 0x84C */ u8 m84C[0x85C - 0x84C];
-    /* 0x85C */ StateFunc mCurStateFunc;
+    /* 0x85C */ ActionFunc mCurStateFunc;
     /* 0x868 */ u8 m868[0x8E0 - 0x868];
     /* 0x8E0 */ cXyz mCurrentPos;
     /* 0x8EC */ csXyz mCurrentRot;

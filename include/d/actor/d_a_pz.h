@@ -10,6 +10,10 @@
 
 class daPz_c : public fopAc_ac_c {
 public:
+    enum Proc_e {
+        
+    };
+
     void getRightHandMatrix() {}
     void isAnm(signed char) {}
     void isEyeAnm(signed char) {}
@@ -73,7 +77,7 @@ public:
     void modeTalk();
     void modeFollowInit();
     void modeFollow();
-    void modeProc(daPz_c::Proc_e, int);
+    void modeProc(Proc_e, int);
     BOOL _execute();
     void bowDraw();
     void bodyDraw();

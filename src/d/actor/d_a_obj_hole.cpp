@@ -41,9 +41,17 @@ static daObj_Hole_HIO_c l_HIO;
 class daObj_Hole_c : public fopAc_ac_c {
 public:
     enum Proc_e {
-        PROC_MODE_WAIT,
-        PROC_MODE_EVENT
+        PROC_INIT = 0,
+        PROC_EXEC = 1
     };
+
+    enum Mode {
+        MODE_WAIT  = 0,
+        MODE_EVENT = 1,
+        MODE_NULL,
+    };
+
+    void modeProcInit(int newMode) { modeProc(PROC_INIT, newMode); }
 
     void setMtx();
     void getPosAndAngle();
@@ -68,7 +76,7 @@ public:
 
     static const char m_arc_name[];
 
-    /* 0x0290 */ s32 mState;
+    /* 0x0290 */ s32 mMode;
     /* 0x0294 */ u8 mHasModel;
     /* 0x0295 */ u8 mExitIdx;
     /* 0x0296 */ u16 mScaleLocal;
@@ -105,7 +113,7 @@ void daObj_Hole_c::setMtx() {
     adjustPos.z = current.pos.z;
     adjustPos.y += l_HIO.m0010;
 
-    if (mState != 1) {
+    if (mMode != MODE_EVENT) {
         shape_angle.y = fopCamM_GetAngleY(dComIfGp_getCamera(0)) + 0x8000;
     }
 
@@ -169,7 +177,7 @@ void daObj_Hole_c::modeWait() {
     }
 
     if (dLib_checkPlayerInCircle(current.pos, scale, 20.0f)) {
-        modeProc(PROC_MODE_WAIT, 1);
+        modeProcInit(MODE_EVENT);
     }
 }
 
@@ -201,7 +209,7 @@ void daObj_Hole_c::modeEvent() {
 }
 
 /* 000005D0-000006C0       .text modeProc__12daObj_Hole_cFQ212daObj_Hole_c6Proc_ei */
-void daObj_Hole_c::modeProc(daObj_Hole_c::Proc_e mode, int i_nextState) {
+void daObj_Hole_c::modeProc(daObj_Hole_c::Proc_e proc, int newMode) {
     typedef void (daObj_Hole_c::*daObjHole_mode_t)(void);
 
     struct mode_struct {
@@ -223,18 +231,18 @@ void daObj_Hole_c::modeProc(daObj_Hole_c::Proc_e mode, int i_nextState) {
         }
     };
 
-    if (mode == PROC_MODE_WAIT) {
-        mState = i_nextState;
-        (this->*mode_tbl[mState].init)();
+    if (proc == PROC_INIT) {
+        mMode = newMode;
+        (this->*mode_tbl[mMode].init)();
     }
-    else if (mode == PROC_MODE_EVENT) {
-        (this->*mode_tbl[mState].exec)();
+    else if (proc == PROC_EXEC) {
+        (this->*mode_tbl[mMode].exec)();
     }
 }
 
 /* 000006C0-00000700       .text _execute__12daObj_Hole_cFv */
 s32 daObj_Hole_c::_execute() {
-    modeProc(PROC_MODE_EVENT, 2);
+    modeProc(PROC_EXEC, MODE_NULL);
     setMtx();
     return 0;
 }
@@ -263,7 +271,7 @@ s32 daObj_Hole_c::_draw() {
 
 /* 000007BC-00000864       .text createInit__12daObj_Hole_cFv */
 void daObj_Hole_c::createInit() {
-    modeProc(PROC_MODE_WAIT, 0);
+    modeProcInit(MODE_WAIT);
 
     fopAcM_SetMtx(this, mpMdl->getBaseTRMtx());
     fopAcM_setCullSizeFar(this, 10.0f);

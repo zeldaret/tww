@@ -10,6 +10,10 @@
 
 class daNpc_Ac1_c : public fopAc_ac_c {
 public:
+    struct anm_prm_c {
+        
+    };
+
     void nodeWngControl(J3DNode*, J3DModel*);
     void nodeArmControl(J3DNode*, J3DModel*);
     void nodeAc1Control(J3DNode*, J3DModel*);
@@ -23,7 +27,7 @@ public:
     void iniTexPttrnAnm(bool);
     void plyTexPttrnAnm();
     void setAnm_tex(signed char);
-    void setAnm_anm(daNpc_Ac1_c::anm_prm_c*);
+    void setAnm_anm(anm_prm_c*);
     void setAnm();
     void chg_anmTag();
     void control_anmTag();

@@ -6,6 +6,10 @@
 
 class daObj_Canon_c : public fopAc_ac_c {
 public:
+    enum Proc_e {
+        
+    };
+
     void modeProcInit(int) {}
 
     void _nodeControl(J3DNode*, J3DModel*);
@@ -27,7 +31,7 @@ public:
     void modeSwWait();
     void modeAppearInit();
     void modeAppear();
-    void modeProc(daObj_Canon_c::Proc_e, int);
+    void modeProc(Proc_e, int);
     BOOL _execute();
     void debugDraw();
     BOOL _draw();

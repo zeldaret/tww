@@ -6,6 +6,10 @@
 
 class daNpc_Bj1_c : public fopAc_ac_c {
 public:
+    struct anm_prm_c {
+        
+    };
+
     void nodeBj1Control(J3DNode*, J3DModel*);
     void nodePrpControl(J3DNode*, J3DModel*);
     void init_BJ4_0();
@@ -17,7 +21,7 @@ public:
     void setMtx_anmProc();
     void setMtx(bool);
     void anmNum_toResID(int);
-    void setAnm_anm(daNpc_Bj1_c::anm_prm_c*);
+    void setAnm_anm(anm_prm_c*);
     void setAnm_NUM(int);
     void setAnm();
     void setAnm_prp(signed char);

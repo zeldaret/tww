@@ -149,8 +149,8 @@ public:
     void setBombRestTime(s16 time);
     void setNoGravityTime(s16 time);
     static int prm_make(daBomb_c::State_e, bool, bool);
-    bool chk_state(daBomb_c::State_e) const;
-    void change_state(daBomb_c::State_e);
+    bool chk_state(State_e) const;
+    void change_state(State_e);
     int prm_get_state() const;
     bool get_explode_instant() const;
     bool prm_get_cheapEff() const;

@@ -24,7 +24,7 @@ namespace daObjBuoyflag {
                 roomNo, angle, NULL, -1, NULL
             );
         }
-        static u32 prm_make(daObjBuoyflag::Type_e, daObjBuoyflag::Texture_e, bool) {
+        static u32 prm_make(Type_e, Texture_e, bool) {
             // TODO: placeholder function
             return 0;
         }
@@ -35,8 +35,8 @@ namespace daObjBuoyflag {
         inline BOOL _draw();
         inline BOOL _execute();
         void jump_to_sea(float, float, short) {}
-        void make_barrel2_mine(unsigned int, cXyz*, int, csXyz*, daObjBuoyflag::Texture_e, bool) {}
-        void make_barrel2_norm(unsigned int, cXyz*, int, csXyz*, daObjBuoyflag::Texture_e) {}
+        void make_barrel2_mine(unsigned int, cXyz*, int, csXyz*, Texture_e, bool) {}
+        void make_barrel2_norm(unsigned int, cXyz*, int, csXyz*, Texture_e) {}
         void attr_type() const {}
         void prm_get_noCull() const {}
         void prm_get_texture() const {}

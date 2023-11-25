@@ -6,6 +6,10 @@
 
 class daNpc_Hi1_c : public fopAc_ac_c {
 public:
+    struct anm_prm_c {
+        
+    };
+
     void _nodeCB_Head(J3DNode*, J3DModel*);
     void _nodeCB_BackBone(J3DNode*, J3DModel*);
     void init_HI1_0();
@@ -20,7 +24,7 @@ public:
     void init_texPttrnAnm(signed char, bool);
     void play_btp_anm();
     void play_btk_anm();
-    void setAnm_anm(daNpc_Hi1_c::anm_prm_c*);
+    void setAnm_anm(anm_prm_c*);
     void setAnm_NUM(int, int);
     void setAnm();
     void chngAnmTag();

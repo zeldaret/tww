@@ -5,13 +5,17 @@
 
 class daTag_Gship_c : public fopAc_ac_c {
 public:
+    enum Proc_e {
+        
+    };
+
     void modeProcInit(int) {}
 
     void modeClearWaitInit();
     void modeClearWait();
     void modeClearEventInit();
     void modeClearEvent();
-    void modeProc(daTag_Gship_c::Proc_e, int);
+    void modeProc(Proc_e, int);
     BOOL _execute();
     BOOL _draw();
     void getArg();
