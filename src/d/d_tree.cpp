@@ -43,7 +43,7 @@ void dTree_room_c::newData(dTree_data_c* data) {
 void dTree_room_c::deleteData() {
     while (this->mpHead != (dTree_data_c*)0x0) {
         this->mpHead->field_0x000 = 0;
-        // JAIZelBasic::seDeleteObject(JAIZelBasic::zel_basic, &this->mpHead->mPos);
+        mDoAud_seDeleteObject(&this->mpHead->mPos);
         this->mpHead = this->mpHead->mpNext;
     }
     return;

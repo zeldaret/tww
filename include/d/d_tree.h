@@ -10,10 +10,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_s_play.h"
-#include "dolphin/types.h"
-#include "f_op/f_op_actor_mng.h"
-#include "m_Do/m_Do_mtx.h"
-#include "d/actor/d_a_player.h"
 
 class dTree_data_c {
 public:
