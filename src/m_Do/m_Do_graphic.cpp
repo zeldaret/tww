@@ -846,7 +846,8 @@ bool mDoGph_Painter() {
     dComIfGd_drawCopy2D();
     if (dComIfGp_getWindowNum() != 0) {
         dDlst_window_c* window = dComIfGp_getWindow(0);
-        camera_class* camera = dComIfGp_getCamera(window->getCameraID());
+        s32 cameraID = window->getCameraID();
+        camera_class* camera = dComIfGp_getCamera(cameraID);
 
         if (camera != NULL) {
             dComIfGd_imageDrawShadow(camera->mViewMtx);
@@ -869,7 +870,7 @@ bool mDoGph_Painter() {
 
             JPADrawInfo jpaDrawInfo(camera->mViewMtx, camera->mFovy, camera->mAspect);
 
-            bool isTower9 = strcmp(dComIfGp_getStartStageName(), "GTower") == 0 && dComIfGp_getStartStageLayer() == 9;
+            s32 isTower9 = strcmp(dComIfGp_getStartStageName(), "GTower") == 0 && dComIfGp_getStartStageLayer() == 9;
             dComIfGp_setCurrentWindow(window);
             dComIfGp_setCurrentView(camera);
             dComIfGp_setCurrentViewport(viewport_p);
@@ -899,7 +900,7 @@ bool mDoGph_Painter() {
                 dComIfGd_drawOpaListP1();
             }
 
-            dComIfGd_drawOpaListInvisible();
+            dComIfGd_drawOpaList();
             dComIfGd_drawXluListBG();
 
             if (dComIfGd_getSpotModelNum() != 0)
@@ -911,7 +912,7 @@ bool mDoGph_Painter() {
             if (!mDoGph_gInf_c::isMonotone())
                 dComIfGd_drawXluListP1();
 
-            dComIfGd_drawXluListInvisible();
+            dComIfGd_drawXluList();
 
             if (!dMenu_flag()) {
                 dComIfGp_particle_draw(&jpaDrawInfo);
@@ -947,7 +948,7 @@ bool mDoGph_Painter() {
 
             if (!dMenu_flag()) {
                 motionBlure(camera);
-                drawDepth(camera, viewport_p, dComIfGp_getCamZoomForcus(window->getCameraID()));
+                drawDepth(camera, viewport_p, dComIfGp_getCamZoomForcus(cameraID));
                 dComIfGp_particle_drawProjection(&jpaDrawInfo);
             
                 GXSetClipMode(GX_CLIP_ENABLE);

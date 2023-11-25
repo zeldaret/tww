@@ -420,10 +420,11 @@ public:
     void draw2DXlu() { draw(mp2DXluArr, mp2DXlu); }
 
     void drawOpaDrawList(J3DDrawBuffer * drawBuffer) { j3dSys.setDrawModeOpaTexEdge(); drawBuffer->draw(); }
+    void drawTailOpaDrawList(J3DDrawBuffer * drawBuffer) { j3dSys.setDrawModeOpaTexEdge(); drawBuffer->drawTail(); }
     void drawXluDrawList(J3DDrawBuffer * drawBuffer) { j3dSys.setDrawModeXlu(); drawBuffer->draw(); }
     void drawOpaListSky() { drawOpaDrawList(mpOpaListSky); }
     void drawXluListSky() { drawXluDrawList(mpXluListSky); }
-    void drawOpaListP0() { drawOpaDrawList(mpOpaListP0); }
+    void drawOpaListP0() { drawTailOpaDrawList(mpOpaListP0); }
     void drawOpaListP1() { drawOpaDrawList(mpOpaListP1); }
     void drawXluListP1() { drawOpaDrawList(mpXluListP1); }
     void drawOpaListBG() { drawOpaDrawList(mpOpaListBG); }
