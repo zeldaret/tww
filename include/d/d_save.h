@@ -40,11 +40,11 @@ public:
     void init();
 
     void setDateIpl(s64 i_time) { mDateIPL = i_time; }
-    u16 getDate() const { return mDate; }
-    f32 getTime() const { return mTime; }
+    u16 getDate() { return mDate; }
+    f32 getTime() { return mTime; }
     void setDate(u16 i_date) { mDate = i_date; }
     void setTime(f32 i_time) { mTime = i_time; }
-    s64 getDateIpl() const { return mDateIPL; }
+    s64 getDateIpl() { return mDateIPL; }
     s16 getWindY() { return mTactWindAngleY; }
     s16 getWindX() { return mTactWindAngleX; }
     void setWindY(s16 i_windY) { mTactWindAngleY = i_windY; }

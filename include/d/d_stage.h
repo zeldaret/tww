@@ -429,8 +429,6 @@ public:
     /* vt[34] */ virtual int getEnvrNumInfo() const { return mEnvrInfoNum; }
     /* vt[35] */ virtual void setVrboxNumInfo(int i_vrboxNum) { mVrboxInfoNum = i_vrboxNum; }
     /* vt[36] */ virtual int getVrboxNumInfo() const { return mVrboxInfoNum; }
-    /* vt[37] */ virtual void setPlightNumInfo(int i_plightNum) { mPlightInfoNum = i_plightNum; }
-    /* vt[38] */ virtual int getPlightNumInfo() const { return mPlightInfoNum; }
     /* vt[39] */ virtual void setLightVecInfo(stage_lightvec_info_class*) {
         dStage_SetErrorStage();
         OSReport("stage non LightVec data !!\n");
@@ -451,6 +449,8 @@ public:
         JUT_ASSERT(2395, 0);
         return 0;
     }
+    /* vt[37] */ virtual void setPlightNumInfo(int i_plightNum) { mPlightInfoNum = i_plightNum; }
+    /* vt[38] */ virtual int getPlightNumInfo() const { return mPlightInfoNum; }
     /* vt[43] */ virtual void setStagInfo(stage_stag_info_class* i_stag) { mpStagInfo = i_stag; }
     /* vt[44] */ virtual stage_stag_info_class* getStagInfo() const { return mpStagInfo; }
     /* vt[45] */ virtual void setSclsInfo(stage_scls_info_dummy_class* i_scls) { mpScls = i_scls; }
@@ -1060,5 +1060,9 @@ bool dStage_chkPlayerId(int playerId, int room_no);
 int dStage_changeScene(int i_exitId, f32 speed, u32 mode, s8 room_no);
 
 void dStage_restartRoom(u32 roomParam, u32 mode);
+
+inline int IkadaGetIkadaIdArgPrm(u32 param) {
+    return (param >> 0x12) & 0xFF;
+}
 
 #endif /* D_D_STAGE_H */

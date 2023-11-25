@@ -21,22 +21,7 @@
 #include "f_op/f_op_msg_mng.h"
 #include "f_op/f_op_scene_mng.h"
 #include "m_Do/m_Do_mtx.h"
-
-const char dummy_4720[13][8] = {
-    "ACTR",
-    "ACT0",
-    "ACT1",
-    "ACT2",
-    "ACT3",
-    "ACT4",
-    "ACT5",
-    "ACT6",
-    "ACT7",
-    "ACT8",
-    "ACT9",
-    "ACTa",
-    "ACTb",
-};
+#include "d/actor/d_a_sea.h"
 
 /* 80040900-80040938       .text set__18dStage_nextStage_cFPCcScsScSc */
 void dStage_nextStage_c::set(const char* i_stage, s8 i_roomId, s16 i_point, s8 i_layer, s8 i_wipe) {
@@ -1346,18 +1331,77 @@ int dStage_cameraCreate(stage_camera2_data_class* i_cameraData, int i_cameraIdx,
 }
 
 /* 80041708-8004184C       .text dStage_decodeSearchIkada__FPvi */
-void dStage_decodeSearchIkada(void*, int) {
-    /* Nonmatching */
-    static const char* x = "ikada_h";
-    static const char* y = "ikada_u";
-    static const char* z = "ikadaS";
-    int ikada_data = 0;
-    JUT_ASSERT(0, ikada_data != 0);
+stage_actor_data_class* dStage_decodeSearchIkada(void* i_file, int ikadaShipId) {
+    char actor_node_names[][8] = {
+        "ACTR",
+        "ACT0",
+        "ACT1",
+        "ACT2",
+        "ACT3",
+        "ACT4",
+        "ACT5",
+        "ACT6",
+        "ACT7",
+        "ACT8",
+        "ACT9",
+        "ACTa",
+        "ACTb",
+    };
+    
+    if (i_file != NULL) {
+        dStage_fileHeader* file = ((dStage_fileHeader*)i_file);
+        dStage_nodeHeader* node;
+        for (int i = 0; i < ARRAY_SIZE(actor_node_names); i++) {
+            node = ((dStage_nodeHeader*)(file + 1));
+            for (int j = 0; j < file->chunkCount; j++) {
+                if ((s32)node->m_tag == *(s32*)actor_node_names[i]) {
+                    stage_actor_data_class* actor_data = (stage_actor_data_class*)node->m_offset;
+                    for (int k = 0; k  < node->m_entryNum; k++) {
+                        if (strcmp(actor_data->mName, "ikada_h") == 0 ||
+                            strcmp(actor_data->mName, "ikada_u") == 0 ||
+                            strcmp(actor_data->mName, "ikadaS") == 0)
+                        {
+                            if (IkadaGetIkadaIdArgPrm(actor_data->mParameter) == ikadaShipId) {
+                                return actor_data;
+                            }
+                        }
+                        actor_data++;
+                    }
+                    break;
+                }
+                node++;
+            }
+        }
+    }
+    return NULL;
 }
 
 /* 8004184C-800419D0       .text dStage_playerInitIkada__FP16fopAcM_prm_classPv */
-void dStage_playerInitIkada(fopAcM_prm_class*, void*) {
-    /* Nonmatching */
+void dStage_playerInitIkada(fopAcM_prm_class* player_prm, void* i_file) {
+    stage_actor_data_class* ikada_data = dStage_decodeSearchIkada(i_file, dComIfGp_getIkadaShipId());
+    JUT_ASSERT(1590, ikada_data != 0);
+    
+    u8 roomNo = dComIfGp_getIkadaShipBeforeRoomId();
+    player_prm->mParameter = 0xFF000000 | roomNo;
+    player_prm->mParameter |= 0x80;
+    
+    mDoMtx_stack_c::transS(ikada_data->mSpawnPos);
+    mDoMtx_stack_c::YrotM(ikada_data->mAngle.y);
+    
+    cXyz offset(0.0f, 87.0f, 550.0f);
+    cXyz pos;
+    mDoMtx_stack_c::multVec(&offset, &pos);
+    daSea_execute(pos);
+    f32 seaHeight = 0.0f;
+    if (daSea_ChkArea(ikada_data->mSpawnPos.x, ikada_data->mSpawnPos.z)) {
+        seaHeight = daSea_calcWave(ikada_data->mSpawnPos.x, ikada_data->mSpawnPos.z);
+    }
+    pos.y += seaHeight;
+    pos.y += 500.0f;
+    player_prm->mPos.set(pos);
+    
+    s16 angleZ = (ikada_data->mAngle.x & 0xFF) << 8;
+    player_prm->mAngle.set(0, ikada_data->mAngle.y, angleZ);
 }
 
 /* 800419D0-80041AEC       .text dStage_chkPlayerId__Fii */
@@ -1792,7 +1836,6 @@ int dStage_mecoInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
 }
 
 /* 800429C0-80042B10       .text dStage_setShipPos__Fii */
-// NONMATCHING - close
 bool dStage_setShipPos(int param_0, int i_roomNo) {
     if (strcmp(dComIfGp_getStartStageName(), "GanonM") == 0 && !dComIfGs_isEventBit(0x3D02)) {
         param_0 = 0xFF;
@@ -1802,12 +1845,13 @@ bool dStage_setShipPos(int param_0, int i_roomNo) {
     }
 
     // g_dComIfG_gameInfo.save.getTurnRestart().field_0x34 probably an inline, idk which though
+    dComIfG_inf_c& gameinfo = g_dComIfG_gameInfo; // fakematch
     if (dComIfGp_getStartStagePoint() == -3 &&
         g_dComIfG_gameInfo.save.getTurnRestart().field_0x34 != 0)
     {
         daShip_c* ship_p = (daShip_c*)fopAcM_SearchByName(PROC_SHIP);
         if (ship_p != NULL) {
-            ship_p->initStartPos(&dComIfGs_getTurnRestartShipPos(),
+            ship_p->initStartPos(&gameinfo.save.getTurnRestart().getShipPos(),
                                  dComIfGs_getTurnRestartShipAngleY());
         }
 
@@ -2050,8 +2094,7 @@ void layerLoader(void* i_data, dStage_dt_c* i_stage, int i_roomNo) {
         l_layer8FuncTable, l_layer9FuncTable, l_layerAFuncTable, l_layerBFuncTable,
     };
 
-    dStage_dt_c_decode(i_data, i_stage, l_layerFuncTable_p[dComIfG_play_c::getLayerNo(i_roomNo)],
-                       3);
+    dStage_dt_c_decode(i_data, i_stage, l_layerFuncTable_p[dComIfG_play_c::getLayerNo(i_roomNo)], 3);
 }
 
 /* 8004313C-80043190       .text dStage_dt_c_stageLoader__FPvP11dStage_dt_c */
@@ -2288,10 +2331,9 @@ void dStage_restartRoom(u32 roomParam, u32 mode) {
 
 /* 80043B10-80043BD0       .text dStage_turnRestart__Fv */
 void dStage_turnRestart() {
-    /* Nonmatching - regalloc */
     s8 layerNo = dComIfGp_getStartStageLayer();
     if (layerNo >= 0)
-        layerNo = dComIfGp_getStartStageLayer() ^ 1;
+        layerNo ^= 1;
 
     dComIfGp_setNextStage(dComIfGp_getStartStageName(), -3, dComIfGs_getTurnRestartRoomNo(), layerNo, 0.0f, 0, 0, 6);
 
@@ -2342,7 +2384,7 @@ JKRExpHeap* dStage_roomControl_c::mMemoryBlock[16];
 dStage_darkStatus_c dStage_roomControl_c::mDarkStatus[8] = {
     // TODO: member names need to be documented
     {0x19, 0x06, 0x06, 0.8f, 0.8f, 0x08080206, 0.8f, 1.0f, 2.0f, 5.0f},
-    {0x32, 0x06, 0x06, 0.8f, 2.6f, 0x08080309, 0.8f, 2.6f, 4.0f, 144.0f},
+    {0x32, 0x06, 0x06, 0.8f, 2.6f, 0x08080309, 0.8f, 2.6f, 4.0f, 11.0f},
     {},
     {},
     {},
