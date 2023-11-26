@@ -15,6 +15,10 @@
 
 class daObj_Ikada_c : public fopAc_ac_c {
 public:
+    enum Proc_e {
+        
+    };
+
     void getCranePos() {}
     void getFrame() {}
     void getMode() {}
@@ -41,7 +45,7 @@ public:
     void incRopeCnt(int, int);
     void setRopePos();
     void setMtx();
-    void modeProc(daObj_Ikada_c::Proc_e, int);
+    void modeProc(Proc_e, int);
     void modeWaitInit();
     void modeWait();
     void modeCraneUpInit();

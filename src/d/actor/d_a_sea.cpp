@@ -347,7 +347,7 @@ void daSea_packet_c::execute(cXyz&) {
 }
 
 /* 8015C75C-8015D80C       .text draw__14daSea_packet_cFv */
-BOOL daSea_packet_c::draw() {
+void daSea_packet_c::draw() {
     /* Nonmatching */
 }
 
@@ -386,7 +386,7 @@ BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 8015D924-8015D99C       .text daSea_Create__FP10fopAc_ac_c */
 s32 daSea_Create(fopAc_ac_c* i_this) {
     fopAcM_SetupActor(i_this, sea_class);
-    if (!fopAcM_entrySolidHeap(i_this, (heapCallbackFunc)CheckCreateHeap, 0xA000))
+    if (!fopAcM_entrySolidHeap(i_this, CheckCreateHeap, 0xA000))
         return cPhs_ERROR_e;
     return cPhs_COMPLEATE_e;
 }

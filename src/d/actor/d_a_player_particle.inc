@@ -11,20 +11,37 @@
  */
 
 #include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_sea.h"
 
 /* 8012901C-80129034       .text setup__24daPy_swimTailEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void daPy_swimTailEcallBack_c::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
-    /* Nonmatching */
+void daPy_swimTailEcallBack_c::setup(JPABaseEmitter* emitter, const cXyz* pos, const csXyz* angle, s8) {
+    mpEmitter = emitter;
+    field_0x04 = false;
+    field_0x20 = angle;
+    field_0x05 = false;
 }
 
 /* 80129034-801290D8       .text getMaxWaterY__24daPy_swimTailEcallBack_cFPQ29JGeometry8TVec3<f> */
-void daPy_swimTailEcallBack_c::getMaxWaterY(JGeometry::TVec3<f32>*) {
-    /* Nonmatching */
+void daPy_swimTailEcallBack_c::getMaxWaterY(JGeometry::TVec3<f32>* pos) {
+    if (daSea_ChkArea(pos->x, pos->z)) {
+        pos->y = daSea_calcWave(pos->x, pos->z) + 2.0f;
+        if (field_0x10 > pos->y) {
+            pos->y = field_0x10 + 2.0f;
+        }
+    } else if (field_0x10 != 0.0f) {
+        pos->y = field_0x10 + 2.0f;
+    } else {
+        pos->y = field_0x0C;
+    }
 }
 
 /* 801290D8-8012910C       .text remove__24daPy_swimTailEcallBack_cFv */
 void daPy_swimTailEcallBack_c::remove() {
-    /* Nonmatching */
+    if (mpEmitter != NULL) {
+        mpEmitter->setEmitterCallBackPtr(NULL);
+        mpEmitter->becomeInvalidEmitter();
+        mpEmitter = NULL;
+    }
 }
 
 /* 8012910C-80129310       .text execute__24daPy_swimTailEcallBack_cFP14JPABaseEmitter */
@@ -34,11 +51,13 @@ void daPy_swimTailEcallBack_c::execute(JPABaseEmitter*) {
 
 /* 80129310-80129348       .text draw__24daPy_swimTailEcallBack_cFP14JPABaseEmitter */
 void daPy_swimTailEcallBack_c::draw(JPABaseEmitter*) {
-    /* Nonmatching */
+    if (dPa_control_c::isStatus(0x01)) {
+        GXSetZMode(GX_FALSE, GX_NEVER, GX_FALSE);
+    }
 }
 
 /* 80129348-8012952C       .text draw__18daPy_sightPacket_cFv */
-BOOL daPy_sightPacket_c::draw() {
+void daPy_sightPacket_c::draw() {
     /* Nonmatching */
 }
 
@@ -58,7 +77,7 @@ void daPy_swBlur_c::copySwBlur(MtxP, int) {
 }
 
 /* 80129A78-80129DD0       .text draw__13daPy_swBlur_cFv */
-BOOL daPy_swBlur_c::draw() {
+void daPy_swBlur_c::draw() {
     /* Nonmatching */
 }
 
@@ -104,8 +123,9 @@ void daPy_waterDropEcallBack_c::execute(JPABaseEmitter* emitter) {
 }
 
 /* 8012A040-8012A058       .text setup__25daPy_waterDropEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void daPy_waterDropEcallBack_c::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
-    /* Nonmatching */
+void daPy_waterDropEcallBack_c::setup(JPABaseEmitter* emitter, const cXyz* pos, const csXyz* angle, s8) {
+    mpEmitter = emitter;
+    mpEmitter->becomeImmortalEmitter();
 }
 
 /* 8012A058-8012A0B4       .text end__25daPy_waterDropEcallBack_cFv */
@@ -205,7 +225,12 @@ void daPy_lk_c::endFlameDamageEmitter() {
 
 /* 8012C9D8-8012CA44       .text endDamageEmitter__9daPy_lk_cFv */
 void daPy_lk_c::endDamageEmitter() {
-    /* Nonmatching */
+    for (int i = 0; i < (int)ARRAY_SIZE(m33B8); i++) {
+        m33B8[i].end();
+    }
+    daPy_dmEcallBack_c::setTimer(0);
+    daPy_dmEcallBack_c::setType(3);
+    mLightInfluence.mPower = 0.0f;
 }
 
 /* 8012CA44-8012CD60       .text setItemWaterEffect__9daPy_lk_cFP10fopAc_ac_cii */

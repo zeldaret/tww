@@ -1,23 +1,23 @@
-#ifndef D_A_OBJ_CAFELMP_H
-#define D_A_OBJ_CAFELMP_H
+#ifndef D_THROWSTONE_H
+#define D_THROWSTONE_H
 
 #include "f_op/f_op_actor.h"
 #include "SSystem/SComponent/c_phase.h"
 
-class daObjCafelmp_c : public fopAc_ac_c {
+class daThrowstone_c : public fopAc_ac_c {
 public:
+    BOOL CreateHeap();
     inline s32 _create();
     inline BOOL _delete();
-    inline BOOL _draw();
     inline BOOL _execute();
+    inline bool _draw();
 
-    BOOL CreateHeap();
-    void CreateInit();
-    void set_mtx();
+    static const char M_arcname[5];
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhs;
     /* 0x298 */ J3DModel * mpModel;
+    /* 0x29C */ Mtx mMtx;
 };
 
-#endif /* D_A_OBJ_CAFELMP_H */
+#endif /* D_THROWSTONE_H */

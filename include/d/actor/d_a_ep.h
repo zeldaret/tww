@@ -8,6 +8,10 @@
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "SSystem/SComponent/c_phase.h"
 
+struct ep_ga_s {
+    
+};
+
 class ep_class : public fopAc_ac_c {
 public:
     /* 0x290 */ request_of_phase_process_class mPhsLoad_Ep;

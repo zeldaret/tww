@@ -185,7 +185,7 @@ static s32 daVrbox_Create(fopAc_ac_c* i_actor) {
     i_this->m29C = 0;
 
     s32 phase_state = cPhs_COMPLEATE_e;
-    if (fopAcM_entrySolidHeap(i_this, (heapCallbackFunc)&daVrbox_solidHeapCB, 0xC60)) {
+    if (fopAcM_entrySolidHeap(i_this, daVrbox_solidHeapCB, 0xC60)) {
         dComIfGp_onStatus(1);
         g_env_light.mbVrboxInvisible = 0;
     } else {

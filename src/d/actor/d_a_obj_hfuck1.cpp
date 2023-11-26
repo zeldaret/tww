@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_hfuck1.cpp
 //
 
+#include "d/actor/d_a_obj_hfuck1.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -12,26 +13,6 @@
 #include "d/actor/d_a_player.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-class daObjHfuck1_c : public fopAc_ac_c {
-public:
-    void init_mtx();
-    s32 _create();
-    bool _execute();
-    bool _draw();
-    bool _delete();
-    bool create_heap();
-    bool checkCollision();
-    static BOOL solidHeapCB(fopAc_ac_c *i_this);
-
-public:
-    /* 0x290 */ request_of_phase_process_class mPhs;
-    /* 0x298 */ J3DModel * mpModel;
-    /* 0x29C */ dBgW * mpBgW;
-    /* 0x2A0 */ dCcD_Stts mStts;
-    /* 0x408 */ dCcD_Sph mSph;
-    /* 0x40C */ fopAc_ac_c * mpHookshotActor;
-};
 
 namespace {
     static const char l_arcname[] = "Hfuck1";
@@ -122,7 +103,7 @@ s32 daObjHfuck1_c::_create() {
     s32 ret = dComIfG_resLoad(&mPhs, l_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, 0xc20)) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0xc20)) {
             if (dComIfG_Bgsp()->Regist(mpBgW, this)) {
                 ret = cPhs_ERROR_e;
             } else {

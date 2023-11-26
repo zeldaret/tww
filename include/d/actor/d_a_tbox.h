@@ -6,28 +6,58 @@
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_phase.h"
+#include "d/d_bg_w.h"
+#include "d/d_particle.h"
+#include "d/d_bg_s_acch.h"
+#include "f_op/f_op_actor_mng.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class daTbox_c : public fopAc_ac_c {
 public:
-    void action() {}
-    void deleteProc() {}
-    inline BOOL draw();
-    void flagCheck(unsigned short) {}
-    void flagClr() {}
-    void flagOff(unsigned short) {}
-    void flagOn(unsigned short) {}
-    void getItemNo() {}
-    void getPhase() {}
-    void getSwNo() {}
-    void getTboxNo() {}
-    void setAction(int (daTbox_c::*)()) {}
+    struct modelInfo {
+        s16 modelId;
+        s16 openBckId;
+        s16 btkId;
+        s16 brkId;
+        s16 closedColId;
+        s16 openColId;
+    };
 
+    typedef BOOL (daTbox_c::*ActionFunc)();
+
+    u8 getTboxNo() { return fopAcM_GetParam(this) >> 0x07 & 0x1F; }
+    int getSwNo() { return fopAcM_GetParam(this) >> 0x0C & 0xFF; }
+    u8 getItemNo() { return orig.angle.z >> 8 & 0xFF; }
+    void flagOn(u16 flag) { mFlags |= flag; }
+    void flagOff(u16 flag) { mFlags &= ~flag; }
+    void flagClr() { mFlags = 0; }
+    BOOL flagCheck(u16 flag) { return mFlags & flag; }
+    request_of_phase_process_class* getPhase() { return &mPhs; }
+    bool action() { return (this->*mActionFunc)(); }
+    void setAction(ActionFunc func) { mActionFunc = func; }
+    void deleteProc() {} // Maybe only used in the demo
+
+    inline BOOL draw();
+    BOOL execute();
+    s32 commonShapeSet();
+    s32 effectShapeSet();
+    s32 envShapeSet();
+    s32 bgCheckSet();
     void searchRoomNo();
     void lightReady();
+    BOOL checkEnv();
+    BOOL checkOpen();
+    modelInfo& getModelInfo();
     void clrDzb();
     void setDzb();
     void surfaceProc();
+    BOOL checkRoomDisp(int);
+    s32 getShapeType();
+    s32 getFuncType();
+    BOOL checkNormal();
+    BOOL CreateHeap();
     void CreateInit();
+    s32 boxCheck();
     void lightUpProc();
     void lightDownProc();
     void darkProc();
@@ -37,57 +67,70 @@ public:
     void demoInitAppear();
     void demoProcAppear_Tact();
     void demoProcAppear();
+    s32 demoProc();
     void OpenInit_com();
     void OpenInit();
     void setCollision();
+    BOOL actionWait();
+    BOOL actionDemo();
+    BOOL actionDemo2();
+    BOOL actionOpenWait();
+    BOOL actionSwOnWait();
+    BOOL actionSwOnWait2();
+    BOOL actionGenocide();
 
 public:
-    /* 0x290 */ int mRoomNo;
-    /* 0x294 */ request_of_phase_process_class mResLoadDalways;
-    /* 0x29C */ J3DModel* mpModel1;
-    /* 0x2A0 */ mDoExt_bckAnm mBckAnkm;
-    /* 0x2B0 */ mDoExt_btkAnm* mpBtkAnm;
-    /* 0x2B4 */ mDoExt_brkAnm* m2B4;
-    /* 0x2B8 */ cBgW* m2B8;
-    /* 0x2BC */ void* m2BC;
-    /* 0x2C0 */ void* m2C0;
-    /* 0x2C4 */ void* m2C4;
-    /* 0x2C8 */ void* m2C8;
-    /* 0x2CC */ void* m2CC;
-    /* 0x2D0 */ void* m2D0;
-    /* 0x2D4 */ void* m2D4;
-    /* 0x2D8 */ void* m2D8;
-    /* 0x2DC */ void* m2DC;
-    /* 0x2E0 */ void* m2E0;
-    /* 0x2E4 */ void* m2E4;
-    /* 0x2E8 */ void* m2E8;
-    /* 0x2EC */ void* m2EC;
-    /* 0x2F0 */ void* m2F0;
-    /* 0x2F4 */ void* m2F4;
-    /* 0x2F8 */ void* m2F8;
-    /* 0x2FC */ void* m2FC;
-    /* 0x300 */ void* m300;
-    /* 0x304 */ void* m304;
-    /* 0x308 */ void* m308;
-    /* 0x30C */ u8 m30C[0x324 - 0x30C];
-    /* 0x324 */ J3DModel* mpModel;
-    /* 0x328 */ mDoExt_brkAnm m328;
-    /* 0x340 */ u8 m340[0x350 - 0x340];
-    /* 0x350 */ int mStaffId;
-    /* 0x354 */ Mtx m354;
+    /* 0x290 */ s32 mRoomNo;
+    /* 0x294 */ request_of_phase_process_class mPhs;
+    /* 0x29C */ J3DModel* mpChestMdl;
+    /* 0x2A0 */ mDoExt_bckAnm mOpenAnm;
+    /* 0x2B0 */ mDoExt_btkAnm* mpAppearTexAnm;
+    /* 0x2B4 */ mDoExt_brkAnm* mpAppearRegAnm;
+    /* 0x2B8 */ dBgW* mpBgWClosed;
+    /* 0x2BC */ dBgW* mpBgWOpen;
+    /* 0x2C0 */ dBgW* mpBgWVines;
+    /* 0x2C4 */ dBgW* mpBgWCurrent;
+    /* 0x2C8 */ J3DModel* mpFlashMdl;
+    /* 0x2CC */ mDoExt_bckAnm mFlashAnm;
+    /* 0x2DC */ mDoExt_btkAnm mFlashTexAnm;
+    /* 0x2F0 */ mDoExt_brkAnm mFlashRegAnm;
+    /* 0x308 */ u32 m0308;
+    /* 0x30C */ mDoExt_brkAnm mBrkAnm3;
+    /* 0x324 */ J3DModel* mpTactPlatformMdl;
+    /* 0x328 */ mDoExt_brkAnm mTactPlatformBrk;
+    /* 0x340 */ ActionFunc mActionFunc;
+    /* 0x34C */ f32 mInvisibleScrollVal;
+    /* 0x350 */ u32 mStaffId;
+    /* 0x354 */ Mtx mMtx;
     /* 0x384 */ LIGHT_INFLUENCE mPLight;
     /* 0x3A4 */ LIGHT_INFLUENCE mEfLight;
-    /* 0x3C4 */ u8 m3C4[0x3E4 - 0x3C4];
-    /* 0x3E4 */ JPABaseEmitter* m3E4;
+    /* 0x3C4 */ dPa_smokeEcallBack mSmokeCB;
+    /* 0x3E4 */ JPABaseEmitter* mSmokeEmitter;
     /* 0x3E8 */ f32 mAllColRatio;
-    /* 0x3EC */ u8 m3EC[0x3F0 - 0x3EC];
-    /* 0x3F0 */ u16 m3F0;
-    /* 0x3F2 */ s16 m3F2;
-    /* 0x3F4 */ u8 m3F4[0x600 - 0x3F4];
-    /* 0x600 */ dCcD_Stts mStts;
-    /* 0x63C */ dCcD_Cyl mCyl;
-    /* 0x76C */ u8 mChestOpenFlagIndex;
-    /* 0x76D */ u8 m76D[0x770 - 0x76D];
+    /* 0x3EC */ f32 m03EC;
+    /* 0x3F0 */ u16 mFlags;
+    /* 0x3F2 */ u16 mOpenTimer;
+    /* 0x3F4 */ bool mHasOpenAnmFinished;
+    /* 0x3F5 */ bool mIsFlashPlaying;
+    /* 0x3F6 */ u16 mAppearTimer;
+    /* 0x3F8 */ u8 mGenocideDelayTimer;
+    /* 0x3FC */ dBgS_ObjAcch mObjAcch;
+    /* 0x5C0 */ dBgS_AcchCir mAcchCir;
+    /* 0x600 */ dCcD_Stts mColStatus;
+    /* 0x63C */ dCcD_Cyl mColCyl;
+    /* 0x76C */ u8 mOpenedSwitch;
+};
+
+class daTbox_HIO_c : public JORReflexible {
+public:
+    daTbox_HIO_c();
+    virtual ~daTbox_HIO_c() { }
+
+    /* 0x04 */ s8 mHioId;
+    /* 0x06 */ s16 m06;
+    /* 0x08 */ s16 m08;
+    /* 0x0A */ s16 m0A;
+    /* 0x0C */ s16 m0C;
 };
 
 #endif /* D_A_TBOX_H */

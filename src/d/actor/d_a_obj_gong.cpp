@@ -67,7 +67,7 @@ s32 daObjGong::Act_c::_create() {
     s32 ret = dComIfG_resLoad(&mPhs, M_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, 0x0)) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0)) {
             fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
             init_mtx();
             fopAcM_setCullSizeBox(this, -100.0f, -1.0f, -50.0f, 100.0f, 230.0f, 50.0f);
@@ -114,9 +114,8 @@ bool daObjGong::Act_c::_execute() {
 
 /* 000004F0-00000580       .text _draw__Q29daObjGong5Act_cFv */
 bool daObjGong::Act_c::_draw() {
-    /* Nonmatching - just some tiny regalloc */
-    J3DModel* model = mpMorf->getModel();
-    J3DModelData* modelData = model->getModelData();
+    J3DModel* model = (J3DModel*)mpMorf->getModel();
+    J3DModelData* modelData = (J3DModelData*)model->getModelData();
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(model, &mTevStr);
     dDlst_texSpecmapST(&mEyePos, &mTevStr, modelData, attr().spec);
@@ -163,7 +162,7 @@ namespace daObjGong {
 
 actor_process_profile_definition g_profile_Obj_Gong = {
     /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 3,
+    /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Gong,
     /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
@@ -171,7 +170,7 @@ actor_process_profile_definition g_profile_Obj_Gong = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x004C,
+    /* Priority     */ 0x0081,
     /* Actor SubMtd */ &daObjGong::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e | fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e,
     /* Group        */ fopAc_ACTOR_e,

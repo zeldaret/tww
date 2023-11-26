@@ -71,7 +71,7 @@ s32 daObjYgush00_c::_create() {
     s32 ret = dComIfG_resLoad(&mPhs, l_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, 0x740) == 1) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x740) == 1) {
             mpModel->setBaseScale(mScale);
             mDoMtx_stack_c::transS(current.pos);
             mpModel->setBaseTRMtx(mDoMtx_stack_c::get());

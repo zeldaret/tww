@@ -102,7 +102,7 @@ static u8 dummy3[] = {
     0
 };
 
-static int createHeap_CB(fopAc_ac_c* i_this) {
+static BOOL createHeap_CB(fopAc_ac_c* i_this) {
     return static_cast<daObjTpost_c*>(i_this)->_createHeap();
 }
 
@@ -113,12 +113,12 @@ BOOL daObjTpost_c::_createHeap() {
     mMorf = new mDoExt_McaMorf(modelData, 0, 0, 0, -1, 1.0f, 0, -1, 1, 0, 0x80000, 0x11000022);
 
     if(mMorf == 0 || mMorf->getModel() == 0) {
-        return 0;
+        return FALSE;
     }
     else {
         mMorf->getModel()->setUserArea((u32)this);
 
-        return 1;
+        return TRUE;
     }
 }
 
@@ -947,7 +947,7 @@ int daObjTpost_c::_create() {
     getArg();
     int step = dComIfG_resLoad(&mPhs, m_arc_name);
     if(step == cPhs_COMPLEATE_e) {
-        if(fopAcM_entrySolidHeap(this, &createHeap_CB, 0x7E0) == 0) {
+        if(fopAcM_entrySolidHeap(this, createHeap_CB, 0x7E0) == 0) {
             return cPhs_ERROR_e;
         }
 

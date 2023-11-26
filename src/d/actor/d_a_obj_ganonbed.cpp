@@ -57,7 +57,7 @@ s32 daObjGbed_c::_create() {
     s32 ret = dComIfG_resLoad(&mPhs, l_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, 0x13e0)) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x13e0)) {
             if (dComIfG_Bgsp()->Regist(mpBgW, this)) {
                 ret = cPhs_ERROR_e;
             } else {

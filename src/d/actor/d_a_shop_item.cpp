@@ -196,17 +196,17 @@ int daShopItem_c::_create() {
         else if(result == cPhs_COMPLEATE_e && result2 == cPhs_COMPLEATE_e) {
             u8 type = fopAcM_GetParamBit(fopAcM_GetParam(this), 8, 4);
             if(type == 2 || (type == 0 && mModelType[m_itemNo] == 0x02)) {
-                if(fopAcM_entrySolidHeap(this, &CheckItemCreateHeap, dItem_data::getHeapSize(m_itemNo)) == 0) {
+                if(fopAcM_entrySolidHeap(this, CheckItemCreateHeap, dItem_data::getHeapSize(m_itemNo)) == 0) {
                     return cPhs_ERROR_e;
                 }
             }
             else if(type == 1 || (type == 0 && mModelType[m_itemNo] == 0x01)) {
-                if(fopAcM_entrySolidHeap(this, &CheckFieldItemCreateHeap, dItem_data::getFieldHeapSize(m_itemNo)) == 0) {
+                if(fopAcM_entrySolidHeap(this, CheckFieldItemCreateHeap, dItem_data::getFieldHeapSize(m_itemNo)) == 0) {
                     return cPhs_ERROR_e;
                 }
             }
             else {
-                if(fopAcM_entrySolidHeap(this, &CheckItemCreateHeap, dItem_data::getHeapSize(m_itemNo)) == 0) {
+                if(fopAcM_entrySolidHeap(this, CheckItemCreateHeap, dItem_data::getHeapSize(m_itemNo)) == 0) {
                     return cPhs_ERROR_e;
                 }
             }

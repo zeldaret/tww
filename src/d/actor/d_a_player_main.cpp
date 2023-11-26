@@ -2759,18 +2759,26 @@ void daPy_lk_c::setDoStatus() {
 }
 
 /* 80108A9C-80108B08       .text getDirectionFromAngle__9daPy_lk_cFs */
-void daPy_lk_c::getDirectionFromAngle(s16) {
-    /* Nonmatching */
+int daPy_lk_c::getDirectionFromAngle(s16 angle) {
+    if (abs(angle) > 0x6000) {
+        return 1;
+    } else if (angle >= 0x2000) {
+        return 2;
+    } else if (angle <= -0x2000) {
+        return 3;
+    } else {
+        return 0;
+    }
 }
 
 /* 80108B08-80108B38       .text getDirectionFromShapeAngle__9daPy_lk_cFv */
-void daPy_lk_c::getDirectionFromShapeAngle() {
-    /* Nonmatching */
+int daPy_lk_c::getDirectionFromShapeAngle() {
+    return getDirectionFromAngle(m34E8 - shape_angle.y);
 }
 
 /* 80108B38-80108B68       .text getDirectionFromCurrentAngle__9daPy_lk_cFv */
-void daPy_lk_c::getDirectionFromCurrentAngle() {
-    /* Nonmatching */
+int daPy_lk_c::getDirectionFromCurrentAngle() {
+    return getDirectionFromAngle(m34E8 - current.angle.y);
 }
 
 /* 80108B68-80108D80       .text setNormalSpeedF__9daPy_lk_cFffff */
@@ -4499,7 +4507,7 @@ J3DModelData* daPy_lk_c::initModel(J3DModel** i_model, int i_fileIndex, u32 i_di
 
 /* 80124C98-80125CC8       .text playerInit__9daPy_lk_cFv */
 void daPy_lk_c::playerInit() {
-    if (!fopAcM_entrySolidHeap(this, (heapCallbackFunc)&daPy_createHeap, 0xB0000)) {
+    if (!fopAcM_entrySolidHeap(this, daPy_createHeap, 0xB0000)) {
         JUT_ASSERT(0x53B6, 0);
     }
     

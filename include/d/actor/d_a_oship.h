@@ -14,6 +14,10 @@
 
 class daOship_c : public fopAc_ac_c {
 public:
+    enum Proc_e {
+        
+    };
+
     void getSw() {}
     void isSpecial() {}
     void modeProcInit(int) {}
@@ -47,7 +51,7 @@ public:
     void modeAttack();
     void modeDeleteInit();
     void modeDelete();
-    void modeProc(daOship_c::Proc_e, int);
+    void modeProc(Proc_e, int);
     BOOL _execute();
     BOOL _draw();
     void createInit();

@@ -27,7 +27,7 @@ public:
     void demoPlay(mDoExt_McaMorf*);
 
     s32 CreateHeap();
-    static s32 solidHeapCB(fopAc_ac_c*);
+    static BOOL solidHeapCB(fopAc_ac_c*);
     
     MtxP getJointMtx(const char*);
 

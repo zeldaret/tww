@@ -16,8 +16,8 @@ public:
     void daMP_c_Callback_Draw(daMP_c*);
 
 public:
-    /* 0x290 */ u8 m290[0x294 - 0x290];
-    /* 0x294 */ int m294;
+    /* 0x290 */ u32 (*mpCallBack1)();
+    /* 0x294 */ u32 (*mpCallBack2)(f32);
 };
 
 #endif /* D_A_MOVIE_PLAYER_H */

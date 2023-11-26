@@ -12,6 +12,7 @@
 
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_ship.h"
+#include "d/d_com_inf_game.h"
 
 /* 8013F848-8013F8AC       .text shipSpecialDemoStart__9daPy_lk_cFv */
 void daPy_lk_c::shipSpecialDemoStart() {
@@ -53,7 +54,7 @@ void daPy_lk_c::initShipRideUseItem(int param_1, int param_2) {
     if (param_1 == 0) {
         return;
     }
-    dComIfGp_getShipActor()->field_0x034D = 2; // TODO probably inline setter
+    dComIfGp_getShipActor()->m034D = 2; // TODO probably inline setter
     mGravity = 0.0f;
     speed.y = 0.0f;
     if (param_1 == 1) {

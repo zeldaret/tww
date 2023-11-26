@@ -5,10 +5,14 @@
 
 class daNpc_De1_c : public fopAc_ac_c {
 public:
+    struct anm_prm_c {
+        
+    };
+
     void createInit();
     void setMtx();
     void anmResID(int, int*, int*);
-    void setAnm_anm(daNpc_De1_c::anm_prm_c*);
+    void setAnm_anm(anm_prm_c*);
     void setAnm_NUM(int);
     void setAnm();
     void chngAnmTag();

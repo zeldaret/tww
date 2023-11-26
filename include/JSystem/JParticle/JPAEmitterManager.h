@@ -14,7 +14,9 @@ public:
     JPADrawInfo(MtxP cameraMtxPtr, f32 fovy, f32 aspect) : mCameraMtxPtr(cameraMtxPtr), mFovy(fovy), mAspect(aspect) {}
     MtxP getCameraMtxPtr() { return mCameraMtxPtr; }
     f32 getFovy() { return mFovy; }
+    void setFovy(f32 fovy) { mFovy = fovy; }
     f32 getAspect() { return mAspect; }
+    void setAspect(f32 aspect) { mAspect = aspect; }
 
     /* 0x00 */ MtxP mCameraMtxPtr;
     /* 0x04 */ f32 mFovy;

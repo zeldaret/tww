@@ -426,17 +426,19 @@ public:
     JKRHeap * getHeap() { return mHeap; }
 
     static dPa_setColorEcallBack* getLifeBallSetColorEcallBack(int idx) { return &mLifeBall[idx]; }
+    static dPa_setColorEcallBack mLifeBall[3];
+
+    static bool isStatus(u8 status) { return mStatus & status; }
+    static void onStatus(u8 status) { mStatus |= status; }
+    static void offStatus(u8 status) { mStatus &= ~status; }
+    static u8 mStatus;
 
     static dPa_rippleEcallBack mSingleRippleEcallBack;
-    static dPa_setColorEcallBack mLifeBall[3];
 
     static JPAEmitterManager * mEmitterMng;
 
-    static bool isStatus(u8 b) { return !!(mStatus & b); }
-    static u8 mStatus;
-
-    static Mtx mWindViewMatrix;
     static MtxP getWindViewMatrix() { return mWindViewMatrix; }
+    static Mtx mWindViewMatrix;
 
     /* 0x0000 */ JKRHeap* mHeap;
     /* 0x0004 */ JPAResourceManager* mpCommonResMgr;

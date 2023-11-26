@@ -15,18 +15,13 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_meter.h"
 #include "m_Do/m_Do_controller_pad.h"
+#include "d/actor/d_a_movie_player.h"
 
 namespace JAInter {
     class BankWave {
     public:
         static bool checkAllWaveLoadStatus();
     };
-};
-
-class daMP_c : public fopAc_ac_c {
-public:
-    /* 0x290 */ u32 (*mpCallBack1)();
-    /* 0x294 */ u32 (*mpCallBack2)(f32);
 };
 
 #if VERSION == VERSION_PAL

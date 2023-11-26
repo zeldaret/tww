@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_eayogn.cpp
 //
 
+#include "d/actor/d_a_obj_eayogn.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -12,34 +13,16 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
-class daObjEayogn_c : public fopAc_ac_c {
-public:
-    s32 _create();
-    bool _execute();
-    bool _draw();
-    bool _delete();
-    bool create_heap();
-    static bool solidHeapCB(fopAc_ac_c *i_this);
-    void init_mtx();
-    BOOL check_ev_bit() const;
-    static const char M_arcname[7];
-
-public:
-    /* 0x290 */ J3DModel * mpModel;
-    /* 0x294 */ request_of_phase_process_class mPhs;
-    /* 0x2A0 */ dBgW * mpBgW;
-};
-
 const char daObjEayogn_c::M_arcname[7] = "Eayogn";
 
 /* 00000078-00000098       .text solidHeapCB__13daObjEayogn_cFP10fopAc_ac_c */
-bool daObjEayogn_c::solidHeapCB(fopAc_ac_c* i_this) {
+BOOL daObjEayogn_c::solidHeapCB(fopAc_ac_c* i_this) {
     return ((daObjEayogn_c*)i_this)->create_heap();
 }
 
 /* 00000098-00000198       .text create_heap__13daObjEayogn_cFv */
-bool daObjEayogn_c::create_heap() {
-    bool ret = false;
+BOOL daObjEayogn_c::create_heap() {
+    BOOL ret = FALSE;
 
     J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, 0x04));
     JUT_ASSERT(0x5c, mdl_data != 0);
@@ -49,7 +32,7 @@ bool daObjEayogn_c::create_heap() {
         if (mpModel != NULL) {
             mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(M_arcname, 0x07), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
             if (mpBgW != NULL)
-                ret = true;
+                ret = TRUE;
         }
     }
 
@@ -67,7 +50,7 @@ s32 daObjEayogn_c::_create() {
 
         if (ret == cPhs_COMPLEATE_e) {
             ret = cPhs_ERROR_e;
-            if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, 0x0)) {
+            if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0)) {
                 fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
                 init_mtx();
                 dComIfG_Bgsp()->Regist(mpBgW, this);

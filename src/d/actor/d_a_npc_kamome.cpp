@@ -289,7 +289,7 @@ s32 daNpc_kam_c::create() {
     s32 phase_state = dComIfG_resLoad(&mPhs, "Kamome");
     
     if (phase_state == cPhs_COMPLEATE_e) {
-        if (!fopAcM_entrySolidHeap(this, &checkCreateHeap, l_heap_size)) {
+        if (!fopAcM_entrySolidHeap(this, checkCreateHeap, l_heap_size)) {
             mpMorf = NULL;
             return cPhs_ERROR_e;
         }

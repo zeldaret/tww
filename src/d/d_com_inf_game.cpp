@@ -19,16 +19,8 @@
 #include "f_op/f_op_scene_mng.h"
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_audio.h"
-
-class J3DModel;
-class daArrow_c {
-public:
-    static void setKeepType(u8);
-};
-
-class daShip_c : public fopAc_ac_c {
-public:
-};
+#include "d/actor/d_a_arrow.h"
+#include "d/actor/d_a_ship.h"
 
 dComIfG_inf_c g_dComIfG_gameInfo;
 
@@ -1202,7 +1194,7 @@ void dComIfGs_gameStart() {
     dComIfGp_offEnableNextStage();
 
     s8 roomNo = g_dComIfG_gameInfo.save.getPlayer().getPlayerReturnPlace().getRoomNo();
-    s16 point = g_dComIfG_gameInfo.save.getPlayer().getPlayerReturnPlace().getPlayerStatus();
+    s16 point = g_dComIfG_gameInfo.save.getPlayer().getPlayerReturnPlace().getPoint();
     char* name = g_dComIfG_gameInfo.save.getPlayer().getPlayerReturnPlace().getName();
     dComIfGp_setNextStage(name, point, roomNo, -1, 0.0f, 0, 1, 0);
 }

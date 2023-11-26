@@ -344,7 +344,6 @@ public:
     bool ChkCoHitNoActor() const { return mGObjCo.ChkRPrm(1); }
     bool ChkAtHitNoActor() const { return mGObjAt.ChkRPrm(2); }
     bool ChkTgHitNoActor() const { return mGObjTg.ChkRPrm(1); }
-    bool ChkTgWolfSpNoDamage() { return mGObjTg.ChkSPrm(0x800); }
     bool ChkAtNoHitMark() { return mGObjAt.ChkSPrm(2); }
     bool ChkTgNoHitMark() { return mGObjTg.ChkSPrm(4); }
     bool ChkTgHookShotNoHitMark() { return mGObjTg.ChkSPrm(0x400); }

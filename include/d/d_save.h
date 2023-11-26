@@ -40,11 +40,11 @@ public:
     void init();
 
     void setDateIpl(s64 i_time) { mDateIPL = i_time; }
-    u16 getDate() const { return mDate; }
-    f32 getTime() const { return mTime; }
+    u16 getDate() { return mDate; }
+    f32 getTime() { return mTime; }
     void setDate(u16 i_date) { mDate = i_date; }
     void setTime(f32 i_time) { mTime = i_time; }
-    s64 getDateIpl() const { return mDateIPL; }
+    s64 getDateIpl() { return mDateIPL; }
     s16 getWindY() { return mTactWindAngleY; }
     s16 getWindX() { return mTactWindAngleX; }
     void setWindY(s16 i_windY) { mTactWindAngleY = i_windY; }
@@ -65,13 +65,13 @@ public:
     void init();
     void set(char const*, s8, u8);
 
-    const s8 getRoomNo() const { return mRoomNo; }
-    u8 getPlayerStatus() const { return mPlayerStatus; }
+    s8 getRoomNo() { return mRoomNo; }
+    u8 getPoint() { return mPoint; }
     char* getName() { return mName; }
 
     /* 0x00 */ char mName[8];
     /* 0x08 */ s8 mRoomNo;
-    /* 0x09 */ u8 mPlayerStatus;
+    /* 0x09 */ u8 mPoint;
     /* 0x0A */ u8 unk_0xa;
     /* 0x0B */ u8 unk_0xb;
 };  // Size: 0xC
@@ -91,7 +91,7 @@ public:
     u8 checkBottle(u8);
     u8 checkEmptyBottle();
 
-    u8 getItem(int i_idx) const { return mItems[i_idx]; }
+    u8 getItem(int i_idx) { return mItems[i_idx]; }
     void setItem(int i_idx, u8 i_itemNo) { mItems[i_idx] = i_itemNo; }
 
     /* 0x00 */ u8 mItems[21];
@@ -139,9 +139,9 @@ class dSv_player_item_max_c {
 public:
     void init();
 
-    u8 getArrowNum() const { return mArrowNum; }
+    u8 getArrowNum() { return mArrowNum; }
     void setArrowNum(u8 num) { mArrowNum = num; }
-    u8 getBombNum() const { return mBombNum; }
+    u8 getBombNum() { return mBombNum; }
     void setBombNum(u8 num) { mBombNum = num; }
     // void setReserved1Num(u8 num) { ? = num; }
 
@@ -207,9 +207,11 @@ class dSv_player_bag_item_record_c {
 public:
     void init();
 
-    u8 getBeastNum(int i_idx) const { return mBeastNum[i_idx]; }
-    u8 getBaitNum(int i_idx) const { return mBaitNum[i_idx]; }
-    u8 getReserveNum(int i_idx) const { return mReserveNum[i_idx]; }
+    u8 getBeastNum(int i_idx) { return mBeastNum[i_idx]; }
+    void setBeastNum(int i_idx, u8 num) { mBeastNum[i_idx] = num; }
+    u8 getBaitNum(int i_idx) { return mBaitNum[i_idx]; }
+    void setBaitNum(int i_idx, u8 num) { mBaitNum[i_idx] = num; }
+    u8 getReserveNum(int i_idx) { return mReserveNum[i_idx]; }
 
     /* 0x00 */ u8 mBeastNum[8];
     /* 0x08 */ u8 mBaitNum[8];
@@ -280,7 +282,16 @@ public:
     void init();
 
     const char* getPlayerName() const { return mPlayerName; }
-    u8 getClearCount() const { return mClearCount; }
+    void setPlayerName(const char*) {}
+    u8 getClearCount() { return mClearCount; }
+    void clearCountUp() {}
+    void setClearCount(u8) {}
+    void addDeathCount() {}
+    void getPuzzleInfo() {}
+    void setPuzzleInfo(u8) {}
+    void setPuzzleData(int, u8) {}
+    void getRandomSalvage() {}
+    void setRandomSalvage(u8) {}
 
     /* 0x00 */ u8 field_0x0[0x10];
     /* 0x10 */ u16 field_0x10;
@@ -301,7 +312,14 @@ public:
     void init();
     s32 checkVibration();
 
-    u8 getVibration() const { return mVibration; }
+    u8 getVibration() { return mVibration; }
+    void setVibration(u8 vib) { mVibration = vib; }
+    u8 getAttentionType() { return mAttentionType; }
+    void setAttentionType(u8 type) { mAttentionType = type; }
+    void getRuby() {}
+    void setRuby(u8) {}
+    u8 getSound() { return mSoundMode; }
+    void setSound(u8 mode) { mSoundMode = mode; }
 
     /* 0x0 */ u8 field_0x0;
     /* 0x1 */ u8 mSoundMode;
@@ -504,7 +522,6 @@ public:
     void init();
 
     dSv_memBit_c& getBit() { return mMembit; }
-    const dSv_memBit_c& getBit() const { return mMembit; }
 
     /* 0x0 */ dSv_memBit_c mMembit;
 };  // Size: 0x24
@@ -561,10 +578,8 @@ public:
     void init(int);
 
     dSv_zoneBit_c& getZoneBit() { return mZoneBit; }
-    const dSv_zoneBit_c& getBit() const { return mZoneBit; }
     dSv_zoneActor_c& getActor() { return mZoneActor; }
-    const dSv_zoneActor_c& getActor() const { return mZoneActor; }
-
+    s8 getRoomNo() { return mRoomNo; }
     void reset() { mRoomNo = -1; }
 
     /* 0x00 */ s8 mRoomNo;
@@ -616,13 +631,12 @@ class dSv_turnRestart_c {
 public:
     void set(cXyz const&, s16, s8, u32, cXyz const&, s16, int);
 
-    u32 getParam() const { return mParam; }
+    u32 getParam() { return mParam; }
     cXyz& getPos() { return mPosition; }
-    s16 getAngleY() const { return mAngleY; }
-
-    cXyz& getShipPos() { return field_0x24; }
-    s16 getShipAngleY() const { return field_0x30; }
+    s16 getAngleY() { return mAngleY; }
     s8 getRoomNo() { return mRoomNo; }
+    cXyz& getShipPos() { return mShipPos; }
+    s16 getShipAngleY() { return mShipAngleY; }
 
     /* 0x00 */ cXyz mPosition;
     /* 0x0C */ u32 mParam;
@@ -630,8 +644,8 @@ public:
     /* 0x12 */ s8 mRoomNo;
     /* 0x13 */ u8 field_0x13;
     /* 0x14 */ u8 field_0x14[0x24 - 0x14];
-    /* 0x24 */ cXyz field_0x24;
-    /* 0x30 */ s16 field_0x30;
+    /* 0x24 */ cXyz mShipPos;
+    /* 0x30 */ s16 mShipAngleY;
     /* 0x34 */ int field_0x34;
 };  // Size: 0x38
 

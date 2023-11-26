@@ -142,7 +142,7 @@ void daNpc_Jb1_c::event_proc(int) {
 }
 
 /* 00000B44-00000BF0       .text set_action__11daNpc_Jb1_cFM11daNpc_Jb1_cFPCvPvPv_iPv */
-void daNpc_Jb1_c::set_action(int (daNpc_Jb1_c::*)(void*), void*) {
+void daNpc_Jb1_c::set_action(ActionFunc, void*) {
     /* Nonmatching */
 }
 

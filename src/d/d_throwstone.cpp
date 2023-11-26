@@ -3,6 +3,7 @@
 // Translation Unit: d_throwstone.cpp
 //
 
+#include "d/d_throwstone.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
@@ -11,31 +12,16 @@
 #include "m_Do/m_Do_mtx.h"
 #include "JSystem/JKernel/JKRHeap.h"
 
-class daThrowstone_c : fopAc_ac_c {
-public:
-    s32 CreateHeap();
-    inline s32 _create();
-    inline BOOL _delete();
-    inline BOOL _execute();
-    inline bool _draw();
-    static const char M_arcname[5];
-
-public:
-    /* 0x290 */ request_of_phase_process_class mPhs;
-    /* 0x298 */ J3DModel * mpModel;
-    /* 0x29C */ Mtx mMtx;
-};
-
 const char daThrowstone_c::M_arcname[] = "Aisi";
 
 /* 8023B544-8023B564       .text CheckCreateHeap__FP10fopAc_ac_c */
-static s32 CheckCreateHeap(fopAc_ac_c* i_actor) {
+static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
     daThrowstone_c* i_this = (daThrowstone_c*)i_actor;
     return i_this->CreateHeap();
 }
 
 /* 8023B564-8023B5DC       .text CreateHeap__14daThrowstone_cFv */
-s32 daThrowstone_c::CreateHeap() {
+BOOL daThrowstone_c::CreateHeap() {
     J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 0x03);
     if (pModelData == NULL)
         return FALSE;
@@ -50,7 +36,7 @@ s32 daThrowstone_c::_create() {
     if (result == cPhs_COMPLEATE_e) {
         fopAcM_SetupActor(this, daThrowstone_c);
 
-        if (!fopAcM_entrySolidHeap(this, (heapCallbackFunc)CheckCreateHeap, 0x4C0)) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x4C0)) {
             result = cPhs_ERROR_e;
         } else {
             mDoMtx_stack_c::transS(current.pos);

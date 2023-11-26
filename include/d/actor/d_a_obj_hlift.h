@@ -6,6 +6,10 @@
 namespace daObjHlift {
     class Act_c : public fopAc_ac_c {
     public:
+        enum Mode_e {
+            
+        };
+    
         void prm_get_dist() const {}
         void prm_get_evId() const {}
         void prm_get_size() const {}
@@ -24,7 +28,7 @@ namespace daObjHlift {
         void mode_upper();
         void mode_u_l_init();
         void mode_u_l();
-        void mode_demoreq_init(daObjHlift::Act_c::Mode_e);
+        void mode_demoreq_init(Mode_e);
         void mode_demoreq();
         void set_mtx();
         void init_mtx();

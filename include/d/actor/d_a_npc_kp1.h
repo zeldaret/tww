@@ -5,6 +5,10 @@
 
 class daNpc_Kp1_c : public fopAc_ac_c {
 public:
+    struct anm_prm_c {
+        
+    };
+
     void getAttPos() {}
     void getBackboneJntNum() {}
     void getBackbone_x() {}
@@ -22,7 +26,7 @@ public:
     void init_btp(bool, int);
     void initTexPatternAnm(bool);
     void playTexPatternAnm();
-    void setAnm_anm(daNpc_Kp1_c::anm_prm_c*);
+    void setAnm_anm(anm_prm_c*);
     void setAnm_NUM(int, int);
     void setAnm();
     void chngAnmTag();

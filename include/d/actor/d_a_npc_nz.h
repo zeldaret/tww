@@ -6,6 +6,10 @@
 
 class daNpc_Nz_c : public fopAc_ac_c {
 public:
+    enum Proc_e {
+        
+    };
+
     void modeProcInit(int) {}
 
     void NodeCallBack(J3DNode*, int);
@@ -23,7 +27,7 @@ public:
     void modeWait();
     void modeEventEsaInit();
     void modeEventEsa();
-    void modeProc(daNpc_Nz_c::Proc_e, int);
+    void modeProc(Proc_e, int);
     void createShopItem(unsigned char, unsigned char);
     void getShopItem(int);
     void deleteShopItem();

@@ -3,6 +3,7 @@
 // Translation Unit: d_a_mozo.cpp
 //
 
+#include "d/actor/d_a_mozo.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -14,92 +15,10 @@
 #include "m_do/m_Do_mtx.h"
 #include "m_Do/m_Do_ext.h"
 
-
-/*** HIO ***/
-class daMozo_HIO_c {
-public:
-    daMozo_HIO_c();
-    ~daMozo_HIO_c();
-};
-
 static daMozo_HIO_c l_HIO;
-
-class daMozo_childHIO_c {
-public:
-    ~daMozo_childHIO_c();
-};
-
-class daMozo_FireChildHIO_c {
-public:
-    ~daMozo_FireChildHIO_c();
-};
-
-class daMozo_BeamChildHIO_c {
-public:
-    ~daMozo_BeamChildHIO_c();
-};
-
-/*** Actor ***/
-class daMozo_c : public fopAc_ac_c {
-public:
-    s32 _create();
-    bool _delete();
-    bool _draw();
-    bool _execute();
-    void anime_proc();
-    void checkRange(int);
-    s32 CreateHeap();
-    s32 CreateInit();
-    void event_move();
-    void getBeamActor(u32);
-    void search_beam_proc();
-    void search_beam_proc_init();
-    void search_fire_proc();
-    void search_fire_proc_init();
-    void set_mtx();
-    void setAnm(int, float);
-    void towait_proc();
-    void towait_proc_init();
-    void wait_proc();
-    void wait_proc_init();
-
-    typedef void(daMozo_c::*proc_t)(void);
-    proc_t mCurrentProc;
-    request_of_phase_process_class mPhs;
-    
-    mDoExt_McaMorf* mAnimMorf;
-    
-    mDoExt_brkAnm mBrkAnm;
-    J3DAnmTevRegKey* m_brk;
-    
-    mDoExt_btkAnm mBtkAnm;
-    J3DAnmTextureSRTKey* m_btk;
-
-    // TODO: insert missing members
-
-    Quaternion mQuatRotation;
-
-    dCcD_Stts mColStatus;
-    dCcD_Cps mCapsuleCol;
-};
 
 /* 000000EC-000001D0       .text __ct__12daMozo_HIO_cFv */
 daMozo_HIO_c::daMozo_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 000001D0-0000022C       .text __dt__21daMozo_FireChildHIO_cFv */
-daMozo_FireChildHIO_c::~daMozo_FireChildHIO_c() {
-    /* Nonmatching */
-}
-
-/* 0000022C-00000288       .text __dt__21daMozo_BeamChildHIO_cFv */
-daMozo_BeamChildHIO_c::~daMozo_BeamChildHIO_c() {
-    /* Nonmatching */
-}
-
-/* 00000288-000002D0       .text __dt__17daMozo_childHIO_cFv */
-daMozo_childHIO_c::~daMozo_childHIO_c() {
     /* Nonmatching */
 }
 
@@ -119,12 +38,12 @@ void daMozo_nodeCallBack(J3DNode*, int) {
 }
 
 /* 0000078C-000007AC       .text CheckCreateHeap__FP10fopAc_ac_c */
-s32 CheckCreateHeap(fopAc_ac_c* i_this) {
+BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return static_cast<daMozo_c*>(i_this)->CreateHeap();
 }
 
 /* 000007AC-00000A24       .text CreateHeap__8daMozo_cFv */
-s32 daMozo_c::CreateHeap() {
+BOOL daMozo_c::CreateHeap() {
     /* Nonmatching */
     J3DModelData* mdlData = (J3DModelData*)dComIfG_getObjectRes("Mozo", 9);
     
@@ -269,7 +188,7 @@ s32 daMozo_c::_create() {
     s32 result = dComIfG_resLoad(&mPhs, "Mozo");
 
     if (result == cPhs_COMPLEATE_e) {
-        s32 solidHeapResult = fopAcM_entrySolidHeap(this, (heapCallbackFunc)CheckCreateHeap, 0x1AA0);
+        s32 solidHeapResult = fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1AA0);
 
         if (solidHeapResult & 0xFF == 0) {
             result = cPhs_ERROR_e;
@@ -324,33 +243,28 @@ bool daMozo_c::_draw() {
 }
 
 /* 0000267C-000026A0       .text daMozo_Draw__FP8daMozo_c */
-s32 daMozo_Draw(daMozo_c* i_this) {
+BOOL daMozo_Draw(daMozo_c* i_this) {
     return i_this->_draw();
 }
 
 /* 000026A0-000026C4       .text daMozo_Execute__FP8daMozo_c */
-s32 daMozo_Execute(daMozo_c* i_this) {
+BOOL daMozo_Execute(daMozo_c* i_this) {
     return i_this->_execute();
 }
 
 /* 000026C4-000026CC       .text daMozo_IsDelete__FP8daMozo_c */
-s32 daMozo_IsDelete(daMozo_c*) {
+BOOL daMozo_IsDelete(daMozo_c*) {
     return TRUE;
 }
 
 /* 000026CC-000026F0       .text daMozo_Delete__FP8daMozo_c */
-s32 daMozo_Delete(daMozo_c* i_this) {
+BOOL daMozo_Delete(daMozo_c* i_this) {
     return i_this->_delete();
 }
 
 /* 000026F0-00002710       .text daMozo_Create__FP10fopAc_ac_c */
 s32 daMozo_Create(fopAc_ac_c* i_this) {
     return static_cast<daMozo_c*>(i_this)->_create();
-}
-
-/* 00002710-000027AC       .text __dt__12daMozo_HIO_cFv */
-daMozo_HIO_c::~daMozo_HIO_c() {
-    /* Nonmatching */
 }
 
 static actor_method_class l_daMozo_Method = {

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_akabe.cpp
 //
 
-#include "d/d_a_obj.h"
+#include "d/actor/d_a_obj_akabe.h"
 #include "d/d_item.h"
 #include "d/d_item_data.h"
 #include "d/d_cc_d.h"
@@ -13,47 +13,6 @@
 #include "JSystem/JKernel/JKRHeap.h"
 
 namespace daObjAkabe {
-    struct Act_c : public fopAc_ac_c {
-    public:
-        enum Prm_e {
-            PRM_SWSAVE_W = 8,
-            PRM_SWSAVE_S = 0,
-
-            PRM_SCL_W = 2,
-            PRM_SCL_S = 8,
-
-            PRM_ALWAYS_W = 1,
-            PRM_ALWAYS_S = 12,
-
-            PRM_ARG0_W = 4,
-            PRM_ARG0_S = 16,
-        };
-
-        s32 _create();
-        bool create_heap();
-        bool _delete();
-        void init_scale();
-        void init_mtx();
-        bool chk_appear();
-        bool _execute();
-        bool _draw();
-
-        static BOOL solidHeapCB(fopAc_ac_c*);
-        static const char* const M_arcname[4];
-
-        s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
-        s32 prm_get_scl() const { return daObj::PrmAbstract(this, PRM_SCL_W, PRM_SCL_S); }
-        s32 prm_get_always() const { return daObj::PrmAbstract(this, PRM_ALWAYS_W, PRM_ALWAYS_S); }
-        s32 prm_get_arg0() const { return daObj::PrmAbstract(this, PRM_ARG0_W, PRM_ARG0_S); }
-
-    public:
-        /* 0x290 */ request_of_phase_process_class mPhs;
-        /* 0x298 */ dBgW * mpBgW;
-        /* 0x29C */ Mtx mMtx;
-        /* 0x2CC */ s32 mType;
-        /* 0x2D0 */ u8 mbAppear;
-    };
-
     const char* const Act_c::M_arcname[4] = {
         "Akabe",
         "AkabeD",
@@ -109,7 +68,7 @@ namespace daObjAkabe {
                 init_mtx();
 
                 static const u32 heap_size[4] = { 0x200, 0x200, 0x200, 0x3E0, };
-                if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, heap_size[mType])) {
+                if (fopAcM_entrySolidHeap(this, solidHeapCB, heap_size[mType])) {
                     dComIfG_Bgsp()->Regist(mpBgW, this);
                     mpBgW->SetCrrFunc(NULL);
                     mpBgW->SetPriority(1);

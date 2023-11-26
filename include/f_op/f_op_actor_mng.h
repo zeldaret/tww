@@ -382,8 +382,6 @@ s32 fopAcM_createChildFromOffset(s16 procName, unsigned int parentProcID, u32 ac
 
 void fopAcM_DeleteHeap(fopAc_ac_c* p_actor);
 
-s32 fopAcM_callCallback(fopAc_ac_c* p_actor, heapCallbackFunc p_callbackFunc, JKRHeap* p_heap);
-
 bool fopAcM_entrySolidHeap(fopAc_ac_c* p_actor, heapCallbackFunc p_heapCallback, u32 size);
 
 inline void fopAcM_SetMin(fopAc_ac_c* p_actor, f32 minX, f32 minY, f32 minZ) {
@@ -428,7 +426,6 @@ f32 fopAcM_searchActorDistanceXZ2(fopAc_ac_c* p_actorA, fopAc_ac_c* p_actorB);
 s32 fopAcM_rollPlayerCrash(fopAc_ac_c* i_this, f32 distAdjust, u32 flag);
 s32 fopAcM_checkCullingBox(Mtx, f32, f32, f32, f32, f32, f32);
 s32 fopAcM_cullingCheck(fopAc_ac_c*);
-void* event_second_actor(u16);
 s32 fopAcM_orderTalkEvent(fopAc_ac_c*, fopAc_ac_c*);
 s32 fopAcM_orderSpeakEvent(fopAc_ac_c* i_actor);
 s32 fopAcM_orderDoorEvent(fopAc_ac_c*, fopAc_ac_c*);

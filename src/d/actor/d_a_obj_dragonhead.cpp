@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_dragonhead.cpp
 //
 
+#include "d/actor/d_a_obj_dragonhead.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -13,30 +14,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
-class daObjDragonhead_c : public fopAc_ac_c {
-public:
-    inline s32 _create();
-    inline bool _execute();
-    inline bool _draw();
-    inline bool _delete();
-    BOOL CreateHeap();
-    void CreateInit();
-    void set_mtx();
-
-public:
-    /* 0x290 */ request_of_phase_process_class mPhs;
-    /* 0x298 */ J3DModel * mpModel;
-    /* 0x29C */ dCcD_Stts mStts;
-    /* 0x2D8 */ dCcD_Sph mSph;
-    /* 0x404 */ u8 mAlpha;
-    /* 0x405 */ bool mSwitchOn;
-    /* 0x408 */ dBgW * mpBgW;
-    /* 0x40C */ u8 field_0x40c;
-    /* 0x410 */ cXyz mSphCenter;
-    /* 0x41C */ Mtx mtx;
-};
-
-dCcD_SrcSph sph_check_src = {
+static dCcD_SrcSph sph_check_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
@@ -66,12 +44,12 @@ dCcD_SrcSph sph_check_src = {
 };
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daObjDragonhead_c*)i_this)->CreateHeap();
 }
 
 namespace daObjDragonhead_prm {
-    inline u8 getSwitchNo(daObjDragonhead_c* ac) { return (fopAcM_GetParam(ac) >> 8) & 0xFF; }
+    inline u32 getSwitchNo(daObjDragonhead_c* ac) { return (fopAcM_GetParam(ac) >> 8) & 0xFF; }
 };
 
 /* 00000098-00000228       .text CreateHeap__17daObjDragonhead_cFv */
@@ -106,8 +84,8 @@ void daObjDragonhead_c::CreateInit() {
     set_mtx();
 
     field_0x40c = 0;
-    /* Nonmatching -- swapped switchNo and g_dComIfG_gameInfo load */
-    if (dComIfGs_isSwitch(daObjDragonhead_prm::getSwitchNo(this), fopAcM_GetHomeRoomNo(this))) {
+    u32 switchNo = daObjDragonhead_prm::getSwitchNo(this);
+    if (dComIfGs_isSwitch(switchNo, fopAcM_GetHomeRoomNo(this))) {
         mSwitchOn = true;
         mAlpha = 0;
     } else {
@@ -138,7 +116,7 @@ s32 daObjDragonhead_c::_create() {
     s32 ret = dComIfG_resLoad(&mPhs, "Qdghd");
 
     if (ret == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)CheckCreateHeap, 0x10500) == 0) {
+        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x10500) == 0) {
             ret = cPhs_ERROR_e;
         } else {
             CreateInit();
@@ -148,30 +126,31 @@ s32 daObjDragonhead_c::_create() {
     return ret;
 }
 
-bool daObjDragonhead_c::_delete() {
+BOOL daObjDragonhead_c::_delete() {
     if (heap != NULL && field_0x40c == 1)
         dComIfG_Bgsp()->Release(mpBgW);
 
     mDoAud_seDeleteObject(&mSphCenter);
     dComIfG_resDelete(&mPhs, "Qdghd");
-    return true;
+    return TRUE;
 }
 
-bool daObjDragonhead_c::_execute() {
+BOOL daObjDragonhead_c::_execute() {
     dComIfG_Ccsp()->Set(&mSph);
     if (!mSwitchOn) {
         mDoAud_seStart(JA_SE_OBJ_ICEBERG_BREATH, &mSphCenter, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
         if (mSph.ChkTgHit()) {
             cCcD_Obj* at = mSph.GetTgHitObj();
             if (at != NULL && at->ChkAtType(AT_TYPE_FIRE_ARROW)) {
-                dComIfGs_onSwitch(daObjDragonhead_prm::getSwitchNo(this), fopAcM_GetHomeRoomNo(this));
+                u32 switchNo = daObjDragonhead_prm::getSwitchNo(this);
+                dComIfGs_onSwitch(switchNo, fopAcM_GetHomeRoomNo(this));
                 mSwitchOn = true;
             }
         }
     }
 
-    /* Nonmatching -- swapped switchNo and g_dComIfG_gameInfo load */
-    if (dComIfGs_isSwitch(daObjDragonhead_prm::getSwitchNo(this), fopAcM_GetHomeRoomNo(this))) {
+    u32 switchNo = daObjDragonhead_prm::getSwitchNo(this);
+    if (dComIfGs_isSwitch(switchNo, fopAcM_GetHomeRoomNo(this))) {
         if (field_0x40c == 1) {
             if (!dComIfG_Bgsp()->Release(mpBgW))
                 field_0x40c = 0;
@@ -199,10 +178,10 @@ bool daObjDragonhead_c::_execute() {
     }
 
     set_mtx();
-    return true;
+    return TRUE;
 }
 
-bool daObjDragonhead_c::_draw() {
+BOOL daObjDragonhead_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &mTevStr);
     dComIfGd_setListBG();
@@ -214,31 +193,31 @@ bool daObjDragonhead_c::_draw() {
     }
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
-    return true;
+    return TRUE;
 }
 
 /* 000003CC-000004FC       .text daObjDragonhead_Create__FPv */
-s32 daObjDragonhead_Create(void* i_this) {
+static s32 daObjDragonhead_Create(void* i_this) {
     return ((daObjDragonhead_c*)i_this)->_create();
 }
 
 /* 000006B4-00000730       .text daObjDragonhead_Delete__FPv */
-BOOL daObjDragonhead_Delete(void* i_this) {
+static BOOL daObjDragonhead_Delete(void* i_this) {
     return ((daObjDragonhead_c*)i_this)->_delete();
 }
 
 /* 00000730-00000824       .text daObjDragonhead_Draw__FPv */
-BOOL daObjDragonhead_Draw(void* i_this) {
+static BOOL daObjDragonhead_Draw(void* i_this) {
     return ((daObjDragonhead_c*)i_this)->_draw();
 }
 
 /* 00000824-00000A48       .text daObjDragonhead_Execute__FPv */
-BOOL daObjDragonhead_Execute(void* i_this) {
+static BOOL daObjDragonhead_Execute(void* i_this) {
     return ((daObjDragonhead_c*)i_this)->_execute();
 }
 
 /* 00000A48-00000A50       .text daObjDragonhead_IsDelete__FPv */
-BOOL daObjDragonhead_IsDelete(void* i_this) {
+static BOOL daObjDragonhead_IsDelete(void* i_this) {
     return TRUE;
 }
 

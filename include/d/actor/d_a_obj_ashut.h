@@ -6,6 +6,10 @@
 namespace daObjAshut {
     class Act_c : public fopAc_ac_c {
     public:
+        enum Mode_e {
+            
+        };
+    
         void is_switch() const {}
         void prm_get_evId() const {}
         void prm_get_swSave() const {}
@@ -26,7 +30,7 @@ namespace daObjAshut {
         void mode_lower();
         void mode_l_u_init();
         void mode_l_u();
-        void mode_demoreq_init(daObjAshut::Act_c::Mode_e);
+        void mode_demoreq_init(Mode_e);
         void mode_demoreq();
         void Execute(float(**)[3][4]);
         BOOL Draw();

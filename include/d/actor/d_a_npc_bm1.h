@@ -6,6 +6,10 @@
 
 class daNpc_Bm1_c : public fopAc_ac_c {
 public:
+    struct anm_prm_c {
+        
+    };
+
     void IamKakkuto() {}
     void IamSukketo() {}
     void clr_manzai() {}
@@ -46,7 +50,7 @@ public:
     void iniTexPttrnAnm(bool);
     void plyTexPttrnAnm();
     void setAnm_tex(signed char);
-    void setAnm_anm(daNpc_Bm1_c::anm_prm_c*);
+    void setAnm_anm(anm_prm_c*);
     void setAnm_NUM(int, int);
     void setAnm();
     void setPlaySpd(float);
@@ -190,8 +194,8 @@ public:
     /* 0x8FD */ u8 m8FD;
     /* 0x8FE */ u8 m8FE[0x900 - 0x8FE];
     /* 0x900 */ u8 m900;
-    /* 0x901 */ daNpc_Bm1_c__Type mType;
-    /* 0x902 */ daNpc_Bm1_c__SpecificType mSpecificType;
+    /* 0x901 */ u8 mType;
+    /* 0x902 */ u8 mSpecificType;
     /* 0x903 */ u8 mSpawnCondition;
     /* 0x904 */ u8 m904[0x908 - 0x904];
 };

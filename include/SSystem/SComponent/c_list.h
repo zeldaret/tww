@@ -16,6 +16,6 @@ int cLs_Insert(node_list_class* pList, int idx, node_class* pNode);
 node_class* cLs_GetFirst(node_list_class* pList);
 void cLs_Create(node_list_class* pList);
 
-#define LIST_GET_HEAD(pList) (pList->mpHead)
+#define LIST_GET_HEAD(pList) ((pList)->mpHead)
 
 #endif /* C_LIST_H */

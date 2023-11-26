@@ -242,7 +242,7 @@ s32 daItem_c::_daItem_create() {
     if (phase_state == cPhs_COMPLEATE_e) {
         // Note: The demo version calls getHeapSize instead of getFieldHeapSize here.
         u32 heap_size = dItem_data::getFieldHeapSize(m_itemNo);
-        if (!fopAcM_entrySolidHeap(this, &CheckFieldItemCreateHeap, heap_size)) {
+        if (!fopAcM_entrySolidHeap(this, CheckFieldItemCreateHeap, heap_size)) {
             return cPhs_ERROR_e;
         }
         CreateInit();

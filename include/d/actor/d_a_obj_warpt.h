@@ -5,6 +5,10 @@
 
 class daObj_Warpt_c : public fopAc_ac_c {
 public:
+    enum Proc_e {
+        
+    };
+
     void modeProcInit(int) {}
 
     void _createHeap();
@@ -36,7 +40,7 @@ public:
     void spWarp();
     void modeEventOpenInit();
     void modeEventOpen();
-    void modeProc(daObj_Warpt_c::Proc_e, int);
+    void modeProc(Proc_e, int);
     BOOL _execute();
     BOOL _draw();
     void getArg();

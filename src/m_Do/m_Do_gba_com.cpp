@@ -77,7 +77,6 @@ void GbaReset(JUTGbaParam*, void*) {
 }
 
 /* 8001A6A0-8001A7B8       .text mDoGaC_Initial__15mDoGaC_agbCom_cFP18mDoGaC_DataManag_cUc */
-// NONMATCHING - loop / end issues
 void mDoGaC_agbCom_c::mDoGaC_Initial(mDoGaC_DataManag_c* param_0, u8 param_1) {
     field_0x0 = 0;
     field_0x1 = 0;
@@ -111,9 +110,9 @@ void mDoGaC_agbCom_c::mDoGaC_Initial(mDoGaC_DataManag_c* param_0, u8 param_1) {
     field_0x114 = -1;
     field_0x118 = 0;
 
-    field_0x12c.U16._12e |= (u32)cM_rndF(32767.0f);
-    field_0x12c.U32 |= (u32)cM_rndF(32767.0f);
-    field_0x12c.U8 = (field_0x12c.U8 & 0x3F) | 0x40;
+    field_0x12c.U16._12e_1 = (u32)cM_rndF(32767.0f);
+    field_0x12c.U32bits._12c_2 = cM_rndF(32767.0f);
+    field_0x12c.U8._12c_0 = 1;
     field_0x128 = 0;
 }
 
@@ -148,10 +147,11 @@ void mDoGaC_agbCom_c::mDoGaC_ComStop() {
 
 /* 8001A858-8001A8B4       .text mDoGaC_GbaReboot__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_GbaReboot() {
+    // Nonmatching
     mDoGaC_ComStop();
     field_0x0 = 0;
     field_0x3 = 0;
-    field_0x12c.U32 |= (u32)cM_rndF(32767.0f);
+    field_0x12c.U32bits._12c_2 = cM_rndF(32767.0f);
     field_0x128 = 0;
 }
 
@@ -282,12 +282,10 @@ int mDoGaC_agbCom_c::mDoGaC_SendDataSet(u32* param_0, int param_1, u8 param_2, u
 }
 
 /* 8001AC14-8001AD48       .text mDoGaC_SendDataWrite__15mDoGaC_agbCom_cFv */
-// NONMATCHING - regswap
 void mDoGaC_agbCom_c::mDoGaC_SendDataWrite() {
     u8 var_r5 = 0;
     while (field_0x10c > var_r5) {
-        u8 var_r0 = field_0x110[var_r5].field_0x5;
-        if (var_r0 != 0) {
+        if (field_0x110[var_r5].field_0x5 != 0) {
             u8 temp_r0 = field_0x9 + 1;
             if (temp_r0 >= 16) {
                 temp_r0 = 0;
@@ -298,7 +296,7 @@ void mDoGaC_agbCom_c::mDoGaC_SendDataWrite() {
             }
 
             if (field_0x110[var_r5].field_0x4 == 0 || field_0x110[var_r5].field_0x4 == 1) {
-                if (var_r0 == 1) {
+                if (field_0x110[var_r5].field_0x5 == 1) {
                     field_0xc[field_0x9].field_0x0 = &field_0x11C;
                     field_0xc[field_0x9].field_0x4 = 4;
                 } else {
@@ -422,11 +420,10 @@ void mDoGaC_agbCom_c::mDoGaC_CodeExchange0() {
 }
 
 /* 8001B060-8001B0F4       .text mDoGaC_CodeExchange1__15mDoGaC_agbCom_cFv */
-// NONMATCHING - weird string load
 void mDoGaC_agbCom_c::mDoGaC_CodeExchange1() {
     u8 sp8[16];
     if (!JUTGba::getManager()->resultRead(mDoGaC_getPortNo(), sp8)) {
-        if (field_0x118 == (u32) "GZLE") {
+        if (field_0x118 == *(u32*) "GZLE") {
             JUTGba::getManager()->doGetStatus(mDoGaC_getPortNo(), CodeExchange_2, NULL);
         } else {
             mDoGaC_GbaReboot();
@@ -437,11 +434,10 @@ void mDoGaC_agbCom_c::mDoGaC_CodeExchange1() {
 }
 
 /* 8001B0F4-8001B184       .text mDoGaC_CodeExchange2__15mDoGaC_agbCom_cFv */
-// NONMATCHING - weird string load
 void mDoGaC_agbCom_c::mDoGaC_CodeExchange2() {
     u8 sp8[16];
     if (!JUTGba::getManager()->resultGetStatus(mDoGaC_getPortNo(), sp8) && sp8[0] == 0x20) {
-        field_0x114 = (u32) "GZLE";
+        field_0x114 = *(u32*) "GZLE";
         JUTGba::getManager()->doWrite(mDoGaC_getPortNo(), (u8*)&field_0x114, CodeExchange_3, NULL);
     } else {
         field_0x2 = 0;
@@ -459,11 +455,10 @@ void mDoGaC_agbCom_c::mDoGaC_CodeExchange3() {
 }
 
 /* 8001B1F8-8001B298       .text mDoGaC_CodeExchange4__15mDoGaC_agbCom_cFv */
-// NONMATCHING - weird bit shifting
 void mDoGaC_agbCom_c::mDoGaC_CodeExchange4() {
     u8 sp8[16];
     if (!JUTGba::getManager()->resultGetStatus(mDoGaC_getPortNo(), sp8) && sp8[0] == 0x30) {
-        field_0x12c.U8 = (field_0x12c.U8 & ~0xC0) | (mDoGaC_getPortNo() & 0xC0);
+        field_0x12c.U8._12c_0 = mDoGaC_getPortNo();
         field_0x114 = BigLittleChange(field_0x12c.U32);
         JUTGba::getManager()->doWrite(mDoGaC_getPortNo(), (u8*)&field_0x114, ContextSend, NULL);
     } else {
@@ -606,7 +601,6 @@ void mDoGaC_agbCom_c::mDoGaC_GbaRead() {
 }
 
 /* 8001B778-8001BA34       .text mDoGaC_ReadResult__15mDoGaC_agbCom_cFv */
-// NONMATCHING - almost
 void mDoGaC_agbCom_c::mDoGaC_ReadResult() {
     static u8 data_type = 0;
     static u32 check_sum = 0;
@@ -627,7 +621,8 @@ void mDoGaC_agbCom_c::mDoGaC_ReadResult() {
             u32 temp_r0_2 = BigLittleChange(field_0x118);
             data_type = temp_r0_2;
             if ((temp_r0_2 & 0xFF) < 0x10) {
-                recv_p = &field_0x110[temp_r0_2 & 0xFF].field_0x0;
+                u8 temp = temp_r0_2 & 0xFF;
+                recv_p = (u32*)field_0x110[temp].field_0x0;
             } else {
                 recv_p = NULL;
             }
@@ -646,8 +641,8 @@ void mDoGaC_agbCom_c::mDoGaC_ReadResult() {
             }
             break;
         case 3:
-            u32 temp_r0_4 = BigLittleChange(field_0x118);
-            end_p = &field_0x110[data_type].field_0x0 + temp_r0_4;
+            u32 temp_r0_4 = (BigLittleChange(field_0x118) + 3) & ~3;
+            end_p = (u32*)((u8*)field_0x110[data_type].field_0x0 + temp_r0_4);
             data_sum = 0;
             if (recv_p == NULL) {
                 field_0x7 = 6;
@@ -667,8 +662,9 @@ void mDoGaC_agbCom_c::mDoGaC_ReadResult() {
             field_0x7 = 0;
             break;
         case 5:
-            *recv_p = field_0x118;
-            data_sum += BigLittleChange(field_0x118);
+            u32 temp = field_0x118;
+            *recv_p = temp;
+            data_sum += BigLittleChange(temp);
         case 6:
             recv_p++;
             if (recv_p >= end_p) {

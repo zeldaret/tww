@@ -1,24 +1,15 @@
 /*
  * d_a_obj_pbka.cpp
  */
+
+#include "d/actor/d_a_obj_pbka.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_procname.h"
 
-class daObjPbka_c : public fopAc_ac_c {
-public:
-    bool CreateHeap();
-    void CreateInit();
-    void set_mtx();
-    inline bool draw();
-public:
-    /* 0x290 */ request_of_phase_process_class mPhase;
-    /* 0x298 */ J3DModel* mpModel;
-}; //Size 0x29C
-
-bool daObjPbka_c::draw()
+BOOL daObjPbka_c::_draw()
 {
     dKy_tevstr_c * pTevStr;
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, pTevStr = &mTevStr);
@@ -29,20 +20,20 @@ bool daObjPbka_c::draw()
     return true;
 }
 
-void CheckCreateHeap(fopAc_ac_c* i_this) {
+static int CheckCreateHeap(fopAc_ac_c* i_this) {
     daObjPbka_c* a_this = (daObjPbka_c*)i_this;
-    a_this->CreateHeap();
+    return a_this->CreateHeap();
 }
 
 /* 00000098-0000015C       .text CreateHeap__11daObjPbka_cFv */
-bool daObjPbka_c::CreateHeap() {
+BOOL daObjPbka_c::CreateHeap() {
     J3DModelData *modelData = (J3DModelData *)dComIfG_getObjectRes("Pbka", 3);
     JUT_ASSERT(0x51, modelData != 0);
     mpModel = mDoExt_J3DModel__create(modelData,0,0x11020203);
     if(mpModel == NULL) {
         return false;
     }
-    return true;
+    return TRUE;
 }
 
 void daObjPbka_c::CreateInit() {
@@ -63,14 +54,14 @@ void daObjPbka_c::set_mtx() {
     mDoMtx_copy(mDoMtx_stack_c::get(), mpModel->mBaseTransformMtx);
 }
 
-cPhs__Step daObjPbka_Create(void* i_this) {
+static cPhs__Step daObjPbka_Create(void* i_this) {
     int cPhsStep;
     daObjPbka_c* a_this = (daObjPbka_c*)i_this;
     fopAcM_SetupActor(a_this, daObjPbka_c);
 
     cPhsStep = dComIfG_resLoad(&a_this->mPhase, "Pbka");
     if (cPhsStep == cPhs_COMPLEATE_e) {
-        if ((fopAcM_entrySolidHeap(a_this, (heapCallbackFunc)CheckCreateHeap,0x680) & 0xff) == 0) {
+        if (fopAcM_entrySolidHeap(a_this, CheckCreateHeap, 0x680) == 0) {
             cPhsStep =  cPhs_ERROR_e;
         } else {
             a_this->CreateInit();
@@ -82,12 +73,12 @@ cPhs__Step daObjPbka_Create(void* i_this) {
 static BOOL daObjPbka_Delete(void* i_this) {
     daObjPbka_c* a_this = (daObjPbka_c*)i_this;
     dComIfG_resDelete(&a_this->mPhase,"Pbka");
-    return true;
+    return TRUE;
 }
 
 static BOOL daObjPbka_Draw(void* i_this) {
     daObjPbka_c* a_this = (daObjPbka_c*)i_this;
-    return a_this->draw();
+    return a_this->_draw();
 }
 
 static BOOL daObjPbka_Execute(void* i_this) {
@@ -96,11 +87,11 @@ static BOOL daObjPbka_Execute(void* i_this) {
         a_this->shape_angle.y = a_this->current.angle.y;
         mDoAud_seStart(JA_SE_OBJ_BOMB_SHOP_FAN, &a_this->current.pos, 0 , dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
         a_this->set_mtx();
-        return true;
+        return TRUE;
 }
 
 static BOOL daObjPbka_IsDelete(void*) {
-    return true;
+    return TRUE;
 }
 
 static actor_method_class daObj_PbkaMethodTable = {

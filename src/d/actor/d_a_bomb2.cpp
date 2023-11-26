@@ -186,7 +186,7 @@ namespace daBomb2 {
         mpEmitter = param_1;
     }
 
-    int Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+    BOOL Act_c::solidHeapCB(fopAc_ac_c* i_this) {
         return static_cast<Act_c*>(i_this)->create_heap();
     }
 
@@ -310,7 +310,7 @@ namespace daBomb2 {
         int status = dComIfG_resLoad(&mPhs, L_attr.resName);
 
         if(status == cPhs_COMPLEATE_e) {
-            if(fopAcM_entrySolidHeap(this, &solidHeapCB, L_attr.heapSize)) {
+            if(fopAcM_entrySolidHeap(this, solidHeapCB, L_attr.heapSize)) {
                 create_init();
             }
             else {

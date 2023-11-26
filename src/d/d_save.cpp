@@ -138,7 +138,7 @@ void dSv_player_status_b_c::init() {
 void dSv_player_return_place_c::init() {
     strcpy(mName, "sea");
     mRoomNo = 44;
-    mPlayerStatus = 206;
+    mPoint = 206;
 }
 
 /* 80058BC8-80058C60       .text set__25dSv_player_return_place_cFPCcScUc */
@@ -147,7 +147,7 @@ void dSv_player_return_place_c::set(const char* i_name, s8 i_roomNo, u8 i_status
 
     strcpy(mName, i_name);
     mRoomNo = i_roomNo;
-    mPlayerStatus = i_status;
+    mPoint = i_status;
 }
 
 /* 80058C60-80058C7C       .text init__17dSv_player_item_cFv */
@@ -1193,14 +1193,14 @@ void dSv_restart_c::setRestartOption(s8 param_0, cXyz* i_pos, s16 i_angle, s8 i_
 
 /* 8005D5B4-8005D604       .text set__17dSv_turnRestart_cFRC4cXyzsScUlRC4cXyzsi */
 void dSv_turnRestart_c::set(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param,
-                            const cXyz& param_4, s16 param_5, int param_6) {
+                            const cXyz& i_shipPos, s16 i_shipAngle, int param_6) {
     mPosition = i_pos;
     mAngleY = i_angle;
     mRoomNo = i_roomNo;
     mParam = i_param;
     field_0x13 = 0;
-    field_0x24 = param_4;
-    field_0x30 = param_5;
+    mShipPos = i_shipPos;
+    mShipAngleY = i_shipAngle;
     field_0x34 = param_6;
 }
 
