@@ -9,6 +9,20 @@
 #include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_phase.h"
 
+struct mo_ga_s {
+    /* 0x00 */ J3DModel* mpModel;
+    /* 0x04 */ cXyz mPos;
+    /* 0x10 */ cXyz m10;
+    /* 0x1C */ s16 mRotX;
+    /* 0x1E */ s16 mRotY;
+    /* 0x20 */ u8 m20[0x24 - 0x20];
+    /* 0x24 */ f32 mScale;
+    /* 0x28 */ f32 mScaleY;
+    /* 0x2C */ s16 m2C;
+    /* 0x2E */ u8 m2E;
+    /* 0x2F */ u8 m2F;
+};
+
 class kantera_class : public fopAc_ac_c {
 public:
     /* 0x290 */ request_of_phase_process_class mPhs;

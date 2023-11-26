@@ -4507,7 +4507,7 @@ J3DModelData* daPy_lk_c::initModel(J3DModel** i_model, int i_fileIndex, u32 i_di
 
 /* 80124C98-80125CC8       .text playerInit__9daPy_lk_cFv */
 void daPy_lk_c::playerInit() {
-    if (!fopAcM_entrySolidHeap(this, (heapCallbackFunc)&daPy_createHeap, 0xB0000)) {
+    if (!fopAcM_entrySolidHeap(this, daPy_createHeap, 0xB0000)) {
         JUT_ASSERT(0x53B6, 0);
     }
     

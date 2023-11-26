@@ -281,7 +281,7 @@ s32 daVrbox2_Create(fopAc_ac_c* i_actor) {
     vrbox2_class* i_this = static_cast<vrbox2_class*>(i_actor);
 
     s32 phase_state = cPhs_COMPLEATE_e;
-    if (!fopAcM_entrySolidHeap(i_this, (heapCallbackFunc)&daVrbox2_solidHeapCB, 0x21a0))
+    if (!fopAcM_entrySolidHeap(i_this, daVrbox2_solidHeapCB, 0x21a0))
         phase_state = cPhs_ERROR_e;
 
     return phase_state;

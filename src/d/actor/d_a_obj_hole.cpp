@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_hole.cpp
 //
 
+#include "d/actor/d_a_obj_hole.h"
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_com_inf_game.h"
@@ -23,86 +24,22 @@ static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
 static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
 static f64 dummy4[2] = {3.0, 0.5};
 
-
-class daObj_Hole_HIO_c {
-public:
-    daObj_Hole_HIO_c();
-    virtual ~daObj_Hole_HIO_c() {}
-
-    /* 0x0004 */ s8 m0004;
-    /* 0x0005 */ u8 m0005;
-    /* 0x0008 */ float m0008;
-    /* 0x000C */ s16 m000C;
-    /* 0x0010 */ float m0010;
-};
-
 static daObj_Hole_HIO_c l_HIO;
-
-class daObj_Hole_c : public fopAc_ac_c {
-public:
-    enum Proc_e {
-        PROC_INIT = 0,
-        PROC_EXEC = 1
-    };
-
-    enum Mode {
-        MODE_WAIT  = 0,
-        MODE_EVENT = 1,
-        MODE_NULL,
-    };
-
-    void modeProcInit(int newMode) { modeProc(PROC_INIT, newMode); }
-
-    void setMtx();
-    void getPosAndAngle();
-
-    void modeWaitInit();
-    void modeWait();
-    void modeEventInit();
-    void modeEvent();
-    void modeProc(Proc_e, int);
-
-    s32 _execute();
-
-    void debugDraw();
-    s32 _draw();
-
-    void createInit();
-    s32 _createHeap();
-    void getArg();
-
-    s32 _create();
-    s32 _delete();
-
-    static const char m_arc_name[];
-
-    /* 0x0290 */ s32 mMode;
-    /* 0x0294 */ u8 mHasModel;
-    /* 0x0295 */ u8 mExitIdx;
-    /* 0x0296 */ u16 mScaleLocal;
-    /* 0x0298 */ request_of_phase_process_class mPhs;
-    
-    /* 0x02A0 */ J3DModel* mpMdl;
-
-    /* 0x02A4 */ dBgS_ObjLinChk mLinChk;
-    /* 0x0310 */ dBgS_ObjAcch mAcch;
-    /* 0x04D4 */ dBgS_AcchCir mAcchCir;
-};
 
 const char daObj_Hole_c::m_arc_name[] = "Aana";
 
 /* 000000EC-0000010C       .text createHeap_CB__FP10fopAc_ac_c */
-static s32 createHeap_CB(fopAc_ac_c* i_actor) {
+static BOOL createHeap_CB(fopAc_ac_c* i_actor) {
     return static_cast<daObj_Hole_c*>(i_actor)->_createHeap();
 }
 
 /* 0000010C-00000148       .text __ct__16daObj_Hole_HIO_cFv */
 daObj_Hole_HIO_c::daObj_Hole_HIO_c() {
-    m0004 = -1;
-    m0005 = 0;
-    m0008 = 65.0f;
-    m000C = 0;
-    m0010 = 2.0f;
+    m04 = -1;
+    m05 = 0;
+    m08 = 65.0f;
+    m0C = 0;
+    m10 = 2.0f;
 }
 
 /* 00000148-000002BC       .text setMtx__12daObj_Hole_cFv */
@@ -111,23 +48,23 @@ void daObj_Hole_c::setMtx() {
     adjustPos.x = current.pos.x;
     adjustPos.y = current.pos.y;
     adjustPos.z = current.pos.z;
-    adjustPos.y += l_HIO.m0010;
+    adjustPos.y += l_HIO.m10;
 
     if (mMode != MODE_EVENT) {
         shape_angle.y = fopCamM_GetAngleY(dComIfGp_getCamera(0)) + 0x8000;
     }
 
     if (mHasModel == 0xFF) {
-        float scale = l_HIO.m0008 * mScale.x;
+        float scale = l_HIO.m08 * mScale.x;
 
-        if (l_HIO.m000C != 0) {
-            scale += l_HIO.m000C * 10;
+        if (l_HIO.m0C != 0) {
+            scale += l_HIO.m0C * 10;
         }
         else {
             scale += mScaleLocal * 10;
         }
 
-        scale /= l_HIO.m0008;
+        scale /= l_HIO.m08;
 
         cXyz scaleVec;
         scaleVec.setall(scale);
@@ -167,10 +104,10 @@ void daObj_Hole_c::modeWaitInit() {
 
 /* 00000410-000004F0       .text modeWait__12daObj_Hole_cFv */
 void daObj_Hole_c::modeWait() {
-    float scale = l_HIO.m0008 * mScale.x;
+    float scale = l_HIO.m08 * mScale.x;
 
-    if (l_HIO.m000C != 0) {
-        scale += l_HIO.m000C * 10;
+    if (l_HIO.m0C != 0) {
+        scale += l_HIO.m0C * 10;
     }
     else {
         scale += mScaleLocal * 10;
@@ -241,21 +178,21 @@ void daObj_Hole_c::modeProc(daObj_Hole_c::Proc_e proc, int newMode) {
 }
 
 /* 000006C0-00000700       .text _execute__12daObj_Hole_cFv */
-s32 daObj_Hole_c::_execute() {
+bool daObj_Hole_c::_execute() {
     modeProc(PROC_EXEC, MODE_NULL);
     setMtx();
-    return 0;
+    return false;
 }
 
 /* 00000700-00000738       .text debugDraw__12daObj_Hole_cFv */
 void daObj_Hole_c::debugDraw() {
     cXyz pos = current.pos;
-    pos.y += l_HIO.m0010;
+    pos.y += l_HIO.m10;
 }
 
 /* 00000738-000007BC       .text _draw__12daObj_Hole_cFv */
-s32 daObj_Hole_c::_draw() {
-    if (l_HIO.m0005 != 0) {
+bool daObj_Hole_c::_draw() {
+    if (l_HIO.m05 != 0) {
         debugDraw();
     }
 
@@ -266,7 +203,7 @@ s32 daObj_Hole_c::_draw() {
         mDoExt_modelUpdateDL(mpMdl);
     }
 
-    return 1;
+    return true;
 }
 
 /* 000007BC-00000864       .text createInit__12daObj_Hole_cFv */
@@ -286,7 +223,7 @@ void daObj_Hole_c::createInit() {
 }
 
 /* 00000864-00000928       .text _createHeap__12daObj_Hole_cFv */
-s32 daObj_Hole_c::_createHeap() {
+BOOL daObj_Hole_c::_createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, 3);
 
     JUT_ASSERT(0x13D, modelData != 0);
@@ -294,10 +231,10 @@ s32 daObj_Hole_c::_createHeap() {
     mpMdl = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
 
     if (mpMdl == NULL) {
-        return 0;
+        return FALSE;
     }
     else {
-        return 1;
+        return TRUE;
     }
 }
 
@@ -326,7 +263,7 @@ s32 daObj_Hole_c::_create() {
         getArg();
 
         if (mHasModel == 0xFF) {
-            u32 heapResult = fopAcM_entrySolidHeap(this, (heapCallbackFunc)createHeap_CB, 0x1000);
+            u32 heapResult = fopAcM_entrySolidHeap(this, createHeap_CB, 0x1000);
 
             if (heapResult == 0) {
                 return cPhs_ERROR_e;
@@ -340,9 +277,9 @@ s32 daObj_Hole_c::_create() {
 }
 
 /* 0000122C-0000125C       .text _delete__12daObj_Hole_cFv */
-s32 daObj_Hole_c::_delete() {
+bool daObj_Hole_c::_delete() {
     dComIfG_resDelete(&mPhs, m_arc_name);
-    return 1;
+    return true;
 }
 
 /* 0000125C-0000127C       .text daObj_HoleCreate__FPv */
@@ -351,22 +288,22 @@ static s32 daObj_HoleCreate(void* i_actor) {
 }
 
 /* 0000127C-000012A0       .text daObj_HoleDelete__FPv */
-static u8 daObj_HoleDelete(void* i_actor) {
+static BOOL daObj_HoleDelete(void* i_actor) {
     return static_cast<daObj_Hole_c*>(i_actor)->_delete();
 }
 
 /* 000012A0-000012C4       .text daObj_HoleExecute__FPv */
-static u8 daObj_HoleExecute(void* i_actor) {
+static BOOL daObj_HoleExecute(void* i_actor) {
     return static_cast<daObj_Hole_c*>(i_actor)->_execute();
 }
 
 /* 000012C4-000012E8       .text daObj_HoleDraw__FPv */
-static u8 daObj_HoleDraw(void* i_actor) {
+static BOOL daObj_HoleDraw(void* i_actor) {
     return static_cast<daObj_Hole_c*>(i_actor)->_draw();
 }
 
 /* 000012E8-000012F0       .text daObj_HoleIsDelete__FPv */
-static u8 daObj_HoleIsDelete(void* i_actor) {
+static BOOL daObj_HoleIsDelete(void* i_actor) {
     return TRUE;
 }
 

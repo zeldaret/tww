@@ -46,7 +46,7 @@ s32 daKaji_c::_create() {
     
     s32 phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)&CheckCreateHeap, 0x660)) {
+        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x660)) {
             mDoMtx_stack_c::transS(current.pos);
             mDoMtx_stack_c::YrotM(shape_angle.y);
             mDoMtx_stack_c::scaleM(mScale);

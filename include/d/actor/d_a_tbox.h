@@ -10,6 +10,7 @@
 #include "d/d_particle.h"
 #include "d/d_bg_s_acch.h"
 #include "f_op/f_op_actor_mng.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class daTbox_c : public fopAc_ac_c {
 public:
@@ -54,7 +55,7 @@ public:
     s32 getShapeType();
     s32 getFuncType();
     BOOL checkNormal();
-    s32 CreateHeap();
+    BOOL CreateHeap();
     void CreateInit();
     s32 boxCheck();
     void lightUpProc();
@@ -120,7 +121,7 @@ public:
     /* 0x76C */ u8 mOpenedSwitch;
 };
 
-class daTbox_HIO_c {
+class daTbox_HIO_c : public JORReflexible {
 public:
     daTbox_HIO_c();
     virtual ~daTbox_HIO_c() { }

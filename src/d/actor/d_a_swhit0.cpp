@@ -102,7 +102,7 @@ s32 daSwhit0_c::getSwNo2() {
 }
 
 /* 000000C4-00000230       .text CreateHeap__10daSwhit0_cFv */
-s32 daSwhit0_c::CreateHeap() {
+BOOL daSwhit0_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", 0x35);
     JUT_ASSERT(0xD5, modelData != 0);
 
@@ -184,7 +184,7 @@ s32 daSwhit0_c::CreateInit() {
 }
 
 /* 000004E8-00000508       .text CheckCreateHeap__FP10fopAc_ac_c */
-static s32 CheckCreateHeap(fopAc_ac_c* i_actr) {
+static BOOL CheckCreateHeap(fopAc_ac_c* i_actr) {
     return static_cast<daSwhit0_c*>(i_actr)->CreateHeap();
 }
 
@@ -195,7 +195,7 @@ s32 daSwhit0_c::create() {
     shape_angle.z = 0;
     current.angle.z = 0;
 
-    if ((fopAcM_entrySolidHeap(this, (heapCallbackFunc)CheckCreateHeap, 0x34A0) & 0xFF) == 0) {
+    if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x34A0) == 0) {
         return cPhs_ERROR_e;
     }
 

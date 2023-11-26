@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_Vteng.cpp
 //
 
+#include "d/actor/d_a_obj_Vteng.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -11,25 +12,6 @@
 #include "d/d_procname.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-class daObjVteng_c : public fopAc_ac_c {
-public:
-    void init_mtx();
-    s32 _create();
-    bool _execute();
-    bool _draw();
-    bool _delete();
-    bool create_heap();
-    bool jokai_demo();
-    static BOOL solidHeapCB(fopAc_ac_c *i_this);
-
-public:
-    /* 0x290 */ request_of_phase_process_class mPhs;
-    /* 0x298 */ J3DModel * mpModel;
-    /* 0x29C */ mDoExt_McaMorf* mpMorf;
-    /* 0x2A0 */ dBgW * mpBgW;
-    /* 0x2A4 */ Mtx mtx;
-};
 
 namespace {
     static const char l_arcname[] = "Vteng";
@@ -93,7 +75,7 @@ s32 daObjVteng_c::_create() {
     s32 ret = dComIfG_resLoad(&mPhs, l_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, 0x72a0)) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x72a0)) {
             fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
             init_mtx();
             if (dComIfG_Bgsp()->Regist(mpBgW, this)) {

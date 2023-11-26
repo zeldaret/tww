@@ -61,7 +61,7 @@ static cPhs__Step daObjPbka_Create(void* i_this) {
 
     cPhsStep = dComIfG_resLoad(&a_this->mPhase, "Pbka");
     if (cPhsStep == cPhs_COMPLEATE_e) {
-        if ((fopAcM_entrySolidHeap(a_this, CheckCreateHeap, 0x680) & 0xff) == 0) {
+        if (fopAcM_entrySolidHeap(a_this, CheckCreateHeap, 0x680) == 0) {
             cPhsStep =  cPhs_ERROR_e;
         } else {
             a_this->CreateInit();

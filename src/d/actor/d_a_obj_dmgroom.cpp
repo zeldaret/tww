@@ -56,7 +56,7 @@ s32 daObjDmgroom_c::_create() {
     s32 ret = dComIfG_resLoad(&mPhs, "Dmgroom");
 
     if (ret == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)CheckCreateHeap, 0x1460) == 0) {
+        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1460) == 0) {
             ret = cPhs_ERROR_e;
         } else {
             CreateInit();

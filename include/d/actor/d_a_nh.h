@@ -106,7 +106,7 @@ class daNh_HIO_c : public JORReflexible {
 
 public:
     daNh_HIO_c();
-    virtual ~daNh_HIO_c();
+    virtual ~daNh_HIO_c() {}
     
 public:
     /* 0x04 */ s8 mChildID;

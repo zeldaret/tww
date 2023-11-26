@@ -21,7 +21,7 @@ public:
     s32 getTimer();
     s32 getSwNo2();
 
-    s32 CreateHeap();
+    BOOL CreateHeap();
     void decisionRtType();
     
     s32 CreateInit();

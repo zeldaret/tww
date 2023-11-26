@@ -87,7 +87,7 @@ namespace daBomb2 {
         void set_no_hit();
         bool chk_explode();
 
-        static int solidHeapCB(fopAc_ac_c*);
+        static BOOL solidHeapCB(fopAc_ac_c*);
         bool create_heap_nut();
         bool create_heap();
         void crr_init();

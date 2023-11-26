@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_AjavW.cpp
 //
 
+#include "d/actor/d_a_obj_AjavW.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -11,22 +12,6 @@
 #include "d/d_procname.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-class daObjAjavW_c : public fopAc_ac_c {
-public:
-    s32 _create();
-    bool _execute();
-    bool _draw();
-    bool _delete();
-    bool create_heap();
-    static BOOL solidHeapCB(fopAc_ac_c *i_this);
-
-public:
-    /* 0x290 */ request_of_phase_process_class mPhs;
-    /* 0x298 */ J3DModel * mpModel;
-    /* 0x29C */ mDoExt_btkAnm mBtkAnm;
-    /* 0x2B0 */ dBgW * mpBgW;
-};
 
 namespace {
     static const char l_arcname[] = "AjavW";
@@ -66,7 +51,7 @@ s32 daObjAjavW_c::_create() {
     s32 ret = dComIfG_resLoad(&mPhs, l_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, 0x8c0) == 1) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x8c0) == 1) {
             if (dComIfG_Bgsp()->Regist(mpBgW, this)) {
                 ret = cPhs_ERROR_e;
             } else {

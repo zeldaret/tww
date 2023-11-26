@@ -89,7 +89,7 @@ void daItemBase_c::setLoadError() {
 }
 
 /* 80068748-800687B4       .text CheckItemCreateHeap__FP10fopAc_ac_c */
-int CheckItemCreateHeap(fopAc_ac_c* i_ac) {
+BOOL CheckItemCreateHeap(fopAc_ac_c* i_ac) {
     daItemBase_c * i_this = (daItemBase_c *)i_ac;
     u8 itemNo = i_this->getItemNo();
     return i_this->CreateItemHeap(
@@ -105,7 +105,7 @@ int CheckItemCreateHeap(fopAc_ac_c* i_ac) {
 }
 
 /* 800687B4-80068820       .text CheckFieldItemCreateHeap__FP10fopAc_ac_c */
-int CheckFieldItemCreateHeap(fopAc_ac_c* i_ac) {
+BOOL CheckFieldItemCreateHeap(fopAc_ac_c* i_ac) {
     daItemBase_c * i_this = (daItemBase_c *)i_ac;
     u8 itemNo = i_this->getItemNo();
     return i_this->CreateItemHeap(

@@ -3,6 +3,7 @@
 // Translation Unit: d_a_swtact.cpp
 //
 
+#include "d/actor/d_a_swtact.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -11,41 +12,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
-
-class daSwTact_c : public fopAc_ac_c {
-public:
-    bool _delete();
-    BOOL CreateHeap();
-    void CreateInit();
-    void set_mtx();
-    s32 getAnswer();
-    s32 _create();
-    bool _execute();
-    bool _draw();
-
-    inline f32 getR() { return mRadius * mScale.x; }
-
-    static const char * m_arcname;
-    static const f32 mDefaultR;
-    static const f32 mDefaultRwM;
-    static const u32 m_heapsize;
-
-public:
-    /* 0x290 */ request_of_phase_process_class mPhs;
-    /* 0x298 */ J3DModel * model;
-    /* 0x29C */ f32 mRadius;
-    /* 0x2A0 */ u32 mSwitchNo;
-    /* 0x2A4 */ u8 mAnswer;
-    /* 0x2A5 */ bool mTrigger;
-    /* 0x2A6 */ u8 mPlayerStatus;
-    /* 0x2A7 */ u8 pad;
-};
-
-namespace daSwTact_prm {
-    inline u32 getSwitchNo(daSwTact_c * i_this)  { return (fopAcM_GetParam(i_this) >> 0) & 0xFF; }
-    inline u32 getAnswer(daSwTact_c * i_this)  { return (fopAcM_GetParam(i_this) >> 8) & 0xFF; }
-    inline u32 getModel(daSwTact_c * i_this) { return (fopAcM_GetParam(i_this) >> 16) & 0x0F; }
-}
 
 const char * daSwTact_c::m_arcname = "Itact";
 const f32 daSwTact_c::mDefaultR = 50.0f;
@@ -59,7 +25,7 @@ bool daSwTact_c::_delete() {
 }
 
 /* 000000AC-000000CC       .text CheckCreateHeap__FP10fopAc_ac_c */
-s32 CheckCreateHeap(fopAc_ac_c* i_ac) {
+BOOL CheckCreateHeap(fopAc_ac_c* i_ac) {
     return ((daSwTact_c *)i_ac)->CreateHeap();
 }
 
@@ -111,7 +77,7 @@ s32 daSwTact_c::_create() {
         result = dComIfG_resLoad(&this->mPhs, m_arcname);
 
         if (result == cPhs_COMPLEATE_e) {
-            if (!fopAcM_entrySolidHeap(this, (heapCallbackFunc)CheckCreateHeap, 0x3000)) {
+            if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x3000)) {
                 return cPhs_ERROR_e;
             }
         }

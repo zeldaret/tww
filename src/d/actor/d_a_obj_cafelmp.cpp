@@ -51,7 +51,7 @@ s32 daObjCafelmp_c::_create() {
     s32 ret = dComIfG_resLoad(&mPhs, "Cafelmp");
 
     if (ret == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)CheckCreateHeap, 0x680) == 0) {
+        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x680) == 0) {
             ret = cPhs_ERROR_e;
         } else {
             CreateInit();

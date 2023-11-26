@@ -68,7 +68,7 @@ namespace daObjAkabe {
                 init_mtx();
 
                 static const u32 heap_size[4] = { 0x200, 0x200, 0x200, 0x3E0, };
-                if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, heap_size[mType])) {
+                if (fopAcM_entrySolidHeap(this, solidHeapCB, heap_size[mType])) {
                     dComIfG_Bgsp()->Regist(mpBgW, this);
                     mpBgW->SetCrrFunc(NULL);
                     mpBgW->SetPriority(1);

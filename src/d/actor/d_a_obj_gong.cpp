@@ -67,7 +67,7 @@ s32 daObjGong::Act_c::_create() {
     s32 ret = dComIfG_resLoad(&mPhs, M_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)solidHeapCB, 0x0)) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0)) {
             fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
             init_mtx();
             fopAcM_setCullSizeBox(this, -100.0f, -1.0f, -50.0f, 100.0f, 230.0f, 50.0f);

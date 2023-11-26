@@ -408,12 +408,12 @@ BOOL daTbox_c::checkNormal() {
 }
 
 /* 0000108C-000010AC       .text CheckCreateHeap__FP10fopAc_ac_c */
-static s32 CheckCreateHeap(fopAc_ac_c* i_actor) {
+static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
     return static_cast<daTbox_c*>(i_actor)->CreateHeap();
 }
 
 /* 000010AC-0000114C       .text CreateHeap__8daTbox_cFv */
-s32 daTbox_c::CreateHeap() {
+BOOL daTbox_c::CreateHeap() {
     if (commonShapeSet() != cPhs_COMPLEATE_e) {
         return FALSE;
     }
@@ -511,7 +511,7 @@ void daTbox_c::CreateInit() {
     mAllColRatio = 1.0f;
 
     if (l_HIO.mHioId < 0) {
-        l_HIO.mHioId = mDoHIO_root.mDoHIO_createChild("宝箱", (JORReflexible*)(&l_HIO));
+        l_HIO.mHioId = mDoHIO_root.mDoHIO_createChild("宝箱", &l_HIO);
     }
 
     shape_angle.z = 0;
@@ -1241,7 +1241,7 @@ static s32 daTbox_Create(fopAc_ac_c* i_actor) {
             heapSize += opensize_tbl[shapeType];
         }
 
-        u32 heapResult = fopAcM_entrySolidHeap(i_actor, (heapCallbackFunc)CheckCreateHeap, heapSize);
+        u32 heapResult = fopAcM_entrySolidHeap(i_actor, CheckCreateHeap, heapSize);
         if (!heapResult) {
             return cPhs_ERROR_e;
         }

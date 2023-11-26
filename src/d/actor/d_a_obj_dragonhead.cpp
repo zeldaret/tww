@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_dragonhead.cpp
 //
 
+#include "d/actor/d_a_obj_dragonhead.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -12,29 +13,6 @@
 #include "d/d_procname.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-class daObjDragonhead_c : public fopAc_ac_c {
-public:
-    inline s32 _create();
-    inline bool _execute();
-    inline bool _draw();
-    inline bool _delete();
-    BOOL CreateHeap();
-    void CreateInit();
-    void set_mtx();
-
-public:
-    /* 0x290 */ request_of_phase_process_class mPhs;
-    /* 0x298 */ J3DModel * mpModel;
-    /* 0x29C */ dCcD_Stts mStts;
-    /* 0x2D8 */ dCcD_Sph mSph;
-    /* 0x404 */ u8 mAlpha;
-    /* 0x405 */ bool mSwitchOn;
-    /* 0x408 */ dBgW * mpBgW;
-    /* 0x40C */ u8 field_0x40c;
-    /* 0x410 */ cXyz mSphCenter;
-    /* 0x41C */ Mtx mtx;
-};
 
 static dCcD_SrcSph sph_check_src = {
     // dCcD_SrcGObjInf
@@ -138,7 +116,7 @@ s32 daObjDragonhead_c::_create() {
     s32 ret = dComIfG_resLoad(&mPhs, "Qdghd");
 
     if (ret == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)CheckCreateHeap, 0x10500) == 0) {
+        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x10500) == 0) {
             ret = cPhs_ERROR_e;
         } else {
             CreateInit();
@@ -148,16 +126,16 @@ s32 daObjDragonhead_c::_create() {
     return ret;
 }
 
-bool daObjDragonhead_c::_delete() {
+BOOL daObjDragonhead_c::_delete() {
     if (heap != NULL && field_0x40c == 1)
         dComIfG_Bgsp()->Release(mpBgW);
 
     mDoAud_seDeleteObject(&mSphCenter);
     dComIfG_resDelete(&mPhs, "Qdghd");
-    return true;
+    return TRUE;
 }
 
-bool daObjDragonhead_c::_execute() {
+BOOL daObjDragonhead_c::_execute() {
     dComIfG_Ccsp()->Set(&mSph);
     if (!mSwitchOn) {
         mDoAud_seStart(JA_SE_OBJ_ICEBERG_BREATH, &mSphCenter, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
@@ -200,10 +178,10 @@ bool daObjDragonhead_c::_execute() {
     }
 
     set_mtx();
-    return true;
+    return TRUE;
 }
 
-bool daObjDragonhead_c::_draw() {
+BOOL daObjDragonhead_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &mTevStr);
     dComIfGd_setListBG();
@@ -215,7 +193,7 @@ bool daObjDragonhead_c::_draw() {
     }
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
-    return true;
+    return TRUE;
 }
 
 /* 000003CC-000004FC       .text daObjDragonhead_Create__FPv */

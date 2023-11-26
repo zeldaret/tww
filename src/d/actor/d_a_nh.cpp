@@ -129,7 +129,7 @@ s32 daNh_c::create() {
     
     fopAcM_SetupActor(this, daNh_c);
     
-    if (!fopAcM_entrySolidHeap(this, (heapCallbackFunc)&checkCreateHeap, a_heap_size_tbl)) {
+    if (!fopAcM_entrySolidHeap(this, checkCreateHeap, a_heap_size_tbl)) {
         return cPhs_ERROR_e;
     }
     
@@ -498,9 +498,6 @@ BOOL daNh_Delete(daNh_c* i_this) {
 s32 daNh_Create(fopAc_ac_c* i_this) {
     return ((daNh_c*)i_this)->create();
 }
-
-/* 800FAEAC-800FAEF4       .text __dt__10daNh_HIO_cFv */
-daNh_HIO_c::~daNh_HIO_c() {}
 
 actor_method_class l_daNh_Method = {
     (process_method_func)daNh_Create,

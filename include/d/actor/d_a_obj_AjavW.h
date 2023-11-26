@@ -8,10 +8,18 @@
 
 class daObjAjavW_c : public fopAc_ac_c {
 public:
+    s32 _create();
+    bool _execute();
+    bool _draw();
+    bool _delete();
+    bool create_heap();
+    static BOOL solidHeapCB(fopAc_ac_c *i_this);
+
+public:
     /* 0x290 */ request_of_phase_process_class mPhs;
-    /* 0x298 */ J3DModel* mModel;
-    /* 0x29C */ mDoExt_btkAnm mBtk;
-    /* 0x2B0 */ dBgW* mBgW;
+    /* 0x298 */ J3DModel * mpModel;
+    /* 0x29C */ mDoExt_btkAnm mBtkAnm;
+    /* 0x2B0 */ dBgW * mpBgW;
 };
 
 #endif /* D_A_OBJ_AJAVW_H */

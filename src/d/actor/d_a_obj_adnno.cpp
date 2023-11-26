@@ -67,7 +67,7 @@ s32 daObjAdnno_c::_create() {
     s32 ret = dComIfG_resLoad(&mPhs, "Adnno");
 
     if (ret == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, (heapCallbackFunc)CheckCreateHeap, 0x9C00) == 0) {
+        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x9C00) == 0) {
             ret = cPhs_ERROR_e;
         } else {
             CreateInit();

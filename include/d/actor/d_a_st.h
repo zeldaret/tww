@@ -8,10 +8,18 @@
 #include "m_Do/m_Do_ext.h"
 #include "c/c_damagereaction.h"
 
+struct st_p {
+    
+};
+
+struct st_ke_s {
+    
+};
+
 class st_class : public fopAc_ac_c {
 public:
     /* 0x02AC */ u8 m02AC[0x02B4 - 0x02AC];
-    /* 0x02B4 */ daSt__BehaviorTypes mBehaviorType;
+    /* 0x02B4 */ u8 mBehaviorType;
     /* 0x02B5 */ u8 mAmbushSightRange;
     /* 0x02B6 */ u8 mUnusedParam;
     /* 0x02B7 */ u8 mAmbushSwitch;

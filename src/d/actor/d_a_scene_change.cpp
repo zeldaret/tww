@@ -3,6 +3,7 @@
 // Translation Unit: d_a_scene_change.cpp
 //
 
+#include "d/actor/d_a_scene_change.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
@@ -11,22 +12,7 @@
 #include "d/d_procname.h"
 #include "dolphin/types.h"
 
-class daSceneChgHIO_c {
-public:
-    daSceneChgHIO_c();
-    virtual ~daSceneChgHIO_c();
-
-    s8 m0004;
-    s8 m0005;
-    f32 m0008;
-};
-
 static daSceneChgHIO_c l_HIO;
-
-class d_a_scene_change_c : public fopAc_ac_c {
-public:
-    Mtx mTransformMtx;
-};
 
 /* 000000EC-00000118       .text __ct__15daSceneChgHIO_cFv */
 daSceneChgHIO_c::daSceneChgHIO_c() {
@@ -66,11 +52,6 @@ BOOL daSceneChgDraw(void* i_this) {
 /* 000001C0-000001C8       .text daSceneChgIsDelete__FPv */
 BOOL daSceneChgIsDelete(void* i_this) {
     return TRUE;
-}
-
-/* 000001C8-00000218       .text __dt__15daSceneChgHIO_cFv */
-daSceneChgHIO_c::~daSceneChgHIO_c() {
-    m0004 = 0xFF;
 }
 
 static actor_method_class daSceneChgMethodTable = {

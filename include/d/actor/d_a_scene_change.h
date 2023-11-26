@@ -5,7 +5,19 @@
 
 class d_a_scene_change_c : public fopAc_ac_c {
 public:
-    /* Place member variables here */
+    /* 0x290 */ Mtx mTransformMtx;
+};
+
+class daSceneChgHIO_c {
+public:
+    daSceneChgHIO_c();
+    virtual ~daSceneChgHIO_c() {
+        m0004 = -1;
+    }
+
+    s8 m0004;
+    s8 m0005;
+    f32 m0008;
 };
 
 #endif /* D_A_SCENE_CHANGE_H */
