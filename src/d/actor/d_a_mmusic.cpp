@@ -4,21 +4,40 @@
 //
 
 #include "d/actor/d_a_mmusic.h"
+#include "JAZelAudio/JAIZelBasic.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_item_data.h"
+#include "d/d_save.h"
+#include "dolphin/mtx/mtx.h"
 #include "dolphin/types.h"
+#include "m_Do/m_Do_mtx.h"
 
 /* 00000078-0000009C       .text solidHeapCB__Q28daMmusic5Act_cFP10fopAc_ac_c */
-void daMmusic::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daMmusic::Act_c::solidHeapCB(fopAc_ac_c* param) {
+    BOOL uVar1;
+    uVar1 = create_heap();
+    return uVar1;
 }
 
 /* 0000009C-000000A4       .text create_heap__Q28daMmusic5Act_cFv */
-void daMmusic::Act_c::create_heap() {
-    /* Nonmatching */
+BOOL daMmusic::Act_c::create_heap() {
+    return TRUE;
 }
 
 /* 000000A4-0000013C       .text Macore_is_playing__Q28daMmusic5Act_cFv */
-void daMmusic::Act_c::Macore_is_playing() {
-    /* Nonmatching */
+BOOL daMmusic::Act_c::Macore_is_playing() {
+    int iVar1 = dComIfGs_isStageBossEnemy(7);
+    bool bVar2;
+
+    if ((((iVar1 == 0) &&
+          (iVar1 = g_dComIfG_gameInfo.save.mSavedata.mEvent.isEventBit(0x2910), iVar1 == 0)) &&
+         (iVar1 = g_dComIfG_gameInfo.save.mSavedata.mEvent.isEventBit(0x2e02), iVar1 == 0)) &&
+        ((iVar1 = g_dComIfG_gameInfo.save.mSavedata.mEvent.isEventBit(0x1610),
+          iVar1 == 0 && (bVar2 = dComIfGs_checkGetItem(LV3_SWORD), bVar2))))
+    {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 0000013C-000001A4       .text set_mtx__Q28daMmusic5Act_cFv */
@@ -38,7 +57,8 @@ BOOL daMmusic::Act_c::_delete() {
 
 /* 000002B4-000002C0       .text init_se__Q28daMmusic5Act_cFv */
 void daMmusic::Act_c::init_se() {
-    /* Nonmatching */
+    (this->field_0x2D4) = 0x78;
+    return;
 }
 
 /* 000002C0-000003D0       .text manage_se__Q28daMmusic5Act_cFi */
@@ -48,7 +68,8 @@ void daMmusic::Act_c::manage_se(int) {
 
 /* 000003D0-000003FC       .text delete_se__Q28daMmusic5Act_cFv */
 void daMmusic::Act_c::delete_se() {
-    /* Nonmatching */
+    JAIZelBasic::cbPracticeStop(JAIZelBasic::zel_basic);
+    return;
 }
 
 /* 000003FC-00000554       .text _execute__Q28daMmusic5Act_cFv */
@@ -58,11 +79,5 @@ BOOL daMmusic::Act_c::_execute() {
 
 /* 00000554-0000055C       .text _draw__Q28daMmusic5Act_cFv */
 BOOL daMmusic::Act_c::_draw() {
-    /* Nonmatching */
+    return TRUE;
 }
-
-
-
-
-
-
