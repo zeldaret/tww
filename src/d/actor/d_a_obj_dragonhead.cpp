@@ -36,7 +36,7 @@ public:
     /* 0x41C */ Mtx mtx;
 };
 
-dCcD_SrcSph sph_check_src = {
+static dCcD_SrcSph sph_check_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
@@ -66,12 +66,12 @@ dCcD_SrcSph sph_check_src = {
 };
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daObjDragonhead_c*)i_this)->CreateHeap();
 }
 
 namespace daObjDragonhead_prm {
-    inline u8 getSwitchNo(daObjDragonhead_c* ac) { return (fopAcM_GetParam(ac) >> 8) & 0xFF; }
+    inline u32 getSwitchNo(daObjDragonhead_c* ac) { return (fopAcM_GetParam(ac) >> 8) & 0xFF; }
 };
 
 /* 00000098-00000228       .text CreateHeap__17daObjDragonhead_cFv */
@@ -106,8 +106,8 @@ void daObjDragonhead_c::CreateInit() {
     set_mtx();
 
     field_0x40c = 0;
-    /* Nonmatching -- swapped switchNo and g_dComIfG_gameInfo load */
-    if (dComIfGs_isSwitch(daObjDragonhead_prm::getSwitchNo(this), fopAcM_GetHomeRoomNo(this))) {
+    u32 switchNo = daObjDragonhead_prm::getSwitchNo(this);
+    if (dComIfGs_isSwitch(switchNo, fopAcM_GetHomeRoomNo(this))) {
         mSwitchOn = true;
         mAlpha = 0;
     } else {
@@ -164,14 +164,15 @@ bool daObjDragonhead_c::_execute() {
         if (mSph.ChkTgHit()) {
             cCcD_Obj* at = mSph.GetTgHitObj();
             if (at != NULL && at->ChkAtType(AT_TYPE_FIRE_ARROW)) {
-                dComIfGs_onSwitch(daObjDragonhead_prm::getSwitchNo(this), fopAcM_GetHomeRoomNo(this));
+                u32 switchNo = daObjDragonhead_prm::getSwitchNo(this);
+                dComIfGs_onSwitch(switchNo, fopAcM_GetHomeRoomNo(this));
                 mSwitchOn = true;
             }
         }
     }
 
-    /* Nonmatching -- swapped switchNo and g_dComIfG_gameInfo load */
-    if (dComIfGs_isSwitch(daObjDragonhead_prm::getSwitchNo(this), fopAcM_GetHomeRoomNo(this))) {
+    u32 switchNo = daObjDragonhead_prm::getSwitchNo(this);
+    if (dComIfGs_isSwitch(switchNo, fopAcM_GetHomeRoomNo(this))) {
         if (field_0x40c == 1) {
             if (!dComIfG_Bgsp()->Release(mpBgW))
                 field_0x40c = 0;
@@ -218,27 +219,27 @@ bool daObjDragonhead_c::_draw() {
 }
 
 /* 000003CC-000004FC       .text daObjDragonhead_Create__FPv */
-s32 daObjDragonhead_Create(void* i_this) {
+static s32 daObjDragonhead_Create(void* i_this) {
     return ((daObjDragonhead_c*)i_this)->_create();
 }
 
 /* 000006B4-00000730       .text daObjDragonhead_Delete__FPv */
-BOOL daObjDragonhead_Delete(void* i_this) {
+static BOOL daObjDragonhead_Delete(void* i_this) {
     return ((daObjDragonhead_c*)i_this)->_delete();
 }
 
 /* 00000730-00000824       .text daObjDragonhead_Draw__FPv */
-BOOL daObjDragonhead_Draw(void* i_this) {
+static BOOL daObjDragonhead_Draw(void* i_this) {
     return ((daObjDragonhead_c*)i_this)->_draw();
 }
 
 /* 00000824-00000A48       .text daObjDragonhead_Execute__FPv */
-BOOL daObjDragonhead_Execute(void* i_this) {
+static BOOL daObjDragonhead_Execute(void* i_this) {
     return ((daObjDragonhead_c*)i_this)->_execute();
 }
 
 /* 00000A48-00000A50       .text daObjDragonhead_IsDelete__FPv */
-BOOL daObjDragonhead_IsDelete(void* i_this) {
+static BOOL daObjDragonhead_IsDelete(void* i_this) {
     return TRUE;
 }
 

@@ -18,7 +18,7 @@ static const u32 daObjAdnno_bmt_table[16] = {
 };
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daObjAdnno_c*)i_this)->CreateHeap();
 }
 
@@ -44,14 +44,19 @@ void daObjAdnno_c::CreateInit() {
 
 /* 000001E8-00000330       .text set_mtx__12daObjAdnno_cFv */
 void daObjAdnno_c::set_mtx() {
-    for (s32 i = 0; i < 16; i++) {
+    for (int i = 0; i < 16; i++) {
         J3DModel * model = mpModel[i];
         model->setBaseScale(mScale);
 
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::YrotM(current.angle.y);
-        /* Nonmatching - this translation code is wrong */
-        mDoMtx_stack_c::transM(40.0f + i * 60.0f, 60.0f - 40.0f * i, 0.0f);
+        int x = i % 4;
+        int y = i / 4;
+        mDoMtx_stack_c::transM(
+            x * 40.0f - 60.0f,
+            60.0f - y * 40.0f,
+            0.0f
+        );
         mpModel[i]->setBaseTRMtx(mDoMtx_stack_c::get());
     }
 }
@@ -103,27 +108,27 @@ bool daObjAdnno_c::_draw() {
 }
 
 /* 00000330-000003D4       .text daObjAdnno_Create__FPv */
-s32 daObjAdnno_Create(void* i_this) {
+static s32 daObjAdnno_Create(void* i_this) {
     return ((daObjAdnno_c*)i_this)->_create();
 }
 
 /* 000003D4-00000404       .text daObjAdnno_Delete__FPv */
-BOOL daObjAdnno_Delete(void* i_this) {
+static BOOL daObjAdnno_Delete(void* i_this) {
     return ((daObjAdnno_c*)i_this)->_delete();
 }
 
 /* 00000404-000004F8       .text daObjAdnno_Draw__FPv */
-BOOL daObjAdnno_Draw(void* i_this) {
+static BOOL daObjAdnno_Draw(void* i_this) {
     return ((daObjAdnno_c*)i_this)->_draw();
 }
 
 /* 000004F8-0000051C       .text daObjAdnno_Execute__FPv */
-BOOL daObjAdnno_Execute(void* i_this) {
+static BOOL daObjAdnno_Execute(void* i_this) {
     return ((daObjAdnno_c*)i_this)->_execute();
 }
 
 /* 0000051C-00000524       .text daObjAdnno_IsDelete__FPv */
-BOOL daObjAdnno_IsDelete(void* i_this) {
+static BOOL daObjAdnno_IsDelete(void* i_this) {
     return TRUE;
 }
 
