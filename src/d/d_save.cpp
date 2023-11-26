@@ -303,41 +303,41 @@ void dSv_player_get_item_c::onBottleItem(u8 i_item) {
 BOOL dSv_player_get_item_c::isBottleItem(u8 i_item) {
     switch (i_item) {
     case EMPTY_BSHIP:
-        return mItemFlags[0] & 0x02;
+        return (mItemFlags[0] >> 1) & 1;
     case EMPTY_BOTTLE:
-        return mItemFlags[0] & 0x04;
+        return (mItemFlags[0] >> 2) & 1;
     case RED_BOTTLE:
-        return mItemFlags[0] & 0x08;
+        return (mItemFlags[0] >> 3) & 1;
     case GREEN_BOTTLE:
-        return mItemFlags[0] & 0x10;
+        return (mItemFlags[0] >> 4) & 1;
     case BLUE_BOTTLE:
-        return mItemFlags[0] & 0x20;
+        return (mItemFlags[0] >> 5) & 1;
     case BOTTLESHIP:
-        return mItemFlags[0] & 0x40;
+        return (mItemFlags[0] >> 6) & 1;
     case SOUP_BOTTLE:
-        return mItemFlags[0] & 0x80;
+        return (mItemFlags[0] >> 7) & 1;
     case BIN_IN_WATER:
-        return mItemFlags[1] & 0x02;
+        return (mItemFlags[1] >> 1) & 1;
     case FAIRY_BOTTLE:
-        return mItemFlags[1] & 0x04;
+        return (mItemFlags[1] >> 2) & 1;
     case FIREFLY_BOTTLE:
-        return mItemFlags[1] & 0x08;
+        return (mItemFlags[1] >> 3) & 1;
     case FWATER_BOTTLE:
-        return mItemFlags[1] & 0x10;
+        return (mItemFlags[1] >> 4) & 1;
     case UNK_BOTTLE_5A:
-        return mItemFlags[1] & 0x20;
+        return (mItemFlags[1] >> 5) & 1;
     case UNK_BOTTLE_5B:
-        return mItemFlags[1] & 0x40;
+        return (mItemFlags[1] >> 6) & 1;
     case UNK_BOTTLE_5C:
-        return mItemFlags[1] & 0x80;
+        return (mItemFlags[1] >> 7) & 1;
     case UNK_BOTTLE_5D:
-        return mItemFlags[2] & 0x02;
+        return (mItemFlags[2] >> 1) & 1;
     case UNK_BOTTLE_5E:
-        return mItemFlags[2] & 0x04;
+        return (mItemFlags[2] >> 2) & 1;
     case UNK_BOTTLE_5F:
-        return mItemFlags[2] & 0x08;
+        return (mItemFlags[2] >> 3) & 1;
     case UNK_BOTTLE_60:
-        return mItemFlags[2] & 0x10;
+        return (mItemFlags[2] >> 4) & 1;
     default:
         return false;
     }
