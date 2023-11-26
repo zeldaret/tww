@@ -3,6 +3,22 @@
 
 #include "dolphin/types.h"
 
+// made up name
+struct controller_pad_buttons {
+    bool left  : 1;
+    bool right : 1;
+    bool down  : 1;
+    bool up    : 1;
+    bool z     : 1;
+    bool r     : 1;
+    bool l     : 1;
+    bool a     : 1;
+    bool b     : 1;
+    bool x     : 1;
+    bool y     : 1;
+    bool start : 1;
+};
+
 struct interface_of_controller_pad {
     /* 0x00 */ f32 mMainStickPosX;
     /* 0x04 */ f32 mMainStickPosY;
@@ -20,10 +36,8 @@ struct interface_of_controller_pad {
     /* 0x24 */ f32 mAnalogB;
     /* 0x28 */ f32 mTriggerLeft;
     /* 0x2C */ f32 mTriggerRight;
-    /* 0x30 */ u8 mButtonHold0;
-    /* 0x31 */ u8 mButtonHold1;
-    /* 0x32 */ u8 mButtonTrig0;
-    /* 0x33 */ u8 mButtonTrig1;
+    /* 0x30 */ controller_pad_buttons mButtonHold;
+    /* 0x32 */ controller_pad_buttons mButtonTrig;
     /* 0x34 */ s8 mGamepadErrorFlags;
     /* 0x35 */ u8 mHoldLockL;
     /* 0x36 */ u8 mTrigLockL;

@@ -779,9 +779,8 @@ BOOL daNpc_Md_c::flyCheck() {
 }
 
 /* 0000362C-00003648       .text mirrorCancelCheck__10daNpc_Md_cFv */
-BOOL daNpc_Md_c::mirrorCancelCheck() {
-    /* Nonmatching */
-    return CPad_CHECK_TRIG_B(0);
+bool daNpc_Md_c::mirrorCancelCheck() {
+    return CPad_CHECK_TRIG_B(0) != false;
 }
 
 /* 00003648-00003674       .text setWingEmitter__10daNpc_Md_cFv */

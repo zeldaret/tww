@@ -97,7 +97,16 @@ public:
 
     struct daAgb_GbaFlg {
         /* 0x0 */ u16 field_0x0;
-        /* 0x2 */ u8 field_0x2;
+        /* 0x2 */ struct {
+            u8 m7 : 1;
+            u8 m6 : 1;
+            u8 m5 : 1;
+            u8 m4 : 1;
+            u8 m3 : 1;
+            u8 m2 : 1;
+            u8 m1 : 1;
+            u8 m0 : 1;
+        } field_0x2;
         /* 0x3 */ u8 field_0x3;
         /* 0x4 */ u16 field_0x4;
         /* 0x6 */ u16 field_0x6;
@@ -173,7 +182,7 @@ public:
     /* 0x650 */ u32 field_0x650;
     /* 0x654 */ int field_0x654;
     /* 0x658 */ u16 field_0x658;
-    /* 0x65A */ u16 field_0x65a;
+    /* 0x65A */ u16 mPrevButtons;
     /* 0x65C */ u16 field_0x65c;
     /* 0x65E */ u16 field_0x65e;
     /* 0x660 */ u16 mDenyMessage;

@@ -557,58 +557,51 @@ bool daAgb_c::FlashCheck() {
     return false;
 }
 
-#define MASK_INSERT_BUTTON(field, value, fieldshift, valueshift)                               \
-    temp = (bool)(((value) & (1 << valueshift)));                                              \
-    (field) = ((temp << fieldshift) & (1 << fieldshift)) | ((field) & ~(1 << fieldshift))
-
 /* 800D0734-800D0978       .text FlagsRecv__7daAgb_cFv */
 void daAgb_c::FlagsRecv() {
-    // Nonmatching - regalloc and a couple rlwinms
     interface_of_controller_pad* pad_p = &g_mDoCPd_cpadInfo[mDoGaC_getPortNo()];
     u32 temp_r3 = BigLittleChange(mGbaFlg.field_0x0);
 
-    u32 temp_r0 = temp_r3 >> 0x10U;
-    BOOL temp;
-    MASK_INSERT_BUTTON(pad_p->mButtonHold0, temp_r3, 4, 0x16);
-    MASK_INSERT_BUTTON(pad_p->mButtonHold0, temp_r3, 5, 0x17);
-    MASK_INSERT_BUTTON(pad_p->mButtonHold0, temp_r3, 7, 0x15);
-    MASK_INSERT_BUTTON(pad_p->mButtonHold0, temp_r3, 6, 0x14);
-    MASK_INSERT_BUTTON(pad_p->mButtonHold0, temp_r3, 0, 0x10);
-    MASK_INSERT_BUTTON(pad_p->mButtonHold1, temp_r3, 7, 0x11);
-    MASK_INSERT_BUTTON(pad_p->mButtonHold0, temp_r3, 2, 0x18);
-    MASK_INSERT_BUTTON(pad_p->mButtonHold0, temp_r3, 1, 0x19);
-    MASK_INSERT_BUTTON(pad_p->mButtonHold1, temp_r3, 4, 0x13);
-    temp = !!temp;
+    u16 buttons = temp_r3 >> 0x10U;
+    pad_p->mButtonHold.up    = buttons & 0x0040;
+    pad_p->mButtonHold.down  = buttons & 0x0080;
+    pad_p->mButtonHold.left  = buttons & 0x0020;
+    pad_p->mButtonHold.right = buttons & 0x0010;
+    pad_p->mButtonHold.a     = buttons & 0x0001;
+    pad_p->mButtonHold.b     = buttons & 0x0002;
+    pad_p->mButtonHold.r     = buttons & 0x0100;
+    pad_p->mButtonHold.l     = buttons & 0x0200;
+    pad_p->mButtonHold.start = buttons & 0x0008;
 
-    u32 temp_r5 = temp_r0 & (temp_r0 ^ field_0x65a);
-    MASK_INSERT_BUTTON(pad_p->mButtonTrig0, temp_r5, 4, 0x06);
-    MASK_INSERT_BUTTON(pad_p->mButtonTrig0, temp_r5, 5, 0x07);
-    MASK_INSERT_BUTTON(pad_p->mButtonTrig0, temp_r5, 7, 0x05);
-    MASK_INSERT_BUTTON(pad_p->mButtonTrig0, temp_r5, 6, 0x04);
-    MASK_INSERT_BUTTON(pad_p->mButtonTrig0, temp_r5, 0, 0x00);
-    MASK_INSERT_BUTTON(pad_p->mButtonTrig1, temp_r5, 7, 0x01);
-    MASK_INSERT_BUTTON(pad_p->mButtonTrig0, temp_r5, 2, 0x08);
-    u16 temp_r6 = temp_r5 & 0xFFFF;
-    MASK_INSERT_BUTTON(pad_p->mButtonTrig0, temp_r6, 1, 0x09);
-    MASK_INSERT_BUTTON(pad_p->mButtonTrig1, temp_r6, 4, 0x03);
+    // Buttons just pressed this frame
+    u16 triggeredButtons = buttons & (buttons ^ mPrevButtons);
+    pad_p->mButtonTrig.up    = triggeredButtons & 0x0040;
+    pad_p->mButtonTrig.down  = triggeredButtons & 0x0080;
+    pad_p->mButtonTrig.left  = triggeredButtons & 0x0020;
+    pad_p->mButtonTrig.right = triggeredButtons & 0x0010;
+    pad_p->mButtonTrig.a     = triggeredButtons & 0x0001;
+    pad_p->mButtonTrig.b     = triggeredButtons & 0x0002;
+    pad_p->mButtonTrig.r     = triggeredButtons & 0x0100;
+    pad_p->mButtonTrig.l     = triggeredButtons & 0x0200;
+    pad_p->mButtonTrig.start = triggeredButtons & 0x0008;
 
     g_mDoCPd_cpadInfo[mDoGaC_getPortNo()].mGamepadErrorFlags = 0;
 
-    field_0x65a = temp_r0;
+    mPrevButtons = buttons;
     field_0x673 = mGbaFlg.field_0x3 != 0;
     field_0x630 = BigLittleChange(mGbaFlg.field_0x4) >> 0x10;
     field_0x632 = BigLittleChange(mGbaFlg.field_0x6) >> 0x10;
-    field_0x67a = (mGbaFlg.field_0x2 >> 2);
+    field_0x67a = mGbaFlg.field_0x2.m2;
 
-    if (!dComIfGs_isEventBit(0x1708) && ((mGbaFlg.field_0x2 >> 3) & 1)) {
+    if (!dComIfGs_isEventBit(0x1708) && mGbaFlg.field_0x2.m3) {
         dComIfGs_onEventBit(0x1708);
     }
 
-    if (!dComIfGs_isEventBit(0x1A10) && ((mGbaFlg.field_0x2 >> 4) & 1)) {
+    if (!dComIfGs_isEventBit(0x1A10) && mGbaFlg.field_0x2.m4) {
         dComIfGs_onEventBit(0x1A10);
     }
 
-    if (!dComIfGs_isEventBit(0x1A08) && ((mGbaFlg.field_0x2 >> 5) & 1)) {
+    if (!dComIfGs_isEventBit(0x1A08) && mGbaFlg.field_0x2.m5) {
         dComIfGs_onEventBit(0x1A08);
     }
 }

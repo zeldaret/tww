@@ -314,7 +314,7 @@ public:
     void getStickAngY(int);
     void calcStickPos(s16, cXyz*);
     BOOL flyCheck();
-    BOOL mirrorCancelCheck();
+    bool mirrorCancelCheck();
     void setWingEmitter();
     void setHane02Emitter();
     void deleteHane02Emitter();
