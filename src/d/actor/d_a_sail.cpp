@@ -27,7 +27,7 @@ void daSail_packet_c::setNrmVtx(cXyz*, int, int) {
 }
 
 /* 00000870-000010D8       .text draw__15daSail_packet_cFv */
-BOOL daSail_packet_c::draw() {
+void daSail_packet_c::draw() {
     /* Nonmatching */
 }
 

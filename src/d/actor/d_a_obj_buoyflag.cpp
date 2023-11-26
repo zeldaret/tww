@@ -22,7 +22,7 @@ void daObjBuoyflag::Packet_c::draw_hasi(daObjBuoyflag::Act_c*) {
 }
 
 /* 00000C4C-00000CB8       .text draw__Q213daObjBuoyflag8Packet_cFv */
-BOOL daObjBuoyflag::Packet_c::draw() {
+void daObjBuoyflag::Packet_c::draw() {
     /* Nonmatching */
 }
 

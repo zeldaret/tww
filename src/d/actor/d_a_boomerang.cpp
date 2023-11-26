@@ -7,22 +7,22 @@
 #include "dolphin/types.h"
 
 /* 800E0C08-800E0D44       .text initBlur__18daBoomerang_blur_cFPA4_fs */
-void daBoomerang_blur_c::initBlur(float(*)[4], short) {
+void daBoomerang_blur_c::initBlur(MtxP, s16) {
     /* Nonmatching */
 }
 
 /* 800E0D44-800E101C       .text copyBlur__18daBoomerang_blur_cFPA4_fs */
-void daBoomerang_blur_c::copyBlur(float(*)[4], short) {
+void daBoomerang_blur_c::copyBlur(MtxP, s16) {
     /* Nonmatching */
 }
 
 /* 800E101C-800E13A4       .text draw__18daBoomerang_blur_cFv */
-BOOL daBoomerang_blur_c::draw() {
+void daBoomerang_blur_c::draw() {
     /* Nonmatching */
 }
 
 /* 800E13A4-800E14F0       .text draw__25daBoomerang_sightPacket_cFv */
-BOOL daBoomerang_sightPacket_c::draw() {
+void daBoomerang_sightPacket_c::draw() {
     /* Nonmatching */
 }
 
@@ -155,32 +155,3 @@ dBgS_BoomerangLinChk::~dBgS_BoomerangLinChk() {
 void daBoomerang_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-
-
-/* 800E34AC-800E34C8       .text getBoomerangCatchPos__9daPy_lk_cCFv */
-void daPy_lk_c::getBoomerangCatchPos() const {
-    /* Nonmatching */
-}
-
-/* 800E34C8-800E34F4       .text getLineTopPos__9daPy_lk_cFv */
-void daPy_lk_c::getLineTopPos() {
-    /* Nonmatching */
-}
-
-/* 800E34F4-800E3510       .text getPos__18daPy_sightPacket_cFv */
-void daPy_sightPacket_c::getPos() {
-    /* Nonmatching */
-}
-
-/* 800E3510-800E35DC       .text __dt__18daBoomerang_blur_cFv */
-daBoomerang_blur_c::~daBoomerang_blur_c() {
-    /* Nonmatching */
-}
-
-/* 800E35DC-800E3638       .text __dt__25daBoomerang_sightPacket_cFv */
-daBoomerang_sightPacket_c::~daBoomerang_sightPacket_c() {
-    /* Nonmatching */
-}
-
