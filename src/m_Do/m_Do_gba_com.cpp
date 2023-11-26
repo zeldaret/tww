@@ -690,6 +690,3 @@ u32 BigLittleChange(u32 param_0) {
 
     return little;
 }
-
-/* 8001BAA0-8001BADC       .text __dt__15mDoGaC_agbCom_cFv */
-mDoGaC_agbCom_c::~mDoGaC_agbCom_c() {}

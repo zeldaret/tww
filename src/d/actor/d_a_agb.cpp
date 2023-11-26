@@ -33,11 +33,11 @@ public:
 static mDoDvdThd_toMainRam_c* l_gbaCommand;
 
 int daAgb_c::mEffect;
-u8 daAgb_c::mItemBuy;
+daAgb_c::daAgb_ItemBuy daAgb_c::mItemBuy;
 daAgb_c::daAgb_GbaFlg daAgb_c::mGbaFlg;
 daAgb_c::daAgb_Switch daAgb_c::mSwitch;
 daAgb_c::daAgb_Item daAgb_c::mItem;
-u8 daAgb_c::mShop;
+daAgb_c::daAgb_Shop daAgb_c::mShop;
 
 /* 800CF5EC-800CF6B8       .text __ct__11daAgb_HIO_cFv */
 daAgb_HIO_c::daAgb_HIO_c() {
@@ -139,20 +139,19 @@ int daAgb_c::uploadInitCheck() {
     dStage_FileList_dt_c* fili_p =
         dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
 
-    if ((dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != 7 &&
-         !dMap_c::isEnableDispMap()) ||
-        (fili_p != NULL && (fili_p->mParam & 2)))
+    if ((dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != 7 && !dMap_c::isEnableDispMap()) ||
+        (fili_p != NULL && dStage_FileList_dt_CheckAgbCom(fili_p)))
     {
         l_msgCtrl.init(1);
         mUploadAction = 10;
-    } else if (g_mDoGaC_gbaCom.field_0x0 == 0) {
+    } else if (!mDoGaC_getComEnable()) {
         field_0x66f = 0;
         mIsMsgSend = false;
         JUTGba::getManager()->doInitProbe(1, NULL, NULL);
         JUTGba::getManager()->doInitProbe(2, NULL, NULL);
         JUTGba::getManager()->doInitProbe(3, NULL, NULL);
         mUploadAction = 1;
-    } else if (g_mDoGaC_gbaCom.mDoGaC_GbaLink()) {
+    } else if (mDoGaC_GbaLink()) {
         l_msgCtrl.init(2);
         mUploadAction = 10;
     } else {
@@ -160,7 +159,7 @@ int daAgb_c::uploadInitCheck() {
         JUTGba::getManager()->doInitProbe(2, NULL, NULL);
         JUTGba::getManager()->doInitProbe(3, NULL, NULL);
         mUploadAction = 1;
-        g_mDoGaC_gbaCom.mDoGaC_ConnectSleep();
+        mDoGaC_ConnectSleep();
     }
 
     return 1;
@@ -178,7 +177,7 @@ int daAgb_c::uploadPortCheckWait() {
         }
     }
 
-    if (g_mDoGaC_gbaCom.mDoGaC_GbaLink()) {
+    if (mDoGaC_GbaLink()) {
         l_msgCtrl.init(2);
         mUploadAction = 10;
     } else {
@@ -193,7 +192,7 @@ int daAgb_c::uploadPortCheckWait() {
 
         l_msgCtrl.init(3);
         mUploadAction = 10;
-        g_mDoGaC_gbaCom.mDoGaC_ConnectWake();
+        mDoGaC_ConnectWake();
     }
 
     return 1;
@@ -206,7 +205,7 @@ int daAgb_c::uploadSelect() {
     if (l_msgCtrl.execute() == 14) {
         if (dComIfGp_checkMesgCancelButton() || (int)l_msgCtrl.mpMsg->mSelectedChoiceIdx != 0) {
             l_msgCtrl.mpMsg->mMode = 16;
-            g_mDoGaC_gbaCom.mDoGaC_ConnectWake();
+            mDoGaC_ConnectWake();
         } else {
             l_msgCtrl.mpMsg->mMode = 15;
             fopMsgM_messageSet(6);  // "Now calling Tingle..."
@@ -216,8 +215,8 @@ int daAgb_c::uploadSelect() {
                 mDoDvdThd_toMainRam_c::create("/res/Gba/client_u.bin", 0, dMsg_getAgbWorkArea());
             JUT_ASSERT(860, l_gbaCommand != 0);
 
-            g_mDoGaC_gbaCom.mDoGaC_GbaReboot();
-            g_mDoGaC_gbaCom.mPortNo = mPortNo;
+            mDoGaC_GbaReboot();
+            mDoGaC_setPortNo(mPortNo);
             field_0x66f = 0;
             mIsMsgSend = false;
         }
@@ -283,8 +282,8 @@ int daAgb_c::uploadMessageLoad() {
         JUT_ASSERT(1000, l_gbaCommand != 0);
 
         mUploadAction = 7;
-        g_mDoGaC_gbaCom.field_0x0 = 1;
-        g_mDoGaC_gbaCom.mDoGaC_ComStart();
+        mDoGaC_onComEnable();
+        mDoGaC_ComStart();
     }
 
     return 1;
@@ -301,18 +300,18 @@ int daAgb_c::uploadMessageLoad2() {
 
 /* 800CFF78-800D00C8       .text uploadConnect__7daAgb_cFv */
 int daAgb_c::uploadConnect() {
-    if (g_mDoGaC_gbaCom.field_0x0 != 0 && g_mDoGaC_gbaCom.mDoGaC_GbaLink()) {
+    if (mDoGaC_getComEnable() && mDoGaC_GbaLink()) {
         void* programp = l_gbaCommand->getMemAddress();
         JUT_ASSERT(1045, programp != 0);
-        g_mDoGaC_gbaCom.mDoGaC_SendDataSet((u32*)programp, l_gbaCommand->getMemSize(), 0, 0);
+        mDoGac_SendDataSet((u32*)programp, l_gbaCommand->getMemSize(), 0, 0);
 
         mUploadAction = 8;
         NameConv();
-        g_mDoGaC_gbaCom.mDoGaC_SendDataSet((u32*)&mPlayerName, sizeof(mPlayerName), 10, 0);
+        mDoGac_SendDataSet((u32*)&mPlayerName, sizeof(mPlayerName), 10, 0);
 
         dMap_c::mapAGBSendIslandData();
     } else {
-        g_mDoGaC_gbaCom.mDoGaC_GbaReboot();
+        mDoGaC_GbaReboot();
         l_msgCtrl.mpMsg->mMode = 15;
         fopMsgM_messageSet(7);  // "An error has occurred."
         fopMsgM_messageSendOn();
@@ -327,7 +326,7 @@ int daAgb_c::uploadConnect() {
 
 /* 800D00C8-800D01F4       .text uploadMessageSend__7daAgb_cFv */
 int daAgb_c::uploadMessageSend() {
-    if (g_mDoGaC_gbaCom.field_0x110->field_0x4 == 0) {
+    if (mDoGaC_getDataStatus(0) == 0) {
         mIsMsgSend = true;
         if (field_0x67a != 0) {
             l_msgCtrl.mpMsg->mMode = 15;
@@ -342,7 +341,7 @@ int daAgb_c::uploadMessageSend() {
             JKRHeap::free(l_gbaCommand->getMemAddress(), NULL);
             delete l_gbaCommand;
         }
-    } else if (g_mDoGaC_gbaCom.field_0x110->field_0x4 == 9) {
+    } else if (mDoGaC_getDataStatus(0) == 9) {
         field_0x664 = 5;
         mUploadAction = 9;
     }
@@ -558,37 +557,42 @@ bool daAgb_c::FlashCheck() {
     return false;
 }
 
+#define MASK_INSERT_BUTTON(field, value, fieldshift, valueshift)                               \
+    temp = (bool)(((value) & (1 << valueshift)));                                              \
+    (field) = ((temp << fieldshift) & (1 << fieldshift)) | ((field) & ~(1 << fieldshift))
+
 /* 800D0734-800D0978       .text FlagsRecv__7daAgb_cFv */
-// NONMATCHING - a lot of issues, not really sure what's going on here
 void daAgb_c::FlagsRecv() {
-    int portNo = mDoGaC_getPortNo();
-    interface_of_controller_pad* pad_p = &g_mDoCPd_cpadInfo[portNo];
+    // Nonmatching - regalloc and a couple rlwinms
+    interface_of_controller_pad* pad_p = &g_mDoCPd_cpadInfo[mDoGaC_getPortNo()];
     u32 temp_r3 = BigLittleChange(mGbaFlg.field_0x0);
 
     u32 temp_r0 = temp_r3 >> 0x10U;
-    pad_p->mButtonHold0 = (u8)((pad_p->mButtonHold0 & ~0x10) | ((temp_r3 >> 0x12) & 0x10));
-    pad_p->mButtonHold0 = (u8)((pad_p->mButtonHold0 & ~0x20) | ((temp_r3 >> 0x12) & 0x20));
-    pad_p->mButtonHold0 = (u8)((pad_p->mButtonHold0 & ~0x80) | ((temp_r3 >> 0xE) & 0x80));
-    pad_p->mButtonHold0 = (u8)((pad_p->mButtonHold0 & ~0x40) | ((temp_r3 >> 0xE) & 0x40));
-    pad_p->mButtonHold0 = (u8)((pad_p->mButtonHold0 & ~1) | ((temp_r3 >> 0x10) & 1));
-    pad_p->mButtonHold1 = (u8)((pad_p->mButtonHold1 & ~0x80) | ((temp_r3 >> 0xA) & 0x80));
-    pad_p->mButtonHold0 = (u8)((pad_p->mButtonHold0 & ~4) | ((temp_r3 >> 0x16) & 4));
-    pad_p->mButtonHold0 = (u8)((pad_p->mButtonHold0 & ~2) | ((temp_r3 >> 0x18) & 2));
-    pad_p->mButtonHold1 =
-        (u8)((pad_p->mButtonHold1 & ~0x10) | ((((temp_r3 >> 0x13) & 1) << 4) & 0x10));
+    BOOL temp;
+    MASK_INSERT_BUTTON(pad_p->mButtonHold0, temp_r3, 4, 0x16);
+    MASK_INSERT_BUTTON(pad_p->mButtonHold0, temp_r3, 5, 0x17);
+    MASK_INSERT_BUTTON(pad_p->mButtonHold0, temp_r3, 7, 0x15);
+    MASK_INSERT_BUTTON(pad_p->mButtonHold0, temp_r3, 6, 0x14);
+    MASK_INSERT_BUTTON(pad_p->mButtonHold0, temp_r3, 0, 0x10);
+    MASK_INSERT_BUTTON(pad_p->mButtonHold1, temp_r3, 7, 0x11);
+    MASK_INSERT_BUTTON(pad_p->mButtonHold0, temp_r3, 2, 0x18);
+    MASK_INSERT_BUTTON(pad_p->mButtonHold0, temp_r3, 1, 0x19);
+    MASK_INSERT_BUTTON(pad_p->mButtonHold1, temp_r3, 4, 0x13);
+    temp = !!temp;
 
     u32 temp_r5 = temp_r0 & (temp_r0 ^ field_0x65a);
-    pad_p->mButtonTrig0 = (u8)((pad_p->mButtonTrig0 & ~0x10) | ((temp_r5 >> 2) & 0x10));
-    pad_p->mButtonTrig0 = (u8)((pad_p->mButtonTrig0 & ~0x20) | ((temp_r5 >> 2) & 0x20));
-    pad_p->mButtonTrig0 = (u8)((pad_p->mButtonTrig0 & ~0x80) | ((temp_r5 << 2) & 0x80));
-    pad_p->mButtonTrig0 = (u8)((pad_p->mButtonTrig0 & ~0x40) | ((temp_r5 << 2) & 0x40));
-    pad_p->mButtonTrig0 = (u8)((pad_p->mButtonTrig0 & ~1) | (temp_r5 & 1));
-    pad_p->mButtonTrig1 = (u8)((pad_p->mButtonTrig1 & ~0x80) | ((temp_r5 << 6) & 0x80));
-    pad_p->mButtonTrig0 = (u8)((pad_p->mButtonTrig0 & ~4) | ((temp_r5 >> 6) & 4));
-    pad_p->mButtonTrig0 = (u8)((pad_p->mButtonTrig0 & ~2) | ((temp_r5 >> 8) & 2));
-    pad_p->mButtonTrig1 = (u8)((pad_p->mButtonTrig1 & ~0x10) | ((temp_r5 << 1) & 0x10));
+    MASK_INSERT_BUTTON(pad_p->mButtonTrig0, temp_r5, 4, 0x06);
+    MASK_INSERT_BUTTON(pad_p->mButtonTrig0, temp_r5, 5, 0x07);
+    MASK_INSERT_BUTTON(pad_p->mButtonTrig0, temp_r5, 7, 0x05);
+    MASK_INSERT_BUTTON(pad_p->mButtonTrig0, temp_r5, 6, 0x04);
+    MASK_INSERT_BUTTON(pad_p->mButtonTrig0, temp_r5, 0, 0x00);
+    MASK_INSERT_BUTTON(pad_p->mButtonTrig1, temp_r5, 7, 0x01);
+    MASK_INSERT_BUTTON(pad_p->mButtonTrig0, temp_r5, 2, 0x08);
+    u16 temp_r6 = temp_r5 & 0xFFFF;
+    MASK_INSERT_BUTTON(pad_p->mButtonTrig0, temp_r6, 1, 0x09);
+    MASK_INSERT_BUTTON(pad_p->mButtonTrig1, temp_r6, 4, 0x03);
 
-    g_mDoCPd_cpadInfo[portNo].mGamepadErrorFlags = 0;
+    g_mDoCPd_cpadInfo[mDoGaC_getPortNo()].mGamepadErrorFlags = 0;
 
     field_0x65a = temp_r0;
     field_0x673 = mGbaFlg.field_0x3 != 0;
@@ -630,7 +634,7 @@ void daAgb_c::SwitchOn() {
         }
     }
 
-    g_mDoGaC_gbaCom.mDoGaC_DataStatusReset(8);
+    mDoGaC_DataStatusReset(8);
 }
 
 /* 800D0A54-800D1188       .text GbaItemUse__7daAgb_cFv */
@@ -641,10 +645,9 @@ void daAgb_c::GbaItemUse() {
     u32 temp_r0 = temp_r29 - 3;
     if (temp_r0 == 0 || temp_r0 == 1 || temp_r0 == 2 || temp_r29 == 0x11 || temp_r29 == 0x12) {
         int roomNo = dComIfGp_roomControl_getStayNo();
-        dStage_FileList_dt_c* fili_p =
-            dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
+        dStage_FileList_dt_c* fili_p = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
 
-        if (fili_p != NULL && fili_p->mParam & 4) {
+        if (fili_p != NULL && dStage_FileList_dt_CheckAgbHover(fili_p)) {
             if (mBombDeny) {
                 mEffect = BigLittleChange((mDenyMessage << 0x10) | 0x300);
                 return;
@@ -878,11 +881,10 @@ void daAgb_c::modeMove() {
 
 /* 800D303C-800D30D4       .text modeDelete__7daAgb_cFv */
 void daAgb_c::modeDelete() {
-    if (field_0x664 == 0 && g_mDoGaC_gbaCom.mDoGaC_GbaLink() &&
-        g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(1))
+    if (field_0x664 == 0 && mDoGaC_GbaLink() && mDoGac_SendStatusCheck(1))
     {
         mPlayerName = 0x1000000;
-        g_mDoGaC_gbaCom.mDoGaC_SendDataSet((u32*)&mPlayerName, 4, 1, 0);
+        mDoGac_SendDataSet((u32*)&mPlayerName, 4, 1, 0);
         field_0x664++;
     }
 }
@@ -905,9 +907,9 @@ int daAgb_Execute(daAgb_c* i_this) {
     daPy_lk_c* temp_r29 = (daPy_lk_c*)dComIfGp_getPlayer(0);
     i_this->field_0x679 = 0;
 
-    if (g_mDoGaC_gbaCom.mDoGaC_GbaLink() && g_mDoGaC_gbaCom.mDoGaC_RecvStatusCheck(4)) {
+    if (mDoGaC_GbaLink() && mDoGaC_RecvStatusCheck(4)) {
         i_this->FlagsRecv();
-        g_mDoGaC_gbaCom.mDoGaC_DataStatusReset(4);
+        mDoGaC_DataStatusReset(4);
     } else {
         g_mDoCPd_cpadInfo[mDoGaC_getPortNo()].mGamepadErrorFlags = 1;
     }
@@ -917,12 +919,12 @@ int daAgb_Execute(daAgb_c* i_this) {
 
     u32 st_type = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo());
 
-    if (g_mDoGaC_gbaCom.mDoGaC_GbaLink()) {
-        if (g_mDoGaC_gbaCom.mDoGaC_RecvStatusCheck(8)) {
+    if (mDoGaC_GbaLink()) {
+        if (mDoGaC_RecvStatusCheck(8)) {
             i_this->SwitchOn();
         }
 
-        if (g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(9)) {
+        if (mDoGac_SendStatusCheck(9)) {
             i_this->FlagsSend(st_type);
         }
 
@@ -950,7 +952,7 @@ int daAgb_Execute(daAgb_c* i_this) {
 
     i_this->modeProcCall();
 
-    if (g_mDoGaC_gbaCom.mDoGaC_GbaLink()) {
+    if (mDoGaC_GbaLink()) {
         if (i_this->isFree()) {
             if (i_this->current.pos.x != i_this->next.pos.x ||
                 i_this->current.pos.z != i_this->next.pos.z)
@@ -1031,7 +1033,7 @@ int daAgb_Execute(daAgb_c* i_this) {
 int daAgb_Draw(daAgb_c* i_this) {
     u8 var_r6 = 1;
 
-    if (g_mDoGaC_gbaCom.mDoGaC_GbaLink()) {
+    if (mDoGaC_GbaLink()) {
         if (i_this->field_0x66f != 0 && !(daAgb_c::mFlags.field_0xa & 1) &&
             (!dComIfGp_event_runCheck() ||
              dComIfGp_evmng_startCheck("DEFAULT_AGB_LOOK_ATTENTION") ||
@@ -1147,8 +1149,8 @@ int daAgb_Create(fopAc_ac_c* i_this) {
         a_this->field_0x670 = 0;
         a_this->field_0x65c = 0;
         a_this->field_0x66b = 0;
-        a_this->field_0x66f = g_mDoGaC_gbaCom.field_0x0;
-        a_this->mIsMsgSend = g_mDoGaC_gbaCom.field_0x0 > 0;
+        a_this->field_0x66f = mDoGaC_getComEnable();
+        a_this->mIsMsgSend = mDoGaC_getComEnable() > 0;
         a_this->field_0x654 = 0;
         a_this->field_0x650 = -1;
         a_this->mFollowTarget = 0;
