@@ -8,11 +8,13 @@
 
 /* 00000078-00000084       .text getSwbit__10daTag_Mk_cFv */
 unsigned int daTag_Mk_c::getSwbit() {
+    /* Nonmatching */
     return this->mBase.mParameters & 0xff;
 }
 
 /* 00000084-00000090       .text getSwbit2__10daTag_Mk_cFv */
 unsigned int daTag_Mk_c::getSwbit2() {
+    /* Nonmatching */
     return this->mBase.mParameters & 0xff;
 }
 
@@ -157,19 +159,19 @@ BOOL daTag_Mk_c::execute() {
 }
 
 /* 00000E9C-00000EA4       .text daTag_Mk_Draw__FP10daTag_Mk_c */
-int daTag_Mk_Draw(daTag_Mk_c*) {
-    return 1;
+BOOL daTag_Mk_Draw(daTag_Mk_c*) {
+    return TRUE;
 }
 
 /* 00000EA4-00000EC8       .text daTag_Mk_Execute__FP10daTag_Mk_c */
-int daTag_Mk_Execute(daTag_Mk_c* param) {
+BOOL daTag_Mk_Execute(daTag_Mk_c* param) {
     param->execute();
-    return 1;
+    return TRUE;
 }
 
 /* 00000EC8-00000ED0       .text daTag_Mk_IsDelete__FP10daTag_Mk_c */
-int daTag_Mk_IsDelete(daTag_Mk_c*) {
-    return 1;
+BOOL daTag_Mk_IsDelete(daTag_Mk_c*) {
+    return TRUE;
 }
 
 /* 00000ED0-00000F00       .text daTag_Mk_Delete__FP10daTag_Mk_c */

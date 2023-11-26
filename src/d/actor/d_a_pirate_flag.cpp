@@ -23,8 +23,7 @@ void daPirate_Flag_packet_c::setNrmVtx(cXyz*, int, int) {
 
 /* 0000083C-00000E44       .text draw__22daPirate_Flag_packet_cFv */
 BOOL daPirate_Flag_packet_c::draw() {
-    //temp return to allow to build
-    return TRUE;
+    /* Nonmatching */
 }
 
 /* 00000E44-000011A0       .text daPirate_Flag_Draw__FP17pirate_flag_class */
