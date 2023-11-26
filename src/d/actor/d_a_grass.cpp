@@ -143,7 +143,7 @@ s32 daGrass_Create(fopAc_ac_c* i_ac) {
 
     if (kind == 0) {
         // grass
-        if (g_dComIfG_gameInfo.play.createGrass() != NULL) {
+        if (dComIfGp_createGrass() != NULL) {
             s8 item = daGrass_prm::getItemNo(i_this);
             if (item < 0x20 || item >= 0x40)
                 item = -1;
@@ -158,7 +158,7 @@ s32 daGrass_Create(fopAc_ac_c* i_ac) {
         }
     } else if (kind == 1) {
         // tree
-        if (g_dComIfG_gameInfo.play.createTree() != NULL) {
+        if (dComIfGp_createTree() != NULL) {
             f32 cosR = cM_scos(i_this->current.angle.y), sinR = cM_ssin(i_this->current.angle.y);
             cXyz pos;
             pos.y = acpos.y;
@@ -172,7 +172,7 @@ s32 daGrass_Create(fopAc_ac_c* i_ac) {
         }
     } else if (kind == 2 || kind == 3) {
         // white flower, pink flower
-        if (g_dComIfG_gameInfo.play.createFlower() != NULL) {
+        if (dComIfGp_createFlower() != NULL) {
             s8 item = daGrass_prm::getItemNo(i_this);
             if (item < 0x20 || item >= 0x40)
                 item = 0xFF;

@@ -1289,7 +1289,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_toripost", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_tousekiki"),
     ActorRel(NonMatching, "d_a_obj_warpt"),
-    ActorRel(NonMatching, "d_a_obj_wood"),
+    ActorRel(Matching,    "d_a_obj_wood", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_pirate_flag"),
     ActorRel(NonMatching, "d_a_race_item"),
     ActorRel(NonMatching, "d_a_rd", extra_cflags=['-pragma "nosyminline on"']),

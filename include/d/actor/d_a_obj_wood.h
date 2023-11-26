@@ -2,18 +2,27 @@
 #define D_A_OBJ_WOOD_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_cc_d.h"
 
 namespace daObjWood {
-    class Method : public fopAc_ac_c {
+    class Act_c : public fopAc_ac_c {
     public:
-        void Create(void*);
-        void Delete(void*);
-        void Execute(void*);
-        void Draw(void*);
-        void IsDelete(void*);
-    
+        inline s32 _create();
+        inline bool _delete();
+        inline bool _execute();
+        inline bool _draw();
     public:
-        /* Place member variables here */
+        /* 0x290 */ u32 field_0x290[3];
+        /* 0x2B4 */ dCcD_Stts mStts;
+        /* 0x2D8 */ dCcD_Cyl mCyl;
+    };
+
+    namespace Method {
+        s32 Create(void*);
+        BOOL Delete(void*);
+        BOOL Execute(void*);
+        BOOL Draw(void*);
+        BOOL IsDelete(void*);
     };
 };
 

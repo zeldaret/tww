@@ -1636,65 +1636,28 @@ inline dDetect_c& dComIfGp_getDetect() {
     return g_dComIfG_gameInfo.play.getDetect();
 }
 
-inline dMagma_packet_c* dComIfGp_getMagma() {
-    return g_dComIfG_gameInfo.play.getMagma();
-}
+inline dGrass_packet_c* dComIfGp_createGrass() { return g_dComIfG_gameInfo.play.createGrass(); }
+inline dTree_packet_c* dComIfGp_createTree() { return g_dComIfG_gameInfo.play.createTree(); }
+inline dFlower_packet_c* dComIfGp_createFlower() { return g_dComIfG_gameInfo.play.createFlower(); }
+inline dWood::Packet_c* dComIfGp_createWood() { return g_dComIfG_gameInfo.play.createWood(); }
 
-inline dGrass_packet_c* dComIfGp_getGrass() {
-    return g_dComIfG_gameInfo.play.getGrass();
-}
+inline dMagma_packet_c* dComIfGp_getMagma() { return g_dComIfG_gameInfo.play.getMagma(); }
+inline dGrass_packet_c* dComIfGp_getGrass() { return g_dComIfG_gameInfo.play.getGrass(); }
+inline dTree_packet_c* dComIfGp_getTree() { return g_dComIfG_gameInfo.play.getTree(); }
+inline dFlower_packet_c* dComIfGp_getFlower() { return g_dComIfG_gameInfo.play.getFlower(); }
+inline dWood::Packet_c* dComIfGp_getWood() { return g_dComIfG_gameInfo.play.getWood(); }
 
-inline dTree_packet_c* dComIfGp_getTree() {
-    return g_dComIfG_gameInfo.play.getTree();
-}
+inline void dComIfGp_executeMagma() { return g_dComIfG_gameInfo.play.executeMagma(); }
+inline void dComIfGp_executeGrass() { return g_dComIfG_gameInfo.play.executeGrass(); }
+inline void dComIfGp_executeTree() { return g_dComIfG_gameInfo.play.executeTree(); }
+inline void dComIfGp_executeFlower() { return g_dComIfG_gameInfo.play.executeFlower(); }
+inline void dComIfGp_executeWood() { return g_dComIfG_gameInfo.play.executeWood(); }
 
-inline dWood::Packet_c* dComIfGp_getWood() {
-    return g_dComIfG_gameInfo.play.getWood();
-}
-
-inline dFlower_packet_c* dComIfGp_getFlower() {
-    return g_dComIfG_gameInfo.play.getFlower();
-}
-
-inline void dComIfGp_executeMagma() {
-    return g_dComIfG_gameInfo.play.executeMagma();
-}
-
-inline void dComIfGp_executeGrass() {
-    return g_dComIfG_gameInfo.play.executeGrass();
-}
-
-inline void dComIfGp_executeTree() {
-    return g_dComIfG_gameInfo.play.executeTree();
-}
-
-inline void dComIfGp_executeWood() {
-    return g_dComIfG_gameInfo.play.executeWood();
-}
-
-inline void dComIfGp_executeFlower() {
-    return g_dComIfG_gameInfo.play.executeFlower();
-}
-
-inline void dComIfGp_drawMagma() {
-    return g_dComIfG_gameInfo.play.drawMagma();
-}
-
-inline void dComIfGp_drawGrass() {
-    return g_dComIfG_gameInfo.play.drawGrass();
-}
-
-inline void dComIfGp_drawTree() {
-    return g_dComIfG_gameInfo.play.drawTree();
-}
-
-inline void dComIfGp_drawWood() {
-    return g_dComIfG_gameInfo.play.drawWood();
-}
-
-inline void dComIfGp_drawFlower() {
-    return g_dComIfG_gameInfo.play.drawFlower();
-}
+inline void dComIfGp_drawMagma() { return g_dComIfG_gameInfo.play.drawMagma(); }
+inline void dComIfGp_drawGrass() { return g_dComIfG_gameInfo.play.drawGrass(); }
+inline void dComIfGp_drawTree() { return g_dComIfG_gameInfo.play.drawTree(); }
+inline void dComIfGp_drawFlower() { return g_dComIfG_gameInfo.play.drawFlower(); }
+inline void dComIfGp_drawWood() { return g_dComIfG_gameInfo.play.drawWood(); }
 
 inline void dComIfGp_map_mapBufferSendAGB(int param_0) {
     dMap_c::mapBufferSendAGB(param_0);
