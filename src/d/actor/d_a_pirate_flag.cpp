@@ -23,7 +23,8 @@ void daPirate_Flag_packet_c::setNrmVtx(cXyz*, int, int) {
 
 /* 0000083C-00000E44       .text draw__22daPirate_Flag_packet_cFv */
 BOOL daPirate_Flag_packet_c::draw() {
-    return true;
+    //temp return to allow to build
+    return TRUE;
 }
 
 /* 00000E44-000011A0       .text daPirate_Flag_Draw__FP17pirate_flag_class */
@@ -52,8 +53,8 @@ void daPirate_Flag_Execute(pirate_flag_class*) {
 }
 
 /* 00001A38-00001A40       .text daPirate_Flag_IsDelete__FP17pirate_flag_class */
-int daPirate_Flag_IsDelete(pirate_flag_class*) {
-    return 1;
+BOOL daPirate_Flag_IsDelete(pirate_flag_class*) {
+    return TRUE;
 }
 
 /* 00001A40-00001A90       .text daPirate_Flag_Delete__FP17pirate_flag_class */
