@@ -266,7 +266,7 @@ config.libs = [
             Object(Matching,    "m_Do/m_Do_DVDError.cpp"),
             Object(NonMatching, "m_Do/m_Do_MemCard.cpp"),
             Object(NonMatching, "m_Do/m_Do_MemCardRWmng.cpp"),
-            Object(NonMatching, "m_Do/m_Do_gba_com.cpp"),
+            Object(Matching,    "m_Do/m_Do_gba_com.cpp"),
             Object(Matching,    "m_Do/m_Do_machine_exception.cpp"),
 
             # c
