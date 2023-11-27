@@ -2,7 +2,8 @@
 #define D_A_OBJ_VDS_H
 
 #include "f_op/f_op_actor.h"
-#include "JSystem/J3DGraphAnimator/J3DAnimation.h"
+
+class J3DAnmTransformKey;
 
 namespace daObjVds {
     class Act_c : public fopAc_ac_c {

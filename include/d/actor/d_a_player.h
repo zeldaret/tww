@@ -1,7 +1,6 @@
 #ifndef D_A_PLAYER
 #define D_A_PLAYER
 
-#include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_particle.h"
 #include "d/d_cc_d.h"

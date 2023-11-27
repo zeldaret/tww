@@ -54,9 +54,14 @@ public:
     void mDoGaC_GbaRead();
     void mDoGaC_ReadResult();
 
-    ~mDoGaC_agbCom_c();
+    ~mDoGaC_agbCom_c() {}
 
+    u8 getEnable() { return field_0x0; }
+    void onEnable() { field_0x0 = 1; }
     u8 getPortNo() { return mPortNo; }
+    void setPortNo(u8 port) { mPortNo = port; }
+    u8 getDataStatus(u8 param_0) { return field_0x110[param_0].field_0x4; }
+    void getReConnect() {} // TODO
 
     /* 0x000 */ u8 field_0x0;
     /* 0x001 */ u8 field_0x1;
@@ -106,8 +111,64 @@ extern mDoGaC_DataManag_c TestDataManager[16];
 
 u32 BigLittleChange(u32);
 
+inline int mDoGaC_GbaLink() {
+    return g_mDoGaC_gbaCom.mDoGaC_GbaLink();
+}
+
+inline u8 mDoGaC_getComEnable() {
+    return g_mDoGaC_gbaCom.getEnable();
+};
+
+inline void mDoGaC_onComEnable() {
+    g_mDoGaC_gbaCom.onEnable();
+}
+
+inline void mDoGaC_ComStart() {
+    g_mDoGaC_gbaCom.mDoGaC_ComStart();
+}
+
 inline u8 mDoGaC_getPortNo() {
     return g_mDoGaC_gbaCom.getPortNo();
+}
+
+inline void mDoGaC_setPortNo(u8 port) {
+    g_mDoGaC_gbaCom.setPortNo(port);
+}
+
+inline void mDoGaC_GbaReboot() {
+    g_mDoGaC_gbaCom.mDoGaC_GbaReboot();
+}
+
+inline void mDoGac_SendDataSet(u32* param_0, int param_1, u8 param_2, u32 param_3) {
+    g_mDoGaC_gbaCom.mDoGaC_SendDataSet(param_0, param_1, param_2, param_3);
+}
+
+inline void mDoGac_SendEndCheck(u8 param_0) {
+    g_mDoGaC_gbaCom.mDoGaC_SendEndCheck(param_0);
+}
+
+inline BOOL mDoGac_SendStatusCheck(u8 param_0) {
+    return g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(param_0);
+}
+
+inline BOOL mDoGaC_RecvStatusCheck(u8 param_0) {
+    return g_mDoGaC_gbaCom.mDoGaC_RecvStatusCheck(param_0);
+}
+
+inline void mDoGaC_DataStatusReset(u8 param_0) {
+    g_mDoGaC_gbaCom.mDoGaC_DataStatusReset(param_0);
+}
+
+inline u8 mDoGaC_getDataStatus(u8 param_0) {
+    return g_mDoGaC_gbaCom.getDataStatus(param_0);
+}
+
+inline void mDoGaC_ConnectWake() {
+    g_mDoGaC_gbaCom.mDoGaC_ConnectWake();
+}
+
+inline void mDoGaC_ConnectSleep() {
+    g_mDoGaC_gbaCom.mDoGaC_ConnectSleep();
 }
 
 #endif /* M_DO_GBA_COM_H */

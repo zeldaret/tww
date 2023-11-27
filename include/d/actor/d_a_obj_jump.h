@@ -3,7 +3,8 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_bg_w.h"
-#include "JSystem/J3DGraphAnimator/J3DNode.h"
+
+class J3DNode;
 
 namespace daObjJump {
     class Act_c : public fopAc_ac_c {

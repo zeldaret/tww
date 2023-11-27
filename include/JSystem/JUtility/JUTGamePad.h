@@ -82,6 +82,8 @@ public:
 
     u32 getButton() const { return mButton.mButton; }
     u32 getTrigger() const { return mButton.mTrigger; }
+    u32 getRelease() const { return mButton.mRelease; }
+    u32 getRepeat() const { return mButton.mRepeat; }
 
     f32 getMainStickX() const { return mMainStick.mPosX; }
     f32 getMainStickY() const { return mMainStick.mPosY; }
@@ -124,7 +126,7 @@ public:
     void stopMotor() { mRumble.stopMotor(mPortNum); }
     void stopMotorHard() { mRumble.stopMotorHard(mPortNum); }
 
-    static PADStatus & getPortStatus(u32 port) { return mPadStatus[port]; }
+    static PADStatus & getPortStatus(EPadPort port) { return mPadStatus[port]; }
 
     struct CButton {
         CButton() { clear(); }
@@ -220,6 +222,10 @@ public:
     void startMotorWave(u8* param_2, CRumble::ERumble rumble, u32 param_4) {
         mRumble.startPatternedRumble(param_2, rumble, param_4);
     }
+
+    // TODO:
+    void isResetOccurred(int*) {}
+    void suppressPadReset(u32) {}
 
     /* 0x18 */ CButton mButton;
     /* 0x48 */ CStick mMainStick;

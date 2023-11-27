@@ -91,16 +91,26 @@ public:
     void getTargetID() {}
     void setTargetID(unsigned int) {}
 
-    static int mEffect;
+    struct daAgb_ItemBuy {
+        /* 0x0 */ u8 field_0x0;
+    } __attribute__((aligned(4)));
 
     struct daAgb_GbaFlg {
         /* 0x0 */ u16 field_0x0;
-        /* 0x2 */ u8 field_0x2;
+        /* 0x2 */ struct {
+            u8 m7 : 1;
+            u8 m6 : 1;
+            u8 m5 : 1;
+            u8 m4 : 1;
+            u8 m3 : 1;
+            u8 m2 : 1;
+            u8 m1 : 1;
+            u8 m0 : 1;
+        } field_0x2;
         /* 0x3 */ u8 field_0x3;
         /* 0x4 */ u16 field_0x4;
         /* 0x6 */ u16 field_0x6;
     };
-    static daAgb_GbaFlg mGbaFlg;
 
     struct daAgb_Switch {
         /* 0x0 */ u8 field_0x0;
@@ -110,15 +120,22 @@ public:
         /* 0x4 */ u8 field_0x4;
         u8 field_0x5[0x8 - 0x5];
     };
-    static daAgb_Switch mSwitch;
 
     struct daAgb_Item {
         /* 0x0 */ u8 field_0x0;
         /* 0x1 */ u8 field_0x1;
-    };
+    } __attribute__((aligned(4)));
+
+    struct daAgb_Shop {
+        /* 0x0 */ u8 field_0x0;
+    } __attribute__((aligned(4)));
+
+    static int mEffect;
+    static daAgb_ItemBuy mItemBuy;
+    static daAgb_GbaFlg mGbaFlg;
+    static daAgb_Switch mSwitch;
     static daAgb_Item mItem;
-    static u8 mShop;
-    static u8 mItemBuy;
+    static daAgb_Shop mShop;
     static u8 DungeonNoTable[];
 
     struct daAgb_Flags {
@@ -165,7 +182,7 @@ public:
     /* 0x650 */ u32 field_0x650;
     /* 0x654 */ int field_0x654;
     /* 0x658 */ u16 field_0x658;
-    /* 0x65A */ u16 field_0x65a;
+    /* 0x65A */ u16 mPrevButtons;
     /* 0x65C */ u16 field_0x65c;
     /* 0x65E */ u16 field_0x65e;
     /* 0x660 */ u16 mDenyMessage;

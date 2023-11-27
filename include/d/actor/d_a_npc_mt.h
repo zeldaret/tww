@@ -4,10 +4,12 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
-#include "d/d_bg_s_acch.h"
-#include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_npc.h"
+
+struct sMtAnmDat {
+    
+};
 
 class daNpcMt_c : public fopAc_ac_c {
 public:

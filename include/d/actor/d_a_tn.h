@@ -5,23 +5,25 @@
 #include "d/d_cc_d.h"
 #include "d/d_particle.h"
 #include "c/c_damagereaction.h"
-#include "c/c_damagereaction.h"
-#include "c/c_damagereaction.h"
 
-class tn_class : public fopAc_ac_c {
+struct tn_p {
+    /* 0x00 */ u8 m00[0x4C - 0x00];
+};
+
+class tn_class : public fopEn_enemy_c {
 public:
     /* 0x02AC */ u8 m02AC[0x02BC - 0x02AC];
-    /* 0x02BC */ daTn__BehaviorTypes mBehaviorType;
+    /* 0x02BC */ u8 mBehaviorType;
     /* 0x02BD */ u8 mRangeOrFrozenAnim;
     /* 0x02BE */ u8 mPathIndex;
     /* 0x02BF */ u8 mEnableSpawnSwitch;
     /* 0x02C0 */ u8 mDisableSpawnOnDeathSwitch;
     /* 0x02C1 */ u8 m02C1[0x02D0 - 0x02C1];
-    /* 0x02D0 */ daTn__RemainingEquipmentPieces mRemainingEquipmentPieces;
+    /* 0x02D0 */ u8 mRemainingEquipmentPieces;
     /* 0x02D1 */ u8 m02D1[0x02E0 - 0x02D1];
     /* 0x02E0 */ tn_p parts[3];
     /* 0x03C4 */ u8 mArmorColorIndex;
-    /* 0x03C5 */ daTn__EquipmentTypes mEquipmentType;
+    /* 0x03C5 */ u8 mEquipmentType;
     /* 0x03C6 */ u8 m03C6[0x03E2 - 0x03C6];
     /* 0x03E2 */ s16 m03E2;
     /* 0x03E4 */ u8 m03E4[0x03EE - 0x03E4];

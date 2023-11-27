@@ -3,8 +3,6 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_bg_s_acch.h"
-#include "d/d_bg_s_acch.h"
-#include "m_Do/m_Do_ext.h"
 #include "c/c_damagereaction.h"
 
 class pt_class : public fopEn_enemy_c {

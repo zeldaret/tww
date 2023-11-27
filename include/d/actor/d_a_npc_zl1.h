@@ -2,7 +2,8 @@
 #define D_A_NPC_ZL1_H
 
 #include "f_op/f_op_actor.h"
-#include "JSystem/J3DGraphBase/J3DMaterial.h"
+
+class J3DMaterial;
 
 class daNpc_Zl1_matAnm_c : public fopAc_ac_c {
 public:

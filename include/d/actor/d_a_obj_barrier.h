@@ -32,9 +32,9 @@ public:
     bool checkHitActor(fopAc_ac_c*);
     void birth(fopAc_ac_c*, f32, cXyz, cXyz, int);
     bool init();
-    s32 create();
-    BOOL execute();
-    BOOL draw();
+    void create();
+    void execute();
+    void draw();
 
     f32 getBtkFrame(int i_idx) { return mBtk[i_idx].getFrame(); }
 

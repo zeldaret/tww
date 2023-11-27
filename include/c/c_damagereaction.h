@@ -1,12 +1,13 @@
 #ifndef C_DAMAGEREACTION_H
 #define C_DAMAGEREACTION_H
 
+#include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
-#include "d/d_kankyo.h"
 #include "d/d_particle.h"
-#include "f_op/f_op_actor.h"
-#include "m_Do/m_Do_ext.h"
+
+class mDoExt_McaMorf;
+class JPABaseEmitter;
 
 struct enemyice {
 public:

@@ -4,15 +4,16 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
-#include "d/d_bg_s_acch.h"
-#include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_path.h"
+
+class mDoExt_McaMorf;
+class J3DTexNoAnm;
+class J3DMaterialTable;
 
 class kb_class : public fopAc_ac_c {
 public:
     void taura_pos_set(cXyz) {}
-
 
 public:
     /* 0x290 */ dKy_tevstr_c mTevStr;

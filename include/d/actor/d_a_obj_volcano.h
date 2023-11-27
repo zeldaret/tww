@@ -2,7 +2,8 @@
 #define D_A_OBJ_VOLCANO_H
 
 #include "f_op/f_op_actor.h"
-#include "JSystem/J3DGraphBase/J3DMaterial.h"
+
+class J3DMaterial;
 
 namespace daObjVolcano {
     class Act_c : public fopAc_ac_c {

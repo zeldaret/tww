@@ -4,15 +4,11 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
-#include "d/d_bg_s_acch.h"
 #include "d/d_particle.h"
-#include "JSystem/JParticle/JPAEmitter.h"
-#include "m_Do/m_Do_ext.h"
-#include "c/c_damagereaction.h"
 #include "c/c_damagereaction.h"
 #include "SSystem/SComponent/c_phase.h"
 
-class am_class : public fopAc_ac_c {
+class am_class : public fopEn_enemy_c {
 public:
     /* 0x02AC */ request_of_phase_process_class mPhs;
     /* 0x02B4 */ JntHit_c* mEyeJntHit;
@@ -28,11 +24,11 @@ public:
     /* 0x02C7 */ bool mbIsBodyBeingHit;
     /* 0x02C8 */ s16 mCountDownTimers[4];
     /* 0x02D0 */ s16 mCountUpTimers[5];
-    /* 0x02DA */ s16 mDesiredRotY;
+    /* 0x02DA */ s16 mTargetAngleY;
     /* 0x02DC */ s16 mSpawnRotY;
     /* 0x02DE */ u8 m02DE[0x02E0 - 0x02DE];
     /* 0x02E0 */ int mCurrBckIdx;
-    /* 0x02E4 */ u32 mSwallowedActorProcID;
+    /* 0x02E4 */ u32 mSwallowedActorPID;
     /* 0x02E8 */ f32 mAreaRadius;
     /* 0x02EC */ f32 m02EC;
     /* 0x02F0 */ f32 mSpawnPosY;
@@ -42,7 +38,7 @@ public:
     /* 0x0318 */ cXyz mJawPos;
     /* 0x0324 */ cXyz mSpawnPos;
     /* 0x0330 */ csXyz mEyeRot;
-    /* 0x0336 */ csXyz mDesiredEyeRot;
+    /* 0x0336 */ csXyz mTargetEyeRot;
     /* 0x033C */ JPABaseEmitter* m033C;
     /* 0x0340 */ JPABaseEmitter* m0340;
     /* 0x0344 */ dPa_smokeEcallBack mSmokeCbs[4];

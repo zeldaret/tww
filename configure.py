@@ -266,7 +266,7 @@ config.libs = [
             Object(Matching,    "m_Do/m_Do_DVDError.cpp"),
             Object(NonMatching, "m_Do/m_Do_MemCard.cpp"),
             Object(NonMatching, "m_Do/m_Do_MemCardRWmng.cpp"),
-            Object(NonMatching, "m_Do/m_Do_gba_com.cpp"),
+            Object(Matching,    "m_Do/m_Do_gba_com.cpp"),
             Object(Matching,    "m_Do/m_Do_machine_exception.cpp"),
 
             # c
@@ -351,7 +351,7 @@ config.libs = [
             Object(Matching,    "d/d_a_boko_static.cpp"),
             Object(Matching,    "d/d_a_bomb_static.cpp"),
             Object(Matching,    "d/d_a_branch_static.cpp"),
-            Object(NonMatching, "d/d_a_mgameboard_static.cpp"),
+            Object(Matching,    "d/d_a_mgameboard_static.cpp"),
             Object(Matching,    "d/d_a_itembase_static.cpp"),
             Object(Matching,    "d/d_a_item_static.cpp"),
             Object(Matching,    "d/d_a_shop_item_static.cpp"),
@@ -1289,7 +1289,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_toripost", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_tousekiki"),
     ActorRel(NonMatching, "d_a_obj_warpt"),
-    ActorRel(NonMatching, "d_a_obj_wood"),
+    ActorRel(Matching,    "d_a_obj_wood", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_pirate_flag"),
     ActorRel(NonMatching, "d_a_race_item"),
     ActorRel(NonMatching, "d_a_rd", extra_cflags=['-pragma "nosyminline on"']),

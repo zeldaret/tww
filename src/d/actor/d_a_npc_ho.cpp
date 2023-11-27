@@ -215,18 +215,3 @@ void daNpc_Ho_Draw(daNpc_Ho_c*) {
 void daNpc_Ho_IsDelete(daNpc_Ho_c*) {
     /* Nonmatching */
 }
-
-
-
-
-
-/* 00002934-00002950       .text setEyePos__10daNpc_Ho_cF4cXyz */
-void daNpc_Ho_c::setEyePos(cXyz) {
-    /* Nonmatching */
-}
-
-/* 00002950-0000296C       .text setAttentionBasePos__10daNpc_Ho_cF4cXyz */
-void daNpc_Ho_c::setAttentionBasePos(cXyz) {
-    /* Nonmatching */
-}
-

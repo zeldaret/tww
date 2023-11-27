@@ -3,8 +3,6 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
-#include "JSystem/JParticle/JPAEmitter.h"
-#include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_bg_w.h"
 #include "d/d_particle.h"

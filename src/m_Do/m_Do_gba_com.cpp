@@ -7,6 +7,7 @@
 #include "JSystem/JUtility/JUTGba.h"
 #include "SSystem/SComponent/c_math.h"
 #include "m_Do/m_Do_Reset.h"
+#include "global.h"
 
 mDoGaC_agbCom_c g_mDoGaC_gbaCom;
 mDoGaC_DataManag_c TestDataManager[16];
@@ -147,12 +148,11 @@ void mDoGaC_agbCom_c::mDoGaC_ComStop() {
 
 /* 8001A858-8001A8B4       .text mDoGaC_GbaReboot__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_GbaReboot() {
-    // Nonmatching
     mDoGaC_ComStop();
-    field_0x0 = 0;
+    u8 temp = field_0x0 = 0; // fakematch?
     field_0x3 = 0;
     field_0x12c.U32bits._12c_2 = cM_rndF(32767.0f);
-    field_0x128 = 0;
+    field_0x128 = temp;
 }
 
 /* 8001A8B4-8001A94C       .text mDoGaC_GbaReset__15mDoGaC_agbCom_cFv */
@@ -412,7 +412,12 @@ void mDoGaC_agbCom_c::mDoGaC_ProbeCheck1() {
 /* 8001AFDC-8001B060       .text mDoGaC_CodeExchange0__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_CodeExchange0() {
     u8 sp8[16];
-    if (!JUTGba::getManager()->resultGetStatus(mDoGaC_getPortNo(), sp8) && sp8[0] == 0x28) {
+#if VERSION == VERSION_JPN
+    // Bug: Missing parentheses cause the second half of this condition to always evaluate to true on JPN.
+    if (!JUTGba::getManager()->resultGetStatus(mDoGaC_getPortNo(), sp8) && sp8[0] == 0x20 | 0x08) {
+#else
+    if (!JUTGba::getManager()->resultGetStatus(mDoGaC_getPortNo(), sp8) && sp8[0] == (0x20 | 0x08)) {
+#endif
         JUTGba::getManager()->doRead(mDoGaC_getPortNo(), (u8*)&field_0x118, CodeExchange_1, NULL);
     } else {
         field_0x2 = 0;
@@ -423,7 +428,7 @@ void mDoGaC_agbCom_c::mDoGaC_CodeExchange0() {
 void mDoGaC_agbCom_c::mDoGaC_CodeExchange1() {
     u8 sp8[16];
     if (!JUTGba::getManager()->resultRead(mDoGaC_getPortNo(), sp8)) {
-        if (field_0x118 == *(u32*) "GZLE") {
+        if (field_0x118 == *(u32*) VERSION_SELECT("GZLJ", "GZLE", "GZLP")) {
             JUTGba::getManager()->doGetStatus(mDoGaC_getPortNo(), CodeExchange_2, NULL);
         } else {
             mDoGaC_GbaReboot();
@@ -437,7 +442,7 @@ void mDoGaC_agbCom_c::mDoGaC_CodeExchange1() {
 void mDoGaC_agbCom_c::mDoGaC_CodeExchange2() {
     u8 sp8[16];
     if (!JUTGba::getManager()->resultGetStatus(mDoGaC_getPortNo(), sp8) && sp8[0] == 0x20) {
-        field_0x114 = *(u32*) "GZLE";
+        field_0x114 = *(u32*) VERSION_SELECT("GZLJ", "GZLE", "GZLP");
         JUTGba::getManager()->doWrite(mDoGaC_getPortNo(), (u8*)&field_0x114, CodeExchange_3, NULL);
     } else {
         field_0x2 = 0;
@@ -457,7 +462,12 @@ void mDoGaC_agbCom_c::mDoGaC_CodeExchange3() {
 /* 8001B1F8-8001B298       .text mDoGaC_CodeExchange4__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_CodeExchange4() {
     u8 sp8[16];
-    if (!JUTGba::getManager()->resultGetStatus(mDoGaC_getPortNo(), sp8) && sp8[0] == 0x30) {
+#if VERSION == VERSION_JPN
+    // Bug: Missing parentheses cause the second half of this condition to always evaluate to true on JPN.
+    if (!JUTGba::getManager()->resultGetStatus(mDoGaC_getPortNo(), sp8) && sp8[0] == 0x10 | 0x20) {
+#else
+    if (!JUTGba::getManager()->resultGetStatus(mDoGaC_getPortNo(), sp8) && sp8[0] == (0x10 | 0x20)) {
+#endif
         field_0x12c.U8._12c_0 = mDoGaC_getPortNo();
         field_0x114 = BigLittleChange(field_0x12c.U32);
         JUTGba::getManager()->doWrite(mDoGaC_getPortNo(), (u8*)&field_0x114, ContextSend, NULL);
@@ -500,7 +510,12 @@ void mDoGaC_agbCom_c::mDoGaC_ContextSend() {
 /* 8001B3A8-8001B42C       .text mDoGaC_ContextRead__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_ContextRead() {
     u8 sp8[16];
-    if (!JUTGba::getManager()->resultGetStatus(mDoGaC_getPortNo(), sp8) && sp8[0] == 0x38) {
+#if VERSION == VERSION_JPN
+    // Bug: Missing parentheses cause the second half of this condition to always evaluate to true on JPN.
+    if (!JUTGba::getManager()->resultGetStatus(mDoGaC_getPortNo(), sp8) && sp8[0] == 0x20 | 0x08) {
+#else
+    if (!JUTGba::getManager()->resultGetStatus(mDoGaC_getPortNo(), sp8) && sp8[0] == (0x20 | 0x10 | 0x08)) {
+#endif
         JUTGba::getManager()->doRead(mDoGaC_getPortNo(), (u8*)&field_0x118, ContextCheck, NULL);
     } else {
         field_0x2 = 0;
@@ -690,6 +705,3 @@ u32 BigLittleChange(u32 param_0) {
 
     return little;
 }
-
-/* 8001BAA0-8001BADC       .text __dt__15mDoGaC_agbCom_cFv */
-mDoGaC_agbCom_c::~mDoGaC_agbCom_c() {}

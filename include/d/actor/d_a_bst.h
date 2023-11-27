@@ -2,7 +2,9 @@
 #define D_A_BST_H
 
 #include "f_op/f_op_actor.h"
-#include "m_Do/m_Do_ext.h"
+
+class mDoExt_McaMorf;
+class mDoExt_baseAnm;
 
 class bst_class : public fopAc_ac_c {
 public:

@@ -4,7 +4,6 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
-#include "d/d_bg_s_acch.h"
 #include "m_Do/m_Do_ext.h"
 #include "c/c_damagereaction.h"
 
@@ -16,7 +15,7 @@ struct st_ke_s {
     
 };
 
-class st_class : public fopAc_ac_c {
+class st_class : public fopEn_enemy_c {
 public:
     /* 0x02AC */ u8 m02AC[0x02B4 - 0x02AC];
     /* 0x02B4 */ u8 mBehaviorType;

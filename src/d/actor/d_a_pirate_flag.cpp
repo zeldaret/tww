@@ -22,7 +22,7 @@ void daPirate_Flag_packet_c::setNrmVtx(cXyz*, int, int) {
 }
 
 /* 0000083C-00000E44       .text draw__22daPirate_Flag_packet_cFv */
-BOOL daPirate_Flag_packet_c::draw() {
+void daPirate_Flag_packet_c::draw() {
     /* Nonmatching */
 }
 

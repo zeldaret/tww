@@ -27,7 +27,7 @@ void daHo_packet_c::setTopNrmVtx(cXyz*) {
 }
 
 /* 800E93B8-800E9BE8       .text draw__13daHo_packet_cFv */
-BOOL daHo_packet_c::draw() {
+void daHo_packet_c::draw() {
     /* Nonmatching */
 }
 

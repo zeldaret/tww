@@ -17,7 +17,7 @@ void daGFlag_packet_c::setToonTexObj() {
 }
 
 /* 00000330-00000978       .text draw__16daGFlag_packet_cFv */
-BOOL daGFlag_packet_c::draw() {
+void daGFlag_packet_c::draw() {
     /* Nonmatching */
 }
 

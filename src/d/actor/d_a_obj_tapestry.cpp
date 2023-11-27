@@ -217,7 +217,7 @@ void daObjTapestryPacket_c::setup_tevColReg(daObjTapestry_c*) {
 }
 
 /* 000044B8-000045C8       .text draw__21daObjTapestryPacket_cFv */
-BOOL daObjTapestryPacket_c::draw() {
+void daObjTapestryPacket_c::draw() {
     /* Nonmatching */
 }
 

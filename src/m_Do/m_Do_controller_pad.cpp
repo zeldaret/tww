@@ -28,39 +28,33 @@ inline void mDoCPd_TRIGGER_CONV(u8 analog, f32& param_1) {
     }
 }
 
-#define MASK_INSERT_BUTTON(field, value, fieldshift, valueshift)                               \
-    temp = (bool)(((value) & (1 << valueshift)));                                              \
-    (field) = ((temp << fieldshift) & (1 << fieldshift)) | ((field) & ~(1 << fieldshift))
-
 /* 80007598-800078C0       .text mDoCPd_Convert__FP27interface_of_controller_padP10JUTGamePad */
 static s32 mDoCPd_Convert(interface_of_controller_pad* pInterface, JUTGamePad* pPad) {
-    // the temp var stuff is hacky but seems required for matching codegen, including the !!temp at the end
-    BOOL temp;
-    MASK_INSERT_BUTTON(pInterface->mButtonHold0, pPad->mButton.mButton,  4, 3);
-    MASK_INSERT_BUTTON(pInterface->mButtonHold0, pPad->mButton.mButton,  5, 2);
-    MASK_INSERT_BUTTON(pInterface->mButtonHold0, pPad->mButton.mButton,  7, 0);
-    MASK_INSERT_BUTTON(pInterface->mButtonHold0, pPad->mButton.mButton,  6, 1);
-    MASK_INSERT_BUTTON(pInterface->mButtonHold0, pPad->mButton.mButton,  3, 4);
-    MASK_INSERT_BUTTON(pInterface->mButtonHold0, pPad->mButton.mButton,  2, 5);
-    MASK_INSERT_BUTTON(pInterface->mButtonHold0, pPad->mButton.mButton,  1, 6);
-    MASK_INSERT_BUTTON(pInterface->mButtonHold0, pPad->mButton.mButton,  0, 8);
-    MASK_INSERT_BUTTON(pInterface->mButtonHold1, pPad->mButton.mButton,  7, 9);
-    MASK_INSERT_BUTTON(pInterface->mButtonHold1, pPad->mButton.mButton,  6, 10);
-    MASK_INSERT_BUTTON(pInterface->mButtonHold1, pPad->mButton.mButton,  5, 11);
-    MASK_INSERT_BUTTON(pInterface->mButtonHold1, pPad->mButton.mButton,  4, 12);
-    MASK_INSERT_BUTTON(pInterface->mButtonTrig0, pPad->mButton.mTrigger, 4, 3);
-    MASK_INSERT_BUTTON(pInterface->mButtonTrig0, pPad->mButton.mTrigger, 5, 2);
-    MASK_INSERT_BUTTON(pInterface->mButtonTrig0, pPad->mButton.mTrigger, 7, 0);
-    MASK_INSERT_BUTTON(pInterface->mButtonTrig0, pPad->mButton.mTrigger, 6, 1);
-    MASK_INSERT_BUTTON(pInterface->mButtonTrig0, pPad->mButton.mTrigger, 3, 4);
-    MASK_INSERT_BUTTON(pInterface->mButtonTrig0, pPad->mButton.mTrigger, 2, 5);
-    MASK_INSERT_BUTTON(pInterface->mButtonTrig0, pPad->mButton.mTrigger, 1, 6);
-    MASK_INSERT_BUTTON(pInterface->mButtonTrig0, pPad->mButton.mTrigger, 0, 8);
-    MASK_INSERT_BUTTON(pInterface->mButtonTrig1, pPad->mButton.mTrigger, 7, 9);
-    MASK_INSERT_BUTTON(pInterface->mButtonTrig1, pPad->mButton.mTrigger, 6, 10);
-    MASK_INSERT_BUTTON(pInterface->mButtonTrig1, pPad->mButton.mTrigger, 5, 11);
-    MASK_INSERT_BUTTON(pInterface->mButtonTrig1, pPad->mButton.mTrigger, 4, 12);
-    temp = !!temp;
+    pInterface->mButtonHold.up    = pPad->mButton.mButton & CButton::DPAD_UP;
+    pInterface->mButtonHold.down  = pPad->mButton.mButton & CButton::DPAD_DOWN;
+    pInterface->mButtonHold.left  = pPad->mButton.mButton & CButton::DPAD_LEFT;
+    pInterface->mButtonHold.right = pPad->mButton.mButton & CButton::DPAD_RIGHT;
+    pInterface->mButtonHold.z     = pPad->mButton.mButton & CButton::Z;
+    pInterface->mButtonHold.r     = pPad->mButton.mButton & CButton::R;
+    pInterface->mButtonHold.l     = pPad->mButton.mButton & CButton::L;
+    pInterface->mButtonHold.a     = pPad->mButton.mButton & CButton::A;
+    pInterface->mButtonHold.b     = pPad->mButton.mButton & CButton::B;
+    pInterface->mButtonHold.x     = pPad->mButton.mButton & CButton::X;
+    pInterface->mButtonHold.y     = pPad->mButton.mButton & CButton::Y;
+    pInterface->mButtonHold.start = pPad->mButton.mButton & CButton::START;
+
+    pInterface->mButtonTrig.up    = pPad->mButton.mTrigger & CButton::DPAD_UP;
+    pInterface->mButtonTrig.down  = pPad->mButton.mTrigger & CButton::DPAD_DOWN;
+    pInterface->mButtonTrig.left  = pPad->mButton.mTrigger & CButton::DPAD_LEFT;
+    pInterface->mButtonTrig.right = pPad->mButton.mTrigger & CButton::DPAD_RIGHT;
+    pInterface->mButtonTrig.z     = pPad->mButton.mTrigger & CButton::Z;
+    pInterface->mButtonTrig.r     = pPad->mButton.mTrigger & CButton::R;
+    pInterface->mButtonTrig.l     = pPad->mButton.mTrigger & CButton::L;
+    pInterface->mButtonTrig.a     = pPad->mButton.mTrigger & CButton::A;
+    pInterface->mButtonTrig.b     = pPad->mButton.mTrigger & CButton::B;
+    pInterface->mButtonTrig.x     = pPad->mButton.mTrigger & CButton::X;
+    pInterface->mButtonTrig.y     = pPad->mButton.mTrigger & CButton::Y;
+    pInterface->mButtonTrig.start = pPad->mButton.mTrigger & CButton::START;
     
     pInterface->mMainStickPosX = pPad->getMainStickX();
     pInterface->mMainStickPosY = pPad->getMainStickY();

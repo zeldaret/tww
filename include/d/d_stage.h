@@ -1035,13 +1035,13 @@ inline u8 dStage_FileList_dt_DarkNo(dStage_FileList_dt_c* i_fili) {
     return (i_fili->mParam & 0x78) >> 3;
 }
 
-// inline u8 dStage_FileList_dt_CheckAgbCom(dStage_FileList_dt_c* i_fili) {
-    
-// }
+inline u8 dStage_FileList_dt_CheckAgbCom(dStage_FileList_dt_c* i_fili) {
+    return i_fili->mParam & 2;
+}
 
-// inline u8 dStage_FileList_dt_CheckAgbHover(dStage_FileList_dt_c* i_fili) {
-    
-// }
+inline u8 dStage_FileList_dt_CheckAgbHover(dStage_FileList_dt_c* i_fili) {
+    return i_fili->mParam & 4;
+}
 
 // inline u8 dStage_FileList_dt_GetSongOk(dStage_FileList_dt_c* i_fili) {
     // maybe 0x40000000?

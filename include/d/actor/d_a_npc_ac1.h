@@ -2,10 +2,6 @@
 #define D_A_NPC_AC1_H
 
 #include "f_op/f_op_actor.h"
-#include "m_Do/m_Do_ext.h"
-#include "JSystem/J3DGraphAnimator/J3DNode.h"
-#include "JSystem/J3DGraphAnimator/J3DAnimation.h"
-#include "d/d_npc.h"
 #include "d/d_npc.h"
 
 class daNpc_Ac1_c : public fopAc_ac_c {

@@ -27,7 +27,7 @@ void daMajuu_Flag_packet_c::setNrmVtx(cXyz*, int) {
 }
 
 /* 000006E8-00000D30       .text draw__21daMajuu_Flag_packet_cFv */
-BOOL daMajuu_Flag_packet_c::draw() {
+void daMajuu_Flag_packet_c::draw() {
     /* Nonmatching */
 }
 

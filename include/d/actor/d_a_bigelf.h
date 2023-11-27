@@ -4,17 +4,18 @@
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_phase.h"
-#include "JSystem/J3DGraphAnimator/J3DNode.h"
 
 class daBigelf_c : public fopAc_ac_c {
 public:
+    typedef BOOL (daBigelf_c::*ActionFunc)(void*);
+
     void chkFlag(unsigned short) {}
     void clrFlag(unsigned short) {}
     void getBackboneJntNum() {}
     void getHeadJntNum() {}
     void getHead_x() {}
     void incAttnSetCount() {}
-    void setAction(int (daBigelf_c::*)(void*), void*) {}
+    void setAction(ActionFunc, void*) {}
     void setAttentionBasePos(cXyz) {}
     void setEyePos(cXyz) {}
     void setFlag(unsigned short) {}
@@ -117,7 +118,7 @@ public:
     /* 0x3A4 */ f32 m3A4;
     /* 0x3A8 */ f32 m3A8;
     /* 0x3AC */ u8 m3AC[0x3B0 - 0x3AC];
-    /* 0x3B0 */ entStateFunc mCurrentStateFunc;
+    /* 0x3B0 */ ActionFunc mCurrentStateFunc;
     /* 0x3BC */ u8 m3BC[0x3C4 - 0x3BC];
     /* 0x3C4 */ int mStaffId;
     /* 0x3C8 */ s16 m3C8;

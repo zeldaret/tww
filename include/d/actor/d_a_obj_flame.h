@@ -3,9 +3,11 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
-#include "JSystem/JParticle/JPAEmitter.h"
-#include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_phase.h"
+
+class JPABaseEmitter;
+class mDoExt_btkAnm;
+class mDoExt_brkAnm;
 
 namespace daObjFlame {
     class Act_c : public fopAc_ac_c {
