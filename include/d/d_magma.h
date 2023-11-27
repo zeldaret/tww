@@ -5,17 +5,37 @@
 #include "dolphin/mtx/mtx.h"
 #include "JSystem/J3DGraphBase/J3DPacket.h"
 
-class dMagma_ball_c;
+class dMagma_ball_c {
+public:
+    dMagma_ball_c();
+    virtual ~dMagma_ball_c();
+    virtual void calc(f32, u8, int) = 0;
+    virtual void update() = 0;
+    virtual void setup(f32, u8, int) = 0;
+
+    void draw();
+    bool rangeCheck(cXyz&, f32*);
+};
+
+class dMagma_ballPath_c : public dMagma_ball_c {
+public:
+    dMagma_ballPath_c();
+    virtual ~dMagma_ballPath_c();
+    virtual void calc(f32, u8, int);
+    virtual void update();
+    virtual void setup(f32, u8, int);
+};
+
 class dMagma_floor_c {
 public:
+    ~dMagma_floor_c();
+    dMagma_floor_c();
+
     void draw();
     void calc(int);
     void update();
     void create(cXyz&, cXyz&, s16, u8, int);
     void remove();
-
-    ~dMagma_floor_c();
-    dMagma_floor_c();
 
     /* 0x00 */ dMagma_ball_c** mpBalls;
     /* 0x04 */ u8 mBallNum;
@@ -30,7 +50,7 @@ public:
     /* 0xAC */ dMagma_floor_c* mpNext;
 };
 
-class dMagma_room_c{
+class dMagma_room_c {
 public:
     void newFloor(dMagma_floor_c*);
     void deleteFloor();
@@ -51,7 +71,13 @@ public:
 
     virtual void draw();
     virtual ~dMagma_packet_c();
-    
+
+    static GXTexObj mKuroTexObj;
+    static Mtx mKuroMtx;
+    static GXTexObj mColTexObj;
+    static Mtx mBallMtx;
+    static Mtx mFloorMtx;
+
     /* 0x010 */ dMagma_floor_c mFloor[8];
     /* 0x590 */ dMagma_room_c mRoom[64];
     /* 0x690 */ GXColor mColor1;

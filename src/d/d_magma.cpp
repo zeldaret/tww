@@ -3,8 +3,23 @@
 // Translation Unit: d_magma.cpp
 //
 
-#include "d_magma.h"
-#include "dolphin/types.h"
+#include "d/d_magma.h"
+#include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_mtx.h"
+#include "JSystem/JKernel/JKRHeap.h"
+
+Mtx l_colOrthoMtx;
+GXTexObj dMagma_packet_c::mKuroTexObj;
+Mtx dMagma_packet_c::mKuroMtx;
+GXTexObj dMagma_packet_c::mColTexObj;
+Mtx dMagma_packet_c::mFloorMtx;
+Mtx dMagma_packet_c::mBallMtx;
+
+Vec l_YfloorPos[4] = {};
+u8 l_YfloorDL[0x27] = {};
+u8 l_YfloorMatDL[0x55] = {};
+Vec l_YballPos[0x21] = {};
+u8 l_YballMatDL[0x4b] = {};
 
 /* 800755A4-800756B8       .text draw__13dMagma_ball_cFv */
 void dMagma_ball_c::draw() {
@@ -12,7 +27,7 @@ void dMagma_ball_c::draw() {
 }
 
 /* 800756B8-800757D4       .text rangeCheck__13dMagma_ball_cFR4cXyzPf */
-void dMagma_ball_c::rangeCheck(cXyz&, float*) {
+bool dMagma_ball_c::rangeCheck(cXyz&, f32*) {
     /* Nonmatching */
 }
 
@@ -33,17 +48,54 @@ void dMagma_ballPath_c::setup(float, unsigned char, int) {
 
 /* 80075A6C-80075CB8       .text draw__14dMagma_floor_cFv */
 void dMagma_floor_c::draw() {
-    /* Nonmatching */
+    GXSetArray(GX_VA_POS, l_YfloorPos, sizeof(*l_YfloorPos));
+    GXLoadTexMtxImm(mTexMtx0, GX_TEXMTX2, GX_MTX3x4);
+    GXLoadTexMtxImm(dMagma_packet_c::mKuroMtx, (u32)GX_PTTEXMTX0, GX_MTX3x4);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX2, GX_FALSE, GX_PTTEXMTX0);
+    GXSetTexCoordScaleManually(GX_TEXCOORD0, GX_TRUE, GXGetTexObjWidth(&dMagma_packet_c::mKuroTexObj), GXGetTexObjHeight(&dMagma_packet_c::mKuroTexObj));
+    GXSetTexCoordBias(GX_TEXCOORD0, GX_FALSE, GX_FALSE);
+    GXCallDisplayList(&l_YfloorMatDL, 0x40);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXLoadPosMtxImm(mPosMtx, GX_PNMTX0);
+    GXCallDisplayList(&l_YfloorDL, 0x20);
+    GXSetArray(GX_VA_POS, l_YballPos, sizeof(*l_YballPos));
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_TEXA, GX_CC_HALF, GX_CC_ONE, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_COMP_RGB8_GT, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_TEXC, GX_CC_C1, GX_CC_CPREV, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_APREV, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXCallDisplayList(l_YballMatDL, 0x40);
+    GXLoadTexMtxImm(mBallPostMtx0, (u32)GX_PTTEXMTX1, GX_MTX3x4);
+
+    dMagma_ball_c** ball = &mpBalls[0];
+    for (s32 i = 0; i < mBallNum; ball++, i++)
+        (*ball)->draw();
 }
 
 /* 80075CB8-80075DD8       .text calc__14dMagma_floor_cFi */
-void dMagma_floor_c::calc(int) {
-    /* Nonmatching */
+void dMagma_floor_c::calc(int i_roomNo) {
+    mDoMtx_stack_c::scaleS(1.0f, 0.05f, 1.0f);
+    if (strcmp(dComIfGp_getStartStageName(), "MDrag_B") == 0 || strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0)
+        mDoMtx_stack_c::transM(0.0f, -(mBallPos.y + 20.0f), 0.0f);
+    else
+        mDoMtx_stack_c::transM(0.0f, -(mBallPos.y + 30.0f), 0.0f);
+    mDoMtx_concat(l_colOrthoMtx, mDoMtx_stack_c::get(), mBallPostMtx0);
+    dMagma_ball_c** ball = &mpBalls[0];
+    for (s32 i = 0; i < mBallNum; ball++, i++)
+        (*ball)->calc(mBallPos.y, mPathNo, i_roomNo);
 }
 
 /* 80075DD8-80075E50       .text update__14dMagma_floor_cFv */
 void dMagma_floor_c::update() {
-    /* Nonmatching */
+    mDoMtx_concat(j3dSys.getViewMtx(), mTexMtx0, mPosMtx);
+    dMagma_ball_c** ball = &mpBalls[0];
+    for (s32 i = 0; i < mBallNum; ball++, i++)
+        (*ball)->update();
 }
 
 /* 80075E50-80076038       .text create__14dMagma_floor_cFR4cXyzR4cXyzsUci */
@@ -58,7 +110,12 @@ dMagma_ball_c::~dMagma_ball_c() {
 
 /* 80076080-80076100       .text remove__14dMagma_floor_cFv */
 void dMagma_floor_c::remove() {
-    /* Nonmatching */
+    dMagma_ball_c** ball = &mpBalls[0];
+    for (s32 i = 0; i < mBallNum; ball++, i++)
+        delete *ball;
+
+    delete mpBalls;
+    mpBalls = NULL;
 }
 
 /* 80076100-80076110       .text newFloor__13dMagma_room_cFP14dMagma_floor_c */
@@ -88,7 +145,7 @@ dMagma_floor_c::~dMagma_floor_c() {
 
 /* 80076318-80076324       .text __ct__14dMagma_floor_cFv */
 dMagma_floor_c::dMagma_floor_c() {
-    /* Nonmatching */
+    mpBalls = NULL;
 }
 
 /* 80076324-800763CC       .text __dt__15dMagma_packet_cFv */
@@ -98,7 +155,27 @@ dMagma_packet_c::~dMagma_packet_c() {
 
 /* 800763CC-800764EC       .text draw__15dMagma_packet_cFv */
 void dMagma_packet_c::draw() {
-    /* Nonmatching */
+    j3dSys.reinitGX();
+    GXSetNumIndStages(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXLoadTexObj(&mKuroTexObj, GX_TEXMAP0);
+    GXLoadTexObj(&mColTexObj, GX_TEXMAP1);
+    dKy_GxFog_set();
+    GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
+    GXSetTevColor(GX_TEVREG1, mColor1);
+    GXSetCurrentMtx(GX_PNMTX0);
+
+    dMagma_floor_c* floor = &mFloor[0];
+    for (s32 i = 0; i < 8; i++, floor++) {
+        if (floor->mpBalls != NULL)
+            floor->draw();
+    }
+
+    GXSetTexCoordScaleManually(GX_TEXCOORD0, GX_FALSE, 0, 0);
+    GXSetTexCoordScaleManually(GX_TEXCOORD1, GX_FALSE, 0, 0);
+    J3DShape::resetVcdVatCache();
 }
 
 /* 800764EC-800764FC       .text morfCalc__Ffff */
@@ -113,7 +190,12 @@ void dMagma_packet_c::calc() {
 
 /* 80076770-800767E4       .text update__15dMagma_packet_cFv */
 void dMagma_packet_c::update() {
-    /* Nonmatching */
+    dMagma_floor_c* floor = &mFloor[0];
+    for (s32 i = 0; i < 8; i++, floor++) {
+        if (floor->mpBalls != NULL)
+            floor->update();
+    }
+    j3dSys.getDrawBuffer(0)->entryImm(this, 0);
 }
 
 /* 800767E4-80076924       .text checkYpos__15dMagma_packet_cFR4cXyz */
@@ -122,7 +204,7 @@ void dMagma_packet_c::checkYpos(cXyz&) {
 }
 
 /* 80076924-80076AA4       .text newFloor__15dMagma_packet_cFR4cXyzR4cXyzis */
-void dMagma_packet_c::newFloor(cXyz&, cXyz&, int, short) {
+void dMagma_packet_c::newFloor(cXyz&, cXyz&, int i_roomNo, s16 i_pathNo) {
     /* Nonmatching */
 }
 

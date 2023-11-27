@@ -35,6 +35,7 @@ GXTexRegionCallback GXSetTexRegionCallback(GXTexRegionCallback callback);
 GXTlutRegionCallback GXSetTlutRegionCallback(GXTlutRegionCallback callback);
 
 void GXSetTexCoordScaleManually(GXTexCoordID coord, GXBool enable, u16 s_scale, u16 t_scale);
+void GXSetTexCoordBias(GXTexCoordID coord, GXBool s_enable, GXBool t_enable);
 
 void __SetSURegs();
 void __GXSetSUTexRegs();
