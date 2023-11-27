@@ -50,6 +50,3 @@ void daMsw_CreateInit(fopAc_ac_c*) {
 void daMsw_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-

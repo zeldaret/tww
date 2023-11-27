@@ -656,12 +656,3 @@ void kb_class::taura_pos_set(cXyz) {
     /* Nonmatching */
 }
 
-/* 00009BB4-00009BFC       .text __dt__9dSnap_ObjFv */
-dSnap_Obj::~dSnap_Obj() {
-    /* Nonmatching */
-}
-
-
-
-
-

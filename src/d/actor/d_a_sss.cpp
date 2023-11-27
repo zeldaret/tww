@@ -96,20 +96,3 @@ void daSss_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00002DF0-00002E2C       .text __dt__5sss_sFv */
-sss_s::~sss_s() {
-    /* Nonmatching */
-}
-
-/* 00002E2C-00002E30       .text __ct__5sss_sFv */
-sss_s::sss_s() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-

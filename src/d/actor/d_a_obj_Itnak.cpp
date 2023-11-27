@@ -21,11 +21,6 @@ s32 daObjItnak::Act_c::_create() {
     /* Nonmatching */
 }
 
-/* 000003A0-0000063C       .text __ct__Q210daObjItnak5Act_cFv */
-daObjItnak::Act_c::Act_c() {
-    /* Nonmatching */
-}
-
 /* 00000D10-00000D40       .text _delete__Q210daObjItnak5Act_cFv */
 BOOL daObjItnak::Act_c::_delete() {
     /* Nonmatching */
@@ -60,24 +55,3 @@ BOOL daObjItnak::Act_c::_execute() {
 BOOL daObjItnak::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-/* 0000144C-00001850       .text __dt__Q210daObjItnak5Act_cFv */
-daObjItnak::Act_c::~Act_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-

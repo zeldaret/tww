@@ -56,11 +56,6 @@ void daEp_Execute(ep_class*) {
     /* Nonmatching */
 }
 
-/* 00001E30-00001F98       .text __dt__18dBgS_ObjGndChk_SplFv */
-dBgS_ObjGndChk_Spl::~dBgS_ObjGndChk_Spl() {
-    /* Nonmatching */
-}
-
 /* 00002270-00002278       .text daEp_IsDelete__FP8ep_class */
 void daEp_IsDelete(ep_class*) {
     /* Nonmatching */
@@ -85,40 +80,4 @@ void daEp_CreateInit(fopAc_ac_c*) {
 void daEp_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 00002840-00002A3C       .text __ct__8ep_classFv */
-ep_class::ep_class() {
-    /* Nonmatching */
-}
-
-/* 00002A3C-00002A78       .text __dt__7ep_ga_sFv */
-ep_ga_s::~ep_ga_s() {
-    /* Nonmatching */
-}
-
-/* 00002A78-00002A7C       .text __ct__7ep_ga_sFv */
-ep_ga_s::ep_ga_s() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -271,16 +271,6 @@ s32 daObj_Ikada_c::_create() {
     /* Nonmatching */
 }
 
-/* 00004C18-00004EC0       .text __ct__13daObj_Ikada_cFv */
-daObj_Ikada_c::daObj_Ikada_c() {
-    /* Nonmatching */
-}
-
-/* 00005274-00005278       .text __ct__Q29JGeometry8TVec3<f>Fv */
-JGeometry::TVec3<float>::TVec3() {
-    /* Nonmatching */
-}
-
 /* 00005320-0000543C       .text _delete__13daObj_Ikada_cFv */
 BOOL daObj_Ikada_c::_delete() {
     /* Nonmatching */
@@ -310,13 +300,4 @@ void daObj_IkadaDraw(void*) {
 void daObj_IkadaIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 00005700-0000575C       .text __dt__17daObj_Ikada_HIO_cFv */
-daObj_Ikada_HIO_c::~daObj_Ikada_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
 

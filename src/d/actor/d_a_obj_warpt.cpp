@@ -226,12 +226,3 @@ void daObj_WarptIsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 00002BC0-00002C1C       .text __dt__17daObj_Warpt_HIO_cFv */
-daObj_Warpt_HIO_c::~daObj_Warpt_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-

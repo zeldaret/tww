@@ -325,11 +325,6 @@ void daNpc_Mk_Draw(daNpc_Mk_c*) {
 void daNpc_Mk_IsDelete(daNpc_Mk_c*) {
     /* Nonmatching */
 }
-
-
-
-
-
 /* 00004C38-00004C54       .text setEyePos__10daNpc_Mk_cF4cXyz */
 void daNpc_Mk_c::setEyePos(cXyz) {
     /* Nonmatching */

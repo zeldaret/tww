@@ -30,6 +30,3 @@ void daHitobj_Delete(hitobj_class*) {
 void daHitobj_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-

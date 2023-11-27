@@ -96,15 +96,3 @@ void daBwds_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00003FCC-00004014       .text __dt__12daBwds_HIO_cFv */
-daBwds_HIO_c::~daBwds_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-

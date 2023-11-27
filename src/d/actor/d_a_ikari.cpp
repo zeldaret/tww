@@ -71,8 +71,3 @@ void daIkariIsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 000006D8-00000734       .text __dt__15daObjIkariHIO_cFv */
-daObjIkariHIO_c::~daObjIkariHIO_c() {
-    /* Nonmatching */
-}
-

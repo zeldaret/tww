@@ -56,11 +56,6 @@ void daObjComing::Act_c::get_aqua_y(const cXyz*) {
     /* Nonmatching */
 }
 
-/* 000005BC-000006E0       .text __dt__11dBgS_WtrChkFv */
-dBgS_WtrChk::~dBgS_WtrChk() {
-    /* Nonmatching */
-}
-
 /* 000006E0-000007EC       .text chk_ship_range__Q211daObjComing5Act_cCFPC10fopAc_ac_c */
 void daObjComing::Act_c::chk_ship_range(const fopAc_ac_c*) const {
     /* Nonmatching */
@@ -145,35 +140,3 @@ BOOL daObjComing::Act_c::_execute() {
 BOOL daObjComing::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-/* 000015DC-000016D8       .text __dt__14dBgS_SplGrpChkFv */
-dBgS_SplGrpChk::~dBgS_SplGrpChk() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

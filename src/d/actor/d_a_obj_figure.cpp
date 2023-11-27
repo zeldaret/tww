@@ -160,6 +160,3 @@ void daSampleIsDelete(void*) {
 void linkDraw(mDoExt_McaMorf*) {
     /* Nonmatching */
 }
-
-
-

@@ -31,16 +31,6 @@ s32 daWall_c::_create() {
     /* Nonmatching */
 }
 
-/* 0000065C-000006B8       .text __dt__8cM3dGTriFv */
-cM3dGTri::~cM3dGTri() {
-    /* Nonmatching */
-}
-
-/* 000006B8-00000700       .text __dt__8cM3dGPlaFv */
-cM3dGPla::~cM3dGPla() {
-    /* Nonmatching */
-}
-
 /* 00000800-00000880       .text set_mtx__8daWall_cFv */
 void daWall_c::set_mtx() {
     /* Nonmatching */
@@ -110,6 +100,3 @@ void daWall_Execute(void*) {
 void daWall_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

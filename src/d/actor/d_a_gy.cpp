@@ -211,11 +211,6 @@ s32 daGy_c::_create() {
     /* Nonmatching */
 }
 
-/* 00004A80-00004EF0       .text __ct__6daGy_cFv */
-daGy_c::daGy_c() {
-    /* Nonmatching */
-}
-
 /* 00005A80-00005AD4       .text _delete__6daGy_cFv */
 BOOL daGy_c::_delete() {
     /* Nonmatching */
@@ -245,25 +240,4 @@ void daGyDraw(void*) {
 void daGyIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 00005EB0-00005F0C       .text __dt__10daGy_HIO_cFv */
-daGy_HIO_c::~daGy_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

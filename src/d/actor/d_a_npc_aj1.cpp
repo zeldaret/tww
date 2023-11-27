@@ -476,17 +476,3 @@ void daNpc_Aj1_IsDelete(daNpc_Aj1_c*) {
     /* Nonmatching */
 }
 
-/* 00004170-000041CC       .text __dt__15daNpc_Aj1_HIO_cFv */
-daNpc_Aj1_HIO_c::~daNpc_Aj1_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 00004204-00004280       .text cLib_getRndValue<i>__Fii */
-void cLib_getRndValue<int>(int, int) {
-    /* Nonmatching */
-}
-
-
-
-
-

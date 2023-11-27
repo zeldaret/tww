@@ -181,10 +181,3 @@ void daObj_CanonIsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 00001ECC-00001F28       .text __dt__17daObj_Canon_HIO_cFv */
-daObj_Canon_HIO_c::~daObj_Canon_HIO_c() {
-    /* Nonmatching */
-}
-
-
-

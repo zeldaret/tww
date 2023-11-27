@@ -181,11 +181,6 @@ s32 daNpc_Nz_c::_create() {
     /* Nonmatching */
 }
 
-/* 000028FC-00002AF0       .text __ct__10daNpc_Nz_cFv */
-daNpc_Nz_c::daNpc_Nz_c() {
-    /* Nonmatching */
-}
-
 /* 00002E00-00002E6C       .text _delete__10daNpc_Nz_cFv */
 BOOL daNpc_Nz_c::_delete() {
     /* Nonmatching */
@@ -215,20 +210,6 @@ void daNpc_NzDraw(void*) {
 void daNpc_NzIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 0000318C-000031D4       .text __dt__14daNpc_Nz_HIO_cFv */
-daNpc_Nz_HIO_c::~daNpc_Nz_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
 
 /* 000032BC-000032E8       .text searchEsa_CB__FPvPv */
 void searchEsa_CB(void*, void*) {

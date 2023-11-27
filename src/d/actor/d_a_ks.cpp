@@ -126,14 +126,3 @@ void daKS_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00003A94-00003CEC       .text __ct__8ks_classFv */
-ks_class::ks_class() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-

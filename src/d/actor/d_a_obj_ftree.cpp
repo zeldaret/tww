@@ -326,11 +326,6 @@ s32 daObjFtree::Act_c::_create() {
     /* Nonmatching */
 }
 
-/* 000035F4-00003840       .text __ct__Q210daObjFtree5Act_cFv */
-daObjFtree::Act_c::Act_c() {
-    /* Nonmatching */
-}
-
 /* 00003FB8-00004004       .text _delete__Q210daObjFtree5Act_cFv */
 BOOL daObjFtree::Act_c::_delete() {
     /* Nonmatching */
@@ -350,24 +345,3 @@ BOOL daObjFtree::Act_c::_execute() {
 BOOL daObjFtree::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-/* 0000476C-00004AB8       .text __dt__Q210daObjFtree5Act_cFv */
-daObjFtree::Act_c::~Act_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-

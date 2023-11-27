@@ -66,13 +66,3 @@ void daPirate_Flag_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00001D1C-00001D6C       .text __dt__19daPirate_Flag_HIO_cFv */
-daPirate_Flag_HIO_c::~daPirate_Flag_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 00001D6C-00001E38       .text __dt__22daPirate_Flag_packet_cFv */
-daPirate_Flag_packet_c::~daPirate_Flag_packet_c() {
-    /* Nonmatching */
-}
-

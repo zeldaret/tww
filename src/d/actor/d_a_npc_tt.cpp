@@ -221,16 +221,6 @@ s32 daNpc_Tt_c::_create() {
     /* Nonmatching */
 }
 
-/* 0000241C-00002498       .text __dt__7tt_ke_sFv */
-tt_ke_s::~tt_ke_s() {
-    /* Nonmatching */
-}
-
-/* 00002498-00002500       .text __ct__7tt_ke_sFv */
-tt_ke_s::tt_ke_s() {
-    /* Nonmatching */
-}
-
 /* 000027D0-00002AB0       .text CreateHeap__10daNpc_Tt_cFv */
 void daNpc_Tt_c::CreateHeap() {
     /* Nonmatching */
@@ -260,11 +250,6 @@ void daNpc_Tt_Draw(daNpc_Tt_c*) {
 void daNpc_Tt_IsDelete(daNpc_Tt_c*) {
     /* Nonmatching */
 }
-
-
-
-
-
 /* 00002C60-00002C7C       .text setEyePos__10daNpc_Tt_cF4cXyz */
 void daNpc_Tt_c::setEyePos(cXyz) {
     /* Nonmatching */

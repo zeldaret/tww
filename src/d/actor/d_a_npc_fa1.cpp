@@ -276,16 +276,6 @@ s32 daNpc_Fa1_c::_create() {
     /* Nonmatching */
 }
 
-/* 800FD224-800FD48C       .text __ct__11daNpc_Fa1_cFv */
-daNpc_Fa1_c::daNpc_Fa1_c() {
-    /* Nonmatching */
-}
-
-/* 800FD48C-800FD4E8       .text __dt__28daNpc_Fa1_McaMorfCallBack1_cFv */
-daNpc_Fa1_McaMorfCallBack1_c::~daNpc_Fa1_McaMorfCallBack1_c() {
-    /* Nonmatching */
-}
-
 /* 800FD4E8-800FD61C       .text CreateHeap__11daNpc_Fa1_cFv */
 void daNpc_Fa1_c::CreateHeap() {
     /* Nonmatching */

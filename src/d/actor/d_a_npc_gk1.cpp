@@ -316,17 +316,3 @@ void daNpc_Gk1_IsDelete(daNpc_Gk1_c*) {
     /* Nonmatching */
 }
 
-/* 00002EA0-00002EFC       .text __dt__15daNpc_Gk1_HIO_cFv */
-daNpc_Gk1_HIO_c::~daNpc_Gk1_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 00002F18-00002F94       .text cLib_getRndValue<i>__Fii */
-void cLib_getRndValue<int>(int, int) {
-    /* Nonmatching */
-}
-
-
-
-
-

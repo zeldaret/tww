@@ -40,14 +40,3 @@ BOOL daKomore::Act_c::_execute() {
 BOOL daKomore::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-/* 000005AC-00000638       .text __dt__Q28daKomore5Act_cFv */
-daKomore::Act_c::~Act_c() {
-    /* Nonmatching */
-}
-

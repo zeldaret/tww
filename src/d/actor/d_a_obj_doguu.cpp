@@ -86,11 +86,6 @@ s32 daObjDoguu_c::_create() {
     /* Nonmatching */
 }
 
-/* 0000178C-000019A0       .text __ct__12daObjDoguu_cFv */
-daObjDoguu_c::daObjDoguu_c() {
-    /* Nonmatching */
-}
-
 /* 00001CC8-00001D0C       .text daObjDoguu_Delete__FPv */
 void daObjDoguu_Delete(void*) {
     /* Nonmatching */
@@ -125,8 +120,3 @@ BOOL daObjDoguu_c::_execute() {
 void daObjDoguu_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-
-

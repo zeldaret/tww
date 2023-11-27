@@ -111,11 +111,6 @@ void daTag_Hint_c::setPlayerAngle() {
     /* Nonmatching */
 }
 
-/* 000010F0-00001244       .text __dt__14dBgS_CamLinChkFv */
-dBgS_CamLinChk::~dBgS_CamLinChk() {
-    /* Nonmatching */
-}
-
 /* 0000167C-00001744       .text darkProc__12daTag_Hint_cFv */
 void daTag_Hint_c::darkProc() {
     /* Nonmatching */
@@ -195,12 +190,3 @@ void daTag_Hint_Delete(daTag_Hint_c*) {
 void daTag_Hint_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-
-

@@ -35,8 +35,3 @@ void daAtt_Delete(att_class*) {
 void daAtt_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-
-
-

@@ -191,11 +191,6 @@ void daMP_Reader(void*) {
     /* Nonmatching */
 }
 
-/* 00003494-000034A0       .text daMP_NEXT_READ_SIZE__FP18daMP_THPReadBuffer */
-void daMP_NEXT_READ_SIZE(daMP_THPReadBuffer*) {
-    /* Nonmatching */
-}
-
 /* 000034A0-00003550       .text daMP_CreateReadThread__Fl */
 void daMP_CreateReadThread(long) {
     /* Nonmatching */
@@ -496,11 +491,6 @@ void daMP_ActivePlayer_Finish() {
     /* Nonmatching */
 }
 
-/* 0000615C-00006180       .text JKRFree__FPv */
-void JKRFree(void*) {
-    /* Nonmatching */
-}
-
 /* 00006180-000061DC       .text daMP_ActivePlayer_Main__Fv */
 void daMP_ActivePlayer_Main() {
     /* Nonmatching */
@@ -603,31 +593,6 @@ void daMP_c::daMP_c_Callback_Draw(daMP_c*) {
 
 /* 000067B8-000067C0       .text daMP_Callback_Dummy__FP6daMP_c */
 void daMP_Callback_Dummy(daMP_c*) {
-    /* Nonmatching */
-}
-
-/* 000067C0-00006820       .text __dt__16daMP_Dlst_base_cFv */
-daMP_Dlst_base_c::~daMP_Dlst_base_c() {
-    /* Nonmatching */
-}
-
-/* 000068A8-000068E4       .text __ct__16daMP_Dlst_base_cFv */
-daMP_Dlst_base_c::daMP_Dlst_base_c() {
-    /* Nonmatching */
-}
-
-/* 00006914-0000691C       .text fpcM_GetParam__FPv */
-void fpcM_GetParam(void*) {
-    /* Nonmatching */
-}
-
-/* 0000692C-0000695C       .text __ct__6daMP_cFv */
-daMP_c::daMP_c() {
-    /* Nonmatching */
-}
-
-/* 0000695C-00006964       .text __nw__FUlPv */
-void operator new(unsigned long, void*) {
     /* Nonmatching */
 }
 

@@ -50,11 +50,3 @@ void useHeapInit(fopAc_ac_c*) {
 void daFf_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-

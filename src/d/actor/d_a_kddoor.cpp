@@ -285,11 +285,3 @@ void daKddoor_Delete(daKddoor_c*) {
 void daKddoor_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-
-/* 00002E5C-00002FD8       .text __dt__15dDoor_ssk_sub_cFv */
-dDoor_ssk_sub_c::~dDoor_ssk_sub_c() {
-    /* Nonmatching */
-}
-

@@ -151,10 +151,3 @@ void daSaku_Execute(daSaku_c*) {
     /* Nonmatching */
 }
 
-/* 000027E8-00002830       .text __dt__9sakuHIO_cFv */
-sakuHIO_c::~sakuHIO_c() {
-    /* Nonmatching */
-}
-
-
-

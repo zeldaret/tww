@@ -80,6 +80,3 @@ void daFan_Execute(void*) {
 void daFan_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

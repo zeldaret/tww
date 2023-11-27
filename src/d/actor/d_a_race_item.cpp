@@ -65,8 +65,3 @@ void daRaceItem_Create(fopAc_ac_c*) {
 void daRaceItem_c::setListStart() {
     /* Nonmatching */
 }
-
-
-
-
-

@@ -161,12 +161,3 @@ void daNpc_Sarace_IsDelete(daNpc_Sarace_c*) {
     /* Nonmatching */
 }
 
-/* 00002740-000027A0       .text __dt__18daNpc_Sarace_HIO_cFv */
-daNpc_Sarace_HIO_c::~daNpc_Sarace_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-

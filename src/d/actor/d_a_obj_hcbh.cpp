@@ -110,10 +110,3 @@ void daObjHcbh_Draw(daObjHcbh_c*) {
 void daObjHcbh_IsDelete(daObjHcbh_c*) {
     /* Nonmatching */
 }
-
-
-
-
-
-
-

@@ -81,10 +81,3 @@ void daBalanceliftIsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 00001868-000018B0       .text __dt__19daBalancelift_HIO_cFv */
-daBalancelift_HIO_c::~daBalancelift_HIO_c() {
-    /* Nonmatching */
-}
-
-
-

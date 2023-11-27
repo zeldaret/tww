@@ -26,16 +26,6 @@ s32 daObjHtetu1_c::_create() {
     /* Nonmatching */
 }
 
-/* 00000460-000004D0       .text __dt__19daObjHtetu1Splash_cFv */
-daObjHtetu1Splash_c::~daObjHtetu1Splash_c() {
-    /* Nonmatching */
-}
-
-/* 000004D0-00000508       .text __ct__19daObjHtetu1Splash_cFv */
-daObjHtetu1Splash_c::daObjHtetu1Splash_c() {
-    /* Nonmatching */
-}
-
 /* 00000508-00000610       .text _delete__13daObjHtetu1_cFv */
 BOOL daObjHtetu1_c::_delete() {
     /* Nonmatching */
@@ -61,11 +51,6 @@ void daObjHtetu1_c::get_water_h() {
     /* Nonmatching */
 }
 
-/* 0000098C-00000AB0       .text __dt__11dBgS_WtrChkFv */
-dBgS_WtrChk::~dBgS_WtrChk() {
-    /* Nonmatching */
-}
-
 /* 00000AB0-00000BCC       .text splash_manager__13daObjHtetu1_cFv */
 void daObjHtetu1_c::splash_manager() {
     /* Nonmatching */
@@ -80,21 +65,3 @@ BOOL daObjHtetu1_c::_execute() {
 BOOL daObjHtetu1_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-/* 00001340-0000143C       .text __dt__14dBgS_SplGrpChkFv */
-dBgS_SplGrpChk::~dBgS_SplGrpChk() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-

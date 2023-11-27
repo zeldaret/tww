@@ -41,11 +41,6 @@ void daYkgrIsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 000008FC-00000958       .text __dt__12daYkgr_HIO_cFv */
-daYkgr_HIO_c::~daYkgr_HIO_c() {
-    /* Nonmatching */
-}
-
 /* 000009FC-00000A00       .text execute__54JPACallBackBase2<P14JPABaseEmitter,P15JPABaseParticle>FP14JPABaseEmitterP15JPABaseParticle */
 void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::execute(JPABaseEmitter*, JPABaseParticle*) {
     /* Nonmatching */
@@ -58,11 +53,6 @@ void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::init(JPABaseEmitter*, 
 
 /* 00000A04-00000A08       .text draw__54JPACallBackBase2<P14JPABaseEmitter,P15JPABaseParticle>FP14JPABaseEmitterP15JPABaseParticle */
 void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::draw(JPABaseEmitter*, JPABaseParticle*) {
-    /* Nonmatching */
-}
-
-/* 00000A08-00000A50       .text __dt__54JPACallBackBase2<P14JPABaseEmitter,P15JPABaseParticle>Fv */
-JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::~JPACallBackBase2() {
     /* Nonmatching */
 }
 

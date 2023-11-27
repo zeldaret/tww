@@ -85,8 +85,3 @@ void daObjMshokki_Draw(daObjMshokki_c*) {
 void daObjMshokki_IsDelete(daObjMshokki_c*) {
     /* Nonmatching */
 }
-
-
-
-
-

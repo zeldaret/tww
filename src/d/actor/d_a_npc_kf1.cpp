@@ -481,17 +481,3 @@ void daNpc_Kf1_IsDelete(daNpc_Kf1_c*) {
     /* Nonmatching */
 }
 
-/* 00004704-00004760       .text __dt__15daNpc_Kf1_HIO_cFv */
-daNpc_Kf1_HIO_c::~daNpc_Kf1_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 000047AC-00004828       .text cLib_getRndValue<i>__Fii */
-void cLib_getRndValue<int>(int, int) {
-    /* Nonmatching */
-}
-
-
-
-
-

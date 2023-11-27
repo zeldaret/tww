@@ -71,18 +71,3 @@ void daYougan_c::_daYougan_create() {
     /* Nonmatching */
 }
 
-/* 000009C8-00000A10       .text __dt__14daYOUGAN_HIO_cFv */
-daYOUGAN_HIO_c::~daYOUGAN_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 00000A4C-00000ADC       .text __dt__11yg_awa_dataFv */
-yg_awa_data::~yg_awa_data() {
-    /* Nonmatching */
-}
-
-/* 00000ADC-00000B1C       .text __ct__11yg_awa_dataFv */
-yg_awa_data::yg_awa_data() {
-    /* Nonmatching */
-}
-

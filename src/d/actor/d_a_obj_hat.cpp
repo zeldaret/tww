@@ -95,8 +95,3 @@ void daSampleIsDelete(void*) {
 void daNpcRoten_c::getWindVec() {
     /* Nonmatching */
 }
-
-
-
-
-

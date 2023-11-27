@@ -291,17 +291,3 @@ void daNpc_Zk1_IsDelete(daNpc_Zk1_c*) {
     /* Nonmatching */
 }
 
-/* 00002880-000028DC       .text __dt__15daNpc_Zk1_HIO_cFv */
-daNpc_Zk1_HIO_c::~daNpc_Zk1_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 000028F8-00002974       .text cLib_getRndValue<i>__Fii */
-void cLib_getRndValue<int>(int, int) {
-    /* Nonmatching */
-}
-
-
-
-
-

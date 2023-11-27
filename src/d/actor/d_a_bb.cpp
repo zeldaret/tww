@@ -166,24 +166,3 @@ void daBb_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00007F58-00008394       .text __ct__8bb_classFv */
-bb_class::bb_class() {
-    /* Nonmatching */
-}
-
-/* 00008CFC-00008D58       .text __dt__7bbHIO_cFv */
-bbHIO_c::~bbHIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-

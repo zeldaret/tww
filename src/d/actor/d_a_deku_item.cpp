@@ -105,8 +105,3 @@ void daDekuItem_Execute(void*) {
 void daDekuItem_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-
-

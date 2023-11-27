@@ -136,16 +136,6 @@ void daSTBox_IsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 000014A8-00001514       .text __dt__25daSTBox_shadowEcallBack_cFv */
-daSTBox_shadowEcallBack_c::~daSTBox_shadowEcallBack_c() {
-    /* Nonmatching */
-}
-
-/* 00001514-00001518       .text __ct__Q29JGeometry8TVec3<f>Fv */
-JGeometry::TVec3<float>::TVec3() {
-    /* Nonmatching */
-}
-
 /* 000015BC-000015D0       .text setup__25daSTBox_shadowEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
 void daSTBox_shadowEcallBack_c::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
     /* Nonmatching */

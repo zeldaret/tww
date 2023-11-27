@@ -61,12 +61,3 @@ void daTag_Kk1_IsDelete(daTag_Kk1_c*) {
     /* Nonmatching */
 }
 
-/* 0000071C-00000764       .text __dt__15daTag_Kk1_HIO_cFv */
-daTag_Kk1_HIO_c::~daTag_Kk1_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-

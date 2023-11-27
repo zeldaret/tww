@@ -116,24 +116,3 @@ void daKi_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 000046F4-00004A00       .text __ct__8ki_classFv */
-ki_class::ki_class() {
-    /* Nonmatching */
-}
-
-/* 000052C4-0000530C       .text __dt__7kiHIO_cFv */
-kiHIO_c::~kiHIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-

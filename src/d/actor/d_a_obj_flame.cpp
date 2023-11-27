@@ -160,6 +160,3 @@ void daObjFlame::Method::Draw(void*) {
 void daObjFlame::Method::IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

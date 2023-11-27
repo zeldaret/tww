@@ -196,11 +196,6 @@ s32 daBemos_c::_create() {
     /* Nonmatching */
 }
 
-/* 0000403C-0000429C       .text __ct__9daBemos_cFv */
-daBemos_c::daBemos_c() {
-    /* Nonmatching */
-}
-
 /* 00004ACC-00004BC0       .text daBemosDelete__FPv */
 void daBemosDelete(void*) {
     /* Nonmatching */
@@ -220,21 +215,4 @@ void daBemosDraw(void*) {
 void daBemosIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 00005004-0000504C       .text __dt__13daBemos_HIO_cFv */
-daBemos_HIO_c::~daBemos_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
 

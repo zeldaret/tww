@@ -96,11 +96,6 @@ BOOL daObjPirateship::Act_c::_execute() {
     /* Nonmatching */
 }
 
-/* 00001BD0-00001BD4       .text __ct__Q29JGeometry8TVec3<f>Fv */
-JGeometry::TVec3<float>::TVec3() {
-    /* Nonmatching */
-}
-
 /* 00001E8C-00001F50       .text Delete__Q215daObjPirateship6MethodFPv */
 void daObjPirateship::Method::Delete(void*) {
     /* Nonmatching */
@@ -120,18 +115,4 @@ void daObjPirateship::Method::Draw(void*) {
 void daObjPirateship::Method::IsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 00001FB4-00001FFC       .text __dt__20daObjPirateShipHIO_cFv */
-daObjPirateShipHIO_c::~daObjPirateShipHIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
 

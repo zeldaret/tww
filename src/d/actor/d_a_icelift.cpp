@@ -95,6 +95,3 @@ void daIlift_Execute(void*) {
 void daIlift_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

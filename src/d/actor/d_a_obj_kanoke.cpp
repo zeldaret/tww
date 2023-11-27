@@ -150,6 +150,3 @@ void daObjKanokeDraw(void*) {
 void daObjKanokeIsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

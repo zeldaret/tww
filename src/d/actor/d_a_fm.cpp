@@ -536,11 +536,6 @@ s32 daFm_c::_create() {
     /* Nonmatching */
 }
 
-/* 00009258-00009640       .text __ct__6daFm_cFv */
-daFm_c::daFm_c() {
-    /* Nonmatching */
-}
-
 /* 0000A094-0000A0FC       .text _delete__6daFm_cFv */
 BOOL daFm_c::_delete() {
     /* Nonmatching */
@@ -570,28 +565,4 @@ void daFmDraw(void*) {
 void daFmIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 0000A4D4-0000A548       .text __dt__10daFm_HIO_cFv */
-daFm_HIO_c::~daFm_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 0000A548-0000A590       .text __dt__12JntHit_HIO_cFv */
-JntHit_HIO_c::~JntHit_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -131,35 +131,3 @@ void daGM_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 0000842C-000087B4       .text __ct__8gm_classFv */
-gm_class::gm_class() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* 00009068-000091E4       .text __dt__21dBgS_CamLinChk_NorWtrFv */
-dBgS_CamLinChk_NorWtr::~dBgS_CamLinChk_NorWtr() {
-    /* Nonmatching */
-}
-
-/* 000091E4-00009338       .text __dt__14dBgS_CamLinChkFv */
-dBgS_CamLinChk::~dBgS_CamLinChk() {
-    /* Nonmatching */
-}
-

@@ -16,11 +16,6 @@ daNpc_P2_HIO_c::daNpc_P2_HIO_c() {
     /* Nonmatching */
 }
 
-/* 000003E8-00000448       .text __dt__19daNpc_P2_childHIO_cFv */
-daNpc_P2_childHIO_c::~daNpc_P2_childHIO_c() {
-    /* Nonmatching */
-}
-
 /* 00000490-0000068C       .text nodeCallBack__FP7J3DNodei */
 void nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
@@ -330,15 +325,6 @@ void daNpc_P2Draw(void*) {
 void daNpc_P2IsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 000050BC-00005140       .text __dt__14daNpc_P2_HIO_cFv */
-daNpc_P2_HIO_c::~daNpc_P2_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
 
 /* 00005238-00005528       .text cutProc__10daNpc_P2_cFv */
 void daNpc_P2_c::cutProc() {

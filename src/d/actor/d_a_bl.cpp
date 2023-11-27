@@ -156,19 +156,3 @@ void daBL_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00005D88-00006020       .text __ct__8bl_classFv */
-bl_class::bl_class() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-

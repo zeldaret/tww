@@ -3,7 +3,6 @@
 // Translation Unit: d_a_itembase_static.cpp
 //
 
-#include "d/actor/d_a_itembase_static.h"
 #include "d/actor/d_a_itembase.h"
 #include "d/d_item_data.h"
 #include "SSystem/SComponent/c_lib.h"

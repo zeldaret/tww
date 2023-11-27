@@ -71,13 +71,3 @@ void daMajuu_Flag_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00001B94-00001BF0       .text __dt__18daMajuu_Flag_HIO_cFv */
-daMajuu_Flag_HIO_c::~daMajuu_Flag_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 00001C38-00001D04       .text __dt__21daMajuu_Flag_packet_cFv */
-daMajuu_Flag_packet_c::~daMajuu_Flag_packet_c() {
-    /* Nonmatching */
-}
-

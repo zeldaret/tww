@@ -75,8 +75,3 @@ void daSwProp_Execute(void*) {
 void daSwProp_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-
-

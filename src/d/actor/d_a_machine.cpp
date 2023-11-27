@@ -56,11 +56,6 @@ s32 daMachine_c::_create() {
     /* Nonmatching */
 }
 
-/* 00000898-00000AA0       .text __ct__11daMachine_cFv */
-daMachine_c::daMachine_c() {
-    /* Nonmatching */
-}
-
 /* 00000F74-0000100C       .text set_mtx__11daMachine_cFv */
 void daMachine_c::set_mtx() {
     /* Nonmatching */
@@ -120,10 +115,3 @@ void daMachine_Execute(void*) {
 void daMachine_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-
-
-
-

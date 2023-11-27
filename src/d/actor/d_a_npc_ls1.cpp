@@ -481,11 +481,6 @@ s32 daNpc_Ls1_c::_create() {
     /* Nonmatching */
 }
 
-/* 000047D4-0000496C       .text __ct__11daNpc_Ls1_cFv */
-daNpc_Ls1_c::daNpc_Ls1_c() {
-    /* Nonmatching */
-}
-
 /* 00004C98-00005250       .text bodyCreateHeap__11daNpc_Ls1_cFv */
 void daNpc_Ls1_c::bodyCreateHeap() {
     /* Nonmatching */
@@ -528,25 +523,6 @@ void daNpc_Ls1_Draw(daNpc_Ls1_c*) {
 
 /* 0000563C-00005644       .text daNpc_Ls1_IsDelete__FP11daNpc_Ls1_c */
 void daNpc_Ls1_IsDelete(daNpc_Ls1_c*) {
-    /* Nonmatching */
-}
-
-/* 00005730-0000578C       .text __dt__15daNpc_Ls1_HIO_cFv */
-daNpc_Ls1_HIO_c::~daNpc_Ls1_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 000057A8-00005824       .text cLib_getRndValue<i>__Fii */
-void cLib_getRndValue<int>(int, int) {
-    /* Nonmatching */
-}
-
-
-
-
-
-/* 00005894-000058F0       .text __dt__18daNpc_Ls1_matAnm_cFv */
-daNpc_Ls1_matAnm_c::~daNpc_Ls1_matAnm_c() {
     /* Nonmatching */
 }
 

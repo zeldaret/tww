@@ -21,11 +21,6 @@ s32 daObjZouk::Act_c::_create() {
     /* Nonmatching */
 }
 
-/* 00000724-000009C0       .text __ct__Q29daObjZouk5Act_cFv */
-daObjZouk::Act_c::Act_c() {
-    /* Nonmatching */
-}
-
 /* 00001094-00001164       .text _delete__Q29daObjZouk5Act_cFv */
 BOOL daObjZouk::Act_c::_delete() {
     /* Nonmatching */
@@ -65,24 +60,3 @@ BOOL daObjZouk::Act_c::_draw() {
 void daObjZouk::Act_c::setEffectMtx(const cXyz*, float) {
     /* Nonmatching */
 }
-
-
-
-
-
-
-/* 00001A14-00001E18       .text __dt__Q29daObjZouk5Act_cFv */
-daObjZouk::Act_c::~Act_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-

@@ -141,16 +141,6 @@ s32 daBoomerang_c::create() {
     /* Nonmatching */
 }
 
-/* 800E2EF0-800E329C       .text __ct__13daBoomerang_cFv */
-daBoomerang_c::daBoomerang_c() {
-    /* Nonmatching */
-}
-
-/* 800E329C-800E33F0       .text __dt__20dBgS_BoomerangLinChkFv */
-dBgS_BoomerangLinChk::~dBgS_BoomerangLinChk() {
-    /* Nonmatching */
-}
-
 /* 800E33F0-800E3410       .text daBoomerang_Create__FP10fopAc_ac_c */
 void daBoomerang_Create(fopAc_ac_c*) {
     /* Nonmatching */

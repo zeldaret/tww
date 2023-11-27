@@ -211,28 +211,3 @@ void daBst_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 0000B860-0000BB84       .text __ct__9bst_classFv */
-bst_class::bst_class() {
-    /* Nonmatching */
-}
-
-/* 0000C42C-0000C474       .text __dt__11daBst_HIO_cFv */
-daBst_HIO_c::~daBst_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -150,9 +150,3 @@ void daObjTide::Act_c::Execute(float(**)[3][4]) {
 BOOL daObjTide::Act_c::Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

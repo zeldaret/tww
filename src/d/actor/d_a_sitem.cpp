@@ -86,22 +86,3 @@ void daSitem_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00002F48-00002F84       .text __dt__7sitem_sFv */
-sitem_s::~sitem_s() {
-    /* Nonmatching */
-}
-
-/* 00002F84-00002F88       .text __ct__7sitem_sFv */
-sitem_s::sitem_s() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-

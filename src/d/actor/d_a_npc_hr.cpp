@@ -456,21 +456,6 @@ s32 daNpc_Hr_c::_create() {
     /* Nonmatching */
 }
 
-/* 000052C4-00005480       .text __ct__10daNpc_Hr_cFv */
-daNpc_Hr_c::daNpc_Hr_c() {
-    /* Nonmatching */
-}
-
-/* 00005484-000054F4       .text __dt__14daNpc_Wind_EffFv */
-daNpc_Wind_Eff::~daNpc_Wind_Eff() {
-    /* Nonmatching */
-}
-
-/* 000054F4-0000552C       .text __ct__14daNpc_Wind_EffFv */
-daNpc_Wind_Eff::daNpc_Wind_Eff() {
-    /* Nonmatching */
-}
-
 /* 000057E4-00005CE8       .text CreateHeap__10daNpc_Hr_cFv */
 void daNpc_Hr_c::CreateHeap() {
     /* Nonmatching */
@@ -500,9 +485,6 @@ void daNpc_Hr_Draw(daNpc_Hr_c*) {
 void daNpc_Hr_IsDelete(daNpc_Hr_c*) {
     /* Nonmatching */
 }
-
-
-
 /* 00005F84-00005FA0       .text setEyePos__10daNpc_Hr_cF4cXyz */
 void daNpc_Hr_c::setEyePos(cXyz) {
     /* Nonmatching */

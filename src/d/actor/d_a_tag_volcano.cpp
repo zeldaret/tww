@@ -30,9 +30,3 @@ BOOL daTagvolcano::Act_c::_execute() {
 BOOL daTagvolcano::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

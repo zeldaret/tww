@@ -151,11 +151,6 @@ s32 daObj_Search::Act_c::_create() {
     /* Nonmatching */
 }
 
-/* 80100B08-80100D60       .text __ct__Q212daObj_Search5Act_cFv */
-daObj_Search::Act_c::Act_c() {
-    /* Nonmatching */
-}
-
 /* 80100F9C-801010C4       .text smoke_set__Q212daObj_Search5Act_cFfi */
 void daObj_Search::Act_c::smoke_set(float, int) {
     /* Nonmatching */
@@ -260,7 +255,3 @@ void daObj_Search::Mthd::Draw(void*) {
 void daObj_Search::Mthd::IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-

@@ -96,11 +96,6 @@ void daWfall_c::getWaterHeight() {
     /* Nonmatching */
 }
 
-/* 0000124C-00001370       .text __dt__11dBgS_WtrChkFv */
-dBgS_WtrChk::~dBgS_WtrChk() {
-    /* Nonmatching */
-}
-
 /* 00001370-000013E0       .text set_se__9daWfall_cFv */
 void daWfall_c::set_se() {
     /* Nonmatching */
@@ -130,16 +125,4 @@ void daWfall_Execute(void*) {
 void daWfall_IsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 000017AC-000018A8       .text __dt__14dBgS_SplGrpChkFv */
-dBgS_SplGrpChk::~dBgS_SplGrpChk() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
 

@@ -31,11 +31,6 @@ s32 daDai_c::_create() {
     /* Nonmatching */
 }
 
-/* 00000494-0000064C       .text __ct__7daDai_cFv */
-daDai_c::daDai_c() {
-    /* Nonmatching */
-}
-
 /* 00000874-000008F4       .text set_mtx__7daDai_cFv */
 void daDai_c::set_mtx() {
     /* Nonmatching */
@@ -120,8 +115,3 @@ void daDai_Execute(void*) {
 void daDai_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-
-

@@ -60,6 +60,3 @@ void daObjGtaki_Execute(void*) {
 void daObjGtaki_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

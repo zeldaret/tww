@@ -21,11 +21,6 @@ void daObjEskban::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
-/* 000004D0-00000698       .text __ct__Q211daObjEskban5Act_cFv */
-daObjEskban::Act_c::Act_c() {
-    /* Nonmatching */
-}
-
 /* 000009C0-00000A10       .text Delete__Q211daObjEskban5Act_cFv */
 BOOL daObjEskban::Act_c::Delete() {
     /* Nonmatching */
@@ -70,13 +65,3 @@ void daObjEskban::Act_c::Execute(float(**)[3][4]) {
 BOOL daObjEskban::Act_c::Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-
-
-

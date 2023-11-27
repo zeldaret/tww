@@ -156,39 +156,3 @@ void daBwd_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00009C7C-00009F30       .text __ct__9bwd_classFv */
-bwd_class::bwd_class() {
-    /* Nonmatching */
-}
-
-/* 0000A2FC-0000A338       .text __dt__6sita_sFv */
-sita_s::~sita_s() {
-    /* Nonmatching */
-}
-
-/* 0000A338-0000A33C       .text __ct__6sita_sFv */
-sita_s::sita_s() {
-    /* Nonmatching */
-}
-
-/* 0000A5E4-0000A62C       .text __dt__11daBwd_HIO_cFv */
-daBwd_HIO_c::~daBwd_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 0000A850-0000A888       .text __arraydtor$4195 */
-void __arraydtor$4195 {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-

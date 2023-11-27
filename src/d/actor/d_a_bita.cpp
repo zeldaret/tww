@@ -55,6 +55,3 @@ void useHeapInit(fopAc_ac_c*) {
 void daBita_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-

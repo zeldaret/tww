@@ -55,8 +55,3 @@ void daTama_Draw(daTama_c*) {
 void daTama_IsDelete(daTama_c*) {
     /* Nonmatching */
 }
-
-
-
-
-

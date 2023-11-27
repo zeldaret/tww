@@ -55,6 +55,3 @@ void daObjRflw_Execute(void*) {
 void daObjRflw_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

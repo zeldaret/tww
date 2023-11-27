@@ -240,8 +240,3 @@ void daNpc_AhDraw(void*) {
 void daNpc_AhIsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-
-

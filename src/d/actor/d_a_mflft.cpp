@@ -41,11 +41,6 @@ void mflft_move(mflft_class*) {
     /* Nonmatching */
 }
 
-/* 00001718-00001880       .text __dt__20dBgS_ObjGndChk_YoganFv */
-dBgS_ObjGndChk_Yogan::~dBgS_ObjGndChk_Yogan() {
-    /* Nonmatching */
-}
-
 /* 000019C0-00001E5C       .text himo_move__FP11mflft_class */
 void himo_move(mflft_class*) {
     /* Nonmatching */
@@ -80,17 +75,3 @@ void CallbackCreateHeap(fopAc_ac_c*) {
 void daMflft_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

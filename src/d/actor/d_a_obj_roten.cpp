@@ -61,8 +61,3 @@ void daObj_RotenIsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 00000638-00000680       .text __dt__17daObj_Roten_HIO_cFv */
-daObj_Roten_HIO_c::~daObj_Roten_HIO_c() {
-    /* Nonmatching */
-}
-

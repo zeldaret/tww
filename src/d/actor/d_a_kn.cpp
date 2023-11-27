@@ -60,6 +60,3 @@ void useHeapInit(fopAc_ac_c*) {
 void daKN_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-

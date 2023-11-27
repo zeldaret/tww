@@ -261,16 +261,6 @@ s32 daNpc_Rsh1_c::_create() {
     /* Nonmatching */
 }
 
-/* 00004464-0000465C       .text __ct__12daNpc_Rsh1_cFv */
-daNpc_Rsh1_c::daNpc_Rsh1_c() {
-    /* Nonmatching */
-}
-
-/* 0000465C-00004698       .text __dt__11ShopItems_cFv */
-ShopItems_c::~ShopItems_c() {
-    /* Nonmatching */
-}
-
 /* 00004698-000049A0       .text CreateHeap__12daNpc_Rsh1_cFv */
 void daNpc_Rsh1_c::CreateHeap() {
     /* Nonmatching */
@@ -306,15 +296,6 @@ void daNpc_Rsh1_IsDelete(daNpc_Rsh1_c*) {
     /* Nonmatching */
 }
 
-/* 00004CD0-00004D30       .text __dt__16daNpc_Rsh1_HIO_cFv */
-daNpc_Rsh1_HIO_c::~daNpc_Rsh1_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
 /* 00004FE0-00004FFC       .text setEyePos__12daNpc_Rsh1_cF4cXyz */
 void daNpc_Rsh1_c::setEyePos(cXyz) {
     /* Nonmatching */
@@ -327,11 +308,6 @@ void daNpc_Rsh1_c::setAttentionBasePos(cXyz) {
 
 /* 00005018-000050F8       .text getItemZoomPos__16ShopCam_action_cFf */
 void ShopCam_action_c::getItemZoomPos(float) {
-    /* Nonmatching */
-}
-
-/* 000050F8-00005144       .text __ct__11ShopItems_cFv */
-ShopItems_c::ShopItems_c() {
     /* Nonmatching */
 }
 

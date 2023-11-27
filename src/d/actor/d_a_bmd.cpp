@@ -151,19 +151,3 @@ void daBmd_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00006908-00006AF4       .text __ct__9bmd_classFv */
-bmd_class::bmd_class() {
-    /* Nonmatching */
-}
-
-/* 000073FC-00007444       .text __dt__11daBmd_HIO_cFv */
-daBmd_HIO_c::~daBmd_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-

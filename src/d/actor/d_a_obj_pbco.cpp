@@ -56,8 +56,3 @@ void daObj_PbcoIsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 00000544-0000058C       .text __dt__16daObj_Pbco_HIO_cFv */
-daObj_Pbco_HIO_c::~daObj_Pbco_HIO_c() {
-    /* Nonmatching */
-}
-

@@ -16,16 +16,6 @@ void daSalvage_c::CreateHeap() {
     /* Nonmatching */
 }
 
-/* 000003E4-00000420       .text __dt__15dSalvage_info_cFv */
-dSalvage_info_c::~dSalvage_info_c() {
-    /* Nonmatching */
-}
-
-/* 00000420-00000424       .text __ct__15dSalvage_info_cFv */
-dSalvage_info_c::dSalvage_info_c() {
-    /* Nonmatching */
-}
-
 /* 00000424-00000570       .text CreateInit__11daSalvage_cFv */
 void daSalvage_c::CreateInit() {
     /* Nonmatching */
@@ -176,11 +166,6 @@ void daSalvageIsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 000024A4-000024EC       .text __dt__8cM3dGPlaFv */
-cM3dGPla::~cM3dGPla() {
-    /* Nonmatching */
-}
-
 /* 000025A4-000025EC       .text setPos__11daSalvage_cFi4cXyz */
 void daSalvage_c::setPos(int, cXyz) {
     /* Nonmatching */
@@ -193,11 +178,6 @@ void daSalvage_c::getPos(int) {
 
 /* 00002620-00002654       .text getScale__11daSalvage_cFi */
 void daSalvage_c::getScale(int) {
-    /* Nonmatching */
-}
-
-/* 00002654-000026B0       .text __dt__8cM3dGTriFv */
-cM3dGTri::~cM3dGTri() {
     /* Nonmatching */
 }
 

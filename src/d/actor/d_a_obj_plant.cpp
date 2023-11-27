@@ -55,6 +55,3 @@ void daObjPlant_Execute(void*) {
 void daObjPlant_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

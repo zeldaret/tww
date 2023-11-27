@@ -105,9 +105,3 @@ void daObjShelf::Act_c::Execute(float(**)[3][4]) {
 BOOL daObjShelf::Act_c::Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

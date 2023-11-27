@@ -121,25 +121,3 @@ void daBmdhand_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 000036B4-000036F0       .text __dt__6hand_sFv */
-hand_s::~hand_s() {
-    /* Nonmatching */
-}
-
-/* 000036F0-000036F4       .text __ct__6hand_sFv */
-hand_s::hand_s() {
-    /* Nonmatching */
-}
-
-/* 000037E0-00003828       .text __dt__15daBmdhand_HIO_cFv */
-daBmdhand_HIO_c::~daBmdhand_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-

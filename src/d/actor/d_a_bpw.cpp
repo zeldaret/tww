@@ -286,17 +286,3 @@ void daBPW_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 0000DB08-0000DDF8       .text __ct__9bpw_classFv */
-bpw_class::bpw_class() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-

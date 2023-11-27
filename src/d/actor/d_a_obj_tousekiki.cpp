@@ -45,6 +45,3 @@ void daObj_TousekikiDraw(void*) {
 void daObj_TousekikiIsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

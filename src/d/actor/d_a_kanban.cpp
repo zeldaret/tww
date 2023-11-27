@@ -106,12 +106,3 @@ void daKanban_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00002E24-00002E80       .text __dt__14daKanban_HIO_cFv */
-daKanban_HIO_c::~daKanban_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-

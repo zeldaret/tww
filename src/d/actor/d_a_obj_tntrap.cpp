@@ -61,16 +61,6 @@ s32 daObjTnTrap_c::_create() {
     /* Nonmatching */
 }
 
-/* 00000DE8-00000E44       .text __dt__8cM3dGTriFv */
-cM3dGTri::~cM3dGTri() {
-    /* Nonmatching */
-}
-
-/* 00000E44-00000E8C       .text __dt__8cM3dGPlaFv */
-cM3dGPla::~cM3dGPla() {
-    /* Nonmatching */
-}
-
 /* 00000F8C-00001050       .text _delete__13daObjTnTrap_cFv */
 BOOL daObjTnTrap_c::_delete() {
     /* Nonmatching */
@@ -180,6 +170,3 @@ void daObjTnTrap_Draw(daObjTnTrap_c*) {
 void daObjTnTrap_IsDelete(daObjTnTrap_c*) {
     /* Nonmatching */
 }
-
-
-

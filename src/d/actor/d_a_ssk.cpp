@@ -55,8 +55,3 @@ void useHeapInit(fopAc_ac_c*) {
 void daSsk_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-
-
-

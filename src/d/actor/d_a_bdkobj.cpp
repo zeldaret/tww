@@ -31,11 +31,6 @@ void kaidan_hahen_move(bdkobj_class*, bdo_eff_s*) {
     /* Nonmatching */
 }
 
-/* 00001640-000017A8       .text __dt__18dBgS_ObjGndChk_SplFv */
-dBgS_ObjGndChk_Spl::~dBgS_ObjGndChk_Spl() {
-    /* Nonmatching */
-}
-
 /* 000018E8-00001970       .text hahen_move__FP12bdkobj_class */
 void hahen_move(bdkobj_class*) {
     /* Nonmatching */
@@ -70,33 +65,4 @@ void useHeapInit(fopAc_ac_c*) {
 void daBdkobj_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 000029CC-00002AF8       .text __dt__9bdo_eff_sFv */
-bdo_eff_s::~bdo_eff_s() {
-    /* Nonmatching */
-}
-
-/* 00002AF8-00002BB4       .text __ct__9bdo_eff_sFv */
-bdo_eff_s::bdo_eff_s() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

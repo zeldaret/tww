@@ -51,17 +51,7 @@ void daSteamTag_Delete(daSteamTag_c*) {
     /* Nonmatching */
 }
 
-/* 0000072C-00000930       .text __dt__12daSteamTag_cFv */
-daSteamTag_c::~daSteamTag_c() {
-    /* Nonmatching */
-}
-
 /* 00000930-00000AD0       .text daSteamTag_Create__FP10fopAc_ac_c */
 void daSteamTag_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-
-
-

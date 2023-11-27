@@ -45,14 +45,3 @@ BOOL daObjGaship::Act_c::_execute() {
 BOOL daObjGaship::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-/* 00000700-00000760       .text __dt__Q211daObjGaship5Act_cFv */
-daObjGaship::Act_c::~Act_c() {
-    /* Nonmatching */
-}
-

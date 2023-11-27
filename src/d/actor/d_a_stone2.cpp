@@ -240,18 +240,3 @@ void daStone2::Act_c::draw_shadow() {
 BOOL daStone2::Act_c::Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-/* 00002B08-00002D80       .text __dt__Q28daStone25Act_cFv */
-daStone2::Act_c::~Act_c() {
-    /* Nonmatching */
-}
-
-
-
-
-

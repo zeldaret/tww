@@ -75,6 +75,3 @@ void daAleaf_Execute(void*) {
 void daAleaf_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

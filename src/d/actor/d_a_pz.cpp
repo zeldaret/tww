@@ -366,11 +366,6 @@ s32 daPz_c::_create() {
     /* Nonmatching */
 }
 
-/* 00006CB0-000071F4       .text __ct__6daPz_cFv */
-daPz_c::daPz_c() {
-    /* Nonmatching */
-}
-
 /* 00007DA0-00007E20       .text _delete__6daPz_cFv */
 BOOL daPz_c::_delete() {
     /* Nonmatching */
@@ -398,30 +393,6 @@ void daPzDraw(void*) {
 
 /* 00007EAC-00007EB4       .text daPzIsDelete__FPv */
 void daPzIsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 00008154-000081C8       .text __dt__10daPz_HIO_cFv */
-daPz_HIO_c::~daPz_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* 00008350-000083AC       .text __dt__13daPz_matAnm_cFv */
-daPz_matAnm_c::~daPz_matAnm_c() {
     /* Nonmatching */
 }
 

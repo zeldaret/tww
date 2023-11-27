@@ -181,17 +181,3 @@ void daKb_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00007798-00007ADC       .text __ct__8kb_classFv */
-kb_class::kb_class() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-

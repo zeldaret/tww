@@ -106,10 +106,3 @@ void daBmdfoot_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 000033F8-00003440       .text __dt__15daBmdfoot_HIO_cFv */
-daBmdfoot_HIO_c::~daBmdfoot_HIO_c() {
-    /* Nonmatching */
-}
-
-
-

@@ -55,9 +55,3 @@ void daObjSmplbg::Act_c::Execute(float(**)[3][4]) {
 BOOL daObjSmplbg::Act_c::Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

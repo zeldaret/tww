@@ -60,9 +60,3 @@ BOOL daMmusic::Act_c::_execute() {
 BOOL daMmusic::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

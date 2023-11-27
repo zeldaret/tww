@@ -111,16 +111,6 @@ himo2HIO_c::~himo2HIO_c() {
     /* Nonmatching */
 }
 
-/* 800F0C14-800F0C50       .text __dt__7himo2_sFv */
-himo2_s::~himo2_s() {
-    /* Nonmatching */
-}
-
-/* 800F0C50-800F0C54       .text __ct__7himo2_sFv */
-himo2_s::himo2_s() {
-    /* Nonmatching */
-}
-
 /* 800F0C54-800F0C70       .text show__8daYkgr_cFv */
 void daYkgr_c::show() {
     /* Nonmatching */

@@ -20,9 +20,3 @@ void daObjMsdan2::Act_c::Mthd_Execute() {
 void daObjMsdan2::Act_c::Mthd_Delete() {
     /* Nonmatching */
 }
-
-
-
-
-
-

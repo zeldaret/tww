@@ -561,34 +561,6 @@ void daNpc_Cb1_IsDelete(daNpc_Cb1_c*) {
     /* Nonmatching */
 }
 
-/* 00009610-00009670       .text __dt__15daNpc_Cb1_HIO_cFv */
-daNpc_Cb1_HIO_c::~daNpc_Cb1_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 000096A8-0000972C       .text cLib_getRndValue<s>__Fss */
-void cLib_getRndValue<short>(short, short) {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* 00009AFC-00009CFC       .text __ct__11daNpc_Cb1_cFv */
-daNpc_Cb1_c::daNpc_Cb1_c() {
-    /* Nonmatching */
-}
-
 /* 0000A130-0000A138       .text getGroundY__11daNpc_Cb1_cFv */
 void daNpc_Cb1_c::getGroundY() {
     /* Nonmatching */

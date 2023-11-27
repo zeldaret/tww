@@ -71,8 +71,3 @@ void daObjQuakeIsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 00000780-000007C8       .text __dt__16daObjQuake_HIO_cFv */
-daObjQuake_HIO_c::~daObjQuake_HIO_c() {
-    /* Nonmatching */
-}
-

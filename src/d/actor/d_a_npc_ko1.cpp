@@ -16,11 +16,6 @@ daNpc_Ko1_HIO_c::daNpc_Ko1_HIO_c() {
     /* Nonmatching */
 }
 
-/* 0000020C-00000268       .text __dt__20daNpc_Ko1_childHIO_cFv */
-daNpc_Ko1_childHIO_c::~daNpc_Ko1_childHIO_c() {
-    /* Nonmatching */
-}
-
 /* 00000268-000002E0       .text searchActor_Ko_Hna__FPvPv */
 void searchActor_Ko_Hna(void*, void*) {
     /* Nonmatching */
@@ -656,11 +651,6 @@ s32 daNpc_Ko1_c::_create() {
     /* Nonmatching */
 }
 
-/* 00007730-000078BC       .text __ct__11daNpc_Ko1_cFv */
-daNpc_Ko1_c::daNpc_Ko1_c() {
-    /* Nonmatching */
-}
-
 /* 00007C2C-00007E9C       .text create_Anm__11daNpc_Ko1_cFv */
 void daNpc_Ko1_c::create_Anm() {
     /* Nonmatching */
@@ -710,27 +700,4 @@ void daNpc_Ko1_Draw(daNpc_Ko1_c*) {
 void daNpc_Ko1_IsDelete(daNpc_Ko1_c*) {
     /* Nonmatching */
 }
-
-/* 00008788-0000880C       .text __dt__15daNpc_Ko1_HIO_cFv */
-daNpc_Ko1_HIO_c::~daNpc_Ko1_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 00008828-000088A4       .text cLib_getRndValue<i>__Fii */
-void cLib_getRndValue<int>(int, int) {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 

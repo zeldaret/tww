@@ -181,8 +181,3 @@ void daTag_MdCb_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 000019B0-000019F8       .text __dt__16daTag_MdCb_HIO_cFv */
-daTag_MdCb_HIO_c::~daTag_MdCb_HIO_c() {
-    /* Nonmatching */
-}
-

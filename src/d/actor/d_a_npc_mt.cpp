@@ -270,8 +270,3 @@ void daNpc_MtDraw(void*) {
 void daNpc_MtIsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-
-

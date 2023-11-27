@@ -296,11 +296,6 @@ s32 daNpc_Tc_c::_create() {
     /* Nonmatching */
 }
 
-/* 00004090-00004220       .text __ct__10daNpc_Tc_cFv */
-daNpc_Tc_c::daNpc_Tc_c() {
-    /* Nonmatching */
-}
-
 /* 000045D0-000047DC       .text _createHeap__10daNpc_Tc_cFv */
 void daNpc_Tc_c::_createHeap() {
     /* Nonmatching */
@@ -328,11 +323,6 @@ void daNpc_Tc_Draw(daNpc_Tc_c*) {
 
 /* 0000485C-00004864       .text daNpc_Tc_IsDelete__FP10daNpc_Tc_c */
 void daNpc_Tc_IsDelete(daNpc_Tc_c*) {
-    /* Nonmatching */
-}
-
-/* 00004B38-00004BAC       .text __dt__14daNpc_Tc_HIO_cFv */
-daNpc_Tc_HIO_c::~daNpc_Tc_HIO_c() {
     /* Nonmatching */
 }
 
@@ -505,8 +495,3 @@ void daNpc_Tc_c::cutPayStart(int) {
 void daNpc_Tc_c::cutPayProc(int) {
     /* Nonmatching */
 }
-
-
-
-
-

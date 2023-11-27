@@ -16,11 +16,6 @@ daNpc_Yw1_HIO_c::daNpc_Yw1_HIO_c() {
     /* Nonmatching */
 }
 
-/* 000001DC-00000238       .text __dt__20daNpc_Yw1_childHIO_cFv */
-daNpc_Yw1_childHIO_c::~daNpc_Yw1_childHIO_c() {
-    /* Nonmatching */
-}
-
 /* 00000238-00000284       .text nodeCB_Hair__FP7J3DNodei */
 void nodeCB_Hair(J3DNode*, int) {
     /* Nonmatching */
@@ -420,18 +415,4 @@ void daNpc_Yw1_Draw(daNpc_Yw1_c*) {
 void daNpc_Yw1_IsDelete(daNpc_Yw1_c*) {
     /* Nonmatching */
 }
-
-/* 00004B44-00004BC8       .text __dt__15daNpc_Yw1_HIO_cFv */
-daNpc_Yw1_HIO_c::~daNpc_Yw1_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 00004BE4-00004C60       .text cLib_getRndValue<i>__Fii */
-void cLib_getRndValue<int>(int, int) {
-    /* Nonmatching */
-}
-
-
-
-
 

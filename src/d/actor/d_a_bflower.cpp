@@ -31,11 +31,6 @@ s32 daBFlower_c::_create() {
     /* Nonmatching */
 }
 
-/* 000008AC-00000A30       .text __ct__11daBFlower_cFv */
-daBFlower_c::daBFlower_c() {
-    /* Nonmatching */
-}
-
 /* 00000E94-00000F4C       .text set_mtx__11daBFlower_cFv */
 void daBFlower_c::set_mtx() {
     /* Nonmatching */
@@ -95,8 +90,3 @@ void daBFlower_Execute(void*) {
 void daBFlower_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-
-

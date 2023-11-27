@@ -16,11 +16,6 @@ daNpc_Ym1_HIO_c::daNpc_Ym1_HIO_c() {
     /* Nonmatching */
 }
 
-/* 0000020C-00000268       .text __dt__20daNpc_Ym1_childHIO_cFv */
-daNpc_Ym1_childHIO_c::~daNpc_Ym1_childHIO_c() {
-    /* Nonmatching */
-}
-
 /* 00000268-00000290       .text area_check__FP10fopAc_ac_cP4cXyzUl */
 void area_check(fopAc_ac_c*, cXyz*, unsigned long) {
     /* Nonmatching */
@@ -396,11 +391,6 @@ s32 daNpc_Ym1_c::_create() {
     /* Nonmatching */
 }
 
-/* 00003BDC-00003D90       .text __ct__11daNpc_Ym1_cFv */
-daNpc_Ym1_c::daNpc_Ym1_c() {
-    /* Nonmatching */
-}
-
 /* 0000405C-00004360       .text bodyCreateHeap__11daNpc_Ym1_cFv */
 void daNpc_Ym1_c::bodyCreateHeap() {
     /* Nonmatching */
@@ -445,18 +435,4 @@ void daNpc_Ym1_Draw(daNpc_Ym1_c*) {
 void daNpc_Ym1_IsDelete(daNpc_Ym1_c*) {
     /* Nonmatching */
 }
-
-/* 0000476C-000047F0       .text __dt__15daNpc_Ym1_HIO_cFv */
-daNpc_Ym1_HIO_c::~daNpc_Ym1_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 0000480C-00004888       .text cLib_getRndValue<i>__Fii */
-void cLib_getRndValue<int>(int, int) {
-    /* Nonmatching */
-}
-
-
-
-
 

@@ -45,8 +45,3 @@ void useHeapInit(fopAc_ac_c*) {
 void daFgmahou_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-
-
-

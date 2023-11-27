@@ -456,39 +456,13 @@ s32 daShip_c::create() {
     /* Nonmatching */
 }
 
-/* 0000C790-0000CA80       .text __ct__8daShip_cFv */
-daShip_c::daShip_c() {
-    /* Nonmatching */
-}
-
-/* 0000CA80-0000CA84       .text __ct__Q29JGeometry8TVec3<f>Fv */
-JGeometry::TVec3<float>::TVec3() {
-    /* Nonmatching */
-}
-
 /* 0000D018-0000D038       .text daShip_Create__FP10fopAc_ac_c */
 void daShip_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 0000D390-0000D3CC       .text __dt__13daShip_HIO_c0Fv */
-daShip_HIO_c0::~daShip_HIO_c0() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
 /* 0000D3FC-0000D41C       .text checkNoControll__9daPy_lk_cCFv */
 void daPy_lk_c::checkNoControll() const {
-    /* Nonmatching */
-}
-
-/* 0000D41C-0000D42C       .text daPy_getPlayerLinkActorClass__Fv */
-void daPy_getPlayerLinkActorClass() {
     /* Nonmatching */
 }
 
@@ -507,11 +481,6 @@ void daGrid_c::force_calc_wind_rel_angle(short) {
     /* Nonmatching */
 }
 
-/* 0000D5FC-0000D61C       .text cMtx_multVecSR__FPA4_CfPC3VecP3Vec */
-void cMtx_multVecSR(const float(*)[4], const Vec*, Vec*) {
-    /* Nonmatching */
-}
-
 /* 0000D61C-0000D638       .text __as__5csXyzFRC5csXyz */
 void csXyz::operator=(const csXyz&) {
     /* Nonmatching */
@@ -524,36 +493,6 @@ void csXyz::set(short, short, short) {
 
 /* 0000D6A8-0000D6C0       .text getCannonAngleX__8daShip_cCFv */
 void daShip_c::getCannonAngleX() const {
-    /* Nonmatching */
-}
-
-/* 0000D6C0-0000D6E0       .text cMtx_multVec__FPA4_CfPC3VecP3Vec */
-void cMtx_multVec(const float(*)[4], const Vec*, Vec*) {
-    /* Nonmatching */
-}
-
-/* 0000D6E0-0000D6FC       .text mDoMtx_multVecZero__FPA4_CfP3Vec */
-void mDoMtx_multVecZero(const float(*)[4], Vec*) {
-    /* Nonmatching */
-}
-
-/* 0000D7A8-0000D7CC       .text cM_scos__Fs */
-void cM_scos(short) {
-    /* Nonmatching */
-}
-
-/* 0000D7CC-0000D7F0       .text cM_ssin__Fs */
-void cM_ssin(short) {
-    /* Nonmatching */
-}
-
-/* 0000D8BC-0000D8FC       .text cM_fcos__Ff */
-void cM_fcos(float) {
-    /* Nonmatching */
-}
-
-/* 0000D8FC-0000D93C       .text cM_fsin__Ff */
-void cM_fsin(float) {
     /* Nonmatching */
 }
 

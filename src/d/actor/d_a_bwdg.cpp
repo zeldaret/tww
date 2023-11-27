@@ -56,8 +56,3 @@ void daBwdg_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00000B88-00000C28       .text __dt__15daBwdg_packet_cFv */
-daBwdg_packet_c::~daBwdg_packet_c() {
-    /* Nonmatching */
-}
-

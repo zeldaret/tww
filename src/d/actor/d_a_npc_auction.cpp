@@ -216,12 +216,3 @@ void daNpc_AuctionIsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 00002EC0-00002F1C       .text __dt__20daNpc_Auction2_HIO_cFv */
-daNpc_Auction2_HIO_c::~daNpc_Auction2_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-

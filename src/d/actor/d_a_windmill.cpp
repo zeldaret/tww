@@ -95,10 +95,3 @@ void daWindMill_Execute(void*) {
 void daWindMill_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-
-
-
-

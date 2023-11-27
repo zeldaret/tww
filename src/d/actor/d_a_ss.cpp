@@ -81,34 +81,3 @@ void daSs_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00003554-000035D0       .text __dt__4ss_sFv */
-ss_s::~ss_s() {
-    /* Nonmatching */
-}
-
-/* 000035D0-0000360C       .text __dt__6ss_s_sFv */
-ss_s_s::~ss_s_s() {
-    /* Nonmatching */
-}
-
-/* 0000360C-00003678       .text __ct__4ss_sFv */
-ss_s::ss_s() {
-    /* Nonmatching */
-}
-
-/* 00003678-0000367C       .text __ct__6ss_s_sFv */
-ss_s_s::ss_s_s() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-

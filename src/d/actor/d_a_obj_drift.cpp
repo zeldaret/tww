@@ -95,11 +95,3 @@ void daObjDrift::Act_c::Execute(float(**)[3][4]) {
 BOOL daObjDrift::Act_c::Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-

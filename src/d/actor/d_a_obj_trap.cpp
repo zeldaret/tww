@@ -21,11 +21,6 @@ s32 daObjTrap_c::_create() {
     /* Nonmatching */
 }
 
-/* 00000510-000006D4       .text __ct__11daObjTrap_cFv */
-daObjTrap_c::daObjTrap_c() {
-    /* Nonmatching */
-}
-
 /* 00000DF0-00000E84       .text _delete__11daObjTrap_cFv */
 BOOL daObjTrap_c::_delete() {
     /* Nonmatching */
@@ -110,26 +105,3 @@ BOOL daObjTrap_c::_execute() {
 BOOL daObjTrap_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

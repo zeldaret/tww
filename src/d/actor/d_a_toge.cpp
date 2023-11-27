@@ -95,6 +95,3 @@ void daToge_Execute(void*) {
 void daToge_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

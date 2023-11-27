@@ -21,11 +21,6 @@ daNpc_Ds1_HIO_c::daNpc_Ds1_HIO_c() {
     /* Nonmatching */
 }
 
-/* 00000298-000002F8       .text __dt__20daNpc_Ds1_childHIO_cFv */
-daNpc_Ds1_childHIO_c::~daNpc_Ds1_childHIO_c() {
-    /* Nonmatching */
-}
-
 /* 000002F8-00000318       .text daNpc_Ds1_XyEventCB__FPvi */
 void daNpc_Ds1_XyEventCB(void*, int) {
     /* Nonmatching */
@@ -271,11 +266,6 @@ s32 daNpc_Ds1_c::_create() {
     /* Nonmatching */
 }
 
-/* 000047BC-000049FC       .text __ct__11daNpc_Ds1_cFv */
-daNpc_Ds1_c::daNpc_Ds1_c() {
-    /* Nonmatching */
-}
-
 /* 00004E08-000052D4       .text CreateHeap__11daNpc_Ds1_cFv */
 void daNpc_Ds1_c::CreateHeap() {
     /* Nonmatching */
@@ -305,15 +295,6 @@ void daNpc_Ds1_Draw(daNpc_Ds1_c*) {
 void daNpc_Ds1_IsDelete(daNpc_Ds1_c*) {
     /* Nonmatching */
 }
-
-/* 0000557C-000055EC       .text __dt__15daNpc_Ds1_HIO_cFv */
-daNpc_Ds1_HIO_c::~daNpc_Ds1_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
 
 /* 000057B0-000057CC       .text setEyePos__11daNpc_Ds1_cF4cXyz */
 void daNpc_Ds1_c::setEyePos(cXyz) {

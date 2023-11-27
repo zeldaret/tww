@@ -51,11 +51,3 @@ void dBgWSv::MatrixCrrPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*) {
     /* Nonmatching */
 }
 
-/* 00000C7C-00000D20       .text __dt__10dBgWDeformFv */
-dBgWDeform::~dBgWDeform() {
-    /* Nonmatching */
-}
-
-
-
-

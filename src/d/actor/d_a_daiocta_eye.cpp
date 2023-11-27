@@ -136,15 +136,3 @@ void daDaiocta_EyeIsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 00001A30-00001AA4       .text __dt__19daDaiocta_Eye_HIO_cFv */
-daDaiocta_Eye_HIO_c::~daDaiocta_Eye_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-/* 00001AF0-00001B38       .text __dt__12JntHit_HIO_cFv */
-JntHit_HIO_c::~JntHit_HIO_c() {
-    /* Nonmatching */
-}
-

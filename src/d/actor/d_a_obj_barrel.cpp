@@ -225,8 +225,3 @@ void daObjBarrel::Method::Draw(void*) {
 void daObjBarrel::Method::IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-
-

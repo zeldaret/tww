@@ -276,10 +276,3 @@ void daObj_hsh_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 0000228C-000022D4       .text __dt__15daObj_hsh_HIO_cFv */
-daObj_hsh_HIO_c::~daObj_hsh_HIO_c() {
-    /* Nonmatching */
-}
-
-
-

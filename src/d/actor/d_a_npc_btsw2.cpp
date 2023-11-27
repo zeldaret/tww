@@ -151,12 +151,3 @@ void daNpc_Btsw2_IsDelete(daNpc_Btsw2_c*) {
     /* Nonmatching */
 }
 
-/* 00002214-00002274       .text __dt__17daNpc_Btsw2_HIO_cFv */
-daNpc_Btsw2_HIO_c::~daNpc_Btsw2_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-

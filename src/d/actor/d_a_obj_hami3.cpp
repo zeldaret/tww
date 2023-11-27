@@ -85,9 +85,3 @@ void daObjHami3::Act_c::Execute(float(**)[3][4]) {
 BOOL daObjHami3::Act_c::Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

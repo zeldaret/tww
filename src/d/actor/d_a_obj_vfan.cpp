@@ -55,11 +55,3 @@ void daObjVfan::Act_c::Execute(float(**)[3][4]) {
 BOOL daObjVfan::Act_c::Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-

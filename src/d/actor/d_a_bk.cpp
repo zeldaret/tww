@@ -356,33 +356,3 @@ void daBk_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 0000EA2C-0000EEA4       .text __ct__8bk_classFv */
-bk_class::bk_class() {
-    /* Nonmatching */
-}
-
-/* 0000F6A4-0000F6EC       .text __dt__7bkHIO_cFv */
-bkHIO_c::~bkHIO_c() {
-    /* Nonmatching */
-}
-
-/* 0000F6EC-0000F8C8       .text __ct__7bkHIO_cFv */
-bkHIO_c::bkHIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

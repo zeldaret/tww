@@ -141,19 +141,3 @@ void daWZ_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 000071C4-00007494       .text __ct__8wz_classFv */
-wz_class::wz_class() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-

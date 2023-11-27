@@ -146,27 +146,3 @@ void daBgn2_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00003FF4-00004228       .text __ct__10bgn2_classFv */
-bgn2_class::bgn2_class() {
-    /* Nonmatching */
-}
-
-/* 000047F0-00004838       .text __dt__12daBgn2_HIO_cFv */
-daBgn2_HIO_c::~daBgn2_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 00004940-0000497C       .text __dt__12dKy_tevstr_cFv */
-dKy_tevstr_c::~dKy_tevstr_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-

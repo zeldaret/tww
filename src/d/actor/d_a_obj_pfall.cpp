@@ -146,8 +146,3 @@ void daObj_PfallIsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 00001578-000015C8       .text __dt__16daObj_PfallHIO_cFv */
-daObj_PfallHIO_c::~daObj_PfallHIO_c() {
-    /* Nonmatching */
-}
-

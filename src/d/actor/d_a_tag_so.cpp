@@ -66,8 +66,3 @@ void daTag_SoIsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 00000318-00000360       .text __dt__14daTag_So_HIO_cFv */
-daTag_So_HIO_c::~daTag_So_HIO_c() {
-    /* Nonmatching */
-}
-

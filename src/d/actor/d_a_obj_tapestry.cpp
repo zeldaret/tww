@@ -56,11 +56,6 @@ daObjTapestryPacket_c::daObjTapestryPacket_c() {
     /* Nonmatching */
 }
 
-/* 00000C44-00000CC0       .text __dt__22daObjTapestrySmokeCB_cFv */
-daObjTapestrySmokeCB_c::~daObjTapestrySmokeCB_c() {
-    /* Nonmatching */
-}
-
 /* 00000CC0-00000F3C       .text init__21daObjTapestryPacket_cFP15daObjTapestry_c */
 void daObjTapestryPacket_c::init(daObjTapestry_c*) {
     /* Nonmatching */
@@ -276,16 +271,6 @@ s32 daObjTapestry_c::_create() {
     /* Nonmatching */
 }
 
-/* 00005418-00005474       .text __dt__8cM3dGTriFv */
-cM3dGTri::~cM3dGTri() {
-    /* Nonmatching */
-}
-
-/* 00005474-000054BC       .text __dt__8cM3dGPlaFv */
-cM3dGPla::~cM3dGPla() {
-    /* Nonmatching */
-}
-
 /* 00005560-00005628       .text _delete__15daObjTapestry_cFv */
 BOOL daObjTapestry_c::_delete() {
     /* Nonmatching */
@@ -355,44 +340,4 @@ void daObjTapestry_Draw(daObjTapestry_c*) {
 void daObjTapestry_IsDelete(daObjTapestry_c*) {
     /* Nonmatching */
 }
-
-/* 00005F10-00005F58       .text __dt__19daObjTapestry_HIO_cFv */
-daObjTapestry_HIO_c::~daObjTapestry_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 00005F58-00005FD4       .text __dt__22daObjTapestryFireEff_cFv */
-daObjTapestryFireEff_c::~daObjTapestryFireEff_c() {
-    /* Nonmatching */
-}
-
-/* 00005FD4-0000604C       .text __ct__22daObjTapestryFireEff_cFv */
-daObjTapestryFireEff_c::daObjTapestryFireEff_c() {
-    /* Nonmatching */
-}
-
-/* 00006050-000060E4       .text __dt__22daObjTapestryDrawVtx_cFv */
-daObjTapestryDrawVtx_c::~daObjTapestryDrawVtx_c() {
-    /* Nonmatching */
-}
-
-/* 000060E4-0000616C       .text __ct__22daObjTapestryDrawVtx_cFv */
-daObjTapestryDrawVtx_c::daObjTapestryDrawVtx_c() {
-    /* Nonmatching */
-}
-
-/* 0000616C-00006278       .text __dt__21daObjTapestryPacket_cFv */
-daObjTapestryPacket_c::~daObjTapestryPacket_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
 

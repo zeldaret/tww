@@ -291,23 +291,8 @@ void daNpc_De1_IsDelete(daNpc_De1_c*) {
     /* Nonmatching */
 }
 
-/* 00002E8C-00002ED4       .text __dt__15daNpc_De1_HIO_cFv */
-daNpc_De1_HIO_c::~daNpc_De1_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
 /* 00002F54-00002F58       .text MatrixCrrPos__6dBgWSvFR13cBgS_PolyInfoPvbP4cXyzP5csXyzP5csXyz */
 void dBgWSv::MatrixCrrPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*) {
-    /* Nonmatching */
-}
-
-/* 00002F58-00002FFC       .text __dt__10dBgWDeformFv */
-dBgWDeform::~dBgWDeform() {
     /* Nonmatching */
 }
 

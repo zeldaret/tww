@@ -115,6 +115,3 @@ void daObjLeaves_Draw(daObjLeaves_c*) {
 void daObjLeaves_IsDelete(daObjLeaves_c*) {
     /* Nonmatching */
 }
-
-
-

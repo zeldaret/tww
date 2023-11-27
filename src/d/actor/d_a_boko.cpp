@@ -126,23 +126,8 @@ void daBoko_c::createHeap() {
     /* Nonmatching */
 }
 
-/* 00002CFC-00002D78       .text __dt__6ke_c_sFv */
-ke_c_s::~ke_c_s() {
-    /* Nonmatching */
-}
-
-/* 00002D78-00002DE0       .text __ct__6ke_c_sFv */
-ke_c_s::ke_c_s() {
-    /* Nonmatching */
-}
-
 /* 00002DE4-00003154       .text create__8daBoko_cFv */
 s32 daBoko_c::create() {
-    /* Nonmatching */
-}
-
-/* 00003154-000032F0       .text __ct__8daBoko_cFv */
-daBoko_c::daBoko_c() {
     /* Nonmatching */
 }
 
@@ -150,25 +135,3 @@ daBoko_c::daBoko_c() {
 void daBoko_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

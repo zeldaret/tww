@@ -96,18 +96,3 @@ void daDr2_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00002668-000026A4       .text __dt__11iwa_hahen_sFv */
-iwa_hahen_s::~iwa_hahen_s() {
-    /* Nonmatching */
-}
-
-/* 000026A4-000026A8       .text __ct__11iwa_hahen_sFv */
-iwa_hahen_s::iwa_hahen_s() {
-    /* Nonmatching */
-}
-
-/* 00002760-000027A8       .text __dt__11daDr2_HIO_cFv */
-daDr2_HIO_c::~daDr2_HIO_c() {
-    /* Nonmatching */
-}
-

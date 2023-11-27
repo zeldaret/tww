@@ -96,15 +96,3 @@ void daBridge_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00004770-00004830       .text __dt__4br_sFv */
-br_s::~br_s() {
-    /* Nonmatching */
-}
-
-/* 000048FC-00004A44       .text __ct__4br_sFv */
-br_s::br_s() {
-    /* Nonmatching */
-}
-
-
-

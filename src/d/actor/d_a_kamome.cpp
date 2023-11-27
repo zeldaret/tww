@@ -136,17 +136,3 @@ void daKamome_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00005308-00005350       .text __dt__11kamomeHIO_cFv */
-kamomeHIO_c::~kamomeHIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-

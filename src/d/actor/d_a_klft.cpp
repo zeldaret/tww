@@ -65,8 +65,3 @@ void CallbackCreateHeap(fopAc_ac_c*) {
 void daKlft_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-
-
-

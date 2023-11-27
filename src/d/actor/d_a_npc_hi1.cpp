@@ -276,11 +276,6 @@ s32 daNpc_Hi1_c::_create() {
     /* Nonmatching */
 }
 
-/* 0000205C-000021CC       .text __ct__11daNpc_Hi1_cFv */
-daNpc_Hi1_c::daNpc_Hi1_c() {
-    /* Nonmatching */
-}
-
 /* 000024F4-00002768       .text bodyCreateHeap__11daNpc_Hi1_cFv */
 void daNpc_Hi1_c::bodyCreateHeap() {
     /* Nonmatching */
@@ -315,18 +310,4 @@ void daNpc_Hi1_Draw(daNpc_Hi1_c*) {
 void daNpc_Hi1_IsDelete(daNpc_Hi1_c*) {
     /* Nonmatching */
 }
-
-/* 00002960-000029BC       .text __dt__15daNpc_Hi1_HIO_cFv */
-daNpc_Hi1_HIO_c::~daNpc_Hi1_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 000029D8-00002A54       .text cLib_getRndValue<i>__Fii */
-void cLib_getRndValue<int>(int, int) {
-    /* Nonmatching */
-}
-
-
-
-
 

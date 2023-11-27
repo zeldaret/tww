@@ -115,6 +115,3 @@ void daHmlif_Execute(void*) {
 void daHmlif_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

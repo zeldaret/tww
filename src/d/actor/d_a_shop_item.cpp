@@ -11,7 +11,7 @@
 #include "d/d_s_play.h"
 #include "d/d_item.h"
 #include "d/d_item_data.h"
-#include "d/actor/d_a_itembase_static.h"
+#include "d/actor/d_a_item.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
 

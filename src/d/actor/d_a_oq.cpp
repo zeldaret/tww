@@ -111,19 +111,3 @@ void daOQ_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00004DBC-00005120       .text __ct__8oq_classFv */
-oq_class::oq_class() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-

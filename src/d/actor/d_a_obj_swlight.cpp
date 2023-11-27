@@ -26,16 +26,6 @@ s32 daObjSwlight::Act_c::_create() {
     /* Nonmatching */
 }
 
-/* 000009F0-00000A4C       .text __dt__8cM3dGTriFv */
-cM3dGTri::~cM3dGTri() {
-    /* Nonmatching */
-}
-
-/* 00000A4C-00000A94       .text __dt__8cM3dGPlaFv */
-cM3dGPla::~cM3dGPla() {
-    /* Nonmatching */
-}
-
 /* 00000C38-00000CB8       .text _delete__Q212daObjSwlight5Act_cFv */
 BOOL daObjSwlight::Act_c::_delete() {
     /* Nonmatching */
@@ -150,11 +140,3 @@ void daObjSwlight::setMaterial_Before_mirror(J3DMaterial*, unsigned char) {
 BOOL daObjSwlight::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-

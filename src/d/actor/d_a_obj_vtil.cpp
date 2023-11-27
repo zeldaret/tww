@@ -170,13 +170,3 @@ BOOL daObjVtil_c::_execute() {
 BOOL daObjVtil_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-
-
-

@@ -141,16 +141,6 @@ void daMt_Execute(mt_class*) {
     /* Nonmatching */
 }
 
-/* 000078DC-00007A44       .text __dt__20dBgS_ObjGndChk_YoganFv */
-dBgS_ObjGndChk_Yogan::~dBgS_ObjGndChk_Yogan() {
-    /* Nonmatching */
-}
-
-/* 00007A44-00007B84       .text __ct__20dBgS_ObjGndChk_YoganFv */
-dBgS_ObjGndChk_Yogan::dBgS_ObjGndChk_Yogan() {
-    /* Nonmatching */
-}
-
 /* 00007CC4-00007CCC       .text daMt_IsDelete__FP8mt_class */
 void daMt_IsDelete(mt_class*) {
     /* Nonmatching */
@@ -170,38 +160,4 @@ void CallbackCreateHeap(fopAc_ac_c*) {
 void daMt_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 000088A8-00008B98       .text __ct__8mt_classFv */
-mt_class::mt_class() {
-    /* Nonmatching */
-}
-
-/* 000094D4-00009530       .text __dt__10daMt_HIO_cFv */
-daMt_HIO_c::~daMt_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

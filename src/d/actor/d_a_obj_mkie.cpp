@@ -31,16 +31,6 @@ void daObjMkie::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
-/* 00000A04-00000A60       .text __dt__8cM3dGTriFv */
-cM3dGTri::~cM3dGTri() {
-    /* Nonmatching */
-}
-
-/* 00000A60-00000AA8       .text __dt__8cM3dGPlaFv */
-cM3dGPla::~cM3dGPla() {
-    /* Nonmatching */
-}
-
 /* 00000BF0-00000BF8       .text Delete__Q29daObjMkie5Act_cFv */
 BOOL daObjMkie::Act_c::Delete() {
     /* Nonmatching */
@@ -125,11 +115,3 @@ void daObjMkie::Act_c::Execute(float(**)[3][4]) {
 BOOL daObjMkie::Act_c::Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-

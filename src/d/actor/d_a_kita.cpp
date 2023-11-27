@@ -21,11 +21,6 @@ void kita_move(kita_class*) {
     /* Nonmatching */
 }
 
-/* 0000126C-000013D4       .text __dt__18dBgS_ObjGndChk_SplFv */
-dBgS_ObjGndChk_Spl::~dBgS_ObjGndChk_Spl() {
-    /* Nonmatching */
-}
-
 /* 00001894-000019F8       .text himo_create__FP10kita_class */
 void himo_create(kita_class*) {
     /* Nonmatching */
@@ -55,19 +50,3 @@ void CallbackCreateHeap(fopAc_ac_c*) {
 void daKita_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

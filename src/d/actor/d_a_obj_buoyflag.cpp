@@ -86,35 +86,7 @@ void daObjBuoyflag::Act_c::mode_jumpToSea() {
     /* Nonmatching */
 }
 
-
 /* 000027AC-000029FC       .text _create__Q213daObjBuoyflag5Act_cFv */
 s32 daObjBuoyflag::Act_c::_create() {
     /* Nonmatching */
 }
-
-
-
-
-
-/* 00002C90-00002D34       .text __dt__Q213daObjBuoyflag8Packet_cFv */
-daObjBuoyflag::Packet_c::~Packet_c() {
-    /* Nonmatching */
-}
-
-/* 00002D38-00002DCC       .text __dt__Q213daObjBuoyflag9DrawVtx_cFv */
-daObjBuoyflag::DrawVtx_c::~DrawVtx_c() {
-    /* Nonmatching */
-}
-
-/* 00002DCC-00002E54       .text __ct__Q213daObjBuoyflag9DrawVtx_cFv */
-daObjBuoyflag::DrawVtx_c::DrawVtx_c() {
-    /* Nonmatching */
-}
-
-/* 000030DC-00003114       .text __arraydtor$3997 */
-void __arraydtor$3997 {
-    /* Nonmatching */
-}
-
-
-

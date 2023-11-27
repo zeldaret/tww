@@ -355,11 +355,6 @@ void daNpc_Uk_Draw(daNpc_Uk_c*) {
 void daNpc_Uk_IsDelete(daNpc_Uk_c*) {
     /* Nonmatching */
 }
-
-
-
-
-
 /* 00005A0C-00005A28       .text setEyePos__10daNpc_Uk_cF4cXyz */
 void daNpc_Uk_c::setEyePos(cXyz) {
     /* Nonmatching */

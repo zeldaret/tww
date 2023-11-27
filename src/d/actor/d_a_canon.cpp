@@ -170,5 +170,3 @@ void daCanonDraw(void*) {
 void daCanonIsDelete(void*) {
     /* Nonmatching */
 }
-
-

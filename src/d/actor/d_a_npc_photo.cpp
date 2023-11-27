@@ -336,17 +336,3 @@ void daNpc_PhotoIsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 00004FF8-00005040       .text __dt__9dSnap_ObjFv */
-dSnap_Obj::~dSnap_Obj() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-

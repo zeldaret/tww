@@ -161,19 +161,3 @@ void daPW_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00006BDC-00006E8C       .text __ct__8pw_classFv */
-pw_class::pw_class() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-

@@ -206,16 +206,6 @@ s32 daOship_c::_create() {
     /* Nonmatching */
 }
 
-/* 000030EC-00003418       .text __ct__9daOship_cFv */
-daOship_c::daOship_c() {
-    /* Nonmatching */
-}
-
-/* 00003DCC-00003DD0       .text __ct__Q29JGeometry8TVec3<f>Fv */
-JGeometry::TVec3<float>::TVec3() {
-    /* Nonmatching */
-}
-
 /* 00003E78-00003F20       .text _delete__9daOship_cFv */
 BOOL daOship_c::_delete() {
     /* Nonmatching */
@@ -245,21 +235,4 @@ void daOshipDraw(void*) {
 void daOshipIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 0000419C-000041F8       .text __dt__13daOship_HIO_cFv */
-daOship_HIO_c::~daOship_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
 

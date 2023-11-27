@@ -11,11 +11,6 @@ daNpc_P1_HIO_c::daNpc_P1_HIO_c() {
     /* Nonmatching */
 }
 
-/* 00000264-000002AC       .text __dt__19daNpc_P1_childHIO_cFv */
-daNpc_P1_childHIO_c::~daNpc_P1_childHIO_c() {
-    /* Nonmatching */
-}
-
 /* 000002AC-000002BC       .text __ct__19daNpc_P1_childHIO_cFv */
 daNpc_P1_childHIO_c::daNpc_P1_childHIO_c() {
     /* Nonmatching */
@@ -190,13 +185,4 @@ void daNpc_P1_Delete(daNpc_P1_c*) {
 void daNpc_P1_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 00004E2C-00004E9C       .text __dt__14daNpc_P1_HIO_cFv */
-daNpc_P1_HIO_c::~daNpc_P1_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
 

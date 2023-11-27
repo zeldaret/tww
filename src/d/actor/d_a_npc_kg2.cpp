@@ -201,12 +201,3 @@ void daNpc_Kg2_IsDelete(daNpc_Kg2_c*) {
     /* Nonmatching */
 }
 
-/* 0000311C-0000317C       .text __dt__15daNpc_Kg2_HIO_cFv */
-daNpc_Kg2_HIO_c::~daNpc_Kg2_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-

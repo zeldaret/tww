@@ -105,6 +105,3 @@ void daObjIce_Draw(daObjIce_c*) {
 void daObjIce_IsDelete(daObjIce_c*) {
     /* Nonmatching */
 }
-
-
-

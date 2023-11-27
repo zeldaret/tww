@@ -286,14 +286,3 @@ void daDaioctaIsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 0000554C-000055A8       .text __dt__15daDaiocta_HIO_cFv */
-daDaiocta_HIO_c::~daDaiocta_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-

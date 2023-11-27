@@ -361,11 +361,6 @@ s32 daNpc_So_c::_create() {
     /* Nonmatching */
 }
 
-/* 00003F38-0000417C       .text __ct__10daNpc_So_cFv */
-daNpc_So_c::daNpc_So_c() {
-    /* Nonmatching */
-}
-
 /* 000046E4-00004754       .text _delete__10daNpc_So_cFv */
 BOOL daNpc_So_c::_delete() {
     /* Nonmatching */
@@ -393,22 +388,6 @@ void daNpc_SoDraw(void*) {
 
 /* 000047E0-000047E8       .text daNpc_SoIsDelete__FPv */
 void daNpc_SoIsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 00004AD0-00004B58       .text __dt__14daNpc_So_HIO_cFv */
-daNpc_So_HIO_c::~daNpc_So_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-/* 00004BE0-00004C28       .text __dt__12JntHit_HIO_cFv */
-JntHit_HIO_c::~JntHit_HIO_c() {
     /* Nonmatching */
 }
 

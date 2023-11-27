@@ -196,29 +196,3 @@ void daGnd_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00007CFC-00008010       .text __ct__9gnd_classFv */
-gnd_class::gnd_class() {
-    /* Nonmatching */
-}
-
-/* 0000855C-000085D8       .text __dt__8gnd_ke_sFv */
-gnd_ke_s::~gnd_ke_s() {
-    /* Nonmatching */
-}
-
-/* 000085D8-00008640       .text __ct__8gnd_ke_sFv */
-gnd_ke_s::gnd_ke_s() {
-    /* Nonmatching */
-}
-
-/* 00008A3C-00008A84       .text __dt__11daGnd_HIO_cFv */
-daGnd_HIO_c::~daGnd_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-

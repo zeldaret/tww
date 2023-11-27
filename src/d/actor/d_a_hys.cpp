@@ -85,6 +85,3 @@ void daHys_Execute(void*) {
 void daHys_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

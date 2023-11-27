@@ -325,10 +325,3 @@ void daNpc_RotenIsDelete(void*) {
 void daDitem_c::setOffsetPos(cXyz) {
     /* Nonmatching */
 }
-
-
-
-
-
-
-

@@ -171,14 +171,3 @@ void daPH_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00006D1C-00007098       .text __ct__8ph_classFv */
-ph_class::ph_class() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-

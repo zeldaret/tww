@@ -36,11 +36,6 @@ BOOL daFallRock_c::execute() {
     /* Nonmatching */
 }
 
-/* 00000810-00000978       .text __dt__20dBgS_ObjGndChk_YoganFv */
-dBgS_ObjGndChk_Yogan::~dBgS_ObjGndChk_Yogan() {
-    /* Nonmatching */
-}
-
 /* 00000E38-00000E40       .text daFallRock_IsDelete__FP12daFallRock_c */
 void daFallRock_IsDelete(daFallRock_c*) {
     /* Nonmatching */
@@ -48,11 +43,6 @@ void daFallRock_IsDelete(daFallRock_c*) {
 
 /* 00000E40-00000E68       .text daFallRock_Delete__FP12daFallRock_c */
 void daFallRock_Delete(daFallRock_c*) {
-    /* Nonmatching */
-}
-
-/* 00000E68-00001030       .text __dt__12daFallRock_cFv */
-daFallRock_c::~daFallRock_c() {
     /* Nonmatching */
 }
 
@@ -70,19 +60,3 @@ s32 daFallRock_c::create() {
 void daFallRock_c::setParticle(int, cXyz*) {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

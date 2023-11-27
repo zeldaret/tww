@@ -40,6 +40,3 @@ void daLamp_solidHeapCB(fopAc_ac_c*) {
 void daLamp_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-

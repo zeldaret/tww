@@ -126,13 +126,3 @@ void daGoal_FlagIsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 00002D78-00002DC8       .text __dt__13daGFlag_HIO_cFv */
-daGFlag_HIO_c::~daGFlag_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 00002DC8-00002EAC       .text __dt__16daGFlag_packet_cFv */
-daGFlag_packet_c::~daGFlag_packet_c() {
-    /* Nonmatching */
-}
-

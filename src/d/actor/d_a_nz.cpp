@@ -176,31 +176,3 @@ void daNZ_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00008294-000085C0       .text __ct__8nz_classFv */
-nz_class::nz_class() {
-    /* Nonmatching */
-}
-
-/* 00008D28-00008D84       .text __dt__10daNZ_HIO_cFv */
-daNZ_HIO_c::~daNZ_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

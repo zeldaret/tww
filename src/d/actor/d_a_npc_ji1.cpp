@@ -511,11 +511,6 @@ s32 daNpc_Ji1_c::_create() {
     /* Nonmatching */
 }
 
-/* 0000DF78-0000E278       .text __ct__11daNpc_Ji1_cFv */
-daNpc_Ji1_c::daNpc_Ji1_c() {
-    /* Nonmatching */
-}
-
 /* 0000E864-0000F324       .text CreateHeap__11daNpc_Ji1_cFv */
 void daNpc_Ji1_c::CreateHeap() {
     /* Nonmatching */
@@ -605,15 +600,4 @@ void daNpc_Ji1_Delete(daNpc_Ji1_c*) {
 void daNpc_Ji1_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 0001235C-000123CC       .text __dt__15daNpc_Ji1_HIO_cFv */
-daNpc_Ji1_HIO_c::~daNpc_Ji1_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
 

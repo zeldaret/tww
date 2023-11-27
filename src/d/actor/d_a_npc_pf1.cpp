@@ -361,17 +361,3 @@ void daNpc_Pf1_IsDelete(daNpc_Pf1_c*) {
     /* Nonmatching */
 }
 
-/* 00003990-000039EC       .text __dt__15daNpc_Pf1_HIO_cFv */
-daNpc_Pf1_HIO_c::~daNpc_Pf1_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 00003A08-00003A84       .text cLib_getRndValue<i>__Fii */
-void cLib_getRndValue<int>(int, int) {
-    /* Nonmatching */
-}
-
-
-
-
-

@@ -150,6 +150,3 @@ void daObjFirewall_Draw(daObjFirewall_c*) {
 void daObjFirewall_IsDelete(daObjFirewall_c*) {
     /* Nonmatching */
 }
-
-
-

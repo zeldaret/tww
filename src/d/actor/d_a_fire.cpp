@@ -110,6 +110,3 @@ void daFire_Execute(void*) {
 void daFire_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

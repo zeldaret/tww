@@ -281,11 +281,6 @@ s32 daNpc_Ac1_c::_create() {
     /* Nonmatching */
 }
 
-/* 0000213C-000022A0       .text __ct__11daNpc_Ac1_cFv */
-daNpc_Ac1_c::daNpc_Ac1_c() {
-    /* Nonmatching */
-}
-
 /* 0000256C-00002838       .text create_Anm__11daNpc_Ac1_cFv */
 void daNpc_Ac1_c::create_Anm() {
     /* Nonmatching */
@@ -335,13 +330,4 @@ void daNpc_Ac1_Draw(daNpc_Ac1_c*) {
 void daNpc_Ac1_IsDelete(daNpc_Ac1_c*) {
     /* Nonmatching */
 }
-
-/* 000031B8-00003214       .text __dt__15daNpc_Ac1_HIO_cFv */
-daNpc_Ac1_HIO_c::~daNpc_Ac1_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
 

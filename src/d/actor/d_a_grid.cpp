@@ -91,11 +91,6 @@ daHo_HIO_c::~daHo_HIO_c() {
     /* Nonmatching */
 }
 
-/* 800EB520-800EB5D8       .text __dt__13daHo_packet_cFv */
-daHo_packet_c::~daHo_packet_c() {
-    /* Nonmatching */
-}
-
 /* 800EB5D8-800EB60C       .text Eye__9dCamera_cFv */
 void dCamera_c::Eye() {
     /* Nonmatching */

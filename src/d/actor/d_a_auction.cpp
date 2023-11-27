@@ -275,8 +275,3 @@ void daAuctionDraw(void*) {
 void daAuctionIsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-
-

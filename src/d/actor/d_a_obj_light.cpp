@@ -100,11 +100,3 @@ BOOL daObjLight::Act_c::_execute() {
 BOOL daObjLight::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-

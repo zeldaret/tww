@@ -95,6 +95,3 @@ void daLlift_Execute(void*) {
 void daLlift_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

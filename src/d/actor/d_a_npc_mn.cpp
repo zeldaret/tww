@@ -400,8 +400,3 @@ void daNpc_MnDraw(void*) {
 void daNpc_MnIsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-
-

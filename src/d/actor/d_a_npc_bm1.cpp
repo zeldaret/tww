@@ -16,11 +16,6 @@ daNpc_Bm1_HIO_c::daNpc_Bm1_HIO_c() {
     /* Nonmatching */
 }
 
-/* 0000020C-00000268       .text __dt__20daNpc_Bm1_childHIO_cFv */
-daNpc_Bm1_childHIO_c::~daNpc_Bm1_childHIO_c() {
-    /* Nonmatching */
-}
-
 /* 00000268-000002E0       .text searchActor_Zl__FPvPv */
 void searchActor_Zl(void*, void*) {
     /* Nonmatching */
@@ -786,11 +781,6 @@ s32 daNpc_Bm1_c::_create() {
     /* Nonmatching */
 }
 
-/* 00007ED4-00008038       .text __ct__11daNpc_Bm1_cFv */
-daNpc_Bm1_c::daNpc_Bm1_c() {
-    /* Nonmatching */
-}
-
 /* 000083E8-00008710       .text create_Anm__11daNpc_Bm1_cFv */
 void daNpc_Bm1_c::create_Anm() {
     /* Nonmatching */
@@ -845,13 +835,4 @@ void daNpc_Bm1_Draw(daNpc_Bm1_c*) {
 void daNpc_Bm1_IsDelete(daNpc_Bm1_c*) {
     /* Nonmatching */
 }
-
-/* 00009714-00009798       .text __dt__15daNpc_Bm1_HIO_cFv */
-daNpc_Bm1_HIO_c::~daNpc_Bm1_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
 

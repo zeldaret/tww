@@ -136,11 +136,6 @@ void daBO_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 000050DC-000054B4       .text __ct__8bo_classFv */
-bo_class::bo_class() {
-    /* Nonmatching */
-}
-
 /* 00005C60-00005C64       .text draw__54JPACallBackBase2<P14JPABaseEmitter,P15JPABaseParticle>FP14JPABaseEmitterP15JPABaseParticle */
 void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::draw(JPABaseEmitter*, JPABaseParticle*) {
     /* Nonmatching */
@@ -155,28 +150,3 @@ void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::execute(JPABaseEmitter
 void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::init(JPABaseEmitter*, JPABaseParticle*) {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* 00005D90-00005EFC       .text __dt__22yodare_ato_PcallBack_cFv */
-yodare_ato_PcallBack_c::~yodare_ato_PcallBack_c() {
-    /* Nonmatching */
-}
-
-/* 000063BC-00006404       .text __dt__54JPACallBackBase2<P14JPABaseEmitter,P15JPABaseParticle>Fv */
-JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::~JPACallBackBase2() {
-    /* Nonmatching */
-}
-

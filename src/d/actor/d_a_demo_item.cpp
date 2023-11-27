@@ -75,8 +75,3 @@ void daDitem_Draw(daDitem_c*) {
 BOOL daDitem_c::isdelete() {
     /* Nonmatching */
 }
-
-
-
-
-

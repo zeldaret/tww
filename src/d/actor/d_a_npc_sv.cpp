@@ -255,8 +255,3 @@ void daNpc_PeopleIsDelete(void*) {
 void daObj_Ikada_c::getCranePos() {
     /* Nonmatching */
 }
-
-
-
-
-

@@ -300,8 +300,3 @@ void daNpc_BmconDraw(void*) {
 void daNpc_BmconIsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-
-

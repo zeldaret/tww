@@ -76,10 +76,3 @@ void daObj_StairIsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 000013A4-000013EC       .text __dt__16daobj_stairHIO_cFv */
-daobj_stairHIO_c::~daobj_stairHIO_c() {
-    /* Nonmatching */
-}
-
-
-

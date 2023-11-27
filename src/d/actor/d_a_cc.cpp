@@ -166,14 +166,3 @@ void daCC_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00007160-00007440       .text __ct__8cc_classFv */
-cc_class::cc_class() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-

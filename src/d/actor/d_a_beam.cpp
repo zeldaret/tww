@@ -86,11 +86,6 @@ s32 daBeam_c::_create() {
     /* Nonmatching */
 }
 
-/* 00001D34-00001FF8       .text __ct__8daBeam_cFv */
-daBeam_c::daBeam_c() {
-    /* Nonmatching */
-}
-
 /* 0000291C-0000298C       .text daBeamDelete__FPv */
 void daBeamDelete(void*) {
     /* Nonmatching */
@@ -110,19 +105,4 @@ void daBeamDraw(void*) {
 void daBeamIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 00002BCC-00002C14       .text __dt__12daBeam_HIO_cFv */
-daBeam_HIO_c::~daBeam_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
 

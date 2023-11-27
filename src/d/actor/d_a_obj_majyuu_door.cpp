@@ -116,10 +116,3 @@ void daObj_MjDoorIsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 000010A8-00001104       .text __dt__17daObj_MjDoorHIO_cFv */
-daObj_MjDoorHIO_c::~daObj_MjDoorHIO_c() {
-    /* Nonmatching */
-}
-
-
-

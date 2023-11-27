@@ -36,11 +36,6 @@ s32 daSie_Flag_c::_create() {
     /* Nonmatching */
 }
 
-/* 00000488-00000620       .text __ct__12daSie_Flag_cFv */
-daSie_Flag_c::daSie_Flag_c() {
-    /* Nonmatching */
-}
-
 /* 00000814-00000864       .text _delete__12daSie_Flag_cFv */
 BOOL daSie_Flag_c::_delete() {
     /* Nonmatching */
@@ -80,11 +75,4 @@ void daSie_FlagDraw(void*) {
 void daSie_FlagIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 00000D14-00000D5C       .text __dt__16daSie_Flag_HIO_cFv */
-daSie_Flag_HIO_c::~daSie_Flag_HIO_c() {
-    /* Nonmatching */
-}
-
-
 

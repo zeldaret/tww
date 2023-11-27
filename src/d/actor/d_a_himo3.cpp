@@ -61,39 +61,3 @@ void daHimo3_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00002128-0000238C       .text __ct__11himo3_classFv */
-himo3_class::himo3_class() {
-    /* Nonmatching */
-}
-
-/* 0000238C-000023C8       .text __dt__7h3_ga_sFv */
-h3_ga_s::~h3_ga_s() {
-    /* Nonmatching */
-}
-
-/* 000023C8-000023CC       .text __ct__7h3_ga_sFv */
-h3_ga_s::h3_ga_s() {
-    /* Nonmatching */
-}
-
-/* 00002870-000028AC       .text __dt__7himo3_sFv */
-himo3_s::~himo3_s() {
-    /* Nonmatching */
-}
-
-/* 000028AC-000028B0       .text __ct__7himo3_sFv */
-himo3_s::himo3_s() {
-    /* Nonmatching */
-}
-
-/* 00002CB8-00002D00       .text __dt__10himo3HIO_cFv */
-himo3HIO_c::~himo3HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-

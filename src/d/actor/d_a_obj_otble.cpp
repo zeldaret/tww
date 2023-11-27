@@ -60,6 +60,3 @@ void daObj_Otble::Mthd::Draw(void*) {
 void daObj_Otble::Mthd::IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

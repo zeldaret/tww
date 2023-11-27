@@ -50,6 +50,3 @@ void useHeapInit(fopAc_ac_c*) {
 void daJBO_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-

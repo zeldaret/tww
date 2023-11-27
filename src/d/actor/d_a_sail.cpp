@@ -76,13 +76,3 @@ void daSail_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 0000254C-0000259C       .text __dt__12daSail_HIO_cFv */
-daSail_HIO_c::~daSail_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 0000259C-00002668       .text __dt__15daSail_packet_cFv */
-daSail_packet_c::~daSail_packet_c() {
-    /* Nonmatching */
-}
-

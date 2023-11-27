@@ -105,9 +105,3 @@ void daObjAshut::Act_c::Execute(float(**)[3][4]) {
 BOOL daObjAshut::Act_c::Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

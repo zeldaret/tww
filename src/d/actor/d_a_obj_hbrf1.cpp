@@ -90,9 +90,3 @@ void daObjHbrf1::Act_c::Execute(float(**)[3][4]) {
 BOOL daObjHbrf1::Act_c::Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

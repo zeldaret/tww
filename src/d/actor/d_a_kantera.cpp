@@ -61,22 +61,3 @@ void daKantera_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00002304-00002340       .text __dt__7mo_ga_sFv */
-mo_ga_s::~mo_ga_s() {
-    /* Nonmatching */
-}
-
-/* 00002340-00002344       .text __ct__7mo_ga_sFv */
-mo_ga_s::mo_ga_s() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-

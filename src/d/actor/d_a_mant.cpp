@@ -56,25 +56,3 @@ void daMant_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00001FB0-0000202C       .text __dt__8mant_j_sFv */
-mant_j_s::~mant_j_s() {
-    /* Nonmatching */
-}
-
-/* 0000202C-00002094       .text __ct__8mant_j_sFv */
-mant_j_s::mant_j_s() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-/* 0000229C-00002338       .text __dt__15daMant_packet_cFv */
-daMant_packet_c::~daMant_packet_c() {
-    /* Nonmatching */
-}
-

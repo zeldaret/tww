@@ -6,16 +6,6 @@
 #include "d/actor/d_a_lod_bg.h"
 #include "dolphin/types.h"
 
-/* 00000078-00000204       .text __ct__9daLodbg_cFv */
-daLodbg_c::daLodbg_c() {
-    /* Nonmatching */
-}
-
-/* 00000204-0000031C       .text __dt__9daLodbg_cFv */
-daLodbg_c::~daLodbg_c() {
-    /* Nonmatching */
-}
-
 /* 0000031C-0000046C       .text deleteModelData__9daLodbg_cFv */
 void daLodbg_c::deleteModelData() {
     /* Nonmatching */

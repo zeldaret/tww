@@ -45,9 +45,3 @@ BOOL daObjVmsms_c::_execute() {
 BOOL daObjVmsms_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

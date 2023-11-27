@@ -95,19 +95,3 @@ void daTagLight::Act_c::set_material(J3DMaterial*, unsigned char) {
 BOOL daTagLight::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

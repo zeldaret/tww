@@ -55,6 +55,3 @@ void daKmonDraw(void*) {
 void daKmonIsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

@@ -76,20 +76,3 @@ void daDk_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 0000125C-00001308       .text __dt__6tail_sFv */
-tail_s::~tail_s() {
-    /* Nonmatching */
-}
-
-/* 00001344-000013F0       .text __ct__6tail_sFv */
-tail_s::tail_s() {
-    /* Nonmatching */
-}
-
-/* 000013F8-00001440       .text __dt__10daDk_HIO_cFv */
-daDk_HIO_c::~daDk_HIO_c() {
-    /* Nonmatching */
-}
-
-
-

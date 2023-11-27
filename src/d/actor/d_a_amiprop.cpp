@@ -75,6 +75,3 @@ void daAmiProp_Execute(void*) {
 void daAmiProp_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

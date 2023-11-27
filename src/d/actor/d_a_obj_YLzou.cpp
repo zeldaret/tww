@@ -201,13 +201,3 @@ void daObjYLzou_IsDelete(daObjYLzou_c*) {
     /* Nonmatching */
 }
 
-/* 0000197C-00001A08       .text __dt__10EffSmokeCBFv */
-EffSmokeCB::~EffSmokeCB() {
-    /* Nonmatching */
-}
-
-/* 00001A08-00001A48       .text __ct__10EffSmokeCBFv */
-EffSmokeCB::EffSmokeCB() {
-    /* Nonmatching */
-}
-

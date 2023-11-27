@@ -125,9 +125,3 @@ void daObjCorrect::Act_c::demo_run() {
 BOOL daObjCorrect::Act_c::_execute() {
     /* Nonmatching */
 }
-
-
-
-
-
-

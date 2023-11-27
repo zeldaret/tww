@@ -41,16 +41,6 @@ s32 daTsubo::Act_c::_create() {
     /* Nonmatching */
 }
 
-/* 00000B10-00000D74       .text __ct__Q27daTsubo5Act_cFv */
-daTsubo::Act_c::Act_c() {
-    /* Nonmatching */
-}
-
-/* 00001058-000011C0       .text __dt__20dBgS_ObjGndChk_YoganFv */
-dBgS_ObjGndChk_Yogan::~dBgS_ObjGndChk_Yogan() {
-    /* Nonmatching */
-}
-
 /* 00001778-000017B8       .text _is_delete__Q27daTsubo5Act_cFv */
 void daTsubo::Act_c::_is_delete() {
     /* Nonmatching */
@@ -620,19 +610,3 @@ void daTsubo::Method::Draw(void*) {
 void daTsubo::Method::IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -81,8 +81,3 @@ void daTag_Ba1_IsDelete(daTag_Ba1_c*) {
     /* Nonmatching */
 }
 
-/* 000004DC-00000524       .text __dt__15daTag_Ba1_HIO_cFv */
-daTag_Ba1_HIO_c::~daTag_Ba1_HIO_c() {
-    /* Nonmatching */
-}
-

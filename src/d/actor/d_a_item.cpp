@@ -5,7 +5,6 @@
 
 #include "d/d_item.h"
 #include "d/d_item_data.h"
-#include "d/actor/d_a_itembase_static.h"
 #include "d/actor/d_a_item.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_sea.h"

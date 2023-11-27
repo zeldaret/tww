@@ -86,8 +86,3 @@ void daTag_GshipIsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 00000688-000006D0       .text __dt__17daTag_Gship_HIO_cFv */
-daTag_Gship_HIO_c::~daTag_Gship_HIO_c() {
-    /* Nonmatching */
-}
-

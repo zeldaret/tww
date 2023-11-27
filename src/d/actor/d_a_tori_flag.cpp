@@ -41,11 +41,6 @@ s32 daTori_Flag_c::_create() {
     /* Nonmatching */
 }
 
-/* 00000478-00000610       .text __ct__13daTori_Flag_cFv */
-daTori_Flag_c::daTori_Flag_c() {
-    /* Nonmatching */
-}
-
 /* 00000804-00000854       .text daTori_FlagDelete__FPv */
 void daTori_FlagDelete(void*) {
     /* Nonmatching */
@@ -70,11 +65,4 @@ void daTori_FlagDraw(void*) {
 void daTori_FlagIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 00000CAC-00000CF4       .text __dt__17daTori_Flag_HIO_cFv */
-daTori_Flag_HIO_c::~daTori_Flag_HIO_c() {
-    /* Nonmatching */
-}
-
-
 

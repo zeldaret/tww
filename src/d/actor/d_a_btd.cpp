@@ -221,37 +221,3 @@ void daBtd_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 000091D0-00009468       .text __ct__9btd_classFv */
-btd_class::btd_class() {
-    /* Nonmatching */
-}
-
-/* 00009468-000094A4       .text __dt__12btd_sibuki_sFv */
-btd_sibuki_s::~btd_sibuki_s() {
-    /* Nonmatching */
-}
-
-/* 000094A4-000094A8       .text __ct__12btd_sibuki_sFv */
-btd_sibuki_s::btd_sibuki_s() {
-    /* Nonmatching */
-}
-
-/* 000094A8-000094E4       .text __dt__11btd_hahen_sFv */
-btd_hahen_s::~btd_hahen_s() {
-    /* Nonmatching */
-}
-
-/* 000094E4-000094E8       .text __ct__11btd_hahen_sFv */
-btd_hahen_s::btd_hahen_s() {
-    /* Nonmatching */
-}
-
-/* 00009D14-00009D5C       .text __dt__11daBtd_HIO_cFv */
-daBtd_HIO_c::~daBtd_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-

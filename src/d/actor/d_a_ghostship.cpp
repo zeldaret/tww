@@ -86,16 +86,6 @@ void daGhostshipCreate(void*) {
     /* Nonmatching */
 }
 
-/* 00000DFC-00000E38       .text __dt__18dLib_circle_path_cFv */
-dLib_circle_path_c::~dLib_circle_path_c() {
-    /* Nonmatching */
-}
-
-/* 00000E38-00000E3C       .text __ct__18dLib_circle_path_cFv */
-dLib_circle_path_c::dLib_circle_path_c() {
-    /* Nonmatching */
-}
-
 /* 00000FD8-00001024       .text daGhostshipDelete__FPv */
 void daGhostshipDelete(void*) {
     /* Nonmatching */
@@ -125,11 +115,4 @@ BOOL daGhostship_c::_draw() {
 void daGhostshipIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 00001A98-00001AF4       .text __dt__17daGhostship_HIO_cFv */
-daGhostship_HIO_c::~daGhostship_HIO_c() {
-    /* Nonmatching */
-}
-
-
 

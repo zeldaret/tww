@@ -39,7 +39,7 @@ struct daItemBase_c_m_data {
 
 STATIC_ASSERT(sizeof(daItemBase_c_m_data) == 0x4C);
 
-struct daItemBase_c : public fopAc_ac_c {
+class daItemBase_c : public fopAc_ac_c {
 public:
     BOOL DeleteBase(const char*);
     BOOL CreateItemHeap(const char*, short, short, short, short, short, short, short);
@@ -90,5 +90,8 @@ public:
 };
 
 STATIC_ASSERT(sizeof(daItemBase_c) == 0x63C);
+
+int CheckItemCreateHeap(fopAc_ac_c*);
+int CheckFieldItemCreateHeap(fopAc_ac_c*);
 
 #endif /* D_A_ITEMBASE_H */

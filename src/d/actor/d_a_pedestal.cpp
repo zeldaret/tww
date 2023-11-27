@@ -161,11 +161,6 @@ void daPedestal::daPds_infiniteEcallBack_c::makeEmitter(unsigned short, const cX
     /* Nonmatching */
 }
 
-/* 000010D4-00001140       .text __dt__Q210daPedestal25daPds_infiniteEcallBack_cFv */
-daPedestal::daPds_infiniteEcallBack_c::~daPds_infiniteEcallBack_c() {
-    /* Nonmatching */
-}
-
 /* 00001288-00001290       .text setup__Q210daPedestal25daPds_infiniteEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
 void daPedestal::daPds_infiniteEcallBack_c::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
     /* Nonmatching */

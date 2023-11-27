@@ -16,11 +16,6 @@ void daDemo00_model_c::reset() {
     /* Nonmatching */
 }
 
-/* 800E59EC-800E5A60       .text __dt__10daDemo00_cFv */
-daDemo00_c::~daDemo00_c() {
-    /* Nonmatching */
-}
-
 /* 800E5A60-800E5AFC       .text setBaseMtx__10daDemo00_cFv */
 void daDemo00_c::setBaseMtx() {
     /* Nonmatching */

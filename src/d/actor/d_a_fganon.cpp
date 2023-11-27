@@ -101,11 +101,6 @@ void down(fganon_class*) {
     /* Nonmatching */
 }
 
-/* 00003B3C-00003CA4       .text __dt__18dBgS_ObjGndChk_SplFv */
-dBgS_ObjGndChk_Spl::~dBgS_ObjGndChk_Spl() {
-    /* Nonmatching */
-}
-
 /* 00003F7C-00004300       .text kabe_check__FP12fganon_class */
 void kabe_check(fganon_class*) {
     /* Nonmatching */
@@ -200,35 +195,4 @@ void useHeapInit(fopAc_ac_c*) {
 void daFganon_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 00009C70-00009EF4       .text __ct__12fganon_classFv */
-fganon_class::fganon_class() {
-    /* Nonmatching */
-}
-
-/* 0000A65C-0000A6A4       .text __dt__14daFganon_HIO_cFv */
-daFganon_HIO_c::~daFganon_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

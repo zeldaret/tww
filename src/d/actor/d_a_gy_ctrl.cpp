@@ -171,16 +171,3 @@ void daGy_CtrlIsDelete(void*) {
     /* Nonmatching */
 }
 
-/* 00001CD8-00001D34       .text __dt__15daGy_Ctrl_HIO_cFv */
-daGy_Ctrl_HIO_c::~daGy_Ctrl_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-

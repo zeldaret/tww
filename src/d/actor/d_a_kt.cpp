@@ -45,9 +45,3 @@ void daKt_solidHeapCB(fopAc_ac_c*) {
 void daKt_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-
-
-
-
