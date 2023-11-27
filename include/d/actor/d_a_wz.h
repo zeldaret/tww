@@ -3,7 +3,8 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
-#include "m_Do/m_Do_ext.h"
+
+class mDoExt_McaMorf;
 
 class wz_class : public fopEn_enemy_c {
 public:

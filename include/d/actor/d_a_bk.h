@@ -3,7 +3,6 @@
 
 #include "f_op/f_op_actor.h"
 #include "c/c_damagereaction.h"
-#include "c/c_damagereaction.h"
 #include "SSystem/SComponent/c_phase.h"
 
 class bk_class : public fopEn_enemy_c {

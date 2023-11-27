@@ -2,7 +2,8 @@
 #define D_A_YKGR_H
 
 #include "f_op/f_op_actor.h"
-#include "JSystem/JParticle/JPAEmitter.h"
+
+class JPABaseEmitter;
 
 class daYkgr_c : public fopAc_ac_c {
 public:

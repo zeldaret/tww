@@ -119,6 +119,9 @@ public:
     }
     virtual ~dCcD_Stts() {}
 
+    /* 0x00 */ /* cCcD_Stts */
+    /* 0x18 */ /* vtable */
+    /* 0x1C */ /* dCcD_GStts */
 };  // Size = 0x3C
 
 class dCcD_GObjInf;

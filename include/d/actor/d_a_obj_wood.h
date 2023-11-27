@@ -13,7 +13,7 @@ namespace daObjWood {
         inline bool _draw();
     public:
         /* 0x290 */ u32 field_0x290[3];
-        /* 0x2B4 */ dCcD_Stts mStts;
+        /* 0x29C */ dCcD_Stts mStts;
         /* 0x2D8 */ dCcD_Cyl mCyl;
     };
 

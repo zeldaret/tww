@@ -2,10 +2,11 @@
 #define D_A_DR_H
 
 #include "f_op/f_op_actor.h"
-#include "JSystem/JParticle/JPAEmitter.h"
-#include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_phase.h"
 #include "m_Do/m_Do_hostIO.h"
+
+class JPABaseEmitter;
+class mDoExt_McaMorf;
 
 class dr_class : public fopAc_ac_c {
 public:

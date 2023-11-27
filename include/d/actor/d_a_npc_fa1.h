@@ -4,7 +4,6 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_particle.h"
-#include "JSystem/JParticle/JPAEmitter.h"
 
 class daNpc_Fa1_c : public fopAc_ac_c {
 public:

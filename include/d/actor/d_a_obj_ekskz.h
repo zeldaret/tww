@@ -5,7 +5,6 @@
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_particle.h"
-#include "JSystem/JParticle/JPAEmitter.h"
 #include "m_Do/m_Do_ext.h"
 
 namespace daObjEkskz {

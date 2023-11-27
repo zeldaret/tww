@@ -3,7 +3,9 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
-#include "JSystem/JParticle/JPAEmitter.h"
+#include "d/d_point_wind.h"
+
+class JPABaseEmitter;
 
 class daSteamTag_c : public fopAc_ac_c {
 public:

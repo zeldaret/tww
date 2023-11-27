@@ -2,7 +2,8 @@
 #define D_A_TPOTA_H
 
 #include "f_op/f_op_actor.h"
-#include "JSystem/JParticle/JPAParticle.h"
+
+class JPABaseParticle;
 
 class daTpota_c : public fopAc_ac_c {
 public:

@@ -2,7 +2,8 @@
 #define D_A_KI_H
 
 #include "f_op/f_op_actor.h"
-#include "m_Do/m_Do_ext.h"
+
+class mDoExt_McaMorf;
 
 class ki_class : public fopEn_enemy_c {
 public:

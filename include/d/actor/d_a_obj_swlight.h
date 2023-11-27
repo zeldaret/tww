@@ -2,7 +2,8 @@
 #define D_A_OBJ_SWLIGHT_H
 
 #include "f_op/f_op_actor.h"
-#include "JSystem/J3DGraphAnimator/J3DNode.h"
+
+class J3DNode;
 
 namespace daObjSwlight {
     class Act_c : public fopAc_ac_c {

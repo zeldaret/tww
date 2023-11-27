@@ -5,10 +5,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_bg_s_acch.h"
-#include "d/d_bg_s_acch.h"
 #include "d/d_particle.h"
-#include "m_Do/m_Do_ext.h"
-#include "JSystem/J3DGraphAnimator/J3DNode.h"
 
 class daGy_c : public fopEn_enemy_c {
 public:

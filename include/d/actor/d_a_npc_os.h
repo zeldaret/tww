@@ -4,8 +4,11 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_bg_s_acch.h"
 #include "SSystem/SComponent/c_bg_s_poly_info.h"
-#include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_phase.h"
+#include "d/d_npc.h"
+#include "d/actor/d_a_pedestal.h"
+
+class mDoExt_McaMorf;
 
 class daNpc_Os_c : public fopAc_ac_c {
 public:
@@ -131,7 +134,7 @@ public:
 public:
     /* 0x4EC */ request_of_phase_process_class mPhs;
     /* 0x4F4 */ mDoExt_McaMorf* m4F4;
-    /* 0x4F8 */ daPedestal* mpPedestal;
+    /* 0x4F8 */ daPedestal::daPds_c* mpPedestal;
     /* 0x4FC */ u8 m4FC[0x518 - 0x4FC];
     /* 0x518 */ dBgS_AcchCir mAcchCir1;
     /* 0x558 */ dBgS_AcchCir mAcchCir2;

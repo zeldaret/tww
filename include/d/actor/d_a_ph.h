@@ -2,16 +2,9 @@
 #define D_A_PH_H
 
 #include "f_op/f_op_actor.h"
-#include "d/d_cc_d.h"
-#include "d/d_bg_s_acch.h"
-#include "d/d_bg_s_acch.h"
-#include "d/d_particle.h"
-#include "m_Do/m_Do_ext.h"
 #include "c/c_damagereaction.h"
-#include "c/c_damagereaction.h"
-#include "SSystem/SComponent/c_phase.h"
 
-class ph_class : public fopAc_ac_c {
+class ph_class : public fopEn_enemy_c {
 public:
     /* 0x02AC */ request_of_phase_process_class mPhs;
     /* 0x02B4 */ u8 m02B4[0x02B8 - 0x02B4];
@@ -30,7 +23,7 @@ public:
     /* 0x0338 */ u8 m0338[0x033A - 0x0338];
     /* 0x033A */ s16 m033A;
     /* 0x033C */ u8 m033C[0x033E - 0x033C];
-    /* 0x033E */ daPH__BehaviorTypes mType;
+    /* 0x033E */ u8 mType;
     /* 0x033F */ u8 m033F;
     /* 0x0340 */ u8 m0340;
     /* 0x0341 */ u8 m0341;

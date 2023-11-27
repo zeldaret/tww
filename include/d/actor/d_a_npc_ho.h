@@ -4,9 +4,7 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
-#include "d/d_bg_s_acch.h"
-#include "m_Do/m_Do_ext.h"
-#include "JSystem/J3DGraphAnimator/J3DAnimation.h"
+#include "d/d_npc.h"
 
 class daNpc_Ho_c : public fopAc_ac_c {
 public:
@@ -93,7 +91,7 @@ public:
     /* 0x698 */ u8 m698[0x6A5 - 0x698];
     /* 0x6A5 */ s8 mCurrentAnimIndex;
     /* 0x6A6 */ u8 m6A6[0x6A7 - 0x6A6];
-    /* 0x6A7 */ daNpc_Ho_c_state mCurrentState;
+    /* 0x6A7 */ u8 mCurrentState;
     /* 0x6A8 */ u8 m6A8[0x6AC - 0x6A8];
     /* 0x6AC */ int mCurrentFloorSoundId;
     /* 0x6B0 */ u8 m6B0[0x6B4 - 0x6B0];

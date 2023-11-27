@@ -4,14 +4,15 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 #include "d/d_particle.h"
-#include "m_Do/m_Do_ext.h"
-#include "c/c_damagereaction.h"
-#include "c/c_damagereaction.h"
 #include "c/c_damagereaction.h"
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_path.h"
 
-class mo2_class : public fopAc_ac_c {
+struct ke_s {
+    
+};
+
+class mo2_class : public fopEn_enemy_c {
 public:
     /* 0x02AC */ request_of_phase_process_class mPhsMo2;
     /* 0x02B4 */ request_of_phase_process_class mPhsSpear;
@@ -109,7 +110,7 @@ public:
     /* 0x2948 */ s16 m2948;
     /* 0x294A */ u8 m294A[0x294E - 0x294A];
     /* 0x294E */ s16 m294E;
-    /* 0x2950 */ fopEn_enemy_c__ParryOpeningType m2950;
+    /* 0x2950 */ u8 mParryOpeningType;
     /* 0x2951 */ u8 m2951;
     /* 0x2952 */ s16 m2952;
     /* 0x2954 */ int m2954;

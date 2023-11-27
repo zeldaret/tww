@@ -23,7 +23,7 @@ public:
     BOOL _delete();
 
 public:
-    /* 0x290 */ PTMF* m290;
+    /* 0x290 */ int mMode;
     /* 0x294 */ s8 m294;
     /* 0x295 */ s8 m295;
     /* 0x296 */ s8 m296;

@@ -6,10 +6,12 @@
 #include "d/d_bg_s_gnd_chk.h"
 #include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_phase.h"
-#include "JSystem/J3DGraphAnimator/J3DNode.h"
-#include "JSystem/J3DGraphAnimator/J3DModelData.h"
 
 namespace daObjFtree {
+    struct _ftree_seach_info_ {
+        
+    };
+
     class Act_c : public fopAc_ac_c {
     public:
         void GetRate(float, float, float) {}
@@ -44,7 +46,7 @@ namespace daObjFtree {
         void set_brought();
         void unset_broughtID(int);
         void unset_brought();
-        void get_ftree_info(daObjFtree::_ftree_seach_info_*);
+        void get_ftree_info(_ftree_seach_info_*);
         void iam_last();
         void action_none_init(short);
         void action_none_main();

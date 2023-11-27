@@ -3,7 +3,8 @@
 
 #include "f_op/f_op_actor.h"
 #include "SSystem/SComponent/c_phase.h"
-#include "m_Do/m_Do_ext.h"
+
+class mDoExt_McaMorf;
 
 namespace daObjGong {
     class Act_c : public fopAc_ac_c {

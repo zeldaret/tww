@@ -4,9 +4,9 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
-#include "d/d_bg_s_acch.h"
-#include "JSystem/JParticle/JPAEmitter.h"
 #include "SSystem/SComponent/c_phase.h"
+
+class JPABaseEmitter;
 
 struct ep_ga_s {
     

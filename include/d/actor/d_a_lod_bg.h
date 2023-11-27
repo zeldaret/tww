@@ -2,9 +2,10 @@
 #define D_A_LOD_BG_H
 
 #include "f_op/f_op_actor.h"
-#include "JSystem/J3DGraphAnimator/J3DModelData.h"
-#include "JSystem/JKernel/JKRArchive.h"
-#include "m_Do/m_Do_dvd_thread.h"
+
+class J3DModelData;
+class mDoDvdThd_mountXArchive_c;
+class JKRArchive;
 
 class daLodbg_c : public fopAc_ac_c {
 public:

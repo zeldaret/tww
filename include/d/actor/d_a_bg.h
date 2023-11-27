@@ -3,8 +3,13 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_bg_w.h"
-#include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_phase.h"
+
+class J3DModelData;
+class J3DAnmTextureSRTKey;
+class J3DAnmTevRegKey;
+class mDoExt_btkAnm;
+class mDoExt_brkAnm;
 
 class daBg_btkAnm_c {
 public:

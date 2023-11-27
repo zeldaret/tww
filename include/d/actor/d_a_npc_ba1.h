@@ -2,7 +2,8 @@
 #define D_A_NPC_BA1_H
 
 #include "f_op/f_op_actor.h"
-#include "JSystem/J3DGraphAnimator/J3DNode.h"
+
+class J3DNode;
 
 class daNpc_Ba1_c : public fopAc_ac_c {
 public:

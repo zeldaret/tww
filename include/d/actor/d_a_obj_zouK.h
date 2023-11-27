@@ -5,9 +5,10 @@
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_bg_w.h"
-#include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_phase.h"
-#include "JSystem/J3DGraphAnimator/J3DAnimation.h"
+
+class J3DAnmTransformKey;
+class mDoExt_McaMorf;
 
 namespace daObjZouk {
     class Act_c : public fopAc_ac_c {

@@ -2,9 +2,7 @@
 #define D_A_FM_H
 
 #include "f_op/f_op_actor.h"
-#include "m_Do/m_Do_ext.h"
 #include "c/c_damagereaction.h"
-#include "JSystem/J3DGraphAnimator/J3DNode.h"
 
 class daFm_c : public fopEn_enemy_c {
 public:

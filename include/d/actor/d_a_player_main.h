@@ -2,7 +2,6 @@
 #define D_A_PLAYER_MAIN
 
 #include "JAZelAudio/JAIZelBasic.h"
-#include "m_Do/m_Do_ext.h"
 #include "d/d_attention.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_bg_s_lin_chk.h"

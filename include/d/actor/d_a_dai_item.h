@@ -3,11 +3,11 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_bg_s_acch.h"
-#include "d/d_bg_s_acch.h"
-#include "JSystem/JParticle/JPAEmitter.h"
-#include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_cloth_packet.h"
+
+class JPABaseEmitter;
+class mDoExt_bckAnm;
 
 class daStandItem_c : public fopAc_ac_c {
 public:
