@@ -73,10 +73,10 @@ public:
     s8 getBackboneJntNum() { return mBackboneJntNum; }
     void setHeadJntNum(s8 jnt) { mHeadJntNum = jnt; }
     void setBackboneJntNum(s8 jnt) { mBackboneJntNum = jnt; }
-    int getHead_x() { return mAngles[0][0]; }
-    int getHead_y() { return mAngles[0][1]; }
-    int getBackbone_x() { return mAngles[1][0]; }
-    int getBackbone_y() { return mAngles[1][1]; }
+    s16 getHead_x() { return mAngles[0][0]; }
+    s16 getHead_y() { return mAngles[0][1]; }
+    s16 getBackbone_x() { return mAngles[1][0]; }
+    s16 getBackbone_y() { return mAngles[1][1]; }
     void setHead_x(s16 angle) { mAngles[0][0] = angle; }
     void setHead_y(s16 angle) { mAngles[0][1] = angle; }
     void setBackBone_x(s16 angle) { mAngles[1][0] = angle; }

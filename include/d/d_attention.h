@@ -163,10 +163,30 @@ public:
 
     fopAc_ac_c* Owner() { return (fopAc_ac_c*)mpPlayer; }
     
+    BOOL chkFlag(u32 flag) { return (mFlags & flag) ? TRUE : FALSE; }
+    void setFlag(u32 flag) { mFlags |= flag; }
+    void clrFlag(u32 flag) { mFlags &= ~flag; }
+    bool Lockon() { return LockonTruth() || chkFlag(0x20000000); }
     void CatchRequest(fopAc_ac_c* param_0, u8 param_1, f32 param_2, f32 param_3,
-                      f32 param_4, s16 param_5, s32 param_6) {
+                      f32 param_4, s16 param_5, int param_6) {
         mCatch.request(param_0, param_1, param_2, param_3, param_4, param_5, param_6);
     }
+
+    // TODO:
+    void GetLockonCount() {}
+    void LockEdge() {}
+    void changeOwner() {}
+    void chkEnemySound() {}
+    void getCatchChgItem() {}
+    void getCatghTarget() {}
+    void getLookTarget() {}
+    void getLook2Target() {}
+    void getZHintTarget() {}
+    void offAleart() {}
+    void revivalAleart() {}
+    void LookRequest(fopAc_ac_c*, f32, f32, f32, s16, int) {}
+    void Look2RequestF(fopAc_ac_c*, s16, int) {}
+    void ZHintRequest(fopAc_ac_c*, int) {}
 
 public:
     /* 0x000 */ daPy_lk_c* mpPlayer;

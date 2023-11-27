@@ -90,5 +90,6 @@ void fopMsgM_cposMove(fopMsgM_pane_class*);
 
 u32 fopMsgM_searchMessageNumber(u32);
 void fopMsgM_messageSendOn();
+u32 fopMsgM_tactMessageSet();
 
 #endif

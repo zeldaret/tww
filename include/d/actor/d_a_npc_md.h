@@ -206,20 +206,49 @@ public:
         ACTION_ENDING   = -1,
     };
     
-    typedef int (daNpc_Md_c::*ActionFunc)(void*);
+    typedef BOOL (daNpc_Md_c::*ActionFunc)(void*);
     
-    bool chkPlayerAction(ActionFunc func) { return mCurrPlayerActionFunc == func; }
-    bool chkNpcAction(ActionFunc func) { return mCurrNpcActionFunc == func; }
+    BOOL chkPlayerAction(ActionFunc func) { return mCurrPlayerActionFunc == func; }
+    BOOL chkNpcAction(ActionFunc func) { return mCurrNpcActionFunc == func; }
     
-    bool isOldLightBodyHit() { return cLib_checkBit(m30F0, 0x00008000UL); }
-    void onDefaultTalkXY() { cLib_onBit(m30F0, 0x00010000UL); }
-    void offDefaultTalkXY() { cLib_offBit(m30F0, 0x00010000UL); }
-    bool isDefaultTalkXY() { return cLib_checkBit(m30F0, 0x00010000UL); }
+    void onXYTalk() { cLib_onBit(m30F0, 0x100UL); }
+    void offXYTalk() { cLib_offBit(m30F0, 0x100UL); }
+    bool isXYTalk() { return cLib_checkBit(m30F0, 0x100UL); }
+    bool isOldLightBodyHit() { return cLib_checkBit(m30F0, 0x8000UL); }
+    void onDefaultTalkXY() { cLib_onBit(m30F0, 0x10000UL); }
+    void offDefaultTalkXY() { cLib_offBit(m30F0, 0x10000UL); }
+    bool isDefaultTalkXY() { return cLib_checkBit(m30F0, 0x10000UL); }
     
     void setTypeEdaichi() { m3138 = 4; }
     void setTypeM_Dai() { m3138 = 5; }
     void setTypeM_DaiB() { m3138 = 6; }
     void setTypeShipRide() { m3138 = 7; }
+    
+    s16 getHead_x() { return mJntCtrl.getHead_x(); }
+    s16 getHead_y() { return mJntCtrl.getHead_y(); }
+    s16 getBackbone_x() { return mJntCtrl.getBackbone_x(); }
+    s16 getBackbone_y() { return mJntCtrl.getBackbone_y(); }
+    s16 getWaistRotX() { return m3114; }
+    s16 getWaistRotY() { return m3116; }
+    
+    s8 getArmRJntNum() { return m_armR_jnt_num; }
+    s8 getArmRlocJntNum() { return m_armRloc_jnt_num; }
+    s8 getArmLJntNum() { return m_armL_jnt_num; }
+    s8 getArmLlocJntNum() { return m_armLloc_jnt_num; }
+    
+    J3DModel* getModel() { return mpMorf->getModel(); }
+    cXyz& getAttentionBasePos() { return m3094; }
+    cXyz& getEyePos() { return m3088; }
+    void getPHairDist(int) {}
+    void getPHairPos(int) {}
+    void getPHairVec(int) {}
+    cXyz* getPHairWall() { return m3234; }
+    
+    void incAttnSetCount() {
+        if (m312B != 0xFF) {
+            m312B++;
+        }
+    }
     
     void calcFlyingTimer() {}
     void checkBitEffectStatus(u8) {}
@@ -231,28 +260,10 @@ public:
     void clearStatus() {}
     void clearStatus(u32) {}
     void countPiyo2TalkCNT() {}
-    void getArmLJntNum() {}
-    void getArmLlocJntNum() {}
-    void getArmRJntNum() {}
-    void getArmRlocJntNum() {}
-    void getAttentionBasePos() {}
-    void getBackbone_x() {}
-    void getBackbone_y() {}
-    void getEyePos() {}
     void getFlyingTimer() {}
     void getHairJntNum(int) {}
-    void getHead_x() {}
-    void getHead_y() {}
-    void getModel() {}
-    void getPHairDist(int) {}
-    void getPHairPos(int) {}
-    void getPHairVec(int) {}
-    void getPHairWall() {}
     void getPiyo2TalkCNT() {}
     void getTalkType() {}
-    void getWaistRotX() {}
-    void getWaistRotY() {}
-    void incAttnSetCount() {}
     void isLightBodyHit() {}
     void isLightHit() {}
     void isMirror() {}
@@ -267,7 +278,6 @@ public:
     void isTypeM_Dra09() {}
     void isTypeSea() {}
     void isTypeShipRide() {}
-    void isXYTalk() {}
     void noCarryAction() {}
     void offBitCamTagIn() {}
     void offFlying() {}
@@ -278,7 +288,6 @@ public:
     void offPlayerRoom() {}
     void offSeaTalk() {}
     void offShipRide() {}
-    void offXYTalk() {}
     void onBitCamTagIn() {}
     void onFlying() {}
     void onLightBodyHit() {}
@@ -287,7 +296,6 @@ public:
     void onPlayerRoom() {}
     void onSeaTalk() {}
     void onShipRide() {}
-    void onXYTalk() {}
     void setBitEffectStatus(u8) {}
     void setBitHairMode(u8) {}
     void setBitStatus(u32) {}
@@ -311,8 +319,8 @@ public:
     void setNpcAction(ActionFunc, void*);
     void playerAction(void*);
     void setPlayerAction(ActionFunc, void*);
-    void getStickAngY(int);
-    void calcStickPos(s16, cXyz*);
+    s16 getStickAngY(int);
+    int calcStickPos(s16, cXyz*);
     BOOL flyCheck();
     bool mirrorCancelCheck();
     void setWingEmitter();
@@ -322,113 +330,113 @@ public:
     void deleteHane03Emitter();
     void returnLinkPlayer();
     void shipRideCheck();
-    void isFallAction();
+    BOOL isFallAction();
     void returnLinkCheck();
     void lightHitCheck();
-    void wallHitCheck();
+    int wallHitCheck();
     void NpcCall(int*);
     void checkCollision(int);
     void restartPoint(s16);
     void setMessageAnimation(u8);
     void waitGroundCheck();
     void chkAdanmaeDemoOrder();
-    int waitNpcAction(void*);
-    int harpWaitNpcAction(void*);
-    void XYTalkCheck();
-    int talkNpcAction(void*);
-    int shipTalkNpcAction(void*);
-    int kyohiNpcAction(void*);
-    int shipNpcAction(void*);
-    int mwaitNpcAction(void*);
-    int squatdownNpcAction(void*);
-    int sqwait01NpcAction(void*);
+    BOOL waitNpcAction(void*);
+    BOOL harpWaitNpcAction(void*);
+    BOOL XYTalkCheck();
+    BOOL talkNpcAction(void*);
+    BOOL shipTalkNpcAction(void*);
+    BOOL kyohiNpcAction(void*);
+    BOOL shipNpcAction(void*);
+    BOOL mwaitNpcAction(void*);
+    BOOL squatdownNpcAction(void*);
+    BOOL sqwait01NpcAction(void*);
     void changeCaught02();
-    int carryNpcAction(void*);
-    int throwNpcAction(void*);
-    int glidingNpcAction(void*);
+    BOOL carryNpcAction(void*);
+    BOOL throwNpcAction(void*);
+    BOOL glidingNpcAction(void*);
     void windProc();
-    int fallNpcAction(void*);
-    int fall02NpcAction(void*);
-    int wallHitNpcAction(void*);
-    int land01NpcAction(void*);
-    int land02NpcAction(void*);
-    int land03NpcAction(void*);
-    int piyo2NpcAction(void*);
-    int deleteNpcAction(void*);
-    int demoFlyNpcAction(void*);
+    BOOL fallNpcAction(void*);
+    BOOL fall02NpcAction(void*);
+    BOOL wallHitNpcAction(void*);
+    BOOL land01NpcAction(void*);
+    BOOL land02NpcAction(void*);
+    BOOL land03NpcAction(void*);
+    BOOL piyo2NpcAction(void*);
+    BOOL deleteNpcAction(void*);
+    BOOL demoFlyNpcAction(void*);
     void routeAngCheck(cXyz&, s16*);
     void routeWallCheck(cXyz&, cXyz&, s16*);
     void checkForwardGroundY(s16);
     void checkWallJump(s16);
     void routeCheck(f32, s16*);
-    int searchNpcAction(void*);
-    int hitNpcAction(void*);
+    BOOL searchNpcAction(void*);
+    BOOL hitNpcAction(void*);
     void setNormalSpeedF(f32, f32, f32, f32, f32);
     void setSpeedAndAngleNormal(f32, s16);
     void walkProc(f32, s16);
-    int jumpNpcAction(void*);
-    int escapeNpcAction(void*);
-    int waitPlayerAction(void*);
-    int walkPlayerAction(void*);
-    int hitPlayerAction(void*);
-    int jumpPlayerAction(void*);
-    int flyPlayerAction(void*);
-    int landPlayerAction(void*);
-    int mkamaePlayerAction(void*);
-    int carryPlayerAction(void*);
+    BOOL jumpNpcAction(void*);
+    BOOL escapeNpcAction(void*);
+    BOOL waitPlayerAction(void*);
+    BOOL walkPlayerAction(void*);
+    BOOL hitPlayerAction(void*);
+    BOOL jumpPlayerAction(void*);
+    BOOL flyPlayerAction(void*);
+    BOOL landPlayerAction(void*);
+    BOOL mkamaePlayerAction(void*);
+    BOOL carryPlayerAction(void*);
     void eventProc();
     void initialDefault(int);
-    void actionDefault(int);
+    bool actionDefault(int);
     void initialWaitEvent(int);
-    void actionWaitEvent(int);
+    bool actionWaitEvent(int);
     void initialLetterEvent(int);
     void initialMsgSetEvent(int);
-    void actionMsgSetEvent(int);
-    void actionMsgEndEvent(int);
+    bool actionMsgSetEvent(int);
+    BOOL actionMsgEndEvent(int);
     void initialMovePosEvent(int);
     void initialFlyEvent(int);
-    void actionFlyEvent(int);
+    bool actionFlyEvent(int);
     void initialGlidingEvent(int);
-    void actionGlidingEvent(int);
+    bool actionGlidingEvent(int);
     void initialLandingEvent(int);
-    void actionLandingEvent(int);
+    bool actionLandingEvent(int);
     void initialWalkEvent(int);
-    void actionWalkEvent(int);
-    void actionDashEvent(int);
+    bool actionWalkEvent(int);
+    bool actionDashEvent(int);
     void initialEndEvent(int);
-    void actionTactEvent(int);
+    bool actionTactEvent(int);
     void initialTakeOffEvent(int);
-    void actionTakeOffEvent(int);
+    bool actionTakeOffEvent(int);
     void initialOnetimeEvent(int);
-    void actionOnetimeEvent(int);
+    bool actionOnetimeEvent(int);
     void initialQuake(int);
     void setHarpPlayNum(int);
     void initialHarpPlayEvent(int);
-    void actionHarpPlayEvent(int);
+    bool actionHarpPlayEvent(int);
     void initialOffLinkEvent(int);
     void initialOnLinkEvent(int);
     void initialTurnEvent(int);
-    void actionTurnEvent(int);
+    bool actionTurnEvent(int);
     void initialSetAnmEvent(int);
     void initialLookDown(int);
     void initialLookUp(int);
-    void actionLookDown(int);
-    void talk_init();
-    void talk(int);
+    bool actionLookDown(int);
+    bool talk_init();
+    BOOL talk(int);
     void getAnmType(u8);
     BOOL initTexPatternAnm(u8, bool);
     void playTexPatternAnm();
     BOOL initLightBtkAnm(bool);
     void playLightBtkAnm();
-    void setAnm(int);
-    void dNpc_Md_setAnm(mDoExt_McaMorf2*, f32, int, f32, f32, char*, char*, const char*);
-    void dNpc_Md_setAnm(mDoExt_McaMorf*, int, f32, f32, char*, const char*);
+    bool setAnm(int);
+    bool dNpc_Md_setAnm(mDoExt_McaMorf2*, f32, int, f32, f32, char*, char*, const char*);
+    bool dNpc_Md_setAnm(mDoExt_McaMorf*, int, f32, f32, char*, const char*);
     void chkAttention(cXyz, s16, int);
     void chkArea(cXyz*);
     void carryCheck();
     void eventOrder();
     void checkOrder();
-    void checkCommandTalk();
+    bool checkCommandTalk();
     void next_msgStatus(u32*);
     void getMsg();
     void setCollision();
@@ -487,18 +495,28 @@ public:
     /* 0x304C */ daPy_mtxFollowEcallBack_c m304C;
     /* 0x3058 */ daNpc_Md_followEcallBack_c m3058;
     /* 0x3074 */ dPa_rippleEcallBack m3074;
-    /* 0x3088 */ u8 m3088[0x30A0 - 0x3088];
+    /* 0x3088 */ cXyz m3088;
+    /* 0x3094 */ cXyz m3094;
     /* 0x30A0 */ cXyz m30A0;
-    /* 0x30AC */ u8 m30AC[0x30D4 - 0x30AC];
+    /* 0x30AC */ u8 m30AC[0x30D0 - 0x30AC];
+    /* 0x30D0 */ f32 m30D0;
     /* 0x30D4 */ ActionFunc mCurrPlayerActionFunc;
     /* 0x30E0 */ ActionFunc mCurrNpcActionFunc;
-    /* 0x30EC */ int mMsgId;
+    /* 0x30EC */ u32 mMsgId;
     /* 0x30F0 */ u32 m30F0;
     /* 0x30F4 */ u8 m30F4[0x30F8 - 0x30F4];
     /* 0x30F8 */ f32 m30F8;
-    /* 0x30FC */ u8 m30FC[0x3104 - 0x30FC];
+    /* 0x30FC */ f32 m30FC;
+    /* 0x3100 */ u8 m3100[0x3104 - 0x3100];
     /* 0x3104 */ int m3104;
-    /* 0x3108 */ u8 m3108[0x311C - 0x3108];
+    /* 0x3108 */ f32 m3108;
+    /* 0x310C */ f32 m310C;
+    /* 0x3110 */ s16 m3110;
+    /* 0x3112 */ s16 m3112;
+    /* 0x3114 */ s16 m3114;
+    /* 0x3116 */ s16 m3116;
+    /* 0x3118 */ s16 m3118;
+    /* 0x311A */ s16 m311A;
     /* 0x311C */ s8 m_backbone1_jnt_num;
     /* 0x311D */ s8 m_backbone2_jnt_num;
     /* 0x311E */ s8 m_armR_jnt_num;
@@ -513,15 +531,16 @@ public:
     /* 0x3127 */ s8 m_wingR3_jnt_num;
     /* 0x3128 */ s8 m_wingL3_jnt_num;
     /* 0x3129 */ s8 m_handL_jnt_num;
-    /* 0x312A */ u8 m312A;
-    /* 0x312B */ u8 m312B[0x312C - 0x312B];
+    /* 0x312A */ s8 m312A;
+    /* 0x312B */ u8 m312B;
     /* 0x312C */ u8 m312C;
-    /* 0x312D */ u8 m312D[0x312E - 0x312D];
-    /* 0x312E */ u8 mCurEventMode;
+    /* 0x312D */ s8 m312D;
+    /* 0x312E */ s8 mCurEventMode;
     /* 0x312F */ u8 m312F[0x3131 - 0x312F];
     /* 0x3131 */ u8 m3131;
     /* 0x3132 */ s8 mActionStatus;
-    /* 0x3133 */ u8 m3133[0x3138 - 0x3133];
+    /* 0x3133 */ u8 m3133[0x3137 - 0x3133];
+    /* 0x3137 */ u8 m3137;
     /* 0x3138 */ u8 m3138;
     /* 0x3139 */ u8 mCurEvent;
     /* 0x313A */ u8 m313A;

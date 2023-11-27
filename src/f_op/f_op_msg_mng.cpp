@@ -164,7 +164,7 @@ void fopMsgM_scopeMessageSet(u32) {
 }
 
 /* 8002BA4C-8002BB78       .text fopMsgM_tactMessageSet__Fv */
-void fopMsgM_tactMessageSet() {
+u32 fopMsgM_tactMessageSet() {
     /* Nonmatching */
 }
 

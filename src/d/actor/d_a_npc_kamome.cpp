@@ -27,8 +27,8 @@ static char* l_staff_name = "HyoiKam";
 static u8 temp[0x4C]; // TODO
 static daNpc_kam_HIO_c l_HIO;
 static int l_hio_counter;
-static int l_msgId;
-static int l_msg;
+static u32 l_msgId;
+static msg_class* l_msg;
 static daNpc_kam_c* l_act;
 static s16 l_demo_start_chk_cnt;
 static s16 l_demo_start_chk_flag;
