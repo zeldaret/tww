@@ -4,21 +4,23 @@
 //
 
 #include "d/d_tree.h"
+#include "SSystem/SComponent/c_cc_d.h"
 #include "dolphin/types.h"
+#include "m_Do/m_Do_audio.h"
 
 /* 800787BC-80078960       .text WorkCo__12dTree_data_cFP10fopAc_ac_cUli */
-void dTree_data_c::WorkCo(fopAc_ac_c*, unsigned long, int) {
+void dTree_data_c::WorkCo(fopAc_ac_c*, u32, int) {
     /* Nonmatching */
 }
 
 /* 80078960-80078CC0       .text
  * WorkAt_NoCutAnim__12dTree_data_cFP10fopAc_ac_cUliP15dCcMassS_HitInfP8cCcD_Obj */
-void dTree_data_c::WorkAt_NoCutAnim(fopAc_ac_c*, unsigned long, int, dCcMassS_HitInf*, cCcD_Obj*) {
+void dTree_data_c::WorkAt_NoCutAnim(fopAc_ac_c*, u32, int, dCcMassS_HitInf*, cCcD_Obj*) {
     /* Nonmatching */
 }
 
 /* 80078CC0-80078ED4       .text WorkAt__12dTree_data_cFP10fopAc_ac_cUliP15dCcMassS_HitInf */
-void dTree_data_c::WorkAt(fopAc_ac_c*, unsigned long, int, dCcMassS_HitInf*) {
+void dTree_data_c::WorkAt(fopAc_ac_c*, u32, int, dCcMassS_HitInf*) {
     /* Nonmatching */
 }
 
@@ -34,51 +36,47 @@ void dTree_data_c::animation(int) {
 
 /* 8007945C-8007946C       .text newData__12dTree_room_cFP12dTree_data_c */
 void dTree_room_c::newData(dTree_data_c* data) {
-    data->mpNext = this->mpHead;
-    this->mpHead = data;
-    return;
+    data->mpNext = mpHead;
+    mpHead = data;
 }
 
 /* 8007946C-800794D0       .text deleteData__12dTree_room_cFv */
 void dTree_room_c::deleteData() {
-    while (this->mpHead != (dTree_data_c*)0x0) {
-        this->mpHead->field_0x000 = 0;
-        mDoAud_seDeleteObject(&this->mpHead->mPos);
-        this->mpHead = this->mpHead->mpNext;
+    while (mpHead != NULL) {
+        mpHead->field_0x000 = 0;
+        mDoAud_seDeleteObject(&mpHead->mPos);
+        mpHead = mpHead->mpNext;
     }
-    return;
 }
 
 /* 800794D0-800795E8       .text __ct__14dTree_packet_cFv */
 dTree_packet_c::dTree_packet_c() {
+    /* Nonmatching */
     dTree_data_c* pdVar1;
     dTree_anm_c* pdVar2;
     short sVar3;
     int iVar4;
 
-    this->field_0x0010 = 0;
-    this->field_0x6734 = 0;
-    this->field_0x6736 = 0;
-    pdVar1 = this->mData;
+    field_0x0010 = 0;
+    field_0x6734 = 0;
+    field_0x6736 = 0;
+    pdVar1 = mData;
     iVar4 = 0x40;
-    return;
 }
 
 /* 800795E8-800795F4       .text __ct__12dTree_room_cFv */
 dTree_room_c::dTree_room_c() {
-    this->mpHead = (dTree_data_c*)0x0;
-    return;
+    mpHead = NULL;
 }
 
 /* 800795F4-80079600       .text __ct__11dTree_anm_cFv */
 dTree_anm_c::dTree_anm_c() {
-    return;
+    field_0x00 = 0;
 }
 
 /* 80079600-8007960C       .text __ct__12dTree_data_cFv */
 dTree_data_c::dTree_data_c() {
-    this->field_0x000 = 0;
-    return;
+    field_0x000 = 0;
 }
 
 /* 8007960C-80079898       .text draw__14dTree_packet_cFv */
@@ -117,6 +115,6 @@ void dTree_packet_c::newAnm(short) {
 }
 
 /* 8007A3DC-8007A428       .text setAnm__14dTree_packet_cFis */
-void dTree_packet_c::setAnm(int, short) {
+void dTree_packet_c::setAnm(int a, short b) {
     /* Nonmatching */
 }

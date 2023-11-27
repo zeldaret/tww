@@ -6,21 +6,26 @@
 namespace daMmusic {
 class Act_c : public fopAc_ac_c {
 public:
-    BOOL solidHeapCB(fopAc_ac_c*);
-    BOOL create_heap();
-    BOOL Macore_is_playing();
+    bool solidHeapCB(fopAc_ac_c*);
+    bool create_heap();
+    bool Macore_is_playing();
     void set_mtx();
     s32 _create();
-    BOOL _delete();
+    bool _delete();
     void init_se();
     void manage_se(int);
     void delete_se();
-    BOOL _execute();
-    BOOL _draw();
+    bool _execute();
+    bool _draw();
 
 public:
-    /* 0x290 */ u8 field_0x290[0x2D4 - 0x290];
+    /* 0x290 */ u8 field_0x290[0x2A0 - 0x290];
+    /* 0x2A2 */ int field_0x2A0;
+    /* 0x2A2 */ u8 field_0x2A2[0x2A4 - 0x2A2];  
+    /* 0x2A4 */ int field_0x2A4;
+    /* 0x2A8 */ u8 field_0x2A8[0x2D4 - 0x2A8];
     /* 0x2D4 */ short field_0x2D4;
+    /* 0x2D6 */ u8 field_0x2D6[0x300 - 0x2D6];
 };
 };  // namespace daMmusic
 

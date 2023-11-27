@@ -3,8 +3,9 @@
 // Translation Unit: d_meter.cpp
 //
 
-#include "d_meter.h"
+#include "d/d_meter.h"
 #include "dolphin/types.h"
+#include "d/d_com_inf_game.h"
 
 /* 801EEFDC-801EF360       .text __ct__12dMeter_HIO_cFv */
 dMeter_HIO_c::dMeter_HIO_c() {
@@ -112,7 +113,7 @@ void dMeter_itemMoveFlagCheck() {
 }
 
 /* 801EFA40-801EFA48       .text dMenu_flag__Fv */
-void dMenu_flag() {
+bool dMenu_flag() {
     /* Nonmatching */
 }
 
@@ -1023,11 +1024,6 @@ void mapCtrlDisp_c::moveMapCtrlDisp() {
 
 /* 80205D24-80205D6C       .text __dt__16dMeter_map_HIO_cFv */
 dMeter_map_HIO_c::~dMeter_map_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 80205EDC-80205F14       .text __arraydtor$4710 */
-void __arraydtor$4710 {
     /* Nonmatching */
 }
 

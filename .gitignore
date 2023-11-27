@@ -11,3 +11,5 @@ orig/*/*
 tools/mwcc_compiler
 /*.txt
 ctx.c
+.DS_Store
+**/.DS_Store

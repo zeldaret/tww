@@ -10,30 +10,29 @@
 #include "d/d_save.h"
 #include "dolphin/mtx/mtx.h"
 #include "dolphin/types.h"
+#include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_mtx.h"
 
 /* 00000078-0000009C       .text solidHeapCB__Q28daMmusic5Act_cFP10fopAc_ac_c */
-BOOL daMmusic::Act_c::solidHeapCB(fopAc_ac_c* param) {
-    BOOL uVar1;
+bool daMmusic::Act_c::solidHeapCB(fopAc_ac_c* param) {
+    bool uVar1;
     uVar1 = create_heap();
     return uVar1;
 }
 
 /* 0000009C-000000A4       .text create_heap__Q28daMmusic5Act_cFv */
-BOOL daMmusic::Act_c::create_heap() {
-    return TRUE;
+bool daMmusic::Act_c::create_heap() {
+    return true;
 }
 
 /* 000000A4-0000013C       .text Macore_is_playing__Q28daMmusic5Act_cFv */
-BOOL daMmusic::Act_c::Macore_is_playing() {
-    int iVar1 = dComIfGs_isStageBossEnemy(7);
-    bool bVar2;
-
-    if ((((iVar1 == 0) &&
-          (iVar1 = g_dComIfG_gameInfo.save.mSavedata.mEvent.isEventBit(0x2910), iVar1 == 0)) &&
-         (iVar1 = g_dComIfG_gameInfo.save.mSavedata.mEvent.isEventBit(0x2e02), iVar1 == 0)) &&
-        ((iVar1 = g_dComIfG_gameInfo.save.mSavedata.mEvent.isEventBit(0x1610),
-          iVar1 == 0 && (bVar2 = dComIfGs_checkGetItem(LV3_SWORD), bVar2))))
+bool daMmusic::Act_c::Macore_is_playing() {
+    
+    if (!dComIfGs_isStageBossEnemy(7) &&
+        g_dComIfG_gameInfo.save.mSavedata.mEvent.isEventBit(0x2910) &&
+        g_dComIfG_gameInfo.save.mSavedata.mEvent.isEventBit(0x2e02) &&
+        g_dComIfG_gameInfo.save.mSavedata.mEvent.isEventBit(0x1610) &&
+        dComIfGs_checkGetItem(LV3_SWORD))
     {
         return TRUE;
     }
@@ -51,14 +50,20 @@ s32 daMmusic::Act_c::_create() {
 }
 
 /* 00000268-000002B4       .text _delete__Q28daMmusic5Act_cFv */
-BOOL daMmusic::Act_c::_delete() {
-    /* Nonmatching */
+bool daMmusic::Act_c::_delete() {
+    int iVar1;
+    if (this->field_0x2A0 != 0) {
+        *(unsigned int*)(iVar1 + 0x60) = 0xffffffff;  // should be an object, modify the field
+        *(unsigned int*)(iVar1 + 0x20c) = *(unsigned int*)(iVar1 + 0x20c) | 1;
+        *(unsigned int*)(field_0x2A0) = 0;
+    }
+    delete_se();
+    return true;
 }
 
 /* 000002B4-000002C0       .text init_se__Q28daMmusic5Act_cFv */
 void daMmusic::Act_c::init_se() {
     (this->field_0x2D4) = 0x78;
-    return;
 }
 
 /* 000002C0-000003D0       .text manage_se__Q28daMmusic5Act_cFi */
@@ -68,16 +73,15 @@ void daMmusic::Act_c::manage_se(int) {
 
 /* 000003D0-000003FC       .text delete_se__Q28daMmusic5Act_cFv */
 void daMmusic::Act_c::delete_se() {
-    JAIZelBasic::cbPracticeStop(JAIZelBasic::zel_basic);
-    return;
+    // JAIZelBasic::cbPracticeStop(JAIZelBasic::zel_basic);
 }
 
 /* 000003FC-00000554       .text _execute__Q28daMmusic5Act_cFv */
-BOOL daMmusic::Act_c::_execute() {
+bool daMmusic::Act_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000554-0000055C       .text _draw__Q28daMmusic5Act_cFv */
-BOOL daMmusic::Act_c::_draw() {
-    return TRUE;
+bool daMmusic::Act_c::_draw() {
+    return true;
 }

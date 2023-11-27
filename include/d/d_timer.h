@@ -29,9 +29,9 @@ public:
 class dTimer_c {
 public:
     void _create();
-    void _execute();
-    void _draw();
-    void _delete();
+    bool _execute();
+    bool _draw();
+    bool _delete();
     void RestTimeCheck(int);
     unsigned int deleteCheck();
     void SetSE();
@@ -43,7 +43,7 @@ public:
     void stop(u8);
     void restart(u8);
     void end(int);
-    int deleteRequest();
+    bool deleteRequest();
     void getTimeMs();
     void getLimitTimeMs();
     void getRestTimeMs();

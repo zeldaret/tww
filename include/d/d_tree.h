@@ -1,15 +1,9 @@
 #ifndef D_TREE_H
 #define D_TREE_H
 
-#include "SSystem/SComponent/c_xyz.h"
-#include "dolphin/mtx/mtx.h"
+#include "f_op/f_op_actor.h"
+#include "d/d_cc_mass_s.h"
 #include "JSystem/J3DGraphBase/J3DPacket.h"
-#include "JSystem/JKernel/JKRHeap.h"
-#include "JSystem/JUtility/JUTAssert.h"
-#include "d/actor/d_a_obj_pirateship.h"
-#include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_s_play.h"
 
 class dTree_data_c {
 public:
@@ -21,7 +15,7 @@ public:
     void WorkAt(fopAc_ac_c*, u32, int, dCcMassS_HitInf*);
     void hitCheck(fopAc_ac_c*, int);
     void animation(int);
-    
+
     /* 0x000 */ u8 field_0x000;
     /* 0x001 */ u8 field_0x001;
     /* 0x002 */ u8 mAnimIdx;
@@ -40,7 +34,8 @@ public:
     ~dTree_anm_c();
     dTree_anm_c();
 
-    /* 0x00 */ u8 field_0x00[0x02 - 0x00];
+    /* 0x00 */ u8 field_0x00;
+    /* 0x01 */ u8 field_0x01;
     /* 0x02 */ s16 field_0x02;
     /* 0x04 */ s16 field_0x04;
     /* 0x06 */ u8 field_0x06[0x08 - 0x06];

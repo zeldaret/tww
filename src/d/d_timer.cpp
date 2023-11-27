@@ -4,6 +4,8 @@
 //
 
 #include "d/d_timer.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_meter.h"
 #include "dolphin/types.h"
 #include "f_op/f_op_msg_mng.h"
 
@@ -13,17 +15,17 @@ void dTimer_c::_create() {
 }
 
 /* 8023BCD8-8023BF88       .text _execute__8dTimer_cFv */
-void dTimer_c::_execute() {
+bool dTimer_c::_execute() {
     /* Nonmatching */
 }
 
 /* 8023BF88-8023BFE4       .text _draw__8dTimer_cFv */
-void dTimer_c::_draw() {
-
+bool dTimer_c::_draw() {
+    /* Nonmatching */
 }
 
 /* 8023BFE4-8023C0B8       .text _delete__8dTimer_cFv */
-void dTimer_c::_delete() {
+bool dTimer_c::_delete() {
     /* Nonmatching */
 }
 
@@ -34,9 +36,8 @@ void dTimer_c::RestTimeCheck(int) {
 
 /* 8023C110-8023C124       .text deleteCheck__8dTimer_cFv */
 unsigned int dTimer_c::deleteCheck() {
-    unsigned int uVar1;
-    // uVar1 = std::countl_zero(5 - (unsigned int)(char)this->field_0x164);
-    return uVar1 >> 5 & 0xff;
+    /* Nonmatching */
+    return field_0x164 == 0;
 }
 
 /* 8023C124-8023C268       .text SetSE__8dTimer_cFv */
@@ -80,9 +81,9 @@ void dTimer_c::end(int) {
 }
 
 /* 8023C56C-8023C57C       .text deleteRequest__8dTimer_cFv */
-int dTimer_c::deleteRequest() {
+bool dTimer_c::deleteRequest() {
     this->field_0x164 = 6;
-    return 1;
+    return true;
 }
 
 /* 8023C57C-8023C5E0       .text getTimeMs__8dTimer_cFv */
@@ -125,15 +126,18 @@ void dDlst_TimerScrnDraw_c::setRupee(short) {
     /* Nonmatching */
 }
 
-/* 8023CEF0-8023CF48       .text dTm_parentPaneScale__FP18fopMsgM_pane_classP18fopMsgM_pane_classf */
+/* 8023CEF0-8023CF48       .text dTm_parentPaneScale__FP18fopMsgM_pane_classP18fopMsgM_pane_classf
+ */
 void dTm_parentPaneScale(fopMsgM_pane_class*, fopMsgM_pane_class*, float) {
     /* Nonmatching */
 }
 
-/* 8023CF48-8023CF98       .text setPaneInitialPos__21dDlst_TimerScrnDraw_cFP18fopMsgM_pane_classff */
+/* 8023CF48-8023CF98       .text setPaneInitialPos__21dDlst_TimerScrnDraw_cFP18fopMsgM_pane_classff
+ */
 void dDlst_TimerScrnDraw_c::setPaneInitialPos(fopMsgM_pane_class* param_1, float param_2,
                                               float param_3) {
-    (param_1->mPosCenterOrig).x = param_2 + (param_1->mSizeOrig).x * 0.5;
+    /* Nonmatching */
+    (param_1->mPosCenterOrig).x = param_2 + (0.5 * (param_1->mSizeOrig).x);
     (param_1->mPosCenterOrig).y = param_3 + (param_1->mSizeOrig).y * 0.5;
     fopMsgM_paneTrans(param_1, 0.0, 0.0);
     return;
@@ -180,23 +184,23 @@ void dDlst_TimerScrnDraw_c::draw() {
 }
 
 /* 8023D9A0-8023D9C0       .text dTimer_Draw__FP8dTimer_c */
-void dTimer_Draw(dTimer_c* timer) {
-    timer->_draw();
+bool dTimer_Draw(dTimer_c* timer) {
+    return timer->_draw();
 }
 
 /* 8023D9C0-8023D9E0       .text dTimer_Execute__FP8dTimer_c */
-void dTimer_Execute(dTimer_c* timer) {
-    timer->_execute();
+bool dTimer_Execute(dTimer_c* timer) {
+    return timer->_execute();
 }
 
 /* 8023D9E0-8023D9E8       .text dTimer_IsDelete__FP8dTimer_c */
-int dTimer_IsDelete(dTimer_c*) {
-    return 1;
+bool dTimer_IsDelete(dTimer_c*) {
+    return true;
 }
 
 /* 8023D9E8-8023DA08       .text dTimer_Delete__FP8dTimer_c */
-void dTimer_Delete(dTimer_c* timer) {
-    timer->_delete();
+bool dTimer_Delete(dTimer_c* timer) {
+    return timer->_delete();
 }
 
 /* 8023DA08-8023DA28       .text dTimer_Create__FP9msg_class */
@@ -205,7 +209,8 @@ void dTimer_Create(msg_class* timer) {
 }
 
 /* 8023DA28-8023DA88       .text dTimer_createTimer__FiUsUcUcffff */
-void dTimer_createTimer(int, unsigned short, unsigned char, unsigned char, float, float, float, float) {
+void dTimer_createTimer(int, unsigned short, unsigned char, unsigned char, float, float, float,
+                        float) {
     /* Nonmatching */
 }
 
@@ -216,15 +221,5 @@ void dTimer_createStockTimer() {
 
 /* 8023DAEC-8023DB48       .text __dt__21dDlst_TimerScrnDraw_cFv */
 dDlst_TimerScrnDraw_c::~dDlst_TimerScrnDraw_c() {
-    short in_r4;
-    if (this != (dDlst_TimerScrnDraw_c*)0x0) {
-        // (this->parent).vtbl = &__vt;
-        if (this != (dDlst_TimerScrnDraw_c*)0x0) {
-            // (this->parent).vtbl = (undefined*)&dDlst_base_c::__vt;
-        }
-        if (0 < in_r4) {
-            // delete((JKRHeap*)this);
-        }
-    }
-    return;
+    /* Nonmatching */
 }
