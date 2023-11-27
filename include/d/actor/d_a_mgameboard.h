@@ -17,10 +17,10 @@ public:
     void reqClearGame() {}
     void set_mtx() {}
 
-    void checkClearGame();
-    void getScore();
+    bool checkClearGame();
+    u8 getScore();
     void reqStartGame();
-    void checkEndGame();
+    bool checkEndGame();
     void setGInfoDraw();
     void clrGInfoDraw();
     void CreateHeap();

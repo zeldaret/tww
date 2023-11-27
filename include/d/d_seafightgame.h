@@ -27,6 +27,7 @@ public:
     /* 0x7D */ u8 mBulletNum;
     /* 0x7E */ u8 mScore;
     /* 0x80 */ int mDeadShipNum;
+    /* 0x84 */ u32 field_0x84[31];
 };
 
 #endif /* D_SEAFIGHTGAME_H */
