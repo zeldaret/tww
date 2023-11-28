@@ -9,48 +9,46 @@
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 
-static inline s32 getSwBit(u32 param) {
-    return param & 0xFF;
-}
+static BOOL daSwc00_Execute(swc00_class* i_this) {
+    s32 enable_sw = daSwc00_getSw2No(i_this);
+    fopAc_ac_c* actor = i_this;
+    if(enable_sw == 0xFF || dComIfGs_isSwitch(enable_sw, fopAcM_GetRoomNo(i_this))) {
+        s32 swBit = daSwc00_getSw1No(i_this);
 
-static s32 daSwc00_Execute(swc00_class* i_this) {
-    /* Nonmatching */
-    s32 enable_sw = fopAcM_GetParam(i_this) >> 8 & 0xFF;
-    if(enable_sw == 0xFF || dComIfGs_isSwitch(enable_sw, i_this->current.roomNo)) {
-        u8 swBit = fopAcM_GetParam(i_this) & 0xFF;
+        f32 xz_dist2 = fopAcM_searchPlayerDistanceXZ2(i_this);
+        f32 y_diff = fopAcM_searchPlayerDistanceY(i_this);
+        if(xz_dist2 < i_this->mScale.x && (-100.0f < y_diff && y_diff < i_this->mScale.y)) {
+            dComIfGs_onSwitch(swBit, fopAcM_GetRoomNo(i_this));
 
-        f32 xz_dist = fopAcM_searchPlayerDistanceXZ2(i_this);
-        f32 y_diff = dComIfGp_getPlayer(0)->current.pos.y - i_this->current.pos.y;
-        if(xz_dist < i_this->mScale.x && (-100.0f < y_diff && y_diff < i_this->mScale.y)) {
-            dComIfGs_onSwitch(swBit, i_this->current.roomNo);
-
-            if((fopAcM_GetParam(i_this) >> 0x10 & 3) != 0) {
-                fopAcM_delete(i_this);
+            if(daSwc00_getType(i_this) != 0) {
+                fopAcM_delete(actor);
             }
         }
-        else if((fopAcM_GetParam(i_this) >> 0x10 & 3) == 0) {
-            dComIfGs_offSwitch(swBit, i_this->current.roomNo);
+        else if(daSwc00_getType(i_this) == 0) {
+            dComIfGs_offSwitch(swBit, fopAcM_GetRoomNo(i_this));
         }
     }
 
-    return 1;
+    return TRUE;
 }
 
-static s32 daSwc00_IsDelete(swc00_class* i_this) {
-    return 1;
+static BOOL daSwc00_IsDelete(swc00_class* i_this) {
+    return TRUE;
 }
 
-static s32 daSwc00_Delete(swc00_class* i_this) {
-    return 1;
+static BOOL daSwc00_Delete(swc00_class* i_this) {
+    return TRUE;
 }
 
-static s32 daSwc00_Create(fopAc_ac_c* i_this) {
-    fopAcM_SetupActor(i_this, swc00_class);
+static s32 daSwc00_Create(fopAc_ac_c* i_actor) {
+    fopAcM_SetupActor(i_actor, swc00_class);
 
-    if(dComIfGs_isSwitch(fopAcM_GetParam(i_this) & 0xFF, i_this->current.roomNo)) {
-        if((fopAcM_GetParam(i_this) >> 0x10 & 0x3) == 0) {
-            u32 swBit = getSwBit(fopAcM_GetParam(i_this));
-            dComIfGs_offSwitch(swBit, i_this->current.roomNo);
+    swc00_class* i_this = (swc00_class*)i_actor;
+
+    if(dComIfGs_isSwitch(daSwc00_getSw1No(i_this), fopAcM_GetRoomNo(i_this))) {
+        if(daSwc00_getType(i_this) == 0) {
+            s32 swBit = daSwc00_getSw1No(i_this);
+            dComIfGs_offSwitch(swBit, fopAcM_GetRoomNo(i_this));
         }
         else {
             return cPhs_ERROR_e;
