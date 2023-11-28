@@ -15,6 +15,7 @@
 
 /* 00000078-0000009C       .text solidHeapCB__Q28daMmusic5Act_cFP10fopAc_ac_c */
 bool daMmusic::Act_c::solidHeapCB(fopAc_ac_c* param) {
+    /* Nonmatching */
     bool uVar1;
     uVar1 = create_heap();
     return uVar1;
@@ -27,7 +28,7 @@ bool daMmusic::Act_c::create_heap() {
 
 /* 000000A4-0000013C       .text Macore_is_playing__Q28daMmusic5Act_cFv */
 bool daMmusic::Act_c::Macore_is_playing() {
-    
+    /* Nonmatching */
     if (!dComIfGs_isStageBossEnemy(7) &&
         g_dComIfG_gameInfo.save.mSavedata.mEvent.isEventBit(0x2910) &&
         g_dComIfG_gameInfo.save.mSavedata.mEvent.isEventBit(0x2e02) &&
@@ -51,6 +52,7 @@ s32 daMmusic::Act_c::_create() {
 
 /* 00000268-000002B4       .text _delete__Q28daMmusic5Act_cFv */
 bool daMmusic::Act_c::_delete() {
+    /* Nonmatching */
     int iVar1;
     if (this->field_0x2A0 != 0) {
         *(unsigned int*)(iVar1 + 0x60) = 0xffffffff;  // should be an object, modify the field
@@ -63,6 +65,7 @@ bool daMmusic::Act_c::_delete() {
 
 /* 000002B4-000002C0       .text init_se__Q28daMmusic5Act_cFv */
 void daMmusic::Act_c::init_se() {
+    /* Nonmatching */
     (this->field_0x2D4) = 0x78;
 }
 
