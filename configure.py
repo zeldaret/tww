@@ -1336,7 +1336,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_canon"),
     ActorRel(NonMatching, "d_a_cc"),
     ActorRel(NonMatching, "d_a_dai"),
-    ActorRel(NonMatching, "d_a_demo_item"),
+    ActorRel(Matching,    "d_a_demo_item", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_door12"),
     ActorRel(NonMatching, "d_a_fallrock"),
     ActorRel(NonMatching, "d_a_ff"),

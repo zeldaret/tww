@@ -2301,6 +2301,7 @@ inline view_port_class* dComIfGd_getViewport() { return g_dComIfG_gameInfo.drawl
 inline void dComIfGd_setView(view_class* pView) { g_dComIfG_gameInfo.drawlist.setView(pView); }
 inline view_class* dComIfGd_getView() { return g_dComIfG_gameInfo.drawlist.getView(); }
 inline MtxP dComIfGd_getViewRotMtx() { return dComIfGd_getView()->mViewMtxNoTrans; }
+inline MtxP dComIfGd_getInvViewMtx() { return g_dComIfG_gameInfo.drawlist.getView()->mInvViewMtx; }
 inline void dComIfGd_init() { g_dComIfG_gameInfo.drawlist.init(); }
 inline void dComIfGd_reset() { g_dComIfG_gameInfo.drawlist.reset(); }
 

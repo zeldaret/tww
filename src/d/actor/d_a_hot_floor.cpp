@@ -35,9 +35,9 @@ void daHot_Floor_c::set_mtx() {
         mDoMtx_copy(mDoMtx_stack_c::get(), mtx[0]);
         mDoMtx_stack_c::multVec(&pos, &current.pos);
         if (mEmitter2 != NULL)
-            JPASetRMtxTVecfromMtx(mtx[0], mEmitter2->mGlobalRotation, mEmitter2->mGlobalTranslation);
+            mEmitter2->setGlobalRTMatrix(mtx[0]);
         if (mEmitter1 != NULL)
-            JPASetRMtxTVecfromMtx(mtx[0], mEmitter1->mGlobalRotation, mEmitter1->mGlobalTranslation);
+            mEmitter1->setGlobalRTMatrix(mtx[0]);
     }
     mtx_p = NULL;
 }

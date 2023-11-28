@@ -7,6 +7,7 @@
 #include "JSystem/JSupport/JSUList.h"
 #include "JSystem/JMath/random.h"
 #include "JSystem/JGeometry.h"
+#include "JSystem/TPosition3.hh"
 #include "SSystem/SComponent/c_xyz.h"
 #include "SSystem/SComponent/c_sxyz.h"
 #include "dolphin/gx/GXStruct.h"
@@ -182,6 +183,9 @@ public:
     void setGlobalRTMatrix(MtxP mtx) {
         JPASetRMtxTVecfromMtx(mtx, mGlobalRotation, mGlobalTranslation);
     }
+    void setGlobalRotation(const JGeometry::TVec3<short>& rot) {
+        JPAGetXYZRotateMtx(rot.x, rot.y, rot.z, mGlobalRotation); 
+    }
     void setGlobalTranslation(f32 x, f32 y, f32 z) { mGlobalTranslation.set(x, y, z); }
     void setGlobalTranslation(const JGeometry::TVec3<float>& trans) { mGlobalTranslation.set(trans); }
     void setGlobalScale(const JGeometry::TVec3<float>& scale) {
@@ -290,7 +294,7 @@ public:
     /* 0x19C */ JPACallBackBase<JPABaseEmitter*>* mpEmitterCallBack;
     /* 0x1A0 */ JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>* mpParticleCallBack;
     /* 0x1A4 */ JMath::TRandom_fast_ mRandomSeed;
-    /* 0x1A8 */ Mtx mGlobalRotation;
+    /* 0x1A8 */ JGeometry::SMatrix34C<f32> mGlobalRotation;
     /* 0x1D8 */ JGeometry::TVec3<f32> mGlobalDynamicsScale;
     /* 0x1E4 */ JGeometry::TVec3<f32> mGlobalTranslation;
     /* 0x1F0 */ JGeometry::TVec3<f32> mGlobalParticleScale;

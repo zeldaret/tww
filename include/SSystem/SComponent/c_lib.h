@@ -52,6 +52,11 @@ inline T cLib_checkBit(T value, T bit) {
 }
 
 template <typename T>
+inline void cLib_setBit(T& value, T bit) {
+    value = bit;
+}
+
+template <typename T>
 inline T cLib_minMaxLimit(T val, T min, T max) {
     T ret;
     T var_r30;
