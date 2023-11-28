@@ -888,7 +888,7 @@ void daRd_c::modeParalysisInit() {
 
 /* 000020EC-000021F0       .text modeParalysis__6daRd_cFv */
 void daRd_c::modeParalysis() {
-    /* Nonmatching: isStop inline regalloc + checkTgHit() clrlwi. missing? */
+    /* Nonmatching: isStop inline regalloc */
     if (isAnm(AnmPrm_BEAM_HIT) && mpMorf->isStop()) {
         setAnm(AnmPrm_BEAM, false);
     } else if (isAnm(AnmPrm_BEAM)) {
@@ -900,7 +900,9 @@ void daRd_c::modeParalysis() {
     }
     
     if (checkTgHit()) {
-        // Did something in here get optimized out weirdly?
+        // This line setting speedF to itself gets optimized out and produces no code, but affects codegen.
+        // It's not known what the original code that got optimized out here was, it could be speedF or something else.
+        speedF = speedF;
     }
 }
 

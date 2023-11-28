@@ -1003,7 +1003,7 @@ fopAc_ac_c* fopAcM_createItemForKP2(cXyz* pos, int i_itemNo, int roomNo, csXyz* 
 daItem_c* fopAcM_createItemForSimpleDemo(cXyz* pos, int i_itemNo, int roomNo, csXyz* rot, cXyz* scale, f32 speedF, f32 speedY) {
     daItem_c* item = (daItem_c*)fopAcM_fastCreateItem(pos, i_itemNo, roomNo, rot, scale, speedF, speedY, -7.0f, 0xFFFFFFFF, NULL);
     if (item != NULL)
-        item->mCurState = 5;
+        item->setStatus(5);
     return item;
 }
 
@@ -1070,7 +1070,7 @@ BOOL stealItem_CB(void* actor) {
     if (actor) {
         daItem_c* item = (daItem_c*)actor;
         item->mScale.setall(1.0f);
-        item->mStatusFlags |= 0x40;
+        item->setFlag(0x40);
     }
     return TRUE;
 }

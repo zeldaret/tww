@@ -3,22 +3,23 @@
 
 #include "d/actor/d_a_itembase.h"
 #include "d/d_particle.h"
-#include "f_pc/f_pc_manager.h"
+#include "f_op/f_op_actor_mng.h"
+#include "SSystem/SComponent/c_lib.h"
 
 class daItem_c : public daItemBase_c {
 public:
     typedef void (daItem_c::*ModeFunc)();
     
     enum State {
-        STATE_WAIT_MAIN     = 0x2,
-        STATE_BRING_NEZUMI  = 0x3,
-        STATE_INIT_NORMAL   = 0x5,
-        STATE_MAIN_NORMAL   = 0x6,
-        STATE_INIT_GET_DEMO = 0x7,
-        STATE_WAIT_GET_DEMO = 0x8,
-        STATE_MAIN_GET_DEMO = 0x9,
-        STATE_WAIT_BOSS1    = 0xA,
-        STATE_WAIT_BOSS2    = 0xB,
+        STATUS_WAIT_MAIN     = 0x2,
+        STATUS_BRING_NEZUMI  = 0x3,
+        STATUS_INIT_NORMAL   = 0x5,
+        STATUS_MAIN_NORMAL   = 0x6,
+        STATUS_INIT_GET_DEMO = 0x7,
+        STATUS_WAIT_GET_DEMO = 0x8,
+        STATUS_MAIN_GET_DEMO = 0x9,
+        STATUS_WAIT_BOSS1    = 0xA,
+        STATUS_WAIT_BOSS2    = 0xB,
     };
     
     float getYOffset();
@@ -75,12 +76,11 @@ public:
         mDisappearTimer = param_1;
         field_0x65a = param_2;
     }
-    // TODO
-    void setFlag(u8) {}
-    void clrFlag(u8) {}
-    void checkFlag(u8) {}
-    void setStatus(u8) {}
-    void printStatus() {}
+    void setFlag(u8 flag) { cLib_onBit(mFlag, flag); }
+    void clrFlag(u8 flag) { cLib_offBit(mFlag, flag); }
+    bool checkFlag(u8 flag) { return cLib_checkBit(mFlag, flag); }
+    void setStatus(u8 status) { mItemStatus = status; }
+    void printStatus() {} // this might be a debug-only function
     
     static dCcD_SrcCyl m_cyl_src;
     static s32 m_timer_max;
@@ -101,9 +101,9 @@ public:
     /* 0x666 */ u8 field_0x666;
     /* 0x667 */ u8 mType;
     /* 0x668 */ u8 mAction;
-    /* 0x669 */ u8 mStatusFlags; // TODO rename this
+    /* 0x669 */ u8 mFlag;
     /* 0x66A */ u8 mMode;
-    /* 0x66B */ u8 mCurState;
+    /* 0x66B */ u8 mItemStatus;
     /* 0x66C */ u8 mOnGroundTimer;
     /* 0x66D */ u8 field_0x66D[0x670 - 0x66D];
     /* 0x670 */ u32 mDemoItemBsPcId;
@@ -112,19 +112,19 @@ public:
     /* 0x69C */ dPa_smokeEcallBack mPtclSmokeCb;
     /* 0x6BC */ JPABaseEmitter* mpParticleEmitter;
     
-    // TODO add enums for type, action, state, and status flags
-    // state 7 is probably "about to start an item get demo"
+    // TODO add enums for type, action, flags, mode, and status
+    // status 7 is probably "about to start an item get demo"
 };
 
 STATIC_ASSERT(sizeof(daItem_c) == 0x6C0);
 
 namespace daItem_prm {
-    inline u32 getType(daItem_c* item) { return (fpcM_GetParam(item) & 0x03000000) >> 0x18; }
-    inline u32 getAction(daItem_c* item) { return (fpcM_GetParam(item) & 0xFC000000) >> 0x1A; }
-    inline u32 getItemNo(daItem_c* item) { return (fpcM_GetParam(item) & 0x000000FF) >> 0x00; }
-    inline u32 getItemBitNo(daItem_c* item) { return (fpcM_GetParam(item) & 0x0000FF00) >> 0x08; }
+    inline u32 getType(daItem_c* item) { return (fopAcM_GetParam(item) & 0x03000000) >> 0x18; }
+    inline u32 getAction(daItem_c* item) { return (fopAcM_GetParam(item) & 0xFC000000) >> 0x1A; }
+    inline u32 getItemNo(daItem_c* item) { return (fopAcM_GetParam(item) & 0x000000FF) >> 0x00; }
+    inline u32 getItemBitNo(daItem_c* item) { return (fopAcM_GetParam(item) & 0x0000FF00) >> 0x08; }
     inline u32 getSwitchNo(daItem_c* item) { return (item->orig.angle.z & 0x00FF) >> 0; }
-    inline u32 getSwitchNo2(daItem_c* item) { return (fpcM_GetParam(item) & 0x00FF0000) >> 0x10; }
+    inline u32 getSwitchNo2(daItem_c* item) { return (fopAcM_GetParam(item) & 0x00FF0000) >> 0x10; }
 };
 
 #endif /* D_A_ITEM_H */

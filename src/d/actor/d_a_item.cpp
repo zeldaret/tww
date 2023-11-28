@@ -160,17 +160,17 @@ void daItem_c::CreateInit() {
     mDisappearTimer = getData()->mDuration;
     field_0x65a = getData()->field_0x18;
     field_0x650 = speedPtr->y;
-    mCurState = 0;
+    mItemStatus = 0;
     
     mType = daItem_prm::getType(this);
     if (daItem_prm::getType(this) == 3 || daItem_prm::getType(this) == 1) {
-        mStatusFlags |= 2;
+        setFlag(0x02);
     }
     mAction = daItem_prm::getAction(this);
     
     show();
     
-    if (dItem_data::checkSpecialEffect(m_itemNo) && (m_itemNo != SMALL_KEY || (m_itemNo == SMALL_KEY && (mStatusFlags & 2)))) {
+    if (dItem_data::checkSpecialEffect(m_itemNo) && (m_itemNo != SMALL_KEY || (m_itemNo == SMALL_KEY && checkFlag(0x02)))) {
         u16 particleID = dItem_data::getSpecialEffect(m_itemNo);
         dComIfGp_particle_set(particleID, &current.pos, NULL, NULL, 0xFF, &mPtclFollowCb);
     }
@@ -190,7 +190,7 @@ void daItem_c::CreateInit() {
     mSwitchId = daItem_prm::getSwitchNo2(this);
     if (mSwitchId != 0xFF && !fopAcM_isSwitch(this, mSwitchId)) {
         hide();
-        mStatusFlags |= 2;
+        setFlag(0x02);
     }
     mActivationSwitch = daItem_prm::getSwitchNo(this);
     
@@ -201,7 +201,7 @@ void daItem_c::CreateInit() {
     switch (m_itemNo) {
     case SWORD:
     case SHIELD:
-        mStatus |= 0x4000;
+        fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
         break;
     case DROPPED_SWORD:
         current.angle.x = 0x4000;
@@ -230,7 +230,7 @@ s32 daItem_c::_daItem_create() {
     mPickupFlag = daItem_prm::getItemBitNo(this);
     if (m_itemNo != BLUE_JELLY) { // Blue Chu Jelly uses mPickupFlag as if it was a switch.
         mPickupFlag &= 0x7F;
-        if (dComIfGs_isItem(mPickupFlag, orig.roomNo) && mPickupFlag != 0x7F) {
+        if (fopAcM_isItem(this, mPickupFlag) && mPickupFlag != 0x7F) {
             // Already picked up, don't create the item again.
             setLoadError();
             return cPhs_ERROR_e;
@@ -265,36 +265,36 @@ BOOL daItem_c::_daItem_execute() {
     mEyePos.y += dItem_data::getH(m_itemNo)/2.0f;
     mAttentionInfo.mPosition = current.pos;
     
-    switch (mCurState) {
-    case STATE_BRING_NEZUMI:
+    switch (mItemStatus) {
+    case STATUS_BRING_NEZUMI:
         execBringNezumi();
         break;
     case 0:
     case 1:
         if (checkActionNow()) {
-            mCurState = 1;
+            mItemStatus = 1;
         } else {
-            mCurState = 0;
+            mItemStatus = 0;
         }
-    case STATE_WAIT_MAIN:
+    case STATUS_WAIT_MAIN:
         execWaitMain();
         break;
-    case STATE_INIT_NORMAL:
+    case STATUS_INIT_NORMAL:
         execInitNormalDirection();
-    case STATE_MAIN_NORMAL:
+    case STATUS_MAIN_NORMAL:
         execMainNormalDirection();
         break;
-    case STATE_INIT_GET_DEMO:
+    case STATUS_INIT_GET_DEMO:
         execInitGetDemoDirection();
         break;
-    case STATE_WAIT_GET_DEMO:
+    case STATUS_WAIT_GET_DEMO:
         execWaitGetDemoDirection();
         break;
-    case STATE_MAIN_GET_DEMO:
+    case STATUS_MAIN_GET_DEMO:
         execMainGetDemoDirection();
         break;
-    case STATE_WAIT_BOSS1:
-    case STATE_WAIT_BOSS2:
+    case STATUS_WAIT_BOSS1:
+    case STATUS_WAIT_BOSS2:
         execWaitMainFromBoss();
         break;
     }
@@ -319,25 +319,25 @@ void daItem_c::mode_proc_call() {
         (this->*mode_proc[mMode])();
     }
     
-    if (mStatusFlags & 0x08) {
+    if (checkFlag(0x08)) {
         fopAc_ac_c* boomerang = (fopAc_ac_c*)fopAcM_SearchByName(PROC_BOOMERANG);
         if (boomerang) {
             current.pos = boomerang->current.pos;
         } else {
-            mStatusFlags &= ~0x08;
+            clrFlag(0x08);
         }
     }
     
-    if (mStatusFlags & 0x40) {
+    if (checkFlag(0x40)) {
         fopAc_ac_c* grappling_hook = (fopAc_ac_c*)fopAcM_SearchByName(PROC_HIMO2);
         if (grappling_hook) {
             current.pos = grappling_hook->current.pos;
         } else {
-            mStatusFlags &= ~0x40;
+            clrFlag(0x40);
         }
     }
     
-    if (mType == 1 && (fopAcM_checkHookCarryNow(this) || mStatusFlags & 0x08)) {
+    if (mType == 1 && (fopAcM_checkHookCarryNow(this) || checkFlag(0x08))) {
         mType = 3;
     }
 }
@@ -369,7 +369,7 @@ void daItem_c::execInitNormalDirection() {
         mpParticleEmitter = NULL;
     }
     
-    mCurState = STATE_MAIN_NORMAL;
+    mItemStatus = STATUS_MAIN_NORMAL;
 }
 
 /* 800F5AFC-800F5BC8       .text execMainNormalDirection__8daItem_cFv */
@@ -404,7 +404,7 @@ void daItem_c::execInitGetDemoDirection() {
         fopAcM_orderItemEvent(this);
         mEvtInfo.onCondition(dEvtCnd_CANGETITEM_e);
         mDemoItemBsPcId = fopAcM_createItemForTrBoxDemo(&current.pos, m_itemNo, -1, current.roomNo, NULL, NULL);
-        mCurState = STATE_WAIT_GET_DEMO;
+        mItemStatus = STATUS_WAIT_GET_DEMO;
     }
 }
 
@@ -413,7 +413,7 @@ void daItem_c::execWaitGetDemoDirection() {
     hide();
     
     if (mEvtInfo.checkCommandItem()) {
-        mCurState = STATE_MAIN_GET_DEMO;
+        mItemStatus = STATUS_MAIN_GET_DEMO;
         if (mDemoItemBsPcId != fpcM_ERROR_PROCESS_ID_e) {
             dComIfGp_event_setItemPartnerId(mDemoItemBsPcId);
         }
@@ -449,7 +449,7 @@ void daItem_c::execWaitMain() {
     }
     mode_proc_call();
     
-    if (!(mStatusFlags & 0x02)) {
+    if (!checkFlag(0x02)) {
         f32 temp1 = mScaleTarget.x / getData()->mScaleAnimSpeed;
         f32 temp2 = mScaleTarget.y / getData()->mScaleAnimSpeed;
         f32 temp3 = mScaleTarget.z / getData()->mScaleAnimSpeed;
@@ -485,7 +485,7 @@ void daItem_c::execWaitMainFromBoss() {
     }
     mode_proc_call();
     
-    if (mCurState != STATE_WAIT_BOSS2) {
+    if (mItemStatus != STATUS_WAIT_BOSS2) {
         scaleAnimFromBossItem();
     }
     
@@ -578,10 +578,10 @@ bool Reflect(cXyz& surfVec, cXyz* moveVec, f32 param_2, f32 xzMult) {
 
 /* 800F6434-800F6D24       .text itemGetExecute__8daItem_cFv */
 void daItem_c::itemGetExecute() {
-    if (mCurState == STATE_INIT_NORMAL) {
+    if (mItemStatus == STATUS_INIT_NORMAL) {
         return;
     }
-    mCurState = STATE_INIT_NORMAL;
+    mItemStatus = STATUS_INIT_NORMAL;
     
     switch (m_itemNo) {
     case HEART:
@@ -618,11 +618,11 @@ void daItem_c::itemGetExecute() {
         break;
     case KAKERA_HEART:
         mDoAud_seStart(JA_SE_HEART_PIECE, NULL, 0, 0);
-        mCurState = STATE_INIT_GET_DEMO;
+        mItemStatus = STATUS_INIT_GET_DEMO;
         break;
     case UTUWA_HEART:
         mDoAud_seStart(JA_SE_HEART_PIECE, NULL, 0, 0);
-        mCurState = STATE_INIT_GET_DEMO;
+        mItemStatus = STATUS_INIT_GET_DEMO;
         break;
     case S_MAGIC:
         mDoAud_seStart(JA_SE_MAGIC_POT_GET_S, NULL, 0, 0);
@@ -643,7 +643,7 @@ void daItem_c::itemGetExecute() {
         execItemGet(m_itemNo);
         break;
     case SMALL_KEY:
-        mCurState = STATE_INIT_GET_DEMO;
+        mItemStatus = STATUS_INIT_GET_DEMO;
         break;
     case TRIPLE_HEART:
         mDoAud_seStart(JA_SE_HEART_PIECE, NULL, 0, 0);
@@ -652,36 +652,36 @@ void daItem_c::itemGetExecute() {
     case PENDANT:
         mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
         if (!dComIfGs_isGetItemBeast(7)) {
-            mCurState = STATE_INIT_GET_DEMO;
+            mItemStatus = STATUS_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(7);
         } else {
             execItemGet(m_itemNo);
         }
         break;
     case DEKU_LEAF:
-        mCurState = STATE_INIT_GET_DEMO;
+        mItemStatus = STATUS_INIT_GET_DEMO;
         break;
     case SWORD:
         daItem_c* item = (daItem_c*)fopAcM_SearchByName(PROC_ITEM);
         if (item && item->m_itemNo == SHIELD) {
             item->itemGetExecute();
         }
-        mCurState = STATE_INIT_GET_DEMO;
+        mItemStatus = STATUS_INIT_GET_DEMO;
         break;
     case SHIELD:
         item = (daItem_c*)fopAcM_SearchByName(PROC_ITEM);
         if (item && item->m_itemNo == SWORD) {
             item->itemGetExecute();
         }
-        mCurState = STATE_INIT_GET_DEMO;
+        mItemStatus = STATUS_INIT_GET_DEMO;
         break;
     case DROPPED_SWORD:
-        mCurState = STATE_INIT_GET_DEMO;
+        mItemStatus = STATUS_INIT_GET_DEMO;
         break;
     case SKULL_NECKLACE:
         mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
         if (!dComIfGs_isGetItemBeast(0)) {
-            mCurState = STATE_INIT_GET_DEMO;
+            mItemStatus = STATUS_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(0);
         } else {
             execItemGet(m_itemNo);
@@ -690,7 +690,7 @@ void daItem_c::itemGetExecute() {
     case BOKOBABA_SEED:
         mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
         if (!dComIfGs_isGetItemBeast(1)) {
-            mCurState = STATE_INIT_GET_DEMO;
+            mItemStatus = STATUS_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(1);
         } else {
             execItemGet(m_itemNo);
@@ -699,7 +699,7 @@ void daItem_c::itemGetExecute() {
     case GOLDEN_FEATHER:
         mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
         if (!dComIfGs_isGetItemBeast(2)) {
-            mCurState = STATE_INIT_GET_DEMO;
+            mItemStatus = STATUS_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(2);
         } else {
             execItemGet(m_itemNo);
@@ -708,7 +708,7 @@ void daItem_c::itemGetExecute() {
     case BOKO_BELT:
         mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
         if (!dComIfGs_isGetItemBeast(3)) {
-            mCurState = STATE_INIT_GET_DEMO;
+            mItemStatus = STATUS_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(3);
         } else {
             execItemGet(m_itemNo);
@@ -717,7 +717,7 @@ void daItem_c::itemGetExecute() {
     case RED_JELLY:
         mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
         if (!dComIfGs_isGetItemBeast(4)) {
-            mCurState = STATE_INIT_GET_DEMO;
+            mItemStatus = STATUS_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(4);
         } else {
             execItemGet(m_itemNo);
@@ -726,7 +726,7 @@ void daItem_c::itemGetExecute() {
     case GREEN_JELLY:
         mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
         if (!dComIfGs_isGetItemBeast(5)) {
-            mCurState = STATE_INIT_GET_DEMO;
+            mItemStatus = STATUS_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(5);
         } else {
             execItemGet(m_itemNo);
@@ -735,7 +735,7 @@ void daItem_c::itemGetExecute() {
     case BLUE_JELLY:
         mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
         if (!dComIfGs_isGetItemBeast(6)) {
-            mCurState = STATE_INIT_GET_DEMO;
+            mItemStatus = STATUS_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(6);
         } else {
             execItemGet(m_itemNo);
@@ -744,7 +744,7 @@ void daItem_c::itemGetExecute() {
     case BIRD_ESA_5:
         mDoAud_seStart(JA_SE_ESA_GET, NULL, 0, 0);
         if (!dComIfGs_isGetItemBait(0)) {
-            mCurState = STATE_INIT_GET_DEMO;
+            mItemStatus = STATUS_INIT_GET_DEMO;
             dComIfGs_onGetItemBait(0);
         } else {
             execItemGet(m_itemNo);
@@ -753,7 +753,7 @@ void daItem_c::itemGetExecute() {
     case ANIMAL_ESA:
         mDoAud_seStart(JA_SE_ESA_GET, NULL, 0, 0);
         if (!dComIfGs_isGetItemBait(1)) {
-            mCurState = STATE_INIT_GET_DEMO;
+            mItemStatus = STATUS_INIT_GET_DEMO;
             dComIfGs_onGetItemBait(1);
         } else {
             execItemGet(m_itemNo);
@@ -771,7 +771,7 @@ void daItem_c::itemGetExecute() {
         dComIfGs_onItem(flag, (s8)roomNo);
     }
     
-    mStatusFlags &= ~0x4;
+    clrFlag(0x04);
     
     mCyl.SetTgType(0);
     mCyl.OffCoSetBit();
@@ -789,14 +789,14 @@ void daItem_c::itemDefaultRotateY() {
 /* 800F6D78-800F6E54       .text checkItemDisappear__8daItem_cFv */
 BOOL daItem_c::checkItemDisappear() {
     BOOL disappearing = TRUE;
-    if (mCurState == STATE_BRING_NEZUMI) {
+    if (mItemStatus == STATUS_BRING_NEZUMI) {
         disappearing = FALSE;
         show();
     }
-    if (mStatusFlags & 0x02) {
+    if (checkFlag(0x02)) {
         disappearing = FALSE;
     }
-    if (mStatusFlags & 0x10) {
+    if (checkFlag(0x10)) {
         disappearing = FALSE;
     }
     if (dItem_data::chkFlag(m_itemNo, 0x01)) {
@@ -805,10 +805,10 @@ BOOL daItem_c::checkItemDisappear() {
     if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode != 0) {
         disappearing = FALSE;
     }
-    if (mCurState == 4) {
+    if (mItemStatus == 4) {
         disappearing = FALSE;
     }
-    if ((mStatusFlags & 0x08) || (mStatusFlags & 0x40) || (mStatus & fopAcStts_HOOK_CARRY_e)) {
+    if (checkFlag(0x08) || checkFlag(0x40) || fopAcM_checkStatus(this, fopAcStts_HOOK_CARRY_e)) {
         disappearing = FALSE;
         show();
     }
@@ -818,7 +818,7 @@ BOOL daItem_c::checkItemDisappear() {
 /* 800F6E54-800F6E74       .text setItemTimer__8daItem_cFi */
 void daItem_c::setItemTimer(int timer) {
     if (timer == -1) {
-        mStatusFlags |= 0x10;
+        setFlag(0x10);
         return;
     }
     mDisappearTimer = timer;
@@ -829,7 +829,7 @@ BOOL daItem_c::checkPlayerGet() {
     if (field_0x638 < getData()->field_0x42) {
         return FALSE;
     }
-    if (mCurState == STATE_BRING_NEZUMI) {
+    if (mItemStatus == STATUS_BRING_NEZUMI) {
         return FALSE;
     }
     return TRUE;
@@ -850,14 +850,14 @@ BOOL daItem_c::itemActionForRupee() {
         
         mOnGroundTimer++;
         if (mOnGroundTimer >= 2) {
-            cLib_offBit(mStatusFlags, (u8)0x04);
+            clrFlag(0x04);
         }
         
         set_bound_se();
     } else if (mAcch.ChkGroundHit()) {
         itemDefaultRotateY();
         speedF = 0.0f;
-        cLib_offBit(mStatusFlags, (u8)0x04);
+        clrFlag(0x04);
         mOnGroundTimer = 1;
     }
     
@@ -873,7 +873,7 @@ BOOL daItem_c::itemActionForRupee() {
         mTargetAngleX = 0;
     }
     
-    if (!cLib_checkBit(mStatusFlags, (u8)0x02)) {
+    if (!checkFlag(0x02)) {
         cLib_chaseAngleS(&current.angle.x, mTargetAngleX, field_0x654);
     }
     
@@ -891,7 +891,7 @@ BOOL daItem_c::itemActionForHeart() {
     mAcch.CrrPos(*dComIfG_Bgsp());
     
     if (mAcch.ChkGroundLanding() || mAcch.ChkGroundHit()) {
-        cLib_offBit(mStatusFlags, (u8)0x04);
+        clrFlag(0x04);
         mExtraZRot = 0;
         speed.set(0.0f, -1.0f, 0.0f);
         speedF = 0.0f;
@@ -923,13 +923,13 @@ BOOL daItem_c::itemActionForKey() {
         
         mOnGroundTimer++;
         if (mOnGroundTimer >= 2) {
-            cLib_offBit(mStatusFlags, (u8)0x04);
+            clrFlag(0x04);
         }
     } else if (mAcch.ChkGroundHit()) {
         mOnGroundTimer = 1;
         mTargetAngleX = 0;
         current.angle.x = 0;
-        cLib_offBit(mStatusFlags, (u8)0x04);
+        clrFlag(0x04);
         itemDefaultRotateY();
     }
     
@@ -983,7 +983,7 @@ BOOL daItem_c::itemActionForSword() {
     mAcch.CrrPos(*dComIfG_Bgsp());
     
     bool isQuake = dComIfGp_getDetect().chk_quake(&current.pos);
-    if (isQuake && !cLib_checkBit(mStatusFlags, (u8)0x20) && mAcch.ChkGroundHit()) {
+    if (isQuake && !checkFlag(0x20) && mAcch.ChkGroundHit()) {
         speed.set(0.0f, 21.0f, 0.0f);
         mGravity = -3.5f;
     }
@@ -1037,9 +1037,9 @@ BOOL daItem_c::itemActionForSword() {
     }
     
     if (isQuake) {
-        cLib_onBit(mStatusFlags, (u8)0x20);
+        setFlag(0x20);
     } else {
-        cLib_offBit(mStatusFlags, (u8)0x20);
+        clrFlag(0x20);
     }
     
     return TRUE;
@@ -1188,7 +1188,7 @@ BOOL daItem_c::checkGetItem() {
                 itemGetExecute();
                 return TRUE;
             } else if (atType & AT_TYPE_BOOMERANG) {
-                mStatusFlags |= 0x08;
+                setFlag(0x08);
             }
         }
     }
@@ -1243,7 +1243,7 @@ void daItem_c::mode_water_init() {
     current.angle.x = 0;
     mExtraZRot = 0;
     field_0x654 = 0;
-    cLib_offBit(mStatusFlags, (u8)0x04);
+    clrFlag(0x04);
     mScale.set(mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
     
     cXyz scale;
@@ -1258,7 +1258,7 @@ void daItem_c::mode_water_init() {
 
 /* 800F80CC-800F844C       .text mode_wait__8daItem_cFv */
 void daItem_c::mode_wait() {
-    if (cLib_checkBit(mStatusFlags, (u8)0x04) && dItem_data::checkAppearEffect(m_itemNo)) {
+    if (checkFlag(0x04) && dItem_data::checkAppearEffect(m_itemNo)) {
         u16 appearEffect = dItem_data::getAppearEffect(m_itemNo);
         dComIfGp_particle_setSimple(appearEffect, &current.pos, 0xFF, g_whiteColor, g_whiteColor, 0);
     }
@@ -1345,8 +1345,7 @@ void daItem_c::mode_water() {
 
 /* 800F8528-800F8950       .text initAction__8daItem_cFv */
 BOOL daItem_c::initAction() {
-    /* Nonmatching - regalloc */
-    if (cLib_checkBit(mStatusFlags, (u8)0x02)) {
+    if (checkFlag(0x02)) {
         mScale.set(mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
         
         switch (mAction) {
@@ -1355,26 +1354,25 @@ BOOL daItem_c::initAction() {
             f32 temp = getData()->field_0x2C + cM_rndF(5.0f);
             speedF = cM_rndF(getData()->field_0x30);
             speed.set(0.0f, temp, 0.0f);
-            // speedF = cM_rndF(getData()->field_0x30);
             break;
         case 5:
             speed.setall(0.0f);
             speedF = 0.0f;
             mScale.setall(0.0f);
-            mCurState = STATE_WAIT_BOSS1;
+            mItemStatus = STATUS_WAIT_BOSS1;
             fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
             field_0x654 = 0x4A8;
             break;
         case 0xC:
             mScale.setall(1.0f);
-            mCurState = STATE_WAIT_BOSS2;
+            mItemStatus = STATUS_WAIT_BOSS2;
             fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
             field_0x654 = 0x4A8;
             break;
         }
         
         mGravity = getData()->mFieldItemGravity;
-        cLib_offBit(mStatusFlags, (u8)0x04);
+        clrFlag(0x04);
         mMode = 0;
         
         return TRUE;
@@ -1440,11 +1438,14 @@ BOOL daItem_c::initAction() {
     
     mGravity = getData()->mFieldItemGravity;
     speed.set(0.0f, temp_f31, 0.0f);
+    // This line setting speedF to itself gets optimized out and produces no code, but affects regalloc.
+    // It's not known what the original code that got optimized out here was, it could be speedF or something else.
+    speedF = speedF;
     mScale.setall(0.0f);
     
     mMode = 0;
     
-    cLib_onBit(mStatusFlags, (u8)0x04);
+    setFlag(0x04);
     
     return TRUE;
 }
