@@ -300,6 +300,7 @@ f32 dBgS_Acch::GetWallAddY(Vec&, int) {
     /* Nonmatching */
 }
 
+// TODO: Not sure why this weak function doesn't get inlined.
 /* 800A4434-800A444C       .text getBgW__20dStage_roomControl_cFi */
 dBgW* dStage_roomControl_c::getBgW(int i_roomNo) {
     return mStatus[i_roomNo].mpBgW;

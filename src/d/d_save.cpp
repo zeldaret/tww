@@ -28,12 +28,12 @@ void dSv_player_status_a_c::init() {
     field_0x8 = 0;
 
     for (int i = 0; i < 5; i++) {
-        mSelectItem[i] = 0xFF;
+        mSelectItem[i] = NO_ITEM;
         dComIfGp_setSelectItem(i);
     }
 
     for (int i = 0; i < 4; i++) {
-        mSelectEquip[i] = 0xFF;
+        mSelectEquip[i] = NO_ITEM;
     }
 
     mRupee = 0;
@@ -74,7 +74,7 @@ void dSv_player_return_place_c::set(const char* i_name, s8 i_roomNo, u8 i_status
 /* 80058C60-80058C7C       .text init__17dSv_player_item_cFv */
 void dSv_player_item_c::init() {
     for (int i = 0; i < 21; i++) {
-        mItems[i] = 0xFF;
+        mItems[i] = NO_ITEM;
     }
 }
 
@@ -118,7 +118,9 @@ void dSv_player_item_c::setEquipBottleItemIn(u8 i_btnIdx, u8 i_itemNo) {
     if (invIdx > 0x11) {
         return;
     }
+    
     mItems[invIdx] = i_itemNo;
+    
     dComIfGs_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
     dComIfGp_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
     dComIfGp_setSelectItem(i_btnIdx);
@@ -149,7 +151,9 @@ void dSv_player_item_c::setEquipBottleItemIn(u8 i_itemNo) {
     if (invIdx > 0x11) {
         return;
     }
+    
     mItems[invIdx] = i_itemNo;
+    
     dComIfGs_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
     dComIfGp_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
     dComIfGp_setSelectItem(btnIdx);
@@ -361,24 +365,24 @@ void dSv_player_item_max_c::init() {
 /* 80059908-80059968       .text init__21dSv_player_bag_item_cFv */
 void dSv_player_bag_item_c::init() {
     for (int i = 0; i < 8; i++) {
-        mBeast[i] = 0xFF;
+        mBeast[i] = NO_ITEM;
     }
 
     for (int i = 0; i < 8; i++) {
-        mBait[i] = 0xFF;
+        mBait[i] = NO_ITEM;
     }
 
     for (int i = 0; i < 8; i++) {
-        mReserve[i] = 0xFF;
+        mReserve[i] = NO_ITEM;
     }
 }
 
 /* 80059968-800599D8       .text setBeastItem__21dSv_player_bag_item_cFUc */
-void dSv_player_bag_item_c::setBeastItem(u8 param_0) {
-    if (!checkBeastItem(param_0)) {
+void dSv_player_bag_item_c::setBeastItem(u8 i_itemNo) {
+    if (!checkBeastItem(i_itemNo)) {
         for (int i = 0; i < 8; i++) {
-            if (mBeast[i] == 0xFF) {
-                mBeast[i] = param_0;
+            if (mBeast[i] == NO_ITEM) {
+                mBeast[i] = i_itemNo;
                 return;
             }
         }
@@ -386,14 +390,28 @@ void dSv_player_bag_item_c::setBeastItem(u8 param_0) {
 }
 
 /* 800599D8-80059C30       .text setBeastItemEmpty__21dSv_player_bag_item_cFUc */
-void dSv_player_bag_item_c::setBeastItemEmpty(u8) {
-    /* Nonmatching */
+void dSv_player_bag_item_c::setBeastItemEmpty(u8 i_itemNo) {
+    if (checkBeastItem(i_itemNo)) {
+        for (int i = 0; i < 8; i++) {
+            if (mBeast[i] == i_itemNo) {
+                mBeast[i] = NO_ITEM;
+                for (int btnIdx = 0; btnIdx < 3; btnIdx++) {
+                    if (dComIfGp_getSelectItem(btnIdx) == i_itemNo) {
+                        dComIfGs_setItem(dComIfGs_getSelectItem(btnIdx), NO_ITEM);
+                        dComIfGp_setItem(dComIfGs_getSelectItem(btnIdx), NO_ITEM);
+                        dComIfGp_setSelectItem(btnIdx);
+                    }
+                }
+                return;
+            }
+        }
+    }
 }
 
 /* 80059C30-80059C60       .text checkBeastItem__21dSv_player_bag_item_cFUc */
-bool dSv_player_bag_item_c::checkBeastItem(u8 param_0) {
+bool dSv_player_bag_item_c::checkBeastItem(u8 i_itemNo) {
     for (int i = 0; i < 8; i++) {
-        if (mBeast[i] == param_0) {
+        if (mBeast[i] == i_itemNo) {
             return true;
         }
     }
@@ -402,28 +420,134 @@ bool dSv_player_bag_item_c::checkBeastItem(u8 param_0) {
 }
 
 /* 80059C60-80059EB0       .text setBaitItemChange__21dSv_player_bag_item_cFUc */
-void dSv_player_bag_item_c::setBaitItemChange(u8) {
-    /* Nonmatching */
+void dSv_player_bag_item_c::setBaitItemChange(u8 i_itemNo) {
+    u8 btnIdx = dComIfGp_event_getTalkXYBtn();
+    if (btnIdx == 1) {
+        btnIdx = 0;
+    } else if (btnIdx == 2) {
+        btnIdx = 1;
+    } else if (btnIdx == 3) {
+        btnIdx = 2;
+    } else {
+        return;
+    }
+    
+    u8 invIdx = dComIfGs_getSelectItem(btnIdx);
+    if (invIdx < 0x24) {
+        return;
+    }
+    if (invIdx >= 0x2C) {
+        return;
+    }
+    
+    dComIfGs_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
+    dComIfGp_setSelectItem(btnIdx);
 }
 
 /* 80059EB0-8005A0C8       .text setBaitItemChange__21dSv_player_bag_item_cFUcUc */
-void dSv_player_bag_item_c::setBaitItemChange(u8, u8) {
-    /* Nonmatching */
+void dSv_player_bag_item_c::setBaitItemChange(u8 i_btnIdx, u8 i_itemNo) {
+    if (i_btnIdx > 2) {
+        return;
+    }
+    
+    u8 invIdx = dComIfGs_getSelectItem(i_btnIdx);
+    if (invIdx < 0x24) {
+        return;
+    }
+    if (invIdx >= 0x2C) {
+        return;
+    }
+    
+    dComIfGs_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
+    dComIfGp_setSelectItem(i_btnIdx);
 }
 
 /* 8005A0C8-8005A1A4       .text setBaitItemEmpty__21dSv_player_bag_item_cFv */
 void dSv_player_bag_item_c::setBaitItemEmpty() {
-    /* Nonmatching */
+    u8 btnIdx = dComIfGp_event_getTalkXYBtn();
+    if (btnIdx == 1) {
+        btnIdx = 0;
+    } else if (btnIdx == 2) {
+        btnIdx = 1;
+    } else if (btnIdx == 3) {
+        btnIdx = 2;
+    } else {
+        return;
+    }
+    
+    u8 invIdx = dComIfGs_getSelectItem(btnIdx);
+    if (invIdx < 0x24) {
+        return;
+    }
+    if (invIdx >= 0x2C) {
+        return;
+    }
+    
+    int baitSlotIdx = invIdx - 0x24;
+    u8 num = dComIfGs_getBaitNum(baitSlotIdx);
+    u8 itemNo = dComIfGp_getSelectItem(btnIdx);
+    
+    if (itemNo == ANIMAL_ESA) {
+        u8 num = dComIfGs_getBaitNum(baitSlotIdx);
+        setBaitItemChange(NO_ITEM);
+    } else if (itemNo == BIRD_ESA_5) {
+        num = dComIfGs_getBaitNum(baitSlotIdx);
+        if (num > 0) {
+            num = num - 1;
+        }
+        dComIfGs_setBaitNum(baitSlotIdx, num);
+        if (num == 0) {
+            setBaitItemChange(NO_ITEM);
+        }
+    }
 }
 
 /* 8005A1A4-8005A248       .text setBaitItemEmpty__21dSv_player_bag_item_cFUc */
-void dSv_player_bag_item_c::setBaitItemEmpty(u8) {
-    /* Nonmatching */
+void dSv_player_bag_item_c::setBaitItemEmpty(u8 i_btnIdx) {
+    if (i_btnIdx > 2) {
+        return;
+    }
+    
+    u8 invIdx = dComIfGs_getSelectItem(i_btnIdx);
+    if (invIdx < 0x24) {
+        return;
+    }
+    if (invIdx >= 0x2C) {
+        return;
+    }
+    
+    int baitSlotIdx = invIdx - 0x24;
+    u8 num = dComIfGs_getBaitNum(baitSlotIdx);
+    u8 itemNo = dComIfGp_getSelectItem(i_btnIdx);
+    
+    if (itemNo == ANIMAL_ESA) {
+        u8 num = dComIfGs_getBaitNum(baitSlotIdx);
+        setBaitItemChange(i_btnIdx, NO_ITEM);
+    } else if (itemNo == BIRD_ESA_5) {
+        num = dComIfGs_getBaitNum(baitSlotIdx);
+        if (num > 0) {
+            num = num - 1;
+        }
+        dComIfGs_setBaitNum(baitSlotIdx, num);
+        if (num == 0) {
+            setBaitItemChange(i_btnIdx, NO_ITEM);
+        }
+    }
 }
 
 /* 8005A248-8005A2D0       .text setBaitItem__21dSv_player_bag_item_cFUc */
-void dSv_player_bag_item_c::setBaitItem(u8) {
-    /* Nonmatching */
+void dSv_player_bag_item_c::setBaitItem(u8 i_itemNo) {
+    if (checkBaitItemEmpty()) {
+        for (int i = 0; i < 8; i++) {
+            if (mBait[i] == NO_ITEM) {
+                mBait[i] = i_itemNo;
+                dComIfGs_setBaitNum(i, 3);
+                return;
+            }
+        }
+    }
 }
 
 /* 8005A2D0-8005A2F4       .text checkBaitItemEmpty__21dSv_player_bag_item_cFv */
@@ -445,13 +569,48 @@ u8 dSv_player_bag_item_c::checkBaitItem(u8 i_itemNo) {
 }
 
 /* 8005A334-8005A584       .text setReserveItemChange__21dSv_player_bag_item_cFUc */
-void dSv_player_bag_item_c::setReserveItemChange(u8) {
-    /* Nonmatching */
+void dSv_player_bag_item_c::setReserveItemChange(u8 i_itemNo) {
+    u8 btnIdx = dComIfGp_event_getTalkXYBtn();
+    if (btnIdx == 1) {
+        btnIdx = 0;
+    } else if (btnIdx == 2) {
+        btnIdx = 1;
+    } else if (btnIdx == 3) {
+        btnIdx = 2;
+    } else {
+        return;
+    }
+    
+    u8 invIdx = dComIfGs_getSelectItem(btnIdx);
+    if (invIdx < 0x30) {
+        return;
+    }
+    if (invIdx >= 0x38) {
+        return;
+    }
+    
+    dComIfGs_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
+    dComIfGp_setSelectItem(btnIdx);
 }
 
 /* 8005A584-8005A79C       .text setReserveItemChange__21dSv_player_bag_item_cFUcUc */
-void dSv_player_bag_item_c::setReserveItemChange(u8, u8) {
-    /* Nonmatching */
+void dSv_player_bag_item_c::setReserveItemChange(u8 i_btnIdx, u8 i_itemNo) {
+    if (i_btnIdx > 2) {
+        return;
+    }
+    
+    u8 invIdx = dComIfGs_getSelectItem(i_btnIdx);
+    if (invIdx < 0x30) {
+        return;
+    }
+    if (invIdx >= 0x38) {
+        return;
+    }
+    
+    dComIfGs_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
+    dComIfGp_setSelectItem(i_btnIdx);
 }
 
 /* 8005A79C-8005A7C0       .text setReserveItemEmpty__21dSv_player_bag_item_cFv */
@@ -460,16 +619,16 @@ void dSv_player_bag_item_c::setReserveItemEmpty() {
 }
 
 /* 8005A7C0-8005A7E4       .text setReserveItemEmpty__21dSv_player_bag_item_cFUc */
-void dSv_player_bag_item_c::setReserveItemEmpty(u8 param_0) {
-    setReserveItemChange(param_0, NO_ITEM);
+void dSv_player_bag_item_c::setReserveItemEmpty(u8 i_itemNo) {
+    setReserveItemChange(i_itemNo, NO_ITEM);
 }
 
 /* 8005A7E4-8005A854       .text setReserveItem__21dSv_player_bag_item_cFUc */
-void dSv_player_bag_item_c::setReserveItem(u8 param_0) {
+void dSv_player_bag_item_c::setReserveItem(u8 i_itemNo) {
     if (checkReserveItemEmpty()) {
         for (int i = 0; i < 8; i++) {
-            if (mReserve[i] == 0xFF) {
-                mReserve[i] = param_0;
+            if (mReserve[i] == NO_ITEM) {
+                mReserve[i] = i_itemNo;
                 return;
             }
         }
@@ -1255,11 +1414,17 @@ void dSv_info_c::onSwitch(int i_no, int i_roomNo) {
     } else {
         JUT_ASSERT(3424, 0 <= i_roomNo && i_roomNo < 64);
 
-        int zoneId = dStage_roomControl_c::getZoneNo(i_roomNo);
+        int zoneId = dComIfGp_roomControl_getZoneNo(i_roomNo);
         JUT_ASSERT(3426, 0 <= zoneId && zoneId < ZONE_MAX);
 
         mZone[zoneId].getZoneBit().onSwitch(i_no - (MEMORY_SWITCH + DAN_SWITCH));
     }
+}
+
+// TODO: Not sure why this weak function doesn't get inlined.
+/* 8005DCD0-8005DCEC       .text getZoneNo__20dStage_roomControl_cFi */
+int dStage_roomControl_c::getZoneNo(int i_roomNo) {
+    return mStatus[i_roomNo].mZoneNo;
 }
 
 /* 8005DCEC-8005DE98       .text offSwitch__10dSv_info_cFii */
@@ -1278,7 +1443,7 @@ void dSv_info_c::offSwitch(int i_no, int i_roomNo) {
     } else {
         JUT_ASSERT(3461, 0 <= i_roomNo && i_roomNo < 64);
 
-        int zoneNo = dStage_roomControl_c::getZoneNo(i_roomNo);
+        int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
         JUT_ASSERT(3463, 0 <= zoneNo && zoneNo < ZONE_MAX);
 
         mZone[zoneNo].getZoneBit().offSwitch(i_no - (MEMORY_SWITCH + DAN_SWITCH));
@@ -1298,7 +1463,7 @@ BOOL dSv_info_c::isSwitch(int i_no, int i_roomNo) {
     } else {
         JUT_ASSERT(3509, 0 <= i_roomNo && i_roomNo < 64);
 
-        int zoneNo = dStage_roomControl_c::getZoneNo(i_roomNo);
+        int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
         JUT_ASSERT(3511, 0 <= zoneNo && zoneNo < ZONE_MAX);
 
         return mZone[zoneNo].getZoneBit().isSwitch(i_no - (MEMORY_SWITCH + DAN_SWITCH));
@@ -1321,7 +1486,7 @@ BOOL dSv_info_c::revSwitch(int i_no, int i_roomNo) {
     } else {
         JUT_ASSERT(3544, 0 <= i_roomNo && i_roomNo < 64);
 
-        int zoneNo = dStage_roomControl_c::getZoneNo(i_roomNo);
+        int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
         JUT_ASSERT(3546, 0 <= zoneNo && zoneNo < ZONE_MAX);
 
         return mZone[zoneNo].getZoneBit().revSwitch(i_no - (MEMORY_SWITCH + DAN_SWITCH));
@@ -1342,7 +1507,7 @@ void dSv_info_c::onItem(int i_no, int i_roomNo) {
     } else {
         JUT_ASSERT(3575, 0 <= i_roomNo && i_roomNo < 64);
 
-        int zoneNo = dStage_roomControl_c::getZoneNo(i_roomNo);
+        int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
         JUT_ASSERT(3577, 0 <= zoneNo && zoneNo < ZONE_MAX);
 
         mZone[zoneNo].getZoneBit().onItem(i_no - MEMORY_ITEM);
@@ -1363,7 +1528,7 @@ BOOL dSv_info_c::isItem(int i_no, int i_roomNo) {
     } else {
         JUT_ASSERT(3638, 0 <= i_roomNo && i_roomNo < 64);
 
-        int zoneNo = dStage_roomControl_c::getZoneNo(i_roomNo);
+        int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
         JUT_ASSERT(3640, 0 <= zoneNo && zoneNo < ZONE_MAX);
 
         return mZone[zoneNo].getZoneBit().isItem(i_no - MEMORY_ITEM);
@@ -1378,7 +1543,7 @@ void dSv_info_c::onActor(int i_id, int i_roomNo) {
 
     JUT_ASSERT(3693, (0 <= i_id && i_id < dSv_zoneActor_c::ACTOR_MAX) && (0 <= i_roomNo && i_roomNo < 64));
 
-    int zoneNo = dStage_roomControl_c::getZoneNo(i_roomNo);
+    int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
     JUT_ASSERT(3695, 0 <= zoneNo && zoneNo < ZONE_MAX);
 
     mZone[zoneNo].getActor().on(i_id);
@@ -1396,20 +1561,28 @@ BOOL dSv_info_c::isActor(int i_id, int i_roomNo) {
     
     JUT_ASSERT(3746, 0 <= i_roomNo && i_roomNo < 64);
 
-    int zoneNo = dStage_roomControl_c::getZoneNo(i_roomNo);
+    int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
     JUT_ASSERT(3748, 0 <= zoneNo && zoneNo < ZONE_MAX);
 
     return mZone[zoneNo].getActor().is(i_id);
 }
 
 /* 8005E780-8005EA24       .text memory_to_card__10dSv_info_cFPci */
-void dSv_info_c::memory_to_card(char*, int) {
+int dSv_info_c::memory_to_card(char*, int) {
     /* Nonmatching */
+    int temp_r5 = 0;
+    printf("SAVE size over(%d/%d)\n", 0x768, temp_r5);
+    printf("SAVE size:%d\n", temp_r5);
+    return -1;
 }
 
 /* 8005EA24-8005ED00       .text card_to_memory__10dSv_info_cFPci */
-void dSv_info_c::card_to_memory(char*, int) {
+int dSv_info_c::card_to_memory(char*, int) {
     /* Nonmatching */
+    int temp_r5 = 0;
+    printf("LOAD size over(%d/%d)\n", 0x768, temp_r5);
+    printf("LOAD size:%d\n", temp_r5);
+    return -1;
 }
 
 /* 8005ED00-8005EF88       .text initdata_to_card__10dSv_info_cFPci */

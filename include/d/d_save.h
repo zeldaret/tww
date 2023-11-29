@@ -245,6 +245,7 @@ public:
     u8 getBaitNum(int i_idx) { return mBaitNum[i_idx]; }
     void setBaitNum(int i_idx, u8 num) { mBaitNum[i_idx] = num; }
     u8 getReserveNum(int i_idx) { return mReserveNum[i_idx]; }
+    void setReserveNum(int i_idx, u8 num) { mReserveNum[i_idx] = num; }
 
     /* 0x00 */ u8 mBeastNum[8];
     /* 0x08 */ u8 mBaitNum[8];
@@ -719,8 +720,8 @@ public:
     BOOL isItem(int, int);
     void onActor(int, int);
     BOOL isActor(int, int);
-    void memory_to_card(char*, int);
-    void card_to_memory(char*, int);
+    int memory_to_card(char*, int);
+    int card_to_memory(char*, int);
     int initdata_to_card(char*, int);
 
     dSv_save_c& getSavedata() { return mSavedata; }

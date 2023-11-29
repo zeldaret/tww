@@ -902,12 +902,24 @@ inline u8 dComIfGs_getBeastNum(int i_idx) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord().getBeastNum(i_idx);
 }
 
+inline void dComIfGs_setBeastNum(int i_idx, u8 num) {
+    g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord().setBeastNum(i_idx, num);
+}
+
 inline u8 dComIfGs_getBaitNum(int i_idx) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord().getBaitNum(i_idx);
 }
 
+inline void dComIfGs_setBaitNum(int i_idx, u8 num) {
+    g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord().setBaitNum(i_idx, num);
+}
+
 inline u8 dComIfGs_getReserveNum(int i_idx) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord().getReserveNum(i_idx);
+}
+
+inline void dComIfGs_setReserveNum(int i_idx, u8 num) {
+    g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord().setReserveNum(i_idx, num);
 }
 
 inline u8 dComIfGs_checkReserveItemEmpty() {
