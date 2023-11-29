@@ -13,11 +13,11 @@ public:
     /* 0x299 padding */
     /* 0x29a */ s16 mCycleCtr;
     /* 0x29c */ J3DModel* mModel;
-    /* 0x2a0 */ dPa_followEcallBack mPa; // Bad?
+    /* 0x2a0 */ dPa_followEcallBack mPa;
     /* 0x2b4 */ u8 mParticleInit;
     /* 0x2b5-2b7 padding */
     /* 0x2b8 */ cXyz mPos;
-    /* 0x2c4 */ dCcD_Stts mStts; // Bad?
+    /* 0x2c4 */ dCcD_Stts mStts;
     /* 0x300 */ dCcD_Sph mSph;
     /* 0x42c */ s8 mOto;
     /* 0x42d-42f padding */
