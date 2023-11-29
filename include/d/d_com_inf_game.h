@@ -675,10 +675,10 @@ STATIC_ASSERT(sizeof(dComIfG_inf_c) == 0x1D1C8);
 
 extern dComIfG_inf_c g_dComIfG_gameInfo;
 
-extern JUtility::TColor g_clearColor;
-extern JUtility::TColor g_blackColor;
-extern JUtility::TColor g_whiteColor;
-extern JUtility::TColor g_saftyWhiteColor;
+extern GXColor g_clearColor;
+extern GXColor g_blackColor;
+extern GXColor g_whiteColor;
+extern GXColor g_saftyWhiteColor;
 
 /**
  * === SAVE ===

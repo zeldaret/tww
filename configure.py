@@ -335,7 +335,7 @@ config.libs = [
             # dolzel
             Object(NonMatching, "d/d_stage.cpp"),
             Object(NonMatching, "d/d_map.cpp"),
-            Object(NonMatching, "d/d_com_inf_game.cpp"),
+            Object(Matching,    "d/d_com_inf_game.cpp", extra_cflags=['-sym off']),
             Object(Matching,    "d/d_com_lib_game.cpp"),
             Object(NonMatching, "d/d_com_static.cpp"),
             Object(NonMatching, "d/d_lib.cpp"),

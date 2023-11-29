@@ -273,7 +273,7 @@ bool mDoGph_BeforeOfDraw() {
 bool mDoGph_AfterOfDraw() {
     /* Nonmatching */
     if (!fapGmHIO_isMenu()) {
-        if (JUTGamePad::getPortStatus(0).button == 0 && fapGmHIO_getMeter() != 0 && !JFWSystem::getSystemConsole()->isVisible()) {
+        if (JUTGamePad::getPortStatus(JUTGamePad::Port_1).button == 0 && fapGmHIO_getMeter() != 0 && !JFWSystem::getSystemConsole()->isVisible()) {
         }
     }  
 
