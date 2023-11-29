@@ -402,6 +402,7 @@ void daDitem_c::anim_control() {
         break;
     default:
         animPlay(1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+        break;
     }
 }
 
@@ -497,6 +498,7 @@ BOOL daDitem_c::execute() {
     
     set_pos();
     set_mtx();
+    
     return TRUE;
 }
 

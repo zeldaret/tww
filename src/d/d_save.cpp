@@ -22,93 +22,14 @@ struct daNpc_Sarace_c {
 };
 
 /* 800589A8-80058B54       .text init__21dSv_player_status_a_cFv */
-// Nonmatching - bunch of issues, probably need to setup more inlines
 void dSv_player_status_a_c::init() {
     mMaxLife = 12;
     mLife = 12;
     field_0x8 = 0;
 
     for (int i = 0; i < 5; i++) {
-        int item = 0xFF;
-
         mSelectItem[i] = 0xFF;
-
-        u32 item_idx = dComIfGs_getSelectEquip(i);
-        if (item_idx != 0xFF) {
-            switch (item_idx) {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-            case 10:
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-            case 15:
-            case 16:
-            case 17:
-            case 18:
-            case 19:
-            case 20:
-                item = dComIfGs_getItem(item_idx);
-                break;
-            case 21:
-            case 22:
-            case 23:
-                break;
-            case 24:
-            case 25:
-            case 26:
-            case 27:
-            case 28:
-            case 29:
-            case 30:
-            case 31:
-                item = g_dComIfG_gameInfo.save.getPlayer().mGetItem.mItemFlags[item_idx + 13];
-                break;
-            case 32:
-            case 33:
-            case 34:
-            case 35:
-                break;
-            case 36:
-            case 37:
-            case 38:
-            case 39:
-            case 40:
-            case 41:
-            case 42:
-            case 43:
-                item = g_dComIfG_gameInfo.save.getPlayer().mGetItem.mItemFlags[item_idx + 9];
-                break;
-            case 44:
-            case 45:
-            case 46:
-            case 47:
-                break;
-            case 48:
-            case 49:
-            case 50:
-            case 51:
-            case 52:
-            case 53:
-            case 54:
-            case 55:
-                item = g_dComIfG_gameInfo.save.getPlayer().mGetItem.mItemFlags[item_idx + 5];
-                break;
-            }
-
-            g_dComIfG_gameInfo.play.mEquippedItems[i] = item;
-        } else {
-            g_dComIfG_gameInfo.play.mEquippedItems[i] = NO_ITEM;
-        }
+        dComIfGp_setSelectItem(i);
     }
 
     for (int i = 0; i < 4; i++) {
@@ -345,9 +266,9 @@ BOOL dSv_player_get_item_c::isBottleItem(u8 i_item) {
 
 /* 80059848-8005987C       .text init__24dSv_player_item_record_cFv */
 void dSv_player_item_record_c::init() {
-    field_0x2 = 0;
-    mArrowNum = 0;
-    mBombNum = 0;
+    mItemRecord2.mPictureNum = 0;
+    mItemRecord2.mArrowNum = 0;
+    mItemRecord2.mBombNum = 0;
     mTimer = 0;
 
     for (int i = 0; i < 3; i++) {
@@ -382,9 +303,9 @@ u16 dSv_player_item_record_c::getTimer() {
 
 /* 800598D8-80059908       .text init__21dSv_player_item_max_cFv */
 void dSv_player_item_max_c::init() {
-    field_0x0 = 0;
-    mArrowNum = 0;
-    mBombNum = 0;
+    mItemMax2.field_0x0 = 0;
+    mItemMax2.mArrowNum = 0;
+    mItemMax2.mBombNum = 0;
 
     for (int i = 0; i < 5; i++) {
         field_0x3[i] = 0;

@@ -409,8 +409,9 @@ public:
     void clearPlayerStatus(int param_0, int i, u32 flag) { mPlayerStatus[param_0][i] &= ~flag; }
     bool checkPlayerStatus(int param_0, int i, u32 flag) { return flag & mPlayerStatus[param_0][i]; }
 
-    u8 getSelectItem(int idx) { return mEquippedItems[idx]; }
-    void setSelectItem(int idx, u8 itemNo) { mEquippedItems[idx] = itemNo; }
+    u8 getSelectItem(int idx) { return mSelectItem[idx]; }
+    void setSelectItem(int idx, u8 itemNo) { mSelectItem[idx] = itemNo; }
+    void setSelectEquip(int idx, u8 itemNo) { mSelectEquip[idx] = itemNo; }
     
     void setAStatus(u8 status) { mCurrButtonBAction = status; }
     void setDoStatus(u8 status) { mCurrButtonAAction = status; }
@@ -575,8 +576,8 @@ public:
     /* 0x4930 */ u8 field_0x4930;
     /* 0x4931 */ u8 field_0x4931;
     /* 0x4932 */ u8 field_0x4932;
-    /* 0x4933 */ u8 mEquippedItems[4];
-    /* 0x4937 */ u8 field_0x4937[4];
+    /* 0x4933 */ u8 mSelectItem[4];
+    /* 0x4937 */ u8 mSelectEquip[4];
     /* 0x493B */ u8 mMesgAnime;
     /* 0x493C */ u8 mMesgAnimeTagInfo;
     /* 0x493D */ u8 field_0x493d;
@@ -684,12 +685,8 @@ inline void dComIfGs_init() {
     g_dComIfG_gameInfo.save.init();
 }
 
-inline dSv_player_bag_item_c* dComIfGs_getpBagItem() {
-    return g_dComIfG_gameInfo.save.getPlayer().getpBagItem();
-}
-
 inline u8 dComIfGs_checkReserveItem(u8 i_itemNo) {
-    return dComIfGs_getpBagItem()->checkReserveItem(i_itemNo);
+    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().checkReserveItem(i_itemNo);
 }
 
 inline void dComIfGs_initZone() {
@@ -700,9 +697,11 @@ inline u32 dComIfGs_createZone(int i_roomNo) {
     return g_dComIfG_gameInfo.save.createZone(i_roomNo);
 }
 
-inline u8 dComIfGs_getSelectEquip(int param_0) {
-    return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getSelectEquip(param_0);
+inline u8 dComIfGs_getSelectEquip(int i_no) {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getSelectEquip(i_no);
 }
+
+void dComIfGs_setSelectEquip(int i_type, u8 i_itemNo);
 
 inline u8 dComIfGs_getWalletSize() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getWalletSize();
@@ -716,6 +715,14 @@ inline int dComIfGs_getRupee() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getRupee();
 }
 
+inline void dComIfGs_setRupee(u16 rupee) {
+    g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().setRupee(rupee);
+}
+
+inline u16 dComIfGs_getRupeeMax() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getRupeeMax();
+}
+
 inline u8 dComIfGs_getItemBeast(int param_0) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getBeast(param_0);
 }
@@ -726,10 +733,6 @@ inline u8 dComIfGs_getItemBait(int param_0) {
 
 inline u8 dComIfGs_getItemReserve(int param_0) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getReserve(param_0);
-}
-
-inline u8 dComIfGs_checkCollect(int no) {
-    return g_dComIfG_gameInfo.save.getPlayer().getCollect().checkCollect(no);
 }
 
 inline OSTime dComIfGs_getDateIpl() {
@@ -833,7 +836,7 @@ inline void dComIfGs_offCompleteCollectMap(int i_no) {
     g_dComIfG_gameInfo.save.getPlayer().getMap().offCompleteMap(i_no - 1);
 }
 
-inline u32 dComIfGs_getArrowNum() {
+inline u8 dComIfGs_getArrowNum() {
     return g_dComIfG_gameInfo.save.getPlayer().getItemRecord().getArrowNum();
 }
 
@@ -841,12 +844,20 @@ inline void dComIfGs_setArrowNum(u8 num) {
     g_dComIfG_gameInfo.save.getPlayer().getItemRecord().setArrowNum(num);
 }
 
-inline u32 dComIfGs_getBombNum() {
+inline u8 dComIfGs_getBombNum() {
     return g_dComIfG_gameInfo.save.getPlayer().getItemRecord().getBombNum();
 }
 
 inline void dComIfGs_setBombNum(u8 num) {
     g_dComIfG_gameInfo.save.getPlayer().getItemRecord().setBombNum(num);
+}
+
+inline u8 dComIfGs_getPictureNum() {
+    return g_dComIfG_gameInfo.save.getPlayer().getItemRecord().getPictureNum();
+}
+
+inline void dComIfGs_setPictureNum(u8 num) {
+    g_dComIfG_gameInfo.save.getPlayer().getItemRecord().setPictureNum(num);
 }
 
 inline u8 dComIfGs_getBeastNum(int i_idx) {
@@ -1070,6 +1081,14 @@ inline void dComIfGs_onCollect(int i_idx, u8 i_item) {
     g_dComIfG_gameInfo.save.getPlayer().getCollect().onCollect(i_idx, i_item);
 }
 
+inline u8 dComIfGs_checkCollect(int no) {
+    return g_dComIfG_gameInfo.save.getPlayer().getCollect().checkCollect(no);
+}
+
+inline void dComIfGs_setCollect(int idx, u8 byte) {
+    g_dComIfG_gameInfo.save.getPlayer().getCollect().setCollect(idx, byte);
+}
+
 inline BOOL dComIfGs_isTact(u8 i_no) {
     return g_dComIfG_gameInfo.save.getPlayer().getCollect().isTact(i_no);
 }
@@ -1169,8 +1188,6 @@ inline void dComIfGs_onActor(int i_no, int i_roomNo) {
 inline BOOL dComIfGs_isActor(int i_no, int i_roomNo) {
     return g_dComIfG_gameInfo.save.isActor(i_no, i_roomNo);
 }
-
-void dComIfGs_setSelectEquip(int i_type, u8 i_itemNo);
 
 /**
  * Returns which inventory slot the item equipped on a specific button is located in.
@@ -1320,32 +1337,100 @@ inline u16 dComIfGs_getLife() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getLife();
 }
 
+inline void dComIfGs_setLife(u16 life) {
+    g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().setLife(life);
+}
+
 inline u16 dComIfGs_getMaxLife() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getMaxLife();
+}
+
+inline void dComIfGs_setMaxLife(u8 life) {
+    g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().setMaxLife(life);
 }
 
 inline u8 dComIfGs_getMagic() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getMagic();
 }
 
+inline void dComIfGs_setMagic(u8 magic) {
+    g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().setMagic(magic);
+}
+
 inline u8 dComIfGs_getMaxMagic() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getMaxMagic();
+}
+
+inline void dComIfGs_setMaxMagic(u8 magic) {
+    g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().setMaxMagic(magic);
 }
 
 inline u8 dComIfGs_getKeyNum() {
     return g_dComIfG_gameInfo.save.getMemory().getBit().getKeyNum();
 }
 
-inline dSv_player_status_c_c * dComIfGs_getpPlayerStatusC(u32 i_idx) {
-    return g_dComIfG_gameInfo.save.getPlayer().getpPlayerStatusC(i_idx);
+inline dSv_player_status_a_c* dComIfGs_getpPlayerStatusA() {
+    return g_dComIfG_gameInfo.save.getPlayer().getpPlayerStatusA();
 }
 
-inline dSv_player_collect_c * dComIfGs_getpCollect() {
+inline dSv_player_status_b_c* dComIfGs_getpPlayerStatusB() {
+    return g_dComIfG_gameInfo.save.getPlayer().getpPlayerStatusB();
+}
+
+inline dSv_player_return_place_c* dComIfGs_getpPlayerReturnPlace() {
+    return g_dComIfG_gameInfo.save.getPlayer().getpPlayerReturnPlace();
+}
+
+inline dSv_player_item_c* dComIfGs_getpItem() {
+    return g_dComIfG_gameInfo.save.getPlayer().getpItem();
+}
+
+inline dSv_player_get_item_c* dComIfGs_getpGetItem() {
+    return g_dComIfG_gameInfo.save.getPlayer().getpGetItem();
+}
+
+inline dSv_player_item_record_c* dComIfGs_getpItemRecord() {
+    return g_dComIfG_gameInfo.save.getPlayer().getpItemRecord();
+}
+
+inline dSv_player_item_max_c* dComIfGs_getpItemMax() {
+    return g_dComIfG_gameInfo.save.getPlayer().getpItemMax();
+}
+
+inline dSv_player_bag_item_c* dComIfGs_getpBagItem() {
+    return g_dComIfG_gameInfo.save.getPlayer().getpBagItem();
+}
+
+inline dSv_player_get_bag_item_c* dComIfGs_getpGetBagItem() {
+    return g_dComIfG_gameInfo.save.getPlayer().getpGetBagItem();
+}
+
+inline dSv_player_bag_item_record_c* dComIfGs_getpBagItemRecord() {
+    return g_dComIfG_gameInfo.save.getPlayer().getpBagItemRecord();
+}
+
+inline dSv_player_collect_c* dComIfGs_getpCollect() {
     return g_dComIfG_gameInfo.save.getPlayer().getpCollect();
 }
 
-inline dSv_player_bag_item_record_c * dComIfGs_getpBagItemRecord() {
-    return g_dComIfG_gameInfo.save.getPlayer().getpBagItemRecord();
+inline dSv_player_map_c* dComIfGs_getpMap() {
+    return g_dComIfG_gameInfo.save.getPlayer().getpMap();
+}
+
+inline dSv_player_info_c* dComIfGs_getpPlayerInfo() {
+    return g_dComIfG_gameInfo.save.getPlayer().getpPlayerInfo();
+}
+
+inline dSv_player_config_c* dComIfGs_getpConfig() {
+    return g_dComIfG_gameInfo.save.getPlayer().getpConfig();
+}
+
+inline dSv_player_priest_c* dComIfGs_getpPriest() {
+    return g_dComIfG_gameInfo.save.getPlayer().getpPriest();
+}
+
+inline dSv_player_status_c_c* dComIfGs_getpPlayerStatusC(int i_idx) {
+    return g_dComIfG_gameInfo.save.getPlayer().getpPlayerStatusC(i_idx);
 }
 
 u8 dComIfGs_checkGetItemNum(u8 i_itemNo);
@@ -1882,6 +1967,10 @@ inline void dComIfGp_setSelectItem(int i_btnIdx) {
     } else {
         g_dComIfG_gameInfo.play.setSelectItem(i_btnIdx, 0xFF);
     }
+}
+
+inline void dComIfGp_setSelectEquip(int idx, u8 itemNo) {
+    g_dComIfG_gameInfo.play.setSelectEquip(idx, itemNo);
 }
 
 inline void dComIfGp_setCurrentGrafPort(J2DOrthoGraph* i_graf) {
