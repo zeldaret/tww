@@ -1583,7 +1583,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_vtil"),
     ActorRel(NonMatching, "d_a_obj_vyasi"),
     ActorRel(NonMatching, "d_a_obj_xfuta"),
-    ActorRel(NonMatching, "d_a_obj_zouK"),
+    ActorRel(NonMatching, "d_a_obj_zouK", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_oship"),
     ActorRel(NonMatching, "d_a_ph"),
     ActorRel(NonMatching, "d_a_pt"),
