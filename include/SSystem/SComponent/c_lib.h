@@ -105,6 +105,9 @@ void MtxScale(f32, f32, f32, u8);
 void MtxPosition(cXyz* src, cXyz* dest);
 void MtxPush(void);
 Mtx* MtxPull(void);
+void MtxRotX(f32 rot, u8 concat);
+void MtxRotY(f32 rot, u8 concat);
+void MtxRotZ(f32 rot, u8 concat);
 
 extern Mtx* calc_mtx;
 
