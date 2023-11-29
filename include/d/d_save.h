@@ -205,8 +205,11 @@ public:
     u8 checkReserveItem(u8);
 
     u8 getBeast(int i_idx) { return mBeast[i_idx]; }
+    void setBeast(int i_idx, u8 i_itemNo) { mBeast[i_idx] = i_itemNo; }
     u8 getBait(int i_idx) { return mBait[i_idx]; }
+    void setBait(int i_idx, u8 i_itemNo) { mBait[i_idx] = i_itemNo; }
     u8 getReserve(int i_idx) { return mReserve[i_idx]; }
+    void setReserve(int i_idx, u8 i_itemNo) { mReserve[i_idx] = i_itemNo; }
 
     /* 0x00 */ u8 mBeast[8];
     /* 0x08 */ u8 mBait[8];

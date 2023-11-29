@@ -79,33 +79,80 @@ void dSv_player_item_c::init() {
 }
 
 /* 80058C7C-80058E1C       .text setBottleItemIn__17dSv_player_item_cFUcUc */
-void dSv_player_item_c::setBottleItemIn(u8, u8) {
-    /* Nonmatching */
+void dSv_player_item_c::setBottleItemIn(u8 prevItemNo, u8 newItemNo) {
+    for (int bottleIdx = 0; bottleIdx < 4; bottleIdx++) {
+        if (mItems[0xE + bottleIdx] == prevItemNo) {
+            mItems[0xE + bottleIdx] = newItemNo;
+            for (int btnIdx = 0; btnIdx < 3; btnIdx++) {
+                if (dComIfGs_getSelectItem(btnIdx) == 0xE + bottleIdx) {
+                    dComIfGp_setSelectItem(btnIdx);
+                }
+            }
+            break;
+        }
+    }
 }
 
 /* 80058E1C-80058E44       .text setEmptyBottleItemIn__17dSv_player_item_cFUc */
-void dSv_player_item_c::setEmptyBottleItemIn(u8 param_0) {
-    setBottleItemIn(EMPTY_BOTTLE, param_0);
+void dSv_player_item_c::setEmptyBottleItemIn(u8 i_itemNo) {
+    setBottleItemIn(EMPTY_BOTTLE, i_itemNo);
 }
 
 /* 80058E44-80058F74       .text setEmptyBottle__17dSv_player_item_cFv */
 void dSv_player_item_c::setEmptyBottle() {
-    /* Nonmatching */
+    for (int bottleIdx = 0; bottleIdx < 4; bottleIdx++) {
+        int invIdx = 0xE + bottleIdx;
+        if (dComIfGs_getItem((u8)invIdx) == NO_ITEM) {
+            dComIfGs_setItem((u8)invIdx, EMPTY_BOTTLE);
+            break;
+        }
+    }
 }
 
 /* 80058F74-8005918C       .text setEquipBottleItemIn__17dSv_player_item_cFUcUc */
-void dSv_player_item_c::setEquipBottleItemIn(u8, u8) {
-    /* Nonmatching */
+void dSv_player_item_c::setEquipBottleItemIn(u8 i_btnIdx, u8 i_itemNo) {
+    u8 invIdx = dComIfGs_getSelectItem(i_btnIdx);
+    if (invIdx < 0xE) {
+        return;
+    }
+    if (invIdx > 0x11) {
+        return;
+    }
+    mItems[invIdx] = i_itemNo;
+    dComIfGs_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
+    dComIfGp_setSelectItem(i_btnIdx);
 }
 
 /* 8005918C-800591B0       .text setEquipBottleItemEmpty__17dSv_player_item_cFUc */
-void dSv_player_item_c::setEquipBottleItemEmpty(u8 param_0) {
-    setEquipBottleItemIn(param_0, EMPTY_BOTTLE);
+void dSv_player_item_c::setEquipBottleItemEmpty(u8 i_itemNo) {
+    setEquipBottleItemIn(i_itemNo, EMPTY_BOTTLE);
 }
 
 /* 800591B0-80059408       .text setEquipBottleItemIn__17dSv_player_item_cFUc */
-void dSv_player_item_c::setEquipBottleItemIn(u8) {
-    /* Nonmatching */
+void dSv_player_item_c::setEquipBottleItemIn(u8 i_itemNo) {
+    u8 btnIdx = dComIfGp_event_getTalkXYBtn();
+    if (btnIdx == 1) {
+        btnIdx = 0;
+    } else if (btnIdx == 2) {
+        btnIdx = 1;
+    } else if (btnIdx == 3) {
+        btnIdx = 2;
+    } else {
+        return;
+    }
+    
+    u8 invIdx = dComIfGs_getSelectItem(btnIdx);
+    if (invIdx < 0xE) {
+        return;
+    }
+    if (invIdx > 0x11) {
+        return;
+    }
+    mItems[invIdx] = i_itemNo;
+    dComIfGs_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
+    dComIfGp_setSelectItem(btnIdx);
 }
 
 /* 80059408-8005942C       .text setEquipBottleItemEmpty__17dSv_player_item_cFv */
@@ -463,7 +510,7 @@ void dSv_player_get_bag_item_c::onBeast(u8 i_no) {
 /* 8005A960-8005A9F8       .text isBeast__25dSv_player_get_bag_item_cFUc */
 BOOL dSv_player_get_bag_item_c::isBeast(u8 i_no) {
     JUT_ASSERT(1265, 0 <= i_no && i_no < 8);
-    return mBeastFlags & (u8)(1 << i_no) ? true : false;
+    return mBeastFlags & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
 /* 8005A9F8-8005AA8C       .text onBait__25dSv_player_get_bag_item_cFUc */
@@ -475,7 +522,7 @@ void dSv_player_get_bag_item_c::onBait(u8 i_no) {
 /* 8005AA8C-8005AB24       .text isBait__25dSv_player_get_bag_item_cFUc */
 BOOL dSv_player_get_bag_item_c::isBait(u8 i_no) {
     JUT_ASSERT(1310, 0 <= i_no && i_no < 8);
-    return mBaitFlags & (u8)(1 << i_no) ? true : false;
+    return mBaitFlags & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
 /* 8005AB24-8005ABB4       .text onReserve__25dSv_player_get_bag_item_cFUc */
@@ -487,7 +534,7 @@ void dSv_player_get_bag_item_c::onReserve(u8 i_no) {
 /* 8005ABB4-8005AC48       .text isReserve__25dSv_player_get_bag_item_cFUc */
 BOOL dSv_player_get_bag_item_c::isReserve(u8 i_no) {
     JUT_ASSERT(1355, 0 <= i_no && i_no < 32);
-    return mReserveFlags & (1 << i_no) ? true : false;
+    return mReserveFlags & (1 << i_no) ? TRUE : FALSE;
 }
 
 /* 8005AC48-8005ACA8       .text init__28dSv_player_bag_item_record_cFv */

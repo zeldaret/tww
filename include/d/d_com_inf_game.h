@@ -413,6 +413,11 @@ public:
     void setSelectItem(int idx, u8 itemNo) { mSelectItem[idx] = itemNo; }
     void setSelectEquip(int idx, u8 itemNo) { mSelectEquip[idx] = itemNo; }
     
+    void setItem(u8 slot, u8 i_itemNo) {
+        field_0x493d = slot;
+        field_0x493e = i_itemNo;
+    }
+    
     void setAStatus(u8 status) { mCurrButtonBAction = status; }
     void setDoStatus(u8 status) { mCurrButtonAAction = status; }
     void setRStatusForce(u8 status) { field_0x4930 = status; }
@@ -727,12 +732,24 @@ inline u8 dComIfGs_getItemBeast(int param_0) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getBeast(param_0);
 }
 
+inline void dComIfGs_setItemBeast(int i_idx, u8 i_itemNo) {
+    g_dComIfG_gameInfo.save.getPlayer().getBagItem().setBeast(i_idx, i_itemNo);
+}
+
 inline u8 dComIfGs_getItemBait(int param_0) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getBait(param_0);
 }
 
+inline void dComIfGs_setItemBait(int i_idx, u8 i_itemNo) {
+    g_dComIfG_gameInfo.save.getPlayer().getBagItem().setBait(i_idx, i_itemNo);
+}
+
 inline u8 dComIfGs_getItemReserve(int param_0) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getReserve(param_0);
+}
+
+inline void dComIfGs_setItemReserve(int i_idx, u8 i_itemNo) {
+    g_dComIfG_gameInfo.save.getPlayer().getBagItem().setReserve(i_idx, i_itemNo);
 }
 
 inline OSTime dComIfGs_getDateIpl() {
@@ -764,8 +781,29 @@ inline u8 dComIfGs_getItem(int i_invIdx) {
     }
 }
 
-inline void dComIfGs_setItem(int i_idx, u8 i_itemNo) {
-    g_dComIfG_gameInfo.save.getPlayer().getItem().setItem(i_idx, i_itemNo);
+/**
+ * Sets a specific inventory slot to contain a particular item.
+ * @param i_invIdx The index of the inventory slot.
+ * @param i_itemNo The item number of the item to place in that slot, or 0xFF for no item.
+ */
+inline void dComIfGs_setItem(int i_invIdx, u8 i_itemNo) {
+    if (i_invIdx < 0x15) {
+        g_dComIfG_gameInfo.save.getPlayer().getItem().setItem(i_invIdx, i_itemNo);
+    } else if (i_invIdx < 0x18) {
+        return;
+    } else if (i_invIdx < 0x18 + 8) {
+        dComIfGs_setItemBeast(i_invIdx - 0x18, i_itemNo);
+    } else if (i_invIdx < 0x24) {
+        return;
+    } else if (i_invIdx < 0x24 + 8) {
+        dComIfGs_setItemBait(i_invIdx - 0x24, i_itemNo);
+    } else if (i_invIdx < 0x30) {
+        return;
+    } else if (i_invIdx < 0x30 + 8) {
+        dComIfGs_setItemReserve(i_invIdx - 0x30, i_itemNo);
+    } else {
+        return;
+    }
 }
 
 inline u8 dComIfGs_getBeast(int i_idx) {
@@ -1971,6 +2009,10 @@ inline void dComIfGp_setSelectItem(int i_btnIdx) {
 
 inline void dComIfGp_setSelectEquip(int idx, u8 itemNo) {
     g_dComIfG_gameInfo.play.setSelectEquip(idx, itemNo);
+}
+
+inline void dComIfGp_setItem(u8 slot, u8 i_itemNo) {
+    g_dComIfG_gameInfo.play.setItem(slot, i_itemNo);
 }
 
 inline void dComIfGp_setCurrentGrafPort(J2DOrthoGraph* i_graf) {
