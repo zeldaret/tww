@@ -41,8 +41,8 @@ static dCcD_SrcSph sph_src = {
 static u8 padding[76];
 
 // Need to break these out to get the rodata ordered right
-static const float partHeightOffset = 20.0;
-static const float partMaxFlickerPerTick = 0.02;
+static const float partHeightOffset = 20.0f;
+static const float partMaxFlickerPerTick = 0.02f;
 
 /* 000000EC-00000158       .text daLamp_Draw__FP10lamp_class */
 static BOOL daLamp_Draw(lamp_class* i_lamp) {
@@ -59,25 +59,25 @@ static BOOL daLamp_Execute(lamp_class* i_lamp) {
     MtxTrans(i_lamp->current.pos.x, i_lamp->current.pos.y, i_lamp->current.pos.z, 0);
     mDoMtx_YrotM(*calc_mtx, i_lamp->current.angle.GetY());
     if (i_lamp->mParameters == 0) {
-        i_lamp->mLength = 0.1;
+        i_lamp->mLength = 0.1f;
     } else {
-        if (dComIfGp_getVibration().CheckQuake() || fopAcM_otoCheck(i_lamp, 1000.0) > 400) {
+        if (dComIfGp_getVibration().CheckQuake() || fopAcM_otoCheck(i_lamp, 1000.0f) > 400) {
             i_lamp->mOto = 0x14;
         }
         if (i_lamp->mOto) {
             i_lamp->mOto--;
-            cLib_addCalc2(&i_lamp->mLength, 0.15, 1.0, 0.015);
+            cLib_addCalc2(&i_lamp->mLength, 0.15f, 1.0f, 0.015f);
         } else {
-            cLib_addCalc2(&i_lamp->mLength, 0.01, 1.0, 0.0005);
+            cLib_addCalc2(&i_lamp->mLength, 0.01f, 1.0f, 0.0005f);
         }
     }
     f32 oppDist = cM_ssin(i_lamp->mCycleCtr * 0x320) * i_lamp->mLength;
     MtxRotX(oppDist, 1);
     f32 adjDist = cM_scos(i_lamp->mCycleCtr * 0x2bc) * i_lamp->mLength;
     MtxRotZ(adjDist, 1);
-    MtxScale(0.4, 0.4, 0.4, 1);
+    MtxScale(0.4f, 0.4f, 0.4f, 1);
     i_lamp->mModel->setBaseTRMtx(*calc_mtx);
-    MtxTrans(10.0, -140.0, -15.0, 1);
+    MtxTrans(10.0f, -140.0f, -15.0f, 1);
 
     cXyz pos;
     pos.z = 0.0f;
@@ -97,9 +97,9 @@ static BOOL daLamp_Execute(lamp_class* i_lamp) {
         cXyz whitePartPos = i_lamp->mPos;
         whitePartPos.y += partHeightOffset;
         dComIfGp_particle_setSimple(0x4004, &whitePartPos, 0xFF, g_whiteColor, g_whiteColor, 0);
-        cLib_addCalc2(&i_lamp->mParticlePower, cM_rndF(0.2) + 1.0f, 0.5f, partMaxFlickerPerTick);
+        cLib_addCalc2(&i_lamp->mParticlePower, cM_rndF(0.2f) + 1.0f, 0.5f, partMaxFlickerPerTick);
     } else {
-        i_lamp->mParticlePower = 0.0;
+        i_lamp->mParticlePower = 0.0f;
     }
     i_lamp->mInf.mPos = i_lamp->mPos;
     i_lamp->mInf.mColor.r = 600;
@@ -125,11 +125,11 @@ static BOOL daLamp_Execute(lamp_class* i_lamp) {
         if (i_lamp->mPa.mpEmitter) {
             float tgtZ;
             if (i_lamp->mHitTimeoutLeft > 10) {
-                tgtZ = 4.0;
+                tgtZ = 4.0f;
             } else {
-                tgtZ = 0.0;
+                tgtZ = 0.0f;
             }
-            cLib_addCalc2(&i_lamp->mHitReactCurZ, tgtZ, 1.0, 0.5);
+            cLib_addCalc2(&i_lamp->mHitReactCurZ, tgtZ, 1.0f, 0.5f);
             cMtx_YrotS(*calc_mtx, i_lamp->mHitAngle);
             cXyz localPos;
             localPos.set(0.0f, 1.0f, i_lamp->mHitReactCurZ);
