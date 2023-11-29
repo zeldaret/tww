@@ -264,9 +264,13 @@ struct ItemTableList {
 
 class dComIfG_play_c {
 public:
+#if VERSION == VERSION_JPN
+    dComIfG_play_c();
+#else
     dComIfG_play_c() { ct(); }
-
     void ct();
+#endif
+
     void init();
     void itemInit();
     static int getLayerNo(int i_roomNo);
@@ -619,7 +623,9 @@ public:
     /* 0x4961 */ u8 field_0x4961;
     /* 0x4962 */ u8 mHeapLockFlag;
     /* 0x4963 */ u8 field_0x4963;
+#if VERSION != VERSION_JPN
     /* 0x4964 */ u8 mGameLanguage;
+#endif
     /* 0x4965 */ u8 field_0x4965;
     /* 0x4966 */ char field_0x4966[1];
     /* 0x4967 */ u8 field_0x4967[0x4977 - 0x4967];
@@ -655,7 +661,11 @@ public:
 
 class dComIfG_inf_c {
 public:
+#if VERSION == VERSION_JPN
+    dComIfG_inf_c();
+#else
     dComIfG_inf_c() { ct(); }
+#endif
     ~dComIfG_inf_c() {}
 
     void ct();

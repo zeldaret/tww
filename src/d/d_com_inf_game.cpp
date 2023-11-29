@@ -30,7 +30,12 @@ GXColor g_whiteColor      = {0xFF, 0xFF, 0xFF, 0xFF};
 GXColor g_saftyWhiteColor = {0xA0, 0xA0, 0xA0, 0xFF};
 
 /* 80052134-800521A4       .text ct__14dComIfG_play_cFv */
-void dComIfG_play_c::ct() {
+#if VERSION == VERSION_JPN
+dComIfG_play_c::dComIfG_play_c()
+#else
+void dComIfG_play_c::ct()
+#endif
+{
     mDlstWindowNum = 0;
     mParticle = NULL;
     mDemo = NULL;
@@ -226,13 +231,17 @@ int dComIfG_play_c::getLayerNo(int i_roomNo) {
                 return layer | 6;
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "kenroom") == 0) {
+#if VERSION == VERSION_JPN
+            if (dComIfGs_isEventBit(0x2C01)) {
+#else
             if (dComIfGs_isEventBit(0x2C01) ||
                 (dComIfGs_isEventBit(0x3802) && !dComIfGs_isEventBit(0x3280)))
             {
+#endif
                 return layer | 6;
             } else if (dComIfGs_getTriforceNum() == 8) {
                 return layer | 4;
-            } else if (dComIfGs_isEventBit(0x3802)) {
+            } else if (dComIfGs_isEventBit(VERSION_SELECT(0x3280, 0x3802, 0x3802))) {
                 return layer | 2;
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "M2tower") == 0) {
@@ -259,14 +268,14 @@ int dComIfG_play_c::getLayerNo(int i_roomNo) {
 void dComIfG_play_c::createParticle() {
     mParticle = new dPa_control_c();
 
-    JUT_ASSERT(360, mParticle != 0);
+    JUT_ASSERT(VERSION_SELECT(358, 360, 360), mParticle != 0);
 }
 
 /* 800528F4-8005297C       .text createDemo__14dComIfG_play_cFv */
 void dComIfG_play_c::createDemo() {
     mDemo = new dDemo_manager_c();
 
-    JUT_ASSERT(390, mDemo != 0);
+    JUT_ASSERT(VERSION_SELECT(388, 390, 390), mDemo != 0);
 }
 
 /* 8005297C-800529B8       .text removeDemo__14dComIfG_play_cFv */
@@ -456,11 +465,17 @@ void dComIfG_play_c::drawWood() {
     }
 }
 
+#if VERSION == VERSION_JPN
+dComIfG_inf_c::dComIfG_inf_c() {
+    mBrightness = 0xFF;
+}
+#else
 /* 80053178-800531A8       .text ct__13dComIfG_inf_cFv */
 void dComIfG_inf_c::ct() {
     mBrightness = 0xFF;
     play.ct();
 }
+#endif
 
 /* 800531A8-8005326C       .text dComIfG_changeOpeningScene__FP11scene_classs */
 int dComIfG_changeOpeningScene(scene_class* i_scene, s16 i_procName) {
@@ -523,7 +538,7 @@ int dComIfG_resLoad(request_of_phase_process_class* i_phase, const char* i_arcNa
 
 /* 800533D0-8005347C       .text dComIfG_resDelete__FP30request_of_phase_process_classPCc */
 int dComIfG_resDelete(request_of_phase_process_class* i_phase, const char* i_resName) {
-    JUT_ASSERT(1048, i_phase->id != 1);
+    JUT_ASSERT(VERSION_SELECT(1045, 1048, 1048), i_phase->id != 1);
 
     if (i_phase->id == cPhs_NEXT_e) {
         dComIfG_deleteObjectRes(i_resName);
@@ -1045,12 +1060,12 @@ static void dummy() {
 /* 8005468C-800547BC       .text getSceneList__Fi */
 stage_scls_info_class* getSceneList(int i_no) {
     stage_scls_info_dummy_class* sclsInfo = dComIfGp_getStage().getSclsInfo();
-    JUT_ASSERT(2132, sclsInfo != 0);
+    JUT_ASSERT(VERSION_SELECT(2129, 2132, 2132), sclsInfo != 0);
 
-    JUT_ASSERT(2134, 0 <= i_no && i_no < sclsInfo->num);
+    JUT_ASSERT(VERSION_SELECT(2131, 2134, 2134), 0 <= i_no && i_no < sclsInfo->num);
 
     stage_scls_info_class* sclsData = sclsInfo->m_entries;
-    JUT_ASSERT(2136, sclsData != 0);
+    JUT_ASSERT(VERSION_SELECT(2133, 2136, 2136), sclsData != 0);
 
     return &sclsData[i_no];
 }
@@ -1177,7 +1192,7 @@ void dComIfGs_setGameStartStage() {
             strcpy(stage_name, "sea");
 
             stage_map_info_class* mapInfo = dComIfGp_getStage().getMapInfo();
-            JUT_ASSERT(2362, mapInfo != 0);
+            JUT_ASSERT(VERSION_SELECT(2359, 2362, 2362), mapInfo != 0);
 
             room_no = 4 + dStage_mapInfo_GetOceanX(mapInfo) + ((dStage_mapInfo_GetOceanZ(mapInfo) + 3) * 7);
             point = 0;
@@ -1234,7 +1249,9 @@ void dComIfGs_copyPlayerRecollectionData() {
 
 /* 80054E9C-80055318       .text dComIfGs_setPlayerRecollectionData__Fv */
 void dComIfGs_setPlayerRecollectionData() {
+#if VERSION != VERSION_JPN
     daArrow_c::setKeepType(0);
+#endif
 
     u32 tbl;
     if (strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0 && dComIfGs_isEventBit(0x3d80) != 0) {
