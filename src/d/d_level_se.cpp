@@ -3,19 +3,11 @@
 // Translation Unit: d_level_se.cpp
 //
 
+#include "d/d_level_se.h"
 #include "f_op/f_op_kankyo.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_audio.h"
-
-class dLevelSe_c : public kankyo_class {
-public:
-    /* 0xF8 */ u32 field_0xf8;
-    /* 0xFC */ s8 mReverb;
-    /* 0xFD */ u8 mFlag;
-    /* 0xFE */ u8 field_0xfe;
-    /* 0xFF */ u8 field_0xff;
-};
 
 /* 80199308-801993CC       .text dLevelSe_Execute__FP10dLevelSe_c */
 BOOL dLevelSe_Execute(dLevelSe_c* i_this) {
@@ -48,7 +40,6 @@ BOOL dLevelSe_Delete(dLevelSe_c* i_this) {
 s32 dLevelSe_Create(kankyo_class*) {
     return cPhs_COMPLEATE_e;
 }
-
 
 kankyo_method_class l_dLevelSe_Method = {
     (process_method_func)dLevelSe_Create,
