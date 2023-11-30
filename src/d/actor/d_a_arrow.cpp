@@ -1037,7 +1037,7 @@ void daArrow_c::checkRestMp() {
     
     u8 currMagic = dComIfGs_getMagic();
     if (currMagic < use_mp[m_keep_type]) {
-        m_keep_type = 0;
+        m_keep_type = TYPE_NORMAL;
     }
 }
 

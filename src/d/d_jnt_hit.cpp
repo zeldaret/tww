@@ -108,9 +108,3 @@ JntHit_c* JntHit_create(J3DModel* model, __jnt_hit_data_c* jntHitData, s16 hitDa
 
     return NULL;
 }
-
-/* 8006286C-800628B4       .text __dt__12JntHit_HIO_cFv */
-JntHit_HIO_c::~JntHit_HIO_c() {
-    /* Nonmatching */
-}
-

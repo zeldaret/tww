@@ -2329,6 +2329,10 @@ inline int dComIfGd_setRealShadow2(u32 id, s8 param_2, J3DModel* pModel, cXyz* p
                                                       pTevStr);
 }
 
+inline bool dComIfGd_addRealShadow(u32 id, J3DModel* pModel) {
+    return g_dComIfG_gameInfo.drawlist.addRealShadow(id, pModel);
+}
+
 inline void dComIfGd_imageDrawShadow(Mtx mtx) {
     g_dComIfG_gameInfo.drawlist.imageDrawShadow(mtx);
 }
@@ -2349,6 +2353,10 @@ inline void dComIfGd_setSpotModelColor(GXColor& color) { g_dComIfG_gameInfo.draw
 inline GXColor & dComIfGd_getAlphaModelColor() { return g_dComIfG_gameInfo.drawlist.getAlphaModelColor(); }
 inline GXColor & dComIfGd_getLightModelColor() { return g_dComIfG_gameInfo.drawlist.getLightModelColor(); }
 inline GXColor & dComIfGd_getSpotModelColor() { return g_dComIfG_gameInfo.drawlist.getSpotModelColor(); }
+
+inline J3DDrawBuffer* dComIfGd_getXluList() {
+    return g_dComIfG_gameInfo.drawlist.getXluList();
+}
 
 inline J3DDrawBuffer* dComIfGd_getOpaListP1() {
     return g_dComIfG_gameInfo.drawlist.getOpaListP1();

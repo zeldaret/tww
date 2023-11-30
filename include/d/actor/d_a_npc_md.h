@@ -223,6 +223,14 @@ public:
     void setTypeM_Dai() { m3138 = 5; }
     void setTypeM_DaiB() { m3138 = 6; }
     void setTypeShipRide() { m3138 = 7; }
+    void isTypeAdanmae() {}
+    void isTypeAtorizk() {}
+    void isTypeM_Dra09() {}
+    void isTypeSea() {}
+    bool isTypeEdaichi() { return m3138 == 4; }
+    bool isTypeM_Dai() { return m3138 == 5; }
+    bool isTypeM_DaiB() { return m3138 == 6; }
+    bool isTypeShipRide() { return m3138 == 7; }
     
     s16 getHead_x() { return mJntCtrl.getHead_x(); }
     s16 getHead_y() { return mJntCtrl.getHead_y(); }
@@ -270,14 +278,6 @@ public:
     void isNoCarryAction() {}
     void isSeaTalk() {}
     void isShipRide() {}
-    void isTypeAdanmae() {}
-    void isTypeAtorizk() {}
-    void isTypeEdaichi() {}
-    void isTypeM_Dai() {}
-    void isTypeM_DaiB() {}
-    void isTypeM_Dra09() {}
-    void isTypeSea() {}
-    void isTypeShipRide() {}
     void noCarryAction() {}
     void offBitCamTagIn() {}
     void offFlying() {}
@@ -482,7 +482,7 @@ public:
     /* 0x0508 */ JPABaseEmitter* m0508[6];
     /* 0x0520 */ mDoExt_btpAnm m0520;
     /* 0x0534 */ mDoExt_btkAnm mLightBtkAnm;
-    /* 0x0548 */ u8 m0548[0x054C - 0x0548];
+    /* 0x0548 */ u32 mShadowId;
     /* 0x054C */ dBgS_AcchCir mAcchCir[2];
     /* 0x05CC */ dBgS_MirLightLinChk mLinChk;
     /* 0x0638 */ dCcD_Stts mStts;
@@ -539,7 +539,9 @@ public:
     /* 0x312F */ u8 m312F[0x3131 - 0x312F];
     /* 0x3131 */ u8 m3131;
     /* 0x3132 */ s8 mActionStatus;
-    /* 0x3133 */ u8 m3133[0x3137 - 0x3133];
+    /* 0x3133 */ u8 m3133;
+    /* 0x3134 */ u8 m3134[0x3136 - 0x3134];
+    /* 0x3136 */ u8 m3136;
     /* 0x3137 */ u8 m3137;
     /* 0x3138 */ u8 m3138;
     /* 0x3139 */ u8 mCurEvent;

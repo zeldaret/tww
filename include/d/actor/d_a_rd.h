@@ -190,7 +190,7 @@ public:
     /* 0x520 */ dCcD_Stts mStts;
     /* 0x55C */ dCcD_Cyl mCyl;
     /* 0x68C */ u8 m68C[0x690 - 0x68C];
-    /* 0x690 */ s32 mShadowId;
+    /* 0x690 */ u32 mShadowId;
     /* 0x694 */ mDoExt_invisibleModel mInvisModel;
     /* 0x69C */ dNpc_JntCtrl_c mJntCtrl;
     /* 0x6D0 */ u32 mCorpseID;

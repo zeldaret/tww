@@ -168,7 +168,7 @@ void dComIfG_play_c::itemInit() {
     field_0x4979 = 0;
     field_0x497a = 0;
     field_0x4963 = dComIfGs_getOptVibration();
-    daArrow_c::setKeepType(0);
+    daArrow_c::setKeepType(daArrow_c::TYPE_NORMAL);
     mMesgCameraTagInfo = 0;
     field_0x4984 = 0;
 
@@ -1250,7 +1250,7 @@ void dComIfGs_copyPlayerRecollectionData() {
 /* 80054E9C-80055318       .text dComIfGs_setPlayerRecollectionData__Fv */
 void dComIfGs_setPlayerRecollectionData() {
 #if VERSION != VERSION_JPN
-    daArrow_c::setKeepType(0);
+    daArrow_c::setKeepType(daArrow_c::TYPE_NORMAL);
 #endif
 
     u32 tbl;

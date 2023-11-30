@@ -3,6 +3,7 @@
 
 #include "dolphin/types.h"
 #include "f_op/f_op_actor.h"
+#include "JSystem/J3DGraphBase/J3DPacket.h"
 
 class daSea_WaterHeightInfo_Mng {
 public:

@@ -377,6 +377,7 @@ public:
     static void wipeIn(f32);
     static void calcWipe();
 
+    J3DDrawBuffer* getXluList() { return mpXluList; }
     J3DDrawBuffer* getOpaListP1() { return mpOpaListP1; }
     J3DDrawBuffer* getOpaListFilter() { return mpOpaListFilter; }
     J3DDrawBuffer* getOpaList2D() { return mpOpaList2D; }
@@ -446,6 +447,10 @@ public:
     int setRealShadow2(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5, f32 param_6,
                        dKy_tevstr_c* pTevStr) {
         return mShadowControl.setReal2(id, param_2, pModel, pPos, param_5, param_6, pTevStr);
+    }
+
+    bool addRealShadow(u32 id, J3DModel* pModel) {
+        return mShadowControl.addReal(id, pModel);
     }
 
     void drawShadow(Mtx mtx) { mShadowControl.draw(mtx); }

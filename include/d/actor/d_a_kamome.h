@@ -13,7 +13,7 @@ class kamome_class : public fopAc_ac_c {
 public:
     /* 0x290 */ request_of_phase_process_class mPhsKamome;
     /* 0x298 */ mDoExt_McaMorf* mpMorf;
-    /* 0x29C */ int mShadowIdx;
+    /* 0x29C */ u32 mShadowId;
     /* 0x2A0 */ u8 mType;
     /* 0x2A1 */ u8 mKoMaxCount;
     /* 0x2A2 */ u8 mPathIdx;
