@@ -67,27 +67,27 @@ void daTag_Etc_action_hunt(daTag_Etc_c*) {
 }
 
 /* 000006EC-000006F4       .text daTag_Etc_Draw__FP11daTag_Etc_c */
-void daTag_Etc_Draw(daTag_Etc_c*) {
+static BOOL daTag_Etc_Draw(daTag_Etc_c*) {
     /* Nonmatching */
 }
 
 /* 000006F4-00000730       .text daTag_Etc_Execute__FP11daTag_Etc_c */
-void daTag_Etc_Execute(daTag_Etc_c*) {
+static BOOL daTag_Etc_Execute(daTag_Etc_c*) {
     /* Nonmatching */
 }
 
 /* 00000730-00000738       .text daTag_Etc_IsDelete__FP11daTag_Etc_c */
-void daTag_Etc_IsDelete(daTag_Etc_c*) {
+static BOOL daTag_Etc_IsDelete(daTag_Etc_c*) {
     /* Nonmatching */
 }
 
 /* 00000738-00000768       .text daTag_Etc_Delete__FP11daTag_Etc_c */
-void daTag_Etc_Delete(daTag_Etc_c*) {
+static BOOL daTag_Etc_Delete(daTag_Etc_c*) {
     /* Nonmatching */
 }
 
 /* 00000768-00000788       .text daTag_Etc_Create__FP10fopAc_ac_c */
-void daTag_Etc_Create(fopAc_ac_c*) {
+static s32 daTag_Etc_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

@@ -12,7 +12,7 @@ daYOUGAN_HIO_c::daYOUGAN_HIO_c() {
 }
 
 /* 00000158-00000178       .text daYougan_Draw__FP10daYougan_c */
-void daYougan_Draw(daYougan_c*) {
+static BOOL daYougan_Draw(daYougan_c*) {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void daYougan_c::_daYougan_draw() {
 }
 
 /* 000002A8-000002C8       .text daYougan_Execute__FP10daYougan_c */
-void daYougan_Execute(daYougan_c*) {
+static BOOL daYougan_Execute(daYougan_c*) {
     /* Nonmatching */
 }
 
@@ -32,7 +32,7 @@ void daYougan_c::_daYougan_execute() {
 }
 
 /* 00000554-00000574       .text daYougan_IsDelete__FP10daYougan_c */
-void daYougan_IsDelete(daYougan_c*) {
+static BOOL daYougan_IsDelete(daYougan_c*) {
     /* Nonmatching */
 }
 
@@ -42,7 +42,7 @@ void daYougan_c::_daYougan_isdelete() {
 }
 
 /* 0000057C-0000059C       .text daYougan_Delete__FP10daYougan_c */
-void daYougan_Delete(daYougan_c*) {
+static BOOL daYougan_Delete(daYougan_c*) {
     /* Nonmatching */
 }
 
@@ -57,12 +57,12 @@ void daYougan_c::useHeapInit() {
 }
 
 /* 00000884-000008A4       .text daYougan_solidHeapCB__FP10fopAc_ac_c */
-void daYougan_solidHeapCB(fopAc_ac_c*) {
+static BOOL daYougan_solidHeapCB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000008A4-000008C4       .text daYougan_Create__FP10fopAc_ac_c */
-void daYougan_Create(fopAc_ac_c*) {
+static s32 daYougan_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

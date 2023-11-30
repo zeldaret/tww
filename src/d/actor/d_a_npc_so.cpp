@@ -22,7 +22,7 @@ void daNpc_So_c::_searchEsa(fopAc_ac_c*) {
 }
 
 /* 000002F8-00000344       .text nodeControl_CB__FP7J3DNodei */
-void nodeControl_CB(J3DNode*, int) {
+static BOOL nodeControl_CB(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -72,7 +72,7 @@ void daNpc_So_c::XyEventCB(int) {
 }
 
 /* 000006EC-0000070C       .text createHeap_CB__FP10fopAc_ac_c */
-void createHeap_CB(fopAc_ac_c*) {
+static BOOL createHeap_CB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -367,27 +367,27 @@ BOOL daNpc_So_c::_delete() {
 }
 
 /* 00004754-00004774       .text daNpc_SoCreate__FPv */
-void daNpc_SoCreate(void*) {
+static s32 daNpc_SoCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00004774-00004798       .text daNpc_SoDelete__FPv */
-void daNpc_SoDelete(void*) {
+static BOOL daNpc_SoDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00004798-000047BC       .text daNpc_SoExecute__FPv */
-void daNpc_SoExecute(void*) {
+static BOOL daNpc_SoExecute(void*) {
     /* Nonmatching */
 }
 
 /* 000047BC-000047E0       .text daNpc_SoDraw__FPv */
-void daNpc_SoDraw(void*) {
+static BOOL daNpc_SoDraw(void*) {
     /* Nonmatching */
 }
 
 /* 000047E0-000047E8       .text daNpc_SoIsDelete__FPv */
-void daNpc_SoIsDelete(void*) {
+static BOOL daNpc_SoIsDelete(void*) {
     /* Nonmatching */
 }
 

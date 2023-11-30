@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000108       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -17,7 +17,7 @@ void jbo_draw_SUB(jbo_class*) {
 }
 
 /* 00000240-000002C4       .text daJBO_Draw__FP9jbo_class */
-void daJBO_Draw(jbo_class*) {
+static BOOL daJBO_Draw(jbo_class*) {
     /* Nonmatching */
 }
 
@@ -27,26 +27,26 @@ void jbo_move(jbo_class*) {
 }
 
 /* 00000584-00000698       .text daJBO_Execute__FP9jbo_class */
-void daJBO_Execute(jbo_class*) {
+static BOOL daJBO_Execute(jbo_class*) {
     /* Nonmatching */
 }
 
 /* 00000698-000006A0       .text daJBO_IsDelete__FP9jbo_class */
-void daJBO_IsDelete(jbo_class*) {
+static BOOL daJBO_IsDelete(jbo_class*) {
     /* Nonmatching */
 }
 
 /* 000006A0-000006D0       .text daJBO_Delete__FP9jbo_class */
-void daJBO_Delete(jbo_class*) {
+static BOOL daJBO_Delete(jbo_class*) {
     /* Nonmatching */
 }
 
 /* 000006D0-0000081C       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 0000081C-00000A90       .text daJBO_Create__FP10fopAc_ac_c */
-void daJBO_Create(fopAc_ac_c*) {
+static s32 daJBO_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }

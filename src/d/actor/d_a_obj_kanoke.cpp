@@ -12,7 +12,7 @@ daObjKanoke_c::daObjKanoke_c() {
 }
 
 /* 00000644-00000664       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -127,26 +127,26 @@ void daObjKanoke_c::setMtxHuta(cXyz*) {
 }
 
 /* 00001E4C-00001E6C       .text daObjKanokeCreate__FPv */
-void daObjKanokeCreate(void*) {
+static s32 daObjKanokeCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00001E6C-00001E8C       .text daObjKanokeDelete__FPv */
-void daObjKanokeDelete(void*) {
+static BOOL daObjKanokeDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00001E8C-00001EAC       .text daObjKanokeExecute__FPv */
-void daObjKanokeExecute(void*) {
+static BOOL daObjKanokeExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00001EAC-00001ECC       .text daObjKanokeDraw__FPv */
-void daObjKanokeDraw(void*) {
+static BOOL daObjKanokeDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00001ECC-00001ED4       .text daObjKanokeIsDelete__FPv */
-void daObjKanokeIsDelete(void*) {
+static BOOL daObjKanokeIsDelete(void*) {
     /* Nonmatching */
 }

@@ -12,7 +12,7 @@ void daObjDoguu_c::setPointLight() {
 }
 
 /* 00000168-00000188       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -77,7 +77,7 @@ void daObjDoguu_c::setFinishMyEvent() {
 }
 
 /* 000016A4-000016C4       .text daObjDoguu_Create__FPv */
-void daObjDoguu_Create(void*) {
+static s32 daObjDoguu_Create(void*) {
     /* Nonmatching */
 }
 
@@ -87,12 +87,12 @@ s32 daObjDoguu_c::_create() {
 }
 
 /* 00001CC8-00001D0C       .text daObjDoguu_Delete__FPv */
-void daObjDoguu_Delete(void*) {
+static BOOL daObjDoguu_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00001D0C-00001D30       .text daObjDoguu_Draw__FPv */
-void daObjDoguu_Draw(void*) {
+static BOOL daObjDoguu_Draw(void*) {
     /* Nonmatching */
 }
 
@@ -107,7 +107,7 @@ void daObjDoguu_c::setEffectMtx(const cXyz*, float) {
 }
 
 /* 00002264-00002288       .text daObjDoguu_Execute__FPv */
-void daObjDoguu_Execute(void*) {
+static BOOL daObjDoguu_Execute(void*) {
     /* Nonmatching */
 }
 
@@ -117,6 +117,6 @@ BOOL daObjDoguu_c::_execute() {
 }
 
 /* 000027AC-000027B4       .text daObjDoguu_IsDelete__FPv */
-void daObjDoguu_IsDelete(void*) {
+static BOOL daObjDoguu_IsDelete(void*) {
     /* Nonmatching */
 }

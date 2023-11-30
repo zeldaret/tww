@@ -1451,27 +1451,27 @@ BOOL daItem_c::initAction() {
 }
 
 /* 800F8950-800F8970       .text daItem_Draw__FP8daItem_c */
-BOOL daItem_Draw(daItem_c* i_this) {
+static BOOL daItem_Draw(daItem_c* i_this) {
     return i_this->_daItem_draw();
 }
 
 /* 800F8970-800F8990       .text daItem_Execute__FP8daItem_c */
-BOOL daItem_Execute(daItem_c* i_this) {
+static BOOL daItem_Execute(daItem_c* i_this) {
     return i_this->_daItem_execute();
 }
 
 /* 800F8990-800F89B0       .text daItem_IsDelete__FP8daItem_c */
-BOOL daItem_IsDelete(daItem_c* i_this) {
+static BOOL daItem_IsDelete(daItem_c* i_this) {
     return i_this->_daItem_isdelete();
 }
 
 /* 800F89B0-800F89D0       .text daItem_Delete__FP8daItem_c */
-BOOL daItem_Delete(daItem_c* i_this) {
+static BOOL daItem_Delete(daItem_c* i_this) {
     return i_this->_daItem_delete();
 }
 
 /* 800F89D0-800F89F0       .text daItem_Create__FP10fopAc_ac_c */
-s32 daItem_Create(fopAc_ac_c* i_this) {
+static s32 daItem_Create(fopAc_ac_c* i_this) {
     return ((daItem_c*)i_this)->_daItem_create();
 }
 

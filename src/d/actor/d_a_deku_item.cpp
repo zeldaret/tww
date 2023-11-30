@@ -12,7 +12,7 @@ BOOL daDekuItem_c::_delete() {
 }
 
 /* 000000D0-000000F0       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -82,26 +82,26 @@ BOOL daDekuItem_c::_draw() {
 }
 
 /* 00000ECC-00000EEC       .text daDekuItem_Create__FPv */
-void daDekuItem_Create(void*) {
+static s32 daDekuItem_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000EEC-00000F10       .text daDekuItem_Delete__FPv */
-void daDekuItem_Delete(void*) {
+static BOOL daDekuItem_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000F10-00000F34       .text daDekuItem_Draw__FPv */
-void daDekuItem_Draw(void*) {
+static BOOL daDekuItem_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000F34-00000F58       .text daDekuItem_Execute__FPv */
-void daDekuItem_Execute(void*) {
+static BOOL daDekuItem_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00000F58-00000F60       .text daDekuItem_IsDelete__FPv */
-void daDekuItem_IsDelete(void*) {
+static BOOL daDekuItem_IsDelete(void*) {
     /* Nonmatching */
 }

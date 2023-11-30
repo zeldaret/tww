@@ -12,7 +12,7 @@ daAuction_c::daAuction_c() {
 }
 
 /* 00000644-00000664       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -252,26 +252,26 @@ void daAuction_c::getRand(int) {
 }
 
 /* 00003C08-00003C28       .text daAuctionCreate__FPv */
-void daAuctionCreate(void*) {
+static s32 daAuctionCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00003C28-00003C48       .text daAuctionDelete__FPv */
-void daAuctionDelete(void*) {
+static BOOL daAuctionDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00003C48-00003C68       .text daAuctionExecute__FPv */
-void daAuctionExecute(void*) {
+static BOOL daAuctionExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00003C68-00003C88       .text daAuctionDraw__FPv */
-void daAuctionDraw(void*) {
+static BOOL daAuctionDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00003C88-00003C90       .text daAuctionIsDelete__FPv */
-void daAuctionIsDelete(void*) {
+static BOOL daAuctionIsDelete(void*) {
     /* Nonmatching */
 }

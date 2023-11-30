@@ -87,26 +87,26 @@ BOOL daFire_c::_draw() {
 }
 
 /* 000015AC-000015CC       .text daFire_Create__FPv */
-void daFire_Create(void*) {
+static s32 daFire_Create(void*) {
     /* Nonmatching */
 }
 
 /* 000015CC-000015F0       .text daFire_Delete__FPv */
-void daFire_Delete(void*) {
+static BOOL daFire_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 000015F0-00001614       .text daFire_Draw__FPv */
-void daFire_Draw(void*) {
+static BOOL daFire_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00001614-00001638       .text daFire_Execute__FPv */
-void daFire_Execute(void*) {
+static BOOL daFire_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00001638-00001640       .text daFire_IsDelete__FPv */
-void daFire_IsDelete(void*) {
+static BOOL daFire_IsDelete(void*) {
     /* Nonmatching */
 }

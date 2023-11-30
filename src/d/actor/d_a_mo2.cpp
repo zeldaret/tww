@@ -32,12 +32,12 @@ void ground_smoke_set(mo2_class*) {
 }
 
 /* 000010F8-0000135C       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 0000135C-00001634       .text nodeCallBack_P__FP7J3DNodei */
-void nodeCallBack_P(J3DNode*, int) {
+static BOOL nodeCallBack_P(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -67,12 +67,12 @@ void br_draw(mo2_class*) {
 }
 
 /* 0000236C-00002418       .text daMo2_shadowDraw__FP9mo2_class */
-void daMo2_shadowDraw(mo2_class*) {
+static BOOL daMo2_shadowDraw(mo2_class*) {
     /* Nonmatching */
 }
 
 /* 00002418-0000262C       .text daMo2_Draw__FP9mo2_class */
-void daMo2_Draw(mo2_class*) {
+static BOOL daMo2_Draw(mo2_class*) {
     /* Nonmatching */
 }
 
@@ -312,32 +312,32 @@ void kantera_get_init(mo2_class*) {
 }
 
 /* 0000A8C0-0000B618       .text daMo2_Execute__FP9mo2_class */
-void daMo2_Execute(mo2_class*) {
+static BOOL daMo2_Execute(mo2_class*) {
     /* Nonmatching */
 }
 
 /* 0000B618-0000B620       .text daMo2_IsDelete__FP9mo2_class */
-void daMo2_IsDelete(mo2_class*) {
+static BOOL daMo2_IsDelete(mo2_class*) {
     /* Nonmatching */
 }
 
 /* 0000B620-0000B720       .text daMo2_Delete__FP9mo2_class */
-void daMo2_Delete(mo2_class*) {
+static BOOL daMo2_Delete(mo2_class*) {
     /* Nonmatching */
 }
 
 /* 0000B720-0000B784       .text useArrowHeapInit__FP10fopAc_ac_c */
-void useArrowHeapInit(fopAc_ac_c*) {
+static BOOL useArrowHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 0000B784-0000BAFC       .text createHeap__FP10fopAc_ac_c */
-void createHeap(fopAc_ac_c*) {
+static BOOL createHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 0000BAFC-0000C148       .text daMo2_Create__FP10fopAc_ac_c */
-void daMo2_Create(fopAc_ac_c*) {
+static s32 daMo2_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

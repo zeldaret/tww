@@ -12,7 +12,7 @@ void daBwdg_packet_c::draw() {
 }
 
 /* 000001C4-00000260       .text daBwdg_Draw__FP10bwdg_class */
-void daBwdg_Draw(bwdg_class*) {
+static BOOL daBwdg_Draw(bwdg_class*) {
     /* Nonmatching */
 }
 
@@ -32,27 +32,27 @@ void boss_a_d_sub(void*, void*) {
 }
 
 /* 00000780-0000084C       .text daBwdg_Execute__FP10bwdg_class */
-void daBwdg_Execute(bwdg_class*) {
+static BOOL daBwdg_Execute(bwdg_class*) {
     /* Nonmatching */
 }
 
 /* 0000084C-00000854       .text daBwdg_IsDelete__FP10bwdg_class */
-void daBwdg_IsDelete(bwdg_class*) {
+static BOOL daBwdg_IsDelete(bwdg_class*) {
     /* Nonmatching */
 }
 
 /* 00000854-000008B0       .text daBwdg_Delete__FP10bwdg_class */
-void daBwdg_Delete(bwdg_class*) {
+static BOOL daBwdg_Delete(bwdg_class*) {
     /* Nonmatching */
 }
 
 /* 000008B0-000009A0       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000009A0-00000B5C       .text daBwdg_Create__FP10fopAc_ac_c */
-void daBwdg_Create(fopAc_ac_c*) {
+static s32 daBwdg_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

@@ -32,7 +32,7 @@ void daSail_packet_c::draw() {
 }
 
 /* 000010D8-000013CC       .text daSail_Draw__FP10sail_class */
-void daSail_Draw(sail_class*) {
+static BOOL daSail_Draw(sail_class*) {
     /* Nonmatching */
 }
 
@@ -52,27 +52,27 @@ void sail_move(sail_class*) {
 }
 
 /* 00002094-00002154       .text daSail_Execute__FP10sail_class */
-void daSail_Execute(sail_class*) {
+static BOOL daSail_Execute(sail_class*) {
     /* Nonmatching */
 }
 
 /* 00002154-0000215C       .text daSail_IsDelete__FP10sail_class */
-void daSail_IsDelete(sail_class*) {
+static BOOL daSail_IsDelete(sail_class*) {
     /* Nonmatching */
 }
 
 /* 0000215C-000021D8       .text daSail_Delete__FP10sail_class */
-void daSail_Delete(sail_class*) {
+static BOOL daSail_Delete(sail_class*) {
     /* Nonmatching */
 }
 
 /* 000021D8-00002254       .text daSail_checkCreateHeap__FP10fopAc_ac_c */
-void daSail_checkCreateHeap(fopAc_ac_c*) {
+static BOOL daSail_checkCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00002254-000024E4       .text daSail_Create__FP10fopAc_ac_c */
-void daSail_Create(fopAc_ac_c*) {
+static s32 daSail_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

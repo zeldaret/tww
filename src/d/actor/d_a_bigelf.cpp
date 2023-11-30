@@ -17,7 +17,7 @@ void daBigelf_c::nodeCallBack(J3DNode*) {
 }
 
 /* 00000338-00000384       .text nodeCallBack_Bigelf__FP7J3DNodei */
-void nodeCallBack_Bigelf(J3DNode*, int) {
+static BOOL nodeCallBack_Bigelf(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -317,7 +317,7 @@ BOOL daBigelf_c::_delete() {
 }
 
 /* 00002FAC-00002FCC       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -332,27 +332,27 @@ void daBigelf_c::CreateHeap() {
 }
 
 /* 00003808-00003828       .text daBigelf_Create__FP10fopAc_ac_c */
-void daBigelf_Create(fopAc_ac_c*) {
+static s32 daBigelf_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00003828-00003848       .text daBigelf_Delete__FP10daBigelf_c */
-void daBigelf_Delete(daBigelf_c*) {
+static BOOL daBigelf_Delete(daBigelf_c*) {
     /* Nonmatching */
 }
 
 /* 00003848-00003868       .text daBigelf_Execute__FP10daBigelf_c */
-void daBigelf_Execute(daBigelf_c*) {
+static BOOL daBigelf_Execute(daBigelf_c*) {
     /* Nonmatching */
 }
 
 /* 00003868-00003888       .text daBigelf_Draw__FP10daBigelf_c */
-void daBigelf_Draw(daBigelf_c*) {
+static BOOL daBigelf_Draw(daBigelf_c*) {
     /* Nonmatching */
 }
 
 /* 00003888-00003890       .text daBigelf_IsDelete__FP10daBigelf_c */
-void daBigelf_IsDelete(daBigelf_c*) {
+static BOOL daBigelf_IsDelete(daBigelf_c*) {
     /* Nonmatching */
 }
 

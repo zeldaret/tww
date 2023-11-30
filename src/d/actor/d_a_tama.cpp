@@ -32,26 +32,26 @@ s32 daTama_c::_create() {
 }
 
 /* 00000638-00000658       .text daTama_Create__FP10fopAc_ac_c */
-void daTama_Create(fopAc_ac_c*) {
+static s32 daTama_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00000658-00000678       .text daTama_Delete__FP8daTama_c */
-void daTama_Delete(daTama_c*) {
+static BOOL daTama_Delete(daTama_c*) {
     /* Nonmatching */
 }
 
 /* 00000678-00000698       .text daTama_Execute__FP8daTama_c */
-void daTama_Execute(daTama_c*) {
+static BOOL daTama_Execute(daTama_c*) {
     /* Nonmatching */
 }
 
 /* 00000698-000006B8       .text daTama_Draw__FP8daTama_c */
-void daTama_Draw(daTama_c*) {
+static BOOL daTama_Draw(daTama_c*) {
     /* Nonmatching */
 }
 
 /* 000006B8-000006C0       .text daTama_IsDelete__FP8daTama_c */
-void daTama_IsDelete(daTama_c*) {
+static BOOL daTama_IsDelete(daTama_c*) {
     /* Nonmatching */
 }

@@ -262,27 +262,27 @@ BOOL daFan_c::Draw() {
 }
 
 /* 0000118C-000011AC       .text daFan_Create__FPv */
-BOOL daFan_Create(void* i_this) {
+static BOOL daFan_Create(void* i_this) {
     return ((daFan_c*)i_this)->_create();
 }
 
 /* 000011AC-000011CC       .text daFan_Delete__FPv */
-BOOL daFan_Delete(void* i_this) {
+static BOOL daFan_Delete(void* i_this) {
     return ((daFan_c*)i_this)->MoveBGDelete();
 }
 
 /* 000011CC-000011F8       .text daFan_Draw__FPv */
-BOOL daFan_Draw(void* i_this) {
+static BOOL daFan_Draw(void* i_this) {
     return ((daFan_c*)i_this)->Draw();
 }
 
 /* 000011F8-00001218       .text daFan_Execute__FPv */
-BOOL daFan_Execute(void* i_this) {
+static BOOL daFan_Execute(void* i_this) {
     return ((daFan_c*)i_this)->MoveBGExecute();
 }
 
 /* 00001218-00001220       .text daFan_IsDelete__FPv */
-BOOL daFan_IsDelete(void* i_this) {
+static BOOL daFan_IsDelete(void* i_this) {
     return TRUE;
 }
 

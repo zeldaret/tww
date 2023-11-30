@@ -12,7 +12,7 @@ void daTornado_c::jointCallBack(int) {
 }
 
 /* 00000260-000002A4       .text daTornado_jointCallBack__FP7J3DNodei */
-void daTornado_jointCallBack(J3DNode*, int) {
+static BOOL daTornado_jointCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ BOOL daTornado_c::draw() {
 }
 
 /* 00000464-00000484       .text daTornado_Draw__FP11daTornado_c */
-void daTornado_Draw(daTornado_c*) {
+static BOOL daTornado_Draw(daTornado_c*) {
     /* Nonmatching */
 }
 
@@ -32,12 +32,12 @@ BOOL daTornado_c::execute() {
 }
 
 /* 00000C88-00000CA8       .text daTornado_Execute__FP11daTornado_c */
-void daTornado_Execute(daTornado_c*) {
+static BOOL daTornado_Execute(daTornado_c*) {
     /* Nonmatching */
 }
 
 /* 00000CA8-00000CB0       .text daTornado_IsDelete__FP11daTornado_c */
-void daTornado_IsDelete(daTornado_c*) {
+static BOOL daTornado_IsDelete(daTornado_c*) {
     /* Nonmatching */
 }
 
@@ -47,7 +47,7 @@ void daTornado_c::tornado_delete() {
 }
 
 /* 00000D30-00000D54       .text daTornado_Delete__FP11daTornado_c */
-void daTornado_Delete(daTornado_c*) {
+static BOOL daTornado_Delete(daTornado_c*) {
     /* Nonmatching */
 }
 
@@ -57,7 +57,7 @@ void daTornado_c::createHeap() {
 }
 
 /* 0000109C-000010BC       .text daTornado_createHeap__FP10fopAc_ac_c */
-void daTornado_createHeap(fopAc_ac_c*) {
+static BOOL daTornado_createHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -67,7 +67,7 @@ s32 daTornado_c::create() {
 }
 
 /* 0000162C-0000164C       .text daTornado_Create__FP10fopAc_ac_c */
-void daTornado_Create(fopAc_ac_c*) {
+static s32 daTornado_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

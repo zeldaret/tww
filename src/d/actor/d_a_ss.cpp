@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 000000EC-000001DC       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -17,7 +17,7 @@ void hand_draw(ss_class*) {
 }
 
 /* 00000290-00000308       .text daSs_Draw__FP8ss_class */
-void daSs_Draw(ss_class*) {
+static BOOL daSs_Draw(ss_class*) {
     /* Nonmatching */
 }
 
@@ -57,27 +57,27 @@ void core_move(ss_class*) {
 }
 
 /* 00002B84-00002F1C       .text daSs_Execute__FP8ss_class */
-void daSs_Execute(ss_class*) {
+static BOOL daSs_Execute(ss_class*) {
     /* Nonmatching */
 }
 
 /* 00002F1C-00002F24       .text daSs_IsDelete__FP8ss_class */
-void daSs_IsDelete(ss_class*) {
+static BOOL daSs_IsDelete(ss_class*) {
     /* Nonmatching */
 }
 
 /* 00002F24-00002F58       .text daSs_Delete__FP8ss_class */
-void daSs_Delete(ss_class*) {
+static BOOL daSs_Delete(ss_class*) {
     /* Nonmatching */
 }
 
 /* 00002F58-000030D4       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000030D4-0000339C       .text daSs_Create__FP10fopAc_ac_c */
-void daSs_Create(fopAc_ac_c*) {
+static s32 daSs_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

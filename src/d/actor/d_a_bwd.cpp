@@ -47,7 +47,7 @@ void suna_draw(bwd_class*) {
 }
 
 /* 00000564-00000760       .text daBwd_Draw__FP9bwd_class */
-void daBwd_Draw(bwd_class*) {
+static BOOL daBwd_Draw(bwd_class*) {
     /* Nonmatching */
 }
 
@@ -132,27 +132,27 @@ void bwd_kankyo(bwd_class*) {
 }
 
 /* 000074A4-00008C24       .text daBwd_Execute__FP9bwd_class */
-void daBwd_Execute(bwd_class*) {
+static BOOL daBwd_Execute(bwd_class*) {
     /* Nonmatching */
 }
 
 /* 00008C24-00008C2C       .text daBwd_IsDelete__FP9bwd_class */
-void daBwd_IsDelete(bwd_class*) {
+static BOOL daBwd_IsDelete(bwd_class*) {
     /* Nonmatching */
 }
 
 /* 00008C2C-00008E0C       .text daBwd_Delete__FP9bwd_class */
-void daBwd_Delete(bwd_class*) {
+static BOOL daBwd_Delete(bwd_class*) {
     /* Nonmatching */
 }
 
 /* 00008E0C-000096D8       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00009720-00009C7C       .text daBwd_Create__FP10fopAc_ac_c */
-void daBwd_Create(fopAc_ac_c*) {
+static s32 daBwd_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

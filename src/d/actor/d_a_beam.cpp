@@ -17,7 +17,7 @@ void daBeam_c::set_mtx() {
 }
 
 /* 000003B0-000003D0       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -77,7 +77,7 @@ void daBeam_c::wait_proc() {
 }
 
 /* 00001C84-00001CA4       .text daBeamCreate__FPv */
-void daBeamCreate(void*) {
+static s32 daBeamCreate(void*) {
     /* Nonmatching */
 }
 
@@ -87,22 +87,22 @@ s32 daBeam_c::_create() {
 }
 
 /* 0000291C-0000298C       .text daBeamDelete__FPv */
-void daBeamDelete(void*) {
+static BOOL daBeamDelete(void*) {
     /* Nonmatching */
 }
 
 /* 0000298C-000029B0       .text daBeamExecute__FPv */
-void daBeamExecute(void*) {
+static BOOL daBeamExecute(void*) {
     /* Nonmatching */
 }
 
 /* 000029B0-00002AA0       .text daBeamDraw__FPv */
-void daBeamDraw(void*) {
+static BOOL daBeamDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00002AA0-00002AA8       .text daBeamIsDelete__FPv */
-void daBeamIsDelete(void*) {
+static BOOL daBeamIsDelete(void*) {
     /* Nonmatching */
 }
 

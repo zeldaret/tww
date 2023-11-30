@@ -12,7 +12,7 @@ daObjFigure_c::daObjFigure_c() {
 }
 
 /* 00000588-000005A8       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -132,27 +132,27 @@ void daObjFigure_c::getFigureBmd(unsigned char) {
 }
 
 /* 00001A80-00001AA0       .text daSampleCreate__FPv */
-void daSampleCreate(void*) {
+static s32 daSampleCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00001AA0-00001AC0       .text daSampleDelete__FPv */
-void daSampleDelete(void*) {
+static BOOL daSampleDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00001AC0-00001AE0       .text daSampleExecute__FPv */
-void daSampleExecute(void*) {
+static BOOL daSampleExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00001AE0-00001B00       .text daSampleDraw__FPv */
-void daSampleDraw(void*) {
+static BOOL daSampleDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00001B00-00001B08       .text daSampleIsDelete__FPv */
-void daSampleIsDelete(void*) {
+static BOOL daSampleIsDelete(void*) {
     /* Nonmatching */
 }
 

@@ -42,7 +42,7 @@ BOOL daBoomerang_c::draw() {
 }
 
 /* 800E1998-800E19B8       .text daBoomerang_Draw__FP13daBoomerang_c */
-void daBoomerang_Draw(daBoomerang_c*) {
+static BOOL daBoomerang_Draw(daBoomerang_c*) {
     /* Nonmatching */
 }
 
@@ -112,17 +112,17 @@ BOOL daBoomerang_c::execute() {
 }
 
 /* 800E2BD0-800E2BF0       .text daBoomerang_Execute__FP13daBoomerang_c */
-void daBoomerang_Execute(daBoomerang_c*) {
+static BOOL daBoomerang_Execute(daBoomerang_c*) {
     /* Nonmatching */
 }
 
 /* 800E2BF0-800E2BF8       .text daBoomerang_IsDelete__FP13daBoomerang_c */
-void daBoomerang_IsDelete(daBoomerang_c*) {
+static BOOL daBoomerang_IsDelete(daBoomerang_c*) {
     /* Nonmatching */
 }
 
 /* 800E2BF8-800E2C00       .text daBoomerang_Delete__FP13daBoomerang_c */
-void daBoomerang_Delete(daBoomerang_c*) {
+static BOOL daBoomerang_Delete(daBoomerang_c*) {
     /* Nonmatching */
 }
 
@@ -132,7 +132,7 @@ void daBoomerang_c::createHeap() {
 }
 
 /* 800E2CC8-800E2CE8       .text daBoomerang_createHeap__FP10fopAc_ac_c */
-void daBoomerang_createHeap(fopAc_ac_c*) {
+static BOOL daBoomerang_createHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -142,6 +142,6 @@ s32 daBoomerang_c::create() {
 }
 
 /* 800E33F0-800E3410       .text daBoomerang_Create__FP10fopAc_ac_c */
-void daBoomerang_Create(fopAc_ac_c*) {
+static s32 daBoomerang_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }

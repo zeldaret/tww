@@ -17,7 +17,7 @@ void hahen_draw(bdkobj_class*) {
 }
 
 /* 00000184-000002C4       .text daBdkobj_Draw__FP12bdkobj_class */
-void daBdkobj_Draw(bdkobj_class*) {
+static BOOL daBdkobj_Draw(bdkobj_class*) {
     /* Nonmatching */
 }
 
@@ -42,27 +42,27 @@ void tower_kaidan_move(bdkobj_class*) {
 }
 
 /* 00001CF0-00002274       .text daBdkobj_Execute__FP12bdkobj_class */
-void daBdkobj_Execute(bdkobj_class*) {
+static BOOL daBdkobj_Execute(bdkobj_class*) {
     /* Nonmatching */
 }
 
 /* 00002274-0000227C       .text daBdkobj_IsDelete__FP12bdkobj_class */
-void daBdkobj_IsDelete(bdkobj_class*) {
+static BOOL daBdkobj_IsDelete(bdkobj_class*) {
     /* Nonmatching */
 }
 
 /* 0000227C-000022E8       .text daBdkobj_Delete__FP12bdkobj_class */
-void daBdkobj_Delete(bdkobj_class*) {
+static BOOL daBdkobj_Delete(bdkobj_class*) {
     /* Nonmatching */
 }
 
 /* 000022E8-000024C8       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000024C8-000027B8       .text daBdkobj_Create__FP10fopAc_ac_c */
-void daBdkobj_Create(fopAc_ac_c*) {
+static s32 daBdkobj_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

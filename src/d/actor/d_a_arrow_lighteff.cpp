@@ -22,7 +22,7 @@ void daArrow_Lighteff_c::delete_particle() {
 }
 
 /* 000002C0-000002E0       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -42,22 +42,22 @@ void daArrow_Lighteff_c::set_mtx() {
 }
 
 /* 00000980-00000A70       .text daArrow_Lighteff_Create__FPv */
-void daArrow_Lighteff_Create(void*) {
+static s32 daArrow_Lighteff_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000B70-00000C10       .text daArrow_Lighteff_Delete__FPv */
-void daArrow_Lighteff_Delete(void*) {
+static BOOL daArrow_Lighteff_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000C10-00000D20       .text daArrow_Lighteff_Draw__FPv */
-void daArrow_Lighteff_Draw(void*) {
+static BOOL daArrow_Lighteff_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000D20-00000D44       .text daArrow_Lighteff_Execute__FPv */
-void daArrow_Lighteff_Execute(void*) {
+static BOOL daArrow_Lighteff_Execute(void*) {
     /* Nonmatching */
 }
 
@@ -67,7 +67,7 @@ BOOL daArrow_Lighteff_c::_execute() {
 }
 
 /* 000011A4-000011AC       .text daArrow_Lighteff_IsDelete__FPv */
-void daArrow_Lighteff_IsDelete(void*) {
+static BOOL daArrow_Lighteff_IsDelete(void*) {
     /* Nonmatching */
 }
 

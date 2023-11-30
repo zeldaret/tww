@@ -82,26 +82,26 @@ void daObjIce_c::setEffectMtx() {
 }
 
 /* 000013A0-000013C0       .text daObjIce_Create__FP10fopAc_ac_c */
-void daObjIce_Create(fopAc_ac_c*) {
+static s32 daObjIce_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000013C0-000013E4       .text daObjIce_Delete__FP10daObjIce_c */
-void daObjIce_Delete(daObjIce_c*) {
+static BOOL daObjIce_Delete(daObjIce_c*) {
     /* Nonmatching */
 }
 
 /* 000013E4-00001408       .text daObjIce_Execute__FP10daObjIce_c */
-void daObjIce_Execute(daObjIce_c*) {
+static BOOL daObjIce_Execute(daObjIce_c*) {
     /* Nonmatching */
 }
 
 /* 00001408-0000142C       .text daObjIce_Draw__FP10daObjIce_c */
-void daObjIce_Draw(daObjIce_c*) {
+static BOOL daObjIce_Draw(daObjIce_c*) {
     /* Nonmatching */
 }
 
 /* 0000142C-00001434       .text daObjIce_IsDelete__FP10daObjIce_c */
-void daObjIce_IsDelete(daObjIce_c*) {
+static BOOL daObjIce_IsDelete(daObjIce_c*) {
     /* Nonmatching */
 }

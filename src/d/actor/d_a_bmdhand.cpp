@@ -17,7 +17,7 @@ void hand_draw(bmdhand_class*) {
 }
 
 /* 000001CC-0000022C       .text daBmdhand_Draw__FP13bmdhand_class */
-void daBmdhand_Draw(bmdhand_class*) {
+static BOOL daBmdhand_Draw(bmdhand_class*) {
     /* Nonmatching */
 }
 
@@ -92,17 +92,17 @@ void s_a_d_sub(void*, void*) {
 }
 
 /* 00002EC0-00003028       .text daBmdhand_Execute__FP13bmdhand_class */
-void daBmdhand_Execute(bmdhand_class*) {
+static BOOL daBmdhand_Execute(bmdhand_class*) {
     /* Nonmatching */
 }
 
 /* 00003028-00003030       .text daBmdhand_IsDelete__FP13bmdhand_class */
-void daBmdhand_IsDelete(bmdhand_class*) {
+static BOOL daBmdhand_IsDelete(bmdhand_class*) {
     /* Nonmatching */
 }
 
 /* 00003030-000030C4       .text daBmdhand_Delete__FP13bmdhand_class */
-void daBmdhand_Delete(bmdhand_class*) {
+static BOOL daBmdhand_Delete(bmdhand_class*) {
     /* Nonmatching */
 }
 
@@ -112,12 +112,12 @@ void useHeapInit(bmdhand_class*) {
 }
 
 /* 00003210-00003230       .text solidHeapCB__FP10fopAc_ac_c */
-void solidHeapCB(fopAc_ac_c*) {
+static BOOL solidHeapCB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00003230-000034FC       .text daBmdhand_Create__FP10fopAc_ac_c */
-void daBmdhand_Create(fopAc_ac_c*) {
+static s32 daBmdhand_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 000000EC-0000010C       .text CallbackCreateHeap__FP10fopAc_ac_c */
-void CallbackCreateHeap(fopAc_ac_c*) {
+static BOOL CallbackCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -122,27 +122,27 @@ BOOL daObj_Pfall_c::_draw() {
 }
 
 /* 000014E4-00001504       .text daObj_PfallCreate__FPv */
-void daObj_PfallCreate(void*) {
+static s32 daObj_PfallCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00001504-00001528       .text daObj_PfallDelete__FPv */
-void daObj_PfallDelete(void*) {
+static BOOL daObj_PfallDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00001528-0000154C       .text daObj_PfallExecute__FPv */
-void daObj_PfallExecute(void*) {
+static BOOL daObj_PfallExecute(void*) {
     /* Nonmatching */
 }
 
 /* 0000154C-00001570       .text daObj_PfallDraw__FPv */
-void daObj_PfallDraw(void*) {
+static BOOL daObj_PfallDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00001570-00001578       .text daObj_PfallIsDelete__FPv */
-void daObj_PfallIsDelete(void*) {
+static BOOL daObj_PfallIsDelete(void*) {
     /* Nonmatching */
 }
 

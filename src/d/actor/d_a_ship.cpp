@@ -12,7 +12,7 @@ void daShip_c::bodyJointCallBack(int) {
 }
 
 /* 0000023C-00000284       .text daShip_bodyJointCallBack__FP7J3DNodei */
-void daShip_bodyJointCallBack(J3DNode*, int) {
+static BOOL daShip_bodyJointCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void daShip_c::cannonJointCallBack(int) {
 }
 
 /* 0000033C-00000380       .text daShip_cannonJointCallBack__FP7J3DNodei */
-void daShip_cannonJointCallBack(J3DNode*, int) {
+static BOOL daShip_cannonJointCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -32,7 +32,7 @@ void daShip_c::craneJointCallBack() {
 }
 
 /* 00000414-00000450       .text daShip_craneJointCallBack__FP7J3DNodei */
-void daShip_craneJointCallBack(J3DNode*, int) {
+static BOOL daShip_craneJointCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -42,7 +42,7 @@ void daShip_c::headJointCallBack0() {
 }
 
 /* 00000474-000004B0       .text daShip_headJointCallBack0__FP7J3DNodei */
-void daShip_headJointCallBack0(J3DNode*, int) {
+static BOOL daShip_headJointCallBack0(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -52,7 +52,7 @@ void daShip_c::headJointCallBack1(int) {
 }
 
 /* 000005E4-00000628       .text daShip_headJointCallBack1__FP7J3DNodei */
-void daShip_headJointCallBack1(J3DNode*, int) {
+static BOOL daShip_headJointCallBack1(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -62,7 +62,7 @@ BOOL daShip_c::draw() {
 }
 
 /* 00000B14-00000B34       .text daShip_Draw__FP8daShip_c */
-void daShip_Draw(daShip_c*) {
+static BOOL daShip_Draw(daShip_c*) {
     /* Nonmatching */
 }
 
@@ -422,12 +422,12 @@ BOOL daShip_c::execute() {
 }
 
 /* 0000B9D4-0000B9F4       .text daShip_Execute__FP8daShip_c */
-void daShip_Execute(daShip_c*) {
+static BOOL daShip_Execute(daShip_c*) {
     /* Nonmatching */
 }
 
 /* 0000B9F4-0000B9FC       .text daShip_IsDelete__FP8daShip_c */
-void daShip_IsDelete(daShip_c*) {
+static BOOL daShip_IsDelete(daShip_c*) {
     /* Nonmatching */
 }
 
@@ -437,7 +437,7 @@ void daShip_c::shipDelete() {
 }
 
 /* 0000BB1C-0000BB40       .text daShip_Delete__FP8daShip_c */
-void daShip_Delete(daShip_c*) {
+static BOOL daShip_Delete(daShip_c*) {
     /* Nonmatching */
 }
 
@@ -447,7 +447,7 @@ void daShip_c::createHeap() {
 }
 
 /* 0000BFB8-0000BFD8       .text daShip_createHeap__FP10fopAc_ac_c */
-void daShip_createHeap(fopAc_ac_c*) {
+static BOOL daShip_createHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -457,7 +457,7 @@ s32 daShip_c::create() {
 }
 
 /* 0000D018-0000D038       .text daShip_Create__FP10fopAc_ac_c */
-void daShip_Create(fopAc_ac_c*) {
+static s32 daShip_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

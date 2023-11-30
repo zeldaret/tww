@@ -12,7 +12,7 @@ daBmd_HIO_c::daBmd_HIO_c() {
 }
 
 /* 00000134-00000240       .text core_nodeCallBack__FP7J3DNodei */
-void core_nodeCallBack(J3DNode*, int) {
+static BOOL core_nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void mk_draw(bmd_class*) {
 }
 
 /* 000002CC-000005C8       .text daBmd_Draw__FP9bmd_class */
-void daBmd_Draw(bmd_class*) {
+static BOOL daBmd_Draw(bmd_class*) {
     /* Nonmatching */
 }
 
@@ -122,17 +122,17 @@ void bmd_kankyo(bmd_class*) {
 }
 
 /* 000055EC-00005BF4       .text daBmd_Execute__FP9bmd_class */
-void daBmd_Execute(bmd_class*) {
+static BOOL daBmd_Execute(bmd_class*) {
     /* Nonmatching */
 }
 
 /* 00005BF4-00005BFC       .text daBmd_IsDelete__FP9bmd_class */
-void daBmd_IsDelete(bmd_class*) {
+static BOOL daBmd_IsDelete(bmd_class*) {
     /* Nonmatching */
 }
 
 /* 00005BFC-00005CF4       .text daBmd_Delete__FP9bmd_class */
-void daBmd_Delete(bmd_class*) {
+static BOOL daBmd_Delete(bmd_class*) {
     /* Nonmatching */
 }
 
@@ -142,12 +142,12 @@ void useHeapInit(bmd_class*) {
 }
 
 /* 00006508-00006528       .text solidHeapCB__FP10fopAc_ac_c */
-void solidHeapCB(fopAc_ac_c*) {
+static BOOL solidHeapCB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00006528-00006908       .text daBmd_Create__FP10fopAc_ac_c */
-void daBmd_Create(fopAc_ac_c*) {
+static s32 daBmd_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

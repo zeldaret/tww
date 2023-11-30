@@ -167,26 +167,26 @@ void daTag_Hint_c::actionWait() {
 }
 
 /* 00001F68-00001F70       .text daTag_Hint_Draw__FP12daTag_Hint_c */
-void daTag_Hint_Draw(daTag_Hint_c*) {
+static BOOL daTag_Hint_Draw(daTag_Hint_c*) {
     /* Nonmatching */
 }
 
 /* 00001F70-00001FE4       .text daTag_Hint_Execute__FP12daTag_Hint_c */
-void daTag_Hint_Execute(daTag_Hint_c*) {
+static BOOL daTag_Hint_Execute(daTag_Hint_c*) {
     /* Nonmatching */
 }
 
 /* 00001FE4-00001FEC       .text daTag_Hint_IsDelete__FP12daTag_Hint_c */
-void daTag_Hint_IsDelete(daTag_Hint_c*) {
+static BOOL daTag_Hint_IsDelete(daTag_Hint_c*) {
     /* Nonmatching */
 }
 
 /* 00001FEC-00002074       .text daTag_Hint_Delete__FP12daTag_Hint_c */
-void daTag_Hint_Delete(daTag_Hint_c*) {
+static BOOL daTag_Hint_Delete(daTag_Hint_c*) {
     /* Nonmatching */
 }
 
 /* 00002074-00002194       .text daTag_Hint_Create__FP10fopAc_ac_c */
-void daTag_Hint_Create(fopAc_ac_c*) {
+static s32 daTag_Hint_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }

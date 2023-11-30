@@ -122,27 +122,27 @@ void daTag_Event_c::actionHunt2() {
 }
 
 /* 0000132C-00001334       .text daTag_Event_Draw__FP13daTag_Event_c */
-void daTag_Event_Draw(daTag_Event_c*) {
+static BOOL daTag_Event_Draw(daTag_Event_c*) {
     /* Nonmatching */
 }
 
 /* 00001334-000013D4       .text daTag_Event_Execute__FP13daTag_Event_c */
-void daTag_Event_Execute(daTag_Event_c*) {
+static BOOL daTag_Event_Execute(daTag_Event_c*) {
     /* Nonmatching */
 }
 
 /* 000013D4-000013DC       .text daTag_Event_IsDelete__FP13daTag_Event_c */
-void daTag_Event_IsDelete(daTag_Event_c*) {
+static BOOL daTag_Event_IsDelete(daTag_Event_c*) {
     /* Nonmatching */
 }
 
 /* 000013DC-0000140C       .text daTag_Event_Delete__FP13daTag_Event_c */
-void daTag_Event_Delete(daTag_Event_c*) {
+static BOOL daTag_Event_Delete(daTag_Event_c*) {
     /* Nonmatching */
 }
 
 /* 0000140C-00001524       .text daTag_Event_Create__FP10fopAc_ac_c */
-void daTag_Event_Create(fopAc_ac_c*) {
+static s32 daTag_Event_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

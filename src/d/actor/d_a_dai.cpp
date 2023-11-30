@@ -12,7 +12,7 @@ BOOL daDai_c::_delete() {
 }
 
 /* 000000C4-000000E4       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -92,26 +92,26 @@ void daDai_c::next_msgStatus(unsigned long*) {
 }
 
 /* 0000109C-000010BC       .text daDai_Create__FPv */
-void daDai_Create(void*) {
+static s32 daDai_Create(void*) {
     /* Nonmatching */
 }
 
 /* 000010BC-000010E0       .text daDai_Delete__FPv */
-void daDai_Delete(void*) {
+static BOOL daDai_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 000010E0-00001104       .text daDai_Draw__FPv */
-void daDai_Draw(void*) {
+static BOOL daDai_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00001104-00001128       .text daDai_Execute__FPv */
-void daDai_Execute(void*) {
+static BOOL daDai_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00001128-00001130       .text daDai_IsDelete__FPv */
-void daDai_IsDelete(void*) {
+static BOOL daDai_IsDelete(void*) {
     /* Nonmatching */
 }

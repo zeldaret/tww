@@ -52,7 +52,7 @@ void daDoor12_c::chkStopClose() {
 }
 
 /* 00000658-00000678       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -172,27 +172,27 @@ BOOL daDoor12_c::draw() {
 }
 
 /* 00001AD0-00001AF0       .text daDoor12_Draw__FP10daDoor12_c */
-void daDoor12_Draw(daDoor12_c*) {
+static BOOL daDoor12_Draw(daDoor12_c*) {
     /* Nonmatching */
 }
 
 /* 00001AF0-00001BC8       .text daDoor12_Execute__FP10daDoor12_c */
-void daDoor12_Execute(daDoor12_c*) {
+static BOOL daDoor12_Execute(daDoor12_c*) {
     /* Nonmatching */
 }
 
 /* 00001BC8-00001BD0       .text daDoor12_IsDelete__FP10daDoor12_c */
-void daDoor12_IsDelete(daDoor12_c*) {
+static BOOL daDoor12_IsDelete(daDoor12_c*) {
     /* Nonmatching */
 }
 
 /* 00001BD0-00001CC4       .text daDoor12_Delete__FP10daDoor12_c */
-void daDoor12_Delete(daDoor12_c*) {
+static BOOL daDoor12_Delete(daDoor12_c*) {
     /* Nonmatching */
 }
 
 /* 00001CC4-00001D3C       .text daDoor12_Create__FP10fopAc_ac_c */
-void daDoor12_Create(fopAc_ac_c*) {
+static s32 daDoor12_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

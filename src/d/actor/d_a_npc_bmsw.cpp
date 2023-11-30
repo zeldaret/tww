@@ -12,12 +12,12 @@ daNpc_Bmsw_HIO_c::daNpc_Bmsw_HIO_c() {
 }
 
 /* 000001E4-000003FC       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 00000438-00000550       .text nodeCallBackArm__FP7J3DNodei */
-void nodeCallBackArm(J3DNode*, int) {
+static BOOL nodeCallBackArm(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -142,7 +142,7 @@ BOOL daNpc_Bmsw_c::_delete() {
 }
 
 /* 00002D40-00002D60       .text CallbackCreateHeap__FP10fopAc_ac_c */
-void CallbackCreateHeap(fopAc_ac_c*) {
+static BOOL CallbackCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -252,27 +252,27 @@ void SwCam_c::Move() {
 }
 
 /* 00004D0C-00004D2C       .text daNpc_Bmsw_Create__FP10fopAc_ac_c */
-void daNpc_Bmsw_Create(fopAc_ac_c*) {
+static s32 daNpc_Bmsw_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00004D2C-00004D4C       .text daNpc_Bmsw_Delete__FP12daNpc_Bmsw_c */
-void daNpc_Bmsw_Delete(daNpc_Bmsw_c*) {
+static BOOL daNpc_Bmsw_Delete(daNpc_Bmsw_c*) {
     /* Nonmatching */
 }
 
 /* 00004D4C-00004D6C       .text daNpc_Bmsw_Execute__FP12daNpc_Bmsw_c */
-void daNpc_Bmsw_Execute(daNpc_Bmsw_c*) {
+static BOOL daNpc_Bmsw_Execute(daNpc_Bmsw_c*) {
     /* Nonmatching */
 }
 
 /* 00004D6C-00004D8C       .text daNpc_Bmsw_Draw__FP12daNpc_Bmsw_c */
-void daNpc_Bmsw_Draw(daNpc_Bmsw_c*) {
+static BOOL daNpc_Bmsw_Draw(daNpc_Bmsw_c*) {
     /* Nonmatching */
 }
 
 /* 00004D8C-00004D94       .text daNpc_Bmsw_IsDelete__FP12daNpc_Bmsw_c */
-void daNpc_Bmsw_IsDelete(daNpc_Bmsw_c*) {
+static BOOL daNpc_Bmsw_IsDelete(daNpc_Bmsw_c*) {
     /* Nonmatching */
 }
 

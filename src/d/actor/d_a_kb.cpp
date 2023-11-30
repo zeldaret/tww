@@ -92,7 +92,7 @@ void smoke_set3(kb_class*) {
 }
 
 /* 000018DC-000019A4       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -102,7 +102,7 @@ void draw_SUB(kb_class*) {
 }
 
 /* 00001ACC-00001F6C       .text daKb_Draw__FP8kb_class */
-void daKb_Draw(kb_class*) {
+static BOOL daKb_Draw(kb_class*) {
     /* Nonmatching */
 }
 
@@ -157,27 +157,27 @@ void BG_check(kb_class*) {
 }
 
 /* 0000671C-00006E38       .text daKb_Execute__FP8kb_class */
-void daKb_Execute(kb_class*) {
+static BOOL daKb_Execute(kb_class*) {
     /* Nonmatching */
 }
 
 /* 00006E38-00006E40       .text daKb_IsDelete__FP8kb_class */
-void daKb_IsDelete(kb_class*) {
+static BOOL daKb_IsDelete(kb_class*) {
     /* Nonmatching */
 }
 
 /* 00006E40-00006F28       .text daKb_Delete__FP8kb_class */
-void daKb_Delete(kb_class*) {
+static BOOL daKb_Delete(kb_class*) {
     /* Nonmatching */
 }
 
 /* 00006F28-000071F4       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00007258-00007798       .text daKb_Create__FP10fopAc_ac_c */
-void daKb_Create(fopAc_ac_c*) {
+static s32 daKb_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

@@ -12,7 +12,7 @@ daGy_HIO_c::daGy_HIO_c() {
 }
 
 /* 00000450-0000049C       .text nodeControl_CB__FP7J3DNodei */
-void nodeControl_CB(J3DNode*, int) {
+static BOOL nodeControl_CB(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void daGy_c::_nodeControl(J3DNode*, J3DModel*) {
 }
 
 /* 00000888-000008A8       .text createHeap_CB__FP10fopAc_ac_c */
-void createHeap_CB(fopAc_ac_c*) {
+static BOOL createHeap_CB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -217,27 +217,27 @@ BOOL daGy_c::_delete() {
 }
 
 /* 00005AD4-00005AF4       .text daGyCreate__FPv */
-void daGyCreate(void*) {
+static s32 daGyCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00005AF4-00005B18       .text daGyDelete__FPv */
-void daGyDelete(void*) {
+static BOOL daGyDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00005B18-00005B3C       .text daGyExecute__FPv */
-void daGyExecute(void*) {
+static BOOL daGyExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00005B3C-00005B60       .text daGyDraw__FPv */
-void daGyDraw(void*) {
+static BOOL daGyDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00005B60-00005B68       .text daGyIsDelete__FPv */
-void daGyIsDelete(void*) {
+static BOOL daGyIsDelete(void*) {
     /* Nonmatching */
 }
 

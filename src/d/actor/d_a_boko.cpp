@@ -27,7 +27,7 @@ BOOL daBoko_c::draw() {
 }
 
 /* 00000DC4-00000DE4       .text daBoko_Draw__FP8daBoko_c */
-void daBoko_Draw(daBoko_c*) {
+static BOOL daBoko_Draw(daBoko_c*) {
     /* Nonmatching */
 }
 
@@ -97,12 +97,12 @@ BOOL daBoko_c::execute() {
 }
 
 /* 00002A04-00002A24       .text daBoko_Execute__FP8daBoko_c */
-void daBoko_Execute(daBoko_c*) {
+static BOOL daBoko_Execute(daBoko_c*) {
     /* Nonmatching */
 }
 
 /* 00002A24-00002A2C       .text daBoko_IsDelete__FP8daBoko_c */
-void daBoko_IsDelete(daBoko_c*) {
+static BOOL daBoko_IsDelete(daBoko_c*) {
     /* Nonmatching */
 }
 
@@ -112,12 +112,12 @@ void daBoko_c::bokoDelete() {
 }
 
 /* 00002AA4-00002AC8       .text daBoko_Delete__FP8daBoko_c */
-void daBoko_Delete(daBoko_c*) {
+static BOOL daBoko_Delete(daBoko_c*) {
     /* Nonmatching */
 }
 
 /* 00002AC8-00002AE8       .text daBoko_createHeap__FP10fopAc_ac_c */
-void daBoko_createHeap(fopAc_ac_c*) {
+static BOOL daBoko_createHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -132,6 +132,6 @@ s32 daBoko_c::create() {
 }
 
 /* 00003824-00003844       .text daBoko_Create__FP10fopAc_ac_c */
-void daBoko_Create(fopAc_ac_c*) {
+static s32 daBoko_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }

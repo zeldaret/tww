@@ -96,27 +96,27 @@ bool daObj_Bscurtain_c::_draw() {
 }
 
 /* 00000370-00000400       .text daObj_BscurtainCreate__FPv */
-s32 daObj_BscurtainCreate(void* i_this) {
+static s32 daObj_BscurtainCreate(void* i_this) {
     return ((daObj_Bscurtain_c*)i_this)->_create();
 }
 
 /* 00000400-00000430       .text daObj_BscurtainDelete__FPv */
-BOOL daObj_BscurtainDelete(void* i_this) {
+static BOOL daObj_BscurtainDelete(void* i_this) {
     return ((daObj_Bscurtain_c*)i_this)->_delete();
 }
 
 /* 00000430-00000454       .text daObj_BscurtainExecute__FPv */
-BOOL daObj_BscurtainExecute(void* i_this) {
+static BOOL daObj_BscurtainExecute(void* i_this) {
     return ((daObj_Bscurtain_c*)i_this)->_execute();
 }
 
 /* 00000454-000004F8       .text daObj_BscurtainDraw__FPv */
-BOOL daObj_BscurtainDraw(void* i_this) {
+static BOOL daObj_BscurtainDraw(void* i_this) {
     return ((daObj_Bscurtain_c*)i_this)->_draw();
 }
 
 /* 000004F8-00000500       .text daObj_BscurtainIsDelete__FPv */
-BOOL daObj_BscurtainIsDelete(void* i_this) {
+static BOOL daObj_BscurtainIsDelete(void* i_this) {
     return TRUE;
 }
 

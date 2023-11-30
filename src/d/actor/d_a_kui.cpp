@@ -32,7 +32,7 @@ void setEffectMtx(fopAc_ac_c*, J3DModelData*, float) {
 }
 
 /* 0000037C-00000540       .text daKui_Draw__FP9kui_class */
-void daKui_Draw(kui_class*) {
+static BOOL daKui_Draw(kui_class*) {
     /* Nonmatching */
 }
 
@@ -42,27 +42,27 @@ void demo_camera(kui_class*) {
 }
 
 /* 00000920-000012E4       .text daKui_Execute__FP9kui_class */
-void daKui_Execute(kui_class*) {
+static BOOL daKui_Execute(kui_class*) {
     /* Nonmatching */
 }
 
 /* 000012E4-000012EC       .text daKui_IsDelete__FP9kui_class */
-void daKui_IsDelete(kui_class*) {
+static BOOL daKui_IsDelete(kui_class*) {
     /* Nonmatching */
 }
 
 /* 000012EC-00001340       .text daKui_Delete__FP9kui_class */
-void daKui_Delete(kui_class*) {
+static BOOL daKui_Delete(kui_class*) {
     /* Nonmatching */
 }
 
 /* 00001340-00001664       .text daKui_CreateHeap__FP10fopAc_ac_c */
-void daKui_CreateHeap(fopAc_ac_c*) {
+static BOOL daKui_CreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00001664-000018C8       .text daKui_Create__FP10fopAc_ac_c */
-void daKui_Create(fopAc_ac_c*) {
+static s32 daKui_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

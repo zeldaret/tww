@@ -12,7 +12,7 @@ void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
 }
 
 /* 00000368-00000408       .text daKita_Draw__FP10kita_class */
-void daKita_Draw(kita_class*) {
+static BOOL daKita_Draw(kita_class*) {
     /* Nonmatching */
 }
 
@@ -27,26 +27,26 @@ void himo_create(kita_class*) {
 }
 
 /* 000019F8-00001CB8       .text daKita_Execute__FP10kita_class */
-void daKita_Execute(kita_class*) {
+static BOOL daKita_Execute(kita_class*) {
     /* Nonmatching */
 }
 
 /* 00001CB8-00001CC0       .text daKita_IsDelete__FP10kita_class */
-void daKita_IsDelete(kita_class*) {
+static BOOL daKita_IsDelete(kita_class*) {
     /* Nonmatching */
 }
 
 /* 00001CC0-00001D3C       .text daKita_Delete__FP10kita_class */
-void daKita_Delete(kita_class*) {
+static BOOL daKita_Delete(kita_class*) {
     /* Nonmatching */
 }
 
 /* 00001D3C-00001EB0       .text CallbackCreateHeap__FP10fopAc_ac_c */
-void CallbackCreateHeap(fopAc_ac_c*) {
+static BOOL CallbackCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00001EB0-00002224       .text daKita_Create__FP10fopAc_ac_c */
-void daKita_Create(fopAc_ac_c*) {
+static s32 daKita_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }

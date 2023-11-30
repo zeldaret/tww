@@ -25,7 +25,7 @@ bool daSwTact_c::_delete() {
 }
 
 /* 000000AC-000000CC       .text CheckCreateHeap__FP10fopAc_ac_c */
-BOOL CheckCreateHeap(fopAc_ac_c* i_ac) {
+static BOOL CheckCreateHeap(fopAc_ac_c* i_ac) {
     return ((daSwTact_c *)i_ac)->CreateHeap();
 }
 
@@ -180,27 +180,27 @@ bool daSwTact_c::_draw() {
 }
 
 /* 00000720-00000740       .text daSwTact_Create__FPv */
-s32 daSwTact_Create(void* i_ac) {
+static s32 daSwTact_Create(void* i_ac) {
     return ((daSwTact_c *)i_ac)->_create();
 }
 
 /* 00000740-00000764       .text daSwTact_Delete__FPv */
-BOOL daSwTact_Delete(void* i_ac) {
+static BOOL daSwTact_Delete(void* i_ac) {
     return ((daSwTact_c*)i_ac)->_delete();
 }
 
 /* 00000764-00000788       .text daSwTact_Draw__FPv */
-BOOL daSwTact_Draw(void* i_ac) {
+static BOOL daSwTact_Draw(void* i_ac) {
     return ((daSwTact_c*)i_ac)->_draw();
 }
 
 /* 00000788-000007AC       .text daSwTact_Execute__FPv */
-BOOL daSwTact_Execute(void* i_ac) {
+static BOOL daSwTact_Execute(void* i_ac) {
     return ((daSwTact_c*)i_ac)->_execute();
 }
 
 /* 000007AC-000007B4       .text daSwTact_IsDelete__FPv */
-BOOL daSwTact_IsDelete(void* i_ac) {
+static BOOL daSwTact_IsDelete(void* i_ac) {
     return TRUE;
 }
 

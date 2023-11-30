@@ -7,12 +7,12 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000258       .text body_nodeCallBack__FP7J3DNodei */
-void body_nodeCallBack(J3DNode*, int) {
+static BOOL body_nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 00000294-000003C4       .text kantera_nodeCallBack__FP7J3DNodei */
-void kantera_nodeCallBack(J3DNode*, int) {
+static BOOL kantera_nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -37,7 +37,7 @@ void kantera_draw(bpw_class*) {
 }
 
 /* 00000B64-00000C20       .text damage_ball_draw__FP9bpw_class */
-void damage_ball_draw(bpw_class*) {
+static BOOL damage_ball_draw(bpw_class*) {
     /* Nonmatching */
 }
 
@@ -52,7 +52,7 @@ void torituki_draw(bpw_class*) {
 }
 
 /* 00000CF0-00000DF4       .text daBPW_Draw__FP9bpw_class */
-void daBPW_Draw(bpw_class*) {
+static BOOL daBPW_Draw(bpw_class*) {
     /* Nonmatching */
 }
 
@@ -217,7 +217,7 @@ void action_b_fire_2_dousa(bpw_class*) {
 }
 
 /* 0000BD18-0000BE50       .text damage_ball_execute__FP9bpw_class */
-void damage_ball_execute(bpw_class*) {
+static BOOL damage_ball_execute(bpw_class*) {
     /* Nonmatching */
 }
 
@@ -227,22 +227,22 @@ void torituki_execute(bpw_class*) {
 }
 
 /* 0000C154-0000C5C0       .text daBPW_Execute__FP9bpw_class */
-void daBPW_Execute(bpw_class*) {
+static BOOL daBPW_Execute(bpw_class*) {
     /* Nonmatching */
 }
 
 /* 0000C5C0-0000C5C8       .text daBPW_IsDelete__FP9bpw_class */
-void daBPW_IsDelete(bpw_class*) {
+static BOOL daBPW_IsDelete(bpw_class*) {
     /* Nonmatching */
 }
 
 /* 0000C5C8-0000C770       .text daBPW_Delete__FP9bpw_class */
-void daBPW_Delete(bpw_class*) {
+static BOOL daBPW_Delete(bpw_class*) {
     /* Nonmatching */
 }
 
 /* 0000C770-0000CC40       .text boss_useHeapInit__FP10fopAc_ac_c */
-void boss_useHeapInit(fopAc_ac_c*) {
+static BOOL boss_useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -252,7 +252,7 @@ void body_create_init(bpw_class*) {
 }
 
 /* 0000CDF0-0000CFCC       .text kantera_useHeapInit__FP10fopAc_ac_c */
-void kantera_useHeapInit(fopAc_ac_c*) {
+static BOOL kantera_useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -262,7 +262,7 @@ void kantera_create_init(bpw_class*) {
 }
 
 /* 0000D0B8-0000D1A0       .text fire_useHeapInit__FP10fopAc_ac_c */
-void fire_useHeapInit(fopAc_ac_c*) {
+static BOOL fire_useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -272,7 +272,7 @@ void damage_ball_create_init(bpw_class*) {
 }
 
 /* 0000D254-0000D368       .text tori_useHeapInit__FP10fopAc_ac_c */
-void tori_useHeapInit(fopAc_ac_c*) {
+static BOOL tori_useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -282,7 +282,7 @@ void tori_create_init(bpw_class*) {
 }
 
 /* 0000D43C-0000DB08       .text daBPW_Create__FP10fopAc_ac_c */
-void daBPW_Create(fopAc_ac_c*) {
+static s32 daBPW_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

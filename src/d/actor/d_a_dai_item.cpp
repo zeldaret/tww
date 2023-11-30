@@ -17,7 +17,7 @@ BOOL daStandItem_c::_delete() {
 }
 
 /* 800E3798-800E37B8       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -162,26 +162,26 @@ BOOL daStandItem_c::_draw() {
 }
 
 /* 800E53B8-800E53D8       .text daStandItem_Create__FPv */
-void daStandItem_Create(void*) {
+static s32 daStandItem_Create(void*) {
     /* Nonmatching */
 }
 
 /* 800E53D8-800E53FC       .text daStandItem_Delete__FPv */
-void daStandItem_Delete(void*) {
+static BOOL daStandItem_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 800E53FC-800E5420       .text daStandItem_Draw__FPv */
-void daStandItem_Draw(void*) {
+static BOOL daStandItem_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 800E5420-800E5444       .text daStandItem_Execute__FPv */
-void daStandItem_Execute(void*) {
+static BOOL daStandItem_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 800E5444-800E544C       .text daStandItem_IsDelete__FPv */
-void daStandItem_IsDelete(void*) {
+static BOOL daStandItem_IsDelete(void*) {
     /* Nonmatching */
 }

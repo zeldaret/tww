@@ -12,7 +12,7 @@ daNpc_Tc_HIO_c::daNpc_Tc_HIO_c() {
 }
 
 /* 000003D0-0000059C       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -282,7 +282,7 @@ BOOL daNpc_Tc_c::_delete() {
 }
 
 /* 00003F1C-00003F3C       .text createHeap_CB__FP10fopAc_ac_c */
-void createHeap_CB(fopAc_ac_c*) {
+static BOOL createHeap_CB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -302,27 +302,27 @@ void daNpc_Tc_c::_createHeap() {
 }
 
 /* 000047DC-000047FC       .text daNpc_Tc_Create__FP10fopAc_ac_c */
-void daNpc_Tc_Create(fopAc_ac_c*) {
+static s32 daNpc_Tc_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000047FC-0000481C       .text daNpc_Tc_Delete__FP10daNpc_Tc_c */
-void daNpc_Tc_Delete(daNpc_Tc_c*) {
+static BOOL daNpc_Tc_Delete(daNpc_Tc_c*) {
     /* Nonmatching */
 }
 
 /* 0000481C-0000483C       .text daNpc_Tc_Execute__FP10daNpc_Tc_c */
-void daNpc_Tc_Execute(daNpc_Tc_c*) {
+static BOOL daNpc_Tc_Execute(daNpc_Tc_c*) {
     /* Nonmatching */
 }
 
 /* 0000483C-0000485C       .text daNpc_Tc_Draw__FP10daNpc_Tc_c */
-void daNpc_Tc_Draw(daNpc_Tc_c*) {
+static BOOL daNpc_Tc_Draw(daNpc_Tc_c*) {
     /* Nonmatching */
 }
 
 /* 0000485C-00004864       .text daNpc_Tc_IsDelete__FP10daNpc_Tc_c */
-void daNpc_Tc_IsDelete(daNpc_Tc_c*) {
+static BOOL daNpc_Tc_IsDelete(daNpc_Tc_c*) {
     /* Nonmatching */
 }
 

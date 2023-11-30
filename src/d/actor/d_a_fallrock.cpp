@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -22,12 +22,12 @@ void daFallRock_c::set_mtx() {
 }
 
 /* 000001F0-000002B0       .text daFallRock_Draw__FP12daFallRock_c */
-void daFallRock_Draw(daFallRock_c*) {
+static BOOL daFallRock_Draw(daFallRock_c*) {
     /* Nonmatching */
 }
 
 /* 000002B0-000002D0       .text daFallRock_Execute__FP12daFallRock_c */
-void daFallRock_Execute(daFallRock_c*) {
+static BOOL daFallRock_Execute(daFallRock_c*) {
     /* Nonmatching */
 }
 
@@ -37,17 +37,17 @@ BOOL daFallRock_c::execute() {
 }
 
 /* 00000E38-00000E40       .text daFallRock_IsDelete__FP12daFallRock_c */
-void daFallRock_IsDelete(daFallRock_c*) {
+static BOOL daFallRock_IsDelete(daFallRock_c*) {
     /* Nonmatching */
 }
 
 /* 00000E40-00000E68       .text daFallRock_Delete__FP12daFallRock_c */
-void daFallRock_Delete(daFallRock_c*) {
+static BOOL daFallRock_Delete(daFallRock_c*) {
     /* Nonmatching */
 }
 
 /* 00001030-00001050       .text daFallRock_Create__FP10fopAc_ac_c */
-void daFallRock_Create(fopAc_ac_c*) {
+static s32 daFallRock_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

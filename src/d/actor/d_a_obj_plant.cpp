@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void daObjPlant_c::CreateInit() {
 }
 
 /* 000002AC-00000390       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -32,26 +32,26 @@ void daObjPlant_c::set_mtx() {
 }
 
 /* 00000410-00000544       .text daObjPlant_Create__FPv */
-void daObjPlant_Create(void*) {
+static s32 daObjPlant_Create(void*) {
     /* Nonmatching */
 }
 
 /* 000006FC-0000072C       .text daObjPlant_Delete__FPv */
-void daObjPlant_Delete(void*) {
+static BOOL daObjPlant_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 0000072C-00000814       .text daObjPlant_Draw__FPv */
-void daObjPlant_Draw(void*) {
+static BOOL daObjPlant_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000814-00000A58       .text daObjPlant_Execute__FPv */
-void daObjPlant_Execute(void*) {
+static BOOL daObjPlant_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00000A58-00000A60       .text daObjPlant_IsDelete__FPv */
-void daObjPlant_IsDelete(void*) {
+static BOOL daObjPlant_IsDelete(void*) {
     /* Nonmatching */
 }

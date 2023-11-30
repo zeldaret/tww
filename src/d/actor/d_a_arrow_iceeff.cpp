@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 000000EC-0000010C       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -27,22 +27,22 @@ void daArrow_Iceeff_c::set_mtx() {
 }
 
 /* 0000073C-00000854       .text daArrow_Iceeff_Create__FPv */
-void daArrow_Iceeff_Create(void*) {
+static s32 daArrow_Iceeff_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000938-00000940       .text daArrow_Iceeff_Delete__FPv */
-void daArrow_Iceeff_Delete(void*) {
+static BOOL daArrow_Iceeff_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000940-00000A98       .text daArrow_Iceeff_Draw__FPv */
-void daArrow_Iceeff_Draw(void*) {
+static BOOL daArrow_Iceeff_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000A98-00000ABC       .text daArrow_Iceeff_Execute__FPv */
-void daArrow_Iceeff_Execute(void*) {
+static BOOL daArrow_Iceeff_Execute(void*) {
     /* Nonmatching */
 }
 
@@ -52,7 +52,7 @@ BOOL daArrow_Iceeff_c::_execute() {
 }
 
 /* 00001050-00001058       .text daArrow_Iceeff_IsDelete__FPv */
-void daArrow_Iceeff_IsDelete(void*) {
+static BOOL daArrow_Iceeff_IsDelete(void*) {
     /* Nonmatching */
 }
 

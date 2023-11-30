@@ -14,23 +14,23 @@ void wether_tag_move(kytag01_class* i_this) {
 }
 
 /* 0000007C-00000084       .text daKytag01_Draw__FP13kytag01_class */
-BOOL daKytag01_Draw(kytag01_class* i_this) {
+static BOOL daKytag01_Draw(kytag01_class* i_this) {
     return TRUE;
 }
 
 /* 00000084-000000A8       .text daKytag01_Execute__FP13kytag01_class */
-BOOL daKytag01_Execute(kytag01_class* i_this) {
+static BOOL daKytag01_Execute(kytag01_class* i_this) {
     wether_tag_move(i_this);
     return TRUE;
 }
 
 /* 000000A8-000000B0       .text daKytag01_IsDelete__FP13kytag01_class */
-BOOL daKytag01_IsDelete(kytag01_class* i_this) {
+static BOOL daKytag01_IsDelete(kytag01_class* i_this) {
     return TRUE;
 }
 
 /* 000000B0-00000100       .text daKytag01_Delete__FP13kytag01_class */
-BOOL daKytag01_Delete(kytag01_class* i_this) {
+static BOOL daKytag01_Delete(kytag01_class* i_this) {
     dScnKy_env_light_c& env_light = dKy_getEnvlight();
     for (u32 i = 0; i < 10; i++) {
         if (env_light.mpWaveInfl[i] == &i_this->mWaveInfo)
@@ -72,7 +72,7 @@ void wave_make() {
 }
 
 /* 00000224-00000318       .text daKytag01_Create__FP10fopAc_ac_c */
-s32 daKytag01_Create(fopAc_ac_c* i_ac) {
+static s32 daKytag01_Create(fopAc_ac_c* i_ac) {
     dScnKy_env_light_c& env_light = dKy_getEnvlight();
     kytag01_class* i_this = (kytag01_class*)i_ac;
     fopAcM_SetupActor(i_this, kytag01_class);

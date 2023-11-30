@@ -17,7 +17,7 @@ void ep_draw(ep_class*) {
 }
 
 /* 000001F8-000002E0       .text daEp_Draw__FP8ep_class */
-void daEp_Draw(ep_class*) {
+static BOOL daEp_Draw(ep_class*) {
     /* Nonmatching */
 }
 
@@ -52,22 +52,22 @@ void daEp_set_mtx(ep_class*) {
 }
 
 /* 00001834-00001E30       .text daEp_Execute__FP8ep_class */
-void daEp_Execute(ep_class*) {
+static BOOL daEp_Execute(ep_class*) {
     /* Nonmatching */
 }
 
 /* 00002270-00002278       .text daEp_IsDelete__FP8ep_class */
-void daEp_IsDelete(ep_class*) {
+static BOOL daEp_IsDelete(ep_class*) {
     /* Nonmatching */
 }
 
 /* 00002278-000022D4       .text daEp_Delete__FP8ep_class */
-void daEp_Delete(ep_class*) {
+static BOOL daEp_Delete(ep_class*) {
     /* Nonmatching */
 }
 
 /* 000022D4-00002518       .text daEp_CreateHeap__FP10fopAc_ac_c */
-void daEp_CreateHeap(fopAc_ac_c*) {
+static BOOL daEp_CreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -77,7 +77,7 @@ void daEp_CreateInit(fopAc_ac_c*) {
 }
 
 /* 00002608-00002840       .text daEp_Create__FP10fopAc_ac_c */
-void daEp_Create(fopAc_ac_c*) {
+static s32 daEp_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

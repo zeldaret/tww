@@ -14,7 +14,7 @@
 #include "m_Do/m_Do_mtx.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daObjCafelmp_c*)i_this)->CreateHeap();
 }
 
@@ -82,27 +82,27 @@ BOOL daObjCafelmp_c::_draw() {
 }
 
 /* 0000024C-000002EC       .text daObjCafelmp_Create__FPv */
-s32 daObjCafelmp_Create(void* i_this) {
+static s32 daObjCafelmp_Create(void* i_this) {
     return ((daObjCafelmp_c*)i_this)->_create();
 }
 
 /* 000002EC-0000031C       .text daObjCafelmp_Delete__FPv */
-BOOL daObjCafelmp_Delete(void* i_this) {
+static BOOL daObjCafelmp_Delete(void* i_this) {
     return ((daObjCafelmp_c*)i_this)->_delete();
 }
 
 /* 0000031C-000003C0       .text daObjCafelmp_Draw__FPv */
-BOOL daObjCafelmp_Draw(void* i_this) {
+static BOOL daObjCafelmp_Draw(void* i_this) {
     return ((daObjCafelmp_c*)i_this)->_draw();
 }
 
 /* 000003C0-000003F0       .text daObjCafelmp_Execute__FPv */
-BOOL daObjCafelmp_Execute(void* i_this) {
+static BOOL daObjCafelmp_Execute(void* i_this) {
     return ((daObjCafelmp_c*)i_this)->_execute();
 }
 
 /* 000003F0-000003F8       .text daObjCafelmp_IsDelete__FPv */
-BOOL daObjCafelmp_IsDelete(void* i_this) {
+static BOOL daObjCafelmp_IsDelete(void* i_this) {
     return TRUE;
 }
 

@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000158       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -17,7 +17,7 @@ void draw_SUB(pw_class*) {
 }
 
 /* 00000230-000004D4       .text daPW_Draw__FP8pw_class */
-void daPW_Draw(pw_class*) {
+static BOOL daPW_Draw(pw_class*) {
     /* Nonmatching */
 }
 
@@ -137,27 +137,27 @@ void action_big_demo(pw_class*) {
 }
 
 /* 00005CA4-000061FC       .text daPW_Execute__FP8pw_class */
-void daPW_Execute(pw_class*) {
+static BOOL daPW_Execute(pw_class*) {
     /* Nonmatching */
 }
 
 /* 000061FC-00006204       .text daPW_IsDelete__FP8pw_class */
-void daPW_IsDelete(pw_class*) {
+static BOOL daPW_IsDelete(pw_class*) {
     /* Nonmatching */
 }
 
 /* 00006204-000062B0       .text daPW_Delete__FP8pw_class */
-void daPW_Delete(pw_class*) {
+static BOOL daPW_Delete(pw_class*) {
     /* Nonmatching */
 }
 
 /* 000062B0-000066D8       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00006720-00006BDC       .text daPW_Create__FP10fopAc_ac_c */
-void daPW_Create(fopAc_ac_c*) {
+static s32 daPW_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

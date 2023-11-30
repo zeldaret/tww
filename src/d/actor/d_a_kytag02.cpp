@@ -32,27 +32,27 @@ void windtag_move(kytag02_class*) {
 }
 
 /* 000003D4-000003DC       .text daKytag02_Draw__FP13kytag02_class */
-void daKytag02_Draw(kytag02_class*) {
+static BOOL daKytag02_Draw(kytag02_class*) {
     /* Nonmatching */
 }
 
 /* 000003DC-00000400       .text daKytag02_Execute__FP13kytag02_class */
-void daKytag02_Execute(kytag02_class*) {
+static BOOL daKytag02_Execute(kytag02_class*) {
     /* Nonmatching */
 }
 
 /* 00000400-00000408       .text daKytag02_IsDelete__FP13kytag02_class */
-void daKytag02_IsDelete(kytag02_class*) {
+static BOOL daKytag02_IsDelete(kytag02_class*) {
     /* Nonmatching */
 }
 
 /* 00000408-00000420       .text daKytag02_Delete__FP13kytag02_class */
-void daKytag02_Delete(kytag02_class*) {
+static BOOL daKytag02_Delete(kytag02_class*) {
     /* Nonmatching */
 }
 
 /* 00000420-0000047C       .text daKytag02_Create__FP10fopAc_ac_c */
-void daKytag02_Create(fopAc_ac_c*) {
+static s32 daKytag02_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

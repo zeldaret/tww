@@ -32,12 +32,12 @@ void daRaceItem_c::checkGet() {
 }
 
 /* 000006F0-0000071C       .text daRaceItem_Draw__FP12daRaceItem_c */
-void daRaceItem_Draw(daRaceItem_c*) {
+static BOOL daRaceItem_Draw(daRaceItem_c*) {
     /* Nonmatching */
 }
 
 /* 0000071C-0000073C       .text daRaceItem_Execute__FP12daRaceItem_c */
-void daRaceItem_Execute(daRaceItem_c*) {
+static BOOL daRaceItem_Execute(daRaceItem_c*) {
     /* Nonmatching */
 }
 
@@ -47,17 +47,17 @@ BOOL daRaceItem_c::execute() {
 }
 
 /* 00000C44-00000C4C       .text daRaceItem_IsDelete__FP12daRaceItem_c */
-void daRaceItem_IsDelete(daRaceItem_c*) {
+static BOOL daRaceItem_IsDelete(daRaceItem_c*) {
     /* Nonmatching */
 }
 
 /* 00000C4C-00000C6C       .text daRaceItem_Delete__FP12daRaceItem_c */
-void daRaceItem_Delete(daRaceItem_c*) {
+static BOOL daRaceItem_Delete(daRaceItem_c*) {
     /* Nonmatching */
 }
 
 /* 00000C6C-00000C8C       .text daRaceItem_Create__FP10fopAc_ac_c */
-void daRaceItem_Create(fopAc_ac_c*) {
+static s32 daRaceItem_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

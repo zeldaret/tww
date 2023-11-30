@@ -12,7 +12,7 @@ void kotori_draw(kt_class*) {
 }
 
 /* 000001BC-000001E0       .text daKt_Draw__FP8kt_class */
-void daKt_Draw(kt_class*) {
+static BOOL daKt_Draw(kt_class*) {
     /* Nonmatching */
 }
 
@@ -22,26 +22,26 @@ void kotori_move(kt_class*) {
 }
 
 /* 000011D4-00001240       .text daKt_Execute__FP8kt_class */
-void daKt_Execute(kt_class*) {
+static BOOL daKt_Execute(kt_class*) {
     /* Nonmatching */
 }
 
 /* 00001240-00001248       .text daKt_IsDelete__FP8kt_class */
-void daKt_IsDelete(kt_class*) {
+static BOOL daKt_IsDelete(kt_class*) {
     /* Nonmatching */
 }
 
 /* 00001248-00001278       .text daKt_Delete__FP8kt_class */
-void daKt_Delete(kt_class*) {
+static BOOL daKt_Delete(kt_class*) {
     /* Nonmatching */
 }
 
 /* 00001278-0000134C       .text daKt_solidHeapCB__FP10fopAc_ac_c */
-void daKt_solidHeapCB(fopAc_ac_c*) {
+static BOOL daKt_solidHeapCB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 0000134C-00001530       .text daKt_Create__FP10fopAc_ac_c */
-void daKt_Create(fopAc_ac_c*) {
+static s32 daKt_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }

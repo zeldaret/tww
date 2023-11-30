@@ -12,12 +12,12 @@ daOship_HIO_c::daOship_HIO_c() {
 }
 
 /* 000002B8-000002D8       .text createHeap_CB__FP10fopAc_ac_c */
-void createHeap_CB(fopAc_ac_c*) {
+static BOOL createHeap_CB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000002D8-00000324       .text nodeControl_CB__FP7J3DNodei */
-void nodeControl_CB(J3DNode*, int) {
+static BOOL nodeControl_CB(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -212,27 +212,27 @@ BOOL daOship_c::_delete() {
 }
 
 /* 00003F20-00003F40       .text daOshipCreate__FPv */
-void daOshipCreate(void*) {
+static s32 daOshipCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00003F40-00003F64       .text daOshipDelete__FPv */
-void daOshipDelete(void*) {
+static BOOL daOshipDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00003F64-00003F88       .text daOshipExecute__FPv */
-void daOshipExecute(void*) {
+static BOOL daOshipExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00003F88-00003FAC       .text daOshipDraw__FPv */
-void daOshipDraw(void*) {
+static BOOL daOshipDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00003FAC-00003FB4       .text daOshipIsDelete__FPv */
-void daOshipIsDelete(void*) {
+static BOOL daOshipIsDelete(void*) {
     /* Nonmatching */
 }
 

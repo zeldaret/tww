@@ -12,7 +12,7 @@ void daKnob00_charactorExchange(char*) {
 }
 
 /* 000000B4-000000D4       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -162,27 +162,27 @@ BOOL daKnob00_c::draw() {
 }
 
 /* 00001CA0-00001CC0       .text daKnob00_Draw__FP10daKnob00_c */
-void daKnob00_Draw(daKnob00_c*) {
+static BOOL daKnob00_Draw(daKnob00_c*) {
     /* Nonmatching */
 }
 
 /* 00001CC0-00001E78       .text daKnob00_Execute__FP10daKnob00_c */
-void daKnob00_Execute(daKnob00_c*) {
+static BOOL daKnob00_Execute(daKnob00_c*) {
     /* Nonmatching */
 }
 
 /* 00001E78-00001E80       .text daKnob00_IsDelete__FP10daKnob00_c */
-void daKnob00_IsDelete(daKnob00_c*) {
+static BOOL daKnob00_IsDelete(daKnob00_c*) {
     /* Nonmatching */
 }
 
 /* 00001E80-00001F50       .text daKnob00_Delete__FP10daKnob00_c */
-void daKnob00_Delete(daKnob00_c*) {
+static BOOL daKnob00_Delete(daKnob00_c*) {
     /* Nonmatching */
 }
 
 /* 00001F50-00001F70       .text daKnob00_Create__FP10fopAc_ac_c */
-void daKnob00_Create(fopAc_ac_c*) {
+static s32 daKnob00_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

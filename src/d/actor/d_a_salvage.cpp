@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -142,27 +142,27 @@ void daSalvage_c::debugDraw() {
 }
 
 /* 00002410-00002430       .text daSalvageCreate__FPv */
-void daSalvageCreate(void*) {
+static s32 daSalvageCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00002430-00002454       .text daSalvageDelete__FPv */
-void daSalvageDelete(void*) {
+static BOOL daSalvageDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00002454-00002478       .text daSalvageExecute__FPv */
-void daSalvageExecute(void*) {
+static BOOL daSalvageExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00002478-0000249C       .text daSalvageDraw__FPv */
-void daSalvageDraw(void*) {
+static BOOL daSalvageDraw(void*) {
     /* Nonmatching */
 }
 
 /* 0000249C-000024A4       .text daSalvageIsDelete__FPv */
-void daSalvageIsDelete(void*) {
+static BOOL daSalvageIsDelete(void*) {
     /* Nonmatching */
 }
 

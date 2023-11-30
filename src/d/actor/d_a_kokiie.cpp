@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 000000B4-00000154       .text daKokiie_Draw__FP12kokiie_class */
-void daKokiie_Draw(kokiie_class*) {
+static BOOL daKokiie_Draw(kokiie_class*) {
     /* Nonmatching */
 }
 
@@ -27,27 +27,27 @@ void demo_camera(kokiie_class*) {
 }
 
 /* 00000E98-0000107C       .text daKokiie_Execute__FP12kokiie_class */
-void daKokiie_Execute(kokiie_class*) {
+static BOOL daKokiie_Execute(kokiie_class*) {
     /* Nonmatching */
 }
 
 /* 0000107C-00001084       .text daKokiie_IsDelete__FP12kokiie_class */
-void daKokiie_IsDelete(kokiie_class*) {
+static BOOL daKokiie_IsDelete(kokiie_class*) {
     /* Nonmatching */
 }
 
 /* 00001084-000010E4       .text daKokiie_Delete__FP12kokiie_class */
-void daKokiie_Delete(kokiie_class*) {
+static BOOL daKokiie_Delete(kokiie_class*) {
     /* Nonmatching */
 }
 
 /* 000010E4-00001250       .text CallbackCreateHeap__FP10fopAc_ac_c */
-void CallbackCreateHeap(fopAc_ac_c*) {
+static BOOL CallbackCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00001250-000014E4       .text daKokiie_Create__FP10fopAc_ac_c */
-void daKokiie_Create(fopAc_ac_c*) {
+static s32 daKokiie_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

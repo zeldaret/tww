@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -47,27 +47,27 @@ void daObjHami4_c::daObjHami4_open_stop() {
 }
 
 /* 000007B0-00000870       .text daObjHami4_Create__FPv */
-void daObjHami4_Create(void*) {
+static s32 daObjHami4_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000870-00000918       .text daObjHami4_Delete__FPv */
-void daObjHami4_Delete(void*) {
+static BOOL daObjHami4_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000918-000009DC       .text daObjHami4_Draw__FPv */
-void daObjHami4_Draw(void*) {
+static BOOL daObjHami4_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 000009DC-00000A58       .text daObjHami4_Execute__FPv */
-void daObjHami4_Execute(void*) {
+static BOOL daObjHami4_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00000A58-00000A60       .text daObjHami4_IsDelete__FPv */
-void daObjHami4_IsDelete(void*) {
+static BOOL daObjHami4_IsDelete(void*) {
     /* Nonmatching */
 }
 

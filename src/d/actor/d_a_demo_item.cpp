@@ -503,27 +503,27 @@ BOOL daDitem_c::execute() {
 }
 
 /* 000008F4-00000994       .text daDitem_Delete__FP9daDitem_c */
-BOOL daDitem_Delete(daDitem_c* i_this) {
+static BOOL daDitem_Delete(daDitem_c* i_this) {
     return i_this->Delete();
 }
 
 /* 00000994-00000B6C       .text daDitem_Create__FP9daDitem_c */
-s32 daDitem_Create(daDitem_c* i_this) {
+static s32 daDitem_Create(daDitem_c* i_this) {
     return i_this->create();
 }
 
 /* 00000D94-00000DB4       .text daDitem_IsDelete__FP9daDitem_c */
-BOOL daDitem_IsDelete(daDitem_c* i_this) {
+static BOOL daDitem_IsDelete(daDitem_c* i_this) {
     return i_this->isdelete();
 }
 
 /* 00000DB4-00000E58       .text daDitem_Execute__FP9daDitem_c */
-BOOL daDitem_Execute(daDitem_c* i_this) {
+static BOOL daDitem_Execute(daDitem_c* i_this) {
     return i_this->execute();
 }
 
 /* 00000E58-00000E84       .text daDitem_Draw__FP9daDitem_c */
-BOOL daDitem_Draw(daDitem_c* i_this) {
+static BOOL daDitem_Draw(daDitem_c* i_this) {
     return i_this->draw();
 }
 

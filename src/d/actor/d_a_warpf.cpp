@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -177,27 +177,27 @@ BOOL daWarpf_c::_draw() {
 }
 
 /* 00002340-00002360       .text daWarpf_Create__FPv */
-void daWarpf_Create(void*) {
+static s32 daWarpf_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00002360-00002384       .text daWarpf_Delete__FPv */
-void daWarpf_Delete(void*) {
+static BOOL daWarpf_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00002384-000023A8       .text daWarpf_Draw__FPv */
-void daWarpf_Draw(void*) {
+static BOOL daWarpf_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 000023A8-000023CC       .text daWarpf_Execute__FPv */
-void daWarpf_Execute(void*) {
+static BOOL daWarpf_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 000023CC-000023D4       .text daWarpf_IsDelete__FPv */
-void daWarpf_IsDelete(void*) {
+static BOOL daWarpf_IsDelete(void*) {
     /* Nonmatching */
 }
 

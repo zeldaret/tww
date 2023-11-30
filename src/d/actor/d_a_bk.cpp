@@ -27,12 +27,12 @@ void ground_smoke_set(bk_class*) {
 }
 
 /* 000011F0-00001454       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 00001454-00001564       .text nodeCallBack_P__FP7J3DNodei */
-void nodeCallBack_P(J3DNode*, int) {
+static BOOL nodeCallBack_P(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -47,12 +47,12 @@ void br_draw(bk_class*) {
 }
 
 /* 00001B88-00001CD0       .text daBk_shadowDraw__FP8bk_class */
-void daBk_shadowDraw(bk_class*) {
+static BOOL daBk_shadowDraw(bk_class*) {
     /* Nonmatching */
 }
 
 /* 00001CD0-00001F60       .text daBk_Draw__FP8bk_class */
-void daBk_Draw(bk_class*) {
+static BOOL daBk_Draw(bk_class*) {
     /* Nonmatching */
 }
 
@@ -332,27 +332,27 @@ void bou_mtx_set(bk_class*) {
 }
 
 /* 0000CE18-0000DD1C       .text daBk_Execute__FP8bk_class */
-void daBk_Execute(bk_class*) {
+static BOOL daBk_Execute(bk_class*) {
     /* Nonmatching */
 }
 
 /* 0000DD1C-0000DD24       .text daBk_IsDelete__FP8bk_class */
-void daBk_IsDelete(bk_class*) {
+static BOOL daBk_IsDelete(bk_class*) {
     /* Nonmatching */
 }
 
 /* 0000DD24-0000DDD8       .text daBk_Delete__FP8bk_class */
-void daBk_Delete(bk_class*) {
+static BOOL daBk_Delete(bk_class*) {
     /* Nonmatching */
 }
 
 /* 0000DDD8-0000E2C8       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 0000E310-0000EA2C       .text daBk_Create__FP10fopAc_ac_c */
-void daBk_Create(fopAc_ac_c*) {
+static s32 daBk_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

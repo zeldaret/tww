@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 000000EC-000001B4       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -42,7 +42,7 @@ void ki_player_bg_check(ki_class*) {
 }
 
 /* 00000C58-00000F04       .text daKi_Draw__FP8ki_class */
-void daKi_Draw(ki_class*) {
+static BOOL daKi_Draw(ki_class*) {
     /* Nonmatching */
 }
 
@@ -92,27 +92,27 @@ void ki_path_move(ki_class*) {
 }
 
 /* 000035D0-00003E04       .text daKi_Execute__FP8ki_class */
-void daKi_Execute(ki_class*) {
+static BOOL daKi_Execute(ki_class*) {
     /* Nonmatching */
 }
 
 /* 00003E04-00003E0C       .text daKi_IsDelete__FP8ki_class */
-void daKi_IsDelete(ki_class*) {
+static BOOL daKi_IsDelete(ki_class*) {
     /* Nonmatching */
 }
 
 /* 00003E0C-00003EB8       .text daKi_Delete__FP8ki_class */
-void daKi_Delete(ki_class*) {
+static BOOL daKi_Delete(ki_class*) {
     /* Nonmatching */
 }
 
 /* 00003EB8-000042B8       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00004364-000046F4       .text daKi_Create__FP10fopAc_ac_c */
-void daKi_Create(fopAc_ac_c*) {
+static s32 daKi_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

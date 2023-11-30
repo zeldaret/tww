@@ -52,27 +52,27 @@ BOOL daShutter2_c::Draw() {
 }
 
 /* 00000950-00000970       .text daShutter2_Create__FPv */
-void daShutter2_Create(void*) {
+static s32 daShutter2_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000970-00000990       .text daShutter2_Delete__FPv */
-void daShutter2_Delete(void*) {
+static BOOL daShutter2_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000990-000009BC       .text daShutter2_Draw__FPv */
-void daShutter2_Draw(void*) {
+static BOOL daShutter2_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 000009BC-000009DC       .text daShutter2_Execute__FPv */
-void daShutter2_Execute(void*) {
+static BOOL daShutter2_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 000009DC-000009E4       .text daShutter2_IsDelete__FPv */
-void daShutter2_IsDelete(void*) {
+static BOOL daShutter2_IsDelete(void*) {
     /* Nonmatching */
 }
 

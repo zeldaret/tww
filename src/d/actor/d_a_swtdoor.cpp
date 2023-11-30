@@ -15,7 +15,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 
 /* 00000078-000000C4       .text daSwtdoor_Draw__FP13swtdoor_class */
-BOOL daSwtdoor_Draw(swtdoor_class* i_this) {
+static BOOL daSwtdoor_Draw(swtdoor_class* i_this) {
     J3DModel * model = i_this->model;
     g_env_light.setLightTevColorType(model, &i_this->mTevStr);
     mDoExt_modelUpdateDL(model);
@@ -23,7 +23,7 @@ BOOL daSwtdoor_Draw(swtdoor_class* i_this) {
 }
 
 /* 000000C4-000001BC       .text daSwtdoor_Execute__FP13swtdoor_class */
-BOOL daSwtdoor_Execute(swtdoor_class* i_this) {
+static BOOL daSwtdoor_Execute(swtdoor_class* i_this) {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &i_this->current.pos, &i_this->mTevStr);
     if (dComIfGs_isSwitch(i_this->mSwitchNo, fopAcM_GetRoomNo(i_this)) && i_this->orig.pos.y > -300.0f)
         i_this->orig.pos.y -= 10.0f;
@@ -37,18 +37,18 @@ BOOL daSwtdoor_Execute(swtdoor_class* i_this) {
 }
 
 /* 000001BC-000001C4       .text daSwtdoor_IsDelete__FP13swtdoor_class */
-BOOL daSwtdoor_IsDelete(swtdoor_class* i_this) {
+static BOOL daSwtdoor_IsDelete(swtdoor_class* i_this) {
     return TRUE;
 }
 
 /* 000001C4-000001F4       .text daSwtdoor_Delete__FP13swtdoor_class */
-BOOL daSwtdoor_Delete(swtdoor_class* i_this) {
+static BOOL daSwtdoor_Delete(swtdoor_class* i_this) {
     dComIfG_resDelete(&i_this->mPhs, "Swtdoor");
     return TRUE;
 }
 
 /* 000001F4-00000260       .text useHeapInit__FP10fopAc_ac_c */
-BOOL useHeapInit(fopAc_ac_c* i_ac) {
+static BOOL useHeapInit(fopAc_ac_c* i_ac) {
     swtdoor_class * i_this = (swtdoor_class *)i_ac;
     J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes("Swtdoor", 3);
     i_this->model = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -58,7 +58,7 @@ BOOL useHeapInit(fopAc_ac_c* i_ac) {
 }
 
 /* 00000260-00000374       .text daSwtdoor_Create__FP10fopAc_ac_c */
-s32 daSwtdoor_Create(fopAc_ac_c* i_ac) {
+static s32 daSwtdoor_Create(fopAc_ac_c* i_ac) {
     swtdoor_class * i_this;
 
     fopAcM_SetupActor(i_ac, swtdoor_class);

@@ -12,7 +12,7 @@ BOOL daToge_c::_delete() {
 }
 
 /* 0000013C-0000015C       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void daToge_c::CreateHeap() {
 }
 
 /* 00000290-00000348       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -72,26 +72,26 @@ BOOL daToge_c::_draw() {
 }
 
 /* 00000D44-00000D64       .text daToge_Create__FPv */
-void daToge_Create(void*) {
+static s32 daToge_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000D64-00000D84       .text daToge_Delete__FPv */
-void daToge_Delete(void*) {
+static BOOL daToge_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000D84-00000DA4       .text daToge_Draw__FPv */
-void daToge_Draw(void*) {
+static BOOL daToge_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000DA4-00000DC4       .text daToge_Execute__FPv */
-void daToge_Execute(void*) {
+static BOOL daToge_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00000DC4-00000DCC       .text daToge_IsDelete__FPv */
-void daToge_IsDelete(void*) {
+static BOOL daToge_IsDelete(void*) {
     /* Nonmatching */
 }

@@ -52,27 +52,27 @@ BOOL daFloor_c::Draw() {
 }
 
 /* 000006E0-00000700       .text daFloor_Create__FPv */
-void daFloor_Create(void*) {
+static s32 daFloor_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000700-00000720       .text daFloor_Delete__FPv */
-void daFloor_Delete(void*) {
+static BOOL daFloor_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000720-0000074C       .text daFloor_Draw__FPv */
-void daFloor_Draw(void*) {
+static BOOL daFloor_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 0000074C-0000076C       .text daFloor_Execute__FPv */
-void daFloor_Execute(void*) {
+static BOOL daFloor_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 0000076C-00000774       .text daFloor_IsDelete__FPv */
-void daFloor_IsDelete(void*) {
+static BOOL daFloor_IsDelete(void*) {
     /* Nonmatching */
 }
 

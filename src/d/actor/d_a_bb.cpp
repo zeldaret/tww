@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 000000EC-000003C8       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -72,12 +72,12 @@ void path_check(bb_class*) {
 }
 
 /* 00002250-0000234C       .text daBb_shadowDraw__FP8bb_class */
-void daBb_shadowDraw(bb_class*) {
+static BOOL daBb_shadowDraw(bb_class*) {
     /* Nonmatching */
 }
 
 /* 0000234C-00002444       .text daBb_Draw__FP8bb_class */
-void daBb_Draw(bb_class*) {
+static BOOL daBb_Draw(bb_class*) {
     /* Nonmatching */
 }
 
@@ -142,27 +142,27 @@ void damage_check(bb_class*) {
 }
 
 /* 000069A8-00007778       .text daBb_Execute__FP8bb_class */
-void daBb_Execute(bb_class*) {
+static BOOL daBb_Execute(bb_class*) {
     /* Nonmatching */
 }
 
 /* 00007778-00007780       .text daBb_IsDelete__FP8bb_class */
-void daBb_IsDelete(bb_class*) {
+static BOOL daBb_IsDelete(bb_class*) {
     /* Nonmatching */
 }
 
 /* 00007780-000077EC       .text daBb_Delete__FP8bb_class */
-void daBb_Delete(bb_class*) {
+static BOOL daBb_Delete(bb_class*) {
     /* Nonmatching */
 }
 
 /* 000077EC-00007A68       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00007A68-00007F58       .text daBb_Create__FP10fopAc_ac_c */
-void daBb_Create(fopAc_ac_c*) {
+static s32 daBb_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

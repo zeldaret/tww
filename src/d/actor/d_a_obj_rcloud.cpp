@@ -67,27 +67,27 @@ BOOL daObjRcloud_c::_draw() {
 }
 
 /* 00000848-00000868       .text daObjRcloud_Create__FP10fopAc_ac_c */
-void daObjRcloud_Create(fopAc_ac_c*) {
+static s32 daObjRcloud_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00000868-0000088C       .text daObjRcloud_Delete__FP13daObjRcloud_c */
-void daObjRcloud_Delete(daObjRcloud_c*) {
+static BOOL daObjRcloud_Delete(daObjRcloud_c*) {
     /* Nonmatching */
 }
 
 /* 0000088C-000008B0       .text daObjRcloud_Execute__FP13daObjRcloud_c */
-void daObjRcloud_Execute(daObjRcloud_c*) {
+static BOOL daObjRcloud_Execute(daObjRcloud_c*) {
     /* Nonmatching */
 }
 
 /* 000008B0-000008D4       .text daObjRcloud_Draw__FP13daObjRcloud_c */
-void daObjRcloud_Draw(daObjRcloud_c*) {
+static BOOL daObjRcloud_Draw(daObjRcloud_c*) {
     /* Nonmatching */
 }
 
 /* 000008D4-000008DC       .text daObjRcloud_IsDelete__FP13daObjRcloud_c */
-void daObjRcloud_IsDelete(daObjRcloud_c*) {
+static BOOL daObjRcloud_IsDelete(daObjRcloud_c*) {
     /* Nonmatching */
 }
 

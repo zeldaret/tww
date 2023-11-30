@@ -12,7 +12,7 @@ void daGhostship_SailVtxFactorCB(dCloth_packet_c*, int, int) {
 }
 
 /* 000000F8-00000118       .text createHeap_CB__FP10fopAc_ac_c */
-void createHeap_CB(fopAc_ac_c*) {
+static BOOL createHeap_CB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -82,17 +82,17 @@ void daGhostship_c::getArg() {
 }
 
 /* 00000C8C-00000DFC       .text daGhostshipCreate__FPv */
-void daGhostshipCreate(void*) {
+static s32 daGhostshipCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00000FD8-00001024       .text daGhostshipDelete__FPv */
-void daGhostshipDelete(void*) {
+static BOOL daGhostshipDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00001024-00001048       .text daGhostshipExecute__FPv */
-void daGhostshipExecute(void*) {
+static BOOL daGhostshipExecute(void*) {
     /* Nonmatching */
 }
 
@@ -102,7 +102,7 @@ BOOL daGhostship_c::_execute() {
 }
 
 /* 0000182C-00001850       .text daGhostshipDraw__FPv */
-void daGhostshipDraw(void*) {
+static BOOL daGhostshipDraw(void*) {
     /* Nonmatching */
 }
 
@@ -112,7 +112,7 @@ BOOL daGhostship_c::_draw() {
 }
 
 /* 000019A4-000019AC       .text daGhostshipIsDelete__FPv */
-void daGhostshipIsDelete(void*) {
+static BOOL daGhostshipIsDelete(void*) {
     /* Nonmatching */
 }
 

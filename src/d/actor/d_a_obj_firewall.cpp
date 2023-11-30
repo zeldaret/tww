@@ -127,26 +127,26 @@ BOOL daObjFirewall_c::_draw() {
 }
 
 /* 00001CD4-00001CF4       .text daObjFirewall_Create__FP10fopAc_ac_c */
-void daObjFirewall_Create(fopAc_ac_c*) {
+static s32 daObjFirewall_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00001CF4-00001D18       .text daObjFirewall_Delete__FP15daObjFirewall_c */
-void daObjFirewall_Delete(daObjFirewall_c*) {
+static BOOL daObjFirewall_Delete(daObjFirewall_c*) {
     /* Nonmatching */
 }
 
 /* 00001D18-00001D3C       .text daObjFirewall_Execute__FP15daObjFirewall_c */
-void daObjFirewall_Execute(daObjFirewall_c*) {
+static BOOL daObjFirewall_Execute(daObjFirewall_c*) {
     /* Nonmatching */
 }
 
 /* 00001D3C-00001D60       .text daObjFirewall_Draw__FP15daObjFirewall_c */
-void daObjFirewall_Draw(daObjFirewall_c*) {
+static BOOL daObjFirewall_Draw(daObjFirewall_c*) {
     /* Nonmatching */
 }
 
 /* 00001D60-00001D68       .text daObjFirewall_IsDelete__FP15daObjFirewall_c */
-void daObjFirewall_IsDelete(daObjFirewall_c*) {
+static BOOL daObjFirewall_IsDelete(daObjFirewall_c*) {
     /* Nonmatching */
 }

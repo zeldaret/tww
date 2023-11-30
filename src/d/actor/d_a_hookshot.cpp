@@ -180,7 +180,7 @@ BOOL daHookshot_c::draw() {
 }
 
 /* 800F1324-800F1344       .text daHookshot_Draw__FP12daHookshot_c */
-BOOL daHookshot_Draw(daHookshot_c* i_this) {
+static BOOL daHookshot_Draw(daHookshot_c* i_this) {
     return i_this->draw();
 }
 
@@ -244,12 +244,12 @@ BOOL daHookshot_c::execute() {
 }
 
 /* 800F2B54-800F2B74       .text daHookshot_Execute__FP12daHookshot_c */
-BOOL daHookshot_Execute(daHookshot_c* i_this) {
+static BOOL daHookshot_Execute(daHookshot_c* i_this) {
     return i_this->execute();
 }
 
 /* 800F2B74-800F2B7C       .text daHookshot_IsDelete__FP12daHookshot_c */
-BOOL daHookshot_IsDelete(daHookshot_c* i_this) {
+static BOOL daHookshot_IsDelete(daHookshot_c* i_this) {
     return TRUE;
 }
 
@@ -266,7 +266,7 @@ BOOL daHookshot_c::hookshot_delete() {
 }
 
 /* 800F2BF0-800F2C14       .text daHookshot_Delete__FP12daHookshot_c */
-BOOL daHookshot_Delete(daHookshot_c* i_this) {
+static BOOL daHookshot_Delete(daHookshot_c* i_this) {
     i_this->hookshot_delete();
     return TRUE;
 }
@@ -323,7 +323,7 @@ s32 daHookshot_c::create() {
 }
 
 /* 800F3134-800F3154       .text daHookshot_Create__FP10fopAc_ac_c */
-s32 daHookshot_Create(fopAc_ac_c* i_actor) {
+static s32 daHookshot_Create(fopAc_ac_c* i_actor) {
     return reinterpret_cast<daHookshot_c*>(i_actor)->create();
 }
 

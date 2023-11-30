@@ -896,7 +896,7 @@ void daAgb_c::modeProcCall() {
 
 /* 800D30D4-800D36F4       .text daAgb_Execute__FP7daAgb_c */
 // NONMATCHING - regswap
-int daAgb_Execute(daAgb_c* i_this) {
+static int daAgb_Execute(daAgb_c* i_this) {
     daPy_lk_c* temp_r29 = (daPy_lk_c*)dComIfGp_getPlayer(0);
     i_this->field_0x679 = 0;
 
@@ -1023,7 +1023,7 @@ int daAgb_Execute(daAgb_c* i_this) {
 }
 
 /* 800D36F4-800D38EC       .text daAgb_Draw__FP7daAgb_c */
-int daAgb_Draw(daAgb_c* i_this) {
+static int daAgb_Draw(daAgb_c* i_this) {
     u8 var_r6 = 1;
 
     if (mDoGaC_GbaLink()) {
@@ -1063,19 +1063,19 @@ int daAgb_Draw(daAgb_c* i_this) {
 }
 
 /* 800D38F0-800D38F8       .text daAgb_IsDelete__FP7daAgb_c */
-int daAgb_IsDelete(daAgb_c* i_this) {
+static int daAgb_IsDelete(daAgb_c* i_this) {
     return 1;
 }
 
 /* 800D38F8-800D394C       .text daAgb_Delete__FP7daAgb_c */
-int daAgb_Delete(daAgb_c* i_this) {
+static int daAgb_Delete(daAgb_c* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "Agb");
     i_this->field_0x684.end();
     return 1;
 }
 
 /* 800D394C-800D396C       .text createHeap_CB__FP10fopAc_ac_c */
-int createHeap_CB(fopAc_ac_c* i_this) {
+static BOOL createHeap_CB(fopAc_ac_c* i_this) {
     return static_cast<daAgb_c*>(i_this)->createHeap();
 }
 
@@ -1107,7 +1107,7 @@ int daAgb_c::createHeap() {
 
 /* 800D3B58-800D3D2C       .text daAgb_Create__FP10fopAc_ac_c */
 // NONMATCHING - dBgS_CrrPos::Set needs works
-int daAgb_Create(fopAc_ac_c* i_this) {
+static int daAgb_Create(fopAc_ac_c* i_this) {
     fopAcM_SetupActor(i_this, daAgb_c);
     daAgb_c* a_this = (daAgb_c*)i_this;
 

@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 800E7E60-800E7EA8       .text daEsa_Draw__FP9esa_class */
-void daEsa_Draw(esa_class*) {
+static BOOL daEsa_Draw(esa_class*) {
     /* Nonmatching */
 }
 
@@ -22,27 +22,27 @@ void esa_1_move(esa_class*) {
 }
 
 /* 800E88F8-800E89B8       .text daEsa_Execute__FP9esa_class */
-void daEsa_Execute(esa_class*) {
+static BOOL daEsa_Execute(esa_class*) {
     /* Nonmatching */
 }
 
 /* 800E89B8-800E89C0       .text daEsa_IsDelete__FP9esa_class */
-void daEsa_IsDelete(esa_class*) {
+static BOOL daEsa_IsDelete(esa_class*) {
     /* Nonmatching */
 }
 
 /* 800E89C0-800E89E8       .text daEsa_Delete__FP9esa_class */
-void daEsa_Delete(esa_class*) {
+static BOOL daEsa_Delete(esa_class*) {
     /* Nonmatching */
 }
 
 /* 800E89E8-800E8AB0       .text daEsa_CreateHeap__FP10fopAc_ac_c */
-void daEsa_CreateHeap(fopAc_ac_c*) {
+static BOOL daEsa_CreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 800E8AB0-800E8CA4       .text daEsa_Create__FP10fopAc_ac_c */
-void daEsa_Create(fopAc_ac_c*) {
+static s32 daEsa_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

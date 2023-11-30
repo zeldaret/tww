@@ -12,7 +12,7 @@ BOOL daLStair_c::_delete() {
 }
 
 /* 000000D4-000000F4       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -82,27 +82,27 @@ void daLStair_c::set_off_se() {
 }
 
 /* 00001144-00001164       .text daLStair_Create__FPv */
-void daLStair_Create(void*) {
+static s32 daLStair_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00001164-00001188       .text daLStair_Delete__FPv */
-void daLStair_Delete(void*) {
+static BOOL daLStair_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00001188-0000128C       .text daLStair_Draw__FPv */
-void daLStair_Draw(void*) {
+static BOOL daLStair_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 0000128C-000012B0       .text daLStair_Execute__FPv */
-void daLStair_Execute(void*) {
+static BOOL daLStair_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 000012B0-000012B8       .text daLStair_IsDelete__FPv */
-void daLStair_IsDelete(void*) {
+static BOOL daLStair_IsDelete(void*) {
     /* Nonmatching */
 }
 

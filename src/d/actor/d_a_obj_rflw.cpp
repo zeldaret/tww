@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void daObjRflw_c::CreateInit() {
 }
 
 /* 00000284-00000368       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -32,26 +32,26 @@ void daObjRflw_c::set_mtx() {
 }
 
 /* 000003E8-0000051C       .text daObjRflw_Create__FPv */
-void daObjRflw_Create(void*) {
+static s32 daObjRflw_Create(void*) {
     /* Nonmatching */
 }
 
 /* 000006D4-00000704       .text daObjRflw_Delete__FPv */
-void daObjRflw_Delete(void*) {
+static BOOL daObjRflw_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000704-000007A8       .text daObjRflw_Draw__FPv */
-void daObjRflw_Draw(void*) {
+static BOOL daObjRflw_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 000007A8-000009EC       .text daObjRflw_Execute__FPv */
-void daObjRflw_Execute(void*) {
+static BOOL daObjRflw_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 000009EC-000009F4       .text daObjRflw_IsDelete__FPv */
-void daObjRflw_IsDelete(void*) {
+static BOOL daObjRflw_IsDelete(void*) {
     /* Nonmatching */
 }

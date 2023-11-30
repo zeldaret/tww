@@ -177,27 +177,27 @@ BOOL daObjYLzou_c::_draw() {
 }
 
 /* 00001834-00001854       .text daObjYLzou_Create__FP10fopAc_ac_c */
-void daObjYLzou_Create(fopAc_ac_c*) {
+static s32 daObjYLzou_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00001854-00001878       .text daObjYLzou_Delete__FP12daObjYLzou_c */
-void daObjYLzou_Delete(daObjYLzou_c*) {
+static BOOL daObjYLzou_Delete(daObjYLzou_c*) {
     /* Nonmatching */
 }
 
 /* 00001878-0000189C       .text daObjYLzou_Execute__FP12daObjYLzou_c */
-void daObjYLzou_Execute(daObjYLzou_c*) {
+static BOOL daObjYLzou_Execute(daObjYLzou_c*) {
     /* Nonmatching */
 }
 
 /* 0000189C-000018C0       .text daObjYLzou_Draw__FP12daObjYLzou_c */
-void daObjYLzou_Draw(daObjYLzou_c*) {
+static BOOL daObjYLzou_Draw(daObjYLzou_c*) {
     /* Nonmatching */
 }
 
 /* 000018C0-000018C8       .text daObjYLzou_IsDelete__FP12daObjYLzou_c */
-void daObjYLzou_IsDelete(daObjYLzou_c*) {
+static BOOL daObjYLzou_IsDelete(daObjYLzou_c*) {
     /* Nonmatching */
 }
 

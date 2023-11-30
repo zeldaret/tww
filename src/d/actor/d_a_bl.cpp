@@ -12,7 +12,7 @@ void draw_SUB(bl_class*) {
 }
 
 /* 00000178-000002F8       .text daBL_Draw__FP8bl_class */
-void daBL_Draw(bl_class*) {
+static BOOL daBL_Draw(bl_class*) {
     /* Nonmatching */
 }
 
@@ -132,27 +132,27 @@ void action_normal_skull(bl_class*) {
 }
 
 /* 00005104-00005504       .text daBL_Execute__FP8bl_class */
-void daBL_Execute(bl_class*) {
+static BOOL daBL_Execute(bl_class*) {
     /* Nonmatching */
 }
 
 /* 00005504-0000550C       .text daBL_IsDelete__FP8bl_class */
-void daBL_IsDelete(bl_class*) {
+static BOOL daBL_IsDelete(bl_class*) {
     /* Nonmatching */
 }
 
 /* 0000550C-0000558C       .text daBL_Delete__FP8bl_class */
-void daBL_Delete(bl_class*) {
+static BOOL daBL_Delete(bl_class*) {
     /* Nonmatching */
 }
 
 /* 0000558C-0000583C       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00005884-00005D88       .text daBL_Create__FP10fopAc_ac_c */
-void daBL_Create(fopAc_ac_c*) {
+static s32 daBL_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

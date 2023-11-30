@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 000000EC-0000010C       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -62,17 +62,17 @@ void daMgBoard_c::CursorMove() {
 }
 
 /* 000013C4-000014C8       .text daMgBoard_Create__FPv */
-void daMgBoard_Create(void*) {
+static s32 daMgBoard_Create(void*) {
     /* Nonmatching */
 }
 
 /* 000014C8-00001518       .text daMgBoard_Delete__FPv */
-void daMgBoard_Delete(void*) {
+static BOOL daMgBoard_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00001518-0000153C       .text daMgBoard_Draw__FPv */
-void daMgBoard_Draw(void*) {
+static BOOL daMgBoard_Draw(void*) {
     /* Nonmatching */
 }
 
@@ -82,12 +82,12 @@ BOOL daMgBoard_c::_draw() {
 }
 
 /* 00001850-00001874       .text daMgBoard_Execute__FPv */
-void daMgBoard_Execute(void*) {
+static BOOL daMgBoard_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00001874-0000187C       .text daMgBoard_IsDelete__FPv */
-void daMgBoard_IsDelete(void*) {
+static BOOL daMgBoard_IsDelete(void*) {
     /* Nonmatching */
 }
 

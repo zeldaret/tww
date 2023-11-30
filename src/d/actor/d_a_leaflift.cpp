@@ -12,7 +12,7 @@ BOOL daLlift_c::_delete() {
 }
 
 /* 000001C0-000001E0       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -32,7 +32,7 @@ s32 daLlift_c::_create() {
 }
 
 /* 00000918-000009C4       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -72,26 +72,26 @@ BOOL daLlift_c::_draw() {
 }
 
 /* 00001180-000011A0       .text daLlift_Create__FPv */
-void daLlift_Create(void*) {
+static s32 daLlift_Create(void*) {
     /* Nonmatching */
 }
 
 /* 000011A0-000011C4       .text daLlift_Delete__FPv */
-void daLlift_Delete(void*) {
+static BOOL daLlift_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 000011C4-000011E8       .text daLlift_Draw__FPv */
-void daLlift_Draw(void*) {
+static BOOL daLlift_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 000011E8-0000120C       .text daLlift_Execute__FPv */
-void daLlift_Execute(void*) {
+static BOOL daLlift_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 0000120C-00001214       .text daLlift_IsDelete__FPv */
-void daLlift_IsDelete(void*) {
+static BOOL daLlift_IsDelete(void*) {
     /* Nonmatching */
 }

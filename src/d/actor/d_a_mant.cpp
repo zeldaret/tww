@@ -12,7 +12,7 @@ void daMant_packet_c::draw() {
 }
 
 /* 000003EC-000004E8       .text daMant_Draw__FP10mant_class */
-void daMant_Draw(mant_class*) {
+static BOOL daMant_Draw(mant_class*) {
     /* Nonmatching */
 }
 
@@ -37,22 +37,22 @@ void mant_move(mant_class*) {
 }
 
 /* 000019C0-00001A3C       .text daMant_Execute__FP10mant_class */
-void daMant_Execute(mant_class*) {
+static BOOL daMant_Execute(mant_class*) {
     /* Nonmatching */
 }
 
 /* 00001A3C-00001A44       .text daMant_IsDelete__FP10mant_class */
-void daMant_IsDelete(mant_class*) {
+static BOOL daMant_IsDelete(mant_class*) {
     /* Nonmatching */
 }
 
 /* 00001A44-00001A4C       .text daMant_Delete__FP10mant_class */
-void daMant_Delete(mant_class*) {
+static BOOL daMant_Delete(mant_class*) {
     /* Nonmatching */
 }
 
 /* 00001A4C-00001D18       .text daMant_Create__FP10fopAc_ac_c */
-void daMant_Create(fopAc_ac_c*) {
+static s32 daMant_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

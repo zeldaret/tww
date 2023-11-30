@@ -172,27 +172,27 @@ bool daObjHfuck1_c::_draw() {
 }
 
 /* 0000082C-0000084C       .text daObjHfuck1_Create__FP10fopAc_ac_c */
-BOOL daObjHfuck1_Create(fopAc_ac_c* i_this) {
+static BOOL daObjHfuck1_Create(fopAc_ac_c* i_this) {
     return ((daObjHfuck1_c*)i_this)->_create();
 }
 
 /* 0000084C-00000870       .text daObjHfuck1_Delete__FP13daObjHfuck1_c */
-BOOL daObjHfuck1_Delete(daObjHfuck1_c* i_this) {
+static BOOL daObjHfuck1_Delete(daObjHfuck1_c* i_this) {
     return i_this->_delete();
 }
 
 /* 00000870-00000894       .text daObjHfuck1_Execute__FP13daObjHfuck1_c */
-BOOL daObjHfuck1_Execute(daObjHfuck1_c* i_this) {
+static BOOL daObjHfuck1_Execute(daObjHfuck1_c* i_this) {
     return i_this->_execute();
 }
 
 /* 00000894-000008B8       .text daObjHfuck1_Draw__FP13daObjHfuck1_c */
-BOOL daObjHfuck1_Draw(daObjHfuck1_c* i_this) {
+static BOOL daObjHfuck1_Draw(daObjHfuck1_c* i_this) {
     return i_this->_draw();
 }
 
 /* 000008B8-000008C0       .text daObjHfuck1_IsDelete__FP13daObjHfuck1_c */
-BOOL daObjHfuck1_IsDelete(daObjHfuck1_c* i_this) {
+static BOOL daObjHfuck1_IsDelete(daObjHfuck1_c* i_this) {
     return TRUE;
 }
 

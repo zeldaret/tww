@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000230       .text nodeCallBack_Mk__FP7J3DNodei */
-void nodeCallBack_Mk(J3DNode*, int) {
+static BOOL nodeCallBack_Mk(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -287,7 +287,7 @@ BOOL daNpc_Mk_c::_delete() {
 }
 
 /* 0000405C-0000407C       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -302,27 +302,27 @@ void daNpc_Mk_c::CreateHeap() {
 }
 
 /* 00004954-00004974       .text daNpc_Mk_Create__FP10fopAc_ac_c */
-void daNpc_Mk_Create(fopAc_ac_c*) {
+static s32 daNpc_Mk_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00004974-00004994       .text daNpc_Mk_Delete__FP10daNpc_Mk_c */
-void daNpc_Mk_Delete(daNpc_Mk_c*) {
+static BOOL daNpc_Mk_Delete(daNpc_Mk_c*) {
     /* Nonmatching */
 }
 
 /* 00004994-000049B4       .text daNpc_Mk_Execute__FP10daNpc_Mk_c */
-void daNpc_Mk_Execute(daNpc_Mk_c*) {
+static BOOL daNpc_Mk_Execute(daNpc_Mk_c*) {
     /* Nonmatching */
 }
 
 /* 000049B4-000049D4       .text daNpc_Mk_Draw__FP10daNpc_Mk_c */
-void daNpc_Mk_Draw(daNpc_Mk_c*) {
+static BOOL daNpc_Mk_Draw(daNpc_Mk_c*) {
     /* Nonmatching */
 }
 
 /* 000049D4-000049DC       .text daNpc_Mk_IsDelete__FP10daNpc_Mk_c */
-void daNpc_Mk_IsDelete(daNpc_Mk_c*) {
+static BOOL daNpc_Mk_IsDelete(daNpc_Mk_c*) {
     /* Nonmatching */
 }
 /* 00004C38-00004C54       .text setEyePos__10daNpc_Mk_cF4cXyz */

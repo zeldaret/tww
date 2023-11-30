@@ -22,7 +22,7 @@ void daDaiocta_c::_coHit(fopAc_ac_c*) {
 }
 
 /* 000003DC-00000470       .text nodeControl_CB__FP7J3DNodei */
-void nodeControl_CB(J3DNode*, int) {
+static BOOL nodeControl_CB(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -32,7 +32,7 @@ void daDaiocta_c::_nodeControl(J3DNode*, J3DModel*) {
 }
 
 /* 0000066C-0000068C       .text createHeap_CB__FP10fopAc_ac_c */
-void createHeap_CB(fopAc_ac_c*) {
+static BOOL createHeap_CB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -262,27 +262,27 @@ BOOL daDaiocta_c::_delete() {
 }
 
 /* 0000513C-0000515C       .text daDaioctaCreate__FPv */
-void daDaioctaCreate(void*) {
+static s32 daDaioctaCreate(void*) {
     /* Nonmatching */
 }
 
 /* 0000515C-00005180       .text daDaioctaDelete__FPv */
-void daDaioctaDelete(void*) {
+static BOOL daDaioctaDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00005180-000051A4       .text daDaioctaExecute__FPv */
-void daDaioctaExecute(void*) {
+static BOOL daDaioctaExecute(void*) {
     /* Nonmatching */
 }
 
 /* 000051A4-000051C8       .text daDaioctaDraw__FPv */
-void daDaioctaDraw(void*) {
+static BOOL daDaioctaDraw(void*) {
     /* Nonmatching */
 }
 
 /* 000051C8-000051D0       .text daDaioctaIsDelete__FPv */
-void daDaioctaIsDelete(void*) {
+static BOOL daDaioctaIsDelete(void*) {
     /* Nonmatching */
 }
 

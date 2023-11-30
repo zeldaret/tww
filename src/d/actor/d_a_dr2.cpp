@@ -12,7 +12,7 @@ daDr2_HIO_c::daDr2_HIO_c() {
 }
 
 /* 00000110-00000380       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -37,7 +37,7 @@ void yuka_draw(dr2_class*) {
 }
 
 /* 0000064C-000006D4       .text daDr2_Draw__FP9dr2_class */
-void daDr2_Draw(dr2_class*) {
+static BOOL daDr2_Draw(dr2_class*) {
     /* Nonmatching */
 }
 
@@ -72,27 +72,27 @@ void yuka_move(dr2_class*) {
 }
 
 /* 000019B8-00001B90       .text daDr2_Execute__FP9dr2_class */
-void daDr2_Execute(dr2_class*) {
+static BOOL daDr2_Execute(dr2_class*) {
     /* Nonmatching */
 }
 
 /* 00001B90-00001B98       .text daDr2_IsDelete__FP9dr2_class */
-void daDr2_IsDelete(dr2_class*) {
+static BOOL daDr2_IsDelete(dr2_class*) {
     /* Nonmatching */
 }
 
 /* 00001B98-00001C58       .text daDr2_Delete__FP9dr2_class */
-void daDr2_Delete(dr2_class*) {
+static BOOL daDr2_Delete(dr2_class*) {
     /* Nonmatching */
 }
 
 /* 00001C58-00002458       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000024A0-00002668       .text daDr2_Create__FP10fopAc_ac_c */
-void daDr2_Create(fopAc_ac_c*) {
+static s32 daDr2_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

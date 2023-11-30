@@ -92,26 +92,26 @@ BOOL daObjLeaves_c::_draw() {
 }
 
 /* 00001290-000012B0       .text daObjLeaves_Create__FP13daObjLeaves_c */
-void daObjLeaves_Create(daObjLeaves_c*) {
+static s32 daObjLeaves_Create(daObjLeaves_c*) {
     /* Nonmatching */
 }
 
 /* 000012B0-000012D4       .text daObjLeaves_Delete__FP13daObjLeaves_c */
-void daObjLeaves_Delete(daObjLeaves_c*) {
+static BOOL daObjLeaves_Delete(daObjLeaves_c*) {
     /* Nonmatching */
 }
 
 /* 000012D4-000012F8       .text daObjLeaves_Execute__FP13daObjLeaves_c */
-void daObjLeaves_Execute(daObjLeaves_c*) {
+static BOOL daObjLeaves_Execute(daObjLeaves_c*) {
     /* Nonmatching */
 }
 
 /* 000012F8-0000131C       .text daObjLeaves_Draw__FP13daObjLeaves_c */
-void daObjLeaves_Draw(daObjLeaves_c*) {
+static BOOL daObjLeaves_Draw(daObjLeaves_c*) {
     /* Nonmatching */
 }
 
 /* 0000131C-00001324       .text daObjLeaves_IsDelete__FP13daObjLeaves_c */
-void daObjLeaves_IsDelete(daObjLeaves_c*) {
+static BOOL daObjLeaves_IsDelete(daObjLeaves_c*) {
     /* Nonmatching */
 }

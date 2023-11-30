@@ -37,7 +37,7 @@ void anm_init(btd_class*, int, float, unsigned char, float, int) {
 }
 
 /* 000003D4-00000778       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -47,7 +47,7 @@ void hahen_draw(btd_class*) {
 }
 
 /* 00000828-000009B4       .text daBtd_Draw__FP9btd_class */
-void daBtd_Draw(btd_class*) {
+static BOOL daBtd_Draw(btd_class*) {
     /* Nonmatching */
 }
 
@@ -197,27 +197,27 @@ void btd_kankyo(btd_class*) {
 }
 
 /* 00007950-000081B8       .text daBtd_Execute__FP9btd_class */
-void daBtd_Execute(btd_class*) {
+static BOOL daBtd_Execute(btd_class*) {
     /* Nonmatching */
 }
 
 /* 000081B8-000081C0       .text daBtd_IsDelete__FP9btd_class */
-void daBtd_IsDelete(btd_class*) {
+static BOOL daBtd_IsDelete(btd_class*) {
     /* Nonmatching */
 }
 
 /* 000081C0-00008304       .text daBtd_Delete__FP9btd_class */
-void daBtd_Delete(btd_class*) {
+static BOOL daBtd_Delete(btd_class*) {
     /* Nonmatching */
 }
 
 /* 00008304-00008D30       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00008D78-000091D0       .text daBtd_Create__FP10fopAc_ac_c */
-void daBtd_Create(fopAc_ac_c*) {
+static s32 daBtd_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

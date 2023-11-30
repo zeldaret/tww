@@ -12,12 +12,12 @@ daBmdfoot_HIO_c::daBmdfoot_HIO_c() {
 }
 
 /* 00000114-000001D8       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 000001D8-000002B0       .text daBmdfoot_Draw__FP13bmdfoot_class */
-void daBmdfoot_Draw(bmdfoot_class*) {
+static BOOL daBmdfoot_Draw(bmdfoot_class*) {
     /* Nonmatching */
 }
 
@@ -77,17 +77,17 @@ void s_a_d_sub(void*, void*) {
 }
 
 /* 00002204-00002594       .text daBmdfoot_Execute__FP13bmdfoot_class */
-void daBmdfoot_Execute(bmdfoot_class*) {
+static BOOL daBmdfoot_Execute(bmdfoot_class*) {
     /* Nonmatching */
 }
 
 /* 00002594-0000259C       .text daBmdfoot_IsDelete__FP13bmdfoot_class */
-void daBmdfoot_IsDelete(bmdfoot_class*) {
+static BOOL daBmdfoot_IsDelete(bmdfoot_class*) {
     /* Nonmatching */
 }
 
 /* 0000259C-000026B0       .text daBmdfoot_Delete__FP13bmdfoot_class */
-void daBmdfoot_Delete(bmdfoot_class*) {
+static BOOL daBmdfoot_Delete(bmdfoot_class*) {
     /* Nonmatching */
 }
 
@@ -97,12 +97,12 @@ void useHeapInit(bmdfoot_class*) {
 }
 
 /* 000029FC-00002A1C       .text solidHeapCB__FP10fopAc_ac_c */
-void solidHeapCB(fopAc_ac_c*) {
+static BOOL solidHeapCB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00002A1C-00002E88       .text daBmdfoot_Create__FP10fopAc_ac_c */
-void daBmdfoot_Create(fopAc_ac_c*) {
+static s32 daBmdfoot_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

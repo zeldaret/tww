@@ -12,7 +12,7 @@ BOOL daWfall_c::_delete() {
 }
 
 /* 000000F0-00000110       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -102,27 +102,27 @@ void daWfall_c::set_se() {
 }
 
 /* 000013E0-00001400       .text daWfall_Create__FPv */
-void daWfall_Create(void*) {
+static s32 daWfall_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00001400-00001424       .text daWfall_Delete__FPv */
-void daWfall_Delete(void*) {
+static BOOL daWfall_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00001424-00001550       .text daWfall_Draw__FPv */
-void daWfall_Draw(void*) {
+static BOOL daWfall_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00001550-00001574       .text daWfall_Execute__FPv */
-void daWfall_Execute(void*) {
+static BOOL daWfall_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00001574-0000157C       .text daWfall_IsDelete__FPv */
-void daWfall_IsDelete(void*) {
+static BOOL daWfall_IsDelete(void*) {
     /* Nonmatching */
 }
 

@@ -102,27 +102,27 @@ bool daObjAjavW_c::_draw() {
 }
 
 /* 0000056C-0000058C       .text daObjAjavW_Create__FP12daObjAjavW_c */
-s32 daObjAjavW_Create(daObjAjavW_c* i_this) {
+static s32 daObjAjavW_Create(daObjAjavW_c* i_this) {
     return i_this->_create();
 }
 
 /* 0000058C-000005B0       .text daObjAjavW_Delete__FP12daObjAjavW_c */
-BOOL daObjAjavW_Delete(daObjAjavW_c* i_this) {
+static BOOL daObjAjavW_Delete(daObjAjavW_c* i_this) {
     return i_this->_delete();
 }
 
 /* 000005B0-000005D4       .text daObjAjavW_Execute__FP12daObjAjavW_c */
-BOOL daObjAjavW_Execute(daObjAjavW_c* i_this) {
+static BOOL daObjAjavW_Execute(daObjAjavW_c* i_this) {
     return i_this->_execute();
 }
 
 /* 000005D4-000005F8       .text daObjAjavW_Draw__FP12daObjAjavW_c */
-BOOL daObjAjavW_Draw(daObjAjavW_c* i_this) {
+static BOOL daObjAjavW_Draw(daObjAjavW_c* i_this) {
     return i_this->_draw();
 }
 
 /* 000005F8-00000600       .text daObjAjavW_IsDelete__FP12daObjAjavW_c */
-BOOL daObjAjavW_IsDelete(daObjAjavW_c* i_this) {
+static BOOL daObjAjavW_IsDelete(daObjAjavW_c* i_this) {
     return TRUE;
 }
 

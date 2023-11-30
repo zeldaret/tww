@@ -12,7 +12,7 @@ daObjHat_c::daObjHat_c() {
 }
 
 /* 000003AC-000003CC       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -67,27 +67,27 @@ void daObjHat_c::setSpeed(cXyz) {
 }
 
 /* 00000A20-00000A40       .text daSampleCreate__FPv */
-void daSampleCreate(void*) {
+static s32 daSampleCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00000A40-00000A60       .text daSampleDelete__FPv */
-void daSampleDelete(void*) {
+static BOOL daSampleDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00000A60-00000A80       .text daSampleExecute__FPv */
-void daSampleExecute(void*) {
+static BOOL daSampleExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00000A80-00000AA0       .text daSampleDraw__FPv */
-void daSampleDraw(void*) {
+static BOOL daSampleDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00000AA0-00000AA8       .text daSampleIsDelete__FPv */
-void daSampleIsDelete(void*) {
+static BOOL daSampleIsDelete(void*) {
     /* Nonmatching */
 }
 

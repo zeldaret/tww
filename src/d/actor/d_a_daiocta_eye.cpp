@@ -12,7 +12,7 @@ daDaiocta_Eye_HIO_c::daDaiocta_Eye_HIO_c() {
 }
 
 /* 000001B0-000001FC       .text nodeControl_CB__FP7J3DNodei */
-void nodeControl_CB(J3DNode*, int) {
+static BOOL nodeControl_CB(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void daDaiocta_Eye_c::_nodeControl(J3DNode*, J3DModel*) {
 }
 
 /* 000002B8-000002D8       .text createHeap_CB__FP10fopAc_ac_c */
-void createHeap_CB(fopAc_ac_c*) {
+static BOOL createHeap_CB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -112,27 +112,27 @@ BOOL daDaiocta_Eye_c::_delete() {
 }
 
 /* 000017B4-000017D4       .text daDaiocta_EyeCreate__FPv */
-void daDaiocta_EyeCreate(void*) {
+static s32 daDaiocta_EyeCreate(void*) {
     /* Nonmatching */
 }
 
 /* 000017D4-000017F8       .text daDaiocta_EyeDelete__FPv */
-void daDaiocta_EyeDelete(void*) {
+static BOOL daDaiocta_EyeDelete(void*) {
     /* Nonmatching */
 }
 
 /* 000017F8-0000181C       .text daDaiocta_EyeExecute__FPv */
-void daDaiocta_EyeExecute(void*) {
+static BOOL daDaiocta_EyeExecute(void*) {
     /* Nonmatching */
 }
 
 /* 0000181C-00001840       .text daDaiocta_EyeDraw__FPv */
-void daDaiocta_EyeDraw(void*) {
+static BOOL daDaiocta_EyeDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00001840-00001848       .text daDaiocta_EyeIsDelete__FPv */
-void daDaiocta_EyeIsDelete(void*) {
+static BOOL daDaiocta_EyeIsDelete(void*) {
     /* Nonmatching */
 }
 

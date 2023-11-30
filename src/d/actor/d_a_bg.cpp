@@ -271,7 +271,7 @@ BOOL daBg_c::draw() {
 }
 
 /* 800D8DB8-800D8F34       .text daBg_Draw__FP6daBg_c */
-BOOL daBg_Draw(daBg_c* i_this) {
+static BOOL daBg_Draw(daBg_c* i_this) {
     return i_this->draw();
 }
 
@@ -312,7 +312,7 @@ BOOL daBg_c::execute() {
 }
 
 /* 800D8F34-800D903C       .text daBg_Execute__FP6daBg_c */
-BOOL daBg_Execute(daBg_c* i_this) {
+static BOOL daBg_Execute(daBg_c* i_this) {
     return i_this->execute();
 }
 
@@ -324,18 +324,18 @@ BOOL daBg_c::isDelete() {
 }
 
 /* 800D903C-800D904C       .text daBg_IsDelete__FP6daBg_c */
-BOOL daBg_IsDelete(daBg_c* i_this) {
+static BOOL daBg_IsDelete(daBg_c* i_this) {
     return i_this->isDelete();
 }
 
 /* 800D904C-800D9074       .text daBg_Delete__FP6daBg_c */
-BOOL daBg_Delete(daBg_c* i_this) {
+static BOOL daBg_Delete(daBg_c* i_this) {
     i_this->~daBg_c();
     return TRUE;
 }
 
 /* 800D9074-800D9094       .text daBg_Create__FP10fopAc_ac_c */
-s32 daBg_Create(fopAc_ac_c* i_ac) {
+static s32 daBg_Create(fopAc_ac_c* i_ac) {
     return ((daBg_c*)i_ac)->create();
 }
 

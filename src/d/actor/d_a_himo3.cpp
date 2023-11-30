@@ -17,7 +17,7 @@ void ga_draw(himo3_class*) {
 }
 
 /* 00000D1C-00000EF8       .text daHimo3_Draw__FP11himo3_class */
-void daHimo3_Draw(himo3_class*) {
+static BOOL daHimo3_Draw(himo3_class*) {
     /* Nonmatching */
 }
 
@@ -37,17 +37,17 @@ void path_move(himo3_class*) {
 }
 
 /* 000014F8-00001A3C       .text daHimo3_Execute__FP11himo3_class */
-void daHimo3_Execute(himo3_class*) {
+static BOOL daHimo3_Execute(himo3_class*) {
     /* Nonmatching */
 }
 
 /* 00001A3C-00001A44       .text daHimo3_IsDelete__FP11himo3_class */
-void daHimo3_IsDelete(himo3_class*) {
+static BOOL daHimo3_IsDelete(himo3_class*) {
     /* Nonmatching */
 }
 
 /* 00001A44-00001AE0       .text daHimo3_Delete__FP11himo3_class */
-void daHimo3_Delete(himo3_class*) {
+static BOOL daHimo3_Delete(himo3_class*) {
     /* Nonmatching */
 }
 
@@ -57,7 +57,7 @@ void useHeapInit(himo3_class*) {
 }
 
 /* 00001DD4-00002128       .text daHimo3_Create__FP10fopAc_ac_c */
-void daHimo3_Create(fopAc_ac_c*) {
+static s32 daHimo3_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

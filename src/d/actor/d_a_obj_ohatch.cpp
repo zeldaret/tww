@@ -72,27 +72,27 @@ BOOL daObjOhatch_c::_draw() {
 }
 
 /* 00000B64-00000B84       .text daObjOhatch_Create__FP10fopAc_ac_c */
-void daObjOhatch_Create(fopAc_ac_c*) {
+static s32 daObjOhatch_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00000B84-00000BA8       .text daObjOhatch_Delete__FP13daObjOhatch_c */
-void daObjOhatch_Delete(daObjOhatch_c*) {
+static BOOL daObjOhatch_Delete(daObjOhatch_c*) {
     /* Nonmatching */
 }
 
 /* 00000BA8-00000BCC       .text daObjOhatch_Execute__FP13daObjOhatch_c */
-void daObjOhatch_Execute(daObjOhatch_c*) {
+static BOOL daObjOhatch_Execute(daObjOhatch_c*) {
     /* Nonmatching */
 }
 
 /* 00000BCC-00000BF0       .text daObjOhatch_Draw__FP13daObjOhatch_c */
-void daObjOhatch_Draw(daObjOhatch_c*) {
+static BOOL daObjOhatch_Draw(daObjOhatch_c*) {
     /* Nonmatching */
 }
 
 /* 00000BF0-00000BF8       .text daObjOhatch_IsDelete__FP13daObjOhatch_c */
-void daObjOhatch_IsDelete(daObjOhatch_c*) {
+static BOOL daObjOhatch_IsDelete(daObjOhatch_c*) {
     /* Nonmatching */
 }
 

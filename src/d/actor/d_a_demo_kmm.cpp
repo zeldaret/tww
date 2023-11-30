@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -42,27 +42,27 @@ void daDemo_Kmm_actionWait(daDemo_Kmm_c*) {
 }
 
 /* 000003A8-0000040C       .text daDemo_Kmm_Draw__FP12daDemo_Kmm_c */
-void daDemo_Kmm_Draw(daDemo_Kmm_c*) {
+static BOOL daDemo_Kmm_Draw(daDemo_Kmm_c*) {
     /* Nonmatching */
 }
 
 /* 0000040C-000004A8       .text daDemo_Kmm_Execute__FP12daDemo_Kmm_c */
-void daDemo_Kmm_Execute(daDemo_Kmm_c*) {
+static BOOL daDemo_Kmm_Execute(daDemo_Kmm_c*) {
     /* Nonmatching */
 }
 
 /* 000004A8-000004B0       .text daDemo_Kmm_IsDelete__FP12daDemo_Kmm_c */
-void daDemo_Kmm_IsDelete(daDemo_Kmm_c*) {
+static BOOL daDemo_Kmm_IsDelete(daDemo_Kmm_c*) {
     /* Nonmatching */
 }
 
 /* 000004B0-00000500       .text daDemo_Kmm_Delete__FP12daDemo_Kmm_c */
-void daDemo_Kmm_Delete(daDemo_Kmm_c*) {
+static BOOL daDemo_Kmm_Delete(daDemo_Kmm_c*) {
     /* Nonmatching */
 }
 
 /* 00000500-00000520       .text daDemo_Kmm_Create__FP10fopAc_ac_c */
-void daDemo_Kmm_Create(fopAc_ac_c*) {
+static s32 daDemo_Kmm_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

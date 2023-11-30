@@ -12,7 +12,7 @@ void daYkgr_c::getPosRate() {
 }
 
 /* 00000408-00000428       .text daYkgrCreate__FPv */
-void daYkgrCreate(void*) {
+static s32 daYkgrCreate(void*) {
     /* Nonmatching */
 }
 
@@ -22,22 +22,22 @@ s32 daYkgr_c::_create() {
 }
 
 /* 00000680-00000688       .text daYkgrDelete__FPv */
-void daYkgrDelete(void*) {
+static BOOL daYkgrDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00000688-000007F4       .text daYkgrExecute__FPv */
-void daYkgrExecute(void*) {
+static BOOL daYkgrExecute(void*) {
     /* Nonmatching */
 }
 
 /* 000007F4-000008F4       .text daYkgrDraw__FPv */
-void daYkgrDraw(void*) {
+static BOOL daYkgrDraw(void*) {
     /* Nonmatching */
 }
 
 /* 000008F4-000008FC       .text daYkgrIsDelete__FPv */
-void daYkgrIsDelete(void*) {
+static BOOL daYkgrIsDelete(void*) {
     /* Nonmatching */
 }
 

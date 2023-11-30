@@ -12,17 +12,17 @@ daNpcAuction_c::daNpcAuction_c() {
 }
 
 /* 00000618-00000730       .text daNpc_Auction_nodeCallBack1__FP7J3DNodei */
-void daNpc_Auction_nodeCallBack1(J3DNode*, int) {
+static BOOL daNpc_Auction_nodeCallBack1(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 00000730-00000848       .text daNpc_Auction_nodeCallBack2__FP7J3DNodei */
-void daNpc_Auction_nodeCallBack2(J3DNode*, int) {
+static BOOL daNpc_Auction_nodeCallBack2(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 00000848-00000868       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -192,27 +192,27 @@ void daNpcAuction_c::clrEmitter() {
 }
 
 /* 000029DC-00002A0C       .text daNpc_AuctionCreate__FPv */
-void daNpc_AuctionCreate(void*) {
+static s32 daNpc_AuctionCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00002A0C-00002A70       .text daNpc_AuctionDelete__FPv */
-void daNpc_AuctionDelete(void*) {
+static BOOL daNpc_AuctionDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00002A70-00002C70       .text daNpc_AuctionExecute__FPv */
-void daNpc_AuctionExecute(void*) {
+static BOOL daNpc_AuctionExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00002C70-00002EB8       .text daNpc_AuctionDraw__FPv */
-void daNpc_AuctionDraw(void*) {
+static BOOL daNpc_AuctionDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00002EB8-00002EC0       .text daNpc_AuctionIsDelete__FPv */
-void daNpc_AuctionIsDelete(void*) {
+static BOOL daNpc_AuctionIsDelete(void*) {
     /* Nonmatching */
 }
 

@@ -62,7 +62,7 @@ void daObjApzl_c::privateCut() {
 }
 
 /* 00000D08-00000D28       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -82,17 +82,17 @@ void daObjApzl_c::set_mtx() {
 }
 
 /* 000016B8-00001780       .text daObjApzl_Create__FPv */
-void daObjApzl_Create(void*) {
+static s32 daObjApzl_Create(void*) {
     /* Nonmatching */
 }
 
 /* 0000184C-00001894       .text daObjApzl_Delete__FPv */
-void daObjApzl_Delete(void*) {
+static BOOL daObjApzl_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00001894-000018B8       .text daObjApzl_Draw__FPv */
-void daObjApzl_Draw(void*) {
+static BOOL daObjApzl_Draw(void*) {
     /* Nonmatching */
 }
 
@@ -102,7 +102,7 @@ BOOL daObjApzl_c::_draw() {
 }
 
 /* 00001B00-00001B24       .text daObjApzl_Execute__FPv */
-void daObjApzl_Execute(void*) {
+static BOOL daObjApzl_Execute(void*) {
     /* Nonmatching */
 }
 
@@ -112,7 +112,7 @@ BOOL daObjApzl_c::_execute() {
 }
 
 /* 00001E8C-00001E94       .text daObjApzl_IsDelete__FPv */
-void daObjApzl_IsDelete(void*) {
+static BOOL daObjApzl_IsDelete(void*) {
     /* Nonmatching */
 }
 

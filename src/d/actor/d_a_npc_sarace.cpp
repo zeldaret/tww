@@ -12,7 +12,7 @@ daNpc_Sarace_HIO_c::daNpc_Sarace_HIO_c() {
 }
 
 /* 00000198-00000328       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -122,7 +122,7 @@ BOOL daNpc_Sarace_c::_delete() {
 }
 
 /* 00001AE0-00001B00       .text CallbackCreateHeap__FP10fopAc_ac_c */
-void CallbackCreateHeap(fopAc_ac_c*) {
+static BOOL CallbackCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -137,27 +137,27 @@ void daNpc_Sarace_c::CreateHeap() {
 }
 
 /* 00002498-000024B8       .text daNpc_Sarace_Create__FP10fopAc_ac_c */
-void daNpc_Sarace_Create(fopAc_ac_c*) {
+static s32 daNpc_Sarace_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000024B8-000024D8       .text daNpc_Sarace_Delete__FP14daNpc_Sarace_c */
-void daNpc_Sarace_Delete(daNpc_Sarace_c*) {
+static BOOL daNpc_Sarace_Delete(daNpc_Sarace_c*) {
     /* Nonmatching */
 }
 
 /* 000024D8-000024F8       .text daNpc_Sarace_Execute__FP14daNpc_Sarace_c */
-void daNpc_Sarace_Execute(daNpc_Sarace_c*) {
+static BOOL daNpc_Sarace_Execute(daNpc_Sarace_c*) {
     /* Nonmatching */
 }
 
 /* 000024F8-00002518       .text daNpc_Sarace_Draw__FP14daNpc_Sarace_c */
-void daNpc_Sarace_Draw(daNpc_Sarace_c*) {
+static BOOL daNpc_Sarace_Draw(daNpc_Sarace_c*) {
     /* Nonmatching */
 }
 
 /* 00002518-00002520       .text daNpc_Sarace_IsDelete__FP14daNpc_Sarace_c */
-void daNpc_Sarace_IsDelete(daNpc_Sarace_c*) {
+static BOOL daNpc_Sarace_IsDelete(daNpc_Sarace_c*) {
     /* Nonmatching */
 }
 

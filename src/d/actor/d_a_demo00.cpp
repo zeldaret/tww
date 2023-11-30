@@ -32,7 +32,7 @@ void awaCheck(J3DModel*) {
 }
 
 /* 800E5FF4-800E6014       .text createHeapCallBack__FP10fopAc_ac_c */
-void createHeapCallBack(fopAc_ac_c*) {
+static BOOL createHeapCallBack(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -57,7 +57,7 @@ void daDemo00_c::actLeaving(dDemo_actor_c*) {
 }
 
 /* 800E6E90-800E6EB0       .text daDemo00_Draw__FP10daDemo00_c */
-void daDemo00_Draw(daDemo00_c*) {
+static BOOL daDemo00_Draw(daDemo00_c*) {
     /* Nonmatching */
 }
 
@@ -67,7 +67,7 @@ BOOL daDemo00_c::draw() {
 }
 
 /* 800E7204-800E7224       .text daDemo00_Execute__FP10daDemo00_c */
-void daDemo00_Execute(daDemo00_c*) {
+static BOOL daDemo00_Execute(daDemo00_c*) {
     /* Nonmatching */
 }
 
@@ -77,17 +77,17 @@ BOOL daDemo00_c::execute() {
 }
 
 /* 800E78A0-800E78A8       .text daDemo00_IsDelete__FP10daDemo00_c */
-void daDemo00_IsDelete(daDemo00_c*) {
+static BOOL daDemo00_IsDelete(daDemo00_c*) {
     /* Nonmatching */
 }
 
 /* 800E78A8-800E78D0       .text daDemo00_Delete__FP10daDemo00_c */
-void daDemo00_Delete(daDemo00_c*) {
+static BOOL daDemo00_Delete(daDemo00_c*) {
     /* Nonmatching */
 }
 
 /* 800E78D0-800E7964       .text daDemo00_Create__FP10fopAc_ac_c */
-void daDemo00_Create(fopAc_ac_c*) {
+static s32 daDemo00_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

@@ -62,27 +62,27 @@ BOOL daTag_Gship_c::_delete() {
 }
 
 /* 000005F4-00000614       .text daTag_GshipCreate__FPv */
-void daTag_GshipCreate(void*) {
+static s32 daTag_GshipCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00000614-00000638       .text daTag_GshipDelete__FPv */
-void daTag_GshipDelete(void*) {
+static BOOL daTag_GshipDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00000638-0000065C       .text daTag_GshipExecute__FPv */
-void daTag_GshipExecute(void*) {
+static BOOL daTag_GshipExecute(void*) {
     /* Nonmatching */
 }
 
 /* 0000065C-00000680       .text daTag_GshipDraw__FPv */
-void daTag_GshipDraw(void*) {
+static BOOL daTag_GshipDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00000680-00000688       .text daTag_GshipIsDelete__FPv */
-void daTag_GshipIsDelete(void*) {
+static BOOL daTag_GshipIsDelete(void*) {
     /* Nonmatching */
 }
 

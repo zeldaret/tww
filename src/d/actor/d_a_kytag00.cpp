@@ -89,13 +89,13 @@ void wether_tag_efect_move(kytag00_class* i_this) {
 }
 
 /* 00000C0C-00000C30       .text daKytag00_Draw__FP13kytag00_class */
-BOOL daKytag00_Draw(kytag00_class* i_this) {
+static BOOL daKytag00_Draw(kytag00_class* i_this) {
     wether_tag_efect_move(i_this);
     return TRUE;
 }
 
 /* 00000C30-00000D44       .text daKytag00_Execute__FP13kytag00_class */
-BOOL daKytag00_Execute(kytag00_class* i_this) {
+static BOOL daKytag00_Execute(kytag00_class* i_this) {
     if (!i_this->mbInvert) {
         if (i_this->mSwitchNo != 0xFF && dComIfGs_isSwitch(i_this->mSwitchNo, dComIfGp_roomControl_getStayNo())) {
             cLib_addCalc(&i_this->mTarget, 0.0f, 0.1f, 0.01f, 0.0001f);
@@ -115,18 +115,18 @@ BOOL daKytag00_Execute(kytag00_class* i_this) {
 }
 
 /* 00000D44-00000D4C       .text daKytag00_IsDelete__FP13kytag00_class */
-BOOL daKytag00_IsDelete(kytag00_class* i_this) {
+static BOOL daKytag00_IsDelete(kytag00_class* i_this) {
     return TRUE;
 }
 
 /* 00000D4C-00000D64       .text daKytag00_Delete__FP13kytag00_class */
-BOOL daKytag00_Delete(kytag00_class* i_this) {
+static BOOL daKytag00_Delete(kytag00_class* i_this) {
     g_env_light.mMoyaCount = 0;
     return TRUE;
 }
 
 /* 00000D64-00000F8C       .text daKytag00_Create__FP10fopAc_ac_c */
-s32 daKytag00_Create(fopAc_ac_c* i_ac) {
+static s32 daKytag00_Create(fopAc_ac_c* i_ac) {
     kytag00_class * i_this = (kytag00_class *)i_ac;
 
     fopAcM_SetupActor(i_this, kytag00_class);

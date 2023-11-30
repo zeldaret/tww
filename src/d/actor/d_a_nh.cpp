@@ -474,28 +474,28 @@ BOOL daNh_c::draw() {
 }
 
 /* 800FAE1C-800FAE3C       .text daNh_Draw__FP6daNh_c */
-BOOL daNh_Draw(daNh_c* i_this) {
+static BOOL daNh_Draw(daNh_c* i_this) {
     return i_this->draw();
 }
 
 /* 800FAE3C-800FAE5C       .text daNh_Execute__FP6daNh_c */
-BOOL daNh_Execute(daNh_c* i_this) {
+static BOOL daNh_Execute(daNh_c* i_this) {
     return i_this->execute();
 }
 
 /* 800FAE5C-800FAE64       .text daNh_IsDelete__FP6daNh_c */
-BOOL daNh_IsDelete(daNh_c* i_this) {
+static BOOL daNh_IsDelete(daNh_c* i_this) {
     return TRUE;
 }
 
 /* 800FAE64-800FAE8C       .text daNh_Delete__FP6daNh_c */
-BOOL daNh_Delete(daNh_c* i_this) {
+static BOOL daNh_Delete(daNh_c* i_this) {
     i_this->~daNh_c();
     return TRUE;
 }
 
 /* 800FAE8C-800FAEAC       .text daNh_Create__FP10fopAc_ac_c */
-s32 daNh_Create(fopAc_ac_c* i_this) {
+static s32 daNh_Create(fopAc_ac_c* i_this) {
     return ((daNh_c*)i_this)->create();
 }
 

@@ -17,7 +17,7 @@ void stealItem_CB(void*) {
 }
 
 /* 00000340-0000038C       .text nodeHeadControl_CB__FP7J3DNodei */
-void nodeHeadControl_CB(J3DNode*, int) {
+static BOOL nodeHeadControl_CB(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void daPz_c::_nodeHeadControl(J3DNode*, J3DModel*) {
 }
 
 /* 00000538-00000584       .text nodeWaistControl_CB__FP7J3DNodei */
-void nodeWaistControl_CB(J3DNode*, int) {
+static BOOL nodeWaistControl_CB(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -37,7 +37,7 @@ void daPz_c::_nodeWaistControl(J3DNode*, J3DModel*) {
 }
 
 /* 00000710-0000075C       .text nodeWaist2Control_CB__FP7J3DNodei */
-void nodeWaist2Control_CB(J3DNode*, int) {
+static BOOL nodeWaist2Control_CB(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -47,7 +47,7 @@ void daPz_c::_nodeWaist2Control(J3DNode*, J3DModel*) {
 }
 
 /* 000007F4-00000840       .text nodeSkirtControl_CB__FP7J3DNodei */
-void nodeSkirtControl_CB(J3DNode*, int) {
+static BOOL nodeSkirtControl_CB(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -57,7 +57,7 @@ void daPz_c::_nodeSkirtControl(J3DNode*, J3DModel*) {
 }
 
 /* 00000920-00000940       .text createHeap_CB__FP10fopAc_ac_c */
-void createHeap_CB(fopAc_ac_c*) {
+static BOOL createHeap_CB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -372,27 +372,27 @@ BOOL daPz_c::_delete() {
 }
 
 /* 00007E20-00007E40       .text daPzCreate__FPv */
-void daPzCreate(void*) {
+static s32 daPzCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00007E40-00007E64       .text daPzDelete__FPv */
-void daPzDelete(void*) {
+static BOOL daPzDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00007E64-00007E88       .text daPzExecute__FPv */
-void daPzExecute(void*) {
+static BOOL daPzExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00007E88-00007EAC       .text daPzDraw__FPv */
-void daPzDraw(void*) {
+static BOOL daPzDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00007EAC-00007EB4       .text daPzIsDelete__FPv */
-void daPzIsDelete(void*) {
+static BOOL daPzIsDelete(void*) {
     /* Nonmatching */
 }
 

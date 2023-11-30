@@ -92,26 +92,26 @@ BOOL daHmlif_c::Draw() {
 }
 
 /* 00001610-00001630       .text daHmlif_Create__FPv */
-void daHmlif_Create(void*) {
+static s32 daHmlif_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00001630-00001650       .text daHmlif_Delete__FPv */
-void daHmlif_Delete(void*) {
+static BOOL daHmlif_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00001650-0000167C       .text daHmlif_Draw__FPv */
-void daHmlif_Draw(void*) {
+static BOOL daHmlif_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 0000167C-0000169C       .text daHmlif_Execute__FPv */
-void daHmlif_Execute(void*) {
+static BOOL daHmlif_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 0000169C-000016A4       .text daHmlif_IsDelete__FPv */
-void daHmlif_IsDelete(void*) {
+static BOOL daHmlif_IsDelete(void*) {
     /* Nonmatching */
 }

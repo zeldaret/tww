@@ -22,7 +22,7 @@ void daNpc_Ls1_matAnm_c::calc(J3DMaterial*) const {
 }
 
 /* 0000028C-000002D8       .text nodeCB_Head__FP7J3DNodei */
-void nodeCB_Head(J3DNode*, int) {
+static BOOL nodeCB_Head(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -32,7 +32,7 @@ void daNpc_Ls1_c::_nodeCB_Head(J3DNode*, J3DModel*) {
 }
 
 /* 00000434-00000480       .text nodeCB_BackBone__FP7J3DNodei */
-void nodeCB_BackBone(J3DNode*, int) {
+static BOOL nodeCB_BackBone(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -42,7 +42,7 @@ void daNpc_Ls1_c::_nodeCB_BackBone(J3DNode*, J3DModel*) {
 }
 
 /* 00000520-0000056C       .text nodeCB_Hand_L__FP7J3DNodei */
-void nodeCB_Hand_L(J3DNode*, int) {
+static BOOL nodeCB_Hand_L(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -52,7 +52,7 @@ void daNpc_Ls1_c::_nodeCB_Hand_L(J3DNode*, J3DModel*) {
 }
 
 /* 000005F4-00000640       .text nodeCB_Hand_R__FP7J3DNodei */
-void nodeCB_Hand_R(J3DNode*, int) {
+static BOOL nodeCB_Hand_R(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -62,7 +62,7 @@ void daNpc_Ls1_c::_nodeCB_Hand_R(J3DNode*, J3DModel*) {
 }
 
 /* 000006C8-00000714       .text Ls_hand_nodeCB_Hand_L__FP7J3DNodei */
-void Ls_hand_nodeCB_Hand_L(J3DNode*, int) {
+static BOOL Ls_hand_nodeCB_Hand_L(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -72,7 +72,7 @@ void daNpc_Ls1_c::_Ls_hand_nodeCB_Hand_L(J3DNode*, J3DModel*) {
 }
 
 /* 00000770-000007BC       .text Ls_hand_nodeCB_Hand_R__FP7J3DNodei */
-void Ls_hand_nodeCB_Hand_R(J3DNode*, int) {
+static BOOL Ls_hand_nodeCB_Hand_R(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -82,7 +82,7 @@ void daNpc_Ls1_c::_Ls_hand_nodeCB_Hand_R(J3DNode*, J3DModel*) {
 }
 
 /* 00000818-00000838       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -502,27 +502,27 @@ void daNpc_Ls1_c::CreateHeap() {
 }
 
 /* 000055BC-000055DC       .text daNpc_Ls1_Create__FP10fopAc_ac_c */
-void daNpc_Ls1_Create(fopAc_ac_c*) {
+static s32 daNpc_Ls1_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000055DC-000055FC       .text daNpc_Ls1_Delete__FP11daNpc_Ls1_c */
-void daNpc_Ls1_Delete(daNpc_Ls1_c*) {
+static BOOL daNpc_Ls1_Delete(daNpc_Ls1_c*) {
     /* Nonmatching */
 }
 
 /* 000055FC-0000561C       .text daNpc_Ls1_Execute__FP11daNpc_Ls1_c */
-void daNpc_Ls1_Execute(daNpc_Ls1_c*) {
+static BOOL daNpc_Ls1_Execute(daNpc_Ls1_c*) {
     /* Nonmatching */
 }
 
 /* 0000561C-0000563C       .text daNpc_Ls1_Draw__FP11daNpc_Ls1_c */
-void daNpc_Ls1_Draw(daNpc_Ls1_c*) {
+static BOOL daNpc_Ls1_Draw(daNpc_Ls1_c*) {
     /* Nonmatching */
 }
 
 /* 0000563C-00005644       .text daNpc_Ls1_IsDelete__FP11daNpc_Ls1_c */
-void daNpc_Ls1_IsDelete(daNpc_Ls1_c*) {
+static BOOL daNpc_Ls1_IsDelete(daNpc_Ls1_c*) {
     /* Nonmatching */
 }
 

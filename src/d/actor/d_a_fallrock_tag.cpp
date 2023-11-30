@@ -7,27 +7,27 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000080       .text daFallRockTag_Draw__FP15daFallRockTag_c */
-void daFallRockTag_Draw(daFallRockTag_c*) {
+static BOOL daFallRockTag_Draw(daFallRockTag_c*) {
     /* Nonmatching */
 }
 
 /* 00000080-000002A0       .text daFallRockTag_Execute__FP15daFallRockTag_c */
-void daFallRockTag_Execute(daFallRockTag_c*) {
+static BOOL daFallRockTag_Execute(daFallRockTag_c*) {
     /* Nonmatching */
 }
 
 /* 000002A0-000002A8       .text daFallRockTag_IsDelete__FP15daFallRockTag_c */
-void daFallRockTag_IsDelete(daFallRockTag_c*) {
+static BOOL daFallRockTag_IsDelete(daFallRockTag_c*) {
     /* Nonmatching */
 }
 
 /* 000002A8-000002EC       .text daFallRockTag_Delete__FP15daFallRockTag_c */
-void daFallRockTag_Delete(daFallRockTag_c*) {
+static BOOL daFallRockTag_Delete(daFallRockTag_c*) {
     /* Nonmatching */
 }
 
 /* 000002EC-00000360       .text daFallRockTag_Create__FP10fopAc_ac_c */
-void daFallRockTag_Create(fopAc_ac_c*) {
+static s32 daFallRockTag_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

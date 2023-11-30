@@ -102,27 +102,27 @@ void daWarpfout_c::get_effect_angle() {
 }
 
 /* 00000670-00000690       .text daWarpfout_Create__FPv */
-void daWarpfout_Create(void*) {
+static s32 daWarpfout_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000690-000006B4       .text daWarpfout_Delete__FPv */
-void daWarpfout_Delete(void*) {
+static BOOL daWarpfout_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 000006B4-000006BC       .text daWarpfout_Draw__FPv */
-void daWarpfout_Draw(void*) {
+static BOOL daWarpfout_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 000006BC-000006E0       .text daWarpfout_Execute__FPv */
-void daWarpfout_Execute(void*) {
+static BOOL daWarpfout_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 000006E0-000006E8       .text daWarpfout_IsDelete__FPv */
-void daWarpfout_IsDelete(void*) {
+static BOOL daWarpfout_IsDelete(void*) {
     /* Nonmatching */
 }
 

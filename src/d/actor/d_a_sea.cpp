@@ -352,7 +352,7 @@ void daSea_packet_c::draw() {
 }
 
 /* 8015D80C-8015D87C       .text daSea_Draw__FP9sea_class */
-BOOL daSea_Draw(sea_class* i_this) {
+static BOOL daSea_Draw(sea_class* i_this) {
     dComIfGd_setListSky();
     j3dSys.getDrawBuffer(1)->entryImm(&l_cloth, 31);
     dComIfGd_setList();
@@ -360,7 +360,7 @@ BOOL daSea_Draw(sea_class* i_this) {
 }
 
 /* 8015D87C-8015D8D0       .text daSea_Execute__FP9sea_class */
-BOOL daSea_Execute(sea_class* i_this) {
+static BOOL daSea_Execute(sea_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz pos = player->current.pos;
     l_cloth.execute(pos);
@@ -368,23 +368,23 @@ BOOL daSea_Execute(sea_class* i_this) {
 }
 
 /* 8015D8D0-8015D8E8       .text daSea_IsDelete__FP9sea_class */
-BOOL daSea_IsDelete(sea_class*) {
+static BOOL daSea_IsDelete(sea_class*) {
     l_cloth.mInitFlag = false;
     return TRUE;
 }
 
 /* 8015D8E8-8015D8F0       .text daSea_Delete__FP9sea_class */
-BOOL daSea_Delete(sea_class*) {
+static BOOL daSea_Delete(sea_class*) {
     return TRUE;
 }
 
 /* 8015D8F0-8015D924       .text CheckCreateHeap__FP10fopAc_ac_c */
-BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return l_cloth.create(i_this->current.pos);
 }
 
 /* 8015D924-8015D99C       .text daSea_Create__FP10fopAc_ac_c */
-s32 daSea_Create(fopAc_ac_c* i_this) {
+static s32 daSea_Create(fopAc_ac_c* i_this) {
     fopAcM_SetupActor(i_this, sea_class);
     if (!fopAcM_entrySolidHeap(i_this, CheckCreateHeap, 0xA000))
         return cPhs_ERROR_e;

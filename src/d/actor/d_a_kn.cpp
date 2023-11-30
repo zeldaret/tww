@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000120       .text daKN_Draw__FP8kn_class */
-void daKN_Draw(kn_class*) {
+static BOOL daKN_Draw(kn_class*) {
     /* Nonmatching */
 }
 
@@ -37,26 +37,26 @@ void BG_check(kn_class*) {
 }
 
 /* 00000D64-00000F80       .text daKN_Execute__FP8kn_class */
-void daKN_Execute(kn_class*) {
+static BOOL daKN_Execute(kn_class*) {
     /* Nonmatching */
 }
 
 /* 00000F80-00000F88       .text daKN_IsDelete__FP8kn_class */
-void daKN_IsDelete(kn_class*) {
+static BOOL daKN_IsDelete(kn_class*) {
     /* Nonmatching */
 }
 
 /* 00000F88-00000FD8       .text daKN_Delete__FP8kn_class */
-void daKN_Delete(kn_class*) {
+static BOOL daKN_Delete(kn_class*) {
     /* Nonmatching */
 }
 
 /* 00000FD8-000010E0       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000010E0-000012B0       .text daKN_Create__FP10fopAc_ac_c */
-void daKN_Create(fopAc_ac_c*) {
+static s32 daKN_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }

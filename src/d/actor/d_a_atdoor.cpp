@@ -12,7 +12,7 @@ void daAtdoor_c::getSwbit() {
 }
 
 /* 00000084-000000A4       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -62,27 +62,27 @@ void daAtdoor_actionOpen(daAtdoor_c*) {
 }
 
 /* 000005F8-00000658       .text daAtdoor_Draw__FP10daAtdoor_c */
-void daAtdoor_Draw(daAtdoor_c*) {
+static BOOL daAtdoor_Draw(daAtdoor_c*) {
     /* Nonmatching */
 }
 
 /* 00000658-00000694       .text daAtdoor_Execute__FP10daAtdoor_c */
-void daAtdoor_Execute(daAtdoor_c*) {
+static BOOL daAtdoor_Execute(daAtdoor_c*) {
     /* Nonmatching */
 }
 
 /* 00000694-0000069C       .text daAtdoor_IsDelete__FP10daAtdoor_c */
-void daAtdoor_IsDelete(daAtdoor_c*) {
+static BOOL daAtdoor_IsDelete(daAtdoor_c*) {
     /* Nonmatching */
 }
 
 /* 0000069C-0000070C       .text daAtdoor_Delete__FP10daAtdoor_c */
-void daAtdoor_Delete(daAtdoor_c*) {
+static BOOL daAtdoor_Delete(daAtdoor_c*) {
     /* Nonmatching */
 }
 
 /* 0000070C-0000072C       .text daAtdoor_Create__FP10fopAc_ac_c */
-void daAtdoor_Create(fopAc_ac_c*) {
+static s32 daAtdoor_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

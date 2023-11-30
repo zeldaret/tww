@@ -12,12 +12,12 @@ daNpcMn_c::daNpcMn_c() {
 }
 
 /* 000005E0-000006F8       .text daNpc_Mn_nodeCallBack__FP7J3DNodei */
-void daNpc_Mn_nodeCallBack(J3DNode*, int) {
+static BOOL daNpc_Mn_nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 000006F8-00000718       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -377,26 +377,26 @@ void daNpcMn_c::isChangePos(unsigned char) {
 }
 
 /* 00003CE8-00003D08       .text daNpc_MnCreate__FPv */
-void daNpc_MnCreate(void*) {
+static s32 daNpc_MnCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00003D08-00003D2C       .text daNpc_MnDelete__FPv */
-void daNpc_MnDelete(void*) {
+static BOOL daNpc_MnDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00003D2C-00003D50       .text daNpc_MnExecute__FPv */
-void daNpc_MnExecute(void*) {
+static BOOL daNpc_MnExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00003D50-00003D74       .text daNpc_MnDraw__FPv */
-void daNpc_MnDraw(void*) {
+static BOOL daNpc_MnDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00003D74-00003D7C       .text daNpc_MnIsDelete__FPv */
-void daNpc_MnIsDelete(void*) {
+static BOOL daNpc_MnIsDelete(void*) {
     /* Nonmatching */
 }

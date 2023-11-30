@@ -118,7 +118,7 @@ f32 daMbdoor_c::getToOffset() {
 }
 
 /* 000002DC-000002FC       .text CheckCreateHeap__FP10fopAc_ac_c */
-BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daMbdoor_c*)i_this)->CreateHeap();
 }
 
@@ -509,7 +509,7 @@ BOOL daMbdoor_c::draw() {
 }
 
 /* 00001408-000014BC       .text daMbdoor_Draw__FP10daMbdoor_c */
-BOOL daMbdoor_Draw(daMbdoor_c* i_this) {
+static BOOL daMbdoor_Draw(daMbdoor_c* i_this) {
     return i_this->draw();
 }
 
@@ -538,17 +538,17 @@ BOOL daMbdoor_c::execute() {
 }
 
 /* 000014BC-00001558       .text daMbdoor_Execute__FP10daMbdoor_c */
-BOOL daMbdoor_Execute(daMbdoor_c* i_this) {
+static BOOL daMbdoor_Execute(daMbdoor_c* i_this) {
     return i_this->execute();
 }
 
 /* 00001558-00001560       .text daMbdoor_IsDelete__FP10daMbdoor_c */
-BOOL daMbdoor_IsDelete(daMbdoor_c* i_this) {
+static BOOL daMbdoor_IsDelete(daMbdoor_c* i_this) {
     return TRUE;
 }
 
 /* 00001560-000015D4       .text daMbdoor_Delete__FP10daMbdoor_c */
-BOOL daMbdoor_Delete(daMbdoor_c* i_this) {
+static BOOL daMbdoor_Delete(daMbdoor_c* i_this) {
     if (i_this->heap) {
         dComIfG_Bgsp()->Release(i_this->mpBgW);
     }
@@ -558,7 +558,7 @@ BOOL daMbdoor_Delete(daMbdoor_c* i_this) {
 }
 
 /* 000015D4-000015F4       .text daMbdoor_Create__FP10fopAc_ac_c */
-s32 daMbdoor_Create(fopAc_ac_c* i_this) {
+static s32 daMbdoor_Create(fopAc_ac_c* i_this) {
     return ((daMbdoor_c*)i_this)->create();
 }
 

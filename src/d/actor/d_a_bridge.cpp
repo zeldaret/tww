@@ -17,7 +17,7 @@ void kikuzu_set(bridge_class*, cXyz*) {
 }
 
 /* 00000614-000011EC       .text daBridge_Draw__FP12bridge_class */
-void daBridge_Draw(bridge_class*) {
+static BOOL daBridge_Draw(bridge_class*) {
     /* Nonmatching */
 }
 
@@ -67,17 +67,17 @@ void search_aite(bridge_class*) {
 }
 
 /* 00002AB8-00003C68       .text daBridge_Execute__FP12bridge_class */
-void daBridge_Execute(bridge_class*) {
+static BOOL daBridge_Execute(bridge_class*) {
     /* Nonmatching */
 }
 
 /* 00003C68-00003CD4       .text daBridge_IsDelete__FP12bridge_class */
-void daBridge_IsDelete(bridge_class*) {
+static BOOL daBridge_IsDelete(bridge_class*) {
     /* Nonmatching */
 }
 
 /* 00003CD4-00003D2C       .text daBridge_Delete__FP12bridge_class */
-void daBridge_Delete(bridge_class*) {
+static BOOL daBridge_Delete(bridge_class*) {
     /* Nonmatching */
 }
 
@@ -87,12 +87,12 @@ void CreateInit(fopAc_ac_c*) {
 }
 
 /* 00003E00-00004310       .text CallbackCreateHeap__FP10fopAc_ac_c */
-void CallbackCreateHeap(fopAc_ac_c*) {
+static BOOL CallbackCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00004310-00004770       .text daBridge_Create__FP10fopAc_ac_c */
-void daBridge_Create(fopAc_ac_c*) {
+static s32 daBridge_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

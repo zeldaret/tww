@@ -12,7 +12,7 @@ daObj_Warpt_HIO_c::daObj_Warpt_HIO_c() {
 }
 
 /* 000001D8-000001F8       .text createHeap_CB__FP10fopAc_ac_c */
-void createHeap_CB(fopAc_ac_c*) {
+static BOOL createHeap_CB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -202,27 +202,27 @@ BOOL daObj_Warpt_c::_delete() {
 }
 
 /* 00002858-00002878       .text daObj_WarptCreate__FPv */
-void daObj_WarptCreate(void*) {
+static s32 daObj_WarptCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00002878-0000289C       .text daObj_WarptDelete__FPv */
-void daObj_WarptDelete(void*) {
+static BOOL daObj_WarptDelete(void*) {
     /* Nonmatching */
 }
 
 /* 0000289C-000028C0       .text daObj_WarptExecute__FPv */
-void daObj_WarptExecute(void*) {
+static BOOL daObj_WarptExecute(void*) {
     /* Nonmatching */
 }
 
 /* 000028C0-000028E4       .text daObj_WarptDraw__FPv */
-void daObj_WarptDraw(void*) {
+static BOOL daObj_WarptDraw(void*) {
     /* Nonmatching */
 }
 
 /* 000028E4-000028EC       .text daObj_WarptIsDelete__FPv */
-void daObj_WarptIsDelete(void*) {
+static BOOL daObj_WarptIsDelete(void*) {
     /* Nonmatching */
 }
 

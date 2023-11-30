@@ -12,12 +12,12 @@ daNpcPeople_c::daNpcPeople_c() {
 }
 
 /* 00000624-0000073C       .text daNpc_People_nodeCallBack__FP7J3DNodei */
-void daNpc_People_nodeCallBack(J3DNode*, int) {
+static BOOL daNpc_People_nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 0000073C-0000075C       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -627,27 +627,27 @@ void daNpcPeople_c::warp() {
 }
 
 /* 000098DC-000098FC       .text daNpc_PeopleCreate__FPv */
-void daNpc_PeopleCreate(void*) {
+static s32 daNpc_PeopleCreate(void*) {
     /* Nonmatching */
 }
 
 /* 000098FC-00009920       .text daNpc_PeopleDelete__FPv */
-void daNpc_PeopleDelete(void*) {
+static BOOL daNpc_PeopleDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00009920-00009944       .text daNpc_PeopleExecute__FPv */
-void daNpc_PeopleExecute(void*) {
+static BOOL daNpc_PeopleExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00009944-00009968       .text daNpc_PeopleDraw__FPv */
-void daNpc_PeopleDraw(void*) {
+static BOOL daNpc_PeopleDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00009968-00009970       .text daNpc_PeopleIsDelete__FPv */
-void daNpc_PeopleIsDelete(void*) {
+static BOOL daNpc_PeopleIsDelete(void*) {
     /* Nonmatching */
 }
 

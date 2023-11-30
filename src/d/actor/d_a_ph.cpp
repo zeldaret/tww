@@ -7,17 +7,17 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000158       .text nodeCallBack_UP__FP7J3DNodei */
-void nodeCallBack_UP(J3DNode*, int) {
+static BOOL nodeCallBack_UP(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 00000158-0000025C       .text nodeCallBack_DW__FP7J3DNodei */
-void nodeCallBack_DW(J3DNode*, int) {
+static BOOL nodeCallBack_DW(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 0000025C-000003FC       .text daPH_Draw__FP8ph_class */
-void daPH_Draw(ph_class*) {
+static BOOL daPH_Draw(ph_class*) {
     /* Nonmatching */
 }
 
@@ -142,32 +142,32 @@ void DW_draw_SUB(ph_class*) {
 }
 
 /* 0000591C-000061A4       .text daPH_Execute__FP8ph_class */
-void daPH_Execute(ph_class*) {
+static BOOL daPH_Execute(ph_class*) {
     /* Nonmatching */
 }
 
 /* 000061A4-000061AC       .text daPH_IsDelete__FP8ph_class */
-void daPH_IsDelete(ph_class*) {
+static BOOL daPH_IsDelete(ph_class*) {
     /* Nonmatching */
 }
 
 /* 000061AC-00006224       .text daPH_Delete__FP8ph_class */
-void daPH_Delete(ph_class*) {
+static BOOL daPH_Delete(ph_class*) {
     /* Nonmatching */
 }
 
 /* 00006224-000062B4       .text useArrowHeapInit__FP10fopAc_ac_c */
-void useArrowHeapInit(fopAc_ac_c*) {
+static BOOL useArrowHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000062B4-00006700       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00006700-00006D1C       .text daPH_Create__FP10fopAc_ac_c */
-void daPH_Create(fopAc_ac_c*) {
+static s32 daPH_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

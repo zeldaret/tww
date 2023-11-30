@@ -32,7 +32,7 @@ void daMajuu_Flag_packet_c::draw() {
 }
 
 /* 00000D30-00000DCC       .text daMajuu_Flag_Draw__FP14daMajuu_Flag_c */
-void daMajuu_Flag_Draw(daMajuu_Flag_c*) {
+static BOOL daMajuu_Flag_Draw(daMajuu_Flag_c*) {
     /* Nonmatching */
 }
 
@@ -52,22 +52,22 @@ void majuu_flag_move(daMajuu_Flag_c*) {
 }
 
 /* 000012C8-000013B0       .text daMajuu_Flag_Execute__FP14daMajuu_Flag_c */
-void daMajuu_Flag_Execute(daMajuu_Flag_c*) {
+static BOOL daMajuu_Flag_Execute(daMajuu_Flag_c*) {
     /* Nonmatching */
 }
 
 /* 000013B0-000013B8       .text daMajuu_Flag_IsDelete__FP14daMajuu_Flag_c */
-void daMajuu_Flag_IsDelete(daMajuu_Flag_c*) {
+static BOOL daMajuu_Flag_IsDelete(daMajuu_Flag_c*) {
     /* Nonmatching */
 }
 
 /* 000013B8-00001454       .text daMajuu_Flag_Delete__FP14daMajuu_Flag_c */
-void daMajuu_Flag_Delete(daMajuu_Flag_c*) {
+static BOOL daMajuu_Flag_Delete(daMajuu_Flag_c*) {
     /* Nonmatching */
 }
 
 /* 00001454-00001AE0       .text daMajuu_Flag_Create__FP10fopAc_ac_c */
-void daMajuu_Flag_Create(fopAc_ac_c*) {
+static s32 daMajuu_Flag_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

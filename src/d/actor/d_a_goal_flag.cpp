@@ -67,7 +67,7 @@ void daGoal_Flag_c::get_cloth_anim_factor(cXyz*, cXyz*, cXyz*, int, int) {
 }
 
 /* 00001CC0-00001CE0       .text checkCreateHeap__FP10fopAc_ac_c */
-void checkCreateHeap(fopAc_ac_c*) {
+static BOOL checkCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -97,7 +97,7 @@ void daGoal_Flag_c::RaceEnd() {
 }
 
 /* 000023E0-00002400       .text daGoal_FlagCreate__FPv */
-void daGoal_FlagCreate(void*) {
+static s32 daGoal_FlagCreate(void*) {
     /* Nonmatching */
 }
 
@@ -107,22 +107,22 @@ s32 daGoal_Flag_c::_create() {
 }
 
 /* 000029CC-00002AAC       .text daGoal_FlagDelete__FPv */
-void daGoal_FlagDelete(void*) {
+static BOOL daGoal_FlagDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00002AAC-00002B14       .text daGoal_FlagExecute__FPv */
-void daGoal_FlagExecute(void*) {
+static BOOL daGoal_FlagExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00002B14-00002CA4       .text daGoal_FlagDraw__FPv */
-void daGoal_FlagDraw(void*) {
+static BOOL daGoal_FlagDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00002CA4-00002CAC       .text daGoal_FlagIsDelete__FPv */
-void daGoal_FlagIsDelete(void*) {
+static BOOL daGoal_FlagIsDelete(void*) {
     /* Nonmatching */
 }
 

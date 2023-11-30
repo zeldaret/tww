@@ -12,7 +12,7 @@ void daMtoge_c::getSwbit() {
 }
 
 /* 00000084-000000A4       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -62,27 +62,27 @@ void daMtoge_actionDown(daMtoge_c*) {
 }
 
 /* 0000067C-000006DC       .text daMtoge_Draw__FP9daMtoge_c */
-void daMtoge_Draw(daMtoge_c*) {
+static BOOL daMtoge_Draw(daMtoge_c*) {
     /* Nonmatching */
 }
 
 /* 000006DC-00000718       .text daMtoge_Execute__FP9daMtoge_c */
-void daMtoge_Execute(daMtoge_c*) {
+static BOOL daMtoge_Execute(daMtoge_c*) {
     /* Nonmatching */
 }
 
 /* 00000718-00000720       .text daMtoge_IsDelete__FP9daMtoge_c */
-void daMtoge_IsDelete(daMtoge_c*) {
+static BOOL daMtoge_IsDelete(daMtoge_c*) {
     /* Nonmatching */
 }
 
 /* 00000720-00000790       .text daMtoge_Delete__FP9daMtoge_c */
-void daMtoge_Delete(daMtoge_c*) {
+static BOOL daMtoge_Delete(daMtoge_c*) {
     /* Nonmatching */
 }
 
 /* 00000790-000007B0       .text daMtoge_Create__FP10fopAc_ac_c */
-void daMtoge_Create(fopAc_ac_c*) {
+static s32 daMtoge_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

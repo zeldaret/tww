@@ -42,27 +42,27 @@ BOOL daTag_So_c::_delete() {
 }
 
 /* 00000284-000002A4       .text daTag_SoCreate__FPv */
-void daTag_SoCreate(void*) {
+static s32 daTag_SoCreate(void*) {
     /* Nonmatching */
 }
 
 /* 000002A4-000002C8       .text daTag_SoDelete__FPv */
-void daTag_SoDelete(void*) {
+static BOOL daTag_SoDelete(void*) {
     /* Nonmatching */
 }
 
 /* 000002C8-000002EC       .text daTag_SoExecute__FPv */
-void daTag_SoExecute(void*) {
+static BOOL daTag_SoExecute(void*) {
     /* Nonmatching */
 }
 
 /* 000002EC-00000310       .text daTag_SoDraw__FPv */
-void daTag_SoDraw(void*) {
+static BOOL daTag_SoDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00000310-00000318       .text daTag_SoIsDelete__FPv */
-void daTag_SoIsDelete(void*) {
+static BOOL daTag_SoIsDelete(void*) {
     /* Nonmatching */
 }
 

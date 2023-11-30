@@ -317,27 +317,27 @@ BOOL daObjTapestry_c::_draw() {
 }
 
 /* 00005C44-00005C64       .text daObjTapestry_Create__FP10fopAc_ac_c */
-void daObjTapestry_Create(fopAc_ac_c*) {
+static s32 daObjTapestry_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00005C64-00005C88       .text daObjTapestry_Delete__FP15daObjTapestry_c */
-void daObjTapestry_Delete(daObjTapestry_c*) {
+static BOOL daObjTapestry_Delete(daObjTapestry_c*) {
     /* Nonmatching */
 }
 
 /* 00005C88-00005CAC       .text daObjTapestry_Execute__FP15daObjTapestry_c */
-void daObjTapestry_Execute(daObjTapestry_c*) {
+static BOOL daObjTapestry_Execute(daObjTapestry_c*) {
     /* Nonmatching */
 }
 
 /* 00005CAC-00005CD0       .text daObjTapestry_Draw__FP15daObjTapestry_c */
-void daObjTapestry_Draw(daObjTapestry_c*) {
+static BOOL daObjTapestry_Draw(daObjTapestry_c*) {
     /* Nonmatching */
 }
 
 /* 00005CD0-00005CD8       .text daObjTapestry_IsDelete__FP15daObjTapestry_c */
-void daObjTapestry_IsDelete(daObjTapestry_c*) {
+static BOOL daObjTapestry_IsDelete(daObjTapestry_c*) {
     /* Nonmatching */
 }
 

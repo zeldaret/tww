@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 000000EC-0000032C       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -17,7 +17,7 @@ void draw_SUB(gm_class*) {
 }
 
 /* 0000048C-00000908       .text daGM_Draw__FP8gm_class */
-void daGM_Draw(gm_class*) {
+static BOOL daGM_Draw(gm_class*) {
     /* Nonmatching */
 }
 
@@ -107,27 +107,27 @@ void action_demo(gm_class*) {
 }
 
 /* 00006A98-00007770       .text daGM_Execute__FP8gm_class */
-void daGM_Execute(gm_class*) {
+static BOOL daGM_Execute(gm_class*) {
     /* Nonmatching */
 }
 
 /* 00007770-00007778       .text daGM_IsDelete__FP8gm_class */
-void daGM_IsDelete(gm_class*) {
+static BOOL daGM_IsDelete(gm_class*) {
     /* Nonmatching */
 }
 
 /* 00007778-000078C4       .text daGM_Delete__FP8gm_class */
-void daGM_Delete(gm_class*) {
+static BOOL daGM_Delete(gm_class*) {
     /* Nonmatching */
 }
 
 /* 000078C4-00007E74       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00007EBC-0000842C       .text daGM_Create__FP10fopAc_ac_c */
-void daGM_Create(fopAc_ac_c*) {
+static s32 daGM_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
