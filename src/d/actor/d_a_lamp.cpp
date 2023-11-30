@@ -183,7 +183,7 @@ static int daLamp_Create(fopAc_ac_c* i_ac) {
 
     s32 phase_state = dComIfG_resLoad(&i_this->mPhs, "Lamp");
     if (phase_state == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(i_this, (heapCallbackFunc)&daLamp_solidHeapCB, 0x6040)) {
+        if (fopAcM_entrySolidHeap(i_this, &daLamp_solidHeapCB, 0x6040)) {
             i_this->mParameters = fopAcM_GetParam(i_this);
             if (i_this->mParameters == 0xFF) {
                 i_this->mParameters = 0;
@@ -229,5 +229,5 @@ actor_process_profile_definition g_profile_LAMP = {
     /* Actor SubMtd */ &l_daLamp_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ 0,
+    /* CullType     */ fopAc_CULLBOX_0_e,
 };
