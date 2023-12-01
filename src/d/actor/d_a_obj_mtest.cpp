@@ -59,6 +59,17 @@ enum ASTOP_RES_FILE_ID { // IDs and indexes are synced
     ASTOP_DZB_ASTOP00=0x7,
 };
 
+cXyz daObjMtest::Act_c::M_scl_mult[Type_Max] = {
+    cXyz(1.0f,  1.0f,  1.0f),
+    cXyz(1.0f,  0.5f,  1.0f),
+    cXyz(10.0f, 10.0f, 10.0f),
+    cXyz(10.0f, 5.0f,  10.0f),
+    cXyz(0.2f,  0.2f,  0.2f),
+    cXyz(0.2f,  0.2f,  0.2f),
+    cXyz(1.0f,  1.0f,  1.0f),
+    cXyz(40.0f, 1.0f,  40.0f),
+};
+
 const dCcD_SrcCyl daObjMtest::Act_c::M_cyl_src = {
     // dCcD_SrcGObjInf
     {
@@ -87,17 +98,6 @@ const dCcD_SrcCyl daObjMtest::Act_c::M_cyl_src = {
         /* Radius */ 50.0f,
         /* Height */ 100.0f,
     },
-};
-
-cXyz daObjMtest::Act_c::M_scl_mult[Type_Max] = {
-    cXyz(1.0f,  1.0f,  1.0f),
-    cXyz(1.0f,  0.5f,  1.0f),
-    cXyz(10.0f, 10.0f, 10.0f),
-    cXyz(10.0f, 5.0f,  10.0f),
-    cXyz(0.2f,  0.2f,  0.2f),
-    cXyz(0.2f,  0.2f,  0.2f),
-    cXyz(1.0f,  1.0f,  1.0f),
-    cXyz(40.0f, 1.0f,  40.0f),
 };
 
 /* 000000EC-00000198       .text chk_appear__Q210daObjMtest5Act_cFv */
@@ -144,13 +144,13 @@ BOOL daObjMtest::Act_c::Create() {
     fopAcM_SetMtx(this, mMtx);
     init_mtx();
     
-    if (M_type == 4 || M_type == 5) {
+    if (M_type == Type_MwtrSB || M_type == Type_MygnSB) {
         fopAcM_setCullSizeBox(this, -3000.0f, -10.0f, -3000.0f, 3000.0f, 10.0f, 3000.0f);
-    } else if (M_type != 6) {
+    } else if (M_type != Type_Owater) {
         fopAcM_setCullSizeBox(this, -51.0f, -1.0f, -51.0f, 51.0f, 101.0f, 51.0f);
     }
     
-    if (M_type == 7) {
+    if (M_type == Type_Astop) {
         fopAcM_OnStatus(this, fopAcStts_NOCULLEXEC_e);
     }
     
