@@ -885,18 +885,25 @@ void dKyr_drawRain(Mtx drawMtx, u8** pImg) {
     dKankyo_rain_Packet * pPkt = g_env_light.mpRainPacket;
     camera_class *pCamera = dComIfGp_getCamera(0);
 
-    cXyz windvec = dKyw_get_wind_vecpow();
+    Mtx camMtx;
+    cXyz pos[4];
+    cXyz windvec;
+    cXyz vp;
+    cXyz lp;
+    cXyz p;
+    cXyz dummy;
+    cXyz tilt;
+    Mtx rotMtx;
+    GXColor reg0, reg1;
 
-    static s32 rot = 0;
+    windvec = dKyw_get_wind_vecpow();
+
+    static u32 rot = 0;
 
     if (g_env_light.mSnowCount == 0) {
-        cXyz dummy;
-        dummy.x = 0.0f;
-        dummy.y = -2.0f;
-        dummy.z = 0.0f;
+        dummy.set(0.0f, -2.0f, 0.0f);
 
         if (pPkt->mRainCount != 0) {
-            GXColor reg0, reg1;
             reg0.r = 0xFF;
             reg0.g = 0xFF;
             reg0.b = 0xFF;
@@ -909,7 +916,6 @@ void dKyr_drawRain(Mtx drawMtx, u8** pImg) {
             reg1.a = 0x0A;
 
             if (dComIfGd_getView() != NULL) {
-                Mtx camMtx;
                 MTXInverse(dComIfGd_getViewRotMtx(), camMtx);
             } else {
                 return;
@@ -943,9 +949,8 @@ void dKyr_drawRain(Mtx drawMtx, u8** pImg) {
             GXClearVtxDesc();
             GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
             GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-            Mtx rotMtx;
             MTXRotRad(rotMtx, 'Z', rot * 0.01745329f);
-            MTXConcat(drawMtx, rotMtx, drawMtx);
+            MTXConcat(camMtx, rotMtx, drawMtx);
             GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
             GXSetCurrentMtx(GX_PNMTX0);
 
@@ -957,11 +962,9 @@ void dKyr_drawRain(Mtx drawMtx, u8** pImg) {
                 reg0.a = alpha * 14.0f;
                 GXSetTevColor(GX_TEVREG0, reg0);
 
-                cXyz pos[4], p;
-
-                p.x = pPkt->mRainEff[i].mBasePos.x + + pPkt->mRainEff[i].mPos.x;
-                p.y = pPkt->mRainEff[i].mBasePos.y + + pPkt->mRainEff[i].mPos.y;
-                p.z = pPkt->mRainEff[i].mBasePos.z + + pPkt->mRainEff[i].mPos.z;
+                p.x = pPkt->mRainEff[i].mBasePos.x + pPkt->mRainEff[i].mPos.x;
+                p.y = pPkt->mRainEff[i].mBasePos.y + pPkt->mRainEff[i].mPos.y;
+                p.z = pPkt->mRainEff[i].mBasePos.z + pPkt->mRainEff[i].mPos.z;
 
                 f32 dist = p.abs(pCamera->mLookat.mEye);
                 dist = dist / 1500.0f + 0.1f;
@@ -969,47 +972,42 @@ void dKyr_drawRain(Mtx drawMtx, u8** pImg) {
                     dist = 1.0f;
 
                 f32 size = 2.5f + (i / 250.0f);
-
                 f32 speed = dist * 70.0f + 5.0f;
+                tilt.x = speed * (dummy.x + pPkt->mCenterDelta.x * pPkt->mCenterDeltaMul * 10.0f + (i & 0x07) * 0.08f + windvec.x);
+                tilt.y = speed * (dummy.y + pPkt->mCenterDelta.y * pPkt->mCenterDeltaMul + windvec.y);
+                tilt.z = speed * (dummy.z + pPkt->mCenterDelta.z * pPkt->mCenterDeltaMul * 10.0f + (i & 0x03) * 0.08f + windvec.z);
 
-                cXyz tilt;
-                tilt.x = speed * (windvec.x + pPkt->mCenterDelta.x * pPkt->mCenterDeltaMul + (i & 0x07) * 0.08f + 0.0f);
-                tilt.y = speed * (windvec.y + pPkt->mCenterDelta.y * pPkt->mCenterDeltaMul + -2.0f);
-                tilt.z = speed * (windvec.z + pPkt->mCenterDelta.z * pPkt->mCenterDeltaMul + (i & 0x03) * 0.08f + 0.0f);
-
-                cXyz worldPos, lp;
-
-                worldPos.x = -size * -1.0f;
-                worldPos.y = 0.0f;
-                worldPos.z = 0.0f;
-                MTXMultVec(drawMtx, &worldPos, &lp);
+                vp.x = -1.0f * -size;
+                vp.y = 0.0f;
+                vp.z = 0.0f;
+                MTXMultVec(camMtx, &vp, &lp);
                 pos[0].x = (p.x + lp.x) - tilt.x;
                 pos[0].y = (p.y + lp.y) - tilt.y;
                 pos[0].z = (p.z + lp.z) - tilt.z;
 
-                worldPos.x = size;
-                worldPos.y = 0.0f;
-                worldPos.z = 0.0f;
-                MTXMultVec(drawMtx, &worldPos, &lp);
+                vp.x = -1.0f * size;
+                vp.y = 0.0f;
+                vp.z = 0.0f;
+                MTXMultVec(camMtx, &vp, &lp);
                 pos[1].x = (p.x + lp.x) - tilt.x;
                 pos[1].y = (p.y + lp.y) - tilt.y;
                 pos[1].z = (p.z + lp.z) - tilt.z;
 
-                worldPos.x = -size * -1.0f;
-                worldPos.y = 0.0f;
-                worldPos.z = 0.0f;
-                MTXMultVec(drawMtx, &worldPos, &lp);
+                vp.x = -1.0f * -size;
+                vp.y = 0.0f;
+                vp.z = 0.0f;
+                MTXMultVec(camMtx, &vp, &lp);
                 pos[2].x = p.x + lp.x;
                 pos[2].y = p.y + lp.y;
                 pos[2].z = p.z + lp.z;
 
-                worldPos.x = size;
-                worldPos.y = 0.0f;
-                worldPos.z = 0.0f;
-                MTXMultVec(drawMtx, &worldPos, &lp);
-                pos[3].x = p.x;
-                pos[3].y = p.y;
-                pos[3].z = p.z;
+                vp.x = -1.0f * size;
+                vp.y = 0.0f;
+                vp.z = 0.0f;
+                MTXMultVec(camMtx, &vp, &lp);
+                pos[3].x = p.x + lp.x;
+                pos[3].y = p.y + lp.y;
+                pos[3].z = p.z + lp.z;
 
                 for (s32 j = 0; j < 4; j++) {
                     static const cXyz add_table[4] = {
@@ -1020,8 +1018,8 @@ void dKyr_drawRain(Mtx drawMtx, u8** pImg) {
                     };
 
                     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-                    const cXyz * pAdd = &add_table[i];
-                    f32 addX = pAdd->x, addY = pAdd->y, addZ = pAdd->z;
+                    const cXyz & addv = add_table[j];
+                    f32 addX = addv.x, addY = addv.y, addZ = addv.z;
                     GXPosition3f32(pos[0].x + addX, pos[0].y + addY, pos[0].z + addZ);
                     GXTexCoord2s16(0, 0);
                     GXPosition3f32(pos[1].x + addX, pos[1].y + addY, pos[1].z + addZ);
