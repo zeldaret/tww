@@ -71,7 +71,7 @@ namespace daObjAkabe {
                 if (fopAcM_entrySolidHeap(this, solidHeapCB, heap_size[mType])) {
                     dComIfG_Bgsp()->Regist(mpBgW, this);
                     mpBgW->SetCrrFunc(NULL);
-                    mpBgW->SetPriority(1);
+                    mpBgW->SetPriority((cBgW::PRIORITY)1);
                     fopAcM_SetMtx(this, mMtx);
                     if (mType == 3) {
                         fopAcM_setCullSizeBox(this, -51.0f, -1.0f, -51.0f, 51.0f, 101.0f, 51.0f);

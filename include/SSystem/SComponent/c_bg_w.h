@@ -121,6 +121,10 @@ public:
         LOCK_e = 0x80,
     };
 
+    enum PRIORITY {
+        
+    };
+
     cBgW();
 
     void FreeArea();
@@ -154,22 +158,50 @@ public:
     void GetTriPnt(int, cXyz*, cXyz*, cXyz*) const;
     void GetTopUnder(f32*, f32*) const;
 
-    s32 GetGrpInf(s32 grp_id) {
+    s32 GetGrpInf(int grp_id) const {
         JUT_ASSERT(0x2e1, 0 <= grp_id && grp_id < pm_bgd->m_g_num);
         return pm_bgd->m_g_tbl[grp_id].m_info;
     }
 
-    s32 GetTriGrp(s32 poly_index) {
+    s32 GetTriGrp(int poly_index) const {
         JUT_ASSERT(0x2a2, 0 <= poly_index && poly_index < pm_bgd->m_t_num);
         return pm_bgd->m_t_tbl[poly_index].grp;
     }
 
-    cM3dGPla * GetTriPla(s32 poly_index) {
+    cM3dGPla * GetTriPla(int poly_index) {
         JUT_ASSERT(0x2af, 0 <= poly_index && poly_index < pm_bgd->m_t_num);
         return &pm_tri[poly_index].m_plane;
     }
 
-    void SetPriority(u8 priority) { mWallCorrectPriority = priority; }
+    void SetPriority(PRIORITY priority) { mWallCorrectPriority = priority; }
+    void SetLock() { mFlags |= 0x80; }
+
+    void ChkFlush() {}
+    void ChkGroundRegist() {}
+    void ChkLock() {}
+    void ChkMoveBg() {}
+    void ChkNoCalcVtx() {}
+    void ChkPriority(int) {}
+    void ChkRoofRegist() {}
+    void ChkThrough() {}
+    void ChkWallRegist() {}
+    void ClrNoCalcVtx() {}
+    void GetBaseMtxP() {}
+    void GetOldInvMtx(float(*)[4]) const {}
+    void GetPolyInf0(int) const {}
+    void GetPolyInf1(int) const {}
+    void GetPolyInf2(int) const {}
+    void GetPolyInf3(int) const {}
+    void GetPolyInfId(int) const {}
+    void GetVtxNum() const {}
+    void GetVtxTbl() const {}
+    void GroundCross(cBgS_GndChk*) {}
+    void LineCheck(cBgS_LinChk*) {}
+    void OffRoofRegist() {}
+    void SetBaseMtxP(float(*)[3][4]) {}
+    void SetNoCalcVtx() {}
+    void SetVtxTbl(Vec*) {}
+    void ShdwDraw(cBgS_ShdwDraw*) {}
 
     virtual ~cBgW();
     virtual u32 GetGrpToRoomIndex(int) const;

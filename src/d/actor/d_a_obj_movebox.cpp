@@ -1404,7 +1404,7 @@ namespace daObjMovebox {
         mStts.Init(0xFF, 0xFF, this);
         mCyl.Set(M_cyl_src);
         mCyl.SetStts(&mStts);
-        mCyl.SetTgVec(*(cXyz*)&cXyz::Zero); // TODO: this doesn't seem right, but it does match
+        mCyl.SetTgVec((cXyz&)cXyz::Zero);
         mCyl.OnTgNoHitMark();
         mCyl.OffCoSetBit();
         
