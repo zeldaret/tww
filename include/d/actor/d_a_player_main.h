@@ -165,6 +165,8 @@ public:
     static void setTimer(s16 timer) { m_timer = timer; }
     static void setType(u16 type) { m_type = type; }
     
+    static bool checkCurse() { return m_type == 1; }
+    
     static s16 m_timer;
     static u16 m_type;
 };  // Size: 0x0C

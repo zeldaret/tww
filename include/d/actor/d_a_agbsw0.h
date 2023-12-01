@@ -36,7 +36,11 @@ public:
     BOOL ExeSubM();
     BOOL ExeSubM2();
     BOOL ExeSubM3();
+#if VERSION == VERSION_JPN
+    u32 TriforceCheck();
+#else
     u32 TriforceCheck(daAgb_c*);
+#endif
     BOOL ExeSubMW();
     BOOL ExeSubT();
     BOOL ExeSubS();

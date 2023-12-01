@@ -171,6 +171,7 @@ public:
     /* 0x2EC */ cXyz mRopePos;
     /* 0x2F8 */ cXyz field_0x2f8;
     /* 0x304 */ daPy_demo_c mDemo;
+    /* 0x31C */ /* vtable */
 
     u8 getCutType() const { return mAttackState; }
     s16 getDamageWaitTimer() const { return mDamageWaitTimer; }
@@ -307,6 +308,6 @@ public:
     void stopDoButtonQuake(int);
     void getRopePos() const;
     void setFace(daPy_py_c::daPy_FACE) {}
-};
+};  // Size: 0x320
 
 #endif /* D_A_PLAYER */

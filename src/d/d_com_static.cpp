@@ -8,6 +8,7 @@
 #include "d/actor/d_a_obj_pirateship.h"
 #include "d/actor/d_a_agb.h"
 #include "d/actor/d_a_agbsw0.h"
+#include "d/actor/d_a_npc_os.h"
 #include "d/actor/d_a_npc_md.h"
 #include "d/actor/d_a_arrow.h"
 #include "d/actor/d_a_ib.h"
@@ -16,6 +17,8 @@
 #include "d/actor/d_a_item.h"
 #include "d/d_procname.h"
 #include "d/actor/d_a_npc_kamome.h"
+
+static Vec dummy_3569;
 
 // /* 8005662C-80056638       .text init__12daSteamTag_cFv */
 // void daSteamTag_c::init() {
@@ -106,6 +109,11 @@ void daAgbsw0_c::incTclBeat() {
 // void daDai_c::getDaizaSetItemNum() {
 //     /* Nonmatching */
 // }
+
+bool daNpc_Os_c::m_playerRoom[3] = { false, false, false };
+s8 daNpc_Os_c::m_cattleRoomNo = -1;
+dPa_smokeEcallBack daNpc_Os_c::m_smoke(0, 1, 1, 1);
+dKy_tevstr_c daNpc_Os_c::m_smoke_tevstr;
 
 bool daNpc_Md_c::m_flying;
 bool daNpc_Md_c::m_mirror;

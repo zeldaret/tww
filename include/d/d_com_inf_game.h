@@ -880,6 +880,10 @@ inline void dComIfGs_offOpenCollectMap(int i_no) {
     g_dComIfG_gameInfo.save.getPlayer().getMap().offOpenMap(i_no - 1);
 }
 
+inline BOOL dComIfGs_isCompleteCollectMap(int i_no) {
+    return g_dComIfG_gameInfo.save.getPlayer().getMap().isCompleteMap(i_no - 1);
+}
+
 inline void dComIfGs_offCompleteCollectMap(int i_no) {
     g_dComIfG_gameInfo.save.getPlayer().getMap().offCompleteMap(i_no - 1);
 }

@@ -28,12 +28,10 @@ public:
     void getRightHandMatrix() {}
     void getWork3() {}
     void incAttnSetCount() {}
-    void isFlying() {}
     void isMusic() {}
     void isNoCarryAction() {}
     void isNut() {}
     void isPlayerFind() {}
-    void isPlayerRoom() {}
     void isShipRide() {}
     void isTact() {}
     void isTactCancel() {}
@@ -66,7 +64,16 @@ public:
     void onTactCorrect() {}
     void restartPoint(short) {}
     void setFlyingTimer(short) {}
-
+    
+    static bool m_playerRoom;
+    static bool m_flying;
+    static s16 m_flyingTimer;
+    static u16 m_status;
+    
+    static bool isFlying() { return m_flying; }
+    static s16 getMaxFlyingTimer();
+    static bool isPlayerRoom() { return m_playerRoom; }
+    
     void isTagCheckOK();
     void setMessageAnimation(unsigned char);
     s32 create();

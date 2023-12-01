@@ -5,13 +5,14 @@
 
 class daGhostship_c : public fopAc_ac_c {
 public:
+    bool checkInShip() { return mbInShip; }
+    void getAlpha() {}
+    void setMtx() {}
+
     inline s32 _create();
     inline BOOL _delete();
     inline BOOL _draw();
     inline BOOL _execute();
-    void checkInShip() {}
-    void getAlpha() {}
-    void setMtx() {}
 
     void _createHeap();
     void pathMove();
@@ -27,6 +28,8 @@ public:
 
 public:
     /* Place member variables here */
+    /* 0x290 */ u8 m290[0x708 - 0x290];
+    /* 0x708 */ bool mbInShip;
 };
 
 #endif /* D_A_GHOSTSHIP_H */
