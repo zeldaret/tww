@@ -44,7 +44,7 @@ void daRaceItem_c::set_mtx() {
     mpModel->setBaseScale(mScale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
-    MTXCopy(mDoMtx_stack_c::get(), mpModel->mBaseTransformMtx);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 BOOL daRaceItem_c::Delete() {
@@ -186,7 +186,7 @@ BOOL daRaceItem_c::execute() {
             fopAcM_posMoveF(this, mStts.GetCCMoveP());
             mAcch.CrrPos(*dComIfG_Bgsp());
 
-            if(!(field_0x645 & 1) && !fopAcM_checkStatus(this, 0x100000)) { // looks like !checkOffsetPos() but that isn't an inline
+            if(!(field_0x645 & 1) && !fopAcM_checkHookCarryNow(this)) { // looks like !checkOffsetPos() but that isn't an inline
                 if(mAcch.ChkWaterIn()) {
                     fopAcM_seStart(this, JA_SE_OBJ_FALL_WATER_S, 0);
                     fopAcM_delete(this);

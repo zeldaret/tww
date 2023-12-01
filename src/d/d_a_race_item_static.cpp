@@ -127,7 +127,7 @@ BOOL daRaceItem_c::endOffsetPos(f32 param_1, cXyz* param_2, f32 param_3, f32 par
 
 BOOL daRaceItem_c::checkOffsetPos() {
     BOOL ret = true;
-    if(field_0x645 & 0x1 || fopAcM_checkStatus(this, 0x100000)) {
+    if(field_0x645 & 0x1 || fopAcM_checkHookCarryNow(this)) {
         ret = false;
     }
 
@@ -138,6 +138,6 @@ void daRaceItem_c::set_mtx(cXyz* param_1) {
     mpModel->setBaseScale(mScale);
     mDoMtx_stack_c::transS(*param_1);
     mDoMtx_stack_c::YrotM(current.angle.y);
-    MTXCopy(mDoMtx_stack_c::get(), mpModel->mBaseTransformMtx);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
