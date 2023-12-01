@@ -75,7 +75,7 @@ public:
 
     /* 0x0010 */ u8* mpTxSnow01;
     /* 0x0014 */ u8* mpTxRingAHalf;
-    /* 0x0018 */ RAIN_EFF mRainEff[250];
+    /* 0x0018 */ RAIN_EFF mEff[250];
     /* 0x36C8 */ f32 field_0x36c8;
     /* 0x36CC */ f32 field_0x36cc;
     /* 0x36D0 */ s16 mRainCount;
@@ -154,7 +154,10 @@ struct POISON_EFF {
 
     /* 0x00 */ s8 mStatus;
     /* 0x04 */ cXyz mPos;
-    /* 0x10 */ u8 field_0x10[0x1E];
+    /* 0x10 */ u8 field_0x10[0x10];
+    /* 0x20 */ f32 field_0x20;
+    /* 0x24 */ f32 mAlpha;
+    /* 0x28 */ f32 mSize;
     /* 0x2E */ s16 field_0x2e;
 };
 
@@ -168,9 +171,9 @@ public:
     virtual ~dKankyo_poison_Packet();
 
     /* 0x0010 */ POISON_EFF mEff[1000];
-    /* 0xBB90 */ cXyz field_0xbb90;
+    /* 0xBB90 */ cXyz mBasePos;
     /* 0xBB9C */ cXyz field_0xbb9c;
-    /* 0xBBA8 */ u32 mCount;
+    /* 0xBBA8 */ s32 mCount;
     /* 0xBBAC */ u8* mpTexture;
 };
 
