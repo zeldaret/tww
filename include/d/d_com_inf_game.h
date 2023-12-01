@@ -361,6 +361,16 @@ public:
     void setItemRupeeCount(s32 count) { mItemRupeeCount += count; }
     void setMessageCountNumber(s16 num) { mMsgCountNumber = num; }
 
+    s16 getMiniGameRupee() { return mMiniGameRupee; }
+    void plusMiniGameRupee(s16 count) { 
+        if(mMiniGameRupee + count > 0) {
+            mMiniGameRupee += count;
+        }
+        else {
+            mMiniGameRupee = 0;
+        }
+    }
+
     void setLkDemoAnmArchive(JKRArchive* i_arc) { mpLkDArc = i_arc; }
     void setStatus(u16 status) { mStatus = status; }
     void onStatus(u16 status) { mStatus |= status; }
@@ -644,7 +654,8 @@ public:
     /* 0x4A28 */ u32 mPlayerStatus[2][2];
     /* 0x4A38 */ u8 field_0x4A38[0x4A3A - 0x4A38];
     /* 0x4A3A */ u8 mMiniGameType;
-    /* 0x4A3B */ u8 field_0x4A3B[0x4A40 - 0x4A3B];
+    /* 0x4A3C */ s16 mMiniGameRupee;
+    /* 0x4A3D */ u8 field_0x4A3E[0x4A40 - 0x4A3E];
     /* 0x4A40 */ __d_timer_info_c mTimerInfo;
     /* 0x4A54 */ dDlst_window_c* mCurrentWindow;
     /* 0x4A58 */ view_class* mCurrentView;
@@ -2061,6 +2072,14 @@ inline void dComIfGp_setDoStatus(u8 status) {
 
 inline void dComIfGp_setRStatusForce(u8 status) {
     g_dComIfG_gameInfo.play.setRStatusForce(status);
+}
+
+inline s16 dComIfGp_getMiniGameRupee() {
+    return g_dComIfG_gameInfo.play.getMiniGameRupee();
+}
+
+inline void dComIfGp_plusMiniGameRupee(s16 count) { 
+    g_dComIfG_gameInfo.play.plusMiniGameRupee(count);
 }
 
 inline s32 dComIfGp_getWindowNum() { return g_dComIfG_gameInfo.play.getWindowNum(); }

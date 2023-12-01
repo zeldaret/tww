@@ -3,41 +3,141 @@
 // Translation Unit: d_a_race_item_static.cpp
 //
 
-#include "d/actor/d_a_race_item_static.h"
-#include "dolphin/types.h"
+#include "d/actor/d_a_race_item.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_item.h"
+#include "d/d_item_data.h"
+#include "m_Do/m_Do_mtx.h"
 
-/* 80068A58-80068AA4       .text raceItemForceGet__12daRaceItem_cFv */
 void daRaceItem_c::raceItemForceGet() {
-    /* Nonmatching */
+    field_0x640 = 1;
+    switch(field_0x644) {
+        case 0:
+            raceItemGet();
+            break;
+        case 1:
+            normalItemGet();
+            break;
+    }
 }
 
-/* 80068AA4-80068D48       .text raceItemGet__12daRaceItem_cFv */
 void daRaceItem_c::raceItemGet() {
-    /* Nonmatching */
+    switch(m_itemNo) {
+        case GREEN_RUPEE:
+            mDoAud_seStart(0x826, 0, 0, 0);
+            dComIfGp_plusMiniGameRupee(1);
+            break;
+        case BLUE_RUPEE:
+            mDoAud_seStart(0x835, 0, 0, 0);
+            dComIfGp_plusMiniGameRupee(5);
+            break;
+        case YELLOW_RUPEE:
+            mDoAud_seStart(0x826, 0, 0, 0);
+            dComIfGp_plusMiniGameRupee(10);
+            break;
+        case RED_RUPEE:
+            mDoAud_seStart(0x836, 0, 0, 0);
+            dComIfGp_plusMiniGameRupee(20);
+            break;
+        case PURPLE_RUPEE:
+            mDoAud_seStart(0x826, 0, 0, 0);
+            dComIfGp_plusMiniGameRupee(50);
+            break;
+        case ORANGE_RUPEE:
+            mDoAud_seStart(0x826, 0, 0, 0);
+            dComIfGp_plusMiniGameRupee(100);
+            break;
+        case SILVER_RUPEE:
+            mDoAud_seStart(0x826, 0, 0, 0);
+            dComIfGp_plusMiniGameRupee(200);
+            break;
+    }
 }
 
-/* 80068D48-80068FD0       .text normalItemGet__12daRaceItem_cFv */
 void daRaceItem_c::normalItemGet() {
-    /* Nonmatching */
+    field_0x640 = 1;
+    execItemGet(m_itemNo);
+    if(mPickupFlag != 0x7F) {
+        dComIfGs_onItem(mPickupFlag, fopAcM_GetHomeRoomNo(this));
+    }
+
+    switch(m_itemNo) {
+        case GREEN_RUPEE:
+            mDoAud_seStart(0x826, 0, 0, 0);
+            break;
+        case BLUE_RUPEE:
+            mDoAud_seStart(0x835, 0, 0, 0);
+            break;
+        case YELLOW_RUPEE:
+            mDoAud_seStart(0x836, 0, 0, 0);
+            break;
+        case RED_RUPEE:
+            mDoAud_seStart(0x836, 0, 0, 0);
+            break;
+        case PURPLE_RUPEE:
+            mDoAud_seStart(0x836, 0, 0, 0);
+            break;
+        case ORANGE_RUPEE:
+            mDoAud_seStart(0x836, 0, 0, 0);
+            break;
+        case S_MAGIC:
+            mDoAud_seStart(0x836, 0, 0, 0);
+            break;
+        case L_MAGIC:
+            mDoAud_seStart(0x879, 0, 0, 0);
+            break;
+        case BOMB_5:
+        case BOMB_10:
+        case BOMB_20:
+        case BOMB_30:
+        case ARROW_10:
+        case ARROW_20:
+        case ARROW_30:
+            mDoAud_seStart(0x87A, 0, 0, 0);
+            break;
+        case SILVER_RUPEE:
+            mDoAud_seStart(0x827, 0, 0, 0);
+            break;
+        case TRIPLE_HEART:
+            mDoAud_seStart(0x821, 0, 0, 0);
+            break;
+    }
 }
 
-/* 80068FD0-80068FE0       .text startOffsetPos__12daRaceItem_cFv */
-void daRaceItem_c::startOffsetPos() {
-    /* Nonmatching */
+BOOL daRaceItem_c::startOffsetPos() {
+    field_0x640 = 0;
+    return true;
 }
 
-/* 80068FE0-8006903C       .text endOffsetPos__12daRaceItem_cFfP4cXyzffP5csXyz */
-void daRaceItem_c::endOffsetPos(float, cXyz*, float, float, csXyz*) {
-    /* Nonmatching */
+BOOL daRaceItem_c::endOffsetPos(f32 param_1, cXyz* param_2, f32 param_3, f32 param_4, csXyz* param_5) {
+    if(param_5) {
+        current.angle = *param_5;
+    }
+    if(param_2) {
+        mScale = *param_2;
+    }
+
+    mGravity = param_1;
+    speedF = param_4;
+    speed.y = param_3;
+    field_0x640 = 3;
+
+    return true;
 }
 
-/* 8006903C-80069064       .text checkOffsetPos__12daRaceItem_cFv */
-void daRaceItem_c::checkOffsetPos() {
-    /* Nonmatching */
+BOOL daRaceItem_c::checkOffsetPos() {
+    BOOL ret = true;
+    if(field_0x645 & 0x1 || fopAcM_checkStatus(this, 0x100000)) {
+        ret = false;
+    }
+
+    return ret;
 }
 
-/* 80069064-800690E4       .text set_mtx__12daRaceItem_cFP4cXyz */
-void daRaceItem_c::set_mtx(cXyz*) {
-    /* Nonmatching */
+void daRaceItem_c::set_mtx(cXyz* param_1) {
+    mpModel->setBaseScale(mScale);
+    mDoMtx_stack_c::transS(*param_1);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    MTXCopy(mDoMtx_stack_c::get(), mpModel->mBaseTransformMtx);
 }
 
