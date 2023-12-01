@@ -22,11 +22,11 @@ namespace daObjAkabe {
 
     /* 00000078-0000009C       .text solidHeapCB__Q210daObjAkabe5Act_cFP10fopAc_ac_c */
     BOOL Act_c::solidHeapCB(fopAc_ac_c* i_this) {
-        return ((Act_c*)i_this)->create_heap();
+        return ((Act_c*)i_this)->create_heap() & 0xFF; // Fakematch
     }
 
     /* 0000009C-000001A4       .text create_heap__Q210daObjAkabe5Act_cFv */
-    bool Act_c::create_heap() {
+    BOOL Act_c::create_heap() {
         bool rt = false;
 
         mpBgW = new dBgW();
@@ -38,10 +38,13 @@ namespace daObjAkabe {
                 rt = true;
         }
 
+        // Fakematch: create_heap should have return type bool based on the clrlwi in solidHeapCB,
+        // but this part doesn't match unless the return variable and the return type are both BOOL.
+        BOOL ret = rt;
         if (!rt)
             mpBgW = NULL;
 
-        return rt;
+        return ret;
     }
 
     /* 000001A4-00000360       .text _create__Q210daObjAkabe5Act_cFv */
