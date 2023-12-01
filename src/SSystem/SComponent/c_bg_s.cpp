@@ -76,19 +76,17 @@ static void dummy() {
 }
 
 /* 80246600-8024669C       .text Release__4cBgSFP4cBgW */
-int cBgS::Release(cBgW* bgw) {
+bool cBgS::Release(cBgW* bgw) {
     if (bgw == NULL)
         return true;
 
     if (bgw->ChkUsed() && bgw->GetId() >= 0 && bgw->GetId() < 0x100 && m_chk_element[bgw->GetId()].ChkUsed()) {
         m_chk_element[bgw->GetId()].Release();
         bgw->SetId(256);
-        goto done;
+    } else {
+        return true;
     }
 
-    return true;
-
-done:
     return false;
 }
 
@@ -136,8 +134,8 @@ f32 cBgS::GroundCross(cBgS_GndChk* chk) {
     chk->ClearPi();
     chk->mWallPrecheck = (chk->mFlag & 0x02);
     chk->mGndPrecheck = (chk->mFlag & 0x01);
-    for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
-        cBgS_ChkElm* elm = &m_chk_element[bg_index];
+    cBgS_ChkElm* elm = m_chk_element;
+    for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++, elm++) {
         if (elm->ChkUsed() && elm->m_bgw_base_ptr->pm_vtx_tbl != NULL && !chk->ChkSameActorPid(elm->m_actor_id)) {
             if (elm->m_bgw_base_ptr->GroundCrossGrpRp(chk, elm->m_bgw_base_ptr->m_rootGrpIdx, 1)) {
                 chk->SetActorInfo(bg_index, elm->m_bgw_base_ptr, elm->m_actor_id);
@@ -150,10 +148,13 @@ f32 cBgS::GroundCross(cBgS_GndChk* chk) {
 /* 80246A14-80246C98       .text ConvDzb__4cBgSFPv */
 void* cBgS::ConvDzb(void* work) {
     cBgD_t * pbgd = (cBgD_t *)work;
-    if (pbgd->flag & 0x80000000)
-        return;
 
-    pbgd->flag |= 0x80000000;
+    if (((pbgd->flag & 0x80000000) == 0)) {
+        pbgd->flag |= 0x80000000;
+    } else {
+        return pbgd;
+    }
+
     JUT_ASSERT(0x214, ((int)pbgd->m_v_tbl % 4) == 0);
     JUT_ASSERT(0x215, ((int)pbgd->m_t_tbl % 2) == 0);
     JUT_ASSERT(0x216, ((int)pbgd->m_b_tbl % 2) == 0);
@@ -173,7 +174,7 @@ void* cBgS::ConvDzb(void* work) {
     for (s32 i = 0; i < pbgd->m_g_num; i++) {
         pbgd->m_g_tbl[i].m_name = (char*)((u32)pbgd + (u32)pbgd->m_g_tbl[i].m_name);
     }
-    
+
     return pbgd;
 }
 

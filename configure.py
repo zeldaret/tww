@@ -522,7 +522,7 @@ config.libs = [
             Object(Matching,    "SSystem/SComponent/c_xyz.cpp"),
             Object(Matching,    "SSystem/SComponent/c_sxyz.cpp"),
             Object(Matching,    "SSystem/SComponent/c_math.cpp"),
-            Object(NonMatching, "SSystem/SComponent/c_bg_s.cpp"),
+            Object(Matching,    "SSystem/SComponent/c_bg_s.cpp"),
             Object(Matching,    "SSystem/SComponent/c_bg_s_chk.cpp"),
             Object(Matching,    "SSystem/SComponent/c_bg_s_gnd_chk.cpp"),
             Object(Matching,    "SSystem/SComponent/c_bg_s_lin_chk.cpp"),
