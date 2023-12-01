@@ -312,7 +312,7 @@ void dKyr_sun_move() {
         numPointsVisible = 0;
     }
 
-    if (numCenterPointsVisible != 0) {         
+    if (numCenterPointsVisible != 0) {
         if (numPointsVisible == 4)
             cLib_addCalc(&pSunPkt->mVisibility, 1.0f, 0.1f, 0.1f, 0.001f);
         if (numPointsVisible <= 3)
@@ -500,23 +500,43 @@ void dKyr_star_move() {
 /* 80090DE0-80091964       .text wave_move__Fv */
 void wave_move() {
     /* Nonmatching */
-    cXyz vecpow = dKyw_get_wind_vecpow();
-    dStage_FileList_dt_c * fili_p = NULL;
-
-    dKankyo_wave_Packet * pPkt = g_env_light.mpWavePacket;
-    fopAc_ac_c * pPlayer = dComIfGp_getPlayer(0);
-    camera_class * pCamera = dComIfGp_getCamera(0);
-
+    dScnKy_env_light_c& envLight = dKy_getEnvlight();
+    dStage_FileList_dt_c* fili_p;
+    camera_class* pCamera;
+    fopAc_ac_c* pPlayer;
+    cXyz* windVecP;
+    dKankyo_wave_Packet* pPkt;
+    f32 seaLevel;
+    cXyz newPos2;
     cXyz eyevect;
-    cXyz pos;
-    cXyz windNrmVec;
+    cXyz d0;
+    cXyz newPos3;
+    cXyz windPowVec2;
     cXyz windPowVec;
+    cXyz windNrmVec2;
+    cXyz vectle;
+    cXyz pos;
+    cXyz newPos;
+    DOUBLE_POS deltaXZ;
+    Mtx drawMtx;
+    s32 roomNo;
+    f32 windPow;
+    s32 stageWindY;
+    s16 windX;
+    s16 windY;
 
-    s32 roomNo = dComIfGp_roomControl_getStayNo();
+    windPowVec = dKyw_get_wind_vecpow();
+
+    fili_p = NULL;
+    pPkt = g_env_light.mpWavePacket;
+    pCamera = dComIfGp_getCamera(0);
+    pPlayer = dComIfGp_getPlayer(0);
+
+    roomNo = dComIfGp_roomControl_getStayNo();
     if (roomNo >= 0)
         fili_p = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
 
-    f32 seaLevel;
+    seaLevel;
     if (fili_p != NULL)
         seaLevel = dStage_FileList_dt_SeaLevel(fili_p);
 
@@ -524,24 +544,21 @@ void wave_move() {
         return;
 
     if (dComIfGd_getView() != NULL) {
-        Mtx drawMtx;
         MTXInverse(dComIfGd_getViewRotMtx(), drawMtx);
     } else {
         return;
     }
 
-    cXyz d0;
     dKy_set_eyevect_calc2(pCamera, &eyevect, g_env_light.mWaveChan.mWaveSpawnDist, 0.0f);
-    d0.z = 0.0f;
-    d0.y = 0.0f;
-    d0.x = 0.0f;
+    d0.zero();
 
-    cXyz * windVec = dKyw_get_wind_vec();
-    f32 windPow = dKyw_get_wind_pow();
-    windNrmVec = *windVec;
+    windVecP = dKyw_get_wind_vec();
+    windPow = dKyw_get_wind_pow();
+    windPowVec2 = *windVecP;
 
     if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == 2) {
-        s16 stageWindY = 0;
+        stageWindY = 0;
+
         if (strcmp(dComIfGp_getStartStageName(), "LinkRM") == 0)
             stageWindY = 0x4000;
         else if (strcmp(dComIfGp_getStartStageName(), "Orichh") == 0)
@@ -553,7 +570,6 @@ void wave_move() {
         else if (strcmp(dComIfGp_getStartStageName(), "Onobuta") == 0)
             stageWindY = 0x4000;
 
-        s32 windX, windY;
         if (dComIfGs_getWindX() == -1 && dComIfGs_getWindY() == -1) {
             windX = 0;
             windY = 0;
@@ -564,29 +580,28 @@ void wave_move() {
 
         windY += stageWindY;
 
-        windNrmVec.x = cM_scos(windX) * cM_scos(windY);
-        windNrmVec.y = cM_ssin(windX);
-        windNrmVec.z = cM_scos(windX) * cM_ssin(windY);
+        windNrmVec2.x = cM_scos(windX) * cM_scos(windY);
+        windNrmVec2.y = cM_ssin(windX);
+        windNrmVec2.z = cM_scos(windX) * cM_ssin(windY);
 
+        windPowVec.x = 0.6f * windNrmVec2.x;
+        windPowVec.y = 0.6f * windNrmVec2.y;
+        windPowVec.z = 0.6f * windNrmVec2.z;
+        windPowVec2 = windPowVec;
         windPow = 0.6f;
-        windPowVec.x = windNrmVec.x * 0.6f;
-        windPowVec.z = windNrmVec.z * 0.6f;
     }
 
-    d0.z = 0.0f;
-    d0.y = 0.0f;
-    d0.x = 0.0f;
+    d0.zero();
 
-    DOUBLE_POS deltaXZ;
+    deltaXZ;
     deltaXZ.x = pCamera->mLookat.mCenter.x - pCamera->mLookat.mEye.x;
     deltaXZ.y = 0.0f;
     deltaXZ.z = pCamera->mLookat.mCenter.z - pCamera->mLookat.mEye.z;
-    cXyz lookDirXZ;
-    vectle_calc(&deltaXZ, &lookDirXZ);
+    vectle_calc(&deltaXZ, &vectle);
 
-    pPkt->mSkewDir = cM3d_VectorProduct2d(0.0f, 0.0f, -windNrmVec.x, -windNrmVec.z, lookDirXZ.x, lookDirXZ.z);
-    pPkt->mSkewWidth = (1.0f - fabsf(windNrmVec.x * lookDirXZ.x + windNrmVec.z * lookDirXZ.z)) * windPow * (1.0f - fabsf(windNrmVec.y));
-    pPkt->mSkewWidth *= fabsf(pPkt->mSkewDir) * 0.6f;
+    pPkt->mSkewDir = cM3d_VectorProduct2d(0.0f, 0.0f, -windPowVec2.x, -windPowVec2.z, vectle.x, vectle.z);
+    pPkt->mSkewWidth = windPow * (1.0f - fabsf(windPowVec2.y)) * (1.0f - fabsf(windPowVec2.x * vectle.x + windPowVec2.z * vectle.z));
+    pPkt->mSkewWidth *= 0.6f * fabsf(pPkt->mSkewDir);
 
     for (s32 i = 0; i < g_env_light.mWaveChan.mWaveCount; i++) {
         if (g_env_light.mWaveChan.mWaveReset)
@@ -615,9 +630,8 @@ void wave_move() {
         case 1:
         case 2:
             {
-                // fmuls ordering seems off
-                pPkt->mWaveEff[i].mPos.x += (pPkt->mWaveEff[i].mAlpha * 0.8f + 0.2f) * (pPkt->mWaveEff[i].mStrengthEnv * 0.5f + 0.5f) * (pPkt->mWaveEff[i].mSpeed * windPowVec.x * g_env_light.mWaveChan.mWaveSpeed);
-                pPkt->mWaveEff[i].mPos.z += (pPkt->mWaveEff[i].mAlpha * 0.8f + 0.2f) * (pPkt->mWaveEff[i].mStrengthEnv * 0.5f + 0.5f) * (pPkt->mWaveEff[i].mSpeed * windPowVec.z * g_env_light.mWaveChan.mWaveSpeed);
+                pPkt->mWaveEff[i].mPos.x += (windPowVec.x * g_env_light.mWaveChan.mWaveSpeed * pPkt->mWaveEff[i].mSpeed) * (pPkt->mWaveEff[i].mStrengthEnv * 0.5f + 0.5f) * (pPkt->mWaveEff[i].mAlpha * 0.8f + 0.2f);
+                pPkt->mWaveEff[i].mPos.z += (windPowVec.z * g_env_light.mWaveChan.mWaveSpeed * pPkt->mWaveEff[i].mSpeed) * (pPkt->mWaveEff[i].mStrengthEnv * 0.5f + 0.5f) * (pPkt->mWaveEff[i].mAlpha * 0.8f + 0.2f);
                 pPkt->mWaveEff[i].mCounter += pPkt->mWaveEff[i].mCounterSpeed;
                 pos.x = pPkt->mWaveEff[i].mBasePos.x + pPkt->mWaveEff[i].mPos.x;
                 pos.y = pPkt->mWaveEff[i].mBasePos.y + pPkt->mWaveEff[i].mPos.y;
@@ -629,7 +643,6 @@ void wave_move() {
                         pPkt->mWaveEff[i].mPos.x = cM_rndFX(g_env_light.mWaveChan.mWaveSpawnRadius);
                         pPkt->mWaveEff[i].mPos.z = cM_rndFX(g_env_light.mWaveChan.mWaveSpawnRadius);
                     } else {
-                        cXyz newPos;
                         get_vectle_calc(&pos, &eyevect, &newPos);
                         pPkt->mWaveEff[i].mPos.x = newPos.x * g_env_light.mWaveChan.mWaveSpawnRadius;
                         pPkt->mWaveEff[i].mPos.z = newPos.z * g_env_light.mWaveChan.mWaveSpawnRadius;
@@ -642,14 +655,13 @@ void wave_move() {
 
                 pPkt->mWaveEff[i].mStrengthEnv = 1.0f;
                 for (s32 j = 0; j < 10; j++) {
-                    WAVE_INFO * pInf = g_env_light.mpWaveInfl[j];
-                    if (pInf == NULL)
+                    if (envLight.mpWaveInfl[j] == NULL)
                         continue;
 
-                    pInf->mPos.y = pos.y;
-                    f32 dist = pos.abs(pInf->mPos);
-                    f32 innerRadius = pInf->mInnerRadius;
-                    f32 outerRadius = pInf->mOuterRadius;
+                    envLight.mpWaveInfl[j]->mPos.y = pos.y;
+                    f32 dist = pos.abs(envLight.mpWaveInfl[j]->mPos);
+                    f32 outerRadius = envLight.mpWaveInfl[j]->mOuterRadius;
+                    f32 innerRadius = envLight.mpWaveInfl[j]->mInnerRadius;
                     if (dist < outerRadius) {
                         if (dist < innerRadius) {
                             pPkt->mWaveEff[i].mStrengthEnv = 0.0f;
@@ -661,18 +673,18 @@ void wave_move() {
                             f32 fade = (dist - innerRadius) / range;
                             if (pPkt->mWaveEff[i].mStrengthEnv > fade)
                                 pPkt->mWaveEff[i].mStrengthEnv = fade;
+                        } else {
+                            pPkt->mWaveEff[i].mStrengthEnv = 0.0f;
                         }
                     }
                 }
 
                 if (g_env_light.mWaveChan.mWaveFlatInter > 0.0f) {
-                    cXyz eye;
-                    eye.x = pCamera->mLookat.mEye.x;
-                    eye.y = pos.y;
-                    eye.z = pCamera->mLookat.mEye.z;
+                    newPos3 = pCamera->mLookat.mEye;
+                    newPos3.y = pos.y;
 
-                    f32 dist = pos.abs(eye);
-                    f32 innerRadius = g_env_light.mWaveChan.mWaveFlatInter * g_env_light.mWaveChan.mWaveSpawnRadius * 1.5f;
+                    f32 dist = pos.abs(newPos3);
+                    f32 innerRadius = g_env_light.mWaveChan.mWaveFlatInter * (g_env_light.mWaveChan.mWaveSpawnRadius * 1.5f);
                     f32 outerRadius = innerRadius + 1000.0f;
                     f32 range = outerRadius - innerRadius;
                     if (range > 0.0f) {
@@ -685,11 +697,10 @@ void wave_move() {
                 }
 
                 {
-                    cXyz playerPos;
-                    playerPos.x = pPlayer->current.pos.x;
-                    playerPos.y = pos.y;
-                    playerPos.z = pPlayer->current.pos.z;
-                    f32 dist = pos.abs(playerPos);
+                    newPos3 = pPlayer->current.pos;
+                    newPos3.y = pos.y;
+
+                    f32 dist = pos.abs(newPos3);
                     f32 innerRadius = 200.0f;
                     f32 outerRadius = 2000.0f;
                     f32 range = outerRadius - innerRadius;
@@ -714,14 +725,14 @@ void wave_move() {
         }
 
         {
-            pos.x = pPkt->mWaveEff[i].mBasePos.x + pPkt->mWaveEff[i].mPos.x;
-            pos.y = pPkt->mWaveEff[i].mBasePos.y + pPkt->mWaveEff[i].mPos.y;
-            pos.z = pPkt->mWaveEff[i].mBasePos.z + pPkt->mWaveEff[i].mPos.z;
-            f32 dist = pos.abs(pCamera->mLookat.mEye);
+            newPos2.x = pPkt->mWaveEff[i].mBasePos.x + pPkt->mWaveEff[i].mPos.x;
+            newPos2.y = pPkt->mWaveEff[i].mBasePos.y + pPkt->mWaveEff[i].mPos.y;
+            newPos2.z = pPkt->mWaveEff[i].mBasePos.z + pPkt->mWaveEff[i].mPos.z;
+            f32 dist = newPos2.abs(pCamera->mLookat.mEye);
             if (dist < 0.0f)
                 dist = 0.0f;
-            f32 alphaTarget = 1.03f * (1.0f - (dist / (2.0f * g_env_light.mWaveChan.mWaveSpawnDist)));
-            // this is sinf
+            f32 alphaTarget = 1.0f - (dist / (2.0f * g_env_light.mWaveChan.mWaveSpawnDist));
+            alphaTarget *= 1.03f;
             alphaTarget *= (f32)sin(pPkt->mWaveEff[i].mCounter);
             if (alphaTarget > 1.0f)
                 alphaTarget = 1.0f;
@@ -741,11 +752,11 @@ void cloud_shadow_move() {
 /* 80092294-80092310       .text light_at_hit_check__FP4cXyz */
 BOOL light_at_hit_check(cXyz* pPos) {
     dCcMassS_HitInf hitInfo;
-    bool ret = false;
+    BOOL ret = FALSE;
     fopAc_ac_c * pActor;
     u32 res = dComIfG_Ccsp()->mMass_Mng.Chk(pPos, &pActor, &hitInfo);
     if (((res & 1) != 0) && (hitInfo.GetAtHitObj()->GetAtType() & AT_TYPE_LIGHT) != 0)
-        ret = true;
+        ret = TRUE;
     return ret;
 }
 
@@ -1272,7 +1283,7 @@ void dKyr_thunder_move() {
             pThunder->mLightInfluence.mColor.r = (u8)(pThunder->mFlashTimer * 0.2f * 180.0f);
             pThunder->mLightInfluence.mColor.g = (u8)(pThunder->mFlashTimer * 0.2f * 235.0f);
             pThunder->mLightInfluence.mColor.b = (u8)(pThunder->mFlashTimer * 0.2f * 255.0f);
-            if (g_env_light.field_0xc98 == 0) {                                                     
+            if (g_env_light.field_0xc98 == 0) {
                 dKy_actor_addcol_amb_set(0x5a, 0xa0, 0xf5, pThunder->mFlashTimer * 0.5f);
                 dKy_actor_addcol_dif_set(0x5a, 0xa0, 0xf5, pThunder->mFlashTimer * 0.5f);
                 dKy_bg_addcol_amb_set(0x32, 0x78, 0xff, pThunder->mFlashTimer * 0.7f);
@@ -1283,7 +1294,7 @@ void dKyr_thunder_move() {
                 dKy_vrbox_addcol_kasumi_set(0x5a, 0xa0, 0xf5, pThunder->mFlashTimer * 0.5f);
                 dKy_addcol_fog_set(0x5a, 0xa0, 0xf5, pThunder->mFlashTimer * 0.3f);
             }
-        } else {           
+        } else {
             dKy_vrbox_addcol_sky0_set(0x5a,0xa0,0xf5,(pThunder->mFlashTimer * 0.15f));
             dKy_vrbox_addcol_kasumi_set(0x5a,0xa0,0xf5,(pThunder->mFlashTimer * 0.35f));
             dKy_addcol_fog_set(0x5a, 0xa0, 0xf5, pThunder->mFlashTimer * 0.12f);
