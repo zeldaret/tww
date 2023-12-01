@@ -35,8 +35,12 @@ struct dKy_setLight__Status {
     /* 0x0C */ Vec mPos2;
     /* 0x18 */ GXColor mColor;
     /* 0x1C */ int mAttnType;
-    /* 0x20 */ f32 mLightA[3];
-    /* 0x2C */ f32 mLightK[3];
+    /* 0x20 */ f32 mLightA0;
+    /* 0x24 */ f32 mLightA1;
+    /* 0x28 */ f32 mLightA2;
+    /* 0x2C */ f32 mLightK0;
+    /* 0x30 */ f32 mLightK1;
+    /* 0x34 */ f32 mLightK2;
     /* 0x38 */ Vec mLightDir;
     /* 0x44 */ f32 mSpotCutoff;
     /* 0x48 */ GXSpotFn mSpotFn;
@@ -60,8 +64,8 @@ dKy_setLight__Status lightStatusBase = {
     {377.0f, 5207.4f, 1220.4f},
     {255, 255, 255, 255},
     0,
-    {1.0f, 0.0f, 0.0f},
-    {1.0f, 0.0f, 0.0f},
+    1.0f, 0.0f, 0.0f,
+    1.0f, 0.0f, 0.0f,
     {0.0f, -1.0f, -1.0f},
     90.0f,
     GX_SP_OFF,
@@ -753,7 +757,7 @@ void dScnKy_env_light_c::setLight_palno_get(u8* i_envrSel0, u8* i_envrSel1, u8* 
                     if (strcmp(dComIfGp_getStartStageName(), "sea") == 0 && *i_pSelIdx0 != *i_pSelIdx1) {
                         *i_blendPal01 += 0.0033333334f;
                     } else if (psel_p->mChangeRate > 0.0f) {
-                        *i_blendPal01 += 0.0033333334f / psel_p->mChangeRate;
+                        *i_blendPal01 += 0.033333335f / psel_p->mChangeRate;
                     }
 
                     if (*i_blendPal01 >= 1.0f) {
@@ -1369,16 +1373,23 @@ cXyz dKy_light_influence_pos(int i_lightIdx);
  * settingTevStruct_plightcol_plus__18dScnKy_env_light_cFP4cXyzP12dKy_tevstr_c11_GXColorS1011_GXColorS10Uc
  */
 void dScnKy_env_light_c::settingTevStruct_plightcol_plus(cXyz* i_pos, dKy_tevstr_c* i_tevstr, GXColorS10 c0, GXColorS10 k0, u8 reset) {
-    /* Nonmatching - regalloc */
-    dScnKy_env_light_c * pEnvLight = &g_env_light;
-    J3DSys * pJ3DSys = &j3dSys;
+    dScnKy_env_light_c& envLight = dKy_getEnvlight();
+    MtxP viewMtx = j3dSys.getViewMtx();
 
-    s32 resetLight = false;
-
-    s32 lightIdx = dKy_light_influence_id(*i_pos, 0);
-    f32 lightDist, lightPower, lightYuragi;
+    f32 lightPower;
+    f32 lightDist;
+    f32 lightYuragi;
+    BOOL resetLight;
+    BOOL hasLight;
+    s32 lightIdx;
     cXyz lightPos;
-    s32 hasLight = false;
+    cXyz lightDirView;
+    cXyz tmp;
+    cXyz lightDir;
+
+    resetLight = FALSE;
+    lightIdx = dKy_light_influence_id(*i_pos, 0);
+    hasLight = FALSE;
 
     if (lightIdx >= 0) {
         lightDist = dKy_light_influence_distance(*i_pos, lightIdx);
@@ -1392,10 +1403,10 @@ void dScnKy_env_light_c::settingTevStruct_plightcol_plus(cXyz* i_pos, dKy_tevstr
     }
 
     if (!hasLight) {
-        lightPos = pEnvLight->mBaseLightInfluence.mPos;
-        lightDist = pEnvLight->mBaseLightInfluence.mPos.abs(*i_pos);
-        lightPower = pEnvLight->mBaseLightInfluence.mPower;
-        lightYuragi = pEnvLight->mBaseLightInfluence.mFluctuation;
+        lightPos = envLight.mBaseLightInfluence.mPos;
+        lightDist = envLight.mBaseLightInfluence.mPos.abs(*i_pos);
+        lightPower = envLight.mBaseLightInfluence.mPower;
+        lightYuragi = envLight.mBaseLightInfluence.mFluctuation;
         mK0.r = 0;
         mK0.g = 0;
         mK0.b = 0;
@@ -1405,11 +1416,11 @@ void dScnKy_env_light_c::settingTevStruct_plightcol_plus(cXyz* i_pos, dKy_tevstr
         lightYuragi = dKy_light_influence_yuragi(lightIdx);
 
         if (g_env_light.mpPLights[lightIdx]->mIdx < 0)
-            resetLight = true;
+            resetLight = TRUE;
     }
 
     f32 bright;
-    if (lightPower <= 0.0f || (resetLight & 0xFF) != 0)
+    if (lightPower <= 0.0f || reset)
         bright = 1.0f;
     else
         bright = lightDist / lightPower;
@@ -1459,16 +1470,14 @@ void dScnKy_env_light_c::settingTevStruct_plightcol_plus(cXyz* i_pos, dKy_tevstr
         cLib_addCalc(&i_tevstr->mLightPosWorld.z, lightPos.z, 0.5f, speed, 0.001f);
     }
 
-    cXyz lightDir;
     if (toon_proc_check()) {
-        lightDir = i_tevstr->mLightPosWorld - *i_pos;
-        lightDir = *i_pos - lightDir;
+        tmp = i_tevstr->mLightPosWorld - *i_pos;
+        lightDir = *i_pos - tmp;
     } else {
         lightDir = i_tevstr->mLightPosWorld;
     }
 
-    cXyz lightDirView;
-    MTXMultVec(pJ3DSys->getViewMtx(), &lightDir, &lightDirView);
+    MTXMultVec(viewMtx, &lightDir, &lightDirView);
     i_tevstr->mLightObj.mInfo.mLightPosition = lightDirView;
     i_tevstr->mLightObj.mInfo.mLightDirection = g_env_light.mLightDir;
     i_tevstr->mLightObj.mInfo.mColor.g = 0;
@@ -2335,16 +2344,139 @@ int dKy_Create(void*) {
 
 /* 80194974-80194BDC       .text dKy_setLight_init__Fv */
 void dKy_setLight_init() {
-    /* Nonmatching */
+    for (s32 i = 0; i < 8; i++)
+        lightStatusData[i] = lightStatusBase;
 }
 
 /* 80194BDC-8019514C       .text dKy_setLight__Fv */
 void dKy_setLight() {
     /* Nonmatching */
+    dScnKy_env_light_c& envLight = dKy_getEnvlight();
+    camera_class* pCamera = dComIfGp_getCamera(0);
+    fopAc_ac_c* pPlayer = dComIfGp_getPlayer(0);
+    cXyz camfwd;
+    MtxP viewMtx = j3dSys.getViewMtx();
+    dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &pCamera->mLookat.mCenter, &camfwd);
+
+    // light
+    {
+        dKy_setLight__Status& stts = lightStatusPt[0];
+        stts.mPos2 = pCamera->mLookat.mEye;
+        if (pPlayer != NULL) {
+            dKy_light_influence_id(pPlayer->current.pos, 0);
+        }
+        envLight.mSunPos2 = envLight.mSunPos;
+        cXyz targetPos = envLight.mBaseLightInfluence.mPos;
+        cLib_addCalc(&lightStatusPt->mPos.x, targetPos.x, 0.2f, 50000.0f, 0.00005f);
+        cLib_addCalc(&lightStatusPt->mPos.y, targetPos.y, 0.2f, 50000.0f, 0.00005f);
+        cLib_addCalc(&lightStatusPt->mPos.z, targetPos.z, 0.2f, 50000.0f, 0.00005f);
+
+        static f32 target = 255.0f;
+
+        f32 v;    
+        if (pPlayer != NULL) {
+            v = 0.0f;
+            if (envLight.mBaseLightInfluence.mPower > 0.0f)
+                v = envLight.mBaseLightInfluence.mPos.abs(pPlayer->current.pos) / envLight.mBaseLightInfluence.mPower;
+        } else {
+            v = 1.0f;
+        }
+
+        if (1000.0f < envLight.mBaseLightInfluence.mFluctuation) {
+            if (v > 1.0f) v = 1.0f;
+            v = (1.0f - v) * 20.0f;
+            if (v > 1.0f) v = 1.0f;
+
+            f32 wave = 255.0f - (envLight.mBaseLightInfluence.mFluctuation / 3.0f) * v;
+            cLib_addCalc2(&target, (255.0f - wave) * cM_rndF(1.0f) + wave, 0.4f, 20.0f);
+        } else {
+            target = envLight.mBaseLightInfluence.mFluctuation - 1000.0f;
+        }
+
+        lightStatusPt[0].mColor.r = target;
+        envLight.mPLightNearPlayer = lightStatusPt[0].mPos;
+    }
+
+    // eflight
+    {
+        s32 eflight;
+        if (pPlayer == NULL) {
+            eflight = -1;
+        } else {
+            eflight = dKy_eflight_influence_id(pPlayer->current.pos, 0);
+        }
+
+        if (eflight < 0) {
+            lightMask = 1;
+        } else {
+            static f32 target = 255.0f;
+            lightMask = 3;
+            lightStatusPt[1].mPos = dKy_eflight_influence_pos(eflight);
+
+            f32 power = dKy_eflight_influence_power(eflight);
+            f32 v;
+            if (power > 0.0f) {
+                v = dKy_eflight_influence_distance(pCamera->mLookat.mEye, eflight) / power;
+            } else {
+                v = 1.0f;
+            }
+
+            f32 fluc = dKy_eflight_influence_yuragi(eflight);
+            if (fluc < 1000.0f) {
+                if (v > 1.0f) v = 1.0f;
+                v = (1.0f - v) * 20.0f;
+                if (v > 1.0f) v = 1.0f;
+
+                f32 wave = 255.0f - fluc * v;
+                cLib_addCalc2(&target, wave + (255.0f - wave) * cM_rndF(1.0f), 0.4f, 20.0f);
+            } else {
+                target = fluc - 1000.0f;
+            }
+
+            lightStatusPt[1].mColor.g = target;
+            lightStatusPt[1].mColor.r = 0;
+            lightStatusPt[1].mColor.b = 0;
+        }
+    }
+
+    Mtx invView;
+    mDoMtx_inverseTranspose(viewMtx, invView);
+
+    for (s32 i = 0; i < 8; i++) {
+        if (lightMask & lightMaskData[i]) {
+            dKy_setLight__Status *pStts = &lightStatusData[i];
+            GXLightObj lightObj;
+            cXyz tmp;
+
+            mDoMtx_multVec(viewMtx, &pStts->mPos, &tmp);
+            GXInitLightPos(&lightObj, tmp.x, tmp.y, tmp.z);
+
+            if (i == 0) {
+                mDoMtx_multVec(invView, &pStts->mLightDir, &envLight.mLightDir);
+                GXInitLightDir(&lightObj, envLight.mLightDir.x, envLight.mLightDir.y, envLight.mLightDir.z);
+            } else {
+                mDoMtx_multVec(invView, &pStts->mLightDir, &tmp);
+                GXInitLightDir(&lightObj, tmp.x, tmp.y, tmp.z);
+            }
+
+            GXInitLightColor(&lightObj, pStts->mColor);
+            if (pStts->mAttnType == 0) {
+                GXInitLightAttn(&lightObj,
+                    pStts->mLightA0, pStts->mLightA1, pStts->mLightA2,
+                    pStts->mLightK0, pStts->mLightK1, pStts->mLightK2);
+            } else {
+                GXInitLightDistAttn(&lightObj, pStts->mRefDistance, pStts->mRefBrightness, pStts->mDistAttnFn);
+                GXInitLightSpot(&lightObj, pStts->mSpotCutoff, pStts->mSpotFn);
+            }
+
+            GXLoadLightObjImm(&lightObj, GXLightID(lightMaskData[i]));
+        }
+    }
 }
 
 /* 8019514C-80195270       .text dKy_setLight_again__Fv */
 void dKy_setLight_again() {
+    /* Nonmatching */
     Mtx invView;
     Vec tmp;
     GXLightObj lightObj;
@@ -2361,8 +2493,8 @@ void dKy_setLight_again() {
     GXInitLightColor(&lightObj, pStts->mColor);
     if (pStts->mAttnType == 0) {
         GXInitLightAttn(&lightObj,
-            pStts->mLightA[0], pStts->mLightA[1], pStts->mLightA[2],
-            pStts->mLightK[0], pStts->mLightK[1], pStts->mLightK[2]);
+            pStts->mLightA0, pStts->mLightA1, pStts->mLightA2,
+            pStts->mLightK0, pStts->mLightK1, pStts->mLightK2);
     } else {
         GXInitLightDistAttn(&lightObj, pStts->mRefDistance, pStts->mRefBrightness, pStts->mDistAttnFn);
         GXInitLightSpot(&lightObj, pStts->mSpotCutoff, pStts->mSpotFn);
