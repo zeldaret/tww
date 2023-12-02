@@ -167,7 +167,7 @@ actor_process_profile_definition g_profile_Obj_Monument = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x0086,
     /* Actor SubMtd */ &daObjMonument::Mthd_Table,
-    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e | fopAcStts_SHOWMAP_e | fopAcStts_UNK10_e | fopAcStts_UNK8_e,
+    /* Status       */ 0x18 | fopAcStts_SHOWMAP_e | fopAcStts_UNK40000_e | fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_0_e,
 };

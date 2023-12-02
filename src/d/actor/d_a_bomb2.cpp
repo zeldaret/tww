@@ -336,7 +336,7 @@ namespace daBomb2 {
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::concat(field_0x754);
         mDoMtx_stack_c::ZXYrotM(shape_angle);
-        MTXCopy(mDoMtx_stack_c::get(), mpModel->mBaseTransformMtx);
+        mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 
         eff_fuse_move();
     }

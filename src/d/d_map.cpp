@@ -3,8 +3,8 @@
 // Translation Unit: d_map.cpp
 //
 
-#include "d_map.h"
-#include "dolphin/types.h"
+#include "d/d_map.h"
+#include "d/d_stage.h"
 
 /* 800455AC-80045660       .text onSaveArriveGridForAgbUseGridPos__Fii */
 void onSaveArriveGridForAgbUseGridPos(int, int) {

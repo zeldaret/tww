@@ -11,14 +11,17 @@ namespace daObj_Search {
         enum Proc_e {
             
         };
-    
-        void getFindFlag() {}
+        
+        static bool getFindFlag() { return m_find_flag == true; }
+        void setFindFlag(bool flag) { m_find_flag = flag; }
+        
+        static bool m_find_flag;
+        
         void isSecond() {}
         void modeProcInit(int) {}
         void setBkControl(bool) {}
         void setChildId(unsigned int) {}
-        void setFindFlag(bool) {}
-    
+        
         void _createHeap();
         void searchCreateHeap();
         void beamCreateHeap(int);

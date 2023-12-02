@@ -88,7 +88,7 @@ void daNh_c::setBaseMtx() {
     model->setBaseScale(mScale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
-    MTXCopy(mDoMtx_stack_c::get(), model->getBaseTRMtx());
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
     
     cXyz glowOffset;
     glowOffset.z = 0.0f;

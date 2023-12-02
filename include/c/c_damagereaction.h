@@ -151,7 +151,7 @@ public:
     /* 0x4D4 */ f32 m4D4;
     /* 0x4D8 */ u8 m4D8[0x4DC - 0x4D8];
     /* 0x4DC */ dBgS_AcchCir mAcchCir;
-    /* 0x51C */ dBgS_Acch mAcch;
+    /* 0x51C */ dBgS_ObjAcch mAcch;
     /* 0x6E0 */ int m6E0;
     /* 0x6E4 */ f32 mSpawnY;
     /* 0x6E8 */ cXyz m6E8;

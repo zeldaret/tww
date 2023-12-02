@@ -1,7 +1,10 @@
 #ifndef D_MAP_H
 #define D_MAP_H
 
+#include "dolphin/types.h"
+
 class fopAc_ac_c;
+
 class dMap_c {
 public:
     static void create();

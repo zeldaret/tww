@@ -15,8 +15,7 @@ struct actor_method_class {
 };
 
 enum fopAc_Status_e {
-    fopAcStts_UNK8_e        = 0x00000008,
-    fopAcStts_UNK10_e       = 0x00000010,
+    // Note: The lowest 5 bits of the status field (& 0x1F) act as an index controlling the map icon type.
     fopAcStts_SHOWMAP_e     = 0x00000020,
     fopAcStts_NOCULLEXEC_e  = 0x00000080,
     fopAcStts_CULL_e        = 0x00000100,

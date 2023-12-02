@@ -1075,7 +1075,7 @@ void daBomb_c::set_mtx() {
         mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
     }
 
-    MTXCopy(mDoMtx_stack_c::get(), mpModel->mBaseTransformMtx);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 void daBomb_c::init_mtx() {

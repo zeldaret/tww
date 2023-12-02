@@ -639,7 +639,7 @@ void daObjTpost_c::setMtx() {
 
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
-    MTXCopy(mDoMtx_stack_c::get(), pModel->getBaseTRMtx());
+    pModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 void daObjTpost_c::modeWaitInit() {
