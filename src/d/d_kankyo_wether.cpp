@@ -848,7 +848,7 @@ void wether_move_wave() {
             g_env_light.mpWavePacket->mpTexUsonamiM = (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXA_USONAMI_M_256_64MIP);
 
             for (int i = 0; i < 300; i++) {
-                g_env_light.mpWavePacket->mWaveEff[i].mStatus = 0;
+                g_env_light.mpWavePacket->mEff[i].mStatus = 0;
             }
 
             wave_move();
