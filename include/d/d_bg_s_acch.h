@@ -87,7 +87,7 @@ public:
              csXyz* angle, csXyz* shape_angle);
     void GroundCheckInit(dBgS&);
     void GroundCheck(dBgS&);
-    void GroundRoofProc(dBgS&);
+    f32 GroundRoofProc(dBgS&);
     void LineCheck(dBgS&);
     void CrrPos(dBgS&);
     f32 GetWallAllR();

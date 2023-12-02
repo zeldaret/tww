@@ -115,13 +115,62 @@ void dBgS_Acch::GroundCheckInit(dBgS&) {
 }
 
 /* 800A2EE8-800A305C       .text GroundCheck__9dBgS_AcchFR4dBgS */
-void dBgS_Acch::GroundCheck(dBgS&) {
+void dBgS_Acch::GroundCheck(dBgS& i_bgs) {
     /* Nonmatching */
+    if (m_flags & GRND_NONE)
+        return;
+
+    cXyz pos = *pm_pos;
+
+    pos.y += m_ground_up_h_diff + (m_ground_check_offset - m_ground_up_h);
+    m_ground_up_h_diff = 0.0f;
+    m_gnd.m_pos = pos;
+
+    m_ground_h = i_bgs.GroundCross(&m_gnd);
+    if (m_ground_h != -1000000000.0f) {
+        field_0xb8 = m_ground_h + m_ground_up_h;
+        if (field_0xb8 > field_0xb4) {
+            pm_pos->y = field_0xb8;
+            if (pm_speed != NULL)
+                pm_speed->y = 0.0f;
+
+            cM3dGPla* pla = i_bgs.GetTriPla(m_gnd.GetBgIndex(), m_gnd.GetPolyIndex());
+            m_pla = *pla;
+            m_flags |= GROUND_FIND;
+            m_flags |= GROUND_HIT;
+            i_bgs.RideCallBack(m_gnd, m_my_ac);
+            if (!field_0xb0)
+                m_flags |= GROUND_LANDING;
+        }
+    }
+
+    if (field_0xb0 && !(m_flags & GROUND_HIT)) {
+        m_flags |= GROUND_AWAY;
+    }
 }
 
 /* 800A305C-800A313C       .text GroundRoofProc__9dBgS_AcchFR4dBgS */
-void dBgS_Acch::GroundRoofProc(dBgS&) {
+f32 dBgS_Acch::GroundRoofProc(dBgS& i_bgs) {
     /* Nonmatching */
+    f32 y = -1000000000.0f;
+    if (m_ground_h != -1000000000.0f) {
+        y = m_roof_crr_height;
+        if (y > field_0xb8 && y < pm_pos->y)
+            pm_pos->y = y;
+
+        if (!(m_flags & ROOF_NONE)) {
+            y = m_ground_h;
+            if (y >= m_roof_y) {
+                m_roof.SetExtChk(*this);
+                m_flags &= ~ROOF_HIT;
+                cXyz pos = *pm_pos;
+                m_roof.SetPos(pos);
+                y = i_bgs.RoofChk(&m_roof);
+                m_roof_y = y;
+            }
+        }
+    }
+    return y;
 }
 
 /* 800A313C-800A3460       .text LineCheck__9dBgS_AcchFR4dBgS */
