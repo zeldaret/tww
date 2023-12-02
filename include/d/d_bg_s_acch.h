@@ -98,10 +98,17 @@ public:
     f32 GetWallAllLowH_R();
     f32 GetSpeedY();
     f32 GetWallAddY(Vec&);
-    void SetNowActorInfo(int, void*, unsigned int);
+    void SetNowActorInfo(int bg_index, void* bgw, unsigned int apid) {
+        m_bg_index = bg_index;
+        field_0x78 = bgw;
+        field_0x7c = apid;
+    }
     void SetWallPolyIndex(int, int);
     void CalcMovePosWork();
-    void CalcWallRR();
+    void CalcWallRR() {
+        for (s32 i = 0; i < m_tbl_size; i++)
+            pm_acch_cir[i].CalcWallRR();
+    }
     void SetMoveBGOnly();
     void ClrMoveBGOnly();
     void SetGndThinCellingOff();

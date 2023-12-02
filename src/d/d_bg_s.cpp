@@ -4,6 +4,8 @@
 //
 
 #include "d/d_bg_s.h"
+#include "d/d_bg_s_acch.h"
+#include "d/d_bg_s_sph_chk.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
@@ -325,27 +327,83 @@ bool dBgS::LineCrossNonMoveBG(cBgS_LinChk* chk) {
 }
 
 /* 800A12A4-800A13E0       .text WallCorrect__4dBgSFP9dBgS_Acch */
-void dBgS::WallCorrect(dBgS_Acch*) {
+void dBgS::WallCorrect(dBgS_Acch* acch) {
     /* Nonmatching */
+    acch->CalcWallRR();
+    acch->SetWallCir();
+    acch->SetLin();
+    acch->CalcWallBmdCyl();
+
+    for (s32 prio = 0; prio < 3; prio++) {
+        for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
+            cBgS_ChkElm* elm = &m_chk_element[bg_index];
+            if (elm->ChkUsed() && elm->m_bgw_base_ptr->pm_vtx_tbl != NULL) {
+                acch->SetNowActorInfo(bg_index, elm->m_bgw_base_ptr, elm->m_actor_id);
+                if (!acch->ChkSameActorPid(elm->m_actor_id)) {
+                    dBgW* bgwp = (dBgW*)elm->m_bgw_base_ptr;
+                    if (bgwp->ChkPriority(prio))
+                        bgwp->WallCorrectGrpRp(acch, bgwp->m_rootGrpIdx, 1);
+                }
+            }
+        }
+    }
 }
 
 /* 800A13E0-800A14FC       .text RoofChk__4dBgSFP12dBgS_RoofChk */
-f32 dBgS::RoofChk(dBgS_RoofChk*) {
+f32 dBgS::RoofChk(dBgS_RoofChk* chk) {
     /* Nonmatching */
+    chk->SetNowY(1e+09);
+    chk->ClearPi();
+    for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
+        cBgS_ChkElm* elm = &m_chk_element[bg_index];
+        if (elm->ChkUsed() && elm->m_bgw_base_ptr->pm_vtx_tbl != NULL && !chk->ChkSameActorPid(elm->m_actor_id)) {
+            dBgW* bgwp = (dBgW*)elm->m_bgw_base_ptr;
+            if (bgwp->RoofChkGrpRp(chk, elm->m_bgw_base_ptr->m_rootGrpIdx, 1)) {
+                chk->SetActorInfo(bg_index, elm->m_bgw_base_ptr, elm->m_actor_id);
+            }
+        }
+    }
+    return chk->GetNowY();
 }
 
 /* 800A14FC-800A160C       .text SplGrpChk__4dBgSFP14dBgS_SplGrpChk */
-bool dBgS::SplGrpChk(dBgS_SplGrpChk*) {
-    /* Nonmatching */
+bool dBgS::SplGrpChk(dBgS_SplGrpChk* chk) {
+    bool ret = false;
+    chk->Init();
+    for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
+        cBgS_ChkElm* elm = &m_chk_element[bg_index];
+        if (elm->ChkUsed() && elm->m_bgw_base_ptr->pm_vtx_tbl != NULL && !chk->ChkSameActorPid(elm->m_actor_id)) {
+            dBgW* bgwp = (dBgW*)elm->m_bgw_base_ptr;
+            if (bgwp->SplGrpChkGrpRp(chk, elm->m_bgw_base_ptr->m_rootGrpIdx, 1)) {
+                ret = true;
+                chk->SetActorInfo(bg_index, elm->m_bgw_base_ptr, elm->m_actor_id);
+                chk->OnFind();
+            }
+        }
+    }
+    return ret;
 }
 
 /* 800A160C-800A1730       .text SphChk__4dBgSFP11dBgS_SphChkPv */
-bool dBgS::SphChk(dBgS_SphChk*, void*) {
+bool dBgS::SphChk(dBgS_SphChk* chk, void* user) {
     /* Nonmatching */
+    bool ret = false;
+    chk->Init();
+    for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
+        cBgS_ChkElm* elm = &m_chk_element[bg_index];
+        if (elm->ChkUsed() && elm->m_bgw_base_ptr->pm_vtx_tbl != NULL && !chk->ChkSameActorPid(elm->m_actor_id)) {
+            dBgW* bgwp = (dBgW*)elm->m_bgw_base_ptr;
+            if (bgwp->SphChkGrpRp(chk, user, elm->m_bgw_base_ptr->m_rootGrpIdx, 1)) {
+                chk->SetActorInfo(bg_index, elm->m_bgw_base_ptr, elm->m_actor_id);
+                ret = true;
+            }
+        }
+    }
+    return ret;
 }
 
 /* 800A1730-800A1954       .text WallCrrPos__4dBgSFP11dBgS_CrrPos */
-void dBgS::WallCrrPos(dBgS_CrrPos*) {
+void dBgS::WallCrrPos(dBgS_CrrPos* crr) {
     /* Nonmatching */
 }
 

@@ -121,13 +121,13 @@ public:
     void Set(cXyz* i_pos, cXyz* i_line, void* param_2, cXyz* param_3) {
         mpLine0 = i_line;
         pm_pos = i_pos;
-        field_0x058 = param_2;
+        field_0x58 = param_2;
         SetActorPid(fpcM_ERROR_PROCESS_ID_e);
         field_0x3c = param_3->y;
         field_0x40 = param_3->z;
     }
 
-    void SetGndUpY(f32 param_0) { mOffsY2 = param_0; }
+    void SetGndUpY(f32 param_0) { mGndUpY = param_0; }
 
     void ClrNoRoof() {
         mGndChk.OffWall();
@@ -139,12 +139,12 @@ public:
     /* 0x040 */ f32 field_0x40;
     /* 0x044 */ cXyz* pm_pos;
     /* 0x048 */ cXyz* mpLine0;
-    /* 0x04C */ u8 field_0x04C[0x058 - 0x04C];
-    /* 0x058 */ void* field_0x058;
-    /* 0x05C */ f32 field_0x05c;
-    /* 0x060 */ u8 field_0x060;
-    /* 0x064 */ f32 mOffsY2;
-    /* 0x068 */ f32 field_0x068;
+    /* 0x04C */ cXyz field_0x4c;
+    /* 0x058 */ void* field_0x58;
+    /* 0x05C */ f32 field_0x5c;
+    /* 0x060 */ u8 field_0x60;
+    /* 0x064 */ f32 mGndUpY;
+    /* 0x068 */ f32 field_0x68;
     /* 0x06C */ cM3dGCyl mCyl0;
     /* 0x084 */ cM3dGCyl mCyl1;
     /* 0x09C */ cM3dGLin mLin;

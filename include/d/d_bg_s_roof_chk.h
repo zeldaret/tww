@@ -23,13 +23,13 @@ public:
 
     void SetPos(cXyz& pos) { m_pos = pos; }
     cXyz* GetPosP() { return &m_pos; }
-    f32 GetNowY() { return m_pos.y; }
-    void SetNowY(f32 y) { m_pos.y = y; }
+    f32 GetNowY() { return m_now_y; }
+    void SetNowY(f32 y) { m_now_y = y; }
 
 private:
     /* 0x38 */ cXyz m_pos;
     /* 0x44 */ void* field_0x44;
-    /* 0x48 */ void* field_0x48;
+    /* 0x48 */ f32 m_now_y;
 };  // Size: 0x4C
 
 STATIC_ASSERT(sizeof(dBgS_RoofChk) == 0x4C);

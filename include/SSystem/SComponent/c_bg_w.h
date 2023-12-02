@@ -189,7 +189,7 @@ public:
     void ChkLock() {}
     bool ChkMoveBg() { return mFlags & MOVE_BG_e; }
     void ChkNoCalcVtx() {}
-    void ChkPriority(int) {}
+    bool ChkPriority(int prio) { return mWallCorrectPriority == prio; }
     void ChkRoofRegist() {}
     void ChkThrough() {}
     void ChkWallRegist() {}

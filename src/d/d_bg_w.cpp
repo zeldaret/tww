@@ -47,7 +47,7 @@ void dBgW::RoofChkRp(dBgS_RoofChk*, int) {
 }
 
 /* 800A7514-800A767C       .text RoofChkGrpRp__4dBgWFP12dBgS_RoofChkii */
-void dBgW::RoofChkGrpRp(dBgS_RoofChk*, int, int) {
+bool dBgW::RoofChkGrpRp(dBgS_RoofChk*, int, int) {
     /* Nonmatching */
 }
 
@@ -62,7 +62,7 @@ void dBgW::SplGrpChkRp(dBgS_SplGrpChk*, int) {
 }
 
 /* 800A7A74-800A7BDC       .text SplGrpChkGrpRp__4dBgWFP14dBgS_SplGrpChkii */
-void dBgW::SplGrpChkGrpRp(dBgS_SplGrpChk*, int, int) {
+bool dBgW::SplGrpChkGrpRp(dBgS_SplGrpChk*, int, int) {
     /* Nonmatching */
 }
 
@@ -77,7 +77,7 @@ void dBgW::SphChkRp(dBgS_SphChk*, void*, int) {
 }
 
 /* 800A8038-800A8158       .text SphChkGrpRp__4dBgWFP11dBgS_SphChkPvii */
-void dBgW::SphChkGrpRp(dBgS_SphChk*, void*, int, int) {
+bool dBgW::SphChkGrpRp(dBgS_SphChk*, void*, int, int) {
     /* Nonmatching */
 }
 
