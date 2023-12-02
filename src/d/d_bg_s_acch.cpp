@@ -91,7 +91,7 @@ void dBgS_Acch::Set(cXyz* pos, cXyz* old_pos, fopAc_ac_c* actor, int tbl_size, d
     pm_old_pos = old_pos;
     JUT_ASSERT(221, pm_pos != 0);
     JUT_ASSERT(222, pm_old_pos != 0);
-    
+
     m_my_ac = actor;
     SetActorPid(fopAcM_GetID(actor));
     pm_speed = speed;
@@ -134,13 +134,13 @@ void dBgS_Acch::GroundCheck(dBgS& i_bgs) {
             if (pm_speed != NULL)
                 pm_speed->y = 0.0f;
 
-            cM3dGPla* pla = i_bgs.GetTriPla(m_gnd.GetBgIndex(), m_gnd.GetPolyIndex());
+            cM3dGPla* pla = i_bgs.GetTriPla(m_gnd);
             m_pla = *pla;
-            m_flags |= GROUND_FIND;
-            m_flags |= GROUND_HIT;
+            SetGroundFind();
+            SetGroundHit();
             i_bgs.RideCallBack(m_gnd, m_my_ac);
             if (!field_0xb0)
-                m_flags |= GROUND_LANDING;
+                SetGroundLanding();
         }
     }
 
@@ -154,15 +154,16 @@ f32 dBgS_Acch::GroundRoofProc(dBgS& i_bgs) {
     /* Nonmatching */
     f32 y = -1000000000.0f;
     if (m_ground_h != -1000000000.0f) {
-        y = m_roof_crr_height;
-        if (y > field_0xb8 && y < pm_pos->y)
+        y = m_roof_height;
+        if (field_0xb8 < y && y < pm_pos->y) {
             pm_pos->y = y;
+        }
 
         if (!(m_flags & ROOF_NONE)) {
             y = m_ground_h;
             if (y >= m_roof_y) {
                 m_roof.SetExtChk(*this);
-                m_flags &= ~ROOF_HIT;
+                ClrRoofHit();
                 cXyz pos = *pm_pos;
                 m_roof.SetPos(pos);
                 y = i_bgs.RoofChk(&m_roof);
@@ -174,8 +175,37 @@ f32 dBgS_Acch::GroundRoofProc(dBgS& i_bgs) {
 }
 
 /* 800A313C-800A3460       .text LineCheck__9dBgS_AcchFR4dBgS */
-void dBgS_Acch::LineCheck(dBgS&) {
-    /* Nonmatching */
+void dBgS_Acch::LineCheck(dBgS& i_bgs) {
+    for (s32 i = 0; i < m_tbl_size; i++) {
+        cBgS_LinChk linChk;
+        cXyz old_pos = *pm_old_pos;
+        cXyz pos = *pm_pos;
+
+        old_pos.y += pm_acch_cir[i].GetWallH();
+        pos.y += pm_acch_cir[i].GetWallH();
+
+        linChk.Set2(&old_pos, &pos, GetActorPid());
+        linChk.SetExtChk(*this);
+        if (i_bgs.LineCross(&linChk)) {
+            *pm_pos = linChk.GetLinP()->GetEnd();
+            m_flags |= LINE_CHECK_HIT;
+
+            if (pm_out_poly_info != NULL)
+                pm_out_poly_info->SetPolyInfo(linChk);
+
+            cM3dGPla* pla = i_bgs.GetTriPla(linChk);
+            if (!(pla->GetNP()->y >= 0.5f)) {
+                VECAdd(pm_pos, pla->GetNP(), pm_pos);
+                if (!cM3d_IsZero(sqrtf(pla->GetNP()->x*pla->GetNP()->x + pla->GetNP()->z*pla->GetNP()->z)))
+                    pm_acch_cir[i].SetWallHDirect(pm_pos->y);
+
+                pm_pos->y -= pm_acch_cir[i].GetWallH();
+            } else {
+                pm_pos->y -= 1.0f;
+                GroundCheck(i_bgs);
+            }
+        }
+    }
 }
 
 /* 800A3460-800A3F50       .text CrrPos__9dBgS_AcchFR4dBgS */
@@ -183,20 +213,20 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
     if (m_flags & 0x1) {
         return;
     }
-    
+
     JUT_ASSERT(494, pm_pos != 0);
     JUT_ASSERT(495, pm_old_pos != 0);
-    
+
     CHECK_FLOAT_CLASS(535, pm_pos->x);
     CHECK_FLOAT_CLASS(536, pm_pos->y);
     CHECK_FLOAT_CLASS(537, pm_pos->z);
     CHECK_PVEC3_RANGE(541, pm_pos);
-    
+
     i_bgs.MoveBgCrrPos(m_gnd, ChkGroundHit(), pm_pos, pm_angle, pm_shape_angle);
-    
+
     GroundCheckInit(i_bgs);
     Init();
-    
+
     f32 lowH_R = GetWallAllLowH_R();
     cXyz* temp9 = pm_old_pos;
     cXyz* temp10 = pm_pos;
@@ -207,7 +237,7 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
     f32 oldY = pm_old_pos->y;
     f32 temp7 = lowH + oldY;
     f32 temp8 = m_ground_check_offset + pm_pos->y;
-    
+
     bool ranLineCheck = false;
     OffLineCheckHit();
     if (!ChkLineCheckNone() && !cM3d_IsZero(lowH_R)) {
@@ -222,7 +252,7 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
     if (ChkWallHit() && ranLineCheck) {
         LineCheck(i_bgs);
     }
-    
+
     m_roof_height = 1000000000.0f;
     if (!(m_flags & ROOF_NONE)) {
         m_roof.SetExtChk(*(cBgS_Chk*)this);
@@ -235,7 +265,7 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
             SetRoofHit();
         }
     }
-    
+
     if (!(m_flags & GRND_NONE)) {
         ClrGroundFind();
         GroundCheck(i_bgs);
@@ -243,22 +273,22 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
     } else if (m_roof_height < pm_pos->y) {
         pm_pos->y = m_roof_height;
     }
-    
+
     if (!(m_flags & WATER_NONE)) {
         ClrWaterHit();
         ClrWaterIn();
         m_wtr.SetHeight(-1000000000.0f);
-        
+
         int room_no = i_bgs.GetRoomId(m_gnd);
         if (m_ground_h != -1000000000.0f && 0 <= room_no && room_no < 64) {
             JUT_ASSERT(693, 0 <= room_no && room_no < 64);
-            
+
             dBgW* bgw = dComIfGp_roomControl_getBgW(room_no);
             if (bgw) {
                 f32 top;
                 f32 under;
                 bgw->GetTopUnder(&top, &under);
-                
+
                 cXyz ground = *pm_pos;
                 ground.y = under;
                 m_wtr.Set(ground, top);
@@ -268,34 +298,34 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
                     if (m_wtr.GetHeight() > pm_pos->y) {
                         SetWaterIn();
                     }
-                    
+
                     JUT_ASSERT_FLOAT(718, m_wtr.GetHeight() >= ground.y);
                     JUT_ASSERT_FLOAT(719, m_wtr.GetHeight() <= top);
                 }
             }
         }
     }
-    
+
     if (ChkSeaCheckOn()) {
         m_flags &= ~SEA_IN;
         m_sea_height = -1000000000.0f;
-        
+
         if (daSea_ChkArea(pm_pos->x, pm_pos->z)) {
             m_sea_height = daSea_calcWave(pm_pos->x, pm_pos->z);
         }
-        
+
         if (ChkSeaWaterHeight()) {
             f32 wtr_height = m_wtr.GetHeight();
             if (m_sea_height < wtr_height) {
                 m_sea_height = wtr_height;
             }
         }
-        
+
         if (m_sea_height > pm_pos->y) {
             m_flags |= SEA_IN;
         }
     }
-    
+
     CHECK_FLOAT_CLASS(780, pm_pos->x);
     CHECK_FLOAT_CLASS(781, pm_pos->y);
     CHECK_FLOAT_CLASS(782, pm_pos->z);
@@ -308,7 +338,13 @@ static void dummy2() {
 
 /* 800A3F50-800A3F8C       .text GetWallAllR__9dBgS_AcchFv */
 f32 dBgS_Acch::GetWallAllR() {
-    /* Nonmatching */
+    f32 max = 0.0f;
+    for (s32 i = 0; i < m_tbl_size; i++) {
+        f32 r = pm_acch_cir[i].GetWallR();
+        if (max < r)
+            max = r;
+    }
+    return max;
 }
 
 /* 800A3F8C-800A3FE4       .text SetWallCir__9dBgS_AcchFv */
@@ -321,6 +357,31 @@ void dBgS_Acch::SetWallCir() {
 /* 800A3FE4-800A4114       .text CalcWallBmdCyl__9dBgS_AcchFv */
 void dBgS_Acch::CalcWallBmdCyl() {
     /* Nonmatching */
+    if (m_tbl_size <= 0) {
+        m_wall_cyl.SetC(*pm_pos);
+        m_wall_cyl.SetR(0.0f);
+        m_wall_cyl.SetH(0.0f);
+        return;
+    }
+
+    f32 all_r = GetWallAllR();
+    f32 min_h = pm_acch_cir[0].GetWallH();
+    f32 max_h = min_h;
+    if (m_tbl_size >= 1) {
+        for (s32 i = 0; i < m_tbl_size; i++) {
+            f32 h = pm_acch_cir[i].GetWallH();
+            if (min_h > h)
+                min_h = h;
+            if (max_h < h)
+                max_h = h;
+        }
+    }
+
+    cXyz center = *pm_pos;
+    center.y += min_h;
+    m_wall_cyl.SetC(center);
+    m_wall_cyl.SetR(all_r);
+    m_wall_cyl.SetH(max_h - min_h);
 }
 
 /* 800A4114-800A4128       .text SetGroundUpY__9dBgS_AcchFf */
@@ -331,22 +392,71 @@ void dBgS_Acch::SetGroundUpY(f32 y) {
 
 /* 800A4128-800A4178       .text GetWallAllLowH__9dBgS_AcchFv */
 f32 dBgS_Acch::GetWallAllLowH() {
-    /* Nonmatching */
+    if (m_tbl_size <= 0)
+        return 0.0f;
+
+    f32 min = pm_acch_cir[0].GetWallH();
+    for (s32 i = 1; i < m_tbl_size; i++) {
+        f32 h = pm_acch_cir[i].GetWallH();
+        if (min > h)
+            min = h;
+    }
+    return min;
 }
 
 /* 800A4178-800A41E4       .text GetWallAllLowH_R__9dBgS_AcchFv */
 f32 dBgS_Acch::GetWallAllLowH_R() {
-    /* Nonmatching */
+    if (m_tbl_size <= 0)
+        return 0.0f;
+
+    s32 bestWall = 0;
+    f32 min = pm_acch_cir[0].GetWallH();
+    for (s32 i = 1; i < m_tbl_size; i++) {
+        f32 h = pm_acch_cir[i].GetWallH();
+        if (min > h) {
+            min = h;
+            bestWall = i;
+        }
+    }
+    return pm_acch_cir[bestWall].GetWallR();
 }
 
 /* 800A41E4-800A42B4       .text GetOnePolyInfo__9dBgS_AcchFP13cBgS_PolyInfo */
-f32 dBgS_Acch::GetOnePolyInfo(cBgS_PolyInfo*) {
-    /* Nonmatching */
+bool dBgS_Acch::GetOnePolyInfo(cBgS_PolyInfo* dst) {
+    if (ChkGroundHit()) {
+        dst->SetPolyInfo(m_gnd);
+        return false;
+    }
+
+    if (ChkWallHit()) {
+        for (s32 i = 0; i < m_tbl_size; i++) {
+            if (pm_acch_cir[i].ChkWallHit())
+                dst->SetPolyInfo(pm_acch_cir[i]);
+        }
+
+        return false;
+    }
+
+    if (ChkRoofHit()) {
+        dst->SetPolyInfo(m_roof);
+        return false;
+    }
+
+    return true;
 }
 
 /* 800A42B4-800A4348       .text GetWallAddY__9dBgS_AcchFR3Veci */
-f32 dBgS_Acch::GetWallAddY(Vec&, int) {
+f32 dBgS_Acch::GetWallAddY(Vec& vec, int) {
     /* Nonmatching */
+    if (ChkGroundFind() && m_pla.GetNP()->y < 0.5f) {
+        f32 cross_y;
+        m_pla.getCrossY(vec, &cross_y);
+        if (cross_y < 0.0f)
+            cross_y = 0.0f;
+        return -cross_y;
+    } else {
+        return 0.0f;
+    }
 }
 
 // TODO: Not sure why this weak function doesn't get inlined.

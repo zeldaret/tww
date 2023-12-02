@@ -33,7 +33,6 @@ public:
     void SetWallR(f32);
     void CalcWallRR();
     void SetWall(f32 i_halfHeight, f32 i_radius);
-    void SetWallHDirect(f32);
 
     virtual ~dBgS_AcchCir() {}
 
@@ -41,6 +40,7 @@ public:
     f32 GetWallR() { return m_wall_r; }
     s16 GetWallAngleY() { return m_wall_angle_y; }
     void SetWallH(f32 h) { m_wall_h = h; }
+    void SetWallHDirect(f32 h) { m_flags |= WALL_H_DIRECT; m_wall_h_direct = h; }
     void ClrWallHDirect() { m_flags &= ~WALL_H_DIRECT; }
     bool ChkWallHit() { return m_flags & WALL_HIT; }
     void ClrWallHit() {
@@ -110,7 +110,7 @@ public:
     void OnWallSort();
     bool ChkWallSort();
     bool ChkLineDown();
-    f32 GetOnePolyInfo(cBgS_PolyInfo*);
+    bool GetOnePolyInfo(cBgS_PolyInfo*);
     f32 GetWallAddY(Vec&, int);
 
     virtual ~dBgS_Acch();
