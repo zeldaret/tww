@@ -207,7 +207,8 @@ public:
     /* 0x038 */ LIGHT_INFLUENCE mLightInfluence[30];
     /* 0x3F8 */ LIGHT_INFLUENCE* mpPLights[200];
     /* 0x718 */ LIGHT_INFLUENCE* mpEfLights[10];
-    /* 0x740 */ u8 field_0x740[0x764 - 0x740];
+    /* 0x740 */ LIGHT_INFLUENCE mColChgLight;
+    /* 0x760 */ u32 field_0x760;
     /* 0x764 */ EFLIGHT_PROC mEfLightProc;
     /* 0x78C */ stage_plight_info_class* mpPlightInfo;
     /* 0x790 */ WIND_INFLUENCE* mpWindInfluence[30];
@@ -346,7 +347,7 @@ public:
     /* 0xC90 */ u8 mColPatModeGather;
     /* 0xC91 */ u8 mFogAdjEnable;
     /* 0xC92 */ u8 mFogAdjTableType;
-    /* 0xC93 */ u8 mItemGetCol_chg;
+    /* 0xC93 */ u8 mColChgFlag;
     /* 0xC94 */ u8 mInitAnimTimer;
     /* 0xC95 */ u8 mSchbit;
     /* 0xC96 */ u8 mbVrboxInvisible;

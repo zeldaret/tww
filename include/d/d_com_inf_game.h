@@ -421,11 +421,13 @@ public:
         field_0x493d = slot;
         field_0x493e = i_itemNo;
     }
-    
+
     void setAStatus(u8 status) { mCurrButtonBAction = status; }
     void setDoStatus(u8 status) { mCurrButtonAAction = status; }
     void setRStatusForce(u8 status) { field_0x4930 = status; }
 
+    u8 getScopeType() { return mbCamOverrideFarPlane; }
+    void setScopeType(u8 v) { mbCamOverrideFarPlane = v; }
     void setCurrentGrafPort(J2DOrthoGraph* i_graf) { mCurrentGrafPort = i_graf; }
     void setCurrentWindow(dDlst_window_c* i_window) { mCurrentWindow = i_window; }
     void setCurrentView(view_class* i_view) { mCurrentView = i_view; }
@@ -2040,6 +2042,9 @@ inline void dComIfGp_setSelectEquip(int idx, u8 itemNo) {
 inline void dComIfGp_setItem(u8 slot, u8 i_itemNo) {
     g_dComIfG_gameInfo.play.setItem(slot, i_itemNo);
 }
+
+inline u8 dComIfGp_getScopeType() { return g_dComIfG_gameInfo.play.getScopeType(); }
+inline void dComIfGp_setScopeType(u8 v) { g_dComIfG_gameInfo.play.setScopeType(v); }
 
 inline void dComIfGp_setCurrentGrafPort(J2DOrthoGraph* i_graf) {
     g_dComIfG_gameInfo.play.setCurrentGrafPort(i_graf);
