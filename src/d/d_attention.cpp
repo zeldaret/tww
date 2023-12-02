@@ -6,30 +6,92 @@
 #include "d/d_attention.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
+#include "d/actor/d_a_player_main.h"
+#include "d/d_s_play.h"
+#include "m_Do/m_Do_ext.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
 
 /* 8009D220-8009D268       .text __ct__11dAttParam_cFl */
 dAttParam_c::dAttParam_c(long) {
     /* Nonmatching */
+    field_0x04 = 45.0f;
+    field_0x08 = 30.0f;
+    field_0x0c = 90.0f;
+    field_0x00 = 1;
+    field_0x18 = -0.9f;
+    field_0x10 = 3000.0f;
+    field_0x14 = 1000.0f;
 }
 
 /* 8009D268-8009D2B0       .text __dt__11dAttParam_cFv */
 dAttParam_c::~dAttParam_c() {
-    /* Nonmatching */
 }
 
 /* 8009D2B0-8009D2E0       .text execute__19dAttDraw_CallBack_cFUsP16J3DTransformInfo */
-void dAttDraw_CallBack_c::execute(unsigned short, J3DTransformInfo*) {
-    /* Nonmatching */
+bool dAttDraw_CallBack_c::execute(u16 timing, J3DTransformInfo* xform) {
+    if (timing == 0) {
+        xform->mTranslate.y *= g_regHIO.mChild[6].mFloatRegs[17] + 0.6f;
+    }
+    return true;
 }
 
 /* 8009D2E0-8009D654       .text __ct__12dAttention_cFP10fopAc_ac_cUl */
-dAttention_c::dAttention_c(fopAc_ac_c*, unsigned long) {
+dAttention_c::dAttention_c(fopAc_ac_c* player, u32 playerNo) {
     /* Nonmatching */
+    mpPlayer = (daPy_lk_c*)player;
+    mPlayerNo = playerNo;
+    initList(0xFFFFFFFF);
+    mFlagMask = 0;
+    field_0x01c = -1;
+    field_0x019 = 0;
+    mLockOnState = 0;
+    field_0x01a = 0;
+    field_0x01b = 0;
+    mLockOnTargetBsPcID = -1;
+    heap = mDoExt_createSolidHeapFromGameToCurrent(0x3600, 0);
+    JUT_ASSERT(0xb9, heap != 0);
+
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_YAZIRUSHI_01);
+    JUT_ASSERT(0xbe, modelData != 0);
+
+    s32 anmColNum = 0;
+    for (u32 i = 0; i < 5; i++) {
+        static u16 l_bpkIdx[] = {
+            ALWAYS_BPK_YJ_IN, ALWAYS_BPK_YJ_OUT, ALWAYS_BPK_YJ_SCALE, ALWAYS_BPK_YJ_LOOP, ALWAYS_BPK_YJ_DELETE,
+        };
+        J3DAnmColor* anmCol = (J3DAnmColor*)dComIfG_getObjectRes("Always", l_bpkIdx[i]);
+        JUT_ASSERT(0xcc, anmCol != 0);
+
+        anmCol->searchUpdateMaterialID(modelData);
+        if (anmCol->getUpdateMaterialNum() > anmColNum)
+            anmColNum = anmCol->getUpdateMaterialNum();
+    }
+
+    for (s32 i = 0; i < (s32)ARRAY_SIZE(draw); i++) {
+        draw[i].anm = new mDoExt_McaMorf(modelData, &mCallBack, NULL, (J3DAnmTransformKey*)dComIfG_getObjectRes("Always", ALWAYS_BCK_YJ_LOOP), J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1, NULL, 0x80000, 0x1000003);
+        JUT_ASSERT(0xe3, draw[i].anm != 0 && draw[i].anm->getModel() != 0);
+        draw[i].mpAnmClr = NULL;
+        draw[i].mpAnmMatClr = new J3DMatColorAnm[anmColNum];
+    }
+
+    mDoExt_restoreCurrentHeap();
+    if (mDoExt_adjustSolidHeap(heap) >= 0)
+        DCStoreRangeNoSync(heap->getStartAddr(), heap->getSize());
+
+    field_0x028 = -1;
+    mFlags = 0;
+    mHint.init();
+    mCatch.init();
+    mLook[0].init();
+    mLook[1].init();
 }
 
 /* 8009D654-8009D6EC       .text __dt__12dAttention_cFv */
 dAttention_c::~dAttention_c() {
-    /* Nonmatching */
+    if (heap != NULL) {
+        mDoExt_destroySolidHeap(heap);
+        heap = NULL;
+    }
 }
 
 /* 8009D6EC-8009D728       .text GetActionList__12dAttention_cFl */
@@ -113,7 +175,7 @@ void check_distace(cXyz*, short, cXyz*, float, float, float, float) {
 }
 
 /* 8009DE44-8009E03C       .text calcWeight__12dAttention_cFiP10fopAc_ac_cfssPUl */
-void dAttention_c::calcWeight(int, fopAc_ac_c*, float, short, short, unsigned long*) {
+f32 dAttention_c::calcWeight(int, fopAc_ac_c*, float, short, short, unsigned long*) {
     /* Nonmatching */
 }
 
@@ -191,19 +253,37 @@ void dAttention_c::initList(unsigned long flagMask) {
 }
 
 /* 8009E2CC-8009E2F8       .text select_attention__FP10fopAc_ac_cPv */
-void select_attention(fopAc_ac_c* pActor, void* i_attention) {
+int select_attention(fopAc_ac_c* pActor, void* i_attention) {
     dAttention_c * pAttention = (dAttention_c*)i_attention;
-    pAttention->SelectAttention(pActor);
+    return pAttention->SelectAttention(pActor);
 }
 
 /* 8009E2F8-8009E33C       .text makeList__12dAttention_cFv */
 s32 dAttention_c::makeList() {
-    /* Nonmatching */
+    fopAcIt_Executor((fopAcIt_ExecutorFunc)select_attention, this);
+    return mLockOnNum + mActionNum;
 }
 
 /* 8009E33C-8009E474       .text SelectAttention__12dAttention_cFP10fopAc_ac_c */
-void dAttention_c::SelectAttention(fopAc_ac_c*) {
+int dAttention_c::SelectAttention(fopAc_ac_c* ac) {
     /* Nonmatching */
+    if (ac == mpPlayer || mpPlayer == NULL)
+        return 0;
+
+    mFlagMask = ac->mAttentionInfo.mFlags;
+
+    cSGlobe globe1(ac->mAttentionInfo.mPosition - mpPlayer->mAttentionInfo.mPosition);
+    cSAngle angle1 = globe1.U() - mpPlayer->shape_angle.y;
+
+    cSGlobe globe2(mpPlayer->mAttentionInfo.mPosition - ac->mAttentionInfo.mPosition);
+    cSAngle angle2 = globe2.U() - mpPlayer->shape_angle.y;
+
+    u32 type;
+    f32 weight = calcWeight('L', ac, globe1.R(), angle1, angle2, &type);
+    setLList(ac, weight, globe1.R(), type);
+    weight = calcWeight('A', ac, globe1.R(), angle1, angle2, &type);
+    setAList(ac, weight, globe1.R(), type);
+    return 0;
 }
 
 /* 8009E474-8009E5C4       .text sortList__12dAttention_cFv */

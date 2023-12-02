@@ -14,7 +14,7 @@ public:
     void setAnm(int, int, int);
     void draw(cXyz&, Mtx);
 
-    /* 0x0 */ mDoExt_McaMorf * mpMorf;
+    /* 0x0 */ mDoExt_McaMorf * anm;
     /* 0x4 */ J3DAnmColor * mpAnmClr;
     /* 0x8 */ J3DMatColorAnm * mpAnmMatClr;
 };
@@ -107,7 +107,7 @@ public:
 
 class dAttDraw_CallBack_c : public mDoExt_McaMorfCallBack1_c {
 public:
-    virtual void execute(u16, J3DTransformInfo*);
+    virtual bool execute(u16, J3DTransformInfo*);
 };
 
 class daPy_lk_c;
@@ -127,12 +127,12 @@ public:
     dAttList_c* getActionBtnY();
     dAttList_c* getActionBtnZ();
     void chkAttMask(u32, u32);
-    void calcWeight(int, fopAc_ac_c*, f32, s16, s16, u32*);
+    f32 calcWeight(int, fopAc_ac_c*, f32, s16, s16, u32*);
     void setLList(fopAc_ac_c*, f32, f32, u32);
     void setAList(fopAc_ac_c*, f32, f32, u32);
     void initList(u32);
     s32 makeList();
-    void SelectAttention(fopAc_ac_c*);
+    int SelectAttention(fopAc_ac_c*);
     void sortList();
     void stockAttention(u32);
     void nextAttention(u32);
@@ -191,7 +191,7 @@ public:
 public:
     /* 0x000 */ daPy_lk_c* mpPlayer;
     /* 0x004 */ int mLockOnTargetBsPcID;
-    /* 0x008 */ dAttDraw_CallBack_c mpCallBack;
+    /* 0x008 */ dAttDraw_CallBack_c mCallBack;
     /* 0x00C */ int mPlayerNo;
     /* 0x010 */ u32 mFlagMask;
     /* 0x014 */ u8 field_0x014[0x018 - 0x014];
@@ -202,10 +202,10 @@ public:
     /* 0x01C */ s16 field_0x01c;
     /* 0x01E */ u8 field_0x01E[0x020 - 0x01E];
     /* 0x020 */ u32 mFlags;
-    /* 0x024 */ JKRHeap* mpHeap;
-    /* 0x028 */ u8 field_0x028;
+    /* 0x024 */ JKRSolidHeap* heap;
+    /* 0x028 */ s8 field_0x028;
     /* 0x02C */ cXyz field_0x02c;
-    /* 0x038 */ dAttDraw_c mDraw[2];
+    /* 0x038 */ dAttDraw_c draw[2];
     /* 0x050 */ u32 field_0x050;
     /* 0x054 */ dAttList_c mLockOnList[8];
     /* 0x0D4 */ int mLockOnNum;

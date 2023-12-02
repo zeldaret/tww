@@ -501,7 +501,7 @@ public:
     virtual ~J3DAnmColor();
     virtual void getColor(u16, GXColor*) const;
 
-    u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
+    s32 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
     bool isValidUpdateMaterialID(u16 id) const { return mUpdateMaterialID[id] != 0xFFFF; }
     u16 getUpdateMaterialID(u16 idx) const { return mUpdateMaterialID[idx]; }
     JUTNameTab * getUpdateMaterialName() { return &mUpdateMaterialName; }

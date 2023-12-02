@@ -218,7 +218,7 @@ bool dStage_roomControl_c::checkRoomDisp(int i_roomNo) const {
 /* 80040E6C-80040FD8       .text loadRoom__20dStage_roomControl_cFiPUc */
 int dStage_roomControl_c::loadRoom(int roomCount, u8* rooms) {
     for (int roomNo = 0; roomNo < ARRAY_SIZE(mStatus); roomNo++) {
-        if (dStage_roomControl_c::checkStatusFlag(roomNo, 0x02 | 0x04)) {
+        if (checkStatusFlag(roomNo, 0x02 | 0x04)) {
             return 0;
         }
     }
@@ -227,7 +227,7 @@ int dStage_roomControl_c::loadRoom(int roomCount, u8* rooms) {
     for (int roomNo = 0; roomNo < (int)ARRAY_SIZE(mStatus); roomNo++) {
         if (dStage_roomControl_c::checkStatusFlag(roomNo, 0x01)) {
             if (!stayRoomCheck(roomCount, rooms, roomNo)) {
-                dStage_roomControl_c::onStatusFlag(roomNo, 0x04);
+                onStatusFlag(roomNo, 0x04);
                 r26 = FALSE;
             }
         }
@@ -239,10 +239,10 @@ int dStage_roomControl_c::loadRoom(int roomCount, u8* rooms) {
     for (int i = 0; i < roomCount; i++) {
         u8 roomNo = dStage_roomRead_dt_c_GetLoadRoomIndex(rooms[i]);
         dStage_roomControl_c::setZoneCount(roomNo, 2);
-        if (!dStage_roomControl_c::checkStatusFlag(roomNo, 0x01)) {
+        if (!checkStatusFlag(roomNo, 0x01)) {
             if (createRoomScene(roomNo)) {
                 u8 flag = dStage_roomRead_dt_c_ChkBg(rooms[i]) ? 0x02 : 0x0A;
-                dStage_roomControl_c::onStatusFlag(roomNo, flag);
+                onStatusFlag(roomNo, flag);
             }
             return TRUE;
         }

@@ -94,16 +94,16 @@ void objectSetCheck(room_of_scene_class* i_this) {
 
 /* 80236B1C-80236BAC       .text dScnRoom_Execute__FP19room_of_scene_class */
 BOOL dScnRoom_Execute(room_of_scene_class* i_this) {
+    u32 roomNo = fopScnM_GetParam(i_this);
     setMapImage(i_this);
 
-    u8 * pStatusFlag = &(g_dComIfG_gameInfo.play.getRoomControl()->mStatus[fopScnM_GetParam(i_this)].mFlags);
-    if (*pStatusFlag & 0x04) {
+    if (dComIfGp_roomControl_checkStatusFlag(roomNo, 0x04)) {
         fopScnM_DeleteReq(i_this);
         return TRUE;
     } else {
-        if ((*pStatusFlag & 0x02)) {
-            *pStatusFlag &= ~0x02;
-            *pStatusFlag |= 0x01;
+        if (dComIfGp_roomControl_checkStatusFlag(roomNo, 0x02)) {
+            dComIfGp_roomControl_offStatusFlag(roomNo, 0x02);
+            dComIfGp_roomControl_onStatusFlag(roomNo, 0x01);
         } else {
             objectSetCheck(i_this);
         }
@@ -190,7 +190,7 @@ s32 phase_1(room_of_scene_class* i_this) {
 /* 80236DE8-802370A0       .text phase_2__FP19room_of_scene_class */
 s32 phase_2(room_of_scene_class* i_this) {
     const char * arcName = setArcName(i_this);
-    s32 rt = dComIfG_syncObjectRes(arcName);
+    s32 rt = dComIfG_syncStageRes(arcName);
     if (rt < 0) {
         dStage_escapeRestart();
         return cPhs_ERROR_e;
@@ -204,7 +204,7 @@ s32 phase_2(room_of_scene_class* i_this) {
     s32 zoneNo = dComIfGp_roomControl_getZoneNo(roomNo);
     if (zoneNo < 0) {
         zoneNo = dComIfGs_createZone(roomNo);
-        dComIfGp_roomControl_setZoneNo(roomNo, zoneNo);
+        dComIfGp_roomControl_setZoneNo(roomNo, zoneNo); // this isn't getting inlined for some reason
     }
 
     i_this->mpRoomDt = dComIfGp_roomControl_getStatusRoomDt(roomNo);
