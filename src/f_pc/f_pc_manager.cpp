@@ -59,7 +59,8 @@ struct BMG_INF1 : BlockHeader {
 
 /* 8003E3D0-8003E9F0       .text messageSet__FUl */
 void messageSet(u32 status) {
-    /* Nonmatching - TColor stack order and TWidth load */
+    /* Nonmatching - TColor stack order */
+
     BMG_INF1* inf1 = (BMG_INF1*)&msg_data[0x20];
     const char * msg = (const char*)((u8*)inf1->getNext() + sizeof(BlockHeader) + inf1->entries[status]);
 
@@ -111,9 +112,7 @@ void messageSet(u32 status) {
             continue;
         }
 
-        JUTFont::TWidth wid;
-        font->getWidthEntry(ch, &wid);
-        lineWidth[curLine] += (int)wid.field_0x1;
+        lineWidth[curLine] += font->JUTFont::getWidth(ch);
     }
 
     for (s32 i = 0; i < (s32)ARRAY_SIZE(lineWidth); i++) {
