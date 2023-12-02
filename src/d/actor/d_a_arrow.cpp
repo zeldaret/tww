@@ -821,7 +821,13 @@ BOOL daArrow_c::procMove() {
             s32 attribCode = dComIfG_Bgsp()->GetAttributeCode(mLinChk);
             s32 mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(mLinChk);
             
-            if (mArrowType == TYPE_NORMAL && (attribCode == 0x3 || attribCode == 0x14 || attribCode == 0xF || attribCode == 0x9 || attribCode == 0x15)) {
+            if (mArrowType == TYPE_NORMAL && (
+                attribCode == dBgS_Attr_STONE_e ||
+                attribCode == dBgS_Attr_METAL_e ||
+                attribCode == dBgS_Attr_ICE_e ||
+                attribCode == dBgS_Attr_DAMAGE_e ||
+                attribCode == dBgS_Attr_FREEZE_e
+            )) {
                 mCurrProcFunc = &procReturn;
                 fopAcM_SetParam(this, 3);
                 speed *= -0.1f;

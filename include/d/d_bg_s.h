@@ -26,6 +26,41 @@ class dBgS_SphChk;
 
 class dBgS_Acch;
 
+enum dBgS_AttributeCode {
+    dBgS_Attr_NORMAL_e       = 0x00,
+    dBgS_Attr_DIRT_e         = 0x01,
+    dBgS_Attr_WOOD_e         = 0x02,
+    dBgS_Attr_STONE_e        = 0x03,
+    dBgS_Attr_GRASS_e        = 0x04,
+    dBgS_Attr_GIANT_FLOWER_e = 0x05,
+    dBgS_Attr_LAVA_e         = 0x06,
+    // dBgS_Attr_UNK07_e     = 0x07,
+    dBgS_Attr_VOID_e         = 0x08,
+    dBgS_Attr_DAMAGE_e       = 0x09,
+    dBgS_Attr_CARPET_e       = 0x0A,
+    dBgS_Attr_SAND_e         = 0x0B,
+    // dBgS_Attr_UNK0C_e     = 0x0C,
+    // dBgS_Attr_UNK0D_e     = 0x0D,
+    // dBgS_Attr_UNK0E_e     = 0x0E,
+    dBgS_Attr_ICE_e          = 0x0F,
+    // dBgS_Attr_UNK10_e     = 0x10,
+    // dBgS_Attr_UNK11_e     = 0x11,
+    // dBgS_Attr_UNK12_e     = 0x12,
+    dBgS_Attr_WATER_e        = 0x13,
+    dBgS_Attr_METAL_e        = 0x14,
+    dBgS_Attr_FREEZE_e       = 0x15,
+    dBgS_Attr_ELECTRICITY_e  = 0x16,
+    dBgS_Attr_WATERFALL_e    = 0x17,
+    // dBgS_Attr_UNK18_e     = 0x18,
+    // dBgS_Attr_UNK19_e     = 0x19,
+    // dBgS_Attr_UNK1A_e     = 0x1A,
+    dBgS_Attr_UNK1B_e        = 0x1B,
+    // dBgS_Attr_UNK1C_e     = 0x1C,
+    // dBgS_Attr_UNK1D_e     = 0x1D,
+    // dBgS_Attr_UNK1E_e     = 0x1E,
+    // dBgS_Attr_UNK1F_e     = 0x1F,
+};
+
 class dBgS : public cBgS {
 public:
     dBgS() {}

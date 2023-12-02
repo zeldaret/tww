@@ -198,6 +198,9 @@ public:
     void setGlobalDynamicsScale(const JGeometry::TVec3<float>& scale) {
         mGlobalDynamicsScale.set(scale);
     }
+    void setEmitterTranslation(const JGeometry::TVec3<float>& trans) {
+        mEmitterTranslation.set(trans);
+    }
     void setEmitterScale(const JGeometry::TVec3<float>& scale) {
         mEmitterScale.set(scale);
     }

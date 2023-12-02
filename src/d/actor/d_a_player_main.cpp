@@ -4108,7 +4108,7 @@ BOOL daPy_lk_c::checkLavaFace(cXyz* param_1, int attributeCode) {
         }
     }
     
-    if (attributeCode == 6) {
+    if (attributeCode == dBgS_Attr_LAVA_e) {
         if (param_1) {
             current.pos.y = m35D4;
         }
@@ -4117,7 +4117,7 @@ BOOL daPy_lk_c::checkLavaFace(cXyz* param_1, int attributeCode) {
         } else {
             return dProcLavaDamage_init();
         }
-    } else if (attributeCode == 8) {
+    } else if (attributeCode == dBgS_Attr_VOID_e) {
         startRestartRoom(5, 0xC9, -1.0f, 0);
     }
     

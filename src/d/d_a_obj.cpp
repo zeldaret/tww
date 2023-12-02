@@ -13,24 +13,22 @@
 namespace daObj {
     /* 800666EC-800668BC       .text make_land_effect__5daObjFP10fopAc_ac_cP11dBgS_GndChkf */
     void make_land_effect(fopAc_ac_c* ac, dBgS_GndChk* chk, f32 scale) {
-        /* Nonmatching */
+        cXyz scaleV;
         switch (dComIfG_Bgsp()->GetAttributeCode(*chk)) {
-        case 19:
+        case dBgS_Attr_WATER_e:
             {
-                cXyz scaleV;
                 scaleV.setall(scale * 0.85f);
                 JPABaseEmitter* pEmtr = dComIfGp_particle_set(0x23, &ac->current.pos, NULL, &scaleV);
                 if (pEmtr != NULL) {
-                    pEmtr->setRate(50.0f);
+                    pEmtr->setRate(20.0f);
                     pEmtr->setMaxFrame(1);
                     pEmtr->setSpread(1.0f);
                     pEmtr->setDirectionalSpeed(12.0f);
                 }
             }
             break;
-        case 4:
+        case dBgS_Attr_GRASS_e:
             {
-                cXyz scaleV;
                 scaleV.setall(scale);
                 JPABaseEmitter* pEmtr = dComIfGp_particle_set(0x24, &ac->current.pos, NULL, &scaleV);
                 if (pEmtr != NULL) {
@@ -39,14 +37,15 @@ namespace daObj {
                     pEmtr->setMaxFrame(1);
                     pEmtr->setSpread(1.0f);
                     pEmtr->setDirectionalSpeed(20.0f);
-                    pEmtr->setGlobalTranslation(cXyz(0.0f, 5.0f, 0.0f));
+                    JGeometry::TVec3<f32> trans(0.0f, 5.0f, 0.0f);
+                    pEmtr->setEmitterTranslation(trans);
                 }
             }
             break;
-        case 5:
-        case 10:
-        case 15:
-        case 27:
+        case dBgS_Attr_GIANT_FLOWER_e:
+        case dBgS_Attr_CARPET_e:
+        case dBgS_Attr_ICE_e:
+        case dBgS_Attr_UNK1B_e:
             break;
         default:
             {

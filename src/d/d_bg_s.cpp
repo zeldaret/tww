@@ -182,16 +182,44 @@ s32 dBgS::GetAttributeCodeDirect(cBgS_PolyInfo& polyInfo) {
 }
 
 static s32 atr_conv[0x20] = {
-    0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x01,
-    0x08, 0x09, 0x0A, 0x0B, 0x02, 0x02, 0x02, 0x0F,
-    0x02, 0x14, 0x01, 0x13, 0x14, 0x15, 0x16, 0x17,
-    0x14, 0x0A, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00,
+    /* 0x00 */ dBgS_Attr_NORMAL_e,
+    /* 0x01 */ dBgS_Attr_DIRT_e,
+    /* 0x02 */ dBgS_Attr_WOOD_e,
+    /* 0x03 */ dBgS_Attr_STONE_e,
+    /* 0x04 */ dBgS_Attr_GRASS_e,
+    /* 0x05 */ dBgS_Attr_GIANT_FLOWER_e,
+    /* 0x06 */ dBgS_Attr_LAVA_e,
+    /* 0x07 */ dBgS_Attr_DIRT_e,
+    /* 0x08 */ dBgS_Attr_VOID_e,
+    /* 0x09 */ dBgS_Attr_DAMAGE_e,
+    /* 0x0A */ dBgS_Attr_CARPET_e,
+    /* 0x0B */ dBgS_Attr_SAND_e,
+    /* 0x0C */ dBgS_Attr_WOOD_e,
+    /* 0x0D */ dBgS_Attr_WOOD_e,
+    /* 0x0E */ dBgS_Attr_WOOD_e,
+    /* 0x0F */ dBgS_Attr_ICE_e,
+    /* 0x10 */ dBgS_Attr_WOOD_e,
+    /* 0x11 */ dBgS_Attr_METAL_e,
+    /* 0x12 */ dBgS_Attr_DIRT_e,
+    /* 0x13 */ dBgS_Attr_WATER_e,
+    /* 0x14 */ dBgS_Attr_METAL_e,
+    /* 0x15 */ dBgS_Attr_FREEZE_e,
+    /* 0x16 */ dBgS_Attr_ELECTRICITY_e,
+    /* 0x17 */ dBgS_Attr_WATERFALL_e,
+    /* 0x18 */ dBgS_Attr_METAL_e,
+    /* 0x19 */ dBgS_Attr_CARPET_e,
+    /* 0x1A */ dBgS_Attr_WOOD_e,
+    /* 0x1B */ dBgS_Attr_NORMAL_e,
+    /* 0x1C */ dBgS_Attr_NORMAL_e,
+    /* 0x1D */ dBgS_Attr_NORMAL_e,
+    /* 0x1E */ dBgS_Attr_NORMAL_e,
+    /* 0x1F */ dBgS_Attr_NORMAL_e,
 };
 
 /* 800A0B60-800A0BA8       .text GetAttributeCode__4dBgSFR13cBgS_PolyInfo */
 s32 dBgS::GetAttributeCode(cBgS_PolyInfo& polyInfo) {
     s32 attr = GetAttributeCodeDirect(polyInfo);
-    if (!(0 <= attr && attr < 0x20))
+    if (attr < 0 || attr >= (int)ARRAY_SIZE(atr_conv))
         return 0;
     return atr_conv[attr];
 }
