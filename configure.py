@@ -804,7 +804,7 @@ config.libs = [
         "JGadget",
         [
             Object(NonMatching, "JSystem/JGadget/binary.cpp"),
-            Object(NonMatching, "JSystem/JGadget/linklist.cpp"),
+            Object(Matching,    "JSystem/JGadget/linklist.cpp"),
             Object(NonMatching, "JSystem/JGadget/std-vector.cpp"),
         ],
     ),

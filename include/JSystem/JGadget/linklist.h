@@ -38,6 +38,7 @@ struct TNodeLinkList {
 
     struct const_iterator {
         const_iterator(TLinkListNode* pNode) { node = pNode; }
+        const_iterator(iterator it) { node = it.node; }
 
         const_iterator& operator++() { node = node->getNext(); return *this; }
         const_iterator& operator--() { node = node->getPrev(); return *this; }
@@ -75,6 +76,26 @@ struct TNodeLinkList {
     iterator Insert(JGadget::TNodeLinkList::iterator, JGadget::TLinkListNode*);
     iterator Erase(JGadget::TLinkListNode*);
     void Remove(JGadget::TLinkListNode*);
+
+    bool Iterator_isEnd_(const_iterator it) const { return it.node == &ocObject_; }
+    template <typename Predicate> void Remove_if(Predicate predicate, TNodeLinkList& tList) {
+        iterator it = begin();
+
+        while (!Iterator_isEnd_(it)) {
+            if (predicate(*it)) {
+                iterator itPrev = it;
+                ++it;
+                tList.splice(tList.end(), *this, itPrev);
+            } else {
+                ++it;
+            }
+        }
+    }
+
+    template <typename Predicate> void remove_if(Predicate predicate) {
+        TNodeLinkList list;
+        Remove_if(predicate, list);
+    }
 
 public:
     /* 0x00 */ u32 count;
