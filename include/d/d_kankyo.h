@@ -424,6 +424,7 @@ void dKy_arrowcol_chg_move();
 void dKy_setLight_init();
 void dKy_setLight();
 void dKy_GxFog_set();
+void dKy_GxFog_sea_set();
 void GxXFog_set();
 void dKy_set_actcol_ratio(f32 ratio);
 void dKy_set_bgcol_ratio(f32 ratio);

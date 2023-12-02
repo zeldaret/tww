@@ -294,7 +294,7 @@ public:
 
     /* 0x0010 */ u8* mpTexUsonami;
     /* 0x0014 */ u8* mpTexUsonamiM;
-    /* 0x0018 */ WAVE_EFF mWaveEff[300];
+    /* 0x0018 */ WAVE_EFF mEff[300];
     /* 0x41B8 */ f32 mSkewWidth;
     /* 0x41BC */ f32 mSkewDir;
 };
