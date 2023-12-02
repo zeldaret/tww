@@ -63,9 +63,9 @@ struct TNodeLinkList {
     }
 
     iterator begin() { return iterator(ocObject_.getNext()); }
-    iterator end() { return iterator(ocObject_.getPrev()); }
     const_iterator begin() const { return const_iterator(ocObject_.getNext()); }
-    const_iterator end() const { return const_iterator(ocObject_.getPrev()); }
+    iterator end() { return iterator(&ocObject_); }
+    const_iterator end() const { return const_iterator((TLinkListNode*)(&ocObject_)); }
     u32 size() { return count; }
 
     iterator erase(JGadget::TNodeLinkList::iterator, JGadget::TNodeLinkList::iterator);
@@ -122,29 +122,13 @@ struct TLinkList : public TNodeLinkList {
         /* 0x00 */ TNodeLinkList::const_iterator base;
     };
 
-    iterator Insert(iterator iter, T* element) {
-        return TNodeLinkList::Insert(iter.base, Element_toNode(element));
-    }
+    iterator Insert(iterator iter, T* element) { return TNodeLinkList::Insert(iter.base, Element_toNode(element)); }
+    iterator Erase(T* element) { return TNodeLinkList::Erase(Element_toNode(element)); }
 
-    iterator Erase(T* element) {
-        return TNodeLinkList::Erase(Element_toNode(element));
-    }
-
-    iterator begin() {
-        return iterator(TNodeLinkList::begin());
-    }
-
-    iterator end() {
-        return iterator(TNodeLinkList::end());
-    }
-
-    const_iterator begin() const {
-        return const_iterator(TNodeLinkList::begin());
-    }
-
-    const_iterator end() const {
-        return const_iterator(TNodeLinkList::end());
-    }
+    iterator begin() { return iterator(TNodeLinkList::begin()); }
+    const_iterator begin() const { return const_iterator(TNodeLinkList::begin()); }
+    iterator end() { return iterator(TNodeLinkList::end()); }
+    const_iterator end() const { return const_iterator(TNodeLinkList::end()); }
 
     void Push_back(T* element) {
         Insert(end(), element);

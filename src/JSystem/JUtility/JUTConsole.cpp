@@ -362,6 +362,10 @@ JUTConsoleManager* JUTConsoleManager::createManager(JKRHeap* pHeap) {
     return manager;
 }
 
+static void dummy3() {
+    OSReport("consoleManager != 0 && sManager == consoleManager");
+}
+
 /* 802CB380-802CB4C4       .text appendConsole__17JUTConsoleManagerFP10JUTConsole */
 void JUTConsoleManager::appendConsole(JUTConsole* console) {
     /* Nonmatching */
@@ -403,9 +407,7 @@ void JUTConsoleManager::draw() const {
     /* Nonmatching */
 
     // need to figure out how TLinkList works
-    ConsoleList::const_iterator iter = soLink_.begin();
-    ConsoleList::const_iterator end = soLink_.end();
-    for (; iter != end; ++iter) {
+    for (ConsoleList::const_iterator iter = soLink_.begin(); iter != soLink_.end(); ++iter) {
         JUTConsole* pConsole = &(*iter);
         if (pConsole != mActiveConsole)
             pConsole->doDraw(JUTConsole::INACTIVE);
