@@ -3,161 +3,247 @@
 // Translation Unit: d_bg_s.cpp
 //
 
-#include "d_bg_s.h"
-#include "dolphin/types.h"
+#include "d/d_bg_s.h"
+#include "d/d_com_inf_game.h"
+#include "f_op/f_op_actor_mng.h"
 
 /* 800A0270-800A0290       .text Ct__4dBgSFv */
 void dBgS::Ct() {
-    /* Nonmatching */
+    cBgS::Ct();
 }
 
 /* 800A0290-800A02B0       .text Dt__4dBgSFv */
 void dBgS::Dt() {
-    /* Nonmatching */
+    cBgS::Dt();
 }
 
 /* 800A02B0-800A02E8       .text ClrMoveFlag__4dBgSFv */
 void dBgS::ClrMoveFlag() {
-    /* Nonmatching */
+    for (s32 i = 0; i < ARRAY_SIZE(m_chk_element); i++) {
+        if (m_chk_element[i].ChkUsed()) {
+            dBgW* bgwp = (dBgW*)m_chk_element[i].m_bgw_base_ptr;
+            bgwp->mFlag &= ~1;
+        }
+    }
 }
 
 /* 800A02E8-800A0354       .text Move__4dBgSFv */
 void dBgS::Move() {
-    /* Nonmatching */
+    cBgS::Move();
+
+    for (s32 i = 0; i < ARRAY_SIZE(m_chk_element); i++) {
+        if (m_chk_element[i].ChkUsed()) {
+            dBgW* bgwp = (dBgW*)m_chk_element[i].m_bgw_base_ptr;
+            s16 shape_angle = m_chk_element[i].m_actor_ptr->shape_angle.y;
+            bgwp->mRotYDelta = shape_angle - bgwp->mOldRotY;
+            bgwp->mOldRotY = shape_angle;
+        }
+    }
 }
 
 /* 800A0354-800A03C4       .text Regist__4dBgSFP4cBgWP10fopAc_ac_c */
-void dBgS::Regist(cBgW*, fopAc_ac_c*) {
-    /* Nonmatching */
+bool dBgS::Regist(cBgW* bgw, fopAc_ac_c* ac) {
+    if (bgw == NULL)
+        return true;
+
+    if (ac != NULL && !!(bgw->mFlags & cBgW::MOVE_BG_e)) {
+        dBgW* bgwp = (dBgW*)bgw;
+        bgwp->mOldRotY = ac->shape_angle.y;
+        bgwp->mRoomNo = fopAcM_GetRoomNo(ac);
+    }
+
+    return cBgS::Regist(bgw, fopAcM_GetID(ac), ac);
 }
 
 /* 800A03C4-800A0420       .text ChkMoveBG__4dBgSFR13cBgS_PolyInfo */
-void dBgS::ChkMoveBG(cBgS_PolyInfo&) {
-    /* Nonmatching */
+bool dBgS::ChkMoveBG(cBgS_PolyInfo& polyInfo) {
+    dBgW* bgwp = (dBgW*)dComIfG_Bgsp()->GetBgWPointer(polyInfo);
+    if (bgwp != NULL) {
+        if (bgwp->mFlags & cBgW::LOCK_e)
+            return false;
+        if (bgwp->mFlags & cBgW::MOVE_BG_e)
+            return true;
+    }
+    return false;
 }
 
 /* 800A0420-800A046C       .text ChkMoveBG_NoDABg__4dBgSFR13cBgS_PolyInfo */
-void dBgS::ChkMoveBG_NoDABg(cBgS_PolyInfo&) {
-    /* Nonmatching */
+bool dBgS::ChkMoveBG_NoDABg(cBgS_PolyInfo& polyInfo) {
+    dBgW* bgwp = (dBgW*)dComIfG_Bgsp()->GetBgWPointer(polyInfo);
+    if (bgwp != NULL) {
+        if (bgwp->mFlags & cBgW::MOVE_BG_e)
+            return true;
+    }
+    return false;
 }
 
 /* 800A046C-800A0604       .text GetPolyId0__4dBgSFiiiUlUl */
-void dBgS::GetPolyId0(int, int, int, unsigned long, unsigned long) {
-    /* Nonmatching */
+int dBgS::GetPolyId0(int bg_index, int poly_index, int defv, u32 mask, u32 shift) {
+    JUT_ASSERT(0x349, 0 <= bg_index && bg_index < 256);
+    if (!m_chk_element[bg_index].ChkUsed())
+        return defv;
+
+    dBgW* bgwp = (dBgW*)m_chk_element[bg_index].m_bgw_base_ptr;
+    u32 inf_id = bgwp->GetPolyInfId(poly_index);
+    return (bgwp->GetPolyInf0(inf_id) & mask) >> shift;
 }
 
 /* 800A0604-800A0630       .text GetPolyCamId__4dBgSFii */
-void dBgS::GetPolyCamId(int, int) {
-    /* Nonmatching */
+int dBgS::GetPolyCamId(int i_bg_index, int i_poly_index) {
+    return GetPolyId0(i_bg_index, i_poly_index, 0xFF, 0x000000FF, 0);
 }
 
 /* 800A0630-800A0668       .text GetMtrlSndId__4dBgSFR13cBgS_PolyInfo */
-void dBgS::GetMtrlSndId(cBgS_PolyInfo&) {
-    /* Nonmatching */
+u32 dBgS::GetMtrlSndId(cBgS_PolyInfo& polyInfo) {
+    return GetPolyId0(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex(), 0x00, 0x00001F00, 8);
 }
 
 /* 800A0668-800A06A4       .text GetExitId__4dBgSFR13cBgS_PolyInfo */
-void dBgS::GetExitId(cBgS_PolyInfo&) {
-    /* Nonmatching */
+int dBgS::GetExitId(cBgS_PolyInfo& polyInfo) {
+    return GetPolyId0(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex(), 0x3F, 0x0007E000, 13);
 }
 
 /* 800A06A4-800A0708       .text GetPolyColor__4dBgSFR13cBgS_PolyInfo */
-void dBgS::GetPolyColor(cBgS_PolyInfo&) {
+int dBgS::GetPolyColor(cBgS_PolyInfo& polyInfo) {
     /* Nonmatching */
 }
 
 /* 800A0708-800A07F4       .text GetGrpRoomInfId__4dBgSFR13cBgS_PolyInfo */
-void dBgS::GetGrpRoomInfId(cBgS_PolyInfo&) {
-    /* Nonmatching */
+int dBgS::GetGrpRoomInfId(cBgS_PolyInfo& polyInfo) {
+    s32 bg_index = polyInfo.GetBgIndex();
+    JUT_ASSERT(0x3a9, 0 <= bg_index && bg_index < 256);
+    if (!m_chk_element[bg_index].ChkUsed())
+        return 0xFF;
+
+    dBgW* bgwp = (dBgW*)m_chk_element[bg_index].m_bgw_base_ptr;
+    s32 inf = bgwp->mRoomNo2;
+    if (inf != 0xFF)
+        return inf;
+
+    s32 grp_id = GetTriGrp(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex());
+    if (grp_id == -1)
+        return 0xFF;
+    return GetGrpInf(polyInfo, grp_id) & 0xFF;
 }
 
 /* 800A07F4-800A0858       .text GetGrpSoundId__4dBgSFR13cBgS_PolyInfo */
-void dBgS::GetGrpSoundId(cBgS_PolyInfo&) {
-    /* Nonmatching */
+s32 dBgS::GetGrpSoundId(cBgS_PolyInfo& polyInfo) {
+    s32 grp_id = GetTriGrp(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex());
+    if (grp_id == -1)
+        return -1;
+    return (GetGrpInf(polyInfo, grp_id) >> 11) & 0xFF;
 }
 
 /* 800A0858-800A08C0       .text ChkGrpInf__4dBgSFR13cBgS_PolyInfoUl */
-void dBgS::ChkGrpInf(cBgS_PolyInfo&, unsigned long) {
+u32 dBgS::ChkGrpInf(cBgS_PolyInfo& polyInfo, u32 mask) {
     /* Nonmatching */
+    s32 grp_id = GetTriGrp(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex());
+    if (grp_id == -1)
+        return 0;
+
+    u32 inf = GetGrpInf(polyInfo, grp_id);
+    return inf & mask;
 }
 
 /* 800A08C0-800A0A5C       .text GetPolyId1__4dBgSFiiiUlUl */
-void dBgS::GetPolyId1(int, int, int, unsigned long, unsigned long) {
-    /* Nonmatching */
+int dBgS::GetPolyId1(int bg_index, int poly_index, int defv, u32 mask, u32 shift) {
+    JUT_ASSERT(0x414, 0 <= bg_index && bg_index < 256);
+    if (!m_chk_element[bg_index].ChkUsed())
+        return defv;
+
+    dBgW* bgwp = (dBgW*)m_chk_element[bg_index].m_bgw_base_ptr;
+    u32 inf_id = bgwp->GetPolyInfId(poly_index);
+    return (bgwp->GetPolyInf1(inf_id) & mask) >> shift;
 }
 
 /* 800A0A5C-800A0A94       .text GetLinkNo__4dBgSFR13cBgS_PolyInfo */
-void dBgS::GetLinkNo(cBgS_PolyInfo&) {
-    /* Nonmatching */
+int dBgS::GetLinkNo(cBgS_PolyInfo& polyInfo) {
+    return GetPolyId1(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex(), 0xFF, 0x000000FF, 0);
 }
 
 /* 800A0A94-800A0ACC       .text GetWallCode__4dBgSFR13cBgS_PolyInfo */
-void dBgS::GetWallCode(cBgS_PolyInfo&) {
-    /* Nonmatching */
+int dBgS::GetWallCode(cBgS_PolyInfo& polyInfo) {
+    return GetPolyId1(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex(), 0x00, 0x00000F00, 8);
 }
 
 /* 800A0ACC-800A0B08       .text GetSpecialCode__4dBgSFR13cBgS_PolyInfo */
-void dBgS::GetSpecialCode(cBgS_PolyInfo&) {
-    /* Nonmatching */
+int dBgS::GetSpecialCode(cBgS_PolyInfo& polyInfo) {
+    return GetPolyId1(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex(), 0x00, 0x0000F000, 12);
 }
 
 /* 800A0B08-800A0B28       .text dBgS_ChangeAttributeCode__FUlPUl */
-void dBgS_ChangeAttributeCode(unsigned long, unsigned long*) {
+void dBgS_ChangeAttributeCode(u32, u32*) {
     /* Nonmatching */
 }
 
 /* 800A0B28-800A0B60       .text GetAttributeCodeDirect__4dBgSFR13cBgS_PolyInfo */
-void dBgS::GetAttributeCodeDirect(cBgS_PolyInfo&) {
-    /* Nonmatching */
+s32 dBgS::GetAttributeCodeDirect(cBgS_PolyInfo& polyInfo) {
+    return GetPolyId1(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex(), 0x00, 0x001F0000, 16);
 }
 
+static s32 atr_conv[0x20] = {
+    0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x01,
+    0x08, 0x09, 0x0A, 0x0B, 0x02, 0x02, 0x02, 0x0F,
+    0x02, 0x14, 0x01, 0x13, 0x14, 0x15, 0x16, 0x17,
+    0x14, 0x0A, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
 /* 800A0B60-800A0BA8       .text GetAttributeCode__4dBgSFR13cBgS_PolyInfo */
-void dBgS::GetAttributeCode(cBgS_PolyInfo&) {
-    /* Nonmatching */
+s32 dBgS::GetAttributeCode(cBgS_PolyInfo& polyInfo) {
+    s32 attr = GetAttributeCodeDirect(polyInfo);
+    if (!(0 <= attr && attr < 0x20))
+        return 0;
+    return atr_conv[attr];
 }
 
 /* 800A0BA8-800A0BE0       .text GetGroundCode__4dBgSFR13cBgS_PolyInfo */
-void dBgS::GetGroundCode(cBgS_PolyInfo&) {
-    /* Nonmatching */
+int dBgS::GetGroundCode(cBgS_PolyInfo& polyInfo) {
+    return GetPolyId1(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex(), 0x00, 0x03E00000, 21);
 }
 
 /* 800A0BE0-800A0D7C       .text GetPolyId2__4dBgSFiiiUlUl */
-void dBgS::GetPolyId2(int, int, int, unsigned long, unsigned long) {
-    /* Nonmatching */
+int dBgS::GetPolyId2(int bg_index, int poly_index, int defv, u32 mask, u32 shift) {
+    JUT_ASSERT(0x4c1, 0 <= bg_index && bg_index < 256);
+    if (!m_chk_element[bg_index].ChkUsed())
+        return defv;
+
+    dBgW* bgwp = (dBgW*)m_chk_element[bg_index].m_bgw_base_ptr;
+    u32 inf_id = bgwp->GetPolyInfId(poly_index);
+    return (bgwp->GetPolyInf2(inf_id) & mask) >> shift;
 }
 
 /* 800A0D7C-800A0DB4       .text GetCamMoveBG__4dBgSFR13cBgS_PolyInfo */
-void dBgS::GetCamMoveBG(cBgS_PolyInfo&) {
-    /* Nonmatching */
+int dBgS::GetCamMoveBG(cBgS_PolyInfo& polyInfo) {
+    return GetPolyId2(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex(), 0xFF, 0x000000FF, 0);
 }
 
 /* 800A0DB4-800A0DF0       .text GetRoomCamId__4dBgSFR13cBgS_PolyInfo */
-void dBgS::GetRoomCamId(cBgS_PolyInfo&) {
-    /* Nonmatching */
+int dBgS::GetRoomCamId(cBgS_PolyInfo& polyInfo) {
+    return GetPolyId2(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex(), 0xFF, 0x0000FF00, 8);
 }
 
 /* 800A0DF0-800A0E28       .text GetRoomPathId__4dBgSFR13cBgS_PolyInfo */
-void dBgS::GetRoomPathId(cBgS_PolyInfo&) {
-    /* Nonmatching */
+int dBgS::GetRoomPathId(cBgS_PolyInfo& polyInfo) {
+    return GetPolyId2(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex(), 0xFF, 0x00FF0000, 16);
 }
 
 /* 800A0E28-800A0E30       .text dBgS_GetRoomPathPntNo__FUl */
-void dBgS_GetRoomPathPntNo(unsigned long) {
-    /* Nonmatching */
+u32 dBgS_GetRoomPathPntNo(u32 param) {
+    return param >> 24;
 }
 
 /* 800A0E30-800A0E68       .text GetRoomPathPntNo__4dBgSFR13cBgS_PolyInfo */
-void dBgS::GetRoomPathPntNo(cBgS_PolyInfo&) {
-    /* Nonmatching */
+int dBgS::GetRoomPathPntNo(cBgS_PolyInfo& polyInfo) {
+    return GetPolyId2(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex(), 0xFF, 0xFF000000, 24);
 }
 
 /* 800A0E68-800A0F88       .text GetRoomId__4dBgSFR13cBgS_PolyInfo */
-void dBgS::GetRoomId(cBgS_PolyInfo&) {
+int dBgS::GetRoomId(cBgS_PolyInfo&) {
     /* Nonmatching */
 }
 
 /* 800A0F88-800A111C       .text ChkPolyHSStick__4dBgSFR13cBgS_PolyInfo */
-void dBgS::ChkPolyHSStick(cBgS_PolyInfo&) {
+u32 dBgS::ChkPolyHSStick(cBgS_PolyInfo&) {
     /* Nonmatching */
 }
 
@@ -172,17 +258,17 @@ void dBgS::WallCorrect(dBgS_Acch*) {
 }
 
 /* 800A13E0-800A14FC       .text RoofChk__4dBgSFP12dBgS_RoofChk */
-void dBgS::RoofChk(dBgS_RoofChk*) {
+f32 dBgS::RoofChk(dBgS_RoofChk*) {
     /* Nonmatching */
 }
 
 /* 800A14FC-800A160C       .text SplGrpChk__4dBgSFP14dBgS_SplGrpChk */
-void dBgS::SplGrpChk(dBgS_SplGrpChk*) {
+bool dBgS::SplGrpChk(dBgS_SplGrpChk*) {
     /* Nonmatching */
 }
 
 /* 800A160C-800A1730       .text SphChk__4dBgSFP11dBgS_SphChkPv */
-void dBgS::SphChk(dBgS_SphChk*, void*) {
+bool dBgS::SphChk(dBgS_SphChk*, void*) {
     /* Nonmatching */
 }
 
