@@ -1273,7 +1273,7 @@ BOOL daBomb_c::createHeap() {
 }
 
 static BOOL daBomb_createHeap(fopAc_ac_c* i_this) {
-    static_cast<daBomb_c*>(i_this)->createHeap();
+    return static_cast<daBomb_c*>(i_this)->createHeap();
 }
 
 int daBomb_c::create() {

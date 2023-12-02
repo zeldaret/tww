@@ -62,7 +62,7 @@ s32 fopMsgM_setStageLayer(void* proc) {
     scene_class* stageProc = fopScnM_SearchByID(g_dComIfG_gameInfo.play.getRoomControl()->mProcID);
     JUT_ASSERT(0x189, stageProc != 0);
     u32 layer = fpcM_LayerID(stageProc);
-    fpcM_ChangeLayerID(proc, layer);
+    return fpcM_ChangeLayerID(proc, layer);
 }
 
 /* 8002AED4-8002AEF4       .text fopMsgM_SearchByID__FUi */
