@@ -386,7 +386,7 @@ void JUTConsoleManager::removeConsole(JUTConsole* console) {
         if (soLink_.size() <= 1) {
             mActiveConsole = NULL;
         } else {
-            mActiveConsole = console != soLink_.back() ? soLink_.Element_toValue(console->mLinkNode.getNext()) : soLink_.front();
+            mActiveConsole = console != &soLink_.back() ? soLink_.Element_toValue(console->mLinkNode.getNext()) : &soLink_.front();
         }
     }
 
@@ -403,10 +403,10 @@ void JUTConsoleManager::draw() const {
     /* Nonmatching */
 
     // need to figure out how TLinkList works
-    JGadget::TLinkList<JUTConsole, 4>::const_iterator iter = soLink_.begin();
-    JGadget::TLinkList<JUTConsole, 4>::const_iterator end = soLink_.end();
+    ConsoleList::const_iterator iter = soLink_.begin();
+    ConsoleList::const_iterator end = soLink_.end();
     for (; iter != end; ++iter) {
-        JUTConsole* pConsole = *iter;
+        JUTConsole* pConsole = &(*iter);
         if (pConsole != mActiveConsole)
             pConsole->doDraw(JUTConsole::INACTIVE);
     }

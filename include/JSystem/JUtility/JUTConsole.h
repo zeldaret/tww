@@ -132,8 +132,10 @@ public:
 
     static JUTConsoleManager* sManager;
 
+    typedef JGadget::TLinkList<JUTConsole, -offsetof(JUTConsole, mLinkNode)> ConsoleList;
+
 private:
-    /* 0x00 */ JGadget::TLinkList<JUTConsole, -offsetof(JUTConsole, mLinkNode)> soLink_;
+    /* 0x00 */ ConsoleList soLink_;
     /* 0x0C */ JUTConsole* mActiveConsole;
     /* 0x10 */ JUTConsole* mDirectConsole;
 };  // Size: 0x14
