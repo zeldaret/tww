@@ -30,7 +30,7 @@ enum {
 struct JUTGamePadRecordBase {
     virtual void unk0() {}
     virtual void unk1(PADStatus* pad) {}
-    virtual void unk2() {}
+    virtual void write(PADStatus* pad) {}
 
     /* 0x4 */ bool mActive;
 };
@@ -189,7 +189,7 @@ public:
     struct CRumble {
         CRumble(JUTGamePad* pad) { clear(pad); }
 
-        static bool mStatus[4];
+        static u8 mStatus[4];
         static PADMask mEnabled;
 
         enum ERumble {
@@ -213,10 +213,10 @@ public:
         static bool isEnabled(u32 mask) { return mEnabled & mask; }
         static bool isEnabledPort(int port) { return isEnabled(channel_mask[port]); }
 
-        /* 0x00 */ u32 field_0x0;
-        /* 0x04 */ u32 field_0x4;
-        /* 0x08 */ u8* field_0x8;
-        /* 0x0C */ u32 field_0xc;
+        /* 0x00 */ u32 mFrame;
+        /* 0x04 */ u32 mLength;
+        /* 0x08 */ u8* mData;
+        /* 0x0C */ u32 mFrameCount;
     };  // Size: 0x10
 
     void startMotorWave(u8* param_2, CRumble::ERumble rumble, u32 param_4) {
