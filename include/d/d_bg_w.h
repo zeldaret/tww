@@ -67,7 +67,7 @@ public:
     /* 0xAE */ s16 mRotYDelta;
     /* 0xB0 */ dBgW_RideCallBack mpRideCb;
     /* 0xB4 */ dBgW_PPCallBack mpPushPullCb;
-    /* 0xB8 */ s16 mRoomNo;
+    /* 0xB8 */ u16 mRoomNo;
     /* 0xBA */ u8 mFlag;
     /* 0xBB */ u8 mRoomNo2;
 };

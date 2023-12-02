@@ -21,7 +21,6 @@ public:
     cBgS_LinChk() { ct(); }
     void ct();
     void Set2(cXyz*, cXyz*, unsigned int);
-    void PreCalc();
     void GetCross();
 
     virtual ~cBgS_LinChk() {}
@@ -40,6 +39,11 @@ public:
     bool GetPreWallChk() const { return mPreWallChk; }
     bool GetPreGroundChk() const { return mPreGroundChk; }
     bool GetPreRoofChk() const { return mPreRoofChk; }
+    inline void PreCalc() {
+        mPreWallChk = !(mFlag & 0x40000000);
+        mPreGroundChk = !(mFlag & 0x80000000);
+        mPreRoofChk = !(mFlag & 0x20000000);
+    }
 };  // Size: 0x58
 
 #endif /* C_BG_S_LIN_CHK_H */

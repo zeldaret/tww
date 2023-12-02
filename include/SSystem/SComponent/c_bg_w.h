@@ -182,12 +182,12 @@ public:
     }
 
     void SetPriority(PRIORITY priority) { mWallCorrectPriority = priority; }
-    void SetLock() { mFlags |= 0x80; }
+    void SetLock() { mFlags |= LOCK_e; }
 
     void ChkFlush() {}
     void ChkGroundRegist() {}
     void ChkLock() {}
-    void ChkMoveBg() {}
+    bool ChkMoveBg() { return mFlags & MOVE_BG_e; }
     void ChkNoCalcVtx() {}
     void ChkPriority(int) {}
     void ChkRoofRegist() {}
@@ -213,7 +213,7 @@ public:
         return pm_bgd->m_ti_tbl[id].mPolyInf2;
     }
     u32 GetPolyInf3(int id) const {
-        JUT_ASSERT(0x308, 0 <= id && id < pm_bgd->m_ti_num);
+        JUT_ASSERT(0x307, 0 <= id && id < pm_bgd->m_ti_num);
         return pm_bgd->m_ti_tbl[id].mPolyInf3;
     }
     void GetVtxNum() const {}

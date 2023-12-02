@@ -114,9 +114,7 @@ bool cBgS::LineCross(cBgS_LinChk* chk) {
     for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
         cBgS_ChkElm* elm = &m_chk_element[bg_index];
         if (elm->ChkUsed() && elm->m_bgw_base_ptr->pm_vtx_tbl != NULL && !chk->ChkSameActorPid(elm->m_actor_id)) {
-            chk->mPreWallChk = !(chk->mFlag & 0x40000000);
-            chk->mPreGroundChk = !(chk->mFlag & 0x80000000);
-            chk->mPreRoofChk = !(chk->mFlag & 0x20000000);
+            chk->PreCalc();
             if (elm->m_bgw_base_ptr->LineCheckGrpRp(chk, elm->m_bgw_base_ptr->m_rootGrpIdx, 1)) {
                 chk->SetActorInfo(bg_index, elm->m_bgw_base_ptr, elm->m_actor_id);
                 ret = true;

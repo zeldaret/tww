@@ -31,7 +31,7 @@ public:
 
     dBgS_AcchCir();
     void SetWallR(f32);
-    void CalcWallRR();
+    void CalcWallRR() { m_wall_rr = m_wall_r*m_wall_r; }
     void SetWall(f32 i_halfHeight, f32 i_radius);
 
     virtual ~dBgS_AcchCir() {}

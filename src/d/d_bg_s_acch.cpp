@@ -356,7 +356,6 @@ void dBgS_Acch::SetWallCir() {
 
 /* 800A3FE4-800A4114       .text CalcWallBmdCyl__9dBgS_AcchFv */
 void dBgS_Acch::CalcWallBmdCyl() {
-    /* Nonmatching */
     if (m_tbl_size <= 0) {
         m_wall_cyl.SetC(*pm_pos);
         m_wall_cyl.SetR(0.0f);

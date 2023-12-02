@@ -94,9 +94,9 @@ public:
     int GetRoomCamId(cBgS_PolyInfo&);
     int GetRoomPathId(cBgS_PolyInfo&);
     int GetRoomPathPntNo(cBgS_PolyInfo&);
-    int GetRoomId(cBgS_PolyInfo&);
-    u32 ChkPolyHSStick(cBgS_PolyInfo&);
-    void LineCrossNonMoveBG(cBgS_LinChk*);
+    s32 GetRoomId(cBgS_PolyInfo&);
+    BOOL ChkPolyHSStick(cBgS_PolyInfo&);
+    bool LineCrossNonMoveBG(cBgS_LinChk*);
     void WallCorrect(dBgS_Acch*);
     f32 RoofChk(dBgS_RoofChk*);
     bool SplGrpChk(dBgS_SplGrpChk*);
@@ -106,7 +106,7 @@ public:
     void MoveBgTransPos(cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*);
     void MoveBgMatrixCrrPos(cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*);
     void RideCallBack(cBgS_PolyInfo&, fopAc_ac_c*);
-    void PushPullCallBack(cBgS_PolyInfo&, fopAc_ac_c*, short, dBgW::PushPullLabel);
+    fopAc_ac_c* PushPullCallBack(cBgS_PolyInfo&, fopAc_ac_c*, short, dBgW::PushPullLabel);
 
     bool WaterChk(dBgS_SplGrpChk* chk) { return SplGrpChk(chk); }
 };  // Size: 0x1404
