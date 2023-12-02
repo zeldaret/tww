@@ -496,16 +496,19 @@ dScnKy_env_light_c g_env_light;
 
 /* 80190848-80190A18       .text setDaytime__18dScnKy_env_light_cFv */
 void dScnKy_env_light_c::setDaytime() {
+    /* Nonmatching on JPN - JAIZelBasic offsets */
     BOOL var_r30 = false;
     mCurTime = dComIfGs_getTime();
     mDayOfWeek = dComIfGs_getDate();
 
+#if VERSION != VERSION_JPN
     if (strcmp(dComIfGp_getStartStageName(), "sea") == 0 && dComIfGp_roomControl_getStayNo() == 14)
     {
         if (dComIfGp_getStartStageLayer() == 2 || dComIfGp_getStartStageLayer() == 3) {
             var_r30 = true;
         }
     }
+#endif
 
     if (!dKy_checkEventNightStop() && dComIfGs_isGetItem(2, 0) && !dComIfGp_event_runCheck() &&
         !var_r30)
@@ -1825,7 +1828,6 @@ void dScnKy_env_light_c::Sndpos() {
 
 /* 80193BA8-80193D9C       .text Eflight_flush_proc__18dScnKy_env_light_cFv */
 void dScnKy_env_light_c::Eflight_flush_proc() {
-    /* Nonmatching */
     struct ColorTable {
         u8 f, r, g, b;
     };
@@ -2373,7 +2375,6 @@ void dKy_setLight_init() {
 
 /* 80194BDC-8019514C       .text dKy_setLight__Fv */
 void dKy_setLight() {
-    /* Nonmatching */
     dScnKy_env_light_c& envLight = dKy_getEnvlight();
     camera_class* pCamera = dComIfGp_getCamera(0);
     fopAc_ac_c* pPlayer = dComIfGp_getPlayer(0);
@@ -2390,9 +2391,9 @@ void dKy_setLight() {
         }
         envLight.mSunPos2 = envLight.mSunPos;
         cXyz targetPos = envLight.mBaseLightInfluence.mPos;
-        cLib_addCalc(&lightStatusPt->mPos.x, targetPos.x, 0.2f, 50000.0f, 0.00005f);
-        cLib_addCalc(&lightStatusPt->mPos.y, targetPos.y, 0.2f, 50000.0f, 0.00005f);
-        cLib_addCalc(&lightStatusPt->mPos.z, targetPos.z, 0.2f, 50000.0f, 0.00005f);
+        cLib_addCalc(&lightStatusPt->mPos.x, targetPos.x, 0.2f, 50000.0f, 0.00001f);
+        cLib_addCalc(&lightStatusPt->mPos.y, targetPos.y, 0.2f, 50000.0f, 0.00001f);
+        cLib_addCalc(&lightStatusPt->mPos.z, targetPos.z, 0.2f, 50000.0f, 0.00001f);
 
         static f32 target = 255.0f;
 
@@ -2555,13 +2556,20 @@ cXyz dKy_plight_near_pos() {
 
 /* 801952E0-80195364       .text dKy_plight_set__FP15LIGHT_INFLUENCE */
 void dKy_plight_set(LIGHT_INFLUENCE* param_0) {
+#if VERSION != VERSION_JPN
     for (int i = 0; i < 200; i++) {
         if (g_env_light.mpPLights[i] == param_0) {
             return;
         }
     }
+#endif
 
     for (int i = 0; i < 200; i++) {
+#if VERSION == VERSION_JPN
+        if (g_env_light.mpPLights[i] == param_0) {
+            return;
+        }
+#endif
         if (g_env_light.mpPLights[i] == NULL) {
             g_env_light.mpPLights[i] = param_0;
             g_env_light.mpPLights[i]->mIdx = i + 1;
@@ -2610,13 +2618,20 @@ void dKy_plight_cut(LIGHT_INFLUENCE* param_0) {
 
 /* 80195454-801954D8       .text dKy_efplight_set__FP15LIGHT_INFLUENCE */
 void dKy_efplight_set(LIGHT_INFLUENCE* param_0) {
+#if VERSION != VERSION_JPN
     for (int i = 0; i < 10; i++) {
         if (g_env_light.mpEfLights[i] == param_0) {
             return;
         }
     }
+#endif
 
     for (int i = 0; i < 10; i++) {
+#if VERSION == VERSION_JPN
+        if (g_env_light.mpEfLights[i] == param_0) {
+            return;
+        }
+#endif
         if (g_env_light.mpEfLights[i] == NULL) {
             g_env_light.mpEfLights[i] = param_0;
             g_env_light.mpEfLights[i]->mIdx = i + 1;
@@ -2853,7 +2868,7 @@ void dKy_Itemgetcol_chg_move() {
     case 6:
         {
             cLib_addCalc(&envLight.field_0xc34, 0.0f, 0.5f, 0.1f, 0.001f);
-            if (envLight.field_0xc34 < 0.000001f) {
+            if (envLight.field_0xc34 < 0.0000000001f) {
                 envLight.field_0xc34 = 0.0f;
                 envLight.mColChgFlag = 0;
             }
@@ -2908,12 +2923,12 @@ void dKy_arrowcol_chg_move() {
     case 0x20:
     case 0x50:
         {
-            dif[0] = 0x3C;
-            dif[1] = 0x96;
-            dif[2] = 0xE6;
-            amb[0] = 0x32;
-            amb[1] = 0x41;
-            amb[2] = 0x50;
+            amb[0] = 0x3C;
+            amb[1] = 0x96;
+            amb[2] = 0xE6;
+            dif[0] = 0x32;
+            dif[1] = 0x41;
+            dif[2] = 0x50;
         }
         break;
     case 0x30:
@@ -2924,7 +2939,7 @@ void dKy_arrowcol_chg_move() {
             amb[2] = 0x14;
             dif[0] = 0x1E;
             dif[1] = 0x1E;
-            dif[2] = 0x01;
+            dif[2] = 0x0A;
             if (strcmp(dComIfGp_getStartStageName(), "GTower") == 0) {
                 amb[0] = 0x45;
                 amb[1] = 0x1B;
@@ -2952,7 +2967,7 @@ void dKy_arrowcol_chg_move() {
     case 0x60:
         {
             cLib_addCalc(&envLight.field_0xc34, 0.0f, 0.5f, 0.05f, 0.001f);
-            if (envLight.field_0xc34 < 0.000001f) {
+            if (envLight.field_0xc34 < 0.0000000001f) {
                 envLight.field_0xc34 = 0.0f;
                 envLight.mColChgFlag = 0;
             }
@@ -3004,20 +3019,18 @@ BOOL dKy_checkEventNightStop() {
 }
 
 /* 801967C4-801967F4       .text dKy_Sound_init__Fv */
-// NONMATCHING - reg swap
 void dKy_Sound_init() {
     g_env_light.mSound.field_0x0.x = 999999.9f;
     g_env_light.mSound.field_0x0.y = 999999.9f;
     g_env_light.mSound.field_0x0.z = 999999.9f;
     g_env_light.mSound.field_0xc = 0;
     g_env_light.mSound.field_0x14 = -1;
-    g_env_light.mSound.field_0x10 = -1;
+    g_env_light.mSound.field_0x10 = 0;
 }
 
 /* 801967F4-801969A8       .text dKy_Sound_set__F4cXyziUii */
 void dKy_Sound_set(cXyz pos, int p2, unsigned int p3, int p4) {
-    /* Nonmatching */
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
 
     BOOL ret = FALSE;
     f32 newDist = pos.abs(camera->mLookat.mEye);
@@ -3285,9 +3298,10 @@ int dKy_get_schbit_timer() {
 
 /* 80197018-80197144       .text dKy_get_seacolor__FP8_GXColorP8_GXColor */
 void dKy_get_seacolor(GXColor* amb, GXColor* dif) {
-    s16 ambr = g_env_light.mBG1_C0.r + g_env_light.mBg1AddColAmb.r;
-    s16 ambg = g_env_light.mBG1_C0.g + g_env_light.mBg1AddColAmb.g;
-    s16 ambb = g_env_light.mBG1_C0.b + g_env_light.mBg1AddColAmb.b;
+    dScnKy_env_light_c& light = g_env_light; // maybe fakematch
+    s16 ambr = g_env_light.mBG1_C0.r + light.mBg1AddColAmb.r;
+    s16 ambg = g_env_light.mBG1_C0.g + light.mBg1AddColAmb.g;
+    s16 ambb = g_env_light.mBG1_C0.b + light.mBg1AddColAmb.b;
     if (ambr < 0x00)
         ambr = 0x00;
     if (ambg < 0x00)
@@ -3304,9 +3318,9 @@ void dKy_get_seacolor(GXColor* amb, GXColor* dif) {
     amb->g = ambg;
     amb->b = ambb;
 
-    s16 difr = g_env_light.mBG1_K0.r + g_env_light.mBg1AddColDif.r;
-    s16 difg = g_env_light.mBG1_K0.g + g_env_light.mBg1AddColDif.g;
-    s16 difb = g_env_light.mBG1_K0.b + g_env_light.mBg1AddColDif.b;
+    s16 difr = light.mBG1_K0.r + g_env_light.mBg1AddColDif.r;
+    s16 difg = light.mBG1_K0.g + g_env_light.mBg1AddColDif.g;
+    s16 difb = light.mBG1_K0.b + g_env_light.mBg1AddColDif.b;
     if (difr < 0x00)
         difr = 0x00;
     if (difg < 0x00)
@@ -3361,10 +3375,9 @@ void dKy_set_vrboxkumocol_ratio(f32 ratio) {
 }
 
 /* 801971D8-801972AC       .text dKy_itudemo_se__Fv */
-// NONMATCHING - regswap
 void dKy_itudemo_se() {
     dScnKy_env_light_c& env_light = dKy_getEnvlight();
-    s32 roomNo = dComIfGp_roomControl_getStayNo();
+    int roomNo = dComIfGp_roomControl_getStayNo();
 
     if (env_light.mMoyaSE != 0) {
         mDoAud_seStart(env_light.mMoyaSE, NULL, 0, 0);
@@ -3455,7 +3468,7 @@ bool dKy_telescope_lookin_chk(cXyz* pPos, f32 maxDist, f32 minFov) {
 bool dKy_moon_look_chk() {
     bool rt = false;
     if (dKyr_moon_arrival_check()) {
-        rt = dKy_telescope_lookin_chk(&g_env_light.mMoonPos, 100.0f, 200.0f);
+        rt = dKy_telescope_lookin_chk(&g_env_light.mMoonPos, 100.0f, 20.0f);
     }
 
     return rt;
@@ -3483,7 +3496,7 @@ cXyz dKy_get_hokuto_pos() {
     const Vec & eyePos = dComIfGp_getCamera(0)->mLookat.mEye;
     cXyz pos;
     pos.x = eyePos.x + 10300.0f;
-    pos.y = eyePos.y + 13400.0f;
+    pos.y = eyePos.y + 13450.0f;
     pos.z = eyePos.z - 13525.0f;
     return pos;
 }
