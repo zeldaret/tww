@@ -1846,6 +1846,14 @@ inline void dComIfGp_map_mapBufferSendAGB(int param_0) {
     dMap_c::mapBufferSendAGB(param_0);
 }
 
+inline void dComIfGp_map_setImage(int param_0, int param_1, f32 param_2) {
+    dMap_c::setImage(param_0, param_1, param_2);
+}
+
+inline void dComIfGp_map_deleteImage(int param_0) {
+    dMap_c::deleteImage(param_0);
+}
+
 inline dDemo_manager_c* dComIfGp_demo_get() {
     return g_dComIfG_gameInfo.play.getDemo();
 }

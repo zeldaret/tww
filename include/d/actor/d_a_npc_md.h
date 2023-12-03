@@ -276,7 +276,6 @@ public:
     void isLightHit() {}
     void isMirror() {}
     void isNoCarryAction() {}
-    void isSeaTalk() {}
     void isShipRide() {}
     void noCarryAction() {}
     void offBitCamTagIn() {}
@@ -286,7 +285,6 @@ public:
     void offMirror() {}
     void offNoCarryAction() {}
     void offPlayerRoom() {}
-    void offSeaTalk() {}
     void offShipRide() {}
     void onBitCamTagIn() {}
     void onFlying() {}
@@ -294,7 +292,6 @@ public:
     void onLightHit() {}
     void onMirror() {}
     void onPlayerRoom() {}
-    void onSeaTalk() {}
     void onShipRide() {}
     void setBitEffectStatus(u8) {}
     void setBitHairMode(u8) {}
@@ -469,6 +466,9 @@ public:
     static bool m_playerRoom;
     
     static bool isFlying() { return m_flying; }
+    static bool isSeaTalk() { return m_seaTalk; }
+    static void onSeaTalk() { m_seaTalk = true; }
+    static void offSeaTalk() { m_seaTalk = false; }
     static s16 getMaxFlyingTimer();
     static bool isPlayerRoom() { return m_playerRoom; }
     

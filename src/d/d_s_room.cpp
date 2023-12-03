@@ -14,6 +14,8 @@
 #include "d/d_procname.h"
 #include "d/d_stage.h"
 #include "d/actor/d_a_player.h"
+#include "d/actor/d_a_salvage.h"
+#include "d/actor/d_a_npc_md.h"
 #include "m_Do/m_Do_dvd_thread.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
@@ -32,15 +34,19 @@ public:
     /* 0x1DC */ u16 field_0x1dc;
 };
 
+// Fake inline: An inline like this seems necessary for setMapImage to match, but it isn't in the debug maps.
+// TODO: Try to find a way to match setMapImage with real inlines.
+inline f32 getActorPositionY(fopAc_ac_c* actor) {
+    return actor->current.pos.y;
+}
+
 /* 80236938-80236998       .text setMapImage__FP19room_of_scene_class */
 void setMapImage(room_of_scene_class* i_this) {
     if (i_this->mbSetMap)
         return;
 
     if (dComIfGp_roomControl_getStayNo() >= 0) {
-        f32 playerY = fopAcM_GetPosition(dComIfGp_getPlayer(0)).y;
-        s32 roomNo = fopScnM_GetParam(i_this);
-        dMap_c::setImage(roomNo, dComIfGp_roomControl_getStayNo(), playerY);
+        dComIfGp_map_setImage(fopScnM_GetParam(i_this), dComIfGp_roomControl_getStayNo(), getActorPositionY(dComIfGp_getPlayer(0)));
         i_this->mbSetMap = true;
     }
 }
@@ -50,7 +56,7 @@ void deleteMapImage(room_of_scene_class* i_this) {
     if (!i_this->mbSetMap)
         return;
 
-    dMap_c::deleteImage(fopScnM_GetParam(i_this));
+    dComIfGp_map_deleteImage(fopScnM_GetParam(i_this));
 }
 
 /* 802369C8-80236A0C       .text setArcName__FP19room_of_scene_class */
@@ -117,19 +123,9 @@ BOOL dScnRoom_IsDelete(room_of_scene_class* i_this) {
     return TRUE;
 }
 
-class daNpc_Md_c {
-public:
-    static u8 m_seaTalk;
-};
-
-class daSalvage_control_c {
-public:
-    static void init_room(s8);
-};
-
 /* 80236BB4-80236D24       .text dScnRoom_Delete__FP19room_of_scene_class */
 BOOL dScnRoom_Delete(room_of_scene_class* i_this) {
-    s32 roomNo = fopScnM_GetParam(i_this);
+    int roomNo = fopScnM_GetParam(i_this);
     deleteMapImage(i_this);
     const char * arcName = setArcName(i_this);
     dComIfG_deleteStageRes(arcName);
@@ -151,9 +147,9 @@ BOOL dScnRoom_Delete(room_of_scene_class* i_this) {
         dComIfGs_onEventBit(0x1c40);
 
     if (strcmp(dComIfGp_getStartStageName(), "sea") == 0)
-        daNpc_Md_c::m_seaTalk = 0;
+        daNpc_Md_c::offSeaTalk();
 
-    daSalvage_control_c::init_room(roomNo);
+    daSalvage_c::init_room(roomNo);
 
     JKRHeap * pHeap = dStage_roomControl_c::getMemoryBlock(roomNo);
     if (pHeap != NULL)
@@ -200,7 +196,7 @@ s32 phase_2(room_of_scene_class* i_this) {
     if (rt != 0)
         return cPhs_INIT_e;
 
-    s32 roomNo = fopScnM_GetParam(i_this);
+    int roomNo = fopScnM_GetParam(i_this);
     s32 zoneNo = dComIfGp_roomControl_getZoneNo(roomNo);
     if (zoneNo < 0) {
         zoneNo = dComIfGs_createZone(roomNo);
@@ -237,6 +233,12 @@ s32 phase_2(room_of_scene_class* i_this) {
     }
 
     return cPhs_NEXT_e;
+}
+
+// TODO: Not sure why this weak function doesn't get inlined.
+/* 802370A0-802370B8       .text setZoneNo__20dStage_roomControl_cFii */
+void dStage_roomControl_c::setZoneNo(int i_roomNo, int i_zoneNo) {
+    mStatus[i_roomNo].mZoneNo = i_zoneNo;
 }
 
 /* 802370B8-802371D0       .text phase_3__FP19room_of_scene_class */

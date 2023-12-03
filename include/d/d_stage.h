@@ -827,7 +827,7 @@ public:
     void checkDrawArea() const;
     dStage_darkStatus_c* getDarkStatus();
     u32 getDarkMode();
-    static dBgW* getBgW(int i_roomNo);
+    static dBgW* getBgW(int i_roomNo);// { return mStatus[i_roomNo].mpBgW; }
 
     static JKRExpHeap* createMemoryBlock(int, u32);
     static void destroyMemoryBlock();
@@ -835,8 +835,8 @@ public:
     static JKRExpHeap* getMemoryBlock(int);
     static void setStayNo(int);
     static s32 GetTimePass();
-    static void setZoneNo(int i_roomNo, int i_zoneNo) { mStatus[i_roomNo].mZoneNo = i_zoneNo; }
-    static int getZoneNo(int i_roomNo);
+    static void setZoneNo(int i_roomNo, int i_zoneNo);// { mStatus[i_roomNo].mZoneNo = i_zoneNo; }
+    static int getZoneNo(int i_roomNo);// { return mStatus[i_roomNo].mZoneNo; }
     static void setZoneCount(int i_roomNo, int count) { mStatus[i_roomNo].mZoneCount = count; }
 
     static s8 getStayNo() { return mStayNo; }
