@@ -5,13 +5,15 @@
 
 class daRaceItem_c : public daItemBase_c {
 public:
+    void setListStart() {}
+    BOOL draw() { return DrawBase(); }
+
     void set_mtx();
     BOOL Delete();
     s32 create();
     BOOL CreateInit();
     void checkGet();
     inline BOOL execute();
-    void setListStart() {}
 
     // race_item_static functions
     void raceItemForceGet();

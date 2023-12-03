@@ -13,31 +13,33 @@
 #include "m_Do/m_Do_mtx.h"
 
 static dCcD_SrcCyl l_cyl_src = {
-    0,
-    0,
-    0,
-    0,
-    0xFFFFFFFF, // Tg damage types
-    3,
-    0x19,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    4,
-    0,
-    
-    // Cylinder
-    0.0, // X
-    0.0, // Y
-    0.0, // Z
-    0.0, // Radius
-    0.0, // Height
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt Type     */ 0,
+        /* SrcObjAt Atp      */ 0,
+        /* SrcObjAt SPrm     */ 0,
+        /* SrcObjTg Type     */ AT_TYPE_ALL,
+        /* SrcObjTg SPrm     */ 0x03,
+        /* SrcObjCo SPrm     */ 0x19,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt GFlag   */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg GFlag   */ 0x04,
+        /* SrcGObjCo GFlag   */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 0.0f,
+        /* Height */ 0.0f,
+    },
 };
 
 void daRaceItem_c::set_mtx() {
@@ -48,7 +50,7 @@ void daRaceItem_c::set_mtx() {
 }
 
 BOOL daRaceItem_c::Delete() {
-    DeleteBase(dItem_data::field_item_res[m_itemNo].mArc);
+    return DeleteBase(dItem_data::field_item_res[m_itemNo].mArc);
 }
 
 s32 daRaceItem_c::create() {
@@ -110,7 +112,7 @@ void daRaceItem_c::checkGet() {
 }
 
 static BOOL daRaceItem_Draw(daRaceItem_c* i_this) {
-    return i_this->DrawBase();
+    return i_this->draw();
 }
 
 static BOOL daRaceItem_Execute(daRaceItem_c* i_this) {
