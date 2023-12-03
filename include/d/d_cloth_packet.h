@@ -9,12 +9,14 @@
 class dKy_tevstr_c;
 
 class dCloth_packet_c : public J3DPacket {
+    typedef int (*FactorCheck)(dCloth_packet_c*, int, int);
+
     /* 0x10 */ s32 mFlyGridSize;
     /* 0x14 */ s32 mHoistGridSize;
     /* 0x18 */ f32 mFlyLength;
     /* 0x1C */ f32 mHoistLength;
     /* 0x20 */ dKy_tevstr_c* mpTevstr;
-    /* 0x24 */ u32 mpFactorCheckCB;
+    /* 0x24 */ FactorCheck mpFactorCheckCB;
     /* 0x28 */ cXyz* mpPosArr[2];
     /* 0x30 */ cXyz* mpNrmArr[2];
     /* 0x38 */ cXyz* mpNrmArrBack[2];
@@ -52,11 +54,32 @@ public:
 
     void setScale(cXyz scale) { mScale = scale; }
     void setMtx(Mtx mtx);
+    void setFactorCheckCB(FactorCheck cb) { mpFactorCheckCB = cb; }
+    void setWindPower(f32 wind, f32 windWave) {
+        mWindSpeed = wind;
+        mWindSpeedWave = windWave;
+    }
+    void setParam(f32 spring, f32 grav, f32 drag, f32 flyFlex, f32 hoistFlex, s16 wave, s16 param_1, s16 ripple, s16 rotate, f32 wind, f32 windWave) {
+        mSpring = spring;
+        mGravity = grav;
+        mDrag = drag;
+        mFlyFlex = flyFlex;
+        mHoistFlex = hoistFlex;
+        mWaveSpeed = wave;
+        field_0xF2 = param_1;
+        mRipple = ripple;
+        mRotateY = rotate;
+        setWindPower(wind, windWave);
+    }
+
+    void setGlobalWind(cXyz*);
 }; // Size: 0xFC
 
 dCloth_packet_c* dClothVobj03_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
 dCloth_packet_c* dClothVobj04_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
 dCloth_packet_c* dClothVobj05_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
 dCloth_packet_c* dClothVobj07_0_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
+
+dCloth_packet_c* dCloth_packetXlu_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**);
 
 #endif /* D_A_CLOTH_PACKET_H */

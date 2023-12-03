@@ -1619,7 +1619,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_wz"),
     ActorRel(NonMatching, "d_a_ygcwp"),
     ActorRel(NonMatching, "d_a_yougan"),
-    ActorRel(NonMatching, "d_a_ghostship"),
+    ActorRel(NonMatching, "d_a_ghostship", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_movie_player"),
 ]
 

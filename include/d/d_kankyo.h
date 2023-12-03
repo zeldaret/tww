@@ -386,7 +386,7 @@ enum dKy_dice_wether_state {
 int dKy_getdaytime_hour();
 int dKy_getdaytime_minute();
 int dKy_get_dayofweek();
-u32 dKy_moon_type_chk();
+s32 dKy_moon_type_chk();
 BOOL dKy_checkEventNightStop();
 void dKy_set_nexttime(f32);
 void dKy_instant_timechg(f32);
@@ -416,6 +416,8 @@ void dKy_Sound_init();
 void dKy_change_colset(u8 param_0, u8 param_1, f32 param_2);
 void dKy_change_colpat(u8 param_0);
 void dKy_custom_colset(u8 param_0, u8 param_1, f32 i_blend);
+void dKy_pship_existense_set();
+void dKy_pship_existense_cut();
 u8 dKy_pship_existense_chk();
 void dKy_Itemgetcol_chg_off();
 void dKy_Itemgetcol_chg_move();
