@@ -455,6 +455,7 @@ public:
     JKRArchive* getFontArchive() { return mpFont0Archive; }
     JKRArchive* getRubyArchive() { return mpFont1Archive; }
     void setAnmArchive(JKRArchive * pArc) { mpAnmArchive = pArc; }
+    JKRArchive* getAnmArchive() { return mpAnmArchive; }
     void setLkDArc(JKRArchive * pArc) { mpLkDArc = pArc; }
     void setFmapArchive(JKRArchive * pArc) { mpFmapArchive = pArc; }
     void setItemResArchive(JKRArchive * pArc) { mpItemResArchive = pArc; }
@@ -1321,16 +1322,36 @@ inline void  dComIfGs_onGetBottleItem(u8 i_itemNo) {
     g_dComIfG_gameInfo.save.getPlayer().getGetItem().onBottleItem(i_itemNo);
 }
 
-inline BOOL dComIfGs_checkEmptyBottle() {
-    return g_dComIfG_gameInfo.save.getPlayer().getItem().checkEmptyBottle();
+inline void dComIfGs_setBottleItemIn(u8 prevItemNo, u8 newItemNo) {
+    g_dComIfG_gameInfo.save.getPlayer().getItem().setBottleItemIn(prevItemNo, newItemNo);
+}
+
+inline void dComIfGs_setEmptyBottleItemIn(u8 i_itemNo) {
+    g_dComIfG_gameInfo.save.getPlayer().getItem().setEmptyBottleItemIn(i_itemNo);
 }
 
 inline void dComIfGs_setEmptyBottle() {
     g_dComIfG_gameInfo.save.getPlayer().getItem().setEmptyBottle();
 }
 
-inline void dComIfGs_setEmptyBottleItemIn(u8 i_itemNo) {
-    g_dComIfG_gameInfo.save.getPlayer().getItem().setEmptyBottleItemIn(i_itemNo);
+inline void dComIfGs_setEquipBottleItemIn(u8 i_btnIdx, u8 i_itemNo) {
+    g_dComIfG_gameInfo.save.getPlayer().getItem().setEquipBottleItemIn(i_btnIdx, i_itemNo);
+}
+
+inline void dComIfGs_setEquipBottleItemEmpty(u8 i_btnIdx) {
+    g_dComIfG_gameInfo.save.getPlayer().getItem().setEquipBottleItemEmpty(i_btnIdx);
+}
+
+inline void dComIfGs_setEquipBottleItemEmpty() {
+    g_dComIfG_gameInfo.save.getPlayer().getItem().setEquipBottleItemEmpty();
+}
+
+inline u8 dComIfGs_checkBottle(u8 i_itemNo) {
+    return g_dComIfG_gameInfo.save.getPlayer().getItem().checkBottle(i_itemNo);
+}
+
+inline BOOL dComIfGs_checkEmptyBottle() {
+    return g_dComIfG_gameInfo.save.getPlayer().getItem().checkEmptyBottle();
 }
 
 inline BOOL dComIfGs_checkGetBottle() {
@@ -2480,6 +2501,7 @@ inline void dComIfGd_reset() { g_dComIfG_gameInfo.drawlist.reset(); }
  */
 
 inline void dComIfGp_setAnmArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setAnmArchive(pArc); }
+inline JKRArchive* dComIfGp_getAnmArchive() { return g_dComIfG_gameInfo.play.getAnmArchive(); }
 inline void dComIfGp_setMsgArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMsgArchive(pArc); }
 inline void dComIfGp_setDmsgArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setDmsgArchive(pArc); }
 inline void dComIfGp_setTmsgArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setTmsgArchive(pArc); }

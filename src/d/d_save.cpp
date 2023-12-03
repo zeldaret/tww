@@ -127,8 +127,8 @@ void dSv_player_item_c::setEquipBottleItemIn(u8 i_btnIdx, u8 i_itemNo) {
 }
 
 /* 8005918C-800591B0       .text setEquipBottleItemEmpty__17dSv_player_item_cFUc */
-void dSv_player_item_c::setEquipBottleItemEmpty(u8 i_itemNo) {
-    setEquipBottleItemIn(i_itemNo, EMPTY_BOTTLE);
+void dSv_player_item_c::setEquipBottleItemEmpty(u8 i_btnIdx) {
+    setEquipBottleItemIn(i_btnIdx, EMPTY_BOTTLE);
 }
 
 /* 800591B0-80059408       .text setEquipBottleItemIn__17dSv_player_item_cFUc */

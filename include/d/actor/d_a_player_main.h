@@ -1215,6 +1215,7 @@ public:
 
     enum daPy_ANM {
         ANM_UNK_C4 = 0xC4,
+        ANM_UNK_C5 = 0xC5,
     };
 
     enum daPy_UNDER {
