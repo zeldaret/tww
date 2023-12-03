@@ -12,6 +12,12 @@
 #include "d/d_s_play.h"
 #include "d/d_kankyo_wether.h"
 
+// Needed for .data to match.
+static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
+static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
+static f64 dummy4[2] = {3.0, 0.5};
+
 const u32 daGhostship_c::m_heapsize = 0x1EA0;
 const char daGhostship_c::m_arc_name[] = "Ayush";
 const char daGhostship_c::m_cloth_arc_name[] = "Cloth";
