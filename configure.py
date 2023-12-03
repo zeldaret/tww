@@ -1438,7 +1438,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_mant"),
     ActorRel(Matching,    "d_a_mbdoor"),
     ActorRel(NonMatching, "d_a_mgameboard"),
-    ActorRel(NonMatching, "d_a_mmusic"),
+    ActorRel(Matching,    "d_a_mmusic"),
     ActorRel(NonMatching, "d_a_mo2"),
     ActorRel(NonMatching, "d_a_mozo"),
     ActorRel(NonMatching, "d_a_mt"),

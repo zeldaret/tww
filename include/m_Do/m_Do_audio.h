@@ -157,4 +157,16 @@ inline f32 mDoAud_tact_getMelodyPattern(s32 melody_no, s32 note_no, s32 * patter
     return mDoAud_zelAudio_c::mTact.getMelodyPattern(melody_no, note_no, pattern);
 }
 
+inline BOOL mDoAud_checkCbPracticePlay() {
+    return mDoAud_zelAudio_c::getInterface()->checkCbPracticePlay();
+}
+
+inline void mDoAud_cbPracticePlay(Vec* pos) {
+    mDoAud_zelAudio_c::getInterface()->cbPracticePlay(pos);
+}
+
+inline void mDoAud_cbPracticeStop() {
+    mDoAud_zelAudio_c::getInterface()->cbPracticeStop();
+}
+
 #endif /* M_DO_AUDIO_H */
