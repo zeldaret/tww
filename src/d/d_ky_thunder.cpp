@@ -34,15 +34,12 @@ public:
     /* 0x134 */ cXyz mScale;
     /* 0x140 */ cXyz mPos;
     /* 0x14C */ cXyz mPosNeg;
-    /* 0x150 */ f32 mRot;
-    /* 0x154 */ f32 mBtkTime;
+    /* 0x158 */ f32 mRot;
+    /* 0x15C */ f32 mBtkTime;
 };
 
 dThunder_c::~dThunder_c() {
-    mDoAud_seDeleteObject(&mPos);
-    mDoAud_seDeleteObject(&mPosNeg);
-    if (solid_heap != NULL)
-        mDoExt_destroySolidHeap(solid_heap);
+    mDoExt_destroySolidHeap(solid_heap);
 }
 
 BOOL dThunder_c::execute() {
@@ -111,6 +108,8 @@ BOOL dThunder_IsDelete(dThunder_c* i_this) {
 
 /* 80198ABC-80198B68       .text dThunder_Delete__FP10dThunder_c */
 BOOL dThunder_Delete(dThunder_c* i_this) {
+    mDoAud_seDeleteObject(&i_this->mPos);
+    mDoAud_seDeleteObject(&i_this->mPosNeg);
     i_this->~dThunder_c();
     return TRUE;
 }
@@ -128,10 +127,12 @@ s32 dThunder_Create(kankyo_class* i_ky) {
 
 /* 80198BC4-801990CC       .text create__10dThunder_cFv */
 s32 dThunder_c::create() {
-    s32 ret;
+    /* Nonmatching - regalloc */
+    dScnKy_env_light_c& envLight = dKy_getEnvlight();
     camera_class *pCamera = dComIfGp_getCamera(0);
+
     new(this) dThunder_c();
-    J3DModelData *modelData = (J3DModelData *)dComIfG_getObjectRes("Always", ALWAYS_BDL_YTHDR00);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_YTHDR00);
     JUT_ASSERT(0x6e, modelData != 0);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x01000200);
@@ -143,29 +144,31 @@ s32 dThunder_c::create() {
 
     J3DAnmTextureSRTKey * anm = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes("Always", ALWAYS_BTK_YTHDR00);
     JUT_ASSERT(0x7d, anm != 0);
-    if (!mBtk.init(mpModel->getModelData(), anm, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0))
+    if (!mBtk.init(modelData, anm, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0))
         return cPhs_ERROR_e;
 
     J3DAnmTevRegKey * canm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Always", ALWAYS_BRK_YTHDR00);
     JUT_ASSERT(0x8c, canm != 0);
-    if (!mBrk.init(mpModel->getModelData(), canm, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0))
+    if (!mBrk.init(modelData, canm, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0))
         return cPhs_ERROR_e;
 
     mBtkTime = cM_rndF(1.0f);
 
-    f32 size = g_env_light.mThunderEff.mState < 10 ? 1.0f : 0.5f;
+    f32 size = envLight.mThunderEff.mState < 10 ? 1.0f : 0.5f;
+    cXyz fwd;
+    cXyz offs(120000.0f, 2000.0f, 0.0f);
+
     mRot = 4000.0f;
     mRot = size * cM_rndFX(mRot);
     mScale.x = size * (cM_rndF(15.0f) + 5.0f);
-    if (cM_rndFX(1.0) >= 0.5f)
+    if (cM_rndFX(1.0f) >= 0.5)
         mScale.x *= -1.0f;
     mScale.y = size * (cM_rndF(60.0f) + 20.0f);
     mScale.z = 1.0f;
 
-    cXyz fwd;
     dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &pCamera->mLookat.mCenter, &fwd);
+    f32 distXZ = sqrtf(fwd.x * fwd.x + fwd.z * fwd.z);
 
-    f32 distXZ = fwd.absXZ();
     s16 rotX = cM_atan2s(fwd.x, fwd.z);
     s16 rotY = cM_atan2s(fwd.y, distXZ);
 
@@ -175,18 +178,16 @@ s32 dThunder_c::create() {
         rotX -= 0x4000;
     }
 
-    f32 y = cM_scos(rotY);
-    f32 x = cM_ssin(rotX);
-    f32 z = cM_scos(rotX);
+    cXyz rot;
+    rot.x = cM_ssin(rotY) * cM_scos(rotX);
+    rot.z = cM_ssin(rotY) * cM_ssin(rotX);
 
-    f32 baseXZ = cM_rndF(120000.f);
-    f32 baseY = cM_rndFX(2000.0f);
+    f32 baseXZ = cM_rndF(offs.x);
+    mPos.x = pCamera->mLookat.mEye.x + fwd.x * 100000.0f + rot.x * baseXZ;
+    mPos.y = pCamera->mLookat.mEye.y + cM_rndFX(offs.y);
+    mPos.z = pCamera->mLookat.mEye.z + fwd.z * 100000.0f + rot.z * baseXZ;
 
-    mPos.x = pCamera->mLookat.mEye.x + fwd.x * 100000.0f + y * x * baseXZ;
-    mPos.x = pCamera->mLookat.mEye.x + baseY;
-    mPos.z = pCamera->mLookat.mEye.z + fwd.z * 100000.0f + y * z * baseXZ;
-
-    if (cM_rndF(1.0f) < 0.3) {
+    if (cM_rndF(1.0f) < 0.3f) {
         mPosNeg.x = -mPos.x;
         mPosNeg.y = -mPos.y;
         mPosNeg.z = -mPos.z;
