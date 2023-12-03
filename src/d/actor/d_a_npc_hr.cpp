@@ -485,13 +485,3 @@ static BOOL daNpc_Hr_Draw(daNpc_Hr_c*) {
 static BOOL daNpc_Hr_IsDelete(daNpc_Hr_c*) {
     /* Nonmatching */
 }
-/* 00005F84-00005FA0       .text setEyePos__10daNpc_Hr_cF4cXyz */
-void daNpc_Hr_c::setEyePos(cXyz) {
-    /* Nonmatching */
-}
-
-/* 00005FA0-00005FBC       .text setAttentionBasePos__10daNpc_Hr_cF4cXyz */
-void daNpc_Hr_c::setAttentionBasePos(cXyz) {
-    /* Nonmatching */
-}
-

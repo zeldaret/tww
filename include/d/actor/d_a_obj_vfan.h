@@ -7,23 +7,22 @@
 #include "SSystem/SComponent/c_phase.h"
 
 namespace daObjVfan {
-    class Act_c : public fopAc_ac_c {
+    class Act_c : public dBgS_MoveBgActor {
     public:
         void prm_get_swSave() const {}
     
-        void CreateHeap();
-        s32 Create();
+        int CreateHeap();
+        int Create();
         void Mthd_Create();
         BOOL Delete();
         void Mthd_Delete();
         void set_mtx();
         void init_mtx();
         void ParticleSet();
-        void Execute(float(**)[3][4]);
+        int Execute(float(**)[3][4]);
         BOOL Draw();
     
     public:
-        /* 0x000 */ dBgS_MoveBgActor parent;
         /* 0x2C8 */ request_of_phase_process_class mPhs;
         /* 0x2D0 */ J3DModel* mpModel;
         /* 0x2D4 */ dCcD_Stts mStts;

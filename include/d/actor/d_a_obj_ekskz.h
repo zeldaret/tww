@@ -8,22 +8,21 @@
 #include "m_Do/m_Do_ext.h"
 
 namespace daObjEkskz {
-    class Act_c : public fopAc_ac_c {
+    class Act_c : public dBgS_MoveBgActor {
     public:
         void prm_get_swSave() const {}
     
-        void CreateHeap();
-        s32 Create();
+        int CreateHeap();
+        int Create();
         void Mthd_Create();
         BOOL Delete();
         void Mthd_Delete();
         void set_mtx();
         void init_mtx();
-        void Execute(float(**)[3][4]);
+        int Execute(float(**)[3][4]);
         BOOL Draw();
     
     public:
-        /* 0x000 */ dBgS_MoveBgActor parent;
         /* 0x2C8 */ u8 m2C8[0x2D0 - 0x2C8];
         /* 0x2D0 */ J3DModel* mpModel;
         /* 0x2D4 */ dCcD_Stts mStts;
