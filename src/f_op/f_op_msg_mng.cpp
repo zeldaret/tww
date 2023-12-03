@@ -11,8 +11,14 @@
 #include "d/d_com_inf_game.h"
 #include "JSystem/J2DGraph/J2DPicture.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
-#include "dolphin/types.h"
+#include "JSystem/JKernel/JKRExpHeap.h"
 #include "SSystem/SComponent/c_malloc.h"
+
+static bool pushButton;
+static bool pushButton2;
+static bool demoFlag;
+static bool tactFlag;
+static bool nextMsg;
 
 class mesg_header;
 class fopMsgM_pane_alpha_class;
@@ -70,8 +76,8 @@ msg_class* fopMsgM_SearchByName(s16 proc_name) {
 }
 
 /* 8002AF24-8002AF44       .text fopMsgM_IsExecuting__FUi */
-bool fopMsgM_IsExecuting(u32) {
-    /* Nonmatching */
+BOOL fopMsgM_IsExecuting(unsigned int pid) {
+    return fpcEx_IsExist(pid);
 }
 
 /* 8002AF44-8002AF4C       .text fopMsgM_GetAppend__FPv */
@@ -185,42 +191,43 @@ void fopMsgM_selectMessageGet(J2DPane*, J2DPane*, char*, char*, char*, char*, u3
 
 /* 8002C568-8002C574       .text fopMsgM_demoMsgFlagOn__Fv */
 void fopMsgM_demoMsgFlagOn() {
-    /* Nonmatching */
+    demoFlag = true;
 }
 
 /* 8002C574-8002C580       .text fopMsgM_demoMsgFlagOff__Fv */
 void fopMsgM_demoMsgFlagOff() {
-    /* Nonmatching */
+    demoFlag = false;
 }
 
 /* 8002C580-8002C588       .text fopMsgM_demoMsgFlagCheck__Fv */
-void fopMsgM_demoMsgFlagCheck() {
-    /* Nonmatching */
+bool fopMsgM_demoMsgFlagCheck() {
+    return demoFlag;
 }
+
 
 /* 8002C588-8002C594       .text fopMsgM_tactMsgFlagOn__Fv */
 void fopMsgM_tactMsgFlagOn() {
-    /* Nonmatching */
+    tactFlag = true;
 }
 
 /* 8002C594-8002C5A0       .text fopMsgM_tactMsgFlagOff__Fv */
 void fopMsgM_tactMsgFlagOff() {
-    /* Nonmatching */
+    tactFlag = false;
 }
 
 /* 8002C5A0-8002C5A8       .text fopMsgM_tactMsgFlagCheck__Fv */
-void fopMsgM_tactMsgFlagCheck() {
-    /* Nonmatching */
+bool fopMsgM_tactMsgFlagCheck() {
+    return tactFlag;
 }
 
 /* 8002C5A8-8002C5B4       .text fopMsgM_nextMsgFlagOff__Fv */
 void fopMsgM_nextMsgFlagOff() {
-    /* Nonmatching */
+    nextMsg = false;
 }
 
 /* 8002C5B4-8002C5BC       .text fopMsgM_nextMsgFlagCheck__Fv */
-void fopMsgM_nextMsgFlagCheck() {
-    /* Nonmatching */
+bool fopMsgM_nextMsgFlagCheck() {
+    return nextMsg;
 }
 
 /* 8002C5BC-8002C624       .text fopMsgM_getScopeMode__Fv */
@@ -229,38 +236,48 @@ void fopMsgM_getScopeMode() {
 }
 
 /* 8002C624-8002C650       .text fopMsgM_forceSendOn__Fv */
-void fopMsgM_forceSendOn() {
-    /* Nonmatching */
+bool fopMsgM_forceSendOn() {
+    if (dComIfGp_getScopeType() == 10) {
+        pushButton = true;
+        return true;
+    }
+
+    return false;
 }
 
 /* 8002C650-8002C65C       .text fopMsgM_forceSendOff__Fv */
 void fopMsgM_forceSendOff() {
-    /* Nonmatching */
+    pushButton = false;
 }
 
 /* 8002C65C-8002C664       .text fopMsgM_checkForceSend__Fv */
-void fopMsgM_checkForceSend() {
-    /* Nonmatching */
+bool fopMsgM_checkForceSend() {
+    return pushButton;
 }
 
 /* 8002C664-8002C670       .text fopMsgM_messageSendOn__Fv */
 void fopMsgM_messageSendOn() {
-    /* Nonmatching */
+    pushButton2 = true;
 }
 
 /* 8002C670-8002C67C       .text fopMsgM_messageSendOff__Fv */
 void fopMsgM_messageSendOff() {
-    /* Nonmatching */
+    pushButton2 = false;
 }
 
 /* 8002C67C-8002C684       .text fopMsgM_checkMessageSend__Fv */
-void fopMsgM_checkMessageSend() {
-    /* Nonmatching */
+bool fopMsgM_checkMessageSend() {
+    return pushButton2;
 }
 
 /* 8002C684-8002C6B0       .text fopMsgM_releaseScopeMode__Fv */
-void fopMsgM_releaseScopeMode() {
-    /* Nonmatching */
+bool fopMsgM_releaseScopeMode() {
+    if (dComIfGp_getScopeType() == 13) {
+        dComIfGp_setScopeType(11);
+        return true;
+    }
+
+    return false;
 }
 
 /* 8002C6B0-8002C6C4       .text fopMsgM_outFontTex__Fi */
@@ -1120,11 +1137,11 @@ void fopMsgM_setFontsizeCenter2(char*, char*, char*, char*, int, int, int, int) 
 }
 
 /* 8003C414-8003C450       .text fopMsgM_createExpHeap__FUl */
-void fopMsgM_createExpHeap(u32) {
-    /* Nonmatching */
+JKRExpHeap* fopMsgM_createExpHeap(u32 size) {
+    return JKRExpHeap::create(size, mDoExt_getGameHeap(), FALSE);
 }
 
 /* 8003C450-8003C470       .text fopMsgM_destroyExpHeap__FP10JKRExpHeap */
-void fopMsgM_destroyExpHeap(JKRExpHeap*) {
-    /* Nonmatching */
+void fopMsgM_destroyExpHeap(JKRExpHeap* heap) {
+    heap->destroy();
 }
