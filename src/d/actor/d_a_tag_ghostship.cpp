@@ -16,26 +16,31 @@ static f64 dummy4[2] = {3.0, 0.5};
 
 static daTag_Gship_HIO_c l_HIO;
 
+/* 000000EC-0000010C .text __ct__17daTag_Gship_HIO_cFv */
 daTag_Gship_HIO_c::daTag_Gship_HIO_c() {
     field_0x04 = -1;
     field_0x05 = 0;
 }
 
+/* 0000010C-00000110 .text modeClearWaitInit__13daTag_Gship_cFv */
 void daTag_Gship_c::modeClearWaitInit() {
     return;
 }
 
+/* 00000110-000001C0 .text modeClearWait__13daTag_Gship_cFv */
 void daTag_Gship_c::modeClearWait() {
     if(dComIfGp_evmng_endCheck("DEFAULT_TREASURE") || dComIfGp_evmng_endCheck("DEFAULT_TREASURE2") || dComIfGp_evmng_endCheck("DEFAULT_TREASURE_A") || l_HIO.field_0x05) {
         modeProc(CLEAR_WAIT, 1);
     }
 }
 
+/* 000001C0-00000214 .text modeClearEventInit__13daTag_Gship_cFv */
 void daTag_Gship_c::modeClearEventInit() {
     dComIfGs_getEventReg(0x8803);
     dComIfGs_setEventReg(0x8803, 3);
 }
 
+/* 00000214-00000418 .text modeClearEvent__13daTag_Gship_cFv */
 void daTag_Gship_c::modeClearEvent() {
     if(mEvtInfo.checkCommandDemoAccrpt()) {
         int staffIdx = dComIfGp_evmng_getMyStaffId("PScnChg", 0, 0);
@@ -63,6 +68,7 @@ void daTag_Gship_c::modeClearEvent() {
     }
 }
 
+/* 00000418-00000508 .text modeProc__13daTag_Gship_cFQ213daTag_Gship_c6Proc_ei */
 void daTag_Gship_c::modeProc(daTag_Gship_c::Proc_e proc, int param_2) {
     typedef void(daTag_Gship_c::*ProcFunc)(void);
     struct ProcEntry {
@@ -93,15 +99,18 @@ void daTag_Gship_c::modeProc(daTag_Gship_c::Proc_e proc, int param_2) {
     }
 }
 
+/* 00000508-00000534 .text _execute__13daTag_Gship_cFv */
 bool daTag_Gship_c::_execute() {
     modeProc(CLEAR_EVENT, 2);
     return true;
 }
 
+/* 00000534-0000053C .text _draw__13daTag_Gship_cFv */
 bool daTag_Gship_c::_draw() {
     return true;
 }
 
+/* 0000053C-00000594 .text getArg__13daTag_Gship_cFv */
 void daTag_Gship_c::getArg() {
     u32 param = fopAcM_GetParam(this);
 
@@ -115,6 +124,7 @@ void daTag_Gship_c::getArg() {
     }
 }
 
+/* 00000594-000005EC .text _create__13daTag_Gship_cFv */
 s32 daTag_Gship_c::_create() {
     fopAcM_SetupActor(this, daTag_Gship_c);
 
@@ -123,26 +133,32 @@ s32 daTag_Gship_c::_create() {
     return cPhs_COMPLEATE_e;
 }
 
+/* 000005EC-000005F4 .text _delete__13daTag_Gship_cFv */
 bool daTag_Gship_c::_delete() {
     return true;
 }
 
+/* 000005F4-00000614 .text daTag_GshipCreate__FPv */
 static s32 daTag_GshipCreate(void* i_this) {
     return static_cast<daTag_Gship_c*>(i_this)->_create();
 }
 
+/* 00000614-00000638 .text daTag_GshipDelete__FPv */
 static BOOL daTag_GshipDelete(void* i_this) {
     return static_cast<daTag_Gship_c*>(i_this)->_delete();
 }
 
+/* 00000638-0000065C .text daTag_GshipExecute__FPv */
 static BOOL daTag_GshipExecute(void* i_this) {
     return static_cast<daTag_Gship_c*>(i_this)->_execute();
 }
 
+/* 0000065C-00000680 .text daTag_GshipDraw__FPv */
 static BOOL daTag_GshipDraw(void* i_this) {
     return static_cast<daTag_Gship_c*>(i_this)->_draw();
 }
 
+/* 00000680-00000688 .text daTag_GshipIsDelete__FPv */
 static BOOL daTag_GshipIsDelete(void*) {
     return true;
 }

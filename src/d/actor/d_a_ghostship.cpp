@@ -24,14 +24,17 @@ const char daGhostship_c::m_cloth_arc_name[] = "Cloth";
 
 static daGhostship_HIO_c l_HIO;
 
+/* 000000EC-000000F8 .text daGhostship_SailVtxFactorCB__FP15dCloth_packet_cii */
 static int daGhostship_SailVtxFactorCB(dCloth_packet_c*, int, int param_3) {
     return param_3 ? 0 : 1;
 }
 
+/* 000000F8-00000118 .text createHeap_CB__FP10fopAc_ac_c */
 static BOOL createHeap_CB(fopAc_ac_c* i_this) {
     return static_cast<daGhostship_c*>(i_this)->_createHeap();
 }
 
+/* 00000118-0000032C .text _createHeap__13daGhostship_cFv */
 BOOL daGhostship_c::_createHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, 5));
     JUT_ASSERT(88, modelData != 0);
@@ -63,10 +66,12 @@ BOOL daGhostship_c::_createHeap() {
     return true;
 }
 
+/* 0000032C-00000368 .text pathMove_CB__FP4cXyzP4cXyzP4cXyzPv */
 static int pathMove_CB(cXyz* curPos, cXyz* curPntPos, cXyz* nextPntPos, void* i_this) {
     static_cast<daGhostship_c*>(i_this)->_pathMove(curPos, curPntPos, nextPntPos);
 }
 
+/* 00000368-000003B8 .text __ct__17daGhostship_HIO_cFv */
 daGhostship_HIO_c::daGhostship_HIO_c() {
     field_0x04 = 0;
     hideShip = false;
@@ -76,6 +81,7 @@ daGhostship_HIO_c::daGhostship_HIO_c() {
     shipEnterDist = 1500.0f;
 }
 
+/* 00000400-000004CC .text pathMove__13daGhostship_cFv */
 void daGhostship_c::pathMove() {
     cLib_addCalc2(&speedF, mPathSpeed, 0.1f, 2.0f);
     dLib_pathMove(&mPathPos, &mPathPntNo, mPath, speedF, &pathMove_CB, this);
@@ -85,18 +91,22 @@ void daGhostship_c::pathMove() {
     }
 }
 
+/* 000004CC-000004D8 .text modeWaitInit__13daGhostship_cFv */
 void daGhostship_c::modeWaitInit() {
     mMode = 0;
 }
 
+/* 000004D8-000004DC .text modeWait__13daGhostship_cFv */
 void daGhostship_c::modeWait() {
     return;
 }
 
+/* 000004DC-000004E0 .text modeRealize__13daGhostship_cFv */
 void daGhostship_c::modeRealize() {
     return;
 }
 
+/* 000004E0-00000770 .text _pathMove__13daGhostship_cFP4cXyzP4cXyzP4cXyz */
 bool daGhostship_c::_pathMove(cXyz* curPos, cXyz* p_curPntPos, cXyz* p_nextPntPos) {
     /* Nonmatching */
     mCurPntPos = *p_curPntPos;
@@ -118,10 +128,12 @@ bool daGhostship_c::_pathMove(cXyz* curPos, cXyz* p_curPntPos, cXyz* p_nextPntPo
     return false;
 }
 
+/* 00000770-0000077C .text modePathMoveInit__13daGhostship_cFv */
 void daGhostship_c::modePathMoveInit() {
     mMode = 2;
 }
 
+/* 0000077C-000007D0       .text modePathMove__13daGhostship_cFv */
 void daGhostship_c::modePathMove() {
     if(pathId != 0xFF) {
         mPathSpeed = 10.0f;
@@ -131,6 +143,7 @@ void daGhostship_c::modePathMove() {
     current.pos.y = dLib_getWaterY(current.pos, mAcch);
 }
 
+/* 000007D0-00000874 .text modeProcCall__13daGhostship_cFv */
 void daGhostship_c::modeProcCall() {
     /* Nonmatching */
     typedef void(daGhostship_c::*ProcFunc)(void);
@@ -158,6 +171,7 @@ u32 dummyFunc() {
     return dummy[0];
 }
 
+/* 00000874-00000C78 .text createInit__13daGhostship_cFv */
 void daGhostship_c::createInit() {
     mPathPos = current.pos;
 
@@ -217,12 +231,14 @@ void daGhostship_c::createInit() {
     mpCloth2->setMtx(mDoMtx_stack_c::get());
 }
 
+/* 00000C78-00000C8C .text getArg__13daGhostship_cFv */
 void daGhostship_c::getArg() {
     u32 param = fopAcM_GetParam(this);
     pathId = fopAcM_GetParamBit(param, 0x10, 8);
     moonPhase = fopAcM_GetParamBit(param, 0, 8);
 }
 
+/* 00000C8C-00000DFC .text daGhostshipCreate__FPv */
 static s32 daGhostshipCreate(void* i_actor) {
     daGhostship_c* i_this = static_cast<daGhostship_c*>(i_actor);
     fopAcM_SetupActor(i_this, daGhostship_c);
@@ -251,6 +267,7 @@ static s32 daGhostshipCreate(void* i_actor) {
     return cPhs_COMPLEATE_e;
 }
 
+/* 00000FD8-00001024 .text daGhostshipDelete__FPv */
 static BOOL daGhostshipDelete(void* i_actor) {
     daGhostship_c* i_this = static_cast<daGhostship_c*>(i_actor);
 
@@ -260,10 +277,12 @@ static BOOL daGhostshipDelete(void* i_actor) {
     return true;
 }
 
+/* 00001024-00001048 .text daGhostshipExecute__FPv */
 static BOOL daGhostshipExecute(void* i_this) {
     return static_cast<daGhostship_c*>(i_this)->_execute();
 }
 
+/* 00001048-0000182C .text _execute__13daGhostship_cFv */
 bool daGhostship_c::_execute() {
     f32 time = dComIfGs_getTime();
     f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
@@ -382,10 +401,12 @@ bool daGhostship_c::_execute() {
     return false;
 }
 
+/* 0000182C-00001850 .text daGhostshipDraw__FPv */
 static BOOL daGhostshipDraw(void* i_this) {
     return static_cast<daGhostship_c*>(i_this)->_draw();
 }
 
+/* 00001850-000019A4 .text _draw__13daGhostship_cFv */
 bool daGhostship_c::_draw() {
     /* Nonmatching */
     if(mAlpha == 0.0f) {
@@ -415,6 +436,7 @@ bool daGhostship_c::_draw() {
     return true;
 }
 
+/* 000019A4-000019AC .text daGhostshipIsDelete__FPv */
 static BOOL daGhostshipIsDelete(void*) {
     return true;
 }
