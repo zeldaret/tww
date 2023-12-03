@@ -92,6 +92,7 @@ void daGhostship_c::modeRealize() {
 }
 
 bool daGhostship_c::_pathMove(cXyz* curPos, cXyz* p_curPntPos, cXyz* p_nextPntPos) {
+    /* Nonmatching */
     mCurPntPos = *p_curPntPos;
     mCurPntPos.y = current.pos.y;
     mNextPntPos = *p_nextPntPos;
@@ -125,6 +126,7 @@ void daGhostship_c::modePathMove() {
 }
 
 void daGhostship_c::modeProcCall() {
+    /* Nonmatching */
     typedef void(daGhostship_c::*ProcFunc)(void);
     static const ProcFunc mode_proc[] = {
         &daGhostship_c::modeWait,
@@ -379,6 +381,7 @@ static BOOL daGhostshipDraw(void* i_this) {
 }
 
 bool daGhostship_c::_draw() {
+    /* Nonmatching */
     if(mAlpha == 0.0f) {
         return true;
     }
