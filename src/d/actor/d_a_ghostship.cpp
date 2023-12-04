@@ -145,7 +145,6 @@ void daGhostship_c::modePathMove() {
 
 /* 000007D0-00000874 .text modeProcCall__13daGhostship_cFv */
 void daGhostship_c::modeProcCall() {
-    /* Nonmatching */
     typedef void(daGhostship_c::*ProcFunc)(void);
     static const ProcFunc mode_proc[] = {
         &daGhostship_c::modeWait,
@@ -193,7 +192,7 @@ void daGhostship_c::createInit() {
         mPaths[i].mTranslation.x = current.pos.x + temp4 * cM_ssin(shape_angle.y);
         mPaths[i].mTranslation.y = 600.0f + current.pos.y + temp3 + cM_rndF(100.0f);
         mPaths[i].mTranslation.z = current.pos.z + temp4 * cM_scos(shape_angle.y);
-        
+
         dLib_setCirclePath(&mPaths[i]);
     }
 
@@ -261,7 +260,7 @@ static s32 daGhostshipCreate(void* i_actor) {
     if (!fopAcM_entrySolidHeap(i_this, createHeap_CB, 0x1EA0)) {
         return cPhs_ERROR_e;
     }
-    
+
     i_this->createInit();
 
     return cPhs_COMPLEATE_e;
@@ -317,7 +316,7 @@ bool daGhostship_c::_execute() {
         fopAcM_seStart(this, JA_SE_CV_YUUREISEN_SONG, 0);
         fopAcM_OnStatus(this, fopAcStts_SHOWMAP_e | 0x3);
     }
-    
+
     for(int i = 0; i < 0xC; i++) {
         if(mPaths[i].mRadius < 900.0f) {
             field_0x6C4[i] = i * 100.0f + 1500.0f;
@@ -338,7 +337,7 @@ bool daGhostship_c::_execute() {
         cLib_addCalc2(&mPaths[i].mRadius, field_0x6C4[i], 0.1f, 10.0f);
 
         f32 temp = (500.0f + g_regHIO.mChild[12].mFloatRegs[10]);
-        
+
         mPaths[i].mWobbleAmplitude = 300.0f + g_regHIO.mChild[12].mFloatRegs[1];
         mPaths[i].mAngleSpeed = (5 + g_regHIO.mChild[12].mShortRegs[0] + i * 2 + cM_rndF(20.0f)) * temp2;
 
@@ -408,7 +407,6 @@ static BOOL daGhostshipDraw(void* i_this) {
 
 /* 00001850-000019A4 .text _draw__13daGhostship_cFv */
 bool daGhostship_c::_draw() {
-    /* Nonmatching */
     if(mAlpha == 0.0f) {
         return true;
     }
@@ -418,8 +416,9 @@ bool daGhostship_c::_draw() {
         g_env_light.setLightTevColorType(mpModel, &mTevStr);
 
         J3DModelData* modelData = mpModel->getModelData();
+        u8 i;
         u32 alpha = (u8)(mAlpha * 255.5f);
-        for(u8 i = 0; i < modelData->getMaterialNum(); i++) {
+        for(i = 0; i < modelData->getMaterialNum(); i++) {
             modelData->getMaterialNodePointer(i)->getTevKColor(3)->mColor.a = alpha;
         }
 
