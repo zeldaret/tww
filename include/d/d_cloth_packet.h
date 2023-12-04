@@ -9,8 +9,44 @@
 class dKy_tevstr_c;
 
 class dCloth_packet_c : public J3DPacket {
-    typedef int (*FactorCheck)(dCloth_packet_c*, int, int);
+public:
+    dCloth_packet_c(ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**);
+    ~dCloth_packet_c();
+    virtual void init();
+    virtual void cloth_move();
+    virtual void cloth_draw();
+    virtual void TexObjInit(ResTIMG*);
+    virtual void TexObjLoad();
+    virtual void TevSetting();
 
+    void draw();
+    void setGlobalWind(cXyz*);
+    void getFactor(cXyz*, cXyz*, cXyz*, float, float, float, int, int);
+    void setNrm();
+    void plot();
+
+    void setScale(cXyz scale) { mScale = scale; }
+    void setMtx(Mtx mtx);
+    typedef int (*FactorCheck)(dCloth_packet_c*, int, int);
+    void setFactorCheckCB(FactorCheck cb) { mpFactorCheckCB = cb; }
+    void setWindPower(f32 wind, f32 windWave) {
+        mWindSpeed = wind;
+        mWindSpeedWave = windWave;
+    }
+    void setParam(f32 spring, f32 grav, f32 drag, f32 flyFlex, f32 hoistFlex, s16 wave, s16 param_1, s16 ripple, s16 rotate, f32 wind, f32 windWave) {
+        mSpring = spring;
+        mGravity = grav;
+        mDrag = drag;
+        mFlyFlex = flyFlex;
+        mHoistFlex = hoistFlex;
+        mWaveSpeed = wave;
+        field_0xF2 = param_1;
+        mRipple = ripple;
+        mRotateY = rotate;
+        setWindPower(wind, windWave);
+    }
+
+private:
     /* 0x10 */ s32 mFlyGridSize;
     /* 0x14 */ s32 mHoistGridSize;
     /* 0x18 */ f32 mFlyLength;
@@ -41,45 +77,77 @@ class dCloth_packet_c : public J3DPacket {
     /* 0xF4 */ s16 mRipple;
     /* 0xF6 */ s16 mRotateY;
     /* 0xF8 */ u8 mCurArr;
+}; // Size: 0xFC
 
-public:
-    void draw();
-    ~dCloth_packet_c() {}
+class dCloth_packetXlu_c : public dCloth_packet_c {
     virtual void init();
     virtual void cloth_move();
     virtual void cloth_draw();
     virtual void TexObjInit(ResTIMG*);
     virtual void TexObjLoad();
     virtual void TevSetting();
+};
 
-    void setScale(cXyz scale) { mScale = scale; }
-    void setMtx(Mtx mtx);
-    void setFactorCheckCB(FactorCheck cb) { mpFactorCheckCB = cb; }
-    void setWindPower(f32 wind, f32 windWave) {
-        mWindSpeed = wind;
-        mWindSpeedWave = windWave;
-    }
-    void setParam(f32 spring, f32 grav, f32 drag, f32 flyFlex, f32 hoistFlex, s16 wave, s16 param_1, s16 ripple, s16 rotate, f32 wind, f32 windWave) {
-        mSpring = spring;
-        mGravity = grav;
-        mDrag = drag;
-        mFlyFlex = flyFlex;
-        mHoistFlex = hoistFlex;
-        mWaveSpeed = wave;
-        field_0xF2 = param_1;
-        mRipple = ripple;
-        mRotateY = rotate;
-        setWindPower(wind, windWave);
-    }
+class dClothVobj03_c : public dCloth_packet_c {
+    virtual void init();
+    virtual void cloth_move();
+    virtual void cloth_draw();
+    virtual void TexObjInit(ResTIMG*);
+    virtual void TexObjLoad();
+    virtual void TevSetting();
+    void cloth_copy();
 
-    void setGlobalWind(cXyz*);
-}; // Size: 0xFC
+public:
+    static void* top_pointer;
+    static const s32 cloth_counter;
+};
+dClothVobj03_c* dClothVobj03_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
 
-dCloth_packet_c* dClothVobj03_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
-dCloth_packet_c* dClothVobj04_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
-dCloth_packet_c* dClothVobj05_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
-dCloth_packet_c* dClothVobj07_0_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
+class dClothVobj04_c : public dCloth_packet_c {
+    virtual void init();
+    virtual void cloth_move();
+    virtual void cloth_draw();
+    virtual void TexObjInit(ResTIMG*);
+    virtual void TexObjLoad();
+    virtual void TevSetting();
+    void cloth_copy();
 
-dCloth_packet_c* dCloth_packetXlu_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**);
+public:
+    static void* top_pointer;
+    static const s32 cloth_counter;
+};
+dClothVobj04_c* dClothVobj04_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
+
+class dClothVobj05_c : public dCloth_packet_c {
+    virtual void init();
+    virtual void cloth_move();
+    virtual void cloth_draw();
+    virtual void TexObjInit(ResTIMG*);
+    virtual void TexObjLoad();
+    virtual void TevSetting();
+    void cloth_copy();
+
+public:
+    static void* top_pointer;
+    static const s32 cloth_counter;
+};
+dClothVobj05_c* dClothVobj05_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
+
+class dClothVobj07_0_c : public dCloth_packet_c {
+    virtual void init();
+    virtual void cloth_move();
+    virtual void cloth_draw();
+    virtual void TexObjInit(ResTIMG*);
+    virtual void TexObjLoad();
+    virtual void TevSetting();
+    void cloth_copy();
+
+public:
+    static void* top_pointer;
+    static const s32 cloth_counter;
+};
+dClothVobj07_0_c* dClothVobj07_0_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
+
+dCloth_packetXlu_c* dCloth_packetXlu_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**);
 
 #endif /* D_A_CLOTH_PACKET_H */

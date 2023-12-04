@@ -3,17 +3,14 @@
 // Translation Unit: d_cloth_packet.cpp
 //
 
-#include "d_cloth_packet.h"
-#include "dolphin/types.h"
+#include "d/d_cloth_packet.h"
 
 /* 80062D5C-800630B0       .text __ct__15dCloth_packet_cFP7ResTIMGiiffP12dKy_tevstr_cPP4cXyz */
 dCloth_packet_c::dCloth_packet_c(ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**) {
     /* Nonmatching */
 }
 
-/* 800630B0-8006310C       .text __dt__15dCloth_packet_cFv */
 dCloth_packet_c::~dCloth_packet_c() {
-    /* Nonmatching */
 }
 
 /* 8006310C-8006313C       .text default_factor_checkCB__FP15dCloth_packet_cii */
@@ -57,7 +54,7 @@ void dCloth_packet_c::setNrm() {
 }
 
 /* 800642D0-800642FC       .text setMtx__15dCloth_packet_cFPA4_f */
-void dCloth_packet_c::setMtx(float(*)[4]) {
+void dCloth_packet_c::setMtx(Mtx) {
     /* Nonmatching */
 }
 
@@ -102,9 +99,19 @@ void dCloth_packetXlu_c::cloth_draw() {
 }
 
 /* 80064CF8-80064E48       .text dCloth_packetXlu_create__FP7ResTIMGP7ResTIMGiiffP12dKy_tevstr_cPP4cXyz */
-void dCloth_packetXlu_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**) {
+dCloth_packetXlu_c* dCloth_packetXlu_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**) {
     /* Nonmatching */
 }
+
+void* dClothVobj03_c::top_pointer;
+void* dClothVobj04_c::top_pointer;
+void* dClothVobj05_c::top_pointer;
+void* dClothVobj07_0_c::top_pointer;
+
+const s32 dClothVobj03_c::cloth_counter = -1;
+const s32 dClothVobj04_c::cloth_counter = -1;
+const s32 dClothVobj05_c::cloth_counter = -1;
+const s32 dClothVobj07_0_c::cloth_counter = -1;
 
 /* 80064E48-80064F0C       .text cloth_copy__14dClothVobj03_cFv */
 void dClothVobj03_c::cloth_copy() {
@@ -132,7 +139,7 @@ void dClothVobj03_c::TexObjLoad() {
 }
 
 /* 800652A8-800653F4       .text dClothVobj03_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
-void dClothVobj03_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**) {
+dClothVobj03_c* dClothVobj03_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**) {
     /* Nonmatching */
 }
 
@@ -162,7 +169,7 @@ void dClothVobj04_c::TexObjLoad() {
 }
 
 /* 8006584C-80065998       .text dClothVobj04_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
-void dClothVobj04_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**) {
+dClothVobj04_c* dClothVobj04_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**) {
     /* Nonmatching */
 }
 
@@ -197,7 +204,7 @@ void dClothVobj05_VtxFactorCB(dCloth_packet_c*, int, int) {
 }
 
 /* 80065DF8-80065F50       .text dClothVobj05_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
-void dClothVobj05_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**) {
+dClothVobj05_c* dClothVobj05_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**) {
     /* Nonmatching */
 }
 
@@ -232,32 +239,6 @@ void dClothVobj07_0_VtxFactorCB(dCloth_packet_c*, int, int) {
 }
 
 /* 800663B4-8006650C       .text dClothVobj07_0_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
-void dClothVobj07_0_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**) {
+dClothVobj07_0_c* dClothVobj07_0_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**) {
     /* Nonmatching */
 }
-
-/* 8006650C-8006656C       .text __dt__16dClothVobj07_0_cFv */
-dClothVobj07_0_c::~dClothVobj07_0_c() {
-    /* Nonmatching */
-}
-
-/* 8006656C-800665CC       .text __dt__14dClothVobj05_cFv */
-dClothVobj05_c::~dClothVobj05_c() {
-    /* Nonmatching */
-}
-
-/* 800665CC-8006662C       .text __dt__14dClothVobj04_cFv */
-dClothVobj04_c::~dClothVobj04_c() {
-    /* Nonmatching */
-}
-
-/* 8006662C-8006668C       .text __dt__14dClothVobj03_cFv */
-dClothVobj03_c::~dClothVobj03_c() {
-    /* Nonmatching */
-}
-
-/* 8006668C-800666EC       .text __dt__18dCloth_packetXlu_cFv */
-dCloth_packetXlu_c::~dCloth_packetXlu_c() {
-    /* Nonmatching */
-}
-
