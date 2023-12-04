@@ -44,8 +44,6 @@ void mDoMemCd_Ctrl_c::main() {
             OSWaitCond(&mCond, &mMutex);
 
         switch (mCommand) {
-        case CARD_NO_COMMAND:
-            break;
         case CARD_RESTORE:
             restore();
             break;
@@ -61,6 +59,11 @@ void mDoMemCd_Ctrl_c::main() {
         case CARD_DETACH:
             detach();
             break;
+#if VERSION == VERSION_PAL
+        case 6:
+            // restore2();
+            break;
+#endif
         }
 
         mCommand = CARD_NO_COMMAND;
@@ -194,8 +197,10 @@ s32 mDoMemCd_Ctrl_c::SaveSync() {
         if (field_0x1660 == 4) {
             field_0x1660 = 1;
             ret = 1;
+#if VERSION != VERSION_JPN
         } else if (field_0x1660 == 1) {
             ret = 0;
+#endif
         } else {
             ret = 2;
         }
@@ -364,6 +369,11 @@ void mDoMemCd_Ctrl_c::setCardState(s32 state) {
     case CARD_ERROR_ENCODING:
         field_0x1660 = 6;
         break;
+#if VERSION == VERSION_PAL
+    case CARD_ERROR_NOFILE:
+        field_0x1660 = 2;
+        break;
+#endif
     }
 }
 
