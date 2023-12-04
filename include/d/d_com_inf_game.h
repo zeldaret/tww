@@ -1533,6 +1533,8 @@ inline dSv_player_status_c_c* dComIfGs_getpPlayerStatusC(int i_idx) {
 
 u8 dComIfGs_checkGetItemNum(u8 i_itemNo);
 
+stage_scls_info_class* dComIfGd_getMeshSceneList(Vec& vec);
+
 BOOL dComIfGs_checkSeaLandingEvent(s8 i_roomNo);
 
 /**

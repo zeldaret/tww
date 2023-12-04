@@ -1309,7 +1309,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_tag_ba1"),
     ActorRel(NonMatching, "d_a_tag_event"),
     ActorRel(NonMatching, "d_a_tag_evsw"),
-    ActorRel(NonMatching, "d_a_tag_ghostship"),
+    ActorRel(Matching,    "d_a_tag_ghostship"),
     ActorRel(NonMatching, "d_a_tag_hint"),
     ActorRel(Matching,    "d_a_tag_kb_item"),
     ActorRel(NonMatching, "d_a_tag_kk1"),
@@ -1619,7 +1619,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_wz"),
     ActorRel(NonMatching, "d_a_ygcwp"),
     ActorRel(NonMatching, "d_a_yougan"),
-    ActorRel(NonMatching, "d_a_ghostship"),
+    ActorRel(NonMatching, "d_a_ghostship", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_movie_player"),
 ]
 
