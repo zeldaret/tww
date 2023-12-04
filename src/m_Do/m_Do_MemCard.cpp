@@ -9,9 +9,9 @@
 #include "dolphin/card.h"
 #include "MSL_C/string.h"
 
+u8 MemCardStack[0x1000] __attribute__((aligned(32)));
 OSThread MemCardThread;
-u8 MemCardStack[0x1000]  __attribute__((aligned(32)));
-u8 MemCardWorkArea0[0xa000];
+u8 MemCardWorkArea0[0xa000] __attribute__((aligned(32)));
 
 mDoMemCd_Ctrl_c g_mDoMemCd_control;
 
@@ -209,8 +209,8 @@ u32 mDoMemCd_Ctrl_c::getStatus(u32) {
     if (OSTryLockMutex(&mMutex)) {
         s32 ret;
         switch (field_0x1660) {
-        case 2: ret = 2; break;
-        case 1: ret = 1; break;
+        case 1: ret = 2; break;
+        case 2: ret = 1; break;
         case 3: ret = 3; break;
         case 4: ret = 4; break;
         case 5: ret = 5; break;
