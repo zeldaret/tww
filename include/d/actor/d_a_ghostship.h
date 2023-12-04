@@ -25,7 +25,7 @@ public:
     void modeWaitInit();
     void modeWait();
     void modeRealize();
-    bool _pathMove(cXyz*, cXyz*, cXyz*);
+    BOOL _pathMove(cXyz*, cXyz*, cXyz*);
     void modePathMoveInit();
     void modePathMove();
     void modeProcCall();

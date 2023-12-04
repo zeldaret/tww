@@ -67,8 +67,8 @@ BOOL daGhostship_c::_createHeap() {
 }
 
 /* 0000032C-00000368 .text pathMove_CB__FP4cXyzP4cXyzP4cXyzPv */
-static int pathMove_CB(cXyz* curPos, cXyz* curPntPos, cXyz* nextPntPos, void* i_this) {
-    static_cast<daGhostship_c*>(i_this)->_pathMove(curPos, curPntPos, nextPntPos);
+static BOOL pathMove_CB(cXyz* curPos, cXyz* curPntPos, cXyz* nextPntPos, void* i_this) {
+    return static_cast<daGhostship_c*>(i_this)->_pathMove(curPos, curPntPos, nextPntPos);
 }
 
 /* 00000368-000003B8 .text __ct__17daGhostship_HIO_cFv */
@@ -107,25 +107,26 @@ void daGhostship_c::modeRealize() {
 }
 
 /* 000004E0-00000770 .text _pathMove__13daGhostship_cFP4cXyzP4cXyzP4cXyz */
-bool daGhostship_c::_pathMove(cXyz* curPos, cXyz* p_curPntPos, cXyz* p_nextPntPos) {
-    /* Nonmatching */
+BOOL daGhostship_c::_pathMove(cXyz* curPos, cXyz* p_curPntPos, cXyz* p_nextPntPos) {
     mCurPntPos = *p_curPntPos;
     mCurPntPos.y = current.pos.y;
     mNextPntPos = *p_nextPntPos;
     mNextPntPos.y = current.pos.y;
 
-    cXyz dist = mNextPntPos - mCurPntPos;
-    if(!dist.normalizeRS()) {
-        return true;
+    cXyz delta = mNextPntPos - mCurPntPos;
+    if(!delta.normalizeRS()) {
+        return TRUE;
     }
 
-    f32 step = speedF * fabsf(cM_scos(cLib_addCalcAngleS(&current.angle.y, cM_atan2s(dist.x, dist.z), 8, 0x200, 8)));
+    s16 targetAngleY = cM_atan2s(delta.x, delta.z);
+    s16 angleLeftToTarget = cLib_addCalcAngleS(&current.angle.y, targetAngleY, 8, 0x200, 8);
+    f32 step = speedF * fabsf(cM_scos(angleLeftToTarget));
     cLib_chasePosXZ(curPos, mNextPntPos, step);
     if((*curPos - mNextPntPos).absXZ() < step * (g_regHIO.mChild[12].mFloatRegs[5] + 1.0f) || (*curPos - mNextPntPos).absXZ() == 0.0f) {
-        return true;
+        return TRUE;
     }
 
-    return false;
+    return FALSE;
 }
 
 /* 00000770-0000077C .text modePathMoveInit__13daGhostship_cFv */
