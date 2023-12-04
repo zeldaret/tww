@@ -3,57 +3,70 @@
 // Translation Unit: d_door.cpp
 //
 
-#include "d_door.h"
-#include "dolphin/types.h"
+#include "d/d_door.h"
+#include "d/d_com_inf_game.h"
+#include "d/actor/d_a_player.h"
 
 /* 8006B39C-8006B3A8       .text getSwbit__12dDoor_info_cFv */
-void dDoor_info_c::getSwbit() {
-    /* Nonmatching */
+u8 dDoor_info_c::getSwbit() {
+    return fopAcM_GetParam(this) & 0xFF;
 }
 
 /* 8006B3A8-8006B3B4       .text getSwbit2__12dDoor_info_cFv */
-void dDoor_info_c::getSwbit2() {
-    /* Nonmatching */
+u8 dDoor_info_c::getSwbit2() {
+    return (fopAcM_GetParam(this) >> 0x14) & 0xFF;
 }
 
 /* 8006B3B4-8006B3C0       .text getType__12dDoor_info_cFv */
-void dDoor_info_c::getType() {
-    /* Nonmatching */
+u8 dDoor_info_c::getType() {
+    return (fopAcM_GetParam(this) >> 0x08) & 0xF;
 }
 
 /* 8006B3C0-8006B3EC       .text setType__12dDoor_info_cFUc */
-void dDoor_info_c::setType(unsigned char) {
-    /* Nonmatching */
+void dDoor_info_c::setType(u8 type) {
+    if (type >= 0x10)
+        return;
+    fopAcM_SetParam(this, fopAcM_GetParam(this) & ~(0xF << 0x08));
+    fopAcM_SetParam(this, fopAcM_GetParam(this) | ((type << 0x08) & (0xFF << 0x08)));
 }
 
 /* 8006B3EC-8006B3F8       .text getEventNo__12dDoor_info_cFv */
-void dDoor_info_c::getEventNo() {
-    /* Nonmatching */
+u8 dDoor_info_c::getEventNo() {
+    return (fopAcM_GetParam(this) >> 0x0C) & 0xFF;
 }
 
 /* 8006B3F8-8006B404       .text getFRoomNo__12dDoor_info_cFv */
-void dDoor_info_c::getFRoomNo() {
-    /* Nonmatching */
+u8 dDoor_info_c::getFRoomNo() {
+    return orig.angle.x & 0x3F;
 }
 
 /* 8006B404-8006B410       .text getBRoomNo__12dDoor_info_cFv */
-void dDoor_info_c::getBRoomNo() {
-    /* Nonmatching */
+u8 dDoor_info_c::getBRoomNo() {
+    return (orig.angle.x >> 0x06) & 0x3F;
 }
 
 /* 8006B410-8006B41C       .text getShipId__12dDoor_info_cFv */
-void dDoor_info_c::getShipId() {
-    /* Nonmatching */
+u8 dDoor_info_c::getShipId() {
+    return orig.angle.z & 0x3F;
 }
 
 /* 8006B41C-8006B428       .text getArg1__12dDoor_info_cFv */
-void dDoor_info_c::getArg1() {
-    /* Nonmatching */
+u8 dDoor_info_c::getArg1() {
+    return (orig.angle.z >> 0x08) & 0xFF;
 }
 
 /* 8006B428-8006B4C4       .text adjoinPlayer__12dDoor_info_cFv */
-void dDoor_info_c::adjoinPlayer() {
-    /* Nonmatching */
+BOOL dDoor_info_c::adjoinPlayer() {
+    int frontRoomNo = getFRoomNo();
+    int backRoomNo = getBRoomNo();
+    if (frontRoomNo == 0x3F || backRoomNo == 0x3F)
+        return TRUE;
+    if (dComIfGp_roomControl_checkRoomDisp(frontRoomNo) ||
+        dComIfGp_roomControl_checkRoomDisp(backRoomNo))
+    {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 8006B4C4-8006B554       .text getViewRoomNo__12dDoor_info_cFv */
@@ -107,7 +120,7 @@ void dDoor_info_c::initOpenDemo(int) {
 }
 
 /* 8006BC50-8006BDBC       .text checkArea__12dDoor_info_cFfff */
-void dDoor_info_c::checkArea(float, float, float) {
+void dDoor_info_c::checkArea(f32, f32, f32) {
     /* Nonmatching */
 }
 
@@ -137,13 +150,28 @@ void dDoor_info_c::setGoal() {
 }
 
 /* 8006C1D8-8006C200       .text setPlayerAngle__12dDoor_info_cFi */
-void dDoor_info_c::setPlayerAngle(int) {
-    /* Nonmatching */
+void dDoor_info_c::setPlayerAngle(BOOL flip) {
+    s16 angle = shape_angle.y;
+    daPy_py_c* link = (daPy_py_c*)dComIfGp_getLinkPlayer();
+    if (flip) {
+        angle += 0x7FFF;
+    }
+    link->changeDemoMoveAngle(angle);
 }
 
 /* 8006C200-8006C2BC       .text setPosAndAngle__12dDoor_info_cFP4cXyzs */
-void dDoor_info_c::setPosAndAngle(cXyz*, short) {
-    /* Nonmatching */
+void dDoor_info_c::setPosAndAngle(cXyz* pPos, s16 angle) {
+    if (mEvtInfo.checkCommandDemoAccrpt() || mEvtInfo.checkCommandDoor()) {
+        return;
+    }
+    if (pPos) {
+        mAttentionInfo.mPosition = current.pos = *pPos;
+        mAttentionInfo.mPosition.y += 150.0f;
+        mEyePos = mAttentionInfo.mPosition;
+    }
+    current.angle.y = angle;
+    shape_angle.y = current.angle.y;
+    mAngleVec.set(cM_ssin(current.angle.y), 0.0f, cM_scos(current.angle.y));
 }
 
 /* 8006C2BC-8006C388       .text smokeInit__13dDoor_smoke_cFP12dDoor_info_c */
@@ -158,17 +186,17 @@ void dDoor_smoke_c::smokeProc(dDoor_info_c*) {
 
 /* 8006C41C-8006C448       .text smokeEnd__13dDoor_smoke_cFv */
 void dDoor_smoke_c::smokeEnd() {
-    /* Nonmatching */
+    mSmokeCb.end();
 }
 
 /* 8006C448-8006C478       .text keyResLoad__12dDoor_key2_cFv */
 void dDoor_key2_c::keyResLoad() {
-    /* Nonmatching */
+    dComIfG_resLoad(&mPhs, "Key");
 }
 
 /* 8006C478-8006C4A8       .text keyResDelete__12dDoor_key2_cFv */
 void dDoor_key2_c::keyResDelete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhs, "Key");
 }
 
 /* 8006C4A8-8006C5E8       .text keyInit__12dDoor_key2_cFP12dDoor_info_c */
@@ -198,12 +226,12 @@ void dDoor_key2_c::keyCreate(int) {
 
 /* 8006C948-8006C954       .text keyOn__12dDoor_key2_cFv */
 void dDoor_key2_c::keyOn() {
-    /* Nonmatching */
+    mbEnabled = true;
 }
 
 /* 8006C954-8006C960       .text keyOff__12dDoor_key2_cFv */
 void dDoor_key2_c::keyOff() {
-    /* Nonmatching */
+    mbEnabled = false;
 }
 
 /* 8006C960-8006CA10       .text calcMtx__12dDoor_key2_cFP12dDoor_info_c */
@@ -247,8 +275,11 @@ void dDoor_stop_c::create() {
 }
 
 /* 8006CE8C-8006CEA8       .text init__11dDoor_msg_cFs */
-void dDoor_msg_c::init(short) {
-    /* Nonmatching */
+void dDoor_msg_c::init(s16 param_1) {
+    mA = param_1;
+    m0 = -1;
+    mMsg = 0;
+    m8 = 0;
 }
 
 /* 8006CEA8-8006D0DC       .text proc__11dDoor_msg_cFP4cXyz */
@@ -257,13 +288,19 @@ void dDoor_msg_c::proc(cXyz*) {
 }
 
 /* 8006D0DC-8006D11C       .text resLoad__12dDoor_hkyo_cFv */
-void dDoor_hkyo_c::resLoad() {
-    /* Nonmatching */
+s32 dDoor_hkyo_c::resLoad() {
+    if (m11 == 0) {
+        return 4;
+    }
+    dComIfG_resLoad(&mPhs, "Hkyo");
 }
 
 /* 8006D11C-8006D154       .text resDelete__12dDoor_hkyo_cFv */
 void dDoor_hkyo_c::resDelete() {
-    /* Nonmatching */
+    if (m11 == 0) {
+        return;
+    }
+    dComIfG_resDelete(&mPhs, "Hkyo");
 }
 
 /* 8006D154-8006D2D4       .text create__12dDoor_hkyo_cFv */
@@ -272,17 +309,17 @@ void dDoor_hkyo_c::create() {
 }
 
 /* 8006D2D4-8006D3A8       .text setAnm__12dDoor_hkyo_cFUc */
-void dDoor_hkyo_c::setAnm(unsigned char) {
+void dDoor_hkyo_c::setAnm(u8) {
     /* Nonmatching */
 }
 
 /* 8006D3A8-8006D3B4       .text init__12dDoor_hkyo_cFv */
 void dDoor_hkyo_c::init() {
-    /* Nonmatching */
+    mAnmIdx = 0;
 }
 
 /* 8006D3B4-8006D464       .text calcMtx__12dDoor_hkyo_cFP12dDoor_info_cf */
-void dDoor_hkyo_c::calcMtx(dDoor_info_c*, float) {
+void dDoor_hkyo_c::calcMtx(dDoor_info_c*, f32) {
     /* Nonmatching */
 }
 
@@ -307,7 +344,6 @@ void dDoor_hkyo_c::onFirst() {
 }
 
 /* 8006D7E8-8006D800       .text chkStart__12dDoor_hkyo_cFv */
-void dDoor_hkyo_c::chkStart() {
-    /* Nonmatching */
+BOOL dDoor_hkyo_c::chkStart() {
+    return daPy_getPlayerActorClass()->getGrabUpEnd();
 }
-

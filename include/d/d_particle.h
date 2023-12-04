@@ -10,7 +10,6 @@
 #include "m_Do/m_Do_ext.h"
 
 class mDoDvdThd_toMainRam_c;
-class dPa_levelEcallBack;
 class dKy_tevstr_c;
 class cBgS_PolyInfo;
 class JPADrawInfo;

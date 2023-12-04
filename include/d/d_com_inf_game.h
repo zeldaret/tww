@@ -1761,6 +1761,10 @@ inline int dComIfGp_roomControl_loadRoom(int roomCount, u8* rooms) {
     return g_dComIfG_gameInfo.play.getRoomControl()->loadRoom(roomCount, rooms);
 }
 
+inline BOOL dComIfGp_roomControl_checkRoomDisp(int i_roomNo) {
+    return g_dComIfG_gameInfo.play.getRoomControl()->checkRoomDisp(i_roomNo);
+}
+
 inline dBgS* dComIfG_Bgsp() {
     return &g_dComIfG_gameInfo.play.mBgS;
 }
@@ -1854,6 +1858,14 @@ inline void dComIfGp_map_setImage(int param_0, int param_1, f32 param_2) {
 
 inline void dComIfGp_map_deleteImage(int param_0) {
     dMap_c::deleteImage(param_0);
+}
+
+inline void dComIfGp_map_setAGBMapSendStopFlg() {
+    // dMap_c::setAGBMapSendStopFlg();
+}
+
+inline void dComIfGp_map_clrAGBMapSendStopFlg() {
+    // dMap_c::clrAGBMapSendStopFlg();
 }
 
 inline dDemo_manager_c* dComIfGp_demo_get() {

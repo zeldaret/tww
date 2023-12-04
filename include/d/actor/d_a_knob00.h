@@ -4,8 +4,9 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_bg_w.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_door.h"
 
-class daKnob00_c : public fopAc_ac_c {
+class daKnob00_c : public dDoor_info_c {
 public:
     void checkFlag(unsigned short) {}
     inline BOOL execute();
@@ -45,7 +46,6 @@ public:
     BOOL draw();
 
 public:
-    /* 0x000 */ dDoor_info_c parent;
     /* 0x2D0 */ dDoor_msg_c m2D0;
     /* 0x2DC */ u8 m2DC[0x2E4 - 0x2DC];
     /* 0x2E4 */ J3DModel* mpModel;

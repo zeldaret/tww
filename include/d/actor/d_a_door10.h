@@ -3,8 +3,9 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_bg_w.h"
+#include "d/d_door.h"
 
-class daDoor10_c : public fopAc_ac_c {
+class daDoor10_c : public dDoor_info_c {
 public:
     void checkFlag(unsigned short) {}
     inline BOOL execute();
@@ -39,7 +40,6 @@ public:
     BOOL draw();
 
 public:
-    /* 0x000 */ dDoor_info_c parent;
     /* 0x2D0 */ dDoor_smoke_c m2D0;
     /* 0x306 */ u8 m306[0x308 - 0x306];
     /* 0x308 */ dDoor_key2_c mKeyLock;

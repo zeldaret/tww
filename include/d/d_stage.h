@@ -821,7 +821,7 @@ public:
 
     void init();
     dStage_roomDt_c* getStatusRoomDt(int);
-    bool checkRoomDisp(int) const;
+    BOOL checkRoomDisp(int) const;
     int loadRoom(int, u8*);
     void zoneCountCheck(int) const;
     void checkDrawArea() const;

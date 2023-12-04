@@ -207,7 +207,7 @@ int createRoomScene(int param_0) {
 }
 
 /* 80040E38-80040E6C       .text checkRoomDisp__20dStage_roomControl_cCFi */
-bool dStage_roomControl_c::checkRoomDisp(int i_roomNo) const {
+BOOL dStage_roomControl_c::checkRoomDisp(int i_roomNo) const {
     if (checkStatusFlag(i_roomNo, 8)) {
         return false;
     }
