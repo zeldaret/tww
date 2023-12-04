@@ -179,8 +179,8 @@ s32 dThunder_c::create() {
     }
 
     cXyz rot;
-    rot.x = cM_ssin(rotY) * cM_scos(rotX);
-    rot.z = cM_ssin(rotY) * cM_ssin(rotX);
+    rot.x = cM_scos(rotY) * cM_ssin(rotX);
+    rot.z = cM_scos(rotY) * cM_scos(rotX);
 
     f32 baseXZ = cM_rndF(offs.x);
     mPos.x = pCamera->mLookat.mEye.x + fwd.x * 100000.0f + rot.x * baseXZ;
