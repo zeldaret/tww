@@ -76,6 +76,7 @@ public:
     MtxP getAnmMtx(int idx) { return mpNodeMtx[idx]; }
     void setAnmMtx(int idx, Mtx mtx) { MTXCopy(mtx, mpNodeMtx[idx]); }
     MtxP getWeightAnmMtx(int idx) { return mpWeightEnvMtx[idx]; }
+    void setWeightAnmMtx(int idx, Mtx mtx) { MTXCopy(mtx, mpWeightEnvMtx[idx]); }
 
     s32 setNoUseDrawMtx();
     s32 createSingleDrawMtx(J3DModelData*);
@@ -111,28 +112,35 @@ public:
 
     Mtx& getBaseTRMtx() { return mBaseTransformMtx; }
     void setBaseTRMtx(Mtx m) { MTXCopy(m, mBaseTransformMtx); }
-    u32 getMtxCalcMode() const { return mFlags & 0x03; }
-    u32* getCurrentViewNoPtr() { return &mCurrentViewNo; }
-    u8* getScaleFlagArray() const { return mpScaleFlagArr; }
-    u8 getScaleFlag(u32 idx) const { return mpScaleFlagArr[idx]; }
+    u32 getMtxCalcMode() { return mFlags & 0x03; }
+    u8 getScaleFlag(int idx) const { return mpScaleFlagArr[idx]; }
     void setScaleFlag(int idx, u8 param_1) { mpScaleFlagArr[idx] = param_1; }
-    u8 getEnvScaleFlag(u32 idx) const { return mpEvlpScaleFlagArr[idx]; }
-    J3DVertexBuffer* getVertexBuffer() const { return (J3DVertexBuffer*)&mVertexBuffer; }
-    J3DMatPacket* getMatPacket(u16 idx) const { return &mpMatPacket[idx]; }
-    J3DShapePacket* getShapePacket(u16 idx) const { return &mpShapePacket[idx]; }
-    Mtx** getDrawMtxPtrPtr() const { return mpDrawMtxBuf[1]; }
-    Mtx* getDrawMtxPtr() const { return mpDrawMtxBuf[1][mCurrentViewNo]; }
-    Mtx& getDrawMtx(u32 idx) const { return getDrawMtxPtr()[idx]; }
-    Mtx33** getNrmMtxPtrPtr() const { return mpNrmMtxBuf[1]; }
-    Mtx33* getNrmMtxPtr() const { return mpNrmMtxBuf[1][mCurrentViewNo]; }
-    Mtx33& getNrmMtx(u32 idx) const { return getNrmMtxPtr()[idx]; }
-    Mtx33** getBumpMtxPtrPtr(u32 idx) const { return mpBumpMtxArr[1][idx]; }
-    Mtx33* getBumpMtxPtr(u32 idx) const { return mpBumpMtxArr[1][idx][mCurrentViewNo]; }
+    u8 getEnvScaleFlag(int idx) const { return mpEvlpScaleFlagArr[idx]; }
+    J3DVertexBuffer* getVertexBuffer() { return (J3DVertexBuffer*)&mVertexBuffer; }
+    J3DMatPacket* getMatPacket(u16 idx) { return &mpMatPacket[idx]; }
+    J3DMatPacket* getMatPacketArray() { return mpMatPacket; }
+    J3DShapePacket* getShapePacket(u16 idx) { return &mpShapePacket[idx]; }
+    J3DShapePacket* getShapePacketArray() { return mpShapePacket; }
+    Mtx* getDrawMtxPtr() { return mpDrawMtxBuf[1][mCurrentViewNo]; }
+    Mtx& getDrawMtx(int idx) { return getDrawMtxPtr()[idx]; }
+    Mtx33* getNrmMtxPtr() { return mpNrmMtxBuf[1][mCurrentViewNo]; }
+    Mtx33& getNrmMtx(int idx) { return getNrmMtxPtr()[idx]; }
+    Mtx33* getBumpMtxPtr(int idx) { return mpBumpMtxArr[1][idx][mCurrentViewNo]; }
     void setBaseScale(const Vec& scale) { mBaseScale = scale; }
     void setUserArea(u32 area) { mUserArea = area; }
     u32 getUserArea() const { return mUserArea; }
-    Vec* getBaseScale() { return &mBaseScale; }
     void setVisibilityManager(J3DVisibilityManager* manager) { mpVisibilityManager = manager; }
+
+    // TODO
+    void getCurrentVtxNrm() {}
+    void setCurrentVtxNrm(void*) {}
+    void getCurrentVtxPos() {}
+    void setCurrentVtxPos(void*) {}
+    void setModelData(J3DModelData*) {}
+    void setNrmMtx(int, Mtx) {}
+
+    // Appears in TP debug maps but not TWW debug maps.
+    Vec* getBaseScale() { return &mBaseScale; }
 
     /* 0x004 */ J3DModelData* mModelData;
     /* 0x008 */ u32 mFlags;
