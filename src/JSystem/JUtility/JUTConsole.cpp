@@ -404,11 +404,11 @@ void JUTConsoleManager::removeConsole(JUTConsole* console) {
 
 /* 802CB674-802CB740       .text draw__17JUTConsoleManagerCFv */
 void JUTConsoleManager::draw() const {
-    /* Nonmatching */
+    ConsoleList::const_iterator iter = soLink_.begin();
+    ConsoleList::const_iterator end = soLink_.end();
 
-    // need to figure out how TLinkList works
-    for (ConsoleList::const_iterator iter = soLink_.begin(); iter != soLink_.end(); ++iter) {
-        JUTConsole* pConsole = &(*iter);
+    for (; iter != end; ++iter) {
+        const JUTConsole * const pConsole = &(*iter);
         if (pConsole != mActiveConsole)
             pConsole->doDraw(JUTConsole::INACTIVE);
     }
