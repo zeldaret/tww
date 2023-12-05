@@ -84,7 +84,7 @@ struct TNodeLinkList {
     template <typename Predicate> void Remove_if(Predicate predicate, TNodeLinkList& tList) {
         iterator it = begin();
 
-        while (!Iterator_isEnd_(it)) {
+        while (!Iterator_isEnd_(const_iterator(it))) {
             if (predicate(*it)) {
                 iterator itPrev = it;
                 ++it;

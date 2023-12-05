@@ -83,7 +83,7 @@ JGadget::TNodeLinkList::iterator JGadget::TNodeLinkList::Insert(iterator it, TLi
     pIt->mPrev = p;
     pItPrev->mNext = p;
     count++;
-    return p;
+    return iterator(p);
 }
 
 /* 802BFE20-802BFE44       .text Erase__Q27JGadget13TNodeLinkListFPQ27JGadget13TLinkListNode */
@@ -93,7 +93,7 @@ JGadget::TNodeLinkList::iterator JGadget::TNodeLinkList::Erase(TLinkListNode* p)
     pNext->mPrev = pPrev;
     pPrev->mNext = pNext;
     count--;
-    return pNext;
+    return iterator(pNext);
 }
 
 /* 802BFE44-802BFF14       .text Remove__Q27JGadget13TNodeLinkListFPQ27JGadget13TLinkListNode */
