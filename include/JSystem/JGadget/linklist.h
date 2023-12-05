@@ -144,19 +144,25 @@ struct TLinkList : public TNodeLinkList {
         /* 0x00 */ TNodeLinkList::const_iterator base;
     };
 
-    static const TLinkListNode* Element_toNode(const T* element) { return reinterpret_cast<const TLinkListNode*>(reinterpret_cast<const char*>(element) - I); }
-    static TLinkListNode* Element_toNode(T* element) { return reinterpret_cast<TLinkListNode*>(reinterpret_cast<char*>(element) - I); }
-    static const T* Element_toValue(const TLinkListNode* node) { return reinterpret_cast<const T*>(reinterpret_cast<const char*>(node) + I); }
-    static T* Element_toValue(TLinkListNode* node) { return reinterpret_cast<T*>(reinterpret_cast<char*>(node) + I); }
+    static const TLinkListNode* Element_toNode(const T* element) {
+        (void)element; // Debug-only assert
+        return reinterpret_cast<const TLinkListNode*>(reinterpret_cast<const char*>(element) - I);
+    }
+    static TLinkListNode* Element_toNode(T* element) {
+        (void)element; // Debug-only assert
+        return reinterpret_cast<TLinkListNode*>(reinterpret_cast<char*>(element) - I);
+    }
+    static const T* Element_toValue(const TLinkListNode* node) {
+        (void)node; // Debug-only assert
+        return reinterpret_cast<const T*>(reinterpret_cast<const char*>(node) + I);
+    }
+    static T* Element_toValue(TLinkListNode* node) {
+        (void)node; // Debug-only assert
+        return reinterpret_cast<T*>(reinterpret_cast<char*>(node) + I);
+    }
 
-    iterator Insert(iterator iter, T* element) {
-        TLinkListNode* node = Element_toNode(element);
-        return iterator(TNodeLinkList::Insert(iter.base, node));
-    }
-    iterator Erase(T* element) {
-        TLinkListNode* node = Element_toNode(element);
-        return iterator(TNodeLinkList::Erase(node));
-    }
+    iterator Insert(iterator iter, T* element) { return iterator(TNodeLinkList::Insert(iter.base, Element_toNode(element))); }
+    iterator Erase(T* element) { return iterator(TNodeLinkList::Erase(Element_toNode(element))); }
 
     iterator begin() { return iterator(TNodeLinkList::begin()); }
     const_iterator begin() const { return const_iterator(const_cast<TLinkList*>(this)->begin()); }
@@ -166,14 +172,8 @@ struct TLinkList : public TNodeLinkList {
     T& back() { return *--end(); }
     void Push_front(T* element) { Insert(begin(), element); }
     void Push_back(T* element) { Insert(end(), element); }
-    iterator Find(const T* element) {
-        const TLinkListNode* node = Element_toNode(element);
-        return iterator(TNodeLinkList::Find(node));
-    }
-    void Remove(T* element) {
-        TLinkListNode* node = Element_toNode(element);
-        TNodeLinkList::Remove(node);
-    }
+    iterator Find(const T* element) { return iterator(TNodeLinkList::Find(Element_toNode(element))); }
+    void Remove(T* element) { TNodeLinkList::Remove(Element_toNode(element)); }
 };
 
 template <typename T, int I>
