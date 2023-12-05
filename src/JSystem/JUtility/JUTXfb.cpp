@@ -26,19 +26,23 @@ void JUTXfb::common_init(int bufNum) {
 
 /* 802C8224-802C82CC       .text __ct__6JUTXfbFPC16_GXRenderModeObjP7JKRHeapQ26JUTXfb10EXfbNumber */
 JUTXfb::JUTXfb(const _GXRenderModeObj* pObj, JKRHeap* pHeap, JUTXfb::EXfbNumber xfbNum) {
-    /* Nonmatching */
     common_init(xfbNum);
 
     if (pObj) {
         initiate(pObj->fb_width, pObj->xfb_height, pHeap, xfbNum);
     } else {
-        u16 fb_width = JUTVideo::getManager()->getRenderMode()->fb_width;
-        u16 efb_height = JUTVideo::getManager()->getRenderMode()->efb_height;
-        u16 xfb_height = JUTVideo::getManager()->getRenderMode()->xfb_height;
+#if VERSION == VERSION_JPN
+        GXRenderModeObj* obj = JUTVideo::getManager()->getRenderMode();
+        initiate(obj->fb_width, obj->xfb_height, pHeap, xfbNum);
+#else
+        u16 fb_width = JUTVideo::getManager()->getFbWidth();
+        u16 efb_height = JUTVideo::getManager()->getEfbHeight();
+        u16 xfb_height = JUTVideo::getManager()->getXfbHeight();
         f32 scale_factor = GXGetYScaleFactor(efb_height, xfb_height);
         u16 xfb_lines = GXGetNumXfbLines(efb_height, scale_factor);
 
         initiate(fb_width, xfb_lines, pHeap, xfbNum);
+#endif
     }
 }
 
@@ -59,7 +63,7 @@ void JUTXfb::delXfb(int xfbIdx) {
 
 /* 802C837C-802C8410       .text createManager__6JUTXfbFPC16_GXRenderModeObjP7JKRHeapQ26JUTXfb10EXfbNumber */
 JUTXfb* JUTXfb::createManager(const _GXRenderModeObj* pObj, JKRHeap* pHeap, JUTXfb::EXfbNumber xfbNum) {
-    JUT_CONFIRM(203, sManager == 0);
+    JUT_CONFIRM(VERSION_SELECT(198, 203, 203), sManager == 0);
     if (sManager == NULL) {
         sManager = new JUTXfb(pObj, pHeap, xfbNum);
     }
@@ -68,7 +72,7 @@ JUTXfb* JUTXfb::createManager(const _GXRenderModeObj* pObj, JKRHeap* pHeap, JUTX
 
 /* 802C8410-802C8468       .text destroyManager__6JUTXfbFv */
 void JUTXfb::destroyManager() {
-    JUT_CONFIRM(344, sManager);
+    JUT_CONFIRM(VERSION_SELECT(339, 344, 344), sManager);
     delete sManager;
     sManager = NULL;
 }
@@ -102,4 +106,10 @@ void JUTXfb::initiate(u16 width, u16 height, JKRHeap* pHeap, JUTXfb::EXfbNumber 
         mBuffer[2] = NULL;
         mXfbAllocated[2] = false;
     }
+}
+
+void dummy() {
+	OSReport("JX:: disp = %d\n");
+	OSReport("JX:: drawing %d -> ");
+	OSReport("%d\n");
 }
