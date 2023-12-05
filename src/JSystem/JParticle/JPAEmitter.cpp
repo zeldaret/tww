@@ -130,7 +130,7 @@ void JPABaseEmitter::create(JPADataBlockLinkInfo* info) {
     mSpread = dyn->getSpread();
     mDataFlag = dyn->getDataFlag();
     mUseKeyFlag = dyn->getUseKeyFlag();
-    mFlags = JPAEmtrStts_FirstEmit | JPAEmtrStts_RateStepEmit;
+    initStatus(JPAEmtrStts_FirstEmit | JPAEmtrStts_RateStepEmit);
     MTXIdentity(mGlobalRotation);
     mGlobalDynamicsScale.x = 1.0f;
     mGlobalDynamicsScale.y = 1.0f;
@@ -304,7 +304,6 @@ void JPABaseEmitter::calcChild() {
 
 /* 8025D8CC-8025DA90       .text calcKey__14JPABaseEmitterFv */
 void JPABaseEmitter::calcKey() {
-    /* Nonmatching */
     for (s32 i = 0; i < getEmitterDataBlockInfoPtr()->getKeyNum(); i++) {
         JPAKeyBlock* key = getEmitterDataBlockInfoPtr()->getKey()[i];
         f32 tick = mTick;
@@ -312,7 +311,8 @@ void JPABaseEmitter::calcKey() {
         u32 dataNum = key->getNumber();
         if (key->isLoopEnable()) {
             s32 tickMax = (s32)(dataPtr[(dataNum - 1) * 4]) + 1;
-            tick -= (s32)tick % (s32)tickMax;
+            s32 numLoops = (s32)tick / tickMax;
+            tick -= numLoops * tickMax;
         }
         f32 value = JPAGetKeyFrameValue(tick, dataNum, dataPtr);
 

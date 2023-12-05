@@ -158,7 +158,7 @@ public:
     JPABaseParticle* getPtclFromVacList();
     bool doStartFrameProcess();
     bool doTerminationProcess();
-    void calcEmitterGlobalPosition(JGeometry::TVec3<float>&);
+    void calcEmitterGlobalPosition(JGeometry::TVec3<f32>&);
     void calcgReRDirection();
     u32 getPivotX();
     u32 getPivotY();
@@ -166,7 +166,7 @@ public:
     void setStatus(u32 status) { mFlags |= status; }
     void clearStatus(u32 status) { mFlags &= ~status; }
     bool checkStatus(u32 status) { return mFlags & status; }
-    void initStatus(u32 status);
+    void initStatus(u32 status) { mFlags = status; }
 
     int getParticleNumber() {
         return mActiveParticles.getNumLinks() + mChildParticles.getNumLinks();
@@ -183,28 +183,28 @@ public:
     void setGlobalRTMatrix(MtxP mtx) {
         JPASetRMtxTVecfromMtx(mtx, mGlobalRotation, mGlobalTranslation);
     }
-    void setGlobalRotation(const JGeometry::TVec3<short>& rot) {
+    void setGlobalRotation(const JGeometry::TVec3<s16>& rot) {
         JPAGetXYZRotateMtx(rot.x, rot.y, rot.z, mGlobalRotation); 
     }
     void setGlobalTranslation(f32 x, f32 y, f32 z) { mGlobalTranslation.set(x, y, z); }
-    void setGlobalTranslation(const JGeometry::TVec3<float>& trans) { mGlobalTranslation.set(trans); }
-    void setGlobalScale(const JGeometry::TVec3<float>& scale) {
+    void setGlobalTranslation(const JGeometry::TVec3<f32>& trans) { mGlobalTranslation.set(trans); }
+    void setGlobalScale(const JGeometry::TVec3<f32>& scale) {
         mGlobalDynamicsScale.set(scale);
         mGlobalParticleScale.set(scale);
     }
-    void setGlobalParticleScale(const JGeometry::TVec3<float>& scale) {
+    void setGlobalParticleScale(const JGeometry::TVec3<f32>& scale) {
         mGlobalParticleScale.set(scale);
     }
-    void setGlobalDynamicsScale(const JGeometry::TVec3<float>& scale) {
+    void setGlobalDynamicsScale(const JGeometry::TVec3<f32>& scale) {
         mGlobalDynamicsScale.set(scale);
     }
-    void setEmitterTranslation(const JGeometry::TVec3<float>& trans) {
+    void setEmitterTranslation(const JGeometry::TVec3<f32>& trans) {
         mEmitterTranslation.set(trans);
     }
-    void setEmitterScale(const JGeometry::TVec3<float>& scale) {
+    void setEmitterScale(const JGeometry::TVec3<f32>& scale) {
         mEmitterScale.set(scale);
     }
-    void setDirection(const JGeometry::TVec3<float>& dir) {
+    void setDirection(const JGeometry::TVec3<f32>& dir) {
         mEmitterDir.set(dir);
     }
     void setMaxFrame(s32 maxFrame) { mMaxFrame = maxFrame; }
@@ -214,13 +214,14 @@ public:
         mGlobalPrmColor.b = b;
     }
 
-    void setVolumeSweep(float i_volSweep) { mVolumeSweep = i_volSweep; }
+    void setVolumeSweep(f32 i_volSweep) { mVolumeSweep = i_volSweep; }
+    void setVolumeSize(u16 size) { mVolumeSize = size; }
     void setLifeTime(s16 i_lifeTime) { mLifeTime = i_lifeTime; }
-    void setRate(float i_rate) { mRate = i_rate; }
-    void setDirectionalSpeed(float i_speed) { mInitialVelDir = i_speed; }
-    void setAwayFromAxisSpeed(float i_speed) { mInitialVelAxis = i_speed; }
-    void setAwayFromCenterSpeed(float i_speed) { mInitialVelOmni = i_speed; }
-    void setSpread(float i_spread) { mSpread = i_spread; }
+    void setRate(f32 i_rate) { mRate = i_rate; }
+    void setDirectionalSpeed(f32 i_speed) { mInitialVelDir = i_speed; }
+    void setAwayFromAxisSpeed(f32 i_speed) { mInitialVelAxis = i_speed; }
+    void setAwayFromCenterSpeed(f32 i_speed) { mInitialVelOmni = i_speed; }
+    void setSpread(f32 i_spread) { mSpread = i_spread; }
 
     void stopCreateParticle() { setStatus(JPAEmtrStts_StopEmit); }
     void playCreateParticle() { clearStatus(JPAEmtrStts_StopEmit); }
@@ -251,6 +252,44 @@ public:
     f32 getRandomRF() { f32 x = mRandomSeed.get_ufloat_1(); return x + x - 1.0f; }
     f32 getRandomSF() { return mRandomSeed.get_ufloat_1() - 0.5f; }
     s16 getRandomSS() { return mRandomSeed.get_bit16(); }
+
+    u32 getUserWork() { return mUserData; }
+    void setUserWork(u32 work) { mUserData = work; }
+
+    // TODO
+    void becomeContinuousParticle() {}
+    void calcAfterCB() {}
+    void calcBeforeCB() {}
+    void calcEmitterGlobalTranslation(JGeometry::TVec3<f32>&) {}
+    void checkEmDataFlag(u32) {}
+    void drawCB() {}
+    void drawEmitterCallBack() {}
+    void getAspect() {}
+    void getAxisYVec(JGeometry::TVec3<f32>&) const {}
+    void getBaseEnvColor(GXColor&) {}
+    void getBasePrmColor(GXColor&) {}
+    void getCamMtxPtr() {}
+    void getChildParticleList() {}
+    void getCurrentCreateNumber() const {}
+    void getEmitterAxis(JGeometry::TVec3<f32>&, JGeometry::TVec3<f32>&, JGeometry::TVec3<f32>&) const {}
+    void getFovy() {}
+    void getFrame() {}
+    void getGlobalParticleScale(JGeometry::TVec3<f32>&) const {}
+    void getGlobalTranslation(JGeometry::TVec3<f32>&) const {}
+    void getParticleList() {}
+    void getRate() const {}
+    void getgReRDirection(JGeometry::TVec3<f32>&) {}
+    void isChildDraw() {}
+    void isContinuousParticle() {}
+    void isZDraw() {}
+    void loadTexture(u8, GXTexMapID) {}
+    void setEmitterRotation(const JGeometry::TVec3<s16>&) {}
+    void setGlobalEnvColor(u8, u8, u8) {}
+    void setGlobalParticleHeightScale(f32) {}
+    void setGlobalParticleScale(f32, f32) {}
+    void setGlobalParticleWidthScale(f32) {}
+    void setGlobalSRTMatrix(MtxP) {}
+    void setRandomDirectionSpeed(f32) {}
 
     static JPAEmitterInfo emtrInfo;
 
