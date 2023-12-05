@@ -397,14 +397,9 @@ void JUTGamePad::CRumble::stopMotorHard(int portNo) {
     }
 }
 
-inline u8 getNumBit(u8* arr, u32 bitNo) {
-    u8 bit = (arr[bitNo >> 3] & (0x80 >> (bitNo & 7)));
-    return bit;
-}
-
 /* 802C45A4-802C46CC       .text update__Q210JUTGamePad7CRumbleFs */
 void JUTGamePad::CRumble::update(s16 portNo) {
-    if (!isEnabledPort(portNo)) {
+    if (!isEnabled(channel_mask[portNo])) {
         mFrame = 0;
         mLength = 0;
         mData = NULL;
@@ -424,7 +419,8 @@ void JUTGamePad::CRumble::update(s16 portNo) {
         }
         return;
     } else {
-        u8 numBit = getNumBit(mData, mFrame % mFrameCount);
+        u32 bitNo = mFrame % mFrameCount;
+        u8 numBit = (mData[bitNo >> 3] & (0x80 >> (bitNo & 7)));
         if (numBit != 0 && mStatus[portNo] == 0) {
             startMotor(portNo);
         } else if (numBit == 0 && mStatus[portNo] != 0) {
@@ -521,4 +517,18 @@ bool JUTGamePad::recalibrate(u32 mask) {
     }
 
     return PADRecalibrate((PADMask)mask);
+}
+
+static void dummy() {
+	OSReport("JUTGamePad.cpp");
+	OSReport("getDataSizePerFrame() > 0");
+	OSReport("Halt");
+	OSReport("mBuffer");
+	OSReport("(u32)mBuffer <= (u32)dataEnd && (u32)dataEnd <= (u32)mBufferEnd");
+	OSReport("part != 0");
+	OSReport("getBuffer() == getDataEnd() || part == mPart");
+	OSReport("JUTGamePad.h");
+	OSReport("size > 0");
+	OSReport("mBuffer && isValidData( mCurrent )");
+	OSReport("mBuffer && isValidBuffer( mCurrent )");
 }

@@ -368,10 +368,8 @@ static void dummy3() {
 
 /* 802CB380-802CB4C4       .text appendConsole__17JUTConsoleManagerFP10JUTConsole */
 void JUTConsoleManager::appendConsole(JUTConsole* console) {
-    /* Nonmatching */
     JUT_ASSERT(0x3bf, sManager != 0 && console != 0);
 
-    // need to figure out how TLinkList works
     JUT_ASSERT(0x3c2, soLink_.Find( console ) == soLink_.end());
 
     soLink_.Push_back(console);
@@ -382,7 +380,6 @@ void JUTConsoleManager::appendConsole(JUTConsole* console) {
 
 /* 802CB4C4-802CB674       .text removeConsole__17JUTConsoleManagerFP10JUTConsole */
 void JUTConsoleManager::removeConsole(JUTConsole* console) {
-    /* Nonmatching */
     JUT_ASSERT(0x3d6, sManager != 0 && console != 0);
     JUT_ASSERT(0x3d9, soLink_.Find( console ) != soLink_.end());
 
