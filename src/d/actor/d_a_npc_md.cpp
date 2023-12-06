@@ -1688,8 +1688,260 @@ bool daNpc_Md_c::checkCommandTalk() {
 }
 
 /* 0000DCB0-0000E410       .text next_msgStatus__10daNpc_Md_cFPUl */
-void daNpc_Md_c::next_msgStatus(u32*) {
-    /* Nonmatching */
+u16 daNpc_Md_c::next_msgStatus(u32* pCurrMsgNo) {
+    u16 msgStatus = dNpcMsgStts_MSG_CONTINUES_e;
+    switch (*pCurrMsgNo) {
+    case 0x5AC:
+        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        break;
+    case 0x17D5:
+    case 0x1805:
+        *pCurrMsgNo = 0x17D6;
+        break;
+    case 0x17D6:
+        *pCurrMsgNo = 0x17D7;
+        break;
+    case 0x17D7:
+        *pCurrMsgNo = 0x17D8;
+        break;
+    case 0x17D8:
+        mCurEventMode = 4;
+        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        break;
+    case 0x17D9:
+        *pCurrMsgNo = 0x1802;
+        break;
+    case 0x1802:
+        *pCurrMsgNo = 0x17DA;
+        break;
+    case 0x17DA:
+        *pCurrMsgNo = 0x17DB;
+        break;
+    case 0x17DB:
+        dComIfGs_onEventBit(0x0E02);
+        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        break;
+    case 0x17DD:
+        *pCurrMsgNo = 0x17DE;
+        break;
+    case 0x17DE:
+        mCurEventMode = 5;
+        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        break;
+    case 0x17DF:
+        *pCurrMsgNo = 0x17E0;
+        break;
+    case 0x17E0:
+        *pCurrMsgNo = 0x17E1;
+        break;
+    case 0x17E1:
+        *pCurrMsgNo = 0x17E2;
+        break;
+    case 0x17E2:
+        *pCurrMsgNo = 0x17E3;
+        break;
+    case 0x17E4:
+        dComIfGs_onEventBit(0x1101);
+        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        break;
+    case 0x17E5:
+        dComIfGs_onEventBit(0x1280);
+        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        break;
+    case 0x17E6:
+        *pCurrMsgNo = 0x17E7;
+        break;
+    case 0x17E7:
+        *pCurrMsgNo = 0x17E8;
+        break;
+    case 0x17E8:
+        *pCurrMsgNo = 0x17E9;
+        break;
+    case 0x17E9:
+        *pCurrMsgNo = 0x17EA;
+        break;
+    case 0x17EA:
+        *pCurrMsgNo = 0x17EB;
+        break;
+    case 0x17EB:
+        *pCurrMsgNo = 0x17EC;
+        break;
+    case 0x17EC:
+        *pCurrMsgNo = 0x17ED;
+        break;
+    case 0x17ED:
+        *pCurrMsgNo = 0x17EE;
+        break;
+    case 0x17EE:
+        if (l_msg->mSelectedChoiceIdx == 1) {
+            *pCurrMsgNo = 0x17EF;
+        } else {
+            *pCurrMsgNo = 0x17F0;
+        }
+        break;
+    case 0x17EF:
+        *pCurrMsgNo = 0x17ED;
+        break;
+    case 0x17F0:
+        *pCurrMsgNo = 0x17F1;
+        break;
+    case 0x17F1:
+        mCurEventMode = 7;
+        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        break;
+    case 0x17F3:
+        *pCurrMsgNo = 0x17F4;
+        break;
+    case 0x17F4:
+        dComIfGs_onEventBit(0x1104);
+        // Fall-through
+    case 0x17F8:
+        cLib_onBit(m30F0, 0x40UL);
+        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        break;
+    case 0x17F7:
+        *pCurrMsgNo = 0x17F8;
+        break;
+    case 0x17FA:
+        *pCurrMsgNo = 0x17FB;
+        break;
+    case 0x17FB:
+        *pCurrMsgNo = 0x17FC;
+        break;
+    case 0x17FC:
+        *pCurrMsgNo = 0x17FD;
+        break;
+    case 0x17FD:
+        *pCurrMsgNo = 0x17FE;
+        break;
+    case 0x17FE:
+        *pCurrMsgNo = 0x17FF;
+        break;
+    case 0x1800:
+        *pCurrMsgNo = 0x1801;
+        break;
+    case 0x1801:
+        dComIfGs_onEventBit(0x1102);
+        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        break;
+    case 0x19C9:
+        *pCurrMsgNo = 0x19ca;
+        break;
+    case 0x19CA:
+        *pCurrMsgNo = 0x19CB;
+        break;
+    case 0x19CB:
+        *pCurrMsgNo = 0x19CC;
+        break;
+    case 0x19CC:
+        *pCurrMsgNo = 0x19CD;
+        break;
+    case 0x19CD:
+        *pCurrMsgNo = 0x19CE;
+        break;
+    case 0x19CE:
+        *pCurrMsgNo = 0x19CF;
+        break;
+    case 0x19CF:
+        *pCurrMsgNo = 0x19D0;
+        break;
+    case 0x19D0:
+        *pCurrMsgNo = 0x19D1;
+        break;
+    case 0x19D1:
+        dComIfGs_onEventBit(0x1402);
+        onSeaTalk();
+        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        break;
+    case 0x19D2:
+        *pCurrMsgNo = 0x19D3;
+        break;
+    case 0x19D3:
+        *pCurrMsgNo = 0x19D4;
+        break;
+    case 0x19D4:
+        *pCurrMsgNo = 0x19D5;
+        break;
+    case 0x19D6:
+        *pCurrMsgNo = 0x19D7;
+        break;
+    case 0x19D7:
+        *pCurrMsgNo = 0x19D8;
+        break;
+    case 0x19D8:
+        dComIfGs_onEventBit(0x1504);
+    case 0x19D9:
+        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        break;
+    case 0x19DA:
+        *pCurrMsgNo = 0x19db;
+        break;
+    case 0x19DD:
+        *pCurrMsgNo = 0x19de;
+        break;
+    case 0x19E0:
+        *pCurrMsgNo = 0x19e1;
+        break;
+    case 0x19E1:
+        *pCurrMsgNo = 0x19e2;
+        break;
+    case 0x19E2:
+        *pCurrMsgNo = 0x19e3;
+        break;
+    case 0x19E3:
+        *pCurrMsgNo = 0x19e4;
+        break;
+    case 0x19E5:
+        *pCurrMsgNo = 0x19e6;
+        break;
+    case 0x19E7:
+        *pCurrMsgNo = 0x19e8;
+        break;
+    case 0x19F6:
+        *pCurrMsgNo = 0x19f7;
+        break;
+    case 0x19F7:
+        *pCurrMsgNo = 0x19d2;
+        break;
+    case 0x19F8:
+        *pCurrMsgNo = 0x19f9;
+        break;
+    case 0x19F9:
+        *pCurrMsgNo = 0x19fa;
+        break;
+    case 0x19FA:
+        *pCurrMsgNo = 0x19fb;
+        break;
+    case 0x19FB:
+    case 0x19FF:
+        dComIfGs_onEventBit(0x2E40);
+        onSeaTalk();
+        // Fall-through
+    case 0x1A01:
+        dComIfGs_onEventBit(0x2C08);
+        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        break;
+    case 0x19FC:
+        *pCurrMsgNo = 0x19FD;
+        break;
+    case 0x19FD:
+        *pCurrMsgNo = 0x19FE;
+        break;
+    case 0x19FE:
+        *pCurrMsgNo = 0x19FF;
+        break;
+    case 0x1A00:
+        *pCurrMsgNo = 0x1A01;
+        break;
+    case 0x1A02:
+        dComIfGs_onEventBit(0x3B80);
+        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        break;
+    default:
+        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        break;
+    }
+    return msgStatus;
 }
 
 /* 0000E410-0000E64C       .text getMsg__10daNpc_Md_cFv */

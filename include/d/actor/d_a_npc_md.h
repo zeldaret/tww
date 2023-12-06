@@ -434,7 +434,7 @@ public:
     void eventOrder();
     void checkOrder();
     bool checkCommandTalk();
-    void next_msgStatus(u32*);
+    u16 next_msgStatus(u32*);
     void getMsg();
     void setCollision();
     void setAttention(bool);
