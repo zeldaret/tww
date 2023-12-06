@@ -831,7 +831,7 @@ config.libs = [
             Object(Matching,    "JSystem/JUtility/JUTConsole.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTDirectFile.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTGba.cpp"),
-            Object(NonMatching, "JSystem/JUtility/JUTFontData_Ascfont_fix12.s"),
+            Object(Matching,    "JSystem/JUtility/JUTFontData_Ascfont_fix12.cpp"), # Originally a .s file
         ],
     ),
     JSystemLib(

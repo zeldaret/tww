@@ -3095,7 +3095,7 @@ JSystem/JUtility/JUTGba.cpp:
 	.data       start:0x8039D5A0 end:0x8039D5C0
 	.sbss       start:0x803F7920 end:0x803F7928
 
-JSystem/JUtility/JUTFontData_Ascfont_fix12.s: comment:0
+JSystem/JUtility/JUTFontData_Ascfont_fix12.cpp: comment:0
 	.rodata     start:0x8036CA40 end:0x80370BA0 align:32
 
 JSystem/J2DGraph/J2DGrafContext.cpp:
