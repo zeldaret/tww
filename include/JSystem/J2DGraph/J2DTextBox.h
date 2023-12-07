@@ -47,8 +47,8 @@ public:
         size.mSizeX = mFontSizeX;
         size.mSizeY = mFontSizeY;
     }
-    void setCharColor(JUtility::TColor c) { mCharColor = c; }
-    void setGradColor(JUtility::TColor c) { mGradColor = c; }
+    void setCharColor(JUtility::TColor c) { mCharColor.set(c); }
+    void setGradColor(JUtility::TColor c) { mGradColor.set(c); }
     void setBlack(JUtility::TColor c) { mBlack = c; }
     void setWhite(JUtility::TColor c) { mBlack = c; }
     void setLineSpace(f32 x) { mLineSpace = x; }
