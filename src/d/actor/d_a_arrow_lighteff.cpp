@@ -267,13 +267,10 @@ static BOOL daArrow_Lighteff_Execute(void* i_this) {
     return static_cast<daArrow_Lighteff_c*>(i_this)->_execute();
 }
 
-/* 00000D44-000011A4       .text _execute__18daArrow_Lighteff_cFv */
-bool daArrow_Lighteff_c::_execute() {
-    field_0x2F0 = field_0x2EC;
-
+void daArrow_Lighteff_c::brk_play() {
     mBtk.play();
 
-    s32 cam = dComIfGp_getPlayerCameraID(0);
+    int cam = dComIfGp_getPlayerCameraID(0);
     if(!dComIfGp_checkCameraAttentionStatus(cam, 0x20)) {
         if(field_0x2E0 < mBrk.getEndFrame()) {
             field_0x2E0 += 1.0f;
@@ -300,6 +297,13 @@ bool daArrow_Lighteff_c::_execute() {
     }
 
     mBrk.setFrame(field_0x2E0);
+}
+
+/* 00000D44-000011A4       .text _execute__18daArrow_Lighteff_cFv */
+bool daArrow_Lighteff_c::_execute() {
+    field_0x2F0 = field_0x2EC;
+
+    brk_play();
 
     daPy_py_c* link = daPy_getPlayerActorClass();
     daArrow_c* arrow = static_cast<daArrow_c*>(fopAcM_SearchByID(mParentPcId));
@@ -356,7 +360,7 @@ bool daArrow_Lighteff_c::_execute() {
         fopAcM_delete(this);
     }
 
-    cam = dComIfGp_getPlayerCameraID(0);
+    int cam = dComIfGp_getPlayerCameraID(0);
     if(field_0x2E8 == 1) {
         fopAcM_seStartCurrent(this, JA_SE_OBJ_FIRE_ARROW_AMB, 0);
         if(!dComIfGp_checkCameraAttentionStatus(cam, 0x20)) {
@@ -399,7 +403,7 @@ static BOOL daArrow_Lighteff_IsDelete(void*) {
 static actor_method_class daArrow_LighteffMethodTable = {
     (process_method_func)daArrow_Lighteff_Create,
     (process_method_func)daArrow_Lighteff_Delete,
-    (process_method_func)daArrow_Lighteff_Draw,
+    (process_method_func)daArrow_Lighteff_Execute,
     (process_method_func)daArrow_Lighteff_IsDelete,
     (process_method_func)daArrow_Lighteff_Draw,
 };

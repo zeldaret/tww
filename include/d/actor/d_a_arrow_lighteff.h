@@ -14,7 +14,7 @@ public:
     inline bool _delete();
     inline bool _draw();
     inline bool _execute();
-    void brk_play() {} // based on position in the debug map this would play the btk so not sure what this is really doing
+    inline void brk_play();
 
     void setTopPos();
     void setPointLight();

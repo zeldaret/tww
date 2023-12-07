@@ -297,7 +297,7 @@ static BOOL daArrow_Iceeff_IsDelete(void*) {
 static actor_method_class daArrow_IceeffMethodTable = {
     (process_method_func)daArrow_Iceeff_Create,
     (process_method_func)daArrow_Iceeff_Delete,
-    (process_method_func)daArrow_Iceeff_Draw,
+    (process_method_func)daArrow_Iceeff_Execute,
     (process_method_func)daArrow_Iceeff_IsDelete,
     (process_method_func)daArrow_Iceeff_Draw,
 };
