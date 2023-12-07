@@ -243,13 +243,14 @@ public:
     s8 getArmRlocJntNum() { return m_armRloc_jnt_num; }
     s8 getArmLJntNum() { return m_armL_jnt_num; }
     s8 getArmLlocJntNum() { return m_armLloc_jnt_num; }
+    s8 getHairJntNum(int i) { return m_hair_jnt_nums[i]; }
     
     J3DModel* getModel() { return mpMorf->getModel(); }
     cXyz& getAttentionBasePos() { return m3094; }
     cXyz& getEyePos() { return m3088; }
-    void getPHairDist(int) {}
-    void getPHairPos(int) {}
-    void getPHairVec(int) {}
+    cXyz* getPHairPos(int i) { return &m3174[i]; }
+    cXyz* getPHairVec(int i) { return &m31D4[i]; }
+    f32* getPHairDist(int i) { return &m3264[i]; }
     cXyz* getPHairWall() { return m3234; }
     
     void incAttnSetCount() {
@@ -258,9 +259,11 @@ public:
         }
     }
     
+    u8 checkBitHairMode(u8 bit) { return m3134 & bit; }
+    void setBitHairMode(u8 bit) { m3134 |= bit; }
+    
     void calcFlyingTimer() {}
     void checkBitEffectStatus(u8) {}
-    void checkBitHairMode(u8) {}
     void checkStatus(u32) {}
     void checkStatusCamTagIn() {}
     void checkStatusFly() {}
@@ -269,7 +272,6 @@ public:
     void clearStatus(u32) {}
     void countPiyo2TalkCNT() {}
     void getFlyingTimer() {}
-    void getHairJntNum(int) {}
     void getPiyo2TalkCNT() {}
     void getTalkType() {}
     void isLightBodyHit() {}
@@ -294,7 +296,6 @@ public:
     void onPlayerRoom() {}
     void onShipRide() {}
     void setBitEffectStatus(u8) {}
-    void setBitHairMode(u8) {}
     void setBitStatus(u32) {}
     void setEffectStatus(u8) {}
     void setFlyingTimer(s16) {}
@@ -540,7 +541,8 @@ public:
     /* 0x3131 */ u8 m3131;
     /* 0x3132 */ s8 mActionStatus;
     /* 0x3133 */ u8 m3133;
-    /* 0x3134 */ u8 m3134[0x3136 - 0x3134];
+    /* 0x3134 */ u8 m3134;
+    /* 0x3135 */ u8 m3135[0x3136 - 0x3135];
     /* 0x3136 */ u8 m3136;
     /* 0x3137 */ u8 m3137;
     /* 0x3138 */ u8 m3138;
@@ -564,7 +566,7 @@ public:
     /* 0x3174 */ cXyz m3174[8];
     /* 0x31D4 */ cXyz m31D4[8];
     /* 0x3234 */ cXyz m3234[4];
-    /* 0x3264 */ u8 m3264[0x3284 - 0x3264];
+    /* 0x3264 */ f32 m3264[8];
     /* 0x3284 */ char mModelArcName[3];
     /* 0x3287 */ u8 m3287[0x32A4 - 0x3287];
     /* 0x32A4 */ cXyz m32A4;

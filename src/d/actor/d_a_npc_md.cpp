@@ -13,6 +13,7 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/d_snap.h"
 #include "d/actor/d_a_ship.h"
+#include "d/d_kankyo_wether.h"
 
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
@@ -553,8 +554,45 @@ static BOOL armNodeCallBack(J3DNode* node, int param_1) {
 }
 
 /* 0000160C-00001C60       .text hairCross__FP4cXyzP4cXyzP4cXyz */
-static void hairCross(cXyz*, cXyz*, cXyz*) {
-    /* Nonmatching */
+static BOOL hairCross(cXyz* i_r3, cXyz* i_r4, cXyz* i_r5) {
+    cM3dGTri r1_198(&i_r3[0], &i_r3[1], &i_r3[2]);
+    cM3dGTri r1_160(&i_r3[1], &i_r3[3], &i_r3[2]);
+    
+    cM3dGLin r1_144;
+    r1_144.SetStartEnd(*i_r4, *i_r5);
+    
+    cXyz r1_138;
+    if (r1_198.cross(&r1_144, &r1_138, true, false)) {
+        r1_198.Up(2.0f);
+        if (r1_198.cross(&r1_144, &r1_138, true, false)) {
+            f32 f31 = r1_198.getSignedLenPos(i_r4);
+            cXyz r1_12c = *r1_198.GetNP();
+            cXyz r1_120 = *i_r4 + (r1_12c * -f31);
+            cXyz r1_e4 = (*i_r4 - *i_r5);
+            f32 f30 = r1_e4.abs();
+            cXyz r1_108 = (r1_138 - r1_120);
+            r1_108.normalizeZP();
+            r1_108 = r1_108 * sqrtf(f30 * f30 - f31 * f31);
+            *i_r5 = r1_120 + r1_108;
+            return TRUE;
+        }
+    } else if (r1_160.cross(&r1_144, &r1_138, true, false)) {
+        r1_160.Up(2.0f);
+        if (r1_160.cross(&r1_144, &r1_138, true, false)) {
+            f32 f31 = r1_160.getSignedLenPos(i_r4);
+            cXyz r1_12c = *r1_160.GetNP();
+            cXyz r1_120 = *i_r4 + (r1_12c * -f31);
+            cXyz r1_e4 = (*i_r4 - *i_r5);
+            f32 f30 = r1_e4.abs();
+            cXyz r1_108 = (r1_138 - r1_120);
+            r1_108.normalizeZP();
+            r1_108 = r1_108 * sqrtf(f30 * f30 - f31 * f31);
+            *i_r5 = r1_120 + r1_108;
+            return TRUE;
+        }
+    }
+    
+    return FALSE;
 }
 
 /* 00001CBC-00001D0C       .text hairTopNodeCallBack__FP7J3DNodei */
@@ -566,20 +604,133 @@ static BOOL hairTopNodeCallBack(J3DNode* node, int param_1) {
             J3DJoint* joint = (J3DJoint*)node;
             s32 jntNo = joint->getJntNo();
             MtxP mtx = model->getAnmMtx(jntNo);
-            i_this->m3174[0].set(mtx[0][3], mtx[1][3], mtx[2][3]);
+            cXyz* hairTopPos = i_this->getPHairPos(0);
+            hairTopPos->set(mtx[0][3], mtx[1][3], mtx[2][3]);
         }
     }
     return TRUE;
 }
 
 /* 00001D0C-00001F5C       .text vecChange__FP4cXyzP4cXyzs */
-static void vecChange(cXyz*, cXyz*, s16) {
-    /* Nonmatching */
+static void vecChange(cXyz* i_r3, cXyz* i_r4, s16 i_r5) {
+    if (!cM3d_IsZero(i_r3->abs())) {
+        if (!cM3d_IsZero(i_r4->abs())) {
+            cXyz r1_4c = i_r3->norm();
+            cXyz r1_40 = i_r4->norm();
+            f32 dot = r1_4c.inprod(r1_40);
+            if (dot < cM_scos(i_r5)) {
+                cXyz r1_34 = r1_4c.outprod(r1_40);
+                mDoMtx_stack_c::rotAxisRadS(&r1_34, cM_s2rad(i_r5));
+                mDoMtx_stack_c::multVec(&r1_4c, i_r4);
+            } else {
+                *i_r4 = r1_40;
+            }
+        }
+    }
 }
+
+static u8 HairModeMaskData[] = {
+    0x01,
+    0x02,
+    0x04,
+    0x08,
+    0x10,
+    0x20,
+    0x40,
+    0x80,
+};
+
+static s16 baseAngleX[] = {
+    0x8000,
+    0x9000,
+    0xA000,
+    0xB000,
+    0xB000,
+    0xC000,
+    0xC000,
+    0xC000,
+};
 
 /* 00001F5C-0000240C       .text hairNodeCallBack__FP7J3DNodei */
 static BOOL hairNodeCallBack(J3DNode* node, int param_1) {
-    /* Nonmatching */
+    if (!param_1) {
+        J3DModel* model = j3dSys.getModel();
+        daNpc_Md_c* i_this = (daNpc_Md_c*)model->getUserArea();
+        if (i_this) {
+            J3DJoint* joint = (J3DJoint*)node;
+            s32 jntNo = joint->getJntNo();
+            for (int i = 1; i < 8; i++) {
+                if (i_this->getHairJntNum(i) != jntNo) {
+                    continue;
+                }
+                
+                MtxP mtx = model->getAnmMtx(jntNo);
+                if (!i_this->checkBitHairMode(HairModeMaskData[i])) {
+                    i_this->setBitHairMode(HairModeMaskData[i]);
+                    cXyz* hairPos = i_this->getPHairPos(i);
+                    hairPos->set(mtx[0][3], mtx[1][3], mtx[2][3]);
+                    f32* hairDist = i_this->getPHairDist(i);
+                    cXyz* r29 = i_this->getPHairVec(i);
+                    *r29 = (*hairPos - *i_this->getPHairPos(i-1));
+                    *hairDist = r29->abs();
+                    break;
+                }
+                
+                cXyz* r25 = i_this->getPHairPos(i-1);
+                cXyz* r28 = i_this->getPHairPos(i);
+                cXyz* r24 = i_this->getPHairVec(i);
+                if (i <= 1) {
+                    r28->x = mtx[0][3];
+                    r28->y = mtx[1][3];
+                    r28->z = mtx[2][3];
+                    *r24 = (*r28 - *r25);
+                    break;
+                }
+                
+                f32* hairDist = i_this->getPHairDist(i);
+                cXyz* r22 = i_this->getPHairVec(i-1);
+                cXyz r1_e8;
+                cXyz r1_dc;
+                cXyz r1_d0 = *r28;
+                cXyz r1_c4 = r1_d0 - *r25;
+                r1_e8.set(0.0f, -1.0f, 0.0f);
+                r1_e8 *= l_HIO.m14C;
+                f32 power;
+                dKyw_get_AllWind_vec(&i_this->current.pos, &r1_dc, &power);
+                r1_e8 += r1_dc * power * 3.0f;
+                r1_c4 += r1_e8;
+                r1_c4 = r1_c4.normZP() * *hairDist;
+                vecChange(r22, &r1_c4, 0x1000);
+                *r24 = r1_c4 * *hairDist;
+                *r28 = *r24 + *r25;
+                if (hairCross(i_this->getPHairWall(), i_this->getPHairPos(1), r28)) {
+                    *r24 = (*r28 - *r25);
+                    r24->normalizeZP();
+                    r1_c4 = *r24;
+                    *r28 = r1_c4 * *hairDist + *r25;
+                }
+                
+                s16 prevHaitJntNo = i_this->getHairJntNum(i-1);
+                cXyz r1_b8 = r22->normZP();
+                Mtx r1_124;
+                cM3d_UpMtx_Base(r1_b8, r1_c4, r1_124);
+                Mtx r1_f4;
+                mDoMtx_copy(model->getAnmMtx(prevHaitJntNo), r1_f4);
+                r1_f4[0][3] = 0.0f;
+                r1_f4[1][3] = 0.0f;
+                r1_f4[2][3] = 0.0f;
+                mDoMtx_stack_c::copy(r1_f4);
+                mDoMtx_stack_c::revConcat(r1_124);
+                mDoMtx_copy(mDoMtx_stack_c::get(), mtx);
+                mtx[0][3] = r28->x;
+                mtx[1][3] = r28->y;
+                mtx[2][3] = r28->z;
+                cMtx_copy(mtx, J3DSys::mCurrentMtx);
+                break;
+            }
+        }
+    }
+    return TRUE;
 }
 
 static char* hairName[] = {
@@ -683,7 +834,7 @@ BOOL daNpc_Md_c::createHeap() {
     
     if (m3138 != 7) {
         modelData = (J3DModelData*)dComIfG_getObjectRes(mModelArcName, "mdwing.bdl");
-        JUT_ASSERT(2077, modelData != 0);
+        JUT_ASSERT(2083, modelData != 0);
         
         mpWingMorf = new mDoExt_McaMorf(
             modelData,
@@ -2045,7 +2196,7 @@ BOOL daNpc_Md_c::draw() {
         mDoMtx_stack_c::transS(l_ms_light_local_start);
         mDoMtx_stack_c::YrotM(0x8000);
         f32 temp = mCps.GetAtVecP()->abs();
-        mDoMtx_stack_c::scaleM(0.1f, 0.1f, temp * (1.0f/10000.0f));
+        mDoMtx_stack_c::scaleM(0.1f, 0.1f, temp * (1.0f/9600.0f));
         mDoMtx_stack_c::revConcat(mtx);
         m0B70.update(mDoMtx_stack_c::get(), 0xFF, 90.0f);
         dComIfGd_getXluList()->entryImm(&m0B70, 0x1F);

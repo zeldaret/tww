@@ -138,6 +138,14 @@ struct cXyz : Vec {
 
     f32 getDotProduct(const Vec& other) const { return VECDotProduct(this, &other); }
     f32 inprod(const Vec& other) const { return getDotProduct(other); }
+
+    // TODO
+    // void inprodXZ(const Vec&) const {}
+    // void isNearZeroSquare(const cXyz&) const {}
+    // void operator*=(const Vec&) {}
+    // void operator/=(float) {}
+    // void operator=(const cXyz&) {}
+    // void print(const char*) {}
 };
 
 #endif /* C_XYZ_H */

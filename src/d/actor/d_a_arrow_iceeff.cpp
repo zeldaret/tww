@@ -57,14 +57,14 @@ void daArrow_Iceeff_c::CreateInit() {
 
             f32 temp = 180.0f * i / 30.0f;
             s16 angle = cM_rndF(65536.0f);
-            mDoMtx_ZrotS(mDoMtx_stack_c::get(), cM_rndF(65536.0f));
-            mDoMtx_XrotM(mDoMtx_stack_c::get(), cM_rndF(65536.0f));
-            mDoMtx_YrotM(mDoMtx_stack_c::get(), cM_rndF(65536.0f));
+            mDoMtx_stack_c::ZrotS(cM_rndF(65536.0f));
+            mDoMtx_stack_c::XrotM(cM_rndF(65536.0f));
+            mDoMtx_stack_c::YrotM(cM_rndF(65536.0f));
             mDoMtx_stack_c::transM(temp * cM_ssin(angle), temp * cM_scos(angle), 0.0f);
             mDoMtx_stack_c::ZrotM(current.angle.z);
             mDoMtx_stack_c::XrotM(current.angle.x);
             mDoMtx_stack_c::YrotM(current.angle.y);
-            MTXCopy(mDoMtx_stack_c::get(), field_0x314[i]);
+            cMtx_copy(mDoMtx_stack_c::get(), field_0x314[i]);
         }
     }
     else {
