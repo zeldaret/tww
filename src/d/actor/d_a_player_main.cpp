@@ -2405,9 +2405,9 @@ void daPy_lk_c::voiceStart(u32 param_1) {
 
 /* 801031A4-801031DC       .text itemButton__9daPy_lk_cCFv */
 BOOL daPy_lk_c::itemButton() const {
-    if (mLastUsedEquipItem == 0) {
+    if (mLastUsedItemButtonIdx == 0) {
         return m34C9 & 0x04;
-    } else if (mLastUsedEquipItem == 1) {
+    } else if (mLastUsedItemButtonIdx == 1) {
         return m34C9 & 0x08;
     } else {
         return m34C9 & 0x10;
@@ -2416,9 +2416,9 @@ BOOL daPy_lk_c::itemButton() const {
 
 /* 801031DC-80103214       .text itemTrigger__9daPy_lk_cCFv */
 BOOL daPy_lk_c::itemTrigger() const {
-    if (mLastUsedEquipItem == 0) {
+    if (mLastUsedItemButtonIdx == 0) {
         return mPressedButtonsBitfield & 0x04;
-    } else if (mLastUsedEquipItem == 1) {
+    } else if (mLastUsedItemButtonIdx == 1) {
         return mPressedButtonsBitfield & 0x08;
     } else {
         return mPressedButtonsBitfield & 0x10;
@@ -2449,17 +2449,17 @@ BOOL daPy_lk_c::checkGroupItem(int param_1, int itemNo) {
 
 /* 801032E4-801033E4       .text checkSetItemTrigger__9daPy_lk_cFii */
 BOOL daPy_lk_c::checkSetItemTrigger(int param_1, int param_2) {
-    if (param_2 == 0 || daPy_dmEcallBack_c::m_type != 1) {
+    if (param_2 == 0 || !daPy_dmEcallBack_c::checkCurse()) {
         if (mPressedButtonsBitfield & 0x04 && checkGroupItem(param_1, dComIfGp_getSelectItem(0))) {
-            mLastUsedEquipItem = 0;
+            mLastUsedItemButtonIdx = 0;
             return TRUE;
         }
         if (mPressedButtonsBitfield & 0x08 && checkGroupItem(param_1, dComIfGp_getSelectItem(1))) {
-            mLastUsedEquipItem = 1;
+            mLastUsedItemButtonIdx = 1;
             return TRUE;
         }
         if (mPressedButtonsBitfield & 0x10 && checkGroupItem(param_1, dComIfGp_getSelectItem(2))) {
-            mLastUsedEquipItem = 2;
+            mLastUsedItemButtonIdx = 2;
             return TRUE;
         }
     }
@@ -4320,7 +4320,7 @@ BOOL daPy_lk_c::playerDelete() {
     mDoAud_seDeleteObject(&mSwordTopPos);
     mDoAud_seDeleteObject(&mRopePos);
     mDoAud_seDeleteObject(&m338C.field_0x08);
-    mDoAud_seDeleteObject(&mFanWindCps1.GetEndP());
+    mDoAud_seDeleteObject(&mFanWindCps.GetEndP());
     
     for (i = 0; i < (int)ARRAY_SIZE(m_anm_heap_under); i++) {
         mDoExt_destroySolidHeap(m_anm_heap_under[i].mpAnimeHeap);
@@ -4636,15 +4636,15 @@ void daPy_lk_c::playerInit() {
     mAtCps[2].SetStts(&mStts);
     mAtCyl.Set(l_at_cyl_src);
     mAtCyl.SetStts(&mStts);
-    mFanWindCps1.Set(l_fan_wind_cps_src);
-    mFanWindCps1.SetR(70.0f);
-    mFanWindCps1.SetStts(&mStts);
+    mFanWindCps.Set(l_fan_wind_cps_src);
+    mFanWindCps.SetR(70.0f);
+    mFanWindCps.SetStts(&mStts);
     mFanWindSph.Set(l_fan_wind_sph_src);
     mFanWindSph.SetStts(&mStts);
-    mFanWindCps2.Set(l_fan_wind_cps_src);
-    mFanWindCps2.SetStts(&mStts);
-    mFanWindCps2.SetAtType(AT_TYPE_LIGHT);
-    mFanWindCps2.SetR(20.0f);
+    mFanLightCps.Set(l_fan_wind_cps_src);
+    mFanLightCps.SetStts(&mStts);
+    mFanLightCps.SetAtType(AT_TYPE_LIGHT);
+    mFanLightCps.SetR(20.0f);
     
     for (int i = 0; i < (int)ARRAY_SIZE(m_anm_heap_under); i++) {
         createAnimeHeap(&m_anm_heap_under[i].mpAnimeHeap, HEAP_TYPE_UNDER_UPPER_e);

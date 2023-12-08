@@ -958,6 +958,10 @@ inline void dComIfGs_setReserveItemEmpty() {
     g_dComIfG_gameInfo.save.getPlayer().getBagItem().setReserveItemEmpty();
 }
 
+inline void dComIfGs_setReserveBaitEmpty(u8 i_btnIdx) {
+    g_dComIfG_gameInfo.save.getPlayer().getBagItem().setBaitItemEmpty(i_btnIdx);
+}
+
 inline void dComIfGs_setEventReg(u16 i_reg, u8 i_no) {
     g_dComIfG_gameInfo.save.getEvent().setEventReg(i_reg, i_no);
 }

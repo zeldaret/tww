@@ -112,7 +112,37 @@ BOOL daPy_lk_c::procFoodThrow_init() {
 
 /* 801546F4-80154880       .text procFoodThrow__9daPy_lk_cFv */
 BOOL daPy_lk_c::procFoodThrow() {
-    /* Nonmatching */
+    J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[0];
+    setShipRidePosUseItem();
+    if (frameCtrl.getRate() < 0.01f) {
+        if (mDemo.getDemoType() != 5) {
+            dComIfGp_evmng_cutEnd(mStaffIdx);
+        } else {
+            dComIfGp_event_reset();
+            u32 playerPID = fopAcM_GetID(this);
+            dCam_getBody()->EndEventCamera(playerPID);
+            endDemoMode();
+        }
+    } else if (frameCtrl.checkPass(9.0f)) {
+        seStartOnlyReverb(JA_SE_LK_ESA_THROW);
+        void* esa = fopAcM_fastCreate(PROC_ESA, 0xFFFF0014, &field_0x2d4, fopAcM_GetRoomNo(this), &shape_angle);
+        if (esa) {
+            m3630 = fopAcM_GetID(esa);
+            if (mDemo.getDemoType() != 5) {
+                u8 btnIdx = dComIfGp_event_getTalkXYBtn();
+                if (btnIdx == 1) {
+                    dComIfGs_setReserveBaitEmpty(0);
+                } else if (btnIdx == 2) {
+                    dComIfGs_setReserveBaitEmpty(1);
+                } else {
+                    dComIfGs_setReserveBaitEmpty(2);
+                }
+            } else {
+                dComIfGs_setReserveBaitEmpty(mLastUsedItemButtonIdx);
+            }
+        }
+    }
+    return TRUE;
 }
 
 /* 80154880-80154A48       .text procFoodSet_init__9daPy_lk_cFv */
