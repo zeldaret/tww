@@ -157,7 +157,7 @@ void daArrow_c::setLightEffect() {
             mLightEffPID = fopAcM_createChild(
                 PROC_ARROW_LIGHTEFF, fopAcM_GetID(this),
                 mArrowType, &field_0x6a8,
-                current.roomNo, &shape_angle, NULL, -1, NULL
+                current.roomNo, &shape_angle
             );
             if (mLightEffPID != fpcM_ERROR_PROCESS_ID_e) {
                 mbHasLightEff = true;
@@ -403,7 +403,7 @@ bool daArrow_c::check_water_in() {
             mInWaterTimer = 10*30;
             fopAcM_createChild(
                 PROC_ARROW_ICEEFF, fopAcM_GetID(this), mArrowType,
-                &waterHitPos, current.roomNo, &current.angle, NULL, -1, NULL
+                &waterHitPos, current.roomNo, &current.angle
             );
             if (!field_0x6e4) {
                 dKy_arrowcol_chg_on(&current.pos, 1);
@@ -807,7 +807,7 @@ BOOL daArrow_c::procMove() {
                     fopAcM_createChild(
                         PROC_ARROW_ICEEFF, fopAcM_GetID(this),
                         mArrowType, &field_0x6a8,
-                        current.roomNo, &field_0x6e6, NULL, -1, NULL
+                        current.roomNo, &field_0x6e6
                     );
                     
                     fopAcM_seStartCurrent(this, JA_SE_OBJ_ICE_ARW_EFF, 0);
@@ -989,7 +989,7 @@ BOOL daArrow_c::procStop_BG() {
         if (mCoSph.ChkCoHit()) {
             dComIfGp_setItemArrowNumCount(1);
             fopAcM_createItemForSimpleDemo(&current.pos, ARROW_10, -1, NULL, NULL, 0.0f, 0.0f);
-            mDoAud_seStart(JA_SE_CONSUMP_ITEM_GET, NULL, 0, 0);
+            mDoAud_seStart(JA_SE_CONSUMP_ITEM_GET);
             fopAcM_delete(this);
             return TRUE;
         }

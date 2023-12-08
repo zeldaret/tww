@@ -481,7 +481,7 @@ void dComIfG_inf_c::ct() {
 int dComIfG_changeOpeningScene(scene_class* i_scene, s16 i_procName) {
     dComIfGp_offEnableNextStage();
 
-    dComIfGp_setNextStage("sea_T", 0, 44, 0, 0.0f, 0, 1, 0);
+    dComIfGp_setNextStage("sea_T", 0, 44, 0);
     mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(),
                         dComIfGp_getNextStageLayer());
     dComIfGs_setRestartRoomParam(0);
@@ -641,7 +641,7 @@ stage_arrow_class* dComIfGp_getRoomArrow(int i_roomNo) {
 
 /* 800537C8-8005388C       .text dComIfGp_setNextStage__FPCcsScScfUliSc */
 void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8 i_layer,
-                           f32 i_lastSpeed, u32 i_lastMode, int i_setPoint, s8 i_wipe) {
+                           f32 i_lastSpeed, u32 i_lastMode, BOOL i_setPoint, s8 i_wipe) {
     g_dComIfG_gameInfo.play.setNextStage(i_stageName, i_roomNo, i_point, i_layer, i_wipe);
 
     if (daPy_getPlayerLinkActorClass() != NULL) {
@@ -1213,7 +1213,7 @@ void dComIfGs_gameStart() {
     s8 roomNo = g_dComIfG_gameInfo.save.getPlayer().getPlayerReturnPlace().getRoomNo();
     s16 point = g_dComIfG_gameInfo.save.getPlayer().getPlayerReturnPlace().getPoint();
     char* name = g_dComIfG_gameInfo.save.getPlayer().getPlayerReturnPlace().getName();
-    dComIfGp_setNextStage(name, point, roomNo, -1, 0.0f, 0, 1, 0);
+    dComIfGp_setNextStage(name, point, roomNo);
 }
 
 /* 80054CC0-80054E9C       .text dComIfGs_copyPlayerRecollectionData__Fv */

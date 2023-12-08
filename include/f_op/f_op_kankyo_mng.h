@@ -15,8 +15,9 @@ struct fopKyM_prm_class {
 typedef int (*fopKyM_CreateFunc)(void*);
 
 void fopKyM_Delete(void* param_1);
-int fopKyM_Create(s16 param_1, fopKyM_CreateFunc param_2, void* param_3);
-int fopKyM_create(s16 i_procName, int i_param, cXyz* i_pos, cXyz* i_scale, fopKyM_CreateFunc i_createFunc);
+int fopKyM_Create(s16 param_1, fopKyM_CreateFunc param_2 = NULL, void* param_3 = NULL);
+int fopKyM_create(s16 i_procName, int i_param, cXyz* i_pos = NULL, cXyz* i_scale = NULL,
+                  fopKyM_CreateFunc i_createFunc = NULL);
 kankyo_class* fopKyM_SearchByID(unsigned int id);
 base_process_class* fopKyM_fastCreate(s16 param_0, int param_1, cXyz* param_2, cXyz* param_3,
                                       fopKyM_CreateFunc);

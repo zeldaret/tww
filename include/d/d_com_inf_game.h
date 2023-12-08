@@ -1545,8 +1545,9 @@ BOOL dComIfGs_checkSeaLandingEvent(s8 i_roomNo);
  * === PLAY ===
  */
 
-void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8 i_layer,
-                           f32 i_lastSpeed, u32 i_lastMode, int, s8 i_wipe);
+void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8 i_layer = -1,
+                           f32 i_lastSpeed = 0.0f, u32 i_lastMode = 0, BOOL i_setPoint = TRUE,
+                           s8 i_wipe = 0);
 dStage_Ship_data* dComIfGp_getShip(int i_roomNo, int param_1);
 bool dComIfGp_getMapTrans(int i_roomNo, f32* o_transX, f32* o_transY, s16* o_angle);
 
@@ -2217,7 +2218,7 @@ inline s32 dComIfGp_event_moveApproval(void* actor) {
     return g_dComIfG_gameInfo.play.getEvent().moveApproval(actor);
 }
 
-inline BOOL dComIfGp_event_compulsory(void* param_1, const char* param_2, u16 param_3) {
+inline BOOL dComIfGp_event_compulsory(void* param_1, const char* param_2 = NULL, u16 param_3 = -1) {
     return g_dComIfG_gameInfo.play.getEvent().compulsory(param_1, param_2, param_3);
 }
 
@@ -2276,8 +2277,8 @@ inline s16 dComIfGp_evmng_getEventIdx(const char* pName, u8 evNo) {
     return g_dComIfG_gameInfo.play.getEvtManager().getEventIdx(pName, evNo);
 }
 
-inline int dComIfGp_evmng_getMyStaffId(const char* pName, fopAc_ac_c* pActor, int param_3) {
-    return dComIfGp_getPEvtManager()->getMyStaffId(pName, pActor, param_3);
+inline int dComIfGp_evmng_getMyStaffId(const char* pName, fopAc_ac_c* pActor = NULL, int staffType = 0) {
+    return dComIfGp_getPEvtManager()->getMyStaffId(pName, pActor, staffType);
 }
 
 inline int dComIfGp_evmng_getMyActIdx(int staffIdx, char** pActions, int actionCount, int force, int param_5) {

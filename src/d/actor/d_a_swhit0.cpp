@@ -249,7 +249,7 @@ s32 daSwhit0_c::actionOffWait() {
             case 3:
                 mState = 2;
                 
-                fopAcM_orderOtherEventId(this, mEventIdx, getEvNo(), 0xFFFF, 0, 1);
+                fopAcM_orderOtherEventId(this, mEventIdx, getEvNo());
                 mEvtInfo.onCondition(0x02);
 
                 break;
@@ -279,7 +279,7 @@ s32 daSwhit0_c::actionToOnReady() {
     else {
         mState = 2;
 
-        fopAcM_orderOtherEventId(this, mEventIdx, getEvNo(), 0xFFFF, 0, 1);
+        fopAcM_orderOtherEventId(this, mEventIdx, getEvNo());
         mEvtInfo.onCondition(0x02);
     }
 
@@ -290,12 +290,12 @@ s32 daSwhit0_c::actionToOnReady() {
 s32 daSwhit0_c::actionToOnOrder() {
     if (mEvtInfo.checkCommandDemoAccrpt()) {
         mState = 3;
-        mStaffId = dComIfGp_evmng_getMyStaffId("SWITCH", NULL, 0);
+        mStaffId = dComIfGp_evmng_getMyStaffId("SWITCH");
         
         DemoProc();
     }
     else {
-        fopAcM_orderOtherEventId(this, mEventIdx, getEvNo(), 0xFFFF, 0, 1);
+        fopAcM_orderOtherEventId(this, mEventIdx, getEvNo());
         mEvtInfo.onCondition(0x02);
     }
 

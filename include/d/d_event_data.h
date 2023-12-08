@@ -91,7 +91,7 @@ public:
     /* 0x46 */ u8 mAdvance;
     /* 0x47 */ u8 mbNeedsAction;
     /* 0x48 */ u8 field_48[0x50 - 0x48];
-};
+};  // Size: 0x50
 
 class dEvDtEvent_c {
 public:

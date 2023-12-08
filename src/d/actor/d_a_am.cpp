@@ -979,7 +979,7 @@ static void action_itai_move(am_class* i_this) {
         mDoAud_seStart(JA_SE_CM_AM_EXPLODE, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
         mDoAud_seStart(JA_SE_LK_LAST_HIT, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
 
-        fopAcM_createDisappear(i_this, &centerPos, 5, 0, 0xFF);
+        fopAcM_createDisappear(i_this, &centerPos, 5);
         fopAcM_onActor(i_this);
         fopAcM_delete(i_this);
         break;
@@ -1243,8 +1243,7 @@ static s32 daAM_Create(fopAc_ac_c* i_actor) {
 
         i_this->mAcch.Set(
             &fopAcM_GetPosition_p(i_this), &fopAcM_GetOldPosition_p(i_this),
-            i_this, 1, &i_this->mAcchCir, &fopAcM_GetSpeed_p(i_this),
-            NULL, NULL
+            i_this, 1, &i_this->mAcchCir, &fopAcM_GetSpeed_p(i_this)
         );
         i_this->mStts.Init(0xFE, 1, i_this);
 

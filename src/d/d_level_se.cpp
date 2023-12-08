@@ -15,11 +15,11 @@ BOOL dLevelSe_Execute(dLevelSe_c* i_this) {
 
     if (i_this->mFlag & 0x08) {
     } else if (i_this->mFlag & 0x01) {
-        mDoAud_seStart(soundId, &i_this->mPos, i_this->field_0xf8, 0);
+        mDoAud_seStart(soundId, &i_this->mPos, i_this->field_0xf8);
     } else if (i_this->mFlag & 0x04) {
         mDoAud_seStart(soundId, &i_this->mPos, i_this->field_0xf8, i_this->mReverb);
     } else {
-        mDoAud_seStart(soundId, &i_this->mPos, 0, 0);
+        mDoAud_seStart(soundId, &i_this->mPos);
     }
 
     return TRUE;

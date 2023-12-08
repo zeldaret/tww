@@ -18,11 +18,7 @@ namespace daObjBuoyflag {
     public:
         static s32 make_norm(unsigned int parentPId, cXyz* pos, int roomNo, csXyz* angle) {
             u32 params = prm_make(static_cast<Type_e>(0), static_cast<Texture_e>(0), false); // TODO: placeholder
-            return fopAcM_createChild(
-                PROC_Obj_Buoyflag, parentPId,
-                params, pos,
-                roomNo, angle, NULL, -1, NULL
-            );
+            return fopAcM_createChild(PROC_Obj_Buoyflag, parentPId, params, pos, roomNo, angle);
         }
         static u32 prm_make(Type_e, Texture_e, bool) {
             // TODO: placeholder function

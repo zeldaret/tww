@@ -428,7 +428,7 @@ void daAgb_c::modeLookAttention() {
             }
         }
     } else {
-        fopAcM_orderOtherEvent2(this, "DEFAULT_AGB_LOOK_ATTENTION", 4, 0xFFFF);
+        fopAcM_orderOtherEvent2(this, "DEFAULT_AGB_LOOK_ATTENTION", 4);
     }
 }
 
@@ -721,7 +721,7 @@ void daAgb_c::GbaItemUse() {
                 temp_r29 = 15;
             }
 
-            fopAcM_create(0x128, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos, -1);
+            fopAcM_create(0x128, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
             field_0x65c = 0x78;
         } else {
             temp_r29 = 0xe;
@@ -732,7 +732,7 @@ void daAgb_c::GbaItemUse() {
         break;
     case 0x15:
         resetCursor(false);
-        fopAcM_create(0x128, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos, -1);
+        fopAcM_create(0x128, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
         field_0x65c = 0x78;
         break;
     case 0x11:
@@ -1126,8 +1126,7 @@ static int daAgb_Create(fopAc_ac_c* i_this) {
 
         a_this->mCrrPos.SetGndUpY(170.0f);
         a_this->mCrrPos.ClrNoRoof();
-        a_this->mAcch.Set(&a_this->current.pos, &a_this->next.pos, a_this, 1, &a_this->mAcchCir,
-                          NULL, NULL, NULL);
+        a_this->mAcch.Set(&a_this->current.pos, &a_this->next.pos, a_this, 1, &a_this->mAcchCir);
         a_this->mAcch.OnLineCheck();
         a_this->mAcch.SetGrndNone();
         a_this->mAcchCir.SetWall(171.01f, 40.0f);

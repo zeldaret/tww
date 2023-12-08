@@ -206,7 +206,7 @@ void daGhostship_c::createInit() {
     }
 
     mCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&fopAcM_GetPosition_p(this), &fopAcM_GetOldPosition_p(this), this, true, &mCir, &fopAcM_GetSpeed_p(this), 0, 0);
+    mAcch.Set(&fopAcM_GetPosition_p(this), &fopAcM_GetOldPosition_p(this), this, 1, &mCir, &fopAcM_GetSpeed_p(this));
     mAcch.SetWallNone();
     mAcch.SetRoofNone();
     dLib_waveRot(&current.pos, 0.0f, &mWave);
@@ -353,14 +353,14 @@ bool daGhostship_c::_execute() {
     }
 
     if(mAlpha == l_HIO.shipAlpha && dist < l_HIO.shipEnterDist && dComIfGs_getEventReg(0x8803) < 3 && !mbEnteredShip) {
-        mDoAud_seStart(JA_SE_LK_WARP_TO_G_SHIP, 0, 0, 0);
+        mDoAud_seStart(JA_SE_LK_WARP_TO_G_SHIP);
         stage_scls_info_class* scls_data = dComIfGd_getMeshSceneList(current.pos);
         JUT_ASSERT(463, scls_data != 0)
 
         u8 startCode = scls_data->mStart;
         dComIfGs_setEventReg(0xC3FF, scls_data->mRoom);
         dComIfGs_setEventReg(0x85FF, startCode);
-        dComIfGp_setNextStage("PShip", 0, 2, 0xFF, 0.0f, 0, 1, 0);
+        dComIfGp_setNextStage("PShip", 0, 2);
         mbEnteredShip = true;
     }
 

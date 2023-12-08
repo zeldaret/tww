@@ -129,19 +129,19 @@ void daObj_Hole_c::modeEventInit() {
 /* 000004F4-000005D0       .text modeEvent__12daObj_Hole_cFv */
 void daObj_Hole_c::modeEvent() {
     if (mEvtInfo.checkCommandDemoAccrpt()) {
-        int staffId = dComIfGp_evmng_getMyStaffId("Ypit00", NULL, 0);
+        int staffId = dComIfGp_evmng_getMyStaffId("Ypit00");
 
         if (dComIfGp_evmng_endCheck("DEFAULT_PITFALL")) {
             if (mExitIdx != 0xFF) {
                 dLib_setNextStageBySclsNum(mExitIdx, current.roomNo);
             }
             else {
-                dComIfGp_setNextStage(dComIfGp_getStartStageName(), 0, current.roomNo, 0xFF, 0.0f, 0, 1, 0);
+                dComIfGp_setNextStage(dComIfGp_getStartStageName(), 0, current.roomNo);
             }
         }
     }
     else {
-        fopAcM_orderOtherEvent2(this, "DEFAULT_PITFALL", 1, 0xFFFF);
+        fopAcM_orderOtherEvent2(this, "DEFAULT_PITFALL", 1);
     }
 }
 
@@ -214,7 +214,7 @@ void daObj_Hole_c::createInit() {
     fopAcM_setCullSizeFar(this, 10.0f);
 
     mAcchCir.SetWall(100.0f, 10.0f);
-    mAcch.Set(&current.pos, &next.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
+    mAcch.Set(&current.pos, &next.pos, this, 1, &mAcchCir, &speed);
 
     mAcch.SetWallNone();
     mAcch.SetRoofNone();

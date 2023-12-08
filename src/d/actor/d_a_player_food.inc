@@ -32,14 +32,14 @@ BOOL daPy_lk_c::procFoodThrow_init() {
         return TRUE;
     }
     if (m3630 != -1) {
-        mDoAud_seStart(JA_SE_ITEM_TARGET_OUT, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_ITEM_TARGET_OUT);
         return FALSE;
     }
     
     dBgS* bgs = dComIfG_Bgsp(); // This is kinda weird, maybe fakematch
     
     if (!dComIfGp_event_runCheck()) {
-        if (!dComIfGp_event_compulsory(this, NULL, -1)) {
+        if (!dComIfGp_event_compulsory(this)) {
             return FALSE;
         } else {
             mDemo.setSpecialDemoType();
@@ -168,7 +168,7 @@ BOOL daPy_lk_c::procFoodSet_init() {
     }
     
     if (!dComIfGp_event_runCheck()) {
-        if (!dComIfGp_event_compulsory(this, NULL, -1)) {
+        if (!dComIfGp_event_compulsory(this)) {
             return FALSE;
         }
         mDemo.setDemoType(5);

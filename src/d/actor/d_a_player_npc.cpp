@@ -171,7 +171,7 @@ BOOL daPy_npc_c::checkNowPosMove(const char* pName) {
         return TRUE;
     }
     
-    int evtStaffId = dComIfGp_evmng_getMyStaffId(pName, NULL, 0);
+    int evtStaffId = dComIfGp_evmng_getMyStaffId(pName);
     if (evtStaffId != -1) {
         return TRUE;
     }

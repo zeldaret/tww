@@ -130,7 +130,7 @@ int daFan_c::Create() {
     }
 
     mModel->calc();
-    mWindSePId = fopKyM_create(PROC_LEVEL_SE, JA_SE_OBJ_WIND_TAG, &mEyePos, NULL, NULL);
+    mWindSePId = fopKyM_create(PROC_LEVEL_SE, JA_SE_OBJ_WIND_TAG, &mEyePos);
     return TRUE;
 }
 

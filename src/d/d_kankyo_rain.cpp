@@ -1841,12 +1841,12 @@ void dKyr_thunder_move() {
             cLib_addCalc(&pThunder->mFlashTimer, 1.0f, 0.3f, 0.2f, 0.001f);
             if (pThunder->mFlashTimer >= 1.0f) {
                 if (pThunder->mState < 10)
-                    mDoAud_seStart(0x69f7, NULL, 0, 0);
+                    mDoAud_seStart(JA_SE_OBJ_THUNDER_NEAR);
                 pThunder->mState++;
             }
 
             if (cM_rndF(1.0f) < 0.18f)
-                fopKyM_create(PROC_KY_THUNDER, -1, NULL, NULL, NULL);
+                fopKyM_create(PROC_KY_THUNDER, -1);
         }
         break;
     case 2:

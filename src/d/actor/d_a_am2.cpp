@@ -987,7 +987,7 @@ static void action_itai(am2_class* i_this) {
         dComIfGp_particle_set(0x81AF, &i_this->current.pos, &i_this->shape_angle);
         dComIfGp_particle_set(0x81B0, &i_this->current.pos, &i_this->shape_angle);
         mDoAud_seStart(JA_SE_CM_AM2_EXPLODE, &i_this->mEyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
-        fopAcM_createDisappear(i_this, &centerPos, 5, 0, 0xFF);
+        fopAcM_createDisappear(i_this, &centerPos, 5);
         fopAcM_onActor(i_this);
         fopAcM_delete(i_this);
         break;
@@ -1349,8 +1349,7 @@ static s32 daAM2_Create(fopAc_ac_c* i_actor) {
 
         i_this->mAcch.Set(
             &fopAcM_GetPosition_p(i_this), &fopAcM_GetOldPosition_p(i_this),
-            i_this, 1, &i_this->mAcchCir, &fopAcM_GetSpeed_p(i_this),
-            NULL, NULL
+            i_this, 1, &i_this->mAcchCir, &fopAcM_GetSpeed_p(i_this)
         );
         i_this->mStts.Init(0xFE, 1, i_this);
 

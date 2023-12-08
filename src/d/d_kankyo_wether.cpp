@@ -535,7 +535,7 @@ void wether_move_rain() {
             g_env_light.mbRainInitialized = true;
 
             if (g_env_light.mRainCount != 250) {
-                mDoAud_seStart(JA_SE_ATM_RAIN_START, NULL, 0, 0);
+                mDoAud_seStart(JA_SE_ATM_RAIN_START);
             }
         }
         break;
@@ -552,7 +552,7 @@ void wether_move_rain() {
 
         if (g_env_light.mRainCount == 0) {
             g_env_light.mbRainInitialized = false;
-            mDoAud_seStart(JA_SE_ATM_RAIN_END, NULL, 0, 0);
+            mDoAud_seStart(JA_SE_ATM_RAIN_END);
             delete g_env_light.mpRainPacket;
         }
         break;

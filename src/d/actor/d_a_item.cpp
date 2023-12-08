@@ -135,8 +135,7 @@ void itemGetCallBack(fopAc_ac_c* item_actor, dCcD_GObjInf*, fopAc_ac_c* collided
 /* 800F5044-800F53EC       .text CreateInit__8daItem_cFv */
 void daItem_c::CreateInit() {
     mAcchCir.SetWall(30.0f, 30.0f);
-    cXyz* speedPtr;
-    mAcch.Set(&current.pos, &next.pos, this, 1, &mAcchCir, speedPtr = &speed, NULL, NULL);
+    mAcch.Set(&current.pos, &next.pos, this, 1, &mAcchCir, &fopAcM_GetSpeed_p(this));
     mAcch.m_flags &= ~0x400;
     mAcch.m_flags &= ~0x8;
     mCullMtx = mpModel->mBaseTransformMtx;
@@ -159,7 +158,7 @@ void daItem_c::CreateInit() {
     
     mDisappearTimer = getData()->mDuration;
     field_0x65a = getData()->field_0x18;
-    field_0x650 = speedPtr->y;
+    field_0x650 = fopAcM_GetSpeed_p(this).y;
     mItemStatus = 0;
     
     mType = daItem_prm::getType(this);
@@ -403,7 +402,7 @@ void daItem_c::execInitGetDemoDirection() {
     if (player == link) {
         fopAcM_orderItemEvent(this);
         mEvtInfo.onCondition(dEvtCnd_CANGETITEM_e);
-        mDemoItemBsPcId = fopAcM_createItemForTrBoxDemo(&current.pos, m_itemNo, -1, current.roomNo, NULL, NULL);
+        mDemoItemBsPcId = fopAcM_createItemForTrBoxDemo(&current.pos, m_itemNo, -1, current.roomNo);
         mItemStatus = STATUS_WAIT_GET_DEMO;
     }
 }
@@ -585,51 +584,51 @@ void daItem_c::itemGetExecute() {
     
     switch (m_itemNo) {
     case HEART:
-        mDoAud_seStart(JA_SE_HEART_PIECE, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_HEART_PIECE);
         execItemGet(m_itemNo);
         break;
     case GREEN_RUPEE:
-        mDoAud_seStart(JA_SE_LUPY_GET, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_LUPY_GET);
         execItemGet(m_itemNo);
         break;
     case BLUE_RUPEE:
-        mDoAud_seStart(JA_SE_BLUE_LUPY_GET, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_BLUE_LUPY_GET);
         execItemGet(m_itemNo);
         break;
     case YELLOW_RUPEE:
-        mDoAud_seStart(JA_SE_BLUE_LUPY_GET, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_BLUE_LUPY_GET);
         execItemGet(m_itemNo);
         break;
     case RED_RUPEE:
-        mDoAud_seStart(JA_SE_RED_LUPY_GET, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_RED_LUPY_GET);
         execItemGet(m_itemNo);
         break;
     case PURPLE_RUPEE:
-        mDoAud_seStart(JA_SE_RED_LUPY_GET, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_RED_LUPY_GET);
         execItemGet(m_itemNo);
         break;
     case ORANGE_RUPEE:
-        mDoAud_seStart(JA_SE_RED_LUPY_GET, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_RED_LUPY_GET);
         execItemGet(m_itemNo);
         break;
     case SILVER_RUPEE:
-        mDoAud_seStart(JA_SE_RED_LUPY_GET, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_RED_LUPY_GET);
         execItemGet(m_itemNo);
         break;
     case KAKERA_HEART:
-        mDoAud_seStart(JA_SE_HEART_PIECE, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_HEART_PIECE);
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
     case UTUWA_HEART:
-        mDoAud_seStart(JA_SE_HEART_PIECE, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_HEART_PIECE);
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
     case S_MAGIC:
-        mDoAud_seStart(JA_SE_MAGIC_POT_GET_S, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_MAGIC_POT_GET_S);
         execItemGet(m_itemNo);
         break;
     case L_MAGIC:
-        mDoAud_seStart(JA_SE_MAGIC_POT_GET_L, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_MAGIC_POT_GET_L);
         execItemGet(m_itemNo);
         break;
     case BOMB_5:
@@ -639,18 +638,18 @@ void daItem_c::itemGetExecute() {
     case ARROW_10:
     case ARROW_20:
     case ARROW_30:
-        mDoAud_seStart(JA_SE_CONSUMP_ITEM_GET, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_CONSUMP_ITEM_GET);
         execItemGet(m_itemNo);
         break;
     case SMALL_KEY:
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
     case TRIPLE_HEART:
-        mDoAud_seStart(JA_SE_HEART_PIECE, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_HEART_PIECE);
         execItemGet(m_itemNo);
         break;
     case PENDANT:
-        mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_SPOILS_GET);
         if (!dComIfGs_isGetItemBeast(7)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(7);
@@ -679,7 +678,7 @@ void daItem_c::itemGetExecute() {
         mItemStatus = STATUS_INIT_GET_DEMO;
         break;
     case SKULL_NECKLACE:
-        mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_SPOILS_GET);
         if (!dComIfGs_isGetItemBeast(0)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(0);
@@ -688,7 +687,7 @@ void daItem_c::itemGetExecute() {
         }
         break;
     case BOKOBABA_SEED:
-        mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_SPOILS_GET);
         if (!dComIfGs_isGetItemBeast(1)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(1);
@@ -697,7 +696,7 @@ void daItem_c::itemGetExecute() {
         }
         break;
     case GOLDEN_FEATHER:
-        mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_SPOILS_GET);
         if (!dComIfGs_isGetItemBeast(2)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(2);
@@ -706,7 +705,7 @@ void daItem_c::itemGetExecute() {
         }
         break;
     case BOKO_BELT:
-        mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_SPOILS_GET);
         if (!dComIfGs_isGetItemBeast(3)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(3);
@@ -715,7 +714,7 @@ void daItem_c::itemGetExecute() {
         }
         break;
     case RED_JELLY:
-        mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_SPOILS_GET);
         if (!dComIfGs_isGetItemBeast(4)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(4);
@@ -724,7 +723,7 @@ void daItem_c::itemGetExecute() {
         }
         break;
     case GREEN_JELLY:
-        mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_SPOILS_GET);
         if (!dComIfGs_isGetItemBeast(5)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(5);
@@ -733,7 +732,7 @@ void daItem_c::itemGetExecute() {
         }
         break;
     case BLUE_JELLY:
-        mDoAud_seStart(JA_SE_SPOILS_GET, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_SPOILS_GET);
         if (!dComIfGs_isGetItemBeast(6)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
             dComIfGs_onGetItemBeast(6);
@@ -742,7 +741,7 @@ void daItem_c::itemGetExecute() {
         }
         break;
     case BIRD_ESA_5:
-        mDoAud_seStart(JA_SE_ESA_GET, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_ESA_GET);
         if (!dComIfGs_isGetItemBait(0)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
             dComIfGs_onGetItemBait(0);
@@ -751,7 +750,7 @@ void daItem_c::itemGetExecute() {
         }
         break;
     case ANIMAL_ESA:
-        mDoAud_seStart(JA_SE_ESA_GET, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_ESA_GET);
         if (!dComIfGs_isGetItemBait(1)) {
             mItemStatus = STATUS_INIT_GET_DEMO;
             dComIfGs_onGetItemBait(1);

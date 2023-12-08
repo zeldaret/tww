@@ -1432,13 +1432,13 @@ namespace daObjMovebox {
             mChildPID = fopAcM_createChild(
                 PROC_Obj_Jump, fopAcM_GetID(this),
                 jumpParams, &current.pos,
-                fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL
+                fopAcM_GetRoomNo(this), &shape_angle
             );
         } else if (mType == TYPE_MIRROR) {
             mChildPID = fopAcM_createChild(
                 PROC_Obj_Mmrr, fopAcM_GetID(this),
                 0, &current.pos,
-                fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL
+                fopAcM_GetRoomNo(this), &shape_angle
             );
         } else if (mType == TYPE_BLACK_BOX_WITH_MKIE) {
             cXyz mkiePos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
@@ -1790,7 +1790,7 @@ namespace daObjMovebox {
     void Act_c::make_item() {
         s32 itemTableNo = prm_get_itemNo();
         s32 itemBitNo = prm_get_itemSave();
-        fopAcM_createItemFromTable(&current.pos, itemTableNo, itemBitNo, fopAcM_GetHomeRoomNo(this), 0, &current.angle, 7, NULL);
+        fopAcM_createItemFromTable(&current.pos, itemTableNo, itemBitNo, fopAcM_GetHomeRoomNo(this), 0, &current.angle, 7);
     }
     
     /* 00003450-00003570       .text eff_break__Q212daObjMovebox5Act_cFv */
@@ -1806,7 +1806,7 @@ namespace daObjMovebox {
             emitter->setLifeTime(30);
             emitter->setAwayFromAxisSpeed(30.0f);
         }
-        fopAcM_create(PROC_Obj_Eff, 0x5, &particlePos, -1);
+        fopAcM_create(PROC_Obj_Eff, 0x5, &particlePos);
         // TODO daObjEff::Act_c::make_woodBox_smoke(cXyz*)
     }
     

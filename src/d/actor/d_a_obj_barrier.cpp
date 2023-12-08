@@ -258,7 +258,7 @@ void daObjBarrier_c::break_order_proc() {
     if (mEvtInfo.checkCommandDemoAccrpt()) {
         mBarrierProc = PROC_BREAK_END_WAIT;
     } else {
-        fopAcM_orderOtherEventId(this, mEventID, 0xFF, 0xFFFF, 0, 1);
+        fopAcM_orderOtherEventId(this, mEventID);
         mEvtInfo.onCondition(2);
     }
 }

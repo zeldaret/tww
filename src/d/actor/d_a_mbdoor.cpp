@@ -439,7 +439,7 @@ BOOL daMbdoor_actionWait(daMbdoor_c* i_this) {
 BOOL daMbdoor_actionLockWait(daMbdoor_c* i_this) {
     if (i_this->checkUnlock()) {
         i_this->setAction(2);
-        fopAcM_orderOtherEvent2(i_this, "MBDOOR_STOP_OPEN", 1, -1);
+        fopAcM_orderOtherEvent2(i_this, "MBDOOR_STOP_OPEN", 1);
     }
     return TRUE;
 }
@@ -447,11 +447,11 @@ BOOL daMbdoor_actionLockWait(daMbdoor_c* i_this) {
 /* 0000121C-000012AC       .text daMbdoor_actionLockOff__FP10daMbdoor_c */
 BOOL daMbdoor_actionLockOff(daMbdoor_c* i_this) {
     if (i_this->mEvtInfo.checkCommandDemoAccrpt()) {
-        i_this->mEvtStaffId = dComIfGp_evmng_getMyStaffId("MBDOOR", NULL, 0);
+        i_this->mEvtStaffId = dComIfGp_evmng_getMyStaffId("MBDOOR");
         i_this->demoProc();
         i_this->setAction(3);
     } else {
-        fopAcM_orderOtherEvent2(i_this, "MBDOOR_STOP_OPEN", 1, -1);
+        fopAcM_orderOtherEvent2(i_this, "MBDOOR_STOP_OPEN", 1);
     }
     return TRUE;
 }
@@ -470,7 +470,7 @@ BOOL daMbdoor_actionLockDemo(daMbdoor_c* i_this) {
 /* 00001324-000013E4       .text daMbdoor_actionCloseWait__FP10daMbdoor_c */
 BOOL daMbdoor_actionCloseWait(daMbdoor_c* i_this) {
     if (i_this->mEvtInfo.checkCommandDoor()) {
-        i_this->mEvtStaffId = dComIfGp_evmng_getMyStaffId("MBDOOR", NULL, 0);
+        i_this->mEvtStaffId = dComIfGp_evmng_getMyStaffId("MBDOOR");
         i_this->demoProc();
         i_this->setAction(5);
         dComIfG_Bgsp()->Release(i_this->mpBgW);

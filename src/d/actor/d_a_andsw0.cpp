@@ -270,7 +270,7 @@ static void event_start_check(andsw0_class* i_this) {
             if (actor->mEvtInfo.checkCommandDemoAccrpt()) {
                 i_this->mEventState++;
             } else {
-                fopAcM_orderOtherEventId(actor, i_this->mEventIdx, i_this->mEventNo, 0xFFFF, 0, 1);
+                fopAcM_orderOtherEventId(actor, i_this->mEventIdx, i_this->mEventNo);
             }
         }
 

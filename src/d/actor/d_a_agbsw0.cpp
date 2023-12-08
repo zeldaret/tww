@@ -1042,7 +1042,7 @@ BOOL daAgbsw0_c::ExeSubMW() {
                 se_flag = 1;
             }
 
-            dComIfGp_evmng_getMyStaffId("AGB_SW0", 0, 0);
+            dComIfGp_evmng_getMyStaffId("AGB_SW0");
             fopAc_ac_c* player = dComIfGp_getPlayer(0);
             cXyz diff = mEyePos - player->current.pos;
             f32 dist = diff.absXZ();
@@ -1062,7 +1062,7 @@ BOOL daAgbsw0_c::ExeSubMW() {
             }
         }
         else {
-            fopAcM_orderOtherEvent2(this, "DEFAULT_AGB_LOOK_ATTENTION", 4, -1);
+            fopAcM_orderOtherEvent2(this, "DEFAULT_AGB_LOOK_ATTENTION", 4);
         }
     }
 
@@ -1197,7 +1197,7 @@ BOOL daAgbsw0_c::ExeSubR() {
                 current.pos.y += mScale.y / 2.0f;
             }
 
-            fopAcM_fastCreateItem(&current.pos, itemNo, fopAcM_GetHomeRoomNo(this), 0, 0, 0.0f, cM_rndF(10.0f) + 40.0f, -7.0f, -1, 0);
+            fopAcM_fastCreateItem(&current.pos, itemNo, fopAcM_GetHomeRoomNo(this), 0, 0, 0.0f, cM_rndF(10.0f) + 40.0f, -7.0f);
             fopAcM_seStart(agb, JA_SE_CV_CHI_MEGAHORN, 0);
             MailSend(-1, 0, 0xFF, 0xFF, 0);
 
@@ -1462,7 +1462,7 @@ BOOL daAgbsw0_c::ExeSubD() {
                     if(0 <= itemNo && itemNo < 0x1F && itemNo != KAKERA_HEART && itemNo != UTUWA_HEART && itemNo != SMALL_KEY) {
                         s8 roomNo = fopAcM_GetHomeRoomNo(this);
                         f32 rnd = cM_rndF(10.0f) + 40.0f;
-                        fopAcM_fastCreateItem(&current.pos, itemNo, roomNo, 0, 0, 0.0f, rnd, -7.0f, -1, 0);
+                        fopAcM_fastCreateItem(&current.pos, itemNo, roomNo, 0, 0, 0.0f, rnd, -7.0f);
                         MailSend(-1, 0, 0xFF, 0xFF, 0x11);
                     }
 

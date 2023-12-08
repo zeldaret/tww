@@ -24,31 +24,31 @@ void daRaceItem_c::raceItemForceGet() {
 void daRaceItem_c::raceItemGet() {
     switch(m_itemNo) {
         case GREEN_RUPEE:
-            mDoAud_seStart(JA_SE_LUPY_GET, 0, 0, 0);
+            mDoAud_seStart(JA_SE_LUPY_GET);
             dComIfGp_plusMiniGameRupee(1);
             break;
         case BLUE_RUPEE:
-            mDoAud_seStart(JA_SE_BLUE_LUPY_GET, 0, 0, 0);
+            mDoAud_seStart(JA_SE_BLUE_LUPY_GET);
             dComIfGp_plusMiniGameRupee(5);
             break;
         case YELLOW_RUPEE:
-            mDoAud_seStart(JA_SE_LUPY_GET, 0, 0, 0);
+            mDoAud_seStart(JA_SE_LUPY_GET);
             dComIfGp_plusMiniGameRupee(10);
             break;
         case RED_RUPEE:
-            mDoAud_seStart(JA_SE_RED_LUPY_GET, 0, 0, 0);
+            mDoAud_seStart(JA_SE_RED_LUPY_GET);
             dComIfGp_plusMiniGameRupee(20);
             break;
         case PURPLE_RUPEE:
-            mDoAud_seStart(JA_SE_LUPY_GET, 0, 0, 0);
+            mDoAud_seStart(JA_SE_LUPY_GET);
             dComIfGp_plusMiniGameRupee(50);
             break;
         case ORANGE_RUPEE:
-            mDoAud_seStart(JA_SE_LUPY_GET, 0, 0, 0);
+            mDoAud_seStart(JA_SE_LUPY_GET);
             dComIfGp_plusMiniGameRupee(100);
             break;
         case SILVER_RUPEE:
-            mDoAud_seStart(JA_SE_LUPY_GET, 0, 0, 0);
+            mDoAud_seStart(JA_SE_LUPY_GET);
             dComIfGp_plusMiniGameRupee(200);
             break;
     }
@@ -63,31 +63,31 @@ void daRaceItem_c::normalItemGet() {
 
     switch(m_itemNo) {
         case GREEN_RUPEE:
-            mDoAud_seStart(JA_SE_LUPY_GET, 0, 0, 0);
+            mDoAud_seStart(JA_SE_LUPY_GET);
             break;
         case BLUE_RUPEE:
-            mDoAud_seStart(JA_SE_BLUE_LUPY_GET, 0, 0, 0);
+            mDoAud_seStart(JA_SE_BLUE_LUPY_GET);
             break;
         case YELLOW_RUPEE:
-            mDoAud_seStart(JA_SE_RED_LUPY_GET, 0, 0, 0);
+            mDoAud_seStart(JA_SE_RED_LUPY_GET);
             break;
         case RED_RUPEE:
-            mDoAud_seStart(JA_SE_RED_LUPY_GET, 0, 0, 0);
+            mDoAud_seStart(JA_SE_RED_LUPY_GET);
             break;
         case PURPLE_RUPEE:
-            mDoAud_seStart(JA_SE_RED_LUPY_GET, 0, 0, 0);
+            mDoAud_seStart(JA_SE_RED_LUPY_GET);
             break;
         case ORANGE_RUPEE:
-            mDoAud_seStart(JA_SE_RED_LUPY_GET, 0, 0, 0);
+            mDoAud_seStart(JA_SE_RED_LUPY_GET);
             break;
         case SILVER_RUPEE:
-            mDoAud_seStart(JA_SE_RED_LUPY_GET, 0, 0, 0);
+            mDoAud_seStart(JA_SE_RED_LUPY_GET);
             break;
         case S_MAGIC:
-            mDoAud_seStart(JA_SE_MAGIC_POT_GET_S, 0, 0, 0);
+            mDoAud_seStart(JA_SE_MAGIC_POT_GET_S);
             break;
         case L_MAGIC:
-            mDoAud_seStart(JA_SE_MAGIC_POT_GET_L, 0, 0, 0);
+            mDoAud_seStart(JA_SE_MAGIC_POT_GET_L);
             break;
         case BOMB_5:
         case BOMB_10:
@@ -96,10 +96,10 @@ void daRaceItem_c::normalItemGet() {
         case ARROW_10:
         case ARROW_20:
         case ARROW_30:
-            mDoAud_seStart(JA_SE_CONSUMP_ITEM_GET, 0, 0, 0);
+            mDoAud_seStart(JA_SE_CONSUMP_ITEM_GET);
             break;
         case TRIPLE_HEART:
-            mDoAud_seStart(JA_SE_HEART_PIECE, 0, 0, 0);
+            mDoAud_seStart(JA_SE_HEART_PIECE);
             break;
     }
 }

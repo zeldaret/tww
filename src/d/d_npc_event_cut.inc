@@ -20,7 +20,7 @@ bool dNpc_EventCut_c::cutProc() {
         return false;
     }
     else {
-        mEvtStaffId = dComIfGp_evmng_getMyStaffId(mpEvtStaffName, 0, 0);
+        mEvtStaffId = dComIfGp_evmng_getMyStaffId(mpEvtStaffName);
         if(mEvtStaffId == -1) {
             return false;
         }

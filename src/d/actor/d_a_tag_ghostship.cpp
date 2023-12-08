@@ -43,28 +43,28 @@ void daTag_Gship_c::modeClearEventInit() {
 /* 00000214-00000418 .text modeClearEvent__13daTag_Gship_cFv */
 void daTag_Gship_c::modeClearEvent() {
     if(mEvtInfo.checkCommandDemoAccrpt()) {
-        int staffIdx = dComIfGp_evmng_getMyStaffId("PScnChg", 0, 0);
+        int staffIdx = dComIfGp_evmng_getMyStaffId("PScnChg");
         if(dEvmng_strcmp(dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx), "WARAIGOE") == 0) {
             if(dComIfGs_getEventReg(0x8803) == 3) {
-                mDoAud_seStart(JA_SE_CV_G_SHIP_SCREAM, 0, 0, 0);
+                mDoAud_seStart(JA_SE_CV_G_SHIP_SCREAM);
             }
             else {
-                mDoAud_seStart(JA_SE_CV_G_SHIP_LAUGH, 0, 0, 0);
+                mDoAud_seStart(JA_SE_CV_G_SHIP_LAUGH);
             }
 
             dComIfGp_evmng_cutEnd(staffIdx);
         }
 
         if(dComIfGp_evmng_endCheck("PSHIP_CLEAR")) {
-            mDoAud_seStart(JA_SE_LK_WARP_TO_G_SHIP, 0, 0, 0);
+            mDoAud_seStart(JA_SE_LK_WARP_TO_G_SHIP);
             s8 room = dComIfGs_getEventReg(0xC3FF);
             s8 spawn = dComIfGs_getEventReg(0x85FF);
             dKy_set_nexttime(120.0f);
-            dComIfGp_setNextStage("sea", spawn, room, 0xFF, 0.0f, 5, 1, 0);
+            dComIfGp_setNextStage("sea", spawn, room, 0xFF, 0.0f, 5);
         }
     }
     else {
-        fopAcM_orderOtherEvent2(this, "PSHIP_CLEAR", 1, 0xFFFF);
+        fopAcM_orderOtherEvent2(this, "PSHIP_CLEAR", 1);
     }
 }
 

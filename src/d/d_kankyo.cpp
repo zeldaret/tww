@@ -3380,7 +3380,7 @@ void dKy_itudemo_se() {
     int roomNo = dComIfGp_roomControl_getStayNo();
 
     if (env_light.mMoyaSE != 0) {
-        mDoAud_seStart(env_light.mMoyaSE, NULL, 0, 0);
+        mDoAud_seStart(env_light.mMoyaSE);
     }
 
     if (strcmp(dComIfGp_getStartStageName(), "M_NewD2") == 0 && roomNo == 3) {

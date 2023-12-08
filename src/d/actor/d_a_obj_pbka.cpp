@@ -83,11 +83,11 @@ static BOOL daObjPbka_Draw(void* i_this) {
 
 static BOOL daObjPbka_Execute(void* i_this) {
     daObjPbka_c* a_this = (daObjPbka_c*)i_this;
-        a_this->current.angle.y += 0x500;
-        a_this->shape_angle.y = a_this->current.angle.y;
-        mDoAud_seStart(JA_SE_OBJ_BOMB_SHOP_FAN, &a_this->current.pos, 0 , dComIfGp_getReverb(fopAcM_GetRoomNo(a_this)));
-        a_this->set_mtx();
-        return TRUE;
+    a_this->current.angle.y += 0x500;
+    a_this->shape_angle.y = a_this->current.angle.y;
+    fopAcM_seStartCurrent(a_this, JA_SE_OBJ_BOMB_SHOP_FAN, 0);
+    a_this->set_mtx();
+    return TRUE;
 }
 
 static BOOL daObjPbka_IsDelete(void*) {

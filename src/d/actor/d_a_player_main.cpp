@@ -4137,7 +4137,7 @@ BOOL daPy_lk_c::checkFallCode() {
 /* 80120724-80120BBC       .text startRestartRoom__9daPy_lk_cFUlifi */
 BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int i_point) {
     /* Nonmatching - npc_sarace */
-    if (!checkNoResetFlg0(daPyFlg0_UNK4000) && (i_point != 0 || dComIfGp_event_compulsory(this, NULL, -1))) {
+    if (!checkNoResetFlg0(daPyFlg0_UNK4000) && (i_point != 0 || dComIfGp_event_compulsory(this))) {
         mDemo.setOriginalDemoType();
         if (i_point == 0) {
             mDemo.setDemoMode(1);
@@ -4146,8 +4146,8 @@ BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int
         changePlayer(this);
         
         if (dComIfGp_getMiniGameType() == 1) {
-            dComIfGp_setNextStage("sea", 1, 48, -1, 0.0f, 0, 1, 0);
-            mDoAud_seStart(JA_SE_FORCE_BACK, NULL, 0, 0);
+            dComIfGp_setNextStage("sea", 1, 48);
+            mDoAud_seStart(JA_SE_FORCE_BACK);
             // daNpc_Sarace_c::ship_race_result = 3;
             mTinkleShieldTimer = 0;
             return TRUE;
@@ -4157,10 +4157,10 @@ BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int
             mTinkleShieldTimer = 0;
             
             if (stageType == 7 && !dComIfGs_isEventBit(0x2A08) && (current.roomNo == 11 || current.roomNo == 44) && dStage_chkPlayerId(0x80, current.roomNo)) {
-                dComIfGp_setNextStage(dComIfGp_getStartStageName(), 0x80, current.roomNo, -1, 0.0f, param_1, 1, 0);
+                dComIfGp_setNextStage(dComIfGp_getStartStageName(), 0x80, current.roomNo, -1, 0.0f, param_1);
                 u32 roomParam = setParamData(-1, 0, eventInfoIdx, 0);
                 dComIfGs_setRestartRoomParam(roomParam);
-                mDoAud_seStart(JA_SE_FORCE_BACK, NULL, 0, 0);
+                mDoAud_seStart(JA_SE_FORCE_BACK);
                 return TRUE;
             }
             
@@ -4210,20 +4210,20 @@ BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int
                         int roomNo = dComIfGs_getRestartRoomNo();
                         u32 roomParam = setParamData(roomNo, 0, eventInfoIdx, 0);
                         dStage_restartRoom(roomParam, param_1);
-                        mDoAud_seStart(JA_SE_FORCE_BACK, NULL, 0, 0);
+                        mDoAud_seStart(JA_SE_FORCE_BACK);
                     }
                     return TRUE;
                 }
             } else if (checkNoResetFlg0(daPyFlg0_DEKU_SP_RETURN_FLG)) {
-                dComIfGp_setNextStage(dComIfGp_getStartStageName(), i_point, 41, -1, 0.0f, param_1, 1, 0);
+                dComIfGp_setNextStage(dComIfGp_getStartStageName(), i_point, 41, -1, 0.0f, param_1);
             } else {
-                dComIfGp_setNextStage(dComIfGp_getStartStageName(), i_point, current.roomNo, -1, 0.0f, param_1, 1, 0);
+                dComIfGp_setNextStage(dComIfGp_getStartStageName(), i_point, current.roomNo, -1, 0.0f, param_1);
             }
             
             if (mCurProcID != DPROC_DEAD_e) {
                 u32 roomParam = setParamData(-1, 0, eventInfoIdx, 0);
                 dComIfGs_setRestartRoomParam(roomParam);
-                mDoAud_seStart(JA_SE_FORCE_BACK, NULL, 0, 0);
+                mDoAud_seStart(JA_SE_FORCE_BACK);
             }
             
             return TRUE;

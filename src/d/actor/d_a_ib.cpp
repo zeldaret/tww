@@ -375,7 +375,7 @@ void daIball_c::CreateInit() {
     mCyl.Set(m_cyl_src);
     mCyl.SetStts(&mStts);
     mAcchCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&current.pos, &next.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
+    mAcch.Set(&current.pos, &next.pos, this, 1, &mAcchCir, &speed);
     mAcch.OnSeaCheckOn();
     mAcch.OnSeaWaterHeight();
     

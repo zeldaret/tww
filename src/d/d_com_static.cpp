@@ -233,7 +233,7 @@ void daTagKbItem_c::dig_main() {
         f32 speedF = cM_rndF(5.0f);
         daItem_c* item = (daItem_c*)fopAcM_fastCreateItem(
             &mpActor->current.pos, field_0x2a0, roomNo, &angle,
-            &scale, speedF, speedY, -6.0f, field_0x29c, NULL
+            &scale, speedF, speedY, -6.0f, field_0x29c
         );
         if (item) {
             fopAcM_OnStatus(item, fopAcStts_UNK4000_e);

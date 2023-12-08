@@ -843,7 +843,7 @@ void daRd_c::modeDeath() {
     mGroup = fopAc_ENV_e;
     
     if (cLib_calcTimer(&mTimer1) == 0) {
-        fopAcM_createDisappear(this, &current.pos, 5, 0, 0xFF);
+        fopAcM_createDisappear(this, &current.pos, 5);
         fopAcM_delete(this);
     }
 }
@@ -963,7 +963,7 @@ void daRd_c::modeCryInit() {
     if (dComIfGp_evmng_startCheck("DEFAULT_RD_CRY")) {
         dComIfGp_event_reset();
     }
-    fopAcM_orderOtherEvent2(this, "DEFAULT_RD_CRY", 1, -1);
+    fopAcM_orderOtherEvent2(this, "DEFAULT_RD_CRY", 1);
     fopAcM_monsSeStart(this, JA_SE_CV_RD_SCREAM, 0);
     mTimer1 = l_HIO.m54;
     mBreakFreeCounter = l_HIO.m78;
@@ -1774,7 +1774,7 @@ void daRd_c::createInit() {
     mCyl.Set(m_cyl_src);
     mCyl.SetStts(&mStts);
     mAcchCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&fopAcM_GetPosition_p(this), &fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, &fopAcM_GetSpeed_p(this), NULL, NULL);
+    mAcch.Set(&fopAcM_GetPosition_p(this), &fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, &fopAcM_GetSpeed_p(this));
     mAcch.SetRoofNone();
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     mJntCtrl.setHeadJntNum(0x0A); // ree_kubi_1

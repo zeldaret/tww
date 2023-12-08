@@ -1083,7 +1083,7 @@ void daBomb_c::init_mtx() {
 }
 
 void daBomb_c::se_cannon_fly_set() {
-    mDoAud_seStart(JA_SE_LK_SHIP_CANNON_FLY, &current.pos, 0, 0);
+    mDoAud_seStart(JA_SE_LK_SHIP_CANNON_FLY, &current.pos);
     field_0x77F = 1;
 }
 
@@ -1200,7 +1200,7 @@ dCcD_SrcSph l_sph_src = {};
 
 void daBomb_c::create_init() {
     mCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&current.pos, &next.pos, this, true, &mCir, &speed, &current.angle, &shape_angle);
+    mAcch.Set(&current.pos, &next.pos, this, 1, &mCir, &speed, &current.angle, &shape_angle);
     mAcch.ClrWaterNone();
     mAcch.ClrRoofNone();
     mAcch.m_roof_height = 50.0f;

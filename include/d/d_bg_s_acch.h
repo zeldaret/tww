@@ -83,8 +83,8 @@ public:
     dBgS_Acch();
     void Init();
     void Set(fopAc_ac_c*, int, dBgS_AcchCir*);
-    void Set(cXyz* pos, cXyz* old_pos, fopAc_ac_c* actor, int tbl_size, dBgS_AcchCir* acchCir, cXyz* speed,
-             csXyz* angle, csXyz* shape_angle);
+    void Set(cXyz* pos, cXyz* old_pos, fopAc_ac_c* actor, int tbl_size, dBgS_AcchCir* acchCir,
+             cXyz* speed = NULL, csXyz* angle = NULL, csXyz* shape_angle = NULL);
     void GroundCheckInit(dBgS&);
     void GroundCheck(dBgS&);
     f32 GroundRoofProc(dBgS&);
