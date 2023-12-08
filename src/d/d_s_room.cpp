@@ -84,7 +84,7 @@ void objectSetCheck(room_of_scene_class* i_this) {
 
     if (!i_this->mbReLoaded) {
         if (!hiddenFlag) {
-            fopAcM_create(PROC_BG, roomNo, NULL, -1, NULL, NULL, 0xFF, NULL);
+            fopAcM_create(PROC_BG, roomNo, NULL, -1);
             dStage_dt_c_roomReLoader(i_this->mpRoomData, i_this->mpRoomDt, roomNo);
             i_this->mbReLoaded = true;
         }

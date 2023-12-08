@@ -721,8 +721,7 @@ void daAgb_c::GbaItemUse() {
                 temp_r29 = 15;
             }
 
-            fopAcM_create(0x128, daBomb_c::prm_make(daBomb_c::STATE_8, false, false),
-                          &current.pos, -1, NULL, NULL, -1, NULL);
+            fopAcM_create(0x128, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos, -1);
             field_0x65c = 0x78;
         } else {
             temp_r29 = 0xe;
@@ -733,8 +732,7 @@ void daAgb_c::GbaItemUse() {
         break;
     case 0x15:
         resetCursor(false);
-        fopAcM_create(0x128, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos,
-                      -1, NULL, NULL, -1, NULL);
+        fopAcM_create(0x128, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos, -1);
         field_0x65c = 0x78;
         break;
     case 0x11:
@@ -1047,9 +1045,9 @@ static int daAgb_Draw(daAgb_c* i_this) {
             mDoExt_modelUpdateDL(i_this->mpModel);
 
             if (i_this->field_0x679 != 0 &&
-                i_this->current.pos.y - i_this->mCrrPos.field_0x05c > 2.5f)
+                i_this->current.pos.y - i_this->mCrrPos.field_0x5c > 2.5f)
             {
-                dComIfGd_setSimpleShadow2(&i_this->current.pos, i_this->mCrrPos.field_0x05c, 50.0f,
+                dComIfGd_setSimpleShadow2(&i_this->current.pos, i_this->mCrrPos.field_0x5c, 50.0f,
                                           i_this->mCrrPos.mGndChk, 0, 1.0f, &i_this->mTexObj);
             }
 
@@ -1121,7 +1119,7 @@ static int daAgb_Create(fopAc_ac_c* i_this) {
         // a_this->mCrrPos.Set(&a_this->current.pos, &a_this->next.pos, NULL, );
         a_this->mCrrPos.mpLine0 = &a_this->current.pos;
         a_this->mCrrPos.pm_pos = &a_this->next.pos;
-        a_this->mCrrPos.field_0x058 = NULL;
+        a_this->mCrrPos.field_0x58 = NULL;
         a_this->mCrrPos.SetActorPid(fpcM_ERROR_PROCESS_ID_e);
         a_this->mCrrPos.field_0x3c = 171.0f;
         a_this->mCrrPos.field_0x40 = 50.0f;

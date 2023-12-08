@@ -52,7 +52,7 @@ namespace daObj {
                 cXyz scaleV;
                 scaleV.setall(scale);
                 scaleV *= (5.0f / 3.0f);
-                fopAcM_create(PROC_Obj_Eff, 3, &ac->current.pos, -1, NULL, &scaleV, 0xFF, NULL);
+                fopAcM_create(PROC_Obj_Eff, 3, &ac->current.pos, -1, NULL, &scaleV);
             }
             break;
         }

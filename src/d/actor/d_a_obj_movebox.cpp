@@ -1806,7 +1806,7 @@ namespace daObjMovebox {
             emitter->setLifeTime(30);
             emitter->setAwayFromAxisSpeed(30.0f);
         }
-        fopAcM_create(PROC_Obj_Eff, 0x5, &particlePos, -1, NULL, NULL, 0xFF, NULL);
+        fopAcM_create(PROC_Obj_Eff, 0x5, &particlePos, -1);
         // TODO daObjEff::Act_c::make_woodBox_smoke(cXyz*)
     }
     
@@ -1874,7 +1874,7 @@ namespace daObjMovebox {
         cXyz smokeScale;
         smokeScale.setall(i_attr()->mLandSmokeScale);
         smokeScale *= 5.0f/3.0f;
-        fopAcM_create(PROC_Obj_Eff, 0x3, &current.pos, -1, NULL, &smokeScale, 0xFF, NULL);
+        fopAcM_create(PROC_Obj_Eff, 0x3, &current.pos, -1, NULL, &smokeScale);
         // TODO daObjEff::Act_c::make_land_smoke(cXyz*, float)
     }
     

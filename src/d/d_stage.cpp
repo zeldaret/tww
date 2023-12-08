@@ -1489,13 +1489,13 @@ int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* i_file)
     JUT_ASSERT(1842, stageProc != 0);
 
     if (stageProc->mBase.mBase.mProcName != PROC_PLAY_SCENE) {
-        fopAcM_create(PROC_TITLE, 0, NULL, -1, NULL, NULL, 255, NULL);
+        fopAcM_create(PROC_TITLE, 0, NULL, -1);
     }
 
     fopMsgM_Create(PROC_METER, NULL, NULL);
 
     cXyz agb_pos(appen->mPos.x, appen->mPos.y + 10.0f, appen->mPos.z);
-    fopAcM_create(PROC_AGB, 0, &agb_pos, -1, NULL, NULL, 255, NULL);
+    fopAcM_create(PROC_AGB, 0, &agb_pos, -1);
     dComIfGp_setAgb(NULL);
     return 1;
 }

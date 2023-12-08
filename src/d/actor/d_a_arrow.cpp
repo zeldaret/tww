@@ -464,7 +464,7 @@ daArrow_c* daArrow_c::changeArrowType() {
     
     if (mArrowType != origArrowType) {
         m_keep_type = mArrowType;
-        daArrow_c* newNockedArrow = (daArrow_c*)fopAcM_fastCreate(PROC_ARROW, 0, &current.pos, current.roomNo, NULL, NULL, -1, NULL, NULL);
+        daArrow_c* newNockedArrow = (daArrow_c*)fopAcM_fastCreate(PROC_ARROW, 0, &current.pos, current.roomNo);
         if (!newNockedArrow) {
             mArrowType = origArrowType;
             m_keep_type = origArrowType;
@@ -800,7 +800,7 @@ BOOL daArrow_c::procMove() {
                 field_0x698 = false;
             } else if (mArrowType == TYPE_ICE) {
                 if (dComIfG_Bgsp()->ChkGrpInf(mLinChk, 0x200)) {
-                    fopAcM_create(PROC_Obj_Magmarock, NULL, &field_0x6a8, current.roomNo, NULL, NULL, -1, NULL);
+                    fopAcM_create(PROC_Obj_Magmarock, NULL, &field_0x6a8, current.roomNo);
                 } else {
                     dComIfGp_particle_setP1(0x29E, &field_0x6a8, &temp10);
                     
