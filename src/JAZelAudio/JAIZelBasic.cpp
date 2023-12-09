@@ -207,7 +207,7 @@ void JAIZelBasic::cbPracticeStop() {
 }
 
 /* 802A6508-802A6570       .text checkCbPracticePlay__11JAIZelBasicFv */
-void JAIZelBasic::checkCbPracticePlay() {
+bool JAIZelBasic::checkCbPracticePlay() {
     /* Nonmatching */
 }
 

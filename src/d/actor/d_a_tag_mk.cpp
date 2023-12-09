@@ -5,22 +5,23 @@
 
 #include "d/actor/d_a_tag_mk.h"
 #include "dolphin/types.h"
+#include "f_op/f_op_actor_mng.h"
 
 /* 00000078-00000084       .text getSwbit__10daTag_Mk_cFv */
 unsigned int daTag_Mk_c::getSwbit() {
     /* Nonmatching */
-    return this->mBase.mParameters & 0xff;
+    return fopAcM_GetParam(this) & 0xff;
 }
 
 /* 00000084-00000090       .text getSwbit2__10daTag_Mk_cFv */
 unsigned int daTag_Mk_c::getSwbit2() {
     /* Nonmatching */
-    return this->mBase.mParameters & 0xff;
+    return fopAcM_GetParam(this) & 0xff;
 }
 
 /* 00000090-0000009C       .text getType__10daTag_Mk_cFv */
 unsigned int daTag_Mk_c::getType() {
-    return this->mBase.mParameters & 0xff;
+    return fopAcM_GetParam(this) & 0xff;
 }
 
 /* 0000009C-000001F8       .text checkArea__10daTag_Mk_cFfff */

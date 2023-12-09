@@ -137,9 +137,9 @@ void dTm_parentPaneScale(fopMsgM_pane_class*, fopMsgM_pane_class*, float) {
 void dDlst_TimerScrnDraw_c::setPaneInitialPos(fopMsgM_pane_class* param_1, float param_2,
                                               float param_3) {
     /* Nonmatching */
-    (param_1->mPosCenterOrig).x = param_2 + (0.5 * (param_1->mSizeOrig).x);
-    (param_1->mPosCenterOrig).y = param_3 + (param_1->mSizeOrig).y * 0.5;
-    fopMsgM_paneTrans(param_1, 0.0, 0.0);
+    (param_1->mPosCenterOrig).x = param_2 + (0.5f * (param_1->mSizeOrig).x);
+    (param_1->mPosCenterOrig).y = param_3 + (param_1->mSizeOrig).y * 0.5f;
+    fopMsgM_paneTrans(param_1, 0.0f, 0.0f);
     return;
 }
 
