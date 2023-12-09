@@ -3024,7 +3024,7 @@ void dKy_Sound_init() {
     g_env_light.mSound.field_0x0.y = 999999.9f;
     g_env_light.mSound.field_0x0.z = 999999.9f;
     g_env_light.mSound.field_0xc = 0;
-    g_env_light.mSound.field_0x14 = -1;
+    g_env_light.mSound.field_0x14 = fpcM_ERROR_PROCESS_ID_e;
     g_env_light.mSound.field_0x10 = 0;
 }
 
@@ -3050,7 +3050,7 @@ void dKy_Sound_set(cXyz pos, int p2, unsigned int p3, int p4) {
         dKy_getEnvlight().mSound.field_0x0.y = pos.y;
         dKy_getEnvlight().mSound.field_0x0.z = pos.z;
         dKy_getEnvlight().mSound.field_0xc = p2;
-        dKy_getEnvlight().mSound.field_0x14 = p3;
+        dKy_getEnvlight().mSound.field_0x14 = fpcM_ERROR_PROCESS_ID_e;
         dKy_getEnvlight().mSound.field_0x10 = p4;
     }
 }

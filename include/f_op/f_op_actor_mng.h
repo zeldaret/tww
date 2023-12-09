@@ -6,6 +6,7 @@
 #include "f_pc/f_pc_manager.h"
 #include "f_pc/f_pc_searcher.h"
 #include "m_Do/m_Do_audio.h"
+#include "d/d_item_data.h"
 
 #define fopAcM_SetupActor(ptr,ClassName) \
     if (!fopAcM_CheckCondition(ptr, fopAcCnd_INIT_e)) { \
@@ -321,6 +322,15 @@ inline BOOL fopAcM_isItem(fopAc_ac_c* item, int bitNo) {
     return dComIfGs_isItem(bitNo, fopAcM_GetHomeRoomNo(item));
 }
 
+inline BOOL dComIfGs_isSaveSwitch(int i_stageNo, int i_no);
+inline BOOL fopAcM_isItemForIb(int itemBitNo, u8 itemNo, s8 roomNo) {
+    if (itemNo == BLUE_JELLY) { // Blue Chu Jelly uses itemBitNo as if it was a switch.
+        return dComIfGs_isSaveSwitch(0xE, itemBitNo);
+    } else {
+        return dComIfGs_isItem(itemBitNo, roomNo);
+    }
+}
+
 inline f32 fopAcM_searchActorDistanceY(fopAc_ac_c* actorA, fopAc_ac_c* actorB) {
     return actorB->current.pos.y - actorA->current.pos.y;
 }
@@ -456,6 +466,9 @@ s32 fopAcM_createItemForTrBoxDemo(cXyz* p_pos, int i_itemNo, int i_itemBitNo = -
 s32 fopAcM_createItemFromTable(cXyz* p_pos, int i_tableNo, int i_itemBitNo, int i_roomNo, int,
                                csXyz* p_angle, int, cXyz* p_scale = NULL);
 
+s32 fopAcM_createRaceItemFromTable(cXyz* pos, int i_itemNo, int i_itemBitNo, int i_roomNo,
+                                   csXyz* angle, cXyz* scale, int param_7);
+
 s32 fopAcM_createShopItem(cXyz* p_pos, int i_itemNo, csXyz* p_angle, int roomNo, cXyz* scale = NULL,
                           createFunc createFunc = NULL);
 
@@ -491,6 +504,8 @@ s32 fopAcM_createDisappear(fopAc_ac_c* i_actor, cXyz* p_pos, u8 i_scale, u8 i_he
 void fopAcM_setCarryNow(fopAc_ac_c* i_this, int stageLayer);
 void fopAcM_cancelCarryNow(fopAc_ac_c* i_this);
 s32 fopAcM_otoCheck(fopAc_ac_c*, f32);
+BOOL fopAcM_viewCutoffCheck(fopAc_ac_c* actor, f32 param_2);
+BOOL fopAcM_getGroundAngle(fopAc_ac_c* actor, csXyz* p_angle);
 // void vectle_calc(DOUBLE_POS*, cXyz*);
 // void get_vectle_calc(cXyz*, cXyz*, cXyz*);
 

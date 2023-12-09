@@ -115,18 +115,6 @@ static BOOL itemParamSet_CB(void* i_actor) {
     return TRUE;
 }
 
-// This is a fake inline, not present in the demo debug map.
-// However, it's possible an inline similar to this was added to the final release.
-// The kiosk demo calls dSv_memBit_c::isVisitedRoom(int) instead of dSv_memBit_c::isSwitch(int) here,
-// so it's plausible they also added this inline while they were modifying that code.
-inline BOOL isItemBit(u8 itemNo, s8 itemBitNo, s8 roomNo) {
-    if (itemNo == BLUE_JELLY) { // Blue Chu Jelly uses itemBitNo as if it was a switch.
-        return dComIfGs_isSaveSwitch(0xE, itemBitNo);
-    } else {
-        return dComIfGs_isItem(itemBitNo, roomNo);
-    }
-}
-
 /* 800F3658-800F3994       .text createItem__9daIball_cFv */
 BOOL daIball_c::createItem() {
     // Fakematch: itemBitNo and itemTableIdx should really be separate variables as they aren't
@@ -148,7 +136,7 @@ BOOL daIball_c::createItem() {
         itemBitNo = -1;
         if (isLimitedItem(items[i])) {
             itemBitNo = daIball_prm::getItemBitNo(this);
-            if (itemBitNo == 0x1F || itemBitNo == 0xFF || itemBitNo == -1 || isItemBit(items[i], itemBitNo, current.roomNo)) {
+            if ((itemBitNo == 0x1F || itemBitNo == 0xFF || itemBitNo == -1) || fopAcM_isItemForIb(itemBitNo, items[i], current.roomNo)) {
                 itemBitNo = -1;
                 items[i] = YELLOW_RUPEE;
             }
