@@ -51,7 +51,7 @@ public:
     J3DJoint* getJointNodePointer(u16 idx) const { return mJointTree.getJointNodePointer(idx); }
     J3DJointTree& getJointTree() { return mJointTree; }
     JUTNameTab* getJointName() const { return mJointTree.getJointName(); }
-    Mtx& getInvJointMtx(s32 idx) const { return mJointTree.getInvJointMtx(idx); }
+    Mtx& getInvJointMtx(int idx) { return mJointTree.getInvJointMtx(idx); }
     J3DTexture* getTexture() const { return mMaterialTable.getTexture(); }
     JUTNameTab* getTextureName() const { return mMaterialTable.getTextureName(); }
     void setTexture(J3DTexture* pTexture) { mMaterialTable.setTexture(pTexture); }
@@ -59,22 +59,18 @@ public:
     bool isLocked() { return mMaterialTable.isLocked(); }
     u16 getDrawFullWgtMtxNum() const { return mJointTree.getDrawFullWgtMtxNum(); }
     u16 getWEvlpMtxNum() const { return mJointTree.getWEvlpMtxNum(); }
-    u16* getWEvlpMixMtxIndex() const { return mJointTree.getWEvlpMixIndex(); }
-    f32* getWEvlpMixWeight() const { return mJointTree.getWEvlpMixWeight(); }
+    u16* getWEvlpMixMtxIndex() { return mJointTree.getWEvlpMixIndex(); }
+    f32* getWEvlpMixWeight() { return mJointTree.getWEvlpMixWeight(); }
     u8 getWEvlpMixMtxNum(u16 idx) const { return mJointTree.getWEvlpMixMtxNum(idx); }
     u32 getModelDataType() const { return mJointTree.getModelDataType(); }
-    void* getVtxPosArray() const { return mVertexData.getVtxPosArray(); }
-    void* getVtxNrmArray() const { return mVertexData.getVtxNrmArray(); }
     GXColor* getVtxColorArray(u8 idx) const { return mVertexData.getVtxColorArray(idx); }
     bool checkFlag(u32 flag) const { return (mFlags & flag) ? true : false; }
     u32 getFlag() const { return mFlags; }
-    void* getRawData() const { return mpRawData; }
     u16 checkBumpFlag() const { return mbHasBumpArray; }
     void setBumpFlag(u32 flag) { mbHasBumpArray = flag; }
     bool checkBBoardFlag() const { return mbHasBillboard == 1; }
     void entryTexMtxAnimator(J3DAnmTextureSRTKey* anm) { mMaterialTable.entryTexMtxAnimator(anm); }
     void entryTevRegAnimator(J3DAnmTevRegKey* anm) { mMaterialTable.entryTevRegAnimator(anm); }
-    void entryTexNoAnimator(J3DAnmTexPattern* anm) { mMaterialTable.entryTexNoAnimator(anm); }
     int removeTexNoAnimator(J3DAnmTexPattern* anm) {
         return mMaterialTable.removeTexNoAnimator(anm);
     }
@@ -87,6 +83,20 @@ public:
     int removeMatColorAnimator(J3DAnmColor* anm) {
         return mMaterialTable.removeMatColorAnimator(anm);
     }
+
+    // TODO
+    void entryMatColorAnimator(J3DAnmColor*) {}
+    void getBasicMtxCalc() {}
+    void getBinary() {}
+    void getHierarchy() const {}
+    void getRootNode() {}
+    void makeHierarchy(J3DNode*, const J3DModelHierarchy**) {}
+    void setBasicMtxCalc(J3DMtxCalc*) {}
+    void setHierarchy(J3DModelHierarchy*) {}
+    void setMatColorAnimator(J3DAnmColor*, J3DMatColorAnm*) {}
+    void setModelDataType(u32) {}
+    void setTexMtxAnimator(J3DAnmTextureSRTKey*, J3DTexMtxAnm*, J3DTexMtxAnm*) {}
+    void setTexNoAnimator(J3DAnmTexPattern*, J3DTexNoAnm*) {}
 
 private:
     /* 0x04 */ void* mpRawData;

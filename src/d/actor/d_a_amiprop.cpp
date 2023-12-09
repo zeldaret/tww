@@ -12,7 +12,7 @@ BOOL daAmiProp_c::_delete() {
 }
 
 /* 000000D4-000000F4       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -52,29 +52,26 @@ BOOL daAmiProp_c::_draw() {
 }
 
 /* 00000924-00000944       .text daAmiProp_Create__FPv */
-void daAmiProp_Create(void*) {
+static s32 daAmiProp_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000944-00000968       .text daAmiProp_Delete__FPv */
-void daAmiProp_Delete(void*) {
+static BOOL daAmiProp_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000968-0000098C       .text daAmiProp_Draw__FPv */
-void daAmiProp_Draw(void*) {
+static BOOL daAmiProp_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 0000098C-000009B0       .text daAmiProp_Execute__FPv */
-void daAmiProp_Execute(void*) {
+static BOOL daAmiProp_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 000009B0-000009B8       .text daAmiProp_IsDelete__FPv */
-void daAmiProp_IsDelete(void*) {
+static BOOL daAmiProp_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

@@ -77,7 +77,7 @@ void anm_init(bdk_class*, int, float, unsigned char, float, int, unsigned char) 
 }
 
 /* 000008F8-00000B10       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -122,7 +122,7 @@ void my_effect_draw(bdk_class*) {
 }
 
 /* 0000159C-000018C4       .text daBdk_Draw__FP9bdk_class */
-void daBdk_Draw(bdk_class*) {
+static BOOL daBdk_Draw(bdk_class*) {
     /* Nonmatching */
 }
 
@@ -287,75 +287,27 @@ void my_effect_move(bdk_class*) {
 }
 
 /* 0000B30C-0000BD74       .text daBdk_Execute__FP9bdk_class */
-void daBdk_Execute(bdk_class*) {
+static BOOL daBdk_Execute(bdk_class*) {
     /* Nonmatching */
 }
 
 /* 0000BD74-0000BD7C       .text daBdk_IsDelete__FP9bdk_class */
-void daBdk_IsDelete(bdk_class*) {
+static BOOL daBdk_IsDelete(bdk_class*) {
     /* Nonmatching */
 }
 
 /* 0000BD7C-0000BF08       .text daBdk_Delete__FP9bdk_class */
-void daBdk_Delete(bdk_class*) {
+static BOOL daBdk_Delete(bdk_class*) {
     /* Nonmatching */
 }
 
 /* 0000BF08-0000C684       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 0000C6CC-0000CCA8       .text daBdk_Create__FP10fopAc_ac_c */
-void daBdk_Create(fopAc_ac_c*) {
+static s32 daBdk_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 0000CCA8-0000D1A4       .text __ct__9bdk_classFv */
-bdk_class::bdk_class() {
-    /* Nonmatching */
-}
-
-/* 0000D2D8-0000D3AC       .text __dt__9bdk_eff_sFv */
-bdk_eff_s::~bdk_eff_s() {
-    /* Nonmatching */
-}
-
-/* 0000D3AC-0000D440       .text __ct__9bdk_eff_sFv */
-bdk_eff_s::bdk_eff_s() {
-    /* Nonmatching */
-}
-
-/* 0000D7D8-0000D884       .text __dt__10bdk_tail_sFv */
-bdk_tail_s::~bdk_tail_s() {
-    /* Nonmatching */
-}
-
-/* 0000D884-0000D930       .text __ct__10bdk_tail_sFv */
-bdk_tail_s::bdk_tail_s() {
-    /* Nonmatching */
-}
-
-/* 0000DC18-0000DC60       .text __dt__11daBdk_HIO_cFv */
-daBdk_HIO_c::~daBdk_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 0000DD14-0000DD4C       .text __arraydtor$5507 */
-void __arraydtor$5507 {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 

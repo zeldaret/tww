@@ -11,11 +11,6 @@ void daComing3::Act_c::get_water_height(float*, int*, const cXyz*) {
     /* Nonmatching */
 }
 
-/* 000008C4-000009E8       .text __dt__11dBgS_WtrChkFv */
-dBgS_WtrChk::~dBgS_WtrChk() {
-    /* Nonmatching */
-}
-
 /* 000009E8-00000A80       .text position_is_safety_call_back__9daComing3FPvPv */
 void daComing3::position_is_safety_call_back(void*, void*) {
     /* Nonmatching */
@@ -125,35 +120,3 @@ BOOL daComing3::Act_c::_execute() {
 BOOL daComing3::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-/* 00001EDC-00002020       .text __dt__Q29daComing35Act_cFv */
-daComing3::Act_c::~Act_c() {
-    /* Nonmatching */
-}
-
-/* 00002020-0000211C       .text __dt__14dBgS_SplGrpChkFv */
-dBgS_SplGrpChk::~dBgS_SplGrpChk() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

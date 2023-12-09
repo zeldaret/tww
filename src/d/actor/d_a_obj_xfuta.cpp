@@ -40,14 +40,3 @@ BOOL daObjXfuta::Act_c::_execute() {
 BOOL daObjXfuta::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-/* 000004A0-00000500       .text __dt__Q210daObjXfuta5Act_cFv */
-daObjXfuta::Act_c::~Act_c() {
-    /* Nonmatching */
-}
-

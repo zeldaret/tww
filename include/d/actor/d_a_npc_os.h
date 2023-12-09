@@ -30,7 +30,6 @@ public:
     void incAttnSetCount() {}
     void isFinish() {}
     void isGravity() {}
-    void isPlayerRoom(int) {}
     void isPlayerRoom_Goat() {}
     void isSetHomePos() {}
     void isWaterHit() {}
@@ -42,6 +41,13 @@ public:
     void onSetHomePos() {}
     void onWaterHit() {}
     void setCattleRoomNo(signed char) {}
+
+    static bool m_playerRoom[3];
+    static s8 m_cattleRoomNo;
+    static dPa_smokeEcallBack m_smoke;
+    static dKy_tevstr_c m_smoke_tevstr;
+
+    static bool isPlayerRoom(int idx) { return m_playerRoom[idx]; }
 
     s32 create();
     void createHeap();

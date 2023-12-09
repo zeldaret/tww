@@ -167,27 +167,27 @@ void daTag_Island_c::actionWait() {
 }
 
 /* 00001240-00001248       .text daTag_Island_Draw__FP14daTag_Island_c */
-void daTag_Island_Draw(daTag_Island_c*) {
+static BOOL daTag_Island_Draw(daTag_Island_c*) {
     /* Nonmatching */
 }
 
 /* 00001248-000012C4       .text daTag_Island_Execute__FP14daTag_Island_c */
-void daTag_Island_Execute(daTag_Island_c*) {
+static BOOL daTag_Island_Execute(daTag_Island_c*) {
     /* Nonmatching */
 }
 
 /* 000012C4-000012CC       .text daTag_Island_IsDelete__FP14daTag_Island_c */
-void daTag_Island_IsDelete(daTag_Island_c*) {
+static BOOL daTag_Island_IsDelete(daTag_Island_c*) {
     /* Nonmatching */
 }
 
 /* 000012CC-000012FC       .text daTag_Island_Delete__FP14daTag_Island_c */
-void daTag_Island_Delete(daTag_Island_c*) {
+static BOOL daTag_Island_Delete(daTag_Island_c*) {
     /* Nonmatching */
 }
 
 /* 000012FC-000013D8       .text daTag_Island_Create__FP10fopAc_ac_c */
-void daTag_Island_Create(fopAc_ac_c*) {
+static s32 daTag_Island_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

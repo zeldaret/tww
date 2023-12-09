@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 000000EC-00000128       .text daNpcNz_NodeCallBack__FP7J3DNodei */
-void daNpcNz_NodeCallBack(J3DNode*, int) {
+static BOOL daNpcNz_NodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -17,7 +17,7 @@ void daNpc_Nz_c::NodeCallBack(J3DNode*, int) {
 }
 
 /* 00000288-000002C4       .text daNpcNz_TailNodeCallBack__FP7J3DNodei */
-void daNpcNz_TailNodeCallBack(J3DNode*, int) {
+static BOOL daNpcNz_TailNodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -32,7 +32,7 @@ void daNpc_Nz_c::TailControl() {
 }
 
 /* 00000CF8-00000D18       .text createHeap_CB__FP10fopAc_ac_c */
-void createHeap_CB(fopAc_ac_c*) {
+static BOOL createHeap_CB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -181,54 +181,35 @@ s32 daNpc_Nz_c::_create() {
     /* Nonmatching */
 }
 
-/* 000028FC-00002AF0       .text __ct__10daNpc_Nz_cFv */
-daNpc_Nz_c::daNpc_Nz_c() {
-    /* Nonmatching */
-}
-
 /* 00002E00-00002E6C       .text _delete__10daNpc_Nz_cFv */
 BOOL daNpc_Nz_c::_delete() {
     /* Nonmatching */
 }
 
 /* 00002E6C-00002E8C       .text daNpc_NzCreate__FPv */
-void daNpc_NzCreate(void*) {
+static s32 daNpc_NzCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00002E8C-00002EB0       .text daNpc_NzDelete__FPv */
-void daNpc_NzDelete(void*) {
+static BOOL daNpc_NzDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00002EB0-00002ED4       .text daNpc_NzExecute__FPv */
-void daNpc_NzExecute(void*) {
+static BOOL daNpc_NzExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00002ED4-00002EF8       .text daNpc_NzDraw__FPv */
-void daNpc_NzDraw(void*) {
+static BOOL daNpc_NzDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00002EF8-00002F00       .text daNpc_NzIsDelete__FPv */
-void daNpc_NzIsDelete(void*) {
+static BOOL daNpc_NzIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 0000318C-000031D4       .text __dt__14daNpc_Nz_HIO_cFv */
-daNpc_Nz_HIO_c::~daNpc_Nz_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
 
 /* 000032BC-000032E8       .text searchEsa_CB__FPvPv */
 void searchEsa_CB(void*, void*) {

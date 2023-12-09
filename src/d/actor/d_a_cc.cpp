@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-000002AC       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -17,7 +17,7 @@ void draw_SUB(cc_class*) {
 }
 
 /* 00000524-00000900       .text daCC_Draw__FP8cc_class */
-void daCC_Draw(cc_class*) {
+static BOOL daCC_Draw(cc_class*) {
     /* Nonmatching */
 }
 
@@ -142,38 +142,27 @@ void BG_check(cc_class*) {
 }
 
 /* 00005A58-00006214       .text daCC_Execute__FP8cc_class */
-void daCC_Execute(cc_class*) {
+static BOOL daCC_Execute(cc_class*) {
     /* Nonmatching */
 }
 
 /* 00006214-0000621C       .text daCC_IsDelete__FP8cc_class */
-void daCC_IsDelete(cc_class*) {
+static BOOL daCC_IsDelete(cc_class*) {
     /* Nonmatching */
 }
 
 /* 0000621C-00006290       .text daCC_Delete__FP8cc_class */
-void daCC_Delete(cc_class*) {
+static BOOL daCC_Delete(cc_class*) {
     /* Nonmatching */
 }
 
 /* 00006290-00006A2C       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00006A74-00007160       .text daCC_Create__FP10fopAc_ac_c */
-void daCC_Create(fopAc_ac_c*) {
+static s32 daCC_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 00007160-00007440       .text __ct__8cc_classFv */
-cc_class::cc_class() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
 

@@ -70,9 +70,3 @@ BOOL daObjBuoyrace::Act_c::_execute() {
 BOOL daObjBuoyrace::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

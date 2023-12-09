@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 000000EC-0000010C       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -28,11 +28,6 @@ void daBFlower_c::init_bck_anm(short) {
 
 /* 0000080C-000008AC       .text _create__11daBFlower_cFv */
 s32 daBFlower_c::_create() {
-    /* Nonmatching */
-}
-
-/* 000008AC-00000A30       .text __ct__11daBFlower_cFv */
-daBFlower_c::daBFlower_c() {
     /* Nonmatching */
 }
 
@@ -72,31 +67,26 @@ BOOL daBFlower_c::_draw() {
 }
 
 /* 00001AC4-00001AE4       .text daBFlower_Create__FPv */
-void daBFlower_Create(void*) {
+static s32 daBFlower_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00001AE4-00001B14       .text daBFlower_Delete__FPv */
-void daBFlower_Delete(void*) {
+static BOOL daBFlower_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00001B14-00001B38       .text daBFlower_Draw__FPv */
-void daBFlower_Draw(void*) {
+static BOOL daBFlower_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00001B38-00001B5C       .text daBFlower_Execute__FPv */
-void daBFlower_Execute(void*) {
+static BOOL daBFlower_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00001B5C-00001B64       .text daBFlower_IsDelete__FPv */
-void daBFlower_IsDelete(void*) {
+static BOOL daBFlower_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-
-

@@ -9,6 +9,7 @@
  */
 
 #include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_player_HIO.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
 #include "JSystem/JKernel/JKRHeap.h"
@@ -2405,9 +2406,9 @@ void daPy_lk_c::voiceStart(u32 param_1) {
 
 /* 801031A4-801031DC       .text itemButton__9daPy_lk_cCFv */
 BOOL daPy_lk_c::itemButton() const {
-    if (mLastUsedEquipItem == 0) {
+    if (mLastUsedItemButtonIdx == 0) {
         return m34C9 & 0x04;
-    } else if (mLastUsedEquipItem == 1) {
+    } else if (mLastUsedItemButtonIdx == 1) {
         return m34C9 & 0x08;
     } else {
         return m34C9 & 0x10;
@@ -2416,9 +2417,9 @@ BOOL daPy_lk_c::itemButton() const {
 
 /* 801031DC-80103214       .text itemTrigger__9daPy_lk_cCFv */
 BOOL daPy_lk_c::itemTrigger() const {
-    if (mLastUsedEquipItem == 0) {
+    if (mLastUsedItemButtonIdx == 0) {
         return mPressedButtonsBitfield & 0x04;
-    } else if (mLastUsedEquipItem == 1) {
+    } else if (mLastUsedItemButtonIdx == 1) {
         return mPressedButtonsBitfield & 0x08;
     } else {
         return mPressedButtonsBitfield & 0x10;
@@ -2449,17 +2450,17 @@ BOOL daPy_lk_c::checkGroupItem(int param_1, int itemNo) {
 
 /* 801032E4-801033E4       .text checkSetItemTrigger__9daPy_lk_cFii */
 BOOL daPy_lk_c::checkSetItemTrigger(int param_1, int param_2) {
-    if (param_2 == 0 || daPy_dmEcallBack_c::m_type != 1) {
+    if (param_2 == 0 || !daPy_dmEcallBack_c::checkCurse()) {
         if (mPressedButtonsBitfield & 0x04 && checkGroupItem(param_1, dComIfGp_getSelectItem(0))) {
-            mLastUsedEquipItem = 0;
+            mLastUsedItemButtonIdx = 0;
             return TRUE;
         }
         if (mPressedButtonsBitfield & 0x08 && checkGroupItem(param_1, dComIfGp_getSelectItem(1))) {
-            mLastUsedEquipItem = 1;
+            mLastUsedItemButtonIdx = 1;
             return TRUE;
         }
         if (mPressedButtonsBitfield & 0x10 && checkGroupItem(param_1, dComIfGp_getSelectItem(2))) {
-            mLastUsedEquipItem = 2;
+            mLastUsedItemButtonIdx = 2;
             return TRUE;
         }
     }
@@ -2532,7 +2533,12 @@ JKRHeap* daPy_lk_c::setItemHeap() {
 }
 
 /* 80104240-80104280       .text setBlurPosResource__9daPy_lk_cFUs */
-void daPy_lk_c::setBlurPosResource(u16) {
+void daPy_lk_c::setBlurPosResource(u16 index) {
+    dComIfGp_getAnmArchive()->readIdxResource(mSwBlur.mpBlurPos, 0x4800, index);
+}
+
+/* 80104280-80104364       .text getItemAnimeResource__9daPy_lk_cFUs */
+J3DAnmTransform* daPy_lk_c::getItemAnimeResource(u16) {
     /* Nonmatching */
 }
 
@@ -4108,7 +4114,7 @@ BOOL daPy_lk_c::checkLavaFace(cXyz* param_1, int attributeCode) {
         }
     }
     
-    if (attributeCode == 6) {
+    if (attributeCode == dBgS_Attr_LAVA_e) {
         if (param_1) {
             current.pos.y = m35D4;
         }
@@ -4117,7 +4123,7 @@ BOOL daPy_lk_c::checkLavaFace(cXyz* param_1, int attributeCode) {
         } else {
             return dProcLavaDamage_init();
         }
-    } else if (attributeCode == 8) {
+    } else if (attributeCode == dBgS_Attr_VOID_e) {
         startRestartRoom(5, 0xC9, -1.0f, 0);
     }
     
@@ -4132,7 +4138,7 @@ BOOL daPy_lk_c::checkFallCode() {
 /* 80120724-80120BBC       .text startRestartRoom__9daPy_lk_cFUlifi */
 BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int i_point) {
     /* Nonmatching - npc_sarace */
-    if (!checkNoResetFlg0(daPyFlg0_UNK4000) && (i_point != 0 || dComIfGp_event_compulsory(this, NULL, -1))) {
+    if (!checkNoResetFlg0(daPyFlg0_UNK4000) && (i_point != 0 || dComIfGp_event_compulsory(this))) {
         mDemo.setOriginalDemoType();
         if (i_point == 0) {
             mDemo.setDemoMode(1);
@@ -4141,8 +4147,8 @@ BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int
         changePlayer(this);
         
         if (dComIfGp_getMiniGameType() == 1) {
-            dComIfGp_setNextStage("sea", 1, 48, -1, 0.0f, 0, 1, 0);
-            mDoAud_seStart(JA_SE_FORCE_BACK, NULL, 0, 0);
+            dComIfGp_setNextStage("sea", 1, 48);
+            mDoAud_seStart(JA_SE_FORCE_BACK);
             // daNpc_Sarace_c::ship_race_result = 3;
             mTinkleShieldTimer = 0;
             return TRUE;
@@ -4152,10 +4158,10 @@ BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int
             mTinkleShieldTimer = 0;
             
             if (stageType == 7 && !dComIfGs_isEventBit(0x2A08) && (current.roomNo == 11 || current.roomNo == 44) && dStage_chkPlayerId(0x80, current.roomNo)) {
-                dComIfGp_setNextStage(dComIfGp_getStartStageName(), 0x80, current.roomNo, -1, 0.0f, param_1, 1, 0);
+                dComIfGp_setNextStage(dComIfGp_getStartStageName(), 0x80, current.roomNo, -1, 0.0f, param_1);
                 u32 roomParam = setParamData(-1, 0, eventInfoIdx, 0);
                 dComIfGs_setRestartRoomParam(roomParam);
-                mDoAud_seStart(JA_SE_FORCE_BACK, NULL, 0, 0);
+                mDoAud_seStart(JA_SE_FORCE_BACK);
                 return TRUE;
             }
             
@@ -4205,20 +4211,20 @@ BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int
                         int roomNo = dComIfGs_getRestartRoomNo();
                         u32 roomParam = setParamData(roomNo, 0, eventInfoIdx, 0);
                         dStage_restartRoom(roomParam, param_1);
-                        mDoAud_seStart(JA_SE_FORCE_BACK, NULL, 0, 0);
+                        mDoAud_seStart(JA_SE_FORCE_BACK);
                     }
                     return TRUE;
                 }
             } else if (checkNoResetFlg0(daPyFlg0_DEKU_SP_RETURN_FLG)) {
-                dComIfGp_setNextStage(dComIfGp_getStartStageName(), i_point, 41, -1, 0.0f, param_1, 1, 0);
+                dComIfGp_setNextStage(dComIfGp_getStartStageName(), i_point, 41, -1, 0.0f, param_1);
             } else {
-                dComIfGp_setNextStage(dComIfGp_getStartStageName(), i_point, current.roomNo, -1, 0.0f, param_1, 1, 0);
+                dComIfGp_setNextStage(dComIfGp_getStartStageName(), i_point, current.roomNo, -1, 0.0f, param_1);
             }
             
             if (mCurProcID != DPROC_DEAD_e) {
                 u32 roomParam = setParamData(-1, 0, eventInfoIdx, 0);
                 dComIfGs_setRestartRoomParam(roomParam);
-                mDoAud_seStart(JA_SE_FORCE_BACK, NULL, 0, 0);
+                mDoAud_seStart(JA_SE_FORCE_BACK);
             }
             
             return TRUE;
@@ -4315,7 +4321,7 @@ BOOL daPy_lk_c::playerDelete() {
     mDoAud_seDeleteObject(&mSwordTopPos);
     mDoAud_seDeleteObject(&mRopePos);
     mDoAud_seDeleteObject(&m338C.field_0x08);
-    mDoAud_seDeleteObject(&mFanWindCps1.GetEndP());
+    mDoAud_seDeleteObject(&mFanWindCps.GetEndP());
     
     for (i = 0; i < (int)ARRAY_SIZE(m_anm_heap_under); i++) {
         mDoExt_destroySolidHeap(m_anm_heap_under[i].mpAnimeHeap);
@@ -4505,6 +4511,16 @@ J3DModelData* daPy_lk_c::initModel(J3DModel** i_model, int i_fileIndex, u32 i_di
     return tmp_modelData;
 }
 
+/* 80124B30-80124BE4       .text entryBtk__9daPy_lk_cFP12J3DModelDatai */
+J3DAnmTextureSRTKey* daPy_lk_c::entryBtk(J3DModelData*, int) {
+    /* Nonmatching */
+}
+
+/* 80124BE4-80124C98       .text entryBrk__9daPy_lk_cFP12J3DModelDatai */
+J3DAnmTevRegKey* daPy_lk_c::entryBrk(J3DModelData*, int) {
+    /* Nonmatching */
+}
+
 /* 80124C98-80125CC8       .text playerInit__9daPy_lk_cFv */
 void daPy_lk_c::playerInit() {
     if (!fopAcM_entrySolidHeap(this, daPy_createHeap, 0xB0000)) {
@@ -4621,15 +4637,15 @@ void daPy_lk_c::playerInit() {
     mAtCps[2].SetStts(&mStts);
     mAtCyl.Set(l_at_cyl_src);
     mAtCyl.SetStts(&mStts);
-    mFanWindCps1.Set(l_fan_wind_cps_src);
-    mFanWindCps1.SetR(70.0f);
-    mFanWindCps1.SetStts(&mStts);
+    mFanWindCps.Set(l_fan_wind_cps_src);
+    mFanWindCps.SetR(70.0f);
+    mFanWindCps.SetStts(&mStts);
     mFanWindSph.Set(l_fan_wind_sph_src);
     mFanWindSph.SetStts(&mStts);
-    mFanWindCps2.Set(l_fan_wind_cps_src);
-    mFanWindCps2.SetStts(&mStts);
-    mFanWindCps2.SetAtType(AT_TYPE_LIGHT);
-    mFanWindCps2.SetR(20.0f);
+    mFanLightCps.Set(l_fan_wind_cps_src);
+    mFanLightCps.SetStts(&mStts);
+    mFanLightCps.SetAtType(AT_TYPE_LIGHT);
+    mFanLightCps.SetR(20.0f);
     
     for (int i = 0; i < (int)ARRAY_SIZE(m_anm_heap_under); i++) {
         createAnimeHeap(&m_anm_heap_under[i].mpAnimeHeap, HEAP_TYPE_UNDER_UPPER_e);

@@ -2,6 +2,7 @@
 #define D_A_NPC_DS1_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_shop.h"
 
 class daNpc_Ds1_c : public fopAc_ac_c {
 public:

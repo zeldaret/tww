@@ -123,27 +123,27 @@ bool daObjVteng_c::_draw() {
 }
 
 /* 00000578-00000598       .text daObjVteng_Create__FP10fopAc_ac_c */
-s32 daObjVteng_Create(fopAc_ac_c* i_this) {
+static s32 daObjVteng_Create(fopAc_ac_c* i_this) {
     return ((daObjVteng_c*)i_this)->_create();
 }
 
 /* 00000598-000005BC       .text daObjVteng_Delete__FP12daObjVteng_c */
-BOOL daObjVteng_Delete(daObjVteng_c* i_this) {
+static BOOL daObjVteng_Delete(daObjVteng_c* i_this) {
     return i_this->_delete();
 }
 
 /* 000005BC-000005E0       .text daObjVteng_Execute__FP12daObjVteng_c */
-BOOL daObjVteng_Execute(daObjVteng_c* i_this) {
+static BOOL daObjVteng_Execute(daObjVteng_c* i_this) {
     return i_this->_execute();
 }
 
 /* 000005E0-00000604       .text daObjVteng_Draw__FP12daObjVteng_c */
-BOOL daObjVteng_Draw(daObjVteng_c* i_this) {
+static BOOL daObjVteng_Draw(daObjVteng_c* i_this) {
     return i_this->_draw();
 }
 
 /* 00000604-0000060C       .text daObjVteng_IsDelete__FP12daObjVteng_c */
-BOOL daObjVteng_IsDelete(daObjVteng_c* i_this) {
+static BOOL daObjVteng_IsDelete(daObjVteng_c* i_this) {
     return TRUE;
 }
 

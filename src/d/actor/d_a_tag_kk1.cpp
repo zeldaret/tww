@@ -37,36 +37,27 @@ s32 daTag_Kk1_c::_create() {
 }
 
 /* 00000694-000006B4       .text daTag_Kk1_Create__FP10fopAc_ac_c */
-void daTag_Kk1_Create(fopAc_ac_c*) {
+static s32 daTag_Kk1_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000006B4-000006D4       .text daTag_Kk1_Delete__FP11daTag_Kk1_c */
-void daTag_Kk1_Delete(daTag_Kk1_c*) {
+static BOOL daTag_Kk1_Delete(daTag_Kk1_c*) {
     /* Nonmatching */
 }
 
 /* 000006D4-000006F4       .text daTag_Kk1_Execute__FP11daTag_Kk1_c */
-void daTag_Kk1_Execute(daTag_Kk1_c*) {
+static BOOL daTag_Kk1_Execute(daTag_Kk1_c*) {
     /* Nonmatching */
 }
 
 /* 000006F4-00000714       .text daTag_Kk1_Draw__FP11daTag_Kk1_c */
-void daTag_Kk1_Draw(daTag_Kk1_c*) {
+static BOOL daTag_Kk1_Draw(daTag_Kk1_c*) {
     /* Nonmatching */
 }
 
 /* 00000714-0000071C       .text daTag_Kk1_IsDelete__FP11daTag_Kk1_c */
-void daTag_Kk1_IsDelete(daTag_Kk1_c*) {
+static BOOL daTag_Kk1_IsDelete(daTag_Kk1_c*) {
     /* Nonmatching */
 }
-
-/* 0000071C-00000764       .text __dt__15daTag_Kk1_HIO_cFv */
-daTag_Kk1_HIO_c::~daTag_Kk1_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
 

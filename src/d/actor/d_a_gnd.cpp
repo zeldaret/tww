@@ -57,7 +57,7 @@ void z_s_sub(void*, void*) {
 }
 
 /* 0000094C-00000C38       .text daGnd_Draw__FP9gnd_class */
-void daGnd_Draw(gnd_class*) {
+static BOOL daGnd_Draw(gnd_class*) {
     /* Nonmatching */
 }
 
@@ -172,53 +172,27 @@ void body_flash(gnd_class*) {
 }
 
 /* 00006D0C-000076B8       .text daGnd_Execute__FP9gnd_class */
-void daGnd_Execute(gnd_class*) {
+static BOOL daGnd_Execute(gnd_class*) {
     /* Nonmatching */
 }
 
 /* 000076B8-000076C0       .text daGnd_IsDelete__FP9gnd_class */
-void daGnd_IsDelete(gnd_class*) {
+static BOOL daGnd_IsDelete(gnd_class*) {
     /* Nonmatching */
 }
 
 /* 000076C0-00007738       .text daGnd_Delete__FP9gnd_class */
-void daGnd_Delete(gnd_class*) {
+static BOOL daGnd_Delete(gnd_class*) {
     /* Nonmatching */
 }
 
 /* 00007738-00007A78       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00007AC0-00007CFC       .text daGnd_Create__FP10fopAc_ac_c */
-void daGnd_Create(fopAc_ac_c*) {
+static s32 daGnd_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 00007CFC-00008010       .text __ct__9gnd_classFv */
-gnd_class::gnd_class() {
-    /* Nonmatching */
-}
-
-/* 0000855C-000085D8       .text __dt__8gnd_ke_sFv */
-gnd_ke_s::~gnd_ke_s() {
-    /* Nonmatching */
-}
-
-/* 000085D8-00008640       .text __ct__8gnd_ke_sFv */
-gnd_ke_s::gnd_ke_s() {
-    /* Nonmatching */
-}
-
-/* 00008A3C-00008A84       .text __dt__11daGnd_HIO_cFv */
-daGnd_HIO_c::~daGnd_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
 

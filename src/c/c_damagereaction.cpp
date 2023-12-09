@@ -181,7 +181,7 @@ BOOL enemy_ice(enemyice* ei) {
         ei->mCyl.SetStts(&ei->mStts);
         ei->mCyl.SetR(ei->mWallRadius);
         ei->mCyl.SetH(ei->mCylHeight);
-        ei->mBgAcch.Set(&ac->current.pos, &ac->next.pos, ac, 1, &ei->mBgAcchCir, &ei->mSpeed, NULL, NULL);
+        ei->mBgAcch.Set(&ac->current.pos, &ac->next.pos, ac, 1, &ei->mBgAcchCir, &ei->mSpeed);
         ei->mBgAcchCir.SetWall(40.0f, ei->mWallRadius);
         
         if (ei->mParticleScale < 0.1f) {

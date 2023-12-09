@@ -21,11 +21,6 @@ daNpc_Ds1_HIO_c::daNpc_Ds1_HIO_c() {
     /* Nonmatching */
 }
 
-/* 00000298-000002F8       .text __dt__20daNpc_Ds1_childHIO_cFv */
-daNpc_Ds1_childHIO_c::~daNpc_Ds1_childHIO_c() {
-    /* Nonmatching */
-}
-
 /* 000002F8-00000318       .text daNpc_Ds1_XyEventCB__FPvi */
 void daNpc_Ds1_XyEventCB(void*, int) {
     /* Nonmatching */
@@ -37,7 +32,7 @@ void daNpc_Ds1_c::XyEventCB(int) {
 }
 
 /* 00000550-00000718       .text nodeCallBack_Ds__FP7J3DNodei */
-void nodeCallBack_Ds(J3DNode*, int) {
+static BOOL nodeCallBack_Ds(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -262,17 +257,12 @@ BOOL daNpc_Ds1_c::_delete() {
 }
 
 /* 0000465C-0000467C       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 0000467C-000047BC       .text _create__11daNpc_Ds1_cFv */
 s32 daNpc_Ds1_c::_create() {
-    /* Nonmatching */
-}
-
-/* 000047BC-000049FC       .text __ct__11daNpc_Ds1_cFv */
-daNpc_Ds1_c::daNpc_Ds1_c() {
     /* Nonmatching */
 }
 
@@ -282,38 +272,29 @@ void daNpc_Ds1_c::CreateHeap() {
 }
 
 /* 000052D4-000052F4       .text daNpc_Ds1_Create__FP10fopAc_ac_c */
-void daNpc_Ds1_Create(fopAc_ac_c*) {
+static s32 daNpc_Ds1_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000052F4-00005314       .text daNpc_Ds1_Delete__FP11daNpc_Ds1_c */
-void daNpc_Ds1_Delete(daNpc_Ds1_c*) {
+static BOOL daNpc_Ds1_Delete(daNpc_Ds1_c*) {
     /* Nonmatching */
 }
 
 /* 00005314-00005334       .text daNpc_Ds1_Execute__FP11daNpc_Ds1_c */
-void daNpc_Ds1_Execute(daNpc_Ds1_c*) {
+static BOOL daNpc_Ds1_Execute(daNpc_Ds1_c*) {
     /* Nonmatching */
 }
 
 /* 00005334-00005354       .text daNpc_Ds1_Draw__FP11daNpc_Ds1_c */
-void daNpc_Ds1_Draw(daNpc_Ds1_c*) {
+static BOOL daNpc_Ds1_Draw(daNpc_Ds1_c*) {
     /* Nonmatching */
 }
 
 /* 00005354-0000535C       .text daNpc_Ds1_IsDelete__FP11daNpc_Ds1_c */
-void daNpc_Ds1_IsDelete(daNpc_Ds1_c*) {
+static BOOL daNpc_Ds1_IsDelete(daNpc_Ds1_c*) {
     /* Nonmatching */
 }
-
-/* 0000557C-000055EC       .text __dt__15daNpc_Ds1_HIO_cFv */
-daNpc_Ds1_HIO_c::~daNpc_Ds1_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
 
 /* 000057B0-000057CC       .text setEyePos__11daNpc_Ds1_cF4cXyz */
 void daNpc_Ds1_c::setEyePos(cXyz) {

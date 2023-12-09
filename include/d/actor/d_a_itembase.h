@@ -39,7 +39,7 @@ struct daItemBase_c_m_data {
 
 STATIC_ASSERT(sizeof(daItemBase_c_m_data) == 0x4C);
 
-struct daItemBase_c : public fopAc_ac_c {
+class daItemBase_c : public fopAc_ac_c {
 public:
     BOOL DeleteBase(const char*);
     BOOL CreateItemHeap(const char*, short, short, short, short, short, short, short);
@@ -81,7 +81,7 @@ public:
     /* 0x480 */ dBgS_AcchCir mAcchCir;
     /* 0x4C0 */ dCcD_Stts mStts;
     /* 0x4FC */ dCcD_Cyl mCyl;
-    /* 0x62C */ s32 mShadowId;
+    /* 0x62C */ u32 mShadowId;
     /* 0x630 */ s32 mPickupFlag;
     /* 0x634 */ s32 field_0x634;
     /* 0x638 */ s16 field_0x638;
@@ -90,5 +90,8 @@ public:
 };
 
 STATIC_ASSERT(sizeof(daItemBase_c) == 0x63C);
+
+int CheckItemCreateHeap(fopAc_ac_c*);
+int CheckFieldItemCreateHeap(fopAc_ac_c*);
 
 #endif /* D_A_ITEMBASE_H */

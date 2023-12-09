@@ -40,9 +40,3 @@ BOOL daObjVmsdz_c::_execute() {
 BOOL daObjVmsdz_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

@@ -13,10 +13,19 @@ struct TVec3 {
     T y;
     T z;
 
-    void set(const TVec3& other) {
-        x = other.x;
-        y = other.y;
-        z = other.z;
+    TVec3<T>& operator=(const TVec3<T>& b) {
+        set(b.x, b.y, b.z);
+        return *this;
+    }
+
+    TVec3() {}
+
+    TVec3(T x, T y, T z) { set(x, y, z); }
+
+    void set(T x_, T y_, T z_) {
+        x = x_;
+        y = y_;
+        z = z_;
     }
 };
 
@@ -28,6 +37,10 @@ struct TVec3<s16> {
         set(b.x, b.y, b.z);
         return *this;
     }
+
+    TVec3() {}
+
+    TVec3(s16 x, s16 y, s16 z) { set(x, y, z); }
 
     void set(s16 x_, s16 y_, s16 z_) {
         x = x_;

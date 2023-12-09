@@ -111,16 +111,6 @@ s32 daObjAjav::Act_c::_create() {
     /* Nonmatching */
 }
 
-/* 0000166C-000016A8       .text __dt__Q29daObjAjav6Part_cFv */
-daObjAjav::Part_c::~Part_c() {
-    /* Nonmatching */
-}
-
-/* 000016A8-000016AC       .text __ct__Q29daObjAjav6Part_cFv */
-daObjAjav::Part_c::Part_c() {
-    /* Nonmatching */
-}
-
 /* 00001B3C-00001C08       .text _delete__Q29daObjAjav5Act_cFv */
 BOOL daObjAjav::Act_c::_delete() {
     /* Nonmatching */
@@ -200,13 +190,3 @@ void daObjAjav::Part_c::set_se_pos(cXyz) {
 BOOL daObjAjav::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-
-
-

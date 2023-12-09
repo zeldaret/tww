@@ -50,7 +50,7 @@ BOOL dEvDt_Next_Stage(int staffIdx, int wipePrm) {
     if (pStageName != NULL && pStartCode != NULL) {
         if (pHour != NULL)
             dKy_set_nexttime(*pHour * 15.0f);
-        dComIfGp_setNextStage(pStageName, *pStartCode, roomNo, layerNo, 0.0f, mode, 1, wipe);
+        dComIfGp_setNextStage(pStageName, *pStartCode, roomNo, layerNo, 0.0f, mode, TRUE, wipe);
     } else {
         JUT_ASSERT(0x88, 0);
     }
@@ -202,7 +202,7 @@ void dEvDtStaff_c::advanceCut(int cutIdx) {
 
 /* 80071D88-80071F58       .text specialProcLight__12dEvDtStaff_cFv */
 void dEvDtStaff_c::specialProcLight() {
-    int staffIdx = dComIfGp_evmng_getMyStaffId("LIGHT", NULL, 0);
+    int staffIdx = dComIfGp_evmng_getMyStaffId("LIGHT");
     if (staffIdx == -1) {
         JUT_ASSERT(0x16a, 0);
         return;
@@ -253,7 +253,7 @@ void dEvDtStaff_c::specialProcLight() {
 
 /* 80071F58-80072458       .text specialProcMessage__12dEvDtStaff_cFv */
 void dEvDtStaff_c::specialProcMessage() {
-    int staffIdx = dComIfGp_evmng_getMyStaffId("MESSAGE", NULL, 0);
+    int staffIdx = dComIfGp_evmng_getMyStaffId("MESSAGE");
     if (staffIdx == -1) {
         JUT_ASSERT(0x1C2, 0);
         return;
@@ -378,7 +378,7 @@ void dEvDtStaff_c::specialProcMessage() {
 
 /* 80072458-80072748       .text specialProcSound__12dEvDtStaff_cFv */
 void dEvDtStaff_c::specialProcSound() {
-    int staffIdx = dComIfGp_evmng_getMyStaffId("SOUND", NULL, 0);
+    int staffIdx = dComIfGp_evmng_getMyStaffId("SOUND");
     if (staffIdx == -1) {
         JUT_ASSERT(0x254, 0);
         return;
@@ -414,7 +414,7 @@ void dEvDtStaff_c::specialProcSound() {
                 specialProc_WaitStart(staffIdx);
                 break;
             case 5: // RIDDLE
-                mDoAud_seStart(JA_SE_READ_RIDDLE_1, NULL, 0, 0);
+                mDoAud_seStart(JA_SE_READ_RIDDLE_1);
                 break;
             case 6: // LANDING_DEMO
                 {
@@ -463,7 +463,7 @@ void dEvDtStaff_c::specialProcSound() {
 
 /* 80072748-80072A28       .text specialProcCreate__12dEvDtStaff_cFv */
 void dEvDtStaff_c::specialProcCreate() {
-    int staffIdx = dComIfGp_evmng_getMyStaffId("CREATER", NULL, 0);
+    int staffIdx = dComIfGp_evmng_getMyStaffId("CREATER");
     if (staffIdx == -1) {
         JUT_ASSERT(0x2d3, 0);
         return;
@@ -524,7 +524,7 @@ void dEvDtStaff_c::specialProcCreate() {
                     scale = *pScale;
                 }
 
-                fopAcM_create(objectName->mProcName, arg, &pos, dComIfGp_roomControl_getStayNo(), &angle, &scale, objectName->mSubtype, NULL);
+                fopAcM_create(objectName->mProcName, arg, &pos, dComIfGp_roomControl_getStayNo(), &angle, &scale, objectName->mSubtype);
             }
             break;
         }
@@ -534,7 +534,7 @@ void dEvDtStaff_c::specialProcCreate() {
 /* 80072A28-80073064       .text specialProcDirector__12dEvDtStaff_cFv */
 void dEvDtStaff_c::specialProcDirector() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
-    int staffIdx = dComIfGp_evmng_getMyStaffId("DIRECTOR", NULL, 0);
+    int staffIdx = dComIfGp_evmng_getMyStaffId("DIRECTOR");
     if (staffIdx == -1) {
         JUT_ASSERT(0x330, 0);
         return;
@@ -628,7 +628,7 @@ void dEvDtStaff_c::specialProcDirector() {
                         };
 
                         if (*pSE < (s32)ARRAY_SIZE(se_table)) {
-                            mDoAud_seStart(se_table[*pSE], NULL, 0, 0);
+                            mDoAud_seStart(se_table[*pSE]);
                         }
                     }
                 }
@@ -646,7 +646,7 @@ void dEvDtStaff_c::specialProcDirector() {
                     if (sound != NULL) {
                         switch (*sound) {
                         case 0:
-                            mDoAud_seStart(JA_SE_CHUYA_SWITCH, NULL, 0, 0);
+                            mDoAud_seStart(JA_SE_CHUYA_SWITCH);
                             break;
                         }
                     }
@@ -709,7 +709,7 @@ void dEvDtStaff_c::specialProcDirector() {
 
 /* 80073064-800733CC       .text specialProcPackage__12dEvDtStaff_cFv */
 void dEvDtStaff_c::specialProcPackage() {
-    int staffIdx = dComIfGp_evmng_getMyStaffId("PACKAGE", NULL, 0);
+    int staffIdx = dComIfGp_evmng_getMyStaffId("PACKAGE");
     if (staffIdx == -1) {
         JUT_ASSERT(0x3f2, 0);
         return;
@@ -787,7 +787,7 @@ void dEvDtStaff_c::specialProcPackage() {
 
 /* 800733CC-800735BC       .text specialProcTimekeeper__12dEvDtStaff_cFv */
 void dEvDtStaff_c::specialProcTimekeeper() {
-    int staffIdx = dComIfGp_evmng_getMyStaffId("TIMEKEEPER", NULL, 0);
+    int staffIdx = dComIfGp_evmng_getMyStaffId("TIMEKEEPER");
     if (staffIdx == -1) {
         JUT_ASSERT(0x471, 0);
         return;

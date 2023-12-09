@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 000000EC-000001E8       .text kantera_nodeCallBack__FP7J3DNodei */
-void kantera_nodeCallBack(J3DNode*, int) {
+static BOOL kantera_nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -17,7 +17,7 @@ void ga_draw(kantera_class*) {
 }
 
 /* 000002C8-00000584       .text daKantera_Draw__FP13kantera_class */
-void daKantera_Draw(kantera_class*) {
+static BOOL daKantera_Draw(kantera_class*) {
     /* Nonmatching */
 }
 
@@ -37,46 +37,27 @@ void kantera_move(kantera_class*) {
 }
 
 /* 000018BC-00001ABC       .text daKantera_Execute__FP13kantera_class */
-void daKantera_Execute(kantera_class*) {
+static BOOL daKantera_Execute(kantera_class*) {
     /* Nonmatching */
 }
 
 /* 00001ABC-00001AC4       .text daKantera_IsDelete__FP13kantera_class */
-void daKantera_IsDelete(kantera_class*) {
+static BOOL daKantera_IsDelete(kantera_class*) {
     /* Nonmatching */
 }
 
 /* 00001AC4-00001B30       .text daKantera_Delete__FP13kantera_class */
-void daKantera_Delete(kantera_class*) {
+static BOOL daKantera_Delete(kantera_class*) {
     /* Nonmatching */
 }
 
 /* 00001B30-00001F5C       .text daKantera_CreateHeap__FP10fopAc_ac_c */
-void daKantera_CreateHeap(fopAc_ac_c*) {
+static BOOL daKantera_CreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00001FA4-00002304       .text daKantera_Create__FP10fopAc_ac_c */
-void daKantera_Create(fopAc_ac_c*) {
+static s32 daKantera_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 00002304-00002340       .text __dt__7mo_ga_sFv */
-mo_ga_s::~mo_ga_s() {
-    /* Nonmatching */
-}
-
-/* 00002340-00002344       .text __ct__7mo_ga_sFv */
-mo_ga_s::mo_ga_s() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
 

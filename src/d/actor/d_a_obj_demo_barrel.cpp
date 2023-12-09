@@ -17,7 +17,7 @@ void daObj_Demo_Barrel_c::setParticleSibuki() {
 }
 
 /* 00000378-00000398       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -27,27 +27,27 @@ void daObj_Demo_Barrel_c::CreateHeap() {
 }
 
 /* 00000538-000005EC       .text daObj_Demo_BarrelCreate__FPv */
-void daObj_Demo_BarrelCreate(void*) {
+static s32 daObj_Demo_BarrelCreate(void*) {
     /* Nonmatching */
 }
 
 /* 000005EC-0000061C       .text daObj_Demo_BarrelDelete__FPv */
-void daObj_Demo_BarrelDelete(void*) {
+static BOOL daObj_Demo_BarrelDelete(void*) {
     /* Nonmatching */
 }
 
 /* 0000061C-00000790       .text daObj_Demo_BarrelExecute__FPv */
-void daObj_Demo_BarrelExecute(void*) {
+static BOOL daObj_Demo_BarrelExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00000790-00000814       .text daObj_Demo_BarrelDraw__FPv */
-void daObj_Demo_BarrelDraw(void*) {
+static BOOL daObj_Demo_BarrelDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00000814-0000081C       .text daObj_Demo_BarrelIsDelete__FPv */
-void daObj_Demo_BarrelIsDelete(void*) {
+static BOOL daObj_Demo_BarrelIsDelete(void*) {
     /* Nonmatching */
 }
 

@@ -17,7 +17,7 @@ void daBemos_c::set_mtx() {
 }
 
 /* 0000033C-0000035C       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -187,7 +187,7 @@ void daBemos_c::getBeamActor() {
 }
 
 /* 00003F70-00003F90       .text daBemosCreate__FPv */
-void daBemosCreate(void*) {
+static s32 daBemosCreate(void*) {
     /* Nonmatching */
 }
 
@@ -196,45 +196,23 @@ s32 daBemos_c::_create() {
     /* Nonmatching */
 }
 
-/* 0000403C-0000429C       .text __ct__9daBemos_cFv */
-daBemos_c::daBemos_c() {
-    /* Nonmatching */
-}
-
 /* 00004ACC-00004BC0       .text daBemosDelete__FPv */
-void daBemosDelete(void*) {
+static BOOL daBemosDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00004BC0-00004CF0       .text daBemosExecute__FPv */
-void daBemosExecute(void*) {
+static BOOL daBemosExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00004CF0-00004E10       .text daBemosDraw__FPv */
-void daBemosDraw(void*) {
+static BOOL daBemosDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00004E10-00004E18       .text daBemosIsDelete__FPv */
-void daBemosIsDelete(void*) {
+static BOOL daBemosIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 00005004-0000504C       .text __dt__13daBemos_HIO_cFv */
-daBemos_HIO_c::~daBemos_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
 

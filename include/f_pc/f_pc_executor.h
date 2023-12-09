@@ -16,7 +16,7 @@ s32 fpcEx_Execute(base_process_class* pProc);
 s32 fpcEx_ToExecuteQ(base_process_class* pProc);
 void fpcEx_Handler(fpcLnIt_QueueFunc pFunc);
 
-inline base_process_class* i_fpcM_Search(fpcLyIt_JudgeFunc pFunc, void* pUserData) {
+inline base_process_class* fpcM_Search(fpcLyIt_JudgeFunc pFunc, void* pUserData) {
     return fpcEx_Search(pFunc, pUserData);
 }
 

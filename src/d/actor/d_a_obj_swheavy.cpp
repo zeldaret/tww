@@ -105,9 +105,3 @@ BOOL daObjSwheavy::Act_c::_execute() {
 BOOL daObjSwheavy::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

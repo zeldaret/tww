@@ -12,7 +12,7 @@ void draw_SUB(ks_class*) {
 }
 
 /* 000002CC-00000568       .text daKS_Draw__FP8ks_class */
-void daKS_Draw(ks_class*) {
+static BOOL daKS_Draw(ks_class*) {
     /* Nonmatching */
 }
 
@@ -102,38 +102,27 @@ void BG_check(ks_class*) {
 }
 
 /* 00002C54-00003054       .text daKS_Execute__FP8ks_class */
-void daKS_Execute(ks_class*) {
+static BOOL daKS_Execute(ks_class*) {
     /* Nonmatching */
 }
 
 /* 00003054-0000305C       .text daKS_IsDelete__FP8ks_class */
-void daKS_IsDelete(ks_class*) {
+static BOOL daKS_IsDelete(ks_class*) {
     /* Nonmatching */
 }
 
 /* 0000305C-000030F4       .text daKS_Delete__FP8ks_class */
-void daKS_Delete(ks_class*) {
+static BOOL daKS_Delete(ks_class*) {
     /* Nonmatching */
 }
 
 /* 000030F4-000034B0       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000034F8-00003A94       .text daKS_Create__FP10fopAc_ac_c */
-void daKS_Create(fopAc_ac_c*) {
+static s32 daKS_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 00003A94-00003CEC       .text __ct__8ks_classFv */
-ks_class::ks_class() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
 

@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 000000EC-0000010C       .text createHeap_CB__FP10fopAc_ac_c */
-void createHeap_CB(fopAc_ac_c*) {
+static BOOL createHeap_CB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -47,32 +47,27 @@ BOOL daIkari_c::_delete() {
 }
 
 /* 000005E0-00000600       .text daIkariCreate__FPv */
-void daIkariCreate(void*) {
+static s32 daIkariCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00000600-00000624       .text daIkariDelete__FPv */
-void daIkariDelete(void*) {
+static BOOL daIkariDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00000624-00000648       .text daIkariExecute__FPv */
-void daIkariExecute(void*) {
+static BOOL daIkariExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00000648-0000066C       .text daIkariDraw__FPv */
-void daIkariDraw(void*) {
+static BOOL daIkariDraw(void*) {
     /* Nonmatching */
 }
 
 /* 0000066C-00000674       .text daIkariIsDelete__FPv */
-void daIkariIsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 000006D8-00000734       .text __dt__15daObjIkariHIO_cFv */
-daObjIkariHIO_c::~daObjIkariHIO_c() {
+static BOOL daIkariIsDelete(void*) {
     /* Nonmatching */
 }
 

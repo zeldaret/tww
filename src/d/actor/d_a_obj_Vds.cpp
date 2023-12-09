@@ -125,14 +125,3 @@ BOOL daObjVds::Act_c::_execute() {
 BOOL daObjVds::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-/* 0000163C-00001720       .text __dt__Q28daObjVds5Act_cFv */
-daObjVds::Act_c::~Act_c() {
-    /* Nonmatching */
-}
-

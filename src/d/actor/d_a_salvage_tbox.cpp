@@ -32,7 +32,7 @@ BOOL daSTBox_c::_delete() {
 }
 
 /* 000006E8-00000708       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -112,37 +112,27 @@ void daSTBox_c::actWaitDummy(int) {
 }
 
 /* 000013BC-000013DC       .text daSTBox_Create__FPv */
-void daSTBox_Create(void*) {
+static s32 daSTBox_Create(void*) {
     /* Nonmatching */
 }
 
 /* 000013DC-00001400       .text daSTBox_Delete__FPv */
-void daSTBox_Delete(void*) {
+static BOOL daSTBox_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00001400-0000146C       .text daSTBox_Draw__FPv */
-void daSTBox_Draw(void*) {
+static BOOL daSTBox_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 0000146C-00001490       .text daSTBox_Execute__FPv */
-void daSTBox_Execute(void*) {
+static BOOL daSTBox_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00001490-00001498       .text daSTBox_IsDelete__FPv */
-void daSTBox_IsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 000014A8-00001514       .text __dt__25daSTBox_shadowEcallBack_cFv */
-daSTBox_shadowEcallBack_c::~daSTBox_shadowEcallBack_c() {
-    /* Nonmatching */
-}
-
-/* 00001514-00001518       .text __ct__Q29JGeometry8TVec3<f>Fv */
-JGeometry::TVec3<float>::TVec3() {
+static BOOL daSTBox_IsDelete(void*) {
     /* Nonmatching */
 }
 

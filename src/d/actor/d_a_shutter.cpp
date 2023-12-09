@@ -12,7 +12,7 @@ BOOL daShutter_c::_delete() {
 }
 
 /* 00000108-00000128       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -57,27 +57,27 @@ BOOL daShutter_c::_draw() {
 }
 
 /* 00000DD8-00000DF8       .text daShutter_Create__FPv */
-void daShutter_Create(void*) {
+static s32 daShutter_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000DF8-00000E18       .text daShutter_Delete__FPv */
-void daShutter_Delete(void*) {
+static BOOL daShutter_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000E18-00000E38       .text daShutter_Draw__FPv */
-void daShutter_Draw(void*) {
+static BOOL daShutter_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000E38-00000E58       .text daShutter_Execute__FPv */
-void daShutter_Execute(void*) {
+static BOOL daShutter_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00000E58-00000E60       .text daShutter_IsDelete__FPv */
-void daShutter_IsDelete(void*) {
+static BOOL daShutter_IsDelete(void*) {
     /* Nonmatching */
 }
 

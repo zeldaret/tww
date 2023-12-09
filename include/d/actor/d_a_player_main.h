@@ -165,6 +165,8 @@ public:
     static void setTimer(s16 timer) { m_timer = timer; }
     static void setType(u16 type) { m_type = type; }
     
+    static bool checkCurse() { return m_type == 1; }
+    
     static s16 m_timer;
     static u16 m_type;
 };  // Size: 0x0C
@@ -1213,6 +1215,7 @@ public:
 
     enum daPy_ANM {
         ANM_UNK_C4 = 0xC4,
+        ANM_UNK_C5 = 0xC5,
     };
 
     enum daPy_UNDER {
@@ -2349,7 +2352,7 @@ public:
     /* 0x34BA */ u8 m34BA;
     /* 0x34BB */ u8 mCurrItemHeapIdx;
     /* 0x34BC */ u8 m34BC;
-    /* 0x34BD */ u8 mLastUsedEquipItem;
+    /* 0x34BD */ u8 mLastUsedItemButtonIdx;
     /* 0x34BE */ u8 m34BE;
     /* 0x34BF */ s8 mReverb;
     /* 0x34C0 */ u8 mLeftHandIdx;
@@ -2529,9 +2532,9 @@ public:
     /* 0x4284 */ dCcD_Cyl mAtCyl;
     /* 0x43B4 */ dCcD_Cyl mLightCyl;
     /* 0x44E4 */ dCcD_Cps mAtCps[3];
-    /* 0x488C */ dCcD_Cps mFanWindCps1;
+    /* 0x488C */ dCcD_Cps mFanWindCps;
     /* 0x49C4 */ dCcD_Sph mFanWindSph;
-    /* 0x4AF0 */ dCcD_Cps mFanWindCps2;
+    /* 0x4AF0 */ dCcD_Cps mFanLightCps;
     
     struct ProcInitTableEntry {
         /* 0x00 */ ProcFunc mProcFunc;

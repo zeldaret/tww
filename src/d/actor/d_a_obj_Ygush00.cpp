@@ -104,13 +104,13 @@ bool daObjYgush00_c::_execute() {
     if (mType == 1) {
         if (mpGryw00 != NULL) {
             if (mpGryw00->get_draw_water_lv(mpGryw00) <= current.pos.y) {
-                fopAcM_seStartCurrent(this, 0x61fe, 0);
+                fopAcM_seStartCurrent(this, JA_SE_OBJ_SPRING, 0);
             }
         } else {
             mpGryw00 = (daObjGryw00_c*)fopAcM_SearchByName(PROC_Obj_Gryw00);
         }
     } else {
-        fopAcM_seStartCurrent(this, 0x61fe, 0);
+        fopAcM_seStartCurrent(this, JA_SE_OBJ_SPRING, 0);
     }
 
     return true;

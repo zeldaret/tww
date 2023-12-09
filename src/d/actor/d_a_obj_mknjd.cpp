@@ -455,7 +455,7 @@ void daObjMknjD::Act_c::privateCut() {
 
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
-    int staffIdx = dComIfGp_evmng_getMyStaffId("MknjD", NULL, 0);
+    int staffIdx = dComIfGp_evmng_getMyStaffId("MknjD");
     if (staffIdx != -1) {
         mActionIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_table, ARRAY_SIZE(cut_name_table), 1, 0);
 
@@ -474,7 +474,7 @@ void daObjMknjD::Act_c::privateCut() {
                         setPlayerAngle(staffIdx);
                         break;
                     case ACT_BREAK:
-                        mDoAud_seStart(JA_SE_READ_RIDDLE_1, NULL, 0, 0);
+                        mDoAud_seStart(JA_SE_READ_RIDDLE_1);
 
                         int switchId = prm_get_swSave();
                         fopAcM_onSwitch(this, switchId);

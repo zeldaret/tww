@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void daLwood_c::CreateInit() {
 }
 
 /* 000002E0-000004D8       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -37,27 +37,27 @@ void daLwood_c::setMoveBGMtx() {
 }
 
 /* 000005D8-00000678       .text daLwood_Create__FPv */
-void daLwood_Create(void*) {
+static s32 daLwood_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000678-000006D4       .text daLwood_Delete__FPv */
-void daLwood_Delete(void*) {
+static BOOL daLwood_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 000006D4-00000778       .text daLwood_Draw__FPv */
-void daLwood_Draw(void*) {
+static BOOL daLwood_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000778-0000078C       .text daLwood_Execute__FPv */
-void daLwood_Execute(void*) {
+static BOOL daLwood_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 0000078C-00000794       .text daLwood_IsDelete__FPv */
-void daLwood_IsDelete(void*) {
+static BOOL daLwood_IsDelete(void*) {
     /* Nonmatching */
 }
 

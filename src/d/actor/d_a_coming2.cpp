@@ -46,11 +46,6 @@ void daComing2::Act_c::get_water_height(float*, const cXyz*) {
     /* Nonmatching */
 }
 
-/* 00001138-0000125C       .text __dt__11dBgS_WtrChkFv */
-dBgS_WtrChk::~dBgS_WtrChk() {
-    /* Nonmatching */
-}
-
 /* 0000125C-00001294       .text init_barrelN_info__Q29daComing25Act_cFi */
 void daComing2::Act_c::init_barrelN_info(int) {
     /* Nonmatching */
@@ -171,26 +166,6 @@ s32 daComing2::Act_c::_create() {
     /* Nonmatching */
 }
 
-/* 00002264-000022A0       .text __dt__Q39daComing25Act_c12_start_buoy_Fv */
-daComing2::Act_c::_start_buoy_::~_start_buoy_() {
-    /* Nonmatching */
-}
-
-/* 000022A0-000022A4       .text __ct__Q39daComing25Act_c12_start_buoy_Fv */
-daComing2::Act_c::_start_buoy_::_start_buoy_() {
-    /* Nonmatching */
-}
-
-/* 000022A4-000022E0       .text __dt__Q29daComing213_barrel_info_Fv */
-daComing2::_barrel_info_::~_barrel_info_() {
-    /* Nonmatching */
-}
-
-/* 000022E0-000022E4       .text __ct__Q29daComing213_barrel_info_Fv */
-daComing2::_barrel_info_::_barrel_info_() {
-    /* Nonmatching */
-}
-
 /* 000022E4-000022EC       .text _delete__Q29daComing25Act_cFv */
 BOOL daComing2::Act_c::_delete() {
     /* Nonmatching */
@@ -205,40 +180,3 @@ BOOL daComing2::Act_c::_execute() {
 BOOL daComing2::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-/* 0000244C-000024E0       .text __dt__Q29daComing25Act_cFv */
-daComing2::Act_c::~Act_c() {
-    /* Nonmatching */
-}
-
-/* 000024E0-000025DC       .text __dt__14dBgS_SplGrpChkFv */
-dBgS_SplGrpChk::~dBgS_SplGrpChk() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

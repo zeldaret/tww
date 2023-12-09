@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 800FDAFC-800FDB1C       .text createHeap_CB__FP10fopAc_ac_c */
-void createHeap_CB(fopAc_ac_c*) {
+static BOOL createHeap_CB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void daObj_Search::Act_c::beamCreateHeap(int) {
 }
 
 /* 800FDDBC-800FDE08       .text nodeControl_CB__FP7J3DNodei */
-void nodeControl_CB(J3DNode*, int) {
+static BOOL nodeControl_CB(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -151,11 +151,6 @@ s32 daObj_Search::Act_c::_create() {
     /* Nonmatching */
 }
 
-/* 80100B08-80100D60       .text __ct__Q212daObj_Search5Act_cFv */
-daObj_Search::Act_c::Act_c() {
-    /* Nonmatching */
-}
-
 /* 80100F9C-801010C4       .text smoke_set__Q212daObj_Search5Act_cFfi */
 void daObj_Search::Act_c::smoke_set(float, int) {
     /* Nonmatching */
@@ -260,7 +255,3 @@ void daObj_Search::Mthd::Draw(void*) {
 void daObj_Search::Mthd::IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-

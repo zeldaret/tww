@@ -42,7 +42,7 @@ BOOL daObj_Stair_c::Delete() {
 }
 
 /* 000004B8-000004D8       .text daObj_StairCreate__FPv */
-void daObj_StairCreate(void*) {
+static s32 daObj_StairCreate(void*) {
     /* Nonmatching */
 }
 
@@ -52,12 +52,12 @@ s32 daObj_Stair_c::_create() {
 }
 
 /* 00000A7C-00000AFC       .text daObj_StairDelete__FPv */
-void daObj_StairDelete(void*) {
+static BOOL daObj_StairDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00000AFC-00000B20       .text daObj_StairExecute__FPv */
-void daObj_StairExecute(void*) {
+static BOOL daObj_StairExecute(void*) {
     /* Nonmatching */
 }
 
@@ -67,19 +67,12 @@ BOOL daObj_Stair_c::_execute() {
 }
 
 /* 00001364-0000139C       .text daObj_StairDraw__FPv */
-void daObj_StairDraw(void*) {
+static BOOL daObj_StairDraw(void*) {
     /* Nonmatching */
 }
 
 /* 0000139C-000013A4       .text daObj_StairIsDelete__FPv */
-void daObj_StairIsDelete(void*) {
+static BOOL daObj_StairIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 000013A4-000013EC       .text __dt__16daobj_stairHIO_cFv */
-daobj_stairHIO_c::~daobj_stairHIO_c() {
-    /* Nonmatching */
-}
-
-
 

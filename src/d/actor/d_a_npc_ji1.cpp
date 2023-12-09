@@ -482,37 +482,32 @@ void daNpc_Ji1_c::setAnm(int, float, int) {
 }
 
 /* 0000DAB0-0000DC04       .text nodeCallBack1__FP7J3DNodei */
-void nodeCallBack1(J3DNode*, int) {
+static BOOL nodeCallBack1(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 0000DC04-0000DD68       .text nodeCallBack2__FP7J3DNodei */
-void nodeCallBack2(J3DNode*, int) {
+static BOOL nodeCallBack2(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 0000DD68-0000DE90       .text nodeCallBack3__FP7J3DNodei */
-void nodeCallBack3(J3DNode*, int) {
+static BOOL nodeCallBack3(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 0000DE90-0000DEB0       .text daNpc_Ji1_Draw__FP11daNpc_Ji1_c */
-void daNpc_Ji1_Draw(daNpc_Ji1_c*) {
+static BOOL daNpc_Ji1_Draw(daNpc_Ji1_c*) {
     /* Nonmatching */
 }
 
 /* 0000DEB0-0000DED0       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 0000DED0-0000DF78       .text _create__11daNpc_Ji1_cFv */
 s32 daNpc_Ji1_c::_create() {
-    /* Nonmatching */
-}
-
-/* 0000DF78-0000E278       .text __ct__11daNpc_Ji1_cFv */
-daNpc_Ji1_c::daNpc_Ji1_c() {
     /* Nonmatching */
 }
 
@@ -587,33 +582,22 @@ void daNpc_Ji1_c::harpoonMove() {
 }
 
 /* 00011F74-00011F98       .text daNpc_Ji1_Execute__FP11daNpc_Ji1_c */
-void daNpc_Ji1_Execute(daNpc_Ji1_c*) {
+static BOOL daNpc_Ji1_Execute(daNpc_Ji1_c*) {
     /* Nonmatching */
 }
 
 /* 00011F98-00011FA0       .text daNpc_Ji1_IsDelete__FP11daNpc_Ji1_c */
-void daNpc_Ji1_IsDelete(daNpc_Ji1_c*) {
+static BOOL daNpc_Ji1_IsDelete(daNpc_Ji1_c*) {
     /* Nonmatching */
 }
 
 /* 00011FA0-00011FC0       .text daNpc_Ji1_Delete__FP11daNpc_Ji1_c */
-void daNpc_Ji1_Delete(daNpc_Ji1_c*) {
+static BOOL daNpc_Ji1_Delete(daNpc_Ji1_c*) {
     /* Nonmatching */
 }
 
 /* 00011FC0-00011FE0       .text daNpc_Ji1_Create__FP10fopAc_ac_c */
-void daNpc_Ji1_Create(fopAc_ac_c*) {
+static s32 daNpc_Ji1_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 0001235C-000123CC       .text __dt__15daNpc_Ji1_HIO_cFv */
-daNpc_Ji1_HIO_c::~daNpc_Ji1_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
 

@@ -135,16 +135,3 @@ void daObjSwhammer::Act_c::Execute(float(**)[3][4]) {
 BOOL daObjSwhammer::Act_c::Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-/* 00001848-00001AD0       .text __dt__Q213daObjSwhammer5Act_cFv */
-daObjSwhammer::Act_c::~Act_c() {
-    /* Nonmatching */
-}
-
-
-

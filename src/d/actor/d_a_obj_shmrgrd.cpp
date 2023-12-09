@@ -155,16 +155,3 @@ BOOL daObjShmrgrd_c::_execute() {
 BOOL daObjShmrgrd_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-/* 00001CF0-00002124       .text __dt__14daObjShmrgrd_cFv */
-daObjShmrgrd_c::~daObjShmrgrd_c() {
-    /* Nonmatching */
-}
-
-
-

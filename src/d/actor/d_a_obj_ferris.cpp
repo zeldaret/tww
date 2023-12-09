@@ -85,13 +85,3 @@ BOOL daObjFerris::Act_c::_execute() {
 BOOL daObjFerris::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-
-
-

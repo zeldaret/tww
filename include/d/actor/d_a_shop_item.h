@@ -10,7 +10,8 @@ struct daShopItem_c_m_data {
     /* 0x18 */ SVec field_0x18;
 };
 
-struct daShopItem_c : public daItemBase_c {
+class daShopItem_c : public daItemBase_c {
+public:
     inline BOOL _delete();
     void setTevType(int) {}
 

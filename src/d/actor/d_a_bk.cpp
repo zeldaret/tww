@@ -4,385 +4,425 @@
 //
 
 #include "d/actor/d_a_bk.h"
-#include "dolphin/types.h"
+#include "f_op/f_op_actor_mng.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "d/d_procname.h"
+#include "d/d_com_inf_game.h"
+#include "d/actor/d_a_obj_search.h"
+#include "d/actor/d_a_item.h"
+#include "d/d_item_data.h"
+
+static bkHIO_c l_bkHIO;
 
 /* 000000EC-00000234       .text anm_init__FP8bk_classifUcfi */
-void anm_init(bk_class*, int, float, unsigned char, float, int) {
+static void anm_init(bk_class* i_this, int, f32, u8, f32, int) {
     /* Nonmatching */
 }
 
 /* 00000234-000005A8       .text yari_off_check__FP8bk_class */
-void yari_off_check(bk_class*) {
+static void yari_off_check(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00000A1C-00000EE8       .text smoke_set_s__FP8bk_classf */
-void smoke_set_s(bk_class*, float) {
+static void smoke_set_s(bk_class* i_this, f32) {
     /* Nonmatching */
 }
 
 /* 00000EE8-000011F0       .text ground_smoke_set__FP8bk_class */
-void ground_smoke_set(bk_class*) {
+static void ground_smoke_set(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 000011F0-00001454       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 00001454-00001564       .text nodeCallBack_P__FP7J3DNodei */
-void nodeCallBack_P(J3DNode*, int) {
+static BOOL nodeCallBack_P(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 00001564-000019A4       .text search_check_draw__FP8bk_class */
-void search_check_draw(bk_class*) {
+static void search_check_draw(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 000019A8-00001B88       .text br_draw__FP8bk_class */
-void br_draw(bk_class*) {
+static void br_draw(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00001B88-00001CD0       .text daBk_shadowDraw__FP8bk_class */
-void daBk_shadowDraw(bk_class*) {
+static BOOL daBk_shadowDraw(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00001CD0-00001F60       .text daBk_Draw__FP8bk_class */
-void daBk_Draw(bk_class*) {
+static BOOL daBk_Draw(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00001F60-00002404       .text way_pos_check__FP8bk_classP4cXyz */
-void way_pos_check(bk_class*, cXyz*) {
+static void way_pos_check(bk_class* i_this, cXyz*) {
     /* Nonmatching */
 }
 
 /* 0000259C-00002864       .text ground_4_check__FP8bk_classisf */
-void ground_4_check(bk_class*, int, short, float) {
+static void ground_4_check(bk_class* i_this, int, s16, f32) {
     /* Nonmatching */
 }
 
 /* 00002864-00002C4C       .text daBk_other_bg_check__FP8bk_classP10fopAc_ac_c */
-void daBk_other_bg_check(bk_class*, fopAc_ac_c*) {
+static void daBk_other_bg_check(bk_class* i_this, fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00002C4C-00002CD4       .text s_w_sub__FPvPv */
-void s_w_sub(void*, void*) {
+static void s_w_sub(void*, void*) {
     /* Nonmatching */
 }
 
 /* 00002CD4-00002FB0       .text search_wepon__FP8bk_class */
-void search_wepon(bk_class*) {
+static u32 search_wepon(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00002FB0-0000302C       .text s_b_sub__FPvPv */
-void s_b_sub(void*, void*) {
+static void s_b_sub(void*, void*) {
     /* Nonmatching */
 }
 
 /* 0000302C-000033BC       .text search_bomb__FP8bk_classi */
-void search_bomb(bk_class*, int) {
+static fopAc_ac_c* search_bomb(bk_class* i_this, int) {
     /* Nonmatching */
 }
 
 /* 000033BC-00003438       .text daBk_wepon_view_check__FP8bk_class */
-void daBk_wepon_view_check(bk_class*) {
-    /* Nonmatching */
+static BOOL daBk_wepon_view_check(bk_class* i_this) {
+    if (i_this->m02CC != 0) {
+        return FALSE;
+    }
+    i_this->m1200 = search_wepon(i_this);
+    if (i_this->m1200 != fpcM_ERROR_PROCESS_ID_e) {
+        if (fopAcM_SearchByID(i_this->m1200)) {
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 /* 00003438-00003478       .text daBk_bomb_view_check__FP8bk_class */
-void daBk_bomb_view_check(bk_class*) {
+static void daBk_bomb_view_check(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00003478-000034B8       .text daBk_bomb_check__FP8bk_class */
-void daBk_bomb_check(bk_class*) {
-    /* Nonmatching */
+static BOOL daBk_bomb_check(bk_class* i_this) {
+    i_this->m11F8 = search_bomb(i_this, 0);
+    if (i_this->m11F8) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 000034B8-0000385C       .text daBk_player_bg_check__FP8bk_classP4cXyz */
-void daBk_player_bg_check(bk_class*, cXyz*) {
+static void daBk_player_bg_check(bk_class* i_this, cXyz*) {
     /* Nonmatching */
 }
 
 /* 0000385C-00003A18       .text daBk_player_view_check__FP8bk_classP4cXyzss */
-void daBk_player_view_check(bk_class*, cXyz*, short, short) {
+static void daBk_player_view_check(bk_class* i_this, cXyz*, s16, s16) {
     /* Nonmatching */
 }
 
 /* 00003A18-00003A5C       .text daBk_player_way_check__FP8bk_class */
-void daBk_player_way_check(bk_class*) {
-    /* Nonmatching */
+static BOOL daBk_player_way_check(bk_class* i_this) {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    s16 angleDiff = i_this->current.angle.y - player->shape_angle.y;
+    if (angleDiff < 0) {
+        angleDiff = -angleDiff;
+    }
+    if ((u16)angleDiff < 0x4000) {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 /* 00003A5C-00003B2C       .text wait_set__FP8bk_class */
-void wait_set(bk_class*) {
+static void wait_set(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00003B2C-00003C34       .text walk_set__FP8bk_class */
-void walk_set(bk_class*) {
+static void walk_set(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00003C34-00003C74       .text fight_run_set__FP8bk_class */
-void fight_run_set(bk_class*) {
+static void fight_run_set(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00003C74-00004104       .text path_check__FP8bk_classUc */
-void path_check(bk_class*, unsigned char) {
+static void path_check(bk_class* i_this, u8) {
     /* Nonmatching */
 }
 
 /* 00004104-0000488C       .text jyunkai__FP8bk_class */
-void jyunkai(bk_class*) {
+static void jyunkai(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 0000488C-000048E4       .text ken_s_sub__FPvPv */
-void ken_s_sub(void*, void*) {
-    /* Nonmatching */
+static void* ken_s_sub(void* param_1, void*) {
+    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_ITEM) {
+        daItem_c* item = (daItem_c*)param_1;
+        if (item->getItemNo() == DROPPED_SWORD) {
+            return param_1;
+        }
+    }
+    return NULL;
 }
 
 /* 000048E4-000053E0       .text stand__FP8bk_class */
-void stand(bk_class*) {
+static void stand(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 000053E0-000054E0       .text s_s_sub__FPvPv */
-void s_s_sub(void*, void*) {
+static void s_s_sub(void*, void*) {
     /* Nonmatching */
 }
 
 /* 000054E0-00005D40       .text stand2__FP8bk_class */
-void stand2(bk_class*) {
+static void stand2(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00005D40-00006218       .text path_run__FP8bk_class */
-void path_run(bk_class*) {
+static void path_run(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00006218-0000647C       .text attack_set__FP8bk_classUc */
-void attack_set(bk_class*, unsigned char) {
+static void attack_set(bk_class* i_this, u8) {
     /* Nonmatching */
 }
 
+u16 learn_check;
+
 /* 0000647C-000064D8       .text shot_s_sub__FPvPv */
-void shot_s_sub(void*, void*) {
-    /* Nonmatching */
+static void* shot_s_sub(void* param_1, void*) {
+    if (fopAc_IsActor(param_1) && learn_check & 0x400 && fopAcM_GetName(param_1) == PROC_HIMO2) {
+        return param_1;
+    }
+    return NULL;
 }
 
 /* 000064D8-000073B8       .text fight_run__FP8bk_class */
-void fight_run(bk_class*) {
+static void fight_run(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 000073B8-000075E8       .text yari_hit_check__FP8bk_class */
-void yari_hit_check(bk_class*) {
+static void yari_hit_check(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 000075E8-00007EF4       .text fight__FP8bk_class */
-void fight(bk_class*) {
+static void fight(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00007EF4-00008108       .text p_lost__FP8bk_class */
-void p_lost(bk_class*) {
+static void p_lost(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00008108-00008470       .text b_nige__FP8bk_class */
-void b_nige(bk_class*) {
+static void b_nige(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00008470-00008580       .text defence__FP8bk_class */
-void defence(bk_class*) {
+static void defence(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00008580-00008654       .text oshi__FP8bk_class */
-void oshi(bk_class*) {
+static void oshi(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00008654-00008C38       .text hukki__FP8bk_class */
-void hukki(bk_class*) {
+static void hukki(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00008C38-00008D1C       .text aite_miru__FP8bk_class */
-void aite_miru(bk_class*) {
+static void aite_miru(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00008D1C-00008ECC       .text fail__FP8bk_class */
-void fail(bk_class*) {
+static void fail(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00008ECC-000090E0       .text yogan_fail__FP8bk_class */
-void yogan_fail(bk_class*) {
+static void yogan_fail(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 000090E0-0000924C       .text water_fail__FP8bk_class */
-void water_fail(bk_class*) {
+static void water_fail(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 0000924C-00009944       .text wepon_search__FP8bk_class */
-void wepon_search(bk_class*) {
+static void wepon_search(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00009944-00009AFC       .text d_dozou__FP8bk_class */
-void d_dozou(bk_class*) {
+static void d_dozou(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00009AFC-00009B0C       .text carry__FP8bk_class */
-void carry(bk_class*) {
-    /* Nonmatching */
+static void carry(bk_class* i_this) {
+    i_this->speed.y = 0.0f;
 }
 
 /* 00009B0C-00009DF0       .text carry_drop__FP8bk_class */
-void carry_drop(bk_class*) {
+static void carry_drop(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00009DF0-00009F1C       .text d_mahi__FP8bk_class */
-void d_mahi(bk_class*) {
+static void d_mahi(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 00009F1C-0000A350       .text tubo_wait__FP8bk_class */
-void tubo_wait(bk_class*) {
+static void tubo_wait(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 0000A350-0000A630       .text z_demo_1__FP8bk_class */
-void z_demo_1(bk_class*) {
+static void z_demo_1(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 0000A630-0000A9BC       .text b_hang__FP8bk_class */
-void b_hang(bk_class*) {
+static void b_hang(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 0000A9BC-0000AC6C       .text rope_on__FP8bk_class */
-void rope_on(bk_class*) {
+static void rope_on(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 0000AC6C-0000AC84       .text search_target__FP8bk_class */
-void search_target(bk_class*) {
+static void search_target(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 0000AC84-0000B25C       .text Bk_move__FP8bk_class */
-void Bk_move(bk_class*) {
+static void Bk_move(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 0000B25C-0000B324       .text bk_eye_tex_anm__FP8bk_class */
-void bk_eye_tex_anm(bk_class*) {
+static void bk_eye_tex_anm(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 0000B324-0000BC98       .text damage_check__FP8bk_class */
-void damage_check(bk_class*) {
+static void damage_check(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 0000BCD4-0000BD30       .text s_s2_sub__FPvPv */
-void s_s2_sub(void*, void*) {
-    /* Nonmatching */
+static void* s_s2_sub(void* param_1, void*) {
+    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_OBJ_SEARCH) {
+        if (daObj_Search::Act_c::getFindFlag()) {
+            return param_1;
+        }
+    }
+    return NULL;
 }
 
 /* 0000BD30-0000C2D0       .text waki_set__FP8bk_class */
-void waki_set(bk_class*) {
+static void waki_set(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 0000C2D0-0000CC68       .text demo_camera__FP8bk_class */
-void demo_camera(bk_class*) {
+static void demo_camera(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 0000CC68-0000CD00       .text tate_mtx_set__FP8bk_class */
-void tate_mtx_set(bk_class*) {
+static void tate_mtx_set(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 0000CD00-0000CE18       .text bou_mtx_set__FP8bk_class */
-void bou_mtx_set(bk_class*) {
+static void bou_mtx_set(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 0000CE18-0000DD1C       .text daBk_Execute__FP8bk_class */
-void daBk_Execute(bk_class*) {
+static BOOL daBk_Execute(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 0000DD1C-0000DD24       .text daBk_IsDelete__FP8bk_class */
-void daBk_IsDelete(bk_class*) {
-    /* Nonmatching */
+static BOOL daBk_IsDelete(bk_class* i_this) {
+    return TRUE;
 }
 
 /* 0000DD24-0000DDD8       .text daBk_Delete__FP8bk_class */
-void daBk_Delete(bk_class*) {
+static BOOL daBk_Delete(bk_class* i_this) {
     /* Nonmatching */
 }
 
 /* 0000DDD8-0000E2C8       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c* i_this) {
     /* Nonmatching */
 }
 
 /* 0000E310-0000EA2C       .text daBk_Create__FP10fopAc_ac_c */
-void daBk_Create(fopAc_ac_c*) {
+static s32 daBk_Create(fopAc_ac_c* i_this) {
     /* Nonmatching */
+    fopAcM_SetupActor(i_this, bk_class);
 }
 
-/* 0000EA2C-0000EEA4       .text __ct__8bk_classFv */
-bk_class::bk_class() {
-    /* Nonmatching */
-}
+static actor_method_class l_daBk_Method = {
+    (process_method_func)daBk_Create,
+    (process_method_func)daBk_Delete,
+    (process_method_func)daBk_Execute,
+    (process_method_func)daBk_IsDelete,
+    (process_method_func)daBk_Draw,
+};
 
-/* 0000F6A4-0000F6EC       .text __dt__7bkHIO_cFv */
-bkHIO_c::~bkHIO_c() {
-    /* Nonmatching */
-}
-
-/* 0000F6EC-0000F8C8       .text __ct__7bkHIO_cFv */
-bkHIO_c::bkHIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+actor_process_profile_definition g_profile_BK = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 7,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_BK,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(bk_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x00B0,
+    /* Actor SubMtd */ &l_daBk_Method,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
+    /* Group        */ fopAc_ENEMY_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

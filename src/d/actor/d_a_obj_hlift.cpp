@@ -125,9 +125,3 @@ void daObjHlift::Act_c::Execute(float(**)[3][4]) {
 BOOL daObjHlift::Act_c::Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

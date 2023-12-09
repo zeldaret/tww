@@ -14,7 +14,7 @@
 #include "m_Do/m_Do_mtx.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daObjDmgroom_c*)i_this)->CreateHeap();
 }
 
@@ -93,27 +93,27 @@ bool daObjDmgroom_c::_draw() {
 }
 
 /* 000002EC-000003B4       .text daObjDmgroom_Create__FPv */
-s32 daObjDmgroom_Create(void* i_this) {
+static s32 daObjDmgroom_Create(void* i_this) {
     return ((daObjDmgroom_c*)i_this)->_create();
 }
 
 /* 00000458-00000488       .text daObjDmgroom_Delete__FPv */
-BOOL daObjDmgroom_Delete(void* i_this) {
+static BOOL daObjDmgroom_Delete(void* i_this) {
     return ((daObjDmgroom_c*)i_this)->_delete();
 }
 
 /* 00000488-00000558       .text daObjDmgroom_Draw__FPv */
-BOOL daObjDmgroom_Draw(void* i_this) {
+static BOOL daObjDmgroom_Draw(void* i_this) {
     return ((daObjDmgroom_c*)i_this)->_draw();
 }
 
 /* 00000558-000005CC       .text daObjDmgroom_Execute__FPv */
-BOOL daObjDmgroom_Execute(void* i_this) {
+static BOOL daObjDmgroom_Execute(void* i_this) {
     return ((daObjDmgroom_c*)i_this)->_execute();
 }
 
 /* 000005CC-000005D4       .text daObjDmgroom_IsDelete__FPv */
-BOOL daObjDmgroom_IsDelete(void* i_this) {
+static BOOL daObjDmgroom_IsDelete(void* i_this) {
     return TRUE;
 }
 

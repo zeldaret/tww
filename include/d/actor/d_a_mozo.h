@@ -8,9 +8,9 @@
 
 class daMozo_c : public fopAc_ac_c {
 public:
-    typedef void(daMozo_c::*proc_t)(void);
+    typedef void (daMozo_c::*proc_t)();
 
-    void setProcess(void (daMozo_c::*)()) {}
+    void setProcess(proc_t proc) { mCurrentProc = proc; }
 
     s32 _create();
     bool _delete();
@@ -34,18 +34,18 @@ public:
     void setAnm(int, float);
 
 public:
-    // TODO: add offset comments
-    proc_t mCurrentProc;
-    request_of_phase_process_class mPhs;
-    mDoExt_McaMorf* mAnimMorf;
-    mDoExt_brkAnm mBrkAnm;
-    J3DAnmTevRegKey* m_brk;
-    mDoExt_btkAnm mBtkAnm;
-    J3DAnmTextureSRTKey* m_btk;
-    // TODO: insert missing members
-    Quaternion mQuatRotation;
-    dCcD_Stts mColStatus;
-    dCcD_Cps mCapsuleCol;
+    /* 0x290 */ proc_t mCurrentProc;
+    /* 0x29C */ request_of_phase_process_class mPhs;
+    /* 0x2A4 */ mDoExt_McaMorf* mAnimMorf;
+    /* 0x2A8 */ mDoExt_brkAnm mBrkAnm;
+    /* 0x2C0 */ J3DAnmTevRegKey* m_brk;
+    /* 0x2C4 */ mDoExt_btkAnm mBtkAnm;
+    /* 0x2D8 */ J3DAnmTextureSRTKey* m_btk;
+    /* 0x2DC */ u8 m2DC[0x35C - 0x2DC];
+    /* 0x35C */ Quaternion mQuatRotation;
+    /* 0x36C */ u8 m36C[0x380 - 0x36C];
+    /* 0x380 */ dCcD_Stts mColStatus;
+    /* 0x3BC */ dCcD_Cps mCapsuleCol;
 };
 
 class daMozo_HIO_c {

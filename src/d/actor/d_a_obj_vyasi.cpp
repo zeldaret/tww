@@ -140,20 +140,3 @@ BOOL daObjVyasi::Act_c::_execute() {
 BOOL daObjVyasi::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-/* 00002D94-00002F68       .text __dt__Q210daObjVyasi5Act_cFv */
-daObjVyasi::Act_c::~Act_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-

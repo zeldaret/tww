@@ -12,12 +12,12 @@ daNpcBmcon_c::daNpcBmcon_c() {
 }
 
 /* 00000690-000007F0       .text daNpc_Bmcon_nodeCallBack__FP7J3DNodei */
-void daNpc_Bmcon_nodeCallBack(J3DNode*, int) {
+static BOOL daNpc_Bmcon_nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 000007F0-00000834       .text daNpc_Arm_nodeCallBack__FP7J3DNodei */
-void daNpc_Arm_nodeCallBack(J3DNode*, int) {
+static BOOL daNpc_Arm_nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void daNpcBmcon_c::nodeArmControl(J3DNode*, J3DModel*) {
 }
 
 /* 000008E4-00000904       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -277,31 +277,26 @@ void daNpcBmcon_c::isClear() {
 }
 
 /* 00003DFC-00003E1C       .text daNpc_BmconCreate__FPv */
-void daNpc_BmconCreate(void*) {
+static s32 daNpc_BmconCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00003E1C-00003E40       .text daNpc_BmconDelete__FPv */
-void daNpc_BmconDelete(void*) {
+static BOOL daNpc_BmconDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00003E40-00003E64       .text daNpc_BmconExecute__FPv */
-void daNpc_BmconExecute(void*) {
+static BOOL daNpc_BmconExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00003E64-00003E88       .text daNpc_BmconDraw__FPv */
-void daNpc_BmconDraw(void*) {
+static BOOL daNpc_BmconDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00003E88-00003E90       .text daNpc_BmconIsDelete__FPv */
-void daNpc_BmconIsDelete(void*) {
+static BOOL daNpc_BmconIsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-
-

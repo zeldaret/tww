@@ -12,7 +12,7 @@ BOOL daIlift_c::_delete() {
 }
 
 /* 000000E0-00000100       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -72,29 +72,26 @@ BOOL daIlift_c::_draw() {
 }
 
 /* 00000FF8-00001018       .text daIlift_Create__FPv */
-void daIlift_Create(void*) {
+static s32 daIlift_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00001018-0000103C       .text daIlift_Delete__FPv */
-void daIlift_Delete(void*) {
+static BOOL daIlift_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 0000103C-00001060       .text daIlift_Draw__FPv */
-void daIlift_Draw(void*) {
+static BOOL daIlift_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00001060-00001084       .text daIlift_Execute__FPv */
-void daIlift_Execute(void*) {
+static BOOL daIlift_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00001084-0000108C       .text daIlift_IsDelete__FPv */
-void daIlift_IsDelete(void*) {
+static BOOL daIlift_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

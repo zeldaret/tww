@@ -211,11 +211,6 @@ void daObjTry::Act_c::get_water_h() {
     /* Nonmatching */
 }
 
-/* 00002A90-00002BB4       .text __dt__11dBgS_WtrChkFv */
-dBgS_WtrChk::~dBgS_WtrChk() {
-    /* Nonmatching */
-}
-
 /* 00002BB4-00002DA8       .text _execute__Q28daObjTry5Act_cFv */
 BOOL daObjTry::Act_c::_execute() {
     /* Nonmatching */
@@ -225,25 +220,3 @@ BOOL daObjTry::Act_c::_execute() {
 BOOL daObjTry::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-/* 00003120-0000321C       .text __dt__14dBgS_SplGrpChkFv */
-dBgS_SplGrpChk::~dBgS_SplGrpChk() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-

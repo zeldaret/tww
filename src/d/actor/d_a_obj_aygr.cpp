@@ -50,9 +50,3 @@ void daObjAygr::Act_c::Execute(float(**)[3][4]) {
 BOOL daObjAygr::Act_c::Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

@@ -27,8 +27,8 @@ public:
     static void postRetraceProc(u32);
     static void drawDoneCallback();
 
-    u16 getFbWidth() const { return mRenderObj->fb_width; }
-    u16 getEfbHeight() const { return mRenderObj->efb_height; }
+    u32 getFbWidth() const { return mRenderObj->fb_width; }
+    u32 getEfbHeight() const { return mRenderObj->efb_height; }
     void getBounds(u16& width, u16& height) const {
         width = (u16)getFbWidth();
         height = (u16)getEfbHeight();

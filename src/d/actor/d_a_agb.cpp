@@ -428,7 +428,7 @@ void daAgb_c::modeLookAttention() {
             }
         }
     } else {
-        fopAcM_orderOtherEvent2(this, "DEFAULT_AGB_LOOK_ATTENTION", 4, 0xFFFF);
+        fopAcM_orderOtherEvent2(this, "DEFAULT_AGB_LOOK_ATTENTION", 4);
     }
 }
 
@@ -721,8 +721,7 @@ void daAgb_c::GbaItemUse() {
                 temp_r29 = 15;
             }
 
-            fopAcM_create(0x128, daBomb_c::prm_make(daBomb_c::STATE_8, false, false),
-                          &current.pos, -1, NULL, NULL, -1, NULL);
+            fopAcM_create(0x128, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
             field_0x65c = 0x78;
         } else {
             temp_r29 = 0xe;
@@ -733,8 +732,7 @@ void daAgb_c::GbaItemUse() {
         break;
     case 0x15:
         resetCursor(false);
-        fopAcM_create(0x128, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos,
-                      -1, NULL, NULL, -1, NULL);
+        fopAcM_create(0x128, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
         field_0x65c = 0x78;
         break;
     case 0x11:
@@ -896,7 +894,7 @@ void daAgb_c::modeProcCall() {
 
 /* 800D30D4-800D36F4       .text daAgb_Execute__FP7daAgb_c */
 // NONMATCHING - regswap
-int daAgb_Execute(daAgb_c* i_this) {
+static int daAgb_Execute(daAgb_c* i_this) {
     daPy_lk_c* temp_r29 = (daPy_lk_c*)dComIfGp_getPlayer(0);
     i_this->field_0x679 = 0;
 
@@ -1023,7 +1021,7 @@ int daAgb_Execute(daAgb_c* i_this) {
 }
 
 /* 800D36F4-800D38EC       .text daAgb_Draw__FP7daAgb_c */
-int daAgb_Draw(daAgb_c* i_this) {
+static int daAgb_Draw(daAgb_c* i_this) {
     u8 var_r6 = 1;
 
     if (mDoGaC_GbaLink()) {
@@ -1047,9 +1045,9 @@ int daAgb_Draw(daAgb_c* i_this) {
             mDoExt_modelUpdateDL(i_this->mpModel);
 
             if (i_this->field_0x679 != 0 &&
-                i_this->current.pos.y - i_this->mCrrPos.field_0x05c > 2.5f)
+                i_this->current.pos.y - i_this->mCrrPos.field_0x5c > 2.5f)
             {
-                dComIfGd_setSimpleShadow2(&i_this->current.pos, i_this->mCrrPos.field_0x05c, 50.0f,
+                dComIfGd_setSimpleShadow2(&i_this->current.pos, i_this->mCrrPos.field_0x5c, 50.0f,
                                           i_this->mCrrPos.mGndChk, 0, 1.0f, &i_this->mTexObj);
             }
 
@@ -1063,19 +1061,19 @@ int daAgb_Draw(daAgb_c* i_this) {
 }
 
 /* 800D38F0-800D38F8       .text daAgb_IsDelete__FP7daAgb_c */
-int daAgb_IsDelete(daAgb_c* i_this) {
+static int daAgb_IsDelete(daAgb_c* i_this) {
     return 1;
 }
 
 /* 800D38F8-800D394C       .text daAgb_Delete__FP7daAgb_c */
-int daAgb_Delete(daAgb_c* i_this) {
+static int daAgb_Delete(daAgb_c* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "Agb");
     i_this->field_0x684.end();
     return 1;
 }
 
 /* 800D394C-800D396C       .text createHeap_CB__FP10fopAc_ac_c */
-int createHeap_CB(fopAc_ac_c* i_this) {
+static BOOL createHeap_CB(fopAc_ac_c* i_this) {
     return static_cast<daAgb_c*>(i_this)->createHeap();
 }
 
@@ -1107,7 +1105,7 @@ int daAgb_c::createHeap() {
 
 /* 800D3B58-800D3D2C       .text daAgb_Create__FP10fopAc_ac_c */
 // NONMATCHING - dBgS_CrrPos::Set needs works
-int daAgb_Create(fopAc_ac_c* i_this) {
+static int daAgb_Create(fopAc_ac_c* i_this) {
     fopAcM_SetupActor(i_this, daAgb_c);
     daAgb_c* a_this = (daAgb_c*)i_this;
 
@@ -1121,15 +1119,14 @@ int daAgb_Create(fopAc_ac_c* i_this) {
         // a_this->mCrrPos.Set(&a_this->current.pos, &a_this->next.pos, NULL, );
         a_this->mCrrPos.mpLine0 = &a_this->current.pos;
         a_this->mCrrPos.pm_pos = &a_this->next.pos;
-        a_this->mCrrPos.field_0x058 = NULL;
+        a_this->mCrrPos.field_0x58 = NULL;
         a_this->mCrrPos.SetActorPid(fpcM_ERROR_PROCESS_ID_e);
         a_this->mCrrPos.field_0x3c = 171.0f;
         a_this->mCrrPos.field_0x40 = 50.0f;
 
         a_this->mCrrPos.SetGndUpY(170.0f);
         a_this->mCrrPos.ClrNoRoof();
-        a_this->mAcch.Set(&a_this->current.pos, &a_this->next.pos, a_this, 1, &a_this->mAcchCir,
-                          NULL, NULL, NULL);
+        a_this->mAcch.Set(&a_this->current.pos, &a_this->next.pos, a_this, 1, &a_this->mAcchCir);
         a_this->mAcch.OnLineCheck();
         a_this->mAcch.SetGrndNone();
         a_this->mAcchCir.SetWall(171.01f, 40.0f);

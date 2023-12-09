@@ -93,7 +93,7 @@ inline void mDoAud_resetProcess() {
     }
 }
 
-inline void mDoAud_seStart(u32 i_sfxID, Vec* i_sePos, u32 param_2, s8 i_reverb) {
+inline void mDoAud_seStart(u32 i_sfxID, Vec* i_sePos = NULL, u32 param_2 = 0, s8 i_reverb = 0) {
     mDoAud_zelAudio_c::getInterface()->seStart(i_sfxID, i_sePos, param_2, i_reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
@@ -155,6 +155,18 @@ inline void mDoAud_rainPlay(s32 param_0) {
 
 inline f32 mDoAud_tact_getMelodyPattern(s32 melody_no, s32 note_no, s32 * pattern) {
     return mDoAud_zelAudio_c::mTact.getMelodyPattern(melody_no, note_no, pattern);
+}
+
+inline BOOL mDoAud_checkCbPracticePlay() {
+    return mDoAud_zelAudio_c::getInterface()->checkCbPracticePlay();
+}
+
+inline void mDoAud_cbPracticePlay(Vec* pos) {
+    mDoAud_zelAudio_c::getInterface()->cbPracticePlay(pos);
+}
+
+inline void mDoAud_cbPracticeStop() {
+    mDoAud_zelAudio_c::getInterface()->cbPracticeStop();
 }
 
 #endif /* M_DO_AUDIO_H */

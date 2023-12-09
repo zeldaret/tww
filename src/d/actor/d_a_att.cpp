@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 000000EC-000000F4       .text daAtt_Draw__FP9att_class */
-void daAtt_Draw(att_class*) {
+static BOOL daAtt_Draw(att_class*) {
     /* Nonmatching */
 }
 
@@ -17,26 +17,21 @@ void boss_s_sub(void*, void*) {
 }
 
 /* 00000140-0000052C       .text daAtt_Execute__FP9att_class */
-void daAtt_Execute(att_class*) {
+static BOOL daAtt_Execute(att_class*) {
     /* Nonmatching */
 }
 
 /* 00000568-00000570       .text daAtt_IsDelete__FP9att_class */
-void daAtt_IsDelete(att_class*) {
+static BOOL daAtt_IsDelete(att_class*) {
     /* Nonmatching */
 }
 
 /* 00000570-00000578       .text daAtt_Delete__FP9att_class */
-void daAtt_Delete(att_class*) {
+static BOOL daAtt_Delete(att_class*) {
     /* Nonmatching */
 }
 
 /* 00000578-00000768       .text daAtt_Create__FP10fopAc_ac_c */
-void daAtt_Create(fopAc_ac_c*) {
+static s32 daAtt_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-
-
-

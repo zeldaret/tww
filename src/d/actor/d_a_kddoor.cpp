@@ -77,7 +77,7 @@ void dDoor_ssk_c::calcMtx(dDoor_info_c*) {
 }
 
 /* 000007A8-00000978       .text nodeCB__FP7J3DNodei */
-void nodeCB(J3DNode*, int) {
+static BOOL nodeCB(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -172,7 +172,7 @@ void daKddoor_c::getDzbName() {
 }
 
 /* 00001934-00001954       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -262,34 +262,26 @@ BOOL daKddoor_c::draw() {
 }
 
 /* 000029E0-00002A00       .text daKddoor_Draw__FP10daKddoor_c */
-void daKddoor_Draw(daKddoor_c*) {
+static BOOL daKddoor_Draw(daKddoor_c*) {
     /* Nonmatching */
 }
 
 /* 00002A00-00002AF4       .text daKddoor_Execute__FP10daKddoor_c */
-void daKddoor_Execute(daKddoor_c*) {
+static BOOL daKddoor_Execute(daKddoor_c*) {
     /* Nonmatching */
 }
 
 /* 00002AF4-00002AFC       .text daKddoor_IsDelete__FP10daKddoor_c */
-void daKddoor_IsDelete(daKddoor_c*) {
+static BOOL daKddoor_IsDelete(daKddoor_c*) {
     /* Nonmatching */
 }
 
 /* 00002AFC-00002C44       .text daKddoor_Delete__FP10daKddoor_c */
-void daKddoor_Delete(daKddoor_c*) {
+static BOOL daKddoor_Delete(daKddoor_c*) {
     /* Nonmatching */
 }
 
 /* 00002C44-00002C64       .text daKddoor_Create__FP10fopAc_ac_c */
-void daKddoor_Create(fopAc_ac_c*) {
+static s32 daKddoor_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-
-/* 00002E5C-00002FD8       .text __dt__15dDoor_ssk_sub_cFv */
-dDoor_ssk_sub_c::~dDoor_ssk_sub_c() {
-    /* Nonmatching */
-}
-

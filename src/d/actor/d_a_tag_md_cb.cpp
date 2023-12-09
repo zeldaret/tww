@@ -157,32 +157,27 @@ daTag_MdCb_c::~daTag_MdCb_c() {
 }
 
 /* 0000191C-0000193C       .text daTag_MdCb_Draw__FP12daTag_MdCb_c */
-void daTag_MdCb_Draw(daTag_MdCb_c*) {
+static BOOL daTag_MdCb_Draw(daTag_MdCb_c*) {
     /* Nonmatching */
 }
 
 /* 0000193C-00001960       .text daTag_MdCb_Execute__FP12daTag_MdCb_c */
-void daTag_MdCb_Execute(daTag_MdCb_c*) {
+static BOOL daTag_MdCb_Execute(daTag_MdCb_c*) {
     /* Nonmatching */
 }
 
 /* 00001960-00001968       .text daTag_MdCb_IsDelete__FP12daTag_MdCb_c */
-void daTag_MdCb_IsDelete(daTag_MdCb_c*) {
+static BOOL daTag_MdCb_IsDelete(daTag_MdCb_c*) {
     /* Nonmatching */
 }
 
 /* 00001968-00001990       .text daTag_MdCb_Delete__FP12daTag_MdCb_c */
-void daTag_MdCb_Delete(daTag_MdCb_c*) {
+static BOOL daTag_MdCb_Delete(daTag_MdCb_c*) {
     /* Nonmatching */
 }
 
 /* 00001990-000019B0       .text daTag_MdCb_Create__FP10fopAc_ac_c */
-void daTag_MdCb_Create(fopAc_ac_c*) {
-    /* Nonmatching */
-}
-
-/* 000019B0-000019F8       .text __dt__16daTag_MdCb_HIO_cFv */
-daTag_MdCb_HIO_c::~daTag_MdCb_HIO_c() {
+static s32 daTag_MdCb_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

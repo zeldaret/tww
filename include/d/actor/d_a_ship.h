@@ -12,19 +12,20 @@
 class daShip_c : public fopAc_ac_c {
 public:
     enum daSHIP_SFLG {
-        
+        daSFLG_HEAD_NO_DRAW_e = 0x00200000,
     };
+    
+    bool checkStateFlg(daSHIP_SFLG flag) const { return m0358 & flag; }
+    bool checkHeadNoDraw() const { return checkStateFlg(daSFLG_HEAD_NO_DRAW_e); }
     
     void checkCraneMode() const {}
     void checkCraneUpEnd() const {}
     void checkForceMove() {}
-    void checkHeadNoDraw() const {}
     void checkJumpOkFlg() const {}
     void checkRopeCntMax() const {}
     void checkRopeDownStart() const {}
     void checkSalvageDemo() const {}
     void checkShootCannon() const {}
-    void checkStateFlg(daSHIP_SFLG) const {}
     void checkTornadoFlg() const {}
     void checkTornadoUp() const {}
     void getBeltSpeed() const {}
@@ -188,7 +189,7 @@ public:
     /* 0x0354 */ int mEvtStaffId;
     /* 0x0358 */ u32 m0358;
     /* 0x035C */ int mNextMessageID;
-    /* 0x0360 */ int mShadowId;
+    /* 0x0360 */ u32 mShadowId;
     /* 0x0364 */ u8 m0364[0x036C - 0x0364];
     /* 0x036C */ s16 m036C;
     /* 0x036E */ u8 m036E[0x0370 - 0x036E];

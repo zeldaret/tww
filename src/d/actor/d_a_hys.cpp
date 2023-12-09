@@ -62,29 +62,26 @@ BOOL daHys_c::Draw() {
 }
 
 /* 00000778-00000904       .text daHys_Create__FPv */
-void daHys_Create(void*) {
+static s32 daHys_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000BBC-00000BDC       .text daHys_Delete__FPv */
-void daHys_Delete(void*) {
+static BOOL daHys_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000BDC-00000C08       .text daHys_Draw__FPv */
-void daHys_Draw(void*) {
+static BOOL daHys_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000C08-00000C28       .text daHys_Execute__FPv */
-void daHys_Execute(void*) {
+static BOOL daHys_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00000C28-00000C30       .text daHys_IsDelete__FPv */
-void daHys_IsDelete(void*) {
+static BOOL daHys_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

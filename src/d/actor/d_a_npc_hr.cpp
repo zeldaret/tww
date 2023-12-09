@@ -217,7 +217,7 @@ void daNpc_Hr_c::demoProc() {
 }
 
 /* 0000232C-00002550       .text nodeCallBack_Hr__FP7J3DNodei */
-void nodeCallBack_Hr(J3DNode*, int) {
+static BOOL nodeCallBack_Hr(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -227,7 +227,7 @@ void daNpc_Hr_c::node_Ht_ant(int) {
 }
 
 /* 00002868-00002918       .text nodeCallBack_Ht_ant__FP7J3DNodei */
-void nodeCallBack_Ht_ant(J3DNode*, int) {
+static BOOL nodeCallBack_Ht_ant(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -447,27 +447,12 @@ BOOL daNpc_Hr_c::_delete() {
 }
 
 /* 00005188-000051A8       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000051A8-000052C4       .text _create__10daNpc_Hr_cFv */
 s32 daNpc_Hr_c::_create() {
-    /* Nonmatching */
-}
-
-/* 000052C4-00005480       .text __ct__10daNpc_Hr_cFv */
-daNpc_Hr_c::daNpc_Hr_c() {
-    /* Nonmatching */
-}
-
-/* 00005484-000054F4       .text __dt__14daNpc_Wind_EffFv */
-daNpc_Wind_Eff::~daNpc_Wind_Eff() {
-    /* Nonmatching */
-}
-
-/* 000054F4-0000552C       .text __ct__14daNpc_Wind_EffFv */
-daNpc_Wind_Eff::daNpc_Wind_Eff() {
     /* Nonmatching */
 }
 
@@ -477,39 +462,26 @@ void daNpc_Hr_c::CreateHeap() {
 }
 
 /* 00005CE8-00005D08       .text daNpc_Hr_Create__FP10fopAc_ac_c */
-void daNpc_Hr_Create(fopAc_ac_c*) {
+static s32 daNpc_Hr_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00005D08-00005D28       .text daNpc_Hr_Delete__FP10daNpc_Hr_c */
-void daNpc_Hr_Delete(daNpc_Hr_c*) {
+static BOOL daNpc_Hr_Delete(daNpc_Hr_c*) {
     /* Nonmatching */
 }
 
 /* 00005D28-00005D48       .text daNpc_Hr_Execute__FP10daNpc_Hr_c */
-void daNpc_Hr_Execute(daNpc_Hr_c*) {
+static BOOL daNpc_Hr_Execute(daNpc_Hr_c*) {
     /* Nonmatching */
 }
 
 /* 00005D48-00005D68       .text daNpc_Hr_Draw__FP10daNpc_Hr_c */
-void daNpc_Hr_Draw(daNpc_Hr_c*) {
+static BOOL daNpc_Hr_Draw(daNpc_Hr_c*) {
     /* Nonmatching */
 }
 
 /* 00005D68-00005D70       .text daNpc_Hr_IsDelete__FP10daNpc_Hr_c */
-void daNpc_Hr_IsDelete(daNpc_Hr_c*) {
+static BOOL daNpc_Hr_IsDelete(daNpc_Hr_c*) {
     /* Nonmatching */
 }
-
-
-
-/* 00005F84-00005FA0       .text setEyePos__10daNpc_Hr_cF4cXyz */
-void daNpc_Hr_c::setEyePos(cXyz) {
-    /* Nonmatching */
-}
-
-/* 00005FA0-00005FBC       .text setAttentionBasePos__10daNpc_Hr_cF4cXyz */
-void daNpc_Hr_c::setAttentionBasePos(cXyz) {
-    /* Nonmatching */
-}
-

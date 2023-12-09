@@ -32,7 +32,7 @@ void daHo_packet_c::draw() {
 }
 
 /* 800E9BE8-800E9C0C       .text daGrid_Draw__FP8daGrid_c */
-void daGrid_Draw(daGrid_c*) {
+static BOOL daGrid_Draw(daGrid_c*) {
     /* Nonmatching */
 }
 
@@ -42,22 +42,22 @@ void ho_move(daGrid_c*) {
 }
 
 /* 800EA928-800EA94C       .text daGrid_Execute__FP8daGrid_c */
-void daGrid_Execute(daGrid_c*) {
+static BOOL daGrid_Execute(daGrid_c*) {
     /* Nonmatching */
 }
 
 /* 800EA94C-800EA954       .text daGrid_IsDelete__FP8daGrid_c */
-void daGrid_IsDelete(daGrid_c*) {
+static BOOL daGrid_IsDelete(daGrid_c*) {
     /* Nonmatching */
 }
 
 /* 800EA954-800EA978       .text daGrid_Delete__FP8daGrid_c */
-void daGrid_Delete(daGrid_c*) {
+static BOOL daGrid_Delete(daGrid_c*) {
     /* Nonmatching */
 }
 
 /* 800EA978-800EA998       .text daGrid_Create__FP10fopAc_ac_c */
-void daGrid_Create(fopAc_ac_c*) {
+static s32 daGrid_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -88,11 +88,6 @@ void J3DMatPacket::entry(J3DDrawBuffer*) {
 
 /* 800EB4D0-800EB520       .text __dt__10daHo_HIO_cFv */
 daHo_HIO_c::~daHo_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 800EB520-800EB5D8       .text __dt__13daHo_packet_cFv */
-daHo_packet_c::~daHo_packet_c() {
     /* Nonmatching */
 }
 

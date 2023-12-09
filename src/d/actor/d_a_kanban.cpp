@@ -12,7 +12,7 @@ daKanban_HIO_c::daKanban_HIO_c() {
 }
 
 /* 00000174-0000047C       .text daKanban_Draw__FP12kanban_class */
-void daKanban_Draw(kanban_class*) {
+static BOOL daKanban_Draw(kanban_class*) {
     /* Nonmatching */
 }
 
@@ -77,17 +77,17 @@ void chield_water_swim(kanban_class*) {
 }
 
 /* 00001DEC-000022A8       .text daKanban_Execute__FP12kanban_class */
-void daKanban_Execute(kanban_class*) {
+static BOOL daKanban_Execute(kanban_class*) {
     /* Nonmatching */
 }
 
 /* 000022A8-000022B0       .text daKanban_IsDelete__FP12kanban_class */
-void daKanban_IsDelete(kanban_class*) {
+static BOOL daKanban_IsDelete(kanban_class*) {
     /* Nonmatching */
 }
 
 /* 000022B0-00002300       .text daKanban_Delete__FP12kanban_class */
-void daKanban_Delete(kanban_class*) {
+static BOOL daKanban_Delete(kanban_class*) {
     /* Nonmatching */
 }
 
@@ -97,21 +97,12 @@ void setTex(J3DModelData*) {
 }
 
 /* 0000249C-00002614       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00002614-00002A5C       .text daKanban_Create__FP10fopAc_ac_c */
-void daKanban_Create(fopAc_ac_c*) {
+static s32 daKanban_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 00002E24-00002E80       .text __dt__14daKanban_HIO_cFv */
-daKanban_HIO_c::~daKanban_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
 

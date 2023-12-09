@@ -12,12 +12,12 @@ void smoke_set(bo_class*) {
 }
 
 /* 000001E8-00000638       .text nodeCallBack_UP__FP7J3DNodei */
-void nodeCallBack_UP(J3DNode*, int) {
+static BOOL nodeCallBack_UP(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 00000638-000006C8       .text nodeCallBack_DW__FP7J3DNodei */
-void nodeCallBack_DW(J3DNode*, int) {
+static BOOL nodeCallBack_DW(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -32,7 +32,7 @@ void draw_SUB(bo_class*) {
 }
 
 /* 00000930-00000AD4       .text daBO_Draw__FP8bo_class */
-void daBO_Draw(bo_class*) {
+static BOOL daBO_Draw(bo_class*) {
     /* Nonmatching */
 }
 
@@ -112,32 +112,27 @@ void bo5_move(bo_class*) {
 }
 
 /* 000042B8-000048B0       .text daBO_Execute__FP8bo_class */
-void daBO_Execute(bo_class*) {
+static BOOL daBO_Execute(bo_class*) {
     /* Nonmatching */
 }
 
 /* 000048B0-000048B8       .text daBO_IsDelete__FP8bo_class */
-void daBO_IsDelete(bo_class*) {
+static BOOL daBO_IsDelete(bo_class*) {
     /* Nonmatching */
 }
 
 /* 000048B8-00004998       .text daBO_Delete__FP8bo_class */
-void daBO_Delete(bo_class*) {
+static BOOL daBO_Delete(bo_class*) {
     /* Nonmatching */
 }
 
 /* 00004998-00004D08       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00004D50-000050DC       .text daBO_Create__FP10fopAc_ac_c */
-void daBO_Create(fopAc_ac_c*) {
-    /* Nonmatching */
-}
-
-/* 000050DC-000054B4       .text __ct__8bo_classFv */
-bo_class::bo_class() {
+static s32 daBO_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -155,28 +150,3 @@ void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::execute(JPABaseEmitter
 void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::init(JPABaseEmitter*, JPABaseParticle*) {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* 00005D90-00005EFC       .text __dt__22yodare_ato_PcallBack_cFv */
-yodare_ato_PcallBack_c::~yodare_ato_PcallBack_c() {
-    /* Nonmatching */
-}
-
-/* 000063BC-00006404       .text __dt__54JPACallBackBase2<P14JPABaseEmitter,P15JPABaseParticle>Fv */
-JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::~JPACallBackBase2() {
-    /* Nonmatching */
-}
-

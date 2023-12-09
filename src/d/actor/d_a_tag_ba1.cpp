@@ -57,32 +57,27 @@ s32 daTag_Ba1_c::_create() {
 }
 
 /* 00000454-00000474       .text daTag_Ba1_Create__FP10fopAc_ac_c */
-void daTag_Ba1_Create(fopAc_ac_c*) {
+static s32 daTag_Ba1_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00000474-00000494       .text daTag_Ba1_Delete__FP11daTag_Ba1_c */
-void daTag_Ba1_Delete(daTag_Ba1_c*) {
+static BOOL daTag_Ba1_Delete(daTag_Ba1_c*) {
     /* Nonmatching */
 }
 
 /* 00000494-000004B4       .text daTag_Ba1_Execute__FP11daTag_Ba1_c */
-void daTag_Ba1_Execute(daTag_Ba1_c*) {
+static BOOL daTag_Ba1_Execute(daTag_Ba1_c*) {
     /* Nonmatching */
 }
 
 /* 000004B4-000004D4       .text daTag_Ba1_Draw__FP11daTag_Ba1_c */
-void daTag_Ba1_Draw(daTag_Ba1_c*) {
+static BOOL daTag_Ba1_Draw(daTag_Ba1_c*) {
     /* Nonmatching */
 }
 
 /* 000004D4-000004DC       .text daTag_Ba1_IsDelete__FP11daTag_Ba1_c */
-void daTag_Ba1_IsDelete(daTag_Ba1_c*) {
-    /* Nonmatching */
-}
-
-/* 000004DC-00000524       .text __dt__15daTag_Ba1_HIO_cFv */
-daTag_Ba1_HIO_c::~daTag_Ba1_HIO_c() {
+static BOOL daTag_Ba1_IsDelete(daTag_Ba1_c*) {
     /* Nonmatching */
 }
 

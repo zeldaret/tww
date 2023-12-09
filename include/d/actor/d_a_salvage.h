@@ -64,6 +64,8 @@ public:
     void isEffectKind(int);
     void debugDraw();
 
+    static void init_room(signed char);
+
 public:
     /* Place member variables here */
 };

@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -112,27 +112,27 @@ void daSbox_c::actionWait() {
 }
 
 /* 000013D0-00001500       .text daSbox_Draw__FP8daSbox_c */
-void daSbox_Draw(daSbox_c*) {
+static BOOL daSbox_Draw(daSbox_c*) {
     /* Nonmatching */
 }
 
 /* 00001500-00001534       .text daSbox_Execute__FP8daSbox_c */
-void daSbox_Execute(daSbox_c*) {
+static BOOL daSbox_Execute(daSbox_c*) {
     /* Nonmatching */
 }
 
 /* 00001534-0000153C       .text daSbox_IsDelete__FP8daSbox_c */
-void daSbox_IsDelete(daSbox_c*) {
+static BOOL daSbox_IsDelete(daSbox_c*) {
     /* Nonmatching */
 }
 
 /* 0000153C-00001640       .text daSbox_Delete__FP8daSbox_c */
-void daSbox_Delete(daSbox_c*) {
+static BOOL daSbox_Delete(daSbox_c*) {
     /* Nonmatching */
 }
 
 /* 00001640-00001660       .text daSbox_Create__FP10fopAc_ac_c */
-void daSbox_Create(fopAc_ac_c*) {
+static s32 daSbox_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

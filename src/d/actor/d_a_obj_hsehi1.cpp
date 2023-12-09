@@ -87,7 +87,7 @@ void daObj_hsh_c::createHeap() {
 }
 
 /* 00000910-00000930       .text checkCreateHeap__FP10fopAc_ac_c */
-void checkCreateHeap(fopAc_ac_c*) {
+static BOOL checkCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -252,34 +252,27 @@ BOOL daObj_hsh_c::draw() {
 }
 
 /* 00002158-00002178       .text daObj_hsh_Draw__FP11daObj_hsh_c */
-void daObj_hsh_Draw(daObj_hsh_c*) {
+static BOOL daObj_hsh_Draw(daObj_hsh_c*) {
     /* Nonmatching */
 }
 
 /* 00002178-00002198       .text daObj_hsh_Execute__FP11daObj_hsh_c */
-void daObj_hsh_Execute(daObj_hsh_c*) {
+static BOOL daObj_hsh_Execute(daObj_hsh_c*) {
     /* Nonmatching */
 }
 
 /* 00002198-000021A0       .text daObj_hsh_IsDelete__FP11daObj_hsh_c */
-void daObj_hsh_IsDelete(daObj_hsh_c*) {
+static BOOL daObj_hsh_IsDelete(daObj_hsh_c*) {
     /* Nonmatching */
 }
 
 /* 000021A0-000021C8       .text daObj_hsh_Delete__FP11daObj_hsh_c */
-void daObj_hsh_Delete(daObj_hsh_c*) {
+static BOOL daObj_hsh_Delete(daObj_hsh_c*) {
     /* Nonmatching */
 }
 
 /* 000021C8-000021E8       .text daObj_hsh_Create__FP10fopAc_ac_c */
-void daObj_hsh_Create(fopAc_ac_c*) {
+static s32 daObj_hsh_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 0000228C-000022D4       .text __dt__15daObj_hsh_HIO_cFv */
-daObj_hsh_HIO_c::~daObj_hsh_HIO_c() {
-    /* Nonmatching */
-}
-
-
 

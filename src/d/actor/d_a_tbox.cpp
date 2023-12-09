@@ -530,7 +530,7 @@ void daTbox_c::CreateInit() {
 
     if (funcType == FUNC_TYPE_GRAVITY) {
         mAcchCir.SetWall(30.0f, 0.0f);
-        mObjAcch.Set(&current.pos, &next.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
+        mObjAcch.Set(&current.pos, &next.pos, this, 1, &mAcchCir, &speed);
 
         mGravity = -2.5f;
     }
@@ -942,7 +942,7 @@ BOOL daTbox_c::actionOpenWait() {
         dComIfGp_event_onEventFlag(0x04);
 
         u8 itemNo = getItemNo();
-        u32 itemPID = fopAcM_createItemForTrBoxDemo(&current.pos, itemNo, -1, -1, NULL, NULL);
+        u32 itemPID = fopAcM_createItemForTrBoxDemo(&current.pos, itemNo);
 
         if (itemPID != fpcM_ERROR_PROCESS_ID_e) {
             dComIfGp_event_setItemPartnerId(itemPID);
@@ -965,7 +965,7 @@ BOOL daTbox_c::actionOpenWait() {
 
         setAction(&daTbox_c::actionDemo);
 
-        mStaffId = dComIfGp_evmng_getMyStaffId("TREASURE", NULL, 0);
+        mStaffId = dComIfGp_evmng_getMyStaffId("TREASURE");
         demoProc();
     }
     else {
@@ -989,12 +989,12 @@ BOOL daTbox_c::actionSwOnWait() {
     if (mEvtInfo.checkCommandDemoAccrpt()) {
         setAction(&daTbox_c::actionDemo2);
 
-        mStaffId = dComIfGp_evmng_getMyStaffId("TREASURE", NULL, 0);
+        mStaffId = dComIfGp_evmng_getMyStaffId("TREASURE");
         demoProc();
     }
     else {
         if (dComIfGs_isSwitch(getSwNo(), mRoomNo)) {
-            fopAcM_orderOtherEvent2(this, "DEFAULT_TREASURE_APPEAR", 1, 0xFFFF);
+            fopAcM_orderOtherEvent2(this, "DEFAULT_TREASURE_APPEAR", 1);
             mEvtInfo.mCondition |= 2;
         }
     }
@@ -1017,7 +1017,7 @@ BOOL daTbox_c::actionGenocide() {
     if (mEvtInfo.checkCommandDemoAccrpt()) {
         setAction(&daTbox_c::actionDemo2);
 
-        mStaffId = dComIfGp_evmng_getMyStaffId("TREASURE", NULL, 0);
+        mStaffId = dComIfGp_evmng_getMyStaffId("TREASURE");
         demoProc();
     }
     else {
@@ -1026,7 +1026,7 @@ BOOL daTbox_c::actionGenocide() {
                 mGenocideDelayTimer--;
             }
             else {
-                fopAcM_orderOtherEvent2(this, "DEFAULT_TREASURE_APPEAR", 1, 0xFFFF);
+                fopAcM_orderOtherEvent2(this, "DEFAULT_TREASURE_APPEAR", 1);
                 mEvtInfo.mCondition |= 2;
 
                 dComIfGs_onSwitch(getSwNo(), mRoomNo);

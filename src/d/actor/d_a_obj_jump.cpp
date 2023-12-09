@@ -135,17 +135,3 @@ void daObjJump::Act_c::Execute(float(**)[3][4]) {
 BOOL daObjJump::Act_c::Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

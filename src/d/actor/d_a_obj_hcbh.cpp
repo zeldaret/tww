@@ -87,33 +87,26 @@ BOOL daObjHcbh_c::_draw() {
 }
 
 /* 0000197C-0000199C       .text daObjHcbh_Create__FP10fopAc_ac_c */
-void daObjHcbh_Create(fopAc_ac_c*) {
+static s32 daObjHcbh_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 0000199C-000019C0       .text daObjHcbh_Delete__FP11daObjHcbh_c */
-void daObjHcbh_Delete(daObjHcbh_c*) {
+static BOOL daObjHcbh_Delete(daObjHcbh_c*) {
     /* Nonmatching */
 }
 
 /* 000019C0-000019E4       .text daObjHcbh_Execute__FP11daObjHcbh_c */
-void daObjHcbh_Execute(daObjHcbh_c*) {
+static BOOL daObjHcbh_Execute(daObjHcbh_c*) {
     /* Nonmatching */
 }
 
 /* 000019E4-00001A08       .text daObjHcbh_Draw__FP11daObjHcbh_c */
-void daObjHcbh_Draw(daObjHcbh_c*) {
+static BOOL daObjHcbh_Draw(daObjHcbh_c*) {
     /* Nonmatching */
 }
 
 /* 00001A08-00001A10       .text daObjHcbh_IsDelete__FP11daObjHcbh_c */
-void daObjHcbh_IsDelete(daObjHcbh_c*) {
+static BOOL daObjHcbh_IsDelete(daObjHcbh_c*) {
     /* Nonmatching */
 }
-
-
-
-
-
-
-

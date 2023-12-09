@@ -17,7 +17,7 @@ void z_check(ff_class*, cXyz*) {
 }
 
 /* 000002EC-0000037C       .text daFf_Draw__FP8ff_class */
-void daFf_Draw(ff_class*) {
+static BOOL daFf_Draw(ff_class*) {
     /* Nonmatching */
 }
 
@@ -27,34 +27,26 @@ void fire_fly_move(ff_class*) {
 }
 
 /* 00001098-00001168       .text daFf_Execute__FP8ff_class */
-void daFf_Execute(ff_class*) {
+static BOOL daFf_Execute(ff_class*) {
     /* Nonmatching */
 }
 
 /* 00001168-00001170       .text daFf_IsDelete__FP8ff_class */
-void daFf_IsDelete(ff_class*) {
+static BOOL daFf_IsDelete(ff_class*) {
     /* Nonmatching */
 }
 
 /* 00001170-000011AC       .text daFf_Delete__FP8ff_class */
-void daFf_Delete(ff_class*) {
+static BOOL daFf_Delete(ff_class*) {
     /* Nonmatching */
 }
 
 /* 000011AC-0000138C       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000013D4-0000164C       .text daFf_Create__FP10fopAc_ac_c */
-void daFf_Create(fopAc_ac_c*) {
+static s32 daFf_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-

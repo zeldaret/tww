@@ -115,7 +115,7 @@ s32 daBranch_c::CreateHeap() {
 }
 
 /* 0000049C-00000524       .text daBranch_Draw__FP10daBranch_c */
-BOOL daBranch_Draw(daBranch_c* i_this) {
+static BOOL daBranch_Draw(daBranch_c* i_this) {
     int activeIdx = 0;
     if (i_this->m02B8 == 5) {
         activeIdx = 1;
@@ -130,7 +130,7 @@ BOOL daBranch_Draw(daBranch_c* i_this) {
 }
 
 /* 00000524-0000060C       .text daBranch_Execute__FP10daBranch_c */
-void daBranch_Execute(daBranch_c* i_this) {
+static BOOL daBranch_Execute(daBranch_c* i_this) {
     /* Nonmatching */
     int demoId = i_this->mDemoActorId;
 
@@ -163,18 +163,18 @@ void daBranch_Execute(daBranch_c* i_this) {
 }
 
 /* 0000060C-00000614       .text daBranch_IsDelete__FP10daBranch_c */
-BOOL daBranch_IsDelete(daBranch_c* i_this) {
+static BOOL daBranch_IsDelete(daBranch_c* i_this) {
     return TRUE;
 }
 
 /* 00000614-00000694       .text daBranch_Delete__FP10daBranch_c */
-BOOL daBranch_Delete(daBranch_c* i_this) {
+static BOOL daBranch_Delete(daBranch_c* i_this) {
     i_this->~daBranch_c();
     return TRUE;
 }
 
 /* 00000694-0000080C       .text daBranch_Create__FP10fopAc_ac_c */
-s32 daBranch_Create(fopAc_ac_c* i_this) {
+static s32 daBranch_Create(fopAc_ac_c* i_this) {
     /* Nonmatching */
     daBranch_c* branch = static_cast<daBranch_c*>(i_this);
 

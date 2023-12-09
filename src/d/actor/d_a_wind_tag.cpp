@@ -36,11 +36,6 @@ s32 daWindTag::daWindTag_c::_create() {
     /* Nonmatching */
 }
 
-/* 0000099C-00000B38       .text __ct__Q29daWindTag11daWindTag_cFv */
-daWindTag::daWindTag_c::daWindTag_c() {
-    /* Nonmatching */
-}
-
 /* 00000E60-00000F74       .text set_mtx__Q29daWindTag11daWindTag_cFv */
 void daWindTag::daWindTag_c::set_mtx() {
     /* Nonmatching */
@@ -86,40 +81,28 @@ void daWindTag::daWindTag_c::MoveEmitter() {
     /* Nonmatching */
 }
 
-/* 00001AA4-00001B00       .text __dt__8cM3dGTriFv */
-cM3dGTri::~cM3dGTri() {
-    /* Nonmatching */
-}
-
 /* 00001B00-00001B20       .text daWindTag_Create__FPv */
-void daWindTag_Create(void*) {
+static s32 daWindTag_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00001B20-00001B44       .text daWindTag_Delete__FPv */
-void daWindTag_Delete(void*) {
+static BOOL daWindTag_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00001B44-00001B68       .text daWindTag_Draw__FPv */
-void daWindTag_Draw(void*) {
+static BOOL daWindTag_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00001B68-00001B8C       .text daWindTag_Execute__FPv */
-void daWindTag_Execute(void*) {
+static BOOL daWindTag_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00001B8C-00001B94       .text daWindTag_IsDelete__FPv */
-void daWindTag_IsDelete(void*) {
+static BOOL daWindTag_IsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 00001B94-00001BDC       .text __dt__8cM3dGPlaFv */
-cM3dGPla::~cM3dGPla() {
-    /* Nonmatching */
-}
-
-
 

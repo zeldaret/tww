@@ -119,7 +119,7 @@ s32 dScnTitle_Create(scene_class* i_scn) {
     dComIfGp_offEnableNextStage();
     u32 parameter = fpcM_GetName(i_this) == PROC_TITLE_SCENE ? 0 : 1;
 
-    i_this->mMoviePId = fopAcM_create(PROC_MP, parameter, NULL, -1, NULL, NULL, 0xFF, NULL);
+    i_this->mMoviePId = fopAcM_create(PROC_MP, parameter);
 
 #if VERSION == VERSION_PAL
     dScnTitle_c::mMp = NULL;

@@ -72,27 +72,27 @@ void daSpcItem01_c::setTevStr() {
 }
 
 /* 8015E368-8015E388       .text daSpcItem01_Draw__FP13daSpcItem01_c */
-void daSpcItem01_Draw(daSpcItem01_c*) {
+static BOOL daSpcItem01_Draw(daSpcItem01_c*) {
     /* Nonmatching */
 }
 
 /* 8015E388-8015E3A8       .text daSpcItem01_Execute__FP13daSpcItem01_c */
-void daSpcItem01_Execute(daSpcItem01_c*) {
+static BOOL daSpcItem01_Execute(daSpcItem01_c*) {
     /* Nonmatching */
 }
 
 /* 8015E3A8-8015E3B0       .text daSpcItem01_IsDelete__FP13daSpcItem01_c */
-void daSpcItem01_IsDelete(daSpcItem01_c*) {
+static BOOL daSpcItem01_IsDelete(daSpcItem01_c*) {
     /* Nonmatching */
 }
 
 /* 8015E3B0-8015E3D0       .text daSpcItem01_Delete__FP13daSpcItem01_c */
-void daSpcItem01_Delete(daSpcItem01_c*) {
+static BOOL daSpcItem01_Delete(daSpcItem01_c*) {
     /* Nonmatching */
 }
 
 /* 8015E3D0-8015E3F0       .text daSpcItem01_Create__FP10fopAc_ac_c */
-void daSpcItem01_Create(fopAc_ac_c*) {
+static s32 daSpcItem01_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

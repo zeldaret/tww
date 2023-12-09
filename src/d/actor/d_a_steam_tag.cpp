@@ -27,12 +27,12 @@ void daSteamTag_c::endEmitter() {
 }
 
 /* 000003B4-000003BC       .text daSteamTag_Draw__FP12daSteamTag_c */
-void daSteamTag_Draw(daSteamTag_c*) {
+static BOOL daSteamTag_Draw(daSteamTag_c*) {
     /* Nonmatching */
 }
 
 /* 000003BC-000003DC       .text daSteamTag_Execute__FP12daSteamTag_c */
-void daSteamTag_Execute(daSteamTag_c*) {
+static BOOL daSteamTag_Execute(daSteamTag_c*) {
     /* Nonmatching */
 }
 
@@ -42,26 +42,16 @@ BOOL daSteamTag_c::execute() {
 }
 
 /* 000006FC-00000704       .text daSteamTag_IsDelete__FP12daSteamTag_c */
-void daSteamTag_IsDelete(daSteamTag_c*) {
+static BOOL daSteamTag_IsDelete(daSteamTag_c*) {
     /* Nonmatching */
 }
 
 /* 00000704-0000072C       .text daSteamTag_Delete__FP12daSteamTag_c */
-void daSteamTag_Delete(daSteamTag_c*) {
-    /* Nonmatching */
-}
-
-/* 0000072C-00000930       .text __dt__12daSteamTag_cFv */
-daSteamTag_c::~daSteamTag_c() {
+static BOOL daSteamTag_Delete(daSteamTag_c*) {
     /* Nonmatching */
 }
 
 /* 00000930-00000AD0       .text daSteamTag_Create__FP10fopAc_ac_c */
-void daSteamTag_Create(fopAc_ac_c*) {
+static s32 daSteamTag_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-
-
-

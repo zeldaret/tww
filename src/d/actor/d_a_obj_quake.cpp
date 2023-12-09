@@ -47,32 +47,27 @@ void daObjQuake_c::getPrmPower() {
 }
 
 /* 000006F8-00000718       .text daObjQuakeCreate__FPv */
-void daObjQuakeCreate(void*) {
+static s32 daObjQuakeCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00000718-00000738       .text daObjQuakeDelete__FPv */
-void daObjQuakeDelete(void*) {
+static BOOL daObjQuakeDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00000738-00000758       .text daObjQuakeExecute__FPv */
-void daObjQuakeExecute(void*) {
+static BOOL daObjQuakeExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00000758-00000760       .text daObjQuakeDraw__FPv */
-void daObjQuakeDraw(void*) {
+static BOOL daObjQuakeDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00000760-00000780       .text daObjQuakeIsDelete__FPv */
-void daObjQuakeIsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 00000780-000007C8       .text __dt__16daObjQuake_HIO_cFv */
-daObjQuake_HIO_c::~daObjQuake_HIO_c() {
+static BOOL daObjQuakeIsDelete(void*) {
     /* Nonmatching */
 }
 

@@ -252,7 +252,7 @@ BOOL daNpc_De1_c::_delete() {
 }
 
 /* 00002500-00002520       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -267,47 +267,32 @@ void daNpc_De1_c::CreateHeap() {
 }
 
 /* 00002E04-00002E24       .text daNpc_De1_Create__FP10fopAc_ac_c */
-void daNpc_De1_Create(fopAc_ac_c*) {
+static s32 daNpc_De1_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00002E24-00002E44       .text daNpc_De1_Delete__FP11daNpc_De1_c */
-void daNpc_De1_Delete(daNpc_De1_c*) {
+static BOOL daNpc_De1_Delete(daNpc_De1_c*) {
     /* Nonmatching */
 }
 
 /* 00002E44-00002E64       .text daNpc_De1_Execute__FP11daNpc_De1_c */
-void daNpc_De1_Execute(daNpc_De1_c*) {
+static BOOL daNpc_De1_Execute(daNpc_De1_c*) {
     /* Nonmatching */
 }
 
 /* 00002E64-00002E84       .text daNpc_De1_Draw__FP11daNpc_De1_c */
-void daNpc_De1_Draw(daNpc_De1_c*) {
+static BOOL daNpc_De1_Draw(daNpc_De1_c*) {
     /* Nonmatching */
 }
 
 /* 00002E84-00002E8C       .text daNpc_De1_IsDelete__FP11daNpc_De1_c */
-void daNpc_De1_IsDelete(daNpc_De1_c*) {
+static BOOL daNpc_De1_IsDelete(daNpc_De1_c*) {
     /* Nonmatching */
 }
-
-/* 00002E8C-00002ED4       .text __dt__15daNpc_De1_HIO_cFv */
-daNpc_De1_HIO_c::~daNpc_De1_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
 
 /* 00002F54-00002F58       .text MatrixCrrPos__6dBgWSvFR13cBgS_PolyInfoPvbP4cXyzP5csXyzP5csXyz */
 void dBgWSv::MatrixCrrPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*) {
-    /* Nonmatching */
-}
-
-/* 00002F58-00002FFC       .text __dt__10dBgWDeformFv */
-dBgWDeform::~dBgWDeform() {
     /* Nonmatching */
 }
 

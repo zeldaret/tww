@@ -32,12 +32,12 @@ void daBgn_DrawS(bgn_class*) {
 }
 
 /* 00000FCC-000012D0       .text daBgn2_Draw__FP10bgn2_class */
-void daBgn2_Draw(bgn2_class*) {
+static BOOL daBgn2_Draw(bgn2_class*) {
     /* Nonmatching */
 }
 
 /* 000012D0-00001754       .text daBgn3_Draw__FP10bgn3_class */
-void daBgn3_Draw(bgn3_class*) {
+static BOOL daBgn3_Draw(bgn3_class*) {
     /* Nonmatching */
 }
 
@@ -72,7 +72,7 @@ void bgn3_s_sub(void*, void*) {
 }
 
 /* 00001A8C-00001C40       .text daBgn_Draw__FP9bgn_class */
-void daBgn_Draw(bgn_class*) {
+static BOOL daBgn_Draw(bgn_class*) {
     /* Nonmatching */
 }
 
@@ -242,17 +242,17 @@ void demo_camera(bgn_class*) {
 }
 
 /* 0000AE8C-0000B134       .text daBgn_Execute__FP9bgn_class */
-void daBgn_Execute(bgn_class*) {
+static BOOL daBgn_Execute(bgn_class*) {
     /* Nonmatching */
 }
 
 /* 0000B134-0000B13C       .text daBgn_IsDelete__FP9bgn_class */
-void daBgn_IsDelete(bgn_class*) {
+static BOOL daBgn_IsDelete(bgn_class*) {
     /* Nonmatching */
 }
 
 /* 0000B13C-0000B238       .text daBgn_Delete__FP9bgn_class */
-void daBgn_Delete(bgn_class*) {
+static BOOL daBgn_Delete(bgn_class*) {
     /* Nonmatching */
 }
 
@@ -262,58 +262,12 @@ void part_init(part_s*, J3DModelData*) {
 }
 
 /* 0000B284-0000B994       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 0000B9DC-0000CA80       .text daBgn_Create__FP10fopAc_ac_c */
-void daBgn_Create(fopAc_ac_c*) {
+static s32 daBgn_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 0000CA80-0000CEA4       .text __ct__9bgn_classFv */
-bgn_class::bgn_class() {
-    /* Nonmatching */
-}
-
-/* 0000CF44-0000CF80       .text __dt__12dKy_tevstr_cFv */
-dKy_tevstr_c::~dKy_tevstr_c() {
-    /* Nonmatching */
-}
-
-/* 0000D13C-0000D1A0       .text __dt__6move_sFv */
-move_s::~move_s() {
-    /* Nonmatching */
-}
-
-/* 0000D1A0-0000D1E8       .text __ct__6move_sFv */
-move_s::move_s() {
-    /* Nonmatching */
-}
-
-/* 0000D1E8-0000D2E4       .text __dt__6part_sFv */
-part_s::~part_s() {
-    /* Nonmatching */
-}
-
-/* 0000D2E4-0000D424       .text __ct__6part_sFv */
-part_s::part_s() {
-    /* Nonmatching */
-}
-
-/* 0000D620-0000D668       .text __dt__11daBgn_HIO_cFv */
-daBgn_HIO_c::~daBgn_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
 

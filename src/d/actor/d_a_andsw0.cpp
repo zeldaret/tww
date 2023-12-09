@@ -202,11 +202,11 @@ static s32 hajimari_actor_entry(andsw0_class* i_this) {
     }
     check_count = 0;
 
-    i_fpcM_Search(&bk_s_sub1, i_this);
-    i_fpcM_Search(&bk_s_sub2, i_this);
-    i_fpcM_Search(&bk_s_sub3, i_this);
+    fpcM_Search(&bk_s_sub1, i_this);
+    fpcM_Search(&bk_s_sub2, i_this);
+    fpcM_Search(&bk_s_sub3, i_this);
     check_count = 5;
-    i_fpcM_Search(&bb_s_sub, i_this);
+    fpcM_Search(&bb_s_sub, i_this);
 
     for(int i = 0; i < 7; i++) {
         if(ac[i] == 0) {
@@ -270,7 +270,7 @@ static void event_start_check(andsw0_class* i_this) {
             if (actor->mEvtInfo.checkCommandDemoAccrpt()) {
                 i_this->mEventState++;
             } else {
-                fopAcM_orderOtherEventId(actor, i_this->mEventIdx, i_this->mEventNo, 0xFFFF, 0, 1);
+                fopAcM_orderOtherEventId(actor, i_this->mEventIdx, i_this->mEventNo);
             }
         }
 

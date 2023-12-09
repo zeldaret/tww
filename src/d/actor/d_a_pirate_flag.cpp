@@ -27,7 +27,7 @@ void daPirate_Flag_packet_c::draw() {
 }
 
 /* 00000E44-000011A0       .text daPirate_Flag_Draw__FP17pirate_flag_class */
-void daPirate_Flag_Draw(pirate_flag_class*) {
+static BOOL daPirate_Flag_Draw(pirate_flag_class*) {
     /* Nonmatching */
 }
 
@@ -47,7 +47,7 @@ void pirate_flag_move(pirate_flag_class*) {
 }
 
 /* 00001938-00001A38       .text daPirate_Flag_Execute__FP17pirate_flag_class */
-void daPirate_Flag_Execute(pirate_flag_class*) {
+static BOOL daPirate_Flag_Execute(pirate_flag_class*) {
     /* Nonmatching */
 }
 
@@ -57,22 +57,12 @@ BOOL daPirate_Flag_IsDelete(pirate_flag_class*) {
 }
 
 /* 00001A40-00001A90       .text daPirate_Flag_Delete__FP17pirate_flag_class */
-void daPirate_Flag_Delete(pirate_flag_class*) {
+static BOOL daPirate_Flag_Delete(pirate_flag_class*) {
     /* Nonmatching */
 }
 
 /* 00001A90-00001C8C       .text daPirate_Flag_Create__FP10fopAc_ac_c */
-void daPirate_Flag_Create(fopAc_ac_c*) {
-    /* Nonmatching */
-}
-
-/* 00001D1C-00001D6C       .text __dt__19daPirate_Flag_HIO_cFv */
-daPirate_Flag_HIO_c::~daPirate_Flag_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 00001D6C-00001E38       .text __dt__22daPirate_Flag_packet_cFv */
-daPirate_Flag_packet_c::~daPirate_Flag_packet_c() {
+static s32 daPirate_Flag_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

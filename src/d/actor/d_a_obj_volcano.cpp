@@ -105,11 +105,3 @@ void daObjVolcano::Act_c::set_material(J3DMaterial*, unsigned char) {
 BOOL daObjVolcano::Act_c::Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-

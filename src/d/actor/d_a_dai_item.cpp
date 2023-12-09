@@ -17,7 +17,7 @@ BOOL daStandItem_c::_delete() {
 }
 
 /* 800E3798-800E37B8       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -162,69 +162,26 @@ BOOL daStandItem_c::_draw() {
 }
 
 /* 800E53B8-800E53D8       .text daStandItem_Create__FPv */
-void daStandItem_Create(void*) {
+static s32 daStandItem_Create(void*) {
     /* Nonmatching */
 }
 
 /* 800E53D8-800E53FC       .text daStandItem_Delete__FPv */
-void daStandItem_Delete(void*) {
+static BOOL daStandItem_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 800E53FC-800E5420       .text daStandItem_Draw__FPv */
-void daStandItem_Draw(void*) {
+static BOOL daStandItem_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 800E5420-800E5444       .text daStandItem_Execute__FPv */
-void daStandItem_Execute(void*) {
+static BOOL daStandItem_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 800E5444-800E544C       .text daStandItem_IsDelete__FPv */
-void daStandItem_IsDelete(void*) {
+static BOOL daStandItem_IsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 800E578C-800E57C4       .text __arraydtor$4071 */
-void __arraydtor$4071 {
-    /* Nonmatching */
-}
-
-/* 800E57C4-800E57FC       .text __arraydtor$4069 */
-void __arraydtor$4069 {
-    /* Nonmatching */
-}
-
-/* 800E57FC-800E5834       .text __arraydtor$4067 */
-void __arraydtor$4067 {
-    /* Nonmatching */
-}
-
-/* 800E5834-800E586C       .text __arraydtor$4065 */
-void __arraydtor$4065 {
-    /* Nonmatching */
-}
-
-/* 800E586C-800E58A4       .text __arraydtor$4063 */
-void __arraydtor$4063 {
-    /* Nonmatching */
-}
-
-/* 800E58A4-800E58DC       .text __arraydtor$4061 */
-void __arraydtor$4061 {
-    /* Nonmatching */
-}
-
-/* 800E58DC-800E5914       .text __arraydtor$4059 */
-void __arraydtor$4059 {
-    /* Nonmatching */
-}
-
-/* 800E5914-800E594C       .text __arraydtor$4057 */
-void __arraydtor$4057 {
-    /* Nonmatching */
-}
-
-
-

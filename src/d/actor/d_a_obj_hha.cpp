@@ -81,31 +81,6 @@ s32 daObjHha_c::_create() {
     /* Nonmatching */
 }
 
-/* 000011AC-00001410       .text __ct__10daObjHha_cFv */
-daObjHha_c::daObjHha_c() {
-    /* Nonmatching */
-}
-
-/* 00001410-00001480       .text __dt__16daObjHhaSplash_cFv */
-daObjHhaSplash_c::~daObjHhaSplash_c() {
-    /* Nonmatching */
-}
-
-/* 00001480-000014B8       .text __ct__16daObjHhaSplash_cFv */
-daObjHhaSplash_c::daObjHhaSplash_c() {
-    /* Nonmatching */
-}
-
-/* 000014B8-000014F4       .text __dt__14daObjHhaPart_cFv */
-daObjHhaPart_c::~daObjHhaPart_c() {
-    /* Nonmatching */
-}
-
-/* 000014F4-000014F8       .text __ct__14daObjHhaPart_cFv */
-daObjHhaPart_c::daObjHhaPart_c() {
-    /* Nonmatching */
-}
-
 /* 000018EC-000019EC       .text _delete__10daObjHha_cFv */
 BOOL daObjHha_c::_delete() {
     /* Nonmatching */
@@ -133,11 +108,6 @@ void daObjHha_c::init_co() {
 
 /* 00001C64-00001E14       .text get_water_h__10daObjHha_cFv */
 void daObjHha_c::get_water_h() {
-    /* Nonmatching */
-}
-
-/* 00001E14-00001F38       .text __dt__11dBgS_WtrChkFv */
-dBgS_WtrChk::~dBgS_WtrChk() {
     /* Nonmatching */
 }
 
@@ -185,28 +155,6 @@ BOOL daObjHha_c::_execute() {
 BOOL daObjHha_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-/* 00002CB8-00002DB4       .text __dt__14dBgS_SplGrpChkFv */
-dBgS_SplGrpChk::~dBgS_SplGrpChk() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
 /* 00003064-00003080       .text get_base_pos__16daObjHhaSplash_cFv */
 void daObjHhaSplash_c::get_base_pos() {
     /* Nonmatching */

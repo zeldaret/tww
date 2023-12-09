@@ -17,7 +17,7 @@ void daObj_Pbco_c::set_mtx() {
 }
 
 /* 0000018C-000001AC       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -32,32 +32,27 @@ void daObj_Pbco_c::CreateInit() {
 }
 
 /* 000003A4-00000434       .text daObj_PbcoCreate__FPv */
-void daObj_PbcoCreate(void*) {
+static s32 daObj_PbcoCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00000434-0000048C       .text daObj_PbcoDelete__FPv */
-void daObj_PbcoDelete(void*) {
+static BOOL daObj_PbcoDelete(void*) {
     /* Nonmatching */
 }
 
 /* 0000048C-000004D0       .text daObj_PbcoExecute__FPv */
-void daObj_PbcoExecute(void*) {
+static BOOL daObj_PbcoExecute(void*) {
     /* Nonmatching */
 }
 
 /* 000004D0-0000053C       .text daObj_PbcoDraw__FPv */
-void daObj_PbcoDraw(void*) {
+static BOOL daObj_PbcoDraw(void*) {
     /* Nonmatching */
 }
 
 /* 0000053C-00000544       .text daObj_PbcoIsDelete__FPv */
-void daObj_PbcoIsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 00000544-0000058C       .text __dt__16daObj_Pbco_HIO_cFv */
-daObj_Pbco_HIO_c::~daObj_Pbco_HIO_c() {
+static BOOL daObj_PbcoIsDelete(void*) {
     /* Nonmatching */
 }
 

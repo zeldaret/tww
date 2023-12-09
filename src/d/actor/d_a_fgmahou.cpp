@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-000000E4       .text daFgmahou_Draw__FP13fgmahou_class */
-void daFgmahou_Draw(fgmahou_class*) {
+static BOOL daFgmahou_Draw(fgmahou_class*) {
     /* Nonmatching */
 }
 
@@ -22,31 +22,26 @@ void move(fgmahou_class*) {
 }
 
 /* 00000C14-00000DD8       .text daFgmahou_Execute__FP13fgmahou_class */
-void daFgmahou_Execute(fgmahou_class*) {
+static BOOL daFgmahou_Execute(fgmahou_class*) {
     /* Nonmatching */
 }
 
 /* 00000DD8-00000DE0       .text daFgmahou_IsDelete__FP13fgmahou_class */
-void daFgmahou_IsDelete(fgmahou_class*) {
+static BOOL daFgmahou_IsDelete(fgmahou_class*) {
     /* Nonmatching */
 }
 
 /* 00000DE0-00000E3C       .text daFgmahou_Delete__FP13fgmahou_class */
-void daFgmahou_Delete(fgmahou_class*) {
+static BOOL daFgmahou_Delete(fgmahou_class*) {
     /* Nonmatching */
 }
 
 /* 00000E3C-0000109C       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000010E4-0000135C       .text daFgmahou_Create__FP10fopAc_ac_c */
-void daFgmahou_Create(fopAc_ac_c*) {
+static s32 daFgmahou_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-
-
-

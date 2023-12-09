@@ -7,12 +7,12 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000240       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 0000027C-000002EC       .text daSk_Draw__FP8sk_class */
-void daSk_Draw(sk_class*) {
+static BOOL daSk_Draw(sk_class*) {
     /* Nonmatching */
 }
 
@@ -27,29 +27,26 @@ void body_atari_check(sk_class*) {
 }
 
 /* 00000758-000008D4       .text daSk_Execute__FP8sk_class */
-void daSk_Execute(sk_class*) {
+static BOOL daSk_Execute(sk_class*) {
     /* Nonmatching */
 }
 
 /* 000008D4-000008DC       .text daSk_IsDelete__FP8sk_class */
-void daSk_IsDelete(sk_class*) {
+static BOOL daSk_IsDelete(sk_class*) {
     /* Nonmatching */
 }
 
 /* 000008DC-0000090C       .text daSk_Delete__FP8sk_class */
-void daSk_Delete(sk_class*) {
+static BOOL daSk_Delete(sk_class*) {
     /* Nonmatching */
 }
 
 /* 0000090C-00000A6C       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00000A6C-00000E30       .text daSk_Create__FP10fopAc_ac_c */
-void daSk_Create(fopAc_ac_c*) {
+static s32 daSk_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-

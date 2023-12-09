@@ -27,8 +27,8 @@ static char* l_staff_name = "HyoiKam";
 static u8 temp[0x4C]; // TODO
 static daNpc_kam_HIO_c l_HIO;
 static int l_hio_counter;
-static int l_msgId;
-static int l_msg;
+static u32 l_msgId;
+static msg_class* l_msg;
 static daNpc_kam_c* l_act;
 static s16 l_demo_start_chk_cnt;
 static s16 l_demo_start_chk_flag;
@@ -423,7 +423,7 @@ BOOL daNpc_kam_c::init() {
     
     mAcchCirs[0].SetWall(20.0f, 50.0f);
     mAcchCirs[1].SetWall(-20.0f, 50.0f);
-    mAcch.Set(&current.pos, &next.pos, this, ARRAY_SIZE(mAcchCirs), mAcchCirs, &speed, NULL, NULL);
+    mAcch.Set(&current.pos, &next.pos, this, ARRAY_SIZE(mAcchCirs), mAcchCirs, &speed);
     mAcch.ClrRoofNone();
     mAcch.SetRoofCrrHeight(20.0f);
     mAcch.OnLineCheck();
@@ -881,7 +881,7 @@ void daNpc_kam_c::eventOrder() {
         }
     } else if (mEventState != -1 && mEventState < 3) {
         mCurrEventIdxIdx = mEventState;
-        fopAcM_orderOtherEventId(this, mEventIdxs[mCurrEventIdxIdx], -1, -1, 0, 1);
+        fopAcM_orderOtherEventId(this, mEventIdxs[mCurrEventIdxIdx]);
     }
 }
 
@@ -945,7 +945,7 @@ BOOL daNpc_kam_c::eventProc() {
             if (mEventState == 0) {
                 if (dComIfGp_evmng_startCheck("OPTION_CHAR_END") || dComIfGp_evmng_endCheck("OPTION_CHAR_END")) {
                     dComIfGp_event_setTalkPartner(dComIfGp_getLinkPlayer());
-                    mDoAud_seStart(JA_SE_CTRL_NPC_TO_LINK, NULL, 0, 0);
+                    mDoAud_seStart(JA_SE_CTRL_NPC_TO_LINK);
                 } else {
                     offReturnLink();
                     mEventState = -1;
@@ -958,7 +958,7 @@ BOOL daNpc_kam_c::eventProc() {
         }
     }
     
-    int staffId = dComIfGp_evmng_getMyStaffId(l_staff_name, NULL, 0);
+    int staffId = dComIfGp_evmng_getMyStaffId(l_staff_name);
     // The dComIfGp_event_runCheck inline breaks the codegen here.
     // if (dComIfGp_event_runCheck() && !checkCommandTalk()) {
     if (g_dComIfG_gameInfo.play.getEvent().runCheck() && !checkCommandTalk()) {

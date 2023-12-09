@@ -97,27 +97,27 @@ BOOL daObjGryw00_c::Draw() {
 }
 
 /* 00000ECC-00000EEC       .text daObjGryw00_Create__FP13daObjGryw00_c */
-void daObjGryw00_Create(daObjGryw00_c*) {
+static s32 daObjGryw00_Create(daObjGryw00_c*) {
     /* Nonmatching */
 }
 
 /* 00000EEC-00000F0C       .text daObjGryw00_Delete__FP13daObjGryw00_c */
-void daObjGryw00_Delete(daObjGryw00_c*) {
+static BOOL daObjGryw00_Delete(daObjGryw00_c*) {
     /* Nonmatching */
 }
 
 /* 00000F0C-00000F2C       .text daObjGryw00_Execute__FP13daObjGryw00_c */
-void daObjGryw00_Execute(daObjGryw00_c*) {
+static BOOL daObjGryw00_Execute(daObjGryw00_c*) {
     /* Nonmatching */
 }
 
 /* 00000F2C-00000F58       .text daObjGryw00_Draw__FP13daObjGryw00_c */
-void daObjGryw00_Draw(daObjGryw00_c*) {
+static BOOL daObjGryw00_Draw(daObjGryw00_c*) {
     /* Nonmatching */
 }
 
 /* 00000F58-00000F84       .text daObjGryw00_IsDelete__FP13daObjGryw00_c */
-void daObjGryw00_IsDelete(daObjGryw00_c*) {
+static BOOL daObjGryw00_IsDelete(daObjGryw00_c*) {
     /* Nonmatching */
 }
 

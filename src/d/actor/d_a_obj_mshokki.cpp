@@ -62,31 +62,26 @@ BOOL daObjMshokki_c::_draw() {
 }
 
 /* 00000E84-00000EA4       .text daObjMshokki_Create__FP10fopAc_ac_c */
-void daObjMshokki_Create(fopAc_ac_c*) {
+static s32 daObjMshokki_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00000EA4-00000EC8       .text daObjMshokki_Delete__FP14daObjMshokki_c */
-void daObjMshokki_Delete(daObjMshokki_c*) {
+static BOOL daObjMshokki_Delete(daObjMshokki_c*) {
     /* Nonmatching */
 }
 
 /* 00000EC8-00000EEC       .text daObjMshokki_Execute__FP14daObjMshokki_c */
-void daObjMshokki_Execute(daObjMshokki_c*) {
+static BOOL daObjMshokki_Execute(daObjMshokki_c*) {
     /* Nonmatching */
 }
 
 /* 00000EEC-00000F10       .text daObjMshokki_Draw__FP14daObjMshokki_c */
-void daObjMshokki_Draw(daObjMshokki_c*) {
+static BOOL daObjMshokki_Draw(daObjMshokki_c*) {
     /* Nonmatching */
 }
 
 /* 00000F10-00000F18       .text daObjMshokki_IsDelete__FP14daObjMshokki_c */
-void daObjMshokki_IsDelete(daObjMshokki_c*) {
+static BOOL daObjMshokki_IsDelete(daObjMshokki_c*) {
     /* Nonmatching */
 }
-
-
-
-
-

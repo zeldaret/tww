@@ -15,6 +15,7 @@
 #include "JSystem/JUtility/JUTResFont.h"
 #include "JSystem/JUtility/JUTDbPrint.h"
 #include "JSystem/JUtility/JUTConsole.h"
+#include "JSystem/JUtility/JUTFontData_Ascfont_fix12.h"
 #include "dolphin/os/OS.h"
 #include "dolphin/dvd/dvd.h"
 #include "dolphin/gx/GXFrameBuf.h"
@@ -28,8 +29,8 @@ u32 JFWSystem::CSetUpParam::aramGraphBufSize = 0x600000;
 u32 JFWSystem::CSetUpParam::streamPriority = 8;
 u32 JFWSystem::CSetUpParam::decompPriority = 7;
 u32 JFWSystem::CSetUpParam::aPiecePriority = 6;
-ResFONT* JFWSystem::CSetUpParam::systemFontRes = (ResFONT*)0x8036CA40; //using JUTResFONT_Ascfont_fix12 makes the pointer null
-GXRenderModeObj* JFWSystem::CSetUpParam::renderMode = (GXRenderModeObj*)0x803A1AB8; //using GXNtsc480IntDf makes the pointer null
+ResFONT* JFWSystem::CSetUpParam::systemFontRes = (ResFONT*)JUTResFONT_Ascfont_fix12;
+GXRenderModeObj* JFWSystem::CSetUpParam::renderMode = &GXNtsc480IntDf;
 u32 JFWSystem::CSetUpParam::exConsoleBufferSize = 0x24F8;
 
 JKRExpHeap* JFWSystem::rootHeap = 0;
@@ -53,7 +54,7 @@ void JFWSystem::firstInit() {
 }
 
 void JFWSystem::init() {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
     JUT_ASSERT(101, sInitCalled == false);
 
     if(rootHeap == 0) {

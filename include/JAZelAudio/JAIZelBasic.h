@@ -52,7 +52,7 @@ public:
     void cbPracticePlay(Vec*);
     void cbPracticeProcess();
     void cbPracticeStop();
-    bool checkCbPracticePlay();
+    BOOL checkCbPracticePlay();
     void prepareLandingDemo(s32);
     void startLandingDemo();
     void endLandingDemo();

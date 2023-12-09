@@ -12,7 +12,7 @@ void hand_draw(sitem_class*) {
 }
 
 /* 000001FC-00000248       .text daSitem_Draw__FP11sitem_class */
-void daSitem_Draw(sitem_class*) {
+static BOOL daSitem_Draw(sitem_class*) {
     /* Nonmatching */
 }
 
@@ -57,17 +57,17 @@ void hand_move(sitem_class*) {
 }
 
 /* 00002684-000026F4       .text daSitem_Execute__FP11sitem_class */
-void daSitem_Execute(sitem_class*) {
+static BOOL daSitem_Execute(sitem_class*) {
     /* Nonmatching */
 }
 
 /* 000026F4-000026FC       .text daSitem_IsDelete__FP11sitem_class */
-void daSitem_IsDelete(sitem_class*) {
+static BOOL daSitem_IsDelete(sitem_class*) {
     /* Nonmatching */
 }
 
 /* 000026FC-00002760       .text daSitem_Delete__FP11sitem_class */
-void daSitem_Delete(sitem_class*) {
+static BOOL daSitem_Delete(sitem_class*) {
     /* Nonmatching */
 }
 
@@ -77,31 +77,12 @@ void useHeapInit(sitem_class*) {
 }
 
 /* 00002824-00002844       .text daSitem_solidHeapCB__FP10fopAc_ac_c */
-void daSitem_solidHeapCB(fopAc_ac_c*) {
+static BOOL daSitem_solidHeapCB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00002844-00002C04       .text daSitem_Create__FP10fopAc_ac_c */
-void daSitem_Create(fopAc_ac_c*) {
+static s32 daSitem_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 00002F48-00002F84       .text __dt__7sitem_sFv */
-sitem_s::~sitem_s() {
-    /* Nonmatching */
-}
-
-/* 00002F84-00002F88       .text __ct__7sitem_sFv */
-sitem_s::sitem_s() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
 

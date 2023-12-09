@@ -7,12 +7,12 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00000098-00000164       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -27,17 +27,17 @@ void daObjLpalm_c::CreateInit() {
 }
 
 /* 00000404-000004A4       .text daObjLpalmCreate__FPv */
-void daObjLpalmCreate(void*) {
+static s32 daObjLpalmCreate(void*) {
     /* Nonmatching */
 }
 
 /* 000004A4-00000528       .text daObjLpalmDelete__FPv */
-void daObjLpalmDelete(void*) {
+static BOOL daObjLpalmDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00000528-0000054C       .text daObjLpalmExecute__FPv */
-void daObjLpalmExecute(void*) {
+static BOOL daObjLpalmExecute(void*) {
     /* Nonmatching */
 }
 
@@ -47,12 +47,12 @@ BOOL daObjLpalm_c::_execute() {
 }
 
 /* 000008C4-00000950       .text daObjLpalmDraw__FPv */
-void daObjLpalmDraw(void*) {
+static BOOL daObjLpalmDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00000950-00000958       .text daObjLpalmIsDelete__FPv */
-void daObjLpalmIsDelete(void*) {
+static BOOL daObjLpalmIsDelete(void*) {
     /* Nonmatching */
 }
 

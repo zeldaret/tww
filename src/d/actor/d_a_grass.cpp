@@ -22,17 +22,17 @@ namespace daGrass_prm {
 };
 
 /* 000000EC-000000F4       .text daGrass_IsDelete__FP11grass_class */
-BOOL daGrass_IsDelete(grass_class*) {
+static BOOL daGrass_IsDelete(grass_class*) {
     return TRUE;
 }
 
 /* 000000F4-000000FC       .text daGrass_Delete__FP11grass_class */
-BOOL daGrass_Delete(grass_class*) {
+static BOOL daGrass_Delete(grass_class*) {
     return TRUE;
 }
 
 /* 000000FC-000014E0       .text daGrass_Create__FP10fopAc_ac_c */
-s32 daGrass_Create(fopAc_ac_c* i_ac) {
+static s32 daGrass_Create(fopAc_ac_c* i_ac) {
     static float dummy[19];
 
     static const csXyz l_setType0[] = {

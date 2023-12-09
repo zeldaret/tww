@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -77,27 +77,27 @@ BOOL daLbridge_c::_draw() {
 }
 
 /* 00000FF8-00001018       .text daLbridge_Create__FPv */
-void daLbridge_Create(void*) {
+static s32 daLbridge_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00001018-000010D4       .text daLbridge_Delete__FPv */
-void daLbridge_Delete(void*) {
+static BOOL daLbridge_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 000010D4-000010F8       .text daLbridge_Draw__FPv */
-void daLbridge_Draw(void*) {
+static BOOL daLbridge_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 000010F8-0000111C       .text daLbridge_Execute__FPv */
-void daLbridge_Execute(void*) {
+static BOOL daLbridge_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 0000111C-00001124       .text daLbridge_IsDelete__FPv */
-void daLbridge_IsDelete(void*) {
+static BOOL daLbridge_IsDelete(void*) {
     /* Nonmatching */
 }
 

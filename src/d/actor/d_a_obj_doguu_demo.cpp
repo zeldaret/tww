@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -27,27 +27,27 @@ void daObjDoguuD_c::set_mtx() {
 }
 
 /* 00000314-000003BC       .text daObjDoguuD_create__FPv */
-void daObjDoguuD_create(void*) {
+static s32 daObjDoguuD_create(void*) {
     /* Nonmatching */
 }
 
 /* 000003BC-00000424       .text daObjDoguuD_Delete__FPv */
-void daObjDoguuD_Delete(void*) {
+static BOOL daObjDoguuD_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000424-000004C8       .text daObjDoguuD_Draw__FPv */
-void daObjDoguuD_Draw(void*) {
+static BOOL daObjDoguuD_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 000004C8-00000538       .text daObjDoguuD_Execute__FPv */
-void daObjDoguuD_Execute(void*) {
+static BOOL daObjDoguuD_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00000538-00000540       .text daObjDoguuD_IsDelete__FPv */
-void daObjDoguuD_IsDelete(void*) {
+static BOOL daObjDoguuD_IsDelete(void*) {
     /* Nonmatching */
 }
 

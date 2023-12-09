@@ -26,18 +26,13 @@ daNpc_Bms1_HIO_c::daNpc_Bms1_HIO_c() {
     /* Nonmatching */
 }
 
-/* 000002A0-00000300       .text __dt__21daNpc_Bms1_childHIO_cFv */
-daNpc_Bms1_childHIO_c::~daNpc_Bms1_childHIO_c() {
-    /* Nonmatching */
-}
-
 /* 00000300-000004C4       .text nodeCallBack_Bms__FP7J3DNodei */
-void nodeCallBack_Bms(J3DNode*, int) {
+static BOOL nodeCallBack_Bms(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 000004C4-00000A00       .text nodeCallBack_BmsHead__FP7J3DNodei */
-void nodeCallBack_BmsHead(J3DNode*, int) {
+static BOOL nodeCallBack_BmsHead(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -222,17 +217,12 @@ BOOL daNpc_Bms1_c::_delete() {
 }
 
 /* 00003514-00003534       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00003534-00003718       .text _create__12daNpc_Bms1_cFv */
 s32 daNpc_Bms1_c::_create() {
-    /* Nonmatching */
-}
-
-/* 00003718-00003938       .text __ct__12daNpc_Bms1_cFv */
-daNpc_Bms1_c::daNpc_Bms1_c() {
     /* Nonmatching */
 }
 
@@ -242,38 +232,29 @@ void daNpc_Bms1_c::CreateHeap() {
 }
 
 /* 000043B8-000043D8       .text daNpc_Bms1_Create__FP10fopAc_ac_c */
-void daNpc_Bms1_Create(fopAc_ac_c*) {
+static s32 daNpc_Bms1_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000043D8-000043F8       .text daNpc_Bms1_Delete__FP12daNpc_Bms1_c */
-void daNpc_Bms1_Delete(daNpc_Bms1_c*) {
+static BOOL daNpc_Bms1_Delete(daNpc_Bms1_c*) {
     /* Nonmatching */
 }
 
 /* 000043F8-00004418       .text daNpc_Bms1_Execute__FP12daNpc_Bms1_c */
-void daNpc_Bms1_Execute(daNpc_Bms1_c*) {
+static BOOL daNpc_Bms1_Execute(daNpc_Bms1_c*) {
     /* Nonmatching */
 }
 
 /* 00004418-00004438       .text daNpc_Bms1_Draw__FP12daNpc_Bms1_c */
-void daNpc_Bms1_Draw(daNpc_Bms1_c*) {
+static BOOL daNpc_Bms1_Draw(daNpc_Bms1_c*) {
     /* Nonmatching */
 }
 
 /* 00004438-00004440       .text daNpc_Bms1_IsDelete__FP12daNpc_Bms1_c */
-void daNpc_Bms1_IsDelete(daNpc_Bms1_c*) {
+static BOOL daNpc_Bms1_IsDelete(daNpc_Bms1_c*) {
     /* Nonmatching */
 }
-
-/* 00004660-000046D0       .text __dt__16daNpc_Bms1_HIO_cFv */
-daNpc_Bms1_HIO_c::~daNpc_Bms1_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
 
 /* 000047AC-000047C8       .text setEyePos__12daNpc_Bms1_cF4cXyz */
 void daNpc_Bms1_c::setEyePos(cXyz) {

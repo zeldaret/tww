@@ -10,27 +10,22 @@
 #include "m_Do/m_Do_mtx.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "d/d_procname.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-static s32 CheckCreateHeap(fopAc_ac_c* i_this) {
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daObjYboil_c*)i_this)->CreateHeap();
 }
 
 /* 00000098-00000368       .text CreateHeap__12daObjYboil_cFv */
 BOOL daObjYboil_c::CreateHeap() {
-    /* Nonmatching */
-    J3DModelData* modelData;
-    J3DAnmTransform* bck;
-    J3DAnmTextureSRTKey* btk;
-    J3DAnmTevRegKey* brk;
-
-    modelData = (J3DModelData*)dComIfG_getObjectRes("Yboil", 0x06);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Yboil", 0x06);
     JUT_ASSERT(92, modelData != 0);
-    bck = (J3DAnmTransform*)dComIfG_getObjectRes("Yboil", 0x09);
+    J3DAnmTransform* bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Yboil", 0x09));
     JUT_ASSERT(96, bck != 0);
-    btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Yboil", 0x0F);
+    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Yboil", 0x0F));
     JUT_ASSERT(100, btk != 0);
-    brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Yboil", 0x0C);
+    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Yboil", 0x0C));
     JUT_ASSERT(104, brk != 0);
 
     for (s32 i = 0; i < 50; i++) {
@@ -51,10 +46,9 @@ BOOL daObjYboil_c::CreateHeap() {
 
 /* 00000368-00000470       .text pos_reset__12daObjYboil_cFi */
 void daObjYboil_c::pos_reset(int i) {
-    /* Nonmatching */
     mMdlScale[i].setall(mScaleMin + cM_rndF(mScaleMax - mScaleMin));
     f32 dist = 1300.0f + cM_rndF(1400.0f);
-    f32 angle = cM_rndF(65536.0f);
+    s16 angle = cM_rndF(65536.0f);
     mMdlPos[i].x = current.pos.x + dist * cM_ssin(angle);
     mMdlPos[i].y = current.pos.y;
     mMdlPos[i].z = current.pos.z + dist * cM_scos(angle);
@@ -62,7 +56,6 @@ void daObjYboil_c::pos_reset(int i) {
 
 /* 00000470-000005CC       .text CreateInit__12daObjYboil_cFv */
 void daObjYboil_c::CreateInit() {
-    /* Nonmatching */
     mScaleMin = 0.5f;
     mScaleMax = 1.0f;
 
@@ -98,7 +91,7 @@ s32 daObjYboil_c::_create() {
     } else {
         ret = dComIfG_resLoad(&mPhs, "Yboil");
         if (ret == cPhs_COMPLEATE_e) {
-            if (!fopAcM_entrySolidHeap(this, (heapCallbackFunc)CheckCreateHeap, 0x14500)) {
+            if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x14500)) {
                 ret = cPhs_ERROR_e;
             } else {
                 CreateInit();
@@ -120,7 +113,6 @@ u32 daObjYboil_c::prm_get_swSave() const {
 }
 
 bool daObjYboil_c::_execute() {
-    /* Nonmatching */
     for (s32 i = 0; i < 50; i++) {
         if (mMdlTimer[i] == 0) {
             mBckAnm[i].play();
@@ -134,7 +126,7 @@ bool daObjYboil_c::_execute() {
                 mBtkAnm[i].setPlaySpeed(1.0f);
                 mBrkAnm[i].setFrame(0.0f);
                 mBrkAnm[i].setPlaySpeed(1.0f);
-                mMdlTimer[i] = 1 + (s32)cM_rndF(3.999f);
+                mMdlTimer[i] = 1 + (s32)cM_rndF(3.9999f);
             }
         } else {
             if (!fopAcM_isSwitch(this, prm_get_swSave())) {
@@ -149,17 +141,17 @@ bool daObjYboil_c::_execute() {
 }
 
 /* 0000066C-000007D8       .text daObjYboil_Create__FPv */
-s32 daObjYboil_Create(void* i_this) {
+static s32 daObjYboil_Create(void* i_this) {
     return ((daObjYboil_c*)i_this)->_create();
 }
 
 /* 000009F0-00000A2C       .text daObjYboil_Delete__FPv */
-BOOL daObjYboil_Delete(void* i_this) {
+static BOOL daObjYboil_Delete(void* i_this) {
     return ((daObjYboil_c*)i_this)->_delete();
 }
 
 /* 00000A2C-00000A50       .text daObjYboil_Draw__FPv */
-BOOL daObjYboil_Draw(void* i_this) {
+static BOOL daObjYboil_Draw(void* i_this) {
     return ((daObjYboil_c*)i_this)->_draw();
 }
 
@@ -194,11 +186,36 @@ bool daObjYboil_c::_draw() {
 }
 
 /* 00000C6C-00000DF4       .text daObjYboil_Execute__FPv */
-BOOL daObjYboil_Execute(void* i_this) {
+static BOOL daObjYboil_Execute(void* i_this) {
     return ((daObjYboil_c*)i_this)->_execute();
 }
 
 /* 00000DF4-00000DFC       .text daObjYboil_IsDelete__FPv */
-BOOL daObjYboil_IsDelete(void* i_this) {
+static BOOL daObjYboil_IsDelete(void* i_this) {
     return TRUE;
 }
+
+static actor_method_class daObj_YboilMethodTable = {
+    (process_method_func)daObjYboil_Create,
+    (process_method_func)daObjYboil_Delete,
+    (process_method_func)daObjYboil_Execute,
+    (process_method_func)daObjYboil_IsDelete,
+    (process_method_func)daObjYboil_Draw,
+};
+
+actor_process_profile_definition g_profile_Obj_Yboil = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 7,
+    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Yboil,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daObjYboil_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0073,
+    /* Actor SubMtd */ &daObj_YboilMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

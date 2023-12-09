@@ -40,14 +40,3 @@ BOOL daDummy::Act_c::_execute() {
 BOOL daDummy::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-/* 00000270-000002D0       .text __dt__Q27daDummy5Act_cFv */
-daDummy::Act_c::~Act_c() {
-    /* Nonmatching */
-}
-

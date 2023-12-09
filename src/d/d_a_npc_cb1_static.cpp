@@ -3,11 +3,16 @@
 // Translation Unit: d_a_npc_cb1_static.cpp
 //
 
-#include "d/actor/d_a_npc_cb1_static.h"
+#include "d/actor/d_a_npc_cb1.h"
 #include "dolphin/types.h"
 
+bool daNpc_Cb1_c::m_playerRoom;
+bool daNpc_Cb1_c::m_flying;
+s16 daNpc_Cb1_c::m_flyingTimer;
+u16 daNpc_Cb1_c::m_status;
+
 /* 800CB5C4-800CB5CC       .text getMaxFlyingTimer__11daNpc_Cb1_cFv */
-void daNpc_Cb1_c::getMaxFlyingTimer() {
-    /* Nonmatching */
+s16 daNpc_Cb1_c::getMaxFlyingTimer() {
+    return 15*30;
 }
 

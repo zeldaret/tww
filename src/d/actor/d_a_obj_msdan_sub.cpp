@@ -50,9 +50,3 @@ void daObjMsdanSub::Act_c::Execute(float(**)[3][4]) {
 BOOL daObjMsdanSub::Act_c::Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

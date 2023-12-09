@@ -28,17 +28,17 @@ bool cCcD_DivideInfo::Chk(const cCcD_DivideInfo& other) const {
 void cCcD_DivideArea::SetArea(const cM3dGAab& aabb) {
     *(cM3dGAab*)this = aabb;
     mScaledXDiff = (GetMaxX() - GetMinX()) * 0.09090909f;
-    mXDiffIsZero = fabsf(mScaledXDiff) < G_CM3D_F_ABS_MIN;
+    mXDiffIsZero = cM3d_IsZero(mScaledXDiff);
     if (!mXDiffIsZero)
         mInvScaledXDiff = 1.0f / mScaledXDiff;
 
-    mScaledYDiff = (GetMaxY() - GetMinY()) * 0.09090909f;
-    mYDiffIsZero = fabsf(mScaledYDiff) < G_CM3D_F_ABS_MIN;
+    mScaledYDiff = (GetMaxY() - GetMinY()) * 0.1f;
+    mYDiffIsZero = cM3d_IsZero(mScaledYDiff);
     if (!mYDiffIsZero)
         mInvScaledYDiff = 1.0f / mScaledYDiff;
 
     mScaledZDiff = (GetMaxZ() - GetMinZ()) * 0.09090909f;
-    mZDiffIsZero = fabsf(mScaledZDiff) < G_CM3D_F_ABS_MIN;
+    mZDiffIsZero = cM3d_IsZero(mScaledZDiff);
     if (!mZDiffIsZero)
         mInvScaledZDiff = 1.0f / mScaledZDiff;
 }

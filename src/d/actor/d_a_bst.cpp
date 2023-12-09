@@ -37,7 +37,7 @@ void anm_init(bst_class*, int, float, unsigned char, float, int) {
 }
 
 /* 000003E8-00000514       .text nodeCallBackHead__FP7J3DNodei */
-void nodeCallBackHead(J3DNode*, int) {
+static BOOL nodeCallBackHead(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -47,7 +47,7 @@ void beam_draw(bst_class*) {
 }
 
 /* 000005B4-00000950       .text daBst_Draw__FP9bst_class */
-void daBst_Draw(bst_class*) {
+static BOOL daBst_Draw(bst_class*) {
     /* Nonmatching */
 }
 
@@ -187,52 +187,27 @@ void bst_kankyo(bst_class*) {
 }
 
 /* 0000A1A4-0000A9C8       .text daBst_Execute__FP9bst_class */
-void daBst_Execute(bst_class*) {
+static BOOL daBst_Execute(bst_class*) {
     /* Nonmatching */
 }
 
 /* 0000A9C8-0000A9D0       .text daBst_IsDelete__FP9bst_class */
-void daBst_IsDelete(bst_class*) {
+static BOOL daBst_IsDelete(bst_class*) {
     /* Nonmatching */
 }
 
 /* 0000A9D0-0000AADC       .text daBst_Delete__FP9bst_class */
-void daBst_Delete(bst_class*) {
+static BOOL daBst_Delete(bst_class*) {
     /* Nonmatching */
 }
 
 /* 0000AADC-0000B2D0       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 0000B318-0000B860       .text daBst_Create__FP10fopAc_ac_c */
-void daBst_Create(fopAc_ac_c*) {
+static s32 daBst_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 0000B860-0000BB84       .text __ct__9bst_classFv */
-bst_class::bst_class() {
-    /* Nonmatching */
-}
-
-/* 0000C42C-0000C474       .text __dt__11daBst_HIO_cFv */
-daBst_HIO_c::~daBst_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

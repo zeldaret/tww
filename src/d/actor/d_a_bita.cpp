@@ -12,7 +12,7 @@ void b_a_sub(void*, void*) {
 }
 
 /* 000000C4-0000018C       .text daBita_Draw__FP10bita_class */
-void daBita_Draw(bita_class*) {
+static BOOL daBita_Draw(bita_class*) {
     /* Nonmatching */
 }
 
@@ -32,29 +32,26 @@ void base_mtx_set(bita_class*) {
 }
 
 /* 00000584-00000714       .text daBita_Execute__FP10bita_class */
-void daBita_Execute(bita_class*) {
+static BOOL daBita_Execute(bita_class*) {
     /* Nonmatching */
 }
 
 /* 00000714-0000071C       .text daBita_IsDelete__FP10bita_class */
-void daBita_IsDelete(bita_class*) {
+static BOOL daBita_IsDelete(bita_class*) {
     /* Nonmatching */
 }
 
 /* 0000071C-00000778       .text daBita_Delete__FP10bita_class */
-void daBita_Delete(bita_class*) {
+static BOOL daBita_Delete(bita_class*) {
     /* Nonmatching */
 }
 
 /* 00000778-00000A18       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00000A60-00000D24       .text daBita_Create__FP10fopAc_ac_c */
-void daBita_Create(fopAc_ac_c*) {
+static s32 daBita_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-

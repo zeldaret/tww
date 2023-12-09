@@ -535,7 +535,7 @@ void wether_move_rain() {
             g_env_light.mbRainInitialized = true;
 
             if (g_env_light.mRainCount != 250) {
-                mDoAud_seStart(JA_SE_ATM_RAIN_START, NULL, 0, 0);
+                mDoAud_seStart(JA_SE_ATM_RAIN_START);
             }
         }
         break;
@@ -552,7 +552,7 @@ void wether_move_rain() {
 
         if (g_env_light.mRainCount == 0) {
             g_env_light.mbRainInitialized = false;
-            mDoAud_seStart(JA_SE_ATM_RAIN_END, NULL, 0, 0);
+            mDoAud_seStart(JA_SE_ATM_RAIN_END);
             delete g_env_light.mpRainPacket;
         }
         break;
@@ -848,7 +848,7 @@ void wether_move_wave() {
             g_env_light.mpWavePacket->mpTexUsonamiM = (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXA_USONAMI_M_256_64MIP);
 
             for (int i = 0; i < 300; i++) {
-                g_env_light.mpWavePacket->mWaveEff[i].mStatus = 0;
+                g_env_light.mpWavePacket->mEff[i].mStatus = 0;
             }
 
             wave_move();

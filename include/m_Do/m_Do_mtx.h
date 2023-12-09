@@ -305,6 +305,12 @@ public:
      */
     static void ZrotM(s16 z) { mDoMtx_ZrotM(now, z); }
 
+    /**
+     * Rotates the `now` matrix on the Z-axis
+     * @param z The rotation value
+     */
+    static void ZrotS(s16 z) { mDoMtx_ZrotS(now, z); }
+
     static void inverse() { MTXInverse(now, now); }
 
     static void inverseTranspose() { mDoMtx_inverseTranspose(now, now); }
@@ -322,6 +328,14 @@ public:
      * @param m The source matrix to copy
      */
     static void copy(const Mtx m) { MTXCopy(m, now); }
+
+    static void rotAxisRadS(const Vec* axis, f32 rad) {
+        MTXRotAxisRad(now, axis, rad);
+    }
+
+    // TODO
+    static void quatS(const Quaternion*) {}
+    static void rYrotS(f32) {}
 
     static Mtx now;
     static Mtx buffer[16];

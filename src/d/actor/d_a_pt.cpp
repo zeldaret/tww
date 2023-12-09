@@ -17,7 +17,7 @@ void anm_init(pt_class*, int, float, unsigned char, float, int) {
 }
 
 /* 00000238-00000360       .text daPt_Draw__FP8pt_class */
-void daPt_Draw(pt_class*) {
+static BOOL daPt_Draw(pt_class*) {
     /* Nonmatching */
 }
 
@@ -81,11 +81,6 @@ void water_check(pt_class*) {
     /* Nonmatching */
 }
 
-/* 000036C0-00003828       .text __dt__18dBgS_ObjGndChk_SplFv */
-dBgS_ObjGndChk_Spl::~dBgS_ObjGndChk_Spl() {
-    /* Nonmatching */
-}
-
 /* 00003B00-00003B4C       .text esa_s_sub__FPvPv */
 void esa_s_sub(void*, void*) {
     /* Nonmatching */
@@ -97,58 +92,27 @@ void action(pt_class*) {
 }
 
 /* 00003F5C-000043C8       .text daPt_Execute__FP8pt_class */
-void daPt_Execute(pt_class*) {
+static BOOL daPt_Execute(pt_class*) {
     /* Nonmatching */
 }
 
 /* 000043C8-000043D0       .text daPt_IsDelete__FP8pt_class */
-void daPt_IsDelete(pt_class*) {
+static BOOL daPt_IsDelete(pt_class*) {
     /* Nonmatching */
 }
 
 /* 000043D0-00004540       .text daPt_Delete__FP8pt_class */
-void daPt_Delete(pt_class*) {
+static BOOL daPt_Delete(pt_class*) {
     /* Nonmatching */
 }
 
 /* 00004540-000047D4       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 0000481C-00004B1C       .text daPt_Create__FP10fopAc_ac_c */
-void daPt_Create(fopAc_ac_c*) {
+static s32 daPt_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 00004B1C-00004DA8       .text __ct__8pt_classFv */
-pt_class::pt_class() {
-    /* Nonmatching */
-}
-
-/* 000055C4-0000560C       .text __dt__10daPt_HIO_cFv */
-daPt_HIO_c::~daPt_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

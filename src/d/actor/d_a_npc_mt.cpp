@@ -12,12 +12,12 @@ daNpcMt_c::daNpcMt_c() {
 }
 
 /* 000005D8-000006F4       .text daNpc_Mt_nodeCallBack__FP7J3DNodei */
-void daNpc_Mt_nodeCallBack(J3DNode*, int) {
+static BOOL daNpc_Mt_nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 000006F4-00000714       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -247,31 +247,26 @@ void daNpcMt_c::changePhotoNo(unsigned char) {
 }
 
 /* 00002D4C-00002D6C       .text daNpc_MtCreate__FPv */
-void daNpc_MtCreate(void*) {
+static s32 daNpc_MtCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00002D6C-00002D90       .text daNpc_MtDelete__FPv */
-void daNpc_MtDelete(void*) {
+static BOOL daNpc_MtDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00002D90-00002DB4       .text daNpc_MtExecute__FPv */
-void daNpc_MtExecute(void*) {
+static BOOL daNpc_MtExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00002DB4-00002DD8       .text daNpc_MtDraw__FPv */
-void daNpc_MtDraw(void*) {
+static BOOL daNpc_MtDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00002DD8-00002DE0       .text daNpc_MtIsDelete__FPv */
-void daNpc_MtIsDelete(void*) {
+static BOOL daNpc_MtIsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-
-

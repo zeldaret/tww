@@ -61,16 +61,6 @@ void daObjSwpush::Act_c::rideCB(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 00000EDC-00000F38       .text __dt__8cM3dGTriFv */
-cM3dGTri::~cM3dGTri() {
-    /* Nonmatching */
-}
-
-/* 00000F38-00000F80       .text __dt__8cM3dGPlaFv */
-cM3dGPla::~cM3dGPla() {
-    /* Nonmatching */
-}
-
 /* 00000FBC-0000105C       .text jnodeCB__Q211daObjSwpush5Act_cFP7J3DNodei */
 void daObjSwpush::Act_c::jnodeCB(J3DNode*, int) {
     /* Nonmatching */
@@ -195,9 +185,3 @@ void daObjSwpush::Act_c::Mthd_Execute() {
 void daObjSwpush::Act_c::Mthd_Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

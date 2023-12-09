@@ -42,7 +42,7 @@ void daNpc_Rsh1_shopStickMoveMsgCheck(unsigned long) {
 }
 
 /* 0000087C-00000A44       .text nodeCallBack_Rsh__FP7J3DNodei */
-void nodeCallBack_Rsh(J3DNode*, int) {
+static BOOL nodeCallBack_Rsh(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -252,22 +252,12 @@ BOOL daNpc_Rsh1_c::_delete() {
 }
 
 /* 00004308-00004328       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00004328-00004464       .text _create__12daNpc_Rsh1_cFv */
 s32 daNpc_Rsh1_c::_create() {
-    /* Nonmatching */
-}
-
-/* 00004464-0000465C       .text __ct__12daNpc_Rsh1_cFv */
-daNpc_Rsh1_c::daNpc_Rsh1_c() {
-    /* Nonmatching */
-}
-
-/* 0000465C-00004698       .text __dt__11ShopItems_cFv */
-ShopItems_c::~ShopItems_c() {
     /* Nonmatching */
 }
 
@@ -282,38 +272,29 @@ void daNpc_Rsh1_c::set_mtx() {
 }
 
 /* 00004A28-00004A48       .text daNpc_Rsh1_Create__FP10fopAc_ac_c */
-void daNpc_Rsh1_Create(fopAc_ac_c*) {
+static s32 daNpc_Rsh1_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00004A48-00004A68       .text daNpc_Rsh1_Delete__FP12daNpc_Rsh1_c */
-void daNpc_Rsh1_Delete(daNpc_Rsh1_c*) {
+static BOOL daNpc_Rsh1_Delete(daNpc_Rsh1_c*) {
     /* Nonmatching */
 }
 
 /* 00004A68-00004A88       .text daNpc_Rsh1_Execute__FP12daNpc_Rsh1_c */
-void daNpc_Rsh1_Execute(daNpc_Rsh1_c*) {
+static BOOL daNpc_Rsh1_Execute(daNpc_Rsh1_c*) {
     /* Nonmatching */
 }
 
 /* 00004A88-00004AA8       .text daNpc_Rsh1_Draw__FP12daNpc_Rsh1_c */
-void daNpc_Rsh1_Draw(daNpc_Rsh1_c*) {
+static BOOL daNpc_Rsh1_Draw(daNpc_Rsh1_c*) {
     /* Nonmatching */
 }
 
 /* 00004AA8-00004AB0       .text daNpc_Rsh1_IsDelete__FP12daNpc_Rsh1_c */
-void daNpc_Rsh1_IsDelete(daNpc_Rsh1_c*) {
+static BOOL daNpc_Rsh1_IsDelete(daNpc_Rsh1_c*) {
     /* Nonmatching */
 }
-
-/* 00004CD0-00004D30       .text __dt__16daNpc_Rsh1_HIO_cFv */
-daNpc_Rsh1_HIO_c::~daNpc_Rsh1_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
 
 /* 00004FE0-00004FFC       .text setEyePos__12daNpc_Rsh1_cF4cXyz */
 void daNpc_Rsh1_c::setEyePos(cXyz) {
@@ -327,11 +308,6 @@ void daNpc_Rsh1_c::setAttentionBasePos(cXyz) {
 
 /* 00005018-000050F8       .text getItemZoomPos__16ShopCam_action_cFf */
 void ShopCam_action_c::getItemZoomPos(float) {
-    /* Nonmatching */
-}
-
-/* 000050F8-00005144       .text __ct__11ShopItems_cFv */
-ShopItems_c::ShopItems_c() {
     /* Nonmatching */
 }
 

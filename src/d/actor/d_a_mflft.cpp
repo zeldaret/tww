@@ -22,7 +22,7 @@ void himo_Draw(mflft_class*) {
 }
 
 /* 00000488-00000530       .text daMflft_Draw__FP11mflft_class */
-void daMflft_Draw(mflft_class*) {
+static BOOL daMflft_Draw(mflft_class*) {
     /* Nonmatching */
 }
 
@@ -41,11 +41,6 @@ void mflft_move(mflft_class*) {
     /* Nonmatching */
 }
 
-/* 00001718-00001880       .text __dt__20dBgS_ObjGndChk_YoganFv */
-dBgS_ObjGndChk_Yogan::~dBgS_ObjGndChk_Yogan() {
-    /* Nonmatching */
-}
-
 /* 000019C0-00001E5C       .text himo_move__FP11mflft_class */
 void himo_move(mflft_class*) {
     /* Nonmatching */
@@ -57,40 +52,26 @@ void eff_cont(mflft_class*) {
 }
 
 /* 00002008-00002284       .text daMflft_Execute__FP11mflft_class */
-void daMflft_Execute(mflft_class*) {
+static BOOL daMflft_Execute(mflft_class*) {
     /* Nonmatching */
 }
 
 /* 00002284-0000228C       .text daMflft_IsDelete__FP11mflft_class */
-void daMflft_IsDelete(mflft_class*) {
+static BOOL daMflft_IsDelete(mflft_class*) {
     /* Nonmatching */
 }
 
 /* 0000228C-00002310       .text daMflft_Delete__FP11mflft_class */
-void daMflft_Delete(mflft_class*) {
+static BOOL daMflft_Delete(mflft_class*) {
     /* Nonmatching */
 }
 
 /* 00002310-000024C8       .text CallbackCreateHeap__FP10fopAc_ac_c */
-void CallbackCreateHeap(fopAc_ac_c*) {
+static BOOL CallbackCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000024C8-00002A34       .text daMflft_Create__FP10fopAc_ac_c */
-void daMflft_Create(fopAc_ac_c*) {
+static s32 daMflft_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

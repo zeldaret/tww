@@ -12,7 +12,7 @@ daObj_Canon_HIO_c::daObj_Canon_HIO_c() {
 }
 
 /* 000001E8-00000234       .text nodeControl_CB__FP7J3DNodei */
-void nodeControl_CB(J3DNode*, int) {
+static BOOL nodeControl_CB(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void daObj_Canon_c::_nodeControl(J3DNode*, J3DModel*) {
 }
 
 /* 000003D8-000003F8       .text createHeap_CB__FP10fopAc_ac_c */
-void createHeap_CB(fopAc_ac_c*) {
+static BOOL createHeap_CB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -157,34 +157,27 @@ BOOL daObj_Canon_c::_delete() {
 }
 
 /* 00001C50-00001C70       .text daObj_CanonCreate__FPv */
-void daObj_CanonCreate(void*) {
+static s32 daObj_CanonCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00001C70-00001C94       .text daObj_CanonDelete__FPv */
-void daObj_CanonDelete(void*) {
+static BOOL daObj_CanonDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00001C94-00001CB8       .text daObj_CanonExecute__FPv */
-void daObj_CanonExecute(void*) {
+static BOOL daObj_CanonExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00001CB8-00001CDC       .text daObj_CanonDraw__FPv */
-void daObj_CanonDraw(void*) {
+static BOOL daObj_CanonDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00001CDC-00001CE4       .text daObj_CanonIsDelete__FPv */
-void daObj_CanonIsDelete(void*) {
+static BOOL daObj_CanonIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 00001ECC-00001F28       .text __dt__17daObj_Canon_HIO_cFv */
-daObj_Canon_HIO_c::~daObj_Canon_HIO_c() {
-    /* Nonmatching */
-}
-
-
 

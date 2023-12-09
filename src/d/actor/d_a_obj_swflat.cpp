@@ -60,16 +60,3 @@ BOOL daObjSwflat::Act_c::Draw() {
 BOOL daObjSwflat::Act_c::IsDelete() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-/* 00001394-000013DC       .text __dt__17daObjSwflat_HIO_cFv */
-daObjSwflat_HIO_c::~daObjSwflat_HIO_c() {
-    /* Nonmatching */
-}
-
-
-

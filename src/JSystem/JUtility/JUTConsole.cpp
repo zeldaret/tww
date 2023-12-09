@@ -362,12 +362,14 @@ JUTConsoleManager* JUTConsoleManager::createManager(JKRHeap* pHeap) {
     return manager;
 }
 
+static void dummy3() {
+    OSReport("consoleManager != 0 && sManager == consoleManager");
+}
+
 /* 802CB380-802CB4C4       .text appendConsole__17JUTConsoleManagerFP10JUTConsole */
 void JUTConsoleManager::appendConsole(JUTConsole* console) {
-    /* Nonmatching */
     JUT_ASSERT(0x3bf, sManager != 0 && console != 0);
 
-    // need to figure out how TLinkList works
     JUT_ASSERT(0x3c2, soLink_.Find( console ) == soLink_.end());
 
     soLink_.Push_back(console);
@@ -378,7 +380,6 @@ void JUTConsoleManager::appendConsole(JUTConsole* console) {
 
 /* 802CB4C4-802CB674       .text removeConsole__17JUTConsoleManagerFP10JUTConsole */
 void JUTConsoleManager::removeConsole(JUTConsole* console) {
-    /* Nonmatching */
     JUT_ASSERT(0x3d6, sManager != 0 && console != 0);
     JUT_ASSERT(0x3d9, soLink_.Find( console ) != soLink_.end());
 
@@ -386,7 +387,7 @@ void JUTConsoleManager::removeConsole(JUTConsole* console) {
         if (soLink_.size() <= 1) {
             mActiveConsole = NULL;
         } else {
-            mActiveConsole = console != soLink_.back() ? soLink_.Element_toValue(console->mLinkNode.getNext()) : soLink_.front();
+            mActiveConsole = console != &soLink_.back() ? soLink_.Element_toValue(console->mLinkNode.getNext()) : &soLink_.front();
         }
     }
 
@@ -400,13 +401,11 @@ void JUTConsoleManager::removeConsole(JUTConsole* console) {
 
 /* 802CB674-802CB740       .text draw__17JUTConsoleManagerCFv */
 void JUTConsoleManager::draw() const {
-    /* Nonmatching */
+    ConsoleList::const_iterator iter = soLink_.begin();
+    ConsoleList::const_iterator end = soLink_.end();
 
-    // need to figure out how TLinkList works
-    JGadget::TLinkList<JUTConsole, 4>::const_iterator iter = soLink_.begin();
-    JGadget::TLinkList<JUTConsole, 4>::const_iterator end = soLink_.end();
     for (; iter != end; ++iter) {
-        JUTConsole* pConsole = *iter;
+        const JUTConsole * const pConsole = &(*iter);
         if (pConsole != mActiveConsole)
             pConsole->doDraw(JUTConsole::INACTIVE);
     }

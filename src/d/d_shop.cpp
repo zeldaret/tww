@@ -1032,14 +1032,14 @@ void ShopItems_c::createItem(int numItems, int roomNo) {
         
         mItemActorProcessIds[0] = fopAcM_createShopItem(
             &pos, Item_set_data_tbl[mItemSetListGlobalIdx][0]->mpItemData->mItemNo,
-            &angle, roomNo, NULL, NULL
+            &angle, roomNo
         );
         pos.x += 75.0f;
         
         if (dComIfGs_isEventBit(0x0D04)) {
             mItemActorProcessIds[1] = fopAcM_createShopItem(
                 &pos, Item_set_data_tbl[mItemSetListGlobalIdx][1]->mpItemData->mItemNo,
-                &angle, roomNo, NULL, NULL
+                &angle, roomNo
             );
             pos.x += 75.0f;
         }
@@ -1047,7 +1047,7 @@ void ShopItems_c::createItem(int numItems, int roomNo) {
         if (dComIfGs_isEventBit(0x0D02)) {
             mItemActorProcessIds[2] = fopAcM_createShopItem(
                 &pos, Item_set_data_tbl[mItemSetListGlobalIdx][2]->mpItemData->mItemNo,
-                &angle, roomNo, NULL, NULL
+                &angle, roomNo
             );
         }
     } else {
@@ -1055,7 +1055,7 @@ void ShopItems_c::createItem(int numItems, int roomNo) {
             mItemActorProcessIds[i] = fopAcM_createShopItem(
                 (cXyz*)&Item_set_pos_data_tbl[mItemSetListGlobalIdx][i],
                 Item_set_data_tbl[mItemSetListGlobalIdx][i]->mpItemData->mItemNo,
-                &angle, roomNo, NULL, NULL
+                &angle, roomNo
             );
         }
     }

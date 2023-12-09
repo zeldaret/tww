@@ -214,7 +214,7 @@ namespace daBomb2 {
 
     void Act_c::crr_init() {
         mCir.SetWall(30.0f, 30.0f);
-        mAcch.Set(&current.pos, &next.pos, this, true, &mCir, &speed, &current.angle, &shape_angle);
+        mAcch.Set(&current.pos, &next.pos, this, 1, &mCir, &speed, &current.angle, &shape_angle);
         mAcch.ClrWaterNone();
         mAcch.ClrRoofNone();
         mAcch.m_roof_crr_height = 50.0f;
@@ -336,7 +336,7 @@ namespace daBomb2 {
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::concat(field_0x754);
         mDoMtx_stack_c::ZXYrotM(shape_angle);
-        MTXCopy(mDoMtx_stack_c::get(), mpModel->mBaseTransformMtx);
+        mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 
         eff_fuse_move();
     }

@@ -7,22 +7,12 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00000098-0000039C       .text CreateHeap__11daSalvage_cFv */
 void daSalvage_c::CreateHeap() {
-    /* Nonmatching */
-}
-
-/* 000003E4-00000420       .text __dt__15dSalvage_info_cFv */
-dSalvage_info_c::~dSalvage_info_c() {
-    /* Nonmatching */
-}
-
-/* 00000420-00000424       .text __ct__15dSalvage_info_cFv */
-dSalvage_info_c::dSalvage_info_c() {
     /* Nonmatching */
 }
 
@@ -152,32 +142,27 @@ void daSalvage_c::debugDraw() {
 }
 
 /* 00002410-00002430       .text daSalvageCreate__FPv */
-void daSalvageCreate(void*) {
+static s32 daSalvageCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00002430-00002454       .text daSalvageDelete__FPv */
-void daSalvageDelete(void*) {
+static BOOL daSalvageDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00002454-00002478       .text daSalvageExecute__FPv */
-void daSalvageExecute(void*) {
+static BOOL daSalvageExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00002478-0000249C       .text daSalvageDraw__FPv */
-void daSalvageDraw(void*) {
+static BOOL daSalvageDraw(void*) {
     /* Nonmatching */
 }
 
 /* 0000249C-000024A4       .text daSalvageIsDelete__FPv */
-void daSalvageIsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 000024A4-000024EC       .text __dt__8cM3dGPlaFv */
-cM3dGPla::~cM3dGPla() {
+static BOOL daSalvageIsDelete(void*) {
     /* Nonmatching */
 }
 
@@ -193,11 +178,6 @@ void daSalvage_c::getPos(int) {
 
 /* 00002620-00002654       .text getScale__11daSalvage_cFi */
 void daSalvage_c::getScale(int) {
-    /* Nonmatching */
-}
-
-/* 00002654-000026B0       .text __dt__8cM3dGTriFv */
-cM3dGTri::~cM3dGTri() {
     /* Nonmatching */
 }
 

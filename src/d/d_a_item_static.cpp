@@ -8,16 +8,16 @@
 
 /* 80068820-800688A0       .text checkControl__8daItem_cFv */
 BOOL daItem_c::checkControl() {
-    if (mCurState == STATE_BRING_NEZUMI) {
+    if (mItemStatus == STATUS_BRING_NEZUMI) {
         return FALSE;
     }
     if (checkActionNow()) {
         return FALSE;
     }
-    if (mCurState == 4) {
+    if (mItemStatus == 4) {
         return FALSE;
     }
-    if (mCurState == STATE_INIT_NORMAL || mCurState == STATE_MAIN_NORMAL) {
+    if (mItemStatus == STATUS_INIT_NORMAL || mItemStatus == STATUS_MAIN_NORMAL) {
         return FALSE;
     }
     return TRUE;
@@ -28,13 +28,13 @@ BOOL daItem_c::startControl() {
     if (!checkControl()) {
         return FALSE;
     }
-    mCurState = STATE_BRING_NEZUMI;
+    mItemStatus = STATUS_BRING_NEZUMI;
     return TRUE;
 }
 
 /* 800688E8-800688F8       .text endControl__8daItem_cFv */
 BOOL daItem_c::endControl() {
-    mCurState = 0;
+    mItemStatus = 0;
     return TRUE;
 }
 
@@ -43,10 +43,10 @@ BOOL daItem_c::checkLock() {
     if (checkActionNow()) {
         return FALSE;
     }
-    if (mCurState == 4) {
+    if (mItemStatus == 4) {
         return FALSE;
     }
-    return mCurState == 0 ? TRUE : FALSE;
+    return mItemStatus == 0 ? TRUE : FALSE;
 }
 
 /* 80068950-80068998       .text setLock__8daItem_cFv */
@@ -54,13 +54,13 @@ BOOL daItem_c::setLock() {
     if (!checkLock()) {
         return FALSE;
     }
-    mCurState = STATE_WAIT_MAIN;
+    mItemStatus = STATUS_WAIT_MAIN;
     return TRUE;
 }
 
 /* 80068998-800689A8       .text releaseLock__8daItem_cFv */
 BOOL daItem_c::releaseLock() {
-    mCurState = 0;
+    mItemStatus = 0;
     return TRUE;
 }
 

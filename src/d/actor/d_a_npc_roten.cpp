@@ -12,12 +12,12 @@ daNpcRoten_c::daNpcRoten_c() {
 }
 
 /* 000007B4-000008CC       .text daNpc_Roten_nodeCallBack__FP7J3DNodei */
-void daNpc_Roten_nodeCallBack(J3DNode*, int) {
+static BOOL daNpc_Roten_nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 000008CC-000008EC       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -297,27 +297,27 @@ void daNpcRoten_c::setCollisionH() {
 }
 
 /* 00003F08-00003F28       .text daNpc_RotenCreate__FPv */
-void daNpc_RotenCreate(void*) {
+static s32 daNpc_RotenCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00003F28-00003F4C       .text daNpc_RotenDelete__FPv */
-void daNpc_RotenDelete(void*) {
+static BOOL daNpc_RotenDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00003F4C-00003F70       .text daNpc_RotenExecute__FPv */
-void daNpc_RotenExecute(void*) {
+static BOOL daNpc_RotenExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00003F70-00003F94       .text daNpc_RotenDraw__FPv */
-void daNpc_RotenDraw(void*) {
+static BOOL daNpc_RotenDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00003F94-00003F9C       .text daNpc_RotenIsDelete__FPv */
-void daNpc_RotenIsDelete(void*) {
+static BOOL daNpc_RotenIsDelete(void*) {
     /* Nonmatching */
 }
 
@@ -325,10 +325,3 @@ void daNpc_RotenIsDelete(void*) {
 void daDitem_c::setOffsetPos(cXyz) {
     /* Nonmatching */
 }
-
-
-
-
-
-
-

@@ -21,11 +21,6 @@ s32 daObjHomen::Act_c::_create() {
     /* Nonmatching */
 }
 
-/* 000005B0-0000079C       .text __ct__Q210daObjHomen5Act_cFv */
-daObjHomen::Act_c::Act_c() {
-    /* Nonmatching */
-}
-
 /* 000011A4-00001230       .text _delete__Q210daObjHomen5Act_cFv */
 BOOL daObjHomen::Act_c::_delete() {
     /* Nonmatching */
@@ -160,26 +155,3 @@ BOOL daObjHomen::Act_c::_execute() {
 BOOL daObjHomen::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-/* 00002C0C-00002E88       .text __dt__Q210daObjHomen5Act_cFv */
-daObjHomen::Act_c::~Act_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-

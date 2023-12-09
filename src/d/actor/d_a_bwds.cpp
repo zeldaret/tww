@@ -22,7 +22,7 @@ void body_draw(bwds_class*) {
 }
 
 /* 000002E8-000003E4       .text daBwds_Draw__FP10bwds_class */
-void daBwds_Draw(bwds_class*) {
+static BOOL daBwds_Draw(bwds_class*) {
     /* Nonmatching */
 }
 
@@ -72,39 +72,27 @@ void move(bwds_class*) {
 }
 
 /* 00002590-000031B4       .text daBwds_Execute__FP10bwds_class */
-void daBwds_Execute(bwds_class*) {
+static BOOL daBwds_Execute(bwds_class*) {
     /* Nonmatching */
 }
 
 /* 000031B4-000031BC       .text daBwds_IsDelete__FP10bwds_class */
-void daBwds_IsDelete(bwds_class*) {
+static BOOL daBwds_IsDelete(bwds_class*) {
     /* Nonmatching */
 }
 
 /* 000031BC-00003278       .text daBwds_Delete__FP10bwds_class */
-void daBwds_Delete(bwds_class*) {
+static BOOL daBwds_Delete(bwds_class*) {
     /* Nonmatching */
 }
 
 /* 00003278-00003634       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 0000367C-000039A4       .text daBwds_Create__FP10fopAc_ac_c */
-void daBwds_Create(fopAc_ac_c*) {
+static s32 daBwds_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 00003FCC-00004014       .text __dt__12daBwds_HIO_cFv */
-daBwds_HIO_c::~daBwds_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
 

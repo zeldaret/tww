@@ -52,69 +52,119 @@ BOOL fpcM_IsCreating(unsigned int pID) {
     return fpcCt_IsCreatingByID(pID);
 }
 
+struct BMG_INF1 : BlockHeader {
+    /* 0x08 */ u8 m08[0x10 - 0x08];
+    /* 0x10 */ u32 entries[6];
+};
+
 /* 8003E3D0-8003E9F0       .text messageSet__FUl */
-void messageSet(unsigned long status) {
-    const u32 * inf1_tbl = (u32*)&msg_data[0x30];
-    const char * msg = (const char*)((&msg_data[0x68]) + inf1_tbl[status]);
+void messageSet(u32 status) {
+    /* Nonmatching - PAL-only regswap between msg and tpane */
+#if VERSION == VERSION_PAL
+    BMG_INF1* inf1;
+    if (g_dComIfG_gameInfo.play.mGameLanguage == 1) {
+        inf1 = (BMG_INF1*)&msg_data_ge[0x20];
+    } else if (g_dComIfG_gameInfo.play.mGameLanguage == 2) {
+        inf1 = (BMG_INF1*)&msg_data_fr[0x20];
+    } else if (g_dComIfG_gameInfo.play.mGameLanguage == 3) {
+        inf1 = (BMG_INF1*)&msg_data_sp[0x20];
+    } else if (g_dComIfG_gameInfo.play.mGameLanguage == 4) {
+        inf1 = (BMG_INF1*)&msg_data_it[0x20];
+    } else {
+        inf1 = (BMG_INF1*)&msg_data[0x20]; // English
+    }
+#else
+    BMG_INF1* inf1 = (BMG_INF1*)&msg_data[0x20];
+#endif
+    const char * msg = (const char*)((u8*)inf1->getNext() + sizeof(BlockHeader) + inf1->entries[status]);
 
     J2DTextBox * tpane = new J2DTextBox('TXT1', JGeometry::TBox2<f32>(0.0f, 0.0f, 660.0f, 200.0f), (ResFONT*)font_data, msg, HBIND_CENTER, VBIND_CENTER);
-    JUT_ASSERT(0x141, tpane != 0);
+    JUT_ASSERT(VERSION_SELECT(0x12b, 0x141, 0x141), tpane != 0);
 
     J2DTextBox * spane = new J2DTextBox('TXT2', JGeometry::TBox2<f32>(0.0f, 0.0f, 660.0f, 200.0f), (ResFONT*)font_data, msg, HBIND_CENTER, VBIND_CENTER);
-    JUT_ASSERT(0x149, spane != 0);
+    JUT_ASSERT(VERSION_SELECT(0x133, 0x149, 0x149), spane != 0);
 
     J2DPicture * ppane = new J2DPicture('PIC1', JGeometry::TBox2<f32>(0.0f, 0.0f, 665.0f, 530.0f), (ResTIMG*)black_tex, NULL);
-    JUT_ASSERT(0x14e, ppane != 0);
+    JUT_ASSERT(VERSION_SELECT(0x138, 0x14e, 0x14e), ppane != 0);
 
-    tpane->setFontSize(27.0f, 27.0f);
-    tpane->setCharColor(JUtility::TColor(0xFFC800FF));
-    tpane->setGradColor(JUtility::TColor(0xFFB400FF));
+    J2DTextBox::TFontSize size;
+    size.mSizeX = 27.0f;
+    size.mSizeY = 27.0f;
+    tpane->setFontSize(size);
+    tpane->setCharColor(JUtility::TColor(0xFF, 0xC8, 0x00, 0xFF));
+    tpane->setGradColor(JUtility::TColor(0xFF, 0xB4, 0x00, 0xFF));
     tpane->setCharSpace(0.0f);
     tpane->setLineSpace(27.0f);
-    tpane->setBlack(JUtility::TColor(0xFFFFFF00));
+    tpane->setBlack(JUtility::TColor(0xFF, 0xFF, 0xFF, 0x00));
 
-    spane->setFontSize(27.0f, 27.0f);
-    spane->setCharColor(JUtility::TColor(0x000000FF));
-    spane->setGradColor(JUtility::TColor(0x000000FF));
+    spane->setFontSize(size);
+    spane->setCharColor(JUtility::TColor(0x00, 0x00, 0x00, 0xC8));
+    spane->setGradColor(JUtility::TColor(0x00, 0x00, 0x00, 0xC8));
     spane->setCharSpace(0.0f);
     spane->setLineSpace(27.0f);
 
     ppane->setAlpha(130);
 
+#if VERSION != VERSION_JPN
     JUTResFont * font = new JUTResFont((ResFONT*)font_data, NULL);
+#endif
 
-    s32 height = 27;
-    s32 curLine = 0;
-    u8 ch;
+    s16 height = 27;
+    s32 ch;
+#if VERSION != VERSION_JPN
     f32 maxWidth = 0.0f;
-    f32 lineWidth[6] = {};
-    for (; ch = *msg, ch != '\0'; msg++) {
-        if (ch == '\n') {
+    s32 curLine = 0;
+    f32 lineWidth[6];
+    for (s32 i = 0; i < (s32)ARRAY_SIZE(lineWidth); i++) {
+        lineWidth[i] = 0.0f;
+    }
+#endif
+    for (; ch = (u8)*msg, (s8)ch != '\0'; msg++) {
+        if ((s8)ch == '\n') {
             height += 27;
+#if VERSION != VERSION_JPN
             curLine++;
+#endif
             continue;
         }
 
-        JUTFont::TWidth wid;
-        font->getWidthEntry(ch, &wid);
-        lineWidth[curLine] += wid.field_0x0;
+#if VERSION != VERSION_JPN
+        lineWidth[curLine] += font->JUTFont::getWidth(ch);
+#endif
     }
 
+#if VERSION != VERSION_JPN
     for (s32 i = 0; i < (s32)ARRAY_SIZE(lineWidth); i++) {
-        f32 width = lineWidth[curLine];
-        if (width > maxWidth)
+        f32 width = lineWidth[i];
+        if (maxWidth < width)
             maxWidth = width;
     }
+#endif
 
-    f32 x = (659.0f - maxWidth) / 2.0f + -21.0f;
+#if VERSION == VERSION_JPN
+    f32 x = -9.5f;
+#else
+    f32 x = (659.0f - maxWidth) / 2.0f + -9.0f;
+#endif
     f32 y = (524 - height) / 2.0f + -21.0f;
 
     ppane->draw(-12.0f, -24.0f, 665.0f, 530.0f, false, false, false);
-    y += 10.0f;
-    spane->draw(x + 2.0f, y + 2.0f, 660.0f, HBIND_LEFT);
-    tpane->draw(x, y, 660.0f, HBIND_LEFT);
+#if VERSION == VERSION_PAL
+    if (g_dComIfG_gameInfo.play.mGameLanguage == 0) {
+        spane->draw(x + 2.0f, y + 10.0f + 2.0f, 660.0f, HBIND_LEFT);
+        tpane->draw(x, y + 10.0f, 660.0f, HBIND_LEFT);
+    } else {
+        spane->draw(-7.0f, y + 10.0f + 2.0f, 660.0f, HBIND_CENTER);
+        tpane->draw(-9.0f, y + 10.0f, 660.0f, HBIND_CENTER);
+    }
+#else
+    spane->draw(x + 2.0f, y + 10.0f + 2.0f, 660.0f, VERSION_SELECT(HBIND_CENTER, HBIND_LEFT, HBIND_LEFT));
+    tpane->draw(x, y + 10.0f, 660.0f, VERSION_SELECT(HBIND_CENTER, HBIND_LEFT, HBIND_LEFT));
+#endif
 
+#if VERSION != VERSION_JPN
     delete font;
+#endif
     delete ppane;
     delete tpane;
     delete spane;
@@ -129,15 +179,19 @@ namespace JAInter {
 
 /* 8003E9F0-8003EBD4       .text drawDvdCondition__Fl */
 void drawDvdCondition(long status) {
+#if VERSION == VERSION_PAL
+    JUtility::TColor backColor = g_clearColor;
+#else
     JFWDisplay::getManager()->setFader(NULL);
-    GXColor backColor = mDoGph_gInf_c::getBackColor();
+    JUtility::TColor backColor = mDoGph_gInf_c::getBackColor();
+#endif
     JFWDisplay::getManager()->setClearColor(backColor);
     JFWDisplay::getManager()->beginRender();
     GXSetAlphaUpdate(GX_FALSE);
     j3dSys.drawInit();
 
     J2DOrthoGraph draw2D(0.0f, 0.0f, 640.0f, 480.0f, -1.0f, 1.0);
-    draw2D.setOrtho(-9.0f, -21.0f, 650.0f, 503.0f, -1.0f, 1.0f);
+    draw2D.setOrtho(-9.0f, -21.0f, 659.0f, 524.0f, -1.0f, 1.0f);
     draw2D.setPort();
     dComIfGp_setCurrentGrafPort(&draw2D);
 
@@ -153,12 +207,17 @@ void drawDvdCondition(long status) {
         messageSet(0);
     } else if (status == -1) {
         messageSet(5);
+#if VERSION != VERSION_JPN
         JAInter::StreamLib::stop();
+#endif
     } else {
-        JUT_WARN(0x1e1, "Dvd Error !! <%d>\n", status);
+        JUT_WARN(VERSION_SELECT(423, 481, 478), "Dvd Error !! <%d>\n", status);
     }
 
     JFWDisplay::getManager()->endRender();
+#if VERSION == VERSION_PAL
+    JFWDisplay::getManager()->setFader(NULL);
+#endif
 }
 
 /* 8003EBD4-8003EC84       .text checkDvdCondition__Fv */
@@ -193,10 +252,10 @@ void fpcM_Management(fpcM_ManagementFunc callBack1, fpcM_ManagementFunc callBack
     cAPIGph_Painter();
     fpcDt_Handler();
     if (!fpcPi_Handler())
-        JUT_ASSERT(548, 0);
+        JUT_ASSERT(VERSION_SELECT(490, 548, 547), 0);
 
     if (!fpcCt_Handler())
-        JUT_ASSERT(552, 0);
+        JUT_ASSERT(VERSION_SELECT(494, 552, 551), 0);
 
     if (callBack1 != NULL)
         callBack1();

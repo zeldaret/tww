@@ -40,6 +40,9 @@ inline void C_MTXRotAxisRad(Mtx m, const Vec* axis, f32 rad) {
     PSMTXRotAxisRad(m, axis, rad);
 }
 
+#define MTXDegToRad(deg) ((deg) * 0.01745329252f)
+#define MTXRadToDeg(rad) ((rad) * 57.29577951f)
+
 /* When compiling in debug mode, use C implementations */
 #ifdef DEBUG
 #define MTXIdentity C_MTXIdentity
@@ -68,6 +71,9 @@ inline void C_MTXRotAxisRad(Mtx m, const Vec* axis, f32 rad) {
 #define MTXScaleApply PSMTXScaleApply
 #define MTXQuat PSMTXQuat
 #endif
+
+#define MTXRotDeg(m, axis, deg) MTXRotRad(m, axis, MTXDegToRad(deg))
+#define MTXRotAxisDeg(m, axis, deg) MTXRotAxisRad(m, axis, MTXDegToRad(deg))
 
 #ifdef __cplusplus
 };

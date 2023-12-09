@@ -220,39 +220,3 @@ void daObjEff::Act_c::die() {
 BOOL daObjEff::Act_c::_execute() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-/* 00001538-000015C4       .text __dt__Q28daObjEff14WoodBoxSmokeCBFv */
-daObjEff::WoodBoxSmokeCB::~WoodBoxSmokeCB() {
-    /* Nonmatching */
-}
-
-/* 000015CC-00001658       .text __dt__Q28daObjEff15PineconeSmokeCBFv */
-daObjEff::PineconeSmokeCB::~PineconeSmokeCB() {
-    /* Nonmatching */
-}
-
-/* 00001658-000016E4       .text __dt__Q28daObjEff11LandSmokeCBFv */
-daObjEff::LandSmokeCB::~LandSmokeCB() {
-    /* Nonmatching */
-}
-
-/* 000016E4-00001770       .text __dt__Q28daObjEff12SkullSmokeCBFv */
-daObjEff::SkullSmokeCB::~SkullSmokeCB() {
-    /* Nonmatching */
-}
-
-/* 00001770-000017FC       .text __dt__Q28daObjEff12StoolSmokeCBFv */
-daObjEff::StoolSmokeCB::~StoolSmokeCB() {
-    /* Nonmatching */
-}
-
-/* 000017FC-00001888       .text __dt__Q28daObjEff13BarrelSmokeCBFv */
-daObjEff::BarrelSmokeCB::~BarrelSmokeCB() {
-    /* Nonmatching */
-}
-

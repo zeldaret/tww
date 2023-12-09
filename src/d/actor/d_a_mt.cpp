@@ -42,17 +42,17 @@ void mt_eye_tex_anm(mt_class*) {
 }
 
 /* 000005EC-00000720       .text nodeCallBack_head__FP7J3DNodei */
-void nodeCallBack_head(J3DNode*, int) {
+static BOOL nodeCallBack_head(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 0000075C-0000098C       .text nodeCallBack_body__FP7J3DNodei */
-void nodeCallBack_body(J3DNode*, int) {
+static BOOL nodeCallBack_body(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 0000098C-00000B28       .text nodeCallBack_tail__FP7J3DNodei */
-void nodeCallBack_tail(J3DNode*, int) {
+static BOOL nodeCallBack_tail(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -97,12 +97,12 @@ void br_draw(mt_class*) {
 }
 
 /* 00003210-00003360       .text daMt_shadowDraw__FP8mt_class */
-void daMt_shadowDraw(mt_class*) {
+static BOOL daMt_shadowDraw(mt_class*) {
     /* Nonmatching */
 }
 
 /* 00003360-0000361C       .text daMt_Draw__FP8mt_class */
-void daMt_Draw(mt_class*) {
+static BOOL daMt_Draw(mt_class*) {
     /* Nonmatching */
 }
 
@@ -137,71 +137,27 @@ void damage_check(mt_class*) {
 }
 
 /* 00006188-000074D4       .text daMt_Execute__FP8mt_class */
-void daMt_Execute(mt_class*) {
-    /* Nonmatching */
-}
-
-/* 000078DC-00007A44       .text __dt__20dBgS_ObjGndChk_YoganFv */
-dBgS_ObjGndChk_Yogan::~dBgS_ObjGndChk_Yogan() {
-    /* Nonmatching */
-}
-
-/* 00007A44-00007B84       .text __ct__20dBgS_ObjGndChk_YoganFv */
-dBgS_ObjGndChk_Yogan::dBgS_ObjGndChk_Yogan() {
+static BOOL daMt_Execute(mt_class*) {
     /* Nonmatching */
 }
 
 /* 00007CC4-00007CCC       .text daMt_IsDelete__FP8mt_class */
-void daMt_IsDelete(mt_class*) {
+static BOOL daMt_IsDelete(mt_class*) {
     /* Nonmatching */
 }
 
 /* 00007CCC-00007E18       .text daMt_Delete__FP8mt_class */
-void daMt_Delete(mt_class*) {
+static BOOL daMt_Delete(mt_class*) {
     /* Nonmatching */
 }
 
 /* 00007E18-00008400       .text CallbackCreateHeap__FP10fopAc_ac_c */
-void CallbackCreateHeap(fopAc_ac_c*) {
+static BOOL CallbackCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000084AC-000088A8       .text daMt_Create__FP10fopAc_ac_c */
-void daMt_Create(fopAc_ac_c*) {
+static s32 daMt_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 000088A8-00008B98       .text __ct__8mt_classFv */
-mt_class::mt_class() {
-    /* Nonmatching */
-}
-
-/* 000094D4-00009530       .text __dt__10daMt_HIO_cFv */
-daMt_HIO_c::~daMt_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -17,7 +17,7 @@ void hand_draw(shand_class*) {
 }
 
 /* 00000194-000001E0       .text daShand_Draw__FP11shand_class */
-void daShand_Draw(shand_class*) {
+static BOOL daShand_Draw(shand_class*) {
     /* Nonmatching */
 }
 
@@ -61,23 +61,18 @@ void hand_move(shand_class*) {
     /* Nonmatching */
 }
 
-/* 00001DAC-00001F14       .text __dt__18dBgS_ObjGndChk_SplFv */
-dBgS_ObjGndChk_Spl::~dBgS_ObjGndChk_Spl() {
-    /* Nonmatching */
-}
-
 /* 000021EC-0000225C       .text daShand_Execute__FP11shand_class */
-void daShand_Execute(shand_class*) {
+static BOOL daShand_Execute(shand_class*) {
     /* Nonmatching */
 }
 
 /* 0000225C-00002264       .text daShand_IsDelete__FP11shand_class */
-void daShand_IsDelete(shand_class*) {
+static BOOL daShand_IsDelete(shand_class*) {
     /* Nonmatching */
 }
 
 /* 00002264-000022D4       .text daShand_Delete__FP11shand_class */
-void daShand_Delete(shand_class*) {
+static BOOL daShand_Delete(shand_class*) {
     /* Nonmatching */
 }
 
@@ -87,46 +82,12 @@ void useHeapInit(shand_class*) {
 }
 
 /* 00002360-00002380       .text daShand_solidHeapCB__FP10fopAc_ac_c */
-void daShand_solidHeapCB(fopAc_ac_c*) {
+static BOOL daShand_solidHeapCB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00002380-00002630       .text daShand_Create__FP10fopAc_ac_c */
-void daShand_Create(fopAc_ac_c*) {
+static s32 daShand_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 00002980-000029BC       .text __dt__7shand_sFv */
-shand_s::~shand_s() {
-    /* Nonmatching */
-}
-
-/* 000029BC-000029C0       .text __ct__7shand_sFv */
-shand_s::shand_s() {
-    /* Nonmatching */
-}
-
-/* 00002B64-00002BAC       .text __dt__13daShand_HIO_cFv */
-daShand_HIO_c::~daShand_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

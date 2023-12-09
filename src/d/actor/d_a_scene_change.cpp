@@ -22,7 +22,7 @@ daSceneChgHIO_c::daSceneChgHIO_c() {
 }
 
 /* 00000118-000001A8       .text daSceneChgCreate__FPv */
-s32 daSceneChgCreate(void* i_this) {
+static s32 daSceneChgCreate(void* i_this) {
     d_a_scene_change_c* scnChg = static_cast<d_a_scene_change_c*>(i_this);
     
     fopAcM_SetupActor(scnChg, d_a_scene_change_c);
@@ -35,22 +35,22 @@ s32 daSceneChgCreate(void* i_this) {
 }
 
 /* 000001A8-000001B0       .text daSceneChgDelete__FPv */
-BOOL daSceneChgDelete(void* i_this) {
+static BOOL daSceneChgDelete(void* i_this) {
     return TRUE;
 }
 
 /* 000001B0-000001B8       .text daSceneChgExecute__FPv */
-BOOL daSceneChgExecute(void* i_this) {
+static BOOL daSceneChgExecute(void* i_this) {
     return TRUE;
 }
 
 /* 000001B8-000001C0       .text daSceneChgDraw__FPv */
-BOOL daSceneChgDraw(void* i_this) {
+static BOOL daSceneChgDraw(void* i_this) {
     return TRUE;
 }
 
 /* 000001C0-000001C8       .text daSceneChgIsDelete__FPv */
-BOOL daSceneChgIsDelete(void* i_this) {
+static BOOL daSceneChgIsDelete(void* i_this) {
     return TRUE;
 }
 

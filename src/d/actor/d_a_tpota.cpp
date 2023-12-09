@@ -45,9 +45,3 @@ BOOL daTpota_c::_execute() {
 BOOL daTpota_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

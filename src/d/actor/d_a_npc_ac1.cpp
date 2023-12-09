@@ -12,7 +12,7 @@ daNpc_Ac1_HIO_c::daNpc_Ac1_HIO_c() {
 }
 
 /* 00000198-000001E4       .text nodeCallBack_Wng__FP7J3DNodei */
-void nodeCallBack_Wng(J3DNode*, int) {
+static BOOL nodeCallBack_Wng(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void daNpc_Ac1_c::nodeWngControl(J3DNode*, J3DModel*) {
 }
 
 /* 00000294-000002E0       .text nodeCallBack_Arm__FP7J3DNodei */
-void nodeCallBack_Arm(J3DNode*, int) {
+static BOOL nodeCallBack_Arm(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -32,7 +32,7 @@ void daNpc_Ac1_c::nodeArmControl(J3DNode*, J3DModel*) {
 }
 
 /* 00000390-000003DC       .text nodeCallBack_Ac1__FP7J3DNodei */
-void nodeCallBack_Ac1(J3DNode*, int) {
+static BOOL nodeCallBack_Ac1(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -272,17 +272,12 @@ BOOL daNpc_Ac1_c::_delete() {
 }
 
 /* 00001FFC-0000201C       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 0000201C-0000213C       .text _create__11daNpc_Ac1_cFv */
 s32 daNpc_Ac1_c::_create() {
-    /* Nonmatching */
-}
-
-/* 0000213C-000022A0       .text __ct__11daNpc_Ac1_cFv */
-daNpc_Ac1_c::daNpc_Ac1_c() {
     /* Nonmatching */
 }
 
@@ -312,36 +307,27 @@ void daNpc_Ac1_c::CreateHeap() {
 }
 
 /* 00003044-00003064       .text daNpc_Ac1_Create__FP10fopAc_ac_c */
-void daNpc_Ac1_Create(fopAc_ac_c*) {
+static s32 daNpc_Ac1_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00003064-00003084       .text daNpc_Ac1_Delete__FP11daNpc_Ac1_c */
-void daNpc_Ac1_Delete(daNpc_Ac1_c*) {
+static BOOL daNpc_Ac1_Delete(daNpc_Ac1_c*) {
     /* Nonmatching */
 }
 
 /* 00003084-000030A4       .text daNpc_Ac1_Execute__FP11daNpc_Ac1_c */
-void daNpc_Ac1_Execute(daNpc_Ac1_c*) {
+static BOOL daNpc_Ac1_Execute(daNpc_Ac1_c*) {
     /* Nonmatching */
 }
 
 /* 000030A4-000030C4       .text daNpc_Ac1_Draw__FP11daNpc_Ac1_c */
-void daNpc_Ac1_Draw(daNpc_Ac1_c*) {
+static BOOL daNpc_Ac1_Draw(daNpc_Ac1_c*) {
     /* Nonmatching */
 }
 
 /* 000030C4-000030CC       .text daNpc_Ac1_IsDelete__FP11daNpc_Ac1_c */
-void daNpc_Ac1_IsDelete(daNpc_Ac1_c*) {
+static BOOL daNpc_Ac1_IsDelete(daNpc_Ac1_c*) {
     /* Nonmatching */
 }
-
-/* 000031B8-00003214       .text __dt__15daNpc_Ac1_HIO_cFv */
-daNpc_Ac1_HIO_c::~daNpc_Ac1_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
 

@@ -72,7 +72,7 @@ void st_part_draw(st_class*) {
 }
 
 /* 00001E80-00001F90       .text daSt_Draw__FP8st_class */
-void daSt_Draw(st_class*) {
+static BOOL daSt_Draw(st_class*) {
     /* Nonmatching */
 }
 
@@ -177,72 +177,27 @@ void eff_move(st_class*) {
 }
 
 /* 000082F8-000087C8       .text daSt_Execute__FP8st_class */
-void daSt_Execute(st_class*) {
+static BOOL daSt_Execute(st_class*) {
     /* Nonmatching */
 }
 
 /* 000087C8-000087D0       .text daSt_IsDelete__FP8st_class */
-void daSt_IsDelete(st_class*) {
+static BOOL daSt_IsDelete(st_class*) {
     /* Nonmatching */
 }
 
 /* 000087D0-000088CC       .text daSt_Delete__FP8st_class */
-void daSt_Delete(st_class*) {
+static BOOL daSt_Delete(st_class*) {
     /* Nonmatching */
 }
 
 /* 000088CC-00008B44       .text createHeap__FP10fopAc_ac_c */
-void createHeap(fopAc_ac_c*) {
+static BOOL createHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00008B44-00008F60       .text daSt_Create__FP10fopAc_ac_c */
-void daSt_Create(fopAc_ac_c*) {
+static s32 daSt_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 00008F60-00009238       .text __ct__8st_classFv */
-st_class::st_class() {
-    /* Nonmatching */
-}
-
-/* 000093F4-00009470       .text __dt__7st_ke_sFv */
-st_ke_s::~st_ke_s() {
-    /* Nonmatching */
-}
-
-/* 00009470-000094D8       .text __ct__7st_ke_sFv */
-st_ke_s::st_ke_s() {
-    /* Nonmatching */
-}
-
-/* 000094D8-00009568       .text __dt__4st_pFv */
-st_p::~st_p() {
-    /* Nonmatching */
-}
-
-/* 00009568-000095A0       .text __ct__4st_pFv */
-st_p::st_p() {
-    /* Nonmatching */
-}
-
-/* 00009CFC-00009D44       .text __dt__5HIO_cFv */
-HIO_c::~HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

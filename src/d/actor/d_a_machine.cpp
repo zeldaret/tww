@@ -12,7 +12,7 @@ BOOL daMachine_c::_delete() {
 }
 
 /* 000000A8-000000C8       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void daMachine_c::CreateHeap() {
 }
 
 /* 0000022C-000002A0       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -53,11 +53,6 @@ void daMachine_c::set_speed() {
 
 /* 000007F8-00000898       .text _create__11daMachine_cFv */
 s32 daMachine_c::_create() {
-    /* Nonmatching */
-}
-
-/* 00000898-00000AA0       .text __ct__11daMachine_cFv */
-daMachine_c::daMachine_c() {
     /* Nonmatching */
 }
 
@@ -97,33 +92,26 @@ BOOL daMachine_c::_draw() {
 }
 
 /* 0000154C-0000156C       .text daMachine_Create__FPv */
-void daMachine_Create(void*) {
+static s32 daMachine_Create(void*) {
     /* Nonmatching */
 }
 
 /* 0000156C-00001590       .text daMachine_Delete__FPv */
-void daMachine_Delete(void*) {
+static BOOL daMachine_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00001590-000015B4       .text daMachine_Draw__FPv */
-void daMachine_Draw(void*) {
+static BOOL daMachine_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 000015B4-000015D8       .text daMachine_Execute__FPv */
-void daMachine_Execute(void*) {
+static BOOL daMachine_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 000015D8-000015E0       .text daMachine_IsDelete__FPv */
-void daMachine_IsDelete(void*) {
+static BOOL daMachine_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-
-
-
-

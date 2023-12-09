@@ -141,7 +141,14 @@ public:
     struct daAgb_Flags {
         /* 0x0 */ u16 field_0x0;
         /* 0x2 */ u8 field_0x2;
-        /* 0x3 */ u8 field_0x3;
+        /* 0x3 */ u8 field_0x3_0 : 1;
+        /* 0x3 */ u8 field_0x3_1 : 1;
+        /* 0x3 */ u8 field_0x3_2 : 1;
+        /* 0x3 */ u8 field_0x3_3 : 1;
+        /* 0x3 */ u8 field_0x3_4 : 1;
+        /* 0x3 */ u8 field_0x3_5 : 1;
+        /* 0x3 */ u8 field_0x3_6 : 1;
+        /* 0x3 */ u8 field_0x3_7 : 1;
         /* 0x4 */ u8 field_0x4;
         /* 0x5 */ u8 field_0x5_0 : 1;
         /* 0x5 */ u8 field_0x5_1 : 1;
@@ -176,6 +183,9 @@ public:
     /* 0x62C */ f32 field_0x62c;
     /* 0x630 */ u16 field_0x630;
     /* 0x632 */ u16 field_0x632;
+#if VERSION == VERSION_JPN
+    u8 jpn_padding[0x18];
+#endif
     /* 0x634 */ cXyz field_0x634;
     /* 0x640 */ int field_0x640;
     /* 0x648 */ u64 mPlayerName;

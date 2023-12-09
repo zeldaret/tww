@@ -30,9 +30,3 @@ BOOL daTagWaterlevel::Act_c::_execute() {
 BOOL daTagWaterlevel::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

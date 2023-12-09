@@ -65,11 +65,3 @@ void daObjEbomzo::Act_c::Execute(float(**)[3][4]) {
 BOOL daObjEbomzo::Act_c::Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-

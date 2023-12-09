@@ -40,14 +40,3 @@ BOOL daObjRforce::Act_c::_execute() {
 BOOL daObjRforce::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-/* 0000059C-000005FC       .text __dt__Q211daObjRforce5Act_cFv */
-daObjRforce::Act_c::~Act_c() {
-    /* Nonmatching */
-}
-

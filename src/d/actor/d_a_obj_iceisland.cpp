@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -72,27 +72,27 @@ void daObjIceisland_c::daObjIceisland_fail_demo_main() {
 }
 
 /* 000009B8-00000B2C       .text daObjIceisland_Create__FPv */
-void daObjIceisland_Create(void*) {
+static s32 daObjIceisland_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000C2C-00000C5C       .text daObjIceisland_Delete__FPv */
-void daObjIceisland_Delete(void*) {
+static BOOL daObjIceisland_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000C5C-00000D2C       .text daObjIceisland_Draw__FPv */
-void daObjIceisland_Draw(void*) {
+static BOOL daObjIceisland_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000D2C-00000EC0       .text daObjIceisland_Execute__FPv */
-void daObjIceisland_Execute(void*) {
+static BOOL daObjIceisland_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00000EC0-00000EC8       .text daObjIceisland_IsDelete__FPv */
-void daObjIceisland_IsDelete(void*) {
+static BOOL daObjIceisland_IsDelete(void*) {
     /* Nonmatching */
 }
 

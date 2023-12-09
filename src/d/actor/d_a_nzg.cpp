@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-000000E4       .text daNZG_Draw__FP9nzg_class */
-void daNZG_Draw(nzg_class*) {
+static BOOL daNZG_Draw(nzg_class*) {
     /* Nonmatching */
 }
 
@@ -22,29 +22,26 @@ void nzg_01_move(nzg_class*) {
 }
 
 /* 00000450-000004D0       .text daNZG_Execute__FP9nzg_class */
-void daNZG_Execute(nzg_class*) {
+static BOOL daNZG_Execute(nzg_class*) {
     /* Nonmatching */
 }
 
 /* 000004D0-000004D8       .text daNZG_IsDelete__FP9nzg_class */
-void daNZG_IsDelete(nzg_class*) {
+static BOOL daNZG_IsDelete(nzg_class*) {
     /* Nonmatching */
 }
 
 /* 000004D8-00000508       .text daNZG_Delete__FP9nzg_class */
-void daNZG_Delete(nzg_class*) {
+static BOOL daNZG_Delete(nzg_class*) {
     /* Nonmatching */
 }
 
 /* 00000508-00000620       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00000620-00000864       .text daNZG_Create__FP10fopAc_ac_c */
-void daNZG_Create(fopAc_ac_c*) {
+static s32 daNZG_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-

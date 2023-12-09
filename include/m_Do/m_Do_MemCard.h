@@ -44,16 +44,16 @@ public:
     /* 0x0000 */ u8 mData[0x1650];
     /* 0x1650 */ s32 mCardCommand;
     /* 0x1654 */ s32 mCardState;
-    /* 0x1658 */ u8 field_0x1658;
+    /* 0x1658 */ u8 mCardSlot;
     /* 0x1659 */ u8 field_0x1659;
     /* 0x165A */ u8 field_0x165A;
     /* 0x165B */ u8 field_0x165B;
-    /* 0x165C */ s32 field_0x165c;
+    /* 0x165C */ s32 mCommand;
     /* 0x1660 */ s32 field_0x1660;
     /* 0x1664 */ OSMutex mMutex;
-};  // Size: 0x167C
-
-STATIC_ASSERT(sizeof(mDoMemCd_Ctrl_c) == 0x167C);
+    /* 0x167C */ OSCond mCond;
+    /* 0x1684 */ u32 field_0x1684[5];
+};  // Size: 0x1698
 
 static int mDoMemCd_main(void*);
 
@@ -70,5 +70,20 @@ inline void mDoMemCd_ThdInit() {
 inline void mDoMemCd_save(void* i_data, u32 param_1, u32 param_2) {
     g_mDoMemCd_control.save(i_data,param_1,param_2);
 }
+
+struct CARDFileInfo;
+struct mDoMemCdRWm_HeaderData;
+s32 mDoMemCdRWm_Store(CARDFileInfo*, void*, u32);
+s32 mDoMemCdRWm_Restore(CARDFileInfo*, void*, u32);
+void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData*);
+void mDoMemCdRWm_SetCardStat(CARDFileInfo*);
+void mDoMemCdRWm_CheckCardStat(CARDFileInfo*);
+void mDoMemCdRWm_CalcCheckSum(void*, u32);
+void mDoMemCdRWm_CalcCheckSumPictData(void*, u32);
+void mDoMemCdRWm_TestCheckSumPictData(void*);
+void mDoMemCdRWm_SetCheckSumPictData(u8*);
+void mDoMemCdRWm_CalcCheckSumGameData(void*, u32);
+void mDoMemCdRWm_TestCheckSumGameData(void*);
+void mDoMemCdRWm_SetCheckSumGameData(u8*, u8);
 
 #endif /* M_DO_M_DO_MEMCARD_H */

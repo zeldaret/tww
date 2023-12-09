@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-0000012C       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -85,9 +85,3 @@ void daObjHami2::Act_c::Execute(float(**)[3][4]) {
 BOOL daObjHami2::Act_c::Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

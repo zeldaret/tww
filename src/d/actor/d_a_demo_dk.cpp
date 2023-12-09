@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-000000E8       .text daDEMO_DK_Draw__FP13demo_dk_class */
-void daDEMO_DK_Draw(demo_dk_class*) {
+static BOOL daDEMO_DK_Draw(demo_dk_class*) {
     /* Nonmatching */
 }
 
@@ -27,27 +27,27 @@ void mode_akubi(demo_dk_class*) {
 }
 
 /* 00000378-000004C0       .text daDEMO_DK_Execute__FP13demo_dk_class */
-void daDEMO_DK_Execute(demo_dk_class*) {
+static BOOL daDEMO_DK_Execute(demo_dk_class*) {
     /* Nonmatching */
 }
 
 /* 000004C0-000004C8       .text daDEMO_DK_IsDelete__FP13demo_dk_class */
-void daDEMO_DK_IsDelete(demo_dk_class*) {
+static BOOL daDEMO_DK_IsDelete(demo_dk_class*) {
     /* Nonmatching */
 }
 
 /* 000004C8-000004F8       .text daDEMO_DK_Delete__FP13demo_dk_class */
-void daDEMO_DK_Delete(demo_dk_class*) {
+static BOOL daDEMO_DK_Delete(demo_dk_class*) {
     /* Nonmatching */
 }
 
 /* 000004F8-000005FC       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000005FC-00000714       .text daDEMO_DK_Create__FP10fopAc_ac_c */
-void daDEMO_DK_Create(fopAc_ac_c*) {
+static s32 daDEMO_DK_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

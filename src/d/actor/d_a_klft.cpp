@@ -12,12 +12,12 @@ void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
 }
 
 /* 000003B0-0000046C       .text nodeCallBack_main__FP7J3DNodei */
-void nodeCallBack_main(J3DNode*, int) {
+static BOOL nodeCallBack_main(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 0000046C-00000520       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void himo_Draw(klft_class*) {
 }
 
 /* 000005A0-00000688       .text daKlft_Draw__FP10klft_class */
-void daKlft_Draw(klft_class*) {
+static BOOL daKlft_Draw(klft_class*) {
     /* Nonmatching */
 }
 
@@ -42,31 +42,26 @@ void himo_move(klft_class*) {
 }
 
 /* 00001140-00001444       .text daKlft_Execute__FP10klft_class */
-void daKlft_Execute(klft_class*) {
+static BOOL daKlft_Execute(klft_class*) {
     /* Nonmatching */
 }
 
 /* 00001444-0000144C       .text daKlft_IsDelete__FP10klft_class */
-void daKlft_IsDelete(klft_class*) {
+static BOOL daKlft_IsDelete(klft_class*) {
     /* Nonmatching */
 }
 
 /* 0000144C-00001520       .text daKlft_Delete__FP10klft_class */
-void daKlft_Delete(klft_class*) {
+static BOOL daKlft_Delete(klft_class*) {
     /* Nonmatching */
 }
 
 /* 00001520-000017C4       .text CallbackCreateHeap__FP10fopAc_ac_c */
-void CallbackCreateHeap(fopAc_ac_c*) {
+static BOOL CallbackCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000017C4-00001C78       .text daKlft_Create__FP10fopAc_ac_c */
-void daKlft_Create(fopAc_ac_c*) {
+static s32 daKlft_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-
-
-

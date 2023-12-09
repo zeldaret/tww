@@ -3,7 +3,7 @@
 
 #include "f_op/f_op_actor.h"
 
-struct daSpotbox_c : public fopAc_ac_c {
+class daSpotbox_c : public fopAc_ac_c {
 public:
     inline s32 create();
     inline BOOL draw();

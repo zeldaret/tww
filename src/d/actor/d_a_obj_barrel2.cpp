@@ -211,11 +211,6 @@ void daObjBarrel2::Act_c::set_water_pos() {
     /* Nonmatching */
 }
 
-/* 00002688-000027AC       .text __dt__11dBgS_WtrChkFv */
-dBgS_WtrChk::~dBgS_WtrChk() {
-    /* Nonmatching */
-}
-
 /* 000027AC-00002908       .text afl_sway__Q212daObjBarrel25Act_cFv */
 void daObjBarrel2::Act_c::afl_sway() {
     /* Nonmatching */
@@ -275,18 +270,4 @@ void daObjBarrel2::Method::Draw(void*) {
 void daObjBarrel2::Method::IsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 0000323C-00003338       .text __dt__14dBgS_SplGrpChkFv */
-dBgS_SplGrpChk::~dBgS_SplGrpChk() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
 

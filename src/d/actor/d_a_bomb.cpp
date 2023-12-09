@@ -206,7 +206,7 @@ BOOL daBomb_c::draw() {
     return true;
 }
 
-BOOL daBomb_Draw(daBomb_c* i_this) {
+static BOOL daBomb_Draw(daBomb_c* i_this) {
     return i_this->draw();
 }
 
@@ -1042,7 +1042,7 @@ BOOL daBomb_c::execute() {
     return true;
 }
 
-BOOL daBomb_Execute(daBomb_c* i_this) {
+static BOOL daBomb_Execute(daBomb_c* i_this) {
     return i_this->execute();
 }
 
@@ -1075,7 +1075,7 @@ void daBomb_c::set_mtx() {
         mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
     }
 
-    MTXCopy(mDoMtx_stack_c::get(), mpModel->mBaseTransformMtx);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 void daBomb_c::init_mtx() {
@@ -1083,7 +1083,7 @@ void daBomb_c::init_mtx() {
 }
 
 void daBomb_c::se_cannon_fly_set() {
-    mDoAud_seStart(JA_SE_LK_SHIP_CANNON_FLY, &current.pos, 0, 0);
+    mDoAud_seStart(JA_SE_LK_SHIP_CANNON_FLY, &current.pos);
     field_0x77F = 1;
 }
 
@@ -1107,7 +1107,7 @@ void daBomb_c::eff_water_splash() {
     fopAcM_seStart(this, JA_SE_OBJ_FALL_WATER_S, soundId);
 }
 
-bool daBomb_IsDelete(daBomb_c*) {
+static bool daBomb_IsDelete(daBomb_c*) {
     return true;
 }
 
@@ -1142,14 +1142,14 @@ bool daBomb_c::bombDelete() {
     return true;
 }
 
-BOOL daBomb_Delete(daBomb_c* i_this) {
+static BOOL daBomb_Delete(daBomb_c* i_this) {
     i_this->bombDelete();
     return true;
 }
 
 #include "d/actor/d_a_bomb3.inc"
 
-BOOL daBomb_createHeap(fopAc_ac_c* i_this) {
+static BOOL daBomb_createHeap(fopAc_ac_c* i_this) {
     static_cast<daBomb_c*>(i_this)->createHeap();
 }
 
@@ -1192,7 +1192,7 @@ daBomb_c::daBomb_c() {
     /* Nonmatching */
 }
 
-int daBomb_Create(fopAc_ac_c* i_this) {
+static int daBomb_Create(fopAc_ac_c* i_this) {
     return static_cast<daBomb_c*>(i_this)->create();
 }
 
@@ -1200,7 +1200,7 @@ dCcD_SrcSph l_sph_src = {};
 
 void daBomb_c::create_init() {
     mCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&current.pos, &next.pos, this, true, &mCir, &speed, &current.angle, &shape_angle);
+    mAcch.Set(&current.pos, &next.pos, this, 1, &mCir, &speed, &current.angle, &shape_angle);
     mAcch.ClrWaterNone();
     mAcch.ClrRoofNone();
     mAcch.m_roof_height = 50.0f;

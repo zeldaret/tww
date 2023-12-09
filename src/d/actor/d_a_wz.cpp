@@ -7,12 +7,12 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000140       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 00000140-00000208       .text rod_nodeCallBack__FP7J3DNodei */
-void rod_nodeCallBack(J3DNode*, int) {
+static BOOL rod_nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -32,12 +32,12 @@ void summon_door_draw(wz_class*) {
 }
 
 /* 0000074C-00000814       .text damage_ball_draw__FP8wz_class */
-void damage_ball_draw(wz_class*) {
+static BOOL damage_ball_draw(wz_class*) {
     /* Nonmatching */
 }
 
 /* 00000814-000008C0       .text daWZ_Draw__FP8wz_class */
-void daWZ_Draw(wz_class*) {
+static BOOL daWZ_Draw(wz_class*) {
     /* Nonmatching */
 }
 
@@ -112,48 +112,32 @@ void action_summon_dousa(wz_class*) {
 }
 
 /* 00005B64-00006108       .text daWZ_Execute__FP8wz_class */
-void daWZ_Execute(wz_class*) {
+static BOOL daWZ_Execute(wz_class*) {
     /* Nonmatching */
 }
 
 /* 00006108-00006110       .text daWZ_IsDelete__FP8wz_class */
-void daWZ_IsDelete(wz_class*) {
+static BOOL daWZ_IsDelete(wz_class*) {
     /* Nonmatching */
 }
 
 /* 00006110-0000627C       .text daWZ_Delete__FP8wz_class */
-void daWZ_Delete(wz_class*) {
+static BOOL daWZ_Delete(wz_class*) {
     /* Nonmatching */
 }
 
 /* 0000627C-00006684       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000066CC-00006888       .text useHeapInit2__FP10fopAc_ac_c */
-void useHeapInit2(fopAc_ac_c*) {
+static BOOL useHeapInit2(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00006888-000071C4       .text daWZ_Create__FP10fopAc_ac_c */
-void daWZ_Create(fopAc_ac_c*) {
+static s32 daWZ_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 000071C4-00007494       .text __ct__8wz_classFv */
-wz_class::wz_class() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
 

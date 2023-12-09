@@ -37,7 +37,7 @@ void himo2_disp(himo2_class*) {
 }
 
 /* 800EC338-800ECBE8       .text daHimo2_Draw__FP11himo2_class */
-void daHimo2_Draw(himo2_class*) {
+static BOOL daHimo2_Draw(himo2_class*) {
     /* Nonmatching */
 }
 
@@ -82,42 +82,32 @@ void new_himo2_move(himo2_class*) {
 }
 
 /* 800F01BC-800F062C       .text daHimo2_Execute__FP11himo2_class */
-void daHimo2_Execute(himo2_class*) {
+static BOOL daHimo2_Execute(himo2_class*) {
     /* Nonmatching */
 }
 
 /* 800F062C-800F0634       .text daHimo2_IsDelete__FP11himo2_class */
-void daHimo2_IsDelete(himo2_class*) {
+static BOOL daHimo2_IsDelete(himo2_class*) {
     /* Nonmatching */
 }
 
 /* 800F0634-800F0670       .text daHimo2_Delete__FP11himo2_class */
-void daHimo2_Delete(himo2_class*) {
+static BOOL daHimo2_Delete(himo2_class*) {
     /* Nonmatching */
 }
 
 /* 800F0670-800F07F4       .text CallbackCreateHeap__FP10fopAc_ac_c */
-void CallbackCreateHeap(fopAc_ac_c*) {
+static BOOL CallbackCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 800F07F4-800F0B08       .text daHimo2_Create__FP10fopAc_ac_c */
-void daHimo2_Create(fopAc_ac_c*) {
+static s32 daHimo2_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 800F0B98-800F0BE0       .text __dt__10himo2HIO_cFv */
 himo2HIO_c::~himo2HIO_c() {
-    /* Nonmatching */
-}
-
-/* 800F0C14-800F0C50       .text __dt__7himo2_sFv */
-himo2_s::~himo2_s() {
-    /* Nonmatching */
-}
-
-/* 800F0C50-800F0C54       .text __ct__7himo2_sFv */
-himo2_s::himo2_s() {
     /* Nonmatching */
 }
 

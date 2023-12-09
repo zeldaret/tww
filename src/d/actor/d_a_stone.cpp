@@ -26,16 +26,6 @@ s32 daStone::Act_c::_create() {
     /* Nonmatching */
 }
 
-/* 00000744-00000958       .text __ct__Q27daStone5Act_cFv */
-daStone::Act_c::Act_c() {
-    /* Nonmatching */
-}
-
-/* 00000BA8-00000D10       .text __dt__20dBgS_ObjGndChk_YoganFv */
-dBgS_ObjGndChk_Yogan::~dBgS_ObjGndChk_Yogan() {
-    /* Nonmatching */
-}
-
 /* 000012C8-00001324       .text _delete__Q27daStone5Act_cFv */
 BOOL daStone::Act_c::_delete() {
     /* Nonmatching */
@@ -245,19 +235,3 @@ void daStone::Method::Draw(void*) {
 void daStone::Method::IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

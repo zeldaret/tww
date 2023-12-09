@@ -40,18 +40,18 @@ s32 daMagma_c::create() {
 }
 
 /* 00000078-00000080       .text daMagma_IsDelete__FP9daMagma_c */
-BOOL daMagma_IsDelete(daMagma_c* i_this) {
+static BOOL daMagma_IsDelete(daMagma_c* i_this) {
     return TRUE;
 }
 
 /* 00000080-000000CC       .text daMagma_Delete__FP9daMagma_c */
-BOOL daMagma_Delete(daMagma_c* i_this) {
+static BOOL daMagma_Delete(daMagma_c* i_this) {
     i_this->~daMagma_c();
     return TRUE;
 }
 
 /* 000000CC-00000178       .text daMagma_Create__FP10fopAc_ac_c */
-s32 daMagma_Create(fopAc_ac_c* i_this) {
+static s32 daMagma_Create(fopAc_ac_c* i_this) {
     return ((daMagma_c*)i_this)->create();
 }
 

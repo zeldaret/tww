@@ -37,7 +37,7 @@ void daBalancelift_c::calc_weight() {
 }
 
 /* 00000984-000009A4       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -52,17 +52,17 @@ void daBalancelift_c::CreateInit() {
 }
 
 /* 00000F34-000010E0       .text daBalanceliftCreate__FPv */
-void daBalanceliftCreate(void*) {
+static s32 daBalanceliftCreate(void*) {
     /* Nonmatching */
 }
 
 /* 0000129C-00001318       .text daBalanceliftDelete__FPv */
-void daBalanceliftDelete(void*) {
+static BOOL daBalanceliftDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00001318-0000133C       .text daBalanceliftExecute__FPv */
-void daBalanceliftExecute(void*) {
+static BOOL daBalanceliftExecute(void*) {
     /* Nonmatching */
 }
 
@@ -72,19 +72,12 @@ BOOL daBalancelift_c::_execute() {
 }
 
 /* 000016F0-00001774       .text daBalanceliftDraw__FPv */
-void daBalanceliftDraw(void*) {
+static BOOL daBalanceliftDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00001774-0000177C       .text daBalanceliftIsDelete__FPv */
-void daBalanceliftIsDelete(void*) {
+static BOOL daBalanceliftIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 00001868-000018B0       .text __dt__19daBalancelift_HIO_cFv */
-daBalancelift_HIO_c::~daBalancelift_HIO_c() {
-    /* Nonmatching */
-}
-
-
 

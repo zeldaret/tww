@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 000000EC-00000208       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -17,7 +17,7 @@ void draw_SUB(oq_class*) {
 }
 
 /* 00000310-000004DC       .text daOQ_Draw__FP8oq_class */
-void daOQ_Draw(oq_class*) {
+static BOOL daOQ_Draw(oq_class*) {
     /* Nonmatching */
 }
 
@@ -87,43 +87,27 @@ void action_wakidasi(oq_class*) {
 }
 
 /* 00003BC4-00004274       .text daOQ_Execute__FP8oq_class */
-void daOQ_Execute(oq_class*) {
+static BOOL daOQ_Execute(oq_class*) {
     /* Nonmatching */
 }
 
 /* 00004274-0000427C       .text daOQ_IsDelete__FP8oq_class */
-void daOQ_IsDelete(oq_class*) {
+static BOOL daOQ_IsDelete(oq_class*) {
     /* Nonmatching */
 }
 
 /* 0000427C-00004300       .text daOQ_Delete__FP8oq_class */
-void daOQ_Delete(oq_class*) {
+static BOOL daOQ_Delete(oq_class*) {
     /* Nonmatching */
 }
 
 /* 00004300-000046C0       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00004708-00004DBC       .text daOQ_Create__FP10fopAc_ac_c */
-void daOQ_Create(fopAc_ac_c*) {
+static s32 daOQ_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 00004DBC-00005120       .text __ct__8oq_classFv */
-oq_class::oq_class() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
 

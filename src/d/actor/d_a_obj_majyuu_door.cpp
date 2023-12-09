@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 000000EC-0000010C       .text createHeap_CB__FP10fopAc_ac_c */
-void createHeap_CB(fopAc_ac_c*) {
+static BOOL createHeap_CB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -92,34 +92,27 @@ BOOL daObj_MjDoor_c::_draw() {
 }
 
 /* 00000F28-00000F48       .text daObj_MjDoorCreate__FPv */
-void daObj_MjDoorCreate(void*) {
+static s32 daObj_MjDoorCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00000F48-00000F6C       .text daObj_MjDoorDelete__FPv */
-void daObj_MjDoorDelete(void*) {
+static BOOL daObj_MjDoorDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00000F6C-00000F90       .text daObj_MjDoorExecute__FPv */
-void daObj_MjDoorExecute(void*) {
+static BOOL daObj_MjDoorExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00000F90-00000FB4       .text daObj_MjDoorDraw__FPv */
-void daObj_MjDoorDraw(void*) {
+static BOOL daObj_MjDoorDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00000FB4-00000FBC       .text daObj_MjDoorIsDelete__FPv */
-void daObj_MjDoorIsDelete(void*) {
+static BOOL daObj_MjDoorIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 000010A8-00001104       .text __dt__17daObj_MjDoorHIO_cFv */
-daObj_MjDoorHIO_c::~daObj_MjDoorHIO_c() {
-    /* Nonmatching */
-}
-
-
 

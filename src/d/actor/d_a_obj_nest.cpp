@@ -65,9 +65,3 @@ void daObjNest::Act_c::Execute(float(**)[3][4]) {
 BOOL daObjNest::Act_c::Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

@@ -17,7 +17,7 @@ void daObj_Roten_c::set_mtx() {
 }
 
 /* 00000188-000001A8       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -37,32 +37,27 @@ void Roten_create_check(unsigned char) {
 }
 
 /* 00000410-00000530       .text daObj_RotenCreate__FPv */
-void daObj_RotenCreate(void*) {
+static s32 daObj_RotenCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00000530-0000058C       .text daObj_RotenDelete__FPv */
-void daObj_RotenDelete(void*) {
+static BOOL daObj_RotenDelete(void*) {
     /* Nonmatching */
 }
 
 /* 0000058C-000005C4       .text daObj_RotenExecute__FPv */
-void daObj_RotenExecute(void*) {
+static BOOL daObj_RotenExecute(void*) {
     /* Nonmatching */
 }
 
 /* 000005C4-00000630       .text daObj_RotenDraw__FPv */
-void daObj_RotenDraw(void*) {
+static BOOL daObj_RotenDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00000630-00000638       .text daObj_RotenIsDelete__FPv */
-void daObj_RotenIsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 00000638-00000680       .text __dt__17daObj_Roten_HIO_cFv */
-daObj_Roten_HIO_c::~daObj_Roten_HIO_c() {
+static BOOL daObj_RotenIsDelete(void*) {
     /* Nonmatching */
 }
 

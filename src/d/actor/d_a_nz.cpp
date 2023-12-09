@@ -12,7 +12,7 @@ daNZ_HIO_c::daNZ_HIO_c() {
 }
 
 /* 00000180-00000228       .text nodeCallBack_tail__FP7J3DNodei */
-void nodeCallBack_tail(J3DNode*, int) {
+static BOOL nodeCallBack_tail(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -27,12 +27,12 @@ void tail_draw(nz_class*) {
 }
 
 /* 00000C88-00000D64       .text nodeCallBack_head__FP7J3DNodei */
-void nodeCallBack_head(J3DNode*, int) {
+static BOOL nodeCallBack_head(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 00000D64-00000E60       .text nodeCallBack_hand__FP7J3DNodei */
-void nodeCallBack_hand(J3DNode*, int) {
+static BOOL nodeCallBack_hand(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -47,7 +47,7 @@ void rakka_line_check(nz_class*) {
 }
 
 /* 00001578-0000178C       .text daNZ_Draw__FP8nz_class */
-void daNZ_Draw(nz_class*) {
+static BOOL daNZ_Draw(nz_class*) {
     /* Nonmatching */
 }
 
@@ -147,22 +147,22 @@ void nz6_move(nz_class*) {
 }
 
 /* 000072D8-00007B50       .text daNZ_Execute__FP8nz_class */
-void daNZ_Execute(nz_class*) {
+static BOOL daNZ_Execute(nz_class*) {
     /* Nonmatching */
 }
 
 /* 00007B50-00007B58       .text daNZ_IsDelete__FP8nz_class */
-void daNZ_IsDelete(nz_class*) {
+static BOOL daNZ_IsDelete(nz_class*) {
     /* Nonmatching */
 }
 
 /* 00007B58-00007BE0       .text daNZ_Delete__FP8nz_class */
-void daNZ_Delete(nz_class*) {
+static BOOL daNZ_Delete(nz_class*) {
     /* Nonmatching */
 }
 
 /* 00007BE0-00007EB0       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -172,35 +172,7 @@ void daNZ_CreateInit(nz_class*) {
 }
 
 /* 000081AC-00008294       .text daNZ_Create__FP10fopAc_ac_c */
-void daNZ_Create(fopAc_ac_c*) {
+static s32 daNZ_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 00008294-000085C0       .text __ct__8nz_classFv */
-nz_class::nz_class() {
-    /* Nonmatching */
-}
-
-/* 00008D28-00008D84       .text __dt__10daNZ_HIO_cFv */
-daNZ_HIO_c::~daNZ_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

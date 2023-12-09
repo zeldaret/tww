@@ -26,7 +26,7 @@ void texScrollCheck(float& v) {
 BOOL daVrbox2_color_set(vrbox2_class*);
 
 /* 8015EA5C-8015EC30       .text daVrbox2_Draw__FP12vrbox2_class */
-BOOL daVrbox2_Draw(vrbox2_class* i_this) {
+static BOOL daVrbox2_Draw(vrbox2_class* i_this) {
     J3DModel * pBackCloud = i_this->mpBackCloud;
     J3DModel * pKasumiMae = i_this->mpKasumiMae;
     J3DModel * pUsoUmi = i_this->mpUsoUmi;
@@ -239,22 +239,22 @@ BOOL daVrbox2_color_set(vrbox2_class* i_this) {
 }
 
 /* 8015F368-8015F370       .text daVrbox2_Execute__FP12vrbox2_class */
-BOOL daVrbox2_Execute(vrbox2_class*) {
+static BOOL daVrbox2_Execute(vrbox2_class*) {
     return TRUE;
 }
 
 /* 8015F370-8015F378       .text daVrbox2_IsDelete__FP12vrbox2_class */
-BOOL daVrbox2_IsDelete(vrbox2_class*) {
+static BOOL daVrbox2_IsDelete(vrbox2_class*) {
     return TRUE;
 }
 
 /* 8015F378-8015F380       .text daVrbox2_Delete__FP12vrbox2_class */
-BOOL daVrbox2_Delete(vrbox2_class*) {
+static BOOL daVrbox2_Delete(vrbox2_class*) {
     return TRUE;
 }
 
 /* 8015F380-8015F4D4       .text daVrbox2_solidHeapCB__FP10fopAc_ac_c */
-BOOL daVrbox2_solidHeapCB(fopAc_ac_c* i_actor) {
+static BOOL daVrbox2_solidHeapCB(fopAc_ac_c* i_actor) {
     vrbox2_class* i_this = static_cast<vrbox2_class*>(i_actor);
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getStageRes("Stage", "vr_back_cloud.bdl");
@@ -276,7 +276,7 @@ BOOL daVrbox2_solidHeapCB(fopAc_ac_c* i_actor) {
 }
 
 /* 8015F4D4-8015F550       .text daVrbox2_Create__FP10fopAc_ac_c */
-s32 daVrbox2_Create(fopAc_ac_c* i_actor) {
+static s32 daVrbox2_Create(fopAc_ac_c* i_actor) {
     fopAcM_SetupActor(i_actor, vrbox2_class);
     vrbox2_class* i_this = static_cast<vrbox2_class*>(i_actor);
 

@@ -12,12 +12,12 @@ daNpcAh_c::daNpcAh_c() {
 }
 
 /* 000005C0-000006DC       .text da_Npc_Ah_nodeCallBack__FP7J3DNodei */
-void da_Npc_Ah_nodeCallBack(J3DNode*, int) {
+static BOOL da_Npc_Ah_nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 000006DC-000006FC       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -217,31 +217,26 @@ void daNpcAh_c::chkEndEvent() {
 }
 
 /* 00002338-00002358       .text daNpc_AhCreate__FPv */
-void daNpc_AhCreate(void*) {
+static s32 daNpc_AhCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00002358-0000237C       .text daNpc_AhDelete__FPv */
-void daNpc_AhDelete(void*) {
+static BOOL daNpc_AhDelete(void*) {
     /* Nonmatching */
 }
 
 /* 0000237C-000023A0       .text daNpc_AhExecute__FPv */
-void daNpc_AhExecute(void*) {
+static BOOL daNpc_AhExecute(void*) {
     /* Nonmatching */
 }
 
 /* 000023A0-000023C4       .text daNpc_AhDraw__FPv */
-void daNpc_AhDraw(void*) {
+static BOOL daNpc_AhDraw(void*) {
     /* Nonmatching */
 }
 
 /* 000023C4-000023CC       .text daNpc_AhIsDelete__FPv */
-void daNpc_AhIsDelete(void*) {
+static BOOL daNpc_AhIsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-
-

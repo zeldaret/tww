@@ -129,27 +129,27 @@ bool daSwAt_c::_draw() {
 }
 
 /* 00000564-00000584       .text daSwAt_Create__FPv */
-s32 daSwAt_Create(void* i_this) {
+static s32 daSwAt_Create(void* i_this) {
     return ((daSwAt_c*)i_this)->_create();
 }
 
 /* 00000584-000005A8       .text daSwAt_Delete__FPv */
-BOOL daSwAt_Delete(void* i_this) {
+static BOOL daSwAt_Delete(void* i_this) {
     return ((daSwAt_c*)i_this)->_delete();
 }
 
 /* 000005A8-000005CC       .text daSwAt_Draw__FPv */
-BOOL daSwAt_Draw(void* i_this) {
+static BOOL daSwAt_Draw(void* i_this) {
     return ((daSwAt_c*)i_this)->_draw();
 }
 
 /* 000005CC-000005F0       .text daSwAt_Execute__FPv */
-BOOL daSwAt_Execute(void* i_this) {
+static BOOL daSwAt_Execute(void* i_this) {
     return ((daSwAt_c*)i_this)->_execute();
 }
 
 /* 000005F0-000005F8       .text daSwAt_IsDelete__FPv */
-BOOL daSwAt_IsDelete(void* i_this) {
+static BOOL daSwAt_IsDelete(void* i_this) {
     return TRUE;
 }
 

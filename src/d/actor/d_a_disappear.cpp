@@ -14,12 +14,12 @@
 #include "dolphin/types.h"
 
 /* 800E79C0-800E79C8       .text daDisappear_Draw__FP15disappear_class */
-BOOL daDisappear_Draw(disappear_class*) {
+static BOOL daDisappear_Draw(disappear_class*) {
     return TRUE;
 }
 
 /* 800E79C8-800E7AC0       .text daDisappear_Execute__FP15disappear_class */
-BOOL daDisappear_Execute(disappear_class* i_this) {
+static BOOL daDisappear_Execute(disappear_class* i_this) {
     if (i_this->mTimer != 0) {
         i_this->mTimer--;
         
@@ -28,7 +28,7 @@ BOOL daDisappear_Execute(disappear_class* i_this) {
 
             if (health != 1 && health != 3) {
                 if (health == 2) {
-                    fopAcM_createItemForBoss(&i_this->current.pos, 0, i_this->current.roomNo, &i_this->current.angle, NULL, 0);
+                    fopAcM_createItemForBoss(&i_this->current.pos, 0, i_this->current.roomNo, &i_this->current.angle);
                 }
                 else if (health >= 0x0A && health <= 0x0D) {
                     if (health < 0x0D) {
@@ -36,7 +36,7 @@ BOOL daDisappear_Execute(disappear_class* i_this) {
                             0, 10, 16
                         };
 
-                        fopAcM_createItem(&i_this->current.pos, ki_item_d[health - 0xA], -1, -1, 0, NULL, 4, NULL);
+                        fopAcM_createItem(&i_this->current.pos, ki_item_d[health - 0xA], -1, -1, 0, NULL, 4);
                     }
                 }
                 else {
@@ -53,19 +53,18 @@ BOOL daDisappear_Execute(disappear_class* i_this) {
 }
 
 /* 800E7AC0-800E7AC8       .text daDisappear_IsDelete__FP15disappear_class */
-BOOL daDisappear_IsDelete(disappear_class*) {
+static BOOL daDisappear_IsDelete(disappear_class*) {
     return TRUE;
 }
 
 /* 800E7AC8-800E7AD0       .text daDisappear_Delete__FP15disappear_class */
-BOOL daDisappear_Delete(disappear_class*) {
+static BOOL daDisappear_Delete(disappear_class*) {
     return TRUE;
 }
 
 /* 800E7AD0-800E7DBC       .text set_disappear__FP15disappear_classf */
 void set_disappear(disappear_class* i_this, float scale) {
-    s8 rev = dComIfGp_getReverb(i_this->current.roomNo);
-    mDoAud_seStart(JA_SE_CM_MONS_EXPLODE, &i_this->mEyePos, 0, rev);
+    fopAcM_seStart(i_this, JA_SE_CM_MONS_EXPLODE, 0);
 
     cXyz particleScale(scale, scale, scale);
     i_this->mTimer = 58 + g_regHIO.mChild[8].mShortRegs[0];
@@ -96,7 +95,7 @@ void set_disappear(disappear_class* i_this, float scale) {
 }
 
 /* 800E7DBC-800E7E60       .text daDisappear_Create__FP10fopAc_ac_c */
-s32 daDisappear_Create(fopAc_ac_c* i_this) {
+static s32 daDisappear_Create(fopAc_ac_c* i_this) {
     disappear_class* dis = static_cast<disappear_class*>(i_this);
 
     fopAcM_SetupActor(dis, disappear_class);

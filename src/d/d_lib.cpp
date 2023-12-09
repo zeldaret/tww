@@ -205,7 +205,7 @@ void dLib_setNextStageBySclsNum(u8 i_sclsnum, s8 room_no) {
     stage_scls_info_class* scls_entry = &scls_data[i_sclsnum];
     s32 wipe = dStage_sclsInfo_getWipe(scls_entry);
     wipe = wipe == 0xFF ? 0 : wipe;
-    dComIfGp_setNextStage(scls_entry->mStage, scls_entry->mStart, scls_entry->mRoom, -1, 0.0f, 0, 1, wipe);
+    dComIfGp_setNextStage(scls_entry->mStage, scls_entry->mStart, scls_entry->mRoom, -1, 0.0f, 0, TRUE, wipe);
 }
 
 /* 80057EC0-80057F30       .text dLib_setFirstMsg__FUsUlUl */

@@ -32,12 +32,12 @@ void search_imouto(kamome_class*) {
 }
 
 /* 00000ABC-00000B84       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 00000B84-00000CAC       .text daKamome_Draw__FP12kamome_class */
-void daKamome_Draw(kamome_class*) {
+static BOOL daKamome_Draw(kamome_class*) {
     /* Nonmatching */
 }
 
@@ -112,41 +112,27 @@ void daKamome_setMtx(kamome_class*) {
 }
 
 /* 00004768-000049F8       .text daKamome_Execute__FP12kamome_class */
-void daKamome_Execute(kamome_class*) {
+static BOOL daKamome_Execute(kamome_class*) {
     /* Nonmatching */
 }
 
 /* 000049F8-00004A00       .text daKamome_IsDelete__FP12kamome_class */
-void daKamome_IsDelete(kamome_class*) {
+static BOOL daKamome_IsDelete(kamome_class*) {
     /* Nonmatching */
 }
 
 /* 00004A00-00004A70       .text daKamome_Delete__FP12kamome_class */
-void daKamome_Delete(kamome_class*) {
+static BOOL daKamome_Delete(kamome_class*) {
     /* Nonmatching */
 }
 
 /* 00004A70-00004B94       .text createHeap__FP10fopAc_ac_c */
-void createHeap(fopAc_ac_c*) {
+static BOOL createHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00004B94-00004F84       .text daKamome_Create__FP10fopAc_ac_c */
-void daKamome_Create(fopAc_ac_c*) {
+static s32 daKamome_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 00005308-00005350       .text __dt__11kamomeHIO_cFv */
-kamomeHIO_c::~kamomeHIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
 

@@ -313,7 +313,7 @@ struct mDoExt_MtxCalcAnmBlendTblOld : public mDoExt_MtxCalcAnmBlendTbl {
 class mDoExt_McaMorfCallBack1_c {
 public:
     virtual ~mDoExt_McaMorfCallBack1_c() {}
-    virtual void execute(u16, J3DTransformInfo*) = 0;
+    virtual bool execute(u16, J3DTransformInfo*) = 0;
 };
 
 class mDoExt_McaMorfCallBack2_c {
@@ -374,6 +374,7 @@ public:
     BOOL checkFrame(f32 frame) {
         return mFrameCtrl.checkPass(frame);
     }
+    void isMorf() {} // TODO
 
     /* 0x50 */ J3DModel* mpModel;
     /* 0x54 */ J3DAnmTransform* mpAnm;
@@ -407,6 +408,30 @@ public:
     void stopZelAnime();
 
     J3DModel* getModel() { return mpModel; }
+    u8 getPlayMode() { return mFrameCtrl.getAttribute(); }
+    void setPlayMode(int mode) { mFrameCtrl.setAttribute(mode); }
+    f32 getStartFrame() { return mFrameCtrl.getStart(); }
+    void setStartFrame(f32 frame) { mFrameCtrl.setStart(frame); }
+    f32 getEndFrame() { return mFrameCtrl.getEnd(); }
+    void setEndFrame(f32 frame) { mFrameCtrl.setEnd(frame); }
+    f32 getLoopFrame() { return mFrameCtrl.getLoop(); }
+    void setLoopFrame(f32 frame) { mFrameCtrl.setLoop(frame); }
+    f32 getPlaySpeed() { return mFrameCtrl.getRate(); }
+    void setPlaySpeed(f32 speed) { mFrameCtrl.setRate(speed); }
+    f32 getFrame() { return mFrameCtrl.getFrame(); }
+    void setFrame(f32 frame) { mFrameCtrl.setFrame((s16)frame); }
+    BOOL isStop() { //regswap somewhere here
+        bool stopped = true;
+        if (!mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && mFrameCtrl.getRate() != 0.0f) {
+            stopped = false;
+        }
+        return stopped;
+    }
+    BOOL checkFrame(f32 frame) {
+        return mFrameCtrl.checkPass(frame);
+    }
+    BOOL isMorf() { return field_0x78 < 1.0f; }
+    void setAnmRate(f32) {} // TODO
 
     /* 0x50 */ J3DModel* mpModel;
     /* 0x54 */ J3DAnmTransform* field_0x54;

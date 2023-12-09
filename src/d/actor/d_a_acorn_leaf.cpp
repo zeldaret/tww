@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 000000EC-0000010C       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -52,29 +52,26 @@ BOOL daAleaf_c::_draw() {
 }
 
 /* 00000CD4-00000CF4       .text daAleaf_Create__FPv */
-void daAleaf_Create(void*) {
+static s32 daAleaf_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000CF4-00000D24       .text daAleaf_Delete__FPv */
-void daAleaf_Delete(void*) {
+static BOOL daAleaf_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000D24-00000D48       .text daAleaf_Draw__FPv */
-void daAleaf_Draw(void*) {
+static BOOL daAleaf_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000D48-00000D6C       .text daAleaf_Execute__FPv */
-void daAleaf_Execute(void*) {
+static BOOL daAleaf_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00000D6C-00000D74       .text daAleaf_IsDelete__FPv */
-void daAleaf_IsDelete(void*) {
+static BOOL daAleaf_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

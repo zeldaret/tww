@@ -70,9 +70,3 @@ BOOL daObjVgnfd_c::_execute() {
 BOOL daObjVgnfd_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

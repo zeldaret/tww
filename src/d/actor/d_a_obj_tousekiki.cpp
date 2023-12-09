@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 000000EC-0000010C       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -17,7 +17,7 @@ void daObj_Tousekiki_c::CreateHeap() {
 }
 
 /* 000002BC-000002DC       .text daObj_TousekikiCreate__FPv */
-void daObj_TousekikiCreate(void*) {
+static s32 daObj_TousekikiCreate(void*) {
     /* Nonmatching */
 }
 
@@ -27,24 +27,21 @@ s32 daObj_Tousekiki_c::_create() {
 }
 
 /* 000006E8-00000718       .text daObj_TousekikiDelete__FPv */
-void daObj_TousekikiDelete(void*) {
+static BOOL daObj_TousekikiDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00000718-000008A4       .text daObj_TousekikiExecute__FPv */
-void daObj_TousekikiExecute(void*) {
+static BOOL daObj_TousekikiExecute(void*) {
     /* Nonmatching */
 }
 
 /* 000008A4-00000934       .text daObj_TousekikiDraw__FPv */
-void daObj_TousekikiDraw(void*) {
+static BOOL daObj_TousekikiDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00000934-0000093C       .text daObj_TousekikiIsDelete__FPv */
-void daObj_TousekikiIsDelete(void*) {
+static BOOL daObj_TousekikiIsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

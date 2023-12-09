@@ -12,7 +12,7 @@ BOOL daSwProp_c::_delete() {
 }
 
 /* 000000B8-000000D8       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void daSwProp_c::CreateInit() {
 }
 
 /* 00000350-00000404       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -52,31 +52,26 @@ BOOL daSwProp_c::_draw() {
 }
 
 /* 00000C00-00000C20       .text daSwProp_Create__FPv */
-void daSwProp_Create(void*) {
+static s32 daSwProp_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000C20-00000C44       .text daSwProp_Delete__FPv */
-void daSwProp_Delete(void*) {
+static BOOL daSwProp_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000C44-00000C68       .text daSwProp_Draw__FPv */
-void daSwProp_Draw(void*) {
+static BOOL daSwProp_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000C68-00000C8C       .text daSwProp_Execute__FPv */
-void daSwProp_Execute(void*) {
+static BOOL daSwProp_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00000C8C-00000C94       .text daSwProp_IsDelete__FPv */
-void daSwProp_IsDelete(void*) {
+static BOOL daSwProp_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-
-

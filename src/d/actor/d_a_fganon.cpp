@@ -22,7 +22,7 @@ void tama_draw(fganon_class*) {
 }
 
 /* 00000338-00000420       .text daFganon_Draw__FP12fganon_class */
-void daFganon_Draw(fganon_class*) {
+static BOOL daFganon_Draw(fganon_class*) {
     /* Nonmatching */
 }
 
@@ -101,11 +101,6 @@ void down(fganon_class*) {
     /* Nonmatching */
 }
 
-/* 00003B3C-00003CA4       .text __dt__18dBgS_ObjGndChk_SplFv */
-dBgS_ObjGndChk_Spl::~dBgS_ObjGndChk_Spl() {
-    /* Nonmatching */
-}
-
 /* 00003F7C-00004300       .text kabe_check__FP12fganon_class */
 void kabe_check(fganon_class*) {
     /* Nonmatching */
@@ -177,58 +172,27 @@ void mahou_se_set(void*, void*) {
 }
 
 /* 000086B4-0000924C       .text daFganon_Execute__FP12fganon_class */
-void daFganon_Execute(fganon_class*) {
+static BOOL daFganon_Execute(fganon_class*) {
     /* Nonmatching */
 }
 
 /* 0000924C-00009254       .text daFganon_IsDelete__FP12fganon_class */
-void daFganon_IsDelete(fganon_class*) {
+static BOOL daFganon_IsDelete(fganon_class*) {
     /* Nonmatching */
 }
 
 /* 00009254-000093B4       .text daFganon_Delete__FP12fganon_class */
-void daFganon_Delete(fganon_class*) {
+static BOOL daFganon_Delete(fganon_class*) {
     /* Nonmatching */
 }
 
 /* 000093B4-000097FC       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00009844-00009C70       .text daFganon_Create__FP10fopAc_ac_c */
-void daFganon_Create(fopAc_ac_c*) {
+static s32 daFganon_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 00009C70-00009EF4       .text __ct__12fganon_classFv */
-fganon_class::fganon_class() {
-    /* Nonmatching */
-}
-
-/* 0000A65C-0000A6A4       .text __dt__14daFganon_HIO_cFv */
-daFganon_HIO_c::~daFganon_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

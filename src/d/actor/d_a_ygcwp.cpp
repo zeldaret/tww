@@ -60,9 +60,3 @@ BOOL daYgcwp_c::_execute() {
 BOOL daYgcwp_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

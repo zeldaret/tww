@@ -40,9 +40,3 @@ void daObjTimer::Act_c::mode_count() {
 BOOL daObjTimer::Act_c::_execute() {
     /* Nonmatching */
 }
-
-
-
-
-
-

@@ -35,9 +35,9 @@ void daHot_Floor_c::set_mtx() {
         mDoMtx_copy(mDoMtx_stack_c::get(), mtx[0]);
         mDoMtx_stack_c::multVec(&pos, &current.pos);
         if (mEmitter2 != NULL)
-            JPASetRMtxTVecfromMtx(mtx[0], mEmitter2->mGlobalRotation, mEmitter2->mGlobalTranslation);
+            mEmitter2->setGlobalRTMatrix(mtx[0]);
         if (mEmitter1 != NULL)
-            JPASetRMtxTVecfromMtx(mtx[0], mEmitter1->mGlobalRotation, mEmitter1->mGlobalTranslation);
+            mEmitter1->setGlobalRTMatrix(mtx[0]);
     }
     mtx_p = NULL;
 }
@@ -97,27 +97,27 @@ bool daHot_Floor_c::_draw() {
 }
 
 /* 00000264-000002F8       .text daHot_FloorCreate__FPv */
-s32 daHot_FloorCreate(void* i_this) {
+static s32 daHot_FloorCreate(void* i_this) {
     return ((daHot_Floor_c*)i_this)->_create();
 }
 
 /* 000003F8-00000440       .text daHot_FloorDelete__FPv */
-BOOL daHot_FloorDelete(void* i_this) {
+static BOOL daHot_FloorDelete(void* i_this) {
     return ((daHot_Floor_c*)i_this)->_delete();
 }
 
 /* 00000440-00000604       .text daHot_FloorExecute__FPv */
-BOOL daHot_FloorExecute(void* i_this) {
+static BOOL daHot_FloorExecute(void* i_this) {
     return ((daHot_Floor_c*)i_this)->_execute();
 }
 
 /* 00000604-0000060C       .text daHot_FloorDraw__FPv */
-BOOL daHot_FloorDraw(void* i_this) {
+static BOOL daHot_FloorDraw(void* i_this) {
     return ((daHot_Floor_c*)i_this)->_draw();
 }
 
 /* 0000060C-00000614       .text daHot_FloorIsDelete__FPv */
-BOOL daHot_FloorIsDelete(void* i_this) {
+static BOOL daHot_FloorIsDelete(void* i_this) {
     return TRUE;
 }
 

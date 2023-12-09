@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -32,7 +32,7 @@ void daObjGtaki_c::set_mtx() {
 }
 
 /* 00000684-000006A4       .text daObjGtaki_Create__FPv */
-void daObjGtaki_Create(void*) {
+static s32 daObjGtaki_Create(void*) {
     /* Nonmatching */
 }
 
@@ -42,24 +42,21 @@ s32 daObjGtaki_c::_create() {
 }
 
 /* 00000AD8-00000B38       .text daObjGtaki_Delete__FPv */
-void daObjGtaki_Delete(void*) {
+static BOOL daObjGtaki_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000B38-00000C08       .text daObjGtaki_Draw__FPv */
-void daObjGtaki_Draw(void*) {
+static BOOL daObjGtaki_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000C08-00000C64       .text daObjGtaki_Execute__FPv */
-void daObjGtaki_Execute(void*) {
+static BOOL daObjGtaki_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00000C64-00000C6C       .text daObjGtaki_IsDelete__FPv */
-void daObjGtaki_IsDelete(void*) {
+static BOOL daObjGtaki_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

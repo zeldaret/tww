@@ -141,7 +141,7 @@ void daObjTpost_c::cutProc() {
         "DISP_LETTER"
     };
 
-    int staffIdx = dComIfGp_evmng_getMyStaffId("Tpost", 0, 0);
+    int staffIdx = dComIfGp_evmng_getMyStaffId("Tpost");
     if(staffIdx != -1) {
         int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), 1, 0);
         if(actIdx == -1) {
@@ -182,7 +182,7 @@ void daObjTpost_c::cutPresentStart(int staffIdx) {
 }
 
 void daObjTpost_c::cutPresentProc(int staffIdx) {
-    u32 itemPID = fopAcM_createItemForPresentDemo(&current.pos, m_letter[mNumReadable].mItemNo, 0, -1, -1, 0, 0);
+    u32 itemPID = fopAcM_createItemForPresentDemo(&current.pos, m_letter[mNumReadable].mItemNo);
     if(itemPID != fpcM_ERROR_PROCESS_ID_e) {
         dComIfGp_event_setItemPartnerId(itemPID);
         dComIfGp_evmng_cutEnd(staffIdx);
@@ -618,7 +618,7 @@ void daObjTpost_c::setAnm(s8 param_1, bool param_2) {
     }
 
     if(field_0x6C8 == 0 && mMorf->getFrame() == 1.0f) {
-        mDoAud_seStart(JA_SE_OBJ_POST_EAT_LUGGAGE, 0, 0, 0);
+        mDoAud_seStart(JA_SE_OBJ_POST_EAT_LUGGAGE);
     }
 
     if(field_0x6C8 == 1) {
@@ -626,7 +626,7 @@ void daObjTpost_c::setAnm(s8 param_1, bool param_2) {
         scale.setall(1.0f);
         if(mMorf->getFrame() == 1.0f) {
             dComIfGp_particle_set(0x8190, &current.pos, &current.angle, &scale);
-            mDoAud_seStart(JA_SE_OBJ_POST_LUGGAGE_OUT, 0, 0, 0);
+            mDoAud_seStart(JA_SE_OBJ_POST_LUGGAGE_OUT);
         }
     }
 
@@ -639,7 +639,7 @@ void daObjTpost_c::setMtx() {
 
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
-    MTXCopy(mDoMtx_stack_c::get(), pModel->getBaseTRMtx());
+    pModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 void daObjTpost_c::modeWaitInit() {
@@ -930,7 +930,7 @@ void daObjTpost_c::createInit() {
     modeProc(PROC_INIT, 0);
 
     mAcchCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&current.pos, &next.pos, this, 1, &mAcchCir, &speed, 0, 0);
+    mAcch.Set(&current.pos, &next.pos, this, 1, &mAcchCir, &speed);
     mAcch.SetRoofNone();
     mGravity = -4.5f;
 

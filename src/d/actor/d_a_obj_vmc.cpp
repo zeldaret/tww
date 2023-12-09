@@ -70,11 +70,3 @@ BOOL daObjVmc::Act_c::_execute() {
 BOOL daObjVmc::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-

@@ -22,7 +22,7 @@ void daNpc_tt_XyEventCB(void*, int) {
 }
 
 /* 00000108-000002D8       .text nodeCallBack_Tt__FP7J3DNodei */
-void nodeCallBack_Tt(J3DNode*, int) {
+static BOOL nodeCallBack_Tt(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -212,22 +212,12 @@ BOOL daNpc_Tt_c::_delete() {
 }
 
 /* 000021A8-000021C8       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000021C8-0000241C       .text _create__10daNpc_Tt_cFv */
 s32 daNpc_Tt_c::_create() {
-    /* Nonmatching */
-}
-
-/* 0000241C-00002498       .text __dt__7tt_ke_sFv */
-tt_ke_s::~tt_ke_s() {
-    /* Nonmatching */
-}
-
-/* 00002498-00002500       .text __ct__7tt_ke_sFv */
-tt_ke_s::tt_ke_s() {
     /* Nonmatching */
 }
 
@@ -237,34 +227,29 @@ void daNpc_Tt_c::CreateHeap() {
 }
 
 /* 00002AB0-00002AD0       .text daNpc_Tt_Create__FP10fopAc_ac_c */
-void daNpc_Tt_Create(fopAc_ac_c*) {
+static s32 daNpc_Tt_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00002AD0-00002AF0       .text daNpc_Tt_Delete__FP10daNpc_Tt_c */
-void daNpc_Tt_Delete(daNpc_Tt_c*) {
+static BOOL daNpc_Tt_Delete(daNpc_Tt_c*) {
     /* Nonmatching */
 }
 
 /* 00002AF0-00002B10       .text daNpc_Tt_Execute__FP10daNpc_Tt_c */
-void daNpc_Tt_Execute(daNpc_Tt_c*) {
+static BOOL daNpc_Tt_Execute(daNpc_Tt_c*) {
     /* Nonmatching */
 }
 
 /* 00002B10-00002B30       .text daNpc_Tt_Draw__FP10daNpc_Tt_c */
-void daNpc_Tt_Draw(daNpc_Tt_c*) {
+static BOOL daNpc_Tt_Draw(daNpc_Tt_c*) {
     /* Nonmatching */
 }
 
 /* 00002B30-00002B38       .text daNpc_Tt_IsDelete__FP10daNpc_Tt_c */
-void daNpc_Tt_IsDelete(daNpc_Tt_c*) {
+static BOOL daNpc_Tt_IsDelete(daNpc_Tt_c*) {
     /* Nonmatching */
 }
-
-
-
-
-
 /* 00002C60-00002C7C       .text setEyePos__10daNpc_Tt_cF4cXyz */
 void daNpc_Tt_c::setEyePos(cXyz) {
     /* Nonmatching */

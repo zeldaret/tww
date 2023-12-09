@@ -207,7 +207,7 @@ int createRoomScene(int param_0) {
 }
 
 /* 80040E38-80040E6C       .text checkRoomDisp__20dStage_roomControl_cCFi */
-bool dStage_roomControl_c::checkRoomDisp(int i_roomNo) const {
+BOOL dStage_roomControl_c::checkRoomDisp(int i_roomNo) const {
     if (checkStatusFlag(i_roomNo, 8)) {
         return false;
     }
@@ -218,7 +218,7 @@ bool dStage_roomControl_c::checkRoomDisp(int i_roomNo) const {
 /* 80040E6C-80040FD8       .text loadRoom__20dStage_roomControl_cFiPUc */
 int dStage_roomControl_c::loadRoom(int roomCount, u8* rooms) {
     for (int roomNo = 0; roomNo < ARRAY_SIZE(mStatus); roomNo++) {
-        if (dStage_roomControl_c::checkStatusFlag(roomNo, 0x02 | 0x04)) {
+        if (checkStatusFlag(roomNo, 0x02 | 0x04)) {
             return 0;
         }
     }
@@ -227,7 +227,7 @@ int dStage_roomControl_c::loadRoom(int roomCount, u8* rooms) {
     for (int roomNo = 0; roomNo < (int)ARRAY_SIZE(mStatus); roomNo++) {
         if (dStage_roomControl_c::checkStatusFlag(roomNo, 0x01)) {
             if (!stayRoomCheck(roomCount, rooms, roomNo)) {
-                dStage_roomControl_c::onStatusFlag(roomNo, 0x04);
+                onStatusFlag(roomNo, 0x04);
                 r26 = FALSE;
             }
         }
@@ -239,10 +239,10 @@ int dStage_roomControl_c::loadRoom(int roomCount, u8* rooms) {
     for (int i = 0; i < roomCount; i++) {
         u8 roomNo = dStage_roomRead_dt_c_GetLoadRoomIndex(rooms[i]);
         dStage_roomControl_c::setZoneCount(roomNo, 2);
-        if (!dStage_roomControl_c::checkStatusFlag(roomNo, 0x01)) {
+        if (!checkStatusFlag(roomNo, 0x01)) {
             if (createRoomScene(roomNo)) {
                 u8 flag = dStage_roomRead_dt_c_ChkBg(rooms[i]) ? 0x02 : 0x0A;
-                dStage_roomControl_c::onStatusFlag(roomNo, flag);
+                onStatusFlag(roomNo, flag);
             }
             return TRUE;
         }
@@ -1489,13 +1489,13 @@ int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* i_file)
     JUT_ASSERT(1842, stageProc != 0);
 
     if (stageProc->mBase.mBase.mProcName != PROC_PLAY_SCENE) {
-        fopAcM_create(PROC_TITLE, 0, NULL, -1, NULL, NULL, 255, NULL);
+        fopAcM_create(PROC_TITLE, 0);
     }
 
     fopMsgM_Create(PROC_METER, NULL, NULL);
 
     cXyz agb_pos(appen->mPos.x, appen->mPos.y + 10.0f, appen->mPos.z);
-    fopAcM_create(PROC_AGB, 0, &agb_pos, -1, NULL, NULL, 255, NULL);
+    fopAcM_create(PROC_AGB, 0, &agb_pos);
     dComIfGp_setAgb(NULL);
     return 1;
 }
@@ -1962,10 +1962,10 @@ int dStage_roomDrtgInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*
 
 /* 80042EB8-80042F14       .text dKankyo_create__Fv */
 void dKankyo_create() {
-    fopKyM_Create(PROC_KANKYO, NULL, NULL);
-    fopKyM_Create(PROC_KYEFF, NULL, NULL);
-    fopKyM_Create(PROC_KYEFF2, NULL, NULL);
-    fopKyM_Create(PROC_ENVSE, NULL, NULL);
+    fopKyM_Create(PROC_KANKYO);
+    fopKyM_Create(PROC_KYEFF);
+    fopKyM_Create(PROC_KYEFF2);
+    fopKyM_Create(PROC_ENVSE);
 }
 
 /* 80042F14-80042FC4       .text dStage_dt_c_decode__FPvP11dStage_dt_cP9FuncTablei */
@@ -2262,9 +2262,9 @@ int dStage_changeSceneExitId(cBgS_PolyInfo& i_poly, f32 i_speed, u32 i_mode, s8 
         s16 point = IkadaGetLinkIdArg1(actor_p);
 
         if (exit_id == 0x3E) {
-            dComIfGp_setNextStage("Obshop", point, roomNo, -1, i_speed, i_mode, 1, 0);
+            dComIfGp_setNextStage("Obshop", point, roomNo, -1, i_speed, i_mode);
         } else if (exit_id == 0x3B) {
-            dComIfGp_setNextStage("Abship", point, roomNo, -1, i_speed, i_mode, 1, 0);
+            dComIfGp_setNextStage("Abship", point, roomNo, -1, i_speed, i_mode);
         }
 
         dComIfGp_setIkadaShipBeforeRoomId(i_roomNo);
@@ -2274,22 +2274,21 @@ int dStage_changeSceneExitId(cBgS_PolyInfo& i_poly, f32 i_speed, u32 i_mode, s8 
     } else if (exit_id == 0x3D) {
         JUT_ASSERT(4134, dComIfGp_getIkadaShipBeforeRoomId() >= 0 &&
                              dComIfGp_getIkadaShipBeforeRoomId() < 64);
-        dComIfGp_setNextStage("sea", -2, dComIfGp_getIkadaShipBeforeRoomId(), -1, i_speed, i_mode,
-                              1, 0);
+        dComIfGp_setNextStage("sea", -2, dComIfGp_getIkadaShipBeforeRoomId(), -1, i_speed, i_mode);
         return 1;
     } else if (exit_id == 0x3C) {
         if (strcmp(dComIfGp_getStartStageName(), "Asoko") == 0) {
             if (dComIfGs_isEventBit(0x808)) {
                 if (dComIfGs_isEventBit(0x520)) {
-                    dComIfGp_setNextStage("sea", 5, 11, -1, i_speed, i_mode, 1, 0);
+                    dComIfGp_setNextStage("sea", 5, 11, -1, i_speed, i_mode);
                 } else {
-                    dComIfGp_setNextStage("MajyuE", 18, 0, -1, i_speed, i_mode, 1, 0);
+                    dComIfGp_setNextStage("MajyuE", 18, 0, -1, i_speed, i_mode);
                 }
             } else {
-                dComIfGp_setNextStage("A_umikz", 0, 0, -1, i_speed, i_mode, 1, 0);
+                dComIfGp_setNextStage("A_umikz", 0, 0, -1, i_speed, i_mode);
             }
         } else {
-            dComIfGp_setNextStage("Asoko", 0, 0, -1, i_speed, i_mode, 1, 0);
+            dComIfGp_setNextStage("Asoko", 0, 0, -1, i_speed, i_mode);
         }
         return 1;
     }
@@ -2318,14 +2317,14 @@ int dStage_changeScene(int i_exitId, f32 speed, u32 mode, s8 room_no) {
     s32 wipe = dStage_sclsInfo_getWipe(scls_info);
 
     dComIfGp_setNextStage(scls_info->mStage, scls_info->mStart, scls_info->mRoom, -1, speed, mode,
-                          1, wipe == 15 ? 0 : wipe);
+                          TRUE, wipe == 15 ? 0 : wipe);
     return 1;
 }
 
 /* 80043AB0-80043B10       .text dStage_restartRoom__FUlUl */
 void dStage_restartRoom(u32 roomParam, u32 mode) {
     dComIfGp_setNextStage(dComIfGp_getStartStageName(), -1, dComIfGs_getRestartRoomNo(), -1, 0.0f,
-                          mode, 0, 0);
+                          mode, FALSE);
     dComIfGs_setRestartRoomParam(roomParam);
 }
 
@@ -2335,7 +2334,7 @@ void dStage_turnRestart() {
     if (layerNo >= 0)
         layerNo ^= 1;
 
-    dComIfGp_setNextStage(dComIfGp_getStartStageName(), -3, dComIfGs_getTurnRestartRoomNo(), layerNo, 0.0f, 0, 0, 6);
+    dComIfGp_setNextStage(dComIfGp_getStartStageName(), -3, dComIfGs_getTurnRestartRoomNo(), layerNo, 0.0f, 0, FALSE, 6);
 
     s32 hour = dKy_getdaytime_hour();
     f32 nextTime = 180.0f;
@@ -2361,7 +2360,7 @@ void dStage_escapeRestart() {
     }
 
     dComIfGp_setNextStage(dComIfGp_getStartStageName(), -3, dComIfGs_getTurnRestartRoomNo(), -1,
-                          0.0f, 0, 0, 9);
+                          0.0f, 0, FALSE, 9);
 }
 
 /* 80043C84-80043CD0       .text dStage_checkRestart__Fv */

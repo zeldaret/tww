@@ -57,27 +57,27 @@ void daTitle_proc_c::proc_draw() {
 }
 
 /* 00001A5C-00001AAC       .text daTitle_Draw__FP9daTitle_c */
-void daTitle_Draw(daTitle_c*) {
+static BOOL daTitle_Draw(daTitle_c*) {
     /* Nonmatching */
 }
 
 /* 00001AAC-00001CF8       .text daTitle_Execute__FP9daTitle_c */
-void daTitle_Execute(daTitle_c*) {
+static BOOL daTitle_Execute(daTitle_c*) {
     /* Nonmatching */
 }
 
 /* 00001CF8-00001D00       .text daTitle_IsDelete__FP9daTitle_c */
-void daTitle_IsDelete(daTitle_c*) {
+static BOOL daTitle_IsDelete(daTitle_c*) {
     /* Nonmatching */
 }
 
 /* 00001D00-00001D70       .text daTitle_Delete__FP9daTitle_c */
-void daTitle_Delete(daTitle_c*) {
+static BOOL daTitle_Delete(daTitle_c*) {
     /* Nonmatching */
 }
 
 /* 00001D70-00001E28       .text daTitle_Create__FP10fopAc_ac_c */
-void daTitle_Create(fopAc_ac_c*) {
+static s32 daTitle_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

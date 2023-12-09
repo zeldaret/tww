@@ -12,7 +12,7 @@ void hand_draw(sss_class*) {
 }
 
 /* 000001F0-00000248       .text daSss_Draw__FP9sss_class */
-void daSss_Draw(sss_class*) {
+static BOOL daSss_Draw(sss_class*) {
     /* Nonmatching */
 }
 
@@ -67,17 +67,17 @@ void hand_main(sss_class*) {
 }
 
 /* 00002618-0000269C       .text daSss_Execute__FP9sss_class */
-void daSss_Execute(sss_class*) {
+static BOOL daSss_Execute(sss_class*) {
     /* Nonmatching */
 }
 
 /* 0000269C-000026A4       .text daSss_IsDelete__FP9sss_class */
-void daSss_IsDelete(sss_class*) {
+static BOOL daSss_IsDelete(sss_class*) {
     /* Nonmatching */
 }
 
 /* 000026A4-00002720       .text daSss_Delete__FP9sss_class */
-void daSss_Delete(sss_class*) {
+static BOOL daSss_Delete(sss_class*) {
     /* Nonmatching */
 }
 
@@ -87,29 +87,12 @@ void useHeapInit(sss_class*) {
 }
 
 /* 000028A0-000028C0       .text daSss_solidHeapCB__FP10fopAc_ac_c */
-void daSss_solidHeapCB(fopAc_ac_c*) {
+static BOOL daSss_solidHeapCB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000028C0-00002BB4       .text daSss_Create__FP10fopAc_ac_c */
-void daSss_Create(fopAc_ac_c*) {
+static s32 daSss_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 00002DF0-00002E2C       .text __dt__5sss_sFv */
-sss_s::~sss_s() {
-    /* Nonmatching */
-}
-
-/* 00002E2C-00002E30       .text __ct__5sss_sFv */
-sss_s::sss_s() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
 

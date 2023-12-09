@@ -25,11 +25,3 @@ BOOL daTagEvsw::Act_c::_execute() {
 BOOL daTagEvsw::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-

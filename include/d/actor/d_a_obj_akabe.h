@@ -29,7 +29,7 @@ namespace daObjAkabe {
         s32 prm_get_arg0() const { return daObj::PrmAbstract(this, PRM_ARG0_W, PRM_ARG0_S); }
     
         s32 _create();
-        bool create_heap();
+        BOOL create_heap();
         bool _delete();
         void init_scale();
         void init_mtx();

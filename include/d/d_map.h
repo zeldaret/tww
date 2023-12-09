@@ -1,9 +1,38 @@
 #ifndef D_MAP_H
 #define D_MAP_H
 
+#include "dolphin/types.h"
+
 class fopAc_ac_c;
+
 class dMap_c {
 public:
+    void clrAGBMapSendStopFlg() {}
+    void getIconDispMode() {}
+    void getMapAlpha() {}
+    void getMapDspPosLeftUpX() {}
+    void getMapDspPosLeftUpY() {}
+    void getMapDspSizeHeight() {}
+    void getMapDspSizeWidth() {}
+    void getNowRoom() {}
+    void isAGBMapSendStopFlg() {}
+    void isMapDispTypeEnlargementSize() {}
+    void isMapDispTypeRealSize() {}
+    void setAGBMapSendStopFlg() {}
+    void setIconDispMode(u8) {}
+    void setIconFreeAlpha(u8) {}
+    void setIconFreePosX(s16) {}
+    void setIconFreePosY(s16) {}
+    void setIconFreeScale(f32) {}
+    void setIconSelfAlpha(u8) {}
+    void setIconSelfScale(f32) {}
+    void setMapAlpha(u8) {}
+    void setMapChgSizeEnlargementSize() {}
+    void setMapChgSizeRealSize() {}
+    void setMapDispMode(u8) {}
+    void setMapDispPosLeftUpX(s16) {}
+    void setMapDispPosLeftUpY(s16) {}
+
     static void create();
     void isEnableEnlargementScroll();
     static bool isEnableDispMap();

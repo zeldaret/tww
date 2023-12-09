@@ -245,6 +245,7 @@ public:
     void Stay();
     void SetTrimSize(s32);
     void StartEventCamera(int, int, ...);
+    void EndEventCamera(int);
     
     void CStickUse() {}
     void CStickUseless() {}
@@ -286,5 +287,7 @@ struct camera_process_profile_definition {
 };
 
 dCamera_c* dCam_getBody();
+s16 dCam_getAngleY(camera_class*);
+s16 dCam_getAngleX(camera_class*);
 
 #endif

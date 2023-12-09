@@ -17,7 +17,7 @@ void daTori_Flag_c::set_mtx() {
 }
 
 /* 000001C4-000001E4       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -32,7 +32,7 @@ void daTori_Flag_c::CreateInit() {
 }
 
 /* 000003A4-000003C4       .text daTori_FlagCreate__FPv */
-void daTori_FlagCreate(void*) {
+static s32 daTori_FlagCreate(void*) {
     /* Nonmatching */
 }
 
@@ -41,18 +41,13 @@ s32 daTori_Flag_c::_create() {
     /* Nonmatching */
 }
 
-/* 00000478-00000610       .text __ct__13daTori_Flag_cFv */
-daTori_Flag_c::daTori_Flag_c() {
-    /* Nonmatching */
-}
-
 /* 00000804-00000854       .text daTori_FlagDelete__FPv */
-void daTori_FlagDelete(void*) {
+static BOOL daTori_FlagDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00000854-00000878       .text daTori_FlagExecute__FPv */
-void daTori_FlagExecute(void*) {
+static BOOL daTori_FlagExecute(void*) {
     /* Nonmatching */
 }
 
@@ -62,19 +57,12 @@ BOOL daTori_Flag_c::_execute() {
 }
 
 /* 00000B1C-00000BB8       .text daTori_FlagDraw__FPv */
-void daTori_FlagDraw(void*) {
+static BOOL daTori_FlagDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00000BB8-00000BC0       .text daTori_FlagIsDelete__FPv */
-void daTori_FlagIsDelete(void*) {
+static BOOL daTori_FlagIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 00000CAC-00000CF4       .text __dt__17daTori_Flag_HIO_cFv */
-daTori_Flag_HIO_c::~daTori_Flag_HIO_c() {
-    /* Nonmatching */
-}
-
-
 

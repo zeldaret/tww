@@ -157,7 +157,7 @@ void daArrow_c::setLightEffect() {
             mLightEffPID = fopAcM_createChild(
                 PROC_ARROW_LIGHTEFF, fopAcM_GetID(this),
                 mArrowType, &field_0x6a8,
-                current.roomNo, &shape_angle, NULL, -1, NULL
+                current.roomNo, &shape_angle
             );
             if (mLightEffPID != fpcM_ERROR_PROCESS_ID_e) {
                 mbHasLightEff = true;
@@ -403,7 +403,7 @@ bool daArrow_c::check_water_in() {
             mInWaterTimer = 10*30;
             fopAcM_createChild(
                 PROC_ARROW_ICEEFF, fopAcM_GetID(this), mArrowType,
-                &waterHitPos, current.roomNo, &current.angle, NULL, -1, NULL
+                &waterHitPos, current.roomNo, &current.angle
             );
             if (!field_0x6e4) {
                 dKy_arrowcol_chg_on(&current.pos, 1);
@@ -464,7 +464,7 @@ daArrow_c* daArrow_c::changeArrowType() {
     
     if (mArrowType != origArrowType) {
         m_keep_type = mArrowType;
-        daArrow_c* newNockedArrow = (daArrow_c*)fopAcM_fastCreate(PROC_ARROW, 0, &current.pos, current.roomNo, NULL, NULL, -1, NULL, NULL);
+        daArrow_c* newNockedArrow = (daArrow_c*)fopAcM_fastCreate(PROC_ARROW, 0, &current.pos, current.roomNo);
         if (!newNockedArrow) {
             mArrowType = origArrowType;
             m_keep_type = origArrowType;
@@ -800,14 +800,14 @@ BOOL daArrow_c::procMove() {
                 field_0x698 = false;
             } else if (mArrowType == TYPE_ICE) {
                 if (dComIfG_Bgsp()->ChkGrpInf(mLinChk, 0x200)) {
-                    fopAcM_create(PROC_Obj_Magmarock, NULL, &field_0x6a8, current.roomNo, NULL, NULL, -1, NULL);
+                    fopAcM_create(PROC_Obj_Magmarock, NULL, &field_0x6a8, current.roomNo);
                 } else {
                     dComIfGp_particle_setP1(0x29E, &field_0x6a8, &temp10);
                     
                     fopAcM_createChild(
                         PROC_ARROW_ICEEFF, fopAcM_GetID(this),
                         mArrowType, &field_0x6a8,
-                        current.roomNo, &field_0x6e6, NULL, -1, NULL
+                        current.roomNo, &field_0x6e6
                     );
                     
                     fopAcM_seStartCurrent(this, JA_SE_OBJ_ICE_ARW_EFF, 0);
@@ -821,7 +821,13 @@ BOOL daArrow_c::procMove() {
             s32 attribCode = dComIfG_Bgsp()->GetAttributeCode(mLinChk);
             s32 mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(mLinChk);
             
-            if (mArrowType == TYPE_NORMAL && (attribCode == 0x3 || attribCode == 0x14 || attribCode == 0xF || attribCode == 0x9 || attribCode == 0x15)) {
+            if (mArrowType == TYPE_NORMAL && (
+                attribCode == dBgS_Attr_STONE_e ||
+                attribCode == dBgS_Attr_METAL_e ||
+                attribCode == dBgS_Attr_ICE_e ||
+                attribCode == dBgS_Attr_DAMAGE_e ||
+                attribCode == dBgS_Attr_FREEZE_e
+            )) {
                 mCurrProcFunc = &procReturn;
                 fopAcM_SetParam(this, 3);
                 speed *= -0.1f;
@@ -983,7 +989,7 @@ BOOL daArrow_c::procStop_BG() {
         if (mCoSph.ChkCoHit()) {
             dComIfGp_setItemArrowNumCount(1);
             fopAcM_createItemForSimpleDemo(&current.pos, ARROW_10, -1, NULL, NULL, 0.0f, 0.0f);
-            mDoAud_seStart(JA_SE_CONSUMP_ITEM_GET, NULL, 0, 0);
+            mDoAud_seStart(JA_SE_CONSUMP_ITEM_GET);
             fopAcM_delete(this);
             return TRUE;
         }
@@ -1037,7 +1043,7 @@ void daArrow_c::checkRestMp() {
     
     u8 currMagic = dComIfGs_getMagic();
     if (currMagic < use_mp[m_keep_type]) {
-        m_keep_type = 0;
+        m_keep_type = TYPE_NORMAL;
     }
 }
 

@@ -12,7 +12,7 @@ BOOL daWindMill_c::_delete() {
 }
 
 /* 000000E8-00000108       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void daWindMill_c::CreateInit() {
 }
 
 /* 0000050C-00000608       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -72,33 +72,26 @@ BOOL daWindMill_c::_draw() {
 }
 
 /* 000017A4-000017C4       .text daWindMill_Create__FPv */
-void daWindMill_Create(void*) {
+static s32 daWindMill_Create(void*) {
     /* Nonmatching */
 }
 
 /* 000017C4-000017E8       .text daWindMill_Delete__FPv */
-void daWindMill_Delete(void*) {
+static BOOL daWindMill_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 000017E8-0000180C       .text daWindMill_Draw__FPv */
-void daWindMill_Draw(void*) {
+static BOOL daWindMill_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 0000180C-00001830       .text daWindMill_Execute__FPv */
-void daWindMill_Execute(void*) {
+static BOOL daWindMill_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00001830-00001838       .text daWindMill_IsDelete__FPv */
-void daWindMill_IsDelete(void*) {
+static BOOL daWindMill_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-
-
-
-
-

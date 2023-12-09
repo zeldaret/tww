@@ -22,97 +22,18 @@ struct daNpc_Sarace_c {
 };
 
 /* 800589A8-80058B54       .text init__21dSv_player_status_a_cFv */
-// Nonmatching - bunch of issues, probably need to setup more inlines
 void dSv_player_status_a_c::init() {
     mMaxLife = 12;
     mLife = 12;
     field_0x8 = 0;
 
     for (int i = 0; i < 5; i++) {
-        int item = 0xFF;
-
-        mSelectItem[i] = 0xFF;
-
-        u32 item_idx = dComIfGs_getSelectEquip(i);
-        if (item_idx != 0xFF) {
-            switch (item_idx) {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-            case 10:
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-            case 15:
-            case 16:
-            case 17:
-            case 18:
-            case 19:
-            case 20:
-                item = dComIfGs_getItem(item_idx);
-                break;
-            case 21:
-            case 22:
-            case 23:
-                break;
-            case 24:
-            case 25:
-            case 26:
-            case 27:
-            case 28:
-            case 29:
-            case 30:
-            case 31:
-                item = g_dComIfG_gameInfo.save.getPlayer().mGetItem.mItemFlags[item_idx + 13];
-                break;
-            case 32:
-            case 33:
-            case 34:
-            case 35:
-                break;
-            case 36:
-            case 37:
-            case 38:
-            case 39:
-            case 40:
-            case 41:
-            case 42:
-            case 43:
-                item = g_dComIfG_gameInfo.save.getPlayer().mGetItem.mItemFlags[item_idx + 9];
-                break;
-            case 44:
-            case 45:
-            case 46:
-            case 47:
-                break;
-            case 48:
-            case 49:
-            case 50:
-            case 51:
-            case 52:
-            case 53:
-            case 54:
-            case 55:
-                item = g_dComIfG_gameInfo.save.getPlayer().mGetItem.mItemFlags[item_idx + 5];
-                break;
-            }
-
-            g_dComIfG_gameInfo.play.mEquippedItems[i] = item;
-        } else {
-            g_dComIfG_gameInfo.play.mEquippedItems[i] = NO_ITEM;
-        }
+        mSelectItem[i] = NO_ITEM;
+        dComIfGp_setSelectItem(i);
     }
 
     for (int i = 0; i < 4; i++) {
-        mSelectEquip[i] = 0xFF;
+        mSelectEquip[i] = NO_ITEM;
     }
 
     mRupee = 0;
@@ -153,38 +74,89 @@ void dSv_player_return_place_c::set(const char* i_name, s8 i_roomNo, u8 i_status
 /* 80058C60-80058C7C       .text init__17dSv_player_item_cFv */
 void dSv_player_item_c::init() {
     for (int i = 0; i < 21; i++) {
-        mItems[i] = 0xFF;
+        mItems[i] = NO_ITEM;
     }
 }
 
 /* 80058C7C-80058E1C       .text setBottleItemIn__17dSv_player_item_cFUcUc */
-void dSv_player_item_c::setBottleItemIn(u8, u8) {
-    /* Nonmatching */
+void dSv_player_item_c::setBottleItemIn(u8 prevItemNo, u8 newItemNo) {
+    for (int bottleIdx = 0; bottleIdx < 4; bottleIdx++) {
+        if (mItems[0xE + bottleIdx] == prevItemNo) {
+            mItems[0xE + bottleIdx] = newItemNo;
+            for (int btnIdx = 0; btnIdx < 3; btnIdx++) {
+                if (dComIfGs_getSelectItem(btnIdx) == 0xE + bottleIdx) {
+                    dComIfGp_setSelectItem(btnIdx);
+                }
+            }
+            break;
+        }
+    }
 }
 
 /* 80058E1C-80058E44       .text setEmptyBottleItemIn__17dSv_player_item_cFUc */
-void dSv_player_item_c::setEmptyBottleItemIn(u8 param_0) {
-    setBottleItemIn(EMPTY_BOTTLE, param_0);
+void dSv_player_item_c::setEmptyBottleItemIn(u8 i_itemNo) {
+    setBottleItemIn(EMPTY_BOTTLE, i_itemNo);
 }
 
 /* 80058E44-80058F74       .text setEmptyBottle__17dSv_player_item_cFv */
 void dSv_player_item_c::setEmptyBottle() {
-    /* Nonmatching */
+    for (int bottleIdx = 0; bottleIdx < 4; bottleIdx++) {
+        int invIdx = 0xE + bottleIdx;
+        if (dComIfGs_getItem((u8)invIdx) == NO_ITEM) {
+            dComIfGs_setItem((u8)invIdx, EMPTY_BOTTLE);
+            break;
+        }
+    }
 }
 
 /* 80058F74-8005918C       .text setEquipBottleItemIn__17dSv_player_item_cFUcUc */
-void dSv_player_item_c::setEquipBottleItemIn(u8, u8) {
-    /* Nonmatching */
+void dSv_player_item_c::setEquipBottleItemIn(u8 i_btnIdx, u8 i_itemNo) {
+    u8 invIdx = dComIfGs_getSelectItem(i_btnIdx);
+    if (invIdx < 0xE) {
+        return;
+    }
+    if (invIdx > 0x11) {
+        return;
+    }
+    
+    mItems[invIdx] = i_itemNo;
+    
+    dComIfGs_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
+    dComIfGp_setSelectItem(i_btnIdx);
 }
 
 /* 8005918C-800591B0       .text setEquipBottleItemEmpty__17dSv_player_item_cFUc */
-void dSv_player_item_c::setEquipBottleItemEmpty(u8 param_0) {
-    setEquipBottleItemIn(param_0, EMPTY_BOTTLE);
+void dSv_player_item_c::setEquipBottleItemEmpty(u8 i_btnIdx) {
+    setEquipBottleItemIn(i_btnIdx, EMPTY_BOTTLE);
 }
 
 /* 800591B0-80059408       .text setEquipBottleItemIn__17dSv_player_item_cFUc */
-void dSv_player_item_c::setEquipBottleItemIn(u8) {
-    /* Nonmatching */
+void dSv_player_item_c::setEquipBottleItemIn(u8 i_itemNo) {
+    u8 btnIdx = dComIfGp_event_getTalkXYBtn();
+    if (btnIdx == 1) {
+        btnIdx = 0;
+    } else if (btnIdx == 2) {
+        btnIdx = 1;
+    } else if (btnIdx == 3) {
+        btnIdx = 2;
+    } else {
+        return;
+    }
+    
+    u8 invIdx = dComIfGs_getSelectItem(btnIdx);
+    if (invIdx < 0xE) {
+        return;
+    }
+    if (invIdx > 0x11) {
+        return;
+    }
+    
+    mItems[invIdx] = i_itemNo;
+    
+    dComIfGs_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
+    dComIfGp_setSelectItem(btnIdx);
 }
 
 /* 80059408-8005942C       .text setEquipBottleItemEmpty__17dSv_player_item_cFv */
@@ -345,9 +317,9 @@ BOOL dSv_player_get_item_c::isBottleItem(u8 i_item) {
 
 /* 80059848-8005987C       .text init__24dSv_player_item_record_cFv */
 void dSv_player_item_record_c::init() {
-    field_0x2 = 0;
-    mArrowNum = 0;
-    mBombNum = 0;
+    mItemRecord2.mPictureNum = 0;
+    mItemRecord2.mArrowNum = 0;
+    mItemRecord2.mBombNum = 0;
     mTimer = 0;
 
     for (int i = 0; i < 3; i++) {
@@ -382,9 +354,9 @@ u16 dSv_player_item_record_c::getTimer() {
 
 /* 800598D8-80059908       .text init__21dSv_player_item_max_cFv */
 void dSv_player_item_max_c::init() {
-    field_0x0 = 0;
-    mArrowNum = 0;
-    mBombNum = 0;
+    mItemMax2.field_0x0 = 0;
+    mItemMax2.mArrowNum = 0;
+    mItemMax2.mBombNum = 0;
 
     for (int i = 0; i < 5; i++) {
         field_0x3[i] = 0;
@@ -393,24 +365,24 @@ void dSv_player_item_max_c::init() {
 /* 80059908-80059968       .text init__21dSv_player_bag_item_cFv */
 void dSv_player_bag_item_c::init() {
     for (int i = 0; i < 8; i++) {
-        mBeast[i] = 0xFF;
+        mBeast[i] = NO_ITEM;
     }
 
     for (int i = 0; i < 8; i++) {
-        mBait[i] = 0xFF;
+        mBait[i] = NO_ITEM;
     }
 
     for (int i = 0; i < 8; i++) {
-        mReserve[i] = 0xFF;
+        mReserve[i] = NO_ITEM;
     }
 }
 
 /* 80059968-800599D8       .text setBeastItem__21dSv_player_bag_item_cFUc */
-void dSv_player_bag_item_c::setBeastItem(u8 param_0) {
-    if (!checkBeastItem(param_0)) {
+void dSv_player_bag_item_c::setBeastItem(u8 i_itemNo) {
+    if (!checkBeastItem(i_itemNo)) {
         for (int i = 0; i < 8; i++) {
-            if (mBeast[i] == 0xFF) {
-                mBeast[i] = param_0;
+            if (mBeast[i] == NO_ITEM) {
+                mBeast[i] = i_itemNo;
                 return;
             }
         }
@@ -418,14 +390,28 @@ void dSv_player_bag_item_c::setBeastItem(u8 param_0) {
 }
 
 /* 800599D8-80059C30       .text setBeastItemEmpty__21dSv_player_bag_item_cFUc */
-void dSv_player_bag_item_c::setBeastItemEmpty(u8) {
-    /* Nonmatching */
+void dSv_player_bag_item_c::setBeastItemEmpty(u8 i_itemNo) {
+    if (checkBeastItem(i_itemNo)) {
+        for (int i = 0; i < 8; i++) {
+            if (mBeast[i] == i_itemNo) {
+                mBeast[i] = NO_ITEM;
+                for (int btnIdx = 0; btnIdx < 3; btnIdx++) {
+                    if (dComIfGp_getSelectItem(btnIdx) == i_itemNo) {
+                        dComIfGs_setItem(dComIfGs_getSelectItem(btnIdx), NO_ITEM);
+                        dComIfGp_setItem(dComIfGs_getSelectItem(btnIdx), NO_ITEM);
+                        dComIfGp_setSelectItem(btnIdx);
+                    }
+                }
+                return;
+            }
+        }
+    }
 }
 
 /* 80059C30-80059C60       .text checkBeastItem__21dSv_player_bag_item_cFUc */
-bool dSv_player_bag_item_c::checkBeastItem(u8 param_0) {
+bool dSv_player_bag_item_c::checkBeastItem(u8 i_itemNo) {
     for (int i = 0; i < 8; i++) {
-        if (mBeast[i] == param_0) {
+        if (mBeast[i] == i_itemNo) {
             return true;
         }
     }
@@ -434,28 +420,134 @@ bool dSv_player_bag_item_c::checkBeastItem(u8 param_0) {
 }
 
 /* 80059C60-80059EB0       .text setBaitItemChange__21dSv_player_bag_item_cFUc */
-void dSv_player_bag_item_c::setBaitItemChange(u8) {
-    /* Nonmatching */
+void dSv_player_bag_item_c::setBaitItemChange(u8 i_itemNo) {
+    u8 btnIdx = dComIfGp_event_getTalkXYBtn();
+    if (btnIdx == 1) {
+        btnIdx = 0;
+    } else if (btnIdx == 2) {
+        btnIdx = 1;
+    } else if (btnIdx == 3) {
+        btnIdx = 2;
+    } else {
+        return;
+    }
+    
+    u8 invIdx = dComIfGs_getSelectItem(btnIdx);
+    if (invIdx < 0x24) {
+        return;
+    }
+    if (invIdx >= 0x2C) {
+        return;
+    }
+    
+    dComIfGs_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
+    dComIfGp_setSelectItem(btnIdx);
 }
 
 /* 80059EB0-8005A0C8       .text setBaitItemChange__21dSv_player_bag_item_cFUcUc */
-void dSv_player_bag_item_c::setBaitItemChange(u8, u8) {
-    /* Nonmatching */
+void dSv_player_bag_item_c::setBaitItemChange(u8 i_btnIdx, u8 i_itemNo) {
+    if (i_btnIdx > 2) {
+        return;
+    }
+    
+    u8 invIdx = dComIfGs_getSelectItem(i_btnIdx);
+    if (invIdx < 0x24) {
+        return;
+    }
+    if (invIdx >= 0x2C) {
+        return;
+    }
+    
+    dComIfGs_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
+    dComIfGp_setSelectItem(i_btnIdx);
 }
 
 /* 8005A0C8-8005A1A4       .text setBaitItemEmpty__21dSv_player_bag_item_cFv */
 void dSv_player_bag_item_c::setBaitItemEmpty() {
-    /* Nonmatching */
+    u8 btnIdx = dComIfGp_event_getTalkXYBtn();
+    if (btnIdx == 1) {
+        btnIdx = 0;
+    } else if (btnIdx == 2) {
+        btnIdx = 1;
+    } else if (btnIdx == 3) {
+        btnIdx = 2;
+    } else {
+        return;
+    }
+    
+    u8 invIdx = dComIfGs_getSelectItem(btnIdx);
+    if (invIdx < 0x24) {
+        return;
+    }
+    if (invIdx >= 0x2C) {
+        return;
+    }
+    
+    int baitSlotIdx = invIdx - 0x24;
+    u8 num = dComIfGs_getBaitNum(baitSlotIdx);
+    u8 itemNo = dComIfGp_getSelectItem(btnIdx);
+    
+    if (itemNo == ANIMAL_ESA) {
+        u8 num = dComIfGs_getBaitNum(baitSlotIdx);
+        setBaitItemChange(NO_ITEM);
+    } else if (itemNo == BIRD_ESA_5) {
+        num = dComIfGs_getBaitNum(baitSlotIdx);
+        if (num > 0) {
+            num = num - 1;
+        }
+        dComIfGs_setBaitNum(baitSlotIdx, num);
+        if (num == 0) {
+            setBaitItemChange(NO_ITEM);
+        }
+    }
 }
 
 /* 8005A1A4-8005A248       .text setBaitItemEmpty__21dSv_player_bag_item_cFUc */
-void dSv_player_bag_item_c::setBaitItemEmpty(u8) {
-    /* Nonmatching */
+void dSv_player_bag_item_c::setBaitItemEmpty(u8 i_btnIdx) {
+    if (i_btnIdx > 2) {
+        return;
+    }
+    
+    u8 invIdx = dComIfGs_getSelectItem(i_btnIdx);
+    if (invIdx < 0x24) {
+        return;
+    }
+    if (invIdx >= 0x2C) {
+        return;
+    }
+    
+    int baitSlotIdx = invIdx - 0x24;
+    u8 num = dComIfGs_getBaitNum(baitSlotIdx);
+    u8 itemNo = dComIfGp_getSelectItem(i_btnIdx);
+    
+    if (itemNo == ANIMAL_ESA) {
+        u8 num = dComIfGs_getBaitNum(baitSlotIdx);
+        setBaitItemChange(i_btnIdx, NO_ITEM);
+    } else if (itemNo == BIRD_ESA_5) {
+        num = dComIfGs_getBaitNum(baitSlotIdx);
+        if (num > 0) {
+            num = num - 1;
+        }
+        dComIfGs_setBaitNum(baitSlotIdx, num);
+        if (num == 0) {
+            setBaitItemChange(i_btnIdx, NO_ITEM);
+        }
+    }
 }
 
 /* 8005A248-8005A2D0       .text setBaitItem__21dSv_player_bag_item_cFUc */
-void dSv_player_bag_item_c::setBaitItem(u8) {
-    /* Nonmatching */
+void dSv_player_bag_item_c::setBaitItem(u8 i_itemNo) {
+    if (checkBaitItemEmpty()) {
+        for (int i = 0; i < 8; i++) {
+            if (mBait[i] == NO_ITEM) {
+                mBait[i] = i_itemNo;
+                dComIfGs_setBaitNum(i, 3);
+                return;
+            }
+        }
+    }
 }
 
 /* 8005A2D0-8005A2F4       .text checkBaitItemEmpty__21dSv_player_bag_item_cFv */
@@ -477,13 +569,48 @@ u8 dSv_player_bag_item_c::checkBaitItem(u8 i_itemNo) {
 }
 
 /* 8005A334-8005A584       .text setReserveItemChange__21dSv_player_bag_item_cFUc */
-void dSv_player_bag_item_c::setReserveItemChange(u8) {
-    /* Nonmatching */
+void dSv_player_bag_item_c::setReserveItemChange(u8 i_itemNo) {
+    u8 btnIdx = dComIfGp_event_getTalkXYBtn();
+    if (btnIdx == 1) {
+        btnIdx = 0;
+    } else if (btnIdx == 2) {
+        btnIdx = 1;
+    } else if (btnIdx == 3) {
+        btnIdx = 2;
+    } else {
+        return;
+    }
+    
+    u8 invIdx = dComIfGs_getSelectItem(btnIdx);
+    if (invIdx < 0x30) {
+        return;
+    }
+    if (invIdx >= 0x38) {
+        return;
+    }
+    
+    dComIfGs_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(btnIdx), i_itemNo);
+    dComIfGp_setSelectItem(btnIdx);
 }
 
 /* 8005A584-8005A79C       .text setReserveItemChange__21dSv_player_bag_item_cFUcUc */
-void dSv_player_bag_item_c::setReserveItemChange(u8, u8) {
-    /* Nonmatching */
+void dSv_player_bag_item_c::setReserveItemChange(u8 i_btnIdx, u8 i_itemNo) {
+    if (i_btnIdx > 2) {
+        return;
+    }
+    
+    u8 invIdx = dComIfGs_getSelectItem(i_btnIdx);
+    if (invIdx < 0x30) {
+        return;
+    }
+    if (invIdx >= 0x38) {
+        return;
+    }
+    
+    dComIfGs_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
+    dComIfGp_setItem(dComIfGs_getSelectItem(i_btnIdx), i_itemNo);
+    dComIfGp_setSelectItem(i_btnIdx);
 }
 
 /* 8005A79C-8005A7C0       .text setReserveItemEmpty__21dSv_player_bag_item_cFv */
@@ -492,16 +619,16 @@ void dSv_player_bag_item_c::setReserveItemEmpty() {
 }
 
 /* 8005A7C0-8005A7E4       .text setReserveItemEmpty__21dSv_player_bag_item_cFUc */
-void dSv_player_bag_item_c::setReserveItemEmpty(u8 param_0) {
-    setReserveItemChange(param_0, NO_ITEM);
+void dSv_player_bag_item_c::setReserveItemEmpty(u8 i_itemNo) {
+    setReserveItemChange(i_itemNo, NO_ITEM);
 }
 
 /* 8005A7E4-8005A854       .text setReserveItem__21dSv_player_bag_item_cFUc */
-void dSv_player_bag_item_c::setReserveItem(u8 param_0) {
+void dSv_player_bag_item_c::setReserveItem(u8 i_itemNo) {
     if (checkReserveItemEmpty()) {
         for (int i = 0; i < 8; i++) {
-            if (mReserve[i] == 0xFF) {
-                mReserve[i] = param_0;
+            if (mReserve[i] == NO_ITEM) {
+                mReserve[i] = i_itemNo;
                 return;
             }
         }
@@ -542,7 +669,7 @@ void dSv_player_get_bag_item_c::onBeast(u8 i_no) {
 /* 8005A960-8005A9F8       .text isBeast__25dSv_player_get_bag_item_cFUc */
 BOOL dSv_player_get_bag_item_c::isBeast(u8 i_no) {
     JUT_ASSERT(1265, 0 <= i_no && i_no < 8);
-    return mBeastFlags & (u8)(1 << i_no) ? true : false;
+    return mBeastFlags & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
 /* 8005A9F8-8005AA8C       .text onBait__25dSv_player_get_bag_item_cFUc */
@@ -554,7 +681,7 @@ void dSv_player_get_bag_item_c::onBait(u8 i_no) {
 /* 8005AA8C-8005AB24       .text isBait__25dSv_player_get_bag_item_cFUc */
 BOOL dSv_player_get_bag_item_c::isBait(u8 i_no) {
     JUT_ASSERT(1310, 0 <= i_no && i_no < 8);
-    return mBaitFlags & (u8)(1 << i_no) ? true : false;
+    return mBaitFlags & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
 /* 8005AB24-8005ABB4       .text onReserve__25dSv_player_get_bag_item_cFUc */
@@ -566,7 +693,7 @@ void dSv_player_get_bag_item_c::onReserve(u8 i_no) {
 /* 8005ABB4-8005AC48       .text isReserve__25dSv_player_get_bag_item_cFUc */
 BOOL dSv_player_get_bag_item_c::isReserve(u8 i_no) {
     JUT_ASSERT(1355, 0 <= i_no && i_no < 32);
-    return mReserveFlags & (1 << i_no) ? true : false;
+    return mReserveFlags & (1 << i_no) ? TRUE : FALSE;
 }
 
 /* 8005AC48-8005ACA8       .text init__28dSv_player_bag_item_record_cFv */
@@ -1287,11 +1414,17 @@ void dSv_info_c::onSwitch(int i_no, int i_roomNo) {
     } else {
         JUT_ASSERT(3424, 0 <= i_roomNo && i_roomNo < 64);
 
-        int zoneId = dStage_roomControl_c::getZoneNo(i_roomNo);
+        int zoneId = dComIfGp_roomControl_getZoneNo(i_roomNo);
         JUT_ASSERT(3426, 0 <= zoneId && zoneId < ZONE_MAX);
 
         mZone[zoneId].getZoneBit().onSwitch(i_no - (MEMORY_SWITCH + DAN_SWITCH));
     }
+}
+
+// TODO: Not sure why this weak function doesn't get inlined.
+/* 8005DCD0-8005DCEC       .text getZoneNo__20dStage_roomControl_cFi */
+int dStage_roomControl_c::getZoneNo(int i_roomNo) {
+    return mStatus[i_roomNo].mZoneNo;
 }
 
 /* 8005DCEC-8005DE98       .text offSwitch__10dSv_info_cFii */
@@ -1310,7 +1443,7 @@ void dSv_info_c::offSwitch(int i_no, int i_roomNo) {
     } else {
         JUT_ASSERT(3461, 0 <= i_roomNo && i_roomNo < 64);
 
-        int zoneNo = dStage_roomControl_c::getZoneNo(i_roomNo);
+        int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
         JUT_ASSERT(3463, 0 <= zoneNo && zoneNo < ZONE_MAX);
 
         mZone[zoneNo].getZoneBit().offSwitch(i_no - (MEMORY_SWITCH + DAN_SWITCH));
@@ -1330,7 +1463,7 @@ BOOL dSv_info_c::isSwitch(int i_no, int i_roomNo) {
     } else {
         JUT_ASSERT(3509, 0 <= i_roomNo && i_roomNo < 64);
 
-        int zoneNo = dStage_roomControl_c::getZoneNo(i_roomNo);
+        int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
         JUT_ASSERT(3511, 0 <= zoneNo && zoneNo < ZONE_MAX);
 
         return mZone[zoneNo].getZoneBit().isSwitch(i_no - (MEMORY_SWITCH + DAN_SWITCH));
@@ -1353,7 +1486,7 @@ BOOL dSv_info_c::revSwitch(int i_no, int i_roomNo) {
     } else {
         JUT_ASSERT(3544, 0 <= i_roomNo && i_roomNo < 64);
 
-        int zoneNo = dStage_roomControl_c::getZoneNo(i_roomNo);
+        int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
         JUT_ASSERT(3546, 0 <= zoneNo && zoneNo < ZONE_MAX);
 
         return mZone[zoneNo].getZoneBit().revSwitch(i_no - (MEMORY_SWITCH + DAN_SWITCH));
@@ -1374,7 +1507,7 @@ void dSv_info_c::onItem(int i_no, int i_roomNo) {
     } else {
         JUT_ASSERT(3575, 0 <= i_roomNo && i_roomNo < 64);
 
-        int zoneNo = dStage_roomControl_c::getZoneNo(i_roomNo);
+        int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
         JUT_ASSERT(3577, 0 <= zoneNo && zoneNo < ZONE_MAX);
 
         mZone[zoneNo].getZoneBit().onItem(i_no - MEMORY_ITEM);
@@ -1395,7 +1528,7 @@ BOOL dSv_info_c::isItem(int i_no, int i_roomNo) {
     } else {
         JUT_ASSERT(3638, 0 <= i_roomNo && i_roomNo < 64);
 
-        int zoneNo = dStage_roomControl_c::getZoneNo(i_roomNo);
+        int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
         JUT_ASSERT(3640, 0 <= zoneNo && zoneNo < ZONE_MAX);
 
         return mZone[zoneNo].getZoneBit().isItem(i_no - MEMORY_ITEM);
@@ -1410,7 +1543,7 @@ void dSv_info_c::onActor(int i_id, int i_roomNo) {
 
     JUT_ASSERT(3693, (0 <= i_id && i_id < dSv_zoneActor_c::ACTOR_MAX) && (0 <= i_roomNo && i_roomNo < 64));
 
-    int zoneNo = dStage_roomControl_c::getZoneNo(i_roomNo);
+    int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
     JUT_ASSERT(3695, 0 <= zoneNo && zoneNo < ZONE_MAX);
 
     mZone[zoneNo].getActor().on(i_id);
@@ -1428,20 +1561,28 @@ BOOL dSv_info_c::isActor(int i_id, int i_roomNo) {
     
     JUT_ASSERT(3746, 0 <= i_roomNo && i_roomNo < 64);
 
-    int zoneNo = dStage_roomControl_c::getZoneNo(i_roomNo);
+    int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
     JUT_ASSERT(3748, 0 <= zoneNo && zoneNo < ZONE_MAX);
 
     return mZone[zoneNo].getActor().is(i_id);
 }
 
 /* 8005E780-8005EA24       .text memory_to_card__10dSv_info_cFPci */
-void dSv_info_c::memory_to_card(char*, int) {
+int dSv_info_c::memory_to_card(char*, int) {
     /* Nonmatching */
+    int temp_r5 = 0;
+    printf("SAVE size over(%d/%d)\n", 0x768, temp_r5);
+    printf("SAVE size:%d\n", temp_r5);
+    return -1;
 }
 
 /* 8005EA24-8005ED00       .text card_to_memory__10dSv_info_cFPci */
-void dSv_info_c::card_to_memory(char*, int) {
+int dSv_info_c::card_to_memory(char*, int) {
     /* Nonmatching */
+    int temp_r5 = 0;
+    printf("LOAD size over(%d/%d)\n", 0x768, temp_r5);
+    printf("LOAD size:%d\n", temp_r5);
+    return -1;
 }
 
 /* 8005ED00-8005EF88       .text initdata_to_card__10dSv_info_cFPci */

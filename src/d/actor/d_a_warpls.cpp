@@ -12,7 +12,7 @@ BOOL daWarpls_c::_delete() {
 }
 
 /* 000000E0-00000100       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -77,27 +77,27 @@ void daWarpls_c::warp_eff_start() {
 }
 
 /* 000010C8-000010E8       .text daWarpls_Create__FPv */
-void daWarpls_Create(void*) {
+static s32 daWarpls_Create(void*) {
     /* Nonmatching */
 }
 
 /* 000010E8-0000110C       .text daWarpls_Delete__FPv */
-void daWarpls_Delete(void*) {
+static BOOL daWarpls_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 0000110C-000011D0       .text daWarpls_Draw__FPv */
-void daWarpls_Draw(void*) {
+static BOOL daWarpls_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 000011D0-000011F4       .text daWarpls_Execute__FPv */
-void daWarpls_Execute(void*) {
+static BOOL daWarpls_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 000011F4-000011FC       .text daWarpls_IsDelete__FPv */
-void daWarpls_IsDelete(void*) {
+static BOOL daWarpls_IsDelete(void*) {
     /* Nonmatching */
 }
 

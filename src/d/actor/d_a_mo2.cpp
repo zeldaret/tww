@@ -32,12 +32,12 @@ void ground_smoke_set(mo2_class*) {
 }
 
 /* 000010F8-0000135C       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 0000135C-00001634       .text nodeCallBack_P__FP7J3DNodei */
-void nodeCallBack_P(J3DNode*, int) {
+static BOOL nodeCallBack_P(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -67,12 +67,12 @@ void br_draw(mo2_class*) {
 }
 
 /* 0000236C-00002418       .text daMo2_shadowDraw__FP9mo2_class */
-void daMo2_shadowDraw(mo2_class*) {
+static BOOL daMo2_shadowDraw(mo2_class*) {
     /* Nonmatching */
 }
 
 /* 00002418-0000262C       .text daMo2_Draw__FP9mo2_class */
-void daMo2_Draw(mo2_class*) {
+static BOOL daMo2_Draw(mo2_class*) {
     /* Nonmatching */
 }
 
@@ -312,87 +312,32 @@ void kantera_get_init(mo2_class*) {
 }
 
 /* 0000A8C0-0000B618       .text daMo2_Execute__FP9mo2_class */
-void daMo2_Execute(mo2_class*) {
+static BOOL daMo2_Execute(mo2_class*) {
     /* Nonmatching */
 }
 
 /* 0000B618-0000B620       .text daMo2_IsDelete__FP9mo2_class */
-void daMo2_IsDelete(mo2_class*) {
+static BOOL daMo2_IsDelete(mo2_class*) {
     /* Nonmatching */
 }
 
 /* 0000B620-0000B720       .text daMo2_Delete__FP9mo2_class */
-void daMo2_Delete(mo2_class*) {
+static BOOL daMo2_Delete(mo2_class*) {
     /* Nonmatching */
 }
 
 /* 0000B720-0000B784       .text useArrowHeapInit__FP10fopAc_ac_c */
-void useArrowHeapInit(fopAc_ac_c*) {
+static BOOL useArrowHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 0000B784-0000BAFC       .text createHeap__FP10fopAc_ac_c */
-void createHeap(fopAc_ac_c*) {
+static BOOL createHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 0000BAFC-0000C148       .text daMo2_Create__FP10fopAc_ac_c */
-void daMo2_Create(fopAc_ac_c*) {
+static s32 daMo2_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 0000C148-0000C6FC       .text __ct__9mo2_classFv */
-mo2_class::mo2_class() {
-    /* Nonmatching */
-}
-
-/* 0000C6FC-0000C738       .text __dt__4ga_sFv */
-ga_s::~ga_s() {
-    /* Nonmatching */
-}
-
-/* 0000C738-0000C73C       .text __ct__4ga_sFv */
-ga_s::ga_s() {
-    /* Nonmatching */
-}
-
-/* 0000CA08-0000CA84       .text __dt__4ke_sFv */
-ke_s::~ke_s() {
-    /* Nonmatching */
-}
-
-/* 0000CA84-0000CAEC       .text __ct__4ke_sFv */
-ke_s::ke_s() {
-    /* Nonmatching */
-}
-
-/* 0000D084-0000D0E4       .text __dt__8mo2HIO_cFv */
-mo2HIO_c::~mo2HIO_c() {
-    /* Nonmatching */
-}
-
-/* 0000D0E4-0000D3A4       .text __ct__8mo2HIO_cFv */
-mo2HIO_c::mo2HIO_c() {
-    /* Nonmatching */
-}
-
-/* 0000D3A4-0000D3EC       .text __dt__12JntHit_HIO_cFv */
-JntHit_HIO_c::~JntHit_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

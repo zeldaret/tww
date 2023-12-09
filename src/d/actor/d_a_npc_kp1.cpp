@@ -12,7 +12,7 @@ daNpc_Kp1_HIO_c::daNpc_Kp1_HIO_c() {
 }
 
 /* 00000198-0000035C       .text nodeCallBack_Kp__FP7J3DNodei */
-void nodeCallBack_Kp(J3DNode*, int) {
+static BOOL nodeCallBack_Kp(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -222,17 +222,12 @@ BOOL daNpc_Kp1_c::_delete() {
 }
 
 /* 0000215C-0000217C       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 0000217C-000022A0       .text _create__11daNpc_Kp1_cFv */
 s32 daNpc_Kp1_c::_create() {
-    /* Nonmatching */
-}
-
-/* 000022A0-00002404       .text __ct__11daNpc_Kp1_cFv */
-daNpc_Kp1_c::daNpc_Kp1_c() {
     /* Nonmatching */
 }
 
@@ -242,36 +237,27 @@ void daNpc_Kp1_c::CreateHeap() {
 }
 
 /* 00002B14-00002B34       .text daNpc_Kp1_Create__FP10fopAc_ac_c */
-void daNpc_Kp1_Create(fopAc_ac_c*) {
+static s32 daNpc_Kp1_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00002B34-00002B54       .text daNpc_Kp1_Delete__FP11daNpc_Kp1_c */
-void daNpc_Kp1_Delete(daNpc_Kp1_c*) {
+static BOOL daNpc_Kp1_Delete(daNpc_Kp1_c*) {
     /* Nonmatching */
 }
 
 /* 00002B54-00002B74       .text daNpc_Kp1_Execute__FP11daNpc_Kp1_c */
-void daNpc_Kp1_Execute(daNpc_Kp1_c*) {
+static BOOL daNpc_Kp1_Execute(daNpc_Kp1_c*) {
     /* Nonmatching */
 }
 
 /* 00002B74-00002B94       .text daNpc_Kp1_Draw__FP11daNpc_Kp1_c */
-void daNpc_Kp1_Draw(daNpc_Kp1_c*) {
+static BOOL daNpc_Kp1_Draw(daNpc_Kp1_c*) {
     /* Nonmatching */
 }
 
 /* 00002B94-00002B9C       .text daNpc_Kp1_IsDelete__FP11daNpc_Kp1_c */
-void daNpc_Kp1_IsDelete(daNpc_Kp1_c*) {
+static BOOL daNpc_Kp1_IsDelete(daNpc_Kp1_c*) {
     /* Nonmatching */
 }
-
-/* 00002C88-00002CE4       .text __dt__15daNpc_Kp1_HIO_cFv */
-daNpc_Kp1_HIO_c::~daNpc_Kp1_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
 

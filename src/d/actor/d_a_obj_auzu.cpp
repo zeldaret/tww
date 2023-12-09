@@ -70,9 +70,3 @@ void daObjAuzu::Act_c::set_material(J3DMaterial*, unsigned char) {
 BOOL daObjAuzu::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

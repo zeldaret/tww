@@ -12,7 +12,7 @@ void daKmon_c::set_mtx() {
 }
 
 /* 00000118-00000138       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -32,29 +32,26 @@ void daKmon_c::checkTalk() {
 }
 
 /* 000006E8-000007F8       .text daKmonCreate__FPv */
-void daKmonCreate(void*) {
+static s32 daKmonCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00000968-00000998       .text daKmonDelete__FPv */
-void daKmonDelete(void*) {
+static BOOL daKmonDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00000998-00000A00       .text daKmonExecute__FPv */
-void daKmonExecute(void*) {
+static BOOL daKmonExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00000A00-00000A9C       .text daKmonDraw__FPv */
-void daKmonDraw(void*) {
+static BOOL daKmonDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00000A9C-00000AA4       .text daKmonIsDelete__FPv */
-void daKmonIsDelete(void*) {
+static BOOL daKmonIsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

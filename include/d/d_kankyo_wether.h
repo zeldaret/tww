@@ -75,7 +75,7 @@ public:
 
     /* 0x0010 */ u8* mpTxSnow01;
     /* 0x0014 */ u8* mpTxRingAHalf;
-    /* 0x0018 */ RAIN_EFF mRainEff[250];
+    /* 0x0018 */ RAIN_EFF mEff[250];
     /* 0x36C8 */ f32 field_0x36c8;
     /* 0x36CC */ f32 field_0x36cc;
     /* 0x36D0 */ s16 mRainCount;
@@ -154,7 +154,10 @@ struct POISON_EFF {
 
     /* 0x00 */ s8 mStatus;
     /* 0x04 */ cXyz mPos;
-    /* 0x10 */ u8 field_0x10[0x1E];
+    /* 0x10 */ u8 field_0x10[0x10];
+    /* 0x20 */ f32 field_0x20;
+    /* 0x24 */ f32 mAlpha;
+    /* 0x28 */ f32 mSize;
     /* 0x2E */ s16 field_0x2e;
 };
 
@@ -168,9 +171,9 @@ public:
     virtual ~dKankyo_poison_Packet();
 
     /* 0x0010 */ POISON_EFF mEff[1000];
-    /* 0xBB90 */ cXyz field_0xbb90;
+    /* 0xBB90 */ cXyz mBasePos;
     /* 0xBB9C */ cXyz field_0xbb9c;
-    /* 0xBBA8 */ u32 mCount;
+    /* 0xBBA8 */ s32 mCount;
     /* 0xBBAC */ u8* mpTexture;
 };
 
@@ -291,7 +294,7 @@ public:
 
     /* 0x0010 */ u8* mpTexUsonami;
     /* 0x0014 */ u8* mpTexUsonamiM;
-    /* 0x0018 */ WAVE_EFF mWaveEff[300];
+    /* 0x0018 */ WAVE_EFF mEff[300];
     /* 0x41B8 */ f32 mSkewWidth;
     /* 0x41BC */ f32 mSkewDir;
 };
@@ -361,5 +364,6 @@ void dKyw_pntwind_cut(WIND_INFLUENCE*);
 void dKyw_pwind_cylinder_set(WIND_INFLUENCE*);
 void dKyw_evt_wind_set(s16 i_windX, s16 i_windY);
 void dKyw_evt_wind_set_go();
+void dKyw_get_AllWind_vec(cXyz* param_0, cXyz* i_direction, f32* i_power);
 
 #endif /* D_KANKYO_WETHER_H */

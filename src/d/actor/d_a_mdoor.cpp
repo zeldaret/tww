@@ -27,7 +27,7 @@ void daMdoor_c::getShapeType() {
 }
 
 /* 000000A8-000000C8       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -112,27 +112,27 @@ void daMdoor_actionEvent(daMdoor_c*) {
 }
 
 /* 00000ED4-00000F34       .text daMdoor_Draw__FP9daMdoor_c */
-void daMdoor_Draw(daMdoor_c*) {
+static BOOL daMdoor_Draw(daMdoor_c*) {
     /* Nonmatching */
 }
 
 /* 00000F34-00000F84       .text daMdoor_Execute__FP9daMdoor_c */
-void daMdoor_Execute(daMdoor_c*) {
+static BOOL daMdoor_Execute(daMdoor_c*) {
     /* Nonmatching */
 }
 
 /* 00000F84-00000F8C       .text daMdoor_IsDelete__FP9daMdoor_c */
-void daMdoor_IsDelete(daMdoor_c*) {
+static BOOL daMdoor_IsDelete(daMdoor_c*) {
     /* Nonmatching */
 }
 
 /* 00000F8C-00001054       .text daMdoor_Delete__FP9daMdoor_c */
-void daMdoor_Delete(daMdoor_c*) {
+static BOOL daMdoor_Delete(daMdoor_c*) {
     /* Nonmatching */
 }
 
 /* 00001054-00001074       .text daMdoor_Create__FP10fopAc_ac_c */
-void daMdoor_Create(fopAc_ac_c*) {
+static s32 daMdoor_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

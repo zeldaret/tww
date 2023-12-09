@@ -47,27 +47,27 @@ void daWbird_c::actionSelect() {
 }
 
 /* 00000850-00000858       .text daWbird_Draw__FP9daWbird_c */
-void daWbird_Draw(daWbird_c*) {
+static BOOL daWbird_Draw(daWbird_c*) {
     /* Nonmatching */
 }
 
 /* 00000858-000008D0       .text daWbird_Execute__FP9daWbird_c */
-void daWbird_Execute(daWbird_c*) {
+static BOOL daWbird_Execute(daWbird_c*) {
     /* Nonmatching */
 }
 
 /* 000008D0-000008D8       .text daWbird_IsDelete__FP9daWbird_c */
-void daWbird_IsDelete(daWbird_c*) {
+static BOOL daWbird_IsDelete(daWbird_c*) {
     /* Nonmatching */
 }
 
 /* 000008D8-00000908       .text daWbird_Delete__FP9daWbird_c */
-void daWbird_Delete(daWbird_c*) {
+static BOOL daWbird_Delete(daWbird_c*) {
     /* Nonmatching */
 }
 
 /* 00000908-00000928       .text daWbird_Create__FP10fopAc_ac_c */
-void daWbird_Create(fopAc_ac_c*) {
+static s32 daWbird_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

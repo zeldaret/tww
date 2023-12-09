@@ -11,13 +11,20 @@ public:
     u8 getSelectItem(int i_no) { return mSelectItem[i_no]; }
     void setSelectItem(int i_no, u8 i_invIdx) { mSelectItem[i_no] = i_invIdx; }
     u8 getSelectEquip(int i_no) { return mSelectEquip[i_no]; }
+    void setSelectEquip(int i_no, u8 i_itemNo) { mSelectEquip[i_no] = i_itemNo; }
     u8 getWalletSize() { return mWalletSize; }
     void setWalletSize(u8 size) { mWalletSize = size; }
     int getRupee() { return mRupee; }
+    void setRupee(u16 rupee) { mRupee = rupee; }
+    u16 getRupeeMax() { return 0; } // TODO
     u8 getMagic() { return mMagic; }
+    void setMagic(u8 magic) { mMagic = magic;}
     u8 getMaxMagic() { return mMaxMagic; }
+    void setMaxMagic(u8 magic) { mMaxMagic = magic; }
     u16 getLife() { return mLife; }
+    void setLife(u16 life) { mLife = life; }
     u16 getMaxLife() { return mMaxLife; }
+    void setMaxLife(u16 life) { mMaxLife = life; }
 
     /* 0x00 */ u16 mMaxLife;
     /* 0x02 */ u16 mLife;
@@ -112,6 +119,20 @@ public:
 
 STATIC_ASSERT(sizeof(dSv_player_get_item_c) == 0x15);
 
+class dSv_player_item_record2_c {
+public:
+    u8 getArrowNum() { return mArrowNum; }
+    void setArrowNum(u8 num) { mArrowNum = num; }
+    u8 getBombNum() { return mBombNum; }
+    void setBombNum(u8 num) { mBombNum = num; }
+    u8 getPictureNum() { return mPictureNum; }
+    void setPictureNum(u8 num) { mPictureNum = num; }
+
+    /* 0x0 */ u8 mPictureNum;
+    /* 0x1 */ u8 mArrowNum;
+    /* 0x2 */ u8 mBombNum;
+};  // Size: 0x3
+
 class dSv_player_item_record_c {
 public:
     void init();
@@ -119,35 +140,44 @@ public:
     void decTimer();
     u16 getTimer();
 
-    u32 getArrowNum() { return mArrowNum; }
-    void setArrowNum(u8 num) { mArrowNum = num; }
-    u32 getBombNum() { return mBombNum; }
-    void setBombNum(u8 num) { mBombNum = num; }
-    // u32 getPictureNum() { return ?; }
-    // void setPictureNum(u8 num) { ? = num; }
+    u8 getArrowNum() { return mItemRecord2.getArrowNum(); }
+    void setArrowNum(u8 num) { mItemRecord2.setArrowNum(num); }
+    u8 getBombNum() { return mItemRecord2.getBombNum(); }
+    void setBombNum(u8 num) { mItemRecord2.setBombNum(num); }
+    u8 getPictureNum() { return mItemRecord2.getPictureNum(); }
+    void setPictureNum(u8 num) { mItemRecord2.setPictureNum(num); }
 
     /* 0x0 */ u16 mTimer;
-    /* 0x2 */ u8 field_0x2;
-    /* 0x3 */ u8 mArrowNum;
-    /* 0x4 */ u8 mBombNum;
+    /* 0x2 */ dSv_player_item_record2_c mItemRecord2;
     /* 0x5 */ u8 mBottleNum[3];
 };  // Size: 0x8
 
 STATIC_ASSERT(sizeof(dSv_player_item_record_c) == 0x8);
 
-class dSv_player_item_max_c {
+class dSv_player_item_max2_c {
 public:
-    void init();
-
+    // void setReserved1Num(u8 num) { ? = num; }
     u8 getArrowNum() { return mArrowNum; }
     void setArrowNum(u8 num) { mArrowNum = num; }
     u8 getBombNum() { return mBombNum; }
     void setBombNum(u8 num) { mBombNum = num; }
-    // void setReserved1Num(u8 num) { ? = num; }
 
     /* 0x0 */ u8 field_0x0;
     /* 0x1 */ u8 mArrowNum;
     /* 0x2 */ u8 mBombNum;
+};  // Size: 0x3
+
+class dSv_player_item_max_c {
+public:
+    void init();
+
+    // void setReserved1Num(u8 num) { ? = num; }
+    u8 getArrowNum() { return mItemMax2.getArrowNum(); }
+    void setArrowNum(u8 num) { mItemMax2.setArrowNum(num); }
+    u8 getBombNum() { return mItemMax2.getBombNum(); }
+    void setBombNum(u8 num) { mItemMax2.setBombNum(num); }
+
+    /* 0x0 */ dSv_player_item_max2_c mItemMax2;
     /* 0x3 */ u8 field_0x3[5];
 };  // Size: 0x8
 
@@ -175,8 +205,11 @@ public:
     u8 checkReserveItem(u8);
 
     u8 getBeast(int i_idx) { return mBeast[i_idx]; }
+    void setBeast(int i_idx, u8 i_itemNo) { mBeast[i_idx] = i_itemNo; }
     u8 getBait(int i_idx) { return mBait[i_idx]; }
+    void setBait(int i_idx, u8 i_itemNo) { mBait[i_idx] = i_itemNo; }
     u8 getReserve(int i_idx) { return mReserve[i_idx]; }
+    void setReserve(int i_idx, u8 i_itemNo) { mReserve[i_idx] = i_itemNo; }
 
     /* 0x00 */ u8 mBeast[8];
     /* 0x08 */ u8 mBait[8];
@@ -212,6 +245,7 @@ public:
     u8 getBaitNum(int i_idx) { return mBaitNum[i_idx]; }
     void setBaitNum(int i_idx, u8 num) { mBaitNum[i_idx] = num; }
     u8 getReserveNum(int i_idx) { return mReserveNum[i_idx]; }
+    void setReserveNum(int i_idx, u8 num) { mReserveNum[i_idx] = num; }
 
     /* 0x00 */ u8 mBeastNum[8];
     /* 0x08 */ u8 mBaitNum[8];
@@ -354,11 +388,11 @@ public:
 
     /* 0x00 */ dSv_player_status_a_c mRecollectStatusA;
     /* 0x18 */ dSv_player_item_c mRecollectItem;
-    /* 0x2D */ u8 mRecollectItemRecord[3];
-    /* 0x30 */ u8 mRecollectItemMax[3];
+    /* 0x2D */ dSv_player_item_record2_c mRecollectItemRecord;
+    /* 0x30 */ dSv_player_item_max2_c mRecollectItemMax;
     /* 0x33 */ dSv_player_bag_item_c mRecollectBagItem;
     /* 0x4B */ dSv_player_bag_item_record_c mRecollectBagItemRecord;
-    /* 0x63 */ u8 mRecollectCollect[13];
+    /* 0x63 */ dSv_player_collect_c mRecollectCollect;
 };  // Size: 0x70
 
 STATIC_ASSERT(sizeof(dSv_player_status_c_c) == 0x70);
@@ -686,8 +720,8 @@ public:
     BOOL isItem(int, int);
     void onActor(int, int);
     BOOL isActor(int, int);
-    void memory_to_card(char*, int);
-    void card_to_memory(char*, int);
+    int memory_to_card(char*, int);
+    int card_to_memory(char*, int);
     int initdata_to_card(char*, int);
 
     dSv_save_c& getSavedata() { return mSavedata; }

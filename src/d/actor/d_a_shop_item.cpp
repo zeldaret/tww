@@ -11,7 +11,7 @@
 #include "d/d_s_play.h"
 #include "d/d_item.h"
 #include "d/d_item_data.h"
-#include "d/actor/d_a_itembase_static.h"
+#include "d/actor/d_a_item.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
 
@@ -105,7 +105,7 @@ void daShopItem_c::set_mtx() {
     mDoMtx_stack_c::transM(temp1.x, temp1.y, temp1.z);
     const SVec& temp2 = getData()[m_itemNo].field_0x18;
     mDoMtx_stack_c::ZXYrotM(temp2.x, temp2.y, temp2.z);
-    MTXCopy(mDoMtx_stack_c::get(), mpModel->mBaseTransformMtx);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 
     if(field_0x644 != 0) {
         // I have no clue why Nintendo would do this but it works

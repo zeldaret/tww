@@ -335,24 +335,3 @@ BOOL daObjTribox::Act_c::_execute() {
 BOOL daObjTribox::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

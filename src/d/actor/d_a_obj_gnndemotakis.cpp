@@ -40,9 +40,3 @@ BOOL daObjGnntakis_c::_execute() {
 BOOL daObjGnntakis_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

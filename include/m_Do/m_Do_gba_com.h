@@ -147,6 +147,10 @@ inline void mDoGac_SendEndCheck(u8 param_0) {
     g_mDoGaC_gbaCom.mDoGaC_SendEndCheck(param_0);
 }
 
+inline void mDoGaC_SendEntry(u8 param_0, u32 param_1) {
+    g_mDoGaC_gbaCom.mDoGaC_SendEntry(param_0, param_1);
+}
+
 inline BOOL mDoGac_SendStatusCheck(u8 param_0) {
     return g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(param_0);
 }

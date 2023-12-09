@@ -32,7 +32,7 @@ void daCanon_c::createCheck(int, int, int) {
 }
 
 /* 000005A0-00000628       .text daCanon_nodeCallBack__FP7J3DNodei */
-void daCanon_nodeCallBack(J3DNode*, int) {
+static BOOL daCanon_nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -127,7 +127,7 @@ void daCanon_c::PadMove() {
 }
 
 /* 00001A18-00001A38       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -142,7 +142,7 @@ void daCanon_c::GameInfo2DDraw() {
 }
 
 /* 00002074-00002094       .text daCanonCreate__FPv */
-void daCanonCreate(void*) {
+static s32 daCanonCreate(void*) {
     /* Nonmatching */
 }
 
@@ -152,23 +152,21 @@ s32 daCanon_c::_create() {
 }
 
 /* 00002578-00002600       .text daCanonDelete__FPv */
-void daCanonDelete(void*) {
+static BOOL daCanonDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00002600-0000274C       .text daCanonExecute__FPv */
-void daCanonExecute(void*) {
+static BOOL daCanonExecute(void*) {
     /* Nonmatching */
 }
 
 /* 0000274C-0000283C       .text daCanonDraw__FPv */
-void daCanonDraw(void*) {
+static BOOL daCanonDraw(void*) {
     /* Nonmatching */
 }
 
 /* 0000283C-00002844       .text daCanonIsDelete__FPv */
-void daCanonIsDelete(void*) {
+static BOOL daCanonIsDelete(void*) {
     /* Nonmatching */
 }
-
-

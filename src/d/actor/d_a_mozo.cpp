@@ -33,12 +33,12 @@ void daMozo_nodeCallBackFire(daMozo_c*, J3DModel*, J3DNode*, int) {
 }
 
 /* 00000728-0000078C       .text daMozo_nodeCallBack__FP7J3DNodei */
-void daMozo_nodeCallBack(J3DNode*, int) {
+static BOOL daMozo_nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 0000078C-000007AC       .text CheckCreateHeap__FP10fopAc_ac_c */
-BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return static_cast<daMozo_c*>(i_this)->CreateHeap();
 }
 
@@ -243,27 +243,27 @@ bool daMozo_c::_draw() {
 }
 
 /* 0000267C-000026A0       .text daMozo_Draw__FP8daMozo_c */
-BOOL daMozo_Draw(daMozo_c* i_this) {
+static BOOL daMozo_Draw(daMozo_c* i_this) {
     return i_this->_draw();
 }
 
 /* 000026A0-000026C4       .text daMozo_Execute__FP8daMozo_c */
-BOOL daMozo_Execute(daMozo_c* i_this) {
+static BOOL daMozo_Execute(daMozo_c* i_this) {
     return i_this->_execute();
 }
 
 /* 000026C4-000026CC       .text daMozo_IsDelete__FP8daMozo_c */
-BOOL daMozo_IsDelete(daMozo_c*) {
+static BOOL daMozo_IsDelete(daMozo_c*) {
     return TRUE;
 }
 
 /* 000026CC-000026F0       .text daMozo_Delete__FP8daMozo_c */
-BOOL daMozo_Delete(daMozo_c* i_this) {
+static BOOL daMozo_Delete(daMozo_c* i_this) {
     return i_this->_delete();
 }
 
 /* 000026F0-00002710       .text daMozo_Create__FP10fopAc_ac_c */
-s32 daMozo_Create(fopAc_ac_c* i_this) {
+static s32 daMozo_Create(fopAc_ac_c* i_this) {
     return static_cast<daMozo_c*>(i_this)->_create();
 }
 

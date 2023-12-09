@@ -4,6 +4,7 @@
 #include "MSL_C/math.h"
 #include "dolphin/types.h"
 #include "dolphin/mtx/vec.h"
+#include "dolphin/mtx/mtx.h"
 
 class cM3dGAab;
 class cM3dGCps;
@@ -85,6 +86,7 @@ f32 cM3d_lineVsPosSuisenCross(const cM3dGLin*, const Vec*, Vec*);
 f32 cM3d_lineVsPosSuisenCross(const Vec&, const Vec&, const Vec&, Vec*);
 int cM3d_2PlaneLinePosNearPos(const cM3dGPla&, const cM3dGPla&, const Vec*, Vec*);
 void cM3d_CrawVec(const Vec&, const Vec&, Vec*);
+void cM3d_UpMtx_Base(const Vec&, const Vec&, MtxP);
 
 inline bool cM3d_IsZero(f32 f) {
     return fabsf(f) < G_CM3D_F_ABS_MIN;

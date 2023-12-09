@@ -27,7 +27,7 @@ void bgn3_s_sub(void*, void*) {
 }
 
 /* 00000354-0000035C       .text daBgn2_Draw__FP10bgn2_class */
-void daBgn2_Draw(bgn2_class*) {
+static BOOL daBgn2_Draw(bgn2_class*) {
     /* Nonmatching */
 }
 
@@ -122,51 +122,27 @@ void ki_check(bgn2_class*) {
 }
 
 /* 00002D24-000037B0       .text daBgn2_Execute__FP10bgn2_class */
-void daBgn2_Execute(bgn2_class*) {
+static BOOL daBgn2_Execute(bgn2_class*) {
     /* Nonmatching */
 }
 
 /* 000037B0-000037B8       .text daBgn2_IsDelete__FP10bgn2_class */
-void daBgn2_IsDelete(bgn2_class*) {
+static BOOL daBgn2_IsDelete(bgn2_class*) {
     /* Nonmatching */
 }
 
 /* 000037B8-00003828       .text daBgn2_Delete__FP10bgn2_class */
-void daBgn2_Delete(bgn2_class*) {
+static BOOL daBgn2_Delete(bgn2_class*) {
     /* Nonmatching */
 }
 
 /* 00003828-00003C60       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00003CA8-00003FF4       .text daBgn2_Create__FP10fopAc_ac_c */
-void daBgn2_Create(fopAc_ac_c*) {
+static s32 daBgn2_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 00003FF4-00004228       .text __ct__10bgn2_classFv */
-bgn2_class::bgn2_class() {
-    /* Nonmatching */
-}
-
-/* 000047F0-00004838       .text __dt__12daBgn2_HIO_cFv */
-daBgn2_HIO_c::~daBgn2_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 00004940-0000497C       .text __dt__12dKy_tevstr_cFv */
-dKy_tevstr_c::~dKy_tevstr_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
-
 

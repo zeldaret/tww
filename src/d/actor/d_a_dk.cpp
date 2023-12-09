@@ -12,7 +12,7 @@ daDk_HIO_c::daDk_HIO_c() {
 }
 
 /* 00000130-000001EC       .text nodeCallBack__FP7J3DNodei */
-void nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -32,7 +32,7 @@ void kamen_draw(dk_class*) {
 }
 
 /* 00000938-00000A18       .text daDk_Draw__FP8dk_class */
-void daDk_Draw(dk_class*) {
+static BOOL daDk_Draw(dk_class*) {
     /* Nonmatching */
 }
 
@@ -52,44 +52,27 @@ void daDk_delete_Bdk() {
 }
 
 /* 00000A60-00000D08       .text daDk_Execute__FP8dk_class */
-void daDk_Execute(dk_class*) {
+static BOOL daDk_Execute(dk_class*) {
     /* Nonmatching */
 }
 
 /* 00000D08-00000D10       .text daDk_IsDelete__FP8dk_class */
-void daDk_IsDelete(dk_class*) {
+static BOOL daDk_IsDelete(dk_class*) {
     /* Nonmatching */
 }
 
 /* 00000D10-00000D7C       .text daDk_Delete__FP8dk_class */
-void daDk_Delete(dk_class*) {
+static BOOL daDk_Delete(dk_class*) {
     /* Nonmatching */
 }
 
 /* 00000D7C-00000FFC       .text useHeapInit__FP10fopAc_ac_c */
-void useHeapInit(fopAc_ac_c*) {
+static BOOL useHeapInit(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00000FFC-000011EC       .text daDk_Create__FP10fopAc_ac_c */
-void daDk_Create(fopAc_ac_c*) {
+static s32 daDk_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 0000125C-00001308       .text __dt__6tail_sFv */
-tail_s::~tail_s() {
-    /* Nonmatching */
-}
-
-/* 00001344-000013F0       .text __ct__6tail_sFv */
-tail_s::tail_s() {
-    /* Nonmatching */
-}
-
-/* 000013F8-00001440       .text __dt__10daDk_HIO_cFv */
-daDk_HIO_c::~daDk_HIO_c() {
-    /* Nonmatching */
-}
-
-
 

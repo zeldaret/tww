@@ -50,9 +50,3 @@ void daObjUsovmc::Act_c::Execute(float(**)[3][4]) {
 BOOL daObjUsovmc::Act_c::Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

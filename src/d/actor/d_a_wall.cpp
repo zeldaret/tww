@@ -12,7 +12,7 @@ BOOL daWall_c::_delete() {
 }
 
 /* 00000100-00000120       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -28,16 +28,6 @@ void daWall_c::CreateInit() {
 
 /* 00000380-000004EC       .text _create__8daWall_cFv */
 s32 daWall_c::_create() {
-    /* Nonmatching */
-}
-
-/* 0000065C-000006B8       .text __dt__8cM3dGTriFv */
-cM3dGTri::~cM3dGTri() {
-    /* Nonmatching */
-}
-
-/* 000006B8-00000700       .text __dt__8cM3dGPlaFv */
-cM3dGPla::~cM3dGPla() {
     /* Nonmatching */
 }
 
@@ -87,29 +77,26 @@ BOOL daWall_c::_draw() {
 }
 
 /* 00001044-00001064       .text daWall_Create__FPv */
-void daWall_Create(void*) {
+static s32 daWall_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00001064-00001088       .text daWall_Delete__FPv */
-void daWall_Delete(void*) {
+static BOOL daWall_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00001088-000010AC       .text daWall_Draw__FPv */
-void daWall_Draw(void*) {
+static BOOL daWall_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 000010AC-000010D0       .text daWall_Execute__FPv */
-void daWall_Execute(void*) {
+static BOOL daWall_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 000010D0-000010D8       .text daWall_IsDelete__FPv */
-void daWall_IsDelete(void*) {
+static BOOL daWall_IsDelete(void*) {
     /* Nonmatching */
 }
-
-
-

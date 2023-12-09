@@ -105,17 +105,3 @@ void daObjLadder::Act_c::Execute(float(**)[3][4]) {
 BOOL daObjLadder::Act_c::Draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

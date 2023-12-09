@@ -12,7 +12,7 @@ daTagPhoto_c::daTagPhoto_c() {
 }
 
 /* 000000D0-000000F0       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -127,27 +127,27 @@ void daTagPhoto_c::getPrmTagNo() {
 }
 
 /* 00000928-00000948       .text daTagPhotoCreate__FPv */
-void daTagPhotoCreate(void*) {
+static s32 daTagPhotoCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00000948-00000968       .text daTagPhotoDelete__FPv */
-void daTagPhotoDelete(void*) {
+static BOOL daTagPhotoDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00000968-00000988       .text daTagPhotoExecute__FPv */
-void daTagPhotoExecute(void*) {
+static BOOL daTagPhotoExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00000988-000009A8       .text daTagPhotoDraw__FPv */
-void daTagPhotoDraw(void*) {
+static BOOL daTagPhotoDraw(void*) {
     /* Nonmatching */
 }
 
 /* 000009A8-000009B0       .text daTagPhotoIsDelete__FPv */
-void daTagPhotoIsDelete(void*) {
+static BOOL daTagPhotoIsDelete(void*) {
     /* Nonmatching */
 }
 

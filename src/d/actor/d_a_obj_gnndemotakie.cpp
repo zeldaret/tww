@@ -40,9 +40,3 @@ BOOL daObjGnntakie_c::_execute() {
 BOOL daObjGnntakie_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-

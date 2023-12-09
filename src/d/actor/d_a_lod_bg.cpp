@@ -6,16 +6,6 @@
 #include "d/actor/d_a_lod_bg.h"
 #include "dolphin/types.h"
 
-/* 00000078-00000204       .text __ct__9daLodbg_cFv */
-daLodbg_c::daLodbg_c() {
-    /* Nonmatching */
-}
-
-/* 00000204-0000031C       .text __dt__9daLodbg_cFv */
-daLodbg_c::~daLodbg_c() {
-    /* Nonmatching */
-}
-
 /* 0000031C-0000046C       .text deleteModelData__9daLodbg_cFv */
 void daLodbg_c::deleteModelData() {
     /* Nonmatching */
@@ -37,7 +27,7 @@ void daLodbg_c::createHeap() {
 }
 
 /* 00000A38-00000A58       .text createHeapCallBack__FP10fopAc_ac_c */
-void createHeapCallBack(fopAc_ac_c*) {
+static BOOL createHeapCallBack(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -62,27 +52,27 @@ BOOL daLodbg_c::draw() {
 }
 
 /* 00001274-00001294       .text daLodbg_Draw__FP9daLodbg_c */
-void daLodbg_Draw(daLodbg_c*) {
+static BOOL daLodbg_Draw(daLodbg_c*) {
     /* Nonmatching */
 }
 
 /* 00001294-000012BC       .text daLodbg_Execute__FP9daLodbg_c */
-void daLodbg_Execute(daLodbg_c*) {
+static BOOL daLodbg_Execute(daLodbg_c*) {
     /* Nonmatching */
 }
 
 /* 000012BC-000012C4       .text daLodbg_IsDelete__FP9daLodbg_c */
-void daLodbg_IsDelete(daLodbg_c*) {
+static BOOL daLodbg_IsDelete(daLodbg_c*) {
     /* Nonmatching */
 }
 
 /* 000012C4-000012EC       .text daLodbg_Delete__FP9daLodbg_c */
-void daLodbg_Delete(daLodbg_c*) {
+static BOOL daLodbg_Delete(daLodbg_c*) {
     /* Nonmatching */
 }
 
 /* 000012EC-0000133C       .text daLodbg_Create__FP10fopAc_ac_c */
-void daLodbg_Create(fopAc_ac_c*) {
+static s32 daLodbg_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

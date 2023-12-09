@@ -843,7 +843,7 @@ void daRd_c::modeDeath() {
     mGroup = fopAc_ENV_e;
     
     if (cLib_calcTimer(&mTimer1) == 0) {
-        fopAcM_createDisappear(this, &current.pos, 5, 0, 0xFF);
+        fopAcM_createDisappear(this, &current.pos, 5);
         fopAcM_delete(this);
     }
 }
@@ -888,7 +888,7 @@ void daRd_c::modeParalysisInit() {
 
 /* 000020EC-000021F0       .text modeParalysis__6daRd_cFv */
 void daRd_c::modeParalysis() {
-    /* Nonmatching: isStop inline regalloc + checkTgHit() clrlwi. missing? */
+    /* Nonmatching: isStop inline regalloc */
     if (isAnm(AnmPrm_BEAM_HIT) && mpMorf->isStop()) {
         setAnm(AnmPrm_BEAM, false);
     } else if (isAnm(AnmPrm_BEAM)) {
@@ -900,7 +900,9 @@ void daRd_c::modeParalysis() {
     }
     
     if (checkTgHit()) {
-        // Did something in here get optimized out weirdly?
+        // This line setting speedF to itself gets optimized out and produces no code, but affects codegen.
+        // It's not known what the original code that got optimized out here was, it could be speedF or something else.
+        speedF = speedF;
     }
 }
 
@@ -961,7 +963,7 @@ void daRd_c::modeCryInit() {
     if (dComIfGp_evmng_startCheck("DEFAULT_RD_CRY")) {
         dComIfGp_event_reset();
     }
-    fopAcM_orderOtherEvent2(this, "DEFAULT_RD_CRY", 1, -1);
+    fopAcM_orderOtherEvent2(this, "DEFAULT_RD_CRY", 1);
     fopAcM_monsSeStart(this, JA_SE_CV_RD_SCREAM, 0);
     mTimer1 = l_HIO.m54;
     mBreakFreeCounter = l_HIO.m78;
@@ -1772,7 +1774,7 @@ void daRd_c::createInit() {
     mCyl.Set(m_cyl_src);
     mCyl.SetStts(&mStts);
     mAcchCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&fopAcM_GetPosition_p(this), &fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, &fopAcM_GetSpeed_p(this), NULL, NULL);
+    mAcch.Set(&fopAcM_GetPosition_p(this), &fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, &fopAcM_GetSpeed_p(this));
     mAcch.SetRoofNone();
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     mJntCtrl.setHeadJntNum(0x0A); // ree_kubi_1

@@ -12,7 +12,7 @@ void daShip_c::bodyJointCallBack(int) {
 }
 
 /* 0000023C-00000284       .text daShip_bodyJointCallBack__FP7J3DNodei */
-void daShip_bodyJointCallBack(J3DNode*, int) {
+static BOOL daShip_bodyJointCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void daShip_c::cannonJointCallBack(int) {
 }
 
 /* 0000033C-00000380       .text daShip_cannonJointCallBack__FP7J3DNodei */
-void daShip_cannonJointCallBack(J3DNode*, int) {
+static BOOL daShip_cannonJointCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -32,7 +32,7 @@ void daShip_c::craneJointCallBack() {
 }
 
 /* 00000414-00000450       .text daShip_craneJointCallBack__FP7J3DNodei */
-void daShip_craneJointCallBack(J3DNode*, int) {
+static BOOL daShip_craneJointCallBack(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -42,7 +42,7 @@ void daShip_c::headJointCallBack0() {
 }
 
 /* 00000474-000004B0       .text daShip_headJointCallBack0__FP7J3DNodei */
-void daShip_headJointCallBack0(J3DNode*, int) {
+static BOOL daShip_headJointCallBack0(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -52,7 +52,7 @@ void daShip_c::headJointCallBack1(int) {
 }
 
 /* 000005E4-00000628       .text daShip_headJointCallBack1__FP7J3DNodei */
-void daShip_headJointCallBack1(J3DNode*, int) {
+static BOOL daShip_headJointCallBack1(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -62,7 +62,7 @@ BOOL daShip_c::draw() {
 }
 
 /* 00000B14-00000B34       .text daShip_Draw__FP8daShip_c */
-void daShip_Draw(daShip_c*) {
+static BOOL daShip_Draw(daShip_c*) {
     /* Nonmatching */
 }
 
@@ -422,12 +422,12 @@ BOOL daShip_c::execute() {
 }
 
 /* 0000B9D4-0000B9F4       .text daShip_Execute__FP8daShip_c */
-void daShip_Execute(daShip_c*) {
+static BOOL daShip_Execute(daShip_c*) {
     /* Nonmatching */
 }
 
 /* 0000B9F4-0000B9FC       .text daShip_IsDelete__FP8daShip_c */
-void daShip_IsDelete(daShip_c*) {
+static BOOL daShip_IsDelete(daShip_c*) {
     /* Nonmatching */
 }
 
@@ -437,7 +437,7 @@ void daShip_c::shipDelete() {
 }
 
 /* 0000BB1C-0000BB40       .text daShip_Delete__FP8daShip_c */
-void daShip_Delete(daShip_c*) {
+static BOOL daShip_Delete(daShip_c*) {
     /* Nonmatching */
 }
 
@@ -447,7 +447,7 @@ void daShip_c::createHeap() {
 }
 
 /* 0000BFB8-0000BFD8       .text daShip_createHeap__FP10fopAc_ac_c */
-void daShip_createHeap(fopAc_ac_c*) {
+static BOOL daShip_createHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -456,39 +456,13 @@ s32 daShip_c::create() {
     /* Nonmatching */
 }
 
-/* 0000C790-0000CA80       .text __ct__8daShip_cFv */
-daShip_c::daShip_c() {
-    /* Nonmatching */
-}
-
-/* 0000CA80-0000CA84       .text __ct__Q29JGeometry8TVec3<f>Fv */
-JGeometry::TVec3<float>::TVec3() {
-    /* Nonmatching */
-}
-
 /* 0000D018-0000D038       .text daShip_Create__FP10fopAc_ac_c */
-void daShip_Create(fopAc_ac_c*) {
+static s32 daShip_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 0000D390-0000D3CC       .text __dt__13daShip_HIO_c0Fv */
-daShip_HIO_c0::~daShip_HIO_c0() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
 
 /* 0000D3FC-0000D41C       .text checkNoControll__9daPy_lk_cCFv */
 void daPy_lk_c::checkNoControll() const {
-    /* Nonmatching */
-}
-
-/* 0000D41C-0000D42C       .text daPy_getPlayerLinkActorClass__Fv */
-void daPy_getPlayerLinkActorClass() {
     /* Nonmatching */
 }
 
@@ -507,11 +481,6 @@ void daGrid_c::force_calc_wind_rel_angle(short) {
     /* Nonmatching */
 }
 
-/* 0000D5FC-0000D61C       .text cMtx_multVecSR__FPA4_CfPC3VecP3Vec */
-void cMtx_multVecSR(const float(*)[4], const Vec*, Vec*) {
-    /* Nonmatching */
-}
-
 /* 0000D61C-0000D638       .text __as__5csXyzFRC5csXyz */
 void csXyz::operator=(const csXyz&) {
     /* Nonmatching */
@@ -524,36 +493,6 @@ void csXyz::set(short, short, short) {
 
 /* 0000D6A8-0000D6C0       .text getCannonAngleX__8daShip_cCFv */
 void daShip_c::getCannonAngleX() const {
-    /* Nonmatching */
-}
-
-/* 0000D6C0-0000D6E0       .text cMtx_multVec__FPA4_CfPC3VecP3Vec */
-void cMtx_multVec(const float(*)[4], const Vec*, Vec*) {
-    /* Nonmatching */
-}
-
-/* 0000D6E0-0000D6FC       .text mDoMtx_multVecZero__FPA4_CfP3Vec */
-void mDoMtx_multVecZero(const float(*)[4], Vec*) {
-    /* Nonmatching */
-}
-
-/* 0000D7A8-0000D7CC       .text cM_scos__Fs */
-void cM_scos(short) {
-    /* Nonmatching */
-}
-
-/* 0000D7CC-0000D7F0       .text cM_ssin__Fs */
-void cM_ssin(short) {
-    /* Nonmatching */
-}
-
-/* 0000D8BC-0000D8FC       .text cM_fcos__Ff */
-void cM_fcos(float) {
-    /* Nonmatching */
-}
-
-/* 0000D8FC-0000D93C       .text cM_fsin__Ff */
-void cM_fsin(float) {
     /* Nonmatching */
 }
 

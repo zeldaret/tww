@@ -12,7 +12,7 @@ daNpc_Kf1_HIO_c::daNpc_Kf1_HIO_c() {
 }
 
 /* 00000198-000001E4       .text nodeCB_Head__FP7J3DNodei */
-void nodeCB_Head(J3DNode*, int) {
+static BOOL nodeCB_Head(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void daNpc_Kf1_c::_nodeCB_Head(J3DNode*, J3DModel*) {
 }
 
 /* 00000314-00000360       .text nodeCB_Neck__FP7J3DNodei */
-void nodeCB_Neck(J3DNode*, int) {
+static BOOL nodeCB_Neck(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -32,7 +32,7 @@ void daNpc_Kf1_c::_nodeCB_Neck(J3DNode*, J3DModel*) {
 }
 
 /* 00000400-0000044C       .text nodeCB_BackBone__FP7J3DNodei */
-void nodeCB_BackBone(J3DNode*, int) {
+static BOOL nodeCB_BackBone(J3DNode*, int) {
     /* Nonmatching */
 }
 
@@ -42,7 +42,7 @@ void daNpc_Kf1_c::_nodeCB_BackBone(J3DNode*, J3DModel*) {
 }
 
 /* 000004EC-0000050C       .text CheckCreateHeap__FP10fopAc_ac_c */
-void CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -457,41 +457,27 @@ void daNpc_Kf1_c::CreateHeap() {
 }
 
 /* 00004590-000045B0       .text daNpc_Kf1_Create__FP10fopAc_ac_c */
-void daNpc_Kf1_Create(fopAc_ac_c*) {
+static s32 daNpc_Kf1_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 000045B0-000045D0       .text daNpc_Kf1_Delete__FP11daNpc_Kf1_c */
-void daNpc_Kf1_Delete(daNpc_Kf1_c*) {
+static BOOL daNpc_Kf1_Delete(daNpc_Kf1_c*) {
     /* Nonmatching */
 }
 
 /* 000045D0-000045F0       .text daNpc_Kf1_Execute__FP11daNpc_Kf1_c */
-void daNpc_Kf1_Execute(daNpc_Kf1_c*) {
+static BOOL daNpc_Kf1_Execute(daNpc_Kf1_c*) {
     /* Nonmatching */
 }
 
 /* 000045F0-00004610       .text daNpc_Kf1_Draw__FP11daNpc_Kf1_c */
-void daNpc_Kf1_Draw(daNpc_Kf1_c*) {
+static BOOL daNpc_Kf1_Draw(daNpc_Kf1_c*) {
     /* Nonmatching */
 }
 
 /* 00004610-00004618       .text daNpc_Kf1_IsDelete__FP11daNpc_Kf1_c */
-void daNpc_Kf1_IsDelete(daNpc_Kf1_c*) {
+static BOOL daNpc_Kf1_IsDelete(daNpc_Kf1_c*) {
     /* Nonmatching */
 }
-
-/* 00004704-00004760       .text __dt__15daNpc_Kf1_HIO_cFv */
-daNpc_Kf1_HIO_c::~daNpc_Kf1_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 000047AC-00004828       .text cLib_getRndValue<i>__Fii */
-void cLib_getRndValue<int>(int, int) {
-    /* Nonmatching */
-}
-
-
-
-
 

@@ -147,40 +147,27 @@ BOOL daGy_Ctrl_c::_delete() {
 }
 
 /* 00001C44-00001C64       .text daGy_CtrlCreate__FPv */
-void daGy_CtrlCreate(void*) {
+static s32 daGy_CtrlCreate(void*) {
     /* Nonmatching */
 }
 
 /* 00001C64-00001C88       .text daGy_CtrlDelete__FPv */
-void daGy_CtrlDelete(void*) {
+static BOOL daGy_CtrlDelete(void*) {
     /* Nonmatching */
 }
 
 /* 00001C88-00001CAC       .text daGy_CtrlExecute__FPv */
-void daGy_CtrlExecute(void*) {
+static BOOL daGy_CtrlExecute(void*) {
     /* Nonmatching */
 }
 
 /* 00001CAC-00001CD0       .text daGy_CtrlDraw__FPv */
-void daGy_CtrlDraw(void*) {
+static BOOL daGy_CtrlDraw(void*) {
     /* Nonmatching */
 }
 
 /* 00001CD0-00001CD8       .text daGy_CtrlIsDelete__FPv */
-void daGy_CtrlIsDelete(void*) {
+static BOOL daGy_CtrlIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 00001CD8-00001D34       .text __dt__15daGy_Ctrl_HIO_cFv */
-daGy_Ctrl_HIO_c::~daGy_Ctrl_HIO_c() {
-    /* Nonmatching */
-}
-
-
-
-
-
-
-
-
 

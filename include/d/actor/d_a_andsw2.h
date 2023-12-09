@@ -3,7 +3,7 @@
 
 #include "f_op/f_op_actor.h"
 
-struct daAndsw2_c : public fopAc_ac_c {
+class daAndsw2_c : public fopAc_ac_c {
 public:
     void setActio(u8 action) { mAction = action; }
 

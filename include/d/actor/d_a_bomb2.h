@@ -70,7 +70,7 @@ namespace daBomb2 {
         
     };
 
-    class Act_c : public fopAc_ac_c { 
+    class Act_c : public fopAc_ac_c {
     public:
         void prm_get_start() const {}
         void prm_get_stick() const {}

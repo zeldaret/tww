@@ -24,6 +24,11 @@ struct J2DTbxBlockHeader {
 
 class J2DTextBox : public J2DPane {
 public:
+    struct TFontSize {
+        /* 0x0 */ f32 mSizeX;
+        /* 0x4 */ f32 mSizeY;
+    };
+
     J2DTextBox(const char*, const char*);
     J2DTextBox(J2DPane*, JSURandomInputStream*);
     J2DTextBox(u32, const JGeometry::TBox2<f32>&, const ResFONT*, const char*, J2DTextBoxHBinding,
@@ -32,24 +37,18 @@ public:
     void initiate(const ResFONT*, const char*, J2DTextBoxHBinding, J2DTextBoxVBinding);
     void setFont(JUTFont*);
     void setFontSize(f32 sizeX, f32 sizeY) {
-        f32 x;
-        if (sizeX > 0.0f) {
-            x = sizeX;
-        } else {
-            x = 0.0f;
-        }
-        mFontSizeX = x;
-
-        f32 y;
-        if (sizeY > 0.0f) {
-            y = sizeY;
-        } else {
-            y = 0.0f;
-        }
-        mFontSizeY = y;
+        mFontSizeX = sizeX > 0.0f ? sizeX : 0.0f;
+        mFontSizeY = sizeY > 0.0f ? sizeY : 0.0f;
     }
-    void setCharColor(JUtility::TColor c) { mCharColor = c; }
-    void setGradColor(JUtility::TColor c) { mGradColor = c; }
+    void setFontSize(TFontSize size) {
+        setFontSize(size.mSizeX, size.mSizeY);
+    }
+    void getFontSize(TFontSize& size) const {
+        size.mSizeX = mFontSizeX;
+        size.mSizeY = mFontSizeY;
+    }
+    void setCharColor(JUtility::TColor c) { mCharColor.set(c); }
+    void setGradColor(JUtility::TColor c) { mGradColor.set(c); }
     void setBlack(JUtility::TColor c) { mBlack = c; }
     void setWhite(JUtility::TColor c) { mBlack = c; }
     void setLineSpace(f32 x) { mLineSpace = x; }

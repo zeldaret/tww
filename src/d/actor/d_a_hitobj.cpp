@@ -7,29 +7,26 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000080       .text daHitobj_Draw__FP12hitobj_class */
-void daHitobj_Draw(hitobj_class*) {
+static BOOL daHitobj_Draw(hitobj_class*) {
     /* Nonmatching */
 }
 
 /* 00000080-000000E8       .text daHitobj_Execute__FP12hitobj_class */
-void daHitobj_Execute(hitobj_class*) {
+static BOOL daHitobj_Execute(hitobj_class*) {
     /* Nonmatching */
 }
 
 /* 000000E8-000000F0       .text daHitobj_IsDelete__FP12hitobj_class */
-void daHitobj_IsDelete(hitobj_class*) {
+static BOOL daHitobj_IsDelete(hitobj_class*) {
     /* Nonmatching */
 }
 
 /* 000000F0-00000120       .text daHitobj_Delete__FP12hitobj_class */
-void daHitobj_Delete(hitobj_class*) {
+static BOOL daHitobj_Delete(hitobj_class*) {
     /* Nonmatching */
 }
 
 /* 00000120-0000025C       .text daHitobj_Create__FP10fopAc_ac_c */
-void daHitobj_Create(fopAc_ac_c*) {
+static s32 daHitobj_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-
-

@@ -41,11 +41,6 @@ void daObjMmrr::Act_c::set_cc_trans_pos() {
     /* Nonmatching */
 }
 
-/* 000009FC-00000B50       .text __dt__19dBgS_MirLightLinChkFv */
-dBgS_MirLightLinChk::~dBgS_MirLightLinChk() {
-    /* Nonmatching */
-}
-
 /* 00000F88-0000102C       .text set_cull__Q29daObjMmrr5Act_cFv */
 void daObjMmrr::Act_c::set_cull() {
     /* Nonmatching */
@@ -100,36 +95,3 @@ BOOL daObjMmrr::Act_c::_execute() {
 BOOL daObjMmrr::Act_c::_draw() {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* 00001B74-00001BF0       .text __dt__Q29daObjMmrr5Eff_cFv */
-daObjMmrr::Eff_c::~Eff_c() {
-    /* Nonmatching */
-}
-
-/* 00002080-000020DC       .text __dt__8cM3dGTriFv */
-cM3dGTri::~cM3dGTri() {
-    /* Nonmatching */
-}
-
-/* 000020DC-00002124       .text __dt__8cM3dGPlaFv */
-cM3dGPla::~cM3dGPla() {
-    /* Nonmatching */
-}
-

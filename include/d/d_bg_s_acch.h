@@ -31,9 +31,8 @@ public:
 
     dBgS_AcchCir();
     void SetWallR(f32);
-    void CalcWallRR();
+    void CalcWallRR() { m_wall_rr = m_wall_r*m_wall_r; }
     void SetWall(f32 i_halfHeight, f32 i_radius);
-    void SetWallHDirect(f32);
 
     virtual ~dBgS_AcchCir() {}
 
@@ -41,6 +40,7 @@ public:
     f32 GetWallR() { return m_wall_r; }
     s16 GetWallAngleY() { return m_wall_angle_y; }
     void SetWallH(f32 h) { m_wall_h = h; }
+    void SetWallHDirect(f32 h) { m_flags |= WALL_H_DIRECT; m_wall_h_direct = h; }
     void ClrWallHDirect() { m_flags &= ~WALL_H_DIRECT; }
     bool ChkWallHit() { return m_flags & WALL_HIT; }
     void ClrWallHit() {
@@ -83,11 +83,11 @@ public:
     dBgS_Acch();
     void Init();
     void Set(fopAc_ac_c*, int, dBgS_AcchCir*);
-    void Set(cXyz* pos, cXyz* old_pos, fopAc_ac_c* actor, int tbl_size, dBgS_AcchCir* acchCir, cXyz* speed,
-             csXyz* angle, csXyz* shape_angle);
+    void Set(cXyz* pos, cXyz* old_pos, fopAc_ac_c* actor, int tbl_size, dBgS_AcchCir* acchCir,
+             cXyz* speed = NULL, csXyz* angle = NULL, csXyz* shape_angle = NULL);
     void GroundCheckInit(dBgS&);
     void GroundCheck(dBgS&);
-    void GroundRoofProc(dBgS&);
+    f32 GroundRoofProc(dBgS&);
     void LineCheck(dBgS&);
     void CrrPos(dBgS&);
     f32 GetWallAllR();
@@ -98,10 +98,17 @@ public:
     f32 GetWallAllLowH_R();
     f32 GetSpeedY();
     f32 GetWallAddY(Vec&);
-    void SetNowActorInfo(int, void*, unsigned int);
+    void SetNowActorInfo(int bg_index, void* bgw, unsigned int apid) {
+        m_bg_index = bg_index;
+        field_0x78 = bgw;
+        field_0x7c = apid;
+    }
     void SetWallPolyIndex(int, int);
     void CalcMovePosWork();
-    void CalcWallRR();
+    void CalcWallRR() {
+        for (s32 i = 0; i < m_tbl_size; i++)
+            pm_acch_cir[i].CalcWallRR();
+    }
     void SetMoveBGOnly();
     void ClrMoveBGOnly();
     void SetGndThinCellingOff();
@@ -110,7 +117,7 @@ public:
     void OnWallSort();
     bool ChkWallSort();
     bool ChkLineDown();
-    f32 GetOnePolyInfo(cBgS_PolyInfo*);
+    bool GetOnePolyInfo(cBgS_PolyInfo*);
     f32 GetWallAddY(Vec&, int);
 
     virtual ~dBgS_Acch();

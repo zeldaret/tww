@@ -36,13 +36,13 @@ public:
     void WallCorrectGrpRp(dBgS_Acch*, int, int);
     void RwgRoofChk(u16, dBgS_RoofChk*);
     void RoofChkRp(dBgS_RoofChk*, int);
-    void RoofChkGrpRp(dBgS_RoofChk*, int, int);
+    bool RoofChkGrpRp(dBgS_RoofChk*, int, int);
     void RwgSplGrpChk(u16, dBgS_SplGrpChk*);
     void SplGrpChkRp(dBgS_SplGrpChk*, int);
-    void SplGrpChkGrpRp(dBgS_SplGrpChk*, int, int);
+    bool SplGrpChkGrpRp(dBgS_SplGrpChk*, int, int);
     void RwgSphChk(u16, dBgS_SphChk*, void*);
     void SphChkRp(dBgS_SphChk*, void*, int);
-    void SphChkGrpRp(dBgS_SphChk*, void*, int, int);
+    bool SphChkGrpRp(dBgS_SphChk*, void*, int, int);
     void positionWallCrrPos(cM3dGTri&, dBgS_CrrPos*, cXyz*, f32, f32);
     void RwgWallCrrPos(u16, dBgS_CrrPos*);
     void WallCrrPosRp(dBgS_CrrPos*, int);
@@ -67,7 +67,7 @@ public:
     /* 0xAE */ s16 mRotYDelta;
     /* 0xB0 */ dBgW_RideCallBack mpRideCb;
     /* 0xB4 */ dBgW_PPCallBack mpPushPullCb;
-    /* 0xB8 */ s16 mRoomNo;
+    /* 0xB8 */ u16 mRoomNo;
     /* 0xBA */ u8 mFlag;
     /* 0xBB */ u8 mRoomNo2;
 };
