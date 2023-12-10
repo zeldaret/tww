@@ -2508,18 +2508,18 @@ void dKy_setLight() {
 
 /* 8019514C-80195270       .text dKy_setLight_again__Fv */
 void dKy_setLight_again() {
-    /* Nonmatching */
     Mtx invView;
     Vec tmp;
     GXLightObj lightObj;
 
-    mDoMtx_inverseTranspose(j3dSys.getViewMtx(), invView);
+    MtxP viewMtx; // fakematch
+    mDoMtx_inverseTranspose(viewMtx = j3dSys.getViewMtx(), invView);
 
     dKy_setLight__Status *pStts = &lightStatusData[0];
-    MTXMultVec(j3dSys.getViewMtx(), &pStts->mPos, &tmp);
+    mDoMtx_multVec(viewMtx, &pStts->mPos, &tmp);
     GXInitLightPos(&lightObj, tmp.x, tmp.y, tmp.z);
 
-    MTXMultVec(invView, &pStts->mLightDir, &tmp);
+    mDoMtx_multVec(invView, &pStts->mLightDir, &tmp);
     GXInitLightDir(&lightObj, tmp.x, tmp.y, tmp.z);
 
     GXInitLightColor(&lightObj, pStts->mColor);
@@ -2905,48 +2905,48 @@ void dKy_arrowcol_chg_on(cXyz*, int mode) {
 void dKy_arrowcol_chg_move() {
     /* Nonmatching - regalloc */
     dScnKy_env_light_c& envLight = dKy_getEnvlight();
-    s16 amb[3], dif[3];
-    s16 bg3_amb[3], bg3_dif[3];
+    GXColorS10 amb, dif;
+    GXColorS10 bg3_amb, bg3_dif;
 
     switch (envLight.mColChgFlag) {
     case 0x10:
     case 0x40:
         {
-            amb[0] = 0xBE;
-            amb[1] = 0x78;
-            amb[2] = 0x78;
-            dif[0] = 0x3C;
-            dif[1] = 0x00;
-            dif[2] = 0x00;
+            amb.r = 0xBE;
+            amb.g = 0x78;
+            amb.b = 0x78;
+            dif.r = 0x3C;
+            dif.g = 0x00;
+            dif.b = 0x00;
         }
         break;
     case 0x20:
     case 0x50:
         {
-            amb[0] = 0x3C;
-            amb[1] = 0x96;
-            amb[2] = 0xE6;
-            dif[0] = 0x32;
-            dif[1] = 0x41;
-            dif[2] = 0x50;
+            amb.r = 0x3C;
+            amb.g = 0x96;
+            amb.b = 0xE6;
+            dif.r = 0x32;
+            dif.g = 0x41;
+            dif.b = 0x50;
         }
         break;
     case 0x30:
     case 0x60:
         {
-            amb[0] = 0x50;
-            amb[1] = 0x50;
-            amb[2] = 0x14;
-            dif[0] = 0x1E;
-            dif[1] = 0x1E;
-            dif[2] = 0x0A;
+            amb.r = 0x50;
+            amb.g = 0x50;
+            amb.b = 0x14;
+            dif.r = 0x1E;
+            dif.g = 0x1E;
+            dif.b = 0x0A;
             if (strcmp(dComIfGp_getStartStageName(), "GTower") == 0) {
-                amb[0] = 0x45;
-                amb[1] = 0x1B;
-                amb[2] = 0x00;
-                dif[0] = 0x74;
-                dif[1] = 0x65;
-                dif[2] = 0x10;
+                amb.r = 0x45;
+                amb.g = 0x1B;
+                amb.b = 0x00;
+                dif.r = 0x74;
+                dif.g = 0x65;
+                dif.b = 0x10;
             }
         }
         break;
@@ -2975,37 +2975,37 @@ void dKy_arrowcol_chg_move() {
         break;
     }
     if ((envLight.mColChgFlag & 0xF0) != 0) {
-        dKy_actor_addcol_amb_set(amb[0] - envLight.mActorC0.r, amb[1] - envLight.mActorC0.g, amb[2] - envLight.mActorC0.b, envLight.field_0xc34);
-        dKy_bg_addcol_amb_set(amb[0] - envLight.mBG0_C0.r, amb[1] - envLight.mBG0_C0.g, amb[2] - envLight.mBG0_C0.b, envLight.field_0xc34);
+        dKy_actor_addcol_amb_set(amb.r - envLight.mActorC0.r, amb.g - envLight.mActorC0.g, amb.b - envLight.mActorC0.b, envLight.field_0xc34);
+        dKy_bg_addcol_amb_set(amb.r - envLight.mBG0_C0.r, amb.g - envLight.mBG0_C0.g, amb.b - envLight.mBG0_C0.b, envLight.field_0xc34);
         if (strcmp(dComIfGp_getStartStageName(), "GTower") != 0) {
-            dKy_bg1_addcol_amb_set(amb[0] - envLight.mBG1_C0.r, amb[1] - envLight.mBG1_C0.g, amb[2] - envLight.mBG1_C0.b, envLight.field_0xc34);
+            dKy_bg1_addcol_amb_set(amb.r - envLight.mBG1_C0.r, amb.g - envLight.mBG1_C0.g, amb.b - envLight.mBG1_C0.b, envLight.field_0xc34);
         }
-        dKy_bg2_addcol_amb_set(amb[0] - envLight.mBG2_C0.r, amb[1] - envLight.mBG2_C0.g, amb[2] - envLight.mBG2_C0.b, envLight.field_0xc34);
-        bg3_amb[0] = amb[0] - envLight.mBG3_C0.r;
-        bg3_amb[1] = amb[1] - envLight.mBG3_C0.g;
-        bg3_amb[2] = amb[2] - envLight.mBG3_C0.b;
+        dKy_bg2_addcol_amb_set(amb.r - envLight.mBG2_C0.r, amb.g - envLight.mBG2_C0.g, amb.b - envLight.mBG2_C0.b, envLight.field_0xc34);
+        bg3_amb.r = amb.r - envLight.mBG3_C0.r;
+        bg3_amb.g = amb.g - envLight.mBG3_C0.g;
+        bg3_amb.b = amb.b - envLight.mBG3_C0.b;
         if (strcmp(dComIfGp_getStartStageName(), "GTower") == 0) {
-            bg3_amb[0] = 0xB7 - envLight.mBG3_C0.r;
-            bg3_amb[1] = 0xB0 - envLight.mBG3_C0.g;
-            bg3_amb[2] = 0x88 - envLight.mBG3_C0.b;
+            bg3_amb.r = 0xB7 - envLight.mBG3_C0.r;
+            bg3_amb.g = 0xB0 - envLight.mBG3_C0.g;
+            bg3_amb.b = 0x88 - envLight.mBG3_C0.b;
         }
 
-        dKy_bg3_addcol_amb_set(bg3_amb[0], bg3_amb[1], bg3_amb[2], envLight.field_0xc34);
-        dKy_actor_addcol_dif_set(dif[0] - envLight.mActorK0.r, dif[1] - envLight.mActorK0.g, dif[2] - envLight.mActorK0.b, envLight.field_0xc34);
-        dKy_bg_addcol_dif_set(dif[0] - envLight.mBG0_K0.r, dif[1] - envLight.mBG0_K0.g, dif[2] - envLight.mBG0_K0.b, envLight.field_0xc34);
+        dKy_bg3_addcol_amb_set(bg3_amb.r, bg3_amb.g, bg3_amb.b, envLight.field_0xc34);
+        dKy_actor_addcol_dif_set(dif.r - envLight.mActorK0.r, dif.g - envLight.mActorK0.g, dif.b - envLight.mActorK0.b, envLight.field_0xc34);
+        dKy_bg_addcol_dif_set(dif.r - envLight.mBG0_K0.r, dif.g - envLight.mBG0_K0.g, dif.b - envLight.mBG0_K0.b, envLight.field_0xc34);
         if (strcmp(dComIfGp_getStartStageName(), "GTower") != 0) {
-            dKy_bg1_addcol_dif_set(dif[0] - envLight.mBG1_K0.r, dif[1] - envLight.mBG1_K0.g, dif[2] - envLight.mBG1_K0.b, envLight.field_0xc34);
+            dKy_bg1_addcol_dif_set(dif.r - envLight.mBG1_K0.r, dif.g - envLight.mBG1_K0.g, dif.b - envLight.mBG1_K0.b, envLight.field_0xc34);
         }
-        dKy_bg2_addcol_dif_set(dif[0] - envLight.mBG2_K0.r, dif[1] - envLight.mBG2_K0.g, dif[2] - envLight.mBG2_K0.b, envLight.field_0xc34);
-        bg3_dif[0] = dif[0] - envLight.mBG3_K0.r;
-        bg3_dif[1] = dif[1] - envLight.mBG3_K0.g;
-        bg3_dif[2] = dif[2] - envLight.mBG3_K0.b;
+        dKy_bg2_addcol_dif_set(dif.r - envLight.mBG2_K0.r, dif.g - envLight.mBG2_K0.g, dif.b - envLight.mBG2_K0.b, envLight.field_0xc34);
+        bg3_dif.r = dif.r - envLight.mBG3_K0.r;
+        bg3_dif.g = dif.g - envLight.mBG3_K0.g;
+        bg3_dif.b = dif.b - envLight.mBG3_K0.b;
         if (strcmp(dComIfGp_getStartStageName(), "GTower") == 0) {
-            bg3_dif[0] = 0x8A - envLight.mBG3_C0.r;
-            bg3_dif[1] = 0x8A - envLight.mBG3_C0.g;
-            bg3_dif[2] = 0x44 - envLight.mBG3_C0.b;
+            bg3_dif.r = 0x8A - envLight.mBG3_C0.r;
+            bg3_dif.g = 0x8A - envLight.mBG3_C0.g;
+            bg3_dif.b = 0x44 - envLight.mBG3_C0.b;
         }
-        dKy_bg3_addcol_dif_set(bg3_dif[0], bg3_dif[1], bg3_dif[2], envLight.field_0xc34);
+        dKy_bg3_addcol_dif_set(bg3_dif.r, bg3_dif.g, bg3_dif.b, envLight.field_0xc34);
     }
 }
 
@@ -3050,7 +3050,7 @@ void dKy_Sound_set(cXyz pos, int p2, unsigned int p3, int p4) {
         dKy_getEnvlight().mSound.field_0x0.y = pos.y;
         dKy_getEnvlight().mSound.field_0x0.z = pos.z;
         dKy_getEnvlight().mSound.field_0xc = p2;
-        dKy_getEnvlight().mSound.field_0x14 = fpcM_ERROR_PROCESS_ID_e;
+        dKy_getEnvlight().mSound.field_0x14 = p3;
         dKy_getEnvlight().mSound.field_0x10 = p4;
     }
 }
@@ -3298,10 +3298,10 @@ int dKy_get_schbit_timer() {
 
 /* 80197018-80197144       .text dKy_get_seacolor__FP8_GXColorP8_GXColor */
 void dKy_get_seacolor(GXColor* amb, GXColor* dif) {
-    dScnKy_env_light_c& light = g_env_light; // maybe fakematch
-    s16 ambr = g_env_light.mBG1_C0.r + light.mBg1AddColAmb.r;
-    s16 ambg = g_env_light.mBG1_C0.g + light.mBg1AddColAmb.g;
-    s16 ambb = g_env_light.mBG1_C0.b + light.mBg1AddColAmb.b;
+    dScnKy_env_light_c& envLight = dKy_getEnvlight();
+    s16 ambr = envLight.mBG1_C0.r + dKy_getEnvlight().mBg1AddColAmb.r;
+    s16 ambg = envLight.mBG1_C0.g + dKy_getEnvlight().mBg1AddColAmb.g;
+    s16 ambb = envLight.mBG1_C0.b + dKy_getEnvlight().mBg1AddColAmb.b;
     if (ambr < 0x00)
         ambr = 0x00;
     if (ambg < 0x00)
@@ -3318,9 +3318,9 @@ void dKy_get_seacolor(GXColor* amb, GXColor* dif) {
     amb->g = ambg;
     amb->b = ambb;
 
-    s16 difr = light.mBG1_K0.r + g_env_light.mBg1AddColDif.r;
-    s16 difg = light.mBG1_K0.g + g_env_light.mBg1AddColDif.g;
-    s16 difb = light.mBG1_K0.b + g_env_light.mBg1AddColDif.b;
+    s16 difr = envLight.mBG1_K0.r + dKy_getEnvlight().mBg1AddColDif.r;
+    s16 difg = envLight.mBG1_K0.g + dKy_getEnvlight().mBg1AddColDif.g;
+    s16 difb = envLight.mBG1_K0.b + dKy_getEnvlight().mBg1AddColDif.b;
     if (difr < 0x00)
         difr = 0x00;
     if (difg < 0x00)
