@@ -16,6 +16,7 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_printf.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
+#include "JSystem/J2DGraph/J2DPrint.h"
 #include "JSystem/JFramework/JFWDisplay.h"
 #include "JSystem/JFramework/JFWSystem.h"
 #include "JSystem/JKernel/JKRHeap.h"
@@ -29,10 +30,6 @@
 #include "JSystem/JUtility/JUTVideo.h"
 #include "JSystem/JUtility/JUTXfb.h"
 #include "dolphin/base/PPCArch.h"
-
-namespace J2DPrint {
-    void setBuffer(u32);
-}
 
 JUTFader * mDoGph_gInf_c::mFader;
 ResTIMG * mDoGph_gInf_c::mFrameBufferTimg;
