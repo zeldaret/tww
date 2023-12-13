@@ -32,12 +32,20 @@ public:
     void getJumpBlurRate() {}
     void getNowMode() {}
     void getSeType() {}
-    void moveStateInit(float, float, short) {}
+    void moveStateInit(f32 speedForward, f32 speedY, s16 angleY) {
+        speed.y = speedY;
+        speedF = speedForward;
+        current.angle.y = angleY;
+    }
     void onFloorFlg() {}
-    void setMatrix(float(*)[4]) {}
+    void setMatrix(Mtx mtx) {
+        if (mpModel) {
+            mpModel->setBaseTRMtx(mtx);
+        }
+    }
     void setNowMode(int) {}
-    void setRotAngleSpeed(short) {}
-    void setThrow(short) {}
+    void setRotAngleSpeed(s16 speed) { m2C2 = speed; }
+    void setThrow(s16) {}
 
     void getTopPos(cXyz *);
     void getBlurRootPos(cXyz *);

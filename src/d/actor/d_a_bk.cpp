@@ -11,17 +11,160 @@
 #include "d/actor/d_a_obj_search.h"
 #include "d/actor/d_a_item.h"
 #include "d/d_item_data.h"
+#include "d/actor/d_a_boko.h"
+#include "d/d_bg_s_lin_chk.h"
+#include "m_Do/m_Do_mtx.h"
+#include "d/actor/d_a_player.h"
 
 static bkHIO_c l_bkHIO;
 
+enum BK_RES_FILE_ID { // IDs and indexes are synced
+    /* BAS */
+    BK_BAS_BK_AOMUKE=0x8,
+    BK_BAS_BK_ATTACK1=0x9,
+    BK_BAS_BK_ATTACK2=0xA,
+    BK_BAS_BK_ATTACK3=0xB,
+    BK_BAS_BK_BOKKURI=0xC,
+    BK_BAS_BK_CATCH=0xD,
+    BK_BAS_BK_HAKKEN=0xE,
+    BK_BAS_BK_IATTACK1=0xF,
+    BK_BAS_BK_JATTACK2=0x10,
+    BK_BAS_BK_JATTACK3=0x11,
+    BK_BAS_BK_JUMP1=0x12,
+    BK_BAS_BK_JUMP2=0x13,
+    BK_BAS_BK_KERI1=0x14,
+    BK_BAS_BK_KERI2=0x15,
+    BK_BAS_BK_KYORO1=0x16,
+    BK_BAS_BK_KYORO2=0x17,
+    BK_BAS_BK_NIGERU=0x18,
+    BK_BAS_BK_NOBI=0x19,
+    BK_BAS_BK_NOMWAIT=0x1A,
+    BK_BAS_BK_OKIRUA=0x1B,
+    BK_BAS_BK_OKIRUU=0x1C,
+    BK_BAS_BK_OTISOU1=0x1D,
+    BK_BAS_BK_OTISOU2=0x1E,
+    BK_BAS_BK_RUN=0x1F,
+    BK_BAS_BK_SLEEP=0x20,
+    BK_BAS_BK_SUWARI=0x21,
+    BK_BAS_BK_TUTUKU1=0x22,
+    BK_BAS_BK_UTUBUSE=0x23,
+    BK_BAS_BK_WAIT=0x24,
+    BK_BAS_BK_WALK=0x25,
+    BK_BAS_BK_WALK2=0x26,
+    
+    /* BCK */
+    BK_BCK_BK_AOMUKE=0x29,
+    BK_BCK_BK_ATTACK1=0x2A,
+    BK_BCK_BK_ATTACK2=0x2B,
+    BK_BCK_BK_ATTACK3=0x2C,
+    BK_BCK_BK_BIKKURI=0x2D,
+    BK_BCK_BK_BOUGYO1=0x2E,
+    BK_BCK_BK_BOUGYO2=0x2F,
+    BK_BCK_BK_CATCH=0x30,
+    BK_BCK_BK_HAKKEN=0x31,
+    BK_BCK_BK_HAKOBI=0x32,
+    BK_BCK_BK_HIDARIROT=0x33,
+    BK_BCK_BK_JATTACK1=0x34,
+    BK_BCK_BK_JATTACK2=0x35,
+    BK_BCK_BK_JATTACK3=0x36,
+    BK_BCK_BK_JUMP1=0x37,
+    BK_BCK_BK_JUMP2=0x38,
+    BK_BCK_BK_KERI1=0x39,
+    BK_BCK_BK_KERI2=0x3A,
+    BK_BCK_BK_KIME=0x3B,
+    BK_BCK_BK_KOUKA=0x3C,
+    BK_BCK_BK_KYORO1=0x3D,
+    BK_BCK_BK_KYORO2=0x3E,
+    BK_BCK_BK_MIGIROT=0x3F,
+    BK_BCK_BK_NIGERU=0x40,
+    BK_BCK_BK_NOBI=0x41,
+    BK_BCK_BK_NOMWAIT=0x42,
+    BK_BCK_BK_NOZOKU=0x43,
+    BK_BCK_BK_OKIRUA=0x44,
+    BK_BCK_BK_OKIRUU=0x45,
+    BK_BCK_BK_OTISOU1=0x46,
+    BK_BCK_BK_OTISOU2=0x47,
+    BK_BCK_BK_RUN=0x48,
+    BK_BCK_BK_SLEEP=0x49,
+    BK_BCK_BK_SUWARI=0x4A,
+    BK_BCK_BK_TATAKU=0x4B,
+    BK_BCK_BK_TUTUKU1=0x4C,
+    BK_BCK_BK_TUTUKU2=0x4D,
+    BK_BCK_BK_TUTUKU3=0x4E,
+    BK_BCK_BK_TYAKU=0x4F,
+    BK_BCK_BK_UTUBUSE=0x50,
+    BK_BCK_BK_WAIT=0x51,
+    BK_BCK_BK_WALK=0x52,
+    BK_BCK_BK_WALK2=0x53,
+    
+    /* BDLM */
+    BK_BDL_BK=0x56,
+    BK_BDL_BOUEN=0x57,
+    
+    /* BMD */
+    BK_BMD_BK_KB=0x5A,
+    BK_BMD_BK_TATE=0x5B,
+    
+    /* BMT */
+    BK_BMT_BK_BOKO=0x5E,
+    BK_BMT_BK_KEN=0x5F,
+    BK_BMT_GREEN=0x60,
+    BK_BMT_PINK=0x61,
+    
+    /* BTP */
+    BK_BTP_TMABATAKI=0x64,
+};
+
 /* 000000EC-00000234       .text anm_init__FP8bk_classifUcfi */
-static void anm_init(bk_class* i_this, int, f32, u8, f32, int) {
-    /* Nonmatching */
+static void anm_init(bk_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f32 speed, int soundFileIdx) {
+    if (i_this->mDamageReaction.mState == 0x13 && bckFileIdx != BK_BCK_BK_OTISOU1 && bckFileIdx != BK_BCK_BK_OTISOU2) {
+        return;
+    }
+    if (soundFileIdx >= 0) {
+        void* soundAnm = dComIfG_getObjectRes("AM2", soundFileIdx);
+        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("AM2", bckFileIdx);
+        i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, soundAnm);
+    } else {
+        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("AM2", bckFileIdx);
+        i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, NULL);
+    }
 }
 
 /* 00000234-000005A8       .text yari_off_check__FP8bk_class */
 static void yari_off_check(bk_class* i_this) {
-    /* Nonmatching */
+    if (i_this->m0B34 == 0) {
+        return;
+    }
+    
+    daBoko_c* boko = (daBoko_c*)fopAcM_SearchByID(i_this->m1200);
+    if (boko) {
+        daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+        fopAcM_cancelCarryNow(boko);
+        
+        if (i_this->m0B34 != 2) {
+            boko->setRotAngleSpeed(cM_rndFX(2000.0f));
+            s16 angleY = i_this->shape_angle.y + 0x8000 + (s16)cM_rndFX(8000.0f);
+            f32 speedY = 20.0f + cM_rndF(20.0f);
+            f32 speedForward = 20.0f + cM_rndF(10.0f);
+            boko->moveStateInit(speedForward, speedY, angleY);
+        }
+        boko->current.angle.y = player->shape_angle.y;
+        
+        dBgS_LinChk linChk;
+        linChk.Set(&i_this->mEyePos, &boko->current.pos, i_this);
+        if (dComIfG_Bgsp()->LineCross(&linChk)) {
+            MtxP mtx = i_this->mpMorf->getModel()->getAnmMtx(0x10); // mune (chest) joint
+            cMtx_copy(mtx, *calc_mtx);
+            boko->setMatrix(*calc_mtx);
+            cXyz offset;
+            offset.set(0.0f, 0.0f, 0.0f);
+            MtxPosition(&offset, &boko->current.pos);
+        }
+    }
+    
+    i_this->m121F = 1;
+    i_this->m0B34 = 0;
+    i_this->m0B30 = 0;
 }
 
 /* 00000A1C-00000EE8       .text smoke_set_s__FP8bk_classf */
@@ -79,9 +222,22 @@ static void daBk_other_bg_check(bk_class* i_this, fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+static fopAc_ac_c* target_info[10];
+static s32 target_info_count;
+
 /* 00002C4C-00002CD4       .text s_w_sub__FPvPv */
-static void s_w_sub(void*, void*) {
-    /* Nonmatching */
+static void* s_w_sub(void* param_1, void*) {
+    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_BOKO) {
+        daBoko_c* boko = (daBoko_c*)param_1;
+        // TODO: enum for boko type
+        if (fopAcM_GetParam(boko) != 4 && !fopAcM_checkCarryNow(boko)) {
+            if (target_info_count < (s32)ARRAY_SIZE(target_info)) {
+                target_info[target_info_count] = boko;
+                target_info_count++;
+            }
+        }
+    }
+    return NULL;
 }
 
 /* 00002CD4-00002FB0       .text search_wepon__FP8bk_class */
@@ -327,8 +483,9 @@ static void rope_on(bk_class* i_this) {
 }
 
 /* 0000AC6C-0000AC84       .text search_target__FP8bk_class */
-static void search_target(bk_class* i_this) {
-    /* Nonmatching */
+static BOOL search_target(bk_class* i_this) {
+    i_this->mDamageReaction.m714 = dComIfGp_getPlayer(0);
+    return FALSE;
 }
 
 /* 0000AC84-0000B25C       .text Bk_move__FP8bk_class */

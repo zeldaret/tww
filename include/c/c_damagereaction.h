@@ -164,7 +164,8 @@ public:
     /* 0x711 */ u8 m711[0x712 - 0x711];
     /* 0x712 */ u8 m712;
     /* 0x713 */ u8 m713;
-    /* 0x714 */ u8 m714[0x71E - 0x714];
+    /* 0x714 */ fopAc_ac_c* m714;
+    /* 0x718 */ u8 m718[0x71E - 0x718];
     /* 0x71E */ s16 m71E;
     /* 0x720 */ f32 mMaxFallDistance;
     /* 0x724 */ dCcD_Stts mStts;
