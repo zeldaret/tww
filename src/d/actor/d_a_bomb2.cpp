@@ -260,9 +260,9 @@ namespace daBomb2 {
     void Act_c::start_proc_call() {
         typedef void(Act_c::*procFunc)();
         static procFunc start_proc[] = {
-            &start_explode_instant,
-            &start_explode_interval,
-            &start_carry
+            &Act_c::start_explode_instant,
+            &Act_c::start_explode_interval,
+            &Act_c::start_carry
         };
 
         int proc = daObj::PrmAbstract(this, PRM_2_W, PRM_2_S);
@@ -851,10 +851,10 @@ namespace daBomb2 {
     void Act_c::mode_proc_call() {
         typedef void(Act_c::*procFunc)();
         static procFunc mode_proc[] = {
-            &mode_wait,
-            &mode_carry,
-            &mode_explode,
-            &mode_sink,
+            &Act_c::mode_wait,
+            &Act_c::mode_carry,
+            &Act_c::mode_explode,
+            &Act_c::mode_sink,
         };
 
         if(fopAcM_checkCarryNow(this) && field_0x694 != 1) {
@@ -951,10 +951,10 @@ namespace daBomb2 {
     void Act_c::tensor_proc_call() {
         typedef void(Act_c::*procFunc)();
         static procFunc tensor_proc[] = {
-            &tensor_wait,
-            &tensor_carry,
-            &tensor_explode,
-            &tensor_sink,
+            &Act_c::tensor_wait,
+            &Act_c::tensor_carry,
+            &Act_c::tensor_explode,
+            &Act_c::tensor_sink,
         };
 
         if(!daObj::PrmAbstract(this, PRM_1_W, PRM_1_S)) {

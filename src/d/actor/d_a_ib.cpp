@@ -12,6 +12,7 @@
 #include "d/actor/d_a_item.h"
 #include "d/d_item.h"
 #include "d/d_item_data.h"
+#include "global.h"
 #include "m_Do/m_Do_mtx.h"
 
 // Needed for the .data section to match.
@@ -191,8 +192,8 @@ BOOL daIball_c::dead() {
 /* 800F3A48-800F3E78       .text checkGeo__9daIball_cFv */
 void daIball_c::checkGeo() {
     static ModeFunc mode_proc[] = {
-        &mode_wait,
-        &mode_water,
+        &daIball_c::mode_wait,
+        &daIball_c::mode_water,
     };
     
     mPrevSpeedY = speed.y;
@@ -321,10 +322,7 @@ void daIball_c::set_mtx() {
 }
 
 // TODO: This is a hack. I have no idea why this one variable needs to go in .data instead of .sdata.
-#ifndef __INTELLISENSE__
-__declspec(section ".data")
-#endif
-char daIball_c::m_arcname[] = "Always";
+SECTION_DATA char daIball_c::m_arcname[] = "Always";
 
 dCcD_SrcCyl daIball_c::m_cyl_src = {
     // dCcD_SrcGObjInf

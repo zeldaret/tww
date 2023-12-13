@@ -11,7 +11,7 @@
 #include "JSystem/JUtility/JUTProcBar.h"
 #include "dolphin/gx/GX.h"
 #include "dolphin/os/OS.h"
-#include "dolphin/types.h"
+#include "global.h"
 
 JFWDisplay* JFWDisplay::sManager = 0;
 
@@ -22,7 +22,7 @@ Mtx e_mtx = {
     {0.0f, 0.0f, 1.0f, 0.0f},
 };
 static GXTexObj clear_z_tobj;
-u8 clear_z_TX[64] __attribute__((aligned(32))) = {
+u8 clear_z_TX[64] ALIGN_DECL(32) = {
     0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF,
     0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF,
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
@@ -484,7 +484,7 @@ void JFWGXDrawDoneAutoAbort() {
     if(JFWAutoAbortGfx != 0) {
         OSAlarm alarm;
         OSCreateAlarm(&alarm);
-        OSSetAlarm(&alarm, __OSBusClock >> 2, JFWGXAbortAlarmHandler);
+        OSSetAlarm(&alarm, OS_TIMER_CLOCK, JFWGXAbortAlarmHandler);
         GXDrawDone();
         OSCancelAlarm(&alarm);
     }

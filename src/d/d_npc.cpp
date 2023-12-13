@@ -702,12 +702,12 @@ bool dNpc_setAnm_2(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int
 
 /* 8021C238-8021C2E8       .text swing_vertical_init__14dNpc_HeadAnm_cFsssi */
 void dNpc_HeadAnm_c::swing_vertical_init(s16 param_1, s16 param_2, s16 param_3, int param_4) {
-    if(param_4 == 0 || mFunc != &swing_vertical) {
+    if(param_4 == 0 || mFunc != &dNpc_HeadAnm_c::swing_vertical) {
         field_0x1C = 0;
         field_0x20 = param_1;
         field_0x1E = param_2;
         field_0x14 = param_3;
-        mFunc = &swing_vertical;
+        mFunc = &dNpc_HeadAnm_c::swing_vertical;
     }
 }
 
@@ -726,12 +726,12 @@ void dNpc_HeadAnm_c::swing_vertical() {
 
 /* 8021C3C8-8021C478       .text swing_horizone_init__14dNpc_HeadAnm_cFsssi */
 void dNpc_HeadAnm_c::swing_horizone_init(s16 param_1, s16 param_2, s16 param_3, int param_4) {
-    if(param_4 == 0 || mFunc != &swing_vertical) {
+    if(param_4 == 0 || mFunc != &dNpc_HeadAnm_c::swing_vertical) {
         field_0x1C = 0;
         field_0x20 = param_1;
         field_0x1E = param_2;
         field_0x18 = param_3;
-        mFunc = &swing_horizone;
+        mFunc = &dNpc_HeadAnm_c::swing_horizone;
     }
 }
 

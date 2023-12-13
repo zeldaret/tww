@@ -336,7 +336,7 @@ void mDoMtx_stack_c::lYrotM(s32 param_0) {
 /* 8000D904-8000D940       .text rYrotM__14mDoMtx_stack_cFf */
 void mDoMtx_stack_c::rYrotM(f32 i_rad) {
     Mtx m;
-    PSMTXRotRad(m, 'Y', i_rad);
+    MTXRotRad(m, 'Y', i_rad);
     mDoMtx_concat(now, m, now);
 }
 

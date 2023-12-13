@@ -313,9 +313,9 @@ bool daBomb_c::checkExplodeCc() {
     if(0 < mRestTime) {
         typedef bool(daBomb_c::*checkFunc)();
         static checkFunc proc[] = {
-            &checkExplodeCc_norm,
-            &checkExplodeCc_nut,
-            &checkExplodeCc_cannon
+            &daBomb_c::checkExplodeCc_norm,
+            &daBomb_c::checkExplodeCc_nut,
+            &daBomb_c::checkExplodeCc_cannon
         };
 
         return (this->*proc[mType])();
@@ -432,9 +432,9 @@ bool daBomb_c::checkExplodeBg_cannon() {
 bool daBomb_c::checkExplodeBg() {
     typedef bool(daBomb_c::*checkFunc)();
     static checkFunc proc[] = {
-        &checkExplodeBg_norm,
-        &checkExplodeBg_nut,
-        &checkExplodeBg_cannon
+        &daBomb_c::checkExplodeBg_norm,
+        &daBomb_c::checkExplodeBg_nut,
+        &daBomb_c::checkExplodeBg_cannon
     };
 
     return (this->*proc[mType])();
@@ -757,7 +757,7 @@ int daBomb_c::procExplode_init() {
 
     field_0x774 = 0;
     field_0x778 = 0.0f;
-    mFunc = &procExplode;
+    mFunc = &daBomb_c::procExplode;
     speedF = 0.0f;
     speed = cXyz::Zero;
     mGravity = 0.0f;
@@ -869,7 +869,7 @@ bool daBomb_c::procCarry_init() {
         setFuseEffect();
     }
 
-    mFunc = &procCarry;
+    mFunc = &daBomb_c::procCarry;
     change_state(STATE_2);
     speedF = 0.0f;
     speed.set(cXyz::Zero);
@@ -903,7 +903,7 @@ bool daBomb_c::procCarry() {
 }
 
 bool daBomb_c::procWait_init() {
-    mFunc = &procWait;
+    mFunc = &daBomb_c::procWait;
     if(chk_attrState(this, ATTR_STATE_80)) {
         change_state(STATE_1);
     }

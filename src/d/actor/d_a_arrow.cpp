@@ -390,7 +390,7 @@ bool daArrow_c::check_water_in() {
             waterHitPos = (next.pos * weight) + (current.pos * (1.0f - weight));
         }
         
-        mCurrProcFunc = &procWater;
+        mCurrProcFunc = &daArrow_c::procWater;
         fopAcM_SetParam(this, 4);
         
         if (mArrowType == TYPE_FIRE) {
@@ -620,7 +620,7 @@ BOOL daArrow_c::procWait() {
             checkRestMp();
         }
         
-        mCurrProcFunc = &procMove;
+        mCurrProcFunc = &daArrow_c::procMove;
         arrowShooting();
     }
     
@@ -678,7 +678,7 @@ BOOL daArrow_c::procMove() {
                                 dKy_arrowcol_chg_on(&current.pos, 2);
                             }
                             
-                            mCurrProcFunc = &procStop_BG;
+                            mCurrProcFunc = &daArrow_c::procStop_BG;
                             fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
                             fopAcM_SetParam(this, 2);
                             field_0x604 = 0x28;
@@ -729,7 +729,7 @@ BOOL daArrow_c::procMove() {
         
         if (hitType == 1) { // Blocked hit
             fopAcM_SetParam(this, 3);
-            mCurrProcFunc = &procReturn;
+            mCurrProcFunc = &daArrow_c::procReturn;
             speed *= -0.1f;
             speed.y += speed.absXZ();
             current.pos = next.pos;
@@ -740,7 +740,7 @@ BOOL daArrow_c::procMove() {
             fopAcM_seStartCurrent(this, JA_SE_LK_ARROW_REBOUND, 0x20);
         } else if (hitType == 2) { // Hit a joint
             fpcM_SetParam(this, 2);
-            mCurrProcFunc = &procStop_Actor;
+            mCurrProcFunc = &daArrow_c::procStop_Actor;
             
             if (mArrowType == TYPE_FIRE) {
                 fopAcM_seStartCurrent(this, JA_SE_OBJ_FIRE_ARW_EFF, 0);
@@ -779,7 +779,7 @@ BOOL daArrow_c::procMove() {
                 dKy_arrowcol_chg_on(&current.pos, temp8);
             }
             
-            mCurrProcFunc = &procStop_BG;
+            mCurrProcFunc = &daArrow_c::procStop_BG;
             fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
             fopAcM_SetParam(this, 2);
             field_0x604 = 0x28;
@@ -828,7 +828,7 @@ BOOL daArrow_c::procMove() {
                 attribCode == dBgS_Attr_DAMAGE_e ||
                 attribCode == dBgS_Attr_FREEZE_e
             )) {
-                mCurrProcFunc = &procReturn;
+                mCurrProcFunc = &daArrow_c::procReturn;
                 fopAcM_SetParam(this, 3);
                 speed *= -0.1f;
                 speed.y += speed.absXZ();
@@ -848,7 +848,7 @@ BOOL daArrow_c::procMove() {
         // There was probably some code here that got commented out.
     }
     
-    if (mCurrProcFunc == &procWater) {
+    if (mCurrProcFunc == &daArrow_c::procWater) {
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, 0);
         mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -1061,7 +1061,7 @@ BOOL daArrow_c::createInit() {
         mpBtk = daPy_getPlayerLinkActorClass()->getIceArrowBtk();
     }
     
-    mCurrProcFunc = &procWait;
+    mCurrProcFunc = &daArrow_c::procWait;
     
     setKeepMatrix();
     mCullMtx = mpModel->getBaseTRMtx();

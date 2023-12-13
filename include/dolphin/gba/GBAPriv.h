@@ -1,11 +1,10 @@
 #ifndef _DOLPHIN_GBAPRIV
 #define _DOLPHIN_GBAPRIV
 
-#include "dolphin/types.h"
-
 #include "dolphin/dsp.h"
 #include "dolphin/gba/GBA.h"
 #include "dolphin/os/OS.h"
+#include "global.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -23,7 +22,7 @@ typedef struct GBASecParam {
     u32 keyA;
     s32 keyB;
     u8 _padding1[24];
-} GBASecParam __attribute__((aligned(32)));
+} GBASecParam ALIGN_DECL(32);
 
 typedef struct GBABootInfo {
     s32 paletteColor;

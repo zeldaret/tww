@@ -14,6 +14,7 @@
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "SSystem/SComponent/c_rnd.h"
 #include "SSystem/SComponent/c_bg_s_shdw_draw.h"
+#include "global.h"
 
 GXTexObj dDlst_shadowControl_c::mSimpleTexObj;
 
@@ -479,21 +480,21 @@ extern void GFSetVtxAttrFmtv(GXVtxFmt, GXVtxAttrFmtList*);
 extern void GFSetBlendModeEtc(GXBlendMode, GXBlendFactor, GXBlendFactor, GXLogicOp, u8, u8, u8);
 extern void GFSetArray(GXAttr, void*, u8);
 
-char l_backRevZMat[0x41] __attribute__((aligned(32))) = {};
-char l_frontZMat[0x3c] __attribute__((aligned(32))) = {};
-char l_frontNoZSubMat[0x2a] __attribute__((aligned(32))) = {};
+char l_backRevZMat[0x41] ALIGN_DECL(32) = {};
+char l_frontZMat[0x3c] ALIGN_DECL(32) = {};
+char l_frontNoZSubMat[0x2a] ALIGN_DECL(32) = {};
 
 Vec l_bonboriPos[0x2a] = {};
-char l_bonboriDL[0xa7] __attribute__((aligned(32))) = {};
+char l_bonboriDL[0xa7] ALIGN_DECL(32) = {};
 
 Vec l_s_beam_checkPos[0x28] = {};
-char l_s_beam_checkDL[0xf8] __attribute__((aligned(32))) = {};
+char l_s_beam_checkDL[0xf8] ALIGN_DECL(32) = {};
 
 Vec l_cubePos[0x08] = {};
-char l_cubeDL[0x4a] __attribute__((aligned(32))) = {};
+char l_cubeDL[0x4a] ALIGN_DECL(32) = {};
 
 Vec l_bonbori2Pos[0x56] = {};
-char l_bonbori2DL[0x2a8] __attribute__((aligned(32))) = {};
+char l_bonbori2DL[0x2a8] ALIGN_DECL(32) = {};
 
 /* 80082838-80082E44       .text draw__22dDlst_alphaModelData_cFPA4_f */
 void dDlst_alphaModelData_c::draw(Mtx viewMtx) {
@@ -649,7 +650,7 @@ BOOL dDlst_alphaModel_c::draw(Mtx mtx) {
     if (mNum == 0)
         return FALSE;
 
-    static char l_matDL[0x64] __attribute__((aligned(32))) = {};
+    static char l_matDL[0x64] ALIGN_DECL(32) = {};
 
     static GXVtxDescList l_vtxDescList[2] = {
     };

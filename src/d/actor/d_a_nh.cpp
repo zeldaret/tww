@@ -173,7 +173,7 @@ BOOL daNh_c::init() {
 void daNh_c::action(void* arg) {
     if (mCurrActionFunc == NULL) {
         speedF = 0.0f;
-        setAction(&waitAction, NULL);
+        setAction(&daNh_c::waitAction, NULL);
     }
     (this->*mCurrActionFunc)(arg);
 }
@@ -218,7 +218,7 @@ BOOL daNh_c::checkBinCatch() {
 /* 800F9F3C-800FA108       .text searchPlayer__6daNh_cFv */
 BOOL daNh_c::searchPlayer() {
     if (isTypeBottle()) {
-        setAction(&escapeAction, NULL);
+        setAction(&daNh_c::escapeAction, NULL);
         return TRUE;
     }
     
@@ -229,7 +229,7 @@ BOOL daNh_c::searchPlayer() {
     mPlayerDist = playerDist;
     if (playerDelta.absXZ() > 0.001f && playerDist < 600.0f && playerDistDelta > l_HIO.prm.mMinFrightenSpeed) {
         // Player is nearby and moving closer. The Forest Firefly becomes frightened and tries to escape.
-        setAction(&escapeAction, NULL);
+        setAction(&daNh_c::escapeAction, NULL);
         return TRUE;
     }
     
@@ -299,7 +299,7 @@ BOOL daNh_c::waitAction(void*) {
     } else if (mActionStatus != ACTION_ENDING) {
         cLib_addCalc(&speedF, 0.0f, 0.1f, 10.0f, 1.0f);
         if (getHomeDistance() > 50.0f) {
-            setAction(&returnAction, NULL);
+            setAction(&daNh_c::returnAction, NULL);
         }
     }
     return TRUE;
@@ -310,11 +310,11 @@ BOOL daNh_c::checkEscapeEnd() {
     cXyz homeDelta = orig.pos - current.pos;
     if (!isTypeBottle()) {
         if (cLib_calcTimer(&mEscapeTimer) == 0) {
-            setAction(&waitAction, NULL);
+            setAction(&daNh_c::waitAction, NULL);
             return TRUE;
         }
         if (homeDelta.abs2XZ() > l_HIO.prm.mMaxHomeDist*l_HIO.prm.mMaxHomeDist) {
-            setAction(&returnAction, NULL);
+            setAction(&daNh_c::returnAction, NULL);
             return TRUE;
         }
     }
@@ -353,7 +353,7 @@ BOOL daNh_c::returnAction(void*) {
         mEscapeTimer = 5*30;
     } else if (mActionStatus != ACTION_ENDING) {
         if (getHomeDistance() < 50.0f) {
-            setAction(&waitAction, NULL);
+            setAction(&daNh_c::waitAction, NULL);
         } else {
             s16 targetAngle = cLib_targetAngleY(&current.pos, &orig.pos);
             cXyz homeDelta = orig.pos - current.pos;

@@ -16,6 +16,7 @@
 #include "c/c_dylink.h"
 #include "d/d_com_inf_game.h"
 #include "f_ap/f_ap_game.h"
+#include "global.h"
 #include "m_Do/m_Do_MemCard.h"
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_audio.h"
@@ -351,7 +352,7 @@ bool JKRHeap::dump_sort() {
 s32 LOAD_COPYDATE(void*) {
     s32 status;
 
-    DVDFileInfo __attribute__((aligned(0x20))) fileInfo;
+    DVDFileInfo ALIGN_DECL(0x20) fileInfo;
     u8 buffer[0x20];
     status = DVDOpen("/COPYDATE", &fileInfo);
 
@@ -443,7 +444,7 @@ OSThread mainThread;
 /* 80006464-800065DC       .text main */
 void main() {
     OSThread* current_thread = OSGetCurrentThread();
-    u8 __attribute__((aligned(0x20))) stack[0xF000];
+    u8 ALIGN_DECL(0x20) stack[0xF000];
 
     mDoMain::sPowerOnTime = OSGetTime();
     OSReportInit__Fv();

@@ -5,6 +5,7 @@
 #include "dolphin/os/OSMessage.h"
 #include "dolphin/os/OSMutex.h"
 #include "f_pc/f_pc_node.h"
+#include "global.h"
 
 class JKRHeap;
 class JKRMemArchive;
@@ -106,7 +107,7 @@ private:
 
 struct mDoDvdThdStack {
     u8 stack[4096];
-} __attribute__((aligned(32)));
+} ALIGN_DECL(32);
 
 struct mDoDvdThd {
     static s32 main(void*);

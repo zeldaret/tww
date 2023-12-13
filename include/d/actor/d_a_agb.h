@@ -5,6 +5,7 @@
 #include "d/d_bg_s_acch.h"
 #include "d/d_particle.h"
 #include "f_op/f_op_actor_mng.h"
+#include "global.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_hostIO.h"
 
@@ -93,7 +94,7 @@ public:
 
     struct daAgb_ItemBuy {
         /* 0x0 */ u8 field_0x0;
-    } __attribute__((aligned(4)));
+    } ALIGN_DECL(4);
 
     struct daAgb_GbaFlg {
         /* 0x0 */ u16 field_0x0;
@@ -124,11 +125,11 @@ public:
     struct daAgb_Item {
         /* 0x0 */ u8 field_0x0;
         /* 0x1 */ u8 field_0x1;
-    } __attribute__((aligned(4)));
+    } ALIGN_DECL(4);
 
     struct daAgb_Shop {
         /* 0x0 */ u8 field_0x0;
-    } __attribute__((aligned(4)));
+    } ALIGN_DECL(4);
 
     static int mEffect;
     static daAgb_ItemBuy mItemBuy;

@@ -7,11 +7,12 @@
 #include "m_Do/m_Do_Reset.h"
 #include "JSystem/JKernel/JKRThread.h"
 #include "dolphin/card.h"
+#include "global.h"
 #include "MSL_C/string.h"
 
-u8 MemCardStack[0x1000] __attribute__((aligned(32)));
+u8 MemCardStack[0x1000] ALIGN_DECL(32);
 OSThread MemCardThread;
-u8 MemCardWorkArea0[0xa000] __attribute__((aligned(32)));
+u8 MemCardWorkArea0[0xa000] ALIGN_DECL(32);
 
 mDoMemCd_Ctrl_c g_mDoMemCd_control;
 

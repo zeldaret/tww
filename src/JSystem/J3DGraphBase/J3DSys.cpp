@@ -9,6 +9,7 @@
 #include "JSystem/J3DGraphBase/J3DTevs.h"
 #include "JSystem/J3DGraphBase/J3DShape.h"
 #include "dolphin/os/OS.h"
+#include "global.h"
 
 extern void JRNLoadTexCached(GXTexMapID, u32, GXTexCacheSize, u32, GXTexCacheSize);
 extern void makeTexCoordTable();
@@ -118,7 +119,7 @@ void J3DFifoLoadNrmMtxImm3x3(Mtx33 mtx, unsigned long idx) {
     GFX_FIFO(u32) = mtx_u32[8];
 }
 
-u8 NullTexData[16] __attribute__((aligned(32))) = {
+u8 NullTexData[16] ALIGN_DECL(32) = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
