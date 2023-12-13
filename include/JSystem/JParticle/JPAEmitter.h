@@ -213,6 +213,11 @@ public:
         mGlobalPrmColor.g = g;
         mGlobalPrmColor.b = b;
     }
+    void setGlobalEnvColor(u8 r, u8 g, u8 b) {
+        mGlobalEnvColor.r = r;
+        mGlobalEnvColor.g = g;
+        mGlobalEnvColor.b = b;
+    }
 
     void setVolumeSweep(f32 i_volSweep) { mVolumeSweep = i_volSweep; }
     void setVolumeSize(u16 size) { mVolumeSize = size; }
@@ -284,7 +289,6 @@ public:
     void isZDraw() {}
     void loadTexture(u8, GXTexMapID) {}
     void setEmitterRotation(const JGeometry::TVec3<s16>&) {}
-    void setGlobalEnvColor(u8, u8, u8) {}
     void setGlobalParticleHeightScale(f32) {}
     void setGlobalParticleScale(f32, f32) {}
     void setGlobalParticleWidthScale(f32) {}

@@ -10,6 +10,7 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "SSystem/SComponent/c_malloc.h"
+#include "m_Do/m_Do_lib.h"
 
 /* 8007A4D8-8007A514       .text __ct__18dPa_modelEmitter_cFv */
 dPa_modelEmitter_c::dPa_modelEmitter_c() {
@@ -17,8 +18,54 @@ dPa_modelEmitter_c::dPa_modelEmitter_c() {
 }
 
 /* 8007A514-8007A804       .text __ct__21dPa_J3DmodelEmitter_cFP14JPABaseEmitterP12J3DModelDataR12dKy_tevstr_cP16J3DAnmTexPatternUsi */
-dPa_J3DmodelEmitter_c::dPa_J3DmodelEmitter_c(JPABaseEmitter*, J3DModelData*, dKy_tevstr_c&, J3DAnmTexPattern*, u16, int) {
+dPa_J3DmodelEmitter_c::dPa_J3DmodelEmitter_c(JPABaseEmitter* param_1, J3DModelData* param_2, dKy_tevstr_c& param_3, J3DAnmTexPattern* param_4, u16 param_5, int param_6) {
     /* Nonmatching */
+    field_0x28 = j3dDefaultLightInfo;
+    mpBaseEmitter = param_1;
+    field_0x18 = param_2;
+    field_0x26 = param_6;
+    field_0x28 = param_3.mLightObj.getLightInfo();
+    field_0x9c = param_3.mLightPosWorld;
+    field_0xa8 = param_3.mColorC0;
+    field_0xb0 = param_3.mColorK0;
+    field_0xb4 = param_3.mColorK1;
+    field_0xb8 = param_3.mFogColor;
+    field_0xc0 = param_3.mFogStartZ;
+    field_0xc4 = param_3.mFogEndZ;
+    field_0xc8 = param_3.mColpatBlend;
+    field_0xcc = param_3.mInitTimer;
+    field_0xcd = param_3.mEnvrIdxCurr;
+    field_0xce = param_3.mEnvrIdxPrev;
+    field_0xcf = param_3.mColpatCurr;
+    field_0xd0 = param_3.mColpatPrev;
+    field_0xd1 = param_3.mRoomNo;
+    field_0xd2 = param_3.mEnvrIdxOverride;
+    field_0xd3 = param_3.mLightMode;
+    field_0xd4 = param_3.mInitType;
+    field_0x1c = param_4;
+    if (!field_0x1c) {
+        mpHeap = NULL;
+        field_0x20 = NULL;
+    } else {
+        u16 r29 = field_0x1c->getUpdateMaterialNum();
+        mpHeap = mDoExt_createSolidHeapToCurrent(r29 * 12 + 16, NULL, 0);
+        if (mpHeap) {
+            field_0x20 = new J3DTexNoAnm[r29];
+            if (field_0x20) {
+                field_0x1c->searchUpdateMaterialID(field_0x18);
+                J3DTexNoAnm* tex = field_0x20;
+                for (u16 i = 0; i < r29; i++) {
+                    tex->setAnmIndex(i);
+                    tex->setAnmTexPattern(field_0x1c);
+                    tex++;
+                }
+                field_0x24 = param_5;
+            }
+            mDoExt_restoreCurrentHeap();
+            mDoExt_adjustSolidHeap(mpHeap);
+        }
+    }
+    param_1->becomeImmortalEmitter();
 }
 
 /* 8007A84C-8007A8C8       .text __dt__21dPa_J3DmodelEmitter_cFv */
@@ -54,12 +101,12 @@ dPa_J3Dmodel_c::dPa_J3Dmodel_c() {
 
 /* 8007AED8-8007AF64       .text __dt__18dPa_modelControl_cFv */
 dPa_modelControl_c::~dPa_modelControl_c() {
-    /* Nonmatching (node_class has no virtual destructor) */
-    node_class* node = mpHead;
+    /* this cast is a guess */
+    dPa_modelEmitter_c* node = (dPa_modelEmitter_c*)mpHead;
     while (node) {
-        node_class* nextNode = node->mpNextNode;
+        dPa_modelEmitter_c* nextNode = (dPa_modelEmitter_c*)node->mpNextNode;
         cLs_SingleCut(node);
-        // delete node;
+        delete node;
         node = nextNode;
     }
 }
@@ -157,8 +204,12 @@ dPa_smokeEcallBack::dPa_smokeEcallBack(const _GXColor&, dKy_tevstr_c*, u8) {
 }
 
 /* 8007B5E8-8007B698       .text setup__18dPa_smokeEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void dPa_smokeEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
-    /* Nonmatching */
+void dPa_smokeEcallBack::setup(JPABaseEmitter* param_1, const cXyz* param_2, const csXyz* param_3, s8 param_4) {
+    static dPa_smokePcallBack l_smokePcallBack;
+    dPa_followEcallBack::setup(param_1, param_2, param_3, param_4);
+    field_0x14 = param_4;
+    param_1->mpParticleCallBack = &dPa_control_c::mSmokePcallback;
+    param_1->mUserData = field_0x15;
 }
 
 /* 8007B73C-8007B804       .text initiateLighting__FR11_GXColorS10R8_GXColorR8_GXColor */
@@ -213,8 +264,38 @@ dPa_simpleData_c::dPa_simpleData_c() {
 }
 
 /* 8007C460-8007C618       .text executeAfter__19dPa_simpleEcallBackFP14JPABaseEmitter */
-void dPa_simpleEcallBack::executeAfter(JPABaseEmitter*) {
+void dPa_simpleEcallBack::executeAfter(JPABaseEmitter* param_1) {
     /* Nonmatching */
+    s32 r28 = JPABaseEmitter::emtrInfo.mVolumeEmitCount;
+    if (r28 <= 0) {
+        mCount = 0;
+    } else {
+        dPa_simpleData_c* simpleData = mSimpleData;
+        param_1->playCreateParticle();
+        while (mCount != 0) {
+            Vec local_38 = simpleData->mPos;
+            if (mDoLib_clipper::mClipper.clip(j3dSys.getViewMtx(), local_38, 200.0f) == 0) {
+                param_1->setGlobalTranslation(simpleData->mPos.x, simpleData->mPos.y, simpleData->mPos.z);
+                param_1->setGlobalPrmColor(simpleData->mPrmColor.r, simpleData->mPrmColor.g, simpleData->mPrmColor.b);
+                param_1->setGlobalAlpha(simpleData->mPrmColor.a);
+                param_1->setGlobalEnvColor(simpleData->mEnvColor[0], simpleData->mEnvColor[1], simpleData->mEnvColor[2]);
+                for (int i = 0; i < r28; i++) {
+                    JPABaseParticle* particle = param_1->createParticle();
+                    if (particle == NULL) {
+                        break;
+                    }
+                    particle->setOffsetPosition(simpleData->mPos.x, simpleData->mPos.y, simpleData->mPos.z);
+                    if (simpleData->mbAffectedByWind) {
+                        static dPa_windPcallBack l_windPcallBack;
+                        particle->mpCallBack2 = &l_windPcallBack;
+                    }
+                }
+            }
+            mCount--;
+            simpleData++;
+        }
+    }
+    param_1->stopCreateParticle();
 }
 
 /* 8007C674-8007C6EC       .text draw__19dPa_simpleEcallBackFP14JPABaseEmitter */
@@ -228,8 +309,18 @@ void dPa_simpleEcallBack::create(JPAEmitterManager*, u16, u8) {
 }
 
 /* 8007C774-8007C840       .text createEmitter__19dPa_simpleEcallBackFP17JPAEmitterManager */
-void dPa_simpleEcallBack::createEmitter(JPAEmitterManager*) {
-    /* Nonmatching */
+JPABaseEmitter* dPa_simpleEcallBack::createEmitter(JPAEmitterManager* manager) {
+    if (!mpBaseEmitter) {
+        static JGeometry::TVec3<f32> pos(0.0f, 0.0f, 0.0f);
+        mpBaseEmitter = manager->createSimpleEmitterID(pos, mResID, mGrpID, dPa_control_c::getRM_ID(mResID), NULL, NULL);
+        if (!mpBaseEmitter) {
+            return mpBaseEmitter;
+        }
+        mpBaseEmitter->mpEmitterCallBack = this;
+        mpBaseEmitter->mMaxFrame = 0;
+        mpBaseEmitter->stopCreateParticle();
+    }
+    return mpBaseEmitter;
 }
 
 /* 8007C840-8007C8C4       .text set__19dPa_simpleEcallBackFPC4cXyzUcRC8_GXColorRC8_GXColori */
@@ -242,7 +333,34 @@ void dPa_windPcallBack::execute(JPABaseEmitter*, JPABaseParticle*) {
     /* Nonmatching */
 }
 
+GXColor l_lifeBallColor[] = {
+    0xeb, 0x20, 0x78, 0xff,
+    0x20, 0xf1, 0x9b, 0xff,
+    0xeb, 0xd7, 0x2f, 0xff
+};
+
+dPa_selectTexEcallBack dPa_control_c::mTsubo[] = {
+    dPa_selectTexEcallBack(0),
+    dPa_selectTexEcallBack(1),
+    dPa_selectTexEcallBack(2),
+    dPa_selectTexEcallBack(3),
+};
+
+dPa_setColorEcallBack dPa_control_c::mLifeBall[] = {
+    dPa_setColorEcallBack(l_lifeBallColor[0]),
+    dPa_setColorEcallBack(l_lifeBallColor[1]),
+    dPa_setColorEcallBack(l_lifeBallColor[2]),
+};
+
 JPAEmitterManager * dPa_control_c::mEmitterMng;
+dPa_stripesEcallBack dPa_control_c::mStripes;
+dPa_kageroEcallBack dPa_control_c::mKagero;
+dPa_smokeEcallBack dPa_control_c::mSmokeEcallback(0, 1, 1, 1);
+dPa_smokePcallBack dPa_control_c::mSmokePcallback;
+dPa_singleRippleEcallBack dPa_control_c::mSingleRippleEcallBack;
+dPa_ripplePcallBack dPa_control_c::mRipplePcallBack;
+dPa_bombSmokeEcallBack dPa_control_c::mBombSmokeEcallBack;
+u8 dPa_control_c::mStatus;
 
 /* 8007C8E8-8007C9A4       .text __ct__13dPa_control_cFv */
 dPa_control_c::dPa_control_c() {
@@ -257,7 +375,7 @@ dPa_control_c::dPa_control_c() {
 }
 
 /* 8007CA28-8007CA30       .text getRM_ID__13dPa_control_cFUs */
-u16 dPa_control_c::getRM_ID(u16 uid) {
+u8 dPa_control_c::getRM_ID(u16 uid) {
     return (uid >> 15) & 0x01;
 }
 
@@ -327,12 +445,12 @@ JPABaseEmitter* dPa_control_c::setBombSmoke(u16, const cXyz*, const csXyz*, cons
 }
 
 /* 8007D414-8007D998       .text setSimpleLand__13dPa_control_cFiPC4cXyzPC5csXyzfffP12dKy_tevstr_cPii */
-void dPa_control_c::setSimpleLand(int, const cXyz*, const csXyz*, float, float, float, dKy_tevstr_c*, int*, int) {
+void dPa_control_c::setSimpleLand(int, const cXyz*, const csXyz*, f32, f32, f32, dKy_tevstr_c*, int*, int) {
     /* Nonmatching */
 }
 
 /* 8007D998-8007DA58       .text setSimpleLand__13dPa_control_cFR13cBgS_PolyInfoPC4cXyzPC5csXyzfffP12dKy_tevstr_cPii */
-void dPa_control_c::setSimpleLand(cBgS_PolyInfo&, const cXyz*, const csXyz*, float, float, float, dKy_tevstr_c*, int*, int) {
+void dPa_control_c::setSimpleLand(cBgS_PolyInfo&, const cXyz*, const csXyz*, f32, f32, f32, dKy_tevstr_c*, int*, int) {
     /* Nonmatching */
 }
 
@@ -472,7 +590,7 @@ void dPa_bombSmokeEcallBack::execute(JPABaseEmitter*) {
 }
 
 /* 8007F108-8007F1A8       .text getMaxWaterY__18dPa_trackEcallBackFPQ29JGeometry8TVec3<f> */
-void dPa_trackEcallBack::getMaxWaterY(JGeometry::TVec3<float>*) {
+void dPa_trackEcallBack::getMaxWaterY(JGeometry::TVec3<f32>*) {
     /* Nonmatching */
 }
 

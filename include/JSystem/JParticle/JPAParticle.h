@@ -33,6 +33,7 @@ public:
 
     ~JPABaseParticle() {}
     JPABaseParticle() : mLink(this), mCurFrame(0.0f) {}
+    void setOffsetPosition(f32 x, f32 y, f32 z) { mGlobalPosition.set(x, y, z); }
 
 public:
     /* 0x00 */ JSULink<JPABaseParticle> mLink;
