@@ -19,16 +19,6 @@ struct JAIAnimeSound__Slot {
 
 class JAIAnimeSound {
 public:
-    JAIAnimeSound();
-    void initActorAnimSound(void*, u32, f32);
-    void setAnimSoundVec(JAIBasic*, Vec*, f32, f32, u32, u8);
-    void setAnimSoundActor(JAIBasic*, JAInter::Actor*, f32, f32, u8);
-    void playActorAnimSound(JAIBasic*, JAInter::Actor*, f32, u8);
-    virtual void startAnimSound(void*, u32, JAISound**, JAInter::Actor*, u8);
-    virtual void setSpeedModifySound(JAISound*, JAIAnimeFrameSoundData*, f32);
-    void stop();
-
-public:
     /* 0x00 */ JAIAnimeSound__Slot mSlots[8];
     /* 0x60 */ u32 m60;
     /* 0x64 */ u32 m64;
@@ -43,6 +33,16 @@ public:
     /* 0x8C */ u8 m8C[0x90 - 0x8C];
     /* 0x90 */ u16* mpData;
     /* 0x94 */ /* vtable */
+
+public:
+    JAIAnimeSound();
+    void initActorAnimSound(void*, u32, f32);
+    void setAnimSoundVec(JAIBasic*, Vec*, f32, f32, u32, u8);
+    void setAnimSoundActor(JAIBasic*, JAInter::Actor*, f32, f32, u8);
+    void playActorAnimSound(JAIBasic*, JAInter::Actor*, f32, u8);
+    virtual void startAnimSound(void*, u32, JAISound**, JAInter::Actor*, u8);
+    virtual void setSpeedModifySound(JAISound*, JAIAnimeFrameSoundData*, f32);
+    void stop();
 };  // Size: 0x98
 
 #endif /* JAIANIMATION_H */

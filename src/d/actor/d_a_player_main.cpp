@@ -20,6 +20,8 @@
 #include "d/actor/d_a_itembase.h"
 #include "d/d_item_data.h"
 #include "d/d_item.h"
+#include "m_Do/m_Do_mtx.h"
+#include "d/d_material.h"
 
 const daPy_lk_c::TexAnmTableEntry daPy_lk_c::mTexAnmIndexTable[] = {
     {LKANM_BTP_TMABAA, LKANM_BTK_TMABA},
@@ -2427,8 +2429,14 @@ BOOL daPy_lk_c::itemTrigger() const {
 }
 
 /* 80103214-80103258       .text getReadyItem__9daPy_lk_cFv */
-void daPy_lk_c::getReadyItem() {
-    /* Nonmatching */
+u8 daPy_lk_c::getReadyItem() {
+    if (mLastUsedItemButtonIdx == 0) {
+        return dComIfGp_getSelectItem(0);
+    } else if (mLastUsedItemButtonIdx == 1) {
+        return dComIfGp_getSelectItem(1);
+    } else {
+        return dComIfGp_getSelectItem(2);
+    }
 }
 
 /* 80103258-801032E4       .text checkGroupItem__9daPy_lk_cFii */
@@ -2468,13 +2476,22 @@ BOOL daPy_lk_c::checkSetItemTrigger(int param_1, int param_2) {
 }
 
 /* 801033E4-80103450       .text auraJointCB0__9daPy_lk_cFi */
-void daPy_lk_c::auraJointCB0(int) {
-    /* Nonmatching */
+BOOL daPy_lk_c::auraJointCB0(int jntNo) {
+    mpYmgcs00Model->setAnmMtx(jntNo, mpCLModel->getAnmMtx(jntNo));
+    mDoMtx_copy(mpCLModel->getAnmMtx(jntNo), j3dSys.mCurrentMtx);
+    return TRUE;
 }
 
 /* 80103450-80103494       .text daPy_auraCallback__FP7J3DNodei */
-static BOOL daPy_auraCallback(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL daPy_auraCallback(J3DNode* node, int param_1) {
+    if (!param_1) {
+        J3DJoint* joint = static_cast<J3DJoint*>(node);
+        s32 jntNo = joint->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        daPy_lk_c* i_this = reinterpret_cast<daPy_lk_c*>(model->getUserArea());
+        i_this->auraJointCB0(jntNo);
+    }
+    return TRUE;
 }
 
 /* 80103494-80103A88       .text jointBeforeCB__9daPy_lk_cFiP16J3DTransformInfoP10Quaternion */
@@ -2498,23 +2515,35 @@ static BOOL daPy_jointAfterCallback(u32 userArea, u16 param_1, J3DTransformInfo*
 }
 
 /* 80103C40-80103EE4       .text jointCB0__9daPy_lk_cFi */
-void daPy_lk_c::jointCB0(int) {
+BOOL daPy_lk_c::jointCB0(int) {
     /* Nonmatching */
 }
 
 /* 80103EE4-80103F28       .text daPy_jointCallback0__FP7J3DNodei */
-static BOOL daPy_jointCallback0(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL daPy_jointCallback0(J3DNode* node, int param_1) {
+    if (!param_1) {
+        J3DJoint* joint = static_cast<J3DJoint*>(node);
+        s32 jntNo = joint->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        daPy_lk_c* i_this = reinterpret_cast<daPy_lk_c*>(model->getUserArea());
+        i_this->jointCB0(jntNo);
+    }
+    return TRUE;
 }
 
 /* 80103F28-80104178       .text jointCB1__9daPy_lk_cFv */
-void daPy_lk_c::jointCB1() {
+BOOL daPy_lk_c::jointCB1() {
     /* Nonmatching */
 }
 
 /* 80104178-801041B4       .text daPy_jointCallback1__FP7J3DNodei */
-static BOOL daPy_jointCallback1(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL daPy_jointCallback1(J3DNode* node, int param_1) {
+    if (!param_1) {
+        J3DModel* model = j3dSys.getModel();
+        daPy_lk_c* i_this = reinterpret_cast<daPy_lk_c*>(model->getUserArea());
+        i_this->jointCB1();
+    }
+    return TRUE;
 }
 
 /* 801041B4-801041EC       .text setAnimeHeap__9daPy_lk_cFP12JKRSolidHeap */
@@ -2636,8 +2665,24 @@ BOOL daPy_lk_c::checkSightLine(f32, cXyz*) {
 }
 
 /* 80105814-80105910       .text setBootsModel__9daPy_lk_cFPP8J3DModel */
-void daPy_lk_c::setBootsModel(J3DModel**) {
-    /* Nonmatching */
+void daPy_lk_c::setBootsModel(J3DModel** pBootModels) {
+    u16 temp;
+    if (checkEquipHeavyBoots()) {
+        // TODO: add enum for link's joint numbers
+        pBootModels[0]->setAnmMtx(0x01, mpCLModel->getAnmMtx(0x26));
+        pBootModels[1]->setAnmMtx(0x01, mpCLModel->getAnmMtx(0x21));
+        temp = 2;
+    } else {
+        temp = 1;
+    }
+    
+    J3DModel* bootModel = pBootModels[0];
+    bootModel->setAnmMtx(temp, mpCLModel->getAnmMtx(0x28));
+    bootModel->setAnmMtx(temp+1, mpCLModel->getAnmMtx(0x27));
+    
+    bootModel = pBootModels[1];
+    bootModel->setAnmMtx(temp, mpCLModel->getAnmMtx(0x23));
+    bootModel->setAnmMtx(temp+1, mpCLModel->getAnmMtx(0x22));
 }
 
 /* 80105910-80106660       .text setItemModel__9daPy_lk_cFv */
@@ -2666,13 +2711,23 @@ void daPy_lk_c::setDrawHandModel() {
 }
 
 /* 80106BD0-80106C40       .text entryDLSetLight__9daPy_lk_cFP8J3DModelUl */
-void daPy_lk_c::entryDLSetLight(J3DModel*, u32) {
-    /* Nonmatching */
+void daPy_lk_c::entryDLSetLight(J3DModel* model, u32 param_2) {
+    g_env_light.setLightTevColorType(model, &mTevStr);
+    if (param_2 != 0) {
+        dMat_control_c::iceEntryDL(model, -1, NULL);
+    } else {
+        mDoExt_modelEntryDL(model);
+    }
 }
 
 /* 80106C40-80106CB0       .text updateDLSetLight__9daPy_lk_cFP8J3DModelUl */
-void daPy_lk_c::updateDLSetLight(J3DModel*, u32) {
-    /* Nonmatching */
+void daPy_lk_c::updateDLSetLight(J3DModel* model, u32 param_2) {
+    g_env_light.setLightTevColorType(model, &mTevStr);
+    if (param_2 != 0) {
+        dMat_control_c::iceUpdateDL(model, -1, NULL);
+    } else {
+        mDoExt_modelUpdateDL(model);
+    }
 }
 
 /* 80106CB0-80106D8C       .text hideHatAndBackle__9daPy_lk_cFP11J3DMaterial */
@@ -3023,12 +3078,21 @@ void daPy_lk_c::makeItemType() {
 
 /* 8010CB70-8010CBC8       .text setScopeModel__9daPy_lk_cFv */
 void daPy_lk_c::setScopeModel() {
-    /* Nonmatching */
+    JKRHeap* oldHeap = setItemHeap();
+    initModel(&mpHeldItemModel, LINK_BDL_TELESCOPE, 0x37221222);
+    mDoExt_setCurrentHeap(oldHeap);
 }
 
 /* 8010CBC8-8010CC78       .text setPhotoBoxModel__9daPy_lk_cFv */
 void daPy_lk_c::setPhotoBoxModel() {
-    /* Nonmatching */
+    JKRHeap* oldHeap = setItemHeap();
+    initModel(&mpHeldItemModel, LINK_BDL_CAMERA, 0x37221222);
+    mDoExt_setCurrentHeap(oldHeap);
+    if (mHeldItemType == CAMERA) {
+        mpHeldItemModel->getModelData()->getJointNodePointer(0x02)->getMesh()->getShape()->hide();
+    } else {
+        mpHeldItemModel->getModelData()->getJointNodePointer(0x02)->getMesh()->getShape()->show();
+    }
 }
 
 /* 8010CC78-8010CD34       .text changeDragonShield__9daPy_lk_cFi */
@@ -4404,8 +4468,8 @@ BOOL daPy_lk_c::createHeap() {
     tmp_modelData = initModel(&mpYmsls00Model, LINK_BDL_YMSLS00, 0x13000222);
     mpYmsls00Btk = entryBtk(tmp_modelData, LINK_BTK_YMSLS00);
     
-    tmp_modelData = initModel(&mpHbootsModelRightFoot, LINK_BDL_HBOOTS, 0x37221222);
-    tmp_modelData = initModel(&mpHbootsModelLeftFoot, LINK_BDL_HBOOTS, 0x37221222);
+    tmp_modelData = initModel(&mpHbootsModels[0], LINK_BDL_HBOOTS, 0x37221222);
+    tmp_modelData = initModel(&mpHbootsModels[1], LINK_BDL_HBOOTS, 0x37221222);
     
     tmp_modelData = initModel(&mpSuimenMunyaModel, LINK_BDL_SUIMEN_MUNYA, 0x11001222);
     mpSuimenMunyaBtk = entryBtk(tmp_modelData, LINK_BTK_SUIMEN_MUNYA);
@@ -4465,7 +4529,7 @@ BOOL daPy_lk_c::createHeap() {
     mpGicer00Btk = entryBtk(tmp_modelData, LINK_BTK_GICER00);
     
     tmp_modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, LINK_BDL_GICER01);
-    JUT_ASSERT(21198, tmp_modelData != 0);
+    JUT_ASSERT(21205, tmp_modelData != 0);
     mpGicer01Btk = entryBtk(tmp_modelData, LINK_BTK_GICER01);
     
     const int numCLJoints = 0x2A;
@@ -4824,17 +4888,15 @@ int phase_2(daPy_lk_c* i_this) {
 
 /* 80125DB4-80126F00       .text __ct__9daPy_lk_cFv */
 daPy_lk_c::daPy_lk_c() {
-    /* Nonmatching */
 }
 
 /* 80126F00-8012704C       .text __dt__15daPy_footData_cFv */
 daPy_footData_c::~daPy_footData_c() {
-    /* Nonmatching */
 }
 
 /* 8012704C-80127160       .text __ct__15daPy_footData_cFv */
 daPy_footData_c::daPy_footData_c() {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
 }
 
 /* 80127160-80127B50       .text makeBgWait__9daPy_lk_cFv */
@@ -4968,7 +5030,44 @@ void daPy_lk_c::resetActAnimeUpper(daPy_lk_c::daPy_UPPER, f32) {
 
 /* 801286C0-801287E8       .text animeUpdate__9daPy_lk_cFv */
 void daPy_lk_c::animeUpdate() {
-    /* Nonmatching */
+    J3DAnmTransform* underPack0 = getNowAnmPackUnder(UNDER_UNK0);
+    J3DAnmTransform* underPack1 = getNowAnmPackUnder(UNDER_UNK1);
+    J3DAnmTransform* upperPack0 = getNowAnmPackUpper(UPPER_UNK0);
+    J3DAnmTransform* upperPack1 = getNowAnmPackUpper(UPPER_UNK1);
+    mFrameCtrlUnder[UNDER_UNK0].update();
+    underPack0->setFrame(mFrameCtrlUnder[UNDER_UNK0].getFrame());
+    if (underPack1) {
+        mFrameCtrlUnder[UNDER_UNK1].update();
+        underPack1->setFrame(mFrameCtrlUnder[UNDER_UNK1].getFrame());
+    }
+    if (upperPack0 && upperPack0 != underPack0) {
+        mFrameCtrlUpper[UPPER_UNK0].update();
+        upperPack0->setFrame(mFrameCtrlUpper[UPPER_UNK0].getFrame());
+    }
+    if (upperPack1 && upperPack1 != underPack1) {
+        mFrameCtrlUpper[UPPER_UNK1].update();
+        upperPack1->setFrame(mFrameCtrlUpper[UPPER_UNK1].getFrame());
+    }
+    
+    // TODO: not sure if this is a fakematch or a bug, but the under array is length 2 and this accesses at index 2.
+    // so it's actually accessing index 0 of the next array (upper).
+    for (int i = 2; i < 2; i++) {
+        J3DAnmTransform* underPack2 = getNowAnmPackUnder((daPy_UNDER)i);
+        if (underPack2) {
+            mFrameCtrlUnder[i].update();
+            underPack2->setFrame(mFrameCtrlUnder[i].getFrame());
+        }
+    }
+    
+    J3DAnmTransform* upperPack2 = getNowAnmPackUpper(UPPER_UNK2);
+    if (upperPack2) {
+        mFrameCtrlUpper[UPPER_UNK2].update();
+        upperPack2->setFrame(mFrameCtrlUpper[UPPER_UNK2].getFrame());
+    }
+    
+    if (m2EAC) {
+        m2EAC->play(NULL, 0, 0);
+    }
 }
 
 /* 801287E8-8012887C       .text simpleAnmPlay__9daPy_lk_cFP10J3DAnmBase */

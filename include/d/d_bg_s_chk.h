@@ -7,8 +7,8 @@
 class dBgS_Chk : public dBgS_PolyPassChk, public dBgS_GrpPassChk {
 public:
     dBgS_Chk() {}
-    cBgS_PolyPassChk* GetPolyPassChkInfo() { return (cBgS_PolyPassChk*)this; }
-    cBgS_GrpPassChk* GetGrpPassChkInfo() { return (cBgS_GrpPassChk*)this; }
+    dBgS_PolyPassChk* GetPolyPassChkInfo() { return (dBgS_PolyPassChk*)this; }
+    dBgS_GrpPassChk* GetGrpPassChkInfo() { return (dBgS_GrpPassChk*)this; }
 
     virtual ~dBgS_Chk() {}
 };  // Size: 0x14

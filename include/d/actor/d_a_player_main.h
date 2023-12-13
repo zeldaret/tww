@@ -1219,10 +1219,13 @@ public:
     };
 
     enum daPy_UNDER {
-        
+        UNDER_UNK0 = 0,
+        UNDER_UNK1 = 1,
     };
 
     enum daPy_UPPER {
+        UPPER_UNK0 = 0,
+        UPPER_UNK1 = 1,
         UPPER_UNK2 = 2,
     };
 
@@ -1242,14 +1245,14 @@ public:
     void seStartSwordCut(u32);
     BOOL itemButton() const;
     BOOL itemTrigger() const;
-    void getReadyItem();
+    u8 getReadyItem();
     BOOL checkGroupItem(int, int);
     BOOL checkSetItemTrigger(int, int);
-    void auraJointCB0(int);
+    BOOL auraJointCB0(int);
     BOOL jointBeforeCB(int, J3DTransformInfo*, Quaternion*);
     BOOL jointAfterCB(int, J3DTransformInfo*, Quaternion*);
-    void jointCB0(int);
-    void jointCB1();
+    BOOL jointCB0(int);
+    BOOL jointCB1();
     JKRHeap* setAnimeHeap(JKRSolidHeap*);
     JKRHeap* setItemHeap();
     void setBlurPosResource(u16);
@@ -2101,6 +2104,9 @@ public:
     
     request_of_phase_process_class* getPhase() { return &mPhsLoad; }
     
+    J3DAnmTransform* getNowAnmPackUnder(daPy_UNDER idx) { return mAnmRatioUnder[idx].getAnmTransform(); }
+    J3DAnmTransform* getNowAnmPackUpper(daPy_UPPER idx) { return mAnmRatioUpper[idx].getAnmTransform(); }
+    
     void allTrigger() const {}
     void cancelTrigger() const {}
     void checkAttentionLock() {}
@@ -2134,8 +2140,6 @@ public:
     void getAnmSpeedStickRate(f32, f32) {}
     void getBombWaterPillarBrk() {}
     void getBombWaterPillarBtk() {}
-    void getNowAnmPackUnder(daPy_UNDER) {}
-    void getNowAnmPackUpper(daPy_UPPER) {}
     void getStartModeFromParam(u32) {}
     void getTactLeftHandPos() const {}
     void itemButtonX() const {}
@@ -2242,8 +2246,7 @@ public:
     /* 0x09A0 */ dDlst_mirrorPacket mMirrorPacket;
     /* 0x2E7C */ J3DModel* mpYmsls00Model;
     /* 0x2E80 */ J3DAnmTextureSRTKey* mpYmsls00Btk;
-    /* 0x2E84 */ J3DModel* mpHbootsModelRightFoot;
-    /* 0x2E88 */ J3DModel* mpHbootsModelLeftFoot;
+    /* 0x2E84 */ J3DModel* mpHbootsModels[2];
     /* 0x2E8C */ J3DModel* mpPringModel;
     /* 0x2E90 */ JKRSolidHeap* mpItemHeaps[2];
     /* 0x2E98 */ J3DModel* mpHeldItemModel;
