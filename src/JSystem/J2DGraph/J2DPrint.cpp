@@ -94,7 +94,6 @@ void J2DPrint::locate(f32 param_1, f32 param_2) {
 
 /* 802CE4D8-802CE888       .text printReturn__8J2DPrintFPCcff18J2DTextBoxHBinding18J2DTextBoxVBindingffUc */
 void J2DPrint::printReturn(const char* param_1, f32 param_2, f32 param_3, J2DTextBoxHBinding param_4, J2DTextBoxVBinding param_5, f32 param_6, f32 param_7, u8 param_8) {
-    /* Nonmatching */
     if (mFont != NULL) {
         initchar();
         field_0x24 = s32(field_0x2c);
@@ -115,10 +114,10 @@ void J2DPrint::printReturn(const char* param_1, f32 param_2, f32 param_3, J2DTex
         case VBIND_TOP:
             break;
         case VBIND_BOTTOM:
-            param_7 += (s32)(param_3 - dVar13 - 0.5f);
+            param_7 += param_3 - (s32)(dVar13 + 0.5f);
             break;
         case VBIND_CENTER:
-            param_7 += (s32)(param_3 - dVar13 - 0.5f) * 0.5f;
+            param_7 += (param_3 - (s32)(dVar13 + 0.5f)) / 2.0f;
         default:
             break;
         }
@@ -177,9 +176,10 @@ f32 J2DPrint::parse(const u8* param_1, int param_2, int param_3, u16* param_4, J
         local_d8 = &local_b8;
     }
     mFont->setGradColor(local_b8, *local_d8);
+    u8 local_f0;
     bool r25;
     do {
-        u8 local_f0 = 0;
+        local_f0 = 0;
         if (mFont->isLeadByte(r27)) {
             r27 = (r27 << 8) | (*(param_1++));
             local_f0 = 1;
@@ -558,4 +558,8 @@ f32 J2DPrint::getNumberF32(const u8** param_1, f32 param_2, f32 param_3, int bas
         }
     }
     return uVar2;
+}
+
+void dummy2() {
+    OSReport("buff != 0");
 }

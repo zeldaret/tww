@@ -839,7 +839,7 @@ config.libs = [
         [
             Object(Matching,    "JSystem/J2DGraph/J2DGrafContext.cpp"),
             Object(Matching,    "JSystem/J2DGraph/J2DOrthoGraph.cpp"),
-            Object(NonMatching, "JSystem/J2DGraph/J2DPrint.cpp"),
+            Object(Matching,    "JSystem/J2DGraph/J2DPrint.cpp"),
             Object(Matching,    "JSystem/J2DGraph/J2DPane.cpp"),
             Object(Matching,    "JSystem/J2DGraph/J2DScreen.cpp"),
             Object(NonMatching, "JSystem/J2DGraph/J2DWindow.cpp"),
