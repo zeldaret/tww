@@ -12,8 +12,8 @@ public:
     virtual ~J3DUClipper() {}
     void init();
     void calcViewFrustum();
-    u32 clip(const Mtx, Vec, f32);
-    u32 clip(const Mtx, Vec*, Vec*);
+    s32 clip(const Mtx, Vec, f32);
+    s32 clip(const Mtx, Vec*, Vec*);
     u32 clipByBox(J3DModel*);
 
     void setFovy(f32 fovy) { mFovY = fovy; }

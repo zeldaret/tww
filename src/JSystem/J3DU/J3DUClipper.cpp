@@ -50,7 +50,7 @@ void J3DUClipper::calcViewFrustum() {
 }
 
 /* 80256888-802569D0       .text clip__11J3DUClipperFPA4_Cf3Vecf */
-u32 J3DUClipper::clip(const Mtx mtx, Vec pos, float radius) {
+s32 J3DUClipper::clip(const Mtx mtx, Vec pos, float radius) {
     Vec p;
     MTXMultVec(mtx, &pos, &p);
 
@@ -71,7 +71,7 @@ u32 J3DUClipper::clip(const Mtx mtx, Vec pos, float radius) {
 }
 
 /* 802569D0-80256CB8       .text clip__11J3DUClipperFPA4_CfP3VecP3Vec */
-u32 J3DUClipper::clip(const Mtx mtx, Vec* pMin, Vec* pMax) {
+s32 J3DUClipper::clip(const Mtx mtx, Vec* pMin, Vec* pMax) {
     s32 clip[6];
     for (u32 i = 0; i < ARRAY_SIZE(clip); i++)
         clip[i] = 0;
