@@ -53,10 +53,17 @@ public:
         mBounds.f.x = mBounds.i.x + w;
         mBounds.f.y = mBounds.i.y + h;
     }
-    virtual bool setConnectParent(bool connected);
-    virtual void calcMtx();
-    virtual void update();
-    virtual void drawSelf(f32 x, f32 y);
+    virtual bool setConnectParent(bool connected) {
+        mIsConnectParent = 0;
+        return false;
+    }
+    virtual void calcMtx() {
+        if (mPaneTree.mList) {
+            makeMatrix(mBounds.i.x, mBounds.i.y);
+        }
+    }
+    virtual void update() {}
+    virtual void drawSelf(f32 x, f32 y) {}
     virtual void drawSelf(f32 x, f32 y, Mtx* mtx) {}
     virtual J2DPane* search(u32 tag);
     virtual void makeMatrix(f32, f32);
