@@ -3,37 +3,62 @@
 // Translation Unit: resource.cpp
 //
 
-#include "resource.h"
+#include "JSystem/JMessage/resource.h"
+#include "JSystem/JUtility/JUTResFont.h"
 #include "dolphin/types.h"
 
 /* 8029FCC4-8029FD04       .text __ct__Q28JMessage18TResourceContainerFv */
 JMessage::TResourceContainer::TResourceContainer() {
     /* Nonmatching */
+    field_0x10 = 0;
+    field_0x14 = NULL;
 }
 
 /* 8029FD04-8029FD90       .text Get_groupID__Q28JMessage18TResourceContainerFUs */
-void JMessage::TResourceContainer::Get_groupID(unsigned short) {
+void JMessage::TResourceContainer::Get_groupID(u16) {
     /* Nonmatching */
 }
 
 /* 8029FD90-8029FDC8       .text SetEncoding__Q28JMessage18TResourceContainerFUc */
-void JMessage::TResourceContainer::SetEncoding(unsigned char) {
-    /* Nonmatching */
+void JMessage::TResourceContainer::SetEncoding(u8 param_1) {
+    if (param_1 == 0) {
+        field_0x10 = param_1;
+        field_0x14 = 0;
+    } else {
+        SetEncoding_(param_1);
+    }
 }
 
 /* 8029FDC8-8029FE14       .text Do_create__Q28JMessage18TResourceContainerFv */
-void JMessage::TResourceContainer::Do_create() {
-    /* Nonmatching */
+JMessage::TResource* JMessage::TResourceContainer::Do_create() {
+    return new TResource();
 }
 
 /* 8029FE14-8029FE38       .text Do_destroy__Q28JMessage18TResourceContainerFPQ28JMessage9TResource */
-void JMessage::TResourceContainer::Do_destroy(JMessage::TResource*) {
-    /* Nonmatching */
+void JMessage::TResourceContainer::Do_destroy(JMessage::TResource* resource) {
+    delete resource;
+}
+
+namespace JMessage {
+    namespace {
+        IsLeadByte_func gapfnIsLeadByte_[4] = {
+            NULL,
+            JUTFont::isLeadByte_1Byte,
+            JUTFont::isLeadByte_2Byte,
+            JUTFont::isLeadByte_ShiftJIS,
+        };
+    }
 }
 
 /* 8029FE38-8029FE68       .text SetEncoding___Q28JMessage18TResourceContainerFUc */
-void SetEncoding___Q28JMessage18TResourceContainerFUc {
-    /* Nonmatching */
+void JMessage::TResourceContainer::SetEncoding_(u8 param_1) {
+    field_0x10 = param_1;
+    u32 r4 = param_1;
+    field_0x14 = 0;
+    if (r4 >= 4) {
+        return;
+    }
+    field_0x14 = gapfnIsLeadByte_[r4];
 }
 
 /* 8029FE68-8029FE90       .text __ct__Q28JMessage6TParseFPQ28JMessage18TResourceContainer */
@@ -47,27 +72,11 @@ JMessage::TParse::~TParse() {
 }
 
 /* 8029FEF0-802A0024       .text parseHeader_next__Q28JMessage6TParseFPPCvPUlUl */
-void JMessage::TParse::parseHeader_next(const void**, unsigned long*, unsigned long) {
+void JMessage::TParse::parseHeader_next(const void**, u32*, u32) {
     /* Nonmatching */
 }
 
 /* 802A0024-802A0170       .text parseBlock_next__Q28JMessage6TParseFPPCvPUlUl */
-void JMessage::TParse::parseBlock_next(const void**, unsigned long*, unsigned long) {
+void JMessage::TParse::parseBlock_next(const void**, u32*, u32) {
     /* Nonmatching */
 }
-
-/* 802A0170-802A0178       .text isLeadByte_1Byte__7JUTFontFi */
-void JUTFont::isLeadByte_1Byte(int) {
-    /* Nonmatching */
-}
-
-/* 802A0178-802A0180       .text isLeadByte_2Byte__7JUTFontFi */
-void JUTFont::isLeadByte_2Byte(int) {
-    /* Nonmatching */
-}
-
-/* 802A0180-802A01B0       .text isLeadByte_ShiftJIS__7JUTFontFi */
-void JUTFont::isLeadByte_ShiftJIS(int) {
-    /* Nonmatching */
-}
-
