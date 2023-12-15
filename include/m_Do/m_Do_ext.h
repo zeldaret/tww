@@ -509,6 +509,7 @@ private:
 
 class mDoExt_backupMaterial_c {
 public:
+    mDoExt_backupMaterial_c() { mBackupMatBlock = NULL; }
     bool create(J3DModelData*);
     bool create(u16);
     void restore(J3DModelData*);
