@@ -3,11 +3,21 @@
 // Translation Unit: d_a_obj_tribox_static.cpp
 //
 
-#include "d/actor/d_a_obj_tribox_static.h"
-#include "dolphin/types.h"
+#include "d/actor/d_a_obj_tribox.h"
+
+cXyz daObjTribox::Act_c::M_sound_pos;
+int daObjTribox::Act_c::M_correct_cnt;
+bool daObjTribox::Act_c::M_correct_flag;
+int daObjTribox::Act_c::M_b_cont_cnt;
+int daObjTribox::Act_c::M_c_cont_cnt;
+u8 daObjTribox::Act_c::M_sink_start;
 
 /* 80067D1C-80067D5C       .text reset__Q211daObjTribox5Act_cFv */
 void daObjTribox::Act_c::reset() {
-    /* Nonmatching */
+    M_correct_cnt = 0;
+    M_correct_flag = false;
+    M_b_cont_cnt = 0;
+    M_c_cont_cnt = 0;
+    M_sink_start = 0;
+    M_sound_pos = cXyz::Zero;
 }
-
