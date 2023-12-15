@@ -3,8 +3,9 @@
 // Translation Unit: d_meter.cpp
 //
 
-#include "d_meter.h"
-#include "dolphin/types.h"
+#include "d/d_meter.h"
+#include "d/d_drawlist.h"
+#include "d/d_metronome.h"
 
 /* 801EEFDC-801EF360       .text __ct__12dMeter_HIO_cFv */
 dMeter_HIO_c::dMeter_HIO_c() {
@@ -37,12 +38,12 @@ void dMeter_mtrHide() {
 }
 
 /* 801EF94C-801EF954       .text dMenu_setMenuStatus__FUc */
-void dMenu_setMenuStatus(unsigned char) {
+void dMenu_setMenuStatus(u8) {
     /* Nonmatching */
 }
 
 /* 801EF954-801EF95C       .text dMenu_setMenuStatusOld__FUc */
-void dMenu_setMenuStatusOld(unsigned char) {
+void dMenu_setMenuStatusOld(u8) {
     /* Nonmatching */
 }
 
@@ -57,7 +58,7 @@ void dMenu_getCollectMode() {
 }
 
 /* 801EF96C-801EF974       .text dMenu_setCollectMode__FUc */
-void dMenu_setCollectMode(unsigned char) {
+void dMenu_setCollectMode(u8) {
     /* Nonmatching */
 }
 
@@ -67,7 +68,7 @@ void dMenu_getItemMode() {
 }
 
 /* 801EF97C-801EF984       .text dMenu_setItemMode__FUc */
-void dMenu_setItemMode(unsigned char) {
+void dMenu_setItemMode(u8) {
     /* Nonmatching */
 }
 
@@ -102,7 +103,7 @@ void dMeter_offAuctionFlag() {
 }
 
 /* 801EF9C4-801EFA38       .text dMeter_itemMoveSet__FP18fopMsgM_pane_classUcUc */
-void dMeter_itemMoveSet(fopMsgM_pane_class*, unsigned char, unsigned char) {
+void dMeter_itemMoveSet(fopMsgM_pane_class*, u8, u8) {
     /* Nonmatching */
 }
 
@@ -112,12 +113,12 @@ void dMeter_itemMoveFlagCheck() {
 }
 
 /* 801EFA40-801EFA48       .text dMenu_flag__Fv */
-void dMenu_flag() {
+bool dMenu_flag() {
     /* Nonmatching */
 }
 
 /* 801EFA48-801EFA50       .text dMenu_flagSet__FUc */
-void dMenu_flagSet(unsigned char) {
+void dMenu_flagSet(u8) {
     /* Nonmatching */
 }
 
@@ -132,7 +133,7 @@ void dMenu_getPushMenuButton() {
 }
 
 /* 801EFA60-801EFA68       .text dMenu_setPushMenuButton__FUc */
-void dMenu_setPushMenuButton(unsigned char) {
+void dMenu_setPushMenuButton(u8) {
     /* Nonmatching */
 }
 
@@ -142,17 +143,17 @@ void dMeter_PaneHide(fopMsgM_pane_class*) {
 }
 
 /* 801EFA78-801EFA90       .text dMeter_isBit8__FPUcUc */
-void dMeter_isBit8(unsigned char*, unsigned char) {
+void dMeter_isBit8(u8*, u8) {
     /* Nonmatching */
 }
 
 /* 801EFA90-801EFAA4       .text dMeter_onBit8__FPUcUc */
-void dMeter_onBit8(unsigned char*, unsigned char) {
+void dMeter_onBit8(u8*, u8) {
     /* Nonmatching */
 }
 
 /* 801EFAA4-801EFAB8       .text dMeter_offBit8__FPUcUc */
-void dMeter_offBit8(unsigned char*, unsigned char) {
+void dMeter_offBit8(u8*, u8) {
     /* Nonmatching */
 }
 
@@ -172,22 +173,22 @@ void dMeter_statusCheck(sub_meter_class*) {
 }
 
 /* 801F01C0-801F0258       .text dMeter_alphaClose__FPsPs */
-void dMeter_alphaClose(short*, short*) {
+void dMeter_alphaClose(s16*, s16*) {
     /* Nonmatching */
 }
 
 /* 801F0258-801F02E8       .text dMeter_alphaOpen__FPsPs */
-void dMeter_alphaOpen(short*, short*) {
+void dMeter_alphaOpen(s16*, s16*) {
     /* Nonmatching */
 }
 
 /* 801F02E8-801F0320       .text dMeter_rupy_num__FPcs */
-void dMeter_rupy_num(char*, short) {
+void dMeter_rupy_num(char*, s16) {
     /* Nonmatching */
 }
 
 /* 801F0320-801F0378       .text dMeter_actionTex__Fs */
-void dMeter_actionTex(short) {
+void dMeter_actionTex(s16) {
     /* Nonmatching */
 }
 
@@ -197,7 +198,7 @@ void dMeter_weponTex() {
 }
 
 /* 801F041C-801F0434       .text dMeter_heartTex__Fs */
-void dMeter_heartTex(short) {
+void dMeter_heartTex(s16) {
     /* Nonmatching */
 }
 
@@ -222,42 +223,42 @@ void dMeter_heart_data_set(fopMsgM_pane_class*, fopMsgM_pane_class*, fopMsgM_pan
 }
 
 /* 801F07D4-801F0820       .text dMeter_paneBottomScaleY__FP18fopMsgM_pane_classf */
-void dMeter_paneBottomScaleY(fopMsgM_pane_class*, float) {
+void dMeter_paneBottomScaleY(fopMsgM_pane_class*, f32) {
     /* Nonmatching */
 }
 
 /* 801F0820-801F08DC       .text dMeter_parentPaneTrans__FP18fopMsgM_pane_classf */
-void dMeter_parentPaneTrans(fopMsgM_pane_class*, float) {
+void dMeter_parentPaneTrans(fopMsgM_pane_class*, f32) {
     /* Nonmatching */
 }
 
 /* 801F08DC-801F09D8       .text dMeter_childPaneTrans__FP18fopMsgM_pane_classP18fopMsgM_pane_classf */
-void dMeter_childPaneTrans(fopMsgM_pane_class*, fopMsgM_pane_class*, float) {
+void dMeter_childPaneTrans(fopMsgM_pane_class*, fopMsgM_pane_class*, f32) {
     /* Nonmatching */
 }
 
 /* 801F09D8-801F0AD8       .text dMeter_childPaneTransOnly__FP18fopMsgM_pane_classP18fopMsgM_pane_classff */
-void dMeter_childPaneTransOnly(fopMsgM_pane_class*, fopMsgM_pane_class*, float, float) {
+void dMeter_childPaneTransOnly(fopMsgM_pane_class*, fopMsgM_pane_class*, f32, f32) {
     /* Nonmatching */
 }
 
 /* 801F0AD8-801F0C10       .text dMeter_childPaneTransChildTrans__FP18fopMsgM_pane_classP18fopMsgM_pane_classP18fopMsgM_pane_classff */
-void dMeter_childPaneTransChildTrans(fopMsgM_pane_class*, fopMsgM_pane_class*, fopMsgM_pane_class*, float, float) {
+void dMeter_childPaneTransChildTrans(fopMsgM_pane_class*, fopMsgM_pane_class*, fopMsgM_pane_class*, f32, f32) {
     /* Nonmatching */
 }
 
 /* 801F0C10-801F0D0C       .text dMeter_childPaneTransChildTransOnly__FP18fopMsgM_pane_classP18fopMsgM_pane_classP18fopMsgM_pane_classff */
-void dMeter_childPaneTransChildTransOnly(fopMsgM_pane_class*, fopMsgM_pane_class*, fopMsgM_pane_class*, float, float) {
+void dMeter_childPaneTransChildTransOnly(fopMsgM_pane_class*, fopMsgM_pane_class*, fopMsgM_pane_class*, f32, f32) {
     /* Nonmatching */
 }
 
 /* 801F0D0C-801F0D64       .text dMeter_setHeartScaleXY__FP18fopMsgM_pane_classs */
-void dMeter_setHeartScaleXY(fopMsgM_pane_class*, short) {
+void dMeter_setHeartScaleXY(fopMsgM_pane_class*, s16) {
     /* Nonmatching */
 }
 
 /* 801F0D64-801F0DD4       .text dMeter_setHeartScaleXY2__FP18fopMsgM_pane_classs */
-void dMeter_setHeartScaleXY2(fopMsgM_pane_class*, short) {
+void dMeter_setHeartScaleXY2(fopMsgM_pane_class*, s16) {
     /* Nonmatching */
 }
 
@@ -402,12 +403,12 @@ void dMeter_actionAlpha(sub_meter_class*) {
 }
 
 /* 801F4C80-801F4CC4       .text dMeter_numberSet__FP7J2DPaneUc */
-void dMeter_numberSet(J2DPane*, unsigned char) {
+void dMeter_numberSet(J2DPane*, u8) {
     /* Nonmatching */
 }
 
 /* 801F4CC4-801F4E04       .text dMeter_numberColor__FP7J2DPaneUcUc */
-void dMeter_numberColor(J2DPane*, unsigned char, unsigned char) {
+void dMeter_numberColor(J2DPane*, u8, u8) {
     /* Nonmatching */
 }
 
@@ -452,7 +453,7 @@ void dMeter_xyItemChange(sub_meter_class*, int) {
 }
 
 /* 801F5FDC-801F6084       .text dMeter_xyRotateZ__FP18fopMsgM_pane_classff */
-void dMeter_xyRotateZ(fopMsgM_pane_class*, float, float) {
+void dMeter_xyRotateZ(fopMsgM_pane_class*, f32, f32) {
     /* Nonmatching */
 }
 
@@ -547,12 +548,12 @@ void dMeter_magicGaugeMove(sub_meter_class*) {
 }
 
 /* 801F961C-801F9A24       .text dMeter_flyGaugeMove__FP15sub_meter_classUcss */
-void dMeter_flyGaugeMove(sub_meter_class*, unsigned char, short, short) {
+void dMeter_flyGaugeMove(sub_meter_class*, u8, s16, s16) {
     /* Nonmatching */
 }
 
 /* 801F9A24-801F9B3C       .text dMeter_magicChange__FP15sub_meter_classf */
-void dMeter_magicChange(sub_meter_class*, float) {
+void dMeter_magicChange(sub_meter_class*, f32) {
     /* Nonmatching */
 }
 
@@ -567,7 +568,7 @@ void dMeter_magicInitTrans(sub_meter_class*) {
 }
 
 /* 801F9CCC-801F9F18       .text dMeter_magicTransScale__FP15sub_meter_classfff */
-void dMeter_magicTransScale(sub_meter_class*, float, float, float) {
+void dMeter_magicTransScale(sub_meter_class*, f32, f32, f32) {
     /* Nonmatching */
 }
 
@@ -607,7 +608,7 @@ void dMeter_menuPlusMove(sub_meter_class*) {
 }
 
 /* 801FBB28-801FBC70       .text dMeter_magicLength__FP15sub_meter_classf */
-void dMeter_magicLength(sub_meter_class*, float) {
+void dMeter_magicLength(sub_meter_class*, f32) {
     /* Nonmatching */
 }
 
@@ -652,12 +653,12 @@ void dMeter_walletChange(sub_meter_class*) {
 }
 
 /* 801FC85C-801FCA98       .text dMeter_keyLight__FP18fopMsgM_pane_classPsf */
-void dMeter_keyLight(fopMsgM_pane_class*, short*, float) {
+void dMeter_keyLight(fopMsgM_pane_class*, s16*, f32) {
     /* Nonmatching */
 }
 
 /* 801FCA98-801FCCA8       .text dMeter_keyRndLightFrame__FPs */
-void dMeter_keyRndLightFrame(short*) {
+void dMeter_keyRndLightFrame(s16*) {
     /* Nonmatching */
 }
 
@@ -677,7 +678,7 @@ void dMeter_keyMove(sub_meter_class*) {
 }
 
 /* 801FD09C-801FD104       .text dMeter_compassRotate__FP18fopMsgM_pane_classP18fopMsgM_pane_classf */
-void dMeter_compassRotate(fopMsgM_pane_class*, fopMsgM_pane_class*, float) {
+void dMeter_compassRotate(fopMsgM_pane_class*, fopMsgM_pane_class*, f32) {
     /* Nonmatching */
 }
 
@@ -757,12 +758,12 @@ void dMeter_clockMove(sub_meter_class*) {
 }
 
 /* 801FEC2C-801FED10       .text dMeter_clockStarLight__FP18fopMsgM_pane_classPs */
-void dMeter_clockStarLight(fopMsgM_pane_class*, short*) {
+void dMeter_clockStarLight(fopMsgM_pane_class*, s16*) {
     /* Nonmatching */
 }
 
 /* 801FED10-801FEE00       .text dMeter_starLightFrame__FPs */
-void dMeter_starLightFrame(short*) {
+void dMeter_starLightFrame(s16*) {
     /* Nonmatching */
 }
 
@@ -812,7 +813,7 @@ void dMeter_moveItemDraw(sub_meter_class*) {
 }
 
 /* 8020042C-8020054C       .text dMeter_swimTransY__FP15sub_meter_classf */
-void dMeter_swimTransY(sub_meter_class*, float) {
+void dMeter_swimTransY(sub_meter_class*, f32) {
     /* Nonmatching */
 }
 
@@ -827,12 +828,12 @@ void dMeter_swimPaneHide(sub_meter_class*) {
 }
 
 /* 80200630-802006AC       .text dMeter_swimPaneTransY__FP15sub_meter_classf */
-void dMeter_swimPaneTransY(sub_meter_class*, float) {
+void dMeter_swimPaneTransY(sub_meter_class*, f32) {
     /* Nonmatching */
 }
 
 /* 802006AC-8020070C       .text dMeter_swimPaneAlpha__FP15sub_meter_classf */
-void dMeter_swimPaneAlpha(sub_meter_class*, float) {
+void dMeter_swimPaneAlpha(sub_meter_class*, f32) {
     /* Nonmatching */
 }
 
@@ -892,7 +893,7 @@ void dMeter_swimLightBirth(sub_meter_class*) {
 }
 
 /* 802021B4-8020238C       .text dMeter_swimLightAnime__FP15sub_meter_classs */
-void dMeter_swimLightAnime(sub_meter_class*, short) {
+void dMeter_swimLightAnime(sub_meter_class*, s16) {
     /* Nonmatching */
 }
 
@@ -912,7 +913,7 @@ void dMeter_arrowCheckStatus(sub_meter_class*) {
 }
 
 /* 80202580-80202770       .text dMeter_arrowTransScale__FP15sub_meter_classffi */
-void dMeter_arrowTransScale(sub_meter_class*, float, float, int) {
+void dMeter_arrowTransScale(sub_meter_class*, f32, f32, int) {
     /* Nonmatching */
 }
 
@@ -1025,29 +1026,3 @@ void mapCtrlDisp_c::moveMapCtrlDisp() {
 dMeter_map_HIO_c::~dMeter_map_HIO_c() {
     /* Nonmatching */
 }
-
-/* 80205EDC-80205F14       .text __arraydtor$4710 */
-void __arraydtor$4710 {
-    /* Nonmatching */
-}
-
-/* 80205F14-80205F30       .text __ct__11dDlst_2Dm_cFv */
-dDlst_2Dm_c::dDlst_2Dm_c() {
-    /* Nonmatching */
-}
-
-/* 80205F30-80205F6C       .text __dt__13dMeter_info_cFv */
-dMeter_info_c::~dMeter_info_c() {
-    /* Nonmatching */
-}
-
-/* 80205F6C-80205FC8       .text __dt__12dMetronome_cFv */
-dMetronome_c::~dMetronome_c() {
-    /* Nonmatching */
-}
-
-/* 80205FC8-80205FE8       .text draw__12dMetronome_cFv */
-void dMetronome_c::draw() {
-    /* Nonmatching */
-}
-

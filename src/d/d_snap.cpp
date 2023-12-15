@@ -3,8 +3,23 @@
 // Translation Unit: d_snap.cpp
 //
 
-#include "d_snap.h"
+#include "d/d_snap.h"
 #include "dolphin/types.h"
+
+void (dSnap_packet::*dSnap_packet::m_judge_tbl[])() = {
+    NULL,
+    &dSnap_packet::JudgePost,
+    &dSnap_packet::JudgeBikutsuki,
+    &dSnap_packet::JudgeCoupleLook,
+    &dSnap_packet::JudgeGF,
+    &dSnap_packet::JudgeGenzo,
+    &dSnap_packet::JudgeObasan4,
+    &dSnap_packet::JudgeGene,
+    &dSnap_packet::JudgeGene,
+    &dSnap_packet::JudgeGene,
+    &dSnap_packet::JudgeTestM,
+};
+dSnap_packet l_snap;
 
 /* 800CCF6C-800CCFE4       .text dSnap_PhotoIndex2TableIndex__Fi */
 void dSnap_PhotoIndex2TableIndex(int) {
@@ -62,7 +77,7 @@ void dSnap_Obj::ChkPhoto(int) {
 }
 
 /* 800CDC18-800CDC40       .text ChkSuccess__9dSnap_ObjFlf */
-void dSnap_Obj::ChkSuccess(long, f32) {
+void dSnap_Obj::ChkSuccess(s32, f32) {
     /* Nonmatching */
 }
 
@@ -72,9 +87,7 @@ void dSnap_Obj::ChkCamCull() const {
 }
 
 /* 800CDCD8-800CDCDC       .text Init__18dSnap_RegistObjElmFv */
-void dSnap_RegistObjElm::Init() {
-    /* Nonmatching */
-}
+void dSnap_RegistObjElm::Init() {}
 
 /* 800CDCDC-800CDD70       .text Regist__18dSnap_RegistObjElmFRC9dSnap_Obj */
 void dSnap_RegistObjElm::Regist(const dSnap_Obj&) {
@@ -232,9 +245,7 @@ void dSnap_DebugDraw() {
 }
 
 /* 800CF054-800CF058       .text dSnap_Delete__Fv */
-void dSnap_Delete() {
-    /* Nonmatching */
-}
+void dSnap_Delete() {}
 
 /* 800CF058-800CF0DC       .text __dt__12dSnap_packetFv */
 dSnap_packet::~dSnap_packet() {
@@ -250,4 +261,3 @@ dSnap_RegistObjElm::~dSnap_RegistObjElm() {
 dSnap_RegistObjElm::dSnap_RegistObjElm() {
     /* Nonmatching */
 }
-

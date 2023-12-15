@@ -7,12 +7,12 @@
 #include "dolphin/types.h"
 
 /* 80019940-80019CE8       .text mDoMemCdRWm_Store__FP12CARDFileInfoPvUl */
-void mDoMemCdRWm_Store(CARDFileInfo*, void*, unsigned long) {
+void mDoMemCdRWm_Store(CARDFileInfo*, void*, u32) {
     /* Nonmatching */
 }
 
 /* 80019CE8-80019F4C       .text mDoMemCdRWm_Restore__FP12CARDFileInfoPvUl */
-void mDoMemCdRWm_Restore(CARDFileInfo*, void*, unsigned long) {
+void mDoMemCdRWm_Restore(CARDFileInfo*, void*, u32) {
     /* Nonmatching */
 }
 
@@ -32,12 +32,12 @@ void mDoMemCdRWm_CheckCardStat(CARDFileInfo*) {
 }
 
 /* 8001A2F0-8001A330       .text mDoMemCdRWm_CalcCheckSum__FPvUl */
-void mDoMemCdRWm_CalcCheckSum(void*, unsigned long) {
+void mDoMemCdRWm_CalcCheckSum(void*, u32) {
     /* Nonmatching */
 }
 
 /* 8001A330-8001A358       .text mDoMemCdRWm_CalcCheckSumPictData__FPvUl */
-void mDoMemCdRWm_CalcCheckSumPictData(void*, unsigned long) {
+void mDoMemCdRWm_CalcCheckSumPictData(void*, u32) {
     /* Nonmatching */
 }
 
@@ -47,12 +47,12 @@ void mDoMemCdRWm_TestCheckSumPictData(void*) {
 }
 
 /* 8001A39C-8001A3D0       .text mDoMemCdRWm_SetCheckSumPictData__FPUc */
-void mDoMemCdRWm_SetCheckSumPictData(unsigned char*) {
+void mDoMemCdRWm_SetCheckSumPictData(u8*) {
     /* Nonmatching */
 }
 
 /* 8001A3D0-8001A408       .text mDoMemCdRWm_CalcCheckSumGameData__FPvUl */
-void mDoMemCdRWm_CalcCheckSumGameData(void*, unsigned long) {
+void mDoMemCdRWm_CalcCheckSumGameData(void*, u32) {
     /* Nonmatching */
 }
 
@@ -62,6 +62,6 @@ void mDoMemCdRWm_TestCheckSumGameData(void*) {
 }
 
 /* 8001A454-8001A498       .text mDoMemCdRWm_SetCheckSumGameData__FPUcUc */
-void mDoMemCdRWm_SetCheckSumGameData(unsigned char*, unsigned char) {
+void mDoMemCdRWm_SetCheckSumGameData(u8*, u8) {
     /* Nonmatching */
 }

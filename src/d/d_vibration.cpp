@@ -3,35 +3,30 @@
 // Translation Unit: d_vibration.cpp
 //
 
-#include "d_vibration.h"
-#include "dolphin/types.h"
-
-
-
-
+#include "d/d_vibration.h"
 
 /* 8009C73C-8009CCCC       .text Run__12dVibration_cFv */
-void dVibration_c::Run() {
+int dVibration_c::Run() {
     /* Nonmatching */
 }
 
 /* 8009CCCC-8009CD6C       .text StartShock__12dVibration_cFii4cXyz */
-void dVibration_c::StartShock(int, int, cXyz) {
+bool dVibration_c::StartShock(int, int, cXyz) {
     /* Nonmatching */
 }
 
 /* 8009CD6C-8009CE1C       .text StartQuake__12dVibration_cFii4cXyz */
-void dVibration_c::StartQuake(int, int, cXyz) {
+bool dVibration_c::StartQuake(int, int, cXyz) {
     /* Nonmatching */
 }
 
 /* 8009CE1C-8009CF84       .text StartQuake__12dVibration_cFPCUcii4cXyz */
-void dVibration_c::StartQuake(const unsigned char*, int, int, cXyz) {
+bool dVibration_c::StartQuake(const unsigned char*, int, int, cXyz) {
     /* Nonmatching */
 }
 
 /* 8009CF84-8009CFEC       .text StopQuake__12dVibration_cFi */
-void dVibration_c::StopQuake(int) {
+int dVibration_c::StopQuake(int) {
     /* Nonmatching */
 }
 
@@ -41,7 +36,7 @@ void dVibration_c::Kill() {
 }
 
 /* 8009D044-8009D06C       .text CheckQuake__12dVibration_cFv */
-void dVibration_c::CheckQuake() {
+bool dVibration_c::CheckQuake() {
     /* Nonmatching */
 }
 
@@ -69,4 +64,3 @@ dVibration_c::dVibration_c() {
 dVibration_c::~dVibration_c() {
     /* Nonmatching */
 }
-

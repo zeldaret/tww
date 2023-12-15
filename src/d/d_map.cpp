@@ -32,37 +32,37 @@ void mapOffsetY() {
 }
 
 /* 800458E0-800459E4       .text dMap_GetTopBottomFloorNo__FP11dStage_dt_cPUcPUc */
-void dMap_GetTopBottomFloorNo(dStage_dt_c*, unsigned char*, unsigned char*) {
+void dMap_GetTopBottomFloorNo(dStage_dt_c*, u8*, u8*) {
     /* Nonmatching */
 }
 
 /* 800459E4-80045A98       .text dMap_GetFloorInfoDtP__FP18dStage_FloorInfo_cf */
-void dMap_GetFloorInfoDtP(dStage_FloorInfo_c*, float) {
+void dMap_GetFloorInfoDtP(dStage_FloorInfo_c*, f32) {
     /* Nonmatching */
 }
 
 /* 80045A98-80045AEC       .text dMap_GetFloorInfoDtPFromFloorNo__FP18dStage_FloorInfo_cUc */
-void dMap_GetFloorInfoDtPFromFloorNo(dStage_FloorInfo_c*, unsigned char) {
+void dMap_GetFloorInfoDtPFromFloorNo(dStage_FloorInfo_c*, u8) {
     /* Nonmatching */
 }
 
 /* 80045AEC-80045C24       .text dMap_GetFloorNoForDmap__FP11dStage_dt_cif */
-void dMap_GetFloorNoForDmap(dStage_dt_c*, int, float) {
+void dMap_GetFloorNoForDmap(dStage_dt_c*, int, f32) {
     /* Nonmatching */
 }
 
 /* 80045C24-80045C6C       .text dMap_GetFloorNo_WithRoom__Fif */
-void dMap_GetFloorNo_WithRoom(int, float) {
+void dMap_GetFloorNo_WithRoom(int, f32) {
     /* Nonmatching */
 }
 
 /* 80045C6C-80045C90       .text dMap_GetFloorNo__FP11dStage_dt_cf */
-void dMap_GetFloorNo(dStage_dt_c*, float) {
+void dMap_GetFloorNo(dStage_dt_c*, f32) {
     /* Nonmatching */
 }
 
 /* 80045C90-80045E54       .text getRoomDspFloorNo__15dMap_RoomInfo_cFUci */
-void dMap_RoomInfo_c::getRoomDspFloorNo(unsigned char, int) {
+void dMap_RoomInfo_c::getRoomDspFloorNo(u8, int) {
     /* Nonmatching */
 }
 
@@ -72,7 +72,7 @@ void dMap_RoomInfo_c::init(dMap_RoomInfo_c*, int) {
 }
 
 /* 80045F40-80046314       .text getRoomImage__15dMap_RoomInfo_cFiUciPP7ResTIMGPP7ResTIMGPP8map_dt_cPP20stage_map_info_classPUc */
-void dMap_RoomInfo_c::getRoomImage(int, unsigned char, int, ResTIMG**, ResTIMG**, map_dt_c**, stage_map_info_class**, unsigned char*) {
+void dMap_RoomInfo_c::getRoomImage(int, u8, int, ResTIMG**, ResTIMG**, map_dt_c**, stage_map_info_class**, u8*) {
     /* Nonmatching */
 }
 
@@ -82,12 +82,12 @@ void dMap_RoomInfo_c::makeRoomDspFloorNoTbl(int) {
 }
 
 /* 80046470-80046A58       .text roomEntryRoom__15dMap_RoomInfo_cFiUciUcP15dMap_RoomInfo_cssf */
-void dMap_RoomInfo_c::roomEntryRoom(int, unsigned char, int, unsigned char, dMap_RoomInfo_c*, short, short, float) {
+void dMap_RoomInfo_c::roomEntryRoom(int, u8, int, u8, dMap_RoomInfo_c*, s16, s16, f32) {
     /* Nonmatching */
 }
 
 /* 80046A58-80046F08       .text Changeimage__15dMap_RoomInfo_cFUcUcissf */
-void dMap_RoomInfo_c::Changeimage(unsigned char, unsigned char, int, short, short, float) {
+void dMap_RoomInfo_c::Changeimage(u8, u8, int, s16, s16, f32) {
     /* Nonmatching */
 }
 
@@ -97,17 +97,17 @@ void dMap_RoomInfo_c::deleteRoom() {
 }
 
 /* 80046FE0-800470CC       .text enlagementSizeTextureCordCalc__15dMap_RoomInfo_cFPfPfPfPfffffff */
-void dMap_RoomInfo_c::enlagementSizeTextureCordCalc(float*, float*, float*, float*, float, float, float, float, float, float) {
+void dMap_RoomInfo_c::enlagementSizeTextureCordCalc(f32*, f32*, f32*, f32*, f32, f32, f32, f32, f32, f32) {
     /* Nonmatching */
 }
 
 /* 800470CC-800475B8       .text roomDrawRoomEnlargementSize__15dMap_RoomInfo_cFiiiiffffUc */
-void dMap_RoomInfo_c::roomDrawRoomEnlargementSize(int, int, int, int, float, float, float, float, unsigned char) {
+void dMap_RoomInfo_c::roomDrawRoomEnlargementSize(int, int, int, int, f32, f32, f32, f32, u8) {
     /* Nonmatching */
 }
 
 /* 800475B8-80047834       .text roomDrawRoomRealSize__15dMap_RoomInfo_cFiiiiffffffUc */
-void dMap_RoomInfo_c::roomDrawRoomRealSize(int, int, int, int, float, float, float, float, float, float, unsigned char) {
+void dMap_RoomInfo_c::roomDrawRoomRealSize(int, int, int, int, f32, f32, f32, f32, f32, f32, u8) {
     /* Nonmatching */
 }
 
@@ -122,7 +122,7 @@ void dMap_RoomInfoCtrl_c::getNextRoomP(dMap_RoomInfo_c*) {
 }
 
 /* 80047960-80047A8C       .text ctrlEntryRoom__19dMap_RoomInfoCtrl_cFiUciUcssf */
-void dMap_RoomInfoCtrl_c::ctrlEntryRoom(int, unsigned char, int, unsigned char, short, short, float) {
+void dMap_RoomInfoCtrl_c::ctrlEntryRoom(int, u8, int, u8, s16, s16, f32) {
     /* Nonmatching */
 }
 
@@ -132,12 +132,12 @@ void dMap_RoomInfoCtrl_c::deleteRoom(int) {
 }
 
 /* 80047AC4-80047B8C       .text ctrlDrawRoomEnlargementSize__19dMap_RoomInfoCtrl_cFiiiiiffffUc */
-void dMap_RoomInfoCtrl_c::ctrlDrawRoomEnlargementSize(int, int, int, int, int, float, float, float, float, unsigned char) {
+void dMap_RoomInfoCtrl_c::ctrlDrawRoomEnlargementSize(int, int, int, int, int, f32, f32, f32, f32, u8) {
     /* Nonmatching */
 }
 
 /* 80047B8C-80047C64       .text ctrlDrawRoomRealSize__19dMap_RoomInfoCtrl_cFiiiiiffffffUc */
-void dMap_RoomInfoCtrl_c::ctrlDrawRoomRealSize(int, int, int, int, int, float, float, float, float, float, float, unsigned char) {
+void dMap_RoomInfoCtrl_c::ctrlDrawRoomRealSize(int, int, int, int, int, f32, f32, f32, f32, f32, f32, u8) {
     /* Nonmatching */
 }
 
@@ -157,7 +157,7 @@ void dMap_c::isEnableEnlargementScroll() {
 }
 
 /* 800482B4-800482D8       .text isEnableDispMap__6dMap_cFv */
-void dMap_c::isEnableDispMap() {
+bool dMap_c::isEnableDispMap() {
     /* Nonmatching */
 }
 
@@ -172,7 +172,7 @@ void dMap_c::remove() {
 }
 
 /* 80048370-800484A4       .text setImage__6dMap_cFiif */
-void dMap_c::setImage(int, int, float) {
+void dMap_c::setImage(int, int, f32) {
     /* Nonmatching */
 }
 
@@ -192,27 +192,27 @@ void dMap_2DSQ_c::draw() {
 }
 
 /* 80048A20-80048B54       .text mapDrawIconFree__6dMap_cFssUc */
-void dMap_c::mapDrawIconFree(short, short, unsigned char) {
+void dMap_c::mapDrawIconFree(s16, s16, u8) {
     /* Nonmatching */
 }
 
 /* 80048B54-80048C80       .text mapDrawIconSelf__6dMap_cFssUc */
-void dMap_c::mapDrawIconSelf(short, short, unsigned char) {
+void dMap_c::mapDrawIconSelf(s16, s16, u8) {
     /* Nonmatching */
 }
 
 /* 80048C80-80048D80       .text mapDrawFrame__6dMap_cFUc */
-void dMap_c::mapDrawFrame(unsigned char) {
+void dMap_c::mapDrawFrame(u8) {
     /* Nonmatching */
 }
 
 /* 80048D80-80048F74       .text mapDrawEnlargementSize__6dMap_cFffffUc */
-void dMap_c::mapDrawEnlargementSize(float, float, float, float, unsigned char) {
+void dMap_c::mapDrawEnlargementSize(f32, f32, f32, f32, u8) {
     /* Nonmatching */
 }
 
 /* 80048F74-80049354       .text mapDrawRealSize__6dMap_cFffUc */
-void dMap_c::mapDrawRealSize(float, float, unsigned char) {
+void dMap_c::mapDrawRealSize(f32, f32, u8) {
     /* Nonmatching */
 }
 
@@ -222,12 +222,12 @@ void dMap_c::mapAGBSendIslandData() {
 }
 
 /* 800494A0-800494C8       .text setPlayerStayAgbMapTypeNow__6dMap_cFff */
-void dMap_c::setPlayerStayAgbMapTypeNow(float, float) {
+void dMap_c::setPlayerStayAgbMapTypeNow(f32, f32) {
     /* Nonmatching */
 }
 
 /* 800494C8-80049538       .text agbMapNoSet__6dMap_cFUcUc */
-void dMap_c::agbMapNoSet(unsigned char, unsigned char) {
+void dMap_c::agbMapNoSet(u8, u8) {
     /* Nonmatching */
 }
 
@@ -267,7 +267,7 @@ void dMap_c::agbIsActive() {
 }
 
 /* 800496D0-80049B1C       .text isInDspArea__6dMap_cFffb */
-void dMap_c::isInDspArea(float, float, bool) {
+void dMap_c::isInDspArea(f32, f32, bool) {
     /* Nonmatching */
 }
 
@@ -277,12 +277,12 @@ void dMap_c::mapAGBSendStatInit() {
 }
 
 /* 80049B64-80049F4C       .text mapAGBSendMapMain__6dMap_cFff */
-void dMap_c::mapAGBSendMapMain(float, float) {
+void dMap_c::mapAGBSendMapMain(f32, f32) {
     /* Nonmatching */
 }
 
 /* 80049F4C-8004A3A4       .text calcEnlargementSizeParameter__6dMap_cFff */
-void dMap_c::calcEnlargementSizeParameter(float, float) {
+void dMap_c::calcEnlargementSizeParameter(f32, f32) {
     /* Nonmatching */
 }
 
@@ -292,12 +292,12 @@ void dMap_c::calcScissor() {
 }
 
 /* 8004A478-8004A6E8       .text mapMoveAll__6dMap_cFffif */
-void dMap_c::mapMoveAll(float, float, int, float) {
+void dMap_c::mapMoveAll(f32, f32, int, f32) {
     /* Nonmatching */
 }
 
 /* 8004A6E8-8004A760       .text mapDrawAll__6dMap_cFffif */
-void dMap_c::mapDrawAll(float, float, int, float) {
+void dMap_c::mapDrawAll(f32, f32, int, f32) {
     /* Nonmatching */
 }
 
@@ -307,27 +307,27 @@ void dMap_c::mapDrawIcon() {
 }
 
 /* 8004A7B4-8004A82C       .text draw__6dMap_cFffif */
-void dMap_c::draw(float, float, int, float) {
+void dMap_c::draw(f32, f32, int, f32) {
     /* Nonmatching */
 }
 
 /* 8004A82C-8004A97C       .text point2Grid__6dMap_cFffPScPSc */
-void dMap_c::point2Grid(float, float, signed char*, signed char*) {
+void dMap_c::point2Grid(f32, f32, s8*, s8*) {
     /* Nonmatching */
 }
 
 /* 8004A97C-8004ABB0       .text point2GridAndLocal__6dMap_cFffPScPScPsPs */
-void dMap_c::point2GridAndLocal(float, float, signed char*, signed char*, short*, short*) {
+void dMap_c::point2GridAndLocal(f32, f32, s8*, s8*, s16*, s16*) {
     /* Nonmatching */
 }
 
 /* 8004ABB0-8004AC44       .text getCheckPointUseGrid__6dMap_cFScSc */
-void dMap_c::getCheckPointUseGrid(signed char, signed char) {
+void dMap_c::getCheckPointUseGrid(s8, s8) {
     /* Nonmatching */
 }
 
 /* 8004AC44-8004ACD8       .text getFmapChkPntPrm__6dMap_cFiPScPScPsPsPUc */
-void dMap_c::getFmapChkPntPrm(int, signed char*, signed char*, short*, short*, unsigned char*) {
+void dMap_c::getFmapChkPntPrm(int, s8*, s8*, s16*, s16*, u8*) {
     /* Nonmatching */
 }
 
@@ -347,102 +347,102 @@ void dMap_c::initPoint() {
 }
 
 /* 8004AE28-8004B148       .text setGbaPoint_ocean__6dMap_cFUcffsUcUcUcUc */
-void dMap_c::setGbaPoint_ocean(unsigned char, float, float, short, unsigned char, unsigned char, unsigned char, unsigned char) {
+void dMap_c::setGbaPoint_ocean(u8, f32, f32, s16, u8, u8, u8, u8) {
     /* Nonmatching */
 }
 
 /* 8004B148-8004B1D0       .text isPointStayInDspNowRoomAgbScr__6dMap_cFss */
-void dMap_c::isPointStayInDspNowRoomAgbScr(short, short) {
+void dMap_c::isPointStayInDspNowRoomAgbScr(s16, s16) {
     /* Nonmatching */
 }
 
 /* 8004B1D0-8004B33C       .text setCollectPoint__6dMap_cFUcUcfffScsUcUcUcUc */
-void dMap_c::setCollectPoint(unsigned char, unsigned char, float, float, float, signed char, short, unsigned char, unsigned char, unsigned char, unsigned char) {
+void dMap_c::setCollectPoint(u8, u8, f32, f32, f32, s8, s16, u8, u8, u8, u8) {
     /* Nonmatching */
 }
 
 /* 8004B33C-8004B814       .text setGbaPoint_dungeon__6dMap_cFUcffsUcUcUcUc */
-void dMap_c::setGbaPoint_dungeon(unsigned char, float, float, short, unsigned char, unsigned char, unsigned char, unsigned char) {
+void dMap_c::setGbaPoint_dungeon(u8, f32, f32, s16, u8, u8, u8, u8) {
     /* Nonmatching */
 }
 
 /* 8004B814-8004B8A0       .text getPosAgbMapType__6dMap_cFffb */
-void dMap_c::getPosAgbMapType(float, float, bool) {
+void dMap_c::getPosAgbMapType(f32, f32, bool) {
     /* Nonmatching */
 }
 
 /* 8004B8A0-8004B8DC       .text setGbaPoint__6dMap_cFUcffsUcUcUcUc */
-void dMap_c::setGbaPoint(unsigned char, float, float, short, unsigned char, unsigned char, unsigned char, unsigned char) {
+void dMap_c::setGbaPoint(u8, f32, f32, s16, u8, u8, u8, u8) {
     /* Nonmatching */
 }
 
 /* 8004B8DC-8004B9C8       .text setArriveInfo__6dMap_cFff */
-void dMap_c::setArriveInfo(float, float) {
+void dMap_c::setArriveInfo(f32, f32) {
     /* Nonmatching */
 }
 
 /* 8004B9C8-8004BA64       .text drawPointPlayer__6dMap_cFffs */
-void dMap_c::drawPointPlayer(float, float, short) {
+void dMap_c::drawPointPlayer(f32, f32, s16) {
     /* Nonmatching */
 }
 
 /* 8004BA64-8004BB0C       .text drawPointEnemy__6dMap_cFff */
-void dMap_c::drawPointEnemy(float, float) {
+void dMap_c::drawPointEnemy(f32, f32) {
     /* Nonmatching */
 }
 
 /* 8004BB0C-8004BC94       .text drawPointAgbCursor__6dMap_cFff */
-void dMap_c::drawPointAgbCursor(float, float) {
+void dMap_c::drawPointAgbCursor(f32, f32) {
     /* Nonmatching */
 }
 
 /* 8004BC94-8004BD84       .text drawPointTbox__6dMap_cFffff */
-void dMap_c::drawPointTbox(float, float, float, float) {
+void dMap_c::drawPointTbox(f32, f32, f32, f32) {
     /* Nonmatching */
 }
 
 /* 8004BD84-8004BE7C       .text drawPointDoor__6dMap_cFffffsUc */
-void dMap_c::drawPointDoor(float, float, float, float, short, unsigned char) {
+void dMap_c::drawPointDoor(f32, f32, f32, f32, s16, u8) {
     /* Nonmatching */
 }
 
 /* 8004BE7C-8004BF78       .text drawPointRestart__6dMap_cFffsff */
-void dMap_c::drawPointRestart(float, float, short, float, float) {
+void dMap_c::drawPointRestart(f32, f32, s16, f32, f32) {
     /* Nonmatching */
 }
 
 /* 8004BF78-8004C044       .text drawPointFriend__6dMap_cFfff */
-void dMap_c::drawPointFriend(float, float, float) {
+void dMap_c::drawPointFriend(f32, f32, f32) {
     /* Nonmatching */
 }
 
 /* 8004C044-8004C144       .text drawPointShip__6dMap_cFffsff */
-void dMap_c::drawPointShip(float, float, short, float, float) {
+void dMap_c::drawPointShip(f32, f32, s16, f32, f32) {
     /* Nonmatching */
 }
 
 /* 8004C144-8004CC7C       .text drawPointGc__6dMap_cFUcfffScsUcUcUcUc */
-void dMap_c::drawPointGc(unsigned char, float, float, float, signed char, short, unsigned char, unsigned char, unsigned char, unsigned char) {
+void dMap_c::drawPointGc(u8, f32, f32, f32, s8, s16, u8, u8, u8, u8) {
     /* Nonmatching */
 }
 
 /* 8004CC7C-8004CD68       .text drawPointMain__6dMap_cFUcUcfffScsUcUcUcUc */
-void dMap_c::drawPointMain(unsigned char, unsigned char, float, float, float, signed char, short, unsigned char, unsigned char, unsigned char, unsigned char) {
+void dMap_c::drawPointMain(u8, u8, f32, f32, f32, s8, s16, u8, u8, u8, u8) {
     /* Nonmatching */
 }
 
 /* 8004CD68-8004CEF4       .text drawPointAgb__6dMap_cFUcfffScsUcUcUcUc */
-void dMap_c::drawPointAgb(unsigned char, float, float, float, signed char, short, unsigned char, unsigned char, unsigned char, unsigned char) {
+void dMap_c::drawPointAgb(u8, f32, f32, f32, s8, s16, u8, u8, u8, u8) {
     /* Nonmatching */
 }
 
 /* 8004CEF4-8004CFA4       .text getTypeAgbGcFromTypeAcs__6dMap_cFUcPUcPUc */
-void dMap_c::getTypeAgbGcFromTypeAcs(unsigned char, unsigned char*, unsigned char*) {
+void dMap_c::getTypeAgbGcFromTypeAcs(u8, u8*, u8*) {
     /* Nonmatching */
 }
 
 /* 8004CFA4-8004D0A4       .text drawPointSingle__6dMap_cFUcfffScsUcUcUc */
-void dMap_c::drawPointSingle(unsigned char, float, float, float, signed char, short, unsigned char, unsigned char, unsigned char) {
+void dMap_c::drawPointSingle(u8, f32, f32, f32, s8, s16, u8, u8, u8) {
     /* Nonmatching */
 }
 
@@ -477,17 +477,17 @@ void dMap_c::mapBufferSendAGB(int) {
 }
 
 /* 8004D9BC-8004DA54       .text checkFloorMoveImageChangeRoom__19dMap_RoomInfoCtrl_cFUcUcissf */
-void dMap_RoomInfoCtrl_c::checkFloorMoveImageChangeRoom(unsigned char, unsigned char, int, short, short, float) {
+void dMap_RoomInfoCtrl_c::checkFloorMoveImageChangeRoom(u8, u8, int, s16, s16, f32) {
     /* Nonmatching */
 }
 
 /* 8004DA54-8004DBE0       .text init__22dMap_2DMtMapSpcl_tex_cFP7ResTIMGUlRC8_GXColor */
-void dMap_2DMtMapSpcl_tex_c::init(ResTIMG*, unsigned long, const _GXColor&) {
+void dMap_2DMtMapSpcl_tex_c::init(ResTIMG*, u32, const _GXColor&) {
     /* Nonmatching */
 }
 
 /* 8004DBE0-8004DBF4       .text setScroll__22dMap_2DMtMapSpcl_tex_cFffff */
-void dMap_2DMtMapSpcl_tex_c::setScroll(float, float, float, float) {
+void dMap_2DMtMapSpcl_tex_c::setScroll(f32, f32, f32, f32) {
     /* Nonmatching */
 }
 
@@ -497,7 +497,7 @@ void dMap_2DMtMapSpcl_c::init(int, dMap_2DMtMapSpcl_tex_c*) {
 }
 
 /* 8004DC08-8004DC1C       .text setPos__18dMap_2DMtMapSpcl_cFssss */
-void dMap_2DMtMapSpcl_c::setPos(short, short, short, short) {
+void dMap_2DMtMapSpcl_c::setPos(s16, s16, s16, s16) {
     /* Nonmatching */
 }
 
@@ -512,22 +512,22 @@ void dMap_2DAGBScrDsp_c::setImage(ResTIMG*, map_dt_c*) {
 }
 
 /* 8004E1CC-8004E264       .text init__18dMap_2DAGBScrDsp_cFP8map_dt_cP7ResTIMGffssssffUc */
-void dMap_2DAGBScrDsp_c::init(map_dt_c*, ResTIMG*, float, float, short, short, short, short, float, float, unsigned char) {
+void dMap_2DAGBScrDsp_c::init(map_dt_c*, ResTIMG*, f32, f32, s16, s16, s16, s16, f32, f32, u8) {
     /* Nonmatching */
 }
 
 /* 8004E264-8004E384       .text getScrnPrm__18dMap_2DAGBScrDsp_cFffifPiPfPf */
-void dMap_2DAGBScrDsp_c::getScrnPrm(float, float, int, float, int*, float*, float*) {
+void dMap_2DAGBScrDsp_c::getScrnPrm(f32, f32, int, f32, int*, f32*, f32*) {
     /* Nonmatching */
 }
 
 /* 8004E384-8004E41C       .text getScrnPrmXY__18dMap_2DAGBScrDsp_cFffffiiffPiPiPfPfPfPf */
-void dMap_2DAGBScrDsp_c::getScrnPrmXY(float, float, float, float, int, int, float, float, int*, int*, float*, float*, float*, float*) {
+void dMap_2DAGBScrDsp_c::getScrnPrmXY(f32, f32, f32, f32, int, int, f32, f32, int*, int*, f32*, f32*, f32*, f32*) {
     /* Nonmatching */
 }
 
 /* 8004E41C-8004E698       .text calc_standard_prm__18dMap_2DAGBScrDsp_cFUsUsffssssffPiPiPiPiPfPfPfPfPfPf */
-void dMap_2DAGBScrDsp_c::calc_standard_prm(unsigned short, unsigned short, float, float, short, short, short, short, float, float, int*, int*, int*, int*, float*, float*, float*, float*, float*, float*) {
+void dMap_2DAGBScrDsp_c::calc_standard_prm(u16, u16, f32, f32, s16, s16, s16, s16, f32, f32, int*, int*, int*, int*, f32*, f32*, f32*, f32*, f32*, f32*) {
     /* Nonmatching */
 }
 
@@ -537,17 +537,17 @@ void dMap_2DAGBScrDsp_c::draw() {
 }
 
 /* 8004EE30-8004EE44       .text setPos__18dMap_2DAGBScrDsp_cFssss */
-void dMap_2DAGBScrDsp_c::setPos(short, short, short, short) {
+void dMap_2DAGBScrDsp_c::setPos(s16, s16, s16, s16) {
     /* Nonmatching */
 }
 
 /* 8004EE44-8004EE50       .text setScale__18dMap_2DAGBScrDsp_cFff */
-void dMap_2DAGBScrDsp_c::setScale(float, float) {
+void dMap_2DAGBScrDsp_c::setScale(f32, f32) {
     /* Nonmatching */
 }
 
 /* 8004EE50-8004EE88       .text init__12dMap_2DTri_cFssRC8_GXColorffs */
-void dMap_2DTri_c::init(short, short, const _GXColor&, float, float, short) {
+void dMap_2DTri_c::init(s16, s16, const _GXColor&, f32, f32, s16) {
     /* Nonmatching */
 }
 
@@ -557,12 +557,12 @@ void dMap_2DTri_c::draw() {
 }
 
 /* 8004F080-8004F08C       .text setPos__12dMap_2DTri_cFss */
-void dMap_2DTri_c::setPos(short, short) {
+void dMap_2DTri_c::setPos(s16, s16) {
     /* Nonmatching */
 }
 
 /* 8004F08C-8004F0BC       .text init__14dMap_2DPoint_cFssRC8_GXColorUc */
-void dMap_2DPoint_c::init(short, short, const _GXColor&, unsigned char) {
+void dMap_2DPoint_c::init(s16, s16, const _GXColor&, u8) {
     /* Nonmatching */
 }
 
@@ -572,7 +572,7 @@ void dMap_2DPoint_c::draw() {
 }
 
 /* 8004F1E4-8004F214       .text init__18dMap_2DAGBCursor_cFssRC8_GXColorUc */
-void dMap_2DAGBCursor_c::init(short, short, const _GXColor&, unsigned char) {
+void dMap_2DAGBCursor_c::init(s16, s16, const _GXColor&, u8) {
     /* Nonmatching */
 }
 
@@ -587,22 +587,22 @@ void dMap_2DT2_c::draw() {
 }
 
 /* 8004F778-8004F8B4       .text init__11dMap_2DT2_cFP7ResTIMGffffUcUcUcffs */
-void dMap_2DT2_c::init(ResTIMG*, float, float, float, float, unsigned char, unsigned char, unsigned char, float, float, short) {
+void dMap_2DT2_c::init(ResTIMG*, f32, f32, f32, f32, u8, u8, u8, f32, f32, s16) {
     /* Nonmatching */
 }
 
 /* 8004F8B4-8004FC68       .text setTlut__11dMap_Dmap_cFP16dmap_dmap_tlut_sUcUcUcf */
-void dMap_Dmap_c::setTlut(dmap_dmap_tlut_s*, unsigned char, unsigned char, unsigned char, float) {
+void dMap_Dmap_c::setTlut(dmap_dmap_tlut_s*, u8, u8, u8, f32) {
     /* Nonmatching */
 }
 
 /* 8004FC68-8004FFC8       .text setFloorTextureOne__11dMap_Dmap_cFUc */
-void dMap_Dmap_c::setFloorTextureOne(unsigned char) {
+void dMap_Dmap_c::setFloorTextureOne(u8) {
     /* Nonmatching */
 }
 
 /* 8004FFC8-800504C4       .text init__11dMap_Dmap_cFsssssssssUcUcUcUcUc */
-void dMap_Dmap_c::init(short, short, short, short, short, short, short, short, short, unsigned char, unsigned char, unsigned char, unsigned char, unsigned char) {
+void dMap_Dmap_c::init(s16, s16, s16, s16, s16, s16, s16, s16, s16, u8, u8, u8, u8, u8) {
     /* Nonmatching */
 }
 
@@ -636,35 +636,19 @@ dMap_2DTri_c::~dMap_2DTri_c() {
     /* Nonmatching */
 }
 
-/* 800519C4-80051A20       .text __dt__18dMap_2DAGBScrDsp_cFv */
-dMap_2DAGBScrDsp_c::~dMap_2DAGBScrDsp_c() {
-    /* Nonmatching */
-}
-
-/* 80051A20-80051A7C       .text __dt__18dMap_2DMtMapSpcl_cFv */
-dMap_2DMtMapSpcl_c::~dMap_2DMtMapSpcl_c() {
-    /* Nonmatching */
-}
-
 /* 80051A7C-80051AD8       .text __dt__11dMap_2DSQ_cFv */
 dMap_2DSQ_c::~dMap_2DSQ_c() {
     /* Nonmatching */
 }
 
 /* 80051DE8-80051E20       .text __arraydtor$4205 */
-void __arraydtor$4205 {
-    /* Nonmatching */
-}
+//void __arraydtor$4205 {}
 
 /* 80051E20-80051E58       .text __arraydtor$4202 */
-void __arraydtor$4202 {
-    /* Nonmatching */
-}
+//void __arraydtor$4202 {}
 
 /* 80051E58-80051E90       .text __arraydtor$4200 */
-void __arraydtor$4200 {
-    /* Nonmatching */
-}
+//void __arraydtor$4200 {}
 
 /* 80051E90-80051EAC       .text __ct__11dMap_2DT2_cFv */
 dMap_2DT2_c::dMap_2DT2_c() {
@@ -672,9 +656,7 @@ dMap_2DT2_c::dMap_2DT2_c() {
 }
 
 /* 80051EAC-80051EE4       .text __arraydtor$4196 */
-void __arraydtor$4196 {
-    /* Nonmatching */
-}
+//void __arraydtor$4196 {}
 
 /* 80051EE4-80051F00       .text __ct__14dMap_2DPoint_cFv */
 dMap_2DPoint_c::dMap_2DPoint_c() {
@@ -682,9 +664,7 @@ dMap_2DPoint_c::dMap_2DPoint_c() {
 }
 
 /* 80051F00-80051F38       .text __arraydtor$4188 */
-void __arraydtor$4188 {
-    /* Nonmatching */
-}
+//void __arraydtor$4188 {}
 
 /* 80051F38-80051F74       .text __dt__22dMap_2DMtMapSpcl_tex_cFv */
 dMap_2DMtMapSpcl_tex_c::~dMap_2DMtMapSpcl_tex_c() {
@@ -697,19 +677,10 @@ dMap_2DMtMapSpcl_tex_c::dMap_2DMtMapSpcl_tex_c() {
 }
 
 /* 80051F78-80051FB0       .text __arraydtor$4186 */
-void __arraydtor$4186 {
-    /* Nonmatching */
-}
-
-/* 80051FB0-80051FCC       .text __ct__18dMap_2DMtMapSpcl_cFv */
-dMap_2DMtMapSpcl_c::dMap_2DMtMapSpcl_c() {
-    /* Nonmatching */
-}
+//void __arraydtor$4186 {}
 
 /* 80051FCC-80052004       .text __arraydtor$4184 */
-void __arraydtor$4184 {
-    /* Nonmatching */
-}
+//void __arraydtor$4184 {}
 
 /* 80052004-800520B8       .text __dt__15dMap_RoomInfo_cFv */
 dMap_RoomInfo_c::~dMap_RoomInfo_c() {
@@ -720,4 +691,3 @@ dMap_RoomInfo_c::~dMap_RoomInfo_c() {
 dMap_RoomInfo_c::dMap_RoomInfo_c() {
     /* Nonmatching */
 }
-
