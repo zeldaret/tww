@@ -4,21 +4,27 @@
 //
 
 #include "JSystem/J3DGraphAnimator/J3DCluster.h"
-#include "dolphin/types.h"
+#include "JSystem/J3DGraphAnimator/J3DModel.h"
+#include "JSystem/J3DGraphAnimator/J3DSkinDeform.h"
 
 /* 802F37C4-802F37E4       .text clear__13J3DDeformDataFv */
 void J3DDeformData::clear() {
-    /* Nonmatching */
+    mClusterNum = 0;
+    mClusterPointer = NULL;
+    mClusterKeyNum = 0;
+    mClusterKeyPointer = NULL;
+    field_0x20 = 0;
+    field_0x24 = 0;
 }
 
 /* 802F37E4-802F3814       .text __ct__13J3DDeformDataFv */
 J3DDeformData::J3DDeformData() {
-    /* Nonmatching */
+    clear();
 }
 
 /* 802F3814-802F3838       .text deform__13J3DDeformDataFP8J3DModel */
-void J3DDeformData::deform(J3DModel*) {
-    /* Nonmatching */
+void J3DDeformData::deform(J3DModel* model) {
+    deform(model->getVertexBuffer());
 }
 
 /* 802F3838-802F3900       .text deform__13J3DDeformDataFP15J3DVertexBuffer */
@@ -28,36 +34,44 @@ void J3DDeformData::deform(J3DVertexBuffer*) {
 
 /* 802F3900-802F3920       .text clear__11J3DDeformerFv */
 void J3DDeformer::clear() {
-    /* Nonmatching */
+    mDeformData = NULL;
+    mAnmCluster = NULL;
+    field_0x8 = 0;
+    field_0xc = 0;
+    mFlags = 3;
 }
 
 /* 802F3920-802F3A08       .text deform__11J3DDeformerFP15J3DVertexBufferUs */
-void J3DDeformer::deform(J3DVertexBuffer*, unsigned short) {
+void J3DDeformer::deform(J3DVertexBuffer*, u16) {
     /* Nonmatching */
 }
 
 /* 802F3A08-802F3FA8       .text deform__11J3DDeformerFP15J3DVertexBufferUsPf */
-void J3DDeformer::deform(J3DVertexBuffer*, unsigned short, float*) {
+void J3DDeformer::deform(J3DVertexBuffer*, u16, f32*) {
     /* Nonmatching */
 }
 
 /* 802F3FA8-802F4064       .text normalize__11J3DDeformerFPf */
-void J3DDeformer::normalize(float*) {
+void J3DDeformer::normalize(f32*) {
     /* Nonmatching */
 }
 
 /* 802F4064-802F40C0       .text normalizeWeight__11J3DDeformerFiPf */
-void J3DDeformer::normalizeWeight(int, float*) {
+void J3DDeformer::normalizeWeight(int, f32*) {
     /* Nonmatching */
 }
 
 /* 802F40C0-802F40F0       .text __ct__13J3DSkinDeformFv */
 J3DSkinDeform::J3DSkinDeform() {
-    /* Nonmatching */
+    mPosData = NULL;
+    mNrmData = NULL;
+    mNrmMtx = NULL;
+    mFlags = 3;
+    field_0x14 = 1;
 }
 
 /* 802F40F0-802F44E8       .text initMtxIndexArray__13J3DSkinDeformFP12J3DModelData */
-void J3DSkinDeform::initMtxIndexArray(J3DModelData*) {
+int J3DSkinDeform::initMtxIndexArray(J3DModelData*) {
     /* Nonmatching */
 }
 
@@ -93,10 +107,5 @@ void J3DSkinDeform::deformVtxNrm_S16(J3DModel*) const {
 
 /* 802F4CD8-802F4D78       .text deform__13J3DSkinDeformFP8J3DModel */
 void J3DSkinDeform::deform(J3DModel*) {
-    /* Nonmatching */
-}
-
-/* 802F4D78-802F4DC0       .text __dt__13J3DSkinDeformFv */
-J3DSkinDeform::~J3DSkinDeform() {
     /* Nonmatching */
 }
