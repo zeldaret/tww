@@ -3,7 +3,7 @@
 // Translation Unit: d_event_manager.cpp
 //
 
-#include "d_event_manager.h"
+#include "d/d_event_manager.h"
 #include "dolphin/types.h"
 
 /* 800737DC-800737F4       .text init__18dEvent_exception_cFv */
@@ -12,7 +12,7 @@ void dEvent_exception_c::init() {
 }
 
 /* 800737F4-80073900       .text setStartDemo__18dEvent_exception_cFi */
-void dEvent_exception_c::setStartDemo(int) {
+int dEvent_exception_c::setStartDemo(int) {
     /* Nonmatching */
 }
 
@@ -77,7 +77,7 @@ void dEvent_manager_c::closeProc(dEvDtEvent_c*) {
 }
 
 /* 80074114-800741D4       .text endProc__16dEvent_manager_cFsi */
-void dEvent_manager_c::endProc(short, int) {
+void dEvent_manager_c::endProc(s16, int) {
     /* Nonmatching */
 }
 
@@ -92,24 +92,23 @@ void dEvent_manager_c::runProc() {
 }
 
 /* 80074370-800743AC       .text getEventData__16dEvent_manager_cFs */
-void dEvent_manager_c::getEventData(short) {
+dEvDtEvent_c* dEvent_manager_c::getEventData(s16) {
     /* Nonmatching */
 }
 
 /* 800743AC-800744AC       .text getEventIdx__16dEvent_manager_cFPCcUc */
-s16 dEvent_manager_c::getEventIdx(const char*, unsigned char) {
+s16 dEvent_manager_c::getEventIdx(const char*, u8) {
     /* Nonmatching */
 }
 
 /* 800744AC-800744E8       .text order__16dEvent_manager_cFs */
-void dEvent_manager_c::order(short) {
+void dEvent_manager_c::order(s16) {
     /* Nonmatching */
 }
 
 /* 800744E8-80074528       .text startCheck__16dEvent_manager_cFs */
-void dEvent_manager_c::startCheck(short) {
+BOOL dEvent_manager_c::startCheck(s16) {
     /* Nonmatching */
-    startCheckOld()
 }
 
 /* 80074528-80074564       .text startCheckOld__16dEvent_manager_cFPCc */
@@ -118,22 +117,22 @@ int dEvent_manager_c::startCheckOld(const char*) {
 }
 
 /* 80074564-800745A4       .text endCheck__16dEvent_manager_cFs */
-BOOL dEvent_manager_c::endCheck(short) {
+BOOL dEvent_manager_c::endCheck(s16) {
     /* Nonmatching */
 }
 
 /* 800745A4-800745E0       .text endCheckOld__16dEvent_manager_cFPCc */
-void dEvent_manager_c::endCheckOld(const char*) {
+BOOL dEvent_manager_c::endCheckOld(const char*) {
     /* Nonmatching */
 }
 
 /* 800745E0-80074718       .text getMyStaffId__16dEvent_manager_cFPCcP10fopAc_ac_ci */
-void dEvent_manager_c::getMyStaffId(const char*, fopAc_ac_c*, int) {
+int dEvent_manager_c::getMyStaffId(const char*, fopAc_ac_c*, int) {
     /* Nonmatching */
 }
 
 /* 80074718-8007473C       .text getIsAddvance__16dEvent_manager_cFi */
-void dEvent_manager_c::getIsAddvance(int) {
+BOOL dEvent_manager_c::getIsAddvance(int) {
     /* Nonmatching */
 }
 
@@ -143,17 +142,17 @@ void dEvmng_strcmp(const char*, char*) {
 }
 
 /* 80074824-80074964       .text getMyActIdx__16dEvent_manager_cFiPCPCciii */
-void dEvent_manager_c::getMyActIdx(int, const char* const*, int, int, int) {
+int dEvent_manager_c::getMyActIdx(int, const char* const*, int, int, int) {
     /* Nonmatching */
 }
 
 /* 80074964-800749A0       .text getMyActName__16dEvent_manager_cFi */
-void dEvent_manager_c::getMyActName(int) {
+char* dEvent_manager_c::getMyActName(int) {
     /* Nonmatching */
 }
 
 /* 800749A0-800749D0       .text getMyNowCutName__16dEvent_manager_cFi */
-void dEvent_manager_c::getMyNowCutName(int) {
+char* dEvent_manager_c::getMyNowCutName(int) {
     /* Nonmatching */
 }
 
@@ -163,7 +162,7 @@ void dEvent_manager_c::getMyDataP(int, const char*, int) {
 }
 
 /* 80074AA0-80074AF8       .text getMySubstanceP__16dEvent_manager_cFiPCci */
-void dEvent_manager_c::getMySubstanceP(int, const char*, int) {
+void* dEvent_manager_c::getMySubstanceP(int, const char*, int) {
     /* Nonmatching */
 }
 
@@ -178,12 +177,12 @@ void dEvent_manager_c::cutEnd(int) {
 }
 
 /* 80074B7C-80074BB0       .text getEventPrio__16dEvent_manager_cFs */
-void dEvent_manager_c::getEventPrio(short) {
+u16 dEvent_manager_c::getEventPrio(s16) {
     /* Nonmatching */
 }
 
 /* 80074BB0-80074BE4       .text getEventEndSound__16dEvent_manager_cFs */
-void dEvent_manager_c::getEventEndSound(short) {
+void dEvent_manager_c::getEventEndSound(s16) {
     /* Nonmatching */
 }
 
@@ -208,7 +207,7 @@ void dEvent_manager_c::setGoal(cXyz*) {
 }
 
 /* 80074DF8-80074E00       .text getGoal__16dEvent_manager_cFv */
-void dEvent_manager_c::getGoal() {
+cXyz* dEvent_manager_c::getGoal() {
     /* Nonmatching */
 }
 
@@ -218,7 +217,7 @@ void findShutterCallBack(fopAc_ac_c*, void*) {
 }
 
 /* 80074EB4-80074FE8       .text specialCast_Shutter__16dEvent_manager_cFsi */
-void dEvent_manager_c::specialCast_Shutter(short, int) {
+void dEvent_manager_c::specialCast_Shutter(s16, int) {
     /* Nonmatching */
 }
 
@@ -233,12 +232,12 @@ void dEvent_manager_c::setPrmStaff(void*, int) {
 }
 
 /* 80075288-8007537C       .text getToolId__16dEvent_manager_cFUci */
-void dEvent_manager_c::getToolId(unsigned char, int) {
+void dEvent_manager_c::getToolId(u8, int) {
     /* Nonmatching */
 }
 
 /* 8007537C-80075394       .text __ct__13dEv_seach_prmFPCcUlUl */
-dEv_seach_prm::dEv_seach_prm(const char*, unsigned long, unsigned long) {
+dEv_seach_prm::dEv_seach_prm(const char*, u32, u32) {
     /* Nonmatching */
 }
 
@@ -253,7 +252,7 @@ void dEv_talkman_get_action(int) {
 }
 
 /* 80075450-8007548C       .text ChkPresentEnd__16dEvent_manager_cFv */
-void dEvent_manager_c::ChkPresentEnd() {
+BOOL dEvent_manager_c::ChkPresentEnd() {
     /* Nonmatching */
 }
 
@@ -263,12 +262,12 @@ void dEvent_manager_c::CancelPresent() {
 }
 
 /* 800754BC-800754EC       .text checkStartDemo__16dEvent_manager_cFv */
-void dEvent_manager_c::checkStartDemo() {
+BOOL dEvent_manager_c::checkStartDemo() {
     /* Nonmatching */
 }
 
 /* 800754EC-80075590       .text dEvmng_daNpc_Tt_Conv__FUc */
-void dEvmng_daNpc_Tt_Conv(unsigned char) {
+void dEvmng_daNpc_Tt_Conv(u8) {
     /* Nonmatching */
 }
 
@@ -276,4 +275,3 @@ void dEvmng_daNpc_Tt_Conv(unsigned char) {
 void dEvmng_daNpc_Tt_GetEvFlag(int) {
     /* Nonmatching */
 }
-

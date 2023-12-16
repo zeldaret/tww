@@ -3,22 +3,36 @@
 // Translation Unit: d_material.cpp
 //
 
-#include "d_material.h"
+#include "d/d_material.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/types.h"
+
+mDoExt_backupMaterial_c dMat_control_c::mTempBackup;
+JKRSolidHeap* dMat_control_c::mHeap;
+dMat_backup_c* dMat_control_c::mBackup;
+dMat_ice_c* dMat_control_c::mIce;
 
 /* 8006F62C-8006F69C       .text restore__13dMat_backup_cFv */
 void dMat_backup_c::restore() {
-    /* Nonmatching */
+    JUT_ASSERT(82, mModelData != 0);
+    field_0x8.restore(mModelData);
 }
 
 /* 8006F69C-8006F740       .text create__10dMat_ice_cFP16J3DMaterialTableP19J3DAnmTextureSRTKey */
-void dMat_ice_c::create(J3DMaterialTable*, J3DAnmTextureSRTKey*) {
+void dMat_ice_c::create(J3DMaterialTable* param_1, J3DAnmTextureSRTKey* param_2) {
     /* Nonmatching */
+    field_0x0 = param_1;
+    int rt = field_0x4.init(field_0x0, param_2, 1, 2, 1.0f, 0, -1, false, 0);
+    JUT_ASSERT(98, rt != 0);
+    field_0x4.entry(field_0x0, field_0x4.getFrameCtrl()->getFrame());
 }
 
 /* 8006F740-8006F780       .text play__10dMat_ice_cFv */
 void dMat_ice_c::play() {
     /* Nonmatching */
+    field_0x4.play();
+    field_0x4.entryFrame();
 }
 
 /* 8006F780-8006F83C       .text copy__10dMat_ice_cFP12J3DModelData */
@@ -47,27 +61,38 @@ void dMat_ice_c::entryDL(mDoExt_McaMorf*, signed char, mDoExt_invisibleModel*) {
 }
 
 /* 8006FB84-8006FCF0       .text create__14dMat_control_cFP16J3DMaterialTableP19J3DAnmTextureSRTKey */
-void dMat_control_c::create(J3DMaterialTable*, J3DAnmTextureSRTKey*) {
+void dMat_control_c::create(J3DMaterialTable* param_1, J3DAnmTextureSRTKey* param_2) {
     /* Nonmatching */
+    mHeap = mDoExt_createSolidHeapFromSystem(0, 0);
+    JUT_ASSERT(308, mHeap != 0);
+    JKRHeap* heap = mDoExt_setCurrentHeap(mHeap);
+    mBackup = new dMat_backup_c[16];
+    mIce = new dMat_ice_c();
+    JUT_ASSERT(313, mBackup != 0 && mIce != 0);
+    mIce->create(param_1, param_2);
+    mTempBackup.create(0x40);
+    mDoExt_adjustSolidHeap(mHeap);
+    mDoExt_setCurrentHeap(heap);
 }
 
 /* 8006FD4C-8006FD88       .text __dt__13dMat_backup_cFv */
-dMat_backup_c::~dMat_backup_c() {
-    /* Nonmatching */
-}
+dMat_backup_c::~dMat_backup_c() {}
 
 /* 8006FD88-8006FD98       .text __ct__13dMat_backup_cFv */
 dMat_backup_c::dMat_backup_c() {
-    /* Nonmatching */
+    mModelData = NULL;
 }
 
 /* 8006FD98-8006FDBC       .text remove__14dMat_control_cFv */
 void dMat_control_c::remove() {
-    /* Nonmatching */
+    mDoExt_destroySolidHeap(mHeap);
 }
 
 /* 8006FDBC-8006FDF4       .text restore__14dMat_control_cFSc */
-void dMat_control_c::restore(signed char) {
+void dMat_control_c::restore(s8 param_1) {
     /* Nonmatching */
+    if (param_1 < 0) {
+        return;
+    }
+    mBackup[param_1].restore();
 }
-

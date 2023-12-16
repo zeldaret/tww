@@ -14,7 +14,7 @@ class dDlst_base_c {
 public:
     dDlst_base_c() {}
     virtual ~dDlst_base_c() {}
-    virtual void draw();
+    virtual void draw() {}
 };
 
 class dDlst_2D_c : public dDlst_base_c {

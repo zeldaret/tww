@@ -15,6 +15,7 @@
 #include "d/actor/d_a_obj_movebox.h"
 #include "d/actor/d_a_tag_kb_item.h"
 #include "d/actor/d_a_item.h"
+#include "d/actor/d_a_title.h"
 #include "d/d_procname.h"
 #include "d/actor/d_a_npc_kamome.h"
 
@@ -259,10 +260,12 @@ void daTagKbItem_c::dig_main() {
     field_0x299 = 0;
 }
 
-// /* 80056CC0-80056CCC       .text daTitle_Kirakira_Sound_flag_on__14daTitle_proc_cFv */
-// void daTitle_proc_c::daTitle_Kirakira_Sound_flag_on() {
-//     /* Nonmatching */
-// }
+bool daTitle_proc_c::daTitle_Kirakira_Sound_flag[] = { false };
+
+/* 80056CC0-80056CCC       .text daTitle_Kirakira_Sound_flag_on__14daTitle_proc_cFv */
+void daTitle_proc_c::daTitle_Kirakira_Sound_flag_on() {
+    daTitle_Kirakira_Sound_flag[0] = true;
+}
 
 // /* 80056CCC-80056DE0       .text daiItemNodeCallBack__13daStandItem_cFP7J3DNodei */
 // void daStandItem_c::daiItemNodeCallBack(J3DNode*, int) {

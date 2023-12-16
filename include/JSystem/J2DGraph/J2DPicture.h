@@ -27,8 +27,14 @@ public:
     virtual u16 getTypeID() { return 0x12; }
     virtual void drawSelf(f32 x, f32 y);
     virtual void drawSelf(f32 x, f32 y, Mtx* mtx);
-    virtual void drawOut(f32, f32, f32, f32, f32, f32);
-    virtual void drawOut(f32, f32, f32, f32, f32, f32, f32, f32);
+    virtual void drawOut(f32 p1, f32 p2, f32 p3, f32 p4, f32 p5, f32 p6) {
+        if (mpTexture[0]) {
+            drawOut(JGeometry::TBox2<f32>(p1, p2, p1 + p3, p2 + p4), JGeometry::TBox2<f32>(p5, p6, p5 + mpTexture[0]->getWidth(), p6 + mpTexture[0]->getHeight()));
+        }
+    }
+    virtual void drawOut(f32 p1, f32 p2, f32 p3, f32 p4, f32 p5, f32 p6, f32 p7, f32 p8) {
+        drawOut(JGeometry::TBox2<f32>(p1, p2, p1 + p3, p2 + p4), JGeometry::TBox2<f32>(p5, p6, p5 + p7, p6 + p8));
+    }
     JUTTexture * getTexture(u8 idx) const {
         return idx < mNumTexture ? mpTexture[idx] : NULL;
     }

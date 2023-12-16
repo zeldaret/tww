@@ -3,7 +3,7 @@
 // Translation Unit: d_demo.cpp
 //
 
-#include "d_demo.h"
+#include "d/d_demo.h"
 #include "dolphin/types.h"
 
 /* 800692C4-80069330       .text __ct__13dDemo_actor_cFv */
@@ -47,17 +47,17 @@ void dDemo_actor_c::getPrm_Morf() {
 }
 
 /* 80069838-800698C0       .text dDemo_getJaiPointer__FPCcUliPUs */
-void dDemo_getJaiPointer(const char*, unsigned long, int, unsigned short*) {
+void dDemo_getJaiPointer(const char*, u32, int, u16*) {
     /* Nonmatching */
 }
 
 /* 800698C0-80069BC0       .text dDemo_setDemoData__FP10fopAc_ac_cUcP14mDoExt_McaMorfPCciPUsUlSc */
-void dDemo_setDemoData(fopAc_ac_c*, unsigned char, mDoExt_McaMorf*, const char*, int, unsigned short*, unsigned long, signed char) {
+BOOL dDemo_setDemoData(fopAc_ac_c*, u8, mDoExt_McaMorf*, const char*, int, u16*, u32, s8) {
     /* Nonmatching */
 }
 
 /* 80069BC0-80069BDC       .text JSGSetData__13dDemo_actor_cFUlPCvUl */
-void dDemo_actor_c::JSGSetData(unsigned long, const void*, unsigned long) {
+void dDemo_actor_c::JSGSetData(u32, const void*, u32) {
     /* Nonmatching */
 }
 
@@ -77,32 +77,32 @@ void dDemo_actor_c::JSGSetRotation(const Vec&) {
 }
 
 /* 80069C90-80069CA4       .text JSGSetShape__13dDemo_actor_cFUl */
-void dDemo_actor_c::JSGSetShape(unsigned long) {
+void dDemo_actor_c::JSGSetShape(u32) {
     /* Nonmatching */
 }
 
 /* 80069CA4-80069CC0       .text JSGSetAnimation__13dDemo_actor_cFUl */
-void dDemo_actor_c::JSGSetAnimation(unsigned long) {
+void dDemo_actor_c::JSGSetAnimation(u32) {
     /* Nonmatching */
 }
 
 /* 80069CC0-80069CD4       .text JSGSetAnimationFrame__13dDemo_actor_cFf */
-void dDemo_actor_c::JSGSetAnimationFrame(float) {
+void dDemo_actor_c::JSGSetAnimationFrame(f32) {
     /* Nonmatching */
 }
 
 /* 80069CD4-80069CE8       .text JSGSetAnimationTransition__13dDemo_actor_cFf */
-void dDemo_actor_c::JSGSetAnimationTransition(float) {
+void dDemo_actor_c::JSGSetAnimationTransition(f32) {
     /* Nonmatching */
 }
 
 /* 80069CE8-80069CFC       .text JSGSetTextureAnimation__13dDemo_actor_cFUl */
-void dDemo_actor_c::JSGSetTextureAnimation(unsigned long) {
+void dDemo_actor_c::JSGSetTextureAnimation(u32) {
     /* Nonmatching */
 }
 
 /* 80069CFC-80069D10       .text JSGSetTextureAnimationFrame__13dDemo_actor_cFf */
-void dDemo_actor_c::JSGSetTextureAnimationFrame(float) {
+void dDemo_actor_c::JSGSetTextureAnimationFrame(f32) {
     /* Nonmatching */
 }
 
@@ -112,42 +112,42 @@ void getView() {
 }
 
 /* 80069D44-80069D78       .text JSGGetProjectionNear__14dDemo_camera_cCFv */
-void dDemo_camera_c::JSGGetProjectionNear() const {
+f32 dDemo_camera_c::JSGGetProjectionNear() const {
     /* Nonmatching */
 }
 
 /* 80069D78-80069D8C       .text JSGSetProjectionNear__14dDemo_camera_cFf */
-void dDemo_camera_c::JSGSetProjectionNear(float) {
+void dDemo_camera_c::JSGSetProjectionNear(f32) {
     /* Nonmatching */
 }
 
 /* 80069D8C-80069DC0       .text JSGGetProjectionFar__14dDemo_camera_cCFv */
-void dDemo_camera_c::JSGGetProjectionFar() const {
+f32 dDemo_camera_c::JSGGetProjectionFar() const {
     /* Nonmatching */
 }
 
 /* 80069DC0-80069DD4       .text JSGSetProjectionFar__14dDemo_camera_cFf */
-void dDemo_camera_c::JSGSetProjectionFar(float) {
+void dDemo_camera_c::JSGSetProjectionFar(f32) {
     /* Nonmatching */
 }
 
 /* 80069DD4-80069E08       .text JSGGetProjectionFovy__14dDemo_camera_cCFv */
-void dDemo_camera_c::JSGGetProjectionFovy() const {
+f32 dDemo_camera_c::JSGGetProjectionFovy() const {
     /* Nonmatching */
 }
 
 /* 80069E08-80069E1C       .text JSGSetProjectionFovy__14dDemo_camera_cFf */
-void dDemo_camera_c::JSGSetProjectionFovy(float) {
+void dDemo_camera_c::JSGSetProjectionFovy(f32) {
     /* Nonmatching */
 }
 
 /* 80069E1C-80069E50       .text JSGGetProjectionAspect__14dDemo_camera_cCFv */
-void dDemo_camera_c::JSGGetProjectionAspect() const {
+f32 dDemo_camera_c::JSGGetProjectionAspect() const {
     /* Nonmatching */
 }
 
 /* 80069E50-80069E64       .text JSGSetProjectionAspect__14dDemo_camera_cFf */
-void dDemo_camera_c::JSGSetProjectionAspect(float) {
+void dDemo_camera_c::JSGSetProjectionAspect(f32) {
     /* Nonmatching */
 }
 
@@ -182,12 +182,12 @@ void dDemo_camera_c::JSGSetViewTargetPosition(const Vec&) {
 }
 
 /* 80069FF8-8006A050       .text JSGGetViewRoll__14dDemo_camera_cCFv */
-void dDemo_camera_c::JSGGetViewRoll() const {
+f32 dDemo_camera_c::JSGGetViewRoll() const {
     /* Nonmatching */
 }
 
 /* 8006A050-8006A064       .text JSGSetViewRoll__14dDemo_camera_cFf */
-void dDemo_camera_c::JSGSetViewRoll(float) {
+void dDemo_camera_c::JSGSetViewRoll(f32) {
     /* Nonmatching */
 }
 
@@ -212,12 +212,12 @@ void dDemo_light_c::JSGSetColor(_GXColor) {
 }
 
 /* 8006A100-8006A11C       .text JSGSetDistanceAttenuation__13dDemo_light_cFff13_GXDistAttnFn */
-void dDemo_light_c::JSGSetDistanceAttenuation(float, float, _GXDistAttnFn) {
+void dDemo_light_c::JSGSetDistanceAttenuation(f32, f32, _GXDistAttnFn) {
     /* Nonmatching */
 }
 
 /* 8006A11C-8006A134       .text JSGSetAngleAttenuation__13dDemo_light_cFf9_GXSpotFn */
-void dDemo_light_c::JSGSetAngleAttenuation(float, _GXSpotFn) {
+void dDemo_light_c::JSGSetAngleAttenuation(f32, _GXSpotFn) {
     /* Nonmatching */
 }
 
@@ -232,12 +232,12 @@ void dDemo_fog_c::JSGSetFogFunction(_GXFogType) {
 }
 
 /* 8006A170-8006A184       .text JSGSetStartZ__11dDemo_fog_cFf */
-void dDemo_fog_c::JSGSetStartZ(float) {
+void dDemo_fog_c::JSGSetStartZ(f32) {
     /* Nonmatching */
 }
 
 /* 8006A184-8006A198       .text JSGSetEndZ__11dDemo_fog_cFf */
-void dDemo_fog_c::JSGSetEndZ(float) {
+void dDemo_fog_c::JSGSetEndZ(f32) {
     /* Nonmatching */
 }
 
@@ -253,7 +253,7 @@ dDemo_object_c::dDemo_object_c() {
 
 /* 8006A1E4-8006A234       .text __dt__14dDemo_object_cFv */
 dDemo_object_c::~dDemo_object_c() {
-    /* Nonmatching */
+    remove();
 }
 
 /* 8006A234-8006A2F8       .text appendActor__14dDemo_object_cFP10fopAc_ac_c */
@@ -262,7 +262,7 @@ void dDemo_object_c::appendActor(fopAc_ac_c*) {
 }
 
 /* 8006A2F8-8006A31C       .text getActor__14dDemo_object_cFUc */
-void dDemo_object_c::getActor(unsigned char) {
+dDemo_actor_c* dDemo_object_c::getActor(u8) {
     /* Nonmatching */
 }
 
@@ -297,27 +297,19 @@ void dDemo_object_c::remove() {
 }
 
 /* 8006A678-8006A6D8       .text __dt__11dDemo_fog_cFv */
-dDemo_fog_c::~dDemo_fog_c() {
-    /* Nonmatching */
-}
+dDemo_fog_c::~dDemo_fog_c() {}
 
 /* 8006A6D8-8006A738       .text __dt__13dDemo_light_cFv */
-dDemo_light_c::~dDemo_light_c() {
-    /* Nonmatching */
-}
+dDemo_light_c::~dDemo_light_c() {}
 
 /* 8006A738-8006A798       .text __dt__15dDemo_ambient_cFv */
-dDemo_ambient_c::~dDemo_ambient_c() {
-    /* Nonmatching */
-}
+dDemo_ambient_c::~dDemo_ambient_c() {}
 
 /* 8006A798-8006A7F8       .text __dt__14dDemo_camera_cFv */
-dDemo_camera_c::~dDemo_camera_c() {
-    /* Nonmatching */
-}
+dDemo_camera_c::~dDemo_camera_c() {}
 
 /* 8006A7F8-8006A92C       .text JSGFindObject__14dDemo_system_cCFPCcQ26JStage8TEObject */
-void dDemo_system_c::JSGFindObject(const char*, JStage::TEObject) const {
+bool dDemo_system_c::JSGFindObject(const char*, JStage::TEObject) const {
     /* Nonmatching */
 }
 
@@ -332,17 +324,17 @@ dDemo_manager_c::~dDemo_manager_c() {
 }
 
 /* 8006AEFC-8006AF5C       .text __dt__14dMesg_tControlFv */
+/*
 dMesg_tControl::~dMesg_tControl() {
     /* Nonmatching */
 }
+*/
 
 /* 8006AF5C-8006AFBC       .text __dt__14dDemo_system_cFv */
-dDemo_system_c::~dDemo_system_c() {
-    /* Nonmatching */
-}
+dDemo_system_c::~dDemo_system_c() {}
 
 /* 8006AFBC-8006B0D4       .text create__15dDemo_manager_cFPCUcP4cXyzf */
-void dDemo_manager_c::create(const unsigned char*, cXyz*, float) {
+void dDemo_manager_c::create(const u8*, cXyz*, f32) {
     /* Nonmatching */
 }
 
@@ -357,22 +349,22 @@ void dDemo_manager_c::update() {
 }
 
 /* 8006B1B4-8006B240       .text JSGFindNodeID__13dDemo_actor_cCFPCc */
-void dDemo_actor_c::JSGFindNodeID(const char*) const {
+s32 dDemo_actor_c::JSGFindNodeID(const char*) const {
     /* Nonmatching */
 }
 
 /* 8006B240-8006B2DC       .text JSGGetNodeTransformation__13dDemo_actor_cCFUlPA4_f */
-void dDemo_actor_c::JSGGetNodeTransformation(unsigned long, float(*)[4]) const {
+int dDemo_actor_c::JSGGetNodeTransformation(u32, f32(*)[4]) const {
     /* Nonmatching */
 }
 
 /* 8006B2DC-8006B2E4       .text JSGGetAnimationFrameMax__13dDemo_actor_cCFv */
-void dDemo_actor_c::JSGGetAnimationFrameMax() const {
+f32 dDemo_actor_c::JSGGetAnimationFrameMax() const {
     /* Nonmatching */
 }
 
 /* 8006B2E4-8006B2EC       .text JSGGetTextureAnimationFrameMax__13dDemo_actor_cCFv */
-void dDemo_actor_c::JSGGetTextureAnimationFrameMax() const {
+f32 dDemo_actor_c::JSGGetTextureAnimationFrameMax() const {
     /* Nonmatching */
 }
 
@@ -390,4 +382,3 @@ void dDemo_actor_c::JSGGetScaling(Vec*) const {
 void dDemo_actor_c::JSGGetRotation(Vec*) const {
     /* Nonmatching */
 }
-

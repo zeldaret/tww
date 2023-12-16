@@ -3,8 +3,9 @@
 // Translation Unit: d_event.cpp
 //
 
-#include "d_event.h"
+#include "d/d_event.h"
 #include "dolphin/types.h"
+#include "f_op/f_op_actor.h" // dEvt_info_c
 
 /* 8006FE04-8006FE54       .text __ct__14dEvt_control_cFv */
 dEvt_control_c::dEvt_control_c() {
@@ -17,12 +18,12 @@ dEvt_order_c::dEvt_order_c() {
 }
 
 /* 8006FE58-8006FEE8       .text orderOld__14dEvt_control_cFUsUsUsUsPvPvPCv */
-void dEvt_control_c::orderOld(unsigned short, unsigned short, unsigned short, unsigned short, void*, void*, const void*) {
+s32 dEvt_control_c::orderOld(u16, u16, u16, u16, void*, void*, const void*) {
     /* Nonmatching */
 }
 
 /* 8006FEE8-8007002C       .text order__14dEvt_control_cFUsUsUsUsPvPvsUc */
-void dEvt_control_c::order(unsigned short, unsigned short, unsigned short, unsigned short, void*, void*, short, unsigned char) {
+s32 dEvt_control_c::order(u16, u16, u16, u16, void*, void*, s16, u8) {
     /* Nonmatching */
 }
 
@@ -42,7 +43,7 @@ void dEvt_control_c::afterFlagProc(dEvt_order_c*) {
 }
 
 /* 80070218-80070290       .text commonCheck__14dEvt_control_cFP12dEvt_order_cUsUs */
-void dEvt_control_c::commonCheck(dEvt_order_c*, unsigned short, unsigned short) {
+void dEvt_control_c::commonCheck(dEvt_order_c*, u16, u16) {
     /* Nonmatching */
 }
 
@@ -132,12 +133,12 @@ void dEvt_control_c::photoCheck() {
 }
 
 /* 80071270-80071418       .text moveApproval__14dEvt_control_cFPv */
-void dEvt_control_c::moveApproval(void*) {
+s32 dEvt_control_c::moveApproval(void*) {
     /* Nonmatching */
 }
 
 /* 80071418-80071468       .text compulsory__14dEvt_control_cFPvPCcUs */
-void dEvt_control_c::compulsory(void*, const char*, unsigned short) {
+BOOL dEvt_control_c::compulsory(void*, const char*, u16) {
     /* Nonmatching */
 }
 
@@ -157,12 +158,12 @@ void dEvt_control_c::nextStageEventDt(void*) {
 }
 
 /* 800715B8-800715DC       .text getPId__14dEvt_control_cFPv */
-void dEvt_control_c::getPId(void*) {
+int dEvt_control_c::getPId(void*) {
     /* Nonmatching */
 }
 
 /* 800715DC-8007160C       .text convPId__14dEvt_control_cFUi */
-void dEvt_control_c::convPId(unsigned int) {
+fopAc_ac_c* dEvt_control_c::convPId(unsigned int) {
     /* Nonmatching */
 }
 
@@ -187,12 +188,11 @@ void dEvt_info_c::setEventName(char*) {
 }
 
 /* 800716AC-800716F8       .text getEventName__11dEvt_info_cFv */
-void dEvt_info_c::getEventName() {
+char* dEvt_info_c::getEventName() {
     /* Nonmatching */
 }
 
 /* 800716F8-80071778       .text giveItemCut__14dEvt_control_cFUc */
-void dEvt_control_c::giveItemCut(unsigned char) {
+void dEvt_control_c::giveItemCut(u8) {
     /* Nonmatching */
 }
-

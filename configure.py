@@ -900,7 +900,7 @@ config.libs = [
         "JMath",
         [
             Object(NonMatching, "JSystem/JMath/JMath.cpp"),
-            Object(NonMatching, "JSystem/JMath/random.cpp"),
+            Object(Matching,    "JSystem/JMath/random.cpp"),
         ],
     ),
     DolphinLib(

@@ -14,7 +14,7 @@ class J3DAnmCluster;
 class J3DDeformData {
 public:
     J3DDeformData();
-    void offAllFlag(u32);
+    void clear();
     void deform(J3DVertexBuffer*);
     void deform(J3DModel*);
     void setAnm(J3DAnmCluster*);
@@ -50,18 +50,13 @@ struct J3DSkinNList {
 class J3DSkinDeform {
 public:
     J3DSkinDeform();
-    void initSkinInfo(J3DModelData*);
     int initMtxIndexArray(J3DModelData*);
     void changeFastSkinDL(J3DModelData*);
-    // void calcNrmMtx(J3DMtxBuffer*);
-    void transformVtxPosNrm(J3DModelData*);
-    // void calcAnmInvJointMtx(J3DMtxBuffer*);
-    // void deformFastVtxPos_F32(J3DVertexBuffer*, J3DMtxBuffer*) const;
-    // void deformFastVtxNrm_F32(J3DVertexBuffer*, J3DMtxBuffer*) const;
-    // void deformVtxPos_F32(J3DVertexBuffer*, J3DMtxBuffer*) const;
-    // void deformVtxPos_S16(J3DVertexBuffer*, J3DMtxBuffer*) const;
-    void deformVtxNrm_F32(J3DVertexBuffer*) const;
-    void deformVtxNrm_S16(J3DVertexBuffer*) const;
+    void calcNrmMtx(J3DModel*);
+    void deformVtxPos_F32(J3DModel*) const;
+    void deformVtxPos_S16(J3DModel*) const;
+    void deformVtxNrm_F32(J3DModel*) const;
+    void deformVtxNrm_S16(J3DModel*) const;
     void setNrmMtx(int i, MtxP mtx) {
         J3DPSMtx33CopyFrom34(mtx, (Mtx3P)mNrmMtx[i]);
     }
@@ -71,7 +66,7 @@ public:
     bool checkFlag(u32 flag) { return mFlags & flag; }
 
     virtual void deform(J3DModel*);
-    virtual ~J3DSkinDeform();
+    virtual ~J3DSkinDeform() {}
 
     static u16* sWorkArea_WEvlpMixMtx[1024];
     static f32* sWorkArea_WEvlpMixWeight[1024];
@@ -90,10 +85,12 @@ STATIC_ASSERT(sizeof(J3DSkinDeform) == 0x18);
 class J3DDeformer {
 public:
     J3DDeformer(J3DDeformData*);
+    void clear();
     void deform(J3DVertexBuffer*, u16, f32*);
     void deform(J3DVertexBuffer*, u16);
     void deform_VtxPosF32(J3DVertexBuffer*, J3DCluster*, J3DClusterKey*, f32*);
     void deform_VtxNrmF32(J3DVertexBuffer*, J3DCluster*, J3DClusterKey*, f32*);
+    void normalize(f32*);
     void normalizeWeight(int, f32*);
 
 private:

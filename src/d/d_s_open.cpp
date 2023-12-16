@@ -3,6 +3,7 @@
 // Translation Unit: d_s_open.cpp
 //
 
+#include "d/d_s_open.h"
 #include "f_op/f_op_scene.h"
 #include "f_op/f_op_draw_iter.h"
 #include "f_op/f_op_scene_mng.h"
@@ -13,37 +14,6 @@
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
-
-class dScnOpen_message_c;
-class J2DScreen;
-
-class dScnOpen_proc_c : public dDlst_base_c {
-public:
-    dScnOpen_proc_c();
-    virtual ~dScnOpen_proc_c();
-    void proc_execute();
-
-    /* 0x004 */ JKRExpHeap* exp_heap;
-    /* 0x008 */ dScnOpen_message_c* m_message;
-    /* 0x00C */ J2DScreen* m_Screen;
-    /* 0x010 */ u8 pad[0x2a0];
-    /* 0x2B0 */ s32 field_0x2b0;
-    /* 0x010 */ u8 pad2[0x014];
-};
-
-class dScnOpen_c : public scene_class {
-public:
-    ~dScnOpen_c();
-    void changeGameScene();
-    s32 create();
-    BOOL draw();
-    BOOL execute();
-
-    /* 0x1C4 */ request_of_phase_process_class mPhs;
-    /* 0x1CC */ JKRSolidHeap* solid_heap;
-    /* 0x1D0 */ dScnOpen_proc_c* mpProc;
-    /* 0x1D4 */ u8 field_0x1d4;
-};
 
 /* 80232A68-80232BC4       .text create__10dScnOpen_cFv */
 s32 dScnOpen_c::create() {

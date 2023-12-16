@@ -3,11 +3,11 @@
 // Translation Unit: d_s_open_sub.cpp
 //
 
-#include "d_s_open_sub.h"
+#include "d/d_s_open.h"
 #include "dolphin/types.h"
 
 /* 80232EFC-8023334C       .text set_message__18dScnOpen_message_cFUli */
-void dScnOpen_message_c::set_message(unsigned long, int) {
+void dScnOpen_message_c::set_message(u32, int) {
     /* Nonmatching */
 }
 
@@ -50,4 +50,3 @@ void dScnOpen_proc_c::proc_draw() {
 void dScnOpen_proc_c::draw() {
     /* Nonmatching */
 }
-

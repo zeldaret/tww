@@ -125,6 +125,7 @@ enum dEvt_Condition_e {
     dEvtCnd_CANTALKITEM_e = 0x0020,
 };
 
+// TODO: move to d_event.h
 class dEvt_info_c {
 public:
     dEvt_info_c();

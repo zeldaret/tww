@@ -10,7 +10,9 @@ class fopAc_ac_c;
 class dEvent_exception_c {
 public:
     dEvent_exception_c() { mEventInfoIdx = -1; }
+    void init();
     int setStartDemo(int eventInfoIdx);
+    void getEventName();
 
     /* 0x0 */ s32 mEventInfoIdx;
     /* 0x4 */ u8 field_0x4;
@@ -76,6 +78,11 @@ public:
     /* 0x024 */ dEvent_exception_c mException;
     /* 0x030 */ cXyz mGoal;
     /* 0x03C */ dEvDtFlag_c mFlag;
+};
+
+class dEv_seach_prm {
+public:
+    dEv_seach_prm(const char*, u32, u32);
 };
 
 inline int dEvmng_strcmp(const char* s1, const char* s2) {

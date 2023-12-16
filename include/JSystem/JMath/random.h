@@ -29,6 +29,20 @@ struct TRandom_fast_ {
 
     void setSeed(u32 seed) { value = seed; }
 };
+
+struct TRandom_enough_ {
+    TRandom_enough_() { setSeed(0); }
+    void setSeed(u32 value);
+    f32 get();
+
+    void next_() {
+        field_0x0 = ((u64)field_0x0 * 0x41a7) % 0x7fffffff;
+    }
+
+    u32 field_0x0;
+    u32 field_0x4;
+    u32 field_0x8[32];
+};
 }  // namespace JMath
 
 #endif /* RANDOM_H */
