@@ -42,7 +42,7 @@ public:
     virtual ~cBgS_PolyInfo() {}
 
     s32 GetPolyIndex() const { return mPolyIndex; }
-    s32 GetBgIndex() const { return mBgIndex; }
+    u16 GetBgIndex() const { return mBgIndex; }
     bool ChkSetInfo() const {
         if (mPolyIndex == 0xFFFF || mBgIndex == 0x100) {
             return false;
@@ -50,6 +50,17 @@ public:
 
         return true;
     }
+    bool ChkBgIndex() const {
+        if (mBgIndex == 0x100) {
+            return false;
+        }
+        return true;
+    }
+
+    // TODO
+    void ChkSafe(const void*, unsigned int) const {}
+    void ChkSetInf() const {}
+    void SetPolyIndex(int) {}
 };  // Size: 0x10
 
 STATIC_ASSERT(sizeof(cBgS_PolyInfo) == 0x10);

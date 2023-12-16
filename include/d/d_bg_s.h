@@ -101,7 +101,7 @@ public:
     f32 RoofChk(dBgS_RoofChk*);
     bool SplGrpChk(dBgS_SplGrpChk*);
     bool SphChk(dBgS_SphChk*, void*);
-    void WallCrrPos(dBgS_CrrPos*);
+    bool WallCrrPos(dBgS_CrrPos*);
     void MoveBgCrrPos(cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*);
     void MoveBgTransPos(cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*);
     void MoveBgMatrixCrrPos(cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*);
@@ -133,6 +133,40 @@ public:
         mGndChk.OffWall();
         field_0x38 &= ~8;
     }
+
+    void ChkXCrr() {}
+    void ChkZCrr() {}
+    void ClrPosVec() {
+        field_0x4c.x = field_0x4c.y = field_0x4c.z = 0.0f;
+    }
+    void ClrWallHit() {}
+    void ClrXCrr() {}
+    void ClrZCrr() {}
+    void GetCylP() const {}
+    void GetGroundH() const {}
+    void GetOldPos() const {}
+    cXyz* GetPos() const { return pm_pos; }
+    cXyz& GetPosVec() { return field_0x4c; }
+    void GetWallH() const {}
+    void GetWallR() const {}
+    void Set(cXyz*, cXyz*, unsigned int, cXyz*) {}
+    void SetCyl() {
+        mCyl1.Set(*pm_pos, field_0x40, field_0x3c * 2.0f);
+    }
+    void SetLin() {
+        mLin.SetStartEnd(*mpLine0, *pm_pos);
+    }
+    void SetOldCyl() {
+        mCyl0.Set(*mpLine0, field_0x40, field_0x3c * 2.0f);
+    }
+    void SetWall(f32, f32) {}
+    void SetWallActorInfo(int bg_index, void* bgw, unsigned int actor_id) {
+        SetActorInfo(bg_index, bgw, actor_id);
+    }
+    void SetWallHit() {}
+    void SetWallPolyIndex(int) {}
+    void SetXCrr() {}
+    void SetZCrr() {}
 
     /* 0x038 */ u32 field_0x38;
     /* 0x03C */ f32 field_0x3c;

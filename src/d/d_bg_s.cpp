@@ -272,7 +272,6 @@ int dBgS::GetRoomPathPntNo(cBgS_PolyInfo& polyInfo) {
 
 /* 800A0E68-800A0F88       .text GetRoomId__4dBgSFR13cBgS_PolyInfo */
 s32 dBgS::GetRoomId(cBgS_PolyInfo& polyInfo) {
-    /* Nonmatching */
     if (!polyInfo.ChkSetInfo())
         return -1;
 
@@ -283,7 +282,7 @@ s32 dBgS::GetRoomId(cBgS_PolyInfo& polyInfo) {
         return -1;
 
     dBgW* bgwp = (dBgW*)m_chk_element[id].m_bgw_base_ptr;
-    u16 roomNo = bgwp->mRoomNo;
+    s32 roomNo = bgwp->mRoomNo;
     if (roomNo == 0xFFFF) {
         s32 grp = GetTriGrp(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex());
         roomNo = GetGrpToRoomId(polyInfo.GetBgIndex(), grp);
@@ -295,7 +294,6 @@ s32 dBgS::GetRoomId(cBgS_PolyInfo& polyInfo) {
 
 /* 800A0F88-800A111C       .text ChkPolyHSStick__4dBgSFR13cBgS_PolyInfo */
 BOOL dBgS::ChkPolyHSStick(cBgS_PolyInfo& polyInfo) {
-    /* Nonmatching */
     s32 bg_index = polyInfo.GetBgIndex();
     JUT_ASSERT(0x583, 0 <= bg_index && bg_index < 256);
     if (!m_chk_element[bg_index].ChkUsed())
@@ -328,15 +326,15 @@ bool dBgS::LineCrossNonMoveBG(cBgS_LinChk* chk) {
 
 /* 800A12A4-800A13E0       .text WallCorrect__4dBgSFP9dBgS_Acch */
 void dBgS::WallCorrect(dBgS_Acch* acch) {
-    /* Nonmatching */
     acch->CalcWallRR();
     acch->SetWallCir();
     acch->SetLin();
     acch->CalcWallBmdCyl();
 
+    cBgS_ChkElm* elm;
     for (s32 prio = 0; prio < 3; prio++) {
         for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
-            cBgS_ChkElm* elm = &m_chk_element[bg_index];
+            elm = &m_chk_element[bg_index];
             if (elm->ChkUsed() && elm->m_bgw_base_ptr->pm_vtx_tbl != NULL) {
                 acch->SetNowActorInfo(bg_index, elm->m_bgw_base_ptr, elm->m_actor_id);
                 if (!acch->ChkSameActorPid(elm->m_actor_id)) {
@@ -351,11 +349,11 @@ void dBgS::WallCorrect(dBgS_Acch* acch) {
 
 /* 800A13E0-800A14FC       .text RoofChk__4dBgSFP12dBgS_RoofChk */
 f32 dBgS::RoofChk(dBgS_RoofChk* chk) {
-    /* Nonmatching */
     chk->SetNowY(1e+09);
     chk->ClearPi();
+    cBgS_ChkElm* elm;
     for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
-        cBgS_ChkElm* elm = &m_chk_element[bg_index];
+        elm = &m_chk_element[bg_index];
         if (elm->ChkUsed() && elm->m_bgw_base_ptr->pm_vtx_tbl != NULL && !chk->ChkSameActorPid(elm->m_actor_id)) {
             dBgW* bgwp = (dBgW*)elm->m_bgw_base_ptr;
             if (bgwp->RoofChkGrpRp(chk, elm->m_bgw_base_ptr->m_rootGrpIdx, 1)) {
@@ -386,11 +384,11 @@ bool dBgS::SplGrpChk(dBgS_SplGrpChk* chk) {
 
 /* 800A160C-800A1730       .text SphChk__4dBgSFP11dBgS_SphChkPv */
 bool dBgS::SphChk(dBgS_SphChk* chk, void* user) {
-    /* Nonmatching */
+    cBgS_ChkElm* elm;
     bool ret = false;
     chk->Init();
     for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
-        cBgS_ChkElm* elm = &m_chk_element[bg_index];
+        elm = &m_chk_element[bg_index];
         if (elm->ChkUsed() && elm->m_bgw_base_ptr->pm_vtx_tbl != NULL && !chk->ChkSameActorPid(elm->m_actor_id)) {
             dBgW* bgwp = (dBgW*)elm->m_bgw_base_ptr;
             if (bgwp->SphChkGrpRp(chk, user, elm->m_bgw_base_ptr->m_rootGrpIdx, 1)) {
@@ -403,14 +401,38 @@ bool dBgS::SphChk(dBgS_SphChk* chk, void* user) {
 }
 
 /* 800A1730-800A1954       .text WallCrrPos__4dBgSFP11dBgS_CrrPos */
-void dBgS::WallCrrPos(dBgS_CrrPos* crr) {
-    /* Nonmatching */
+bool dBgS::WallCrrPos(dBgS_CrrPos* crr) {
+    crr->SetOldCyl();
+    crr->SetCyl();
+    crr->SetLin();
+    crr->ClrPosVec();
+    
+    cBgS_ChkElm* elm;
+    bool ret = false;
+    for (s32 prio = 0; prio < 3; prio++) {
+        for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
+            elm = &m_chk_element[bg_index];
+            if (elm->ChkUsed() && elm->m_bgw_base_ptr->pm_vtx_tbl != NULL) {
+                if (crr->ChkSameActorPid(elm->m_actor_id))
+                    continue;
+                dBgW* bgwp = (dBgW*)elm->m_bgw_base_ptr;
+                BOOL isPrio = bgwp->ChkPriority(prio);
+                if (isPrio && bgwp->WallCrrPos(crr)) {
+                    crr->SetWallActorInfo(bg_index, elm->m_bgw_base_ptr, elm->m_actor_id);
+                    crr->GetPos()->x += crr->GetPosVec().x;
+                    crr->GetPos()->y += crr->GetPosVec().y;
+                    crr->GetPos()->z += crr->GetPosVec().z;
+                    ret = true;
+                }
+            }
+        }
+    }
+    return ret;
 }
 
 /* 800A1954-800A1A74       .text MoveBgCrrPos__4dBgSFR13cBgS_PolyInfobP4cXyzP5csXyzP5csXyz */
 void dBgS::MoveBgCrrPos(cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, csXyz* angle1, csXyz* angle2) {
-    /* Nonmatching */
-    if (!accept)
+    if (!accept || !polyInfo.ChkBgIndex())
         return;
 
     s32 bg_index = polyInfo.GetBgIndex();
@@ -426,8 +448,7 @@ void dBgS::MoveBgCrrPos(cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, csXyz* 
 
 /* 800A1A74-800A1B94       .text MoveBgTransPos__4dBgSFR13cBgS_PolyInfobP4cXyzP5csXyzP5csXyz */
 void dBgS::MoveBgTransPos(cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, csXyz* angle1, csXyz* angle2) {
-    /* Nonmatching */
-    if (!accept)
+    if (!accept || !polyInfo.ChkBgIndex())
         return;
 
     s32 bg_index = polyInfo.GetBgIndex();
@@ -443,8 +464,7 @@ void dBgS::MoveBgTransPos(cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, csXyz
 
 /* 800A1B94-800A1C98       .text MoveBgMatrixCrrPos__4dBgSFR13cBgS_PolyInfobP4cXyzP5csXyzP5csXyz */
 void dBgS::MoveBgMatrixCrrPos(cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, csXyz* angle1, csXyz* angle2) {
-    /* Nonmatching */
-    if (!accept)
+    if (!accept || !polyInfo.ChkBgIndex())
         return;
 
     s32 bg_index = polyInfo.GetBgIndex();
@@ -525,7 +545,6 @@ void dBgS_CrrPos::CrrPos(dBgS&) {
 }
 
 /* 800A2550-800A257C       .text MatrixCrrPos__4dBgWFR13cBgS_PolyInfoPvbP4cXyzP5csXyzP5csXyz */
-void dBgW::MatrixCrrPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*) {
-    /* Nonmatching */
+void dBgW::MatrixCrrPos(cBgS_PolyInfo& polyInfo, void* param_2, bool param_3, cXyz* param_4, csXyz* param_5, csXyz* param_6) {
+    CrrPos(polyInfo, param_2, param_3, param_4, param_5, param_6);
 }
-

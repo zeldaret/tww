@@ -47,7 +47,7 @@ public:
     void RwgWallCrrPos(u16, dBgS_CrrPos*);
     void WallCrrPosRp(dBgS_CrrPos*, int);
     void WallCrrPosGrpRp(dBgS_CrrPos*, int, int);
-    void WallCrrPos(dBgS_CrrPos*);
+    bool WallCrrPos(dBgS_CrrPos*);
     void ChangeAttributeCodeByPathPntNo(int, u32);
 
     virtual ~dBgW() {}
