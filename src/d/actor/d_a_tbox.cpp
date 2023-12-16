@@ -36,6 +36,49 @@
 #define FUNC_TYPE_EXTRA_SAVE_INFO 7
 #define FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN 8
 
+enum DALWAYS_RES_FILE_ID { // IDs and indexes are synced
+    /* BCK */
+    DALWAYS_BCK_BOXOPENBOX=0x8,
+    DALWAYS_BCK_BOXOPENSHORTBOX=0x9,
+    DALWAYS_BCK_IT_TAKARA_FLASH=0xA,
+    DALWAYS_BCK_IT_TAKARA_FLASH2=0xB,
+    
+    /* BDLI */
+    DALWAYS_BDL_BOXA=0xE,
+    DALWAYS_BDL_BOXB=0xF,
+    DALWAYS_BDL_BOXC=0x10,
+    
+    /* BDLM */
+    DALWAYS_BDL_BOX_SHADOW=0x13,
+    DALWAYS_BDL_BOXD=0x14,
+    DALWAYS_BDL_BOXSEA=0x15,
+    DALWAYS_BDL_IT_TAKARA_FLASH=0x16,
+    DALWAYS_BDL_YTRIF00=0x17,
+    
+    /* BRK */
+    DALWAYS_BRK_BOX_SHADOW=0x1A,
+    DALWAYS_BRK_BOXA=0x1B,
+    DALWAYS_BRK_BOXB=0x1C,
+    DALWAYS_BRK_BOXC=0x1D,
+    DALWAYS_BRK_IT_TAKARA_FLASH=0x1E,
+    DALWAYS_BRK_YTRIF00=0x1F,
+    
+    /* BTK */
+    DALWAYS_BTK_BOXA=0x22,
+    DALWAYS_BTK_BOXB=0x23,
+    DALWAYS_BTK_BOXC=0x24,
+    DALWAYS_BTK_IT_TAKARA_FLASH=0x25,
+    
+    /* DZB */
+    DALWAYS_DZB_BOXA_00=0x28,
+    DALWAYS_DZB_BOXA_01=0x29,
+    DALWAYS_DZB_BOXB_00=0x2A,
+    DALWAYS_DZB_BOXB_01=0x2B,
+    DALWAYS_DZB_BOXD_00=0x2C,
+    DALWAYS_DZB_BOXD_01=0x2D,
+    DALWAYS_DZB_KINB_00=0x2E,
+};
+
 extern dCcD_SrcCyl dNpc_cyl_src;
 
 // Needed for the .data section to match.
@@ -47,10 +90,38 @@ static f64 dummy4[2] = {3.0, 0.5};
 static daTbox_HIO_c l_HIO;
 
 static daTbox_c::modelInfo l_modelInfo[] = {
-    { 0x000E, 0x0009, 0x0022, 0x001B, 0x002A, 0x002B },
-    { 0x000F, 0x0008, 0x0023, 0x001C, 0x002A, 0x002B },
-    { 0x0010, 0x0008, 0x0024, 0x001D, 0x002A, 0x002B },
-    { 0x0014, 0x0008, 0xFFFF, 0xFFFF, 0x002C, 0x002D }
+    {
+        DALWAYS_BDL_BOXA,
+        DALWAYS_BCK_BOXOPENSHORTBOX,
+        DALWAYS_BTK_BOXA,
+        DALWAYS_BRK_BOXA,
+        DALWAYS_DZB_BOXB_00,
+        DALWAYS_DZB_BOXB_01,
+    },
+    {
+        DALWAYS_BDL_BOXB,
+        DALWAYS_BCK_BOXOPENBOX,
+        DALWAYS_BTK_BOXB,
+        DALWAYS_BRK_BOXB,
+        DALWAYS_DZB_BOXB_00,
+        DALWAYS_DZB_BOXB_01,
+    },
+    {
+        DALWAYS_BDL_BOXC,
+        DALWAYS_BCK_BOXOPENBOX,
+        DALWAYS_BTK_BOXC,
+        DALWAYS_BRK_BOXC,
+        DALWAYS_DZB_BOXB_00,
+        DALWAYS_DZB_BOXB_01,
+    },
+    {
+        DALWAYS_BDL_BOXD,
+        DALWAYS_BCK_BOXOPENBOX,
+        -1,
+        -1,
+        DALWAYS_DZB_BOXD_00,
+        DALWAYS_DZB_BOXD_01,
+    }
 };
 
 /* 000000EC-00000124       .text __ct__12daTbox_HIO_cFv */
@@ -116,7 +187,7 @@ s32 daTbox_c::commonShapeSet() {
 
     // Set up Triforce platform for the type that spawns via Wind Waker song
     if (getFuncType() == FUNC_TYPE_TACT) {
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Dalways", 0x17);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Dalways", DALWAYS_BDL_YTRIF00);
         JUT_ASSERT(0xE2, modelData);
 
         mpTactPlatformMdl = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000000);
@@ -124,7 +195,7 @@ s32 daTbox_c::commonShapeSet() {
             return cPhs_ERROR_e;
         }
 
-        J3DAnmTevRegKey* tactPlatformBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", 0x1F);
+        J3DAnmTevRegKey* tactPlatformBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", DALWAYS_BRK_YTRIF00);
         if (mTactPlatformBrk.init(modelData, tactPlatformBrk, true, 0, 1.0f, 0, -1, false, 0) == 0) {
             return cPhs_ERROR_e;
         }
@@ -148,7 +219,7 @@ s32 daTbox_c::commonShapeSet() {
 
 /* 00000598-00000764       .text effectShapeSet__8daTbox_cFv */
 s32 daTbox_c::effectShapeSet() {
-    J3DModelData* flashModelData = (J3DModelData*)dComIfG_getObjectRes("Dalways", 0x16);
+    J3DModelData* flashModelData = (J3DModelData*)dComIfG_getObjectRes("Dalways", DALWAYS_BDL_IT_TAKARA_FLASH);
     JUT_ASSERT(0x117, flashModelData != 0);
     
     mpFlashMdl = mDoExt_J3DModel__create(flashModelData, 0x80000, 0x1000200);
@@ -156,17 +227,17 @@ s32 daTbox_c::effectShapeSet() {
         return cPhs_ERROR_e;
     }
 
-    J3DAnmTransform* flashAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Dalways", 0x0B);
+    J3DAnmTransform* flashAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Dalways", DALWAYS_BCK_IT_TAKARA_FLASH2);
     if (mFlashAnm.init(flashModelData, flashAnm, true, 0, 1.0f, 0, -1, false) == 0) {
         return cPhs_ERROR_e;
     }
 
-    J3DAnmTextureSRTKey* flashTexAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dalways", 0x25);
+    J3DAnmTextureSRTKey* flashTexAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dalways", DALWAYS_BTK_IT_TAKARA_FLASH);
     if (mFlashTexAnm.init(flashModelData, flashTexAnm, true, 0, 1.0f, 0, -1, false, 0) == 0) {
         return cPhs_ERROR_e;
     }
 
-    J3DAnmTevRegKey* flashRegAnm = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", 0x1E);
+    J3DAnmTevRegKey* flashRegAnm = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", DALWAYS_BRK_IT_TAKARA_FLASH);
     int regInit = mFlashRegAnm.init(flashModelData, flashRegAnm, true, 0, 1.0f, 0, -1, false, 0);
 
     // Using cPhs_COMPLEATE_e and cPhs_ERROR_e break the match here.
@@ -233,7 +304,7 @@ s32 daTbox_c::bgCheckSet() {
     }
 
     if (getFuncType() == FUNC_TYPE_SWITCH_VISIBLE) {
-        bgd = (cBgD_t*)dComIfG_getObjectRes("Dalways", 0x2E);
+        bgd = (cBgD_t*)dComIfG_getObjectRes("Dalways", DALWAYS_DZB_KINB_00);
         JUT_ASSERT(0x1B9, bgd != 0);
 
         mpBgWVines = new dBgW();
