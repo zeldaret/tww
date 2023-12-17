@@ -262,7 +262,7 @@ namespace daObjMovebox {
             M_wall_work[i].Set(&temp_44, &temp_38, (fopAc_ac_c*)movebox);
             M_wall_work[i].SetActorPid(movebox->mBase.mBsPcId);
             if (dComIfG_Bgsp()->LineCross(&M_wall_work[i])) {
-                mWallPos[i] = M_wall_work[i].i_GetCross();
+                mWallPos[i] = M_wall_work[i].GetCross();
                 f32 dist = temp_44.abs2(mWallPos[i]);
                 if (dist < mNearestWallDist) {
                     mNearestWallDist = dist;

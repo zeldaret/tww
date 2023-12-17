@@ -20,30 +20,43 @@ public:
 public:
     cBgS_LinChk() { ct(); }
     void ct();
-    void Set2(cXyz*, cXyz*, unsigned int);
-    void GetCross();
+    void Set2(cXyz* pStart, cXyz* pEnd, unsigned int actorPid);
 
     virtual ~cBgS_LinChk() {}
 
-    void ClrHit() { mFlag &= ~0x10; }
     void SetHit() { mFlag |= 0x10; }
-    u32 ChkHit() const { return mFlag & 0x10; }
+    void ClrHit() { mFlag &= ~0x10; }
+    bool ChkHit() { return mFlag & 0x10; }
+    void SetSttsWallOff() { mFlag |= 0x40000000; }
+    void ClrSttsWallOff() { mFlag &= ~0x40000000; }
+    bool ChkSttsWallOff() { return mFlag & 0x40000000; }
+    void SetSttsGroundOff() { mFlag |= 0x80000000; }
+    void ClrSttsGroundOff() { mFlag &= ~0x80000000; }
+    bool ChkSttsGroundOff() { return mFlag & 0x80000000; }
+    void SetSttsRoofOff() { mFlag |= 0x20000000; }
     void ClrSttsRoofOff() { mFlag &= ~0x20000000; }
-    void SetCross(const cXyz& pos) { mLin.SetEnd(pos); }
-    cXyz& i_GetCross() { return mLin.GetEnd(); }
+    bool ChkSttsRoofOff() { return mFlag & 0x20000000; }
+
+    void SetCross(cXyz& pos) { mLin.SetEnd(pos); }
+    cXyz& GetCross() { return mLin.GetEnd(); }
+    cXyz& GetCrossP() { return mLin.GetEndP(); }
     cM3dGLin* GetLinP() { return &mLin; }
+
+    void OnFrontFlag() { mFrontFlag = true; }
+    void OffFrontFlag() { mFrontFlag = false; }
+    bool ChkFrontFlag() { return mFrontFlag; }
     void OnBackFlag() { mBackFlag = true; }
     void OffBackFlag() { mBackFlag = false; }
-    bool ChkBackFlag() const { return mBackFlag; }
-    bool ChkFrontFlag() const { return mFrontFlag; }
+    bool ChkBackFlag() { return mBackFlag; }
     bool GetPreWallChk() const { return mPreWallChk; }
     bool GetPreGroundChk() const { return mPreGroundChk; }
     bool GetPreRoofChk() const { return mPreRoofChk; }
-    inline void PreCalc() {
-        mPreWallChk = !(mFlag & 0x40000000);
-        mPreGroundChk = !(mFlag & 0x80000000);
-        mPreRoofChk = !(mFlag & 0x20000000);
+    void PreCalc() {
+        mPreWallChk = !ChkSttsWallOff();
+        mPreGroundChk = !ChkSttsGroundOff();
+        mPreRoofChk = !ChkSttsRoofOff();
     }
+    void ClearCheckIndex() {} // TODO
 };  // Size: 0x58
 
 #endif /* C_BG_S_LIN_CHK_H */

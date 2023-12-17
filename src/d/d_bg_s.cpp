@@ -9,6 +9,11 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
+#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)) ) == 1));
+#define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);
+#define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
+#define CHECK_PVEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v->x && v->x < 1.0e32f && -1.0e32f < v->y && v->y < 1.0e32f && -1.0e32f < v->z && v->z < 1.0e32f)
+
 /* 800A0270-800A0290       .text Ct__4dBgSFv */
 void dBgS::Ct() {
     cBgS::Ct();
@@ -349,7 +354,7 @@ void dBgS::WallCorrect(dBgS_Acch* acch) {
 
 /* 800A13E0-800A14FC       .text RoofChk__4dBgSFP12dBgS_RoofChk */
 f32 dBgS::RoofChk(dBgS_RoofChk* chk) {
-    chk->SetNowY(1e+09);
+    chk->SetNowY(1e+09f);
     chk->ClearPi();
     cBgS_ChkElm* elm;
     for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
@@ -540,8 +545,75 @@ fopAc_ac_c* dBgS::PushPullCallBack(cBgS_PolyInfo& polyInfo, fopAc_ac_c* ac, s16 
 }
 
 /* 800A1FD8-800A2550       .text CrrPos__11dBgS_CrrPosFR4dBgS */
-void dBgS_CrrPos::CrrPos(dBgS&) {
-    /* Nonmatching */
+void dBgS_CrrPos::CrrPos(dBgS& i_bgs) {
+    if (mFlag & 1)
+        return;
+    
+    ClrWallHit();
+    ClrXCrr();
+    ClrZCrr();
+    CHECK_PVEC3_RANGE(2280, pm_pos);
+    
+    if (!(mFlag & 4)) {
+        f32 dist2 = GetOldPos()->abs2(*pm_pos);
+        bool inWall = false;
+        if (dist2 > (0.65f*0.65f * GetWallR()*GetWallR())) {
+            inWall = true;
+            
+            cBgS_LinChk linChk;
+            cXyz startPos(*pm_old_pos);
+            cXyz endPos(*pm_pos);
+            startPos.y += GetWallH();
+            endPos.y += GetWallH();
+            linChk.Set2(&startPos, &endPos, GetActorPid());
+            linChk.SetExtChk(*this);
+            linChk.SetSttsGroundOff();
+            
+            if (i_bgs.LineCross(&linChk)) {
+                *pm_pos = linChk.GetCross();
+                cM3dGPla* plane = i_bgs.GetTriPla(linChk.GetBgIndex(), linChk.GetPolyIndex());
+                pm_pos->x += plane->GetNP()->x;
+                pm_pos->y += plane->GetNP()->y - mWallHeight;
+                pm_pos->z += plane->GetNP()->z;
+            }
+        }
+        
+        if (i_bgs.WallCrrPos(this) && inWall) {
+            cBgS_LinChk linChk;
+            cXyz startPos(*pm_old_pos);
+            cXyz endPos(*pm_pos);
+            startPos.y += mWallHeight;
+            endPos.y += mWallHeight;
+            linChk.Set2(&startPos, &endPos, GetActorPid());
+            linChk.SetExtChk(*this);
+            linChk.SetSttsGroundOff();
+            
+            if (i_bgs.LineCross(&linChk)) {
+                *pm_pos = linChk.GetCross();
+                cM3dGPla* plane = i_bgs.GetTriPla(linChk.GetBgIndex(), linChk.GetPolyIndex());
+                pm_pos->x += plane->GetNP()->x;
+                pm_pos->y += plane->GetNP()->y - mWallHeight;
+                pm_pos->z += plane->GetNP()->z;
+            }
+        }
+    }
+    
+    if (!(mFlag & 2)) {
+        field_0x60 = 0;
+        mGndChk.SetExtChk(*this);
+        cXyz pos = *pm_pos;
+        pos.y += mGndUpY;
+        mGndChk.SetPos(&pos);
+        f32 f31 = pm_pos->y;
+        mGroundH = i_bgs.GroundCross(&mGndChk);
+        if (mGroundH != -1e+09f && mGroundH > f31) {
+            pm_pos->y = mGroundH;
+            if (field_0x58) {
+                field_0x58->y = 0.0f;
+            }
+            field_0x60 = 1;
+        }
+    }
 }
 
 /* 800A2550-800A257C       .text MatrixCrrPos__4dBgWFR13cBgS_PolyInfoPvbP4cXyzP5csXyzP5csXyz */

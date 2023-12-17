@@ -113,74 +113,88 @@ public:
 
 class dBgS_CrrPos : public cBgS_PolyInfo, public dBgS_Chk, public cBgS_Chk {
 public:
-    dBgS_CrrPos();
-    void CrrPos(dBgS&);
-
+    dBgS_CrrPos() {
+        SetPolyPassChk(GetPolyPassChkInfo());
+        SetGrpPassChk(GetGrpPassChkInfo());
+        SetActorPid(fpcM_ERROR_PROCESS_ID_e);
+        mFlag = 0;
+        mWallHeight = 0.0f;
+        mWallRadius = 0.0f;
+        pm_pos = NULL;
+        pm_old_pos = NULL;
+        mGroundH = -1e+9f;
+        field_0x60 = 0;
+        field_0x68 = 20.0f;
+        field_0x58 = NULL;
+        mGndUpY = 400.0f;
+    }
     virtual ~dBgS_CrrPos() {}
 
-    void Set(cXyz* i_pos, cXyz* i_line, void* param_2, cXyz* param_3) {
-        mpLine0 = i_line;
+    void CrrPos(dBgS&);
+
+    void Set(cXyz* i_pos, cXyz* i_line, void* actor, cXyz* param_3) {
+        // not 100% sure if this is right
+        Set(i_pos, i_line, fpcM_GetID(actor), param_3);
+    }
+    void Set(cXyz* i_pos, cXyz* i_line, unsigned int actorPid, cXyz* param_3) {
+        // not 100% sure if this is right
         pm_pos = i_pos;
-        field_0x58 = param_2;
-        SetActorPid(fpcM_ERROR_PROCESS_ID_e);
-        field_0x3c = param_3->y;
-        field_0x40 = param_3->z;
+        pm_old_pos = i_line;
+        field_0x58 = param_3;
+        SetActorPid(actorPid);
     }
 
-    void SetGndUpY(f32 param_0) { mGndUpY = param_0; }
+    void SetWallHit() { mFlag |= 0x10; }
+    void ClrWallHit() { mFlag &= ~0x10; }
+    void SetXCrr() { mFlag |= 0x20; }
+    void ClrXCrr() { mFlag &= ~0x20; }
+    bool ChkXCrr() { return mFlag & 0x20; }
+    void SetZCrr() { mFlag |= 0x40; }
+    void ClrZCrr() { mFlag &= ~0x40; }
+    bool ChkZCrr() { return mFlag & 0x40; }
 
+    void SetGndUpY(f32 y) { mGndUpY = y; }
     void ClrNoRoof() {
         mGndChk.OffWall();
-        field_0x38 &= ~8;
+        mFlag &= ~8;
     }
+    void ClrPosVec() { field_0x4c.x = field_0x4c.y = field_0x4c.z = 0.0f; }
 
-    void ChkXCrr() {}
-    void ChkZCrr() {}
-    void ClrPosVec() {
-        field_0x4c.x = field_0x4c.y = field_0x4c.z = 0.0f;
+    f32 GetWallH() const { return mWallHeight; }
+    f32 GetWallR() const { return mWallRadius; }
+    void SetWall(f32 height, f32 radius) {
+        mWallHeight = height;
+        mWallRadius = radius;
     }
-    void ClrWallHit() {}
-    void ClrXCrr() {}
-    void ClrZCrr() {}
-    void GetCylP() const {}
-    void GetGroundH() const {}
-    void GetOldPos() const {}
+    f32 GetGroundH() const { return mGroundH; }
+
+    cXyz* GetOldPos() const { return pm_old_pos; }
     cXyz* GetPos() const { return pm_pos; }
     cXyz& GetPosVec() { return field_0x4c; }
-    void GetWallH() const {}
-    void GetWallR() const {}
-    void Set(cXyz*, cXyz*, unsigned int, cXyz*) {}
-    void SetCyl() {
-        mCyl1.Set(*pm_pos, field_0x40, field_0x3c * 2.0f);
-    }
-    void SetLin() {
-        mLin.SetStartEnd(*mpLine0, *pm_pos);
-    }
-    void SetOldCyl() {
-        mCyl0.Set(*mpLine0, field_0x40, field_0x3c * 2.0f);
-    }
-    void SetWall(f32, f32) {}
+
+    const cM3dGCyl* GetCylP() const { return &mCyl; }
+    void SetOldCyl() { mOldCyl.Set(*pm_old_pos, mWallRadius, mWallHeight * 2.0f); }
+    void SetCyl() { mCyl.Set(*pm_pos, mWallRadius, mWallHeight * 2.0f); }
+    void SetLin() { mLin.SetStartEnd(*pm_old_pos, *pm_pos); }
+
     void SetWallActorInfo(int bg_index, void* bgw, unsigned int actor_id) {
         SetActorInfo(bg_index, bgw, actor_id);
     }
-    void SetWallHit() {}
-    void SetWallPolyIndex(int) {}
-    void SetXCrr() {}
-    void SetZCrr() {}
+    void SetWallPolyIndex(int) {} // TODO
 
-    /* 0x038 */ u32 field_0x38;
-    /* 0x03C */ f32 field_0x3c;
-    /* 0x040 */ f32 field_0x40;
+    /* 0x038 */ u32 mFlag;
+    /* 0x03C */ f32 mWallHeight;
+    /* 0x040 */ f32 mWallRadius;
     /* 0x044 */ cXyz* pm_pos;
-    /* 0x048 */ cXyz* mpLine0;
+    /* 0x048 */ cXyz* pm_old_pos;
     /* 0x04C */ cXyz field_0x4c;
-    /* 0x058 */ void* field_0x58;
-    /* 0x05C */ f32 field_0x5c;
+    /* 0x058 */ cXyz* field_0x58;
+    /* 0x05C */ f32 mGroundH;
     /* 0x060 */ u8 field_0x60;
     /* 0x064 */ f32 mGndUpY;
     /* 0x068 */ f32 field_0x68;
-    /* 0x06C */ cM3dGCyl mCyl0;
-    /* 0x084 */ cM3dGCyl mCyl1;
+    /* 0x06C */ cM3dGCyl mOldCyl;
+    /* 0x084 */ cM3dGCyl mCyl;
     /* 0x09C */ cM3dGLin mLin;
     /* 0x0B8 */ cBgS_GndChk mGndChk;
     /* 0x0F8 */ cBgS_LinChk mLinChk;
@@ -188,7 +202,7 @@ public:
 
 class dBgS_LinkCrrPos : public dBgS_CrrPos {
 public:
-    dBgS_LinkCrrPos();
+    dBgS_LinkCrrPos() { SetLink(); }
 
     virtual ~dBgS_LinkCrrPos() {}
 };

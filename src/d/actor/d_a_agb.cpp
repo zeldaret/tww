@@ -51,7 +51,7 @@ daAgb_HIO_c::daAgb_HIO_c() {
     field_0x04[1].mColor.b = 0;
     field_0x04[1].mColor.a = 0;
 
-    field_0x14 = 24.0f;
+    field_0x14 = 25.0f;
     field_0x18 = 50.0f;
     field_0x1c = 781.25f;
     field_0x20 = 170.0f;
@@ -895,7 +895,7 @@ void daAgb_c::modeProcCall() {
 /* 800D30D4-800D36F4       .text daAgb_Execute__FP7daAgb_c */
 // NONMATCHING - regswap
 static int daAgb_Execute(daAgb_c* i_this) {
-    daPy_lk_c* temp_r29 = (daPy_lk_c*)dComIfGp_getPlayer(0);
+    daPy_py_c* player = daPy_getPlayerActorClass();
     i_this->field_0x679 = 0;
 
     if (mDoGaC_GbaLink() && mDoGaC_RecvStatusCheck(4)) {
@@ -954,12 +954,12 @@ static int daAgb_Execute(daAgb_c* i_this) {
             }
         } else {
             daPy_lk_c* player_p2 = daPy_getPlayerLinkActorClass();
-            if ((dComIfGp_getPlayer(0) == player_p2 && !temp_r29->checkPlayerFly()) ||
-                ((fopAcM_GetName(temp_r29) == PROC_NPC_MD && !daNpc_Md_c::isFlying()) ||
-                 (fopAcM_GetName(temp_r29) == PROC_NPC_CB1 && !daNpc_Cb1_c::m_flying) ||
-                 fopAcM_GetName(temp_r29) == PROC_NPC_OS))
+            if ((dComIfGp_getPlayer(0) == player_p2 && !player->checkPlayerFly()) ||
+                ((fopAcM_GetName(player) == PROC_NPC_MD && !daNpc_Md_c::isFlying()) ||
+                 (fopAcM_GetName(player) == PROC_NPC_CB1 && !daNpc_Cb1_c::m_flying) ||
+                 fopAcM_GetName(player) == PROC_NPC_OS))
             {
-                f32 speedF = fabs(temp_r29->speedF);
+                f32 speedF = fabs(player->speedF);
 
                 if (speedF <= 0.0f) {
                     daAgb_c::mFlags.field_0x5_3 = 0;
@@ -1045,9 +1045,9 @@ static int daAgb_Draw(daAgb_c* i_this) {
             mDoExt_modelUpdateDL(i_this->mpModel);
 
             if (i_this->field_0x679 != 0 &&
-                i_this->current.pos.y - i_this->mCrrPos.field_0x5c > 2.5f)
+                i_this->current.pos.y - i_this->mCrrPos.GetGroundH() > 2.5f)
             {
-                dComIfGd_setSimpleShadow2(&i_this->current.pos, i_this->mCrrPos.field_0x5c, 50.0f,
+                dComIfGd_setSimpleShadow2(&i_this->current.pos, i_this->mCrrPos.GetGroundH(), 50.0f,
                                           i_this->mCrrPos.mGndChk, 0, 1.0f, &i_this->mTexObj);
             }
 
@@ -1116,20 +1116,14 @@ static int daAgb_Create(fopAc_ac_c* i_this) {
             return cPhs_ERROR_e;
         }
 
-        // a_this->mCrrPos.Set(&a_this->current.pos, &a_this->next.pos, NULL, );
-        a_this->mCrrPos.mpLine0 = &a_this->current.pos;
-        a_this->mCrrPos.pm_pos = &a_this->next.pos;
-        a_this->mCrrPos.field_0x58 = NULL;
-        a_this->mCrrPos.SetActorPid(fpcM_ERROR_PROCESS_ID_e);
-        a_this->mCrrPos.field_0x3c = 171.0f;
-        a_this->mCrrPos.field_0x40 = 50.0f;
-
+        a_this->mCrrPos.Set(&fopAcM_GetPosition_p(a_this), &fopAcM_GetOldPosition_p(a_this), (void*)NULL, NULL);
+        a_this->mCrrPos.SetWall(171.0f, 50.0f);
         a_this->mCrrPos.SetGndUpY(170.0f);
         a_this->mCrrPos.ClrNoRoof();
-        a_this->mAcch.Set(&a_this->current.pos, &a_this->next.pos, a_this, 1, &a_this->mAcchCir);
+        a_this->mAcch.Set(&fopAcM_GetPosition_p(a_this), &fopAcM_GetOldPosition_p(a_this), a_this, 1, &a_this->mAcchCir);
         a_this->mAcch.OnLineCheck();
         a_this->mAcch.SetGrndNone();
-        a_this->mAcchCir.SetWall(171.01f, 40.0f);
+        a_this->mAcchCir.SetWall(171.0f, 40.0f);
 
         TestDataManager[4].field_0x0 = (u32)&daAgb_c::mGbaFlg;
         TestDataManager[8].field_0x0 = (u32)&daAgb_c::mSwitch;
