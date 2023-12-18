@@ -5,6 +5,10 @@
 
 class dDetectPlace_c {
 public:
+    dDetectPlace_c();
+    ~dDetectPlace_c();
+    void chk_enable() const;
+
     /* 0x00 */ cXyz mPos;
     /* 0x0C */ s16 mEnable;
 };

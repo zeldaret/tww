@@ -3,56 +3,20 @@
 // Translation Unit: JASWSParser.cpp
 //
 
-#include "JASWSParser.h"
+#include "JSystem/JAudio/JASWSParser.h"
 #include "dolphin/types.h"
 
 /* 80286BF4-80286C1C       .text getGroupCount__Q28JASystem8WSParserFPv */
-void JASystem::WSParser::getGroupCount(void*) {
+u32 JASystem::WSParser::getGroupCount(void*) {
     /* Nonmatching */
 }
 
 /* 80286C1C-80286E38       .text createBasicWaveBank__Q28JASystem8WSParserFPv */
-void JASystem::WSParser::createBasicWaveBank(void*) {
+JASystem::TBasicWaveBank* JASystem::WSParser::createBasicWaveBank(void*) {
     /* Nonmatching */
 }
 
 /* 80286E38-80287048       .text createSimpleWaveBank__Q28JASystem8WSParserFPv */
-void JASystem::WSParser::createSimpleWaveBank(void*) {
+JASystem::TSimpleWaveBank* JASystem::WSParser::createSimpleWaveBank(void*) {
     /* Nonmatching */
 }
-
-/* 80287048-80287060       .text JSUConvertOffsetToPtr<Q38JASystem8WSParser9TCtrlWave>__FPCvUl */
-void JSUConvertOffsetToPtr<JASystem::WSParser::TCtrlWave>(const void*, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 80287060-80287078       .text JSUConvertOffsetToPtr<Q38JASystem8WSParser5TWave>__FPCvUl */
-void JSUConvertOffsetToPtr<JASystem::WSParser::TWave>(const void*, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 80287078-80287090       .text JSUConvertOffsetToPtr<Q38JASystem8WSParser12TWaveArchive>__FPCvUl */
-void JSUConvertOffsetToPtr<JASystem::WSParser::TWaveArchive>(const void*, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 80287090-802870A8       .text JSUConvertOffsetToPtr<Q38JASystem8WSParser16TWaveArchiveBank>__FPCvUl */
-void JSUConvertOffsetToPtr<JASystem::WSParser::TWaveArchiveBank>(const void*, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 802870A8-802870C0       .text JSUConvertOffsetToPtr<Q38JASystem8WSParser5TCtrl>__FPCvUl */
-void JSUConvertOffsetToPtr<JASystem::WSParser::TCtrl>(const void*, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 802870C0-802870D8       .text JSUConvertOffsetToPtr<Q38JASystem8WSParser10TCtrlScene>__FPCvUl */
-void JSUConvertOffsetToPtr<JASystem::WSParser::TCtrlScene>(const void*, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 802870D8-802870F0       .text JSUConvertOffsetToPtr<Q38JASystem8WSParser10TCtrlGroup>__FPCvUl */
-void JSUConvertOffsetToPtr<JASystem::WSParser::TCtrlGroup>(const void*, unsigned long) {
-    /* Nonmatching */
-}
-

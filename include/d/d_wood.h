@@ -10,11 +10,13 @@ class cCcD_Obj;
 class fopAc_ac_c;
 
 namespace dWood {
+enum AnmID_e {};
 class Anm_c;
 class Packet_c;
 class Unit_c {
 public:
     Unit_c();
+    ~Unit_c();
 
     void set_ground();
     void set_mtx(Anm_c*);
@@ -40,7 +42,6 @@ STATIC_ASSERT(sizeof(Unit_c) == 0x18C);
 class Anm_c {
 public:
     enum Mode_e {};
-    enum AnmID_e {};
 
     Anm_c();
     void play(Packet_c*);

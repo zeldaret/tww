@@ -3,7 +3,7 @@
 // Translation Unit: d_wood.cpp
 //
 
-#include "d_wood.h"
+#include "d/d_wood.h"
 #include "dolphin/types.h"
 
 /* 800BD678-800BD710       .text __ct__Q25dWood5Anm_cFv */
@@ -185,4 +185,3 @@ void dWood::Packet_c::search_empty_UnitID() const {
 void dWood::Packet_c::search_anm(dWood::Anm_c::Mode_e) {
     /* Nonmatching */
 }
-

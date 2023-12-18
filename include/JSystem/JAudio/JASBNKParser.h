@@ -18,7 +18,7 @@ namespace JASystem {
 
         TBasicBank* createBasicBank(void*);
         void findOscPtr(JASystem::TBasicBank*, JASystem::BNKParser::THeader*, JASystem::BNKParser::TOsc*);
-        void getOscTableEndPtr(short*);
+        void getOscTableEndPtr(s16*);
     };
 }
 

@@ -133,6 +133,18 @@ private:
     /* 0x4C */ J3DNBTScale mNBTScale;
 };  // Size: 0x5C
 
+class J3DTexGenBlockNull : public J3DTexGenBlock {
+public:
+    virtual void calc(f32 const (*)[4]) {}
+    virtual void load() {}
+    virtual void patch() {}
+    virtual void diff(u32) {}
+    virtual void diffTexMtx() {}
+    virtual void diffTexGen() {}
+    virtual u32 getType() { return 'TGNL'; }
+    virtual ~J3DTexGenBlockNull() {}
+};
+
 class J3DTevBlock {
 public:
     virtual void reset(J3DTevBlock*) {}
@@ -258,6 +270,13 @@ private:
 };  // Size: 0xD8
 
 class J3DTevBlockNull : public J3DTevBlock {
+public:
+    virtual void reset(J3DTevBlock*) {}
+    virtual void ptrToIndex() {}
+    virtual void indexToPtr() {}
+    virtual u32 getType() { return 'TVNL'; }
+    virtual ~J3DTevBlockNull() {}
+
     void initialize();
 };
 
@@ -787,6 +806,13 @@ private:
     /* 0x0F */ u8 mDither;
 };  // Size: 0x10
 
+class J3DPEBlockNull : public J3DPEBlock {
+public:
+    virtual void load() {}
+    virtual u32 getType() { return 'PENL'; }
+    virtual ~J3DPEBlockNull() {}
+};
+
 struct J3DIndTexCoordScale : public J3DIndTexCoordScaleInfo {
     J3DIndTexCoordScale() { *(J3DIndTexCoordScaleInfo*)this = j3dDefaultIndTexCoordScaleInfo; }
     ~J3DIndTexCoordScale() {}
@@ -1079,6 +1105,12 @@ public:
 protected:
     /* 0x20 */ J3DGXColor mAmbColor[2];
 };  // Size: 0x28
+
+class J3DColorBlockNull : public J3DColorBlock {
+public:
+    virtual u32 getType() { return 'CLNL'; }
+    virtual ~J3DColorBlockNull() {}
+};
 
 extern int SizeOfJ3DColorBlockAmbientOnLoad;
 

@@ -3,12 +3,25 @@
 // Translation Unit: d_msg.cpp
 //
 
-#include "d_msg.h"
+#include "d/d_msg.h"
 #include "dolphin/types.h"
 
+class J2DTextBox;
+class fopMsgM_pane_class;
+
+J2DPicture* button_icon[8];
+J2DPicture* button_kage[8];
+s16 buttonTimer[8];
+J2DTextBox * numberPane[3];
+
+JKRHeap* agb_work_area;
+dDlst_2DMSG_c message;
+dDlst_2Dtact_c capture;
+dDlst_2DM_c multiTex;
+
 /* 8020A620-8020A628       .text dMsg_getAgbWorkArea__Fv */
-void dMsg_getAgbWorkArea() {
-    /* Nonmatching */
+JKRHeap* dMsg_getAgbWorkArea() {
+    return agb_work_area;
 }
 
 /* 8020A628-8020A950       .text draw__13dDlst_2DMSG_cFv */
@@ -27,7 +40,7 @@ void dDlst_2Dtact_c::draw() {
 }
 
 /* 8020AD3C-8020ADD8       .text dMsg_msg_pane_parts_set__FP18fopMsgM_pane_classUc */
-void dMsg_msg_pane_parts_set(fopMsgM_pane_class*, unsigned char) {
+void dMsg_msg_pane_parts_set(fopMsgM_pane_class*, u8) {
     /* Nonmatching */
 }
 
@@ -172,7 +185,7 @@ void dMsg_cornerMove(sub_msg_class*) {
 }
 
 /* 802109A0-80210AA0       .text dMsg_tactGuideShow__FP13sub_msg_classUc */
-void dMsg_tactGuideShow(sub_msg_class*, unsigned char) {
+void dMsg_tactGuideShow(sub_msg_class*, u8) {
     /* Nonmatching */
 }
 
@@ -212,7 +225,7 @@ void dMsg_subTextClose(sub_msg_class*) {
 }
 
 /* 80211A8C-80211B34       .text dMsg_setCloseSound__FP13sub_msg_classUc */
-void dMsg_setCloseSound(sub_msg_class*, unsigned char) {
+void dMsg_setCloseSound(sub_msg_class*, u8) {
     /* Nonmatching */
 }
 
@@ -317,8 +330,8 @@ void dMsg_Execute(sub_msg_class*) {
 }
 
 /* 802153B0-802153B8       .text dMsg_IsDelete__FP13sub_msg_class */
-void dMsg_IsDelete(sub_msg_class*) {
-    /* Nonmatching */
+BOOL dMsg_IsDelete(sub_msg_class*) {
+    return TRUE;
 }
 
 /* 802153B8-80215698       .text dMsg_Delete__FP13sub_msg_class */
@@ -340,4 +353,3 @@ dDlst_2Dtact_c::~dDlst_2Dtact_c() {
 dDlst_2DMSG_c::~dDlst_2DMSG_c() {
     /* Nonmatching */
 }
-

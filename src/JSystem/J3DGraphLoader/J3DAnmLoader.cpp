@@ -4,10 +4,10 @@
 //
 
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
-#include "dolphin/types.h"
+#include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 
 /* 802FEDA0-802FF6C8       .text load__20J3DAnmLoaderDataBaseFPCv */
-void J3DAnmLoaderDataBase::load(const void*) {
+void* J3DAnmLoaderDataBase::load(const void*) {
     /* Nonmatching */
 }
 
@@ -17,27 +17,19 @@ void J3DAnmLoaderDataBase::setResource(J3DAnmBase*, const void*) {
 }
 
 /* 802FF9EC-802FFA08       .text __ct__20J3DAnmFullLoader_v15Fv */
-J3DAnmFullLoader_v15::J3DAnmFullLoader_v15() {
-    /* Nonmatching */
-}
+J3DAnmFullLoader_v15::J3DAnmFullLoader_v15() {}
 
 /* 802FFA08-802FFA64       .text __dt__20J3DAnmFullLoader_v15Fv */
-J3DAnmFullLoader_v15::~J3DAnmFullLoader_v15() {
-    /* Nonmatching */
-}
+J3DAnmFullLoader_v15::~J3DAnmFullLoader_v15() {}
 
 /* 802FFA64-802FFA80       .text __ct__19J3DAnmKeyLoader_v15Fv */
-J3DAnmKeyLoader_v15::J3DAnmKeyLoader_v15() {
-    /* Nonmatching */
-}
+J3DAnmKeyLoader_v15::J3DAnmKeyLoader_v15() {}
 
 /* 802FFA80-802FFADC       .text __dt__19J3DAnmKeyLoader_v15Fv */
-J3DAnmKeyLoader_v15::~J3DAnmKeyLoader_v15() {
-    /* Nonmatching */
-}
+J3DAnmKeyLoader_v15::~J3DAnmKeyLoader_v15() {}
 
 /* 802FFADC-802FFC28       .text load__20J3DAnmFullLoader_v15FPCv */
-void J3DAnmFullLoader_v15::load(const void*) {
+void* J3DAnmFullLoader_v15::load(const void*) {
     /* Nonmatching */
 }
 
@@ -107,7 +99,7 @@ void J3DAnmFullLoader_v15::setAnmVtxColor(J3DAnmVtxColorFull*, const J3DAnmVtxCo
 }
 
 /* 80300318-80300464       .text load__19J3DAnmKeyLoader_v15FPCv */
-void J3DAnmKeyLoader_v15::load(const void*) {
+void* J3DAnmKeyLoader_v15::load(const void*) {
     /* Nonmatching */
 }
 
@@ -173,85 +165,5 @@ void J3DAnmKeyLoader_v15::readAnmVtxColor(const J3DAnmVtxColorKeyData*) {
 
 /* 80300C5C-80300DC4       .text setAnmVtxColor__19J3DAnmKeyLoader_v15FP17J3DAnmVtxColorKeyPC21J3DAnmVtxColorKeyData */
 void J3DAnmKeyLoader_v15::setAnmVtxColor(J3DAnmVtxColorKey*, const J3DAnmVtxColorKeyData*) {
-    /* Nonmatching */
-}
-
-/* 80300DC4-80300E20       .text __dt__20J3DAnmVisibilityFullFv */
-J3DAnmVisibilityFull::~J3DAnmVisibilityFull() {
-    /* Nonmatching */
-}
-
-/* 80300E20-80300EA8       .text __dt__15J3DAnmTevRegKeyFv */
-J3DAnmTevRegKey::~J3DAnmTevRegKey() {
-    /* Nonmatching */
-}
-
-/* 80300EA8-80300EF0       .text __dt__12J3DAnmLoaderFv */
-J3DAnmLoader::~J3DAnmLoader() {
-    /* Nonmatching */
-}
-
-/* 80300EF0-80300F08       .text JSUConvertOffsetToPtr<18J3DAnmKRegKeyTable>__FPCvPCv */
-void JSUConvertOffsetToPtr<J3DAnmKRegKeyTable>(const void*, const void*) {
-    /* Nonmatching */
-}
-
-/* 80300F08-80300F20       .text JSUConvertOffsetToPtr<18J3DAnmCRegKeyTable>__FPCvPCv */
-void JSUConvertOffsetToPtr<J3DAnmCRegKeyTable>(const void*, const void*) {
-    /* Nonmatching */
-}
-
-/* 80300F20-80300F38       .text JSUConvertOffsetToPtr<21J3DAnmClusterKeyTable>__FPCvPCv */
-void JSUConvertOffsetToPtr<J3DAnmClusterKeyTable>(const void*, const void*) {
-    /* Nonmatching */
-}
-
-/* 80300F38-80300F50       .text JSUConvertOffsetToPtr<19J3DAnmColorKeyTable>__FPCvPCv */
-void JSUConvertOffsetToPtr<J3DAnmColorKeyTable>(const void*, const void*) {
-    /* Nonmatching */
-}
-
-/* 80300F50-80300F68       .text JSUConvertOffsetToPtr<3Vec>__FPCvPCv */
-void JSUConvertOffsetToPtr<Vec>(const void*, const void*) {
-    /* Nonmatching */
-}
-
-/* 80300F68-80300F80       .text JSUConvertOffsetToPtr<23J3DAnmTransformKeyTable>__FPCvPCv */
-void JSUConvertOffsetToPtr<J3DAnmTransformKeyTable>(const void*, const void*) {
-    /* Nonmatching */
-}
-
-/* 80300F80-80300F98       .text JSUConvertOffsetToPtr<23J3DAnmVtxColorIndexData>__FPCvPCv */
-void JSUConvertOffsetToPtr<J3DAnmVtxColorIndexData>(const void*, const void*) {
-    /* Nonmatching */
-}
-
-/* 80300F98-80300FB0       .text JSUConvertOffsetToPtr<22J3DAnmClusterFullTable>__FPCvPCv */
-void JSUConvertOffsetToPtr<J3DAnmClusterFullTable>(const void*, const void*) {
-    /* Nonmatching */
-}
-
-/* 80300FB0-80300FC8       .text JSUConvertOffsetToPtr<25J3DAnmVisibilityFullTable>__FPCvPCv */
-void JSUConvertOffsetToPtr<J3DAnmVisibilityFullTable>(const void*, const void*) {
-    /* Nonmatching */
-}
-
-/* 80300FC8-80300FE0       .text JSUConvertOffsetToPtr<25J3DAnmTexPatternFullTable>__FPCvPCv */
-void JSUConvertOffsetToPtr<J3DAnmTexPatternFullTable>(const void*, const void*) {
-    /* Nonmatching */
-}
-
-/* 80300FE0-80300FF8       .text JSUConvertOffsetToPtr<20J3DAnmColorFullTable>__FPCvPCv */
-void JSUConvertOffsetToPtr<J3DAnmColorFullTable>(const void*, const void*) {
-    /* Nonmatching */
-}
-
-/* 80300FF8-80301010       .text JSUConvertOffsetToPtr<s>__FPCvPCv */
-void JSUConvertOffsetToPtr<short>(const void*, const void*) {
-    /* Nonmatching */
-}
-
-/* 80301010-80301028       .text JSUConvertOffsetToPtr<24J3DAnmTransformFullTable>__FPCvPCv */
-void JSUConvertOffsetToPtr<J3DAnmTransformFullTable>(const void*, const void*) {
     /* Nonmatching */
 }

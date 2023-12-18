@@ -1,9 +1,11 @@
 #ifndef J3DMATERIALFACTORY_V21_H
 #define J3DMATERIALFACTORY_V21_H
 
-#include "dolphin/types.h"
+#include "dolphin/gx/GXEnum.h"
+#include "dolphin/gx/GXStruct.h"
 
 class J3DMaterial;
+struct J3DMaterialBlock_v21;
 class J3DMaterialInitData_v21;
 class J3DIndInitData;
 class J3DColorChanInfo;

@@ -3,21 +3,21 @@
 // Translation Unit: d_flower.cpp
 //
 
-#include "d_flower.h"
+#include "d/d_flower.h"
 #include "dolphin/types.h"
 
 /* 800BFA9C-800BFD28       .text WorkCo__14dFlower_data_cFP10fopAc_ac_cUli */
-void dFlower_data_c::WorkCo(fopAc_ac_c*, unsigned long, int) {
+void dFlower_data_c::WorkCo(fopAc_ac_c*, u32, int) {
     /* Nonmatching */
 }
 
 /* 800BFD28-800C0018       .text WorkAt_NoCutAnim__14dFlower_data_cFP10fopAc_ac_cUliP15dCcMassS_HitInfP8cCcD_Obj */
-void dFlower_data_c::WorkAt_NoCutAnim(fopAc_ac_c*, unsigned long, int, dCcMassS_HitInf*, cCcD_Obj*) {
+void dFlower_data_c::WorkAt_NoCutAnim(fopAc_ac_c*, u32, int, dCcMassS_HitInf*, cCcD_Obj*) {
     /* Nonmatching */
 }
 
 /* 800C0018-800C0270       .text WorkAt__14dFlower_data_cFP10fopAc_ac_cUliP15dCcMassS_HitInf */
-void dFlower_data_c::WorkAt(fopAc_ac_c*, unsigned long, int, dCcMassS_HitInf*) {
+void dFlower_data_c::WorkAt(fopAc_ac_c*, u32, int, dCcMassS_HitInf*) {
     /* Nonmatching */
 }
 
@@ -77,12 +77,12 @@ void dFlower_packet_c::update() {
 }
 
 /* 800C0EF4-800C10D4       .text setData__16dFlower_packet_cFP14dFlower_data_ciScR4cXyziSc */
-void dFlower_packet_c::setData(dFlower_data_c*, int, signed char, cXyz&, int, signed char) {
+void dFlower_packet_c::setData(dFlower_data_c*, int, s8, cXyz&, int, s8) {
     /* Nonmatching */
 }
 
 /* 800C10D4-800C121C       .text newData__16dFlower_packet_cFScR4cXyziSc */
-void dFlower_packet_c::newData(signed char, cXyz&, int, signed char) {
+void dFlower_packet_c::newData(s8, cXyz&, int, s8) {
     /* Nonmatching */
 }
 
@@ -92,7 +92,6 @@ void dFlower_packet_c::newAnm() {
 }
 
 /* 800C1264-800C1288       .text setAnm__16dFlower_packet_cFis */
-void dFlower_packet_c::setAnm(int, short) {
+void dFlower_packet_c::setAnm(int, s16) {
     /* Nonmatching */
 }
-

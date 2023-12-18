@@ -3,8 +3,7 @@
 // Translation Unit: d_salvage.cpp
 //
 
-#include "d_salvage.h"
-#include "dolphin/types.h"
+#include "d/d_salvage.h"
 
 /* 800CC734-800CC76C       .text init__18dSalvage_control_cFv */
 void dSalvage_control_c::init() {
@@ -22,7 +21,7 @@ void dSalvage_control_c::entry(fopAc_ac_c*, JPABaseEmitter*) {
 }
 
 /* 800CCB70-800CCBC4       .text init_room__18dSalvage_control_cFSc */
-void dSalvage_control_c::init_room(signed char) {
+void dSalvage_control_c::init_room(s8) {
     /* Nonmatching */
 }
 
@@ -127,17 +126,17 @@ void dSalvage_control_c::setPos(int, cXyz) {
 }
 
 /* 800CCF1C-800CCF34       .text setFlag__18dSalvage_control_cFiUc */
-void dSalvage_control_c::setFlag(int, unsigned char) {
+void dSalvage_control_c::setFlag(int, u8) {
     /* Nonmatching */
 }
 
 /* 800CCF34-800CCF4C       .text clrFlag__18dSalvage_control_cFiUc */
-void dSalvage_control_c::clrFlag(int, unsigned char) {
+void dSalvage_control_c::clrFlag(int, u8) {
     /* Nonmatching */
 }
 
 /* 800CCF4C-800CCF5C       .text setNowAlpha__18dSalvage_control_cFiUc */
-void dSalvage_control_c::setNowAlpha(int, unsigned char) {
+void dSalvage_control_c::setNowAlpha(int, u8) {
     /* Nonmatching */
 }
 
@@ -145,4 +144,3 @@ void dSalvage_control_c::setNowAlpha(int, unsigned char) {
 void dSalvage_control_c::setDrawMode(int, int) {
     /* Nonmatching */
 }
-

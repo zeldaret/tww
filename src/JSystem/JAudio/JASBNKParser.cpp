@@ -3,11 +3,11 @@
 // Translation Unit: JASBNKParser.cpp
 //
 
-#include "JASBNKParser.h"
+#include "JSystem/JAudio/JASBNKParser.h"
 #include "dolphin/types.h"
 
 /* 802870F0-802879A0       .text createBasicBank__Q28JASystem9BNKParserFPv */
-void JASystem::BNKParser::createBasicBank(void*) {
+JASystem::TBasicBank* JASystem::BNKParser::createBasicBank(void*) {
     /* Nonmatching */
 }
 
@@ -17,52 +17,6 @@ void JASystem::BNKParser::findOscPtr(JASystem::TBasicBank*, JASystem::BNKParser:
 }
 
 /* 80287AEC-80287B00       .text getOscTableEndPtr__Q28JASystem9BNKParserFPs */
-void JASystem::BNKParser::getOscTableEndPtr(short*) {
+void JASystem::BNKParser::getOscTableEndPtr(s16*) {
     /* Nonmatching */
 }
-
-/* 80287B00-80287B18       .text JSUConvertOffsetToPtr<Q38JASystem9BNKParser5TPmap>__FPCvUl */
-void JSUConvertOffsetToPtr<JASystem::BNKParser::TPmap>(const void*, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 80287B18-80287B30       .text JSUConvertOffsetToPtr<Q38JASystem9BNKParser5TPerc>__FPCvUl */
-void JSUConvertOffsetToPtr<JASystem::BNKParser::TPerc>(const void*, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 80287B30-80287B48       .text JSUConvertOffsetToPtr<Q38JASystem9BNKParser5TVmap>__FPCvUl */
-void JSUConvertOffsetToPtr<JASystem::BNKParser::TVmap>(const void*, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 80287B48-80287B60       .text JSUConvertOffsetToPtr<Q38JASystem9BNKParser7TKeymap>__FPCvUl */
-void JSUConvertOffsetToPtr<JASystem::BNKParser::TKeymap>(const void*, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 80287B60-80287B78       .text JSUConvertOffsetToPtr<Q38JASystem9BNKParser6TSense>__FPCvUl */
-void JSUConvertOffsetToPtr<JASystem::BNKParser::TSense>(const void*, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 80287B78-80287B90       .text JSUConvertOffsetToPtr<Q38JASystem9BNKParser5TRand>__FPCvUl */
-void JSUConvertOffsetToPtr<JASystem::BNKParser::TRand>(const void*, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 80287B90-80287BA8       .text JSUConvertOffsetToPtr<s>__FPCvUl */
-void JSUConvertOffsetToPtr<short>(const void*, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 80287BA8-80287BC0       .text JSUConvertOffsetToPtr<Q38JASystem9BNKParser4TOsc>__FPCvUl */
-void JSUConvertOffsetToPtr<JASystem::BNKParser::TOsc>(const void*, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 80287BC0-80287BD8       .text JSUConvertOffsetToPtr<Q38JASystem9BNKParser5TInst>__FPCvUl */
-void JSUConvertOffsetToPtr<JASystem::BNKParser::TInst>(const void*, unsigned long) {
-    /* Nonmatching */
-}
-
