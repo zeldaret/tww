@@ -8,7 +8,6 @@
 #include "f_pc/f_pc_manager.h"
 #include "f_op/f_op_msg.h"
 #include "f_op/f_op_draw_tag.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JAZelAudio/JAIZelBasic.h"

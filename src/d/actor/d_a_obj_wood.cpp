@@ -7,7 +7,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "f_op/f_op_actor_mng.h"
-#include "JSystem/JKernel/JKRHeap.h"
 
 s32 daObjWood::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);

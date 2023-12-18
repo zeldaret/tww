@@ -7,7 +7,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "f_op/f_op_actor_mng.h"
-#include "JSystem/JKernel/JKRHeap.h"
 
 /* 00000078-0000007C       .text wether_tag_move__FP13kytag01_class */
 void wether_tag_move(kytag01_class* i_this) {

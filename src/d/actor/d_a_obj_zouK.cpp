@@ -11,7 +11,6 @@
 #include "d/d_kankyo_rain.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_mtx.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
 namespace daObjZouk {

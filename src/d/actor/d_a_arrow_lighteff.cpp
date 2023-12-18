@@ -11,7 +11,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_graphic.h"
 #include "SSystem/SComponent/c_lib.h"
-#include "JSystem/JKernel/JKRHeap.h"
 
 /* 00000078-00000108       .text setTopPos__18daArrow_Lighteff_cFv */
 void daArrow_Lighteff_c::setTopPos() {
@@ -424,4 +423,3 @@ actor_process_profile_definition g_profile_ARROW_LIGHTEFF = {
     fopAc_ACTOR_e,
     fopAc_CULLBOX_CUSTOM_e,
 };
-

@@ -5,7 +5,6 @@
 
 #include "d/actor/d_a_kaji.h"
 #include "f_op/f_op_actor_mng.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"

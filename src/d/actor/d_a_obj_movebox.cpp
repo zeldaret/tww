@@ -15,7 +15,6 @@ u8 dummy5[0x4C];
 #include "d/actor/d_a_obj_movebox.h"
 #include "d/d_cc_d.h"
 #include "d/d_procname.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"

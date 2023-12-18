@@ -4,7 +4,6 @@
 //
 
 #include "d/actor/d_a_ghostship.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "SSystem/SComponent/c_math.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_procname.h"

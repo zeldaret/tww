@@ -4,7 +4,6 @@
 //
 
 #include "d/actor/d_a_kytag05.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JAZelAudio/JAIZelBasic.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_player_main.h"

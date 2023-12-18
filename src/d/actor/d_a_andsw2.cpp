@@ -5,7 +5,6 @@
 
 #include "d/actor/d_a_andsw2.h"
 #include "f_op/f_op_actor_mng.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "dolphin/types.h"

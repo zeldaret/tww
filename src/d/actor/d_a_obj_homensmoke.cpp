@@ -6,7 +6,6 @@
 #include "d/actor/d_a_obj_homensmoke.h"
 #include "d/d_procname.h"
 #include "d/d_particle.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
 

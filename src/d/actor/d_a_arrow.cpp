@@ -4,7 +4,6 @@
 //
 
 #include "d/actor/d_a_arrow.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"

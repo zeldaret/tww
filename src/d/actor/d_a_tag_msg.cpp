@@ -3,7 +3,6 @@
 // Translation Unit: d_a_tag_msg.cpp
 //
 #include "d/actor/d_a_tag_msg.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"

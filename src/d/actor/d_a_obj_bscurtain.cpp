@@ -6,7 +6,6 @@
 #include "d/actor/d_a_obj_bscurtain.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JParticle/JPAParticle.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"

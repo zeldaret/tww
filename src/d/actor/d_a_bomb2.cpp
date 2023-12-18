@@ -5,7 +5,6 @@
 
 #include "d/actor/d_a_bomb2.h"
 #include "d/d_procname.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "d/d_kankyo_wether.h"
 #include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
