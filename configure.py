@@ -698,7 +698,7 @@ config.libs = [
             Object(NonMatching, "JSystem/JAudio/JASOscillator.cpp"),
             Object(Matching,    "JSystem/JAudio/JASDriverTables.cpp"),
             Object(Matching,    "JSystem/JAudio/dspproc.c", extra_cflags="-lang c++ -O4 -func_align 32"),
-            Object(NonMatching, "JSystem/JAudio/dsptask.c", extra_cflags="-lang c++ -O4 -func_align 32"),
+            Object(Matching,    "JSystem/JAudio/dsptask.c", extra_cflags="-lang c++ -O4 -func_align 32"),
             Object(Matching,    "JSystem/JAudio/osdsp.c", extra_cflags="-lang c++ -O4 -func_align 32 -str nopool"),
             Object(Matching,    "JSystem/JAudio/osdsp_task.c", extra_cflags="-lang c++ -O4 -func_align 32"),
             Object(NonMatching, "JSystem/JAudio/JAIAnimation.cpp"),

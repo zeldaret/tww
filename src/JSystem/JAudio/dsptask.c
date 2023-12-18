@@ -7,11 +7,10 @@
 #include "JSystem/JAudio/osdsp.h"
 #include "JSystem/JAudio/osdsp_task.h"
 #include "dolphin/dsp.h"
-#include "dolphin/types.h"
+#include "global.h"
 
 /* 8028E860-8028E898       .text DspHandShake__FPv */
 void DspHandShake(void*) {
-    /* Nonmatching */
     while (DSPCheckMailFromDSP() == 0) {}
     DSPReadMailFromDSP();
     DSPCheckMailFromDSP();
@@ -487,13 +486,12 @@ static u8 jdsp[] = {
     0x80, 0x01, 0x02, 0xBF, 0x00, 0xEB, 0x02, 0xDF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-static STRUCT_DSP_TASK audio_task;
+static DSPTaskInfo audio_task ALIGN_DECL(32);
 
-static u8 AUDIO_YIELD_BUFFER[8192];
+static u8 AUDIO_YIELD_BUFFER[8192] ALIGN_DECL(32);
 
 /* 8028E8A0-8028E94C       .text DspBoot__FPFPv_v */
 void DspBoot(void (*param_1)(void*)) {
-    /* Nonmatching */
     DspInitWork();
     audio_task.priority = 0xf0;
     audio_task.iram_mmem_addr = (u16*)(jdsp + 0x80000000);
@@ -514,10 +512,9 @@ void DspBoot(void (*param_1)(void*)) {
 
 /* 8028E960-8028EA48       .text DSPSendCommands2__FPUlUlPFUs_v */
 int DSPSendCommands2(u32* param_1, u32 param_2, void (*callBack)(u16)) {
-    /* Nonmatching */
-    s32 startWorkStatus;
-    BOOL interruptFlag;
     s32 i;
+    BOOL interruptFlag;
+    s32 startWorkStatus;
 
     while (Dsp_Running_Check() == 0) {};
 

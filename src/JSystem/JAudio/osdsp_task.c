@@ -15,7 +15,6 @@ DSPTaskInfo* DSP_prior_task;
 
 /* 8028ECA0-8028EFA4       .text __DSPHandler */
 void __DSPHandler(int interrupt, OSContext* context) {
-    /* Nonmatching */
     OSContext funcContext;
     __DSPRegs[5] = ((u16)(__DSPRegs[5]) & ~0x28) | 0x80;
     OSClearContext(&funcContext);
@@ -129,9 +128,8 @@ void Dsp_Update_Request() {
 }
 
 /* 8028F060-8028F074       .text Dsp_Running_Check__Fv */
-bool Dsp_Running_Check() {
-    /* Nonmatching */
-    return DSP_prior_yield == 1;
+BOOL Dsp_Running_Check() {
+    return DSP_prior_yield == 1 ? TRUE : FALSE;
 }
 
 /* 8028F080-8028F08C       .text Dsp_Running_Start__Fv */

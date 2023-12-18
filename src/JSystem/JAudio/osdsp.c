@@ -9,7 +9,6 @@
 
 /* 8028EB80-8028EC04       .text DSPAddTask */
 DSPTaskInfo* DSPAddTask(DSPTaskInfo* task) {
-    /* Nonmatching */
     if (DSP_prior_task == NULL) {
         OSReport("Prior Task is not inited\n");
         return NULL;
@@ -23,8 +22,7 @@ DSPTaskInfo* DSPAddTask(DSPTaskInfo* task) {
 }
 
 /* 8028EC20-8028EC9C       .text DSPAddPriorTask__FP15STRUCT_DSP_TASK */
-void DSPAddPriorTask(STRUCT_DSP_TASK* task) {
-    /* Nonmatching */
+void DSPAddPriorTask(DSPTaskInfo* task) {
     if (DSP_prior_task != NULL) {
         OSReport("Already inited prior DSP task\n");
         return;
