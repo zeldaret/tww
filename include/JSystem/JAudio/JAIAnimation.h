@@ -20,17 +20,17 @@ struct JAIAnimeSound__Slot {
 class JAIAnimeSound {
 public:
     /* 0x00 */ JAIAnimeSound__Slot mSlots[8];
-    /* 0x60 */ u32 m60;
-    /* 0x64 */ u32 m64;
-    /* 0x68 */ u32 m68;
-    /* 0x6C */ u32 m6C;
-    /* 0x70 */ void* m70[2];
+    /* 0x60 */ u32 field_0x60;
+    /* 0x64 */ u32 field_0x64;
+    /* 0x68 */ u32 field_0x68;
+    /* 0x6C */ u32 field_0x6c;
+    /* 0x70 */ void* field_0x70[2];
     /* 0x78 */ int mDataCounterInc;
     /* 0x7C */ int mDataCounterLimit;
     /* 0x80 */ u32 mDataCounter;
     /* 0x84 */ int mLoopCount;
     /* 0x88 */ f32 mCurrentTime;
-    /* 0x8C */ u8 m8C[0x90 - 0x8C];
+    /* 0x8C */ u8 field_0x8c[0x90 - 0x8C];
     /* 0x90 */ u16* mpData;
     /* 0x94 */ /* vtable */
 

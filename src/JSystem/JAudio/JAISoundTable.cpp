@@ -4,24 +4,40 @@
 //
 
 #include "JSystem/JAudio/JAISoundTable.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JAIBasic.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+
+u8 JAInter::SoundTable::mVersion;
+u8 JAInter::SoundTable::mCategotyMax;
+s16* JAInter::SoundTable::mSoundMax;
+u32 JAInter::SoundTable::mDatasize;
+int* JAInter::SoundTable::mPointerCategory;
+u8* JAInter::SoundTable::mAddress;
 
 /* 8029B570-8029B6FC       .text init__Q27JAInter10SoundTableFPUcUl */
-void JAInter::SoundTable::init(unsigned char*, unsigned long) {
+void JAInter::SoundTable::init(u8* param_1, u32 param_2) {
     /* Nonmatching */
+    mAddress = param_1;
+    mDatasize = param_2;
+    mVersion = param_1[3];
+    mSoundMax = new (JAIBasic::getCurrentJAIHeap(), 4) s16[18];
+    mPointerCategory = new (JAIBasic::getCurrentJAIHeap(), 4) int[18];
+    for (int i = 0; i < 18; i++) {
+        // TODO
+    }
 }
 
 /* 8029B6FC-8029B8CC       .text getInfoPointer__Q27JAInter10SoundTableFUl */
-void JAInter::SoundTable::getInfoPointer(unsigned long) {
+void JAInter::SoundTable::getInfoPointer(u32) {
     /* Nonmatching */
 }
 
 /* 8029B8CC-8029B99C       .text getInfoFormat__Q27JAInter10SoundTableFUl */
-void JAInter::SoundTable::getInfoFormat(unsigned long) {
+void JAInter::SoundTable::getInfoFormat(u32) {
     /* Nonmatching */
 }
 
 /* 8029B99C-8029B9A4       .text getCategotyMax__Q27JAInter10SoundTableFv */
-void JAInter::SoundTable::getCategotyMax() {
-    /* Nonmatching */
+u8 JAInter::SoundTable::getCategotyMax() {
+    return mCategotyMax;
 }

@@ -4,344 +4,425 @@
 //
 
 #include "JSystem/JAudio/JAIGlobalParameter.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JAIBasic.h"
+#include "JSystem/JAudio/JAIInitData.h"
+#include "JSystem/JAudio/JAISoundTable.h"
+#include "JSystem/JAudio/JAIStreamMgr.h"
+#include "JSystem/JAudio/JASDriverIF.h"
 
 /* 802920EC-80292100       .text setParamInitDataPointer__18JAIGlobalParameterFPv */
-void JAIGlobalParameter::setParamInitDataPointer(void*) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamInitDataPointer(void* value) {
+    JAInter::InitData::aafPointer = (u32*)value;
+    JAIBasic::msBasic->initLoadFileSw = 4;
 }
 
 /* 80292100-80292108       .text setParamInterfaceHeapSize__18JAIGlobalParameterFUl */
-void JAIGlobalParameter::setParamInterfaceHeapSize(unsigned long) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamInterfaceHeapSize(u32 value) {
+    interfaceHeapSize = value;
 }
 
 /* 80292108-80292110       .text setParamSoundSceneMax__18JAIGlobalParameterFUl */
-void JAIGlobalParameter::setParamSoundSceneMax(unsigned long) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamSoundSceneMax(u32 value) {
+    soundSceneMax = value;
 }
 
 /* 80292110-80292118       .text setParamSeRegistMax__18JAIGlobalParameterFUl */
-void JAIGlobalParameter::setParamSeRegistMax(unsigned long) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamSeRegistMax(u32 value) {
+    seRegistMax = value;
 }
 
 /* 80292118-80292120       .text setParamSeTrackMax__18JAIGlobalParameterFUl */
-void JAIGlobalParameter::setParamSeTrackMax(unsigned long) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamSeTrackMax(u32 value) {
+    seTrackMax = value;
 }
 
 /* 80292120-80292130       .text setParamSeqPlayTrackMax__18JAIGlobalParameterFUl */
-void JAIGlobalParameter::setParamSeqPlayTrackMax(unsigned long) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamSeqPlayTrackMax(u32 value) {
+    seqPlayTrackMax = value;
+    seqControlBufferMax = value << 1;
 }
 
 /* 80292130-80292138       .text setParamSeqControlBufferMax__18JAIGlobalParameterFUl */
-void JAIGlobalParameter::setParamSeqControlBufferMax(unsigned long) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamSeqControlBufferMax(u32 value) {
+    seqControlBufferMax = value;
 }
 
 /* 80292138-80292140       .text setParamStreamControlBufferMax__18JAIGlobalParameterFUl */
-void JAIGlobalParameter::setParamStreamControlBufferMax(unsigned long) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamStreamControlBufferMax(u32 value) {
+    streamControlBufferMax = value;
 }
 
 /* 80292140-80292148       .text setParamAutoHeapMax__18JAIGlobalParameterFUl */
-void JAIGlobalParameter::setParamAutoHeapMax(unsigned long) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamAutoHeapMax(u32 value) {
+    autoHeapMax = value;
 }
 
 /* 80292148-80292150       .text setParamStayHeapMax__18JAIGlobalParameterFUl */
-void JAIGlobalParameter::setParamStayHeapMax(unsigned long) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamStayHeapMax(u32 value) {
+    stayHeapMax = value;
 }
 
 /* 80292150-80292158       .text setParamInputGainDown__18JAIGlobalParameterFf */
-void JAIGlobalParameter::setParamInputGainDown(float) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamInputGainDown(f32 value) {
+    inputGainDown = value;
 }
 
 /* 80292158-80292160       .text setParamOutputGainUp__18JAIGlobalParameterFf */
-void JAIGlobalParameter::setParamOutputGainUp(float) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamOutputGainUp(f32 value) {
+    outputGainUp = value;
 }
 
 /* 80292160-80292168       .text setParamDistanceMax__18JAIGlobalParameterFf */
-void JAIGlobalParameter::setParamDistanceMax(float) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamDistanceMax(f32 value) {
+    distanceMax = value;
 }
 
 /* 80292168-80292170       .text setParamMaxVolumeDistance__18JAIGlobalParameterFf */
-void JAIGlobalParameter::setParamMaxVolumeDistance(float) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamMaxVolumeDistance(f32 value) {
+    maxVolumeDistance = value;
 }
 
 /* 80292170-80292178       .text setParamMinDistanceVolume__18JAIGlobalParameterFf */
-void JAIGlobalParameter::setParamMinDistanceVolume(float) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamMinDistanceVolume(f32 value) {
+    minDistanceVolume = value;
 }
 
 /* 80292178-80292180       .text setParamSeDistanceFxParameter__18JAIGlobalParameterFUs */
-void JAIGlobalParameter::setParamSeDistanceFxParameter(unsigned short) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamSeDistanceFxParameter(u16 value) {
+    seDistanceFxParameter = value;
 }
 
 /* 80292180-802921A0       .text setParamStreamDecodedBufferBlocks__18JAIGlobalParameterFUl */
-void JAIGlobalParameter::setParamStreamDecodedBufferBlocks(unsigned long) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamStreamDecodedBufferBlocks(u32 value) {
+    JAInter::StreamLib::setDecodedBufferBlocks(value);
 }
 
 /* 802921A0-802921B8       .text setParamStreamInsideBufferCut__18JAIGlobalParameterFb */
-void JAIGlobalParameter::setParamStreamInsideBufferCut(bool) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamStreamInsideBufferCut(bool value) {
+    JAIBasic::msBasic->field_0xe.flag5 = value;
 }
 
 /* 802921B8-802921C0       .text setParamAutoHeapRoomSize__18JAIGlobalParameterFUl */
-void JAIGlobalParameter::setParamAutoHeapRoomSize(unsigned long) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamAutoHeapRoomSize(u32 value) {
+    autoHeapRoomSize = value;
 }
 
 /* 802921C0-802921C8       .text setParamStayHeapSize__18JAIGlobalParameterFUl */
-void JAIGlobalParameter::setParamStayHeapSize(unsigned long) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamStayHeapSize(u32 value) {
+    stayHeapSize = value;
 }
 
 /* 802921C8-802921F4       .text setParamSeDolbyCenterValue__18JAIGlobalParameterFUc */
-void JAIGlobalParameter::setParamSeDolbyCenterValue(unsigned char) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamSeDolbyCenterValue(u8 value) {
+    seDolbyCenterValue = value;
 }
 
 /* 802921F4-802921FC       .text setParamSeDolbyFrontDistanceMax__18JAIGlobalParameterFf */
-void JAIGlobalParameter::setParamSeDolbyFrontDistanceMax(float) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamSeDolbyFrontDistanceMax(f32 value) {
+    seDolbyFrontDistanceMax = value;
 }
 
 /* 802921FC-80292204       .text setParamSeDolbyBehindDistanceMax__18JAIGlobalParameterFf */
-void JAIGlobalParameter::setParamSeDolbyBehindDistanceMax(float) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamSeDolbyBehindDistanceMax(f32 value) {
+    seDolbyBehindDistanceMax = value;
 }
 
 /* 80292204-8029220C       .text setParamInitDataFileName__18JAIGlobalParameterFPc */
-void JAIGlobalParameter::setParamInitDataFileName(char*) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamInitDataFileName(char* value) {
+    initDataFileName = value;
 }
 
 /* 8029220C-80292214       .text setParamWavePath__18JAIGlobalParameterFPc */
-void JAIGlobalParameter::setParamWavePath(char*) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamWavePath(char* value) {
+    wavePath = value;
 }
 
 /* 80292214-8029221C       .text setParamSequenceArchivesPath__18JAIGlobalParameterFPc */
-void JAIGlobalParameter::setParamSequenceArchivesPath(char*) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamSequenceArchivesPath(char* value) {
+    sequenceArchivesPath = value;
 }
 
 /* 8029221C-80292224       .text setParamStreamPath__18JAIGlobalParameterFPc */
-void JAIGlobalParameter::setParamStreamPath(char*) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamStreamPath(char* value) {
+    streamPath = value;
 }
 
 /* 80292224-8029222C       .text setParamAudioResPath__18JAIGlobalParameterFPc */
-void JAIGlobalParameter::setParamAudioResPath(char*) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamAudioResPath(char* value) {
+    audioResPath = value;
 }
 
 /* 8029222C-80292234       .text setParamSequenceArchivesFileName__18JAIGlobalParameterFPc */
-void JAIGlobalParameter::setParamSequenceArchivesFileName(char*) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamSequenceArchivesFileName(char* value) {
+    sequenceArchivesFileName = value;
 }
 
 /* 80292234-8029223C       .text setParamDummyObjectLifeTime__18JAIGlobalParameterFUl */
-void JAIGlobalParameter::setParamDummyObjectLifeTime(unsigned long) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamDummyObjectLifeTime(u32 value) {
+    dummyObjectLifeTime = value;
 }
 
 /* 8029223C-80292244       .text setParamDummyObjectMax__18JAIGlobalParameterFUl */
-void JAIGlobalParameter::setParamDummyObjectMax(unsigned long) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamDummyObjectMax(u32 value) {
+    dummyObjectMax = value;
 }
 
 /* 80292244-8029224C       .text setParamAudioCameraMax__18JAIGlobalParameterFUl */
-void JAIGlobalParameter::setParamAudioCameraMax(unsigned long) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamAudioCameraMax(u32 value) {
+    audioCameraMax = value;
 }
 
 /* 8029224C-80292254       .text setParamSystemTrackMax__18JAIGlobalParameterFl */
-void JAIGlobalParameter::setParamSystemTrackMax(long) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamSystemTrackMax(s32 value) {
+    systemTrackMax = value;
 }
 
 /* 80292254-80292334       .text setParamSoundOutputMode__18JAIGlobalParameterFUl */
-void JAIGlobalParameter::setParamSoundOutputMode(unsigned long) {
-    /* Nonmatching */
+void JAIGlobalParameter::setParamSoundOutputMode(u32 value) {
+    int r31 = 1;
+    int r30 = 0;
+    switch (value) {
+    case 0:
+        r31 = 0;
+        r30 = 0;
+        break;
+    case 1:
+        r31 = 1;
+        r30 = 1;
+        break;
+    case 2:
+        r31 = 2;
+        r30 = 1;
+        break;
+    default:
+        JUT_ASSERT_MSG(345, 0, "JAIGlobalParameter::setParamSoundOutputMode 出力モードが不正です。\n");
+        break;
+    }
+    JAIBasic::msBasic->field_0xd = value;
+    JASystem::Driver::setOutputMode(r31);
+    JAInter::StreamLib::setOutputMode(r30);
 }
 
 /* 80292334-80292358       .text getParamSeCategoryMax__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamSeCategoryMax() {
-    /* Nonmatching */
+int JAIGlobalParameter::getParamSeCategoryMax() {
+    return JAInter::SoundTable::getCategotyMax();
 }
 
 /* 80292358-80292360       .text getParamSoundSceneMax__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamSoundSceneMax() {
-    /* Nonmatching */
+u32 JAIGlobalParameter::getParamSoundSceneMax() {
+    return soundSceneMax;
 }
 
 /* 80292360-80292368       .text getParamSeRegistMax__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamSeRegistMax() {
-    /* Nonmatching */
+u32 JAIGlobalParameter::getParamSeRegistMax() {
+    return seRegistMax;
 }
 
 /* 80292368-80292370       .text getParamSeTrackMax__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamSeTrackMax() {
-    /* Nonmatching */
+u32 JAIGlobalParameter::getParamSeTrackMax() {
+    return seTrackMax;
 }
 
 /* 80292370-80292378       .text getParamSeqTrackMax__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamSeqTrackMax() {
-    /* Nonmatching */
+u32 JAIGlobalParameter::getParamSeqTrackMax() {
+    return seqTrackMax;
 }
 
 /* 80292378-80292380       .text getParamSeqControlBufferMax__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamSeqControlBufferMax() {
-    /* Nonmatching */
+u32 JAIGlobalParameter::getParamSeqControlBufferMax() {
+    return seqControlBufferMax;
 }
 
 /* 80292380-80292388       .text getParamStreamControlBufferMax__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamStreamControlBufferMax() {
-    /* Nonmatching */
+u32 JAIGlobalParameter::getParamStreamControlBufferMax() {
+    return streamControlBufferMax;
 }
 
 /* 80292388-80292390       .text getParamStreamParameterBufferMax__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamStreamParameterBufferMax() {
-    /* Nonmatching */
+u32 JAIGlobalParameter::getParamStreamParameterBufferMax() {
+    return streamParameterBufferMax;
 }
 
 /* 80292390-80292398       .text getParamAutoHeapMax__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamAutoHeapMax() {
-    /* Nonmatching */
+u32 JAIGlobalParameter::getParamAutoHeapMax() {
+    return autoHeapMax;
 }
 
 /* 80292398-802923A0       .text getParamStayHeapMax__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamStayHeapMax() {
-    /* Nonmatching */
+u32 JAIGlobalParameter::getParamStayHeapMax() {
+    return stayHeapMax;
 }
 
 /* 802923A0-802923A8       .text getParamSeqPlayTrackMax__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamSeqPlayTrackMax() {
-    /* Nonmatching */
+u32 JAIGlobalParameter::getParamSeqPlayTrackMax() {
+    return seqPlayTrackMax;
 }
 
 /* 802923A8-802923B0       .text getParamDistanceMax__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamDistanceMax() {
-    /* Nonmatching */
+f32 JAIGlobalParameter::getParamDistanceMax() {
+    return distanceMax;
 }
 
 /* 802923B0-802923B8       .text getParamMaxVolumeDistance__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamMaxVolumeDistance() {
-    /* Nonmatching */
+f32 JAIGlobalParameter::getParamMaxVolumeDistance() {
+    return maxVolumeDistance;
 }
 
 /* 802923B8-802923C0       .text getParamMinDistanceVolume__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamMinDistanceVolume() {
-    /* Nonmatching */
+f32 JAIGlobalParameter::getParamMinDistanceVolume() {
+    return minDistanceVolume;
 }
 
 /* 802923C0-802923C8       .text getParamAutoHeapRoomSize__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamAutoHeapRoomSize() {
-    /* Nonmatching */
+u32 JAIGlobalParameter::getParamAutoHeapRoomSize() {
+    return autoHeapRoomSize;
 }
 
 /* 802923C8-802923D0       .text getParamStayHeapSize__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamStayHeapSize() {
-    /* Nonmatching */
+u32 JAIGlobalParameter::getParamStayHeapSize() {
+    return stayHeapSize;
 }
 
 /* 802923D0-802923D8       .text getParamSeDolbyCenterValue__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamSeDolbyCenterValue() {
-    /* Nonmatching */
+f32 JAIGlobalParameter::getParamSeDolbyCenterValue() {
+    return seDolbyCenterValue;
 }
 
 /* 802923D8-802923E0       .text getParamSeDolbyFrontDistanceMax__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamSeDolbyFrontDistanceMax() {
-    /* Nonmatching */
+f32 JAIGlobalParameter::getParamSeDolbyFrontDistanceMax() {
+    return seDolbyFrontDistanceMax;
 }
 
 /* 802923E0-802923E8       .text getParamSeDolbyBehindDistanceMax__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamSeDolbyBehindDistanceMax() {
-    /* Nonmatching */
+f32 JAIGlobalParameter::getParamSeDolbyBehindDistanceMax() {
+    return seDolbyBehindDistanceMax;
 }
 
 /* 802923E8-802923F0       .text getParamInitDataFileName__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamInitDataFileName() {
-    /* Nonmatching */
+char* JAIGlobalParameter::getParamInitDataFileName() {
+    return initDataFileName;
 }
 
 /* 802923F0-802923F8       .text getParamWavePath__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamWavePath() {
-    /* Nonmatching */
+char* JAIGlobalParameter::getParamWavePath() {
+    return wavePath;
 }
 
 /* 802923F8-80292400       .text getParamSequenceArchivesPath__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamSequenceArchivesPath() {
-    /* Nonmatching */
+char* JAIGlobalParameter::getParamSequenceArchivesPath() {
+    return sequenceArchivesPath;
 }
 
 /* 80292400-80292408       .text getParamStreamPath__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamStreamPath() {
-    /* Nonmatching */
+char* JAIGlobalParameter::getParamStreamPath() {
+    return streamPath;
 }
 
 /* 80292408-80292410       .text getParamAudioResPath__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamAudioResPath() {
-    /* Nonmatching */
+char* JAIGlobalParameter::getParamAudioResPath() {
+    return audioResPath;
 }
 
 /* 80292410-80292418       .text getParamSequenceArchivesFileName__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamSequenceArchivesFileName() {
-    /* Nonmatching */
+char* JAIGlobalParameter::getParamSequenceArchivesFileName() {
+    return sequenceArchivesFileName;
 }
 
 /* 80292418-80292420       .text getParamDopplarMoveTime__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamDopplarMoveTime() {
-    /* Nonmatching */
+u32 JAIGlobalParameter::getParamDopplarMoveTime() {
+    return dopplarMoveTime;
 }
 
 /* 80292420-80292428       .text getParamDistanceParameterMoveTime__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamDistanceParameterMoveTime() {
-    /* Nonmatching */
+u8 JAIGlobalParameter::getParamDistanceParameterMoveTime() {
+    return distanceParameterMoveTime;
 }
 
 /* 80292428-80292430       .text getParamDummyObjectMax__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamDummyObjectMax() {
-    /* Nonmatching */
+u32 JAIGlobalParameter::getParamDummyObjectMax() {
+    return dummyObjectMax;
 }
 
 /* 80292430-80292438       .text getParamSeqMuteVolumeSePlay__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamSeqMuteVolumeSePlay() {
-    /* Nonmatching */
+u8 JAIGlobalParameter::getParamSeqMuteVolumeSePlay() {
+    return seqMuteVolumeSePlay;
 }
 
 /* 80292438-80292440       .text getParamSeqMuteMoveSpeedSePlay__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamSeqMuteMoveSpeedSePlay() {
-    /* Nonmatching */
+u32 JAIGlobalParameter::getParamSeqMuteMoveSpeedSePlay() {
+    return seqMuteMoveSpeedSePlay;
 }
 
 /* 80292440-80292448       .text getParamAudioCameraMax__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamAudioCameraMax() {
-    /* Nonmatching */
+u32 JAIGlobalParameter::getParamAudioCameraMax() {
+    return audioCameraMax;
 }
 
 /* 80292448-80292450       .text getParamSeqParameterLines__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamSeqParameterLines() {
-    /* Nonmatching */
+u8 JAIGlobalParameter::getParamSeqParameterLines() {
+    return seqParameterLines;
 }
 
 /* 80292450-80292458       .text getParamStreamParameterLines__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamStreamParameterLines() {
-    /* Nonmatching */
+u8 JAIGlobalParameter::getParamStreamParameterLines() {
+    return streamParameterLines;
 }
 
 /* 80292458-80292460       .text getParamSeDistanceWaitMax__18JAIGlobalParameterFv */
-void JAIGlobalParameter::getParamSeDistanceWaitMax() {
-    /* Nonmatching */
+u16 JAIGlobalParameter::getParamSeDistanceWaitMax() {
+    return seDistanceWaitMax;
 }
+
+static void dummy() {
+    OSReport("Seqs/JaiSeInf.bst");
+}
+
+u8 JAIGlobalParameter::distanceParameterMoveTime = 3;
+u8 JAIGlobalParameter::audioSystemThreadPriority = 2;
+u8 JAIGlobalParameter::audioDvdThreadPriority = 3;
+u8 JAIGlobalParameter::seqMuteVolumeSePlay = 0x28;
+u8 JAIGlobalParameter::seqParameterLines = 7;
+u8 JAIGlobalParameter::streamParameterLines = 7;
+u16 JAIGlobalParameter::seDistanceFxParameter = 0x96;
+u32 JAIGlobalParameter::soundSceneMax = 2;
+u32 JAIGlobalParameter::seRegistMax = 0x14;
+u32 JAIGlobalParameter::seTrackMax = 0x20;
+u32 JAIGlobalParameter::seqTrackMax = 0x20;
+u32 JAIGlobalParameter::seqPlayTrackMax = 8;
+u32 JAIGlobalParameter::seqControlBufferMax = 8;
+u32 JAIGlobalParameter::streamControlBufferMax = 2;
+u32 JAIGlobalParameter::streamParameterBufferMax = 2;
+u32 JAIGlobalParameter::autoHeapMax = 2;
+u32 JAIGlobalParameter::stayHeapMax = 2;
+u32 JAIGlobalParameter::autoHeapRoomSize = 0xC000;
+u32 JAIGlobalParameter::stayHeapSize = 0x00010000;
+char* JAIGlobalParameter::initDataFileName = "JaiInit.aaf";
+char* JAIGlobalParameter::wavePath = "Banks/";
+char* JAIGlobalParameter::sequenceArchivesPath = "Seqs/";
+char* JAIGlobalParameter::streamPath = "Stream/";
+char* JAIGlobalParameter::audioResPath = "AudioRes/";
+char* JAIGlobalParameter::sequenceArchivesFileName = "JaiSeqs.arc";
+f32 JAIGlobalParameter::inputGainDown = 0.5f;
+f32 JAIGlobalParameter::outputGainUp = 1.2f;
+f32 JAIGlobalParameter::distanceMax = 5000.0f;
+f32 JAIGlobalParameter::maxVolumeDistance = 1000.0f;
+f32 JAIGlobalParameter::seDolbyCenterValue = 30.f;
+f32 JAIGlobalParameter::seDolbyFrontDistanceMax = -300.0f;
+f32 JAIGlobalParameter::seDolbyBehindDistanceMax = 1000.0f;
+u32 JAIGlobalParameter::dopplarMoveTime = 0x0f;
+u32 JAIGlobalParameter::dummyObjectLifeTime = 0x0258;
+u32 JAIGlobalParameter::dummyObjectMax = 0x0a;
+u32 JAIGlobalParameter::seqMuteMoveSpeedSePlay = 3;
+u32 JAIGlobalParameter::audioCameraMax = 1;
+s32 JAIGlobalParameter::systemTrackMax = 0x0100;
+f32 JAIGlobalParameter::panDistanceMax = 500.0f;
+f32 JAIGlobalParameter::panDistance2Max = 1000.0f;
+f32 JAIGlobalParameter::panAngleParameter = 12.0f;
+f32 JAIGlobalParameter::panAngleParameter2 = 2.4f;
+f32 JAIGlobalParameter::dopplarParameter = 3200.0f;
+u16 JAIGlobalParameter::seDistanceWaitMax = 0xc;
+f32 JAIGlobalParameter::seDistancepitchMax = 0.2f;
+
+u16 JAIGlobalParameter::seDefaultFx;
+u32 JAIGlobalParameter::interfaceHeapSize;
+f32 JAIGlobalParameter::minDistanceVolume;

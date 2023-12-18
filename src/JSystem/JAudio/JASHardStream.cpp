@@ -228,7 +228,7 @@ void JASystem::HardStream::getAddrCallback(s32 param_1, DVDCommandBlock* param_2
     }
 }
 
-float dummy1() {
+static float dummy1() {
     return 0.0f;
 }
 
@@ -278,7 +278,7 @@ u16 JASystem::HardStream::TControl::getLoopNum() {
     return mpList->getPair()->getLoop();
 }
 
-void dummy2() {
+static void dummy2() {
     OSReport(__FILE__);
     OSReport("playPairs != 0");
     OSReport("Halt");

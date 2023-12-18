@@ -78,7 +78,16 @@ namespace daObjTribox {
         void execute_correct();
         BOOL _execute();
         BOOL _draw();
-    
+
+        static void reset();
+
+        static cXyz M_sound_pos;
+        static int M_correct_cnt;
+        static bool M_correct_flag;
+        static int M_b_cont_cnt;
+        static int M_c_cont_cnt;
+        static u8 M_sink_start;
+
     public:
         /* Place member variables here */
     };

@@ -21,6 +21,7 @@
 #include "JSystem/J2DGraph/J2DPicture.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
+#include "JSystem/JAudio/JAIStreamMgr.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/dvd/DVD.h"
 #include "dolphin/gx/GX.h"
@@ -168,13 +169,6 @@ void messageSet(u32 status) {
     delete ppane;
     delete tpane;
     delete spane;
-}
-
-namespace JAInter {
-    class StreamLib {
-    public:
-        static void stop();
-    };
 }
 
 /* 8003E9F0-8003EBD4       .text drawDvdCondition__Fl */

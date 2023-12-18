@@ -16,6 +16,7 @@ namespace JASystem {
         class TPortCmd {
         public:
             TPortCmd();
+            ~TPortCmd() {}
             bool addPortCmdOnce();
             bool setPortCmd(void (*)(TPortArgs*), TPortArgs*);
             bool addPortCmd(TPortHead*);

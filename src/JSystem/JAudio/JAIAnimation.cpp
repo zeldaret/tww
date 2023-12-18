@@ -4,44 +4,62 @@
 //
 
 #include "JSystem/JAudio/JAIAnimation.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JAIBasic.h"
+#include "JSystem/JAudio/JAISound.h"
 
 /* 8028F08C-8028F110       .text __ct__13JAIAnimeSoundFv */
 JAIAnimeSound::JAIAnimeSound() {
-    /* Nonmatching */
+    field_0x60 = 0;
+    field_0x64 = 0;
+    field_0x68 = 0;
+    field_0x6c = 0;
+    for (u8 i = 0; i < 8; i++) {
+        mSlots[i].mpSound = NULL;
+        mSlots[i].mbIsPlaying = false;
+    }
+    for (u8 i = 0; i < 2; i++) {
+        field_0x70[i] = NULL;
+    }
+    mDataCounter = 0;
+    mLoopCount = 0;
 }
 
 /* 8028F110-8028F268       .text initActorAnimSound__13JAIAnimeSoundFPvUlf */
-void JAIAnimeSound::initActorAnimSound(void*, unsigned long, float) {
+void JAIAnimeSound::initActorAnimSound(void*, u32, f32) {
     /* Nonmatching */
 }
 
 /* 8028F268-8028F2A0       .text setAnimSoundVec__13JAIAnimeSoundFP8JAIBasicP3VecffUlUc */
-void JAIAnimeSound::setAnimSoundVec(JAIBasic*, Vec*, float, float, unsigned long, unsigned char) {
+void JAIAnimeSound::setAnimSoundVec(JAIBasic*, Vec*, f32, f32, u32, u8) {
     /* Nonmatching */
 }
 
 /* 8028F2A0-8028F7B8       .text setAnimSoundActor__13JAIAnimeSoundFP8JAIBasicPQ27JAInter5ActorffUc */
-void JAIAnimeSound::setAnimSoundActor(JAIBasic*, JAInter::Actor*, float, float, unsigned char) {
+void JAIAnimeSound::setAnimSoundActor(JAIBasic*, JAInter::Actor*, f32, f32, u8) {
     /* Nonmatching */
 }
 
 /* 8028F7B8-8028FA60       .text playActorAnimSound__13JAIAnimeSoundFP8JAIBasicPQ27JAInter5ActorfUc */
-void JAIAnimeSound::playActorAnimSound(JAIBasic*, JAInter::Actor*, float, unsigned char) {
+void JAIAnimeSound::playActorAnimSound(JAIBasic*, JAInter::Actor*, f32, u8) {
     /* Nonmatching */
 }
 
 /* 8028FA60-8028FA94       .text startAnimSound__13JAIAnimeSoundFPvUlPP8JAISoundPQ27JAInter5ActorUc */
-void JAIAnimeSound::startAnimSound(void*, unsigned long, JAISound**, JAInter::Actor*, unsigned char) {
-    /* Nonmatching */
+void JAIAnimeSound::startAnimSound(void* param_1, u32 param_2, JAISound** param_3, JAInter::Actor* param_4, u8 param_5) {
+    JAIBasic* basic = (JAIBasic*)param_1;
+    basic->startSoundActor(param_2, param_3, param_4, 0, param_5);
 }
 
 /* 8028FA94-8028FBE0       .text setSpeedModifySound__13JAIAnimeSoundFP8JAISoundP22JAIAnimeFrameSoundDataf */
-void JAIAnimeSound::setSpeedModifySound(JAISound*, JAIAnimeFrameSoundData*, float) {
+void JAIAnimeSound::setSpeedModifySound(JAISound*, JAIAnimeFrameSoundData*, f32) {
     /* Nonmatching */
 }
 
 /* 8028FBE0-8028FC48       .text stop__13JAIAnimeSoundFv */
 void JAIAnimeSound::stop() {
-    /* Nonmatching */
+    for (u8 i = 0; i < 8; i++) {
+        if (mSlots[i].mpSound) {
+            mSlots[i].mpSound->stop(0);
+        }
+    }
 }

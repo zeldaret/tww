@@ -4,7 +4,78 @@
 //
 
 #include "JSystem/JAudio/JAIStreamMgr.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASCallback.h"
+#include "JSystem/JAudio/JASDSPInterface.h"
+#include "JSystem/JAudio/JASSystemHeap.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+#include "MSL_C/string.h"
+#include "dolphin/os/OS.h"
+
+s16 JAInter::StreamLib::filter_table[32] = {
+    0x0000, 0x0000, 0x0800, 0x0000, 0x0000, 0x0800, 0x0400, 0x0400,
+    0x1000, -0x800, 0x0E00, -0x600, 0x0C00, -0x400, 0x1200, -0xA00,
+    0x1068, -0x8C8, 0x12C0, -0x8FC, 0x1400, -0xC00, 0x0800, -0x800,
+    0x0400, -0x400, -0x400, 0x0400, -0x400, 0x0000, -0x800, 0x0000,
+};
+s16 JAInter::StreamLib::table4[] = {
+    0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007,
+    -0x008, -0x007, -0x006, -0x005, -0x004, -0x003, -0x002, -0x001,
+
+};
+JAInter::LinkSound JAInter::StreamMgr::streamControl;
+DVDFileInfo JAInter::StreamLib::finfo;
+u32 JAInter::StreamLib::header[8];
+char JAInter::StreamLib::Filename[100];
+JASystem::Kernel::TSolidHeap JAInter::StreamLib::streamHeap;
+u32 JAInter::StreamLib::LOOP_BLOCKS = 12;
+int JAInter::StreamLib::LOOP_SAMPLESIZE = 0xF000;
+int JAInter::StreamLib::outputmode = 1;
+u8 JAInter::StreamMgr::flags;
+int JAInter::StreamMgr::streamUpdate;
+u8* JAInter::StreamMgr::streamList;
+u8* JAInter::StreamMgr::initOnCodeStrm;
+int JAInter::StreamLib::adpcm_remain;
+int JAInter::StreamLib::adpcm_loadpoint;
+int JAInter::StreamLib::loadsize;
+int JAInter::StreamLib::adpcm_buffer;
+int JAInter::StreamLib::loop_buffer;
+int JAInter::StreamLib::store_buffer;
+JASystem::TDSPChannel* JAInter::StreamLib::assign_ch[2];
+int JAInter::StreamLib::playside;
+int JAInter::StreamLib::playback_samples;
+int JAInter::StreamLib::loadup_samples;
+u32 JAInter::StreamLib::adpcmbuf_state;
+int JAInter::StreamLib::movieframe;
+bool JAInter::StreamLib::stopflag;
+bool JAInter::StreamLib::stopflag2;
+u8 JAInter::StreamLib::playflag;
+u8 JAInter::StreamLib::playflag2;
+u8 JAInter::StreamLib::prepareflag;
+u8 JAInter::StreamLib::dspch_deallockflag;
+f32 JAInter::StreamLib::outvolume;
+f32 JAInter::StreamLib::outpitch;
+f32 JAInter::StreamLib::outpan;
+f32 JAInter::StreamLib::stackvolume;
+f32 JAInter::StreamLib::stackpitch;
+f32 JAInter::StreamLib::stackpan;
+u8 JAInter::StreamLib::outflag_volume;
+bool JAInter::StreamLib::outflag_pan;
+bool JAInter::StreamLib::outflag_pitch;
+int JAInter::StreamLib::loop_start_flag;
+int JAInter::StreamLib::outpause;
+int JAInter::StreamLib::playmode;
+int JAInter::StreamLib::shift_sample;
+int JAInter::StreamLib::extra_sample;
+int JAInter::StreamLib::DvdLoadFlag;
+u32 JAInter::StreamLib::startInitFlag;
+int JAInter::StreamLib::Mode;
+int JAInter::StreamLib::sFillBlockSize;
+void* JAInter::StreamLib::Head;
+bool JAInter::StreamLib::bufferMode;
+u8 JAInter::StreamLib::allocFlag;
+u8 JAInter::StreamLib::dspFinishFlag;
+void (*JAInter::StreamLib::allocCallback)();
+void (*JAInter::StreamLib::deallocCallback)();
 
 /* 8029B9A4-8029BEB4       .text init__Q27JAInter9StreamMgrFv */
 void JAInter::StreamMgr::init() {
@@ -12,18 +83,24 @@ void JAInter::StreamMgr::init() {
 }
 
 /* 8029BEB4-8029C04C       .text storeStreamBuffer__Q27JAInter9StreamMgrFPP8JAISoundPQ27JAInter5ActorUlUlUcPv */
-void JAInter::StreamMgr::storeStreamBuffer(JAISound**, JAInter::Actor*, unsigned long, unsigned long, unsigned char, void*) {
+void JAInter::StreamMgr::storeStreamBuffer(JAISound**, JAInter::Actor*, u32, u32, u8, void*) {
     /* Nonmatching */
 }
 
 /* 8029C04C-8029C0F0       .text releaseStreamBuffer__Q27JAInter9StreamMgrFP8JAISoundUl */
-void JAInter::StreamMgr::releaseStreamBuffer(JAISound*, unsigned long) {
+void JAInter::StreamMgr::releaseStreamBuffer(JAISound*, u32) {
     /* Nonmatching */
 }
 
 /* 8029C0F0-8029C128       .text processGFrameStream__Q27JAInter9StreamMgrFv */
 void JAInter::StreamMgr::processGFrameStream() {
     /* Nonmatching */
+    if ((flags >> 6 & 1) == 0) {
+        checkPlayingStream();
+        checkRequestStream();
+        checkWaitStream();
+        checkEntriedStream();
+    }
 }
 
 /* 8029C128-8029C1D8       .text checkEntriedStream__Q27JAInter9StreamMgrFv */
@@ -47,53 +124,63 @@ void JAInter::StreamMgr::checkPlayingStream() {
 }
 
 /* 8029C730-8029C858       .text Play_DirectPCM__Q27JAInter9StreamLibFPQ28JASystem11TDSPChannelPsUsUlsUs */
-void JAInter::StreamLib::Play_DirectPCM(JASystem::TDSPChannel*, short*, unsigned short, unsigned long, short, unsigned short) {
+void JAInter::StreamLib::Play_DirectPCM(JASystem::TDSPChannel*, s16*, u16, u32, s16, u16) {
     /* Nonmatching */
 }
 
 /* 8029C858-8029C864       .text Get_DirectPCM_LoopRemain__Q27JAInter9StreamLibFPQ38JASystem12DSPInterface9DSPBuffer */
-void JAInter::StreamLib::Get_DirectPCM_LoopRemain(JASystem::DSPInterface::DSPBuffer*) {
-    /* Nonmatching */
+int JAInter::StreamLib::Get_DirectPCM_LoopRemain(JASystem::DSPInterface::DSPBuffer* dspBuffer) {
+    return dspBuffer->field_0x6c >> 0x10;
 }
 
 /* 8029C864-8029C86C       .text Get_DirectPCM_Remain__Q27JAInter9StreamLibFPQ38JASystem12DSPInterface9DSPBuffer */
-void JAInter::StreamLib::Get_DirectPCM_Remain(JASystem::DSPInterface::DSPBuffer*) {
-    /* Nonmatching */
+int JAInter::StreamLib::Get_DirectPCM_Remain(JASystem::DSPInterface::DSPBuffer* dspBuffer) {
+    return dspBuffer->field_0x74;
 }
 
 /* 8029C86C-8029C8BC       .text init__Q27JAInter9StreamLibFb */
-void JAInter::StreamLib::init(bool) {
-    /* Nonmatching */
+void JAInter::StreamLib::init(bool param_1) {
+    bufferMode = param_1;
+    if (!param_1) {
+        u32 size = getNeedBufferSize();
+        allocBuffer(JASDram->alloc(size, 0), size);
+    }
 }
 
 /* 8029C8BC-8029CBF0       .text allocBuffer__Q27JAInter9StreamLibFPvl */
-void JAInter::StreamLib::allocBuffer(void*, long) {
+void JAInter::StreamLib::allocBuffer(void*, s32) {
     /* Nonmatching */
 }
 
 /* 8029CBF0-8029CC50       .text deallocBuffer__Q27JAInter9StreamLibFv */
-void JAInter::StreamLib::deallocBuffer() {
-    /* Nonmatching */
+bool JAInter::StreamLib::deallocBuffer() {
+    if (bufferMode && allocFlag && playflag2 != 1) {
+        streamHeap.freeAll();
+        allocFlag = 0;
+        return true;
+    }
+    return false;
 }
 
 /* 8029CC50-8029CCA4       .text getNeedBufferSize__Q27JAInter9StreamLibFv */
-void JAInter::StreamLib::getNeedBufferSize() {
+int JAInter::StreamLib::getNeedBufferSize() {
     /* Nonmatching */
 }
 
 /* 8029CCA4-8029CCAC       .text setAllocBufferCallback__Q27JAInter9StreamLibFPFv_v */
-void JAInter::StreamLib::setAllocBufferCallback(void (*)(void)) {
-    /* Nonmatching */
+void JAInter::StreamLib::setAllocBufferCallback(void (*param_1)(void)) {
+    allocCallback = param_1;
 }
 
 /* 8029CCAC-8029CCB4       .text setDeallocBufferCallback__Q27JAInter9StreamLibFPFv_v */
-void JAInter::StreamLib::setDeallocBufferCallback(void (*)(void)) {
-    /* Nonmatching */
+void JAInter::StreamLib::setDeallocBufferCallback(void (*param_1)(void)) {
+    deallocCallback = param_1;
 }
 
 /* 8029CCB4-8029CCD0       .text sync__Q27JAInter9StreamLibFl */
-void JAInter::StreamLib::sync(long) {
-    /* Nonmatching */
+void JAInter::StreamLib::sync(s32 param_1) {
+    static s32 before = param_1;
+    before = param_1;
 }
 
 /* 8029CCD0-8029CD8C       .text __DecodePCM__Q27JAInter9StreamLibFv */
@@ -112,8 +199,12 @@ void JAInter::StreamLib::__Decode() {
 }
 
 /* 8029D1C8-8029D1E8       .text __LoadFin__Q27JAInter9StreamLibFlP11DVDFileInfo */
-void JAInter::StreamLib::__LoadFin(long, DVDFileInfo*) {
-    /* Nonmatching */
+void JAInter::StreamLib::__LoadFin(s32, DVDFileInfo*) {
+    DvdLoadFlag = 0;
+    if (adpcmbuf_state == 3) {
+        return;
+    }
+    adpcmbuf_state = 2;
 }
 
 /* 8029D1E8-8029D328       .text LoadADPCM__Q27JAInter9StreamLibFv */
@@ -122,53 +213,66 @@ void JAInter::StreamLib::LoadADPCM() {
 }
 
 /* 8029D328-8029D338       .text setVolume__Q27JAInter9StreamLibFf */
-void JAInter::StreamLib::setVolume(float) {
-    /* Nonmatching */
+void JAInter::StreamLib::setVolume(f32 param_1) {
+    stackvolume = param_1;
+    outflag_volume = true;
 }
 
 /* 8029D338-8029D348       .text setPitch__Q27JAInter9StreamLibFf */
-void JAInter::StreamLib::setPitch(float) {
-    /* Nonmatching */
+void JAInter::StreamLib::setPitch(f32 param_1) {
+    stackpitch = param_1;
+    outflag_pitch = true;
 }
 
 /* 8029D348-8029D358       .text setPan__Q27JAInter9StreamLibFf */
-void JAInter::StreamLib::setPan(float) {
-    /* Nonmatching */
+void JAInter::StreamLib::setPan(f32 param_1) {
+    stackpan = param_1;
+    outflag_pan = true;
 }
 
 /* 8029D358-8029D368       .text stop__Q27JAInter9StreamLibFv */
 void JAInter::StreamLib::stop() {
-    /* Nonmatching */
+    stopflag = true;
+    stopflag2 = true;
 }
 
 /* 8029D368-8029D384       .text setPauseFlag__Q27JAInter9StreamLibFUc */
-void JAInter::StreamLib::setPauseFlag(unsigned char) {
-    /* Nonmatching */
+void JAInter::StreamLib::setPauseFlag(u8 param_1) {
+    outpause |= param_1;
+    outpause |= 0x80;
 }
 
 /* 8029D384-8029D3A4       .text clearPauseFlag__Q27JAInter9StreamLibFUc */
-void JAInter::StreamLib::clearPauseFlag(unsigned char) {
-    /* Nonmatching */
+void JAInter::StreamLib::clearPauseFlag(u8 param_1) {
+    outpause &= (param_1 ^ 0xff);
+    outpause |= 0x80;
 }
 
 /* 8029D3A4-8029D3AC       .text setPrepareFlag__Q27JAInter9StreamLibFUc */
-void JAInter::StreamLib::setPrepareFlag(unsigned char) {
-    /* Nonmatching */
+void JAInter::StreamLib::setPrepareFlag(u8 param_1) {
+    prepareflag = param_1;
 }
 
 /* 8029D3AC-8029D3B4       .text setOutputMode__Q27JAInter9StreamLibFUl */
-void JAInter::StreamLib::setOutputMode(unsigned long) {
-    /* Nonmatching */
+void JAInter::StreamLib::setOutputMode(u32 param_1) {
+    outputmode = param_1;
 }
 
 /* 8029D3B4-8029D3BC       .text getPlayingFlag__Q27JAInter9StreamLibFv */
-void JAInter::StreamLib::getPlayingFlag() {
-    /* Nonmatching */
+u8 JAInter::StreamLib::getPlayingFlag() {
+    return playflag2;
 }
 
 /* 8029D3BC-8029D424       .text setDecodedBufferBlocks__Q27JAInter9StreamLibFUl */
-void JAInter::StreamLib::setDecodedBufferBlocks(unsigned long) {
-    /* Nonmatching */
+void JAInter::StreamLib::setDecodedBufferBlocks(u32 param_1) {
+    if (param_1 < 3) {
+        OSReport("setDecodedBufferBlocks : 3ブロック以上必要ですので、使用ブロックを%dから3に変更します。\n");
+        param_1 = 3;
+    } else if (param_1 > 12) {
+        OSReport("setDecodedBufferBlocks : 13ブロック以上は設定できませんので、使用ブロックを%dから12に変更しま す。\n");
+        param_1 = 12;
+    }
+    LOOP_BLOCKS = param_1;
 }
 
 /* 8029D424-8029D464       .text LoopInit__Q27JAInter9StreamLibFv */
@@ -177,13 +281,33 @@ void JAInter::StreamLib::LoopInit() {
 }
 
 /* 8029D464-8029D4C0       .text directPlayWait__Q27JAInter9StreamLibFPv */
-void JAInter::StreamLib::directPlayWait(void*) {
-    /* Nonmatching */
+s32 JAInter::StreamLib::directPlayWait(void*) {
+    if (getPlayingFlag() != 1) {
+        startInitFlag++;
+        prepareflag = 0;
+        JASystem::Kernel::registerDspCallback(callBack, NULL);
+        return -1;
+    }
+    return 0;
 }
 
 /* 8029D4C0-8029D560       .text start__Q27JAInter9StreamLibFPcUlPv */
-void JAInter::StreamLib::start(char*, unsigned long, void*) {
+void JAInter::StreamLib::start(char* param_1, u32 param_2, void* param_3) {
     /* Nonmatching */
+    if (!startInitFlag) {
+        strcpy(Filename, param_1);
+        Mode = param_2;
+        Head = param_3;
+        if (!param_3) {
+            stop();
+            JASystem::Kernel::registerDspCallback(directPlayWait, NULL);
+        } else {
+            startInitFlag++;
+            prepareflag = 0;
+            JASystem::Kernel::registerDspCallback(callBack, NULL);
+        }
+    }
+
 }
 
 /* 8029D560-8029D7C0       .text __start__Q27JAInter9StreamLibFv */
@@ -192,6 +316,6 @@ void JAInter::StreamLib::__start() {
 }
 
 /* 8029D7C0-8029E14C       .text callBack__Q27JAInter9StreamLibFPv */
-void JAInter::StreamLib::callBack(void*) {
+s32 JAInter::StreamLib::callBack(void*) {
     /* Nonmatching */
 }
