@@ -852,7 +852,41 @@ void daAgb_c::GbaItemUse() {
 
 /* 800D1188-800D12E4       .text Shopping__7daAgb_cFv */
 void daAgb_c::Shopping() {
-    /* Nonmatching */
+    daAgb_ItemBuy& itemBuy = mItemBuy;
+    mItemBuy.field_0x0 = mShop.field_0x0;
+    
+    // The usage of single | instead of double || here looks like a bug
+    if (!(dComIfGp_event_runCheck() | dMenu_flag())) {
+        if (dComIfGs_getRupee() < mShop.field_0x2) {
+            itemBuy.field_0x1 = 3;
+            return;
+        } else if (mShop.field_0x0 == 0) {
+            if (dComIfGs_getArrowNum() < dComIfGs_getArrowMax()) {
+                dComIfGp_setItemArrowNumCount(mShop.field_0x1);
+            } else {
+                itemBuy.field_0x1 = 2;
+                return;
+            }
+        } else if (mShop.field_0x0 == 1) {
+            if (dComIfGs_getBombNum() < dComIfGs_getBombMax()) {
+                dComIfGp_setItemBombNumCount(mShop.field_0x1);
+            } else {
+                itemBuy.field_0x1 = 2;
+                return;
+            }
+        } else {
+            if (dComIfGs_checkBaitItemEmpty()) {
+                dComIfGs_setBaitItem(BIRD_ESA_5);
+            } else {
+                itemBuy.field_0x1 = 2;
+                return;
+            }
+        }
+        dComIfGp_setItemRupeeCount(-mShop.field_0x2);
+        itemBuy.field_0x1 = 1;
+    } else {
+        itemBuy.field_0x1 = 0;
+    }
 }
 
 /* 800D12E4-800D1A3C       .text FlagsSend__7daAgb_cFUl */
@@ -861,8 +895,147 @@ void daAgb_c::FlagsSend(u32) {
 }
 
 /* 800D1A3C-800D25D8       .text CursorMove__7daAgb_cFP10fopAc_ac_cUl */
-void daAgb_c::CursorMove(fopAc_ac_c*, u32) {
-    /* Nonmatching */
+void daAgb_c::CursorMove(fopAc_ac_c* actor, u32 r17) {
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    
+    f32 f31;
+    if (r17 == 7) {
+        f31 = field_0x67e != 0 ? 50.0f : 781.25f;
+    } else {
+        f31 = 25.0f;
+    }
+    
+    if (cLib_chaseF(&field_0x628, 2.5f, field_0x62c) &&
+        field_0x673 != 0 && isActive() && field_0x674 == 0 &&
+        !CPad_CHECK_HOLD_L(mDoGaC_getPortNo())
+    ) {
+        if (CPad_CHECK_HOLD_LEFT(mDoGaC_getPortNo())) {
+            actor->orig.pos.x -= f31;
+        } else if (CPad_CHECK_HOLD_RIGHT(mDoGaC_getPortNo())) {
+            actor->orig.pos.x += f31;
+        }
+        if (CPad_CHECK_HOLD_UP(mDoGaC_getPortNo())) {
+            actor->orig.pos.z -= f31;
+        } else if (CPad_CHECK_HOLD_DOWN(mDoGaC_getPortNo())) {
+            actor->orig.pos.z += f31;
+        }
+        
+        if (r17 == 7 && field_0x67e == 0) {
+            if (actor->orig.pos.x < -350000.0f) {
+                actor->orig.pos.x = -350000.0f;
+            } else if (actor->orig.pos.x > 350000.0f) {
+                actor->orig.pos.x = 350000.0f;
+            }
+            if (actor->orig.pos.z < -350000.0f) {
+                actor->orig.pos.z = -350000.0f;
+            } else if (actor->orig.pos.z > 350000.0f) {
+                actor->orig.pos.z = 350000.0f;
+            }
+        } else {
+            int roomNo = dComIfGp_roomControl_getStayNo();
+            stage_map_info_class* mapInfo = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getMapInfo();
+            if (mapInfo) {
+                if (actor->orig.pos.x < mapInfo->field_0x18) {
+                    actor->orig.pos.x = mapInfo->field_0x18;
+                } else if (actor->orig.pos.x > mapInfo->field_0x20) {
+                    actor->orig.pos.x = mapInfo->field_0x20;
+                }
+                if (actor->orig.pos.z < mapInfo->field_0x1C) {
+                    actor->orig.pos.z = mapInfo->field_0x1C;
+                } else if (actor->orig.pos.z > mapInfo->field_0x24) {
+                    actor->orig.pos.z = mapInfo->field_0x24;
+                }
+            }
+        }
+        
+        cLib_chaseF(&actor->current.pos.x, actor->orig.pos.x, f31);
+        cLib_chaseF(&actor->current.pos.z, actor->orig.pos.z, f31);
+        
+        f32 playerDist = fopAcM_searchPlayerDistanceXZ(actor);
+        if (playerDist > 212100.0f) {
+            if (mIsFree || mFollowTarget == 0) {
+                cXyz r1_50 = player->current.pos - actor->current.pos;
+                actor->orig.pos.x = player->current.pos.x - r1_50.x * 212100.0f / playerDist;
+                actor->orig.pos.z = player->current.pos.z - r1_50.z * 212100.0f / playerDist;
+            } else {
+                mIsFree = false;
+                mFollowTarget = 0;
+                field_0x650 = -1;
+            }
+        }
+    }
+    
+    cXyz r1_44 = actor->next.pos;
+    cXyz r1_38 = actor->next.pos;
+    r1_38.y += 171.0f;
+    dBgS_LinkLinChk r1_11C;
+    r1_11C.Set(&r1_44, &r1_38, actor);
+    r1_11C.ClrSttsGroundOff();
+    r1_11C.ClrSttsWallOff();
+    f32 f31_2 = 171.0f;
+    if (dComIfG_Bgsp()->LineCross(&r1_11C)) {
+        f31_2 = r1_11C.GetCross().y - 55.0f - actor->current.pos.y;
+        if (f31_2 < 20.0f) {
+            f31_2 = 20.0f;
+        }
+    }
+    mCrrPos.SetWall(f31_2, 50.0f);
+    mAcchCir.SetWall(f31_2, 40.0f);
+    mCrrPos.CrrPos(*dComIfG_Bgsp());
+    mAcch.CrrPos(*dComIfG_Bgsp());
+    
+    {
+        cXyz r1_2C = actor->next.pos;
+        r1_2C.y += f31_2;
+        cXyz r1_20 = actor->current.pos;
+        r1_20.y += f31_2;
+        dBgS_LinkLinChk r1_B0;
+        r1_B0.Set(&r1_2C, &r1_20, actor);
+        if (dComIfG_Bgsp()->LineCross(&r1_B0)) {
+            actor->current.pos = actor->next.pos;
+        }
+    }
+    
+    int roomNo = dComIfG_Bgsp()->GetRoomId(mCrrPos.mGndChk);
+    actor->current.roomNo = actor->mTevStr.mRoomNo = roomNo;
+    if (roomNo != player->current.roomNo) {
+        return;
+    }
+    
+    field_0x679 = 1;
+    
+    if (mCrrPos.ChkXCrr()) {
+        actor->orig.pos.x = actor->current.pos.x;
+    }
+    if (mCrrPos.ChkZCrr()) {
+        actor->orig.pos.z = actor->current.pos.z;
+    }
+    
+    cXyz r1_14;
+    dBgS_GndChk r1_5C;
+    f32 f30 = -1e+9f;
+    r1_5C.OffWall();
+    r1_14.y = actor->current.pos.y + 150.0f;
+    static f32 l_ckOffset[][2] = {
+        -49.0f, -49.0f,
+        49.0f, -49.0f,
+        -49.0f, 49.0f,
+        49.0f, 49.0f,
+    };
+    for (int i = 0; i < 4; i++) {
+        r1_14.x = actor->current.pos.x + l_ckOffset[i][0];
+        r1_14.z = actor->current.pos.z + l_ckOffset[i][1];
+        r1_5C.SetPos(&r1_14);
+        f32 groundY = dComIfG_Bgsp()->GroundCross(&r1_5C);
+        if (groundY > f30) {
+            f30 = groundY;
+        }
+    }
+    
+    cLib_chaseF(&actor->current.pos.y, actor->orig.pos.y, 25.0f);
+    if (f30 > actor->current.pos.y && f30 < actor->current.pos.y + 170.0f + 1.0f) {
+        actor->orig.pos.y = f30;
+    }
 }
 
 /* 800D272C-800D303C       .text modeMove__7daAgb_cFv */

@@ -94,6 +94,7 @@ public:
 
     struct daAgb_ItemBuy {
         /* 0x0 */ u8 field_0x0;
+        /* 0x1 */ u8 field_0x1;
     } ALIGN_DECL(4);
 
     struct daAgb_GbaFlg {
@@ -129,6 +130,8 @@ public:
 
     struct daAgb_Shop {
         /* 0x0 */ u8 field_0x0;
+        /* 0x1 */ u8 field_0x1;
+        /* 0x2 */ u8 field_0x2;
     } ALIGN_DECL(4);
 
     static int mEffect;
