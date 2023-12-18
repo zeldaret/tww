@@ -6,8 +6,8 @@
 typedef struct CARDFileInfo CARDFileInfo;
 struct mDoMemCdRWm_HeaderData;
 
-void mDoMemCdRWm_Store(CARDFileInfo*, void*, u32);
-void mDoMemCdRWm_Restore(CARDFileInfo*, void*, u32);
+s32 mDoMemCdRWm_Store(CARDFileInfo*, void*, u32);
+s32 mDoMemCdRWm_Restore(CARDFileInfo*, void*, u32);
 void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData*);
 void mDoMemCdRWm_SetCardStat(CARDFileInfo*);
 void mDoMemCdRWm_CheckCardStat(CARDFileInfo*);

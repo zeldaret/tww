@@ -4,6 +4,7 @@
 //
 
 #include "m_Do/m_Do_MemCard.h"
+#include "m_Do/m_Do_MemCardRWmng.h"
 #include "m_Do/m_Do_Reset.h"
 #include "JSystem/JKernel/JKRThread.h"
 #include "dolphin/card.h"
