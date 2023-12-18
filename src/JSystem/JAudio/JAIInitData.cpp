@@ -4,11 +4,36 @@
 //
 
 #include "JSystem/JAudio/JAIInitData.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JAIBankWave.h"
+#include "JSystem/JAudio/JAIConst.h"
+#include "JSystem/JAudio/JAIGlobalParameter.h"
+#include "JSystem/JAudio/JAISoundTable.h"
+#include "JSystem/JAudio/JAIStreamMgr.h"
+#include "JSystem/JAudio/JAISystemInterface.h"
+#include "JSystem/JAudio/JASSystemHeap.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "MSL_C/string.h"
+
+u32* JAInter::InitData::aafPointer;
 
 /* 80292460-80292548       .text checkInitDataFile__Q27JAInter8InitDataFv */
-void JAInter::InitData::checkInitDataFile() {
-    /* Nonmatching */
+BOOL JAInter::InitData::checkInitDataFile() {
+    if (!SystemInterface::checkFileExsistence(JAIGlobalParameter::getParamInitDataFileName())) {
+        char* fileName = (char*)JASDram->alloc(strlen(JAIGlobalParameter::getParamAudioResPath()) + strlen(JAIGlobalParameter::getParamInitDataFileName()) + 1, 0);
+        sprintf(fileName, "%s%s%c", JAIGlobalParameter::getParamAudioResPath(), JAIGlobalParameter::getParamInitDataFileName(), 0);
+        JAIGlobalParameter::setParamInitDataFileName(fileName);
+        if (!SystemInterface::checkFileExsistence(JAIGlobalParameter::getParamInitDataFileName())) {
+            return false;
+        }
+    }
+    loadTmpDVDFile(JAIGlobalParameter::getParamInitDataFileName(), (u8**)&aafPointer);
+    if (aafPointer) {
+        checkInitDataOnMemory();
+        deleteTmpDVDFile((u8**)&aafPointer);
+        return true;
+    }
+    return false;
 }
 
 /* 80292548-8029285C       .text checkInitDataOnMemory__Q27JAInter8InitDataFv */

@@ -4,185 +4,192 @@
 //
 
 #include "JSystem/JAudio/JAISound.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JAIBasic.h"
 
 /* 8029859C-802985C4       .text __ct__8JAISoundFv */
 JAISound::JAISound() {
-    /* Nonmatching */
+    field_0x3c = NULL;
+    field_0x5 = 0;
+    field_0x6 = 10;
+    field_0x24 = NULL;
 }
 
 /* 802985C4-802985E8       .text getSeCategoryNumber__8JAISoundFv */
-void JAISound::getSeCategoryNumber() {
+int JAISound::getSeCategoryNumber() {
     /* Nonmatching */
 }
 
 /* 802985E8-802985F4       .text getSwBit__8JAISoundFv */
-void JAISound::getSwBit() {
+int JAISound::getSwBit() {
     /* Nonmatching */
 }
 
 /* 802985F4-80298624       .text checkSwBit__8JAISoundFUl */
-void JAISound::checkSwBit(unsigned long) {
-    /* Nonmatching */
+int JAISound::checkSwBit(u32 param_1) {
+    return param_1 & getSwBit();
 }
 
 /* 80298624-80298630       .text getInfoPriority__8JAISoundFv */
-void JAISound::getInfoPriority() {
+u8 JAISound::getInfoPriority() {
     /* Nonmatching */
 }
 
 /* 80298630-80298648       .text clearMainSoundPPointer__8JAISoundFv */
 void JAISound::clearMainSoundPPointer() {
-    /* Nonmatching */
+    if (!field_0x38) {
+        return;
+    }
+    field_0x38[0] = NULL;
 }
 
 /* 80298648-80298688       .text start__8JAISoundFUl */
-void JAISound::start(unsigned long) {
-    /* Nonmatching */
+void JAISound::start(u32 param_1) {
+    setPrepareFlag(0);
+    field_0x14 = param_1;
 }
 
 /* 80298688-802986B8       .text stop__8JAISoundFUl */
-void JAISound::stop(unsigned long) {
-    /* Nonmatching */
+void JAISound::stop(u32 param_1) {
+    JAIBasic::msBasic->stopSoundHandle(this, param_1);
 }
 
 /* 802986B8-8029878C       .text setVolume__8JAISoundFfUlUc */
-void JAISound::setVolume(float, unsigned long, unsigned char) {
+void JAISound::setVolume(f32, u32, u8) {
     /* Nonmatching */
 }
 
 /* 8029878C-80298864       .text setPan__8JAISoundFfUlUc */
-void JAISound::setPan(float, unsigned long, unsigned char) {
+void JAISound::setPan(f32, u32, u8) {
     /* Nonmatching */
 }
 
 /* 80298864-8029893C       .text setPitch__8JAISoundFfUlUc */
-void JAISound::setPitch(float, unsigned long, unsigned char) {
+void JAISound::setPitch(f32, u32, u8) {
     /* Nonmatching */
 }
 
 /* 8029893C-80298A04       .text setFxmix__8JAISoundFfUlUc */
-void JAISound::setFxmix(float, unsigned long, unsigned char) {
+void JAISound::setFxmix(f32, u32, u8) {
     /* Nonmatching */
 }
 
 /* 80298A04-80298ACC       .text setDolby__8JAISoundFfUlUc */
-void JAISound::setDolby(float, unsigned long, unsigned char) {
+void JAISound::setDolby(f32, u32, u8) {
     /* Nonmatching */
 }
 
 /* 80298ACC-80298B74       .text setTempoProportion__8JAISoundFfUl */
-void JAISound::setTempoProportion(float, unsigned long) {
+void JAISound::setTempoProportion(f32, u32) {
     /* Nonmatching */
 }
 
 /* 80298B74-80298C28       .text setPortData__8JAISoundFUcUs */
-void JAISound::setPortData(unsigned char, unsigned short) {
+void JAISound::setPortData(u8, u16) {
     /* Nonmatching */
 }
 
 /* 80298C28-80298CD8       .text setPrepareFlag__8JAISoundFUc */
-void JAISound::setPrepareFlag(unsigned char) {
+void JAISound::setPrepareFlag(u8) {
     /* Nonmatching */
 }
 
 /* 80298CD8-80298E30       .text setDistanceVolumeCommon__8JAISoundFfUc */
-void JAISound::setDistanceVolumeCommon(float, unsigned char) {
+f32 JAISound::setDistanceVolumeCommon(f32, u8) {
     /* Nonmatching */
 }
 
 /* 80298E30-80298F8C       .text setDistancePanCommon__8JAISoundFv */
-void JAISound::setDistancePanCommon() {
+f32 JAISound::setDistancePanCommon() {
     /* Nonmatching */
 }
 
 /* 80298F8C-80299178       .text setPositionDopplarCommon__8JAISoundFUl */
-void JAISound::setPositionDopplarCommon(unsigned long) {
+f32 JAISound::setPositionDopplarCommon(u32) {
     /* Nonmatching */
 }
 
 /* 80299178-8029925C       .text setSeqInterVolume__8JAISoundFUcfUl */
-void JAISound::setSeqInterVolume(unsigned char, float, unsigned long) {
+void JAISound::setSeqInterVolume(u8, f32, u32) {
     /* Nonmatching */
 }
 
 /* 8029925C-802993AC       .text setSeqInterPan__8JAISoundFUcfUl */
-void JAISound::setSeqInterPan(unsigned char, float, unsigned long) {
+void JAISound::setSeqInterPan(u8, f32, u32) {
     /* Nonmatching */
 }
 
 /* 802993AC-802994FC       .text setSeqInterPitch__8JAISoundFUcfUl */
-void JAISound::setSeqInterPitch(unsigned char, float, unsigned long) {
+void JAISound::setSeqInterPitch(u8, f32, u32) {
     /* Nonmatching */
 }
 
 /* 802994FC-8029964C       .text setSeqInterFxmix__8JAISoundFUcfUl */
-void JAISound::setSeqInterFxmix(unsigned char, float, unsigned long) {
+void JAISound::setSeqInterFxmix(u8, f32, u32) {
     /* Nonmatching */
 }
 
 /* 8029964C-802997E4       .text setSeqInterDolby__8JAISoundFUcfUl */
-void JAISound::setSeqInterDolby(unsigned char, float, unsigned long) {
+void JAISound::setSeqInterDolby(u8, f32, u32) {
     /* Nonmatching */
 }
 
 /* 802997E4-80299884       .text setSeqTempoProportion__8JAISoundFfUl */
-void JAISound::setSeqTempoProportion(float, unsigned long) {
+void JAISound::setSeqTempoProportion(f32, u32) {
     /* Nonmatching */
 }
 
 /* 80299884-802999F4       .text setSeqPortData__8JAISoundFUcUsUl */
-void JAISound::setSeqPortData(unsigned char, unsigned short, unsigned long) {
+void JAISound::setSeqPortData(u8, u16, u32) {
     /* Nonmatching */
 }
 
 /* 802999F4-80299B14       .text setTrackVolume__8JAISoundFUcfUl */
-void JAISound::setTrackVolume(unsigned char, float, unsigned long) {
+void JAISound::setTrackVolume(u8, f32, u32) {
     /* Nonmatching */
 }
 
 /* 80299B14-80299BAC       .text setTrackInterruptSwitch__8JAISoundFUcUc */
-void JAISound::setTrackInterruptSwitch(unsigned char, unsigned char) {
+void JAISound::setTrackInterruptSwitch(u8, u8) {
     /* Nonmatching */
 }
 
 /* 80299BAC-80299CD4       .text setTrackPortData__8JAISoundFUcUcUs */
-void JAISound::setTrackPortData(unsigned char, unsigned char, unsigned short) {
+void JAISound::setTrackPortData(u8, u8, u16) {
     /* Nonmatching */
 }
 
 /* 80299CD4-80299DE8       .text setSeInterRandomPara__8JAISoundFPfUlff */
-void JAISound::setSeInterRandomPara(float*, unsigned long, float, float) {
+void JAISound::setSeInterRandomPara(f32*, u32, f32, f32) {
     /* Nonmatching */
 }
 
 /* 80299DE8-80299E88       .text setSeInterVolume__8JAISoundFUcfUlUc */
-void JAISound::setSeInterVolume(unsigned char, float, unsigned long, unsigned char) {
+void JAISound::setSeInterVolume(u8, f32, u32, u8) {
     /* Nonmatching */
 }
 
 /* 80299E88-80299F28       .text setSeInterPan__8JAISoundFUcfUlUc */
-void JAISound::setSeInterPan(unsigned char, float, unsigned long, unsigned char) {
+void JAISound::setSeInterPan(u8, f32, u32, u8) {
     /* Nonmatching */
 }
 
 /* 80299F28-80299FE0       .text setSeInterPitch__8JAISoundFUcfUlf */
-void JAISound::setSeInterPitch(unsigned char, float, unsigned long, float) {
+void JAISound::setSeInterPitch(u8, f32, u32, f32) {
     /* Nonmatching */
 }
 
 /* 80299FE0-8029A080       .text setSeInterFxmix__8JAISoundFUcfUlUc */
-void JAISound::setSeInterFxmix(unsigned char, float, unsigned long, unsigned char) {
+void JAISound::setSeInterFxmix(u8, f32, u32, u8) {
     /* Nonmatching */
 }
 
 /* 8029A080-8029A120       .text setSeInterDolby__8JAISoundFUcfUlUc */
-void JAISound::setSeInterDolby(unsigned char, float, unsigned long, unsigned char) {
+void JAISound::setSeInterDolby(u8, f32, u32, u8) {
     /* Nonmatching */
 }
 
 /* 8029A120-8029A1C4       .text setSePortData__8JAISoundFUcUs */
-void JAISound::setSePortData(unsigned char, unsigned short) {
+void JAISound::setSePortData(u8, u16) {
     /* Nonmatching */
 }
 
@@ -192,17 +199,17 @@ void JAISound::setSeDistanceParameters() {
 }
 
 /* 8029A2E4-8029A364       .text setSeDistanceVolume__8JAISoundFUc */
-void JAISound::setSeDistanceVolume(unsigned char) {
+void JAISound::setSeDistanceVolume(u8) {
     /* Nonmatching */
 }
 
 /* 8029A364-8029A3BC       .text setSeDistancePan__8JAISoundFUc */
-void JAISound::setSeDistancePan(unsigned char) {
+void JAISound::setSeDistancePan(u8) {
     /* Nonmatching */
 }
 
 /* 8029A3BC-8029A544       .text setSeDistancePitch__8JAISoundFUc */
-void JAISound::setSeDistancePitch(unsigned char) {
+void JAISound::setSeDistancePitch(u8) {
     /* Nonmatching */
 }
 
@@ -212,107 +219,107 @@ void JAISound::setSePositionDopplar() {
 }
 
 /* 8029A5CC-8029A6B0       .text setSeDistanceFxmix__8JAISoundFUc */
-void JAISound::setSeDistanceFxmix(unsigned char) {
+void JAISound::setSeDistanceFxmix(u8) {
     /* Nonmatching */
 }
 
 /* 8029A6B0-8029A6B4       .text setSeDistanceFir__8JAISoundFUc */
-void JAISound::setSeDistanceFir(unsigned char) {
+void JAISound::setSeDistanceFir(u8) {
     /* Nonmatching */
 }
 
 /* 8029A6B4-8029A788       .text setSeDistanceDolby__8JAISoundFUc */
-void JAISound::setSeDistanceDolby(unsigned char) {
+void JAISound::setSeDistanceDolby(u8) {
     /* Nonmatching */
 }
 
 /* 8029A788-8029A86C       .text setStreamInterVolume__8JAISoundFUcfUl */
-void JAISound::setStreamInterVolume(unsigned char, float, unsigned long) {
+void JAISound::setStreamInterVolume(u8, f32, u32) {
     /* Nonmatching */
 }
 
 /* 8029A86C-8029A950       .text setStreamInterPitch__8JAISoundFUcfUl */
-void JAISound::setStreamInterPitch(unsigned char, float, unsigned long) {
+void JAISound::setStreamInterPitch(u8, f32, u32) {
     /* Nonmatching */
 }
 
 /* 8029A950-8029AA34       .text setStreamInterPan__8JAISoundFUcfUl */
-void JAISound::setStreamInterPan(unsigned char, float, unsigned long) {
+void JAISound::setStreamInterPan(u8, f32, u32) {
     /* Nonmatching */
 }
 
 /* 8029AA34-8029AA84       .text setStreamPrepareFlag__8JAISoundFUc */
-void JAISound::setStreamPrepareFlag(unsigned char) {
+void JAISound::setStreamPrepareFlag(u8) {
     /* Nonmatching */
 }
 
 /* 8029AA84-8029ACF0       .text setPauseMode__8JAISoundFUcUc */
-void JAISound::setPauseMode(unsigned char, unsigned char) {
+void JAISound::setPauseMode(u8, u8) {
     /* Nonmatching */
 }
 
 /* 8029ACF0-8029AD54       .text setSeqPrepareFlag__8JAISoundFUc */
-void JAISound::setSeqPrepareFlag(unsigned char) {
+void JAISound::setSeqPrepareFlag(u8) {
     /* Nonmatching */
 }
 
 /* 8029AD54-8029ADA8       .text getSeqInterVolume__8JAISoundFUc */
-void JAISound::getSeqInterVolume(unsigned char) {
+f32 JAISound::getSeqInterVolume(u8) {
     /* Nonmatching */
 }
 
 /* 8029ADA8-8029AE34       .text getStreamInterVolume__8JAISoundFUc */
-void JAISound::getStreamInterVolume(unsigned char) {
+f32 JAISound::getStreamInterVolume(u8) {
     /* Nonmatching */
 }
 
 /* 8029AE34-8029AE3C       .text getSeqParameter__8JAISoundFv */
-void JAISound::getSeqParameter() {
+JAInter::SeqParameter* JAISound::getSeqParameter() {
     /* Nonmatching */
 }
 
 /* 8029AE3C-8029AE44       .text getSeParameter__8JAISoundFv */
-void JAISound::getSeParameter() {
+JAInter::SeParameter* JAISound::getSeParameter() {
     /* Nonmatching */
 }
 
 /* 8029AE44-8029AE4C       .text getStreamParameter__8JAISoundFv */
-void JAISound::getStreamParameter() {
+JAInter::StreamParameter* JAISound::getStreamParameter() {
     /* Nonmatching */
 }
 
 /* 8029AE4C-8029AE88       .text getTrackPortRoute__8JAISoundFUcUc */
-void JAISound::getTrackPortRoute(unsigned char, unsigned char) {
+int JAISound::getTrackPortRoute(u8, u8) {
     /* Nonmatching */
 }
 
 /* 8029AE88-8029AEF8       .text checkSoundHandle__8JAISoundFUlPv */
-void JAISound::checkSoundHandle(unsigned long, void*) {
+int JAISound::checkSoundHandle(u32, void*) {
     /* Nonmatching */
 }
 
 /* 8029AEF8-8029AFCC       .text initParameter__8JAISoundFPP8JAISoundPQ27JAInter5ActorUlUlUcPv */
-void JAISound::initParameter(JAISound**, JAInter::Actor*, unsigned long, unsigned long, unsigned char, void*) {
+void JAISound::initParameter(JAISound**, JAInter::Actor*, u32, u32, u8, void*) {
     /* Nonmatching */
 }
 
 /* 8029AFCC-8029B07C       .text set__Q27JAInter11MoveParaSetFfUl */
-void JAInter::MoveParaSet::set(float, unsigned long) {
+int JAInter::MoveParaSet::set(f32, u32) {
     /* Nonmatching */
 }
 
 /* 8029B07C-8029B0C4       .text move__Q27JAInter11MoveParaSetFv */
-void JAInter::MoveParaSet::move() {
+bool JAInter::MoveParaSet::move() {
     /* Nonmatching */
 }
 
 /* 8029B0C4-8029B4AC       .text init__Q27JAInter9LinkSoundFP8JAISoundUl */
-void JAInter::LinkSound::init(JAISound*, unsigned long) {
+void JAInter::LinkSound::init(JAISound*, u32) {
     /* Nonmatching */
 }
 
 /* 8029B4AC-8029B500       .text getSound__Q27JAInter9LinkSoundFv */
-void JAInter::LinkSound::getSound() {
+JAISound* JAInter::LinkSound::getSound() {
     /* Nonmatching */
 }
 

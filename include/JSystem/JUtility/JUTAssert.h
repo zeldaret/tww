@@ -10,6 +10,16 @@
         OSPanic(__FILE__, LINE, "Halt");                                                           \
     }
 
+// Favored by JAI (JAudio)
+#define JUT_ASSERT_MSG(LINE, COND, MSG)                                                            \
+    if (!(COND)) {                                                                                 \
+        OSReport(MSG);                                                                             \
+        if (!(COND)) {                                                                                \
+            JUTAssertion::showAssert(3, __FILE__, LINE, #COND);                                    \
+            OSPanic(__FILE__, LINE, "Halt");                                                       \
+        }                                                                                          \
+    }
+
 // Some asserts on floats have the wrong codegen with JUT_ASSERT's (COND) == 0 check.
 // Using !(COND) instead fixes them.
 #define JUT_ASSERT_FLOAT(LINE, COND)                                                               \

@@ -85,7 +85,7 @@ namespace JASystem {
             /* 0x64 */ short field_0x64;
             /* 0x66 */ short field_0x66;
             /* 0x68 */ int field_0x68;
-            /* 0x6C */ int field_0x6c;
+            /* 0x6C */ u32 field_0x6c;
             /* 0x70 */ u8 field_0x70[0x74 - 0x70];
             /* 0x74 */ int field_0x74;
             /* 0x78 */ short field_0x78[4];

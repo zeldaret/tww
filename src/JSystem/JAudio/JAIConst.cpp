@@ -4,24 +4,49 @@
 //
 
 #include "JSystem/JAudio/JAIConst.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JAIBasic.h"
+#include "JSystem/JAudio/JASDvdThread.h"
+#include "JSystem/JAudio/JASSystemHeap.h"
+#include "JSystem/JKernel/JKRDvdRipper.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
+
+Vec JAInter::Const::dummyZeroVec = {0.0f, 0.0f, 0.0f};
+JMath::TRandom_fast_ JAInter::Const::random(0);
 
 /* 80291704-802917D8       .text transInitDataFile__7JAInterFPUcUl */
-void JAInter::transInitDataFile(unsigned char*, unsigned long) {
-    /* Nonmatching */
+u8* JAInter::transInitDataFile(u8* param_1, u32 param_2) {
+    u8* var1 = new (JAIBasic::getCurrentJAIHeap(), 0x20) u8[param_2];
+    if (var1) {
+        for (int i = 0; i < param_2; i++) {
+            var1[i] = param_1[i];
+        }
+    }
+    return var1;
 }
 
 /* 802917D8-802918CC       .text loadTmpDVDFile__7JAInterFPcPPUc */
-void JAInter::loadTmpDVDFile(char*, unsigned char**) {
-    /* Nonmatching */
+void JAInter::loadTmpDVDFile(char* param_1, u8** tmpPointer) {
+    u32 size = JASystem::Dvd::checkFile(param_1);
+    if (size == 0) {
+        *tmpPointer = NULL;
+        return;
+    }
+    *tmpPointer = (u8*)JASDram->alloc(size, -0x20);
+    JUT_ASSERT_MSG(113, (*tmpPointer), "JAIBasic::loadTmpDVDFile Cannot Alloc Heap!!\n");
+    if (!JKRDvdRipper::loadToMainRAM(param_1, *tmpPointer, EXPAND_SWITCH_UNKNOWN0, 0, NULL, JKRDvdRipper::ALLOC_DIRECTION_FORWARD, 0, NULL)) {
+        *tmpPointer = NULL;
+    }
 }
 
 /* 802918CC-802918FC       .text deleteTmpDVDFile__7JAInterFPPUc */
-void JAInter::deleteTmpDVDFile(unsigned char**) {
-    /* Nonmatching */
+void JAInter::deleteTmpDVDFile(u8** tmpPointer) {
+    if (*tmpPointer) {
+        JASDram->freeTail();
+    }
 }
 
 /* 802918FC-8029193C       .text routeToTrack__7JAInterFUl */
-void JAInter::routeToTrack(unsigned long) {
+u32 JAInter::routeToTrack(u32) {
     /* Nonmatching */
 }
