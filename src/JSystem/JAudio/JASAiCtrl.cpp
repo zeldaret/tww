@@ -34,12 +34,12 @@ s16* JASystem::Kernel::dac[3];
 /* 8027AE5C-8027AEF8       .text initSystem__Q28JASystem6KernelFv */
 void JASystem::Kernel::initSystem() {
     for (int i = 0; i < 3; i++) {
-        dac[i] = (s16*)allocFromSysDram(gDacSize * 2);
-        Calc::bzero(dac[i], gDacSize * 2);
-        DCStoreRange(dac[i], gDacSize * 2);
+        dac[i] = (s16*)allocFromSysDram(getDacSize() * 2);
+        Calc::bzero(dac[i], getDacSize() * 2);
+        DCStoreRange(dac[i], getDacSize() * 2);
     }
     AIInit(NULL);
-    AIInitDMA(u32(dac[2]), gDacSize * 2);
+    AIInitDMA(u32(dac[2]), getDacSize() * 2);
 }
 
 int JASystem::Kernel::JASUniversalDacCounter;
@@ -61,26 +61,26 @@ void JASystem::Kernel::registerMixCallback(s16* (*param_1)(s32), u8 param_2) {
 void JASystem::Kernel::vframeWork() {
     static u32 dacp = 0;
     JASVframeCounter++;
-    s16* buf = TDSP_DACBuffer::mixDSP(gDacSize / 2);
-    Calc::imixcopy(buf + gFrameSamples, buf, dac[dacp], gDacSize / 2);
+    s16* buf = TDSP_DACBuffer::mixDSP(getDacSize() / 2);
+    Calc::imixcopy(buf + gFrameSamples, buf, dac[dacp], getDacSize() / 2);
     if (extMixCallback) {
         switch(extMixMode) {
         case 0:
-            mixMonoTrack(dac[dacp], gDacSize / 2, extMixCallback);
+            mixMonoTrack(dac[dacp], getDacSize() / 2, extMixCallback);
             break;
         case 1:
-            mixMonoTrackWide(dac[dacp], gDacSize / 2, extMixCallback);
+            mixMonoTrackWide(dac[dacp], getDacSize() / 2, extMixCallback);
             break;
         case 2:
-            mixExtraTrack(dac[dacp], gDacSize / 2, extMixCallback);
+            mixExtraTrack(dac[dacp], getDacSize() / 2, extMixCallback);
             break;
         case 3:
-            mixInterleaveTrack(dac[dacp], gDacSize / 2, extMixCallback);
+            mixInterleaveTrack(dac[dacp], getDacSize() / 2, extMixCallback);
             break;
         }
     }
     BOOL enable = OSDisableInterrupts();
-    DCStoreRange(dac[dacp], gDacSize * 2);
+    DCStoreRange(dac[dacp], getDacSize() * 2);
     OSRestoreInterrupts(enable);
     lastRspMadep = dac[dacp];
     dacp++;
@@ -92,13 +92,12 @@ void JASystem::Kernel::vframeWork() {
 
 /* 8027B0B8-8027B160       .text updateDac__Q28JASystem6KernelFv */
 void JASystem::Kernel::updateDac() {
-    /* Nonmatching */
     if (!useRspMadep) {
         useRspMadep = lastRspMadep;
         lastRspMadep = NULL;
     }
     if (useRspMadep) {
-        AIInitDMA(u32(useRspMadep), gDacSize * 2);
+        AIInitDMA(u32(useRspMadep), getDacSize() * 2);
         useRspMadep = NULL;
     } else {
         JASUniversalDacCounter++;
@@ -108,7 +107,7 @@ void JASystem::Kernel::updateDac() {
     }
     HardStream::main();
     if (dacCallbackFunc) {
-        dacCallbackFunc(lastRspMadep, gDacSize / 2);
+        dacCallbackFunc(lastRspMadep, getDacSize() / 2);
     }
 }
 

@@ -24,6 +24,8 @@ namespace JASystem {
         extern int JASVframeCounter;
         extern s16* (*extMixCallback)(s32);
         extern u8 extMixMode;
+
+        inline void JASAiMixLimit16(s32) {} // TODO
     }
 }
 

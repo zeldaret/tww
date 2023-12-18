@@ -7,7 +7,7 @@
 
 f32 JASystem::Kernel::gDacRate = 32028.5f;
 u32 JASystem::Kernel::gSubFrames = 7;
-int JASystem::Kernel::gFrameSamples = 560;
+u32 JASystem::Kernel::gFrameSamples = 560;
 u32 JASystem::Kernel::gDacSize = 1120;
 int JASystem::Kernel::gOutputRate;
 int JASystem::Kernel::gAiSetting;

@@ -29,20 +29,19 @@ static void dummy() {
 
 /* 802892E0-802893E4       .text init__Q28JASystem14TDSP_DACBufferFv */
 void JASystem::TDSP_DACBuffer::init() {
-    /* Nonmatching */
     if (!isInit) {
-        int r30 = Kernel::gFrameSamples;
+        u32 frameSamples = Kernel::getFrameSamples();
         writeBuffer = numDSPBuf - 1;
         readBuffer = 0;
         dsp_buf = new (JASDram, 0x20) s16*[numDSPBuf];
         for (int i = 0; i < numDSPBuf; i++) {
-            dsp_buf[i] = new (JASDram, 0x20) s16[r30 * 2];
-            for (u32 j = 0; j < r30 * 2; j++) {
+            dsp_buf[i] = new (JASDram, 0x20) s16[frameSamples * 2];
+            for (u32 j = 0; j < frameSamples * 2; j++) {
                 dsp_buf[i][j] = 0;
             }
-            DCStoreRange(dsp_buf[i], r30 * 4);
+            DCStoreRange(dsp_buf[i], frameSamples * 4);
         }
-        OSReport("DSP_DAC buffer size : %d\n", r30 * 2);
+        OSReport("DSP_DAC buffer size : %d\n", frameSamples * 2);
         dspStatus = 0;
         isInit = 1;
     }
@@ -63,9 +62,8 @@ void JASystem::TDSP_DACBuffer::updateDSP() {
 
 /* 80289438-80289568       .text mixDSP__Q28JASystem14TDSP_DACBufferFl */
 s16* JASystem::TDSP_DACBuffer::mixDSP(s32) {
-    /* Nonmatching */
     u8 var4 = readBuffer + 1;
-    u32 frameSamples = Kernel::gFrameSamples;
+    u32 frameSamples = Kernel::getFrameSamples();
     if (var4 == numDSPBuf) {
         var4 = 0;
     }
@@ -97,7 +95,7 @@ void (*JASystem::TDSP_DACBuffer::callback)(s16*, u32);
 /* 80289568-8028963C       .text finishDSPFrame__Q28JASystem14TDSP_DACBufferFv */
 void JASystem::TDSP_DACBuffer::finishDSPFrame() {
     u8 var2 = writeBuffer + 1;
-    u32 r31 = Kernel::gFrameSamples;
+    u32 frameSamples = Kernel::getFrameSamples();
     if (var2 == numDSPBuf) {
         var2 = 0;
     }
@@ -106,12 +104,12 @@ void JASystem::TDSP_DACBuffer::finishDSPFrame() {
         return;
     }
     writeBuffer = var2;
-    TAudioThread::snIntCount = Kernel::gSubFrames;
+    TAudioThread::snIntCount = Kernel::getSubFrames();
     Kernel::probeStart(7, "DSP-MAIN");
-    DsyncFrame2(Kernel::gSubFrames, u32(dsp_buf[writeBuffer]), u32(&dsp_buf[writeBuffer][r31]));
+    DsyncFrame2(Kernel::getSubFrames(), u32(dsp_buf[writeBuffer]), u32(&dsp_buf[writeBuffer][frameSamples]));
     dspStatus = 1;
     updateDSP();
     if (callback) {
-        callback(dsp_buf[writeBuffer], r31);
+        callback(dsp_buf[writeBuffer], frameSamples);
     }
 }

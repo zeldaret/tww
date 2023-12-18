@@ -10,6 +10,7 @@
 #include "JSystem/JAudio/JASChGlobal.h"
 #include "JSystem/JAudio/JASPlayer.h"
 #include "JSystem/JAudio/JASSystemHeap.h"
+#include "JSystem/JAudio/JASRate.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
@@ -481,8 +482,18 @@ void JASystem::TTrack::updateSeq(u32, bool) {
 }
 
 /* 802825A0-8028265C       .text seqTimeToDspTime__Q28JASystem6TTrackFlUc */
-int JASystem::TTrack::seqTimeToDspTime(s32, u8) {
-    /* Nonmatching */
+int JASystem::TTrack::seqTimeToDspTime(s32 param_1, u8 param_2) {
+    f32 f1 = ((f32)param_1 * (f32)param_2) / 100.0f;
+    if (field_0x387) {
+        f1 /= field_0x368;
+    } else {
+        f1 = 120.0f * f1;
+        f1 /= field_0x378;
+        if (Kernel::getOutputRate() == 0) {
+            f1 = (f1 * Kernel::getSubFrames()) / 10.0f;
+        }
+    }
+    return f1;
 }
 
 /* 8028265C-8028278C       .text setParam__Q28JASystem6TTrackFifi */

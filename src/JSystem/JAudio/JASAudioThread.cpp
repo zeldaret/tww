@@ -57,7 +57,7 @@ void* JASystem::TAudioThread::audioproc(void*) {
         sbIsDSPBoot = 1;
     }
     Driver::init();
-    AISetDSPSampleRate(Kernel::gAiSetting);
+    AISetDSPSampleRate(Kernel::getAiSetting());
     AIRegisterDMACallback(syncAudio);
     AIStartDMA();
     while (true) {

@@ -54,6 +54,13 @@ namespace JASystem {
         void extraUpdate(TChannel*, u32);
         static void updatecallLogicalChannel(TChannel*, u32);
 
+        u8 getNoteOnPriority() const { return field_0x48; }
+
+        // TODO
+        void getLifeTimePriority() const {}
+        void getReleasePriority() const {}
+        void setSkipSamples(u32) {}
+
         /* 0x00 */ u8 field_0x0;
         /* 0x01 */ u8 field_0x1;
         /* 0x02 */ u8 mPauseFlag;

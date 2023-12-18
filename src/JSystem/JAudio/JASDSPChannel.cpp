@@ -249,11 +249,11 @@ f32 JASystem::DSP_LIMIT_RATIO = 1.1f;
 /* 80289E68-8028A04C       .text updateAll__Q28JASystem11TDSPChannelFv */
 void JASystem::TDSPChannel::updateAll() {
     /* Nonmatching */
-    if (Kernel::gSubFrames <= 10) {
+    if (Kernel::getSubFrames() <= 10) {
         OSTick time = OSGetTick();
         OSTick var3 = time - old_time;
         old_time = time;
-        u32 var2 = Kernel::gSubFrames - TAudioThread::snIntCount;
+        u32 var2 = Kernel::getSubFrames() - TAudioThread::snIntCount;
         history[var2] = var3;
         if (var2) {
             if (f32(history[0]) / var3 < DSP_LIMIT_RATIO) {

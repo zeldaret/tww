@@ -121,7 +121,7 @@ JASystem::TChannel* JASystem::BankMgr::noteOnOsc(TChannelMgr* param_1, int param
     channel->field_0xc = 2;
     channel->field_0x0 = param_4;
     channel->field_0x1 = param_3;
-    channel->field_0x50 = 16736.016f / Kernel::gDacRate;
+    channel->field_0x50 = 16736.016f / Kernel::getDacRate();
     channel->field_0x58 = channel->field_0x50;
     s32 var1 = param_3;
     if (var1 < 0) {
