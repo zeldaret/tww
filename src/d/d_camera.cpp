@@ -3,9 +3,14 @@
 // Translation Unit: d_camera.cpp
 //
 
-#include "d_camera.h"
+#include "d/d_camera.h"
+#include "d/d_bg_s_gnd_chk.h"
+#include "d/d_bg_s_lin_chk.h"
+#include "d/d_bg_s_sph_chk.h"
+#include "SSystem/SComponent/c_bg_s.h"
 #include "dolphin/types.h"
 
+class camera_process_class;
 
 /* 80161790-801618B8       .text __ct__9dCamera_cFP12camera_class */
 dCamera_c::dCamera_c(camera_class*) {
@@ -18,7 +23,7 @@ dCamera_c::~dCamera_c() {
 }
 
 /* 80161994-80162128       .text initialize__9dCamera_cFP12camera_classP10fopAc_ac_cUlUl */
-void dCamera_c::initialize(camera_class*, fopAc_ac_c*, unsigned long, unsigned long) {
+void dCamera_c::initialize(camera_class*, fopAc_ac_c*, u32, u32) {
     /* Nonmatching */
 }
 
@@ -38,7 +43,7 @@ void dCamera_c::Stay() {
 }
 
 /* 8016214C-801621A0       .text ChangeModeOK__9dCamera_cFl */
-void dCamera_c::ChangeModeOK(long) {
+void dCamera_c::ChangeModeOK(s32) {
     /* Nonmatching */
 }
 
@@ -72,11 +77,6 @@ dBgS_CamLinChk_NorWtr::~dBgS_CamLinChk_NorWtr() {
     /* Nonmatching */
 }
 
-/* 8016319C-801632F0       .text __dt__14dBgS_CamLinChkFv */
-dBgS_CamLinChk::~dBgS_CamLinChk() {
-    /* Nonmatching */
-}
-
 /* 801632F0-8016336C       .text Att__9dCamera_cFv */
 void dCamera_c::Att() {
     /* Nonmatching */
@@ -98,12 +98,12 @@ void dCamera_c::NotRun() {
 }
 
 /* 801640A8-801640B4       .text SetTrimSize__9dCamera_cFl */
-void dCamera_c::SetTrimSize(long) {
+void dCamera_c::SetTrimSize(s32) {
     /* Nonmatching */
 }
 
 /* 801640B4-801640C0       .text SetTrimTypeForce__9dCamera_cFl */
-void dCamera_c::SetTrimTypeForce(long) {
+void dCamera_c::SetTrimTypeForce(s32) {
     /* Nonmatching */
 }
 
@@ -118,22 +118,22 @@ void dCamera_c::Draw() {
 }
 
 /* 8016418C-80164898       .text nextMode__9dCamera_cFl */
-void dCamera_c::nextMode(long) {
+void dCamera_c::nextMode(s32) {
     /* Nonmatching */
 }
 
 /* 80164898-80164A48       .text onModeChange__9dCamera_cFll */
-void dCamera_c::onModeChange(long, long) {
+void dCamera_c::onModeChange(s32, s32) {
     /* Nonmatching */
 }
 
 /* 80164A48-80164CEC       .text nextType__9dCamera_cFl */
-void dCamera_c::nextType(long) {
+void dCamera_c::nextType(s32) {
     /* Nonmatching */
 }
 
 /* 80164CEC-80164DB4       .text onTypeChange__9dCamera_cFll */
-void dCamera_c::onTypeChange(long, long) {
+void dCamera_c::onTypeChange(s32, s32) {
     /* Nonmatching */
 }
 
@@ -143,17 +143,17 @@ void dCamera_c::SetTypeForce(char*, fopAc_ac_c*) {
 }
 
 /* 80164DFC-80164E2C       .text SetTypeForce__9dCamera_cFlP10fopAc_ac_c */
-void dCamera_c::SetTypeForce(long, fopAc_ac_c*) {
+void dCamera_c::SetTypeForce(s32, fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 80164E2C-80164F5C       .text onStyleChange__9dCamera_cFll */
-void dCamera_c::onStyleChange(long, long) {
+void dCamera_c::onStyleChange(s32, s32) {
     /* Nonmatching */
 }
 
 /* 80164F5C-8016513C       .text GetCameraTypeFromMapToolID__9dCamera_cFll */
-void dCamera_c::GetCameraTypeFromMapToolID(long, long) {
+void dCamera_c::GetCameraTypeFromMapToolID(s32, s32) {
     /* Nonmatching */
 }
 
@@ -168,7 +168,7 @@ void dCamera_c::pushPos() {
 }
 
 /* 80165234-8016528C       .text limited_range_addition__FPffff */
-void limited_range_addition(float*, float, float, float) {
+void limited_range_addition(f32*, f32, f32, f32) {
     /* Nonmatching */
 }
 
@@ -198,7 +198,7 @@ void dCamera_c::relationalPos(fopAc_ac_c*, cXyz*, cSAngle) {
 }
 
 /* 8016548C-801656AC       .text relationalPos__9dCamera_cFP10fopAc_ac_cP10fopAc_ac_cP4cXyzf */
-void dCamera_c::relationalPos(fopAc_ac_c*, fopAc_ac_c*, cXyz*, float) {
+void dCamera_c::relationalPos(fopAc_ac_c*, fopAc_ac_c*, cXyz*, f32) {
     /* Nonmatching */
 }
 
@@ -223,7 +223,7 @@ void dCamera_c::radiusActorInSight(fopAc_ac_c*, fopAc_ac_c*) {
 }
 
 /* 80165830-80165CC4       .text radiusActorInSight__9dCamera_cFP10fopAc_ac_cP10fopAc_ac_cP4cXyzP4cXyzfs */
-void dCamera_c::radiusActorInSight(fopAc_ac_c*, fopAc_ac_c*, cXyz*, cXyz*, float, short) {
+void dCamera_c::radiusActorInSight(fopAc_ac_c*, fopAc_ac_c*, cXyz*, cXyz*, f32, s16) {
     /* Nonmatching */
 }
 
@@ -238,27 +238,27 @@ dBgS_CamGndChk_Wtr::~dBgS_CamGndChk_Wtr() {
 }
 
 /* 80166230-80166354       .text lineBGCheck__9dCamera_cFP4cXyzP4cXyzP11dBgS_LinChkUl */
-void dCamera_c::lineBGCheck(cXyz*, cXyz*, dBgS_LinChk*, unsigned long) {
+void dCamera_c::lineBGCheck(cXyz*, cXyz*, dBgS_LinChk*, u32) {
     /* Nonmatching */
 }
 
 /* 80166354-80166740       .text lineBGCheck__9dCamera_cFP4cXyzP4cXyzP4cXyzUl */
-void dCamera_c::lineBGCheck(cXyz*, cXyz*, cXyz*, unsigned long) {
+void dCamera_c::lineBGCheck(cXyz*, cXyz*, cXyz*, u32) {
     /* Nonmatching */
 }
 
 /* 80166740-80166A04       .text lineBGCheck__9dCamera_cFP4cXyzP4cXyzUl */
-void dCamera_c::lineBGCheck(cXyz*, cXyz*, unsigned long) {
+void dCamera_c::lineBGCheck(cXyz*, cXyz*, u32) {
     /* Nonmatching */
 }
 
 /* 80166A04-80166CD4       .text lineBGCheckBack__9dCamera_cFP4cXyzP4cXyzUl */
-void dCamera_c::lineBGCheckBack(cXyz*, cXyz*, unsigned long) {
+void dCamera_c::lineBGCheckBack(cXyz*, cXyz*, u32) {
     /* Nonmatching */
 }
 
 /* 80166CD4-80166D00       .text lineBGCheckBoth__9dCamera_cFP4cXyzP4cXyzP11dBgS_LinChkUl */
-void dCamera_c::lineBGCheckBoth(cXyz*, cXyz*, dBgS_LinChk*, unsigned long) {
+void dCamera_c::lineBGCheckBoth(cXyz*, cXyz*, dBgS_LinChk*, u32) {
     /* Nonmatching */
 }
 
@@ -273,17 +273,12 @@ void sph_chk_callback(dBgS_SphChk*, cBgD_Vtx_t*, int, int, int, cM3dGPla*, void*
 }
 
 /* 80166EA4-80167294       .text compWallMargin__9dCamera_cFP4cXyzf */
-void dCamera_c::compWallMargin(cXyz*, float) {
+void dCamera_c::compWallMargin(cXyz*, f32) {
     /* Nonmatching */
 }
 
 /* 80167294-801673DC       .text __dt__14dBgS_CamSphChkFv */
 dBgS_CamSphChk::~dBgS_CamSphChk() {
-    /* Nonmatching */
-}
-
-/* 801673DC-801674F4       .text __dt__11dBgS_SphChkFv */
-dBgS_SphChk::~dBgS_SphChk() {
     /* Nonmatching */
 }
 
@@ -293,7 +288,7 @@ void dCamera_c::defaultTriming() {
 }
 
 /* 801675E8-801676C0       .text setView__9dCamera_cFffff */
-void dCamera_c::setView(float, float, float, float) {
+void dCamera_c::setView(f32, f32, f32, f32) {
     /* Nonmatching */
 }
 
@@ -303,7 +298,7 @@ void dCamera_c::forwardCheckAngle() {
 }
 
 /* 80167F08-80168D44       .text bumpCheck__9dCamera_cFUl */
-void dCamera_c::bumpCheck(unsigned long) {
+void dCamera_c::bumpCheck(u32) {
     /* Nonmatching */
 }
 
@@ -328,18 +323,12 @@ void dCamera_c::checkGroundInfo() {
 }
 
 /* 8016A0F0-8016A110       .text followCamera2__9dCamera_cFl */
-void dCamera_c::followCamera2(long) {
+void dCamera_c::followCamera2(s32) {
     /* Nonmatching */
 }
 
 /* 8016A110-8016C4F8       .text followCamera__9dCamera_cFl */
-void dCamera_c::followCamera(long) {
-    /* Nonmatching */
-}
-
-
-/* 8016C53C-8016C55C       .text d2s__6cAngleFf */
-void cAngle::d2s(float) {
+void dCamera_c::followCamera(s32) {
     /* Nonmatching */
 }
 
@@ -348,20 +337,13 @@ void dCamera_c::eyePos(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-/* 8016C578-8016C5A4       .text GetTriPla__4cBgSCFR13cBgS_PolyInfo */
-void cBgS::GetTriPla(cBgS_PolyInfo&) const {
-    /* Nonmatching */
-}
-
 /* 8016C5A4-8016C5D0       .text heightOf__9dCamera_cFP10fopAc_ac_c */
 void dCamera_c::heightOf(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
-
-
 /* 8016C618-8016D824       .text lockonCamera__9dCamera_cFl */
-void dCamera_c::lockonCamera(long) {
+void dCamera_c::lockonCamera(s32) {
     /* Nonmatching */
 }
 
@@ -376,94 +358,92 @@ void dCamera_c::getMsgCmdCut() {
 }
 
 /* 8016D8D0-80170434       .text talktoCamera__9dCamera_cFl */
-void dCamera_c::talktoCamera(long) {
+void dCamera_c::talktoCamera(s32) {
     /* Nonmatching */
 }
 
-
-
 /* 80170490-801708E0       .text CalcSubjectAngle__9dCamera_cFPsPs */
-void dCamera_c::CalcSubjectAngle(short*, short*) {
+void dCamera_c::CalcSubjectAngle(s16*, s16*) {
     /* Nonmatching */
 }
 
 /* 801708E0-801719C4       .text subjectCamera__9dCamera_cFl */
-void dCamera_c::subjectCamera(long) {
+void dCamera_c::subjectCamera(s32) {
     /* Nonmatching */
 }
 
 /* 801719C4-80172C20       .text towerCamera__9dCamera_cFl */
-void dCamera_c::towerCamera(long) {
+void dCamera_c::towerCamera(s32) {
     /* Nonmatching */
 }
 
 /* 80172C20-8017346C       .text crawlCamera__9dCamera_cFl */
-void dCamera_c::crawlCamera(long) {
+void dCamera_c::crawlCamera(s32) {
     /* Nonmatching */
 }
 
 /* 8017346C-80173E40       .text hookshotCamera__9dCamera_cFl */
-void dCamera_c::hookshotCamera(long) {
+void dCamera_c::hookshotCamera(s32) {
     /* Nonmatching */
 }
 
 /* 80173E40-80174E98       .text tornadoCamera__9dCamera_cFl */
-void dCamera_c::tornadoCamera(long) {
+void dCamera_c::tornadoCamera(s32) {
     /* Nonmatching */
 }
 
 /* 80174E98-8017623C       .text rideCamera__9dCamera_cFl */
-void dCamera_c::rideCamera(long) {
+void dCamera_c::rideCamera(s32) {
     /* Nonmatching */
 }
 
 /* 8017623C-80176F54       .text hungCamera__9dCamera_cFl */
-void dCamera_c::hungCamera(long) {
+void dCamera_c::hungCamera(s32) {
     /* Nonmatching */
 }
 
 /* 80176F54-8017793C       .text vomitCamera__9dCamera_cFl */
-void dCamera_c::vomitCamera(long) {
+void dCamera_c::vomitCamera(s32) {
     /* Nonmatching */
 }
 
 /* 8017793C-801787B8       .text shieldCamera__9dCamera_cFl */
-void dCamera_c::shieldCamera(long) {
+void dCamera_c::shieldCamera(s32) {
     /* Nonmatching */
 }
 
 /* 801787B8-801795C8       .text manualCamera__9dCamera_cFl */
-void dCamera_c::manualCamera(long) {
+void dCamera_c::manualCamera(s32) {
     /* Nonmatching */
 }
 
 /* 801795C8-801799C0       .text nonOwnerCamera__9dCamera_cFl */
-void dCamera_c::nonOwnerCamera(long) {
+void dCamera_c::nonOwnerCamera(s32) {
     /* Nonmatching */
 }
 
 /* 801799C0-80179F8C       .text fixedFrameCamera__9dCamera_cFl */
-void dCamera_c::fixedFrameCamera(long) {
+void dCamera_c::fixedFrameCamera(s32) {
     /* Nonmatching */
 }
 
 /* 80179F8C-8017A80C       .text fixedPositionCamera__9dCamera_cFl */
-void dCamera_c::fixedPositionCamera(long) {
+void dCamera_c::fixedPositionCamera(s32) {
     /* Nonmatching */
 }
 
 /* 8017A80C-8017B144       .text eventCamera__9dCamera_cFl */
-void dCamera_c::eventCamera(long) {
+void dCamera_c::eventCamera(s32) {
     /* Nonmatching */
 }
 
 /* 8017B144-8017B14C       .text demoCamera__9dCamera_cFl */
-void dCamera_c::demoCamera(long) {
+void dCamera_c::demoCamera(s32) {
     /* Nonmatching */
 }
 
 /* 8017B14C-8017B154       .text letCamera__9dCamera_cFl */
-void dCamera_c::letCamera(long) {
+void dCamera_c::letCamera(s32) {
     /* Nonmatching */
 }
 
@@ -473,17 +453,17 @@ void dCamera_c::Set(cXyz, cXyz) {
 }
 
 /* 8017B18C-8017B1EC       .text Set__9dCamera_cF4cXyz4cXyzfs */
-void dCamera_c::Set(cXyz, cXyz, float, short) {
+void dCamera_c::Set(cXyz, cXyz, f32, s16) {
     /* Nonmatching */
 }
 
 /* 8017B1EC-8017B24C       .text Set__9dCamera_cF4cXyz4cXyzsf */
-void dCamera_c::Set(cXyz, cXyz, short, float) {
+void dCamera_c::Set(cXyz, cXyz, s16, f32) {
     /* Nonmatching */
 }
 
 /* 8017B24C-8017B31C       .text Reset__9dCamera_cF4cXyz4cXyzfs */
-void dCamera_c::Reset(cXyz, cXyz, float, short) {
+void dCamera_c::Reset(cXyz, cXyz, f32, s16) {
     /* Nonmatching */
 }
 
@@ -503,7 +483,7 @@ void dCamera_c::ResetView() {
 }
 
 /* 8017B4C4-8017B51C       .text Chtyp__9dCamera_cFl */
-void dCamera_c::Chtyp(long) {
+void dCamera_c::Chtyp(s32) {
     /* Nonmatching */
 }
 
@@ -518,7 +498,7 @@ void dCamera_c::shakeCamera() {
 }
 
 /* 8017BA50-8017BB8C       .text StartShake__9dCamera_cFlPUcl4cXyz */
-void dCamera_c::StartShake(long, unsigned char*, long, cXyz) {
+void dCamera_c::StartShake(s32, u8*, s32, cXyz) {
     /* Nonmatching */
 }
 
@@ -533,22 +513,22 @@ void dCamera_c::ResetBlure(int) {
 }
 
 /* 8017BBF0-8017BBF8       .text SetBlureAlpha__9dCamera_cFf */
-void dCamera_c::SetBlureAlpha(float) {
+void dCamera_c::SetBlureAlpha(f32) {
     /* Nonmatching */
 }
 
 /* 8017BBF8-8017BC08       .text SetBlureScale__9dCamera_cFfff */
-void dCamera_c::SetBlureScale(float, float, float) {
+void dCamera_c::SetBlureScale(f32, f32, f32) {
     /* Nonmatching */
 }
 
 /* 8017BC08-8017BC1C       .text SetBlureScale__9dCamera_cFf */
-void dCamera_c::SetBlureScale(float) {
+void dCamera_c::SetBlureScale(f32) {
     /* Nonmatching */
 }
 
 /* 8017BC1C-8017BC74       .text SetBlurePosition__9dCamera_cFfff */
-void dCamera_c::SetBlurePosition(float, float, float) {
+void dCamera_c::SetBlurePosition(f32, f32, f32) {
     /* Nonmatching */
 }
 
@@ -558,7 +538,7 @@ void dCamera_c::SetBlurePositionType(int) {
 }
 
 /* 8017BC7C-8017BC84       .text SetBlureTimer__9dCamera_cFl */
-void dCamera_c::SetBlureTimer(long) {
+void dCamera_c::SetBlureTimer(s32) {
     /* Nonmatching */
 }
 
@@ -603,27 +583,27 @@ void dCam_isManual(camera_class*) {
 }
 
 /* 8017BD9C-8017BDC0       .text dCam_getAngleY__FP12camera_class */
-void dCam_getAngleY(camera_class*) {
+s16 dCam_getAngleY(camera_class*) {
     /* Nonmatching */
 }
 
 /* 8017BDC0-8017BDC8       .text dCam_getAngleX__FP12camera_class */
-void dCam_getAngleX(camera_class*) {
+s16 dCam_getAngleX(camera_class*) {
     /* Nonmatching */
 }
 
 /* 8017BDC8-8017BDEC       .text dCam_getControledAngleY__FP12camera_class */
-void dCam_getControledAngleY(camera_class*) {
+s16 dCam_getControledAngleY(camera_class*) {
     /* Nonmatching */
 }
 
 /* 8017BDEC-8017BDFC       .text dCam_getCamera__Fv */
-void dCam_getCamera() {
+camera_class* dCam_getCamera() {
     /* Nonmatching */
 }
 
 /* 8017BDFC-8017BE20       .text dCam_getBody__Fv */
-void dCam_getBody() {
+dCamera_c* dCam_getBody() {
     /* Nonmatching */
 }
 
@@ -712,23 +692,13 @@ dBgS_CamGndChk::~dBgS_CamGndChk() {
     /* Nonmatching */
 }
 
-/* 8017D0CC-8017D0D0       .text __ct__Q29dCamera_c23@class$4017d_camera_cppFv */
-dCamera_c::@class$4017d_camera_cpp::@class$4017d_camera_cpp() {
-    /* Nonmatching */
-}
-
-/* 8017D0D0-8017D10C       .text __dt__Q29dCamera_c23@class$4017d_camera_cppFv */
-dCamera_c::@class$4017d_camera_cpp::~@class$4017d_camera_cpp() {
-    /* Nonmatching */
-}
-
 /* 8017D128-8017D13C       .text setFlag__9dCamera_cFUl */
-void dCamera_c::setFlag(unsigned long) {
+void dCamera_c::setFlag(u32) {
     /* Nonmatching */
 }
 
 /* 8017D13C-8017D150       .text chkFlag__9dCamera_cFUl */
-void dCamera_c::chkFlag(unsigned long) {
+void dCamera_c::chkFlag(u32) {
     /* Nonmatching */
 }
 
@@ -748,32 +718,11 @@ void dCamera_c::Center() {
 }
 
 /* 8017D1D4-8017D1F4       .text Flag__11dCamParam_cFlUs */
-void dCamParam_c::Flag(long, unsigned short) {
+void dCamParam_c::Flag(s32, u16) {
     /* Nonmatching */
 }
 
 /* 8017D200-8017D220       .text Val__11dCamParam_cFli */
-void dCamParam_c::Val(long, int) {
+void dCamParam_c::Val(s32, int) {
     /* Nonmatching */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

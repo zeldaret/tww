@@ -121,6 +121,7 @@ private:
     cSAngle mInclination;  // original: U
 
 public:
+    cSGlobe() {};
     cSGlobe(const cSGlobe&);
     cSGlobe(float, short, short);
     cSGlobe(float, const cSAngle&, const cSAngle&);

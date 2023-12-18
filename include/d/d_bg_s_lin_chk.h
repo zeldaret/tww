@@ -68,9 +68,11 @@ public:
 
 class dBgS_CamLinChk : public dBgS_LinChk {
 public:
-    dBgS_CamLinChk();
+    dBgS_CamLinChk() {
+        mbCamThrough = true;
+    }
 
-    virtual ~dBgS_CamLinChk();
+    virtual ~dBgS_CamLinChk() {}
 };
 
 class dBgS_CamLinChk_NorWtr : public dBgS_CamLinChk {

@@ -98,6 +98,8 @@ class dCamSetup_c {
 };
 
 class dCamParam_c {
+    void Flag(s32, u16);
+    void Val(s32, int);
     /* 0x0 */ dCamera__Style* mpStyle;
     /* 0x4 */ int mStyleIdx;
     /* 0x8 */ void* vtbl;
