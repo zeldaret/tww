@@ -30,7 +30,7 @@ class dMsgCtrl_c {
 public:
     int init(u16);
     int execute();
-    ~dMsgCtrl_c();
+    ~dMsgCtrl_c() {}
 
     /* 0x00 */ u16 field_0x0;
     /* 0x04 */ u32 mMsgID;

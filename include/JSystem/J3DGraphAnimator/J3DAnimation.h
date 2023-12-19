@@ -331,7 +331,7 @@ public:
     virtual void calcTransform(f32, u16, J3DTransformInfo*) const;
 
     virtual ~J3DAnmTransformKey() {}
-    virtual void getTransform(u16, J3DTransformInfo*) const;
+    virtual void getTransform(u16 param_1, J3DTransformInfo* param_2) const { calcTransform(getFrame(), param_1, param_2); }
 
 private:
     /* 0x24 */ int field_0x24;
@@ -461,7 +461,7 @@ public:
     void searchUpdateMaterialID(J3DMaterialTable*);
     void searchUpdateMaterialID(J3DModelData*);
 
-    virtual ~J3DAnmTevRegKey();
+    virtual ~J3DAnmTevRegKey() {}
     virtual s32 getKind() const;
 
     u16 getCRegUpdateMaterialNum() const { return mCRegUpdateMaterialNum; }

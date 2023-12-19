@@ -1,6 +1,7 @@
 #ifndef J3DPACKET_H
 #define J3DPACKET_H
 
+#include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "dolphin/gd/GDBase.h"
 #include "dolphin/types.h"
@@ -207,7 +208,10 @@ public:
     bool isEnabled_Diff() const { return mpInitShapePacket->getDisplayListObj() != NULL; }
 
     virtual ~J3DMatPacket();
-    virtual int entry(J3DDrawBuffer*);
+    virtual int entry(J3DDrawBuffer* param_1) {
+        J3DDrawBuffer::sortFunc func = J3DDrawBuffer::sortFuncTable[param_1->mSortType];
+        return (param_1->*func)(this);
+    }
     virtual void draw();
     virtual bool isSame(J3DMatPacket*) const;
 

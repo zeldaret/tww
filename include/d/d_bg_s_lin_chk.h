@@ -38,7 +38,7 @@ class dBgS_BoomerangLinChk : public dBgS_LinChk {
 public:
     dBgS_BoomerangLinChk() { SetBoomerang(); }
 
-    virtual ~dBgS_BoomerangLinChk();
+    virtual ~dBgS_BoomerangLinChk() {}
 };
 
 class dBgS_ArrowLinChk : public dBgS_LinChk {

@@ -40,7 +40,7 @@ STATIC_ASSERT(sizeof(daPy_mtxFollowEcallBack_c) == 0x0C);
 
 class daPy_HIO_c {
 public:
-    daPy_HIO_c();
+    daPy_HIO_c() {}
 
 public:
     /* 0x00 */ u8 temp[0x3F - 0x00];
@@ -82,6 +82,7 @@ class daPy_py_c : public fopAc_ac_c {
 public:
     enum daPy_FLG0 {
         daPyFlg0_UNK4               = 0x00000004,
+        daPyFlg0_UNK8               = 0x00000008,
         daPyFlg0_DEKU_SP_RETURN_FLG = 0x00000010,
         daPyFlg0_CUT_AT_FLG         = 0x00000040,
         daPyFlg0_UNK100             = 0x00000100,
@@ -277,7 +278,7 @@ public:
     virtual BOOL checkTactWait() const { return FALSE; }
     virtual void setTactZev(unsigned int, int, char*) {}
     virtual void onDekuSpReturnFlg(u8) {}
-    virtual bool checkComboCutTurn() const { return false; }
+    virtual BOOL checkComboCutTurn() const { return false; }
     virtual f32 getBaseAnimeFrameRate() = 0;
     virtual f32 getBaseAnimeFrame() = 0;
     virtual u32 getItemID() const { return -1; }
