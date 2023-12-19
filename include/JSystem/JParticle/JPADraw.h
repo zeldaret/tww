@@ -1,50 +1,54 @@
 #ifndef JPADRAW_H
 #define JPADRAW_H
 
-#include "dolphin/types.h"
+#include "JSystem/JGeometry.h"
+#include "JSystem/JParticle/JPADrawVisitor.h"
+#include "JSystem/JParticle/JPADrawSetupTev.h"
 #include "dolphin/gx/GXStruct.h"
 #include "dolphin/gx/GXEnum.h"
 #include "dolphin/mtx/mtx.h"
+#include "global.h"
 
-class JPABaseShape;
-class JPAExtraShape;
-class JPASweepShape;
-class JPAExTexShape;
-class JPATextureResource;
-class JPABaseEmitter;
-class JPABaseParticle;
-struct JSUPtrList;
-
-class JPADraw;
-class JPADrawExecEmitterVisitor;
-class JPADrawExecParticleVisitor;
-class JPADrawClipBoard;
-class JPADrawVisitorContainer;
-
-class JPADrawContext {
+class JPADrawClipBoard {
 public:
-    /* 0x00 */ JPABaseEmitter* pbe;
-    /* 0x04 */ JPABaseShape* pbsp;
-    /* 0x08 */ JPAExtraShape* pesp;
-    /* 0x0C */ JPASweepShape* pssp;
-    /* 0x10 */ JPAExTexShape* petx;
-    /* 0x14 */ JPADraw* mpDraw;
-    /* 0x18 */ JSUPtrList* mpActiveParticles;
-    /* 0x1C */ JPATextureResource* mpTextureResource;
-    /* 0x20 */ u16* pTexIdx;
+    JPADrawClipBoard() {}
+    ~JPADrawClipBoard() {}
 
-    static JPADrawClipBoard* pcb;
+    JPADrawSetupTev field_0x0;
+    f32 field_0x4;
+    f32 field_0x8;
+    f32 field_0xc;
+    f32 field_0x10;
+    JGeometry::TVec2<f32> field_0x14[4];
+    MtxP field_0x34;
+    f32 field_0x38;
+    f32 field_0x3c;
+    f32 field_0x40;
+    f32 field_0x44;
+    f32 field_0x48;
+    f32 field_0x4c;
+    f32 field_0x50;
+    f32 field_0x54;
+    f32 field_0x58;
+    f32 field_0x5c;
+    f32 field_0x60;
+    f32 field_0x64;
+    Mtx field_0x68;
+    GXColor field_0x98;
+    GXColor field_0x9c;
+    void* field_0xa0;
+    u8 field_0xa4[0xb4 - 0xa4];
 };
 
 class JPADraw {
 public:
     struct JPADrawVisitorDefFlags {
-        /* 0x00 */ u32 mbIsEnableDrawParent;
-        /* 0x04 */ u32 mbHasPrmAnm;
-        /* 0x08 */ u32 mbHasEnvAnm;
-        /* 0x0C */ u32 mbIsStripe;
-        /* 0x10 */ u32 mbIsPointOrLine;
-        /* 0x04 */ u32 mbIsEnableAlpha;
+        /* 0x00 */ BOOL mbIsEnableDrawParent;
+        /* 0x04 */ BOOL mbHasPrmAnm;
+        /* 0x08 */ BOOL mbHasEnvAnm;
+        /* 0x0C */ BOOL mbIsStripe;
+        /* 0x10 */ BOOL mbIsPointOrLine;
+        /* 0x14 */ BOOL mbIsEnableAlpha;
     };
 
     bool initialize(JPABaseEmitter*, JPATextureResource*);
@@ -73,11 +77,11 @@ public:
     /* 0x00 */ JPADrawExecEmitterVisitor* mpExecEmtrVis[1];
     /* 0x04 */ JPADrawExecEmitterVisitor* mpExecEmtrPVis[5];
     /* 0x18 */ JPADrawExecEmitterVisitor* mpExecEmtrCVis[3];
-    /* 0x24 */ JPADrawExecParticleVisitor* mpCalcEmtrVis[4];
+    /* 0x24 */ JPADrawCalcEmitterVisitor* mpCalcEmtrVis[4];
     /* 0x34 */ JPADrawExecParticleVisitor* mpExecPtclVis[5];
-    /* 0x48 */ JPADrawExecParticleVisitor* mpCalcPtclVis[10];
+    /* 0x48 */ JPADrawCalcParticleVisitor* mpCalcPtclVis[10];
     /* 0x70 */ JPADrawExecParticleVisitor* mpExecChldVis[4];
-    /* 0x80 */ JPADrawExecParticleVisitor* mpCalcChldVis[2];
+    /* 0x80 */ JPADrawCalcParticleVisitor* mpCalcChldVis[2];
     /* 0x88 */ u8 execEmtrVisNum;
     /* 0x89 */ u8 execEmtrPVisNum;
     /* 0x8A */ u8 execEmtrCVisNum;
