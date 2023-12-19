@@ -67,7 +67,7 @@ void dFlower_packet_c::calc() {
 }
 
 /* 800C0A88-800C0D38       .text checkGroundY__FR4cXyz */
-void checkGroundY(cXyz&) {
+static void checkGroundY(cXyz&) {
     /* Nonmatching */
 }
 
