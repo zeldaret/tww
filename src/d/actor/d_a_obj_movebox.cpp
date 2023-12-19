@@ -10,7 +10,7 @@ static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
 static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
 static u8 dummy3[4] = {0x02, 0x00, 0x02, 0x01};
 static f64 dummy4[2] = {3.0, 0.5};
-u8 dummy5[0x4C];
+static u8 dummy5[0x4C];
 
 #include "d/actor/d_a_obj_movebox.h"
 #include "d/d_cc_d.h"

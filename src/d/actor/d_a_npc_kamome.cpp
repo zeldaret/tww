@@ -1051,7 +1051,7 @@ void daNpc_kam_c::initialDescendEvent(int evtStaffId) {
 }
 
 // Needed for the .rodata section to match.
-const f32 dummy5[] = {40.0f};
+static const f32 dummy5[] = {40.0f};
 
 /* 00003730-00003864       .text actionDescendEvent__11daNpc_kam_cFi */
 BOOL daNpc_kam_c::actionDescendEvent(int evtStaffId) {

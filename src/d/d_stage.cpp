@@ -38,7 +38,7 @@ void dStage_SetErrorRoom() {}
 /* 8004093C-80040940       .text dStage_SetErrorStage__Fv */
 void dStage_SetErrorStage() {}
 
-Vec dummy;
+static Vec dummy;
 
 dStage_KeepTresureInfo TresureInfo;
 dStage_KeepDoorInfo DoorInfo;

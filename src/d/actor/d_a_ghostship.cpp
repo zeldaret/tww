@@ -169,7 +169,7 @@ void daGhostship_c::modeProcCall() {
 }
 
 // probably unused/debug colors or something
-const u32 dummy[] = {
+static const u32 dummy[] = {
     0x0000FF80,
     0xFF000080,
     0xFF000080,
@@ -179,7 +179,7 @@ const u32 dummy[] = {
     0x0000FF80,
     0x0000FF80,
 };
-u32 dummyFunc() {
+static u32 dummyFunc() {
     return dummy[0];
 }
 

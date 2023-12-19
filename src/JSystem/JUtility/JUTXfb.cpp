@@ -108,7 +108,7 @@ void JUTXfb::initiate(u16 width, u16 height, JKRHeap* pHeap, JUTXfb::EXfbNumber 
     }
 }
 
-void dummy() {
+static void dummy() {
 	OSReport("JX:: disp = %d\n");
 	OSReport("JX:: drawing %d -> ");
 	OSReport("%d\n");

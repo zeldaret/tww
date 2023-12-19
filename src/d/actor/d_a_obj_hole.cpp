@@ -119,7 +119,7 @@ void daObj_Hole_c::modeWait() {
 }
 
 // Required to make rodata match
-const u8 dummy5[] = { 0x00, 0xFF, 0x00, 0x80};
+static const u8 dummy5[] = { 0x00, 0xFF, 0x00, 0x80};
 
 /* 000004F0-000004F4       .text modeEventInit__12daObj_Hole_cFv */
 void daObj_Hole_c::modeEventInit() {

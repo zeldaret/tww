@@ -13,7 +13,7 @@
 #include "SSystem/SComponent/c_list.h"
 #include "dolphin/dvd/dvd.h"
 
-u8 dummy[0x0c];
+static u8 dummy[0x0c];
 OSThread mDoDvdThd::l_thread;
 mDoDvdThdStack mDoDvdThd::l_threadStack;
 mDoDvdThd_param_c mDoDvdThd::l_param;

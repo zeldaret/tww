@@ -560,6 +560,6 @@ f32 J2DPrint::getNumberF32(const u8** param_1, f32 param_2, f32 param_3, int bas
     return uVar2;
 }
 
-void dummy2() {
+static void dummy2() {
     OSReport("buff != 0");
 }
