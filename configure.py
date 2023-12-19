@@ -889,7 +889,7 @@ config.libs = [
             Object(NonMatching, "JSystem/J3DGraphLoader/J3DMaterialFactory.cpp"),
             Object(NonMatching, "JSystem/J3DGraphLoader/J3DMaterialFactory_v21.cpp"),
             Object(NonMatching, "JSystem/J3DGraphLoader/J3DClusterLoader.cpp"),
-            Object(NonMatching, "JSystem/J3DGraphLoader/J3DModelLoader.cpp"),
+            Object(Matching,    "JSystem/J3DGraphLoader/J3DModelLoader.cpp"),
             Object(NonMatching, "JSystem/J3DGraphLoader/J3DModelLoaderCalcSize.cpp"),
             Object(NonMatching, "JSystem/J3DGraphLoader/J3DJointFactory.cpp"),
             Object(NonMatching, "JSystem/J3DGraphLoader/J3DShapeFactory.cpp"),

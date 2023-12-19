@@ -1,6 +1,14 @@
 #ifndef JSUPPORT_H
 #define JSUPPORT_H
 
+template <typename T>
+T* JSUConvertOffsetToPtr(const void* ptr, u32 offset) {
+    if (offset == NULL) {
+        return NULL;
+    } else {
+        return (T*)((s32)ptr + offset);
+    }
+}
 
 template <typename T>
 T* JSUConvertOffsetToPtr(const void* ptr, const void* offset) {

@@ -147,7 +147,6 @@ J3DMaterialTable* J3DModelLoader::loadMaterialTable(const void* i_data) {
 
 /* 802FBE24-802FC0CC       .text loadBinaryDisplayList__14J3DModelLoaderFPCvUl */
 J3DModelData* J3DModelLoader::loadBinaryDisplayList(const void* i_data, u32 i_flags) {
-    /* Nonmatching - strange loop optimization of (i_flags & 0x03000000) | 0x50100000 */
     mpModelData = new J3DModelData();
     mpModelData->clear();
     mpModelData->mpRawData = i_data;
@@ -183,12 +182,14 @@ J3DModelData* J3DModelLoader::loadBinaryDisplayList(const void* i_data, u32 i_fl
                 modifyMaterial(i_flags);
                 break;
             case 'MAT3':
+                u32 flags = 0x50100000;
+                flags |= i_flags & 0x03000000;
                 mpMaterialBlock = (J3DMaterialBlock*)block;
                 u32 matType = getBdlFlag_MaterialType(i_flags);
                 if (matType == 0) {
-                    readMaterial((J3DMaterialBlock*)block, (i_flags & 0x03000000) | 0x50100000);
+                    readMaterial((J3DMaterialBlock*)block, flags);
                 } else if (matType == 0x2000) {
-                    readPatchedMaterial((J3DMaterialBlock*)block, (i_flags & 0x03000000) | 0x50100000);
+                    readPatchedMaterial((J3DMaterialBlock*)block, flags);
                 }
                 break;
             default:
@@ -211,9 +212,9 @@ void J3DModelLoader::setupBBoardInfo() {
         J3DMaterial* mesh = mpModelData->getJointNodePointer(i)->getMesh();
         if (mesh != NULL) {
             u16 shape_index = mesh->getShape()->getIndex();
-            u16* index_table = JSUConvertOffsetToPtr<u16>(mpShapeBlock, mpShapeBlock->mpIndexTable);
+            u16* index_table = JSUConvertOffsetToPtr<u16>(mpShapeBlock, (u32)mpShapeBlock->mpIndexTable);
             J3DShapeInitData* shape_init_data =
-                JSUConvertOffsetToPtr<J3DShapeInitData>(mpShapeBlock, mpShapeBlock->mpShapeInitData);
+                JSUConvertOffsetToPtr<J3DShapeInitData>(mpShapeBlock, (u32)mpShapeBlock->mpShapeInitData);
             J3DJoint* joint;
             switch (shape_init_data[index_table[shape_index]].mShapeMtxType) {
                 case 0:
