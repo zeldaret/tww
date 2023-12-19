@@ -57,22 +57,22 @@ void J3DMaterialFactory::createLockedMaterial(J3DMaterial*, int, unsigned long) 
 }
 
 /* 802F83A0-802F8420       .text calcSize__18J3DMaterialFactoryCFP11J3DMaterialQ218J3DMaterialFactory12MaterialTypeiUl */
-void J3DMaterialFactory::calcSize(J3DMaterial*, J3DMaterialFactory::MaterialType, int, unsigned long) const {
+u32 J3DMaterialFactory::calcSize(J3DMaterial*, J3DMaterialFactory::MaterialType, int, unsigned long) const {
     /* Nonmatching */
 }
 
 /* 802F8420-802F8554       .text calcSizeNormalMaterial__18J3DMaterialFactoryCFP11J3DMaterialiUl */
-void J3DMaterialFactory::calcSizeNormalMaterial(J3DMaterial*, int, unsigned long) const {
+u32 J3DMaterialFactory::calcSizeNormalMaterial(J3DMaterial*, int, unsigned long) const {
     /* Nonmatching */
 }
 
 /* 802F8554-802F8624       .text calcSizePatchedMaterial__18J3DMaterialFactoryCFP11J3DMaterialiUl */
-void J3DMaterialFactory::calcSizePatchedMaterial(J3DMaterial*, int, unsigned long) const {
+u32 J3DMaterialFactory::calcSizePatchedMaterial(J3DMaterial*, int, unsigned long) const {
     /* Nonmatching */
 }
 
 /* 802F8624-802F863C       .text calcSizeLockedMaterial__18J3DMaterialFactoryCFP11J3DMaterialiUl */
-void J3DMaterialFactory::calcSizeLockedMaterial(J3DMaterial*, int, unsigned long) const {
+u32 J3DMaterialFactory::calcSizeLockedMaterial(J3DMaterial*, int, unsigned long) const {
     /* Nonmatching */
 }
 

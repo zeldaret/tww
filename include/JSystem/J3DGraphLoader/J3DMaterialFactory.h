@@ -25,10 +25,10 @@ public:
     void createPatchedMaterial(J3DMaterial*, int, unsigned long) const;
     void modifyPatchedCurrentMtx(J3DMaterial*, int) const;
     void createLockedMaterial(J3DMaterial*, int, unsigned long) const;
-    void calcSize(J3DMaterial*, MaterialType, int, unsigned long) const;
-    void calcSizeNormalMaterial(J3DMaterial*, int, unsigned long) const;
-    void calcSizePatchedMaterial(J3DMaterial*, int, unsigned long) const;
-    void calcSizeLockedMaterial(J3DMaterial*, int, unsigned long) const;
+    u32 calcSize(J3DMaterial*, MaterialType, int, unsigned long) const;
+    u32 calcSizeNormalMaterial(J3DMaterial*, int, unsigned long) const;
+    u32 calcSizePatchedMaterial(J3DMaterial*, int, unsigned long) const;
+    u32 calcSizeLockedMaterial(J3DMaterial*, int, unsigned long) const;
     void newMatColor(int, int) const;
     void newColorChanNum(int) const;
     void newColorChan(int, int) const;

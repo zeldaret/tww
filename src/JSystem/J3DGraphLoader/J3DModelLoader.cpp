@@ -18,14 +18,15 @@ J3DModelData* J3DModelLoaderDataBase::load(const void* i_data, u32 i_flags) {
     if (i_data == NULL) {
         return NULL;
     }
-    if (*(u32*)i_data == 'J3D1' && *(u32*)((u32)i_data + 4) == 'bmd1') {
+    const J3DModelFileData* fileHeader = (const J3DModelFileData*)i_data;
+    if (fileHeader->mMagic1 == 'J3D1' && fileHeader->mMagic2 == 'bmd1') {
         return NULL;
     }
-    if (*(u32*)i_data == 'J3D2' && *(u32*)((u32)i_data + 4) == 'bmd2') {
+    if (fileHeader->mMagic1 == 'J3D2' && fileHeader->mMagic2 == 'bmd2') {
         J3DModelLoader_v21 loader;
         return loader.load(i_data, i_flags);
     }
-    if (*(u32*)i_data == 'J3D2' && *(u32*)((u32)i_data + 4) == 'bmd3') {
+    if (fileHeader->mMagic1 == 'J3D2' && fileHeader->mMagic2 == 'bmd3') {
         J3DModelLoader_v26 loader;
         return loader.load(i_data, i_flags);
     }
@@ -37,7 +38,8 @@ J3DMaterialTable* J3DModelLoaderDataBase::loadMaterialTable(const void* i_data) 
     if (!i_data) {
         return NULL;
     }
-    if (*(u32*)i_data == 'J3D2' && *(u32*)((u32)i_data + 4) == 'bmt3') {
+    const J3DModelFileData* fileHeader = (const J3DModelFileData*)i_data;
+    if (fileHeader->mMagic1 == 'J3D2' && fileHeader->mMagic2 == 'bmt3') {
         J3DModelLoader_v26 loader;
         return loader.loadMaterialTable(i_data);
     }
@@ -49,12 +51,10 @@ J3DModelData* J3DModelLoaderDataBase::loadBinaryDisplayList(const void* i_data, 
     if (!i_data) {
         return NULL;
     }
-    if (*(u32*)i_data == 'J3D2') {
-        u32 file_type = *(u32*)((u32)i_data + 4);
-        if (file_type == 'bdl3' || file_type == 'bdl4') {
-            J3DModelLoader_v26 loader;
-            return loader.loadBinaryDisplayList(i_data, i_flags);
-        }
+    const J3DModelFileData* fileHeader = (const J3DModelFileData*)i_data;
+    if (fileHeader->mMagic1 == 'J3D2' && (fileHeader->mMagic2 == 'bdl3' || fileHeader->mMagic2 == 'bdl4')) {
+        J3DModelLoader_v26 loader;
+        return loader.loadBinaryDisplayList(i_data, i_flags);
     }
     return NULL;
 }
@@ -102,7 +102,7 @@ J3DModelData* J3DModelLoader::load(const void* i_data, u32 i_flags) {
                 OSReport("Unknown data block\n");
                 break;
         }
-        block = (J3DModelBlock*)((u32)block + block->mBlockSize);
+        block = block->getNext();
     }
     const J3DModelHierarchy* hierarchy = mpModelData->getHierarchy();
     mpModelData->makeHierarchy(NULL, &hierarchy);
@@ -137,7 +137,7 @@ J3DMaterialTable* J3DModelLoader::loadMaterialTable(const void* i_data) {
                 OSReport("Unknown data block\n");
                 break;
         }
-        block = (J3DModelBlock*)((u32)block + block->mBlockSize);
+        block = block->getNext();
     }
     if (mpMaterialTable->getTexture() == NULL) {
         mpMaterialTable->setTexture(new J3DTexture(0, NULL));
@@ -182,21 +182,21 @@ J3DModelData* J3DModelLoader::loadBinaryDisplayList(const void* i_data, u32 i_fl
                 modifyMaterial(i_flags);
                 break;
             case 'MAT3':
-                u32 flags = 0x50100000;
-                flags |= i_flags & 0x03000000;
+                u32 matFlags = 0x50100000;
+                matFlags |= i_flags & 0x03000000;
                 mpMaterialBlock = (J3DMaterialBlock*)block;
                 u32 matType = getBdlFlag_MaterialType(i_flags);
                 if (matType == 0) {
-                    readMaterial((J3DMaterialBlock*)block, flags);
+                    readMaterial((J3DMaterialBlock*)block, matFlags);
                 } else if (matType == 0x2000) {
-                    readPatchedMaterial((J3DMaterialBlock*)block, flags);
+                    readPatchedMaterial((J3DMaterialBlock*)block, matFlags);
                 }
                 break;
             default:
                 OSReport("Unknown data block\n");
                 break;
         }
-        block = (J3DModelBlock*)((u32)block + block->mBlockSize);
+        block = block->getNext();
     }
     J3DModelHierarchy const* hierarchy = mpModelData->getHierarchy();
     mpModelData->makeHierarchy(NULL, &hierarchy);
@@ -248,8 +248,8 @@ void J3DModelLoader::readInformation(const J3DModelInfoBlock* i_block, u32 i_fla
     mpModelData->mFlags = i_flags | i_block->mFlags;
     mpModelData->getJointTree().setFlag(mpModelData->mFlags);
     J3DMtxCalc* mtx_calc = NULL;
-    switch (mpModelData->mFlags & 0xf) {
-        case 0:
+    switch (mpModelData->mFlags & 0xF) {
+        case 0: // TODO: enum for mtxcalc type (and other load flags)
             mtx_calc = new J3DMtxCalcBasic();
             break;
         case 1:
@@ -457,7 +457,7 @@ void J3DModelLoader_v21::readMaterial_v21(const J3DMaterialBlock_v21* i_block, u
         }
     } else {
         for (u16 i = 0; i < mpMaterialTable->mMaterialNum; i++) {
-            mpMaterialTable->mMaterialNodePointer[i]->mDiffFlag = 0xc0000000;
+            mpMaterialTable->mMaterialNodePointer[i]->mDiffFlag = 0xC0000000;
         }
     }
 }
@@ -593,7 +593,7 @@ void J3DModelLoader::readMaterialDL(const J3DMaterialDLBlock* i_block, u32 i_fla
             );
         }
         for (u16 i = 0; i < mpMaterialTable->mMaterialNum; i++) {
-            mpMaterialTable->mMaterialNodePointer[i]->mDiffFlag = 0xc0000000;
+            mpMaterialTable->mMaterialNodePointer[i]->mDiffFlag = 0xC0000000;
         }
     } else {
         for (u16 i = 0; i < mpMaterialTable->mMaterialNum; i++) {

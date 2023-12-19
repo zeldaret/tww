@@ -11,6 +11,10 @@ inline u32 getBdlFlag_MaterialType(u32 i_flags) {
 struct J3DModelBlock {
     /* 0x00 */ u32 mBlockType;
     /* 0x04 */ u32 mBlockSize;
+
+    const J3DModelBlock* getNext() const {
+        return reinterpret_cast<const J3DModelBlock*>(reinterpret_cast<const u8*>(this) + mBlockSize);
+    }
 };
 
 struct J3DModelFileData {
@@ -135,18 +139,18 @@ public:
     virtual J3DModelData* load(const void*, u32);
     virtual J3DMaterialTable* loadMaterialTable(const void*);
     virtual J3DModelData* loadBinaryDisplayList(const void*, u32);
-    virtual void calcLoadSize(const void*, u32);
-    virtual void calcLoadMaterialTableSize(const void*);
-    virtual void calcLoadBinaryDisplayListSize(const void*, u32);
-    virtual void countMaterialNum(const void*);
+    virtual u32 calcLoadSize(const void*, u32);
+    virtual u32 calcLoadMaterialTableSize(const void*);
+    virtual u32 calcLoadBinaryDisplayListSize(const void*, u32);
+    virtual u16 countMaterialNum(const void*);
     virtual void setupBBoardInfo();
     virtual ~J3DModelLoader() {}
     virtual void readMaterial(const J3DMaterialBlock*, u32) {}
     virtual void readMaterial_v21(const J3DMaterialBlock_v21*, u32) {}
     virtual void readMaterialTable(const J3DMaterialBlock*, u32) {}
     virtual void readMaterialTable_v21(const J3DMaterialBlock_v21*, u32) {}
-    virtual s32 calcSizeMaterial(const J3DMaterialBlock*, u32) { return 0; }
-    virtual s32 calcSizeMaterialTable(const J3DMaterialBlock*, u32) { return 0; }
+    virtual u32 calcSizeMaterial(const J3DMaterialBlock*, u32) { return 0; }
+    virtual u32 calcSizeMaterialTable(const J3DMaterialBlock*, u32) { return 0; }
     
     void readInformation(const J3DModelInfoBlock*, u32);
     void readVertex(const J3DVertexBlock*);
@@ -159,13 +163,13 @@ public:
     void readPatchedMaterial(const J3DMaterialBlock*, u32);
     void readMaterialDL(const J3DMaterialDLBlock*, u32);
     void modifyMaterial(u32);
-    void calcSizeInformation(const J3DModelInfoBlock*, u32);
-    void calcSizeJoint(const J3DJointBlock*);
-    void calcSizeShape(const J3DShapeBlock*, u32);
-    void calcSizeTexture(const J3DTextureBlock*);
-    void calcSizeTextureTable(const J3DTextureBlock*);
-    void calcSizePatchedMaterial(const J3DMaterialBlock*, u32);
-    void calcSizeMaterialDL(const J3DMaterialDLBlock*, u32);
+    u32 calcSizeInformation(const J3DModelInfoBlock*, u32);
+    u32 calcSizeJoint(const J3DJointBlock*);
+    u32 calcSizeShape(const J3DShapeBlock*, u32);
+    u32 calcSizeTexture(const J3DTextureBlock*);
+    u32 calcSizeTextureTable(const J3DTextureBlock*);
+    u32 calcSizePatchedMaterial(const J3DMaterialBlock*, u32);
+    u32 calcSizeMaterialDL(const J3DMaterialDLBlock*, u32);
 
 protected:
     /* 0x04 */ J3DModelData* mpModelData;
@@ -189,8 +193,8 @@ public:
     ~J3DModelLoader_v26() {}
     void readMaterial(const J3DMaterialBlock*, u32);
     void readMaterialTable(const J3DMaterialBlock*, u32);
-    s32 calcSizeMaterial(const J3DMaterialBlock*, u32);
-    s32 calcSizeMaterialTable(const J3DMaterialBlock*, u32);
+    u32 calcSizeMaterial(const J3DMaterialBlock*, u32);
+    u32 calcSizeMaterialTable(const J3DMaterialBlock*, u32);
 };
 
 #endif /* J3DMODELLOADER_H */
