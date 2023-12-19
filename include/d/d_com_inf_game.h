@@ -175,6 +175,11 @@ enum ALWAYS_RES_FILE_ID { // IDs and indexes are synced
     ALWAYS_BTI_UMIPT=0x8E,
 };
 
+enum CLOTH_RES_FILE_ID { // IDs and indexes are synced
+    /* TEX */
+    CLOTH_BTI_CLOTHTOON=0x3,
+};
+
 class __d_timer_info_c {
 public:
     __d_timer_info_c() {

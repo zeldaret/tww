@@ -274,7 +274,7 @@ struct dItem_data_item_resource {
     /* 0x14 */ s8 mTevFrm; // If specified, keep the BRK animation on this frame.
     /* 0x16 */ s16 mItemMesgNum; // Message containing this item's name
     /* 0x18 */ u32 mUnused; // Always 0, doesn't seem to be read
-    /* 0x1C */ u32 mUnknown; // Varies between items, but doesn't seem to be read
+    /* 0x1C */ u32 mUnknown; // Varies between items, but doesn't seem to be read. Resembles a differed dlist flag.
     /* 0x20 */ u16 mHeapSize;
 };
 

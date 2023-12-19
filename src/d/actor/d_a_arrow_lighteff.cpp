@@ -81,13 +81,13 @@ BOOL daArrow_Lighteff_c::CreateHeap() {
     
     J3DModelData* modelData;
     if(field_0x2E8 == 1) {
-        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", 0x32));
+        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GARWFI00));
     }
     else if(field_0x2E8 == 2) {
-        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", 0x33));
+        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GARWFI01));
     }
     else {
-        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", 0x34));
+        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GARWG00));
     }
 
     JUT_ASSERT(187, modelData != 0);
@@ -100,16 +100,16 @@ BOOL daArrow_Lighteff_c::CreateHeap() {
     J3DAnmTextureSRTKey* btk;
     J3DAnmTevRegKey* brk;
     if(field_0x2E8 == 1) {
-        btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Link", 0x5E));
-        brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Link", 0x52));
+        btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Link", LINK_BTK_GARWFI00));
+        brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Link", LINK_BRK_GARWFI00));
     }
     else if(field_0x2E8 == 2) {
-        btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Link", 0x5F));
-        brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Link", 0x53));
+        btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Link", LINK_BTK_GARWFI01));
+        brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Link", LINK_BRK_GARWFI01));
     }
     else {
-        btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Link", 0x60));
-        brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Link", 0x54));
+        btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Link", LINK_BTK_GARWG00));
+        brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Link", LINK_BRK_GARWG00));
     }
 
     JUT_ASSERT(216, btk != 0);

@@ -10,6 +10,9 @@ class dKy_tevstr_c;
 
 class dCloth_packet_c : public J3DPacket {
 public:
+    typedef dCloth_packet_c* (*CreateFunc)(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
+    typedef int (*FactorCheck)(dCloth_packet_c*, int, int);
+
     dCloth_packet_c(ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**);
     ~dCloth_packet_c();
     virtual void init();
@@ -27,7 +30,6 @@ public:
 
     void setScale(cXyz scale) { mScale = scale; }
     void setMtx(Mtx mtx);
-    typedef int (*FactorCheck)(dCloth_packet_c*, int, int);
     void setFactorCheckCB(FactorCheck cb) { mpFactorCheckCB = cb; }
     void setWindPower(f32 wind, f32 windWave) {
         mWindSpeed = wind;

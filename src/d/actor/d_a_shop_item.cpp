@@ -15,6 +15,41 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
 
+enum FDAI_RES_FILE_ID { // IDs and indexes are synced
+    /* BCK */
+    FDAI_BCK_FOBJ00=0x5,
+    FDAI_BCK_FOBJ01=0x6,
+    FDAI_BCK_FOBJ02=0x7,
+    FDAI_BCK_FOBJ05=0x8,
+    FDAI_BCK_FOBJ06=0x9,
+    FDAI_BCK_FOBJ07=0xA,
+    FDAI_BCK_FOBJ08=0xB,
+    FDAI_BCK_FOBJ09=0xC,
+    FDAI_BCK_FOBJ10=0xD,
+    FDAI_BCK_FOBJ11=0xE,
+    
+    /* BDL */
+    FDAI_BDL_FDAI=0x11,
+    FDAI_BDL_FOBJ00=0x12,
+    FDAI_BDL_FOBJ01=0x13,
+    FDAI_BDL_FOBJ02=0x14,
+    FDAI_BDL_FOBJ03=0x15,
+    FDAI_BDL_FOBJ04=0x16,
+    FDAI_BDL_FOBJ05=0x17,
+    FDAI_BDL_FOBJ06=0x18,
+    FDAI_BDL_FOBJ07=0x19,
+    FDAI_BDL_FOBJ08=0x1A,
+    FDAI_BDL_FOBJ09=0x1B,
+    FDAI_BDL_FOBJ10=0x1C,
+    FDAI_BDL_FOBJ11=0x1D,
+    
+    /* TEX */
+    FDAI_BTI_FTEX03=0x20,
+    FDAI_BTI_FTEX04=0x21,
+    FDAI_BTI_FTEX05=0x22,
+    FDAI_BTI_FTEX07=0x23,
+};
+
 const char daShopItem_c::m_cloth_arcname[] = "Cloth";
 const f32 daShopItem_c::m_cullfar_max = 5000.0f;
 
@@ -62,8 +97,18 @@ void daShopItem_c::CreateInit() {
 
 BOOL daShopItem_c::clothCreate() {
     if(isUseClothPacket(m_itemNo)) {
-        dCloth_packet_c* (*clothFunc[4])(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**) = {dClothVobj03_create, dClothVobj04_create, dClothVobj05_create, dClothVobj07_0_create};
-        u32 clothRes[4] = {0x20, 0x21, 0x22, 0x23};
+        dCloth_packet_c::CreateFunc clothFunc[4] = {
+            (dCloth_packet_c::CreateFunc)dClothVobj03_create,
+            (dCloth_packet_c::CreateFunc)dClothVobj04_create,
+            (dCloth_packet_c::CreateFunc)dClothVobj05_create,
+            (dCloth_packet_c::CreateFunc)dClothVobj07_0_create
+        };
+        u32 clothRes[4] = {
+            FDAI_BTI_FTEX03,
+            FDAI_BTI_FTEX04,
+            FDAI_BTI_FTEX05,
+            FDAI_BTI_FTEX07
+        };
 
         switch(m_itemNo) {
             case HEROS_FLAG:
@@ -81,7 +126,7 @@ BOOL daShopItem_c::clothCreate() {
         }
 
         ResTIMG* shopArc = (ResTIMG*)dComIfG_getObjectRes(getShopArcname(), clothRes[field_0x648]);
-        ResTIMG* clothArc = (ResTIMG*)dComIfG_getObjectRes(m_cloth_arcname, 3);
+        ResTIMG* clothArc = (ResTIMG*)dComIfG_getObjectRes(m_cloth_arcname, CLOTH_BTI_CLOTHTOON);
 
         field_0x644 = (*clothFunc[field_0x648])(shopArc, clothArc, &mTevStr, 0);
         if (field_0x644 == 0) {
