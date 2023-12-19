@@ -60,12 +60,6 @@ void J3DModel::initialize() {
     mpVisibilityManager = NULL;
 }
 
-enum {
-    J3DMdlDataFlag_ConcatView = 0x10,
-    J3DMdlDataFlag_NoUseDrawMtx = 0x20,
-    J3DMdlDataFlag_NoAnimation = 0x100,
-};
-
 static inline u32 getMdlDataFlag_MtxLoadType(u32 flag) {
     return flag & 0xF0;
 }
@@ -453,7 +447,7 @@ s32 J3DModel::setSkinDeform(J3DSkinDeform* pSkinDeform, u32 flags) {
     } else {
         mpSkinDeform->initMtxIndexArray(mModelData);
 
-        ret = mModelData->checkFlag(0x100);
+        ret = mModelData->checkFlag(J3DMdlDataFlag_NoAnimation);
         if (ret != J3DErrType_Success) {
             mpSkinDeform->changeFastSkinDL(mModelData);
             flags &= ~2;
@@ -643,7 +637,7 @@ void J3DModel::viewCalc() {
     swapDrawMtx();
     swapNrmMtx();
 
-    if (mModelData->checkFlag(0x20)) {
+    if (mModelData->checkFlag(J3DMdlDataFlag_NoUseDrawMtx)) {
         if (getMtxCalcMode() == 2)
             calcViewBaseMtx(j3dSys.getViewMtx(), mBaseScale, mBaseTransformMtx, (MtxP)&mViewBaseMtx);
 

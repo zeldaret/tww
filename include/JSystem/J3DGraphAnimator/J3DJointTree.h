@@ -34,7 +34,6 @@ public:
     J3DJointTree() { clear(); }
     void clear();
     void makeHierarchy(J3DNode*, const J3DModelHierarchy**, J3DMaterialTable*, J3DShape**);
-    void findImportantMtxIndex();
 
     virtual ~J3DJointTree() {}
 
@@ -42,21 +41,31 @@ public:
     u16 getWEvlpMtxNum() const { return mWEvlpMtxNum; }
     u8 getWEvlpMixMtxNum(u16 idx) const { return mWEvlpMixMtxNum[idx]; }
     u16 * getWEvlpMixIndex() const { return mWEvlpMixIndex; }
-    f32 * getWEvlpMixWeight() const { return mWEvlpMixWeight; }
+    f32 * getWEvlpMixWeight() { return mWEvlpMixWeight; }
     u16 getDrawFullWgtMtxNum() const { return mDrawMtxData.mDrawFullWgtMtxNum; }
     u16 getJointNum() const { return mJointNum; }
     u16 getDrawMtxNum() const { return mDrawMtxData.mEntryNum; }
     u8 getDrawMtxFlag(u16 idx) const { return mDrawMtxData.mDrawMtxFlag[idx]; }
     u16 getDrawMtxIndex(u16 idx) const { return mDrawMtxData.mDrawMtxIndex[idx]; }
     JUTNameTab* getJointName() const { return mJointName; }
+    const J3DModelHierarchy* getHierarchy() const { return mHierarchy; }
+    void setHierarchy(J3DModelHierarchy* hierarchy) { mHierarchy = hierarchy; }
+    void setBasicMtxCalc(J3DMtxCalc* calc) { mBasicMtxCalc = calc; }
     J3DJoint* getRootNode() { return mRootNode; }
     J3DJoint* getJointNodePointer(u16 idx) const { return mJointNodePointer[idx]; }
-    J3DMtxCalc* getBasicMtxCalc() const { return mBasicMtxCalc; }
-    Mtx& getInvJointMtx(s32 idx) const { return mInvJointMtx[idx]; }
+    J3DMtxCalc* getBasicMtxCalc() { return mBasicMtxCalc; }
+    Mtx& getInvJointMtx(int idx) { return mInvJointMtx[idx]; }
     u32 getModelDataType() const { return mModelDataType; }
+    void setModelDataType(u32 type) { mModelDataType = type; }
     bool checkFlag(u32 flag) { return mFlags & flag; }
+    void setFlag(u32 flag) { mFlags = flag; }
+
+    // TODO
+    void getWEvlpMixMtxIndex() {}
 
 private:
+    friend class J3DModelLoader;
+
     /* 0x04 */ J3DModelHierarchy* mHierarchy;
     /* 0x08 */ u32 mFlags;
     /* 0x0C */ u32 mModelDataType;

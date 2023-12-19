@@ -12,7 +12,7 @@ J3DMaterialFactory_v21::J3DMaterialFactory_v21(const J3DMaterialBlock_v21&) {
 }
 
 /* 802F9C68-802F9C8C       .text countUniqueMaterials__22J3DMaterialFactory_v21Fv */
-void J3DMaterialFactory_v21::countUniqueMaterials() {
+u16 J3DMaterialFactory_v21::countUniqueMaterials() {
     /* Nonmatching */
 }
 
@@ -27,7 +27,7 @@ void J3DMaterialFactory_v21::countStages(int) const {
 }
 
 /* 802F9D4C-802FA4C0       .text create__22J3DMaterialFactory_v21CFP11J3DMaterialiUl */
-void J3DMaterialFactory_v21::create(J3DMaterial*, int, unsigned long) const {
+J3DMaterial* J3DMaterialFactory_v21::create(J3DMaterial*, int, unsigned long) const {
     /* Nonmatching */
 }
 
@@ -133,10 +133,5 @@ void J3DMaterialFactory_v21::newDither(int) const {
 
 /* 802FAF90-802FB034       .text newNBTScale__22J3DMaterialFactory_v21CFi */
 void J3DMaterialFactory_v21::newNBTScale(int) const {
-    /* Nonmatching */
-}
-
-/* 802FB034-802FB04C       .text JSUConvertOffsetToPtr<23J3DMaterialInitData_v21>__FPCvPCv */
-void JSUConvertOffsetToPtr<J3DMaterialInitData_v21>(const void*, const void*) {
     /* Nonmatching */
 }

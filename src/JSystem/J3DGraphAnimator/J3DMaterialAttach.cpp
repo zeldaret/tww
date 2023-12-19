@@ -12,7 +12,7 @@ void J3DMaterialTable::clear() {
     mMaterialNum = 0;
     mMaterialNodePointer = NULL;
     mMaterialName = NULL;
-    field_0x10 = NULL;
+    mUniqueMatNum = 0;
     field_0x14 = NULL;
     mTexture = NULL;
     mTextureName = NULL;

@@ -41,6 +41,9 @@ public:
     virtual void reset();
     virtual void change();
 
+    J3DMaterial() { initialize(); }
+    ~J3DMaterial() {}
+
     J3DMaterial* getNext() const { return mNext; }
     void setNext(J3DMaterial* material) {mNext = material; }
     J3DShape* getShape() const { return mShape; }

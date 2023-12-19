@@ -137,6 +137,7 @@ public:
     void setOldMtxCalc(J3DMtxCalc* i_mtxCalc) { mOldMtxCalc = i_mtxCalc; }
     J3DMtxCalc* getOldMtxCalc() { return mOldMtxCalc; }
     J3DMtxCalc* getCurrentMtxCalc() { return mCurrentMtxCalc; };
+    void setMtxType(u8 type) { mKind = (mKind & ~0xf0) | (type << 4); }
 
     static J3DMtxCalc* mCurrentMtxCalc;
 

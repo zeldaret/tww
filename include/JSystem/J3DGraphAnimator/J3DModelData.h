@@ -17,6 +17,12 @@ enum J3DMaterialCopyFlag {
     J3DMatCopyFlag_All = 0x03,
 };
 
+enum {
+    J3DMdlDataFlag_ConcatView = 0x10,
+    J3DMdlDataFlag_NoUseDrawMtx = 0x20,
+    J3DMdlDataFlag_NoAnimation = 0x100,
+};
+
 class J3DModelData {
 public:
     void clear();
@@ -63,6 +69,10 @@ public:
     f32* getWEvlpMixWeight() { return mJointTree.getWEvlpMixWeight(); }
     u8 getWEvlpMixMtxNum(u16 idx) const { return mJointTree.getWEvlpMixMtxNum(idx); }
     u32 getModelDataType() const { return mJointTree.getModelDataType(); }
+    const J3DModelHierarchy* getHierarchy() const { return mJointTree.getHierarchy(); }
+    void setHierarchy(J3DModelHierarchy* hierarchy) { mJointTree.setHierarchy(hierarchy); }
+    void setBasicMtxCalc(J3DMtxCalc* calc) { mJointTree.setBasicMtxCalc(calc); }
+    void setModelDataType(u32 type) { mJointTree.setModelDataType(type); }
     GXColor* getVtxColorArray(u8 idx) const { return mVertexData.getVtxColorArray(idx); }
     bool checkFlag(u32 flag) const { return (mFlags & flag) ? true : false; }
     u32 getFlag() const { return mFlags; }
@@ -83,23 +93,24 @@ public:
     int removeMatColorAnimator(J3DAnmColor* anm) {
         return mMaterialTable.removeMatColorAnimator(anm);
     }
+    void makeHierarchy(J3DNode* joint, const J3DModelHierarchy** hierarchy) {
+        mJointTree.makeHierarchy(joint, hierarchy, &mMaterialTable, mShapeTable.mShapeNodePointer);
+        initShapeNodes();
+    }
 
     // TODO
     void entryMatColorAnimator(J3DAnmColor*) {}
     void getBasicMtxCalc() {}
     void getBinary() {}
-    void getHierarchy() const {}
     void getRootNode() {}
-    void makeHierarchy(J3DNode*, const J3DModelHierarchy**) {}
-    void setBasicMtxCalc(J3DMtxCalc*) {}
-    void setHierarchy(J3DModelHierarchy*) {}
     void setMatColorAnimator(J3DAnmColor*, J3DMatColorAnm*) {}
-    void setModelDataType(u32) {}
     void setTexMtxAnimator(J3DAnmTextureSRTKey*, J3DTexMtxAnm*, J3DTexMtxAnm*) {}
     void setTexNoAnimator(J3DAnmTexPattern*, J3DTexNoAnm*) {}
 
 private:
-    /* 0x04 */ void* mpRawData;
+    friend class J3DModelLoader;
+
+    /* 0x04 */ const void* mpRawData;
     /* 0x08 */ u32 mFlags;
     /* 0x0C */ u16 mbHasBumpArray;
     /* 0x0E */ u16 mbHasBillboard;
