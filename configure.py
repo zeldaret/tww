@@ -576,7 +576,7 @@ config.libs = [
             Object(NonMatching, "JSystem/JParticle/JPAEmitterManager.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPADrawVisitor.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPADraw.cpp"),
-            Object(NonMatching, "JSystem/JParticle/JPADrawSetupTev.cpp"),
+            Object(Matching,    "JSystem/JParticle/JPADrawSetupTev.cpp"),
         ],
     ),
     JSystemLib(

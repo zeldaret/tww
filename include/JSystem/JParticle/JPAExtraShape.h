@@ -44,8 +44,8 @@ public:
     virtual f32 getScaleOutTiming() = 0;
     virtual f32 getScaleInValueX() = 0;
     virtual f32 getScaleInValueY() = 0;
-    virtual u32 getAnmTypeX() = 0;
-    virtual u32 getAnmTypeY() = 0;
+    virtual u8 getAnmTypeX() = 0;
+    virtual u8 getAnmTypeY() = 0;
     virtual u32 getAnmCycleX() = 0;
     virtual u32 getAnmCycleY() = 0;
     virtual f32 getIncreaseRateX() = 0;
@@ -61,7 +61,7 @@ public:
     virtual f32 getAlphaOutTiming() = 0;
     virtual f32 getAlphaInValue() = 0;
     virtual f32 getAlphaBaseValue() = 0;
-    virtual u32 getAlphaWaveType() = 0;
+    virtual u8 getAlphaWaveType() = 0;
     virtual f32 getAlphaWaveParam1() = 0;
     virtual f32 getAlphaWaveParam2() = 0;
     virtual f32 getAlphaWaveParam3() = 0;
@@ -90,8 +90,8 @@ public:
     virtual f32 getScaleOutTiming() { return mpData->mScaleOutTiming; }
     virtual f32 getScaleInValueX() { return mpData->mScaleInValueX; }
     virtual f32 getScaleInValueY() { return mpData->mScaleInValueY; }
-    virtual u32 getAnmTypeX() { return (mpData->mFlag >> 18) & 0x01; }
-    virtual u32 getAnmTypeY() { return (mpData->mFlag >> 19) & 0x01; }
+    virtual u8 getAnmTypeX() { return (mpData->mFlag >> 18) & 0x01; }
+    virtual u8 getAnmTypeY() { return (mpData->mFlag >> 19) & 0x01; }
     virtual u32 getAnmCycleX() { return mpData->mAnmCycleX; }
     virtual u32 getAnmCycleY() { return mpData->mAnmCycleY; }
     virtual f32 getIncreaseRateX() { return mIncreaseRateX; }
@@ -107,7 +107,7 @@ public:
     virtual f32 getAlphaOutTiming() { return mpData->mAlphaOutTiming; }
     virtual f32 getAlphaInValue() { return mpData->mAlphaInValue; }
     virtual f32 getAlphaBaseValue() { return mpData->mAlphaBaseValue; }
-    virtual u32 getAlphaWaveType() { return (mpData->mFlag >> 2) & 0x03; }
+    virtual u8 getAlphaWaveType() { return (mpData->mFlag >> 2) & 0x03; }
     virtual f32 getAlphaWaveParam1() { return mpData->mAlphaWaveParam1; }
     virtual f32 getAlphaWaveParam2() { return mpData->mAlphaWaveParam2; }
     virtual f32 getAlphaWaveParam3() { return mpData->mAlphaWaveParam3; }

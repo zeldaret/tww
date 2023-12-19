@@ -52,12 +52,12 @@ public:
     virtual GXAlphaOp getAlphaCmpOp() = 0;
     virtual u8 getAlphaCmpRef0() = 0;
     virtual u8 getAlphaCmpRef1() = 0;
-    virtual BOOL isEnableAnmTone() = 0;
-    virtual BOOL isEnableProjection() = 0;
+    virtual u32 isEnableAnmTone() = 0;
+    virtual u32 isEnableProjection() = 0;
     virtual BOOL isClipOn() = 0;
     virtual BOOL isEnableTextureAnm() = 0;
     virtual BOOL textureIsEmpty() = 0;
-    virtual u32 getTextureAnmType() = 0;
+    virtual u8 getTextureAnmType() = 0;
     virtual u8 getTextureAnmKeyNum() = 0;
     virtual u8 getTextureIndex() = 0;
     virtual u8 getTextureIndex(u8 idx) = 0;
@@ -69,9 +69,9 @@ public:
     virtual GXColor getEnvColor() = 0;
     virtual GXColor getPrmColor(s16) = 0;
     virtual GXColor getEnvColor(s16) = 0;
-    virtual u32 getColorRegAnmType() = 0;
+    virtual u8 getColorRegAnmType() = 0;
     virtual u32 getColorRegAnmMaxFrm() = 0;
-    virtual BOOL isEnableTexScrollAnm() = 0;
+    virtual u32 isEnableTexScrollAnm() = 0;
     virtual f32 getTilingX() = 0;
     virtual f32 getTilingY() = 0;
     virtual f32 getTexStaticTransX() = 0;
@@ -160,12 +160,12 @@ public:
     virtual GXAlphaOp getAlphaCmpOp() { return stAlphaOp[(pBsd->mAlphaFlags >> 3) & 0x03]; }
     virtual u8 getAlphaCmpRef0() { return pBsd->mAlphaCmpRef0; }
     virtual u8 getAlphaCmpRef1() { return pBsd->mAlphaCmpRef1; }
-    virtual BOOL isEnableAnmTone() { return pBsd->mFlags & 0x80000; }
-    virtual BOOL isEnableProjection() { return pBsd->mFlags & 0x100000; }
+    virtual u32 isEnableAnmTone() { return pBsd->mFlags & 0x80000; }
+    virtual u32 isEnableProjection() { return pBsd->mFlags & 0x100000; }
     virtual BOOL isClipOn() { return pBsd->mFlags & 0x800000; }
     virtual BOOL isEnableTextureAnm() { return pBsd->mTextureFlags & 0x01; }
     virtual BOOL textureIsEmpty() { return !(pBsd->mTextureFlags & 0x02); }
-    virtual u32 getTextureAnmType() { return (pBsd->mTextureFlags >> 2) & 0x07; }
+    virtual u8 getTextureAnmType() { return (pBsd->mTextureFlags >> 2) & 0x07; }
     virtual u8 getTextureAnmKeyNum() { return pBsd->mTextureAnmKeyNum; }
     virtual u8 getTextureIndex() { return pBsd->mTextureIndex; }
     virtual u8 getTextureIndex(u8 idx) { return mpTexAnmIdxArr[idx]; }
@@ -177,9 +177,9 @@ public:
     virtual GXColor getEnvColor() { return pBsd->mEnvColor; }
     virtual GXColor getPrmColor(s16 idx) { return mpPrmColorArr[idx]; }
     virtual GXColor getEnvColor(s16 idx) { return mpEnvColorArr[idx]; }
-    virtual u32 getColorRegAnmType() { return (pBsd->mColorFlags >> 4) & 0x07; }
+    virtual u8 getColorRegAnmType() { return (pBsd->mColorFlags >> 4) & 0x07; }
     virtual u32 getColorRegAnmMaxFrm() { return pBsd->mColorRegAnmMaxFrm; }
-    virtual BOOL isEnableTexScrollAnm() { return pBsd->mFlags & 0x1000000; }
+    virtual u32 isEnableTexScrollAnm() { return pBsd->mFlags & 0x1000000; }
     virtual f32 getTilingX() { return pBsd->mTilingX; }
     virtual f32 getTilingY() { return pBsd->mTilingY; }
     virtual f32 getTexStaticTransX() { return pBsd->mTexStaticTransX; }

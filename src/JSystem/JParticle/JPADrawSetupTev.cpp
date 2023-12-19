@@ -4,9 +4,63 @@
 //
 
 #include "JSystem/JParticle/JPADrawSetupTev.h"
-#include "dolphin/types.h"
+#include "JSystem/JParticle/JPABaseShape.h"
+#include "JSystem/JParticle/JPAExTexShape.h"
+#include "dolphin/gx/GX.h"
 
 /* 8026D7B8-8026DBBC       .text setupTev__15JPADrawSetupTevFP12JPABaseShapeP13JPAExTexShape */
-void JPADrawSetupTev::setupTev(JPABaseShape*, JPAExTexShape*) {
-    /* Nonmatching */
+void JPADrawSetupTev::setupTev(JPABaseShape* param_1, JPAExTexShape* param_2) {
+    field_0x1 = 1;
+    field_0x0 = 1;
+    field_0x2 = 0;
+    GXTevColorArg* tevColorArg = param_1->getTevColorArg();
+    GXTevAlphaArg* tevAlphaArg = param_1->getTevAlphaArg();
+    GXSetTevColorIn(GX_TEVSTAGE0, tevColorArg[0], tevColorArg[1], tevColorArg[2], tevColorArg[3]);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, tevAlphaArg[0], tevAlphaArg[1], tevAlphaArg[2], tevAlphaArg[3]);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    if (param_2) {
+        GXTevStageID stage = GX_TEVSTAGE1;
+        GXTexCoordID coord = GX_TEXCOORD1;
+        switch (param_2->getIndTexMode()) {
+        case 1:
+            GXSetIndTexOrder(GX_INDTEXSTAGE0, GX_TEXCOORD1, GX_TEXMAP5);
+            GXSetIndTexCoordScale(GX_INDTEXSTAGE0, GX_ITS_1, GX_ITS_1);
+            GXSetIndTexMtx(GX_ITM_0, (f32*)param_2->getIndTexMtx(), param_2->getExpScale());
+            GXSetTevIndirect(GX_TEVSTAGE0, GX_INDTEXSTAGE0, GX_ITF_8, GX_ITB_STU, param_2->getIndTexMtxID(), GX_ITW_OFF, GX_ITW_OFF, GX_FALSE, GX_FALSE, GX_ITBA_OFF);
+            field_0x2++;
+            field_0x1++;
+            coord = GX_TEXCOORD2;
+            break;
+        case 2:
+            GXSetIndTexOrder(GX_INDTEXSTAGE0, GX_TEXCOORD1, GX_TEXMAP5);
+            GXSetIndTexCoordScale(GX_INDTEXSTAGE0, GX_ITS_1, GX_ITS_1);
+            GXSetIndTexMtx(GX_ITM_0, (f32*)param_2->getIndTexMtx(), param_2->getExpScale());
+            GXSetTevIndirect(GX_TEVSTAGE1, GX_INDTEXSTAGE0, GX_ITF_8, GX_ITB_STU, param_2->getIndTexMtxID(), GX_ITW_OFF, GX_ITW_OFF, GX_FALSE, GX_FALSE, GX_ITBA_OFF);
+            GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD2, GX_TEXMAP6, GX_COLOR_NULL);
+            GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV, GX_CC_TEXA);
+            GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
+            GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            field_0x0++;
+            field_0x1 += 2;
+            field_0x2++;
+            stage = GX_TEVSTAGE2;
+            coord = GX_TEXCOORD3;
+            break;
+        }
+        if (param_2->isEnableSecondTex()) {
+            GXSetTevOrder(stage, coord, GX_TEXMAP7, GX_COLOR_NULL);
+            GXSetTevColorIn(stage, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV, GX_CC_ZERO);
+            GXSetTevAlphaIn(stage, GX_CA_ZERO, GX_CA_TEXA, GX_CA_APREV, GX_CA_ZERO);
+            GXSetTevColorOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            field_0x0++;
+            field_0x1++;
+        }
+    }
+    GXSetNumTexGens(field_0x1);
+    GXSetNumTevStages(field_0x0);
+    GXSetNumIndStages(field_0x2);
 }
