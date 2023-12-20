@@ -9,7 +9,6 @@
 #include "d/d_level_se.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_mtx.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
 const char* daFan_c::m_arcname[3] = { "Hsen1", "Hsen1", "Hsen3", };

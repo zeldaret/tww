@@ -11,7 +11,6 @@
 #include "d/d_kankyo_rain.h"
 #include "d/d_kankyo_wether.h"
 #include "m_Do/m_Do_mtx.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/J3DGraphBase/J3DMatBlock.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 

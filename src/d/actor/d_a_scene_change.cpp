@@ -4,7 +4,6 @@
 //
 
 #include "d/actor/d_a_scene_change.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_mtx.h"

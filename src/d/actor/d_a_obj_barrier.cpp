@@ -4,7 +4,6 @@
 //
 
 #include "d/actor/d_a_obj_barrier.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_com_inf_game.h"

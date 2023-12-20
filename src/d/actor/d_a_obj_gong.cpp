@@ -5,7 +5,6 @@
 
 #include "d/actor/d_a_obj_gong.h"
 #include "f_op/f_op_actor_mng.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_a_obj.h"
 #include "d/d_bg_w.h"

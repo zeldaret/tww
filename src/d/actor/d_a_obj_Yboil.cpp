@@ -8,7 +8,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "m_Do/m_Do_mtx.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_procname.h"
 

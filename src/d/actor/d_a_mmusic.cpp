@@ -8,7 +8,6 @@
 #include "d/d_item_data.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_mtx.h"
-#include "JSystem/JKernel/JKRHeap.h"
 
 namespace daMmusic {
     namespace {

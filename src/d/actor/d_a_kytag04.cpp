@@ -3,7 +3,6 @@
  */
 
 #include "d/actor/d_a_kytag04.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -83,4 +82,3 @@ actor_process_profile_definition g_profile_KYTAG04 = {
     fopAc_ACTOR_e,
     fopAc_CULLBOX_0_e,
 };
-

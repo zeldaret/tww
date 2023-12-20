@@ -4,7 +4,6 @@
 //
 
 #include "d/actor/d_a_vrbox.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/J3DGraphBase/J3DMatBlock.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"

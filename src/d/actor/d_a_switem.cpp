@@ -5,7 +5,6 @@
 
 #include "d/actor/d_a_switem.h"
 #include "f_op/f_op_actor_mng.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "d/d_procname.h"
 #include "d/d_cc_d.h"
 #include "f_op/f_op_draw_tag.h"

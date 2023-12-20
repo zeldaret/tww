@@ -8,7 +8,6 @@
 #include "d/d_procname.h"
 #include "d/d_stage.h"
 #include "m_Do/m_Do_lib.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "d/actor/d_a_daiocta.h"
 
 daSea_packet_c l_cloth;

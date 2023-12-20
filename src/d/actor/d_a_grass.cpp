@@ -12,7 +12,6 @@
 #include "d/d_item_data.h"
 #include "d/d_procname.h"
 #include "d/d_tree.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "SSystem/SComponent/c_sxyz.h"
 
 namespace daGrass_prm {

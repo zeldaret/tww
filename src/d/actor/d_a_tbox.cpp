@@ -4,7 +4,6 @@
 //
 
 #include "d/actor/d_a_tbox.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_bg_w.h"

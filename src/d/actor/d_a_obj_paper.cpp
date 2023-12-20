@@ -4,7 +4,6 @@
 //
 
 #include "d/actor/d_a_obj_paper.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"

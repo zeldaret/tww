@@ -4,7 +4,6 @@
 //
 
 #include "d/actor/d_a_race_item.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_sea.h"
 #include "d/d_item_data.h"

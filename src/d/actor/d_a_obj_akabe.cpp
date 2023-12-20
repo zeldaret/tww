@@ -10,7 +10,6 @@
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
-#include "JSystem/JKernel/JKRHeap.h"
 
 namespace daObjAkabe {
     const char* const Act_c::M_arcname[4] = {

@@ -4,7 +4,6 @@
 //
 
 #include "d/actor/d_a_spotbox.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"

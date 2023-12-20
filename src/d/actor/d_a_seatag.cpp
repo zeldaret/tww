@@ -2,7 +2,6 @@
  * d_a_seatag.cpp
  */
 #include "d/actor/d_a_seatag.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
 

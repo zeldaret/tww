@@ -7,7 +7,6 @@
 #include "d/d_procname.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
-#include "JSystem/JKernel/JKRHeap.h"
 
 Mtx daObjKanat::Act_c::M_tmp_mtx;
 const char daObjKanat::Act_c::M_arcname[] = "Kanat";

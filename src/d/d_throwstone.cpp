@@ -10,7 +10,6 @@
 #include "d/d_demo.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_mtx.h"
-#include "JSystem/JKernel/JKRHeap.h"
 
 const char daThrowstone_c::M_arcname[] = "Aisi";
 
