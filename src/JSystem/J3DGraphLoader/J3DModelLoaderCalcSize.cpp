@@ -101,8 +101,8 @@ u32 J3DModelLoader::calcLoadMaterialTableSize(const void* i_data) {
 /* 802FDB0C-802FDD28       .text calcLoadBinaryDisplayListSize__14J3DModelLoaderFPCvUl */
 u32 J3DModelLoader::calcLoadBinaryDisplayListSize(const void* i_data, u32 i_flags) {
     /* Nonmatching - regalloc */
-    u32 size = 0;
     u32 i;
+    u32 size = 0;
     const J3DModelFileData* header = (const J3DModelFileData*)i_data;
     const J3DModelBlock* block = &header->mBlocks[0];
     i = 0;
@@ -273,21 +273,19 @@ u32 J3DModelLoader::calcSizePatchedMaterial(const J3DMaterialBlock* i_block, u32
 
 /* 802FE0CC-802FE1A4       .text calcSizeMaterialDL__14J3DModelLoaderFPC18J3DMaterialDLBlockUl */
 u32 J3DModelLoader::calcSizeMaterialDL(const J3DMaterialDLBlock* i_block, u32 i_flags) {
-    /* Nonmatching - regalloc */
     u32 size = 0;
     J3DMaterialFactory factory(*i_block);
-    u32 count;
     if (!field_0x18) {
-        count = i_block->mMaterialNum;
+        u32 count = i_block->mMaterialNum;
         if (i_block->mpNameTable) {
             size = 0x10;
         }
         size += count * sizeof(J3DLockedMaterial*);
         for (u32 i = 0; (u16)i < count; i++) {
-            size += factory.calcSize(NULL, J3DMaterialFactory::MATERIAL_TYPE_LOCKED, (u16)i, i_flags);
+            size += factory.calcSize(NULL, J3DMaterialFactory::MATERIAL_TYPE_LOCKED, (u16)i, (u32)i_flags);
         }
     } else {
-        count = i_block->mMaterialNum;
+        u32 count = i_block->mMaterialNum;
         for (u32 i = 0; (u16)i < count; i++) {
             size += factory.calcSize((J3DMaterial*)this, J3DMaterialFactory::MATERIAL_TYPE_LOCKED, (u16)i, i_flags);
         }
