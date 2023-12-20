@@ -782,7 +782,7 @@ void dKyr_poison_light_colision() {
     dCcMassS_Mng * mass = &dComIfG_Ccsp()->mMass_Mng;
     dComIfG_Ccsp()->mMass_Mng.mCylAttr.SetR(220.0f);
     dComIfG_Ccsp()->mMass_Mng.mCylAttr.SetH(140.0f);
-    mass->field_0x200 = 0x0B;
+    mass->field_0x128 = 0x0B;
     mass->mResultCamBit = 0x03;
 #endif
 
