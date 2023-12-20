@@ -8,7 +8,125 @@
 
 /* 802A1C78-802A1EB4       .text __ct__11JAIZelBasicFv */
 JAIZelBasic::JAIZelBasic() {
-    /* Nonmatching */
+    zel_basic = this;
+    field_0x0021 = 0;
+    field_0x0024 = 0;
+    mpSound = 0;
+    field_0x0020 = 0;
+    field_0x0074 = -1;
+    field_0x0078 = -1;
+    field_0x007c = -1;
+    field_0x0080 = 1.0f;
+    field_0x0084 = 1.0f;
+    field_0x0088 = 1.0f;
+    field_0x008c = 1.0f;
+    field_0x0090 = 1.0f;
+    field_0x0094 = 1.0f;
+    field_0x0098 = 1.0f;
+    field_0x009c = 1.0f;
+    field_0x00a0 = 1.0f;
+    field_0x00a4 = 1.0f;
+    field_0x00ac = 1.0f;
+    field_0x00a8 = 1.0f;
+    mHour = 0;
+    mMinute = 0;
+    mWeekday = 0;
+    field_0x002f = 0;
+    field_0x0030 = 0xc00;
+    field_0x0032 = 0;
+    field_0x0034 = 0;
+    field_0x0038 = 0;
+    field_0x003c = 1.0f;
+    field_0x0041 = 0;
+    field_0x0042 = 0;
+    field_0x0043 = 0;
+    field_0x0044 = 0;
+    field_0x0045 = 0;
+    field_0x0046 = 0;
+    field_0x0047 = 0;
+    field_0x0048.x = 1e+07;
+    field_0x0048.y = 1e+07;
+    field_0x0048.z = 1e+07;
+    field_0x0054.x = 1e+07;
+    field_0x0054.y = 1e+07;
+    field_0x0054.z = 1e+07;
+    field_0x00d0 = 0;
+    field_0x0063 = 0;
+    field_0x00b0 = -1;
+    mSomeSpecialBGMFlag = 0;
+    mLastMinibossSubBGMType = 0;
+    field_0x1f3c = 0;
+    field_0x01f8 = 0;
+    field_0x0201 = 0;
+    field_0x0204 = 0;
+    field_0x0064[0] = 0;
+    field_0x0064[1] = 0;
+    field_0x00b8 = 0;
+    field_0x00ba = 0;
+    field_0x00bb = 0;
+    field_0x0206 = 0;
+    field_0x01f9 = 0;
+    field_0x01fa = 0;
+    field_0x0202[0] = 0;
+    field_0x0202[1] = 0;
+    field_0x01fb = 0;
+    field_0x01fc = 0;
+    field_0x023a = 0;
+    field_0x0220 = -1;
+    field_0x0224 = -1;
+    mNextSceneBgmId = 0;
+    field_0x022e = 0;
+    field_0x022f = 0;
+    field_0x0230 = 0;
+    field_0x0231 = 0;
+    mFirstDynamicSceneWaveIndex = 0;
+    field_0x0233 = 0;
+    mSetNum = 0;
+    mSecondDynamicSceneWaveIndex = 0;
+    field_0x0236 = 0;
+    field_0x0237 = 0;
+    field_0x022c = 0;
+    field_0x022d = 0;
+    field_0x00b4 = 0;
+    field_0x00bc = 0;
+    field_0x00c0 = 0;
+    field_0x00c1 = 0;
+    field_0x00c4 = 0;
+    field_0x00c8 = 0;
+    field_0x00c9 = 0;
+    field_0x00ca = 0;
+    mCameraSeaFloorGroupInfo = 0;
+    mIslandRoomNo = 0;
+    mLinkSeaFloorGroupInfo = 0;
+    field_0x021e = 0;
+    field_0x00cb = -1;
+    field_0x00cc = 0;
+    field_0x1dd4 = 0;
+    field_0x00b9 = 0;
+    field_0x00cd = 0;
+    field_0x0033 = 0;
+    mIsSailing = 0;
+    field_0x1f40 = 0.0;
+    field_0x00b7 = 0;
+    field_0x0040 = 0;
+    field_0x0207 = 0;
+    mbLandingDemoStarted = 0;
+    field_0x0239 = 0;
+    field_0x0208 = 0;
+    field_0x1ec0 = 0;
+    field_0x00ce = 0;
+    field_0x00bd = 0;
+    field_0x00be = 0;
+    field_0x0061 = 0;
+    field_0x01fd = 0;
+    field_0x01fe = 0;
+    field_0x01ff = 0;
+    field_0x0200 = 0;
+    field_0x0205 = 0;
+    field_0x0066 = 0;
+    field_0x00bf = 0;
+    field_0x0028 = 0;
+    field_0x0062 = 0;
 }
 
 /* 802A1EB4-802A2F48       .text zeldaGFrameWork__11JAIZelBasicFv */
@@ -387,17 +505,17 @@ void JAIZelBasic::setLinkGroupInfo(u8) {
 }
 
 /* 802AA378-802AA380       .text getMapInfoFxline__11JAIZelBasicFUl */
-void JAIZelBasic::getMapInfoFxline(u32) {
+bool JAIZelBasic::getMapInfoFxline(u32) {
     /* Nonmatching */
 }
 
 /* 802AA380-802AA388       .text getMapInfoFxParameter__11JAIZelBasicFUl */
-void JAIZelBasic::getMapInfoFxParameter(u32) {
+f32 JAIZelBasic::getMapInfoFxParameter(u32) {
     /* Nonmatching */
 }
 
 /* 802AA388-802AA390       .text getMapInfoGround__11JAIZelBasicFUl */
-void JAIZelBasic::getMapInfoGround(u32) {
+bool JAIZelBasic::getMapInfoGround(u32) {
     /* Nonmatching */
 }
 
@@ -557,7 +675,7 @@ void JAIZelBasic::checkOnOuterSea(f32*) {
 }
 
 /* 802AC1BC-802AC258       .text makeSound__11JAIZelBasicFUl */
-void JAIZelBasic::makeSound(u32) {
+JAISound* JAIZelBasic::makeSound(u32) {
     /* Nonmatching */
 }
 
