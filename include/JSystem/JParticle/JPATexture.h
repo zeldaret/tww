@@ -32,15 +32,22 @@ public:
     virtual JUTTexture* getJUTTexture() { return &mTexture; }
 
 public:
-    JUTTexture mTexture;
-    const JPATextureData* mpData;
+    /* 0x00 */ JUTTexture mTexture;
+    /* 0x40 */ const JPATextureData* mpData;
 };
 
 struct JPADefaultTexture {
+public:
     JPADefaultTexture() : imgBuf(NULL) {}
     void initialize(JKRHeap *);
-    u8 * imgBuf;
-    GXTexObj mTexObj;
+
+    inline void load(GXTexMapID texMap) {
+        GXLoadTexObj(&mTexObj, texMap);
+    }
+
+public:
+    /* 0x00 */ u8 * imgBuf;
+    /* 0x04 */ GXTexObj mTexObj;
 };
 
 #endif /* JPATEXTURE_H */

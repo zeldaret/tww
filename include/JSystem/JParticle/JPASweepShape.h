@@ -30,9 +30,9 @@ class JPASweepShape {
 public:
     virtual ~JPASweepShape() {};
     virtual u8 getType() = 0;
-    virtual u32 getDirType() = 0;
-    virtual u32 getRotType() = 0;
-    virtual u32 getBasePlaneType() = 0;
+    virtual u8 getDirType() = 0;
+    virtual u8 getRotType() = 0;
+    virtual u8 getBasePlaneType() = 0;
     virtual s16 getLife() = 0;
     virtual s16 getRate() = 0;
     virtual f32 getTiming() = 0;
@@ -69,9 +69,9 @@ public:
     JPASweepShapeArc(const u8*);
     virtual ~JPASweepShapeArc() {};
     virtual u8 getType() { return (mpData->mFlag >> 0) & 0x0F; }
-    virtual u32 getDirType() { return (mpData->mFlag >> 4) & 0x07; }
-    virtual u32 getRotType() { return (mpData->mFlag >> 7) & 0x07; }
-    virtual u32 getBasePlaneType() { return (mpData->mFlag >> 10) & 0x01; }
+    virtual u8 getDirType() { return (mpData->mFlag >> 4) & 0x07; }
+    virtual u8 getRotType() { return (mpData->mFlag >> 7) & 0x07; }
+    virtual u8 getBasePlaneType() { return (mpData->mFlag >> 10) & 0x01; }
     virtual s16 getLife() { return mpData->mLife; }
     virtual s16 getRate() { return mpData->mRate; }
     virtual f32 getTiming() { return mpData->mTiming; }

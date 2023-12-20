@@ -119,7 +119,7 @@ void JPADraw::draw(MtxP drawMtx) {
     GXSetBlendMode(dc.pbsp->getBlendMode1(), dc.pbsp->getSrcBlendFactor1(), dc.pbsp->getDstBlendFactor1(), dc.pbsp->getBlendOp1());
     cb.mPrmColor = dc.pbe->mGlobalPrmColor;
     cb.mEnvColor = dc.pbe->mGlobalEnvColor;
-    cb.mDrawMtx = drawMtx;
+    cb.mDrawMtxPtr = drawMtx;
     cb.mSetupTev.setupTev(dc.pbsp, dc.petx);
     for (int i = 0; i < execEmtrVisNum; i++) {
         mpExecEmtrVis[i]->exec(&dc);
@@ -160,12 +160,47 @@ void JPADraw::calcChild(JPABaseParticle* ptcl) {
 
 /* 80268A48-80268F28       .text initParticle__7JPADrawFP15JPABaseParticle */
 void JPADraw::initParticle(JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    ptcl->mAxis.set(JPABaseEmitter::emtrInfo.mEmitterGlobalRot[0][1], JPABaseEmitter::emtrInfo.mEmitterGlobalRot[1][1], JPABaseEmitter::emtrInfo.mEmitterGlobalRot[2][1]);
+    ptcl->mPrmColor = mPrmColor;
+    ptcl->mEnvColor = mEnvColor;
+    ptcl->mAlphaOut = 1.0f;
+    ptcl->mLoopOffset = dc.pbe->getRandomF() * dc.pbsp->getLoopOffset();
+    if (dc.pesp != NULL) {
+        if (dc.pesp->isEnableRotate()) {
+            ptcl->mRotateAngle = (dc.pesp->getRotateAngle() * 32768.0f) + (dc.pbe->getRandomSF() * dc.pesp->getRotateRandomAngle() * 65536.0f);
+            s16 rotateSpeed;
+            if (dc.pbe->getRandomRF() < dc.pesp->getRotateDirection()) {
+                rotateSpeed = dc.pesp->getRotateSpeed() * (dc.pesp->getRotateRandomSpeed() * dc.pbe->getRandomRF() + 1.0f) * 32768.0f;
+            } else {
+                rotateSpeed = -dc.pesp->getRotateSpeed() * (dc.pesp->getRotateRandomSpeed() * dc.pbe->getRandomRF() + 1.0f) * 32768.0f;
+            }
+            ptcl->mRotateSpeed = rotateSpeed;
+        } else {
+            ptcl->mRotateAngle = 0;
+            ptcl->mRotateSpeed = 0;
+        }
+
+        if (dc.pesp->isEnableScale()) {
+            ptcl->mScaleX = ptcl->mScaleY = ptcl->mScaleOut = (dc.pbe->getRandomRF() * dc.pesp->getRandomScale() + 1.0f) * mScaleOut;
+        } else {
+            ptcl->mScaleX = ptcl->mScaleY = ptcl->mScaleOut = mScaleOut;
+        }
+
+        if (dc.pesp->isEnableAlpha()) {
+            ptcl->mAlphaWaveRandom = (dc.pbe->getRandomRF() * dc.pesp->getAlphaWaveRandom() + 1.0f);
+        } else {
+            ptcl->mAlphaWaveRandom = 1.0f;
+        }
+    } else {
+        ptcl->mRotateAngle = 0;
+        ptcl->mRotateSpeed = 0;
+        ptcl->mScaleOut = ptcl->mScaleX = ptcl->mScaleY = mScaleOut;
+        ptcl->mAlphaWaveRandom = 1.0f;
+    }
 }
 
 /* 80268F28-802692A4       .text initChild__7JPADrawFP15JPABaseParticleP15JPABaseParticle */
 void JPADraw::initChild(JPABaseParticle* ptcl, JPABaseParticle* chld) {
-    /* Nonmatching */
     chld->mAxis.set(ptcl->mAxis);
     chld->mAlphaOut = 1.0f;
     if (dc.pssp->isInheritedRGB()) {
@@ -370,7 +405,7 @@ void JPADraw::setDrawExecVisitorsAfterCB(const JPADrawVisitorDefFlags& flags) {
         case JPABaseShape::JPAType_RotationCross:
             mpExecPtclVis[execPtclVisNum++] = &vc.mExecRotationCross;
             break;
-        case 9:
+        case JPABaseShape::JPAType_DirBillboard:
             mpExecPtclVis[execPtclVisNum++] = &vc.mExecDirBillBoard;
             break;
         case JPABaseShape::JPAType_Stripe:
@@ -608,12 +643,188 @@ void JPADraw::setDrawCalcVisitors(const JPADraw::JPADrawVisitorDefFlags& flags) 
 
 /* 8026ADB0-8026B3DC       .text setParticleClipBoard__7JPADrawFv */
 void JPADraw::setParticleClipBoard() {
-    /* Nonmatching */
+    /* Nonmatching - top switch */
+
+    switch (dc.pbsp->getType()) {
+    case JPABaseShape::JPAType_Billboard:
+        break;
+    case JPABaseShape::JPAType_DirBillboard:
+        PSMTXIdentity(cb.mDrawMtx);
+        break;
+    case JPABaseShape::JPAType_YBillboard:
+        loadYBBMtx(cb.mDrawMtxPtr);
+        break;
+    case JPABaseShape::JPAType_Point:
+    case JPABaseShape::JPAType_Line:
+    case JPABaseShape::JPAType_Direction:
+    case JPABaseShape::JPAType_DirectionCross:
+    case JPABaseShape::JPAType_Stripe:
+    case JPABaseShape::JPAType_StripeCross:
+    case JPABaseShape::JPAType_Rotation:
+    case JPABaseShape::JPAType_RotationCross:
+        MTXCopy(cb.mDrawMtxPtr, cb.mDrawMtx);
+        break;
+    }
+
+    GXLoadPosMtxImm(cb.mDrawMtx, GX_PNMTX0);
+
+    JPABaseEmitter* emtr = dc.pbe;
+    f32 scaleX = emtr->mGlobalParticleScale.x;
+    f32 scaleY = emtr->mGlobalParticleScale.y;
+
+    cb.mGlobalScaleX = 25.0f * dc.pbsp->getBaseSizeX() * scaleX;
+    cb.mGlobalScaleY = 25.0f * dc.pbsp->getBaseSizeY() * scaleY;
+
+    if (dc.pbsp->getType() == JPABaseShape::JPAType_Point) {
+        cb.mGlobalScaleX *= 1.02f;
+        cb.mGlobalScaleY *= 1.02f;
+    } else if (dc.pbsp->getType() == JPABaseShape::JPAType_Line) {
+        cb.mGlobalScaleX *= 1.02f;
+        cb.mGlobalScaleY *= 0.4f;
+    }
+
+    if (dc.pesp != NULL && dc.pesp->isEnableScale()) {
+        cb.mPivotX = cb.mGlobalScaleX * (dc.pesp->getPivotX() - 1.0f);
+        cb.mPivotY = cb.mGlobalScaleY * (dc.pesp->getPivotY() - 1.0f);
+    } else {
+        cb.mPivotX = cb.mPivotY = 0.0f;
+    }
+
+    f32 tilingX = dc.pbsp->getTilingX();
+    f32 tilingY = dc.pbsp->getTilingY();
+
+    cb.field_0x14[0].x = 0.0f;
+    cb.field_0x14[0].y = 0.0f;
+    cb.field_0x14[1].x = tilingX;
+    cb.field_0x14[1].y = 0.0f;
+    cb.field_0x14[2].x = tilingX;
+    cb.field_0x14[2].y = tilingY;
+    cb.field_0x14[3].x = 0.0f;
+    cb.field_0x14[3].y = tilingY;
+
+    if (!dc.pbsp->textureIsEmpty() && !dc.pbsp->isEnableTextureAnm())
+        mTexIdx = dc.pTexIdx[dc.pbsp->getTextureIndex()], GX_TEXMAP0;
+
+    cb.mDirTypeFunc = NULL;
+    cb.mRotTypeFunc = NULL;
+    cb.mBasePlaneTypeFunc = NULL;
+
+    if (dc.pbsp->getType() == JPABaseShape::JPAType_Direction || dc.pbsp->getType() == JPABaseShape::JPAType_DirectionCross || dc.pbsp->getType() == JPABaseShape::JPAType_DirBillboard || dc.pbsp->getType() == JPABaseShape::JPAType_Stripe || dc.pbsp->getType() == JPABaseShape::JPAType_StripeCross) {
+        switch (dc.pbsp->getDirType()) {
+        case 0: cb.mDirTypeFunc = dirTypeVel; break;
+        case 1: cb.mDirTypeFunc = dirTypePos; break;
+        case 2: cb.mDirTypeFunc = dirTypePosInv; break;
+        case 3: cb.mDirTypeFunc = dirTypeEmtrDir; break;
+        case 4: cb.mDirTypeFunc = dirTypePrevPtcl; break;
+        }
+    }
+
+    if (dc.pbsp->getType() == JPABaseShape::JPAType_Direction || dc.pbsp->getType() == JPABaseShape::JPAType_DirectionCross || dc.pbsp->getType() == JPABaseShape::JPAType_Rotation || dc.pbsp->getType() == JPABaseShape::JPAType_RotationCross) {
+        switch (dc.pbsp->getRotType()) {
+        case 0: cb.mRotTypeFunc = rotTypeY; break;
+        case 1: cb.mRotTypeFunc = rotTypeX; break;
+        case 2: cb.mRotTypeFunc = rotTypeZ; break;
+        case 3: cb.mRotTypeFunc = rotTypeXYZ; break;
+        case 4: cb.mRotTypeFunc = rotTypeYJiggle; break;
+        }
+    }
+
+    if (dc.pbsp->getType() == JPABaseShape::JPAType_Direction || dc.pbsp->getType() == JPABaseShape::JPAType_Rotation) {
+        switch (dc.pbsp->getBasePlaneType()) {
+        case 0: cb.mBasePlaneTypeFunc = basePlaneTypeXY; break;
+        case 1: cb.mBasePlaneTypeFunc = basePlaneTypeXZ; break;
+        }
+    }
 }
 
 /* 8026B3DC-8026B938       .text setChildClipBoard__7JPADrawFv */
 void JPADraw::setChildClipBoard() {
-    /* Nonmatching */
+    /* Nonmatching - top switch */
+
+    switch (dc.pssp->getType()) {
+    case JPABaseShape::JPAType_Billboard:
+        break;
+    case JPABaseShape::JPAType_DirBillboard:
+        PSMTXIdentity(cb.mDrawMtx);
+        break;
+    case JPABaseShape::JPAType_YBillboard:
+        loadYBBMtx(cb.mDrawMtxPtr);
+        break;
+    case JPABaseShape::JPAType_Point:
+    case JPABaseShape::JPAType_Line:
+    case JPABaseShape::JPAType_Direction:
+    case JPABaseShape::JPAType_DirectionCross:
+    case JPABaseShape::JPAType_Stripe:
+    case JPABaseShape::JPAType_StripeCross:
+    case JPABaseShape::JPAType_Rotation:
+    case JPABaseShape::JPAType_RotationCross:
+        MTXCopy(cb.mDrawMtxPtr, cb.mDrawMtx);
+        break;
+    }
+
+    GXLoadPosMtxImm(cb.mDrawMtx, GX_PNMTX0);
+
+    JPABaseEmitter* emtr = dc.pbe;
+    f32 scaleX = emtr->mGlobalParticleScale.x;
+    f32 scaleY = emtr->mGlobalParticleScale.y;
+
+    if (!dc.pssp->isInheritedScale()) {
+        cb.mGlobalScaleX = 25.0f * dc.pssp->getScaleX() * scaleX;
+        cb.mGlobalScaleY = 25.0f * dc.pssp->getScaleY() * scaleY;
+    } else {
+        cb.mGlobalScaleX = 25.0f * dc.pbsp->getBaseSizeX() * scaleX;
+        cb.mGlobalScaleY = 25.0f * dc.pbsp->getBaseSizeY() * scaleY;
+    }
+
+    if (dc.pssp->getType() == JPABaseShape::JPAType_Point) {
+        cb.mGlobalScaleX *= 1.02f;
+        cb.mGlobalScaleY *= 1.02f;
+    } else if (dc.pssp->getType() == JPABaseShape::JPAType_Line) {
+        cb.mGlobalScaleX *= 1.02f;
+        cb.mGlobalScaleY *= 0.4f;
+    }
+
+    cb.mPivotX = cb.mPivotY = 0.0f;
+
+    cb.field_0x14[1].y = 0.0f;
+    cb.field_0x14[0].y = 0.0f;
+    cb.field_0x14[3].x = 0.0f;
+    cb.field_0x14[0].x = 0.0f;
+    cb.field_0x14[3].y = 1.0f;
+    cb.field_0x14[2].y = 1.0f;
+    cb.field_0x14[2].x = 1.0f;
+    cb.field_0x14[1].x = 1.0f;
+
+    cb.mDirTypeFunc = NULL;
+    cb.mRotTypeFunc = NULL;
+    cb.mBasePlaneTypeFunc = NULL;
+
+    if (dc.pssp->getType() == JPABaseShape::JPAType_Direction || dc.pssp->getType() == JPABaseShape::JPAType_DirectionCross || dc.pssp->getType() == JPABaseShape::JPAType_DirBillboard || dc.pssp->getType() == JPABaseShape::JPAType_Stripe || dc.pssp->getType() == JPABaseShape::JPAType_StripeCross) {
+        switch (dc.pssp->getDirType()) {
+        case 0: cb.mDirTypeFunc = dirTypeVel; break;
+        case 1: cb.mDirTypeFunc = dirTypePos; break;
+        case 2: cb.mDirTypeFunc = dirTypePosInv; break;
+        case 3: cb.mDirTypeFunc = dirTypeEmtrDir; break;
+        case 4: cb.mDirTypeFunc = dirTypePrevPtcl; break;
+        }
+    }
+
+    if (dc.pssp->getType() == JPABaseShape::JPAType_Direction || dc.pssp->getType() == JPABaseShape::JPAType_DirectionCross || dc.pssp->getType() == JPABaseShape::JPAType_Rotation || dc.pssp->getType() == JPABaseShape::JPAType_RotationCross) {
+        switch (dc.pssp->getRotType()) {
+        case 0: cb.mRotTypeFunc = rotTypeY; break;
+        case 1: cb.mRotTypeFunc = rotTypeX; break;
+        case 2: cb.mRotTypeFunc = rotTypeZ; break;
+        case 3: cb.mRotTypeFunc = rotTypeXYZ; break;
+        case 4: cb.mRotTypeFunc = rotTypeYJiggle; break;
+        }
+    }
+
+    if (dc.pssp->getType() == JPABaseShape::JPAType_Direction || dc.pssp->getType() == JPABaseShape::JPAType_Rotation) {
+        switch (dc.pssp->getBasePlaneType()) {
+        case 0: cb.mBasePlaneTypeFunc = basePlaneTypeXY; break;
+        case 1: cb.mBasePlaneTypeFunc = basePlaneTypeXZ; break;
+        }
+    }
 }
 
 /* 8026B938-8026BC2C       .text drawParticle__7JPADrawFv */
@@ -668,7 +879,7 @@ void JPADraw::drawChild() {
     GXEnableTexOffsets(GX_TEXCOORD0, GX_TRUE, GX_TRUE);
 
     if (dc.pbsp->textureIsEmpty()) {
-        GXLoadTexObj(&dc.mpTextureResource->defaultTex.mTexObj, GX_TEXMAP0);
+        dc.mpTextureResource->loadDefaultTexture(GX_TEXMAP0);
     } else {
         dc.mpTextureResource->load(dc.pTexIdx[dc.pssp->getTextureIndex()], GX_TEXMAP0);
     }

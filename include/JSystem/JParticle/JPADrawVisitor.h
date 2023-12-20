@@ -2,6 +2,7 @@
 #define JPADRAWVISITOR_H
 
 #include "JSystem/JSupport/JSUList.h"
+#include "dolphin/mtx/mtx.h"
 #include "dolphin/types.h"
 
 class JPABaseEmitter;
@@ -519,5 +520,20 @@ public:
     /* 0x134 */ JPADrawCalcChildAlphaOut mCalcChildAlphaOut;
     /* 0x138 */ JPADrawCalcChildScaleOut mCalcChildScaleOut;
 };
+
+void dirTypeVel(JPABaseParticle*, JPABaseEmitter*, JGeometry::TVec3<f32>&);
+void dirTypePos(JPABaseParticle*, JPABaseEmitter*, JGeometry::TVec3<f32>&);
+void dirTypePosInv(JPABaseParticle*, JPABaseEmitter*, JGeometry::TVec3<f32>&);
+void dirTypeEmtrDir(JPABaseParticle*, JPABaseEmitter*, JGeometry::TVec3<f32>&);
+void dirTypePrevPtcl(JPABaseParticle*, JPABaseEmitter*, JGeometry::TVec3<f32>&);
+
+void rotTypeY(f32, f32, Mtx&);
+void rotTypeX(f32, f32, Mtx&);
+void rotTypeZ(f32, f32, Mtx&);
+void rotTypeXYZ(f32, f32, Mtx&);
+void rotTypeYJiggle(f32, f32, Mtx&);
+
+void basePlaneTypeXY(f32, f32, f32, f32, JGeometry::TVec3<f32>*);
+void basePlaneTypeXZ(f32, f32, f32, f32, JGeometry::TVec3<f32>*);
 
 #endif /* JPADRAWVISITOR_H */

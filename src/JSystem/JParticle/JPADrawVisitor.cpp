@@ -5,6 +5,7 @@
 
 #include "JSystem/JParticle/JPADrawVisitor.h"
 #include "JSystem/JGeometry.h"
+#include "dolphin/mtx/mtx.h"
 
 JPADrawClipBoard* JPADrawContext::pcb;
 
@@ -114,62 +115,62 @@ void JPADrawExecRotYBillBoard::exec(const JPADrawContext*, JPABaseParticle*) {
 }
 
 /* 8026134C-80261368       .text dirTypeVel__FP15JPABaseParticleP14JPABaseEmitterRQ29JGeometry8TVec3<f> */
-void dirTypeVel(JPABaseParticle*, JPABaseEmitter*, JGeometry::TVec3<float>&) {
+void dirTypeVel(JPABaseParticle*, JPABaseEmitter*, JGeometry::TVec3<f32>&) {
     /* Nonmatching */
 }
 
 /* 80261368-80261384       .text dirTypePos__FP15JPABaseParticleP14JPABaseEmitterRQ29JGeometry8TVec3<f> */
-void dirTypePos(JPABaseParticle*, JPABaseEmitter*, JGeometry::TVec3<float>&) {
+void dirTypePos(JPABaseParticle*, JPABaseEmitter*, JGeometry::TVec3<f32>&) {
     /* Nonmatching */
 }
 
 /* 80261384-802613C4       .text dirTypePosInv__FP15JPABaseParticleP14JPABaseEmitterRQ29JGeometry8TVec3<f> */
-void dirTypePosInv(JPABaseParticle*, JPABaseEmitter*, JGeometry::TVec3<float>&) {
+void dirTypePosInv(JPABaseParticle*, JPABaseEmitter*, JGeometry::TVec3<f32>&) {
     /* Nonmatching */
 }
 
 /* 802613C4-802613E8       .text dirTypeEmtrDir__FP15JPABaseParticleP14JPABaseEmitterRQ29JGeometry8TVec3<f> */
-void dirTypeEmtrDir(JPABaseParticle*, JPABaseEmitter*, JGeometry::TVec3<float>&) {
+void dirTypeEmtrDir(JPABaseParticle*, JPABaseEmitter*, JGeometry::TVec3<f32>&) {
     /* Nonmatching */
 }
 
 /* 802613E8-802614A8       .text dirTypePrevPtcl__FP15JPABaseParticleP14JPABaseEmitterRQ29JGeometry8TVec3<f> */
-void dirTypePrevPtcl(JPABaseParticle*, JPABaseEmitter*, JGeometry::TVec3<float>&) {
+void dirTypePrevPtcl(JPABaseParticle*, JPABaseEmitter*, JGeometry::TVec3<f32>&) {
     /* Nonmatching */
 }
 
 /* 802614A8-802614E8       .text rotTypeY__FffRA3_A4_f */
-void rotTypeY(float, float, float(&)[3][4]) {
+void rotTypeY(f32, f32, Mtx&) {
     /* Nonmatching */
 }
 
 /* 802614E8-80261528       .text rotTypeX__FffRA3_A4_f */
-void rotTypeX(float, float, float(&)[3][4]) {
+void rotTypeX(f32, f32, Mtx&) {
     /* Nonmatching */
 }
 
 /* 80261528-80261568       .text rotTypeZ__FffRA3_A4_f */
-void rotTypeZ(float, float, float(&)[3][4]) {
+void rotTypeZ(f32, f32, Mtx&) {
     /* Nonmatching */
 }
 
 /* 80261568-802615C4       .text rotTypeXYZ__FffRA3_A4_f */
-void rotTypeXYZ(float, float, float(&)[3][4]) {
+void rotTypeXYZ(f32, f32, Mtx&) {
     /* Nonmatching */
 }
 
 /* 802615C4-8026161C       .text rotTypeYJiggle__FffRA3_A4_f */
-void rotTypeYJiggle(float, float, float(&)[3][4]) {
+void rotTypeYJiggle(f32, f32, Mtx&) {
     /* Nonmatching */
 }
 
 /* 8026161C-80261654       .text basePlaneTypeXY__FffffPQ29JGeometry8TVec3<f> */
-void basePlaneTypeXY(float, float, float, float, JGeometry::TVec3<float>*) {
+void basePlaneTypeXY(f32, f32, f32, f32, JGeometry::TVec3<f32>*) {
     /* Nonmatching */
 }
 
 /* 80261654-8026168C       .text basePlaneTypeXZ__FffffPQ29JGeometry8TVec3<f> */
-void basePlaneTypeXZ(float, float, float, float, JGeometry::TVec3<float>*) {
+void basePlaneTypeXZ(f32, f32, f32, f32, JGeometry::TVec3<f32>*) {
     /* Nonmatching */
 }
 

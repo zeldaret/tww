@@ -18,6 +18,10 @@ public:
         pTexResArray[id]->load(texMap);
     }
 
+    inline void loadDefaultTexture(GXTexMapID texMap) {
+        defaultTex.load(texMap);
+    }
+
 public:
     /* 0x00 */ JPADefaultTexture defaultTex;
     /* 0x24 */ u32 registNum;

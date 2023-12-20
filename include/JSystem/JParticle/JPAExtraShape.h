@@ -52,8 +52,8 @@ public:
     virtual f32 getIncreaseRateY() = 0;
     virtual f32 getDecreaseRateX() = 0;
     virtual f32 getDecreaseRateY() = 0;
-    virtual u32 getPivotX() = 0;
-    virtual u32 getPivotY() = 0;
+    virtual u8 getPivotX() = 0;
+    virtual u8 getPivotY() = 0;
     virtual f32 getRandomScale() = 0;
     virtual BOOL isEnableAlpha() = 0;
     virtual BOOL isEnableSinWave() = 0;
@@ -98,8 +98,8 @@ public:
     virtual f32 getIncreaseRateY() { return mIncreaseRateY; }
     virtual f32 getDecreaseRateX() { return mDecreaseRateX; }
     virtual f32 getDecreaseRateY() { return mDecreaseRateY; }
-    virtual u32 getPivotX() { return (mpData->mFlag >> 14) & 0x03; }
-    virtual u32 getPivotY() { return (mpData->mFlag >> 16) & 0x03; }
+    virtual u8 getPivotX() { return (mpData->mFlag >> 14) & 0x03; }
+    virtual u8 getPivotY() { return (mpData->mFlag >> 16) & 0x03; }
     virtual f32 getRandomScale() { return mpData->mRandomScale; }
     virtual BOOL isEnableAlpha() { return (mpData->mFlag & 0x01); }
     virtual BOOL isEnableSinWave() { return (mpData->mFlag & 0x02); }

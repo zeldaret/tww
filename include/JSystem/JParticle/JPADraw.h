@@ -14,13 +14,17 @@ public:
     JPADrawClipBoard() {}
     ~JPADrawClipBoard() {}
 
+    typedef void(*DirTypeFunc)(JPABaseParticle*, JPABaseEmitter*, JGeometry::TVec3<f32>&);
+    typedef void(*RotTypeFunc)(f32, f32, Mtx&);
+    typedef void(*BasePlaneTypeFunc)(f32, f32, f32, f32, JGeometry::TVec3<f32>*);
+
     /* 0x00 */ JPADrawSetupTev mSetupTev;
     /* 0x04 */ f32 mGlobalScaleX;
     /* 0x08 */ f32 mGlobalScaleY;
     /* 0x0C */ f32 mPivotX;
     /* 0x10 */ f32 mPivotY;
     /* 0x14 */ JGeometry::TVec2<f32> field_0x14[4];
-    /* 0x34 */ MtxP mDrawMtx;
+    /* 0x34 */ MtxP mDrawMtxPtr;
     /* 0x38 */ f32 field_0x38;
     /* 0x3C */ f32 field_0x3c;
     /* 0x40 */ f32 field_0x40;
@@ -33,11 +37,13 @@ public:
     /* 0x5C */ f32 field_0x5c;
     /* 0x60 */ f32 field_0x60;
     /* 0x64 */ f32 field_0x64;
-    /* 0x68 */ Mtx field_0x68;
+    /* 0x68 */ Mtx mDrawMtx;
     /* 0x98 */ GXColor mPrmColor;
     /* 0x9C */ GXColor mEnvColor;
-    /* 0xA0 */ void* field_0xa0;
-    /* 0xA4 */ u8 field_0xa4[0xb4 - 0xa4];
+    /* 0xA0 */ DirTypeFunc mDirTypeFunc;
+    /* 0xA4 */ RotTypeFunc mRotTypeFunc;
+    /* 0xA8 */ BasePlaneTypeFunc mBasePlaneTypeFunc;
+    /* 0xAC */ u8 field_0xa4[0xb4 - 0xac];
 };
 
 class JPADraw {
