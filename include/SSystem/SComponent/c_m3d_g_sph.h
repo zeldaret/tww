@@ -27,8 +27,14 @@ public:
         SetC(src.mCenter);
         SetR(src.mRadius);
     }
-    bool cross(const cM3dGSph*, cXyz*) const;
+    bool Cross(const cM3dGCps* cps, cXyz* dst) const {
+        return cM3d_Cross_CpsSph(*cps, *this, dst);
+    }
+    bool Cross(const cM3dGTri& tri, cXyz* dst) const {
+        return cM3d_Cross_SphTri(this, &tri, dst);
+    }
     bool cross(const cM3dGCyl*, cXyz*) const;
+    bool cross(const cM3dGSph*, cXyz*) const;
     bool cross(const cM3dGSph*, f32*) const;
     const cXyz& GetC() const { return mCenter; }
     const cXyz* GetCP() const { return &mCenter; }

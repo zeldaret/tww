@@ -41,7 +41,6 @@ public:
     void GetD() const {}
     void Set(const cM3dGPla*) {}
     void SetupFrom3Vtx(const Vec*, const Vec*, const Vec*) {}
-    cM3dGPla(const cM3dGPla&) {}
     cM3dGPla(const cXyz*, float) {}
     void cross(const cM3dGLin&, Vec&) const {}
     void getCrossYLessD(const Vec&, float*) const {}

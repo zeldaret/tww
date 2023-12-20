@@ -42,13 +42,13 @@ public:
     bool cross(const cM3dGCyl*, cXyz*) const;
     bool cross(const cM3dGSph*, f32*) const;
     bool cross(const cM3dGCyl*, f32*) const;
+    bool Cross(const cM3dGCps* cps, cXyz* dst) const { return cM3d_Cross_CpsCyl(*cps, *this, dst); }
+    bool Cross(const cM3dGTri& tri, cXyz* dst) const { return cM3d_Cross_CylTri(this, &tri, dst); }
     const cXyz* GetCP() const { return &mCenter; }
     f32 GetR() const { return mRadius; }
     f32 GetH() const { return mHeight; }
     cXyz& GetC() { return mCenter; }
 
-    void Cross(const cM3dGCps*, cXyz*) const {}
-    void Cross(const cM3dGTri&, cXyz*) const {}
     void GetC() const {}
     void GetCP() {}
     void GetRP() {}

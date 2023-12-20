@@ -3,6 +3,7 @@
 
 #include "SSystem/SComponent/c_m3d.h"
 #include "SSystem/SComponent/c_m3d_g_lin.h"
+#include "SSystem/SComponent/c_m3d_g_tri.h"
 #include "global.h"
 
 struct cM3dGCpsS {
@@ -23,11 +24,10 @@ public:
         SetR(src.mRadius);
     }
     void SetCps(const cM3dGCps&);
-    bool Cross(cM3dGCps const* other, cXyz* xyz) const {
-        return cM3d_Cross_CpsCps(*this, *other, xyz);
-    }
+    bool Cross(cM3dGCps const* cps, cXyz* xyz) const { return cM3d_Cross_CpsCps(*this, *cps, xyz); }
     bool Cross(cM3dGCyl const* cyl, cXyz* xyz) const { return cM3d_Cross_CpsCyl(*this, *cyl, xyz); }
     bool Cross(cM3dGSph const* sph, cXyz* xyz) const { return cM3d_Cross_CpsSph(*this, *sph, xyz); }
+    bool Cross(cM3dGTri const& tri, cXyz* xyz) const { return cM3d_Cross_CpsTri(*this, tri, xyz); }
     void SetR(f32 r) { mRadius = r; }
 
 };  // Size = 0x20
