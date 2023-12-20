@@ -214,6 +214,14 @@ public:
     void onXYTalk() { cLib_onBit(m30F0, 0x100UL); }
     void offXYTalk() { cLib_offBit(m30F0, 0x100UL); }
     bool isXYTalk() { return cLib_checkBit(m30F0, 0x100UL); }
+    void noCarryAction() { cLib_onBit(m30F0, 0x800UL); }
+    void offNoCarryAction() { cLib_offBit(m30F0, 0x800UL); }
+    bool isNoCarryAction() { return cLib_checkBit(m30F0, 0x800UL); }
+    void onLightHit() { cLib_onBit(m30F0, 0x2000UL); }
+    void offLightHit() { cLib_offBit(m30F0, 0x2000UL); }
+    bool isLightHit() { return cLib_checkBit(m30F0, 0x2000UL); }
+    void onLightBodyHit() { cLib_onBit(m30F0, 0x8000UL); }
+    void offLightBodyHit() { cLib_offBit(m30F0, 0x8000UL); }
     bool isOldLightBodyHit() { return cLib_checkBit(m30F0, 0x8000UL); }
     void onDefaultTalkXY() { cLib_onBit(m30F0, 0x10000UL); }
     void offDefaultTalkXY() { cLib_offBit(m30F0, 0x10000UL); }
@@ -275,23 +283,15 @@ public:
     void getPiyo2TalkCNT() {}
     void getTalkType() {}
     void isLightBodyHit() {}
-    void isLightHit() {}
     void isMirror() {}
-    void isNoCarryAction() {}
     void isShipRide() {}
-    void noCarryAction() {}
     void offBitCamTagIn() {}
     void offFlying() {}
-    void offLightBodyHit() {}
-    void offLightHit() {}
     void offMirror() {}
-    void offNoCarryAction() {}
     void offPlayerRoom() {}
     void offShipRide() {}
     void onBitCamTagIn() {}
     void onFlying() {}
-    void onLightBodyHit() {}
-    void onLightHit() {}
     void onMirror() {}
     void onPlayerRoom() {}
     void onShipRide() {}
@@ -327,10 +327,10 @@ public:
     void setHane03Emitter();
     void deleteHane03Emitter();
     void returnLinkPlayer();
-    void shipRideCheck();
+    BOOL shipRideCheck();
     BOOL isFallAction();
-    void returnLinkCheck();
-    void lightHitCheck();
+    BOOL returnLinkCheck();
+    BOOL lightHitCheck();
     int wallHitCheck();
     void NpcCall(int*);
     void checkCollision(int);

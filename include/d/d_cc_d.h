@@ -388,6 +388,9 @@ STATIC_ASSERT(sizeof(dCcD_GObjInf) == 0xF8);
 // Cylinder
 class dCcD_Cyl : public dCcD_GObjInf, public cCcD_CylAttr {
 public:
+    /* 0x00 */ /* dCcD_GObjInf */
+    /* 0xF8 */ /* cCcD_CylAttr */
+
     void Set(dCcD_SrcCyl const&);
     cCcD_ShapeAttr* GetShapeAttr() { return this; }
     void StartCAt(cXyz&);
@@ -413,6 +416,9 @@ public:
 // Capsule
 class dCcD_Cps : public dCcD_GObjInf, public cCcD_CpsAttr {
 public:
+    /* 0x00 */ /* dCcD_GObjInf */
+    /* 0xF8 */ /* cCcD_CpsAttr */
+
     void Set(dCcD_SrcCps const&);
     cCcD_ShapeAttr* GetShapeAttr() { return (cCcD_ShapeAttr*)this; }
     void CalcAtVec() {

@@ -13,8 +13,7 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "d/d_npc.h"
 #include "d/d_snap.h"
-
-s16 dCam_getControledAngleY(camera_class*);
+#include "d/d_camera.h"
 
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};

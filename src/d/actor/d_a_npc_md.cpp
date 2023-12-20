@@ -13,6 +13,8 @@
 #include "d/d_snap.h"
 #include "d/actor/d_a_ship.h"
 #include "d/d_kankyo_wether.h"
+#include "d/d_camera.h"
+#include "d/d_detect.h"
 
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
@@ -978,13 +980,52 @@ void daNpc_Md_c::setPlayerAction(ActionFunc actionFunc, void* arg) {
 }
 
 /* 000033C4-00003430       .text getStickAngY__10daNpc_Md_cFi */
-s16 daNpc_Md_c::getStickAngY(int) {
-    /* Nonmatching */
+s16 daNpc_Md_c::getStickAngY(BOOL param_1) {
+    if (param_1) {
+        return g_mDoCPd_cpadInfo[0].mMainStickAngle + 0x8000;
+    } else {
+        s16 angleY = dCam_getControledAngleY(dComIfGp_getCamera(0));
+        return g_mDoCPd_cpadInfo[0].mMainStickAngle + 0x8000 + angleY;
+    }
 }
 
 /* 00003430-00003588       .text calcStickPos__10daNpc_Md_cFsP4cXyz */
-int daNpc_Md_c::calcStickPos(s16, cXyz*) {
-    /* Nonmatching */
+int daNpc_Md_c::calcStickPos(s16 param_1, cXyz* param_2) {
+    /* Nonmatching - dAttention_c::Lockon regswap */
+    dAttList_c* attList = dComIfGp_getAttention().GetLockonList(0);
+    
+    bool r26 = dComIfGp_getAttention().Lockon();
+    
+    int r31;
+    if (!r26) {
+        r31 = 0;
+    } else {
+        BOOL lockon = dComIfGp_getAttention().LockonTruth();
+        r31 = -1;
+        if (lockon) {
+            r31 = 1;
+        }
+    }
+    
+    if (attList == NULL) {
+        attList = dComIfGp_getAttention().GetActionList(0);
+    }
+    if (attList) {
+        *param_2 = attList->getActor()->mEyePos;
+        return r31;
+    }
+    
+    if (r26) {
+        param_1 = shape_angle.y;
+    }
+    
+    param_2->set(
+        current.pos.x +  100.0f * cM_ssin(param_1),
+        current.pos.y,
+        current.pos.z +  100.0f * cM_scos(param_1)
+    );
+    
+    return r31;
 }
 
 /* 00003588-0000362C       .text flyCheck__10daNpc_Md_cFv */
@@ -1012,32 +1053,42 @@ void daNpc_Md_c::setWingEmitter() {
 
 /* 00003674-000036C0       .text setHane02Emitter__10daNpc_Md_cFv */
 void daNpc_Md_c::setHane02Emitter() {
-    /* Nonmatching */
+    particle_set(&m0508[2], 0x8217);
+    particle_set(&m0508[3], 0x8217);
 }
 
 /* 000036C0-000036FC       .text deleteHane02Emitter__10daNpc_Md_cFv */
 void daNpc_Md_c::deleteHane02Emitter() {
-    /* Nonmatching */
+    emitterDelete(&m0508[2]);
+    emitterDelete(&m0508[3]);
 }
 
 /* 000036FC-00003748       .text setHane03Emitter__10daNpc_Md_cFv */
 void daNpc_Md_c::setHane03Emitter() {
-    /* Nonmatching */
+    particle_set(&m0508[4], 0x827D);
+    particle_set(&m0508[5], 0x827D);
 }
 
 /* 00003748-00003784       .text deleteHane03Emitter__10daNpc_Md_cFv */
 void daNpc_Md_c::deleteHane03Emitter() {
-    /* Nonmatching */
+    emitterDelete(&m0508[4]);
+    emitterDelete(&m0508[5]);
 }
 
 /* 00003784-000037C4       .text returnLinkPlayer__10daNpc_Md_cFv */
 void daNpc_Md_c::returnLinkPlayer() {
-    /* Nonmatching */
+    changePlayer(dComIfGp_getLinkPlayer());
+    m_flying = false;
+    m_mirror = false;
 }
 
 /* 000037C4-00003824       .text shipRideCheck__10daNpc_Md_cFv */
-void daNpc_Md_c::shipRideCheck() {
-    /* Nonmatching */
+BOOL daNpc_Md_c::shipRideCheck() {
+    if (isTypeShipRide()) {
+        setNpcAction(&shipNpcAction, NULL);
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00003824-00003908       .text isFallAction__10daNpc_Md_cFv */
@@ -1046,13 +1097,83 @@ BOOL daNpc_Md_c::isFallAction() {
 }
 
 /* 00003908-00003958       .text returnLinkCheck__10daNpc_Md_cFv */
-void daNpc_Md_c::returnLinkCheck() {
-    /* Nonmatching */
+BOOL daNpc_Md_c::returnLinkCheck() {
+    if (!dComIfGp_event_runCheck()) {
+        if (CPad_CHECK_TRIG_R(0) || CPad_CHECK_TRIG_START(0)) {
+            if (mAcch.ChkGroundHit()) {
+                return TRUE;
+            }
+        }
+    }
+    return FALSE;
 }
 
 /* 00003958-00003D20       .text lightHitCheck__10daNpc_Md_cFv */
-void daNpc_Md_c::lightHitCheck() {
-    /* Nonmatching */
+BOOL daNpc_Md_c::lightHitCheck() {
+    BOOL lightHit = FALSE;
+    cXyz lightVec;
+    cMtx_multVecSR(mpHarpModel->getBaseTRMtx(), &l_ms_light_local_vec, &lightVec);
+    offLightBodyHit();
+    
+    if (dComIfGp_getDetect().chk_light(&current.pos)) {
+        onLightBodyHit();
+        lightHit = TRUE;
+    } else {
+        cCcD_Obj* hitObj = mCyl3.GetTgHitObj();
+        if (hitObj && hitObj->ChkAtType(AT_TYPE_LIGHT)) {
+            onLightBodyHit();
+            if (mCyl3.GetTgRVecP()->inprod(lightVec) < 0.0f) {
+                lightHit = TRUE;
+            }
+        }
+    }
+    
+    if (lightHit) {
+        onLightHit();
+        
+        if (mCps.ChkAtHit()) {
+            fopAc_ac_c* hitActor = mCps.GetAtHitAc();
+            if (fopAcM_checkStatus(this, fopAcStts_CARRY_e) && !isNoCarryAction()) {
+                if (hitActor != dComIfGp_getLinkPlayer() && m3058.getEmitter() == NULL) {
+                    dComIfGp_particle_set(0x8232, &current.pos, NULL, NULL, 0xFF, &m3058);
+                }
+            } else if (m3058.getEmitter() == NULL) {
+                dComIfGp_particle_set(0x8232, &current.pos, NULL, NULL, 0xFF, &m3058);
+            }
+            
+            cM3d_lineVsPosSuisenCross(mCps.GetStart(), mCps.GetEnd(), *mCps.GetAtHitPosP(), &m3058.getPos());
+            s16 angleY = cM_atan2s(lightVec.x, lightVec.z);
+            s16 angleX = cM_atan2s(-lightVec.y, lightVec.absXZ());
+            m3058.setAngle(angleX, angleY, 0);
+        } else {
+            m3058.end();
+        }
+        
+        if (!mCps.ChkAtSet()) {
+            fopAcM_seStartCurrent(this, JA_SE_OBJ_MIRROR_REFLECT, 0);
+        } else {
+            fopAcM_seStartCurrent(this, JA_SE_OBJ_MIRROR_LIGHT, 0);
+        }
+        
+        if (m304C.getEmitter() == NULL) {
+            m304C.makeEmitter(0x8226, mpHarpLightModel->getBaseTRMtx(), &current.pos, NULL);
+            JPABaseEmitter* emitter = m304C.getEmitter();
+            JGeometry::TVec3<f32> temp;
+            temp.set(1.0f, 1.0f, 1.0f);
+            emitter->setEmitterScale(temp);
+            temp.set(0.0f, 4.0f, 0.0f);
+            emitter->setEmitterTranslation(temp);
+        }
+    } else {
+        offLightHit();
+        m3058.end();
+        if (m304C.getEmitter()) {
+            m304C.getEmitter()->setGlobalAlpha(0);
+            m304C.end();
+        }
+    }
+    
+    return lightHit;
 }
 
 /* 00003D20-00003D68       .text wallHitCheck__10daNpc_Md_cFv */

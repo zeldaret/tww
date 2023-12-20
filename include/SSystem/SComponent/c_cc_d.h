@@ -110,7 +110,7 @@ public:
     cM3dGAab const& GetWorkAab() const { return mAab; }
 
     static cXyz m_virtual_center;
-};
+};  // Size: 0x20
 
 STATIC_ASSERT(0x20 == sizeof(cCcD_ShapeAttr));
 
@@ -155,6 +155,9 @@ struct cCcD_SrcCpsAttr {
 
 class cCcD_CpsAttr : public cCcD_ShapeAttr, public cM3dGCps {
 public:
+    /* 0x00 */ /* cCcD_ShapeAttr */
+    /* 0x20 */ /* cM3dGCps */
+
     cCcD_CpsAttr() {}
     void Set(const cCcD_SrcCpsAttr& pSrc) {
         cM3dGCps::Set(pSrc.mCps);
