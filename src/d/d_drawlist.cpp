@@ -6,6 +6,10 @@
 #include "d/d_drawlist.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_rain.h"
+#include "dolphin/gf/GFGeometry.h"
+#include "dolphin/gf/GFLight.h"
+#include "dolphin/gf/GFPixel.h"
+#include "dolphin/gf/GFTransform.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_mtx.h"
@@ -471,14 +475,6 @@ void dDlst_alphaModelData_c::set(u8 type, Mtx mtx, u8 alpha) {
     mpMtx = mtx;
     mAlpha = alpha;
 }
-
-extern void GFLoadPosMtxImm(MtxP, GXPosNrmMtx);
-extern void GFSetCurrentMtx(u32, u32, u32, u32, u32, u32, u32, u32, u32);
-extern void GFSetChanMatColor(GXChannelID, GXColor);
-extern void GFSetVtxDescv(GXVtxDescList*);
-extern void GFSetVtxAttrFmtv(GXVtxFmt, GXVtxAttrFmtList*);
-extern void GFSetBlendModeEtc(GXBlendMode, GXBlendFactor, GXBlendFactor, GXLogicOp, u8, u8, u8);
-extern void GFSetArray(GXAttr, void*, u8);
 
 char l_backRevZMat[0x41] ALIGN_DECL(32) = {};
 char l_frontZMat[0x3c] ALIGN_DECL(32) = {};
