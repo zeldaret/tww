@@ -14,6 +14,10 @@ public:
     JPATextureResource(u32, JKRHeap*);
     void registration(JPATexture*);
 
+    inline void load(u16 id, GXTexMapID texMap) {
+        pTexResArray[id]->load(texMap);
+    }
+
 public:
     /* 0x00 */ JPADefaultTexture defaultTex;
     /* 0x24 */ u32 registNum;

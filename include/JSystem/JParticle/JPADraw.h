@@ -14,13 +14,13 @@ public:
     JPADrawClipBoard() {}
     ~JPADrawClipBoard() {}
 
-    /* 0x00 */ JPADrawSetupTev field_0x0;
-    /* 0x04 */ f32 field_0x4;
-    /* 0x08 */ f32 field_0x8;
-    /* 0x0C */ f32 field_0xc;
-    /* 0x10 */ f32 field_0x10;
+    /* 0x00 */ JPADrawSetupTev mSetupTev;
+    /* 0x04 */ f32 mGlobalScaleX;
+    /* 0x08 */ f32 mGlobalScaleY;
+    /* 0x0C */ f32 mPivotX;
+    /* 0x10 */ f32 mPivotY;
     /* 0x14 */ JGeometry::TVec2<f32> field_0x14[4];
-    /* 0x34 */ MtxP field_0x34;
+    /* 0x34 */ MtxP mDrawMtx;
     /* 0x38 */ f32 field_0x38;
     /* 0x3C */ f32 field_0x3c;
     /* 0x40 */ f32 field_0x40;
@@ -34,8 +34,8 @@ public:
     /* 0x60 */ f32 field_0x60;
     /* 0x64 */ f32 field_0x64;
     /* 0x68 */ Mtx field_0x68;
-    /* 0x98 */ GXColor field_0x98;
-    /* 0x9C */ GXColor field_0x9c;
+    /* 0x98 */ GXColor mPrmColor;
+    /* 0x9C */ GXColor mEnvColor;
     /* 0xA0 */ void* field_0xa0;
     /* 0xA4 */ u8 field_0xa4[0xb4 - 0xa4];
 };

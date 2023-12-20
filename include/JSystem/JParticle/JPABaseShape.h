@@ -9,17 +9,17 @@ class JKRHeap;
 class JPABaseShape {
 public:
     enum Type {
-        JPAType_Point,
-        JPAType_Line,
-        JPAType_Billboard,
-        JPAType_Direction,
-        JPAType_DirectionCross,
-        JPAType_Stripe,
-        JPAType_StripeCross,
-        JPAType_Rotation,
-        JPAType_RotationCross,
-        JPAType_DirBillboard,
-        JPAType_YBillboard,
+        /*  0 */ JPAType_Point,
+        /*  1 */ JPAType_Line,
+        /*  2 */ JPAType_Billboard,
+        /*  3 */ JPAType_Direction,
+        /*  4 */ JPAType_DirectionCross,
+        /*  5 */ JPAType_Stripe,
+        /*  6 */ JPAType_StripeCross,
+        /*  7 */ JPAType_Rotation,
+        /*  8 */ JPAType_RotationCross,
+        /*  9 */ JPAType_DirBillboard,
+        /* 10 */ JPAType_YBillboard,
     };
 
     virtual ~JPABaseShape() {}
@@ -34,19 +34,19 @@ public:
     virtual s16 getTexLoopOffset() = 0;
     virtual BOOL isEnableGlobalColAnm() = 0;
     virtual BOOL isEnableGlobalTexAnm() = 0;
-    virtual BOOL getListOrder() = 0;
+    virtual u32 getListOrder() = 0;
     virtual u32 getChildOrder() = 0;
     virtual GXTevColorArg* getTevColorArg() = 0;
     virtual GXTevAlphaArg* getTevAlphaArg() = 0;
-    virtual BOOL isEnableAlphaUpdate() = 0;
+    virtual GXBool isEnableAlphaUpdate() = 0;
     virtual GXBlendMode getBlendMode1() = 0;
     virtual GXBlendFactor getSrcBlendFactor1() = 0;
     virtual GXBlendFactor getDstBlendFactor1() = 0;
     virtual GXLogicOp getBlendOp1() = 0;
-    virtual BOOL isEnableZCmp() = 0;
-    virtual u32 getZCmpFunction() = 0;
-    virtual BOOL isEnableZCmpUpdate() = 0;
-    virtual u32 getZCompLoc() = 0;
+    virtual GXBool isEnableZCmp() = 0;
+    virtual GXCompare getZCmpFunction() = 0;
+    virtual GXBool isEnableZCmpUpdate() = 0;
+    virtual GXBool getZCompLoc() = 0;
     virtual GXCompare getAlphaCmpComp0() = 0;
     virtual GXCompare getAlphaCmpComp1() = 0;
     virtual GXAlphaOp getAlphaCmpOp() = 0;
@@ -54,7 +54,7 @@ public:
     virtual u8 getAlphaCmpRef1() = 0;
     virtual u32 isEnableAnmTone() = 0;
     virtual u32 isEnableProjection() = 0;
-    virtual BOOL isClipOn() = 0;
+    virtual u32 isClipOn() = 0;
     virtual BOOL isEnableTextureAnm() = 0;
     virtual BOOL textureIsEmpty() = 0;
     virtual u8 getTextureAnmType() = 0;
@@ -142,19 +142,19 @@ public:
     virtual s16 getTexLoopOffset() { return mTexLoopOffset; }
     virtual BOOL isEnableGlobalColAnm() { return mGlobalAnmFlags & 0x02; }
     virtual BOOL isEnableGlobalTexAnm() { return mGlobalAnmFlags & 0x01; }
-    virtual BOOL getListOrder() { return pBsd->mFlags & 0x200000; }
+    virtual u32 getListOrder() { return pBsd->mFlags & 0x200000; }
     virtual u32 getChildOrder() { return pBsd->mFlags & 0x400000; }
     virtual GXTevColorArg* getTevColorArg() { return stTevColorArg[(pBsd->mFlags >> 15) & 0x07]; }
     virtual GXTevAlphaArg* getTevAlphaArg() { return stTevAlphaArg[(pBsd->mFlags >> 18) & 0x01]; }
-    virtual BOOL isEnableAlphaUpdate() { return (pBsd->mBlendFlags >> 14) & 0x01; }
+    virtual GXBool isEnableAlphaUpdate() { return (pBsd->mBlendFlags >> 14) & 0x01; }
     virtual GXBlendMode getBlendMode1() { return stBlendMode[(pBsd->mBlendFlags >> 0) & 0x03]; }
     virtual GXBlendFactor getSrcBlendFactor1() { return stBlendFactor[(pBsd->mBlendFlags >> 2) & 0x0F]; }
     virtual GXBlendFactor getDstBlendFactor1() { return stBlendFactor[(pBsd->mBlendFlags >> 6) & 0x0F]; }
     virtual GXLogicOp getBlendOp1() { return stLogicOp[(pBsd->mBlendFlags >> 10) & 0x0F]; }
-    virtual BOOL isEnableZCmp() { return (pBsd->mZFlags >> 0) & 0x01; }
-    virtual u32 getZCmpFunction() { return stCompare[(pBsd->mZFlags >> 1) & 0x07]; }
-    virtual BOOL isEnableZCmpUpdate() { return (pBsd->mZFlags >> 4) & 0x01; }
-    virtual u32 getZCompLoc() { return (pBsd->mZFlags >> 5) & 0x01; }
+    virtual GXBool isEnableZCmp() { return (pBsd->mZFlags >> 0) & 0x01; }
+    virtual GXCompare getZCmpFunction() { return stCompare[(pBsd->mZFlags >> 1) & 0x07]; }
+    virtual GXBool isEnableZCmpUpdate() { return (pBsd->mZFlags >> 4) & 0x01; }
+    virtual GXBool getZCompLoc() { return (pBsd->mZFlags >> 5) & 0x01; }
     virtual GXCompare getAlphaCmpComp0() { return stCompare[(pBsd->mAlphaFlags >> 0) & 0x07]; }
     virtual GXCompare getAlphaCmpComp1() { return stCompare[(pBsd->mAlphaFlags >> 5) & 0x07]; }
     virtual GXAlphaOp getAlphaCmpOp() { return stAlphaOp[(pBsd->mAlphaFlags >> 3) & 0x03]; }
@@ -162,7 +162,7 @@ public:
     virtual u8 getAlphaCmpRef1() { return pBsd->mAlphaCmpRef1; }
     virtual u32 isEnableAnmTone() { return pBsd->mFlags & 0x80000; }
     virtual u32 isEnableProjection() { return pBsd->mFlags & 0x100000; }
-    virtual BOOL isClipOn() { return pBsd->mFlags & 0x800000; }
+    virtual u32 isClipOn() { return pBsd->mFlags & 0x800000; }
     virtual BOOL isEnableTextureAnm() { return pBsd->mTextureFlags & 0x01; }
     virtual BOOL textureIsEmpty() { return !(pBsd->mTextureFlags & 0x02); }
     virtual u8 getTextureAnmType() { return (pBsd->mTextureFlags >> 2) & 0x07; }

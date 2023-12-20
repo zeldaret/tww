@@ -62,7 +62,7 @@ public:
     /* 0xB4 */ int mLoopOffset;
     /* 0xB8 */ GXColor mPrmColor;
     /* 0xBC */ GXColor mEnvColor;
-    /* 0xC0 */ s16 mRotateAngle;
+    /* 0xC0 */ u16 mRotateAngle;
     /* 0xC2 */ s16 mRotateSpeed;
     /* 0xC4 */ u8 field_0xC4[0xC6 - 0xC4];
     /* 0xC6 */ u16 mTexIdx;
