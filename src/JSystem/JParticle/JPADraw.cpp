@@ -931,15 +931,117 @@ void JPADraw::zDraw() {
 
 /* 8026C024-8026C24C       .text zDrawParticle__7JPADrawFv */
 void JPADraw::zDrawParticle() {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
+    field_0xc2 &= ~0x02;
+    setParticleClipBoard();
+    dc.mpActiveParticles = &dc.pbe->mActiveParticles;
+    GXSetPointSize(cb.mGlobalScaleX, GX_TO_ONE);
+    GXSetLineWidth(cb.mGlobalScaleX, GX_TO_ONE);
+    GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
+    GXSetZCompLoc(GX_FALSE);
+    GXSetAlphaCompare(GX_GEQUAL, dc.pbe->mGlobalPrmColor.a, GX_AOP_OR, GX_GEQUAL, dc.pbe->mGlobalPrmColor.a);
+    GXSetAlphaUpdate(GX_FALSE);
+    GXSetColorUpdate(GX_FALSE);
+    GXSetCullMode(GX_CULL_NONE);
+    if (dc.pbsp->isClipOn()) {
+        GXSetClipMode(GX_CLIP_ENABLE);
+        GXSetMisc(1, 8);
+    } else {
+        GXSetClipMode(GX_CLIP_DISABLE);
+    }
+
+    for (s32 i = 0; i < execEmtrPVisNum; i++)
+        mpExecEmtrPVis[i]->exec(&dc);
+
+    JPABaseEmitter * emtr = dc.pbe;
+    if (dc.pbsp->getListOrder() == 0) {
+        for (JSULink<JPABaseParticle> * link = emtr->mActiveParticles.getFirst(); link != NULL; link = link->getNext()) {
+            JPABaseParticle * ptcl = link->getObject();
+            for (s32 i = 0; i < execPtclVisNum; i++)
+                mpExecPtclVis[i]->exec(&dc, ptcl);
+        }
+    } else {
+        for (JSULink<JPABaseParticle> * link = emtr->mActiveParticles.getLast(); link != NULL; link = link->getPrev()) {
+            JPABaseParticle * ptcl = link->getObject();
+            for (s32 i = 0; i < execPtclVisNum; i++)
+                mpExecPtclVis[i]->exec(&dc, ptcl);
+        }
+    }
+
+    GXSetMisc(1, 0);
 }
 
 /* 8026C24C-8026C4DC       .text zDrawChild__7JPADrawFv */
 void JPADraw::zDrawChild() {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
+    field_0xc2 |= 0x02;
+    setChildClipBoard();
+    dc.mpActiveParticles = &dc.pbe->mChildParticles;
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXEnableTexOffsets(GX_TEXCOORD0, GX_TRUE, GX_TRUE);
+
+    if (dc.pbsp->textureIsEmpty()) {
+        dc.mpTextureResource->loadDefaultTexture(GX_TEXMAP0);
+    } else {
+        dc.mpTextureResource->load(dc.pTexIdx[dc.pssp->getTextureIndex()], GX_TEXMAP0);
+    }
+
+    GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
+    GXSetZCompLoc(GX_FALSE);
+    GXSetAlphaCompare(GX_GEQUAL, dc.pbe->mGlobalPrmColor.a, GX_AOP_OR, GX_GEQUAL, dc.pbe->mGlobalPrmColor.a);
+    GXSetAlphaUpdate(GX_FALSE);
+    GXSetColorUpdate(GX_FALSE);
+    GXSetCullMode(GX_CULL_NONE);
+
+    if (dc.pssp->isClipOn()) {
+        GXSetClipMode(GX_CLIP_ENABLE);
+        GXSetMisc(1, 8);
+    } else {
+        GXSetClipMode(GX_CLIP_DISABLE);
+    }
+
+    for (s32 i = 0; i < execEmtrCVisNum; i++)
+        mpExecEmtrCVis[i]->exec(&dc);
+
+    JPABaseEmitter * emtr = dc.pbe;
+    if (dc.pbsp->getListOrder() == 0) {
+        for (JSULink<JPABaseParticle> * link = emtr->mChildParticles.getFirst(); link != NULL; link = link->getNext()) {
+            JPABaseParticle * ptcl = link->getObject();
+            for (s32 i = 0; i < execChldVisNum; i++)
+                mpExecChldVis[i]->exec(&dc, ptcl);
+        }
+    } else {
+        for (JSULink<JPABaseParticle> * link = emtr->mChildParticles.getLast(); link != NULL; link = link->getPrev()) {
+            JPABaseParticle * ptcl = link->getObject();
+            for (s32 i = 0; i < execChldVisNum; i++)
+                mpExecChldVis[i]->exec(&dc, ptcl);
+        }
+    }
+
+    GXSetMisc(1, 0);
 }
 
 /* 8026C4DC-8026C640       .text loadYBBMtx__7JPADrawFPA4_f */
-void JPADraw::loadYBBMtx(float(*)[4]) {
+void JPADraw::loadYBBMtx(MtxP mtx) {
     /* Nonmatching */
+    JGeometry::TVec3<f32> v(0.0f, mtx[1][1], mtx[2][1]);
+    JUT_ASSERT(0x596, !v.isZero());
+    v.normalize();
+
+    cb.mDrawYBBMtx[0][0] = 1.0f;
+    cb.mDrawYBBMtx[0][1] = 0.0f;
+    cb.mDrawYBBMtx[0][2] = 0.0f;
+    cb.mDrawYBBMtx[0][3] = mtx[0][3];
+
+    cb.mDrawYBBMtx[1][0] = 0.0f;
+    cb.mDrawYBBMtx[1][1] = v.y;
+    cb.mDrawYBBMtx[1][2] = -v.z;
+    cb.mDrawYBBMtx[1][3] = mtx[1][3];
+
+    cb.mDrawYBBMtx[2][0] = 1.0f;
+    cb.mDrawYBBMtx[2][1] = v.z;
+    cb.mDrawYBBMtx[2][2] = v.y;
+    cb.mDrawYBBMtx[2][3] = mtx[2][3];
+
+    MTXIdentity(cb.mDrawMtx);
 }
