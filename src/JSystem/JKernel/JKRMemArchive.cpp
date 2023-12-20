@@ -44,13 +44,13 @@ JKRMemArchive::~JKRMemArchive() {
 /* 802B9700-802B9740       .text fixedInit__13JKRMemArchiveFl */
 void JKRMemArchive::fixedInit(s32 param_1) {
     mIsMounted = false;
-	mMountMode = 1;
-	mMountCount = 1;
-	field_0x58 = 2;
-	mHeap = JKRHeap::sCurrentHeap;
-	mEntryNum = param_1;
-	if (sCurrentVolume) return;
-	sCurrentVolume = this;
+    mMountMode = 1;
+    mMountCount = 1;
+    field_0x58 = 2;
+    mHeap = JKRHeap::sCurrentHeap;
+    mEntryNum = param_1;
+    if (sCurrentVolume) return;
+    sCurrentVolume = this;
     setCurrentDirID(0);
 }
 
@@ -59,30 +59,30 @@ bool JKRMemArchive::mountFixed(void* param_1, JKRMemBreakFlag param_2) {
     if (check_mount_already((s32)param_1)) {
         return false;
     }
-	fixedInit((s32)param_1);
-	if (!open(param_1, 0xffff, param_2)) {
+    fixedInit((s32)param_1);
+    if (!open(param_1, 0xffff, param_2)) {
         return false;
     }
-	mVolumeType = 'RARC';
+    mVolumeType = 'RARC';
     mVolumeName = mStringTable + mNodes->name_offset;
-	sVolumeList.prepend(&mFileLoaderLink);
+    sVolumeList.prepend(&mFileLoaderLink);
     mIsOpen = param_2 == 1;
-	mIsMounted = true;
+    mIsMounted = true;
     return true;
 }
 
 /* 802B9810-802B98FC       .text unmountFixed__13JKRMemArchiveFv */
 void JKRMemArchive::unmountFixed() {
     JUT_ASSERT(337, isMounted());
-	JUT_ASSERT(340, mMountCount == 1);
-	if (sCurrentVolume == this) {
+    JUT_ASSERT(340, mMountCount == 1);
+    if (sCurrentVolume == this) {
         sCurrentVolume = NULL;
     }
-	if (mIsOpen && mArcHeader) {
+    if (mIsOpen && mArcHeader) {
         JKRHeap::free(mArcHeader, mHeap);
     }
-	sVolumeList.remove(&mFileLoaderLink);
-	mIsMounted = false;
+    sVolumeList.remove(&mFileLoaderLink);
+    mIsMounted = false;
 }
 
 /* 802B98FC-802B9A90       .text open__13JKRMemArchiveFlQ210JKRArchive15EMountDirection */

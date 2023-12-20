@@ -236,7 +236,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 000006C0-0000096C       .text _createHeap__6daRd_cFv */
 BOOL daRd_c::_createHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, RD_BDL_RD));
-	JUT_ASSERT(504, modelData != 0);
+    JUT_ASSERT(504, modelData != 0);
     
     mpMorf = new mDoExt_McaMorf(
         modelData,
@@ -257,7 +257,7 @@ BOOL daRd_c::_createHeap() {
     }
     
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, RD_BTK_RD_CLOSE));
-	JUT_ASSERT(525, btk != 0);
+    JUT_ASSERT(525, btk != 0);
     if (!mBtkAnm.init(modelData, btk, true, 0, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
@@ -265,7 +265,7 @@ BOOL daRd_c::_createHeap() {
     modelData->getJointNodePointer(0x0C)->setCallBack(nodeHeadControl_CB); // ree_atama_1
     
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, RD_BRK_NML));
-	JUT_ASSERT(550, brk != 0);
+    JUT_ASSERT(550, brk != 0);
     if (!mBrkAnm.init(modelData, brk, true, 0, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
@@ -1384,7 +1384,7 @@ void daRd_c::setBrkAnm(s8 idx) {
     
     J3DModel* model = mpMorf->getModel();
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, a_anm_idx_tbl[idx]));
-	JUT_ASSERT(1890, brk != 0);
+    JUT_ASSERT(1890, brk != 0);
     mBrkAnm.init(model->getModelData(), brk, true, a_play_mod_tbl[idx], 1.0f, 0, -1, true, 0);
 }
 

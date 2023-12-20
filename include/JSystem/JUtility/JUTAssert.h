@@ -14,7 +14,7 @@
 #define JUT_ASSERT_MSG(LINE, COND, MSG)                                                            \
     if (!(COND)) {                                                                                 \
         OSReport(MSG);                                                                             \
-        if (!(COND)) {                                                                                \
+        if (!(COND)) {                                                                             \
             JUTAssertion::showAssert(3, __FILE__, LINE, #COND);                                    \
             OSPanic(__FILE__, LINE, "Halt");                                                       \
         }                                                                                          \

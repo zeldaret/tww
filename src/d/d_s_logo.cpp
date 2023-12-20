@@ -880,7 +880,7 @@ s32 phase_2(dScnLogo_c* i_this) {
     rt = dComIfG_setObjectRes("Agb", JKRArchive::UNKNOWN_MOUNT_DIRECTION, NULL);
     JUT_ASSERT(VERSION_SELECT(1360, 1659, 1699), rt == 1);
 
-    l_anmCommand = aramMount("/res/Object/LkAnm.arc");                                                     
+    l_anmCommand = aramMount("/res/Object/LkAnm.arc");
     l_fmapCommand = aramMount("/res/Fmap/Fmap.arc");
     l_itemResCommand = aramMount("/res/Msg/itemres.arc");
     l_fmapResCommand = aramMount("/res/Msg/fmapres.arc");

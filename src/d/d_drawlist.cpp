@@ -413,7 +413,7 @@ void dDlst_2Dm_c::draw() {
     GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
     GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
-    GXSetCurrentMtx(GX_PNMTX0);                                     
+    GXSetCurrentMtx(GX_PNMTX0);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(mX0, mY0, 0.0f);

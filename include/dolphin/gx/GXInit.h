@@ -56,8 +56,8 @@ typedef struct _GXData {
     /* 0x208 */ GXTexRegion field_0x208[8];
     /* 0x288 */ GXTexRegion field_0x288[8];
     /* 0x308 */ GXTexRegion field_0x308[8];
-    /* 0x388 */ GXTlutRegion field_0x388[16]; 
-    /* 0x488 */ GXTlutRegion field_0x488[4]; 
+    /* 0x388 */ GXTlutRegion field_0x388[16];
+    /* 0x488 */ GXTlutRegion field_0x488[4];
     /* 0x4C8 */ GXTexRegionCallback field_0x4c8;
     /* 0x4CC */ GXTlutRegionCallback field_0x4cc;
     /* 0x4D0 */ GXAttrType field_0x4d0;

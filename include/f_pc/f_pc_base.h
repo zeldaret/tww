@@ -9,7 +9,7 @@
 #include "f_pc/f_pc_profile.h"
 
 typedef struct create_request create_request;
-typedef struct process_method_class process_method_class; 
+typedef struct process_method_class process_method_class;
 typedef struct profile_method_class profile_method_class;
 
 typedef struct base_process_class {

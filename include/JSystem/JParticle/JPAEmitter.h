@@ -184,7 +184,7 @@ public:
         JPASetRMtxTVecfromMtx(mtx, mGlobalRotation, mGlobalTranslation);
     }
     void setGlobalRotation(const JGeometry::TVec3<s16>& rot) {
-        JPAGetXYZRotateMtx(rot.x, rot.y, rot.z, mGlobalRotation); 
+        JPAGetXYZRotateMtx(rot.x, rot.y, rot.z, mGlobalRotation);
     }
     void setGlobalTranslation(f32 x, f32 y, f32 z) { mGlobalTranslation.set(x, y, z); }
     void setGlobalTranslation(const JGeometry::TVec3<f32>& trans) { mGlobalTranslation.set(trans); }

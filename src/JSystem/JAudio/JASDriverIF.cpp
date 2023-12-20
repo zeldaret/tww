@@ -19,11 +19,11 @@ void JASystem::Driver::init() {
 u16 JASystem::Driver::MAX_MIXERLEVEL = 0x2ee0;
 
 static void dummy() {
-	OSReport("JASDriverIF.cpp");
-	OSReport("(0.0 <= channel_level) && (channel_level <= 2.0)");
-	OSReport("Halt");
-	OSReport("(0.0 <= auto_level) && (auto_level <= 2.0)");
-	OSReport("(0.0 <= dsp_level) && (dsp_level <= 8.0)");
+    OSReport("JASDriverIF.cpp");
+    OSReport("(0.0 <= channel_level) && (channel_level <= 2.0)");
+    OSReport("Halt");
+    OSReport("(0.0 <= auto_level) && (auto_level <= 2.0)");
+    OSReport("(0.0 <= dsp_level) && (dsp_level <= 8.0)");
 }
 
 /* 8028A9A0-8028AAC4       .text setMixerLevel__Q28JASystem6DriverFff */

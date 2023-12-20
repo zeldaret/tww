@@ -229,7 +229,7 @@ bool daArrow_Lighteff_c::_delete() {
 
 /* 00000B70-00000C10       .text daArrow_Lighteff_Delete__FPv */
 static BOOL daArrow_Lighteff_Delete(void* i_this) {
-    return static_cast<daArrow_Lighteff_c*>(i_this)->_delete(); 
+    return static_cast<daArrow_Lighteff_c*>(i_this)->_delete();
 }
 
 bool daArrow_Lighteff_c::_draw() {

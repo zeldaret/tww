@@ -2622,9 +2622,9 @@ int getRotenItemNumInBag() {
 /* 800C7B50-800C7B7C       .text isDaizaItem__FUc */
 BOOL isDaizaItem(u8 itemNo) {
     BOOL isDaiza = FALSE;
-    if (itemNo == FLOWER_1 || itemNo == FLOWER_2 || itemNo == FLOWER_3 || 
-        itemNo == HEROS_FLAG || itemNo == TAIRYO_FLAG || itemNo == SALES_FLAG || 
-        itemNo == WIND_FLAG || itemNo == RED_FLAG || itemNo == FOSSIL_HEAD || 
+    if (itemNo == FLOWER_1 || itemNo == FLOWER_2 || itemNo == FLOWER_3 ||
+        itemNo == HEROS_FLAG || itemNo == TAIRYO_FLAG || itemNo == SALES_FLAG ||
+        itemNo == WIND_FLAG || itemNo == RED_FLAG || itemNo == FOSSIL_HEAD ||
         itemNo == WATER_STATUE || itemNo == POSTMAN_STATUE || itemNo == PRESIDENT_STATUE)
     {
         isDaiza = TRUE;

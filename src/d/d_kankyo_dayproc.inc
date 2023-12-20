@@ -79,7 +79,7 @@ static void dKankyo_DayProc() {
     }
 #endif
 
-    if (dKy_get_dayofweek() == 5) {                   
+    if (dKy_get_dayofweek() == 5) {
         dComIfGs_offEventBit(0x2080);
         dComIfGs_offEventBit(0x2004);
         dComIfGs_offEventBit(0x2002);

@@ -60,7 +60,7 @@ BOOL J3DFrameCtrl::checkPass(f32 pass_frame) {
                 return false;
             }
         } else if (mEnd <= cur_frame) {
-            while (next_frame >= mEnd) {            
+            while (next_frame >= mEnd) {
                 if (mEnd - mLoop <= 0.0f) {
                     break;
                 }
@@ -73,7 +73,7 @@ BOOL J3DFrameCtrl::checkPass(f32 pass_frame) {
                 return false;
             }
         } else if (next_frame < mStart) {
-            while (next_frame < mStart) {            
+            while (next_frame < mStart) {
                 if (mLoop - mStart <= 0.0f) {
                     break;
                 }
@@ -86,7 +86,7 @@ BOOL J3DFrameCtrl::checkPass(f32 pass_frame) {
                 return false;
             }
         } else if (mEnd <= next_frame) {
-            while (next_frame >= mEnd) {            
+            while (next_frame >= mEnd) {
                 if (mEnd - mLoop <= 0.0f) {
                     break;
                 }

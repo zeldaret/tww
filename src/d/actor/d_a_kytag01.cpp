@@ -40,7 +40,7 @@ static BOOL daKytag01_Delete(kytag01_class* i_this) {
 }
 
 /* 00000100-00000224       .text wave_make__Fv */
-void wave_make() { 
+void wave_make() {
     dScnKy_env_light_c& env_light = dKy_getEnvlight();
     if (env_light.mWaveChan.mWaveCount == 0) {
         env_light.mWaveChan.mWaveSpawnDist = 20000.0f;

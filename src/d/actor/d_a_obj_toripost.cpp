@@ -269,7 +269,7 @@ s32 daObjTpost_c::getReadableLetterNum() {
 
 u8 daObjTpost_c::checkSendPrice() {
     static const u8 pay_type[49] = {
-        02, 
+        02,
         01,
         01,
         00,

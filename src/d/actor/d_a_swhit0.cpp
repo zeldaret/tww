@@ -92,7 +92,7 @@ s32 daSwhit0_c::getTimer() {
     if (param == 0xFF) {
         timer = 0;
     }
-    return timer; 
+    return timer;
 }
 
 /* 000000B8-000000C4       .text getSwNo2__10daSwhit0_cFv */

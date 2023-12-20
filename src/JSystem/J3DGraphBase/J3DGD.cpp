@@ -227,7 +227,7 @@ void J3DGDSetTexCoordGen(GXTexGenType type, GXTexGenSrc src) {
 
     switch (src) {
     case GX_TG_POS: row = 0; form = 1; break;
-    case GX_TG_NRM: row = 1; form = 1; break; 
+    case GX_TG_NRM: row = 1; form = 1; break;
     case GX_TG_BINRM: row = 3; form = 1; break;
     case GX_TG_TANGENT: row = 4; form = 1; break;
     case GX_TG_COLOR0: row = 2; break;

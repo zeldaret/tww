@@ -6,11 +6,11 @@
 class JKRSolidHeap : public JKRHeap {
 public:
     struct Unknown {
-        u32 field_0x0;
-        u32 field_0x4;
-        u32 field_0x8;
-        void* field_0xc;
-        Unknown* mNext;
+        /* 0x00 */ u32 field_0x0;
+        /* 0x04 */ u32 field_0x4;
+        /* 0x08 */ u32 field_0x8;
+        /* 0x0C */ void* field_0xc;
+        /* 0x10 */ Unknown* mNext;
     };
 
 protected:

@@ -254,7 +254,7 @@ public:
     virtual void draw(JPABaseEmitter*);
     virtual void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
 
-    u8 field_0x4;
+    /* 0x04 */ u8 field_0x4;
 };
 
 class dPa_windPcallBack : public JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*> {

@@ -106,9 +106,9 @@ inline void J3DFillZero32B(register void* param_0, register u32 param_1) {
         srwi param_1, param_1, 5
         mtctr param_1
     lbl_8032D948:
-    	dcbz 0, param_0
-    	addi param_0, param_0, 0x20
-    	bdnz lbl_8032D948
+        dcbz 0, param_0
+        addi param_0, param_0, 0x20
+        bdnz lbl_8032D948
     }
 }
 

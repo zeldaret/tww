@@ -2397,7 +2397,7 @@ void dKy_setLight() {
 
         static f32 target = 255.0f;
 
-        f32 v;    
+        f32 v;
         if (pPlayer != NULL) {
             if (envLight.mBaseLightInfluence.mPower > 0.0f)
                 v = envLight.mBaseLightInfluence.mPos.abs(pPlayer->current.pos) / envLight.mBaseLightInfluence.mPower;

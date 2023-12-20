@@ -1079,7 +1079,7 @@ void dKyr_drawSun(Mtx drawMtx, cXyz* pPos, GXColor& reg0, u8** pImg) {
                 GXTexCoord2s16(0xFF, 0xFF);
                 GXPosition3f32(pos[3].x, pos[3].y, pos[3].z);
                 GXTexCoord2s16(0, 0xFF);
-                GXEnd();                
+                GXEnd();
             }
         }
 
@@ -1171,7 +1171,7 @@ void dKyr_drawSun(Mtx drawMtx, cXyz* pPos, GXColor& reg0, u8** pImg) {
                 GXTexCoord2s16(0xFF, 0xFF);
                 GXPosition3f32(pos[3].x, pos[3].y, pos[3].z);
                 GXTexCoord2s16(0, 0xFF);
-                GXEnd();                
+                GXEnd();
             }
         }
 #if VERSION != VERSION_JPN

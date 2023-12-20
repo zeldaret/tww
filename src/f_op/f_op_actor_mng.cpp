@@ -1138,7 +1138,7 @@ void* fopAcM_createStealItem(cXyz* p_pos, int i_tblNo, int i_roomNo, csXyz* p_an
     
     if (isLimitedItem(itemNo)) {
         if (
-            (i_itemBitNo == 0x1F || i_itemBitNo == -1 || i_itemBitNo == 0xFF) || 
+            (i_itemBitNo == 0x1F || i_itemBitNo == -1 || i_itemBitNo == 0xFF) ||
             (
                 !(i_itemBitNo == 0x1F || i_itemBitNo == -1 || i_itemBitNo == 0xFF) &&
                 fopAcM_isItemForIb(i_itemBitNo, itemNo, i_roomNo)
@@ -1187,7 +1187,7 @@ void* fopAcM_createItemFromEnemyTable(u16 itemTableIdx, int i_itemBitNo, int i_r
     
     if (isLimitedItem(items[itemIdx])) {
         if (
-            (i_itemBitNo == 0x1F || i_itemBitNo == -1 || i_itemBitNo == 0xFF) || 
+            (i_itemBitNo == 0x1F || i_itemBitNo == -1 || i_itemBitNo == 0xFF) ||
             (
                 !(i_itemBitNo == 0x1F || i_itemBitNo == -1 || i_itemBitNo == 0xFF) &&
                 fopAcM_isItemForIb(i_itemBitNo, items[itemIdx], i_roomNo)

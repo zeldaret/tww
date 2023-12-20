@@ -65,7 +65,7 @@ BOOL daBranch_c::solidHeapCB(fopAc_ac_c* i_this) {
 /* 00000248-0000049C       .text CreateHeap__10daBranch_cFv */
 s32 daBranch_c::CreateHeap() {
     /* Nonmatching */
-    int basIds[] = { 8, 0 }; 
+    int basIds[] = { 8, 0 };
     int bckIds[] = { 7, 2 };
     int bmdIds[] = { 6, 5 };
     int t[] = {0, 0};
@@ -90,7 +90,7 @@ s32 daBranch_c::CreateHeap() {
             -1,
             1,
             0,
-            0, 
+            0,
             0x11020203
         );
 

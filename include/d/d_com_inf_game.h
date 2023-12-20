@@ -367,7 +367,7 @@ public:
     void setMessageCountNumber(s16 num) { mMsgCountNumber = num; }
 
     s16 getMiniGameRupee() { return mMiniGameRupee; }
-    void plusMiniGameRupee(s16 count) { 
+    void plusMiniGameRupee(s16 count) {
         if(mMiniGameRupee + count > 0) {
             mMiniGameRupee += count;
         }
@@ -2136,7 +2136,7 @@ inline s16 dComIfGp_getMiniGameRupee() {
     return g_dComIfG_gameInfo.play.getMiniGameRupee();
 }
 
-inline void dComIfGp_plusMiniGameRupee(s16 count) { 
+inline void dComIfGp_plusMiniGameRupee(s16 count) {
     g_dComIfG_gameInfo.play.plusMiniGameRupee(count);
 }
 

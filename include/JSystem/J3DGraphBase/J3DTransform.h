@@ -67,25 +67,25 @@ inline void J3DPSMulMtxVec(register MtxP mtx, register Vec* vec, register Vec* d
     register f32 fr00;
     asm {
         psq_l fr00, 0(vec), 0, 0
-    	psq_l fr2, 0(mtx), 0, 0
-    	psq_l fr01, 8(vec), 1, 0
-    	ps_mul fr4, fr2, fr00
-    	psq_l fr3, 8(mtx), 0, 0
-    	ps_madd fr5, fr3, fr01, fr4
-    	psq_l fr8, 16(mtx), 0, 0
-    	ps_sum0 fr6, fr5, fr6, fr5
-    	psq_l fr9, 24(mtx), 0, 0
-    	ps_mul fr10, fr8, fr00
-    	psq_st fr6, 0(dst), 1, 0
-    	ps_madd fr11, fr9, fr01, fr10
-    	psq_l fra2, 32(mtx), 0, 0
-    	ps_sum0 fr12, fr11, fr12, fr11
-    	psq_l fr3, 40(mtx), 0, 0
-    	ps_mul fra4, fra2, fr00
-    	psq_st fr12, 4(dst), 1, 0
-    	ps_madd fra5, fr3, fr01, fra4
-    	ps_sum0 fra6, fra5, fra6, fra5
-    	psq_st fra6, 8(dst), 1, 0
+        psq_l fr2, 0(mtx), 0, 0
+        psq_l fr01, 8(vec), 1, 0
+        ps_mul fr4, fr2, fr00
+        psq_l fr3, 8(mtx), 0, 0
+        ps_madd fr5, fr3, fr01, fr4
+        psq_l fr8, 16(mtx), 0, 0
+        ps_sum0 fr6, fr5, fr6, fr5
+        psq_l fr9, 24(mtx), 0, 0
+        ps_mul fr10, fr8, fr00
+        psq_st fr6, 0(dst), 1, 0
+        ps_madd fr11, fr9, fr01, fr10
+        psq_l fra2, 32(mtx), 0, 0
+        ps_sum0 fr12, fr11, fr12, fr11
+        psq_l fr3, 40(mtx), 0, 0
+        ps_mul fra4, fra2, fr00
+        psq_st fr12, 4(dst), 1, 0
+        ps_madd fra5, fr3, fr01, fra4
+        ps_sum0 fra6, fra5, fra6, fra5
+        psq_st fra6, 8(dst), 1, 0
     }
 }
 
@@ -109,25 +109,25 @@ inline void J3DPSMulMtxVec(register MtxP mtx, register SVec* vec, register SVec*
     register f32 fr00;
     asm {
         psq_l fr00, 0(vec), 0, 7
-    	psq_l fr2, 0(mtx), 0, 0
-    	psq_l fr01, 4(vec), 1, 7
-    	ps_mul fr4, fr2, fr00
-    	psq_l fr3, 8(mtx), 0, 0
-    	ps_madd fr5, fr3, fr01, fr4
-    	psq_l fr8, 16(mtx), 0, 0
-    	ps_sum0 fr6, fr5, fr6, fr5
-    	psq_l fr9, 24(mtx), 0, 0
-    	ps_mul fr10, fr8, fr00
-    	psq_st fr6, 0(dst), 1, 7
-    	ps_madd fr11, fr9, fr01, fr10
-    	psq_l fra2, 32(mtx), 0, 0
-    	ps_sum0 fr12, fr11, fr12, fr11
-    	psq_l fr3, 40(mtx), 0, 0
-    	ps_mul fra4, fra2, fr00
-    	psq_st fr12, 2(dst), 1, 7
-    	ps_madd fra5, fr3, fr01, fra4
-    	ps_sum0 fra6, fra5, fra6, fra5
-    	psq_st fra6, 4(dst), 1, 7
+        psq_l fr2, 0(mtx), 0, 0
+        psq_l fr01, 4(vec), 1, 7
+        ps_mul fr4, fr2, fr00
+        psq_l fr3, 8(mtx), 0, 0
+        ps_madd fr5, fr3, fr01, fr4
+        psq_l fr8, 16(mtx), 0, 0
+        ps_sum0 fr6, fr5, fr6, fr5
+        psq_l fr9, 24(mtx), 0, 0
+        ps_mul fr10, fr8, fr00
+        psq_st fr6, 0(dst), 1, 7
+        ps_madd fr11, fr9, fr01, fr10
+        psq_l fra2, 32(mtx), 0, 0
+        ps_sum0 fr12, fr11, fr12, fr11
+        psq_l fr3, 40(mtx), 0, 0
+        ps_mul fra4, fra2, fr00
+        psq_st fr12, 2(dst), 1, 7
+        ps_madd fra5, fr3, fr01, fra4
+        ps_sum0 fra6, fra5, fra6, fra5
+        psq_st fra6, 4(dst), 1, 7
     }
 }
 

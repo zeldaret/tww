@@ -445,7 +445,7 @@ void daBomb_c::water_tention() {
             f32 temp;
             if(field_0x554.y - field_0x554.z < 0) {
                 temp = 0.8f * field_0x554.z;
-            } 
+            }
             else {
                 temp = 0.2f * field_0x554.z;
             }

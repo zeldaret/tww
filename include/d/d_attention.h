@@ -86,10 +86,10 @@ public:
     void requestF(fopAc_ac_c*, s16, int);
 
 private:
-    u32 field_0x0;
-    u32 field_0x4;
-    f32 field_0x8;
-    u32 mLookTargetID;
+    /* 0x0 */ u32 field_0x0;
+    /* 0x4 */ u32 field_0x4;
+    /* 0x8 */ f32 field_0x8;
+    /* 0xC */ u32 mLookTargetID;
 };  // Size: 0x10
 
 class dAttList_c {

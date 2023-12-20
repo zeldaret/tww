@@ -128,11 +128,11 @@ void J2DWindow::draw_private(const JGeometry::TBox2<f32>& frameBox, const JGeome
         f32 bottom = 1.0f + mpFrameTexture1->getHeight();
         u16 s0, s1, t0, t1;
 
-        drawFrameTexture(mpFrameTexture1, 0.0f, 0.0f, 
+        drawFrameTexture(mpFrameTexture1, 0.0f, 0.0f,
             (field_0x110 >> 7) & 1,
             (field_0x110 >> 6) & 1, true);
-        drawFrameTexture(mpFrameTexture2, right, 0.0f, 
-            (field_0x110 >> 5) & 1, 
+        drawFrameTexture(mpFrameTexture2, right, 0.0f,
+            (field_0x110 >> 5) & 1,
             (field_0x110 >> 4) & 1, (field_0x111 >> 0) & 1);
 
         s0 = ((field_0x110 >> 5) & 1) ? (u16)0x8000 : (u16)0;

@@ -3004,7 +3004,7 @@ void daPy_lk_c::deleteEquipItem(int param_1) {
     
     if ((mHeldItemType == ROPE && checkRopeAnime()) ||
         (mHeldItemType == BOOMERANG && checkBoomerangAnime()) ||
-        (mHeldItemType == HOOKSHOT && m_anm_heap_upper[2].mIdx == LKANM_BCK_HOOKSHOTWAIT) || 
+        (mHeldItemType == HOOKSHOT && m_anm_heap_upper[2].mIdx == LKANM_BCK_HOOKSHOTWAIT) ||
         (checkBowItem(mHeldItemType) && checkBowAnime()))
     {
         resetActAnimeUpper(UPPER_UNK2, -1.0f);
@@ -4910,7 +4910,7 @@ int phase_3(daPy_lk_c* i_this) {
 
 static s32 daPy_Create(fopAc_ac_c* i_this) {
     static int (*l_method[3])(daPy_lk_c*) = {
-        phase_1, 
+        phase_1,
         phase_2,
         phase_3,
     };

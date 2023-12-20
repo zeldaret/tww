@@ -59,4 +59,7 @@ public:
     /* 0x2DC */ u8 mUnloadTimer;
 };
 
+// inline void searchRoomMemory(int) {}
+// inline void searchRoomNo(int, readRoom_c*) {}
+
 #endif /* D_A_BG_H */

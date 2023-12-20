@@ -377,10 +377,10 @@ s32 dNpc_PathRun_c::absIdx(u8 startIdx, u8 lastIdx) {
     s32 diff_2 = lastIdx - startIdx;
 
     if(diff_1 < 0) {
-        diff_1 += maxPoint(); 
+        diff_1 += maxPoint();
     }
     if(diff_2 < 0) {
-        diff_2 += maxPoint(); 
+        diff_2 += maxPoint();
     }
     if(diff_1 > diff_2) {
         return diff_2;

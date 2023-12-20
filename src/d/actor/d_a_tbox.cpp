@@ -754,9 +754,7 @@ void daTbox_c::demoProcAppear_Tact() {
         mAppearTimer--;
 
         if (mAppearTimer > l_HIO.m08 - l_HIO.m0A) {
-            dKy_set_allcol_ratio(
-                (0.6f / l_HIO.m0A) 
-                * (mAppearTimer - (l_HIO.m08 - l_HIO.m0A)) + 0.4f);
+            dKy_set_allcol_ratio((0.6f / l_HIO.m0A) * (mAppearTimer - (l_HIO.m08 - l_HIO.m0A)) + 0.4f);
         }
         else if (mAppearTimer < l_HIO.m0C) {
             dKy_set_allcol_ratio((0.6f / l_HIO.m0C) * (l_HIO.m0C - mAppearTimer) + 0.4f);

@@ -62,7 +62,7 @@ namespace JAInter {
 
     class MuteBit {
     public:
-		MuteBit();
+        MuteBit();
 
         u8 flag1 : 1;
         u8 flag2 : 1;
@@ -72,12 +72,12 @@ namespace JAInter {
         u8 flag6 : 1;
         u8 flag7 : 1;
         u8 flag8 : 1;
-	};
+    };
 
     class SeqParameter {
     public:
         SeqParameter() {}
-		int init();
+        int init();
 
         /* 0x0000 */ MoveParaSet field_0x0;
         /* 0x0010 */ MoveParaSet field_0x10[16];
@@ -99,7 +99,7 @@ namespace JAInter {
         /* 0x135C */ SeqUpdateData* field_0x135c;
         /* 0x1360 */ JASystem::TTrack field_0x1360;
         /* 0x16EC */ JASystem::TTrack::TOuterParam field_0x16ec;
-	};
+    };
 
     namespace SequenceMgr {
         void init();
@@ -118,10 +118,10 @@ namespace JAInter {
         void checkPlayingSeqUpdateTrack(u32, u32, MoveParaSet*, u32*, u8, f32*);
         void checkPlayingSeqTrack(u32);
         void stopSeq(JAISound*);
-		void checkDvdLoadArc(u32, u32);
-		void storeSeqBuffer(JAISound**, Actor*, u32, u32, u8, void*);
-		void releaseSeqBuffer(JAISound*, u32);
-		int getPlayTrackInfo(u32);
+        void checkDvdLoadArc(u32, u32);
+        void storeSeqBuffer(JAISound**, Actor*, u32, u32, u8, void*);
+        void releaseSeqBuffer(JAISound*, u32);
+        int getPlayTrackInfo(u32);
 
         extern LinkSound seqControl;
         extern SeqUpdateData* seqTrackInfo;

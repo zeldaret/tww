@@ -43,7 +43,7 @@ daMP_c* dScnTitle_c::mMp;
 #endif
 
 /* 802372F4-80237344       .text dScnTitle_Draw__FP20title_of_scene_class */
-BOOL dScnTitle_Draw(title_of_scene_class* i_this) {  
+BOOL dScnTitle_Draw(title_of_scene_class* i_this) {
     for (create_tag_class* pTag = fopDwIt_Begin(); pTag != NULL; pTag = fopDwIt_Next(pTag))
         fpcM_Draw(pTag->mpTagData);
     return TRUE;
@@ -140,11 +140,11 @@ static scene_method_class l_dScnTitle_Method = {
 };
 
 extern scene_process_profile_definition g_profile_TITLE_SCENE = {
-	fpcLy_ROOT_e,
+    fpcLy_ROOT_e,
     1,
     fpcPi_CURRENT_e,
     PROC_TITLE_SCENE,
-	&g_fpcNd_Method.mBase,
+    &g_fpcNd_Method.mBase,
     sizeof(title_of_scene_class),
     0,
     0,
@@ -153,11 +153,11 @@ extern scene_process_profile_definition g_profile_TITLE_SCENE = {
 };
 
 extern scene_process_profile_definition g_profile_ENDING_SCENE = {
-	fpcLy_ROOT_e,
+    fpcLy_ROOT_e,
     1,
     fpcPi_CURRENT_e,
     PROC_ENDING_SCENE,
-	&g_fpcNd_Method.mBase,
+    &g_fpcNd_Method.mBase,
     sizeof(title_of_scene_class),
     0,
     0,

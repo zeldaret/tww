@@ -259,7 +259,7 @@ bool daObjZouk::Act_c::_execute() {
 }
 
 static void dummy() {
-    const f32 floats[] = { 
+    const f32 floats[] = {
         1200.0f, 500.0f, 26.0f,
         530.0f, 418.0f, 1003.0f,
         305.0f, 235.0f, 1323.0f,

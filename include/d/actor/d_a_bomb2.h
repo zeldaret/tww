@@ -175,7 +175,7 @@ namespace daBomb2 {
             PRM_2_S = 0x00,
         };
 
-    private: 
+    private:
         //some of these might need updating since i initially copied them from daBomb_c
         /* 0x290 */ request_of_phase_process_class mPhs;
         /* 0x298 */ J3DModel* mpModel;

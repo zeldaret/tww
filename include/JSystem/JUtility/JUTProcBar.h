@@ -33,11 +33,11 @@ public:
         }
 
         void accumePeek() {
-			if (++field_0xc >= 0x10 || mCost >= field_0x8) {
-				field_0x8 = mCost;
-				field_0xc = 0;
-			}
-		}
+            if (++field_0xc >= 0x10 || mCost >= field_0x8) {
+                field_0x8 = mCost;
+                field_0xc = 0;
+            }
+        }
 
         int calcBarSize(int p1, int p2) { return mCost * p1 / p2; }
 
