@@ -222,23 +222,10 @@ struct TVec3<f32> {
         };
     }
 
-    void negateInternal(TVec3<f32>* dst) {
-        register f32* rdst = &dst->x;
-        const register f32* src = &x;
-        register f32 x_y;
-        register f32 z;
-        asm {
-            psq_l  x_y, 0(src), 0, 0
-            ps_neg x_y, x_y
-            psq_st x_y, 0(rdst), 0, 0
-            lfs    z,   8(src)
-            fneg   z,   z
-            stfs   z,   8(rdst)
-        };
-    }
-
     void negate() {
-        negateInternal(this);
+        x = -x;
+        y = -y;
+        z = -z;
     }
 
     void sub(const TVec3<f32>& b) {

@@ -32,7 +32,9 @@ public:
     /* 0xA0 */ DirTypeFunc mDirTypeFunc;
     /* 0xA4 */ RotTypeFunc mRotTypeFunc;
     /* 0xA8 */ BasePlaneTypeFunc mBasePlaneTypeFunc;
-    /* 0xAC */ u8 field_0xa4[0xb4 - 0xac];
+    /* 0xAC */ u32 field_0xa4;
+    /* 0xB0 */ s16 mColorAnmFrame;
+    /* 0xB2 */ s16 field_0xb2;
 };
 
 class JPADraw {
@@ -89,7 +91,7 @@ public:
     /* 0xB4 */ f32 mScaleOut;
     /* 0xB8 */ GXColor mPrmColor;
     /* 0xBC */ GXColor mEnvColor;
-    /* 0xC0 */ s16 mTexIdx;
+    /* 0xC0 */ u16 mTexIdx;
     /* 0xC2 */ u8 field_0xc2;
     /* 0xC3 */ u8 field_0xc3;
 };

@@ -515,7 +515,7 @@ config.libs = [
             Object(Matching,    "SSystem/SComponent/c_node_iter.cpp"),
             Object(Matching,    "SSystem/SComponent/c_tree.cpp"),
             Object(Matching,    "SSystem/SComponent/c_tree_iter.cpp"),
-            Object(NonMatching, "SSystem/SComponent/c_phase.cpp"),
+            Object(Matching,    "SSystem/SComponent/c_phase.cpp"),
             Object(Matching,    "SSystem/SComponent/c_request.cpp"),
             Object(Matching,    "SSystem/SComponent/c_tag.cpp"),
             Object(Matching,    "SSystem/SComponent/c_tag_iter.cpp"),

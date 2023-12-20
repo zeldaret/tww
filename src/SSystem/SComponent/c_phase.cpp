@@ -48,10 +48,12 @@ int cPhs_Next(request_of_phase_process_class* pPhase) {
 }
 
 /* 80245268-8024533C       .text cPhs_Do__FP30request_of_phase_process_classPv */
-// pUserData loading in too early
 int cPhs_Do(request_of_phase_process_class* pPhase, void* pUserData) {
-    if (pPhase->mpHandlerTable) {
-        int newStep = pPhase->mpHandlerTable[pPhase->id](pUserData);
+    cPhs__Handler * handler = pPhase->mpHandlerTable;
+
+    if (handler) {
+        handler += pPhase->id;
+        int newStep = (*handler)(pUserData);
 
         switch (newStep) {
         case cPhs_LOADING_e:
@@ -66,6 +68,7 @@ int cPhs_Do(request_of_phase_process_class* pPhase, void* pUserData) {
         case cPhs_ERROR_e:
             cPhs_UnCompleate(pPhase);
             return cPhs_ERROR_e;
+        case cPhs_INIT_e:
         default:
             return newStep;
         }

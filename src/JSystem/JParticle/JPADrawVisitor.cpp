@@ -4,159 +4,280 @@
 //
 
 #include "JSystem/JParticle/JPADrawVisitor.h"
+#include "JSystem/JParticle/JPABaseShape.h"
+#include "JSystem/JParticle/JPAEmitter.h"
+#include "JSystem/JParticle/JPAParticle.h"
+#include "JSystem/JParticle/JPAResourceManager.h"
+#include "JSystem/JParticle/JPASweepShape.h"
 #include "JSystem/JGeometry.h"
+#include "dolphin/gx/GX.h"
 #include "dolphin/mtx/mtx.h"
 
 JPADrawClipBoard* JPADrawContext::pcb;
 
 /* 8025F960-8025FBE4       .text exec__20JPADrawExecLoadExTexFPC14JPADrawContext */
-void JPADrawExecLoadExTex::exec(const JPADrawContext*) {
+void JPADrawExecLoadExTex::exec(const JPADrawContext* ctx) {
     /* Nonmatching */
 }
 
 /* 8025FBE4-8025FC78       .text exec__20JPADrawExecGenPrjMtxFPC14JPADrawContext */
-void JPADrawExecGenPrjMtx::exec(const JPADrawContext*) {
+void JPADrawExecGenPrjMtx::exec(const JPADrawContext* ctx) {
     /* Nonmatching */
+    Mtx mtx;
+    C_MTXLightPerspective(mtx, JPABaseEmitter::emtrInfo.mFovy, JPABaseEmitter::emtrInfo.mAspect, 0.5f, -0.5f, 0.5f, 0.5f);
+    MTXConcat(mtx, JPADrawContext::pcb->mDrawMtx, mtx);
+    GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX3x4);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
+    GXEnableTexOffsets(GX_TEXCOORD0, GX_TRUE, GX_TRUE);
 }
 
 /* 8025FC78-8025FF20       .text exec__23JPADrawExecGenPrjTexMtxFPC14JPADrawContext */
-void JPADrawExecGenPrjTexMtx::exec(const JPADrawContext*) {
+void JPADrawExecGenPrjTexMtx::exec(const JPADrawContext* ctx) {
     /* Nonmatching */
 }
 
 /* 8025FF20-8025FF68       .text exec__21JPADrawExecGenTexMtx0FPC14JPADrawContext */
-void JPADrawExecGenTexMtx0::exec(const JPADrawContext*) {
-    /* Nonmatching */
+void JPADrawExecGenTexMtx0::exec(const JPADrawContext* ctx) {
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
+    GXEnableTexOffsets(GX_TEXCOORD0, GX_TRUE, GX_TRUE);
 }
 
 /* 8025FF68-8025FFB0       .text exec__20JPADrawExecGenIdtMtxFPC14JPADrawContext */
-void JPADrawExecGenIdtMtx::exec(const JPADrawContext*) {
-    /* Nonmatching */
+void JPADrawExecGenIdtMtx::exec(const JPADrawContext* ctx) {
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXEnableTexOffsets(GX_TEXCOORD0, GX_TRUE, GX_TRUE);
 }
 
 /* 8025FFB0-802602F0       .text exec__20JPADrawExecSetTexMtxFPC14JPADrawContext */
-void JPADrawExecSetTexMtx::exec(const JPADrawContext*) {
+void JPADrawExecSetTexMtx::exec(const JPADrawContext* ctx) {
     /* Nonmatching */
 }
 
 /* 802602F0-8026031C       .text exec__29JPADrawExecLoadDefaultTextureFPC14JPADrawContext */
-void JPADrawExecLoadDefaultTexture::exec(const JPADrawContext*) {
-    /* Nonmatching */
+void JPADrawExecLoadDefaultTexture::exec(const JPADrawContext* ctx) {
+    ctx->mpTextureResource->loadDefaultTexture(GX_TEXMAP0);
 }
 
 /* 8026031C-80260364       .text exec__22JPADrawExecLoadTextureFPC14JPADrawContext */
-void JPADrawExecLoadTexture::exec(const JPADrawContext*) {
-    /* Nonmatching */
+void JPADrawExecLoadTexture::exec(const JPADrawContext* ctx) {
+    ctx->mpTextureResource->load(ctx->mpDraw->mTexIdx, GX_TEXMAP0);
 }
 
 /* 80260364-802603A4       .text exec__23JPADrawExecSetPointSizeFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecSetPointSize::exec(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
+void JPADrawExecSetPointSize::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
+    GXSetPointSize(JPADrawContext::pcb->mGlobalScaleX * ptcl->mScaleX, GX_TO_ONE);
 }
 
 /* 802603A4-802603E4       .text exec__23JPADrawExecSetLineWidthFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecSetLineWidth::exec(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
+void JPADrawExecSetLineWidth::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
+    GXSetLineWidth(JPADrawContext::pcb->mGlobalScaleX * ptcl->mScaleX, GX_TO_ONE);
 }
 
 /* 802603E4-802604AC       .text exec__30JPADrawExecRegisterPrmColorAnmFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecRegisterPrmColorAnm::exec(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
+void JPADrawExecRegisterPrmColorAnm::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
+    GXColor prm = ptcl->mPrmColor;
+    prm.r = COLOR_MULTI(prm.r, JPADrawContext::pcb->mPrmColor.r);
+    prm.g = COLOR_MULTI(prm.g, JPADrawContext::pcb->mPrmColor.g);
+    prm.b = COLOR_MULTI(prm.b, JPADrawContext::pcb->mPrmColor.b);
+    u8 a  = COLOR_MULTI(prm.a, JPADrawContext::pcb->mPrmColor.a);
+    prm.a = ptcl->mAlphaOut * a;
+    GXSetTevColor(GX_TEVREG0, prm);
 }
 
 /* 802604AC-80260578       .text exec__30JPADrawExecRegisterPrmAlphaAnmFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecRegisterPrmAlphaAnm::exec(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
+void JPADrawExecRegisterPrmAlphaAnm::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
+    GXColor prm = ctx->mpDraw->mPrmColor;
+    prm.r = COLOR_MULTI(prm.r, JPADrawContext::pcb->mPrmColor.r);
+    prm.g = COLOR_MULTI(prm.g, JPADrawContext::pcb->mPrmColor.g);
+    prm.b = COLOR_MULTI(prm.b, JPADrawContext::pcb->mPrmColor.b);
+    u8 a  = COLOR_MULTI(prm.a, JPADrawContext::pcb->mPrmColor.a);
+    prm.a = ptcl->mAlphaOut * a;
+    GXSetTevColor(GX_TEVREG0, prm);
 }
 
 /* 80260578-802605FC       .text exec__30JPADrawExecRegisterEnvColorAnmFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecRegisterEnvColorAnm::exec(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
+void JPADrawExecRegisterEnvColorAnm::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
+    GXColor env = ptcl->mEnvColor;
+    env.r = COLOR_MULTI(env.r, JPADrawContext::pcb->mEnvColor.r);
+    env.g = COLOR_MULTI(env.g, JPADrawContext::pcb->mEnvColor.g);
+    env.b = COLOR_MULTI(env.b, JPADrawContext::pcb->mEnvColor.b);
+    GXSetTevColor(GX_TEVREG1, env);
 }
 
 /* 802605FC-80260728       .text exec__26JPADrawExecRegisterPrmCEnvFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecRegisterPrmCEnv::exec(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
+void JPADrawExecRegisterPrmCEnv::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
+    GXColor prm = ptcl->mPrmColor;
+    GXColor env = ptcl->mEnvColor;
+    prm.r = COLOR_MULTI(prm.r, JPADrawContext::pcb->mPrmColor.r);
+    prm.g = COLOR_MULTI(prm.g, JPADrawContext::pcb->mPrmColor.g);
+    prm.b = COLOR_MULTI(prm.b, JPADrawContext::pcb->mPrmColor.b);
+    u8 a  = COLOR_MULTI(prm.a, JPADrawContext::pcb->mPrmColor.a);
+    prm.a = ptcl->mAlphaOut * a;
+    env.r = COLOR_MULTI(env.r, JPADrawContext::pcb->mEnvColor.r);
+    env.g = COLOR_MULTI(env.g, JPADrawContext::pcb->mEnvColor.g);
+    env.b = COLOR_MULTI(env.b, JPADrawContext::pcb->mEnvColor.b);
+    GXSetTevColor(GX_TEVREG0, prm);
+    GXSetTevColor(GX_TEVREG1, env);
 }
 
 /* 80260728-80260858       .text exec__26JPADrawExecRegisterPrmAEnvFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecRegisterPrmAEnv::exec(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
+void JPADrawExecRegisterPrmAEnv::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
+    GXColor prm = ctx->mpDraw->mPrmColor;
+    GXColor env = ptcl->mEnvColor;
+    prm.r = COLOR_MULTI(prm.r, JPADrawContext::pcb->mPrmColor.r);
+    prm.g = COLOR_MULTI(prm.g, JPADrawContext::pcb->mPrmColor.g);
+    prm.b = COLOR_MULTI(prm.b, JPADrawContext::pcb->mPrmColor.b);
+    u8 a  = COLOR_MULTI(prm.a, JPADrawContext::pcb->mPrmColor.a);
+    prm.a = ptcl->mAlphaOut * a;
+    env.r = COLOR_MULTI(env.r, JPADrawContext::pcb->mEnvColor.r);
+    env.g = COLOR_MULTI(env.g, JPADrawContext::pcb->mEnvColor.g);
+    env.b = COLOR_MULTI(env.b, JPADrawContext::pcb->mEnvColor.b);
+    GXSetTevColor(GX_TEVREG0, prm);
+    GXSetTevColor(GX_TEVREG1, env);
 }
 
 /* 80260858-80260B68       .text exec__20JPADrawExecSetTexMtxFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecSetTexMtx::exec(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawExecSetTexMtx::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80260B68-80260BAC       .text exec__22JPADrawExecLoadTextureFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecLoadTexture::exec(const JPADrawContext*, JPABaseParticle*) {
-    /* Nonmatching */
+void JPADrawExecLoadTexture::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
+    ctx->mpTextureResource->load(ptcl->mTexIdx, GX_TEXMAP0);
 }
 
 /* 80260BAC-80260D24       .text exec__20JPADrawExecBillBoardFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecBillBoard::exec(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawExecBillBoard::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80260D24-80260F2C       .text exec__23JPADrawExecRotBillBoardFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecRotBillBoard::exec(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawExecRotBillBoard::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80260F2C-8026110C       .text exec__21JPADrawExecYBillBoardFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecYBillBoard::exec(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawExecYBillBoard::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 8026110C-8026134C       .text exec__24JPADrawExecRotYBillBoardFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecRotYBillBoard::exec(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawExecRotYBillBoard::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 8026134C-80261368       .text dirTypeVel__FP15JPABaseParticleP14JPABaseEmitterRQ29JGeometry8TVec3<f> */
-void dirTypeVel(JPABaseParticle*, JPABaseEmitter*, JGeometry::TVec3<f32>&) {
-    /* Nonmatching */
+void dirTypeVel(JPABaseParticle* ptcl, JPABaseEmitter* emtr, JGeometry::TVec3<f32>& out) {
+    out.set(ptcl->mVelocity);
 }
 
 /* 80261368-80261384       .text dirTypePos__FP15JPABaseParticleP14JPABaseEmitterRQ29JGeometry8TVec3<f> */
-void dirTypePos(JPABaseParticle*, JPABaseEmitter*, JGeometry::TVec3<f32>&) {
-    /* Nonmatching */
+void dirTypePos(JPABaseParticle* ptcl, JPABaseEmitter* emtr, JGeometry::TVec3<f32>& out) {
+    out.set(ptcl->mLocalPosition);
 }
 
 /* 80261384-802613C4       .text dirTypePosInv__FP15JPABaseParticleP14JPABaseEmitterRQ29JGeometry8TVec3<f> */
-void dirTypePosInv(JPABaseParticle*, JPABaseEmitter*, JGeometry::TVec3<f32>&) {
-    /* Nonmatching */
+void dirTypePosInv(JPABaseParticle* ptcl, JPABaseEmitter* emtr, JGeometry::TVec3<f32>& out) {
+    out.set(ptcl->mLocalPosition);
+    out.negate();
 }
 
 /* 802613C4-802613E8       .text dirTypeEmtrDir__FP15JPABaseParticleP14JPABaseEmitterRQ29JGeometry8TVec3<f> */
-void dirTypeEmtrDir(JPABaseParticle*, JPABaseEmitter*, JGeometry::TVec3<f32>&) {
-    /* Nonmatching */
+void dirTypeEmtrDir(JPABaseParticle* ptcl, JPABaseEmitter* emtr, JGeometry::TVec3<f32>& out) {
+    out.set(JPABaseEmitter::emtrInfo.mgReRDir);
 }
 
 /* 802613E8-802614A8       .text dirTypePrevPtcl__FP15JPABaseParticleP14JPABaseEmitterRQ29JGeometry8TVec3<f> */
-void dirTypePrevPtcl(JPABaseParticle*, JPABaseEmitter*, JGeometry::TVec3<f32>&) {
-    /* Nonmatching */
+void dirTypePrevPtcl(JPABaseParticle* ptcl, JPABaseEmitter* emtr, JGeometry::TVec3<f32>& out) {
+    JGeometry::TVec3<f32> pos;
+    pos.set(ptcl->mPosition);
+    JSULink<JPABaseParticle>* prev = ptcl->getLinkBufferPtr()->getPrev();
+    if (prev != NULL) {
+        out.set(prev->getObject()->mPosition);
+    } else {
+        emtr->calcEmitterGlobalPosition(out);
+    }
+    out.x -= pos.x;
+    out.y -= pos.y;
+    out.z -= pos.z;
 }
 
 /* 802614A8-802614E8       .text rotTypeY__FffRA3_A4_f */
-void rotTypeY(f32, f32, Mtx&) {
-    /* Nonmatching */
+void rotTypeY(f32 sin, f32 cos, Mtx& out) {
+    out[0][0] = cos;
+    out[0][1] = 0.0f;
+    out[0][2] = -sin;
+    out[0][3] = 0.0f;
+
+    out[1][0] = 0.0f;
+    out[1][1] = 1.0f;
+    out[1][2] = 0.0f;
+    out[1][3] = 0.0f;
+
+    out[2][0] = sin;
+    out[2][1] = 0.0f;
+    out[2][2] = cos;
+    out[2][3] = 0.0f;
 }
 
 /* 802614E8-80261528       .text rotTypeX__FffRA3_A4_f */
-void rotTypeX(f32, f32, Mtx&) {
-    /* Nonmatching */
+void rotTypeX(f32 sin, f32 cos, Mtx& out) {
+    out[0][0] = 1.0f;
+    out[0][1] = 0.0f;
+    out[0][2] = 0.0f;
+    out[0][3] = 0.0f;
+
+    out[1][0] = 0.0f;
+    out[1][1] = cos;
+    out[1][2] = -sin;
+    out[1][3] = 0.0f;
+
+    out[2][0] = 0.0f;
+    out[2][1] = sin;
+    out[2][2] = cos;
+    out[2][3] = 0.0f;
 }
 
 /* 80261528-80261568       .text rotTypeZ__FffRA3_A4_f */
-void rotTypeZ(f32, f32, Mtx&) {
-    /* Nonmatching */
+void rotTypeZ(f32 sin, f32 cos, Mtx& out) {
+    out[0][0] = cos;
+    out[0][1] = -sin;
+    out[0][2] = 0.0f;
+    out[0][3] = 0.0f;
+
+    out[1][0] = sin;
+    out[1][1] = cos;
+    out[1][2] = 0.0f;
+    out[1][3] = 0.0f;
+
+    out[2][0] = 0.0f;
+    out[2][1] = 0.0f;
+    out[2][2] = 1.0f;
+    out[2][3] = 0.0f;
 }
 
 /* 80261568-802615C4       .text rotTypeXYZ__FffRA3_A4_f */
-void rotTypeXYZ(f32, f32, Mtx&) {
-    /* Nonmatching */
+void rotTypeXYZ(f32 sin, f32 cos, Mtx& out) {
+    f32 a, b, c;
+    a = (1.0f - cos) * (1.0f / 3.0f);
+    c = a + (0.57735f * sin);
+    b = a - (0.57735f * sin);
+    a = a + cos;
+
+    out[0][0] = a;
+    out[0][1] = b;
+    out[0][2] = c;
+    out[0][3] = 0.0f;
+
+    out[1][0] = c;
+    out[1][1] = a;
+    out[1][2] = b;
+    out[1][3] = 0.0f;
+
+    out[2][0] = b;
+    out[2][1] = c;
+    out[2][2] = a;
+    out[2][3] = 0.0f;
 }
 
 /* 802615C4-8026161C       .text rotTypeYJiggle__FffRA3_A4_f */
@@ -165,311 +286,354 @@ void rotTypeYJiggle(f32, f32, Mtx&) {
 }
 
 /* 8026161C-80261654       .text basePlaneTypeXY__FffffPQ29JGeometry8TVec3<f> */
-void basePlaneTypeXY(f32, f32, f32, f32, JGeometry::TVec3<f32>*) {
-    /* Nonmatching */
+void basePlaneTypeXY(f32 x0, f32 x1, f32 y0, f32 y1, JGeometry::TVec3<f32>* out) {
+    out[0].set(x0, y0, 0.0f);
+    out[1].set(x1, y0, 0.0f);
+    out[2].set(x1, y1, 0.0f);
+    out[3].set(x0, y1, 0.0f);
 }
 
 /* 80261654-8026168C       .text basePlaneTypeXZ__FffffPQ29JGeometry8TVec3<f> */
-void basePlaneTypeXZ(f32, f32, f32, f32, JGeometry::TVec3<f32>*) {
-    /* Nonmatching */
+void basePlaneTypeXZ(f32 x0, f32 x1, f32 y0, f32 y1, JGeometry::TVec3<f32>* out) {
+    out[0].set(x0, 0.0f, y1);
+    out[1].set(x1, 0.0f, y1);
+    out[2].set(x1, 0.0f, y0);
+    out[3].set(x0, 0.0f, y0);
 }
 
 /* 8026168C-80261AD0       .text exec__22JPADrawExecDirectionalFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecDirectional::exec(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawExecDirectional::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80261AD0-80261F60       .text exec__25JPADrawExecRotDirectionalFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecRotDirectional::exec(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawExecRotDirectional::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80261F60-802624D4       .text exec__27JPADrawExecDirectionalCrossFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecDirectionalCross::exec(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawExecDirectionalCross::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 802624D4-80262A98       .text exec__30JPADrawExecRotDirectionalCrossFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecRotDirectionalCross::exec(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawExecRotDirectionalCross::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80262A98-80262DC0       .text exec__23JPADrawExecDirBillBoardFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecDirBillBoard::exec(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawExecDirBillBoard::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80262DC0-80262FBC       .text exec__19JPADrawExecRotationFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecRotation::exec(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawExecRotation::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80262FBC-802632EC       .text exec__24JPADrawExecRotationCrossFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecRotationCross::exec(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawExecRotationCross::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 802632EC-80263380       .text exec__16JPADrawExecPointFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecPoint::exec(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawExecPoint::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80263380-80263508       .text exec__15JPADrawExecLineFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecLine::exec(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawExecLine::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80263508-80263510       .text stripeGetNext__FP26JSULink<15JPABaseParticle> */
-void stripeGetNext(JSULink<JPABaseParticle>*) {
-    /* Nonmatching */
+JSULink<JPABaseParticle>* stripeGetNext(JSULink<JPABaseParticle>* link) {
+    return link->getNext();
 }
 
 /* 80263510-80263518       .text stripeGetPrev__FP26JSULink<15JPABaseParticle> */
-void stripeGetPrev(JSULink<JPABaseParticle>*) {
-    /* Nonmatching */
+JSULink<JPABaseParticle>* stripeGetPrev(JSULink<JPABaseParticle>* link) {
+    return link->getPrev();
 }
 
 /* 80263518-80263A68       .text exec__17JPADrawExecStripeFPC14JPADrawContext */
-void JPADrawExecStripe::exec(const JPADrawContext*) {
+void JPADrawExecStripe::exec(const JPADrawContext* ctx) {
     /* Nonmatching */
 }
 
 /* 80263A68-802643B0       .text exec__22JPADrawExecStripeCrossFPC14JPADrawContext */
-void JPADrawExecStripeCross::exec(const JPADrawContext*) {
+void JPADrawExecStripeCross::exec(const JPADrawContext* ctx) {
     /* Nonmatching */
 }
 
 /* 802643B0-802644B4       .text exec__33JPADrawExecRegisterColorEmitterPEFPC14JPADrawContext */
-void JPADrawExecRegisterColorEmitterPE::exec(const JPADrawContext*) {
-    /* Nonmatching */
+void JPADrawExecRegisterColorEmitterPE::exec(const JPADrawContext* ctx) {
+    GXColor prm = ctx->mpDraw->mPrmColor;
+    GXColor env = ctx->mpDraw->mEnvColor;
+    prm.r = COLOR_MULTI(prm.r, JPADrawContext::pcb->mPrmColor.r);
+    prm.g = COLOR_MULTI(prm.g, JPADrawContext::pcb->mPrmColor.g);
+    prm.b = COLOR_MULTI(prm.b, JPADrawContext::pcb->mPrmColor.b);
+    prm.a = COLOR_MULTI(prm.a, JPADrawContext::pcb->mPrmColor.a);
+    env.r = COLOR_MULTI(env.r, JPADrawContext::pcb->mEnvColor.r);
+    env.g = COLOR_MULTI(env.g, JPADrawContext::pcb->mEnvColor.g);
+    env.b = COLOR_MULTI(env.b, JPADrawContext::pcb->mEnvColor.b);
+    GXSetTevColor(GX_TEVREG0, prm);
+    GXSetTevColor(GX_TEVREG1, env);
 }
 
 /* 802644B4-80264554       .text exec__32JPADrawExecRegisterColorEmitterPFPC14JPADrawContext */
-void JPADrawExecRegisterColorEmitterP::exec(const JPADrawContext*) {
-    /* Nonmatching */
+void JPADrawExecRegisterColorEmitterP::exec(const JPADrawContext* ctx) {
+    GXColor prm = ctx->mpDraw->mPrmColor;
+    prm.r = COLOR_MULTI(prm.r, JPADrawContext::pcb->mPrmColor.r);
+    prm.g = COLOR_MULTI(prm.g, JPADrawContext::pcb->mPrmColor.g);
+    prm.b = COLOR_MULTI(prm.b, JPADrawContext::pcb->mPrmColor.b);
+    prm.a = COLOR_MULTI(prm.a, JPADrawContext::pcb->mPrmColor.a);
+    GXSetTevColor(GX_TEVREG0, prm);
 }
 
 /* 80264554-802645DC       .text exec__32JPADrawExecRegisterColorEmitterEFPC14JPADrawContext */
-void JPADrawExecRegisterColorEmitterE::exec(const JPADrawContext*) {
-    /* Nonmatching */
+void JPADrawExecRegisterColorEmitterE::exec(const JPADrawContext* ctx) {
+    GXColor env = ctx->mpDraw->mEnvColor;
+    env.r = COLOR_MULTI(env.r, JPADrawContext::pcb->mEnvColor.r);
+    env.g = COLOR_MULTI(env.g, JPADrawContext::pcb->mEnvColor.g);
+    env.b = COLOR_MULTI(env.b, JPADrawContext::pcb->mEnvColor.b);
+    GXSetTevColor(GX_TEVREG1, env);
 }
 
 /* 802645DC-80264708       .text exec__31JPADrawExecRegisterColorChildPEFPC14JPADrawContext */
-void JPADrawExecRegisterColorChildPE::exec(const JPADrawContext*) {
-    /* Nonmatching */
+void JPADrawExecRegisterColorChildPE::exec(const JPADrawContext* ctx) {
+    GXColor prm = ctx->pssp->getPrm();
+    GXColor env = ctx->pssp->getEnv();
+    prm.r = COLOR_MULTI(prm.r, JPADrawContext::pcb->mPrmColor.r);
+    prm.g = COLOR_MULTI(prm.g, JPADrawContext::pcb->mPrmColor.g);
+    prm.b = COLOR_MULTI(prm.b, JPADrawContext::pcb->mPrmColor.b);
+    prm.a = COLOR_MULTI(prm.a, JPADrawContext::pcb->mPrmColor.a);
+    env.r = COLOR_MULTI(env.r, JPADrawContext::pcb->mEnvColor.r);
+    env.g = COLOR_MULTI(env.g, JPADrawContext::pcb->mEnvColor.g);
+    env.b = COLOR_MULTI(env.b, JPADrawContext::pcb->mEnvColor.b);
+    GXSetTevColor(GX_TEVREG0, prm);
+    GXSetTevColor(GX_TEVREG1, env);
 }
 
 /* 80264708-80264774       .text calc__19JPADrawCalcColorPrmFPC14JPADrawContext */
-void JPADrawCalcColorPrm::calc(const JPADrawContext*) {
-    /* Nonmatching */
+void JPADrawCalcColorPrm::calc(const JPADrawContext* ctx) {
+    ctx->mpDraw->mPrmColor = ctx->pbsp->getPrmColor(JPADrawContext::pcb->mColorAnmFrame);
 }
 
 /* 80264774-802647E0       .text calc__19JPADrawCalcColorEnvFPC14JPADrawContext */
-void JPADrawCalcColorEnv::calc(const JPADrawContext*) {
-    /* Nonmatching */
+void JPADrawCalcColorEnv::calc(const JPADrawContext* ctx) {
+    ctx->mpDraw->mEnvColor = ctx->pbsp->getEnvColor(JPADrawContext::pcb->mColorAnmFrame);
 }
 
 /* 802647E0-8026486C       .text calc__30JPADrawCalcColorAnmFrameNormalFPC14JPADrawContext */
-void JPADrawCalcColorAnmFrameNormal::calc(const JPADrawContext*) {
+void JPADrawCalcColorAnmFrameNormal::calc(const JPADrawContext* ctx) {
     /* Nonmatching */
+    s16 tick = ctx->pbe->mTick;
+    s16 frame;
+    if (tick < ctx->pbsp->getColorRegAnmMaxFrm()) {
+        frame = tick;
+    } else {
+        frame = ctx->pbsp->getColorRegAnmMaxFrm();
+    }
+    JPADrawContext::pcb->mColorAnmFrame = frame;
 }
 
 /* 8026486C-802648E0       .text calc__30JPADrawCalcColorAnmFrameRepeatFPC14JPADrawContext */
-void JPADrawCalcColorAnmFrameRepeat::calc(const JPADrawContext*) {
+void JPADrawCalcColorAnmFrameRepeat::calc(const JPADrawContext* ctx) {
     /* Nonmatching */
 }
 
 /* 802648E0-8026495C       .text calc__31JPADrawCalcColorAnmFrameReverseFPC14JPADrawContext */
-void JPADrawCalcColorAnmFrameReverse::calc(const JPADrawContext*) {
+void JPADrawCalcColorAnmFrameReverse::calc(const JPADrawContext* ctx) {
     /* Nonmatching */
 }
 
 /* 8026495C-8026496C       .text calc__29JPADrawCalcColorAnmFrameMergeFPC14JPADrawContext */
-void JPADrawCalcColorAnmFrameMerge::calc(const JPADrawContext*) {
+void JPADrawCalcColorAnmFrameMerge::calc(const JPADrawContext* ctx) {
     /* Nonmatching */
 }
 
 /* 8026496C-8026497C       .text calc__30JPADrawCalcColorAnmFrameRandomFPC14JPADrawContext */
-void JPADrawCalcColorAnmFrameRandom::calc(const JPADrawContext*) {
+void JPADrawCalcColorAnmFrameRandom::calc(const JPADrawContext* ctx) {
     /* Nonmatching */
 }
 
 /* 8026497C-80264A34       .text calc__32JPADrawCalcTextureAnmIndexNormalFPC14JPADrawContext */
-void JPADrawCalcTextureAnmIndexNormal::calc(const JPADrawContext*) {
+void JPADrawCalcTextureAnmIndexNormal::calc(const JPADrawContext* ctx) {
     /* Nonmatching */
 }
 
 /* 80264A34-80264AD0       .text calc__32JPADrawCalcTextureAnmIndexRepeatFPC14JPADrawContext */
-void JPADrawCalcTextureAnmIndexRepeat::calc(const JPADrawContext*) {
+void JPADrawCalcTextureAnmIndexRepeat::calc(const JPADrawContext* ctx) {
     /* Nonmatching */
 }
 
 /* 80264AD0-80264B80       .text calc__33JPADrawCalcTextureAnmIndexReverseFPC14JPADrawContext */
-void JPADrawCalcTextureAnmIndexReverse::calc(const JPADrawContext*) {
+void JPADrawCalcTextureAnmIndexReverse::calc(const JPADrawContext* ctx) {
     /* Nonmatching */
 }
 
 /* 80264B80-80264BC8       .text calc__31JPADrawCalcTextureAnmIndexMergeFPC14JPADrawContext */
-void JPADrawCalcTextureAnmIndexMerge::calc(const JPADrawContext*) {
+void JPADrawCalcTextureAnmIndexMerge::calc(const JPADrawContext* ctx) {
     /* Nonmatching */
 }
 
 /* 80264BC8-80264C10       .text calc__32JPADrawCalcTextureAnmIndexRandomFPC14JPADrawContext */
-void JPADrawCalcTextureAnmIndexRandom::calc(const JPADrawContext*) {
+void JPADrawCalcTextureAnmIndexRandom::calc(const JPADrawContext* ctx) {
     /* Nonmatching */
 }
 
 /* 80264C10-80264C4C       .text exec__19JPADrawExecCallBackFPC14JPADrawContext */
-void JPADrawExecCallBack::exec(const JPADrawContext*) {
+void JPADrawExecCallBack::exec(const JPADrawContext* ctx) {
     /* Nonmatching */
 }
 
 /* 80264C4C-80264C88       .text exec__19JPADrawExecCallBackFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawExecCallBack::exec(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawExecCallBack::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80264C88-80264DB8       .text calc__17JPADrawCalcScaleXFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcScaleX::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcScaleX::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80264DB8-80264EE8       .text calc__17JPADrawCalcScaleYFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcScaleY::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcScaleY::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80264EE8-802650B8       .text calc__24JPADrawCalcScaleXBySpeedFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcScaleXBySpeed::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcScaleXBySpeed::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 802650B8-80265288       .text calc__24JPADrawCalcScaleYBySpeedFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcScaleYBySpeed::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcScaleYBySpeed::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80265288-80265294       .text calc__23JPADrawCalcScaleCopyX2YFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcScaleCopyX2Y::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcScaleCopyX2Y::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80265294-802652A4       .text calc__31JPADrawCalcScaleAnmTimingNormalFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcScaleAnmTimingNormal::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcScaleAnmTimingNormal::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 802652A4-80265374       .text calc__32JPADrawCalcScaleAnmTimingRepeatXFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcScaleAnmTimingRepeatX::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcScaleAnmTimingRepeatX::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80265374-80265444       .text calc__32JPADrawCalcScaleAnmTimingRepeatYFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcScaleAnmTimingRepeatY::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcScaleAnmTimingRepeatY::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80265444-80265588       .text calc__33JPADrawCalcScaleAnmTimingReverseXFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcScaleAnmTimingReverseX::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcScaleAnmTimingReverseX::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80265588-802656CC       .text calc__33JPADrawCalcScaleAnmTimingReverseYFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcScaleAnmTimingReverseY::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcScaleAnmTimingReverseY::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 802656CC-80265734       .text calc__19JPADrawCalcColorPrmFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcColorPrm::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcColorPrm::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80265734-8026579C       .text calc__19JPADrawCalcColorEnvFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcColorEnv::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcColorEnv::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 8026579C-802657E8       .text calc__31JPADrawCalcColorCopyFromEmitterFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcColorCopyFromEmitter::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcColorCopyFromEmitter::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 802657E8-80265880       .text calc__30JPADrawCalcColorAnmFrameNormalFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcColorAnmFrameNormal::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcColorAnmFrameNormal::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80265880-80265918       .text calc__30JPADrawCalcColorAnmFrameRepeatFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcColorAnmFrameRepeat::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcColorAnmFrameRepeat::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80265918-802659C4       .text calc__31JPADrawCalcColorAnmFrameReverseFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcColorAnmFrameReverse::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcColorAnmFrameReverse::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 802659C4-80265A90       .text calc__29JPADrawCalcColorAnmFrameMergeFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcColorAnmFrameMerge::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcColorAnmFrameMerge::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80265A90-80265B14       .text calc__30JPADrawCalcColorAnmFrameRandomFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcColorAnmFrameRandom::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcColorAnmFrameRandom::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80265B14-80265C40       .text calc__16JPADrawCalcAlphaFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcAlpha::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcAlpha::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80265C40-80265D54       .text calc__27JPADrawCalcAlphaFlickNrmSinFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcAlphaFlickNrmSin::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcAlphaFlickNrmSin::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80265D54-80265EC4       .text calc__27JPADrawCalcAlphaFlickAddSinFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcAlphaFlickAddSin::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcAlphaFlickAddSin::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80265EC4-80266048       .text calc__28JPADrawCalcAlphaFlickMultSinFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcAlphaFlickMultSin::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcAlphaFlickMultSin::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80266048-80266100       .text calc__32JPADrawCalcTextureAnmIndexNormalFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcTextureAnmIndexNormal::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcTextureAnmIndexNormal::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80266100-802661B4       .text calc__32JPADrawCalcTextureAnmIndexRepeatFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcTextureAnmIndexRepeat::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcTextureAnmIndexRepeat::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 802661B4-80266284       .text calc__33JPADrawCalcTextureAnmIndexReverseFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcTextureAnmIndexReverse::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcTextureAnmIndexReverse::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80266284-8026636C       .text calc__31JPADrawCalcTextureAnmIndexMergeFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcTextureAnmIndexMerge::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcTextureAnmIndexMerge::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 8026636C-8026640C       .text calc__32JPADrawCalcTextureAnmIndexRandomFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcTextureAnmIndexRandom::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcTextureAnmIndexRandom::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 8026640C-80266420       .text calc__24JPADrawCalcChildAlphaOutFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcChildAlphaOut::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcChildAlphaOut::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
 
 /* 80266420-80266450       .text calc__24JPADrawCalcChildScaleOutFPC14JPADrawContextP15JPABaseParticle */
-void JPADrawCalcChildScaleOut::calc(const JPADrawContext*, JPABaseParticle*) {
+void JPADrawCalcChildScaleOut::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
     /* Nonmatching */
 }
