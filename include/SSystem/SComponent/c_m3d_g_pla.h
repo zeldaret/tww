@@ -23,6 +23,7 @@ public:
 
     cXyz* GetNP() { return &mNormal; }
     const cXyz* GetNP() const { return &mNormal; }
+    f32 GetD() const { return mD; }
     float getCrossY(const cXyz& i_axis) const { // fake inline
         return (-mNormal.x * i_axis.x - mNormal.z * i_axis.z - mD) / mNormal.y;
     }
@@ -38,7 +39,6 @@ public:
     virtual ~cM3dGPla() {}
 
     // TODO
-    void GetD() const {}
     void Set(const cM3dGPla*) {}
     void SetupFrom3Vtx(const Vec*, const Vec*, const Vec*) {}
     cM3dGPla(const cXyz*, float) {}

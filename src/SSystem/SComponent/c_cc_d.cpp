@@ -237,7 +237,7 @@ void cCcD_CpsAttr::CalcAabBox() {
 bool cCcD_CpsAttr::GetNVec(const cXyz& vec, cXyz* dst) const {
     /* Nonmatching */
     cXyz lin;
-    VECSubtract(&mEnd, &mStart, &lin);
+    CalcVec(&lin);
     f32 len = lin.getDotProduct(lin);
     if (cM3d_IsZero(len))
         return false;
