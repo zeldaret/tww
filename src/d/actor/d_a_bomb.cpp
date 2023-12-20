@@ -14,6 +14,10 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
 
+// Needed for the .data section to match.
+static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
+static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+
 namespace {
     enum AttrSt_e {
         ATTR_STATE_0 = 0x00,
@@ -54,56 +58,53 @@ namespace {
     }
 }
 
-const daBomb_c::AttrType daBomb_c::m_attrType[] = {
+const daBomb_c::Attr_c daBomb_c::m_attrType[] = {
     {"Link", 0x8E0},
     {"VbakH", 0x800},
     {"Link", 0x8E0},
 };
 
+/* 800D9364-800D977C       .text executeAfter__25daBomb_fuseSmokeEcallBackFP14JPABaseEmitter */
 void daBomb_fuseSmokeEcallBack::executeAfter(JPABaseEmitter* emitter) {
-    cXyz pos = *mpPos;
-    emitter->mGlobalTranslation.set(pos.x, pos.y, pos.z);
+    JGeometry::TVec3<f32> vec1;
+    vec1.set(*field_0x0C);
+    JGeometry::TVec3<f32> vec2;
+    vec2.set(*mpPos);
+    emitter->mGlobalTranslation.set(vec2);
     f32 temp = mpPos->abs(*field_0x0C);
     s16 temp2 = (20.0f - temp) * 0.5f + 10.0f;
     if(temp2 < 10) {
         temp2 = 10;
     }
 
-    //probably uses cubic<f>__Q29JGeometry8TVec3<f>FRCQ29JGeometry8TVec3<f>RCQ29JGeometry8TVec3<f>RCQ29JGeometry8TVec3<f>RCQ29JGeometry8TVec3<f>f
-    //but I don't know exactly what that would encompass
     emitter->mLifeTime = temp2;
-    cXyz temp3 = *field_0x0C - *mpPos;
-    cXyz temp4((field_0x0C->x - field_0x10->x) * 0.5f, (field_0x0C->y - field_0x10->y) * 0.5f, (field_0x0C->z - field_0x10->z) * 0.5f);
+    
+    JGeometry::TVec3<f32> vec3;
+    vec3.z = 0.5f * (vec2.x - vec1.x);
+    vec3.y = 0.5f * (vec2.y - vec1.y);
+    vec3.x = 0.5f * (vec2.z - vec1.z);
+    
+    JGeometry::TVec3<f32> vec4;
+    vec4.x = 0.5f * (vec1.x - field_0x10->x);
+    vec4.y = 0.5f * (vec1.y - field_0x10->y);
+    vec4.z = 0.5f * (vec1.z - field_0x10->z);
+    
     f32 temp5 = mpPos->abs(*field_0x0C);
 
-    //this is minimally-fixed ghidra stuff, no idea if its functionality is even similar
-    if(temp5 * 0.1f < 1.0f) {
-        f32 temp6 = 1.0f / (temp5 * 0.1f);
-        s32 temp7 = temp6;
-        s32 temp8 = temp2 + temp7;
+    if(temp5 * 0.1f > 1.0f) {
+        f32 step = 1.0f / (temp5 * 0.1f);
+        s16 temp7 = step * (field_0x04 - temp2);
+        s16 temp8 = temp2 + temp7;
 
-        f32 step = temp6;
-        for(; temp6 < 1.0f; temp6 += step) {
-            cXyz temp9;
-            temp9.x = temp6 * temp6;
-            temp9.y = temp9.x * temp6;
-            temp9.z = 1.0f + (2.0f * temp9.y - 3.0f * temp9.x);
-            cXyz temp10;
-            temp10.x = -2.0f * temp9.y + 3.0f * temp9.x;
-            temp10.y = temp6 + (temp9.y - 2.0f * temp9.x);
-            temp10.z = temp9.y - temp9.x;
-            cXyz temp11;
-            temp11.x = temp10.z * temp3.x * 0.5f + temp10.y * temp4.x + temp9.z * field_0x0C->x + temp10.x * mpPos->x;
-            temp11.y = temp10.z * temp3.y * 0.5f + temp10.y * temp4.y + temp9.z * field_0x0C->y + temp10.x * mpPos->y;
-            temp11.z = temp10.z * temp3.z * 0.5f + temp10.y * temp4.z + temp9.z * field_0x0C->z + temp10.x * mpPos->z;
+        for(f32 i = step; i < 1.0f; i += step, temp8 += temp7) {
+            JGeometry::TVec3<f32> vec5;
+            vec5.cubic<f32>(vec1, vec2, vec3, vec4, i);
             
             emitter->mLifeTime = temp8;
             JPABaseParticle* particle = emitter->createParticle();
             if(particle) {
-                particle->mGlobalPosition = temp11;
+                particle->setOffsetPosition(vec5);
             }
-
-            temp8 += temp7;
         }
     }
 
@@ -154,15 +155,15 @@ void daBomb_c::draw_norm() {
     dComIfGd_setList();
 }
 
+/* 800D9950-800D9A48       .text draw_nut__8daBomb_cFv */
 void daBomb_c::draw_nut() {
-    //entry calls are loading params in the wrong order
     if(chk_state(STATE_5) || chk_state(STATE_6)) {
-        mBck0.entry(mpModel->getModelData(), mBck0.getFrame());
-        mBrk0.entry(mpModel->getModelData(), mBrk0.getFrame());
+        mBck0.entry(mpModel->getModelData());
+        mBrk0.entry(mpModel->getModelData());
     }
     else {
-        mBck1.entry(mpModel->getModelData(), mBck1.getFrame());
-        mBrk1.entry(mpModel->getModelData(), mBrk1.getFrame());
+        mBck1.entry(mpModel->getModelData());
+        mBrk1.entry(mpModel->getModelData());
     }
 
     dComIfGd_setListP1();
@@ -358,7 +359,9 @@ bool daBomb_c::checkExplodeBg_norm() {
     return false;
 }
 
+/* 800DA098-800DA1A4       .text checkExplodeBg_nut__8daBomb_cFv */
 bool daBomb_c::checkExplodeBg_nut() {
+    /* Nonmatching - regalloc */
     bool sink = chk_water_in();
     bool burn = chk_lava_hit();
 
@@ -396,7 +399,9 @@ bool daBomb_c::checkExplodeBg_nut() {
     return ret;
 }
 
+/* 800DA1A4-800DA284       .text checkExplodeBg_cannon__8daBomb_cFv */
 bool daBomb_c::checkExplodeBg_cannon() {
+    /* Nonmatching - regalloc */
     bool sink = chk_water_in();
     bool burn = chk_lava_hit();
 
@@ -428,6 +433,7 @@ bool daBomb_c::checkExplodeBg_cannon() {
     return ret;
 }
 
+/* 800DA284-800DA320       .text checkExplodeBg__8daBomb_cFv */
 bool daBomb_c::checkExplodeBg() {
     typedef bool(daBomb_c::*checkFunc)();
     static checkFunc proc[] = {
@@ -439,7 +445,9 @@ bool daBomb_c::checkExplodeBg() {
     return (this->*proc[mType])();
 }
 
+/* 800DA320-800DA3A0       .text water_tention__8daBomb_cFv */
 void daBomb_c::water_tention() {
+    /* Nonmatching - regalloc */
     if(chk_water_in()) {
         if(field_0x554.y != -1.0e9f && field_0x554.z != -1.0e9f) {
             f32 temp;
@@ -455,8 +463,10 @@ void daBomb_c::water_tention() {
     }
 }
 
+/* 800DA3A0-800DA520       .text posMoveF__8daBomb_cFv */
 void daBomb_c::posMoveF() {
-    u32 temp = mNoGravityTime > 0;
+    cM3dGPla* tri;
+    bool temp = mNoGravityTime > 0;
     f32 gravity;
     if(temp) {
         gravity = mGravity;
@@ -470,7 +480,7 @@ void daBomb_c::posMoveF() {
 
     if(!chk_state(STATE_5) && !chk_state(STATE_6) && field_0x6F3 != 1) {
         water_tention();
-        cM3dGPla* tri = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd.GetBgIndex(), mAcch.m_gnd.GetPolyIndex());
+        tri = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd.GetBgIndex(), mAcch.m_gnd.GetPolyIndex());
 
         f32 mag = mWindVec.getSquareMag();
         if(mag > 0.01f) {
@@ -545,10 +555,11 @@ bool daBomb_c::chk_dead_zone() {
     return mAcch.GetGroundH() == -1.0e9f && field_0x554.y == -1.0e9f && field_0x554.x == -1.0e9f;
 }
 
+/* 800DA7CC-800DA8C8       .text bound__8daBomb_cFf */
 void daBomb_c::bound(f32 param_1) {
     if(mAcch.ChkWallHit()) {
         speedF *= 0.8f;
-        current.angle.y = (mCir.GetWallAngleY() * 2) - (current.angle.y - 0x8000); //+ 0x10000 - 0x8000 generates the addis but seems fake
+        current.angle.y = (mCir.GetWallAngleY() * 2) - (current.angle.y + 0x8000);
     }
 
     if(mAcch.ChkGroundLanding()) {
@@ -1131,7 +1142,7 @@ bool daBomb_c::bombDelete() {
 
     se_cannon_fly_stop();
     if(mType == 1) {
-        dComIfG_resDelete(&mPhs, m_attrType[mType].resName);
+        dComIfG_resDelete(&mPhs, attrType().resName);
     }
 
     dKy_actor_addcol_set(0, 0, 0, 0.0f);
@@ -1168,14 +1179,14 @@ int daBomb_c::create() {
 
     int status;
     if(mType == 1) {
-        status = dComIfG_resLoad(&mPhs, m_attrType[mType].resName);
+        status = dComIfG_resLoad(&mPhs, attrType().resName);
     }
     else {
         status = cPhs_COMPLEATE_e;
     }
 
     if(status == cPhs_COMPLEATE_e) {
-        if(fopAcM_entrySolidHeap(this, daBomb_createHeap, m_attrType[mType].heapSize)) {
+        if(fopAcM_entrySolidHeap(this, daBomb_createHeap, attrType().heapSize)) {
             create_init();
         }
         else {
@@ -1202,7 +1213,7 @@ void daBomb_c::create_init() {
     mAcch.Set(&current.pos, &next.pos, this, 1, &mCir, &speed, &current.angle, &shape_angle);
     mAcch.ClrWaterNone();
     mAcch.ClrRoofNone();
-    mAcch.m_roof_height = 50.0f;
+    mAcch.m_roof_crr_height = 50.0f;
     mAcch.OnLineCheck();
 
     field_0x554.setall(-1.0e9f);

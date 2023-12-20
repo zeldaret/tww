@@ -14,13 +14,12 @@ namespace daBomb2 {
     class FuseSmokeCB_c : public dPa_levelEcallBack {
     public:
         FuseSmokeCB_c() {}
-        virtual ~FuseSmokeCB_c();
+        virtual ~FuseSmokeCB_c() {}
 
         
         void setOldPosP(const cXyz*, const cXyz*);
         void deleteCallBack();
 
-        //void init(JPABaseEmitter*);
         void execute(JPABaseEmitter*);
         void executeAfter(JPABaseEmitter*);
         void draw(JPABaseEmitter*);
@@ -37,13 +36,11 @@ namespace daBomb2 {
     class FuseSparksCB_c : public dPa_levelEcallBack {
     public:
         FuseSparksCB_c() {}
-        virtual ~FuseSparksCB_c();
+        virtual ~FuseSparksCB_c() {}
 
         void deleteCallBack();
 
-        //void init(JPABaseEmitter*);
         void execute(JPABaseEmitter*);
-        //void executeAfter(JPABaseEmitter*);
         void draw(JPABaseEmitter*);
 
         void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);

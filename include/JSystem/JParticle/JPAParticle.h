@@ -34,6 +34,28 @@ public:
     ~JPABaseParticle() {}
     JPABaseParticle() : mLink(this), mCurFrame(0.0f) {}
     void setOffsetPosition(f32 x, f32 y, f32 z) { mGlobalPosition.set(x, y, z); }
+    void setOffsetPosition(const JGeometry::TVec3<f32>& pos) { mGlobalPosition.set(pos); }
+
+    void calcCB(JPABaseEmitter*) {}
+    void checkStatus(u32) {}
+    void clearStatus(u32) {}
+    void drawCB(JPABaseEmitter*) {}
+    void getAge() const {}
+    void getDrawParamCPtr() {}
+    void getDrawParamPPtr() {}
+    void getGlobalPosition(JGeometry::TVec3<f32>&) const {}
+    void getHeight() {}
+    void getLifeTime() const {}
+    void getLocalPosition(JGeometry::TVec3<f32>&) const {}
+    void getOffsetPosition(JGeometry::TVec3<f32>&) const {}
+    void getVelVec(JGeometry::TVec3<f32>&) const {}
+    void getWidth() {}
+    void initStatus(u32) {}
+    void isInvisibleParticle() {}
+    void setCallBackPtr(JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>*) {}
+    void setDeleteParticleFlag() {}
+    void setInvisibleParticleFlag() {}
+    void setStatus(u32) {}
 
 public:
     /* 0x00 */ JSULink<JPABaseParticle> mLink;

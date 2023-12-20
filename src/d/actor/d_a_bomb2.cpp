@@ -11,42 +11,75 @@
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
 
+// Needed for the .data section to match.
+static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
+static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+
 namespace daBomb2 {
     namespace {
-        struct AttrType {
-            const char* resName;
-            u32 heapSize;
-            s16 field_0x8;
-            s16 field_0xA;
-            f32 gravity;
-            f32 maxFallSpeed;
-            f32 field_0x14;
-            f32 field_0x18;
-            f32 field_0x1C;
-            f32 field_0x20;
-            f32 field_0x24;
-            f32 field_0x28;
-            f32 field_0x2C;
-            f32 field_0x30;
-            f32 field_0x34;
-            f32 field_0x38;
-            f32 field_0x3C;
-            f32 field_0x40;
-            f32 field_0x44;
-            f32 field_0x48;
-            f32 field_0x4C;
-            f32 field_0x50;
-            f32 field_0x54;
-            f32 field_0x58;
-            f32 field_0x5C;
-            f32 field_0x60;
-            f32 field_0x64;
-            f32 field_0x68;
+        struct Attr_c {
+            /* 0x00 */ const char* resName;
+            /* 0x04 */ u32 heapSize;
+            /* 0x08 */ s16 field_0x8;
+            /* 0x0A */ s16 field_0xA;
+            /* 0x0C */ f32 gravity;
+            /* 0x10 */ f32 maxFallSpeed;
+            /* 0x14 */ f32 field_0x14;
+            /* 0x18 */ f32 field_0x18;
+            /* 0x1C */ f32 field_0x1C;
+            /* 0x20 */ f32 field_0x20;
+            /* 0x24 */ f32 field_0x24;
+            /* 0x28 */ f32 field_0x28;
+            /* 0x2C */ f32 field_0x2C;
+            /* 0x30 */ f32 field_0x30;
+            /* 0x34 */ f32 field_0x34;
+            /* 0x38 */ f32 field_0x38;
+            /* 0x3C */ f32 field_0x3C;
+            /* 0x40 */ f32 field_0x40;
+            /* 0x44 */ f32 field_0x44;
+            /* 0x48 */ f32 field_0x48;
+            /* 0x4C */ f32 field_0x4C;
+            /* 0x50 */ f32 field_0x50;
+            /* 0x54 */ f32 field_0x54;
+            /* 0x58 */ f32 field_0x58;
+            /* 0x5C */ f32 field_0x5C;
+            /* 0x60 */ f32 field_0x60;
+            /* 0x64 */ f32 field_0x64;
+            /* 0x68 */ f32 field_0x68;
         };
 
-        const AttrType L_attr = {
-            "VbakH", 0x920, 0x96, 0x1E, 2.9f, -100.0f, -0.6f, 19.5f, 13.0f, 0.1f, 0.5f, 20.0f, 25.0f, 0.002f, 0.0005f, 140.0f, 100.0f, 180.0f, 50.0f, 2.0f, 0.3f, 0.03f, 0.1f, 0.4f, 0.5f, -0.005f, 1.5f, 0.6f
+        const Attr_c L_attr = {
+            /* resName      */ "VbakH",
+            /* heapSize     */ 0x920,
+            /* field_0x8    */ 0x96,
+            /* field_0xA    */ 0x1E,
+            /* gravity      */ 2.9f,
+            /* maxFallSpeed */ -100.0f,
+            /* field_0x14   */ -0.6f,
+            /* field_0x18   */ 19.5f,
+            /* field_0x1C   */ 13.0f,
+            /* field_0x20   */ 0.1f,
+            /* field_0x24   */ 0.5f,
+            /* field_0x28   */ 20.0f,
+            /* field_0x2C   */ 25.0f,
+            /* field_0x30   */ 0.002f,
+            /* field_0x34   */ 0.0005f,
+            /* field_0x38   */ 140.0f,
+            /* field_0x3C   */ 100.0f,
+            /* field_0x40   */ 180.0f,
+            /* field_0x44   */ 50.0f,
+            /* field_0x48   */ 2.0f,
+            /* field_0x4C   */ 0.3f,
+            /* field_0x50   */ 0.03f,
+            /* field_0x54   */ 0.1f,
+            /* field_0x58   */ 0.4f,
+            /* field_0x5C   */ 0.5f,
+            /* field_0x60   */ -0.005f,
+            /* field_0x64   */ 1.5f,
+            /* field_0x68   */ 0.6f,
         };
+
+        inline static const Attr_c& attr() { return L_attr; }
     }
     
     void Env_c::set(const cXyz& pos) {
@@ -82,6 +115,7 @@ namespace daBomb2 {
         return field_0x4C > 1;
     }
 
+    /* 800DD4B0-800DD670       .text proc__Q27daBomb25Env_cFRC4cXyz */
     void Env_c::proc(const cXyz& param_1) {
         camera_class* camera = dComIfGp_getCamera(0);
         f32 temp2 = 0.0f;
@@ -93,7 +127,7 @@ namespace daBomb2 {
         if(temp < 1500.0f) {
             temp2 = 1.0f - (temp * (1.0f / 1500.0f));
         }
-        temp2 *= field_0x50; // operand swap
+        temp2 = field_0x50 * temp2;
 
         dKy_actor_addcol_amb_set(200, 180, 100, temp2);
         dKy_bg_addcol_amb_set(180, 160, 60, temp2);
@@ -101,15 +135,15 @@ namespace daBomb2 {
 
         switch(field_0x4C) {
         case 0:
-            cLib_addCalc(&field_0x50, 0.0f, 0.05f, 0.04f, 0.001f);
-            if(field_0x50 >= 0.01f) {
+            cLib_addCalc(&field_0x50, 1.0f, 0.5f, 0.4f, 0.01f);
+            if(field_0x50 >= 0.99f) {
                 field_0x4C += 1;
             }
 
             break;
         case 1:
-            cLib_addCalc(&field_0x50, 0.0f, 0.05f, 0.04f, 0.01f);
-            if(field_0x50 <= 0.99f) {
+            cLib_addCalc(&field_0x50, 0.0f, 0.05f, 0.04f, 0.001f);
+            if(field_0x50 <= 0.01f) {
                 field_0x4C += 1;
             }
 
@@ -132,13 +166,52 @@ namespace daBomb2 {
     }
 
     /* 800DD6BC-800DD6C0       .text execute__Q27daBomb213FuseSmokeCB_cFP14JPABaseEmitter */
-    void FuseSmokeCB_c::execute(JPABaseEmitter*) {
-        /* Nonmatching */
+    void FuseSmokeCB_c::execute(JPABaseEmitter* emitter) {
     }
 
     /* 800DD6C0-800DDAE8       .text executeAfter__Q27daBomb213FuseSmokeCB_cFP14JPABaseEmitter */
-    void FuseSmokeCB_c::executeAfter(JPABaseEmitter*) {
-        /* Nonmatching */
+    void FuseSmokeCB_c::executeAfter(JPABaseEmitter* emitter) {
+        JGeometry::TVec3<f32> vec1;
+        vec1.set(*field_0x0C);
+        JGeometry::TVec3<f32> vec2;
+        vec2.set(*mpPos);
+        f32 f15 = attr().field_0x24;
+        emitter->setGlobalTranslation(vec2);
+        
+        s16 r29 = 10.0f + (0.5f * (20.0f - mpPos->abs(*field_0x0C)));
+        if (r29 < 0xA) {
+            r29 = 0xA;
+        }
+        emitter->setLifeTime(r29);
+        
+        JGeometry::TVec3<f32> vec3;
+        vec3.z = f15 * (vec2.x - vec1.x);
+        vec3.y = f15 * (vec2.y - vec1.y);
+        vec3.x = f15 * (vec2.z - vec1.z);
+        
+        JGeometry::TVec3<f32> vec4;
+        vec4.x = f15 * (vec1.x - field_0x10->x);
+        vec4.y = f15 * (vec1.y - field_0x10->y);
+        vec4.z = f15 * (vec1.z - field_0x10->z);
+        
+        f32 f0 = mpPos->abs(*field_0x0C) * attr().field_0x20;
+        if (f0 > 1.0f) {
+            f32 f20 = 1.0f / f0;
+            s16 r28 = f20 * (field_0x04 - r29);
+            s16 lifetime = r29 + r28;
+            for (f32 f19 = f20; f19 < 1.0f; f19 += f20, lifetime += r28) {
+                JGeometry::TVec3<f32> vec5;
+                vec5.cubic<f32>(vec1, vec2, vec3, vec4, f19);
+                
+                emitter->setLifeTime(lifetime);
+                JPABaseParticle* particle = emitter->createParticle();
+                if (particle) {
+                    particle->setOffsetPosition(vec5);
+                }
+            }
+        }
+        
+        field_0x04 = r29;
     }
 
     /* 800DDAE8-800DDAEC       .text draw__Q27daBomb213FuseSmokeCB_cFP14JPABaseEmitter */
@@ -189,18 +262,19 @@ namespace daBomb2 {
         return static_cast<Act_c*>(i_this)->create_heap();
     }
 
+    /* 800DDBAC-800DDD90       .text create_heap_nut__Q27daBomb25Act_cFv */
     bool Act_c::create_heap_nut() {
-        const char* resName = L_attr.resName;
+        const char* resName = attr().resName;
 
-        J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(resName, 0xC);
+        J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(attr().resName, 0xC));
         JUT_ASSERT(0x303, mdl_data != 0);
         mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000022);
 
-        J3DAnmTransform* bck_data = (J3DAnmTransform*)dComIfG_getObjectRes(resName, 0x7);
+        J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(resName, 0x7));
         JUT_ASSERT(0x30D, bck_data != 0);
         int temp = mBck0.init(mdl_data, bck_data, true, 0, 1.0f, 0, -1, false);
 
-        J3DAnmTevRegKey* brk_data = (J3DAnmTevRegKey*)dComIfG_getObjectRes(resName, 0x10);
+        J3DAnmTevRegKey* brk_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(resName, 0x10));
         JUT_ASSERT(0x314, brk_data != 0);
         int temp3 = mBrk0.init(mdl_data, brk_data, true, 0, 1.0f, 0, -1, false, 0);
 
@@ -226,7 +300,34 @@ namespace daBomb2 {
         field_0x528 = -1.0e9f;
     }
 
-    dCcD_SrcSph Act_c::M_sph_src = {};
+    dCcD_SrcSph Act_c::M_sph_src = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt Type     */ AT_TYPE_BOMB,
+            /* SrcObjAt Atp      */ 0x04,
+            /* SrcObjAt SPrm     */ 0x0E,
+            /* SrcObjTg Type     */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
+            /* SrcObjTg SPrm     */ 0x09,
+            /* SrcObjCo SPrm     */ 0x79,
+            /* SrcGObjAt Se      */ 0,
+            /* SrcGObjAt HitMark */ 0,
+            /* SrcGObjAt Spl     */ 0x01,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt GFlag   */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ 0,
+            /* SrcGObjTg Spl     */ 0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg GFlag   */ 0x02,
+            /* SrcGObjCo GFlag   */ 0,
+        },
+        // cM3dGSphS
+        {
+            /* Center */ 0.0f, 0.0f, 0.0f,
+            /* Radius */ 30.0f,
+        },
+    };
 
     void Act_c::cc_init() {
         mStts.Init(200, 0xFF, this);
@@ -285,15 +386,15 @@ namespace daBomb2 {
             on_carry();
         }
 
-        mGravity = L_attr.gravity;
-        mMaxFallSpeed = L_attr.maxFallSpeed;
+        mGravity = attr().gravity;
+        mMaxFallSpeed = attr().maxFallSpeed;
         bgCrrPos();
         speed.y = 0.0f;
         speedF = 0.0f;
         current.pos = orig.pos;
         init_mtx();
 
-        field_0x738 = L_attr.field_0x8;
+        field_0x738 = attr().field_0x8;
         field_0x740 = 0;
         field_0x741 = 0;
         field_0x742 = 0;
@@ -306,10 +407,10 @@ namespace daBomb2 {
     int Act_c::_create() {
         fopAcM_SetupActor(this, Act_c);
 
-        int status = dComIfG_resLoad(&mPhs, L_attr.resName);
+        int status = dComIfG_resLoad(&mPhs, attr().resName);
 
         if(status == cPhs_COMPLEATE_e) {
-            if(fopAcM_entrySolidHeap(this, solidHeapCB, L_attr.heapSize)) {
+            if(fopAcM_entrySolidHeap(this, solidHeapCB, attr().heapSize)) {
                 create_init();
             }
             else {
@@ -325,7 +426,7 @@ namespace daBomb2 {
     bool Act_c::_delete() {
         eff_fuse_end();
         mEnv.clean();
-        dComIfG_resDelete(&mPhs, L_attr.resName);
+        dComIfG_resDelete(&mPhs, attr().resName);
 
         return true;
     }
@@ -413,19 +514,19 @@ namespace daBomb2 {
     void Act_c::bound(f32 param_1) {
         if(mAcch.ChkWallHit()) {
             speedF *= 0.8f;
-            current.angle.y = (mCir.GetWallAngleY() * 2) - (current.angle.y - 0x8000); //+ 0x10000 - 0x8000 generates the addis but seems fake
+            current.angle.y = (mCir.GetWallAngleY() * 2) - (current.angle.y + 0x8000);
         }
 
         if(mAcch.ChkGroundLanding()) {
-            daObj::make_land_effect(this, &mAcch.m_gnd, L_attr.field_0x68);
-            param_1 *= L_attr.field_0x14;
-            if(param_1 < L_attr.field_0x18) {
+            daObj::make_land_effect(this, &mAcch.m_gnd, attr().field_0x68);
+            param_1 *= attr().field_0x14;
+            if(param_1 < attr().field_0x18) {
                 field_0x741 = 0;
             }
             else {
                 speedF *= 0.9f;
-                if(param_1 > L_attr.field_0x1C) {
-                    speed.y = L_attr.field_0x1C;
+                if(param_1 > attr().field_0x1C) {
+                    speed.y = attr().field_0x1C;
                 }
                 else {
                     speed.y = param_1;
@@ -440,10 +541,10 @@ namespace daBomb2 {
     }
 
     void Act_c::set_nut_exp_interval() {
-        if(field_0x738 > L_attr.field_0xA) {
-            field_0x738 = L_attr.field_0xA;
+        if(field_0x738 > attr().field_0xA) {
+            field_0x738 = attr().field_0xA;
 
-            f32 frame = 0x87 - L_attr.field_0xA;
+            f32 frame = 0x87 - attr().field_0xA;
             mBck0.getFrameCtrl()->setFrame(frame);
             mBrk0.getFrameCtrl()->setFrame(frame);
         }
@@ -585,7 +686,7 @@ namespace daBomb2 {
 
 
         if(mSph.ChkCoHit()) {
-            if(field_0x741 || speed.abs() > L_attr.field_0x2C) {
+            if(field_0x741 || speed.abs() > attr().field_0x2C) {
                 explode = true;
             }
 
@@ -631,13 +732,13 @@ namespace daBomb2 {
             ret = true;
         }
         else {
-            if(water && speed.abs() > L_attr.field_0x28) {
+            if(water && speed.abs() > attr().field_0x28) {
                 eff_explode_water();
                 ret = true;
                 
             }
             else if(temp1) {
-                if(field_0x741 || speed.abs() > L_attr.field_0x2C) {
+                if(field_0x741 || speed.abs() > attr().field_0x2C) {
                     eff_fuse_start();
                     set_nut_exp_interval();
                 }
@@ -666,7 +767,7 @@ namespace daBomb2 {
         bool water = chk_water_in();
 
         bool ret = false;
-        if(water && speed.abs() <= L_attr.field_0x28) {
+        if(water && speed.abs() <= attr().field_0x28) {
             eff_water_splash();
             ret = true;
             
@@ -711,7 +812,7 @@ namespace daBomb2 {
 
     void Act_c::mode_wait_init() {
         field_0x694 = 0;
-        mGravity = L_attr.gravity;
+        mGravity = attr().gravity;
         mSph.OnCoSPrmBit(CO_SPRM_SET);
     }
 
@@ -906,45 +1007,45 @@ namespace daBomb2 {
 
     void Act_c::tensor_wait_drop() {
         if(field_0x7A8 > 0) {
-            field_0x79C = speed.z * L_attr.field_0x60;
-            field_0x7A0 = speed.x * L_attr.field_0x60;
+            field_0x79C = speed.z * attr().field_0x60;
+            field_0x7A0 = speed.x * attr().field_0x60;
         }
 
         field_0x784 = 0.0f;
         field_0x788 = 0.0f;
-        field_0x7A4 = L_attr.field_0x54;
+        field_0x7A4 = attr().field_0x54;
     }
 
     void Act_c::tensor_wait_ground() {
         cM3dGPla* pNormal = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd.GetBgIndex(), mAcch.m_gnd.GetPolyIndex());
         if(pNormal) {
-            field_0x784 = pNormal->mNormal.z * L_attr.field_0x64;
-            field_0x788 = pNormal->mNormal.x * L_attr.field_0x64;
+            field_0x784 = pNormal->mNormal.z * attr().field_0x64;
+            field_0x788 = pNormal->mNormal.x * attr().field_0x64;
         }
         else {
             field_0x784 = 0.0f;
             field_0x788 = 0.0f;
         }
         
-        field_0x7A4 = L_attr.field_0x58;
+        field_0x7A4 = attr().field_0x58;
     }
 
     void Act_c::tensor_carry() {
         field_0x784 = 0.0f;
         field_0x788 = 0.0f;
-        field_0x7A4 = L_attr.field_0x58;
+        field_0x7A4 = attr().field_0x58;
     }
 
     void Act_c::tensor_explode() {
         field_0x784 = 0.0f;
         field_0x788 = 0.0f;
-        field_0x7A4 = L_attr.field_0x58;
+        field_0x7A4 = attr().field_0x58;
     }
 
     void Act_c::tensor_sink() {
         field_0x784 = 0.0f;
         field_0x788 = 0.0f;
-        field_0x7A4 = L_attr.field_0x58;
+        field_0x7A4 = attr().field_0x58;
     }
 
     void Act_c::tensor_proc_call() {

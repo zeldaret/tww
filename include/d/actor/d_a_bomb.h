@@ -9,14 +9,11 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_ext.h"
 
-
-
 class daBomb_fuseSmokeEcallBack : public dPa_levelEcallBack {
 public:
     daBomb_fuseSmokeEcallBack() {}
-    ~daBomb_fuseSmokeEcallBack();
+    ~daBomb_fuseSmokeEcallBack() {}
     
-    void init(JPABaseEmitter*);
     void execute(JPABaseEmitter*);
     void executeAfter(JPABaseEmitter*);
     void draw(JPABaseEmitter*);
@@ -33,11 +30,9 @@ public:
 class daBomb_fuseSparksEcallBack : public dPa_levelEcallBack {
 public:
     daBomb_fuseSparksEcallBack() {}
-    ~daBomb_fuseSparksEcallBack();
+    ~daBomb_fuseSparksEcallBack() {}
     
-    void init(JPABaseEmitter*);
     void execute(JPABaseEmitter*);
-    void executeAfter(JPABaseEmitter*);
     void draw(JPABaseEmitter*);
 
     void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
@@ -136,7 +131,12 @@ public:
         PRM_VERSION_S = 0x1F,
     };
 
-    void attrType() const {}
+    struct Attr_c {
+        const char* resName;
+        u32 heapSize;
+    };
+
+    const Attr_c& attrType() const { return m_attrType[mType]; }
 
     s16 getBombRestTime();
     s16 getBombCheck_Flag();
@@ -213,11 +213,7 @@ private:
     /* 0x7C4 */ int mMassCounter;
     /* 0x7C8 */ int field_0x7C8;
     
-    struct AttrType {
-        const char* resName;
-        u32 heapSize;
-    };
-    static const AttrType m_attrType[];
+    static const Attr_c m_attrType[];
 }; // Size 0x7CC
 
 #endif /* D_A_BOMB_H */

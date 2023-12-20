@@ -289,6 +289,20 @@ struct TVec3<f32> {
         };
         return res;
     }
+
+    template<typename S>
+    void cubic(const JGeometry::TVec3<f32>& vec1, const JGeometry::TVec3<f32>& vec2, const JGeometry::TVec3<f32>& vec3, const JGeometry::TVec3<f32>& vec4, f32 f19) {
+        // TODO: name variables properly
+        f32 f5 = f19 * f19;
+        f32 f4 = f5 * f19;
+        f32 f3 = 1.0f + ((2.0f * f4) - (3.0f * f5));
+        f32 f2 = (-2.0f * f4) + (3.0f * f5);
+        f32 f1 = f19 + (f4 - (2.0f * f5));
+        f32 f0 = (f4 - f5);
+        this->x = (f3 * vec1.x) + (f2 * vec2.x) + (f1 * vec4.x) + (f0 * vec3.z);
+        this->y = (f3 * vec1.y) + (f2 * vec2.y) + (f1 * vec4.y) + (f0 * vec3.y);
+        this->z = (f3 * vec1.z) + (f2 * vec2.z) + (f1 * vec4.z) + (f0 * vec3.x);
+    }
 };
 
 template <typename T>
