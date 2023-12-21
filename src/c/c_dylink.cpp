@@ -14,7 +14,7 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "DynamicLink.h"
-#include "dolphin/OS/OS.h"
+#include "dolphin/os/OS.h"
 #include "MSL_C/string.h"
 
 DynamicModuleControlBase * DMC[PROC_COUNT_e];

@@ -14,6 +14,7 @@
 #include "SSystem/SComponent/c_m3d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
+#include "dolphin/gf/GFPixel.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_printf.h"
 
@@ -1430,8 +1431,6 @@ void mDoExt_McaMorf2::calc() {
 void mDoExt_McaMorf2::stopZelAnime() {
     /* Nonmatching */
 }
-
-extern void GFSetBlendModeEtc(GXBlendMode, GXBlendFactor, GXBlendFactor, GXLogicOp, u8, u8, u8);
 
 /* 8001427C-800142B8       .text draw__24mDoExt_offCupOnAupPacketFv */
 void mDoExt_offCupOnAupPacket::draw() {

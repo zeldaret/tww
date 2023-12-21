@@ -4,10 +4,9 @@
 //
 
 #include "JSystem/J3DGraphLoader/J3DClusterLoader.h"
-#include "dolphin/types.h"
 
 /* 802FB04C-802FB0E8       .text load__24J3DClusterLoaderDataBaseFPCv */
-void J3DClusterLoaderDataBase::load(const void*) {
+void* J3DClusterLoaderDataBase::load(const void*) {
     /* Nonmatching */
 }
 
@@ -22,41 +21,11 @@ J3DClusterLoader_v15::~J3DClusterLoader_v15() {
 }
 
 /* 802FB160-802FB21C       .text load__20J3DClusterLoader_v15FPCv */
-void J3DClusterLoader_v15::load(const void*) {
+void* J3DClusterLoader_v15::load(const void*) {
     /* Nonmatching */
 }
 
 /* 802FB21C-802FB698       .text readCluster__20J3DClusterLoader_v15FPC15J3DClusterBlock */
 void J3DClusterLoader_v15::readCluster(const J3DClusterBlock*) {
-    /* Nonmatching */
-}
-
-/* 802FB698-802FB6E0       .text __dt__16J3DClusterLoaderFv */
-J3DClusterLoader::~J3DClusterLoader() {
-    /* Nonmatching */
-}
-
-/* 802FB6E0-802FB6F8       .text JSUConvertOffsetToPtr<16J3DClusterVertex>__FPCvPCv */
-void JSUConvertOffsetToPtr<J3DClusterVertex>(const void*, const void*) {
-    /* Nonmatching */
-}
-
-/* 802FB6F8-802FB710       .text JSUConvertOffsetToPtr<13J3DClusterKey>__FPCvPCv */
-void JSUConvertOffsetToPtr<J3DClusterKey>(const void*, const void*) {
-    /* Nonmatching */
-}
-
-/* 802FB710-802FB728       .text JSUConvertOffsetToPtr<10J3DCluster>__FPCvPCv */
-void JSUConvertOffsetToPtr<J3DCluster>(const void*, const void*) {
-    /* Nonmatching */
-}
-
-/* 802FB728-802FB740       .text JSUConvertOffsetToPtr<f>__FPCvPCv */
-void JSUConvertOffsetToPtr<float>(const void*, const void*) {
-    /* Nonmatching */
-}
-
-/* 802FB740-802FB758       .text JSUConvertOffsetToPtr<7ResNTAB>__FPCvPCv */
-void JSUConvertOffsetToPtr<ResNTAB>(const void*, const void*) {
     /* Nonmatching */
 }

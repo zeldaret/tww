@@ -12,6 +12,7 @@
 #include "d/d_procname.h"
 #include "d/d_s_play.h"
 #include "d/d_stage.h"
+#include "dolphin/gf/GFPixel.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_kankyo.h"
@@ -3150,8 +3151,6 @@ void dKy_GxFog_tevstr_set(dKy_tevstr_c* pTevStr) {
     GXSetFog(GX_FOG_PERSP_LIN, pTevStr->mFogStartZ, pTevStr->mFogEndZ, near, far, fogColor);
     GxXFog_set();
 }
-
-extern void GFSetFog(GXFogType type, f32 startZ, f32 endZ, f32 nearZ, f32 farZ, GXColor color);
 
 /* 80196C5C-80196D04       .text dKy_GfFog_tevstr_set__FP12dKy_tevstr_c */
 void dKy_GfFog_tevstr_set(dKy_tevstr_c* pTevStr) {

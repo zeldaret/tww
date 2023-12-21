@@ -5,6 +5,10 @@
 #include "dolphin/mtx/mtx.h"
 #include "JSystem/J3DGraphBase/J3DPacket.h"
 
+class cCcD_Obj;
+class dCcMassS_HitInf;
+class fopAc_ac_c;
+
 class dTree_data_c {
 public:
     ~dTree_data_c();
@@ -15,7 +19,7 @@ public:
     void WorkAt(fopAc_ac_c*, u32, int, dCcMassS_HitInf*);
     void hitCheck(fopAc_ac_c*, int);
     void animation(int);
-    
+
     /* 0x000 */ u8 field_0x000;
     /* 0x001 */ u8 field_0x001;
     /* 0x002 */ u8 mAnimIdx;

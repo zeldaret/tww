@@ -4,7 +4,27 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "f_op/f_op_msg_mng.h"
 
-class dDlst_TimerScrnDraw_c;
+class J2DPane;
+class JKRArchive;
+
+class dDlst_TimerScrnDraw_c {
+public:
+    ~dDlst_TimerScrnDraw_c();
+    void setScreen(const char*, JKRArchive*);
+    void changeNumberTexture(J2DPane*, int);
+    void getNumber(int);
+    void setTimer(int);
+    void setRupee(s16);
+    void setPaneInitialPos(fopMsgM_pane_class*, f32, f32);
+    void setTimerPos(f32, f32);
+    void setRupeePos(f32, f32);
+    void setShowType(u8);
+    void setIconType(void*, u8);
+    void anime();
+    void closeAnime();
+    void hide();
+    void draw();
+};
 
 class dTimer_c {
 public:

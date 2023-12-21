@@ -3,7 +3,7 @@
 // Translation Unit: d_bg_w.cpp
 //
 
-#include "d_bg_w.h"
+#include "d/d_bg_w.h"
 #include "dolphin/types.h"
 
 /* 800A5C3C-800A5CA8       .text __ct__4dBgWFv */
@@ -17,12 +17,12 @@ void dBgW::Move() {
 }
 
 /* 800A5CD4-800A5E64       .text positionWallCorrect__4dBgWFP9dBgS_AcchfR8cM3dGPlaP4cXyzf */
-void dBgW::positionWallCorrect(dBgS_Acch*, float, cM3dGPla&, cXyz*, float) {
+void dBgW::positionWallCorrect(dBgS_Acch*, f32, cM3dGPla&, cXyz*, f32) {
     /* Nonmatching */
 }
 
 /* 800A5E64-800A6DF8       .text RwgWallCorrect__4dBgWFP9dBgS_AcchUs */
-void dBgW::RwgWallCorrect(dBgS_Acch*, unsigned short) {
+void dBgW::RwgWallCorrect(dBgS_Acch*, u16) {
     /* Nonmatching */
 }
 
@@ -37,7 +37,7 @@ void dBgW::WallCorrectGrpRp(dBgS_Acch*, int, int) {
 }
 
 /* 800A7120-800A72E0       .text RwgRoofChk__4dBgWFUsP12dBgS_RoofChk */
-void dBgW::RwgRoofChk(unsigned short, dBgS_RoofChk*) {
+void dBgW::RwgRoofChk(u16, dBgS_RoofChk*) {
     /* Nonmatching */
 }
 
@@ -52,7 +52,7 @@ bool dBgW::RoofChkGrpRp(dBgS_RoofChk*, int, int) {
 }
 
 /* 800A767C-800A783C       .text RwgSplGrpChk__4dBgWFUsP14dBgS_SplGrpChk */
-void dBgW::RwgSplGrpChk(unsigned short, dBgS_SplGrpChk*) {
+void dBgW::RwgSplGrpChk(u16, dBgS_SplGrpChk*) {
     /* Nonmatching */
 }
 
@@ -67,7 +67,7 @@ bool dBgW::SplGrpChkGrpRp(dBgS_SplGrpChk*, int, int) {
 }
 
 /* 800A7BDC-800A7DCC       .text RwgSphChk__4dBgWFUsP11dBgS_SphChkPv */
-void dBgW::RwgSphChk(unsigned short, dBgS_SphChk*, void*) {
+void dBgW::RwgSphChk(u16, dBgS_SphChk*, void*) {
     /* Nonmatching */
 }
 
@@ -82,12 +82,12 @@ bool dBgW::SphChkGrpRp(dBgS_SphChk*, void*, int, int) {
 }
 
 /* 800A8158-800A819C       .text positionWallCrrPos__4dBgWFR8cM3dGTriP11dBgS_CrrPosP4cXyzff */
-void dBgW::positionWallCrrPos(cM3dGTri&, dBgS_CrrPos*, cXyz*, float, float) {
+void dBgW::positionWallCrrPos(cM3dGTri&, dBgS_CrrPos*, cXyz*, f32, f32) {
     /* Nonmatching */
 }
 
 /* 800A819C-800A8964       .text RwgWallCrrPos__4dBgWFUsP11dBgS_CrrPos */
-void dBgW::RwgWallCrrPos(unsigned short, dBgS_CrrPos*) {
+void dBgW::RwgWallCrrPos(u16, dBgS_CrrPos*) {
     /* Nonmatching */
 }
 
@@ -102,7 +102,7 @@ void dBgW::WallCrrPosGrpRp(dBgS_CrrPos*, int, int) {
 }
 
 /* 800A8C8C-800A8CB4       .text WallCrrPos__4dBgWFP11dBgS_CrrPos */
-void dBgW::WallCrrPos(dBgS_CrrPos*) {
+bool dBgW::WallCrrPos(dBgS_CrrPos*) {
     /* Nonmatching */
 }
 
@@ -117,37 +117,26 @@ void dBgW::TransPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*) {
 }
 
 /* 800A8D2C-800A9474       .text ChkPolyThrough__4dBgWFiP16cBgS_PolyPassChk */
-void dBgW::ChkPolyThrough(int, cBgS_PolyPassChk*) {
+bool dBgW::ChkPolyThrough(int, cBgS_PolyPassChk*) {
     /* Nonmatching */
 }
 
 /* 800A9474-800A9684       .text ChkShdwDrawThrough__4dBgWFiP16cBgS_PolyPassChk */
-void dBgW::ChkShdwDrawThrough(int, cBgS_PolyPassChk*) {
+bool dBgW::ChkShdwDrawThrough(int, cBgS_PolyPassChk*) {
     /* Nonmatching */
 }
 
 /* 800A9684-800A974C       .text ChkGrpThrough__4dBgWFiP15cBgS_GrpPassChki */
-void dBgW::ChkGrpThrough(int, cBgS_GrpPassChk*, int) {
+bool dBgW::ChkGrpThrough(int, cBgS_GrpPassChk*, int) {
     /* Nonmatching */
 }
 
 /* 800A974C-800A97E4       .text ChangeAttributeCodeByPathPntNo__4dBgWFiUl */
-void dBgW::ChangeAttributeCodeByPathPntNo(int, unsigned long) {
+void dBgW::ChangeAttributeCodeByPathPntNo(int, u32) {
     /* Nonmatching */
 }
 
 /* 800A97E4-800A986C       .text dBgW_NewSet__FP6cBgD_tUlPA3_A4_f */
-void dBgW_NewSet(cBgD_t*, unsigned long, float(*)[3][4]) {
+dBgW* dBgW_NewSet(cBgD_t*, u32, f32(*)[3][4]) {
     /* Nonmatching */
 }
-
-/* 800A986C-800A98C8       .text __dt__8cM3dGTriFv */
-cM3dGTri::~cM3dGTri() {
-    /* Nonmatching */
-}
-
-/* 800A98C8-800A9928       .text __dt__4dBgWFv */
-dBgW::~dBgW() {
-    /* Nonmatching */
-}
-

@@ -52,7 +52,7 @@ public:
         OnSpl();
     }
 
-    virtual ~dBgS_ObjGndChk_Spl();
+    virtual ~dBgS_ObjGndChk_Spl() {}
 };
 
 class dBgS_ObjGndChk_All : public dBgS_ObjGndChk {

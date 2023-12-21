@@ -4,8 +4,8 @@
 #include "dolphin/types.h"
 
 class J3DMaterial;
-class J3DMaterialBlock;
-class J3DMaterialDLBlock;
+struct J3DMaterialBlock;
+struct J3DMaterialDLBlock;
 
 class J3DMaterialFactory {
 public:

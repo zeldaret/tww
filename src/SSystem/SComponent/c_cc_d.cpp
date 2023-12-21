@@ -44,7 +44,7 @@ void cCcD_DivideArea::SetArea(const cM3dGAab& aabb) {
 }
 
 /* 80241558-8024170C       .text CalcDivideInfo__15cCcD_DivideAreaFP15cCcD_DivideInfoRC8cM3dGAabUl */
-void cCcD_DivideArea::CalcDivideInfo(cCcD_DivideInfo*, const cM3dGAab&, unsigned long) {
+void cCcD_DivideArea::CalcDivideInfo(cCcD_DivideInfo*, const cM3dGAab&, u32) {
     /* Nonmatching */
 }
 

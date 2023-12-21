@@ -3,7 +3,7 @@
 // Translation Unit: d_detect.cpp
 //
 
-#include "d_detect.h"
+#include "d/d_detect.h"
 #include "dolphin/types.h"
 
 /* 8009BFD4-8009BFFC       .text __ct__14dDetectPlace_cFv */
@@ -37,7 +37,7 @@ void dDetect_c::proc() {
 }
 
 /* 8009C14C-8009C1E0       .text chk_quake__9dDetect_cCFPC4cXyz */
-void dDetect_c::chk_quake(const cXyz*) const {
+bool dDetect_c::chk_quake(const cXyz*) const {
     /* Nonmatching */
 }
 
@@ -47,7 +47,7 @@ void dDetect_c::set_quake(const cXyz*) {
 }
 
 /* 8009C254-8009C32C       .text chk_quake_area__9dDetect_cCFPC4cXyz */
-void dDetect_c::chk_quake_area(const cXyz*) const {
+bool dDetect_c::chk_quake_area(const cXyz*) const {
     /* Nonmatching */
 }
 
@@ -57,12 +57,11 @@ void dDetect_c::search_tag_light(void*, void*) {
 }
 
 /* 8009C588-8009C5B8       .text chk_light__9dDetect_cCFPC4cXyz */
-void dDetect_c::chk_light(const cXyz*) const {
+bool dDetect_c::chk_light(const cXyz*) const {
     /* Nonmatching */
 }
 
 /* 8009C5B8-8009C620       .text chk_attention__9dDetect_cCFP4cXyz */
-void dDetect_c::chk_attention(cXyz*) const {
+bool dDetect_c::chk_attention(cXyz*) const {
     /* Nonmatching */
 }
-

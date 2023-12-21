@@ -80,7 +80,7 @@ inline s32 fopMsgM_Timer_create(s16 param_0, u8 param_1, u32 param_2, u8 param_3
                             param_8, createFunc);
 }
 
-void fopMsgM_setPaneData(fopMsgM_pane_class*, J2DScreen*, unsigned long);
+void fopMsgM_setPaneData(fopMsgM_pane_class*, J2DScreen*, u32);
 void fopMsgM_setNowAlpha(fopMsgM_pane_class*, f32);
 void fopMsgM_setNowAlphaZero(fopMsgM_pane_class*);
 void fopMsgM_setInitAlpha(fopMsgM_pane_class*);

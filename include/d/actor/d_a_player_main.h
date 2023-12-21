@@ -5,6 +5,7 @@
 #include "d/d_attention.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_bg_s_lin_chk.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
 #include "d/d_bg_w.h"
 #include "d/actor/d_a_player.h"
@@ -2178,28 +2179,28 @@ public:
     virtual BOOL checkTactWait() const { return mCurProc == PROC_TACT_WAIT_e; }
     virtual void setTactZev(unsigned int, int, char*);
     virtual void onDekuSpReturnFlg(u8 i_point);
-    virtual bool checkComboCutTurn() const;
+    virtual BOOL checkComboCutTurn() const { return mCurProc == 0x55 && m3570 != 0; }
     virtual f32 getBaseAnimeFrameRate() { return mFrameCtrlUnder[0].getRate(); }
     virtual f32 getBaseAnimeFrame() { return mFrameCtrlUnder[0].getFrame(); }
     virtual u32 getItemID() const { return mActorKeepEquip.getID(); }
     virtual u32 getThrowBoomerangID() const { return mActorKeepThrow.getID(); }
     virtual u32 getGrabActorID() const { return mActorKeepGrab.getID(); }
     virtual BOOL checkGrabBarrel() { return checkGrabBarrelSearch(1); }
-    virtual BOOL checkPlayerNoDraw();
+    virtual BOOL checkPlayerNoDraw() { return dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 2) || checkNoResetFlg0(daPyFlg0_NO_DRAW); }
     virtual BOOL checkRopeTag() { return mActorKeepEquip.getActor() == NULL; }
-    virtual BOOL checkRopeReadyAnime() const;
+    virtual BOOL checkRopeReadyAnime() const { return m_anm_heap_upper[2].mIdx == LKANM_BCK_ROPETHROWWAIT; }
     virtual void voiceStart(u32);
     virtual void setOutPower(f32, s16, int);
-    virtual void onFrollCrashFlg(u32);
+    virtual void onFrollCrashFlg(u32 param_1) { m3620 = param_1; onNoResetFlg0(daPyFlg0_UNK8); }
     virtual MtxP getModelJointMtx(u16 idx) { return mpCLModel->getAnmMtx(idx); }
-    virtual f32 getOldSpeedY();
+    virtual f32 getOldSpeedY() { return mOldSpeed.y; }
     virtual BOOL setHookshotCarryOffset(unsigned int, const cXyz*);
     virtual void setPlayerPosAndAngle(cXyz*, s16);
     virtual void setPlayerPosAndAngle(cXyz*, csXyz*);
     virtual void setPlayerPosAndAngle(MtxP);
     virtual BOOL setThrowDamage(cXyz*, s16, f32, f32, int);
     virtual void changeTextureAnime(u16, u16, int);
-    virtual void cancelChangeTextureAnime();
+    virtual void cancelChangeTextureAnime() { resetDemoTextureAnime(); }
 
     /* 0x0320 */ request_of_phase_process_class mPhsLoad;
     /* 0x0328 */ J3DModelData* mpCLModelData;

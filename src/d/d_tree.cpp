@@ -3,21 +3,21 @@
 // Translation Unit: d_tree.cpp
 //
 
-#include "d_tree.h"
+#include "d/d_tree.h"
 #include "dolphin/types.h"
 
 /* 800787BC-80078960       .text WorkCo__12dTree_data_cFP10fopAc_ac_cUli */
-void dTree_data_c::WorkCo(fopAc_ac_c*, unsigned long, int) {
+void dTree_data_c::WorkCo(fopAc_ac_c*, u32, int) {
     /* Nonmatching */
 }
 
 /* 80078960-80078CC0       .text WorkAt_NoCutAnim__12dTree_data_cFP10fopAc_ac_cUliP15dCcMassS_HitInfP8cCcD_Obj */
-void dTree_data_c::WorkAt_NoCutAnim(fopAc_ac_c*, unsigned long, int, dCcMassS_HitInf*, cCcD_Obj*) {
+void dTree_data_c::WorkAt_NoCutAnim(fopAc_ac_c*, u32, int, dCcMassS_HitInf*, cCcD_Obj*) {
     /* Nonmatching */
 }
 
 /* 80078CC0-80078ED4       .text WorkAt__12dTree_data_cFP10fopAc_ac_cUliP15dCcMassS_HitInf */
-void dTree_data_c::WorkAt(fopAc_ac_c*, unsigned long, int, dCcMassS_HitInf*) {
+void dTree_data_c::WorkAt(fopAc_ac_c*, u32, int, dCcMassS_HitInf*) {
     /* Nonmatching */
 }
 
@@ -82,22 +82,21 @@ void dTree_packet_c::update() {
 }
 
 /* 8007A14C-8007A238       .text setData__14dTree_packet_cFP12dTree_data_ciR4cXyzUci */
-void dTree_packet_c::setData(dTree_data_c*, int, cXyz&, unsigned char, int) {
+void dTree_packet_c::setData(dTree_data_c*, int, cXyz&, u8, int) {
     /* Nonmatching */
 }
 
 /* 8007A238-8007A36C       .text newData__14dTree_packet_cFR4cXyzUci */
-void dTree_packet_c::newData(cXyz&, unsigned char, int) {
+void dTree_packet_c::newData(cXyz&, u8, int) {
     /* Nonmatching */
 }
 
 /* 8007A36C-8007A3DC       .text newAnm__14dTree_packet_cFs */
-void dTree_packet_c::newAnm(short) {
+void dTree_packet_c::newAnm(s16) {
     /* Nonmatching */
 }
 
 /* 8007A3DC-8007A428       .text setAnm__14dTree_packet_cFis */
-void dTree_packet_c::setAnm(int, short) {
+void dTree_packet_c::setAnm(int, s16) {
     /* Nonmatching */
 }
-

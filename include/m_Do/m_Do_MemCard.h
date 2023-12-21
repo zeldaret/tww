@@ -71,19 +71,4 @@ inline void mDoMemCd_save(void* i_data, u32 param_1, u32 param_2) {
     g_mDoMemCd_control.save(i_data,param_1,param_2);
 }
 
-struct CARDFileInfo;
-struct mDoMemCdRWm_HeaderData;
-s32 mDoMemCdRWm_Store(CARDFileInfo*, void*, u32);
-s32 mDoMemCdRWm_Restore(CARDFileInfo*, void*, u32);
-void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData*);
-void mDoMemCdRWm_SetCardStat(CARDFileInfo*);
-void mDoMemCdRWm_CheckCardStat(CARDFileInfo*);
-void mDoMemCdRWm_CalcCheckSum(void*, u32);
-void mDoMemCdRWm_CalcCheckSumPictData(void*, u32);
-void mDoMemCdRWm_TestCheckSumPictData(void*);
-void mDoMemCdRWm_SetCheckSumPictData(u8*);
-void mDoMemCdRWm_CalcCheckSumGameData(void*, u32);
-void mDoMemCdRWm_TestCheckSumGameData(void*);
-void mDoMemCdRWm_SetCheckSumGameData(u8*, u8);
-
 #endif /* M_DO_M_DO_MEMCARD_H */

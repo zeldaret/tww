@@ -3,7 +3,7 @@
 // Translation Unit: d_cc_mass_s.cpp
 //
 
-#include "d_cc_mass_s.h"
+#include "d/d_cc_mass_s.h"
 #include "dolphin/types.h"
 
 /* 800AC810-800AC920       .text __ct__12dCcMassS_MngFv */
@@ -22,7 +22,7 @@ void dCcMassS_Mng::Prepare() {
 }
 
 /* 800ACCB8-800AD17C       .text Chk__12dCcMassS_MngFP4cXyzPP10fopAc_ac_cP15dCcMassS_HitInf */
-void dCcMassS_Mng::Chk(cXyz*, fopAc_ac_c**, dCcMassS_HitInf*) {
+u32 dCcMassS_Mng::Chk(cXyz*, fopAc_ac_c**, dCcMassS_HitInf*) {
     /* Nonmatching */
 }
 
@@ -32,12 +32,12 @@ void dCcMassS_Mng::Clear() {
 }
 
 /* 800AD234-800AD310       .text Set__12dCcMassS_MngFP8cCcD_ObjUc */
-void dCcMassS_Mng::Set(cCcD_Obj*, unsigned char) {
+void dCcMassS_Mng::Set(cCcD_Obj*, u8) {
     /* Nonmatching */
 }
 
 /* 800AD310-800AD384       .text SetAreaChk__12dCcMassS_MngFP8cCcD_ObjUcPFP10fopAc_ac_cP4cXyzUl_v */
-void dCcMassS_Mng::SetAreaChk(cCcD_Obj*, unsigned char, void (*)(fopAc_ac_c*, cXyz*, unsigned long)) {
+void dCcMassS_Mng::SetAreaChk(cCcD_Obj*, u8, void (*)(fopAc_ac_c*, cXyz*, u32)) {
     /* Nonmatching */
 }
 
@@ -47,7 +47,7 @@ void dCcMassS_Mng::SetCam(const cM3dGCps&) {
 }
 
 /* 800AD3D4-800AD3DC       .text GetResultCam__12dCcMassS_MngCFv */
-void dCcMassS_Mng::GetResultCam() const {
+u8 dCcMassS_Mng::GetResultCam() const {
     /* Nonmatching */
 }
 
@@ -60,4 +60,3 @@ void dCcMassS_Mng::GetCamTopPos(Vec*) {
 dCcMassS_Obj::dCcMassS_Obj() {
     /* Nonmatching */
 }
-

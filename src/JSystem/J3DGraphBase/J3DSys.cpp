@@ -63,7 +63,7 @@ void J3DSys::loadNrmMtxIndx(int addr, u16 indx) const {
 }
 
 /* 802D8BD8-802D8C58       .text J3DFifoLoadPosMtxImm__FPA4_fUl */
-void J3DFifoLoadPosMtxImm(Mtx mtx, unsigned long idx) {
+void J3DFifoLoadPosMtxImm(Mtx mtx, u32 idx) {
     J3DFifoWriteXFCmd(idx << 2, 12);
     u32 * mtx_u32 = (u32*)mtx;
 
@@ -84,7 +84,7 @@ void J3DFifoLoadPosMtxImm(Mtx mtx, unsigned long idx) {
 }
 
 /* 802D8C58-802D8CC4       .text J3DFifoLoadNrmMtxImm__FPA4_fUl */
-void J3DFifoLoadNrmMtxImm(Mtx mtx, unsigned long idx) {
+void J3DFifoLoadNrmMtxImm(Mtx mtx, u32 idx) {
     J3DFifoWriteXFCmd(0x400 + (idx * 3), 9);
     u32 * mtx_u32 = (u32*)mtx;
 
@@ -102,7 +102,7 @@ void J3DFifoLoadNrmMtxImm(Mtx mtx, unsigned long idx) {
 }
 
 /* 802D8CC4-802D8D30       .text J3DFifoLoadNrmMtxImm3x3__FPA3_fUl */
-void J3DFifoLoadNrmMtxImm3x3(Mtx33 mtx, unsigned long idx) {
+void J3DFifoLoadNrmMtxImm3x3(Mtx33 mtx, u32 idx) {
     J3DFifoWriteXFCmd(0x400 + (idx * 3), 9);
     u32 * mtx_u32 = (u32*)mtx;
 

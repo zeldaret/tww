@@ -4,7 +4,9 @@
 //
 
 #include "d/actor/d_a_grid.h"
-#include "dolphin/types.h"
+#include "JSystem/J3DGraphBase/J3DPacket.h"
+
+static daHo_HIO_c l_HIO;
 
 /* 800E8CC0-800E8D48       .text setBackNrm__13daHo_packet_cFv */
 void daHo_packet_c::setBackNrm() {
@@ -80,19 +82,3 @@ BOOL daGrid_c::_execute() {
 BOOL daGrid_c::_draw() {
     /* Nonmatching */
 }
-
-/* 800EB328-800EB388       .text entry__12J3DMatPacketFP13J3DDrawBuffer */
-void J3DMatPacket::entry(J3DDrawBuffer*) {
-    /* Nonmatching */
-}
-
-/* 800EB4D0-800EB520       .text __dt__10daHo_HIO_cFv */
-daHo_HIO_c::~daHo_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 800EB5D8-800EB60C       .text Eye__9dCamera_cFv */
-void dCamera_c::Eye() {
-    /* Nonmatching */
-}
-

@@ -35,10 +35,10 @@ public:
 
     void Up(f32 dist) {
         Vec delta;
-        PSVECScale(&mNormal, &delta, dist);
-        PSVECAdd(&mA, &delta, &mA);
-        PSVECAdd(&mB, &delta, &mB);
-        PSVECAdd(&mC, &delta, &mC);
+        VECScale(&mNormal, &delta, dist);
+        VECAdd(&mA, &delta, &mA);
+        VECAdd(&mB, &delta, &mB);
+        VECAdd(&mC, &delta, &mC);
         mD -= dist;
     }
 

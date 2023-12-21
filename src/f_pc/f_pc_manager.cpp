@@ -23,7 +23,7 @@
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/JAudio/JAIStreamMgr.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "dolphin/dvd/DVD.h"
+#include "dolphin/dvd/dvd.h"
 #include "dolphin/gx/GX.h"
 
 #include "f_pc/f_pc_manager_data.inc"

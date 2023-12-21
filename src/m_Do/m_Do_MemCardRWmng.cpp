@@ -7,12 +7,12 @@
 #include "dolphin/types.h"
 
 /* 80019940-80019CE8       .text mDoMemCdRWm_Store__FP12CARDFileInfoPvUl */
-void mDoMemCdRWm_Store(CARDFileInfo*, void*, u32) {
+s32 mDoMemCdRWm_Store(CARDFileInfo*, void*, u32) {
     /* Nonmatching */
 }
 
 /* 80019CE8-80019F4C       .text mDoMemCdRWm_Restore__FP12CARDFileInfoPvUl */
-void mDoMemCdRWm_Restore(CARDFileInfo*, void*, u32) {
+s32 mDoMemCdRWm_Restore(CARDFileInfo*, void*, u32) {
     /* Nonmatching */
 }
 

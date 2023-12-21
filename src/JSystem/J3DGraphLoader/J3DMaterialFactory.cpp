@@ -4,7 +4,7 @@
 //
 
 #include "JSystem/J3DGraphLoader/J3DMaterialFactory.h"
-#include "dolphin/types.h"
+#include "JSystem/J3DGraphBase/J3DMatBlock.h"
 
 /* 802F68F0-802F6B38       .text __ct__18J3DMaterialFactoryFRC16J3DMaterialBlock */
 J3DMaterialFactory::J3DMaterialFactory(const J3DMaterialBlock&) {
@@ -208,105 +208,5 @@ void J3DMaterialFactory::newDither(int) const {
 
 /* 802F9514-802F95B8       .text newNBTScale__18J3DMaterialFactoryCFi */
 void J3DMaterialFactory::newNBTScale(int) const {
-    /* Nonmatching */
-}
-
-/* 802F95B8-802F95BC       .text load__14J3DPEBlockNullFv */
-void J3DPEBlockNull::load() {
-    /* Nonmatching */
-}
-
-/* 802F95BC-802F95C8       .text getType__14J3DPEBlockNullFv */
-void J3DPEBlockNull::getType() {
-    /* Nonmatching */
-}
-
-/* 802F95C8-802F9624       .text __dt__14J3DPEBlockNullFv */
-J3DPEBlockNull::~J3DPEBlockNull() {
-    /* Nonmatching */
-}
-
-/* 802F9624-802F9628       .text reset__15J3DTevBlockNullFP11J3DTevBlock */
-void J3DTevBlockNull::reset(J3DTevBlock*) {
-    /* Nonmatching */
-}
-
-/* 802F9628-802F962C       .text ptrToIndex__15J3DTevBlockNullFv */
-void J3DTevBlockNull::ptrToIndex() {
-    /* Nonmatching */
-}
-
-/* 802F962C-802F9650       .text indexToPtr__15J3DTevBlockNullFv */
-void J3DTevBlockNull::indexToPtr() {
-    /* Nonmatching */
-}
-
-/* 802F9650-802F965C       .text getType__15J3DTevBlockNullFv */
-void J3DTevBlockNull::getType() {
-    /* Nonmatching */
-}
-
-/* 802F965C-802F96B8       .text __dt__15J3DTevBlockNullFv */
-J3DTevBlockNull::~J3DTevBlockNull() {
-    /* Nonmatching */
-}
-
-/* 802F96B8-802F96BC       .text calc__18J3DTexGenBlockNullFPA4_Cf */
-void J3DTexGenBlockNull::calc(const float(*)[4]) {
-    /* Nonmatching */
-}
-
-/* 802F96BC-802F96C0       .text load__18J3DTexGenBlockNullFv */
-void J3DTexGenBlockNull::load() {
-    /* Nonmatching */
-}
-
-/* 802F96C0-802F96C4       .text patch__18J3DTexGenBlockNullFv */
-void J3DTexGenBlockNull::patch() {
-    /* Nonmatching */
-}
-
-/* 802F96C4-802F96C8       .text diff__18J3DTexGenBlockNullFUl */
-void J3DTexGenBlockNull::diff(unsigned long) {
-    /* Nonmatching */
-}
-
-/* 802F96C8-802F96CC       .text diffTexMtx__18J3DTexGenBlockNullFv */
-void J3DTexGenBlockNull::diffTexMtx() {
-    /* Nonmatching */
-}
-
-/* 802F96CC-802F96D0       .text diffTexGen__18J3DTexGenBlockNullFv */
-void J3DTexGenBlockNull::diffTexGen() {
-    /* Nonmatching */
-}
-
-/* 802F96D0-802F96DC       .text getType__18J3DTexGenBlockNullFv */
-void J3DTexGenBlockNull::getType() {
-    /* Nonmatching */
-}
-
-/* 802F96DC-802F9738       .text __dt__18J3DTexGenBlockNullFv */
-J3DTexGenBlockNull::~J3DTexGenBlockNull() {
-    /* Nonmatching */
-}
-
-/* 802F9738-802F9744       .text getType__17J3DColorBlockNullFv */
-void J3DColorBlockNull::getType() {
-    /* Nonmatching */
-}
-
-/* 802F9744-802F97A0       .text __dt__17J3DColorBlockNullFv */
-J3DColorBlockNull::~J3DColorBlockNull() {
-    /* Nonmatching */
-}
-
-/* 802F97A0-802F9800       .text __ct__11J3DTevStageFRC15J3DTevStageInfo */
-J3DTevStage::J3DTevStage(const J3DTevStageInfo&) {
-    /* Nonmatching */
-}
-
-/* 802F9800-802F9848       .text __dt__11J3DMaterialFv */
-J3DMaterial::~J3DMaterial() {
     /* Nonmatching */
 }
