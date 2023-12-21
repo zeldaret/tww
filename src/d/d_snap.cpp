@@ -33,7 +33,19 @@ void dSnap_GetFigRoomId(int) {
 
 /* 800CD00C-800CD068       .text __ct__9dSnap_ObjFv */
 dSnap_Obj::dSnap_Obj() {
-    /* Nonmatching */
+    mBsPcId = -1;
+    field_0x18 = 0;
+    field_0x19 = 4;
+    field_0x1a = -1;
+    field_0x1b = 0;
+    field_0x1c = 0x7fff;
+    field_0x1e = 0;
+    field_0x20 = 0;
+    field_0x24 = 0.0f;
+    field_0x28 = 0;
+    field_0x2a = 0;
+    field_0x2c = 0;
+    field_0x2e = 0;
 }
 
 /* 800CD068-800CD6D0       .text CalcArea2D__9dSnap_ObjFv */
@@ -248,16 +260,10 @@ void dSnap_DebugDraw() {
 void dSnap_Delete() {}
 
 /* 800CF058-800CF0DC       .text __dt__12dSnap_packetFv */
-dSnap_packet::~dSnap_packet() {
-    /* Nonmatching */
-}
+dSnap_packet::~dSnap_packet() {}
 
 /* 800CF0DC-800CF138       .text __dt__18dSnap_RegistObjElmFv */
-dSnap_RegistObjElm::~dSnap_RegistObjElm() {
-    /* Nonmatching */
-}
+dSnap_RegistObjElm::~dSnap_RegistObjElm() {}
 
 /* 800CF2E0-800CF31C       .text __ct__18dSnap_RegistObjElmFv */
-dSnap_RegistObjElm::dSnap_RegistObjElm() {
-    /* Nonmatching */
-}
+dSnap_RegistObjElm::dSnap_RegistObjElm() {}

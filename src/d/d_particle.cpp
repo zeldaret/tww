@@ -164,8 +164,11 @@ void dPa_modelControl_c::draw() {
 }
 
 /* 8007B158-8007B194       .text __ct__19dPa_followEcallBackFUcUc */
-dPa_followEcallBack::dPa_followEcallBack(u8, u8) {
-    /* Nonmatching */
+dPa_followEcallBack::dPa_followEcallBack(u8 param_1, u8 param_2) {
+    mRateOff = param_1;
+    field_0x12 = param_2;
+    field_0x13 = 0;
+    mpEmitter = NULL;
 }
 
 /* 8007B194-8007B288       .text execute__19dPa_followEcallBackFP14JPABaseEmitter */
@@ -189,18 +192,39 @@ void dPa_followEcallBack::end() {
 }
 
 /* 8007B3B0-8007B444       .text __ct__18dPa_smokeEcallBackFUc */
-dPa_smokeEcallBack::dPa_smokeEcallBack(u8) {
+dPa_smokeEcallBack::dPa_smokeEcallBack(u8 param_1) {
     /* Nonmatching */
+    GXColor local_18 = {0xa0, 0xa0, 0x80, 0xff};
+    field_0x16 = local_18;
+    mRateOff = param_1;
+    field_0x12 = 0;
+    mTevstr = NULL;
+    field_0x14 = -1;
+    field_0x15 = 0;
 }
 
 /* 8007B4B0-8007B558       .text __ct__18dPa_smokeEcallBackFUcUcUcUc */
-dPa_smokeEcallBack::dPa_smokeEcallBack(u8, u8, u8, u8) {
+dPa_smokeEcallBack::dPa_smokeEcallBack(u8 param_1, u8 param_2, u8 param_3, u8 param_4) {
     /* Nonmatching */
+    GXColor local_28 = {0xa0, 0xa0, 0x80, 0xff};
+    field_0x16 = local_28;
+    mRateOff = param_1;
+    field_0x12 = param_2;
+    field_0x13 = param_4;
+    mTevstr = NULL;
+    field_0x14 = -1;
+    mFlag = param_3;
+    field_0x15 = 0;
+
 }
 
 /* 8007B558-8007B5E8       .text __ct__18dPa_smokeEcallBackFRC8_GXColorP12dKy_tevstr_cUc */
-dPa_smokeEcallBack::dPa_smokeEcallBack(const _GXColor&, dKy_tevstr_c*, u8) {
-    /* Nonmatching */
+dPa_smokeEcallBack::dPa_smokeEcallBack(const _GXColor& param_1, dKy_tevstr_c* param_2, u8 param_3) {
+    field_0x16 = param_1;
+    mTevstr = param_2;
+    mRateOff = param_3;
+    field_0x12 = 0;
+    field_0x14 = -1;
 }
 
 /* 8007B5E8-8007B698       .text setup__18dPa_smokeEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
@@ -259,9 +283,7 @@ dPa_simpleEcallBack::dPa_simpleEcallBack() {
 }
 
 /* 8007C45C-8007C460       .text __ct__16dPa_simpleData_cFv */
-dPa_simpleData_c::dPa_simpleData_c() {
-    /* Nonmatching */
-}
+dPa_simpleData_c::dPa_simpleData_c() {}
 
 /* 8007C460-8007C618       .text executeAfter__19dPa_simpleEcallBackFP14JPABaseEmitter */
 void dPa_simpleEcallBack::executeAfter(JPABaseEmitter* param_1) {

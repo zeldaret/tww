@@ -9,13 +9,11 @@
 
 /* 8006FE04-8006FE54       .text __ct__14dEvt_control_cFv */
 dEvt_control_c::dEvt_control_c() {
-    /* Nonmatching */
+    remove();
 }
 
 /* 8006FE54-8006FE58       .text __ct__12dEvt_order_cFv */
-dEvt_order_c::dEvt_order_c() {
-    /* Nonmatching */
-}
+dEvt_order_c::dEvt_order_c() {}
 
 /* 8006FE58-8006FEE8       .text orderOld__14dEvt_control_cFUsUsUsUsPvPvPCv */
 s32 dEvt_control_c::orderOld(u16, u16, u16, u16, void*, void*, const void*) {
@@ -145,6 +143,19 @@ BOOL dEvt_control_c::compulsory(void*, const char*, u16) {
 /* 80071468-800714AC       .text remove__14dEvt_control_cFv */
 void dEvt_control_c::remove() {
     /* Nonmatching */
+    mMode = 0;
+    mbEndProc = 0;
+    mOrderCount = 0;
+    field_0xdd = 0;
+    mEventEndSound = 0;
+    field_0xdb = 0;
+    mCullFarClipRatio = 0.0f;
+    field_0xde = 0xff;
+    field_0xdf = 0xff;
+    mTalkButton = 0;
+    mbInPhoto = 0;
+    mItemNo = 0xff;
+    mEventFlag = 0;
 }
 
 /* 800714AC-80071534       .text getStageEventDt__14dEvt_control_cFv */
@@ -179,7 +190,12 @@ void dEvt_control_c::getTactFreeCStick(int) {
 
 /* 80071624-80071658       .text __ct__11dEvt_info_cFv */
 dEvt_info_c::dEvt_info_c() {
-    /* Nonmatching */
+    mCommand = 0;
+    mCondition = 0;
+    mEventId = -1;
+    mMapToolId = 0xff;
+    mpEventCB = 0;
+    mpCheckCB = 0;
 }
 
 /* 80071658-800716AC       .text setEventName__11dEvt_info_cFPc */
