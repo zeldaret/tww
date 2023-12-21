@@ -191,7 +191,7 @@ static s32 daBranch_Create(fopAc_ac_c* i_this) {
             state = cPhs_ERROR_e;
         }
         else {
-            branch->mCullMtx = branch->mModel[0]->mBaseTransformMtx;
+            fopAcM_SetMtx(i_this, branch->mModel[0]->getBaseTRMtx());
             fopAcM_setCullSizeBox(i_this, 0.0f, 0.0f, -50.0f, 300.0f, 100.0f, 50.0f);
             
             branch->m02B8 = 6;

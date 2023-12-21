@@ -30,7 +30,7 @@ void daPy_lk_c::setHyoiModel() {
 
 /* 801543A0-801546F4       .text procFoodThrow_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procFoodThrow_init() {
-    if (mCurProcID == PROC_FOOD_THROW_e) {
+    if (mCurProc == PROC_FOOD_THROW_e) {
         return TRUE;
     }
     if (m3630 != -1) {
@@ -149,7 +149,7 @@ BOOL daPy_lk_c::procFoodThrow() {
 
 /* 80154880-80154A48       .text procFoodSet_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procFoodSet_init() {
-    if (mCurProcID == PROC_FOOD_SET_e) {
+    if (mCurProc == PROC_FOOD_SET_e) {
         if (mDemo.getParam0() == 1) {
             if (mHeldItemType == ANIMAL_ESA) {
                 u8 btnIdx = dComIfGp_event_getTalkXYBtn();

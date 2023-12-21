@@ -43,7 +43,7 @@ s32 daThrowstone_c::_create() {
             mDoMtx_stack_c::scaleM(mScale);
 
             mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
-            mCullMtx = mpModel->getBaseTRMtx();
+            fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
 
             mDoMtx_copy(mpModel->getBaseTRMtx(), mMtx);
         }

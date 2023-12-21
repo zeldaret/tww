@@ -123,8 +123,8 @@ namespace daObjPaper {
 
                 mMsgId = fpcM_ERROR_PROCESS_ID_e;
 
-                if (mType == 2) {
-                    mStatus = mStatus & 0xFFFFFFC0 | 0x38;
+                if (mType == Piwa_e) {
+                    fopAcM_SetStatusMap(this, 0x18);
                 }
 
                 if (attr(mType).mColCylinderRadius != 0) {
@@ -162,7 +162,7 @@ namespace daObjPaper {
 
     /* 00000730-00000748       .text mode_wait_init__Q210daObjPaper5Act_cFv */
     void daObjPaper::Act_c::mode_wait_init() {
-        mStatus |= fopAcStts_NOCULLEXEC_e;
+        fopAcM_OnStatus(this, fopAcStts_NOCULLEXEC_e);
         mMode = ActMode_WAIT_e;
     }
 
@@ -178,7 +178,7 @@ namespace daObjPaper {
 
     /* 00000784-000007A4       .text mode_talk0_init__Q210daObjPaper5Act_cFv */
     void daObjPaper::Act_c::mode_talk0_init() {
-        mStatus &= ~fopAcStts_NOCULLEXEC_e;
+        fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
         mMsgId = fpcM_ERROR_PROCESS_ID_e;
         mMode = ActMode_TALKBEGIN_e;
     }
@@ -271,7 +271,7 @@ namespace daObjPaper {
         set_mtx();
         if (mbHasCc) {
             mCylinderCol.SetC(current.pos);
-            g_dComIfG_gameInfo.play.mCcS.Set(&mCylinderCol);
+            dComIfG_Ccsp()->Set(&mCylinderCol);
         }
 
         return true;

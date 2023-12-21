@@ -57,8 +57,8 @@ void daRaceItem_c::raceItemGet() {
 void daRaceItem_c::normalItemGet() {
     field_0x640 = 1;
     execItemGet(m_itemNo);
-    if(mPickupFlag != 0x7F) {
-        dComIfGs_onItem(mPickupFlag, fopAcM_GetHomeRoomNo(this));
+    if(mItemBitNo != 0x7F) {
+        dComIfGs_onItem(mItemBitNo, fopAcM_GetHomeRoomNo(this));
     }
 
     switch(m_itemNo) {

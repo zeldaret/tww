@@ -3324,23 +3324,23 @@ void daPy_lk_c::cancelNoDamageMode() {
 }
 
 /* 80112348-80112954       .text commonProcInit__9daPy_lk_cFQ29daPy_lk_c9daPy_PROC */
-BOOL daPy_lk_c::commonProcInit(daPy_lk_c::daPy_PROC procID) {
-    ProcInitTableEntry& procInit = mProcInitTable[procID];
+BOOL daPy_lk_c::commonProcInit(daPy_lk_c::daPy_PROC proc) {
+    ProcInitTableEntry& procInit = mProcInitTable[proc];
     
     s32 temp_r29;
     BOOL resetDemoAnime = FALSE;
     s32 temp_r28;
     
-    if (mCurProcID == PROC_SLIP_e) {
+    if (mCurProc == PROC_SLIP_e) {
         mDoAud_seStop(JA_SE_LK_RUN_SLIP, 0);
-    } else if (mCurProcID == PROC_GRAB_MISS_e || (mCurProcID == PROC_GRAB_READY_e && procID != PROC_GRAB_MISS_e)) {
+    } else if (mCurProc == PROC_GRAB_MISS_e || (mCurProc == PROC_GRAB_READY_e && proc != PROC_GRAB_MISS_e)) {
         mActorKeepRope.clearData();
-    } else if (mCurProcID == DPROC_TALISMAN_WAIT_e) {
+    } else if (mCurProc == DPROC_TALISMAN_WAIT_e) {
         seStartOnlyReverb(JA_SE_LK_ITEM_TAKEOUT);
         mpHeldItemModel = NULL;
-    } else if (mCurProcID == PROC_FAN_SWING_e) {
+    } else if (mCurProc == PROC_FAN_SWING_e) {
         setSmallFanModel();
-    } else if (mCurProcID == PROC_FAN_GLIDE_e) {
+    } else if (mCurProc == PROC_FAN_GLIDE_e) {
         deleteEquipItem(0);
         mMaxFallSpeed = daPy_HIO_autoJump_c0::m.field_0x10;
         setSmallFanModel();
@@ -3349,28 +3349,28 @@ BOOL daPy_lk_c::commonProcInit(daPy_lk_c::daPy_PROC procID) {
         m3730 = cXyz::Zero;
         m34E0 = 0;
         m34E4 = 0;
-    } else if (mCurProcID == PROC_SLOW_FALL_e) {
+    } else if (mCurProc == PROC_SLOW_FALL_e) {
         mMaxFallSpeed = daPy_HIO_autoJump_c0::m.field_0x10;
-    } else if (mCurProcID == DPROC_TOOL_e) {
+    } else if (mCurProc == DPROC_TOOL_e) {
         resetDemoAnime = TRUE;
         speed.y = 0.0f;
-    } else if (mCurProcID == DPROC_GET_ITEM_e || mCurProcID == DPROC_GET_DANCE_e) {
+    } else if (mCurProc == DPROC_GET_ITEM_e || mCurProc == DPROC_GET_DANCE_e) {
         dKy_Itemgetcol_chg_off();
-        if (mCurProcID == DPROC_GET_ITEM_e && m34D8 != 0) {
+        if (mCurProc == DPROC_GET_ITEM_e && m34D8 != 0) {
             m34C2 = 0xB;
         }
-    } else if (mCurProcID == DPROC_PRESENT_e || mCurProcID == PROC_NOT_USE_e) {
+    } else if (mCurProc == DPROC_PRESENT_e || mCurProc == PROC_NOT_USE_e) {
         daItemBase_c* item = (daItemBase_c*)fopAcM_getItemEventPartner(this);
         if (item && (fopAcM_GetName(item) == PROC_ITEM || fopAcM_GetName(item) == PROC_Demo_Item)) {
             item->dead();
         }
-    } else if (mCurProcID == DPROC_LETTER_READ_e) {
+    } else if (mCurProc == DPROC_LETTER_READ_e) {
         deleteEquipItem(0);
-    } else if (mCurProcID == PROC_CUT_ROLL_END_e) {
+    } else if (mCurProc == PROC_CUT_ROLL_END_e) {
         if (m33A8.getEmitter()) {
             m33A8.getEmitter()->setGlobalAlpha(0);
         }
-    } else if (mCurProcID == PROC_SHIP_BOW_e) {
+    } else if (mCurProc == PROC_SHIP_BOW_e) {
         deleteArrow();
     }
     
@@ -3384,7 +3384,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_lk_c::daPy_PROC procID) {
     
     temp_r29 = (checkModeFlg(0x2) >> 1) ^ 1;
     
-    mCurProcID = procID;
+    mCurProc = proc;
     mCurProcFunc = procInit.mProcFunc;
     m3598 = 0.0f;
     mModeFlg = procInit.mProcFlags;
@@ -3443,7 +3443,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_lk_c::daPy_PROC procID) {
         m35F4 = m3688.y;
     }
     
-    if (mCurProcID != PROC_SWIM_MOVE_e) {
+    if (mCurProc != PROC_SWIM_MOVE_e) {
         mSwimTailEcallBack[0].onEnd();
         mSwimTailEcallBack[1].onEnd();
     }
@@ -3480,7 +3480,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_lk_c::daPy_PROC procID) {
     
     m35E8 = 0.0f;
     
-    if (!checkModeFlg(0x800) && mCurProcID != PROC_ROPE_SUBJECT_e && mCurProcID != PROC_ROPE_MOVE_e) {
+    if (!checkModeFlg(0x800) && mCurProc != PROC_ROPE_SUBJECT_e && mCurProc != PROC_ROPE_MOVE_e) {
         freeRopeItem();
     }
     if (!checkModeFlg(0x200)) {
@@ -3779,7 +3779,7 @@ BOOL daPy_lk_c::procBackJumpLand() {
 
 /* 80115E88-80115EA4       .text checkAutoJumpFlying__9daPy_lk_cCFv */
 int daPy_lk_c::checkAutoJumpFlying() const {
-    return mCurProcID != PROC_AUTO_JUMP_e ? -1 : m34D0;
+    return mCurProc != PROC_AUTO_JUMP_e ? -1 : m34D0;
 }
 
 /* 80115EA4-8011602C       .text procAutoJump_init__9daPy_lk_cFv */
@@ -4114,11 +4114,11 @@ void daPy_lk_c::setBgCheckParam() {
     mAcchCir[1].SetWallH(89.9f);
     mAcchCir[2].SetWallH(125.0f);
     
-    if (mCurProcID == PROC_ROPE_SWING_START_e) {
+    if (mCurProc == PROC_ROPE_SWING_START_e) {
         mAcchCir[0].SetWallH(-125.0f);
         mAcchCir[1].SetWallH(-89.9f);
         mAcchCir[2].SetWallH(0.0f);
-    } else if (mCurProcID == PROC_LARGE_DAMAGE_WALL_e || checkModeFlg(0x410000)) {
+    } else if (mCurProc == PROC_LARGE_DAMAGE_WALL_e || checkModeFlg(0x410000)) {
         mAcchCir[0].SetWallR(5.0f);
     } else if (checkModeFlg(0x200000)) {
         mAcchCir[0].SetWallR(40.0f);
@@ -4132,7 +4132,7 @@ void daPy_lk_c::setBgCheckParam() {
         mAcchCir[0].SetWallH(-5.0f);
         mAcchCir[1].SetWallH(0.0f);
         mAcchCir[2].SetWallH(20.0f);
-    } else if (checkModeFlg(0x1000000) && mCurProcID != PROC_CRAWL_END_e) {
+    } else if (checkModeFlg(0x1000000) && mCurProc != PROC_CRAWL_END_e) {
         mAcchCir[0].SetWallR(30.0f);
         mAcchCir[0].SetWallH(10.0f);
         mAcchCir[1].SetWallH(50.0f);
@@ -4228,7 +4228,7 @@ BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int
                 return TRUE;
             }
             
-            if (checkNoResetFlg0(daPyFlg0_DEKU_SP_RETURN_FLG) && mCurProcID != DPROC_DEAD_e) {
+            if (checkNoResetFlg0(daPyFlg0_DEKU_SP_RETURN_FLG) && mCurProc != DPROC_DEAD_e) {
                 i_point = mDekuSpRestartPoint;
             } else {
                 i_point = mRestartPoint;
@@ -4268,7 +4268,7 @@ BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int
                     
                     dStage_changeScene(scls_idx, 0.0f, param_1, -1);
                 } else {
-                    if (mCurProcID == DPROC_DEAD_e) {
+                    if (mCurProc == DPROC_DEAD_e) {
                         dStage_changeScene(0, 0.0f, param_1, -1);
                     } else {
                         int roomNo = dComIfGs_getRestartRoomNo();
@@ -4284,7 +4284,7 @@ BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int
                 dComIfGp_setNextStage(dComIfGp_getStartStageName(), i_point, current.roomNo, -1, 0.0f, param_1);
             }
             
-            if (mCurProcID != DPROC_DEAD_e) {
+            if (mCurProc != DPROC_DEAD_e) {
                 u32 roomParam = setParamData(-1, 0, eventInfoIdx, 0);
                 dComIfGs_setRestartRoomParam(roomParam);
                 mDoAud_seStart(JA_SE_FORCE_BACK);

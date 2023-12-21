@@ -232,9 +232,9 @@ int daObjMknjD::Act_c::CreateHeap() {
 
 /* 00000620-000008E8       .text Create__Q210daObjMknjD5Act_cFv */
 int daObjMknjD::Act_c::Create() {
-    mCullMtx = mMainMdl->getBaseTRMtx();
+    fopAcM_SetMtx(this, mMainMdl->getBaseTRMtx());
     init_mtx();
-    mCullMtx = mBreakMdl->getBaseTRMtx();
+    fopAcM_SetMtx(this, mBreakMdl->getBaseTRMtx());
     init_mtx();
 
     fopAcM_setCullSizeBox(this, -400.0f, -1.0f, -400.0f, 400.0f, 405.0f, 400.0f);
@@ -482,7 +482,7 @@ void daObjMknjD::Act_c::privateCut() {
 
                         if (mpBgW != NULL) {
                             if (mpBgW->ChkUsed()) {
-                                g_dComIfG_gameInfo.play.mBgS.Release(mpBgW);
+                                dComIfG_Bgsp()->Release(mpBgW);
                             }
                         }
 

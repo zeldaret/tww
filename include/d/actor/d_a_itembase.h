@@ -82,7 +82,7 @@ public:
     /* 0x4C0 */ dCcD_Stts mStts;
     /* 0x4FC */ dCcD_Cyl mCyl;
     /* 0x62C */ u32 mShadowId;
-    /* 0x630 */ s32 mPickupFlag;
+    /* 0x630 */ s32 mItemBitNo;
     /* 0x634 */ s32 field_0x634;
     /* 0x638 */ s16 field_0x638;
     /* 0x63A */ u8 m_itemNo;

@@ -8,8 +8,7 @@
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_procname.h"
 
-BOOL daObjPbka_c::_draw()
-{
+BOOL daObjPbka_c::_draw() {
     dKy_tevstr_c * pTevStr;
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, pTevStr = &mTevStr);
     g_env_light.setLightTevColorType(mpModel, pTevStr);
@@ -36,8 +35,8 @@ BOOL daObjPbka_c::CreateHeap() {
 }
 
 void daObjPbka_c::CreateInit() {
-    mCullMtx =  mpModel->getBaseTRMtx();
-    fopAcM_setCullSizeBox(this,-300.0,-300.0,-300.0,300.0,300.0,300.0);
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -300.0f, -300.0f, -300.0f, 300.0f, 300.0f, 300.0f);
     mCullSizeFar = 1.0f;
     set_mtx();
 }

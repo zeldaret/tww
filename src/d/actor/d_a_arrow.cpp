@@ -1063,7 +1063,7 @@ BOOL daArrow_c::createInit() {
     mCurrProcFunc = &daArrow_c::procWait;
     
     setKeepMatrix();
-    mCullMtx = mpModel->getBaseTRMtx();
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     mCull.mBox.mMin.x = -6.0f;
     mCull.mBox.mMin.y = -6.0f;
     mCull.mBox.mMin.z = 0.0f;

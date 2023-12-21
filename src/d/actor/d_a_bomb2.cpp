@@ -580,8 +580,8 @@ namespace daBomb2 {
 
     void Act_c::eff_explode_normal(const csXyz* rotation) {
         dComIfGp_particle_setP1(0xB, &current.pos, rotation, &mScale, 0xFF, 0, -1, 0, 0, 0);
-        g_dComIfG_gameInfo.play.getParticle()->setBombSmoke(0x2009, &current.pos, 0, &mScale, 0xFF);
-        g_dComIfG_gameInfo.play.getParticle()->setBombSmoke(0x200A, &current.pos, 0, &mScale, 0xFF);
+        dComIfGp_particle_setBombSmoke(0x2009, &current.pos, 0, &mScale, 0xFF);
+        dComIfGp_particle_setBombSmoke(0x200A, &current.pos, 0, &mScale, 0xFF);
         dComIfGp_particle_setToonP1(0x2008, &current.pos, 0, &mScale, 0xFF, 0, -1, 0, 0, 0);
     }
 

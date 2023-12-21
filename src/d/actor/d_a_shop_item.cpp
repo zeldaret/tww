@@ -73,7 +73,7 @@ s16 daShopItem_c::getShopBmdIdx() {
 }
 
 void daShopItem_c::CreateInit() {
-    mCullMtx = field_0x64C;
+    fopAcM_SetMtx(this, field_0x64C);
     fopAcM_setCullSizeBox(this, -100.0f, 0.0f, -100.0f, 100.0f, 200.0f, 100.0f);
     if(mDoLib_clipper::mSystemFar > 1.0f) {
         mCullSizeFar = 5000.0f / mDoLib_clipper::mSystemFar;

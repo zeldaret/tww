@@ -132,7 +132,7 @@ s32 daNh_c::create() {
         return cPhs_ERROR_e;
     }
     
-    mCullMtx = mpModel->getBaseTRMtx();
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     
     if (l_HIO.mChildID < 0) {
         l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("森のほたる", &l_HIO);

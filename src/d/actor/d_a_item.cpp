@@ -137,7 +137,7 @@ void daItem_c::CreateInit() {
     mAcch.Set(&current.pos, &next.pos, this, 1, &mAcchCir, &fopAcM_GetSpeed_p(this));
     mAcch.m_flags &= ~0x400;
     mAcch.m_flags &= ~0x8;
-    mCullMtx = mpModel->mBaseTransformMtx;
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     mStts.Init(0, 0xFF, this);
     mCyl.Set(m_cyl_src);
     mCyl.SetStts(&mStts);
@@ -225,10 +225,10 @@ s32 daItem_c::_daItem_create() {
         return cPhs_ERROR_e;
     }
     
-    mPickupFlag = daItem_prm::getItemBitNo(this);
-    if (m_itemNo != BLUE_JELLY) { // Blue Chu Jelly uses mPickupFlag as if it was a switch.
-        mPickupFlag &= 0x7F;
-        if (fopAcM_isItem(this, mPickupFlag) && mPickupFlag != 0x7F) {
+    mItemBitNo = daItem_prm::getItemBitNo(this);
+    if (m_itemNo != BLUE_JELLY) { // Blue Chu Jelly uses mItemBitNo as if it was a switch.
+        mItemBitNo &= 0x7F;
+        if (fopAcM_isItem(this, mItemBitNo) && mItemBitNo != 0x7F) {
             // Already picked up, don't create the item again.
             setLoadError();
             return cPhs_ERROR_e;
@@ -759,15 +759,7 @@ void daItem_c::itemGetExecute() {
         break;
     }
     
-    u8 roomNo = current.roomNo;
-    s32 flag = mPickupFlag;
-    if (m_itemNo == BLUE_JELLY) {
-        // Blue Chu Jelly uses mPickupFlag as if it was a switch.
-        // Specifically a switch in stageNo 0xE, which is not used for anything else.
-        dComIfGs_onSaveSwitch(0xE, flag);
-    } else {
-        dComIfGs_onItem(flag, (s8)roomNo);
-    }
+    fopAcM_onItemForIb(mItemBitNo, m_itemNo, current.roomNo);
     
     clrFlag(0x04);
     
@@ -800,7 +792,7 @@ BOOL daItem_c::checkItemDisappear() {
     if (dItem_data::chkFlag(m_itemNo, 0x01)) {
         disappearing = FALSE;
     }
-    if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode != 0) {
+    if (dComIfGp_event_runCheck()) {
         disappearing = FALSE;
     }
     if (mItemStatus == 4) {

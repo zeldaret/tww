@@ -917,7 +917,7 @@ void daObjTpost_c::createInit() {
     setMtx();
     mMorf->calc();
 
-    mCullMtx = mMorf->getModel()->getBaseTRMtx();
+    fopAcM_SetMtx(this, mMorf->getModel()->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -50.0f, 0.0f, -50.0f, 70.0f, 200.0f, 70.0f);
     mCullSizeFar = 10.0f;
 

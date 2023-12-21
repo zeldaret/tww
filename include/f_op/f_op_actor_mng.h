@@ -325,10 +325,21 @@ inline BOOL fopAcM_isItem(fopAc_ac_c* item, int bitNo) {
 
 inline BOOL dComIfGs_isSaveSwitch(int i_stageNo, int i_no);
 inline BOOL fopAcM_isItemForIb(int itemBitNo, u8 itemNo, s8 roomNo) {
-    if (itemNo == BLUE_JELLY) { // Blue Chu Jelly uses itemBitNo as if it was a switch.
+    if (itemNo == BLUE_JELLY) {
+        // Blue Chu Jelly uses itemBitNo as if it was a switch in stageNo 0xE.
         return dComIfGs_isSaveSwitch(0xE, itemBitNo);
     } else {
         return dComIfGs_isItem(itemBitNo, roomNo);
+    }
+}
+
+inline void dComIfGs_onSaveSwitch(int i_stageNo, int i_no);
+inline void fopAcM_onItemForIb(int itemBitNo, u8 itemNo, s8 roomNo) {
+    if (itemNo == BLUE_JELLY) {
+        // Blue Chu Jelly uses itemBitNo as if it was a switch in stageNo 0xE.
+        dComIfGs_onSaveSwitch(0xE, itemBitNo);
+    } else {
+        dComIfGs_onItem(itemBitNo, roomNo);
     }
 }
 

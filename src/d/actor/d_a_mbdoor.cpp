@@ -233,7 +233,7 @@ BOOL daMbdoor_c::CreateInit() {
     mAttentionInfo.mFlags = fopAc_Attn_ACTION_DOOR_e;
     calcMtx();
     mpBgW->Move();
-    mStatus = mStatus & ~0x3F | 0x2B;
+    fopAcM_SetStatusMap(this, 0xB);
     
     return TRUE;
 }

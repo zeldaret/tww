@@ -56,9 +56,9 @@ s32 daRaceItem_c::create() {
     fopAcM_SetupActor(this, daRaceItem_c);
 
     m_itemNo = fopAcM_GetParam(this) & 0xFF;
-    mPickupFlag = fopAcM_GetParam(this) >> 8 & 0x7F;
+    mItemBitNo = fopAcM_GetParam(this) >> 8 & 0x7F;
     
-    if(fopAcM_isItem(this, mPickupFlag) && mPickupFlag != 0x7F) {
+    if(fopAcM_isItem(this, mItemBitNo) && mItemBitNo != 0x7F) {
         setLoadError();
         return cPhs_ERROR_e;
     }

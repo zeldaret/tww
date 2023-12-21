@@ -168,7 +168,7 @@ s32 daMozo_c::CreateInit() {
     mQuatRotation = ZeroQuat;
 
     fopAcM_setCullSizeBox(this, -1000.f, -1000.f, -1000.f, 1000.0f, 1000.0f, 1000.0f);
-    mCullMtx = mAnimMorf->getModel()->getBaseTRMtx();
+    fopAcM_SetMtx(this, mAnimMorf->getModel()->getBaseTRMtx());
 
     // TODO: Insert missing code here
 

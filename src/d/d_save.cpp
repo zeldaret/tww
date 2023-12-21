@@ -330,12 +330,12 @@ void dSv_player_item_record_c::init() {
 /* 8005987C-80059894       .text resetTimer__24dSv_player_item_record_cFUs */
 void dSv_player_item_record_c::resetTimer(u16 timer) {
     mTimer = timer;
-    g_dComIfG_gameInfo.play.field_0x4956 = 0;
+    dComIfGs_stopFwaterTimer();
 }
 
 /* 80059894-800598D0       .text decTimer__24dSv_player_item_record_cFv */
 void dSv_player_item_record_c::decTimer() {
-    if (g_dComIfG_gameInfo.play.field_0x4956 != 1)
+    if (dComIfGs_checkFwaterTimer() != 1)
         return;
 
     if (mTimer != 0) {
@@ -344,7 +344,7 @@ void dSv_player_item_record_c::decTimer() {
     }
 
     mTimer = 0;
-    g_dComIfG_gameInfo.play.field_0x4956 = 0;
+    dComIfGs_stopFwaterTimer();
 }
 
 /* 800598D0-800598D8       .text getTimer__24dSv_player_item_record_cFv */

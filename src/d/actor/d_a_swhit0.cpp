@@ -442,10 +442,10 @@ static s32 daSwhit0_Execute(daSwhit0_c* i_swhit) {
     }
 
     if (i_swhit->checkFlag(0x02)) {
-        g_dComIfG_gameInfo.play.mCcS.Set(&i_swhit->mColCyl);
+        dComIfG_Ccsp()->Set(&i_swhit->mColCyl);
     }
 
-    g_dComIfG_gameInfo.play.mCcS.Set(&i_swhit->mColSph);
+    dComIfG_Ccsp()->Set(&i_swhit->mColSph);
     return TRUE;
 }
 

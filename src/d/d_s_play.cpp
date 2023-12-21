@@ -307,6 +307,8 @@ int dScnPly_Draw(dScnPly_ply_c* i_this) {
         if (dComIfGp_getGrass() != NULL || dComIfGp_getTree() != NULL ||
             dComIfGp_getWood() != NULL || dComIfGp_getFlower() != NULL || dKyr_poison_live_check())
         {
+            // using the inline breaks the match
+            // dComIfG_Ccsp()->PrepareMass();
             g_dComIfG_gameInfo.play.mCcS.PrepareMass();
         }
 

@@ -292,7 +292,7 @@ s32 daNpc_kam_c::create() {
             return cPhs_ERROR_e;
         }
         
-        mCullMtx = mpMorf->getModel()->getBaseTRMtx();
+        fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
         
         if (l_HIO.mChildID < 0) {
             l_HIO.mChildID = mDoHIO_root.mDoHIO_createChild("かもめ", &l_HIO);

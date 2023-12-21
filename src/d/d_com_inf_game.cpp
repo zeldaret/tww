@@ -116,8 +116,8 @@ void dComIfG_play_c::itemInit() {
 
     mMesgAnime = 0;
     mMesgAnimeTagInfo = 0;
-    field_0x493d = 0;
-    field_0x493e = 0;
+    mItemSlot = 0;
+    mItemNo = 0;
     field_0x493f = 0;
     field_0x4940 = 0;
     field_0x4941 = 0;
@@ -146,7 +146,7 @@ void dComIfG_play_c::itemInit() {
     field_0x4953 = 0;
     field_0x4954 = 0;
     field_0x4955 = 0;
-    field_0x4956 = 0;
+    mFwaterTimer = 0;
     mPlacenameIndex = 0;
     mPlacenameState = 0;
     field_0x4959 = 0;

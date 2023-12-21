@@ -1105,7 +1105,7 @@ BOOL daAgbsw0_c::ExeSubT() {
                     mTimer = 30;
                 }
                 else {
-                    g_dComIfG_gameInfo.play.mCcS.Set(&mCyl);
+                    dComIfG_Ccsp()->Set(&mCyl);
                 }
             }
         }

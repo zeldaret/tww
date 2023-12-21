@@ -617,7 +617,7 @@ void daBomb_c::makeFireEffect(cXyz& pos, csXyz& rotation) {
 
     rotation.x = rotation.x + 0x4000;
     rotation.z = rotation.z;
-    g_dComIfG_gameInfo.play.getParticle()->setBombSmoke(0x200A, &pos, &rotation, &scale, 0xFF);
+    dComIfGp_particle_setBombSmoke(0x200A, &pos, &rotation, &scale);
 
     dComIfGp_getVibration().StartShock(7, -0x21, cXyz(0.0f, 1.0f, 0.0f));
 }
@@ -663,8 +663,8 @@ void daBomb_c::setFuseEffect() {
 
 void daBomb_c::eff_explode_normal(const csXyz* rotation) {
     dComIfGp_particle_setP1(0xB, &current.pos, rotation, &mScale, 0xFF, 0, -1, 0, 0, 0);
-    g_dComIfG_gameInfo.play.getParticle()->setBombSmoke(0x2009, &current.pos, 0, &mScale, 0xFF);
-    g_dComIfG_gameInfo.play.getParticle()->setBombSmoke(0x200A, &current.pos, 0, &mScale, 0xFF);
+    dComIfGp_particle_setBombSmoke(0x2009, &current.pos, 0, &mScale);
+    dComIfGp_particle_setBombSmoke(0x200A, &current.pos, 0, &mScale);
     dComIfGp_particle_setToonP1(0x2008, &current.pos, 0, &mScale, 0xFF, 0, -1, 0, 0, 0);
 }
 
@@ -676,8 +676,8 @@ void daBomb_c::eff_explode_cheap(const csXyz* rotation) {
         emitter->setGlobalParticleScale(vec);
     }
 
-    g_dComIfG_gameInfo.play.getParticle()->setBombSmoke(0x232A, &current.pos, 0, &mScale, 0xFF);
-    emitter = g_dComIfG_gameInfo.play.getParticle()->setBombSmoke(0x200A, &current.pos, 0, &mScale, 0xFF);
+    dComIfGp_particle_setBombSmoke(0x232A, &current.pos, 0, &mScale);
+    emitter = dComIfGp_particle_setBombSmoke(0x200A, &current.pos, 0, &mScale);
     if(emitter) {
         emitter->mLifeTime = 0x46;
     }
@@ -1220,7 +1220,7 @@ void daBomb_c::create_init() {
     field_0x560 = 0;
     mbWaterIn = 0;
     field_0x562 = 0;
-    mCullMtx = mpModel->getBaseTRMtx();
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     
     mStts.Init(200, 0xFF, this);
     mSph.Set(l_sph_src);

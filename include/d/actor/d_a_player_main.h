@@ -1373,7 +1373,7 @@ public:
     BOOL checkSubjectEnd(int);
     BOOL checkGuardAccept();
     void cancelNoDamageMode();
-    BOOL commonProcInit(daPy_lk_c::daPy_PROC procID);
+    BOOL commonProcInit(daPy_lk_c::daPy_PROC proc);
     BOOL procScope_init(int);
     BOOL procScope();
     BOOL procSubjectivity_init(int);
@@ -2171,11 +2171,11 @@ public:
     virtual BOOL checkPlayerGuard() const;
     virtual fopAc_ac_c* getGrabMissActor();
     virtual u32 checkPlayerFly() const { return checkModeFlg(0x10452822); } // TODO add enum
-    virtual BOOL checkFrontRoll() const { return mCurProcID == PROC_FRONT_ROLL_e; }
-    virtual BOOL checkBottleSwing() const { return mCurProcID == PROC_BOTTLE_SWING_e; }
-    virtual BOOL checkCutCharge() const { return mCurProcID == PROC_CUT_TURN_MOVE_e; }
+    virtual BOOL checkFrontRoll() const { return mCurProc == PROC_FRONT_ROLL_e; }
+    virtual BOOL checkBottleSwing() const { return mCurProc == PROC_BOTTLE_SWING_e; }
+    virtual BOOL checkCutCharge() const { return mCurProc == PROC_CUT_TURN_MOVE_e; }
     virtual BOOL getBokoFlamePos(cXyz*);
-    virtual BOOL checkTactWait() const { return mCurProcID == PROC_TACT_WAIT_e; }
+    virtual BOOL checkTactWait() const { return mCurProc == PROC_TACT_WAIT_e; }
     virtual void setTactZev(unsigned int, int, char*);
     virtual void onDekuSpReturnFlg(u8 i_point);
     virtual bool checkComboCutTurn() const;
@@ -2319,7 +2319,7 @@ public:
     /* 0x31CE */ u16 m31CE;
     /* 0x31D0 */ void* mpTextureScrollResData;
     /* 0x31D4 */ JKRSolidHeap* mpTextureScrollResHeap;
-    /* 0x31D8 */ int mCurProcID;
+    /* 0x31D8 */ int mCurProc;
     /* 0x31DC */ ProcFunc mCurProcFunc;
     /* 0x31E8 */ daPy_footEffect_c m31E8[2];
     /* 0x3280 */ dPa_rippleEcallBack m3280;

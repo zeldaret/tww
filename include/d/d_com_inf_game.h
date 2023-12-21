@@ -432,9 +432,9 @@ public:
     void setSelectItem(int idx, u8 itemNo) { mSelectItem[idx] = itemNo; }
     void setSelectEquip(int idx, u8 itemNo) { mSelectEquip[idx] = itemNo; }
     
-    void setItem(u8 slot, u8 i_itemNo) {
-        field_0x493d = slot;
-        field_0x493e = i_itemNo;
+    void setItem(u8 i_slot, u8 i_itemNo) {
+        mItemSlot = i_slot;
+        mItemNo = i_itemNo;
     }
 
     void setAStatus(u8 status) { mCurrButtonBAction = status; }
@@ -497,6 +497,9 @@ public:
     void setItemTable(void * pData) { mpItemTable = (ItemTableList*)pData; }
     ItemTableList* getItemTable() { return mpItemTable; }
     void setFmapData(void * pData) { mpFmapData = pData; }
+
+    inline void stopFwaterTimer() { mFwaterTimer = 0; }
+    inline u8 checkFwaterTimer() { return mFwaterTimer; }
 
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
@@ -607,8 +610,8 @@ public:
     /* 0x4937 */ u8 mSelectEquip[4];
     /* 0x493B */ u8 mMesgAnime;
     /* 0x493C */ u8 mMesgAnimeTagInfo;
-    /* 0x493D */ u8 field_0x493d;
-    /* 0x493E */ u8 field_0x493e;
+    /* 0x493D */ u8 mItemSlot;
+    /* 0x493E */ u8 mItemNo;
     /* 0x493F */ u8 field_0x493f;
     /* 0x4940 */ u8 field_0x4940;
     /* 0x4941 */ u8 field_0x4941;
@@ -627,7 +630,7 @@ public:
     /* 0x4953 */ u8 field_0x4953;
     /* 0x4954 */ u8 field_0x4954;
     /* 0x4955 */ u8 field_0x4955;
-    /* 0x4956 */ u8 field_0x4956;
+    /* 0x4956 */ u8 mFwaterTimer;
     /* 0x4957 */ u8 mPlacenameIndex;
     /* 0x4958 */ u8 mPlacenameState;
     /* 0x4959 */ u8 field_0x4959;
@@ -1545,6 +1548,14 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo);
 stage_scls_info_class* dComIfGd_getMeshSceneList(Vec& vec);
 
 BOOL dComIfGs_checkSeaLandingEvent(s8 i_roomNo);
+
+inline void dComIfGs_stopFwaterTimer() {
+    g_dComIfG_gameInfo.play.stopFwaterTimer();
+}
+
+inline u8 dComIfGs_checkFwaterTimer() {
+    return g_dComIfG_gameInfo.play.checkFwaterTimer();
+}
 
 /**
  * === PLAY ===
@@ -2780,6 +2791,13 @@ inline void dComIfGp_particle_setSimple(u16 particleID, cXyz* pos, u8 alpha, GXC
                                         GXColor& envColor, int param_6) {
     dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
     pParticle->setSimple(particleID, pos, alpha, prmColor, envColor, param_6);
+}
+
+inline JPABaseEmitter* dComIfGp_particle_setBombSmoke(u16 particleID, const cXyz* pos,
+                                           const csXyz* angle = NULL, const cXyz* scale = NULL,
+                                           u8 alpha = 0xFF) {
+    dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
+    return pParticle->setBombSmoke(particleID, pos, angle, scale, alpha);
 }
 
 inline void dComIfGp_particle_calc3D() {

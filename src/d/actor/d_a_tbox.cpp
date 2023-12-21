@@ -388,7 +388,7 @@ daTbox_c::modelInfo& daTbox_c::getModelInfo() {
 /* 00000D78-00000DD0       .text clrDzb__8daTbox_cFv */
 void daTbox_c::clrDzb() {
     if (mpBgWCurrent != NULL) {
-        g_dComIfG_gameInfo.play.mBgS.Release(mpBgWCurrent);
+        dComIfG_Bgsp()->Release(mpBgWCurrent);
         mpBgWCurrent = NULL;
 
         mColCyl.OffCoSetBit();
@@ -411,7 +411,7 @@ void daTbox_c::setDzb() {
         }
     }
 
-    bool rt = g_dComIfG_gameInfo.play.mBgS.Regist(mpBgWCurrent, this);
+    bool rt = dComIfG_Bgsp()->Regist(mpBgWCurrent, this);
     JUT_ASSERT(0x234, !rt);
 
     mpBgWCurrent->mRoomNo = mRoomNo;
@@ -953,7 +953,7 @@ void daTbox_c::setCollision() {
     mColCyl.SetR(40.0f);
     mColCyl.SetH(110.f);
 
-    g_dComIfG_gameInfo.play.mCcS.Set(&mColCyl);
+    dComIfG_Ccsp()->Set(&mColCyl);
 }
 
 /* 000024AC-000024B4       .text actionWait__8daTbox_cFv */
@@ -1226,7 +1226,7 @@ BOOL daTbox_c::execute() {
 
     if (getFuncType() == FUNC_TYPE_GRAVITY) {
         fopAcM_posMoveF(this, NULL);
-        mObjAcch.CrrPos(g_dComIfG_gameInfo.play.mBgS);
+        mObjAcch.CrrPos(*dComIfG_Bgsp());
 
         mAttentionInfo.mPosition = current.pos;
 
@@ -1262,7 +1262,7 @@ static s32 daTbox_IsDelete(daTbox_c*) {
 /* 00002FD8-00003070       .text daTbox_Delete__FP8daTbox_c */
 static s32 daTbox_Delete(daTbox_c* i_tbox) {
     if (i_tbox->mpBgWCurrent != NULL) {
-        g_dComIfG_gameInfo.play.mBgS.Release(i_tbox->mpBgWCurrent);
+        dComIfG_Bgsp()->Release(i_tbox->mpBgWCurrent);
     }
 
     i_tbox->mSmokeCB.end();

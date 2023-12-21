@@ -1235,7 +1235,7 @@ static s32 daAM_Create(fopAc_ac_c* i_actor) {
         i_this->mMaxHealth = 10;
         i_this->mHealth = 10;
 
-        i_this->mCullMtx = i_this->mpMorf->mpModel->getBaseTRMtx();
+        fopAcM_SetMtx(i_this, i_this->mpMorf->mpModel->getBaseTRMtx());
         fopAcM_setCullSizeBox(i_this, -100.0f, -10.0f, -80.0f, 120.0f, 400.0f, 100.0f);
 
         i_this->mAttentionInfo.mFlags = 0;
