@@ -339,8 +339,8 @@ void J3DModelLoader::readEnvelop(const J3DEnvelopBlock* i_block) {
     mpModelData->getJointTree().mWEvlpMtxNum = i_block->mWEvlpMtxNum;
     mpModelData->getJointTree().mWEvlpMixMtxNum =
         JSUConvertOffsetToPtr<u8>(i_block, i_block->mpWEvlpMixMtxNum);
-    mpModelData->getJointTree().mWEvlpMixIndex =
-        JSUConvertOffsetToPtr<u16>(i_block, i_block->mpWEvlpMixIndex);
+    mpModelData->getJointTree().mWEvlpMixMtxIndex =
+        JSUConvertOffsetToPtr<u16>(i_block, i_block->mpWEvlpMixMtxIndex);
     mpModelData->getJointTree().mWEvlpMixWeight =
         JSUConvertOffsetToPtr<f32>(i_block, i_block->mpWEvlpMixWeight);
     mpModelData->getJointTree().mInvJointMtx =

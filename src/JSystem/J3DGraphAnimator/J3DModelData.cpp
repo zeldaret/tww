@@ -20,7 +20,7 @@ void J3DJointTree::clear() {
     field_0x40 = NULL;
     mWEvlpMtxNum = 0;
     mWEvlpMixMtxNum = NULL;
-    mWEvlpMixIndex = NULL;
+    mWEvlpMixMtxIndex = NULL;
     mWEvlpMixWeight = NULL;
     mInvJointMtx = NULL;
     mJointName = NULL;
