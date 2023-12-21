@@ -23,15 +23,19 @@ public:
         mStart = start;
         mEnd = end;
     }
-    void CalcPos(Vec*, f32) const;
+    void CalcPos(Vec*, f32) const { /* TODO */ }
     void CalcVec(Vec* pOut) const { VECSubtract(&this->mEnd, &this->mStart, pOut); }
-    void SetEnd(const cXyz&);
+    void SetEnd(const cXyz&) { /* TODO */ }
     const cXyz& GetStartP() const { return mStart; }
     cXyz& GetStartP() { return mStart; }
+    const cXyz& GetStart() const { return mStart; }
     cXyz& GetStart() { return mStart; }
     const cXyz& GetEndP() const { return mEnd; }
     cXyz& GetEndP() { return mEnd; }
+    const cXyz& GetEnd() const { return mEnd; }
     cXyz& GetEnd() { return mEnd; }
+    void GetLen() const { /* TODO */ }
+    void set(const Vec&, const Vec&) { /* TODO */ }
 };  // Size = 0x1C
 
 STATIC_ASSERT(0x1C == sizeof(cM3dGLin));

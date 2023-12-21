@@ -284,7 +284,7 @@ private:
 public:
     cCcD_DivideInfo() {}
     virtual ~cCcD_DivideInfo() {}
-    void Set(u32, u32, u32);
+    void Set(u32 param_1) { mRangeBits = param_1; }
     bool Chk(cCcD_DivideInfo const&) const;
 };  // Size = 0x8
 
