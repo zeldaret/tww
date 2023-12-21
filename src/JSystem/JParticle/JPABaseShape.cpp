@@ -7,13 +7,13 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
-GXBlendMode JPABaseShapeArc::stBlendMode[4] = {
+GXBlendMode JPABaseShape::stBlendMode[4] = {
     GX_BM_NONE,
     GX_BM_BLEND,
     GX_BM_LOGIC,
 };
 
-GXBlendFactor JPABaseShapeArc::stBlendFactor[10] = {
+GXBlendFactor JPABaseShape::stBlendFactor[10] = {
     GX_BL_ZERO,
     GX_BL_ONE,
     GX_BL_SRC_COLOR,
@@ -26,22 +26,26 @@ GXBlendFactor JPABaseShapeArc::stBlendFactor[10] = {
     GX_BL_INV_DST_ALPHA,
 };
 
-GXLogicOp JPABaseShapeArc::stLogicOp[16] = {
+GXLogicOp JPABaseShape::stLogicOp[16] = {
     GX_LO_CLEAR,
-    GX_LO_CLEAR,
-    GX_LO_CLEAR,
-    GX_LO_CLEAR,
-    GX_LO_CLEAR,
-    GX_LO_CLEAR,
-    GX_LO_CLEAR,
-    GX_LO_CLEAR,
-    GX_LO_CLEAR,
-    GX_LO_CLEAR,
-    GX_LO_CLEAR,
-    GX_LO_CLEAR,
+    GX_LO_SET,
+    GX_LO_COPY,
+    GX_LO_INV_COPY,
+    GX_LO_NOOP,
+    GX_LO_INV,
+    GX_LO_AND,
+    GX_LO_NAND,
+    GX_LO_OR,
+    GX_LO_NOR,
+    GX_LO_XOR,
+    GX_LO_EQUIV,
+    GX_LO_REV_AND,
+    GX_LO_INV_AND,
+    GX_LO_REV_OR,
+    GX_LO_INV_OR,
 };
 
-GXCompare JPABaseShapeArc::stCompare[8] = {
+GXCompare JPABaseShape::stCompare[8] = {
     GX_NEVER,
     GX_LESS,
     GX_LEQUAL,
@@ -52,7 +56,7 @@ GXCompare JPABaseShapeArc::stCompare[8] = {
     GX_ALWAYS,
 };
 
-GXAlphaOp JPABaseShapeArc::stAlphaOp[4] = {
+GXAlphaOp JPABaseShape::stAlphaOp[4] = {
     GX_AOP_AND,
     GX_AOP_OR,
     GX_AOP_XOR,
@@ -73,13 +77,54 @@ GXTevAlphaArg JPABaseShapeArc::stTevAlphaArg[2][4] = {
     { GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0   },
 };
 
-class JPAColorRegAnmKey;
+class JPAColorRegAnmKey {
+public:
+    s16 m00;
+    GXColor m02;
+};
 
 /* 80256F88-80257248       .text makeColorTable__FP17JPAColorRegAnmKeyiiP7JKRHeap */
-GXColor * makeColorTable(JPAColorRegAnmKey* pKey, int keyNum, int frmNum, JKRHeap* pHeap) {
-    /* Nonmatching */
-    GXColor * colTbl = (GXColor *)JKRHeap::alloc((frmNum + 1) * sizeof(GXColor), 4, pHeap);
+GXColor* makeColorTable(JPAColorRegAnmKey* pKey, int keyNum, int frmNum, JKRHeap* pHeap) {
+    GXColor* colTbl = (GXColor*)JKRHeap::alloc((frmNum + 1) * sizeof(GXColor), 4, pHeap);
     JUT_ASSERT(0x5d, colTbl);
+    
+    f32 f3, f4, f5, f6;
+    f3 = f4 = f5 = f6 = 0.0f;
+    f32 f0, f7, f8, f9;
+    f0 = pKey[0].m02.r;
+    f7 = pKey[0].m02.g;
+    f8 = pKey[0].m02.b;
+    f9 = pKey[0].m02.a;
+    int key = 0;
+    for (int i = 0; i < frmNum+1; i++) {
+        if (pKey[key].m00 == i) {
+            colTbl[i] = pKey[key].m02;
+            f0 = pKey[key].m02.r;
+            f7 = pKey[key].m02.g;
+            f8 = pKey[key].m02.b;
+            f9 = pKey[key].m02.a;
+            key++;
+            if (key < keyNum) {
+                f32 f2 = 1.0f / (pKey[key].m00 - pKey[key-1].m00);
+                f3 = (pKey[key].m02.r - f0) * f2;
+                f4 = (pKey[key].m02.g - f7) * f2;
+                f5 = (pKey[key].m02.b - f8) * f2;
+                f6 = (pKey[key].m02.a - f9) * f2;
+            } else {
+                f3 = f4 = f5 = f6 = 0.0f;
+            }
+        } else {
+            f0 += f3;
+            colTbl[i].r = f0;
+            f7 += f4;
+            colTbl[i].g = f7;
+            f8 += f5;
+            colTbl[i].b = f8;
+            f9 += f6;
+            colTbl[i].a = f9;
+        }
+    }
+    
     return colTbl;
 }
 
@@ -91,13 +136,12 @@ static void dummy() {
 
 /* 80257248-80257508       .text __ct__15JPABaseShapeArcFPCUcP7JKRHeap */
 JPABaseShapeArc::JPABaseShapeArc(const u8* data, JKRHeap* pHeap) {
-    /* Nonmatching */
     pBsd = reinterpret_cast<const JPABaseShapeData*>(data+0x0C);
-    mColLoopOffset = -((pBsd->mFlags >> 11) & 0x01);
-    mTexLoopOffset = -((pBsd->mFlags >> 13) & 0x01);
+    mColLoopOffset = (pBsd->mFlags & 0x0800) ? 0xFFFF : 0;
+    mTexLoopOffset = (pBsd->mFlags & 0x2000) ? 0xFFFF : 0;
 
-    bool isEnableGlobalColAnm = (!(pBsd->mFlags & 0x1000) && (getType() == JPAType_Stripe || getType() == JPAType_StripeCross)) ? true : false;
-    bool isEnableGlobalTexAnm = (!(pBsd->mFlags & 0x4000) && (getType() == JPAType_Stripe || getType() == JPAType_StripeCross)) ? true : false;
+    BOOL isEnableGlobalColAnm = ((pBsd->mFlags & 0x1000) || getType() == JPAType_Stripe || getType() == JPAType_StripeCross) ? TRUE : FALSE;
+    BOOL isEnableGlobalTexAnm = ((pBsd->mFlags & 0x4000) || getType() == JPAType_Stripe || getType() == JPAType_StripeCross) ? TRUE : FALSE;
     mGlobalAnmFlags = isEnableGlobalColAnm << 1 | isEnableGlobalTexAnm << 0;
 
     if (isEnableTextureAnm() && getTextureAnmKeyNum() != 0)

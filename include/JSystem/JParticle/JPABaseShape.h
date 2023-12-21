@@ -22,6 +22,12 @@ public:
         /* 10 */ JPAType_YBillboard,
     };
 
+    static GXBlendMode stBlendMode[4];
+    static GXBlendFactor stBlendFactor[10];
+    static GXLogicOp stLogicOp[16];
+    static GXCompare stCompare[8];
+    static GXAlphaOp stAlphaOp[4];
+
     virtual ~JPABaseShape() {}
     virtual u8 getType() = 0;
     virtual u8 getDirType() = 0;
@@ -121,11 +127,6 @@ struct JPABaseShapeData {
 
 class JPABaseShapeArc : public JPABaseShape {
 public:
-    static GXBlendMode stBlendMode[4];
-    static GXBlendFactor stBlendFactor[10];
-    static GXLogicOp stLogicOp[16];
-    static GXCompare stCompare[8];
-    static GXAlphaOp stAlphaOp[4];
     static GXTevColorArg stTevColorArg[6][4];
     static GXTevAlphaArg stTevAlphaArg[2][4];
 
@@ -146,11 +147,11 @@ public:
     virtual u32 getChildOrder() { return pBsd->mFlags & 0x400000; }
     virtual GXTevColorArg* getTevColorArg() { return stTevColorArg[(pBsd->mFlags >> 15) & 0x07]; }
     virtual GXTevAlphaArg* getTevAlphaArg() { return stTevAlphaArg[(pBsd->mFlags >> 18) & 0x01]; }
-    virtual GXBool isEnableAlphaUpdate() { return (pBsd->mBlendFlags >> 14) & 0x01; }
     virtual GXBlendMode getBlendMode1() { return stBlendMode[(pBsd->mBlendFlags >> 0) & 0x03]; }
     virtual GXBlendFactor getSrcBlendFactor1() { return stBlendFactor[(pBsd->mBlendFlags >> 2) & 0x0F]; }
     virtual GXBlendFactor getDstBlendFactor1() { return stBlendFactor[(pBsd->mBlendFlags >> 6) & 0x0F]; }
     virtual GXLogicOp getBlendOp1() { return stLogicOp[(pBsd->mBlendFlags >> 10) & 0x0F]; }
+    virtual GXBool isEnableAlphaUpdate() { return (pBsd->mBlendFlags >> 14) & 0x01; }
     virtual GXBool isEnableZCmp() { return (pBsd->mZFlags >> 0) & 0x01; }
     virtual GXCompare getZCmpFunction() { return stCompare[(pBsd->mZFlags >> 1) & 0x07]; }
     virtual GXBool isEnableZCmpUpdate() { return (pBsd->mZFlags >> 4) & 0x01; }
