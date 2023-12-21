@@ -21,7 +21,7 @@ static dCcD_SrcCyl cyl_check_src = {
         /* SrcObjAt  SPrm    */ 0,
         /* SrcObjTg  Type    */ 0,
         /* SrcObjTg  SPrm    */ 0,
-        /* SrcObjCo  SPrm    */ 0x119,
+        /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_UNK8 | CO_SPRM_UNK10 | CO_SPRM_NO_CRR,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
         /* SrcGObjAt Spl     */ 0,

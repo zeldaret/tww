@@ -24,7 +24,7 @@ namespace {
             /* SrcObjAt  Atp     */ 0,
             /* SrcObjAt  SPrm    */ 0,
             /* SrcObjTg  Type    */ AT_TYPE_HOOKSHOT,
-            /* SrcObjTg  SPrm    */ 9,
+            /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_UNK8,
             /* SrcObjCo  SPrm    */ 0,
             /* SrcGObjAt Se      */ 0,
             /* SrcGObjAt HitMark */ 0,
@@ -35,7 +35,7 @@ namespace {
             /* SrcGObjTg HitMark */ 0,
             /* SrcGObjTg Spl     */ 0,
             /* SrcGObjTg Mtrl    */ 0,
-            /* SrcGObjTg SPrm    */ 6,
+            /* SrcGObjTg SPrm    */ G_TG_SPRM_NO_CON_HIT | G_TG_SPRM_NO_HIT_MARK,
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS

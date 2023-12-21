@@ -7,14 +7,7 @@
 #include "SSystem/SComponent/c_m3d_g_sph.h"
 #include "SSystem/SComponent/c_m3d_g_tri.h"
 
-typedef struct _GXColor GXColor;
 class fopAc_ac_c;
-
-enum CcG_Tg_HitMark {
-    CcG_Tg_UNK_MARK_6 = 6,
-    CcG_Tg_UNK_MARK_8 = 8,
-};
-
 class cCcD_PntAttr;
 class cCcD_CpsAttr;
 class cCcD_TriAttr;
@@ -52,20 +45,38 @@ enum cCcD_ObjAtType {
     /* 0xFFFFFFFF */ AT_TYPE_ALL            = ~0,
 };
 
-enum AtSPrm_e {
-    AT_SPRM_SET = 1,
-    AT_SPRM_NO_TG_HIT_INF_SET = 0x10,
+enum cCcD_AtSPrm_e {
+    /* 0x01 */ AT_SPRM_SET = 0x01,
+    /* 0x02 */ AT_SPRM_UNK2 = 0x02,
+    /* 0x04 */ AT_SPRM_UNK4 = 0x04,
+    /* 0x08 */ AT_SPRM_UNK8 = 0x08,
+    /* 0x0E */ AT_SPRM_GRP = AT_SPRM_UNK2 | AT_SPRM_UNK4 | AT_SPRM_UNK8,
+    /* 0x10 */ AT_SPRM_NO_TG_HIT_INF_SET = 0x10,
 };
 
-enum TgSPrm_e {
-    TG_SPRM_SET = 1,
-    TG_SPRM_NO_AT_HIT_INF_SET = 0x10,
+enum cCcD_TgSPrm_e {
+    /* 0x01 */ TG_SPRM_SET = 0x01,
+    /* 0x02 */ TG_SPRM_UNK2 = 0x02,
+    /* 0x04 */ TG_SPRM_UNK4 = 0x04,
+    /* 0x08 */ TG_SPRM_UNK8 = 0x08,
+    /* 0x0E */ TG_SPRM_GRP = TG_SPRM_UNK2 | TG_SPRM_UNK4 | TG_SPRM_UNK8,
+    /* 0x10 */ TG_SPRM_NO_AT_HIT_INF_SET = 0x10,
 };
 
-enum CoSPrm_e {
-    CO_SPRM_SET = 1,
-    CO_SPRM_NO_CRR = 0x100,
-    CO_SPRM_NO_CO_HIT_INF_SET = 0x200,
+enum cCcD_CoSPrm_e {
+    /* 0x0001 */ CO_SPRM_SET = 0x01,
+    /* 0x0002 */ CO_SPRM_UNK2 = 0x02,
+    /* 0x0004 */ CO_SPRM_UNK4 = 0x04,
+    /* 0x0008 */ CO_SPRM_UNK8 = 0x08,
+    /* 0x0010 */ CO_SPRM_UNK10 = 0x10,
+    /* 0x0020 */ CO_SPRM_UNK20 = 0x20,
+    /* 0x0040 */ CO_SPRM_UNK40 = 0x40,
+    /* 0x000E */ CO_SPRM_IGRP = CO_SPRM_UNK2 | CO_SPRM_UNK4 | CO_SPRM_UNK8,
+    /* 0x001E */ CO_SPRM_GRP = CO_SPRM_IGRP | CO_SPRM_UNK10,
+    /* 0x0070 */ CO_SPRM_VSGRP = CO_SPRM_UNK10 | CO_SPRM_UNK20 | CO_SPRM_UNK40,
+    /* 0x0080 */ CO_SPRM_SPH_3D_CRR = 0x80,
+    /* 0x0100 */ CO_SPRM_NO_CRR = 0x100,
+    /* 0x0200 */ CO_SPRM_NO_CO_HIT_INF_SET = 0x200,
 };
 
 class cCcD_ShapeAttr {
@@ -430,7 +441,7 @@ public:
     }
     void ClrHit() { ClrRPrm(1); ClrObj(); }
     int GetType() const { return mType; }
-    u32 GetGrp() const { return MskSPrm(0xE); }
+    u32 GetGrp() const { return MskSPrm(AT_SPRM_GRP); }
     bool ChkSet() const { return MskSPrm(AT_SPRM_SET); }
     u8 GetAtp() const { return mAtp; }
     u32 MskType(u32 msk) const { return mType & msk; }
@@ -464,7 +475,7 @@ public:
     }
     int GetType() const { return mType; }
     void SetType(u32 type) { mType = type; }
-    u32 GetGrp() const { return MskSPrm(0xE); }
+    u32 GetGrp() const { return MskSPrm(TG_SPRM_GRP); }
     bool ChkSet() const { return MskSPrm(TG_SPRM_SET); }
     void ClrSet() { OffSPrmBit(TG_SPRM_SET); }
     u32 ChkHit() { return MskRPrm(1); }
@@ -485,12 +496,12 @@ public:
     void ClrHit() { ClrRPrm(1); ClrObj(); }
     void SetIGrp(u32);
     void SetVsGrp(u32);
-    u32 GetGrp() const { return MskSPrm(0x1E); }
+    u32 GetGrp() const { return MskSPrm(CO_SPRM_GRP); }
     bool ChkSet() const { return MskSPrm(CO_SPRM_SET); }
-    u32 GetVsGrp() const { return MskSPrm(0x70); }
-    u32 GetIGrp() const { return MskSPrm(0xE); }
+    u32 GetVsGrp() const { return MskSPrm(CO_SPRM_VSGRP); }
+    u32 GetIGrp() const { return MskSPrm(CO_SPRM_IGRP); }
     u32 ChkNoCrr() const { return MskSPrm(CO_SPRM_NO_CRR); }
-    u32 ChkSph3DCrr() const { return MskSPrm(0x80); }
+    u32 ChkSph3DCrr() const { return MskSPrm(CO_SPRM_SPH_3D_CRR); }
     void ClrSet() { OffSPrmBit(CO_SPRM_SET); }
     u32 ChkHit() { return MskRPrm(1); }
 

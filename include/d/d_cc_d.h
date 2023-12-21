@@ -9,7 +9,31 @@
 #include "SSystem/SComponent/c_cc_d.h"
 #include "f_pc/f_pc_manager.h"
 
+enum dCcG_At_SPrm {
+    G_AT_SPRM_NO_CON_HIT = 0x01,
+    G_AT_SPRM_NO_HIT_MARK = 0x02,
+    G_AT_SPRM_STOP_NO_CON_HIT = 0x04,
+    G_AT_SPRM_NO_MASS = 0x08,
+};
+
+enum dCcG_Tg_SPrm {
+    G_TG_SPRM_SHIELD = 0x01,
+    G_TG_SPRM_NO_CON_HIT = 0x02,
+    G_TG_SPRM_NO_HIT_MARK = 0x04,
+    G_TG_SPRM_SHIELD_FRONT_RANGE = 0x08,
+};
+
+enum dCcG_Co_SPrm {
+    G_CO_SPRM_AT_LASSO = 0x01,
+    G_CO_SPRM_TG_LASSO = 0x02,
+};
+
 enum dCcD_hitSe {};
+
+enum CcG_Tg_HitMark {
+    CcG_Tg_UNK_MARK_6 = 6,
+    CcG_Tg_UNK_MARK_8 = 8,
+};
 
 enum dCcG_At_Spl {};
 
@@ -167,16 +191,16 @@ public:
     virtual ~dCcD_GAtTgCoCommonBase() {}
 
     void ClrEffCounter() { mEffCounter = 0; }
-    u32 GetSPrm() const { return mSPrm; }
-    u32 GetRPrm() const { return mRPrm; }
-    u32 MskSPrm(u32 mask) const { return mSPrm & mask; }
-    u32 MskRPrm(u32 mask) const { return mRPrm & mask; }
-    bool ChkSPrm(u32 mask) const { return MskSPrm(mask); }
+    u32 GetSPrm() { return mSPrm; }
+    u32 GetRPrm() { return mRPrm; }
+    u32 MskSPrm(u32 mask) { return mSPrm & mask; }
+    u32 MskRPrm(u32 mask) { return mRPrm & mask; }
+    bool ChkSPrm(u32 mask) { return MskSPrm(mask); }
     void OnSPrm(u32 flag) { mSPrm |= flag; }
     void OnRPrm(u32 flag) { mRPrm |= flag; }
     void OffSPrm(u32 flag) { mSPrm &= ~flag; }
     void OffRPrm(u32 flag) { mRPrm &= ~flag; }
-    bool ChkRPrm(u32 flag) const { return MskRPrm(flag); }
+    bool ChkRPrm(u32 flag) { return MskRPrm(flag); }
     void SetHitCallback(dCcD_HitCallback callback) { mHitCallback = callback; }
     dCcD_HitCallback GetHitCallback() { return mHitCallback; }
 };  // Size = 0x1C
@@ -288,14 +312,14 @@ public:
 
     void SetAtVec(cXyz& vec) { mGObjAt.SetVec(vec); }
     void SetTgVec(cXyz& vec) { mGObjTg.SetVec(vec); }
-    bool ChkAtNoMass() const { return mGObjAt.ChkSPrm(8); }
-    void OnAtNoHitMark() { mGObjAt.OnSPrm(2); }
-    void OffAtNoHitMark() { mGObjAt.OffSPrm(2); }
-    void OnTgNoHitMark() { mGObjTg.OnSPrm(4); }
-    void OffTgNoHitMark() { mGObjTg.OffSPrm(4); }
-    void OnAtNoConHit() { mGObjAt.OnSPrm(1); }
-    void OffAtNoConHit() { mGObjAt.OffSPrm(1); }
-    void OnTgNoConHit() { mGObjTg.OnSPrm(2); }
+    bool ChkAtNoMass() { return mGObjAt.ChkSPrm(G_AT_SPRM_NO_MASS); }
+    void OnAtNoHitMark() { mGObjAt.OnSPrm(G_AT_SPRM_NO_HIT_MARK); }
+    void OffAtNoHitMark() { mGObjAt.OffSPrm(G_AT_SPRM_NO_HIT_MARK); }
+    void OnTgNoHitMark() { mGObjTg.OnSPrm(G_TG_SPRM_NO_HIT_MARK); }
+    void OffTgNoHitMark() { mGObjTg.OffSPrm(G_TG_SPRM_NO_HIT_MARK); }
+    void OnAtNoConHit() { mGObjAt.OnSPrm(G_AT_SPRM_NO_CON_HIT); }
+    void OffAtNoConHit() { mGObjAt.OffSPrm(G_AT_SPRM_NO_CON_HIT); }
+    void OnTgNoConHit() { mGObjTg.OnSPrm(G_TG_SPRM_NO_CON_HIT); }
     void SetAtHitMark(u8 mark) { mGObjAt.SetHitMark(mark); }
     void SetAtSe(u8 se) { mGObjAt.SetSe(se); }
     void SetTgSe(u8 se) { mGObjTg.SetSe(se); }
@@ -316,22 +340,18 @@ public:
     fopAc_ac_c* GetTgHitAc() { return mGObjTg.GetAc(); }
     void SetTgShieldFrontRangeYAngle(s16* angle) { mGObjTg.SetShieldFrontRangeYAngle(angle); }
     void SetTgHitMark(CcG_Tg_HitMark mark) { mGObjTg.SetHitMark(mark); }
-    void OnTgShield() { mGObjTg.OnSPrm(0x1); }
-    void OffTgShield() { mGObjTg.OffSPrm(0x1); }
-    void OnTgShieldFrontRange() { mGObjTg.OnSPrm(0x8); }
-    void OffTgShieldFrontRange() { mGObjTg.OffSPrm(0x8); }
-    bool ChkTgIronBallRebound() { return mGObjTg.ChkSPrm(0x100); }
+    void OnTgShield() { mGObjTg.OnSPrm(G_TG_SPRM_SHIELD); }
+    void OffTgShield() { mGObjTg.OffSPrm(G_TG_SPRM_SHIELD); }
+    void OnTgShieldFrontRange() { mGObjTg.OnSPrm(G_TG_SPRM_SHIELD_FRONT_RANGE); }
+    void OffTgShieldFrontRange() { mGObjTg.OffSPrm(G_TG_SPRM_SHIELD_FRONT_RANGE); }
     s16* GetTgShieldFrontRangeYAngle() { return mGObjTg.GetShieldFrontRangeYAngle(); }
-    bool ChkTgShield() { return mGObjTg.ChkSPrm(1); }
-    bool ChkTgSpShield() { return mGObjTg.ChkSPrm(0x40); }
-    bool ChkTgSmallShield() { return mGObjTg.ChkSPrm(0x10); }
-    bool ChkTgShieldFrontRange() { return mGObjTg.ChkSPrm(8); }
-    bool ChkAtNoConHit() { return mGObjAt.ChkSPrm(1); }
-    bool ChkAtStopNoConHit() { return mGObjAt.ChkSPrm(0x4); }
-    bool ChkTgNoConHit() { return mGObjTg.ChkSPrm(2); }
-    bool ChkTgStopNoConHit() { return mGObjTg.ChkSPrm(0x2000); }
-    bool ChkCoAtLasso() { return mGObjCo.ChkSPrm(1); }
-    bool ChkCoTgLasso() { return mGObjCo.ChkSPrm(2); }
+    bool ChkTgShield() { return mGObjTg.ChkSPrm(G_TG_SPRM_SHIELD); }
+    bool ChkTgShieldFrontRange() { return mGObjTg.ChkSPrm(G_TG_SPRM_SHIELD_FRONT_RANGE); }
+    bool ChkAtNoConHit() { return mGObjAt.ChkSPrm(G_AT_SPRM_NO_CON_HIT); }
+    bool ChkAtStopNoConHit() { return mGObjAt.ChkSPrm(G_AT_SPRM_STOP_NO_CON_HIT); }
+    bool ChkTgNoConHit() { return mGObjTg.ChkSPrm(G_TG_SPRM_NO_CON_HIT); }
+    bool ChkCoAtLasso() { return mGObjCo.ChkSPrm(G_CO_SPRM_AT_LASSO); }
+    bool ChkCoTgLasso() { return mGObjCo.ChkSPrm(G_CO_SPRM_TG_LASSO); }
     dCcD_HitCallback GetCoHitCallback() { return mGObjCo.GetHitCallback(); }
     dCcD_HitCallback GetAtHitCallback() { return mGObjAt.GetHitCallback(); }
     dCcD_HitCallback GetTgHitCallback() { return mGObjTg.GetHitCallback(); }
@@ -344,13 +364,11 @@ public:
     void OffAtHitNoActor() { mGObjAt.OffRPrm(2); }
     void OnTgHitNoActor() { mGObjTg.OnRPrm(1); }
     void OffTgHitNoActor() { mGObjTg.OffRPrm(1); }
-    bool ChkCoHitNoActor() const { return mGObjCo.ChkRPrm(1); }
-    bool ChkAtHitNoActor() const { return mGObjAt.ChkRPrm(2); }
-    bool ChkTgHitNoActor() const { return mGObjTg.ChkRPrm(1); }
-    bool ChkAtNoHitMark() { return mGObjAt.ChkSPrm(2); }
-    bool ChkTgNoHitMark() { return mGObjTg.ChkSPrm(4); }
-    bool ChkTgHookShotNoHitMark() { return mGObjTg.ChkSPrm(0x400); }
-    bool ChkTgArrowNoHitMark() { return mGObjTg.ChkSPrm(0x1000); }
+    bool ChkCoHitNoActor() { return mGObjCo.ChkRPrm(1); }
+    bool ChkAtHitNoActor() { return mGObjAt.ChkRPrm(2); }
+    bool ChkTgHitNoActor() { return mGObjTg.ChkRPrm(1); }
+    bool ChkAtNoHitMark() { return mGObjAt.ChkSPrm(G_AT_SPRM_NO_HIT_MARK); }
+    bool ChkTgNoHitMark() { return mGObjTg.ChkSPrm(G_TG_SPRM_NO_HIT_MARK); }
     dCcG_Tg_Spl GetTgSpl() { return (dCcG_Tg_Spl)mGObjTg.GetSpl(); }
     int GetTgHitMark() { return mGObjTg.GetHitMark(); }
     int GetAtHitMark() { return mGObjAt.GetHitMark(); }
