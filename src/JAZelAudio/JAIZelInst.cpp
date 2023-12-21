@@ -8,7 +8,19 @@
 
 /* 802AE04C-802AE0B4       .text __ct__10JAIZelInstFv */
 JAIZelInst::JAIZelInst() {
-    /* Nonmatching */
+    field_0x0 = 0;
+    field_0xc = 0;
+    field_0x10 = -1;
+    field_0x14 = 0x2f;
+    mMelodyNum = 3;
+    field_0x20 = 0.6f;
+    field_0x24 = 3.0f;
+    field_0x28 = 60.f;
+    field_0x2c = 1.0f;
+    field_0x30 = field_0x2c * 30.0f;
+    field_0x1e = 0;
+    field_0x48 = 0;
+    field_0x34 = 0x37;
 }
 
 /* 802AE0B4-802AE1C0       .text reset__10JAIZelInstFv */

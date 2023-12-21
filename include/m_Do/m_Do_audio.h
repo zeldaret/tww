@@ -7,9 +7,10 @@
 class mDoAud_zelAudio_c : public JAIZelBasic {
 public:
     mDoAud_zelAudio_c() {}
+    ~mDoAud_zelAudio_c() {}
 
     void reset();
-    
+
     static void calcLoadTimer();
 
     static bool isResetFlag() { return mResetFlag; }

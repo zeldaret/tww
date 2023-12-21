@@ -7,6 +7,7 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "SSystem/SComponent/c_lib.h"
 
+JAIZelInst mDoAud_zelAudio_c::mTact;
 mDoAud_zelAudio_c g_mDoAud_zelAudio;
 
 bool mDoAud_zelAudio_c::mInitFlag;

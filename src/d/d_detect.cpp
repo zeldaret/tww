@@ -8,28 +8,25 @@
 
 /* 8009BFD4-8009BFFC       .text __ct__14dDetectPlace_cFv */
 dDetectPlace_c::dDetectPlace_c() {
-    /* Nonmatching */
+    mPos = cXyz::Zero;
+    mEnable = 0;
 }
 
 /* 8009BFFC-8009C038       .text __dt__14dDetectPlace_cFv */
-dDetectPlace_c::~dDetectPlace_c() {
-    /* Nonmatching */
-}
+dDetectPlace_c::~dDetectPlace_c() {}
 
 /* 8009C038-8009C048       .text chk_enable__14dDetectPlace_cCFv */
-void dDetectPlace_c::chk_enable() const {
-    /* Nonmatching */
+bool dDetectPlace_c::chk_enable() const {
+    return mEnable != 0;
 }
 
 /* 8009C048-8009C098       .text __ct__9dDetect_cFv */
 dDetect_c::dDetect_c() {
-    /* Nonmatching */
+    mTimer = 0;
 }
 
 /* 8009C098-8009C0F8       .text __dt__9dDetect_cFv */
-dDetect_c::~dDetect_c() {
-    /* Nonmatching */
-}
+dDetect_c::~dDetect_c() {}
 
 /* 8009C0F8-8009C14C       .text proc__9dDetect_cFv */
 void dDetect_c::proc() {

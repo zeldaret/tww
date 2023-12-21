@@ -218,9 +218,7 @@ void daSea_packet_c::CleanUp() {
 }
 
 /* 8015B7E4-8015B84C       .text __ct__14daSea_packet_cFv */
-daSea_packet_c::daSea_packet_c() {
-    /* Nonmatching */
-}
+daSea_packet_c::daSea_packet_c() {}
 
 /* 8015B84C-8015B86C       .text SetFlat__14daSea_packet_cFv */
 void daSea_packet_c::SetFlat() {

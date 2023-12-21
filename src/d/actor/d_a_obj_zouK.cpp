@@ -278,8 +278,6 @@ bool daObjZouk::Act_c::_draw() {
     return true;
 }
 
-camera_class * dCam_getCamera();
-
 /* 000015F0-00001804       .text setEffectMtx__Q29daObjZouk5Act_cFPC4cXyzf */
 void daObjZouk::Act_c::setEffectMtx(const cXyz* pos, f32 scale) {
     static Mtx mtx_adj = {

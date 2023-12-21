@@ -278,7 +278,7 @@ public:
 STATIC_ASSERT(0x38 == sizeof(cCcD_CylAttr));
 
 class cCcD_DivideInfo {
-private:
+public:
     /* 0x00 */ u32 mRangeBits;
     /* 0x04 vtable */
 public:

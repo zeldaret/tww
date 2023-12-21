@@ -3,6 +3,7 @@
 // Translation Unit: d_s_title.cpp
 //
 
+#include "JSystem/JAudio/JAIBankWave.h"
 #include "f_op/f_op_scene.h"
 #include "f_op/f_op_draw_iter.h"
 #include "f_op/f_op_actor_mng.h"
@@ -16,13 +17,6 @@
 #include "d/d_meter.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "d/actor/d_a_movie_player.h"
-
-namespace JAInter {
-    class BankWave {
-    public:
-        static bool checkAllWaveLoadStatus();
-    };
-};
 
 #if VERSION == VERSION_PAL
     #define title_of_scene_class dScnTitle_c

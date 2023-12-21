@@ -1240,8 +1240,6 @@ void dDlst_list_c::calcWipe() {
     }
 }
 
-camera_class * dCam_getCamera();
-
 /* 80086790-8008696C       .text dDlst_texSpecmapST__FPC4cXyzPC12dKy_tevstr_cP12J3DModelDataf */
 void dDlst_texSpecmapST(const cXyz* pos, const dKy_tevstr_c* tevStr, J3DModelData* modelData, f32 scale) {
     static Mtx mtx_adj = {

@@ -3,7 +3,7 @@
 // Translation Unit: d_ev_camera.cpp
 //
 
-#include "d_ev_camera.h"
+#include "d/d_camera.h"
 #include "dolphin/types.h"
 
 /* 800B004C-800B0174       .text StartEventCamera__9dCamera_cFiie */
@@ -37,7 +37,7 @@ void dCamera_c::getEvIntData(int*, char*, int) {
 }
 
 /* 800B0484-800B055C       .text getEvFloatData__9dCamera_cFPfPcf */
-void dCamera_c::getEvFloatData(float*, char*, float) {
+void dCamera_c::getEvFloatData(f32*, char*, f32) {
     /* Nonmatching */
 }
 
@@ -96,28 +96,13 @@ void dCamera_c::uniformTransEvCamera() {
     /* Nonmatching */
 }
 
-/* 800B3DDC-800B3E18       .text __dt__Q29dCamera_c26@class$5621d_ev_camera_cppFv */
-dCamera_c::@class$5621d_ev_camera_cpp::~@class$5621d_ev_camera_cpp() {
-    /* Nonmatching */
-}
-
 /* 800B3E18-800B5110       .text uniformBrakeEvCamera__9dCamera_cFv */
 void dCamera_c::uniformBrakeEvCamera() {
     /* Nonmatching */
 }
 
-/* 800B5110-800B514C       .text __dt__Q29dCamera_c26@class$6314d_ev_camera_cppFv */
-dCamera_c::@class$6314d_ev_camera_cpp::~@class$6314d_ev_camera_cpp() {
-    /* Nonmatching */
-}
-
 /* 800B514C-800B6434       .text uniformAcceleEvCamera__9dCamera_cFv */
 void dCamera_c::uniformAcceleEvCamera() {
-    /* Nonmatching */
-}
-
-/* 800B6434-800B6470       .text __dt__Q29dCamera_c26@class$6993d_ev_camera_cppFv */
-dCamera_c::@class$6993d_ev_camera_cpp::~@class$6993d_ev_camera_cpp() {
     /* Nonmatching */
 }
 
@@ -216,4 +201,3 @@ void dCamera_c::bSplineEvCamera() {
 void dCamera_c::twoActor0EvCamera() {
     /* Nonmatching */
 }
-

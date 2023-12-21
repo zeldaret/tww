@@ -4,21 +4,76 @@
 //
 
 #include "d/d_cc_mass_s.h"
-#include "dolphin/types.h"
+#include "JSystem/JUtility/JUTAssert.h"
 
 /* 800AC810-800AC920       .text __ct__12dCcMassS_MngFv */
 dCcMassS_Mng::dCcMassS_Mng() {
-    /* Nonmatching */
+    Ct();
 }
 
 /* 800AC920-800AC96C       .text Ct__12dCcMassS_MngFv */
 void dCcMassS_Mng::Ct() {
-    /* Nonmatching */
+    mFlag = 0;
+    mResultCam = 0;
+    mCamTopPos.x = 0.0f;
+    mCamTopPos.y = -1e+9f;
+    mCamTopPos.z = 0.0f;
+    mCamBottomPos.x = 0.0f;
+    mCamBottomPos.y = -1e+9f;
+    mCamBottomPos.z = 0.0f;
+    Clear();
 }
 
 /* 800AC96C-800ACCB8       .text Prepare__12dCcMassS_MngFv */
 void dCcMassS_Mng::Prepare() {
     /* Nonmatching */
+    cM3dGAab local_38;
+    local_38.ClearForMinMax();
+    for (dCcMassS_Obj* mass = mMassObjs; mass < mMassObjs + mMassObjCount; mass++) {
+        cCcD_Obj* pobj = mass->mpObj;
+        JUT_ASSERT(61, pobj != 0);
+        cCcD_ShapeAttr* attr = pobj->GetShapeAttr();
+        attr->CalcAabBox();
+        local_38.SetMinMax(attr->mAab.mMin);
+        local_38.SetMinMax(attr->mAab.mMax);
+    }
+    for (dCcMassS_Obj* mass = mMassAreas; mass < mMassAreas + mMassAreaCount; mass++) {
+        cCcD_Obj* parea = mass->mpObj;
+        JUT_ASSERT(73, parea != 0);
+        cCcD_ShapeAttr* attr = parea->GetShapeAttr();
+        attr->CalcAabBox();
+        local_38.SetMinMax(attr->mAab.mMin);
+        local_38.SetMinMax(attr->mAab.mMax);
+    }
+    if (mFlag & 1) {
+        mCpsAttr.CalcAabBox();
+        local_38.SetMinMax(mCpsAttr.mAab.mMin);
+        local_38.SetMinMax(mCpsAttr.mAab.mMax);
+    }
+    mDivideArea.SetArea(local_38);
+    for (dCcMassS_Obj* mass = mMassObjs; mass < mMassObjs + mMassObjCount; mass++) {
+        cCcD_Obj* pobj = mass->mpObj;
+        JUT_ASSERT(93, pobj != 0);
+        cCcD_ShapeAttr* attr = pobj->GetShapeAttr();
+        mDivideArea.CalcDivideInfo(&mass->mDivideInfo, attr->mAab, 0);
+    }
+    for (dCcMassS_Obj* mass = mMassAreas; mass < mMassAreas + mMassAreaCount; mass++) {
+        cCcD_Obj* parea = mass->mpObj;
+        JUT_ASSERT(104, parea != 0);
+        cCcD_ShapeAttr* attr = parea->GetShapeAttr();
+        mDivideArea.CalcDivideInfo(&mass->mDivideInfo, attr->mAab, 0);
+    }
+    if (mFlag & 1) {
+        mDivideArea.CalcDivideInfo(&mDivideInfo, mCpsAttr.mAab, 0);
+    }
+    mCamTopPos.x = 0.0f;
+    mCamTopPos.y = -1e+9f;
+    mCamTopPos.z = 0.0f;
+    mCamTopDist = 1e+9f;
+    mCamBottomPos.x = 0.0f;
+    mCamBottomPos.y = -1e+9f;
+    mCamBottomPos.z = 0.0f;
+    mCamBottomDist = 1e+9f;
 }
 
 /* 800ACCB8-800AD17C       .text Chk__12dCcMassS_MngFP4cXyzPP10fopAc_ac_cP15dCcMassS_HitInf */
@@ -28,7 +83,24 @@ u32 dCcMassS_Mng::Chk(cXyz*, fopAc_ac_c**, dCcMassS_HitInf*) {
 
 /* 800AD17C-800AD234       .text Clear__12dCcMassS_MngFv */
 void dCcMassS_Mng::Clear() {
-    /* Nonmatching */
+    mMassObjCount = 0;
+    mMassAreaCount = 0;
+    for (int i = 0; i < 5; i++) {
+        mMassObjs[i].mpObj = NULL;
+        mMassObjs[i].mPriority = 5;
+        mMassObjs[i].mpCallback = NULL;
+        mMassObjs[i].mDivideInfo.mRangeBits = 0;
+    }
+    for (int i = 0; i < 2; i++) {
+        mMassAreas[i].mpObj = NULL;
+        mMassAreas[i].mPriority = 5;
+        mMassAreas[i].mpCallback = NULL;
+        mMassAreas[i].mDivideInfo.mRangeBits = 0;
+    }
+    mCylAttr.SetR(0.0f);
+    mCylAttr.SetH(0.0f);
+    field_0x128 = 0;
+    mResultCamBit = 4;
 }
 
 /* 800AD234-800AD310       .text Set__12dCcMassS_MngFP8cCcD_ObjUc */
@@ -53,10 +125,5 @@ u8 dCcMassS_Mng::GetResultCam() const {
 
 /* 800AD3DC-800AD3F8       .text GetCamTopPos__12dCcMassS_MngFP3Vec */
 void dCcMassS_Mng::GetCamTopPos(Vec*) {
-    /* Nonmatching */
-}
-
-/* 800AD594-800AD5B0       .text __ct__12dCcMassS_ObjFv */
-dCcMassS_Obj::dCcMassS_Obj() {
     /* Nonmatching */
 }

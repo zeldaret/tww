@@ -70,6 +70,6 @@ void JAInter::BankWave::getWaveLoadStatus(s32) {
 }
 
 /* 802916C0-80291704       .text checkAllWaveLoadStatus__Q27JAInter8BankWaveFv */
-void JAInter::BankWave::checkAllWaveLoadStatus() {
+bool JAInter::BankWave::checkAllWaveLoadStatus() {
     /* Nonmatching */
 }

@@ -7,7 +7,7 @@
 typedef void (*dCcMassS_ObjCallback)(fopAc_ac_c*, cXyz*, u32);
 
 class dCcMassS_Obj {
-private:
+public:
     /* 0x00 */ cCcD_Obj* mpObj;
     /* 0x04 */ u8 mPriority;
     /* 0x08 */ dCcMassS_ObjCallback mpCallback;
@@ -15,7 +15,7 @@ private:
     /* 0x14 vtable */
 
 public:
-    dCcMassS_Obj();
+    dCcMassS_Obj() {}
     virtual ~dCcMassS_Obj() {}
     void Set(cCcD_Obj* p_obj, u8 priority, dCcMassS_ObjCallback callback);
     void Clear();
@@ -53,7 +53,7 @@ public:
     /* 0x00BC */ s32 mMassAreaCount;
     /* 0x00C0 */ dCcMassS_Obj mMassAreas[2];
     /* 0x00F0 */ cCcD_CylAttr mCylAttr;
-    /* 0x0128 */ u8 field_0x200;
+    /* 0x0128 */ u8 field_0x128;
     /* 0x0129 */ u8 mResultCamBit;
     /* 0x012C */ u32 mFlag;
     /* 0x0130 */ u32 mResultCam;
@@ -72,7 +72,7 @@ public:
     void SetAttr(f32 radius, f32 height, u8 param_2, u8 param_3) {
         mCylAttr.SetR(radius);
         mCylAttr.SetH(height);
-        field_0x200 = param_2;
+        field_0x128 = param_2;
         mResultCamBit = param_3;
     }
     void Prepare();

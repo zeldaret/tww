@@ -1,17 +1,19 @@
 #ifndef JAZELAUDIO_JAIZELBASIC_H
 #define JAZELAUDIO_JAIZELBASIC_H
 
-#include "dolphin/types.h"
 #include "JAZelAudio/JAZelAudio_SE.h"
 #include "JAZelAudio/JAZelAudio_BGM.h"
+#include "JSystem/JAudio/JAIBasic.h"
+#include "JSystem/JMath/random.h"
 #include "dolphin/mtx/mtx.h"
 
 class JAISound;
 class JKRSolidHeap;
 
-class JAIZelBasic {
+class JAIZelBasic : public JAIBasic {
 public:
     JAIZelBasic();
+    ~JAIZelBasic() {}
 
     void zeldaGFrameWork();
     void heartGaugeOn();
@@ -142,10 +144,10 @@ public:
     void registWindowPos(Vec*);
     void rainPlay(s32);
 
-    virtual void makeSound(u32);
-    virtual void getMapInfoFxline(u32);
-    virtual void getMapInfoGround(u32);
-    virtual void getMapInfoFxParameter(u32);
+    virtual JAISound* makeSound(u32);
+    virtual bool getMapInfoFxline(u32);
+    virtual bool getMapInfoGround(u32);
+    virtual f32 getMapInfoFxParameter(u32);
 
     void setHour(s32 i_hour) { mHour = i_hour; }
     void setMinute(s32 i_minute) { mMinute = i_minute; }
@@ -168,23 +170,22 @@ public:
     // static spot_dir_name;
     // static mIsleArea;
 
-    /* 0x0004 */ u8 field_0x0004[0x0020 - 0x0004];
     /* 0x0020 */ u8 field_0x0020;
     /* 0x0021 */ u8 field_0x0021;
     /* 0x0022 */ u8 field_0x0022[0x0024 - 0x0022];
     /* 0x0024 */ int field_0x0024;
-    /* 0x0028 */ u8 field_0x0028[0x002C - 0x0028];
+    /* 0x0028 */ int field_0x0028;
     /* 0x002C */ u8 mHour;
     /* 0x002D */ u8 mMinute;
     /* 0x002E */ u8 mWeekday;
     /* 0x002F */ u8 field_0x002f;
     /* 0x0030 */ s16 field_0x0030;
     /* 0x0032 */ u8 field_0x0032;
-    /* 0x0033 */ u8 field_0x0033[0x0034 - 0x0033];
+    /* 0x0033 */ u8 field_0x0033;
     /* 0x0034 */ int field_0x0034;
     /* 0x0038 */ int field_0x0038;
     /* 0x003C */ f32 field_0x003c;
-    /* 0x0040 */ u8 field_0x0040[0x0041 - 0x0040];
+    /* 0x0040 */ u8 field_0x0040;
     /* 0x0041 */ u8 field_0x0041;
     /* 0x0042 */ u8 field_0x0042;
     /* 0x0043 */ u8 field_0x0043;
@@ -192,14 +193,10 @@ public:
     /* 0x0045 */ u8 field_0x0045;
     /* 0x0046 */ u8 field_0x0046;
     /* 0x0047 */ u8 field_0x0047;
-    /* 0x0048 */ f32 field_0x0048;
-    /* 0x004C */ f32 field_0x004c;
-    /* 0x0050 */ f32 field_0x0050;
-    /* 0x0054 */ f32 field_0x0054;
-    /* 0x0058 */ f32 field_0x0058;
-    /* 0x005C */ f32 field_0x005c;
+    /* 0x0048 */ Vec field_0x0048;
+    /* 0x0054 */ Vec field_0x0054;
     /* 0x0060 */ u8 mbLandingDemoStarted;
-    /* 0x0061 */ u8 field_0x0061[0x0062 - 0x0061];
+    /* 0x0061 */ u8 field_0x0061;
     /* 0x0062 */ u8 field_0x0062;
     /* 0x0063 */ u8 field_0x0063;
     /* 0x0064 */ u8 field_0x0064[0x0066 - 0x0064];
@@ -222,27 +219,56 @@ public:
     /* 0x00A8 */ f32 field_0x00a8;
     /* 0x00AC */ f32 field_0x00ac;
     /* 0x00B0 */ int field_0x00b0;
-    /* 0x00B4 */ u8 field_0x00B4[0x00B5 - 0x00B4];
+    /* 0x00B4 */ u8 field_0x00b4;
     /* 0x00B5 */ u8 mSomeSpecialBGMFlag;
     /* 0x00B6 */ u8 mLastMinibossSubBGMType;
-    /* 0x00B7 */ u8 field_0x00B7[0x00BC - 0x00B7];
+    /* 0x00B7 */ u8 field_0x00b7;
+    /* 0x00B8 */ u8 field_0x00b8;
+    /* 0x00B9 */ u8 field_0x00b9;
+    /* 0x00BA */ u8 field_0x00ba;
+    /* 0x00BB */ u8 field_0x00bb;
     /* 0x00BC */ u8 field_0x00bc;
-    /* 0x00BD */ u8 field_0x00BD[0x00BE - 0x00BD];
+    /* 0x00BD */ u8 field_0x00bd;
     /* 0x00BE */ u8 field_0x00be;
-    /* 0x00BF */ u8 field_0x00BF[0x00CA - 0x00BF];
+    /* 0x00BF */ u8 field_0x00bf;
+    /* 0x00C0 */ u8 field_0x00c0;
+    /* 0x00C1 */ u8 field_0x00c1;
+    /* 0x00C4 */ int field_0x00c4;
+    /* 0x00C8 */ u8 field_0x00c8;
+    /* 0x00C9 */ u8 field_0x00c9;
     /* 0x00CA */ u8 field_0x00ca;
-    /* 0x00CB */ u8 field_0x00CB[0x01F9 - 0x00CB];
+    /* 0x00CB */ s8 field_0x00cb;
+    /* 0x00CC */ u8 field_0x00cc;
+    /* 0x00CD */ u8 field_0x00cd;
+    /* 0x00CE */ u8 field_0x00ce;
+    /* 0x00CF */ u8 field_0x00CF[0x00D0 - 0x00CF];
+    /* 0x00D0 */ int field_0x00d0;
+    /* 0x00D4 */ u8 field_0x00d4[0x01F8 - 0x00D4];
+    /* 0x01F8 */ u8 field_0x01f8;
     /* 0x01F9 */ u8 field_0x01f9;
-    /* 0x01FA */ u8 field_0x01FA[0x0201 - 0x01FA];
+    /* 0x01FA */ u8 field_0x01fa;
+    /* 0x01FB */ u8 field_0x01fb;
+    /* 0x01FC */ u8 field_0x01fc;
+    /* 0x01FD */ u8 field_0x01fd;
+    /* 0x01FE */ u8 field_0x01fe;
+    /* 0x01FF */ u8 field_0x01ff;
+    /* 0x0200 */ u8 field_0x0200;
     /* 0x0201 */ u8 field_0x0201;
-    /* 0x0202 */ u8 field_0x0202[0x021C - 0x0202];
+    /* 0x0202 */ u8 field_0x0202[0x0204 - 0x0202];
+    /* 0x0204 */ u8 field_0x0204;
+    /* 0x0205 */ u8 field_0x0205;
+    /* 0x0206 */ u8 field_0x0206;
+    /* 0x0207 */ u8 field_0x0207;
+    /* 0x0208 */ u8 field_0x0208;
+    /* 0x0209 */ u8 field_0x0209[0x021C - 0x0209];
     /* 0x021C */ u8 mCameraSeaFloorGroupInfo;
     /* 0x021D */ u8 mLinkSeaFloorGroupInfo;
     /* 0x021E */ u8 field_0x021e;
-    /* 0x021F */ u8 field_0x021F[0x0224 - 0x021F];
+    /* 0x021F */ u8 field_0x021F[0x0220 - 0x021F];
+    /* 0x0220 */ int field_0x0220;
     /* 0x0224 */ int field_0x0224;
     /* 0x0228 */ u32 mNextSceneBgmId;
-    /* 0x022C */ u8 field_0x022C[0x022D - 0x022C];
+    /* 0x022C */ u8 field_0x022c;
     /* 0x022D */ u8 field_0x022d;
     /* 0x022E */ u8 field_0x022e;
     /* 0x022F */ u8 field_0x022f;
@@ -255,11 +281,20 @@ public:
     /* 0x0236 */ u8 field_0x0236;
     /* 0x0237 */ u8 field_0x0237;
     /* 0x0238 */ u8 mIslandRoomNo;
-    /* 0x0239 */ u8 field_0x0239[0x1F3D - 0x0239];
+    /* 0x0239 */ u8 field_0x0239;
+    /* 0x023A */ u8 field_0x023a;
+    /* 0x023B */ u8 field_0x023B[0x1DD4 - 0x023B];
+    /* 0x1DD4 */ u8 field_0x1dd4;
+    /* 0x1DD5 */ u8 field_0x1DD5[0x1EC0 - 0x1DD5];
+    /* 0x1EC0 */ int field_0x1ec0;
+    /* 0x1EC4 */ u8 field_0x1EC1[0x1F3C - 0x1EC4];
+    /* 0x1F3C */ u8 field_0x1f3c;
     /* 0x1F3D */ u8 mIsSailing;
     /* 0x1F3E */ u8 field_0x1F3E[0x1F40 - 0x1F3E];
     /* 0x1F40 */ f32 field_0x1f40;
-    /* 0x1F44 */ u8 field_0x1F44[0x20F4 - 0x1F44];
+    /* 0x1F44 */ u8 field_0x1F44[0x2068 - 0x1F44];
+    /* 0x2068 */ JMath::TRandom_enough_ field_0x2068;
+    /* 0x20F0 */ u8 field_0x20F0[0x20F4 - 0x20F0];
 };
 
 #endif /* JAZELAUDIO_JAIZELBASIC_H */

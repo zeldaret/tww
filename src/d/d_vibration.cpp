@@ -4,6 +4,22 @@
 //
 
 #include "d/d_vibration.h"
+#include "m_Do/m_Do_controller_pad.h"
+
+namespace {
+    void makedata(u16*, u32, s32) {
+        /* Nonmatching */
+    }
+    void rollshift(u32, s32, s32) {
+        /* Nonmatching */
+    }
+    void makebits(u32, s32, s32) {
+        /* Nonmatching */
+    }
+    void randombit(s32, s32) {
+        /* Nonmatching */
+    }
+};
 
 /* 8009C73C-8009CCCC       .text Run__12dVibration_cFv */
 int dVibration_c::Run() {
@@ -32,22 +48,35 @@ int dVibration_c::StopQuake(int) {
 
 /* 8009CFEC-8009D044       .text Kill__12dVibration_cFv */
 void dVibration_c::Kill() {
-    /* Nonmatching */
+    g_mDoCPd_gamePad[0]->stopMotorWaveHard();
+    g_mDoCPd_gamePad[0]->stopMotorHard();
+    setDefault();
 }
 
 /* 8009D044-8009D06C       .text CheckQuake__12dVibration_cFv */
 bool dVibration_c::CheckQuake() {
-    /* Nonmatching */
+    return field_0x24 != -1 || field_0x60 != -1;
 }
 
 /* 8009D06C-8009D0AC       .text setDefault__12dVibration_cFv */
 void dVibration_c::setDefault() {
-    /* Nonmatching */
+    field_0x48 = -1;
+    field_0x0 = -1;
+    field_0x60 = -1;
+    field_0x24 = -1;
+    field_0x58 = -99;
+    field_0x20 = -99;
+    field_0x70 = -99;
+    field_0x44 = -99;
+    field_0x74 = -99;
+    field_0x5c = -99;
+    field_0x7c = 0;
+    field_0x78 = 0;
 }
 
 /* 8009D0AC-8009D0CC       .text Init__12dVibration_cFv */
 void dVibration_c::Init() {
-    /* Nonmatching */
+    setDefault();
 }
 
 /* 8009D0CC-8009D188       .text Pause__12dVibration_cFv */
@@ -57,10 +86,10 @@ void dVibration_c::Pause() {
 
 /* 8009D188-8009D1C4       .text __ct__12dVibration_cFv */
 dVibration_c::dVibration_c() {
-    /* Nonmatching */
+    setDefault();
 }
 
 /* 8009D1C4-8009D220       .text __dt__12dVibration_cFv */
 dVibration_c::~dVibration_c() {
-    /* Nonmatching */
+    Kill();
 }
