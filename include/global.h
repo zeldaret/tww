@@ -22,7 +22,7 @@
 #define _SDA_BASE_(dummy) 0
 #define _SDA2_BASE_(dummy) 0
 
-#ifndef IN_VSCODE_EDITOR
+#ifndef __INTELLISENSE__
 #ifndef offsetof
 #define offsetof(type, member) ((size_t) & (((type*)0)->member))
 #endif
