@@ -107,7 +107,8 @@ void JUTDirectPrint::drawChar(int position_x, int position_y, int ch) {
             for (int y2 = 0; y2 < scale_y; y2++) {
                 int tmp = mStride * y2;
                 for (int x2 = 0; x2 < scale_x; x2++) {
-                    pixel[x2 + tmp] = value;
+                    u16* row = &pixel[tmp];
+                    row[x2] = value;
                 }
             }
 

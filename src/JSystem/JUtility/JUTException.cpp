@@ -10,6 +10,7 @@
 #include "MSL_C/math.h"
 #include "MSL_C/stdio.h"
 #include "MSL_C/stdlib.h"
+#include "MSL_C/new.h"
 #include "dolphin/base/PPCArch.h"
 #include "dolphin/gx/GX.h"
 #include "dolphin/os/OS.h"

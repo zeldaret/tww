@@ -822,7 +822,7 @@ config.libs = [
             Object(Matching,    "JSystem/JUtility/JUTDbPrint.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTGamePad.cpp"),
             Object(NonMatching, "JSystem/JUtility/JUTException.cpp"),
-            Object(NonMatching, "JSystem/JUtility/JUTDirectPrint.cpp"),
+            Object(Matching,    "JSystem/JUtility/JUTDirectPrint.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTAssert.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTVideo.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTXfb.cpp"),
