@@ -3,9 +3,10 @@
 
 #include "dolphin/mtx/mtx.h"
 
-void JMANewSinTable(u8 param_1);
-void JMAEulerToQuat(s16 param_0, s16 param_1, s16 param_2, Quaternion* param_3);
-void JMAQuatLerp(Quaternion*, Quaternion*, f32, Quaternion*);
+bool JMANewSinTable(u8 numBits);
+void JMAEulerToQuat(s16 x, s16 y, s16 z, Quaternion* out);
+void JMAQuatLerp(Quaternion* a, Quaternion* b, f32 t, Quaternion* out);
+f32 JMAHermiteInterpolation(f32 frame, f32 time0, f32 value0, f32 tangent0, f32 time1, f32 value1, f32 tangent1);
 
 inline f32 JMAFastReciprocal(f32 value) {
     return __fres(value);
@@ -117,7 +118,5 @@ inline void gekko_ps_copy16(register void* dst, register const void* src) {
 }
 
 };  // namespace JMath
-
-f32 JMAHermiteInterpolation(f32, f32, f32, f32, f32, f32, f32);
 
 #endif /* JMATH_H */

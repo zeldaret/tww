@@ -4,25 +4,89 @@
 //
 
 #include "JSystem/JMath/JMath.h"
+#include "JSystem/JMath/JMATrigonometric.h"
+#include "MSL_C/math.h"
 #include "dolphin/types.h"
 
+u16 jmaSinTableSize;
+u32 jmaSinShift;
+f32* jmaSinTable;
+f32* jmaCosTable;
+
 /* 80301028-80301150       .text JMANewSinTable__FUc */
-void JMANewSinTable(unsigned char) {
-    /* Nonmatching */
+bool JMANewSinTable(u8 numBits) {
+    jmaSinShift = 16 - numBits;
+
+    jmaSinTableSize = 1;
+    for (u8 i = 0; i < numBits; i++) {
+        jmaSinTableSize *= 2;
+    }
+
+    jmaSinTable = new f32[jmaSinTableSize + (jmaSinTableSize / 4)];
+    if (!jmaSinTable) {
+        return false;
+    }
+
+    for (u16 i = 0; i < jmaSinTableSize + (jmaSinTableSize / 4); i++) {
+        jmaSinTable[i] = sin(((M_PI * 2.0f) / jmaSinTableSize) * i);
+    }
+
+    jmaCosTable = jmaSinTable + (jmaSinTableSize / 4);
+    return true;
 }
 
 /* 80301150-80301218       .text JMAEulerToQuat__FsssP10Quaternion */
-void JMAEulerToQuat(short, short, short, Quaternion*) {
-    /* Nonmatching */
+void JMAEulerToQuat(s16 x, s16 y, s16 z, Quaternion* out) {
+    f32 cos_0 = JMASCos(x / 2);
+    f32 cos_1 = JMASCos(y / 2);
+    f32 cos_2 = JMASCos(z / 2);
+    f32 sin_0 = JMASSin(x / 2);
+    f32 sin_1 = JMASSin(y / 2);
+    f32 sin_2 = JMASSin(z / 2);
+
+    f32 c1_c2 = cos_1 * cos_2;
+    f32 s1_s2 = sin_1 * sin_2;
+
+    out->w = (cos_0 * c1_c2) + (sin_0 * s1_s2);
+    out->x = (sin_0 * c1_c2) - (cos_0 * s1_s2);
+    out->y = (cos_2 * (cos_0 * sin_1)) + (sin_2 * (sin_0 * cos_1));
+    out->z = (sin_2 * (cos_0 * cos_1)) - (cos_2 * (sin_0 * sin_1));
 }
 
 /* 80301218-803012D8       .text JMAQuatLerp__FP10QuaternionP10QuaternionfP10Quaternion */
-void JMAQuatLerp(Quaternion*, Quaternion*, float, Quaternion*) {
-    /* Nonmatching */
+void JMAQuatLerp(Quaternion* a, Quaternion* b, f32 t, Quaternion* out) {
+    Quaternion temp;
+
+    f32 dot = (a->x * b->x) + (a->y * b->y) + (a->z * b->z) + (a->w * b->w);
+    if (dot < 0.0) {
+        temp.x = -b->x;
+        temp.y = -b->y;
+        temp.z = -b->z;
+        temp.w = -b->w;
+    } else {
+        temp.x = b->x;
+        temp.y = b->y;
+        temp.z = b->z;
+        temp.w = b->w;  
+    }
+
+    out->x = (1.0 - t) * a->x + (f64)t * temp.x;
+    out->y = (1.0 - t) * a->y + (f64)t * temp.y;
+    out->z = (1.0 - t) * a->z + (f64)t * temp.z;
+    out->w = (1.0 - t) * a->w + (f64)t * temp.w;
 }
 
 /* 803012D8-80301350       .text JMAHermiteInterpolation__Ffffffff */
-f32 JMAHermiteInterpolation(f32, f32, f32, f32, f32, f32, f32) {
-    /* Nonmatching */
+f32 JMAHermiteInterpolation(f32 frame, f32 time0, f32 value0, f32 tangent0, f32 time1, f32 value1, f32 tangent1) {
+    f32 length = time1 - time0;
+    f32 f9 = frame - time0;
+    f32 f1 = 1.0f / length;
+    f32 f2 = f9 * f9 * f1;
+    f32 f10 = f2 * f1;
+    f32 f11 = f9 * f10;
+    f32 f12 = f11 * f1;
+    return (value0 * ((1.0f + ((2.0f * f12) - (3.0f * f10))))) +
+           (value1 * ((-2.0f * f12) + (3.0f * f10))) +
+           (tangent0 * (f9 + (f11 - (2.0f * f2)))) +
+           (tangent1 * (f11 - f2));
 }
-

@@ -899,7 +899,7 @@ config.libs = [
     JSystemLib(
         "JMath",
         [
-            Object(NonMatching, "JSystem/JMath/JMath.cpp"),
+            Object(Matching,    "JSystem/JMath/JMath.cpp"),
             Object(Matching,    "JSystem/JMath/random.cpp"),
         ],
     ),
