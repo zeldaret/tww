@@ -3,11 +3,11 @@
 // Translation Unit: d_boss_magma.cpp
 //
 
-#include "d_boss_magma.h"
+#include "d/d_magma.h"
 #include "dolphin/types.h"
 
 /* 80076B00-80076CDC       .text calc__17dMagma_ballBoss_cFfUci */
-void dMagma_ballBoss_c::calc(float, unsigned char, int) {
+void dMagma_ballBoss_c::calc(f32, u8, int) {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void b_a_sub(void*, void*) {
 }
 
 /* 80076D9C-80076FEC       .text setup__17dMagma_ballBoss_cFfUci */
-void dMagma_ballBoss_c::setup(float, unsigned char, int) {
+void dMagma_ballBoss_c::setup(f32, u8, int) {
     /* Nonmatching */
 }
 

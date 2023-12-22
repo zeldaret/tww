@@ -16,6 +16,13 @@ public:
     void MoveDownLift();
     BOOL _draw();
 
+    void checkEndDownLift();
+    void MoveUpLift();
+
+    static const f32 m_height;
+    static const f32 m_max_speed;
+    static const f32 m_min_speed;
+
 public:
     /* Place member variables here */
 };

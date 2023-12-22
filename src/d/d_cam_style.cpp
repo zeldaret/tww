@@ -3,6 +3,5 @@
 // Translation Unit: d_cam_style.cpp
 //
 
-#include "d_cam_style.h"
-#include "dolphin/types.h"
+#include "d/d_cam_param.h"
 

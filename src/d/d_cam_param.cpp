@@ -3,21 +3,20 @@
 // Translation Unit: d_cam_param.cpp
 //
 
-#include "d_cam_param.h"
-#include "dolphin/types.h"
+#include "d/d_cam_param.h"
 
 /* 800AF384-800AF4F4       .text rationalBezierRatio__8dCamMathFff */
-void dCamMath::rationalBezierRatio(float, float) {
+void dCamMath::rationalBezierRatio(f32, f32) {
     /* Nonmatching */
 }
 
 /* 800AF4F4-800AF544       .text customRBRatio__8dCamMathFff */
-void dCamMath::customRBRatio(float, float) {
+void dCamMath::customRBRatio(f32, f32) {
     /* Nonmatching */
 }
 
 /* 800AF544-800AF5A0       .text zoomFovy__8dCamMathFff */
-void dCamMath::zoomFovy(float, float) {
+void dCamMath::zoomFovy(f32, f32) {
     /* Nonmatching */
 }
 
@@ -47,7 +46,7 @@ dCstick_c::dCstick_c() {
 }
 
 /* 800AF838-800AF840       .text Shift__9dCstick_cFUl */
-void dCstick_c::Shift(unsigned long) {
+void dCstick_c::Shift(u32) {
     /* Nonmatching */
 }
 
@@ -57,7 +56,7 @@ dCamBGChk_c::dCamBGChk_c() {
 }
 
 /* 800AF8F4-800AF930       .text __ct__11dCamParam_cFl */
-dCamParam_c::dCamParam_c(long) {
+dCamParam_c::dCamParam_c(s32) {
     /* Nonmatching */
 }
 
@@ -67,57 +66,57 @@ dCamParam_c::~dCamParam_c() {
 }
 
 /* 800AF978-800AF9BC       .text Change__11dCamParam_cFl */
-void dCamParam_c::Change(long) {
+void dCamParam_c::Change(s32) {
     /* Nonmatching */
 }
 
 /* 800AF9BC-800AFA04       .text SearchStyle__11dCamParam_cFUl */
-void dCamParam_c::SearchStyle(unsigned long) {
+void dCamParam_c::SearchStyle(u32) {
     /* Nonmatching */
 }
 
 /* 800AFA04-800AFAA4       .text ratiof__11dCamParam_cFffff */
-void dCamParam_c::ratiof(float, float, float, float) {
+void dCamParam_c::ratiof(f32, f32, f32, f32) {
     /* Nonmatching */
 }
 
 /* 800AFAA4-800AFB00       .text DefaultRadius__11dCamParam_cFPf */
-void dCamParam_c::DefaultRadius(float*) {
+void dCamParam_c::DefaultRadius(f32*) {
     /* Nonmatching */
 }
 
 /* 800AFB00-800AFB88       .text RadiusRatio__11dCamParam_cFf */
-void dCamParam_c::RadiusRatio(float) {
+void dCamParam_c::RadiusRatio(f32) {
     /* Nonmatching */
 }
 
 /* 800AFB88-800AFBB8       .text CenterHeight__11dCamParam_cFf */
-void dCamParam_c::CenterHeight(float) {
+void dCamParam_c::CenterHeight(f32) {
     /* Nonmatching */
 }
 
 /* 800AFBB8-800AFBE8       .text Fovy__11dCamParam_cFf */
-void dCamParam_c::Fovy(float) {
+void dCamParam_c::Fovy(f32) {
     /* Nonmatching */
 }
 
 /* 800AFBE8-800AFC74       .text LockonLongitude__11dCamParam_cFf */
-void dCamParam_c::LockonLongitude(float) {
+void dCamParam_c::LockonLongitude(f32) {
     /* Nonmatching */
 }
 
 /* 800AFC74-800AFD00       .text LockonLatitude__11dCamParam_cFf */
-void dCamParam_c::LockonLatitude(float) {
+void dCamParam_c::LockonLatitude(f32) {
     /* Nonmatching */
 }
 
 /* 800AFD00-800AFD20       .text LockonFovy__11dCamParam_cFf */
-void dCamParam_c::LockonFovy(float) {
+void dCamParam_c::LockonFovy(f32) {
     /* Nonmatching */
 }
 
 /* 800AFD20-800AFD40       .text LockonCenterHeight__11dCamParam_cFf */
-void dCamParam_c::LockonCenterHeight(float) {
+void dCamParam_c::LockonCenterHeight(f32) {
     /* Nonmatching */
 }
 
@@ -132,7 +131,7 @@ dCamSetup_c::~dCamSetup_c() {
 }
 
 /* 800AFF40-800AFFB0       .text CheckLatitudeRange__11dCamSetup_cFPs */
-void dCamSetup_c::CheckLatitudeRange(short*) {
+void dCamSetup_c::CheckLatitudeRange(s16*) {
     /* Nonmatching */
 }
 
@@ -140,9 +139,3 @@ void dCamSetup_c::CheckLatitudeRange(short*) {
 void dCamSetup_c::FanBank() {
     /* Nonmatching */
 }
-
-/* 800B0004-800B004C       .text __dt__9dCstick_cFv */
-dCstick_c::~dCstick_c() {
-    /* Nonmatching */
-}
-

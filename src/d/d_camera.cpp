@@ -13,7 +13,7 @@
 class camera_process_class;
 
 /* 80161790-801618B8       .text __ct__9dCamera_cFP12camera_class */
-dCamera_c::dCamera_c(camera_class*) {
+dCamera_c::dCamera_c(camera_class*) : mCamParam(0) {
     /* Nonmatching */
 }
 

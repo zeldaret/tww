@@ -3,8 +3,12 @@
 // Translation Unit: d_a_leaflift_static.cpp
 //
 
-#include "d/actor/d_a_leaflift_static.h"
+#include "d/actor/d_a_leaflift.h"
 #include "dolphin/types.h"
+
+const f32 daLlift_c::m_height = 560.0f;
+const f32 daLlift_c::m_max_speed = 10.0f;
+const f32 daLlift_c::m_min_speed = 5.0f;
 
 /* 800690E4-80069100       .text checkEndDownLift__9daLlift_cFv */
 void daLlift_c::checkEndDownLift() {

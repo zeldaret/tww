@@ -324,11 +324,9 @@ dDemo_manager_c::~dDemo_manager_c() {
 }
 
 /* 8006AEFC-8006AF5C       .text __dt__14dMesg_tControlFv */
-/*
-dMesg_tControl::~dMesg_tControl() {
-    /* Nonmatching */
-}
-*/
+// dMesg_tControl::~dMesg_tControl() {
+//     /* Nonmatching */
+// }
 
 /* 8006AF5C-8006AFBC       .text __dt__14dDemo_system_cFv */
 dDemo_system_c::~dDemo_system_c() {}

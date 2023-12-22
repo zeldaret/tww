@@ -3,5 +3,4 @@
 // Translation Unit: d_vib_pattern.cpp
 //
 
-#include "d_vib_pattern.h"
-#include "dolphin/types.h"
+#include "d/d_vibration.h"

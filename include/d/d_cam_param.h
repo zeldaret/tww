@@ -2,18 +2,28 @@
 #define D_CAM_PARAM_H
 
 #include "dolphin/types.h"
+#include "SSystem/SComponent/c_angle.h"
 
 struct dCamera__Style;
 
 class dCstick_c {
+public:
     /* 0x00 */ f32 m00;
     /* 0x04 */ f32 m04;
     /* 0x08 */ u32 m08;
     /* 0x0C */ u8 m0C[0x10 - 0x0C];
-    /* 0x10 */ void* vtbl;
+public:
+    dCstick_c();
+    virtual ~dCstick_c() {}
+
+    void Shift(u32);
 };
 
 class dCamBGChk_c {
+public:
+    dCamBGChk_c();
+
+public:
     /* 0x00 */ f32 m00;
     /* 0x04 */ f32 m04;
     /* 0x08 */ f32 m08;
@@ -41,6 +51,7 @@ class dCamBGChk_c {
 };
 
 class dCamSetup_c {
+public:
     /* 0x000 */ f32 m000;
     /* 0x004 */ f32 m004;
     /* 0x008 */ u16 m008;
@@ -92,17 +103,52 @@ class dCamSetup_c {
     /* 0x0C0 */ f32 m0C0;
     /* 0x0C4 */ f32 m0C4;
     /* 0x0C8 */ u32 m0C8;
-    /* 0x0CC */ void* vtbl;
+
+public:
+    dCamSetup_c();
+    virtual ~dCamSetup_c();
+
+    void CheckLatitudeRange(s16*);
+    void FanBank();
+
+public:
     /* 0x0D0 */ dCstick_c mCstick;
     /* 0x0E4 */ dCamBGChk_c mBGChk;
 };
 
 class dCamParam_c {
-    void Flag(s32, u16);
-    void Val(s32, int);
+public:
     /* 0x0 */ dCamera__Style* mpStyle;
     /* 0x4 */ int mStyleIdx;
-    /* 0x8 */ void* vtbl;
+
+public:
+    dCamParam_c(s32);
+    virtual ~dCamParam_c();
+
+    void Flag(s32, u16);
+    void Val(s32, int);
+    void Change(s32);
+    void SearchStyle(u32);
+    void ratiof(f32, f32, f32, f32);
+    void DefaultRadius(f32*);
+    void RadiusRatio(f32);
+    void CenterHeight(f32);
+    void Fovy(f32);
+    void LockonLongitude(f32);
+    void LockonLatitude(f32);
+    void LockonFovy(f32);
+    void LockonCenterHeight(f32);
+};
+
+class dCamMath {
+public:
+    void rationalBezierRatio(f32, f32);
+    void customRBRatio(f32, f32);
+    void zoomFovy(f32, f32);
+    void xyzRotateX(cXyz&, cSAngle);
+    void xyzRotateY(cXyz&, cSAngle);
+    void xyzHorizontalDistance(cXyz&, cXyz&);
+    void xyzProjPosOnYZ(cSAngle, cXyz&, cXyz&);
 };
 
 #endif /* D_CAM_PARAM_H */
