@@ -24,18 +24,28 @@ public:
         , field_0x1C(NULL) {}
 
     BOOL CreateInit();
-    void CylHitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*, cXyz, cXyz, f32);
-    void Cyl2HitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*, cXyz, cXyz, f32);
-    void SphHitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*, cXyz, f32);
-    void HitBufferUpdate(int*, cXyz*, int, csXyz*, cXyz*);
+    BOOL CylHitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*, cXyz, cXyz, f32);
+    BOOL Cyl2HitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*, cXyz, cXyz, f32);
+    BOOL SphHitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*, cXyz, f32);
+    BOOL HitBufferUpdate(int*, cXyz*, int, csXyz*, cXyz*);
     s32 searchJntHitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*);
     
     J3DModel* getModel() { return mpModel; }
-    // setSearchData(__jnt_hit_data_c*);
-    // setMdlPtr(J3DModel*);
-    // setMaxNum(short);
-    // isThrow(int);
-    // isDelete(int);
+    void setSearchData(__jnt_hit_data_c* data) { mpSearchData = data; }
+    void setMdlPtr(J3DModel* model) { mpModel = model; }
+    void setMaxNum(s16 num) { mMaxNum = num; }
+    bool isThrow(int type) {
+        if (type == 4 || type == 3) {
+            return true;
+        }
+        return false;
+    }
+    bool isDelete(int type) {
+        if (type == 8 || type == 7) {
+            return true;
+        }
+        return false;
+    }
     bool isCylinder(int type) {
         if (type == 0 || (u32)type-2 <= 1 || type == 5 || type == 7) {
             return true;
@@ -53,13 +63,13 @@ public:
     // DBdrawSph(MtxP, cXyz*, f32);
     // DBdrawAll();
     
-    /* 0x00 */ __jnt_hit_data_c* mpHitData;
+    /* 0x00 */ __jnt_hit_data_c* mpSearchData;
     /* 0x04 */ J3DModel* mpModel;
     /* 0x08 */ cXyz* mpOffsets;
     /* 0x0C */ f32* mpRadiuses;
     /* 0x10 */ s16* mpShapeTypes;
     /* 0x14 */ s16* mpJointIndexes;
-    /* 0x18 */ s16 mHitDataCount;
+    /* 0x18 */ s16 mMaxNum;
     /* 0x1A */ u8 field_0x1A[2];
     /* 0x1C */ void* field_0x1C;
 };

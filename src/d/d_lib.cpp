@@ -14,15 +14,12 @@ Quaternion ZeroQuat = {0.0f, 0.0f, 0.0f, 1.0f};
 
 /* 80057000-800570CC       .text dLib_setCirclePath__FP18dLib_circle_path_c */
 void dLib_setCirclePath(dLib_circle_path_c* path) {
-    /* Nonmatching */
     path->mAngle += path->mAngleSpeed;
     f32 rad = path->mRadius + path->mWobbleAmplitude * cM_ssin(path->mAngle);
     mDoMtx_stack_c::transS(path->mTranslation);
     mDoMtx_stack_c::YrotM(path->mAngle);
     mDoMtx_stack_c::transM(rad, 0.0f, 0.0f);
-    path->mPos.x = mDoMtx_stack_c::get()[0][3];
-    path->mPos.y = mDoMtx_stack_c::get()[1][3];
-    path->mPos.z = mDoMtx_stack_c::get()[2][3];
+    mDoMtx_stack_c::multVecZero(&path->mPos);
 }
 
 /* 800570CC-8005716C       .text dLib_getWaterY__FR4cXyzR12dBgS_ObjAcch */

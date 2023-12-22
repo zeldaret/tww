@@ -4,14 +4,16 @@
 //
 
 #include "d/d_jnt_hit.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_mtx.h"
+#include "SSystem/SComponent/c_math.h"
+#include "SSystem/SComponent/c_lib.h"
 
 /* 80060BE8-80060C44       .text __ct__12JntHit_HIO_cFv */
 JntHit_HIO_c::JntHit_HIO_c() {
     m06 = 0;
     m08 = 0;
     m0C = 50.0f;
-    m10.set(cXyz::Zero);
+    m10 = cXyz::Zero;
     m1C = 0.0f;
     m20 = 0.0f;
     m24 = 100.0f;
@@ -20,10 +22,10 @@ JntHit_HIO_c::JntHit_HIO_c() {
 
 /* 80060C44-80060EC4       .text CreateInit__8JntHit_cFv */
 BOOL JntHit_c::CreateInit() {
-    __jnt_hit_data_c* pHitData = mpHitData;
+    __jnt_hit_data_c* pHitData = mpSearchData;
     int posCount = 0;
     int i;
-    for (i = 0; i < mHitDataCount; i++) {
+    for (i = 0; i < mMaxNum; i++) {
         if (isCylinder(pHitData->mShapeType)) {
             posCount += 2;
         } else if (isSphere(pHitData->mShapeType)) {
@@ -32,20 +34,20 @@ BOOL JntHit_c::CreateInit() {
         pHitData++;
     }
     
-    mpShapeTypes = new s16[mHitDataCount];
+    mpShapeTypes = new s16[mMaxNum];
     mpOffsets = new cXyz[posCount];
-    mpRadiuses = new f32[mHitDataCount];
-    mpJointIndexes = new s16[mHitDataCount];
+    mpRadiuses = new f32[mMaxNum];
+    mpJointIndexes = new s16[mMaxNum];
     if (!mpShapeTypes || !mpOffsets || !mpRadiuses || !mpJointIndexes) {
         return FALSE;
     }
     
-    pHitData = mpHitData;
+    pHitData = mpSearchData;
     s16* pShapeType = mpShapeTypes;
     s16* pJointIndex = mpJointIndexes;
     f32* pRadius = mpRadiuses;
     cXyz* pOffset = mpOffsets;
-    for (i = 0; i < mHitDataCount;) {
+    for (i = 0; i < mMaxNum;) {
         pShapeType[0] = pHitData->mShapeType;
         pJointIndex[0] = pHitData->mJointIndex;
         pRadius[0] = pHitData->mRadius;
@@ -70,28 +72,332 @@ BOOL JntHit_c::CreateInit() {
 }
 
 /* 80060EC4-80061440       .text CylHitPosAngleOffset__8JntHit_cFP4cXyzP5csXyzP4cXyzP5csXyz4cXyz4cXyzf */
-void JntHit_c::CylHitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*, cXyz, cXyz, f32) {
-    /* Nonmatching */
+BOOL JntHit_c::CylHitPosAngleOffset(cXyz* r27, csXyz* r28, cXyz* r29, csXyz* r30, cXyz r31, cXyz r9, f32 f28) {
+    cXyz r1_100 = r9 - r31;
+    cXyz r1_F4 = r1_100.normZP();
+    f32 f30 = r1_100.abs();
+    f32 f1 = r27->inprod(r1_F4);
+    cXyz r1_E8;
+    cXyz r1_DC = *r27;
+    cXyz r1_D0 = r1_F4;
+    r1_D0 *= f1;
+    r1_DC -= r1_D0;
+    
+    f32 sinX = cM_ssin(r28->x);
+    f32 cosX = cM_scos(r28->x);
+    f32 x = cM_ssin(r28->y) * cosX;
+    f32 z = cM_scos(r28->y) * cosX;
+    cXyz r1_C4(x, -sinX, z);
+    f1 = r1_C4.inprod(r1_F4);
+    cXyz r1_B8 = r1_C4;
+    r1_D0 = r1_F4;
+    r1_D0 *= f1;
+    r1_B8 -= r1_D0;
+    if (r1_B8.normalizeRS()) {
+        f32 f31 = r1_DC.inprod(r1_B8);
+        f32 temp = f31*f31 + f28*f28 - r1_DC.abs2();
+        if (temp < 0.0f)
+            temp = 0.0f;
+        r1_E8 = r1_C4 * (-f31 - sqrtf(temp));
+        r1_E8 += *r27;
+        if (temp == 0.0f) {
+            cXyz r1_AC = r1_E8;
+            r1_AC -= r1_F4 * r1_E8.inprod(r1_F4);
+            r1_AC.normalizeZP();
+            r1_AC = r1_AC * f28;
+            r1_AC += r1_F4 * r1_E8.inprod(r1_F4);
+            r1_E8 = r1_AC;
+        }
+    } else {
+        r1_E8 = *r27;
+        cXyz r1_A0 = *r27;
+        r1_A0 -= r1_F4 * r1_E8.inprod(r1_F4);
+        r1_A0.normalizeZP();
+        r1_A0 = r1_A0 * f28;
+        r1_A0 += r1_F4 * r1_E8.inprod(r1_F4);
+        r1_E8 = r1_A0;
+    }
+    
+    f32 temp = r1_E8.inprod(r1_F4);
+    f32 temp2 = 0.0f;
+    if (temp < 0.0f)
+        temp2 = -temp;
+    else if (temp > f30)
+        temp2 = f30 - temp;
+    r1_E8 += r1_F4 * temp2;
+    r1_E8 += r31;
+    
+    mDoMtx_stack_c::inverse();
+    mDoMtx_stack_c::transM(r1_E8);
+    mDoMtx_stack_c::ZXYrotM(*r28);
+    mDoMtx_stack_c::multVecZero(r29);
+    mDoMtx_MtxToRot(mDoMtx_stack_c::get(), r30);
+    
+    return TRUE;
 }
 
 /* 80061440-80061830       .text Cyl2HitPosAngleOffset__8JntHit_cFP4cXyzP5csXyzP4cXyzP5csXyz4cXyz4cXyzf */
-void JntHit_c::Cyl2HitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*, cXyz, cXyz, f32) {
-    /* Nonmatching */
+BOOL JntHit_c::Cyl2HitPosAngleOffset(cXyz* r27, csXyz* r29, cXyz* r30, csXyz* r31, cXyz r28, cXyz r9, f32 f31) {
+    cXyz r1_94 = r9 - r28;
+    cXyz r1_88 = r1_94.normZP();
+    f32 f29 = r1_94.abs();
+    f32 f30 = r27->inprod(r1_88);
+    
+    f32 sinX = cM_ssin(r29->x);
+    f32 cosX = cM_scos(r29->x);
+    f32 x = cM_ssin(r29->y) * cosX;
+    f32 z = cM_scos(r29->y) * cosX;
+    cXyz r1_7C;
+    cXyz r1_70(x, -sinX, z);
+    f32 f1 = r1_70.inprod(r1_88);
+    if (!(fabsf(f1) < cXyz::getNearZeroValue())) { // TODO: is this an inline?
+        if (f1 > 0.0f) {
+            f1 = -f30 / f1;
+        } else {
+            f1 = (f29 - f30) / f1;
+        }
+        cXyz r1_64 = r1_70;
+        r1_64 *= f1;
+        r1_7C = *r27 + r1_64;
+    } else {
+        r1_7C = *r27;
+    }
+    
+    cXyz r1_58 = r1_7C;
+    f32 temp = r1_58.inprod(r1_88);
+    cXyz r1_4C = r1_88;
+    r1_4C *= temp;
+    r1_58 -= r1_4C;
+    cXyz r1_40 = r1_58;
+    if (r1_58.abs() > f31 && r1_58.normalizeRS()) {
+        r1_58 *= f31;
+        r1_58 = r1_40 - r1_58;
+        r1_7C -= r1_58;
+    }
+    r1_7C += r28;
+    
+    mDoMtx_stack_c::inverse();
+    mDoMtx_stack_c::transM(r1_7C);
+    mDoMtx_stack_c::ZXYrotM(*r29);
+    mDoMtx_stack_c::multVecZero(r30);
+    mDoMtx_MtxToRot(mDoMtx_stack_c::get(), r31);
+    
+    return TRUE;
 }
 
 /* 80061830-80061ACC       .text SphHitPosAngleOffset__8JntHit_cFP4cXyzP5csXyzP4cXyzP5csXyz4cXyzf */
-void JntHit_c::SphHitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*, cXyz, f32) {
-    /* Nonmatching */
+BOOL JntHit_c::SphHitPosAngleOffset(cXyz* r27, csXyz* r29, cXyz* r30, csXyz* r31, cXyz r28, f32 f30) {
+    f32 sinX = cM_ssin(r29->x);
+    f32 cosX = cM_scos(r29->x);
+    f32 x = cM_ssin(r29->y) * cosX;
+    f32 z = cM_scos(r29->y) * cosX;
+    cXyz r1_34(x, -sinX, z);
+    f32 f31 = r27->inprod(r1_34);
+    f32 temp = f31*f31 + f30*f30 - r27->abs2();
+    if (temp < 0.0f)
+        temp = 0.0f;
+    
+    cXyz r1_28 = r1_34 * (-f31 - sqrtf(temp));
+    r1_28 += *r27;
+    if (r1_28.abs() > f30) {
+        r1_28.normalizeZP();
+        r1_28 *= f30;
+    }
+    r1_28 += r28;
+    
+    mDoMtx_stack_c::inverse();
+    mDoMtx_stack_c::transM(r1_28);
+    mDoMtx_stack_c::ZXYrotM(*r29);
+    mDoMtx_stack_c::multVecZero(r30);
+    mDoMtx_MtxToRot(mDoMtx_stack_c::get(), r31);
+    
+    return TRUE;
 }
 
 /* 80061ACC-80061C28       .text HitBufferUpdate__8JntHit_cFPiP4cXyziP5csXyzP4cXyz */
-void JntHit_c::HitBufferUpdate(int*, cXyz*, int, csXyz*, cXyz*) {
-    /* Nonmatching */
+BOOL JntHit_c::HitBufferUpdate(int* r28, cXyz* r29, int r30, csXyz* r31, cXyz* r27) {
+    mDoMtx_stack_c::copy(mpModel->getAnmMtx(r30));
+    cXyz r1_2C;
+    mDoMtx_stack_c::multVec(r27, &r1_2C);
+    if (*r28 >= 0) {
+        cXyz r1_20(
+            cM_scos(r31->x) * cM_ssin(r31->y),
+            -cM_ssin(r31->x),
+            cM_scos(r31->x) * cM_scos(r31->y)
+        );
+        cXyz r1_14 = r1_2C - *r29;
+        if (r1_14.inprod(r1_20) < 0.0f) {
+            *r28 = r30;
+            *r29 = r1_2C;
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    } else {
+        *r28 = r30;
+        *r29 = r1_2C;
+        return TRUE;
+    }
 }
 
 /* 80061C28-800627DC       .text searchJntHitPosAngleOffset__8JntHit_cFP4cXyzP5csXyzP4cXyzP5csXyz */
-s32 JntHit_c::searchJntHitPosAngleOffset(cXyz*, csXyz*, cXyz*, csXyz*) {
-    /* Nonmatching */
+s32 JntHit_c::searchJntHitPosAngleOffset(cXyz* r18, csXyz* r28, cXyz* r29, csXyz* r30) {
+    cXyz r1_1A0;
+    cXyz r1_194;
+    cXyz r1_188;
+    cXyz r1_17C;
+    cXyz r1_170;
+    cXyz r1_164;
+    cXyz r1_158;
+    cXyz r1_14C;
+    cXyz r1_140;
+    cXyz r1_134;
+    cXyz r1_128;
+    cXyz r1_11C;
+    cXyz r1_110;
+    cXyz r1_104;
+    cXyz r1_2C;
+    csXyz r1_24;
+    J3DModel* model = mpModel;
+    f32 f31 = 10000.0f;
+    int j = 0;
+    int jointIndex = -1;
+    s16* pShapeType = mpShapeTypes;
+    s16* pJointIndex = mpJointIndexes;
+    f32* pRadius = mpRadiuses;
+    cXyz* pOffset = mpOffsets;
+    int i = 0;
+    int posIndex = 0;
+    int hitIndex = 0;
+    int hitPosIndex = 0;
+    int r1_20 = -1;
+    for (; j++ < mMaxNum; i++) {
+        mDoMtx_stack_c::copy(model->getAnmMtx(*pJointIndex));
+        
+        if (isCylinder(*pShapeType)) {
+            mDoMtx_stack_c::multVec(pOffset, &r1_17C);
+            mDoMtx_stack_c::multVec(pOffset+1, &r1_170);
+            r1_164 = r1_170 - r1_17C;
+            r1_158 = r1_164;
+            r1_1A0 = *r18 - r1_17C;
+            if (!r1_158.normalizeRS()) {
+                f32 temp = cLib_minLimit(r1_1A0.abs() - *pRadius, 0.0f);
+                if (temp <= f31) {
+                    jointIndex = *pJointIndex;
+                    f31 = temp;
+                    hitIndex = i;
+                    hitPosIndex = posIndex;
+                    if (f31 < *pRadius) {
+                        SphHitPosAngleOffset(&r1_1A0, r28, r29, r30, r1_17C, *pRadius);
+                        if (HitBufferUpdate(&r1_20, &r1_194, jointIndex, r28, r29)) {
+                            r1_188 = *r29;
+                            r1_24 = *r30;
+                        }
+                    }
+                }
+            } else {
+                r1_14C = r1_158.outprod(r1_1A0);
+                f32 f29 = cLib_minLimit(r1_14C.abs() - *pRadius, 0.0f);
+                f32 f30 = r1_158.inprod(r1_1A0);
+                f32 f5;
+                if (f30 < 0.0f) {
+                    f5 = -f30;
+                } else {
+                    if (f30 > r1_164.abs()) {
+                        f5 = f30 - r1_164.abs();
+                    } else {
+                        f5 = 0.0f;
+                    }
+                }
+                f32 f4 = sqrtf(f5*f5 + f29*f29);
+                if (f4 <= f31) {
+                    jointIndex = *pJointIndex;
+                    f31 = f4;
+                    hitIndex = i;
+                    hitPosIndex = posIndex;
+                    if (fabsf(f5) < cXyz::getNearZeroValue() && fabsf(f29) < cXyz::getNearZeroValue()) {
+                        if (!isThrow(*pShapeType)) {
+                            if (*pShapeType == 0) {
+                                CylHitPosAngleOffset(&r1_1A0, r28, r29, r30, r1_17C, r1_170, *pRadius);
+                            } else if (*pShapeType == 2) {
+                                Cyl2HitPosAngleOffset(&r1_1A0, r28, r29, r30, r1_17C, r1_170, *pRadius);
+                            }
+                            if (isDelete(*pShapeType)) {
+                                return -3;
+                            }
+                            if (HitBufferUpdate(&r1_20, &r1_194, jointIndex, r28, r29)) {
+                                r1_188 = *r29;
+                                r1_24 = *r30;
+                            }
+                        }
+                    }
+                }
+            }
+            pOffset += 2;
+            posIndex += 2;
+        } else if (isSphere(*pShapeType)) {
+            mDoMtx_stack_c::multVec(pOffset, &r1_140);
+            r1_1A0 = *r18 - r1_140;
+            f32 temp = cLib_minLimit(r1_1A0.abs() - *pRadius, 0.0f);
+            if (temp <= f31) {
+                jointIndex = *pJointIndex;
+                f31 = temp;
+                hitIndex = i;
+                hitPosIndex = posIndex;
+                if (fabsf(f31) < cXyz::getNearZeroValue()) {
+                    SphHitPosAngleOffset(&r1_1A0, r28, r29, r30, r1_140, *pRadius);
+                    if (isDelete(*pShapeType)) {
+                        jointIndex = -3;
+                        return jointIndex;
+                    } else if (isThrow(*pShapeType)) {
+                        // Do nothing
+                    } else if (HitBufferUpdate(&r1_20, &r1_194, jointIndex, r28, r29)) {
+                        r1_188 = *r29;
+                        r1_24 = *r30;
+                    }
+                }
+            }
+            pOffset += 1;
+            posIndex += 1;
+        }
+        
+        pShapeType++;
+        pJointIndex++;
+        pRadius++;
+    }
+    
+    if (r1_20 >= 0) {
+        *r29 = r1_188;
+        *r30 = r1_24;
+        return r1_20;
+    }
+    
+    pShapeType = mpShapeTypes;
+    pRadius = mpRadiuses;
+    pOffset = mpOffsets;
+    
+    mDoMtx_stack_c::copy(model->getAnmMtx(jointIndex));
+    if (isThrow(pShapeType[hitIndex])) {
+        jointIndex = -1;
+    } else if (isDelete(pShapeType[hitIndex])) {
+        jointIndex = -3;
+    } else if (pShapeType[hitIndex] == 0) {
+        mDoMtx_stack_c::multVec(&pOffset[hitPosIndex], &r1_134);
+        mDoMtx_stack_c::multVec(&pOffset[hitPosIndex+1], &r1_128);
+        r1_1A0 = *r18 - r1_134;
+        CylHitPosAngleOffset(&r1_1A0, r28, r29, r30, r1_134, r1_128, pRadius[hitIndex]);
+    } else if (pShapeType[hitIndex] == 1) {
+        mDoMtx_stack_c::multVec(&pOffset[hitPosIndex], &r1_11C);
+        r1_1A0 = *r18 - r1_11C;
+        SphHitPosAngleOffset(&r1_1A0, r28, r29, r30, r1_11C, pRadius[hitIndex]);
+    } else {
+        mDoMtx_stack_c::multVec(&pOffset[hitPosIndex], &r1_110);
+        mDoMtx_stack_c::multVec(&pOffset[hitPosIndex+1], &r1_104);
+        r1_1A0 = *r18 - r1_110;
+        Cyl2HitPosAngleOffset(&r1_1A0, r28, r29, r30, r1_110, r1_104, pRadius[hitIndex]);
+    }
+    
+    return jointIndex;
 }
 
 /* 800627DC-8006286C       .text JntHit_create__FP8J3DModelP16__jnt_hit_data_cs */
@@ -99,9 +405,9 @@ JntHit_c* JntHit_create(J3DModel* model, __jnt_hit_data_c* jntHitData, s16 hitDa
     JntHit_c * pJntHit = new JntHit_c();
 
     if (pJntHit != NULL) {
-        pJntHit->mpHitData = jntHitData;
-        pJntHit->mpModel = model;
-        pJntHit->mHitDataCount = hitDataCount;
+        pJntHit->setSearchData(jntHitData);
+        pJntHit->setMdlPtr(model);
+        pJntHit->setMaxNum(hitDataCount);
         if (pJntHit->CreateInit())
             return pJntHit;
     }

@@ -113,10 +113,10 @@ struct cXyz : Vec {
         }
     }
 
-    float getSquareMag() const { return VECSquareMag(this); }
+    f32 getSquareMag() const { return VECSquareMag(this); }
     f32 getSquareDistance(const Vec& other) const { return VECSquareDistance(this, &other); }
 
-    static float getNearZeroValue() { return 8e-11f; }
+    static f32 getNearZeroValue() { return 8e-11f; }
 
     bool isNearZeroSquare() const { return (this->getSquareMag() < getNearZeroValue()); }
     f32 abs2() const { return this->getSquareMag(); }
@@ -143,7 +143,7 @@ struct cXyz : Vec {
     // void inprodXZ(const Vec&) const {}
     // void isNearZeroSquare(const cXyz&) const {}
     // void operator*=(const Vec&) {}
-    // void operator/=(float) {}
+    // void operator/=(f32) {}
     // void operator=(const cXyz&) {}
     // void print(const char*) {}
 };
