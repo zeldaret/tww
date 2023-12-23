@@ -32,13 +32,13 @@ class J3DAnmVtxColorKey;
 class J3DAnmVtxColorKeyData;
 
 struct J3DAnmLoaderDataBase {
-    static void* load(const void*);
+    static J3DAnmBase* load(const void*);
     static void setResource(J3DAnmBase*, const void*);
 };
 
 class J3DAnmLoader {
 public:
-    virtual void* load(const void*) = 0;
+    virtual J3DAnmBase* load(const void*) = 0;
     virtual void setResource(J3DAnmBase*, const void*) = 0;
     virtual ~J3DAnmLoader() {}
 };
@@ -47,7 +47,7 @@ class J3DAnmFullLoader_v15 : public J3DAnmLoader {
 public:
     J3DAnmFullLoader_v15();
     ~J3DAnmFullLoader_v15();
-    void* load(const void*);
+    J3DAnmBase* load(const void*);
     void setResource(J3DAnmBase*, const void*);
     void readAnmTransform(const J3DAnmTransformFullData*);
     void setAnmTransform(J3DAnmTransformFull*, const J3DAnmTransformFullData*);
@@ -62,14 +62,14 @@ public:
     void readAnmVtxColor(const J3DAnmVtxColorFullData*);
     void setAnmVtxColor(J3DAnmVtxColorFull*, const J3DAnmVtxColorFullData*);
 
-    void* field_0x4;
+    J3DAnmBase* mAnm;
 };
 
 class J3DAnmKeyLoader_v15 : public J3DAnmLoader {
 public:
     J3DAnmKeyLoader_v15();
     ~J3DAnmKeyLoader_v15();
-    void* load(const void*);
+    J3DAnmBase* load(const void*);
     void setResource(J3DAnmBase*, const void*);
     void readAnmTransform(const J3DAnmTransformKeyData*);
     void setAnmTransform(J3DAnmTransformKey*, const J3DAnmTransformKeyData*);
@@ -84,7 +84,7 @@ public:
     void readAnmVtxColor(const J3DAnmVtxColorKeyData*);
     void setAnmVtxColor(J3DAnmVtxColorKey*, const J3DAnmVtxColorKeyData*);
 
-    void* field_0x4;
+    J3DAnmBase* mAnm;
 };
 
 #endif /* J3DANMLOADER_H */
