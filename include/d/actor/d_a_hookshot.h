@@ -19,28 +19,28 @@ public:
     typedef BOOL (daHookshot_c::*ProcFunc)();
     
     int getChainCnt() { return mChainCnt; }
+    cXyz getMoveVec() const { return mMoveVec; }
+    u32 getCarryActorID() const { return mCarryActorID; }
+    void getHookAngle() {}
+    void getMtxTop() {}
+    void getObjHookFlg() const {}
+    void getSightHit() const {}
+    void getObjSightCrossPos() {}
     void onObjHookFlg() {}
     void offObjHookFlg() {}
-    void setObjSightCrossPos(const cXyz*) {}
-    void getObjSightCrossPos() {}
     void checkPull() {}
     void checkReturn() {}
     void checkShipRideFlg() const {}
     void checkShot() {}
     void checkWait() {}
-    void getCarryActorID() const {}
-    void getHookAngle() {}
-    void getMtxTop() {}
-    void getObjHookFlg() const {}
-    void getSightHit() const {}
+    void setObjSightCrossPos(const cXyz*) {}
     void setCarryOffset(const cXyz*) {}
     void setReturn() {}
     void setShot() {}
-    cXyz getMoveVec() const { return m2C0; }
     
     daHookshot_c() {}
     BOOL draw();
-    BOOL procWait_init(int);
+    BOOL procWait_init(BOOL);
     BOOL procWait();
     BOOL procShot();
     BOOL procPlayerPull();
@@ -64,14 +64,14 @@ public:
     /* 0x2B6 */ s16 m2B6;
     /* 0x2B8 */ s16 m2B8;
     /* 0x2BA */ csXyz m2BA;
-    /* 0x2C0 */ cXyz m2C0;
+    /* 0x2C0 */ cXyz mMoveVec;
     /* 0x2CC */ cXyz m2CC;
     /* 0x2D8 */ dBgS_RopeLinChk mLinChk;
     /* 0x344 */ dBgS_ObjGndChk mGndChk;
     /* 0x398 */ dCcD_Stts mStts;
     /* 0x3D4 */ dCcD_Cps mCps;
     /* 0x50C */ cXyz m50C;
-    /* 0x518 */ u32 m518;
+    /* 0x518 */ u32 mCarryActorID;
     /* 0x51C */ Mtx m51C;
     /* 0x54C */ ProcFunc mCurrProcFunc;
 };

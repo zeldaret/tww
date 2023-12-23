@@ -128,7 +128,7 @@ static u8 l_matDL[] ALIGN_DECL(32) = {
 
 /* 800F104C-800F12C8       .text draw__16daHookshot_shapeFv */
 void daHookshot_shape::draw() {
-    daHookshot_c* hookshot = reinterpret_cast<daHookshot_c*>(mpUserData);
+    daHookshot_c* hookshot = reinterpret_cast<daHookshot_c*>(getUserArea());
     int chain_count = hookshot->getChainCnt();
     if (chain_count < 1) {
         return;
@@ -200,15 +200,15 @@ void daHookshot_rockLineCallback(fopAc_ac_c* hookshot_actor, dCcD_GObjInf* objIn
 }
 
 /* 800F13E8-800F14CC       .text procWait_init__12daHookshot_cFi */
-BOOL daHookshot_c::procWait_init(int param_1) {
+BOOL daHookshot_c::procWait_init(BOOL playSe) {
     daPy_lk_c* link = daPy_getPlayerLinkActorClass();
     fopAcM_SetParam(this, 0);
     mCurrProcFunc = &daHookshot_c::procWait;
     mChainCnt = 0;
     current.pos = link->getHookshotRootPos();
-    m518 = -1;
+    mCarryActorID = -1;
     m2B0 = 0;
-    if (param_1 != 0) {
+    if (playSe) {
         mDoAud_seStart(JA_SE_LK_HS_WIND_UP_FIN, &link->current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
     }
     return TRUE;
@@ -216,11 +216,71 @@ BOOL daHookshot_c::procWait_init(int param_1) {
 
 /* 800F14CC-800F1990       .text procWait__12daHookshot_cFv */
 BOOL daHookshot_c::procWait() {
-    /* Nonmatching */
     daPy_lk_c* link = daPy_getPlayerLinkActorClass();
     current.pos = link->getHookshotRootPos();
     MtxP leftHandtx = link->getModelJointMtx(0x08); // cl_LhandA joint
     cMtx_copy(leftHandtx, m51C);
+    m51C[0][3] = current.pos.x;
+    m51C[1][3] = current.pos.y;
+    m51C[2][3] = current.pos.z;
+    m2B0 = 0;
+    
+    if (fopAcM_GetParam(this) == 1) {
+        int angleY = link->getBodyAngleY() + link->shape_angle.y;
+        int angleX = link->getBodyAngleX();
+        mMoveVec.x = cM_ssin(angleY) * cM_scos(angleX);
+        mMoveVec.y = -cM_ssin(angleX);
+        mMoveVec.z = cM_scos(angleY) * cM_scos(angleX);
+        mCps.ResetAtHit();
+        mCps.OffAtNoTgHitInfSet();
+        mCps.SetAtHitCallback(NULL);
+        
+        cXyz r1_3C = current.pos - mMoveVec * 60.0f;
+        mLinChk.Set(&r1_3C, &current.pos, this);
+        m2A0 = true;
+        if (dComIfG_Bgsp()->LineCross(&mLinChk)) {
+            if (dComIfG_Bgsp()->ChkPolyHSStick(mLinChk)) {
+                fopAcM_SetParam(this, 3);
+                m2A2 = 0;
+                mCurrProcFunc = &daHookshot_c::procPlayerPull;
+                cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mLinChk);
+                m2B4 = cM_atan2s(triPla->GetNP()->y, triPla->GetNP()->absXZ());
+                m2B6 = cM_atan2s(-triPla->GetNP()->x, -triPla->GetNP()->z);
+                m2B8 = 0;
+                mMoveVec = cXyz::Zero;
+            } else {
+                fopAcM_SetParam(this, 2);
+                mCurrProcFunc = &daHookshot_c::procReturn;
+            }
+        } else {
+            mMoveVec *= 7.0f;
+            
+            mCps.SetStartEnd(r1_3C, current.pos);
+            mCps.SetR(5.0f);
+            mCps.CalcAtVec();
+            dComIfG_Ccsp()->Set(&mCps);
+            // Using the inline breaks the match.
+            // dComIfG_Ccsp()->SetMass(&mCps, 1);
+            g_dComIfG_gameInfo.play.mCcS.SetMass(&mCps, 1);
+            
+            m2A3 = 0;
+            mCurrProcFunc = &daHookshot_c::procShot;
+        }
+    } else {
+        mCps.OnAtNoTgHitInfSet();
+        m2CC.set(
+            current.pos.x + cM_ssin(link->shape_angle.y) * 1500.0f * cM_scos(link->getBodyAngleX()),
+            current.pos.y - cM_ssin(link->getBodyAngleX()) * 1500.0f,
+            current.pos.z + cM_scos(link->shape_angle.y) * 1500.0f * cM_scos(link->getBodyAngleX())
+        );
+        mCps.SetStartEnd(current.pos, m2CC);
+        mCps.SetR(5.0f);
+        mCps.CalcAtVec();
+        mCps.SetAtHitCallback(daHookshot_rockLineCallback);
+        dComIfG_Ccsp()->Set(&mCps);
+    }
+    
+    return TRUE;
 }
 
 /* 800F1990-800F2144       .text procShot__12daHookshot_cFv */
@@ -255,11 +315,11 @@ static BOOL daHookshot_IsDelete(daHookshot_c* i_this) {
 
 /* 800F2B7C-800F2BF0       .text hookshot_delete__12daHookshot_cFv */
 BOOL daHookshot_c::hookshot_delete() {
-    if (m518 != -1) {
-        fopAc_ac_c* hooked_actor = fopAcM_SearchByID(m518);
+    if (mCarryActorID != -1) {
+        fopAc_ac_c* hooked_actor = fopAcM_SearchByID(mCarryActorID);
         if (hooked_actor && fopAcM_checkStatus(hooked_actor, fopAcStts_HOOK_CARRY_e)) {
             fopAcM_cancelHookCarryNow(hooked_actor);
-            m518 = -1;
+            mCarryActorID = -1;
         }
     }
     return TRUE;
@@ -307,7 +367,7 @@ s32 daHookshot_c::create() {
     
     mShape.setUserArea(reinterpret_cast<u32>(this));
     mLinChk.ClrSttsRoofOff();
-    procWait_init(0);
+    procWait_init(FALSE);
     mGravity = -5.0f;
     
     mStts.Init(0xA, 0xFF, this);
