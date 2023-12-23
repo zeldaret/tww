@@ -22,10 +22,11 @@
 #define _SDA_BASE_(dummy) 0
 #define _SDA2_BASE_(dummy) 0
 
-#ifndef __INTELLISENSE__
 #ifndef offsetof
 #define offsetof(type, member) ((size_t) & (((type*)0)->member))
 #endif
+
+#ifndef __INTELLISENSE__
 #define GLUE(a, b) a##b
 #define GLUE2(a, b) GLUE(a, b)
 #define STATIC_ASSERT(cond) typedef char GLUE2(static_assertion_failed, __LINE__)[(cond) ? 1 : -1]
