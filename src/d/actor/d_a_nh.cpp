@@ -26,7 +26,7 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
         /* SrcObjTg  Type    */ AT_TYPE_ALL,
-        /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_UNK2,
+        /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_ENEMY,
         /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_UNK8 | CO_SPRM_UNK10,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,

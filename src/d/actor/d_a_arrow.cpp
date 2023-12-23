@@ -29,7 +29,7 @@ const dCcD_SrcCps daArrow_c::m_at_cps_src = {
         /* Flags             */ 0,
         /* SrcObjAt  Type    */ AT_TYPE_NORMAL_ARROW,
         /* SrcObjAt  Atp     */ 2,
-        /* SrcObjAt  SPrm    */ AT_SPRM_SET | AT_SPRM_UNK2 | AT_SPRM_UNK8,
+        /* SrcObjAt  SPrm    */ AT_SPRM_SET | AT_SPRM_VS_ENEMY | AT_SPRM_UNK8,
         /* SrcObjTg  Type    */ 0,
         /* SrcObjTg  SPrm    */ 0,
         /* SrcObjCo  SPrm    */ 0,

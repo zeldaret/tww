@@ -22,7 +22,7 @@ static const dCcD_SrcCyl l_cyl_at_src = {
         /* Flags             */ 0,
         /* SrcObjAt  Type    */ AT_TYPE_UNK800,
         /* SrcObjAt  Atp     */ 1,
-        /* SrcObjAt  SPrm    */ AT_SPRM_SET | AT_SPRM_UNK4,
+        /* SrcObjAt  SPrm    */ AT_SPRM_SET | AT_SPRM_VS_PLAYER,
         /* SrcObjTg  Type    */ 0,
         /* SrcObjTg  SPrm    */ 0,
         /* SrcObjCo  SPrm    */ 0,

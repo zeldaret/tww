@@ -36,6 +36,7 @@ public:
     void setCarryOffset(const cXyz*) {}
     void setReturn() {}
     void setShot() {}
+    cXyz getMoveVec() const { return m2C0; }
     
     daHookshot_c() {}
     BOOL draw();

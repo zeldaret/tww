@@ -39,7 +39,7 @@ void daBomb_c::setBombNoHit() {
     mSph.OffTgSPrmBit(TG_SPRM_SET);
     mSph.OffCoSPrmBit(CO_SPRM_SET);
     mSph.OffAtSPrmBit(AT_SPRM_SET);
-    mSph.OffAtSPrmBit(AT_SPRM_SET);
+    mSph.ClrAtSet();
 
     field_0x6F3 = true;
 }
@@ -156,7 +156,7 @@ void daBomb2::Act_c::set_no_hit() {
     mSph.OffTgSPrmBit(TG_SPRM_SET);
     mSph.OffCoSPrmBit(CO_SPRM_SET);
     mSph.OffAtSPrmBit(AT_SPRM_SET);
-    mSph.OffAtSPrmBit(AT_SPRM_SET);
+    mSph.ClrAtSet();
 }
 
 bool daBomb2::Act_c::chk_explode() {

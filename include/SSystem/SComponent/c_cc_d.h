@@ -47,19 +47,19 @@ enum cCcD_ObjAtType {
 
 enum cCcD_AtSPrm_e {
     /* 0x01 */ AT_SPRM_SET = 0x01,
-    /* 0x02 */ AT_SPRM_UNK2 = 0x02,
-    /* 0x04 */ AT_SPRM_UNK4 = 0x04,
-    /* 0x08 */ AT_SPRM_UNK8 = 0x08,
-    /* 0x0E */ AT_SPRM_GRP = AT_SPRM_UNK2 | AT_SPRM_UNK4 | AT_SPRM_UNK8,
+    /* 0x02 */ AT_SPRM_VS_ENEMY = 0x02,
+    /* 0x04 */ AT_SPRM_VS_PLAYER = 0x04,
+    /* 0x08 */ AT_SPRM_UNK8 = 0x08, // May be for interactable objects? Doesn't have inlines like enemy and player
+    /* 0x0E */ AT_SPRM_GRP = AT_SPRM_VS_ENEMY | AT_SPRM_VS_PLAYER | AT_SPRM_UNK8,
     /* 0x10 */ AT_SPRM_NO_TG_HIT_INF_SET = 0x10,
 };
 
 enum cCcD_TgSPrm_e {
     /* 0x01 */ TG_SPRM_SET = 0x01,
-    /* 0x02 */ TG_SPRM_UNK2 = 0x02,
-    /* 0x04 */ TG_SPRM_UNK4 = 0x04,
+    /* 0x02 */ TG_SPRM_IS_ENEMY = 0x02,
+    /* 0x04 */ TG_SPRM_IS_PLAYER = 0x04,
     /* 0x08 */ TG_SPRM_UNK8 = 0x08,
-    /* 0x0E */ TG_SPRM_GRP = TG_SPRM_UNK2 | TG_SPRM_UNK4 | TG_SPRM_UNK8,
+    /* 0x0E */ TG_SPRM_GRP = TG_SPRM_IS_ENEMY | TG_SPRM_IS_PLAYER | TG_SPRM_UNK8,
     /* 0x10 */ TG_SPRM_NO_AT_HIT_INF_SET = 0x10,
 };
 
@@ -313,16 +313,16 @@ public:
 STATIC_ASSERT(0x40 == sizeof(cCcD_DivideArea));
 
 struct cCcD_SrcObjCommonBase {
-    /* 0x0 */ s32 mSPrm;
+    /* 0x0 */ u32 mSPrm;
 };
 
 struct cCcD_SrcObjTg {
-    /* 0x0 */ s32 mType;
+    /* 0x0 */ u32 mType;
     /* 0x4 */ cCcD_SrcObjCommonBase mBase;
 };  // Size: 0x8
 
 struct cCcD_SrcObjAt {
-    /* 0x0 */ s32 mType;
+    /* 0x0 */ u32 mType;
     /* 0x4 */ u8 mAtp;
     /* 0x8 */ cCcD_SrcObjCommonBase mBase;
 };  // Size: 0xC
@@ -338,7 +338,7 @@ struct cCcD_SrcObjHitInf {
 };  // Size: 0x18
 
 struct cCcD_SrcObj {
-    /* 0x0 */ int mFlags;
+    /* 0x0 */ u32 mFlags;
     /* 0x4 */ cCcD_SrcObjHitInf mSrcObjHitInf;
 };  // Size: 0x1C
 
@@ -407,13 +407,11 @@ public:
         ClrObj();
     }
     void SetSPrm(u32 sprm) { mSPrm = sprm; }
-    u32 getSPrm() const { return mSPrm; }
     void SetRPrm(u32 rprm) { mRPrm = rprm; }
-    u32 getRPrm() const { return mRPrm; }
-    cCcD_Obj* GetHitObj() { return mHitObj; }
+    cCcD_Obj* GetHitObj() const { return mHitObj; }
     void ClrObj() { mHitObj = NULL; }
     u32 MskSPrm(u32 mask) const { return mSPrm & mask; }
-    u32 MskRPrm(u32 mask) { return mRPrm & mask; }
+    u32 MskRPrm(u32 mask) const { return mRPrm & mask; }
     void OnSPrmBit(u32 flag) { mSPrm |= flag; }
     void OffSPrmBit(u32 flag) { mSPrm &= ~flag; }
     void ClrRPrm(u32 flag) { mRPrm &= ~flag; }
@@ -440,7 +438,7 @@ public:
         mAtp = src.mAtp;
     }
     void ClrHit() { ClrRPrm(1); ClrObj(); }
-    int GetType() const { return mType; }
+    u32 GetType() const { return mType; }
     u32 GetGrp() const { return MskSPrm(AT_SPRM_GRP); }
     bool ChkSet() const { return MskSPrm(AT_SPRM_SET); }
     u8 GetAtp() const { return mAtp; }
@@ -450,10 +448,10 @@ public:
     void ClrSet() { OffSPrmBit(AT_SPRM_SET); }
     void OnHitBit() { SetRPrm(1); }
     void OffHitBit() { ClrRPrm(1); }
-    u32 ChkHit() { return MskRPrm(1); }
+    u32 ChkHit() const { return MskRPrm(1); }
 
 protected:
-    /* 0x10 */ int mType;
+    /* 0x10 */ u32 mType;
     /* 0x14 */ u8 mAtp;
 };
 
@@ -467,21 +465,24 @@ public:
         cCcD_ObjCommonBase::Set(src.mBase);
         mType = src.mType;
     }
-    void SetGrp(u32);
+    void SetGrp(u32 grp) {
+        OffSPrmBit(TG_SPRM_GRP);
+        OnSPrmBit(grp);
+    }
     void ClrHit() { ClrRPrm(1); ClrObj(); }
     void SetHit(cCcD_Obj* obj) {
         SetRPrm(1);
         SetHitObj(obj);
     }
-    int GetType() const { return mType; }
+    u32 GetType() const { return mType; }
     void SetType(u32 type) { mType = type; }
     u32 GetGrp() const { return MskSPrm(TG_SPRM_GRP); }
     bool ChkSet() const { return MskSPrm(TG_SPRM_SET); }
     void ClrSet() { OffSPrmBit(TG_SPRM_SET); }
-    u32 ChkHit() { return MskRPrm(1); }
+    u32 ChkHit() const { return MskRPrm(1); }
 
 private:
-    /* 0x10 */ int mType;
+    /* 0x10 */ u32 mType;
 };
 
 STATIC_ASSERT(0x14 == sizeof(cCcD_ObjTg));
@@ -494,8 +495,14 @@ public:
         SetHitObj(obj);
     }
     void ClrHit() { ClrRPrm(1); ClrObj(); }
-    void SetIGrp(u32);
-    void SetVsGrp(u32);
+    void SetIGrp(u32 grp) { // Fake inline, but exists in TP
+        OffSPrmBit(CO_SPRM_IGRP);
+        OnSPrmBit(grp);
+    }
+    void SetVsGrp(u32 grp) {
+        OffSPrmBit(CO_SPRM_VSGRP);
+        OnSPrmBit(grp);
+    }
     u32 GetGrp() const { return MskSPrm(CO_SPRM_GRP); }
     bool ChkSet() const { return MskSPrm(CO_SPRM_SET); }
     u32 GetVsGrp() const { return MskSPrm(CO_SPRM_VSGRP); }
@@ -503,7 +510,7 @@ public:
     u32 ChkNoCrr() const { return MskSPrm(CO_SPRM_NO_CRR); }
     u32 ChkSph3DCrr() const { return MskSPrm(CO_SPRM_SPH_3D_CRR); }
     void ClrSet() { OffSPrmBit(CO_SPRM_SET); }
-    u32 ChkHit() { return MskRPrm(1); }
+    u32 ChkHit() const { return MskRPrm(1); }
 
     void Set(cCcD_SrcObjCo const& src) {
         cCcD_ObjCommonBase::Set(src.mBase);
@@ -520,14 +527,19 @@ protected:
     /* 0x03C vtable */
 public:
     virtual ~cCcD_ObjHitInf() {}
-    void Set(cCcD_SrcObjHitInf const&);
-    cCcD_ObjAt& GetObjAt() { return mObjAt; }
-    cCcD_ObjTg& GetObjTg() { return mObjTg; }
-    cCcD_ObjCo& GetObjCo() { return mObjCo; }
+
+    void Set(const cCcD_SrcObjHitInf& src) {
+        mObjAt.Set(src.mObjAt);
+        mObjTg.Set(src.mObjTg);
+        mObjCo.Set(src.mObjCo);
+    }
+    cCcD_ObjAt& GetObjAt() { return mObjAt; } // Fake inline
+    cCcD_ObjTg& GetObjTg() { return mObjTg; } // Fake inline
+    cCcD_ObjCo& GetObjCo() { return mObjCo; } // Fake inline
     u32 GetTgGrp() const { return mObjTg.GetGrp(); }
     u32 GetAtGrp() const { return mObjAt.GetGrp(); }
-    u32 GetCoGrp() const { return mObjCo.GetGrp(); }
-    int GetTgType() const { return mObjTg.GetType(); }
+    u32 GetCoGrp() const { return mObjCo.GetGrp(); } // Fake inline, included for completeness
+    u32 GetTgType() const { return mObjTg.GetType(); }
     u32 GetAtType() const { return mObjAt.GetType(); }
     bool ChkTgSet() const { return mObjTg.ChkSet(); }
     bool ChkAtSet() const { return mObjAt.ChkSet(); }
@@ -537,7 +549,7 @@ public:
     u8 GetAtAtp() const { return mObjAt.GetAtp(); }
     u32 ChkAtNoTgHitInfSet() const { return mObjAt.MskSPrm(AT_SPRM_NO_TG_HIT_INF_SET); }
     u32 ChkTgNoAtHitInfSet() const { return mObjTg.MskSPrm(TG_SPRM_NO_AT_HIT_INF_SET); }
-    u32 ChkCoNoCoHitInfSet() const { return mObjCo.MskSPrm(CO_SPRM_NO_CO_HIT_INF_SET); }
+    u32 ChkCoNoCoHitInfSet() { return mObjCo.MskSPrm(CO_SPRM_NO_CO_HIT_INF_SET); }
     void SetAtHit(cCcD_Obj* obj) { mObjAt.SetHit(obj); }
     void SetTgHit(cCcD_Obj* obj) { mObjTg.SetHit(obj); }
     void SetCoHit(cCcD_Obj* obj) { mObjCo.SetHit(obj); }
@@ -560,21 +572,34 @@ public:
     void OnTgSetBit() { mObjTg.OnSPrmBit(TG_SPRM_SET); }
     void OffTgSetBit() { mObjTg.ClrSet(); }
     void OnCoSetBit() { mObjCo.OnSPrmBit(CO_SPRM_SET); }
-    void OffAtVsPlayerBit() { mObjAt.OffSPrmBit(0xC); }
-    void OnAtVsPlayerBit() { mObjAt.OnSPrmBit(0xC); }
+    void OnAtVsBitSet(u32 prm) { mObjAt.OnSPrmBit(prm); }
+    void OffAtVsBitSet(u32 prm) { mObjAt.OffSPrmBit(prm); }
+    void OnAtVsEnemyBit() { mObjAt.OnSPrmBit(AT_SPRM_VS_ENEMY); }
+    void OffAtVsEnemyBit() { mObjAt.OffSPrmBit(AT_SPRM_VS_ENEMY); }
+    void OnAtVsPlayerBit() { mObjAt.OnSPrmBit(AT_SPRM_VS_PLAYER); }
+    void OffAtVsPlayerBit() { mObjAt.OffSPrmBit(AT_SPRM_VS_PLAYER); }
     void OnCoSPrmBit(u32 flag) { mObjCo.OnSPrmBit(flag); }
-    void SetTgSPrm(u32 prm) { mObjTg.SetSPrm(prm); }
+    void SetTgSPrm(u32 prm) { mObjTg.SetSPrm(prm); } // Fake inline, but exists in TP
     void SetCoSPrm(u32 prm) { mObjCo.SetSPrm(prm); }
     void ClrAtHit() { mObjAt.ClrHit(); }
     void ClrTgHit() { mObjTg.ClrHit(); }
     void ClrCoHit() { mObjCo.ClrHit(); }
-    u32 ChkAtHit() { return mObjAt.ChkHit(); }
-    u32 ChkTgHit() { return mObjTg.ChkHit(); }
-    u32 ChkCoHit() { return mObjCo.ChkHit(); }
-    cCcD_Obj* GetAtHitObj() { return mObjAt.GetHitObj(); }
-    cCcD_Obj* GetTgHitObj() { return mObjTg.GetHitObj(); }
-    cCcD_Obj* GetCoHitObj() { return mObjCo.GetHitObj(); }
-
+    u32 ChkAtHit() const { return mObjAt.ChkHit(); }
+    u32 ChkTgHit() const { return mObjTg.ChkHit(); }
+    u32 ChkCoHit() const { return mObjCo.ChkHit(); }
+    cCcD_Obj* GetAtHitObj() const { return mObjAt.GetHitObj(); }
+    cCcD_Obj* GetTgHitObj() const { return mObjTg.GetHitObj(); }
+    cCcD_Obj* GetCoHitObj() const { return mObjCo.GetHitObj(); }
+    void ClrAtSet() { OffAtSetBit(); }
+    void ClrTgSet() { OffTgSetBit(); }
+    void ClrCoSet() { OffCoSetBit(); }
+    u32 MskAtSPrm(u32 prm) const { return mObjAt.MskSPrm(prm); }
+    void OnAtNoTgHitInfSet() { mObjAt.OnSPrmBit(AT_SPRM_NO_TG_HIT_INF_SET); }
+    void OffAtNoTgHitInfSet() { mObjAt.OffSPrmBit(AT_SPRM_NO_TG_HIT_INF_SET); }
+    void OnTgNoAtHitInfSet() { mObjTg.OnSPrmBit(TG_SPRM_NO_AT_HIT_INF_SET); }
+    void SetTgGrp(u32 grp) { mObjTg.SetGrp(grp); }
+    void SetCoIGrp(u32 grp) { mObjCo.SetIGrp(grp); } // Fake inline, but exists in TP
+    void SetCoVsGrp(u32 grp) { mObjCo.SetVsGrp(grp); }
 };  // Size = 0x40
 
 STATIC_ASSERT(0x40 == sizeof(cCcD_ObjHitInf));
@@ -599,11 +624,11 @@ public:
     fopAc_ac_c* GetAc() { return GetStts() == NULL ? NULL : GetStts()->GetActor(); }
     cCcD_DivideInfo& GetDivideInfo() { return mDivideInfo; }
     cCcD_DivideInfo* GetPDivideInfo() { return &mDivideInfo; }
-    int ChkBsRevHit() const { return mFlags & 2; }
+    u32 ChkBsRevHit() const { return mFlags & 2; }
     void OnBsRevHit() { mFlags |= 2; }
 
 private:
-    /* 0x040 */ int mFlags;
+    /* 0x040 */ u32 mFlags;
     /* 0x044 */ cCcD_Stts* mStts;
     /* 0x048 */ cCcD_DivideInfo mDivideInfo;
 };  // Size = 0x50

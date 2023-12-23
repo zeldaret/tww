@@ -218,9 +218,7 @@ void cCcD_Stts::PlusCcMove(f32 x, f32 y, f32 z) {
 /* 80241C5C-80241C98       .text Set__8cCcD_ObjFRC11cCcD_SrcObj */
 void cCcD_Obj::Set(const cCcD_SrcObj& src) {
     mFlags = src.mFlags;
-    mObjAt.Set(src.mSrcObjHitInf.mObjAt);
-    mObjTg.Set(src.mSrcObjHitInf.mObjTg);
-    mObjCo.Set(src.mSrcObjHitInf.mObjCo);
+    cCcD_ObjHitInf::Set(src.mSrcObjHitInf);
 }
 
 /* 80241C98-80241D68       .text CrossAtTg__12cCcD_TriAttrCFRC12cCcD_CpsAttrP4cXyz */
