@@ -65,7 +65,7 @@ public:
     bool isLocked() { return mMaterialTable.isLocked(); }
     u16 getDrawFullWgtMtxNum() const { return mJointTree.getDrawFullWgtMtxNum(); }
     u16 getWEvlpMtxNum() const { return mJointTree.getWEvlpMtxNum(); }
-    u16* getWEvlpMixMtxIndex() { return mJointTree.getWEvlpMixIndex(); }
+    u16* getWEvlpMixMtxIndex() { return mJointTree.getWEvlpMixMtxIndex(); }
     f32* getWEvlpMixWeight() { return mJointTree.getWEvlpMixWeight(); }
     u8 getWEvlpMixMtxNum(u16 idx) const { return mJointTree.getWEvlpMixMtxNum(idx); }
     u32 getModelDataType() const { return mJointTree.getModelDataType(); }

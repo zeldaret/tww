@@ -40,7 +40,7 @@ public:
     J3DDrawMtxData * getDrawMtxData() { return &mDrawMtxData; }
     u16 getWEvlpMtxNum() const { return mWEvlpMtxNum; }
     u8 getWEvlpMixMtxNum(u16 idx) const { return mWEvlpMixMtxNum[idx]; }
-    u16 * getWEvlpMixIndex() const { return mWEvlpMixIndex; }
+    u16 * getWEvlpMixMtxIndex() const { return mWEvlpMixMtxIndex; }
     f32 * getWEvlpMixWeight() { return mWEvlpMixWeight; }
     u16 getDrawFullWgtMtxNum() const { return mDrawMtxData.mDrawFullWgtMtxNum; }
     u16 getJointNum() const { return mJointNum; }
@@ -60,9 +60,6 @@ public:
     bool checkFlag(u32 flag) { return mFlags & flag; }
     void setFlag(u32 flag) { mFlags = flag; }
 
-    // TODO
-    void getWEvlpMixMtxIndex() {}
-
 private:
     friend class J3DModelLoader;
 
@@ -75,7 +72,7 @@ private:
     /* 0x1C */ J3DJoint** mJointNodePointer;
     /* 0x20 */ u16 mWEvlpMtxNum;
     /* 0x24 */ u8* mWEvlpMixMtxNum;
-    /* 0x28 */ u16* mWEvlpMixIndex;
+    /* 0x28 */ u16* mWEvlpMixMtxIndex;
     /* 0x2C */ f32* mWEvlpMixWeight;
     /* 0x30 */ Mtx* mInvJointMtx;
     /* 0x34 */ J3DDrawMtxData mDrawMtxData;

@@ -45,7 +45,7 @@ struct J3DVertexBlock : public J3DModelBlock {
 struct J3DEnvelopBlock : public J3DModelBlock {
     /* 0x08 */ u16 mWEvlpMtxNum;
     /* 0x0C */ void* mpWEvlpMixMtxNum;
-    /* 0x10 */ void* mpWEvlpMixIndex;
+    /* 0x10 */ void* mpWEvlpMixMtxIndex;
     /* 0x14 */ void* mpWEvlpMixWeight;
     /* 0x18 */ void* mpInvJointMtx;
 };  // Size: 0x1C
