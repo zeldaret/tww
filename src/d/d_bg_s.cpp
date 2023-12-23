@@ -298,7 +298,7 @@ s32 dBgS::GetRoomId(cBgS_PolyInfo& polyInfo) {
 }
 
 /* 800A0F88-800A111C       .text ChkPolyHSStick__4dBgSFR13cBgS_PolyInfo */
-BOOL dBgS::ChkPolyHSStick(cBgS_PolyInfo& polyInfo) {
+u32 dBgS::ChkPolyHSStick(cBgS_PolyInfo& polyInfo) {
     s32 bg_index = polyInfo.GetBgIndex();
     JUT_ASSERT(0x583, 0 <= bg_index && bg_index < 256);
     if (!m_chk_element[bg_index].ChkUsed())
@@ -571,7 +571,7 @@ void dBgS_CrrPos::CrrPos(dBgS& i_bgs) {
             
             if (i_bgs.LineCross(&linChk)) {
                 *pm_pos = linChk.GetCross();
-                cM3dGPla* plane = i_bgs.GetTriPla(linChk.GetBgIndex(), linChk.GetPolyIndex());
+                cM3dGPla* plane = i_bgs.GetTriPla(linChk);
                 pm_pos->x += plane->GetNP()->x;
                 pm_pos->y += plane->GetNP()->y - mWallHeight;
                 pm_pos->z += plane->GetNP()->z;
@@ -590,7 +590,7 @@ void dBgS_CrrPos::CrrPos(dBgS& i_bgs) {
             
             if (i_bgs.LineCross(&linChk)) {
                 *pm_pos = linChk.GetCross();
-                cM3dGPla* plane = i_bgs.GetTriPla(linChk.GetBgIndex(), linChk.GetPolyIndex());
+                cM3dGPla* plane = i_bgs.GetTriPla(linChk);
                 pm_pos->x += plane->GetNP()->x;
                 pm_pos->y += plane->GetNP()->y - mWallHeight;
                 pm_pos->z += plane->GetNP()->z;

@@ -933,7 +933,7 @@ dCcD_SrcCyl dNpc_cyl_src = {
         /* SrcObjAt  SPrm    */ 0,
         /* SrcObjTg  Type    */ ~(AT_TYPE_BOOMERANG),
         /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_ENEMY,
-        /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_UNK4 | CO_SPRM_VSGRP,
+        /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK4 | CO_SPRM_VSGRP,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
         /* SrcGObjAt Spl     */ 0,

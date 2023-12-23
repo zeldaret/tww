@@ -1102,7 +1102,7 @@ void daItem_c::checkWall() {
         return;
     }
     
-    cM3dGPla* wallPlane = dComIfG_Bgsp()->GetTriPla(mAcchCir.GetBgIndex(), mAcchCir.GetPolyIndex());
+    cM3dGPla* wallPlane = dComIfG_Bgsp()->GetTriPla(mAcchCir);
     cXyz wallNorm = wallPlane->mNormal;
     
     cXyz vel;
@@ -1478,8 +1478,8 @@ dCcD_SrcCyl daItem_c::m_cyl_src = {
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
         /* SrcObjTg  Type    */ AT_TYPE_ALL,
-        /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_UNK8,
-        /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_UNK8 | CO_SPRM_UNK10 | CO_SPRM_UNK40,
+        /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_OTHER,
+        /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK8 | CO_SPRM_VS_UNK2 | CO_SPRM_VS_UNK8,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
         /* SrcGObjAt Spl     */ 0,

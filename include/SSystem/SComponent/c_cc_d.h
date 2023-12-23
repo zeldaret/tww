@@ -49,8 +49,8 @@ enum cCcD_AtSPrm_e {
     /* 0x01 */ AT_SPRM_SET = 0x01,
     /* 0x02 */ AT_SPRM_VS_ENEMY = 0x02,
     /* 0x04 */ AT_SPRM_VS_PLAYER = 0x04,
-    /* 0x08 */ AT_SPRM_UNK8 = 0x08, // May be for interactable objects? Doesn't have inlines like enemy and player
-    /* 0x0E */ AT_SPRM_GRP = AT_SPRM_VS_ENEMY | AT_SPRM_VS_PLAYER | AT_SPRM_UNK8,
+    /* 0x08 */ AT_SPRM_VS_OTHER = 0x08,
+    /* 0x0E */ AT_SPRM_GRP = AT_SPRM_VS_ENEMY | AT_SPRM_VS_PLAYER | AT_SPRM_VS_OTHER,
     /* 0x10 */ AT_SPRM_NO_TG_HIT_INF_SET = 0x10,
 };
 
@@ -58,22 +58,21 @@ enum cCcD_TgSPrm_e {
     /* 0x01 */ TG_SPRM_SET = 0x01,
     /* 0x02 */ TG_SPRM_IS_ENEMY = 0x02,
     /* 0x04 */ TG_SPRM_IS_PLAYER = 0x04,
-    /* 0x08 */ TG_SPRM_UNK8 = 0x08,
-    /* 0x0E */ TG_SPRM_GRP = TG_SPRM_IS_ENEMY | TG_SPRM_IS_PLAYER | TG_SPRM_UNK8,
+    /* 0x08 */ TG_SPRM_IS_OTHER = 0x08,
+    /* 0x0E */ TG_SPRM_GRP = TG_SPRM_IS_ENEMY | TG_SPRM_IS_PLAYER | TG_SPRM_IS_OTHER,
     /* 0x10 */ TG_SPRM_NO_AT_HIT_INF_SET = 0x10,
 };
 
 enum cCcD_CoSPrm_e {
     /* 0x0001 */ CO_SPRM_SET = 0x01,
-    /* 0x0002 */ CO_SPRM_UNK2 = 0x02,
-    /* 0x0004 */ CO_SPRM_UNK4 = 0x04,
-    /* 0x0008 */ CO_SPRM_UNK8 = 0x08,
-    /* 0x0010 */ CO_SPRM_UNK10 = 0x10,
-    /* 0x0020 */ CO_SPRM_UNK20 = 0x20,
-    /* 0x0040 */ CO_SPRM_UNK40 = 0x40,
-    /* 0x000E */ CO_SPRM_IGRP = CO_SPRM_UNK2 | CO_SPRM_UNK4 | CO_SPRM_UNK8,
-    /* 0x001E */ CO_SPRM_GRP = CO_SPRM_IGRP | CO_SPRM_UNK10,
-    /* 0x0070 */ CO_SPRM_VSGRP = CO_SPRM_UNK10 | CO_SPRM_UNK20 | CO_SPRM_UNK40,
+    /* 0x0002 */ CO_SPRM_IS_UNK2 = 0x02,
+    /* 0x0004 */ CO_SPRM_IS_UNK4 = 0x04,
+    /* 0x0008 */ CO_SPRM_IS_UNK8 = 0x08,
+    /* 0x0010 */ CO_SPRM_VS_UNK2 = 0x10,
+    /* 0x0020 */ CO_SPRM_VS_UNK4 = 0x20,
+    /* 0x0040 */ CO_SPRM_VS_UNK8 = 0x40,
+    /* 0x000E */ CO_SPRM_IGRP = CO_SPRM_IS_UNK2 | CO_SPRM_IS_UNK4 | CO_SPRM_IS_UNK8,
+    /* 0x0070 */ CO_SPRM_VSGRP = CO_SPRM_VS_UNK2 | CO_SPRM_VS_UNK4 | CO_SPRM_VS_UNK8,
     /* 0x0080 */ CO_SPRM_SPH_3D_CRR = 0x80,
     /* 0x0100 */ CO_SPRM_NO_CRR = 0x100,
     /* 0x0200 */ CO_SPRM_NO_CO_HIT_INF_SET = 0x200,
@@ -503,7 +502,6 @@ public:
         OffSPrmBit(CO_SPRM_VSGRP);
         OnSPrmBit(grp);
     }
-    u32 GetGrp() const { return MskSPrm(CO_SPRM_GRP); }
     bool ChkSet() const { return MskSPrm(CO_SPRM_SET); }
     u32 GetVsGrp() const { return MskSPrm(CO_SPRM_VSGRP); }
     u32 GetIGrp() const { return MskSPrm(CO_SPRM_IGRP); }
@@ -538,7 +536,6 @@ public:
     cCcD_ObjCo& GetObjCo() { return mObjCo; } // Fake inline
     u32 GetTgGrp() const { return mObjTg.GetGrp(); }
     u32 GetAtGrp() const { return mObjAt.GetGrp(); }
-    u32 GetCoGrp() const { return mObjCo.GetGrp(); } // Fake inline, included for completeness
     u32 GetTgType() const { return mObjTg.GetType(); }
     u32 GetAtType() const { return mObjAt.GetType(); }
     bool ChkTgSet() const { return mObjTg.ChkSet(); }
@@ -558,14 +555,15 @@ public:
     u32 ChkCoSph3DCrr() const { return mObjCo.ChkSph3DCrr(); }
     void OnAtSPrmBit(u32 flag) { mObjAt.OnSPrmBit(flag); }
     void OffAtSPrmBit(u32 flag) { mObjAt.OffSPrmBit(flag); }
+    void OnTgSPrmBit(u32 flag) { mObjTg.OnSPrmBit(flag); }
+    void OffTgSPrmBit(u32 flag) { mObjTg.OffSPrmBit(flag); }
+    void OnCoSPrmBit(u32 flag) { mObjCo.OnSPrmBit(flag); }
     void OffCoSPrmBit(u32 flag) { mObjCo.OffSPrmBit(flag); }
     void SetAtType(u32 type) { mObjAt.SetType(type); }
     void OnAtSetBit() { mObjAt.OnSPrmBit(AT_SPRM_SET); }
     void SetAtAtp(int atp) { mObjAt.SetAtp(atp); }
     void OffCoSetBit() { mObjCo.ClrSet(); }
     void SetTgType(u32 type) { mObjTg.SetType(type); }
-    void OnTgSPrmBit(u32 flag) { mObjTg.OnSPrmBit(flag); }
-    void OffTgSPrmBit(u32 flag) { mObjTg.OffSPrmBit(flag); }
     void OffAtSetBit() { mObjAt.ClrSet(); }
     void OnAtHitBit() { mObjAt.OnHitBit(); }
     void OffAtHitBit() { mObjAt.OffHitBit(); }
@@ -578,7 +576,6 @@ public:
     void OffAtVsEnemyBit() { mObjAt.OffSPrmBit(AT_SPRM_VS_ENEMY); }
     void OnAtVsPlayerBit() { mObjAt.OnSPrmBit(AT_SPRM_VS_PLAYER); }
     void OffAtVsPlayerBit() { mObjAt.OffSPrmBit(AT_SPRM_VS_PLAYER); }
-    void OnCoSPrmBit(u32 flag) { mObjCo.OnSPrmBit(flag); }
     void SetTgSPrm(u32 prm) { mObjTg.SetSPrm(prm); } // Fake inline, but exists in TP
     void SetCoSPrm(u32 prm) { mObjCo.SetSPrm(prm); }
     void ClrAtHit() { mObjAt.ClrHit(); }

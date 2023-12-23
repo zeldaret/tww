@@ -559,7 +559,7 @@ int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 param_1, f32 param_2, cBgS_PolyIn
                               s16 i_angle, f32 param_5, GXTexObj* i_tex) {
     if (i_floorPoly.ChkSetInfo() && -1000000000.0f != param_1) {
         cM3dGPla* plane_p =
-            dComIfG_Bgsp()->GetTriPla(i_floorPoly.GetBgIndex(), i_floorPoly.GetPolyIndex());
+            dComIfG_Bgsp()->GetTriPla(i_floorPoly);
 
         return dComIfGd_setSimpleShadow(i_pos, param_1, param_2, &plane_p->mNormal, i_angle,
                                         param_5, i_tex);

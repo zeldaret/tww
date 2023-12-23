@@ -29,7 +29,7 @@ const dCcD_SrcCps daArrow_c::m_at_cps_src = {
         /* Flags             */ 0,
         /* SrcObjAt  Type    */ AT_TYPE_NORMAL_ARROW,
         /* SrcObjAt  Atp     */ 2,
-        /* SrcObjAt  SPrm    */ AT_SPRM_SET | AT_SPRM_VS_ENEMY | AT_SPRM_UNK8,
+        /* SrcObjAt  SPrm    */ AT_SPRM_SET | AT_SPRM_VS_ENEMY | AT_SPRM_VS_OTHER,
         /* SrcObjTg  Type    */ 0,
         /* SrcObjTg  SPrm    */ 0,
         /* SrcObjCo  SPrm    */ 0,
@@ -62,7 +62,7 @@ const dCcD_SrcSph daArrow_c::m_co_sph_src = {
         /* SrcObjAt  SPrm    */ 0,
         /* SrcObjTg  Type    */ 0,
         /* SrcObjTg  SPrm    */ 0,
-        /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_UNK8 | CO_SPRM_UNK10 | CO_SPRM_NO_CRR,
+        /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK8 | CO_SPRM_VS_UNK2 | CO_SPRM_NO_CRR,
         /* SrcGObjAt Se      */ 0x07,
         /* SrcGObjAt HitMark */ 0,
         /* SrcGObjAt Spl     */ 0,
@@ -252,7 +252,7 @@ void daArrow_c::setDrawShapeMaterial() {
     if (mbSetByZelda) {
         mAtCps.SetAtAtp(4);
         mAtCps.SetAtType(arrow_mat[0].mAtType);
-        mAtCps.OnAtSPrmBit(0xE);
+        mAtCps.OnAtSPrmBit(AT_SPRM_GRP);
     }
     
     if (arrow_mat[mArrowType].mTipJointIdx != 0) {

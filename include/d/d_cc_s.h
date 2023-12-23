@@ -43,8 +43,22 @@ public:
     virtual void MoveAfterCheck();
     virtual void CalcParticleAngle(dCcD_GObjInf*, cCcD_Stts*, cCcD_Stts*, csXyz*);
 
+    u32 ChkMass(cXyz* p_xyz, fopAc_ac_c** p_actor, dCcMassS_HitInf* p_hitInf) {
+        return mMass_Mng.Chk(p_xyz, p_actor, p_hitInf);
+    }
     void SetMass(cCcD_Obj* i_obj, u8 i_priority) { mMass_Mng.Set(i_obj, i_priority); }
     void PrepareMass() { mMass_Mng.Prepare(); }
+    void SetMassAttr(f32 radius, f32 height, u8 param_2, u8 param_3) {
+        mMass_Mng.SetAttr(radius, height, param_2, param_3);
+    }
+
+    void ChkActor(fopAc_ac_c*) {}
+    void GetMassCamTopPos(Vec*) {}
+    void GetMassResultCam() {}
+    void OffMassAllTimer() {}
+    void OnMassAllTimer() {}
+    void SetMassAreaChk(cCcD_Obj*, u8, void (*)(fopAc_ac_c*, cXyz*, u32)) {}
+    void SetMassCam(cM3dGCps&) {}
 
     static u8 m_mtrl_hit_tbl[64];
 

@@ -95,7 +95,7 @@ public:
     int GetRoomPathId(cBgS_PolyInfo&);
     int GetRoomPathPntNo(cBgS_PolyInfo&);
     s32 GetRoomId(cBgS_PolyInfo&);
-    BOOL ChkPolyHSStick(cBgS_PolyInfo&);
+    u32 ChkPolyHSStick(cBgS_PolyInfo&);
     bool LineCrossNonMoveBG(cBgS_LinChk*);
     void WallCorrect(dBgS_Acch*);
     f32 RoofChk(dBgS_RoofChk*);

@@ -197,7 +197,7 @@ BOOL daBomb_c::draw() {
     }
 
     if(fopAcM_GetModel(this) == 0 && mAcch.GetGroundH() != -1.0e9f) {
-        cM3dGPla* pNormal = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd.GetBgIndex(), mAcch.m_gnd.GetPolyIndex());
+        cM3dGPla* pNormal = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
         if(pNormal) {
             dComIfGd_setSimpleShadow(&current.pos, mAcch.GetGroundH(), 25.0f, &pNormal->mNormal, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
         }
@@ -480,7 +480,7 @@ void daBomb_c::posMoveF() {
 
     if(!chk_state(STATE_5) && !chk_state(STATE_6) && field_0x6F3 != 1) {
         water_tention();
-        tri = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd.GetBgIndex(), mAcch.m_gnd.GetPolyIndex());
+        tri = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
 
         f32 mag = mWindVec.getSquareMag();
         if(mag > 0.01f) {

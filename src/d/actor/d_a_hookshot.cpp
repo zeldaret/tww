@@ -277,7 +277,7 @@ static dCcD_SrcCps l_at_cps_src = {
         /* Flags             */ 0,
         /* SrcObjAt  Type    */ AT_TYPE_HOOKSHOT,
         /* SrcObjAt  Atp     */ 0x01,
-        /* SrcObjAt  SPrm    */ AT_SPRM_SET | AT_SPRM_VS_ENEMY | AT_SPRM_UNK8,
+        /* SrcObjAt  SPrm    */ AT_SPRM_SET | AT_SPRM_VS_ENEMY | AT_SPRM_VS_OTHER,
         /* SrcObjTg  Type    */ 0,
         /* SrcObjTg  SPrm    */ 0,
         /* SrcObjCo  SPrm    */ 0,

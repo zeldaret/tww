@@ -89,7 +89,7 @@ void daObj_Hole_c::getPosAndAngle() {
 
     mLinChk.Set(&posUp, &posDown, this);
     if (dComIfG_Bgsp()->LineCross(&mLinChk) != 0) {
-        cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mLinChk.GetBgIndex(), mLinChk.GetPolyIndex());
+        cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mLinChk);
         
         triPla->CalcAngleXz(&shape_angle.x, &shape_angle.z);
         triPla->getCrossY(current.pos, &current.pos.y);

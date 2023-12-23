@@ -754,7 +754,7 @@ BOOL light_at_hit_check(cXyz* pPos) {
     dCcMassS_HitInf hitInfo;
     BOOL ret = FALSE;
     fopAc_ac_c * pActor;
-    u32 res = dComIfG_Ccsp()->mMass_Mng.Chk(pPos, &pActor, &hitInfo);
+    u32 res = dComIfG_Ccsp()->ChkMass(pPos, &pActor, &hitInfo);
     if (((res & 1) != 0) && (hitInfo.GetAtHitObj()->GetAtType() & AT_TYPE_LIGHT) != 0)
         ret = TRUE;
     return ret;
@@ -775,16 +775,7 @@ void dKyr_poison_light_colision() {
     if (!dKyr_poison_live_check())
         return;
 
-    // inline should match, but doesn't
-#if 0
-    dComIfG_Ccsp()->mMass_Mng.SetAttr(220.0f, 140.0f, 0x0B, 0x03);
-#else
-    dCcMassS_Mng * mass = &dComIfG_Ccsp()->mMass_Mng;
-    dComIfG_Ccsp()->mMass_Mng.mCylAttr.SetR(220.0f);
-    dComIfG_Ccsp()->mMass_Mng.mCylAttr.SetH(140.0f);
-    mass->field_0x128 = 0x0B;
-    mass->mResultCamBit = 0x03;
-#endif
+    dComIfG_Ccsp()->SetMassAttr(220.0f, 140.0f, 0x0B, 0x03);
 
     f32 halfHeight = 70.0f;
     for (s32 i = 0; i < g_env_light.mPoisonCount; i++) {

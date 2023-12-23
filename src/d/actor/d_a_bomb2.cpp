@@ -308,8 +308,8 @@ namespace daBomb2 {
             /* SrcObjAt  Atp     */ 0x04,
             /* SrcObjAt  SPrm    */ AT_SPRM_GRP,
             /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
-            /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_UNK8,
-            /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_UNK8 | CO_SPRM_VSGRP,
+            /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_OTHER,
+            /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK8 | CO_SPRM_VSGRP,
             /* SrcGObjAt Se      */ 0,
             /* SrcGObjAt HitMark */ 0,
             /* SrcGObjAt Spl     */ 0x01,
@@ -1017,7 +1017,7 @@ namespace daBomb2 {
     }
 
     void Act_c::tensor_wait_ground() {
-        cM3dGPla* pNormal = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd.GetBgIndex(), mAcch.m_gnd.GetPolyIndex());
+        cM3dGPla* pNormal = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
         if(pNormal) {
             field_0x784 = pNormal->mNormal.z * attr().field_0x64;
             field_0x788 = pNormal->mNormal.x * attr().field_0x64;

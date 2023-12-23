@@ -38,7 +38,7 @@ const dCcD_SrcCyl daRd_c::m_cyl_src = {
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
         /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_LEAF_WIND | AT_TYPE_UNK400000),
-        /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_UNK8,
+        /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_OTHER,
         /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IGRP | CO_SPRM_VSGRP,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
@@ -694,16 +694,16 @@ bool daRd_c::checkTgHit() {
 /* 00001650-000017D0       .text setCollision__6daRd_cFv */
 void daRd_c::setCollision() {
     if (mMode == MODE_DEATH) {
-        mCyl.OffCoSPrmBit(0x10);
-        mCyl.OffCoSPrmBit(0x02);
+        mCyl.OffCoSPrmBit(CO_SPRM_VS_UNK2);
+        mCyl.OffCoSPrmBit(CO_SPRM_IS_UNK2);
         mCyl.OffTgSPrmBit(TG_SPRM_SET);
-        mCyl.OffTgSPrmBit(0x08);
+        mCyl.OffTgSPrmBit(TG_SPRM_IS_OTHER);
     } else if (mMode == MODE_ATTACK || mMode == MODE_CRY || dComIfGp_evmng_startCheck("DEFAULT_RD_CRY")) {
-        mCyl.OffCoSPrmBit(0x10);
-        mCyl.OffCoSPrmBit(0x02);
+        mCyl.OffCoSPrmBit(CO_SPRM_VS_UNK2);
+        mCyl.OffCoSPrmBit(CO_SPRM_IS_UNK2);
     } else {
-        mCyl.OnCoSPrmBit(0x10);
-        mCyl.OnCoSPrmBit(0x02);
+        mCyl.OnCoSPrmBit(CO_SPRM_VS_UNK2);
+        mCyl.OnCoSPrmBit(CO_SPRM_IS_UNK2);
     }
     
     if (isAnm(AnmPrm_SUWARIP)) {

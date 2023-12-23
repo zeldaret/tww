@@ -34,7 +34,7 @@ namespace daObjZouk {
             /* SrcObjAt  SPrm    */ 0,
             /* SrcObjTg  Type    */ AT_TYPE_ALL & ~(AT_TYPE_LIGHT | AT_TYPE_UNK400000 | AT_TYPE_LEAF_WIND | AT_TYPE_UNK20000 | AT_TYPE_WATER),
             /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_GRP,
-            /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_UNK8 | CO_SPRM_VSGRP,
+            /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK8 | CO_SPRM_VSGRP,
             /* SrcGObjAt Se      */ 0,
             /* SrcGObjAt HitMark */ 0,
             /* SrcGObjAt Spl     */ 0,
