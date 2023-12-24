@@ -22,7 +22,7 @@ public:
     /* 0x291*/  u8 field_0x291;
     /* 0x292*/  u8 field_0x292;
     /* 0x293*/  u8 field_0x293;
-    /* 0x294 */ void* field_0x294;
+    /* 0x294 */ s32 processId;
     /* 0x298 */ s16 eventIndex;
     /* 0x29A */ short field_0x29A;
 };
