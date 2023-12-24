@@ -4,50 +4,175 @@
 //
 
 #include "d/actor/d_a_tag_etc.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_event.h"
+#include "d/d_event_manager.h"
 #include "dolphin/types.h"
+#include "f_op/f_op_actor_iter.h"
+#include "f_pc/f_pc_searcher.h"
+#include "global.h"
 
 /* 00000078-00000084       .text getEventNo__11daTag_Etc_cFv */
-void daTag_Etc_c::getEventNo() {
-    /* Nonmatching */
+u8 daTag_Etc_c::getEventNo() {
+    return this->mBase.mParameters >> 0x18;
 }
 
 /* 00000084-00000090       .text getType2__11daTag_Etc_cFv */
-void daTag_Etc_c::getType2() {
-    /* Nonmatching */
+u32 daTag_Etc_c::getType2() {
+    return this->mBase.mParameters >> 8 & 0xF;
 }
 
+/* Not Matching */
 /* 00000090-000001B4       .text rangeCheck__11daTag_Etc_cFP10fopAc_ac_c */
-void daTag_Etc_c::rangeCheck(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daTag_Etc_c::rangeCheck(fopAc_ac_c* pActor) {
+    BOOL result;
+    float fVar4;
+    float distanceMagnitude;
+    cXyz cxYz_planar_distance;
+    cXyz cXyz_distance;
+
+    cXyz_distance = ((pActor->current).pos - (this->current).pos);
+    if (0.0 <= cXyz_distance.x) {
+        cxYz_planar_distance.x = cXyz_distance.x;
+        cxYz_planar_distance.y = 0.0;
+        cxYz_planar_distance.z = cXyz_distance.z;
+        distanceMagnitude = PSVECSquareMag(&cxYz_planar_distance);
+        if (0.0 < distanceMagnitude) {
+            fVar4 = sqrtf(distanceMagnitude);
+        }
+        distanceMagnitude = this->mScale.x;
+        distanceMagnitude *= 100;
+        if ((distanceMagnitude <= fVar4) || ((this->mScale.x) * 100 < cXyz_distance.y)) {
+            result = FALSE;
+        } else {
+            result = TRUE;
+        }
+    } else {
+        result = FALSE;
+    }
+    return result;
 }
 
 /* 000001B4-00000214       .text otherCheck__11daTag_Etc_cFP10fopAc_ac_c */
-void daTag_Etc_c::otherCheck(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daTag_Etc_c::otherCheck(fopAc_ac_c* pActor) {
+    BOOL result;
+
+    u8 cVar2 = getType2();
+
+    switch (cVar2) {
+    case 0:
+        if (pActor != (fopAc_ac_c*)0x0 &&
+            ((u32)pActor[0x13].mBase.mLnTg.mBase.mpTagData & 0x10) != 0)
+        {
+            result = TRUE;
+        } else {
+            result = FALSE;
+        }
+        break;
+    default:
+        result = TRUE;
+        break;
+    }
+    return result;
 }
 
+/* Not matching, registers seem off */
 /* 00000214-000002EC       .text demoProc__11daTag_Etc_cFv */
 void daTag_Etc_c::demoProc() {
-    /* Nonmatching */
+    s16 sVar1;
+    fopAc_ac_c* pfVar2;
+    int staffIdx;
+    u8 cVar3;
+    void* local_18[2];
+
+    local_18[0] = this->field_0x294;
+    pfVar2 = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, local_18);
+    staffIdx = g_dComIfG_gameInfo.play.mEvtManager.getMyStaffId("TAG_ETC_D", (fopAc_ac_c*)0x0, 0);
+
+    if (staffIdx != -1) {
+        cVar3 = getType2();
+        switch (cVar3) {
+        case 0:
+            if ((pfVar2 == (fopAc_ac_c*)0x0) ||
+                ((u32)pfVar2[0x13].mBase.mLnTg.mBase.mpTagData & 0x10) == 0)
+            {
+                sVar1 = this->field_0x29A;
+                if (sVar1 >= 1) {
+                    this->field_0x29A = sVar1 + -1;
+                } else {
+                    g_dComIfG_gameInfo.play.mEvtManager.cutEnd(staffIdx);
+                }
+            }
+            break;
+        default:
+            g_dComIfG_gameInfo.play.mEvtManager.cutEnd(staffIdx);
+        }
+    }
 }
 
 /* 000002EC-00000368       .text demoInitProc__11daTag_Etc_cFv */
 void daTag_Etc_c::demoInitProc() {
-    /* Nonmatching */
+    u8 cVar1;
+    fopAc_ac_c* pActor;
+    void* local_18[4];
+    dEvt_control_c* control;
+
+    cVar1 = getType2();
+    switch (cVar1)
+    case 0: {
+        local_18[0] = this->field_0x294;
+        pActor = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeByID, local_18);
+        control = &g_dComIfG_gameInfo.play.mEvtCtrl;
+        control->mPtItem = control->getPId(pActor);
+        this->field_0x29A = 0xf;
+    default:;
+    }
+        return;
 }
 
+// Not matching
 /* 00000368-00000458       .text create__11daTag_Etc_cFv */
 s32 daTag_Etc_c::create() {
-    /* Nonmatching */
+    float fVar1;
+    u8 stageEVNTListIndex;
+    u16 uVar2;
+    u8 cVar3;
+
+    fopAcM_SetupActor(this, daTag_Etc_c);
+
+    stageEVNTListIndex = getEventNo();
+    this->eventIndex =
+        g_dComIfG_gameInfo.play.mEvtManager.getEventIdx((char*)0x0, stageEVNTListIndex);
+    if (this->eventIndex == -1) {
+        this->field_0x290 = 0;
+    } else {
+        cVar3 = getType2();
+        switch (cVar3) {
+        case 0:
+            this->field_0x290 = 1;
+            break;
+        default:
+            this->field_0x290 = 0;
+        }
+    }
+    this->shape_angle.z = 0;
+    this->shape_angle.x = 0;
+    this->current.angle.z = 0;
+    this->current.angle.x = 0;
+    this->mAttentionInfo.mFlags = fopAc_Attn_ACTION_TALK_e;
+    // MNot matching part, seems to be a constant value?
+    this->mAttentionInfo.mPosition.y += 150.0;
+    this->mEyePos.y += 150.0;
+    return 4;
 }
 
 /* 00000458-00000460       .text daTag_Etc_action_wait__FP11daTag_Etc_c */
-void daTag_Etc_action_wait(daTag_Etc_c*) {
-    /* Nonmatching */
+u8 daTag_Etc_action_wait(daTag_Etc_c*) {
+    return 1;
 }
 
 /* 00000460-000004E8       .text daTag_Etc_action_search__FP11daTag_Etc_c */
-void daTag_Etc_action_search(daTag_Etc_c*) {
+void daTag_Etc_action_search(daTag_Etc_c* pEtcTag) {
     /* Nonmatching */
 }
 
@@ -68,7 +193,7 @@ void daTag_Etc_action_hunt(daTag_Etc_c*) {
 
 /* 000006EC-000006F4       .text daTag_Etc_Draw__FP11daTag_Etc_c */
 static BOOL daTag_Etc_Draw(daTag_Etc_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000006F4-00000730       .text daTag_Etc_Execute__FP11daTag_Etc_c */
@@ -78,16 +203,16 @@ static BOOL daTag_Etc_Execute(daTag_Etc_c*) {
 
 /* 00000730-00000738       .text daTag_Etc_IsDelete__FP11daTag_Etc_c */
 static BOOL daTag_Etc_IsDelete(daTag_Etc_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000738-00000768       .text daTag_Etc_Delete__FP11daTag_Etc_c */
-static BOOL daTag_Etc_Delete(daTag_Etc_c*) {
-    /* Nonmatching */
+static BOOL daTag_Etc_Delete(daTag_Etc_c* i_actor) {
+    i_actor->~daTag_Etc_c();
+    return TRUE;
 }
 
 /* 00000768-00000788       .text daTag_Etc_Create__FP10fopAc_ac_c */
-static s32 daTag_Etc_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daTag_Etc_Create(fopAc_ac_c* i_actor) {
+    return reinterpret_cast<daTag_Etc_c*>(i_actor)->create();
 }
-
