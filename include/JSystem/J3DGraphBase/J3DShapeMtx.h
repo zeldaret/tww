@@ -78,7 +78,8 @@ public:
 
 class J3DShapeMtxMultiImm : public J3DShapeMtxImm {
 public:
-    J3DShapeMtxMultiImm(u16 useMtxIndex) : J3DShapeMtxImm(useMtxIndex) {}
+    J3DShapeMtxMultiImm(u16 useMtxIndex, u16 useMtxNum, u16* useMtxIndexTable)
+        : J3DShapeMtxImm(useMtxIndex), mUseMtxNum(useMtxNum), mUseMtxIndexTable(useMtxIndexTable) {}
 
     virtual ~J3DShapeMtxMultiImm() {}
     virtual u32 getType() const { return 'SMMI'; }

@@ -8,8 +8,8 @@
 
 class J3DCurrentMtxInfo {
 public:
-    u32 mMtxIdxRegA;
-    u32 mMtxIdxRegB;
+    /* 0x00 */ u32 mMtxIdxRegA;
+    /* 0x04 */ u32 mMtxIdxRegB;
 };
 
 static inline void J3DFifoWriteCPCmd(u8 cmd, u32 param) {
@@ -29,6 +29,11 @@ public:
     J3DCurrentMtx() {
         mMtxIdxRegA = 0x3cf3cf00;
         mMtxIdxRegB = 0x00f3cf3c;
+    }
+
+    explicit J3DCurrentMtx(const J3DCurrentMtxInfo& info) {
+        mMtxIdxRegA = info.mMtxIdxRegA;
+        mMtxIdxRegB = info.mMtxIdxRegB;
     }
 
     u32 getMtxIdxRegA() const { return mMtxIdxRegA; }

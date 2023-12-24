@@ -102,9 +102,9 @@ struct J3DMaterialBlock_v21 : public J3DModelBlock {
 
 struct J3DMaterialDLBlock : public J3DModelBlock {
     /* 0x08 */ u16 mMaterialNum;
-    /* 0x0C */ void* field_0x0c;
-    /* 0x10 */ void* field_0x10;
-    /* 0x14 */ void* field_0x14;
+    /* 0x0C */ void* mpDisplayListInit;
+    /* 0x10 */ void* mpPatchingInfo;
+    /* 0x14 */ void* mpCurrentMtxInfo;
     /* 0x18 */ void* field_0x18;
     /* 0x1C */ void* field_0x1c;
     /* 0x20 */ void* mpNameTable;
