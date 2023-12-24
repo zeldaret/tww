@@ -550,14 +550,14 @@ public:
     J3DAnmTevRegKey() : J3DAnmBase(0) {
         mKRegUpdateMaterialNum = 0;
         mCRegUpdateMaterialNum = 0;
-        mCRegDataCount[3] = 0;
-        mCRegDataCount[2] = 0;
-        mCRegDataCount[1] = 0;
-        mCRegDataCount[0] = 0;
-        mKRegDataCount[3] = 0;
-        mKRegDataCount[2] = 0;
-        mKRegDataCount[1] = 0;
-        mKRegDataCount[0] = 0;
+        mCRegDataCountA = 0;
+        mCRegDataCountB = 0;
+        mCRegDataCountG = 0;
+        mCRegDataCountR = 0;
+        mKRegDataCountA = 0;
+        mKRegDataCountB = 0;
+        mKRegDataCountG = 0;
+        mKRegDataCountR = 0;
         mKRegUpdateMaterialID = NULL;
         mCRegUpdateMaterialID = NULL;
         mAnmCRegDataA = NULL;
@@ -592,8 +592,14 @@ public:
 private:
     /* 0x10 */ u16 mCRegUpdateMaterialNum;
     /* 0x12 */ u16 mKRegUpdateMaterialNum;
-    /* 0x14 */ u16 mCRegDataCount[4];
-    /* 0x1C */ u16 mKRegDataCount[4];
+    /* 0x14 */ u16 mCRegDataCountR;
+    /* 0x16 */ u16 mCRegDataCountG;
+    /* 0x18 */ u16 mCRegDataCountB;
+    /* 0x1A */ u16 mCRegDataCountA;
+    /* 0x1C */ u16 mKRegDataCountR;
+    /* 0x1E */ u16 mKRegDataCountG;
+    /* 0x20 */ u16 mKRegDataCountB;
+    /* 0x22 */ u16 mKRegDataCountA;
     /* 0x24 */ u16* mCRegUpdateMaterialID;
     /* 0x28 */ JUTNameTab mCRegUpdateMaterialName;
     /* 0x38 */ u16* mKRegUpdateMaterialID;
