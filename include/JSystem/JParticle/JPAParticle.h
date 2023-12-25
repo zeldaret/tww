@@ -21,6 +21,10 @@ class JPACallBackBase;
 template<typename T, typename U>
 class JPACallBackBase2;
 
+enum JPAParticleStatus {
+    JPAPtclStts_Invisible = 0x08,
+};
+
 class JPABaseParticle {
 public:
     void initParticle();
@@ -36,8 +40,11 @@ public:
     void setOffsetPosition(f32 x, f32 y, f32 z) { mGlobalPosition.set(x, y, z); }
     void setOffsetPosition(const JGeometry::TVec3<f32>& pos) { mGlobalPosition.set(pos); }
 
+    bool checkStatus(u32 flag) { return mStatus & flag; }
+    bool isInvisibleParticle() { return checkStatus(JPAPtclStts_Invisible); }
+    void setInvisibleParticleFlag() { mStatus |= JPAPtclStts_Invisible; }
+
     void calcCB(JPABaseEmitter*) {}
-    void checkStatus(u32) {}
     void clearStatus(u32) {}
     void drawCB(JPABaseEmitter*) {}
     void getAge() const {}
@@ -51,10 +58,8 @@ public:
     void getVelVec(JGeometry::TVec3<f32>&) const {}
     void getWidth() {}
     void initStatus(u32) {}
-    void isInvisibleParticle() {}
     void setCallBackPtr(JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>*) {}
     void setDeleteParticleFlag() {}
-    void setInvisibleParticleFlag() {}
     void setStatus(u32) {}
 
 public:
@@ -100,10 +105,5 @@ public:
     virtual void execute(JPABaseEmitter*, JPABaseParticle*);
     virtual void draw(JPABaseEmitter*, JPABaseParticle*);
 };
-
-// not sure where this belongs
-static inline u32 COLOR_MULTI(u32 a, u32 b) {
-    return ((a * (b + 1)) * 0x10000) >> 24;
-}
 
 #endif /* JPAPARTICLE_H */
