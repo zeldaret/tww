@@ -25,7 +25,7 @@ public:
     }
     void CalcPos(Vec*, f32) const { /* TODO */ }
     void CalcVec(Vec* pOut) const { VECSubtract(&this->mEnd, &this->mStart, pOut); }
-    void SetEnd(const cXyz&) { /* TODO */ }
+    void SetEnd(const cXyz& pos) { mEnd = pos; }
     const cXyz& GetStartP() const { return mStart; }
     cXyz& GetStartP() { return mStart; }
     const cXyz& GetStart() const { return mStart; }

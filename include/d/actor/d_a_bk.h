@@ -4,29 +4,39 @@
 #include "f_op/f_op_actor.h"
 #include "c/c_damagereaction.h"
 #include "SSystem/SComponent/c_phase.h"
+#include "m_Do/m_Do_hostIO.h"
+
+class dPath;
 
 class bk_class : public fopEn_enemy_c {
 public:
-    /* 0x02AC */ request_of_phase_process_class mPhsBk;
-    /* 0x02B4 */ u8 mMode;
+    /* 0x02AC */ request_of_phase_process_class mPhs;
+    /* 0x02B4 */ u8 mType;
     /* 0x02B5 */ u8 m02B5;
     /* 0x02B6 */ u8 m02B6;
     /* 0x02B7 */ u8 m02B7;
     /* 0x02B8 */ u8 m02B8;
     /* 0x02B9 */ u8 m02B9;
-    /* 0x02BA */ u8 m02BA[0x02BC - 0x02BA];
+    /* 0x02BA */ u8 m02BA;
+    /* 0x02BB */ u8 m02BB[0x02BC - 0x02BB];
     /* 0x02BC */ mDoExt_McaMorf* mpMorf;
     /* 0x02C0 */ u8 m02C0[0x02CC - 0x02C0];
     /* 0x02CC */ s16 m02CC;
-    /* 0x02CE */ u8 m02CE[0x0302 - 0x02CE];
+    /* 0x02CE */ u8 m02CE[0x02D4 - 0x02CE];
+    /* 0x02D4 */ u8 m02D4;
+    /* 0x02D5 */ u8 m02D5;
+    /* 0x02D6 */ u8 m02D6[0x02DC - 0x02D6];
+    /* 0x02DC */ u8 m02DC;
+    /* 0x02DD */ u8 m02DD[0x0302 - 0x02DD];
     /* 0x0302 */ s16 m0302;
     /* 0x0304 */ u8 m0304[0x030C - 0x0304];
     /* 0x030C */ s16 m030C;
-    /* 0x030E */ u8 m030E[0x0336 - 0x030E];
+    /* 0x030E */ s16 m030E;
+    /* 0x0310 */ u8 m0310[0x0336 - 0x0310];
     /* 0x0336 */ s16 m0336;
-    /* 0x0338 */ u8 m0338[0x0344 - 0x0338];
-    /* 0x0344 */ s16 m0344;
-    /* 0x0346 */ u8 m0346[0x034C - 0x0346];
+    /* 0x0338 */ cXyz m0338;
+    /* 0x0344 */ csXyz m0344;
+    /* 0x034A */ u8 m034A[0x034C - 0x034A];
     /* 0x034C */ s16 m034C;
     /* 0x034E */ u8 m034E;
     /* 0x034F */ u8 m034F;
@@ -43,13 +53,26 @@ public:
     /* 0x0DE8 */ dCcD_Sph m0DE8;
     /* 0x0F14 */ dCcD_Sph m0F14;
     /* 0x1040 */ dCcD_Sph m1040;
-    /* 0x116C */ u8 m116C[0x11F8 - 0x116C];
+    /* 0x116C */ cXyz m116C;
+    /* 0x1178 */ cXyz m1178;
+    /* 0x1184 */ u8 m1184[0x11F0 - 0x1184];
+    /* 0x11F0 */ u8 m11F0;
+    /* 0x11F1 */ u8 m11F1;
+    /* 0x11F2 */ u8 m11F2;
+    /* 0x11F3 */ u8 m11F3;
+    /* 0x11F4 */ s16 m11F4;
     /* 0x11F8 */ fopAc_ac_c* m11F8;
     /* 0x11FC */ u32 m11FC;
     /* 0x1200 */ u32 m1200;
-    /* 0x1204 */ u8 m1204[0x121C - 0x1204];
+    /* 0x1204 */ u8 m1204[0x1214 - 0x1204];
+    /* 0x1214 */ u8 m1214;
+    /* 0x1215 */ u8 m1215;
+    /* 0x1216 */ u8 m1216;
+    /* 0x1217 */ u8 m1217;
+    /* 0x1218 */ dPath* m1218;
     /* 0x121C */ u8 m121C;
-    /* 0x121D */ u8 m121D[0x121F - 0x121D];
+    /* 0x121D */ u8 m121D;
+    /* 0x121E */ u8 m121E[0x121F - 0x121E];
     /* 0x121F */ s8 m121F;
     /* 0x1220 */ u8 m1220[0x1264 - 0x1220];
     /* 0x1264 */ enemyice mEnemyIce;
@@ -57,7 +80,7 @@ public:
     /* 0x1844 */ JntHit_c* mpJntHit;
 };
 
-class bkHIO_c {
+class bkHIO_c : public JORReflexible {
 public:
     bkHIO_c() {
         /* Nonmatching */
@@ -142,7 +165,7 @@ public:
     virtual ~bkHIO_c() {}
 
 public:
-    /* 0x004 */ u8 m004[0x005 - 0x004];
+    /* 0x004 */ s8 mChildID;
     /* 0x005 */ u8 m005;
     /* 0x006 */ u8 m006;
     /* 0x007 */ u8 m007;
