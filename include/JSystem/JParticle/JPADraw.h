@@ -32,7 +32,7 @@ public:
     /* 0xA0 */ DirTypeFunc mDirTypeFunc;
     /* 0xA4 */ RotTypeFunc mRotTypeFunc;
     /* 0xA8 */ BasePlaneTypeFunc mBasePlaneTypeFunc;
-    /* 0xAC */ u32 field_0xa4;
+    /* 0xAC */ f32 mScaleAnmTiming;
     /* 0xB0 */ s16 mColorAnmFrame;
     /* 0xB2 */ s16 field_0xb2;
 };

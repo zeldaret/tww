@@ -242,18 +242,65 @@ f32 J3DAnmClusterFull::getWeight(u16 idx) const {
         return mWeight[maxFrame - 1 + getAnmTable()[idx].mOffset];
 }
 
+template <typename T>
+f32 J3DGetKeyFrameInterpolation(f32, J3DAnmKeyTableBase*, T*) {
+}
+
 /* 802F1188-802F120C       .text getWeight__16J3DAnmClusterKeyCFUs */
-f32 J3DAnmClusterKey::getWeight(u16) const {
+f32 J3DAnmClusterKey::getWeight(u16 idx) const {
     /* Nonmatching */
+    J3DAnmKeyTableBase& table = mAnmTable[idx].mWeightTable;
+    if (table.mMaxFrame != 0 && table.mMaxFrame != 1) {
+        return J3DGetKeyFrameInterpolation<f32>(getFrame(), &table, &mWeight[table.mOffset]);
+    } else if (table.mMaxFrame == 0) {
+        return 1.0f;
+    } else {
+        return mWeight[table.mOffset];
+    }
 }
 
 /* 802F120C-802F14B4       .text getColor__18J3DAnmVtxColorFullCFUcUsP8_GXColor */
-void J3DAnmVtxColorFull::getColor(u8, u16, GXColor* dst) const {
-    /* Nonmatching */
+void J3DAnmVtxColorFull::getColor(u8 col, u16 idx, GXColor* dst) const {
+    {
+        u16 maxFrame = getAnmTable(col)[idx].mRMaxFrame;
+        if (0.0f <= getFrame() && getFrame() < maxFrame)
+            dst->r = mColorR[(s32)getFrame() + getAnmTable(col)[idx].mROffset];
+        else if (getFrame() < 0.0f)
+            dst->r = mColorR[getAnmTable(col)[idx].mROffset];
+        else
+            dst->r = mColorR[maxFrame - 1 + getAnmTable(col)[idx].mROffset];
+    }
+    {
+        u16 maxFrame = getAnmTable(col)[idx].mGMaxFrame;
+        if (0.0f <= getFrame() && getFrame() < maxFrame)
+            dst->g = mColorG[(s32)getFrame() + getAnmTable(col)[idx].mGOffset];
+        else if (getFrame() < 0.0f)
+            dst->g = mColorG[getAnmTable(col)[idx].mGOffset];
+        else
+            dst->g = mColorG[maxFrame - 1 + getAnmTable(col)[idx].mGOffset];
+    }
+    {
+        u16 maxFrame = getAnmTable(col)[idx].mBMaxFrame;
+        if (0.0f <= getFrame() && getFrame() < maxFrame)
+            dst->b = mColorB[(s32)getFrame() + getAnmTable(col)[idx].mBOffset];
+        else if (getFrame() < 0.0f)
+            dst->b = mColorB[getAnmTable(col)[idx].mBOffset];
+        else
+            dst->b = mColorB[maxFrame - 1 + getAnmTable(col)[idx].mBOffset];
+    }
+    {
+        u16 maxFrame = getAnmTable(col)[idx].mAMaxFrame;
+        if (0.0f <= getFrame() && getFrame() < maxFrame)
+            dst->a = mColorA[(s32)getFrame() + getAnmTable(col)[idx].mAOffset];
+        else if (getFrame() < 0.0f)
+            dst->a = mColorA[getAnmTable(col)[idx].mAOffset];
+        else
+            dst->a = mColorA[maxFrame - 1 + getAnmTable(col)[idx].mAOffset];
+    }
 }
 
 /* 802F14B4-802F17D0       .text getColor__17J3DAnmVtxColorKeyCFUcUsP8_GXColor */
-void J3DAnmVtxColorKey::getColor(u8, u16, GXColor* dst) const {
+void J3DAnmVtxColorKey::getColor(u8 col, u16 idx, GXColor* dst) const {
     /* Nonmatching */
 }
 
@@ -382,11 +429,171 @@ void J3DAnmTextureSRTKey::searchUpdateMaterialID(J3DModelData* modelData) {
 /* 802F22E0-802F2624       .text getTevColorReg__15J3DAnmTevRegKeyCFUsP11_GXColorS10 */
 void J3DAnmTevRegKey::getTevColorReg(u16 idx, GXColorS10* dst) const {
     /* Nonmatching */
+    {
+        J3DAnmKeyTableBase& table = getAnmCRegKeyTable()[idx].mRTable;
+        switch (table.mMaxFrame) {
+        case 0:
+            dst->r = 0;
+            break;
+        case 1:
+            dst->r = mAnmCRegDataR[table.mOffset];
+            break;
+        default:
+            f32 v = J3DGetKeyFrameInterpolation<s16>(getFrame(), &table, &mAnmCRegDataR[table.mOffset]);
+            if (v < -1024.0f)
+                dst->r = -1024;
+            if (v > 1023.0f)
+                dst->r = 1023;
+            if (0.0f <= v && v <= 255.0f)
+                dst->r = v;
+            break;
+        }
+    }
+    {
+        J3DAnmKeyTableBase& table = getAnmCRegKeyTable()[idx].mGTable;
+        switch (table.mMaxFrame) {
+        case 0:
+            dst->g = 0;
+            break;
+        case 1:
+            dst->g = mAnmCRegDataG[table.mOffset];
+            break;
+        default:
+            f32 v = J3DGetKeyFrameInterpolation<s16>(getFrame(), &table, &mAnmCRegDataG[table.mOffset]);
+            if (v < -1024.0f)
+                dst->g = -1024;
+            if (v > 1023.0f)
+                dst->g = 1023;
+            if (0.0f <= v && v <= 255.0f)
+                dst->g = v;
+            break;
+        }
+    }
+    {
+        J3DAnmKeyTableBase& table = getAnmCRegKeyTable()[idx].mBTable;
+        switch (table.mMaxFrame) {
+        case 0:
+            dst->b = 0;
+            break;
+        case 1:
+            dst->b = mAnmCRegDataB[table.mOffset];
+            break;
+        default:
+            f32 v = J3DGetKeyFrameInterpolation<s16>(getFrame(), &table, &mAnmCRegDataB[table.mOffset]);
+            if (v < -1024.0f)
+                dst->b = -1024;
+            if (v > 1023.0f)
+                dst->b = 1023;
+            if (0.0f <= v && v <= 255.0f)
+                dst->b = v;
+            break;
+        }
+    }
+    {
+        J3DAnmKeyTableBase& table = getAnmCRegKeyTable()[idx].mATable;
+        switch (table.mMaxFrame) {
+        case 0:
+            dst->a = 0;
+            break;
+        case 1:
+            dst->a = mAnmCRegDataA[table.mOffset];
+            break;
+        default:
+            f32 v = J3DGetKeyFrameInterpolation<s16>(getFrame(), &table, &mAnmCRegDataA[table.mOffset]);
+            if (v < -1024.0f)
+                dst->a = -1024;
+            if (v > 1023.0f)
+                dst->a = 1023;
+            if (0.0f <= v && v <= 255.0f)
+                dst->a = v;
+            break;
+        }
+    }
 }
 
 /* 802F2624-802F2968       .text getTevKonstReg__15J3DAnmTevRegKeyCFUsP8_GXColor */
 void J3DAnmTevRegKey::getTevKonstReg(u16 idx, GXColor* dst) const {
     /* Nonmatching */
+    {
+        J3DAnmKeyTableBase& table = getAnmKRegKeyTable()[idx].mRTable;
+        switch (table.mMaxFrame) {
+        case 0:
+            dst->r = 0;
+            break;
+        case 1:
+            dst->r = mAnmKRegDataR[table.mOffset];
+            break;
+        default:
+            f32 v = J3DGetKeyFrameInterpolation<s16>(getFrame(), &table, &mAnmKRegDataR[table.mOffset]);
+            if (v < 0.0f)
+                dst->r = 0;
+            if (v > 255.0f)
+                dst->r = 255;
+            if (0.0f <= v && v <= 255.0f)
+                dst->r = v;
+            break;
+        }
+    }
+    {
+        J3DAnmKeyTableBase& table = getAnmKRegKeyTable()[idx].mGTable;
+        switch (table.mMaxFrame) {
+        case 0:
+            dst->g = 0;
+            break;
+        case 1:
+            dst->g = mAnmKRegDataG[table.mOffset];
+            break;
+        default:
+            f32 v = J3DGetKeyFrameInterpolation<s16>(getFrame(), &table, &mAnmKRegDataG[table.mOffset]);
+            if (v < 0.0f)
+                dst->g = 0;
+            if (v > 255.0f)
+                dst->g = 255;
+            if (0.0f <= v && v <= 255.0f)
+                dst->g = v;
+            break;
+        }
+    }
+    {
+        J3DAnmKeyTableBase& table = getAnmKRegKeyTable()[idx].mBTable;
+        switch (table.mMaxFrame) {
+        case 0:
+            dst->b = 0;
+            break;
+        case 1:
+            dst->b = mAnmKRegDataB[table.mOffset];
+            break;
+        default:
+            f32 v = J3DGetKeyFrameInterpolation<s16>(getFrame(), &table, &mAnmKRegDataB[table.mOffset]);
+            if (v < 0.0f)
+                dst->b = 0;
+            if (v > 255.0f)
+                dst->b = 255;
+            if (0.0f <= v && v <= 255.0f)
+                dst->b = v;
+            break;
+        }
+    }
+    {
+        J3DAnmKeyTableBase& table = getAnmKRegKeyTable()[idx].mATable;
+        switch (table.mMaxFrame) {
+        case 0:
+            dst->a = 0;
+            break;
+        case 1:
+            dst->a = mAnmKRegDataA[table.mOffset];
+            break;
+        default:
+            f32 v = J3DGetKeyFrameInterpolation<s16>(getFrame(), &table, &mAnmKRegDataA[table.mOffset]);
+            if (v < 0.0f)
+                dst->a = 0;
+            if (v > 255.0f)
+                dst->a = 255;
+            if (0.0f <= v && v <= 255.0f)
+                dst->a = v;
+            break;
+        }
+    }
 }
 
 /* 802F2968-802F2A64       .text searchUpdateMaterialID__15J3DAnmTevRegKeyFP16J3DMaterialTable */

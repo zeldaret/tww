@@ -40,7 +40,7 @@ public:
     J3DDrawMtxData * getDrawMtxData() { return &mDrawMtxData; }
     u16 getWEvlpMtxNum() const { return mWEvlpMtxNum; }
     u8 getWEvlpMixMtxNum(u16 idx) const { return mWEvlpMixMtxNum[idx]; }
-    u16 * getWEvlpMixMtxIndex() const { return mWEvlpMixMtxIndex; }
+    u16 * getWEvlpMixMtxIndex() { return mWEvlpMixMtxIndex; }
     f32 * getWEvlpMixWeight() { return mWEvlpMixWeight; }
     u16 getDrawFullWgtMtxNum() const { return mDrawMtxData.mDrawFullWgtMtxNum; }
     u16 getJointNum() const { return mJointNum; }

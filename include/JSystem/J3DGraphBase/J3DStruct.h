@@ -145,8 +145,8 @@ struct J3DIndTexOrderInfo {
 };
 
 struct J3DTevSwapModeInfo {
-    /* 0x0 */ u8 field_0x0 ALIGN_DECL(4);
-    /* 0x1 */ u8 field_0x1;
+    /* 0x0 */ u8 mRasSel ALIGN_DECL(4);
+    /* 0x1 */ u8 mTexSel;
 };
 
 struct J3DTevSwapModeTableInfo {

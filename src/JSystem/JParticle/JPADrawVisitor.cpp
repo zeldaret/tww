@@ -6,12 +6,17 @@
 #include "JSystem/JParticle/JPADrawVisitor.h"
 #include "JSystem/JParticle/JPABaseShape.h"
 #include "JSystem/JParticle/JPAEmitter.h"
+#include "JSystem/JParticle/JPAExtraShape.h"
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAResourceManager.h"
 #include "JSystem/JParticle/JPASweepShape.h"
 #include "JSystem/JGeometry.h"
 #include "dolphin/gx/GX.h"
 #include "dolphin/mtx/mtx.h"
+
+static inline u32 COLOR_MULTI(u32 a, u32 b) {
+    return ((a * (b + 1)) * 0x10000) >> 24;
+}
 
 JPADrawClipBoard* JPADrawContext::pcb;
 
@@ -338,7 +343,15 @@ void JPADrawExecRotationCross::exec(const JPADrawContext* ctx, JPABaseParticle* 
 
 /* 802632EC-80263380       .text exec__16JPADrawExecPointFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawExecPoint::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    if (ptcl->isInvisibleParticle())
+        return;
+
+    JGeometry::TVec3<f32> pos(ptcl->mPosition);
+
+    GXBegin(GX_POINTS, GX_VTXFMT0, 1);
+    GXPosition3f32(pos.x, pos.y, pos.z);
+    GXTexCoord2f32(0.0f, 0.0f);
+    GXEnd();
 }
 
 /* 80263380-80263508       .text exec__15JPADrawExecLineFPC14JPADrawContextP15JPABaseParticle */
@@ -427,45 +440,50 @@ void JPADrawCalcColorEnv::calc(const JPADrawContext* ctx) {
 
 /* 802647E0-8026486C       .text calc__30JPADrawCalcColorAnmFrameNormalFPC14JPADrawContext */
 void JPADrawCalcColorAnmFrameNormal::calc(const JPADrawContext* ctx) {
-    /* Nonmatching */
-    s16 tick = ctx->pbe->mTick;
-    s16 frame;
-    if (tick < ctx->pbsp->getColorRegAnmMaxFrm()) {
-        frame = tick;
-    } else {
-        frame = ctx->pbsp->getColorRegAnmMaxFrm();
-    }
+    s32 tick = ctx->pbe->mTick;
+    s32 frame = (tick < ctx->pbsp->getColorRegAnmMaxFrm()) ? tick : ctx->pbsp->getColorRegAnmMaxFrm();
     JPADrawContext::pcb->mColorAnmFrame = frame;
 }
 
 /* 8026486C-802648E0       .text calc__30JPADrawCalcColorAnmFrameRepeatFPC14JPADrawContext */
 void JPADrawCalcColorAnmFrameRepeat::calc(const JPADrawContext* ctx) {
-    /* Nonmatching */
+    f32 tick = ctx->pbe->mTick;
+    s32 frame = ((u32)tick) % (ctx->pbsp->getColorRegAnmMaxFrm() + 1);
+    JPADrawContext::pcb->mColorAnmFrame = frame;
 }
 
 /* 802648E0-8026495C       .text calc__31JPADrawCalcColorAnmFrameReverseFPC14JPADrawContext */
 void JPADrawCalcColorAnmFrameReverse::calc(const JPADrawContext* ctx) {
     /* Nonmatching */
+    s32 tick = ctx->pbe->mTick;
+    s32 frame = tick / ctx->pbsp->getColorRegAnmMaxFrm();
+    JPADrawContext::pcb->mColorAnmFrame = frame;
 }
 
 /* 8026495C-8026496C       .text calc__29JPADrawCalcColorAnmFrameMergeFPC14JPADrawContext */
 void JPADrawCalcColorAnmFrameMerge::calc(const JPADrawContext* ctx) {
-    /* Nonmatching */
+    JPADrawContext::pcb->mColorAnmFrame = 0;
 }
 
 /* 8026496C-8026497C       .text calc__30JPADrawCalcColorAnmFrameRandomFPC14JPADrawContext */
 void JPADrawCalcColorAnmFrameRandom::calc(const JPADrawContext* ctx) {
-    /* Nonmatching */
+    JPADrawContext::pcb->mColorAnmFrame = 0;
 }
 
 /* 8026497C-80264A34       .text calc__32JPADrawCalcTextureAnmIndexNormalFPC14JPADrawContext */
 void JPADrawCalcTextureAnmIndexNormal::calc(const JPADrawContext* ctx) {
-    /* Nonmatching */
+    s32 tick = ctx->pbe->mTick;
+    s32 idx = ((ctx->pbsp->getTextureAnmKeyNum() - 1) < tick) ? ctx->pbsp->getTextureAnmKeyNum() - 1 : tick;
+    ctx->mpDraw->mTexIdx = ctx->pTexIdx[ctx->pbsp->getTextureIndex(idx)];
 }
 
 /* 80264A34-80264AD0       .text calc__32JPADrawCalcTextureAnmIndexRepeatFPC14JPADrawContext */
 void JPADrawCalcTextureAnmIndexRepeat::calc(const JPADrawContext* ctx) {
     /* Nonmatching */
+    f32 tick = ctx->pbe->mTick;
+    s32 maxFrame = ctx->pbsp->getTextureAnmKeyNum();
+    s32 idx = ctx->pbsp->getTextureIndex((s32)tick % maxFrame);
+    ctx->mpDraw->mTexIdx = ctx->pTexIdx[idx];
 }
 
 /* 80264AD0-80264B80       .text calc__33JPADrawCalcTextureAnmIndexReverseFPC14JPADrawContext */
@@ -485,12 +503,15 @@ void JPADrawCalcTextureAnmIndexRandom::calc(const JPADrawContext* ctx) {
 
 /* 80264C10-80264C4C       .text exec__19JPADrawExecCallBackFPC14JPADrawContext */
 void JPADrawExecCallBack::exec(const JPADrawContext* ctx) {
-    /* Nonmatching */
+    if (ctx->pbe->mpEmitterCallBack != NULL)
+        ctx->pbe->mpEmitterCallBack->draw(ctx->pbe);
 }
 
 /* 80264C4C-80264C88       .text exec__19JPADrawExecCallBackFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawExecCallBack::exec(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    JPABaseEmitter* pbe = ctx->pbe;
+    if (ptcl->mpCallBack2 != NULL)
+        ptcl->mpCallBack2->draw(pbe, ptcl);
 }
 
 /* 80264C88-80264DB8       .text calc__17JPADrawCalcScaleXFPC14JPADrawContextP15JPABaseParticle */
@@ -515,22 +536,24 @@ void JPADrawCalcScaleYBySpeed::calc(const JPADrawContext* ctx, JPABaseParticle* 
 
 /* 80265288-80265294       .text calc__23JPADrawCalcScaleCopyX2YFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcScaleCopyX2Y::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    ptcl->mScaleY = ptcl->mScaleX;
 }
 
 /* 80265294-802652A4       .text calc__31JPADrawCalcScaleAnmTimingNormalFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcScaleAnmTimingNormal::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    JPADrawContext::pcb->mScaleAnmTiming = ptcl->mCurNormTime;
 }
 
 /* 802652A4-80265374       .text calc__32JPADrawCalcScaleAnmTimingRepeatXFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcScaleAnmTimingRepeatX::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    s32 frame = ptcl->mCurFrame;
+    JPADrawContext::pcb->mScaleAnmTiming = (frame % ctx->pesp->getAnmCycleX()) / (f32)ctx->pesp->getAnmCycleX();
 }
 
 /* 80265374-80265444       .text calc__32JPADrawCalcScaleAnmTimingRepeatYFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcScaleAnmTimingRepeatY::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    s32 frame = ptcl->mCurFrame;
+    JPADrawContext::pcb->mScaleAnmTiming = (frame % ctx->pesp->getAnmCycleY()) / (f32)ctx->pesp->getAnmCycleY();
 }
 
 /* 80265444-80265588       .text calc__33JPADrawCalcScaleAnmTimingReverseXFPC14JPADrawContextP15JPABaseParticle */
@@ -545,17 +568,18 @@ void JPADrawCalcScaleAnmTimingReverseY::calc(const JPADrawContext* ctx, JPABaseP
 
 /* 802656CC-80265734       .text calc__19JPADrawCalcColorPrmFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcColorPrm::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    ptcl->mPrmColor = ctx->pbsp->getPrmColor(JPADrawContext::pcb->mColorAnmFrame);
 }
 
 /* 80265734-8026579C       .text calc__19JPADrawCalcColorEnvFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcColorEnv::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    ptcl->mEnvColor = ctx->pbsp->getEnvColor(JPADrawContext::pcb->mColorAnmFrame);
 }
 
 /* 8026579C-802657E8       .text calc__31JPADrawCalcColorCopyFromEmitterFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcColorCopyFromEmitter::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    ptcl->mPrmColor = ctx->mpDraw->mPrmColor;
+    ptcl->mEnvColor = ctx->mpDraw->mEnvColor;
 }
 
 /* 802657E8-80265880       .text calc__30JPADrawCalcColorAnmFrameNormalFPC14JPADrawContextP15JPABaseParticle */
@@ -630,10 +654,11 @@ void JPADrawCalcTextureAnmIndexRandom::calc(const JPADrawContext* ctx, JPABasePa
 
 /* 8026640C-80266420       .text calc__24JPADrawCalcChildAlphaOutFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcChildAlphaOut::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    ptcl->mAlphaOut = 1.0f - ptcl->mCurNormTime;
 }
 
 /* 80266420-80266450       .text calc__24JPADrawCalcChildScaleOutFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcChildScaleOut::calc(const JPADrawContext* ctx, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    ptcl->mScaleX = ptcl->mScaleOut * (1.0f - ptcl->mCurNormTime);
+    ptcl->mScaleY = ptcl->mAlphaWaveRandom * (1.0f - ptcl->mCurNormTime);
 }

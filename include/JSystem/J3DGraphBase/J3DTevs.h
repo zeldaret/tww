@@ -36,7 +36,7 @@ struct J3DTevStage {
         setTevStageInfo(j3dDefaultTevStageInfo);
         setTevSwapModeInfo(j3dDefaultTevSwapMode);
     }
-    J3DTevStage(const J3DTevStageInfo& info) {
+    explicit J3DTevStage(const J3DTevStageInfo& info) {
         setTevStageInfo(info);
         setTevSwapModeInfo(j3dDefaultTevSwapMode);
     }
@@ -100,8 +100,8 @@ struct J3DTevStage {
     void setTexSel(u8 param_0) { mTevSwapModeInfo = mTevSwapModeInfo & ~0x0C | param_0 << 2; }
     void setRasSel(u8 param_0) { mTevSwapModeInfo = mTevSwapModeInfo & ~0x03 | param_0; }
     void setTevSwapModeInfo(const J3DTevSwapModeInfo& info) {
-        setTexSel(info.field_0x1);
-        setRasSel(info.field_0x0);
+        setTexSel(info.mTexSel);
+        setRasSel(info.mRasSel);
     }
 
     void load(u32) const {
@@ -123,6 +123,11 @@ struct J3DIndTevStage {
     J3DIndTevStage() {
         mInfo = 0;
         setIndTevStageInfo(j3dDefaultIndTevStageInfo);
+    }
+
+    explicit J3DIndTevStage(const J3DIndTevStageInfo& info) {
+        mInfo = 0;
+        setIndTevStageInfo(info);
     }
 
     void setIndStage(u8 stage) { mInfo = mInfo & ~0x03 | stage; }
@@ -156,20 +161,26 @@ struct J3DIndTevStage {
 
 struct J3DTevOrder : public J3DTevOrderInfo {
     J3DTevOrder() { *(J3DTevOrderInfo*)this = j3dDefaultTevOrderInfoNull; }
+    explicit J3DTevOrder(const J3DTevOrderInfo& info) { *(J3DTevOrderInfo*)this = info; }
 
     J3DTevOrderInfo& getTevOrderInfo() { return *this; }
     u8 getTexMap() { return mTexMap; }
 };
 
+static inline u8 calcTevSwapTableID(u8 r, u8 g, u8 b, u8 a) {
+    return r * 64 + g * 16 + b * 4 + a;
+}
+
 struct J3DTevSwapModeTable {
-    J3DTevSwapModeTable() { field_0x0 = j3dDefaultTevSwapTableID; }
+    J3DTevSwapModeTable() { mIdx = j3dDefaultTevSwapTableID; }
+    explicit J3DTevSwapModeTable(const J3DTevSwapModeTableInfo& info) { mIdx = calcTevSwapTableID(info.field_0x0, info.field_0x1, info.field_0x2, info.field_0x3); }
 
-    u8 getR() { return j3dTevSwapTableTable[field_0x0 * 4]; }
-    u8 getG() { return j3dTevSwapTableTable[field_0x0 * 4 + 1]; }
-    u8 getB() { return j3dTevSwapTableTable[field_0x0 * 4 + 2]; }
-    u8 getA() { return j3dTevSwapTableTable[field_0x0 * 4 + 3]; }
+    u8 getR() { return j3dTevSwapTableTable[mIdx * 4]; }
+    u8 getG() { return j3dTevSwapTableTable[mIdx * 4 + 1]; }
+    u8 getB() { return j3dTevSwapTableTable[mIdx * 4 + 2]; }
+    u8 getA() { return j3dTevSwapTableTable[mIdx * 4 + 3]; }
 
-    /* 0x0 */ u8 field_0x0;
+    /* 0x0 */ u8 mIdx;
 };  // Size: 0x1
 
 class J3DLightObj {
@@ -188,11 +199,8 @@ public:
 };  // Size = 0x74
 
 struct J3DNBTScale : public J3DNBTScaleInfo {
-    J3DNBTScale() {}
-    J3DNBTScale(J3DNBTScaleInfo const& info) {
-        mbHasScale = info.mbHasScale;
-        mScale = info.mScale;
-    }
+    J3DNBTScale() { *(J3DNBTScaleInfo*)this = j3dDefaultNBTScaleInfo; }
+    explicit J3DNBTScale(const J3DNBTScaleInfo& info) { *(J3DNBTScaleInfo*)this = info; }
     Vec* getScale() { return &mScale; }
 };
 

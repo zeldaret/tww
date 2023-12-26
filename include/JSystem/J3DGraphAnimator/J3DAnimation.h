@@ -84,7 +84,9 @@ struct J3DAnmClusterFullTable {
     u16 mOffset;
 };
 
-struct J3DAnmClusterKeyTable;
+struct J3DAnmClusterKeyTable {
+    /* 0x00 */ J3DAnmKeyTableBase mWeightTable;
+};
 
 // same as J3DModelBlock?
 struct J3DAnmDataBlockHeader {  // actual name unknown
@@ -112,7 +114,8 @@ struct J3DAnmVtxColorFullData {
     /* 0x09 */ u8 field_0x9;  // padding?
     /* 0x0A */ s16 mFrameMax;
     /* 0x0C */ u16 mAnmTableNum[2];
-    /* 0x10 */ u8 field_0x10[0x18 - 0x10];
+    /* 0x10 */ u16 mIndexNum[2];
+    /* 0x14 */ u32 field_0x14;
     /* 0x18 */ s32 mTableOffsets[2];
     /* 0x20 */ s32 mVtxColorIndexDataOffsets[2];
     /* 0x28 */ s32 mVtxColorIndexPointerOffsets[2];
@@ -213,14 +216,14 @@ struct J3DAnmVtxColorKeyData {
     /* 0x09 */ u8 field_0x9;
     /* 0x0A */ s16 mFrameMax;
     /* 0x0C */ u16 mAnmTableNum[2];
-    /* 0x10 */ u8 field_0x10[0x18 - 0x10];
+    /* 0x10 */ u32 mIndexNum[2];
     /* 0x18 */ s32 mTableOffsets[2];
-    /* 0x20 */ s32 mVtxColoIndexDataOffset[2];
-    /* 0x28 */ s32 mVtxColoIndexPointerOffset[2];
-    /* 0x30 */ s32 mRValOffset;
-    /* 0x34 */ s32 mGValOffset;
-    /* 0x38 */ s32 mBValOffset;
-    /* 0x3C */ s32 mAValOffset;
+    /* 0x20 */ s32 mVtxColorIndexDataOffsets[2];
+    /* 0x28 */ s32 mVtxColorIndexPointerOffsets[2];
+    /* 0x30 */ s32 mRValuesOffset;
+    /* 0x34 */ s32 mGValuesOffset;
+    /* 0x38 */ s32 mBValuesOffset;
+    /* 0x3C */ s32 mAValuesOffset;
 };  // Size = 0x40
 
 STATIC_ASSERT(sizeof(J3DAnmVtxColorKeyData) == 0x40);
@@ -547,24 +550,24 @@ public:
     J3DAnmTevRegKey() : J3DAnmBase(0) {
         mKRegUpdateMaterialNum = 0;
         mCRegUpdateMaterialNum = 0;
-        mCRegDataCount[3] = 0;
-        mCRegDataCount[2] = 0;
-        mCRegDataCount[1] = 0;
-        mCRegDataCount[0] = 0;
-        mKRegDataCount[3] = 0;
-        mKRegDataCount[2] = 0;
-        mKRegDataCount[1] = 0;
-        mKRegDataCount[0] = 0;
+        mCRegDataCountA = 0;
+        mCRegDataCountB = 0;
+        mCRegDataCountG = 0;
+        mCRegDataCountR = 0;
+        mKRegDataCountA = 0;
+        mKRegDataCountB = 0;
+        mKRegDataCountG = 0;
+        mKRegDataCountR = 0;
         mKRegUpdateMaterialID = NULL;
         mCRegUpdateMaterialID = NULL;
-        mAnmCRegData[3] = NULL;
-        mAnmCRegData[2] = NULL;
-        mAnmCRegData[1] = NULL;
-        mAnmCRegData[0] = NULL;
-        mAnmKRegData[3] = NULL;
-        mAnmKRegData[2] = NULL;
-        mAnmKRegData[1] = NULL;
-        mAnmKRegData[0] = NULL;
+        mAnmCRegDataA = NULL;
+        mAnmCRegDataB = NULL;
+        mAnmCRegDataG = NULL;
+        mAnmCRegDataR = NULL;
+        mAnmKRegDataA = NULL;
+        mAnmKRegDataB = NULL;
+        mAnmKRegDataG = NULL;
+        mAnmKRegDataR = NULL;
         mKind = 5;
     }
     void getTevColorReg(u16, GXColorS10*) const;
@@ -589,16 +592,28 @@ public:
 private:
     /* 0x10 */ u16 mCRegUpdateMaterialNum;
     /* 0x12 */ u16 mKRegUpdateMaterialNum;
-    /* 0x14 */ u16 mCRegDataCount[4];
-    /* 0x1C */ u16 mKRegDataCount[4];
+    /* 0x14 */ u16 mCRegDataCountR;
+    /* 0x16 */ u16 mCRegDataCountG;
+    /* 0x18 */ u16 mCRegDataCountB;
+    /* 0x1A */ u16 mCRegDataCountA;
+    /* 0x1C */ u16 mKRegDataCountR;
+    /* 0x1E */ u16 mKRegDataCountG;
+    /* 0x20 */ u16 mKRegDataCountB;
+    /* 0x22 */ u16 mKRegDataCountA;
     /* 0x24 */ u16* mCRegUpdateMaterialID;
     /* 0x28 */ JUTNameTab mCRegUpdateMaterialName;
     /* 0x38 */ u16* mKRegUpdateMaterialID;
     /* 0x3C */ JUTNameTab mKRegUpdateMaterialName;
     /* 0x4C */ J3DAnmCRegKeyTable* mAnmCRegKeyTable;
     /* 0x50 */ J3DAnmKRegKeyTable* mAnmKRegKeyTable;
-    /* 0x54 */ s16 * mAnmCRegData[4];
-    /* 0x64 */ s16 * mAnmKRegData[4];
+    /* 0x54 */ s16 * mAnmCRegDataR;
+    /* 0x58 */ s16 * mAnmCRegDataG;
+    /* 0x5C */ s16 * mAnmCRegDataB;
+    /* 0x60 */ s16 * mAnmCRegDataA;
+    /* 0x64 */ s16 * mAnmKRegDataR;
+    /* 0x68 */ s16 * mAnmKRegDataG;
+    /* 0x6C */ s16 * mAnmKRegDataB;
+    /* 0x70 */ s16 * mAnmKRegDataA;
 };  // Size: 0x74
 
 class J3DAnmColor : public J3DAnmBase {
@@ -689,48 +704,62 @@ public:
             mAnmTableNum[i] = 0;
         }
         for (int i = 0; i < 2; i++) {
-            mAnmVtxColorIndexData[i] = 0;
+            mAnmVtxColorIndexData[i] = NULL;
         }
     }
 
     virtual ~J3DAnmVtxColor();
     virtual void getColor(u8, u16, GXColor*) const {}
 
-private:
+protected:
     /* 0x10 */ s16 mAnmTableNum[2];
-    /* 0x14 */ int mAnmVtxColorIndexData[2];
+    /* 0x14 */ void* mAnmVtxColorIndexData[2];
 };  // Size: 0x1C
 
 class J3DAnmVtxColorKey : public J3DAnmVtxColor {
 public:
+    friend class J3DAnmKeyLoader_v15;
+
     J3DAnmVtxColorKey() {
         for (int i = 0; i < 2; i++) {
-            field_0x1c[i] = 0;
+            mpTable[i] = NULL;
         }
     }
 
     virtual ~J3DAnmVtxColorKey();
     virtual void getColor(u8, u16, GXColor*) const;
 
-private:
-    /* 0x1C */ int field_0x1c[2];
-    /* 0x24 */ u8 field_0x24[0x34 - 0x24];
+    J3DAnmColorKeyTable * getAnmTable(u8 idx) const { return mpTable[idx]; }
+
+protected:
+    /* 0x1C */ J3DAnmColorKeyTable* mpTable[2];
+    /* 0x24 */ s16* mColorR;
+    /* 0x28 */ s16* mColorG;
+    /* 0x2C */ s16* mColorB;
+    /* 0x30 */ s16* mColorA;
 };
 
 class J3DAnmVtxColorFull : public J3DAnmVtxColor {
 public:
+    friend class J3DAnmFullLoader_v15;
+
     J3DAnmVtxColorFull() {
         for (int i = 0; i < 2; i++) {
-            field_0x1c[i] = 0;
+            mpTable[i] = NULL;
         }
     }
 
     virtual ~J3DAnmVtxColorFull();
     virtual void getColor(u8, u16, GXColor*) const;
 
-private:
-    /* 0x1C */ int field_0x1c[2];
-    /* 0x24 */ u8 field_0x24[0x34 - 0x24];
+    J3DAnmColorFullTable * getAnmTable(u8 idx) const { return mpTable[idx]; }
+
+protected:
+    /* 0x1C */ J3DAnmColorFullTable* mpTable[2];
+    /* 0x24 */ u8* mColorR;
+    /* 0x28 */ u8* mColorG;
+    /* 0x2C */ u8* mColorB;
+    /* 0x30 */ u8* mColorA;
 };
 
 class J3DAnmCluster : public J3DAnmBase {
@@ -767,13 +796,13 @@ public:
     friend class J3DAnmKeyLoader_v15;
 
     J3DAnmClusterKey() : J3DAnmCluster(3, NULL) {
-        field_0x14 = 0;
+        mAnmTable = NULL;
     }
     virtual ~J3DAnmClusterKey() {}
     virtual f32 getWeight(u16) const;
 
 private:
-    /* 0x14 */ J3DAnmClusterKeyTable* field_0x14;
+    /* 0x14 */ J3DAnmClusterKeyTable* mAnmTable;
 };
 
 class J3DFrameCtrl {

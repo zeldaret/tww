@@ -8,10 +8,12 @@ inline u32 getBdlFlag_MaterialType(u32 i_flags) {
     return i_flags & 0x3000;
 }
 
+// Actual struct name unknown
 struct J3DModelBlock {
     /* 0x00 */ u32 mBlockType;
     /* 0x04 */ u32 mBlockSize;
 
+    // Fake inline
     const J3DModelBlock* getNext() const {
         return reinterpret_cast<const J3DModelBlock*>(reinterpret_cast<const u8*>(this) + mBlockSize);
     }
@@ -102,9 +104,9 @@ struct J3DMaterialBlock_v21 : public J3DModelBlock {
 
 struct J3DMaterialDLBlock : public J3DModelBlock {
     /* 0x08 */ u16 mMaterialNum;
-    /* 0x0C */ void* field_0x0c;
-    /* 0x10 */ void* field_0x10;
-    /* 0x14 */ void* field_0x14;
+    /* 0x0C */ void* mpDisplayListInit;
+    /* 0x10 */ void* mpPatchingInfo;
+    /* 0x14 */ void* mpCurrentMtxInfo;
     /* 0x18 */ void* field_0x18;
     /* 0x1C */ void* field_0x1c;
     /* 0x20 */ void* mpNameTable;
