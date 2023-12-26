@@ -42,7 +42,7 @@ public:
     static u8 getBlureRate() { return mBlureRate; }
     static MtxP getBlureMtx() { return mBlureMtx; }
     static void offAutoForcus() { mAutoForcus = false; }
-    static bool isAutoForcus() { return mAutoForcus; }
+    static BOOL isAutoForcus() { return mAutoForcus; }
     static void setTickRate(u32 rate) { JFWDisplay::getManager()->setTickRate(rate); }
     static void waitBlanking(int wait) { JFWDisplay::getManager()->waitBlanking(wait); }
     static BOOL isMonotone() { return mMonotone; }

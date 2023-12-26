@@ -68,18 +68,6 @@ u64 mCaptureTimeOutTicks;
 JKRHeap * mDoGph_gInf_c::mHeap[2] = {};
 GXColor mDoGph_gInf_c::mBackColor = {};
 GXColor mDoGph_gInf_c::mFadeColor = {};
-static GXColorS10 l_tevColor = {};
-u8 mCaptureDraw = 1;
-u8 mCaptureTextureFormat = GX_TF_CMPR;
-u8 mCaptureCaptureFormat = GX_TF_RGB565;
-u8 mCaptureSizeWidth = 152;
-u8 mCaptureSizeHeight = 104;
-s16 mCaptureCenterX = 320;
-s16 mCaptureCenterY = 180;
-GXColor mCaptureMonoColor0 = { 0x00, 0x00, 0x00, 0x00 };
-GXColor mCaptureMonoColor1 = { 0xFF, 0xFF, 0xFF, 0xFF };
-u32 mCaptureThreadStackSize = 0x2000;
-u32 mCaptureThreadPriority = 30;
 
 /* 80007BBC-80007DDC       .text create__13mDoGph_gInf_cFv */
 void mDoGph_gInf_c::create() {
@@ -138,9 +126,7 @@ void* mDoGph_gInf_c::alloc(u32 size, int align) {
 
 /* 80007EE4-80007F1C       .text free__13mDoGph_gInf_cFv */
 void mDoGph_gInf_c::free() {
-    u8 heap = mCurrentHeap;
-    mCurrentHeap ^= 1;
-    mHeap[heap]->freeAll();
+    mHeap[mCurrentHeap ^= 1]->freeAll();
 }
 
 /* 80007F1C-80007F6C       .text fadeOut__13mDoGph_gInf_cFfR8_GXColor */
@@ -268,10 +254,22 @@ bool mDoGph_BeforeOfDraw() {
 
 /* 80008410-80008600       .text mDoGph_AfterOfDraw__Fv */
 bool mDoGph_AfterOfDraw() {
-    /* Nonmatching */
-    if (!fapGmHIO_isMenu()) {
-        if (JUTGamePad::getPortStatus(JUTGamePad::Port_1).button == 0 && fapGmHIO_getMeter() != 0 && !JFWSystem::getSystemConsole()->isVisible()) {
+    if (fapGmHIO_isMenu()) {
+        JUTProcBar::getManager()->setVisible(false);
+        JUTProcBar::getManager()->setVisibleHeapBar(false);
+        JUTDbPrint::getManager()->setVisible(true);
+    } else {
+        BOOL consoleVisible = JFWSystem::getSystemConsole()->isVisible();
+        BOOL pad3Connected = JUTGamePad::getPortStatus(JUTGamePad::Port_3).error == 0;
+        BOOL procVisible = pad3Connected && fapGmHIO_getMeter() && !consoleVisible;
+        BOOL printVisible = pad3Connected && fapGmHIO_isPrint();
+        if (mDoMain::developmentMode == 0) {
+            procVisible = FALSE;
+            printVisible = FALSE;
         }
+        JUTProcBar::getManager()->setVisible(procVisible);
+        JUTProcBar::getManager()->setVisibleHeapBar(procVisible);
+        JUTDbPrint::getManager()->setVisible(printVisible);
     }
 
     GXSetZCompLoc(GX_TRUE);
@@ -315,7 +313,7 @@ void clearAlphaBuffer(view_class* view, u8 alpha) {
     GXSetColorUpdate(GX_FALSE);
     GXSetAlphaUpdate(GX_TRUE);
     GXSetNumIndStages(0);
-    GXColor color = { 0xFF, 0xFF, 0xFF, 0xFF };
+    GXColor color = { 0x00, 0x00, 0x00, 0x00 };
     color.a = alpha;
     GXSetTevColor(GX_TEVREG0, color);
     Mtx44 mtx;
@@ -458,6 +456,16 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
         GXGetProjectionv(projv);
         GXGetViewportv(viewv);
         GXProject(view->mLookat.mCenter.x, view->mLookat.mCenter.y, view->mLookat.mCenter.z, view->mViewMtx, projv, viewv, &x, &y, &z);
+        
+        int temp = z * 0xFFFFFF;
+        depth = (0xFF0000 - temp) >> 8;
+        if (depth < -0x400) {
+            temp = -0x400;
+        } else {
+            temp = -depth & ~depth;
+            temp = ~(temp >> 31) & depth;
+        }
+        depth = temp;
     }
 
     static GXColorS10 l_tevColor0 = { 0, 0, 0, 0 };
@@ -470,23 +478,23 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
         if (roomNo >= 0)
             fili_p = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
 
-        if (fili_p != NULL) {
-            if (mDoGph_gInf_c::isAutoForcus()) {
-                l_tevColor0.a = depth - dStage_FileList_dt_PhotoDepth(fili_p);
+        if (fili_p == NULL) {
+            if (!mDoGph_gInf_c::isAutoForcus()) {
+                l_tevColor0.a = depth - g_envHIO.mOther.field_0x40;
             } else {
-                s16 photoDepth = -dStage_FileList_dt_PhotoDepth(fili_p);
-                if (depth < -dStage_FileList_dt_PhotoDepth(fili_p))
-                    depth = photoDepth;
+                s16 photoDepth = -g_envHIO.mOther.field_0x40;
+                if (photoDepth > (s16)depth)
+                    photoDepth = depth;
                 l_tevColor0.a = photoDepth;
             }
         } else {
-            if (mDoGph_gInf_c::isAutoForcus()) {
-                s16 photoDepth = -g_envHIO.mOther.field_0x40;
-                if (depth < -g_envHIO.mOther.field_0x40)
-                    depth = photoDepth;
-                l_tevColor0.a = photoDepth;
+            if (!mDoGph_gInf_c::isAutoForcus()) {
+                l_tevColor0.a = depth - dStage_FileList_dt_PhotoDepth(fili_p);
             } else {
-                l_tevColor0.a = depth - g_envHIO.mOther.field_0x40;
+                int photoDepth = -dStage_FileList_dt_PhotoDepth(fili_p);
+                if (photoDepth > depth)
+                    photoDepth = depth;
+                l_tevColor0.a = photoDepth;
             }
         }
     }
@@ -539,6 +547,18 @@ void motionBlure(view_class* view) {
         GXSetProjection(view->mProjMtx, GX_PERSPECTIVE);
     }
 }
+
+u8 mCaptureDraw = 1;
+u8 mCaptureTextureFormat = GX_TF_CMPR;
+u8 mCaptureCaptureFormat = GX_TF_RGB565;
+u8 mCaptureSizeWidth = 152;
+u8 mCaptureSizeHeight = 104;
+s16 mCaptureCenterX = 320;
+s16 mCaptureCenterY = 180;
+GXColor mCaptureMonoColor0 = { 0x00, 0x00, 0x00, 0x00 };
+GXColor mCaptureMonoColor1 = { 0xFF, 0xFF, 0xFF, 0xFF };
+u32 mCaptureThreadStackSize = 0x2000;
+u32 mCaptureThreadPriority = 30;
 
 /* 80009BBC-80009BE0       .text mCaptureAlarmHandler__FP7OSAlarmP9OSContext */
 void mCaptureAlarmHandler(OSAlarm*, OSContext*) {
