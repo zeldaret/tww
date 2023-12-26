@@ -38,11 +38,11 @@ public:
     void onEnemyDamage();
     void mbossBgmMuteProcess();
     void mbossBgmNearByProcess(f32);
-    void checkBgmPlaying();
-    void checkPlayingMainBgmFlag();
-    void checkSubBgmPlaying();
-    void checkPlayingSubBgmFlag();
-    void checkPlayingStreamBgmFlag();
+    bool checkBgmPlaying();
+    int checkPlayingMainBgmFlag();
+    bool checkSubBgmPlaying();
+    int checkPlayingSubBgmFlag();
+    int checkPlayingStreamBgmFlag();
     void changeBgmStatus(s32);
     void changeSubBgmStatus(s32);
     void bgmMuteMtDragon();
@@ -102,7 +102,7 @@ public:
     BOOL check1stDynamicWave();
     void load2ndDynamicWave();
     void loadStaticWaves();
-    BOOL checkFirstWaves();
+    s32 checkFirstWaves();
     void setLinkHp(s32, s32);
     void setLinkSwordType(s32, s32);
     void setLinkShieldType(s32, s32);
@@ -145,8 +145,8 @@ public:
     void rainPlay(s32);
 
     virtual JAISound* makeSound(u32);
-    virtual bool getMapInfoFxline(u32);
-    virtual bool getMapInfoGround(u32);
+    virtual BOOL getMapInfoFxline(u32);
+    virtual BOOL getMapInfoGround(u32);
     virtual f32 getMapInfoFxParameter(u32);
 
     void setHour(s32 i_hour) { mHour = i_hour; }
@@ -154,6 +154,18 @@ public:
     void setWeekday(s32 i_weekday) { mWeekday = i_weekday; }
 
     static JAIZelBasic* getInterface() { return zel_basic; }
+
+    // TODO
+    void bstHoriOff() {}
+    void bstHoriOn() {}
+    void calcMainBgmVol() {}
+    void calcSubBgmVol() {}
+    void checkSeMute() {}
+    void checkTBoxDemo() {}
+    void getCurCamera(u32) {}
+    void getLinkBootsType() {}
+    void getLinkSwShieldBeat() {}
+    void isTaktUsing() {}
 
     static JAIZelBasic* zel_basic;
 
@@ -199,10 +211,13 @@ public:
     /* 0x0061 */ u8 field_0x0061;
     /* 0x0062 */ u8 field_0x0062;
     /* 0x0063 */ u8 field_0x0063;
-    /* 0x0064 */ u8 field_0x0064[0x0066 - 0x0064];
+    /* 0x0064 */ u8 field_0x0064[0x0065 - 0x0064];
+    /* 0x0065 */ u8 field_0x0065;
     /* 0x0066 */ u8 field_0x0066;
-    /* 0x0067 */ u8 field_0x0067[0x0070 - 0x0067];
-    /* 0x0070 */ JAISound* mpSound;
+    /* 0x0067 */ u8 field_0x0067[0x0068 - 0x0067];
+    /* 0x0068 */ JAISound* mpMainBgmSound;
+    /* 0x006C */ JAISound* mpSubBgmSound;
+    /* 0x0070 */ JAISound* mpStreamBgmSound;
     /* 0x0074 */ int field_0x0074;
     /* 0x0078 */ u32 field_0x0078;
     /* 0x007C */ u32 field_0x007c;

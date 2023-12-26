@@ -14,7 +14,7 @@ namespace JAInter {
         void finishSceneSet(u32);
         void loadSceneWave(s32, s32);
         void loadGroupWave(s32, s32);
-        void getWaveLoadStatus(s32);
+        s32 getWaveLoadStatus(s32);
         bool checkAllWaveLoadStatus();
 
         extern s32* wsGroupNumber;

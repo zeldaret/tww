@@ -65,7 +65,7 @@ void JAInter::BankWave::loadGroupWave(s32, s32) {
 }
 
 /* 802916B0-802916C0       .text getWaveLoadStatus__Q27JAInter8BankWaveFl */
-void JAInter::BankWave::getWaveLoadStatus(s32) {
+s32 JAInter::BankWave::getWaveLoadStatus(s32) {
     /* Nonmatching */
 }
 

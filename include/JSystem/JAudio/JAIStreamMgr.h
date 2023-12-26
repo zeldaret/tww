@@ -28,9 +28,11 @@ namespace JAInter {
 
         extern LinkSound streamControl;
         extern u8 flags;
-        extern int streamUpdate;
+        extern int streamUpdate; // TODO pointer to something, not actually an int
         extern u8* streamList;
         extern u8* initOnCodeStrm;
+
+        inline int getUpdateInfo() { return streamUpdate; }
     }
 
     namespace StreamLib {

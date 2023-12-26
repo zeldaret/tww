@@ -224,13 +224,13 @@ void JAIBasic::deleteObject(void*) {
 }
 
 /* 80290D94-80290DA0       .text getMapInfoFxline__8JAIBasicFUl */
-bool JAIBasic::getMapInfoFxline(u32 param_1) {
-    return param_1 != 0;
+BOOL JAIBasic::getMapInfoFxline(u32 param_1) {
+    return param_1 ? TRUE : FALSE;
 }
 
 /* 80290DA0-80290DAC       .text getMapInfoGround__8JAIBasicFUl */
-bool JAIBasic::getMapInfoGround(u32 param_1) {
-    return param_1 != 0;
+BOOL JAIBasic::getMapInfoGround(u32 param_1) {
+    return param_1 ? TRUE : FALSE;
 }
 
 /* 80290DAC-80290DC4       .text getMapInfoFxParameter__8JAIBasicFUl */

@@ -19,8 +19,8 @@ class JAIBasic {
 public:
     JAIBasic();
     virtual JAISound* makeSound(u32);
-    virtual bool getMapInfoFxline(u32);
-    virtual bool getMapInfoGround(u32);
+    virtual BOOL getMapInfoFxline(u32);
+    virtual BOOL getMapInfoGround(u32);
     virtual f32 getMapInfoFxParameter(u32);
     virtual void setSeExtParameter(JAISound*);
     virtual void setRegisterTrackCallback();
@@ -80,6 +80,22 @@ public:
         JUT_ASSERT_MSG(148, msCurrentHeap, "JAIBasicのカレントヒープがありません（mCurrentHeap==NULL）\n");
         return msCurrentHeap;
     }
+
+    // TODO
+    void addInitOnCodeSeScene(u32, u32) {}
+    void checkAllWaveLoadStatus() {}
+    void checkEnablePrepare(u32) {}
+    void getAudioCamera() {}
+    void getInitDataInfo() {}
+    void getInitOnCodeSeScene() {}
+    void getSceneSetFlag() {}
+    void getSeSoundHandle() {}
+    void getWaveLoadStatus(s32) {}
+    void initAudio(JKRSolidHeap*, u32, u8) {}
+    void loadSceneWave(s32, s32) {}
+    void prepareSoundVec(u32, JAISound**, Vec*, u32, u32, u8) {}
+    void setInitDataInfo(char*) {}
+    void setInitOnCodeSeScene(u32*) {}
 
     static JAIBasic* msBasic;
     static JKRSolidHeap* msCurrentHeap;

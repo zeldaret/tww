@@ -72,6 +72,46 @@ public:
     int checkSoundHandle(u32, void*);
     void initParameter(JAISound**, JAInter::Actor*, u32, u32, u8, void*);
 
+    // TODO
+    void decWait() {}
+    void getAct() {}
+    void getAdjustPriority() {}
+    void getFadetime() {}
+    void getID() {}
+    void getInfoPointer() {}
+    void getMapInfo() {}
+    void getNextSound() {}
+    void getPlayGameFrameCounter() {}
+    void getPlayer() {}
+    void getPositionInfo() {}
+    void getPrevSound() {}
+    void getPriority() {}
+    void getStatus() {}
+    void getTrack() {}
+    void getTrans() {}
+    void getWait() {}
+    void incPlayGameFrameCounter() {}
+    void setCustomParameterPointer(void*) {}
+    void setDemoFxmix(f32, u32) {}
+    void setDemoPan(f32, u32) {}
+    void setDemoPitch(f32, u32) {}
+    void setDemoVolume(f32, u32) {}
+    void setFadetime(u32) {}
+    void setID(u32) {}
+    void setMainSoundPPointer(JAISound**) {}
+    void setNextSound(JAISound*) {}
+    void setPrevSound(JAISound*) {}
+    void setPriority(u32) {}
+    void setRandom(u8) {}
+    void setSeInterDolbyU7(u8, u8, u32, u8) {}
+    void setSeInterFxmixU7(u8, u8, u32, u8) {}
+    void setSeqInterVolumeU7(u8, u8, u32) {}
+    void setStatus(u8) {}
+    void setTrack(u8) {}
+    void setTrackVolumeU7(u8, u8, u32) {}
+    void setVolumeU7(u8, u32, u8) {}
+    void setWait(u8) {}
+
     /* 0x04 */ u8 field_0x4;
     /* 0x05 */ u8 field_0x5;
     /* 0x06 */ u8 field_0x6;

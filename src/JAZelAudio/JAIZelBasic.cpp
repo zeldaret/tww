@@ -4,14 +4,18 @@
 //
 
 #include "JAZelAudio/JAIZelBasic.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JAISound.h"
+#include "JSystem/JAudio/JAIStreamMgr.h"
+#include "JSystem/JAudio/JAIBankWave.h"
+
+JAIZelBasic* JAIZelBasic::zel_basic;
 
 /* 802A1C78-802A1EB4       .text __ct__11JAIZelBasicFv */
 JAIZelBasic::JAIZelBasic() {
     zel_basic = this;
     field_0x0021 = 0;
     field_0x0024 = 0;
-    mpSound = 0;
+    mpStreamBgmSound = NULL;
     field_0x0020 = 0;
     field_0x0074 = -1;
     field_0x0078 = -1;
@@ -180,8 +184,12 @@ void JAIZelBasic::bgmStop(u32, s32) {
 }
 
 /* 802A4770-802A47B8       .text mainBgmStopOnly__11JAIZelBasicFUl */
-void JAIZelBasic::mainBgmStopOnly(u32) {
-    /* Nonmatching */
+void JAIZelBasic::mainBgmStopOnly(u32 param_1) {
+    if (mpMainBgmSound) {
+        mpMainBgmSound->stop(param_1);
+    }
+    mpMainBgmSound = NULL;
+    field_0x0078 = -1;
 }
 
 /* 802A47B8-802A4CDC       .text subBgmStart__11JAIZelBasicFUl */
@@ -225,8 +233,8 @@ void JAIZelBasic::bgmHitSound(s32) {
 }
 
 /* 802A579C-802A57A4       .text bgmSetSwordUsing__11JAIZelBasicFl */
-void JAIZelBasic::bgmSetSwordUsing(s32) {
-    /* Nonmatching */
+void JAIZelBasic::bgmSetSwordUsing(s32 param_1) {
+    field_0x00c9 = param_1;
 }
 
 /* 802A57A4-802A5818       .text onEnemyDamage__11JAIZelBasicFv */
@@ -245,33 +253,48 @@ void JAIZelBasic::mbossBgmNearByProcess(f32) {
 }
 
 /* 802A59B0-802A59D8       .text checkBgmPlaying__11JAIZelBasicFv */
-void JAIZelBasic::checkBgmPlaying() {
-    /* Nonmatching */
+bool JAIZelBasic::checkBgmPlaying() {
+    if (mpMainBgmSound || mpStreamBgmSound) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /* 802A59D8-802A59F4       .text checkPlayingMainBgmFlag__11JAIZelBasicFv */
-void JAIZelBasic::checkPlayingMainBgmFlag() {
-    /* Nonmatching */
+int JAIZelBasic::checkPlayingMainBgmFlag() {
+    if (mpMainBgmSound) {
+        return mpMainBgmSound->field_0xc;
+    } else {
+        return -1;
+    }
 }
 
 /* 802A59F4-802A5A04       .text checkSubBgmPlaying__11JAIZelBasicFv */
-void JAIZelBasic::checkSubBgmPlaying() {
-    /* Nonmatching */
+bool JAIZelBasic::checkSubBgmPlaying() {
+    return mpSubBgmSound != NULL;
 }
 
 /* 802A5A04-802A5A20       .text checkPlayingSubBgmFlag__11JAIZelBasicFv */
-void JAIZelBasic::checkPlayingSubBgmFlag() {
-    /* Nonmatching */
+int JAIZelBasic::checkPlayingSubBgmFlag() {
+    if (mpSubBgmSound) {
+        return mpSubBgmSound->field_0xc;
+    } else {
+        return -1;
+    }
 }
 
 /* 802A5A20-802A5A40       .text checkPlayingStreamBgmFlag__11JAIZelBasicFv */
-void JAIZelBasic::checkPlayingStreamBgmFlag() {
+int JAIZelBasic::checkPlayingStreamBgmFlag() {
     /* Nonmatching */
+    JAInter::StreamMgr::getUpdateInfo();
 }
 
 /* 802A5A40-802A5A78       .text changeBgmStatus__11JAIZelBasicFl */
-void JAIZelBasic::changeBgmStatus(s32) {
-    /* Nonmatching */
+void JAIZelBasic::changeBgmStatus(s32 param_0) {
+    if (mpMainBgmSound) {
+        mpMainBgmSound->setPortData(9, param_0);
+    }
 }
 
 /* 802A5A78-802A5AC0       .text changeSubBgmStatus__11JAIZelBasicFl */
@@ -281,7 +304,7 @@ void JAIZelBasic::changeSubBgmStatus(s32) {
 
 /* 802A5AC0-802A5ACC       .text bgmMuteMtDragon__11JAIZelBasicFv */
 void JAIZelBasic::bgmMuteMtDragon() {
-    /* Nonmatching */
+    field_0x0065 = 1;
 }
 
 /* 802A5ACC-802A5BA4       .text enemyNearBy__11JAIZelBasicFv */
@@ -341,7 +364,7 @@ void JAIZelBasic::startLandingDemo() {
 
 /* 802A6608-802A6614       .text endLandingDemo__11JAIZelBasicFv */
 void JAIZelBasic::endLandingDemo() {
-    /* Nonmatching */
+    mbLandingDemoStarted = 0;
 }
 
 /* 802A6614-802A6720       .text initSe__11JAIZelBasicFv */
@@ -435,8 +458,8 @@ void JAIZelBasic::shipCruiseSePlay(Vec*, f32) {
 }
 
 /* 802A965C-802A9664       .text setShipSailState__11JAIZelBasicFl */
-void JAIZelBasic::setShipSailState(s32) {
-    /* Nonmatching */
+void JAIZelBasic::setShipSailState(s32 isSailing) {
+    mIsSailing = isSailing;
 }
 
 /* 802A9664-802A9874       .text init__11JAIZelBasicFP12JKRSolidHeapUl */
@@ -505,8 +528,8 @@ void JAIZelBasic::setLinkGroupInfo(u8) {
 }
 
 /* 802AA378-802AA380       .text getMapInfoFxline__11JAIZelBasicFUl */
-bool JAIZelBasic::getMapInfoFxline(u32) {
-    /* Nonmatching */
+BOOL JAIZelBasic::getMapInfoFxline(u32 param_0) {
+    return param_0 & 0xFFFF;
 }
 
 /* 802AA380-802AA388       .text getMapInfoFxParameter__11JAIZelBasicFUl */
@@ -515,8 +538,8 @@ f32 JAIZelBasic::getMapInfoFxParameter(u32) {
 }
 
 /* 802AA388-802AA390       .text getMapInfoGround__11JAIZelBasicFUl */
-bool JAIZelBasic::getMapInfoGround(u32) {
-    /* Nonmatching */
+BOOL JAIZelBasic::getMapInfoGround(u32) {
+    return FALSE;
 }
 
 /* 802AA390-802AACE8       .text setScene__11JAIZelBasicFllll */
@@ -580,8 +603,8 @@ void JAIZelBasic::loadStaticWaves() {
 }
 
 /* 802AB888-802AB8B0       .text checkFirstWaves__11JAIZelBasicFv */
-BOOL JAIZelBasic::checkFirstWaves() {
-    /* Nonmatching */
+s32 JAIZelBasic::checkFirstWaves() {
+    return 2 - JAInter::BankWave::getWaveLoadStatus(2);
 }
 
 /* 802AB8B0-802AB9F4       .text setLinkHp__11JAIZelBasicFll */
