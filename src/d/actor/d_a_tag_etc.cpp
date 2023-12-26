@@ -28,7 +28,7 @@ BOOL daTag_Etc_c::rangeCheck(fopAc_ac_c* pActor) {
 
     delta = pActor->current.pos - current.pos;
     if (delta.y >= 0.0f) {
-        if ((mScale.x * 100) <= delta.absXZ() || (mScale.x * 100) < delta.y) {
+        if ((mScale.x * 100.0f) <= delta.absXZ() || (mScale.x * 100.0f) < delta.y) {
             result = FALSE;
         } else {
             result = TRUE;
@@ -47,7 +47,7 @@ BOOL daTag_Etc_c::otherCheck(fopAc_ac_c* pActor) {
 
     switch (cVar2) {
     case 0:
-        if (pActor != (daNpc_Md_c*)0x0 && (((daNpc_Md_c*)pActor)->m30F0 & 0x10) != 0) {
+        if (pActor != NULL && (((daNpc_Md_c*)pActor)->m30F0 & 0x10) != 0) {
             result = TRUE;
         } else {
             result = FALSE;
@@ -66,13 +66,13 @@ void daTag_Etc_c::demoProc() {
     int staffIdx;
     u8 cVar3;
     pMedli = (daNpc_Md_c*)fopAcM_SearchByID(processId);
-    staffIdx = dComIfGp_evmng_getMyStaffId("TAG_ETC_D", (daNpc_Md_c*)0x0, 0);
+    staffIdx = dComIfGp_evmng_getMyStaffId("TAG_ETC_D", NULL, 0);
 
     if (staffIdx != -1) {
         cVar3 = getType2();
         switch (cVar3) {
         case 0:
-            if ((pMedli == (daNpc_Md_c*)0x0) || (pMedli->m30F0 & 0x10) == 0) {
+            if (pMedli == NULL || (pMedli->m30F0 & 0x10) == 0) {
                 if (field_0x29A > 0) {
                     field_0x29A--;
                 } else {
@@ -113,7 +113,7 @@ s32 daTag_Etc_c::create() {
     fopAcM_SetupActor(this, daTag_Etc_c);
 
     stageEVNTListIndex = getEventNo();
-    eventIndex = dComIfGp_evmng_getEventIdx((char*)0x0, stageEVNTListIndex);
+    eventIndex = dComIfGp_evmng_getEventIdx(NULL, stageEVNTListIndex);
     if (eventIndex == -1) {
         field_0x290 = 0;
     } else {
