@@ -46,8 +46,8 @@ public:
     virtual f32 getScaleInValueY() = 0;
     virtual u8 getAnmTypeX() = 0;
     virtual u8 getAnmTypeY() = 0;
-    virtual u32 getAnmCycleX() = 0;
-    virtual u32 getAnmCycleY() = 0;
+    virtual s16 getAnmCycleX() = 0;
+    virtual s16 getAnmCycleY() = 0;
     virtual f32 getIncreaseRateX() = 0;
     virtual f32 getIncreaseRateY() = 0;
     virtual f32 getDecreaseRateX() = 0;
@@ -92,8 +92,8 @@ public:
     virtual f32 getScaleInValueY() { return mpData->mScaleInValueY; }
     virtual u8 getAnmTypeX() { return (mpData->mFlag >> 18) & 0x01; }
     virtual u8 getAnmTypeY() { return (mpData->mFlag >> 19) & 0x01; }
-    virtual u32 getAnmCycleX() { return mpData->mAnmCycleX; }
-    virtual u32 getAnmCycleY() { return mpData->mAnmCycleY; }
+    virtual s16 getAnmCycleX() { return mpData->mAnmCycleX; }
+    virtual s16 getAnmCycleY() { return mpData->mAnmCycleY; }
     virtual f32 getIncreaseRateX() { return mIncreaseRateX; }
     virtual f32 getIncreaseRateY() { return mIncreaseRateY; }
     virtual f32 getDecreaseRateX() { return mDecreaseRateX; }

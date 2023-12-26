@@ -30,8 +30,8 @@ class J3DMaterialFactory_v21 {
 public:
     J3DMaterialFactory_v21(const J3DMaterialBlock_v21&);
     u16 countUniqueMaterials();
-    void countTexGens(int) const;
-    void countStages(int) const;
+    u32 countTexGens(int) const;
+    u32 countStages(int) const;
     J3DMaterial* create(J3DMaterial*, int, unsigned long) const;
     void newMatColor(int, int) const;
     void newColorChanNum(int) const;

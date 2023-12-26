@@ -11,10 +11,17 @@
 #include "d/actor/d_a_item.h"
 #include "d/d_item_data.h"
 #include "d/actor/d_a_boko.h"
+#include "d/actor/d_a_bomb.h"
 #include "d/d_bg_s_lin_chk.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/actor/d_a_player.h"
+#include "d/d_s_play.h"
+#include "d/d_path.h"
 
+static u8 hio_set;
+static u8 another_hit;
+static u32 ken;
+static u8 search_sp;
 static bkHIO_c l_bkHIO;
 
 enum BK_RES_FILE_ID { // IDs and indexes are synced
@@ -120,11 +127,11 @@ static void anm_init(bk_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f3
         return;
     }
     if (soundFileIdx >= 0) {
-        void* soundAnm = dComIfG_getObjectRes("AM2", soundFileIdx);
-        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("AM2", bckFileIdx);
+        void* soundAnm = dComIfG_getObjectRes("Bk", soundFileIdx);
+        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Bk", bckFileIdx);
         i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, soundAnm);
     } else {
-        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("AM2", bckFileIdx);
+        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Bk", bckFileIdx);
         i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, NULL);
     }
 }
@@ -167,8 +174,60 @@ static void yari_off_check(bk_class* i_this) {
 }
 
 /* 00000A1C-00000EE8       .text smoke_set_s__FP8bk_classf */
-static void smoke_set_s(bk_class* i_this, f32) {
-    /* Nonmatching */
+static void smoke_set_s(bk_class* i_this, f32 rate) {
+    dBgS_LinChk linChk;
+    s32 attribCode;
+    attribCode = 0;
+    cXyz startPos = i_this->m0338;
+    startPos.y += 100.0f;
+    cXyz endPos = i_this->m0338;
+    endPos.y -= 100.0f;
+    linChk.Set(&startPos, &endPos, i_this);
+    
+    dBgS* bgs = dComIfG_Bgsp(); // Fakematch? fixes regalloc
+    if (bgs->LineCross(&linChk)) {
+        endPos = linChk.GetCross();
+        i_this->m0338.y = endPos.y;
+        attribCode = bgs->GetAttributeCode(linChk);
+    } else {
+        i_this->m0338.y -= 20000.0f;
+    }
+    
+    if (i_this->m034F != 0 && attribCode != dBgS_Attr_GRASS_e) {
+        return;
+    }
+    
+    i_this->m034F++;
+    
+    switch (attribCode) {
+    case dBgS_Attr_NORMAL_e:
+    case dBgS_Attr_DIRT_e:
+    case dBgS_Attr_WOOD_e:
+    case dBgS_Attr_STONE_e:
+    case dBgS_Attr_SAND_e:
+        i_this->m0350.end();
+        JPABaseEmitter* emitter1 = dComIfGp_particle_setToon(
+            0x2022, &i_this->m0338, &i_this->m0344, NULL, 0xB9,
+            &i_this->m0350, fopAcM_GetRoomNo(i_this)
+        );
+        if (emitter1) {
+            emitter1->setRate(rate);
+            emitter1->setSpread(1.0f);
+            JGeometry::TVec3<f32> scale;
+            scale.x = scale.y = scale.z = 1.2f;
+            emitter1->setGlobalScale(scale);
+            scale.x = scale.y = scale.z = 1.5f + g_regHIO.mChild[0].mFloatRegs[16];
+            emitter1->setGlobalParticleScale(scale);
+        }
+        break;
+    case dBgS_Attr_GRASS_e:
+        JPABaseEmitter* emitter2 = dComIfGp_particle_set(0x24, &i_this->m0338, &i_this->m0344);
+        if (emitter2) {
+            emitter2->setRate(rate * 0.5f);
+            emitter2->setMaxFrame(3);
+        }
+        break;
+    }
 }
 
 /* 00000EE8-000011F0       .text ground_smoke_set__FP8bk_class */
@@ -245,8 +304,18 @@ static u32 search_wepon(bk_class* i_this) {
 }
 
 /* 00002FB0-0000302C       .text s_b_sub__FPvPv */
-static void s_b_sub(void*, void*) {
-    /* Nonmatching */
+static void* s_b_sub(void* param_1, void*) {
+    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_BOMB) {
+        daBomb_c* bomb = (daBomb_c*)param_1;
+        // TODO: why is it checking the bomb's params as a single field instead of just one param? bug?
+        if (fopAcM_GetParam(bomb) != 0) {
+            if (target_info_count < (s32)ARRAY_SIZE(target_info)) {
+                target_info[target_info_count] = bomb;
+                target_info_count++;
+            }
+        }
+    }
+    return NULL;
 }
 
 /* 0000302C-000033BC       .text search_bomb__FP8bk_classi */
@@ -317,7 +386,7 @@ static void walk_set(bk_class* i_this) {
 
 /* 00003C34-00003C74       .text fight_run_set__FP8bk_class */
 static void fight_run_set(bk_class* i_this) {
-    /* Nonmatching */
+    anm_init(i_this, BK_BCK_BK_RUN, 10.0f, J3DFrameCtrl::LOOP_REPEAT_e, l_bkHIO.m070, BK_BAS_BK_RUN);
 }
 
 /* 00003C74-00004104       .text path_check__FP8bk_classUc */
@@ -553,9 +622,212 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
 }
 
 /* 0000E310-0000EA2C       .text daBk_Create__FP10fopAc_ac_c */
-static s32 daBk_Create(fopAc_ac_c* i_this) {
-    /* Nonmatching */
-    fopAcM_SetupActor(i_this, bk_class);
+static s32 daBk_Create(fopAc_ac_c* i_actor) {
+    /* Nonmatching - data */
+    fopAcM_SetupActor(i_actor, bk_class);
+    bk_class* i_this = (bk_class*)i_actor;
+    
+    s32 phase_state = dComIfG_resLoad(&i_this->mPhs, "Bk");
+    if (phase_state == cPhs_COMPLEATE_e) {
+        i_this->mGbaName = 1;
+        
+        if (strcmp(dComIfGp_getStartStageName(), "ITest63") == 0 ||
+            strcmp(dComIfGp_getStartStageName(), "GanonJ") == 0)
+        {
+            search_sp = 1;
+        } else {
+            search_sp = 0;
+        }
+        
+        i_this->mType = fopAcM_GetParam(i_this) & 0xF;
+        i_this->m02B9 = fopAcM_GetParam(i_this) & 0x10;
+        i_this->m02D4 = fopAcM_GetParam(i_this) & 0x20;
+        if (i_this->mType == 0xB) {
+            i_this->m02D4 = 0;
+            i_this->m02DC = 1;
+            i_this->mType = 4;
+        }
+        i_this->m02D5 = fopAcM_GetParam(i_this) & 0xC0;
+        i_this->m02B5 = fopAcM_GetParam(i_this) >> 8 & 0xFF;
+        i_this->m02B6 = fopAcM_GetParam(i_this) >> 16 & 0xFF;
+        i_this->m02B7 = fopAcM_GetParam(i_this) >> 24 & 0xFF;
+        i_this->m02B8 = i_this->current.angle.z;
+        i_this->current.angle.z = 0;
+        i_this->current.angle.x = 0;
+        if (i_this->m02B8 == 0xFF) {
+            i_this->m02B8 = 0;
+        }
+        
+        if (i_this->m02B8 != 0) {
+            if (dComIfGs_isSwitch(i_this->m02B8, fopAcM_GetRoomNo(i_this))) {
+                return cPhs_ERROR_e;
+            }
+        }
+        if (i_this->m02B9 != 0) {
+            if (dComIfGs_isSwitch(i_this->m02B7, fopAcM_GetRoomNo(i_this))) {
+                return cPhs_ERROR_e;
+            }
+            i_this->m02B7 = 0xFF;
+        }
+        
+        i_this->mItemTableIdx = dComIfGp_CharTbl()->GetNameIndex("Bk", 0);
+        
+        if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x17B20)) {
+            return cPhs_ERROR_e;
+        }
+        
+        if (!hio_set) {
+            l_bkHIO.mChildID = mDoHIO_root.mDoHIO_createChild("ボコちゃん", &l_bkHIO);
+            i_this->m121D = 1;
+            hio_set = 1;
+        }
+        
+        ken = 0;
+        
+        if (!i_this->mpMorf || !i_this->mpMorf->getModel()) {
+            return cPhs_ERROR_e;
+        }
+        
+        fopAcM_SetMin(i_this, -200.0f, -50.0f, -100.0f);
+        fopAcM_SetMax(i_this, 125.0f, 250.0f, 250.0f);
+        fopAcM_SetMtx(i_this, i_this->mpMorf->getModel()->getBaseTRMtx());
+        i_this->mpMorf->getModel()->setUserArea((u32)i_this);
+        i_this->initBt(162.5f, 125.0f);
+        
+        i_this->mDamageReaction.m70C = 1;
+        i_this->mDamageReaction.mSpawnY = i_this->current.pos.y;
+        i_this->mDamageReaction.mMaxFallDistance = 1000.0f;
+        
+        if (i_this->m02B6 != 0xFF) {
+            i_this->m1218 = dPath_GetRoomPath(i_this->m02B6, fopAcM_GetRoomNo(i_this));
+            if (i_this->m1218 == NULL) {
+                return cPhs_ERROR_e;
+            }
+            i_this->m1215 = i_this->m02B6 + 1;
+            i_this->m1217 = 1;
+        }
+        
+        if (i_this->mType == 4 || i_this->mType == 0xA) {
+            i_this->mDamageReaction.mState = 1;
+            if (i_this->mType == 0xA) {
+                i_this->mDamageReaction.m004 = -0x14;
+                fopAcM_OnStatus(i_this, fopAcStts_BOSS_e);
+            } else {
+                i_this->mDamageReaction.m004 = -1;
+            }
+            i_this->m0302 = 1000.0f + cM_rndF(1000.0f);
+        } else if (i_this->mType == 6) {
+            i_this->mDamageReaction.mState = 2;
+            i_this->mDamageReaction.mMaxFallDistance = 300.0f;
+        } else if (i_this->mType == 7) {
+            i_this->mDamageReaction.mState = 0x1D;
+            i_this->mDamageReaction.mMaxFallDistance = 300.0f;
+        } else if (i_this->mType == 5) {
+            anm_init(i_this, BK_BCK_BK_HAKOBI, 1.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+            i_this->mDamageReaction.mState = 0x1E;
+            i_this->mDamageReaction.mMaxFallDistance = 100000.0f;
+        } else if (i_this->mType == 2 || i_this->mType == 3) {
+            i_this->m02BA = 0xFF;
+            i_this->mDamageReaction.mState = 0xF;
+            i_this->m030E = 0xA;
+        } else if (i_this->mType == 9) {
+            i_this->mDamageReaction.mState = 3;
+            i_this->m1216 = i_this->current.angle.z;
+            i_this->m1217 = i_this->current.angle.y;
+            i_this->current.angle.z = 0;
+            i_this->current.angle.y = 0;
+        }
+        
+        if (i_this->m02B7 != 0xFF) {
+            if (i_this->mType != 6) {
+                i_this->m02BA = i_this->m02B7 + 1;
+            }
+        }
+        
+        if (i_this->mType == 0xF) {
+            i_this->mDamageReaction.mState = 0x17;
+            i_this->m02BA = 0;
+        }
+        
+        if (i_this->mType != 8 && i_this->m02DC == 0 &&
+            strcmp(dComIfGp_getStartStageName(), "A_mori") != 0)
+        {
+            u32 weaponType; // TODO enum
+            if (i_this->m02D5 & 0x40) {
+                weaponType = 1;
+            } else if (i_this->m02D5 & 0x80) {
+                weaponType = 7;
+            } else {
+                weaponType = 0;
+            }
+            i_this->m1200 = fopAcM_create(PROC_BOKO, weaponType, &i_this->current.pos, fopAcM_GetRoomNo(i_this));
+            i_this->m1214 = 1;
+            i_this->m02D5 &= 0x40;
+        } else {
+            i_this->m11F3 = 1;
+        }
+        
+        i_this->mDamageReaction.mAcch.Set(
+            &fopAcM_GetPosition_p(i_this), &fopAcM_GetOldPosition_p(i_this),
+            i_this, 1, &i_this->mDamageReaction.mAcchCir,
+            &fopAcM_GetSpeed_p(i_this)
+        );
+        i_this->mDamageReaction.mAcchCir.SetWall(40.0f, 40.0f);
+        i_this->mDamageReaction.mAcch.ClrRoofNone();
+        i_this->mDamageReaction.mAcch.SetRoofCrrHeight(80.0f + g_regHIO.mChild[0].mFloatRegs[7]);
+        i_this->mDamageReaction.mAcch.OnLineCheck();
+        i_this->mDamageReaction.mInvincibleTimer = 5;
+        
+        if (i_this->m02D4 != 0) {
+            i_this->mMaxHealth = i_this->mHealth = 7;
+        } else {
+            i_this->mMaxHealth = i_this->mHealth = 5;
+        }
+        
+        i_this->mDamageReaction.mStts.Init(0xC8, 0xFF, i_this);
+        static dCcD_SrcCyl co_cyl_src = {}; // TODO
+        i_this->m0B88.Set(co_cyl_src);
+        i_this->m0B88.SetStts(&i_this->mDamageReaction.mStts);
+        static dCcD_SrcCyl tg_cyl_src = {}; // TODO
+        i_this->m0CB8.Set(tg_cyl_src);
+        i_this->m0CB8.SetStts(&i_this->mDamageReaction.mStts);
+        static dCcD_SrcSph head_sph_src = {}; // TODO
+        i_this->m0DE8.Set(head_sph_src);
+        i_this->m0DE8.SetStts(&i_this->mDamageReaction.mStts);
+        static dCcD_SrcSph wepon_sph_src = {}; // TODO
+        i_this->m1040.Set(wepon_sph_src);
+        i_this->m1040.SetStts(&i_this->mDamageReaction.mStts);
+        static dCcD_SrcSph defence_sph_src = {}; // TODO
+        i_this->m0F14.Set(defence_sph_src);
+        i_this->m0F14.SetStts(&i_this->mDamageReaction.mStts);
+        
+        i_this->m02CC = 5;
+        i_this->model = i_this->mpMorf->getModel();
+        
+        i_this->mEnemyIce.mpActor = i_this;
+        i_this->mEnemyIce.mWallRadius = 50.0f + g_regHIO.mChild[0].mFloatRegs[4];
+        i_this->mEnemyIce.mCylHeight = 180.0f + g_regHIO.mChild[0].mFloatRegs[5];
+        i_this->mEnemyIce.mDeathSwitch = i_this->m02B8;
+        
+        i_this->mEnemyFire.mpMcaMorf = i_this->mpMorf;
+        i_this->mEnemyFire.mpActor = i_this;
+        static u8 fire_j[10] = {
+            // TODO
+        };
+        static f32 fire_sc[10] = {
+            // TODO
+        };
+        for (int i = 0; i < ARRAY_SIZE(i_this->mEnemyFire.mFlameJntIdxs); i++) {
+            i_this->mEnemyFire.mFlameJntIdxs[i] = fire_j[i];
+            i_this->mEnemyFire.mParticleScale[i] = fire_sc[i];
+        }
+        
+        i_this->mItemStealLeft = 3;
+        
+        daBk_Execute(i_this);
+    }
+    
+    return phase_state;
 }
 
 static actor_method_class l_daBk_Method = {

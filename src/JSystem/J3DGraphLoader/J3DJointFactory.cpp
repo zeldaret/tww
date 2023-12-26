@@ -9,9 +9,8 @@
 
 /* 802FE1A4-802FE1FC       .text __ct__15J3DJointFactoryFRC13J3DJointBlock */
 J3DJointFactory::J3DJointFactory(const J3DJointBlock& jointBlock) {
-    /* Nonmatching */
-    mJointInitData = JSUConvertOffsetToPtr<J3DJointInitData>(&jointBlock, jointBlock.mpJointInitData);
-    mIndexTable = JSUConvertOffsetToPtr<u16>(&jointBlock, jointBlock.mpIndexTable);
+    mJointInitData = JSUConvertOffsetToPtr<J3DJointInitData>(&jointBlock, (u32)jointBlock.mpJointInitData);
+    mIndexTable = JSUConvertOffsetToPtr<u16>(&jointBlock, (u32)jointBlock.mpIndexTable);
 }
 
 /* 802FE1FC-802FE390       .text create__15J3DJointFactoryFi */

@@ -192,7 +192,7 @@ public:
     /* 0xC */ f32 mRadius;
 
     fopAc_cullSizeSphere() {}
-    fopAc_cullSizeSphere(cXyz, float);
+    fopAc_cullSizeSphere(cXyz, f32);
     ~fopAc_cullSizeSphere() {}
 #endif
 };
@@ -276,6 +276,28 @@ public:
         OPENING_VERTICAL_JUMP_PARRY = 3,
         OPENING_GANONDORF_FINISHER_PARRY = 4,
     };
+    
+    void initBt(f32 height, f32 radius) {
+        setBtHeight(height);
+        setBtBodyR(radius);
+    }
+    f32 getBtHeight() const { return m290; }
+    void setBtHeight(f32 height) { m290 = height; }
+    f32 getBtBodyR() const { return m294; }
+    void setBtBodyR(f32 radius) { m294 = radius; }
+    
+    // TODO
+    void setBtAttackData(f32, f32, f32, u8) {}
+    void getBtStartFrame() const {}
+    void setBtStartFrame(f32) {}
+    void getBtEndFrame() const {}
+    void setBtEndFrame(f32) {}
+    void getBtNowFrame() const {}
+    void setBtNowFrame(f32) {}
+    void getBtAttackType() const {}
+    void setBtAttackType(u8) {}
+    void getBtMaxDis() const {}
+    void setBtMaxDis(f32) {}
     
     /* 0x290 */ f32 m290;
     /* 0x294 */ f32 m294;

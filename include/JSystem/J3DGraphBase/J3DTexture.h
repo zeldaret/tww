@@ -81,6 +81,7 @@ private:
 
 struct J3DTexCoord : public J3DTexCoordInfo {
     J3DTexCoord() { *(J3DTexCoordInfo*)this = j3dDefaultTexCoordInfo[0]; }
+    J3DTexCoord(const J3DTexCoordInfo& info) { *(J3DTexCoordInfo*)this = info; }
 
     u8 getTexGenType() { return mTexGenType; }
     u8 getTexGenSrc() { return mTexGenSrc; }

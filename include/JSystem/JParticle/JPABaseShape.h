@@ -76,7 +76,7 @@ public:
     virtual GXColor getPrmColor(s16) = 0;
     virtual GXColor getEnvColor(s16) = 0;
     virtual u8 getColorRegAnmType() = 0;
-    virtual s32 getColorRegAnmMaxFrm() = 0;
+    virtual s16 getColorRegAnmMaxFrm() = 0;
     virtual u32 isEnableTexScrollAnm() = 0;
     virtual f32 getTilingX() = 0;
     virtual f32 getTilingY() = 0;
@@ -179,7 +179,7 @@ public:
     virtual GXColor getPrmColor(s16 idx) { return mpPrmColorArr[idx]; }
     virtual GXColor getEnvColor(s16 idx) { return mpEnvColorArr[idx]; }
     virtual u8 getColorRegAnmType() { return (pBsd->mColorFlags >> 4) & 0x07; }
-    virtual s32 getColorRegAnmMaxFrm() { return pBsd->mColorRegAnmMaxFrm; }
+    virtual s16 getColorRegAnmMaxFrm() { return pBsd->mColorRegAnmMaxFrm; }
     virtual u32 isEnableTexScrollAnm() { return pBsd->mFlags & 0x1000000; }
     virtual f32 getTilingX() { return pBsd->mTilingX; }
     virtual f32 getTilingY() { return pBsd->mTilingY; }

@@ -109,6 +109,7 @@ public:
 
 class J3DPatchedMaterial : public J3DMaterial {
 public:
+    J3DPatchedMaterial() { initialize(); }
     void initialize();
 
     virtual void calc(const Mtx);
@@ -122,6 +123,7 @@ public:
 
 class J3DLockedMaterial : public J3DMaterial {
 public:
+    J3DLockedMaterial() { initialize(); }
     void initialize();
 
     virtual void calc(const Mtx);
