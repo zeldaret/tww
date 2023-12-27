@@ -643,25 +643,15 @@ void JPADraw::setDrawCalcVisitors(const JPADraw::JPADrawVisitorDefFlags& flags) 
 
 /* 8026ADB0-8026B3DC       .text setParticleClipBoard__7JPADrawFv */
 void JPADraw::setParticleClipBoard() {
-    /* Nonmatching - top switch */
-
     switch (dc.pbsp->getType()) {
     case JPABaseShape::JPAType_Billboard:
-        break;
     case JPABaseShape::JPAType_DirBillboard:
         PSMTXIdentity(cb.mDrawMtx);
         break;
     case JPABaseShape::JPAType_YBillboard:
         loadYBBMtx(cb.mDrawMtxPtr);
         break;
-    case JPABaseShape::JPAType_Point:
-    case JPABaseShape::JPAType_Line:
-    case JPABaseShape::JPAType_Direction:
-    case JPABaseShape::JPAType_DirectionCross:
-    case JPABaseShape::JPAType_Stripe:
-    case JPABaseShape::JPAType_StripeCross:
-    case JPABaseShape::JPAType_Rotation:
-    case JPABaseShape::JPAType_RotationCross:
+    default:
         MTXCopy(cb.mDrawMtxPtr, cb.mDrawMtx);
         break;
     }
@@ -739,25 +729,15 @@ void JPADraw::setParticleClipBoard() {
 
 /* 8026B3DC-8026B938       .text setChildClipBoard__7JPADrawFv */
 void JPADraw::setChildClipBoard() {
-    /* Nonmatching - top switch */
-
     switch (dc.pssp->getType()) {
     case JPABaseShape::JPAType_Billboard:
-        break;
     case JPABaseShape::JPAType_DirBillboard:
         PSMTXIdentity(cb.mDrawMtx);
         break;
     case JPABaseShape::JPAType_YBillboard:
         loadYBBMtx(cb.mDrawMtxPtr);
         break;
-    case JPABaseShape::JPAType_Point:
-    case JPABaseShape::JPAType_Line:
-    case JPABaseShape::JPAType_Direction:
-    case JPABaseShape::JPAType_DirectionCross:
-    case JPABaseShape::JPAType_Stripe:
-    case JPABaseShape::JPAType_StripeCross:
-    case JPABaseShape::JPAType_Rotation:
-    case JPABaseShape::JPAType_RotationCross:
+    default:
         MTXCopy(cb.mDrawMtxPtr, cb.mDrawMtx);
         break;
     }

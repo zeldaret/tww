@@ -12,6 +12,11 @@
 #include "SSystem/SComponent/c_malloc.h"
 #include "m_Do/m_Do_lib.h"
 
+static f32 dummy_2100[3] = {1.0f, 1.0f, 1.0f};
+static f32 dummy_2080[3] = {1.0f, 1.0f, 1.0f};
+
+static Vec dummy_3569;
+
 /* 8007A4D8-8007A514       .text __ct__18dPa_modelEmitter_cFv */
 dPa_modelEmitter_c::dPa_modelEmitter_c() {
     cNd_ForcedClear(this);
@@ -557,8 +562,47 @@ void dPa_waveEcallBack::remove() {
 }
 
 /* 8007E2BC-8007E484       .text executeAfter__17dPa_waveEcallBackFP14JPABaseEmitter */
-void dPa_waveEcallBack::executeAfter(JPABaseEmitter*) {
-    /* Nonmatching */
+void dPa_waveEcallBack::executeAfter(JPABaseEmitter* emitter) {
+    /* Nonmatching - how to make TVec3 only exist in registers without being stored to the stack? */
+    
+    emitter->getEmitterAxis(mRotMtx[0], mRotMtx[1], mRotMtx[2]);
+    
+    if (mState != 0) {
+        emitter->setDirectionalSpeed(0.0f);
+        if (mFadeTimer > 0) {
+            mFadeTimer--;
+        } else {
+            remove();
+        }
+        return;
+    }
+    
+    JGeometry::TVec3<f32> delta;
+    emitter->getGlobalTranslation(delta); // TODO
+    emitter->setGlobalTranslation(*mpPos);
+    delta.sub(*mpPos); // TODO
+    f32 vel = delta.length();
+    if (vel >= mMaxParticleVelocity) {
+        vel = mMaxParticleVelocity;
+    }
+    f32 speed = mVelFade1 * vel * mVelFade2;
+    
+    JGeometry::TVec3<s16> rot;
+    rot.x = 0;
+    rot.y = mpRot->y;
+    rot.z = 0;
+    emitter->setGlobalRotation(rot);
+    
+    if (fabsf(speed - mVel) > mVelSpeed) {
+        if (speed - mVel > 0.0f) {
+            speed = mVel + mVelSpeed;
+        } else {
+            speed = mVel - mVelSpeed;
+        }
+    }
+    
+    emitter->setDirectionalSpeed(speed);
+    mVel = speed;
 }
 
 /* 8007E484-8007E804       .text draw__17dPa_waveEcallBackFP14JPABaseEmitter */
@@ -646,13 +690,4 @@ void dPa_stripesEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8)
 
 /* 8007FAE8-8007FAEC       .text setup__22dPa_selectTexEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
 void dPa_selectTexEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
-}
-
-/* 8007FF78-8007FFA8       .text draw__21dPa_setColorEcallBackFP14JPABaseEmitter */
-void dPa_setColorEcallBack::draw(JPABaseEmitter*) {
-    GXSetTevColor(GX_TEVREG1, mColor);
-}
-
-/* 8007FFA8-8007FFAC       .text setup__21dPa_setColorEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void dPa_setColorEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
 }

@@ -119,7 +119,7 @@ public:
     /* 0x1C */ cXyz mCollapsePos[2];
     /* 0x34 */ cXyz* mpPos;
     /* 0x38 */ csXyz* mpRot;
-    /* 0x3C */ Vec mRotMtx[3];
+    /* 0x3C */ JGeometry::TVec3<f32> mRotMtx[3];
     /* 0x60 */ JPABaseEmitter* mpBaseEmitter;
 };
 
@@ -330,8 +330,8 @@ public:
     dPa_setColorEcallBack(const GXColor& color) { mColor = color; }
     virtual ~dPa_setColorEcallBack() {}
 
-    virtual void draw(JPABaseEmitter*);
-    virtual void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
+    virtual void draw(JPABaseEmitter*) { GXSetTevColor(GX_TEVREG1, mColor); }
+    virtual void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {}
 
 public:
     /* 0x04 */ GXColor mColor;

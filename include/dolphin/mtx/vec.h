@@ -40,21 +40,9 @@ inline void C_VECAdd(register const Vec* a, register const Vec* b, register Vec*
 }
 
 inline void C_VECSubtract(register const Vec* a, register const Vec* b, register Vec* ab) {
-    register f32 axy;
-    register f32 bxy;
-    register f32 az;
-    register f32 subz;
-    register f32 bz;
-    asm {
-        psq_l axy, 0(a), 0, 0
-        psq_l bxy, 0(b), 0, 0
-        ps_sub bxy, axy, bxy
-        psq_st bxy, 0(ab), 0, 0
-        psq_l az, 8(a), 1, 0
-        psq_l bz, 8(b), 1, 0
-        ps_sub subz, az, bz
-        psq_st subz, 8(ab), 1, 0
-    }
+    ab->x = a->x - b->x;
+    ab->y = a->y - b->y;
+    ab->z = a->z - b->z;
 }
 
 inline f32 C_VECSquareMag(const Vec* v) {

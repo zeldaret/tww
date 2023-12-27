@@ -30,8 +30,8 @@ struct TVec3 {
 };
 
 template <>
-struct TVec3<s16> {
-    s16 x, y, z;
+struct TVec3<s16> : public SVec {
+    // s16 x, y, z;
 
     TVec3& operator=(const TVec3& b) {
         set(b.x, b.y, b.z);
@@ -49,39 +49,14 @@ struct TVec3<s16> {
     }
 };
 
-inline void setTVec3f(const f32* vec_a, f32* vec_b) {
-    const register f32* v_a = vec_a;
-    register f32* v_b = vec_b;
-
-    register f32 a_x;
-    register f32 b_x;
-
-    asm {
-        psq_l a_x, 0(v_a), 0, 0
-        lfs b_x, 8(v_a)
-        psq_st a_x, 0(v_b), 0, 0
-        stfs b_x, 8(v_b)
-    };
-}
-
-// Until we figure out TVec3 ctors
-inline void setTVec3f(const Vec& vec_a, Vec& vec_b) {
-    setTVec3f(&vec_a.x, &vec_b.x);
-}
-
-inline float fsqrt_step(float mag) {
-    f32 root = __frsqrte(mag);
-    return 0.5f * root * (3.0f - mag * (root * root));
-}
-
 template <>
-struct TVec3<f32> {
-    f32 x;
-    f32 y;
-    f32 z;
+struct TVec3<f32> : public Vec {
+    // f32 x;
+    // f32 y;
+    // f32 z;
 
     inline TVec3(const Vec& i_vec) {
-        setTVec3f(&i_vec.x, &x);
+        set(i_vec);
     }
 
     TVec3() {}
@@ -148,52 +123,38 @@ struct TVec3<f32> {
 
     f32 normalize_broken() {
         f32 sq = squared();
-        if (sq <= 3.814697e-06f) {
+        if (sq <= TUtil<f32>::epsilon()) {
             return 0.0f;
         }
-        f32 norm;
-        if (sq <= 0.0f) {
-            norm = sq;
-        } else {
-            norm = fsqrt_step(sq);
-        }
+        f32 norm = TUtil<f32>::inv_sqrt(sq);
         scale(norm);
         return norm;
     }
 
     f32 normalize() {
         f32 sq = squared();
-        if (sq <= 3.814697e-06f) {
+        if (sq <= TUtil<f32>::epsilon()) {
             return 0.0f;
         }
-        f32 norm;
-        if (sq <= 0.0f) {
-            norm = sq;
-        } else {
-            norm = fsqrt_step(sq);
-        }
+        f32 norm = TUtil<f32>::inv_sqrt(sq);
         scale(1.0f / norm);
         return norm;
     }
 
     f32 normalize(const TVec3<f32>& other) {
         f32 sq = other.squared();
-        if (sq <= 3.814697e-06f) {
+        if (sq <= TUtil<f32>::epsilon()) {
             zero();
             return 0.0f;
         }
-        f32 norm;
-        if (sq <= 0.0f) {
-            norm = sq;
-        } else {
-            norm = fsqrt_step(sq);
-        }
+        f32 norm = TUtil<f32>::inv_sqrt(sq);
         scale(1.0f / norm, other);
         return norm;
     }
 
     f32 length() const {
-        return VECMag((Vec*)this);
+        f32 sqr = squared();
+        return TUtil<f32>::sqrt(sqr);
     }
 
     void scale(register f32 sc) {
@@ -233,7 +194,7 @@ struct TVec3<f32> {
     }
 
     bool isZero() const {
-        return squared() <= 32.0f * 3.814697e-06f;
+        return squared() <= TUtil<f32>::epsilon();
     }
 
     void cross(const TVec3<f32>& a, const TVec3<f32>& b) {
@@ -242,15 +203,10 @@ struct TVec3<f32> {
 
     void setLength(f32 len) {
         f32 sq = squared();
-        if (sq <= 3.814697e-06f * 32.0f) {
+        if (sq <= TUtil<f32>::epsilon()) {
             return;
         }
-        f32 norm;
-        if (sq <= 0.0f) {
-            norm = sq;
-        } else {
-            norm = fsqrt_step(sq);
-        }
+        f32 norm = TUtil<f32>::inv_sqrt(sq);
         scale(norm * len);
     }
 
@@ -336,11 +292,7 @@ struct TVec2 {
 
     f32 length() {
         f32 sqr = squared();
-        if (sqr <= 0.0f) {
-            return sqr;
-        }
-        sqr *= fsqrt_step(sqr);
-        return sqr;
+        return TUtil<f32>::sqrt(sqr);
     }
 
     T x;
@@ -408,14 +360,26 @@ struct TBox2 : TBox<TVec2<T> > {
 
 template<typename T>
 struct TUtil {
-    static inline T clamp(T v, T min, T max) {
-        if (v < min) {
-            return min;
+    static inline f32 epsilon() {
+        return 3.81469727e-06f;
+    }
+    
+    static inline f32 sqrt(f32 mag) {
+        if (mag <= 0.0f) {
+            return mag;
+        } else {
+            f32 root = __frsqrte(mag);
+            return 0.5f * root * (3.0f - mag * (root * root)) * mag;
         }
-        if (v > max) {
-            return max;
+    }
+
+    static inline f32 inv_sqrt(f32 mag) {
+        if (mag <= 0.0f) {
+            return mag;
+        } else {
+            f32 root = __frsqrte(mag);
+            return 0.5f * root * (3.0f - mag * (root * root));
         }
-        return v;
     }
 };
 
