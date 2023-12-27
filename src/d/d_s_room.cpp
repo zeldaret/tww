@@ -19,8 +19,7 @@
 #include "m_Do/m_Do_dvd_thread.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
-#include "string.h"
-#include "printf.h"
+#include "stdio.h"
 
 class room_of_scene_class : public scene_class {
 public:

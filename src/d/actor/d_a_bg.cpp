@@ -20,7 +20,7 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "printf.h"
+#include "stdio.h"
 
 /* 800D8434-800D8478       .text setArcName__6daBg_cFv */
 const char* daBg_c::setArcName() {
