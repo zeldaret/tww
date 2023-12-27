@@ -16,6 +16,12 @@ s32 mDoMemCdRWm_Restore(CARDFileInfo*, void*, u32) {
     /* Nonmatching */
 }
 
+#if VERSION == VERSION_PAL
+s32 mDoMemCdRWm_Restore2(CARDFileInfo*) {
+    /* Nonmatching */
+}
+#endif
+
 /* 80019F4C-8001A0A8       .text mDoMemCdRWm_BuildHeader__FP22mDoMemCdRWm_HeaderData */
 void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData*) {
     /* Nonmatching */

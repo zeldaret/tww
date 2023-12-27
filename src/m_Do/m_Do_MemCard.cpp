@@ -62,8 +62,8 @@ void mDoMemCd_Ctrl_c::main() {
             detach();
             break;
 #if VERSION == VERSION_PAL
-        case 6:
-            // restore2();
+        case CARD_RESTORE2:
+            restore2();
             break;
 #endif
         }
@@ -210,6 +210,48 @@ s32 mDoMemCd_Ctrl_c::SaveSync() {
     }
     return ret;
 }
+
+#if VERSION == VERSION_PAL
+void mDoMemCd_Ctrl_c::restore2() {
+    if (field_0x1660 != 1) {
+        return;
+    }
+    CARDFileInfo cardInfo;
+    s32 ret = CARDOpen(mCardSlot, "gczelda", &cardInfo);
+    if (ret == CARD_ERROR_READY) {
+        if (!mDoMemCdRWm_Restore2(&cardInfo)) {
+            field_0x1660 = 3;
+        } else {
+            setCardState(ret);
+        }
+        CARDClose(&cardInfo);
+    } else {
+        setCardState(ret);
+    }
+}
+
+void mDoMemCd_Ctrl_c::load2() {
+    if (OSTryLockMutex(&mMutex)) {
+        mCommand = CARD_RESTORE2;
+        OSUnlockMutex(&mMutex);
+        OSSignalCond(&mCond);
+    }
+}
+
+s32 mDoMemCd_Ctrl_c::LoadSync2() {
+    s32 ret = 0;
+    if (OSTryLockMutex(&mMutex)) {
+        if (field_0x1660 == 3) {
+            field_0x1660 = 1;
+            ret = 1;
+        } else {
+            ret = 2;
+        }
+        OSUnlockMutex(&mMutex);
+    }
+    return ret;
+}
+#endif
 
 /* 8001939C-80019480       .text getStatus__15mDoMemCd_Ctrl_cFUl */
 u32 mDoMemCd_Ctrl_c::getStatus(u32) {

@@ -8,6 +8,9 @@ struct mDoMemCdRWm_HeaderData;
 
 s32 mDoMemCdRWm_Store(CARDFileInfo*, void*, u32);
 s32 mDoMemCdRWm_Restore(CARDFileInfo*, void*, u32);
+#if VERSION == VERSION_PAL
+s32 mDoMemCdRWm_Restore2(CARDFileInfo*);
+#endif
 void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData*);
 void mDoMemCdRWm_SetCardStat(CARDFileInfo*);
 void mDoMemCdRWm_CheckCardStat(CARDFileInfo*);

@@ -13,6 +13,9 @@ public:
         CARD_FORMAT,
         CARD_ATTACH,
         CARD_DETACH,
+#if VERSION == VERSION_PAL
+        CARD_RESTORE2,
+#endif
     };
 
     mDoMemCd_Ctrl_c();
@@ -20,10 +23,13 @@ public:
     void main();
     void update();
     void load();
-    void load2();
     void restore();
     s32 LoadSync(void*, u32, u32);
+#if VERSION == VERSION_PAL
+    void load2();
+    void restore2();
     s32 LoadSync2();
+#endif
     void save(void*, u32, u32);
     void store();
     s32 SaveSync();
