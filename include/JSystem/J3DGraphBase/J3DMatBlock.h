@@ -276,7 +276,7 @@ public:
     J3DTevBlockNull() { initialize(); }
     virtual void reset(J3DTevBlock*) {}
     virtual void ptrToIndex() {}
-    virtual void indexToPtr() {}
+    virtual void indexToPtr() { indexToPtr_private(mTexNoOffset); }
     virtual u32 getType() { return 'TVNL'; }
     virtual ~J3DTevBlockNull() {}
 
@@ -654,6 +654,8 @@ struct J3DAlphaComp {
         mRef1 = 0;
     }
 
+    J3DAlphaComp(u16 id) : mAlphaCmpID(id), mRef0(0), mRef1(0) {}
+
     explicit J3DAlphaComp(const J3DAlphaCompInfo& info) { setAlphaCompInfo(info); }
 
     GXCompare getComp0() const { return GXCompare(j3dAlphaCmpTable[mAlphaCmpID * 3]); }
@@ -951,7 +953,25 @@ inline u32 setChanCtrlMacro(u8 enable, GXColorSrc ambSrc, GXColorSrc matSrc, u32
 
 struct J3DColorChan {
     J3DColorChan() { setColorChanInfo(j3dDefaultColorChanInfo); }
-    J3DColorChan(const J3DColorChanInfo & info) { setColorChanInfo(info); }
+    J3DColorChan(const J3DColorChanInfo& info) {
+        mChanCtrl = calcColorChanID(
+            info.field_0x0, info.field_0x1, info.field_0x2, info.field_0x3, info.field_0x4,
+            info.field_0x5 == 0xFF ? 0 : info.field_0x5
+        );
+    }
+    void setColorChanInfo(const J3DColorChanInfo& info) {
+        // Bug: It compares info.field_0x5 (an 8 bit integer) with 0xFFFF instead of 0xFF.
+        // This inline is only called by the default constructor J3DColorChan().
+        // The J3DColorChan(const J3DColorChanInfo&) constructor does not call this inline, and instead duplicates the
+        // same logic but without the bug.
+        // See J3DMaterialFactory::newColorChan - both the bugged and correct behavior are present there, as it calls
+        // both constructors.
+        mChanCtrl = calcColorChanID(
+            info.field_0x0, info.field_0x1, info.field_0x2, info.field_0x3, info.field_0x4,
+            info.field_0x5 == 0xFFFF ? 0 : info.field_0x5
+        );
+    }
+    J3DColorChan(u16 id) : mChanCtrl(id) {}
     GXAttnFn getAttnFn();
     GXDiffuseFn getDiffuseFn() { return GXDiffuseFn(mChanCtrl >> 7 & 3); }
     u8 getLightMask() { return ((mChanCtrl >> 2 & 0x0f) | (mChanCtrl >> 11 & 0x0f) << 4); }
@@ -962,10 +982,6 @@ struct J3DColorChan {
     GXColorSrc getMatSrc() { return GXColorSrc(mChanCtrl >> 0 & 0x01); }
     GXColorSrc getAmbSrc() { return GXColorSrc(mChanCtrl >> 6 & 0x01); }
     u8 getEnable() { return !!(mChanCtrl & 0x02); }
-    void setColorChanInfo(const J3DColorChanInfo& info) {
-        u8 r30 = info.field_0x5 == 0xFFFF ? 0 : info.field_0x5;
-        mChanCtrl = calcColorChanID(info.field_0x0, info.field_0x1, info.field_0x2, info.field_0x3, info.field_0x4, r30);
-    }
     void load() {
         J3DGDWrite_u32(setChanCtrlMacro(getEnable(), getAmbSrc(), getMatSrc(), getLightMask(), getDiffuseFn(), getAttnFn()));
     }

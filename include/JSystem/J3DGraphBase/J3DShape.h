@@ -31,7 +31,7 @@ public:
         mMtxIdxRegB = 0x00f3cf3c;
     }
 
-    explicit J3DCurrentMtx(const J3DCurrentMtxInfo& info) {
+    void operator=(const J3DCurrentMtxInfo& info) {
         mMtxIdxRegA = info.mMtxIdxRegA;
         mMtxIdxRegB = info.mMtxIdxRegB;
     }
