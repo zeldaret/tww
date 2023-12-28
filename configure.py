@@ -1321,7 +1321,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_tag_light"),
     ActorRel(Matching,    "d_a_tag_msg"),
     ActorRel(NonMatching, "d_a_tag_photo"),
-    ActorRel(NonMatching, "d_a_tag_waterlevel"),
+    ActorRel(Matching,    "d_a_tag_waterlevel"),
     ActorRel(NonMatching, "d_a_tama"),
     ActorRel(Matching,    "d_a_tbox", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_tpota"),

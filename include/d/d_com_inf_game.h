@@ -2202,6 +2202,10 @@ inline void dComIfGp_event_offEventFlag(s16 flag) {
     g_dComIfG_gameInfo.play.getEvent().offEventFlag(flag);
 }
 
+inline BOOL dComIfGp_event_chkEventFlag(s16 flag) {
+    return g_dComIfG_gameInfo.play.getEvent().chkEventFlag(flag);
+}
+
 inline void dComIfGp_event_remove() {
     g_dComIfG_gameInfo.play.getEvent().remove();
 }

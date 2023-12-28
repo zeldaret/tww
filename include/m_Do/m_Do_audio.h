@@ -170,4 +170,12 @@ inline void mDoAud_cbPracticeStop() {
     mDoAud_zelAudio_c::getInterface()->cbPracticeStop();
 }
 
+inline void mDoAud_stWaterLevelUp() {
+    mDoAud_zelAudio_c::getInterface()->stWaterLevelUp();
+}
+
+inline void mDoAud_stWaterLevelDown() {
+    mDoAud_zelAudio_c::getInterface()->stWaterLevelDown();
+}
+
 #endif /* M_DO_AUDIO_H */

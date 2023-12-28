@@ -15,6 +15,7 @@
 #include "d/actor/d_a_obj_movebox.h"
 #include "d/actor/d_a_tag_kb_item.h"
 #include "d/actor/d_a_item.h"
+#include "d/actor/d_a_tag_waterlevel.h"
 #include "d/actor/d_a_title.h"
 #include "d/d_procname.h"
 #include "d/actor/d_a_npc_kamome.h"
@@ -36,6 +37,9 @@ f32 daObjPirateship::getShipOffsetY(s16* param_1, s16* param_2, f32 param_3) {
     *param_1 += *param_2;
     return param_3 * cM_ssin(*param_1);
 }
+
+f32 daTagWaterlevel::Act_c::M_now;
+u32 daTagWaterlevel::Act_c::M_state;
 
 daAgb_c::daAgb_Flags daAgb_c::mFlags;
 u8 daAgbsw0_c::mFigureDispose;

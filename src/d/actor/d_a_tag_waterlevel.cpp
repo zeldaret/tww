@@ -4,29 +4,158 @@
 //
 
 #include "d/actor/d_a_tag_waterlevel.h"
-#include "dolphin/types.h"
+#include "d/d_a_obj.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
+#include "d/d_procname.h"
+#include "SSystem/SComponent/c_lib.h"
 
-/* 00000078-00000128       .text _create__Q215daTagWaterlevel5Act_cFv */
-s32 daTagWaterlevel::Act_c::_create() {
-    /* Nonmatching */
-}
+namespace daTagWaterlevel {
+    namespace {
+        struct Attr_c {
+            f32 field_0x00;
+            f32 field_0x04;
+            f32 field_0x08;
+            f32 field_0x0c;
+        };
 
-/* 00000128-00000130       .text _delete__Q215daTagWaterlevel5Act_cFv */
-BOOL daTagWaterlevel::Act_c::_delete() {
-    /* Nonmatching */
-}
+        static const Attr_c L_attr = {
+            0.005f, 0.05f, 0.015f, 0.005f,
+        };
 
-/* 00000130-000001D8       .text bgm_proc__Q215daTagWaterlevel5Act_cFv */
-void daTagWaterlevel::Act_c::bgm_proc() {
-    /* Nonmatching */
-}
+        inline const Attr_c & attr() { return L_attr; }
+    }
 
-/* 000001D8-00000364       .text _execute__Q215daTagWaterlevel5Act_cFv */
-BOOL daTagWaterlevel::Act_c::_execute() {
-    /* Nonmatching */
-}
+    /* 00000078-000001D4       .text _create__Q28daTagRet5Act_cFv */
+    s32 Act_c::_create() {
+        fopAcM_SetupActor(this, Act_c);
 
-/* 00000364-0000036C       .text _draw__Q215daTagWaterlevel5Act_cFv */
-BOOL daTagWaterlevel::Act_c::_draw() {
-    /* Nonmatching */
-}
+        if ((prm_get_sch() & dKy_get_schbit() & 0xFF)) {
+            M_now = 1.0f;
+        } else {
+            M_now = 0.0f;
+        }
+
+        field_0x290 = 0.0f;
+        mAction = 0;
+
+        return cPhs_COMPLEATE_e;
+    }
+
+    /* 00000128-00000130       .text _delete__Q215daTagWaterlevel5Act_cFv */
+    bool Act_c::_delete() {
+        return true;
+    }
+
+    /* 00000130-000001D8       .text bgm_proc__Q215daTagWaterlevel5Act_cFv */
+    void Act_c::bgm_proc() {
+        if (cLib_checkBit(get_state(), STATE_1)) {
+            if (get_now() > 0.95f && mAction != 1) {
+                mAction = 1;
+                mDoAud_stWaterLevelUp();
+            }
+        } else {
+            if (get_now() < 0.05f && mAction != 2) {
+                mAction = 2;
+                mDoAud_stWaterLevelDown();
+            }
+        }
+    }
+
+    /* 000001D8-00000364       .text _execute__Q215daTagWaterlevel5Act_cFv */
+    bool Act_c::_execute() {
+        f32 target;
+        u8 prm_sch = prm_get_sch();
+        u8 sch_bit = dKy_get_schbit();
+        cLib_offBit(M_state, STATE_2);
+
+        if ((prm_sch & sch_bit & 0xFF)) {
+            target = 1.0f;
+            if (!cLib_checkBit(get_state(), STATE_1)) {
+                cLib_onBit(M_state, STATE_2);
+                cLib_onBit(M_state, STATE_1);
+            }
+        } else {
+            target = 0.0f;
+            if (cLib_checkBit(get_state(), STATE_1)) {
+                cLib_onBit(M_state, STATE_2);
+                cLib_offBit(M_state, STATE_1);
+            }
+        }
+
+        if (dComIfGp_event_runCheck() && dComIfGp_event_chkEventFlag(2)) {
+            if (get_now() < 0.5f) {
+                M_now = 0.0f;
+            } else {
+                M_now = 1.0f;
+            }
+        } else {
+            if (fabsf(target - get_now()) < attr().field_0x0c) {
+                M_now = target;
+                field_0x290 = 0.0f;
+            } else {
+                field_0x290 += attr().field_0x00;
+                if (field_0x290 > attr().field_0x08)
+                    field_0x290 = attr().field_0x08;
+                if (field_0x290 < attr().field_0x0c)
+                    field_0x290 = attr().field_0x0c;
+                cLib_addCalc(&M_now, target, attr().field_0x04, field_0x290, attr().field_0x0c);
+            }
+        }
+
+        bgm_proc();
+        return true;
+    }
+
+    /* 00000364-0000036C       .text _draw__Q215daTagWaterlevel5Act_cFv */
+    bool Act_c::_draw() {
+        return true;
+    }
+
+    namespace {
+        s32 Mthd_Create(void* i_this) {
+            return ((Act_c*)i_this)->_create();
+        }
+
+        BOOL Mthd_Delete(void* i_this) {
+            return ((Act_c*)i_this)->_delete();
+        }
+
+        BOOL Mthd_Execute(void* i_this) {
+            return ((Act_c*)i_this)->_execute();
+        }
+
+        BOOL Mthd_Draw(void* i_this) {
+            return ((Act_c*)i_this)->_draw();
+        }
+
+        BOOL Mthd_IsDelete(void* i_this) {
+            return TRUE;
+        }
+
+        static actor_method_class Mthd_Table = {
+            (process_method_func)Mthd_Create,
+            (process_method_func)Mthd_Delete,
+            (process_method_func)Mthd_Execute,
+            (process_method_func)Mthd_IsDelete,
+            (process_method_func)Mthd_Draw,
+        };
+    };
+};
+
+actor_process_profile_definition g_profile_Tag_Waterlevel = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 9,
+    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ProcName     */ PROC_Tag_Waterlevel,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daTagWaterlevel::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0128,
+    /* Actor SubMtd */ &daTagWaterlevel::Mthd_Table,
+    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

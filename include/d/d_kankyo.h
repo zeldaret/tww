@@ -442,5 +442,6 @@ void dKy_get_seacolor(GXColor* amb, GXColor* dif);
 cXyz dKy_get_orion_pos();
 cXyz dKy_get_hokuto_pos();
 void dKy_DayProc();
+u8 dKy_get_schbit();
 
 #endif /* D_KANKYO_D_KANKYO_H */
