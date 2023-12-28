@@ -3,14 +3,15 @@
 
 #include "stddef.h"
 #include "extras.h"
+#include "global.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-__declspec(section ".init") void* memcpy(void* dest, const void* src, size_t n);
-__declspec(section ".init") void __fill_mem(void* dest, int val, size_t count);
-__declspec(section ".init") void* memset(void* dest, int val, size_t count);
+SECTION_INIT void* memcpy(void* dest, const void* src, size_t n);
+SECTION_INIT void __fill_mem(void* dest, int val, size_t count);
+SECTION_INIT void* memset(void* dest, int val, size_t count);
 
 int memcmp(const void* lhs, const void* rhs, size_t count);
 void* __memrchr(const void* ptr, int ch, size_t count);
