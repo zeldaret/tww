@@ -10,7 +10,7 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTException.h"
-#include "MSL_C/string.h"
+#include "string.h"
 #include "dolphin/ar/ar.h"
 #include "dolphin/ar/arq.h"
 #include "dolphin/os/OS.h"

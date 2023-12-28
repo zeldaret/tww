@@ -6,7 +6,7 @@
 #include "d/d_stage.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "MSL_C/string.h"
+#include "string.h"
 #include "SSystem/SComponent/c_malloc.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_ship.h"

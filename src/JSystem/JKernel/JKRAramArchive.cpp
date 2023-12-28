@@ -13,8 +13,8 @@
 #include "JSystem/JKernel/JKRDvdAramRipper.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "MSL_C/math.h"
-#include "MSL_C/string.h"
+#include "math.h"
+#include "string.h"
 #include "dolphin/os/OS.h"
 
 /* 802B9FE0-802BA088       .text __ct__14JKRAramArchiveFlQ210JKRArchive15EMountDirection */

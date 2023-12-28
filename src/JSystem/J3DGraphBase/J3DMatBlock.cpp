@@ -12,7 +12,7 @@
 #include "dolphin/gd/GDBase.h"
 #include "dolphin/os/OS.h"
 #include "dolphin/types.h"
-#include "MSL_C/string.h"
+#include "string.h"
 
 inline GXAttnFn J3DColorChan::getAttnFn() {
     u8 attnFnTbl[] = { GX_AF_NONE, GX_AF_SPEC, GX_AF_NONE, GX_AF_SPOT };

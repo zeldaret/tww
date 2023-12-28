@@ -8,7 +8,7 @@
 #include "JSystem/JKernel/JKRDvdRipper.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "MSL_C/string.h"
+#include "string.h"
 
 /* 802B9568-802B95A4       .text __ct__13JKRMemArchiveFv */
 JKRMemArchive::JKRMemArchive() {}

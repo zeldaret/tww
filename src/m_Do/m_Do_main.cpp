@@ -12,7 +12,7 @@
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "JSystem/JUtility/JUTReport.h"
-#include "MSL_C/string.h"
+#include "string.h"
 #include "c/c_dylink.h"
 #include "d/d_com_inf_game.h"
 #include "f_ap/f_ap_game.h"

@@ -5,7 +5,7 @@
 
 #include "SSystem/SComponent/c_xyz.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "MSL_C/float.h"
+#include "float.h"
 #include "SSystem/SComponent/c_math.h"
 
 const cXyz cXyz::Zero(0, 0, 0);

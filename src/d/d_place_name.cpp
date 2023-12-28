@@ -17,6 +17,7 @@
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/J2DGraph/J2DPane.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
+#include "printf.h"
 
 enum { dPn_stage_max_e = 19 };
 

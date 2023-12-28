@@ -7,8 +7,8 @@
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTVideo.h"
-#include "MSL_C/stdio.h"
-#include "Runtime.PPCEABI.H/__va_arg.h"
+#include "stdio.h"
+#include "__va_arg.h"
 #include "dolphin/types.h"
 
 /* 802C328C-802C32D4       .text __ct__10JUTDbPrintFP7JUTFontP7JKRHeap */

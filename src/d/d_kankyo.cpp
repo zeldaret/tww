@@ -21,7 +21,7 @@
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_printf.h"
-#include "MSL_C/math.h"
+#include "math.h"
 
 class sub_kankyo__class : public kankyo_class {
 };

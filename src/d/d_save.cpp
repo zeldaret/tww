@@ -13,8 +13,8 @@
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "SSystem/SComponent/c_math.h"
-#include "MSL_C/string.h"
-#include "MSL_C/stdio.h"
+#include "string.h"
+#include "stdio.h"
 
 struct daNpc_Sarace_c {
     static int ship_race_rupee;

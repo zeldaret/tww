@@ -6,7 +6,7 @@
 #include "JSystem/J3DU/J3DUClipper.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
-#include "MSL_C/math.h"
+#include "math.h"
 
 // Needed for the .rodata section to match.
 static const f32 dummy1[3] = {1.0f, 1.0f, 1.0f};

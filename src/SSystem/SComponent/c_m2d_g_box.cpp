@@ -4,7 +4,7 @@
 //
 
 #include "SSystem/SComponent/c_m2d_g_box.h"
-#include "MSL_C/math.h"
+#include "math.h"
 #include "dolphin/types.h"
 
 /* 8024A0E0-8024A104       .text Set__8cM2dGBoxFR3cXyR3cXy */

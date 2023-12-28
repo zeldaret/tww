@@ -19,8 +19,8 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTTexture.h"
-#include "MSL_C/stdio.h"
-#include "MSL_C/string.h"
+#include "stdio.h"
+#include "string.h"
 #include "dolphin/os/OSCache.h"
 
 /* 8006D804-8006D824       .text __ct__11dRes_info_cFv */

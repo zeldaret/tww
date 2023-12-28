@@ -15,7 +15,7 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "DynamicLink.h"
 #include "dolphin/os/OS.h"
-#include "MSL_C/string.h"
+#include "string.h"
 
 DynamicModuleControlBase * DMC[PROC_COUNT_e];
 bool DMC_initialized = false;

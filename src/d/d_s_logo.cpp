@@ -24,7 +24,8 @@
 #include "JSystem/JKernel/JKRAramHeap.h"
 #include "dolphin/vi/vi.h"
 #include "dolphin/os/OS.h"
-#include "MSL_C/string.h"
+#include "string.h"
+#include "printf.h"
 
 class dScnLogo_c : public scene_class {
 public:
