@@ -273,7 +273,7 @@ public:
     void calcFlyingTimer() {}
     void checkBitEffectStatus(u8) {}
     void checkStatus(u32) {}
-    void checkStatusCamTagIn() {}
+    u8 checkStatusCamTagIn() { return cLib_checkBit(m30F0, 0x20UL); }
     void checkStatusFly() {}
     void clearJntAng() {}
     void clearStatus() {}
@@ -285,12 +285,12 @@ public:
     void isLightBodyHit() {}
     void isMirror() {}
     void isShipRide() {}
-    void offBitCamTagIn() {}
+    void offBitCamTagIn() { cLib_offBit(m30F0, 0x20UL); }
     void offFlying() {}
     void offMirror() {}
     void offPlayerRoom() {}
     void offShipRide() {}
-    void onBitCamTagIn() {}
+    void onBitCamTagIn() { cLib_onBit(m30F0, 0x20UL); }
     void onFlying() {}
     void onMirror() {}
     void onPlayerRoom() {}

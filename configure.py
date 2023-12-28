@@ -1605,7 +1605,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_switem", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_swpropeller"),
     ActorRel(Matching,    "d_a_swtact"),
-    ActorRel(NonMatching, "d_a_tag_etc"),
+    ActorRel(Matching,    "d_a_tag_etc"),
     ActorRel(NonMatching, "d_a_tag_island"),
     ActorRel(NonMatching, "d_a_tag_kf1"),
     ActorRel(Matching,    "d_a_tag_ret", extra_cflags=['-pragma "nosyminline on"']),

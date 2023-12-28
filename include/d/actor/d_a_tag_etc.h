@@ -5,12 +5,14 @@
 
 class daTag_Etc_c : public fopAc_ac_c {
 public:
+    typedef BOOL (ActionFunc)(daTag_Etc_c*);
+
     inline BOOL draw();
     inline BOOL execute();
-    void setActio(unsigned char) {}
+    void setActio(u8 action) { mAction = action; }
 
     u8 getEventNo();
-    u32 getType2();
+    u8 getType2();
     BOOL rangeCheck(fopAc_ac_c*);
     BOOL otherCheck(fopAc_ac_c*);
     void demoProc();
@@ -18,12 +20,12 @@ public:
     s32 create();
 
 public:
-    /* 0x290 */ u8 field_0x290;
+    /* 0x290 */ u8 mAction;
     /* 0x291*/  u8 field_0x291;
     /* 0x292*/  u8 field_0x292;
     /* 0x293*/  u8 field_0x293;
-    /* 0x294 */ s32 processId;
-    /* 0x298 */ s16 eventIndex;
+    /* 0x294 */ s32 mProcID;
+    /* 0x298 */ s16 mEventIdx;
     /* 0x29A */ short field_0x29A;
 };
 
