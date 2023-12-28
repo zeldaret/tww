@@ -19,7 +19,7 @@ enum Action {
 
 /* 00000078-00000084       .text getEventNo__11daTag_Etc_cFv */
 u8 daTag_Etc_c::getEventNo() {
-    return fopAcM_GetParam(this) >> 0x18;
+    return fopAcM_GetParam(this) >> 24;
 }
 
 /* 00000084-00000090       .text getType2__11daTag_Etc_cFv */
@@ -27,7 +27,6 @@ u8 daTag_Etc_c::getType2() {
     return fopAcM_GetParam(this) >> 8 & 0xF;
 }
 
-/* Not Matching */
 /* 00000090-000001B4       .text rangeCheck__11daTag_Etc_cFP10fopAc_ac_c */
 BOOL daTag_Etc_c::rangeCheck(fopAc_ac_c* pActor) {
     float distanceMagnitude;
@@ -47,11 +46,9 @@ BOOL daTag_Etc_c::rangeCheck(fopAc_ac_c* pActor) {
 BOOL daTag_Etc_c::otherCheck(fopAc_ac_c* pActor) {
     BOOL result;
 
-    u8 cVar2 = getType2();
-
-    switch (cVar2) {
+    switch (getType2()) {
     case 0:
-        if (pActor != NULL && (((daNpc_Md_c*)pActor)->m30F0 & 0x10) != 0) {
+        if (pActor != NULL && ((daNpc_Md_c*)pActor)->checkStatusFly()) {
             result = TRUE;
         } else {
             result = FALSE;

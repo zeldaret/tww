@@ -273,8 +273,8 @@ public:
     void calcFlyingTimer() {}
     void checkBitEffectStatus(u8) {}
     void checkStatus(u32) {}
-    u8 checkStatusCamTagIn() { return cLib_checkBit(m30F0, 0x20UL); }
-    void checkStatusFly() {}
+    bool checkStatusCamTagIn() { return cLib_checkBit(m30F0, 0x20UL); }
+    bool checkStatusFly() { return cLib_checkBit(m30F0, 0x10UL); }
     void clearJntAng() {}
     void clearStatus() {}
     void clearStatus(u32) {}
