@@ -116,22 +116,22 @@ base_process_class* fpcBs_Create(s16 i_profName, unsigned int i_procID, void* i_
 /* 8003CB5C-8003CC08       .text fpcBs_SubCreate__FP18base_process_class */
 s32 fpcBs_SubCreate(base_process_class* i_proc) {
     switch (fpcMtd_Create(i_proc->mpPcMtd, i_proc)) {
-    case 2:
+    case cPhs_NEXT_e:
     case cPhs_COMPLEATE_e:
         fpcBs_DeleteAppend(i_proc);
-        i_proc->mCreateResult = 2;
-        return 2;
+        i_proc->mCreateResult = cPhs_NEXT_e;
+        return cPhs_NEXT_e;
     case cPhs_INIT_e:
-    case 1:
+    case cPhs_LOADING_e:
         i_proc->mInitState = 1;
-        i_proc->mCreateResult = 0;
+        i_proc->mCreateResult = cPhs_INIT_e;
         return cPhs_INIT_e;
-    case 3:
-        i_proc->mCreateResult = 3;
-        return 3;
+    case cPhs_UNK3_e:
+        i_proc->mCreateResult = cPhs_UNK3_e;
+        return cPhs_UNK3_e;
     case cPhs_ERROR_e:
     default:
-        i_proc->mCreateResult = 5;
+        i_proc->mCreateResult = cPhs_ERROR_e;
         return cPhs_ERROR_e;
     }
 }

@@ -290,9 +290,9 @@ void dDoor_msg_c::proc(cXyz*) {
 /* 8006D0DC-8006D11C       .text resLoad__12dDoor_hkyo_cFv */
 s32 dDoor_hkyo_c::resLoad() {
     if (m11 == 0) {
-        return 4;
+        return cPhs_COMPLEATE_e;
     }
-    dComIfG_resLoad(&mPhs, "Hkyo");
+    return dComIfG_resLoad(&mPhs, "Hkyo");
 }
 
 /* 8006D11C-8006D154       .text resDelete__12dDoor_hkyo_cFv */

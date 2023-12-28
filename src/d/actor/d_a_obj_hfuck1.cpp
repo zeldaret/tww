@@ -13,6 +13,14 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
+enum HFUCK1_RES_FILE_ID { // IDs and indexes are synced
+    /* BDL */
+    HFUCK1_BDL_HFUCK1=0x4,
+    
+    /* DZB */
+    HFUCK1_DZB_HFUCK1=0x7,
+};
+
 namespace {
     static const char l_arcname[] = "Hfuck1";
 
@@ -65,14 +73,14 @@ BOOL daObjHfuck1_c::solidHeapCB(fopAc_ac_c* i_this) {
 bool daObjHfuck1_c::create_heap() {
     bool ret = true;
 
-    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, 0x04));
+    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, HFUCK1_BDL_HFUCK1));
 
     if (!pModelData) {
         JUT_ASSERT(0xf5, 0);
         ret = false;
     } else {
         mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000022);
-        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, 0x07), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
+        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, HFUCK1_DZB_HFUCK1), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
 
         if (!mpModel || !mpBgW)
             ret = false;

@@ -12,6 +12,15 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
+enum GBED_RES_FILE_ID { // IDs and indexes are synced
+    /* BDL */
+    GBED_BDL_K_GBED=0x4,
+    
+    /* DZB */
+    GBED_DZB_K_GBED=0x7,
+    GBED_DZB_VTENG=0x8,
+};
+
 namespace {
     static const char l_arcname[] = "Gbed";
 };
@@ -33,14 +42,14 @@ BOOL daObjGbed_c::solidHeapCB(fopAc_ac_c* i_this) {
 bool daObjGbed_c::create_heap() {
     bool ret = true;
 
-    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, 0x04));
+    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, GBED_BDL_K_GBED));
 
     if (!pModelData) {
         JUT_ASSERT(0xb1, 0);
         ret = false;
     } else {
         mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000022);
-        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, 0x07), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
+        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, GBED_DZB_K_GBED), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
 
         if (!mpModel || !mpBgW)
             ret = false;

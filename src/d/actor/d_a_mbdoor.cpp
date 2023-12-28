@@ -11,6 +11,28 @@
 #include "m_Do/m_Do_mtx.h"
 #include "d/actor/d_a_player.h"
 
+enum MBDOOR_RES_FILE_ID { // IDs and indexes are synced
+    /* BDL */
+    MBDOOR_BDL_S_MBD_L=0x4,
+    MBDOOR_BDL_S_MBD_R=0x5,
+    MBDOOR_BDL_S_MBDFU=0x6,
+    MBDOOR_BDL_S_MBDTO=0x7,
+    
+    /* DZB */
+    MBDOOR_DZB_S_MBDFU=0xA,
+};
+
+enum GBDOOR_RES_FILE_ID { // IDs and indexes are synced
+    /* BDL */
+    GBDOOR_BDL_V_GBD_L=0x4,
+    GBDOOR_BDL_V_GBD_R=0x5,
+    GBDOOR_BDL_V_GBDFU=0x6,
+    GBDOOR_BDL_V_GBDTO=0x7,
+    
+    /* DZB */
+    GBDOOR_DZB_GBD=0xA,
+};
+
 /* 00000078-00000084       .text getSwbit__10daMbdoor_cFv */
 u8 daMbdoor_c::getSwbit() {
     return fopAcM_GetParam(this) & 0xFF;
@@ -40,9 +62,9 @@ const char* daMbdoor_c::getArcName() {
 u32 daMbdoor_c::getFuBdl() {
     switch (getShapeType()) {
     case 1:
-        return 6; // v_gbdfu.bdl
+        return GBDOOR_BDL_V_GBDFU;
     default:
-        return 6; // s_mbdfu.bdl
+        return MBDOOR_BDL_S_MBDFU;
     }
 }
 
@@ -50,9 +72,9 @@ u32 daMbdoor_c::getFuBdl() {
 u32 daMbdoor_c::getLBdl() {
     switch (getShapeType()) {
     case 1:
-        return 4; // v_gbd_l.bdl
+        return GBDOOR_BDL_V_GBD_L;
     default:
-        return 4; // s_mbd_l.bdl
+        return MBDOOR_BDL_S_MBD_L;
     }
 }
 
@@ -60,9 +82,9 @@ u32 daMbdoor_c::getLBdl() {
 u32 daMbdoor_c::getRBdl() {
     switch (getShapeType()) {
     case 1:
-        return 5; // v_gbd_r.bdl
+        return GBDOOR_BDL_V_GBD_R;
     default:
-        return 5; // s_mbd_r.bdl
+        return MBDOOR_BDL_S_MBD_R;
     }
 }
 
@@ -70,9 +92,9 @@ u32 daMbdoor_c::getRBdl() {
 u32 daMbdoor_c::getToBdl() {
     switch (getShapeType()) {
     case 1:
-        return 7; // v_gbdto.bdl
+        return GBDOOR_BDL_V_GBDTO;
     default:
-        return 7; // s_mbdto.bdl
+        return MBDOOR_BDL_S_MBDTO;
     }
 }
 
@@ -80,9 +102,9 @@ u32 daMbdoor_c::getToBdl() {
 u32 daMbdoor_c::getDzb() {
     switch (getShapeType()) {
     case 1:
-        return 0xA; // gbd.dzb
+        return GBDOOR_DZB_GBD;
     default:
-        return 0xA; // s_mbdfu.dzb
+        return MBDOOR_DZB_S_MBDFU;
     }
 }
 

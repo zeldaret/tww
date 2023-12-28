@@ -15,6 +15,23 @@
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
 static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
 
+enum VBAKH_RES_FILE_ID { // IDs and indexes are synced
+    /* BCK */
+    VBAKH_BCK_VBAHX=0x5,
+    VBAKH_BCK_VBAKH=0x6,
+    VBAKH_BCK_VBAKM=0x7,
+    VBAKH_BCK_VBAMX=0x8,
+    
+    /* BDLM */
+    VBAKH_BDL_VBAKH=0xB,
+    VBAKH_BDL_VBAKM=0xC,
+    
+    /* BRK */
+    VBAKH_BRK_VBAHX=0xF,
+    VBAKH_BRK_VBAKM=0x10,
+    VBAKH_BRK_VBAMX=0x11,
+};
+
 namespace daBomb2 {
     namespace {
         struct Attr_c {
@@ -266,15 +283,15 @@ namespace daBomb2 {
     bool Act_c::create_heap_nut() {
         const char* resName = attr().resName;
 
-        J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(attr().resName, 0xC));
+        J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(attr().resName, VBAKH_BDL_VBAKM));
         JUT_ASSERT(0x303, mdl_data != 0);
         mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000022);
 
-        J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(resName, 0x7));
+        J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(resName, VBAKH_BCK_VBAKM));
         JUT_ASSERT(0x30D, bck_data != 0);
         int temp = mBck0.init(mdl_data, bck_data, true, 0, 1.0f, 0, -1, false);
 
-        J3DAnmTevRegKey* brk_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(resName, 0x10));
+        J3DAnmTevRegKey* brk_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(resName, VBAKH_BRK_VBAKM));
         JUT_ASSERT(0x314, brk_data != 0);
         int temp3 = mBrk0.init(mdl_data, brk_data, true, 0, 1.0f, 0, -1, false, 0);
 

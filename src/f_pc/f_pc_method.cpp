@@ -4,13 +4,14 @@
 //
 
 #include "f_pc/f_pc_method.h"
+#include "SSystem/SComponent/c_phase.h"
 
 /* 8003EF00-8003EF38       .text fpcMtd_Method__FPFPv_iPv */
 s32 fpcMtd_Method(process_method_func i_methodFunc, void* i_data) {
     if (i_methodFunc != NULL)
         return i_methodFunc(i_data);
     else
-        return 1;
+        return cPhs_LOADING_e;
 }
 
 /* 8003EF38-8003EF5C       .text fpcMtd_Execute__FP20process_method_classPv */

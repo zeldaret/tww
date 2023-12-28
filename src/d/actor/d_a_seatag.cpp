@@ -6,25 +6,25 @@
 #include "d/d_procname.h"
 
 static BOOL daSeatag_Draw(daSeatag_c*) {
-    return true;
+    return TRUE;
 }
 
 static  BOOL daSeatag_Execute(daSeatag_c*) {
-    return true;
+    return TRUE;
 }
 
 static BOOL daSeatag_IsDelete(daSeatag_c*) {
-    return true;
+    return TRUE;
 }
 
 static BOOL daSeatag_Delete(daSeatag_c* a_this) {
     a_this->~daSeatag_c();
-    return 1;
+    return TRUE;
 }
 
 static int daSeatag_Create(fopAc_ac_c* a_this) {
     fopAcM_SetupActor(a_this, daSeatag_c);
-    return 4;
+    return cPhs_COMPLEATE_e;
 }
 static actor_method_class l_daSeatag_Method = {
     (process_method_func)daSeatag_Create,

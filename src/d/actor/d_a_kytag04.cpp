@@ -9,7 +9,7 @@
 #include "dolphin/types.h"
 
 static BOOL daKytag04_Draw(kytag04_class*) {
-    return true;
+    return TRUE;
 }
 
 /* 00000080-00000138       .text daKytag04_Execute__FP13kytag04_class */
@@ -35,12 +35,12 @@ static BOOL daKytag04_Execute(kytag04_class* i_this) {
 /* 00000138-00000160       .text daKytag04_IsDelete__FP13kytag04_class */
 static BOOL daKytag04_IsDelete(kytag04_class* i_this) {
     dKy_change_colpat(i_this->mOffColPat);
-    return true;
+    return TRUE;
 }
 
 /* 00000160-00000168       .text daKytag04_Delete__FP13kytag04_class */
 static BOOL daKytag04_Delete(kytag04_class*) {
-    return true;
+    return TRUE;
 }
 
 /* 00000168-00000208       .text daKytag04_Create__FP10fopAc_ac_c */
@@ -55,7 +55,7 @@ static int daKytag04_Create(fopAc_ac_c* i_this)  {
     a_this->mScaleY = a_this->mScale.y * 100.0f;
     a_this->mTimer = 0;
     a_this->mTimerThreshold = 5;
-    return 4;
+    return cPhs_COMPLEATE_e;
 }
 
 static actor_method_class l_daKytag04_Method = {

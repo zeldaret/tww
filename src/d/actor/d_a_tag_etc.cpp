@@ -133,7 +133,7 @@ s32 daTag_Etc_c::create() {
     mAttentionInfo.mFlags = fopAc_Attn_ACTION_TALK_e;
     mAttentionInfo.mPosition.y += 150.0f;
     mEyePos.y += 150.0f;
-    return 4;
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000458-00000460       .text daTag_Etc_action_wait__FP11daTag_Etc_c */

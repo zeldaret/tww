@@ -12,6 +12,14 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
+enum EAYOGN_RES_FILE_ID { // IDs and indexes are synced
+    /* BDL */
+    EAYOGN_BDL_EAYOGN=0x4,
+    
+    /* DZB */
+    EAYOGN_DZB_EAYOGN=0x7,
+};
+
 const char daObjEayogn_c::M_arcname[7] = "Eayogn";
 
 /* 00000078-00000098       .text solidHeapCB__13daObjEayogn_cFP10fopAc_ac_c */
@@ -23,13 +31,13 @@ BOOL daObjEayogn_c::solidHeapCB(fopAc_ac_c* i_this) {
 BOOL daObjEayogn_c::create_heap() {
     BOOL ret = FALSE;
 
-    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, 0x04));
+    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, EAYOGN_BDL_EAYOGN));
     JUT_ASSERT(0x5c, mdl_data != 0);
 
     if (mdl_data != NULL) {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0x00, 0x11020203);
         if (mpModel != NULL) {
-            mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(M_arcname, 0x07), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
+            mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(M_arcname, EAYOGN_DZB_EAYOGN), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
             if (mpBgW != NULL)
                 ret = TRUE;
         }

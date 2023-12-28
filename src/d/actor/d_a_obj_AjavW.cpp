@@ -12,6 +12,17 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
+enum AJAVW_RES_FILE_ID { // IDs and indexes are synced
+    /* BDLM */
+    AJAVW_BDL_AJAVW=0x5,
+    
+    /* BTK */
+    AJAVW_BTK_AJAVW=0x8,
+    
+    /* DZB */
+    AJAVW_DZB_AJAVW=0xB,
+};
+
 namespace {
     static const char l_arcname[] = "AjavW";
 };
@@ -25,8 +36,8 @@ BOOL daObjAjavW_c::solidHeapCB(fopAc_ac_c* i_this) {
 bool daObjAjavW_c::create_heap() {
     bool ret = true;
 
-    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, 0x05));
-    J3DAnmTextureSRTKey * pBtk = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes(l_arcname, 0x08);
+    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, AJAVW_BDL_AJAVW));
+    J3DAnmTextureSRTKey * pBtk = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes(l_arcname, AJAVW_BTK_AJAVW);
 
     if (!pModelData || !pBtk) {
         JUT_ASSERT(0xa7, 0);
@@ -34,7 +45,7 @@ bool daObjAjavW_c::create_heap() {
     } else {
         mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000222);
         s32 btkRet = mBtkAnm.init(pModelData, pBtk, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
-        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, 0x0B), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
+        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, AJAVW_DZB_AJAVW), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
 
         if (!mpModel || !btkRet || !mpBgW)
             ret = false;

@@ -416,7 +416,8 @@ u32 J3DMaterialFactory::calcSizePatchedMaterial(J3DMaterial* i_material, int i_i
     }
     bool ind_flag = !!(i_flags & 0x03000000) ? true : false; // fakematch? order gets messed up if you remove the ternary
     size += J3DMaterial::calcSizeColorBlock(0x40000000);
-    size += 0x124;  // TODO what is this
+    size += sizeof(J3DTexGenBlockPatched);
+    size += sizeof(J3DTevBlockPatched);
     size += J3DMaterial::calcSizeIndBlock(ind_flag);
     size += J3DMaterial::calcSizePEBlock(0x10000000, getMaterialMode(i_idx));
     J3DMaterialInitData* init_data = &mpMaterialInitData[mpMaterialID[i_idx]];
