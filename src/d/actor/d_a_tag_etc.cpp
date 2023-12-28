@@ -4,50 +4,145 @@
 //
 
 #include "d/actor/d_a_tag_etc.h"
+#include "d/actor/d_a_npc_md.h"
+#include "d/d_com_inf_game.h"
 #include "dolphin/types.h"
 
+
 /* 00000078-00000084       .text getEventNo__11daTag_Etc_cFv */
-void daTag_Etc_c::getEventNo() {
-    /* Nonmatching */
+u8 daTag_Etc_c::getEventNo() {
+    return fopAcM_GetParam(this) >> 0x18;
 }
 
 /* 00000084-00000090       .text getType2__11daTag_Etc_cFv */
-void daTag_Etc_c::getType2() {
-    /* Nonmatching */
+u32 daTag_Etc_c::getType2() {
+    return fopAcM_GetParam(this) >> 8 & 0xF;
 }
 
+/* Not Matching */
 /* 00000090-000001B4       .text rangeCheck__11daTag_Etc_cFP10fopAc_ac_c */
-void daTag_Etc_c::rangeCheck(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daTag_Etc_c::rangeCheck(fopAc_ac_c* pActor) {
+    BOOL result;
+    float distanceMagnitude;
+    cXyz delta;
+
+    delta = pActor->current.pos - current.pos;
+    if (delta.y >= 0.0f) {
+        if ((mScale.x * 100.0f) <= delta.absXZ() || (mScale.x * 100.0f) < delta.y) {
+            result = FALSE;
+        } else {
+            result = TRUE;
+        }
+    } else {
+        result = FALSE;
+    }
+    return result;
 }
 
 /* 000001B4-00000214       .text otherCheck__11daTag_Etc_cFP10fopAc_ac_c */
-void daTag_Etc_c::otherCheck(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daTag_Etc_c::otherCheck(fopAc_ac_c* pActor) {
+    BOOL result;
+
+    u8 cVar2 = getType2();
+
+    switch (cVar2) {
+    case 0:
+        if (pActor != NULL && (((daNpc_Md_c*)pActor)->m30F0 & 0x10) != 0) {
+            result = TRUE;
+        } else {
+            result = FALSE;
+        }
+        break;
+    default:
+        result = TRUE;
+        break;
+    }
+    return result;
 }
 
 /* 00000214-000002EC       .text demoProc__11daTag_Etc_cFv */
 void daTag_Etc_c::demoProc() {
-    /* Nonmatching */
+    daNpc_Md_c* pMedli;
+    int staffIdx;
+    u8 cVar3;
+    pMedli = (daNpc_Md_c*)fopAcM_SearchByID(processId);
+    staffIdx = dComIfGp_evmng_getMyStaffId("TAG_ETC_D", NULL, 0);
+
+    if (staffIdx != -1) {
+        cVar3 = getType2();
+        switch (cVar3) {
+        case 0:
+            if (pMedli == NULL || (pMedli->m30F0 & 0x10) == 0) {
+                if (field_0x29A > 0) {
+                    field_0x29A--;
+                } else {
+                    dComIfGp_evmng_cutEnd(staffIdx);
+                }
+            }
+            break;
+        default:
+            dComIfGp_evmng_cutEnd(staffIdx);
+        }
+    }
 }
 
 /* 000002EC-00000368       .text demoInitProc__11daTag_Etc_cFv */
 void daTag_Etc_c::demoInitProc() {
-    /* Nonmatching */
+    u8 cVar1;
+    fopAc_ac_c* pActor;
+
+    cVar1 = getType2();
+    switch (cVar1) {
+    case 0:
+        pActor = fopAcM_SearchByID(processId);
+        dComIfGp_event_setItemPartner(pActor);
+        field_0x29A = 0xf;
+        break;
+    default:;
+    }
+    return;
 }
 
 /* 00000368-00000458       .text create__11daTag_Etc_cFv */
 s32 daTag_Etc_c::create() {
-    /* Nonmatching */
+    float fVar1;
+    u8 stageEVNTListIndex;
+    u16 uVar2;
+    u8 cVar3;
+
+    fopAcM_SetupActor(this, daTag_Etc_c);
+
+    stageEVNTListIndex = getEventNo();
+    eventIndex = dComIfGp_evmng_getEventIdx(NULL, stageEVNTListIndex);
+    if (eventIndex == -1) {
+        field_0x290 = 0;
+    } else {
+        cVar3 = getType2();
+        switch (cVar3) {
+        case 0:
+            field_0x290 = 1;
+            break;
+        default:
+            field_0x290 = 0;
+        }
+    }
+    shape_angle.z = 0;
+    shape_angle.x = 0;
+    current.angle.z = 0;
+    current.angle.x = 0;
+    mAttentionInfo.mFlags = fopAc_Attn_ACTION_TALK_e;
+    mAttentionInfo.mPosition.y += 150.0f;
+    mEyePos.y += 150.0f;
+    return 4;
 }
 
 /* 00000458-00000460       .text daTag_Etc_action_wait__FP11daTag_Etc_c */
-void daTag_Etc_action_wait(daTag_Etc_c*) {
-    /* Nonmatching */
+u8 daTag_Etc_action_wait(daTag_Etc_c*) {
+    return 1;
 }
 
 /* 00000460-000004E8       .text daTag_Etc_action_search__FP11daTag_Etc_c */
-void daTag_Etc_action_search(daTag_Etc_c*) {
+void daTag_Etc_action_search(daTag_Etc_c* pEtcTag) {
     /* Nonmatching */
 }
 
@@ -68,7 +163,7 @@ void daTag_Etc_action_hunt(daTag_Etc_c*) {
 
 /* 000006EC-000006F4       .text daTag_Etc_Draw__FP11daTag_Etc_c */
 static BOOL daTag_Etc_Draw(daTag_Etc_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000006F4-00000730       .text daTag_Etc_Execute__FP11daTag_Etc_c */
@@ -78,16 +173,16 @@ static BOOL daTag_Etc_Execute(daTag_Etc_c*) {
 
 /* 00000730-00000738       .text daTag_Etc_IsDelete__FP11daTag_Etc_c */
 static BOOL daTag_Etc_IsDelete(daTag_Etc_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000738-00000768       .text daTag_Etc_Delete__FP11daTag_Etc_c */
-static BOOL daTag_Etc_Delete(daTag_Etc_c*) {
-    /* Nonmatching */
+static BOOL daTag_Etc_Delete(daTag_Etc_c* i_actor) {
+    i_actor->~daTag_Etc_c();
+    return TRUE;
 }
 
 /* 00000768-00000788       .text daTag_Etc_Create__FP10fopAc_ac_c */
-static s32 daTag_Etc_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daTag_Etc_Create(fopAc_ac_c* i_actor) {
+    return reinterpret_cast<daTag_Etc_c*>(i_actor)->create();
 }
-
