@@ -837,7 +837,7 @@ void snap_sunmoon_proc(cXyz* pPos, int type) {
     dSnap_Obj snapObj;
     camera_class * pCamera = dComIfGp_getCamera(0);
 
-    if (dComIfGp_checkPlayerStatus1(0, 0x08) != 0) {
+    if (dComIfGp_checkPlayerStatus1(0, daPyStts1_PICTO_BOX_AIM_e)) {
         cXyz pos;
         pos.x = (pPos->x - pCamera->mLookat.mEye.x);
         pos.y = (pPos->y - pCamera->mLookat.mEye.y);

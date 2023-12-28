@@ -24,6 +24,10 @@ public:
     void melodyPlay(s32);
     void melodyStop();
 
+    // one of these inlines returns field_0x30, not sure which
+    void getBeat() {}
+    void getBeatFrames() {}
+
 public:
     /* 0x00 */ int field_0x0;
     /* 0x04 */ u8 field_0x4[5];

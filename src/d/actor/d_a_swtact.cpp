@@ -113,9 +113,9 @@ s32 daSwTact_c::getAnswer() {
 /* 00000410-000006AC       .text _execute__10daSwTact_cFv */
 bool daSwTact_c::_execute() {
     daPy_py_c * player = daPy_getPlayerActorClass();
-    u32 stts1 = dComIfGp_checkPlayerStatus1(0, 0x01);
+    u32 stts1 = dComIfGp_checkPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e);
 
-    if (player == NULL || dComIfGp_checkPlayerStatus0(0, 0x10000))
+    if (player == NULL || dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e))
         return true;
 
     if ((player->current.pos - current.pos).absXZ() <= getR()) {

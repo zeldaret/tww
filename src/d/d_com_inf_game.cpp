@@ -16,6 +16,7 @@
 #include "d/d_magma.h"
 #include "d/d_particle.h"
 #include "d/d_tree.h"
+#include "d/d_wood.h"
 #include "f_op/f_op_scene_mng.h"
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_audio.h"

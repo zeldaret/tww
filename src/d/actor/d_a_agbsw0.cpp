@@ -1825,25 +1825,33 @@ BOOL daAgbsw0_c::MoveCheck(s16 param_1) {
 
             break;
         case 0x23:
-            if(dComIfGp_checkPlayerStatus0(0, 0x100000)) {
+            if(dComIfGp_checkPlayerStatus0(0, daPyStts0_SWIM_e)) {
                 return 0;
             }
 
             break;
         case 0x24:
-            if(dComIfGp_checkPlayerStatus0(0, 0x10000)) {
+            if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
                 return 0;
             }
 
             break;
         case 0x25:
-            if(dComIfGp_checkPlayerStatus0(0, 0x10000) && dComIfGp_getSelectItem(0) != BOMB_BAG && dComIfGp_getSelectItem(1) != BOMB_BAG && dComIfGp_getSelectItem(2) != BOMB_BAG) {
+            if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) &&
+                dComIfGp_getSelectItem(0) != BOMB_BAG &&
+                dComIfGp_getSelectItem(1) != BOMB_BAG &&
+                dComIfGp_getSelectItem(2) != BOMB_BAG)
+            {
                 return 0;
             }
 
             break;
         case 0x26:
-            if(dComIfGp_checkPlayerStatus0(0, 0x10000) && dComIfGp_getSelectItem(0) != ROPE && dComIfGp_getSelectItem(1) != ROPE && dComIfGp_getSelectItem(2) != ROPE) {
+            if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) &&
+                dComIfGp_getSelectItem(0) != ROPE &&
+                dComIfGp_getSelectItem(1) != ROPE &&
+                dComIfGp_getSelectItem(2) != ROPE)
+            {
                 return 0;
             }
 

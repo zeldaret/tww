@@ -15,7 +15,6 @@
 #include "d/d_save.h"
 #include "d/d_stage.h"
 #include "d/d_vibration.h"
-#include "d/d_wood.h"
 #include "d/d_demo.h"
 #include "d/d_timer.h"
 #include "SSystem/SComponent/c_data_tbl.h"
@@ -23,22 +22,40 @@
 class JKRArchive;
 class JKRAramBlock;
 class JKRExpHeap;
-class dPa_control_c;
-class dDemo_manager_c;
 class dMagma_packet_c;
 class dGrass_packet_c;
 class dTree_packet_c;
 class dFlower_packet_c;
-class Packet_c;
+namespace dWood { class Packet_c; };
 class daPy_py_c;
 class daPy_lk_c;
-class daPy_npc_c;
 class daShip_c;
 class daAgb_c;
-class dTimer_c;
 class camera_class;
 class J2DOrthoGraph;
-class dDemo_actor_c;
+
+enum daPy__PlayerStatus0 {
+    daPyStts0_UNK10_e          = 0x00000010,
+    daPyStts0_BOW_AIM_e        = 0x00001000,
+    daPyStts0_SWORD_SWING_e    = 0x00008000,
+    daPyStts0_SHIP_RIDE_e      = 0x00010000,
+    daPyStts0_BOOMERANG_AIM_e  = 0x00080000,
+    daPyStts0_SWIM_e           = 0x00100000,
+    daPyStts0_TELESCOPE_LOOK_e = 0x00200000,
+    daPyStts0_BOOMERANG_WAIT_e = 0x00400000,
+    daPyStts0_CRAWL_e          = 0x08000000,
+    daPyStts0_SPIN_ATTACK_e    = 0x40000000,
+};
+
+enum daPy__PlayerStatus1 {
+    daPyStts1_WIND_WAKER_CONDUCT_e = 0x00000001,
+    daPyStts1_PICTO_BOX_AIM_e      = 0x00000008,
+    daPyStts1_DEKU_LEAF_FLY_e      = 0x00000020,
+    daPyStts1_DEKU_LEAF_FAN_e      = 0x00000040,
+    daPyStts1_SAIL_e               = 0x00000400,
+    daPyStts1_UNK8000_e            = 0x00008000,
+    daPyStts1_UNK40000_e           = 0x00040000,
+};
 
 enum ALWAYS_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

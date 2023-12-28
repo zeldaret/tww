@@ -733,7 +733,7 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
                 f32 absXZ = partnerDiff.absXZ();
 
                 if (absXZ < 800.0f && (rotDiff < -0x4000 || rotDiff > 0x4000)) {
-                    if (dComIfGp_checkPlayerStatus1(0, 1) != 0) {
+                    if (dComIfGp_checkPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e)) {
                         m043F = 1;
                         manage_friend_draw(0);
                     }
@@ -787,7 +787,7 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
                 }
             }
             else {
-                if (dComIfGp_checkPlayerStatus1(0, 1) == 0) {
+                if (!dComIfGp_checkPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e)) {
                     m043F = 0;
                     manage_friend_draw(1);
                 }
@@ -808,7 +808,7 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
 
             break;
         case 5:
-            if (dComIfGp_checkPlayerStatus1(0, 1) == 0) {
+            if (!dComIfGp_checkPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e)) {
                 m043F = 0;
             }
 

@@ -22,6 +22,8 @@
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_material.h"
 
+const Vec l_tact_top = {38.0f, 7.5f, 12.5f};
+
 const daPy_lk_c::TexAnmTableEntry daPy_lk_c::mTexAnmIndexTable[] = {
     {LKANM_BTP_TMABAA, LKANM_BTK_TMABA},
     {LKANM_BTP_TMABAA, LKANM_BTK_TEUP},
@@ -1842,8 +1844,8 @@ const daPy_lk_c::AnmDataTableEntry daPy_lk_c::mAnmDataTable[] = {
 #include "d/actor/d_a_player_HIO.inc"
 
 // Needed for the .data section to match.
-static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
+static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
+static Vec dummy_2080 = {1.0f, 1.0f, 1.0f};
 
 char l_arcName[] = "Link";
 
@@ -2030,6 +2032,9 @@ static dCcD_SrcSph l_fan_wind_sph_src = {
         /* Radius */ 150.0f,
     },
 };
+
+Vec dummy_3569;
+JGeometry::TVec3<f32> l_hammer_splash_particle_scale(0.00002f, 0.00002f, 0.00002f);
 
 daPy_lk_c::ProcInitTableEntry daPy_lk_c::mProcInitTable[] = {
     /* 0x00 */ {&daPy_lk_c::procScope,                 0x00000001},
@@ -2333,6 +2338,7 @@ daPy_lk_c::ProcFunc daPy_lk_c::mDemoProcInitFuncTable[] = {
 
 GXColor l_freeze_fade_color = {0xFF, 0xFF, 0xFF, 0xFF};
 
+cXyz l_debug_keep_pos;
 csXyz l_debug_current_angle;
 csXyz l_debug_shape_angle;
 
@@ -2343,6 +2349,13 @@ u8 daPy_matAnm_c::m_morf_frame;
 
 s16 daPy_dmEcallBack_c::m_timer = 0;
 u16 daPy_dmEcallBack_c::m_type = 3;
+
+daPy_waterDropPcallBack_c daPy_waterDropEcallBack_c::m_pcallback;
+
+static mDoExt_offCupOnAupPacket l_offCupOnAupPacket1;
+static mDoExt_offCupOnAupPacket l_offCupOnAupPacket2;
+static mDoExt_onCupOffAupPacket l_onCupOffAupPacket1;
+static mDoExt_onCupOffAupPacket l_onCupOffAupPacket2;
 
 /* 80102E8C-80102EAC       .text daPy_createHeap__FP10fopAc_ac_c */
 static BOOL daPy_createHeap(fopAc_ac_c* i_this) {
@@ -3403,8 +3416,8 @@ BOOL daPy_lk_c::commonProcInit(daPy_lk_c::daPy_PROC proc) {
         mAcch.OnLineCheck();
     }
     
-    dComIfGp_clearPlayerStatus0(0, ~0x00400010);
-    dComIfGp_clearPlayerStatus1(0, ~0xFFF48400);
+    dComIfGp_clearPlayerStatus0(0, ~(daPyStts0_BOOMERANG_WAIT_e | daPyStts0_UNK10_e));
+    dComIfGp_clearPlayerStatus1(0, ~(daPyStts1_SAIL_e | daPyStts1_UNK8000_e | daPyStts1_UNK40000_e) & 0x000FFFFF);
     
     mGravity = daPy_HIO_autoJump_c0::m.field_0xC;
     m34F2 = 0;
@@ -4405,8 +4418,8 @@ BOOL daPy_lk_c::playerDelete() {
         *mpCurrLinktex = mOtherLinktex;
     }
     
-    dComIfGp_clearPlayerStatus0(0, 0x00400000); // Waiting for the boomerang to come back
-    dComIfGp_clearPlayerStatus1(0, 0x00040000);
+    dComIfGp_clearPlayerStatus0(0, daPyStts0_BOOMERANG_WAIT_e);
+    dComIfGp_clearPlayerStatus1(0, daPyStts1_UNK40000_e);
     g_dComIfG_gameInfo.play.field_0x4947 = 0;
     
     cancelNoDamageMode();
@@ -4755,7 +4768,7 @@ void daPy_lk_c::playerInit() {
     mActorKeepRope.clearData();
     m3628 = -1;
     m3634 = -1;
-    m362C = -1;
+    mTactZevPartnerPID = fpcM_ERROR_PROCESS_ID_e;
     m3630 = -1;
     
     ResTIMG* blur_img = (ResTIMG*)dComIfG_getObjectRes(l_arcName, LINK_BTI_BLUR);

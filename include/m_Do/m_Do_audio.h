@@ -18,13 +18,20 @@ public:
     static void offResetFlag() { mResetFlag = false; }
 
     static bool isInitFlag() { return mInitFlag; }
+    static void onInitFlag() { mInitFlag = true; }
     static void offInitFlag() { mInitFlag = false; }
 
     static bool isBgmSet() { return mBgmSet; }
+    static void onBgmSet() { mBgmSet = true; }
     static void offBgmSet() { mBgmSet = false; }
 
     static void setLoadTimer(u8 i_timer) { mLoadTimer = i_timer; }
     static u8 getLoadTimer() { return mLoadTimer; }
+
+    static JAIZelInst& getTact() { return mTact; }
+
+    static void getMode() {}
+    static void setMode(u8) {}
 
     static bool mInitFlag;
     static bool mResetFlag;
@@ -156,6 +163,18 @@ inline void mDoAud_rainPlay(s32 param_0) {
 
 inline f32 mDoAud_tact_getMelodyPattern(s32 melody_no, s32 note_no, s32 * pattern) {
     return mDoAud_zelAudio_c::mTact.getMelodyPattern(melody_no, note_no, pattern);
+}
+
+inline void mDoAud_tact_reset() {
+    mDoAud_zelAudio_c::getTact().reset();
+}
+
+inline void mDoAud_tact_getBeat() {
+    return mDoAud_zelAudio_c::getTact().getBeat();
+}
+
+inline void mDoAud_tact_getBeatFrames() {
+    return mDoAud_zelAudio_c::getTact().getBeatFrames();
 }
 
 inline BOOL mDoAud_checkCbPracticePlay() {

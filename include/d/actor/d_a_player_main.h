@@ -154,6 +154,8 @@ public:
     daPy_waterDropEcallBack_c() {}
     ~daPy_waterDropEcallBack_c() {}
 
+    static daPy_waterDropPcallBack_c m_pcallback;
+
     /* 0x1C */ u8 field_0x1C[0x4];
 };  // Size: 0x20
 
@@ -1932,13 +1934,13 @@ public:
     u32 getDayNightParamData();
     void setTactModel();
     BOOL checkNpcStatus();
-    void getTactPlayRightArmAnm(s32);
-    void getTactPlayLeftArmAnm(s32);
+    int getTactPlayRightArmAnm(s32);
+    int getTactPlayLeftArmAnm(s32);
     BOOL checkEndTactMusic() const;
     f32 getTactMetronomeRate();
     BOOL checkTactLastInput();
     BOOL getTactTopPos(cXyz*);
-    void getTactNormalWait() const;
+    BOOL getTactNormalWait() const;
     BOOL checkTactPlayMelody();
     void resetTactCount();
     BOOL procTactWait_init(int);
@@ -2167,7 +2169,7 @@ public:
     virtual MtxP getLeftHandMatrix() { return mpCLModel->getAnmMtx(0x08); } // cl_LhandA joint
     virtual MtxP getRightHandMatrix() { return mpCLModel->getAnmMtx(0x0C); } // cl_RhandA joint
     virtual f32 getGroundY() { return mAcch.GetGroundH(); }
-    virtual int getTactMusic() const;
+    virtual s32 getTactMusic() const;
     virtual int getTactTimerCancel() const;
     virtual BOOL checkPlayerGuard() const;
     virtual fopAc_ac_c* getGrabMissActor();
@@ -2454,8 +2456,8 @@ public:
     /* 0x3568 */ s16 m3568;
     /* 0x356A */ u8 m356A[0x356C - 0x356A];
     /* 0x356C */ int mCameraInfoIdx;
-    /* 0x3570 */ int m3570;
-    /* 0x3574 */ int m3574;
+    /* 0x3570 */ s32 m3570;
+    /* 0x3574 */ s32 m3574;
     /* 0x3578 */ int m3578;
     /* 0x357C */ u8 m357C[0x3580 - 0x357C];
     /* 0x3580 */ int m3580;
@@ -2468,7 +2470,8 @@ public:
     /* 0x359C */ u8 m359C[0x35A0 - 0x359C];
     /* 0x35A0 */ f32 m35A0;
     /* 0x35A4 */ f32 m35A4;
-    /* 0x35A8 */ u8 m35A8[0x35B0 - 0x35A8];
+    /* 0x35A8 */ u8 m35A8[0x35AC - 0x35A8];
+    /* 0x35AC */ f32 m35AC;
     /* 0x35B0 */ f32 m35B0;
     /* 0x35B4 */ u8 m35B4[0x35BC - 0x35B4];
     /* 0x35BC */ f32 mVelocity;
@@ -2498,7 +2501,7 @@ public:
     /* 0x3620 */ u32 m3620;
     /* 0x3624 */ int m3624;
     /* 0x3628 */ int m3628;
-    /* 0x362C */ int m362C;
+    /* 0x362C */ unsigned int mTactZevPartnerPID;
     /* 0x3630 */ u32 m3630;
     /* 0x3634 */ int m3634;
     /* 0x3638 */ int mMsgId;

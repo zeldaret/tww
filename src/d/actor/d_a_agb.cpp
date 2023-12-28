@@ -679,10 +679,13 @@ void daAgb_c::GbaItemUse() {
     switch (temp_r29) {
     case 16:
         if (daPy_getPlayerLinkActorClass()->checkNoControll() ||
-            dComIfGp_checkPlayerStatus0(0, 0x8000000) ||
-            (daPy_getPlayerActorClass()->checkPlayerFly() &&
-             !dComIfGp_checkPlayerStatus0(0, 0x100000) && !dComIfGp_checkPlayerStatus0(0, 0x10000)))
-        {
+            dComIfGp_checkPlayerStatus0(0, daPyStts0_CRAWL_e) ||
+            (
+                daPy_getPlayerActorClass()->checkPlayerFly() &&
+                !dComIfGp_checkPlayerStatus0(0, daPyStts0_SWIM_e) &&
+                !dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)
+            )
+        ) {
             mEffect = BigLittleChange(0x1F0300);
             return;
         } else if (field_0x67d != 0) {

@@ -36,7 +36,7 @@ void daPy_lk_c::setShipRideArmAngle(int, J3DTransformInfo*) {
 
 /* 8013FE78-8013FEF4       .text checkShipRideUseItem__9daPy_lk_cFi */
 int daPy_lk_c::checkShipRideUseItem(int param_1) {
-    if (dComIfGp_checkPlayerStatus0(0, 0x10000) && dComIfGp_getShipActor() != NULL) {
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && dComIfGp_getShipActor() != NULL) {
         if (param_1 != 0) {
             deleteEquipItem(0);
         }
@@ -60,7 +60,7 @@ void daPy_lk_c::initShipRideUseItem(int param_1, int param_2) {
     if (param_1 == 1) {
         setOldRootQuaternion(0, 0x4000, 0);
     }
-    dComIfGp_setPlayerStatus0(0, 0x10000);
+    dComIfGp_setPlayerStatus0(0, daPyStts0_SHIP_RIDE_e);
     if (param_2 == 2) {
         setShipRidePosUseItem();
     } else if (param_2 == 1) {
