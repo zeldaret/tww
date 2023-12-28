@@ -4,7 +4,7 @@
 //
 
 #include "SSystem/SComponent/c_data_tbl.h"
-#include "MSL_C/string.h"
+#include "string.h"
 
 /* 80254974-80254990       .text __ct__12cDT_NamePTblFv */
 cDT_NamePTbl::cDT_NamePTbl() {

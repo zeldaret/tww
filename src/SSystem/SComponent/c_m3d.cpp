@@ -13,7 +13,7 @@
 #include "SSystem/SComponent/c_m3d_g_sph.h"
 #include "SSystem/SComponent/c_m3d_g_tri.h"
 #include "SSystem/SComponent/c_math.h"
-#include "MSL_C/float.h"
+#include "float.h"
 
 // TODO: these should be in .sdata2
 f32 G_CM3D_F_ABS_MIN = 3.814697e-06;

@@ -3,7 +3,7 @@
 
 #include "SSystem/SComponent/c_xyz.h"
 #include "d/d_event_data.h"
-#include "MSL_C/string.h"
+#include "string.h"
 
 class fopAc_ac_c;
 

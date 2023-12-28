@@ -7,7 +7,7 @@
 #include "JSystem/JKernel/JKRDecomp.h"
 #include "JSystem/JKernel/JKRDvdFile.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "MSL_C/string.h"
+#include "string.h"
 #include "dolphin/os/OS.h"
 #include "dolphin/vi/vi.h"
 #include "global.h"

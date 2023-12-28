@@ -13,7 +13,7 @@
 #include "JSystem/JAudio/JASSystemHeap.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "MSL_C/string.h"
+#include "string.h"
 
 u32* JAInter::InitData::aafPointer;
 

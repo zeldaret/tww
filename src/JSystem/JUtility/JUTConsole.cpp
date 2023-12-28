@@ -9,8 +9,8 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTDirectPrint.h"
 #include "JSystem/JUtility/JUTVideo.h"
-#include "MSL_C/new.h"
-#include "MSL_C/stdio.h"
+#include "new.h"
+#include "stdio.h"
 #include "dolphin/types.h"
 
 JUTConsoleManager* JUTConsoleManager::sManager;

@@ -9,7 +9,7 @@
 #include "JSystem/JKernel/JKRThread.h"
 #include "dolphin/card.h"
 #include "global.h"
-#include "MSL_C/string.h"
+#include "string.h"
 
 u8 MemCardStack[0x1000] ALIGN_DECL(32);
 OSThread MemCardThread;

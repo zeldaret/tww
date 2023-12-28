@@ -7,7 +7,7 @@
 #include "JSystem/JAudio/JASSystemHeap.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "MSL_C/math.h"
+#include "math.h"
 
 f32* JASystem::Calc::JASC_SINTABLE;
 f32* JASystem::Calc::JASC_DOL2TABLE;

@@ -5,7 +5,7 @@
 
 #include "JSystem/JMath/JMath.h"
 #include "JSystem/JMath/JMATrigonometric.h"
-#include "MSL_C/math.h"
+#include "math.h"
 #include "dolphin/types.h"
 
 u16 jmaSinTableSize;

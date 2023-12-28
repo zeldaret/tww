@@ -13,7 +13,7 @@
 #include "JSystem/JKernel/JKRArchive.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "MSL_C/string.h"
+#include "string.h"
 
 namespace JAIInitData = JAInter::InitData;
 namespace JAISequenceMgr = JAInter::SequenceMgr;

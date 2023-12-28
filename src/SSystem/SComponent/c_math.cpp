@@ -5,7 +5,7 @@
 
 #include "SSystem/SComponent/c_math.h"
 #include "SSystem/SComponent/c_m3d.h"
-#include "MSL_C/math.h"
+#include "math.h"
 #include "dolphin/types.h"
 
 /* 80246044-8024609C       .text cM_rad2s__Ff */

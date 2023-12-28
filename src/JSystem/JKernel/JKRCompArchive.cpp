@@ -15,8 +15,8 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JKernel/JKRMemArchive.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "MSL_C/math.h"
-#include "MSL_C/string.h"
+#include "math.h"
+#include "string.h"
 #include "dolphin/os/OS.h"
 
 /* 802BB82C-802BB8D4       .text __ct__14JKRCompArchiveFlQ210JKRArchive15EMountDirection */

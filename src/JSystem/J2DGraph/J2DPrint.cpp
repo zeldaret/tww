@@ -6,7 +6,7 @@
 #include "JSystem/J2DGraph/J2DPrint.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "MSL_C/stdlib.h"
+#include "stdlib.h"
 #include "dolphin/types.h"
 
 char* J2DPrint::mStrBuff;

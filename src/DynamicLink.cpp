@@ -10,7 +10,7 @@
 #include "JSystem/JKernel/JKRFileCache.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
-#include "MSL_C/stdio.h"
+#include "stdio.h"
 #include "REL/executor.h"
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_ext.h"

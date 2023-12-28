@@ -8,7 +8,7 @@
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/JKernel/JKRHeap.h"
-#include "MSL_C/string.h"
+#include "string.h"
 #include "dolphin/gx/GX.h"
 #include "dolphin/os/OS.h"
 

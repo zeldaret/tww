@@ -1704,7 +1704,7 @@ d/d_wpot_water.cpp:
 	.sbss       start:0x803FEB20 end:0x803FEB28
 	.sdata2     start:0x80403350 end:0x80403370
 
-Runtime.PPCEABI.H/__mem.c:
+PowerPC_EABI_Support/Runtime/Src/__mem.c:
 	.init       start:0x800033A8 end:0x800034E0
 
 DynamicLink.cpp:
@@ -3748,215 +3748,215 @@ dolphin/gd/GDGeometry.c:
 	.text       start:0x8032D3C8 end:0x8032DDD8
 	.data       start:0x803A8CB8 end:0x803A8D20
 
-Runtime.PPCEABI.H/__va_arg.c:
+PowerPC_EABI_Support/Runtime/Src/__va_arg.c:
 	.text       start:0x8032DDD8 end:0x8032DEA0
 
-Runtime.PPCEABI.H/global_destructor_chain.c:
+PowerPC_EABI_Support/Runtime/Src/global_destructor_chain.c:
 	.text       start:0x8032DEA0 end:0x8032DF00
 	.dtors      start:0x8033DD68 end:0x8033DD6C
 	.sbss       start:0x803FF4D0 end:0x803FF4D8
 
-Runtime.PPCEABI.H/CPlusLibPPC.cp:
+PowerPC_EABI_Support/Runtime/Src/CPlusLibPPC.cp:
 	.text       start:0x8032DF00 end:0x8032DF30
 
-Runtime.PPCEABI.H/NMWException.cp:
+PowerPC_EABI_Support/Runtime/Src/NMWException.cp:
 	extab       start:0x80005620 end:0x80005668
 	extabindex  start:0x80005680 end:0x800056BC
 	.text       start:0x8032DF30 end:0x8032E2D4
 
-Runtime.PPCEABI.H/ptmf.c:
+PowerPC_EABI_Support/Runtime/Src/ptmf.c:
 	.text       start:0x8032E2D4 end:0x8032E368
 	.rodata     start:0x80377C98 end:0x80377CA8
 
-Runtime.PPCEABI.H/runtime.c:
+PowerPC_EABI_Support/Runtime/Src/runtime.c:
 	.text       start:0x8032E368 end:0x8032EA44
 	.rodata     start:0x80377CA8 end:0x80377CC0
 
-Runtime.PPCEABI.H/__init_cpp_exceptions.cpp:
+PowerPC_EABI_Support/Runtime/Src/__init_cpp_exceptions.cpp:
 	.text       start:0x8032EA44 end:0x8032EAC0
 	.ctors      start:0x8033DBC0 end:0x8033DBC4
 	.dtors      start:0x8033DD60 end:0x8033DD68
 	.sdata      start:0x803FDFE8 end:0x803FDFF0
 
-Runtime.PPCEABI.H/Gecko_ExceptionPPC.cp:
+PowerPC_EABI_Support/Runtime/Src/Gecko_ExceptionPPC.cp:
 	.text       start:0x8032EAC0 end:0x8032EB28
 	.bss        start:0x803F92B8 end:0x803F92C8
 
-Runtime.PPCEABI.H/GCN_mem_alloc.c:
+PowerPC_EABI_Support/Runtime/Src/GCN_mem_alloc.c:
 	.text       start:0x8032EB28 end:0x8032EBE0
 	.rodata     start:0x80377CC0 end:0x80377D38
 
-MSL_C/MSL_Common/abort_exit.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/abort_exit.c:
 	.text       start:0x8032EBE0 end:0x8032ECAC
 	.bss        start:0x803F92C8 end:0x803F93C8
 	.sbss       start:0x803FF4D8 end:0x803FF4E8
 
-MSL_C/MSL_Common/alloc.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/alloc.c:
 	.text       start:0x8032ECAC end:0x8032F214
 	.rodata     start:0x80377D38 end:0x80377D50
 	.bss        start:0x803F93C8 end:0x803F9400
 	.sbss       start:0x803FF4E8 end:0x803FF4F0
 
-MSL_C/MSL_Common/errno.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/errno.c:
 	.sbss       start:0x803FF4F0 end:0x803FF4F8
 
-MSL_C/MSL_Common/ansi_files.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/ansi_files.c:
 	.text       start:0x8032F214 end:0x8032F31C
 	.data       start:0x803A8D20 end:0x803A8E60
 	.bss        start:0x803F9400 end:0x803F9700
 
-MSL_C/MSL_Common_Embedded/ansi_fp.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Src/ansi_fp.c:
 	.text       start:0x8032F31C end:0x8032FF34
 	.rodata     start:0x80377D50 end:0x80377E30
 	.data       start:0x803A8E60 end:0x803A8F88
 	.sdata2     start:0x80404408 end:0x80404410
 
-MSL_C/MSL_Common/arith.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/arith.c:
 	.text       start:0x8032FF34 end:0x8032FFAC
 
-MSL_C/MSL_Common/buffer_io.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/buffer_io.c:
 	.text       start:0x8032FFAC end:0x803300A4
 
-MSL_C/MSL_Common/ctype.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/ctype.c:
 	.text       start:0x803300A4 end:0x803300C8
 	.data       start:0x803A8F88 end:0x803A9288
 
-MSL_C/MSL_Common/direct_io.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/direct_io.c:
 	.text       start:0x803300C8 end:0x803303F4
 
-MSL_C/MSL_Common/file_io.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/file_io.c:
 	.text       start:0x803303F4 end:0x803305EC
 
-MSL_C/MSL_Common/FILE_POS.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/FILE_POS.c:
 	.text       start:0x803305EC end:0x803308B8
 
-MSL_C/MSL_Common/mbstring.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/mbstring.c:
 	.text       start:0x803308B8 end:0x803309FC
 	.sdata2     start:0x80404410 end:0x80404418
 
-MSL_C/MSL_Common/mem.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/mem.c:
 	.text       start:0x803309FC end:0x80330B6C
 
-MSL_C/MSL_Common/mem_funcs.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/mem_funcs.c:
 	.text       start:0x80330B6C end:0x80330E4C
 
-MSL_C/MSL_Common/misc_io.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/misc_io.c:
 	.text       start:0x80330E4C end:0x80330E5C
 
-MSL_C/MSL_Common/printf.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/printf.c:
 	.text       start:0x80330E5C end:0x80332F54
 	.rodata     start:0x80377E30 end:0x80377E58
 	.data       start:0x803A9288 end:0x803A94B8
 	.sdata      start:0x803FDFF0 end:0x803FDFF8
 	.sdata2     start:0x80404418 end:0x80404420
 
-MSL_C/MSL_Common/float.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/float.c:
 	.sdata      start:0x803FDFF8 end:0x803FE000
 
-MSL_C/MSL_Common/scanf.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/scanf.c:
 	.text       start:0x80332F54 end:0x80332FE4
 
-MSL_C/MSL_Common/string.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/string.c:
 	.text       start:0x80332FE4 end:0x80333308
 
-MSL_C/MSL_Common/strtoul.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/strtoul.c:
 	.text       start:0x80333308 end:0x8033381C
 	.data       start:0x803A94B8 end:0x803A9500
 
-MSL_C/MSL_Common/uart_console_io.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Src/uart_console_io.c:
 	.text       start:0x8033381C end:0x803338E8
 	.sbss       start:0x803FF4F8 end:0x803FF500
 
-MSL_C/MSL_Common/wchar_io.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/wchar_io.c:
 	.text       start:0x803338E8 end:0x80333970
 
-MSL_C/Math/Double_precision/e_acos.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_acos.c:
 	.text       start:0x80333970 end:0x80333C80
 	.sdata2     start:0x80404420 end:0x804044B0
 
-MSL_C/Math/Double_precision/e_asin.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_asin.c:
 	.text       start:0x80333C80 end:0x80333EE4
 	.sdata2     start:0x804044B0 end:0x80404548
 
-MSL_C/Math/Double_precision/e_atan2.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_atan2.c:
 	.text       start:0x80333EE4 end:0x80334174
 	.sdata2     start:0x80404548 end:0x804045A0
 
-MSL_C/Math/Double_precision/e_fmod.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_fmod.c:
 	.text       start:0x80334174 end:0x803344B0
 	.rodata     start:0x80377E58 end:0x80377E68
 
-MSL_C/Math/Double_precision/e_rem_pio2.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_rem_pio2.c:
 	.text       start:0x803344B0 end:0x80334850
 	.rodata     start:0x80377E68 end:0x80377FF0
 	.sdata2     start:0x804045A0 end:0x804045F8
 
-MSL_C/Math/Double_precision/k_cos.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/k_cos.c:
 	.text       start:0x80334850 end:0x80334944
 	.sdata2     start:0x804045F8 end:0x80404640
 
-MSL_C/Math/Double_precision/k_rem_pio2.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/k_rem_pio2.c:
 	.text       start:0x80334944 end:0x80335798
 	.rodata     start:0x80377FF0 end:0x80378040
 	.sdata2     start:0x80404640 end:0x80404680
 
-MSL_C/Math/Double_precision/k_sin.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/k_sin.c:
 	.text       start:0x80335798 end:0x80335838
 	.sdata2     start:0x80404680 end:0x804046B8
 
-MSL_C/Math/Double_precision/k_tan.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/k_tan.c:
 	.text       start:0x80335838 end:0x80335A4C
 	.rodata     start:0x80378040 end:0x803780A8
 	.sdata2     start:0x804046B8 end:0x804046F0
 
-MSL_C/Math/Double_precision/s_atan.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_atan.c:
 	.text       start:0x80335A4C end:0x80335C4C
 	.rodata     start:0x803780A8 end:0x80378140
 	.sdata2     start:0x804046F0 end:0x80404718
 
-MSL_C/Math/Double_precision/s_copysign.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_copysign.c:
 	.text       start:0x80335C4C end:0x80335C74
 
-MSL_C/Math/Double_precision/s_cos.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_cos.c:
 	.text       start:0x80335C74 end:0x80335D48
 	.sdata2     start:0x80404718 end:0x80404720
 
-MSL_C/Math/Double_precision/s_floor.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_floor.c:
 	.text       start:0x80335D48 end:0x80335E90
 	.sdata2     start:0x80404720 end:0x80404730
 
-MSL_C/Math/Double_precision/s_frexp.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_frexp.c:
 	.text       start:0x80335E90 end:0x80335F1C
 	.sdata2     start:0x80404730 end:0x80404738
 
-MSL_C/Math/Double_precision/s_ldexp.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_ldexp.c:
 	.text       start:0x80335F1C end:0x803360E0
 	.sdata2     start:0x80404738 end:0x80404760
 
-MSL_C/Math/Double_precision/s_modf.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_modf.c:
 	.text       start:0x803360E0 end:0x803361DC
 
-MSL_C/Math/Double_precision/s_sin.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_sin.c:
 	.text       start:0x803361DC end:0x803362B4
 	.sdata2     start:0x80404760 end:0x80404768
 
-MSL_C/Math/Double_precision/s_tan.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_tan.c:
 	.text       start:0x803362B4 end:0x8033632C
 	.sdata2     start:0x80404768 end:0x80404770
 
-MSL_C/Math/Double_precision/w_acos.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_acos.c:
 	.text       start:0x8033632C end:0x8033634C
 
-MSL_C/Math/Double_precision/w_asin.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_asin.c:
 	.text       start:0x8033634C end:0x8033636C
 
-MSL_C/Math/Double_precision/w_atan2.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_atan2.c:
 	.text       start:0x8033636C end:0x8033638C
 
-MSL_C/Math/Double_precision/w_fmod.c:
+PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_fmod.c:
 	.text       start:0x8033638C end:0x803363AC
 
-MSL_C/PPC_EABI/math_ppc.c:
+PowerPC_EABI_Support/MSL/MSL_C/PPC_EABI/Src/math_ppc.c:
 	.text       start:0x803363AC end:0x8033643C
 
 TRK_MINNOW_DOLPHIN/Portable/mainloop.c:

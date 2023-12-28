@@ -5,7 +5,7 @@
 
 #include "JSystem/JAudio/JASHardStream.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "MSL_C/string.h"
+#include "string.h"
 #include "dolphin/ai/ai.h"
 #include "dolphin/dvd/dvd.h"
 #include "dolphin/os/OS.h"

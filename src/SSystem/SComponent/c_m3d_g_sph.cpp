@@ -6,7 +6,7 @@
 #include "SSystem/SComponent/c_m3d_g_sph.h"
 #include "SSystem/SComponent/c_m3d.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "MSL_C/float.h"
+#include "float.h"
 
 #define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)) ) == 1));
 #define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);

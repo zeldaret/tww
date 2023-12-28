@@ -8,7 +8,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTReport.h"
-#include "MSL_C/string.h"
+#include "string.h"
 #include "SSystem/SComponent/c_counter.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_title.h"

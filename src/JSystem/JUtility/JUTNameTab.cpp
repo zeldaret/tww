@@ -5,7 +5,7 @@
 
 #include "JSystem/JUtility/JUTNameTab.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "MSL_C/string.h"
+#include "string.h"
 
 JUTNameTab::JUTNameTab() {
     setResource(NULL);

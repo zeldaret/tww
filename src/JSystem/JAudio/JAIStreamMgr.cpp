@@ -8,7 +8,7 @@
 #include "JSystem/JAudio/JASDSPInterface.h"
 #include "JSystem/JAudio/JASSystemHeap.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
-#include "MSL_C/string.h"
+#include "string.h"
 #include "dolphin/os/OS.h"
 
 s16 JAInter::StreamLib::filter_table[32] = {

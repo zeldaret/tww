@@ -12,7 +12,7 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JSupport/JSUFileStream.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "MSL_C/string.h"
+#include "string.h"
 #include "dolphin/os/OSCache.h"
 #include "dolphin/os/OSInterrupt.h"
 #include "dolphin/vi/vi.h"

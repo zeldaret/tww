@@ -7,7 +7,7 @@
 #include "JSystem/JAudio/JAIBasic.h"
 #include "JSystem/JAudio/JAIGlobalParameter.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
-#include "MSL_C/string.h"
+#include "string.h"
 
 JAInter::LinkSound JAInter::SequenceMgr::seqControl;
 JAInter::SeqUpdateData* JAInter::SequenceMgr::seqTrackInfo;
