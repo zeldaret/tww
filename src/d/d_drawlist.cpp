@@ -821,7 +821,7 @@ cBgS_ShdwDraw::~cBgS_ShdwDraw() {
 }
 
 /* 800841B0-8008450C       .text setShadowRealMtx__FPA4_fPA4_fPA4_fP4cXyzP4cXyzffP18dDlst_shadowPoly_cf */
-void setShadowRealMtx(Mtx, Mtx, Mtx, cXyz*, cXyz*, f32, f32, dDlst_shadowPoly_c*, f32) {
+u8 setShadowRealMtx(Mtx, Mtx, Mtx, cXyz*, cXyz*, f32, f32, dDlst_shadowPoly_c*, f32) {
     /* Nonmatching */
 }
 
@@ -831,8 +831,29 @@ u32 dDlst_shadowReal_c::set(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*) 
 }
 
 /* 800846C8-80084844       .text set2__18dDlst_shadowReal_cFUlScP8J3DModelP4cXyzffP12dKy_tevstr_c */
-u32 dDlst_shadowReal_c::set2(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*) {
-    /* Nonmatching */
+u32 dDlst_shadowReal_c::set2(u32 r26, s8 r27, J3DModel* r31, cXyz* r28, f32 f30, f32 f31, dKy_tevstr_c* tevstr) {
+    if (mModelNum == 0) {
+        cXyz lightPos = dKy_plight_near_pos();
+        if (tevstr) {
+            lightPos = tevstr->mLightPosWorld;
+        }
+        mAlpha = setShadowRealMtx(
+            mViewMtx, mRenderProjMtx, mReceiverProjMtx, &lightPos, r28, f30, f31, &mShadowRealPoly,
+            r27 == 0 ? 0.0f : f31 * 0.00025f
+        );
+        if (mAlpha == 0) {
+            return 0;
+        }
+        mState = 1;
+        mKey = r26;
+        field_0x1 = r27;
+        mModelNum = 0;
+    }
+    
+    JUT_ASSERT(3999, mModelNum < MODEL_MAX);
+    
+    mpModels[mModelNum++] = r31;
+    return mKey;
 }
 
 /* 80084844-800848E8       .text add__18dDlst_shadowReal_cFP8J3DModel */
@@ -909,7 +930,8 @@ int dDlst_shadowControl_c::setReal(u32 key, s8 size, J3DModel* model, cXyz* pos,
     dDlst_shadowReal_c * real = &mReal[0];
     for (s32 i = 0; i < (s32)ARRAY_SIZE(mReal); i++, real++) {
         if (real->isNoUse()) {
-            return real->set(i, size, model, pos, f0, f1, tevstr);
+            while (++mNextID == 0) {}
+            return real->set(mNextID, size, model, pos, f0, f1, tevstr);
         }
     }
 
@@ -917,8 +939,25 @@ int dDlst_shadowControl_c::setReal(u32 key, s8 size, J3DModel* model, cXyz* pos,
 }
 
 /* 80085170-8008520C       .text setReal2__21dDlst_shadowControl_cFUlScP8J3DModelP4cXyzffP12dKy_tevstr_c */
-int dDlst_shadowControl_c::setReal2(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*) {
-    /* Nonmatching */
+int dDlst_shadowControl_c::setReal2(u32 key, s8 size, J3DModel* model, cXyz* pos, f32 f0, f32 f1, dKy_tevstr_c* tevstr) {
+    if (key != 0) {
+        dDlst_shadowReal_c * real = &mReal[0];
+        for (s32 i = 0; i < (s32)ARRAY_SIZE(mReal); i++, real++) {
+            if (real->isUse() && real->checkKey(key)) {
+                return real->set2(key, size, model, pos, f0, f1, tevstr);
+            }
+        }
+    }
+
+    dDlst_shadowReal_c * real = &mReal[0];
+    for (s32 i = 0; i < (s32)ARRAY_SIZE(mReal); i++, real++) {
+        if (real->isNoUse()) {
+            while (++mNextID == 0) {}
+            return real->set2(mNextID, size, model, pos, f0, f1, tevstr);
+        }
+    }
+
+    return 0;
 }
 
 /* 8008520C-80085274       .text addReal__21dDlst_shadowControl_cFUlP8J3DModel */

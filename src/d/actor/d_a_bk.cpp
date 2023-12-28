@@ -257,7 +257,36 @@ static void br_draw(bk_class* i_this) {
 
 /* 00001B88-00001CD0       .text daBk_shadowDraw__FP8bk_class */
 static BOOL daBk_shadowDraw(bk_class* i_this) {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
+    J3DModel* model = i_this->mpMorf->getModel();
+    if (!fopAcM_checkCarryNow(i_this)) {
+        cXyz shadowPos(
+            i_this->current.pos.x,
+            i_this->current.pos.y + 150.0f + g_regHIO.mChild[8].mFloatRegs[18],
+            i_this->current.pos.z
+        );
+        f32 temp = 800.0f + g_regHIO.mChild[8].mFloatRegs[19];
+        f32 shadowSize = 40.0f + g_regHIO.mChild[8].mFloatRegs[17];
+        i_this->mShadowId = dComIfGd_setShadow(
+            i_this->mShadowId, 1, model, &shadowPos, temp, shadowSize,
+            i_this->current.pos.y, i_this->mDamageReaction.mAcch.GetGroundH(),
+            i_this->mDamageReaction.mAcch.m_gnd, &i_this->mTevStr,
+            0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
+        );
+    }
+    
+    if (i_this->mShadowId) {
+        daBoko_c* boko = (daBoko_c*)fopAcM_SearchByID(i_this->m1200);
+        if (boko) {
+            dComIfGd_addRealShadow(i_this->mShadowId, boko->model);
+        }
+        if (i_this->m02D4) {
+            dComIfGd_addRealShadow(i_this->mShadowId, i_this->m02D0);
+        }
+        if (i_this->m02DC) {
+            dComIfGd_addRealShadow(i_this->mShadowId, i_this->m02D8);
+        }
+    }
 }
 
 /* 00001CD0-00001F60       .text daBk_Draw__FP8bk_class */
@@ -338,8 +367,9 @@ static BOOL daBk_wepon_view_check(bk_class* i_this) {
 }
 
 /* 00003438-00003478       .text daBk_bomb_view_check__FP8bk_class */
-static void daBk_bomb_view_check(bk_class* i_this) {
-    /* Nonmatching */
+static BOOL daBk_bomb_view_check(bk_class* i_this) {
+    i_this->m11F8 = search_bomb(i_this, 1);
+    return i_this->m11F8 != NULL ? TRUE : FALSE;
 }
 
 /* 00003478-000034B8       .text daBk_bomb_check__FP8bk_class */
@@ -613,7 +643,18 @@ static BOOL daBk_IsDelete(bk_class* i_this) {
 
 /* 0000DD24-0000DDD8       .text daBk_Delete__FP8bk_class */
 static BOOL daBk_Delete(bk_class* i_this) {
-    /* Nonmatching */
+    dComIfG_resDelete(&i_this->mPhs, "Bk");
+    if (i_this->heap) {
+        i_this->mpMorf->stopZelAnime();
+    }
+    if (i_this->m121D) {
+        hio_set = 0;
+        mDoHIO_root.mDoHIO_deleteChild(l_bkHIO.mChildID);
+    }
+    i_this->m0350.end();
+    i_this->mDamageReaction.mParticleCallBack.end();
+    enemy_fire_remove(&i_this->mEnemyFire);
+    return TRUE;
 }
 
 /* 0000DDD8-0000E2C8       .text useHeapInit__FP10fopAc_ac_c */
