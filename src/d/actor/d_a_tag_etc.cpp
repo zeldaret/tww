@@ -65,15 +65,13 @@ BOOL daTag_Etc_c::otherCheck(fopAc_ac_c* pActor) {
 void daTag_Etc_c::demoProc() {
     daNpc_Md_c* pMedli;
     int staffIdx;
-    u8 cVar3;
     pMedli = (daNpc_Md_c*)fopAcM_SearchByID(mProcID);
     staffIdx = dComIfGp_evmng_getMyStaffId("TAG_ETC_D", NULL, 0);
 
     if (staffIdx != -1) {
-        cVar3 = getType2();
-        switch (cVar3) {
+        switch (getType2()) {
         case 0:
-            if (pMedli == NULL || (pMedli->m30F0 & 0x10) == 0) {
+            if (pMedli == NULL || !pMedli->checkStatusFly()) {
                 if (field_0x29A > 0) {
                     field_0x29A--;
                 } else {
@@ -89,17 +87,14 @@ void daTag_Etc_c::demoProc() {
 
 /* 000002EC-00000368       .text demoInitProc__11daTag_Etc_cFv */
 void daTag_Etc_c::demoInitProc() {
-    u8 cVar1;
     fopAc_ac_c* pActor;
 
-    cVar1 = getType2();
-    switch (cVar1) {
+    switch (getType2()) {
     case 0:
         pActor = fopAcM_SearchByID(mProcID);
         dComIfGp_event_setItemPartner(pActor);
-        field_0x29A = 0xf;
+        field_0x29A = 15;
         break;
-    default:;
     }
     return;
 }
@@ -108,7 +103,6 @@ void daTag_Etc_c::demoInitProc() {
 s32 daTag_Etc_c::create() {
     float fVar1;
     u8 stageEVNTListIndex;
-    u16 uVar2;
 
     fopAcM_SetupActor(this, daTag_Etc_c);
 
@@ -126,6 +120,7 @@ s32 daTag_Etc_c::create() {
             break;
         }
     }
+
     shape_angle.z = 0;
     shape_angle.x = 0;
     current.angle.z = 0;
