@@ -17,12 +17,12 @@ u16 J3DMaterialFactory_v21::countUniqueMaterials() {
 }
 
 /* 802F9C8C-802F9CC4       .text countTexGens__22J3DMaterialFactory_v21CFi */
-void J3DMaterialFactory_v21::countTexGens(int) const {
+u32 J3DMaterialFactory_v21::countTexGens(int) const {
     /* Nonmatching */
 }
 
 /* 802F9CC4-802F9D4C       .text countStages__22J3DMaterialFactory_v21CFi */
-void J3DMaterialFactory_v21::countStages(int) const {
+u32 J3DMaterialFactory_v21::countStages(int) const {
     /* Nonmatching */
 }
 

@@ -142,7 +142,7 @@ void J2DWindow::draw_private(const JGeometry::TBox2<f32>& frameBox, const JGeome
 
         drawFrameTexture(mpFrameTexture4, right, top,
             (field_0x110 >> 1) & 1,
-            (field_0x110 >> 0) & 1, (field_0x111 & 1));
+            (field_0x110 >> 0) & 1, (field_0x111 & 2));
 
         s0 = ((field_0x110 >> 1) & 1) ? (u16)0x8000 : (u16)0;
         t0 = ((field_0x110 >> 0) & 1) ? (u16)0 : (u16)0x8000;
@@ -156,7 +156,7 @@ void J2DWindow::draw_private(const JGeometry::TBox2<f32>& frameBox, const JGeome
 
         drawFrameTexture(mpFrameTexture3, 0.0f, top,
             (field_0x110 >> 3) & 1,
-            (field_0x110 >> 2) & 1, (field_0x111 & 1));
+            (field_0x110 >> 2) & 1, (field_0x111 & 4));
 
         s0 = ((field_0x110 >> 3) & 1) ? (u16)0 : (u16)0x8000;
         s1 = (u16)(s0 ^ 0x8000);

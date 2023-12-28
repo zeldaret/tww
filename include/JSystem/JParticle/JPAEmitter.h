@@ -160,8 +160,8 @@ public:
     bool doTerminationProcess();
     void calcEmitterGlobalPosition(JGeometry::TVec3<f32>&);
     void calcgReRDirection();
-    u32 getPivotX();
-    u32 getPivotY();
+    u8 getPivotX();
+    u8 getPivotY();
 
     void setStatus(u32 status) { mFlags |= status; }
     void clearStatus(u32 status) { mFlags &= ~status; }

@@ -596,37 +596,34 @@ extern void J3DPSMtxArrayConcat(f32(*)[4], f32(*)[4], f32(*)[4], u32);
 
 /* 802EEBDC-802EEE30       .text calcDrawMtx__8J3DModelFv */
 void J3DModel::calcDrawMtx() {
+    /* Nonmatching - regalloc */
     switch (getMtxCalcMode()) {
     case 0:
         MtxP viewMtx = j3dSys.getViewMtx();
         for (u16 i = 0; i < getModelData()->getDrawFullWgtMtxNum(); i++) {
             u16 drawMtxIdx = getModelData()->getDrawMtxIndex(i);
-            MTXConcat(viewMtx, getAnmMtx(drawMtxIdx), getDrawMtxPtr()[i]);
+            MTXConcat(viewMtx, getAnmMtx(drawMtxIdx), getDrawMtx(i));
         }
         if (getModelData()->getDrawMtxNum() > getModelData()->getDrawFullWgtMtxNum()) {
-            MtxP weightAnmMtx = getWeightAnmMtx(0);
-            MtxP drawMtx = getDrawMtxPtr()[getModelData()->getDrawFullWgtMtxNum()];
-            J3DPSMtxArrayConcat(viewMtx, weightAnmMtx, drawMtx, getModelData()->getWEvlpMtxNum());
+            J3DPSMtxArrayConcat(viewMtx, getWeightAnmMtx(0), getDrawMtx(getModelData()->getDrawFullWgtMtxNum()), getModelData()->getWEvlpMtxNum());
         }
         break;
     case 1:
-        for (u16 i = 0; i < getModelData()->getDrawFullWgtMtxNum(); i++)
-            MTXCopy(getAnmMtx(getModelData()->getDrawMtxIndex(i)), getDrawMtxPtr()[i]);
+        for (u16 i = 0; i < getModelData()->getDrawFullWgtMtxNum(); i++) {
+            MTXCopy(getAnmMtx(getModelData()->getDrawMtxIndex(i)), getDrawMtx(i));
+        }
         for (u16 i = 0; i < getModelData()->getWEvlpMtxNum(); i++) {
-            MtxP drawMtx = getDrawMtxPtr()[getModelData()->getDrawFullWgtMtxNum() + i];
-            setWeightAnmMtx(i, drawMtx);
+            MTXCopy(getWeightAnmMtx(i), getDrawMtx(getModelData()->getDrawFullWgtMtxNum() + i));
         }
         break;
     case 2:
         calcViewBaseMtx(j3dSys.getViewMtx(), mBaseScale, mBaseTransformMtx, mViewBaseMtx);
         for (u16 i = 0; i < getModelData()->getDrawFullWgtMtxNum(); i++) {
-            MtxP anmMtx = getAnmMtx(getModelData()->getDrawMtxIndex(i));
-            MTXConcat(mViewBaseMtx, anmMtx, getDrawMtxPtr()[i]);
+            u16 drawMtxIdx = getModelData()->getDrawMtxIndex(i);
+            MTXConcat(mViewBaseMtx, getAnmMtx(drawMtxIdx), getDrawMtx(i));
         }
-        if (getModelData()->getDrawFullWgtMtxNum() > getModelData()->getDrawMtxNum()) {
-            MtxP weightAnmMtx = getWeightAnmMtx(0);
-            MtxP drawMtx = getDrawMtxPtr()[getModelData()->getDrawFullWgtMtxNum()];
-            J3DPSMtxArrayConcat(mViewBaseMtx, weightAnmMtx, drawMtx, getModelData()->getWEvlpMtxNum());
+        if (getModelData()->getDrawMtxNum() > getModelData()->getDrawFullWgtMtxNum()) {
+            J3DPSMtxArrayConcat(mViewBaseMtx, getWeightAnmMtx(0), getDrawMtx(getModelData()->getDrawFullWgtMtxNum()), getModelData()->getWEvlpMtxNum());
         }
         break;
     }

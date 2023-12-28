@@ -215,7 +215,7 @@ void drawDvdCondition(long status) {
 }
 
 /* 8003EBD4-8003EC84       .text checkDvdCondition__Fv */
-static int checkDvdCondition() {
+int checkDvdCondition() {
     static int l_dvdError = 0;
     
     int status = DVDGetDriveStatus();

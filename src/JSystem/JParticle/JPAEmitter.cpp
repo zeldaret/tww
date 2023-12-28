@@ -419,7 +419,7 @@ void JPABaseEmitter::calcgReRDirection() {
 }
 
 /* 8025DDE8-8025DE2C       .text getPivotX__14JPABaseEmitterFv */
-u32 JPABaseEmitter::getPivotX() {
+u8 JPABaseEmitter::getPivotX() {
     if (getEmitterDataBlockInfoPtr()->getExtraShape() != NULL)
         return getEmitterDataBlockInfoPtr()->getExtraShape()->getPivotX();
     else
@@ -427,7 +427,7 @@ u32 JPABaseEmitter::getPivotX() {
 }
 
 /* 8025DE2C-8025DE70       .text getPivotY__14JPABaseEmitterFv */
-u32 JPABaseEmitter::getPivotY() {
+u8 JPABaseEmitter::getPivotY() {
     if (getEmitterDataBlockInfoPtr()->getExtraShape() != NULL)
         return getEmitterDataBlockInfoPtr()->getExtraShape()->getPivotY();
     else

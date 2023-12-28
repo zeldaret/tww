@@ -18,29 +18,9 @@ void J3DGQRSetup7(u32, u32, u32, u32) {
 }
 
 /* 802DA0E8-802DA120       .text J3DCalcZValue__FPA4_f3Vec */
-
-// matches debug
-f32 J3DCalcZValue(register MtxP m, register Vec v) {
-    register f32 temp_f4;
-    register f32 out;
-    register f32 temp_f0;
-    register f32 temp_f2;
-    register f32 temp_f1 = 1.0f;
-
-    // clang-format off
-    asm {
-        psq_l temp_f0, 0(v), 0, 0 /* qr0 */
-        lfs temp_f2, 8(v)
-        psq_l temp_f4, 32(m), 0, 0 /* qr0 */
-        psq_l out, 40(m), 0, 0 /* qr0 */
-        ps_merge00 temp_f2, temp_f2, temp_f1
-        ps_mul temp_f4, temp_f0, temp_f4
-        ps_madd out, temp_f2, out, temp_f4
-        ps_sum0 out, out, out, out
-    }
-    // clang-format on
-
-    return out;
+f32 J3DCalcZValue(MtxP m, Vec v) {
+    /* Nonmatching */
+    return m[2][0] * v.x + m[2][1] * v.y + m[2][2] * v.z + m[2][3];
 }
 
 /* 802DA120-802DA2E0       .text J3DCalcBBoardMtx__FPA4_f */
