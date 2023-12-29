@@ -423,7 +423,7 @@ config.libs = [
             Object(Matching,    "d/actor/d_a_arrow.cpp", extra_cflags=["-sym off"]),
             Object(Matching,    "d/actor/d_a_bg.cpp"),
             Object(NonMatching, "d/actor/d_a_bomb.cpp"),
-            Object(NonMatching, "d/actor/d_a_bomb2.cpp"),
+            Object(Matching,    "d/actor/d_a_bomb2.cpp"),
             Object(NonMatching, "d/actor/d_a_boomerang.cpp"),
             Object(NonMatching, "d/actor/d_a_dai_item.cpp"),
             Object(NonMatching, "d/actor/d_a_demo00.cpp"),

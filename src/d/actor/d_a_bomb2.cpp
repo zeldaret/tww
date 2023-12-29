@@ -10,6 +10,8 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
+#include "d/actor/d_a_sea.h"
+#include "d/actor/d_a_player.h"
 
 // Needed for the .data section to match.
 static f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
@@ -53,7 +55,7 @@ namespace daBomb2 {
             /* heapSize     */ 0x920,
             /* field_0x8    */ 0x96,
             /* field_0xA    */ 0x1E,
-            /* gravity      */ 2.9f,
+            /* gravity      */ -2.9f,
             /* maxFallSpeed */ -100.0f,
             /* field_0x14   */ -0.6f,
             /* field_0x18   */ 19.5f,
@@ -216,7 +218,6 @@ namespace daBomb2 {
 
     /* 800DDAE8-800DDAEC       .text draw__Q27daBomb213FuseSmokeCB_cFP14JPABaseEmitter */
     void FuseSmokeCB_c::draw(JPABaseEmitter*) {
-        /* Nonmatching */
     }
 
     void FuseSmokeCB_c::setup(JPABaseEmitter* param_1, const cXyz* param_2, const csXyz*, signed char) {
@@ -399,7 +400,7 @@ namespace daBomb2 {
         field_0x741 = 0;
         field_0x742 = 0;
         field_0x743 = 0;
-        field_0x748 = cXyz::Zero;
+        mWindVec = cXyz::Zero;
 
         start_proc_call();
     }
@@ -450,7 +451,37 @@ namespace daBomb2 {
 
     /* 800DE5B0-800DE740       .text cc_set__Q27daBomb25Act_cFv */
     void Act_c::cc_set() {
-        /* Nonmatching */
+        bool r3 = mState == 2;
+        bool r4 = mState == 3;
+        bool r31 = true;
+        f32 radius = 200.0f;
+        cXyz pos = current.pos;
+        if (r3) {
+            if (field_0x73C > 0) {
+                field_0x73C--;
+            }
+            if (field_0x73C <= 0) {
+                r31 = false;
+            }
+        } else if (r4) {
+            r31 = false;
+        } else if (r31) {
+            radius = mScale.x * 30.0f;
+            static cXyz local_center(0.0f, 30.0f, 0.0f);
+            mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
+            mDoMtx_stack_c::scaleM(mScale);
+            mDoMtx_stack_c::multVec(&local_center, &pos);
+        }
+        
+        if (r31) {
+            mStts.Move();
+            mSph.SetR(radius);
+            mSph.SetC(pos);
+            dComIfG_Ccsp()->Set(&mSph);
+            //using inline breaks match
+            //dComIfG_Ccsp()->SetMass(&mSph, 3);
+            g_dComIfG_gameInfo.play.mCcS.SetMass(&mSph, 3);
+        }
     }
 
     void Act_c::camera_lockoff() const {
@@ -460,7 +491,27 @@ namespace daBomb2 {
 
     /* 800DE794-800DE854       .text posMoveF__Q27daBomb25Act_cFv */
     void Act_c::posMoveF() {
-        /* Nonmatching */
+        if (mWindVec.abs2() > 0.01f) {
+            cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
+            cXyz* r6;
+            f32 f3, f4;
+            if (triPla) {
+                r6 = triPla->GetNP();
+                f3 = 0.06f;
+                f4 = cM_scos(0xA4F);
+            } else {
+                r6 = NULL;
+                f3 = 0.0f;
+                f4 = 0.0f;
+            }
+            daObj::posMoveF_grade(
+                this, mStts.GetCCMoveP(), &mWindVec,
+                attr().field_0x30, attr().field_0x34,
+                r6, f3, f4, NULL
+            );
+        } else {
+            fopAcM_posMoveF(this, mStts.GetCCMoveP());
+        }
     }
 
     /* 800DE854-800DE8A8       .text bgCrrPos__Q27daBomb25Act_cFv */
@@ -481,7 +532,32 @@ namespace daBomb2 {
 
     /* 800DE914-800DEA0C       .text bgCrrPos_water__Q27daBomb25Act_cFv */
     void Act_c::bgCrrPos_water() {
-        /* Nonmatching */
+        f32 f31 = mAcch.m_wtr.GetHeight();
+        bool r31 = daSea_ChkArea(current.pos.x, current.pos.z);
+        f32 f1 = daSea_calcWave(current.pos.x, current.pos.z);
+        bool r4 = mAcch.ChkWaterIn();
+        bool r3 = r31 && current.pos.y < f1;
+        bool r5 = false;
+        if (r4 && r3) {
+            if (f31 > f1) {
+                r3 = 0;
+            } else {
+                r4 = 0;
+            }
+        }
+        if (r4) {
+            field_0x520 = f31;
+            r5 = true;
+            field_0x526 = 0;
+        } else if (r3) {
+            field_0x520 = f1;
+            r5 = true;
+            field_0x526 = 1;
+        } else {
+            field_0x520 = -1e9f;
+            field_0x526 = 0;
+        }
+        mbWaterIn = r5;
     }
 
     bool Act_c::chk_water_in() const {
@@ -535,7 +611,7 @@ namespace daBomb2 {
         }
         else {
             if(mAcch.ChkGroundHit()) {
-                cLib_addCalc(&speedF, 0.0f, 0.5f, 5.5f, 1.0f);
+                cLib_addCalc(&speedF, 0.0f, 0.5f, 5.0f, 1.0f);
             }
         }
     }
@@ -559,7 +635,53 @@ namespace daBomb2 {
 
     /* 800DEC70-800DEFAC       .text set_wind_vec__Q27daBomb25Act_cFv */
     void Act_c::set_wind_vec() {
-        /* Nonmatching */
+        mWindVec *= 0.95f;
+        if (mWindVec.abs2() < 0.1f)
+            mWindVec.setall(0.0f);
+        if (!mSph.ChkTgHit())
+            return;
+        cCcD_Obj* hitObj = mSph.GetTgHitObj();
+        if (hitObj == NULL)
+            return;
+        if (!(hitObj->GetAtType() & AT_TYPE_LEAF_WIND))
+            return;
+        
+        f32 f30 = attr().field_0x40;
+        cXyz sp48 = *mSph.GetTgRVecP();
+        f32 f31 = sp48.abs2();
+        if (f31 > f30*f30) {
+            sp48 *= f30 / sqrtf(f31);;
+        }
+        cCcD_ShapeAttr* hitShapeAttr = hitObj->GetShapeAttr();
+        cXyz hitNormal = cXyz::Zero;
+        f30 = 1.0f;
+        f32 f29 = 1.0f;
+        if (hitShapeAttr->GetNVec(current.pos, &hitNormal)) {
+            hitNormal *= attr().field_0x44;
+            mWindVec.abs2();
+            fopAc_ac_c* hitActor = mSph.GetTgHitAc();
+            if (hitActor && fpcM_GetProfName(hitActor) == PROC_PLAYER) {
+                s16 hitObjAngleY = cM_atan2s(hitNormal.x, hitNormal.z);
+                f32 f2 = cM_scos(hitActor->shape_angle.y - hitObjAngleY);
+                if (f2 > 0.0f) {
+                    f30 = 1.0f + attr().field_0x48*f2;
+                    f29 = 1.0f + attr().field_0x4C*f2;
+                }
+            }
+        }
+        f32 f28;
+        if (f31 > 0.01f) {
+            f31 = 0.9f;
+            f28 = 0.1f;
+        } else {
+            f31 = 0.0f;
+            f28 = 1.0f;
+        }
+        mWindVec = sp48 * f31 + hitNormal * f28 * f30;
+        if (fabsf(mWindVec.y) < 5.0f) {
+            mWindVec.y += attr().field_0x38*f31 + f29*(attr().field_0x3C*f28);
+        }
+        field_0x7A8 = 2;
     }
 
     void Act_c::eff_explode() {
@@ -647,7 +769,23 @@ namespace daBomb2 {
 
     /* 800DF488-800DF578       .text se_fall_water__Q27daBomb25Act_cFv */
     void Act_c::se_fall_water() {
-        /* Nonmatching */
+        cBgS_PolyInfo* temp[2] = {
+            field_0x526 ? NULL : &mAcch.m_wtr,
+            &mAcch.m_gnd,
+        };
+        
+        u32 mtrlSndId = 0x13;
+        for (int i = 0; i < ARRAY_SIZE(temp); i++) {
+            if (temp[i] == NULL)
+                continue;
+            int bg_index = temp[i]->GetBgIndex();
+            if (bg_index >= 0 && bg_index < 0x100) {
+                mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(*temp[i]);
+                break;
+            }
+        }
+
+        fopAcM_seStart(this, JA_SE_OBJ_FALL_WATER_S, mtrlSndId);
     }
 
     void Act_c::se_explode() {
@@ -716,15 +854,7 @@ namespace daBomb2 {
         bool water = chk_water_in();
         bool lava = chk_lava_in();
         
-        bool temp1 = true;
-        bool temp2 = false;
-        if(mAcch.ChkWallHit() || mAcch.ChkGroundHit()) {
-            temp2 = true;
-        }
-
-        if(!temp2 && !mAcch.ChkRoofHit()) {
-            temp1 = false;
-        }
+        bool hit = mAcch.ChkWallHit() || mAcch.ChkGroundHit() || mAcch.ChkRoofHit();
 
         bool ret = false;
         if(lava) {
@@ -737,7 +867,7 @@ namespace daBomb2 {
                 ret = true;
                 
             }
-            else if(temp1) {
+            else if(hit) {
                 if(field_0x741 || speed.abs() > attr().field_0x2C) {
                     eff_fuse_start();
                     set_nut_exp_interval();
@@ -780,26 +910,50 @@ namespace daBomb2 {
         return chk_sink_bg_nut();
     }
 
-    bool Act_c::chk_exp_pre() {
+    u8 Act_c::chk_exp_pre() {
         return chk_exp_cc() || chk_exp_timer();
     }
 
-    bool Act_c::chk_exp_post() {
+    u8 Act_c::chk_exp_post() {
         return chk_exp_bg();
     }
 
-    bool Act_c::chk_sink_post() {
+    u8 Act_c::chk_sink_post() {
         return chk_sink_bg();
     }
 
     /* 800DFC54-800DFD0C       .text set_real_shadow_flag__Q27daBomb25Act_cFv */
     void Act_c::set_real_shadow_flag() {
-        /* Nonmatching */
+        bool r30 = false;
+        if (mState == 1) {
+            if (model) {
+                r30 = true;
+            } else {
+                daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+                if (player->getGrabActorID() == fopAcM_GetID(this) && player->getGrabUpStart()) {
+                    r30 = true;
+                }
+            }
+        }
+        model = r30 ? mpModel : NULL;
     }
 
     /* 800DFD0C-800DFDB0       .text carry_fuse_start__Q27daBomb25Act_cFv */
     void Act_c::carry_fuse_start() {
-        /* Nonmatching */
+        bool r30 = false;
+        if (field_0x744 == 0) {
+            daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+            if (player->getGrabActorID() == fopAcM_GetID(this)) {
+                if (player->getGrabUpEnd()) {
+                    r30 = true;
+                }
+            } else {
+                r30 = true;
+            }
+        }
+        if (r30) {
+            eff_fuse_start();
+        }
     }
 
     void Act_c::on_carry() {
@@ -811,7 +965,7 @@ namespace daBomb2 {
     }
 
     void Act_c::mode_wait_init() {
-        field_0x694 = 0;
+        mState = 0;
         mGravity = attr().gravity;
         mSph.OnCoSPrmBit(CO_SPRM_SET);
     }
@@ -867,7 +1021,7 @@ namespace daBomb2 {
     }
 
     void Act_c::mode_carry_init() {
-        field_0x694 = 1;
+        mState = 1;
         speedF = 0.0f;
         speed = cXyz::Zero;
         off_carry();
@@ -899,7 +1053,7 @@ namespace daBomb2 {
     }
 
     void Act_c::mode_explode_init() {
-        field_0x694 = 2;
+        mState = 2;
         camera_lockoff();
         eff_fuse_end();
         mEnv.set(current.pos);
@@ -924,7 +1078,7 @@ namespace daBomb2 {
     }
 
     void Act_c::mode_sink_init() {
-        field_0x694 = 3;
+        mState = 3;
         speed.y *= 0.8f;
         speedF *= 0.8f;
         mSph.OffAtSPrmBit(AT_SPRM_SET);
@@ -938,7 +1092,8 @@ namespace daBomb2 {
 
     void Act_c::mode_sink() {
         f32 temp;
-        if(fopAcM_getWaterY(&current.pos, &temp) && field_0x528 != -1.0e9f && --field_0x698 > 0) {
+        bool temp2 = fopAcM_getWaterY(&current.pos, &temp);
+        if(temp2 && field_0x528 != -1.0e9f && --field_0x698 > 0) {
             current.pos.y += temp - field_0x528;
             field_0x528 = temp;
             posMoveF();
@@ -957,11 +1112,11 @@ namespace daBomb2 {
             &Act_c::mode_sink,
         };
 
-        if(fopAcM_checkCarryNow(this) && field_0x694 != 1) {
+        if(fopAcM_checkCarryNow(this) && mState != 1) {
             mode_carry_init();
         }
 
-        (this->*mode_proc[field_0x694])();
+        (this->*mode_proc[mState])();
         set_real_shadow_flag();
     }
 
@@ -985,7 +1140,21 @@ namespace daBomb2 {
 
     /* 800E0430-800E04FC       .text vib_proc__Q27daBomb25Act_cFv */
     void Act_c::vib_proc() {
-        
+        f32 f5 = field_0x7A0 - attr().field_0x50 * (field_0x790 - field_0x788);
+        f32 f6 = 1.0f / attr().field_0x5C;
+        f32 f7 = 1.0f - field_0x7A4;
+        f32 f0 = field_0x79C - attr().field_0x50 * (field_0x78C - field_0x784);
+        field_0x794 += f0 * f6;
+        field_0x798 += f5 * f6;
+        field_0x794 *= f7;
+        field_0x798 *= f7;
+        field_0x78C += field_0x794;
+        field_0x790 += field_0x798;
+        field_0x79C = 0.0f;
+        field_0x7A0 = 0.0f;
+        if (field_0x7A8 > 0) {
+            field_0x7A8--;
+        }
     }
 
     void Act_c::set_vib_tensor() {
@@ -1058,7 +1227,7 @@ namespace daBomb2 {
         };
 
         if(!daObj::PrmAbstract(this, PRM_1_W, PRM_1_S)) {
-            (this->*tensor_proc[field_0x694])();
+            (this->*tensor_proc[mState])();
             vib_proc();
             set_vib_tensor();
         }
@@ -1089,7 +1258,7 @@ namespace daBomb2 {
 
     bool Act_c::is_draw() {
         bool draw = false;
-        if(field_0x694 != 2 && !field_0x743 && ! field_0x742) {
+        if(mState != 2 && !field_0x743 && ! field_0x742) {
             draw = true;
         }
 
@@ -1097,7 +1266,7 @@ namespace daBomb2 {
     }
 
     void Act_c::draw_nut() {
-        J3DModelData* mdlData = mpModel->getModelData();
+        J3DModelData* mdlData = (J3DModelData*)mpModel->getModelData();
         mBck0.entry(mdlData, mBck0.getFrame());
         mBrk0.entry(mdlData, mBrk0.getFrame());
         dComIfGd_setListP1();
@@ -1184,7 +1353,7 @@ actor_process_profile_definition g_profile_Bomb2 = {
     0,
     0,
     &g_fopAc_Method.base,
-    0x0115,
+    0x0116,
     &daBomb2::Mthd_Table,
     fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     fopAc_ACTOR_e,

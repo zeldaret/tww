@@ -131,9 +131,9 @@ namespace daBomb2 {
         bool chk_exp_timer();
         bool chk_sink_bg_nut();
         bool chk_sink_bg();
-        bool chk_exp_pre();
-        bool chk_exp_post();
-        bool chk_sink_post();
+        u8 chk_exp_pre();
+        u8 chk_exp_post();
+        u8 chk_sink_post();
         void set_real_shadow_flag();
         void carry_fuse_start();
         void on_carry();
@@ -189,9 +189,8 @@ namespace daBomb2 {
         /* 0x528 */ f32 field_0x528;
         /* 0x52C */ dCcD_Stts mStts;
         /* 0x568 */ dCcD_Sph mSph;
-        /* 0x694 */ int field_0x694;
+        /* 0x694 */ int mState;
         /* 0x698 */ int field_0x698;
-
         /* 0x69C */ FuseSmokeCB_c mSmoke;
         /* 0x6B4 */ FuseSparksCB_c mSparks;
         /* 0x6C0 */ cXyz field_0x6C0;
@@ -206,7 +205,7 @@ namespace daBomb2 {
         /* 0x743 */ u8 field_0x743;
         /* 0x744 */ bool field_0x744;
         /* 0x745 */ bool field_0x745;
-        /* 0x748 */ cXyz field_0x748;
+        /* 0x748 */ cXyz mWindVec;
         /* 0x754 */ Mtx field_0x754;
         /* 0x784 */ f32 field_0x784;
         /* 0x788 */ f32 field_0x788;

@@ -160,5 +160,5 @@ void daBomb2::Act_c::set_no_hit() {
 }
 
 bool daBomb2::Act_c::chk_explode() {
-    return field_0x694 == 2;
+    return mState == 2;
 }

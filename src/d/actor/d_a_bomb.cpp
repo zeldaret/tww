@@ -3,16 +3,4 @@
 // Translation Unit: d_a_bomb.cpp
 //
 
-#include "d/actor/d_a_bomb.h"
-#include "SSystem/SComponent/c_counter.h"
-#include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/actor/d_a_player_main.h"
-#include "d/actor/d_a_sea.h"
-#include "d/d_kankyo_wether.h"
-#include "f_op/f_op_camera_mng.h"
-#include "f_op/f_op_kankyo_mng.h"
-#include "m_Do/m_Do_mtx.h"
-#include "m_Do/m_Do_lib.h"
-
 #include "d/actor/d_a_bomb3.inc"
