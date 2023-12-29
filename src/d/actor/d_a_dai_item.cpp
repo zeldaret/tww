@@ -4,15 +4,15 @@
 //
 
 #include "d/actor/d_a_dai_item.h"
-#include "dolphin/types.h"
+#include "d/d_kankyo_wether.h"
 
 /* 800E3638-800E36C8       .text convItemNo__FUc */
-void convItemNo(unsigned char) {
+static u32 convItemNo(u8) {
     /* Nonmatching */
 }
 
 /* 800E36C8-800E3798       .text _delete__13daStandItem_cFv */
-BOOL daStandItem_c::_delete() {
+bool daStandItem_c::_delete() {
     /* Nonmatching */
 }
 
@@ -42,8 +42,14 @@ void daStandItem_c::set_mtx() {
 }
 
 /* 800E443C-800E44A4       .text _execute__13daStandItem_cFv */
-BOOL daStandItem_c::_execute() {
-    /* Nonmatching */
+bool daStandItem_c::_execute() {
+    mTimer++;
+    execAction();
+    itemProc();
+    set_mtx();
+    if (mpCloth != NULL)
+        mpCloth->cloth_move();
+    return true;
 }
 
 /* 800E44A4-800E4518       .text itemProc__13daStandItem_cFv */
@@ -52,63 +58,76 @@ void daStandItem_c::itemProc() {
 }
 
 /* 800E4518-800E453C       .text actionFobj00__13daStandItem_cFv */
-void daStandItem_c::actionFobj00() {
-    /* Nonmatching */
+bool daStandItem_c::actionFobj00() {
+    animTest();
+    return true;
 }
 
 /* 800E453C-800E4560       .text actionFobj01__13daStandItem_cFv */
-void daStandItem_c::actionFobj01() {
-    /* Nonmatching */
+bool daStandItem_c::actionFobj01() {
+    animTest();
+    return true;
 }
 
 /* 800E4560-800E4584       .text actionFobj02__13daStandItem_cFv */
-void daStandItem_c::actionFobj02() {
-    /* Nonmatching */
+bool daStandItem_c::actionFobj02() {
+    animTest();
+    return true;
 }
 
 /* 800E4584-800E458C       .text actionFobj03__13daStandItem_cFv */
-void daStandItem_c::actionFobj03() {
-    /* Nonmatching */
+bool daStandItem_c::actionFobj03() {
+    return true;
 }
 
 /* 800E458C-800E4594       .text actionFobj04__13daStandItem_cFv */
-void daStandItem_c::actionFobj04() {
-    /* Nonmatching */
+bool daStandItem_c::actionFobj04() {
+    return true;
 }
 
 /* 800E4594-800E45E0       .text actionFobj05__13daStandItem_cFv */
-void daStandItem_c::actionFobj05() {
-    /* Nonmatching */
+bool daStandItem_c::actionFobj05() {
+    f32 windPow = dKyw_get_wind_pow();
+    if (mpBckAnm != NULL && windPow > 0.0f)
+        mpBckAnm->play();
+    return true;
 }
 
 /* 800E45E0-800E4770       .text actionFobj06__13daStandItem_cFv */
-void daStandItem_c::actionFobj06() {
+bool daStandItem_c::actionFobj06() {
     /* Nonmatching */
 }
 
 /* 800E4770-800E47BC       .text actionFobj07__13daStandItem_cFv */
-void daStandItem_c::actionFobj07() {
-    /* Nonmatching */
+bool daStandItem_c::actionFobj07() {
+    f32 windPow = dKyw_get_wind_pow();
+    if (mpBckAnm != NULL && windPow > 0.0f)
+        mpBckAnm->play();
+    return true;
 }
 
 /* 800E47BC-800E47E0       .text actionFobj08__13daStandItem_cFv */
-void daStandItem_c::actionFobj08() {
-    /* Nonmatching */
+bool daStandItem_c::actionFobj08() {
+    animTest();
+    return true;
 }
 
 /* 800E47E0-800E4B94       .text actionFobj09__13daStandItem_cFv */
-void daStandItem_c::actionFobj09() {
+bool daStandItem_c::actionFobj09() {
     /* Nonmatching */
 }
 
 /* 800E4B94-800E4BB8       .text actionFobj10__13daStandItem_cFv */
-void daStandItem_c::actionFobj10() {
-    /* Nonmatching */
+bool daStandItem_c::actionFobj10() {
+    animTest();
+    return true;
 }
 
 /* 800E4BB8-800E4BE4       .text actionFobj11__13daStandItem_cFv */
-void daStandItem_c::actionFobj11() {
-    /* Nonmatching */
+bool daStandItem_c::actionFobj11() {
+    mBckSpeed = 1.0f;
+    animTest();
+    return true;
 }
 
 /* 800E4BE4-800E4E44       .text animTest__13daStandItem_cFv */
@@ -143,7 +162,6 @@ void daStandItem_c::mode_wait_init() {
 
 /* 800E5230-800E5234       .text mode_wait__13daStandItem_cFv */
 void daStandItem_c::mode_wait() {
-    /* Nonmatching */
 }
 
 /* 800E5234-800E5240       .text mode_drop_init__13daStandItem_cFv */
@@ -157,31 +175,31 @@ void daStandItem_c::mode_drop() {
 }
 
 /* 800E52D0-800E53B8       .text _draw__13daStandItem_cFv */
-BOOL daStandItem_c::_draw() {
+bool daStandItem_c::_draw() {
     /* Nonmatching */
 }
 
 /* 800E53B8-800E53D8       .text daStandItem_Create__FPv */
-static s32 daStandItem_Create(void*) {
-    /* Nonmatching */
+static s32 daStandItem_Create(void* i_this) {
+    return ((daStandItem_c*)i_this)->_create();
 }
 
 /* 800E53D8-800E53FC       .text daStandItem_Delete__FPv */
-static BOOL daStandItem_Delete(void*) {
-    /* Nonmatching */
+static BOOL daStandItem_Delete(void* i_this) {
+    return ((daStandItem_c*)i_this)->_delete();
 }
 
 /* 800E53FC-800E5420       .text daStandItem_Draw__FPv */
-static BOOL daStandItem_Draw(void*) {
-    /* Nonmatching */
+static BOOL daStandItem_Draw(void* i_this) {
+    return ((daStandItem_c*)i_this)->_draw();
 }
 
 /* 800E5420-800E5444       .text daStandItem_Execute__FPv */
-static BOOL daStandItem_Execute(void*) {
-    /* Nonmatching */
+static BOOL daStandItem_Execute(void* i_this) {
+    return ((daStandItem_c*)i_this)->_execute();
 }
 
 /* 800E5444-800E544C       .text daStandItem_IsDelete__FPv */
-static BOOL daStandItem_IsDelete(void*) {
-    /* Nonmatching */
+static BOOL daStandItem_IsDelete(void* i_this) {
+    return TRUE;
 }

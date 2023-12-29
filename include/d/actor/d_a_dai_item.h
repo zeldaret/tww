@@ -13,25 +13,25 @@ class daStandItem_c : public fopAc_ac_c {
 public:
     void getItemNo() const {}
 
-    BOOL _delete();
+    bool _delete();
     void CreateHeap();
     void CreateInit();
     s32 _create();
     void set_mtx();
-    BOOL _execute();
+    bool _execute();
     void itemProc();
-    void actionFobj00();
-    void actionFobj01();
-    void actionFobj02();
-    void actionFobj03();
-    void actionFobj04();
-    void actionFobj05();
-    void actionFobj06();
-    void actionFobj07();
-    void actionFobj08();
-    void actionFobj09();
-    void actionFobj10();
-    void actionFobj11();
+    bool actionFobj00();
+    bool actionFobj01();
+    bool actionFobj02();
+    bool actionFobj03();
+    bool actionFobj04();
+    bool actionFobj05();
+    bool actionFobj06();
+    bool actionFobj07();
+    bool actionFobj08();
+    bool actionFobj09();
+    bool actionFobj10();
+    bool actionFobj11();
     void animTest();
     void animTestForOneTime();
     void execAction();
@@ -41,7 +41,7 @@ public:
     void mode_wait();
     void mode_drop_init();
     void mode_drop();
-    BOOL _draw();
+    bool _draw();
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhsDai;
