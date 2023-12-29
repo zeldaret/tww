@@ -967,7 +967,7 @@ BOOL daTbox_c::actionDemo() {
     s16 eventId = mEvtInfo.getEventId();
     dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
 
-    if (play->mEvtManager.endCheck(eventId)) {
+    if (dComIfGp_evmng_endCheck(eventId)) {
         setAction(&daTbox_c::actionWait);
         play->mEvtCtrl.reset();
 

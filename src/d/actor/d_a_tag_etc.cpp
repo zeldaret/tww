@@ -65,7 +65,7 @@ BOOL daTag_Etc_c::otherCheck(fopAc_ac_c* pActor) {
 void daTag_Etc_c::demoProc() {
     daNpc_Md_c* pMedli;
     int staffIdx;
-    pMedli = (daNpc_Md_c*)fopAcM_SearchByID(mProcID);
+    pMedli = (daNpc_Md_c*)fopAcM_SearchByID(mMedliPID);
     staffIdx = dComIfGp_evmng_getMyStaffId("TAG_ETC_D", NULL, 0);
 
     if (staffIdx != -1) {
@@ -91,7 +91,7 @@ void daTag_Etc_c::demoInitProc() {
 
     switch (getType2()) {
     case 0:
-        pActor = fopAcM_SearchByID(mProcID);
+        pActor = fopAcM_SearchByID(mMedliPID);
         dComIfGp_event_setItemPartner(pActor);
         field_0x29A = 15;
         break;
@@ -146,7 +146,7 @@ static BOOL daTag_Etc_action_search(daTag_Etc_c* i_this) {
     }
 
     if (actor != NULL) {
-        i_this->mProcID = fopAcM_GetID(actor);
+        i_this->mMedliPID = fopAcM_GetID(actor);
         i_this->setActio(ACT_HUNT);
     }
 
@@ -156,7 +156,7 @@ static BOOL daTag_Etc_action_search(daTag_Etc_c* i_this) {
 /* 000004E8-00000560       .text daTag_Etc_action_event__FP11daTag_Etc_c */
 static BOOL daTag_Etc_action_event(daTag_Etc_c* i_this) {
     if (dComIfGp_evmng_endCheck(i_this->mEventIdx)) {
-        i_this->mProcID = fpcM_ERROR_PROCESS_ID_e;
+        i_this->mMedliPID = fpcM_ERROR_PROCESS_ID_e;
         i_this->setActio(ACT_SEARCH);
         dComIfGp_event_reset();
     } else {
@@ -168,13 +168,13 @@ static BOOL daTag_Etc_action_event(daTag_Etc_c* i_this) {
 
 /* 00000560-0000063C       .text daTag_Etc_action_ready__FP11daTag_Etc_c */
 static BOOL daTag_Etc_action_ready(daTag_Etc_c* i_this) {
-    fopAc_ac_c* actor = fopAcM_SearchByID(i_this->mProcID);
+    fopAc_ac_c* actor = fopAcM_SearchByID(i_this->mMedliPID);
     if (i_this->mEvtInfo.checkCommandDemoAccrpt()) {
         i_this->demoInitProc();
         i_this->setActio(ACT_EVENT);
         daTag_Etc_action_event(i_this);
     } else if (actor == NULL || !i_this->rangeCheck(actor) || !i_this->otherCheck(actor)) {
-        i_this->mProcID = fpcM_ERROR_PROCESS_ID_e;
+        i_this->mMedliPID = fpcM_ERROR_PROCESS_ID_e;
         i_this->setActio(ACT_SEARCH);
     } else {
         fopAcM_orderOtherEventId(i_this, i_this->mEventIdx);
@@ -185,9 +185,9 @@ static BOOL daTag_Etc_action_ready(daTag_Etc_c* i_this) {
 
 /* 0000063C-000006EC       .text daTag_Etc_action_hunt__FP11daTag_Etc_c */
 static BOOL daTag_Etc_action_hunt(daTag_Etc_c* i_this) {
-    daNpc_Md_c* actor = (daNpc_Md_c*)fopAcM_SearchByID(i_this->mProcID);
+    daNpc_Md_c* actor = (daNpc_Md_c*)fopAcM_SearchByID(i_this->mMedliPID);
     if (actor == NULL) {
-        i_this->mProcID = fpcM_ERROR_PROCESS_ID_e;
+        i_this->mMedliPID = fpcM_ERROR_PROCESS_ID_e;
         i_this->setActio(ACT_SEARCH);
         return TRUE;
     }

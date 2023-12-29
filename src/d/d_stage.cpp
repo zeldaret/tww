@@ -209,10 +209,10 @@ int createRoomScene(int param_0) {
 /* 80040E38-80040E6C       .text checkRoomDisp__20dStage_roomControl_cCFi */
 BOOL dStage_roomControl_c::checkRoomDisp(int i_roomNo) const {
     if (checkStatusFlag(i_roomNo, 8)) {
-        return false;
+        return FALSE;
     }
 
-    return checkStatusFlag(i_roomNo, 16) ? true : false;
+    return checkStatusFlag(i_roomNo, 16) ? TRUE : FALSE;
 }
 
 /* 80040E6C-80040FD8       .text loadRoom__20dStage_roomControl_cFiPUc */

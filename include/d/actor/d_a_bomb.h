@@ -14,11 +14,14 @@ public:
     daBomb_fuseSmokeEcallBack() {}
     ~daBomb_fuseSmokeEcallBack() {}
     
-    void execute(JPABaseEmitter*);
+    void execute(JPABaseEmitter*) {}
     void executeAfter(JPABaseEmitter*);
-    void draw(JPABaseEmitter*);
+    void draw(JPABaseEmitter*) {}
     
-    void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
+    void setup(JPABaseEmitter* emitter, const cXyz* pos, const csXyz*, s8) {
+        mpPos = pos;
+        mpEmitter = emitter;
+    }
 
     /* 0x04 */ s16 field_0x04;
     /* 0x08 */ const cXyz* mpPos;
@@ -33,9 +36,12 @@ public:
     ~daBomb_fuseSparksEcallBack() {}
     
     void execute(JPABaseEmitter*);
-    void draw(JPABaseEmitter*);
+    void draw(JPABaseEmitter*) {}
 
-    void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
+    void setup(JPABaseEmitter* emitter, const cXyz* pos, const csXyz*, s8) {
+        mpPos = pos;
+        mpEmitter = emitter;
+    }
 
     /* 0x04 */ const cXyz* mpPos;
     /* 0x08 */ JPABaseEmitter* mpEmitter;
@@ -49,6 +55,8 @@ public:
 
 class daBomb_c : public fopAc_ac_c {
 public:
+    typedef bool(daBomb_c::*procFunc)();
+
     daBomb_c();
 
     void draw_norm();
@@ -101,7 +109,7 @@ public:
     void se_cannon_fly_stop();
     void eff_water_splash();
     bool bombDelete();
-    bool createHeap();
+    BOOL createHeap();
     int create();
     void create_init();
 
@@ -159,8 +167,6 @@ public:
     void _prm_chk_version() const;
 
 private:
-    typedef bool(daBomb_c::*procFunc)();
-
     /* 0x290 */ procFunc mFunc;
     /* 0x29C */ request_of_phase_process_class mPhs;
     /* 0x2A4 */ J3DModel* mpModel;

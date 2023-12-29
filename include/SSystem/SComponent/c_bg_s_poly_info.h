@@ -41,8 +41,8 @@ public:
 
     virtual ~cBgS_PolyInfo() {}
 
-    s32 GetPolyIndex() const { return mPolyIndex; }
-    u16 GetBgIndex() const { return mBgIndex; }
+    int GetPolyIndex() const { return mPolyIndex; }
+    int GetBgIndex() const { return mBgIndex; }
     bool ChkSetInfo() const {
         if (mPolyIndex == 0xFFFF || mBgIndex == 0x100) {
             return false;

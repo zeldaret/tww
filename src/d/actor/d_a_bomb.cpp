@@ -8,6 +8,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_sea.h"
 #include "d/d_kankyo_wether.h"
 #include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
@@ -361,20 +362,10 @@ bool daBomb_c::checkExplodeBg_norm() {
 
 /* 800DA098-800DA1A4       .text checkExplodeBg_nut__8daBomb_cFv */
 bool daBomb_c::checkExplodeBg_nut() {
-    /* Nonmatching - regalloc */
     bool sink = chk_water_in();
     bool burn = chk_lava_hit();
 
-    //these 2 ifs might be an inline?
-    bool temp1 = true;
-    bool temp2 = false;
-    if(mAcch.ChkWallHit() || mAcch.ChkGroundHit()) {
-        temp2 = true;
-    }
-
-    if(!temp2 && !mAcch.ChkRoofHit()) {
-        temp1 = false;
-    }
+    bool hit = mAcch.ChkWallHit() || mAcch.ChkGroundHit() || mAcch.ChkRoofHit();
 
     bool ret = false;
     if(burn) {
@@ -385,7 +376,7 @@ bool daBomb_c::checkExplodeBg_nut() {
             makeWaterEffect();
             field_0x781 = true;
         }
-        else if(temp1 && field_0x780) {
+        else if(hit && field_0x780) {
             change_state(STATE_1);
             setFuseEffect();
             if(30 < mRestTime) {
@@ -401,23 +392,14 @@ bool daBomb_c::checkExplodeBg_nut() {
 
 /* 800DA1A4-800DA284       .text checkExplodeBg_cannon__8daBomb_cFv */
 bool daBomb_c::checkExplodeBg_cannon() {
-    /* Nonmatching - regalloc */
     bool sink = chk_water_in();
     bool burn = chk_lava_hit();
 
-    //these 2 ifs might be an inline?
-    bool temp1 = true;
-    bool temp2 = false;
-    if(mAcch.ChkWallHit() || mAcch.ChkGroundHit()) {
-        temp2 = true;
-    }
-    if(!temp2 && !mAcch.ChkRoofHit()) {
-        temp1 = false;
-    }
+    bool hit = mAcch.ChkWallHit() || mAcch.ChkGroundHit() || mAcch.ChkRoofHit();
 
     bool dead = chk_dead_zone();
     bool ret = false;
-    if(burn || temp1) {
+    if(burn || hit) {
         ret = procExplode_init();
     }
     else {
@@ -447,18 +429,10 @@ bool daBomb_c::checkExplodeBg() {
 
 /* 800DA320-800DA3A0       .text water_tention__8daBomb_cFv */
 void daBomb_c::water_tention() {
-    /* Nonmatching - regalloc */
     if(chk_water_in()) {
         if(field_0x554.y != -1.0e9f && field_0x554.z != -1.0e9f) {
-            f32 temp;
-            if(field_0x554.y - field_0x554.z < 0) {
-                temp = 0.8f * field_0x554.z;
-            }
-            else {
-                temp = 0.2f * field_0x554.z;
-            }
-
-            current.pos.y += temp;
+            f32 temp = field_0x554.y - field_0x554.z;
+            current.pos.y += temp < 0.0f ? 0.8f * temp : 0.2f * temp;
         }
     }
 }
@@ -526,7 +500,34 @@ void daBomb_c::bgCrrPos_lava() {
 
 /* 800DA5E0-800DA700       .text bgCrrPos_water__8daBomb_cFv */
 void daBomb_c::bgCrrPos_water() {
-    /* Nonmatching */
+    f32 f31 = mAcch.m_wtr.GetHeight();
+    bool r31 = daSea_ChkArea(current.pos.x, current.pos.z);
+    f32 f1 = daSea_calcWave(current.pos.x, current.pos.z);
+    bool r4 = mAcch.ChkWaterIn();
+    bool r3 = r31 && current.pos.y < f1;
+    bool r5 = false;
+    field_0x554.z = field_0x554.y;
+    if (r4 && r3) {
+        if (f31 > f1) {
+            r3 = 0;
+        } else {
+            r4 = 0;
+        }
+    }
+    if (r4) {
+        field_0x554.y = f31;
+        r5 = true;
+        field_0x562 = 0;
+    } else if (r3) {
+        field_0x554.y = f1;
+        r5 = true;
+        field_0x562 = 1;
+    } else {
+        field_0x554.y = -1e9f;
+        field_0x562 = 0;
+    }
+    field_0x560 = r5 && !mbWaterIn;
+    mbWaterIn = r5;
 }
 
 bool daBomb_c::chk_water_land() {
@@ -580,14 +581,34 @@ void daBomb_c::bound(f32 param_1) {
     }
     else {
         if(mAcch.ChkGroundHit()) {
-            cLib_addCalc(&speedF, 0.0f, 0.5f, 5.5f, 1.0f);
+            cLib_addCalc(&speedF, 0.0f, 0.5f, 5.0f, 1.0f);
         }
     }
 }
 
 /* 800DA8C8-800DA9DC       .text set_real_shadow_flag__8daBomb_cFv */
 void daBomb_c::set_real_shadow_flag() {
-    /* Nonmatching */
+    bool r31 = chk_state(STATE_2);
+    bool r3 = chk_state(STATE_3);
+    bool r30 = false;
+    if (field_0x7C8 <= 1 && (r31 || r3)) {
+        if (model) {
+            r30 = true;
+        } else if (r3) {
+            r30 = true;
+        } else if (field_0x7C8 == 1) {
+            r30 = true;
+        } else {
+            daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+            if (player->getGrabActorID() == fopAcM_GetID(this) && player->getGrabUpStart()) {
+                r30 = true;
+            }
+        }
+    }
+    if (field_0x7C8 > 0) {
+        field_0x7C8--;
+    }
+    model = r30 ? mpModel : NULL;
 }
 
 void daBomb_c::setRoomInfo() {
@@ -838,15 +859,15 @@ bool daBomb_c::procExplode() {
 
     switch(field_0x774) {
     case 0:
-        cLib_addCalc(&field_0x778, 0.0f, 0.05f, 0.04f, 0.001f);
-        if(field_0x778 >= 0.01f) {
+        cLib_addCalc(&field_0x778, 1.0f, 0.5f, 0.4f, 0.01f);
+        if(field_0x778 >= 0.99f) {
             field_0x774 += 1;
         }
 
         break;
     case 1:
-        cLib_addCalc(&field_0x778, 0.0f, 0.05f, 0.04f, 0.01f);
-        if(field_0x778 <= 0.99f) {
+        cLib_addCalc(&field_0x778, 0.0f, 0.05f, 0.04f, 0.001f);
+        if(field_0x778 <= 0.01f) {
             field_0x774 += 1;
         }
 
@@ -1058,7 +1079,50 @@ static BOOL daBomb_Execute(daBomb_c* i_this) {
 
 /* 800DBF44-800DC250       .text set_wind_vec__8daBomb_cFv */
 void daBomb_c::set_wind_vec() {
-    /* Nonmatching */
+    mWindVec *= 0.95f;
+    if (mWindVec.abs2() < 0.1f)
+        mWindVec.setall(0.0f);
+    if (!mSph.ChkTgHit())
+        return;
+    cCcD_Obj* hitObj = mSph.GetTgHitObj();
+    if (hitObj == NULL)
+        return;
+    if (!(hitObj->GetAtType() & AT_TYPE_LEAF_WIND))
+        return;
+    cXyz sp48 = *mSph.GetTgRVecP();
+    f32 f31 = sp48.abs2();
+    if (f31 > 180.0f*180.0f) {
+        sp48 *= 180.0f / sqrtf(f31);;
+    }
+    cCcD_ShapeAttr* hitShapeAttr = hitObj->GetShapeAttr();
+    cXyz hitNormal = cXyz::Zero;
+    f32 f30 = 1.0f;
+    f32 f29 = 1.0f;
+    if (hitShapeAttr->GetNVec(current.pos, &hitNormal)) {
+        hitNormal *= 50.0f;
+        mWindVec.abs2();
+        fopAc_ac_c* hitActor = mSph.GetTgHitAc();
+        if (hitActor && fpcM_GetProfName(hitActor) == PROC_PLAYER) {
+            s16 hitObjAngleY = cM_atan2s(hitNormal.x, hitNormal.z);
+            f32 f2 = cM_scos(hitActor->shape_angle.y - hitObjAngleY);
+            if (f2 > 0.0f) {
+                f30 = 1.0f + 2.0f*f2;
+                f29 = 1.0f + 0.3f*f2;
+            }
+        }
+    }
+    f32 f28;
+    if (f31 > 0.01f) {
+        f31 = 0.9f;
+        f28 = 0.1f;
+    } else {
+        f31 = 0.0f;
+        f28 = 1.0f;
+    }
+    mWindVec = sp48 * f31 + hitNormal * f28 * f30;
+    if (fabsf(mWindVec.y) < 5.0f) {
+        mWindVec.y += f29*(100.0f*f28) + 140.0f*f31;
+    }
 }
 
 /* 800DC250-800DC2D0       .text anm_play_nut__8daBomb_cFv */
@@ -1105,16 +1169,26 @@ void daBomb_c::se_cannon_fly_stop() {
 }
 
 void daBomb_c::eff_water_splash() {
-    cXyz pos;
-    pos.z = current.pos.z;
-    pos.y = field_0x554.y;
-    pos.x = current.pos.x;
+    cXyz pos(current.pos.x, field_0x554.y, current.pos.z);
     fopKyM_createWpillar(&pos, 0.5f, 0.75f, 0);
 
-    //what
-    u32 soundId = 0x13;
+    cBgS_PolyInfo* temp[2] = {
+        field_0x562 ? NULL : &mAcch.m_wtr,
+        &mAcch.m_gnd,
+    };
+    
+    u32 mtrlSndId = 0x13;
+    for (int i = 0; i < ARRAY_SIZE(temp); i++) {
+        if (temp[i] == NULL)
+            continue;
+        int bg_index = temp[i]->GetBgIndex();
+        if (bg_index >= 0 && bg_index < 0x100) {
+            mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(*temp[i]);
+            break;
+        }
+    }
 
-    fopAcM_seStart(this, JA_SE_OBJ_FALL_WATER_S, soundId);
+    fopAcM_seStart(this, JA_SE_OBJ_FALL_WATER_S, mtrlSndId);
 }
 
 static bool daBomb_IsDelete(daBomb_c*) {
@@ -1142,7 +1216,7 @@ bool daBomb_c::bombDelete() {
 
     se_cannon_fly_stop();
     if(mType == 1) {
-        dComIfG_resDelete(&mPhs, attrType().resName);
+        dComIfG_resDelete(&mPhs, m_attrType[mType].resName);
     }
 
     dKy_actor_addcol_set(0, 0, 0, 0.0f);
@@ -1179,7 +1253,7 @@ int daBomb_c::create() {
 
     int status;
     if(mType == 1) {
-        status = dComIfG_resLoad(&mPhs, attrType().resName);
+        status = dComIfG_resLoad(&mPhs, m_attrType[mType].resName);
     }
     else {
         status = cPhs_COMPLEATE_e;
@@ -1198,15 +1272,43 @@ int daBomb_c::create() {
 }
 
 /* 800DCC0C-800DCEBC       .text __ct__8daBomb_cFv */
-daBomb_c::daBomb_c() {
-    /* Nonmatching */
-}
+daBomb_c::daBomb_c() {}
 
 static int daBomb_Create(fopAc_ac_c* i_this) {
     return static_cast<daBomb_c*>(i_this)->create();
 }
 
-dCcD_SrcSph l_sph_src = {};
+// TODO: not sure why this appears in data
+daBomb_c::procFunc dummy_5390 = &daBomb_c::procSink;
+
+static dCcD_SrcSph l_sph_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ AT_TYPE_BOMB,
+        /* SrcObjAt  Atp     */ 0x04,
+        /* SrcObjAt  SPrm    */ AT_SPRM_GRP,
+        /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
+        /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_OTHER,
+        /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK8 | CO_SPRM_VSGRP,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 1,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ G_TG_SPRM_NO_CON_HIT,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGSphS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 30.0f,
+    },
+};
 
 void daBomb_c::create_init() {
     mCir.SetWall(30.0f, 30.0f);
@@ -1284,31 +1386,6 @@ void daBomb_c::create_init() {
     mCullSizeFar = 10.0f;
 
     init_mtx();
-}
-
-/* 800DD348-800DD34C       .text draw__26daBomb_fuseSparksEcallBackFP14JPABaseEmitter */
-void daBomb_fuseSparksEcallBack::draw(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-void daBomb_fuseSparksEcallBack::setup(JPABaseEmitter* emitter, const cXyz* pos, const csXyz*, signed char) {
-    mpPos = pos;
-    mpEmitter = emitter;
-}
-
-/* 800DD358-800DD35C       .text execute__25daBomb_fuseSmokeEcallBackFP14JPABaseEmitter */
-void daBomb_fuseSmokeEcallBack::execute(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-/* 800DD35C-800DD360       .text draw__25daBomb_fuseSmokeEcallBackFP14JPABaseEmitter */
-void daBomb_fuseSmokeEcallBack::draw(JPABaseEmitter*) {
-    /* Nonmatching */
-}
-
-void daBomb_fuseSmokeEcallBack::setup(JPABaseEmitter* emitter, const cXyz* pos, const csXyz*, signed char) {
-    mpPos = pos;
-    mpEmitter = emitter;
 }
 
 actor_method_class l_daBomb_Method = {

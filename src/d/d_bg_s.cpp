@@ -299,7 +299,7 @@ s32 dBgS::GetRoomId(cBgS_PolyInfo& polyInfo) {
 
 /* 800A0F88-800A111C       .text ChkPolyHSStick__4dBgSFR13cBgS_PolyInfo */
 u32 dBgS::ChkPolyHSStick(cBgS_PolyInfo& polyInfo) {
-    s32 bg_index = polyInfo.GetBgIndex();
+    s32 bg_index = (u16)polyInfo.GetBgIndex();
     JUT_ASSERT(0x583, 0 <= bg_index && bg_index < 256);
     if (!m_chk_element[bg_index].ChkUsed())
         return FALSE;
