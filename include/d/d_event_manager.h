@@ -39,7 +39,7 @@ public:
     void runProc();
     dEvDtEvent_c* getEventData(s16);
     s16 getEventIdx(const char*, u8);
-    void order(s16);
+    BOOL order(s16);
     BOOL startCheck(s16);
     BOOL startCheckOld(const char*);
     BOOL endCheck(s16);
@@ -54,7 +54,7 @@ public:
     void getMySubstanceNum(int, const char*);
     void cutEnd(int);
     u16 getEventPrio(s16);
-    void getEventEndSound(s16);
+    u8 getEventEndSound(s16);
     void exceptionProc();
     void issueStaff(const char*);
     void cancelStaff(const char*);

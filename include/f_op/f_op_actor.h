@@ -17,12 +17,14 @@ struct actor_method_class {
 enum fopAc_Status_e {
     // Note: The lowest 5 bits of the status field (& 0x1F) act as an index controlling the map icon type.
     fopAcStts_SHOWMAP_e     = 0x00000020,
+    fopAcStts_UNK40_e       = 0x00000040,
     fopAcStts_NOCULLEXEC_e  = 0x00000080,
     fopAcStts_CULL_e        = 0x00000100,
     fopAcStts_FREEZE_e      = 0x00000400,
     fopAcStts_UNK800_e      = 0x00000800,
     fopAcStts_CARRY_e       = 0x00002000,
     fopAcStts_UNK4000_e     = 0x00004000,
+    fopAcStts_FORCEMOVE_e   = 0x00008000,
     fopAcStts_NOPAUSE_e     = 0x00020000,
     fopAcStts_UNK40000_e    = 0x00040000,
     fopAcStts_UNK80000_e    = 0x00080000,
@@ -123,6 +125,7 @@ enum dEvt_Condition_e {
     dEvtCnd_CANDOOR_e     = 0x0004,
     dEvtCnd_CANGETITEM_e  = 0x0008,
     dEvtCnd_CANTALKITEM_e = 0x0020,
+    dEvtCnd_CANCATCH_e    = 0x0040,
 };
 
 // TODO: move to d_event.h
@@ -148,6 +151,11 @@ public:
     BOOL chkCondition(u16 condition) { return (mCondition & condition) == condition; }
     void onCondition(u16 cond) { mCondition |= cond; }
     void offCondition(u16 cond) { mCondition &= ~cond; }
+    s16 runPhotoEventCB(void* ac, int flag) {
+        if (mpPhotoCB == NULL)
+            return -1;
+        return mpPhotoCB(ac, flag);
+    }
 
     BOOL checkCommandTalk() { return mCommand == dEvtCmd_INTALK_e; }
     BOOL checkCommandItem() { return mCommand == dEvtCmd_INGETITEM_e; }

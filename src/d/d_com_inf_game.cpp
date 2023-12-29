@@ -155,7 +155,7 @@ void dComIfG_play_c::itemInit() {
     field_0x495b = 0;
     field_0x495c = 0;
     field_0x495d = 0;
-    field_0x495e = 0;
+    mPictureStatus = 0;
     field_0x495f = 0;
     field_0x4960 = 0;
     field_0x4961 = 0;

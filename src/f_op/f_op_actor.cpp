@@ -39,7 +39,7 @@ s32 fopAc_Draw(void* pProc) {
 
         if (
             (
-                moveApproval == 2
+                moveApproval == dEvtMove_FORCE_e
                 || (
                     !fopAcM_checkStatus(actor, fopAc_ac_c::getStopStatus())
                     && !(
@@ -84,10 +84,10 @@ s32 fopAc_Execute(void* pProc) {
 
         if (
             (
-                moveApproval == 2
+                moveApproval == dEvtMove_FORCE_e
                 || (
                     (
-                        moveApproval != 0
+                        moveApproval != dEvtMove_NOMOVE_e
                         && !fopAcM_checkStatus(actor, fopAc_ac_c::getStopStatus())
                     )
                     && (

@@ -56,10 +56,10 @@ const char* daTag_Msg_c::myDemoName() {
     if (getMessage() == 0x1902) {
         return "RT_TALK";
     }
-    if (pEventInfo == NULL || (int)eventNo == 0xff || pEventInfo->field_0x0 < (int)eventNo) {
+    if (pEventInfo == NULL || (int)eventNo == 0xff || pEventInfo->num < (int)eventNo) {
         return "DEFAULT_MSG";
     }
-    return pEventInfo->mName + eventNo * 0x18 + 1;
+    return pEventInfo->events[eventNo].mName;
 }
 
 u16 daTag_Msg_c::getMessage() {

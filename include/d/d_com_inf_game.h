@@ -75,7 +75,7 @@ enum ALWAYS_RES_FILE_ID { // IDs and indexes are synced
     ALWAYS_BCK_YJ_LOOP=0x19,
     ALWAYS_BCK_YJ_OUT=0x1A,
     ALWAYS_BCK_YJ_SCALE=0x1B,
-    
+
     /* BDL */
     ALWAYS_BDL_ARROWITEM=0x1E,
     ALWAYS_BDL_FA=0x1F,
@@ -91,7 +91,7 @@ enum ALWAYS_RES_FILE_ID { // IDs and indexes are synced
     ALWAYS_BDL_VHAPL=0x29,
     ALWAYS_BDL_VHRTL=0x2A,
     ALWAYS_BDL_VKEYL=0x2B,
-    
+
     /* BDLM */
     ALWAYS_BDL_IB=0x2E,
     ALWAYS_BDL_MPA_SIMI=0x2F,
@@ -110,17 +110,17 @@ enum ALWAYS_RES_FILE_ID { // IDs and indexes are synced
     ALWAYS_BDL_YA=0x3C,
     ALWAYS_BDL_YAZIRUSHI_01=0x3D,
     ALWAYS_BDL_YTHDR00=0x3E,
-    
+
     /* BMTM */
     ALWAYS_BMT_ICE=0x41,
-    
+
     /* BPK */
     ALWAYS_BPK_YJ_DELETE=0x44,
     ALWAYS_BPK_YJ_IN=0x45,
     ALWAYS_BPK_YJ_LOOP=0x46,
     ALWAYS_BPK_YJ_OUT=0x47,
     ALWAYS_BPK_YJ_SCALE=0x48,
-    
+
     /* BRK */
     ALWAYS_BRK_IB_01=0x4B,
     ALWAYS_BRK_IB_02=0x4C,
@@ -130,7 +130,7 @@ enum ALWAYS_RES_FILE_ID { // IDs and indexes are synced
     ALWAYS_BRK_VHANL=0x50,
     ALWAYS_BRK_VLUPL=0x51,
     ALWAYS_BRK_YTHDR00=0x52,
-    
+
     /* BTK */
     ALWAYS_BTK_EFA_USONAMI_01=0x55,
     ALWAYS_BTK_IB=0x56,
@@ -144,17 +144,17 @@ enum ALWAYS_RES_FILE_ID { // IDs and indexes are synced
     ALWAYS_BTK_W_PILLAR_A=0x5E,
     ALWAYS_BTK_YA=0x5F,
     ALWAYS_BTK_YTHDR00=0x60,
-    
+
     /* BTP */
     ALWAYS_BTP_MPA_SIMI=0x63,
     ALWAYS_BTP_MPI_KIBAKO_TARU=0x64,
     ALWAYS_BTP_MPI_KINOHAHEN=0x65,
     ALWAYS_BTP_MPI_KOISHI=0x66,
     ALWAYS_BTP_MPM_TUBO=0x67,
-    
+
     /* DAT */
     ALWAYS_BIN_ITEM_TABLE=0x6A,
-    
+
     /* TEX */
     ALWAYS_BTI_AK_HOUSHI00=0x6D,
     ALWAYS_BTI_AK_SMOKE01=0x6E,
@@ -337,7 +337,7 @@ public:
     void removeWood();
     void executeWood();
     void drawWood();
-    
+
     BOOL checkCameraAttentionStatus(int idx, u32 flag) {
         return mCameraInfo[idx].mCameraAttentionStatus & flag;
     }
@@ -435,7 +435,7 @@ public:
 
     dTimer_c* getTimerPtr() { return mTimerInfo.mTimerPtr; }
     s32 getTimerMode() { return mTimerInfo.mTimerMode; }
-    
+
     s16 getItemMagicCount() { return mItemMagicCount; }
     void setItemMagicCount(s16 magic) { mItemMagicCount += magic; }
     s16 getItemMaxMagicCount() { return mItemMaxMagicCount; }
@@ -445,10 +445,10 @@ public:
 
     f32 getItemLifeCount() { return mItemLifeCount; }
     void setItemLifeCount(f32 num) { mItemLifeCount += num; }
-    
+
     s16 getItemMaxLifeCount() { return mItemMaxLifeCount; }
     void setItemMaxLifeCount(s16 num) { mItemMaxLifeCount += num; }
-    
+
     s16 getItemArrowNumCount() { return mItemArrowNumCount; }
     void setItemArrowNumCount(s16 num) { mItemArrowNumCount += num; }
 
@@ -465,7 +465,7 @@ public:
     u8 getSelectItem(int idx) { return mSelectItem[idx]; }
     void setSelectItem(int idx, u8 itemNo) { mSelectItem[idx] = itemNo; }
     void setSelectEquip(int idx, u8 itemNo) { mSelectEquip[idx] = itemNo; }
-    
+
     void setItem(u8 i_slot, u8 i_itemNo) {
         mItemSlot = i_slot;
         mItemNo = i_itemNo;
@@ -474,6 +474,7 @@ public:
     void setAStatus(u8 status) { mCurrButtonBAction = status; }
     void setDoStatus(u8 status) { mCurrButtonAAction = status; }
     void setRStatusForce(u8 status) { field_0x4930 = status; }
+    inline u8 getPictureStatus() { return mPictureStatus; }
 
     u8 getScopeType() { return mbCamOverrideFarPlane; }
     void setScopeType(u8 v) { mbCamOverrideFarPlane = v; }
@@ -672,7 +673,7 @@ public:
     /* 0x495B */ u8 field_0x495b;
     /* 0x495C */ u8 field_0x495c;
     /* 0x495D */ u8 field_0x495d;
-    /* 0x495E */ u8 field_0x495e;
+    /* 0x495E */ u8 mPictureStatus;
     /* 0x495F */ u8 field_0x495f;
     /* 0x4960 */ u8 field_0x4960;
     /* 0x4961 */ u8 field_0x4961;
@@ -2133,7 +2134,7 @@ inline void dComIfGp_setSelectItem(int i_btnIdx) {
         int invIdx = dComIfGs_getSelectItem(i_btnIdx);
         u8 itemNo = dComIfGs_getItem(invIdx);
         g_dComIfG_gameInfo.play.setSelectItem(i_btnIdx, itemNo);
-        
+
         invIdx = dComIfGs_getSelectItem(i_btnIdx);
         itemNo = dComIfGs_getItem(invIdx);
         if (itemNo == 0xFF) {
@@ -2175,6 +2176,10 @@ inline void dComIfGp_setDoStatus(u8 status) {
 
 inline void dComIfGp_setRStatusForce(u8 status) {
     g_dComIfG_gameInfo.play.setRStatusForce(status);
+}
+
+inline u8 dComIfGp_getPictureStatus() {
+    return g_dComIfG_gameInfo.play.getPictureStatus();
 }
 
 inline s16 dComIfGp_getMiniGameRupee() {
@@ -2434,6 +2439,14 @@ inline BOOL dComIfGp_evmng_existence(const char* pName) {
 
 inline BOOL dComIfGp_evmng_existence(s16 eventIdx) {
     return g_dComIfG_gameInfo.play.getEvtManager().getEventData(eventIdx) != NULL;
+}
+
+inline BOOL dComIfGp_evmng_order(s16 eventIdx) {
+    return g_dComIfG_gameInfo.play.getEvtManager().order(eventIdx);
+}
+
+inline u8 dComIfGp_evmng_getEventEndSound(s16 eventIdx) {
+    return g_dComIfG_gameInfo.play.getEvtManager().getEventEndSound(eventIdx);
 }
 
 /**
@@ -2894,6 +2907,10 @@ inline void dComIfGp_att_CatchRequest(fopAc_ac_c* param_0, u8 param_1, f32 param
                                       f32 param_4, s16 param_5, s32 param_6) {
     dAttention_c& attention = g_dComIfG_gameInfo.play.getAttention();
     attention.CatchRequest(param_0, param_1, param_2, param_3, param_4,param_5, param_6);
+}
+
+inline u8 dComIfGp_att_getCatchChgItem() {
+    return g_dComIfG_gameInfo.play.getAttention().getCatchChgItem();
 }
 
 /**

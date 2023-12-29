@@ -21,6 +21,12 @@ enum dEvtType_e {
     /* 0x0A */ dEvtType_CHANGE_e,
 };
 
+enum {
+    dEvtMove_NOMOVE_e,
+    dEvtMove_MOVE_e,
+    dEvtMove_FORCE_e,
+};
+
 class dEvt_order_c {
 public:
     ~dEvt_order_c() {}
@@ -37,6 +43,8 @@ public:
     /* 0x15 */ u8 mEventInfoIdx;
 };  // Size = 0x18
 
+class dStage_Event_dt_c;
+
 class dEvt_control_c {
 public:
     dEvt_control_c();
@@ -44,36 +52,36 @@ public:
     s32 orderOld(u16, u16, u16, u16, void*, void*, const void*);
     s32 order(u16, u16, u16, u16, void*, void*, s16, u8);
     void setParam(dEvt_order_c*);
-    void beforeFlagProc(dEvt_order_c*);
-    void afterFlagProc(dEvt_order_c*);
-    void commonCheck(dEvt_order_c*, u16, u16);
-    void talkCheck(dEvt_order_c*);
-    void talkXyCheck(dEvt_order_c*);
-    void photoCheck(dEvt_order_c*);
-    void catchCheck(dEvt_order_c*);
-    void talkEnd();
-    void demoCheck(dEvt_order_c*);
-    void demoEnd();
-    void potentialCheck(dEvt_order_c*);
-    void doorCheck(dEvt_order_c*);
-    void itemCheck(dEvt_order_c*);
-    void endProc();
-    void checkChange();
-    void changeProc();
-    void checkStart();
-    void soundProc();
-    void check();
-    void photoCheck();
+    BOOL beforeFlagProc(dEvt_order_c*);
+    BOOL afterFlagProc(dEvt_order_c*);
+    BOOL commonCheck(dEvt_order_c*, u16, u16);
+    BOOL talkCheck(dEvt_order_c*);
+    BOOL talkXyCheck(dEvt_order_c*);
+    BOOL photoCheck(dEvt_order_c*);
+    BOOL catchCheck(dEvt_order_c*);
+    BOOL talkEnd();
+    BOOL demoCheck(dEvt_order_c*);
+    BOOL demoEnd();
+    BOOL potentialCheck(dEvt_order_c*);
+    BOOL doorCheck(dEvt_order_c*);
+    BOOL itemCheck(dEvt_order_c*);
+    BOOL endProc();
+    BOOL checkChange();
+    BOOL changeProc();
+    BOOL checkStart();
+    BOOL soundProc();
+    BOOL check();
+    BOOL photoCheck();
     s32 moveApproval(void*);
     BOOL compulsory(void*, const char*, u16);
     void remove();
-    void getStageEventDt();
-    void nextStageEventDt(void*);
+    dStage_Event_dt_c* getStageEventDt();
+    dStage_Event_dt_c* nextStageEventDt(void*);
     int getPId(void*);
     fopAc_ac_c * convPId(unsigned int);
-    void getTactFreeMStick(int);
-    void getTactFreeCStick(int);
-    void giveItemCut(u8);
+    u8 getTactFreeMStick(int);
+    u8 getTactFreeCStick(int);
+    bool giveItemCut(u8);
 
     u8 getTalkXYBtn() { return mTalkButton; }
     bool chkTalkXY() { return mTalkButton == 1 || mTalkButton == 2 || mTalkButton == 3; }
@@ -86,7 +94,7 @@ public:
     
     f32 getCullRate() { return mCullFarClipRatio; }
     void setCullRate(f32 ratio) { mCullFarClipRatio = ratio; }
-    
+
     u16 chkEventFlag(u16 flag) { return flag & mEventFlag; }
     void onEventFlag(u16 flag) { mEventFlag |= flag; }
     void offEventFlag(u16 flag) { mEventFlag &= ~flag; }
@@ -95,8 +103,8 @@ public:
     bool runCheck() { return mMode != 0; }
 
     /* 0x00 */ dEvt_order_c mOrder[8];
-    /* 0xC0 */ u8 mOrderCount;
-    /* 0xC1 */ u8 mFirstOrderIdx;
+    /* 0xC0 */ s8 mOrderCount;
+    /* 0xC1 */ s8 mFirstOrderIdx;
     /* 0xC2 */ u8 mMode;
     /* 0xC3 */ u8 mbEndProc;
     /* 0xC4 */ u32 mPt1;
@@ -105,22 +113,22 @@ public:
     /* 0xD0 */ u32 mPtItem;
     /* 0xD4 */ u8 mGetItemNo;
     /* 0xD5 */ u8 field_0xD5[0xD6 - 0xD5];
-    /* 0xD6 */ s16 field_0xd6;
+    /* 0xD6 */ s16 mHindFlag;
     /* 0xD8 */ s16 mEventId;
     /* 0xDA */ u8 mEventEndSound;
     /* 0xDB */ u8 field_0xdb;
     /* 0xDC */ u8 field_0xdc;
     /* 0xDD */ u8 field_0xdd;
     /* 0xDE */ u8 field_0xde;
-    /* 0xDF */ u8 field_0xdf;
+    /* 0xDF */ u8 mEventInfoIdx;
     /* 0xE0 */ u8 mTalkButton;
     /* 0xE1 */ u8 mItemNo;
     /* 0xE2 */ u8 mbInPhoto;
     /* 0xE3 */ u8 field_0xE3[0xE4 - 0xE3];
     /* 0xE4 */ f32 mCullFarClipRatio;
     /* 0xE8 */ u16 mEventFlag;
-    /* 0xEA */ u8 mTactFreeMStick[4];
-    /* 0xEE */ u8 mTactFreeCStick[4];
+    /* 0xEA */ u8 mTactFreeMStick[5];
+    /* 0xEF */ u8 mTactFreeCStick[4];
 };  // Size = 0xF4
 
 #endif /* D_EVENT_D_EVENT_H */

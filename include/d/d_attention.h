@@ -177,7 +177,7 @@ public:
     void LockEdge() {}
     void changeOwner() {}
     void chkEnemySound() {}
-    void getCatchChgItem() {}
+    u8 getCatchChgItem() { return mCatch.getChangeItem(); }
     void getCatghTarget() {}
     void getLookTarget() {}
     void getLook2Target() {}

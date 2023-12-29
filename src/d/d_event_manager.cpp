@@ -102,7 +102,7 @@ s16 dEvent_manager_c::getEventIdx(const char*, u8) {
 }
 
 /* 800744AC-800744E8       .text order__16dEvent_manager_cFs */
-void dEvent_manager_c::order(s16) {
+BOOL dEvent_manager_c::order(s16) {
     /* Nonmatching */
 }
 
@@ -182,7 +182,7 @@ u16 dEvent_manager_c::getEventPrio(s16) {
 }
 
 /* 80074BB0-80074BE4       .text getEventEndSound__16dEvent_manager_cFs */
-void dEvent_manager_c::getEventEndSound(s16) {
+u8 dEvent_manager_c::getEventEndSound(s16) {
     /* Nonmatching */
 }
 
