@@ -22,6 +22,7 @@ enum fopAc_Status_e {
     fopAcStts_CULL_e        = 0x00000100,
     fopAcStts_FREEZE_e      = 0x00000400,
     fopAcStts_UNK800_e      = 0x00000800,
+    fopAcStts_UNK1000_e     = 0x00001000,
     fopAcStts_CARRY_e       = 0x00002000,
     fopAcStts_UNK4000_e     = 0x00004000,
     fopAcStts_FORCEMOVE_e   = 0x00008000,

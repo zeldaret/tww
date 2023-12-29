@@ -21,7 +21,16 @@ struct event_binary_data_header {
     /* 0x38 */ u8 unk[8];
 };  // Size: 0x40
 
-class dEvDtData_c {};
+class dEvDtData_c {
+public:
+    /* 0x00 */ char mName[32];
+    /* 0x20 */ s32 mIndex;
+    /* 0x24 */ s32 mSubstanceType;
+    /* 0x28 */ s32 mSubstanceIdx;
+    /* 0x2C */ s32 mSubstanceSize;
+    /* 0x30 */ s32 mNextIdx;
+    /* 0x34 */ u32 field_0x34[3];
+}; // Size: 0x40
 
 class dEvDtCut_c {
 public:
@@ -36,7 +45,7 @@ public:
     /* 0x24 */ u32 mIndex;
     /* 0x28 */ u32 mFlagCheck[3];
     /* 0x34 */ u32 mFlagIdx;
-    /* 0x38 */ u32 field_0x38;
+    /* 0x38 */ u32 mFirstDataIdx;
     /* 0x3C */ u32 mNextCutIdx;
     /* 0x40 */ u32 field_0x40[4];
 };
@@ -56,7 +65,10 @@ public:
     void specialProcPackage();
     void specialProcTimekeeper();
 
+    const char* getName() { return mName; }
+    u32 getStartCut() { return mFirstCutIdx; }
     u32 getCurrentCut() { return mCurCutIdx; }
+    u32 getType() { return mStaffType; }
 
     enum StaffType_e {
         NORMAL_e,
@@ -102,6 +114,15 @@ public:
     u32 getStaff(int idx) { return mStaffIdx[idx]; }
     s32 getNStaff() { return mNStaff; }
     u32 getPriority() { return mPriority; }
+    u8 getEndSound() { return mEventEndSound; }
+
+    enum {
+        NONE_e,
+        ORDER_e,
+        PLAY_e,
+        UNK3_e,
+        CLOSE_e,
+    };
 
 public:
     /* 0x00 */ char mName[0x20];
@@ -116,7 +137,7 @@ public:
     /* 0x98 */ u32 field_0x98;
     /* 0x9C */ u32 field_0x9c;
     /* 0xA0 */ u32 field_0xa0;
-    /* 0xA4 */ u32 mEventState;
+    /* 0xA4 */ s32 mEventState;
     /* 0xA8 */ u32 field_0xa8;
     /* 0xAC */ u32 field_0xac;
 };

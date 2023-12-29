@@ -2321,6 +2321,10 @@ inline void dComIfGp_event_setCullRate(f32 ratio) {
     g_dComIfG_gameInfo.play.getEvent().setCullRate(ratio);
 }
 
+inline BOOL dComIfGp_event_check() {
+    return g_dComIfG_gameInfo.play.getEvent().check();
+}
+
 inline dEvent_manager_c* dComIfGp_getPEvtManager() {
     return &g_dComIfG_gameInfo.play.getEvtManager();
 }
@@ -2328,7 +2332,7 @@ inline dEvent_manager_c* dComIfGp_getPEvtManager() {
 // Note: Some of the below functions call g_dComIfG_gameInfo.play.getEvtManager(), while others use
 // dComIfGp_getPEvtManager(), without a clear pattern for which was chosen.
 
-inline s16 dComIfGp_evmng_getEventPrio(s16 eventIdx) {
+inline u32 dComIfGp_evmng_getEventPrio(s16 eventIdx) {
     return g_dComIfG_gameInfo.play.getEvtManager().getEventPrio(eventIdx);
 }
 

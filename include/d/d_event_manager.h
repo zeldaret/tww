@@ -12,13 +12,10 @@ public:
     dEvent_exception_c() { mEventInfoIdx = -1; }
     void init();
     int setStartDemo(int eventInfoIdx);
-    void getEventName();
+    const char* getEventName();
 
     /* 0x0 */ s32 mEventInfoIdx;
-    /* 0x4 */ u8 field_0x4;
-    /* 0x5 */ u8 field_0x5;
-    /* 0x6 */ u8 field_0x6;
-    /* 0x7 */ u8 field_0x7;
+    /* 0x4 */ s32 field_0x4;
     /* 0x8 */ s32 mState;
 };
 
@@ -28,9 +25,9 @@ public:
     ~dEvent_manager_c() {}
 
     void debugBfProc();
-    void getSubstance(dEvDtData_c*, int);
+    void* getSubstance(dEvDtData_c*, int);
     void setData(const char*);
-    void create();
+    BOOL create();
     void remove();
     void startProc(dEvDtEvent_c*);
     void closeProc(dEvDtEvent_c*);
@@ -49,23 +46,23 @@ public:
     int getMyActIdx(int, const char* const*, int, int, int);
     char* getMyActName(int);
     char* getMyNowCutName(int);
-    void getMyDataP(int, const char*, int);
+    dEvDtData_c* getMyDataP(int, const char*, int);
     void* getMySubstanceP(int, const char*, int);
-    void getMySubstanceNum(int, const char*);
+    s32 getMySubstanceNum(int, const char*);
     void cutEnd(int);
-    u16 getEventPrio(s16);
+    u32 getEventPrio(s16);
     u8 getEventEndSound(s16);
     void exceptionProc();
     void issueStaff(const char*);
     void cancelStaff(const char*);
     void setGoal(cXyz*);
     cXyz* getGoal();
-    void specialCast_Shutter(s16, int);
-    void specialCast(const char*, int);
+    fopAc_ac_c* specialCast_Shutter(s16, int);
+    fopAc_ac_c* specialCast(const char*, int);
     void setPrmStaff(void*, int);
     void getToolId(u8, int);
     BOOL ChkPresentEnd();
-    void CancelPresent();
+    BOOL CancelPresent();
     BOOL checkStartDemo();
     dEvDtFlag_c& getFlags() { return mFlag; }
 
@@ -83,6 +80,12 @@ public:
 class dEv_seach_prm {
 public:
     dEv_seach_prm(const char*, u32, u32);
+
+public:
+    /* 0x00 */ const char* mName;
+    /* 0x04 */ u32 mMask;
+    /* 0x08 */ u32 mValue;
+    /* 0x0C */ u16 mCastInFlag;
 };
 
 inline int dEvmng_strcmp(const char* s1, const char* s2) {
