@@ -2,15 +2,33 @@
 #define D_A_TAG_LIGHT_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_a_obj.h"
 
 class J3DMaterial;
 
 namespace daTagLight {
     class Act_c : public fopAc_ac_c {
     public:
-        void chk_inside(const cXyz*) const {}
+        enum Prm_e {
+            PRM_CONERATIO_W = 0x04,
+            PRM_CONERATIO_S = 0x0A,
+        };
+
+        void chk_inside(const cXyz* pos) const {
+            /* Nonmatching */
+            // M_box_x_min
+            // M_box_x_max
+            // M_box_y_min
+            // M_box_y_max
+            // M_box_z_min
+            // M_box_z_max
+            // M_cone_lower
+            // M_cone_upper
+            prm_get_coneRatio();
+            // M_cone_r
+        }
         void prm_get_ccR() const {}
-        void prm_get_coneRatio() const {}
+        int prm_get_coneRatio() const { return daObj::PrmAbstract(this, PRM_CONERATIO_W, PRM_CONERATIO_S); }
         void prm_get_fadeType() const {}
         void prm_get_sch() const {}
         void prm_get_swSave() const {}

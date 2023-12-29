@@ -4,12 +4,21 @@
 //
 
 #include "d/d_detect.h"
-#include "dolphin/types.h"
+#include "d/d_com_inf_game.h"
+#include "d/actor/d_a_player.h"
+#include "d/actor/d_a_tag_light.h"
+#include "d/d_procname.h"
+
+const dDetect_c::Attr_c dDetect_c::M_attr = {
+    /* maxDistXZ */ 500.0f,
+    /* maxY      */ 500.0f,
+    /* minY      */ -200.0f
+};
 
 /* 8009BFD4-8009BFFC       .text __ct__14dDetectPlace_cFv */
 dDetectPlace_c::dDetectPlace_c() {
     mPos = cXyz::Zero;
-    mEnable = 0;
+    mTimer = 0;
 }
 
 /* 8009BFFC-8009C038       .text __dt__14dDetectPlace_cFv */
@@ -17,7 +26,7 @@ dDetectPlace_c::~dDetectPlace_c() {}
 
 /* 8009C038-8009C048       .text chk_enable__14dDetectPlace_cCFv */
 bool dDetectPlace_c::chk_enable() const {
-    return mEnable != 0;
+    return mTimer != 0;
 }
 
 /* 8009C048-8009C098       .text __ct__9dDetect_cFv */
@@ -30,35 +39,91 @@ dDetect_c::~dDetect_c() {}
 
 /* 8009C0F8-8009C14C       .text proc__9dDetect_cFv */
 void dDetect_c::proc() {
-    /* Nonmatching */
+    /* Nonmatching - 1 literal load order */
+    if (mPlace[0].mTimer > 0) {
+        mPlace[0].mTimer--;
+    } else if (mPlace[0].mTimer < 0) {
+        mPlace[0].mTimer = 1;
+    }
+    if (mTimer > 0) {
+        mTimer--;
+    } else if (mTimer < 0) {
+        mTimer = 1;
+    }
 }
 
 /* 8009C14C-8009C1E0       .text chk_quake__9dDetect_cCFPC4cXyz */
-bool dDetect_c::chk_quake(const cXyz*) const {
-    /* Nonmatching */
+bool dDetect_c::chk_quake(const cXyz* pos) const {
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    bool ret = false;
+    if (mTimer > 0) {
+        ret = true;
+    } else {
+        if (player->checkFrontRollCrash()) {
+            if (pos) {
+                if (chk_quake_area(pos)) {
+                    ret = true;
+                }
+            } else {
+                ret = true;
+            }
+        }
+        if (mPlace[0].mTimer > 0) {
+            ret = true;
+        }
+    }
+    return ret;
 }
 
 /* 8009C1E0-8009C254       .text set_quake__9dDetect_cFPC4cXyz */
-void dDetect_c::set_quake(const cXyz*) {
-    /* Nonmatching */
+void dDetect_c::set_quake(const cXyz* pos) {
+    /* Nonmatching - regalloc, load order */
+    if (pos) {
+        if (!mPlace[0].chk_enable()) {
+            mPlace[0].mTimer = -1;
+            mPlace[0].mPos = *pos;
+        } else {
+            // Possible fakematch: There's a double branch here that probably means something got optimized out, but
+            // it's not clear what it was, or if this is exactly the right spot for it.
+            mPlace[0].mPos.y = mPlace[0].mPos.y;
+        }
+    } else {
+        mTimer = -1;
+    }
 }
 
 /* 8009C254-8009C32C       .text chk_quake_area__9dDetect_cCFPC4cXyz */
-bool dDetect_c::chk_quake_area(const cXyz*) const {
-    /* Nonmatching */
+bool dDetect_c::chk_quake_area(const cXyz* pos) const {
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    f32 maxDist2XZ = attr().maxDistXZ * attr().maxDistXZ;
+    f32 dist2XZ = player->current.pos.abs2XZ(*pos);
+    f32 diffY = pos->y - player->current.pos.y;
+    return dist2XZ <= maxDist2XZ && diffY <= attr().maxY && diffY >= attr().minY;
 }
 
 /* 8009C32C-8009C588       .text search_tag_light__9dDetect_cFPvPv */
-void dDetect_c::search_tag_light(void*, void*) {
+void* dDetect_c::search_tag_light(void* i_proc, void* i_pos) {
     /* Nonmatching */
+    if (fopAc_IsActor(i_proc) && fopAcM_GetProfName(i_proc) == PROC_Tag_Light) {
+        daTagLight::Act_c* light = (daTagLight::Act_c*)i_proc;
+        const cXyz* pos = (const cXyz*)i_pos;
+        light->chk_inside(pos); // TODO
+        return light;
+    }
+    return NULL;
 }
 
 /* 8009C588-8009C5B8       .text chk_light__9dDetect_cCFPC4cXyz */
-bool dDetect_c::chk_light(const cXyz*) const {
-    /* Nonmatching */
+bool dDetect_c::chk_light(const cXyz* pos) const {
+    return fopAcIt_Judge(&dDetect_c::search_tag_light, (void*)pos) != NULL;
 }
 
 /* 8009C5B8-8009C620       .text chk_attention__9dDetect_cCFP4cXyz */
-bool dDetect_c::chk_attention(cXyz*) const {
-    /* Nonmatching */
+bool dDetect_c::chk_attention(cXyz* outPos) const {
+    fopAc_ac_c* target = dComIfGp_getAttention().getLook2Target();
+    if (target == NULL)
+        return false;
+    
+    *outPos = target->mEyePos;
+    return true;
 }

@@ -85,6 +85,8 @@ public:
     void request(fopAc_ac_c*, f32, f32, f32, s16, int);
     void requestF(fopAc_ac_c*, s16, int);
 
+    u32 getLookTarget() { return mLookTargetID; }
+
 private:
     /* 0x0 */ u32 field_0x0;
     /* 0x4 */ u32 field_0x4;
@@ -172,6 +174,9 @@ public:
         mCatch.request(param_0, param_1, param_2, param_3, param_4, param_5, param_6);
     }
 
+    fopAc_ac_c* getLookTarget() { return mLook[0].convPId(mLook[0].getLookTarget()); }
+    fopAc_ac_c* getLook2Target() { return mLook[1].convPId(mLook[1].getLookTarget()); }
+
     // TODO:
     void GetLockonCount() {}
     void LockEdge() {}
@@ -179,8 +184,6 @@ public:
     void chkEnemySound() {}
     u8 getCatchChgItem() { return mCatch.getChangeItem(); }
     void getCatghTarget() {}
-    void getLookTarget() {}
-    void getLook2Target() {}
     void getZHintTarget() {}
     void offAleart() {}
     void revivalAleart() {}

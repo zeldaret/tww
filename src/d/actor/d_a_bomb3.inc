@@ -1,6 +1,6 @@
 // daBomb_c::createHeap's asserts tell us that function is inside d_a_bomb3.inc instead of d_a_bomb.cpp.
 // Furthermore, the symbol maps show that d_a_bomb.o's first .text section is 0 bytes large, with everything going in
-// its second .text section, which suggestions that d_a_bomb.cpp is empty except including d_a_bomb3.inc.
+// its second .text section, which suggests that d_a_bomb.cpp is empty except including d_a_bomb3.inc.
 
 #include "d/actor/d_a_bomb.h"
 #include "SSystem/SComponent/c_counter.h"
