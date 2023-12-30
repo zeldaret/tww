@@ -101,4 +101,12 @@ public:
     /* Place member variables here */
 };
 
+class daNpc_Aj1_HIO_c {
+public:
+    daNpc_Aj1_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NPC_AJ1_H */

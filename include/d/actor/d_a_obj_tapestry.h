@@ -14,4 +14,12 @@ public:
     /* Place member variables here */
 };
 
+class daObjTapestry_HIO_c {
+public:
+    daObjTapestry_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_OBJ_TAPESTRY_H */

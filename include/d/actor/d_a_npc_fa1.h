@@ -5,6 +5,12 @@
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_particle.h"
 
+class daNpc_Fa1_McaMorfCallBack1_c : public mDoExt_McaMorfCallBack1_c {
+public:
+    daNpc_Fa1_McaMorfCallBack1_c();
+    bool execute(unsigned short, J3DTransformInfo*);
+};
+
 class daNpc_Fa1_c : public fopAc_ac_c {
 public:
     void checkStatus(unsigned char) {}
@@ -97,6 +103,33 @@ public:
     /* 0x78A */ u8 m78A[0x794 - 0x78A];
     /* 0x794 */ u8 m794;
     /* 0x795 */ u8 m795[0x7A4 - 0x795];
+};
+
+class daNpc_Fa1_HIO3_c {
+public:
+    daNpc_Fa1_HIO3_c();
+    ~daNpc_Fa1_HIO3_c();
+
+public:
+    /* Place member variables here */
+};
+
+class daNpc_Fa1_HIO2_c {
+public:
+    daNpc_Fa1_HIO2_c();
+    ~daNpc_Fa1_HIO2_c();
+
+public:
+    /* Place member variables here */
+};
+
+class daNpc_Fa1_HIO_c {
+public:
+    daNpc_Fa1_HIO_c();
+    ~daNpc_Fa1_HIO_c();
+
+public:
+    /* Place member variables here */
 };
 
 #endif /* D_A_NPC_FA1_H */

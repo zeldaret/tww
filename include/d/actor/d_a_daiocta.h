@@ -70,4 +70,12 @@ public:
     /* 0x574 */ u8 mSwitchNo;
 };
 
+class daDaiocta_HIO_c {
+public:
+    daDaiocta_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_DAIOCTA_H */

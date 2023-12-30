@@ -63,4 +63,12 @@ public:
     /* Place member variables here */
 };
 
+class daNpc_De1_HIO_c {
+public:
+    daNpc_De1_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NPC_DE1_H */

@@ -36,4 +36,12 @@ public:
     /* Place member variables here */
 };
 
+class daBeam_HIO_c {
+public:
+    daBeam_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_BEAM_H */

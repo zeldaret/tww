@@ -18,4 +18,12 @@ public:
     /* Place member variables here */
 };
 
+class daObj_Pbco_HIO_c {
+public:
+    daObj_Pbco_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_OBJ_PBCO_H */

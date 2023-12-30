@@ -30,6 +30,7 @@ class daDr_HIO_c : public JORReflexible {
 public:
     daDr_HIO_c();
     virtual ~daDr_HIO_c() {}
+
 public:
     /* 0x04 */ s8 mChildID;
     /* 0x05 */ u8 m05[0x08 - 0x05];

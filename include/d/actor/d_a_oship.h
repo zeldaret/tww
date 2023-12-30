@@ -123,4 +123,12 @@ public:
     /* 0xD94 */ dBgS_LinChk mLinChk;
 };
 
+class daOship_HIO_c {
+public:
+    daOship_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_OSHIP_H */

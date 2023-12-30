@@ -8,4 +8,12 @@ public:
     /* Place member variables here */
 };
 
+class daBdk_HIO_c {
+public:
+    daBdk_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_BDK_H */

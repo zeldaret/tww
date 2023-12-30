@@ -68,4 +68,12 @@ public:
     /* 0x75C */ u8 m75C[0x7B4 - 0x75C];
 };
 
+class daNpc_Zk1_HIO_c {
+public:
+    daNpc_Zk1_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NPC_ZK1_H */

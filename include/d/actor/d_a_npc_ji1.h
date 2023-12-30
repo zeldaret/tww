@@ -118,4 +118,12 @@ public:
     /* 0x290 */ u8 m290[0xD88 - 0x290];
 };
 
+class daNpc_Ji1_HIO_c {
+public:
+    daNpc_Ji1_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NPC_JI1_H */

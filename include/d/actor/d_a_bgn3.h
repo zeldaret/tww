@@ -5,6 +5,20 @@
 #include "d/d_cc_d.h"
 #include "m_Do/m_Do_ext.h"
 
+struct bgn3_ke_s {
+    /* 0x00 */ cXyz m00[5];
+    /* 0x3C */ cXyz m3C[5];
+    /* 0x78 */ u8 m78[0x84 - 0x78];
+};
+
+struct part_s3 {
+    /* 0x0000 */ u8 m0000[0x00F8 - 0x0000];
+    /* 0x00F8 */ dCcD_GObjInf m00F8;
+    /* 0x01F0 */ u8 m01F0[0x023C - 0x01F0];
+    /* 0x023C */ bgn3_ke_s mHairs[40];
+    /* 0x16DC */ mDoExt_3DlineMat0_c mLineMat;
+};
+
 class bgn3_class : public fopAc_ac_c {
 public:
     /* 0x00290 */ u8 m00290[0x002E4 - 0x00290];
@@ -18,6 +32,14 @@ public:
     /* 0x0FEF4 */ u8 m0FEF4[0x0FF28 - 0x0FEF4];
     /* 0x0FF28 */ dCcD_GObjInf m0FF28;
     /* 0x10020 */ u8 m10020[0x100B4 - 0x10020];
+};
+
+class daBgn3_HIO_c {
+public:
+    daBgn3_HIO_c();
+
+public:
+    /* Place member variables here */
 };
 
 #endif /* D_A_BGN3_H */

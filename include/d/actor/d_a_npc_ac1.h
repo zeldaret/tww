@@ -128,4 +128,12 @@ public:
     /* 0x87A */ u8 m87A[0x87C - 0x87A];
 };
 
+class daNpc_Ac1_HIO_c {
+public:
+    daNpc_Ac1_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NPC_AC1_H */

@@ -40,4 +40,20 @@ public:
     /* Place member variables here */
 };
 
+class daNpc_P1_HIO_c {
+public:
+    daNpc_P1_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
+class daNpc_P1_childHIO_c {
+public:
+    daNpc_P1_childHIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NPC_P1_H */

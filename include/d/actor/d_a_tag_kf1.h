@@ -35,4 +35,12 @@ public:
     /* Place member variables here */
 };
 
+class daTag_Kf1_HIO_c {
+public:
+    daTag_Kf1_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_TAG_KF1_H */

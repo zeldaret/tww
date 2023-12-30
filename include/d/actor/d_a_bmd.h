@@ -94,4 +94,12 @@ public:
     /* 0xBE1 */ u8 mBE1[0xBE4 - 0xBE1];
 };
 
+class daBmd_HIO_c {
+public:
+    daBmd_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_BMD_H */

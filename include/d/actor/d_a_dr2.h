@@ -8,4 +8,12 @@ public:
     /* Place member variables here */
 };
 
+class daDr2_HIO_c {
+public:
+    daDr2_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_DR2_H */

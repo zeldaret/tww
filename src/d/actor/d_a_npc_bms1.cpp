@@ -256,18 +256,18 @@ static BOOL daNpc_Bms1_IsDelete(daNpc_Bms1_c*) {
     /* Nonmatching */
 }
 
-/* 000047AC-000047C8       .text setEyePos__12daNpc_Bms1_cF4cXyz */
-void daNpc_Bms1_c::setEyePos(cXyz) {
-    /* Nonmatching */
-}
+// /* 000047AC-000047C8       .text setEyePos__12daNpc_Bms1_cF4cXyz */
+// void daNpc_Bms1_c::setEyePos(cXyz) {
+//     /* Nonmatching */
+// }
 
-/* 000047C8-000047E4       .text setAttentionBasePos__12daNpc_Bms1_cF4cXyz */
-void daNpc_Bms1_c::setAttentionBasePos(cXyz) {
-    /* Nonmatching */
-}
+// /* 000047C8-000047E4       .text setAttentionBasePos__12daNpc_Bms1_cF4cXyz */
+// void daNpc_Bms1_c::setAttentionBasePos(cXyz) {
+//     /* Nonmatching */
+// }
 
-/* 00004820-00004900       .text getItemZoomPos__16ShopCam_action_cFf */
-void ShopCam_action_c::getItemZoomPos(float) {
-    /* Nonmatching */
-}
+// /* 00004820-00004900       .text getItemZoomPos__16ShopCam_action_cFf */
+// void ShopCam_action_c::getItemZoomPos(float) {
+//     /* Nonmatching */
+// }
 

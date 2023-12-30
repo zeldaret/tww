@@ -68,4 +68,12 @@ public:
     /* 0x2E9D */ u8 m2E9D[0x2FE4 - 0x2E9D];
 };
 
+class daBst_HIO_c {
+public:
+    daBst_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_BST_H */

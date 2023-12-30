@@ -51,4 +51,12 @@ public:
     /* Place member variables here */
 };
 
+class daBemos_HIO_c {
+public:
+    daBemos_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_OBJ_BEMOS_H */

@@ -21,4 +21,12 @@ public:
     /* Place member variables here */
 };
 
+class daobj_stairHIO_c {
+public:
+    daobj_stairHIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_OBJ_STAIR_H */

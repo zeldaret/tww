@@ -175,4 +175,12 @@ public:
     /* 0x1328 */ cXyz mInitPos;
 };
 
+class daObj_Ikada_HIO_c {
+public:
+    daObj_Ikada_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_OBJ_IKADA_H */

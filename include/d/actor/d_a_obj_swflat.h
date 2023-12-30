@@ -26,4 +26,12 @@ namespace daObjSwflat {
     };
 };
 
+class daObjSwflat_HIO_c {
+public:
+    daObjSwflat_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_OBJ_SWFLAT_H */

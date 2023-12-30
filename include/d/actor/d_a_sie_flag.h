@@ -27,4 +27,12 @@ public:
     /* 0x3A0 */ dCcD_Cyl mCyl;
 };
 
+class daSie_Flag_HIO_c {
+public:
+    daSie_Flag_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_SIE_FLAG_H */

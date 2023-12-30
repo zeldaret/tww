@@ -60,4 +60,12 @@ public:
     /* 0xB8B */ u8 mB8B[0xB8C - 0xB8B];
 };
 
+class daFganon_HIO_c {
+public:
+    daFganon_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_FGANON_H */

@@ -7,11 +7,21 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_npc.h"
 #include "d/actor/d_a_pedestal.h"
+#include "d/d_particle.h"
 
 class mDoExt_McaMorf;
 
+class daNpc_Os_infiniteEcallBack_c : public dPa_levelEcallBack {
+public:
+    void end();
+    void makeEmitter(unsigned short, const cXyz*, const csXyz*, const cXyz*);
+    void execute(JPABaseEmitter*);
+    void setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char);
+};
+
 class daNpc_Os_c : public fopAc_ac_c {
 public:
+    ~daNpc_Os_c();
     void chkNpcAction(int (daNpc_Os_c::*)(void*)) {}
     void chkPlayerAction(int (daNpc_Os_c::*)(void*)) {}
     void clearStatus() {}
@@ -161,6 +171,22 @@ public:
     /* 0x7A8 */ u8 m7A8;
     /* 0x7A9 */ u8 m7A9[0x7FC - 0x7A9];
     /* 0x7FC */ cBgS_PolyInfo m7FC;
+};
+
+class daNpc_Os_HIO2_c {
+public:
+    daNpc_Os_HIO2_c();
+
+public:
+    /* Place member variables here */
+};
+
+class daNpc_Os_HIO_c {
+public:
+    daNpc_Os_HIO_c();
+
+public:
+    /* Place member variables here */
 };
 
 #endif /* D_A_NPC_OS_H */

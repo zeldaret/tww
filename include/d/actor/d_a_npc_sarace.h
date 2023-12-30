@@ -40,4 +40,12 @@ public:
     /* Place member variables here */
 };
 
+class daNpc_Sarace_HIO_c {
+public:
+    daNpc_Sarace_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NPC_SARACE_H */

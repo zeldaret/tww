@@ -26,4 +26,12 @@ public:
     /* Place member variables here */
 };
 
+class daObj_MjDoorHIO_c {
+public:
+    daObj_MjDoorHIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_OBJ_MAJYUU_DOOR_H */

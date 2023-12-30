@@ -212,4 +212,12 @@ public:
     /* 0x928 */ cBgS_PolyInfo m928;
 };
 
+class daNpc_Cb1_HIO_c {
+public:
+    daNpc_Cb1_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NPC_CB1_H */

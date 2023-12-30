@@ -61,4 +61,12 @@ public:
     /* 0x482 */ u8 m482[0x484 - 0x482];
 };
 
+class daObj_PfallHIO_c {
+public:
+    daObj_PfallHIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_OBJ_PFALL_H */

@@ -101,4 +101,12 @@ public:
     /* 0x710 */ u8 m710[0x800 - 0x710];
 };
 
+class daNpc_Kf1_HIO_c {
+public:
+    daNpc_Kf1_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NPC_KF1_H */

@@ -17,4 +17,12 @@ public:
     /* 0x5B0 */ dCcD_Cyl m5B0;
 };
 
+class daKanban_HIO_c {
+public:
+    daKanban_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_KANBAN_H */

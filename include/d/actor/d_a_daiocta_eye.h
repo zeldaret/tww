@@ -31,4 +31,12 @@ public:
     /* Place member variables here */
 };
 
+class daDaiocta_Eye_HIO_c {
+public:
+    daDaiocta_Eye_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_DAIOCTA_EYE_H */

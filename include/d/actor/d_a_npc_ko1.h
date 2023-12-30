@@ -141,4 +141,20 @@ public:
     /* 0x6C4 */ u8 m6C4[0x8AC - 0x6C4];
 };
 
+class daNpc_Ko1_childHIO_c {
+public:
+    daNpc_Ko1_childHIO_c();
+
+public:
+    /* Place member variables here */
+};
+
+class daNpc_Ko1_HIO_c {
+public:
+    daNpc_Ko1_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NPC_KO1_H */

@@ -257,32 +257,32 @@ void daNpc_Ba1_c::charDecide(int) {
 }
 
 /* 00001D7C-00001E10       .text eInit_SET_PLYER_GOL___11daNpc_Ba1_cFv */
-void eInit_SET_PLYER_GOL___11daNpc_Ba1_cFv {
+void daNpc_Ba1_c::eInit_SET_PLYER_GOL_() {
     /* Nonmatching */
 }
 
 /* 00001E10-00001ECC       .text eInit_PLYER_INI_POS___11daNpc_Ba1_cFv */
-void eInit_PLYER_INI_POS___11daNpc_Ba1_cFv {
+void daNpc_Ba1_c::eInit_PLYER_INI_POS() {
     /* Nonmatching */
 }
 
 /* 00001ECC-00001EE8       .text eInit_USE_FAIRY_END___11daNpc_Ba1_cFv */
-void eInit_USE_FAIRY_END___11daNpc_Ba1_cFv {
+void daNpc_Ba1_c::eInit_USE_FAIRY_END() {
     /* Nonmatching */
 }
 
 /* 00001EE8-00001F04       .text eInit_MOV_POS___11daNpc_Ba1_cFv */
-void eInit_MOV_POS___11daNpc_Ba1_cFv {
+void daNpc_Ba1_c::eInit_MOV_POS() {
     /* Nonmatching */
 }
 
 /* 00001F04-00001F48       .text eInit_SET_PLYER_TRN_ANG___11daNpc_Ba1_cFv */
-void eInit_SET_PLYER_TRN_ANG___11daNpc_Ba1_cFv {
+void daNpc_Ba1_c::eInit_SET_PLYER_TRN_ANG() {
     /* Nonmatching */
 }
 
 /* 00001F48-000020AC       .text eInit_ACTOR_DRW_CONTROL___11daNpc_Ba1_cFPiPi */
-void eInit_ACTOR_DRW_CONTROL___11daNpc_Ba1_cFPiPi {
+void daNpc_Ba1_c::eInit_ACTOR_DRW_CONTROL(int*, int*) {
     /* Nonmatching */
 }
 
@@ -292,7 +292,7 @@ void daNpc_Ba1_c::eInit_setEvTimer(int*) {
 }
 
 /* 000020C8-000020E8       .text eInit_CHK_FAIRY___11daNpc_Ba1_cFPi */
-void eInit_CHK_FAIRY___11daNpc_Ba1_cFPi {
+void daNpc_Ba1_c::eInit_CHK_FAIRY(int*) {
     /* Nonmatching */
 }
 
@@ -302,12 +302,12 @@ void daNpc_Ba1_c::eInit_prmFloat(float*, float) {
 }
 
 /* 000020F8-00002130       .text eInit_SET_EYE_OFF___11daNpc_Ba1_cFPf */
-void eInit_SET_EYE_OFF___11daNpc_Ba1_cFPf {
+void daNpc_Ba1_c::eInit_SET_EYE_OFF(float*) {
     /* Nonmatching */
 }
 
 /* 00002130-00002168       .text eInit_EYE_OFF_ZRO___11daNpc_Ba1_cFPf */
-void eInit_EYE_OFF_ZRO___11daNpc_Ba1_cFPf {
+void daNpc_Ba1_c::eInit_EYE_OFF_ZRO(float*) {
     /* Nonmatching */
 }
 
@@ -322,17 +322,17 @@ void daNpc_Ba1_c::event_actionInit(int) {
 }
 
 /* 00002358-00002518       .text eMove_MOV_POS___11daNpc_Ba1_cFv */
-void eMove_MOV_POS___11daNpc_Ba1_cFv {
+void daNpc_Ba1_c::eMove_MOV_POS() {
     /* Nonmatching */
 }
 
 /* 00002518-00002574       .text eMove_CHK_FAIRY___11daNpc_Ba1_cFv */
-void eMove_CHK_FAIRY___11daNpc_Ba1_cFv {
+void daNpc_Ba1_c::eMove_CHK_FAIRY() {
     /* Nonmatching */
 }
 
 /* 00002574-00002608       .text eMove_EYE_OFF_ZRO___11daNpc_Ba1_cFv */
-void eMove_EYE_OFF_ZRO___11daNpc_Ba1_cFv {
+void daNpc_Ba1_c::eMove_EYE_OFF_ZRO() {
     /* Nonmatching */
 }
 

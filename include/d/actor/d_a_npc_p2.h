@@ -108,4 +108,20 @@ public:
     /* Place member variables here */
 };
 
+class daNpc_P2_childHIO_c {
+public:
+    daNpc_P2_childHIO_c();
+
+public:
+    /* Place member variables here */
+};
+
+class daNpc_P2_HIO_c {
+public:
+    daNpc_P2_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NPC_P2_H */

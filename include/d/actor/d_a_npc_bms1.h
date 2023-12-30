@@ -2,6 +2,8 @@
 #define D_A_NPC_BMS1_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_npc.h"
+#include "d/d_shop.h"
 
 class daNpc_Bms1_c : public fopAc_ac_c {
 public:
@@ -63,6 +65,22 @@ public:
     /* 0x850 */ ShopItems_c mShopItems;
     /* 0x894 */ ShopCursor_c* mpShopCursor;
     /* 0x898 */ u8 m898[0x8A8 - 0x898];
+};
+
+class daNpc_Bms1_childHIO_c {
+public:
+    daNpc_Bms1_childHIO_c();
+
+public:
+    /* Place member variables here */
+};
+
+class daNpc_Bms1_HIO_c {
+public:
+    daNpc_Bms1_HIO_c();
+
+public:
+    /* Place member variables here */
 };
 
 #endif /* D_A_NPC_BMS1_H */

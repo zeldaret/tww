@@ -3,6 +3,8 @@
 
 #include "f_op/f_op_actor.h"
 
+class ShopItems_c;
+
 class daNpc_Rsh1_c : public fopAc_ac_c {
 public:
     void chkAction(int (daNpc_Rsh1_c::*)(void*)) {}
@@ -67,6 +69,14 @@ public:
     /* 0x290 */ u8 m290[0x810 - 0x290];
     /* 0x810 */ ShopItems_c* mpShopItems;
     /* 0x814 */ u8 m814[0x968 - 0x814];
+};
+
+class daNpc_Rsh1_HIO_c {
+public:
+    daNpc_Rsh1_HIO_c();
+
+public:
+    /* Place member variables here */
 };
 
 #endif /* D_A_NPC_RSH1_H */

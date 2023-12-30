@@ -2,6 +2,9 @@
 #define D_A_NPC_BMSW_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_npc.h"
+
+class ShopCursor_c;
 
 class daNpc_Bmsw_c : public fopAc_ac_c {
 public:
@@ -40,6 +43,14 @@ public:
     /* 0x6C4 */ u8 m6C4[0x968 - 0x6C4];
     /* 0x968 */ ShopCursor_c* mpShopCursor;
     /* 0x96C */ u8 m96C[0x9E4 - 0x96C];
+};
+
+class daNpc_Bmsw_HIO_c {
+public:
+    daNpc_Bmsw_HIO_c();
+
+public:
+    /* Place member variables here */
 };
 
 #endif /* D_A_NPC_BMSW_H */

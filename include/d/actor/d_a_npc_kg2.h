@@ -48,4 +48,12 @@ public:
     /* Place member variables here */
 };
 
+class daNpc_Kg2_HIO_c {
+public:
+    daNpc_Kg2_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NPC_KG2_H */

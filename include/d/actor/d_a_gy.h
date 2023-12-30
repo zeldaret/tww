@@ -81,4 +81,12 @@ public:
     /* 0xE6C */ u8 mE6C[0xE90 - 0xE6C];
 };
 
+class daGy_HIO_c {
+public:
+    daGy_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_GY_H */

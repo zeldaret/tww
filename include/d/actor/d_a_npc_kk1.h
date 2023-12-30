@@ -134,4 +134,12 @@ public:
     /* 0x81F */ u8 m81F[0x824 - 0x81F];
 };
 
+class daNpc_Kk1_HIO_c {
+public:
+    daNpc_Kk1_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NPC_KK1_H */

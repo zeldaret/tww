@@ -21,4 +21,12 @@ public:
     /* Place member variables here */
 };
 
+class daTag_So_HIO_c {
+public:
+    daTag_So_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_TAG_SO_H */

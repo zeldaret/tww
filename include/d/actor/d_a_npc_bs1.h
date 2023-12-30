@@ -2,6 +2,7 @@
 #define D_A_NPC_BS1_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_shop.h"
 
 class daNpc_Bs1_c : public fopAc_ac_c {
 public:
@@ -79,6 +80,22 @@ public:
     /* 0x82C */ u8 m82C[0x833 - 0x82C];
     /* 0x833 */ u8 mShopIndex;
     /* 0x834 */ u8 m834[0x844 - 0x834];
+};
+
+class daNpc_Bs1_childHIO_c {
+public:
+    daNpc_Bs1_childHIO_c();
+
+public:
+    /* Place member variables here */
+};
+
+class daNpc_Bs1_HIO_c {
+public:
+    daNpc_Bs1_HIO_c();
+
+public:
+    /* Place member variables here */
 };
 
 #endif /* D_A_NPC_BS1_H */

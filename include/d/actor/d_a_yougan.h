@@ -16,4 +16,12 @@ public:
     /* Place member variables here */
 };
 
+class daYOUGAN_HIO_c {
+public:
+    daYOUGAN_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_YOUGAN_H */

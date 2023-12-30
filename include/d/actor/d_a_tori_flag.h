@@ -29,4 +29,12 @@ public:
     /* 0x4D0 */ dCcD_Cyl mCyl2;
 };
 
+class daTori_Flag_HIO_c {
+public:
+    daTori_Flag_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_TORI_FLAG_H */

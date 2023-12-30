@@ -70,4 +70,12 @@ public:
     /* 0x8F2 */ u8 m8F2[0x924 - 0x8F2];
 };
 
+class daNpc_Jb1_HIO_c {
+public:
+    daNpc_Jb1_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NPC_JB1_H */

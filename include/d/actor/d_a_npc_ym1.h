@@ -128,4 +128,20 @@ public:
     /* 0x8B2 */ u8 m8B2[0x8B4 - 0x8B2];
 };
 
+class daNpc_Ym1_childHIO_c {
+public:
+    daNpc_Ym1_childHIO_c();
+
+public:
+    /* Place member variables here */
+};
+
+class daNpc_Ym1_HIO_c {
+public:
+    daNpc_Ym1_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NPC_YM1_H */

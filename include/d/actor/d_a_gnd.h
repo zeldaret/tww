@@ -12,4 +12,12 @@ public:
     /* 0x13D2 */ u8 m13D2[0x15E4 - 0x13D2];
 };
 
+class daGnd_HIO_c {
+public:
+    daGnd_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_GND_H */

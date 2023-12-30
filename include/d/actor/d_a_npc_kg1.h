@@ -68,4 +68,12 @@ public:
     /* 0x78A */ u8 m78A[0x78C - 0x78A];
 };
 
+class daNpc_Kg1_HIO_c {
+public:
+    daNpc_Kg1_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NPC_KG1_H */

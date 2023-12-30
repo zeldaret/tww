@@ -134,4 +134,12 @@ public:
     /* 0xAE8 */ enemyice mEnemyIce;
 };
 
+class daFm_HIO_c {
+public:
+    daFm_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_FM_H */

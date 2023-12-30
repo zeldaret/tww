@@ -20,4 +20,12 @@ public:
     /* Place member variables here */
 };
 
+class daBalancelift_HIO_c {
+public:
+    daBalancelift_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_OBJ_BALANCELIFT_H */

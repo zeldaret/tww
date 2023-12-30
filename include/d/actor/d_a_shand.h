@@ -8,4 +8,12 @@ public:
     /* Place member variables here */
 };
 
+class daShand_HIO_c {
+public:
+    daShand_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_SHAND_H */

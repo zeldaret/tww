@@ -58,10 +58,22 @@ public:
     void check_useFairyArea();
     void checkCommandTalk();
     void charDecide(int);
+    void eInit_SET_PLYER_GOL_();
+    void eInit_PLYER_INI_POS();
+    void eInit_USE_FAIRY_END();
+    void eInit_MOV_POS();
+    void eInit_SET_PLYER_TRN_ANG();
+    void eInit_ACTOR_DRW_CONTROL(int*, int*);
     void eInit_setEvTimer(int*);
+    void eInit_CHK_FAIRY(int*);
     void eInit_prmFloat(float*, float);
+    void eInit_SET_EYE_OFF(float*);
+    void eInit_EYE_OFF_ZRO(float*);
     void eInit_CHK_FAIRY_MOV_1(int*);
     void event_actionInit(int);
+    void eMove_MOV_POS();
+    void eMove_CHK_FAIRY();
+    void eMove_EYE_OFF_ZRO();
     void eMove_CHK_FAIRY_MOV_1();
     void event_action();
     void cut_init_START_TALE1(int);
@@ -93,6 +105,14 @@ public:
     void create_Anm();
     void create_itm_Mdl();
     void CreateHeap();
+
+public:
+    /* Place member variables here */
+};
+
+class daNpc_Ba1_HIO_c {
+public:
+    daNpc_Ba1_HIO_c();
 
 public:
     /* Place member variables here */

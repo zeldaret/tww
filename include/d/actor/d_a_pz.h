@@ -133,4 +133,12 @@ public:
     /* 0x0FD0 */ u8 m0FD0[0x1049 - 0x0FD0];
 };
 
+class daPz_HIO_c {
+public:
+    daPz_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_PZ_H */

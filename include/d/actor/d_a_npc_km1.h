@@ -81,4 +81,12 @@ public:
     /* 0x7C8 */ u8 m7C8[0x7D8 - 0x7C8];
 };
 
+class daNpc_Km1_HIO_c {
+public:
+    daNpc_Km1_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NPC_KM1_H */

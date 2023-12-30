@@ -8,4 +8,12 @@ public:
     /* Place member variables here */
 };
 
+class daMt_HIO_c {
+public:
+    daMt_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_MT_H */

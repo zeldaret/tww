@@ -8,4 +8,12 @@ public:
     /* Place member variables here */
 };
 
+class daNZ_HIO_c {
+public:
+    daNZ_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NZ_H */

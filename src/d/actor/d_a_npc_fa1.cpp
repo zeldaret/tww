@@ -37,7 +37,7 @@ daNpc_Fa1_McaMorfCallBack1_c::daNpc_Fa1_McaMorfCallBack1_c() {
 }
 
 /* 800FB22C-800FB24C       .text execute__28daNpc_Fa1_McaMorfCallBack1_cFUsP16J3DTransformInfo */
-void daNpc_Fa1_McaMorfCallBack1_c::execute(unsigned short, J3DTransformInfo*) {
+bool daNpc_Fa1_McaMorfCallBack1_c::execute(unsigned short, J3DTransformInfo*) {
     /* Nonmatching */
 }
 
@@ -315,14 +315,3 @@ static BOOL daNpc_Fa1_IsDelete(daNpc_Fa1_c*) {
 daNpc_Fa1_HIO_c::~daNpc_Fa1_HIO_c() {
     /* Nonmatching */
 }
-
-/* 800FD7F4-800FD868       .text cLib_getRndValue<Uc>__FUcUc */
-void cLib_getRndValue<unsigned char>(unsigned char, unsigned char) {
-    /* Nonmatching */
-}
-
-/* 800FD868-800FD8DC       .text cLib_getRndValue<Us>__FUsUs */
-void cLib_getRndValue<unsigned short>(unsigned short, unsigned short) {
-    /* Nonmatching */
-}
-

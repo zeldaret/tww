@@ -114,4 +114,20 @@ public:
     /* Place member variables here */
 };
 
+class daNpc_Bj1_childHIO_c {
+public:
+    daNpc_Bj1_childHIO_c();
+
+public:
+    /* Place member variables here */
+};
+
+class daNpc_Bj1_HIO_c {
+public:
+    daNpc_Bj1_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NPC_BJ1_H */

@@ -52,4 +52,12 @@ public:
     /* Place member variables here */
 };
 
+class daObj_Warpt_HIO_c {
+public:
+    daObj_Warpt_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_OBJ_WARPT_H */

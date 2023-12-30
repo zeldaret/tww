@@ -17,4 +17,12 @@ public:
     /* Place member variables here */
 };
 
+class daObjQuake_HIO_c {
+public:
+    daObjQuake_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_OBJ_QUAKE_H */

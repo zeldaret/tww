@@ -4,7 +4,8 @@
 //
 
 #include "d/actor/d_a_bgn.h"
-#include "dolphin/types.h"
+#include "d/actor/d_a_bgn2.h"
+#include "d/actor/d_a_bgn3.h"
 
 /* 000000EC-000003F0       .text __ct__11daBgn_HIO_cFv */
 daBgn_HIO_c::daBgn_HIO_c() {

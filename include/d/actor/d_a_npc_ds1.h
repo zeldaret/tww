@@ -71,4 +71,20 @@ public:
     /* 0x884 */ u8 m884[0x8A0 - 0x884];
 };
 
+class daNpc_Ds1_childHIO_c {
+public:
+    daNpc_Ds1_childHIO_c();
+
+public:
+    /* Place member variables here */
+};
+
+class daNpc_Ds1_HIO_c {
+public:
+    daNpc_Ds1_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NPC_DS1_H */

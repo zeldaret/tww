@@ -8,4 +8,12 @@ public:
     /* Place member variables here */
 };
 
+class daBmdfoot_HIO_c {
+public:
+    daBmdfoot_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_BMDFOOT_H */

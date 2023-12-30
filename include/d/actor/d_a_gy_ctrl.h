@@ -44,4 +44,12 @@ public:
     /* Place member variables here */
 };
 
+class daGy_Ctrl_HIO_c {
+public:
+    daGy_Ctrl_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_GY_CTRL_H */

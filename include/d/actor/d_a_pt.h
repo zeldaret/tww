@@ -89,4 +89,12 @@ public:
     /* 0xDC5 */ u8 mDC5[0xDC8 - 0xDC5];
 };
 
+class daPt_HIO_c {
+public:
+    daPt_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_PT_H */

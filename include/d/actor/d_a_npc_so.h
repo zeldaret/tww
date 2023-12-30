@@ -129,4 +129,12 @@ public:
     /* Place member variables here */
 };
 
+class daNpc_So_HIO_c {
+public:
+    daNpc_So_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NPC_SO_H */

@@ -34,4 +34,12 @@ public:
     /* Place member variables here */
 };
 
+class daNpc_Btsw2_HIO_c {
+public:
+    daNpc_Btsw2_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NPC_BTSW2_H */

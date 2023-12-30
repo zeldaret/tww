@@ -201,4 +201,20 @@ public:
     /* 0x904 */ u8 m904[0x908 - 0x904];
 };
 
+class daNpc_Bm1_childHIO_c {
+public:
+    daNpc_Bm1_childHIO_c();
+
+public:
+    /* Place member variables here */
+};
+
+class daNpc_Bm1_HIO_c {
+public:
+    daNpc_Bm1_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_NPC_BM1_H */

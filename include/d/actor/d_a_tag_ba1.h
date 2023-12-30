@@ -17,4 +17,12 @@ public:
     /* Place member variables here */
 };
 
+class daTag_Ba1_HIO_c {
+public:
+    daTag_Ba1_HIO_c();
+
+public:
+    /* Place member variables here */
+};
+
 #endif /* D_A_TAG_BA1_H */
