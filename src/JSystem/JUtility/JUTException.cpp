@@ -222,10 +222,10 @@ void JUTException::setFPException(u32 fpscr_enable_bits) {
 
 /* 802C50CC-802C525C       .text showFloatSub__12JUTExceptionFif */
 void JUTException::showFloatSub(int index, f32 value) {
-    if (fpclassify(value) == FP_NAN) {
+    if (isnan(value)) {
         sConsole->print_f("F%02d: Nan      ", index);
-    } else if (fpclassify(value) == FP_INFINITE) {
-        if (signbit(value)) {
+    } else if (isinf(value)) {
+        if (*((u8*)&value) & 0x80) {
             sConsole->print_f("F%02d:+Inf     ", index);
         } else {
             sConsole->print_f("F%02d:-Inf     ", index);

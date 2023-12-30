@@ -50,7 +50,7 @@ def import_c_file(in_file) -> str:
     out_text = ''
 
     try:
-      with open(in_file, encoding="shift-jis") as file:
+      with open(in_file, encoding="utf8") as file:
         out_text += process_file(in_file, list(file))
     except Exception:
       with open(in_file) as file:
