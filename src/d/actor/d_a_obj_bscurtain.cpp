@@ -14,9 +14,9 @@
 #include "m_Do/m_Do_hostIO.h"
 #include "m_Do/m_Do_mtx.h"
 
-daObj_Bscurtain_HIO_c l_HIO;
+static u8 dummy[0x4C]; // TODO
 
-const char daObj_Bscurtain_c::M_arcname[4] = "Ptc";
+daObj_Bscurtain_HIO_c l_HIO;
 
 /* 000000EC-00000118       .text __ct__21daObj_Bscurtain_HIO_cFv */
 daObj_Bscurtain_HIO_c::daObj_Bscurtain_HIO_c() {
@@ -24,6 +24,8 @@ daObj_Bscurtain_HIO_c::daObj_Bscurtain_HIO_c() {
     field_0x08 = 0.0f;
     field_0x0c = 0;
 }
+
+const char daObj_Bscurtain_c::M_arcname[4] = "Ptc";
 
 /* 00000118-000001C8       .text set_mtx__17daObj_Bscurtain_cFv */
 void daObj_Bscurtain_c::set_mtx() {

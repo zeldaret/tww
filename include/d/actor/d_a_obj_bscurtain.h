@@ -22,7 +22,7 @@ public:
     /* 0x29C */ J3DModel * mpModel;
 };
 
-class daObj_Bscurtain_HIO_c : public mDoHIO_entry_c {
+class daObj_Bscurtain_HIO_c {
 public:
     daObj_Bscurtain_HIO_c();
     virtual ~daObj_Bscurtain_HIO_c() {}
