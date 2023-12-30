@@ -110,7 +110,7 @@ public:
     /* 0x09 */ u8 field_0x09;
     /* 0x0A */ s16 mGroup;
     /* 0x0C */ s16 mID;
-    /* 0x10 */ int field_0x10;
+    /* 0x10 */ u32 field_0x10;
 };
 
 extern dScnPly_msg_HIO_c g_msgDHIO;

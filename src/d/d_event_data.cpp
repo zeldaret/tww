@@ -281,7 +281,7 @@ void dEvDtStaff_c::specialProcMessage() {
             specialProc_WaitStart(staffIdx);
             break;
         case 1: // CREATE_MSG
-            l_msgId = -1;
+            l_msgId = fpcM_ERROR_PROCESS_ID_e;
             l_msg = NULL;
             u32* idata = dComIfGp_evmng_getMyIntegerP(staffIdx, "msgNo");
             JUT_ASSERT(0x1D2, idata);
@@ -322,7 +322,7 @@ void dEvDtStaff_c::specialProcMessage() {
         switch (mWipeDirection) {
         case 0:
             l_msgId = fopMsgM_messageSet(l_msgNo);
-            if (l_msgId != -1) {
+            if (l_msgId != fpcM_ERROR_PROCESS_ID_e) {
                 mWipeDirection++;
             }
             break;
@@ -349,7 +349,7 @@ void dEvDtStaff_c::specialProcMessage() {
             dComIfGp_evmng_cutEnd(staffIdx);
         } else if (l_msg->mMode == 0x12) {
             l_msg->mMode = 0x13;
-            l_msgId = -1;
+            l_msgId = fpcM_ERROR_PROCESS_ID_e;
             l_msg = NULL;
             dComIfGp_evmng_cutEnd(staffIdx);
         }

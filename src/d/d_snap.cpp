@@ -4,7 +4,7 @@
 //
 
 #include "d/d_snap.h"
-#include "dolphin/types.h"
+#include "f_pc/f_pc_manager.h"
 
 void (dSnap_packet::*dSnap_packet::m_judge_tbl[])() = {
     NULL,
@@ -33,7 +33,7 @@ void dSnap_GetFigRoomId(int) {
 
 /* 800CD00C-800CD068       .text __ct__9dSnap_ObjFv */
 dSnap_Obj::dSnap_Obj() {
-    mBsPcId = -1;
+    mBsPcId = fpcM_ERROR_PROCESS_ID_e;
     field_0x18 = 0;
     field_0x19 = 4;
     field_0x1a = -1;

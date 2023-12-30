@@ -206,7 +206,7 @@ BOOL daHookshot_c::procWait_init(BOOL playSe) {
     mCurrProcFunc = &daHookshot_c::procWait;
     mChainCnt = 0;
     current.pos = link->getHookshotRootPos();
-    mCarryActorID = -1;
+    mCarryActorID = fpcM_ERROR_PROCESS_ID_e;
     m2B0 = 0;
     if (playSe) {
         mDoAud_seStart(JA_SE_LK_HS_WIND_UP_FIN, &link->current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
@@ -315,11 +315,11 @@ static BOOL daHookshot_IsDelete(daHookshot_c* i_this) {
 
 /* 800F2B7C-800F2BF0       .text hookshot_delete__12daHookshot_cFv */
 BOOL daHookshot_c::hookshot_delete() {
-    if (mCarryActorID != -1) {
+    if (mCarryActorID != fpcM_ERROR_PROCESS_ID_e) {
         fopAc_ac_c* hooked_actor = fopAcM_SearchByID(mCarryActorID);
         if (hooked_actor && fopAcM_checkStatus(hooked_actor, fopAcStts_HOOK_CARRY_e)) {
             fopAcM_cancelHookCarryNow(hooked_actor);
-            mCarryActorID = -1;
+            mCarryActorID = fpcM_ERROR_PROCESS_ID_e;
         }
     }
     return TRUE;

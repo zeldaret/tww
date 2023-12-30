@@ -250,11 +250,11 @@ public:
     void SetSe(u8 se) { mSe = se; }
     void SetVec(cXyz& vec) { mVec = vec; }
     cXyz& GetVec() { return mVec; }
-    void SetShieldFrontRangeYAngle(s16* angle) { mShieldFrontRangeYAngle = angle; }
+    void SetShieldFrontRangeYAngle(s16* angle) { mpShieldFrontRangeYAngle = angle; }
     void SetMtrl(u8 mtrl) { mMtrl = mtrl; }
     u8 GetMtrl() { return mMtrl; }
     void SetHitMark(CcG_Tg_HitMark mark) { mHitMark = mark; }
-    s16* GetShieldFrontRangeYAngle() { return mShieldFrontRangeYAngle; }
+    s16* GetShieldFrontRangeYAngle() { return mpShieldFrontRangeYAngle; }
     u8 GetSpl() { return mSpl; }
     void SetSpl(dCcG_Tg_Spl spl) { mSpl = spl; }
     u8 GetHitMark() { return mHitMark; }
@@ -273,7 +273,7 @@ private:
     /* 0x20 */ cXyz mVec;
     /* 0x2C */ cXyz mRVec;
     /* 0x38 */ cXyz mHitPos;
-    /* 0x44 */ s16* mShieldFrontRangeYAngle;
+    /* 0x44 */ s16* mpShieldFrontRangeYAngle;
 };  // Size = 0x48
 
 // Correction (Co) Collider

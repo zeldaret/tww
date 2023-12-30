@@ -17,7 +17,7 @@ void cBgS_ChkElm::Init() {
     m_bgw_base_ptr = NULL;
     m_flags = 0;
     m_actor_ptr = NULL;
-    m_actor_id = -1;
+    m_actor_id = fpcM_ERROR_PROCESS_ID_e;
 }
 
 /* 8024645C-80246478       .text Regist2__11cBgS_ChkElmFP4cBgWUiPv */
@@ -32,7 +32,7 @@ void cBgS_ChkElm::Regist2(cBgW* bgw, unsigned int pid, void* actor) {
 void cBgS_ChkElm::Release() {
     m_flags &= ~1;
     m_bgw_base_ptr = NULL;
-    m_actor_id = -1;
+    m_actor_id = fpcM_ERROR_PROCESS_ID_e;
     m_actor_ptr = NULL;
 }
 

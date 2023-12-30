@@ -378,7 +378,7 @@ namespace daBomb2 {
         fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
 
         fopAcM_setCullSizeBox(this, -36.0f, 0.0f, -36.0f, 36.0f, 66.0f, 36.0f);
-        mCullSizeFar = 10.0f;
+        fopAcM_setCullSizeFar(this, 10.0f);
 
         if(daObj::PrmAbstract(this, PRM_1_W, PRM_1_S)) {
             off_carry();

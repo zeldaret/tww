@@ -148,14 +148,14 @@ u32 daIball_c::m_ib_actor[5];
 /* 800568D0-800568F8       .text init__9daIball_cFv */
 void daIball_c::init() {
     for (int i = 0; i < ARRAY_SIZE(m_ib_actor); i++) {
-        m_ib_actor[i] = -1;
+        m_ib_actor[i] = fpcM_ERROR_PROCESS_ID_e;
     }
 }
 
 /* 800568F8-80056944       .text regist__9daIball_cFP10fopAc_ac_c */
 void daIball_c::regist(fopAc_ac_c* i_actor) {
     for (int i = 0; i < ARRAY_SIZE(m_ib_actor); i++) {
-        if (m_ib_actor[i] == -1) {
+        if (m_ib_actor[i] == fpcM_ERROR_PROCESS_ID_e) {
             m_ib_actor[i] = fopAcM_GetID(i_actor);
             break;
         }
@@ -166,7 +166,7 @@ void daIball_c::regist(fopAc_ac_c* i_actor) {
 void daIball_c::remove(fopAc_ac_c* i_actor) {
     for (int i = 0; i < ARRAY_SIZE(m_ib_actor); i++) {
         if (m_ib_actor[i] == fopAcM_GetID(i_actor)) {
-            m_ib_actor[i] = -1;
+            m_ib_actor[i] = fpcM_ERROR_PROCESS_ID_e;
             break;
         }
     }
@@ -174,9 +174,9 @@ void daIball_c::remove(fopAc_ac_c* i_actor) {
 
 /* 80056990-80056A18       .text remove_old__9daIball_cFv */
 void daIball_c::remove_old() {
-    u32 iball_id = -1;
+    u32 iball_id = fpcM_ERROR_PROCESS_ID_e;
     for (int i = 0; i < ARRAY_SIZE(m_ib_actor); i++) {
-        if (m_ib_actor[i] == -1) {
+        if (m_ib_actor[i] == fpcM_ERROR_PROCESS_ID_e) {
             return;
         }
         if (m_ib_actor[i] < iball_id) {

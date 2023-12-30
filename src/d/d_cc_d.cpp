@@ -33,10 +33,10 @@ dCcD_GStts::dCcD_GStts() {
     mTgSpl = 0;
     mRoomId = 0;
     mActorPerfTblId = -1;
-    mAtApid = -1;
-    mAtOldApid = -1;
-    mTgApid = -1;
-    mTgOldApid = -1;
+    mAtApid = fpcM_ERROR_PROCESS_ID_e;
+    mAtOldApid = fpcM_ERROR_PROCESS_ID_e;
+    mTgApid = fpcM_ERROR_PROCESS_ID_e;
+    mTgOldApid = fpcM_ERROR_PROCESS_ID_e;
     field_0x1C = 0;
 }
 
@@ -46,19 +46,19 @@ void dCcD_GStts::Ct() {
     mTgSpl = 0;
     mRoomId = 0;
     mActorPerfTblId = -1;
-    mAtApid = -1;
-    mAtOldApid = -1;
-    mTgApid = -1;
-    mTgOldApid = -1;
+    mAtApid = fpcM_ERROR_PROCESS_ID_e;
+    mAtOldApid = fpcM_ERROR_PROCESS_ID_e;
+    mTgApid = fpcM_ERROR_PROCESS_ID_e;
+    mTgOldApid = fpcM_ERROR_PROCESS_ID_e;
     field_0x1C = 0;
 }
 
 /* 800AB3BC-800AB3DC       .text Move__10dCcD_GSttsFv */
 void dCcD_GStts::Move() {
     mAtOldApid = mAtApid;
-    mAtApid = NULL;
+    mAtApid = 0;
     mTgOldApid = mTgApid;
-    mTgApid = NULL;
+    mTgApid = 0;
 }
 
 /* 800AB3DC-800AB46C       .text Init__9dCcD_SttsFiiP10fopAc_ac_c */
@@ -108,7 +108,7 @@ void dCcD_GObjTg::Set(const dCcD_SrcGObjTg& src) {
     mHitMark = src.mHitMark;
     mSpl = src.mSpl;
     mHitPos = cXyz::Zero;
-    mShieldFrontRangeYAngle = NULL;
+    mpShieldFrontRangeYAngle = NULL;
 }
 
 /* 800AB520-800AB63C       .text __ct__12dCcD_GObjInfFv */

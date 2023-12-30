@@ -919,7 +919,7 @@ void daObjTpost_c::createInit() {
 
     fopAcM_SetMtx(this, mMorf->getModel()->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -50.0f, 0.0f, -50.0f, 70.0f, 200.0f, 70.0f);
-    mCullSizeFar = 10.0f;
+    fopAcM_setCullSizeFar(this, 10.0f);
 
     mStts.Init(0xFF, 0xFF, this);
     mCyl.Set(m_cyl_src);

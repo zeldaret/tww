@@ -4874,7 +4874,7 @@ int phase_1(daPy_lk_c* i_this) {
     dComIfGp_setLinkPlayer(i_this);
 
     fopAcM_setStageLayer(i_this);
-    i_this->mAttentionInfo.mFlags = 0xFFFFFFFF;
+    i_this->mAttentionInfo.mFlags = ~0;
 
     i_this->mAttentionInfo.mPosition.x = i_this->current.pos.x;
     i_this->mAttentionInfo.mPosition.y = i_this->current.pos.y + 125.0f;

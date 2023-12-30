@@ -133,7 +133,7 @@ void daArrow_Lighteff_c::CreateInit() {
     field_0x2A8.setall(1.0f);
 
     fopAcM_setCullSizeBox(this, -100.0f, -100.0f, -100.0f, 100.0f, 100.0f, 100.0f);
-    mCullSizeFar = 1.0f;
+    fopAcM_setCullSizeFar(this, 1.0f);
 
     set_mtx();
 

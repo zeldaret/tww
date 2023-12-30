@@ -71,7 +71,7 @@ void daArrow_Iceeff_c::CreateInit() {
     }
 
     fopAcM_setCullSizeBox(this, -100.0f, -100.0f, -100.0f, 100.0f, 100.0f, 100.0f);
-    mCullSizeFar = 1.0f;
+    fopAcM_setCullSizeFar(this, 1.0f);
     set_mtx();
     field_0xA30 = 0;
     field_0xA34 = 0.0f;

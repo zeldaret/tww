@@ -31,12 +31,8 @@ static s32 daBossItem_Create(fopAc_ac_c* i_this) {
 
     if (isStageBossDead && !dComIfGs_isStageLife(stageNo)) {
         fopAcM_createItemForBoss(
-            &bItem->current.pos,
-            1,
-            bItem->current.roomNo,
-            &bItem->current.angle,
-            0,
-            1
+            &bItem->current.pos, 1, bItem->current.roomNo,
+            &bItem->current.angle, NULL, 1
         );
     }
 

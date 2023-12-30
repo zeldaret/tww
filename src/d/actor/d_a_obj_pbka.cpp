@@ -37,7 +37,7 @@ BOOL daObjPbka_c::CreateHeap() {
 void daObjPbka_c::CreateInit() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -300.0f, -300.0f, -300.0f, 300.0f, 300.0f, 300.0f);
-    mCullSizeFar = 1.0f;
+    fopAcM_setCullSizeFar(this, 1.0f);
     set_mtx();
 }
 

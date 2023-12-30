@@ -47,14 +47,14 @@ dAttention_c::dAttention_c(fopAc_ac_c* player, u32 playerNo) {
     mLockOnState = 0;
     field_0x01a = 0;
     field_0x01b = 0;
-    mLockOnTargetBsPcID = -1;
+    mLockOnTargetBsPcID = fpcM_ERROR_PROCESS_ID_e;
     heap = mDoExt_createSolidHeapFromGameToCurrent(0x3600, 0);
     JUT_ASSERT(0xb9, heap != 0);
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_YAZIRUSHI_01);
     JUT_ASSERT(0xbe, modelData != 0);
 
-    s32 anmColNum = 0;
+    int anmColNum = 0;
     for (u32 i = 0; i < 5; i++) {
         static u16 l_bpkIdx[] = {
             ALWAYS_BPK_YJ_IN, ALWAYS_BPK_YJ_OUT, ALWAYS_BPK_YJ_SCALE, ALWAYS_BPK_YJ_LOOP, ALWAYS_BPK_YJ_DELETE,
@@ -496,15 +496,15 @@ int dAttHint_c::request(fopAc_ac_c* i_actor, int priority) {
 
 /* 8009FB58-8009FB70       .text init__10dAttHint_cFv */
 void dAttHint_c::init() {
-    mHintActorID = -1;
-    field_0x8 = -1;
+    mHintActorID = fpcM_ERROR_PROCESS_ID_e;
+    field_0x8 = fpcM_ERROR_PROCESS_ID_e;
     mPriority = 0x200;
 }
 
 /* 8009FB70-8009FB8C       .text proc__10dAttHint_cFv */
 void dAttHint_c::proc() {
     field_0x8 = mHintActorID;
-    mHintActorID = -1;
+    mHintActorID = fpcM_ERROR_PROCESS_ID_e;
     mPriority = 0x200;
 }
 
@@ -516,8 +516,8 @@ fopAc_ac_c* dAttCatch_c::convPId(unsigned int i_procID) {
 /* 8009FBBC-8009FBDC       .text init__11dAttCatch_cFv */
 void dAttCatch_c::init() {
     field_0xc = 0x56;
-    field_0x0 = -1;
-    mCatghTargetID = -1;
+    field_0x0 = fpcM_ERROR_PROCESS_ID_e;
+    mCatghTargetID = fpcM_ERROR_PROCESS_ID_e;
     field_0x4 = 3;
 }
 
@@ -525,7 +525,7 @@ void dAttCatch_c::init() {
 void dAttCatch_c::proc() {
     mCatghTargetID = field_0x0;
     mChangeItem = field_0xc;
-    field_0x0 = -1;
+    field_0x0 = fpcM_ERROR_PROCESS_ID_e;
     field_0x4 = 3;
     field_0xc = 0x56;
 }

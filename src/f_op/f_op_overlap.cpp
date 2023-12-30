@@ -36,7 +36,7 @@ static s32 fopOvlp_Create(void* i_ovlp) {
 
         cReq_Create(&i_this->mRq, 1);
         i_this->mSubMtd = profile->mSubMtd;
-        i_this->mScenePId = -1;
+        i_this->mScenePId = fpcM_ERROR_PROCESS_ID_e;
     }
 
     return fpcMtd_Create((process_method_class*)i_this->mSubMtd, i_this);

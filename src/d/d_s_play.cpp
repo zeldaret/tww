@@ -128,7 +128,7 @@ dScnPly_msg_HIO_c::dScnPly_msg_HIO_c() {
     field_0x09 = 0;
     mGroup = 0;
     mID = 1;
-    field_0x10 = -1;
+    field_0x10 = fpcM_ERROR_PROCESS_ID_e;
 }
 
 dScnPly_msg_HIO_c g_msgDHIO;
@@ -228,7 +228,7 @@ void dScnPly_msg_HIO_c::dScnPly_msg_HIO_messageProc() {
     dScnPly_msg_HIO_padCheck();
 
     if (field_0x06) {
-        if (field_0x10 == 0xFFFFFFFF) {
+        if (field_0x10 == fpcM_ERROR_PROCESS_ID_e) {
             u32 msg_num = (mGroup << 0x10) | mID;
             cXyz sp10(0.0f, 0.0f, 0.0f);
 
@@ -246,7 +246,7 @@ void dScnPly_msg_HIO_c::dScnPly_msg_HIO_messageProc() {
                     msg_p->mMode = 16;
                 } else if (msg_p->mMode == 18) {
                     msg_p->mMode = 19;
-                    field_0x10 = -1;
+                    field_0x10 = fpcM_ERROR_PROCESS_ID_e;
                     field_0x06 = 0;
                     mID++;
                 }

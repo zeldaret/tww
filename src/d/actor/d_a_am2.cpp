@@ -197,7 +197,7 @@ static BOOL medama_atari_check(am2_class* i_this) {
                 ret = true;
                 if (i_this->mCurrBckIdx == AM2_BCK_SLEEP) {
                     anm_init(i_this, AM2_BCK_WAIT, 1.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
-                    i_this->mAttentionInfo.mFlags = 4;
+                    i_this->mAttentionInfo.mFlags = fopAc_Attn_LOCKON_ENEMY_e;
                     fopAcM_OnStatus(i_this, fopAcStts_SHOWMAP_e);
                     i_this->mNeedleCyl.OnAtSetBit();
                     i_this->mNeedleCyl.OnAtHitBit();

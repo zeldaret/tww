@@ -57,7 +57,7 @@ static dCcD_SrcCps l_cps_src = {
 BOOL daFan_c::Delete() {
     dComIfG_resDelete(&mPhs, m_arcname[mType]);
     dComIfG_resDelete(&mWindPhs, m_arcname2);
-    if (mWindSePId != -1) {
+    if (mWindSePId != fpcM_ERROR_PROCESS_ID_e) {
         dLevelSe_c* se = (dLevelSe_c*)fopKyM_SearchByID(mWindSePId);
         if (se != NULL)
             fopKyM_Delete(se);
@@ -225,7 +225,7 @@ int daFan_c::Execute(Mtx** mtxP) {
         mWindBtkAnm1.setPlaySpeed(-1.0f);
     }
 
-    if (mWindSePId != -1) {
+    if (mWindSePId != fpcM_ERROR_PROCESS_ID_e) {
         dLevelSe_c* se = (dLevelSe_c*)fopKyM_SearchByID(mWindSePId);
         if (se != NULL)
             se->setReverb(len * 100.0f, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));

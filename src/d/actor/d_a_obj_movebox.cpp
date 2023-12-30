@@ -1445,7 +1445,7 @@ namespace daObjMovebox {
             mChildPID = fopAcM_createChild(
                 PROC_Obj_Mkie, fopAcM_GetID(this),
                 mkieParams, &mkiePos,
-                fopAcM_GetRoomNo(this), &shape_angle, NULL, -1, NULL
+                fopAcM_GetRoomNo(this), &shape_angle
             );
         }
         

@@ -1422,7 +1422,7 @@ void daBomb_c::create_init() {
     mCull.mBox.mMax.x = 36.0f;
     mCull.mBox.mMax.y = 66.0f;
     mCull.mBox.mMax.z = 36.0f;
-    mCullSizeFar = 10.0f;
+    fopAcM_setCullSizeFar(this, 10.0f);
 
     init_mtx();
 }

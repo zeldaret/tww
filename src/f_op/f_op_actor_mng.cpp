@@ -82,7 +82,7 @@ fopAcM_prm_class* fopAcM_CreateAppend() {
         params->mScale.x = 10;
         params->mScale.y = 10;
         params->mScale.z = 10;
-        params->mParentPcId = -1;
+        params->mParentPcId = fpcM_ERROR_PROCESS_ID_e;
         params->mSubtype = -1;
     }
     return params;
@@ -150,7 +150,7 @@ s32 fopAcM_delete(unsigned int actorID) {
 
 /* 8002451C-80024598       .text fopAcM_create__FsUlP4cXyziP5csXyzP4cXyzScPFPv_i */
 s32 fopAcM_create(s16 procName, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, s8 subtype, createFunc createFunc) {
-    fopAcM_prm_class* params = createAppend(parameter, pPos, roomNo, pAngle, pScale, subtype, 0xFFFFFFFF);
+    fopAcM_prm_class* params = createAppend(parameter, pPos, roomNo, pAngle, pScale, subtype, fpcM_ERROR_PROCESS_ID_e);
     if (params == NULL)
         return -1;
 
@@ -168,7 +168,7 @@ s32 fopAcM_create(char* pProcNameString, u32 parameter, cXyz* pPos, int roomNo, 
 
 /* 80024614-8002468C       .text fopAcM_fastCreate__FsUlP4cXyziP5csXyzP4cXyzScPFPv_iPv */
 void* fopAcM_fastCreate(s16 procName, u32 parameter, cXyz* pPos, int roomNo, csXyz* pAngle, cXyz* pScale, s8 subtype, createFunc createFunc, void* pUserData) {
-    fopAcM_prm_class* params = createAppend(parameter, pPos, roomNo, pAngle, pScale, subtype, 0xFFFFFFFF);
+    fopAcM_prm_class* params = createAppend(parameter, pPos, roomNo, pAngle, pScale, subtype, fpcM_ERROR_PROCESS_ID_e);
     if (params == NULL)
         return NULL;
 
@@ -580,12 +580,12 @@ s32 fopAcM_cullingCheck(fopAc_ac_c* i_this) {
         pMtx = mtx;
     }
 
-    f32 cullFar = i_this->mCullSizeFar;
+    f32 cullFar = fopAcM_getCullSizeFar(i_this);
     if (dComIfGp_event_runCheck()) {
         cullFar *= dComIfGp_event_getCullRate();
     }
 
-    int cullType = i_this->mCullType;
+    int cullType = fopAcM_GetCullSize(i_this);
     bool isBox = false;
     if ((cullType >= 0 && cullType < fopAc_CULLBOX_CUSTOM_e) || cullType == fopAc_CULLBOX_CUSTOM_e) {
         isBox = true;
@@ -593,7 +593,7 @@ s32 fopAcM_cullingCheck(fopAc_ac_c* i_this) {
 
     if (isBox) {
         if (cullType == fopAc_CULLBOX_CUSTOM_e) {
-            if (i_this->mCullSizeFar > 0.0f) {
+            if (fopAcM_getCullSizeFar(i_this) > 0.0f) {
                 mDoLib_clipper::mClipper.setFar(cullFar * mDoLib_clipper::mSystemFar);
                 mDoLib_clipper::mClipper.calcViewFrustum();
                 s32 ret = mDoLib_clipper::mClipper.clip(pMtx, &i_this->mCull.mBox.mMax, &i_this->mCull.mBox.mMin);
@@ -605,7 +605,7 @@ s32 fopAcM_cullingCheck(fopAc_ac_c* i_this) {
             }
         } else {
             fopAc_cullSizeBox& cullBox = l_cullSizeBox[cullType];
-            if (i_this->mCullSizeFar > 0.0f) {
+            if (fopAcM_getCullSizeFar(i_this) > 0.0f) {
                 mDoLib_clipper::mClipper.setFar(cullFar * mDoLib_clipper::mSystemFar);
                 mDoLib_clipper::mClipper.calcViewFrustum();
                 s32 ret = mDoLib_clipper::mClipper.clip(pMtx, &cullBox.mMax, &cullBox.mMin);
@@ -618,7 +618,7 @@ s32 fopAcM_cullingCheck(fopAc_ac_c* i_this) {
         }
     } else { // Sphere
         if (cullType == fopAc_CULLSPHERE_CUSTOM_e) {
-            if (i_this->mCullSizeFar > 0.0f) {
+            if (fopAcM_getCullSizeFar(i_this) > 0.0f) {
                 mDoLib_clipper::mClipper.setFar(cullFar * mDoLib_clipper::mSystemFar);
                 mDoLib_clipper::mClipper.calcViewFrustum();
                 f32 radius = i_this->mCull.mSphere.mRadius;
@@ -634,7 +634,7 @@ s32 fopAcM_cullingCheck(fopAc_ac_c* i_this) {
             }
         } else {
             fopAc_cullSizeSphere& cullSphere = l_cullSizeSphere[cullType - fopAc_CULLSPHERE_0_e];
-            if (i_this->mCullSizeFar > 0.0f) {
+            if (fopAcM_getCullSizeFar(i_this) > 0.0f) {
                 mDoLib_clipper::mClipper.setFar(cullFar * mDoLib_clipper::mSystemFar);
                 mDoLib_clipper::mClipper.calcViewFrustum();
                 f32 radius = cullSphere.mRadius;
