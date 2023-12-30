@@ -88,7 +88,7 @@ dCcD_SrcCyl cc_cyl_src = {
         /* SrcGObjAt Mtrl    */ 0,
         /* SrcGObjAt SPrm    */ 0,
         /* SrcGObjTg Se      */ 0x05,
-        /* SrcGObjTg HitMark */ 0x0C,
+        /* SrcGObjTg HitMark */ G_TG_MARK_PURPLE_HIT,
         /* SrcGObjTg Spl     */ 0,
         /* SrcGObjTg Mtrl    */ 0,
         /* SrcGObjTg SPrm    */ G_TG_SPRM_SHIELD | G_TG_SPRM_NO_CON_HIT,
@@ -119,7 +119,7 @@ BOOL enemy_ice(enemyice* ei) {
         
         if (ei->mLightShrinkTimer == 1) { // Just started dying to light arrows.
             ei->mLightShrinkTimer++;
-            dComIfGp_particle_set(0x272, &pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_LIGHT_EXPLOSION, &pos, NULL, &particleScale);
             ac->mTevStr.mFogColor.b = 0xFF;
             ac->mTevStr.mFogColor.g = 0xFF;
             ac->mTevStr.mFogColor.r = 0xFF;
@@ -331,7 +331,7 @@ BOOL enemy_ice(enemyice* ei) {
                     dComIfGp_particle_set(0x10, &pos);
                     csXyz angle(0, fopAcM_searchPlayerAngleY(ac), 0);
                     particleScale.setall(2.0f);
-                    dComIfGp_particle_set(0xD, &pos, &angle, &particleScale);
+                    dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &pos, &angle, &particleScale);
                     dScnPly_ply_c::setPauseTimer(8);
                 }
                 
@@ -591,7 +591,7 @@ void enemy_fire_remove(enemyfire* ef) {
 /* 8001D428-8001D48C       .text enemy_piyo_set__FP10fopAc_ac_c */
 void enemy_piyo_set(fopAc_ac_c* enemy) {
     // Creates the rotating stars particle for when an enemy is stunned.
-    dComIfGp_particle_set(0x27A, &enemy->mAttentionInfo.mPosition);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_STARS_SPIN, &enemy->mAttentionInfo.mPosition);
 }
 
 /* 8001D48C-8001D890       .text wall_angle_get__FP10fopAc_ac_cs */

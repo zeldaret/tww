@@ -196,7 +196,7 @@ bool daArrow_Iceeff_c::_execute() {
     daArrow_c* arrow = static_cast<daArrow_c*>(fopAcM_SearchByID(mParentPcId));
     if(field_0xA38 == 0) {
         if(arrow == 0) {
-            dComIfGp_particle_setP1(0x55, &current.pos, &current.angle, 0);
+            dComIfGp_particle_setP1(0x55, &current.pos, &current.angle);
             fopAcM_delete(this);
 
             return true;
@@ -219,7 +219,7 @@ bool daArrow_Iceeff_c::_execute() {
             field_0xA30++;
         }
         else {
-            dComIfGp_particle_setP1(0x55, &current.pos, &current.angle, 0);
+            dComIfGp_particle_setP1(0x55, &current.pos, &current.angle);
             fopAcM_seStartCurrent(this, JA_SE_OBJ_MINI_ICE_BREAK, 0);
             fopAcM_delete(arrow);
             fopAcM_delete(this);
@@ -234,7 +234,7 @@ bool daArrow_Iceeff_c::_execute() {
             csXyz angle;
             angle.set(-0x4000, 0, 0);
 
-            JPABaseEmitter* ptcl = dComIfGp_particle_setP1(0x29E, &current.pos, &angle, 0);
+            JPABaseEmitter* ptcl = dComIfGp_particle_setP1(0x29E, &current.pos, &angle);
             if(ptcl) {
                 JGeometry::TVec3<f32> scale(0.5f, 0.5f, 0.5f);
                 ptcl->setGlobalScale(scale);
@@ -258,14 +258,14 @@ bool daArrow_Iceeff_c::_execute() {
         }
 
         if(field_0xA30 == 0x23) {
-            JPABaseEmitter* ptcl = dComIfGp_particle_setSingleRipple(0x3D, &current.pos, 0, &ripple_scale);
+            JPABaseEmitter* ptcl = dComIfGp_particle_setSingleRipple(0x3D, &current.pos, NULL, &ripple_scale);
             if(ptcl) {
                 JGeometry::TVec3<f32> scale(0.67f, 0.67f, 1.0f);
                 ptcl->setGlobalParticleScale(scale);
             }
         }
         else if(field_0xA30 == 0x28) {
-            JPABaseEmitter* ptcl = dComIfGp_particle_setP1(0x55, &current.pos, 0, 0);
+            JPABaseEmitter* ptcl = dComIfGp_particle_setP1(0x55, &current.pos);
             if(ptcl) {
                 ptcl->setAwayFromCenterSpeed(25.0f);
                 ptcl->setAwayFromAxisSpeed(5.0f);
@@ -276,7 +276,7 @@ bool daArrow_Iceeff_c::_execute() {
                 ptcl->setGlobalParticleScale(scale2);
             }
             
-            dComIfGp_particle_setSingleRipple(0x3F, &current.pos, 0, &ripple_scale);
+            dComIfGp_particle_setSingleRipple(0x3F, &current.pos, NULL, &ripple_scale);
             fopAcM_seStartCurrent(this, JA_SE_OBJ_MINI_ICE_BREAK, 0);
 
             field_0xA3C = 0;

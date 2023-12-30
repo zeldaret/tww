@@ -75,15 +75,15 @@ void set_disappear(disappear_class* i_this, float scale) {
         case 0xB:
         case 0xC:
         case 0xD:
-            dComIfGp_particle_set(0x14, &i_this->current.pos, 0, &particleScale);
+            dComIfGp_particle_set(0x14, &i_this->current.pos, NULL, &particleScale);
         case 3:
-            dComIfGp_particle_set(0x13, &i_this->current.pos, 0, &particleScale);
-            dComIfGp_particle_setStripes(0x15, &i_this->current.pos, 0, &particleScale, 0xFF, 0x96);
-            dComIfGp_particle_set(0x16, &i_this->current.pos, 0, &particleScale);
+            dComIfGp_particle_set(0x13, &i_this->current.pos, NULL, &particleScale);
+            dComIfGp_particle_setStripes(0x15, &i_this->current.pos, NULL, &particleScale, 0xFF, 0x96);
+            dComIfGp_particle_set(0x16, &i_this->current.pos, NULL, &particleScale);
             break;
         case 1:
-            dComIfGp_particle_set(0x13, &i_this->current.pos, 0, &particleScale);
-            dComIfGp_particle_set(0x16, &i_this->current.pos, 0, &particleScale);
+            dComIfGp_particle_set(0x13, &i_this->current.pos, NULL, &particleScale);
+            dComIfGp_particle_set(0x16, &i_this->current.pos, NULL, &particleScale);
             break;
         case 4:
             dComIfGp_particle_set(0x043C, &i_this->current.pos);

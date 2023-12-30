@@ -34,7 +34,7 @@ const dCcD_SrcCps daArrow_c::m_at_cps_src = {
         /* SrcObjTg  SPrm    */ 0,
         /* SrcObjCo  SPrm    */ 0,
         /* SrcGObjAt Se      */ 0x07,
-        /* SrcGObjAt HitMark */ 0x0D,
+        /* SrcGObjAt HitMark */ G_AT_MARK_NORMAL_HIT,
         /* SrcGObjAt Spl     */ 0,
         /* SrcGObjAt Mtrl    */ 0,
         /* SrcGObjAt SPrm    */ 0,
@@ -836,7 +836,7 @@ BOOL daArrow_c::procMove() {
                 csXyz temp9;
                 cM3d_CalcVecZAngle(triPla->mNormal, &temp9);
                 
-                dComIfGp_particle_setP1(0xC, &field_0x6a8, &temp9);
+                dComIfGp_particle_setP1(dPa_name::ID_COMMON_PURPLE_HIT, &field_0x6a8, &temp9);
                 fopAcM_seStartCurrent(this, JA_SE_LK_ARROW_REBOUND, mtrlSndId);
             } else {
                 fopAcM_seStartCurrent(this, JA_SE_LK_ARROW_HIT, mtrlSndId);

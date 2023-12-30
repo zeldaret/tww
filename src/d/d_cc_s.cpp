@@ -5,6 +5,7 @@
 
 #include "d/d_cc_s.h"
 #include "d/d_cc_d.h"
+#include "d/d_com_inf_game.h"
 
 /* 800AD5B0-800AD5E4       .text Ct__4dCcSFv */
 void dCcS::Ct() {
@@ -58,8 +59,40 @@ void dCcS::CalcParticleAngle(dCcD_GObjInf*, cCcD_Stts*, cCcD_Stts*, csXyz*) {
 }
 
 /* 800ADFF8-800AE308       .text ProcAtTgHitmark__4dCcSFbbP8cCcD_ObjP8cCcD_ObjP12dCcD_GObjInfP12dCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10dCcD_GSttsP10dCcD_GSttsP4cXyz */
-void dCcS::ProcAtTgHitmark(bool, bool, cCcD_Obj*, cCcD_Obj*, dCcD_GObjInf*, dCcD_GObjInf*, cCcD_Stts*, cCcD_Stts*, dCcD_GStts*, dCcD_GStts*, cXyz*) {
-    /* Nonmatching */
+void dCcS::ProcAtTgHitmark(bool, bool, cCcD_Obj* r6, cCcD_Obj* r7, dCcD_GObjInf* atInf, dCcD_GObjInf* tgInf,
+                           cCcD_Stts* r10, cCcD_Stts* r30, dCcD_GStts*, dCcD_GStts* r4, cXyz* pos)
+{
+    if (atInf->ChkAtNoHitMark()) { return; }
+    if (tgInf->ChkTgNoHitMark()) { return; }
+    if (tgInf->GetTgHitMark() == 0xFF) { return; }
+    if (!r4->ChkNoneActorPerfTblId()) { return; }
+    
+    if (!ChkShield(r6, r7, atInf, tgInf)) {
+        if (atInf->GetAtHitMark() == 0) { return; }
+        if (atInf->GetAtHitMark() == 1 && tgInf->GetTgHitMark() == 1) {
+            dComIfGp_particle_set(dPa_name::ID_COMMON_STARS_BLOW, pos);
+        } else {
+            csXyz angle;
+            CalcParticleAngle(atInf, r10, r30, &angle);
+            if (atInf->GetAtHitMark() == 0xF) {
+                dComIfGp_particle_set(0x10, pos);
+                cXyz scale;
+                scale.x = scale.y = scale.z = 2.0f;
+                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, pos, &angle, &scale);
+            } else if (atInf->GetAtHitMark() == 1) {
+                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, pos, &angle);
+            } else {
+                dComIfGp_particle_set(atInf->GetAtHitMark(), pos, &angle);
+            }
+            dKy_SordFlush_set(*pos, 1);
+        }
+    } else {
+        if (tgInf->GetTgHitMark() == 0) { return; }
+        dKy_SordFlush_set(*pos, 0);
+        csXyz angle;
+        CalcParticleAngle(atInf, r10, r30, &angle);
+        dComIfGp_particle_set(tgInf->GetTgHitMark(), pos, &angle);
+    }
 }
 
 /* 800AE308-800AE5AC       .text SetAtTgGObjInf__4dCcSFbbP8cCcD_ObjP8cCcD_ObjP12cCcD_GObjInfP12cCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10cCcD_GSttsP10cCcD_GSttsP4cXyz */

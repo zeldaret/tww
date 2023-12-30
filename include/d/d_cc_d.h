@@ -8,6 +8,7 @@
 
 #include "SSystem/SComponent/c_cc_d.h"
 #include "f_pc/f_pc_manager.h"
+#include "d/d_particle_name.h"
 
 enum dCcG_At_SPrm {
     G_AT_SPRM_NO_CON_HIT = 0x01,
@@ -30,9 +31,13 @@ enum dCcG_Co_SPrm {
 
 enum dCcD_hitSe {};
 
+enum CcG_At_HitMark {
+    /* 0xD */ G_AT_MARK_NORMAL_HIT = dPa_name::ID_COMMON_NORMAL_HIT,
+    /* 0xF */ G_AT_MARK_BIG_HIT = dPa_name::ID_COMMON_BIG_HIT,
+};
+
 enum CcG_Tg_HitMark {
-    CcG_Tg_UNK_MARK_6 = 6,
-    CcG_Tg_UNK_MARK_8 = 8,
+    /* 0xC */ G_TG_MARK_PURPLE_HIT = dPa_name::ID_COMMON_PURPLE_HIT,
 };
 
 enum dCcG_At_Spl {};
@@ -106,7 +111,7 @@ public:
     unsigned int GetAtOldApid() { return mAtOldApid; }
     unsigned int GetTgOldApid() { return mTgOldApid; }
     bool ChkNoActor() { return field_0x1C & 1; }
-    bool ChkNoneActorPerfTblId() { return field_0x08 == 0xFFFF; }
+    bool ChkNoneActorPerfTblId() { return mActorPerfTblId == 0xFFFF; }
     dCcG_At_Spl GetAtSpl() { return (dCcG_At_Spl)mAtSpl; }
     void SetAtSpl(dCcG_At_Spl spl) { mAtSpl = spl; }
     dCcG_Tg_Spl GetTgSpl() { return (dCcG_Tg_Spl)mTgSpl; }
@@ -117,7 +122,7 @@ public:
     /* 0x04 */ u8 mAtSpl;
     /* 0x05 */ u8 mTgSpl;
     /* 0x06 */ u8 mRoomId;
-    /* 0x08 */ u16 field_0x08;
+    /* 0x08 */ u16 mActorPerfTblId;
     /* 0x0C */ int mAtApid;
     /* 0x10 */ int mAtOldApid;
     /* 0x14 */ int mTgApid;
@@ -217,7 +222,7 @@ public:
     void SetHitMark(u8 mark) { mHitMark = mark; }
     void SetSe(u8 se) { mSe = se; }
     void SetMtrl(u8 mtrl) { mMtrl = mtrl; }
-    void SetAtSpl(dCcG_At_Spl spl) { mSpl = spl; }
+    void SetSpl(dCcG_At_Spl spl) { mSpl = spl; }
     u8 GetSe() { return mSe; }
     u8 GetSpl() { return mSpl; }
     u8 GetMtrl() { return mMtrl; }
@@ -251,6 +256,7 @@ public:
     void SetHitMark(CcG_Tg_HitMark mark) { mHitMark = mark; }
     s16* GetShieldFrontRangeYAngle() { return mShieldFrontRangeYAngle; }
     u8 GetSpl() { return mSpl; }
+    void SetSpl(dCcG_Tg_Spl spl) { mSpl = spl; }
     u8 GetHitMark() { return mHitMark; }
     void SetRVec(cXyz& vec) { mRVec = vec; }
     cXyz* GetVecP() { return &mVec; }
@@ -313,14 +319,21 @@ public:
     void SetAtVec(cXyz& vec) { mGObjAt.SetVec(vec); }
     void SetTgVec(cXyz& vec) { mGObjTg.SetVec(vec); }
     bool ChkAtNoMass() { return mGObjAt.ChkSPrm(G_AT_SPRM_NO_MASS); }
+    bool ChkAtNoHitMark() { return mGObjAt.ChkSPrm(G_AT_SPRM_NO_HIT_MARK); }
     void OnAtNoHitMark() { mGObjAt.OnSPrm(G_AT_SPRM_NO_HIT_MARK); }
     void OffAtNoHitMark() { mGObjAt.OffSPrm(G_AT_SPRM_NO_HIT_MARK); }
+    bool ChkTgNoHitMark() { return mGObjTg.ChkSPrm(G_TG_SPRM_NO_HIT_MARK); }
     void OnTgNoHitMark() { mGObjTg.OnSPrm(G_TG_SPRM_NO_HIT_MARK); }
     void OffTgNoHitMark() { mGObjTg.OffSPrm(G_TG_SPRM_NO_HIT_MARK); }
+    bool ChkAtNoConHit() { return mGObjAt.ChkSPrm(G_AT_SPRM_NO_CON_HIT); }
     void OnAtNoConHit() { mGObjAt.OnSPrm(G_AT_SPRM_NO_CON_HIT); }
     void OffAtNoConHit() { mGObjAt.OffSPrm(G_AT_SPRM_NO_CON_HIT); }
+    bool ChkTgNoConHit() { return mGObjTg.ChkSPrm(G_TG_SPRM_NO_CON_HIT); }
     void OnTgNoConHit() { mGObjTg.OnSPrm(G_TG_SPRM_NO_CON_HIT); }
+    int GetAtHitMark() { return mGObjAt.GetHitMark(); }
+    int GetTgHitMark() { return mGObjTg.GetHitMark(); }
     void SetAtHitMark(u8 mark) { mGObjAt.SetHitMark(mark); }
+    void SetTgHitMark(CcG_Tg_HitMark mark) { mGObjTg.SetHitMark(mark); }
     void SetAtSe(u8 se) { mGObjAt.SetSe(se); }
     void SetTgSe(u8 se) { mGObjTg.SetSe(se); }
     void SetAtMtrl(u8 mtrl) { mGObjAt.SetMtrl(mtrl); }
@@ -329,27 +342,26 @@ public:
     cXyz* GetAtVecP() { return mGObjAt.GetVecP(); }
     cXyz* GetTgVecP() { return mGObjTg.GetVecP(); }
     cXyz* GetTgRVecP() { return mGObjTg.GetRVecP(); }
-    void SetAtSpl(dCcG_At_Spl spl) { mGObjAt.SetAtSpl(spl); }
+    dCcG_At_Spl GetAtSpl() { return (dCcG_At_Spl)mGObjAt.GetSpl(); }
+    void SetAtSpl(dCcG_At_Spl spl) { mGObjAt.SetSpl(spl); }
+    dCcG_Tg_Spl GetTgSpl() { return (dCcG_Tg_Spl)mGObjTg.GetSpl(); }
+    void SetTgSpl(dCcG_Tg_Spl spl) { mGObjTg.SetSpl(spl); }
     void SetAtHitCallback(dCcD_HitCallback callback) { mGObjAt.SetHitCallback(callback); }
     void SetTgHitCallback(dCcD_HitCallback callback) { mGObjTg.SetHitCallback(callback); }
     void SetCoHitCallback(dCcD_HitCallback callback) { mGObjCo.SetHitCallback(callback); }
     u8 GetAtSe() { return mGObjAt.GetSe(); }
-    dCcG_At_Spl GetAtSpl() { return (dCcG_At_Spl)mGObjAt.GetSpl(); }
     u8 GetAtMtrl() { return mGObjAt.GetMtrl(); }
     u8 GetTgMtrl() { return mGObjTg.GetMtrl(); }
     fopAc_ac_c* GetTgHitAc() { return mGObjTg.GetAc(); }
     void SetTgShieldFrontRangeYAngle(s16* angle) { mGObjTg.SetShieldFrontRangeYAngle(angle); }
-    void SetTgHitMark(CcG_Tg_HitMark mark) { mGObjTg.SetHitMark(mark); }
+    bool ChkTgShield() { return mGObjTg.ChkSPrm(G_TG_SPRM_SHIELD); }
     void OnTgShield() { mGObjTg.OnSPrm(G_TG_SPRM_SHIELD); }
     void OffTgShield() { mGObjTg.OffSPrm(G_TG_SPRM_SHIELD); }
+    bool ChkTgShieldFrontRange() { return mGObjTg.ChkSPrm(G_TG_SPRM_SHIELD_FRONT_RANGE); }
     void OnTgShieldFrontRange() { mGObjTg.OnSPrm(G_TG_SPRM_SHIELD_FRONT_RANGE); }
     void OffTgShieldFrontRange() { mGObjTg.OffSPrm(G_TG_SPRM_SHIELD_FRONT_RANGE); }
     s16* GetTgShieldFrontRangeYAngle() { return mGObjTg.GetShieldFrontRangeYAngle(); }
-    bool ChkTgShield() { return mGObjTg.ChkSPrm(G_TG_SPRM_SHIELD); }
-    bool ChkTgShieldFrontRange() { return mGObjTg.ChkSPrm(G_TG_SPRM_SHIELD_FRONT_RANGE); }
-    bool ChkAtNoConHit() { return mGObjAt.ChkSPrm(G_AT_SPRM_NO_CON_HIT); }
     bool ChkAtStopNoConHit() { return mGObjAt.ChkSPrm(G_AT_SPRM_STOP_NO_CON_HIT); }
-    bool ChkTgNoConHit() { return mGObjTg.ChkSPrm(G_TG_SPRM_NO_CON_HIT); }
     bool ChkCoAtLasso() { return mGObjCo.ChkSPrm(G_CO_SPRM_AT_LASSO); }
     bool ChkCoTgLasso() { return mGObjCo.ChkSPrm(G_CO_SPRM_TG_LASSO); }
     dCcD_HitCallback GetCoHitCallback() { return mGObjCo.GetHitCallback(); }
@@ -367,11 +379,6 @@ public:
     bool ChkCoHitNoActor() { return mGObjCo.ChkRPrm(1); }
     bool ChkAtHitNoActor() { return mGObjAt.ChkRPrm(2); }
     bool ChkTgHitNoActor() { return mGObjTg.ChkRPrm(1); }
-    bool ChkAtNoHitMark() { return mGObjAt.ChkSPrm(G_AT_SPRM_NO_HIT_MARK); }
-    bool ChkTgNoHitMark() { return mGObjTg.ChkSPrm(G_TG_SPRM_NO_HIT_MARK); }
-    dCcG_Tg_Spl GetTgSpl() { return (dCcG_Tg_Spl)mGObjTg.GetSpl(); }
-    int GetTgHitMark() { return mGObjTg.GetHitMark(); }
-    int GetAtHitMark() { return mGObjAt.GetHitMark(); }
     bool ChkAtEffCounter() { return mGObjAt.ChkEffCounter(); }
     bool ChkTgEffCounter() { return mGObjTg.ChkEffCounter(); }
     void ClrAtEffCounter() { mGObjAt.ClrEffCounter(); }

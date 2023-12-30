@@ -175,9 +175,9 @@ static BOOL medama_atari_check(am2_class* i_this) {
                         atInfo.pParticlePos = NULL;
                         cc_at_check(i_this, &atInfo);
                         i_this->mHealth = origHealth;
-                        dComIfGp_particle_set(0x27B, &i_this->mAttentionInfo.mPosition);
+                        dComIfGp_particle_set(dPa_name::ID_COMMON_STARS_BLOW, &i_this->mAttentionInfo.mPosition);
                     } else {
-                        dComIfGp_particle_set(0xC, &hitPos);
+                        dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, &hitPos);
                     }
                     fopAcM_seStart(i_this, JA_SE_LK_MS_WEP_HIT, 0x42);
                 }
@@ -315,9 +315,9 @@ static BOOL week_atari_check(am2_class* i_this) {
                 if (hitType == 1) {
                     dComIfGp_particle_set(0x10, &hitPos);
                     cXyz particleScale(2.0f, 2.0f, 2.0f);
-                    dComIfGp_particle_set(0xF, &hitPos, &player->shape_angle, &particleScale);
+                    dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, &hitPos, &player->shape_angle, &particleScale);
                 } else {
-                    dComIfGp_particle_set(0xD, &hitPos, &player->shape_angle);
+                    dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &hitPos, &player->shape_angle);
                 }
                 
                 i_this->mAction = ACTION_ITAI;
@@ -1441,7 +1441,7 @@ static s32 daAM2_Create(fopAc_ac_c* i_actor) {
                 /* SrcGObjAt Mtrl    */ 0,
                 /* SrcGObjAt SPrm    */ 0,
                 /* SrcGObjTg Se      */ 0,
-                /* SrcGObjTg HitMark */ 0x0C,
+                /* SrcGObjTg HitMark */ G_TG_MARK_PURPLE_HIT,
                 /* SrcGObjTg Spl     */ 0,
                 /* SrcGObjTg Mtrl    */ 0,
                 /* SrcGObjTg SPrm    */ G_TG_SPRM_SHIELD | G_TG_SPRM_NO_CON_HIT,
@@ -1473,7 +1473,7 @@ static s32 daAM2_Create(fopAc_ac_c* i_actor) {
                 /* SrcGObjAt Mtrl    */ 0,
                 /* SrcGObjAt SPrm    */ 0,
                 /* SrcGObjTg Se      */ 0,
-                /* SrcGObjTg HitMark */ 0x0C,
+                /* SrcGObjTg HitMark */ G_TG_MARK_PURPLE_HIT,
                 /* SrcGObjTg Spl     */ 0,
                 /* SrcGObjTg Mtrl    */ 0,
                 /* SrcGObjTg SPrm    */ G_TG_SPRM_SHIELD | G_TG_SPRM_NO_CON_HIT,

@@ -145,23 +145,23 @@ void daArrow_Lighteff_c::CreateInit() {
 
     if(field_0x2E8 == 1) {
         if(field_0x2F4.getEmitter() == 0) {
-            dComIfGp_particle_setP1(0x299, &field_0x29C, &current.angle, 0, 0xFF, &field_0x2F4);
+            dComIfGp_particle_setP1(0x299, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x2F4);
         }
     }
     else if(field_0x2E8 == 2) {
         if(field_0x2F4.getEmitter() == 0) {
-            dComIfGp_particle_setP1(0x29C, &field_0x29C, &current.angle, 0, 0xFF, &field_0x2F4);
+            dComIfGp_particle_setP1(0x29C, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x2F4);
         }
         if(field_0x308.getEmitter() == 0) {
-            dComIfGp_particle_setP1(0x29D, &field_0x29C, &current.angle, 0, 0xFF, &field_0x308);
+            dComIfGp_particle_setP1(0x29D, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x308);
         }
     }
     else if(field_0x2E8 == 3) {
         if(field_0x2F4.getEmitter() == 0) {
-            dComIfGp_particle_setP1(0x29F, &field_0x29C, &current.angle, 0, 0xFF, &field_0x2F4);
+            dComIfGp_particle_setP1(0x29F, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x2F4);
         }
         if(field_0x308.getEmitter() == 0) {
-            dComIfGp_particle_setP1(0x2A0, &field_0x29C, &current.angle, 0, 0xFF, &field_0x308);
+            dComIfGp_particle_setP1(0x2A0, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x308);
         }
     }
 

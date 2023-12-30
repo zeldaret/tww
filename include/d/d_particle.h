@@ -6,6 +6,7 @@
 #include "JSystem/JGeometry.h"
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAEmitter.h"
+#include "d/d_particle_name.h"
 #include "f_pc/f_pc_node.h"
 #include "m_Do/m_Do_ext.h"
 

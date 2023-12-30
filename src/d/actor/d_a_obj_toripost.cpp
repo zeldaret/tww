@@ -343,7 +343,7 @@ int daObjTpost_c::getMsgXY() {
             col.b = g_regHIO.mChild[12].mShortRegs[2] + 0x80;
             mDoMtx_stack_c::copy(mMorf->getModel()->mpNodeMtx[2]);
             mDoMtx_stack_c::multVec(&pos, &pos);
-            dComIfGp_particle_set(0x57, &pos, &shape_angle, &scale, 0xFF, 0, -1, &col);
+            dComIfGp_particle_set(0x57, &pos, &shape_angle, &scale, 0xFF, NULL, -1, &col);
             
             break;
         case 0x98:

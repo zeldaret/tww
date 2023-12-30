@@ -32,7 +32,7 @@ dCcD_GStts::dCcD_GStts() {
     mAtSpl = 0;
     mTgSpl = 0;
     mRoomId = 0;
-    field_0x08 = -1;
+    mActorPerfTblId = -1;
     mAtApid = -1;
     mAtOldApid = -1;
     mTgApid = -1;
@@ -45,7 +45,7 @@ void dCcD_GStts::Ct() {
     mAtSpl = 0;
     mTgSpl = 0;
     mRoomId = 0;
-    field_0x08 = -1;
+    mActorPerfTblId = -1;
     mAtApid = -1;
     mAtOldApid = -1;
     mTgApid = -1;

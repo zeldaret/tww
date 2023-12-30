@@ -637,7 +637,7 @@ void daBomb_c::makeFireEffect(cXyz& pos, csXyz& rotation) {
 
     rotation.x = rotation.x + 0x4000;
     rotation.z = rotation.z;
-    dComIfGp_particle_setBombSmoke(0x200A, &pos, &rotation, &scale);
+    dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &pos, &rotation, &scale);
 
     dComIfGp_getVibration().StartShock(7, -0x21, cXyz(0.0f, 1.0f, 0.0f));
 }
@@ -673,8 +673,8 @@ void daBomb_c::setFuseEffect() {
         mFusePos2 = mFusePos;
         mFusePos3 = mFusePos;
 
-        dComIfGp_particle_setP1(0x11, &mFusePos, 0, &mScale, 0xFF, &mSparks, -1, 0, 0, 0);
-        dComIfGp_particle_setToonP1(0x2012, &mFusePos, 0, &mScale, 0xDC, &mSmoke, -1, 0, 0, 0);
+        dComIfGp_particle_setP1(dPa_name::ID_COMMON_FUSE_SPARKS, &mFusePos, NULL, &mScale, 0xFF, &mSparks);
+        dComIfGp_particle_setToonP1(0x2012, &mFusePos, NULL, &mScale, 0xDC, &mSmoke);
         mSmoke.field_0x0C = &mFusePos2;
         mSmoke.field_0x10 = &mFusePos3;
         mSmoke.field_0x04 = 0x14;
@@ -682,27 +682,27 @@ void daBomb_c::setFuseEffect() {
 }
 
 void daBomb_c::eff_explode_normal(const csXyz* rotation) {
-    dComIfGp_particle_setP1(0xB, &current.pos, rotation, &mScale, 0xFF, 0, -1, 0, 0, 0);
-    dComIfGp_particle_setBombSmoke(0x2009, &current.pos, 0, &mScale);
-    dComIfGp_particle_setBombSmoke(0x200A, &current.pos, 0, &mScale);
-    dComIfGp_particle_setToonP1(0x2008, &current.pos, 0, &mScale, 0xFF, 0, -1, 0, 0, 0);
+    dComIfGp_particle_setP1(dPa_name::ID_COMMON_LIGHT_FLASH, &current.pos, rotation, &mScale);
+    dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CLOUD, &current.pos, NULL, &mScale);
+    dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &current.pos, NULL, &mScale);
+    dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_SMOKE_DEBRIS, &current.pos, NULL, &mScale);
 }
 
 void daBomb_c::eff_explode_cheap(const csXyz* rotation) {
-    JPABaseEmitter* emitter = dComIfGp_particle_setP1(0xB, &current.pos, rotation, &mScale, 0xFF, 0, -1, 0, 0, 0);
+    JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_LIGHT_FLASH, &current.pos, rotation, &mScale);
     if(emitter) {
         emitter->mLifeTime = 0xC;
         JGeometry::TVec3<f32> vec(0.5f, 0.67f, 1.0f);
         emitter->setGlobalParticleScale(vec);
     }
 
-    dComIfGp_particle_setBombSmoke(0x232A, &current.pos, 0, &mScale);
-    emitter = dComIfGp_particle_setBombSmoke(0x200A, &current.pos, 0, &mScale);
+    dComIfGp_particle_setBombSmoke(0x232A, &current.pos, NULL, &mScale);
+    emitter = dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &current.pos, NULL, &mScale);
     if(emitter) {
         emitter->mLifeTime = 0x46;
     }
     
-    emitter = dComIfGp_particle_setToonP1(0x2008, &current.pos, 0, &mScale, 0xFF, 0, -1, 0, 0, 0);
+    emitter = dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_SMOKE_DEBRIS, &current.pos, NULL, &mScale);
     if(emitter) {
         emitter->mLifeTime = 0x46;
         emitter->mInitialVelAxis = 25.0f;
