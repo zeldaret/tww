@@ -8,6 +8,29 @@
 namespace JGeometry {
 
 template <typename T>
+struct TUtil {
+    static inline f32 epsilon() { return 3.81469727e-06f; }
+
+    static inline f32 sqrt(f32 mag) {
+        if (mag <= 0.0f) {
+            return mag;
+        } else {
+            f32 root = __frsqrte(mag);
+            return 0.5f * root * (3.0f - mag * (root * root)) * mag;
+        }
+    }
+
+    static inline f32 inv_sqrt(f32 mag) {
+        if (mag <= 0.0f) {
+            return mag;
+        } else {
+            f32 root = __frsqrte(mag);
+            return 0.5f * root * (3.0f - mag * (root * root));
+        }
+    }
+};
+
+template <typename T>
 struct TVec3 {
     T x;
     T y;
@@ -356,31 +379,6 @@ struct TBox2 : TBox<TVec2<T> > {
     void set(const TBox2& other) { set(other.i, other.f); }
     void set(const TVec2<f32>& i, const TVec2<f32>& f) { this->i.set(i), this->f.set(f); }
     void set(f32 x0, f32 y0, f32 x1, f32 y1) { i.set(x0, y0); f.set(x1, y1); }
-};
-
-template<typename T>
-struct TUtil {
-    static inline f32 epsilon() {
-        return 3.81469727e-06f;
-    }
-    
-    static inline f32 sqrt(f32 mag) {
-        if (mag <= 0.0f) {
-            return mag;
-        } else {
-            f32 root = __frsqrte(mag);
-            return 0.5f * root * (3.0f - mag * (root * root)) * mag;
-        }
-    }
-
-    static inline f32 inv_sqrt(f32 mag) {
-        if (mag <= 0.0f) {
-            return mag;
-        } else {
-            f32 root = __frsqrte(mag);
-            return 0.5f * root * (3.0f - mag * (root * root));
-        }
-    }
 };
 
 // clang-format on

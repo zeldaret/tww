@@ -646,7 +646,7 @@ void JPADraw::setParticleClipBoard() {
     switch (dc.pbsp->getType()) {
     case JPABaseShape::JPAType_Billboard:
     case JPABaseShape::JPAType_DirBillboard:
-        PSMTXIdentity(cb.mDrawMtx);
+        MTXIdentity(cb.mDrawMtx);
         break;
     case JPABaseShape::JPAType_YBillboard:
         loadYBBMtx(cb.mDrawMtxPtr);
@@ -732,7 +732,7 @@ void JPADraw::setChildClipBoard() {
     switch (dc.pssp->getType()) {
     case JPABaseShape::JPAType_Billboard:
     case JPABaseShape::JPAType_DirBillboard:
-        PSMTXIdentity(cb.mDrawMtx);
+        MTXIdentity(cb.mDrawMtx);
         break;
     case JPABaseShape::JPAType_YBillboard:
         loadYBBMtx(cb.mDrawMtxPtr);

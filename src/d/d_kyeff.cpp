@@ -26,7 +26,7 @@ BOOL dKyeff_Draw(dKyeff_c* i_this) {
 }
 
 /* 80198008-8019803C       .text get_parcent__Ffff */
-f32 get_parcent(f32 param_0, f32 param_1, f32 param_2) {
+static f32 get_parcent(f32 param_0, f32 param_1, f32 param_2) {
     f32 temp_f1;
     f32 temp_f2;
     f32 temp_f4 = param_0 - param_1;
@@ -41,7 +41,7 @@ f32 get_parcent(f32 param_0, f32 param_1, f32 param_2) {
 }
 
 /* 8019803C-8019808C       .text s16_data_ratio_set__Fssf */
-s16 s16_data_ratio_set(s16 param_0, s16 param_1, f32 param_2) {
+static s16 s16_data_ratio_set(s16 param_0, s16 param_1, f32 param_2) {
     return param_0 + (s16)(param_2 * (param_1 - param_0));
 }
 

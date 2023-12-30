@@ -218,7 +218,7 @@ u32 dLib_setFirstMsg(u16 eventBit, u32 firstMsgID, u32 secondMsgID) {
 /* 80057F30-80057F78       .text dLib_checkPlayerInCircle__F4cXyzff */
 bool dLib_checkPlayerInCircle(cXyz center, f32 radius, f32 halfHeight) {
     fopAc_ac_c* link = dComIfGp_getLinkPlayer();
-    dLib_checkActorInCircle(center, link, radius, halfHeight);
+    return dLib_checkActorInCircle(center, link, radius, halfHeight);
 }
 
 /* 80057F78-80058098       .text dLib_checkActorInCircle__F4cXyzP10fopAc_ac_cff */

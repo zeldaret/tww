@@ -106,7 +106,7 @@ s16 u8_data_ratio_set(u8 param_0, u8 param_1, f32 param_2) {
 }
 
 /* 8018F894-8018F8E4       .text s16_data_ratio_set__Fssf */
-s16 s16_data_ratio_set(s16 param_0, s16 param_1, f32 param_2) {
+static s16 s16_data_ratio_set(s16 param_0, s16 param_1, f32 param_2) {
     return param_0 + (s16)(param_2 * (param_1 - param_0));
 }
 
@@ -147,7 +147,7 @@ f32 float_kankyo_color_ratio_set(f32 param_0, f32 param_1, f32 param_2, f32 para
 }
 
 /* 8018FAE0-8018FB14       .text get_parcent__Ffff */
-f32 get_parcent(f32 param_0, f32 param_1, f32 param_2) {
+static f32 get_parcent(f32 param_0, f32 param_1, f32 param_2) {
     f32 temp_f1;
     f32 temp_f2;
     f32 temp_f4 = param_0 - param_1;

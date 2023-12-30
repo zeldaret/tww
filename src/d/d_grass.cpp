@@ -72,7 +72,7 @@ void dGrass_packet_c::calc() {
 }
 
 /* 80078008-800782B8       .text checkGroundY__FR4cXyz */
-void checkGroundY(cXyz&) {
+static void checkGroundY(cXyz&) {
     /* Nonmatching */
 }
 
