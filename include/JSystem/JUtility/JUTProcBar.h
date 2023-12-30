@@ -26,7 +26,7 @@ public:
         }
 
         void end() {
-            mCost = ((OSGetTick() - mTick) * 8) / ((*(u32*)0x800000F8 / 4) / 125000);
+            mCost = OSTicksToMicroseconds(OSGetTick() - mTick);
             if (mCost == 0) {
                 mCost = 1;
             }
