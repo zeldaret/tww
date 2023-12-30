@@ -61,13 +61,13 @@ public:
     static mDoDvdThd_mountArchive_c* create(char const*, u8, JKRHeap*);
     virtual BOOL execute();
 
-    JKRMemArchive* getArchive() const { return mArchive; }
+    JKRArchive* getArchive() const { return mArchive; }
     JKRHeap* getHeap() const { return mHeap; }
 
 private:
     /* 0x14 */ u8 mMountDirection;
     /* 0x18 */ s32 mEntryNum;
-    /* 0x1C */ JKRMemArchive* mArchive;
+    /* 0x1C */ JKRArchive* mArchive;
     /* 0x20 */ JKRHeap* mHeap;
 };  // Size = 0x24
 

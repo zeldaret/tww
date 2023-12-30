@@ -268,11 +268,11 @@ JAISound* JAIBasic::makeSound(u32) {
 }
 
 /* 802911A8-80291200       .text allocStreamBuffer__8JAIBasicFPvl */
-void JAIBasic::allocStreamBuffer(void*, s32) {
+bool JAIBasic::allocStreamBuffer(void*, s32) {
     /* Nonmatching */
 }
 
 /* 80291200-80291220       .text deallocStreamBuffer__8JAIBasicFv */
-void JAIBasic::deallocStreamBuffer() {
+bool JAIBasic::deallocStreamBuffer() {
     /* Nonmatching */
 }

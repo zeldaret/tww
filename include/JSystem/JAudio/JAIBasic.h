@@ -53,8 +53,8 @@ public:
     void getSoundOffsetNumberFromID(u32);
     void setSeCategoryVolume(u8, u8);
     static u16 setParameterSeqSync(JASystem::TTrack*, u16);
-    void allocStreamBuffer(void*, s32);
-    void deallocStreamBuffer();
+    bool allocStreamBuffer(void*, s32);
+    bool deallocStreamBuffer();
 
     /* 0x04 */ void* field_0x4;
     /* 0x08 */ JKRSolidHeap* field_0x8;
