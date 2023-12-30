@@ -881,7 +881,6 @@ bool JUTException::queryMapAddress_single(char* mapPath, u32 address, s32 sectio
             section_idx++;
             while (true) {
                 char* src;
-                char* dst;
 
                 while (true) {
                     int length = file.fgets(buffer, ARRAY_SIZE(buffer));
@@ -893,11 +892,12 @@ bool JUTException::queryMapAddress_single(char* mapPath, u32 address, s32 sectio
 
                 int i = 0;
                 src = buffer + 1;
-                dst = section_name;
-                for (; *src != '\0'; i++, dst++, src++) {
-                    *dst = *src;
+                while (*src != '\0') {
+                    section_name[i] = *src;
                     if (*src == ' ' || i == 0xf)
                         break;
+                    i++;
+                    src++;
                 }
 
                 section_name[i] = 0;

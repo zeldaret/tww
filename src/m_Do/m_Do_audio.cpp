@@ -108,7 +108,6 @@ mDoDvdThd_mountArchive_c* l_arcCommand;
 
 /* 80007090-80007224       .text mDoAud_Create__Fv */
 void mDoAud_Create() {
-    /* Nonmatching */
     if (!l_affCommand) {
         l_affCommand = mDoDvdThd_toMainRam_c::create("/Audiores/JaiInit.aaf", 2, NULL);
         if (!l_affCommand) {
@@ -123,28 +122,27 @@ void mDoAud_Create() {
             return;
         }
     }
-    if (!l_affCommand->sync() || !l_arcCommand->sync()) {
-        return;
+    if (l_affCommand->sync() && l_arcCommand->sync()) {
+        JAIGlobalParameter::setParamInitDataPointer(l_affCommand->getMemAddress());
+        JAInter::SequenceMgr::setArchivePointer(l_arcCommand->getArchive());
+        mDoAud_setupStreamBuffer();
+        if (g_mDoAud_audioHeap) {
+            JKRSetCurrentHeap(NULL);
+            g_mDoAud_zelAudio.init(g_mDoAud_audioHeap, 0x00a00000);
+            JKRSetCurrentHeap(zeldaHeap);
+            g_mDoAud_audioHeap->adjustSize();
+        } else {
+            OSReport_Error("ヒープ確保失敗につきオーディオ初期化できません\n");
+        }
+        g_mDoAud_zelAudio.setEventBit(g_dComIfG_gameInfo.save.getEvent().getPEventBit());
+        g_mDoAud_zelAudio.reset();
+        JAIZelBasic::zel_basic->setOutputMode(OSGetSoundMode());
+        JKRHeap::free(l_affCommand->getMemAddress(), NULL);
+        delete l_affCommand;
+        delete l_arcCommand;
+        mDoAud_zelAudio_c::onInitFlag();
+        mDoDvdThd::SyncWidthSound = 1;
     }
-    JAIGlobalParameter::setParamInitDataPointer(l_affCommand->getMemAddress());
-    JAInter::SequenceMgr::setArchivePointer(l_arcCommand->getArchive());
-    mDoAud_setupStreamBuffer();
-    if (g_mDoAud_audioHeap) {
-        JKRSetCurrentHeap(NULL);
-        g_mDoAud_zelAudio.init(g_mDoAud_audioHeap, 0x00a00000);
-        JKRSetCurrentHeap(zeldaHeap);
-        g_mDoAud_audioHeap->adjustSize();
-    } else {
-        OSReport_Error("ヒープ確保失敗につきオーディオ初期化できません\n");
-    }
-    g_mDoAud_zelAudio.setEventBit(g_dComIfG_gameInfo.save.getEvent().getPEventBit());
-    g_mDoAud_zelAudio.reset();
-    JAIZelBasic::zel_basic->setOutputMode(OSGetSoundMode());
-    JKRHeap::free(l_affCommand->getMemAddress(), NULL);
-    delete l_affCommand;
-    delete l_arcCommand;
-    mDoAud_zelAudio_c::onInitFlag();
-    mDoDvdThd::SyncWidthSound = 1;
 }
 
 /* 80007224-80007268       .text mDoAud_Execute__Fv */
