@@ -1,7 +1,7 @@
 #ifndef M_DO_M_DO_PRINTF_H
 #define M_DO_M_DO_PRINTF_H
 
-#include "__va_arg.h"
+#include "stdarg.h"
 #include "m_Do/m_Do_main.h"
 
 extern "C" {

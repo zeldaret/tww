@@ -8,8 +8,7 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTVideo.h"
 #include "stdio.h"
-#include "__va_arg.h"
-#include "dolphin/types.h"
+#include "stdarg.h"
 
 /* 802C328C-802C32D4       .text __ct__10JUTDbPrintFP7JUTFontP7JKRHeap */
 JUTDbPrint::JUTDbPrint(JUTFont* pFont, JKRHeap* pHeap) {
