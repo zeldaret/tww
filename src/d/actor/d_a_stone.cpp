@@ -212,26 +212,26 @@ BOOL daStone::Act_c::_draw() {
 }
 
 /* 0000344C-0000346C       .text Create__Q27daStone6MethodFPv */
-void daStone::Method::Create(void*) {
+s32 daStone::Method::Create(void*) {
     /* Nonmatching */
 }
 
 /* 0000346C-00003490       .text Delete__Q27daStone6MethodFPv */
-void daStone::Method::Delete(void*) {
+BOOL daStone::Method::Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00003490-000034B4       .text Execute__Q27daStone6MethodFPv */
-void daStone::Method::Execute(void*) {
+BOOL daStone::Method::Execute(void*) {
     /* Nonmatching */
 }
 
 /* 000034B4-000034D8       .text Draw__Q27daStone6MethodFPv */
-void daStone::Method::Draw(void*) {
+BOOL daStone::Method::Draw(void*) {
     /* Nonmatching */
 }
 
 /* 000034D8-000034E0       .text IsDelete__Q27daStone6MethodFPv */
-void daStone::Method::IsDelete(void*) {
+BOOL daStone::Method::IsDelete(void*) {
     /* Nonmatching */
 }

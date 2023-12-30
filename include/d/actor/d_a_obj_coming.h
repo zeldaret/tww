@@ -8,8 +8,14 @@ namespace daObjComing {
         
     };
     
+    class Act_c;
+    
     struct Ctrl_c {
-        
+        void init(const daObjComing::Act_c*);
+        void init_timer(const daObjComing::Act_c*);
+        void set_wait_timer(const daObjComing::Act_c*);
+        void set_retry_timer(const daObjComing::Act_c*);
+        void set_appear_timer(const daObjComing::Act_c*);
     };
     
     class Act_c : public fopAc_ac_c {

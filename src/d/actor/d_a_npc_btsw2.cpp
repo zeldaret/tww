@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_npc_btsw2.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 000000EC-000001A8       .text __ct__17daNpc_Btsw2_HIO_cFv */
 daNpc_Btsw2_HIO_c::daNpc_Btsw2_HIO_c() {

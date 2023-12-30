@@ -135,9 +135,3 @@ static BOOL daSTBox_Execute(void*) {
 static BOOL daSTBox_IsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 000015BC-000015D0       .text setup__25daSTBox_shadowEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void daSTBox_shadowEcallBack_c::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
-    /* Nonmatching */
-}
-

@@ -217,12 +217,12 @@ void daNpc_Gp1_c::charDecide(int) {
 }
 
 /* 00001EF4-00001F40       .text eInit_INI_KAERE_KAERE___11daNpc_Gp1_cFv */
-void eInit_INI_KAERE_KAERE___11daNpc_Gp1_cFv {
+void daNpc_Gp1_c::eInit_INI_KAERE_KAERE_() {
     /* Nonmatching */
 }
 
 /* 00001F40-00001F4C       .text eInit_END_KAERE_KAERE___11daNpc_Gp1_cFv */
-void eInit_END_KAERE_KAERE___11daNpc_Gp1_cFv {
+void daNpc_Gp1_c::eInit_END_KAERE_KAERE_() {
     /* Nonmatching */
 }
 

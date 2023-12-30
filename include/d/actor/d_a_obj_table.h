@@ -10,14 +10,14 @@ namespace daObjTable {
     public:
         void prm_get_mdl() const {}
     
-        int CreateHeap();
+        BOOL CreateHeap();
         int Create();
         void Mthd_Create();
         BOOL Delete();
         void Mthd_Delete();
         void set_mtx();
         void init_mtx();
-        int Execute(float(**)[3][4]);
+        int Execute(Mtx**);
         BOOL Draw();
     
     public:

@@ -5,6 +5,11 @@
 
 class daObjKanoke_c : public fopAc_ac_c {
 public:
+    enum Prm_e {
+        
+    };
+    
+    daObjKanoke_c();
     s32 _create();
     void createHeap();
     void createInit();

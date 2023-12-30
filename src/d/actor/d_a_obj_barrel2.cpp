@@ -247,27 +247,27 @@ BOOL daObjBarrel2::Act_c::_draw() {
 }
 
 /* 00002F78-00002F98       .text Create__Q212daObjBarrel26MethodFPv */
-void daObjBarrel2::Method::Create(void*) {
+s32 daObjBarrel2::Method::Create(void*) {
     /* Nonmatching */
 }
 
 /* 00002F98-00002FBC       .text Delete__Q212daObjBarrel26MethodFPv */
-void daObjBarrel2::Method::Delete(void*) {
+BOOL daObjBarrel2::Method::Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00002FBC-00002FE0       .text Execute__Q212daObjBarrel26MethodFPv */
-void daObjBarrel2::Method::Execute(void*) {
+BOOL daObjBarrel2::Method::Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00002FE0-00003004       .text Draw__Q212daObjBarrel26MethodFPv */
-void daObjBarrel2::Method::Draw(void*) {
+BOOL daObjBarrel2::Method::Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00003004-0000300C       .text IsDelete__Q212daObjBarrel26MethodFPv */
-void daObjBarrel2::Method::IsDelete(void*) {
+BOOL daObjBarrel2::Method::IsDelete(void*) {
     /* Nonmatching */
 }
 

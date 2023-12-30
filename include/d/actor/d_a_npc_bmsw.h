@@ -45,6 +45,48 @@ public:
     /* 0x96C */ u8 m96C[0x9E4 - 0x96C];
 };
 
+class SwMail_c {
+public:
+    void CheckProc(void (SwMail_c::*)()) {}
+    void SetProc(void (SwMail_c::*)()) {}
+
+    void MailCreateInit(cXyz*, cXyz*);
+    void getNextNo(unsigned char);
+    void init();
+    void set_mtx();
+    void set_mtx_throw();
+    void DummyInit();
+    void Dummy();
+    void AppearInit();
+    void Appear();
+    void WaitInit();
+    void Wait();
+    void ThrowInit(cXyz, unsigned char);
+    void Throw();
+    void EndInit();
+    void End();
+    void SeDelete();
+    void move();
+    void draw(dKy_tevstr_c*);
+
+public:
+    /* Place member variables here */
+};
+
+class SwCam_c {
+public:
+    void ActiveOff() {}
+    void ActiveOn() {}
+    void getCenterP() {}
+    void getEyeP() {}
+    void setAimIdx(signed char, signed char) {}
+
+    void Move();
+
+public:
+    /* Place member variables here */
+};
+
 class daNpc_Bmsw_HIO_c {
 public:
     daNpc_Bmsw_HIO_c();

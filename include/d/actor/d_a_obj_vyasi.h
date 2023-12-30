@@ -7,8 +7,11 @@
 
 class J3DAnmTransformKey;
 class mDoExt_McaMorf;
+class J3DNode;
 
 namespace daObjVyasi {
+    static void JointNodeCallBack(J3DNode*, int);
+    
     class Act_c : public fopAc_ac_c {
     public:
         void is_switch() const {}

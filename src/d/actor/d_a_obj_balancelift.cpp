@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_balancelift.h"
-#include "dolphin/types.h"
+#include "d/d_bg_w.h"
 
 /* 000000EC-00000160       .text __ct__19daBalancelift_HIO_cFv */
 daBalancelift_HIO_c::daBalancelift_HIO_c() {

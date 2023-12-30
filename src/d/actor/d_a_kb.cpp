@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_kb.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 00000078-000001A4       .text anm_init__FP8kb_classifUcfi */
 void anm_init(kb_class*, int, float, unsigned char, float, int) {

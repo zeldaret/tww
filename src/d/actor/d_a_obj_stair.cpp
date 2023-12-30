@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_stair.h"
-#include "dolphin/types.h"
+#include "d/d_bg_w.h"
 
 /* 000000EC-00000130       .text __ct__16daobj_stairHIO_cFv */
 daobj_stairHIO_c::daobj_stairHIO_c() {

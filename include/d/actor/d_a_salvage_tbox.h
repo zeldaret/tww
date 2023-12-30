@@ -2,6 +2,23 @@
 #define D_A_SALVAGE_TBOX_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_particle.h"
+
+class daSTBox_shadowEcallBack_c : public dPa_levelEcallBack {
+public:
+    void deleteCallBack() {}
+    void getEmitter() {}
+    void setDepth(float) {}
+    void setIndirectTexData(float, float) {}
+    void setPos(cXyz&) {}
+    void setWaterFlatY(float) {}
+    void setWaterY(float) {}
+    void setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {}
+
+    void getMaxWaterY(JGeometry::TVec3<float>*);
+    void execute(JPABaseEmitter*);
+    void draw(JPABaseEmitter*);
+};
 
 class daSTBox_c : public fopAc_ac_c {
 public:

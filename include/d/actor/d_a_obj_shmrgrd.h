@@ -12,6 +12,7 @@ public:
     void on_switch() const {}
     void prm_get_swSave() const {}
 
+    daObjShmrgrd_c();
     void solidHeapCB(fopAc_ac_c*);
     void create_heap();
     s32 _create();

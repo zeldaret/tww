@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_canon.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 000000EC-000002C8       .text set_mtx__9daCanon_cFv */
 void daCanon_c::set_mtx() {

@@ -4,6 +4,10 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 
+struct sAhAnmDat {
+    
+};
+
 class daNpcAh_c : public fopAc_ac_c {
 public:
     void getPhaseP() {}

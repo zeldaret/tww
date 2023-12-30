@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_rflw.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c*) {

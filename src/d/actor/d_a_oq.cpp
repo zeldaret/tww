@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_oq.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 000000EC-00000208       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode*, int) {

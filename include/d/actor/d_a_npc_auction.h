@@ -3,6 +3,10 @@
 
 #include "f_op/f_op_actor.h"
 
+struct sAnmDat {
+    
+};
+
 class daNpcAuction_c : public fopAc_ac_c {
 public:
     inline s32 _create();

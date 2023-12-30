@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_machine.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 00000078-000000A8       .text _delete__11daMachine_cFv */
 BOOL daMachine_c::_delete() {

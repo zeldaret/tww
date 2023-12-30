@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_tn.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 000000EC-00000220       .text anm_init__FP8tn_classifUcfi */
 void anm_init(tn_class*, int, float, unsigned char, float, int) {

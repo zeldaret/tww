@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_toge.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 00000078-0000013C       .text _delete__8daToge_cFv */
 BOOL daToge_c::_delete() {

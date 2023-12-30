@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_kamome.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 000000EC-000001E4       .text anm_init__FP12kamome_classifUcfi */
 void anm_init(kamome_class*, int, float, unsigned char, float, int) {

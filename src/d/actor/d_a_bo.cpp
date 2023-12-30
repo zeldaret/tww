@@ -135,18 +135,3 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 static s32 daBO_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 00005C60-00005C64       .text draw__54JPACallBackBase2<P14JPABaseEmitter,P15JPABaseParticle>FP14JPABaseEmitterP15JPABaseParticle */
-void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::draw(JPABaseEmitter*, JPABaseParticle*) {
-    /* Nonmatching */
-}
-
-/* 00005C64-00005C68       .text execute__54JPACallBackBase2<P14JPABaseEmitter,P15JPABaseParticle>FP14JPABaseEmitterP15JPABaseParticle */
-void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::execute(JPABaseEmitter*, JPABaseParticle*) {
-    /* Nonmatching */
-}
-
-/* 00005C68-00005C6C       .text init__54JPACallBackBase2<P14JPABaseEmitter,P15JPABaseParticle>FP14JPABaseEmitterP15JPABaseParticle */
-void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::init(JPABaseEmitter*, JPABaseParticle*) {
-    /* Nonmatching */
-}

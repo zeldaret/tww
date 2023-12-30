@@ -79,6 +79,14 @@ namespace daObjBarrel2 {
     public:
         /* Place member variables here */
     };
+    
+    namespace Method {
+        s32 Create(void*);
+        BOOL Delete(void*);
+        BOOL Execute(void*);
+        BOOL Draw(void*);
+        BOOL IsDelete(void*);
+    };
 };
 
 #endif /* D_A_OBJ_BARREL2_H */

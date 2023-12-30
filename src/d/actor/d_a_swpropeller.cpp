@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_swpropeller.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 00000078-000000B8       .text _delete__10daSwProp_cFv */
 BOOL daSwProp_c::_delete() {

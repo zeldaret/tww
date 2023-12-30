@@ -19,6 +19,14 @@ namespace daObj_Otble {
     public:
         /* Place member variables here */
     };
+
+    namespace Mthd {
+        s32 Create(void*);
+        BOOL Delete(void*);
+        BOOL Execute(void*);
+        BOOL Draw(void*);
+        BOOL IsDelete(void*);
+    };
 };
 
 #endif /* D_A_OBJ_OTBLE_H */

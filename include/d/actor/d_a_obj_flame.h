@@ -89,6 +89,14 @@ namespace daObjFlame {
         /* 0x474 */ cXyz mOrigScale;
         /* 0x480 */ u8 m480[0x500 - 0x480];
     };
+    
+    namespace Method {
+        s32 Create(void*);
+        BOOL Delete(void*);
+        BOOL Execute(void*);
+        BOOL Draw(void*);
+        BOOL IsDelete(void*);
+    };
 };
 
 #endif /* D_A_OBJ_FLAME_H */

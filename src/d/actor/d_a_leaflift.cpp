@@ -4,7 +4,8 @@
 //
 
 #include "d/actor/d_a_leaflift.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
+#include "d/d_bg_w.h"
 
 /* 000000EC-000001C0       .text _delete__9daLlift_cFv */
 BOOL daLlift_c::_delete() {

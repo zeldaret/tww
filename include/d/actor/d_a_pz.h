@@ -5,6 +5,16 @@
 #include "c/c_damagereaction.h"
 #include "SSystem/SComponent/c_phase.h"
 
+class daPz_matAnm_c {
+    void clrMoveFlag() {}
+    void getNowOffsetX() {}
+    void getNowOffsetY() {}
+    void setMoveFlag() {}
+
+    daPz_matAnm_c();
+    void calc(J3DMaterial*) const;
+};
+
 class daPz_c : public fopAc_ac_c {
 public:
     enum Proc_e {

@@ -4,6 +4,10 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 
+struct sMnAnmDat {
+    
+};
+
 class daNpcMn_c : public fopAc_ac_c {
 public:
     void getNpcNo() {}
@@ -11,6 +15,7 @@ public:
     void getPosFlag() {}
     void setResFlag(unsigned char) {}
 
+    daNpcMn_c();
     s32 _create();
     void createHeap();
     void createInit();

@@ -34,6 +34,7 @@ public:
     void anmAtr(unsigned short);
     void eventOrder();
     void checkOrder();
+    void setCollision_SP_();
     void set_target(int);
     void chk_talk();
     void chk_partsNotMove();
@@ -44,7 +45,11 @@ public:
     void chkAttention();
     void setAttention(bool);
     void charDecide(int);
+    void eInit_MDR_();
+    void eInit_RED_LTR_();
     void event_actionInit(int);
+    void eMove_MDR_();
+    void eMove_RED_LTR_();
     void event_action();
     void privateCut(int);
     void endEvent();

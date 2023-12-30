@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_npc_uk.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 000000EC-000000F8       .text getType__10daNpc_Uk_cFv */
 void daNpc_Uk_c::getType() {

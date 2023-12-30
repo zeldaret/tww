@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_bmdfoot.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 000000EC-00000114       .text __ct__15daBmdfoot_HIO_cFv */
 daBmdfoot_HIO_c::daBmdfoot_HIO_c() {

@@ -2,8 +2,14 @@
 #define D_A_COMING2_H
 
 #include "f_op/f_op_actor.h"
+#include "d/actor/d_a_obj_barrel2.h"
 
 namespace daComing2 {
+    static void get_speed(fopAc_ac_c*);
+    static void position_is_safety_call_back(void*, void*);
+    static void position_is_none_obj(cXyz*);
+    static void checkLineCrossXZ(cXyz*, cXyz*, cXyz*, cXyz*);
+
     class Act_c : public fopAc_ac_c {
     public:
         void get_coming_point() {}

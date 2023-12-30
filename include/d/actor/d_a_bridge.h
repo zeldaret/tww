@@ -6,6 +6,44 @@
 #include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_phase.h"
 
+class dBgWSv;
+class JPABaseEmitter;
+
+struct br_s {
+    /* 0x000 */ J3DModel* mpModel;
+    /* 0x004 */ u8 m004[0x0B4 - 0x004];
+    /* 0x0B4 */ J3DModel* mpModelRope1;
+    /* 0x0B8 */ J3DModel* mpModelRope0;
+    /* 0x0BC */ mDoExt_3DlineMat1_c mLineMat1;
+    /* 0x0F8 */ cXyz m0F8[3];
+    /* 0x11C */ cXyz m11C[3];
+    /* 0x140 */ dCcD_Cyl mCyl[2];
+    /* 0x3A0 */ s16 m3A0[2];
+    /* 0x3A4 */ u8 m3A4;
+    /* 0x3A5 */ u8 m3A5;
+    /* 0x3A6 */ u8 m3A6[0x3A8 - 0x3A6];
+    /* 0x3A8 */ cXyz m3A8[2];
+    /* 0x3C0 */ s16 m3C0;
+    /* 0x3C2 */ s16 m3C2;
+    /* 0x3C4 */ JPABaseEmitter* m3C4;
+    /* 0x3C8 */ JPABaseEmitter* m3C8;
+    /* 0x3CC */ cXyz m3CC;
+    /* 0x3D8 */ cXyz mPosition;
+    /* 0x3E4 */ csXyz mRotation;
+    /* 0x3EA */ s16 mRotationYExtra;
+    /* 0x3EC */ f32 m3EC;
+    /* 0x3F0 */ f32 m3F0;
+    /* 0x3F4 */ f32 m3F4;
+    /* 0x3F8 */ u8 m3F8[0x3FC - 0x3F8];
+    /* 0x3FC */ f32 m3FC;
+    /* 0x400 */ u8 m400[0x408 - 0x400];
+    /* 0x408 */ u8 m408;
+    /* 0x409 */ u8 m409[0x40C - 0x409];
+    /* 0x40C */ cXyz mScale;
+    /* 0x418 */ s16 m418;
+    /* 0x41A */ u8 m41A[0x41C - 0x41A];
+};
+
 class bridge_class : public fopAc_ac_c {
 public:
     /* 0x0290 */ request_of_phase_process_class mPhsBridge;

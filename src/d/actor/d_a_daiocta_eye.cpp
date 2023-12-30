@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_daiocta_eye.h"
-#include "dolphin/types.h"
+#include "d/d_cc_d.h"
 
 /* 000000EC-000001B0       .text __ct__19daDaiocta_Eye_HIO_cFv */
 daDaiocta_Eye_HIO_c::daDaiocta_Eye_HIO_c() {

@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_npc_photo.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 000000EC-000002D0       .text __ct__12daNpcPhoto_cFv */
 daNpcPhoto_c::daNpcPhoto_c() {

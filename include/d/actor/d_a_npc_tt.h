@@ -3,6 +3,11 @@
 
 #include "f_op/f_op_actor.h"
 
+struct tt_ke_s {
+    void ke_control(float);
+    void ke_pos_set(cXyz*);
+};
+
 class daNpc_Tt_c : public fopAc_ac_c {
 public:
     void ChkOrder(unsigned char) {}

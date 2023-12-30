@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_bst.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 000000EC-00000110       .text __ct__11daBst_HIO_cFv */
 daBst_HIO_c::daBst_HIO_c() {

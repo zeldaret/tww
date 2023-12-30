@@ -3,6 +3,10 @@
 
 #include "f_op/f_op_actor.h"
 
+struct tail_s {
+    
+};
+
 class dk_class : public fopAc_ac_c {
 public:
     /* Place member variables here */

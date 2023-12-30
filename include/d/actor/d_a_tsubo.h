@@ -201,6 +201,14 @@ namespace daTsubo {
         /* 0x814 */ cXyz m814;
         /* 0x820 */ u8 m820[0xF00 - 0x820];
     };
+    
+    namespace Method {
+        s32 Create(void*);
+        BOOL Delete(void*);
+        BOOL Execute(void*);
+        BOOL Draw(void*);
+        BOOL IsDelete(void*);
+    };
 };
 
 #endif /* D_A_TSUBO_H */

@@ -70,7 +70,16 @@ namespace daObj_Search {
 
     class Bgc_c {
     public:
+        Bgc_c();
         void wall_pos(const daObj_Search::Act_c*, cXyz*, cXyz*, bool*, float*);
+    };
+
+    namespace Mthd {
+        s32 Create(void*);
+        BOOL Delete(void*);
+        BOOL Execute(void*);
+        BOOL Draw(void*);
+        BOOL IsDelete(void*);
     };
 };
 

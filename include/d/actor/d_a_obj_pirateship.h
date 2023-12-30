@@ -4,6 +4,8 @@
 #include "f_op/f_op_actor.h"
 
 namespace daObjPirateship {
+    static f32 getShipOffsetY(s16*, s16*, f32);
+    
     class Act_c : public fopAc_ac_c {
     public:
         inline s32 _create();
@@ -34,7 +36,13 @@ namespace daObjPirateship {
         /* 0x2D4 */ u8 m2D4[0x6D4 - 0x2D4];
     };
 
-    static f32 getShipOffsetY(s16*, s16*, f32);
+    namespace Method {
+        s32 Create(void*);
+        BOOL Delete(void*);
+        BOOL Execute(void*);
+        BOOL Draw(void*);
+        BOOL IsDelete(void*);
+    };
 };
 
 #endif /* D_A_OBJ_PIRATESHIP_H */

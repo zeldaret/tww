@@ -4,8 +4,12 @@
 #include "f_op/f_op_actor.h"
 
 class J3DNode;
+class J3DMaterial;
 
 namespace daObjSwlight {
+    static void setMaterial(J3DMaterial*, unsigned char);
+    static void setMaterial_Before_mirror(J3DMaterial*, unsigned char);
+
     class Act_c : public fopAc_ac_c {
     public:
         void get_power() const {}

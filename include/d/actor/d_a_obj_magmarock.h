@@ -3,7 +3,12 @@
 
 #include "f_op/f_op_actor.h"
 
+class dBgW;
+
 namespace daObjMagmarock {
+    static void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
+    static void CheckCreateHeap(fopAc_ac_c*);
+    
     class Act_c : public fopAc_ac_c {
     public:
         void MeltDownRequest() {}
@@ -36,6 +41,14 @@ namespace daObjMagmarock {
     
     public:
         /* Place member variables here */
+    };
+    
+    namespace Method {
+        s32 Create(void*);
+        BOOL Delete(void*);
+        BOOL Execute(void*);
+        BOOL Draw(void*);
+        BOOL IsDelete(void*);
     };
 };
 

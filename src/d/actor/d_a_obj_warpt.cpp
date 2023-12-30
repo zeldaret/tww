@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_warpt.h"
-#include "dolphin/types.h"
+#include "d/d_bg_w.h"
 
 /* 000000EC-00000190       .text __ct__17daObj_Warpt_HIO_cFv */
 daObj_Warpt_HIO_c::daObj_Warpt_HIO_c() {

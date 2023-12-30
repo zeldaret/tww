@@ -6,6 +6,8 @@
 #include "d/actor/d_a_obj_pirateship.h"
 #include "dolphin/types.h"
 
+class dBgW;
+
 /* 000000EC-000000FC       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
     /* Nonmatching */
@@ -82,7 +84,7 @@ void daObjPirateship::Act_c::demo_move() {
 }
 
 /* 00000EF0-00000F10       .text Create__Q215daObjPirateship6MethodFPv */
-void daObjPirateship::Method::Create(void*) {
+s32 daObjPirateship::Method::Create(void*) {
     /* Nonmatching */
 }
 
@@ -97,22 +99,22 @@ BOOL daObjPirateship::Act_c::_execute() {
 }
 
 /* 00001E8C-00001F50       .text Delete__Q215daObjPirateship6MethodFPv */
-void daObjPirateship::Method::Delete(void*) {
+BOOL daObjPirateship::Method::Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00001F50-00001F74       .text Execute__Q215daObjPirateship6MethodFPv */
-void daObjPirateship::Method::Execute(void*) {
+BOOL daObjPirateship::Method::Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00001F74-00001FAC       .text Draw__Q215daObjPirateship6MethodFPv */
-void daObjPirateship::Method::Draw(void*) {
+BOOL daObjPirateship::Method::Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00001FAC-00001FB4       .text IsDelete__Q215daObjPirateship6MethodFPv */
-void daObjPirateship::Method::IsDelete(void*) {
+BOOL daObjPirateship::Method::IsDelete(void*) {
     /* Nonmatching */
 }
 

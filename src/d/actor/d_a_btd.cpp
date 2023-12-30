@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_btd.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 000000EC-000001C8       .text __ct__11daBtd_HIO_cFv */
 daBtd_HIO_c::daBtd_HIO_c() {

@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_dk.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 000000EC-00000130       .text __ct__10daDk_HIO_cFv */
 daDk_HIO_c::daDk_HIO_c() {

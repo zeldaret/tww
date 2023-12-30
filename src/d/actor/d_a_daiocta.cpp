@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_daiocta.h"
-#include "dolphin/types.h"
+#include "d/d_cc_d.h"
 
 /* 000000EC-000002B0       .text __ct__15daDaiocta_HIO_cFv */
 daDaiocta_HIO_c::daDaiocta_HIO_c() {

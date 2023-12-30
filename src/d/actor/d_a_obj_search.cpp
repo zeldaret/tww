@@ -232,26 +232,26 @@ BOOL daObj_Search::Act_c::_isdelete() {
 }
 
 /* 80102844-80102864       .text Create__Q212daObj_Search4MthdFPv */
-void daObj_Search::Mthd::Create(void*) {
+s32 daObj_Search::Mthd::Create(void*) {
     /* Nonmatching */
 }
 
 /* 80102864-80102884       .text Delete__Q212daObj_Search4MthdFPv */
-void daObj_Search::Mthd::Delete(void*) {
+BOOL daObj_Search::Mthd::Delete(void*) {
     /* Nonmatching */
 }
 
 /* 80102884-801028A4       .text Execute__Q212daObj_Search4MthdFPv */
-void daObj_Search::Mthd::Execute(void*) {
+BOOL daObj_Search::Mthd::Execute(void*) {
     /* Nonmatching */
 }
 
 /* 801028A4-801028C4       .text Draw__Q212daObj_Search4MthdFPv */
-void daObj_Search::Mthd::Draw(void*) {
+BOOL daObj_Search::Mthd::Draw(void*) {
     /* Nonmatching */
 }
 
 /* 801028C4-801028E4       .text IsDelete__Q212daObj_Search4MthdFPv */
-void daObj_Search::Mthd::IsDelete(void*) {
+BOOL daObj_Search::Mthd::IsDelete(void*) {
     /* Nonmatching */
 }

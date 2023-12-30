@@ -37,26 +37,26 @@ void daObj_Otble::Act_c::CreateInit() {
 }
 
 /* 000005A0-000006AC       .text Create__Q211daObj_Otble4MthdFPv */
-void daObj_Otble::Mthd::Create(void*) {
+s32 daObj_Otble::Mthd::Create(void*) {
     /* Nonmatching */
 }
 
 /* 0000071C-0000079C       .text Delete__Q211daObj_Otble4MthdFPv */
-void daObj_Otble::Mthd::Delete(void*) {
+BOOL daObj_Otble::Mthd::Delete(void*) {
     /* Nonmatching */
 }
 
 /* 0000079C-000007BC       .text Execute__Q211daObj_Otble4MthdFPv */
-void daObj_Otble::Mthd::Execute(void*) {
+BOOL daObj_Otble::Mthd::Execute(void*) {
     /* Nonmatching */
 }
 
 /* 000007BC-000007DC       .text Draw__Q211daObj_Otble4MthdFPv */
-void daObj_Otble::Mthd::Draw(void*) {
+BOOL daObj_Otble::Mthd::Draw(void*) {
     /* Nonmatching */
 }
 
 /* 000007DC-000007E4       .text IsDelete__Q211daObj_Otble4MthdFPv */
-void daObj_Otble::Mthd::IsDelete(void*) {
+BOOL daObj_Otble::Mthd::IsDelete(void*) {
     /* Nonmatching */
 }

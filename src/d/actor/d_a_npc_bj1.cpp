@@ -267,7 +267,7 @@ void daNpc_Bj1_c::partner_srch() {
 }
 
 /* 00002724-000027B0       .text setCollision_SP___11daNpc_Bj1_cFv */
-void setCollision_SP___11daNpc_Bj1_cFv {
+void daNpc_Bj1_c::setCollision_SP_() {
     /* Nonmatching */
 }
 
@@ -377,47 +377,47 @@ void daNpc_Bj1_c::eInit_prmFloat(float*, float) {
 }
 
 /* 00003B20-00003D3C       .text eInit_ATTENTION___11daNpc_Bj1_cFPiPiPiP4cXyzPiPiPi */
-void eInit_ATTENTION___11daNpc_Bj1_cFPiPiPiP4cXyzPiPiPi {
+void daNpc_Bj1_c::eInit_ATTENTION_(int*, int*, int*, cXyz*, int*, int*, int*) {
     /* Nonmatching */
 }
 
 /* 00003D3C-00003E24       .text eInit_PLYER_MOV_1___11daNpc_Bj1_cFv */
-void eInit_PLYER_MOV_1___11daNpc_Bj1_cFv {
+void daNpc_Bj1_c::eInit_PLYER_MOV_1_() {
     /* Nonmatching */
 }
 
 /* 00003E24-00003F04       .text eInit_MOV___11daNpc_Bj1_cFPfPfPfPi */
-void eInit_MOV___11daNpc_Bj1_cFPfPfPfPi {
+void daNpc_Bj1_c::eInit_MOV_(float*, float*, float*, int*) {
     /* Nonmatching */
 }
 
 /* 00003F04-00003F74       .text eInit_JMP___11daNpc_Bj1_cFPfPf */
-void eInit_JMP___11daNpc_Bj1_cFPfPf {
+void daNpc_Bj1_c::eInit_JMP_(float*, float*) {
     /* Nonmatching */
 }
 
 /* 00003F74-0000406C       .text eInit_CHG_PTH___11daNpc_Bj1_cFPiPi */
-void eInit_CHG_PTH___11daNpc_Bj1_cFPiPi {
+void daNpc_Bj1_c::eInit_CHG_PTH_(int*, int*) {
     /* Nonmatching */
 }
 
 /* 0000406C-000040BC       .text eInit_END_MOV___11daNpc_Bj1_cFv */
-void eInit_END_MOV___11daNpc_Bj1_cFv {
+void daNpc_Bj1_c::eInit_END_MOV_() {
     /* Nonmatching */
 }
 
 /* 000040BC-000040F4       .text eInit_SET_TNE___11daNpc_Bj1_cFv */
-void eInit_SET_TNE___11daNpc_Bj1_cFv {
+void daNpc_Bj1_c::eInit_SET_TNE_() {
     /* Nonmatching */
 }
 
 /* 000040F4-00004114       .text eInit_DEL_TNE___11daNpc_Bj1_cFv */
-void eInit_DEL_TNE___11daNpc_Bj1_cFv {
+void daNpc_Bj1_c::eInit_DEL_TNE_() {
     /* Nonmatching */
 }
 
 /* 00004114-0000417C       .text eInit_SET_ANM___11daNpc_Bj1_cFPiPf */
-void eInit_SET_ANM___11daNpc_Bj1_cFPiPf {
+void daNpc_Bj1_c::eInit_SET_ANM_(int*, float*) {
     /* Nonmatching */
 }
 
@@ -427,27 +427,27 @@ void daNpc_Bj1_c::event_actionInit(int) {
 }
 
 /* 000044E4-00004530       .text eMove_ATTENTION___11daNpc_Bj1_cFv */
-void eMove_ATTENTION___11daNpc_Bj1_cFv {
+void daNpc_Bj1_c::eMove_ATTENTION_() {
     /* Nonmatching */
 }
 
 /* 00004530-00004580       .text eMove_MOV___11daNpc_Bj1_cFv */
-void eMove_MOV___11daNpc_Bj1_cFv {
+void daNpc_Bj1_c::eMove_MOV_() {
     /* Nonmatching */
 }
 
 /* 00004580-00004594       .text eMove_JMP___11daNpc_Bj1_cFv */
-void eMove_JMP___11daNpc_Bj1_cFv {
+void daNpc_Bj1_c::eMove_JMP_() {
     /* Nonmatching */
 }
 
 /* 00004594-000045F0       .text eMove_SET_TNE___11daNpc_Bj1_cFv */
-void eMove_SET_TNE___11daNpc_Bj1_cFv {
+void daNpc_Bj1_c::eMove_SET_TNE_() {
     /* Nonmatching */
 }
 
 /* 000045F0-00004678       .text eMove_PTH_MOV___11daNpc_Bj1_cFv */
-void eMove_PTH_MOV___11daNpc_Bj1_cFv {
+void daNpc_Bj1_c::eMove_PTH_MOV_() {
     /* Nonmatching */
 }
 

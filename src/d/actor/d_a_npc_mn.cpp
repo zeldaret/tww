@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_npc_mn.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 00000078-00000230       .text __ct__9daNpcMn_cFv */
 daNpcMn_c::daNpcMn_c() {

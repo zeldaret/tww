@@ -3,6 +3,14 @@
 
 #include "f_op/f_op_actor.h"
 
+struct bdk_tail_s {
+    
+};
+
+struct bdk_eff_s {
+    
+};
+
 class bdk_class : public fopAc_ac_c {
 public:
     /* Place member variables here */

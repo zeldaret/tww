@@ -40,19 +40,3 @@ static BOOL daYkgrDraw(void*) {
 static BOOL daYkgrIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 000009FC-00000A00       .text execute__54JPACallBackBase2<P14JPABaseEmitter,P15JPABaseParticle>FP14JPABaseEmitterP15JPABaseParticle */
-void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::execute(JPABaseEmitter*, JPABaseParticle*) {
-    /* Nonmatching */
-}
-
-/* 00000A00-00000A04       .text init__54JPACallBackBase2<P14JPABaseEmitter,P15JPABaseParticle>FP14JPABaseEmitterP15JPABaseParticle */
-void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::init(JPABaseEmitter*, JPABaseParticle*) {
-    /* Nonmatching */
-}
-
-/* 00000A04-00000A08       .text draw__54JPACallBackBase2<P14JPABaseEmitter,P15JPABaseParticle>FP14JPABaseEmitterP15JPABaseParticle */
-void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::draw(JPABaseEmitter*, JPABaseParticle*) {
-    /* Nonmatching */
-}
-

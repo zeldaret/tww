@@ -39,6 +39,41 @@ public:
     /* Place member variables here */
 };
 
+class SwMail2_c {
+public:
+    void CheckProc(void (SwMail2_c::*)()) {}
+    void SetProc(void (SwMail2_c::*)()) {}
+
+    void MailCreateInit(cXyz*, cXyz*);
+    void getNextNo(unsigned char);
+    void init();
+    void set_mtx();
+    void set_mtx_throw();
+    void DummyInit();
+    void Dummy();
+    void AppearInit();
+    void Appear();
+    void WaitInit();
+    void Wait();
+    void ThrowInit(cXyz, unsigned char);
+    void Throw();
+    void EndInit();
+    void End();
+    void SeDelete();
+    void move();
+    void draw(dKy_tevstr_c*);
+};
+
+class SwCam2_c {
+    void ActiveOff() {}
+    void ActiveOn() {}
+    void getCenterP() {}
+    void getEyeP() {}
+    void setAimIdx(signed char, signed char) {}
+
+    void Move();
+};
+
 class daNpc_Btsw_HIO_c {
 public:
     daNpc_Btsw_HIO_c();

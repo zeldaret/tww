@@ -4,7 +4,9 @@
 //
 
 #include "d/actor/d_a_obj_leaves.h"
-#include "dolphin/types.h"
+#include "d/d_bg_w.h"
+
+class J3DMaterial;
 
 /* 00000078-000000D8       .text chk_appear__13daObjLeaves_cFv */
 void daObjLeaves_c::chk_appear() {

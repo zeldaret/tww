@@ -3,6 +3,10 @@
 
 #include "f_op/f_op_actor.h"
 
+struct gnd_ke_s {
+    
+};
+
 class gnd_class : public fopEn_enemy_c {
 public:
     /* 0x02AC */ u8 m02AC[0x13CF - 0x02AC];

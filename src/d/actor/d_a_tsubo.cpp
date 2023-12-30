@@ -587,26 +587,26 @@ BOOL daTsubo::Act_c::_draw() {
 }
 
 /* 00007D2C-00007D4C       .text Create__Q27daTsubo6MethodFPv */
-void daTsubo::Method::Create(void*) {
+s32 daTsubo::Method::Create(void*) {
     /* Nonmatching */
 }
 
 /* 00007D4C-00007D70       .text Delete__Q27daTsubo6MethodFPv */
-void daTsubo::Method::Delete(void*) {
+BOOL daTsubo::Method::Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00007D70-00007D94       .text Execute__Q27daTsubo6MethodFPv */
-void daTsubo::Method::Execute(void*) {
+BOOL daTsubo::Method::Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00007D94-00007DB8       .text Draw__Q27daTsubo6MethodFPv */
-void daTsubo::Method::Draw(void*) {
+BOOL daTsubo::Method::Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00007DB8-00007DDC       .text IsDelete__Q27daTsubo6MethodFPv */
-void daTsubo::Method::IsDelete(void*) {
+BOOL daTsubo::Method::IsDelete(void*) {
     /* Nonmatching */
 }

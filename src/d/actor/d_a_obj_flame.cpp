@@ -132,7 +132,7 @@ void daObjFlame::Act_c::mode_proc_call() {
 }
 
 /* 00001EAC-00001ECC       .text Create__Q210daObjFlame6MethodFPv */
-void daObjFlame::Method::Create(void*) {
+s32 daObjFlame::Method::Create(void*) {
     /* Nonmatching */
 }
 
@@ -142,21 +142,21 @@ s32 daObjFlame::Act_c::_create() {
 }
 
 /* 00002484-000024B4       .text Delete__Q210daObjFlame6MethodFPv */
-void daObjFlame::Method::Delete(void*) {
+BOOL daObjFlame::Method::Delete(void*) {
     /* Nonmatching */
 }
 
 /* 000024B4-00002638       .text Execute__Q210daObjFlame6MethodFPv */
-void daObjFlame::Method::Execute(void*) {
+BOOL daObjFlame::Method::Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00002638-00002710       .text Draw__Q210daObjFlame6MethodFPv */
-void daObjFlame::Method::Draw(void*) {
+BOOL daObjFlame::Method::Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00002710-000027B0       .text IsDelete__Q210daObjFlame6MethodFPv */
-void daObjFlame::Method::IsDelete(void*) {
+BOOL daObjFlame::Method::IsDelete(void*) {
     /* Nonmatching */
 }

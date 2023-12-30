@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_npc_auction.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 000000EC-00000268       .text __ct__14daNpcAuction_cFv */
 daNpcAuction_c::daNpcAuction_c() {

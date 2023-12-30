@@ -74,6 +74,7 @@ public:
     static s16 getMaxFlyingTimer();
     static bool isPlayerRoom() { return m_playerRoom; }
     
+    ~daNpc_Cb1_c();
     void isTagCheckOK();
     void setMessageAnimation(unsigned char);
     s32 create();

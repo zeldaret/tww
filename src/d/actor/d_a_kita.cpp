@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_kita.h"
-#include "dolphin/types.h"
+#include "d/d_bg_w.h"
 
 /* 00000078-0000032C       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {

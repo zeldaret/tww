@@ -3,6 +3,10 @@
 
 #include "f_op/f_op_actor.h"
 
+struct ss_s {
+    
+};
+
 class ss_class : public fopAc_ac_c {
 public:
     /* Place member variables here */

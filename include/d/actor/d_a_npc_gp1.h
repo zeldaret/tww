@@ -50,6 +50,8 @@ public:
     void gp_nMove();
     void create_rupee();
     void charDecide(int);
+    void eInit_INI_KAERE_KAERE_();
+    void eInit_END_KAERE_KAERE_();
     void event_actionInit(int);
     void event_action();
     void privateCut(int);

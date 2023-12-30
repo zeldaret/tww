@@ -112,17 +112,17 @@ void daObjMagmarock::Act_c::calc_ground_quat() {
 }
 
 /* 000017DC-0000198C       .text Create__Q214daObjMagmarock6MethodFPv */
-void daObjMagmarock::Method::Create(void*) {
+s32 daObjMagmarock::Method::Create(void*) {
     /* Nonmatching */
 }
 
 /* 00001A90-00001B14       .text Delete__Q214daObjMagmarock6MethodFPv */
-void daObjMagmarock::Method::Delete(void*) {
+BOOL daObjMagmarock::Method::Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00001B14-00001B38       .text Execute__Q214daObjMagmarock6MethodFPv */
-void daObjMagmarock::Method::Execute(void*) {
+BOOL daObjMagmarock::Method::Execute(void*) {
     /* Nonmatching */
 }
 
@@ -132,12 +132,12 @@ BOOL daObjMagmarock::Act_c::_execute() {
 }
 
 /* 00001EC0-00002128       .text Draw__Q214daObjMagmarock6MethodFPv */
-void daObjMagmarock::Method::Draw(void*) {
+BOOL daObjMagmarock::Method::Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00002128-00002130       .text IsDelete__Q214daObjMagmarock6MethodFPv */
-void daObjMagmarock::Method::IsDelete(void*) {
+BOOL daObjMagmarock::Method::IsDelete(void*) {
     /* Nonmatching */
 }
 

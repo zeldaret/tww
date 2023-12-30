@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_icelift.h"
-#include "dolphin/types.h"
+#include "d/d_bg_w.h"
 
 /* 00000078-000000E0       .text _delete__9daIlift_cFv */
 BOOL daIlift_c::_delete() {
