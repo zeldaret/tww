@@ -4,8 +4,15 @@
 //
 
 #include "m_Do/m_Do_audio.h"
+#include "JSystem/JAudio/JAIGlobalParameter.h"
+#include "JSystem/JAudio/JAISequenceMgr.h"
+#include "JSystem/JAudio/JAIStreamMgr.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "SSystem/SComponent/c_lib.h"
+#include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_dvd_thread.h"
+#include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_printf.h"
 
 JAIZelInst mDoAud_zelAudio_c::mTact;
 mDoAud_zelAudio_c g_mDoAud_zelAudio;
@@ -29,21 +36,58 @@ void mDoAud_zelAudio_c::calcLoadTimer() {
     }
 }
 
-BOOL mDoAud_StreamBufferPointer;
+void* mDoAud_StreamBufferPointer;
 
 /* 80006DC0-80006DD4       .text mDoAud_isUsedHeapForStreamBuffer__Fv */
 BOOL mDoAud_isUsedHeapForStreamBuffer() {
-    return mDoAud_StreamBufferPointer != false;
+    return mDoAud_StreamBufferPointer != NULL;
 }
+
+u8 mDoAud_StreamBufferBlocks;
+JKRExpHeap* mDoAud_audioStreamHeap;
 
 /* 80006DD4-80006F88       .text mDoAud_allocStreamBuffer__Fv */
 void mDoAud_allocStreamBuffer() {
     /* Nonmatching */
+    JUT_ASSERT(98, mDoAud_StreamBufferPointer == 0);
+    u32 var1 = mDoAud_StreamBufferBlocks;
+    s32 size;
+    while (true) {
+        JAIGlobalParameter::setParamStreamDecodedBufferBlocks(var1);
+        size = JAInter::StreamLib::getNeedBufferSize();
+        JUT_ASSERT(124, mDoAud_audioStreamHeap == 0);
+        mDoAud_audioStreamHeap = archiveHeap;
+        mDoAud_StreamBufferPointer = JKRAllocFromHeap(archiveHeap, size, 0);
+        if (!mDoAud_StreamBufferPointer) {
+            mDoAud_audioStreamHeap = gameHeap;
+            mDoAud_StreamBufferPointer = JKRAllocFromHeap(gameHeap, size, 0);
+        }
+        if (!mDoAud_StreamBufferPointer) {
+            mDoAud_audioStreamHeap = zeldaHeap;
+            mDoAud_StreamBufferPointer = JKRAllocFromHeap(zeldaHeap, size, 0);
+        }
+        if (mDoAud_StreamBufferPointer) {
+            break;
+        }
+        if (var1 > 3) {
+            var1--;
+            continue;
+        }
+        JUT_ASSERT(144, mDoAud_StreamBufferPointer);
+        return;
+    }
+    bool success = g_mDoAud_zelAudio.allocStreamBuffer(mDoAud_StreamBufferPointer, size);
+    JUT_ASSERT(148, success);
 }
 
 /* 80006F88-8000703C       .text mDoAud_deallocStreamBuffer__Fv */
 void mDoAud_deallocStreamBuffer() {
-    /* Nonmatching */
+    JUT_ASSERT(174, mDoAud_StreamBufferPointer);
+    bool success = g_mDoAud_zelAudio.deallocStreamBuffer();
+    JUT_ASSERT(182, success);
+    JKRFreeToHeap(mDoAud_audioStreamHeap, mDoAud_StreamBufferPointer);
+    mDoAud_audioStreamHeap = NULL;
+    mDoAud_StreamBufferPointer = NULL;
 }
 
 /* 8000703C-80007040       .text mDoAud_executeStreamBuffer__Fv */
@@ -51,12 +95,56 @@ void mDoAud_executeStreamBuffer() {}
 
 /* 80007040-80007090       .text mDoAud_setupStreamBuffer__Fv */
 void mDoAud_setupStreamBuffer() {
-    /* Nonmatching */
+    JAIGlobalParameter::setParamStreamInsideBufferCut(true);
+    mDoAud_StreamBufferPointer = 0;
+    mDoAud_StreamBufferBlocks = 12;
+    mDoAud_audioStreamHeap = 0;
+    JAInter::StreamLib::setAllocBufferCallback(mDoAud_allocStreamBuffer);
+    JAInter::StreamLib::setDeallocBufferCallback(mDoAud_deallocStreamBuffer);
 }
+
+mDoDvdThd_toMainRam_c* l_affCommand;
+mDoDvdThd_mountArchive_c* l_arcCommand;
 
 /* 80007090-80007224       .text mDoAud_Create__Fv */
 void mDoAud_Create() {
     /* Nonmatching */
+    if (!l_affCommand) {
+        l_affCommand = mDoDvdThd_toMainRam_c::create("/Audiores/JaiInit.aaf", 2, NULL);
+        if (!l_affCommand) {
+            return;
+        }
+    }
+    if (!l_arcCommand) {
+        char buffer[96];
+        JAInter::SequenceMgr::getArchiveName(buffer);
+        l_arcCommand = mDoDvdThd_mountArchive_c::create(buffer, 0, NULL);
+        if (!l_arcCommand) {
+            return;
+        }
+    }
+    if (!l_affCommand->sync() || !l_arcCommand->sync()) {
+        return;
+    }
+    JAIGlobalParameter::setParamInitDataPointer(l_affCommand->getMemAddress());
+    JAInter::SequenceMgr::setArchivePointer(l_arcCommand->getArchive());
+    mDoAud_setupStreamBuffer();
+    if (g_mDoAud_audioHeap) {
+        JKRSetCurrentHeap(NULL);
+        g_mDoAud_zelAudio.init(g_mDoAud_audioHeap, 0x00a00000);
+        JKRSetCurrentHeap(zeldaHeap);
+        g_mDoAud_audioHeap->adjustSize();
+    } else {
+        OSReport_Error("ヒープ確保失敗につきオーディオ初期化できません\n");
+    }
+    g_mDoAud_zelAudio.setEventBit(g_dComIfG_gameInfo.save.getEvent().getPEventBit());
+    g_mDoAud_zelAudio.reset();
+    JAIZelBasic::zel_basic->setOutputMode(OSGetSoundMode());
+    JKRHeap::free(l_affCommand->getMemAddress(), NULL);
+    delete l_affCommand;
+    delete l_arcCommand;
+    mDoAud_zelAudio_c::onInitFlag();
+    mDoDvdThd::SyncWidthSound = 1;
 }
 
 /* 80007224-80007268       .text mDoAud_Execute__Fv */

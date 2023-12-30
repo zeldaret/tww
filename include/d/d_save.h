@@ -538,6 +538,8 @@ public:
     void setEventReg(u16, u8);
     u8 getEventReg(u16);
 
+    u8* getPEventBit() { return mFlags;  }
+
     /* 0x0 */ u8 mFlags[0x100];
 };  // Size: 0x100
 
