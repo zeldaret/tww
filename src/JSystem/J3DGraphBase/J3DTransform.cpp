@@ -5,16 +5,19 @@
 
 #include "JSystem/J3DGraphBase/J3DTransform.h"
 #include "JSystem/J3DGraphBase/J3DStruct.h"
-#include "dolphin/types.h"
+#include "JSystem/JMath/JMATrigonometric.h"
 
 /* 802DA0A8-802DA0B0       .text __MTGQR7__FUl */
-void __MTGQR7(u32) {
-    /* Nonmatching */
+void __MTGQR7(register u32 v) {
+    asm {
+        mtspr GQR7, v
+    }
 }
 
 /* 802DA0B0-802DA0E8       .text J3DGQRSetup7__FUlUlUlUl */
-void J3DGQRSetup7(u32, u32, u32, u32) {
-    /* Nonmatching */
+void J3DGQRSetup7(u32 r0, u32 r1, u32 r2, u32 r3) {
+    u32 v = (((r0 << 8) + r1) << 16) | ((r2 << 8) + r3);
+    __MTGQR7(v);
 }
 
 /* 802DA0E8-802DA120       .text J3DCalcZValue__FPA4_f3Vec */
@@ -24,62 +27,255 @@ f32 J3DCalcZValue(MtxP m, Vec v) {
 }
 
 /* 802DA120-802DA2E0       .text J3DCalcBBoardMtx__FPA4_f */
-void J3DCalcBBoardMtx(f32(*)[4]) {
-    /* Nonmatching */
+void J3DCalcBBoardMtx(Mtx mtx) {
+    f32 sx = sqrtf(mtx[0][0]*mtx[0][0] + mtx[1][0]*mtx[1][0] + mtx[2][0]*mtx[2][0]);
+    f32 sy = sqrtf(mtx[0][1]*mtx[0][1] + mtx[1][1]*mtx[1][1] + mtx[2][1]*mtx[2][1]);
+    f32 sz = sqrtf(mtx[0][2]*mtx[0][2] + mtx[1][2]*mtx[1][2] + mtx[2][2]*mtx[2][2]);
+
+    mtx[0][0] = sx;
+    mtx[0][1] = 0.0f;
+    mtx[0][2] = 0.0f;
+
+    mtx[1][0] = 0.0f;
+    mtx[1][1] = sy;
+    mtx[1][2] = 0.0f;
+
+    mtx[2][0] = 0.0f;
+    mtx[2][1] = 0.0f;
+    mtx[2][2] = sz;
 }
 
 /* 802DA2E0-802DA584       .text J3DCalcYBBoardMtx__FPA4_f */
-void J3DCalcYBBoardMtx(f32(*)[4]) {
+void J3DCalcYBBoardMtx(Mtx mtx) {
     /* Nonmatching */
+    f32 sx = sqrtf(mtx[0][0]*mtx[0][0] + mtx[1][0]*mtx[1][0] + mtx[2][0]*mtx[2][0]);
+    f32 sy = sqrtf(mtx[0][1]*mtx[0][1] + mtx[1][1]*mtx[1][1] + mtx[2][1]*mtx[2][1]);
+    f32 sz = sqrtf(mtx[0][2]*mtx[0][2] + mtx[1][2]*mtx[1][2] + mtx[2][2]*mtx[2][2]);
+
+    Vec axisX, axisY, axisZ;
+
+    axisX.x = 1.0f;
+    axisX.y = 0.0f;
+    axisX.z = 0.0f;
+
+    axisY.x = mtx[0][1];
+    axisY.y = mtx[1][1];
+    axisY.z = mtx[2][1];
+
+    VECCrossProduct(&axisX, &axisY, &axisZ);
+    VECNormalize(&axisY, &axisY);
+    VECNormalize(&axisZ, &axisZ);
+
+    mtx[0][0] = axisX.x * sx;
+    mtx[0][1] = axisY.x * sy;
+    mtx[0][2] = axisZ.x * sz;
+
+    mtx[1][0] = axisX.y * sx;
+    mtx[1][1] = axisY.y * sy;
+    mtx[1][2] = axisZ.y * sz;
+
+    mtx[2][0] = axisX.z * sx;
+    mtx[2][1] = axisY.z * sy;
+    mtx[2][2] = axisZ.z * sz;
 }
 
 /* 802DA584-802DA64C       .text J3DPSCalcInverseTranspose__FPA4_fPA3_f */
-void J3DPSCalcInverseTranspose(f32(*)[4], f32(*)[3]) {
+void J3DPSCalcInverseTranspose(Mtx src, Mtx33 dst) {
     /* Nonmatching */
 }
 
 /* 802DA64C-802DA724       .text J3DGetTranslateRotateMtx__FRC16J3DTransformInfoPA4_f */
-void J3DGetTranslateRotateMtx(const J3DTransformInfo&, Mtx) {
-    /* Nonmatching */
+void J3DGetTranslateRotateMtx(const J3DTransformInfo& tx, Mtx dst) {
+    f32 sx = JMASSin(tx.mRotation.x), cx = JMASCos(tx.mRotation.x);
+    f32 sy = JMASSin(tx.mRotation.y), cy = JMASCos(tx.mRotation.y);
+    f32 sz = JMASSin(tx.mRotation.z), cz = JMASCos(tx.mRotation.z);
+
+    dst[2][0] = -sy;
+    dst[0][0] = cz * cy;
+    dst[1][0] = sz * cy;
+    dst[2][1] = cy * sx;
+    dst[2][2] = cy * cx;
+
+    f32 cxsz = cx * sz;
+    f32 sxcz = sx * cz;
+    dst[0][1] = sxcz * sy - cxsz;
+    dst[1][2] = cxsz * sy - sxcz;
+
+    f32 sxsz = sx * sz;
+    f32 cxcz = cx * cz;
+    dst[0][2] = cxcz * sy + sxsz;
+    dst[1][1] = sxsz * sy + cxcz;
+
+    dst[0][3] = tx.mTranslate.x;
+    dst[1][3] = tx.mTranslate.y;
+    dst[2][3] = tx.mTranslate.z;
 }
 
 /* 802DA724-802DA7E4       .text J3DGetTranslateRotateMtx__FsssfffPA4_f */
-void J3DGetTranslateRotateMtx(s16, s16, s16, f32, f32, f32, Mtx) {
-    /* Nonmatching */
+void J3DGetTranslateRotateMtx(s16 rx, s16 ry, s16 rz, f32 tx, f32 ty, f32 tz, Mtx dst) {
+    f32 sx = JMASSin(rx), cx = JMASCos(rx);
+    f32 sy = JMASSin(ry), cy = JMASCos(ry);
+    f32 sz = JMASSin(rz), cz = JMASCos(rz);
+
+    dst[2][0] = -sy;
+    dst[0][0] = cz * cy;
+    dst[1][0] = sz * cy;
+    dst[2][1] = cy * sx;
+    dst[2][2] = cy * cx;
+
+    f32 cxsz = cx * sz;
+    f32 sxcz = sx * cz;
+    dst[0][1] = sxcz * sy - cxsz;
+    dst[1][2] = cxsz * sy - sxcz;
+
+    f32 sxsz = sx * sz;
+    f32 cxcz = cx * cz;
+    dst[0][2] = cxcz * sy + sxsz;
+    dst[1][1] = sxsz * sy + cxcz;
+
+    dst[0][3] = tx;
+    dst[1][3] = ty;
+    dst[2][3] = tz;
 }
 
 /* 802DA7E4-802DA8A8       .text J3DGetTextureMtx__FRC17J3DTextureSRTInfo3VecPA4_f */
-void J3DGetTextureMtx(const J3DTextureSRTInfo&, Vec, f32(*)[4]) {
-    /* Nonmatching */
+void J3DGetTextureMtx(const J3DTextureSRTInfo& srt, Vec center, Mtx dst) {
+    f32 sr = JMASSin(srt.mRotation), cr = JMASCos(srt.mRotation);
+
+    f32 cx = srt.mScaleX * cr;
+    f32 sx = srt.mScaleX * sr;
+    f32 sy = srt.mScaleY * sr;
+    f32 cy = srt.mScaleY * cr;
+
+    dst[0][0] = cx;
+    dst[0][1] = -sx;
+    dst[0][2] = (-cx * center.x + sx * center.y) + center.x + srt.mTranslationX;
+
+    dst[1][0] = sy;
+    dst[1][1] = cy;
+    dst[1][2] = (-sy * center.x - cy * center.y) + center.y + srt.mTranslationY;
+
+    dst[2][3] = 0.0f;
+    dst[2][1] = 0.0f;
+    dst[2][0] = 0.0f;
+    dst[1][3] = 0.0f;
+    dst[0][3] = 0.0f;
+    dst[2][2] = 1.0f;
 }
 
 /* 802DA8A8-802DA96C       .text J3DGetTextureMtxOld__FRC17J3DTextureSRTInfo3VecPA4_f */
-void J3DGetTextureMtxOld(const J3DTextureSRTInfo&, Vec, f32(*)[4]) {
-    /* Nonmatching */
+void J3DGetTextureMtxOld(const J3DTextureSRTInfo& srt, Vec center, Mtx dst) {
+    f32 sr = JMASSin(srt.mRotation), cr = JMASCos(srt.mRotation);
+
+    f32 cx = srt.mScaleX * cr;
+    f32 sx = srt.mScaleX * sr;
+    f32 sy = srt.mScaleY * sr;
+    f32 cy = srt.mScaleY * cr;
+
+    dst[0][0] = cx;
+    dst[0][1] = -sx;
+    dst[0][3] = (-cx * center.x + sx * center.y) + center.x + srt.mTranslationX;
+
+    dst[1][0] = sy;
+    dst[1][1] = cy;
+    dst[1][3] = (-sy * center.x - cy * center.y) + center.y + srt.mTranslationY;
+
+    dst[2][3] = 0.0f;
+    dst[2][1] = 0.0f;
+    dst[2][0] = 0.0f;
+    dst[1][2] = 0.0f;
+    dst[0][2] = 0.0f;
+    dst[2][2] = 1.0f;
 }
 
 /* 802DA96C-802DAA38       .text J3DGetTextureMtxMaya__FRC17J3DTextureSRTInfoPA4_f */
-void J3DGetTextureMtxMaya(const J3DTextureSRTInfo&, f32(*)[4]) {
-    /* Nonmatching */
+void J3DGetTextureMtxMaya(const J3DTextureSRTInfo& srt, Mtx dst) {
+    f32 sr = JMASSin(srt.mRotation), cr = JMASCos(srt.mRotation);
+    f32 tx = srt.mTranslationX - 0.5f;
+    f32 ty = srt.mTranslationY - 0.5f;
+
+    dst[0][0] = srt.mScaleX * cr;
+    dst[0][1] = srt.mScaleY * sr;
+    dst[0][2] = tx * cr - sr * (ty + srt.mScaleY) + 0.5f;
+
+    dst[1][0] = -srt.mScaleX * sr;
+    dst[1][1] = srt.mScaleY * cr;
+    dst[1][2] = -tx * sr - cr * (ty + srt.mScaleY) + 0.5f;
+
+    dst[2][3] = 0.0f;
+    dst[2][1] = 0.0f;
+    dst[2][0] = 0.0f;
+    dst[1][3] = 0.0f;
+    dst[0][3] = 0.0f;
+    dst[2][2] = 1.0f;
 }
 
 /* 802DAA38-802DAB04       .text J3DGetTextureMtxMayaOld__FRC17J3DTextureSRTInfoPA4_f */
-void J3DGetTextureMtxMayaOld(const J3DTextureSRTInfo&, f32(*)[4]) {
-    /* Nonmatching */
+void J3DGetTextureMtxMayaOld(const J3DTextureSRTInfo& srt, Mtx dst) {
+    f32 sr = JMASSin(srt.mRotation), cr = JMASCos(srt.mRotation);
+    f32 tx = srt.mTranslationX - 0.5f;
+    f32 ty = srt.mTranslationY - 0.5f;
+
+    dst[0][0] = srt.mScaleX * cr;
+    dst[0][1] = srt.mScaleY * sr;
+    dst[0][3] = tx * cr - sr * (ty + srt.mScaleY) + 0.5f;
+
+    dst[1][0] = -srt.mScaleX * sr;
+    dst[1][1] = srt.mScaleY * cr;
+    dst[1][3] = -tx * sr - cr * (ty + srt.mScaleY) + 0.5f;
+
+    dst[2][3] = 0.0f;
+    dst[2][1] = 0.0f;
+    dst[2][0] = 0.0f;
+    dst[1][2] = 0.0f;
+    dst[0][2] = 0.0f;
+    dst[2][2] = 1.0f;
 }
 
 /* 802DAB04-802DAB68       .text J3DScaleNrmMtx__FPA4_fRC3Vec */
-void J3DScaleNrmMtx(f32(*)[4], const Vec&) {
-    /* Nonmatching */
+void J3DScaleNrmMtx(register Mtx mtx, const register Vec& scl) {
+    register f32 mtx_xy, mtx_z_, scl_xy, scl_z_;
+
+    asm {
+        /* Row 0 */
+        psq_l  scl_xy, 0(scl), 0, 0
+        psq_l  mtx_xy, 0(mtx), 0, 0
+        lfs    scl_z_, 8(scl)
+        lfs    mtx_z_, 8(mtx)
+        ps_mul f4, mtx_xy, scl_xy
+        psq_st f4, 0(mtx), 0, 0
+        fmuls  f4, mtx_z_, scl_z_
+        stfs   f4, 8(mtx)
+
+        /* Row 1 */
+        psq_l  scl_xy, 0(scl), 0, 0
+        psq_l  mtx_xy, 16(mtx), 0, 0
+        lfs    scl_z_, 8(scl)
+        lfs    mtx_z_, 24(mtx)
+        ps_mul f4, mtx_xy, scl_xy
+        psq_st f4, 16(mtx), 0, 0
+        fmuls  f4, mtx_z_, scl_z_
+        stfs   f4, 24(mtx)
+
+        /* Row 2 */
+        psq_l  scl_xy, 0(scl), 0, 0
+        psq_l  mtx_xy, 32(mtx), 0, 0
+        lfs    scl_z_, 8(scl)
+        lfs    mtx_z_, 40(mtx)
+        ps_mul f4, mtx_xy, scl_xy
+        psq_st f4, 32(mtx), 0, 0
+        fmuls  f4, mtx_z_, scl_z_
+        stfs   f4, 40(mtx)
+    }
 }
 
 /* 802DAB68-802DABBC       .text J3DScaleNrmMtx33__FPA3_fRC3Vec */
-void J3DScaleNrmMtx33(f32(*)[3], const Vec&) {
+void J3DScaleNrmMtx33(register Mtx33 mtx, const register Vec& scl) {
     /* Nonmatching */
 }
 
 /* 802DABBC-802DACE0       .text J3DMtxProjConcat__FPA4_fPA4_fPA4_f */
-void J3DMtxProjConcat(f32(*)[4], f32(*)[4], f32(*)[4]) {
+void J3DMtxProjConcat(Mtx, Mtx, Mtx) {
     /* Nonmatching */
 }
 
@@ -107,30 +303,23 @@ void J3DPSMtx33Copy(register Mtx3P src, register Mtx3P dst) {
 
 /* 802DAD0C-802DAD40       .text J3DPSMtx33CopyFrom34__FPA4_fPA3_f */
 void J3DPSMtx33CopyFrom34(register MtxP src, register Mtx3P dst) {
-    register f32 x_y1;
-    register f32 z1;
-    register f32 x_y2;
-    register f32 z2;
-    register f32 x_y3;
-    register f32 z3;
-
     asm {
-        psq_l x_y1, 0(src), 0, 0
-        psq_st x_y1, 0(dst), 0, 0
-        lfs z1, 8(src)
-        stfs z1, 8(dst)
-        psq_l x_y2, 16(src), 0, 0
-        psq_st x_y2, 12(dst), 0, 0
-        lfs z2, 0x18(src)
-        stfs z2, 0x14(dst)
-        psq_l x_y3, 32(src), 0, 0
-        psq_st x_y3, 24(dst), 0, 0
-        lfs z3, 0x28(src)
-        stfs z3, 0x20(dst)
+        psq_l  f0, 0(src), 0, 0
+        psq_st f0, 0(dst), 0, 0
+        lfs    f1, 8(src)
+        stfs   f1, 8(dst)
+        psq_l  f2, 16(src), 0, 0
+        psq_st f2, 12(dst), 0, 0
+        lfs    f3, 24(src)
+        stfs   f3, 20(dst)
+        psq_l  f4, 32(src), 0, 0
+        psq_st f4, 24(dst), 0, 0
+        lfs    f5, 40(src)
+        stfs   f5, 32(dst)
     }
 }
 
 /* 802DAD40-802DAE1C       .text J3DPSMtxArrayConcat__FPA4_fPA4_fPA4_fUl */
-void J3DPSMtxArrayConcat(f32(*)[4], f32(*)[4], f32(*)[4], u32) {
+void J3DPSMtxArrayConcat(Mtx, Mtx, Mtx, u32) {
     /* Nonmatching */
 }
