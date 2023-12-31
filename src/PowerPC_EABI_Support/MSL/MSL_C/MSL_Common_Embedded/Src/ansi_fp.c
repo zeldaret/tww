@@ -168,6 +168,8 @@ void __timesdec(decimal* result, const decimal* x, const decimal* y) {
             accumulator += *jp * *kp;
         }
 
+        // TODO: It's reusing the result of the modulo for the division, but for a match we need to disable this
+        // optimization and do the divide separately somehow.
         *--ip = (unsigned char)(accumulator % 10);
         accumulator /= 10;
     }
@@ -230,9 +232,7 @@ void __str2dec(decimal* d, const char* s, short exp) {
     }
 }
 
-static const char* const unused = "179769313486231580793729011405303420";
-
-void __two_exp(decimal* result, long exp) {
+void __two_exp(decimal* result, short exp) {
     switch (exp) {
     case -64:
         __str2dec(result, "542101086242752217003726400434970855712890625", -20);
@@ -300,21 +300,27 @@ void __two_exp(decimal* result, long exp) {
     }
 
     {
-        decimal x2, temp;
+        decimal sp8c, sp60, sp34, sp8;
 
-        __two_exp(&x2, exp / 2);
-        __timesdec(result, &x2, &x2);
+        __two_exp(&sp8c, exp / 2);
+        __timesdec(result, &sp8c, &sp8c);
 
         if (exp & 1) {
-            temp = *result;
+            sp60 = *result;
             if (exp > 0) {
-                __str2dec(&x2, "2", 0);
+                __str2dec(&sp34, "2", 0);
+                __timesdec(result, &sp60, &sp34);
             } else {
-                __str2dec(&x2, "5", -1);
+                __str2dec(&sp8, "5", -1);
+                __timesdec(result, &sp60, &sp8);
             }
-            __timesdec(result, &temp, &x2);
         }
     }
+}
+
+static void dummy(decimal* result, short exp) {
+    // 2 to the 1024th power. Unused but needs to appear in stringbase.
+    __str2dec(result, "179769313486231580793729011405303420", 308);
 }
 
 int inline __equals_dec(const decimal* x, const decimal* y) {
@@ -528,7 +534,7 @@ void __num2dec_internal(decimal* d, double x) {
     {
         int exp;
         double frac = frexp(x, &exp);
-        long num_bits_extract = DBL_MANT_DIG - __count_trailing_zero(frac);
+        short num_bits_extract = DBL_MANT_DIG - __count_trailing_zero(frac);
         double integer;
         decimal int_d, pow2_d;
 

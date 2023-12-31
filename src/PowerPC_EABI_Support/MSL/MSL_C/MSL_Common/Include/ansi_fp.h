@@ -25,7 +25,7 @@ typedef struct decform {
 /* void __ull2dec(decimal*, u64);
 void __timesdec(decimal*, const decimal*, const decimal*);
 void __str2dec(decimal*, const char*, short);
-void __two_exp(decimal*, s32);
+void __two_exp(decimal*, s16);
 BOOL __equals_dec(const decimal*, const decimal*);
 BOOL __less_dec(const decimal*, const decimal*);
 void __minus_dec(decimal*, const decimal*, const decimal*);
