@@ -10,6 +10,7 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_printf.h"
@@ -157,8 +158,54 @@ void mDoAud_Execute() {
 }
 
 /* 80007268-800073D8       .text mDoAud_getTactDirection__Fii */
-void mDoAud_getTactDirection(int, int) {
-    /* Nonmatching */
+int mDoAud_getTactDirection(int stick, int ret) {
+    f32 val;
+    s16 ang;
+
+    if (stick != 0) {
+        val = g_mDoCPd_cpadInfo[0].mMainStickValue;
+        ang = g_mDoCPd_cpadInfo[0].mMainStickAngle;
+    } else {
+        val = g_mDoCPd_cpadInfo[0].mCStickValue;
+        ang = g_mDoCPd_cpadInfo[0].mCStickAngle;
+    }
+
+    if (val < 0.9f) {
+        if (stick != 0) {
+            return
+                CPad_CHECK_HOLD_DOWN(0) ? 3 :
+                CPad_CHECK_HOLD_RIGHT(0) ? 2 :
+                CPad_CHECK_HOLD_LEFT(0) ? 4 :
+                CPad_CHECK_HOLD_UP(0) ? 1 : 0;
+        } else {
+            return 0;
+        }
+    } else {
+        s32 angi = abs(ang);
+        if (ret == 0) {
+            if (angi > 0x6000) {
+                return 1;
+            } else if (ang >= 0x2000) {
+                return 2;
+            } else if (ang <= -0x2000) {
+                return 4;
+            } else {
+                return 3;
+            }
+        } else {
+            if (angi > 0x7000) {
+                return 1;
+            } else if (ang >= 0x3000 && ang <= 0x5000) {
+                return 2;
+            } else if (ang <= -0x3000 && ang >= -0x5000) {
+                return 4;
+            } else if (angi < 0x1000) {
+                return 3;
+            }
+        }
+    }
+
+    return ret;
 }
 
 /* 800073D8-80007424       .text mDoAud_setSceneName__FPCcll */
