@@ -334,8 +334,47 @@ void J3DGDLoadTlut(void* pTex, u32 addr, GXTlutSize size) {
 }
 
 /* 802D7AF8-802D7DD8       .text J3DGDSetIndTexMtx__F14_GXIndTexMtxIDPA3_fSc */
-void J3DGDSetIndTexMtx(GXIndTexMtxID, Mtx23, s8) {
-    /* Nonmatching */
+void J3DGDSetIndTexMtx(GXIndTexMtxID id, Mtx23 mtx, s8 exp) {
+    s32 mtx32[6];
+    u32 idx;
+
+    switch (id) {
+    case GX_ITM_0:
+    case GX_ITM_1:
+    case GX_ITM_2:
+        idx = (u32)(id - GX_ITM_0);
+        break;
+    case GX_ITM_S0:
+    case GX_ITM_S1:
+    case GX_ITM_S2:
+        idx = (u32)(id - GX_ITM_S0);
+        break;
+    case GX_ITM_T0:
+    case GX_ITM_T1:
+    case GX_ITM_T2:
+        idx = (u32)(id - GX_ITM_T0);
+        break;
+    default:
+        idx = 0;
+        break;
+    }
+
+    exp += 17;
+
+    mtx32[0] = (s32)(mtx[0][0] * 1024.0f) & 0x7FF;
+    mtx32[1] = (s32)(mtx[1][0] * 1024.0f) & 0x7FF;
+
+    mtx32[2] = (s32)(mtx[0][1] * 1024.0f) & 0x7FF;
+    mtx32[3] = (s32)(mtx[1][1] * 1024.0f) & 0x7FF;
+
+    mtx32[4] = (s32)(mtx[0][2] * 1024.0f) & 0x7FF;
+    mtx32[5] = (s32)(mtx[1][2] * 1024.0f) & 0x7FF;
+
+    GDOverflowCheck(15);
+
+    J3DGDWriteBPCmd((mtx32[0] << 0) | (mtx32[1] << 11) | (((exp >> 0) & 0x03) << 22) | (0x06 + idx * 3) << 24);
+    J3DGDWriteBPCmd((mtx32[2] << 0) | (mtx32[3] << 11) | (((exp >> 2) & 0x03) << 22) | (0x07 + idx * 3) << 24);
+    J3DGDWriteBPCmd((mtx32[4] << 0) | (mtx32[5] << 11) | (((exp >> 4) & 0x03) << 22) | (0x08 + idx * 3) << 24);
 }
 
 /* 802D7DD8-802D7ED0       .text J3DGDSetIndTexCoordScale__F16_GXIndTexStageID14_GXIndTexScale14_GXIndTexScale14_GXIndTexScale14_GXIndTexScale */
