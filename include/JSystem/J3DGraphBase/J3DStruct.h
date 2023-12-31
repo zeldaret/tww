@@ -223,12 +223,12 @@ struct J3DTevOrderInfo {
 };
 
 struct J3DColorChanInfo {
-    /* 0x0 */ u8 field_0x0;
-    /* 0x1 */ u8 field_0x1;
-    /* 0x2 */ u8 field_0x2;
-    /* 0x3 */ u8 field_0x3;
-    /* 0x4 */ u8 field_0x4;
-    /* 0x5 */ u8 field_0x5;
+    /* 0x0 */ u8 mEnable;
+    /* 0x1 */ u8 mMatSrc;
+    /* 0x2 */ u8 mLightMask;
+    /* 0x3 */ u8 mDiffuseFn;
+    /* 0x4 */ u8 mAttnFn;
+    /* 0x5 */ u8 mAmbSrc;
     /* 0x6 */ u8 field_0x6;
     /* 0x7 */ u8 field_0x7;
 };

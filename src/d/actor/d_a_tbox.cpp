@@ -41,19 +41,19 @@ enum DALWAYS_RES_FILE_ID { // IDs and indexes are synced
     DALWAYS_BCK_BOXOPENSHORTBOX=0x9,
     DALWAYS_BCK_IT_TAKARA_FLASH=0xA,
     DALWAYS_BCK_IT_TAKARA_FLASH2=0xB,
-    
+
     /* BDLI */
     DALWAYS_BDL_BOXA=0xE,
     DALWAYS_BDL_BOXB=0xF,
     DALWAYS_BDL_BOXC=0x10,
-    
+
     /* BDLM */
     DALWAYS_BDL_BOX_SHADOW=0x13,
     DALWAYS_BDL_BOXD=0x14,
     DALWAYS_BDL_BOXSEA=0x15,
     DALWAYS_BDL_IT_TAKARA_FLASH=0x16,
     DALWAYS_BDL_YTRIF00=0x17,
-    
+
     /* BRK */
     DALWAYS_BRK_BOX_SHADOW=0x1A,
     DALWAYS_BRK_BOXA=0x1B,
@@ -61,13 +61,13 @@ enum DALWAYS_RES_FILE_ID { // IDs and indexes are synced
     DALWAYS_BRK_BOXC=0x1D,
     DALWAYS_BRK_IT_TAKARA_FLASH=0x1E,
     DALWAYS_BRK_YTRIF00=0x1F,
-    
+
     /* BTK */
     DALWAYS_BTK_BOXA=0x22,
     DALWAYS_BTK_BOXB=0x23,
     DALWAYS_BTK_BOXC=0x24,
     DALWAYS_BTK_IT_TAKARA_FLASH=0x25,
-    
+
     /* DZB */
     DALWAYS_DZB_BOXA_00=0x28,
     DALWAYS_DZB_BOXA_01=0x29,
@@ -220,7 +220,7 @@ s32 daTbox_c::commonShapeSet() {
 s32 daTbox_c::effectShapeSet() {
     J3DModelData* flashModelData = (J3DModelData*)dComIfG_getObjectRes("Dalways", DALWAYS_BDL_IT_TAKARA_FLASH);
     JUT_ASSERT(0x117, flashModelData != 0);
-    
+
     mpFlashMdl = mDoExt_J3DModel__create(flashModelData, 0x80000, 0x1000200);
     if (mpFlashMdl == NULL) {
         return cPhs_ERROR_e;
@@ -590,7 +590,7 @@ void daTbox_c::CreateInit() {
     current.angle.x = 0;
 
     mColStatus.Init(0xFF, 0xFF, this);
-    
+
     mColCyl.Set(dNpc_cyl_src);
     mColCyl.SetStts(&mColStatus);
 
@@ -684,7 +684,7 @@ void daTbox_c::demoProcOpen() {
     if (mOpenTimer < 0x3E8) {
         mOpenTimer++;
     }
-    
+
     if (mOpenTimer < 0x9C) {
         lightUpProc();
     }
@@ -828,7 +828,7 @@ s32 daTbox_c::demoProc() {
             case DEMO_PROC_APPEAR:
                 flagOn(0x20);
                 m03EC = -130.0f;
-                
+
                 setDzb();
 
                 if (getFuncType() == FUNC_TYPE_TACT) {
@@ -1139,7 +1139,7 @@ BOOL daTbox_c::draw() {
     }
 
     g_env_light.setLightTevColorType(mpChestMdl, &mTevStr);
-    
+
     J3DModelData* chestMdlData = mpChestMdl->getModelData();
     mOpenAnm.entry(chestMdlData);
 
@@ -1158,7 +1158,7 @@ BOOL daTbox_c::draw() {
 
         for (u8 i = 0; i < chestMdlData->getMaterialNum(); i++) {
             J3DMaterial* mat = chestMdlData->getMaterialNodePointer(i);
-            
+
             for (u8 j = 0; j < mat->getIndTexStageNum(); j++) {
                 J3DIndTexMtx* texMtx = mat->getIndTexMtx(j);
                 texMtx->setScaleExp(offsetAsU8);
@@ -1232,7 +1232,7 @@ BOOL daTbox_c::execute() {
 
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
         mDoMtx_stack_c::YrotM(orig.angle.y);
-        
+
         mpChestMdl->setBaseTRMtx(mDoMtx_stack_c::get());
         mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
 
@@ -1301,7 +1301,7 @@ static s32 daTbox_Create(fopAc_ac_c* i_actor) {
 
     if (result == cPhs_COMPLEATE_e) {
         tbox->mRoomNo = tbox->orig.angle.x & 0x3F;
-        
+
         u32 shapeType = tbox->getShapeType();
         u32 heapSize = heapsize_tbl[shapeType];
 
