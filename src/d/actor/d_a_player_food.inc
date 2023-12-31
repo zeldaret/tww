@@ -98,7 +98,7 @@ BOOL daPy_lk_c::procFoodThrow_init() {
     
     daPy_matAnm_c::m_maba_flg = 0;
     daPy_matAnm_c::m_maba_timer = 1;
-    setSingleMoveAnime(ANM_UNK_C4, daPy_HIO_food_c0::m.field_0x4, daPy_HIO_food_c0::m.field_0x8, daPy_HIO_food_c0::m.field_0x0, daPy_HIO_food_c0::m.field_0xC);
+    setSingleMoveAnime(ANM_ESAMAKI, daPy_HIO_food_c0::m.field_0x4, daPy_HIO_food_c0::m.field_0x8, daPy_HIO_food_c0::m.field_0x0, daPy_HIO_food_c0::m.field_0xC);
     keepItemData();
     
     if (mDemo.getDemoType() == 5) {
@@ -181,7 +181,7 @@ BOOL daPy_lk_c::procFoodSet_init() {
     current.angle.y = shape_angle.y;
     
     mVelocity = 0.0f;
-    setSingleMoveAnime(ANM_UNK_C5, daPy_HIO_food_c0::m.field_0x10, daPy_HIO_food_c0::m.field_0x14, daPy_HIO_food_c0::m.field_0x2, daPy_HIO_food_c0::m.field_0x18);
+    setSingleMoveAnime(ANM_SETHYOINOMI, daPy_HIO_food_c0::m.field_0x10, daPy_HIO_food_c0::m.field_0x14, daPy_HIO_food_c0::m.field_0x2, daPy_HIO_food_c0::m.field_0x18);
     keepItemData();
     setHyoiModel();
     

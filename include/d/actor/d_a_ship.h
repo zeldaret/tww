@@ -84,7 +84,7 @@ public:
     void setStartModeWarp() {}
     void setSteerMove() {}
     void setTactWarp() {}
-    void setTactWarpID(unsigned long) {}
+    void setTactWarpID(u32 warpID) { m042C = warpID; }
     void setTactWarpPosNum(int) {}
 
     void bodyJointCallBack(int);
@@ -236,7 +236,9 @@ public:
     /* 0x0414 */ daGrid_c* mpGrid;
     /* 0x0418 */ int m0418;
     /* 0x041C */ fopAc_ac_c* m041C;
-    /* 0x0420 */ u8 m0420[0x0434 - 0x0420];
+    /* 0x0420 */ u8 m0420[0x042C - 0x0420];
+    /* 0x042C */ u32 m042C;
+    /* 0x0430 */ u8 m0430[0x0434 - 0x0430];
     /* 0x0434 */ cXyz* m0434;
     /* 0x0438 */ cXyz m0438;
     /* 0x0444 */ cXyz m0444;

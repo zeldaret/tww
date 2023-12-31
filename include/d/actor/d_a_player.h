@@ -17,6 +17,22 @@ public:
     static u8 m_maba_timer;
     static u8 m_morf_frame;
 
+    static void onMabaFlg() { m_maba_flg = 1; }
+    static void offMabaFlg() { m_maba_flg = 0; }
+    static void decMabaTimer() {}
+    static void decMorfFrame() {}
+    static void getEyeMoveFlg() {}
+    static void getMabaFlg() {}
+    static void getMabaTimer() {}
+    static void getNowOffsetXP() {}
+    static void getNowOffsetYP() {}
+    static void offEyeMoveFlg() {}
+    static void onEyeMoveFlg() {}
+    static void setMabaTimer(u8 timer) { m_maba_timer = timer; }
+    static void setMorfFrame(u8) {}
+    static void setNowOffsetX(f32) {}
+    static void setNowOffsetY(f32) {}
+
 public:
     /* 0x6C */ cXy mEyePosOld;
     /* 0x74 */ cXy mEyePos;

@@ -11,6 +11,7 @@
  */
 
 #include "d/actor/d_a_player_main.h"
+#include "f_op/f_op_camera.h"
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
 
 extern const Vec l_tact_top;
@@ -176,8 +177,123 @@ void daPy_lk_c::resetTactCount() {
 }
 
 /* 8014DBEC-8014E100       .text procTactWait_init__9daPy_lk_cFi */
-BOOL daPy_lk_c::procTactWait_init(int) {
-    /* Nonmatching */
+BOOL daPy_lk_c::procTactWait_init(int r30) {
+    if (mCurProc == PROC_TACT_WAIT_e) {
+        if (m3570 != r30) {
+            m34D8 = 0;
+            m34DA = 0;
+            m34D2 = -1;
+        }
+        m3570 = r30;
+        if (m3570 != -4) {
+            g_dComIfG_gameInfo.play.field_0x4947 = 1;
+        } else {
+            g_dComIfG_gameInfo.play.field_0x4947 = 0;
+        }
+        return TRUE;
+    } else if (r30 == -1) {
+        if (!dComIfGp_event_compulsory(this, NULL, -1)) {
+            return FALSE;
+        }
+        mDemo.setDemoType(5);
+    }
+    
+    int r31 = checkShipRideUseItem(1);
+    if (r31 == 0) {
+        if (r30 == -1) {
+            f32 f31 = 200.0f * cM_ssin(shape_angle.y);
+            f32 f30 = 200.0f * cM_scos(shape_angle.y);
+            cXyz startPos(
+                mAttentionInfo.mPosition.x,
+                mAttentionInfo.mPosition.y - 50.0f,
+                mAttentionInfo.mPosition.z
+            );
+            cXyz endPos(
+                startPos.x + f31,
+                startPos.y,
+                startPos.z + f30
+            );
+            mLinkLinChk.Set(&startPos, &endPos, this);
+            if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
+                endPos.x = startPos.x - f31;
+                endPos.z = startPos.z - f30;
+                mLinkLinChk.Set(&startPos, &endPos, this);
+                if (!dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
+                    shape_angle.y += 0x8000;
+                } else {
+                    endPos.x = startPos.x + f30;
+                    endPos.z = startPos.z - f31;
+                    mLinkLinChk.Set(&startPos, &endPos, this);
+                    if (!dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
+                        shape_angle.y += 0x4000;
+                    } else {
+                        endPos.x = startPos.x - f30;
+                        endPos.z = startPos.z + f31;
+                        mLinkLinChk.Set(&startPos, &endPos, this);
+                        if (!dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
+                            shape_angle.y -= 0x4000;
+                        }
+                    }
+                }
+                current.angle.y = shape_angle.y;
+            }
+        } else if (r30 == -4 || r30 == -5) {
+            if (fopAcM_getTalkEventPartner(this)) {
+                shape_angle.y = fopAcM_searchActorAngleY(this, fopAcM_getTalkEventPartner(this));
+            }
+        }
+    }
+    
+    commonProcInit(PROC_TACT_WAIT_e);
+    daPy_matAnm_c::offMabaFlg();
+    daPy_matAnm_c::setMabaTimer(1);
+    setSingleMoveAnime(ANM_WAITTAKT, daPy_HIO_tact_c0::m.field_0x0, 0.0f, -1, daPy_HIO_tact_c0::m.field_0x4);
+    setActAnimeUpper(0x127, UPPER_UNK1, daPy_HIO_tact_c0::m.field_0x0, 0.0f, -1, -1.0f);
+    mAnmRatioUpper[1].setRatio(0.0f);
+    setActAnimeUpper(0x127, UPPER_UNK2, daPy_HIO_tact_c0::m.field_0x0, 0.0f, -1, -1.0f);
+    mAnmRatioUpper[2].setRatio(0.0f);
+    mVelocity = 0.0f;
+    m34D4 = 0;
+    m34D6 = 0;
+    dComIfGp_setPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e);
+    
+    if (r30 == -1) {
+        dCam_getBody()->StartEventCamera(0xC, fopAcM_GetID(this), 0);
+        mDoAud_seStart(JA_SE_TAKT_USE_BEGIN);
+    }
+    
+    mDoAud_tact_reset();
+    mDoAud_tact_setBeat(0);
+    mDoAud_tact_setVolume(0.0f);
+    mDoAud_tact_ambientPlay();
+    
+    setTactModel();
+    initShipRideUseItem(r31, 2);
+    
+    m34D2 = -1;
+    m32E4.makeEmitter(0x50, mpHeldItemModel->getBaseTRMtx(), &current.pos, NULL);
+    m3570 = r30;
+    m34D8 = 0;
+    m3574 = -1;
+    m35A0 = 0.0f;
+    m34DA = 0;
+    m3624 = 0;
+    m35A4 = 0.0f;
+    m35A8 = 0.0f;
+    if (m3570 == 6 || m3570 == 7) {
+        m35AC = 600.0f;
+    } else {
+        m35AC = 900.0f;
+    }
+    m34D0 = -1;
+    setTactZev(-1, -1, NULL);
+    
+    if (m3570 != -4) {
+        g_dComIfG_gameInfo.play.field_0x4947 = 1;
+    }
+    mDoAud_taktModeMute();
+    
+    return TRUE;
 }
 
 /* 8014E100-8014E9A4       .text procTactWait__9daPy_lk_cFv */
@@ -186,8 +302,55 @@ BOOL daPy_lk_c::procTactWait() {
 }
 
 /* 8014E9A4-8014EBA0       .text procTactPlay_init__9daPy_lk_cFlii */
-BOOL daPy_lk_c::procTactPlay_init(s32, int, int) {
-    /* Nonmatching */
+BOOL daPy_lk_c::procTactPlay_init(s32 r27, int r30, int r31) {
+    int r28 = checkShipRideUseItem(0);
+    commonProcInit(PROC_TACT_PLAY_e);
+    dComIfGp_setPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e);
+    m3570 = r27;
+    if (r31 == 0) {
+        m3628 = fopMsgM_messageSet(0x5AD + r27);
+    } else {
+        m3628 = -1;
+    }
+    mDoAud_tact_setVolume(0.0f);
+    resetActAnimeUpper(UPPER_UNK2, -1.0f);
+    resetActAnimeUpper(UPPER_UNK1, -1.0f);
+    m34DA = 0xA;
+    
+    daPy_ANM anm;
+    if (r27 == 0) {
+        anm = ANM_TAKTKAZE;
+    } else if (r27 == 1) {
+        anm = ANM_TAKTSIPPU;
+    } else if (r27 == 5) {
+        anm = ANM_TAKTCHUYA;
+    } else if (r27 == 4) {
+        anm = ANM_TAKTFUJIN;
+    } else if (r27 == 2) {
+        anm = ANM_TAKTAYATSURI;
+    } else {
+        anm = ANM_TAKTCHISIN;
+    }
+    setSingleMoveAnime(anm, 1.0f, 0.0f, -1, 3.0f);
+    
+    initShipRideUseItem(r28, 2);
+    
+    if (r28 != 0 && m3570 == 1) {
+        stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+        if (dStage_stagInfo_GetSTType(stag_info) == 7 && m34CC != 1 && r30 != 0) {
+            daShip_c* ship = dComIfGp_getShipActor();
+            u32 warpID = fopAcM_create(PROC_TORNADO, 1, &current.pos, current.roomNo);
+            ship->setTactWarpID(warpID);
+        }
+    }
+    
+    m32E4.makeEmitter(0x51, mpHeldItemModel->getBaseTRMtx(), &current.pos, NULL);
+    m34D0 = 0;
+    m3574 = r30;
+    m3624 = 0;
+    m34D8 = r31;
+    
+    return TRUE;
 }
 
 /* 8014EBA0-8014EFD4       .text procTactPlay__9daPy_lk_cFv */

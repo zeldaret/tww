@@ -90,6 +90,10 @@ inline void mDoAud_load2ndDynamicWave() {
     mDoAud_zelAudio_c::getInterface()->load2ndDynamicWave();
 }
 
+inline void mDoAud_taktModeMute() {
+    mDoAud_zelAudio_c::getInterface()->taktModeMute();
+}
+
 inline void mDoAud_taktModeMuteOff() {
     mDoAud_zelAudio_c::getInterface()->taktModeMuteOff();
 }
@@ -173,9 +177,34 @@ inline void mDoAud_tact_getBeat() {
     return mDoAud_zelAudio_c::getTact().getBeat();
 }
 
+inline void mDoAud_tact_setBeat(s32 beat) {
+    mDoAud_zelAudio_c::getTact().setBeat(beat);
+}
+
 inline void mDoAud_tact_getBeatFrames() {
     return mDoAud_zelAudio_c::getTact().getBeatFrames();
 }
+
+inline void mDoAud_tact_setVolume(f32 volume) {
+    mDoAud_zelAudio_c::getTact().setVolume(volume);
+}
+
+inline void mDoAud_tact_play() {
+    mDoAud_zelAudio_c::getTact().play();
+}
+
+inline void mDoAud_tact_ambientPlay() {
+    mDoAud_zelAudio_c::getTact().ambientPlay();
+}
+
+inline void mDoAud_tact_armSoundPlay(s32) {}
+inline void mDoAud_tact_judge(s32, s32) {}
+inline void mDoAud_tact_melodyPlay(s32) {}
+inline void mDoAud_tact_melodyStop() {}
+inline void mDoAud_tact_metronomePlay(s32, s32) {}
+inline void mDoAud_tact_playArmSwing(s32, s32) {}
+inline void mDoAud_tact_setStickPos(s32, s32) {}
+inline void mDoAud_tact_stopArmSwing() {}
 
 inline BOOL mDoAud_checkCbPracticePlay() {
     return mDoAud_zelAudio_c::getInterface()->checkCbPracticePlay();

@@ -224,7 +224,8 @@ struct daPy_aura_c {
 
 class daPy_anmIndex_c {
 public:
-    
+    /* 0x00 */ u16 mUnderBckIdx;
+    /* 0x02 */ u16 mUpperBckIdx;
 };
 
 enum LINK_RES_FILE_ID { // IDs and indexes are synced
@@ -1217,8 +1218,240 @@ public:
     };
 
     enum daPy_ANM {
-        ANM_UNK_C4 = 0xC4,
-        ANM_UNK_C5 = 0xC5,
+        ANM_WAITS = 0x00,
+        ANM_WALK = 0x01,
+        ANM_DASH = 0x02,
+        ANM_DASHKAZE = 0x03,
+        ANM_WALKHBOOTS = 0x04,
+        ANM_WALKHBOOTSKAZE = 0x05,
+        ANM_WALKSLOPE = 0x06,
+        ANM_ATNLS = 0x07,
+        ANM_ATNRS = 0x08,
+        ANM_ATNWLS = 0x09,
+        ANM_ATNWRS = 0x0A,
+        ANM_ATNDLS = 0x0B,
+        ANM_ATNDRS = 0x0C,
+        ANM_JMPEDS = 0x0D,
+        ANM_ATNWB = 0x0E,
+        ANM_ATNDB = 0x0F,
+        ANM_ATNJL = 0x10,
+        ANM_ATNJR = 0x11,
+        ANM_ATNJLLAND = 0x12,
+        ANM_ATNJRLAND = 0x13,
+        ANM_ROT = 0x14,
+        ANM_CUTREL = 0x15,
+        ANM_DIFENCE = 0x16,
+        ANM_DIFENCEA = 0x17,
+        ANM_CUTTURNP = 0x18,
+        ANM_CUTTURNPWFB = 0x19,
+        ANM_CUTTURNPWLR = 0x1A,
+        ANM_TALKA = 0x1B,
+        ANM_WAITB = 0x1C,
+        ANM_WAITATOB = 0x1D,
+        ANM_CUTA = 0x1E,
+        ANM_CUTF = 0x1F,
+        ANM_CUTR = 0x20,
+        ANM_CUTL = 0x21,
+        ANM_CUTEA = 0x22,
+        ANM_CUTEB = 0x23,
+        ANM_EXCA1 = 0x24,
+        ANM_EXCB1 = 0x25,
+        ANM_CUTBOKO = 0x26,
+        ANM_CUTRER = 0x27,
+        ANM_CUTTURN = 0x28,
+        ANM_CUTTURNC = 0x29,
+        ANM_CUTTURNB = 0x2A,
+        ANM_JATTACK = 0x2B,
+        ANM_JATTCKP = 0x2C,
+        ANM_JATTCKCUT = 0x2D,
+        ANM_JATTCKCUTHAM = 0x2E,
+        ANM_JATTACKLAND = 0x2F,
+        ANM_LANDDAMA = 0x30,
+        ANM_LANDDAMAST = 0x31,
+        ANM_ROLLF = 0x32,
+        ANM_ROLLFMIS = 0x33,
+        ANM_SLIP = 0x34,
+        ANM_SLIDEF = 0x35,
+        ANM_SLIDEFLAND = 0x36,
+        ANM_SLIDEB = 0x37,
+        ANM_SLIDEBLAND = 0x38,
+        ANM_ATNGAL = 0x39,
+        ANM_ATNGAR = 0x3A,
+        ANM_ATNGAHAM = 0x3B,
+        ANM_JMPST = 0x3C,
+        ANM_ROLLB = 0x3D,
+        ANM_ROLLBLAND = 0x3E,
+        ANM_CROUCH = 0x3F,
+        ANM_LIE = 0x40,
+        ANM_LIEFORWARD = 0x41,
+        ANM_WALL = 0x42,
+        ANM_WALLDW = 0x43,
+        ANM_WALLWL = 0x44,
+        ANM_WALLWR = 0x45,
+        ANM_WALLWLDW = 0x46,
+        ANM_WALLWRDW = 0x47,
+        ANM_WALLPL = 0x48,
+        ANM_WALLPR = 0x49,
+        ANM_WALLPLDW = 0x4A,
+        ANM_WALLPRDW = 0x4B,
+        ANM_VJMP = 0x4C,
+        ANM_VJMPCHA = 0x4D,
+        ANM_VJMPCHB = 0x4E,
+        ANM_VJMPCL = 0x4F,
+        ANM_HANGING = 0x50,
+        ANM_HANGUP = 0x51,
+        ANM_HANGMOVEL = 0x52,
+        ANM_HANGMOVER = 0x53,
+        ANM_DAM = 0x54,
+        ANM_DAML = 0x55,
+        ANM_DAMR = 0x56,
+        ANM_DAMF = 0x57,
+        ANM_DAMB = 0x58,
+        ANM_DAMFL = 0x59,
+        ANM_DAMFR = 0x5A,
+        ANM_DAMFF = 0x5B,
+        ANM_DAMFB = 0x5C,
+        ANM_DAMFLUP = 0x5D,
+        ANM_DAMFRUP = 0x5E,
+        ANM_DAMFFUP = 0x5F,
+        ANM_DAMFBUP = 0x60,
+        ANM_LAVADAM = 0x61,
+        ANM_DIELONG = 0x62,
+        ANM_SHIPDIE = 0x63,
+        ANM_SWIMDIE = 0x64,
+        ANM_GRABP = 0x65,
+        ANM_GRABUP = 0x66,
+        ANM_GRABNG = 0x67,
+        ANM_GRABWAIT = 0x68,
+        ANM_GRABWAITB = 0x69,
+        ANM_GRABTHROW = 0x6A,
+        ANM_GRABRE = 0x6B,
+        ANM_MJMP = 0x6C,
+        ANM_MJMPC = 0x6D,
+        ANM_MROLLL = 0x6E,
+        ANM_MROLLR = 0x6F,
+        ANM_MROLLLC = 0x70,
+        ANM_MROLLRC = 0x71,
+        ANM_MSTEPOVER = 0x72,
+        ANM_MSTEPOVERA = 0x73,
+        ANM_MSTEPOVERLAND = 0x74,
+        ANM_ROPECATCH = 0x75,
+        ANM_ROPESWINGF = 0x76,
+        ANM_ROPESWINGB = 0x77,
+        ANM_ROPEWAIT = 0x78,
+        ANM_ROPECLIMB = 0x79,
+        ANM_ROPEDOWN = 0x7A,
+        ANM_ROPETHROWCATCH = 0x7B,
+        ANM_BOOMCATCH = 0x7C,
+        ANM_VOYAGE1 = 0x7D,
+        ANM_WAITPUSHPULL = 0x7E,
+        ANM_WALKPUSH = 0x7F,
+        ANM_WALKPULL = 0x80,
+        ANM_SWIMP = 0x81,
+        ANM_SWIMWAIT = 0x82,
+        ANM_SWIMING = 0x83,
+        ANM_LADDERUPST = 0x84,
+        ANM_LADDERUPEDR = 0x85,
+        ANM_LADDERUPEDL = 0x86,
+        ANM_LADDERDWST = 0x87,
+        ANM_LADDERDWEDR = 0x88,
+        ANM_LADDERDWEDL = 0x89,
+        ANM_LADDERRTOL = 0x8A,
+        ANM_LADDERLTOR = 0x8B,
+        ANM_FCLIMBSLIDELUP = 0x8C,
+        ANM_FCLIMBSLIDERUP = 0x8D,
+        ANM_BOXOPENLINK = 0x8E,
+        ANM_BOXOPENSHORTLINK = 0x8F,
+        ANM_ITEMGET = 0x90,
+        ANM_HOLDUP = 0x91,
+        ANM_WALLHOLDUP = 0x92,
+        ANM_WALLHOLDUPDW = 0x93,
+        ANM_COMEOUT = 0x94,
+        ANM_WALKBARREL = 0x95,
+        ANM_SALTATION = 0x96,
+        ANM_WHO = 0x97,
+        ANM_PICKUP = 0x98,
+        ANM_WAITPICKUP = 0x99,
+        ANM_SURPRISED = 0x9A,
+        ANM_TURNBACK = 0x9B,
+        ANM_LOOKUP = 0x9C,
+        ANM_WAITQ = 0x9D,
+        ANM_GLAD = 0x9E,
+        ANM_SHIP_JUMP1 = 0x9F,
+        ANM_SHIP_JUMP2 = 0xA0,
+        ANM_USEFANA = 0xA1,
+        ANM_USEFANB = 0xA2,
+        ANM_USEFANB2 = 0xA3,
+        ANM_MOGAKU1 = 0xA4,
+        ANM_FM_BATA = 0xA5,
+        ANM_HOOKSHOTJMP = 0xA6,
+        ANM_VOMITJMP = 0xA7,
+        ANM_WAITTAKT = 0xA8,
+        ANM_SLIPICE = 0xA9,
+        ANM_HAMSWINGA = 0xAA,
+        ANM_HAMSWINGBPRE = 0xAB,
+        ANM_HAMSWINGBHIT = 0xAC,
+        ANM_HAMSWINGBEND = 0xAD,
+        ANM_SETBOOTS = 0xAE,
+        ANM_DOOROPENALINK = 0xAF,
+        ANM_DOOROPENBLINK = 0xB0,
+        ANM_SEYYES = 0xB1,
+        ANM_PRESENTATIONA = 0xB2,
+        ANM_WINDL = 0xB3,
+        ANM_WINDR = 0xB4,
+        ANM_PRESENTATIONB = 0xB5,
+        ANM_BINDRINKPRE = 0xB6,
+        ANM_BINDRINKING = 0xB7,
+        ANM_BINDRINKAFTER = 0xB8,
+        ANM_BINOPENPRE = 0xB9,
+        ANM_BINOPENA = 0xBA,
+        ANM_BINOPENB = 0xBB,
+        ANM_BINSWINGS = 0xBC,
+        ANM_BINSWINGU = 0xBD,
+        ANM_BINGET = 0xBE,
+        ANM_SURPRISEDB = 0xBF,
+        ANM_RISE = 0xC0,
+        ANM_USETCEIVER = 0xC1,
+        ANM_YOBU = 0xC2,
+        ANM_NENRIKI = 0xC3,
+        ANM_ESAMAKI = 0xC4,
+        ANM_SETHYOINOMI = 0xC5,
+        ANM_GETLETTER = 0xC6,
+        ANM_WAITLETTER = 0xC7,
+        ANM_LINK_FREEZ = 0xC8,
+        ANM_LINK_MOGAKI = 0xC9,
+        ANM_TAKTDGE = 0xCA,
+        ANM_DAMBIRI = 0xCB,
+        ANM_SALVLR = 0xCC,
+        ANM_SALVRWAIT = 0xCD,
+        ANM_SALVLWAIT = 0xCE,
+        ANM_SALVRBAD = 0xCF,
+        ANM_SALVLBAD = 0xD0,
+        ANM_SALVRGOOD = 0xD1,
+        ANM_SALVLGOOD = 0xD2,
+        ANM_MSTEPOVER_JMPED = 0xD3,
+        ANM_BOXOPENSLINK = 0xD4,
+        ANM_SEARESET = 0xD5,
+        ANM_WARPIN = 0xD6,
+        ANM_WARPOUT = 0xD7,
+        ANM_SURPRISEDWAIT = 0xD8,
+        ANM_PRESENTATIONAWAIT = 0xD9,
+        ANM_POWUPWAIT = 0xDA,
+        ANM_POWUP = 0xDB,
+        ANM_KOSHIKAKE = 0xDC,
+        ANM_COMBO_LINK = 0xDD,
+        ANM_CUTKESA = 0xDE,
+        ANM_WARPOUTFIRST = 0xDF,
+        ANM_WAITAUCTION = 0xE0,
+        ANM_FREEA = 0xE1,
+        ANM_FREEB = 0xE2,
+        ANM_FREED = 0xE3,
+        ANM_TAKTKAZE = 0xE4,
+        ANM_TAKTSIPPU = 0xE5,
+        ANM_TAKTCHUYA = 0xE6,
+        ANM_TAKTFUJIN = 0xE7,
+        ANM_TAKTAYATSURI = 0xE8,
+        ANM_TAKTCHISIN = 0xE9,
     };
 
     enum daPy_UNDER {
@@ -1260,7 +1493,7 @@ public:
     JKRHeap* setItemHeap();
     void setBlurPosResource(u16);
     J3DAnmTransform* getItemAnimeResource(u16);
-    void getAnimeResource(daPy_anmHeap_c*, u16, u32);
+    J3DAnmTransform* getAnimeResource(daPy_anmHeap_c*, u16, u32);
     void getUnderUpperAnime(daPy_anmIndex_c const*, J3DAnmTransform**, J3DAnmTransform**, int, u32);
     void setTextureAnimeResource(J3DAnmTexPattern*, int);
     void loadTextureAnimeResource(u32, int);
@@ -1530,7 +1763,7 @@ public:
     void animeUpdate();
     void simpleAnmPlay(J3DAnmBase*);
     void setHandModel(daPy_lk_c::daPy_ANM);
-    daPy_anmIndex_c* getAnmData(daPy_lk_c::daPy_ANM) const;
+    const daPy_anmIndex_c* getAnmData(daPy_lk_c::daPy_ANM) const;
     BOOL checkGrabWeapon(int);
     void endDemoMode();
     void setAuraEffect();
@@ -2470,7 +2703,7 @@ public:
     /* 0x359C */ u8 m359C[0x35A0 - 0x359C];
     /* 0x35A0 */ f32 m35A0;
     /* 0x35A4 */ f32 m35A4;
-    /* 0x35A8 */ u8 m35A8[0x35AC - 0x35A8];
+    /* 0x35A8 */ f32 m35A8;
     /* 0x35AC */ f32 m35AC;
     /* 0x35B0 */ f32 m35B0;
     /* 0x35B4 */ u8 m35B4[0x35BC - 0x35B4];
@@ -2557,9 +2790,12 @@ public:
     };  // Size: 0x04
     static const TexAnmTableEntry mTexAnmIndexTable[];
     
+    static const daPy_anmIndex_c mSwordAnmIndexTable[];
+    static const daPy_anmIndex_c mBokoAnmIndexTable[];
+    static const daPy_anmIndex_c mHammerAnmIndexTable[];
+    
     struct AnmDataTableEntry {
-        /* 0x00 */ u16 mUpperBckIdx;
-        /* 0x02 */ u16 mUnderBckIdx;
+        /* 0x00 */ daPy_anmIndex_c mAnmIdx;
         /* 0x04 */ u8 mLeftHandIdx;
         /* 0x05 */ u8 mRightHandIdx;
         /* 0x06 */ u16 mTexAnmIdx;
