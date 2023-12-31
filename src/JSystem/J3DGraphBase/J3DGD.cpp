@@ -497,20 +497,12 @@ void J3DGDSetFog(GXFogType type, f32 startZ, f32 endZ, f32 nearZ, f32 farZ, GXCo
 
 /* 802D895C-802D8AA8       .text J3DGDSetFogRangeAdj__FUcUsP14_GXFogAdjTable */
 void J3DGDSetFogRangeAdj(u8 enabled, u16 center, GXFogAdjTable* pFogAdjTable) {
-    /* Nonmatching */
     if (enabled) {
         for (s32 i = 0; i < 10; i += 2) {
-            u16 r0 = pFogAdjTable->r[i + 0];
-            u16 r1 = pFogAdjTable->r[i + 1];
-
-            u32 reg = 0;
-            reg |= (0xe9 + i / 2) << 24;
-            reg |= r1 << 12;
-            reg |= r0 << 0;
-            J3DGDWriteBPCmd(reg);
+            J3DGDWriteBPCmd((0xe9 + i / 2) << 24 | pFogAdjTable->r[i + 1] << 12 | pFogAdjTable->r[i] << 0);
         }
     }
 
-    u32 reg = (center + 342) << 0 | 0xe8 << 24 | enabled << 10;
+    u32 reg = (0xe8 << 24) | (center + 342) << 0 | enabled << 10;
     J3DGDWriteBPCmd(reg);
 }
