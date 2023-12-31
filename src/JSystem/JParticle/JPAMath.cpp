@@ -8,6 +8,8 @@
 #include "JSystem/JMath/JMATrigonometric.h"
 #include "dolphin/types.h"
 
+static const f32 dummy[1] = { 1.0f };
+
 /* 8025991C-802599A0       .text JPAGetYZRotateMtx__FssPA4_f */
 void JPAGetYZRotateMtx(s16 y, s16 z, Mtx dst) {
     f32 cosY = JMASCos(y);
@@ -83,11 +85,14 @@ void JPAGetDirMtx(const JGeometry::TVec3<f32>& dir, Mtx dst) {
 
 /* 80259B6C-80259C90       .text JPASetSVecfromMtx__FPA4_fRQ29JGeometry8TVec3<f> */
 void JPASetSVecfromMtx(Mtx mtx, JGeometry::TVec3<f32>& scale) {
-    /* Nonmatching */
-    JGeometry::TVec3<f32> tmp;
-    scale.x = sqrtf(mtx[0][0] * mtx[0][0] + mtx[1][0] * mtx[1][0] + mtx[2][0] * mtx[2][0]);
-    scale.y = sqrtf(mtx[0][1] * mtx[0][1] + mtx[1][1] * mtx[1][1] + mtx[2][1] * mtx[2][1]);
-    scale.z = sqrtf(mtx[0][2] * mtx[0][2] + mtx[1][2] * mtx[1][2] + mtx[2][2] * mtx[2][2]);
+    f32 m00 = mtx[0][0], m10 = mtx[1][0], m20 = mtx[2][0];
+    scale.x = JGeometry::TUtil<f32>::sqrt(m00*m00 + m10*m10 + m20*m20);
+
+    f32 m01 = mtx[0][1], m11 = mtx[1][1], m21 = mtx[2][1];
+    scale.y = JGeometry::TUtil<f32>::sqrt(m01*m01 + m11*m11 + m21*m21);
+
+    f32 m02 = mtx[0][2], m12 = mtx[1][2], m22 = mtx[2][2];
+    scale.z = JGeometry::TUtil<f32>::sqrt(m02*m02 + m12*m12 + m22*m22);
 }
 
 /* 80259C90-80259CB8       .text JPASetRMtxTVecfromMtx__FPA4_fPA4_fRQ29JGeometry8TVec3<f> */
