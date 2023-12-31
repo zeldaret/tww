@@ -134,9 +134,9 @@ void J3DGDSetVtxAttrFmtv(GXVtxFmt fmt, GXVtxAttrFmtList* vtxAttr, bool forceNBT)
                 nrmCompCnt = GX_NRM_NBT;
                 nbt3 = true;
             } else {
-                nrmCompCnt = GX_NRM_NBT;
-                if (!forceNBT)
-                    nrmCompCnt = vtxAttr->mCompCnt;
+                // possible fakematch? need to cast vtxAttr->mCompCnt to int to put value in r0 temporarily
+                // nrmCompCnt = forceNBT ? GX_NRM_NBT : vtxAttr->mCompCnt;
+                nrmCompCnt = (GXCompCnt)(forceNBT ? GX_NRM_NBT : (int)(vtxAttr->mCompCnt));
                 nbt3 = false;
             }
             break;

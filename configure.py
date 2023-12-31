@@ -861,7 +861,7 @@ config.libs = [
     JSystemLib(
         "J3DGraphBase",
         [
-            Object(NonMatching, "JSystem/J3DGraphBase/J3DGD.cpp"),
+            Object(Matching,    "JSystem/J3DGraphBase/J3DGD.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DSys.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DVertex.cpp"),
             Object(NonMatching, "JSystem/J3DGraphBase/J3DTransform.cpp"),
