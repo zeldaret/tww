@@ -271,7 +271,33 @@ void J3DScaleNrmMtx(register Mtx mtx, const register Vec& scl) {
 
 /* 802DAB68-802DABBC       .text J3DScaleNrmMtx33__FPA3_fRC3Vec */
 void J3DScaleNrmMtx33(register Mtx33 mtx, const register Vec& scl) {
-    /* Nonmatching */
+    register f32 mtx0_xy, mtx0_z_;
+    register f32 mtx1_xy, mtx1_z_;
+    register f32 mtx2_xy, mtx2_z_;
+    register f32 scl__xy, scl__z_;
+
+    asm {
+        psq_l  mtx0_xy, 0(mtx), 0, 0
+        psq_l  scl__xy, 0(scl), 0, 0
+        lfs    mtx0_z_, 8(mtx)
+        lfs    scl__z_, 8(scl)
+        ps_mul mtx0_xy, mtx0_xy, scl__xy
+        psq_l  mtx1_xy, 12(mtx), 0, 0
+        fmuls  mtx0_z_, mtx0_z_, scl__z_
+        lfs    mtx1_z_, 20(mtx)
+        ps_mul mtx1_xy, mtx1_xy, scl__xy
+        psq_l  mtx2_xy, 24(mtx), 0, 0
+        fmuls  mtx1_z_, mtx1_z_, scl__z_
+        lfs    mtx2_z_, 32(mtx)
+        ps_mul mtx2_xy, mtx2_xy, scl__xy
+        psq_st mtx0_xy, 0(mtx), 0, 0
+        fmuls  mtx2_z_, mtx2_z_, scl__z_
+        stfs   mtx0_z_, 8(mtx)
+        psq_st mtx1_xy, 12(mtx), 0, 0
+        stfs   mtx1_z_, 20(mtx)
+        psq_st mtx2_xy, 24(mtx), 0, 0
+        stfs   mtx2_z_, 32(mtx)
+    }
 }
 
 /* 802DABBC-802DACE0       .text J3DMtxProjConcat__FPA4_fPA4_fPA4_f */
