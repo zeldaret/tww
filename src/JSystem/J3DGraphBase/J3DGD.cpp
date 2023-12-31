@@ -419,8 +419,41 @@ void J3DGDSetTevColorS10(GXTevRegID id, GXColorS10 color) {
 }
 
 /* 802D85F8-802D895C       .text J3DGDSetFog__F10_GXFogTypeffff8_GXColor */
-void J3DGDSetFog(GXFogType, f32, f32, f32, f32, GXColor) {
-    /* Nonmatching */
+void J3DGDSetFog(GXFogType type, f32 startZ, f32 endZ, f32 nearZ, f32 farZ, GXColor color) {
+    f32 A, B, C;
+    if (farZ == nearZ || endZ == startZ) {
+        A = 0.0f;
+        B = 0.5f;
+        C = 0.0f;
+    } else {
+        A = (farZ * nearZ) / ((farZ - nearZ) * (endZ - startZ));
+        B = farZ / (farZ - nearZ);
+        C = startZ / (endZ - startZ);
+    }
+
+    f32 mantissa = B;
+    u32 exponent = 1;
+    while (mantissa > 1.0) {
+        mantissa /= 2.0f;
+        exponent++;
+    }
+
+    while (mantissa > 0.0f && mantissa < 0.5) {
+        mantissa *= 2.0f;
+        exponent--;
+    }
+
+    f32 tA = A / (1 << exponent);
+    u32 mantissa32 = (u32)(mantissa * 8388638.0f);
+
+    u32 A32 = *(u32*)&tA;
+    u32 C32 = *(u32*)&C;
+
+    J3DGDWriteBPCmd((A32 >> 12) | (0xee << 24));
+    J3DGDWriteBPCmd(mantissa32 | (0xef << 24));
+    J3DGDWriteBPCmd(exponent | (0xf0 << 24));
+    J3DGDWriteBPCmd((C32 >> 12) | (type << 21) | (0xf1 << 24));
+    J3DGDWriteBPCmd(color.b << 0 | color.g << 8 | color.r << 16 | (0xf2 << 24));
 }
 
 /* 802D895C-802D8AA8       .text J3DGDSetFogRangeAdj__FUcUsP14_GXFogAdjTable */
