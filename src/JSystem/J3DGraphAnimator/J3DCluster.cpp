@@ -13,8 +13,8 @@ void J3DDeformData::clear() {
     mClusterPointer = NULL;
     mClusterKeyNum = 0;
     mClusterKeyPointer = NULL;
-    field_0x20 = 0;
-    field_0x24 = 0;
+    field_0x20 = NULL;
+    field_0x24 = NULL;
 }
 
 /* 802F37E4-802F3814       .text __ct__13J3DDeformDataFv */
@@ -36,8 +36,8 @@ void J3DDeformData::deform(J3DVertexBuffer*) {
 void J3DDeformer::clear() {
     mDeformData = NULL;
     mAnmCluster = NULL;
-    field_0x8 = 0;
-    field_0xc = 0;
+    field_0x8 = NULL;
+    field_0xc = NULL;
     mFlags = 3;
 }
 
