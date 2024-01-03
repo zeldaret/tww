@@ -30,7 +30,7 @@ public:
     int removeTevRegAnimator(J3DAnmTevRegKey*);
     s32 setMatColorAnimator(J3DAnmColor*, J3DMatColorAnm *);
     s32 setTexNoAnimator(J3DAnmTexPattern*, J3DTexNoAnm*);
-    s32 setTexMtxAnimator(J3DAnmTextureSRTKey*, J3DTexMtxAnm*, J3DTexMtxAnm*);
+    s32 setTexMtxAnimator(J3DAnmTextureSRTKey* pAnm, J3DTexMtxAnm* pTexAnm, J3DTexMtxAnm* pDualAnmR);
     s32 setTevRegAnimator(J3DAnmTevRegKey*, J3DTevColorAnm*, J3DTevKColorAnm*);
 
     virtual ~J3DMaterialTable();

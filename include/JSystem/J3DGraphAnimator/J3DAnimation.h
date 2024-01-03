@@ -370,6 +370,7 @@ protected:
     /* 0x22 */ u16 field_0x22;
 };  // Size: 0x24
 
+// BCK
 class J3DAnmTransformKey : public J3DAnmTransform {
 public:
     friend class J3DAnmKeyLoader_v15;
@@ -389,6 +390,7 @@ private:
     /* 0x28 */ J3DAnmTransformKeyTable* field_0x28;
 };  // Size: 0x2C
 
+// BCA
 class J3DAnmTransformFull : public J3DAnmTransform {
 public:
     friend class J3DAnmFullLoader_v15;
@@ -408,6 +410,7 @@ struct J3DTextureSRTInfo;
 class J3DModelData;
 class J3DMaterialTable;
 
+// BTK
 class J3DAnmTextureSRTKey : public J3DAnmBase {
 public:
     friend class J3DAnmKeyLoader_v15;
@@ -453,8 +456,8 @@ public:
     JUTNameTab * getPostUpdateMaterialName() { return &mPostUpdateMaterialName; }
     u16 getPostUpdateTexMtxID(u16 idx) const { return mPostUpdateTexMtxID[idx]; }
 
-    u32 getTexMtxCalcType() const { return mTexMtxCalcType; }
-    Vec& getSRTCenter(u16 idx) const { return mSRTCenter[idx]; }
+    u32 getTexMtxCalcType() { return mTexMtxCalcType; }
+    Vec& getSRTCenter(u16 idx) { return mSRTCenter[idx]; }
 
 private:
     /* 0x10 */ int mDecShift;
@@ -487,6 +490,7 @@ private:
 
 STATIC_ASSERT(sizeof(J3DAnmTextureSRTKey) == 0x88);
 
+// BVA
 class J3DAnmVisibilityFull : public J3DAnmBase {
 public:
     friend class J3DAnmFullLoader_v15;
@@ -511,6 +515,7 @@ private:
     /* 0x18 */ u8* mVisibility;
 };  // Size: 0x1C
 
+// BTP
 class J3DAnmTexPattern : public J3DAnmBase {
 public:
     friend class J3DAnmFullLoader_v15;
@@ -543,6 +548,7 @@ private:
     /* 0x20 */ JUTNameTab mUpdateMaterialName;
 };  // Size: 0x2C
 
+// BRK
 class J3DAnmTevRegKey : public J3DAnmBase {
 public:
     friend class J3DAnmKeyLoader_v15;
@@ -616,6 +622,7 @@ private:
     /* 0x70 */ s16 * mAnmKRegDataA;
 };  // Size: 0x74
 
+// BPK
 class J3DAnmColor : public J3DAnmBase {
 public:
     J3DAnmColor() : J3DAnmBase(0) {
@@ -775,6 +782,7 @@ protected:
     /* 0x10 */ f32* mWeight;
 };  // Size: 0x14
 
+// BLA
 class J3DAnmClusterFull : public J3DAnmCluster {
 public:
     friend class J3DAnmFullLoader_v15;
@@ -791,6 +799,7 @@ private:
     /* 0x14 */ J3DAnmClusterFullTable * mAnmTable;
 };
 
+// BLK
 class J3DAnmClusterKey : public J3DAnmCluster {
 public:
     friend class J3DAnmKeyLoader_v15;

@@ -81,6 +81,9 @@ public:
     bool checkBBoardFlag() const { return mbHasBillboard == 1; }
     void entryTexMtxAnimator(J3DAnmTextureSRTKey* anm) { mMaterialTable.entryTexMtxAnimator(anm); }
     void entryTevRegAnimator(J3DAnmTevRegKey* anm) { mMaterialTable.entryTevRegAnimator(anm); }
+    void setTexMtxAnimator(J3DAnmTextureSRTKey* pAnm, J3DTexMtxAnm* pTexAnm, J3DTexMtxAnm* pDualAnmR) {
+        mMaterialTable.setTexMtxAnimator(pAnm, pTexAnm, pDualAnmR);
+    }
     int removeTexNoAnimator(J3DAnmTexPattern* anm) {
         return mMaterialTable.removeTexNoAnimator(anm);
     }
@@ -104,7 +107,6 @@ public:
     void getBinary() {}
     void getRootNode() {}
     void setMatColorAnimator(J3DAnmColor*, J3DMatColorAnm*) {}
-    void setTexMtxAnimator(J3DAnmTextureSRTKey*, J3DTexMtxAnm*, J3DTexMtxAnm*) {}
     void setTexNoAnimator(J3DAnmTexPattern*, J3DTexNoAnm*) {}
 
 private:

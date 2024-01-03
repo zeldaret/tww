@@ -410,6 +410,7 @@ public:
         }
     }
 
+    JKRArchive* getLkDemoAnmArchive() { return mpLkDArc; }
     void setLkDemoAnmArchive(JKRArchive* i_arc) { mpLkDArc = i_arc; }
     void setStatus(u16 status) { mStatus = status; }
     void onStatus(u16 status) { mStatus |= status; }
@@ -535,6 +536,8 @@ public:
 
     inline void stopFwaterTimer() { mFwaterTimer = 0; }
     inline u8 checkFwaterTimer() { return mFwaterTimer; }
+
+    inline u8 getMiniGameType() { return mMiniGameType; }
 
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
@@ -1948,6 +1951,10 @@ inline dDemo_actor_c* dComIfGp_demo_getActor(u8 id) {
     return g_dComIfG_gameInfo.play.getDemo()->mDemoObj.getActor(id);
 }
 
+inline JKRArchive* dComIfGp_getLkDemoAnmArchive() {
+    return g_dComIfG_gameInfo.play.getLkDemoAnmArchive();
+}
+
 inline void dComIfGp_setLkDemoAnmArchive(JKRArchive* i_arc) {
     g_dComIfG_gameInfo.play.setLkDemoAnmArchive(i_arc);
 }
@@ -2163,7 +2170,7 @@ inline void dComIfGp_setCurrentGrafPort(J2DOrthoGraph* i_graf) {
 inline u8 dComIfGp_getMiniGameType() {
     // TODO add enum for minigame type.
     // 0 for none, 8 for shooting the fishman, 2/6 for orca, 7 for mail sorting, etc
-    return g_dComIfG_gameInfo.play.mMiniGameType;
+    return g_dComIfG_gameInfo.play.getMiniGameType();
 }
 
 inline void dComIfGp_setAStatus(u8 status) {

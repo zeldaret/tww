@@ -4,9 +4,9 @@
 #include "dolphin/types.h"
 
 struct counter_class {
-    u32 mCounter0;
-    s32 mCounter1;
-    u32 mTimer;
+    /* 0x00 */ u32 mCounter0;
+    /* 0x04 */ s32 mCounter1;
+    /* 0x08 */ u32 mTimer;
 };
 
 extern counter_class g_Counter;

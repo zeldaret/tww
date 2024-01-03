@@ -1017,7 +1017,7 @@ BOOL daTbox_c::actionOpenWait() {
         }
 
         if (getShapeType() != 0) {
-            mDoAud_subBgmStart(0x80000000 | JA_BGM_OPEN_BOX);
+            mDoAud_subBgmStart(JA_BGM_OPEN_BOX);
             mAllColRatio = 0.4f;
 
             flagOn(0x08);

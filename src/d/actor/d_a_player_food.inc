@@ -127,7 +127,7 @@ BOOL daPy_lk_c::procFoodThrow() {
         }
     } else if (frameCtrl.checkPass(9.0f)) {
         seStartOnlyReverb(JA_SE_LK_ESA_THROW);
-        void* esa = fopAcM_fastCreate(PROC_ESA, 0xFFFF0014, &field_0x2d4, fopAcM_GetRoomNo(this), &shape_angle);
+        void* esa = fopAcM_fastCreate(PROC_ESA, 0xFFFF0014, &mLeftHandPos, fopAcM_GetRoomNo(this), &shape_angle);
         if (esa) {
             m3630 = fopAcM_GetID(esa);
             if (mDemo.getDemoType() != 5) {

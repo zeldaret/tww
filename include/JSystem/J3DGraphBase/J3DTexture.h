@@ -57,9 +57,9 @@ public:
         mTexMtxInfo = info;
     }
     ~J3DTexMtx() {}
-    void load(u32 i) const {
+    void load(u32 texMtxID) const {
         GDOverflowCheck(53);
-        J3DGDLoadTexMtxImm((Mtx&)mMtx, i * 3 + 30, (GXTexMtxType)mTexMtxInfo.mProjection);
+        J3DGDLoadTexMtxImm((Mtx&)mMtx, GX_TEXMTX0 + texMtxID * 3, (GXTexMtxType)mTexMtxInfo.mProjection);
     };
     void calc();
     void calcTexMtx(f32 const (*)[4]);
@@ -71,13 +71,15 @@ public:
     Mtx& getMtx() { return mMtx; }
     void setEffectMtx(Mtx effectMtx) { mTexMtxInfo.setEffectMtx(effectMtx); }
     Mtx& getViewMtx() { return mViewMtx; }
-    void setViewMtx(const Mtx viewMtx) { MTXCopy(viewMtx, mViewMtx); }
+    void setViewMtx(Mtx viewMtx) { MTXCopy(viewMtx, mViewMtx); }
+
+    void getTextureSRT() {}
 
 private:
     /* 0x00 */ J3DTexMtxInfo mTexMtxInfo;
     /* 0x64 */ Mtx mMtx;
     /* 0x94 */ Mtx mViewMtx;
-};  // Size: 0xc4
+};  // Size: 0xC4
 
 struct J3DTexCoord : public J3DTexCoordInfo {
     J3DTexCoord() { *(J3DTexCoordInfo*)this = j3dDefaultTexCoordInfo[0]; }

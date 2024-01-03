@@ -206,21 +206,24 @@ class daPy_footData_c {
 public:
     ~daPy_footData_c();
     daPy_footData_c();
-    
+
+public:
     /* 0x000 */ u8 field_0x000[0x034 - 0x000];
     /* 0x034 */ dBgS_LinkGndChk field_0x034;
     /* 0x088 */ u8 field_0x088[0x118 - 0x088];
 };
 
 struct daPy_aura_c {
-    J3DModel* mpYaura00Model;
-    f32 mFrame;
-    
+public:
     void setModel(J3DModel* model) { mpYaura00Model = model; }
     J3DModel* getModel() { return mpYaura00Model; }
     void setFrame(f32 frame) { mFrame = frame; }
     f32 getFrame() { return mFrame; }
-};
+
+public:
+    /* 0x00 */ J3DModel* mpYaura00Model;
+    /* 0x04 */ f32 mFrame;
+};  // Size: 0x08
 
 class daPy_anmIndex_c {
 public:
@@ -1496,7 +1499,7 @@ public:
     J3DAnmTransform* getAnimeResource(daPy_anmHeap_c*, u16, u32);
     void getUnderUpperAnime(daPy_anmIndex_c const*, J3DAnmTransform**, J3DAnmTransform**, int, u32);
     void setTextureAnimeResource(J3DAnmTexPattern*, int);
-    void loadTextureAnimeResource(u32, int);
+    J3DAnmTexPattern* loadTextureAnimeResource(u32, BOOL);
     BOOL checkBossBgm();
     BOOL checkMabaAnimeBtp(int);
     BOOL checkNormalFace();
@@ -2151,8 +2154,8 @@ public:
     BOOL procHookshotMove();
     BOOL procHookshotFly_init();
     BOOL procHookshotFly();
-    void fanWindEffectDraw();
-    void fanWindCrashEffectDraw();
+    BOOL fanWindEffectDraw();
+    BOOL fanWindCrashEffectDraw();
     void fanJointCB(int);
     void parachuteJointCB(int);
     void setShapeFanLeaf();
@@ -2421,7 +2424,7 @@ public:
     virtual u32 getThrowBoomerangID() const { return mActorKeepThrow.getID(); }
     virtual u32 getGrabActorID() const { return mActorKeepGrab.getID(); }
     virtual BOOL checkGrabBarrel() { return checkGrabBarrelSearch(1); }
-    virtual BOOL checkPlayerNoDraw() { return dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 2) || checkNoResetFlg0(daPyFlg0_NO_DRAW); }
+    virtual u32 checkPlayerNoDraw() { return dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 2) || checkNoResetFlg0(daPyFlg0_NO_DRAW); }
     virtual BOOL checkRopeTag() { return mActorKeepEquip.getActor() == NULL; }
     virtual BOOL checkRopeReadyAnime() const { return m_anm_heap_upper[2].mIdx == LKANM_BCK_ROPETHROWWAIT; }
     virtual void voiceStart(u32);
@@ -2445,10 +2448,10 @@ public:
     /* 0x0338 */ ResTIMG* mpCurrLinktex;
     /* 0x033C */ ResTIMG mOtherLinktex;
     /* 0x035C */ J3DAnmTexPattern* m035C;
-    /* 0x0360 */ J3DTexNoAnm* mpTexNoAnm;
+    /* 0x0360 */ J3DTexNoAnm* m_texNoAnms;
     /* 0x0364 */ J3DAnmTextureSRTKey* mpTexScrollResData;
-    /* 0x0368 */ J3DTexMtxAnm* mpTexMtxAnm;
-    /* 0x036C */ daPy_matAnm_c* mpTexEyeScroll[2];
+    /* 0x0368 */ J3DTexMtxAnm* m_texMtxAnm;
+    /* 0x036C */ daPy_matAnm_c* m_tex_eye_scroll[2];
     /* 0x0374 */ J3DShape* mpZOffBlendShape[4];
     /* 0x0384 */ J3DShape* mpZOffNoneShape[4];
     /* 0x0394 */ J3DShape* mpZOnShape[4];
@@ -2543,18 +2546,8 @@ public:
     /* 0x31AC */ fopAc_ac_c* mpAttnActorY;
     /* 0x31B0 */ fopAc_ac_c* mpAttnActorZ;
     /* 0x31B4 */ mDoExt_MtxCalcOldFrame* m_old_fdata;
-    /* 0x31B8 */ u16 mTexAnimeResIdx;
-    /* 0x31BA */ u16 m31BA;
-    /* 0x31BC */ u16 m31BC;
-    /* 0x31BE */ u16 m31BE;
-    /* 0x31C0 */ void* mpTextureAnimeResData;
-    /* 0x31C4 */ JKRSolidHeap* mpTextureAnimeResHeap;
-    /* 0x31C8 */ u16 mTexScrollResIdx;
-    /* 0x31CA */ u16 m31CA;
-    /* 0x31CC */ u16 m31CC;
-    /* 0x31CE */ u16 m31CE;
-    /* 0x31D0 */ void* mpTextureScrollResData;
-    /* 0x31D4 */ JKRSolidHeap* mpTextureScrollResHeap;
+    /* 0x31B8 */ daPy_anmHeap_c m_tex_anm_heap;
+    /* 0x31C8 */ daPy_anmHeap_c m_tex_scroll_heap;
     /* 0x31D8 */ int mCurProc;
     /* 0x31DC */ ProcFunc mCurProcFunc;
     /* 0x31E8 */ daPy_footEffect_c m31E8[2];
@@ -2658,8 +2651,8 @@ public:
     /* 0x352A */ s16 m352A;
     /* 0x352C */ s16 m352C;
     /* 0x352E */ s16 m352E;
-    /* 0x3530 */ s16 m3530;
-    /* 0x3532 */ s16 m3532;
+    /* 0x3530 */ u16 m3530;
+    /* 0x3532 */ u16 m3532;
     /* 0x3534 */ s16 m3534;
     /* 0x3536 */ s16 m3536;
     /* 0x3538 */ s16 m3538;
@@ -2681,7 +2674,7 @@ public:
     /* 0x3558 */ s16 m3558;
     /* 0x355A */ s16 m355A;
     /* 0x355C */ s16 m355C;
-    /* 0x355E */ u16 m355E;
+    /* 0x355E */ s16 m355E;
     /* 0x3560 */ u16 mHeldItemType;
     /* 0x3562 */ u8 m3562[0x3564 - 0x3562];
     /* 0x3564 */ s16 m3564;

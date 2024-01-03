@@ -36,7 +36,7 @@ public:
 public:
     /* 0x6C */ cXy mEyePosOld;
     /* 0x74 */ cXy mEyePos;
-};
+};  // Size: 0x7C
 
 class daPy_mtxFollowEcallBack_c : public dPa_levelEcallBack {
 public:
@@ -54,9 +54,12 @@ public:
 
 STATIC_ASSERT(sizeof(daPy_mtxFollowEcallBack_c) == 0x0C);
 
+// TODO: this probably does not belong in d_a_player.h based on the .text section splitting in d_a_player_main
 class daPy_HIO_c {
 public:
-    daPy_HIO_c() {}
+    // TODO: constructor should be weak, but not inlined?
+    // daPy_HIO_c() {}
+    daPy_HIO_c();
 
 public:
     /* 0x00 */ u8 temp[0x3F - 0x00];
@@ -109,6 +112,7 @@ public:
         daPyFlg0_UNK10000           = 0x00010000,
         daPyFlg0_NO_FALL_VOICE      = 0x00040000,
         daPyFlg0_SCOPE_CANCEL       = 0x00080000,
+        daPyFlg0_PHOTO_BOX_CANCEL   = 0x00080000, // Same as scope cancel
         daPyFlg0_UNK200000          = 0x00200000,
         daPyFlg0_EQUIP_HEAVY_BOOTS  = 0x02000000,
         daPyFlg0_NO_DRAW            = 0x08000000,
@@ -164,42 +168,220 @@ public:
     };
     
     enum daPy_FACE {
-        
+        // Index in daPy_lk_c::mTexAnmIndexTable
+        daPyFace_TMABAA = 0x00,
+        daPyFace_TMABAA_TEUP = 0x01,
+        daPyFace_TMABAB = 0x02,
+        daPyFace_TMABAC = 0x03,
+        daPyFace_TMABACB = 0x04,
+        daPyFace_TMABACB_TEDW = 0x05,
+        daPyFace_TMABACC = 0x06,
+        daPyFace_TMABAD = 0x07,
+        daPyFace_TMABAD_TEDW = 0x08,
+        daPyFace_TMABAE = 0x09,
+        daPyFace_TMABAE_TEUP = 0x0A,
+        daPyFace_TMABAE_TEDW = 0x0B,
+        daPyFace_TMABAE_TEL = 0x0C,
+        daPyFace_TMABAE_TER = 0x0D,
+        daPyFace_TMABAF = 0x0E,
+        daPyFace_TMABAG = 0x0F,
+        daPyFace_TMABAH = 0x10,
+        daPyFace_TMABAI = 0x11,
+        daPyFace_TMABAJ_TEYORIME = 0x12,
+        daPyFace_TMABAD_TWAITPICKUP = 0x13,
+        daPyFace_TMABAC_THOOKSHOTJMP = 0x14,
+        daPyFace_TGRABP = 0x15,
+        daPyFace_TGRABUP = 0x16,
+        daPyFace_TGRABNG = 0x17,
+        daPyFace_TGRABTHROW = 0x18,
+        daPyFace_TGRABRE = 0x19,
+        daPyFace_TWALLWL = 0x1A,
+        daPyFace_TWALLWR = 0x1B,
+        daPyFace_TWALLPL = 0x1C,
+        daPyFace_TWALLPR = 0x1D,
+        daPyFace_TCUT = 0x1E,
+        daPyFace_TCUTEA = 0x1F,
+        daPyFace_TCUTEA_TECN = 0x20,
+        daPyFace_TEXCA1 = 0x21,
+        daPyFace_TEXCB1 = 0x22,
+        daPyFace_TJATTACK = 0x23,
+        daPyFace_TJATTACK_TEUP = 0x24,
+        daPyFace_TCUTTURNP = 0x25,
+        daPyFace_TCUTTURN = 0x26,
+        daPyFace_TMJMP = 0x27,
+        daPyFace_TMJMPC = 0x28,
+        daPyFace_TMROLLL = 0x29,
+        daPyFace_TMROLLR = 0x2A,
+        daPyFace_TMROLLLC = 0x2B,
+        daPyFace_TMROLLRC = 0x2C,
+        daPyFace_TMSTEPOVER = 0x2D,
+        daPyFace_TMSTEPOVERA = 0x2E,
+        daPyFace_TMSTEPOVERLAND = 0x2F,
+        daPyFace_TATNJL = 0x30,
+        daPyFace_TATNJR = 0x31,
+        daPyFace_TJMP = 0x32,
+        daPyFace_TROLLF = 0x33,
+        daPyFace_TROLLB = 0x34,
+        daPyFace_TROLLBLAND = 0x35,
+        daPyFace_TROLLFMIS = 0x36,
+        daPyFace_TFALL = 0x37,
+        daPyFace_TLANDDAMA = 0x38,
+        daPyFace_TLANDDAMAST = 0x39,
+        daPyFace_TDAM = 0x3A,
+        daPyFace_TDAMF = 0x3B,
+        daPyFace_TDAMFFUP = 0x3C,
+        daPyFace_TDAMFBUP = 0x3D,
+        daPyFace_TDAMFLUP = 0x3E,
+        daPyFace_TDAMFRUP = 0x3F,
+        daPyFace_TDAMDASH = 0x40,
+        daPyFace_TGUARD = 0x41,
+        daPyFace_TSLIDEF = 0x42,
+        daPyFace_TSLIDEFLAND = 0x43,
+        daPyFace_TSLIDEB = 0x44,
+        daPyFace_TSLIDEBLAND = 0x45,
+        daPyFace_TSWIMP = 0x46,
+        daPyFace_TSWIMING = 0x47,
+        daPyFace_TBOOMTHROW = 0x48,
+        daPyFace_TBOOMCATCH = 0x49,
+        daPyFace_TWALKPUSH = 0x4A,
+        daPyFace_TWALKPULL = 0x4B,
+        daPyFace_TVJMPCHA = 0x4C,
+        daPyFace_TVJMPCL = 0x4D,
+        daPyFace_TROPECLIMB = 0x4E,
+        daPyFace_TROPEDOWN = 0x4F,
+        daPyFace_TLADDERUPST = 0x50,
+        daPyFace_TLADDERDWST = 0x51,
+        daPyFace_TLADDERUPED = 0x52,
+        daPyFace_TLADDERDWED = 0x53,
+        daPyFace_THANGING = 0x54,
+        daPyFace_THANGUP = 0x55,
+        daPyFace_TLAVADAM = 0x56,
+        daPyFace_TCUTRE = 0x57,
+        daPyFace_TCUTTURNB = 0x58,
+        daPyFace_TWAITATOB = 0x59,
+        daPyFace_TCOMEOUT = 0x5A,
+        daPyFace_THOLDUP = 0x5B,
+        daPyFace_TWALLHOLDUP = 0x5C,
+        daPyFace_TITEMGET = 0x5D,
+        daPyFace_TSALTATION = 0x5E,
+        daPyFace_TWHO = 0x5F,
+        daPyFace_TPICKUP = 0x60,
+        daPyFace_TBOXOPENLINK = 0x61,
+        daPyFace_TBOXOPENSHORTLINK = 0x62,
+        daPyFace_TDIELONG = 0x63,
+        daPyFace_TSWIMDIE = 0x64,
+        daPyFace_TSURPRISED = 0x65,
+        daPyFace_TTURNBACK = 0x66,
+        daPyFace_TLOOKUP = 0x67,
+        daPyFace_TWAITQ = 0x68,
+        daPyFace_TGLAD = 0x69,
+        daPyFace_TCUTBOKO = 0x6A,
+        daPyFace_SHIP_JUMP1 = 0x6B,
+        daPyFace_SHIP_JUMP2 = 0x6C,
+        daPyFace_TUSEFANA = 0x6D,
+        daPyFace_TUSEFANB = 0x6E,
+        daPyFace_TUSEFANB2 = 0x6F,
+        daPyFace_TBOWWAIT = 0x70,
+        daPyFace_TVOMITJMP = 0x71,
+        daPyFace_TREST = 0x72,
+        daPyFace_TTAKE = 0x73,
+        daPyFace_TTAKELR = 0x74,
+        daPyFace_TSLIPICE = 0x75,
+        daPyFace_THAMSWINGA = 0x76,
+        daPyFace_THAMSWINGBPRE = 0x77,
+        daPyFace_THAMSWINGBHIT = 0x78,
+        daPyFace_THAMSWINGBEND = 0x79,
+        daPyFace_TSETBOOTS = 0x7A,
+        daPyFace_TDOOROPENALINK = 0x7B,
+        daPyFace_TDOOROPENBLINK = 0x7C,
+        daPyFace_TSEYYES = 0x7D,
+        daPyFace_TPRESENTATIONA = 0x7E,
+        daPyFace_TWINDL = 0x7F,
+        daPyFace_TWINDR = 0x80,
+        daPyFace_TPRESENTATIONB = 0x81,
+        daPyFace_TBINDRINKPRE = 0x82,
+        daPyFace_TBINDRINKING = 0x83,
+        daPyFace_TBINDRINKAFTER = 0x84,
+        daPyFace_TBINDRINKPRE2 = 0x85,
+        daPyFace_TBINDRINKING2 = 0x86,
+        daPyFace_TBINDRINKAFTER2 = 0x87,
+        daPyFace_TBINOPENPRE = 0x88,
+        daPyFace_TBINOPENA = 0x89,
+        daPyFace_TBINOPENB = 0x8A,
+        daPyFace_TBINSWING = 0x8B,
+        daPyFace_TBINGET = 0x8C,
+        daPyFace_TARROWRELORD = 0x8D,
+        daPyFace_TSURPRISEDB = 0x8E,
+        daPyFace_TFAN = 0x8F,
+        daPyFace_TNENRIKI = 0x90,
+        daPyFace_TMABAB_TEDL = 0x91,
+        daPyFace_TMABAH_TABEKOBE = 0x92,
+        daPyFace_TSETHYOINOMI = 0x93,
+        daPyFace_LINK_FREEZ = 0x94,
+        daPyFace_LINK_MOGAKI = 0x95,
+        daPyFace_TDAMBIRI = 0x96,
+        daPyFace_SALVLR = 0x97,
+        daPyFace_SALVWAIT = 0x98,
+        daPyFace_SALVBAD = 0x99,
+        daPyFace_SALVGOOD = 0x9A,
+        daPyFace_SEARESET = 0x9B,
+        daPyFace_TWARPIN = 0x9C,
+        daPyFace_TWARPOUT = 0x9D,
+        daPyFace_TPOWUPWAIT = 0x9E,
+        daPyFace_TPOWUP = 0x9F,
+        daPyFace_TCUTKESA = 0xA0,
+        daPyFace_TWARPOUTFIRST = 0xA1,
+        daPyFace_TDASHKAZE = 0xA2,
+        daPyFace_TIYAYA = 0xA3,
+        daPyFace_TFREEA = 0xA4,
+        daPyFace_TFREEB = 0xA5,
+        daPyFace_TFREED = 0xA6,
+        daPyFace_TTAKTKAZE = 0xA7,
+        daPyFace_TTAKTSIPPU = 0xA8,
+        daPyFace_TTAKTCHUYA = 0xA9,
+        daPyFace_TTAKTFUJIN = 0xAA,
+        daPyFace_TTAKTAYATSURI = 0xAB,
+        daPyFace_TTAKTCHISIN = 0xAC,
+        daPyFace_UNKNOWN = 0xAD, // Not an index, this is a special value checked in checkNormalFace()
     };
     
-    /* 0x290 */ u8 mAttackState;
+    /* 0x290 */ u8 mCutType;
     /* 0x291 */ u8 field_0x291;
     /* 0x292 */ u8 field_0x292[0x294 - 0x292];
     /* 0x294 */ s16 mDamageWaitTimer;
     /* 0x296 */ s16 mQuakeTimer;
-    /* 0x298 */ int field_0x298;
+    /* 0x298 */ int mFace;
     /* 0x29C */ u32 mNoResetFlg0;
     /* 0x2A0 */ u32 mNoResetFlg1;
     /* 0x2A4 */ u32 mResetFlg0;
     /* 0x2A8 */ f32 field_0x2a8;
-    /* 0x2AC */ f32 field_0x2ac;
+    /* 0x2AC */ f32 mHeight;
     /* 0x2B0 */ f32 field_0x2b0;
     /* 0x2B4 */ csXyz mBodyAngle;
     /* 0x2BA */ u8 field_0x2BA[0x2BC - 0x2BA];
     /* 0x2BC */ cXyz mHeadTopPos;
     /* 0x2C8 */ cXyz mSwordTopPos;
-    /* 0x2D4 */ cXyz field_0x2d4;
-    /* 0x2E0 */ cXyz field_0x2e0;
+    /* 0x2D4 */ cXyz mLeftHandPos;
+    /* 0x2E0 */ cXyz mRightHandPos;
     /* 0x2EC */ cXyz mRopePos;
     /* 0x2F8 */ cXyz field_0x2f8;
     /* 0x304 */ daPy_demo_c mDemo;
     /* 0x31C */ /* vtable */
 
-    u8 getCutType() const { return mAttackState; }
+    f32 getSpeedF() const { return speedF; }
+    u8 getCutType() const { return mCutType; }
     s16 getDamageWaitTimer() const { return mDamageWaitTimer; }
-    s16 getBodyAngleX() { return mBodyAngle.x; }
-    s16 getBodyAngleY() { return mBodyAngle.y; }
-    void getLeftHandPos() const {}
-    void getRightHandPos() const {}
-    void getSwordTopPos() const {}
+    f32 getHeight() const { return mHeight; }
+    s16 getBodyAngleX() const { return mBodyAngle.x; }
+    s16 getBodyAngleY() const { return mBodyAngle.y; }
     cXyz getHeadTopPos() const { return mHeadTopPos; }
     cXyz* getHeadTopPosP() { return &mHeadTopPos; }
-    f32 getSpeedF() const { return speedF; }
+    cXyz getSwordTopPos() const { return mSwordTopPos;}
+    cXyz getLeftHandPos() const { return mLeftHandPos; }
+    cXyz getRightHandPos() const { return mRightHandPos; }
+    cXyz getRopePos() const { return mRopePos; }
+    void getCutCount() const {} // field_0x291?
+    void getYPos() const {}
     
     void changeDemoMode(u32) {}
     void changeDemoMoveAngle(s16 angle) { mDemo.setMoveAngle(angle); }
@@ -208,6 +390,7 @@ public:
         mDemo.setOriginalDemoType();
         mDemo.setParam0(0);
     }
+    void cancelOriginalDemo() {}
 
     void onNoResetFlg0(daPy_FLG0 flag) { mNoResetFlg0 |= flag; }
     void offNoResetFlg0(daPy_FLG0 flag) { mNoResetFlg0 &= ~flag; }
@@ -218,6 +401,7 @@ public:
     bool checkEquipHoverBoots() const { return checkNoResetFlg0(daPyFlg0_HOVER_BOOTS); }
     void onNoFallVoice() { onNoResetFlg0(daPyFlg0_NO_FALL_VOICE); }
     void onScopeCancel() { onNoResetFlg0(daPyFlg0_SCOPE_CANCEL); }
+    void onPhotoBoxCancel() { onNoResetFlg0(daPyFlg0_PHOTO_BOX_CANCEL); }
     bool checkEquipHeavyBoots() const { return checkNoResetFlg0(daPyFlg0_EQUIP_HEAVY_BOOTS); }
     void onPlayerNoDraw() { onNoResetFlg0(daPyFlg0_NO_DRAW); }
     void offPlayerNoDraw() { offNoResetFlg0(daPyFlg0_NO_DRAW); }
@@ -271,13 +455,19 @@ public:
     bool checkArrowShoot() const { return checkResetFlg0(daPyRFlg0_ARROW_SHOOT); }
     
     bool checkGrabWear() const { return field_0x2b0 < 0.0f; }
-    void checkMasterSwordEquip() const {}
+    void setFace(daPy_FACE face) { mFace = face; }
     
-    // checkSwordMiniGame__9daPy_py_cCFv
-    // checkNormalSwordEquip__9daPy_py_cCFv
-    // checkBowMiniGame__9daPy_py_cCFv
-    // checkUseArrowEffect__9daPy_py_cCFv
-    // checkFinalMasterSwordEquip__9daPy_py_cCFv
+    void checkNormalSwordEquip() const {}
+    void checkMasterSwordEquip() const {}
+    void checkFinalMasterSwordEquip() const {}
+    void checkBowMiniGame() const {}
+    void checkSwordMiniGame() const {}
+    void checkSoupPowerUp() const {}
+    void checkSubjectAccept() const {}
+    void checkTactInput() const {}
+    void checkUseArrowEffect() const {}
+    void getRopeJumpLand() const {}
+    void checkRopeForceEnd() const {}
     
     virtual MtxP getLeftHandMatrix() = 0;
     virtual MtxP getRightHandMatrix() = 0;
@@ -301,7 +491,7 @@ public:
     virtual u32 getThrowBoomerangID() const { return -1; }
     virtual u32 getGrabActorID() const { return -1; }
     virtual BOOL checkGrabBarrel() { return FALSE; }
-    virtual BOOL checkPlayerNoDraw() { return FALSE; }
+    virtual u32 checkPlayerNoDraw() { return FALSE; }
     virtual BOOL checkRopeTag() { return FALSE; }
     virtual BOOL checkRopeReadyAnime() const { return FALSE; }
     virtual void voiceStart(u32) {}
@@ -317,14 +507,10 @@ public:
     virtual void changeTextureAnime(u16, u16, int) {}
     virtual void cancelChangeTextureAnime() {}
     
-    void getRopeJumpLand() const;
-    void checkRopeForceEnd() const;
     void changePlayer(fopAc_ac_c*);
     void objWindHitCheck(dCcD_Cyl*);
     void setDoButtonQuake();
     void stopDoButtonQuake(int);
-    void getRopePos() const;
-    void setFace(daPy_py_c::daPy_FACE) {}
 };  // Size: 0x320
 
 #endif /* D_A_PLAYER */

@@ -521,13 +521,13 @@ void daObjMknjD::Act_c::privateCut() {
                 case ACT_BREAK:
                     if (daObjMknjD_break() == true) {
                         if (strcmp(dComIfGp_getStartStageName(), "Ekaze") == 0 || strcmp(dComIfGp_getStartStageName(), "Edaichi") == 0) {
-                            mDoAud_bgmStart(0x80000000 | JA_BGM_JABOO_CAVE);
+                            mDoAud_bgmStart(JA_BGM_JABOO_CAVE);
                         }
                         else if (m043E == true) {
-                            mDoAud_bgmStart(0x80000000 | JA_BGM_D_WIND);
+                            mDoAud_bgmStart(JA_BGM_D_WIND);
                         }
                         else {
-                            mDoAud_bgmStart(0x80000000 | JA_BGM_D_EARTH);
+                            mDoAud_bgmStart(JA_BGM_D_EARTH);
                         }
 
                         if (mSmokeCBs[2].getEmitter() != NULL) {
@@ -908,10 +908,10 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
     }
     if (m0432 == 1) {
         if (m043E == true) {
-            mDoAud_bgmStart(0x80000000 | JA_BGM_TAKT_MAKORE);
+            mDoAud_bgmStart(JA_BGM_TAKT_MAKORE);
         }
         else {
-            mDoAud_bgmStart(0x80000000 | JA_BGM_TAKT_MEDRI);
+            mDoAud_bgmStart(JA_BGM_TAKT_MEDRI);
         }
 
         m0432 = 0;

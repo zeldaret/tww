@@ -231,7 +231,7 @@ void daObjBarrier_c::break_start_wait_proc() {
         if ((player_p->current.pos - current.pos).absXZ() >= 8800.0f &&
             dComIfGs_getSelectEquip(0) == MASTER_SWORD_EX)
         {
-            switch (player_p->mAttackState) {
+            switch (player_p->getCutType()) {
             case 1:
             case 2:
             case 3:

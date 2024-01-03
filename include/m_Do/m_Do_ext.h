@@ -223,7 +223,7 @@ public:
 
 private:
     /* 0x2C */ void* mBas;
-};
+};  // Size: 0x30
 
 class mDoExt_MtxCalcOldFrame {
 public:
@@ -555,6 +555,8 @@ public:
     ~mDoExt_offCupOnAupPacket();
 
     void draw();
+    
+    void entryOpa() { j3dSys.getDrawBuffer(0)->entryImm(this, 0); }
 };
 
 class mDoExt_onCupOffAupPacket : public J3DPacket {
@@ -562,6 +564,8 @@ public:
     ~mDoExt_onCupOffAupPacket();
 
     void draw();
+    
+    void entryOpa() { j3dSys.getDrawBuffer(0)->entryImm(this, 0); }
 };
 
 class mDoExt_3Dline_c {

@@ -121,8 +121,8 @@ public:
     bool getDirEntry(SDirEntry*, u32) const;
     void* getIdxResource(u32);
     void* getResource(u16);
-    u32 readIdxResource(void*, u32, u32);
-    u32 readResource(void*, u32, u16);
+    u32 readIdxResource(void* buffer, u32 bufferSize, u32 index);
+    u32 readResource(void* buffer, u32 bufferSize, u16 id);
     u32 countResource(u32) const;
     JKRArcFinder* getFirstResource(u32) const;
     u32 getFileAttribute(u32) const;

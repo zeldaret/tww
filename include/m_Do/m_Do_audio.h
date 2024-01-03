@@ -70,6 +70,14 @@ inline void mDoAud_bgmStop(u32 param_0) {
     mDoAud_zelAudio_c::getInterface()->bgmStop(param_0, 0);
 }
 
+inline int mDoAud_checkPlayingMainBgmFlag() {
+    return mDoAud_zelAudio_c::getInterface()->checkPlayingMainBgmFlag();
+}
+
+inline int mDoAud_checkPlayingSubBgmFlag() {
+    return mDoAud_zelAudio_c::getInterface()->checkPlayingSubBgmFlag();
+}
+
 inline void mDoAud_prepareLandingDemo(u32 idx) {
     mDoAud_zelAudio_c::getInterface()->prepareLandingDemo(idx);
 }

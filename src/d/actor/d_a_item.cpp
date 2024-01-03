@@ -1368,7 +1368,7 @@ BOOL daItem_c::initAction() {
         return TRUE;
     }
     
-    // TODO: usage of uninitialized register?
+    // TODO: bug? usage of uninitialized register f31 in some cases
     f32 temp_f31;
     switch (mAction) {
     case 1:

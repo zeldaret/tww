@@ -587,9 +587,9 @@ void dEvDtStaff_c::specialProcDirector() {
                     u32* pBGM = dComIfGp_evmng_getMyIntegerP(staffIdx, "BGM_ID");
                     u32 bgm;
                     static u32 bgm_table[] = {
-                        0x80000007, // JA_BGM_I_MAJU
-                        0x80000012, // JA_BGM_TETRA_MEET
-                        0x80000017, // JA_BGM_I_LINK_FOREST
+                        JA_BGM_I_MAJU,
+                        JA_BGM_TETRA_MEET,
+                        JA_BGM_I_LINK_FOREST,
                     };
 
                     if (pBGM != NULL) {

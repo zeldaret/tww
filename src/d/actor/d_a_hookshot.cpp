@@ -219,10 +219,10 @@ BOOL daHookshot_c::procWait() {
     daPy_lk_c* link = daPy_getPlayerLinkActorClass();
     current.pos = link->getHookshotRootPos();
     MtxP leftHandtx = link->getModelJointMtx(0x08); // cl_LhandA joint
-    cMtx_copy(leftHandtx, m51C);
-    m51C[0][3] = current.pos.x;
-    m51C[1][3] = current.pos.y;
-    m51C[2][3] = current.pos.z;
+    cMtx_copy(leftHandtx, mMtx);
+    mMtx[0][3] = current.pos.x;
+    mMtx[1][3] = current.pos.y;
+    mMtx[2][3] = current.pos.z;
     m2B0 = 0;
     
     if (fopAcM_GetParam(this) == 1) {

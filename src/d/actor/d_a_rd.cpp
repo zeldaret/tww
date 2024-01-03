@@ -657,19 +657,19 @@ bool daRd_c::checkTgHit() {
         atInfo.pParticlePos = NULL;
         atInfo.mpObj = mCyl.GetTgHitObj();
         if (r29) {
-            cXyz* temp = mCyl.GetTgHitPosP();
+            cXyz* hitPos = mCyl.GetTgHitPosP();
             cc_at_check(this, &atInfo);
             if (mHitType == 1 || mHitType == 7 || mHitType == 8 || mHealth <= 0) {
                 dComIfGp_particle_set(0x10, mCyl.GetTgHitPosP());
                 cXyz scale(2.0f, 2.0f, 2.0f);
-                dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, temp, &player->shape_angle, &scale);
+                dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, hitPos, &player->shape_angle, &scale);
                 if (mHealth <= 0) {
                     modeProcInit(MODE_DEATH);
                 } else {
                     modeProcInit(MODE_DAMAGE);
                 }
             } else {
-                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, temp, &player->shape_angle);
+                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, hitPos, &player->shape_angle);
                 modeProcInit(MODE_DAMAGE);
             }
         } else if (mHitType == 0xE) {

@@ -22,7 +22,7 @@ public:
     cXyz getMoveVec() const { return mMoveVec; }
     u32 getCarryActorID() const { return mCarryActorID; }
     void getHookAngle() {}
-    void getMtxTop() {}
+    MtxP getMtxTop() { return mMtx; }
     void getObjHookFlg() const {}
     void getSightHit() const {}
     void getObjSightCrossPos() {}
@@ -72,7 +72,7 @@ public:
     /* 0x3D4 */ dCcD_Cps mCps;
     /* 0x50C */ cXyz m50C;
     /* 0x518 */ u32 mCarryActorID;
-    /* 0x51C */ Mtx m51C;
+    /* 0x51C */ Mtx mMtx;
     /* 0x54C */ ProcFunc mCurrProcFunc;
 };
 

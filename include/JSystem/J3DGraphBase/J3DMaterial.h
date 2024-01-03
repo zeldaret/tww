@@ -44,27 +44,26 @@ public:
     J3DMaterial() { initialize(); }
     ~J3DMaterial() {}
 
-    J3DMaterial* getNext() const { return mNext; }
+    J3DMaterial* getNext() { return mNext; }
     void setNext(J3DMaterial* material) {mNext = material; }
-    J3DShape* getShape() const { return mShape; }
-    u32 getMaterialMode() { return mMaterialMode; }
-    void setMaterialMode(u32 mode) { mMaterialMode = mode; }
-    J3DTevBlock* getTevBlock() const { return mTevBlock; }
-    J3DColorBlock* getColorBlock() const { return mColorBlock; }
-    J3DTexGenBlock* getTexGenBlock() const { return mTexGenBlock; }
-    J3DDisplayListObj* getSharedDisplayListObj() const { return mSharedDLObj; }
-    J3DIndBlock* getIndBlock() const { return mIndBlock; }
     J3DShape* getShape() { return mShape; }
     J3DJoint* getJoint() { return mJoint; }
-    J3DMaterialAnm* getMaterialAnm() const {
+    u32 getMaterialMode() { return mMaterialMode; }
+    void setMaterialMode(u32 mode) { mMaterialMode = mode; }
+    J3DTevBlock* getTevBlock() { return mTevBlock; }
+    J3DColorBlock* getColorBlock() { return mColorBlock; }
+    J3DTexGenBlock* getTexGenBlock() { return mTexGenBlock; }
+    J3DDisplayListObj* getSharedDisplayListObj() { return mSharedDLObj; }
+    J3DIndBlock* getIndBlock() { return mIndBlock; }
+    J3DMaterialAnm* getMaterialAnm() {
         if ((u32)mMaterialAnm < 0xC0000000) {
             return mMaterialAnm;
         } else {
             return NULL;
         }
     }
-    J3DNBTScale* getNBTScale() const { return mTexGenBlock->getNBTScale(); }
-    u16 getTexNo(u32 idx) const { return mTevBlock->getTexNo(idx); }
+    J3DNBTScale* getNBTScale() { return mTexGenBlock->getNBTScale(); }
+    u16 getTexNo(u32 idx) { return mTevBlock->getTexNo(idx); }
     J3DGXColor* getTevKColor(u32 param_0) { return mTevBlock->getTevKColor(param_0); }
     J3DGXColorS10* getTevColor(u32 param_0) { return mTevBlock->getTevColor(param_0); }
     J3DFog* getFog() { return mPEBlock->getFog(); }
@@ -73,6 +72,8 @@ public:
     J3DAlphaComp* getAlphaComp() { return mPEBlock->getAlphaComp(); }
     u8 getZCompLoc() { return mPEBlock->getZCompLoc(); }
     J3DTexMtx* getTexMtx(u32 idx) { return mTexGenBlock->getTexMtx(idx); }
+    void setTexMtx(u32 idx, J3DTexMtx* texMtx) { mTexGenBlock->setTexMtx(idx, texMtx); }
+    J3DTexCoord* getTexCoord(u32 idx) { return mTexGenBlock->getTexCoord(idx); }
     u16 getIndex() { return mIndex; }
     bool isDrawModeOpaTexEdge() { return (mMaterialMode & 3) == 0; }
     J3DPEBlock* getPEBlock() { return mPEBlock; }
@@ -86,6 +87,28 @@ public:
     void setTevKColor(u32 i, const J3DGXColor* i_color) { mTevBlock->setTevKColor(i, i_color); }
     void setMaterialAnm(J3DMaterialAnm* i_anm) { mMaterialAnm = i_anm; }
     void setCullMode(u8 i_mode) { mColorBlock->setCullMode(i_mode); }
+
+    void addShape(J3DShape*) {}
+    void getAmbColor(u32) {}
+    void getColorChan(u32) {}
+    void getColorChanNum() const {}
+    void getCullMode() const {}
+    void getCurrentMtx() const {}
+    void getDither() const {}
+    void getIndTevStage(u32) {}
+    void getIndTexCoordScale(u32) {}
+    void getIndTexOrder(u32) {}
+    void getLight(u32) {}
+    void getMatColor(u32) {}
+    void getTevKAlphaSel(u32) {}
+    void getTevKColorSel(u32) {}
+    void getTevOrder(u32) {}
+    void getTevStage(u32) {}
+    void getTevSwapModeTable(u32) {}
+    void getZCompLoc() const {}
+    void setJoint(J3DJoint*) {}
+    void setLight(u32, J3DLightObj*) {}
+    void setTevStageNum(u8) {}
 
 public:
     /* 0x04 */ J3DMaterial* mNext;

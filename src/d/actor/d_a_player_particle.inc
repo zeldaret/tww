@@ -28,7 +28,7 @@ void daPy_swimTailEcallBack_c::getMaxWaterY(JGeometry::TVec3<f32>* pos) {
         if (field_0x10 > pos->y) {
             pos->y = field_0x10 + 2.0f;
         }
-    } else if (field_0x10 != 0.0f) {
+    } else if (field_0x10 != -1e9f) {
         pos->y = field_0x10 + 2.0f;
     } else {
         pos->y = field_0x0C;

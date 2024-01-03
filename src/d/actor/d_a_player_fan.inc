@@ -13,12 +13,12 @@
 #include "d/actor/d_a_player_main.h"
 
 /* 8014BAA0-8014BAEC       .text fanWindEffectDraw__9daPy_lk_cFv */
-void daPy_lk_c::fanWindEffectDraw() {
+BOOL daPy_lk_c::fanWindEffectDraw() {
     /* Nonmatching */
 }
 
 /* 8014BAEC-8014BB38       .text fanWindCrashEffectDraw__9daPy_lk_cFv */
-void daPy_lk_c::fanWindCrashEffectDraw() {
+BOOL daPy_lk_c::fanWindCrashEffectDraw() {
     /* Nonmatching */
 }
 

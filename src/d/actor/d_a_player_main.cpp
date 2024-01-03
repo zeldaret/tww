@@ -20,7 +20,11 @@
 #include "d/d_item_data.h"
 #include "d/d_item.h"
 #include "m_Do/m_Do_mtx.h"
+#include "m_Do/m_Do_lib.h"
 #include "d/d_material.h"
+#include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
+#include "d/actor/d_a_hookshot.h"
+#include "SSystem/SComponent/c_counter.h"
 
 const Vec l_ship_offset = {0.0f, 15.0f, -35.0f};
 const Vec l_ship_offset2 = {0.0f, 15.0f, -66.8f};
@@ -53,179 +57,179 @@ const Vec l_crawl_rside_front_offset = {-50.0f, 5.0f, 80.0f};
 const Vec l_crawl_min_side_offset = {30.0f, 0.0f, 0.0f};
 
 const daPy_lk_c::TexAnmTableEntry daPy_lk_c::mTexAnmIndexTable[] = {
-    {LKANM_BTP_TMABAA, LKANM_BTK_TMABA},
-    {LKANM_BTP_TMABAA, LKANM_BTK_TEUP},
-    {LKANM_BTP_TMABAB, LKANM_BTK_TMABA},
-    {LKANM_BTP_TMABAC, LKANM_BTK_TMABA},
-    {LKANM_BTP_TMABACB, LKANM_BTK_TMABA},
-    {LKANM_BTP_TMABACB, LKANM_BTK_TEDW},
-    {LKANM_BTP_TMABACC, LKANM_BTK_TMABA},
-    {LKANM_BTP_TMABAD, LKANM_BTK_TMABA},
-    {LKANM_BTP_TMABAD, LKANM_BTK_TEDW},
-    {LKANM_BTP_TMABAE, LKANM_BTK_TMABA},
-    {LKANM_BTP_TMABAE, LKANM_BTK_TEUP},
-    {LKANM_BTP_TMABAE, LKANM_BTK_TEDW},
-    {LKANM_BTP_TMABAE, LKANM_BTK_TEL},
-    {LKANM_BTP_TMABAE, LKANM_BTK_TER},
-    {LKANM_BTP_TMABAF, LKANM_BTK_TMABA},
-    {LKANM_BTP_TMABAG, LKANM_BTK_TMABA},
-    {LKANM_BTP_TMABAH, LKANM_BTK_TMABA},
-    {LKANM_BTP_TMABAI, LKANM_BTK_TMABA},
-    {LKANM_BTP_TMABAJ, LKANM_BTK_TEYORIME},
-    {LKANM_BTP_TMABAD, LKANM_BTK_TWAITPICKUP},
-    {LKANM_BTP_TMABAC, LKANM_BTK_THOOKSHOTJMP},
-    {LKANM_BTP_TGRABP, LKANM_BTK_TGRABP},
-    {LKANM_BTP_TGRABUP, LKANM_BTK_TGRABUP},
-    {LKANM_BTP_TGRABNG, LKANM_BTK_TGRABNG},
-    {LKANM_BTP_TGRABTHROW, LKANM_BTK_TGRABTHROW},
-    {LKANM_BTP_TGRABRE, LKANM_BTK_TECN},
-    {LKANM_BTP_TWALLWL, LKANM_BTK_TER},
-    {LKANM_BTP_TWALLWR, LKANM_BTK_TEL},
-    {LKANM_BTP_TWALLPL, LKANM_BTK_TWALLPL},
-    {LKANM_BTP_TWALLPR, LKANM_BTK_TWALLPR},
-    {LKANM_BTP_TCUT, LKANM_BTK_TECN},
-    {LKANM_BTP_TCUTEA, LKANM_BTK_TCUTEA},
-    {LKANM_BTP_TCUTEA, LKANM_BTK_TECN},
-    {LKANM_BTP_TEXCA1, LKANM_BTK_TEXCA1},
-    {LKANM_BTP_TEXCB1, LKANM_BTK_TEXCB1},
-    {LKANM_BTP_TJATTACK, LKANM_BTK_TJATTACK},
-    {LKANM_BTP_TJATTACK, LKANM_BTK_TEUP},
-    {LKANM_BTP_TCUTTURNP, LKANM_BTK_TECN},
-    {LKANM_BTP_TCUTTURN, LKANM_BTK_TCUTTURN},
-    {LKANM_BTP_TMJMP, LKANM_BTK_TMJMP},
-    {LKANM_BTP_TMJMPC, LKANM_BTK_TMJMPC},
-    {LKANM_BTP_TMROLLL, LKANM_BTK_TMROLLL},
-    {LKANM_BTP_TMROLLR, LKANM_BTK_TMROLLR},
-    {LKANM_BTP_TMROLLLRC, LKANM_BTK_TMROLLLC},
-    {LKANM_BTP_TMROLLLRC, LKANM_BTK_TMROLLRC},
-    {LKANM_BTP_TMSTEPOVER, LKANM_BTK_TMSTEPOVER},
-    {LKANM_BTP_TMSTEPOVERA, LKANM_BTK_TMSTEPOVERA},
-    {LKANM_BTP_TMSTEPOVERLAND, LKANM_BTK_TMSTEPOVERLAND},
-    {LKANM_BTP_TATNJLR, LKANM_BTK_TATNJL},
-    {LKANM_BTP_TATNJLR, LKANM_BTK_TATNJR},
-    {LKANM_BTP_TJMP, LKANM_BTK_TJMP},
-    {LKANM_BTP_TROLLF, LKANM_BTK_TROLLF},
-    {LKANM_BTP_TROLLB, LKANM_BTK_TROLLB},
-    {LKANM_BTP_TROLLBLAND, LKANM_BTK_TECN},
-    {LKANM_BTP_TROLLFMIS, LKANM_BTK_TROLLFMIS},
-    {LKANM_BTP_TFALL, LKANM_BTK_TEDW},
-    {LKANM_BTP_TLANDDAMA, LKANM_BTK_TLANDDAMA},
-    {LKANM_BTP_TLANDDAMAST, LKANM_BTK_TLANDDAMAST},
-    {LKANM_BTP_TDAM, LKANM_BTK_TDAM},
-    {LKANM_BTP_TDAMF, LKANM_BTK_TECN},
-    {LKANM_BTP_TDAMFFUP, LKANM_BTK_TDAMFFUP},
-    {LKANM_BTP_TDAMFBUP, LKANM_BTK_TDAMFBUP},
-    {LKANM_BTP_TDAMFLRUP, LKANM_BTK_TDAMFLUP},
-    {LKANM_BTP_TDAMFLRUP, LKANM_BTK_TDAMFRUP},
-    {LKANM_BTP_TDAMDASH, LKANM_BTK_TECN},
-    {LKANM_BTP_TGUARD, LKANM_BTK_TGUARD},
-    {LKANM_BTP_TSLIDEF, LKANM_BTK_TSLIDEF},
-    {LKANM_BTP_TSLIDEFLAND, LKANM_BTK_TSLIDEFLAND},
-    {LKANM_BTP_TSLIDEB, LKANM_BTK_TEDW},
-    {LKANM_BTP_TSLIDEBLAND, LKANM_BTK_TSLIDEFLAND},
-    {LKANM_BTP_TSWIMP, LKANM_BTK_TSWIMP},
-    {LKANM_BTP_TSWIMING, LKANM_BTK_TSWIMING},
-    {LKANM_BTP_TBOOMTHROW, LKANM_BTK_TBOOMTHROW},
-    {LKANM_BTP_TBOOMCATCH, LKANM_BTK_TBOOMCATCH},
-    {LKANM_BTP_TWALKPUSH, LKANM_BTK_TWALKPUSH},
-    {LKANM_BTP_TWALKPULL, LKANM_BTK_TWALKPULL},
-    {LKANM_BTP_TVJMPCHA, LKANM_BTK_TVJMPCHA},
-    {LKANM_BTP_TVJMPCL, LKANM_BTK_TVJMPCL},
-    {LKANM_BTP_TROPECLIMB, LKANM_BTK_TEUP},
-    {LKANM_BTP_TROPEDOWN, LKANM_BTK_TEDW},
-    {LKANM_BTP_TLADDERUPST, LKANM_BTK_TLADDERUPST},
-    {LKANM_BTP_TLADDERDWST, LKANM_BTK_TLADDERDWST},
-    {LKANM_BTP_TLADDERUPED, LKANM_BTK_TLADDERUPED},
-    {LKANM_BTP_TLADDERDWED, LKANM_BTK_TLADDERDWED},
-    {LKANM_BTP_THANGING, LKANM_BTK_THANGING},
-    {LKANM_BTP_THANGUP, LKANM_BTK_THANGUP},
-    {LKANM_BTP_TLAVADAM, LKANM_BTK_TLAVADAM},
-    {LKANM_BTP_TCUTRE, LKANM_BTK_TCUTRE},
-    {LKANM_BTP_TCUTTURNB, LKANM_BTK_TCUTTURNB},
-    {LKANM_BTP_TWAITATOB, LKANM_BTK_TWAITATOB},
-    {LKANM_BTP_TCOMEOUT, LKANM_BTK_TCOMEOUT},
-    {LKANM_BTP_THOLDUP, LKANM_BTK_TMABA},
-    {LKANM_BTP_TWALLHOLDUP, LKANM_BTK_TWALLHOLDUP},
-    {LKANM_BTP_TITEMGET, LKANM_BTK_TITEMGET},
-    {LKANM_BTP_TSALTATION, LKANM_BTK_TSALTATION},
-    {LKANM_BTP_TWHO, LKANM_BTK_TWHO},
-    {LKANM_BTP_TPICKUP, LKANM_BTK_TPICKUP},
-    {LKANM_BTP_TBOXOPENLINK, LKANM_BTK_TBOXOPENLINK},
-    {LKANM_BTP_TBOXOPENSHORTLINK, LKANM_BTK_TBOXOPENSHORTLINK},
-    {LKANM_BTP_TDIELONG, LKANM_BTK_TDIELONG},
-    {LKANM_BTP_TSWIMDIE, LKANM_BTK_TECN},
-    {LKANM_BTP_TSURPRISED, LKANM_BTK_TSURPRISED},
-    {LKANM_BTP_TTURNBACK, LKANM_BTK_TTURNBACK},
-    {LKANM_BTP_TLOOKUP, LKANM_BTK_TLOOKUP},
-    {LKANM_BTP_TWAITQ, LKANM_BTK_TECN},
-    {LKANM_BTP_TGLAD, LKANM_BTK_TECN},
-    {LKANM_BTP_TCUTBOKO, LKANM_BTK_TCUTBOKO},
-    {LKANM_BTP_SHIP_JUMP1, LKANM_BTK_TECN},
-    {LKANM_BTP_SHIP_JUMP2, LKANM_BTK_TECN},
-    {LKANM_BTP_TUSEFANA, LKANM_BTK_TUSEFANA},
-    {LKANM_BTP_TUSEFANB, LKANM_BTK_TUSEFANB},
-    {LKANM_BTP_TUSEFANB2, LKANM_BTK_TEDW},
-    {LKANM_BTP_TBOWWAIT, LKANM_BTK_TBOWWAIT},
-    {LKANM_BTP_TVOMITJMP, LKANM_BTK_TEDW},
-    {LKANM_BTP_TREST, LKANM_BTK_TREST},
-    {LKANM_BTP_TTAKE, LKANM_BTK_TTAKE},
-    {LKANM_BTP_TTAKELR, LKANM_BTK_TECN},
-    {LKANM_BTP_TSLIPICE, LKANM_BTK_TECN},
-    {LKANM_BTP_THAMSWINGA, LKANM_BTK_THAMSWINGA},
-    {LKANM_BTP_THAMSWINGBPRE, LKANM_BTK_THAMSWINGBPRE},
-    {LKANM_BTP_THAMSWINGBHIT, LKANM_BTK_THAMSWINGBHIT},
-    {LKANM_BTP_THAMSWINGBEND, LKANM_BTK_THAMSWINGBEND},
-    {LKANM_BTP_TSETBOOTS, LKANM_BTK_TECN},
-    {LKANM_BTP_TDOOROPENALINK, LKANM_BTK_TDOOROPENALINK},
-    {LKANM_BTP_TDOOROPENBLINK, LKANM_BTK_TDOOROPENBLINK},
-    {LKANM_BTP_TSEYYES, LKANM_BTK_TSEYYES},
-    {LKANM_BTP_TPRESENTATION, LKANM_BTK_TPRESENTATIONA},
-    {LKANM_BTP_TWIND, LKANM_BTK_TWINDL},
-    {LKANM_BTP_TWIND, LKANM_BTK_TWINDR},
-    {LKANM_BTP_TPRESENTATION, LKANM_BTK_TPRESENTATIONB},
-    {LKANM_BTP_TBINDRINKPRE, LKANM_BTK_TBINDRINKPRE},
-    {LKANM_BTP_TBINDRINKING, LKANM_BTK_TECN},
-    {LKANM_BTP_TBINDRINKAFTER, LKANM_BTK_TBINDRINKAFTER},
-    {LKANM_BTP_TBINDRINKPRE2, LKANM_BTK_TBINDRINKPRE},
-    {LKANM_BTP_TBINDRINKING2, LKANM_BTK_TECN},
-    {LKANM_BTP_TBINDRINKAFTER2, LKANM_BTK_TBINDRINKAFTER2},
-    {LKANM_BTP_TBINOPENPRE, LKANM_BTK_TBINOPENPRE},
-    {LKANM_BTP_TBINOPENA, LKANM_BTK_TBINOPENA},
-    {LKANM_BTP_TBINOPENB, LKANM_BTK_TBINOPENB},
-    {LKANM_BTP_TBINSWING, LKANM_BTK_TBINSWING},
-    {LKANM_BTP_TBINGET, LKANM_BTK_TBINGET},
-    {LKANM_BTP_TARROWRELORD, LKANM_BTK_TARROWRELORD},
-    {LKANM_BTP_TSURPRISEDB, LKANM_BTK_TSURPRISEDB},
-    {LKANM_BTP_TFAN, LKANM_BTK_TFAN},
-    {LKANM_BTP_TNENRIKI, LKANM_BTK_TECN},
-    {LKANM_BTP_TMABAB, LKANM_BTK_TEDL},
-    {LKANM_BTP_TMABAH, LKANM_BTK_TABEKOBE},
-    {LKANM_BTP_TSETHYOINOMI, LKANM_BTK_TSETHYOINOMI},
-    {LKANM_BTP_LINK_FREEZ, LKANM_BTK_TECN},
-    {LKANM_BTP_LINK_MOGAKI, LKANM_BTK_TECN},
-    {LKANM_BTP_TDAMBIRI, LKANM_BTK_TDAMBIRI},
-    {LKANM_BTP_SALVLR, LKANM_BTK_SALVWAIT},
-    {LKANM_BTP_SALVWAIT, LKANM_BTK_SALVWAIT},
-    {LKANM_BTP_SALVBAD, LKANM_BTK_SALVWAIT},
-    {LKANM_BTP_SALVGOOD, LKANM_BTK_SALVWAIT},
-    {LKANM_BTP_SEARESET, LKANM_BTK_SEARESET},
-    {LKANM_BTP_TWARPIN, LKANM_BTK_TWARPIN},
-    {LKANM_BTP_TWARPOUT, LKANM_BTK_TWARPOUT},
-    {LKANM_BTP_TPOWUPWAIT, LKANM_BTK_TPOWUPWAIT},
-    {LKANM_BTP_TPOWUP, LKANM_BTK_TPOWUP},
-    {LKANM_BTP_TCUTKESA, LKANM_BTK_TCUTKESA},
-    {LKANM_BTP_TWARPOUTFIRST, LKANM_BTK_TWARPOUTFIRST},
-    {LKANM_BTP_TDASHKAZE, LKANM_BTK_TDASHKAZE},
-    {LKANM_BTP_TIYAYA, LKANM_BTK_TECN},
-    {LKANM_BTP_TFREEA, LKANM_BTK_TFREEA},
-    {LKANM_BTP_TFREEB, LKANM_BTK_TFREEB},
-    {LKANM_BTP_TFREED, LKANM_BTK_TFREED},
-    {LKANM_BTP_TTAKTKAZE, LKANM_BTK_TECN},
-    {LKANM_BTP_TTAKTSIPPU, LKANM_BTK_TECN},
-    {LKANM_BTP_TTAKTCHUYA, LKANM_BTK_TECN},
-    {LKANM_BTP_TTAKTFUJIN, LKANM_BTK_TECN},
-    {LKANM_BTP_TTAKTAYATSURI, LKANM_BTK_TECN},
-    {LKANM_BTP_TTAKTCHISIN, LKANM_BTK_TECN},
+    /* 0x00 */ {LKANM_BTP_TMABAA,            LKANM_BTK_TMABA},
+    /* 0x01 */ {LKANM_BTP_TMABAA,            LKANM_BTK_TEUP},
+    /* 0x02 */ {LKANM_BTP_TMABAB,            LKANM_BTK_TMABA},
+    /* 0x03 */ {LKANM_BTP_TMABAC,            LKANM_BTK_TMABA},
+    /* 0x04 */ {LKANM_BTP_TMABACB,           LKANM_BTK_TMABA},
+    /* 0x05 */ {LKANM_BTP_TMABACB,           LKANM_BTK_TEDW},
+    /* 0x06 */ {LKANM_BTP_TMABACC,           LKANM_BTK_TMABA},
+    /* 0x07 */ {LKANM_BTP_TMABAD,            LKANM_BTK_TMABA},
+    /* 0x08 */ {LKANM_BTP_TMABAD,            LKANM_BTK_TEDW},
+    /* 0x09 */ {LKANM_BTP_TMABAE,            LKANM_BTK_TMABA},
+    /* 0x0A */ {LKANM_BTP_TMABAE,            LKANM_BTK_TEUP},
+    /* 0x0B */ {LKANM_BTP_TMABAE,            LKANM_BTK_TEDW},
+    /* 0x0C */ {LKANM_BTP_TMABAE,            LKANM_BTK_TEL},
+    /* 0x0D */ {LKANM_BTP_TMABAE,            LKANM_BTK_TER},
+    /* 0x0E */ {LKANM_BTP_TMABAF,            LKANM_BTK_TMABA},
+    /* 0x0F */ {LKANM_BTP_TMABAG,            LKANM_BTK_TMABA},
+    /* 0x10 */ {LKANM_BTP_TMABAH,            LKANM_BTK_TMABA},
+    /* 0x11 */ {LKANM_BTP_TMABAI,            LKANM_BTK_TMABA},
+    /* 0x12 */ {LKANM_BTP_TMABAJ,            LKANM_BTK_TEYORIME},
+    /* 0x13 */ {LKANM_BTP_TMABAD,            LKANM_BTK_TWAITPICKUP},
+    /* 0x14 */ {LKANM_BTP_TMABAC,            LKANM_BTK_THOOKSHOTJMP},
+    /* 0x15 */ {LKANM_BTP_TGRABP,            LKANM_BTK_TGRABP},
+    /* 0x16 */ {LKANM_BTP_TGRABUP,           LKANM_BTK_TGRABUP},
+    /* 0x17 */ {LKANM_BTP_TGRABNG,           LKANM_BTK_TGRABNG},
+    /* 0x18 */ {LKANM_BTP_TGRABTHROW,        LKANM_BTK_TGRABTHROW},
+    /* 0x19 */ {LKANM_BTP_TGRABRE,           LKANM_BTK_TECN},
+    /* 0x1A */ {LKANM_BTP_TWALLWL,           LKANM_BTK_TER},
+    /* 0x1B */ {LKANM_BTP_TWALLWR,           LKANM_BTK_TEL},
+    /* 0x1C */ {LKANM_BTP_TWALLPL,           LKANM_BTK_TWALLPL},
+    /* 0x1D */ {LKANM_BTP_TWALLPR,           LKANM_BTK_TWALLPR},
+    /* 0x1E */ {LKANM_BTP_TCUT,              LKANM_BTK_TECN},
+    /* 0x1F */ {LKANM_BTP_TCUTEA,            LKANM_BTK_TCUTEA},
+    /* 0x20 */ {LKANM_BTP_TCUTEA,            LKANM_BTK_TECN},
+    /* 0x21 */ {LKANM_BTP_TEXCA1,            LKANM_BTK_TEXCA1},
+    /* 0x22 */ {LKANM_BTP_TEXCB1,            LKANM_BTK_TEXCB1},
+    /* 0x23 */ {LKANM_BTP_TJATTACK,          LKANM_BTK_TJATTACK},
+    /* 0x24 */ {LKANM_BTP_TJATTACK,          LKANM_BTK_TEUP},
+    /* 0x25 */ {LKANM_BTP_TCUTTURNP,         LKANM_BTK_TECN},
+    /* 0x26 */ {LKANM_BTP_TCUTTURN,          LKANM_BTK_TCUTTURN},
+    /* 0x27 */ {LKANM_BTP_TMJMP,             LKANM_BTK_TMJMP},
+    /* 0x28 */ {LKANM_BTP_TMJMPC,            LKANM_BTK_TMJMPC},
+    /* 0x29 */ {LKANM_BTP_TMROLLL,           LKANM_BTK_TMROLLL},
+    /* 0x2A */ {LKANM_BTP_TMROLLR,           LKANM_BTK_TMROLLR},
+    /* 0x2B */ {LKANM_BTP_TMROLLLRC,         LKANM_BTK_TMROLLLC},
+    /* 0x2C */ {LKANM_BTP_TMROLLLRC,         LKANM_BTK_TMROLLRC},
+    /* 0x2D */ {LKANM_BTP_TMSTEPOVER,        LKANM_BTK_TMSTEPOVER},
+    /* 0x2E */ {LKANM_BTP_TMSTEPOVERA,       LKANM_BTK_TMSTEPOVERA},
+    /* 0x2F */ {LKANM_BTP_TMSTEPOVERLAND,    LKANM_BTK_TMSTEPOVERLAND},
+    /* 0x30 */ {LKANM_BTP_TATNJLR,           LKANM_BTK_TATNJL},
+    /* 0x31 */ {LKANM_BTP_TATNJLR,           LKANM_BTK_TATNJR},
+    /* 0x32 */ {LKANM_BTP_TJMP,              LKANM_BTK_TJMP},
+    /* 0x33 */ {LKANM_BTP_TROLLF,            LKANM_BTK_TROLLF},
+    /* 0x34 */ {LKANM_BTP_TROLLB,            LKANM_BTK_TROLLB},
+    /* 0x35 */ {LKANM_BTP_TROLLBLAND,        LKANM_BTK_TECN},
+    /* 0x36 */ {LKANM_BTP_TROLLFMIS,         LKANM_BTK_TROLLFMIS},
+    /* 0x37 */ {LKANM_BTP_TFALL,             LKANM_BTK_TEDW},
+    /* 0x38 */ {LKANM_BTP_TLANDDAMA,         LKANM_BTK_TLANDDAMA},
+    /* 0x39 */ {LKANM_BTP_TLANDDAMAST,       LKANM_BTK_TLANDDAMAST},
+    /* 0x3A */ {LKANM_BTP_TDAM,              LKANM_BTK_TDAM},
+    /* 0x3B */ {LKANM_BTP_TDAMF,             LKANM_BTK_TECN},
+    /* 0x3C */ {LKANM_BTP_TDAMFFUP,          LKANM_BTK_TDAMFFUP},
+    /* 0x3D */ {LKANM_BTP_TDAMFBUP,          LKANM_BTK_TDAMFBUP},
+    /* 0x3E */ {LKANM_BTP_TDAMFLRUP,         LKANM_BTK_TDAMFLUP},
+    /* 0x3F */ {LKANM_BTP_TDAMFLRUP,         LKANM_BTK_TDAMFRUP},
+    /* 0x40 */ {LKANM_BTP_TDAMDASH,          LKANM_BTK_TECN},
+    /* 0x41 */ {LKANM_BTP_TGUARD,            LKANM_BTK_TGUARD},
+    /* 0x42 */ {LKANM_BTP_TSLIDEF,           LKANM_BTK_TSLIDEF},
+    /* 0x43 */ {LKANM_BTP_TSLIDEFLAND,       LKANM_BTK_TSLIDEFLAND},
+    /* 0x44 */ {LKANM_BTP_TSLIDEB,           LKANM_BTK_TEDW},
+    /* 0x45 */ {LKANM_BTP_TSLIDEBLAND,       LKANM_BTK_TSLIDEFLAND},
+    /* 0x46 */ {LKANM_BTP_TSWIMP,            LKANM_BTK_TSWIMP},
+    /* 0x47 */ {LKANM_BTP_TSWIMING,          LKANM_BTK_TSWIMING},
+    /* 0x48 */ {LKANM_BTP_TBOOMTHROW,        LKANM_BTK_TBOOMTHROW},
+    /* 0x49 */ {LKANM_BTP_TBOOMCATCH,        LKANM_BTK_TBOOMCATCH},
+    /* 0x4A */ {LKANM_BTP_TWALKPUSH,         LKANM_BTK_TWALKPUSH},
+    /* 0x4B */ {LKANM_BTP_TWALKPULL,         LKANM_BTK_TWALKPULL},
+    /* 0x4C */ {LKANM_BTP_TVJMPCHA,          LKANM_BTK_TVJMPCHA},
+    /* 0x4D */ {LKANM_BTP_TVJMPCL,           LKANM_BTK_TVJMPCL},
+    /* 0x4E */ {LKANM_BTP_TROPECLIMB,        LKANM_BTK_TEUP},
+    /* 0x4F */ {LKANM_BTP_TROPEDOWN,         LKANM_BTK_TEDW},
+    /* 0x50 */ {LKANM_BTP_TLADDERUPST,       LKANM_BTK_TLADDERUPST},
+    /* 0x51 */ {LKANM_BTP_TLADDERDWST,       LKANM_BTK_TLADDERDWST},
+    /* 0x52 */ {LKANM_BTP_TLADDERUPED,       LKANM_BTK_TLADDERUPED},
+    /* 0x53 */ {LKANM_BTP_TLADDERDWED,       LKANM_BTK_TLADDERDWED},
+    /* 0x54 */ {LKANM_BTP_THANGING,          LKANM_BTK_THANGING},
+    /* 0x55 */ {LKANM_BTP_THANGUP,           LKANM_BTK_THANGUP},
+    /* 0x56 */ {LKANM_BTP_TLAVADAM,          LKANM_BTK_TLAVADAM},
+    /* 0x57 */ {LKANM_BTP_TCUTRE,            LKANM_BTK_TCUTRE},
+    /* 0x58 */ {LKANM_BTP_TCUTTURNB,         LKANM_BTK_TCUTTURNB},
+    /* 0x59 */ {LKANM_BTP_TWAITATOB,         LKANM_BTK_TWAITATOB},
+    /* 0x5A */ {LKANM_BTP_TCOMEOUT,          LKANM_BTK_TCOMEOUT},
+    /* 0x5B */ {LKANM_BTP_THOLDUP,           LKANM_BTK_TMABA},
+    /* 0x5C */ {LKANM_BTP_TWALLHOLDUP,       LKANM_BTK_TWALLHOLDUP},
+    /* 0x5D */ {LKANM_BTP_TITEMGET,          LKANM_BTK_TITEMGET},
+    /* 0x5E */ {LKANM_BTP_TSALTATION,        LKANM_BTK_TSALTATION},
+    /* 0x5F */ {LKANM_BTP_TWHO,              LKANM_BTK_TWHO},
+    /* 0x60 */ {LKANM_BTP_TPICKUP,           LKANM_BTK_TPICKUP},
+    /* 0x61 */ {LKANM_BTP_TBOXOPENLINK,      LKANM_BTK_TBOXOPENLINK},
+    /* 0x62 */ {LKANM_BTP_TBOXOPENSHORTLINK, LKANM_BTK_TBOXOPENSHORTLINK},
+    /* 0x63 */ {LKANM_BTP_TDIELONG,          LKANM_BTK_TDIELONG},
+    /* 0x64 */ {LKANM_BTP_TSWIMDIE,          LKANM_BTK_TECN},
+    /* 0x65 */ {LKANM_BTP_TSURPRISED,        LKANM_BTK_TSURPRISED},
+    /* 0x66 */ {LKANM_BTP_TTURNBACK,         LKANM_BTK_TTURNBACK},
+    /* 0x67 */ {LKANM_BTP_TLOOKUP,           LKANM_BTK_TLOOKUP},
+    /* 0x68 */ {LKANM_BTP_TWAITQ,            LKANM_BTK_TECN},
+    /* 0x69 */ {LKANM_BTP_TGLAD,             LKANM_BTK_TECN},
+    /* 0x6A */ {LKANM_BTP_TCUTBOKO,          LKANM_BTK_TCUTBOKO},
+    /* 0x6B */ {LKANM_BTP_SHIP_JUMP1,        LKANM_BTK_TECN},
+    /* 0x6C */ {LKANM_BTP_SHIP_JUMP2,        LKANM_BTK_TECN},
+    /* 0x6D */ {LKANM_BTP_TUSEFANA,          LKANM_BTK_TUSEFANA},
+    /* 0x6E */ {LKANM_BTP_TUSEFANB,          LKANM_BTK_TUSEFANB},
+    /* 0x6F */ {LKANM_BTP_TUSEFANB2,         LKANM_BTK_TEDW},
+    /* 0x70 */ {LKANM_BTP_TBOWWAIT,          LKANM_BTK_TBOWWAIT},
+    /* 0x71 */ {LKANM_BTP_TVOMITJMP,         LKANM_BTK_TEDW},
+    /* 0x72 */ {LKANM_BTP_TREST,             LKANM_BTK_TREST},
+    /* 0x73 */ {LKANM_BTP_TTAKE,             LKANM_BTK_TTAKE},
+    /* 0x74 */ {LKANM_BTP_TTAKELR,           LKANM_BTK_TECN},
+    /* 0x75 */ {LKANM_BTP_TSLIPICE,          LKANM_BTK_TECN},
+    /* 0x76 */ {LKANM_BTP_THAMSWINGA,        LKANM_BTK_THAMSWINGA},
+    /* 0x77 */ {LKANM_BTP_THAMSWINGBPRE,     LKANM_BTK_THAMSWINGBPRE},
+    /* 0x78 */ {LKANM_BTP_THAMSWINGBHIT,     LKANM_BTK_THAMSWINGBHIT},
+    /* 0x79 */ {LKANM_BTP_THAMSWINGBEND,     LKANM_BTK_THAMSWINGBEND},
+    /* 0x7A */ {LKANM_BTP_TSETBOOTS,         LKANM_BTK_TECN},
+    /* 0x7B */ {LKANM_BTP_TDOOROPENALINK,    LKANM_BTK_TDOOROPENALINK},
+    /* 0x7C */ {LKANM_BTP_TDOOROPENBLINK,    LKANM_BTK_TDOOROPENBLINK},
+    /* 0x7D */ {LKANM_BTP_TSEYYES,           LKANM_BTK_TSEYYES},
+    /* 0x7E */ {LKANM_BTP_TPRESENTATION,     LKANM_BTK_TPRESENTATIONA},
+    /* 0x7F */ {LKANM_BTP_TWIND,             LKANM_BTK_TWINDL},
+    /* 0x80 */ {LKANM_BTP_TWIND,             LKANM_BTK_TWINDR},
+    /* 0x81 */ {LKANM_BTP_TPRESENTATION,     LKANM_BTK_TPRESENTATIONB},
+    /* 0x82 */ {LKANM_BTP_TBINDRINKPRE,      LKANM_BTK_TBINDRINKPRE},
+    /* 0x83 */ {LKANM_BTP_TBINDRINKING,      LKANM_BTK_TECN},
+    /* 0x84 */ {LKANM_BTP_TBINDRINKAFTER,    LKANM_BTK_TBINDRINKAFTER},
+    /* 0x85 */ {LKANM_BTP_TBINDRINKPRE2,     LKANM_BTK_TBINDRINKPRE},
+    /* 0x86 */ {LKANM_BTP_TBINDRINKING2,     LKANM_BTK_TECN},
+    /* 0x87 */ {LKANM_BTP_TBINDRINKAFTER2,   LKANM_BTK_TBINDRINKAFTER2},
+    /* 0x88 */ {LKANM_BTP_TBINOPENPRE,       LKANM_BTK_TBINOPENPRE},
+    /* 0x89 */ {LKANM_BTP_TBINOPENA,         LKANM_BTK_TBINOPENA},
+    /* 0x8A */ {LKANM_BTP_TBINOPENB,         LKANM_BTK_TBINOPENB},
+    /* 0x8B */ {LKANM_BTP_TBINSWING,         LKANM_BTK_TBINSWING},
+    /* 0x8C */ {LKANM_BTP_TBINGET,           LKANM_BTK_TBINGET},
+    /* 0x8D */ {LKANM_BTP_TARROWRELORD,      LKANM_BTK_TARROWRELORD},
+    /* 0x8E */ {LKANM_BTP_TSURPRISEDB,       LKANM_BTK_TSURPRISEDB},
+    /* 0x8F */ {LKANM_BTP_TFAN,              LKANM_BTK_TFAN},
+    /* 0x90 */ {LKANM_BTP_TNENRIKI,          LKANM_BTK_TECN},
+    /* 0x91 */ {LKANM_BTP_TMABAB,            LKANM_BTK_TEDL},
+    /* 0x92 */ {LKANM_BTP_TMABAH,            LKANM_BTK_TABEKOBE},
+    /* 0x93 */ {LKANM_BTP_TSETHYOINOMI,      LKANM_BTK_TSETHYOINOMI},
+    /* 0x94 */ {LKANM_BTP_LINK_FREEZ,        LKANM_BTK_TECN},
+    /* 0x95 */ {LKANM_BTP_LINK_MOGAKI,       LKANM_BTK_TECN},
+    /* 0x96 */ {LKANM_BTP_TDAMBIRI,          LKANM_BTK_TDAMBIRI},
+    /* 0x97 */ {LKANM_BTP_SALVLR,            LKANM_BTK_SALVWAIT},
+    /* 0x98 */ {LKANM_BTP_SALVWAIT,          LKANM_BTK_SALVWAIT},
+    /* 0x99 */ {LKANM_BTP_SALVBAD,           LKANM_BTK_SALVWAIT},
+    /* 0x9A */ {LKANM_BTP_SALVGOOD,          LKANM_BTK_SALVWAIT},
+    /* 0x9B */ {LKANM_BTP_SEARESET,          LKANM_BTK_SEARESET},
+    /* 0x9C */ {LKANM_BTP_TWARPIN,           LKANM_BTK_TWARPIN},
+    /* 0x9D */ {LKANM_BTP_TWARPOUT,          LKANM_BTK_TWARPOUT},
+    /* 0x9E */ {LKANM_BTP_TPOWUPWAIT,        LKANM_BTK_TPOWUPWAIT},
+    /* 0x9F */ {LKANM_BTP_TPOWUP,            LKANM_BTK_TPOWUP},
+    /* 0xA0 */ {LKANM_BTP_TCUTKESA,          LKANM_BTK_TCUTKESA},
+    /* 0xA1 */ {LKANM_BTP_TWARPOUTFIRST,     LKANM_BTK_TWARPOUTFIRST},
+    /* 0xA2 */ {LKANM_BTP_TDASHKAZE,         LKANM_BTK_TDASHKAZE},
+    /* 0xA3 */ {LKANM_BTP_TIYAYA,            LKANM_BTK_TECN},
+    /* 0xA4 */ {LKANM_BTP_TFREEA,            LKANM_BTK_TFREEA},
+    /* 0xA5 */ {LKANM_BTP_TFREEB,            LKANM_BTK_TFREEB},
+    /* 0xA6 */ {LKANM_BTP_TFREED,            LKANM_BTK_TFREED},
+    /* 0xA7 */ {LKANM_BTP_TTAKTKAZE,         LKANM_BTK_TECN},
+    /* 0xA8 */ {LKANM_BTP_TTAKTSIPPU,        LKANM_BTK_TECN},
+    /* 0xA9 */ {LKANM_BTP_TTAKTCHUYA,        LKANM_BTK_TECN},
+    /* 0xAA */ {LKANM_BTP_TTAKTFUJIN,        LKANM_BTK_TECN},
+    /* 0xAB */ {LKANM_BTP_TTAKTAYATSURI,     LKANM_BTK_TECN},
+    /* 0xAC */ {LKANM_BTP_TTAKTCHISIN,       LKANM_BTK_TECN},
 };
 
 const daPy_anmIndex_c daPy_lk_c::mSwordAnmIndexTable[] = {
@@ -2711,12 +2715,181 @@ u8 daPy_matAnm_c::m_morf_frame;
 s16 daPy_dmEcallBack_c::m_timer = 0;
 u16 daPy_dmEcallBack_c::m_type = 3;
 
+u8 right_dir_4883[0xC];
+u8 texObj_5157[0x20];
+
 daPy_waterDropPcallBack_c daPy_waterDropEcallBack_c::m_pcallback;
+
+u8 normal_ripple_scale_5638[0xC];
+u8 small_ripple_scale_5641[0xC];
+u8 waterfall_splash_trans_5699[0xC];
+u8 run_splash_scale_6040[0xC];
+u8 run_grass_scale_6043[0xC];
+u8 heavy_emit_smoke_scale_6046[0xC];
+u8 heavy_dyn_smoke_scale_6049[0xC];
+u8 heavy_pat_smoke_scale_6052[0xC];
+u8 tail_scale_6508[0xC];
+u8 arm_flame_scale_6651[0xC];
+u8 _6785[0xC];
+u8 eff_scale0_6784[0xC];
+u8 _6789[0xC];
+u8 eff_scale2_6788[0xC];
+u8 direction_6792[0xC];
+u8 splash_scale_14445[0xC];
+u8 ripple_scale_14448[0xC];
+u8 _15293[0xC];
+u8 arm_pos_15292[0xC];
+u8 _15297[0xC];
+u8 armA_offset_15296[0xC];
+u8 dynamic_scale_16750[0xC];
+u8 particle_scale_16753[0xC];
+u8 _17480[0xC];
+u8 local_height_offset_17479[0xC];
+u8 eff_scale_18886[0xC];
+u8 eff_dscale_18889[0xC];
+u8 eff_pscale_18892[0xC];
+u8 smoke_kusa_particle_scale_21005[0xC];
+u8 emitter_scale_21008[0xC];
+u8 emitter_trans_21011[0xC];
+u8 d_scale_23162[0xC];
+u8 p_scale_23165[0xC];
+u8 emitter_trans_24824[0xC];
+u8 particle_scale_24827[0xC];
+u8 root_mtx_25647[0x30];
 
 static mDoExt_offCupOnAupPacket l_offCupOnAupPacket1;
 static mDoExt_offCupOnAupPacket l_offCupOnAupPacket2;
 static mDoExt_onCupOffAupPacket l_onCupOffAupPacket1;
 static mDoExt_onCupOffAupPacket l_onCupOffAupPacket2;
+
+static void dummydatafunc(f32* temp, f64* temp2) {
+    // temporary hack to improve diffs until sdata2 offsets are figured out
+    *temp = 2.0f;
+    *temp = -1000000000.0f;
+    *temp = -1.0f;
+    *temp = 0.0f;
+    *temp = 0.08f;
+    *temp = 1.0f;
+    *temp = 12.0f;
+    *temp = 13.0f;
+    *temp = 150.0f;
+    *temp = 30.0f;
+    *temp = 0.65f;
+    *temp = 0.35f;
+    *temp = 32768.0f;
+    *temp = 16384.0f;
+    *temp = 10.0f;
+    *temp2 = 4503601774854144.0;
+    *temp2 = 4503599627370496.0;
+    *temp = 25.0f;
+    *temp = -0.05f;
+    *temp2 = 0.5;
+    *temp2 = 3.0;
+    *temp = 0.6f;
+    *temp = 0.01f;
+    *temp = 0.001f;
+    *temp = 15.0f;
+    *temp = 1.5f;
+    *temp = 3.1415927f;
+    *temp = 0.5f;
+    *temp = 0.3f;
+    *temp = 1.2f;
+    *temp = 0.4f;
+    *temp = 5.0f;
+    *temp = 0.1f;
+    *temp = 0.8f;
+    *temp = 60.0f;
+    *temp = 4.0f;
+    *temp = 0.25f;
+    *temp = 0.75f;
+    *temp = 16.0f;
+    *temp = 8.0f;
+    *temp = 18.0f;
+    *temp = 3.0f;
+    *temp = 0.2f;
+    *temp = 0.05f;
+    *temp = 45.0f;
+    *temp = 11.0f;
+    *temp = 17.5f;
+    *temp = 1000000000.0f;
+	OSReport("Adanmae");
+	OSReport("d_a_player_dproc.inc");
+	OSReport("0");
+	OSReport("Halt");
+	OSReport("Link");
+	OSReport("DEFAULT_GETITEM");
+	OSReport("GanonK");
+	OSReport("GTower");
+	OSReport("d_a_player_bow.inc");
+	OSReport("d_a_player_hook.inc");
+	OSReport("d_a_player_fan.inc");
+	OSReport("d_a_player_hammer.inc");
+	OSReport("Type");
+	OSReport("Omori");
+	OSReport("d_a_player_sword.inc");
+	OSReport("M_DaiB");
+	OSReport("Xboss2");
+	OSReport("M_DragB");
+	OSReport("Xboss0");
+	OSReport("fall");
+	OSReport("d_a_player_main.cpp");
+	OSReport("(demo_mode < daPy_demo_c::DEMO_LAST_e) || (demo_mode == daPy_demo_c::DEMO_NEW_ANM0_e)");
+	OSReport("Ojhous");
+	OSReport("Orichh");
+	OSReport("kinBOSS");
+	OSReport("Xboss1");
+	OSReport("ICE_FAILED");
+	OSReport("pos");
+	OSReport("angle");
+	OSReport("prm0");
+	OSReport("prm1");
+	OSReport("stick");
+	OSReport("face");
+	OSReport("GanonM");
+	OSReport("sea");
+	OSReport("m_tex_anm_heap.m_buffer != 0");
+	OSReport("m_texNoAnms != 0");
+	OSReport("mat_anm != 0");
+	OSReport("m_tex_scroll_heap.m_buffer != 0");
+	OSReport("material_num == 2");
+	OSReport("m_texMtxAnm != 0");
+	OSReport("m_tex_eye_scroll[no] != 0");
+	OSReport("tmtx != 0");
+	OSReport("mtl->getMaterialAnm() != 0");
+	OSReport("tmp_modelData != 0");
+	OSReport("aura_p->getModel() != 0");
+	OSReport("m_old_fdata != 0");
+	OSReport("m_pbCalc[PART_UNDER_e] != 0");
+	OSReport("m_pbCalc[PART_UPPER_e] != 0");
+	OSReport("m_HIO != 0");
+	OSReport("m_anm_heap_under[UNDER_MOVE0_e].m_buffer != 0");
+	OSReport("m_sanm_buffer != 0");
+	OSReport("m_item_bck_buffer != 0");
+	OSReport("tmp_trans_bas != 0");
+	OSReport("tmp_trans != 0");
+	OSReport("tmp_tp != 0");
+	OSReport("tmp_tk != 0");
+	OSReport("*i_model != 0");
+	OSReport("btk_anm != 0");
+	OSReport("brk_anm != 0");
+	OSReport("zoff_blend_cnt <= 4");
+	OSReport("zoff_none_cnt <= 4");
+	OSReport("zon_cnt <= 4");
+	OSReport("zon_cnt == 4");
+	OSReport("zoff_none_cnt == 4");
+	OSReport("zoff_blend_cnt == 4");
+	OSReport("dummy_data != 0");
+	OSReport("Always");
+	OSReport("tmp_tex != 0");
+	OSReport("tmp_img != 0");
+	OSReport("texture != 0");
+	OSReport("textureName != 0");
+	OSReport("linktexS3TC");
+	OSReport("Pjavdou");
+	OSReport("ShipD");
+	OSReport("Siren");
+	OSReport("data_size < l_sanm_buffer_size");
+}
 
 /* 80102E8C-80102EAC       .text daPy_createHeap__FP10fopAc_ac_c */
 static BOOL daPy_createHeap(fopAc_ac_c* i_this) {
@@ -2940,28 +3113,40 @@ void daPy_lk_c::setBlurPosResource(u16 index) {
 }
 
 /* 80104280-80104364       .text getItemAnimeResource__9daPy_lk_cFUs */
-J3DAnmTransform* daPy_lk_c::getItemAnimeResource(u16) {
-    /* Nonmatching */
+J3DAnmTransform* daPy_lk_c::getItemAnimeResource(u16 index) {
+    dComIfGp_getAnmArchive()->readIdxResource(m_item_bck_buffer, 0x1000, index);
+    JKRHeap* oldHeap = setAnimeHeap(m2ECC);
+    mDoExt_transAnmBas* bas = new mDoExt_transAnmBas(NULL);
+    J3DAnmLoaderDataBase::setResource(bas, m_item_bck_buffer);
+    mDoExt_setCurrentHeap(oldHeap);
+    return bas;
 }
 
 /* 80104364-801043F0       .text getAnimeResource__9daPy_lk_cFP14daPy_anmHeap_cUsUl */
-J3DAnmTransform* daPy_lk_c::getAnimeResource(daPy_anmHeap_c*, u16, u32) {
-    /* Nonmatching */
+J3DAnmTransform* daPy_lk_c::getAnimeResource(daPy_anmHeap_c* anmHeap, u16 index, u32 bufferSize) {
+    J3DAnmTransform* bck;
+    dComIfGp_getAnmArchive()->readIdxResource(anmHeap->m_buffer, bufferSize, index);
+    JKRHeap* oldHeap = setAnimeHeap(anmHeap->mpAnimeHeap);
+    bck = static_cast<J3DAnmTransform*>(J3DAnmLoaderDataBase::load(anmHeap->m_buffer));
+    mDoExt_setCurrentHeap(oldHeap);
+    anmHeap->mIdx = index;
+    anmHeap->field_0x2 = -1;
+    return bck;
 }
 
 /* 801043F0-801044E8       .text getUnderUpperAnime__9daPy_lk_cFPC15daPy_anmIndex_cPP15J3DAnmTransformPP15J3DAnmTransformiUl */
-void daPy_lk_c::getUnderUpperAnime(const daPy_anmIndex_c* anmIndex, J3DAnmTransform** pUnderBck, J3DAnmTransform** pUpperBck, int r7, u32 r28) {
+void daPy_lk_c::getUnderUpperAnime(const daPy_anmIndex_c* anmIndex, J3DAnmTransform** pUnderBck, J3DAnmTransform** pUpperBck, int r7, u32 bufferSize) {
     if (m_anm_heap_under[r7].mIdx != anmIndex->mUnderBckIdx) {
-        *pUnderBck = getAnimeResource(&m_anm_heap_under[r7], anmIndex->mUnderBckIdx, r28);
+        *pUnderBck = getAnimeResource(&m_anm_heap_under[r7], anmIndex->mUnderBckIdx, bufferSize);
     } else {
         *pUnderBck = mAnmRatioUnder[r7].getAnmTransform();
     }
     if (anmIndex->mUnderBckIdx != anmIndex->mUpperBckIdx) {
-        if (r28 == 0xB400) {
-            r28 = 0x4800;
+        if (bufferSize == 0xB400) {
+            bufferSize = 0x4800;
         }
         if (m_anm_heap_upper[r7].mIdx != anmIndex->mUpperBckIdx) {
-            *pUpperBck = getAnimeResource(&m_anm_heap_upper[r7], anmIndex->mUpperBckIdx, r28);
+            *pUpperBck = getAnimeResource(&m_anm_heap_upper[r7], anmIndex->mUpperBckIdx, bufferSize);
         } else {
             *pUpperBck = mAnmRatioUpper[r7].getAnmTransform();
         }
@@ -2972,18 +3157,47 @@ void daPy_lk_c::getUnderUpperAnime(const daPy_anmIndex_c* anmIndex, J3DAnmTransf
 }
 
 /* 801044E8-80104564       .text setTextureAnimeResource__9daPy_lk_cFP16J3DAnmTexPatterni */
-void daPy_lk_c::setTextureAnimeResource(J3DAnmTexPattern*, int) {
-    /* Nonmatching */
+void daPy_lk_c::setTextureAnimeResource(J3DAnmTexPattern* btp, int r31) {
+    btp->searchUpdateMaterialID(mpCLModelData);
+    m035C = btp;
+    m3530 = r31;
+    u16 material_num = btp->getUpdateMaterialNum();
+    for (u16 i = 0; i < material_num; i++) {
+        m_texNoAnms[i].setAnmTexPattern(btp);
+    }
 }
 
 /* 80104564-80104600       .text loadTextureAnimeResource__9daPy_lk_cFUli */
-void daPy_lk_c::loadTextureAnimeResource(u32, int) {
-    /* Nonmatching */
+J3DAnmTexPattern* daPy_lk_c::loadTextureAnimeResource(u32 index, BOOL isDemo) {
+    J3DAnmTexPattern* btp;
+    if (isDemo) {
+        dComIfGp_getLkDemoAnmArchive()->readResource(m_tex_anm_heap.m_buffer, 0x1000, index);
+    } else {
+        dComIfGp_getAnmArchive()->readIdxResource(m_tex_anm_heap.m_buffer, 0x1000, index);
+    }
+    JKRHeap* oldHeap = setAnimeHeap(m_tex_anm_heap.mpAnimeHeap);
+    btp = static_cast<J3DAnmTexPattern*>(J3DAnmLoaderDataBase::load(m_tex_anm_heap.m_buffer));
+    mDoExt_setCurrentHeap(oldHeap);
+    return btp;
 }
 
 /* 80104600-801046CC       .text checkBossBgm__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkBossBgm() {
-    /* Nonmatching */
+    u32 mainBgm = mDoAud_checkPlayingMainBgmFlag();
+    u32 subBgm = mDoAud_checkPlayingSubBgmFlag();
+    if (mainBgm == JA_BGM_GOMA || mainBgm == JA_BGM_GOMA_2 || mainBgm == JA_BGM_KINDAN_BOSS ||
+        mainBgm == JA_BGM_DK_BATTLE || mainBgm == JA_BGM_MJ_TOWER_BATTLE || mainBgm == JA_BGM_BST_BATTLE ||
+        mainBgm == JA_BGM_RANE_BATTLE || mainBgm == JA_BGM_PAST_GOMA_2 || mainBgm == JA_BGM_BIG_POW ||
+        mainBgm == JA_BGM_PAST_BIG_POW || mainBgm == JA_BGM_PAST_BKM || mainBgm == JA_BGM_PAST_GOMA ||
+        mainBgm == JA_BGM_PAST_RANE || mainBgm == JA_BGM_GANON_BATTLE || mainBgm == JA_BGM_BGN_KUGUTSU ||
+        mainBgm == JA_BGM_BGN_TARABA || mainBgm == JA_BGM_BGN_HAYAMUSHI || subBgm == JA_BGM_MBOSS ||
+        subBgm == JA_BGM_MBOSS_S || subBgm == JA_BGM_P_GANON_1 || subBgm == JA_BGM_P_GANON_2 ||
+        subBgm == JA_BGM_DIOCTA_BATTLE || subBgm == JA_BGM_DIOCTA_2)
+    {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 /* 801046CC-801046EC       .text checkMabaAnimeBtp__9daPy_lk_cFi */
@@ -3147,7 +3361,298 @@ void daPy_lk_c::onBodyEffect() {
 
 /* 80107308-80108204       .text draw__9daPy_lk_cFv */
 BOOL daPy_lk_c::draw() {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
+    if (mSightPacket.getDrawFlg()) {
+        mSightPacket.setSight();
+    }
+    g_env_light.settingTevStruct(TEV_TYPE_PLAYER, &current.pos, &mTevStr);
+    if (checkPlayerNoDraw()) {
+        offBodyEffect();
+        drawMirrorLightModel();
+        return TRUE;
+    }
+    
+    if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x20)) {
+        offBodyEffect();
+    } else {
+        onBodyEffect();
+    }
+    
+    s16 origFogR, origFogG, origFogB;
+    f32 origFogStartZ, origFogEndZ;
+    origFogR = mTevStr.mFogColor.r;
+    origFogG = mTevStr.mFogColor.g;
+    origFogB = mTevStr.mFogColor.b;
+    origFogStartZ = mTevStr.mFogStartZ;
+    origFogEndZ = mTevStr.mFogEndZ;
+    if (!checkFreezeState() && mCurProc != PROC_ELEC_DAMAGE_e && (daPy_dmEcallBack_c::checkCurse() || checkConfuse() || mDamageWaitTimer > 0)) {
+        cXyz sp18;
+        mDoLib_pos2camera(&current.pos, &sp18);
+        f32 f2 = fabsf(cM_ssin(g_Counter.mTimer * 0x800));
+        if (daPy_dmEcallBack_c::checkCurse() || checkConfuse()) {
+            mTevStr.mFogColor.r = 0x80;
+            mTevStr.mFogColor.g = 0x00;
+            mTevStr.mFogColor.b = 0xFF;
+        } else {
+            mTevStr.mFogColor.r = 0xFF;
+            mTevStr.mFogColor.g = 0x3C;
+            mTevStr.mFogColor.b = 0x3C;
+        }
+        mTevStr.mFogStartZ = -sp18.z - 200.0f + 200.0f * f2;
+        mTevStr.mFogEndZ = mTevStr.mFogStartZ + 300.0f;
+    }
+    
+    u16 material_num = m035C->getUpdateMaterialNum();
+    for (u16 i = 0; i < material_num; i++) {
+        u16 matID = m035C->getUpdateMaterialID(i);
+        if (matID != 0xFFFF) {
+            J3DMaterial* mtl = mpCLModelData->getMaterialNodePointer(matID);
+            J3DMaterialAnm* mtlAnm = mtl->getMaterialAnm();
+            u8 texNo = m035C->getAnmTable()[i].mTexNo;
+            mtlAnm->setTexNoAnm(texNo, &m_texNoAnms[i]);
+            if (matID != 0xE) {
+                // Not mouth (i.e. it's eyeL, eyeR, mayuL, or mayuR)
+                mtl = mpCLModelData->getMaterialNodePointer(matID+1);
+                mtlAnm = mtl->getMaterialAnm();
+                mtlAnm->setTexNoAnm(texNo, &m_texNoAnms[i]);
+            }
+        }
+    }
+    
+    mpCLModelData->setTexMtxAnimator(mpTexScrollResData, m_texMtxAnm, NULL);
+    m035C->setFrame(m3530);
+    mpTexScrollResData->setFrame(m3532);
+    g_env_light.setLightTevColorType(mpCLModel, &mTevStr);
+    J3DJoint* link_root_joint = mpCLModelData->getJointNodePointer(0x00); // link_root joint
+    mpCLModelData->getJointNodePointer(0x08)->getMesh()->getShape()->hide(); // cl_LhandA joint
+    mpCLModelData->getJointNodePointer(0x0C)->getMesh()->getShape()->hide(); // cl_RhandA joint
+    
+    J3DMaterial* mtl = link_root_joint->getMesh();
+    for (int i = 0; i < 4; i++) {
+        mtl = mtl->getNext();
+    }
+    mtl->getShape()->show();
+    
+    J3DJoint* cl_eye_joint = mpCLModelData->getJointNodePointer(0x13); // cl_eye joint
+    J3DJoint* cl_mayu_joint = mpCLModelData->getJointNodePointer(0x15); // cl_mayu joint
+    setDrawHandModel();
+    j3dSys.setModel(mpCLModel);
+    j3dSys.setTexture(mpCLModelData->getTexture());
+    j3dSys.getModel()->unlock();
+    
+    BOOL r24 = field_0x2b0 <= -85.0f;
+    if (r24) {
+        for (int i = 0; i < ARRAY_SIZE(mpZOffBlendShape); i++) {
+            mpZOffBlendShape[i]->hide();
+            mpZOffNoneShape[i]->hide();
+            mpZOnShape[i]->hide();
+        }
+        mpCLModelData->getJointNodePointer(0x08)->getMesh()->getShape()->hide(); // cl_LhandA joint
+        mpCLModelData->getJointNodePointer(0x0C)->getMesh()->getShape()->hide(); // cl_RhandA joint
+        mtl = link_root_joint->getMesh();
+        for (int i = 0; mtl != NULL; i++, mtl = mtl->getNext()) {
+            if (i != 3) {
+                mtl->getShape()->hide();
+            } else {
+                mtl->getShape()->show();
+            }
+        }
+    } else if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x20)) {
+        for (int i = 0; i < ARRAY_SIZE(mpZOffBlendShape); i++) {
+            mpZOffBlendShape[i]->hide();
+            mpZOffNoneShape[i]->hide();
+            mpZOnShape[i]->hide();
+        }
+        mtl = link_root_joint->getMesh();
+        for (int i = 0; mtl != NULL; i++, mtl = mtl->getNext()) {
+            if (i != 0 && i != 3) {
+                mtl->getShape()->hide();
+            } else {
+                mtl->getShape()->show();
+            }
+        }
+        mpCLModelData->getJointNodePointer(0x14)->getMesh()->getShape()->hide(); // cl_hana joint
+    } else {
+        if (!checkFreezeState()) {
+            dComIfGd_setListP0();
+            l_onCupOffAupPacket2.entryOpa();
+            for (int i = 0; i < ARRAY_SIZE(mpZOffBlendShape); i++) {
+                mpZOffBlendShape[i]->hide();
+                mpZOnShape[i]->hide();
+                mpZOffNoneShape[i]->show();
+            }
+            cl_eye_joint->entryIn();
+            cl_mayu_joint->entryIn();
+            l_offCupOnAupPacket2.entryOpa();
+            for (int i = 0; i < ARRAY_SIZE(mpZOffBlendShape); i++) {
+                mpZOffBlendShape[i]->show();
+                mpZOffNoneShape[i]->hide();
+            }
+            cl_eye_joint->entryIn();
+            cl_mayu_joint->entryIn();
+            mtl = link_root_joint->getMesh();
+            for (int i = 0; mtl != NULL; i++, mtl = mtl->getNext()) {
+                if (i != 2 && i != 5) {
+                    mtl->getShape()->hide();
+                }
+            }
+            link_root_joint->entryIn();
+            if (checkMaskDraw()) {
+                entryDLSetLight(mpYamuModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
+            }
+            j3dSys.setModel(mpCLModel);
+            j3dSys.setTexture(mpCLModelData->getTexture());
+            hideHatAndBackle(link_root_joint->getMesh());
+            l_onCupOffAupPacket1.entryOpa();
+            for (int i = 0; i < ARRAY_SIZE(mpZOffBlendShape); i++) {
+                mpZOffBlendShape[i]->hide();
+                mpZOnShape[i]->show();
+                mpZOffNoneShape[i]->hide();
+            }
+            cl_eye_joint->entryIn();
+            cl_mayu_joint->entryIn();
+            l_offCupOnAupPacket1.entryOpa();
+            for (int i = 0; i < ARRAY_SIZE(mpZOffBlendShape); i++) {
+                mpZOnShape[i]->hide();
+            }
+        } else {
+            hideHatAndBackle(link_root_joint->getMesh());
+        }
+        bool r4 = dComIfGs_getSelectEquip(0) == SWORD || dComIfGp_getMiniGameType() == 2; // TODO this may be an inline
+        if (!r4 && dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != 5 || checkCaughtShapeHide() || checkDemoShieldNoDraw()) {
+            mpCLModelData->getJointNodePointer(0x0D)->getMesh()->getShape()->hide(); // cl_podA joint
+        } else {
+            mpCLModelData->getJointNodePointer(0x0D)->getMesh()->getShape()->show(); // cl_podA joint
+        }
+    }
+    
+    // regalloc issues with j3dSys from here on
+    dComIfGd_setListP1();
+    if (checkFreezeState()) {
+        dMat_control_c::iceEntryDL(mpCLModel, -1, NULL);
+    } else {
+        mDoExt_modelEntryDL(mpCLModel);
+    }
+    mtl = link_root_joint->getMesh();
+    while (mtl != NULL) {
+        mtl->getShape()->show();
+        mtl = mtl->getNext();
+    }
+    mpCLModelData->getJointNodePointer(0x14)->getMesh()->getShape()->show(); // cl_hana joint
+    mpCLModelData->getJointNodePointer(0x29)->getMesh()->getShape()->show(); // cl_back joint
+    if (!r24) {
+        entryDLSetLight(mpHandsModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
+        if (checkNoResetFlg1(daPyFlg1_CASUAL_CLOTHES) && !checkCaughtShapeHide() && !dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x20)) {
+            entryDLSetLight(mpKatsuraModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
+        }
+        if (checkFreezeState() && checkMaskDraw()) {
+            entryDLSetLight(mpYamuModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
+        }
+        if (dComIfGs_getSelectEquip(2) == PWR_GROOVE) {
+            entryDLSetLight(mpPringModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
+        }
+        // TODO this may be an inline
+        bool r4 = dComIfGs_getSelectEquip(0) == MASTER_SWORD || dComIfGs_getSelectEquip(0) == LV3_SWORD || dComIfGs_getSelectEquip(0) == MASTER_SWORD_EX;
+        if (r4 && !checkCaughtShapeHide() && !checkDemoShieldNoDraw()) {
+            updateDLSetLight(mpPodmsModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
+        }
+    }
+    if (checkEquipHeavyBoots()) {
+        entryDLSetLight(mpHbootsModels[0], mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
+        entryDLSetLight(mpHbootsModels[1], mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
+    }
+    
+    mTevStr.mFogColor.r = origFogR;
+    mTevStr.mFogColor.g = origFogG;
+    mTevStr.mFogColor.b = origFogB;
+    mTevStr.mFogStartZ = origFogStartZ;
+    mTevStr.mFogEndZ = origFogEndZ;
+    
+    if (!r24) {
+        if (mCurProc == PROC_CUT_F_e || mCurProc == PROC_BT_VERTICAL_JUMP_CUT_e) {
+            updateDLSetLight(mpSwordTipStabModel, 0);
+        } else if (checkModeFlg(0x40000) && checkNoResetFlg0(daPyFlg0_UNK100) && !(mCurProc == DPROC_DEAD_e && m34D6 == 0)) {
+            GXColor spc;
+            GXColor sp8;
+            dKy_get_seacolor(&spc, &sp8);
+            J3DGXColorS10 sp10;
+            sp10.mColor.r = spc.r;
+            sp10.mColor.g = spc.g;
+            sp10.mColor.b = spc.b;
+            int matID = mpSuimenMunyaModel->getModelData()->getMaterialNum() - 1;
+            for (; matID >= 0; matID--) {
+                mpSuimenMunyaModel->getModelData()->getMaterialNodePointer(matID)->setTevColor(0, &sp10);
+            }
+            mDoExt_modelUpdateDL(mpSuimenMunyaModel);
+        }
+        if (!r24 && !dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x20)) {
+            bool r4 = dComIfGs_getSelectEquip(0) != NO_ITEM || dComIfGp_getMiniGameType() == 2; // TODO this may be an inline
+            if (r4 && !checkDemoSwordNoDraw(1)) {
+                entryDLSetLight(mpEquippedSwordModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
+            }
+        }
+        if (dComIfGs_getSelectEquip(1) != NO_ITEM && !checkCaughtShapeHide() && !checkDemoShieldNoDraw()) {
+            entryDLSetLight(mpEquippedShieldModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
+        }
+        dComIfGd_setList();
+        drawMirrorLightModel();
+        dComIfGd_setListP1();
+        
+        if (mpBottleContentsModel != NULL) {
+            updateDLSetLight(mpBottleContentsModel, 0);
+        }
+        if (mpHeldItemModel && !checkCaughtShapeHide() && !checkDemoSwordNoDraw(0)) {
+            if (!checkBowItem(mHeldItemType) || !checkPlayerGuard()) {
+                if (mHeldItemType == HOOKSHOT) {
+                    if (mActorKeepEquip.getActor()) {
+                        daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
+                        mpHeldItemModel->setAnmMtx(4, hookshot->getMtxTop());
+                    }
+                }
+                entryDLSetLight(mpHeldItemModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
+                if (mpSwordModel1 != NULL) {
+                    if (checkChanceMode() || checkNoResetFlg1(daPyFlg1_UNK8000) || dComIfGs_getSelectEquip(0) == MASTER_SWORD_EX) {
+                        updateDLSetLight(mpSwordModel1, 0);
+                    }
+                }
+            }
+        }
+        if (mpBottleCapModel != NULL && m355E != 0) {
+            updateDLSetLight(mpBottleCapModel, 0);
+        }
+        
+        if (!dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x20)) {
+            f32 frame = mYaura00rBrk.getBrkAnm()->getFrame();
+            if (frame > 0.0f) {
+                daPy_aura_c* auraEntry = &mMagicArmorAuraEntries[0];
+                mYaura00rBrk.entry(auraEntry->getModel()->getModelData(), frame);
+                for (int i = 0; i < (s32)ARRAY_SIZE(mMagicArmorAuraEntries); i++, auraEntry++) {
+                    mpYaura00Btk->setFrame(auraEntry->getFrame());
+                    updateDLSetLight(auraEntry->getModel(), 0);
+                }
+            }
+            frame = mYmgcs00Brk.getBrkAnm()->getFrame();
+            if (frame > 0.0f) {
+                mYmgcs00Brk.entry(mpYmgcs00Model->getModelData(), frame);
+                mDoExt_modelEntryDL(mpYmgcs00Model);
+            }
+        }
+    }
+    if (fanWindEffectDraw()) {
+        updateDLSetLight(mpYuchw00Model, 0);
+    }
+    if (fanWindCrashEffectDraw()) {
+        updateDLSetLight(mpYbafo00Model, 0);
+    }
+    dComIfGd_setList();
+    if (mCurProc != DPROC_CAUGHT_e && !dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
+        drawShadow();
+    }
+    if (mSwBlur.field_0x014 > 0) {
+        dComIfGd_entryZSortXluList(&mSwBlur, mSwBlur.field_0x304[0]);
+    }
+    
+    return TRUE;
 }
 
 /* 80108204-80108224       .text daPy_Draw__FP9daPy_lk_c */
@@ -3720,7 +4225,8 @@ BOOL daPy_lk_c::checkGuardAccept() {
 
 /* 80112330-80112348       .text cancelNoDamageMode__9daPy_lk_cFv */
 void daPy_lk_c::cancelNoDamageMode() {
-    /* Nonmatching */
+    offNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD);
+    mTinkleShieldTimer = 0;
 }
 
 /* 80112348-80112954       .text commonProcInit__9daPy_lk_cFQ29daPy_lk_c9daPy_PROC */
@@ -4468,6 +4974,9 @@ void daPy_lk_c::resetCurse() {
     /* Nonmatching */
 }
 
+u8 normal_scale_38064[0xC];
+u8 boss_scale_38067[0xC];
+
 /* 8011D110-8011D4D0       .text checkLightHit__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkLightHit() {
     /* Nonmatching */
@@ -4564,8 +5073,8 @@ BOOL daPy_lk_c::checkLavaFace(cXyz* param_1, int attributeCode) {
     }
     
     if (param_1) {
-        cXyz temp(current.pos.x, param_1->y + 20.0f, current.pos.z);
-        m08EC.SetPos(&temp);
+        cXyz pos(current.pos.x, param_1->y + 20.0f, current.pos.z);
+        m08EC.SetPos(&pos);
         m35D4 = dComIfG_Bgsp()->GroundCross(&m08EC);
         if (mAcch.GetGroundH() > m35D4) {
             m35D4 = -1000000000.0f;
@@ -4793,8 +5302,8 @@ BOOL daPy_lk_c::playerDelete() {
         mDoExt_destroySolidHeap(m_anm_heap_upper[i].mpAnimeHeap);
     }
     
-    mDoExt_destroySolidHeap(mpTextureAnimeResHeap);
-    mDoExt_destroySolidHeap(mpTextureScrollResHeap);
+    mDoExt_destroySolidHeap(m_tex_anm_heap.mpAnimeHeap);
+    mDoExt_destroySolidHeap(m_tex_scroll_heap.mpAnimeHeap);
     mDoExt_destroySolidHeap(mpItemHeaps[0]);
     mDoExt_destroySolidHeap(mpItemHeaps[1]);
     mDoExt_destroySolidHeap(m2ECC);
@@ -4821,17 +5330,111 @@ static BOOL daPy_Delete(daPy_lk_c* i_this) {
 
 /* 80123078-80123360       .text initTextureAnime__9daPy_lk_cFv */
 void daPy_lk_c::initTextureAnime() {
-    /* Nonmatching */
+    m_tex_anm_heap.m_buffer = new(0x20) u8[0x1000];
+    JUT_ASSERT(20869, m_tex_anm_heap.m_buffer != 0);
+    
+    dComIfGp_getAnmArchive()->readIdxResource(m_tex_anm_heap.m_buffer, 0x1000, LKANM_BTP_TMABAA);
+    J3DAnmTexPattern* btp = static_cast<J3DAnmTexPattern*>(J3DAnmLoaderDataBase::load(m_tex_anm_heap.m_buffer));
+    btp->searchUpdateMaterialID(mpCLModelData);
+    u16 material_num = btp->getUpdateMaterialNum();
+    m_texNoAnms = new J3DTexNoAnm[material_num];
+    JUT_ASSERT(20885, m_texNoAnms != 0);
+    
+    for (u16 i = 0; i < material_num; i++) {
+        u16 matID = btp->getUpdateMaterialID(i);
+        if (matID != 0xFFFF) {
+            J3DMaterialAnm* mat_anm = new J3DMaterialAnm();
+            JUT_ASSERT(20894, mat_anm != 0);
+            
+            if (matID != 1 && matID != 4) {
+                // Not eyeL or eyeR (i.e. it's mouth, mayuL, or mayuR)
+                // Set the animation on the specified material
+                mpCLModelData->getMaterialNodePointer(matID)->change();
+                mpCLModelData->getMaterialNodePointer(matID)->setMaterialAnm(mat_anm);
+                if (matID != 0xE) {
+                    // Not mouth (i.e. it's mayuL or mayuR)
+                    // Additionally, set the animation on mayuLdamA and mayuLdamB or mayuRdamA and mayuRdamB
+                    mpCLModelData->getMaterialNodePointer(matID+1)->change();
+                    mpCLModelData->getMaterialNodePointer(matID+1)->setMaterialAnm(mat_anm);
+                    mpCLModelData->getMaterialNodePointer(matID+2)->change();
+                    mpCLModelData->getMaterialNodePointer(matID+2)->setMaterialAnm(mat_anm);
+                }
+            } else {
+                // eyeL or eyeR
+                // Don't the animation on the specified material
+                // Instead, set it on eyeLdamA and eyeLdamB or eyeRdamA and eyeRdamB
+                mpCLModelData->getMaterialNodePointer(matID+1)->change();
+                mpCLModelData->getMaterialNodePointer(matID+1)->setMaterialAnm(mat_anm);
+                mpCLModelData->getMaterialNodePointer(matID+2)->change();
+                mpCLModelData->getMaterialNodePointer(matID+2)->setMaterialAnm(mat_anm);
+            }
+        }
+        
+        m_texNoAnms[i].setAnmIndex(i);
+    }
 }
 
 /* 80123360-80123830       .text initTextureScroll__9daPy_lk_cFv */
 void daPy_lk_c::initTextureScroll() {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
+    m_tex_scroll_heap.m_buffer = new(0x20) u8[0x800];
+    JUT_ASSERT(20944, m_tex_scroll_heap.m_buffer != 0);
+    
+    dComIfGp_getAnmArchive()->readIdxResource(m_tex_scroll_heap.m_buffer, 0x800, LKANM_BTK_TMABA);
+    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(J3DAnmLoaderDataBase::load(m_tex_scroll_heap.m_buffer));
+    btk->searchUpdateMaterialID(mpCLModelData);
+    u16 material_num = btk->getUpdateMaterialNum();
+    JUT_ASSERT(20958, material_num == 2);
+    
+    m_texMtxAnm = new J3DTexMtxAnm[material_num];
+    JUT_ASSERT(20961, m_texMtxAnm != 0);
+    
+    for (u16 no = 0; no < material_num; no++) {
+        u16 matID = btk->getUpdateMaterialID(no);
+        if (matID != 0xFFFF) {
+            m_tex_eye_scroll[no] = new daPy_matAnm_c();
+            JUT_ASSERT(20972, m_tex_eye_scroll[no] != 0);
+            
+            mpCLModelData->getMaterialNodePointer(matID)->change();
+            mpCLModelData->getMaterialNodePointer(matID)->setMaterialAnm(m_tex_eye_scroll[no]);
+            
+            J3DMaterial* mtl = mpCLModelData->getMaterialNodePointer(matID);
+            u8 texMtxID = btk->getUpdateTexMtxID(no);
+            if (texMtxID != 0xFF) {
+                J3DTexMtx* tmtx;
+                if (mtl->getTexMtx(texMtxID) == NULL) {
+                    tmtx = new J3DTexMtx();
+                    JUT_ASSERT(20984, tmtx != 0);
+                    mtl->setTexMtx(no, tmtx);
+                }
+                if (mtl->getTexCoord(texMtxID) != NULL) {
+                    mtl->getTexCoord(texMtxID)->setTexGenMtx(GX_TEXMTX0 + (texMtxID & 0xFF) * 3);
+                }
+                tmtx = mtl->getTexMtx(no);
+                
+                m_texMtxAnm[no].setAnmTransform(btk);
+                m_texMtxAnm[no].setAnmIndex(no);
+                
+                tmtx->getTexMtxInfo().mInfo = tmtx->getTexMtxInfo().mInfo & 0x7F | btk->getTexMtxCalcType() << 7;
+                // Fakematch? The codegen doesn't match unless a temp variable is used and assigned to multiple times.
+                Vec* temp = &btk->getSRTCenter(no);
+                tmtx->getTexMtxInfo().mCenter.x = temp->x;
+                temp = &btk->getSRTCenter(no);
+                tmtx->getTexMtxInfo().mCenter.y = temp->y;
+                temp = &btk->getSRTCenter(no);
+                tmtx->getTexMtxInfo().mCenter.z = temp->z;
+                
+                JUT_ASSERT(21001, mtl->getMaterialAnm() != 0);
+                
+                mtl->getMaterialAnm()->setTexMtxAnm(texMtxID, &m_texMtxAnm[no]);
+            }
+        }
+    }
 }
 
 /* 80123834-8012469C       .text createHeap__9daPy_lk_cFv */
 BOOL daPy_lk_c::createHeap() {
-    /* Nonmatching - data offsets */
+    /* Nonmatching - daPy_HIO_c constructor */
     J3DModelData* tmp_modelData;
     J3DAnmTransform* bck;
     J3DAnmTevRegKey* brk;
@@ -4862,7 +5465,7 @@ BOOL daPy_lk_c::createHeap() {
     mpTshmsBtk = entryBtk(tmp_modelData, LINK_BTK_TSHMS);
     J3DSkinDeform* shmsSkinDeform = new J3DSkinDeform();
     if (!shmsSkinDeform) { JUT_ASSERT(21077, 0); }
-    if (!mpShmsModel->setSkinDeform(shmsSkinDeform, 1)) { JUT_ASSERT(21080, 0); }
+    if (mpShmsModel->setSkinDeform(shmsSkinDeform, 1) != J3DErrType_Success ) { JUT_ASSERT(21080, 0); }
     
     tmp_modelData = initModel(&mpYmsls00Model, LINK_BDL_YMSLS00, 0x13000222);
     mpYmsls00Btk = entryBtk(tmp_modelData, LINK_BTK_YMSLS00);
@@ -4885,7 +5488,7 @@ BOOL daPy_lk_c::createHeap() {
     mpYbafo00Btk = entryBtk(tmp_modelData, LINK_BTK_YBAFO00);
     mpYbafo00Btk->setFrame(mpYbafo00Btk->getFrameMax()-0.001f);
     
-    tmp_modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, LINK_BDL_YAURA00);
+    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_YAURA00));
     JUT_ASSERT(21130, tmp_modelData != 0);
     daPy_aura_c* aura_p = mMagicArmorAuraEntries;
     for (int i = 0; i < 6; i++) {
@@ -4897,37 +5500,37 @@ BOOL daPy_lk_c::createHeap() {
     brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, LINK_BRK_YAURA00_R);
     ret = mYaura00rBrk.init(tmp_modelData, brk, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
     if (!ret) { JUT_ASSERT(21147, 0); }
-    mYaura00rBrk.setFrame(0.0f);
+    mYaura00rBrk.entryFrame(0.0f);
     
     tmp_modelData = initModel(&mpYmgcs00Model, LINK_BDL_YMGCS00, 0x11001222);
     mpYmgcs00Btk = entryBtk(tmp_modelData, LINK_BTK_YMGCS00);
     brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, LINK_BRK_YMGCS00_MS);
     ret = mYmgcs00Brk.init(tmp_modelData, brk, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
     if (!ret) { JUT_ASSERT(21161, 0); }
-    mYmgcs00Brk.setFrame(0.0f);
+    mYmgcs00Brk.entryFrame(0.0f);
     
-    tmp_modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, LINK_BDL_BOMB);
+    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_BOMB));
     JUT_ASSERT(21169, tmp_modelData != 0);
     mpBombBrk = entryBrk(tmp_modelData, LINK_BRK_BOMB);
     
-    tmp_modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, LINK_BDL_GWP00);
+    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_GWP00));
     JUT_ASSERT(21176, tmp_modelData != 0);
     mpGwp00BrkData = entryBrk(tmp_modelData, LINK_BRK_GWP00);
     mpGwp00BtkData = entryBtk(tmp_modelData, LINK_BTK_GWP00);
     
-    tmp_modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, LINK_BDL_ARROW);
+    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_ARROW));
     JUT_ASSERT(21184, tmp_modelData != 0);
     mpIceArrowBtk = entryBtk(tmp_modelData, LINK_BTK_TTIPICE);
     
-    tmp_modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, LINK_BDL_ARROWGLITTER);
+    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_ARROWGLITTER));
     JUT_ASSERT(21191, tmp_modelData != 0);
     mpLightArrowBtk = entryBtk(tmp_modelData, LINK_BTK_TARROWGLITTER);
     
-    tmp_modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, LINK_BDL_GICER00);
+    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_GICER00));
     JUT_ASSERT(21198, tmp_modelData != 0);
     mpGicer00Btk = entryBtk(tmp_modelData, LINK_BTK_GICER00);
     
-    tmp_modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, LINK_BDL_GICER01);
+    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, LINK_BDL_GICER01));
     JUT_ASSERT(21205, tmp_modelData != 0);
     mpGicer01Btk = entryBtk(tmp_modelData, LINK_BTK_GICER01);
     
@@ -4967,7 +5570,7 @@ void daPy_lk_c::createAnimeHeap(JKRSolidHeap**, daPy_lk_c::daPy_HEAP_TYPE) {
 /* 80124A40-80124B30       .text initModel__9daPy_lk_cFPP8J3DModeliUl */
 J3DModelData* daPy_lk_c::initModel(J3DModel** i_model, int i_fileIndex, u32 i_differedDlistFlag) {
     J3DModelData* tmp_modelData;
-    tmp_modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, i_fileIndex);
+    tmp_modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, i_fileIndex));
     JUT_ASSERT(21340, tmp_modelData != 0);
     *i_model = mDoExt_J3DModel__create(tmp_modelData, 0x00080000, i_differedDlistFlag);
     JUT_ASSERT(21344, *i_model != 0);
@@ -5075,7 +5678,7 @@ void daPy_lk_c::playerInit() {
     mAcchCir[1].SetWall(89.9f, 35.0f);
     mAcchCir[2].SetWall(125.0f, 35.0f);
     mHeadTopPos.setall(0.0f);
-    field_0x2ac = 125.0f;
+    mHeight = 125.0f;
     mHeldItemType = 0x100;
     mKeepItemType = 0x100;
     mCameraInfoIdx = dComIfGp_getPlayerCameraID(0);
@@ -5122,16 +5725,16 @@ void daPy_lk_c::playerInit() {
         m_anm_heap_upper[i].field_0x2 = -1;
         m_anm_heap_upper[i].field_0x4 = -1;
     }
-    createAnimeHeap(&mpTextureAnimeResHeap, HEAP_TYPE_TEXTURE_ANIME_e);
-    mTexAnimeResIdx = -1;
-    m31BA = -1;
-    m31BC = -1;
-    m31BE = -1;
-    createAnimeHeap(&mpTextureScrollResHeap, HEAP_TYPE_TEXTURE_SCROLL_e);
-    mTexScrollResIdx = -1;
-    m31CA = -1;
-    m31CC = -1;
-    m31CE = -1;
+    createAnimeHeap(&m_tex_anm_heap.mpAnimeHeap, HEAP_TYPE_TEXTURE_ANIME_e);
+    m_tex_anm_heap.mIdx = -1;
+    m_tex_anm_heap.field_0x2 = -1;
+    m_tex_anm_heap.field_0x4 = -1;
+    m_tex_anm_heap.field_0x6 = -1;
+    createAnimeHeap(&m_tex_scroll_heap.mpAnimeHeap, HEAP_TYPE_TEXTURE_SCROLL_e);
+    m_tex_scroll_heap.mIdx = -1;
+    m_tex_scroll_heap.field_0x2 = -1;
+    m_tex_scroll_heap.field_0x4 = -1;
+    m_tex_scroll_heap.field_0x6 = -1;
     mSeAnmIdx = -1;
     m34F0 = -1;
     
@@ -5213,7 +5816,7 @@ void daPy_lk_c::playerInit() {
     dKy_plight_set(&mLightInfluence);
     
     m352E = 900;
-    field_0x298 = 0xAD;
+    mFace = daPyFace_UNKNOWN;
     m34DE = shape_angle.y;
     
     ResTIMG* linktex_casual = (ResTIMG*)dComIfG_getObjectRes(l_arcName, LINK_BTI_LINKTEXBCI4);
