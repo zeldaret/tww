@@ -139,7 +139,7 @@ int daAgb_c::uploadInitCheck() {
     dStage_FileList_dt_c* fili_p =
         dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
 
-    if ((dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != 7 && !dMap_c::isEnableDispMap()) ||
+    if ((dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != dStageType_SEA_e && !dMap_c::isEnableDispMap()) ||
         (fili_p != NULL && dStage_FileList_dt_CheckAgbCom(fili_p)))
     {
         l_msgCtrl.init(1);

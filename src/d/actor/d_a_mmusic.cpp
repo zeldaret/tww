@@ -36,7 +36,7 @@ bool daMmusic::Act_c::create_heap() {
 
 /* 000000A4-0000013C       .text Macore_is_playing__Q28daMmusic5Act_cFv */
 BOOL daMmusic::Act_c::Macore_is_playing() {
-    if (dComIfGs_isStageBossEnemy(7) ||
+    if (dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_WT) ||
         g_dComIfG_gameInfo.save.mSavedata.mEvent.isEventBit(0x2910) ||
         g_dComIfG_gameInfo.save.mSavedata.mEvent.isEventBit(0x2e02) ||
         g_dComIfG_gameInfo.save.mSavedata.mEvent.isEventBit(0x1610) ||

@@ -391,7 +391,9 @@ s32 daNpc_Md_c::create() {
                 setTypeM_DaiB();
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "sea") == 0) {
-            if (dComIfGs_isEventBit(0x2E04) || !dComIfGs_isEventBit(0x1820) || !dComIfGs_isStageBossEnemy(3)) {
+            if (dComIfGs_isEventBit(0x2E04) || !dComIfGs_isEventBit(0x1820) ||
+                !dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_DRC))
+            {
                 return cPhs_ERROR_e;
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "Atorizk") == 0) {

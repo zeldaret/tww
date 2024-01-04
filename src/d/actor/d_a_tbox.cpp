@@ -369,7 +369,7 @@ BOOL daTbox_c::checkEnv() {
 /* 00000CD8-00000D48       .text checkOpen__8daTbox_cFv */
 BOOL daTbox_c::checkOpen() {
     if (getFuncType() == FUNC_TYPE_EXTRA_SAVE_INFO || getFuncType() == FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN) {
-        int stageNo = 1;
+        int stageNo = dSv_save_c::STAGE_SEA2;
         u8 tBoxNo = getTboxNo();
 
         return dComIfGs_isStageTbox(stageNo, tBoxNo);
@@ -903,7 +903,7 @@ void daTbox_c::OpenInit_com() {
     mOpenAnm.setPlaySpeed(1.0f);
 
     if (getFuncType() == FUNC_TYPE_EXTRA_SAVE_INFO || getFuncType() == FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN) {
-        dComIfGs_onStageTbox(1, getTboxNo());
+        dComIfGs_onStageTbox(dSv_save_c::STAGE_SEA2, getTboxNo());
     }
     else {
         u8 tboxNo = getTboxNo();

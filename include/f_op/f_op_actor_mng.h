@@ -8,6 +8,7 @@
 #include "f_pc/f_pc_searcher.h"
 #include "m_Do/m_Do_audio.h"
 #include "d/d_item_data.h"
+#include "d/d_save.h"
 
 #define fopAcM_SetupActor(ptr,ClassName) \
     if (!fopAcM_CheckCondition(ptr, fopAcCnd_INIT_e)) { \
@@ -327,7 +328,7 @@ inline BOOL dComIfGs_isSaveSwitch(int i_stageNo, int i_no);
 inline BOOL fopAcM_isItemForIb(int itemBitNo, u8 itemNo, s8 roomNo) {
     if (itemNo == BLUE_JELLY) {
         // Blue Chu Jelly uses itemBitNo as if it was a switch in stageNo 0xE.
-        return dComIfGs_isSaveSwitch(0xE, itemBitNo);
+        return dComIfGs_isSaveSwitch(dSv_save_c::STAGE_BLUE_CHU_JELLY, itemBitNo);
     } else {
         return dComIfGs_isItem(itemBitNo, roomNo);
     }
@@ -337,7 +338,7 @@ inline void dComIfGs_onSaveSwitch(int i_stageNo, int i_no);
 inline void fopAcM_onItemForIb(int itemBitNo, u8 itemNo, s8 roomNo) {
     if (itemNo == BLUE_JELLY) {
         // Blue Chu Jelly uses itemBitNo as if it was a switch in stageNo 0xE.
-        dComIfGs_onSaveSwitch(0xE, itemBitNo);
+        dComIfGs_onSaveSwitch(dSv_save_c::STAGE_BLUE_CHU_JELLY, itemBitNo);
     } else {
         dComIfGs_onItem(itemBitNo, roomNo);
     }

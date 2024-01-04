@@ -116,7 +116,7 @@ BOOL daVrbox2_color_set(vrbox2_class* i_this) {
     windPow = dKyw_get_wind_pow();
     windNrmVec = *windVec;
 
-    if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == 2) {
+    if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MISC_e) {
         s16 stageWindY = 0;
         if (strcmp(dComIfGp_getStartStageName(), "LinkRM") == 0)
             stageWindY = 0x4000;

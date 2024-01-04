@@ -13,6 +13,10 @@
 #include "d/actor/d_a_player_main.h"
 #include "f_op/f_op_camera.h"
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
+#include "d/d_procname.h"
+#include "d/actor/d_a_ship.h"
+#include "d/actor/d_a_player_HIO.h"
+#include "JSystem/JKernel/JKRHeap.h"
 
 extern const Vec l_tact_top;
 
@@ -337,7 +341,7 @@ BOOL daPy_lk_c::procTactPlay_init(s32 r27, int r30, int r31) {
     
     if (r28 != 0 && m3570 == 1) {
         stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
-        if (dStage_stagInfo_GetSTType(stag_info) == 7 && m34CC != 1 && r30 != 0) {
+        if (dStage_stagInfo_GetSTType(stag_info) == dStageType_SEA_e && m34CC != 1 && r30 != 0) {
             daShip_c* ship = dComIfGp_getShipActor();
             u32 warpID = fopAcM_create(PROC_TORNADO, 1, &current.pos, current.roomNo);
             ship->setTactWarpID(warpID);

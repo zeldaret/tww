@@ -180,7 +180,7 @@ static void move(dr_class* i_this) {
         break;
     }
     
-    if (!dComIfGs_isStageBossEnemy(3)) {
+    if (!dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_DRC)) {
         if ((isIdle && (l_HIO.m0C || dComIfGp_getVibration().CheckQuake())) || i_this->m2C8 != 0) {
             l_HIO.m0C = false;
             i_this->m2C8 = 0;

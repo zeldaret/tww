@@ -3520,7 +3520,9 @@ BOOL daPy_lk_c::draw() {
             hideHatAndBackle(link_root_joint->getMesh());
         }
         bool r4 = dComIfGs_getSelectEquip(0) == SWORD || dComIfGp_getMiniGameType() == 2; // TODO this may be an inline
-        if (!r4 && dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != 5 || checkCaughtShapeHide() || checkDemoShieldNoDraw()) {
+        if (!r4 && dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != dStageType_FF1_e ||
+            checkCaughtShapeHide() || checkDemoShieldNoDraw())
+        {
             mpCLModelData->getJointNodePointer(0x0D)->getMesh()->getShape()->hide(); // cl_podA joint
         } else {
             mpCLModelData->getJointNodePointer(0x0D)->getMesh()->getShape()->show(); // cl_podA joint
@@ -4213,8 +4215,7 @@ BOOL daPy_lk_c::checkSubjectEnd(int) {
 /* 80112280-80112330       .text checkGuardAccept__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkGuardAccept() {
     if (checkModeFlg(0x40) && !checkBowAnime()) {
-        u32 stageType = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo());
-        if (stageType != 2 ||
+        if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != dStageType_MISC_e ||
             strcmp(dComIfGp_getStartStageName(), "Ojhous") == 0 ||
             strcmp(dComIfGp_getStartStageName(), "Orichh") == 0)
         {
@@ -5130,7 +5131,9 @@ BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int
             setDamagePoint(param_3);
             mTinkleShieldTimer = 0;
             
-            if (stageType == 7 && !dComIfGs_isEventBit(0x2A08) && (current.roomNo == 11 || current.roomNo == 44) && dStage_chkPlayerId(0x80, current.roomNo)) {
+            if (stageType == dStageType_SEA_e && !dComIfGs_isEventBit(dEvtBit_SHIP_RIDDEN_e) &&
+                (current.roomNo == 11 || current.roomNo == 44) && dStage_chkPlayerId(0x80, current.roomNo))
+            {
                 dComIfGp_setNextStage(dComIfGp_getStartStageName(), 0x80, current.roomNo, -1, 0.0f, param_1);
                 u32 roomParam = setParamData(-1, 0, eventInfoIdx, 0);
                 dComIfGs_setRestartRoomParam(roomParam);
@@ -5148,7 +5151,7 @@ BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int
             }
             
             if (i_point == 0xFF) {
-                if (stageType == 7) {
+                if (stageType == dStageType_SEA_e) {
                     cXyz* pos;
                     if (dComIfGp_getShipActor()) {
                         pos = &dComIfGp_getShipActor()->current.pos;

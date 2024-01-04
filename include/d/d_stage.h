@@ -9,10 +9,22 @@
 #include "global.h"
 #include "f_op/f_op_actor_mng.h"
 
+class JKRExpHeap;
+
 void dStage_SetErrorRoom();
 void dStage_SetErrorStage();
 
-class JKRExpHeap;
+enum StageType {
+    /* 0x00 */ dStageType_OUTDOORS_e,
+    /* 0x01 */ dStageType_DUNGEON_e,
+    /* 0x02 */ dStageType_MISC_e, // Mostly interior rooms but also some exceptions
+    /* 0x03 */ dStageType_BOSS_e,
+    /* 0x04 */ dStageType_SUBDUNGEON_e, // Name based on the debug map select entry サブダンジョン
+    /* 0x05 */ dStageType_FF1_e,
+    /* 0x06 */ dStageType_MINIBOSS_e,
+    /* 0x07 */ dStageType_SEA_e,
+    /* 0x08 */ dStageType_UNKNOWN_8_e,
+};
 
 class stage_vrbox_info_class {
 public:

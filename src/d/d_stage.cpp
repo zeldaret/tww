@@ -60,8 +60,7 @@ void dStage_KeepTresureInfoProc(dStage_dt_c* i_stage, stage_tresure_class* i_tre
         return;
     }
     u32 stageType = dStage_stagInfo_GetSTType(stagInfo);
-    if (stageType == 3 || stageType == 6) {
-        // Boss or miniboss room.
+    if (stageType == dStageType_BOSS_e || stageType == dStageType_MINIBOSS_e) {
         return;
     }
     if (i_tresure == NULL) {
@@ -90,8 +89,7 @@ void dStage_KeepDoorInfoProc(dStage_dt_c* i_stage, stage_tgsc_class* i_drtg) {
         return;
     }
     u32 stageType = dStage_stagInfo_GetSTType(stagInfo);
-    if (stageType == 3 || stageType == 6) {
-        // Boss or miniboss room.
+    if (stageType == dStageType_BOSS_e || stageType == dStageType_MINIBOSS_e) {
         return;
     }
     if (i_drtg == NULL) {
@@ -1890,7 +1888,7 @@ int dStage_shipInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
     s32 roomId = dComIfGp_getShipRoomId();
 
     if (dStage_chkTaura(roomId)) {
-        if (!dComIfGs_isEventBit(0x2A08) && dStage_setShipPos(0x80, roomId)) {
+        if (!dComIfGs_isEventBit(dEvtBit_SHIP_RIDDEN_e) && dStage_setShipPos(0x80, roomId)) {
             shipId = 0xFF;
             roomId = 0xFF;
             dComIfGp_setShipId(0xFF);

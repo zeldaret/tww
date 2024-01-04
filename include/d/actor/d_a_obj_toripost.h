@@ -90,7 +90,7 @@ private:
     /* 0x8F0 */ u32 field_0x8F0;
     /* 0x8F4 */ u8 field_0x8F4;
     /* 0x8F5 */ u8 field_0x8F5;
-    /* 0x8F6 */ u8 field_0x8F6;
+    /* 0x8F6 */ u8 mPreItemNo;
     /* 0x8F7 */ s8 field_0x8F7;
 };
 

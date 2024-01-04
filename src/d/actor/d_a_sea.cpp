@@ -90,7 +90,7 @@ u32 daSea_WaterHeightInfo_Mng::GetHeight(int x, int z) {
     if (x < 0 || 9 <= x || z < 0 || 9 <= z)
         return 10;
 
-    if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == 7) {
+    if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_SEA_e) {
         return mHeight[z][x];
     } else {
         return get_wave_max(dComIfGp_roomControl_getStayNo());

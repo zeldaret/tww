@@ -193,7 +193,7 @@ void dKyr_sun_move() {
     u8 numPointsVisible = 0, numCenterPointsVisible = 0;
     u32 stType = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo());
     cXyz lightDir;
-    if (g_env_light.mBaseLightInfluence.mColor.r == 0 && stType != 2) {
+    if (g_env_light.mBaseLightInfluence.mColor.r == 0 && stType != dStageType_MISC_e) {
         dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &g_env_light.mBaseLightInfluence.mPos, &lightDir);
     } else {
         dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &g_env_light.mSunPos2, &lightDir);
@@ -302,7 +302,7 @@ void dKyr_sun_move() {
         numPointsVisible = 0;
     }
 
-    if (stType == 2) {
+    if (stType == dStageType_MISC_e) {
         numCenterPointsVisible = 0;
         numPointsVisible = 0;
     }
@@ -556,7 +556,7 @@ void wave_move() {
     windPow = dKyw_get_wind_pow();
     windPowVec2 = *windVecP;
 
-    if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == 2) {
+    if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MISC_e) {
         stageWindY = 0;
 
         if (strcmp(dComIfGp_getStartStageName(), "LinkRM") == 0)
@@ -894,7 +894,7 @@ void dKyr_drawSun(Mtx drawMtx, cXyz* pPos, GXColor& reg0, u8** pImg) {
         sunPos = *pPos;
 
         u32 stType = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo());
-        if (dKy_getEnvlight().mBaseLightInfluence.mColor.r == 0 && stType != 2) {
+        if (dKy_getEnvlight().mBaseLightInfluence.mColor.r == 0 && stType != dStageType_MISC_e) {
             if (dKy_getEnvlight().mCurTime > 285.0f || dKy_getEnvlight().mCurTime < 105.0f)
                 bDrawMoon = false;
 

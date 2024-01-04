@@ -1687,31 +1687,31 @@ BOOL daAgbsw0_c::MoveCheck(s16 param_1) {
 
             break;
         case 9:
-            if(dComIfGs_isStageTbox(3, 0xF)) {
+            if(dComIfGs_isStageTbox(dSv_save_c::STAGE_DRC, 0xF)) {
                 return 0;
             }
 
             break;
         case 0xA:
-            if(dComIfGs_isStageTbox(4, 0xF)) {
+            if(dComIfGs_isStageTbox(dSv_save_c::STAGE_FW, 0xF)) {
                 return 0;
             }
 
             break;
         case 0xB:
-            if(dComIfGs_isStageTbox(5, 0xF)) {
+            if(dComIfGs_isStageTbox(dSv_save_c::STAGE_TOTG, 0xF)) {
                 return 0;
             }
 
             break;
         case 0xC:
-            if(dComIfGs_isStageTbox(7, 0xF)) {
+            if(dComIfGs_isStageTbox(dSv_save_c::STAGE_WT, 0xF)) {
                 return 0;
             }
 
             break;
         case 0xD:
-            if(dComIfGs_isStageTbox(6, 0xF)) {
+            if(dComIfGs_isStageTbox(dSv_save_c::STAGE_ET, 0xF)) {
                 return 0;
             }
 
@@ -2445,7 +2445,7 @@ void daAgbsw0_c::MailSend(u16 msgID, u8 reactType, u8 toCheck, u8 toSet, u8 sfx)
     mMail.msgID = msgID;
     mMail.swToSet = toSet;
     mMail.swToCheck = toCheck;
-    mMail.stagInfo = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());
+    mMail.stageSaveTbl = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());
     mMail.roomNo = fopAcM_GetHomeRoomNo(this);
     mMail.reactType = reactType;
     mMail.sfx = sfx;
@@ -2502,7 +2502,7 @@ static BOOL daAgbsw0_Delete(daAgbsw0_c* i_this) {
         info.msgID = 0xFFFF;
         info.swToSet = 0xFF;
         info.swToCheck = 0xFF;
-        info.stagInfo = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());
+        info.stageSaveTbl = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());
         info.roomNo = fopAcM_GetHomeRoomNo(i_this);
         info.reactType = 0;
         info.sfx = 0;

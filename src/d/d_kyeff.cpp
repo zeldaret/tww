@@ -147,10 +147,10 @@ s32 dKyeff_Create(kankyo_class* i_ky) {
         g_env_light.mCurTime = 15.0f * cal.hours;
     } else if (dKy_checkEventNightStop()) {
         u32 stType = dStage_stagInfo_GetSTType(dComIfGp_getStage().getStagInfo());
-        if (stType == 0 || stType == 7) {
+        if (stType == dStageType_OUTDOORS_e || stType == dStageType_SEA_e) {
             dKyw_rain_set(250);
             g_env_light.mThunderEff.mMode = 1;
-        } else if (stType == 2) {
+        } else if (stType == dStageType_MISC_e) {
             if (strcmp(dComIfGp_getStartStageName(), "Ocrogh") == 0 || strcmp(dComIfGp_getStartStageName(), "Omori") == 0 ||
                 strcmp(dComIfGp_getStartStageName(), "Orichh") == 0 || strcmp(dComIfGp_getStartStageName(), "Atorizk") == 0 ||
                 strcmp(dComIfGp_getStartStageName(), "LinkRM") == 0 || strcmp(dComIfGp_getStartStageName(), "Ojhous2") == 0 ||

@@ -477,7 +477,6 @@ public:
         /* 0x3 */ STAGE_BOSS_ENEMY,
         /* 0x4 */ STAGE_LIFE,
         /* 0x5 */ STAGE_BOSS_DEMO,
-        /* 0x7 */ STAGE_BOSS_ENEMY_2 = 7
     };
 
     void init();
@@ -492,21 +491,29 @@ public:
     void onVisitedRoom(int);
     BOOL isVisitedRoom(int);
     void onDungeonItem(int);
+    void offDungeonItem(int);
     BOOL isDungeonItem(int);
 
     u8 getKeyNum() { return mKeyNum; }
     void setKeyNum(u8 i_keyNum) { mKeyNum = i_keyNum; }
     void onDungeonItemMap() { onDungeonItem(MAP); }
+    void offDungeonItemMap() { offDungeonItem(MAP); }
     BOOL isDungeonItemMap() { return isDungeonItem(MAP); }
     void onDungeonItemCompass() { onDungeonItem(COMPASS); }
+    void offDungeonItemCompass() { offDungeonItem(COMPASS); }
     BOOL isDungeonItemCompass() { return isDungeonItem(COMPASS); }
     void onDungeonItemBossKey() { onDungeonItem(BOSS_KEY); }
+    void offDungeonItemBossKey() { offDungeonItem(BOSS_KEY); }
     BOOL isDungeonItemBossKey() { return isDungeonItem(BOSS_KEY); }
     void onStageBossEnemy() { onDungeonItem(STAGE_BOSS_ENEMY); }
+    void offStageBossEnemy() { offDungeonItem(STAGE_BOSS_ENEMY); }
     BOOL isStageBossEnemy() { return isDungeonItem(STAGE_BOSS_ENEMY); }
-    BOOL isStageBossEnemy2() { return isDungeonItem(STAGE_BOSS_ENEMY_2); }
     void onStageLife() { onDungeonItem(STAGE_LIFE); }
+    void offStageLife() { offDungeonItem(STAGE_LIFE); }
     BOOL isStageLife() { return isDungeonItem(STAGE_LIFE); }
+    void onStageBossDemo() { onDungeonItem(STAGE_BOSS_DEMO); }
+    void offStageBossDemo() { offDungeonItem(STAGE_BOSS_DEMO); }
+    BOOL isStageBossDemo() { return isDungeonItem(STAGE_BOSS_DEMO); }
 
     /* 0x00 */ u32 mTbox;
     /* 0x04 */ u32 mSwitch[4];
@@ -696,7 +703,25 @@ public:
     dSv_memory_c& getSave(int i_stageNo) { return mMemory[i_stageNo]; }
     void putSave(int i_stageNo, dSv_memory_c i_mem) { mMemory[i_stageNo] = i_mem; }
 
-    const static int STAGE_MAX = 16;
+    enum SaveStageTbl {
+        /* 0x00 */ STAGE_SEA,
+        /* 0x01 */ STAGE_SEA2,
+        /* 0x02 */ STAGE_FF,
+        /* 0x03 */ STAGE_DRC,
+        /* 0x04 */ STAGE_FW,
+        /* 0x05 */ STAGE_TOTG,
+        /* 0x06 */ STAGE_ET,
+        /* 0x07 */ STAGE_WT,
+        /* 0x08 */ STAGE_GT,
+        /* 0x09 */ STAGE_HYRULE,
+        /* 0x0A */ STAGE_SHIP,
+        /* 0x0B */ STAGE_MISC, // Mostly interior rooms but not all
+        /* 0x0C */ STAGE_SUBDUNGEON, // Name based on the debug map select entry サブダンジョン
+        /* 0x0D */ STAGE_SUBDUNGEON_NEW, // Name based on the debug map select entry サブダン新規追加
+        /* 0x0E */ STAGE_BLUE_CHU_JELLY,
+        /* 0x0F */ STAGE_TEST,
+        /* 0x10 */ STAGE_MAX,
+    };
 
     /* 0x000 */ dSv_player_c mPlayer;
     /* 0x380 */ dSv_memory_c mMemory[STAGE_MAX];

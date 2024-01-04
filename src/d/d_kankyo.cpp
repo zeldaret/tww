@@ -392,7 +392,7 @@ void envcolor_init() {
     g_env_light.field_0xc98 = 0;
     g_env_light.mbDayNightTactStop = false;
 
-    if (dStage_stagInfo_GetSTType(dComIfGp_getStage().getStagInfo()) == 3) {
+    if (dStage_stagInfo_GetSTType(dComIfGp_getStage().getStagInfo()) == dStageType_BOSS_e) {
         g_env_light.mpSchejule = dKyd_schejule_boss_getp();
     } else {
         g_env_light.mpSchejule = dKyd_schejule_getp();

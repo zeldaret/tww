@@ -1123,9 +1123,12 @@ void dComIfGs_setGameStartStage() {
     };
 
     static check_data l_checkData[] = {
-        {true, 0x2A08, "", 0, 0},          {true, 0xF80, "sea", 11, 128},
-        {true, 0x801, "MajyuE", 0, 0},     {true, 0x808, "MajyuE", 0, 18},
-        {true, 0x2401, "A_umikz", 0, 204}, {false, 0, "sea", 44, 128},
+        {true, dEvtBit_SHIP_RIDDEN_e, "", 0, 0},
+        {true, 0xF80, "sea", 11, 128},
+        {true, 0x801, "MajyuE", 0, 0},
+        {true, 0x808, "MajyuE", 0, 18},
+        {true, 0x2401, "A_umikz", 0, 204},
+        {false, 0, "sea", 44, 128},
     };
 
     check_data* data_p = l_checkData;
@@ -1155,7 +1158,7 @@ void dComIfGs_setGameStartStage() {
             room_no = dComIfGs_getEventReg(0xC3FF);
             point = dComIfGs_getEventReg(0x85FF);
             dKy_set_nexttime(120.0f);
-        } else if (stage_type == 7) {
+        } else if (stage_type == dStageType_SEA_e) {
             daPy_lk_c* player_p = daPy_getPlayerLinkActorClass();
             point = player_p->mRestartPoint;
 
@@ -1176,12 +1179,15 @@ void dComIfGs_setGameStartStage() {
                 room_no = scls_p->mRoom;
                 point = scls_p->mStart;
             }
-        } else if (stage_type == 1 || stage_type == 6 || stage_type == 3 || stage_type == 8 || save_tbl == 9) {
+        } else if (stage_type == dStageType_DUNGEON_e || stage_type == dStageType_MINIBOSS_e ||
+                   stage_type == dStageType_BOSS_e || stage_type == dStageType_UNKNOWN_8_e ||
+                   save_tbl == dSv_save_c::STAGE_HYRULE)
+        {
             stage_scls_info_class* scls_p = getSceneList(0);
             strcpy(stage_name, scls_p->mStage);
             room_no = scls_p->mRoom;
             point = scls_p->mStart;
-        } else if (save_tbl == 10) {
+        } else if (save_tbl == dSv_save_c::STAGE_SHIP) {
             cXyz ikada_pos;
             dComIfGp_getIkadaShipBeforePos(&ikada_pos);
 
@@ -1189,7 +1195,9 @@ void dComIfGs_setGameStartStage() {
             strcpy(stage_name, scls_p->mStage);
             room_no = scls_p->mRoom;
             point = scls_p->mStart;
-        } else if (save_tbl == 11 || save_tbl == 12 || save_tbl == 13) {
+        } else if (save_tbl == dSv_save_c::STAGE_MISC || save_tbl == dSv_save_c::STAGE_SUBDUNGEON ||
+                   save_tbl == dSv_save_c::STAGE_SUBDUNGEON_NEW)
+        {
             strcpy(stage_name, "sea");
 
             stage_map_info_class* mapInfo = dComIfGp_getStage().getMapInfo();
@@ -1222,14 +1230,14 @@ void dComIfGs_copyPlayerRecollectionData() {
     s32 tbl;
     dSv_player_status_c_c stts;
 
-    if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == 3) {
-        if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == 3)
+    if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_BOSS_e) {
+        if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dSv_save_c::STAGE_DRC)
             tbl = 0;
-        else if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == 4)
+        else if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dSv_save_c::STAGE_FW)
             tbl = 1;
-        else if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == 6)
+        else if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dSv_save_c::STAGE_ET)
             tbl = 2;
-        else if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == 7)
+        else if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dSv_save_c::STAGE_WT)
             tbl = 3;
         else
             return;

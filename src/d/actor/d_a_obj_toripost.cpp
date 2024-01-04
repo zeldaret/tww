@@ -20,8 +20,9 @@
 extern dScnPly_reg_HIO_c g_regHIO;
 
 const char daObjTpost_c::m_arc_name[] = "Toripost";
+
 const daObjTpost_c__letter_data daObjTpost_c::m_letter[] = {
-    {false, 0x1AAF, 0x07, 0xAC03},
+    {false, 0x1AAF, 0x07, dEvtReg_NOTE_TO_MOM_e},
     {false, 0x0CF9, 0x07, 0xB503},
     {false, 0x0CFA, 0xC3, 0x7D03},
     {false, 0x0CFC, 0x04, 0x7B03},
@@ -29,12 +30,13 @@ const daObjTpost_c__letter_data daObjTpost_c::m_letter[] = {
     {false, 0x0CFD, 0x01, 0x7A03},
     {true,  0x0DB6, 0xCB, 0xB203},
     {false, 0x1148, 0x04, 0x8B03},
-    {false, 0x1AAF, 0x07, 0xAC03},
+    {false, 0x1AAF, 0x07, dEvtReg_NOTE_TO_MOM_e},
     {true,  0x0F76, 0x9D, 0xB003},
     {false, 0x19A6, 0x3F, 0xAE03},
     {true,  0x0CFB, 0x04, 0x7C03},
     {true,  0x0F77, 0x9E, 0xAF03}
 };
+
 const dCcD_SrcCyl daObjTpost_c::m_cyl_src = {
     // dCcD_SrcGObjInf
     {
@@ -227,12 +229,12 @@ void daObjTpost_c::cutDispLetterProc(int staffIdx) {
 }
 
 void daObjTpost_c::deliverLetter() {
-    switch(field_0x8F6) {
-        case 0x9A:
+    switch(mPreItemNo) {
+        case MAGYS_LETTER:
             dComIfGs_onEventBit(0x1220);
             break;
-        case 0x99:
-            dLetter_send(0xAC03);
+        case MAGIC_SEED:
+            dLetter_send(dEvtReg_NOTE_TO_MOM_e);
             break;
     }
 }
@@ -334,9 +336,9 @@ int daObjTpost_c::getMsgXY() {
     cXyz pos(g_regHIO.mChild[12].mFloatRegs[0], g_regHIO.mChild[12].mFloatRegs[1], g_regHIO.mChild[12].mFloatRegs[2]);
     cXyz scale(2.0f, 2.0f, 2.0f);
 
-    switch(field_0x8F6) {
-        case 0x99:
-        case 0x9A:
+    switch(mPreItemNo) {
+        case MAGIC_SEED:
+        case MAGYS_LETTER:
             msgId = 0xCE8;
             col.r = g_regHIO.mChild[12].mShortRegs[0] + 0x80;
             col.g = g_regHIO.mChild[12].mShortRegs[1] + 0x80;
@@ -346,8 +348,8 @@ int daObjTpost_c::getMsgXY() {
             dComIfGp_particle_set(0x57, &pos, &shape_angle, &scale, 0xFF, NULL, -1, &col);
             
             break;
-        case 0x98:
-        case 0x9B:
+        case LETTER00:
+        case MO_LETTER:
             setAnm(3, false);
             field_0x8EA = 1;
             msgId = 0xCEA;
@@ -695,7 +697,7 @@ void daObjTpost_c::modeTalk() {
 
 void daObjTpost_c::modeTalkXYInit() {
     setAnm(1, false);
-    field_0x8F6 = dComIfGp_event_getPreItemNo();
+    mPreItemNo = dComIfGp_event_getPreItemNo();
     field_0x8DC = l_HIO.field_0x14;
     field_0x8E0 = l_HIO.field_0x16;
 }
@@ -893,7 +895,7 @@ void daObjTpost_c::createInit() {
         dLetter_autoStock(0x7D03);
     }
 
-    if(dLetter_isDelivery(0xAC03) && dComIfGs_isStageBossEnemy(6)) {
+    if(dLetter_isDelivery(dEvtReg_NOTE_TO_MOM_e) && dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_ET)) {
         dLetter_autoStock(0x7C03);
     }
 

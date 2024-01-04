@@ -67,7 +67,7 @@ const char* dEvent_exception_c::getEventName() {
 
     if (mEventInfoIdx == 207) {
         JUT_ASSERT(0x9b, stage_info);
-        if (dStage_stagInfo_GetSTType(stage_info) == 3)
+        if (dStage_stagInfo_GetSTType(stage_info) == dStageType_BOSS_e)
             return "BS_SHUTTER_START";
     }
 

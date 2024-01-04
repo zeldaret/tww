@@ -242,8 +242,7 @@ void daObjBarrier_c::break_start_wait_proc() {
             case 8:
             case 9:
             case 10:
-                // 0x2C02: Destroyed Hyrule Barrier
-                dComIfGs_onEventBit(0x2C02);
+                dComIfGs_onEventBit(dEvtBit_BARRIER_BREAK_e);
                 mEventID = dComIfGp_evmng_getEventIdx("seal", 0xFF);
                 mBarrierProc = PROC_BREAK_ORDER;
                 break;
@@ -485,7 +484,7 @@ int daObjBarrier_c::_create() {
         mMoya = param_get_moya();
         if (mMoya != 0) {
             mBarrierActive = true;
-        } else if (dComIfGs_isEventBit(0x2C02) == true) {  // 0x2C02: Destroyed Hyrule Barrier
+        } else if (dComIfGs_isEventBit(dEvtBit_BARRIER_BREAK_e) == true) {
             mBarrierActive = false;
         } else {
             mBarrierActive = true;
