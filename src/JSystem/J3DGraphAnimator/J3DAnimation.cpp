@@ -4,7 +4,7 @@
 //
 
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
-#include "dolphin/types.h"
+#include "JSystem/JMath/JMath.h"
 
 /* 802EF5D8-802EF608       .text init__12J3DFrameCtrlFs */
 void J3DFrameCtrl::init(s16 end) {
@@ -207,13 +207,116 @@ void J3DFrameCtrl::update() {
 }
 
 /* 802EFFE4-802F06D8       .text getTransform__19J3DAnmTransformFullCFUsP16J3DTransformInfo */
-void J3DAnmTransformFull::getTransform(u16, J3DTransformInfo*) const {
+void J3DAnmTransformFull::getTransform(u16 idx, J3DTransformInfo* dst) const {
     /* Nonmatching */
+
+    /* Scale */
+    {
+        u16 maxFrame = mAnmTable[idx*3 + 0].mScaleMaxFrame;
+        if (0.0f <= getFrame() && getFrame() < maxFrame)
+            dst->mScale.x = mScaleData[(s32)getFrame() + mAnmTable[idx*3 + 0].mScaleOffset];
+        else if (getFrame() < 0.0f)
+            dst->mScale.x = mScaleData[mAnmTable[idx*3 + 0].mScaleOffset];
+        else
+            dst->mScale.x = mScaleData[maxFrame - 1 + mAnmTable[idx*3 + 0].mScaleOffset];
+    }
+    /* Seems they copy-pasted this block one too many times? */
+    {
+        u16 maxFrame = mAnmTable[idx*3 + 0].mScaleMaxFrame;
+        if (0.0f <= getFrame() && getFrame() < maxFrame)
+            dst->mScale.x = mScaleData[(s32)getFrame() + mAnmTable[idx*3 + 0].mScaleOffset];
+        else if (getFrame() < 0.0f)
+            dst->mScale.x = mScaleData[mAnmTable[idx*3 + 0].mScaleOffset];
+        else
+            dst->mScale.x = mScaleData[maxFrame - 1 + mAnmTable[idx*3 + 0].mScaleOffset];
+    }
+    {
+        u16 maxFrame = mAnmTable[idx*3 + 1].mScaleMaxFrame;
+        if (0.0f <= getFrame() && getFrame() < maxFrame)
+            dst->mScale.y = mScaleData[(s32)getFrame() + mAnmTable[idx*3 + 1].mScaleOffset];
+        else if (getFrame() < 0.0f)
+            dst->mScale.y = mScaleData[mAnmTable[idx*3 + 1].mScaleOffset];
+        else
+            dst->mScale.y = mScaleData[maxFrame - 1 + mAnmTable[idx*3 + 1].mScaleOffset];
+    }
+    {
+        u16 maxFrame = mAnmTable[idx*3 + 2].mScaleMaxFrame;
+        if (0.0f <= getFrame() && getFrame() < maxFrame)
+            dst->mScale.z = mScaleData[(s32)getFrame() + mAnmTable[idx*3 + 2].mScaleOffset];
+        else if (getFrame() < 0.0f)
+            dst->mScale.z = mScaleData[mAnmTable[idx*3 + 2].mScaleOffset];
+        else
+            dst->mScale.z = mScaleData[maxFrame - 1 + mAnmTable[idx*3 + 2].mScaleOffset];
+    }
+
+    /* Rotation */
+    {
+        u16 maxFrame = mAnmTable[idx*3 + 0].mRotationMaxFrame;
+        if (0.0f <= getFrame() && getFrame() < maxFrame)
+            dst->mRotation.x = mRotData[(s32)getFrame() + mAnmTable[idx*3 + 0].mRotationOffset];
+        else if (getFrame() < 0.0f)
+            dst->mRotation.x = mRotData[mAnmTable[idx*3 + 0].mRotationOffset];
+        else
+            dst->mRotation.x = mRotData[maxFrame - 1 + mAnmTable[idx*3 + 0].mRotationOffset];
+    }
+    {
+        u16 maxFrame = mAnmTable[idx*3 + 1].mRotationMaxFrame;
+        if (0.0f <= getFrame() && getFrame() < maxFrame)
+            dst->mRotation.y = mRotData[(s32)getFrame() + mAnmTable[idx*3 + 1].mRotationOffset];
+        else if (getFrame() < 0.0f)
+            dst->mRotation.y = mRotData[mAnmTable[idx*3 + 1].mRotationOffset];
+        else
+            dst->mRotation.y = mRotData[maxFrame - 1 + mAnmTable[idx*3 + 1].mRotationOffset];
+    }
+    {
+        u16 maxFrame = mAnmTable[idx*3 + 2].mRotationMaxFrame;
+        if (0.0f <= getFrame() && getFrame() < maxFrame)
+            dst->mRotation.z = mRotData[(s32)getFrame() + mAnmTable[idx*3 + 2].mRotationOffset];
+        else if (getFrame() < 0.0f)
+            dst->mRotation.z = mRotData[mAnmTable[idx*3 + 2].mRotationOffset];
+        else
+            dst->mRotation.z = mRotData[maxFrame - 1 + mAnmTable[idx*3 + 2].mRotationOffset];
+    }
+
+    /* Translation */
+    {
+        u16 maxFrame = mAnmTable[idx*3 + 0].mTranslateMaxFrame;
+        if (0.0f <= getFrame() && getFrame() < maxFrame)
+            dst->mTranslate.x = mTransData[(s32)getFrame() + mAnmTable[idx*3 + 0].mTranslateOffset];
+        else if (getFrame() < 0.0f)
+            dst->mTranslate.x = mTransData[mAnmTable[idx*3 + 0].mTranslateOffset];
+        else
+            dst->mTranslate.x = mTransData[maxFrame - 1 + mAnmTable[idx*3 + 0].mTranslateOffset];
+    }
+    {
+        u16 maxFrame = mAnmTable[idx*3 + 1].mTranslateMaxFrame;
+        if (0.0f <= getFrame() && getFrame() < maxFrame)
+            dst->mTranslate.y = mTransData[(s32)getFrame() + mAnmTable[idx*3 + 1].mTranslateOffset];
+        else if (getFrame() < 0.0f)
+            dst->mTranslate.y = mTransData[mAnmTable[idx*3 + 1].mTranslateOffset];
+        else
+            dst->mTranslate.y = mTransData[maxFrame - 1 + mAnmTable[idx*3 + 1].mTranslateOffset];
+    }
+    {
+        u16 maxFrame = mAnmTable[idx*3 + 2].mTranslateMaxFrame;
+        if (0.0f <= getFrame() && getFrame() < maxFrame)
+            dst->mTranslate.z = mTransData[(s32)getFrame() + mAnmTable[idx*3 + 2].mTranslateOffset];
+        else if (getFrame() < 0.0f)
+            dst->mTranslate.z = mTransData[mAnmTable[idx*3 + 2].mTranslateOffset];
+        else
+            dst->mTranslate.z = mTransData[maxFrame - 1 + mAnmTable[idx*3 + 2].mTranslateOffset];
+    }
 }
 
 /* 802F06D8-802F072C       .text J3DHermiteInterpolationS__FfPsPsPsPsPsPs */
 f32 J3DHermiteInterpolationS(f32 t, s16* time0, s16* value0, s16* tangent0, s16* time1, s16* value1, s16* tangent1) {
     /* Nonmatching */
+    f32 v0 = *(f32*)value0;
+    f32 timeRange = (*(f32*)time1 - *(f32*)time0);
+    f32 kt = (t - *(f32*)time0) / timeRange;
+    f32 t1 = (-timeRange * *(f32*)tangent0 - (*(f32*)value1 - v0));
+    f32 t2 = kt * kt * ((*(f32*)tangent1 * timeRange + v0) - *(f32*)value1 - t1);
+    return (t1 * kt * kt + (timeRange * *(f32*)tangent0 + t2) * kt + v0) - t2;
 }
 
 /* 802F072C-802F0954       .text J3DGetKeyFrameInterpolationS__FfP18J3DAnmKeyTableBasePs */
@@ -261,14 +364,145 @@ f32 J3DGetKeyFrameInterpolationS(f32 frame, J3DAnmKeyTableBase* table, s16* data
     }
 }
 
+template <typename T>
+f32 J3DGetKeyFrameInterpolation(f32 frame, J3DAnmKeyTableBase* table, T* data) {
+    if (table->mType == 0) {
+        if (frame < data[0]) {
+            return data[1];
+        } else if (data[3 * (table->mMaxFrame - 1)] <= frame) {
+            return data[3 * (table->mMaxFrame - 1) + 1];
+        } else {
+            // bisect
+            int num = table->mMaxFrame;
+            while (num > 1) {
+                int mid = num / 2;
+                if (frame >= data[3 * mid]) {
+                    data += 3 * mid;
+                    num -= mid;
+                } else {
+                    num = mid;
+                }
+            }
+
+            return JMAHermiteInterpolation(frame, data[0], data[1], data[2], data[3], data[4], data[5]);
+        }
+    } else {
+        if (frame < data[0]) {
+            return data[1];
+        } else if (data[4 * (table->mMaxFrame - 1)] <= frame) {
+            return data[4 * (table->mMaxFrame - 1) + 1];
+        } else {
+            // bisect
+            int num = table->mMaxFrame;
+            while (num > 1) {
+                int mid = num / 2;
+                if (frame >= data[4 * mid]) {
+                    data += 4 * mid;
+                    num -= mid;
+                } else {
+                    num = mid;
+                }
+            }
+
+            return JMAHermiteInterpolation(frame, data[0], data[1], data[3], data[4], data[5], data[6]);
+        }
+    }
+}
+
 /* 802F0954-802F0E20       .text calcTransform__18J3DAnmTransformKeyCFfUsP16J3DTransformInfo */
-void J3DAnmTransformKey::calcTransform(f32, u16, J3DTransformInfo*) const {
-    /* Nonmatching */
+void J3DAnmTransformKey::calcTransform(f32 frame, u16 idx, J3DTransformInfo* dst) const {
+    /* Scale */
+    switch (mAnmTable[idx*3 + 0].mScale.mMaxFrame) {
+    case 0:  dst->mScale.x = 1.0f; break;
+    case 1:  dst->mScale.x = mScaleData[mAnmTable[idx*3 + 0].mScale.mOffset]; break;
+    default: dst->mScale.x = J3DGetKeyFrameInterpolation<f32>(frame, &mAnmTable[idx*3 + 0].mScale, &mScaleData[mAnmTable[idx*3 + 0].mScale.mOffset]); break;
+    }
+
+    switch (mAnmTable[idx*3 + 1].mScale.mMaxFrame) {
+    case 0:  dst->mScale.y = 1.0f; break;
+    case 1:  dst->mScale.y = mScaleData[mAnmTable[idx*3 + 1].mScale.mOffset]; break;
+    default: dst->mScale.y = J3DGetKeyFrameInterpolation<f32>(frame, &mAnmTable[idx*3 + 1].mScale, &mScaleData[mAnmTable[idx*3 + 1].mScale.mOffset]); break;
+    }
+
+    switch (mAnmTable[idx*3 + 2].mScale.mMaxFrame) {
+    case 0:  dst->mScale.z = 1.0f; break;
+    case 1:  dst->mScale.z = mScaleData[mAnmTable[idx*3 + 2].mScale.mOffset]; break;
+    default: dst->mScale.z = J3DGetKeyFrameInterpolation<f32>(frame, &mAnmTable[idx*3 + 2].mScale, &mScaleData[mAnmTable[idx*3 + 2].mScale.mOffset]); break;
+    }
+
+    /* Rotation */
+    switch (mAnmTable[idx*3 + 0].mRotation.mMaxFrame) {
+    case 0:  dst->mRotation.x = 0; break;
+    case 1:  dst->mRotation.x = mRotData[mAnmTable[idx*3 + 0].mRotation.mOffset] << mDecShift; break;
+    default: dst->mRotation.x = (s32)(J3DGetKeyFrameInterpolationS(frame, &mAnmTable[idx*3 + 0].mRotation, &mRotData[mAnmTable[idx*3 + 0].mRotation.mOffset])) << mDecShift; break;
+    }
+
+    switch (mAnmTable[idx*3 + 1].mRotation.mMaxFrame) {
+    case 0:  dst->mRotation.y = 0; break;
+    case 1:  dst->mRotation.y = mRotData[mAnmTable[idx*3 + 1].mRotation.mOffset] << mDecShift; break;
+    default: dst->mRotation.y = (s32)(J3DGetKeyFrameInterpolationS(frame, &mAnmTable[idx*3 + 1].mRotation, &mRotData[mAnmTable[idx*3 + 1].mRotation.mOffset])) << mDecShift; break;
+    }
+
+    switch (mAnmTable[idx*3 + 2].mRotation.mMaxFrame) {
+    case 0:  dst->mRotation.z = 0; break;
+    case 1:  dst->mRotation.z = mRotData[mAnmTable[idx*3 + 2].mRotation.mOffset] << mDecShift; break;
+    default: dst->mRotation.z = (s32)(J3DGetKeyFrameInterpolationS(frame, &mAnmTable[idx*3 + 2].mRotation, &mRotData[mAnmTable[idx*3 + 2].mRotation.mOffset])) << mDecShift; break;
+    }
+
+    /* Translation */
+    switch (mAnmTable[idx*3 + 0].mTranslate.mMaxFrame) {
+    case 0:  dst->mTranslate.x = 0.0f; break;
+    case 1:  dst->mTranslate.x = mTransData[mAnmTable[idx*3 + 0].mTranslate.mOffset]; break;
+    default: dst->mTranslate.x = J3DGetKeyFrameInterpolation<f32>(frame, &mAnmTable[idx*3 + 0].mTranslate, &mTransData[mAnmTable[idx*3 + 0].mTranslate.mOffset]); break;
+    }
+
+    switch (mAnmTable[idx*3 + 1].mTranslate.mMaxFrame) {
+    case 0:  dst->mTranslate.y = 0.0f; break;
+    case 1:  dst->mTranslate.y = mTransData[mAnmTable[idx*3 + 1].mTranslate.mOffset]; break;
+    default: dst->mTranslate.y = J3DGetKeyFrameInterpolation<f32>(frame, &mAnmTable[idx*3 + 1].mTranslate, &mTransData[mAnmTable[idx*3 + 1].mTranslate.mOffset]); break;
+    }
+
+    switch (mAnmTable[idx*3 + 2].mTranslate.mMaxFrame) {
+    case 0:  dst->mTranslate.z = 0.0f; break;
+    case 1:  dst->mTranslate.z = mTransData[mAnmTable[idx*3 + 2].mTranslate.mOffset]; break;
+    default: dst->mTranslate.z = J3DGetKeyFrameInterpolation<f32>(frame, &mAnmTable[idx*3 + 2].mTranslate, &mTransData[mAnmTable[idx*3 + 2].mTranslate.mOffset]); break;
+    }
 }
 
 /* 802F0E20-802F10D4       .text calcTransform__19J3DAnmTextureSRTKeyCFfUsP17J3DTextureSRTInfo */
-void J3DAnmTextureSRTKey::calcTransform(f32, u16, J3DTextureSRTInfo*) const {
-    /* Nonmatching */
+void J3DAnmTextureSRTKey::calcTransform(f32 frame, u16 idx, J3DTextureSRTInfo* dst) const {
+    /* Scale */
+    switch (mAnmTable[idx*3 + 0].mScale.mMaxFrame) {
+    case 0:  dst->mScaleX = 1.0f; break;
+    case 1:  dst->mScaleX = mScaleData[mAnmTable[idx*3 + 0].mScale.mOffset]; break;
+    default: dst->mScaleX = J3DGetKeyFrameInterpolation<f32>(frame, &mAnmTable[idx*3 + 0].mScale, &mScaleData[mAnmTable[idx*3 + 0].mScale.mOffset]); break;
+    }
+
+    switch (mAnmTable[idx*3 + 1].mScale.mMaxFrame) {
+    case 0:  dst->mScaleY = 1.0f; break;
+    case 1:  dst->mScaleY = mScaleData[mAnmTable[idx*3 + 1].mScale.mOffset]; break;
+    default: dst->mScaleY = J3DGetKeyFrameInterpolation<f32>(frame, &mAnmTable[idx*3 + 1].mScale, &mScaleData[mAnmTable[idx*3 + 1].mScale.mOffset]); break;
+    }
+
+    /* Rotation */
+    switch (mAnmTable[idx*3 + 2].mRotation.mMaxFrame) {
+    case 0:  dst->mRotation = 0; break;
+    case 1:  dst->mRotation = mRotData[mAnmTable[idx*3 + 2].mRotation.mOffset] << mDecShift; break;
+    default: dst->mRotation = (s32)(J3DGetKeyFrameInterpolationS(frame, &mAnmTable[idx*3 + 2].mRotation, &mRotData[mAnmTable[idx*3 + 2].mRotation.mOffset])) << mDecShift; break;
+    }
+
+    /* Translation */
+    switch (mAnmTable[idx*3 + 0].mTranslate.mMaxFrame) {
+    case 0:  dst->mTranslationX = 0.0f; break;
+    case 1:  dst->mTranslationX = mTransData[mAnmTable[idx*3 + 0].mTranslate.mOffset]; break;
+    default: dst->mTranslationX = J3DGetKeyFrameInterpolation<f32>(frame, &mAnmTable[idx*3 + 0].mTranslate, &mTransData[mAnmTable[idx*3 + 0].mTranslate.mOffset]); break;
+    }
+
+    switch (mAnmTable[idx*3 + 1].mTranslate.mMaxFrame) {
+    case 0:  dst->mTranslationY = 0.0f; break;
+    case 1:  dst->mTranslationY = mTransData[mAnmTable[idx*3 + 1].mTranslate.mOffset]; break;
+    default: dst->mTranslationY = J3DGetKeyFrameInterpolation<f32>(frame, &mAnmTable[idx*3 + 1].mTranslate, &mTransData[mAnmTable[idx*3 + 1].mTranslate.mOffset]); break;
+    }
 }
 
 /* 802F10D4-802F1188       .text getWeight__17J3DAnmClusterFullCFUs */
@@ -280,10 +514,6 @@ f32 J3DAnmClusterFull::getWeight(u16 idx) const {
         return mWeight[getAnmTable()[idx].mOffset];
     else
         return mWeight[maxFrame - 1 + getAnmTable()[idx].mOffset];
-}
-
-template <typename T>
-f32 J3DGetKeyFrameInterpolation(f32, J3DAnmKeyTableBase*, T*) {
 }
 
 /* 802F1188-802F120C       .text getWeight__16J3DAnmClusterKeyCFUs */
