@@ -33,7 +33,7 @@ void* J3DClusterLoader_v15::load(const void* i_data) {
     mpDeformData->clear();
     
     const JSystemFileHeader* fileHeader = (JSystemFileHeader*)i_data;
-    const JSystemBlockHeader* block = &fileHeader->mFirst;
+    const JSystemBlockHeader* block = &fileHeader->mFirstBlock;
     for (int i = 0; i < fileHeader->mBlockNum; i++) {
         switch (block->mType) {
         case 'CLS1':

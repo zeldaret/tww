@@ -1,28 +1,9 @@
 #ifndef J3DCLUSTERLOADER_H
 #define J3DCLUSTERLOADER_H
 
-#include "global.h"
+#include "JSystem/JFileHeader.h"
 
 class J3DDeformData;
-
-// TODO: move these into a new header
-struct JSystemBlockHeader { // actual name unknown
-    /* 0x0 */ u32 mType;
-    /* 0x4 */ u32 mNextOffset;
-
-    const JSystemBlockHeader* getNext() const {
-        return reinterpret_cast<const JSystemBlockHeader*>(reinterpret_cast<const u8*>(this) + mNextOffset);
-    }
-};  // Size = 0x8
-
-struct JSystemFileHeader { // actual name unknown
-    /* 0x00 */ u32 mMagic;
-    /* 0x04 */ u32 mType;
-    /* 0x08 */ u32 mFileSize;
-    /* 0x0C */ u32 mBlockNum;
-    /* 0x10 */ u8 _10[0x20 - 0x10];
-    /* 0x20 */ JSystemBlockHeader mFirst;
-};
 
 class J3DClusterBlock : public JSystemBlockHeader {
 private:

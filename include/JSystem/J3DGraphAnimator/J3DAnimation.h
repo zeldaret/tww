@@ -3,7 +3,7 @@
 
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
 #include "JSystem/JUtility/JUTNameTab.h"
-#include "global.h"
+#include "JSystem/JFileHeader.h"
 
 typedef struct _GXColor GXColor;
 typedef struct _GXColorS10 GXColorS10;
@@ -88,28 +88,8 @@ struct J3DAnmClusterKeyTable {
     /* 0x00 */ J3DAnmKeyTableBase mWeightTable;
 };
 
-// same as J3DModelBlock?
-struct J3DAnmDataBlockHeader {  // actual name unknown
-    /* 0x0 */ u32 mType;
-    /* 0x4 */ u32 mNextOffset;
-
-    const J3DAnmDataBlockHeader* getNext() const {
-        return reinterpret_cast<const J3DAnmDataBlockHeader*>(reinterpret_cast<const u8*>(this) + mNextOffset);
-    }
-};  // Size = 0x8
-
-// same as J3DModelFileData?
-struct J3DAnmDataHeader {  // actual name unknown
-    /* 0x00 */ u32 mMagic;
-    /* 0x04 */ u32 mType;
-    /* 0x08 */ u8 _8[4];
-    /* 0x0C */ u32 mCount;
-    /* 0x10 */ u8 _10[0x20 - 0x10];
-    /* 0x20 */ J3DAnmDataBlockHeader mFirst;
-};
-
 struct J3DAnmVtxColorFullData {
-    /* 0x00 */ J3DAnmDataBlockHeader mHeader;
+    /* 0x00 */ JSystemBlockHeader mHeader;
     /* 0x08 */ u8 field_0x8;
     /* 0x09 */ u8 field_0x9;  // padding?
     /* 0x0A */ s16 mFrameMax;
@@ -128,7 +108,7 @@ struct J3DAnmVtxColorFullData {
 STATIC_ASSERT(sizeof(J3DAnmVtxColorFullData) == 0x40);
 
 struct J3DAnmVisibilityFullData {
-    /* 0x00 */ J3DAnmDataBlockHeader mHeader;
+    /* 0x00 */ JSystemBlockHeader mHeader;
     /* 0x08 */ u8 field_0x8;
     /* 0x09 */ u8 field_0x9;  // padding?
     /* 0x0A */ s16 mFrameMax;
@@ -141,7 +121,7 @@ struct J3DAnmVisibilityFullData {
 STATIC_ASSERT(sizeof(J3DAnmVisibilityFullData) == 0x18);
 
 struct J3DAnmTransformFullData {
-    /* 0x00 */ J3DAnmDataBlockHeader mHeader;
+    /* 0x00 */ JSystemBlockHeader mHeader;
     /* 0x08 */ u8 field_0x8;
     /* 0x09 */ u8 field_0x9;
     /* 0x0A */ s16 mFrameMax;
@@ -156,7 +136,7 @@ struct J3DAnmTransformFullData {
 STATIC_ASSERT(sizeof(J3DAnmTransformFullData) == 0x24);
 
 struct J3DAnmColorKeyData {
-    /* 0x00 */ J3DAnmDataBlockHeader mHeader;
+    /* 0x00 */ JSystemBlockHeader mHeader;
     /* 0x08 */ u8 field_0x8;
     /* 0x09 */ u8 field_0x9[3];
     /* 0x0C */ s16 mFrameMax;
@@ -177,7 +157,7 @@ struct J3DAnmColorKeyData {
 STATIC_ASSERT(sizeof(J3DAnmColorKeyData) == 0x34);
 
 struct J3DAnmTextureSRTKeyData {
-    /* 0x00 */ J3DAnmDataBlockHeader mHeader;
+    /* 0x00 */ JSystemBlockHeader mHeader;
     /* 0x08 */ u8 field_0x8;
     /* 0x09 */ u8 field_0x9;
     /* 0x0A */ s16 field_0xa;
@@ -211,7 +191,7 @@ struct J3DAnmTextureSRTKeyData {
 STATIC_ASSERT(sizeof(J3DAnmTextureSRTKeyData) == 0x60);
 
 struct J3DAnmVtxColorKeyData {
-    /* 0x00 */ J3DAnmDataBlockHeader mHeader;
+    /* 0x00 */ JSystemBlockHeader mHeader;
     /* 0x08 */ u8 field_0x8;
     /* 0x09 */ u8 field_0x9;
     /* 0x0A */ s16 mFrameMax;
@@ -229,7 +209,7 @@ struct J3DAnmVtxColorKeyData {
 STATIC_ASSERT(sizeof(J3DAnmVtxColorKeyData) == 0x40);
 
 struct J3DAnmTexPatternFullData {
-    /* 0x00 */ J3DAnmDataBlockHeader mHeader;
+    /* 0x00 */ JSystemBlockHeader mHeader;
     /* 0x08 */ u8 field_0x8;
     /* 0x09 */ u8 field_0x9;
     /* 0x0A */ s16 mFrameMax;
@@ -244,7 +224,7 @@ struct J3DAnmTexPatternFullData {
 STATIC_ASSERT(sizeof(J3DAnmTexPatternFullData) == 0x20);
 
 struct J3DAnmTevRegKeyData {
-    /* 0x00 */ J3DAnmDataBlockHeader mHeader;
+    /* 0x00 */ JSystemBlockHeader mHeader;
     /* 0x08 */ u8 field_0x8;
     /* 0x09 */ u8 field_0x9;  // maybe padding
     /* 0x0A */ s16 mFrameMax;
@@ -277,7 +257,7 @@ struct J3DAnmTevRegKeyData {
 STATIC_ASSERT(sizeof(J3DAnmTevRegKeyData) == 0x58);
 
 struct J3DAnmColorFullData { /* PlaceHolder Structure */
-    /* 0x00 */ J3DAnmDataBlockHeader mHeader;
+    /* 0x00 */ JSystemBlockHeader mHeader;
     /* 0x08 */ u8 field_0x8;
     /* 0x09 */ u8 field_0x9[3];
     /* 0x0C */ s16 mFrameMax;
@@ -295,7 +275,7 @@ struct J3DAnmColorFullData { /* PlaceHolder Structure */
 STATIC_ASSERT(sizeof(J3DAnmColorFullData) == 0x34);
 
 struct J3DAnmClusterFullData {
-    /* 0x00 */ J3DAnmDataBlockHeader mHeader;
+    /* 0x00 */ JSystemBlockHeader mHeader;
     /* 0x08 */ u8 field_0x8;
     /* 0x0A */ s16 mFrameMax;
     /* 0x0C */ s32 field_0xc;
@@ -304,7 +284,7 @@ struct J3DAnmClusterFullData {
 };
 
 struct J3DAnmTransformKeyData {
-    /* 0x00 */ J3DAnmDataBlockHeader mHeader;
+    /* 0x00 */ JSystemBlockHeader mHeader;
     /* 0x08 */ u8 field_0x8;
     /* 0x09 */ u8 field_0x9;
     /* 0x0A */ s16 mFrameMax;
@@ -317,7 +297,7 @@ struct J3DAnmTransformKeyData {
 };
 
 struct J3DAnmClusterKeyData {
-    /* 0x00 */ J3DAnmDataBlockHeader mHeader;
+    /* 0x00 */ JSystemBlockHeader mHeader;
     /* 0x08 */ u8 field_0x8;
     /* 0x0A */ s16 mFrameMax;
     /* 0x0C */ s32 field_0xc;

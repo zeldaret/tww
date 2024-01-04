@@ -13,10 +13,10 @@
 
 /* 802FD828-802FD868       .text countMaterialNum__14J3DModelLoaderFPCv */
 u16 J3DModelLoader::countMaterialNum(const void* i_data) {
-    const J3DModelFileData* header = (const J3DModelFileData*)i_data;
-    const J3DModelBlock* block = &header->mBlocks[0];
+    const JSystemFileHeader* header = (const JSystemFileHeader*)i_data;
+    const JSystemBlockHeader* block = &header->mFirstBlock;
     for (int i = 0; i < header->mBlockNum; block = block->getNext(), i++) {
-        if (block->mBlockType == 'MAT3') {
+        if (block->mType == 'MAT3') {
             return ((const J3DMaterialBlock*)block)->mMaterialNum;
         }
     }
@@ -27,13 +27,13 @@ u16 J3DModelLoader::countMaterialNum(const void* i_data) {
 u32 J3DModelLoader::calcLoadSize(const void* i_data, u32 i_flags) {
     u32 flags;
     u32 size = 0;
-    const J3DModelFileData* header = (const J3DModelFileData*)i_data;
-    const J3DModelBlock* block = &header->mBlocks[0];
+    const JSystemFileHeader* header = (const JSystemFileHeader*)i_data;
+    const JSystemBlockHeader* block = &header->mFirstBlock;
     u32 i = 0;
     flags = (u32)i_flags;
     size += sizeof(J3DModelData);
     for (; i < header->mBlockNum; i++) {
-        switch (block->mBlockType) {
+        switch (block->mType) {
         case 'INF1':
             size += calcSizeInformation((J3DModelInfoBlock*)block, flags);
             break;
@@ -69,13 +69,13 @@ u32 J3DModelLoader::calcLoadSize(const void* i_data, u32 i_flags) {
 /* 802FDA10-802FDB0C       .text calcLoadMaterialTableSize__14J3DModelLoaderFPCv */
 u32 J3DModelLoader::calcLoadMaterialTableSize(const void* i_data) {
     u32 size = 0;
-    const J3DModelFileData* header = (const J3DModelFileData*)i_data;
-    const J3DModelBlock* block = &header->mBlocks[0];
+    const JSystemFileHeader* header = (const JSystemFileHeader*)i_data;
+    const JSystemBlockHeader* block = &header->mFirstBlock;
     bool hasTextureTable = false;
     u32 i = 0;
     size += sizeof(J3DMaterialTable);
     for (; i < header->mBlockNum; i++) {
-        switch (block->mBlockType) {
+        switch (block->mType) {
         case 'MAT2':
             break;
         case 'MAT3':
@@ -103,12 +103,12 @@ u32 J3DModelLoader::calcLoadBinaryDisplayListSize(const void* i_data, u32 i_flag
     /* Nonmatching - regalloc */
     u32 i;
     u32 size = 0;
-    const J3DModelFileData* header = (const J3DModelFileData*)i_data;
-    const J3DModelBlock* block = &header->mBlocks[0];
+    const JSystemFileHeader* header = (const JSystemFileHeader*)i_data;
+    const JSystemBlockHeader* block = &header->mFirstBlock;
     i = 0;
     size += sizeof(J3DModelData);
     for (; i < header->mBlockNum; i++) {
-        switch (block->mBlockType) {
+        switch (block->mType) {
         case 'INF1':
             size += calcSizeInformation((const J3DModelInfoBlock*)block, i_flags);
             break;
