@@ -18,7 +18,7 @@ J3DModelData* J3DModelLoaderDataBase::load(const void* i_data, u32 i_flags) {
     if (i_data == NULL) {
         return NULL;
     }
-    const JSystemFileHeader* fileHeader = (const JSystemFileHeader*)i_data;
+    const JUTDataFileHeader* fileHeader = (const JUTDataFileHeader*)i_data;
     if (fileHeader->mMagic == 'J3D1' && fileHeader->mType == 'bmd1') {
         return NULL;
     }
@@ -38,7 +38,7 @@ J3DMaterialTable* J3DModelLoaderDataBase::loadMaterialTable(const void* i_data) 
     if (!i_data) {
         return NULL;
     }
-    const JSystemFileHeader* fileHeader = (const JSystemFileHeader*)i_data;
+    const JUTDataFileHeader* fileHeader = (const JUTDataFileHeader*)i_data;
     if (fileHeader->mMagic == 'J3D2' && fileHeader->mType == 'bmt3') {
         J3DModelLoader_v26 loader;
         return loader.loadMaterialTable(i_data);
@@ -51,7 +51,7 @@ J3DModelData* J3DModelLoaderDataBase::loadBinaryDisplayList(const void* i_data, 
     if (!i_data) {
         return NULL;
     }
-    const JSystemFileHeader* fileHeader = (const JSystemFileHeader*)i_data;
+    const JUTDataFileHeader* fileHeader = (const JUTDataFileHeader*)i_data;
     if (fileHeader->mMagic == 'J3D2' && (fileHeader->mType == 'bdl3' || fileHeader->mType == 'bdl4')) {
         J3DModelLoader_v26 loader;
         return loader.loadBinaryDisplayList(i_data, i_flags);
@@ -67,8 +67,8 @@ J3DModelData* J3DModelLoader::load(const void* i_data, u32 i_flags) {
     mpModelData->mpRawData = i_data;
     mpModelData->setModelDataType(0);
     mpMaterialTable = &mpModelData->mMaterialTable;
-    const JSystemFileHeader* data = (JSystemFileHeader*)i_data;
-    const JSystemBlockHeader* block = &data->mFirstBlock;
+    const JUTDataFileHeader* data = (JUTDataFileHeader*)i_data;
+    const JUTDataBlockHeader* block = &data->mFirstBlock;
     for (u32 block_no = 0; block_no < data->mBlockNum; block_no++) {
         switch (block->mType) {
             case 'INF1':
@@ -120,8 +120,8 @@ J3DModelData* J3DModelLoader::load(const void* i_data, u32 i_flags) {
 J3DMaterialTable* J3DModelLoader::loadMaterialTable(const void* i_data) {
     mpMaterialTable = new J3DMaterialTable();
     mpMaterialTable->clear();
-    const JSystemFileHeader* data = (JSystemFileHeader*)i_data;
-    const JSystemBlockHeader* block = &data->mFirstBlock;
+    const JUTDataFileHeader* data = (JUTDataFileHeader*)i_data;
+    const JUTDataBlockHeader* block = &data->mFirstBlock;
     for (u32 block_no = 0; block_no < data->mBlockNum; block_no++) {
         switch (block->mType) {
             case 'MAT3':
@@ -152,8 +152,8 @@ J3DModelData* J3DModelLoader::loadBinaryDisplayList(const void* i_data, u32 i_fl
     mpModelData->mpRawData = i_data;
     mpModelData->setModelDataType(1);
     mpMaterialTable = &mpModelData->mMaterialTable;
-    const JSystemFileHeader* data = (JSystemFileHeader*)i_data;
-    const JSystemBlockHeader* block = &data->mFirstBlock;
+    const JUTDataFileHeader* data = (JUTDataFileHeader*)i_data;
+    const JUTDataBlockHeader* block = &data->mFirstBlock;
     for (u32 block_no = 0; block_no < data->mBlockNum; block_no++) {
         switch (block->mType) {
             case 'INF1':

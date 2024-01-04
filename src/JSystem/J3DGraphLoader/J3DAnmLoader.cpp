@@ -13,7 +13,7 @@ J3DAnmBase* J3DAnmLoaderDataBase::load(const void* i_data) {
     if (!i_data) {
         return NULL;
     }
-    const JSystemFileHeader* header = (const JSystemFileHeader*)i_data;
+    const JUTDataFileHeader* header = (const JUTDataFileHeader*)i_data;
     if (header->mMagic == 'J3D1') {
         switch (header->mType) {
         case 'bck1': {
@@ -86,7 +86,7 @@ J3DAnmBase* J3DAnmLoaderDataBase::load(const void* i_data) {
 
 /* 802FF6C8-802FF9EC       .text setResource__20J3DAnmLoaderDataBaseFP10J3DAnmBasePCv */
 void J3DAnmLoaderDataBase::setResource(J3DAnmBase* param_1, const void* param_2) {
-    const JSystemFileHeader* header = (const JSystemFileHeader*)param_2;
+    const JUTDataFileHeader* header = (const JUTDataFileHeader*)param_2;
     if (!header) {
         return;
     }
@@ -177,8 +177,8 @@ J3DAnmKeyLoader_v15::~J3DAnmKeyLoader_v15() {}
 
 /* 802FFADC-802FFC28       .text load__20J3DAnmFullLoader_v15FPCv */
 J3DAnmBase* J3DAnmFullLoader_v15::load(const void* param_1) {
-    const JSystemFileHeader* header = (const JSystemFileHeader*)param_1;
-    const JSystemBlockHeader* block = &header->mFirstBlock;
+    const JUTDataFileHeader* header = (const JUTDataFileHeader*)param_1;
+    const JUTDataBlockHeader* block = &header->mFirstBlock;
     for (int i = 0; i < header->mBlockNum; i++) {
         switch (block->mType) {
         case 'ANF1':
@@ -210,8 +210,8 @@ J3DAnmBase* J3DAnmFullLoader_v15::load(const void* param_1) {
 
 /* 802FFC28-802FFDD4       .text setResource__20J3DAnmFullLoader_v15FP10J3DAnmBasePCv */
 void J3DAnmFullLoader_v15::setResource(J3DAnmBase* param_1, const void* param_2) {
-    const JSystemFileHeader* header = (const JSystemFileHeader*)param_2;
-    const JSystemBlockHeader* block = &header->mFirstBlock;
+    const JUTDataFileHeader* header = (const JUTDataFileHeader*)param_2;
+    const JUTDataBlockHeader* block = &header->mFirstBlock;
     for (int i = 0; i < header->mBlockNum; i++) {
         switch (block->mType) {
         case 'ANF1':
@@ -369,8 +369,8 @@ void J3DAnmFullLoader_v15::setAnmVtxColor(J3DAnmVtxColorFull* dst, const J3DAnmV
 
 /* 80300318-80300464       .text load__19J3DAnmKeyLoader_v15FPCv */
 J3DAnmBase* J3DAnmKeyLoader_v15::load(const void* param_1) {
-    const JSystemFileHeader* header = (const JSystemFileHeader*)param_1;
-    const JSystemBlockHeader* block = &header->mFirstBlock;
+    const JUTDataFileHeader* header = (const JUTDataFileHeader*)param_1;
+    const JUTDataBlockHeader* block = &header->mFirstBlock;
     for (int i = 0; i < header->mBlockNum; i++) {
         switch (block->mType) {
         case 'ANK1':
@@ -402,8 +402,8 @@ J3DAnmBase* J3DAnmKeyLoader_v15::load(const void* param_1) {
 
 /* 80300464-80300610       .text setResource__19J3DAnmKeyLoader_v15FP10J3DAnmBasePCv */
 void J3DAnmKeyLoader_v15::setResource(J3DAnmBase* param_1, const void* param_2) {
-    const JSystemFileHeader* header = (const JSystemFileHeader*)param_2;
-    const JSystemBlockHeader* block = &header->mFirstBlock;
+    const JUTDataFileHeader* header = (const JUTDataFileHeader*)param_2;
+    const JUTDataBlockHeader* block = &header->mFirstBlock;
     for (int i = 0; i < header->mBlockNum; i++) {
         switch (block->mType) {
         case 'ANK1':

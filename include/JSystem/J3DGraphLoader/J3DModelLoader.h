@@ -2,20 +2,20 @@
 #define J3DMODELLOADER_H
 
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
-#include "JSystem/JFileHeader.h"
+#include "JSystem/JUtility/JUTDataHeader.h"
 
 inline u32 getBdlFlag_MaterialType(u32 i_flags) {
     return i_flags & 0x3000;
 }
 
-struct J3DModelInfoBlock : public JSystemBlockHeader {
+struct J3DModelInfoBlock : public JUTDataBlockHeader {
     /* 0x08 */ u16 mFlags;
     /* 0x0C */ u32 mPacketNum;
     /* 0x10 */ u32 mVtxNum;
     /* 0x14 */ void* mpHierarchy;
 };  // Size: 0x18
 
-struct J3DVertexBlock : public JSystemBlockHeader {
+struct J3DVertexBlock : public JUTDataBlockHeader {
     /* 0x08 */ void* mpVtxAttrFmtList;
     /* 0x0C */ void* mpVtxPosArray;
     /* 0x10 */ void* mpVtxNrmArray;
@@ -24,7 +24,7 @@ struct J3DVertexBlock : public JSystemBlockHeader {
     /* 0x20 */ void* mpVtxTexCoordArray[8];
 };  // Size: 0x40
 
-struct J3DEnvelopBlock : public JSystemBlockHeader {
+struct J3DEnvelopBlock : public JUTDataBlockHeader {
     /* 0x08 */ u16 mWEvlpMtxNum;
     /* 0x0C */ void* mpWEvlpMixMtxNum;
     /* 0x10 */ void* mpWEvlpMixMtxIndex;
@@ -32,7 +32,7 @@ struct J3DEnvelopBlock : public JSystemBlockHeader {
     /* 0x18 */ void* mpInvJointMtx;
 };  // Size: 0x1C
 
-struct J3DDrawBlock : public JSystemBlockHeader {
+struct J3DDrawBlock : public JUTDataBlockHeader {
     /* 0x08 */ u16 mMtxNum;
     /* 0x0C */ void* mpDrawMtxFlag;
     /* 0x10 */ void* mpDrawMtxIndex;
@@ -40,7 +40,7 @@ struct J3DDrawBlock : public JSystemBlockHeader {
 
 struct J3DJointBlock;
 
-struct J3DMaterialBlock : public JSystemBlockHeader {
+struct J3DMaterialBlock : public JUTDataBlockHeader {
     /* 0x08 */ u16 mMaterialNum;
     /* 0x0C */ void* mpMaterialInitData;
     /* 0x10 */ void* mpMaterialID;
@@ -74,7 +74,7 @@ struct J3DMaterialBlock : public JSystemBlockHeader {
     /* 0x80 */ void* mpNBTScaleInfo;
 };
 
-struct J3DMaterialBlock_v21 : public JSystemBlockHeader {
+struct J3DMaterialBlock_v21 : public JUTDataBlockHeader {
     /* 0x08 */ u16 mMaterialNum;
     /* 0x0C */ void* field_0x0c;
     /* 0x10 */ void* field_0x10;
@@ -82,7 +82,7 @@ struct J3DMaterialBlock_v21 : public JSystemBlockHeader {
     /* more */
 };
 
-struct J3DMaterialDLBlock : public JSystemBlockHeader {
+struct J3DMaterialDLBlock : public JUTDataBlockHeader {
     /* 0x08 */ u16 mMaterialNum;
     /* 0x0C */ void* mpDisplayListInit;
     /* 0x10 */ void* mpPatchingInfo;
@@ -95,7 +95,7 @@ struct J3DMaterialDLBlock : public JSystemBlockHeader {
 
 struct J3DShapeBlock;
 
-struct J3DTextureBlock : public JSystemBlockHeader {
+struct J3DTextureBlock : public JUTDataBlockHeader {
     /* 0x08 */ u16 mTextureNum;
     /* 0x0C */ void* mpTextureRes;
     /* 0x10 */ void* mpNameTable;

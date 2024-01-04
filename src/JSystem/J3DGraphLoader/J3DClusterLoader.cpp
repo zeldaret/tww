@@ -11,7 +11,7 @@
 
 /* 802FB04C-802FB0E8       .text load__24J3DClusterLoaderDataBaseFPCv */
 void* J3DClusterLoaderDataBase::load(const void* i_data) {
-    const JSystemFileHeader* fileHeader = (JSystemFileHeader*)i_data;
+    const JUTDataFileHeader* fileHeader = (JUTDataFileHeader*)i_data;
     if (fileHeader->mMagic == 'J3D1' && fileHeader->mType == 'bls1') {
         J3DClusterLoader_v15 loader;
         return loader.load(i_data);
@@ -32,8 +32,8 @@ void* J3DClusterLoader_v15::load(const void* i_data) {
     mpDeformData = new J3DDeformData();
     mpDeformData->clear();
     
-    const JSystemFileHeader* fileHeader = (JSystemFileHeader*)i_data;
-    const JSystemBlockHeader* block = &fileHeader->mFirstBlock;
+    const JUTDataFileHeader* fileHeader = (JUTDataFileHeader*)i_data;
+    const JUTDataBlockHeader* block = &fileHeader->mFirstBlock;
     for (int i = 0; i < fileHeader->mBlockNum; i++) {
         switch (block->mType) {
         case 'CLS1':

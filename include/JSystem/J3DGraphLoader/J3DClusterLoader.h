@@ -1,11 +1,11 @@
 #ifndef J3DCLUSTERLOADER_H
 #define J3DCLUSTERLOADER_H
 
-#include "JSystem/JFileHeader.h"
+#include "JSystem/JUtility/JUTDataHeader.h"
 
 class J3DDeformData;
 
-class J3DClusterBlock : public JSystemBlockHeader {
+class J3DClusterBlock : public JUTDataBlockHeader {
 private:
     friend class J3DClusterLoader;
     friend class J3DClusterLoader_v15;

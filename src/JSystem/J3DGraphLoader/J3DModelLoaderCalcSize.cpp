@@ -13,8 +13,8 @@
 
 /* 802FD828-802FD868       .text countMaterialNum__14J3DModelLoaderFPCv */
 u16 J3DModelLoader::countMaterialNum(const void* i_data) {
-    const JSystemFileHeader* header = (const JSystemFileHeader*)i_data;
-    const JSystemBlockHeader* block = &header->mFirstBlock;
+    const JUTDataFileHeader* header = (const JUTDataFileHeader*)i_data;
+    const JUTDataBlockHeader* block = &header->mFirstBlock;
     for (int i = 0; i < header->mBlockNum; block = block->getNext(), i++) {
         if (block->mType == 'MAT3') {
             return ((const J3DMaterialBlock*)block)->mMaterialNum;
@@ -27,8 +27,8 @@ u16 J3DModelLoader::countMaterialNum(const void* i_data) {
 u32 J3DModelLoader::calcLoadSize(const void* i_data, u32 i_flags) {
     u32 flags;
     u32 size = 0;
-    const JSystemFileHeader* header = (const JSystemFileHeader*)i_data;
-    const JSystemBlockHeader* block = &header->mFirstBlock;
+    const JUTDataFileHeader* header = (const JUTDataFileHeader*)i_data;
+    const JUTDataBlockHeader* block = &header->mFirstBlock;
     u32 i = 0;
     flags = (u32)i_flags;
     size += sizeof(J3DModelData);
@@ -69,8 +69,8 @@ u32 J3DModelLoader::calcLoadSize(const void* i_data, u32 i_flags) {
 /* 802FDA10-802FDB0C       .text calcLoadMaterialTableSize__14J3DModelLoaderFPCv */
 u32 J3DModelLoader::calcLoadMaterialTableSize(const void* i_data) {
     u32 size = 0;
-    const JSystemFileHeader* header = (const JSystemFileHeader*)i_data;
-    const JSystemBlockHeader* block = &header->mFirstBlock;
+    const JUTDataFileHeader* header = (const JUTDataFileHeader*)i_data;
+    const JUTDataBlockHeader* block = &header->mFirstBlock;
     bool hasTextureTable = false;
     u32 i = 0;
     size += sizeof(J3DMaterialTable);
@@ -103,8 +103,8 @@ u32 J3DModelLoader::calcLoadBinaryDisplayListSize(const void* i_data, u32 i_flag
     /* Nonmatching - regalloc */
     u32 i;
     u32 size = 0;
-    const JSystemFileHeader* header = (const JSystemFileHeader*)i_data;
-    const JSystemBlockHeader* block = &header->mFirstBlock;
+    const JUTDataFileHeader* header = (const JUTDataFileHeader*)i_data;
+    const JUTDataBlockHeader* block = &header->mFirstBlock;
     i = 0;
     size += sizeof(J3DModelData);
     for (; i < header->mBlockNum; i++) {
