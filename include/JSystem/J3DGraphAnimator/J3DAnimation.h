@@ -40,9 +40,9 @@ struct J3DAnmVisibilityFullTable {
 };  // Size = 0x4
 
 struct J3DAnmTransformKeyTable {
-    J3DAnmKeyTableBase mScaleInfo;
-    J3DAnmKeyTableBase mRotationInfo;
-    J3DAnmKeyTableBase mTranslateInfo;
+    /* 0x00 */ J3DAnmKeyTableBase mScale;
+    /* 0x06 */ J3DAnmKeyTableBase mRotation;
+    /* 0x0C */ J3DAnmKeyTableBase mTranslate;
 };  // Size = 0x12
 
 struct J3DAnmTransformFullTable {
@@ -330,10 +330,10 @@ protected:
 
 class J3DAnmTransform : public J3DAnmBase {
 public:
-    J3DAnmTransform(s16 i_frameMax, f32* p1, s16* p2, f32* p3) : J3DAnmBase(i_frameMax) {
-        field_0x10 = p1;
-        field_0x14 = p2;
-        field_0x18 = p3;
+    J3DAnmTransform(s16 i_frameMax, f32* scaleData, s16* rotData, f32* transData) : J3DAnmBase(i_frameMax) {
+        mScaleData = scaleData;
+        mRotData = rotData;
+        mTransData = transData;
         mKind = 0;
     }
 
@@ -341,9 +341,9 @@ public:
     virtual void getTransform(u16, J3DTransformInfo*) const = 0;
 
 protected:
-    /* 0x10 */ f32* field_0x10;
-    /* 0x14 */ s16* field_0x14;
-    /* 0x18 */ f32* field_0x18;
+    /* 0x10 */ f32* mScaleData;
+    /* 0x14 */ s16* mRotData;
+    /* 0x18 */ f32* mTransData;
     /* 0x1C */ s16 field_0x1c;
     /* 0x1E */ s16 field_0x1e;
     /* 0x20 */ u16 field_0x20;
@@ -356,18 +356,18 @@ public:
     friend class J3DAnmKeyLoader_v15;
 
     J3DAnmTransformKey() : J3DAnmTransform(0, NULL, NULL, NULL) {
-        field_0x24 = 0;
-        field_0x28 = 0;
+        mDecShift = 0;
+        mAnmTable = NULL;
     }
 
     virtual void calcTransform(f32, u16, J3DTransformInfo*) const;
 
     virtual ~J3DAnmTransformKey() {}
-    virtual void getTransform(u16 param_1, J3DTransformInfo* param_2) const { calcTransform(getFrame(), param_1, param_2); }
+    virtual void getTransform(u16 idx, J3DTransformInfo* dst) const { calcTransform(getFrame(), idx, dst); }
 
 private:
-    /* 0x24 */ int field_0x24;
-    /* 0x28 */ J3DAnmTransformKeyTable* field_0x28;
+    /* 0x24 */ int mDecShift;
+    /* 0x28 */ J3DAnmTransformKeyTable* mAnmTable;
 };  // Size: 0x2C
 
 // BCA
@@ -376,14 +376,14 @@ public:
     friend class J3DAnmFullLoader_v15;
 
     J3DAnmTransformFull() : J3DAnmTransform(0, NULL, NULL, NULL) {
-        field_0x24 = NULL;
+        mAnmTable = NULL;
     }
 
     virtual ~J3DAnmTransformFull();
     virtual void getTransform(u16, J3DTransformInfo*) const;
 
 private:
-    /* 0x24 */ J3DAnmTransformFullTable* field_0x24;
+    /* 0x24 */ J3DAnmTransformFullTable* mAnmTable;
 };  // Size: 0x28
 
 struct J3DTextureSRTInfo;
@@ -422,8 +422,8 @@ public:
 
     virtual ~J3DAnmTextureSRTKey();
 
-    void getTransform(u16 param_0, J3DTextureSRTInfo* pSRTInfo) const {
-        calcTransform(getFrame(), param_0, pSRTInfo);
+    void getTransform(u16 idx, J3DTextureSRTInfo* pSRTInfo) const {
+        calcTransform(getFrame(), idx, pSRTInfo);
     }
 
     u16 getUpdateMaterialID(u16 idx) const { return mUpdateMaterialID[idx]; }
@@ -442,7 +442,7 @@ public:
 private:
     /* 0x10 */ int mDecShift;
     /* 0x14 */ u16 mTrackNum;
-    /* 0x18 */ void* mAnmTable;
+    /* 0x18 */ J3DAnmTransformKeyTable* mAnmTable;
     /* 0x1C */ u16 mScaleNum;
     /* 0x1E */ u16 mRotNum;
     /* 0x20 */ u16 mTransNum;
