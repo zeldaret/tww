@@ -236,13 +236,13 @@ int dComIfG_play_c::getLayerNo(int i_roomNo) {
             if (dComIfGs_isEventBit(0x2C01)) {
 #else
             if (dComIfGs_isEventBit(0x2C01) ||
-                (dComIfGs_isEventBit(0x3802) && !dComIfGs_isEventBit(0x3280)))
+                (dComIfGs_isEventBit(dSv_evtBit_c::COLORS_IN_HYRULE) && !dComIfGs_isEventBit(0x3280)))
             {
 #endif
                 return layer | 6;
             } else if (dComIfGs_getTriforceNum() == 8) {
                 return layer | 4;
-            } else if (dComIfGs_isEventBit(VERSION_SELECT(0x3280, 0x3802, 0x3802))) {
+            } else if (dComIfGs_isEventBit(VERSION_SELECT(0x3280, dSv_evtBit_c::COLORS_IN_HYRULE, dSv_evtBit_c::COLORS_IN_HYRULE))) {
                 return layer | 2;
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "M2tower") == 0) {
@@ -1123,8 +1123,8 @@ void dComIfGs_setGameStartStage() {
     };
 
     static check_data l_checkData[] = {
-        {true, dEvtBit_SHIP_RIDDEN_e, "", 0, 0},
-        {true, 0xF80, "sea", 11, 128},
+        {true, dSv_evtBit_c::RODE_KORL, "", 0, 0},
+        {true, dSv_evtBit_c::MET_KORL, "sea", 11, 128},
         {true, 0x801, "MajyuE", 0, 0},
         {true, 0x808, "MajyuE", 0, 18},
         {true, 0x2401, "A_umikz", 0, 204},

@@ -1888,7 +1888,7 @@ int dStage_shipInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
     s32 roomId = dComIfGp_getShipRoomId();
 
     if (dStage_chkTaura(roomId)) {
-        if (!dComIfGs_isEventBit(dEvtBit_SHIP_RIDDEN_e) && dStage_setShipPos(0x80, roomId)) {
+        if (!dComIfGs_isEventBit(dSv_evtBit_c::RODE_KORL) && dStage_setShipPos(0x80, roomId)) {
             shipId = 0xFF;
             roomId = 0xFF;
             dComIfGp_setShipId(0xFF);

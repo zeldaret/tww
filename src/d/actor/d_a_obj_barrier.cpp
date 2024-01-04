@@ -242,7 +242,7 @@ void daObjBarrier_c::break_start_wait_proc() {
             case 8:
             case 9:
             case 10:
-                dComIfGs_onEventBit(dEvtBit_BARRIER_BREAK_e);
+                dComIfGs_onEventBit(dSv_evtBit_c::BARRIER_BREAK);
                 mEventID = dComIfGp_evmng_getEventIdx("seal", 0xFF);
                 mBarrierProc = PROC_BREAK_ORDER;
                 break;
@@ -484,7 +484,7 @@ int daObjBarrier_c::_create() {
         mMoya = param_get_moya();
         if (mMoya != 0) {
             mBarrierActive = true;
-        } else if (dComIfGs_isEventBit(dEvtBit_BARRIER_BREAK_e) == true) {
+        } else if (dComIfGs_isEventBit(dSv_evtBit_c::BARRIER_BREAK) == true) {
             mBarrierActive = false;
         } else {
             mBarrierActive = true;

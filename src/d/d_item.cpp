@@ -1424,47 +1424,47 @@ void item_func_tincle_rupee6() {
 
 /* 800C4DB4-800C4DE4       .text item_func_lithograph1__Fv */
 void item_func_lithograph1() {
-    dComIfGs_onEventBit(dEvtBit_LITHOGRAPH_1_e);
+    dComIfGs_onEventBit(dSv_evtBit_c::LITHOGRAPH_1);
 }
 
 /* 800C4DE4-800C4E14       .text item_func_lithograph2__Fv */
 void item_func_lithograph2() {
-    dComIfGs_onEventBit(dEvtBit_LITHOGRAPH_2_e);
+    dComIfGs_onEventBit(dSv_evtBit_c::LITHOGRAPH_2);
 }
 
 /* 800C4E14-800C4E44       .text item_func_lithograph3__Fv */
 void item_func_lithograph3() {
-    dComIfGs_onEventBit(dEvtBit_LITHOGRAPH_3_e);
+    dComIfGs_onEventBit(dSv_evtBit_c::LITHOGRAPH_3);
 }
 
 /* 800C4E44-800C4E74       .text item_func_lithograph4__Fv */
 void item_func_lithograph4() {
-    dComIfGs_onEventBit(dEvtBit_LITHOGRAPH_4_e);
+    dComIfGs_onEventBit(dSv_evtBit_c::LITHOGRAPH_4);
 }
 
 /* 800C4E74-800C4EA4       .text item_func_lithograph5__Fv */
 void item_func_lithograph5() {
-    dComIfGs_onEventBit(dEvtBit_LITHOGRAPH_5_e);
+    dComIfGs_onEventBit(dSv_evtBit_c::LITHOGRAPH_5);
 }
 
 /* 800C4EA4-800C4ED4       .text item_func_lithograph6__Fv */
 void item_func_lithograph6() {
-    dComIfGs_onEventBit(dEvtBit_LITHOGRAPH_6_e);
+    dComIfGs_onEventBit(dSv_evtBit_c::LITHOGRAPH_6);
 }
 
 /* 800C4ED4-800C4F04       .text item_func_collectmap64__Fv */
 void item_func_collectmap64() {
-    dComIfGs_onEventBit(dEvtBit_LITHOGRAPH_7_e);
+    dComIfGs_onEventBit(dSv_evtBit_c::LITHOGRAPH_7);
 }
 
 /* 800C4F04-800C4F34       .text item_func_collectmap63__Fv */
 void item_func_collectmap63() {
-    dComIfGs_onEventBit(dEvtBit_LITHOGRAPH_8_e);
+    dComIfGs_onEventBit(dSv_evtBit_c::LITHOGRAPH_8);
 }
 
 /* 800C4F34-800C4F64       .text item_func_collectmap62__Fv */
 void item_func_collectmap62() {
-    dComIfGs_onEventBit(dEvtBit_LITHOGRAPH_9_e);
+    dComIfGs_onEventBit(dSv_evtBit_c::LITHOGRAPH_9);
 }
 
 /* 800C4F64-800C4FB8       .text item_func_collectmap61__Fv */
@@ -2531,52 +2531,52 @@ int item_getcheck_func_xxx_039() {
 
 /* 800C77E4-800C7814       .text item_getcheck_func_lithograph1__Fv */
 int item_getcheck_func_lithograph1() {
-    return dComIfGs_isEventBit(dEvtBit_LITHOGRAPH_1_e);
+    return dComIfGs_isEventBit(dSv_evtBit_c::LITHOGRAPH_1);
 }
 
 /* 800C7814-800C7844       .text item_getcheck_func_lithograph2__Fv */
 int item_getcheck_func_lithograph2() {
-    return dComIfGs_isEventBit(dEvtBit_LITHOGRAPH_2_e);
+    return dComIfGs_isEventBit(dSv_evtBit_c::LITHOGRAPH_2);
 }
 
 /* 800C7844-800C7874       .text item_getcheck_func_lithograph3__Fv */
 int item_getcheck_func_lithograph3() {
-    return dComIfGs_isEventBit(dEvtBit_LITHOGRAPH_3_e);
+    return dComIfGs_isEventBit(dSv_evtBit_c::LITHOGRAPH_3);
 }
 
 /* 800C7874-800C78A4       .text item_getcheck_func_lithograph4__Fv */
 int item_getcheck_func_lithograph4() {
-    return dComIfGs_isEventBit(dEvtBit_LITHOGRAPH_4_e);
+    return dComIfGs_isEventBit(dSv_evtBit_c::LITHOGRAPH_4);
 }
 
 /* 800C78A4-800C78D4       .text item_getcheck_func_lithograph5__Fv */
 int item_getcheck_func_lithograph5() {
-    return dComIfGs_isEventBit(dEvtBit_LITHOGRAPH_5_e);
+    return dComIfGs_isEventBit(dSv_evtBit_c::LITHOGRAPH_5);
 }
 
 /* 800C78D4-800C7904       .text item_getcheck_func_lithograph6__Fv */
 int item_getcheck_func_lithograph6() {
-    return dComIfGs_isEventBit(dEvtBit_LITHOGRAPH_6_e);
+    return dComIfGs_isEventBit(dSv_evtBit_c::LITHOGRAPH_6);
 }
 
 /* 800C7904-800C7934       .text item_getcheck_func_lithograph7__Fv */
 int item_getcheck_func_lithograph7() {
-    return dComIfGs_isEventBit(dEvtBit_LITHOGRAPH_7_e);
+    return dComIfGs_isEventBit(dSv_evtBit_c::LITHOGRAPH_7);
 }
 
 /* 800C7934-800C7964       .text item_getcheck_func_lithograph8__Fv */
 int item_getcheck_func_lithograph8() {
-    return dComIfGs_isEventBit(dEvtBit_LITHOGRAPH_8_e);
+    return dComIfGs_isEventBit(dSv_evtBit_c::LITHOGRAPH_8);
 }
 
 /* 800C7964-800C7994       .text item_getcheck_func_lithograph9__Fv */
 int item_getcheck_func_lithograph9() {
-    return dComIfGs_isEventBit(dEvtBit_LITHOGRAPH_9_e);
+    return dComIfGs_isEventBit(dSv_evtBit_c::LITHOGRAPH_9);
 }
 
 /* 800C7994-800C79C4       .text item_getcheck_func_lithograph10__Fv */
 int item_getcheck_func_lithograph10() {
-    return dComIfGs_isEventBit(dEvtBit_LITHOGRAPH_10_e);
+    return dComIfGs_isEventBit(dSv_evtBit_c::LITHOGRAPH_10);
 }
 
 /* 800C79C4-800C79F4       .text item_getcheck_func_lithograph11__Fv */

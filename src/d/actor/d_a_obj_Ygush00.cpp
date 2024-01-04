@@ -95,7 +95,7 @@ bool daObjYgush00_c::_delete() {
 
 /* 00000524-0000066C       .text _execute__14daObjYgush00_cFv */
 bool daObjYgush00_c::_execute() {
-    if (mType != 3 || dComIfGs_isEventBit(EV_BIT_TALKED_TO_IRCH_IN_FOREST_HAVEN) == 1) {
+    if (mType != 3 || dComIfGs_isEventBit(dSv_evtBit_c::COLORS_IN_HYRULE) == 1) {
         mBtkAnm.play();
         mBckAnm.play();
     }

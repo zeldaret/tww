@@ -5131,7 +5131,7 @@ BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int
             setDamagePoint(param_3);
             mTinkleShieldTimer = 0;
             
-            if (stageType == dStageType_SEA_e && !dComIfGs_isEventBit(dEvtBit_SHIP_RIDDEN_e) &&
+            if (stageType == dStageType_SEA_e && !dComIfGs_isEventBit(dSv_evtBit_c::RODE_KORL) &&
                 (current.roomNo == 11 || current.roomNo == 44) && dStage_chkPlayerId(0x80, current.roomNo))
             {
                 dComIfGp_setNextStage(dComIfGp_getStartStageName(), 0x80, current.roomNo, -1, 0.0f, param_1);
