@@ -740,10 +740,10 @@ void J3DModel::calcBBoard() {
 
 /* 802EF414-802EF5D8       .text prepareShapePackets__8J3DModelFv */
 void J3DModel::prepareShapePackets() {
-    /* Nonmatching */
     u16 shapeNum = getModelData()->getShapeNum();
 
     for (u16 i = 0; i < shapeNum; i++) {
+        J3DShape *pShape = getModelData()->getShapeNodePointer(i);
         J3DShapePacket* pkt = getShapePacket(i);
         pkt->setScaleFlagArray(mpScaleFlagArr);
         pkt->setDrawMtx(mpDrawMtxBuf[1]);
