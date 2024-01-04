@@ -722,11 +722,11 @@ s32 phase_1(dScnLogo_c* i_this) {
     toonImage = (ResTIMG *)dComIfG_getObjectRes("System", 3);
 
     JUT_ASSERT(VERSION_SELECT(1208, 1426, 1466), toonImage != 0);
-    dDlst_list_c::mToonImage = toonImage;
+    dDlst_list_c::setToonImage(toonImage);
 
     toonImage = (ResTIMG *)dComIfG_getObjectRes("System", 4);
     JUT_ASSERT(VERSION_SELECT(1213, 1431, 1471), toonImage != 0);
-    dDlst_list_c::mToonExImage = toonImage;
+    dDlst_list_c::setToonExImage(toonImage);
 
     i_this->field_0x1f8 = mDoExt_getGameHeap()->alloc(0x3c8a0, 4);
     return cPhs_NEXT_e;

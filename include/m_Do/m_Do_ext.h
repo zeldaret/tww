@@ -450,7 +450,12 @@ public:
 
 class mDoExt_3DlineMat_c {
 public:
-    /* 0x0 */ void* field_0x0;
+    virtual int getMaterialID() = 0;
+    virtual void setMaterial() = 0;
+    virtual void draw() = 0;
+
+public:
+    /* 0x0 */ /* vtable */
     /* 0x4 */ mDoExt_3DlineMat_c* field_0x4;
 };
 
@@ -460,7 +465,7 @@ public:
 
     void reset() { mp3DlineMat = NULL; }
 
-    void setMat(mDoExt_3DlineMat_c* pMat) { mp3DlineMat = pMat; }
+    void setMat(mDoExt_3DlineMat_c* pMat);
     virtual void draw();
     virtual ~mDoExt_3DlineMatSortPacket();
 
@@ -582,7 +587,7 @@ public:
     /* 0x10 */ cXy* mTexArr[2];
 };
 
-class mDoExt_3DlineMat0_c {
+class mDoExt_3DlineMat0_c : public mDoExt_3DlineMat_c {
 public:
     int init(u16, u16, int);
     void setMaterial();
@@ -590,9 +595,19 @@ public:
     void update(u16, f32, GXColor&, u16, dKy_tevstr_c*);
     void update(u16, GXColor&, dKy_tevstr_c*);
     int getMaterialID();
+
+public:
+    /* 0x08 */ GXColor mColor;
+    /* 0x0C */ dKy_tevstr_c* m0C;
+    /* 0x10 */ s16 mNumLines;
+    /* 0x12 */ s16 mNumSegmentsPerLine;
+    /* 0x14 */ u16 m14;
+    /* 0x16 */ u8 m16;
+    /* 0x17 */ u8 m17[0x18 - 0x17];
+    /* 0x18 */ mDoExt_3Dline_c* mpLines;
 };
 
-class mDoExt_3DlineMat1_c {
+class mDoExt_3DlineMat1_c : public mDoExt_3DlineMat_c {
 public:
     int init(u16, u16, ResTIMG*, int);
     void setMaterial();
@@ -602,7 +617,6 @@ public:
     int getMaterialID();
 
 public:
-    /* 0x00 */ mDoExt_3DlineMat_c parent;
     /* 0x08 */ GXTexObj mTexObj;
     /* 0x28 */ GXColor mColor;
     /* 0x2C */ dKy_tevstr_c* mpTevStr;

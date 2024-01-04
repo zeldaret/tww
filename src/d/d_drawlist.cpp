@@ -494,14 +494,13 @@ char l_bonbori2DL[0x2a8] ALIGN_DECL(32) = {};
 
 /* 80082838-80082E44       .text draw__22dDlst_alphaModelData_cFPA4_f */
 void dDlst_alphaModelData_c::draw(Mtx viewMtx) {
-    /* Nonmatching - color and data order */
     Mtx mtx;
     MTXConcat(viewMtx, mpMtx, mtx);
     GFLoadPosMtxImm(mtx, GX_PNMTX0);
     GFSetCurrentMtx(GX_PNMTX0, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY, GX_IDENTITY);
 
-    GXColor color = { 0, 0, 0, 0 };
-    color.a = mAlpha;
+    GXColor color;
+    color.a = mAlpha * 4;
     GFSetChanMatColor(GX_ALPHA0, color);
 
     if (mType == 0) {
@@ -586,7 +585,7 @@ void dDlst_alphaModelData_c::draw(Mtx viewMtx) {
         GFSetArray(GX_VA_POS, l_cubePos, sizeof(*l_cubePos));
         GXCallDisplayList(l_backRevZMat, 0x40);
         GXCallDisplayList(l_frontZMat, 0x20);
-        GXCallDisplayList(l_cubeDL, 0xe0);
+        GXCallDisplayList(l_cubeDL, 0x40);
     } else if (mType == 4) {
         /* Bonbori2 */
         GFSetArray(GX_VA_POS, l_bonbori2Pos, sizeof(*l_bonbori2Pos));
@@ -709,7 +708,6 @@ char l_shadowVolumeDL[] = {
 
 /* 80083064-800832C4       .text draw__22dDlst_alphaModelPacketFv */
 void dDlst_alphaModelPacket::draw() {
-    /* Nonmatching */
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
     GXSetChanMatColor(GX_COLOR0A0, mColor);
@@ -917,7 +915,6 @@ void dDlst_shadowControl_c::draw(Mtx) {
 
 /* 800850D4-80085170       .text setReal__21dDlst_shadowControl_cFUlScP8J3DModelP4cXyzffP12dKy_tevstr_c */
 int dDlst_shadowControl_c::setReal(u32 key, s8 size, J3DModel* model, cXyz* pos, f32 f0, f32 f1, dKy_tevstr_c* tevstr) {
-    /* Nonmatching */
     if (key != 0) {
         dDlst_shadowReal_c * real = &mReal[0];
         for (s32 i = 0; i < (s32)ARRAY_SIZE(mReal); i++, real++) {
@@ -977,7 +974,6 @@ bool dDlst_shadowControl_c::addReal(u32 key, J3DModel* model) {
 
 /* 80085274-800852D8       .text setSimple__21dDlst_shadowControl_cFP4cXyzffP4cXyzsfP9_GXTexObj */
 int dDlst_shadowControl_c::setSimple(cXyz* pos, f32 f0, f32 f1, cXyz* floor_nrm, s16 rotY, f32 f2, GXTexObj* tex) {
-    /* Nonmatching */
     if (floor_nrm == NULL || mSimpleNum >= ARRAY_SIZE(mSimple))
         return false;
 
@@ -1205,12 +1201,12 @@ void dDlst_list_c::reset() {
     mp2DOpaTop = &mp2DOpaTopArr[0];
     mp2DOpa = &mp2DOpaArr[0];
     mp2DXlu = &mp2DXluArr[0];
-    g_dComIfG_gameInfo.drawlist.mpAlphaModel->mNum = 0;
-    g_dComIfG_gameInfo.drawlist.mpSpotModel->mNum = 0;
-    g_dComIfG_gameInfo.drawlist.mpLightModel->mNum = 0;
+    dComIfGd_resetAlphaModel();
+    dComIfGd_resetSpotModel();
+    dComIfGd_resetLightModel();
     mShadowControl.reset();
     for (u32 i = 0; i < ARRAY_SIZE(m3DLineMatSortPacket); i++)
-        m3DLineMatSortPacket[i].setMat(NULL);
+        m3DLineMatSortPacket[i].reset();
 }
 
 /* 80086490-80086540       .text entryZSortXluDrawList__12dDlst_list_cFP13J3DDrawBufferP9J3DPacketR4cXyz */
@@ -1249,7 +1245,11 @@ void dDlst_list_c::wipeIn(f32 speed, GXColor& color) {
     mWipe = true;
     mWipeSpeed = speed;
     mWipeColor = color;
-    mWipeRate = speed >= 0.0f ? 1.0f : 0.0f;
+    if (speed >= 0.0f) {
+        mWipeRate = 0.0f;
+    } else {
+        mWipeRate = 1.0f;
+    }
     ResTIMG* texture = (ResTIMG*)JKRGetResource('TIMG', "wipe_00.bti", dComIfGp_getMenuArchive());
     JUT_ASSERT(0x1637, texture != 0);
     mWipeDlst.init(texture, -9.0f, -21.0f, 659.0f, 524.0f, 0, 1, 1, 2.0f, 2.436f);
@@ -1257,7 +1257,7 @@ void dDlst_list_c::wipeIn(f32 speed, GXColor& color) {
 
 /* 800866C8-800866F0       .text wipeIn__12dDlst_list_cFf */
 void dDlst_list_c::wipeIn(f32 time) {
-    wipeIn(-time, g_blackColor);
+    wipeOut(time, g_blackColor);
 }
 
 /* 800866F0-80086790       .text calcWipe__12dDlst_list_cFv */

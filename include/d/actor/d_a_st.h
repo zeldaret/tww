@@ -53,7 +53,7 @@ public:
     /* 0x0ED3 */ u8 m0ED3;
     /* 0x0ED4 */ st_p mParts[26];
     /* 0x19CC */ st_ke_s m19CC[3];
-    /* 0x1D50 */ mDoExt_3DlineMat_c m1D50;
+    /* 0x1D50 */ mDoExt_3DlineMat0_c m1D50;
     /* 0x1D58 */ u8 m1D58[0x1D6C - 0x1D58];
     /* 0x1D6C */ cXyz m1D6C[3];
     /* 0x1D90 */ csXyz m1D90[3];

@@ -5,10 +5,12 @@
 
 #include "d/actor/d_a_boko.h"
 #include "dolphin/types.h"
+#include "d/d_com_inf_game.h"
 
 /* 000000EC-0000017C       .text keDraw__8daBoko_cFv */
 void daBoko_c::keDraw() {
     /* Nonmatching */
+    dComIfGd_set3DlineMat(mpLineMat);
 }
 
 /* 0000017C-00000620       .text keCalc1__8daBoko_cFP6ke_c_si */

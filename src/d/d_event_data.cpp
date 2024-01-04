@@ -637,7 +637,7 @@ void dEvDtStaff_c::specialProcDirector() {
                 {
                     f32* rate = dComIfGp_evmng_getMyFloatP(staffIdx, "Rate");
                     JUT_ASSERT(0x384, rate);
-                    dDlst_list_c::wipeIn(-*rate);
+                    dDlst_list_c::wipeOut(*rate);
                     if (*rate > 0.0f)
                         mWipeDirection = 0;
                     else

@@ -2239,18 +2239,6 @@ void dStage_roomControl_c::SetTimePass(int i_timepass) {
     m_time_pass = i_timepass;
 }
 
-static inline u8 IkadaGetRoomNoArg0(fopAc_ac_c* i_actor) {
-    return (fopAcM_GetParam(i_actor) >> 4) & 0x3F;
-}
-
-static inline u8 IkadaGetLinkIdArg1(fopAc_ac_c* i_actor) {
-    return (fopAcM_GetParam(i_actor) >> 10) & 0xFF;
-}
-
-static inline u8 IkadaGetIkadaIdArg2(fopAc_ac_c* i_actor) {
-    return (fopAcM_GetParam(i_actor) >> 0x12) & 0xFF;
-}
-
 /* 8004360C-80043900       .text dStage_changeSceneExitId__FR13cBgS_PolyInfofUlSc */
 int dStage_changeSceneExitId(cBgS_PolyInfo& i_poly, f32 i_speed, u32 i_mode, s8 i_roomNo) {
     int exit_id = dComIfG_Bgsp()->GetExitId(i_poly);

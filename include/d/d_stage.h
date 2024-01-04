@@ -1083,6 +1083,18 @@ int dStage_changeScene(int i_exitId, f32 speed, u32 mode, s8 room_no);
 
 void dStage_restartRoom(u32 roomParam, u32 mode);
 
+static inline u8 IkadaGetRoomNoArg0(fopAc_ac_c* i_actor) {
+    return (fopAcM_GetParam(i_actor) >> 4) & 0x3F;
+}
+
+static inline u8 IkadaGetLinkIdArg1(fopAc_ac_c* i_actor) {
+    return (fopAcM_GetParam(i_actor) >> 10) & 0xFF;
+}
+
+static inline u8 IkadaGetIkadaIdArg2(fopAc_ac_c* i_actor) {
+    return (fopAcM_GetParam(i_actor) >> 0x12) & 0xFF;
+}
+
 inline int IkadaGetIkadaIdArgPrm(u32 param) {
     return (param >> 0x12) & 0xFF;
 }

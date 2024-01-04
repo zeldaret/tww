@@ -1514,10 +1514,10 @@ void mDoExt_3DlineMat1_c::update(u16, _GXColor&, dKy_tevstr_c*) {
     JUT_ASSERT(5243, size_p != 0);
 }
 
-// /* 80016518-8001657C       .text setMat__26mDoExt_3DlineMatSortPacketFP18mDoExt_3DlineMat_c */
-// void mDoExt_3DlineMatSortPacket::setMat(mDoExt_3DlineMat_c*) {
-//     /* Nonmatching */
-// }
+/* 80016518-8001657C       .text setMat__26mDoExt_3DlineMatSortPacketFP18mDoExt_3DlineMat_c */
+void mDoExt_3DlineMatSortPacket::setMat(mDoExt_3DlineMat_c* pMat) {
+    /* Nonmatching */
+}
 
 /* 8001657C-800165E4       .text draw__26mDoExt_3DlineMatSortPacketFv */
 void mDoExt_3DlineMatSortPacket::draw() {

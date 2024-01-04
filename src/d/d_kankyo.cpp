@@ -1776,8 +1776,8 @@ void setLightTevColorType_sub(J3DMaterial* i_material, dKy_tevstr_c* i_tevstr) {
                 fog_p->getFogInfo()->mStartZ = fog_p->getFogInfo()->mEndZ;
             }
 
-            fog_p->getFogInfo()->mNearZ = g_dComIfG_gameInfo.drawlist.mpCamera->mNear;
-            fog_p->getFogInfo()->mFarZ = g_dComIfG_gameInfo.drawlist.mpCamera->mFar;
+            fog_p->getFogInfo()->mNearZ = dComIfGd_getView()->mNear;
+            fog_p->getFogInfo()->mFarZ = dComIfGd_getView()->mFar;
             fog_p->getFogInfo()->mColor.r = i_tevstr->mFogColor.r;
             fog_p->getFogInfo()->mColor.g = i_tevstr->mFogColor.g;
             fog_p->getFogInfo()->mColor.b = i_tevstr->mFogColor.b;
@@ -3091,10 +3091,10 @@ void GxFogSet_Sub(GXColor* pFogColor) {
     fogColor.b = pFogColor->b;
     fogColor.a = pFogColor->a;
 
-    if (g_dComIfG_gameInfo.drawlist.mpCamera != NULL) {
-        if (g_dComIfG_gameInfo.drawlist.mpCamera->mNear >= 0.0f && g_dComIfG_gameInfo.drawlist.mpCamera->mFar >= 0.0f && g_dComIfG_gameInfo.drawlist.mpCamera->mNear < g_dComIfG_gameInfo.drawlist.mpCamera->mFar) {
-            near = g_dComIfG_gameInfo.drawlist.mpCamera->mNear;
-            far = g_dComIfG_gameInfo.drawlist.mpCamera->mFar;
+    if (dComIfGd_getView() != NULL) {
+        if (dComIfGd_getView()->mNear >= 0.0f && dComIfGd_getView()->mFar >= 0.0f && dComIfGd_getView()->mNear < dComIfGd_getView()->mFar) {
+            near = dComIfGd_getView()->mNear;
+            far = dComIfGd_getView()->mFar;
         }
     }
 
@@ -3141,10 +3141,10 @@ void dKy_GxFog_tevstr_set(dKy_tevstr_c* pTevStr) {
     fogColor.g = pTevStr->mFogColor.g;
     fogColor.b = pTevStr->mFogColor.b;
 
-    if (g_dComIfG_gameInfo.drawlist.mpCamera != NULL) {
-        if (g_dComIfG_gameInfo.drawlist.mpCamera->mNear >= 0.0f && g_dComIfG_gameInfo.drawlist.mpCamera->mFar >= 0.0f && g_dComIfG_gameInfo.drawlist.mpCamera->mNear < g_dComIfG_gameInfo.drawlist.mpCamera->mFar) {
-            near = g_dComIfG_gameInfo.drawlist.mpCamera->mNear;
-            far = g_dComIfG_gameInfo.drawlist.mpCamera->mFar;
+    if (dComIfGd_getView() != NULL) {
+        if (dComIfGd_getView()->mNear >= 0.0f && dComIfGd_getView()->mFar >= 0.0f && dComIfGd_getView()->mNear < dComIfGd_getView()->mFar) {
+            near = dComIfGd_getView()->mNear;
+            far = dComIfGd_getView()->mFar;
         }
     }
 
@@ -3162,10 +3162,10 @@ void dKy_GfFog_tevstr_set(dKy_tevstr_c* pTevStr) {
     fogColor.g = pTevStr->mFogColor.g;
     fogColor.b = pTevStr->mFogColor.b;
 
-    if (g_dComIfG_gameInfo.drawlist.mpCamera != NULL) {
-        if (g_dComIfG_gameInfo.drawlist.mpCamera->mNear >= 0.0f && g_dComIfG_gameInfo.drawlist.mpCamera->mFar >= 0.0f && g_dComIfG_gameInfo.drawlist.mpCamera->mNear < g_dComIfG_gameInfo.drawlist.mpCamera->mFar) {
-            near = g_dComIfG_gameInfo.drawlist.mpCamera->mNear;
-            far = g_dComIfG_gameInfo.drawlist.mpCamera->mFar;
+    if (dComIfGd_getView() != NULL) {
+        if (dComIfGd_getView()->mNear >= 0.0f && dComIfGd_getView()->mFar >= 0.0f && dComIfGd_getView()->mNear < dComIfGd_getView()->mFar) {
+            near = dComIfGd_getView()->mNear;
+            far = dComIfGd_getView()->mFar;
         }
     }
 

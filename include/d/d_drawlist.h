@@ -347,6 +347,7 @@ public:
     s32 getNum() { return mNum; }
     void setColor(GXColor& color) { mColor = color; }
     GXColor & getColor() { return mColor; }
+    void reset() { mNum = 0; }
 
 public:
     /* 0x00 */ GXColor mColor;
@@ -395,12 +396,16 @@ public:
     void draw(dDlst_base_c**, dDlst_base_c**);
     static void wipeIn(f32, GXColor&);
     static void wipeIn(f32);
+    static void wipeOut(f32 rate) { wipeIn(-rate); }
+    static void wipeOut(f32 rate, GXColor& color) { wipeIn(-rate, color); }
     static void calcWipe();
 
-    J3DDrawBuffer* getXluList() { return mpXluList; }
     J3DDrawBuffer* getOpaListP1() { return mpOpaListP1; }
+    J3DDrawBuffer* getOpaListSky() { return mpOpaListSky; }
     J3DDrawBuffer* getOpaListFilter() { return mpOpaListFilter; }
     J3DDrawBuffer* getOpaList2D() { return mpOpaList2D; }
+    J3DDrawBuffer* getXluList() { return mpXluList; }
+    J3DDrawBuffer* getXluListP1() { return mpXluListP1; }
 
     void setXluDrawList(J3DDrawBuffer* buffer) { j3dSys.setDrawBuffer(buffer, XLU_BUFFER); }
     void setOpaDrawList(J3DDrawBuffer* buffer) { j3dSys.setDrawBuffer(buffer, OPA_BUFFER); }
@@ -464,17 +469,24 @@ public:
         return mShadowControl.setSimple(param_0, param_1, param_2, param_3, param_4, param_5,
                                         param_6);
     }
+    int setRealShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5, f32 param_6,
+                      dKy_tevstr_c* pTevStr) {
+        return mShadowControl.setReal(id, param_2, pModel, pPos, param_5, param_6, pTevStr);
+    }
     int setRealShadow2(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5, f32 param_6,
                        dKy_tevstr_c* pTevStr) {
         return mShadowControl.setReal2(id, param_2, pModel, pPos, param_5, param_6, pTevStr);
     }
-
     bool addRealShadow(u32 id, J3DModel* pModel) {
         return mShadowControl.addReal(id, pModel);
     }
 
     void drawShadow(Mtx mtx) { mShadowControl.draw(mtx); }
     void imageDrawShadow(Mtx mtx) { mShadowControl.imageDraw(mtx); }
+
+    void set3DlineMat(mDoExt_3DlineMat_c* mat) {
+        m3DLineMatSortPacket[mat->getMaterialID()].setMat(mat);
+    }
 
     void setAlphaModel(u8 type, Mtx mtx, u8 alpha) { mpAlphaModel->set(type, mtx, alpha); }
     void setSpotModel(u8 type, Mtx mtx, u8 alpha) { mpSpotModel->set(type, mtx, alpha); }
@@ -486,13 +498,18 @@ public:
 
     s32 getSpotModelNum() { return mpSpotModel->getNum(); }
     s32 getLightModelNum() { return mpLightModel->getNum(); }
+    void setAlphaModelColor(GXColor& color) { mpAlphaModel->setColor(color); }
     void setSpotModelColor(GXColor& color) { mpSpotModel->setColor(color); }
+    void setLightModelColor(GXColor& color) { mpLightModel->setColor(color); }
     GXColor& getAlphaModelColor() { return mpAlphaModel->getColor(); }
     GXColor& getSpotModelColor() { return mpSpotModel->getColor(); }
     GXColor& getLightModelColor() { return mpLightModel->getColor(); }
+    void resetAlphaModel() { mpAlphaModel->reset(); }
+    void resetSpotModel() { mpSpotModel->reset(); }
+    void resetLightModel() { mpLightModel->reset(); }
 
     void setWindow(dDlst_window_c* pWindow) { mpWindow = pWindow; }
-    void setViewPort(view_port_class* pViewPort) { mpViewPort = pViewPort; }
+    void setViewport(view_port_class* pViewPort) { mpViewPort = pViewPort; }
     view_port_class* getViewport() { return mpViewPort; }
     void setView(view_class* pView) { mpCamera = (camera_class*)pView; }
     view_class* getView() { return (view_class*)mpCamera; }
@@ -503,11 +520,18 @@ public:
     void newPeekZdata(s16 x, s16 y, u32 * data) { mPeekZ.newData(x, y, data); }
     void peekZdata() { mPeekZ.peekData(); }
 
+    static ResTIMG* getToonImage() { return mToonImage; }
+    static void setToonImage(ResTIMG* image) { mToonImage = image; }
+    static ResTIMG* getToonExImage() { return mToonExImage; }
+    static void setToonExImage(ResTIMG* image) { mToonExImage = image; }
+
     static bool mWipe;
     static GXColor mWipeColor;
     static f32 mWipeRate;
     static f32 mWipeSpeed;
     static dDlst_2DT2_c mWipeDlst;
+    static ResTIMG * mToonImage;
+    static ResTIMG * mToonExImage;
 
     /* 0x00000 */ J3DDrawBuffer* mpOpaListSky;
     /* 0x00004 */ J3DDrawBuffer* mpXluListSky;
@@ -546,13 +570,10 @@ public:
     /* 0x00250 */ dDlst_shadowControl_c mShadowControl;
     /* 0x16078 */ mDoExt_3DlineMatSortPacket m3DLineMatSortPacket[2];
     /* 0x160A0 */ dDlst_peekZ_c mPeekZ;
-
-    static ResTIMG * mToonImage;
-    static ResTIMG * mToonExImage;
 };  // Size: 0x16234
 
 STATIC_ASSERT(sizeof(dDlst_list_c) == 0x16234);
 
-void dDlst_texSpecmapST(const cXyz*, const dKy_tevstr_c*, J3DModelData*, float);
+void dDlst_texSpecmapST(const cXyz*, const dKy_tevstr_c*, J3DModelData*, f32);
 
 #endif /* D_D_DRAWLIST_H */

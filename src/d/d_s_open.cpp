@@ -64,7 +64,7 @@ BOOL dScnOpen_c::execute() {
 /* 80232CAC-80232D38       .text draw__10dScnOpen_cFv */
 BOOL dScnOpen_c::draw() {
     dComIfGd_setWindow(dComIfGp_getWindow(0));
-    dComIfGd_setViewPort(dComIfGp_getWindow(0)->getViewPort());
+    dComIfGd_setViewport(dComIfGp_getWindow(0)->getViewPort());
     for (create_tag_class* pTag = fopDwIt_Begin(); pTag != NULL; pTag = fopDwIt_Next(pTag))
         fpcM_Draw(pTag->mpTagData);
     dComIfGd_set2DOpa(mpProc);

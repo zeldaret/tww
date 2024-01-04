@@ -76,9 +76,9 @@ static void setToonTex(J3DModelData* pModel) {
                 const char * pName = pTextureName->getName(i);
                 if (pName[0] == 'Z') {
                     if (pName[1] == 'A')
-                        pTexture->setResTIMG(i, *dDlst_list_c::mToonImage);
+                        pTexture->setResTIMG(i, *dDlst_list_c::getToonImage());
                     else if (pName[1] == 'B')
-                        pTexture->setResTIMG(i, *dDlst_list_c::mToonExImage);
+                        pTexture->setResTIMG(i, *dDlst_list_c::getToonExImage());
                 }
             }
 
@@ -120,9 +120,9 @@ static void setToonTex(J3DMaterialTable* pMaterialTable) {
                 const char * pName = pTextureName->getName(i);
                 if (pName[0] == 'Z') {
                     if (pName[1] == 'A')
-                        pTexture->setResTIMG(i, *dDlst_list_c::mToonImage);
+                        pTexture->setResTIMG(i, *dDlst_list_c::getToonImage());
                     else if (pName[1] == 'B')
-                        pTexture->setResTIMG(i, *dDlst_list_c::mToonExImage);
+                        pTexture->setResTIMG(i, *dDlst_list_c::getToonExImage());
                 }
             }
 
