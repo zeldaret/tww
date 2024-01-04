@@ -13,8 +13,8 @@ void J3DDeformData::clear() {
     mClusterPointer = NULL;
     mClusterKeyNum = 0;
     mClusterKeyPointer = NULL;
-    field_0x20 = NULL;
-    field_0x24 = NULL;
+    mClusterName = NULL;
+    mClusterKeyName = NULL;
 }
 
 /* 802F37E4-802F3814       .text __ct__13J3DDeformDataFv */

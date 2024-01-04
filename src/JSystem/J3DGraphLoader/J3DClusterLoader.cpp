@@ -29,9 +29,10 @@ J3DClusterLoader_v15::~J3DClusterLoader_v15() {}
 
 /* 802FB160-802FB21C       .text load__20J3DClusterLoader_v15FPCv */
 void* J3DClusterLoader_v15::load(const void* i_data) {
-    const JSystemFileHeader* fileHeader = (JSystemFileHeader*)i_data;
     mpDeformData = new J3DDeformData();
     mpDeformData->clear();
+    
+    const JSystemFileHeader* fileHeader = (JSystemFileHeader*)i_data;
     const JSystemBlockHeader* block = &fileHeader->mFirst;
     for (int i = 0; i < fileHeader->mBlockNum; i++) {
         switch (block->mType) {
@@ -44,62 +45,65 @@ void* J3DClusterLoader_v15::load(const void* i_data) {
         }
         block = block->getNext();
     }
+    
     return mpDeformData;
 }
 
 /* 802FB21C-802FB698       .text readCluster__20J3DClusterLoader_v15FPC15J3DClusterBlock */
 void J3DClusterLoader_v15::readCluster(const J3DClusterBlock* block) {
-    mpDeformData->mClusterNum = block->m08;
-    mpDeformData->mClusterKeyNum = block->m0A;
-    mpDeformData->field_0x14 = block->m0E;
-    mpDeformData->field_0x16 = block->m10;
-    mpDeformData->field_0x4 = block->m0C;
-    if (block->m28 != NULL) {
-        mpDeformData->field_0x20 = new JUTNameTab(JSUConvertOffsetToPtr<ResNTAB>(block, block->m28));
+    mpDeformData->mClusterNum = block->mClusterNum;
+    mpDeformData->mClusterKeyNum = block->mClusterKeyNum;
+    mpDeformData->mVtxPosNum = block->mVtxPosNum;
+    mpDeformData->mVtxNrmNum = block->mVtxNrmNum;
+    mpDeformData->mClusterVertexNum = block->mClusterVertexNum;
+    
+    if (block->mClusterName != NULL) {
+        mpDeformData->mClusterName = new JUTNameTab(JSUConvertOffsetToPtr<ResNTAB>(block, block->mClusterName));
     } else {
-        mpDeformData->field_0x20 = NULL;
+        mpDeformData->mClusterName = NULL;
     }
-    if (block->m2C != NULL) {
-        mpDeformData->field_0x24 = new JUTNameTab(JSUConvertOffsetToPtr<ResNTAB>(block, block->m2C));
+    if (block->mClusterKeyName != NULL) {
+        mpDeformData->mClusterKeyName = new JUTNameTab(JSUConvertOffsetToPtr<ResNTAB>(block, block->mClusterKeyName));
     } else {
-        mpDeformData->field_0x24 = NULL;
+        mpDeformData->mClusterKeyName = NULL;
     }
-    mpDeformData->mVtxPos = JSUConvertOffsetToPtr<f32>(block, block->m20);
-    mpDeformData->mVtxNrm = JSUConvertOffsetToPtr<f32>(block, block->m24);
+    
+    mpDeformData->mVtxPos = JSUConvertOffsetToPtr<f32>(block, block->mVtxPos);
+    mpDeformData->mVtxNrm = JSUConvertOffsetToPtr<f32>(block, block->mVtxNrm);
     
     mpDeformData->mClusterPointer = new J3DCluster[mpDeformData->getClusterNum()];
-    J3DCluster* blockCluster = JSUConvertOffsetToPtr<J3DCluster>(block, block->m14);
+    J3DCluster* blockCluster = JSUConvertOffsetToPtr<J3DCluster>(block, block->mClusterPointer);
     for (int i = 0; i < mpDeformData->getClusterNum(); i++) {
         mpDeformData->mClusterPointer[i] = blockCluster[i];
     }
     
     mpDeformData->mClusterKeyPointer = new J3DClusterKey[mpDeformData->getClusterKeyNum()];
-    J3DClusterKey* blockClusterKey = JSUConvertOffsetToPtr<J3DClusterKey>(block, block->m18);
+    J3DClusterKey* blockClusterKey = JSUConvertOffsetToPtr<J3DClusterKey>(block, block->mClusterKeyPointer);
     for (int i = 0; i < mpDeformData->getClusterKeyNum(); i++) {
         mpDeformData->mClusterKeyPointer[i] = blockClusterKey[i];
     }
     
-    mpDeformData->field_0x10 = new J3DClusterVertex[mpDeformData->field_0x4];
-    J3DClusterVertex* blockClusterVertex = JSUConvertOffsetToPtr<J3DClusterVertex>(block, block->m1C);
-    for (int i = 0; i < mpDeformData->field_0x4; i++) {
-        mpDeformData->field_0x10[i] = blockClusterVertex[i];
+    mpDeformData->mClusterVertex = new J3DClusterVertex[mpDeformData->mClusterVertexNum];
+    J3DClusterVertex* blockClusterVertex = JSUConvertOffsetToPtr<J3DClusterVertex>(block, block->mClusterVertex);
+    for (int i = 0; i < mpDeformData->mClusterVertexNum; i++) {
+        mpDeformData->mClusterVertex[i] = blockClusterVertex[i];
     }
     
     for (int i = 0; i < mpDeformData->getClusterNum(); i++) {
         J3DCluster* cluster = &mpDeformData->mClusterPointer[i];
-        cluster->field_0x8 = JSUConvertOffsetToPtr<J3DClusterKey>(block, cluster->field_0x8);
+        cluster->mClusterKey = JSUConvertOffsetToPtr<J3DClusterKey>(block, cluster->mClusterKey);
         cluster->field_0x18 = JSUConvertOffsetToPtr<u16>(block, cluster->field_0x18);
-        int r3 = (int)JSUConvertOffsetToPtr<J3DClusterVertex>(block, cluster->field_0x1c);
-        int r31 = (int)blockClusterVertex;
-        cluster->field_0x1c = &mpDeformData->field_0x10[(r3 - r31)/0xC/0xCUL]; // fakematch, TODO
+        J3DClusterVertex* clusterVertex = JSUConvertOffsetToPtr<J3DClusterVertex>(block, cluster->mClusterVertex);
+        u32 vertexIdx = (clusterVertex - blockClusterVertex) / sizeof(J3DClusterVertex);
+        cluster->mClusterVertex = &mpDeformData->mClusterVertex[vertexIdx];
         J3DDeformer* deformer = new J3DDeformer(mpDeformData);
         if (cluster->field_0x14 != 0) {
-            deformer->field_0xc = new u32[cluster->field_0x14*3];
+            deformer->field_0xc = new f32[cluster->field_0x14*3];
         } else {
             deformer->field_0xc = NULL;
         }
-        deformer->mFlags = cluster->field_0xc;
-        deformer->field_0x8 = new u32[cluster->field_0x10];
+        deformer->mFlags = cluster->mFlags;
+        deformer->field_0x8 = new f32[cluster->mKeyNum];
         cluster->setDeformer(deformer);
     }
     
@@ -109,8 +113,8 @@ void J3DClusterLoader_v15::readCluster(const J3DClusterBlock* block) {
         clusterKey->field_0x8 = JSUConvertOffsetToPtr<u16>(block, clusterKey->field_0x8);
     }
     
-    for (int i = 0; i < mpDeformData->field_0x4; i++) {
-        J3DClusterVertex* clusterVertex = &mpDeformData->field_0x10[i];
+    for (int i = 0; i < mpDeformData->mClusterVertexNum; i++) {
+        J3DClusterVertex* clusterVertex = &mpDeformData->mClusterVertex[i];
         clusterVertex->field_0x4 = JSUConvertOffsetToPtr<u16>(block, clusterVertex->field_0x4);
         clusterVertex->field_0x8 = JSUConvertOffsetToPtr<u16>(block, clusterVertex->field_0x8);
     }

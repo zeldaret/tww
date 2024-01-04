@@ -18,7 +18,6 @@ public:
     void clear();
     void deform(J3DVertexBuffer*);
     void deform(J3DModel*);
-    void setAnm(J3DAnmCluster*);
 
     u16 getClusterNum() const { return mClusterNum; }
     u16 getClusterKeyNum() const { return mClusterKeyNum; }
@@ -33,16 +32,16 @@ private:
 
     /* 0x00 */ u16 mClusterNum;
     /* 0x02 */ u16 mClusterKeyNum;
-    /* 0x04 */ u16 field_0x4;
+    /* 0x04 */ u16 mClusterVertexNum;
     /* 0x08 */ J3DCluster* mClusterPointer;
     /* 0x0C */ J3DClusterKey* mClusterKeyPointer;
-    /* 0x10 */ J3DClusterVertex* field_0x10;
-    /* 0x14 */ u16 field_0x14;
-    /* 0x16 */ u16 field_0x16;
+    /* 0x10 */ J3DClusterVertex* mClusterVertex;
+    /* 0x14 */ u16 mVtxPosNum;
+    /* 0x16 */ u16 mVtxNrmNum;
     /* 0x18 */ f32* mVtxPos;
     /* 0x1C */ f32* mVtxNrm;
-    /* 0x20 */ JUTNameTab* field_0x20;
-    /* 0x24 */ JUTNameTab* field_0x24;
+    /* 0x20 */ JUTNameTab* mClusterName;
+    /* 0x24 */ JUTNameTab* mClusterKeyName;
 };  // Size: 0x28
 
 class J3DSkinDeform {
@@ -102,8 +101,8 @@ private:
 
     /* 0x00 */ J3DDeformData* mDeformData;
     /* 0x04 */ J3DAnmCluster* mAnmCluster;
-    /* 0x08 */ void* field_0x8;
-    /* 0x0C */ void* field_0xc;
+    /* 0x08 */ f32* field_0x8;
+    /* 0x0C */ f32* field_0xc;
     /* 0x10 */ u32 mFlags;
 };  // Size: 0x14
 

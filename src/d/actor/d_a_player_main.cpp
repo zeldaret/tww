@@ -24,6 +24,7 @@
 #include "d/d_material.h"
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
 #include "d/actor/d_a_hookshot.h"
+#include "d/actor/d_a_ship.h"
 #include "SSystem/SComponent/c_counter.h"
 
 const Vec l_ship_offset = {0.0f, 15.0f, -35.0f};
@@ -5150,7 +5151,7 @@ BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int
                 if (stageType == 7) {
                     cXyz* pos;
                     if (dComIfGp_getShipActor()) {
-                        pos = &((fopAc_ac_c*)dComIfGp_getShipActor())->current.pos;
+                        pos = &dComIfGp_getShipActor()->current.pos;
                     } else {
                         pos = &current.pos;
                     }

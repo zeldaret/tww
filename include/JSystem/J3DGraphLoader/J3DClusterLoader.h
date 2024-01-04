@@ -29,19 +29,18 @@ private:
     friend class J3DClusterLoader;
     friend class J3DClusterLoader_v15;
 
-    /* 0x08 */ u16 m08;
-    /* 0x0A */ u16 m0A;
-    /* 0x0C */ u16 m0C;
-    /* 0x0E */ u16 m0E;
-    /* 0x10 */ u16 m10;
-    /* 0x12 */ u16 m12;
-    /* 0x14 */ const void* m14;
-    /* 0x18 */ const void* m18;
-    /* 0x1C */ const void* m1C;
-    /* 0x20 */ const void* m20;
-    /* 0x24 */ const void* m24;
-    /* 0x28 */ const void* m28;
-    /* 0x2C */ const void* m2C;
+    /* 0x08 */ u16 mClusterNum;
+    /* 0x0A */ u16 mClusterKeyNum;
+    /* 0x0C */ u16 mClusterVertexNum;
+    /* 0x0E */ u16 mVtxPosNum;
+    /* 0x10 */ u16 mVtxNrmNum;
+    /* 0x14 */ void* mClusterPointer;
+    /* 0x18 */ void* mClusterKeyPointer;
+    /* 0x1C */ void* mClusterVertex;
+    /* 0x20 */ void* mVtxPos;
+    /* 0x24 */ void* mVtxNrm;
+    /* 0x28 */ void* mClusterName;
+    /* 0x2C */ void* mClusterKeyName;
 };
 
 struct J3DClusterLoaderDataBase {
