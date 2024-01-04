@@ -944,15 +944,15 @@ void dSv_player_info_c::init() {
         field_0x47[i] = 0;
     }
 
-    mFmapIdx = cM_rndF(3.0f);
-    if (mFmapIdx >= 3) {
-        mFmapIdx = 2;
+    mRandomSalvagePoint = cM_rndF(3.0f);
+    if (mRandomSalvagePoint >= 3) {
+        mRandomSalvagePoint = 2;
     }
 }
 
 /* 8005BF2C-8005BFA4       .text init__19dSv_player_config_cFv */
 void dSv_player_config_c::init() {
-    field_0x0 = 1;
+    mRuby = 1;
 
     u32 soundMode = OSGetSoundMode();
     if (soundMode == 0) {
@@ -1350,6 +1350,62 @@ void dSv_info_c::reinit() {
                                    0x84FF, 0x83FF, 0x82FF, 0x81FF, 0x80FF};
 
     static u16 l_onEventBit[] = {0x2F08, 0x2F04, 0x2F02, 0x3A01, 0x3401};
+    
+    u8* r29 = new u8[ARRAY_SIZE(l_holdEventReg)];
+    for (int i = 0; i < ARRAY_SIZE(l_holdEventReg); i++) {
+        r29[i] = dComIfGs_getEventReg(l_holdEventReg[i]);
+    }
+    
+    u8 clearCount = dComIfGs_getClearCount();
+    
+    char name[17];
+    strcpy(name, dComIfGs_getPlayerName());
+    
+    u8 attnType = dComIfGs_getOptAttentionType();
+    u8 ruby = dComIfGs_getOptRuby();
+    u8 sound = dComIfGs_getOptSound();
+    u8 vib = dComIfGs_getOptVibration();
+    
+    u8 pictureNum = dComIfGs_getPictureNum();
+    
+    u8 r27 = dComIfGs_getEventReg(0x89FF);
+    
+    init();
+    
+    for (int i = 0; i < ARRAY_SIZE(l_holdEventReg); i++) {
+        dComIfGs_setEventReg(l_holdEventReg[i], r29[i]);
+    }
+    
+    for (int i = 0; i < ARRAY_SIZE(l_onEventBit); i++) {
+        dComIfGs_onEventBit(l_onEventBit[i]);
+    }
+    
+    dComIfGs_setEventReg(0xC407, 7);
+    
+    dComIfGs_setClearCount(clearCount);
+    
+    dComIfGs_onSaveTbox(dSv_save_c::STAGE_MISC, 0x00);
+    dComIfGs_onSaveSwitch(dSv_save_c::STAGE_SEA, 0x47);
+    dComIfGs_onSaveSwitch(dSv_save_c::STAGE_SEA, 0x5E);
+    
+    dComIfGs_setPlayerName(name);
+    
+    dComIfGs_setOptAttentionType(attnType);
+    dComIfGs_setOptRuby(ruby);
+    dComIfGs_setOptSound(sound);
+    dComIfGs_setOptVibration(vib);
+    
+    dComIfGs_setRandomSalvagePoint(3);
+    
+    dComIfGs_setItem(0x8, CAMERA2);
+    dComIfGp_setItem(0x8, CAMERA2);
+    
+    dComIfGs_onGetItem(0x8, 0);
+    dComIfGs_onGetItem(0x8, 1);
+    
+    dComIfGs_setPictureNum(pictureNum);
+    
+    dComIfGs_setEventReg(0x89FF, r27);
 }
 
 /* 8005D860-8005D8C8       .text init__10dSv_save_cFv */

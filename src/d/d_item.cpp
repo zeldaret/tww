@@ -611,7 +611,7 @@ void item_func_l_magic() {
 /* 800C3008-800C3060       .text item_func_bomb_5__Fv */
 void item_func_bomb_5() {
     dComIfGs_onGetItem(0xD, 0);
-    dComIfGp_setItem(0xD, 0xB);
+    dComIfGp_setItem(0xD, BOMB_5);
     dComIfGp_setItemBombNumCount(5);
 }
 

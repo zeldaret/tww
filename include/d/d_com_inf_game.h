@@ -1148,8 +1148,36 @@ inline int dComIfGs_getTriforceNum() {
     return g_dComIfG_gameInfo.save.getPlayer().getCollect().getTriforceNum();
 }
 
+inline u8 dComIfGs_getOptRuby() {
+    return g_dComIfG_gameInfo.save.getPlayer().getConfig().getRuby();
+}
+
+inline void dComIfGs_setOptRuby(u8 ruby) {
+    g_dComIfG_gameInfo.save.getPlayer().getConfig().setRuby(ruby);
+}
+
+inline u8 dComIfGs_getOptSound() {
+    return g_dComIfG_gameInfo.save.getPlayer().getConfig().getSound();
+}
+
+inline void dComIfGs_setOptSound(u8 mode) {
+    g_dComIfG_gameInfo.save.getPlayer().getConfig().setSound(mode);
+}
+
+inline u8 dComIfGs_getOptAttentionType() {
+    return g_dComIfG_gameInfo.save.getPlayer().getConfig().getAttentionType();
+}
+
+inline void dComIfGs_setOptAttentionType(u8 type) {
+    g_dComIfG_gameInfo.save.getPlayer().getConfig().setAttentionType(type);
+}
+
 inline u8 dComIfGs_getOptVibration() {
     return g_dComIfG_gameInfo.save.getPlayer().getConfig().getVibration();
+}
+
+inline void dComIfGs_setOptVibration(u8 vib) {
+    g_dComIfG_gameInfo.save.getPlayer().getConfig().setVibration(vib);
 }
 
 inline BOOL dComIfGs_isTbox(int i_no) {
@@ -1445,8 +1473,28 @@ inline const char* dComIfGs_getPlayerName() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerInfo().getPlayerName();
 }
 
+inline void dComIfGs_setPlayerName(const char* name) {
+    g_dComIfG_gameInfo.save.getPlayer().getPlayerInfo().setPlayerName(name);
+}
+
 inline u8 dComIfGs_getClearCount() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerInfo().getClearCount();
+}
+
+inline void dComIfGs_setClearCount(u8 count) {
+    g_dComIfG_gameInfo.save.getPlayer().getPlayerInfo().setClearCount(count);
+}
+
+inline void dComIfGs_clearCountUp() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerInfo().clearCountUp();
+}
+
+inline u8 dComIfGs_getRandomSalvagePoint() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerInfo().getRandomSalvage();
+}
+
+inline void dComIfGs_setRandomSalvagePoint(u8 point) {
+    g_dComIfG_gameInfo.save.getPlayer().getPlayerInfo().setRandomSalvage(point);
 }
 
 inline u8 dComIfGs_getGbaRupeeCount() {

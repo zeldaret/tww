@@ -66,7 +66,7 @@ public:
     /* 0x2B2 */ u8 mSwitchB;
     /* 0x2B3 */ u8 mPathId;
     /* 0x2B4 */ u8 mTriforce;
-    /* 0x2B5 */ u8 mFmapIdx;
+    /* 0x2B5 */ u8 mRandomSalvagePoint;
     /* 0x2B6 */ u8 mModelType;
     /* 0x2B7 */ u8 m2B7[0x2B8 - 0x2B7];
     /* 0x2B8 */ cXyz mOrigPos;

@@ -3,6 +3,7 @@
 
 #include "global.h"
 #include "SSystem/SComponent/c_xyz.h"
+#include "string.h"
 
 class dSv_player_status_a_c {
 public:
@@ -316,16 +317,16 @@ public:
     void init();
 
     const char* getPlayerName() const { return mPlayerName; }
-    void setPlayerName(const char*) {}
+    void setPlayerName(const char* name) { strcpy(mPlayerName, name); }
     u8 getClearCount() { return mClearCount; }
+    void setClearCount(u8 count) { mClearCount = count; }
     void clearCountUp() {}
-    void setClearCount(u8) {}
     void addDeathCount() {}
     void getPuzzleInfo() {}
     void setPuzzleInfo(u8) {}
     void setPuzzleData(int, u8) {}
-    void getRandomSalvage() {}
-    void setRandomSalvage(u8) {}
+    u8 getRandomSalvage() { return mRandomSalvagePoint; }
+    void setRandomSalvage(u8 point) { mRandomSalvagePoint = point; }
 
     /* 0x00 */ u8 field_0x0[0x10];
     /* 0x10 */ u16 field_0x10;
@@ -335,7 +336,7 @@ public:
     /* 0x36 */ char field_0x36[17];
     /* 0x47 */ char field_0x47[17];
     /* 0x58 */ u8 mClearCount;
-    /* 0x59 */ u8 mFmapIdx;
+    /* 0x59 */ u8 mRandomSalvagePoint;
     /* 0x5A */ u8 field_0x5a[0x5c - 0x5a];
 };  // Size: 0x5C
 
@@ -346,16 +347,16 @@ public:
     void init();
     s32 checkVibration();
 
-    u8 getVibration() { return mVibration; }
-    void setVibration(u8 vib) { mVibration = vib; }
-    u8 getAttentionType() { return mAttentionType; }
-    void setAttentionType(u8 type) { mAttentionType = type; }
-    void getRuby() {}
-    void setRuby(u8) {}
+    u8 getRuby() { return mRuby; }
+    void setRuby(u8 ruby) { mRuby = ruby; }
     u8 getSound() { return mSoundMode; }
     void setSound(u8 mode) { mSoundMode = mode; }
+    u8 getAttentionType() { return mAttentionType; }
+    void setAttentionType(u8 type) { mAttentionType = type; }
+    u8 getVibration() { return mVibration; }
+    void setVibration(u8 vib) { mVibration = vib; }
 
-    /* 0x0 */ u8 field_0x0;
+    /* 0x0 */ u8 mRuby;
     /* 0x1 */ u8 mSoundMode;
     /* 0x2 */ u8 mAttentionType;
     /* 0x3 */ u8 mVibration;
