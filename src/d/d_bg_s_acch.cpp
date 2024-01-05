@@ -116,7 +116,6 @@ void dBgS_Acch::GroundCheckInit(dBgS&) {
 
 /* 800A2EE8-800A305C       .text GroundCheck__9dBgS_AcchFR4dBgS */
 void dBgS_Acch::GroundCheck(dBgS& i_bgs) {
-    /* Nonmatching */
     if (m_flags & GRND_NONE)
         return;
 
@@ -446,11 +445,12 @@ bool dBgS_Acch::GetOnePolyInfo(cBgS_PolyInfo* dst) {
 
 /* 800A42B4-800A4348       .text GetWallAddY__9dBgS_AcchFR3Veci */
 f32 dBgS_Acch::GetWallAddY(Vec& vec, int) {
-    /* Nonmatching */
-    if (ChkGroundFind() && m_pla.GetNP()->y < 0.5f) {
-        f32 cross_y;
-        m_pla.getCrossY(vec, &cross_y);
-        if (cross_y < 0.0f)
+    if (!ChkGroundFind() || m_pla.mNormal.y < 0.5f) {
+        return 0.0f;
+    }
+    f32 cross_y;
+    if (m_pla.getCrossYLessD(vec, &cross_y)) {
+        if (cross_y > 0.0f)
             cross_y = 0.0f;
         return -cross_y;
     } else {

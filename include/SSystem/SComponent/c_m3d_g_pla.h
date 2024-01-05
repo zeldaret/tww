@@ -24,13 +24,20 @@ public:
     cXyz* GetNP() { return &mNormal; }
     const cXyz* GetNP() const { return &mNormal; }
     f32 GetD() const { return mD; }
-    float getCrossY(const cXyz& i_axis) const { // fake inline
+    void getCrossY(const cXyz& i_axis, f32* i_value) const {
+        if (!cM3d_IsZero(mNormal.y)) {
+            *i_value = (-mNormal.x * i_axis.x - mNormal.z * i_axis.z - mD) / mNormal.y;
+        }
+    }
+    f32 getCrossY_NonIsZero(const cXyz& i_axis) const {
         return (-mNormal.x * i_axis.x - mNormal.z * i_axis.z - mD) / mNormal.y;
     }
-    void getCrossY(const cXyz& i_axis, float* i_value) const {
-        if (!cM3d_IsZero(mNormal.y)) {
-            *i_value = getCrossY(i_axis);
+    bool getCrossYLessD(const Vec& i_axis, f32* i_value) const {
+        if (cM3d_IsZero(mNormal.y)) {
+            return false;
         }
+        *i_value = (-mNormal.x * i_axis.x - mNormal.z * i_axis.z) / mNormal.y;
+        return true;
     }
     f32 getSignedLenPos(const cXyz* param_1) const {
         return cM3d_SignedLenPlaAndPos(this, param_1);
@@ -41,11 +48,8 @@ public:
     // TODO
     void Set(const cM3dGPla*) {}
     void SetupFrom3Vtx(const Vec*, const Vec*, const Vec*) {}
-    cM3dGPla(const cXyz*, float) {}
+    cM3dGPla(const cXyz*, f32) {}
     void cross(const cM3dGLin&, Vec&) const {}
-    void getCrossYLessD(const Vec&, float*) const {}
-    void getCrossY_NonIsZero(const cXyz&) const {}
-    void operator=(const cM3dGPla&) {}
 };  // Size: 0x14
 
 #endif

@@ -177,7 +177,7 @@ bool cBgW::RwgGroundCheckGnd(u16 idx, cBgS_GndChk* chk) {
     while (true) {
         cBgW_RwgElm * rwg = &pm_rwg[idx];
         cBgW_TriElm * tri = &pm_tri[idx];
-        f32 y = tri->m_plane.getCrossY(*chk->GetPointP());
+        f32 y = tri->m_plane.getCrossY_NonIsZero(*chk->GetPointP());
         if (RwgGroundCheckCommon(y, (u16)idx, chk))
             ret = true;
         idx = rwg->next;
