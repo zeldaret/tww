@@ -355,9 +355,9 @@ u16 dSv_player_item_record_c::getTimer() {
 
 /* 800598D8-80059908       .text init__21dSv_player_item_max_cFv */
 void dSv_player_item_max_c::init() {
-    mItemMax2.field_0x0 = 0;
-    mItemMax2.mArrowNum = 0;
-    mItemMax2.mBombNum = 0;
+    setReserved1Num(0);
+    setArrowNum(0);
+    setBombNum(0);
 
     for (int i = 0; i < 5; i++) {
         field_0x3[i] = 0;
@@ -1452,7 +1452,7 @@ int dSv_info_c::createZone(int i_roomNo) {
     dSv_zone_c* zone_p = mZone;
 
     for (int i = 0; i < ZONE_MAX; i++) {
-        if (zone_p->mRoomNo < 0) {
+        if (zone_p->getRoomNo() < 0) {
             zone_p->init(i_roomNo);
             return i;
         }

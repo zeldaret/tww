@@ -39,7 +39,7 @@ public:
     /* 0x14 */ u8 mMagic;
     /* 0x15 */ u8 field_0x15;
     /* 0x16 */ u8 field_0x16;
-    /* 0x17 */ /* ??? TODO */
+    /* 0x17 */ /* 1 byte of alignment padding */
 };  // Size: 0x18
 
 STATIC_ASSERT(sizeof(dSv_player_status_a_c) == 0x18);
@@ -65,7 +65,7 @@ public:
     /* 0x10 */ u16 mDate;
     /* 0x12 */ s16 mTactWindAngleX;
     /* 0x14 */ s16 mTactWindAngleY;
-    /* 0x16 */ /* ??? TODO */
+    /* 0x16 */ /* 2 bytes of alignment padding */
 };  // Size: 0x18
 
 STATIC_ASSERT(sizeof(dSv_player_status_b_c) == 0x18);
@@ -159,13 +159,13 @@ STATIC_ASSERT(sizeof(dSv_player_item_record_c) == 0x8);
 
 class dSv_player_item_max2_c {
 public:
-    // void setReserved1Num(u8 num) { ? = num; }
+    void setReserved1Num(u8 num) { mReserved1Num = num; }
     u8 getArrowNum() { return mArrowNum; }
     void setArrowNum(u8 num) { mArrowNum = num; }
     u8 getBombNum() { return mBombNum; }
     void setBombNum(u8 num) { mBombNum = num; }
 
-    /* 0x0 */ u8 field_0x0;
+    /* 0x0 */ u8 mReserved1Num;
     /* 0x1 */ u8 mArrowNum;
     /* 0x2 */ u8 mBombNum;
 };  // Size: 0x3
@@ -174,7 +174,7 @@ class dSv_player_item_max_c {
 public:
     void init();
 
-    // void setReserved1Num(u8 num) { ? = num; }
+    void setReserved1Num(u8 num) { mItemMax2.setReserved1Num(num); }
     u8 getArrowNum() { return mItemMax2.getArrowNum(); }
     void setArrowNum(u8 num) { mItemMax2.setArrowNum(num); }
     u8 getBombNum() { return mItemMax2.getBombNum(); }
@@ -234,7 +234,7 @@ public:
     /* 0x0 */ u32 mReserveFlags;
     /* 0x4 */ u8 mBeastFlags;
     /* 0x5 */ u8 mBaitFlags;
-    /* 0x6 */ u8 unk_0x6[0xC - 0x6]; // TODO?
+    /* 0x6 */ u8 unk_0x6[0xC - 0x6]; // there's probably an unused field here
 };  // Size: 0xC
 
 STATIC_ASSERT(sizeof(dSv_player_get_bag_item_c) == 0xC);
@@ -488,7 +488,8 @@ public:
     /* 0x1A9 */ /* 3 bytes of alignment padding */
     /* 0x1AC */ dSv_player_priest_c mPriest;
     /* 0x1BC */ dSv_player_status_c_c mStatusC[4];
-};  // Size: 0x380 ?
+    /* 0x37C */ /* 4 bytes of alignment padding */
+};  // Size: 0x380
 
 STATIC_ASSERT(sizeof(dSv_player_c) == 0x380);
 
@@ -753,7 +754,6 @@ public:
 
     static const int PACKED_STRUCT_SIZE =
         dSv_player_c::PACKED_STRUCT_SIZE +
-        // sizeof(dSv_player_c) +
         sizeof(dSv_memory_c) * STAGE_MAX +
         sizeof(dSv_ocean_c) +
         sizeof(dSv_event_c) +
@@ -826,7 +826,6 @@ public:
     static const int ZONE_MAX = 0x20;
 
     /* 0x0000 */ dSv_save_c mSavedata;
-    // /* 0x0770 */ u8 unk_0x770[0x778 - 0x770];
     /* 0x0778 */ dSv_memory_c mMemory;
     /* 0x079C */ dSv_danBit_c mDan;
     /* 0x07A8 */ dSv_zone_c mZone[ZONE_MAX];
