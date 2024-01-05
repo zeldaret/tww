@@ -8,6 +8,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
 #include "d/d_stage.h"
+#include "d/d_s_play.h"
 #include "m_Do/m_Do_audio.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTGamePad.h"
@@ -930,9 +931,14 @@ BOOL dSv_player_map_c::isSaveArriveGridForAgb(int no) {
 
 /* 8005BE84-8005BF2C       .text init__17dSv_player_info_cFv */
 void dSv_player_info_c::init() {
-    static char l_defaultName[8] = "Link";
+    static char l_defaultName[] = VERSION_SELECT("リンク", "Link", "Link");
 
     strcpy(mPlayerName, l_defaultName);
+#if VERSION == VERSION_JPN
+    if (g_msgDHIO.field_0x08 == 1) {
+        strcpy(mPlayerName, "Link");
+    }
+#endif
     field_0x10 = 0;
     strcpy(field_0x25, l_defaultName);
     strcpy(field_0x36, l_defaultName);
@@ -952,7 +958,7 @@ void dSv_player_info_c::init() {
 
 /* 8005BF2C-8005BFA4       .text init__19dSv_player_config_cFv */
 void dSv_player_config_c::init() {
-    mRuby = 1;
+    mRuby = VERSION_SELECT(0, 1, 0);
 
     u32 soundMode = OSGetSoundMode();
     if (soundMode == 0) {
@@ -1029,37 +1035,37 @@ void dSv_memBit_c::init() {
 
 /* 8005C0EC-8005C188       .text onTbox__12dSv_memBit_cFi */
 void dSv_memBit_c::onTbox(int i_no) {
-    JUT_ASSERT(2252, 0 <= i_no && i_no < 32);
+    JUT_ASSERT(VERSION_SELECT(2225, 2252, 2252), 0 <= i_no && i_no < 32);
     mTbox |= (1 << i_no);
 }
 
 /* 8005C188-8005C228       .text isTbox__12dSv_memBit_cFi */
 BOOL dSv_memBit_c::isTbox(int i_no) {
-    JUT_ASSERT(2280, 0 <= i_no && i_no < 32);
+    JUT_ASSERT(VERSION_SELECT(2253, 2280, 2280), 0 <= i_no && i_no < 32);
     return mTbox & (1 << i_no) ? TRUE : FALSE;
 }
 
 /* 8005C228-8005C2D4       .text onSwitch__12dSv_memBit_cFi */
 void dSv_memBit_c::onSwitch(int i_no) {
-    JUT_ASSERT(2311, 0 <= i_no && i_no < 128);
+    JUT_ASSERT(VERSION_SELECT(2284, 2311, 2311), 0 <= i_no && i_no < 128);
     mSwitch[i_no >> 5] |= (1 << (i_no & 0x1F));
 }
 
 /* 8005C2D4-8005C380       .text offSwitch__12dSv_memBit_cFi */
 void dSv_memBit_c::offSwitch(int i_no) {
-    JUT_ASSERT(2325, 0 <= i_no && i_no < 128);
+    JUT_ASSERT(VERSION_SELECT(2298, 2325, 2325), 0 <= i_no && i_no < 128);
     mSwitch[i_no >> 5] &= ~(1 << (i_no & 0x1F));
 }
 
 /* 8005C380-8005C430       .text isSwitch__12dSv_memBit_cFi */
 BOOL dSv_memBit_c::isSwitch(int i_no) {
-    JUT_ASSERT(2339, 0 <= i_no && i_no < 128);
+    JUT_ASSERT(VERSION_SELECT(2312, 2339, 2339), 0 <= i_no && i_no < 128);
     return mSwitch[i_no >> 5] & (1 << (i_no & 0x1F)) ? TRUE : FALSE;
 }
 
 /* 8005C430-8005C4EC       .text revSwitch__12dSv_memBit_cFi */
 BOOL dSv_memBit_c::revSwitch(int i_no) {
-    JUT_ASSERT(2353, 0 <= i_no && i_no < 128);
+    JUT_ASSERT(VERSION_SELECT(2326, 2353, 2353), 0 <= i_no && i_no < 128);
 
     u32 idx = i_no >> 5;
     u32 sw = 1 << (i_no & 0x1F);
@@ -1069,41 +1075,43 @@ BOOL dSv_memBit_c::revSwitch(int i_no) {
 
 /* 8005C4EC-8005C598       .text onItem__12dSv_memBit_cFi */
 void dSv_memBit_c::onItem(int i_no) {
-    JUT_ASSERT(2372, 0 <= i_no && i_no < 64);
+    JUT_ASSERT(VERSION_SELECT(2345, 2372, 2372), 0 <= i_no && i_no < 64);
     mItem[i_no >> 5] |= (1 << (i_no & 0x1F));
 }
 
 /* 8005C598-8005C648       .text isItem__12dSv_memBit_cFi */
 BOOL dSv_memBit_c::isItem(int i_no) {
-    JUT_ASSERT(2400, 0 <= i_no && i_no < 64);
+    JUT_ASSERT(VERSION_SELECT(2373, 2400, 2400), 0 <= i_no && i_no < 64);
     return mItem[i_no >> 5] & (1 << (i_no & 0x1F)) ? TRUE : FALSE;
 }
 
 /* 8005C648-8005C6F4       .text onVisitedRoom__12dSv_memBit_cFi */
 void dSv_memBit_c::onVisitedRoom(int i_no) {
-    JUT_ASSERT(2432, 0 <= i_no && i_no < 64);
+    JUT_ASSERT(VERSION_SELECT(2405, 2432, 2432), 0 <= i_no && i_no < 64);
     mVisitedRoom[i_no >> 5] |= (1 << (i_no & 0x1F));
 }
 
 /* 8005C6F4-8005C7A4       .text isVisitedRoom__12dSv_memBit_cFi */
 BOOL dSv_memBit_c::isVisitedRoom(int i_no) {
-    JUT_ASSERT(2460, 0 <= i_no && i_no < 64);
+    JUT_ASSERT(VERSION_SELECT(2433, 2460, 2460), 0 <= i_no && i_no < 64);
     return mVisitedRoom[i_no >> 5] & (1 << (i_no & 0x1F)) ? TRUE : FALSE;
 }
 
 /* 8005C7A4-8005C844       .text onDungeonItem__12dSv_memBit_cFi */
 void dSv_memBit_c::onDungeonItem(int i_no) {
-    JUT_ASSERT(2492, 0 <= i_no && i_no < 6);
+    JUT_ASSERT(VERSION_SELECT(2465, 2492, 2492), 0 <= i_no && i_no < 6);
     mDungeonItem |= (u8)(1 << i_no);
 }
 
 /* 8005C844-8005C8E8       .text isDungeonItem__12dSv_memBit_cFi */
 BOOL dSv_memBit_c::isDungeonItem(int i_no) {
-    JUT_ASSERT(2521, 0 <= i_no && i_no < 6);
+    JUT_ASSERT(VERSION_SELECT(2494, 2521, 2521), 0 <= i_no && i_no < 6);
     return mDungeonItem & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
-static const char* unused_8034f88d = "(123 <= i_no) && (i_no <= 132)";
+static void dummy() {
+    OSReport("(123 <= i_no) && (i_no <= 132)");
+}
 
 /* 8005C8E8-8005C908       .text init__11dSv_ocean_cFv */
 void dSv_ocean_c::init() {
@@ -1114,15 +1122,15 @@ void dSv_ocean_c::init() {
 
 /* 8005C908-8005C9E8       .text onOceanSvBit__11dSv_ocean_cFUcUs */
 void dSv_ocean_c::onOceanSvBit(u8 i_grid, u16 i_bit) {
-    JUT_ASSERT(2640, (0 <= i_grid) && (i_grid <= 0x31));
-    JUT_ASSERT(2641, (0 <= i_bit) && (i_bit < 16));
+    JUT_ASSERT(VERSION_SELECT(2613, 2640, 2640), (0 <= i_grid) && (i_grid <= 0x31));
+    JUT_ASSERT(VERSION_SELECT(2614, 2641, 2641), (0 <= i_bit) && (i_bit < 16));
     field_0x0[i_grid] |= (u16)(1 << i_bit);
 }
 
 /* 8005C9E8-8005CACC       .text isOceanSvBit__11dSv_ocean_cFUcUs */
 BOOL dSv_ocean_c::isOceanSvBit(u8 i_grid, u16 i_bit) {
-    JUT_ASSERT(2672, (0 <= i_grid) && (i_grid <= 0x31));
-    JUT_ASSERT(2673, (0 <= i_bit) && (i_bit < 16));
+    JUT_ASSERT(VERSION_SELECT(2645, 2672, 2672), (0 <= i_grid) && (i_grid <= 0x31));
+    JUT_ASSERT(VERSION_SELECT(2646, 2673, 2673), (0 <= i_bit) && (i_bit < 16));
     return field_0x0[i_grid] & (u16)(1 << i_bit) ? TRUE : FALSE;
 }
 
@@ -1188,25 +1196,25 @@ int dSv_danBit_c::init(s8 i_stageNo) {
 
 /* 8005CC08-8005CCB4       .text onSwitch__12dSv_danBit_cFi */
 void dSv_danBit_c::onSwitch(int i_no) {
-    JUT_ASSERT(2817, 0 <= i_no && i_no < 64);
+    JUT_ASSERT(VERSION_SELECT(2790, 2817, 2817), 0 <= i_no && i_no < 64);
     mSwitch[i_no >> 5] |= (1 << (i_no & 0x1F));
 }
 
 /* 8005CCB4-8005CD60       .text offSwitch__12dSv_danBit_cFi */
 void dSv_danBit_c::offSwitch(int i_no) {
-    JUT_ASSERT(2831, 0 <= i_no && i_no < 64);
+    JUT_ASSERT(VERSION_SELECT(2804, 2831, 2831), 0 <= i_no && i_no < 64);
     mSwitch[i_no >> 5] &= ~(1 << (i_no & 0x1F));
 }
 
 /* 8005CD60-8005CE10       .text isSwitch__12dSv_danBit_cFi */
 BOOL dSv_danBit_c::isSwitch(int i_no) {
-    JUT_ASSERT(2845, 0 <= i_no && i_no < 64);
+    JUT_ASSERT(VERSION_SELECT(2818, 2845, 2845), 0 <= i_no && i_no < 64);
     return mSwitch[i_no >> 5] & (1 << (i_no & 0x1F)) ? TRUE : FALSE;
 }
 
 /* 8005CE10-8005CECC       .text revSwitch__12dSv_danBit_cFi */
 BOOL dSv_danBit_c::revSwitch(int i_no) {
-    JUT_ASSERT(2859, 0 <= i_no && i_no < 64);
+    JUT_ASSERT(VERSION_SELECT(2832, 2859, 2859), 0 <= i_no && i_no < 64);
 
     int sw = 1 << (i_no & 0x1F);
     mSwitch[i_no >> 5] ^= sw;
@@ -1229,25 +1237,25 @@ void dSv_zoneBit_c::clearRoomSwitch() {
 
 /* 8005CF00-8005CFAC       .text onSwitch__13dSv_zoneBit_cFi */
 void dSv_zoneBit_c::onSwitch(int i_no) {
-    JUT_ASSERT(2903, 0 <= i_no && i_no < SWITCH_MAX);
+    JUT_ASSERT(VERSION_SELECT(2876, 2903, 2903), 0 <= i_no && i_no < SWITCH_MAX);
     mSwitch[i_no >> 4] |= (u16)(1 << (i_no & 0xF));
 }
 
 /* 8005CFAC-8005D054       .text offSwitch__13dSv_zoneBit_cFi */
 void dSv_zoneBit_c::offSwitch(int i_no) {
-    JUT_ASSERT(2917, 0 <= i_no && i_no < SWITCH_MAX);
+    JUT_ASSERT(VERSION_SELECT(2890, 2917, 2917), 0 <= i_no && i_no < SWITCH_MAX);
     mSwitch[i_no >> 4] &= ~(1 << (i_no & 0xF));
 }
 
 /* 8005D054-8005D100       .text isSwitch__13dSv_zoneBit_cFi */
 BOOL dSv_zoneBit_c::isSwitch(int i_no) {
-    JUT_ASSERT(2931, 0 <= i_no && i_no < SWITCH_MAX);
+    JUT_ASSERT(VERSION_SELECT(2904, 2931, 2931), 0 <= i_no && i_no < SWITCH_MAX);
     return mSwitch[i_no >> 4] & 1 << (i_no & 0xF) ? TRUE : FALSE;
 }
 
 /* 8005D100-8005D1B8       .text revSwitch__13dSv_zoneBit_cFi */
 BOOL dSv_zoneBit_c::revSwitch(int i_no) {
-    JUT_ASSERT(2945, 0 <= i_no && i_no < SWITCH_MAX);
+    JUT_ASSERT(VERSION_SELECT(2918, 2945, 2945), 0 <= i_no && i_no < SWITCH_MAX);
 
     u32 idx = i_no >> 4;
     int sw = 1 << (i_no & 0xF);
@@ -1257,13 +1265,13 @@ BOOL dSv_zoneBit_c::revSwitch(int i_no) {
 
 /* 8005D1B8-8005D254       .text onItem__13dSv_zoneBit_cFi */
 void dSv_zoneBit_c::onItem(int i_no) {
-    JUT_ASSERT(2964, 0 <= i_no && i_no < 16);
+    JUT_ASSERT(VERSION_SELECT(2937, 2964, 2964), 0 <= i_no && i_no < 16);
     mItem |= (1 << i_no);
 }
 
 /* 8005D254-8005D2F4       .text isItem__13dSv_zoneBit_cFi */
 BOOL dSv_zoneBit_c::isItem(int i_no) {
-    JUT_ASSERT(2992, 0 <= i_no && i_no < 16);
+    JUT_ASSERT(VERSION_SELECT(2965, 2992, 2992), 0 <= i_no && i_no < 16);
     return mItem & (1 << i_no) ? TRUE : FALSE;
 }
 
@@ -1276,13 +1284,13 @@ void dSv_zoneActor_c::init() {
 
 /* 8005D314-8005D3BC       .text on__15dSv_zoneActor_cFi */
 void dSv_zoneActor_c::on(int i_id) {
-    JUT_ASSERT(3037, 0 <= i_id && i_id < ACTOR_MAX);
+    JUT_ASSERT(VERSION_SELECT(3010, 3037, 3037), 0 <= i_id && i_id < ACTOR_MAX);
     mActorFlags[i_id >> 5] |= (1 << (i_id & 0x1F));
 }
 
 /* 8005D3BC-8005D468       .text is__15dSv_zoneActor_cFi */
 BOOL dSv_zoneActor_c::is(int i_id) {
-    JUT_ASSERT(3065, 0 <= i_id && i_id < ACTOR_MAX);
+    JUT_ASSERT(VERSION_SELECT(3038, 3065, 3065), 0 <= i_id && i_id < ACTOR_MAX);
     return mActorFlags[i_id >> 5] & (1 << (i_id & 0x1F)) ? TRUE : FALSE;
 }
 
@@ -1422,13 +1430,13 @@ void dSv_save_c::init() {
 
 /* 8005D8C8-8005D988       .text getSave__10dSv_info_cFi */
 void dSv_info_c::getSave(int i_stageNo) {
-    JUT_ASSERT(3335, 0 <= i_stageNo && i_stageNo < dSv_save_c::STAGE_MAX);
+    JUT_ASSERT(VERSION_SELECT(3308, 3335, 3335), 0 <= i_stageNo && i_stageNo < dSv_save_c::STAGE_MAX);
     mMemory = mSavedata.getSave(i_stageNo);
 }
 
 /* 8005D988-8005DA70       .text putSave__10dSv_info_cFi */
 void dSv_info_c::putSave(int i_stageNo) {
-    JUT_ASSERT(3351, 0 <= i_stageNo && i_stageNo < dSv_save_c::STAGE_MAX);
+    JUT_ASSERT(VERSION_SELECT(3324, 3351, 3351), 0 <= i_stageNo && i_stageNo < dSv_save_c::STAGE_MAX);
     mSavedata.putSave(i_stageNo, mMemory);
 }
 
@@ -1456,7 +1464,7 @@ int dSv_info_c::createZone(int i_roomNo) {
 
 /* 8005DB24-8005DCD0       .text onSwitch__10dSv_info_cFii */
 void dSv_info_c::onSwitch(int i_no, int i_roomNo) {
-    JUT_ASSERT(3411,
+    JUT_ASSERT(VERSION_SELECT(3384, 3411, 3411),
                (0 <= i_no && i_no < (MEMORY_SWITCH+ DAN_SWITCH+ ZONE_SWITCH)) || i_no == -1 || i_no == 255);
 
     if (i_no == -1 || i_no == 255) {
@@ -1468,10 +1476,10 @@ void dSv_info_c::onSwitch(int i_no, int i_roomNo) {
     } else if (i_no < (MEMORY_SWITCH + DAN_SWITCH)) {
         mDan.onSwitch(i_no - MEMORY_SWITCH);
     } else {
-        JUT_ASSERT(3424, 0 <= i_roomNo && i_roomNo < 64);
+        JUT_ASSERT(VERSION_SELECT(3397, 3424, 3424), 0 <= i_roomNo && i_roomNo < 64);
 
         int zoneId = dComIfGp_roomControl_getZoneNo(i_roomNo);
-        JUT_ASSERT(3426, 0 <= zoneId && zoneId < ZONE_MAX);
+        JUT_ASSERT(VERSION_SELECT(3399, 3426, 3426), 0 <= zoneId && zoneId < ZONE_MAX);
 
         mZone[zoneId].getZoneBit().onSwitch(i_no - (MEMORY_SWITCH + DAN_SWITCH));
     }
@@ -1485,7 +1493,7 @@ int dStage_roomControl_c::getZoneNo(int i_roomNo) {
 
 /* 8005DCEC-8005DE98       .text offSwitch__10dSv_info_cFii */
 void dSv_info_c::offSwitch(int i_no, int i_roomNo) {
-    JUT_ASSERT(3448,
+    JUT_ASSERT(VERSION_SELECT(3421, 3448, 3448),
                (0 <= i_no && i_no < (MEMORY_SWITCH+ DAN_SWITCH+ ZONE_SWITCH)) || i_no == -1 || i_no == 255);
 
     if (i_no == -1 || i_no == 255) {
@@ -1497,10 +1505,10 @@ void dSv_info_c::offSwitch(int i_no, int i_roomNo) {
     } else if (i_no < (MEMORY_SWITCH + DAN_SWITCH)) {
         mDan.offSwitch(i_no - MEMORY_SWITCH);
     } else {
-        JUT_ASSERT(3461, 0 <= i_roomNo && i_roomNo < 64);
+        JUT_ASSERT(VERSION_SELECT(3434, 3461, 3461), 0 <= i_roomNo && i_roomNo < 64);
 
         int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
-        JUT_ASSERT(3463, 0 <= zoneNo && zoneNo < ZONE_MAX);
+        JUT_ASSERT(VERSION_SELECT(3436, 3463, 3463), 0 <= zoneNo && zoneNo < ZONE_MAX);
 
         mZone[zoneNo].getZoneBit().offSwitch(i_no - (MEMORY_SWITCH + DAN_SWITCH));
     }
@@ -1517,10 +1525,10 @@ BOOL dSv_info_c::isSwitch(int i_no, int i_roomNo) {
     } else if (i_no < (MEMORY_SWITCH + DAN_SWITCH)) {
         return mDan.isSwitch(i_no - MEMORY_SWITCH);
     } else {
-        JUT_ASSERT(3509, 0 <= i_roomNo && i_roomNo < 64);
+        JUT_ASSERT(VERSION_SELECT(3482, 3509, 3509), 0 <= i_roomNo && i_roomNo < 64);
 
         int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
-        JUT_ASSERT(3511, 0 <= zoneNo && zoneNo < ZONE_MAX);
+        JUT_ASSERT(VERSION_SELECT(3484, 3511, 3511), 0 <= zoneNo && zoneNo < ZONE_MAX);
 
         return mZone[zoneNo].getZoneBit().isSwitch(i_no - (MEMORY_SWITCH + DAN_SWITCH));
     }
@@ -1528,7 +1536,7 @@ BOOL dSv_info_c::isSwitch(int i_no, int i_roomNo) {
 
 /* 8005DFE0-8005E190       .text revSwitch__10dSv_info_cFii */
 BOOL dSv_info_c::revSwitch(int i_no, int i_roomNo) {
-    JUT_ASSERT(3532,
+    JUT_ASSERT(VERSION_SELECT(3505, 3532, 3532),
                (0 <= i_no && i_no < (MEMORY_SWITCH+ DAN_SWITCH+ ZONE_SWITCH)) || i_no == -1 || i_no == 255);
 
     if (i_no == -1 || i_no == 255) {
@@ -1540,10 +1548,10 @@ BOOL dSv_info_c::revSwitch(int i_no, int i_roomNo) {
     } else if (i_no < (MEMORY_SWITCH + DAN_SWITCH)) {
         return mDan.revSwitch(i_no - MEMORY_SWITCH);
     } else {
-        JUT_ASSERT(3544, 0 <= i_roomNo && i_roomNo < 64);
+        JUT_ASSERT(VERSION_SELECT(3517, 3544, 3544), 0 <= i_roomNo && i_roomNo < 64);
 
         int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
-        JUT_ASSERT(3546, 0 <= zoneNo && zoneNo < ZONE_MAX);
+        JUT_ASSERT(VERSION_SELECT(3519, 3546, 3546), 0 <= zoneNo && zoneNo < ZONE_MAX);
 
         return mZone[zoneNo].getZoneBit().revSwitch(i_no - (MEMORY_SWITCH + DAN_SWITCH));
     }
@@ -1551,7 +1559,7 @@ BOOL dSv_info_c::revSwitch(int i_no, int i_roomNo) {
 
 /* 8005E190-8005E324       .text onItem__10dSv_info_cFii */
 void dSv_info_c::onItem(int i_no, int i_roomNo) {
-    JUT_ASSERT(3565,
+    JUT_ASSERT(VERSION_SELECT(3538, 3565, 3565),
                (0 <= i_no && i_no < (MEMORY_ITEM+ZONE_ITEM)) || i_no == -1 || i_no == 127);
 
     if (i_no == -1 || i_no == 127) {
@@ -1561,10 +1569,10 @@ void dSv_info_c::onItem(int i_no, int i_roomNo) {
     if (i_no < MEMORY_ITEM) {
         mMemory.getBit().onItem(i_no);
     } else {
-        JUT_ASSERT(3575, 0 <= i_roomNo && i_roomNo < 64);
+        JUT_ASSERT(VERSION_SELECT(3548, 3575, 3575), 0 <= i_roomNo && i_roomNo < 64);
 
         int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
-        JUT_ASSERT(3577, 0 <= zoneNo && zoneNo < ZONE_MAX);
+        JUT_ASSERT(VERSION_SELECT(3550, 3577, 3577), 0 <= zoneNo && zoneNo < ZONE_MAX);
 
         mZone[zoneNo].getZoneBit().onItem(i_no - MEMORY_ITEM);
     }
@@ -1572,7 +1580,7 @@ void dSv_info_c::onItem(int i_no, int i_roomNo) {
 
 /* 8005E324-8005E4BC       .text isItem__10dSv_info_cFii */
 BOOL dSv_info_c::isItem(int i_no, int i_roomNo) {
-    JUT_ASSERT(3629,
+    JUT_ASSERT(VERSION_SELECT(3602, 3629, 3629),
                (0 <= i_no && i_no < (MEMORY_ITEM+ZONE_ITEM)) || i_no == -1 || i_no == 127);
 
     if (i_no == -1 || i_no == 127) {
@@ -1582,10 +1590,10 @@ BOOL dSv_info_c::isItem(int i_no, int i_roomNo) {
     if (i_no < MEMORY_ITEM) {
         return mMemory.getBit().isItem(i_no);
     } else {
-        JUT_ASSERT(3638, 0 <= i_roomNo && i_roomNo < 64);
+        JUT_ASSERT(VERSION_SELECT(3611, 3638, 3638), 0 <= i_roomNo && i_roomNo < 64);
 
         int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
-        JUT_ASSERT(3640, 0 <= zoneNo && zoneNo < ZONE_MAX);
+        JUT_ASSERT(VERSION_SELECT(3613, 3640, 3640), 0 <= zoneNo && zoneNo < ZONE_MAX);
 
         return mZone[zoneNo].getZoneBit().isItem(i_no - MEMORY_ITEM);
     }
@@ -1597,10 +1605,10 @@ void dSv_info_c::onActor(int i_id, int i_roomNo) {
         return;
     }
 
-    JUT_ASSERT(3693, (0 <= i_id && i_id < dSv_zoneActor_c::ACTOR_MAX) && (0 <= i_roomNo && i_roomNo < 64));
+    JUT_ASSERT(VERSION_SELECT(3666, 3693, 3693), (0 <= i_id && i_id < dSv_zoneActor_c::ACTOR_MAX) && (0 <= i_roomNo && i_roomNo < 64));
 
     int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
-    JUT_ASSERT(3695, 0 <= zoneNo && zoneNo < ZONE_MAX);
+    JUT_ASSERT(VERSION_SELECT(3668, 3695, 3695), 0 <= zoneNo && zoneNo < ZONE_MAX);
 
     mZone[zoneNo].getActor().on(i_id);
 }
@@ -1612,133 +1620,339 @@ BOOL dSv_info_c::isActor(int i_id, int i_roomNo) {
     }
 
     if (0 > i_id || i_id >= dSv_zoneActor_c::ACTOR_MAX) {
-        JUT_ASSERT(3744, 0 <= i_id && i_id < dSv_zoneActor_c::ACTOR_MAX);
+        JUT_ASSERT(VERSION_SELECT(3717, 3744, 3744), 0 <= i_id && i_id < dSv_zoneActor_c::ACTOR_MAX);
     }
     
-    JUT_ASSERT(3746, 0 <= i_roomNo && i_roomNo < 64);
+    JUT_ASSERT(VERSION_SELECT(3719, 3746, 3746), 0 <= i_roomNo && i_roomNo < 64);
 
     int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
-    JUT_ASSERT(3748, 0 <= zoneNo && zoneNo < ZONE_MAX);
+    JUT_ASSERT(VERSION_SELECT(3721, 3748, 3748), 0 <= zoneNo && zoneNo < ZONE_MAX);
 
     return mZone[zoneNo].getActor().is(i_id);
 }
 
 /* 8005E780-8005EA24       .text memory_to_card__10dSv_info_cFPci */
-int dSv_info_c::memory_to_card(char*, int) {
-    /* Nonmatching */
-    int temp_r5 = 0;
-    printf("SAVE size over(%d/%d)\n", 0x768, temp_r5);
-    printf("SAVE size:%d\n", temp_r5);
-    return -1;
+int dSv_info_c::memory_to_card(char* i_cardPtr, int i_dataNum) {
+    // The size of the dSv_save_c struct in RAM (i.e. with alignment padding) is 0x778.
+    // The size that gets stored to the memory card (i.e. packed, without the padding) is 0x768.
+    // At the end of this function there's a check to ensure it doesn't copy more than 0x768 bytes.
+    // At the start of this function, the size the index gets multiplied by to find the slot in the card is 0x770.
+    // I'm not sure where 0x770 comes from, but my best guess is that it's 0x768 aligned to the next 0x10 bytes.
+    char* buffer_start;
+    char* buffer = i_cardPtr + i_dataNum * ALIGN_NEXT(dSv_save_c::PACKED_STRUCT_SIZE, 0x10);
+    buffer_start = buffer;
+    
+    memcpy(buffer, dComIfGs_getpPlayerStatusA(), sizeof(dSv_player_status_a_c));
+    dSv_player_status_a_c* status_a = (dSv_player_status_a_c*)buffer;
+    if (status_a->getLife() < 0xC) {
+        status_a->setLife(0xC);
+    }
+    buffer += sizeof(dSv_player_status_a_c);
+    
+    memcpy(buffer, dComIfGs_getpPlayerStatusB(), sizeof(dSv_player_status_b_c));
+    dSv_player_status_b_c* status_b = (dSv_player_status_b_c*)buffer;
+    status_b->setDateIpl(OSGetTime());
+    buffer += sizeof(dSv_player_status_b_c);
+    
+    memcpy(buffer, dComIfGs_getpPlayerReturnPlace(), sizeof(dSv_player_return_place_c));
+    buffer += sizeof(dSv_player_return_place_c);
+    
+    memcpy(buffer, dComIfGs_getpItem(), sizeof(dSv_player_item_c));
+    buffer += sizeof(dSv_player_item_c);
+    
+    memcpy(buffer, dComIfGs_getpGetItem(), sizeof(dSv_player_get_item_c));
+    buffer += sizeof(dSv_player_get_item_c);
+    
+    memcpy(buffer, dComIfGs_getpItemRecord(), sizeof(dSv_player_item_record_c));
+    buffer += sizeof(dSv_player_item_record_c);
+    
+    memcpy(buffer, dComIfGs_getpItemMax(), sizeof(dSv_player_item_max_c));
+    buffer += sizeof(dSv_player_item_max_c);
+    
+    memcpy(buffer, dComIfGs_getpBagItem(), sizeof(dSv_player_bag_item_c));
+    buffer += sizeof(dSv_player_bag_item_c);
+    
+    memcpy(buffer, dComIfGs_getpGetBagItem(), sizeof(dSv_player_get_bag_item_c));
+    buffer += sizeof(dSv_player_get_bag_item_c);
+    
+    memcpy(buffer, dComIfGs_getpBagItemRecord(), sizeof(dSv_player_bag_item_record_c));
+    buffer += sizeof(dSv_player_bag_item_record_c);
+    
+    memcpy(buffer, dComIfGs_getpCollect(), sizeof(dSv_player_collect_c));
+    buffer += sizeof(dSv_player_collect_c);
+    
+    memcpy(buffer, dComIfGs_getpMap(), sizeof(dSv_player_map_c));
+    buffer += sizeof(dSv_player_map_c);
+    
+    memcpy(buffer, dComIfGs_getpPlayerInfo(), sizeof(dSv_player_info_c));
+    buffer += sizeof(dSv_player_info_c);
+    
+    memcpy(buffer, dComIfGs_getpConfig(), sizeof(dSv_player_config_c));
+    buffer += sizeof(dSv_player_config_c);
+#if VERSION == VERSION_JPN
+    if (dComIfGs_getOptSound() == 0) {
+        OSSetSoundMode(0);
+    } else {
+        OSSetSoundMode(1);
+    }
+#endif
+    
+    memcpy(buffer, dComIfGs_getpPriest(), sizeof(dSv_player_priest_c));
+    buffer += sizeof(dSv_player_priest_c);
+    
+    for (int i = 0; i < 4; i++) {
+        memcpy(buffer, dComIfGs_getpPlayerStatusC(i), sizeof(dSv_player_status_c_c));
+        buffer += sizeof(dSv_player_status_c_c);
+    }
+    
+    memcpy(buffer, dComIfGs_getPCourseInfo(), sizeof(dSv_memory_c) * dSv_save_c::STAGE_MAX);
+    buffer += sizeof(dSv_memory_c) * dSv_save_c::STAGE_MAX;
+    
+    memcpy(buffer, dComIfGs_getPOcean(), sizeof(dSv_ocean_c));
+    buffer += sizeof(dSv_ocean_c);
+    
+    memcpy(buffer, dComIfGs_getPEvent(), sizeof(dSv_event_c));
+    buffer += sizeof(dSv_event_c);
+    
+    memcpy(buffer, dComIfGs_getPReserve(), sizeof(dSv_reserve_c));
+    buffer += sizeof(dSv_reserve_c);
+    
+    s32 save_size = buffer - buffer_start;
+    if (save_size > dSv_save_c::PACKED_STRUCT_SIZE) {
+        printf("SAVE size over(%d/%d)\n", dSv_save_c::PACKED_STRUCT_SIZE, save_size);
+        return -1;
+    } else {
+        printf("SAVE size:%d\n", save_size);
+        return 0;
+    }
 }
 
 /* 8005EA24-8005ED00       .text card_to_memory__10dSv_info_cFPci */
-int dSv_info_c::card_to_memory(char*, int) {
-    /* Nonmatching */
-    int temp_r5 = 0;
-    printf("LOAD size over(%d/%d)\n", 0x768, temp_r5);
-    printf("LOAD size:%d\n", temp_r5);
-    return -1;
+int dSv_info_c::card_to_memory(char* i_cardPtr, int i_dataNum) {
+    char* buffer_start;
+    char* buffer = i_cardPtr + i_dataNum * ALIGN_NEXT(dSv_save_c::PACKED_STRUCT_SIZE, 0x10);
+    buffer_start = buffer;
+    
+    memcpy(dComIfGs_getpPlayerStatusA(), buffer, sizeof(dSv_player_status_a_c));
+    buffer += sizeof(dSv_player_status_a_c);
+    
+    memcpy(dComIfGs_getpPlayerStatusB(), buffer,  sizeof(dSv_player_status_b_c));
+    buffer += sizeof(dSv_player_status_b_c);
+    
+    memcpy(dComIfGs_getpPlayerReturnPlace(), buffer,  sizeof(dSv_player_return_place_c));
+    buffer += sizeof(dSv_player_return_place_c);
+    
+    memcpy(dComIfGs_getpItem(), buffer,  sizeof(dSv_player_item_c));
+    buffer += sizeof(dSv_player_item_c);
+    
+    memcpy(dComIfGs_getpGetItem(), buffer,  sizeof(dSv_player_get_item_c));
+    buffer += sizeof(dSv_player_get_item_c);
+    
+    memcpy(dComIfGs_getpItemRecord(), buffer,  sizeof(dSv_player_item_record_c));
+    buffer += sizeof(dSv_player_item_record_c);
+    
+    memcpy(dComIfGs_getpItemMax(), buffer,  sizeof(dSv_player_item_max_c));
+    buffer += sizeof(dSv_player_item_max_c);
+    
+    memcpy(dComIfGs_getpBagItem(), buffer,  sizeof(dSv_player_bag_item_c));
+    buffer += sizeof(dSv_player_bag_item_c);
+    
+    memcpy(dComIfGs_getpGetBagItem(), buffer,  sizeof(dSv_player_get_bag_item_c));
+    buffer += sizeof(dSv_player_get_bag_item_c);
+    
+    memcpy(dComIfGs_getpBagItemRecord(), buffer,  sizeof(dSv_player_bag_item_record_c));
+    buffer += sizeof(dSv_player_bag_item_record_c);
+    
+    memcpy(dComIfGs_getpCollect(), buffer,  sizeof(dSv_player_collect_c));
+    buffer += sizeof(dSv_player_collect_c);
+    
+    memcpy(dComIfGs_getpMap(), buffer,  sizeof(dSv_player_map_c));
+    buffer += sizeof(dSv_player_map_c);
+    
+    memcpy(dComIfGs_getpPlayerInfo(), buffer,  sizeof(dSv_player_info_c));
+    buffer += sizeof(dSv_player_info_c);
+    
+    memcpy(dComIfGs_getpConfig(), buffer,  sizeof(dSv_player_config_c));
+    buffer += sizeof(dSv_player_config_c);
+    if (OSGetSoundMode() == 0) {
+        dComIfGs_setOptSound(0);
+        mDoAud_setOutputMode(0);
+    } else if (dComIfGs_getOptSound() == 2) {
+        mDoAud_setOutputMode(2);
+    } else {
+        dComIfGs_setOptSound(1);
+        mDoAud_setOutputMode(1);
+    }
+    
+    memcpy(dComIfGs_getpPriest(), buffer,  sizeof(dSv_player_priest_c));
+    buffer += sizeof(dSv_player_priest_c);
+    
+    for (int i = 0; i < 4; i++) {
+        memcpy(dComIfGs_getpPlayerStatusC(i), buffer,  sizeof(dSv_player_status_c_c));
+        buffer += sizeof(dSv_player_status_c_c);
+    }
+    
+    memcpy(g_dComIfG_gameInfo.save.getPSave(), buffer,  sizeof(dSv_memory_c) * dSv_save_c::STAGE_MAX);
+    buffer += sizeof(dSv_memory_c) * dSv_save_c::STAGE_MAX;
+    
+    memcpy(g_dComIfG_gameInfo.save.getPOcean(), buffer,  sizeof(dSv_ocean_c));
+    buffer += sizeof(dSv_ocean_c);
+    
+    memcpy(g_dComIfG_gameInfo.save.getPEvent(), buffer,  sizeof(dSv_event_c));
+    buffer += sizeof(dSv_event_c);
+    
+    memcpy(g_dComIfG_gameInfo.save.getPReserve(), buffer,  sizeof(dSv_reserve_c));
+    buffer += sizeof(dSv_reserve_c);
+    
+    s32 load_size = buffer - buffer_start;
+    if (load_size > dSv_save_c::PACKED_STRUCT_SIZE) {
+        printf("LOAD size over(%d/%d)\n", dSv_save_c::PACKED_STRUCT_SIZE, load_size);
+        return -1;
+    } else {
+        printf("LOAD size:%d\n", load_size);
+        return 0;
+    }
 }
 
 /* 8005ED00-8005EF88       .text initdata_to_card__10dSv_info_cFPci */
-// NONMATCHING - out of order instructions, reg alloc etc
 int dSv_info_c::initdata_to_card(char* i_cardPtr, int i_dataNum) {
-    i_cardPtr = i_cardPtr + (i_dataNum * 0x770);
-    dSv_save_c* save_p = (dSv_save_c*)i_cardPtr;
-
+    // TODO: This function could probably be cleaned up somehow
+    char* buffer = i_cardPtr + i_dataNum * ALIGN_NEXT(dSv_save_c::PACKED_STRUCT_SIZE, 0x10);
+    char* buffer_start = buffer;
+    char* buffer_src;
+    
     dSv_player_status_a_c status_a;
     status_a.init();
-    memcpy(i_cardPtr, &status_a, sizeof(dSv_player_status_a_c));
+    buffer_src = (char*)&status_a;
+    memcpy(buffer, buffer_src, sizeof(dSv_player_status_a_c));
+    buffer += sizeof(dSv_player_status_a_c);
 
     dSv_player_status_b_c status_b;
     status_b.init();
-    memcpy(i_cardPtr + 0x18, &status_b, sizeof(dSv_player_status_b_c));
+    buffer_src = (char*)&status_b;
+    memcpy(buffer, buffer_src, sizeof(dSv_player_status_b_c));
+    buffer += sizeof(dSv_player_status_b_c);
 
     dSv_player_return_place_c return_place;
     return_place.init();
-    memcpy(i_cardPtr + 0x30, &return_place, sizeof(dSv_player_return_place_c));
+    buffer_src = (char*)&return_place;
+    memcpy(buffer, buffer_src, sizeof(dSv_player_return_place_c));
+    buffer += sizeof(dSv_player_return_place_c);
 
     dSv_player_item_c item;
     item.init();
-    memcpy(i_cardPtr + 0x3C, &item, sizeof(dSv_player_item_c));
+    buffer_src = (char*)&item;
+    memcpy(buffer, buffer_src, sizeof(dSv_player_item_c));
+    buffer += sizeof(dSv_player_item_c);
 
     dSv_player_get_item_c get_item;
     get_item.init();
-    memcpy(i_cardPtr + 0x51, &get_item, sizeof(dSv_player_get_item_c));
+    buffer_src = (char*)&get_item;
+    memcpy(buffer, buffer_src, sizeof(dSv_player_get_item_c));
+    buffer += sizeof(dSv_player_get_item_c);
 
     dSv_player_item_record_c item_record;
     item_record.init();
-    memcpy(i_cardPtr + 0x66, &item_record, sizeof(dSv_player_item_record_c));
+    buffer_src = (char*)&item_record;
+    memcpy(buffer, buffer_src, sizeof(dSv_player_item_record_c));
+    buffer += sizeof(dSv_player_item_record_c);
 
     dSv_player_item_max_c item_max;
     item_max.init();
-    memcpy(i_cardPtr + 0x6E, &item_max, sizeof(dSv_player_item_max_c));
+    buffer_src = (char*)&item_max;
+    memcpy(buffer, buffer_src, sizeof(dSv_player_item_max_c));
+    buffer += sizeof(dSv_player_item_max_c);
 
     dSv_player_bag_item_c bag_item;
     bag_item.init();
-    memcpy(i_cardPtr + 0x76, &bag_item, sizeof(dSv_player_bag_item_c));
+    buffer_src = (char*)&bag_item;
+    memcpy(buffer, buffer_src, sizeof(dSv_player_bag_item_c));
+    buffer += sizeof(dSv_player_bag_item_c);
 
     dSv_player_get_bag_item_c get_bag_item;
     get_bag_item.init();
-    memcpy(i_cardPtr + 0x8E, &get_bag_item, sizeof(dSv_player_get_bag_item_c));
+    buffer_src = (char*)&get_bag_item;
+    memcpy(buffer, buffer_src, sizeof(dSv_player_get_bag_item_c));
+    buffer += sizeof(dSv_player_get_bag_item_c);
 
     dSv_player_bag_item_record_c bag_item_record;
     bag_item_record.init();
-    memcpy(i_cardPtr + 0x9A, &bag_item_record, sizeof(dSv_player_bag_item_record_c));
+    buffer_src = (char*)&bag_item_record;
+    memcpy(buffer, buffer_src, sizeof(dSv_player_bag_item_record_c));
+    buffer += sizeof(dSv_player_bag_item_record_c);
 
     dSv_player_collect_c collect;
     collect.init();
-    memcpy(i_cardPtr + 0xB2, &collect, sizeof(dSv_player_collect_c));
+    buffer_src = (char*)&collect;
+    memcpy(buffer, buffer_src, sizeof(dSv_player_collect_c));
+    buffer += sizeof(dSv_player_collect_c);
 
     dSv_player_map_c map;
     map.init();
-    memcpy(save_p->getPlayer().getpMap(), &map, sizeof(dSv_player_map_c));
+    buffer_src = (char*)&map;
+    memcpy(buffer, buffer_src, sizeof(dSv_player_map_c));
+    buffer += sizeof(dSv_player_map_c);
 
     dSv_player_info_c info;
     info.init();
-    memset(i_cardPtr + 0xBF, 0, sizeof(dSv_player_info_c));
+    memset(buffer, 0, sizeof(dSv_player_info_c));
+    buffer += sizeof(dSv_player_info_c);
 
     dSv_player_config_c config;
     config.init();
-    memcpy(i_cardPtr + 0x143, &config, sizeof(dSv_player_config_c));
+    buffer_src = (char*)&config;
+    memcpy(buffer, buffer_src, sizeof(dSv_player_config_c));
+    buffer += sizeof(dSv_player_config_c);
 
     dSv_player_priest_c priest;
     priest.init();
-    memcpy(i_cardPtr + 0x19F, &priest, sizeof(dSv_player_priest_c));
+    buffer_src = (char*)&priest;
+    memcpy(buffer, buffer_src, sizeof(dSv_player_priest_c));
+    buffer += sizeof(dSv_player_priest_c);
 
     dSv_player_status_c_c status_c;
-    char* var_r31 = i_cardPtr + 0x1B4;
     status_c.init();
-
+    buffer_src = (char*)&status_c;
     for (int i = 0; i < 4; i++) {
-        memcpy(var_r31, &status_c, sizeof(dSv_player_status_c_c));
-        var_r31 += 0x70;
+        memcpy(buffer, buffer_src, sizeof(dSv_player_status_c_c));
+        buffer += sizeof(dSv_player_status_c_c);
     }
     
+    // Bug: It copies 16 instances of dSv_memory_c from the stack to the card, but only allocates and initializes 1.
+    // This means when it initializes an empty save slot in the memory card, all of the stage save tables except the
+    // first are filled with garbage data instead of all zeroes.
+    // It's unlikely that this bug has any actual effect ingame, as when you start a new game using the empty slot, it
+    // initializes all 16 dSv_memory_c with zeroes again anyway. But I haven't looked into it too deeply.
     dSv_memory_c memory;
     memory.init();
-    memory.init();
-    memcpy(var_r31, &memory, sizeof(dSv_memory_c) * 16);
+    buffer_src = (char*)&memory;
+    memcpy(buffer, buffer_src, sizeof(dSv_memory_c) * dSv_save_c::STAGE_MAX);
+    buffer += sizeof(dSv_memory_c) * dSv_save_c::STAGE_MAX;
 
     dSv_ocean_c ocean;
     ocean.init();
-    memcpy(var_r31 + 0x240, &ocean, sizeof(dSv_ocean_c));
+    buffer_src = (char*)&ocean;
+    memcpy(buffer, buffer_src, sizeof(dSv_ocean_c));
+    buffer += sizeof(dSv_ocean_c);
 
     dSv_event_c event;
     event.init();
-    memcpy(var_r31 + 0x2A4, &event, sizeof(dSv_event_c));
+    buffer_src = (char*)&event;
+    memcpy(buffer, buffer_src, sizeof(dSv_event_c));
+    buffer += sizeof(dSv_event_c);
 
     dSv_reserve_c reserve;
     reserve.init();
-    memcpy(var_r31 + 0x3A4, &reserve, sizeof(dSv_reserve_c));
+    buffer_src = (char*)&reserve;
+    memcpy(buffer, buffer_src, sizeof(dSv_reserve_c));
+    buffer += sizeof(dSv_reserve_c);
 
-    int temp_r5 = (var_r31 + 0x3F4) - i_cardPtr;
-    if (temp_r5 > 0x768) {
-        printf("INIT size over %d/%d\n", 0x768, temp_r5);
+    s32 load_size = buffer - buffer_start;
+    if (load_size > dSv_save_c::PACKED_STRUCT_SIZE) {
+        printf("INIT size over %d/%d\n", dSv_save_c::PACKED_STRUCT_SIZE, load_size);
         return -1;
+    } else {
+        printf("INIT size:%d\n", load_size);
+        return 0;
     }
-
-    printf("INIT size:%d\n", temp_r5);
-    return 0;
 }

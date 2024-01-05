@@ -1629,6 +1629,22 @@ inline dSv_player_status_c_c* dComIfGs_getpPlayerStatusC(int i_idx) {
     return g_dComIfG_gameInfo.save.getPlayer().getpPlayerStatusC(i_idx);
 }
 
+inline dSv_memory_c* dComIfGs_getPCourseInfo() {
+    return g_dComIfG_gameInfo.save.getPSave();
+}
+
+inline dSv_ocean_c* dComIfGs_getPOcean() {
+    return g_dComIfG_gameInfo.save.getPOcean();
+}
+
+inline dSv_event_c* dComIfGs_getPEvent() {
+    return g_dComIfG_gameInfo.save.getPEvent();
+}
+
+inline dSv_reserve_c* dComIfGs_getPReserve() {
+    return g_dComIfG_gameInfo.save.getPReserve();
+}
+
 u8 dComIfGs_checkGetItemNum(u8 i_itemNo);
 
 stage_scls_info_class* dComIfGd_getMeshSceneList(Vec& vec);

@@ -169,6 +169,10 @@ inline void mDoAud_setWeekday(s32 day) {
     mDoAud_zelAudio_c::getInterface()->setWeekday(day);
 }
 
+inline void mDoAud_setOutputMode(u32 mode) {
+    mDoAud_zelAudio_c::getInterface()->setOutputMode(mode);
+}
+
 inline void mDoAud_rainPlay(s32 param_0) {
     mDoAud_zelAudio_c::getInterface()->rainPlay(param_0);
 }

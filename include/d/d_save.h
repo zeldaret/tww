@@ -8,7 +8,7 @@
 class dSv_player_status_a_c {
 public:
     void init();
-  
+
     u8 getSelectItem(int i_no) { return mSelectItem[i_no]; }
     void setSelectItem(int i_no, u8 i_invIdx) { mSelectItem[i_no] = i_invIdx; }
     u8 getSelectEquip(int i_no) { return mSelectEquip[i_no]; }
@@ -19,7 +19,7 @@ public:
     void setRupee(u16 rupee) { mRupee = rupee; }
     u16 getRupeeMax() { return 0; } // TODO
     u8 getMagic() { return mMagic; }
-    void setMagic(u8 magic) { mMagic = magic;}
+    void setMagic(u8 magic) { mMagic = magic; }
     u8 getMaxMagic() { return mMaxMagic; }
     void setMaxMagic(u8 magic) { mMaxMagic = magic; }
     u16 getLife() { return mLife; }
@@ -39,6 +39,7 @@ public:
     /* 0x14 */ u8 mMagic;
     /* 0x15 */ u8 field_0x15;
     /* 0x16 */ u8 field_0x16;
+    /* 0x17 */ /* ??? TODO */
 };  // Size: 0x18
 
 STATIC_ASSERT(sizeof(dSv_player_status_a_c) == 0x18);
@@ -64,6 +65,7 @@ public:
     /* 0x10 */ u16 mDate;
     /* 0x12 */ s16 mTactWindAngleX;
     /* 0x14 */ s16 mTactWindAngleY;
+    /* 0x16 */ /* ??? TODO */
 };  // Size: 0x18
 
 STATIC_ASSERT(sizeof(dSv_player_status_b_c) == 0x18);
@@ -232,7 +234,7 @@ public:
     /* 0x0 */ u32 mReserveFlags;
     /* 0x4 */ u8 mBeastFlags;
     /* 0x5 */ u8 mBaitFlags;
-    /* 0x6 */ u8 unk_0x6[0xC - 0x6];
+    /* 0x6 */ u8 unk_0x6[0xC - 0x6]; // TODO?
 };  // Size: 0xC
 
 STATIC_ASSERT(sizeof(dSv_player_get_bag_item_c) == 0xC);
@@ -449,6 +451,24 @@ public:
 
     dSv_player_status_c_c* getpPlayerStatusC(int i_idx) { return &mStatusC[i_idx]; }
 
+    static const int PACKED_STRUCT_SIZE =
+        sizeof(dSv_player_status_a_c) +
+        sizeof(dSv_player_status_b_c) +
+        sizeof(dSv_player_return_place_c) +
+        sizeof(dSv_player_item_c) +
+        sizeof(dSv_player_get_item_c) +
+        sizeof(dSv_player_item_record_c) +
+        sizeof(dSv_player_item_max_c) +
+        sizeof(dSv_player_bag_item_c) +
+        sizeof(dSv_player_get_bag_item_c) +
+        sizeof(dSv_player_bag_item_record_c) +
+        sizeof(dSv_player_collect_c) +
+        sizeof(dSv_player_map_c) +
+        sizeof(dSv_player_info_c) +
+        sizeof(dSv_player_config_c) +
+        sizeof(dSv_player_priest_c) +
+        sizeof(dSv_player_status_c_c) * 4;
+
     /* 0x000 */ dSv_player_status_a_c mPlayerStatusA;
     /* 0x018 */ dSv_player_status_b_c mPlayerStatusB;
     /* 0x030 */ dSv_player_return_place_c mReturnPlace;
@@ -457,12 +477,15 @@ public:
     /* 0x066 */ dSv_player_item_record_c mItemRecord;
     /* 0x06E */ dSv_player_item_max_c mItemMax;
     /* 0x076 */ dSv_player_bag_item_c mBagItem;
+    /* 0x08E */ /* 2 bytes of alignment padding */
     /* 0x090 */ dSv_player_get_bag_item_c mGetBagItem;
     /* 0x09C */ dSv_player_bag_item_record_c mBagItemRecord;
     /* 0x0B4 */ dSv_player_collect_c mCollect;
+    /* 0x0C1 */ /* 3 bytes of alignment padding */
     /* 0x0C4 */ dSv_player_map_c mMap;
     /* 0x148 */ dSv_player_info_c mInfo;
     /* 0x1A4 */ dSv_player_config_c mConfig;
+    /* 0x1A9 */ /* 3 bytes of alignment padding */
     /* 0x1AC */ dSv_player_priest_c mPriest;
     /* 0x1BC */ dSv_player_status_c_c mStatusC[4];
 };  // Size: 0x380 ?
@@ -546,7 +569,7 @@ public:
     void setEventReg(u16, u8);
     u8 getEventReg(u16);
 
-    u8* getPEventBit() { return mFlags;  }
+    u8* getPEventBit() { return mFlags; }
 
     /* 0x0 */ u8 mFlags[0x100];
 };  // Size: 0x100
@@ -698,8 +721,12 @@ public:
     void init();
 
     dSv_player_c& getPlayer() { return mPlayer; }
+    dSv_memory_c* getPSave() { return mMemory; }
     dSv_ocean_c& getOcean() { return mOcean; }
+    dSv_ocean_c* getPOcean() { return &mOcean; }
     dSv_event_c& getEvent() { return mEvent; }
+    dSv_event_c* getPEvent() { return &mEvent; }
+    dSv_reserve_c* getPReserve() { return &mReserve; }
 
     dSv_memory_c& getSave(int i_stageNo) { return mMemory[i_stageNo]; }
     void putSave(int i_stageNo, dSv_memory_c i_mem) { mMemory[i_stageNo] = i_mem; }
@@ -724,13 +751,23 @@ public:
         /* 0x10 */ STAGE_MAX,
     };
 
+    static const int PACKED_STRUCT_SIZE =
+        dSv_player_c::PACKED_STRUCT_SIZE +
+        // sizeof(dSv_player_c) +
+        sizeof(dSv_memory_c) * STAGE_MAX +
+        sizeof(dSv_ocean_c) +
+        sizeof(dSv_event_c) +
+        sizeof(dSv_reserve_c);
+
     /* 0x000 */ dSv_player_c mPlayer;
     /* 0x380 */ dSv_memory_c mMemory[STAGE_MAX];
     /* 0x5C0 */ dSv_ocean_c mOcean;
     /* 0x624 */ dSv_event_c mEvent;
-};  // Size: 0x724
+    /* 0x724 */ dSv_reserve_c mReserve;
+    /* 0x774 */ /* 4 bytes of padding */
+};  // Size: 0x778
 
-STATIC_ASSERT(sizeof(dSv_save_c) == 0x728);
+STATIC_ASSERT(sizeof(dSv_save_c) == 0x778);
 
 class dSv_info_c {
 public:
@@ -754,8 +791,12 @@ public:
 
     dSv_save_c& getSavedata() { return mSavedata; }
     dSv_player_c& getPlayer() { return mSavedata.getPlayer(); }
+    dSv_memory_c* getPSave() { return mSavedata.getPSave(); }
     dSv_ocean_c& getOcean() { return mSavedata.getOcean(); }
+    dSv_ocean_c* getPOcean() { return mSavedata.getPOcean(); }
     dSv_event_c& getEvent() { return mSavedata.getEvent(); }
+    dSv_event_c* getPEvent() { return mSavedata.getPEvent(); }
+    dSv_reserve_c* getPReserve() { return mSavedata.getPReserve(); }
     dSv_restart_c& getRestart() { return mRestart; }
     dSv_event_c& getTmp() { return mTmp; }
     dSv_turnRestart_c& getTurnRestart() { return mTurnRestart; }
@@ -765,6 +806,15 @@ public:
 
     void removeZone(int zoneNo) { mZone[zoneNo].reset(); }
     void initDan(s8 i_stage) { mDan.init(i_stage); }
+
+    void getDataNum() {}
+    void getMemCardCheckID() {}
+    void getNewFile() {}
+    void getNoFile() {}
+    void setDataNum(u8) {}
+    void setMemCardCheckID(u64) {}
+    void setNewFile(u8) {}
+    void setNoFile(u8) {}
 
     static const int MEMORY_SWITCH = 0x80;
     static const int DAN_SWITCH = 0x40;
@@ -776,7 +826,7 @@ public:
     static const int ZONE_MAX = 0x20;
 
     /* 0x0000 */ dSv_save_c mSavedata;
-    /* 0x0724 */ u8 unk_0x724[0x50];
+    // /* 0x0770 */ u8 unk_0x770[0x778 - 0x770];
     /* 0x0778 */ dSv_memory_c mMemory;
     /* 0x079C */ dSv_danBit_c mDan;
     /* 0x07A8 */ dSv_zone_c mZone[ZONE_MAX];
