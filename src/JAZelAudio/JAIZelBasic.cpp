@@ -4,6 +4,8 @@
 //
 
 #include "JAZelAudio/JAIZelBasic.h"
+#include "JAZelAudio/JAIZelParam.h"
+#include "JSystem/JAudio/JAIGlobalParameter.h"
 #include "JSystem/JAudio/JAISound.h"
 #include "JSystem/JAudio/JAIStreamMgr.h"
 #include "JSystem/JAudio/JAIBankWave.h"
@@ -463,8 +465,62 @@ void JAIZelBasic::setShipSailState(s32 isSailing) {
 }
 
 /* 802A9664-802A9874       .text init__11JAIZelBasicFP12JKRSolidHeapUl */
-void JAIZelBasic::init(JKRSolidHeap*, u32) {
+void JAIZelBasic::init(JKRSolidHeap* param_1, u32 param_2) {
     /* Nonmatching */
+    JAIGlobalParameter::setParamInterfaceHeapSize(JAIZelParam::DRAM_HEAP_SIZE);
+    JAIGlobalParameter::setParamSeRegistMax(JAIZelParam::SE_REGIST_MAX);
+    JAIGlobalParameter::setParamSoundSceneMax(JAIZelParam::SOUND_SCENE_MAX);
+    JAIGlobalParameter::setParamSeqControlBufferMax(JAIZelParam::SEQ_CONTROL_BUF_MAX);
+    JAIGlobalParameter::setParamStreamControlBufferMax(JAIZelParam::STREAM_CONTROL_BUF_MAX);
+    JAIGlobalParameter::setParamStreamDecodedBufferBlocks(JAIZelParam::STREAM_DECODED_BUFFERS);
+    JAIGlobalParameter::setParamAutoHeapMax(JAIZelParam::AUTO_HEAP_MAX);
+    JAIGlobalParameter::setParamStayHeapMax(JAIZelParam::STAY_HEAP_MAX);
+    JAIGlobalParameter::setParamAutoHeapRoomSize(JAIZelParam::AUTO_HEAP_ROOM_SIZE);
+    JAIGlobalParameter::setParamStayHeapSize(JAIZelParam::STAY_HEAP_ROOM_SIZE);
+    JAIGlobalParameter::setParamSeqPlayTrackMax(JAIZelParam::PLAY_TRACK_MAX);
+    JAIGlobalParameter::setParamSystemTrackMax(JAIZelParam::SYSTEM_TRACK_MAX);
+    JAIGlobalParameter::setParamDistanceMax(JAIZelParam::DISTANCE_MAX);
+    JAIGlobalParameter::setParamMaxVolumeDistance(JAIZelParam::MAX_VOLUME_DISTANCE);
+    JAIGlobalParameter::setParamMinDistanceVolume(JAIZelParam::MIN_DISTANCE_VOLUME);
+    JAIGlobalParameter::setParamSeDolbyCenterValue(JAIZelParam::DOLBY_CENTER_VALUE);
+    JAIGlobalParameter::setParamSeDolbyFrontDistanceMax(JAIZelParam::DOLBY_FLONT_DISTANCE_MAX);
+    JAIGlobalParameter::setParamSeDolbyBehindDistanceMax(JAIZelParam::DOLBY_BEHIND_DISTANCE_MAX);
+    JAIGlobalParameter::setParamSeDistanceFxParameter(JAIZelParam::DISTANCE_FX_PARAM);
+    JAIGlobalParameter::setParamInputGainDown(1.0f);
+    JAIGlobalParameter::setParamOutputGainUp(5.999f);
+    JAIGlobalParameter::setParamAudioResPath(NULL);
+    JAIGlobalParameter::setParamInitDataFileName((char*)JAIZelParam::INIT_DATA_FILE_NAME);
+    JAIGlobalParameter::setParamWavePath((char*)JAIZelParam::WAVE_PATH);
+    JAIGlobalParameter::setParamSequenceArchivesPath((char*)JAIZelParam::SEQ_PATH);
+    JAIGlobalParameter::setParamStreamPath((char*)JAIZelParam::STREAM_PATH);
+    JAIGlobalParameter::setParamSequenceArchivesFileName((char*)JAIZelParam::SEQ_ARCH_FILE_NAME);
+    JAIGlobalParameter::setParamAudioCameraMax(1);
+    JAIGlobalParameter::setParamDummyObjectMax(JAIZelParam::DUMMY_POSITION_MAX);
+    JAIGlobalParameter::setParamDummyObjectLifeTime(JAIZelParam::DUMMY_POSITION_LIFE_TIME);
+    JAIGlobalParameter::setParamStreamInsideBufferCut(true);
+    initDriver(param_1, param_2, 1);
+    initInterface(1);
+    mpMainBgmSound = NULL;
+    mpSubBgmSound = NULL;
+    mpStreamBgmSound = NULL;
+    initSe();
+    setSeCategoryVolume(0, JAIZelParam::VOL_SE_SYSTEM_DEFAULT);
+    setSeCategoryVolume(1, JAIZelParam::VOL_SE_LINK_VOICE_DEFAULT);
+    setSeCategoryVolume(2, JAIZelParam::VOL_SE_LINK_MOTION_DEFAULT);
+    setSeCategoryVolume(3, JAIZelParam::VOL_SE_LINK_FOOTNOTE_DEFAULT);
+    setSeCategoryVolume(4, JAIZelParam::VOL_SE_CHAR_VOICE_DEFAULT);
+    setSeCategoryVolume(5, JAIZelParam::VOL_SE_CHAR_MOVE_DEFAULT);
+    setSeCategoryVolume(6, JAIZelParam::VOL_SE_OBJECT_DEFAULT);
+    setSeCategoryVolume(7, JAIZelParam::VOL_SE_ATMOSPHERE_DEFAULT);
+    field_0x0080 = 1.0f;
+    field_0x0084 = 1.0f;
+    field_0x0088 = 1.0f;
+    field_0x008c = 1.0f;
+    field_0x0090 = 1.0f;
+    field_0x0094 = 1.0f;
+    field_0x0098 = 1.0f;
+    field_0x009c = 1.0f;
+    field_0x00ac = 1.0f;
 }
 
 /* 802A9874-802A98A0       .text setOutputMode__11JAIZelBasicFUl */
