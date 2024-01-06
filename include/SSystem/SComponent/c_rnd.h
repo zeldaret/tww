@@ -16,7 +16,7 @@ struct cM_rnd_c {
     int get();
     f32 getF(f32);
     f32 getFX(f32);
-    f32 getValue(f32, f32);
+    f32 getValue(f32 min, f32 max);
 };
 
 #endif /* C_RND_H */

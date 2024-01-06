@@ -4,8 +4,9 @@
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "JSystem/J2DGraph/J2DPicture.h"
 #include "f_op/f_op_view.h"
-#include "global.h"
 #include "m_Do/m_Do_ext.h"
+#include "SSystem/SComponent/c_rnd.h"
+#include "global.h"
 
 class ResTIMG;
 class cM3dGPla;
@@ -36,6 +37,13 @@ protected:
 class dDlst_2DTri_c : public dDlst_base_c {
 public:
     virtual void draw();
+
+    /* 0x04 */ s16 mX;
+    /* 0x06 */ s16 mY;
+    /* 0x08 */ GXColor mColor;
+    /* 0x)C */ s16 mRot;
+    /* 0x10 */ f32 mScaleX;
+    /* 0x14 */ f32 mScaleY;
 };
 
 class dDlst_2DPoint_c : public dDlst_base_c {
@@ -51,6 +59,38 @@ public:
 class dDlst_2DT_c : public dDlst_base_c {
 public:
     virtual void draw();
+    void init(u8* pTexData, u32 p1, GXTexFmt texFmt, u16 texW, u16 texH, f32 cx, f32 cy, s16 x0, s16 y0, s16 x1, s16 y1, u8 alpha, f32 sx, f32 sy) {
+        mpTexData = pTexData;
+        field_0x08 = p1;
+        mTexFmt = (u8)texFmt;
+        mTexW = texW;
+        mTexH = texH;
+        mCenterX = cx;
+        mCenterY = cy;
+        mX0 = x0;
+        mY0 = y0;
+        mX1 = x1;
+        mY1 = y1;
+        mAlpha = alpha;
+        mScaleX = sx;
+        mScaleY = sy;
+    }
+
+public:
+    /* 0x04 */ u8* mpTexData;
+    /* 0x08 */ u32 field_0x08;
+    /* 0x0C */ u8 mTexFmt;
+    /* 0x0D */ u8 mAlpha;
+    /* 0x0E */ u16 mTexW;
+    /* 0x10 */ u16 mTexH;
+    /* 0x12 */ s16 mX0;
+    /* 0x14 */ s16 mY0;
+    /* 0x16 */ s16 mX1;
+    /* 0x18 */ s16 mY1;
+    /* 0x1C */ f32 mCenterX;
+    /* 0x20 */ f32 mCenterY;
+    /* 0x24 */ f32 mScaleX;
+    /* 0x28 */ f32 mScaleY;
 };
 
 class dDlst_2DT2_c : public dDlst_base_c {
@@ -126,15 +166,60 @@ public:
     /* 0x1C */ TexEntry mTex[2];
 };
 
+class dDlst_2DMt_tex_c {
+public:
+    u8 check() { return mValid; }
+    int getCI() { return mCI; }
+    GXTexObj* getTexObj() { return &mTexObj; }
+    GXTlutObj* getTlutObj() { return &mTlutObj; }
+    GXColor getColor() { return mColor; }
+    f32 getS() { return mS; }
+    f32 getT() { return mT; }
+    f32 getSw() { return mSw; }
+    f32 getTw() { return mTw; }
+
+public:
+    /* 0x00 */ u8 mValid;
+    /* 0x01 */ u8 mCI;
+    /* 0x04 */ GXTexObj mTexObj;
+    /* 0x24 */ GXTlutObj mTlutObj;
+    /* 0x30 */ GXColor mColor;
+    /* 0x34 */ f32 mS;
+    /* 0x38 */ f32 mT;
+    /* 0x3C */ f32 mSw;
+    /* 0x40 */ f32 mTw;
+};
+
 class dDlst_2DMt_c : public dDlst_base_c {
 public:
     virtual void draw();
+
+public:
+    /* 0x04 */ u8 mTexNum;
+    /* 0x08 */ dDlst_2DMt_tex_c* mTex;
+    /* 0x0C */ s16 mX0;
+    /* 0x0E */ s16 mY0;
+    /* 0x10 */ s16 mX1;
+    /* 0x12 */ s16 mY1;
 };
 
 class dDlst_effectLine_c : public dDlst_base_c {
 public:
     void update(cXyz&, GXColor&, u16, u16, u16, u16, f32, f32, f32, f32);
     virtual void draw();
+
+public:
+    /* 0x04 */ cM_rnd_c mRnd;
+    /* 0x10 */ cXyz mPos;
+    /* 0x1C */ GXColor mColor;
+    /* 0x20 */ u16 field_0x20;
+    /* 0x22 */ u16 field_0x22;
+    /* 0x24 */ u16 field_0x24;
+    /* 0x26 */ u16 field_0x26;
+    /* 0x28 */ f32 field_0x28;
+    /* 0x2C */ f32 field_0x2C;
+    /* 0x30 */ f32 field_0x30;
+    /* 0x34 */ f32 field_0x34;
 };
 
 class dDlst_snapShot_c : public dDlst_base_c {

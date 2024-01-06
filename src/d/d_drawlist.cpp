@@ -25,7 +25,6 @@ GXTexObj dDlst_shadowControl_c::mSimpleTexObj;
 bool dDlst_list_c::mWipe;
 f32 dDlst_list_c::mWipeRate = 0.0f;
 f32 dDlst_list_c::mWipeSpeed = 0.0f;
-GXColor dDlst_list_c::mWipeColor = { 0, 0, 0, 0 };
 dDlst_2DT2_c dDlst_list_c::mWipeDlst;
 
 static Vec dummy1 = { 1.0f, 1.0f, 1.0f };
@@ -51,7 +50,35 @@ void dDlst_window_c::setScissor(f32 x, f32 y, f32 w, f32 h) {
 
 /* 800804D4-80080694       .text draw__13dDlst_2DTri_cFv */
 void dDlst_2DTri_c::draw() {
-    /* Nonmatching */
+    f32 cosR = JMASCos(mRot);
+    f32 sinR = JMASSin(mRot);
+
+    s16 px[3];
+    s16 py[3];
+    s16 angle = 0;
+    for (int i = 0; i < 3; i++) {
+        f32 x = mScaleX * JMASSin(angle);
+        f32 y = mScaleY * JMASCos(angle);
+        px[i] = mX + (s32)(x * cosR + y * sinR);
+        py[i] = mY + (s32)(y * cosR - x * sinR);
+        angle -= 0xFFFF / 3;
+    }
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanMatColor(GX_COLOR0A0, mColor);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+    GXBegin(GX_TRIANGLES, GX_VTXFMT0, 3);
+    GXPosition3s16(px[0], py[0], 0);
+    GXPosition3s16(px[1], py[1], 0);
+    GXPosition3s16(px[2], py[2], 0);
+    GXEnd();
 }
 
 /* 80080694-80080784       .text draw__15dDlst_2DPoint_cFv */
@@ -75,11 +102,62 @@ void dDlst_2DPoint_c::draw() {
 /* 80080784-80080A50       .text draw__11dDlst_2DT_cFv */
 void dDlst_2DT_c::draw() {
     /* Nonmatching */
+    f32 texW = mTexW;
+    f32 texH = mTexH;
+    int sizeX = mX1 - mX0;
+    int sizeY = mY1 - mY0;
+
+    f32 xo = (sizeX * 0.5f) / mScaleX;
+    f32 yo = (sizeY * 0.5f) / mScaleY;
+    s16 s0 = ((mCenterX - xo) / texW) * 32768.0f;
+    s16 t0 = ((mCenterY - yo) / texH) * 32768.0f;
+    s16 s1 = ((mCenterX + xo) / texW) * 32768.0f;
+    s16 t1 = ((mCenterY + yo) / texH) * 32768.0f;
+
+    GXTexObj texObj;
+    GXInitTexObj(&texObj, mpTexData, mTexW, mTexH, (GXTexFmt)mTexFmt, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    GXLoadTexObj(&texObj, GX_TEXMAP0);
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+
+    static GXColor l_color = { 0xFF, 0xFF, 0xFF, 0xE0 };
+    l_color.a = mAlpha;
+
+    GXSetChanMatColor(GX_COLOR0A0, l_color);
+    GXSetNumTexGens(1);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
+    GXSetBlendMode(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_SET);
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+
+    GXPosition3s16(mX0, mY0, 0);
+    GXColor1u32(0xFFFFFFFF);
+    GXTexCoord2s16(s0, t0);
+
+    GXPosition3s16(mX1, mY0, 0);
+    GXColor1u32(0xFFFFFFFF);
+    GXTexCoord2s16(s1, t0);
+
+    GXPosition3s16(mX1, mY1, 0);
+    GXColor1u32(0xFFFFFFFF);
+    GXTexCoord2s16(s1, t1);
+
+    GXPosition3s16(mX0, mY1, 0);
+    GXColor1u32(0xFFFFFFFF);
+    GXTexCoord2s16(s0, t1);
+
+    GXEnd();
 }
 
 /* 80080A50-800811E8       .text draw__12dDlst_2DT2_cFv */
 void dDlst_2DT2_c::draw() {
-    /* Nonmatching */
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XY, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     GXClearVtxDesc();
@@ -181,7 +259,7 @@ void dDlst_2DT2_c::draw() {
     } else if (mMirrorS) {
         f32 xH = mX + mW * 0.5f;
 
-        f32 s0, s1, t0, t1;
+        f32 s0, s1, t0;
 
         if (mScrollS == 0.0f) {
             s0 = 0.0f;
@@ -192,12 +270,10 @@ void dDlst_2DT2_c::draw() {
         }
 
         if (mScrollT == 0.0f) {
-            t0 = 0.0f;
-            t1 = 0.0f;
+            t0 = 1.0f;
         } else {
             f32 h = (1.0f / mScrollT) * 0.5f;
             t0 = 0.5f - h;
-            t1 = 0.5f + h;
         }
 
         GXBegin(GX_QUADS, GX_VTXFMT0, 8);
@@ -208,9 +284,9 @@ void dDlst_2DT2_c::draw() {
         GXPosition2f32(xH, mY);
         GXTexCoord2f32(s1, t0);
         GXPosition2f32(xH, y1);
-        GXTexCoord2f32(s1, t1);
+        GXTexCoord2f32(s1, 1.0f);
         GXPosition2f32(mX, y1);
-        GXTexCoord2f32(s0, t1);
+        GXTexCoord2f32(s0, 1.0f);
 
         // R
         GXPosition2f32(xH, mY);
@@ -218,9 +294,9 @@ void dDlst_2DT2_c::draw() {
         GXPosition2f32(x1, mY);
         GXTexCoord2f32(s0, t0);
         GXPosition2f32(x1, y1);
-        GXTexCoord2f32(s0, t1);
+        GXTexCoord2f32(s0, 1.0f);
         GXPosition2f32(xH, y1);
-        GXTexCoord2f32(s1, t1);
+        GXTexCoord2f32(s1, 1.0f);
 
         GXEnd();
     } else if (mMirrorT) {
@@ -229,10 +305,10 @@ void dDlst_2DT2_c::draw() {
         f32 s0, s1, t0, t1;
 
         if (mScrollS == 0.0f) {
-            s0 = 0.0f;
-            s1 = 0.0f;
+            s0 = 1.0f;
+            s1 = 1.0f;
         } else {
-            f32 h = 0.5f - (1.0f / mScrollS) * 0.5f;
+            f32 h = (1.0f / mScrollS) * 0.5f;
             s0 = 0.5f - h;
             s1 = 0.5f + h;
         }
@@ -362,23 +438,26 @@ void dDlst_2Dm_c::setScroll(int idx, s16 x, s16 y) {
 
 /* 80081888-80081DA4       .text draw__11dDlst_2Dm_cFv */
 void dDlst_2Dm_c::draw() {
-    /* Nonmatching - scroll math isn't right */
+    /* Nonmatching */
 
     GXVtxAttrFmtList fmtList[GX_VA_MAX_ATTR + 1];
 
     s16 tex0_s0 = mTex[0].mScrollX;
-    s16 tex0_s1 = (tex0_s0 + 256.0f);
     s16 tex0_t0 = mTex[0].mScrollY;
+    s16 tex0_s1 = (tex0_s0 + 256.0f);
     s16 tex0_t1 = (tex0_t0 + 256.0f);
 
-    s16 tex1_s0 = mTex[1].mScrollX;
-    s16 tex1_s1 = (tex1_s0 + 256.0f);
-    s16 tex1_t0 = mTex[1].mScrollY;
-    s16 tex1_t1 = (tex1_t0 + 256.0f);
+    f32 scaleX = (mScaleX * 256.0f) / GXGetTexObjWidth(&mTex[1].mTexObj);
+    f32 scaleY = (mScaleY * 256.0f) / GXGetTexObjHeight(&mTex[1].mTexObj);
+
+    s16 tex1_s0 = mTex[1].mScrollX * scaleX;
+    s16 tex1_t0 = mTex[1].mScrollY * scaleY;
+    s16 tex1_s1 = tex1_s0 + (s16)(scaleX * GXGetTexObjWidth(&mTex[0].mTexObj));
+    s16 tex1_t1 = tex1_t0 + (s16)(scaleY * GXGetTexObjHeight(&mTex[0].mTexObj));
 
     GXGetVtxAttrFmtv(GX_VTXFMT0, fmtList);
 
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 8);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, 8);
     GXClearVtxDesc();
@@ -420,19 +499,19 @@ void dDlst_2Dm_c::draw() {
     GXSetCurrentMtx(GX_PNMTX0);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(mX0, mY0, 0.0f);
+    GXPosition3s16(mX0, mY0, 0.0f);
     GXTexCoord2s16(tex0_s0, tex0_t0);
     GXTexCoord2s16(tex1_s0, tex1_t0);
 
-    GXPosition3f32(mX1, mY0, 0.0f);
+    GXPosition3s16(mX1, mY0, 0.0f);
     GXTexCoord2s16(tex0_s1, tex0_t0);
     GXTexCoord2s16(tex1_s1, tex1_t0);
 
-    GXPosition3f32(mX1, mY1, 0.0f);
+    GXPosition3s16(mX1, mY1, 0.0f);
     GXTexCoord2s16(tex0_s1, tex0_t1);
     GXTexCoord2s16(tex1_s1, tex1_t1);
 
-    GXPosition3f32(mX0, mY1, 0.0f);
+    GXPosition3s16(mX0, mY1, 0.0f);
     GXTexCoord2s16(tex0_s0, tex0_t1);
     GXTexCoord2s16(tex1_s0, tex1_t1);
     GXEnd();
@@ -442,7 +521,73 @@ void dDlst_2Dm_c::draw() {
 
 /* 80081DA4-80082130       .text draw__12dDlst_2DMt_cFv */
 void dDlst_2DMt_c::draw() {
-    /* Nonmatching */
+    GXVtxAttrFmtList fmtList[GX_VA_MAX_ATTR + 1];
+
+    GXGetVtxAttrFmtv(GX_VTXFMT0, fmtList);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+
+    dDlst_2DMt_tex_c* pTex = &mTex[0];
+    s32 texIdx = 0;
+    for (s32 i = 0; i < mTexNum; pTex++, i++) {
+        if (!pTex->check())
+            continue;
+
+        if (pTex->getCI())
+            GXLoadTlut(pTex->getTlutObj(), i);
+
+        GXLoadTexObj(pTex->getTexObj(), (GXTexMapID)texIdx);
+        GXSetVtxAttrFmt(GX_VTXFMT0, (GXAttr)((u32)GX_VA_TEX0 + texIdx), GX_TEX_ST, GX_F32, 0);
+        GXSetVtxDesc((GXAttr)((u32)GX_VA_TEX0 + texIdx), GX_DIRECT);
+        GXSetTevColor((GXTevRegID)((u32)GX_TEVREG0 + texIdx), pTex->getColor());
+        GXSetTexCoordGen2((GXTexCoordID)texIdx, GX_TG_MTX2x4, (GXTexGenSrc)((u32)GX_TG_TEX0 + texIdx), GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+        GXSetTevOrder((GXTevStageID)texIdx, (GXTexCoordID)texIdx, (GXTexMapID)texIdx, GX_COLOR_NULL);
+        GXSetTevColorIn((GXTevStageID)texIdx, GX_CC_ZERO, (GXTevColorArg)((u32)GX_CC_C0 + texIdx * 2), GX_CC_TEXC, (texIdx != 0) ? GX_CC_CPREV : GX_CC_ZERO);
+        GXSetTevColorOp((GXTevStageID)texIdx, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaIn((GXTevStageID)texIdx, GX_CA_ZERO, (GXTevAlphaArg)((u32)GX_CA_A0 + texIdx), GX_CA_TEXA, (texIdx != 0) ? GX_CA_APREV : GX_CA_ZERO);
+        GXSetTevAlphaOp((GXTevStageID)texIdx, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        texIdx++;
+
+        if (texIdx >= 3)
+            break;
+    }
+
+    if (texIdx != 0) {
+        GXSetNumChans(0);
+        GXSetNumTexGens(texIdx);
+        GXSetNumTevStages(texIdx);
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+
+        GXPosition3s16(mX0, mY0, 0);
+        pTex = &mTex[0];
+        for (s32 i = 0; i < mTexNum; pTex++, i++)
+            if (pTex->check())
+                GXTexCoord2f32(pTex->getS(), pTex->getT());
+
+        GXPosition3s16(mX1, mY0, 0);
+        pTex = &mTex[0];
+        for (s32 i = 0; i < mTexNum; pTex++, i++)
+            if (pTex->check())
+                GXTexCoord2f32(pTex->getS() + pTex->getSw(), pTex->getT());
+
+        GXPosition3s16(mX1, mY1, 0);
+        pTex = &mTex[0];
+        for (s32 i = 0; i < mTexNum; pTex++, i++)
+            if (pTex->check())
+                GXTexCoord2f32(pTex->getS() + pTex->getSw(), pTex->getT() + pTex->getTw());
+
+        GXPosition3s16(mX0, mY1, 0);
+        pTex = &mTex[0];
+        for (s32 i = 0; i < mTexNum; pTex++, i++)
+            if (pTex->check())
+                GXTexCoord2f32(pTex->getS(), pTex->getT() + pTex->getTw());
+
+        GXEnd();
+
+        GXSetVtxAttrFmtv(GX_VTXFMT0, fmtList);
+    }
 }
 
 /* 80082130-800821B0       .text __ct__10dDlst_2D_cFP7ResTIMGssUc */
@@ -462,11 +607,70 @@ void dDlst_2D_c::draw() {
 /* 80082424-80082794       .text draw__18dDlst_effectLine_cFv */
 void dDlst_effectLine_c::draw() {
     /* Nonmatching */
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevColor(GX_TEVREG0, mColor);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetClipMode(GX_CLIP_ENABLE);
+    GXLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+
+    s32 numSegments = (s32)mRnd.getValue(field_0x20, field_0x22);
+    for (s32 i = 0; i < numSegments; i++) {
+        cXyz pt0, pt1;
+
+        s16 angle = mRnd.getFX(32767.0f);
+
+        f32 rad0 = mRnd.getValue(field_0x28, field_0x2C);
+        pt0.x = mPos.x + rad0 * cM_ssin(angle);
+        pt0.y = mPos.y + rad0 * cM_scos(angle);
+        pt0.z = mPos.z;
+
+        f32 rad1 = mRnd.getValue(field_0x30, field_0x34);
+        pt1.x = pt0.x + rad1 * cM_ssin(angle);
+        pt1.y = pt0.y + rad1 * cM_scos(angle);
+        pt1.z = mPos.z;
+
+        mDoMtx_multVec(dComIfGd_getInvViewMtx(), &pt0, &pt0);
+        mDoMtx_multVec(dComIfGd_getInvViewMtx(), &pt1, &pt1);
+
+        f32 lineWidth = mRnd.getValue(field_0x24, field_0x26);
+        GXSetLineWidth(lineWidth, GX_TO_ZERO);
+
+        GXBegin(GX_LINES, GX_VTXFMT0, 2);
+        GXPosition3f32(pt0.x, pt0.y, pt0.z);
+        GXPosition3f32(pt1.x, pt1.y, pt1.z);
+        GXEnd();
+    }
 }
 
 /* 80082794-80082828       .text update__18dDlst_effectLine_cFR4cXyzR8_GXColorUsUsUsUsffff */
-void dDlst_effectLine_c::update(cXyz&, _GXColor&, u16, u16, u16, u16, f32, f32, f32, f32) {
-    /* Nonmatching */
+void dDlst_effectLine_c::update(cXyz& pos, GXColor& color, u16 s0, u16 s1, u16 s2, u16 s3, f32 f0, f32 f1, f32 f2, f32 f3) {
+    mPos = pos;
+    mColor = color;
+    field_0x20 = s0;
+    field_0x22 = s1;
+    field_0x24 = s2;
+    field_0x26 = s3;
+    field_0x28 = f0;
+    field_0x2C = f1;
+    field_0x30 = f2;
+    field_0x34 = f3;
+    dComIfGd_set2DOpa(this);
 }
 
 /* 80082828-80082838       .text set__22dDlst_alphaModelData_cFUcPA4_fUc */
@@ -891,11 +1095,11 @@ void dDlst_shadowControl_c::reset() {
 
 /* 80084DEC-80084EF0       .text imageDraw__21dDlst_shadowControl_cFPA4_f */
 void dDlst_shadowControl_c::imageDraw(Mtx mtx) {
-    static char l_matDL[0x80] = {};
+    static char l_matDL[0x84] = {};
 
     GXSetViewport(0.0f, 0.0f, 256.0f, 256.0f, 0.0f, 1.0f);
     GXSetScissor(0, 0, 0x100, 0x100);
-    GXCallDisplayList(l_matDL, sizeof(l_matDL));
+    GXCallDisplayList(l_matDL, 0x80);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
     GXSetClipMode(GX_CLIP_DISABLE);
@@ -1239,6 +1443,8 @@ void dDlst_list_c::draw(dDlst_base_c** pList, dDlst_base_c** pEnd) {
     for (; pList < pEnd; pList++)
         (*pList)->draw();
 }
+
+GXColor dDlst_list_c::mWipeColor = { 0, 0, 0, 0 };
 
 /* 800865C8-800866C8       .text wipeIn__12dDlst_list_cFfR8_GXColor */
 void dDlst_list_c::wipeIn(f32 speed, GXColor& color) {
