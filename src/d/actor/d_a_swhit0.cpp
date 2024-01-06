@@ -305,7 +305,7 @@ s32 daSwhit0_c::actionToOnOrder() {
 s32 daSwhit0_c::actionToOnDemo() {
     if (dComIfGp_evmng_endCheck(mEventIdx)) {
         mState = 4;
-        dComIfGp_event_onEventFlag(0x08);
+        dComIfGp_event_reset();
 
         return TRUE;
     }

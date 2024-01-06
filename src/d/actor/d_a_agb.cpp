@@ -80,7 +80,7 @@ int dMsgCtrl_c::execute() {
     } else {
         if (mpMsg->mMode == 18) {
             mpMsg->mMode = 19;
-            dComIfGp_event_onEventFlag(8);
+            dComIfGp_event_reset();
         }
 
         return mpMsg->mMode;
@@ -415,7 +415,7 @@ void daAgb_c::modeLookAttention() {
         }
 
         if (dComIfGp_evmng_endCheck("DEFAULT_AGB_LOOK_ATTENTION")) {
-            dComIfGp_event_onEventFlag(8);
+            dComIfGp_event_reset();
             mMode = 0;
             se_flag = false;
 

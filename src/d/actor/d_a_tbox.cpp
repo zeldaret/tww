@@ -995,7 +995,7 @@ BOOL daTbox_c::actionDemo() {
 BOOL daTbox_c::actionDemo2() {
     if (dComIfGp_evmng_endCheck("DEFAULT_TREASURE_APPEAR")) {
         setAction(&daTbox_c::actionOpenWait);
-        dComIfGp_event_onEventFlag(0x08);
+        dComIfGp_event_reset();
     }
     else {
         demoProc();

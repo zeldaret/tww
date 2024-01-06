@@ -350,7 +350,7 @@ BOOL dEvt_control_c::itemCheck(dEvt_order_c* order) {
 
 /* 80070D1C-80070DD4       .text endProc__14dEvt_control_cFv */
 BOOL dEvt_control_c::endProc() {
-    switch (mMode) {
+    switch (getMode()) {
     case dEvtMode_TALK_e:
         talkEnd();
         break;
@@ -475,7 +475,7 @@ BOOL dEvt_control_c::checkStart() {
 
 /* 80071020-80071048       .text soundProc__14dEvt_control_cFv */
 BOOL dEvt_control_c::soundProc() {
-    if (mEventEndSound != 0 && mMode != dEvtMode_DEMO_e)
+    if (mEventEndSound != 0 && getMode() != dEvtMode_DEMO_e)
         mEventEndSound = 0;
     return TRUE;
 }
@@ -521,21 +521,21 @@ BOOL dEvt_control_c::photoCheck() {
 s32 dEvt_control_c::moveApproval(void* actor) {
     /* Nonmatching */
     fopAc_ac_c* i_ac = (fopAc_ac_c*)actor;
-    if (mMode == 0)
+    if (getMode() == dEvtMode_NONE_e)
         return dEvtMove_MOVE_e;
 
-    switch (mMode) {
-    case 1:
+    switch (getMode()) {
+    case dEvtMode_TALK_e:
         if (convPId(mPt1) == i_ac || convPId(mPt2) == i_ac)
             return dEvtMove_FORCE_e;
         break;
-    case 2:
+    case dEvtMode_DEMO_e:
         if (convPId(mPt1) == i_ac || convPId(mPt2) == i_ac)
             return dEvtMove_FORCE_e;
         if (i_ac->mDemoActorId != 0)
             return dEvtMove_FORCE_e;
         break;
-    case 3:
+    case dEvtMode_COMPULSORY_e:
         if (convPId(mPt1) == i_ac)
             return dEvtMove_FORCE_e;
         break;
@@ -544,7 +544,7 @@ s32 dEvt_control_c::moveApproval(void* actor) {
     if (fopAcM_checkStatus(i_ac, fopAcStts_FORCEMOVE_e))
         return dEvtMove_FORCE_e;
 
-    if (mMode == 1 && fopAcM_checkStatus(i_ac, fopAcStts_UNK40_e))
+    if (getMode() == dEvtMode_TALK_e && fopAcM_checkStatus(i_ac, fopAcStts_UNK40_e))
         return dEvtMove_MOVE_e;
     if (dComIfGp_demo_mode() == 1)
         return dEvtMove_MOVE_e;
@@ -561,7 +561,7 @@ s32 dEvt_control_c::moveApproval(void* actor) {
 
 /* 80071418-80071468       .text compulsory__14dEvt_control_cFPvPCcUs */
 BOOL dEvt_control_c::compulsory(void* actor, const char* eventName, u16 p3) {
-    if (mMode != 0)
+    if (getMode() != 0)
         return FALSE;
 
     return orderOld(dEvtType_COMPULSORY_e, 1, 0, p3, actor, NULL, eventName);
@@ -569,7 +569,7 @@ BOOL dEvt_control_c::compulsory(void* actor, const char* eventName, u16 p3) {
 
 /* 80071468-800714AC       .text remove__14dEvt_control_cFv */
 void dEvt_control_c::remove() {
-    mMode = 0;
+    mMode = dEvtMode_NONE_e;
     mbEndProc = 0;
     mOrderCount = 0;
     field_0xdd = 0;
@@ -587,7 +587,7 @@ void dEvt_control_c::remove() {
 /* 800714AC-80071534       .text getStageEventDt__14dEvt_control_cFv */
 dStage_Event_dt_c* dEvt_control_c::getStageEventDt() {
     dStage_EventInfo_c* stageEventInfo = dComIfGp_getStageEventInfo();
-    if (mMode == 0)
+    if (getMode() == 0)
         return NULL;
 
     if (stageEventInfo == NULL || mEventInfoIdx == 0xFF || mEventInfoIdx >= stageEventInfo->num)
@@ -663,12 +663,11 @@ char* dEvt_info_c::getEventName() {
 
 /* 800716F8-80071778       .text giveItemCut__14dEvt_control_cFUc */
 bool dEvt_control_c::giveItemCut(u8 item) {
-    /* Nonmatching */
     s32 staffIdx = dComIfGp_evmng_getMyStaffId("GIVEMAN");
     if (staffIdx == -1)
         return false;
 
     dComIfGp_evmng_cutEnd(staffIdx);
-    mGetItemNo = staffIdx;
+    mGetItemNo = item;
     return true;
 }

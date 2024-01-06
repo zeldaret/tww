@@ -552,7 +552,7 @@ void daObjMknjD::Act_c::privateCut() {
                         doCutEnd = true;
                     }
                     else {
-                        dComIfGp_event_onEventFlag(8);
+                        dComIfGp_event_reset();
                     }
                     break;
                 default:
@@ -838,7 +838,7 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
 
             if (dComIfGp_evmng_endCheck(mDemoEventIdx)) {
                 dComIfGp_getAttention().mFlags &= ~0x80000000;
-                dComIfGp_event_onEventFlag(8);
+                dComIfGp_event_reset();
 
                 fopAcM_delete(this);
             }

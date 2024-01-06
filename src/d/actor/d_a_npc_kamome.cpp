@@ -989,7 +989,7 @@ BOOL daNpc_kam_c::eventProc() {
 
 /* 000034A8-00003514       .text eventEnd__11daNpc_kam_cFv */
 void daNpc_kam_c::eventEnd() {
-    dComIfGp_event_onEventFlag(8);
+    dComIfGp_event_reset();
     offEventAccept();
     
     if (mCurrEventIdxIdx == 0) { // "OPTION_CHAR_END"

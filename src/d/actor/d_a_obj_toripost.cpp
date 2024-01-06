@@ -690,7 +690,7 @@ void daObjTpost_c::modeTalk() {
             modeProc(PROC_INIT, 0);
         }
 
-        dComIfGp_event_onEventFlag(8);
+        dComIfGp_event_reset();
         field_0x8F4 = 0;
     }
 }
@@ -747,7 +747,7 @@ void daObjTpost_c::modeTalkXY() {
         if (stopped) {
             if(cLib_calcTimer(&field_0x8DC) == 0 && talk(1) == dNpcMsgStts_BOX_CLOSED_e) {
                 modeProc(PROC_INIT, 0);
-                dComIfGp_event_onEventFlag(8);
+                dComIfGp_event_reset();
                 field_0x8F5 = 0;
             }
         }
@@ -755,7 +755,7 @@ void daObjTpost_c::modeTalkXY() {
 }
 
 void daObjTpost_c::modeReceiveInit() {
-    dComIfGp_event_onEventFlag(8);
+    dComIfGp_event_reset();
     field_0x8F7 = 3;
     setAnm(1, false);
 }
@@ -772,7 +772,7 @@ void daObjTpost_c::modeReceiveDemo() {
     if(dComIfGp_evmng_endCheck("DEFAULT_POST")) {
         dLetter_read(m_letter[mNumReadable].mEventReg);
         mNumReadable = getReadableLetterNum();
-        dComIfGp_event_onEventFlag(8);
+        dComIfGp_event_reset();
 
         if(mNumReadable != 0) {
             modeProc(PROC_INIT, 1);

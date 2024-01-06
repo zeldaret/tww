@@ -264,7 +264,7 @@ void daObjBarrier_c::break_order_proc() {
 /* 00000A58-00000AB8       .text break_end_wait_proc__14daObjBarrier_cFv */
 void daObjBarrier_c::break_end_wait_proc() {
     if (dComIfGp_evmng_endCheck(mEventID)) {
-        dComIfGp_event_onEventFlag(8);
+        dComIfGp_event_reset();
         fopAcM_delete(this);
     }
 }

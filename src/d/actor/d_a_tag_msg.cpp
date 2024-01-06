@@ -172,7 +172,7 @@ static BOOL daTag_Msg_actionEvent(daTag_Msg_c* a_this) {
     }
     if (l_msg != NULL && l_msg->mMode == 0x12) {
         l_msg->mMode = 0x13;
-        dComIfGp_event_onEventFlag(8);
+        dComIfGp_event_reset();
         if (a_this->getMessage() == 0x1902) {
             daPy_getPlayerLinkActorClass()->offPlayerNoDraw();
         }
