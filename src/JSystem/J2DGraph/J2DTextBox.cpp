@@ -7,6 +7,7 @@
 #include "JSystem/JKernel/JKRFileLoader.h"
 #include "JSystem/JSupport/JSURandomInputStream.h"
 #include "JSystem/JUtility/JUTResource.h"
+#include "__va_arg.h"
 
 /* 802D51D8-802D5268       .text __ct__10J2DTextBoxFPCcPCc */
 J2DTextBox::J2DTextBox(const char* font, const char* str) : mpFont(NULL), mStringPtr(NULL) {
