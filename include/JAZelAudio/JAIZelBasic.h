@@ -169,7 +169,7 @@ public:
 
     static JAIZelBasic* zel_basic;
 
-    // static m_bgm_mute_state;
+    static u8 m_bgm_mute_state[];
 
     // static charVoiceTable;
     // static linkVoiceTable;
