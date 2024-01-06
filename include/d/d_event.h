@@ -101,6 +101,7 @@ public:
     void reset() { onEventFlag(8); }
 
     bool runCheck() { return mMode != 0; }
+    u8 getMode() { return mMode; }
 
     /* 0x00 */ dEvt_order_c mOrder[8];
     /* 0xC0 */ s8 mOrderCount;

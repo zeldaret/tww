@@ -30,6 +30,12 @@ public:
     /* 0x2C */ s32 mSubstanceSize;
     /* 0x30 */ s32 mNextIdx;
     /* 0x34 */ u32 field_0x34[3];
+
+    char* getName() { return mName; }
+    s32 getNext() { return mNextIdx; }
+    s32 getNumber() { return mSubstanceSize; }
+    s32 getIndex() { return mSubstanceIdx; }
+    s32 getType() { return mSubstanceType; }
 }; // Size: 0x40
 
 class dEvDtCut_c {
@@ -38,12 +44,15 @@ public:
     s32 getNext() { return mNextCutIdx; }
     u32 getFlagId() { return mFlagIdx; }
     u32 getTagId() { return mTagId; }
+    u32 getStartFlag(int idx) { return mStartFlag[idx]; }
+    u32 getDataTop() { return mFirstDataIdx; }
+    char* getName() { return mName; }
 
 public:
     /* 0x00 */ char mName[32];
     /* 0x20 */ u32 mTagId;
     /* 0x24 */ u32 mIndex;
-    /* 0x28 */ u32 mFlagCheck[3];
+    /* 0x28 */ u32 mStartFlag[3];
     /* 0x34 */ u32 mFlagIdx;
     /* 0x38 */ u32 mFirstDataIdx;
     /* 0x3C */ u32 mNextCutIdx;
@@ -165,7 +174,42 @@ public:
     void advanceCut(dEvDtEvent_c*);
     bool advanceCutLocal(dEvDtStaff_c*);
 
-    dEvDtCut_c * getCutP(int idx) { return &mCutP[idx]; }
+    event_binary_data_header* getHeaderP() { return mHeaderP; }
+    dEvDtStaff_c* getStaffP(int i) { return &mStaffP[i]; }
+    dEvDtEvent_c* getEventP(int i) { return &mEventP[i]; }
+    dEvDtData_c* getDataP(int i) { return &mDataP[i]; }
+    dEvDtCut_c* getCutP(int i) { return &mCutP[i]; }
+    char* getEventName(int i) { return mEventP[i].getName(); }
+    int getStaffCurrentCut(int i) { return mStaffP[i].getCurrentCut(); }
+    dEvDtCut_c* getCutStaffCurrentCutP(int i) { return getCutP(getStaffCurrentCut(i)); }
+    int getStaffStartCut(int i) { return mStaffP[i].getStartCut(); }
+    dEvDtCut_c* getCutStaffStartCutP(int i) { return getCutP(getStaffStartCut(i)); }
+    int* getIDataP(int i) { return &mIDataP[i]; }
+    f32* getFDataP(int i) { return &mFDataP[i]; }
+    char* getSDataP(int i) { return &mSDataP[i]; }
+    u32 getEventTop() { return mHeaderP->eventTop; }
+    s32 getEventNum() { return mHeaderP->eventNum; }
+    u32 getStaffTop() { return mHeaderP->staffTop; }
+    s32 getStaffNum() { return mHeaderP->staffNum; }
+    u32 getCutTop() { return mHeaderP->cutTop; }
+    s32 getCutNum() { return mHeaderP->cutNum; }
+    u32 getDataTop() { return mHeaderP->dataTop; }
+    s32 getDataNum() { return mHeaderP->dataNum; }
+    u32 getFDataTop() { return mHeaderP->fDataTop; }
+    s32 getFDataNum() { return mHeaderP->fDataNum; }
+    u32 getIDataTop() { return mHeaderP->iDataTop; }
+    s32 getIDataNum() { return mHeaderP->iDataNum; }
+    u32 getSDataTop() { return mHeaderP->sDataTop; }
+    s32 getSDataNum() { return mHeaderP->sDataNum; }
+
+    void setHeaderP(event_binary_data_header* p_header) { mHeaderP = p_header; }
+    void setEventP(dEvDtEvent_c* p_event) { mEventP = p_event; }
+    void setStaffP(dEvDtStaff_c* p_staff) { mStaffP = p_staff; }
+    void setCutP(dEvDtCut_c* p_cut) { mCutP = p_cut; }
+    void setDataP(dEvDtData_c* p_data) { mDataP = p_data; }
+    void setFDataP(f32* p_fdata) { mFDataP = p_fdata; }
+    void setIDataP(int* p_idata) { mIDataP = p_idata; }
+    void setSDataP(char* p_sdata) { mSDataP = p_sdata; }
 
 public:
     /* 0x00 */ event_binary_data_header* mHeaderP;

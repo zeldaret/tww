@@ -2400,6 +2400,10 @@ inline dEvent_manager_c* dComIfGp_getPEvtManager() {
     return &g_dComIfG_gameInfo.play.getEvtManager();
 }
 
+inline u8 dComIfGp_event_getMode() {
+    return g_dComIfG_gameInfo.play.getEvent().getMode();
+}
+
 // Note: Some of the below functions call g_dComIfG_gameInfo.play.getEvtManager(), while others use
 // dComIfGp_getPEvtManager(), without a clear pattern for which was chosen.
 

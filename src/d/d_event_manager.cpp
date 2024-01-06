@@ -100,23 +100,23 @@ enum {
 /* 80073A4C-80073BC0       .text getSubstance__16dEvent_manager_cFP11dEvDtData_ci */
 void* dEvent_manager_c::getSubstance(dEvDtData_c* data, int type) {
     /* Nonmatching */
-    if (data->mSubstanceIdx < 0 || data->mSubstanceSize <= 0) {
+    if (data->getIndex() < 0 || data->getNumber() <= 0) {
         JUT_ASSERT(0x169, 0);
         return NULL;
     }
 
-    if (type != -1 && type != data->mSubstanceType) {
+    if (type != -1 && type != data->getType()) {
         JUT_ASSERT(0x16e, 0);
     }
 
-    switch (data->mSubstanceType) {
+    switch (data->getType()) {
     case dEvtSub_FLOAT_e:
     case dEvtSub_XYZ_e:
-        return &mList.mFDataP[data->mSubstanceIdx];
+        return mList.getFDataP(data->getIndex());
     case dEvtSub_INT_e:
-        return &mList.mIDataP[data->mSubstanceIdx];
+        return mList.getIDataP(data->getIndex());
     case dEvtSub_STR_e:
-        return &mList.mSDataP[data->mSubstanceIdx];
+        return mList.getSDataP(data->getIndex());
     default:
         JUT_ASSERT(0x182, 0);
         return NULL;
@@ -128,21 +128,21 @@ void dEvent_manager_c::setData(const char* data) {
     if (data == NULL)
         return;
 
-    mList.mHeaderP = (event_binary_data_header*)data;
-    if (mList.mHeaderP->eventNum > 0)
-        mList.mEventP = (dEvDtEvent_c*)(data + mList.mHeaderP->eventTop);
-    if (mList.mHeaderP->staffNum > 0)
-        mList.mStaffP = (dEvDtStaff_c*)(data + mList.mHeaderP->staffTop);
-    if (mList.mHeaderP->cutNum > 0)
-        mList.mCutP = (dEvDtCut_c*)(data + mList.mHeaderP->cutTop);
-    if (mList.mHeaderP->dataNum > 0)
-        mList.mDataP = (dEvDtData_c*)(data + mList.mHeaderP->dataTop);
-    if (mList.mHeaderP->fDataNum > 0)
-        mList.mFDataP = (f32*)(data + mList.mHeaderP->fDataTop);
-    if (mList.mHeaderP->iDataNum > 0)
-        mList.mIDataP = (int*)(data + mList.mHeaderP->iDataTop);
-    if (mList.mHeaderP->sDataNum > 0)
-        mList.mSDataP = (char*)(data + mList.mHeaderP->sDataTop);
+    mList.setHeaderP((event_binary_data_header*)data);
+    if (mList.getEventNum() > 0)
+        mList.setEventP((dEvDtEvent_c*)(data + mList.getEventTop()));
+    if (mList.getStaffNum() > 0)
+        mList.setStaffP((dEvDtStaff_c*)(data + mList.getStaffTop()));
+    if (mList.getCutNum() > 0)
+        mList.setCutP((dEvDtCut_c*)(data + mList.getCutTop()));
+    if (mList.getDataNum() > 0)
+        mList.setDataP((dEvDtData_c*)(data + mList.getDataTop()));
+    if (mList.getFDataNum() > 0)
+        mList.setFDataP((f32*)(data + mList.getFDataTop()));
+    if (mList.getIDataNum() > 0)
+        mList.setIDataP((int*)(data + mList.getIDataTop()));
+    if (mList.getSDataNum() > 0)
+        mList.setSDataP((char*)(data + mList.getSDataTop()));
 }
 
 /* 80073C94-80073D10       .text create__16dEvent_manager_cFv */
@@ -235,7 +235,7 @@ void dEvent_manager_c::startProc(dEvDtEvent_c* event) {
     dEv_seach_prm prm(NULL, 0, 0);
     for (s32 i = 0; i < event->mNStaff; i++) {
         s32 staffIdx = event->mStaffIdx[i];
-        dEvDtStaff_c* staff = &mList.mStaffP[staffIdx];
+        dEvDtStaff_c* staff = mList.getStaffP(staffIdx);
         if (staff->mStaffType == dEvDtStaff_c::NORMAL_e) {
             fopAc_ac_c* actor = specialCast(staff->mName, 1);
             if (actor == NULL) {
@@ -395,11 +395,10 @@ int dEvent_manager_c::getMyStaffId(const char*, fopAc_ac_c*, int) {
 
 /* 80074718-8007473C       .text getIsAddvance__16dEvent_manager_cFi */
 BOOL dEvent_manager_c::getIsAddvance(int staffIdx) {
-    /* Nonmatching */
     if (staffIdx == -1)
         return FALSE;
 
-    return mList.mStaffP[staffIdx].mAdvance;
+    return mList.getStaffP(staffIdx)->mAdvance;
 }
 
 /* 80074824-80074964       .text getMyActIdx__16dEvent_manager_cFiPCPCciii */
@@ -424,7 +423,7 @@ char* dEvent_manager_c::getMyNowCutName(int staffIdx) {
     if (staffIdx == -1)
         return NULL;
 
-    return mList.getCutP(mList.mStaffP[staffIdx].getCurrentCut())->mName;
+    return mList.getCutStaffCurrentCutP(staffIdx)->getName();
 }
 
 /* 800749D0-80074AA0       .text getMyDataP__16dEvent_manager_cFiPCci */
@@ -434,16 +433,16 @@ dEvDtData_c* dEvent_manager_c::getMyDataP(int staffIdx, const char* name, int mo
 
     dEvDtCut_c* cut;
     if (mode != 0)
-        cut = mList.getCutP(mList.mStaffP[staffIdx].getStartCut());
+        cut = mList.getCutStaffStartCutP(staffIdx);
     else
-        cut = mList.getCutP(mList.mStaffP[staffIdx].getCurrentCut());
+        cut = mList.getCutStaffCurrentCutP(staffIdx);
 
-    s32 dataIdx = cut->mFirstDataIdx;
+    s32 dataIdx = cut->getDataTop();
     while (dataIdx != -1) {
-        dEvDtData_c* data = &mList.mDataP[dataIdx];
-        if (strcmp(name, data->mName) == 0)
+        dEvDtData_c* data = mList.getDataP(dataIdx);
+        if (strcmp(name, data->getName()) == 0)
             return data;
-        dataIdx = data->mNextIdx;
+        dataIdx = data->getNext();
     }
 
     return NULL;
@@ -471,7 +470,7 @@ void dEvent_manager_c::cutEnd(int staffIdx) {
     if (staffIdx == -1)
         return;
 
-    mFlag.flagSet(mList.getCutP(mList.mStaffP[staffIdx].getCurrentCut())->getFlagId());
+    getFlags().flagSet(mList.getCutStaffCurrentCutP(staffIdx)->getFlagId());
 }
 
 /* 80074B7C-80074BB0       .text getEventPrio__16dEvent_manager_cFs */
@@ -533,14 +532,13 @@ fopAc_ac_c* dEvent_manager_c::specialCast(const char*, int) {
 
 /* 800750FC-80075288       .text setPrmStaff__16dEvent_manager_cFPvi */
 void dEvent_manager_c::setPrmStaff(void* work, int staffIdx) {
-    /* Nonmatching */
     dEv_seach_prm* prm = (dEv_seach_prm*)work;
-    dEvDtStaff_c* staff_data = &mList.mStaffP[staffIdx];
+    dEvDtStaff_c* staff_data = mList.getStaffP(staffIdx);
     JUT_ASSERT(0x66b, staff_data);
     JUT_ASSERT(0x66c, prm);
     prm->mName = staff_data->getName();
 
-    dEvDtData_c* dev_prm_data = getMyDataP(staffIdx, "DEV_PRM_MASK", 0);
+    dEvDtData_c* dev_prm_data = getMyDataP(staffIdx, "DEV_PRM_MASK", 1);
     if (dev_prm_data == NULL) {
         prm->mMask = 0;
         prm->mValue = 0;

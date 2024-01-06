@@ -148,11 +148,11 @@ void dMetronome_c::metronomeMove() {
     for (s32 i = 0; i < 21; i++) {
         if (i == timer) {
             if (i == 10) {
-                ((J2DPicture *)pane_timing[i].scrn)->setBlack(JUtility::TColor(0xFF505000));
-                ((J2DPicture *)pane_timing[i].scrn)->setWhite(JUtility::TColor(0xFF5050FF));
+                ((J2DPicture *)pane_timing[i].pane)->setBlack(JUtility::TColor(0xFF505000));
+                ((J2DPicture *)pane_timing[i].pane)->setWhite(JUtility::TColor(0xFF5050FF));
             } else {
-                ((J2DPicture *)pane_timing[i].scrn)->setBlack(JUtility::TColor(0xFFB90000));
-                ((J2DPicture *)pane_timing[i].scrn)->setWhite(JUtility::TColor(0xFFB900FF));
+                ((J2DPicture *)pane_timing[i].pane)->setBlack(JUtility::TColor(0xFFB90000));
+                ((J2DPicture *)pane_timing[i].pane)->setWhite(JUtility::TColor(0xFFB900FF));
             }
         } else {
             if (pane_timing[i].mUserArea != 0 && g_mnHIO.mTimingTrail) {
@@ -181,11 +181,11 @@ void dMetronome_c::metronomeMove() {
                     white.a = 0xFF;
                 }
 
-                ((J2DPicture *)pane_timing[i].scrn)->setBlack(black);
-                ((J2DPicture *)pane_timing[i].scrn)->setWhite(white);
+                ((J2DPicture *)pane_timing[i].pane)->setBlack(black);
+                ((J2DPicture *)pane_timing[i].pane)->setWhite(white);
             } else {
-                ((J2DPicture *)pane_timing[i].scrn)->setBlack(JUtility::TColor(0x00000000));
-                ((J2DPicture *)pane_timing[i].scrn)->setWhite(JUtility::TColor(0xFFFFFFFF));
+                ((J2DPicture *)pane_timing[i].pane)->setBlack(JUtility::TColor(0x00000000));
+                ((J2DPicture *)pane_timing[i].pane)->setWhite(JUtility::TColor(0xFFFFFFFF));
             }
         }
     }
@@ -306,7 +306,7 @@ void dMetronome_c::melodyGuideShow(s32 note, s16 no) {
     // This is almost J2DPane::setBasePosition
     f32 centerX = pane_i11[no].mSize.x / 2.0f;
     f32 centerY = pane_i11[no].mSize.y / 2.0f;
-    J2DScreen * scrn = pane_i11[no].scrn;
+    J2DScreen* scrn = (J2DScreen*)pane_i11[no].pane;
     scrn->mBasePosition.x = centerX;
     scrn->mBasePosition.y = centerY;
     scrn->mRotationAxis = ROTATE_Z;
@@ -452,7 +452,7 @@ void dMetronome_c::melodyFlash() {
     }
 
     for (s32 i = 0; i < mMelodyNum; i++) {
-        pane_pk[i].mAlphaOrig = g_mnHIO.mAlphaOrig;
+        pane_pk[i].mInitAlpha = g_mnHIO.mAlphaOrig;
         fopMsgM_setNowAlpha(&pane_pk[i], alpha);
     }
 }

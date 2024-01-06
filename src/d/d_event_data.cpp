@@ -834,8 +834,8 @@ void dEvDtStaff_c::specialProcTimekeeper() {
 
 /* 800735BC-8007364C       .text startCheck__10dEvDtCut_cFv */
 s32 dEvDtCut_c::startCheck() {
-    for (s32 i = 0; i < (s32)ARRAY_SIZE(mFlagCheck); i++) {
-        int flag_id = mFlagCheck[i];
+    for (s32 i = 0; i < (s32)ARRAY_SIZE(mStartFlag); i++) {
+        int flag_id = getStartFlag(i);
         if (flag_id == -1) {
             return i == 0 ? -1 : 1;
         }

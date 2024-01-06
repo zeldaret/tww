@@ -188,7 +188,7 @@ s32 dPn_c::_create() {
 #else
             DCStoreRangeNoSync(mpTIMG, 0x3c00);
 #endif
-            ((J2DPicture*)dPn_scrn->pane.scrn)->changeTexture(mpTIMG, 0);
+            ((J2DPicture*)dPn_scrn->pane.pane)->changeTexture(mpTIMG, 0);
             mState = 3;
         }
         mDoExt_setCurrentHeap(oldHeap);
