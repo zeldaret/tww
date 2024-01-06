@@ -405,6 +405,84 @@ void dDlst_2DT2_c::init(ResTIMG* tex, f32 x, f32 y, f32 w, f32 h, u8 p0, u8 p1, 
 /* 800812F4-800817CC       .text draw__11dDlst_2DM_cFv */
 void dDlst_2DM_c::draw() {
     /* Nonmatching */
+
+    GXVtxAttrFmtList fmtList[GX_VA_MAX_ATTR + 1];
+
+    s16 tex0_s0 = mTex[0].mScrollX;
+    s16 tex0_t0 = mTex[0].mScrollY;
+    s16 tex0_s1 = (tex0_s0 + 256.0f);
+    s16 tex0_t1 = (tex0_t0 + 256.0f);
+
+    f32 scaleX = 256.0f / mTex[1].mWidth;
+    f32 scaleY = 256.0f / mTex[1].mHeight;
+
+    s16 tex1_s0 = mTex[1].mScrollX * scaleX;
+    s16 tex1_t0 = mTex[1].mScrollY * scaleY;
+    s16 tex1_s1 = tex1_s0 + (s16)(mTex[0].mWidth * scaleX);
+    s16 tex1_t1 = tex1_t0 + (s16)(mTex[0].mHeight * scaleY);
+
+    GXGetVtxAttrFmtv(GX_VTXFMT0, fmtList);
+
+    GXTexObj texObj[2];
+    GXInitTexObj(&texObj[0], mTex[0].mpData, mTex[0].mWidth, mTex[0].mHeight, (GXTexFmt)mTex[0].mFormat, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(&texObj[0], GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    GXTexWrapMode wrap1 = mTex1Wrap ? GX_REPEAT : GX_CLAMP;
+    GXInitTexObj(&texObj[1], mTex[1].mpData, mTex[1].mWidth, mTex[1].mHeight, (GXTexFmt)mTex[1].mFormat, wrap1, wrap1, GX_FALSE);
+    GXInitTexObjLOD(&texObj[1], GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    GXLoadTexObj(&texObj[0], GX_TEXMAP0);
+    GXLoadTexObj(&texObj[1], GX_TEXMAP1);
+
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, 8);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX1, GX_DIRECT);
+
+    GXSetNumChans(0);
+    GXSetTevColor(GX_TEVREG0, mC0);
+    GXSetTevColor(GX_TEVREG1, mC1);
+
+    GXSetNumTexGens(2);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX1, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+
+    GXSetNumTevStages(2);
+
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_A1, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_TEXA, GX_CA_APREV, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3s16(mX0, mY0, 0.0f);
+    GXTexCoord2s16(tex0_s0, tex0_t0);
+    GXTexCoord2s16(tex1_s0, tex1_t0);
+
+    GXPosition3s16(mX1, mY0, 0.0f);
+    GXTexCoord2s16(tex0_s1, tex0_t0);
+    GXTexCoord2s16(tex1_s1, tex1_t0);
+
+    GXPosition3s16(mX1, mY1, 0.0f);
+    GXTexCoord2s16(tex0_s1, tex0_t1);
+    GXTexCoord2s16(tex1_s1, tex1_t1);
+
+    GXPosition3s16(mX0, mY1, 0.0f);
+    GXTexCoord2s16(tex0_s0, tex0_t1);
+    GXTexCoord2s16(tex1_s0, tex1_t1);
+    GXEnd();
+
+    GXSetVtxAttrFmtv(GX_VTXFMT0, fmtList);
 }
 
 /* 800817CC-80081850       .text init__11dDlst_2Dm_cFP7ResTIMGP7ResTIMGff */

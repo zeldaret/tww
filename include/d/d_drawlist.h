@@ -116,25 +116,24 @@ class dDlst_2DM_c : public dDlst_base_c {
 public:
     virtual void draw();
 
-    s16 field_0x4;
-    s16 field_0x6;
-    s16 field_0x8;
-    s16 field_0xa;
-    u8 field_0xc;
-    GXColor field_0xd;
-    GXColor field_0x11;
-    void* field_0x18;
-    short field_0x1c;
-    u16 field_0x1e;
-    u16 field_0x20;
-    s16 field_0x22;
-    s16 field_0x24;
-    void* field_0x28;
-    short field_0x2c;
-    u16 field_0x2e;
-    u16 field_0x30;
-    s16 field_0x32;
-    s16 field_0x34;
+public:
+    struct TexEntry {
+        /* 0x00 */ u8* mpData;
+        /* 0x04 */ u8 mFormat;
+        /* 0x06 */ u16 mWidth;
+        /* 0x08 */ u16 mHeight;
+        /* 0x0A */ s16 mScrollX;
+        /* 0x0C */ s16 mScrollY;
+    };
+
+    /* 0x04 */ s16 mX0;
+    /* 0x06 */ s16 mY0;
+    /* 0x08 */ s16 mX1;
+    /* 0x0A */ s16 mY1;
+    /* 0x0C */ u8 mTex1Wrap;
+    /* 0x0D */ GXColor mC0;
+    /* 0x11 */ GXColor mC1;
+    /* 0x18 */ TexEntry mTex[2];
 };
 
 class dDlst_2Dm_c : public dDlst_base_c {
@@ -144,6 +143,9 @@ public:
     void setScale(f32, f32);
     void setScroll(int, s16, s16);
     virtual void draw();
+    void setAlpha(u8) {}
+    void setBlackColor(GXColor& c) { mC0 = c; }
+    void setWhiteColor(GXColor& c) { mC1 = c; }
 
 public:
     struct TexEntry {
