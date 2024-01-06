@@ -4,27 +4,509 @@
 //
 
 #include "d/d_meter.h"
+#include "JSystem/J2DGraph/J2DScreen.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
 #include "d/d_metronome.h"
+#include "stdio.h"
+
+dMeter_info_c dMeter_Info;
+dMeter_map_HIO_c g_meter_mapHIO;
+dMeter_HIO_c g_meterHIO;
+dMeter_menuHIO_c g_menuHIO;
+dMeter_msg_HIO_c g_msgHIO;
+dMeter_message_HIO_c g_messageHIO;
+dMetronome_c* dMn_c;
+J2DScreen* sMainParts1;
+J2DScreen* sMainParts2;
+J2DScreen* sMainParts3;
+J2DScreen* sScrTimer1;
+J2DScreen* sScrTimer2;
+J2DScreen* sChoiceRoad;
+J2DPicture* moveItemPane;
+u8 mapAlpha;
+u8 menu_status;
+u8 menu_status_old;
+u8 dMenu_pause;
+int dMenu_frame_timer;
+u8 dMenu_menuButton;
+bool subWinFlag;
+bool dMeter_auctionFlag;
+u8 dMeter_itemMoveFlag;
+u8 dMeter_btn_chk;
+u8 dMeter_itemNum;
+u16 dMeter_itemTimer;
+f32 texRateX;
+f32 texRateY;
+f32 texScaleX;
+f32 texScaleY;
+u8 dMenu_menuFlag;
+u8 dMenu_baitNum[8];
+u8 dMeter_place_name;
+u8 dMeter_itemMode;
+u8 dMeter_collectMode;
+u8 dMeter_windStatus;
+u8 rupy_soundSetFlag;
+u8 rupy_soundOnFlag;
+mapCtrlDisp_c dMeter_mMapCtrlDisp;
+dDlst_2DMETER1_c meter1;
+dDlst_2DMETER2_c meter2;
+dDlst_2Dm_c tekari;
+dDlst_2Dm_c clock[3];
+
+static void dummy(f32* m, u32 p2, s32 p3) {
+    m[0] = 0.8f;
+    m[1] = 0.0f;
+    m[2] = 1.2f;
+    m[3] = 0.1f;
+    m[4] = 1.0f;
+    m[5] = 1.1f;
+    m[6] = 255.0f;
+    m[7] = -1.0f;
+    m[8] = 452.0f;
+    m[9] = p2;
+    m[10] = p3;
+}
 
 /* 801EEFDC-801EF360       .text __ct__12dMeter_HIO_cFv */
 dMeter_HIO_c::dMeter_HIO_c() {
-    /* Nonmatching */
+    field_0x6 = 10;
+    field_0x62 = 0;
+    field_0x63 = 0;
+    field_0xc = 1.0f;
+    field_0x10 = 1.4f;
+    field_0x14 = 0.0f;
+    field_0x18 = -29.0f;
+    field_0x1c = 1.0f;
+    field_0x36 = 0x16;
+    field_0x3c = 0.65f;
+    field_0x38 = 0;
+    field_0x2e = 0;
+    field_0x30 = 0;
+    field_0x32 = 0;
+    field_0x34 = 0;
+    field_0x2c = 0xff;
+    field_0x20 = 1.5f;
+    field_0x24 = 150.0f;
+    field_0x2d = 0x8c;
+    field_0x40 = 0x5a;
+    field_0x42 = 100;
+    field_0x44 = 100;
+    field_0x46 = 0x5a;
+    field_0x50 = 7;
+    field_0x52 = 0xfff4;
+    field_0x48 = 1.8;
+    field_0x4c = 12.0;
+    field_0x54 = 0;
+    field_0x56 = 0xffa8;
+    field_0x58 = 2.3f;
+    field_0x5c = 12.0f;
+    field_0x60 = 0x96;
+    field_0x61 = 100;
+    field_0x64 = 0;
+    field_0x66 = 0;
+    field_0x68 = 0;
+    field_0x6a = 0;
+    field_0x88 = 0xf;
+    field_0x8a = 5;
+    field_0x8c = 5;
+    field_0x8e = 5;
+    field_0x90 = 0x14;
+    field_0x92 = 0xc;
+    field_0x94 = 3;
+    field_0x96 = 3;
+    field_0x98 = 3;
+    field_0x9a = 0;
+    field_0x120 = 0x8c;
+    field_0x121 = 200;
+    field_0x122 = 0x96;
+    field_0x126 = 10;
+    field_0x128 = 6;
+    field_0x12a = 3;
+    field_0x12c = 3;
+    field_0x12e = 2;
+    field_0x130 = 0x14;
+    field_0x132 = 0x27;
+    field_0x7e = 0x14;
+    field_0x136 = 4;
+    field_0x138 = 10;
+    field_0x13a = 0;
+    field_0x13c = 10;
+    field_0x142 = 0xb4;
+    field_0x143 = 0;
+    field_0x144 = 0;
+    field_0x145 = 0xff;
+    field_0x146 = 0;
+    field_0x147 = 0;
+    field_0x148 = 0;
+    field_0x149 = 0;
+    field_0x123 = 1;
+    field_0x134 = 3;
+    field_0x13e = 0;
+    field_0x14a = 0xff;
+    field_0x14b = 0x32;
+    field_0x14c = 0x32;
+    field_0x14e = 10;
+    field_0x150 = 0x14;
+    field_0x152 = 4;
+    field_0x154 = 0x32;
+    field_0x28 = 2.1f;
+    field_0x124 = 5;
+    field_0x140 = 0;
+    field_0xa0 = 0;
+    field_0xa8 = 0;
+    field_0xa2 = 0x3c;
+    field_0xaa = 0xffc4;
+    field_0xa4 = 0;
+    field_0xac = 0;
+    field_0xa6 = 0;
+    field_0xae = 0;
+    field_0xb0 = 0x19;
+    field_0xb8 = 0xffe2;
+    field_0xb2 = 0x23;
+    field_0xba = 0xffea;
+    field_0xb4 = 0xffdf;
+    field_0xbc = 0xfffb;
+    field_0xb6 = 0xfffa;
+    field_0xbe = 0;
+    field_0xc0 = 0;
+    field_0xc8 = 0xffec;
+    field_0xc2 = 0;
+    field_0xca = 0xffec;
+    field_0xc4 = 0;
+    field_0xcc = 0xffec;
+    field_0xc6 = 0;
+    field_0xce = 0;
+    field_0xd0 = 0x28;
+    field_0xd8 = 0xffc4;
+    field_0xd2 = 0x28;
+    field_0xda = 0xffc4;
+    field_0xd4 = 0;
+    field_0xdc = 0;
+    field_0xd6 = 0;
+    field_0xde = 0;
+    field_0xe0 = 0x19;
+    field_0xe8 = 0xffe2;
+    field_0xe2 = 0x23;
+    field_0xea = 0xffea;
+    field_0xe4 = 0;
+    field_0xec = 0xffc4;
+    field_0xe6 = 0xfffa;
+    field_0xee = 0;
+    field_0xf0 = 0;
+    field_0xf8 = 0;
+    field_0xf2 = 0;
+    field_0xfa = 0;
+    field_0xf4 = 0;
+    field_0xfc = 0;
+    field_0xf6 = 0;
+    field_0xfe = 0;
+    field_0x100 = 0;
+    field_0x108 = 0xffc4;
+    field_0x102 = 0;
+    field_0x10a = 0xffc4;
+    field_0x104 = 0x32;
+    field_0x10c = 0xffb8;
+    field_0x106 = 0x32;
+    field_0x10e = 0xffaf;
+    field_0x110 = 0;
+    field_0x118 = 0xffeb;
+    field_0x112 = 0x11;
+    field_0x11a = 0xfff4;
+    field_0x114 = 0xffe2;
+    field_0x11c = 0xfff5;
+    field_0x116 = 0xff9e;
+    field_0x11e = 7;
+    field_0x9c = 0;
+    field_0x9e = 0;
+    field_0x6c = 0xffea;
+    field_0x72 = 0xffd5;
+    field_0x78 = 0x8c;
+    field_0x6e = 0xffdd;
+    field_0x74 = 0xfffd;
+    field_0x7a = 0x82;
+    field_0x70 = 0xfffa;
+    field_0x76 = 0xfff3;
+    field_0x7c = 0x8c;
 }
 
 /* 801EF360-801EF57C       .text __ct__16dMeter_menuHIO_cFv */
 dMeter_menuHIO_c::dMeter_menuHIO_c() {
-    /* Nonmatching */
+    field_0x8 = 1.4f;
+    field_0xbe = 0;
+    field_0xc = 18.0f;
+    field_0x10 = 28.0f;
+    field_0x7e = 3;
+    field_0x80 = 3;
+    field_0xc0 = 1;
+    field_0x7c = 0;
+    field_0xc1 = 0;
+    field_0xc2 = 10;
+    field_0xc3 = 4;
+    field_0xc4 = 0;
+    field_0x3c = 0.0f;
+    field_0x40 = -50.0f;
+    field_0x44 = 1100.0f;
+    field_0x70 = 0xff;
+    field_0x71 = 0xff;
+    field_0x72 = 0xff;
+    field_0x73 = 0xff;
+    field_0x6c = 0x32;
+    field_0x6d = 0x32;
+    field_0x6e = 0x32;
+    field_0x6f = 0xff;
+    field_0x48 = 0.0f;
+    field_0x4c = 0.0f;
+    field_0x50 = -1200.0f;
+    field_0x74 = 0xff;
+    field_0x75 = 0xff;
+    field_0x76 = 0xff;
+    field_0x77 = 0xff;
+    field_0x54 = -1500.0f;
+    field_0x58 = 1000.0f;
+    field_0x5c = 500.0f;
+    field_0x60 = 1.0f;
+    field_0x64 = -1.0f;
+    field_0x68 = -1.0f;
+    field_0x78 = 200;
+    field_0x79 = 200;
+    field_0x7a = 200;
+    field_0x7b = 0xff;
+    field_0x18 = 0.25f;
+    field_0xbf = 0;
+    field_0x1c = 2.5f;
+    field_0xc5 = 2;
+    field_0x82 = 8;
+    field_0x84 = 5;
+    field_0xc6 = 0;
+    field_0xc7 = 1;
+    field_0x20 = 0.5f;
+    field_0xc8 = 9;
+    field_0xc9 = 0;
+    field_0xca = 0;
+    field_0x28 = 0xffec;
+    field_0x36 = 7;
+    field_0x32 = 8;
+    field_0x34 = 5;
+    field_0x38 = 0x1a;
+    field_0x3a = 0xfffd;
+    field_0x88 = 3;
+    field_0x8a = 0;
+    field_0x14 = 1.3f;
+    field_0x8c = 0xff38;
+    field_0xb4 = 6;
+    field_0x90 = 3;
+    field_0x92 = 7;
+    field_0x94 = 1.0f;
+    field_0x98 = 0xff;
+    field_0x99 = 0xff;
+    field_0x9a = 0;
+    field_0x9a = 0;
+    field_0xa0 = 1.0f;
+    field_0xb6 = 0x46;
+    field_0xba = 5;
+    field_0xbc = 3;
+    field_0x24 = 1.4f;
+    field_0xa4 = 6;
+    field_0xa6 = 2;
+    field_0xa8 = 2;
+    field_0xaa = 2;
+    field_0xac = 2;
+    field_0xae = 0x1e;
+    field_0xb0 = 0x3c;
+    field_0xb2 = 0;
+    field_0x8e = 0x15e;
+    field_0xb8 = 0x96;
+    field_0x2a = 0x10;
+    field_0x2c = 0x18;
+    field_0x2e = 0x17;
+    field_0x30 = 0;
 }
 
 /* 801EF57C-801EF75C       .text __ct__16dMeter_msg_HIO_cFv */
 dMeter_msg_HIO_c::dMeter_msg_HIO_c() {
-    /* Nonmatching */
+    field_0x5 = 0x1e;
+    field_0x6 = 0x1e;
+    field_0x7 = 0x1e;
+    field_0x8 = 0xd7;
+    field_0x9 = 0x1e;
+    field_0xa = 0x1e;
+    field_0xb = 0x4b;
+    field_0xc = 0;
+    field_0x5a = 0;
+    field_0x5c = 0;
+    field_0x5e = 0x1e;
+    field_0x66 = 0;
+    field_0x68 = 0xf;
+    field_0xd = 0x1e;
+    field_0xe = 0x1e;
+    field_0xf = 0x1e;
+    field_0x10 = 0xdc;
+    field_0x11 = 0x1e;
+    field_0x12 = 0x1e;
+    field_0x13 = 0xb4;
+    field_0x14 = 0;
+    field_0x15 = 0;
+    field_0x16 = 0xff;
+    field_0x17 = 0;
+    field_0x18 = 0xff;
+    field_0x19 = 0x78;
+    field_0x1a = 0x78;
+    field_0x1b = 0xff;
+    field_0x1c = 0xff;
+    field_0x1d = 0xff;
+    field_0x1e = 0xff;
+    field_0x1f = 0x3c;
+    field_0x20 = 0xff;
+    field_0x21 = 0;
+    field_0x22 = 0xff;
+    field_0x23 = 0xff;
+    field_0x24 = 0xff;
+    field_0x25 = 0xff;
+    field_0x26 = 0;
+    field_0x27 = 0xff;
+    field_0x28 = 0xff;
+    field_0x6a = 0;
+    field_0x72 = 0;
+    field_0x6c = 0;
+    field_0x83 = 0;
+    field_0x84 = 1;
+    field_0x85 = 0;
+    field_0x86 = 0;
+    field_0x87 = 10;
+    field_0x88 = 0;
+    field_0x89 = 0;
+    field_0x8a = 0;
+    field_0x64 = 0;
+    field_0x82 = 2;
+    field_0x58 = 0x1d;
+    field_0x70 = 0x17;
+    field_0x62 = 0;
+    field_0x60 = 0xd;
+    field_0x6e = 0xf0;
+    field_0x50 = 0.6f;
+    field_0x54 = 1.1f;
+    field_0x4a = 2;
+    field_0x4c = 4;
+    field_0x7e = 10;
+    field_0x80 = 0xb4;
+    field_0x74 = 0x80;
+    field_0x7f = 0xaa;
+    field_0x81 = 0x46;
+    field_0x76 = 10;
+    field_0x78 = 0;
+    field_0x7a = 0;
+    field_0x7c = 0x46;
+    field_0x44 = 5;
+    field_0x46 = 3;
+    field_0x48 = 4;
+    field_0x38 = -40.0f;
+    field_0x3c = 0.96f;
+    field_0x40 = 0.5f;
+    field_0x29 = 0xff;
+    field_0x2a = 0x50;
+    field_0x2b = 0x50;
+    field_0x2c = 0x96;
+    field_0x2d = 0xff;
+    field_0x2e = 0x96;
+    field_0x2f = 0x96;
+    field_0x30 = 0xff;
 }
 
 /* 801EF75C-801EF924       .text __ct__20dMeter_message_HIO_cFv */
 dMeter_message_HIO_c::dMeter_message_HIO_c() {
-    /* Nonmatching */
+    field_0x5 = 0;
+    field_0x6 = 0;
+    field_0x7 = 0;
+    field_0x8 = 0xff;
+    field_0x9 = 0xff;
+    field_0xa = 0xff;
+    field_0xb = 0xff;
+    field_0xc = 0xff;
+    field_0xd = 0xff;
+    field_0xe = 0xff;
+    field_0xf = 0xff;
+    field_0x10 = 0;
+    field_0x11 = 0xff;
+    field_0x12 = 0xff;
+    field_0x13 = 0xff;
+    field_0x14 = 0xff;
+    field_0x15 = 0xff;
+    field_0x16 = 0xff;
+    field_0x17 = 0xff;
+    field_0x18 = 0xff;
+    field_0x19 = 0xff;
+    field_0x1a = 0xff;
+    field_0x1b = 0xff;
+    field_0x1c = 0;
+    field_0x1d = 0;
+    field_0x1e = 0;
+    field_0x1f = 0;
+    field_0x20 = 0xff;
+    field_0x21 = 0xff;
+    field_0x22 = 0xff;
+    field_0x23 = 0xff;
+    field_0x24 = 0xff;
+    field_0x25 = 0xff;
+    field_0x26 = 0xff;
+    field_0x27 = 0xff;
+    field_0x28 = 0;
+    field_0x29 = 0x80;
+    field_0x2a = 0xff;
+    field_0x2b = 0xff;
+    field_0x2c = 0xff;
+    field_0x2d = 0xff;
+    field_0x2e = 0xb4;
+    field_0x2f = 0xa0;
+    field_0x30 = 0x4b;
+    field_0x31 = 0;
+    field_0x32 = 0x1b;
+    field_0x34 = 0xfffe;
+    field_0x36 = 0x2a;
+    field_0x38 = 0xf;
+    field_0x3a = 1;
+    field_0x3b = 10;
+    field_0x3c = 0x16;
+    field_0x40 = 0.7f;
+    field_0x44 = 0;
+    field_0x46 = 1;
+    field_0x48 = 0;
+    field_0x4a = 0;
+    field_0x4b = 1;
+    field_0x4c = 0xff;
+    field_0x4d = 0xff;
+    field_0x4e = 0xff;
+    field_0x4f = 0xff;
+    field_0x50 = 0;
+    field_0x51 = 0;
+    field_0x52 = 0;
+    field_0x53 = 0;
+    field_0x54 = 0;
+    field_0x56 = 0;
+    field_0x58 = 0;
+    field_0x5a = 0;
+    field_0x5b = 0xff;
+    field_0x5c = 0;
+    field_0x60 = 0;
+    field_0x66 = 0;
+    field_0x6c = 1;
+    field_0x72 = 1;
+    field_0x5d = 0;
+    field_0x62 = 0;
+    field_0x68 = 0;
+    field_0x6e = 1;
+    field_0x74 = 1;
+    field_0x5e = 0;
+    field_0x64 = 0;
+    field_0x6a = 0;
+    field_0x70 = 1;
+    field_0x76 = 1;
+    field_0x78 = 0;
+    field_0x7a = 4;
+    field_0x7c = 4;
+    field_0x7e = 2;
+    field_0x80 = 600;
+    field_0x82 = 0x18c;
 }
 
 /* 801EF924-801EF938       .text dMeter_mtrShow__Fv */
@@ -38,68 +520,68 @@ void dMeter_mtrHide() {
 }
 
 /* 801EF94C-801EF954       .text dMenu_setMenuStatus__FUc */
-void dMenu_setMenuStatus(u8) {
-    /* Nonmatching */
+void dMenu_setMenuStatus(u8 param_1) {
+    menu_status = param_1;
 }
 
 /* 801EF954-801EF95C       .text dMenu_setMenuStatusOld__FUc */
-void dMenu_setMenuStatusOld(u8) {
-    /* Nonmatching */
+void dMenu_setMenuStatusOld(u8 param_1) {
+    menu_status_old = param_1;
 }
 
 /* 801EF95C-801EF964       .text dMenu_getMenuStatus__Fv */
-void dMenu_getMenuStatus() {
-    /* Nonmatching */
+u8 dMenu_getMenuStatus() {
+    return menu_status;
 }
 
 /* 801EF964-801EF96C       .text dMenu_getCollectMode__Fv */
-void dMenu_getCollectMode() {
-    /* Nonmatching */
+u8 dMenu_getCollectMode() {
+    return dMeter_collectMode;
 }
 
 /* 801EF96C-801EF974       .text dMenu_setCollectMode__FUc */
-void dMenu_setCollectMode(u8) {
-    /* Nonmatching */
+void dMenu_setCollectMode(u8 param_1) {
+    dMeter_collectMode = param_1;
 }
 
 /* 801EF974-801EF97C       .text dMenu_getItemMode__Fv */
-void dMenu_getItemMode() {
-    /* Nonmatching */
+u8 dMenu_getItemMode() {
+    return dMeter_itemMode;
 }
 
 /* 801EF97C-801EF984       .text dMenu_setItemMode__FUc */
-void dMenu_setItemMode(u8) {
-    /* Nonmatching */
+void dMenu_setItemMode(u8 param_1) {
+    dMeter_itemMode = param_1;
 }
 
 /* 801EF984-801EF98C       .text dMeter_subWinFlag__Fv */
-void dMeter_subWinFlag() {
-    /* Nonmatching */
+bool dMeter_subWinFlag() {
+    return subWinFlag;
 }
 
 /* 801EF98C-801EF998       .text dMeter_subWinFlagOn__Fv */
 void dMeter_subWinFlagOn() {
-    /* Nonmatching */
+    subWinFlag = true;
 }
 
 /* 801EF998-801EF9A4       .text dMeter_subWinFlagOff__Fv */
 void dMeter_subWinFlagOff() {
-    /* Nonmatching */
+    subWinFlag = false;
 }
 
 /* 801EF9A4-801EF9AC       .text dMeter_isAuctionFlag__Fv */
-void dMeter_isAuctionFlag() {
-    /* Nonmatching */
+bool dMeter_isAuctionFlag() {
+    return dMeter_auctionFlag;
 }
 
 /* 801EF9AC-801EF9B8       .text dMeter_onAuctionFlag__Fv */
 void dMeter_onAuctionFlag() {
-    /* Nonmatching */
+    dMeter_auctionFlag = true;
 }
 
 /* 801EF9B8-801EF9C4       .text dMeter_offAuctionFlag__Fv */
 void dMeter_offAuctionFlag() {
-    /* Nonmatching */
+    dMeter_auctionFlag = false;
 }
 
 /* 801EF9C4-801EFA38       .text dMeter_itemMoveSet__FP18fopMsgM_pane_classUcUc */
@@ -108,58 +590,60 @@ void dMeter_itemMoveSet(fopMsgM_pane_class*, u8, u8) {
 }
 
 /* 801EFA38-801EFA40       .text dMeter_itemMoveFlagCheck__Fv */
-void dMeter_itemMoveFlagCheck() {
-    /* Nonmatching */
+u8 dMeter_itemMoveFlagCheck() {
+    return dMeter_itemMoveFlag;
 }
 
 /* 801EFA40-801EFA48       .text dMenu_flag__Fv */
-bool dMenu_flag() {
-    /* Nonmatching */
+u8 dMenu_flag() {
+    return dMenu_pause;
 }
 
 /* 801EFA48-801EFA50       .text dMenu_flagSet__FUc */
-void dMenu_flagSet(u8) {
-    /* Nonmatching */
+void dMenu_flagSet(u8 param_1) {
+    dMenu_pause = param_1;
 }
 
 /* 801EFA50-801EFA58       .text dMenu_timer__Fv */
-void dMenu_timer() {
-    /* Nonmatching */
+int dMenu_timer() {
+    return dMenu_frame_timer;
 }
 
 /* 801EFA58-801EFA60       .text dMenu_getPushMenuButton__Fv */
-void dMenu_getPushMenuButton() {
-    /* Nonmatching */
+u8 dMenu_getPushMenuButton() {
+    return dMenu_menuButton;
 }
 
 /* 801EFA60-801EFA68       .text dMenu_setPushMenuButton__FUc */
-void dMenu_setPushMenuButton(u8) {
-    /* Nonmatching */
+void dMenu_setPushMenuButton(u8 param_1) {
+    dMenu_menuButton = param_1;
 }
 
 /* 801EFA68-801EFA78       .text dMeter_PaneHide__FP18fopMsgM_pane_class */
-void dMeter_PaneHide(fopMsgM_pane_class*) {
-    /* Nonmatching */
+void dMeter_PaneHide(fopMsgM_pane_class* param_1) {
+    param_1->scrn->hide();
 }
 
 /* 801EFA78-801EFA90       .text dMeter_isBit8__FPUcUc */
-void dMeter_isBit8(u8*, u8) {
-    /* Nonmatching */
+bool dMeter_isBit8(u8* param_1, u8 param_2) {
+    return (param_1[0] & param_2) != 0;
 }
 
 /* 801EFA90-801EFAA4       .text dMeter_onBit8__FPUcUc */
-void dMeter_onBit8(u8*, u8) {
+void dMeter_onBit8(u8* param_1, u8 param_2) {
     /* Nonmatching */
+    param_1[0] |= param_2;
 }
 
 /* 801EFAA4-801EFAB8       .text dMeter_offBit8__FPUcUc */
-void dMeter_offBit8(u8*, u8) {
+void dMeter_offBit8(u8* param_1, u8 param_2) {
     /* Nonmatching */
+    param_1[0] &= ~param_2;
 }
 
 /* 801EFAB8-801EFAC8       .text dMeter_PaneShow__FP18fopMsgM_pane_class */
-void dMeter_PaneShow(fopMsgM_pane_class*) {
-    /* Nonmatching */
+void dMeter_PaneShow(fopMsgM_pane_class* param_1) {
+    param_1->scrn->show();
 }
 
 /* 801EFAC8-801EFC40       .text dMeter_alphaControl__FP15sub_meter_class */
@@ -183,23 +667,127 @@ void dMeter_alphaOpen(s16*, s16*) {
 }
 
 /* 801F02E8-801F0320       .text dMeter_rupy_num__FPcs */
-void dMeter_rupy_num(char*, s16) {
+void dMeter_rupy_num(char* param_1, s16 param_2) {
     /* Nonmatching */
+    sprintf(param_1, "rupy_num_%02d.bti", param_2);
 }
 
+struct struct_80360f38 {
+    u8 field_0x0;
+    const char* field_0x4;
+};
+
 /* 801F0320-801F0378       .text dMeter_actionTex__Fs */
-void dMeter_actionTex(s16) {
-    /* Nonmatching */
+const char* dMeter_actionTex(s16 param_1) {
+    static const struct_80360f38 act[] = {
+        0, "ba_shiraberu.bti",
+        1, "ba_miru.bti",
+        2, "ba_syaberu.bti",
+        3, "ba_shiraberu.bti",
+        4, "ba_motu.bti",
+        5, "ba_noru.bti",
+        6, "ba_oriru.bti",
+        7, "ba_modoru.bti",
+        8, "ba_shimau.bti",
+        9, "ba_oku.bti",
+        10, "ba_chekku.bti",
+        11, "ba_hiraku.bti",
+        12, "ba_attack.bti",
+        13, "ba_osu.bti",
+        14, "ba_nageru.bti",
+        15, "ba_shagamu.bti",
+        16, "ba_harituku.bti",
+        17, "ba_tukamu.bti",
+        18, "ba_jump.bti",
+        19, "ba_tomeru.bti",
+        20, "ba_haru.bti",
+        21, "ba_tatamu.bti",
+        22, "ba_hanasu.bti",
+        23, "ba_kettei.bti",
+        24, "ba_kogu.bti",
+        25, "ba_tugihe.bti",
+        26, "ba_sake.bti",
+        27, "ba_motu_buki.bti",
+        28, "ba_noru_hune.bti",
+        29, "ba_oriru_hune.bti",
+        30, "ba_save.bti",
+        31, "ba_option.bti",
+        32, "ba_toru.bti",
+        33, "ba_setumei.bti",
+        34, "ba_kirikae.bti",
+        35, "ba_tobu.bti",
+        36, "ba_yobu.bti",
+        37, "ba_hoshii.bti",
+        38, "ba_yomu.bti",
+        39, "ba_yameru.bti",
+        40, "ba_kakudai.bti",
+        41, "ba_hikaku.bti",
+        42, "ba_zoom01.bti",
+        43, "ba_zoom02.bti",
+        44, "ba_susumu.bti",
+        45, "ba_nageru.bti",
+        46, "ba_motu.bti",
+        47, "ba_huru.bti",
+        48, "ba_kaizuhe.bti",
+        49, "ba_sake.bti",
+        50, "ba_modoru.bti",
+        51, "ba_save.bti",
+        52, "ba_save.bti",
+        53, "sword_01.bti",
+        54, "ba_husegu.bti",
+        55, "boko_stick.bti",
+        56, "hatchet.bti",
+        57, "iron_club.bti",
+        58, "longsword.bti",
+        59, "spear.bti",
+        60, "spear.bti",
+        61, "bow_01.bti",
+        62, "ba_modoru.bti",
+    };
+    int found = 0;
+    for (int i = 0; i < 63; i++) {
+        if (param_1 == act[i].field_0x0) {
+            found = i;
+            break;
+        }
+
+    }
+    return act[found].field_0x4;
 }
 
 /* 801F0378-801F041C       .text dMeter_weponTex__Fv */
-void dMeter_weponTex() {
+const char* dMeter_weponTex() {
     /* Nonmatching */
+    static const char* wepon[] = {
+        "sword_00.bti",
+        "sword_01.bti",
+        "sword_02.bti",
+        "sword_03.bti",
+    };
+    int var1;
+    if (dComIfGs_isCollect(0, 3)) {
+        var1 = 3;
+    } else if (dComIfGs_isCollect(0, 2)) {
+        var1 = 2;
+    } else if (dComIfGs_isCollect(0, 1)) {
+        var1 = 1;
+    } else {
+        var1 = 0;
+    }
+    return wepon[var1];
 }
 
 /* 801F041C-801F0434       .text dMeter_heartTex__Fs */
-void dMeter_heartTex(s16) {
+const char* dMeter_heartTex(s16 param_1) {
     /* Nonmatching */
+    static const char* ht[] = {
+        "heart.bti",
+        "heart_03.bti",
+        "heart_02.bti",
+        "heart_01.bti",
+        "heart_04.bti",
+    };
+    return ht[param_1];
 }
 
 /* 801F0434-801F0608       .text dMeter_recollect_boss_data__Fv */
@@ -978,38 +1566,33 @@ void dMeter_Create(msg_class*) {
 }
 
 /* 802057B8-80205814       .text __dt__16dDlst_2DMETER2_cFv */
-dDlst_2DMETER2_c::~dDlst_2DMETER2_c() {
-    /* Nonmatching */
-}
+dDlst_2DMETER2_c::~dDlst_2DMETER2_c() {}
 
 /* 80205814-80205870       .text __dt__16dDlst_2DMETER1_cFv */
-dDlst_2DMETER1_c::~dDlst_2DMETER1_c() {
-    /* Nonmatching */
-}
+dDlst_2DMETER1_c::~dDlst_2DMETER1_c() {}
 
 /* 80205870-802058B8       .text __dt__20dMeter_message_HIO_cFv */
-dMeter_message_HIO_c::~dMeter_message_HIO_c() {
-    /* Nonmatching */
-}
+dMeter_message_HIO_c::~dMeter_message_HIO_c() {}
 
 /* 802058B8-80205900       .text __dt__16dMeter_msg_HIO_cFv */
-dMeter_msg_HIO_c::~dMeter_msg_HIO_c() {
-    /* Nonmatching */
-}
+dMeter_msg_HIO_c::~dMeter_msg_HIO_c() {}
 
 /* 80205900-80205948       .text __dt__16dMeter_menuHIO_cFv */
-dMeter_menuHIO_c::~dMeter_menuHIO_c() {
-    /* Nonmatching */
-}
+dMeter_menuHIO_c::~dMeter_menuHIO_c() {}
 
 /* 80205948-80205990       .text __dt__12dMeter_HIO_cFv */
-dMeter_HIO_c::~dMeter_HIO_c() {
-    /* Nonmatching */
-}
+dMeter_HIO_c::~dMeter_HIO_c() {}
 
 /* 80205990-802059E0       .text __ct__16dMeter_map_HIO_cFv */
 dMeter_map_HIO_c::dMeter_map_HIO_c() {
-    /* Nonmatching */
+    field_0x8 = 0x23;
+    field_0xa = 0x152;
+    field_0xc = -0xb4;
+    field_0x14 = 0x24e;
+    field_0x16 = 0x96;
+    field_0x6 = 200;
+    field_0x7 = 1;
+    field_0x10 = 0.8f;
 }
 
 /* 802059E0-80205A44       .text initMapCtrlDisp__13mapCtrlDisp_cFv */
