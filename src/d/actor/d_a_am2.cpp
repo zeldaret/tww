@@ -117,7 +117,7 @@ static BOOL daAM2_Draw(am2_class* i_this) {
     J3DModel* model = i_this->mpMorf->getModel();
     g_env_light.setLightTevColorType(model, &i_this->mTevStr);
 
-    dSnap_RegistFig(0xB6, i_this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_AM2, i_this, 1.0f, 1.0f, 1.0f);
     
     i_this->mpBrkAnm->entry(model->getModelData());
     i_this->mpBtkAnm->entry(model->getModelData());

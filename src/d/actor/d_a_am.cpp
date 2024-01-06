@@ -138,7 +138,7 @@ static void draw_SUB(am_class* i_this) {
 static BOOL daAM_Draw(am_class* i_this) {
     g_env_light.setLightTevColorType(i_this->mpMorf->getModel(), &i_this->mTevStr);
 
-    dSnap_RegistFig(0xB7, i_this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_AM, i_this, 1.0f, 1.0f, 1.0f);
 
     i_this->mpMorf->entryDL();
 

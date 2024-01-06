@@ -43,10 +43,6 @@ inline s16 cM_deg2s(f32 deg) {
     return deg * 182.04445f;
 }
 
-inline s16 i_cM_deg2s(f32 deg) {
-    return deg;
-}
-
 inline f32 cM_fcos(f32 x) {
     return JMASCos(cM_rad2s(x));
 }

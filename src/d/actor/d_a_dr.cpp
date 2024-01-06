@@ -53,7 +53,7 @@ static BOOL daDr_Draw(dr_class* i_this) {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->mTevStr);
     g_env_light.setLightTevColorType(model, &i_this->mTevStr);
     i_this->mpMorf->entryDL();
-    dSnap_RegistFig(0x99, i_this, i_this->mEyePos, i_this->shape_angle.y, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_DR, i_this, i_this->mEyePos, i_this->shape_angle.y, 1.0f, 1.0f, 1.0f);
     return TRUE;
 }
 

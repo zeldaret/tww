@@ -2338,7 +2338,7 @@ BOOL daNpc_Md_c::draw() {
         }
     }
     
-    dSnap_RegistFig(0x8A, this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_MD, this, 1.0f, 1.0f, 1.0f);
     
     return TRUE;
 }

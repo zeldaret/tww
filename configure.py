@@ -417,7 +417,7 @@ config.libs = [
             Object(Matching,    "d/d_a_npc_cb1_static.cpp"),
             Object(NonMatching, "d/d_a_npc_mk_static.cpp"),
             Object(NonMatching, "d/d_salvage.cpp"),
-            Object(NonMatching, "d/d_snap.cpp"),
+            Object(Matching,    "d/d_snap.cpp"),
             Object(Matching,    "d/d_point_wind.cpp"),
             Object(NonMatching, "d/actor/d_a_agb.cpp"),
             Object(Matching,    "d/actor/d_a_arrow.cpp", extra_cflags=["-sym off"]),

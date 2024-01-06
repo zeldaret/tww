@@ -1401,7 +1401,7 @@ BOOL daNpc_kam_c::draw() {
         0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
     );
     
-    dSnap_RegistFig(0x55, this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_KAMOME, this, 1.0f, 1.0f, 1.0f);
     
     return TRUE;
 }

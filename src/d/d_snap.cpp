@@ -35,27 +35,1407 @@ struct CharaData {
     /* 0x00 */ SVec offset;
     /* 0x06 */ s16 radius;
     /* 0x08 */ s16 height;
-    /* 0x0A */ u16 m0A;
-    /* 0x0C */ s16 m0C;
-    /* 0x0E */ u16 m0E;
-    /* 0x10 */ u8 room;
+    /* 0x0A */ u16 minRatio;
+    /* 0x0C */ s16 cullAngle;
+    /* 0x0E */ u16 minPixels;
+    /* 0x10 */ u8 figRoom;
+    /* 0x11 */ u8 m11;
 };  // Size: 0x12
 
-static const CharaData l_CharaData[0x86] = {
-    // TODO
+static const CharaData l_CharaData[] = {
+
+    {   // 0x00
+        /* offset    */ {0, 10, 0},
+        /* radius    */ 25,
+        /* height    */ 80,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x03,
+        /* m11       */ 0x02,
+    },
+    {   // 0x01
+        /* offset    */ {0, 20, 20},
+        /* radius    */ 40,
+        /* height    */ 90,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x03,
+        /* m11       */ 0x02,
+    },
+    {   // 0x02
+        /* offset    */ {0, 10, 0},
+        /* radius    */ 35,
+        /* height    */ 130,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x03,
+        /* m11       */ 0x02,
+    },
+    {   // 0x03
+        /* offset    */ {0, 10, 10},
+        /* radius    */ 50,
+        /* height    */ 130,
+        /* minRatio  */ 300,
+        /* cullAngle */ 0x7FFF,
+        /* minPixels */ 3000,
+        /* figRoom   */ 0x03,
+        /* m11       */ 0x02,
+    },
+    {   // 0x04
+        /* offset    */ {0, 20, 0},
+        /* radius    */ 45,
+        /* height    */ 160,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2710,
+        /* minPixels */ 2000,
+        /* figRoom   */ 0x03,
+        /* m11       */ 0x02,
+    },
+    {   // 0x05
+        /* offset    */ {0, -30, 0},
+        /* radius    */ 30,
+        /* height    */ 60,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x3FFF,
+        /* minPixels */ 2000,
+        /* figRoom   */ 0x03,
+        /* m11       */ 0x02,
+    },
+    {   // 0x06
+        /* offset    */ {0, 20, 20},
+        /* radius    */ 55,
+        /* height    */ 140,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2710,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x03,
+        /* m11       */ 0x02,
+    },
+    {   // 0x07
+        /* offset    */ {0, 20, 20},
+        /* radius    */ 35,
+        /* height    */ 150,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2710,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x03,
+        /* m11       */ 0x02,
+    },
+    {   // 0x08
+        /* offset    */ {0, 10, 0},
+        /* radius    */ 25,
+        /* height    */ 70,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x03,
+        /* m11       */ 0x02,
+    },
+    {   // 0x09
+        /* offset    */ {0, 10, 0},
+        /* radius    */ 25,
+        /* height    */ 70,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x03,
+        /* m11       */ 0x02,
+    },
+    {   // 0x0A
+        /* offset    */ {0, 0, 0},
+        /* radius    */ 50,
+        /* height    */ 150,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x03,
+        /* m11       */ 0x0C,
+    },
+    {   // 0x0B
+        /* offset    */ {0, 0, 0},
+        /* radius    */ 50,
+        /* height    */ 60,
+        /* minRatio  */ 400,
+        /* cullAngle */ 0x3E80,
+        /* minPixels */ 4000,
+        /* figRoom   */ 0x03,
+        /* m11       */ 0x00,
+    },
+    {   // 0x0C
+        /* offset    */ {0, -40, 0},
+        /* radius    */ 60,
+        /* height    */ 80,
+        /* minRatio  */ 300,
+        /* cullAngle */ 0x7FFF,
+        /* minPixels */ 3000,
+        /* figRoom   */ 0x03,
+        /* m11       */ 0x00,
+    },
+    {   // 0x0D
+        /* offset    */ {0, 0, 0},
+        /* radius    */ 20,
+        /* height    */ 20,
+        /* minRatio  */ 400,
+        /* cullAngle */ 0x7D00,
+        /* minPixels */ 3000,
+        /* figRoom   */ 0x03,
+        /* m11       */ 0x00,
+    },
+    {   // 0x0E
+        /* offset    */ {0, 30, 0},
+        /* radius    */ 50,
+        /* height    */ 120,
+        /* minRatio  */ 200,
+        /* cullAngle */ 0x4650,
+        /* minPixels */ 3000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x0F
+        /* offset    */ {0, 10, 0},
+        /* radius    */ 35,
+        /* height    */ 120,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x10
+        /* offset    */ {0, 10, 20},
+        /* radius    */ 60,
+        /* height    */ 160,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2710,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x11
+        /* offset    */ {0, 10, 0},
+        /* radius    */ 50,
+        /* height    */ 140,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x55F0,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x12
+        /* offset    */ {0, 10, 20},
+        /* radius    */ 60,
+        /* height    */ 200,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2710,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x13
+        /* offset    */ {0, 90, 30},
+        /* radius    */ 60,
+        /* height    */ 120,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x14
+        /* offset    */ {0, 75, 30},
+        /* radius    */ 40,
+        /* height    */ 80,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2710,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x15
+        /* offset    */ {0, 20, 0},
+        /* radius    */ 80,
+        /* height    */ 180,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x4A38,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x16
+        /* offset    */ {0, 15, 0},
+        /* radius    */ 60,
+        /* height    */ 135,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x32C8,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x17
+        /* offset    */ {0, 15, 0},
+        /* radius    */ 50,
+        /* height    */ 155,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2710,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x18
+        /* offset    */ {0, 10, 0},
+        /* radius    */ 30,
+        /* height    */ 80,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x32C8,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x19
+        /* offset    */ {0, 5, 0},
+        /* radius    */ 30,
+        /* height    */ 80,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2710,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x1A
+        /* offset    */ {0, 5, 10},
+        /* radius    */ 45,
+        /* height    */ 180,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2710,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x1B
+        /* offset    */ {0, 20, 0},
+        /* radius    */ 45,
+        /* height    */ 160,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x5208,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x1C
+        /* offset    */ {0, 10, 10},
+        /* radius    */ 45,
+        /* height    */ 130,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x1D
+        /* offset    */ {0, 80, 0},
+        /* radius    */ 35,
+        /* height    */ 80,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x4650,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x1E
+        /* offset    */ {0, 80, 0},
+        /* radius    */ 40,
+        /* height    */ 85,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2710,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x1F
+        /* offset    */ {0, 30, 10},
+        /* radius    */ 45,
+        /* height    */ 115,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x55F0,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x20
+        /* offset    */ {0, 10, 0},
+        /* radius    */ 45,
+        /* height    */ 150,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x4268,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x21
+        /* offset    */ {0, 10, 10},
+        /* radius    */ 45,
+        /* height    */ 150,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2710,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x22
+        /* offset    */ {0, 10, 10},
+        /* radius    */ 45,
+        /* height    */ 145,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x3A98,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x23
+        /* offset    */ {0, 20, 10},
+        /* radius    */ 45,
+        /* height    */ 145,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x3E80,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x24
+        /* offset    */ {0, 20, 10},
+        /* radius    */ 45,
+        /* height    */ 145,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x3E80,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x25
+        /* offset    */ {0, 30, 35},
+        /* radius    */ 80,
+        /* height    */ 160,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x3A98,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x26
+        /* offset    */ {0, 30, 30},
+        /* radius    */ 75,
+        /* height    */ 170,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2328,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x27
+        /* offset    */ {0, 30, 30},
+        /* radius    */ 75,
+        /* height    */ 170,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2328,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x28
+        /* offset    */ {0, 30, 30},
+        /* radius    */ 75,
+        /* height    */ 170,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2328,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x02,
+        /* m11       */ 0x02,
+    },
+    {   // 0x29
+        /* offset    */ {0, 20, 0},
+        /* radius    */ 30,
+        /* height    */ 100,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2710,
+        /* minPixels */ 4000,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x02,
+    },
+    {   // 0x2A
+        /* offset    */ {0, 30, 0},
+        /* radius    */ 50,
+        /* height    */ 160,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2EE0,
+        /* minPixels */ 4500,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x02,
+    },
+    {   // 0x2B
+        /* offset    */ {0, 30, 0},
+        /* radius    */ 50,
+        /* height    */ 160,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2EE0,
+        /* minPixels */ 4500,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x02,
+    },
+    {   // 0x2C
+        /* offset    */ {0, 30, 0},
+        /* radius    */ 50,
+        /* height    */ 160,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2710,
+        /* minPixels */ 4500,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x02,
+    },
+    {   // 0x2D
+        /* offset    */ {0, 20, 10},
+        /* radius    */ 50,
+        /* height    */ 80,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2EE0,
+        /* minPixels */ 4500,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x02,
+    },
+    {   // 0x2E
+        /* offset    */ {0, 10, 0},
+        /* radius    */ 50,
+        /* height    */ 90,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x32C8,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x02,
+    },
+    {   // 0x2F
+        /* offset    */ {0, 20, 10},
+        /* radius    */ 50,
+        /* height    */ 80,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2EE0,
+        /* minPixels */ 4500,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x02,
+    },
+    {   // 0x30
+        /* offset    */ {0, 10, 0},
+        /* radius    */ 55,
+        /* height    */ 120,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x55F0,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x02,
+    },
+    {   // 0x31
+        /* offset    */ {0, 10, 0},
+        /* radius    */ 55,
+        /* height    */ 120,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x55F0,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x02,
+    },
+    {   // 0x32
+        /* offset    */ {0, 10, 0},
+        /* radius    */ 55,
+        /* height    */ 120,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x55F0,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x02,
+    },
+    {   // 0x33
+        /* offset    */ {0, 10, 0},
+        /* radius    */ 55,
+        /* height    */ 120,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x55F0,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x02,
+    },
+    {   // 0x34
+        /* offset    */ {0, 0, 0},
+        /* radius    */ 80,
+        /* height    */ 120,
+        /* minRatio  */ 200,
+        /* cullAngle */ 0x7FFF,
+        /* minPixels */ 2000,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x00,
+    },
+    {   // 0x35
+        /* offset    */ {0, 30, 10},
+        /* radius    */ 80,
+        /* height    */ 150,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2710,
+        /* minPixels */ 3000,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x02,
+    },
+    {   // 0x36
+        /* offset    */ {0, 20, 20},
+        /* radius    */ 40,
+        /* height    */ 120,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x02,
+    },
+    {   // 0x37
+        /* offset    */ {0, 20, 30},
+        /* radius    */ 40,
+        /* height    */ 90,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x02,
+    },
+    {   // 0x38
+        /* offset    */ {0, 100, 40},
+        /* radius    */ 50,
+        /* height    */ 60,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x4268,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x02,
+    },
+    {   // 0x39
+        /* offset    */ {0, 10, 0},
+        /* radius    */ 65,
+        /* height    */ 200,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x02,
+    },
+    {   // 0x3A
+        /* offset    */ {0, 50, 0},
+        /* radius    */ 300,
+        /* height    */ 400,
+        /* minRatio  */ 100,
+        /* cullAngle */ 0x7FFF,
+        /* minPixels */ 4000,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x00,
+    },
+    {   // 0x3B
+        /* offset    */ {0, 0, 0},
+        /* radius    */ 25,
+        /* height    */ 25,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x00,
+    },
+    {   // 0x3C
+        /* offset    */ {0, 0, 0},
+        /* radius    */ 50,
+        /* height    */ 150,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x0C,
+    },
+    {   // 0x3D
+        /* offset    */ {0, 0, 0},
+        /* radius    */ 50,
+        /* height    */ 150,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x0C,
+    },
+    {   // 0x3E
+        /* offset    */ {0, 10, 0},
+        /* radius    */ 35,
+        /* height    */ 120,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x02,
+    },
+    {   // 0x3F
+        /* offset    */ {0, 0, 0},
+        /* radius    */ 50,
+        /* height    */ 150,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x0E,
+    },
+    {   // 0x40
+        /* offset    */ {0, 0, 0},
+        /* radius    */ 50,
+        /* height    */ 150,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x01,
+        /* m11       */ 0x0C,
+    },
+    {   // 0x41
+        /* offset    */ {0, 20, 0},
+        /* radius    */ 30,
+        /* height    */ 100,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2710,
+        /* minPixels */ 4000,
+        /* figRoom   */ 0x06,
+        /* m11       */ 0x02,
+    },
+    {   // 0x42
+        /* offset    */ {0, 10, 0},
+        /* radius    */ 30,
+        /* height    */ 60,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 2000,
+        /* figRoom   */ 0x06,
+        /* m11       */ 0x02,
+    },
+    {   // 0x43
+        /* offset    */ {0, 20, 0},
+        /* radius    */ 60,
+        /* height    */ 200,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x06,
+        /* m11       */ 0x02,
+    },
+    {   // 0x44
+        /* offset    */ {0, 20, 0},
+        /* radius    */ 50,
+        /* height    */ 150,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2EE0,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x06,
+        /* m11       */ 0x02,
+    },
+    {   // 0x45
+        /* offset    */ {0, 20, 25},
+        /* radius    */ 70,
+        /* height    */ 170,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x06,
+        /* m11       */ 0x02,
+    },
+    {   // 0x46
+        /* offset    */ {0, 20, 25},
+        /* radius    */ 70,
+        /* height    */ 170,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x06,
+        /* m11       */ 0x02,
+    },
+    {   // 0x47
+        /* offset    */ {0, 20, 25},
+        /* radius    */ 70,
+        /* height    */ 170,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x06,
+        /* m11       */ 0x02,
+    },
+    {   // 0x48
+        /* offset    */ {0, 20, 25},
+        /* radius    */ 70,
+        /* height    */ 170,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x06,
+        /* m11       */ 0x02,
+    },
+    {   // 0x49
+        /* offset    */ {0, 20, 25},
+        /* radius    */ 70,
+        /* height    */ 170,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x06,
+        /* m11       */ 0x02,
+    },
+    {   // 0x4A
+        /* offset    */ {0, 20, 25},
+        /* radius    */ 70,
+        /* height    */ 170,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x06,
+        /* m11       */ 0x02,
+    },
+    {   // 0x4B
+        /* offset    */ {0, 20, 10},
+        /* radius    */ 50,
+        /* height    */ 170,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x06,
+        /* m11       */ 0x02,
+    },
+    {   // 0x4C
+        /* offset    */ {0, 20, 10},
+        /* radius    */ 50,
+        /* height    */ 170,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x06,
+        /* m11       */ 0x02,
+    },
+    {   // 0x4D
+        /* offset    */ {0, 90, 30},
+        /* radius    */ 60,
+        /* height    */ 90,
+        /* minRatio  */ 500,
+        /* cullAngle */ VERSION_SELECT(0x2000, 0x6000, 0x6000),
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x06,
+        /* m11       */ 0x02,
+    },
+    {   // 0x4E
+        /* offset    */ {0, 20, 25},
+        /* radius    */ 70,
+        /* height    */ 170,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x06,
+        /* m11       */ 0x02,
+    },
+    {   // 0x4F
+        /* offset    */ {0, 30, 0},
+        /* radius    */ 50,
+        /* height    */ 150,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x06,
+        /* m11       */ 0x02,
+    },
+    {   // 0x50
+        /* offset    */ {0, -300, 0},
+        /* radius    */ 870,
+        /* height    */ 700,
+        /* minRatio  */ 100,
+        /* cullAngle */ 0x6000,
+        /* minPixels */ 3000,
+        /* figRoom   */ 0x06,
+        /* m11       */ 0x00,
+    },
+    {   // 0x51
+        /* offset    */ {0, 0, 0},
+        /* radius    */ 1000,
+        /* height    */ 800,
+        /* minRatio  */ 100,
+        /* cullAngle */ 0x4650,
+        /* minPixels */ 1000,
+        /* figRoom   */ 0x06,
+        /* m11       */ 0x00,
+    },
+    {   // 0x52
+        /* offset    */ {0, 0, 0},
+        /* radius    */ 50,
+        /* height    */ 150,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x06,
+        /* m11       */ 0x0E,
+    },
+    {   // 0x53
+        /* offset    */ {0, 0, 0},
+        /* radius    */ 40,
+        /* height    */ 55,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 4000,
+        /* figRoom   */ 0x07,
+        /* m11       */ 0x00,
+    },
+    {   // 0x54
+        /* offset    */ {0, 15, 0},
+        /* radius    */ 40,
+        /* height    */ 100,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 4000,
+        /* figRoom   */ 0x07,
+        /* m11       */ 0x00,
+    },
+    {   // 0x55
+        /* offset    */ {0, 15, 0},
+        /* radius    */ 40,
+        /* height    */ 100,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 4000,
+        /* figRoom   */ 0x07,
+        /* m11       */ 0x00,
+    },
+    {   // 0x56
+        /* offset    */ {0, 15, 0},
+        /* radius    */ 40,
+        /* height    */ 100,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 4000,
+        /* figRoom   */ 0x07,
+        /* m11       */ 0x00,
+    },
+    {   // 0x57
+        /* offset    */ {0, 15, 0},
+        /* radius    */ 40,
+        /* height    */ 100,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 4000,
+        /* figRoom   */ 0x07,
+        /* m11       */ 0x00,
+    },
+    {   // 0x58
+        /* offset    */ {0, 15, 0},
+        /* radius    */ 40,
+        /* height    */ 100,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 4000,
+        /* figRoom   */ 0x07,
+        /* m11       */ 0x00,
+    },
+    {   // 0x59
+        /* offset    */ {0, 15, 0},
+        /* radius    */ 40,
+        /* height    */ 100,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 4000,
+        /* figRoom   */ 0x07,
+        /* m11       */ 0x00,
+    },
+    {   // 0x5A
+        /* offset    */ {0, 15, 0},
+        /* radius    */ 40,
+        /* height    */ 100,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 4000,
+        /* figRoom   */ 0x07,
+        /* m11       */ 0x00,
+    },
+    {   // 0x5B
+        /* offset    */ {0, 15, 0},
+        /* radius    */ 40,
+        /* height    */ 100,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 4000,
+        /* figRoom   */ 0x07,
+        /* m11       */ 0x00,
+    },
+    {   // 0x5C
+        /* offset    */ {0, 15, 0},
+        /* radius    */ 40,
+        /* height    */ 100,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 4000,
+        /* figRoom   */ 0x07,
+        /* m11       */ 0x00,
+    },
+    {   // 0x5D
+        /* offset    */ {0, 700, 800},
+        /* radius    */ 200,
+        /* height    */ 200,
+        /* minRatio  */ 300,
+        /* cullAngle */ 0x7FFF,
+        /* minPixels */ 3000,
+        /* figRoom   */ 0x07,
+        /* m11       */ 0x00,
+    },
+    {   // 0x5E
+        /* offset    */ {0, 85, 0},
+        /* radius    */ 70,
+        /* height    */ 80,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x07,
+        /* m11       */ 0x02,
+    },
+    {   // 0x5F
+        /* offset    */ {0, 0, 0},
+        /* radius    */ 50,
+        /* height    */ 150,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x07,
+        /* m11       */ 0x06,
+    },
+    {   // 0x60
+        /* offset    */ {0, 0, 0},
+        /* radius    */ 50,
+        /* height    */ 150,
+        /* minRatio  */ 550,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x07,
+        /* m11       */ 0x0E,
+    },
+    {   // 0x61
+        /* offset    */ {0, 20, 80},
+        /* radius    */ 60,
+        /* height    */ 100,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x05,
+        /* m11       */ 0x00,
+    },
+    {   // 0x62
+        /* offset    */ {0, 10, 20},
+        /* radius    */ 60,
+        /* height    */ 100,
+        /* minRatio  */ 400,
+        /* cullAngle */ 0x3E80,
+        /* minPixels */ 4000,
+        /* figRoom   */ 0x05,
+        /* m11       */ 0x00,
+    },
+    {   // 0x63
+        /* offset    */ {0, 20, 20},
+        /* radius    */ 40,
+        /* height    */ 50,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2000,
+        /* minPixels */ 3000,
+        /* figRoom   */ 0x05,
+        /* m11       */ 0x00,
+    },
+    {   // 0x64
+        /* offset    */ {0, 0, 0},
+        /* radius    */ 60,
+        /* height    */ 60,
+        /* minRatio  */ 200,
+        /* cullAngle */ 0x7530,
+        /* minPixels */ 3000,
+        /* figRoom   */ 0x05,
+        /* m11       */ 0x00,
+    },
+    {   // 0x65
+        /* offset    */ {0, -25, 30},
+        /* radius    */ 40,
+        /* height    */ 60,
+        /* minRatio  */ 300,
+        /* cullAngle */ 0x4E20,
+        /* minPixels */ 3000,
+        /* figRoom   */ 0x05,
+        /* m11       */ 0x00,
+    },
+    {   // 0x66
+        /* offset    */ {0, -40, 50},
+        /* radius    */ 50,
+        /* height    */ 80,
+        /* minRatio  */ 300,
+        /* cullAngle */ 0x2EE0,
+        /* minPixels */ 3000,
+        /* figRoom   */ 0x05,
+        /* m11       */ 0x00,
+    },
+    {   // 0x67
+        /* offset    */ {0, -50, 0},
+        /* radius    */ 50,
+        /* height    */ 100,
+        /* minRatio  */ 200,
+        /* cullAngle */ 0x4000,
+        /* minPixels */ 3000,
+        /* figRoom   */ 0x05,
+        /* m11       */ 0x00,
+    },
+    {   // 0x68
+        /* offset    */ {0, -80, 0},
+        /* radius    */ 80,
+        /* height    */ 120,
+        /* minRatio  */ 300,
+        /* cullAngle */ 0x7FFF,
+        /* minPixels */ 2000,
+        /* figRoom   */ 0x05,
+        /* m11       */ 0x00,
+    },
+    {   // 0x69
+        /* offset    */ {0, 30, 0},
+        /* radius    */ 120,
+        /* height    */ 50,
+        /* minRatio  */ 100,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 2000,
+        /* figRoom   */ 0x05,
+        /* m11       */ 0x00,
+    },
+    {   // 0x6A
+        /* offset    */ {0, -30, 0},
+        /* radius    */ 30,
+        /* height    */ 60,
+        /* minRatio  */ 300,
+        /* cullAngle */ 0x7FFF,
+        /* minPixels */ 3000,
+        /* figRoom   */ 0x05,
+        /* m11       */ 0x00,
+    },
+    {   // 0x6B
+        /* offset    */ {0, -20, 0},
+        /* radius    */ 60,
+        /* height    */ 100,
+        /* minRatio  */ 400,
+        /* cullAngle */ 0x7FFF,
+        /* minPixels */ 3000,
+        /* figRoom   */ 0x05,
+        /* m11       */ 0x00,
+    },
+    {   // 0x6C
+        /* offset    */ {10, -50, 0},
+        /* radius    */ 60,
+        /* height    */ 100,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 3000,
+        /* figRoom   */ 0x05,
+        /* m11       */ 0x00,
+    },
+    {   // 0x6D
+        /* offset    */ {0, 10, 10},
+        /* radius    */ 60,
+        /* height    */ 130,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 4000,
+        /* figRoom   */ 0x05,
+        /* m11       */ 0x00,
+    },
+    {   // 0x6E
+        /* offset    */ {0, 20, 20},
+        /* radius    */ 130,
+        /* height    */ 300,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x2EE0,
+        /* minPixels */ 5000,
+        /* figRoom   */ 0x05,
+        /* m11       */ 0x00,
+    },
+    {   // 0x6F
+        /* offset    */ {0, 20, 20},
+        /* radius    */ 80,
+        /* height    */ 160,
+        /* minRatio  */ 400,
+        /* cullAngle */ 0x2EE0,
+        /* minPixels */ 3000,
+        /* figRoom   */ 0x05,
+        /* m11       */ 0x00,
+    },
+    {   // 0x70
+        /* offset    */ {0, 20, 50},
+        /* radius    */ 70,
+        /* height    */ 170,
+        /* minRatio  */ 300,
+        /* cullAngle */ 0x4650,
+        /* minPixels */ 3000,
+        /* figRoom   */ 0x05,
+        /* m11       */ 0x00,
+    },
+    {   // 0x71
+        /* offset    */ {0, 20, 50},
+        /* radius    */ 70,
+        /* height    */ 170,
+        /* minRatio  */ 200,
+        /* cullAngle */ 0x4650,
+        /* minPixels */ 2000,
+        /* figRoom   */ 0x05,
+        /* m11       */ 0x00,
+    },
+    {   // 0x72
+        /* offset    */ {0, 0, 0},
+        /* radius    */ 400,
+        /* height    */ 400,
+        /* minRatio  */ 200,
+        /* cullAngle */ 0x7530,
+        /* minPixels */ 3000,
+        /* figRoom   */ 0x05,
+        /* m11       */ 0x00,
+    },
+    {   // 0x73
+        /* offset    */ {0, 0, 0},
+        /* radius    */ 200,
+        /* height    */ 170,
+        /* minRatio  */ 300,
+        /* cullAngle */ 0x7FBC,
+        /* minPixels */ 2000,
+        /* figRoom   */ 0x05,
+        /* m11       */ 0x00,
+    },
+    {   // 0x74
+        /* offset    */ {0, 20, 50},
+        /* radius    */ 100,
+        /* height    */ 140,
+        /* minRatio  */ 300,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 2000,
+        /* figRoom   */ 0x04,
+        /* m11       */ 0x00,
+    },
+    {   // 0x75
+        /* offset    */ {0, -120, 0},
+        /* radius    */ 100,
+        /* height    */ 100,
+        /* minRatio  */ 300,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 2000,
+        /* figRoom   */ 0x04,
+        /* m11       */ 0x00,
+    },
+    {   // 0x76
+        /* offset    */ {0, 10, 10},
+        /* radius    */ 100,
+        /* height    */ 200,
+        /* minRatio  */ 300,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 2000,
+        /* figRoom   */ 0x04,
+        /* m11       */ 0x00,
+    },
+    {   // 0x77
+        /* offset    */ {0, 10, 10},
+        /* radius    */ 100,
+        /* height    */ 200,
+        /* minRatio  */ 300,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 2000,
+        /* figRoom   */ 0x04,
+        /* m11       */ 0x00,
+    },
+    {   // 0x78
+        /* offset    */ {0, 10, 10},
+        /* radius    */ 100,
+        /* height    */ 200,
+        /* minRatio  */ 300,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 2000,
+        /* figRoom   */ 0x04,
+        /* m11       */ 0x00,
+    },
+    {   // 0x79
+        /* offset    */ {0, 10, 10},
+        /* radius    */ 100,
+        /* height    */ 250,
+        /* minRatio  */ 300,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 2000,
+        /* figRoom   */ 0x04,
+        /* m11       */ 0x00,
+    },
+    {   // 0x7A
+        /* offset    */ {0, 20, 10},
+        /* radius    */ 70,
+        /* height    */ 210,
+        /* minRatio  */ 300,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 3000,
+        /* figRoom   */ 0x04,
+        /* m11       */ 0x00,
+    },
+    {   // 0x7B
+        /* offset    */ {0, 20, 30},
+        /* radius    */ 70,
+        /* height    */ 150,
+        /* minRatio  */ 300,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 3000,
+        /* figRoom   */ 0x04,
+        /* m11       */ 0x00,
+    },
+    {   // 0x7C
+        /* offset    */ {0, 20, 30},
+        /* radius    */ 70,
+        /* height    */ 150,
+        /* minRatio  */ 300,
+        /* cullAngle */ 0x2AF8,
+        /* minPixels */ 3000,
+        /* figRoom   */ 0x04,
+        /* m11       */ 0x00,
+    },
+    {   // 0x7D
+        /* offset    */ {0, 200, 0},
+        /* radius    */ 1000,
+        /* height    */ 1200,
+        /* minRatio  */ 100,
+        /* cullAngle */ 0x6D60,
+        /* minPixels */ 1000,
+        /* figRoom   */ 0x04,
+        /* m11       */ 0x00,
+    },
+    {   // 0x7E
+        /* offset    */ {0, -200, 0},
+        /* radius    */ 360,
+        /* height    */ 450,
+        /* minRatio  */ 500,
+        /* cullAngle */ 0x4E20,
+        /* minPixels */ 500,
+        /* figRoom   */ 0x04,
+        /* m11       */ 0x00,
+    },
+    {   // 0x7F
+        /* offset    */ {0, 0, 0},
+        /* radius    */ 400,
+        /* height    */ 380,
+        /* minRatio  */ 300,
+        /* cullAngle */ 0x7D00,
+        /* minPixels */ 2000,
+        /* figRoom   */ 0x04,
+        /* m11       */ 0x00,
+    },
+    {   // 0x80
+        /* offset    */ {0, 0, 50},
+        /* radius    */ 350,
+        /* height    */ 400,
+        /* minRatio  */ 100,
+        /* cullAngle */ 0x4650,
+        /* minPixels */ 1000,
+        /* figRoom   */ 0x04,
+        /* m11       */ 0x00,
+    },
+    {   // 0x81
+        /* offset    */ {0, 200, 50},
+        /* radius    */ 300,
+        /* height    */ 550,
+        /* minRatio  */ 200,
+        /* cullAngle */ 0x3E80,
+        /* minPixels */ 2000,
+        /* figRoom   */ 0x04,
+        /* m11       */ 0x00,
+    },
+    {   // 0x82
+        /* offset    */ {0, 200, 50},
+        /* radius    */ 350,
+        /* height    */ 400,
+        /* minRatio  */ 200,
+        /* cullAngle */ 0x3E80,
+        /* minPixels */ 4000,
+        /* figRoom   */ 0x04,
+        /* m11       */ 0x00,
+    },
+    {   // 0x83
+        /* offset    */ {0, 100, 30},
+        /* radius    */ 500,
+        /* height    */ 300,
+        /* minRatio  */ 200,
+        /* cullAngle */ 0x3E80,
+        /* minPixels */ 2000,
+        /* figRoom   */ 0x04,
+        /* m11       */ 0x00,
+    },
+    {   // 0x84
+        /* offset    */ {0, 400, 0},
+        /* radius    */ 800,
+        /* height    */ 800,
+        /* minRatio  */ 200,
+        /* cullAngle */ 0x4650,
+        /* minPixels */ 1500,
+        /* figRoom   */ 0x04,
+        /* m11       */ 0x00,
+    },
+    {   // 0x85
+        /* offset    */ {0, 10, 0},
+        /* radius    */ 130,
+        /* height    */ 280,
+        /* minRatio  */ 200,
+        /* cullAngle */ 0x4650,
+        /* minPixels */ 1200,
+        /* figRoom   */ 0x04,
+        /* m11       */ 0x0A,
+    },
 };
 
-static const int CharaDataTblSize = 0x86;
-static const int DSNAP_TYPE_LAST_INDEX = 0xD0;
+static const int CharaDataTblSize = ARRAY_SIZE(l_CharaData);
 
-static const Vec cylvtx[5] = {
-    // TODO
+// The coordinates in pixels on the screen representing where the player can see while looking through the Picto Box.
+static const int DSNAP_SHUTTER_LEFT = 174;
+static const int DSNAP_SHUTTER_RIGHT = 468;
+static const int DSNAP_SHUTTER_TOP = 86;
+static const int DSNAP_SHUTTER_BOTTOM = 284;
+
+static const Vec cylvtx[] = {
+    {0.0f, 0.0f, 1.0f},
+    {0.707099974155426f, 0.0f, 0.707099974155426f},
+    {1.0f, 0.0f, 0.0f},
+    {0.707099974155426f, 0.0f, -0.707099974155426f},
+    {0.0f, 0.0f, -1.0f},
 };
-static const Vec vdata[12] = {
-    // TODO
+static const Vec vdata[] = {
+    {-0.525731086730957f, 0.0f, 0.8506507873535156f},
+    {0.525731086730957f, 0.0f, 0.8506507873535156f},
+    {-0.525731086730957f, 0.0f, -0.8506507873535156f},
+    {0.525731086730957f, 0.0f, -0.8506507873535156f},
+    {0.0f, 0.8506507873535156f, 0.525731086730957f},
+    {0.0f, 0.8506507873535156f, -0.525731086730957f},
+    {0.0f, -0.8506507873535156f, 0.525731086730957f},
+    {0.0f, -0.8506507873535156f, -0.525731086730957f},
+    {0.8506507873535156f, 0.525731086730957f, 0.0f},
+    {-0.8506507873535156f, 0.525731086730957f, 0.0f},
+    {0.8506507873535156f, -0.525731086730957f, 0.0f},
+    {-0.8506507873535156f, -0.525731086730957f, 0.0f},
 };
-static const int tindices[20][3] = {
-    // TODO
+static const int tindices[][3] = {
+    {0x0, 0x4, 0x1},
+    {0x0, 0x9, 0x4},
+    {0x9, 0x5, 0x4},
+    {0x4, 0x5, 0x8},
+    {0x4, 0x8, 0x1},
+    {0x8, 0xA, 0x1},
+    {0x8, 0x3, 0xA},
+    {0x5, 0x3, 0x8},
+    {0x5, 0x2, 0x3},
+    {0x2, 0x7, 0x3},
+    {0x7, 0xA, 0x3},
+    {0x7, 0x6, 0xA},
+    {0x7, 0xB, 0x6},
+    {0xB, 0x0, 0x6},
+    {0x0, 0x1, 0x6},
+    {0x6, 0x1, 0xA},
+    {0x9, 0x0, 0xB},
+    {0x9, 0xB, 0x2},
+    {0x9, 0x2, 0x5},
+    {0x7, 0x2, 0xB},
 };
 
 /* 800CCF6C-800CCFE4       .text dSnap_PhotoIndex2TableIndex__Fi */
@@ -70,7 +1450,7 @@ u8 dSnap_GetFigRoomId(int r3) {
     if (r3 >= 0x86) {
         return 0xFF;
     }
-    return l_CharaData[r3].room;
+    return l_CharaData[r3].figRoom;
 }
 
 /* 800CD00C-800CD068       .text __ct__9dSnap_ObjFv */
@@ -80,10 +1460,10 @@ dSnap_Obj::dSnap_Obj() {
     field_0x19 = 4;
     field_0x1a = -1;
     field_0x1b = 0;
-    field_0x1c = 0x7FFF;
+    mCullAngle = 0x7FFF;
     mAngleY = 0;
-    field_0x20 = 0;
-    field_0x24 = 0.0f;
+    mCapturedPixels = 0;
+    mCapturedRatio = 0.0f;
     mMinX = 0;
     mMinY = 0;
     mMaxX = 0;
@@ -208,7 +1588,7 @@ f32 dSnap_Obj::CalcArea2D() {
         mDoMtx_stack_c::transS(mCenter);
         mDoMtx_stack_c::scaleM(f29, f29, f29);
         
-        for (int i = 0; i < 0x14; i++) {
+        for (int i = 0; i < (s32)ARRAY_SIZE(tindices); i++) {
             sp8c.x = vdata[tindices[i][0]].x;
             sp8c.y = vdata[tindices[i][0]].y;
             sp8c.z = vdata[tindices[i][0]].z;
@@ -294,7 +1674,7 @@ void dSnap_Obj::draw() {
         GXLoadPosMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
         
-        for (int i = 0; i < 0x14; i++) {
+        for (int i = 0; i < (s32)ARRAY_SIZE(tindices); i++) {
             GXBegin(GX_TRIANGLES, GX_VTXFMT0, 3);
             GXPosition3f32(vdata[tindices[i][0]].x, vdata[tindices[i][0]].y, vdata[tindices[i][0]].z);
             GXPosition3f32(vdata[tindices[i][1]].x, vdata[tindices[i][1]].y, vdata[tindices[i][1]].z);
@@ -322,12 +1702,12 @@ void dSnap_Obj::SetGeoSph(const Vec& center, f32 radius) {
 }
 
 /* 800CDB68-800CDB94       .text SetInf__9dSnap_ObjFUcPC10fopAc_ac_cUcUcs */
-void dSnap_Obj::SetInf(u8 r4, const fopAc_ac_c* r5, u8 r6, u8 r7, s16 r8) {
+void dSnap_Obj::SetInf(u8 r4, const fopAc_ac_c* r5, u8 r6, u8 r7, s16 cullAngle) {
     mPhoto = r4;
     mActorPID = fpcM_GetID(r5);
     field_0x1a = r6;
     field_0x19 = r7;
-    field_0x1c = r8;
+    mCullAngle = cullAngle;
 }
 
 /* 800CDB94-800CDBB0       .text SetAreaClear__9dSnap_ObjFv */
@@ -360,8 +1740,8 @@ bool dSnap_Obj::ChkPhoto(int r4) {
 }
 
 /* 800CDC18-800CDC40       .text ChkSuccess__9dSnap_ObjFlf */
-bool dSnap_Obj::ChkSuccess(s32 r4, f32 f1) {
-    if (field_0x20 > r4 && field_0x24 > f1) {
+bool dSnap_Obj::ChkSuccess(s32 minPixels, f32 minRatio) {
+    if (mCapturedPixels > minPixels && mCapturedRatio > minRatio) {
         return true;
     }
     return false;
@@ -369,12 +1749,12 @@ bool dSnap_Obj::ChkSuccess(s32 r4, f32 f1) {
 
 /* 800CDC40-800CDCD8       .text ChkCamCull__9dSnap_ObjCFv */
 bool dSnap_Obj::ChkCamCull() const {
-    if (!(field_0x1b & 1) && field_0x1c != 0x7FFF) {
+    if (!(field_0x1b & 1) && mCullAngle != 0x7FFF) {
         // TODO: is this VECSubtract supposed to be an inline? dSnap_Obj::GetLen?
         cXyz sp8;
         VECSubtract(&dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0))->mLookat.mEye, &mCenter, &sp8);
         s16 angle = cM_atan2s(sp8.x, sp8.z);
-        if (cLib_distanceAngleS(angle, mAngleY) > field_0x1c) {
+        if (cLib_distanceAngleS(angle, mAngleY) > mCullAngle) {
             return true;
         }
     }
@@ -510,7 +1890,9 @@ void dSnap_packet::draw() {
     if (!ChkReleaseShutter()) {
         return;
     }
+#if VERSION != VERSION_JPN
     j3dSys.reinitGX();
+#endif
     ClearAlphaBuffer();
     dSnap_MatDl();
     for (int col = 0; col < field_0x14; col++) {
@@ -560,30 +1942,30 @@ void dSnap_packet::Judge() {
     GXDrawDone();
     GXPokeAlphaRead(GX_READ_NONE);
     for (int col = 0; col < (s32)ARRAY_SIZE(m_tbl); col++) {
-        m_tbl[col].m_obj.field_0x20 = 0;
+        m_tbl[col].m_obj.mCapturedPixels = 0;
         m_tbl[col].m_obj.SetAreaClear();
     }
-    for (int y = 0x56; y < 0x11C; y++) {
-        for (int x = 0xAE; x < 0x1D4; x++) {
+    for (int y = DSNAP_SHUTTER_TOP; y < DSNAP_SHUTTER_BOTTOM; y++) {
+        for (int x = DSNAP_SHUTTER_LEFT; x < DSNAP_SHUTTER_RIGHT; x++) {
             u32 sp8;
             GXPeekARGB(x, y, &sp8);
             int r0 = sp8 >> 26;
             if (r0 >= 0x3F) {
                 continue;
             }
-            m_tbl[r0].m_obj.field_0x20++;
+            m_tbl[r0].m_obj.mCapturedPixels++;
             m_tbl[r0].m_obj.SetArea(x, y);
         }
     }
     for (int col = 0; col < field_0x14; col++) {
-        if (m_tbl[col].m_obj.field_0x20 == 0) {
+        if (m_tbl[col].m_obj.mCapturedPixels == 0) {
             continue;
         }
         f32 area = m_tbl[col].m_obj.CalcArea2D();
         if (cM3d_IsZero(area)) {
             continue;
         }
-        m_tbl[col].m_obj.field_0x24 = m_tbl[col].m_obj.field_0x20 / area;
+        m_tbl[col].m_obj.mCapturedRatio = m_tbl[col].m_obj.mCapturedPixels / area;
     }
     SetResult();
     mFlag &= ~1;
@@ -723,21 +2105,21 @@ int dSnap_packet::JudgeFigure(int col) {
         return 0;
     }
     
-    int r5;
-    f32 f1;
+    int minPixels;
+    f32 minRatio;
     if (field_0x10 > 0x48) {
         int tableIndex = dSnap_PhotoIndex2TableIndex(field_0x10);
-        r5 = l_CharaData[tableIndex].m0E;
-        f1 = l_CharaData[tableIndex].m0A / 1000.0f;
+        minPixels = l_CharaData[tableIndex].minPixels;
+        minRatio = l_CharaData[tableIndex].minRatio / 1000.0f;
     } else {
         return 0;
     }
     
-    if (m_tbl[col].m_obj.field_0x20 < r5) {
+    if (m_tbl[col].m_obj.mCapturedPixels < minPixels) {
         return 0;
     }
     
-    if (m_tbl[col].m_obj.field_0x24 < f1) {
+    if (m_tbl[col].m_obj.mCapturedRatio < minRatio) {
         mResultDetail |= 2;
     }
     
@@ -758,10 +2140,10 @@ void dSnap_packet::SetResult() {
     }
     int r30 = -1;
     for (int col = 0; col < field_0x14; col++) {
-        if (m_tbl[col].m_obj.field_0x20 == 0 || m_tbl[col].m_obj.GetPhoto() == 0) {
+        if (m_tbl[col].m_obj.mCapturedPixels == 0 || m_tbl[col].m_obj.GetPhoto() == 0) {
             continue;
         }
-        JUT_ASSERT(2327, 0 <= m_tbl[col].m_obj.GetPhoto() && m_tbl[col].m_obj.GetPhoto() < DSNAP_TYPE_LAST_INDEX);
+        JUT_ASSERT(VERSION_SELECT(2325, 2327, 2327), 0 <= m_tbl[col].m_obj.GetPhoto() && m_tbl[col].m_obj.GetPhoto() < DSNAP_TYPE_LAST_INDEX);
         if (m_tbl[col].m_obj.GetPhoto() < (s32)ARRAY_SIZE(sp8)) {
             if (sp8[m_tbl[col].m_obj.GetPhoto()] != 0) {
                 continue;
@@ -769,17 +2151,17 @@ void dSnap_packet::SetResult() {
             if (m_judge_tbl[m_tbl[col].m_obj.GetPhoto()] != NULL) {
                 field_0x10 = m_tbl[col].m_obj.GetPhoto();
                 mResult = (this->*m_judge_tbl[m_tbl[col].m_obj.GetPhoto()])();
-                r30 = m_tbl[col].m_obj.field_0x20;
+                r30 = m_tbl[col].m_obj.mCapturedPixels;
                 if (mResult != 0) {
                     return;
                 }
             }
             sp8[m_tbl[col].m_obj.GetPhoto()] = 1;
         } else {
-            if (r30 < m_tbl[col].m_obj.field_0x20) {
+            if (r30 < m_tbl[col].m_obj.mCapturedPixels) {
                 field_0x10 = m_tbl[col].m_obj.GetPhoto();
                 mResult = JudgeFigure(col);
-                r30 = m_tbl[col].m_obj.field_0x20;
+                r30 = m_tbl[col].m_obj.mCapturedPixels;
             }
         }
     }
@@ -845,7 +2227,7 @@ void dSnap_RegistFig(u8 r3, fopAc_ac_c* actor, const Vec& pos, s16 angleY, f32 f
     
     dSnap_Obj sp20;
     sp20.SetGeo(sp14, chara.radius*f2, chara.height*f1, (int)angleY);
-    sp20.SetInf(r3, actor, 0, 4, chara.m0C);
+    sp20.SetInf(r3, actor, 0, 4, chara.cullAngle);
     dSnap_RegistSnapObj(sp20);
 }
 

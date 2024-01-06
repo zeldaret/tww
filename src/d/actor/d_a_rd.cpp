@@ -1757,7 +1757,7 @@ bool daRd_c::_draw() {
         0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
     );
     
-    dSnap_RegistFig(0xB9, this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_RD, this, 1.0f, 1.0f, 1.0f);
     
     return true;
 }
