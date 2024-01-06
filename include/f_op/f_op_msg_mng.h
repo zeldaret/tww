@@ -9,6 +9,8 @@ class JKRExpHeap;
 class JKRHeap;
 class fopAc_ac_c;
 class msg_class;
+class J2DPane;
+class J2DScreen;
 
 struct msg_process_profile_definition {
     /* 0x00 */ leaf_process_profile_definition mBase;
@@ -42,16 +44,22 @@ struct fopMsg_prm_timer {
 class J2DScreen;
 
 struct fopMsgM_pane_class {
-    /* 0x00 */ J2DScreen * scrn;
+    /* 0x00 */ J2DPane * pane;
     /* 0x04 */ cXy mPosTopLeftOrig;
     /* 0x0C */ cXy mPosTopLeft;
     /* 0x14 */ cXy mPosCenterOrig;
     /* 0x1C */ cXy mPosCenter;
     /* 0x24 */ cXy mSizeOrig;
     /* 0x2C */ cXy mSize;
-    /* 0x34 */ u8 mAlphaOrig;
-    /* 0x35 */ u8 mAlpha;
+    /* 0x34 */ u8 mInitAlpha;
+    /* 0x35 */ u8 mNowAlpha;
     /* 0x36 */ s16 mUserArea;
+};
+
+struct fopMsgM_pane_alpha_class {
+    /* 0x00 */ J2DPane * pane;
+    /* 0x04 */ u8 mInitAlpha;
+    /* 0x05 */ u8 mNowAlpha;
 };
 
 typedef int (*fopMsgCreateFunc)(void*);
@@ -80,13 +88,19 @@ inline s32 fopMsgM_Timer_create(s16 param_0, u8 param_1, u32 param_2, u8 param_3
                             param_8, createFunc);
 }
 
+void fopMsgM_setPaneData(fopMsgM_pane_class*, J2DPane*);
 void fopMsgM_setPaneData(fopMsgM_pane_class*, J2DScreen*, u32);
+void fopMsgM_setInitAlpha(fopMsgM_pane_class*);
 void fopMsgM_setNowAlpha(fopMsgM_pane_class*, f32);
 void fopMsgM_setNowAlphaZero(fopMsgM_pane_class*);
-void fopMsgM_setInitAlpha(fopMsgM_pane_class*);
 void fopMsgM_setAlpha(fopMsgM_pane_class*);
 void fopMsgM_paneScaleXY(fopMsgM_pane_class*, f32);
 void fopMsgM_cposMove(fopMsgM_pane_class*);
+
+void fopMsgM_setPaneData(fopMsgM_pane_alpha_class*, J2DPane*);
+void fopMsgM_setPaneData(fopMsgM_pane_alpha_class*, J2DScreen*, u32);
+void fopMsgM_setNowAlpha(fopMsgM_pane_alpha_class*, f32);
+void fopMsgM_setAlpha(fopMsgM_pane_alpha_class*, f32);
 
 u32 fopMsgM_searchMessageNumber(u32);
 void fopMsgM_messageSendOn();

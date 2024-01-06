@@ -13,6 +13,8 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "SSystem/SComponent/c_malloc.h"
+#include "printf.h"
+#include "math.h"
 
 static bool pushButton;
 static bool pushButton2;
@@ -993,113 +995,149 @@ void fopMsgM_centerPosCalc(fopMsgM_f2d_class, fopMsgM_f2d_class) {
 }
 
 /* 8003BA40-8003BB34       .text fopMsgM_pane_parts_set__FP18fopMsgM_pane_class */
-void fopMsgM_pane_parts_set(fopMsgM_pane_class* pane) {
+void fopMsgM_pane_parts_set(fopMsgM_pane_class* i_this) {
     /* Nonmatching */
 }
 
 /* 8003BB34-8003BB4C       .text fopMsgM_pane_parts_set__FP24fopMsgM_pane_alpha_class */
-void fopMsgM_pane_parts_set(fopMsgM_pane_alpha_class* paneAlpha) {
+void fopMsgM_pane_parts_set(fopMsgM_pane_alpha_class* i_this) {
     /* Nonmatching */
 }
 
 /* 8003BB4C-8003BB78       .text fopMsgM_setPaneData__FP18fopMsgM_pane_classP7J2DPane */
-void fopMsgM_setPaneData(fopMsgM_pane_class* pane, J2DPane*) {
-    /* Nonmatching */
+void fopMsgM_setPaneData(fopMsgM_pane_class* i_this, J2DPane* pane) {
+    if (pane != NULL) {
+        i_this->pane = pane;
+        fopMsgM_pane_parts_set(i_this);
+    }
 }
 
 /* 8003BB78-8003BBCC       .text fopMsgM_setPaneData__FP18fopMsgM_pane_classP9J2DScreenUl */
-void fopMsgM_setPaneData(fopMsgM_pane_class* pane, J2DScreen*, u32) {
-    /* Nonmatching */
+void fopMsgM_setPaneData(fopMsgM_pane_class* i_this, J2DScreen* scrn, u32 id) {
+    J2DPane * pane = scrn->search(id);
+    if (pane != NULL) {
+        i_this->pane = pane;
+        fopMsgM_pane_parts_set(i_this);
+    }
 }
 
 /* 8003BBCC-8003BBF8       .text fopMsgM_setPaneData__FP24fopMsgM_pane_alpha_classP7J2DPane */
-void fopMsgM_setPaneData(fopMsgM_pane_alpha_class* paneAlpha, J2DPane*) {
-    /* Nonmatching */
+void fopMsgM_setPaneData(fopMsgM_pane_alpha_class* i_this, J2DPane* pane) {
+    if (pane != NULL) {
+        i_this->pane = pane;
+        fopMsgM_pane_parts_set(i_this);
+    }
 }
 
 /* 8003BBF8-8003BC88       .text fopMsgM_setPaneData__FP24fopMsgM_pane_alpha_classP9J2DScreenUl */
-void fopMsgM_setPaneData(fopMsgM_pane_alpha_class* paneAlpha, J2DScreen*, u32) {
-    /* Nonmatching */
+void fopMsgM_setPaneData(fopMsgM_pane_alpha_class* i_this, J2DScreen* scrn, u32 id) {
+    J2DPane * pane = scrn->search(id);
+    if (pane != NULL) {
+        i_this->pane = pane;
+        fopMsgM_pane_parts_set(i_this);
+    } else {
+        JUT_ASSERT(0x398d, 0);
+    }
 }
 
 /* 8003BC88-8003BCC0       .text fopMsgM_paneTrans__FP18fopMsgM_pane_classff */
-void fopMsgM_paneTrans(fopMsgM_pane_class* pane, f32, f32) {
-    /* Nonmatching */
+void fopMsgM_paneTrans(fopMsgM_pane_class* i_this, f32 x, f32 y) {
+    i_this->mPosCenter.x = i_this->mPosCenterOrig.x + x;
+    i_this->mPosCenter.y = i_this->mPosCenterOrig.y + y;
+    fopMsgM_cposMove(i_this);
 }
 
 /* 8003BCC0-8003BCEC       .text fopMsgM_paneScaleX__FP18fopMsgM_pane_classf */
-void fopMsgM_paneScaleX(fopMsgM_pane_class* pane, f32 s) {
-    pane->mSize.x = pane->mSizeOrig.x * s;
-    fopMsgM_cposMove(pane);
+void fopMsgM_paneScaleX(fopMsgM_pane_class* i_this, f32 s) {
+    i_this->mSize.x = i_this->mSizeOrig.x * s;
+    fopMsgM_cposMove(i_this);
 }
 
 /* 8003BCEC-8003BD18       .text fopMsgM_paneScaleY__FP18fopMsgM_pane_classf */
-void fopMsgM_paneScaleY(fopMsgM_pane_class* pane, f32 s) {
-    pane->mSize.y = pane->mSizeOrig.y * s;
-    fopMsgM_cposMove(pane);
+void fopMsgM_paneScaleY(fopMsgM_pane_class* i_this, f32 s) {
+    i_this->mSize.y = i_this->mSizeOrig.y * s;
+    fopMsgM_cposMove(i_this);
 }
 
 /* 8003BD18-8003BD50       .text fopMsgM_paneScale__FP18fopMsgM_pane_classff */
-void fopMsgM_paneScale(fopMsgM_pane_class* pane, f32 sx, f32 sy) {
-    pane->mSize.x = pane->mSizeOrig.x * sx;
-    pane->mSize.y = pane->mSizeOrig.y * sy;
-    fopMsgM_cposMove(pane);
+void fopMsgM_paneScale(fopMsgM_pane_class* i_this, f32 sx, f32 sy) {
+    i_this->mSize.x = i_this->mSizeOrig.x * sx;
+    i_this->mSize.y = i_this->mSizeOrig.y * sy;
+    fopMsgM_cposMove(i_this);
 }
 
 /* 8003BD50-8003BD88       .text fopMsgM_paneScaleXY__FP18fopMsgM_pane_classf */
-void fopMsgM_paneScaleXY(fopMsgM_pane_class* pane, f32 s) {
-    pane->mSize.x = pane->mSizeOrig.x * s;
-    pane->mSize.y = pane->mSizeOrig.y * s;
-    fopMsgM_cposMove(pane);
+void fopMsgM_paneScaleXY(fopMsgM_pane_class* i_this, f32 s) {
+    i_this->mSize.x = i_this->mSizeOrig.x * s;
+    i_this->mSize.y = i_this->mSizeOrig.y * s;
+    fopMsgM_cposMove(i_this);
 }
 
 /* 8003BD88-8003BE14       .text fopMsgM_cposMove__FP18fopMsgM_pane_class */
-void fopMsgM_cposMove(fopMsgM_pane_class* pane) {
-    pane->mPosTopLeft.x = pane->mPosCenter.x - pane->mSize.x / 2.0f;
-    pane->mPosTopLeft.y = pane->mPosCenter.y - pane->mSize.y / 2.0f;
-    pane->scrn->move(pane->mPosTopLeft.x, pane->mPosTopLeft.y);
-    pane->scrn->resize(pane->mSize.x, pane->mSize.y);
+void fopMsgM_cposMove(fopMsgM_pane_class* i_this) {
+    i_this->mPosTopLeft.x = i_this->mPosCenter.x - i_this->mSize.x / 2.0f;
+    i_this->mPosTopLeft.y = i_this->mPosCenter.y - i_this->mSize.y / 2.0f;
+    i_this->pane->move(i_this->mPosTopLeft.x, i_this->mPosTopLeft.y);
+    i_this->pane->resize(i_this->mSize.x, i_this->mSize.y);
 }
 
 /* 8003BE14-8003BE24       .text fopMsgM_setAlpha__FP18fopMsgM_pane_class */
-void fopMsgM_setAlpha(fopMsgM_pane_class* pane) {
-    pane->scrn->setAlpha(pane->mAlpha);
+void fopMsgM_setAlpha(fopMsgM_pane_class* i_this) {
+    i_this->pane->setAlpha(i_this->mNowAlpha);
 }
 
 /* 8003BE24-8003BE30       .text fopMsgM_setInitAlpha__FP18fopMsgM_pane_class */
-void fopMsgM_setInitAlpha(fopMsgM_pane_class* pane) {
-    pane->mAlpha = pane->mAlphaOrig;
+void fopMsgM_setInitAlpha(fopMsgM_pane_class* i_this) {
+    i_this->mNowAlpha = i_this->mInitAlpha;
 }
 
 /* 8003BE30-8003BE6C       .text fopMsgM_setNowAlpha__FP18fopMsgM_pane_classf */
-void fopMsgM_setNowAlpha(fopMsgM_pane_class* pane, f32 v) {
-    pane->mAlpha = pane->mAlphaOrig * v;
+void fopMsgM_setNowAlpha(fopMsgM_pane_class* i_this, f32 v) {
+    i_this->mNowAlpha = i_this->mInitAlpha * v;
 }
 
 /* 8003BE6C-8003BE78       .text fopMsgM_setNowAlphaZero__FP18fopMsgM_pane_class */
-void fopMsgM_setNowAlphaZero(fopMsgM_pane_class* pane) {
-    pane->mAlpha = 0;
+void fopMsgM_setNowAlphaZero(fopMsgM_pane_class* i_this) {
+    i_this->mNowAlpha = 0;
 }
 
 /* 8003BE78-8003BE88       .text fopMsgM_setAlpha__FP24fopMsgM_pane_alpha_class */
-void fopMsgM_setAlpha(fopMsgM_pane_alpha_class* paneAlpha) {
-    /* Nonmatching */
+void fopMsgM_setAlpha(fopMsgM_pane_alpha_class* i_this) {
+    i_this->pane->setAlpha(i_this->mNowAlpha);
 }
 
 /* 8003BE88-8003BEC4       .text fopMsgM_setNowAlpha__FP24fopMsgM_pane_alpha_classf */
-void fopMsgM_setNowAlpha(fopMsgM_pane_alpha_class* paneAlpha, f32) {
-    /* Nonmatching */
+void fopMsgM_setNowAlpha(fopMsgM_pane_alpha_class* i_this, f32 v) {
+    i_this->mNowAlpha = i_this->mInitAlpha * v;
 }
 
 /* 8003BEC4-8003C07C       .text fopMsgM_valueIncrease__FiiUc */
-f32 fopMsgM_valueIncrease(int, int, u8) {
-    /* Nonmatching */
+f32 fopMsgM_valueIncrease(int max, int value, u8 mode) {
+    if (max <= 0)
+        return 1.0f;
+
+    if (value < 0)
+        value = 0;
+    else if (value > max)
+        value = max;
+
+    f32 ret;
+    f32 v = ((f32)value) / ((f32)max);
+    switch (mode) {
+    case 0: ret = v * v; break;
+    case 1: ret = sqrtf(v); break;
+    case 2: default: ret = v; break;
+    case 3: ret = (v * 2.0f - 1.0f) * 2.0f - 1.0f; break;
+    case 4: ret = JMASSin(v * 32768.0f * 0.5f) * JMASSin(v * 32768.0f * 0.5f); break;
+    case 5: ret = JMASSin(v * 65535.0f * 0.5f) * JMASSin(v * 65535.0f * 0.5f); break;
+    }
+    return ret;
 }
 
 /* 8003C07C-8003C0F8       .text fopMsgM_blendInit__FP18fopMsgM_pane_classPCc */
-void fopMsgM_blendInit(fopMsgM_pane_class* pane, const char* data) {
-    ((J2DPicture*)pane->scrn)->insert(data, ((J2DPicture*)pane->scrn)->getNumTexture(), 1.0f);
-    J2DPicture* pic = (J2DPicture*)pane->scrn;
+void fopMsgM_blendInit(fopMsgM_pane_class* i_this, const char* data) {
+    ((J2DPicture*)i_this->pane)->insert(data, ((J2DPicture*)i_this->pane)->getNumTexture(), 1.0f);
+    J2DPicture* pic = (J2DPicture*)i_this->pane;
     pic->setBlendColorRatio(0.0f, 1.0f, 1.0f, 1.0f);
     pic->setBlendAlphaRatio(0.0f, 1.0f, 1.0f, 1.0f);
 }
@@ -1112,8 +1150,8 @@ void fopMsgM_blendInit(J2DPicture* pic, const char* data) {
 }
 
 /* 8003C16C-8003C1D4       .text fopMsgM_blendDraw__FP18fopMsgM_pane_classPCc */
-void fopMsgM_blendDraw(fopMsgM_pane_class* pane, const char* data) {
-    J2DPicture* pic = (J2DPicture*)pane->scrn;
+void fopMsgM_blendDraw(fopMsgM_pane_class* i_this, const char* data) {
+    J2DPicture* pic = (J2DPicture*)i_this->pane;
     pic->show();
     pic->remove(pic->getNumTexture() - 1);
     pic->insert(data, pic->getNumTexture(), 1.0f);
@@ -1132,8 +1170,14 @@ void fopMsgM_setFontsizeCenter(char*, char*, char*, char*, int, int) {
 }
 
 /* 8003C380-8003C414       .text fopMsgM_setFontsizeCenter2__FPcPcPcPciiii */
-void fopMsgM_setFontsizeCenter2(char*, char*, char*, char*, int, int, int, int) {
-    /* Nonmatching */
+void fopMsgM_setFontsizeCenter2(char* a, char* b, char* c, char* d, int, int size, int, int) {
+    char buf1[32], buf2[12];
+    sprintf(buf1, "\eFX[%d]\eFY[%d]", size, size);
+    buf2[0] = '\0';
+    strcat(a, buf1);
+    strcat(b, buf1);
+    strcat(c, buf2);
+    strcat(d, buf2);
 }
 
 /* 8003C414-8003C450       .text fopMsgM_createExpHeap__FUl */
