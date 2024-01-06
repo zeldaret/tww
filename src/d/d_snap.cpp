@@ -92,7 +92,6 @@ dSnap_Obj::dSnap_Obj() {
 
 /* 800CD068-800CD6D0       .text CalcArea2D__9dSnap_ObjFv */
 f32 dSnap_Obj::CalcArea2D() {
-    /* Nonmatching */
     f32 f28 = 0.0f;
     f32 f29 = mRadius;
     f32 f30 = mHeight;
@@ -114,9 +113,15 @@ f32 dSnap_Obj::CalcArea2D() {
         mDoMtx_stack_c::transS(mCenter);
         mDoMtx_stack_c::scaleM(f29, f30, f29);
         mDoMtx_stack_c::YrotM(mAngleY);
-        sp44.set(0.0f, 0.0f, 0.0f);
+        
+        sp44.x = 0.0f;
+        sp44.y = 0.0f;
+        sp44.z = 0.0f;
         mDoMtx_stack_c::multVec(&sp44, &sp44);
-        sp38.set(0.0f, 1.0f, 0.0f);
+        
+        sp38.x = 0.0f;
+        sp38.y = 1.0f;
+        sp38.z = 0.0f;
         mDoMtx_stack_c::multVec(&sp38, &sp38);
         
         for (int i = 0; i < field_0x19; i++) {
@@ -139,22 +144,22 @@ f32 dSnap_Obj::CalcArea2D() {
             mDoMtx_stack_c::multVec(&sp8c, &sp80);
             mDoLib_project(&sp80, &sp50);
             
-            f0 = 0.5f * ((sp68.x - sp74.x) * (sp5c.y - sp74.y) - (sp68.y - sp74.y) * (sp5c.x - sp74.x));
+            f0 = 0.5f * cM3d_VectorProduct2d(sp74.x, sp74.y, sp68.x, sp68.y, sp5c.x, sp5c.y);
             if (f0 > 0.0f) {
                 f28 += f0;
             }
-            f0 = 0.5f * ((sp5c.x - sp74.x) * (sp50.y - sp74.y) - (sp5c.y - sp74.y) * (sp50.x - sp74.x));
+            f0 = 0.5f * cM3d_VectorProduct2d(sp74.x, sp74.y, sp5c.x, sp5c.y, sp50.x, sp50.y);
             if (f0 > 0.0f) {
                 f28 += f0;
             }
             
             mDoLib_project(&sp38, &sp2c);
-            f0 = 0.5f * ((sp5c.x - sp2c.x) * (sp68.y - sp2c.y) - (sp5c.y - sp2c.y) * (sp68.x - sp2c.x));
+            f0 = 0.5f * cM3d_VectorProduct2d(sp2c.x, sp2c.y, sp5c.x, sp5c.y, sp68.x, sp68.y);
             if (f0 > 0.0f) {
                 f28 += f0;
             }
             mDoLib_project(&sp44, &sp20);
-            f0 = 0.5f * ((sp74.x - sp20.x) * (sp50.y - sp20.y) - (sp74.y - sp20.y) * (sp50.x - sp20.x));
+            f0 = 0.5f * cM3d_VectorProduct2d(sp20.x, sp20.y, sp74.x, sp74.y, sp50.x, sp50.y);
             if (f0 > 0.0f) {
                 f28 += f0;
             }
@@ -178,23 +183,23 @@ f32 dSnap_Obj::CalcArea2D() {
             mDoMtx_stack_c::multVec(&sp8c, &sp80);
             mDoLib_project(&sp80, &sp50);
             
-            f0 = 0.5f * ((sp68.x - sp74.x) * (sp5c.y - sp74.y) - (sp68.y - sp74.y) * (sp5c.x - sp74.x));
+            f0 = 0.5f * cM3d_VectorProduct2d(sp74.x, sp74.y, sp68.x, sp68.y, sp5c.x, sp5c.y);
             if (f0 > 0.0f) {
                 f28 += f0;
             }
-            f0 = 0.5f * ((sp5c.x - sp74.x) * (sp50.y - sp74.y) - (sp5c.y - sp74.y) * (sp50.x - sp74.x));
+            f0 = 0.5f * cM3d_VectorProduct2d(sp74.x, sp74.y, sp5c.x, sp5c.y, sp50.x, sp50.y);
             if (f0 > 0.0f) {
                 f28 += f0;
             }
             
             mDoLib_project(&sp38, &sp14);
-            f0 = 0.5f * ((sp74.x - sp14.x) * (sp50.y - sp14.y) - (sp74.y - sp14.y) * (sp50.x - sp14.x));
+            f0 = 0.5f * cM3d_VectorProduct2d(sp14.x, sp14.y, sp74.x, sp74.y, sp50.x, sp50.y);
             if (f0 > 0.0f) {
                 f28 += f0;
             }
             
             mDoLib_project(&sp44, &sp8);
-            f0 = 0.5f * ((sp5c.x - sp8.x) * (sp68.y - sp8.y) - (sp5c.y - sp8.y) * (sp68.x - sp8.x));
+            f0 = 0.5f * cM3d_VectorProduct2d(sp8.x, sp8.y, sp5c.x, sp5c.y, sp68.x, sp68.y);
             if (f0 > 0.0f) {
                 f28 += f0;
             }
@@ -204,19 +209,25 @@ f32 dSnap_Obj::CalcArea2D() {
         mDoMtx_stack_c::scaleM(f29, f29, f29);
         
         for (int i = 0; i < 0x14; i++) {
-            sp8c.set(vdata[tindices[i][0]].x, vdata[tindices[i][0]].y, vdata[tindices[i][0]].z);
+            sp8c.x = vdata[tindices[i][0]].x;
+            sp8c.y = vdata[tindices[i][0]].y;
+            sp8c.z = vdata[tindices[i][0]].z;
             mDoMtx_stack_c::multVec(&sp8c, &sp80);
             mDoLib_project(&sp80, &sp74);
             
-            sp8c.set(vdata[tindices[i][1]].x, vdata[tindices[i][1]].y, vdata[tindices[i][1]].z);
+            sp8c.x = vdata[tindices[i][1]].x;
+            sp8c.y = vdata[tindices[i][1]].y;
+            sp8c.z = vdata[tindices[i][1]].z;
             mDoMtx_stack_c::multVec(&sp8c, &sp80);
             mDoLib_project(&sp80, &sp68);
             
-            sp8c.set(vdata[tindices[i][2]].x, vdata[tindices[i][2]].y, vdata[tindices[i][2]].z);
+            sp8c.x = vdata[tindices[i][2]].x;
+            sp8c.y = vdata[tindices[i][2]].y;
+            sp8c.z = vdata[tindices[i][2]].z;
             mDoMtx_stack_c::multVec(&sp8c, &sp80);
             mDoLib_project(&sp80, &sp5c);
             
-            f0 = 0.5f * ((sp68.x - sp74.x) * (sp5c.y - sp74.y) - (sp68.y - sp74.y) * (sp5c.x - sp74.x));
+            f0 = 0.5f * cM3d_VectorProduct2d(sp74.x, sp74.y, sp68.x, sp68.y, sp5c.x, sp5c.y);
             if (f0 > 0.0f) {
                 f28 += f0;
             }

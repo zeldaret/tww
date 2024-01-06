@@ -6,7 +6,7 @@
 class csXyz : public SVec {
 public:
     static const csXyz Zero;
-    ~csXyz() {};
+    ~csXyz() {}
     /* inline */ csXyz() {}
     /* inline */ csXyz(const csXyz& other) : SVec(other){};
     csXyz(s16, s16, s16);
