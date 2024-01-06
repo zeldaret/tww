@@ -3,6 +3,8 @@
 
 #include "f_op/f_op_actor.h"
 #include "SSystem/SComponent/c_phase.h"
+#include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_mtx.h"
 
 class mDoExt_McaMorf;
 
@@ -10,12 +12,19 @@ class daKaji_c : public fopAc_ac_c {
 public:
     static const char M_arcname[];
 
+    inline void set_mtx() {
+        mpMorf->getModel()->setBaseScale(mScale);
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::ZXYrotM(shape_angle);
+        mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+        MTXCopy(mDoMtx_stack_c::get(), mMtx);
+    }
+    void setAnm(int, f32) {}
+
     inline s32 _create();
     inline BOOL _delete();
     inline BOOL _execute();
     inline bool _draw();
-    void setAnm(int, f32) {}
-    void set_mtx() {}
 
     BOOL CreateHeap();
 

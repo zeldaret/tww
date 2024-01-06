@@ -107,7 +107,7 @@ void dDlst_2DT2_c::draw() {
     GXSetCullMode(GX_CULL_NONE);
     GXSetDither(GX_TRUE);
     GXSetClipMode(GX_CLIP_DISABLE);
-    GXLoadPosMtxImm(g_mDoMtx_identity, GX_PNMTX0);
+    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
 
     f32 x0 = mX, x1 = x0 + mW;

@@ -22,6 +22,7 @@ void GXPokeColorUpdate(GXBool enable_update);
 void GXPokeDstAlpha(GXBool enable, u8 alpha);
 void GXPokeDither(GXBool enable);
 void GXPokeZMode(GXBool enable_compare, GXCompare comp);
+void GXPeekARGB(u16 x, u16 y, u32* color);
 void GXPeekZ(u16 x, u16 y, u32* z);
 
 typedef void (*GXDrawSyncCallback)(u16 token);

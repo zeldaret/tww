@@ -44,6 +44,7 @@ public:
     };
 
     MtxP getViewMtx() { return mViewMtx; }
+    void setViewMtx(Mtx m) { MTXCopy(m, mViewMtx); }
 
     void setDrawModeOpaTexEdge() { mDrawMode = OPA_TEX_EDGE; }
 
@@ -98,8 +99,6 @@ public:
 
     Mtx& getModelDrawMtx(u16 no) const { return mModelDrawMtx[no]; }
     J3DShapePacket* getShapePacket() const { return mShapePacket; }
-
-    void setViewMtx(Mtx m) { MTXCopy(m, mViewMtx); }
 
     J3DModel* getModel() { return mModel; }
     Vec* getNBTScale() { return mNBTScale; }

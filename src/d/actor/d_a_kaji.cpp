@@ -83,11 +83,7 @@ BOOL daKaji_c::_execute() {
     
     mpMorf->play(NULL, 0, 0);
     
-    mpMorf->getModel()->setBaseScale(mScale);
-    mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::ZXYrotM(shape_angle);
-    mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
-    MTXCopy(mDoMtx_stack_c::get(), mMtx);
+    set_mtx();
     
     return FALSE;
 }
