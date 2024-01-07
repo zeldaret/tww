@@ -1304,7 +1304,7 @@ BOOL dShop_now_triggercheck(msg_class* msg, STControl* stickControl, ShopItems_c
             }
         }
         
-        msg->mMode = 0xF;
+        msg->mStatus = fopMsgStts_MSG_CONTINUES_e;
         fopMsgM_messageSet(*pMsgID);
         fopMsgM_messageSendOn();
         shopItems->mSelectedItemIdx = nextIdx;

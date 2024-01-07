@@ -393,21 +393,11 @@ void daObjMknjD::Act_c::setPlayerAngle(int i_staffIdx) {
 
 /* 00000E84-00000F88       .text talk__Q210daObjMknjD5Act_cFi */
 u16 daObjMknjD::Act_c::talk(int i_param1) {
-    u16 msgMode = 0xFF;
+    u16 msgStatus = 0xFF;
 
     if (mMsgPID == fpcM_ERROR_PROCESS_ID_e) {
         if (i_param1 == 1) {
-            u32 msgId;
-
-            if (m0500 == 0) {
-                g_dComIfG_gameInfo.play.mTactMode = mTactMode;
-                msgId = 0x05B3;
-            }
-            else {
-                msgId = 0x1901;
-            }
-            
-            mMsgNo = msgId;
+            mMsgNo = getMsg();
         }
 
         mMsgPID = fopMsgM_messageSet(mMsgNo, this);
@@ -415,18 +405,18 @@ u16 daObjMknjD::Act_c::talk(int i_param1) {
     }
     else {
         if (mMsgPtr) {
-            msgMode = mMsgPtr->mMode;
+            msgStatus = mMsgPtr->mStatus;
 
-            if (msgMode == 0x0E) {
-                if (g_dComIfG_gameInfo.play.field_0x4949 != 0) {
+            if (msgStatus == fopMsgStts_MSG_DISPLAYED_e) {
+                if (dComIfGp_checkMesgCancelButton() != 0) {
                     m0504 = true;
                     fopMsgM_messageSendOn();
                 }
 
-                mMsgPtr->mMode = 0x10;
+                mMsgPtr->mStatus = fopMsgStts_MSG_ENDS_e;
             }
-            else if (msgMode == 0x12) {
-                mMsgPtr->mMode = 0x13;
+            else if (msgStatus == fopMsgStts_BOX_CLOSED_e) {
+                mMsgPtr->mStatus = fopMsgStts_MSG_DESTROYED_e;
                 mMsgPID = fpcM_ERROR_PROCESS_ID_e;
             }
         }
@@ -435,7 +425,7 @@ u16 daObjMknjD::Act_c::talk(int i_param1) {
         }
     }
 
-    return msgMode;
+    return msgStatus;
 }
 
 /* 00000F88-00001348       .text privateCut__Q210daObjMknjD5Act_cFv */
@@ -511,7 +501,7 @@ void daObjMknjD::Act_c::privateCut() {
                     doCutEnd = true;
                     break;
                 case ACT_INPUT:
-                    if (talk(1) == 0x12) {
+                    if (talk(1) == fopMsgStts_BOX_CLOSED_e) {
                         doCutEnd = true;
                     }
                     break;
@@ -541,9 +531,9 @@ void daObjMknjD::Act_c::privateCut() {
                     }
                     break;
                 case ACT_LESSON:
-                    u32 talkResult = talk(1);
+                    u16 msgStatus = talk(1);
 
-                    if (talkResult == 0x12 || talkResult == 0x15) {
+                    if (msgStatus == fopMsgStts_BOX_CLOSED_e || msgStatus == fopMsgStts_UNK15_e) {
                         doCutEnd = true;
                     }
                     break;
@@ -870,7 +860,7 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
         case 10:
             privateCut();
 
-            if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode == 0) {
+            if (!dComIfGp_event_runCheck()) {
                 if (checkItemGet(mGiveItemNo, 1) != 0) {
                     m043F = 0;
                 }
@@ -885,9 +875,9 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
             m043F = 12;
             break;
         case 12:
-            if (talk(1) == 18) {
+            if (talk(1) == fopMsgStts_BOX_CLOSED_e) {
                 player->offPlayerNoDraw();
-                g_dComIfG_gameInfo.play.mEvtCtrl.mEventFlag |= 8;
+                dComIfGp_event_reset();
 
                 if (checkItemGet(mGiveItemNo, 1) != 0) {
                     m043F = 0;

@@ -459,7 +459,7 @@ public:
 
     void setItemBeastNumCount(int i_idx, s16 num) { mItemBeastNumCounts[i_idx] += num; }
 
-    u8 checkMesgCancelButton() { return field_0x4949; }
+    u8 checkMesgCancelButton() { return mMesgCancelButton; }
 
     void setPlayerStatus(int param_0, int i, u32 flag) { mPlayerStatus[param_0][i] |= flag; }
     void clearPlayerStatus(int param_0, int i, u32 flag) { mPlayerStatus[param_0][i] &= ~flag; }
@@ -536,14 +536,17 @@ public:
     ItemTableList* getItemTable() { return mpItemTable; }
     void setFmapData(void * pData) { mpFmapData = pData; }
 
-    inline void stopFwaterTimer() { mFwaterTimer = 0; }
-    inline u8 checkFwaterTimer() { return mFwaterTimer; }
+    void stopFwaterTimer() { mFwaterTimer = 0; }
+    u8 checkFwaterTimer() { return mFwaterTimer; }
 
-    inline u8 getMiniGameType() { return mMiniGameType; }
+    u8 getMiniGameType() { return mMiniGameType; }
 
-    inline void show2dOn() { m2dShow = true; }
-    inline void show2dOff() { m2dShow = false; }
-    inline bool show2dCheck() { return m2dShow; }
+    void show2dOn() { m2dShow = true; }
+    void show2dOff() { m2dShow = false; }
+    bool show2dCheck() { return m2dShow; }
+
+    u8 getMelodyNum() { return mMelodyNum; }
+    void setMelodyNum(u8 melody) { mMelodyNum = melody; }
 
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
@@ -666,9 +669,9 @@ public:
     /* 0x4946 */ u8 field_0x4946;
     /* 0x4947 */ u8 field_0x4947;
     /* 0x4948 */ u8 field_0x4948;
-    /* 0x4949 */ u8 field_0x4949;
+    /* 0x4949 */ u8 mMesgCancelButton;
     /* 0x494A */ u8 field_0x494a[6];
-    /* 0x4950 */ u8 mTactMode;
+    /* 0x4950 */ u8 mMelodyNum;
     /* 0x4951 */ u8 field_0x4951;
     /* 0x4952 */ u8 field_0x4952;
     /* 0x4953 */ u8 field_0x4953;
@@ -2315,6 +2318,14 @@ inline bool dComIfGp_2dShowCheck() {
     return g_dComIfG_gameInfo.play.show2dCheck();
 }
 
+inline u8 dComIfGp_setMelodyNum() {
+    return g_dComIfG_gameInfo.play.getMelodyNum();
+}
+
+inline void dComIfGp_setMelodyNum(u8 melody) {
+    g_dComIfG_gameInfo.play.setMelodyNum(melody);
+}
+
 /**
  * === EVENT ===
  */
@@ -2355,7 +2366,7 @@ inline u8 dComIfGp_event_getPreItemNo() {
     return g_dComIfG_gameInfo.play.getEvent().getPreItemNo();
 }
 
-inline void dComIfGp_event_setItemPartnerId(u32 id) {
+inline void dComIfGp_event_setItemPartnerId(unsigned int id) {
     g_dComIfG_gameInfo.play.getEvent().setPtI_Id(id);
 }
 

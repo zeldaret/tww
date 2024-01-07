@@ -208,20 +208,6 @@ public:
     /* 0x20 */ s16 field_0x20;
 };
 
-enum dNpc_MessageStatus_e {
-    dNpcMsgStts_MSG_PREPARING_e = 0x01,
-    dNpcMsgStts_BOX_OPENING_e = 0x02,
-    dNpcMsgStts_MSG_TYPING_e = 0x06,
-    dNpcMsgStts_MSG_DISPLAYED_e = 0x0E,
-
-    dNpcMsgStts_MSG_CONTINUES_e = 0x0F,
-    dNpcMsgStts_MSG_ENDS_e = 0x10,
-
-    dNpcMsgStts_BOX_CLOSING_e = 0x11,
-    dNpcMsgStts_BOX_CLOSED_e = 0x12,
-    dNpcMsgStts_MSG_DESTROYED_e = 0x13,
-};
-
 class fopNpc_npc_c : public fopAc_ac_c {
 public:
     fopNpc_npc_c() {
@@ -241,7 +227,7 @@ public:
     /* 0x6B0 */ msg_class* mpCurrMsg;
     /* 0x6B4 */ u8 pad_0x6B4[0x6C0 - 0x6B4];
 
-    virtual u16 next_msgStatus(u32* msgId) { return dNpcMsgStts_MSG_ENDS_e; }
+    virtual u16 next_msgStatus(u32* msgId) { return fopMsgStts_MSG_ENDS_e; }
     virtual u32 getMsg() { return 0; }
     virtual void anmAtr(u16) {}
 

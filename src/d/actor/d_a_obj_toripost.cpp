@@ -223,7 +223,7 @@ void daObjTpost_c::cutDispLetterProc(int staffIdx) {
     if(mode == 5) {
         daPy_getPlayerActorClass()->onLetterReadEyeMove();
     }
-    if(mode == dNpcMsgStts_BOX_CLOSED_e) {
+    if(mode == fopMsgStts_BOX_CLOSED_e) {
         dComIfGp_evmng_cutEnd(staffIdx);
     }
 }
@@ -401,7 +401,7 @@ u16 daObjTpost_c::next_msgStatus(u32* msgId) {
         0x0CEE
     };
 
-    u16 status = dNpcMsgStts_MSG_CONTINUES_e;
+    u16 status = fopMsgStts_MSG_CONTINUES_e;
     switch(*msgId) {
         case 0xCE5:
         case 0xCE6:
@@ -424,7 +424,7 @@ u16 daObjTpost_c::next_msgStatus(u32* msgId) {
             }
             else {
                 field_0x8E9 = 1;
-                status = dNpcMsgStts_MSG_ENDS_e;
+                status = fopMsgStts_MSG_ENDS_e;
             }
 
             break;
@@ -439,7 +439,7 @@ u16 daObjTpost_c::next_msgStatus(u32* msgId) {
 
             break;
         case 0xCEF:
-            if(mpCurrMsg->mSelectedChoiceIdx == 0) {
+            if(mpCurrMsg->mSelectNum == 0) {
                 if(dComIfGs_getRupee() >= getSendPrice()) {
                     dComIfGp_setItemRupeeCount(-getSendPrice());
                     dComIfGs_setReserveItemEmpty();
@@ -470,7 +470,7 @@ u16 daObjTpost_c::next_msgStatus(u32* msgId) {
             break;
         case 0xCF4:
         case 0xCF8:
-            if(mpCurrMsg->mSelectedChoiceIdx == 0) {
+            if(mpCurrMsg->mSelectNum == 0) {
                 s32 price = 0x0A;
                 if(m_letter[mNumReadable].mEventReg == 0xB203) {
                     price = 0xC9;
@@ -478,7 +478,7 @@ u16 daObjTpost_c::next_msgStatus(u32* msgId) {
                 if(dComIfGs_getRupee() >= price) {
                     dComIfGp_setItemRupeeCount(-price);
                     field_0x8E9 = 1;
-                    status = dNpcMsgStts_MSG_ENDS_e;
+                    status = fopMsgStts_MSG_ENDS_e;
                 }
                 else {
                     *msgId = 0xCF6;
@@ -499,17 +499,17 @@ u16 daObjTpost_c::next_msgStatus(u32* msgId) {
                 *msgId = 0xCF7;
             }
             else {
-                status = dNpcMsgStts_MSG_ENDS_e;
+                status = fopMsgStts_MSG_ENDS_e;
             }
 
             break;
         default:
-            status = dNpcMsgStts_MSG_ENDS_e;
+            status = fopMsgStts_MSG_ENDS_e;
             break;
     }
 
-    if(mCurrMsgNo == m_letter[mNumReadable].mMsgNo && status == dNpcMsgStts_MSG_ENDS_e) {
-        status = dNpcMsgStts_MSG_DISPLAYED_e;
+    if(mCurrMsgNo == m_letter[mNumReadable].mMsgNo && status == fopMsgStts_MSG_ENDS_e) {
+        status = fopMsgStts_MSG_DISPLAYED_e;
     }
 
     return status;
@@ -681,7 +681,7 @@ void daObjTpost_c::modeTalkInit() {
 }
 
 void daObjTpost_c::modeTalk() {
-    if(talk(1) == dNpcMsgStts_BOX_CLOSED_e) {
+    if(talk(1) == fopMsgStts_BOX_CLOSED_e) {
         if(field_0x8E9) {
             modeProc(PROC_INIT, 3);
             field_0x8E9 = 0;
@@ -745,7 +745,7 @@ void daObjTpost_c::modeTalkXY() {
         bool stopped = true;
         if (!morf->mFrameCtrl.checkState(J3DFrameCtrl::STATE_STOP_E) && morf->mFrameCtrl.getRate() != 0.0f) { stopped = false; }
         if (stopped) {
-            if(cLib_calcTimer(&field_0x8DC) == 0 && talk(1) == dNpcMsgStts_BOX_CLOSED_e) {
+            if(cLib_calcTimer(&field_0x8DC) == 0 && talk(1) == fopMsgStts_BOX_CLOSED_e) {
                 modeProc(PROC_INIT, 0);
                 dComIfGp_event_reset();
                 field_0x8F5 = 0;
@@ -846,7 +846,7 @@ bool daObjTpost_c::_execute() {
     modeProc(PROC_EXEC, 5);
     dBgS* bgs = dComIfG_Bgsp();
 
-    if(g_dComIfG_gameInfo.play.mEvtCtrl.mMode != 0 && mEventCut.cutProc() == false) {
+    if(dComIfGp_event_runCheck() && !mEventCut.cutProc()) {
         cutProc();
     }
     eventOrder();

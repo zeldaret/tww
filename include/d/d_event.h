@@ -98,7 +98,7 @@ public:
 
     u8 getTalkXYBtn() { return mTalkButton; }
     bool chkTalkXY() { return mTalkButton == 1 || mTalkButton == 2 || mTalkButton == 3; }
-    void setPtI_Id(u32 id) { mPtItem = id; }
+    void setPtI_Id(unsigned int id) { mPtItem = id; }
     void setPtI(void* actor) { mPtItem = getPId(actor); }
     void setGtItm(u8 itemNo) { mGetItemNo = itemNo; }
     u8 getGtItm() { return mGetItemNo; }

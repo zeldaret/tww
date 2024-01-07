@@ -598,7 +598,7 @@ dStage_Event_dt_c* dEvt_control_c::nextStageEventDt(void* idxp) {
 int dEvt_control_c::getPId(void* ac) {
     if (ac == NULL)
         return -1;
-    return fpcM_GetID(ac);
+    return fopAcM_GetID(ac);
 }
 
 /* 800715DC-8007160C       .text convPId__14dEvt_control_cFUi */

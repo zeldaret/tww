@@ -291,11 +291,11 @@ void dEvDtStaff_c::specialProcMessage() {
         case 3: // FINISH
         case 5: // END
             JUT_ASSERT(0x1D8, l_msg);
-            l_msg->mMode = 0x10;
+            l_msg->mStatus = fopMsgStts_MSG_ENDS_e;
             break;
         case 4: // CONTINUE
             JUT_ASSERT(0x1DC, l_msg);
-            l_msg->mMode = 0xF;
+            l_msg->mStatus = fopMsgStts_MSG_CONTINUES_e;
             idata = dComIfGp_evmng_getMyIntegerP(staffIdx, "msgNo");
             JUT_ASSERT(0x1DF, idata);
             l_msgNo = *idata;
@@ -339,7 +339,7 @@ void dEvDtStaff_c::specialProcMessage() {
         break;
     case 2: // PUSHBUTTON
         JUT_ASSERT(0x209, l_msg);
-        if (l_msg->mMode == 0xE) {
+        if (l_msg->mStatus == fopMsgStts_MSG_DISPLAYED_e) {
             dComIfGp_evmng_cutEnd(staffIdx);
         }
         break;
@@ -347,8 +347,8 @@ void dEvDtStaff_c::specialProcMessage() {
     case 6: // DELETE
         if (!l_msg) {
             dComIfGp_evmng_cutEnd(staffIdx);
-        } else if (l_msg->mMode == 0x12) {
-            l_msg->mMode = 0x13;
+        } else if (l_msg->mStatus == fopMsgStts_BOX_CLOSED_e) {
+            l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
             l_msgId = fpcM_ERROR_PROCESS_ID_e;
             l_msg = NULL;
             dComIfGp_evmng_cutEnd(staffIdx);
@@ -358,9 +358,9 @@ void dEvDtStaff_c::specialProcMessage() {
         dComIfGp_evmng_cutEnd(staffIdx);
         break;
     case 5: // END
-        switch (l_msg->mMode) {
-        case 0x11:
-        case 0x12:
+        switch (l_msg->mStatus) {
+        case fopMsgStts_BOX_CLOSING_e:
+        case fopMsgStts_BOX_CLOSED_e:
             dComIfGp_evmng_cutEnd(staffIdx);
             break;
         }

@@ -590,7 +590,7 @@ void dNpc_EventCut_c::cutTalkMsgProc() {
     }
     else {
         u16 status = mpTalkActor->talk(0);
-        if(status == dNpcMsgStts_BOX_CLOSED_e) {
+        if(status == fopMsgStts_BOX_CLOSED_e) {
             field_0x52 = 0;
             dComIfGp_evmng_cutEnd(mEvtStaffId);
         }

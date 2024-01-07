@@ -242,10 +242,10 @@ void dScnPly_msg_HIO_c::dScnPly_msg_HIO_messageProc() {
         } else {
             msg_class* msg_p = fopMsgM_SearchByID(field_0x10);
             if (msg_p != NULL) {
-                if (msg_p->mMode == 14) {
-                    msg_p->mMode = 16;
-                } else if (msg_p->mMode == 18) {
-                    msg_p->mMode = 19;
+                if (msg_p->mStatus == fopMsgStts_MSG_DISPLAYED_e) {
+                    msg_p->mStatus = fopMsgStts_MSG_ENDS_e;
+                } else if (msg_p->mStatus == fopMsgStts_BOX_CLOSED_e) {
+                    msg_p->mStatus = fopMsgStts_MSG_DESTROYED_e;
                     field_0x10 = fpcM_ERROR_PROCESS_ID_e;
                     field_0x06 = 0;
                     mID++;

@@ -661,15 +661,15 @@ u16 fopNpc_npc_c::talk(int param_1) {
     }
     else {
         if(mpCurrMsg) {
-            mode = mpCurrMsg->mMode;
-            if(mode == dNpcMsgStts_MSG_DISPLAYED_e) {
-                mpCurrMsg->mMode = next_msgStatus(&mCurrMsgNo);
-                if(mpCurrMsg->mMode == dNpcMsgStts_MSG_CONTINUES_e) {
+            mode = mpCurrMsg->mStatus;
+            if(mode == fopMsgStts_MSG_DISPLAYED_e) {
+                mpCurrMsg->mStatus = next_msgStatus(&mCurrMsgNo);
+                if(mpCurrMsg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
                     fopMsgM_messageSet(mCurrMsgNo);
                 }
             }
-            else if (mode == dNpcMsgStts_BOX_CLOSED_e) {
-                mpCurrMsg->mMode = dNpcMsgStts_MSG_DESTROYED_e;
+            else if (mode == fopMsgStts_BOX_CLOSED_e) {
+                mpCurrMsg->mStatus = fopMsgStts_MSG_DESTROYED_e;
                 mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
             }
 

@@ -77,7 +77,6 @@ int daBranch_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 00000248-0000049C       .text CreateHeap__10daBranch_cFv */
 int daBranch_c::CreateHeap() {
-    /* Nonmatching */
     int bmd[] = { KWOOD_00_BMD_WS, KWOOD_00_BMD_WB };
     int bck[] = { KWOOD_00_BCK_SWING02, KWOOD_00_BCK_BREAK };
     int bas[] = { KWOOD_00_BAS_SWING02, KWOOD_00_BAS_BREAK };
@@ -86,9 +85,10 @@ int daBranch_c::CreateHeap() {
 
     for (int i = 0; i < (s32)ARRAY_SIZE(mAnims); i++) {
         J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes(m_arcname, bmd[i]));
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectIDRes(m_arcname, bck[i]));
+        J3DAnmTransformKey* bckData = static_cast<J3DAnmTransformKey*>(dComIfG_getObjectIDRes(m_arcname, bck[i]));
 
         JUT_ASSERT(0x1CC, modelData != 0);
+        // Bug: They probably meant to assert that bckData isn't null, but accidentally used the array of bck file IDs.
         JUT_ASSERT(0x1CD, bck != 0);
 
         mAnims[i] = new mDoExt_McaMorf(

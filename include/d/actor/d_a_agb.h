@@ -32,6 +32,10 @@ public:
     int execute();
     ~dMsgCtrl_c() {}
 
+    int getSelectNum() { return mpMsg->mSelectNum; }
+    void setMsgStatus(u16 status) { mpMsg->mStatus = status; }
+
+public:
     /* 0x00 */ u16 field_0x0;
     /* 0x04 */ u32 mMsgID;
     /* 0x08 */ msg_class* mpMsg;

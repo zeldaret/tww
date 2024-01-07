@@ -212,12 +212,12 @@ namespace daObjPaper {
 
     /* 00000880-000008DC       .text mode_talk2__Q210daObjPaper5Act_cFv */
     void daObjPaper::Act_c::mode_talk2() {
-        if (mpMsg->mMode == dNpcMsgStts_BOX_CLOSED_e) {
-            mpMsg->mMode = dNpcMsgStts_MSG_DESTROYED_e;
+        if (mpMsg->mStatus == fopMsgStts_BOX_CLOSED_e) {
+            mpMsg->mStatus = fopMsgStts_MSG_DESTROYED_e;
             mpMsg = 0;
             mMsgId = fpcM_ERROR_PROCESS_ID_e;
 
-            g_dComIfG_gameInfo.play.mEvtCtrl.mEventFlag |= 8;
+            dComIfGp_event_reset();
             mode_wait_init();
         }
     }

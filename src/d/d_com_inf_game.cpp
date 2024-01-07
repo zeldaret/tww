@@ -135,13 +135,13 @@ void dComIfG_play_c::itemInit() {
     field_0x4946 = 0;
     field_0x4947 = 0;
     field_0x4948 = 0;
-    field_0x4949 = 0;
+    mMesgCancelButton = 0;
 
     for (int i = 0; i < 6; i++) {
         field_0x494a[i] = 0;
     }
 
-    mTactMode = 0;
+    mMelodyNum = 0;
     field_0x4951 = 0;
     field_0x4952 = 0;
     field_0x4953 = 0;

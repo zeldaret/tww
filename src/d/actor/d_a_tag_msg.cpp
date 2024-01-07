@@ -158,20 +158,20 @@ static BOOL daTag_Msg_actionEvent(daTag_Msg_c* a_this) {
         break;
     case 3:
         JUT_ASSERT(0x13F, l_msg);
-        if (l_msg->mMode == 6) {
+        if (l_msg->mStatus == fopMsgStts_MSG_TYPING_e) {
             msg_mode++;
         }
         break;
     case 4:
         JUT_ASSERT(0x145, l_msg);
-        if (l_msg->mMode == 0xe) {
+        if (l_msg->mStatus == fopMsgStts_MSG_DISPLAYED_e) {
             msg_mode++;
-            l_msg->mMode = 0x10;
+            l_msg->mStatus = fopMsgStts_MSG_ENDS_e;
         }
         break;
     }
-    if (l_msg != NULL && l_msg->mMode == 0x12) {
-        l_msg->mMode = 0x13;
+    if (l_msg != NULL && l_msg->mStatus == fopMsgStts_BOX_CLOSED_e) {
+        l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
         dComIfGp_event_reset();
         if (a_this->getMessage() == 0x1902) {
             daPy_getPlayerLinkActorClass()->offPlayerNoDraw();

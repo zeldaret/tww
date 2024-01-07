@@ -19,10 +19,10 @@ static BOOL daKytag06_Execute(kytag06_class* i_this) {
     f32 time;
     int date;
 
-    if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode == 0) {
+    if (!dComIfGp_event_runCheck()) {
         return TRUE;
     }
-    if(dComIfGp_evmng_startCheck("ARRIVAL_BRK") == 0) {
+    if(!dComIfGp_evmng_startCheck("ARRIVAL_BRK")) {
         return TRUE;
     }
 

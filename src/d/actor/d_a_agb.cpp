@@ -78,12 +78,12 @@ int dMsgCtrl_c::execute() {
     } else if (mpMsg == NULL) {
         mpMsg = fopMsgM_SearchByID(mMsgID);
     } else {
-        if (mpMsg->mMode == 18) {
-            mpMsg->mMode = 19;
+        if (mpMsg->mStatus == fopMsgStts_BOX_CLOSED_e) {
+            mpMsg->mStatus = fopMsgStts_MSG_DESTROYED_e;
             dComIfGp_event_reset();
         }
 
-        return mpMsg->mMode;
+        return mpMsg->mStatus;
     }
 
     return -1;
@@ -202,12 +202,12 @@ extern JKRHeap* dMsg_getAgbWorkArea();
 
 /* 800CFB68-800CFC94       .text uploadSelect__7daAgb_cFv */
 int daAgb_c::uploadSelect() {
-    if (l_msgCtrl.execute() == 14) {
-        if (dComIfGp_checkMesgCancelButton() || (int)l_msgCtrl.mpMsg->mSelectedChoiceIdx != 0) {
-            l_msgCtrl.mpMsg->mMode = 16;
+    if (l_msgCtrl.execute() == fopMsgStts_MSG_DISPLAYED_e) {
+        if (dComIfGp_checkMesgCancelButton() != 0 || l_msgCtrl.getSelectNum() != 0) {
+            l_msgCtrl.setMsgStatus(fopMsgStts_MSG_ENDS_e);
             mDoGaC_ConnectWake();
         } else {
-            l_msgCtrl.mpMsg->mMode = 15;
+            l_msgCtrl.setMsgStatus(fopMsgStts_MSG_CONTINUES_e);
             fopMsgM_messageSet(6);  // "Now calling Tingle..."
             mUploadAction = 3;
 
@@ -253,7 +253,7 @@ int daAgb_c::uploadJoyboot2() {
             field_0x664 = 15;
             mUploadAction = 6;
         } else {
-            l_msgCtrl.mpMsg->mMode = 15;
+            l_msgCtrl.setMsgStatus(fopMsgStts_MSG_CONTINUES_e);
             fopMsgM_messageSet(7);  // "An error has occurred."
             fopMsgM_messageSendOn();
             mUploadAction = 10;
@@ -261,7 +261,7 @@ int daAgb_c::uploadJoyboot2() {
     } else {
         field_0x664--;
         if (field_0x664 == 0) {
-            l_msgCtrl.mpMsg->mMode = 15;
+            l_msgCtrl.setMsgStatus(fopMsgStts_MSG_CONTINUES_e);
             fopMsgM_messageSet(7);  // "An error has occurred."
             fopMsgM_messageSendOn();
             mUploadAction = 10;
@@ -312,7 +312,7 @@ int daAgb_c::uploadConnect() {
         dMap_c::mapAGBSendIslandData();
     } else {
         mDoGaC_GbaReboot();
-        l_msgCtrl.mpMsg->mMode = 15;
+        l_msgCtrl.setMsgStatus(fopMsgStts_MSG_CONTINUES_e);
         fopMsgM_messageSet(7);  // "An error has occurred."
         fopMsgM_messageSendOn();
         mUploadAction = 10;
@@ -329,7 +329,7 @@ int daAgb_c::uploadMessageSend() {
     if (mDoGaC_getDataStatus(0) == 0) {
         mIsMsgSend = true;
         if (field_0x67a != 0) {
-            l_msgCtrl.mpMsg->mMode = 15;
+            l_msgCtrl.setMsgStatus(fopMsgStts_MSG_CONTINUES_e);
             fopMsgM_messageSet(8);  // "Tingle appeared on your Game Boy Advance!"
             fopMsgM_messageSendOn();
             mUploadAction = 11;
@@ -361,8 +361,8 @@ int daAgb_c::uploadRetryWait() {
 
 /* 800D021C-800D0264       .text uploadMsgEndWait__7daAgb_cFv */
 int daAgb_c::uploadMsgEndWait() {
-    if (l_msgCtrl.execute() == 14) {
-        l_msgCtrl.mpMsg->mMode = 16;
+    if (l_msgCtrl.execute() == fopMsgStts_MSG_DISPLAYED_e) {
+        l_msgCtrl.setMsgStatus(fopMsgStts_MSG_ENDS_e);
     }
 
     return 1;
@@ -375,7 +375,7 @@ int daAgb_c::uploadMsgEndTimer() {
         field_0x664--;
 
         if (field_0x664 == 0) {
-            l_msgCtrl.mpMsg->mMode = 16;
+            l_msgCtrl.setMsgStatus(fopMsgStts_MSG_ENDS_e);
             fopMsgM_messageSendOn();
         } else if (field_0x664 == 30) {
             field_0x66f = 1;

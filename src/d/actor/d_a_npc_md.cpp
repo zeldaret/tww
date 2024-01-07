@@ -1962,10 +1962,10 @@ bool daNpc_Md_c::checkCommandTalk() {
 
 /* 0000DCB0-0000E410       .text next_msgStatus__10daNpc_Md_cFPUl */
 u16 daNpc_Md_c::next_msgStatus(u32* pCurrMsgNo) {
-    u16 msgStatus = dNpcMsgStts_MSG_CONTINUES_e;
+    u16 msgStatus = fopMsgStts_MSG_CONTINUES_e;
     switch (*pCurrMsgNo) {
     case 0x5AC:
-        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     case 0x17D5:
     case 0x1805:
@@ -1979,7 +1979,7 @@ u16 daNpc_Md_c::next_msgStatus(u32* pCurrMsgNo) {
         break;
     case 0x17D8:
         mCurEventMode = 4;
-        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     case 0x17D9:
         *pCurrMsgNo = 0x1802;
@@ -1992,14 +1992,14 @@ u16 daNpc_Md_c::next_msgStatus(u32* pCurrMsgNo) {
         break;
     case 0x17DB:
         dComIfGs_onEventBit(0x0E02);
-        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     case 0x17DD:
         *pCurrMsgNo = 0x17DE;
         break;
     case 0x17DE:
         mCurEventMode = 5;
-        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     case 0x17DF:
         *pCurrMsgNo = 0x17E0;
@@ -2015,11 +2015,11 @@ u16 daNpc_Md_c::next_msgStatus(u32* pCurrMsgNo) {
         break;
     case 0x17E4:
         dComIfGs_onEventBit(0x1101);
-        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     case 0x17E5:
         dComIfGs_onEventBit(0x1280);
-        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     case 0x17E6:
         *pCurrMsgNo = 0x17E7;
@@ -2046,7 +2046,7 @@ u16 daNpc_Md_c::next_msgStatus(u32* pCurrMsgNo) {
         *pCurrMsgNo = 0x17EE;
         break;
     case 0x17EE:
-        if (l_msg->mSelectedChoiceIdx == 1) {
+        if (l_msg->mSelectNum == 1) {
             *pCurrMsgNo = 0x17EF;
         } else {
             *pCurrMsgNo = 0x17F0;
@@ -2060,7 +2060,7 @@ u16 daNpc_Md_c::next_msgStatus(u32* pCurrMsgNo) {
         break;
     case 0x17F1:
         mCurEventMode = 7;
-        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     case 0x17F3:
         *pCurrMsgNo = 0x17F4;
@@ -2070,7 +2070,7 @@ u16 daNpc_Md_c::next_msgStatus(u32* pCurrMsgNo) {
         // Fall-through
     case 0x17F8:
         cLib_onBit(m30F0, 0x40UL);
-        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     case 0x17F7:
         *pCurrMsgNo = 0x17F8;
@@ -2095,7 +2095,7 @@ u16 daNpc_Md_c::next_msgStatus(u32* pCurrMsgNo) {
         break;
     case 0x1801:
         dComIfGs_onEventBit(0x1102);
-        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     case 0x19C9:
         *pCurrMsgNo = 0x19ca;
@@ -2124,7 +2124,7 @@ u16 daNpc_Md_c::next_msgStatus(u32* pCurrMsgNo) {
     case 0x19D1:
         dComIfGs_onEventBit(0x1402);
         onSeaTalk();
-        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     case 0x19D2:
         *pCurrMsgNo = 0x19D3;
@@ -2144,7 +2144,7 @@ u16 daNpc_Md_c::next_msgStatus(u32* pCurrMsgNo) {
     case 0x19D8:
         dComIfGs_onEventBit(0x1504);
     case 0x19D9:
-        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     case 0x19DA:
         *pCurrMsgNo = 0x19db;
@@ -2192,7 +2192,7 @@ u16 daNpc_Md_c::next_msgStatus(u32* pCurrMsgNo) {
         // Fall-through
     case 0x1A01:
         dComIfGs_onEventBit(0x2C08);
-        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     case 0x19FC:
         *pCurrMsgNo = 0x19FD;
@@ -2208,10 +2208,10 @@ u16 daNpc_Md_c::next_msgStatus(u32* pCurrMsgNo) {
         break;
     case 0x1A02:
         dComIfGs_onEventBit(0x3B80);
-        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     default:
-        msgStatus = dNpcMsgStts_MSG_ENDS_e;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     }
     return msgStatus;
