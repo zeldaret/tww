@@ -6,6 +6,7 @@
 #include "d/d_drawlist.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_meter.h"
+#include "d/d_procname.h"
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_mtx.h"
@@ -15,6 +16,9 @@
 #include "JSystem/J2DGraph/J2DPane.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "SSystem/SComponent/c_phase.h"
+
+class dDlst_MenuSave_c : public dDlst_base_c {
+};
 
 class dMenu_save_c {
 public:
@@ -27,7 +31,9 @@ public:
     void _delete();
 
 public:
-    /* 0x0004 */ u8 field_0x0004[0x52c];
+    /* 0x0004 */ u8 field_0x0004;
+    /* 0x0008 */ dDlst_MenuSave_c mDlst;
+    /* 0x000C */ u8 field_0x000c[0x0524];
     /* 0x0530 */ u8 field_0x0530;
     /* 0x0531 */ u8 field_0x0531;
     /* 0x0532 */ u8 field_0x0532;
@@ -65,7 +71,7 @@ public:
     BOOL animeClose();
     void setEmitter0(cXyz);
     void setEmitter1(cXyz);
-    void anime1(int);
+    BOOL anime1(int);
     void anime2(int);
     void setRotate(fopMsgM_pane_class*, f32);
 
@@ -73,7 +79,7 @@ public:
 
 public:
     /* 0x004 */ J2DScreen* scrn;
-    /* 0x008 */ fopMsgM_pane_class pane[8];
+    /* 0x008 */ fopMsgM_pane_class letter[8];
     /* 0x1C8 */ u8 field_0x1c8[0x318 - 0x1c8];
     /* 0x318 */ fopMsgM_pane_alpha_class blak;
     /* 0x320 */ JPABaseEmitter* mpEmitter0;
@@ -84,10 +90,8 @@ public:
     /* 0x334 */ u32 field_0x334;
     /* 0x338 */ u32 field_0x338;
     /* 0x33C */ u16 field_0x33c;
-    /* 0x33E */ u16 field_0x33e;
-    /* 0x340 */ u32 field_0x340;
-    /* 0x344 */ u32 field_0x344;
-    /* 0x348 */ u8 field_0x348[0x410 - 0x348];
+    /* 0x33E */ s16 mRotate[8];
+    /* 0x34E */ u8 field_0x34e[0x410 - 0x34E];
 };
 
 class dGameover_c : public msg_class {
@@ -166,7 +170,6 @@ void dDlst_Gameover_CAPTURE_c::draw() {
 
 /* 8018E4B4-8018E77C       .text _create__11dGameover_cFv */
 s32 dGameover_c::_create() {
-    /* Nonmatching */
     s32 rt = dComIfG_resLoad(&mPhs, "Gover");
     if (dMenu_flag() || (dComIfGp_getHeapLockFlag() != 0 && dComIfGp_getHeapLockFlag() != 4) || g_dComIfG_gameInfo.play.field_0x492a != 0)
         return cPhs_INIT_e;
@@ -192,13 +195,14 @@ s32 dGameover_c::_create() {
         JUT_ASSERT(0xbb, dgo_capture_c != 0);
 
         mDoExt_setCurrentHeap(oldHeap);
-        field_0x114 = 90;
-        field_0x116 = 0;
-        field_0x119 = 0;
-        rt = cPhs_COMPLEATE_e;
+    } else {
+        return rt;
     }
 
-    return rt;
+    field_0x114 = 90;
+    field_0x116 = g_menuHIO.field_0xb6;
+    field_0x119 = 0;
+    return cPhs_COMPLEATE_e;
 }
 
 /* 8018E77C-8018E9D4       .text _execute__11dGameover_cFv */
@@ -308,7 +312,7 @@ void dDlst_GameOverScrnDraw_c::setScreen(const char* filename, JKRArchive* arc) 
     };
 
     for (s32 i = 0; i < dGover_tex_number; i++)
-        fopMsgM_setPaneData(&pane[i], scrn->search(labelt[i]));
+        fopMsgM_setPaneData(&letter[i], scrn->search(labelt[i]));
     fopMsgM_setPaneData(&blak, scrn->search('blak'));
     blak.mInitAlpha = 0xFF;
 }
@@ -318,7 +322,7 @@ void dDlst_GameOverScrnDraw_c::valueInit() {
     field_0x32c = dGover_tex_number;
     field_0x330 = 0;
     for (s32 i = 0; i < dGover_tex_number; i++)
-        pane[i].mUserArea = 0;
+        letter[i].mUserArea = 0;
 }
 
 /* 8018ECD8-8018EEC8       .text animeOpen__24dDlst_GameOverScrnDraw_cFv */
@@ -342,8 +346,33 @@ void dDlst_GameOverScrnDraw_c::setEmitter1(cXyz pos) {
 }
 
 /* 8018F13C-8018F334       .text anime1__24dDlst_GameOverScrnDraw_cFi */
-void dDlst_GameOverScrnDraw_c::anime1(int) {
+BOOL dDlst_GameOverScrnDraw_c::anime1(int idx) {
     /* Nonmatching */
+    BOOL ret = FALSE;
+
+    if (letter[idx].mUserArea < 5) {
+        if (letter[idx].mUserArea == 0)
+            fopMsgM_setInitAlpha(&letter[idx]);
+
+        letter[idx].mUserArea++;
+        f32 y = letter[idx].mUserArea;
+        fopMsgM_paneTrans(&letter[idx], 0.0f, (1.0f - (y * y) / 25.0f) * -288.0f);
+    } else if (letter[idx].mUserArea < 7) {
+        letter[idx].mUserArea++;
+        f32 y = letter[idx].mUserArea - 5;
+        fopMsgM_paneTrans(&letter[idx], 0.0f, ((y * y) / 4.0f) * -9.0f);
+    } else if (letter[idx].mUserArea < 9) {
+        letter[idx].mUserArea++;
+        f32 y = letter[idx].mUserArea - 7;
+        fopMsgM_paneTrans(&letter[idx], 0.0f, (1.0f - (y * y) / 4.0f) * -9.0f);
+        if (letter[idx].mUserArea == 9)
+            mDoAud_seStart(JA_SE_EXIT_GAME_OVER);
+    }
+
+    if (letter[idx].mUserArea == 9)
+        ret = TRUE;
+
+    return ret;
 }
 
 /* 8018F334-8018F4A8       .text anime2__24dDlst_GameOverScrnDraw_cFi */
@@ -364,7 +393,7 @@ void dDlst_GameOverScrnDraw_c::setRotate(fopMsgM_pane_class* pane, f32 angle) {
 /* 8018F548-8018F5EC       .text draw__24dDlst_GameOverScrnDraw_cFv */
 void dDlst_GameOverScrnDraw_c::draw() {
     for (s32 i = 0; i < dGover_tex_number; i++)
-        fopMsgM_setAlpha(&pane[i]);
+        fopMsgM_setAlpha(&letter[i]);
     fopMsgM_setNowAlpha(&blak, mAlpha);
     fopMsgM_setAlpha(&blak);
 
@@ -397,3 +426,25 @@ BOOL dGameover_Delete(dGameover_c* i_this) {
 s32 dGameover_Create(msg_class* i_this) {
     return ((dGameover_c*)i_this)->_create();
 }
+
+msg_method_class l_dGameover_Method = {
+    (process_method_func)dGameover_Create,
+    (process_method_func)dGameover_Delete,
+    (process_method_func)dGameover_Execute,
+    (process_method_func)dGameover_IsDelete,
+    (process_method_func)dGameover_Draw,
+};
+
+msg_process_profile_definition g_profile_GAMEOVER = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 12,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_GAMEOVER,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(dGameover_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopMsg_Method,
+    /* Priority     */ 0x01DE,
+    /* Msg SubMtd   */ &l_dGameover_Method,
+};

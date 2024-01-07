@@ -96,6 +96,7 @@ void fopMsgM_setNowAlphaZero(fopMsgM_pane_class*);
 void fopMsgM_setAlpha(fopMsgM_pane_class*);
 void fopMsgM_paneScaleXY(fopMsgM_pane_class*, f32);
 void fopMsgM_cposMove(fopMsgM_pane_class*);
+void fopMsgM_paneTrans(fopMsgM_pane_class*, f32, f32);
 
 void fopMsgM_setPaneData(fopMsgM_pane_alpha_class*, J2DPane*);
 void fopMsgM_setPaneData(fopMsgM_pane_alpha_class*, J2DScreen*, u32);

@@ -533,4 +533,6 @@ public:
 u8 dMenu_flag();
 void dMenu_flagSet(u8);
 
+extern dMeter_menuHIO_c g_menuHIO;
+
 #endif /* D_METER_H */
