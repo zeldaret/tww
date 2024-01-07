@@ -68,8 +68,8 @@ public:
     virtual J2DPane* search(u32 tag);
     virtual void makeMatrix(f32 x, f32 y);
 
-    f32 getWidth() const { return mBounds.getWidth(); }
-    f32 getHeight() const { return mBounds.getHeight(); }
+    f32 getWidth() { return mBounds.getWidth(); }
+    f32 getHeight() { return mBounds.getHeight(); }
     JSUTree<J2DPane>* getFirstChild() { return mPaneTree.getFirstChild(); }
     JSUTree<J2DPane>* getEndChild() { return mPaneTree.getEndChild(); }
     const JSUTree<J2DPane>* getPaneTree() { return &mPaneTree; }
@@ -78,6 +78,15 @@ public:
     bool isConnectParent() const { return mIsConnectParent; }
     void show() { mVisible = true; }
     void hide() { mVisible = false; }
+
+    void getBounds() {}
+    void getGlbBounds() {}
+    void getRotate() const {}
+    void isVisible() {}
+    void place(const JGeometry::TBox2<f32>&) {}
+    void rotate(f32) {}
+    void rotate(f32, f32, J2DRotateAxis, f32) {}
+    void setInfluencedAlpha(bool) {}
 
 public:
     /* 0x04 */ u32 mMagic;

@@ -13,7 +13,6 @@
 
 /* 802D12E0-802D1820       .text __ct__9J2DWindowFP7J2DPaneP20JSURandomInputStream */
 J2DWindow::J2DWindow(J2DPane* param_0, JSURandomInputStream* param_1) : mpFrameTexture1(NULL), mpFrameTexture2(NULL), mpFrameTexture3(NULL), mpFrameTexture4(NULL), mpContentsTexture(NULL), mpPalette(NULL) {
-    /* Nonmatching */
     s32 local_188 = param_1->getPosition();
     u32 header[2];
     param_1->read(header, 8);
@@ -112,7 +111,6 @@ J2DWindow::~J2DWindow() {
 
 /* 802D1B44-802D1F5C       .text draw_private__9J2DWindowFRCQ29JGeometry8TBox2<f>RCQ29JGeometry8TBox2<f> */
 void J2DWindow::draw_private(const JGeometry::TBox2<f32>& frameBox, const JGeometry::TBox2<f32>& contentsBox) {
-    /* Nonmatching */
     drawContents(contentsBox);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -121,28 +119,31 @@ void J2DWindow::draw_private(const JGeometry::TBox2<f32>& frameBox, const JGeome
     GXSetNumTexGens(1);
 
     if (mpFrameTexture1 != NULL && mpFrameTexture2 != NULL && mpFrameTexture3 != NULL && mpFrameTexture4 != NULL) {
+        f32 x = 0.0f;
+        f32 y = 0.0f;
         f32 right = frameBox.getWidth() - mpFrameTexture4->getWidth();
         f32 top = frameBox.getHeight() - mpFrameTexture4->getHeight();
-        // This isn't right, this should be 0.0f +
-        f32 left = 1.0f + mpFrameTexture1->getWidth();
-        f32 bottom = 1.0f + mpFrameTexture1->getHeight();
+        f32 left = x + mpFrameTexture1->getWidth();
+        f32 bottom = y + mpFrameTexture1->getHeight();
         u16 s0, s1, t0, t1;
 
-        drawFrameTexture(mpFrameTexture1, 0.0f, 0.0f,
+        drawFrameTexture(mpFrameTexture1, x, y,
             (field_0x110 >> 7) & 1,
             (field_0x110 >> 6) & 1, true);
+        bool r7 = (field_0x111 & 1) ? true : false;
         drawFrameTexture(mpFrameTexture2, right, 0.0f,
             (field_0x110 >> 5) & 1,
-            (field_0x110 >> 4) & 1, (field_0x111 >> 0) & 1);
+            (field_0x110 >> 4) & 1, r7);
 
         s0 = ((field_0x110 >> 5) & 1) ? (u16)0x8000 : (u16)0;
-        t0 = ((field_0x110 >> 4) & 1) ? (u16)0x8000 : (u16)0;
+        t0 = ((field_0x110 >> 4) & 1) ? (u16)0 : (u16)0x8000;
         t1 = (u16)(t0 ^ 0x8000);
         drawFrameTexture(mpFrameTexture2, left, 0.0f, right - left, (f32)mpFrameTexture2->getHeight(), s0, t0, s0, t1, false);
 
+        r7 = (field_0x111 & 2) ? true : false;
         drawFrameTexture(mpFrameTexture4, right, top,
             (field_0x110 >> 1) & 1,
-            (field_0x110 >> 0) & 1, (field_0x111 & 2));
+            (field_0x110 >> 0) & 1, r7);
 
         s0 = ((field_0x110 >> 1) & 1) ? (u16)0x8000 : (u16)0;
         t0 = ((field_0x110 >> 0) & 1) ? (u16)0 : (u16)0x8000;
@@ -154,9 +155,10 @@ void J2DWindow::draw_private(const JGeometry::TBox2<f32>& frameBox, const JGeome
         t0 = ((field_0x110 >> 0) & 1) ? (u16)0x8000 : (u16)0;
         drawFrameTexture(mpFrameTexture4, right, bottom, (f32)mpFrameTexture4->getWidth(), top - bottom, s0, t0, s1, t0, false);
 
+        r7 = (field_0x111 & 4) ? true : false;
         drawFrameTexture(mpFrameTexture3, 0.0f, top,
             (field_0x110 >> 3) & 1,
-            (field_0x110 >> 2) & 1, (field_0x111 & 4));
+            (field_0x110 >> 2) & 1, r7);
 
         s0 = ((field_0x110 >> 3) & 1) ? (u16)0 : (u16)0x8000;
         s1 = (u16)(s0 ^ 0x8000);
@@ -178,7 +180,7 @@ void J2DWindow::resize(f32 w, f32 h) {
     J2DPane::resize(w, h);
     mWindowBox.f.x += w - oldW;
     mWindowBox.f.y += h - oldH;
-    for (JSUTreeIterator<J2DPane> iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
+    for (JSUTreeIterator<J2DPane> iter(getFirstChild()); iter != getEndChild(); iter++) {
         if (iter->getTypeID() == 0x13 && iter->isConnectParent()) {
             f32 childW = w - oldW + iter->getWidth();
             f32 childH = h - oldH + iter->getHeight();
