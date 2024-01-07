@@ -4,9 +4,16 @@
 //
 
 #include "JSystem/JAudio/JAIBasic.h"
+#include "JSystem/JAudio/JAIBankWave.h"
+#include "JSystem/JAudio/JAIConst.h"
+#include "JSystem/JAudio/JAIDummyObject.h"
+#include "JSystem/JAudio/JAIFx.h"
 #include "JSystem/JAudio/JAIGlobalParameter.h"
 #include "JSystem/JAudio/JAIInitData.h"
+#include "JSystem/JAudio/JAISeMgr.h"
+#include "JSystem/JAudio/JAISequenceHeap.h"
 #include "JSystem/JAudio/JAISequenceMgr.h"
+#include "JSystem/JAudio/JAIStreamMgr.h"
 #include "JSystem/JAudio/JASAudioThread.h"
 #include "JSystem/JAudio/JASDriverIF.h"
 #include "JSystem/JAudio/JASSystemHeap.h"
@@ -33,7 +40,7 @@ JAIBasic::JAIBasic() {
     field_0xe.flag4 = 0;
     field_0xe.flag5 = 0;
     field_0x14 = 0;
-    field_0x4 = NULL;
+    mAudioCamera = NULL;
     field_0x10 = 0;
     initLoadFileSw = 2;
     field_0x1c = 0;
@@ -54,7 +61,26 @@ void JAIBasic::initInterface(u8) {
 
 /* 8028FD04-8028FDC0       .text initInterfaceMain__8JAIBasicFv */
 void JAIBasic::initInterfaceMain() {
-    /* Nonmatching */
+    initHeap();
+    initResourcePath();
+    initArchive();
+    if (initReadFile()) {
+        if (!field_0xe.flag1) {
+            JAInter::BankWave::setWaveScene();
+        }
+        JAInter::DummyObjectMgr::init();
+        JAInter::Fx::init();
+        JAInter::SequenceMgr::init();
+        JAInter::SeMgr::init();
+        JAInter::StreamMgr::init();
+        JAInter::HeapMgr::init(JAIGlobalParameter::stayHeapMax, JAIGlobalParameter::stayHeapSize, JAIGlobalParameter::autoHeapMax, JAIGlobalParameter::autoHeapRoomSize);
+        initCamera();
+        initStream();
+        JAInter::SeMgr::startSeSequence();
+        if (!field_0xe.flag1) {
+            JAInter::SequenceMgr::checkEntriedSeq();
+        }
+    }
 }
 
 /* 8028FDC0-8028FE78       .text initHeap__8JAIBasicFv */
@@ -94,13 +120,20 @@ void JAIBasic::initResourcePath() {
 }
 
 /* 8028FFF8-8029002C       .text setCameraInfo__8JAIBasicFP3VecP3VecPA4_fUl */
-void JAIBasic::setCameraInfo(Vec*, Vec*, f32(*)[4], u32) {
-    /* Nonmatching */
+void JAIBasic::setCameraInfo(Vec* param_1, Vec* param_2, MtxP param_3, u32 param_4) {
+    if (JAIGlobalParameter::audioCameraMax <= param_4) {
+        return;
+    }
+    mAudioCamera[param_4].field_0x0 = param_1;
+    mAudioCamera[param_4].field_0x4 = param_2;
+    mAudioCamera[param_4].field_0x8 = param_3;
 }
 
 /* 8029002C-80290068       .text initStream__8JAIBasicFv */
 void JAIBasic::initStream() {
-    /* Nonmatching */
+    if (!field_0xe.flag4) {
+        JAInter::StreamLib::init(field_0xe.flag5);
+    }
 }
 
 /* 80290068-80290090       .text setRegisterTrackCallback__8JAIBasicFv */
@@ -123,12 +156,32 @@ void JAIBasic::initAudioThread(JKRSolidHeap* param_1, u32 param_2, u8 param_3) {
 
 /* 8029011C-8029031C       .text initCamera__8JAIBasicFv */
 void JAIBasic::initCamera() {
-    /* Nonmatching */
+    mAudioCamera = new (JAIBasic::getCurrentJAIHeap(), 0x20) JAInter::Camera[JAIGlobalParameter::audioCameraMax];
+    JUT_ASSERT_MSG(291, mAudioCamera, "JAIBasic::initAllocParameter Cannot Alloc Heap!! (mAudioCamera)\n");
+    if (!mAudioCamera->field_0x0) {
+        JAInter::Const::nullCamera.field_0x0->x = 0.0f;
+        JAInter::Const::nullCamera.field_0x0->y = 0.0f;
+        JAInter::Const::nullCamera.field_0x0->z = -50.0f;
+        JAInter::Const::nullCamera.field_0x4->x = 0.0f;
+        JAInter::Const::nullCamera.field_0x4->y = 0.0f;
+        JAInter::Const::nullCamera.field_0x4->z = -50.0f;
+        Vec local_2c;
+        local_2c.x = 0.0f;
+        local_2c.y = 1.0f;
+        local_2c.z = 0.0f;
+        Vec local_38;
+        local_38.x = JAInter::Const::dummyZeroVec.x;
+        local_38.y = JAInter::Const::dummyZeroVec.y;
+        local_38.z = JAInter::Const::dummyZeroVec.z;
+        C_MTXLookAt(JAInter::Const::camMtx, JAInter::Const::nullCamera.field_0x0, &local_2c, &local_38);
+        for (u32 i = 0; i < JAIGlobalParameter::audioCameraMax; i++) {
+            setCameraInfo(JAInter::Const::nullCamera.field_0x0, JAInter::Const::nullCamera.field_0x4, JAInter::Const::camMtx, i);
+        }
+    }
 }
 
 /* 80290330-8029046C       .text initReadFile__8JAIBasicFv */
-bool JAIBasic::initReadFile() {
-    /* Nonmatching */
+BOOL JAIBasic::initReadFile() {
     switch (initLoadFileSw) {
     case 2:
         if (JAIInitData::checkInitDataFile()) {
