@@ -6,6 +6,8 @@
 #include "d/actor/d_a_obj_ice.h"
 #include "dolphin/types.h"
 
+class J3DMaterial;
+
 /* 00000078-000000F0       .text chk_appear__10daObjIce_cFv */
 void daObjIce_c::chk_appear() {
     /* Nonmatching */

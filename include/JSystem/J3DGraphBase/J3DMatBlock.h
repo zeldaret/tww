@@ -624,10 +624,11 @@ struct J3DFog : public J3DFogInfo {
     explicit J3DFog(const J3DFogInfo& info) { J3DFogInfo::operator=(info); }
     J3DFogInfo* getFogInfo() { return (J3DFogInfo*)this; }
 
-    void load() {
+    void load() const {
         J3DGDSetFog(GXFogType(mType), mStartZ, mEndZ, mNearZ, mFarZ, mColor);
         J3DGDSetFogRangeAdj(mAdjEnable, mCenter, (GXFogAdjTable*)mFogAdjTable);
     }
+    void setType(u8 type) { mType = type; }
 };
 
 struct J3DAlphaCompInfo {

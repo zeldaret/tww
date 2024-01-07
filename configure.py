@@ -1218,7 +1218,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_att"),
     ActorRel(NonMatching, "d_a_bflower"),
     ActorRel(NonMatching, "d_a_bita"),
-    ActorRel(NonMatching, "d_a_branch"),
+    ActorRel(Matching,    "d_a_branch"),
     ActorRel(NonMatching, "d_a_bridge"),
     ActorRel(NonMatching, "d_a_coming2"),
     ActorRel(NonMatching, "d_a_coming3"),

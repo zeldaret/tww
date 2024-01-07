@@ -47,6 +47,26 @@ public:
 
     bool checkEnable(u16 mask) { return mFlags & mask; }
     csXyz* getRatate() { return &mRotation; }
+    u32 getShapeId() { return mShapeId; }
+
+    void getAnmFrame() {}
+    void getAnmId() {}
+    void getAnmTransition() {}
+    void getOldAnmId() {}
+    void getOldScrId() {}
+    void getOldTevId() {}
+    void getOldTexId() {}
+    void getPrm() {}
+    void getScale() {}
+    void getTrans() {}
+    void onEnable(u16) {}
+    void setAnmFrameMax(f32) {}
+    void setModel(J3DModel*) {}
+    void setOldAnmId(u32) {}
+    void setOldScrId(u32) {}
+    void setOldTevId(u32) {}
+    void setOldTexId(u32) {}
+    void setTexAnmFrameMax(f32) {}
 
     /* 0x04 */ u16 mFlags;
     /* 0x06 */ u8 field_0x06[0x08 - 0x06];
@@ -54,7 +74,7 @@ public:
     /* 0x14 */ cXyz mScaling;
     /* 0x20 */ csXyz mRotation;
     /* 0x26 */ u8 field_0x26[0x28 - 0x26];
-    /* 0x28 */ u32 mShape;
+    /* 0x28 */ u32 mShapeId;
     /* 0x2C */ u32 mNextBckId;
     /* 0x30 */ f32 mAnimationFrame;
     /* 0x34 */ f32 mAnimationTransition;
