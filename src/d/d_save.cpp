@@ -943,7 +943,7 @@ void dSv_player_info_c::init() {
     strcpy(field_0x25, l_defaultName);
     strcpy(field_0x36, l_defaultName);
 
-    field_0x12 = 0;
+    mDeathCount = 0;
     mClearCount = 0;
 
     for (int i = 0; i < 17; i++) {
