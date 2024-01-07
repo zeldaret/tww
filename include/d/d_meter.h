@@ -2,6 +2,7 @@
 #define D_METER_H
 
 #include "d/d_drawlist.h"
+#include "f_op/f_op_msg_mng.h"
 
 class J2DPane;
 class fopAc_ac_c;
@@ -532,6 +533,21 @@ public:
 
 u8 dMenu_flag();
 void dMenu_flagSet(u8);
+
+class sub_meter_class : public msg_class {
+public:
+    /* 0x00FC */ JKRHeap* heap;
+    /* 0x0100 */ fopMsgM_pane_class field_0x0100[24];
+    /* 0x0640 */ fopMsgM_pane_class field_0x0640[20];
+    /* 0x0AA0 */ fopMsgM_pane_class field_0x0aa0[20];
+    /* 0x0F00 */ fopMsgM_pane_class field_0x0f00;
+    /* 0x0F38 */ fopMsgM_pane_class field_0x0f38[0x20];
+    /* 0x1638 */ fopMsgM_pane_class field_0x1638[0x20];
+    /* 0x1D38 */ fopMsgM_pane_class field_0x1d38[0x20];
+    /* 0x2438 */ fopMsgM_pane_class field_0x2438[0x20];
+    /* 0x2B38 */ fopMsgM_pane_class field_0x2b38[0x0D];
+    /* 0x2E46 */ fopMsgM_pane_class field_0x2e46[4];
+};
 
 extern dMeter_menuHIO_c g_menuHIO;
 

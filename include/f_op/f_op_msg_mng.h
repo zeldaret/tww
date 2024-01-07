@@ -65,6 +65,7 @@ struct fopMsgM_pane_alpha_class {
 typedef int (*fopMsgCreateFunc)(void*);
 
 JKRExpHeap* fopMsgM_createExpHeap(u32, JKRHeap*);
+JKRExpHeap* fopMsgM_createExpHeap(u32);
 u32 fopMsgM_Create(s16, fopMsgCreateFunc, void*);
 s32 fopMsgM_create(s16 param_0, fopAc_ac_c* param_1, cXyz* param_2, u32* param_3, u32* param_4, fopMsgCreateFunc createFunc);
 void fopMsgM_Delete(void* process);

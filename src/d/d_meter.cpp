@@ -5,9 +5,11 @@
 
 #include "d/d_meter.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
+#include "JSystem/JKernel/JKRExpHeap.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
 #include "d/d_metronome.h"
+#include "d/d_procname.h"
 #include "stdio.h"
 
 dMeter_info_c dMeter_Info;
@@ -666,13 +668,45 @@ void dMeter_statusCheck(sub_meter_class*) {
 }
 
 /* 801F01C0-801F0258       .text dMeter_alphaClose__FPsPs */
-void dMeter_alphaClose(s16*, s16*) {
-    /* Nonmatching */
+f32 dMeter_alphaClose(s16* timer, s16* value) {
+    f32 ret;
+    if (*timer == 8) {
+        *timer = 9;
+        ret = 1.0f;
+        *value = 1;
+    } else if (*timer == 9) {
+        if (*value < 6) {
+            ret = 1.0f - fopMsgM_valueIncrease(6, *value, 1);
+            (*value)++;
+        } else {
+            ret = 0.0f;
+            *timer = 0;
+        }
+    } else {
+        ret = 0.0f;
+    }
+    return ret;
 }
 
 /* 801F0258-801F02E8       .text dMeter_alphaOpen__FPsPs */
-void dMeter_alphaOpen(s16*, s16*) {
-    /* Nonmatching */
+f32 dMeter_alphaOpen(s16* timer, s16* value) {
+    f32 ret;
+    if (*timer == 0) {
+        *timer = 7;
+        ret = 0.0f;
+        *value = 0;
+    } else if (*timer == 7) {
+        if (*value < 6) {
+            ret = fopMsgM_valueIncrease(6, *value, 1);
+            (*value)++;
+        } else {
+            ret = 1.0f;
+            *timer = 8;
+        }
+    } else {
+        ret = 1.0f;
+    }
+    return ret;
 }
 
 /* 801F02E8-801F0320       .text dMeter_rupy_num__FPcs */
@@ -897,8 +931,16 @@ void dMeter_heartAlpha(sub_meter_class*) {
 }
 
 /* 801F153C-801F15EC       .text dMeter_heartInit__FP15sub_meter_class */
-void dMeter_heartInit(sub_meter_class*) {
+void dMeter_heartInit(sub_meter_class* i_this) {
     /* Nonmatching */
+    texScaleX = i_this->field_0x0640[0].mSizeOrig.x / 40.0f;
+    texScaleY = i_this->field_0x0640[0].mSizeOrig.y / 32.0f;
+    texRateX = 0.4f;
+    texRateY = 0.5f;
+    i_this->field_0x0f00.mUserArea = 0;
+    i_this->field_0x0f00.mUserArea = 0;
+    fopMsgM_setNowAlphaZero(&i_this->field_0x0f00);
+    dMeter_heartScaleInit(i_this);
 }
 
 /* 801F15EC-801F17F0       .text dMeter_LifeMove__FP15sub_meter_classb */
@@ -936,7 +978,10 @@ void dMeter_heartMove(sub_meter_class* i_this) {
 
 /* 801F1E60-801F1EBC       .text dMeter_heartDraw__FP15sub_meter_class */
 void dMeter_heartDraw(sub_meter_class* i_this) {
-    /* Nonmatching */
+    for (int i = 0; i < 20; i++) {
+        fopMsgM_setAlpha(&i_this->field_0x0640[i]);
+        fopMsgM_setAlpha(&i_this->field_0x0aa0[i]);
+    }
 }
 
 /* 801F1EBC-801F1F8C       .text dMeter_weponInit__FP15sub_meter_class */
@@ -1506,12 +1551,24 @@ void dMeter_swimLightAnime(sub_meter_class*, s16) {
 
 /* 8020238C-8020240C       .text dMeter_placeNameMove__Fv */
 void dMeter_placeNameMove() {
-    /* Nonmatching */
+    if (!dMeter_place_name) {
+        if (dComIfGp_checkStageName() == 2) {
+            fopMsgM_create(PROC_PLACE_NAME, NULL, NULL, NULL, NULL, NULL);
+            dMeter_place_name = true;
+        }
+    } else {
+        if (dComIfGp_checkStageName() == 0) {
+            dMeter_place_name = false;
+        }
+    }
 }
 
 /* 8020240C-80202438       .text dMeter_arrowInit__FP15sub_meter_class */
-void dMeter_arrowInit(sub_meter_class*) {
+void dMeter_arrowInit(sub_meter_class* i_this) {
     /* Nonmatching */
+    for (int i = 0; i < 4; i++)
+        i_this->field_0x2e46[i].mUserArea = 0;
+    // i_this->field_0x3025 = 0;
 }
 
 /* 80202438-80202580       .text dMeter_arrowCheckStatus__FP15sub_meter_class */
@@ -1582,6 +1639,49 @@ BOOL dMeter_Delete(sub_meter_class* i_this) {
 /* 80205034-802057B8       .text dMeter_Create__FP9msg_class */
 s32 dMeter_Create(msg_class* i_this) {
     /* Nonmatching */
+    mapAlpha = 0;
+    menu_status = 0;
+    menu_status_old = 0;
+    dMenu_pause = 0;
+    dMenu_frame_timer = 0;
+    dMenu_menuButton = 0;
+    subWinFlag = 0;
+    dMeter_auctionFlag = 0;
+    dMeter_itemMoveFlag = 0;
+    dMeter_btn_chk = 0;
+    dMeter_itemNum = 0;
+    dMeter_itemTimer = 0;
+    texRateX = 0.0f;
+    texRateY = 0.0f;
+    texScaleX = 0.0f;
+    texScaleY = 0.0f;
+    dMenu_menuFlag = 0;
+    dMeter_place_name = 0;
+    dMeter_itemMode = 0;
+    dMeter_collectMode = 0;
+    rupy_soundSetFlag = 0;
+    rupy_soundOnFlag = 0;
+
+    sub_meter_class* i_Meter = (sub_meter_class*)i_this;
+    i_Meter->heap = fopMsgM_createExpHeap(0x2a819);
+    JUT_ASSERT(0x34a3, i_Meter->heap != 0);
+
+    mDoExt_setCurrentHeap(i_Meter->heap);
+    sMainParts1 = new J2DScreen();
+    JUT_ASSERT(0x34a8, sMainParts1 != 0);
+    sMainParts1->set("main_parts1.blo", dComIfGp_getMenuArchive());
+
+    sMainParts2 = new J2DScreen();
+    JUT_ASSERT(0x34ac, sMainParts2 != 0);
+    sMainParts2->set("main_parts2.blo", dComIfGp_getMenuArchive());
+
+    sMainParts3 = new J2DScreen();
+    JUT_ASSERT(0x34ac, sMainParts3 != 0);
+    sMainParts3->set("main_parts3.blo", dComIfGp_getMenuArchive());
+
+    sChoiceRoad = new J2DScreen();
+    JUT_ASSERT(0x34ac, sChoiceRoad != 0);
+    sChoiceRoad->set("choice_road.blo", dComIfGp_getMenuArchive());
 }
 
 /* 802057B8-80205814       .text __dt__16dDlst_2DMETER2_cFv */
