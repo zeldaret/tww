@@ -15,6 +15,8 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_printf.h"
 
+u8 dummy_3569[0xC];
+
 JAIZelInst mDoAud_zelAudio_c::mTact;
 mDoAud_zelAudio_c g_mDoAud_zelAudio;
 
@@ -49,10 +51,9 @@ JKRExpHeap* mDoAud_audioStreamHeap;
 
 /* 80006DD4-80006F88       .text mDoAud_allocStreamBuffer__Fv */
 void mDoAud_allocStreamBuffer() {
-    /* Nonmatching */
     JUT_ASSERT(98, mDoAud_StreamBufferPointer == 0);
     u32 var1 = mDoAud_StreamBufferBlocks;
-    s32 size;
+    u32 size;
     while (true) {
         JAIGlobalParameter::setParamStreamDecodedBufferBlocks(var1);
         size = JAInter::StreamLib::getNeedBufferSize();

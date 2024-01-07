@@ -163,7 +163,7 @@ bool JAInter::StreamLib::deallocBuffer() {
 }
 
 /* 8029CC50-8029CCA4       .text getNeedBufferSize__Q27JAInter9StreamLibFv */
-int JAInter::StreamLib::getNeedBufferSize() {
+u32 JAInter::StreamLib::getNeedBufferSize() {
     /* Nonmatching */
 }
 

@@ -42,7 +42,7 @@ namespace JAInter {
         void init(bool);
         void allocBuffer(void*, s32);
         bool deallocBuffer();
-        int getNeedBufferSize();
+        u32 getNeedBufferSize();
         void setAllocBufferCallback(void (*)(void));
         void setDeallocBufferCallback(void (*)(void));
         void sync(s32);
