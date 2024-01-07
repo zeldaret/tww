@@ -182,7 +182,7 @@ void dEvDtStaff_c::init() {
     m45 = 0;
     m44 = 0;
     mAdvance = 2;
-    mbNeedsAction = false;
+    mbHasAction = false;
     mCurActionIdx = -1;
     if (mStaffType == CAMERA_e)
         dComIfGp_getPEvtManager()->setCameraPlay(1);
@@ -196,7 +196,7 @@ void dEvDtStaff_c::advanceCut(int cutIdx) {
     m45 = 0;
     m44 = 0;
     mAdvance = 1;
-    mbNeedsAction = false;
+    mbHasAction = false;
     mCurActionIdx = -1;
 }
 

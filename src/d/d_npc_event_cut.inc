@@ -4,6 +4,7 @@
 
 #include "d/d_npc.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_event_manager.h"
 
 bool dNpc_EventCut_c::cutProc() {
     static char* action_table[] = {
@@ -171,7 +172,7 @@ void dNpc_EventCut_c::cutTurnToActorProc() {
         fopAcM_Search((fopAcIt_JudgeFunc)&findActorCallBack, this);
     }
     else {
-        if(mpActorName == 0 || dEvmng_strcmp(mpActorName, "Player") == 0) {
+        if(mpActorName == 0 || strcmp(mpActorName, "Player") == 0) {
             mpTargetActor = dComIfGp_getPlayer(0);
         }
         else {
@@ -199,7 +200,7 @@ void dNpc_EventCut_c::cutTurnToActorProc() {
     if(mpTargetActor == 0) {
         dComIfGp_evmng_cutEnd(mEvtStaffId);
     }
-    if(mpActorName == 0 || dEvmng_strcmp(mpActorName, "Player") == 0) {
+    if(mpActorName == 0 || strcmp(mpActorName, "Player") == 0) {
         mPos = dNpc_playerEyePos(0.0f) + mOffsetPos;
     }
     else {
@@ -298,7 +299,7 @@ void dNpc_EventCut_c::cutMoveToActorProc() {
         fopAcM_Search((fopAcIt_JudgeFunc)&findActorCallBack, this);
     }
     else {
-        if(mpActorName == 0 || dEvmng_strcmp(mpActorName, "Player") == 0) {
+        if(mpActorName == 0 || strcmp(mpActorName, "Player") == 0) {
             mpTargetActor = dComIfGp_getPlayer(0);
         }
         else {

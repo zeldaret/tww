@@ -43,11 +43,10 @@ void daTag_Gship_c::modeClearEventInit() {
 void daTag_Gship_c::modeClearEvent() {
     if(mEvtInfo.checkCommandDemoAccrpt()) {
         int staffIdx = dComIfGp_evmng_getMyStaffId("PScnChg");
-        if(dEvmng_strcmp(dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx), "WARAIGOE") == 0) {
+        if(strcmp(dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx), "WARAIGOE") == 0) {
             if(dComIfGs_getEventReg(0x8803) == 3) {
                 mDoAud_seStart(JA_SE_CV_G_SHIP_SCREAM);
-            }
-            else {
+            } else {
                 mDoAud_seStart(JA_SE_CV_G_SHIP_LAUGH);
             }
 

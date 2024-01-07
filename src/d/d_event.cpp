@@ -11,20 +11,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "f_pc/f_pc_manager.h"
 
-enum {
-    dEvtFlag_NOPARTNER_e = 0x01,
-    dEvtFlag_STAFF_ALL_e = 0x02,
-    dEvtFlag_TALK_e = 0x04,
-    dEvtFlag_UNK8_e = 0x08,
-};
-
-enum {
-    dEvtMode_NONE_e,
-    dEvtMode_TALK_e,
-    dEvtMode_DEMO_e,
-    dEvtMode_COMPULSORY_e,
-};
-
 /* 8006FE04-8006FE54       .text __ct__14dEvt_control_cFv */
 dEvt_control_c::dEvt_control_c() {
     remove();

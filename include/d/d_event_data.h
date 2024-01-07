@@ -77,7 +77,8 @@ public:
     const char* getName() { return mName; }
     u32 getStartCut() { return mFirstCutIdx; }
     u32 getCurrentCut() { return mCurCutIdx; }
-    u32 getType() { return mStaffType; }
+    s32 getType() { return mStaffType; }
+    s32 getTagID() { return mTagID; }
 
     enum StaffType_e {
         NORMAL_e,
@@ -97,7 +98,7 @@ public:
 
 public:
     /* 0x00 */ char mName[32];
-    /* 0x20 */ int mSub;
+    /* 0x20 */ int mTagID;
     /* 0x24 */ int mStaffIdx;
     /* 0x28 */ int m28;
     /* 0x2C */ int mStaffType;
@@ -110,7 +111,7 @@ public:
     /* 0x44 */ u8 m44;
     /* 0x45 */ u8 m45;
     /* 0x46 */ u8 mAdvance;
-    /* 0x47 */ u8 mbNeedsAction;
+    /* 0x47 */ u8 mbHasAction;
     /* 0x48 */ u8 field_48[0x50 - 0x48];
 };  // Size: 0x50
 

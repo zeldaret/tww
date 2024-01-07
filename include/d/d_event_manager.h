@@ -88,8 +88,4 @@ public:
     /* 0x0C */ u16 mCastInFlag;
 };
 
-inline int dEvmng_strcmp(const char* s1, const char* s2) {
-    return strcmp(s1, s2);
-}
-
 #endif /* D_EVENT_D_EVENT_MANAGER_H */

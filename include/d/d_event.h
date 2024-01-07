@@ -22,6 +22,19 @@ enum dEvtType_e {
 };
 
 enum {
+    dEvtMode_NONE_e,
+    dEvtMode_TALK_e,
+    dEvtMode_DEMO_e,
+    dEvtMode_COMPULSORY_e,
+};
+
+enum {
+    dEvtFlag_NOPARTNER_e = 0x01,
+    dEvtFlag_STAFF_ALL_e = 0x02,
+    dEvtFlag_TALK_e = 0x04,
+    dEvtFlag_UNK8_e = 0x08,
+};
+enum {
     dEvtMove_NOMOVE_e,
     dEvtMove_MOVE_e,
     dEvtMove_FORCE_e,
@@ -90,6 +103,8 @@ public:
     void setGtItm(u8 itemNo) { mGetItemNo = itemNo; }
     u8 getGtItm() { return mGetItemNo; }
     void setPtT(void* i_actor) { mPtTalk = getPId(i_actor); }
+    void setPt1(void* i_actor) { mPt1 = getPId(i_actor); }
+    void setPt2(void* i_actor) { mPt2 = getPId(i_actor); }
     u8 getPreItemNo() { return mItemNo; }
     
     f32 getCullRate() { return mCullFarClipRatio; }
