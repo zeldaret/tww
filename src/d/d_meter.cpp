@@ -511,12 +511,12 @@ dMeter_message_HIO_c::dMeter_message_HIO_c() {
 
 /* 801EF924-801EF938       .text dMeter_mtrShow__Fv */
 void dMeter_mtrShow() {
-    /* Nonmatching */
+    dComIfGp_2dShowOn();
 }
 
 /* 801EF938-801EF94C       .text dMeter_mtrHide__Fv */
 void dMeter_mtrHide() {
-    /* Nonmatching */
+    dComIfGp_2dShowOff();
 }
 
 /* 801EF94C-801EF954       .text dMenu_setMenuStatus__FUc */
@@ -584,9 +584,20 @@ void dMeter_offAuctionFlag() {
     dMeter_auctionFlag = false;
 }
 
+fopMsgM_pane_class item_parts;
+
 /* 801EF9C4-801EFA38       .text dMeter_itemMoveSet__FP18fopMsgM_pane_classUcUc */
-void dMeter_itemMoveSet(fopMsgM_pane_class*, u8, u8) {
-    /* Nonmatching */
+void dMeter_itemMoveSet(fopMsgM_pane_class* pane, u8 btn, u8 item) {
+    dMeter_itemMoveFlag = 1;
+    dMeter_btn_chk = btn;
+    dMeter_itemNum = item;
+    item_parts.mPosTopLeftOrig = pane->mPosTopLeft;
+    item_parts.mPosTopLeft = item_parts.mPosTopLeftOrig;
+    item_parts.mPosCenterOrig = pane->mPosCenter;
+    item_parts.mPosCenter = item_parts.mPosCenterOrig;
+    item_parts.mSizeOrig = pane->mSizeOrig;
+    item_parts.mSize = pane->mSize;
+    dMeter_itemTimer = 0;
 }
 
 /* 801EFA38-801EFA40       .text dMeter_itemMoveFlagCheck__Fv */
@@ -620,30 +631,28 @@ void dMenu_setPushMenuButton(u8 param_1) {
 }
 
 /* 801EFA68-801EFA78       .text dMeter_PaneHide__FP18fopMsgM_pane_class */
-void dMeter_PaneHide(fopMsgM_pane_class* param_1) {
-    param_1->scrn->hide();
+void dMeter_PaneHide(fopMsgM_pane_class* pane) {
+    pane->pane->hide();
 }
 
 /* 801EFA78-801EFA90       .text dMeter_isBit8__FPUcUc */
-bool dMeter_isBit8(u8* param_1, u8 param_2) {
-    return (param_1[0] & param_2) != 0;
+bool dMeter_isBit8(u8* flag, u8 bit) {
+    return (*flag & bit) != 0;
 }
 
 /* 801EFA90-801EFAA4       .text dMeter_onBit8__FPUcUc */
-void dMeter_onBit8(u8* param_1, u8 param_2) {
-    /* Nonmatching */
-    param_1[0] |= param_2;
+void dMeter_onBit8(u8* flag, u8 bit) {
+    *flag |= bit & 0xFF;
 }
 
 /* 801EFAA4-801EFAB8       .text dMeter_offBit8__FPUcUc */
-void dMeter_offBit8(u8* param_1, u8 param_2) {
-    /* Nonmatching */
-    param_1[0] &= ~param_2;
+void dMeter_offBit8(u8* flag, u8 bit) {
+    *flag &= ~(bit & 0xFF);
 }
 
 /* 801EFAB8-801EFAC8       .text dMeter_PaneShow__FP18fopMsgM_pane_class */
-void dMeter_PaneShow(fopMsgM_pane_class* param_1) {
-    param_1->scrn->show();
+void dMeter_PaneShow(fopMsgM_pane_class* pane) {
+    pane->pane->show();
 }
 
 /* 801EFAC8-801EFC40       .text dMeter_alphaControl__FP15sub_meter_class */
@@ -667,19 +676,16 @@ void dMeter_alphaOpen(s16*, s16*) {
 }
 
 /* 801F02E8-801F0320       .text dMeter_rupy_num__FPcs */
-void dMeter_rupy_num(char* param_1, s16 param_2) {
-    /* Nonmatching */
-    sprintf(param_1, "rupy_num_%02d.bti", param_2);
+void dMeter_rupy_num(char* buf, s16 num) {
+    sprintf(buf, "rupy_num_%02d.bti", num);
 }
 
-struct struct_80360f38 {
-    u8 field_0x0;
-    const char* field_0x4;
-};
-
 /* 801F0320-801F0378       .text dMeter_actionTex__Fs */
-const char* dMeter_actionTex(s16 param_1) {
-    static const struct_80360f38 act[] = {
+const char* dMeter_actionTex(s16 id) {
+    static const struct {
+        u8 id;
+        const char* filename;
+    } act[] = {
         0, "ba_shiraberu.bti",
         1, "ba_miru.bti",
         2, "ba_syaberu.bti",
@@ -746,13 +752,13 @@ const char* dMeter_actionTex(s16 param_1) {
     };
     int found = 0;
     for (int i = 0; i < 63; i++) {
-        if (param_1 == act[i].field_0x0) {
+        if (id == act[i].id) {
             found = i;
             break;
         }
 
     }
-    return act[found].field_0x4;
+    return act[found].filename;
 }
 
 /* 801F0378-801F041C       .text dMeter_weponTex__Fv */
@@ -911,12 +917,25 @@ void dMeter_heartColor(sub_meter_class*) {
 }
 
 /* 801F1DB8-801F1E60       .text dMeter_heartMove__FP15sub_meter_class */
-void dMeter_heartMove(sub_meter_class*) {
-    /* Nonmatching */
+void dMeter_heartMove(sub_meter_class* i_this) {
+    static bool flag = 0;
+
+    if (dComIfGp_getMiniGameType() == 6) {
+        dMeter_BattleLifeMove(i_this, flag);
+        flag = true;
+    } else if (flag) {
+        dMeter_heartInit(i_this);
+        flag = false;
+    } else {
+        dMeter_LifeMove(i_this, flag);
+    }
+
+    dMeter_heartColor(i_this);
+    dMeter_heartAlpha(i_this);
 }
 
 /* 801F1E60-801F1EBC       .text dMeter_heartDraw__FP15sub_meter_class */
-void dMeter_heartDraw(sub_meter_class*) {
+void dMeter_heartDraw(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
@@ -1541,27 +1560,27 @@ void dMeter_screenDataArrowSet(sub_meter_class*) {
 }
 
 /* 80204404-80204820       .text dMeter_Draw__FP15sub_meter_class */
-void dMeter_Draw(sub_meter_class*) {
+BOOL dMeter_Draw(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 80204820-80204C20       .text dMeter_Execute__FP15sub_meter_class */
-void dMeter_Execute(sub_meter_class*) {
+BOOL dMeter_Execute(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 80204C20-80204C28       .text dMeter_IsDelete__FP15sub_meter_class */
-void dMeter_IsDelete(sub_meter_class*) {
-    /* Nonmatching */
+BOOL dMeter_IsDelete(sub_meter_class* i_this) {
+    return TRUE;
 }
 
 /* 80204C28-80205034       .text dMeter_Delete__FP15sub_meter_class */
-void dMeter_Delete(sub_meter_class*) {
+BOOL dMeter_Delete(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 80205034-802057B8       .text dMeter_Create__FP9msg_class */
-void dMeter_Create(msg_class*) {
+s32 dMeter_Create(msg_class* i_this) {
     /* Nonmatching */
 }
 

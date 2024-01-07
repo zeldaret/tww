@@ -166,7 +166,7 @@ void dComIfG_play_c::itemInit() {
 
     field_0x4977 = 0;
     field_0x4978 = 0;
-    field_0x4979 = 0;
+    m2dShow = 0;
     field_0x497a = 0;
     field_0x4963 = dComIfGs_getOptVibration();
     daArrow_c::setKeepType(daArrow_c::TYPE_NORMAL);

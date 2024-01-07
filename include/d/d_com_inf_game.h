@@ -541,6 +541,10 @@ public:
 
     inline u8 getMiniGameType() { return mMiniGameType; }
 
+    inline void show2dOn() { m2dShow = true; }
+    inline void show2dOff() { m2dShow = false; }
+    inline bool show2dCheck() { return m2dShow; }
+
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
     /* 0x3DF8 */ dADM mADM;
@@ -692,7 +696,7 @@ public:
     /* 0x4967 */ u8 field_0x4967[0x4977 - 0x4967];
     /* 0x4977 */ u8 field_0x4977;
     /* 0x4978 */ u8 field_0x4978;
-    /* 0x4979 */ u8 field_0x4979;
+    /* 0x4979 */ u8 m2dShow;
     /* 0x497A */ u8 field_0x497a;
     /* 0x497B */ u8 field_0x497B[0x497C - 0x497B];
     /* 0x497C */ JKRExpHeap* mpExpHeap2D;
@@ -2299,8 +2303,21 @@ inline void dComIfGp_offHeapLockFlag() {
     g_dComIfG_gameInfo.play.offHeapLockFlag();
 }
 
+inline void dComIfGp_2dShowOn() {
+    g_dComIfG_gameInfo.play.show2dOn();
+}
+
+inline void dComIfGp_2dShowOff() {
+    g_dComIfG_gameInfo.play.show2dOff();
+}
+
+inline bool dComIfGp_2dShowCheck() {
+    return g_dComIfG_gameInfo.play.show2dCheck();
+}
+
 /**
- * === EVENT ===*/
+ * === EVENT ===
+ */
 
 inline BOOL dComIfGp_event_runCheck() {
     return g_dComIfG_gameInfo.play.getEvent().runCheck();
