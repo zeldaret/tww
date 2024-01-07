@@ -9,6 +9,7 @@ class JKRSolidHeap;
 
 namespace JAInter {
     class Actor;
+    class Camera;
 }
 
 namespace JASystem {
@@ -34,7 +35,7 @@ public:
     void setCameraInfo(Vec*, Vec*, f32(*)[4], u32);
     void initAudioThread(JKRSolidHeap*, u32, u8);
     void initCamera();
-    bool initReadFile();
+    BOOL initReadFile();
     void processFrameWork();
     void startSoundVec(u32, JAISound**, Vec*, u32, u32, u8);
     void startSoundActor(u32, JAISound**, JAInter::Actor*, u32, u8);
@@ -56,7 +57,7 @@ public:
     bool allocStreamBuffer(void*, s32);
     bool deallocStreamBuffer();
 
-    /* 0x04 */ void* field_0x4;
+    /* 0x04 */ JAInter::Camera* mAudioCamera;
     /* 0x08 */ JKRSolidHeap* field_0x8;
     /* 0x0C */ u8 initLoadFileSw;
     /* 0x0D */ u8 field_0xd;
@@ -73,7 +74,7 @@ public:
     /* 0x10 */ int field_0x10;
     /* 0x14 */ int field_0x14;
     /* 0x18 */ int field_0x18;
-    /* 0x1C */ int field_0x1c;
+    /* 0x1C */ u8** field_0x1c;
 
     static JAIBasic* getInterface() { return msBasic; }
     static JKRSolidHeap* getCurrentJAIHeap() {

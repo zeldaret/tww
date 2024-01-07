@@ -38,7 +38,7 @@ namespace JAIGlobalParameter {
     void setParamAudioCameraMax(u32);
     void setParamSystemTrackMax(s32);
     void setParamSoundOutputMode(u32);
-    int getParamSeCategoryMax();
+    u32 getParamSeCategoryMax();
     u32 getParamSoundSceneMax();
     u32 getParamSeRegistMax();
     u32 getParamSeTrackMax();

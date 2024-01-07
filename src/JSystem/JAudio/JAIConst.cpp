@@ -11,7 +11,16 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
+JAInter::Camera JAInter::Const::nullCamera(&camTrans, &camPreTrans, camMtx);
+JAInter::Actor JAInter::Const::nullActor(NULL, NULL, 0, NULL);
+Mtx JAInter::Const::camMtx;
+Vec JAInter::Const::camTrans;
+Vec JAInter::Const::camPreTrans;
 Vec JAInter::Const::dummyZeroVec = {0.0f, 0.0f, 0.0f};
+u8 JAInter::Const::sCInfos_0[] = {
+    4, 2, 4, 2, 4, 2, 4, 2, 4, 2, 4, 2, 4, 2, 4, 2,
+    4, 2, 4, 2, 4, 2, 4, 2, 4, 2, 4, 2, 4, 2, 4, 2,
+};
 JMath::TRandom_fast_ JAInter::Const::random(0);
 
 /* 80291704-802917D8       .text transInitDataFile__7JAInterFPUcUl */
@@ -47,6 +56,17 @@ void JAInter::deleteTmpDVDFile(u8** tmpPointer) {
 }
 
 /* 802918FC-8029193C       .text routeToTrack__7JAInterFUl */
-u32 JAInter::routeToTrack(u32) {
-    /* Nonmatching */
+u32 JAInter::routeToTrack(u32 param_1) {
+    u32 r4;
+    u32 r5 = 0;
+    r4 = param_1 & 0xF0000000;
+    if (r4 == 0) {
+        return 0;
+    }
+    if (r4 == 0x10000000) {
+        r5 = 0x0F;
+    } else if (r4 == 0x20000000) {
+        r5 = 0xFF;
+    }
+    return param_1 & r5;
 }

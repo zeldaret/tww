@@ -4,26 +4,116 @@
 //
 
 #include "JSystem/JAudio/JAISeMgr.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JAIBasic.h"
+#include "JSystem/JAudio/JAIConst.h"
+#include "JSystem/JAudio/JAIGlobalParameter.h"
+#include "JSystem/JAudio/JAISequenceMgr.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+
+namespace JAISeMgr = JAInter::SeMgr;
+
+JAInter::SeMgr::seTrackUpdate_s* JAInter::SeMgr::seTrackUpdate;
+u8** JAInter::SeMgr::categoryInfoTable;
+u32** JAInter::SeMgr::sePlaySound;
+JAInter::SeParameter* JAInter::SeMgr::seParameterFreeStartPointer;
+JAInter::SeParameter* JAInter::SeMgr::seParameterUsedEndPointer;
+JAInter::LinkSound* JAInter::SeMgr::seRegist;
+JAISound** JAInter::SeMgr::seRegistBuffer;
+JAISound* JAInter::SeMgr::seHandle;
+u8 JAInter::SeMgr::seScene;
+int JAInter::SeMgr::seqMuteFlagFromSe;
+f32* JAInter::SeMgr::seCategoryVolume;
+u8* JAInter::SeMgr::seEntryCancel;
 
 /* 8029285C-80293370       .text init__Q27JAInter5SeMgrFv */
 void JAInter::SeMgr::init() {
     /* Nonmatching */
+    if (JAIBasic::getInterface()->field_0x1c) {
+        JAIGlobalParameter::setParamSeTrackMax(0);
+        for (int i = 0; i < JAIGlobalParameter::getParamSoundSceneMax(); i++) {
+            int r31 = 0;
+            for (int j = 0; j < JAIGlobalParameter::getParamSeCategoryMax(); j++) {
+                r31 += JAIBasic::getInterface()->field_0x1c[i][j];
+            }
+            if (JAIGlobalParameter::getParamSeTrackMax() < r31) {
+                JAIGlobalParameter::setParamSeTrackMax(r31);
+            }
+        }
+    }
+    seRegist = new (JAIBasic::getCurrentJAIHeap(), 0x20) LinkSound[JAIGlobalParameter::getParamSeCategoryMax()];
+    JUT_ASSERT_MSG(63, seRegist, "JAIData::initHeap Cannot Alloc Heap!!\n");
+    sePlaySound = new (JAIBasic::getCurrentJAIHeap(), 0x20) u32*[JAIGlobalParameter::getParamSeCategoryMax()];
+    JUT_ASSERT_MSG(65, sePlaySound, "JAIData::initHeap Cannot Alloc Heap!!\n");
+    seRegistBuffer = new (JAIBasic::getCurrentJAIHeap(), 0x20) JAISound*[JAIGlobalParameter::getParamSeCategoryMax()];
+    JUT_ASSERT_MSG(67, seRegistBuffer, "JAIData::initHeap Cannot Alloc Heap!!\n");
+    for (int i = 0; i < JAIGlobalParameter::getParamSeCategoryMax(); i++) {
+        seRegistBuffer[i] = JAIBasic::getInterface()->makeSound(JAIGlobalParameter::getParamSeRegistMax());
+        JUT_ASSERT_MSG(72, seRegistBuffer[i], "JAIData::initHeap Cannot Alloc Heap!!\n");
+        seRegist[i].init(seRegistBuffer[i], JAIGlobalParameter::getParamSeRegistMax());
+        sePlaySound[i] = new (JAIBasic::getCurrentJAIHeap(), 0x20) u32[0x10];
+        JUT_ASSERT_MSG(78, sePlaySound[i], "JAIData::initHeap Cannot Alloc Heap!!\n");
+        for (int j = 0; j < 16; j++) {
+            sePlaySound[i][j] = 0;
+        }
+    }
+    seTrackUpdate = new (JAIBasic::getCurrentJAIHeap(), 0x20) seTrackUpdate_s[JAIGlobalParameter::getParamSeTrackMax()];
+    JUT_ASSERT_MSG(86, seTrackUpdate, "JAIData::initHeap Cannot Alloc Heap!!\n");
+    for (int i = 0; i < JAIGlobalParameter::getParamSeTrackMax(); i++) {
+        seTrackUpdate_s* tmp = &seTrackUpdate[i];
+        tmp->field_0x4 = 1.0f;
+        tmp->field_0x8 = 1.0f;
+        tmp->field_0xc = 0.0f;
+        tmp->field_0x10 = 0.5f;
+        tmp->field_0x0 = 0xff;
+        tmp->field_0x14 = 0.0f;
+    }
+    SeParameter* parameterObject = new (JAIBasic::getCurrentJAIHeap(), 0x20) SeParameter[JAIGlobalParameter::getParamSeCategoryMax() * JAIGlobalParameter::getParamSeRegistMax()];
+    JUT_ASSERT_MSG(99, parameterObject, "JAIData::initHeap Cannot Alloc Heap!!\n");
+    seParameterFreeStartPointer = parameterObject;
+    seParameterUsedEndPointer = NULL;
+    parameterObject[0].field_0x43c = NULL;
+    parameterObject[0].field_0x440 = parameterObject + 1;
+    int r27;
+    for (r27 = 1; r27 < JAIGlobalParameter::getParamSeCategoryMax() * JAIGlobalParameter::getParamSeRegistMax() - 1; r27++) {
+        parameterObject[r27].field_0x43c = parameterObject + (r27 - 1);
+        parameterObject[r27].field_0x440 = parameterObject + (r27 + 1);
+    }
+    parameterObject[r27].field_0x43c = parameterObject + (r27 - 1);
+    parameterObject[r27].field_0x440 = NULL;
+    if (JAIBasic::getInterface()->field_0x1c) {
+        categoryInfoTable = JAIBasic::getInterface()->field_0x1c;
+    } else {
+        categoryInfoTable = new (JAIBasic::getCurrentJAIHeap(), 0x20) u8*[JAIGlobalParameter::getParamSoundSceneMax()];
+        JUT_ASSERT_MSG(124, categoryInfoTable, "JAIData::initHeap Cannot Alloc Heap!!\n");
+        for (int i = 0; i < JAIGlobalParameter::getParamSoundSceneMax(); i++) {
+            categoryInfoTable[i] = Const::sCInfos_0;
+        }
+    }
+    seEntryCancel = new (JAIBasic::getCurrentJAIHeap(), 0x20) u8[JAIGlobalParameter::getParamSeCategoryMax()];
+    JUT_ASSERT_MSG(132, seEntryCancel, "JAIBasic::initAllocParameter Cannot Alloc Heap!! (seEntryCancel)\n");
+    seCategoryVolume = new (JAIBasic::getCurrentJAIHeap(), 0x20) f32[JAIGlobalParameter::getParamSeCategoryMax()];
+    JUT_ASSERT_MSG(134, seCategoryVolume, "JAIBasic::initAllocParameter Cannot Alloc Heap!!(seCategoryVolume)\n");
+    for (int i = 0; i < JAIGlobalParameter::getParamSeCategoryMax(); i++) {
+        seEntryCancel[i] = 0;
+        seCategoryVolume[i] = 1.0f;
+    }
 }
 
 /* 80293370-80293460       .text __ct__Q27JAInter11SeParameterFv */
-JAInter::SeParameter::SeParameter() {
-    /* Nonmatching */
-}
+JAInter::SeParameter::SeParameter() {}
 
 /* 80293460-80293508       .text startSeSequence__Q27JAInter5SeMgrFv */
 void JAInter::SeMgr::startSeSequence() {
-    /* Nonmatching */
+    seHandle = NULL;
+    JAIBasic::msBasic->startSoundActor(0x80000800, &seHandle, NULL, 1, 4);
+    JUT_ASSERT_MSG(149, JAISeMgr::seHandle, "SEシーケンスの再生に失敗しました。\n")
 }
 
 /* 80293508-80293530       .text processGFrameSe__Q27JAInter5SeMgrFv */
 void JAInter::SeMgr::processGFrameSe() {
-    /* Nonmatching */
+    checkNextFrameSe();
+    checkPlayingSe();
+    checkSeMovePara();
 }
 
 /* 80293530-80293C94       .text checkNextFrameSe__Q27JAInter5SeMgrFv */
@@ -49,6 +139,20 @@ void JAInter::SeMgr::clearSeqMuteFromSeStop(JAISound*) {
 /* 80294380-802944A0       .text checkSeMovePara__Q27JAInter5SeMgrFv */
 void JAInter::SeMgr::checkSeMovePara() {
     /* Nonmatching */
+    if (seHandle && seHandle->getSeqParameter()->field_0x1261 != 2) {
+        for (u8 i = 0; i < JAIGlobalParameter::getParamSeCategoryMax(); i++) {
+            for (JAISound* sound = seRegist[i].field_0x4; sound; sound = sound->field_0x34) {
+                for (u8 j = 0; j < 8; j++) {
+                    sound->getSeParameter()->field_0x124[j].move();
+                    sound->getSeParameter()->field_0x1a4[j].move();
+                    sound->getSeParameter()->field_0x2a4[j].move();
+                    sound->getSeParameter()->field_0x324[j].move();
+                    sound->getSeParameter()->field_0x3a4[j].move();
+                    sound->getSeParameter()->field_0x224[j].move();
+                }
+            }
+        }
+    }
 }
 
 /* 802944A0-802945FC       .text sendSeAllParameter__Q27JAInter5SeMgrFP8JAISound */
@@ -57,17 +161,17 @@ void JAInter::SeMgr::sendSeAllParameter(JAISound*) {
 }
 
 /* 802945FC-802946F0       .text checkPlayingSeUpdateMultiplication__Q27JAInter5SeMgrFP8JAISoundPQ27JAInter13SeqUpdateDataPfPQ27JAInter11MoveParaSetfUcPf */
-void JAInter::SeMgr::checkPlayingSeUpdateMultiplication(JAISound*, JAInter::SeqUpdateData*, float*, JAInter::MoveParaSet*, float, unsigned char, float*) {
+void JAInter::SeMgr::checkPlayingSeUpdateMultiplication(JAISound*, JAInter::SeqUpdateData*, f32*, JAInter::MoveParaSet*, f32, u8, f32*) {
     /* Nonmatching */
 }
 
 /* 802946F0-8029480C       .text checkPlayingSeUpdateAddition__Q27JAInter5SeMgrFP8JAISoundPQ27JAInter13SeqUpdateDataPfPQ27JAInter11MoveParaSetUcPff */
-void JAInter::SeMgr::checkPlayingSeUpdateAddition(JAISound*, JAInter::SeqUpdateData*, float*, JAInter::MoveParaSet*, unsigned char, float*, float) {
+void JAInter::SeMgr::checkPlayingSeUpdateAddition(JAISound*, JAInter::SeqUpdateData*, f32*, JAInter::MoveParaSet*, u8, f32*, f32) {
     /* Nonmatching */
 }
 
 /* 8029480C-80294814       .text changeIDToCategory__Q27JAInter5SeMgrFUl */
-void JAInter::SeMgr::changeIDToCategory(unsigned long) {
+u8 JAInter::SeMgr::changeIDToCategory(u32) {
     /* Nonmatching */
 }
 
@@ -77,7 +181,7 @@ void JAInter::SeMgr::releaseSeRegist(JAISound*) {
 }
 
 /* 80294938-80294994       .text getSeParametermeterPointer__Q27JAInter5SeMgrFv */
-void JAInter::SeMgr::getSeParametermeterPointer() {
+JAInter::SeParameter* JAInter::SeMgr::getSeParametermeterPointer() {
     /* Nonmatching */
 }
 
@@ -87,26 +191,11 @@ void JAInter::SeMgr::releaseSeParameterPointer(JAInter::SeParameter*) {
 }
 
 /* 80294A10-80294EBC       .text storeSeBuffer__Q27JAInter5SeMgrFPP8JAISoundPQ27JAInter5ActorUlUlUcPv */
-void JAInter::SeMgr::storeSeBuffer(JAISound**, JAInter::Actor*, unsigned long, unsigned long, unsigned char, void*) {
+void JAInter::SeMgr::storeSeBuffer(JAISound**, JAInter::Actor*, u32, u32, u8, void*) {
     /* Nonmatching */
 }
 
 /* 80294EBC-80294F14       .text releaseSeBuffer__Q27JAInter5SeMgrFP8JAISoundUl */
-void JAInter::SeMgr::releaseSeBuffer(JAISound*, unsigned long) {
-    /* Nonmatching */
-}
-
-/* 80294F14-80294F2C       .text __ct__Q27JAInter19MoveParaSetInitZeroFv */
-JAInter::MoveParaSetInitZero::MoveParaSetInitZero() {
-    /* Nonmatching */
-}
-
-/* 80294F2C-80294F44       .text __ct__Q27JAInter19MoveParaSetInitHalfFv */
-JAInter::MoveParaSetInitHalf::MoveParaSetInitHalf() {
-    /* Nonmatching */
-}
-
-/* 80294F44-80294F5C       .text __defctor__Q27JAInter11MoveParaSetFv */
-void JAInter::MoveParaSet::__defctor() {
+void JAInter::SeMgr::releaseSeBuffer(JAISound*, u32) {
     /* Nonmatching */
 }

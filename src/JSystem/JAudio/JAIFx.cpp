@@ -4,54 +4,87 @@
 //
 
 #include "JSystem/JAudio/JAIFx.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JAIBasic.h"
+#include "JSystem/JAudio/JASDSPInterface.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
+
+JAInter::Fx::initOnCodeFxScene_s* JAInter::Fx::initOnCodeFxScene;
+u8 JAInter::Fx::mSceneMax;
+u32* JAInter::Fx::mBufferSizeMax;
+s16** JAInter::Fx::mBufferPointer;
+void** JAInter::Fx::mFxconfigTable;
 
 /* 80291CCC-80292068       .text init__Q27JAInter2FxFv */
 void JAInter::Fx::init() {
     /* Nonmatching */
+    if (initOnCodeFxScene) {
+        mBufferSizeMax = new (JAIBasic::getCurrentJAIHeap(), 4) u32[4];
+        mBufferPointer = new (JAIBasic::getCurrentJAIHeap(), 4) s16*[4];
+        initOnCodeFxScene_s* r31 = initOnCodeFxScene;
+        setSceneMax(r31->field_0x0);
+        setBufferMax(r31->field_0x4, r31->field_0x8, r31->field_0xc, r31->field_0x10);
+        void** _heap = new (JAIBasic::getCurrentJAIHeap(), 0x20) void*[getSceneMax()];
+        JUT_ASSERT_MSG(46, _heap, "JAIFx::initHeap Cannot Alloc Heap!!\n");
+        setTablePointer(_heap);
+        for (u8 i = 0; i < getSceneMax(); i++) {
+            setScenePointer(i, (u8*)initOnCodeFxScene + r31->field_0x14[i]);
+        }
+        for (u8 i = 0; i < 4; i++) {
+            if (getBufferSizeMax(i)) {
+                s16* _buf = new (JAIBasic::getCurrentJAIHeap(), 0x20) s16[ALIGN_PREV(getBufferSizeMax(i) * 160, 2) / 2];
+                JUT_ASSERT_MSG(57, _buf, "JAIFx::initHeap Cannot Alloc Heap!!\n");
+                setBufferPointer(i, _buf);
+                JASystem::DSPInterface::FxlineConfig_* config = &getFxconfigTable()[0][i];
+                JASystem::DSPInterface::getFXHandle(i)->setFXLine(getBufferPointer(i), config);
+            }
+        }
+    }
 }
 
 /* 80292068-80292070       .text setSceneMax__Q27JAInter2FxFUc */
-void JAInter::Fx::setSceneMax(unsigned char) {
-    /* Nonmatching */
+void JAInter::Fx::setSceneMax(u8 param_1) {
+    mSceneMax = param_1;
 }
 
 /* 80292070-80292094       .text setBufferMax__Q27JAInter2FxFUlUlUlUl */
-void JAInter::Fx::setBufferMax(unsigned long, unsigned long, unsigned long, unsigned long) {
-    /* Nonmatching */
+void JAInter::Fx::setBufferMax(u32 param_1, u32 param_2, u32 param_3, u32 param_4) {
+    mBufferSizeMax[0] = param_1;
+    mBufferSizeMax[1] = param_2;
+    mBufferSizeMax[2] = param_3;
+    mBufferSizeMax[3] = param_4;
 }
 
 /* 80292094-8029209C       .text setTablePointer__Q27JAInter2FxFPPv */
-void JAInter::Fx::setTablePointer(void**) {
-    /* Nonmatching */
+void JAInter::Fx::setTablePointer(void** param_1) {
+    mFxconfigTable = param_1;
 }
 
 /* 8029209C-802920AC       .text setBufferPointer__Q27JAInter2FxFUcPs */
-void JAInter::Fx::setBufferPointer(unsigned char, short*) {
-    /* Nonmatching */
+void JAInter::Fx::setBufferPointer(u8 param_1, s16* param_2) {
+    mBufferPointer[param_1] = param_2;
 }
 
 /* 802920AC-802920BC       .text setScenePointer__Q27JAInter2FxFUcPv */
-void JAInter::Fx::setScenePointer(unsigned char, void*) {
-    /* Nonmatching */
+void JAInter::Fx::setScenePointer(u8 param_1, void* param_2) {
+    mFxconfigTable[param_1] = param_2;
 }
 
 /* 802920BC-802920C4       .text getSceneMax__Q27JAInter2FxFv */
-void JAInter::Fx::getSceneMax() {
-    /* Nonmatching */
+u8 JAInter::Fx::getSceneMax() {
+    return mSceneMax;
 }
 
 /* 802920C4-802920D4       .text getBufferSizeMax__Q27JAInter2FxFUc */
-void JAInter::Fx::getBufferSizeMax(unsigned char) {
-    /* Nonmatching */
+u32 JAInter::Fx::getBufferSizeMax(u8 param_1) {
+    return mBufferSizeMax[param_1];
 }
 
 /* 802920D4-802920E4       .text getBufferPointer__Q27JAInter2FxFUc */
-void JAInter::Fx::getBufferPointer(unsigned char) {
-    /* Nonmatching */
+s16* JAInter::Fx::getBufferPointer(u8 param_1) {
+    return mBufferPointer[param_1];
 }
 
 /* 802920E4-802920EC       .text getFxconfigTable__Q27JAInter2FxFv */
-void JAInter::Fx::getFxconfigTable() {
-    /* Nonmatching */
+JASystem::DSPInterface::FxlineConfig_** JAInter::Fx::getFxconfigTable() {
+    return (JASystem::DSPInterface::FxlineConfig_**)mFxconfigTable;
 }
