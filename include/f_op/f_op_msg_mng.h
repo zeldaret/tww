@@ -100,7 +100,7 @@ void fopMsgM_cposMove(fopMsgM_pane_class*);
 void fopMsgM_setPaneData(fopMsgM_pane_alpha_class*, J2DPane*);
 void fopMsgM_setPaneData(fopMsgM_pane_alpha_class*, J2DScreen*, u32);
 void fopMsgM_setNowAlpha(fopMsgM_pane_alpha_class*, f32);
-void fopMsgM_setAlpha(fopMsgM_pane_alpha_class*, f32);
+void fopMsgM_setAlpha(fopMsgM_pane_alpha_class*);
 
 u32 fopMsgM_searchMessageNumber(u32);
 void fopMsgM_messageSendOn();

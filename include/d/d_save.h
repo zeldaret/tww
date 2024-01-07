@@ -323,7 +323,10 @@ public:
     u8 getClearCount() { return mClearCount; }
     void setClearCount(u8 count) { mClearCount = count; }
     void clearCountUp() {}
-    void addDeathCount() {}
+    void addDeathCount() {
+        if (mDeathCount < 9999)
+            mDeathCount++;
+    }
     void getPuzzleInfo() {}
     void setPuzzleInfo(u8) {}
     void setPuzzleData(int, u8) {}
@@ -332,7 +335,7 @@ public:
 
     /* 0x00 */ u8 field_0x0[0x10];
     /* 0x10 */ u16 field_0x10;
-    /* 0x10 */ u16 field_0x12;
+    /* 0x10 */ u16 mDeathCount;
     /* 0x14 */ char mPlayerName[17];
     /* 0x25 */ char field_0x25[17];
     /* 0x36 */ char field_0x36[17];

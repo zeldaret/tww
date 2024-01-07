@@ -390,6 +390,8 @@ public:
     }
     void setStageNameOff() { mPlacenameState = 1; }
 
+    void setGameoverStatus(u8 stts) { mGameoverStatus = stts; }
+
     fopAc_ac_c* getPlayerPtr(int idx) { return (fopAc_ac_c*)mpPlayerPtr[idx]; }
     fopAc_ac_c* getPlayer(int idx) { return (fopAc_ac_c*)mpPlayer[idx]; }
     void setPlayer(int idx, fopAc_ac_c* player) { mpPlayer[idx] = (daPy_py_c*)player; }
@@ -671,7 +673,7 @@ public:
     /* 0x4956 */ u8 mFwaterTimer;
     /* 0x4957 */ u8 mPlacenameIndex;
     /* 0x4958 */ u8 mPlacenameState;
-    /* 0x4959 */ u8 field_0x4959;
+    /* 0x4959 */ u8 mGameoverStatus;
     /* 0x495A */ u8 field_0x495a;
     /* 0x495B */ u8 field_0x495b;
     /* 0x495C */ u8 field_0x495c;
@@ -1489,6 +1491,10 @@ inline void dComIfGs_clearCountUp() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerInfo().clearCountUp();
 }
 
+inline void dComIfGs_addDeathCount() {
+    return g_dComIfG_gameInfo.save.getPlayer().getPlayerInfo().addDeathCount();
+}
+
 inline u8 dComIfGs_getRandomSalvagePoint() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerInfo().getRandomSalvage();
 }
@@ -1690,6 +1696,10 @@ inline void dComIfGp_setStageNameOn(u8 idx) {
 
 inline void dComIfGp_setStageNameOff() {
     g_dComIfG_gameInfo.play.setStageNameOff();
+}
+
+inline void dComIfGp_setGameoverStatus(u8 stts) {
+    g_dComIfG_gameInfo.play.setGameoverStatus(stts);
 }
 
 inline int dComIfGp_getStartStageRoomNo() {

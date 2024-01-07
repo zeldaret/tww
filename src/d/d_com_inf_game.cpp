@@ -150,7 +150,7 @@ void dComIfG_play_c::itemInit() {
     mFwaterTimer = 0;
     mPlacenameIndex = 0;
     mPlacenameState = 0;
-    field_0x4959 = 0;
+    mGameoverStatus = 0;
     field_0x495a = 0;
     field_0x495b = 0;
     field_0x495c = 0;
