@@ -709,7 +709,7 @@ config.libs = [
             Object(NonMatching, "JSystem/JAudio/JAIAnimation.cpp"),
             Object(NonMatching, "JSystem/JAudio/JAIBasic.cpp"),
             Object(NonMatching, "JSystem/JAudio/JAIBankWave.cpp"),
-            Object(NonMatching, "JSystem/JAudio/JAIConst.cpp"),
+            Object(Matching,    "JSystem/JAudio/JAIConst.cpp"),
             Object(Matching,    "JSystem/JAudio/JAIDummyObject.cpp"),
             Object(NonMatching, "JSystem/JAudio/JAIFx.cpp"),
             Object(Matching,    "JSystem/JAudio/JAIGlobalParameter.cpp"),
