@@ -8,6 +8,7 @@
 #include "JSystem/JAudio/JAISequenceMgr.h"
 #include "JSystem/JAudio/JAIStreamMgr.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/JUtility/JUTConsole.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_controller_pad.h"
@@ -129,9 +130,15 @@ void mDoAud_Create() {
         JAInter::SequenceMgr::setArchivePointer(l_arcCommand->getArchive());
         mDoAud_setupStreamBuffer();
         if (g_mDoAud_audioHeap) {
+#if VERSION == VERSION_JPN
+            JUTReportConsole("mDoAud_Create g_mDoAud_zelAudio.init before\n");
+#endif
             JKRSetCurrentHeap(NULL);
             g_mDoAud_zelAudio.init(g_mDoAud_audioHeap, 0x00a00000);
             JKRSetCurrentHeap(zeldaHeap);
+#if VERSION == VERSION_JPN
+            JUTReportConsole("mDoAud_Create g_mDoAud_zelAudio.init after\n");
+#endif
             g_mDoAud_audioHeap->adjustSize();
         } else {
             OSReport_Error("ヒープ確保失敗につきオーディオ初期化できません\n");

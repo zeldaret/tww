@@ -186,7 +186,10 @@ public:
     /* 0x0021 */ u8 field_0x0021;
     /* 0x0022 */ u8 field_0x0022[0x0024 - 0x0022];
     /* 0x0024 */ int field_0x0024;
+#if VERSION != VERSION_JPN
     /* 0x0028 */ int field_0x0028;
+#endif
+    /* Offsets below are for USA/PAL */
     /* 0x002C */ u8 mHour;
     /* 0x002D */ u8 mMinute;
     /* 0x002E */ u8 mWeekday;
