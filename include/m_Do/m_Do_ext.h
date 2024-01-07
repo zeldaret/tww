@@ -49,13 +49,13 @@ private:
 class mDoExt_btkAnm : public mDoExt_baseAnm {
 public:
     mDoExt_btkAnm() { mpTexMtxAnm = NULL; }
-    int init(J3DMaterialTable* i_matTable, J3DAnmTextureSRTKey* i_btk, int i_anmPlay,
+    int init(J3DMaterialTable* i_matTable, J3DAnmTextureSRTKey* i_btk, BOOL i_anmPlay,
              int i_attribute, f32 i_rate, s16 i_start, s16 i_end, bool i_modify, int i_entry);
     void entry(J3DMaterialTable* i_matTable, f32 i_frame);
     void entry(J3DModelData *i_modelData, f32 i_frame);
 
     void entry(J3DModelData* i_modelData) { entry(i_modelData, getFrame()); }
-    int init(J3DModelData* i_modelData, J3DAnmTextureSRTKey* i_btk, int i_anmPlay, int i_attribute,
+    int init(J3DModelData* i_modelData, J3DAnmTextureSRTKey* i_btk, BOOL i_anmPlay, int i_attribute,
              f32 i_rate, s16 i_start, s16 i_end, bool i_modify, int i_entry);
 
     int remove(J3DModelData* i_modelData) { return i_modelData->removeTexMtxAnimator(mpAnm); }
@@ -80,14 +80,14 @@ public:
         mpCRegAnm = NULL;
         mpKRegAnm = NULL;
     }
-    int init(J3DMaterialTable* i_matTable, J3DAnmTevRegKey* i_brk, int i_anmPlay,
+    int init(J3DMaterialTable* i_matTable, J3DAnmTevRegKey* i_brk, BOOL i_anmPlay,
                             int i_attribute, f32 i_rate, s16 i_start, s16 i_end, bool i_modify, int i_entry);
     void entry(J3DMaterialTable* i_matTable, f32 i_frame);
 
     void entry(J3DModelData* i_modelData) { entry(i_modelData, getFrame()); }
     void entry(J3DModelData* i_modelData, f32 i_frame);
 
-    int init(J3DModelData* i_modelData, J3DAnmTevRegKey* i_brk, int i_anmPlay, int i_attribute,
+    int init(J3DModelData* i_modelData, J3DAnmTevRegKey* i_brk, BOOL i_anmPlay, int i_attribute,
              f32 i_rate, s16 i_start, s16 i_end, bool i_modify, int i_entry);
 
     int remove(J3DModelData* i_modelData) { return i_modelData->removeTevRegAnimator(mpAnm); }
@@ -113,18 +113,10 @@ public:
                             f32 i_rate, s16 i_startF, s16 i_endF1, bool i_modify);
     void changeBckOnly(J3DAnmTransform* i_bck);
     void entry(J3DModelData* i_modelData, f32 i_frame);
-    void entryJoint(J3DModelData* i_modelData, u16 i_jntNo, f32 i_frame);
 
     void entry(J3DModelData* i_modelData) { entry(i_modelData, getFrame()); }
-
     void remove(J3DModelData* i_modelData) { i_modelData->getJointNodePointer(0)->setMtxCalc(NULL); }
-
-    J3DAnmTransform* getBckAnm() { return mAnmTransform; }
-
-    void removeJoint(J3DModelData* i_modelData, u16 i_idx) {
-        J3DJoint* mpJnt = i_modelData->getJointNodePointer(i_idx);
-        mpJnt->setMtxCalc(0);
-    }
+    J3DAnmTransform* getBckAnm() const { return mAnmTransform; }
 
 private:
     /* 0x08 */ J3DAnmTransform* mAnmTransform;
@@ -136,22 +128,16 @@ STATIC_ASSERT(sizeof(mDoExt_bckAnm) == 0x10);
 class mDoExt_btpAnm : public mDoExt_baseAnm {
 public:
     mDoExt_btpAnm() { field_0xc = NULL; }
-    int init(J3DMaterialTable* i_matTable, J3DAnmTexPattern* i_btk, int i_anmPlay,
-                            int i_attribute, f32 i_rate, s16 i_start, s16 param_6);
-    int init(J3DModelData*, J3DAnmTexPattern*, int, int, float, short, short, bool, int);
-    int init(J3DMaterialTable*, J3DAnmTexPattern*, int, int, float, short, short, bool, int);
+    int init(J3DModelData* i_modelData, J3DAnmTexPattern* i_btp, BOOL i_anmPlay, int i_attribute,
+             f32 i_rate, s16 i_start, s16 i_end, bool i_modify, int i_entry);
+    int init(J3DMaterialTable* i_matTable, J3DAnmTexPattern* i_btp, BOOL i_anmPlay, int i_attribute,
+             f32 i_rate, s16 i_start, s16 i_end, bool i_modify, int i_entry);
     void entry(J3DModelData* i_modelData, s16 i_frame);
     void entry(J3DMaterialTable* i_matTable, s16 i_frame);
 
     void entry(J3DModelData* i_modelData) { entry(i_modelData, getFrame()); }
-
-    int init(J3DModelData* i_modelData, J3DAnmTexPattern* i_btk, int i_anmPlay, int i_attribute,
-             f32 i_rate, s16 i_start, s16 param_6) {
-        return init(&i_modelData->getMaterialTable(), i_btk, i_anmPlay, i_attribute, i_rate,
-                    i_start, param_6);
-    }
-
     int remove(J3DModelData* i_modelData) { return i_modelData->removeTexNoAnimator(mpAnm); }
+    J3DAnmTexPattern* getBtpAnm() const { return mpAnm; }
 
 private:
     /* 0x08 */ J3DAnmTexPattern* mpAnm;
@@ -161,7 +147,7 @@ private:
 
 class mDoExt_blkAnm : public mDoExt_baseAnm {
 public:
-    int init(J3DDeformData* i_deformData, J3DAnmCluster* i_blk, int i_anmPlay,
+    int init(J3DDeformData* i_deformData, J3DAnmCluster* i_blk, BOOL i_anmPlay,
                             int i_attribute, f32 i_rate, s16 i_start, s16 param_6);
 
     J3DAnmCluster* getBlkAnm() { return mpAnm; }
@@ -172,11 +158,11 @@ private:
 
 class mDoExt_bpkAnm : public mDoExt_baseAnm {
 public:
-    int init(J3DModelData*, J3DAnmColor*, int, int, float, short, short, bool, int);
-    int init(J3DMaterialTable*, J3DAnmColor*, int, int, float, short, short, bool, int);
+    int init(J3DModelData*, J3DAnmColor*, int, int, f32, s16, s16, bool, int);
+    int init(J3DMaterialTable*, J3DAnmColor*, int, int, f32, s16, s16, bool, int);
 
-    void entry(J3DModelData*, float);
-    void entry(J3DMaterialTable*, float);
+    void entry(J3DModelData*, f32);
+    void entry(J3DMaterialTable*, f32);
 
 private:
     /* 0x08 */ J3DAnmColor* mpAnm;
@@ -186,10 +172,10 @@ private:
 
 class mDoExt_bvaAnm : public mDoExt_baseAnm {
 public:
-    int init(J3DModel*, J3DAnmVisibilityFull*, int, int, float, short, short, bool, int);
-    void entry(J3DModel*, short);
+    int init(J3DModel*, J3DAnmVisibilityFull*, int, int, f32, s16, s16, bool, int);
+    void entry(J3DModel*, s16);
 
-    int init(J3DModelData*, J3DAnmTransform*, int, int, float, short, short, bool);
+    int init(J3DModelData*, J3DAnmTransform*, int, int, f32, s16, s16, bool);
 
 private:
     /* 0x08 */ J3DAnmVisibilityFull* mpAnm;

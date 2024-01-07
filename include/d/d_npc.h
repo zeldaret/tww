@@ -214,7 +214,7 @@ public:
         mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
         mpCurrMsg = 0;
     }
-    /* 0x290 */ dNpc_JntCtrl_c mJntCtrl;
+    /* 0x290 */ dNpc_JntCtrl_c m_jnt;
     /* 0x2C4 */ dNpc_EventCut_c mEventCut;
     /* 0x330 */ mDoExt_McaMorf* mpMcaMorf;
     /* 0x334 */ dBgS_ObjAcch mObjAcch;
@@ -226,6 +226,7 @@ public:
     /* 0x6AC */ u32 mCurrMsgBsPcId;
     /* 0x6B0 */ msg_class* mpCurrMsg;
     /* 0x6B4 */ u8 pad_0x6B4[0x6C0 - 0x6B4];
+    /* 0x6C0 */ /* vtable */
 
     virtual u16 next_msgStatus(u32* msgId) { return fopMsgStts_MSG_ENDS_e; }
     virtual u32 getMsg() { return 0; }
@@ -233,7 +234,7 @@ public:
 
     void setCollision(float radius, float height);
     u16 talk(int);
-};
+};  // Size: 0x6C4
 
 bool dNpc_setAnmIDRes(mDoExt_McaMorf* pMorf, int loopMode, float morf, float speed, int animResId, int soundResId, const char* arcName);
 bool dNpc_setAnmFNDirect(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, char* animFilename, char* soundFilename, const char* arcName);
