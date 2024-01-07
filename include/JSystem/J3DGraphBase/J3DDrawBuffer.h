@@ -46,15 +46,19 @@ public:
     void draw() const;
     void drawHead() const;
     void drawTail() const;
+    void setCallBackPacket(J3DCallBackPacket* pPacket);
 
-    u32 getEntryTableSize() { return mBufSize; }
-
-    inline void calcZRatio();
+    J3DPacket* getEntryPacket(u16 i) { return mpBuf[i]; }
+    u32 getEntryTableSize() { return mBufSize; } // Unused in TWW, but exists in TP
     void setNonSort() { mSortType = (u32)SORT_NON; }
     void setZSort() { mSortType = (u32)SORT_Z; }
     void setInvalidSort() { mSortType = (u32)SORT_INVALID; }
     void setZMtx(MtxP mtx) { mpZMtx = mtx; }
-    void setCallBackPacket(J3DCallBackPacket* pPacket);
+    void calcZRatio() {
+        mZRatio = (mZFar - mZNear) / (f32)mBufSize;
+    }
+
+    void getSortMode() {}
 
 public:
     /* 0x00 */ J3DPacket** mpBuf;

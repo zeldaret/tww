@@ -14,14 +14,13 @@ public:
     static void* alloc(u32, int);
     static void free();
     static void fadeOut(f32, GXColor&);
-    static void onBlure();
-    static void onBlure(const Mtx);
+    static void onBlure(); // weak?
+    static void onBlure(const Mtx); // weak?
     static void fadeOut(f32);
     static void calcFade();
     static void onMonotone();
     static void offMonotone();
     static void calcMonotone();
-    static void setFrameRate(u16);
     static void getFrameRate();
 
     static void setFader(JUTFader* fader) {
@@ -54,9 +53,21 @@ public:
     static f32 getFadeRate() { return mFadeRate; }
     static GXColor& getFadeColor() { return mFadeColor; }
     static GXColor& getBackColor() { return mBackColor; }
+    static void beginRender() { JFWDisplay::getManager()->beginRender(); }
     static void endRender() { JFWDisplay::getManager()->endRender(); }
     static GXTexObj* getZbufferTexObj() { return &mZbufferTexObj; }
     static GXTexObj* getFrameBufferTexObj() { return &mFrameBufferTexObj; }
+
+    static void alloc32(u32) {}
+    static void fadeIn(f32, _GXColor&) {}
+    static void getFrameBufferMemory() {}
+    static void getFrameBufferSize() {}
+    static void getMonotoneRate() {}
+    static void setBlureMtx(const Mtx) {}
+    static void setBlureRate(u8) {}
+    static void setFrameRate(u16) {}
+    static void setMonotoneRate(s16) {}
+    static void setMonotoneRateSpeed(s16) {}
 
     static GXTexObj mFrameBufferTexObj;
     static GXTexObj mZbufferTexObj;

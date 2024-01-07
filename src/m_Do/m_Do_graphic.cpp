@@ -835,10 +835,9 @@ void setLight() {
 
 /* 8000AF2C-8000BC38       .text mDoGph_Painter__Fv */
 bool mDoGph_Painter() {
-    /* Nonmatching */
     JFWDisplay::getManager()->setFader(mDoGph_gInf_c::mFader);
-    JFWDisplay::getManager()->setClearColor(mDoGph_gInf_c::getBackColor());
-    JFWDisplay::getManager()->beginRender();
+    mDoGph_gInf_c::setClearColor(mDoGph_gInf_c::getBackColor());
+    mDoGph_gInf_c::beginRender();
 
     GXSetAlphaUpdate(GX_FALSE);
     mDoGph_gInf_c::setBackColor(g_clearColor);
@@ -851,12 +850,7 @@ bool mDoGph_Painter() {
     GXSetDither(GX_TRUE);
 
     J2DOrthoGraph graf(0.0f, 0.0f, 640.0f, 480.0f, -1.0f, 1.0f);
-    JGeometry::TBox2<f32> viewport;
-    viewport.i.x = -9.0f;
-    viewport.i.y = -21.0f;
-    viewport.f.x = 650.0f;
-    viewport.f.y = 503.0f;
-    graf.setOrtho(viewport, -1.0f, 1.0f);
+    graf.setOrtho(JGeometry::TBox2<f32>(-9.0f, -21.0f, 650.0f, 503.0f), -1.0f, 1.0f);
     graf.setPort();
 
     dComIfGp_setCurrentGrafPort(&graf);
@@ -864,7 +858,7 @@ bool mDoGph_Painter() {
     if (dComIfGp_getWindowNum() != 0) {
         dDlst_window_c* window = dComIfGp_getWindow(0);
         s32 cameraID = window->getCameraID();
-        camera_class* camera = dComIfGp_getCamera(cameraID);
+        camera_class* camera = (camera_class*)dComIfGp_getCamera(cameraID);
 
         if (camera != NULL) {
             dComIfGd_imageDrawShadow(camera->mViewMtx);
@@ -872,8 +866,8 @@ bool mDoGph_Painter() {
             view_port_class viewport_crop;
             view_port_class* viewport_p = window->getViewPort();
             if (viewport_p->mXOrig != 0.0f || viewport_p->mYOrig != 0.0f) {
-                viewport_crop.mXOrig = viewport_p->mWidth / 2.0f + viewport_p->mXOrig * 2.0f - 320.0f;
-                viewport_crop.mYOrig = viewport_p->mHeight / 2.0f + viewport_p->mYOrig * 2.0f - 240.0f;
+                viewport_crop.mXOrig = 0.5f * (viewport_p->mXOrig * 2.0f + viewport_p->mWidth) - 320.0f;
+                viewport_crop.mYOrig = 0.5f * (viewport_p->mYOrig * 2.0f + viewport_p->mHeight) - 240.0f;
                 viewport_crop.mWidth = 640.0f;
                 viewport_crop.mHeight = 480.0f;
                 viewport_crop.mNearZ = viewport_p->mNearZ;
@@ -883,7 +877,7 @@ bool mDoGph_Painter() {
             }
 
             GXSetViewport(viewport_p->mXOrig, viewport_p->mYOrig, viewport_p->mWidth, viewport_p->mHeight, viewport_p->mNearZ, viewport_p->mFarZ);
-            GXSetScissor(viewport_p->mScissor.mXOrig, viewport_p->mScissor.mYOrig, viewport_p->mScissor.mWidth, viewport_p->mScissor.mHeight);
+            GXSetScissor(viewport_p->mXOrig, viewport_p->mYOrig, viewport_p->mWidth, viewport_p->mHeight);
 
             JPADrawInfo jpaDrawInfo(camera->mViewMtx, 45.0f, 1.218f);
             jpaDrawInfo.setFovy(camera->mFovy);
@@ -983,23 +977,23 @@ bool mDoGph_Painter() {
 
                 if (isTower9)
                     dComIfGp_particle_draw(&jpaDrawInfo);
-            }
 
-            if (mDoGph_gInf_c::isMonotone()) {
-                clearAlphaBuffer(camera, 0);
-                dComIfGd_drawOpaListP0();
-                dComIfGd_drawOpaListP1();
-                dComIfGd_drawXluListP1();
-                dComIfGp_particle_drawP1(&jpaDrawInfo);
-                dComIfGp_particle_drawToonP1(&jpaDrawInfo);
-            }
+                if (mDoGph_gInf_c::isMonotone()) {
+                    clearAlphaBuffer(camera, 0);
+                    dComIfGd_drawOpaListP0();
+                    dComIfGd_drawOpaListP1();
+                    dComIfGd_drawXluListP1();
+                    dComIfGp_particle_drawP1(&jpaDrawInfo);
+                    dComIfGp_particle_drawToonP1(&jpaDrawInfo);
+                }
 
-            mDoGph_gInf_c::calcFade();
-            if (mCaptureStep == 1) {
-                if (!mCaptureCansel)
-                    mDoGph_screenCapture();
-                else
-                    mCaptureStep = 0;
+                mDoGph_gInf_c::calcFade();
+                if (mCaptureStep == 1) {
+                    if (!mCaptureCansel)
+                        mDoGph_screenCapture();
+                    else
+                        mCaptureStep = 0;
+                }
             }
         }
     }
@@ -1089,22 +1083,19 @@ bool mDoGph_Painter() {
     j3dSys.reinitGX();
     GXSetNumIndStages(0);
 
-    viewport.i.x = -9.0f;
-    viewport.i.y = -21.0f;
-    viewport.f.x = 650.0f;
-    viewport.f.y = 503.0f;
-    graf.setOrtho(viewport, 100000.0f, -100000.0f);
+    graf.setOrtho(JGeometry::TBox2<f32>(-9.0f, -21.0f, 650.0f, 503.0f), 100000.0f, -100000.0f);
     graf.setPort();
     Mtx viewMtx;
     mDoMtx_trans(viewMtx, 320.0f, 240.0f, 0.0f);
     JPADrawInfo jpaDrawInfo2D(viewMtx, 45.0f, 1.218f);
     jpaDrawInfo2D.setFovy(0.0f);
-    jpaDrawInfo2D.setAspect(1.333333f);
+    jpaDrawInfo2D.setAspect(1.33333333f);
     if (!dMenu_flag())
         dComIfGp_particle_draw2Dback(&jpaDrawInfo2D);
     dComIfGp_particle_draw2DmenuBack(&jpaDrawInfo2D);
 
-    if (dComIfGd_getList2D()->mpBuf[0] != NULL) {
+    if (dComIfGd_getList2D()->getEntryPacket(0) != NULL) {
+        Mtx viewMtx;
         mDoMtx_copy(j3dSys.getViewMtx(), viewMtx);
         setLight();
         mDoMtx_stack_c::transS(320.0f, 240.0f, 1000.0f);
@@ -1123,7 +1114,8 @@ bool mDoGph_Painter() {
     if (!dMenu_flag())
         dComIfGp_particle_draw2Dfore(&jpaDrawInfo2D);
     dComIfGp_particle_draw2DmenuFore(&jpaDrawInfo2D);
-    JFWDisplay::getManager()->endFrame();
+
+    mDoGph_gInf_c::endRender();
 
     return true;
 }

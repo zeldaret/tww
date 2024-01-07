@@ -12,10 +12,6 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "dolphin/types.h"
 
-void J3DDrawBuffer::calcZRatio() {
-    mZRatio = (mZFar - mZNear) / (f32)mBufSize;
-}
-
 /* 802EC74C-802EC7B4       .text initialize__13J3DDrawBufferFv */
 void J3DDrawBuffer::initialize() {
     mDrawType = DRAW_HEAD;
