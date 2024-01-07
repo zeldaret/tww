@@ -27,6 +27,11 @@ public:
     s32 getNumberS32(const u8**, s32, s32, int);
     f32 getNumberF32(const u8**, f32, f32, int);
 
+    void setFontSize(f32 sizeX, f32 sizeY) {
+        mFontSizeX = sizeX > 0.0f ? sizeX : 0.0f;
+        mFontSizeY = sizeY > 0.0f ? sizeY : 0.0f;
+    }
+
     static char* mStrBuff;
     static bool mHeapFlag;
     static u32 mStrBuffSize;

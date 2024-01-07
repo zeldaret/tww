@@ -66,7 +66,7 @@ public:
     virtual void drawSelf(f32 x, f32 y) {}
     virtual void drawSelf(f32 x, f32 y, Mtx* mtx) {}
     virtual J2DPane* search(u32 tag);
-    virtual void makeMatrix(f32, f32);
+    virtual void makeMatrix(f32 x, f32 y);
 
     f32 getWidth() const { return mBounds.getWidth(); }
     f32 getHeight() const { return mBounds.getHeight(); }

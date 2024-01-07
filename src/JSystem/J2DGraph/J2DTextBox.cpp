@@ -7,6 +7,8 @@
 #include "JSystem/JKernel/JKRFileLoader.h"
 #include "JSystem/JSupport/JSURandomInputStream.h"
 #include "JSystem/JUtility/JUTResource.h"
+#include "JSystem/J2DGraph/J2DPrint.h"
+#include "dolphin/gx/GXTransform.h"
 #include "__va_arg.h"
 
 /* 802D51D8-802D5268       .text __ct__10J2DTextBoxFPCcPCc */
@@ -81,7 +83,6 @@ J2DTextBox::J2DTextBox(u32 tag, const JGeometry::TBox2<f32>& bounds, const ResFO
 
 /* 802D5660-802D5820       .text initiate__10J2DTextBoxFPC7ResFONTPCc18J2DTextBoxHBinding18J2DTextBoxVBinding */
 void J2DTextBox::initiate(const ResFONT* font, const char* str, J2DTextBoxHBinding bindingH, J2DTextBoxVBinding bindingV) {
-    /* Nonmatching */
     if (font != NULL)
         mpFont = new JUTResFont(font, NULL);
 
@@ -91,7 +92,8 @@ void J2DTextBox::initiate(const ResFONT* font, const char* str, J2DTextBoxHBindi
     mWhite = JUtility::TColor(0xFFFFFFFF);
     mBindingH = bindingH;
     mBindingV = bindingV;
-    mStringPtr = new char[strlen(str) + 1];
+    size_t temp = strlen(str);
+    mStringPtr = new char[temp + 1];
     strcpy(mStringPtr, str);
     field_0xd8 = 0.0f;
     field_0xdc = 0.0f;
@@ -127,8 +129,19 @@ void J2DTextBox::setFont(JUTFont* font) {
 }
 
 /* 802D5928-802D5AA4       .text draw__10J2DTextBoxFfff18J2DTextBoxHBinding */
-void J2DTextBox::draw(f32, f32, f32, J2DTextBoxHBinding) {
-    /* Nonmatching */
+void J2DTextBox::draw(f32 x, f32 y, f32 f31, J2DTextBoxHBinding hbind) {
+    if (!mVisible) {
+        return;
+    }
+    J2DPrint print(mpFont, mCharSpace, mLineSpace, mCharColor, mGradColor, mBlack, mWhite);
+    print.setFontSize(mFontSizeX, mFontSizeY);
+    makeMatrix(x, y);
+    GXLoadPosMtxImm(mMtx, 0);
+    GXSetCurrentMtx(0);
+    print.printReturn(mStringPtr, f31, 0.0f, hbind, VBIND_TOP, 0.0f, -mFontSizeY, mDrawAlpha);
+    Mtx mtx;
+    MTXIdentity(mtx);
+    GXLoadPosMtxImm(mtx, 0);
 }
 
 /* 802D5AA4-802D5AAC       .text getStringPtr__10J2DTextBoxCFv */
@@ -168,8 +181,16 @@ void J2DTextBox::drawSelf(f32 x, f32 y) {
 }
 
 /* 802D5C4C-802D5DA4       .text drawSelf__10J2DTextBoxFffPA3_A4_f */
-void J2DTextBox::drawSelf(f32, f32, Mtx*) {
-    /* Nonmatching */
+void J2DTextBox::drawSelf(f32 x, f32 y, Mtx* pMtx) {
+    J2DPrint print(mpFont, mCharSpace, mLineSpace, mCharColor, mGradColor, mBlack, mWhite);
+    print.setFontSize(mFontSizeX, mFontSizeY);
+    Mtx mtx;
+    MTXConcat(*pMtx, mDrawMtx, mtx);
+    GXLoadPosMtxImm(mtx, 0);
+    print.locate(x, y);
+    f32 w = mBounds.f.x - mBounds.i.x + 0.0001f;
+    f32 h = mBounds.f.y - mBounds.i.y;
+    print.printReturn(mStringPtr, w, h, (J2DTextBoxHBinding)mBindingH, (J2DTextBoxVBinding)mBindingV, field_0xd8, field_0xdc, mDrawAlpha);
 }
 
 /* 802D5DA4-802D5EB0       .text resize__10J2DTextBoxFff */
