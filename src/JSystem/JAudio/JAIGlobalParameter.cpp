@@ -204,7 +204,7 @@ void JAIGlobalParameter::setParamSoundOutputMode(u32 value) {
 }
 
 /* 80292334-80292358       .text getParamSeCategoryMax__18JAIGlobalParameterFv */
-int JAIGlobalParameter::getParamSeCategoryMax() {
+u32 JAIGlobalParameter::getParamSeCategoryMax() {
     return JAInter::SoundTable::getCategotyMax();
 }
 
