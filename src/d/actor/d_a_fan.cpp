@@ -67,8 +67,7 @@ BOOL daFan_c::Delete() {
 
 /* 000000F0-0000040C       .text CreateHeap__7daFan_cFv */
 int daFan_c::CreateHeap() {
-    /* Nonmatching */
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[mType], m_bdlidx[mType]);
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname[mType], m_bdlidx[mType]));
     JUT_ASSERT(0x15e, modelData != 0);
 
     mModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -104,7 +103,6 @@ static int nodeCallBack(J3DNode*, int);
 
 /* 0000040C-00000640       .text Create__7daFan_cFv */
 int daFan_c::Create() {
-    /* Nonmatching */
     f32 wind_len = m_wind_length[mType];
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
     Vec cullMin = m_cull_min[mType];
@@ -122,7 +120,7 @@ int daFan_c::Create() {
 
     JUTNameTab* jointName = mModel->getModelData()->getJointName();
     for (u16 i = 0; i < mModel->getModelData()->getJointNum(); i++) {
-        if (strcmp(jointName->getName(i), "puro") == 0) {
+        if (strcmp("puro", jointName->getName(i)) == 0) {
             mModel->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
             break;
         }
@@ -153,8 +151,6 @@ static int nodeCallBack(J3DNode* node, int timing) {
 
 /* 000006F4-00000900       .text _create__7daFan_cFv */
 s32 daFan_c::_create() {
-    const char* arcname = m_arcname2;
-
     fopAcM_SetupActor(this, daFan_c);
 
     mType = daFan_prm::getType(this);
@@ -162,7 +158,7 @@ s32 daFan_c::_create() {
     if (rt1 != cPhs_COMPLEATE_e)
         return rt1;
 
-    s32 rt2 = dComIfG_resLoad(&mWindPhs, arcname);
+    s32 rt2 = dComIfG_resLoad(&mWindPhs, m_arcname2);
     if (rt2 != cPhs_COMPLEATE_e)
         return rt2;
 
@@ -172,7 +168,7 @@ s32 daFan_c::_create() {
             return cPhs_ERROR_e;
     }
 
-    return rt2;
+    return rt1;
 }
 
 /* 00000C28-00000D28       .text set_mtx__7daFan_cFv */
@@ -191,8 +187,9 @@ void daFan_c::set_mtx() {
 
 /* 00000D28-00000D64       .text set_wind_length__7daFan_cFf */
 void daFan_c::set_wind_length(f32 h) {
-    /* Nonmatching */
-    set_cps(m_wind_length[mType] * h);
+    f32 len = m_wind_length[mType];
+    len *= h;
+    set_cps(len);
 }
 
 /* 00000D64-00000E54       .text set_cps__7daFan_cFf */
@@ -210,14 +207,14 @@ void daFan_c::set_cps(f32 h) {
 
 /* 00000E54-00001088       .text Execute__7daFan_cFPPA3_A4_f */
 int daFan_c::Execute(Mtx** mtxP) {
-    /* Nonmatching */
-    s32 speed = m_fan_speed[mType];
+    s16 speed = m_fan_speed[mType];
     f32 len = mFanSpeed / (f32)speed;
 
     if ((mType == 0 && !fopAcM_isSwitch(this, mSwitchNo)) || (mType == 1 && fopAcM_isSwitch(this, mSwitchNo))) {
         cLib_chaseS(&mFanSpeed, speed, 100);
         mWindBtkAnm1.setPlaySpeed(1.0f);
     } else if (mType == 2) {
+        len = 1.0f;
         cLib_chaseS(&mFanSpeed, speed, 100);
         mWindBtkAnm1.setPlaySpeed(1.0f);
     } else {
@@ -293,7 +290,7 @@ static actor_method_class daFanMethodTable = {
     (process_method_func)daFan_Draw,
 };
 
-actor_process_profile_definition g_profile_Fan = {
+actor_process_profile_definition g_profile_FAN = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 7,
     /* ListPrio     */ fpcPi_CURRENT_e,
