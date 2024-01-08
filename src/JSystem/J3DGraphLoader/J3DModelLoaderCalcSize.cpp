@@ -100,23 +100,21 @@ u32 J3DModelLoader::calcLoadMaterialTableSize(const void* i_data) {
 
 /* 802FDB0C-802FDD28       .text calcLoadBinaryDisplayListSize__14J3DModelLoaderFPCvUl */
 u32 J3DModelLoader::calcLoadBinaryDisplayListSize(const void* i_data, u32 i_flags) {
-    /* Nonmatching - regalloc */
-    u32 i;
     u32 size = 0;
     const JUTDataFileHeader* header = (const JUTDataFileHeader*)i_data;
     const JUTDataBlockHeader* block = &header->mFirstBlock;
-    i = 0;
+    u32 i = 0;
     size += sizeof(J3DModelData);
     for (; i < header->mBlockNum; i++) {
         switch (block->mType) {
         case 'INF1':
-            size += calcSizeInformation((const J3DModelInfoBlock*)block, i_flags);
+            size += calcSizeInformation((const J3DModelInfoBlock*)block, (u32)i_flags);
             break;
         case 'JNT1':
             size += calcSizeJoint((const J3DJointBlock*)block);
             break;
         case 'SHP1':
-            size += calcSizeShape((const J3DShapeBlock*)block, i_flags);
+            size += calcSizeShape((const J3DShapeBlock*)block, (u32)i_flags);
             break;
         case 'TEX1':
             size += calcSizeTexture((const J3DTextureBlock*)block);
@@ -128,9 +126,9 @@ u32 J3DModelLoader::calcLoadBinaryDisplayListSize(const void* i_data, u32 i_flag
             break;
         case 'MAT3':
             u32 matFlags = 0x50100000;
-            matFlags |= i_flags & 0x03000000;
-            mpMaterialBlock = (J3DMaterialBlock*)block;
-            u32 matType = getBdlFlag_MaterialType(i_flags);
+            matFlags |= (u32)i_flags & 0x03000000;
+            mpMaterialBlock = (const J3DMaterialBlock*)block;
+            u32 matType = getBdlFlag_MaterialType((u32)i_flags);
             if (matType == 0) {
                 field_0x18 = 1;
                 size += calcSizeMaterial((const J3DMaterialBlock*)block, matFlags);
