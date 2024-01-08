@@ -73,7 +73,7 @@ s32 daSwTact_c::_create() {
 
     s32 result = cPhs_COMPLEATE_e;
     if (daSwTact_prm::getModel(this) == 1) {
-        result = dComIfG_resLoad(&this->mPhs, m_arcname);
+        result = dComIfG_resLoad(&mPhs, m_arcname);
 
         if (result == cPhs_COMPLEATE_e) {
             if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x3000)) {
@@ -212,18 +212,18 @@ actor_method_class daSwTactMethodTable = {
 };
 
 actor_process_profile_definition g_profile_SW_TACT = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_SW_TACT,
-    &g_fpcLf_Method.mBase,
-    sizeof(daSwTact_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x013B,
-    &daSwTactMethodTable,
-    fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 7,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_SW_TACT,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daSwTact_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x013B,
+    /* Actor SubMtd */ &daSwTactMethodTable,
+    /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

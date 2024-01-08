@@ -111,10 +111,10 @@ public:
     
     daRd_c() {}
     bool isAnm(s8 idx) { return mAnmPrmIdx == idx; }
+    void onIkari() { mbIkari = true; }
+    void offIkari() { mbIkari = false; }
     bool isIkari() { return mbIkari; }
     void modeProcInit(int newMode) { modeProc(PROC_INIT, newMode); }
-    void offIkari() { mbIkari = false; }
-    void onIkari() { mbIkari = true; }
     
     fopAc_ac_c* _searchNearDeadRd(fopAc_ac_c*);
     BOOL _nodeControl(J3DNode*, J3DModel*);
@@ -153,7 +153,7 @@ public:
     void modeSwWait();
     void modeKanokeInit();
     void modeKanoke();
-    void modeProc(daRd_c::Proc_e, int);
+    void modeProc(Proc_e, int);
     void setBrkAnm(s8);
     void setBtkAnm(s8);
     void setAnm(s8, bool);

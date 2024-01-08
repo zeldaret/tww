@@ -106,18 +106,14 @@ BOOL daTag_Msg_c::rangeCheck() {
 }
 
 BOOL daTag_Msg_c::otherCheck() {
-    daPy_lk_c *player;
-    short diff;
-    short actorAngle;
-
-    actorAngle = fopAcM_searchActorAngleY(this, daPy_getPlayerActorClass());
-    player = daPy_getPlayerLinkActorClass();
-    if ((getType2() & 1) != 0) {
+    s16 targetAngle = fopAcM_searchPlayerAngleY(this);
+    daPy_lk_c* player = daPy_getPlayerLinkActorClass();
+    if (getType2() & 1) {
         return TRUE;
     }
     JUT_ASSERT(0xC8, player);
     if (getMessage() == 0x1902) {
-        diff = (short)(actorAngle - this->orig.angle.y);
+        s16 diff = targetAngle - orig.angle.y;
         if (diff < 0) {
             diff = -diff;
         }
@@ -125,11 +121,11 @@ BOOL daTag_Msg_c::otherCheck() {
             return FALSE;
         }
     }
-    actorAngle = (short)(actorAngle + 0x7fff) - player->current.angle.y;
-    if (actorAngle < 0) {
-        actorAngle = (short)-actorAngle;
+    targetAngle = (s16)(targetAngle + 0x7FFF) - player->current.angle.y;
+    if (targetAngle < 0) {
+        targetAngle = -targetAngle;
     }
-    if (actorAngle > 0x1000) {
+    if (targetAngle > 0x1000) {
         return FALSE;
     }
 
@@ -201,7 +197,7 @@ static BOOL daTag_Msg_actionHunt(daTag_Msg_c* a_this) {
             daPy_getPlayerLinkActorClass()->onPlayerNoDraw();
         }
     } else if (a_this->rangeCheck() != 0 && a_this->otherCheck() != 0) {
-        if ((a_this->getType2() & 1) != 0) {
+        if (a_this->getType2() & 1) {
             fopAcM_orderSpeakEvent(a_this);
         }
         a_this->mEvtInfo.mCondition |= dEvtCnd_CANTALK_e;
@@ -291,18 +287,18 @@ static actor_method_class l_daTag_Msg_Method = {
 };
 
 actor_process_profile_definition g_profile_TAG_MSG = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_TAG_MSG,
-    &g_fpcLf_Method.mBase,
-    sizeof(daTag_Msg_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x0121,
-    &l_daTag_Msg_Method,
-    fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_6_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 7,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_TAG_MSG,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daTag_Msg_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0121,
+    /* Actor SubMtd */ &l_daTag_Msg_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_6_e,
 };

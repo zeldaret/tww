@@ -8,16 +8,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_procname.h"
 
-BOOL daObjPbka_c::_draw() {
-    dKy_tevstr_c * pTevStr;
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, pTevStr = &mTevStr);
-    g_env_light.setLightTevColorType(mpModel, pTevStr);
-    dComIfGd_setListBG();
-    mDoExt_modelUpdateDL(mpModel);
-    dComIfGd_setList();
-    return true;
-}
-
 static int CheckCreateHeap(fopAc_ac_c* i_this) {
     daObjPbka_c* a_this = (daObjPbka_c*)i_this;
     return a_this->CreateHeap();
@@ -29,7 +19,7 @@ BOOL daObjPbka_c::CreateHeap() {
     JUT_ASSERT(0x51, modelData != 0);
     mpModel = mDoExt_J3DModel__create(modelData,0,0x11020203);
     if(mpModel == NULL) {
-        return false;
+        return FALSE;
     }
     return TRUE;
 }
@@ -52,25 +42,41 @@ void daObjPbka_c::set_mtx() {
     mDoMtx_copy(mDoMtx_stack_c::get(), mpModel->mBaseTransformMtx);
 }
 
-static cPhs__Step daObjPbka_Create(void* i_this) {
-    int cPhsStep;
-    daObjPbka_c* a_this = (daObjPbka_c*)i_this;
-    fopAcM_SetupActor(a_this, daObjPbka_c);
+s32 daObjPbka_c::_create() {
+    fopAcM_SetupActor(this, daObjPbka_c);
 
-    cPhsStep = dComIfG_resLoad(&a_this->mPhase, "Pbka");
-    if (cPhsStep == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(a_this, CheckCreateHeap, 0x680) == 0) {
-            cPhsStep =  cPhs_ERROR_e;
+    int phase_state = dComIfG_resLoad(&mPhase, "Pbka");
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x680) == 0) {
+            phase_state =  cPhs_ERROR_e;
         } else {
-            a_this->CreateInit();
+            CreateInit();
         }
     }
-    return (cPhs__Step)cPhsStep;
+    return phase_state;
+}
+
+static int daObjPbka_Create(void* i_this) {
+    return static_cast<daObjPbka_c*>(i_this)->_create();
+}
+
+BOOL daObjPbka_c::_delete() {
+    dComIfG_resDelete(&mPhase,"Pbka");
+    return TRUE;
 }
 
 static BOOL daObjPbka_Delete(void* i_this) {
-    daObjPbka_c* a_this = (daObjPbka_c*)i_this;
-    dComIfG_resDelete(&a_this->mPhase,"Pbka");
+    static_cast<daObjPbka_c*>(i_this)->_delete();
+    return TRUE;
+}
+
+BOOL daObjPbka_c::_draw() {
+    dKy_tevstr_c * pTevStr;
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, pTevStr = &mTevStr);
+    g_env_light.setLightTevColorType(mpModel, pTevStr);
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(mpModel);
+    dComIfGd_setList();
     return TRUE;
 }
 
@@ -79,13 +85,16 @@ static BOOL daObjPbka_Draw(void* i_this) {
     return a_this->_draw();
 }
 
-static BOOL daObjPbka_Execute(void* i_this) {
-    daObjPbka_c* a_this = (daObjPbka_c*)i_this;
-    a_this->current.angle.y += 0x500;
-    a_this->shape_angle.y = a_this->current.angle.y;
-    fopAcM_seStartCurrent(a_this, JA_SE_OBJ_BOMB_SHOP_FAN, 0);
-    a_this->set_mtx();
+BOOL daObjPbka_c::_execute() {
+    current.angle.y += 0x500;
+    shape_angle.y = current.angle.y;
+    fopAcM_seStartCurrent(this, JA_SE_OBJ_BOMB_SHOP_FAN, 0);
+    set_mtx();
     return TRUE;
+}
+
+static BOOL daObjPbka_Execute(void* i_this) {
+    return static_cast<daObjPbka_c*>(i_this)->_execute();
 }
 
 static BOOL daObjPbka_IsDelete(void*) {
@@ -101,18 +110,18 @@ static actor_method_class daObj_PbkaMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Obj_Pbka = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcLy_CURRENT_e,
-    PROC_Obj_Pbka,
-    &g_fpcLf_Method.mBase,
-    sizeof(daObjPbka_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x70,
-    &daObj_PbkaMethodTable,
-    fopAcStts_UNK40000_e | fopAcStts_CULL_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_CUSTOM_e,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 7,
+    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Pbka,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daObjPbka_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x70,
+    /* Actor SubMtd */ &daObj_PbkaMethodTable,
+    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_CULL_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

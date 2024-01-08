@@ -12,7 +12,7 @@ class daKaji_c : public fopAc_ac_c {
 public:
     static const char M_arcname[];
 
-    inline void set_mtx() {
+    void set_mtx() {
         mpMorf->getModel()->setBaseScale(mScale);
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::ZXYrotM(shape_angle);

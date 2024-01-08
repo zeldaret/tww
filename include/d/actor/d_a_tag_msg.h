@@ -25,9 +25,6 @@ public:
 
 public:
     /* 0x290 */ u8 mAction;
-    /* 0x291 */ u8 field_0x291;
-    /* 0x292 */ u8 field_0x292;
-    /* 0x293 */ u8 field_0x293;
 };
 
 #endif /* D_A_TAG_MSG_H */
