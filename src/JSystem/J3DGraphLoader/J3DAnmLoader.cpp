@@ -263,10 +263,10 @@ void J3DAnmFullLoader_v15::setAnmTransform(J3DAnmTransformFull* param_1, const J
     param_1->mFrameMax = param_2->mFrameMax;
     param_1->mAttribute = param_2->field_0x8;
     param_1->mFrame = 0.0f;
-    param_1->field_0x24 = JSUConvertOffsetToPtr<J3DAnmTransformFullTable>(param_2, (void*)param_2->mTableOffset);
-    param_1->field_0x10 = JSUConvertOffsetToPtr<f32>(param_2, (void*)param_2->mScaleValOffset);
-    param_1->field_0x14 = JSUConvertOffsetToPtr<s16>(param_2, (void*)param_2->mRotValOffset);
-    param_1->field_0x18 = JSUConvertOffsetToPtr<f32>(param_2, (void*)param_2->mTransValOffset);
+    param_1->mAnmTable = JSUConvertOffsetToPtr<J3DAnmTransformFullTable>(param_2, (void*)param_2->mTableOffset);
+    param_1->mScaleData = JSUConvertOffsetToPtr<f32>(param_2, (void*)param_2->mScaleValOffset);
+    param_1->mRotData = JSUConvertOffsetToPtr<s16>(param_2, (void*)param_2->mRotValOffset);
+    param_1->mTransData = JSUConvertOffsetToPtr<f32>(param_2, (void*)param_2->mTransValOffset);
 }
 
 /* 802FFE90-802FFEB8       .text readAnmColor__20J3DAnmFullLoader_v15FPC19J3DAnmColorFullData */
@@ -454,12 +454,12 @@ void J3DAnmKeyLoader_v15::setAnmTransform(J3DAnmTransformKey* param_1, const J3D
     param_1->field_0x22 = param_2->field_0xc;
     param_1->mFrameMax = param_2->mFrameMax;
     param_1->mAttribute = param_2->field_0x8;
-    param_1->field_0x24 = param_2->field_0x9;
+    param_1->mDecShift = param_2->field_0x9;
     param_1->mFrame = 0.0f;
-    param_1->field_0x28 = JSUConvertOffsetToPtr<J3DAnmTransformKeyTable>(param_2, (void*)param_2->mTableOffset);
-    param_1->field_0x10 = JSUConvertOffsetToPtr<f32>(param_2, (void*)param_2->field_0x18);
-    param_1->field_0x14 = JSUConvertOffsetToPtr<s16>(param_2, (void*)param_2->field_0x1c);
-    param_1->field_0x18 = JSUConvertOffsetToPtr<f32>(param_2, (void*)param_2->field_0x20);
+    param_1->mAnmTable = JSUConvertOffsetToPtr<J3DAnmTransformKeyTable>(param_2, (void*)param_2->mTableOffset);
+    param_1->mScaleData = JSUConvertOffsetToPtr<f32>(param_2, (void*)param_2->field_0x18);
+    param_1->mRotData = JSUConvertOffsetToPtr<s16>(param_2, (void*)param_2->field_0x1c);
+    param_1->mTransData = JSUConvertOffsetToPtr<f32>(param_2, (void*)param_2->field_0x20);
 }
 
 /* 803006D4-803006FC       .text readAnmTextureSRT__19J3DAnmKeyLoader_v15FPC23J3DAnmTextureSRTKeyData */

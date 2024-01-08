@@ -270,14 +270,12 @@ public:
     void checkEmDataFlag(u32) {}
     void drawCB() {}
     void drawEmitterCallBack() {}
-    void getAspect() {}
     void getAxisYVec(JGeometry::TVec3<f32>&) const {}
     void getBaseEnvColor(GXColor&) {}
     void getBasePrmColor(GXColor&) {}
     void getCamMtxPtr() {}
     void getChildParticleList() {}
     void getCurrentCreateNumber() const {}
-    void getFovy() {}
     void getFrame() {}
     void getGlobalParticleScale(JGeometry::TVec3<f32>&) const {}
     void getParticleList() {}
@@ -304,6 +302,9 @@ public:
         vec1.set(emtrInfo.mEmitterGlobalRot[0][1], emtrInfo.mEmitterGlobalRot[1][1], emtrInfo.mEmitterGlobalRot[2][1]);
         vec2.set(emtrInfo.mEmitterGlobalRot[0][2], emtrInfo.mEmitterGlobalRot[1][2], emtrInfo.mEmitterGlobalRot[2][2]);
     }
+
+    static f32 getAspect() { return emtrInfo.mAspect; }
+    static f32 getFovy() { return emtrInfo.mFovy; }
 
     /* 0x000 */ VolumeFunc mVolumeFunc;
     /* 0x00C */ JGeometry::TVec3<f32> mEmitterScale;

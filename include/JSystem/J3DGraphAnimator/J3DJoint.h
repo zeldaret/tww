@@ -19,7 +19,7 @@ public:
 
     void initAnm() {
         for (int i = 0; i < 4; i++) {
-            mOne[i] = 0;
+            mOne[i] = NULL;
             mTwo[i] = 0.0f;
         }
     }

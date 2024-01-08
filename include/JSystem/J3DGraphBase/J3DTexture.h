@@ -71,7 +71,7 @@ public:
     Mtx& getMtx() { return mMtx; }
     void setEffectMtx(Mtx effectMtx) { mTexMtxInfo.setEffectMtx(effectMtx); }
     Mtx& getViewMtx() { return mViewMtx; }
-    void setViewMtx(Mtx viewMtx) { MTXCopy(viewMtx, mViewMtx); }
+    void setViewMtx(const Mtx viewMtx) { MTXCopy(viewMtx, mViewMtx); }
 
     void getTextureSRT() {}
 
