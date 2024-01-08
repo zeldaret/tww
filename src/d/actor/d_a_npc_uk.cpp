@@ -355,13 +355,3 @@ static BOOL daNpc_Uk_Draw(daNpc_Uk_c*) {
 static BOOL daNpc_Uk_IsDelete(daNpc_Uk_c*) {
     /* Nonmatching */
 }
-/* 00005A0C-00005A28       .text setEyePos__10daNpc_Uk_cF4cXyz */
-void daNpc_Uk_c::setEyePos(cXyz) {
-    /* Nonmatching */
-}
-
-/* 00005A28-00005A44       .text setAttentionBasePos__10daNpc_Uk_cF4cXyz */
-void daNpc_Uk_c::setAttentionBasePos(cXyz) {
-    /* Nonmatching */
-}
-

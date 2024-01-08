@@ -4,7 +4,8 @@
 //
 
 #include "d/actor/d_a_npc_roten.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
+#include "d/actor/d_a_demo_item.h"
 
 /* 00000078-000002F0       .text __ct__12daNpcRoten_cFv */
 daNpcRoten_c::daNpcRoten_c() {
@@ -318,10 +319,5 @@ static BOOL daNpc_RotenDraw(void*) {
 
 /* 00003F94-00003F9C       .text daNpc_RotenIsDelete__FPv */
 static BOOL daNpc_RotenIsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 00003F9C-00003FB8       .text setOffsetPos__9daDitem_cF4cXyz */
-void daDitem_c::setOffsetPos(cXyz) {
     /* Nonmatching */
 }

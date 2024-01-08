@@ -12,7 +12,7 @@ BOOL daPedestal::daPds_c::_delete() {
 }
 
 /* 000000DC-000000FC       .text CheckCreateHeap__10daPedestalFP10fopAc_ac_c */
-void daPedestal::CheckCreateHeap(fopAc_ac_c*) {
+BOOL daPedestal::CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -122,27 +122,27 @@ BOOL daPedestal::daPds_c::_draw() {
 }
 
 /* 00000F10-00000F30       .text daPds_Create__10daPedestalFPv */
-void daPedestal::daPds_Create(void*) {
+s32 daPedestal::daPds_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000F30-00000F54       .text daPds_Delete__10daPedestalFPv */
-void daPedestal::daPds_Delete(void*) {
+BOOL daPedestal::daPds_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000F54-00000F78       .text daPds_Draw__10daPedestalFPv */
-void daPedestal::daPds_Draw(void*) {
+BOOL daPedestal::daPds_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000F78-00000F9C       .text daPds_Execute__10daPedestalFPv */
-void daPedestal::daPds_Execute(void*) {
+BOOL daPedestal::daPds_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00000F9C-00000FA4       .text daPds_IsDelete__10daPedestalFPv */
-void daPedestal::daPds_IsDelete(void*) {
+BOOL daPedestal::daPds_IsDelete(void*) {
     /* Nonmatching */
 }
 

@@ -14,6 +14,7 @@ namespace daObjSwhammer {
         void prm_get_swSave() const {}
         void prm_get_swSave2() const {}
     
+        Act_c();
         void CreateHeap();
         s32 Create();
         s32 _create();

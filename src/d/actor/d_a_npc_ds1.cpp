@@ -295,19 +295,3 @@ static BOOL daNpc_Ds1_Draw(daNpc_Ds1_c*) {
 static BOOL daNpc_Ds1_IsDelete(daNpc_Ds1_c*) {
     /* Nonmatching */
 }
-
-/* 000057B0-000057CC       .text setEyePos__11daNpc_Ds1_cF4cXyz */
-void daNpc_Ds1_c::setEyePos(cXyz) {
-    /* Nonmatching */
-}
-
-/* 000057CC-000057E8       .text setAttentionBasePos__11daNpc_Ds1_cF4cXyz */
-void daNpc_Ds1_c::setAttentionBasePos(cXyz) {
-    /* Nonmatching */
-}
-
-/* 00005824-00005904       .text getItemZoomPos__16ShopCam_action_cFf */
-void ShopCam_action_c::getItemZoomPos(float) {
-    /* Nonmatching */
-}
-

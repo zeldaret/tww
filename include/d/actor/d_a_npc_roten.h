@@ -3,6 +3,10 @@
 
 #include "f_op/f_op_actor.h"
 
+struct sRotenAnmDat {
+    
+};
+
 class daNpcRoten_c : public fopAc_ac_c {
 public:
     void getPhaseP() {}
@@ -10,6 +14,7 @@ public:
     void setNpcNo(unsigned char) {}
     void setResFlag(unsigned char) {}
 
+    daNpcRoten_c();
     s32 _create();
     void createHeap();
     void createInit();

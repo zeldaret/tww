@@ -7,6 +7,18 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_npc.h"
 
+struct sUbMsgDat {
+    
+};
+
+struct sPeopleAnmDat {
+    
+};
+
+struct daNpcPeople_c__l_npc_dat {
+    
+};
+
 class daNpcPeople_c : public fopAc_ac_c {
 public:
     void getNpcNo() {}
@@ -18,6 +30,7 @@ public:
     void setResFlag(unsigned char) {}
     void setTalk(unsigned char) {}
 
+    daNpcPeople_c();
     s32 _create();
     void createHeap();
     void createInit();
@@ -185,7 +198,7 @@ public:
     /* 0x78E */ u8 m78E[0x78F - 0x78E];
     /* 0x78F */ u8 m78F;
     /* 0x790 */ u8 m790;
-    /* 0x791 */ daNpcPeople_c__NpcType mNpcType;
+    /* 0x791 */ u8 mNpcType;
     /* 0x792 */ u8 m792[0x793 - 0x792];
     /* 0x793 */ u8 m793;
     /* 0x794 */ u8 m794;

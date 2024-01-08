@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_npc_people.h"
-#include "dolphin/types.h"
+#include "d/actor/d_a_kb.h"
 
 /* 00000078-00000274       .text __ct__13daNpcPeople_cFv */
 daNpcPeople_c::daNpcPeople_c() {
@@ -650,9 +650,3 @@ static BOOL daNpc_PeopleDraw(void*) {
 static BOOL daNpc_PeopleIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 00009B90-00009BB4       .text taura_pos_set__8kb_classF4cXyz */
-void kb_class::taura_pos_set(cXyz) {
-    /* Nonmatching */
-}
-

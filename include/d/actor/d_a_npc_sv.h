@@ -4,6 +4,10 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 
+struct sSvAnmDat {
+    
+};
+
 class daNpcSv_c : public fopAc_ac_c {
 public:
     void getMsgPtn() {}
@@ -11,6 +15,7 @@ public:
     void getPhaseP() {}
     void setResFlag(unsigned char) {}
 
+    daNpcSv_c();
     s32 _create();
     void createHeap();
     void createInit();

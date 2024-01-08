@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_npc_rsh1.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 000000EC-0000021C       .text __ct__16daNpc_Rsh1_HIO_cFv */
 daNpc_Rsh1_HIO_c::daNpc_Rsh1_HIO_c() {
@@ -295,19 +295,3 @@ static BOOL daNpc_Rsh1_Draw(daNpc_Rsh1_c*) {
 static BOOL daNpc_Rsh1_IsDelete(daNpc_Rsh1_c*) {
     /* Nonmatching */
 }
-
-/* 00004FE0-00004FFC       .text setEyePos__12daNpc_Rsh1_cF4cXyz */
-void daNpc_Rsh1_c::setEyePos(cXyz) {
-    /* Nonmatching */
-}
-
-/* 00004FFC-00005018       .text setAttentionBasePos__12daNpc_Rsh1_cF4cXyz */
-void daNpc_Rsh1_c::setAttentionBasePos(cXyz) {
-    /* Nonmatching */
-}
-
-/* 00005018-000050F8       .text getItemZoomPos__16ShopCam_action_cFf */
-void ShopCam_action_c::getItemZoomPos(float) {
-    /* Nonmatching */
-}
-

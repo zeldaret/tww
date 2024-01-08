@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_nz.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 000000EC-00000138       .text __ct__10daNZ_HIO_cFv */
 daNZ_HIO_c::daNZ_HIO_c() {

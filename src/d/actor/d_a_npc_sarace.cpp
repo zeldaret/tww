@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_npc_sarace.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 000000EC-00000198       .text __ct__18daNpc_Sarace_HIO_cFv */
 daNpc_Sarace_HIO_c::daNpc_Sarace_HIO_c() {

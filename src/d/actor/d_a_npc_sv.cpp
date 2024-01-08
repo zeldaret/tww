@@ -4,7 +4,8 @@
 //
 
 #include "d/actor/d_a_npc_sv.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
+#include "d/actor/d_a_obj_ikada.h"
 
 /* 00000078-0000021C       .text __ct__9daNpcSv_cFv */
 daNpcSv_c::daNpcSv_c() {
@@ -248,10 +249,5 @@ static BOOL daNpc_PeopleDraw(void*) {
 
 /* 000029E4-000029EC       .text daNpc_PeopleIsDelete__FPv */
 static BOOL daNpc_PeopleIsDelete(void*) {
-    /* Nonmatching */
-}
-
-/* 00002C0C-00002C28       .text getCranePos__13daObj_Ikada_cFv */
-void daObj_Ikada_c::getCranePos() {
     /* Nonmatching */
 }

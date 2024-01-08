@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_npc_p2.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 000000EC-0000020C       .text __ct__19daNpc_P2_childHIO_cFv */
 daNpc_P2_childHIO_c::daNpc_P2_childHIO_c() {

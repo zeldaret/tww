@@ -19,6 +19,7 @@ public:
     void getPhaseP() {}
     void setResFlag(unsigned char) {}
 
+    daNpcMt_c();
     s32 _create();
     void createHeap();
     void createInit();

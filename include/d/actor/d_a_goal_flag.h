@@ -28,4 +28,13 @@ public:
     /* Place member variables here */
 };
 
+class daGFlag_packet_c {
+public:
+    void setTexObj(unsigned char);
+    void setToonTexObj();
+    void draw();
+    void setBackNrm();
+    void setNrmVtx(cXyz*, int, int);
+};
+
 #endif /* D_A_GOAL_FLAG_H */

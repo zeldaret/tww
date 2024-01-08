@@ -6,6 +6,8 @@
 class J3DAnmTransformKey;
 
 namespace daObjVds {
+    static void ds_search_switchCB(void*, void*);
+
     class Act_c : public fopAc_ac_c {
     public:
         void is_switch() const {}

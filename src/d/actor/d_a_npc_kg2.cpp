@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_npc_kg2.h"
-#include "dolphin/types.h"
+#include "m_Do/m_Do_ext.h"
 
 /* 000000EC-00000194       .text __ct__15daNpc_Kg2_HIO_cFv */
 daNpc_Kg2_HIO_c::daNpc_Kg2_HIO_c() {
