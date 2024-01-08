@@ -564,7 +564,7 @@ config.libs = [
     JSystemLib(
         "JParticle",
         [
-            Object(NonMatching, "JSystem/JParticle/JPABaseShape.cpp"),
+            Object(Matching,    "JSystem/JParticle/JPABaseShape.cpp"),
             Object(Matching,    "JSystem/JParticle/JPAExtraShape.cpp"),
             Object(Matching,    "JSystem/JParticle/JPASweepShape.cpp"),
             Object(Matching,    "JSystem/JParticle/JPAExTexShape.cpp"),

@@ -163,3 +163,5 @@ JPABaseShapeArc::JPABaseShapeArc(const u8* data, JKRHeap* pHeap) {
         mpEnvColorArr = NULL;
     }
 }
+
+JPABaseShape::~JPABaseShape() {}
