@@ -48,8 +48,10 @@ static s16 s16_data_ratio_set(s16 param_0, s16 param_1, f32 param_2) {
 
 /* 8019808C-8019847C       .text menu_vrbox_set__Fv */
 void menu_vrbox_set() {
-    /* Nonmatching - regalloc. */
     f32 blendPalAB, curTime;
+    stage_vrbox_info_class* vrbox;
+    stage_vrbox_info_class* vrbox0;
+    stage_vrbox_info_class* vrbox1;
 
     camera_class * pCamera = dComIfGp_getCamera(0);
 
@@ -72,7 +74,7 @@ void menu_vrbox_set() {
 
     g_env_light.mpSchejule = dKyd_schejule_menu_getp();
 
-    u8 palIdx1, palIdx0;
+    u8 palIdx0, palIdx1;
     for (s32 i = 0; i < 11; i++) {
         if (curTime >= g_env_light.mpSchejule[i].mTimeEnd && curTime <= g_env_light.mpSchejule[i].mTimeBegin) {
             palIdx0 = g_env_light.mpSchejule[i].mPalIdx0;
@@ -81,11 +83,11 @@ void menu_vrbox_set() {
         }
     }
 
-    stage_vrbox_info_class* vrbox = dKyd_dmvrbox_getp();
+    vrbox = dKyd_dmvrbox_getp();
     g_env_light.mpVrboxInfo = vrbox;
 
-    stage_vrbox_info_class* vrbox0 = &vrbox[palIdx0];
-    stage_vrbox_info_class* vrbox1 = &vrbox[palIdx1];
+    vrbox0 = &vrbox[palIdx0];
+    vrbox1 = &vrbox[palIdx1];
     g_env_light.mVrSkyColor.r = s16_data_ratio_set(vrbox0->mSkyColor.r, vrbox1->mSkyColor.r, blendPalAB);
     g_env_light.mVrSkyColor.g = s16_data_ratio_set(vrbox0->mSkyColor.g, vrbox1->mSkyColor.g, blendPalAB);
     g_env_light.mVrSkyColor.b = s16_data_ratio_set(vrbox0->mSkyColor.b, vrbox1->mSkyColor.b, blendPalAB);

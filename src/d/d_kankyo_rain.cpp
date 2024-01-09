@@ -381,8 +381,7 @@ void rain_bg_chk(dKankyo_rain_Packet* pPkt, int idx) {
 
 /* 8008D0DC-8008D53C       .text overhead_bg_chk__Fv */
 bool overhead_bg_chk() {
-    /* Nonmatching - regalloc */
-    camera_class * pCamera = dComIfGp_getCamera(0);
+    camera_class * pCamera = (camera_class*)dComIfGp_getCamera(0);
     bool ret = false;
 
     dBgS_ObjGndChk_All gndChk;

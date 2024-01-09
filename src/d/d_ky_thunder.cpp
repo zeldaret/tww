@@ -108,6 +108,7 @@ BOOL dThunder_IsDelete(dThunder_c* i_this) {
 
 /* 80198ABC-80198B68       .text dThunder_Delete__FP10dThunder_c */
 BOOL dThunder_Delete(dThunder_c* i_this) {
+    /* Nonmatching */
     mDoAud_seDeleteObject(&i_this->mPos);
     mDoAud_seDeleteObject(&i_this->mPosNeg);
     i_this->~dThunder_c();
@@ -127,9 +128,8 @@ s32 dThunder_Create(kankyo_class* i_ky) {
 
 /* 80198BC4-801990CC       .text create__10dThunder_cFv */
 s32 dThunder_c::create() {
-    /* Nonmatching - regalloc */
     dScnKy_env_light_c& envLight = dKy_getEnvlight();
-    camera_class *pCamera = dComIfGp_getCamera(0);
+    camera_class *pCamera = (camera_class*)dComIfGp_getCamera(0);
 
     new(this) dThunder_c();
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_YTHDR00);
@@ -160,10 +160,12 @@ s32 dThunder_c::create() {
 
     mRot = 4000.0f;
     mRot = size * cM_rndFX(mRot);
-    mScale.x = size * (cM_rndF(15.0f) + 5.0f);
+    f32 f1 = cM_rndF(15.0f);
+    mScale.x = size * (f1 + 5.0f);
     if (cM_rndFX(1.0f) >= 0.5)
         mScale.x *= -1.0f;
-    mScale.y = size * (cM_rndF(60.0f) + 20.0f);
+    f1 = cM_rndF(60.0f);
+    mScale.y = size * (f1 + 20.0f);
     mScale.z = 1.0f;
 
     dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &pCamera->mLookat.mCenter, &fwd);
@@ -205,7 +207,7 @@ kankyo_method_class l_dThunder_Method = {
     (process_method_func)dThunder_Draw,
 };
 
-kankyo_process_profile_definition g_profile_THUNDER = {
+kankyo_process_profile_definition g_profile_KY_THUNDER = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,
