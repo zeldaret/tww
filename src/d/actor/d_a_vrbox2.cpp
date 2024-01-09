@@ -84,7 +84,7 @@ static BOOL daVrbox2_Draw(vrbox2_class* i_this) {
     return TRUE;
 }
 
-J3DZModeInfo l_zmodeInfo = { GX_FALSE, GX_LEQUAL, GX_FALSE };
+J3DZModeInfo_4bytes l_zmodeInfo = { GX_FALSE, GX_LEQUAL, GX_FALSE };
 
 /* 8015EC30-8015F368       .text daVrbox2_color_set__FP12vrbox2_class */
 BOOL daVrbox2_color_set(vrbox2_class* i_this) {
@@ -162,7 +162,7 @@ BOOL daVrbox2_color_set(vrbox2_class* i_this) {
     modelData = i_this->mpBackCloud->getModelData();
     mat = modelData->getMaterialNodePointer(0);
     mat->setCullMode(GX_CULL_NONE);
-    mat->getZMode()->setZModeInfo(l_zmodeInfo);
+    mat->getZMode()->setZModeInfo(l_zmodeInfo.parent);
     mat->change();
 
     mtx = mat->getTexMtx(0);
@@ -180,7 +180,7 @@ BOOL daVrbox2_color_set(vrbox2_class* i_this) {
 
     mat = modelData->getMaterialNodePointer(1);
     mat->setCullMode(GX_CULL_NONE);
-    mat->getZMode()->setZModeInfo(l_zmodeInfo);
+    mat->getZMode()->setZModeInfo(l_zmodeInfo.parent);
     mat->change();
 
     mtx = mat->getTexMtx(0);
@@ -193,7 +193,7 @@ BOOL daVrbox2_color_set(vrbox2_class* i_this) {
 
     mat = modelData->getMaterialNodePointer(2);
     mat->setCullMode(GX_CULL_NONE);
-    mat->getZMode()->setZModeInfo(l_zmodeInfo);
+    mat->getZMode()->setZModeInfo(l_zmodeInfo.parent);
     mat->change();
 
     mtx = mat->getTexMtx(0);
@@ -207,7 +207,7 @@ BOOL daVrbox2_color_set(vrbox2_class* i_this) {
 
     if (i_this->mpKasumiMae != NULL) {
         mat = i_this->mpKasumiMae->getModelData()->getMaterialNodePointer(0);
-        mat->getZMode()->setZModeInfo(l_zmodeInfo);
+        mat->getZMode()->setZModeInfo(l_zmodeInfo.parent);
         mat->change();
 
         c0.r = g_env_light.mVrKasumiMaeColor.r;
@@ -223,7 +223,7 @@ BOOL daVrbox2_color_set(vrbox2_class* i_this) {
 
     if (i_this->mpUsoUmi != NULL) {
         mat = i_this->mpUsoUmi->getModelData()->getMaterialNodePointer(0);
-        mat->getZMode()->setZModeInfo(l_zmodeInfo);
+        mat->getZMode()->setZModeInfo(l_zmodeInfo.parent);
         mat->change();
 
         k0.r = g_env_light.mVrUsoUmiColor.r;

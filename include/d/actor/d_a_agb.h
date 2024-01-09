@@ -8,6 +8,7 @@
 #include "global.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_hostIO.h"
+#include "f_op/f_op_msg.h"
 
 class daAgb_HIO_c : public mDoHIO_entry_c {
 public:
@@ -25,7 +26,6 @@ public:
     /* 0x30 */ f32 field_0x30;
 };
 
-class msg_class;
 class dMsgCtrl_c {
 public:
     int init(u16);
