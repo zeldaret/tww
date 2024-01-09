@@ -27,7 +27,7 @@ static dCcD_SrcCps l_cps_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
-        /* SrcObjAt  Type    */ AT_TYPE_LEAF_WIND,
+        /* SrcObjAt  Type    */ AT_TYPE_WIND,
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ AT_SPRM_SET | AT_SPRM_GRP,
         /* SrcObjTg  Type    */ 0,

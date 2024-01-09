@@ -17,7 +17,7 @@ static dCcD_SrcSph l_sph_src = {
         /* SrcObjAt  Type    */ 0,
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ ~(AT_TYPE_LIGHT | AT_TYPE_UNK400000 | AT_TYPE_LEAF_WIND | AT_TYPE_UNK20000 | AT_TYPE_WATER), // 0xFF1DFEFF
+        /* SrcObjTg  Type    */ ~(AT_TYPE_LIGHT | AT_TYPE_UNK400000 | AT_TYPE_WIND | AT_TYPE_UNK20000 | AT_TYPE_WATER), // 0xFF1DFEFF
         /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_OTHER,
         /* SrcObjCo  SPrm    */ 0,
         /* SrcGObjAt Se      */ 0,

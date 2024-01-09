@@ -2227,7 +2227,7 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcObjAt  Type    */ 0,
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_LEAF_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
+        /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
         /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_PLAYER,
         /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK2 | CO_SPRM_VSGRP,
         /* SrcGObjAt Se      */ 0,
@@ -2257,7 +2257,7 @@ static dCcD_SrcCyl l_wind_cyl_src = {
         /* SrcObjAt  Type    */ 0,
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ AT_TYPE_LEAF_WIND,
+        /* SrcObjTg  Type    */ AT_TYPE_WIND,
         /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_PLAYER,
         /* SrcObjCo  SPrm    */ 0,
         /* SrcGObjAt Se      */ 0,
@@ -2344,7 +2344,7 @@ static dCcD_SrcCps l_fan_wind_cps_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
-        /* SrcObjAt  Type    */ AT_TYPE_LEAF_WIND,
+        /* SrcObjAt  Type    */ AT_TYPE_WIND,
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ AT_SPRM_SET | AT_SPRM_VS_ENEMY | AT_SPRM_VS_OTHER,
         /* SrcObjTg  Type    */ 0,
@@ -2374,7 +2374,7 @@ static dCcD_SrcSph l_fan_wind_sph_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
-        /* SrcObjAt  Type    */ AT_TYPE_LEAF_WIND,
+        /* SrcObjAt  Type    */ AT_TYPE_WIND,
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ AT_SPRM_SET | AT_SPRM_VS_ENEMY | AT_SPRM_VS_OTHER,
         /* SrcObjTg  Type    */ 0,

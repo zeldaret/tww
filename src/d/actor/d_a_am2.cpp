@@ -270,7 +270,7 @@ static BOOL week_atari_check(am2_class* i_this) {
                     i_this->m2CE = 1;
                 }
                 break;
-            case AT_TYPE_LEAF_WIND:
+            case AT_TYPE_WIND:
                 hitType = 2;
                 i_this->m2CE = 3;
                 break;
@@ -305,7 +305,7 @@ static BOOL week_atari_check(am2_class* i_this) {
                 break;
             }
             
-            if (hitType != 2) { // Not hit by Deku Leaf wind
+            if (hitType != 2) { // Not hit by wind
                 CcAtInfo atInfo;
                 cXyz hitPos = *i_this->mWeakSph.GetTgHitPosP();
                 atInfo.mpObj = i_this->mWeakSph.GetTgHitObj();
@@ -1400,7 +1400,7 @@ static s32 daAM2_Create(fopAc_ac_c* i_actor) {
                 /* SrcObjAt  Type    */ AT_TYPE_UNK1000,
                 /* SrcObjAt  Atp     */ 0,
                 /* SrcObjAt  SPrm    */ 0,
-                /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_LEAF_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
+                /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
                 /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_ENEMY,
                 /* SrcObjCo  SPrm    */ 0,
                 /* SrcGObjAt Se      */ 0,
@@ -1432,7 +1432,7 @@ static s32 daAM2_Create(fopAc_ac_c* i_actor) {
                 /* SrcObjAt  Type    */ AT_TYPE_UNK1000,
                 /* SrcObjAt  Atp     */ 0,
                 /* SrcObjAt  SPrm    */ 0,
-                /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_LEAF_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
+                /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
                 /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_ENEMY,
                 /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IS_UNK4 | CO_SPRM_VSGRP,
                 /* SrcGObjAt Se      */ 0,

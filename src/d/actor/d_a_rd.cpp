@@ -37,7 +37,7 @@ const dCcD_SrcCyl daRd_c::m_cyl_src = {
         /* SrcObjAt  Type    */ 0,
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_LEAF_WIND | AT_TYPE_UNK400000),
+        /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000),
         /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_OTHER,
         /* SrcObjCo  SPrm    */ CO_SPRM_SET | CO_SPRM_IGRP | CO_SPRM_VSGRP,
         /* SrcGObjAt Se      */ 0,
@@ -577,7 +577,7 @@ bool daRd_c::checkTgHit() {
                 break;
             }
             break;
-        case AT_TYPE_LEAF_WIND:
+        case AT_TYPE_WIND:
             r29 = false;
             mHitType = 3;
             mCE0 = 40;

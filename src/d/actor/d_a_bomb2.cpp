@@ -643,7 +643,7 @@ namespace daBomb2 {
         cCcD_Obj* hitObj = mSph.GetTgHitObj();
         if (hitObj == NULL)
             return;
-        if (!(hitObj->GetAtType() & AT_TYPE_LEAF_WIND))
+        if (!(hitObj->GetAtType() & AT_TYPE_WIND))
             return;
         
         f32 f30 = attr().field_0x40;
@@ -814,7 +814,7 @@ namespace daBomb2 {
                 if(obj->ChkAtType(AT_TYPE_BOMB)) {
                     fuse = true;
                 }
-                else if(!obj->ChkAtType(AT_TYPE_LEAF_WIND)) {
+                else if(!obj->ChkAtType(AT_TYPE_WIND)) {
                     explode = true;
                 }
             }

@@ -219,7 +219,7 @@ bool daBomb_c::checkExplodeCc_norm() {
             if(obj->ChkAtType(AT_TYPE_BOMB)) {
                 explode = true;
             }
-            else if(!obj->ChkAtType(AT_TYPE_LEAF_WIND)) {
+            else if(!obj->ChkAtType(AT_TYPE_WIND)) {
                 explode = true;
             }
         }
@@ -247,7 +247,7 @@ bool daBomb_c::checkExplodeCc_nut() {
             if(obj->ChkAtType(AT_TYPE_BOMB)) {
                 explode = true;
             }
-            else if(!obj->ChkAtType(AT_TYPE_LEAF_WIND)) {
+            else if(!obj->ChkAtType(AT_TYPE_WIND)) {
                 hit = true;
             }
         }
@@ -286,7 +286,7 @@ bool daBomb_c::checkExplodeCc_cannon() {
     if(mSph.ChkTgHit()) {
         cCcD_Obj* obj = mSph.GetTgHitObj();
         if(obj) {
-            if(!obj->ChkAtType(AT_TYPE_LEAF_WIND)) {
+            if(!obj->ChkAtType(AT_TYPE_WIND)) {
                 explode = true;
             }
         }
@@ -1086,7 +1086,7 @@ void daBomb_c::set_wind_vec() {
     cCcD_Obj* hitObj = mSph.GetTgHitObj();
     if (hitObj == NULL)
         return;
-    if (!(hitObj->GetAtType() & AT_TYPE_LEAF_WIND))
+    if (!(hitObj->GetAtType() & AT_TYPE_WIND))
         return;
     cXyz sp48 = *mSph.GetTgRVecP();
     f32 f31 = sp48.abs2();

@@ -29,7 +29,7 @@ void daPy_py_c::objWindHitCheck(dCcD_Cyl* cyl) {
     
     if (cyl->ChkTgHit()) {
         cCcD_Obj* hitObj = cyl->GetTgHitObj();
-        if (hitObj && hitObj->GetAtType() & AT_TYPE_LEAF_WIND) {
+        if (hitObj && hitObj->GetAtType() & AT_TYPE_WIND) {
             targetSpeed = *cyl->GetTgRVecP();
             f32 distXZ = cyl->GetTgRVecP()->absXZ();
             maxStep = 1.0f;

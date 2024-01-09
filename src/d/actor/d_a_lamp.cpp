@@ -16,7 +16,7 @@ static dCcD_SrcSph sph_src = {
         /* SrcObjAt  Type    */ 0,
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ AT_TYPE_FIRE | AT_TYPE_UNK20000 | AT_TYPE_FIRE_ARROW | AT_TYPE_LEAF_WIND | AT_TYPE_UNK400000,
+        /* SrcObjTg  Type    */ AT_TYPE_FIRE | AT_TYPE_UNK20000 | AT_TYPE_FIRE_ARROW | AT_TYPE_WIND | AT_TYPE_UNK400000,
         /* SrcObjTg  SPrm    */ TG_SPRM_SET | TG_SPRM_IS_OTHER,
         /* SrcObjCo  SPrm    */ 0,
         /* SrcGObjAt Se      */ 0,
@@ -114,7 +114,7 @@ static BOOL daLamp_Execute(lamp_class* i_this) {
     if (!i_this->mHitTimeoutLeft) {
         if (i_this->mSph.ChkTgHit()) {
             cCcD_Obj* pHitObj = i_this->mSph.GetTgHitObj();
-            if (pHitObj && pHitObj->ChkAtType(AT_TYPE_LEAF_WIND | AT_TYPE_UNK400000)) {
+            if (pHitObj && pHitObj->ChkAtType(AT_TYPE_WIND | AT_TYPE_UNK400000)) {
                 i_this->mHitAngle = dComIfGp_getPlayer(0)->shape_angle.y;
                 i_this->mHitTimeoutLeft = 0x28;
             }
