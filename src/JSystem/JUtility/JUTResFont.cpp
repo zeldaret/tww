@@ -8,6 +8,7 @@
 #include "JSystem/JSupport/JSupport.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
+#include "JSystem/JUtility/JUTDataHeader.h"
 #include "dolphin/gx/GX.h"
 #include "dolphin/types.h"
 
@@ -107,9 +108,9 @@ void JUTResFont::countBlock() {
     mGlyphBlockNum = 0;
     mMapBlockNum = 0;
 
-    const BlockHeader* header = (BlockHeader*)mResFont->data;
+    const JUTDataBlockHeader* header = (JUTDataBlockHeader*)mResFont->data;
     for (u32 i = 0; i < mResFont->numBlocks; i++, header = header->getNext()) {
-        switch (header->magic) {
+        switch (header->mType) {
         case 'WID1':
             mWidthBlockNum++;
             break;
@@ -134,9 +135,9 @@ void JUTResFont::setBlock() {
     int mapNum = 0;
     mMaxCode = -1;
 
-    const BlockHeader* header = (BlockHeader*)mResFont->data;
+    const JUTDataBlockHeader* header = (JUTDataBlockHeader*)mResFont->data;
     for (u32 i = 0; i < mResFont->numBlocks; i++, header = header->getNext()) {
-        switch (header->magic) {
+        switch (header->mType) {
         case 'INF1':
             mInfoBlock = (ResFONT::INF1*)header;
             u32 u = mInfoBlock->fontType;

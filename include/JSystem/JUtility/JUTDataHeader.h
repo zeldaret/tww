@@ -7,10 +7,10 @@
 
 struct JUTDataBlockHeader {
     /* 0x0 */ u32 mType;
-    /* 0x4 */ u32 mNextOffset;
+    /* 0x4 */ u32 mSize;
 
     const JUTDataBlockHeader* getNext() const { // fake inline
-        return reinterpret_cast<const JUTDataBlockHeader*>(reinterpret_cast<const u8*>(this) + mNextOffset);
+        return reinterpret_cast<const JUTDataBlockHeader*>(reinterpret_cast<const u8*>(this) + mSize);
     }
 };
 

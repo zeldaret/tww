@@ -30,6 +30,16 @@ public:
 
 class daGFlag_packet_c {
 public:
+    void changeCurrentPos() {}
+    void getDPos() {}
+    void getMtx() {}
+    void getNrm() {}
+    void getOffsetVec() {}
+    void getPos() {}
+    void getTexObjP() {}
+    void getToonTexObjP() {}
+    void setTevStr(dKy_tevstr_c*) {}
+
     void setTexObj(unsigned char);
     void setToonTexObj();
     void draw();

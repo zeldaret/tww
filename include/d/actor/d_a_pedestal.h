@@ -52,7 +52,11 @@ namespace daPedestal {
         void execute(JPABaseEmitter*);
         void end();
         void makeEmitter(unsigned short, const cXyz*, const csXyz*, const cXyz*);
-        void setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char);
+
+        void getEmitter() {}
+        void setAngle(const csXyz*) {}
+        void setPos(const cXyz*) {}
+        void setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {}
     };
 };
 

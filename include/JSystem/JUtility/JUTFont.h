@@ -2,18 +2,11 @@
 #define JUTFONT_H
 
 #include "JSystem/JUtility/TColor.h"
+#include "JSystem/JUtility/JUTDataHeader.h"
 #include "string.h"
 
-struct BlockHeader {
-    const BlockHeader* getNext() const {
-        return reinterpret_cast<const BlockHeader*>(reinterpret_cast<const u8*>(this) + size);
-    }
-    u32 magic;
-    u32 size;
-};
-
 struct ResFONT {
-    struct INF1 : BlockHeader {
+    struct INF1 : JUTDataBlockHeader {
         /* 0x08 */ u16 fontType;
         /* 0x0A */ u16 ascent;
         /* 0x0C */ u16 descent;
@@ -22,13 +15,13 @@ struct ResFONT {
         /* 0x12 */ u16 defaultCode;
     };
 
-    struct WID1 : BlockHeader {
+    struct WID1 : JUTDataBlockHeader {
         /* 0x08 */ u16 startCode;
         /* 0x0A */ u16 endCode;
         /* 0x0C */ u8 mChunkNum[4];
     };
 
-    struct MAP1 : BlockHeader {
+    struct MAP1 : JUTDataBlockHeader {
         /* 0x08 */ u16 mappingMethod;
         /* 0x0A */ u16 startCode;
         /* 0x0C */ u16 endCode;
@@ -36,7 +29,7 @@ struct ResFONT {
         /* 0x10 */ u16 mLeading;
     };
 
-    struct GLY1 : BlockHeader {
+    struct GLY1 : JUTDataBlockHeader {
         /* 0x08 */ u16 startCode;
         /* 0x0A */ u16 endCode;
         /* 0x0C */ u16 cellWidth;

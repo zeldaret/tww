@@ -160,9 +160,3 @@ void daPedestal::daPds_infiniteEcallBack_c::end() {
 void daPedestal::daPds_infiniteEcallBack_c::makeEmitter(unsigned short, const cXyz*, const csXyz*, const cXyz*) {
     /* Nonmatching */
 }
-
-/* 00001288-00001290       .text setup__Q210daPedestal25daPds_infiniteEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void daPedestal::daPds_infiniteEcallBack_c::setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {
-    /* Nonmatching */
-}
-

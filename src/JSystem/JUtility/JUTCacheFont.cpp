@@ -7,6 +7,7 @@
 #include "JSystem/JKernel/JKRAram.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
+#include "JSystem/JUtility/JUTDataHeader.h"
 #include "dolphin/gx/GX.h"
 
 /* 802C03D4-802C0454       .text __ct__12JUTCacheFontFPC7ResFONTUlP7JKRHeap */
@@ -81,15 +82,15 @@ int JUTCacheFont::getMemorySize(const ResFONT* p_font, u16* o_widCount, u32* o_w
 
     u8* fontInf = (u8*)p_font->data;
     for (int i = 0; i < p_font->numBlocks; i++) {
-        switch (((BlockHeader*)fontInf)->magic) {
+        switch (((JUTDataBlockHeader*)fontInf)->mType) {
         case 'INF1':
             break;
         case 'WID1':
-            totalWidSize += ((BlockHeader*)fontInf)->size;
+            totalWidSize += ((JUTDataBlockHeader*)fontInf)->mSize;
             widBlockCount++;
             break;
         case 'GLY1':
-            totalGlySize += ((BlockHeader*)fontInf)->size;
+            totalGlySize += ((JUTDataBlockHeader*)fontInf)->mSize;
             glyTexSize = ((ResFONT::GLY1*)fontInf)->textureSize;
             glyBlockCount++;
             if (glyTexSize > maxGlyTexSize) {
@@ -97,7 +98,7 @@ int JUTCacheFont::getMemorySize(const ResFONT* p_font, u16* o_widCount, u32* o_w
             }
             break;
         case 'MAP1':
-            totalMapSize += ((BlockHeader*)fontInf)->size;
+            totalMapSize += ((JUTDataBlockHeader*)fontInf)->mSize;
             mapBlockCount++;
             break;
         default:
@@ -105,7 +106,7 @@ int JUTCacheFont::getMemorySize(const ResFONT* p_font, u16* o_widCount, u32* o_w
             break;
         }
 
-        fontInf += ((BlockHeader*)fontInf)->size;
+        fontInf += ((JUTDataBlockHeader*)fontInf)->mSize;
     }
 
     if (o_widCount != NULL) {
@@ -295,7 +296,7 @@ void JUTCacheFont::setBlock() {
             if (iVar1 == NULL) {
                 OSPanic(__FILE__, 476, "Cannot alloc ARAM area.");
             }
-            piVar5->magic = aramAddress;
+            piVar5->mType = aramAddress;
             if (piVar5->textureSize > mMaxSheetSize) {
                 mMaxSheetSize = piVar5->textureSize;
             }

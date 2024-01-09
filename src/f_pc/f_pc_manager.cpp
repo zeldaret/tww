@@ -53,7 +53,7 @@ BOOL fpcM_IsCreating(unsigned int pID) {
     return fpcCt_IsCreatingByID(pID);
 }
 
-struct BMG_INF1 : BlockHeader {
+struct BMG_INF1 : JUTDataBlockHeader {
     /* 0x08 */ u8 m08[0x10 - 0x08];
     /* 0x10 */ u32 entries[6];
 };
@@ -77,7 +77,7 @@ void messageSet(u32 status) {
 #else
     BMG_INF1* inf1 = (BMG_INF1*)&msg_data[0x20];
 #endif
-    const char * msg = (const char*)((u8*)inf1->getNext() + sizeof(BlockHeader) + inf1->entries[status]);
+    const char * msg = (const char*)((u8*)inf1->getNext() + sizeof(JUTDataBlockHeader) + inf1->entries[status]);
 
     J2DTextBox * tpane = new J2DTextBox('TXT1', JGeometry::TBox2<f32>(0.0f, 0.0f, 660.0f, 200.0f), (ResFONT*)font_data, msg, HBIND_CENTER, VBIND_CENTER);
     JUT_ASSERT(VERSION_SELECT(0x12b, 0x141, 0x141), tpane != 0);

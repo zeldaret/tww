@@ -309,7 +309,7 @@ void J3DModelLoader::readVertex(const J3DVertexBlock* i_block) {
     } else if (nrm_end != NULL) {
         vertex_data.mNrmNum = ((u32)nrm_end - (u32)vertex_data.mVtxNrmArray) / nrm_size + 1;
     } else {
-        vertex_data.mNrmNum = (i_block->mNextOffset - (u32)i_block->mpVtxNrmArray) / nrm_size + 1;
+        vertex_data.mNrmNum = (i_block->mSize - (u32)i_block->mpVtxNrmArray) / nrm_size + 1;
     }
 
     void* color0_end = NULL;
@@ -324,13 +324,13 @@ void J3DModelLoader::readVertex(const J3DVertexBlock* i_block) {
     } else if (color0_end != NULL) {
         vertex_data.mColNum = ((u32)color0_end - (u32)vertex_data.mVtxColorArray[0]) / 4 + 1;
     } else {
-        vertex_data.mColNum = (i_block->mNextOffset - (u32)i_block->mpVtxColorArray[0]) / 4 + 1;
+        vertex_data.mColNum = (i_block->mSize - (u32)i_block->mpVtxColorArray[0]) / 4 + 1;
     }
 
     if (vertex_data.mVtxTexCoordArray[0] == NULL) {
         vertex_data.mTexCoordNum = 0;
     } else {
-        vertex_data.mTexCoordNum = (i_block->mNextOffset - (u32)i_block->mpVtxTexCoordArray[0]) / 8 + 1;
+        vertex_data.mTexCoordNum = (i_block->mSize - (u32)i_block->mpVtxTexCoordArray[0]) / 8 + 1;
     }
 }
 
