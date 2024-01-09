@@ -1083,6 +1083,8 @@ int dStage_changeScene(int i_exitId, f32 speed, u32 mode, s8 room_no);
 
 void dStage_restartRoom(u32 roomParam, u32 mode);
 
+BOOL dStage_checkRestart();
+
 static inline u8 IkadaGetRoomNoArg0(fopAc_ac_c* i_actor) {
     return (fopAcM_GetParam(i_actor) >> 4) & 0x3F;
 }

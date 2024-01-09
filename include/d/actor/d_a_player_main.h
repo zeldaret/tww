@@ -2307,9 +2307,10 @@ public:
     s16 checkTinkleShield() const { return mTinkleShieldTimer; }
     void setTinkleShield(s16 time) { mTinkleShieldTimer = time; }
     bool checkNoDamageMode() const { return checkEquipDragonShield() || checkTinkleShield() != 0; }
+    s16 checkTinkleHover() const { return mTinkleHoverTimer; }
     void setHoverBoots(s16 time) {
         onNoResetFlg0(daPyFlg0_HOVER_BOOTS);
-        m354C = time;
+        mTinkleHoverTimer = time;
     }
     void onShipTact() { onNoResetFlg1(daPyFlg1_SHIP_TACT); }
     void offShipTact() { offNoResetFlg1(daPyFlg1_SHIP_TACT); }
@@ -2332,6 +2333,11 @@ public:
     void npcStartRestartRoom() {}
     void setDaiokutaEnd() {}
     void setWhirlId(unsigned int) {}
+    void decrementBombCnt() {
+        if (mActivePlayerBombs != 0) {
+            mActivePlayerBombs--;
+        }
+    }
     
     int getStartRoomNo() { return fopAcM_GetParam(this) & 0x3F; }
     int getStartMode() { return (fopAcM_GetParam(this) >> 0x0C) & 0xF; }
@@ -2370,10 +2376,8 @@ public:
     void checkSpecialDemoMode() const {}
     void checkSwordEquip() const {}
     void checkSwordEquipAnime() const {}
-    void checkTinkleHover() const {}
     void checkUpperAnime(u16) const {}
     void checkUpperGuardAnime() const {}
-    void decrementBombCnt() {}
     void doButton() const {}
     void doTrigger() const {}
     void getAnmSpeedStickRate(f32, f32) {}
@@ -2440,6 +2444,7 @@ public:
     virtual void changeTextureAnime(u16, u16, int);
     virtual void cancelChangeTextureAnime() { resetDemoTextureAnime(); }
 
+public:
     /* 0x0320 */ request_of_phase_process_class mPhsLoad;
     /* 0x0328 */ J3DModelData* mpCLModelData;
     /* 0x032C */ J3DModel* mpCLModel;
@@ -2665,7 +2670,7 @@ public:
     /* 0x3546 */ s16 mShieldFrontRangeYAngle;
     /* 0x3548 */ s16 m3548;
     /* 0x354A */ u8 m354A[0x354C - 0x354A];
-    /* 0x354C */ s16 m354C;
+    /* 0x354C */ s16 mTinkleHoverTimer;
     /* 0x354E */ s16 mTinkleShieldTimer;
     /* 0x3550 */ s16 m3550;
     /* 0x3552 */ u16 mKeepItemType;

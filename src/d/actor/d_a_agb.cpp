@@ -13,22 +13,20 @@
 #include "d/d_item_data.h"
 #include "d/d_meter.h"
 #include "d/d_procname.h"
+#include "d/d_kankyo_wether.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_gba_com.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/actor/d_a_npc_md.h"
+#include "d/actor/d_a_npc_cb1.h"
 #include "d/actor/d_a_bomb.h"
+
+static u8 dummy_3569[0xC];
 
 // stripped or compiler generated?
 static u32 unused_lit_2100[] = {0x3F800000, 0x3F800000, 0x3F800000,
                                 0x3F800000, 0x3F800000, 0x3F800000};
-
-// temp
-class daNpc_Cb1_c {
-public:
-    static bool m_flying;
-};
 
 static mDoDvdThd_toMainRam_c* l_gbaCommand;
 
@@ -420,7 +418,7 @@ void daAgb_c::modeLookAttention() {
             se_flag = false;
 
             field_0x65c = 1;
-            if (field_0x674 == 0) {
+            if (mHold == 0) {
                 shape_angle.x = 0;
                 shape_angle.y = 0;
                 shape_angle.z = 0;
@@ -505,13 +503,13 @@ void daAgb_c::onFree() {
 
 /* 800D05F0-800D0608       .text onHold__7daAgb_cFv */
 void daAgb_c::onHold() {
-    field_0x674 = 1;
+    mHold = true;
     mBrk.setPlaySpeed(6.0f);
 }
 
 /* 800D0608-800D0620       .text offHold__7daAgb_cFv */
 void daAgb_c::offHold() {
-    field_0x674 = 0;
+    mHold = false;
     mBrk.setPlaySpeed(1.0f);
 }
 
@@ -544,7 +542,7 @@ void daAgb_c::resetCursor(bool param_0) {
         field_0x676 = 0;
     }
 
-    field_0x674 = 0;
+    mHold = false;
     mBrk.setPlaySpeed(1.0f);
 }
 
@@ -724,7 +722,7 @@ void daAgb_c::GbaItemUse() {
                 temp_r29 = 15;
             }
 
-            fopAcM_create(0x128, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
+            fopAcM_create(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
             field_0x65c = 0x78;
         } else {
             temp_r29 = 0xe;
@@ -735,7 +733,7 @@ void daAgb_c::GbaItemUse() {
         break;
     case 0x15:
         resetCursor(false);
-        fopAcM_create(0x128, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
+        fopAcM_create(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
         field_0x65c = 0x78;
         break;
     case 0x11:
@@ -856,60 +854,171 @@ void daAgb_c::GbaItemUse() {
 /* 800D1188-800D12E4       .text Shopping__7daAgb_cFv */
 void daAgb_c::Shopping() {
     daAgb_ItemBuy& itemBuy = mItemBuy;
-    mItemBuy.field_0x0 = mShop.field_0x0;
+    mItemBuy.U8.field_0x0 = mShop.field_0x0;
     
     // The usage of single | instead of double || here looks like a bug
     if (!(dComIfGp_event_runCheck() | dMenu_flag())) {
         if (dComIfGs_getRupee() < mShop.field_0x2) {
-            itemBuy.field_0x1 = 3;
+            itemBuy.U8.field_0x1 = 3;
             return;
         } else if (mShop.field_0x0 == 0) {
             if (dComIfGs_getArrowNum() < dComIfGs_getArrowMax()) {
                 dComIfGp_setItemArrowNumCount(mShop.field_0x1);
             } else {
-                itemBuy.field_0x1 = 2;
+                itemBuy.U8.field_0x1 = 2;
                 return;
             }
         } else if (mShop.field_0x0 == 1) {
             if (dComIfGs_getBombNum() < dComIfGs_getBombMax()) {
                 dComIfGp_setItemBombNumCount(mShop.field_0x1);
             } else {
-                itemBuy.field_0x1 = 2;
+                itemBuy.U8.field_0x1 = 2;
                 return;
             }
         } else {
             if (dComIfGs_checkBaitItemEmpty()) {
                 dComIfGs_setBaitItem(BIRD_ESA_5);
             } else {
-                itemBuy.field_0x1 = 2;
+                itemBuy.U8.field_0x1 = 2;
                 return;
             }
         }
         dComIfGp_setItemRupeeCount(-mShop.field_0x2);
-        itemBuy.field_0x1 = 1;
+        itemBuy.U8.field_0x1 = 1;
     } else {
-        itemBuy.field_0x1 = 0;
+        itemBuy.U8.field_0x1 = 0;
     }
 }
 
 /* 800D12E4-800D1A3C       .text FlagsSend__7daAgb_cFUl */
-void daAgb_c::FlagsSend(u32) {
-    /* Nonmatching */
+void daAgb_c::FlagsSend(u32 stage_type) {
+    if (field_0x670 &&
+        (stage_type == dSv_save_c::STAGE_SEA2 ||
+        stage_type == dSv_save_c::STAGE_TOTG ||
+        stage_type == dSv_save_c::STAGE_ET ||
+        stage_type == dSv_save_c::STAGE_WT))
+    {
+        mFlags.field_0xa_7 = 0;
+    } else {
+        mFlags.field_0xa_7 = 1;
+    }
+    mFlags.field_0xa_6 = dMenu_flag();
+    mFlags.field_0xa_5 = dComIfGp_event_getMode() != dEvtMode_NONE_e;
+    if (dStage_checkRestart() || dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK20000000_e)) {
+        mFlags.field_0xa_4 = 1;
+    } else {
+        mFlags.field_0xa_4 = 0;
+    }
+    mFlags.field_0x0 = BigLittleChange(dComIfGs_getRupee()) >> 16;
+    mFlags.field_0x5_6 = dComIfGs_getWalletSize();
+    if (dKyw_gbwind_use_check()) {
+        mFlags.field_0xb_6 = 1;
+        s16 r3;
+        // Fakematch: using the dComIfGp_event_runCheck inline breaks the match
+        // if (dComIfGp_event_runCheck() && (dComIfGp_evmng_startCheck("TACT_WINDOW2_SHIP") || dComIfGp_evmng_startCheck("TACT_WINDOW2"))) {
+        if (g_dComIfG_gameInfo.play.getEvent().runCheck() &&
+            (dComIfGp_evmng_startCheck("TACT_WINDOW2_SHIP") || dComIfGp_evmng_startCheck("TACT_WINDOW2")))
+        {
+            r3 = field_0x658;
+        } else {
+            cXyz* wind_vec = dKyw_get_wind_vec();
+            r3 = cM_atan2s(wind_vec->x, wind_vec->z);
+        }
+        mFlags.field_0x2 = (r3 & 0xFF00) >> 8;
+        field_0x658 = r3;
+    } else {
+        mFlags.field_0xb_6 = 0;
+    }
+    mFlags.field_0x3_4 = dComIfGs_isStageTbox(dSv_save_c::STAGE_DRC, 0xF) != FALSE;
+    mFlags.field_0x3_3 = dComIfGs_isStageTbox(dSv_save_c::STAGE_FW, 0xF) != FALSE;
+    mFlags.field_0x3_2 = dComIfGs_isStageTbox(dSv_save_c::STAGE_TOTG, 0xF) != FALSE;
+    mFlags.field_0x3_1 = dComIfGs_isStageTbox(dSv_save_c::STAGE_ET, 0xF) != FALSE;
+    mFlags.field_0x3_0 = dComIfGs_isStageTbox(dSv_save_c::STAGE_WT, 0xF) != FALSE;
+    mFlags.field_0x4 = (field_0x65c + 29) / 30;
+    mFlags.field_0x6_0 = dKy_get_dayofweek();
+    mFlags.field_0x6_3 = dKy_getdaytime_hour();
+    mFlags.field_0x7_2 = dKy_getdaytime_minute();
+    mFlags.field_0x8_1 = dComIfGs_getLife();
+    mFlags.field_0xa_1 = dComIfGs_isEventBit(0x1708);
+    mFlags.field_0x7_1 = dComIfGs_isEventBit(0x1A10);
+    mFlags.field_0x7_0 = dComIfGs_isEventBit(0x1A08);
+    
+    if (!dComIfGs_isEventBit(0x0F80) || dComIfGs_isEventBit(0x1E80)) {
+        mFlags.field_0x9_7 = 0;
+        mFlags.field_0x9_6 = 0;
+        mFlags.field_0x9_5 = 0;
+    } else if (dComIfGs_isSymbol(2)) {
+        mFlags.field_0x9_7 = 0;
+        mFlags.field_0x9_6 = 0;
+        mFlags.field_0x9_5 = 1;
+    } else if (dComIfGs_isSymbol(1)) {
+        mFlags.field_0x9_7 = 0;
+        mFlags.field_0x9_6 = 1;
+        mFlags.field_0x9_5 = 0;
+    } else {
+        mFlags.field_0x9_7 = 1;
+        mFlags.field_0x9_6 = 0;
+        mFlags.field_0x9_5 = 0;
+    }
+    
+    if (dComIfGs_isEventBit(0x3920)) {
+        mFlags.field_0x9_4 = !dComIfGs_isEventBit(0x1480);
+        mFlags.field_0x9_3 = !dComIfGs_isEventBit(0x1440);
+        mFlags.field_0x9_2 = !dComIfGs_isEventBit(0x1410);
+    } else {
+        mFlags.field_0x9_4 = 0;
+        mFlags.field_0x9_3 = 0;
+        mFlags.field_0x9_2 = 0;
+    }
+    
+    if (dComIfGs_isEventBit(0x1820)) {
+        mFlags.field_0x9_1 = !dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_WT);
+        mFlags.field_0x9_0 = !dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_ET);
+    } else {
+        mFlags.field_0x9_1 = 0;
+        mFlags.field_0x9_0 = 0;
+    }
+    mFlags.field_0xa_3 = dComIfGs_isEventBit(0x1E40);
+    mFlags.field_0xa_0 = mIsFree;
+    mFlags.field_0xb_7 = mFollowTarget;
+    if (stage_type == dSv_save_c::STAGE_ET) {
+        mFlags.field_0x8_0 = 1;
+    } else {
+        mFlags.field_0x8_0 = 0;
+    }
+    mFlags.field_0x3_7 = dComIfGs_isTact(0);
+    
+    if (*(u16*)&g_mDoCPd_cpadInfo[0].mButtonHold || // fakematch? is controller_pad_buttons supposed to be a u16?
+        g_mDoCPd_cpadInfo[0].mMainStickValue ||
+        g_mDoCPd_cpadInfo[0].mCStickValue)
+    {
+        mFlags.field_0x3_6 = 1;
+    } else {
+        mFlags.field_0x3_6 = 0;
+    }
+    if (dComIfGs_getMaxMagic() != 0) {
+        mFlags.field_0xb_0 = 1;
+    } else {
+        mFlags.field_0xb_0 = 0;
+    }
+    mFlags.field_0x5_2 = field_0x675;
+    mFlags.field_0x5_1 = dComIfGs_checkGetItem(COTTAGE_PAPER) != FALSE;
+    mDoGac_SendDataSet((u32*)&mFlags, 0xC, 9, 0);
 }
 
 /* 800D1A3C-800D25D8       .text CursorMove__7daAgb_cFP10fopAc_ac_cUl */
-void daAgb_c::CursorMove(fopAc_ac_c* actor, u32 r17) {
+void daAgb_c::CursorMove(fopAc_ac_c* actor, u32 stage_type) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     
     f32 f31;
-    if (r17 == 7) {
+    if (stage_type == dSv_save_c::STAGE_WT) {
         f31 = field_0x67e != 0 ? 50.0f : 781.25f;
     } else {
         f31 = 25.0f;
     }
     
     if (cLib_chaseF(&field_0x628, 2.5f, field_0x62c) &&
-        field_0x673 != 0 && isActive() && field_0x674 == 0 &&
+        field_0x673 != 0 && isActive() && !mHold &&
         !CPad_CHECK_HOLD_L(mDoGaC_getPortNo())
     ) {
         if (CPad_CHECK_HOLD_LEFT(mDoGaC_getPortNo())) {
@@ -923,7 +1032,7 @@ void daAgb_c::CursorMove(fopAc_ac_c* actor, u32 r17) {
             actor->orig.pos.z += f31;
         }
         
-        if (r17 == 7 && field_0x67e == 0) {
+        if (stage_type == dSv_save_c::STAGE_WT && field_0x67e == 0) {
             if (actor->orig.pos.x < -350000.0f) {
                 actor->orig.pos.x = -350000.0f;
             } else if (actor->orig.pos.x > 350000.0f) {
@@ -1043,7 +1152,174 @@ void daAgb_c::CursorMove(fopAc_ac_c* actor, u32 r17) {
 
 /* 800D272C-800D303C       .text modeMove__7daAgb_cFv */
 void daAgb_c::modeMove() {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    
+    // single | instead of double ||: bug?
+    BOOL r26 = dComIfGp_event_runCheck() | dMenu_flag();
+    
+    u32 stage_type = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo());
+    
+    if (mEvtInfo.checkCommandTalk()) {
+        mUploadAction = 0;
+        mMode = 2;
+        return;
+    }
+    
+    if (field_0x65c != 0) {
+        if (field_0x66b == 3 || field_0x66b == 12) {
+            field_0x65c = daPy_getPlayerLinkActorClass()->checkTinkleHover();
+            if (field_0x65c == 0) {
+                mBrk.setPlaySpeed(1.0f);
+            }
+        } else if (field_0x66b == 4 || field_0x66b == 13) {
+            field_0x65c = daPy_getPlayerLinkActorClass()->checkTinkleShield();
+            if (field_0x65c == 0) {
+                mBrk.setPlaySpeed(1.0f);
+            }
+        } else if (!r26) {
+            field_0x65c--;
+            
+            if (field_0x66b == 0xE) {
+                if (field_0x65c == 0x78) {
+                    fopAcM_create(PROC_BOMB, daBomb_c::prm_make(daBomb_c::STATE_8, false, false), &current.pos);
+                } else if (field_0x65c == 0) {
+                    resetCursor(false);
+                }
+            }
+            
+            if (field_0x66b == 15 && field_0x65c == 30) {
+                fopAcM_fastCreateItem(&field_0x634, field_0x640, -1, NULL, NULL, 5.0f, 50.0f, -7.0f);
+            }
+        }
+    }
+    if (field_0x673 != 0 && !r26 && field_0x65c == 0) {
+        mIsActive = true;
+    } else {
+        mIsActive = false;
+    }
+    
+    if (mDoGaC_GbaLink() && mDoGaC_RecvStatusCheck(6) && mDoGac_SendStatusCheck(7)) {
+        if (isActive() || mItem.field_0x0 == 0x15) {
+            GbaItemUse();
+        } else {
+            mEffect = 0;
+        }
+        
+        mDoGaC_DataStatusReset(6);
+        mDoGac_SendDataSet((u32*)&mEffect, 4, 7, mEffect);
+    }
+    
+    if (field_0x67f != 0) {
+        field_0x67f = 0;
+        
+        if (field_0x67d == 0 &&
+            !daPy_getPlayerLinkActorClass()->checkNoControll() &&
+            !dComIfGp_checkPlayerStatus0(0, daPyStts0_CRAWL_e) &&
+            (
+                !daPy_getPlayerActorClass()->checkPlayerFly() ||
+                dComIfGp_checkPlayerStatus0(0, daPyStts0_SWIM_e) ||
+                dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)
+            )
+        ) {
+            mMode = 1;
+            mIsActive = false;
+            mEyePos = current.pos;
+            
+            cXyz sp3c = mEyePos - player->current.pos;
+            if (sp3c.absXZ() < 10.0f) {
+                mEyePos.x += 10.0f * cM_ssin(player->shape_angle.y);
+                mEyePos.z += 10.0f * cM_scos(player->shape_angle.y);
+            }
+            mAttentionInfo.mPosition = mEyePos;
+            
+            if (isHold()) {
+                s16 angle = fopAcM_searchPlayerAngleY(this);
+                if (field_0x675 == 0) {
+                    angle = -angle;
+                }
+                shape_angle.z = angle;
+            } else {
+                shape_angle.y = fopAcM_searchPlayerAngleY(this);
+                shape_angle.x = cM_atan2s((player->mEyePos - mEyePos).absXZ(), player->mEyePos.y - mEyePos.y);
+                field_0x628 = 50.0f;
+            }
+            
+            field_0x66b = 0x10;
+            field_0x65c = 3*30;
+        }
+    }
+    
+    if (mDoGaC_GbaLink() && mDoGaC_RecvStatusCheck(0xC) && mDoGac_SendStatusCheck(0xD)) {
+        Shopping();
+        mDoGaC_DataStatusReset(0xC);
+        mDoGac_SendDataSet((u32*)&mItemBuy, 4, 0xD, mItemBuy.U32);
+    }
+    
+    if ((g_mDoCPd_cpadInfo[mDoGaC_getPortNo()].mGamepadErrorFlags == 0 && fopAcM_GetName(player) != PROC_NPC_KAM) &&
+        ((isActive() && field_0x675 == 0 && CPad_CHECK_TRIG_R(mDoGaC_getPortNo())) ||
+        (mFlags.field_0x3_5 != 0 && (CPad_CHECK_TRIG_R(mDoGaC_getPortNo()) || CPad_CHECK_TRIG_A(mDoGaC_getPortNo())))))
+    {
+        offHold();
+        mIsFree = false;
+        if (getFollowTarget() != 0) {
+            field_0x650 = -1;
+            mFollowTarget = 0;
+        } else if (stage_type != dSv_save_c::STAGE_ET) {
+            dAttList_c* attList = dComIfGp_getAttention().GetLockonList(0);
+            if (attList) {
+                fopAc_ac_c* r3 = attList->getActor();
+                if (r3) {
+                    if (fopAcM_CheckStatusMap(r3, 0) && !fopAcM_checkStatus(r3, fopAcStts_BOSS_e) && fopAcM_GetName(r3) != PROC_FGANON) {
+                        current.pos = r3->current.pos;
+                        orig.pos = r3->current.pos;
+                        field_0x650 = attList->getPid();
+                        mFollowTarget = 1;
+                    }
+                }
+            }
+        }
+    }
+    
+    if (!isFree()) {
+        if (getFollowTarget() == 1) {
+            fopAc_ac_c* r3 = fopAcM_SearchByID(field_0x650);
+            if (r3 == NULL || !fopAcM_CheckStatusMap(r3, 0)) {
+                field_0x650 = -1;
+                mFollowTarget = 0;
+            }
+        }
+        
+        if (getFollowTarget() == 0) {
+            if (fopAcM_GetName(player) == PROC_NPC_KAM) {
+                onFree();
+            } else {
+                current.pos = player->current.pos;
+                orig.pos = player->current.pos;
+            }
+        } else {
+            fopAc_ac_c* r3 = fopAcM_SearchByID(field_0x650);
+            current.pos = r3->current.pos;
+            orig.pos = r3->current.pos;
+        }
+        
+        shape_angle.setall(0);
+        field_0x628 = 2.5f;
+        
+        if (g_mDoCPd_cpadInfo[mDoGaC_getPortNo()].mGamepadErrorFlags == 0 && !CPad_CHECK_HOLD_L(mDoGaC_getPortNo()) && (
+            CPad_CHECK_HOLD_LEFT(mDoGaC_getPortNo()) | CPad_CHECK_HOLD_RIGHT(mDoGaC_getPortNo()) |
+            CPad_CHECK_HOLD_UP(mDoGaC_getPortNo()) | CPad_CHECK_HOLD_DOWN(mDoGaC_getPortNo())
+        ) && isActive() && !mHold)
+        {
+            onFree();
+        }
+    } else if (!mHold) {
+        CursorMove(this, stage_type);
+    }
+    
+    if (mMode == 0) {
+        mEvtInfo.onCondition(dEvtCnd_CANTALK_e);
+    }
 }
 
 /* 800D303C-800D30D4       .text modeDelete__7daAgb_cFv */
@@ -1081,10 +1357,10 @@ static int daAgb_Execute(daAgb_c* i_this) {
         g_mDoCPd_cpadInfo[mDoGaC_getPortNo()].mGamepadErrorFlags = 1;
     }
 
-    BOOL var_r27 = dComIfGp_event_runCheck() != 0;
-    var_r27 |= dMenu_flag();
+    // single | instead of double ||: bug?
+    BOOL var_r27 = dComIfGp_event_runCheck() | dMenu_flag();
 
-    u32 st_type = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo());
+    u32 stage_type = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo());
 
     if (mDoGaC_GbaLink()) {
         if (mDoGaC_RecvStatusCheck(8)) {
@@ -1092,7 +1368,7 @@ static int daAgb_Execute(daAgb_c* i_this) {
         }
 
         if (mDoGac_SendStatusCheck(9)) {
-            i_this->FlagsSend(st_type);
+            i_this->FlagsSend(stage_type);
         }
 
         i_this->field_0x680 = 1;
@@ -1132,7 +1408,7 @@ static int daAgb_Execute(daAgb_c* i_this) {
             daPy_lk_c* player_p2 = daPy_getPlayerLinkActorClass();
             if ((dComIfGp_getPlayer(0) == player_p2 && !player->checkPlayerFly()) ||
                 ((fopAcM_GetName(player) == PROC_NPC_MD && !daNpc_Md_c::isFlying()) ||
-                 (fopAcM_GetName(player) == PROC_NPC_CB1 && !daNpc_Cb1_c::m_flying) ||
+                 (fopAcM_GetName(player) == PROC_NPC_CB1 && !daNpc_Cb1_c::isFlying()) ||
                  fopAcM_GetName(player) == PROC_NPC_OS))
             {
                 f32 speedF = fabs(player->speedF);
@@ -1153,7 +1429,7 @@ static int daAgb_Execute(daAgb_c* i_this) {
             }
         }
 
-        if ((int)i_this->field_0x674 != 0 && var_r27 == 0 && i_this->mMode != 1) {
+        if (i_this->isHold() && !var_r27 && i_this->mMode != 1) {
             if (i_this->field_0x675 != 0) {
                 if (i_this->field_0x676 != 0) {
                     i_this->shape_angle.z += 0x1000;
@@ -1201,7 +1477,7 @@ static int daAgb_Draw(daAgb_c* i_this) {
     u8 var_r6 = 1;
 
     if (mDoGaC_GbaLink()) {
-        if (i_this->field_0x66f != 0 && !(daAgb_c::mFlags.field_0xa & 1) &&
+        if (i_this->field_0x66f != 0 && !daAgb_c::mFlags.field_0xa_7 &&
             (!dComIfGp_event_runCheck() ||
              dComIfGp_evmng_startCheck("DEFAULT_AGB_LOOK_ATTENTION") ||
              i_this->mMode == 2) &&
@@ -1324,5 +1600,27 @@ static int daAgb_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-/* 800D3D2C-800D3DDC       .text __ct__7daAgb_cFv */
-daAgb_c::daAgb_c() : field_0x684(0, 0) {}
+actor_method_class l_daAgb_Method = {
+    (process_method_func)daAgb_Create,
+    (process_method_func)daAgb_Delete,
+    (process_method_func)daAgb_Execute,
+    (process_method_func)daAgb_IsDelete,
+    (process_method_func)daAgb_Draw,
+};
+
+actor_process_profile_definition g_profile_AGB = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 7,
+    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ProcName     */ PROC_AGB,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daAgb_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x000C,
+    /* Actor SubMtd */ &l_daAgb_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_NOPAUSE_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_0_e,
+};

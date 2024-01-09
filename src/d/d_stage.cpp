@@ -2350,18 +2350,18 @@ void dStage_escapeRestart() {
 }
 
 /* 80043C84-80043CD0       .text dStage_checkRestart__Fv */
-bool dStage_checkRestart() {
+BOOL dStage_checkRestart() {
     if (dComIfGp_isEnableNextStage()) {
         if (dComIfGp_getStartStagePoint() == -2 || dComIfGp_getStartStagePoint() == -3) {
-            return false;
+            return FALSE;
         }
 
         if (dComIfGs_getRestartRoomParam() != 0) {
-            return true;
+            return TRUE;
         }
     }
 
-    return false;
+    return FALSE;
 }
 
 dStage_roomStatus_c dStage_roomControl_c::mStatus[64];

@@ -799,10 +799,7 @@ int daBomb_c::procExplode_init() {
     mAttentionInfo.mFlags &= ~fopAc_Attn_ACTION_CARRY_e;
 
     if(field_0x6F0) {
-        if(daPy_getPlayerLinkActorClass()->mActivePlayerBombs != 0) {
-            daPy_getPlayerLinkActorClass()->mActivePlayerBombs -= 1;
-        }
-
+        daPy_getPlayerLinkActorClass()->decrementBombCnt();
         field_0x6F0 = 0;
     }
 
@@ -1208,9 +1205,7 @@ bool daBomb_c::bombDelete() {
     mSparks.mpEmitter = 0;
 
     if(field_0x6F0) {
-        if(daPy_getPlayerLinkActorClass()->mActivePlayerBombs != 0) {
-            daPy_getPlayerLinkActorClass()->mActivePlayerBombs -= 1;
-        }
+        daPy_getPlayerLinkActorClass()->decrementBombCnt();
     }
 
     se_cannon_fly_stop();

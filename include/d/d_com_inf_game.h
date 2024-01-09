@@ -44,6 +44,7 @@ enum daPy__PlayerStatus0 {
     daPyStts0_TELESCOPE_LOOK_e = 0x00200000,
     daPyStts0_BOOMERANG_WAIT_e = 0x00400000,
     daPyStts0_CRAWL_e          = 0x08000000,
+    daPyStts0_UNK20000000_e    = 0x20000000,
     daPyStts0_SPIN_ATTACK_e    = 0x40000000,
 };
 

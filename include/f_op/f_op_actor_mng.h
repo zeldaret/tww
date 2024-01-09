@@ -141,6 +141,11 @@ inline void fopAcM_OffStatus(fopAc_ac_c* pActor, u32 flag) {
     pActor->mStatus &= ~flag;
 }
 
+inline BOOL fopAcM_CheckStatusMap(fopAc_ac_c* pActor, u32) {
+    // TODO: This implementation probably isn't right, the u32 argument is likely used for something
+    return (pActor->mStatus & fopAcStts_SHOWMAP_e) && (pActor->mStatus & 0x1F) == 0;
+}
+
 inline void fopAcM_SetStatusMap(fopAc_ac_c* pActor, u32 flag) {
     pActor->mStatus = (pActor->mStatus & ~0x3F) | fopAcStts_SHOWMAP_e | flag;
 }

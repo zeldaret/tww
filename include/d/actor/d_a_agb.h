@@ -43,7 +43,9 @@ public:
 
 class daAgb_c : public fopAc_ac_c {
 public:
-    // daAgb_BmRp_c struct?
+    struct daAgb_BmRp_c {
+        // TODO
+    };
 
     void NameConv();
     int uploadInitCheck();
@@ -77,8 +79,6 @@ public:
     void modeDelete();
     int createHeap();
 
-    daAgb_c();
-
     inline void modeProcCall();
     
     BOOL isMsgSend() { return mIsMsgSend; }
@@ -89,17 +89,22 @@ public:
     void offBombDeny() { mBombDeny = false; }
     void setDenyMessage(u16 msg) { mDenyMessage = msg; }
     BOOL isFree() { return mIsFree; }
-    void offFree() {}
-    void isHold() {}
+    void offFree() { mIsFree = false; }
+    BOOL isHold() { return mHold; }
     s32 getFollowTarget() { return mFollowTarget; }
     void setFollowTarget(bool) {}
     void getTargetID() {}
     void setTargetID(unsigned int) {}
 
     struct daAgb_ItemBuy {
-        /* 0x0 */ u8 field_0x0;
-        /* 0x1 */ u8 field_0x1;
-    } ALIGN_DECL(4);
+        union {
+            u32 U32;
+            struct {
+                /* 0x0 */ u8 field_0x0;
+                /* 0x1 */ u8 field_0x1;
+            } U8;
+        };
+    };
 
     struct daAgb_GbaFlg {
         /* 0x0 */ u16 field_0x0;
@@ -162,13 +167,30 @@ public:
         /* 0x5 */ u8 field_0x5_1 : 1;
         /* 0x5 */ u8 field_0x5_2 : 1;
         /* 0x5 */ u8 field_0x5_3 : 3;
-        /* 0x5 */ u8 field_0x5_6 : 1;
-        /* 0x5 */ u8 field_0x5_7 : 1;
-        /* 0x6 */ u8 field_0x6;
-        /* 0x7 */ u8 field_0x7;
-        /* 0x8 */ u8 field_0x8;
-        /* 0x9 */ u8 field_0x9;
-        /* 0xA */ u8 field_0xa;
+        /* 0x5 */ u8 field_0x5_6 : 2;
+        /* 0x6 */ u8 field_0x6_0 : 3;
+        /* 0x6 */ u8 field_0x6_3 : 5;
+        /* 0x7 */ u8 field_0x7_0 : 1;
+        /* 0x7 */ u8 field_0x7_1 : 1;
+        /* 0x7 */ u8 field_0x7_2 : 6;
+        /* 0x8 */ u8 field_0x8_0 : 1;
+        /* 0x8 */ u8 field_0x8_1 : 7;
+        /* 0x9 */ u8 field_0x9_0 : 1;
+        /* 0x9 */ u8 field_0x9_1 : 1;
+        /* 0x9 */ u8 field_0x9_2 : 1;
+        /* 0x9 */ u8 field_0x9_3 : 1;
+        /* 0x9 */ u8 field_0x9_4 : 1;
+        /* 0x9 */ u8 field_0x9_5 : 1;
+        /* 0x9 */ u8 field_0x9_6 : 1;
+        /* 0x9 */ u8 field_0x9_7 : 1;
+        /* 0xA */ u8 field_0xa_0 : 1;
+        /* 0xA */ u8 field_0xa_1 : 1;
+        /* 0xA */ u8 field_0xa_2 : 1;
+        /* 0xA */ u8 field_0xa_3 : 1;
+        /* 0xA */ u8 field_0xa_4 : 1;
+        /* 0xA */ u8 field_0xa_5 : 1;
+        /* 0xA */ u8 field_0xa_6 : 1;
+        /* 0xA */ u8 field_0xa_7 : 1;
         /* 0xB */ u8 field_0xb_0 : 1;
         /* 0xB */ u8 field_0xb_3 : 5;
         /* 0xB */ u8 field_0xb_6 : 1;
@@ -199,7 +221,7 @@ public:
     /* 0x648 */ u64 mPlayerName;
     /* 0x650 */ u32 field_0x650;
     /* 0x654 */ int field_0x654;
-    /* 0x658 */ u16 field_0x658;
+    /* 0x658 */ s16 field_0x658;
     /* 0x65A */ u16 mPrevButtons;
     /* 0x65C */ u16 field_0x65c;
     /* 0x65E */ u16 field_0x65e;
@@ -219,7 +241,7 @@ public:
     /* 0x671 */ bool mIsFree;
     /* 0x672 */ bool mIsActive;
     /* 0x673 */ u8 field_0x673;
-    /* 0x674 */ u8 field_0x674;
+    /* 0x674 */ bool mHold;
     /* 0x675 */ u8 field_0x675;
     /* 0x676 */ u8 field_0x676;
     /* 0x677 */ u8 mFollowTarget;
