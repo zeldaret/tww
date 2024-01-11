@@ -68,7 +68,7 @@ void daPy_lk_c::initShipRideUseItem(int param_1, int param_2) {
     } else {
         setShipRidePos(0);
     }
-    onModeFlg(0x2000);
+    onModeFlg(ModeFlg_00002000);
 }
 
 /* 8013FFC0-80140018       .text setShipRidePosUseItem__9daPy_lk_cFv */
