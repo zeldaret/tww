@@ -2404,7 +2404,7 @@ JGeometry::TVec3<f32> l_hammer_splash_particle_scale(0.00002f, 0.00002f, 0.00002
 
 daPy_lk_c::ProcInitTableEntry daPy_lk_c::mProcInitTable[] = {
     /* 0x00 */ {&daPy_lk_c::procScope,                 ModeFlg_00000001},
-    /* 0x01 */ {&daPy_lk_c::procSubjectivity,          ModeFlg_00000001 | ModeFlg_00000004 | ModeFlg_00001000 | ModeFlg_20000000},
+    /* 0x01 */ {&daPy_lk_c::procSubjectivity,          ModeFlg_00000001 | ModeFlg_00000004 | ModeFlg_00001000 | ModeFlg_SUBJECT},
     /* 0x02 */ {&daPy_lk_c::procCall,                  ModeFlg_00000001 | ModeFlg_00000080 | ModeFlg_00000100},
     /* 0x03 */ {&daPy_lk_c::procControllWait,          ModeFlg_00000001},
     /* 0x04 */ {&daPy_lk_c::procWait,                  ModeFlg_00000001 | ModeFlg_00000004 | ModeFlg_00000040 | ModeFlg_00000080 | ModeFlg_00000100 | ModeFlg_00001000 | ModeFlg_00020000},
@@ -2413,19 +2413,19 @@ daPy_lk_c::ProcInitTableEntry daPy_lk_c::mProcInitTable[] = {
     /* 0x07 */ {&daPy_lk_c::procAtnMove,               ModeFlg_00000004 | ModeFlg_00000040 | ModeFlg_00000080 | ModeFlg_00000100 | ModeFlg_00001000 | ModeFlg_00020000},
     /* 0x08 */ {&daPy_lk_c::procAtnActorWait,          ModeFlg_00000001 | ModeFlg_00000004 | ModeFlg_00000040 | ModeFlg_00000080 | ModeFlg_00000100 | ModeFlg_00001000 | ModeFlg_00020000},
     /* 0x09 */ {&daPy_lk_c::procAtnActorMove,          ModeFlg_00000004 | ModeFlg_00000040 | ModeFlg_00000080 | ModeFlg_00000100 | ModeFlg_00001000 | ModeFlg_00020000},
-    /* 0x0A */ {&daPy_lk_c::procSideStep,              ModeFlg_00000002 | ModeFlg_00000004 | ModeFlg_00000040 | ModeFlg_00000080 | ModeFlg_00000400 | ModeFlg_00001000},
+    /* 0x0A */ {&daPy_lk_c::procSideStep,              ModeFlg_MIDAIR | ModeFlg_00000004 | ModeFlg_00000040 | ModeFlg_00000080 | ModeFlg_00000400 | ModeFlg_00001000},
     /* 0x0B */ {&daPy_lk_c::procSideStepLand,          ModeFlg_00000001 | ModeFlg_00000004 | ModeFlg_00000040 | ModeFlg_00000080 | ModeFlg_00001000},
-    /* 0x0C */ {&daPy_lk_c::procCrouchDefense,         ModeFlg_00000001 | ModeFlg_00000100 | ModeFlg_00800000 | ModeFlg_08000000 | ModeFlg_20000000 | ModeFlg_40000000},
-    /* 0x0D */ {&daPy_lk_c::procCrouchDefenseSlip,     ModeFlg_00000400 | ModeFlg_00800000 | ModeFlg_20000000 | ModeFlg_40000000},
-    /* 0x0E */ {&daPy_lk_c::procCrouch,                ModeFlg_00000001 | ModeFlg_00000100 | ModeFlg_00800000},
-    /* 0x0F */ {&daPy_lk_c::procCrawlStart,            ModeFlg_00000100 | ModeFlg_00008000 | ModeFlg_01000000 | ModeFlg_02000000},
-    /* 0x10 */ {&daPy_lk_c::procCrawlMove,             ModeFlg_00000100 | ModeFlg_00008000 | ModeFlg_01000000 | ModeFlg_02000000 | ModeFlg_08000000},
-    /* 0x11 */ {&daPy_lk_c::procCrawlAutoMove,         ModeFlg_00000100 | ModeFlg_00008000 | ModeFlg_01000000 | ModeFlg_02000000 | ModeFlg_04000000 | ModeFlg_08000000},
-    /* 0x12 */ {&daPy_lk_c::procCrawlEnd,              ModeFlg_00008000 | ModeFlg_01000000 | ModeFlg_02000000},
-    /* 0x13 */ {&daPy_lk_c::procWHideReady,            ModeFlg_00000001 | ModeFlg_00000010},
-    /* 0x14 */ {&daPy_lk_c::procWHideWait,             ModeFlg_00000001 | ModeFlg_00000004 | ModeFlg_00000010 | ModeFlg_00000100},
-    /* 0x15 */ {&daPy_lk_c::procWHideMove,             ModeFlg_00000004 | ModeFlg_00000010},
-    /* 0x16 */ {&daPy_lk_c::procWHidePeep,             ModeFlg_00000001 | ModeFlg_00000004 | ModeFlg_00000010 | ModeFlg_00000400},
+    /* 0x0C */ {&daPy_lk_c::procCrouchDefense,         ModeFlg_00000001 | ModeFlg_00000100 | ModeFlg_CROUCH | ModeFlg_08000000 | ModeFlg_SUBJECT | ModeFlg_40000000},
+    /* 0x0D */ {&daPy_lk_c::procCrouchDefenseSlip,     ModeFlg_00000400 | ModeFlg_CROUCH | ModeFlg_SUBJECT | ModeFlg_40000000},
+    /* 0x0E */ {&daPy_lk_c::procCrouch,                ModeFlg_00000001 | ModeFlg_00000100 | ModeFlg_CROUCH},
+    /* 0x0F */ {&daPy_lk_c::procCrawlStart,            ModeFlg_00000100 | ModeFlg_00008000 | ModeFlg_CRAWL | ModeFlg_02000000},
+    /* 0x10 */ {&daPy_lk_c::procCrawlMove,             ModeFlg_00000100 | ModeFlg_00008000 | ModeFlg_CRAWL | ModeFlg_02000000 | ModeFlg_08000000},
+    /* 0x11 */ {&daPy_lk_c::procCrawlAutoMove,         ModeFlg_00000100 | ModeFlg_00008000 | ModeFlg_CRAWL | ModeFlg_02000000 | ModeFlg_04000000 | ModeFlg_08000000},
+    /* 0x12 */ {&daPy_lk_c::procCrawlEnd,              ModeFlg_00008000 | ModeFlg_CRAWL | ModeFlg_02000000},
+    /* 0x13 */ {&daPy_lk_c::procWHideReady,            ModeFlg_00000001 | ModeFlg_WHIDE},
+    /* 0x14 */ {&daPy_lk_c::procWHideWait,             ModeFlg_00000001 | ModeFlg_00000004 | ModeFlg_WHIDE | ModeFlg_00000100},
+    /* 0x15 */ {&daPy_lk_c::procWHideMove,             ModeFlg_00000004 | ModeFlg_WHIDE},
+    /* 0x16 */ {&daPy_lk_c::procWHidePeep,             ModeFlg_00000001 | ModeFlg_00000004 | ModeFlg_WHIDE | ModeFlg_00000400},
     /* 0x17 */ {&daPy_lk_c::procWaitTurn,              ModeFlg_00000001 | ModeFlg_00000004 | ModeFlg_00000040 | ModeFlg_00000100 | ModeFlg_00001000 | ModeFlg_00004000 | ModeFlg_00020000},
     /* 0x18 */ {&daPy_lk_c::procMoveTurn,              ModeFlg_00000004 | ModeFlg_00000040 | ModeFlg_00004000 | ModeFlg_00020000},
     /* 0x19 */ {&daPy_lk_c::procSlip,                  ModeFlg_00000100},
@@ -2434,40 +2434,40 @@ daPy_lk_c::ProcInitTableEntry daPy_lk_c::mProcInitTable[] = {
     /* 0x1C */ {&daPy_lk_c::procSlideFrontLand,        ModeFlg_00000004 | ModeFlg_00000400},
     /* 0x1D */ {&daPy_lk_c::procSlideBackLand,         ModeFlg_00000004 | ModeFlg_00000400},
     /* 0x1E */ {&daPy_lk_c::procFrontRoll,             ModeFlg_00000400 | ModeFlg_00008000},
-    /* 0x1F */ {&daPy_lk_c::procFrontRollCrash,        ModeFlg_00000002 | ModeFlg_00000400},
+    /* 0x1F */ {&daPy_lk_c::procFrontRollCrash,        ModeFlg_MIDAIR | ModeFlg_00000400},
     /* 0x20 */ {&daPy_lk_c::procNockBackEnd,           ModeFlg_00000400 | ModeFlg_00008000},
     /* 0x21 */ {&daPy_lk_c::procSideRoll,              ModeFlg_00000400 | ModeFlg_00008000},
-    /* 0x22 */ {&daPy_lk_c::procBackJump,              ModeFlg_00000002 | ModeFlg_00000004 | ModeFlg_00000040 | ModeFlg_00000400},
+    /* 0x22 */ {&daPy_lk_c::procBackJump,              ModeFlg_MIDAIR | ModeFlg_00000004 | ModeFlg_00000040 | ModeFlg_00000400},
     /* 0x23 */ {&daPy_lk_c::procBackJumpLand,          ModeFlg_00000001 | ModeFlg_00000004 | ModeFlg_00000040 | ModeFlg_00000400},
-    /* 0x24 */ {&daPy_lk_c::procAutoJump,              ModeFlg_00000002 | ModeFlg_00000004 | ModeFlg_00000400 | ModeFlg_00001000 | ModeFlg_00004000},
+    /* 0x24 */ {&daPy_lk_c::procAutoJump,              ModeFlg_MIDAIR | ModeFlg_00000004 | ModeFlg_00000400 | ModeFlg_00001000 | ModeFlg_00004000},
     /* 0x25 */ {&daPy_lk_c::procLand,                  ModeFlg_00000001 | ModeFlg_00000004 | ModeFlg_00001000 | ModeFlg_00004000},
-    /* 0x26 */ {&daPy_lk_c::procLandDamage,            ModeFlg_00000001 | ModeFlg_00000008 | ModeFlg_00000400},
-    /* 0x27 */ {&daPy_lk_c::procFall,                  ModeFlg_00000002 | ModeFlg_00000004 | ModeFlg_00001000},
-    /* 0x28 */ {&daPy_lk_c::procSlowFall,              ModeFlg_00000002},
-    /* 0x29 */ {&daPy_lk_c::procSmallJump,             ModeFlg_00000002 | ModeFlg_00004000},
+    /* 0x26 */ {&daPy_lk_c::procLandDamage,            ModeFlg_00000001 | ModeFlg_DAMAGE | ModeFlg_00000400},
+    /* 0x27 */ {&daPy_lk_c::procFall,                  ModeFlg_MIDAIR | ModeFlg_00000004 | ModeFlg_00001000},
+    /* 0x28 */ {&daPy_lk_c::procSlowFall,              ModeFlg_MIDAIR},
+    /* 0x29 */ {&daPy_lk_c::procSmallJump,             ModeFlg_MIDAIR | ModeFlg_00004000},
     /* 0x2A */ {&daPy_lk_c::procVerticalJump,          ModeFlg_00000001},
-    /* 0x2B */ {&daPy_lk_c::procHangStart,             ModeFlg_00000001 | ModeFlg_00000020 | ModeFlg_00000400},
-    /* 0x2C */ {&daPy_lk_c::procHangFallStart,         ModeFlg_00000001 | ModeFlg_00000020 | ModeFlg_00000400},
-    /* 0x2D */ {&daPy_lk_c::procHangUp,                ModeFlg_00000001 | ModeFlg_00000020 | ModeFlg_00000400},
-    /* 0x2E */ {&daPy_lk_c::procHangWait,              ModeFlg_00000001 | ModeFlg_00000020 | ModeFlg_00000100},
-    /* 0x2F */ {&daPy_lk_c::procHangMove,              ModeFlg_00000020 | ModeFlg_00000100},
-    /* 0x30 */ {&daPy_lk_c::procHangClimb,             ModeFlg_00000020 | ModeFlg_00000400},
-    /* 0x31 */ {&daPy_lk_c::procHangWallCatch,         ModeFlg_00000020},
-    /* 0x32 */ {&daPy_lk_c::procPushPullWait,          ModeFlg_00000001 | ModeFlg_00000100 | ModeFlg_00200000},
-    /* 0x33 */ {&daPy_lk_c::procPushMove,              ModeFlg_00200000},
-    /* 0x34 */ {&daPy_lk_c::procPullMove,              ModeFlg_00000400 | ModeFlg_00200000},
-    /* 0x35 */ {&daPy_lk_c::procSwimUp,                ModeFlg_00000400 | ModeFlg_00040000 | ModeFlg_04000000},
-    /* 0x36 */ {&daPy_lk_c::procSwimWait,              ModeFlg_00000001 | ModeFlg_00000080 | ModeFlg_00000100 | ModeFlg_00040000 | ModeFlg_04000000},
-    /* 0x37 */ {&daPy_lk_c::procSwimMove,              ModeFlg_00000080 | ModeFlg_00000400 | ModeFlg_00040000 | ModeFlg_04000000},
-    /* 0x38 */ {&daPy_lk_c::procLadderUpStart,         ModeFlg_00000400 | ModeFlg_00400000},
-    /* 0x39 */ {&daPy_lk_c::procLadderUpEnd,           ModeFlg_00000400 | ModeFlg_00400000},
-    /* 0x3A */ {&daPy_lk_c::procLadderDownStart,       ModeFlg_00000400 | ModeFlg_00400000},
-    /* 0x3B */ {&daPy_lk_c::procLadderDownEnd,         ModeFlg_00000400 | ModeFlg_00400000},
-    /* 0x3C */ {&daPy_lk_c::procLadderMove,            ModeFlg_00000100 | ModeFlg_00400000},
-    /* 0x3D */ {&daPy_lk_c::procClimbUpStart,          ModeFlg_00000400 | ModeFlg_00010000},
-    /* 0x3E */ {&daPy_lk_c::procClimbDownStart,        ModeFlg_00000400 | ModeFlg_00010000},
-    /* 0x3F */ {&daPy_lk_c::procClimbMoveUpDown,       ModeFlg_00000100 | ModeFlg_00010000},
-    /* 0x40 */ {&daPy_lk_c::procClimbMoveSide,         ModeFlg_00000100 | ModeFlg_00010000},
+    /* 0x2B */ {&daPy_lk_c::procHangStart,             ModeFlg_00000001 | ModeFlg_HANG | ModeFlg_00000400},
+    /* 0x2C */ {&daPy_lk_c::procHangFallStart,         ModeFlg_00000001 | ModeFlg_HANG | ModeFlg_00000400},
+    /* 0x2D */ {&daPy_lk_c::procHangUp,                ModeFlg_00000001 | ModeFlg_HANG | ModeFlg_00000400},
+    /* 0x2E */ {&daPy_lk_c::procHangWait,              ModeFlg_00000001 | ModeFlg_HANG | ModeFlg_00000100},
+    /* 0x2F */ {&daPy_lk_c::procHangMove,              ModeFlg_HANG | ModeFlg_00000100},
+    /* 0x30 */ {&daPy_lk_c::procHangClimb,             ModeFlg_HANG | ModeFlg_00000400},
+    /* 0x31 */ {&daPy_lk_c::procHangWallCatch,         ModeFlg_HANG},
+    /* 0x32 */ {&daPy_lk_c::procPushPullWait,          ModeFlg_00000001 | ModeFlg_00000100 | ModeFlg_PUSHPULL},
+    /* 0x33 */ {&daPy_lk_c::procPushMove,              ModeFlg_PUSHPULL},
+    /* 0x34 */ {&daPy_lk_c::procPullMove,              ModeFlg_00000400 | ModeFlg_PUSHPULL},
+    /* 0x35 */ {&daPy_lk_c::procSwimUp,                ModeFlg_00000400 | ModeFlg_SWIM | ModeFlg_04000000},
+    /* 0x36 */ {&daPy_lk_c::procSwimWait,              ModeFlg_00000001 | ModeFlg_00000080 | ModeFlg_00000100 | ModeFlg_SWIM | ModeFlg_04000000},
+    /* 0x37 */ {&daPy_lk_c::procSwimMove,              ModeFlg_00000080 | ModeFlg_00000400 | ModeFlg_SWIM | ModeFlg_04000000},
+    /* 0x38 */ {&daPy_lk_c::procLadderUpStart,         ModeFlg_00000400 | ModeFlg_LADDER},
+    /* 0x39 */ {&daPy_lk_c::procLadderUpEnd,           ModeFlg_00000400 | ModeFlg_LADDER},
+    /* 0x3A */ {&daPy_lk_c::procLadderDownStart,       ModeFlg_00000400 | ModeFlg_LADDER},
+    /* 0x3B */ {&daPy_lk_c::procLadderDownEnd,         ModeFlg_00000400 | ModeFlg_LADDER},
+    /* 0x3C */ {&daPy_lk_c::procLadderMove,            ModeFlg_00000100 | ModeFlg_LADDER},
+    /* 0x3D */ {&daPy_lk_c::procClimbUpStart,          ModeFlg_00000400 | ModeFlg_CLIMB},
+    /* 0x3E */ {&daPy_lk_c::procClimbDownStart,        ModeFlg_00000400 | ModeFlg_CLIMB},
+    /* 0x3F */ {&daPy_lk_c::procClimbMoveUpDown,       ModeFlg_00000100 | ModeFlg_CLIMB},
+    /* 0x40 */ {&daPy_lk_c::procClimbMoveSide,         ModeFlg_00000100 | ModeFlg_CLIMB},
     /* 0x41 */ {&daPy_lk_c::procCutA,                  ModeFlg_00000080 | ModeFlg_00000400},
     /* 0x42 */ {&daPy_lk_c::procCutF,                  ModeFlg_00000080 | ModeFlg_00000400},
     /* 0x43 */ {&daPy_lk_c::procCutR,                  ModeFlg_00000080 | ModeFlg_00000400},
@@ -2476,7 +2476,7 @@ daPy_lk_c::ProcInitTableEntry daPy_lk_c::mProcInitTable[] = {
     /* 0x46 */ {&daPy_lk_c::procCutEB,                 ModeFlg_00000080 | ModeFlg_00000400},
     /* 0x47 */ {&daPy_lk_c::procCutExA,                ModeFlg_00000400},
     /* 0x48 */ {&daPy_lk_c::procCutExB,                ModeFlg_00000400},
-    /* 0x49 */ {&daPy_lk_c::procCutExMJ,               ModeFlg_00000002 | ModeFlg_00000400 | ModeFlg_08000000},
+    /* 0x49 */ {&daPy_lk_c::procCutExMJ,               ModeFlg_MIDAIR | ModeFlg_00000400 | ModeFlg_08000000},
     /* 0x4A */ {&daPy_lk_c::procCutKesa,               ModeFlg_00000400},
     /* 0x4B */ {&daPy_lk_c::procWeaponNormalSwing,     ModeFlg_00000080 | ModeFlg_00000400},
     /* 0x4C */ {&daPy_lk_c::procWeaponSideSwing,       ModeFlg_00000400 | ModeFlg_08000000},
@@ -2494,77 +2494,77 @@ daPy_lk_c::ProcInitTableEntry daPy_lk_c::mProcInitTable[] = {
     /* 0x58 */ {&daPy_lk_c::procCutTurnCharge,         ModeFlg_00000400},
     /* 0x59 */ {&daPy_lk_c::procCutTurnMove,           ModeFlg_00000080},
     /* 0x5A */ {&daPy_lk_c::procCutReverse,            ModeFlg_00000400},
-    /* 0x5B */ {&daPy_lk_c::procJumpCut,               ModeFlg_00000002 | ModeFlg_00000400 | ModeFlg_08000000},
+    /* 0x5B */ {&daPy_lk_c::procJumpCut,               ModeFlg_MIDAIR | ModeFlg_00000400 | ModeFlg_08000000},
     /* 0x5C */ {&daPy_lk_c::procJumpCutLand,           ModeFlg_00000001 | ModeFlg_00000400 | ModeFlg_08000000},
-    /* 0x5D */ {&daPy_lk_c::procBtJump,                ModeFlg_00000002 | ModeFlg_00000400 | ModeFlg_08000000 | ModeFlg_80000000},
-    /* 0x5E */ {&daPy_lk_c::procBtJumpCut,             ModeFlg_00000002 | ModeFlg_00000400 | ModeFlg_80000000},
-    /* 0x5F */ {&daPy_lk_c::procBtSlide,               ModeFlg_80000000},
-    /* 0x60 */ {&daPy_lk_c::procBtRoll,                ModeFlg_00000400 | ModeFlg_00008000 | ModeFlg_80000000},
-    /* 0x61 */ {&daPy_lk_c::procBtRollCut,             ModeFlg_00000002 | ModeFlg_00000400 | ModeFlg_08000000 | ModeFlg_80000000},
-    /* 0x62 */ {&daPy_lk_c::procBtVerticalJump,        ModeFlg_00000002 | ModeFlg_00000400 | ModeFlg_08000000 | ModeFlg_80000000},
-    /* 0x63 */ {&daPy_lk_c::procBtVerticalJumpCut,     ModeFlg_00000002 | ModeFlg_00000400 | ModeFlg_08000000 | ModeFlg_80000000},
+    /* 0x5D */ {&daPy_lk_c::procBtJump,                ModeFlg_MIDAIR | ModeFlg_00000400 | ModeFlg_08000000 | ModeFlg_BT},
+    /* 0x5E */ {&daPy_lk_c::procBtJumpCut,             ModeFlg_MIDAIR | ModeFlg_00000400 | ModeFlg_BT},
+    /* 0x5F */ {&daPy_lk_c::procBtSlide,               ModeFlg_BT},
+    /* 0x60 */ {&daPy_lk_c::procBtRoll,                ModeFlg_00000400 | ModeFlg_00008000 | ModeFlg_BT},
+    /* 0x61 */ {&daPy_lk_c::procBtRollCut,             ModeFlg_MIDAIR | ModeFlg_00000400 | ModeFlg_08000000 | ModeFlg_BT},
+    /* 0x62 */ {&daPy_lk_c::procBtVerticalJump,        ModeFlg_MIDAIR | ModeFlg_00000400 | ModeFlg_08000000 | ModeFlg_BT},
+    /* 0x63 */ {&daPy_lk_c::procBtVerticalJumpCut,     ModeFlg_MIDAIR | ModeFlg_00000400 | ModeFlg_08000000 | ModeFlg_BT},
     /* 0x64 */ {&daPy_lk_c::procBtVerticalJumpLand,    ModeFlg_00000400},
     /* 0x65 */ {&daPy_lk_c::procGuardCrash,            0},
-    /* 0x66 */ {&daPy_lk_c::procDamage,                ModeFlg_00000008 | ModeFlg_00000080 | ModeFlg_00000400},
-    /* 0x67 */ {&daPy_lk_c::procPolyDamage,            ModeFlg_00000008 | ModeFlg_00000400},
-    /* 0x68 */ {&daPy_lk_c::procLargeDamage,           ModeFlg_00000002 | ModeFlg_00000008},
-    /* 0x69 */ {&daPy_lk_c::procLargeDamageUp,         ModeFlg_00000008 | ModeFlg_00000400 | ModeFlg_00008000 | ModeFlg_02000000 | ModeFlg_08000000},
-    /* 0x6A */ {&daPy_lk_c::procLargeDamageWall,       ModeFlg_00000002 | ModeFlg_00000008 | ModeFlg_00000400},
-    /* 0x6B */ {&daPy_lk_c::procLavaDamage,            ModeFlg_00000002 | ModeFlg_00000008},
-    /* 0x6C */ {&daPy_lk_c::procElecDamage,            ModeFlg_00000001 | ModeFlg_00000008 | ModeFlg_00008000},
+    /* 0x66 */ {&daPy_lk_c::procDamage,                ModeFlg_DAMAGE | ModeFlg_00000080 | ModeFlg_00000400},
+    /* 0x67 */ {&daPy_lk_c::procPolyDamage,            ModeFlg_DAMAGE | ModeFlg_00000400},
+    /* 0x68 */ {&daPy_lk_c::procLargeDamage,           ModeFlg_MIDAIR | ModeFlg_DAMAGE},
+    /* 0x69 */ {&daPy_lk_c::procLargeDamageUp,         ModeFlg_DAMAGE | ModeFlg_00000400 | ModeFlg_00008000 | ModeFlg_02000000 | ModeFlg_08000000},
+    /* 0x6A */ {&daPy_lk_c::procLargeDamageWall,       ModeFlg_MIDAIR | ModeFlg_DAMAGE | ModeFlg_00000400},
+    /* 0x6B */ {&daPy_lk_c::procLavaDamage,            ModeFlg_MIDAIR | ModeFlg_DAMAGE},
+    /* 0x6C */ {&daPy_lk_c::procElecDamage,            ModeFlg_00000001 | ModeFlg_DAMAGE | ModeFlg_00008000},
     /* 0x6D */ {&daPy_lk_c::procGuardSlip,             ModeFlg_00000080 | ModeFlg_00000400 | ModeFlg_00001000},
-    /* 0x6E */ {&daPy_lk_c::procGrabReady,             ModeFlg_00000001 | ModeFlg_00000400 | ModeFlg_00100000},
-    /* 0x6F */ {&daPy_lk_c::procGrabUp,                ModeFlg_00000001 | ModeFlg_00000400 | ModeFlg_00100000},
-    /* 0x70 */ {&daPy_lk_c::procGrabMiss,              ModeFlg_00000001 | ModeFlg_00000400 | ModeFlg_00100000},
-    /* 0x71 */ {&daPy_lk_c::procGrabThrow,             ModeFlg_00000001 | ModeFlg_00000400 | ModeFlg_00100000},
-    /* 0x72 */ {&daPy_lk_c::procGrabPut,               ModeFlg_00000001 | ModeFlg_00000400 | ModeFlg_00100000},
-    /* 0x73 */ {&daPy_lk_c::procGrabWait,              ModeFlg_00000001 | ModeFlg_00000080 | ModeFlg_00000100 | ModeFlg_00004000 | ModeFlg_00100000},
-    /* 0x74 */ {&daPy_lk_c::procGrabHeavyWait,         ModeFlg_00000001 | ModeFlg_00000080 | ModeFlg_00000100 | ModeFlg_00100000},
-    /* 0x75 */ {&daPy_lk_c::procGrabRebound,           ModeFlg_00000001 | ModeFlg_00000400 | ModeFlg_00100000},
-    /* 0x76 */ {&daPy_lk_c::procRopeSubject,           ModeFlg_00000001 | ModeFlg_00000004 | ModeFlg_00001000 | ModeFlg_20000000},
-    /* 0x77 */ {&daPy_lk_c::procRopeReady,             ModeFlg_00000800 | ModeFlg_04000000},
-    /* 0x78 */ {&daPy_lk_c::procRopeSwing,             ModeFlg_00000400 | ModeFlg_00000800 | ModeFlg_04000000},
-    /* 0x79 */ {&daPy_lk_c::procRopeHangWait,          ModeFlg_00000001 | ModeFlg_00000100 | ModeFlg_00000800 | ModeFlg_04000000},
-    /* 0x7A */ {&daPy_lk_c::procRopeUp,                ModeFlg_00000800 | ModeFlg_04000000},
-    /* 0x7B */ {&daPy_lk_c::procRopeDown,              ModeFlg_00000800 | ModeFlg_04000000},
-    /* 0x7C */ {&daPy_lk_c::procRopeSwingStart,        ModeFlg_00000400 | ModeFlg_00000800 | ModeFlg_04000000},
-    /* 0x7D */ {&daPy_lk_c::procRopeMove,              ModeFlg_00000004 | ModeFlg_00000100 | ModeFlg_00001000 | ModeFlg_20000000},
+    /* 0x6E */ {&daPy_lk_c::procGrabReady,             ModeFlg_00000001 | ModeFlg_00000400 | ModeFlg_GRAB},
+    /* 0x6F */ {&daPy_lk_c::procGrabUp,                ModeFlg_00000001 | ModeFlg_00000400 | ModeFlg_GRAB},
+    /* 0x70 */ {&daPy_lk_c::procGrabMiss,              ModeFlg_00000001 | ModeFlg_00000400 | ModeFlg_GRAB},
+    /* 0x71 */ {&daPy_lk_c::procGrabThrow,             ModeFlg_00000001 | ModeFlg_00000400 | ModeFlg_GRAB},
+    /* 0x72 */ {&daPy_lk_c::procGrabPut,               ModeFlg_00000001 | ModeFlg_00000400 | ModeFlg_GRAB},
+    /* 0x73 */ {&daPy_lk_c::procGrabWait,              ModeFlg_00000001 | ModeFlg_00000080 | ModeFlg_00000100 | ModeFlg_00004000 | ModeFlg_GRAB},
+    /* 0x74 */ {&daPy_lk_c::procGrabHeavyWait,         ModeFlg_00000001 | ModeFlg_00000080 | ModeFlg_00000100 | ModeFlg_GRAB},
+    /* 0x75 */ {&daPy_lk_c::procGrabRebound,           ModeFlg_00000001 | ModeFlg_00000400 | ModeFlg_GRAB},
+    /* 0x76 */ {&daPy_lk_c::procRopeSubject,           ModeFlg_00000001 | ModeFlg_00000004 | ModeFlg_00001000 | ModeFlg_SUBJECT},
+    /* 0x77 */ {&daPy_lk_c::procRopeReady,             ModeFlg_ROPE | ModeFlg_04000000},
+    /* 0x78 */ {&daPy_lk_c::procRopeSwing,             ModeFlg_00000400 | ModeFlg_ROPE | ModeFlg_04000000},
+    /* 0x79 */ {&daPy_lk_c::procRopeHangWait,          ModeFlg_00000001 | ModeFlg_00000100 | ModeFlg_ROPE | ModeFlg_04000000},
+    /* 0x7A */ {&daPy_lk_c::procRopeUp,                ModeFlg_ROPE | ModeFlg_04000000},
+    /* 0x7B */ {&daPy_lk_c::procRopeDown,              ModeFlg_ROPE | ModeFlg_04000000},
+    /* 0x7C */ {&daPy_lk_c::procRopeSwingStart,        ModeFlg_00000400 | ModeFlg_ROPE | ModeFlg_04000000},
+    /* 0x7D */ {&daPy_lk_c::procRopeMove,              ModeFlg_00000004 | ModeFlg_00000100 | ModeFlg_00001000 | ModeFlg_SUBJECT},
     /* 0x7E */ {&daPy_lk_c::procRopeThrowCatch,        ModeFlg_00000001 | ModeFlg_00000400},
-    /* 0x7F */ {&daPy_lk_c::procRopeUpHang,            ModeFlg_00000800 | ModeFlg_04000000},
-    /* 0x80 */ {&daPy_lk_c::procBoomerangSubject,      ModeFlg_00000001 | ModeFlg_00000004 | ModeFlg_00000100 | ModeFlg_00001000 | ModeFlg_00020000 | ModeFlg_20000000},
-    /* 0x81 */ {&daPy_lk_c::procBoomerangMove,         ModeFlg_00000004 | ModeFlg_00000100 | ModeFlg_00001000 | ModeFlg_00020000 | ModeFlg_20000000},
+    /* 0x7F */ {&daPy_lk_c::procRopeUpHang,            ModeFlg_ROPE | ModeFlg_04000000},
+    /* 0x80 */ {&daPy_lk_c::procBoomerangSubject,      ModeFlg_00000001 | ModeFlg_00000004 | ModeFlg_00000100 | ModeFlg_00001000 | ModeFlg_00020000 | ModeFlg_SUBJECT},
+    /* 0x81 */ {&daPy_lk_c::procBoomerangMove,         ModeFlg_00000004 | ModeFlg_00000100 | ModeFlg_00001000 | ModeFlg_00020000 | ModeFlg_SUBJECT},
     /* 0x82 */ {&daPy_lk_c::procBoomerangCatch,        ModeFlg_00000001 | ModeFlg_00000400 | ModeFlg_00001000},
-    /* 0x83 */ {&daPy_lk_c::procHookshotSubject,       ModeFlg_00000001 | ModeFlg_00000004 | ModeFlg_00000100 | ModeFlg_00000200 | ModeFlg_00001000 | ModeFlg_20000000},
-    /* 0x84 */ {&daPy_lk_c::procHookshotMove,          ModeFlg_00000004 | ModeFlg_00000100 | ModeFlg_00000200 | ModeFlg_00001000 | ModeFlg_20000000},
-    /* 0x85 */ {&daPy_lk_c::procHookshotFly,           ModeFlg_00000002 | ModeFlg_00000200},
-    /* 0x86 */ {&daPy_lk_c::procShipReady,             ModeFlg_00000020 | ModeFlg_00000400 | ModeFlg_00002000},
-    /* 0x87 */ {&daPy_lk_c::procShipJumpRide,          ModeFlg_00000400 | ModeFlg_00002000},
-    /* 0x88 */ {&daPy_lk_c::procShipSteer,             ModeFlg_00000080 | ModeFlg_00000100 | ModeFlg_00002000 | ModeFlg_40000000},
-    /* 0x89 */ {&daPy_lk_c::procShipPaddle,            ModeFlg_00000080 | ModeFlg_00000100 | ModeFlg_00002000 | ModeFlg_40000000},
-    /* 0x8A */ {&daPy_lk_c::procShipScope,             ModeFlg_00000100 | ModeFlg_00002000 | ModeFlg_40000000},
-    /* 0x8B */ {&daPy_lk_c::procShipBoomerang,         ModeFlg_00000100 | ModeFlg_00002000 | ModeFlg_00020000 | ModeFlg_20000000 | ModeFlg_40000000},
-    /* 0x8C */ {&daPy_lk_c::procShipHookshot,          ModeFlg_00000100 | ModeFlg_00002000 | ModeFlg_20000000 | ModeFlg_40000000},
-    /* 0x8D */ {&daPy_lk_c::procShipBow,               ModeFlg_00000100 | ModeFlg_00002000 | ModeFlg_20000000 | ModeFlg_40000000},
-    /* 0x8E */ {&daPy_lk_c::procShipCannon,            ModeFlg_00000100 | ModeFlg_00002000 | ModeFlg_40000000},
-    /* 0x8F */ {&daPy_lk_c::procShipCrane,             ModeFlg_00000080 | ModeFlg_00000100 | ModeFlg_00002000 | ModeFlg_08000000},
-    /* 0x90 */ {&daPy_lk_c::procShipGetOff,            ModeFlg_00002000},
-    /* 0x91 */ {&daPy_lk_c::procShipRestart,           ModeFlg_00000400 | ModeFlg_00002000},
+    /* 0x83 */ {&daPy_lk_c::procHookshotSubject,       ModeFlg_00000001 | ModeFlg_00000004 | ModeFlg_00000100 | ModeFlg_HOOKSHOT | ModeFlg_00001000 | ModeFlg_SUBJECT},
+    /* 0x84 */ {&daPy_lk_c::procHookshotMove,          ModeFlg_00000004 | ModeFlg_00000100 | ModeFlg_HOOKSHOT | ModeFlg_00001000 | ModeFlg_SUBJECT},
+    /* 0x85 */ {&daPy_lk_c::procHookshotFly,           ModeFlg_MIDAIR | ModeFlg_HOOKSHOT},
+    /* 0x86 */ {&daPy_lk_c::procShipReady,             ModeFlg_HANG | ModeFlg_00000400 | ModeFlg_IN_SHIP},
+    /* 0x87 */ {&daPy_lk_c::procShipJumpRide,          ModeFlg_00000400 | ModeFlg_IN_SHIP},
+    /* 0x88 */ {&daPy_lk_c::procShipSteer,             ModeFlg_00000080 | ModeFlg_00000100 | ModeFlg_IN_SHIP | ModeFlg_40000000},
+    /* 0x89 */ {&daPy_lk_c::procShipPaddle,            ModeFlg_00000080 | ModeFlg_00000100 | ModeFlg_IN_SHIP | ModeFlg_40000000},
+    /* 0x8A */ {&daPy_lk_c::procShipScope,             ModeFlg_00000100 | ModeFlg_IN_SHIP | ModeFlg_40000000},
+    /* 0x8B */ {&daPy_lk_c::procShipBoomerang,         ModeFlg_00000100 | ModeFlg_IN_SHIP | ModeFlg_00020000 | ModeFlg_SUBJECT | ModeFlg_40000000},
+    /* 0x8C */ {&daPy_lk_c::procShipHookshot,          ModeFlg_00000100 | ModeFlg_IN_SHIP | ModeFlg_SUBJECT | ModeFlg_40000000},
+    /* 0x8D */ {&daPy_lk_c::procShipBow,               ModeFlg_00000100 | ModeFlg_IN_SHIP | ModeFlg_SUBJECT | ModeFlg_40000000},
+    /* 0x8E */ {&daPy_lk_c::procShipCannon,            ModeFlg_00000100 | ModeFlg_IN_SHIP | ModeFlg_40000000},
+    /* 0x8F */ {&daPy_lk_c::procShipCrane,             ModeFlg_00000080 | ModeFlg_00000100 | ModeFlg_IN_SHIP | ModeFlg_08000000},
+    /* 0x90 */ {&daPy_lk_c::procShipGetOff,            ModeFlg_IN_SHIP},
+    /* 0x91 */ {&daPy_lk_c::procShipRestart,           ModeFlg_00000400 | ModeFlg_IN_SHIP},
     /* 0x92 */ {&daPy_lk_c::procFanSwing,              ModeFlg_00000400 | ModeFlg_08000000},
-    /* 0x93 */ {&daPy_lk_c::procFanGlide,              ModeFlg_00000002 | ModeFlg_00000080 | ModeFlg_00000400},
-    /* 0x94 */ {&daPy_lk_c::procBowSubject,            ModeFlg_00000001 | ModeFlg_00000004 | ModeFlg_00000100 | ModeFlg_00001000 | ModeFlg_20000000},
-    /* 0x95 */ {&daPy_lk_c::procBowMove,               ModeFlg_00000004 | ModeFlg_00000100 | ModeFlg_00001000 | ModeFlg_20000000},
-    /* 0x96 */ {&daPy_lk_c::procVomitReady,            ModeFlg_00000002 | ModeFlg_00000400},
+    /* 0x93 */ {&daPy_lk_c::procFanGlide,              ModeFlg_MIDAIR | ModeFlg_00000080 | ModeFlg_00000400},
+    /* 0x94 */ {&daPy_lk_c::procBowSubject,            ModeFlg_00000001 | ModeFlg_00000004 | ModeFlg_00000100 | ModeFlg_00001000 | ModeFlg_SUBJECT},
+    /* 0x95 */ {&daPy_lk_c::procBowMove,               ModeFlg_00000004 | ModeFlg_00000100 | ModeFlg_00001000 | ModeFlg_SUBJECT},
+    /* 0x96 */ {&daPy_lk_c::procVomitReady,            ModeFlg_MIDAIR | ModeFlg_00000400},
     /* 0x97 */ {&daPy_lk_c::procVomitWait,             ModeFlg_00000001 | ModeFlg_00008000 | ModeFlg_04000000},
-    /* 0x98 */ {&daPy_lk_c::procVomitJump,             ModeFlg_00000002},
+    /* 0x98 */ {&daPy_lk_c::procVomitJump,             ModeFlg_MIDAIR},
     /* 0x99 */ {&daPy_lk_c::procVomitLand,             ModeFlg_00000001 | ModeFlg_00000400},
     /* 0x9A */ {&daPy_lk_c::procTactWait,              ModeFlg_00000001 | ModeFlg_00000100 | ModeFlg_08000000},
     /* 0x9B */ {&daPy_lk_c::procTactPlay,              ModeFlg_00000001 | ModeFlg_00000400 | ModeFlg_08000000},
     /* 0x9C */ {&daPy_lk_c::procTactPlayEnd,           ModeFlg_00000001 | ModeFlg_00000100},
     /* 0x9D */ {&daPy_lk_c::procTactPlayOriginal,      ModeFlg_00000001},
-    /* 0x9E */ {&daPy_lk_c::procIceSlipFall,           ModeFlg_00000002},
+    /* 0x9E */ {&daPy_lk_c::procIceSlipFall,           ModeFlg_MIDAIR},
     /* 0x9F */ {&daPy_lk_c::procIceSlipFallUp,         ModeFlg_00000400 | ModeFlg_00008000 | ModeFlg_02000000 | ModeFlg_08000000},
     /* 0xA0 */ {&daPy_lk_c::procIceSlipAlmostFall,     ModeFlg_00000001},
-    /* 0xA1 */ {&daPy_lk_c::procBootsEquip,            ModeFlg_00000001 | ModeFlg_00000002 | ModeFlg_00000400 | ModeFlg_00004000 | ModeFlg_08000000},
+    /* 0xA1 */ {&daPy_lk_c::procBootsEquip,            ModeFlg_00000001 | ModeFlg_MIDAIR | ModeFlg_00000400 | ModeFlg_00004000 | ModeFlg_08000000},
     /* 0xA2 */ {&daPy_lk_c::procNotUse,                ModeFlg_00000001 | ModeFlg_00000400},
     /* 0xA3 */ {&daPy_lk_c::procBottleDrink,           ModeFlg_00000001 | ModeFlg_00000400},
     /* 0xA4 */ {&daPy_lk_c::procBottleOpen,            ModeFlg_00000001 | ModeFlg_00000400},
@@ -2579,9 +2579,9 @@ daPy_lk_c::ProcInitTableEntry daPy_lk_c::mProcInitTable[] = {
     /* 0xAD */ {&daPy_lk_c::dProcOpenTreasure,         ModeFlg_00000001 | ModeFlg_00000400 | ModeFlg_00008000},
     /* 0xAE */ {&daPy_lk_c::dProcGetItem,              ModeFlg_00000001 | ModeFlg_00008000},
     /* 0xAF */ {&daPy_lk_c::dProcUnequip,              ModeFlg_00000001 | ModeFlg_00000100},
-    /* 0xB0 */ {&daPy_lk_c::dProcLavaDamage,           ModeFlg_00000002 | ModeFlg_00000008},
-    /* 0xB1 */ {&daPy_lk_c::dProcFreezeDamage,         ModeFlg_00000002 | ModeFlg_00000008 | ModeFlg_00004000},
-    /* 0xB2 */ {&daPy_lk_c::dProcDead,                 ModeFlg_00000001 | ModeFlg_00000008 | ModeFlg_00000400 | ModeFlg_00008000},
+    /* 0xB0 */ {&daPy_lk_c::dProcLavaDamage,           ModeFlg_MIDAIR | ModeFlg_DAMAGE},
+    /* 0xB1 */ {&daPy_lk_c::dProcFreezeDamage,         ModeFlg_MIDAIR | ModeFlg_DAMAGE | ModeFlg_00004000},
+    /* 0xB2 */ {&daPy_lk_c::dProcDead,                 ModeFlg_00000001 | ModeFlg_DAMAGE | ModeFlg_00000400 | ModeFlg_00008000},
     /* 0xB3 */ {&daPy_lk_c::dProcLookAround,           ModeFlg_00000001 | ModeFlg_00000400},
     /* 0xB4 */ {&daPy_lk_c::dProcSalute,               ModeFlg_00000001 | ModeFlg_00000400},
     /* 0xB5 */ {&daPy_lk_c::dProcLookAround2,          ModeFlg_00000001 | ModeFlg_00000400 | ModeFlg_00080000},
@@ -2592,19 +2592,19 @@ daPy_lk_c::ProcInitTableEntry daPy_lk_c::mProcInitTable[] = {
     /* 0xBA */ {&daPy_lk_c::dProcLookUp,               ModeFlg_00000001 | ModeFlg_00000400},
     /* 0xBB */ {&daPy_lk_c::dProcQuakeWait,            ModeFlg_00000001 | ModeFlg_00000400},
     /* 0xBC */ {&daPy_lk_c::dProcDance,                ModeFlg_00000001 | ModeFlg_00000400},
-    /* 0xBD */ {&daPy_lk_c::dProcCaught,               ModeFlg_10000000},
+    /* 0xBD */ {&daPy_lk_c::dProcCaught,               ModeFlg_CAUGHT},
     /* 0xBE */ {&daPy_lk_c::dProcLookWait,             ModeFlg_00000001 | ModeFlg_00000080 | ModeFlg_00000100 | ModeFlg_00001000},
-    /* 0xBF */ {&daPy_lk_c::dProcPushPullWait,         ModeFlg_00000001 | ModeFlg_00000100 | ModeFlg_00200000},
-    /* 0xC0 */ {&daPy_lk_c::dProcPushMove,             ModeFlg_00200000},
+    /* 0xBF */ {&daPy_lk_c::dProcPushPullWait,         ModeFlg_00000001 | ModeFlg_00000100 | ModeFlg_PUSHPULL},
+    /* 0xC0 */ {&daPy_lk_c::dProcPushMove,             ModeFlg_PUSHPULL},
     /* 0xC1 */ {&daPy_lk_c::dProcDoorOpen,             ModeFlg_00000400},
     /* 0xC2 */ {&daPy_lk_c::dProcNod,                  ModeFlg_00000001 | ModeFlg_00000080 | ModeFlg_00000400 | ModeFlg_00080000},
     /* 0xC3 */ {&daPy_lk_c::dProcPresent,              ModeFlg_00000001 | ModeFlg_00080000},
     /* 0xC4 */ {&daPy_lk_c::dProcWindChange,           ModeFlg_00000001 | ModeFlg_00000400},
     /* 0xC5 */ {&daPy_lk_c::dProcStandItemPut,         ModeFlg_00000001},
-    /* 0xC6 */ {&daPy_lk_c::dProcVorcanoFail,          ModeFlg_00000002},
+    /* 0xC6 */ {&daPy_lk_c::dProcVorcanoFail,          ModeFlg_MIDAIR},
     /* 0xC7 */ {&daPy_lk_c::dProcSlightSurprised,      ModeFlg_00000001 | ModeFlg_00000400},
     /* 0xC8 */ {&daPy_lk_c::dProcSmile,                ModeFlg_00000001},
-    /* 0xC9 */ {&daPy_lk_c::dProcBossWarp,             ModeFlg_00000002 | ModeFlg_00000400},
+    /* 0xC9 */ {&daPy_lk_c::dProcBossWarp,             ModeFlg_MIDAIR | ModeFlg_00000400},
     /* 0xCA */ {&daPy_lk_c::dProcAgbUse,               ModeFlg_00000001 | ModeFlg_00000100},
     /* 0xCB */ {&daPy_lk_c::dProcLookTurn,             ModeFlg_00000001 | ModeFlg_00000400},
     /* 0xCC */ {&daPy_lk_c::dProcLetterOpen,           ModeFlg_00000001 | ModeFlg_00000100},
@@ -2613,12 +2613,12 @@ daPy_lk_c::ProcInitTableEntry daPy_lk_c::mProcInitTable[] = {
     /* 0xCF */ {&daPy_lk_c::dProcRedeadCatch,          ModeFlg_00000001 | ModeFlg_00000400},
     /* 0xD0 */ {&daPy_lk_c::dProcGetDance,             ModeFlg_00000001 | ModeFlg_00000400 | ModeFlg_00008000},
     /* 0xD1 */ {&daPy_lk_c::dProcBottleOpenFairy,      ModeFlg_00000001 | ModeFlg_00000400},
-    /* 0xD2 */ {&daPy_lk_c::dProcWarpShort,            ModeFlg_00000002 | ModeFlg_00000100},
+    /* 0xD2 */ {&daPy_lk_c::dProcWarpShort,            ModeFlg_MIDAIR | ModeFlg_00000100},
     /* 0xD3 */ {&daPy_lk_c::dProcOpenSalvageTreasure,  ModeFlg_00000001 | ModeFlg_00000400},
     /* 0xD4 */ {&daPy_lk_c::dProcSurprisedWait,        ModeFlg_00000001},
     /* 0xD5 */ {&daPy_lk_c::dProcPowerUpWait_init,     ModeFlg_00000001 | ModeFlg_00000400 | ModeFlg_00008000},
     /* 0xD6 */ {&daPy_lk_c::dProcPowerUp,              ModeFlg_00000001 | ModeFlg_00000400 | ModeFlg_00008000},
-    /* 0xD7 */ {&daPy_lk_c::dProcShipSit,              ModeFlg_00000001 | ModeFlg_00000080 | ModeFlg_00000100 | ModeFlg_00002000 | ModeFlg_00080000},
+    /* 0xD7 */ {&daPy_lk_c::dProcShipSit,              ModeFlg_00000001 | ModeFlg_00000080 | ModeFlg_00000100 | ModeFlg_IN_SHIP | ModeFlg_00080000},
     /* 0xD8 */ {&daPy_lk_c::dProcLastCombo,            ModeFlg_00000001 | ModeFlg_00008000},
     /* 0xD9 */ {&daPy_lk_c::dProcHandUp,               ModeFlg_00000001 | ModeFlg_00000080 | ModeFlg_00000100 | ModeFlg_00080000},
     /* 0xDA */ {&daPy_lk_c::dProcIceSlip,              ModeFlg_00000001 | ModeFlg_00000400},
@@ -3574,7 +3574,7 @@ BOOL daPy_lk_c::draw() {
     if (!r24) {
         if (mCurProc == PROC_CUT_F_e || mCurProc == PROC_BT_VERTICAL_JUMP_CUT_e) {
             updateDLSetLight(mpSwordTipStabModel, 0);
-        } else if (checkModeFlg(ModeFlg_00040000) && checkNoResetFlg0(daPyFlg0_UNK100) && !(mCurProc == DPROC_DEAD_e && m34D6 == 0)) {
+        } else if (checkModeFlg(ModeFlg_SWIM) && checkNoResetFlg0(daPyFlg0_UNK100) && !(mCurProc == DPROC_DEAD_e && m34D6 == 0)) {
             GXColor spc;
             GXColor sp8;
             dKy_get_seacolor(&spc, &sp8);
@@ -4136,12 +4136,12 @@ s32 daPy_lk_c::checkWallAtributeDamage(dBgS_AcchCir*) {
 
 /* 80110654-80110F3C       .text changeDamageProc__9daPy_lk_cFv */
 BOOL daPy_lk_c::changeDamageProc() {
-    if (!checkModeFlg(ModeFlg_00000008) && mDamageWaitTimer > 0) {
+    if (!checkModeFlg(ModeFlg_DAMAGE) && mDamageWaitTimer > 0) {
         mDamageWaitTimer--;
         if (mDamageWaitTimer == 0) {
             if (m_anm_heap_upper[2].mIdx == LKANM_BCK_DAMDASH) {
                 resetActAnimeUpper(UPPER_UNK2, daPy_HIO_basic_c0::m.field_0xC);
-            } else if (checkModeFlg(ModeFlg_00040000)) {
+            } else if (checkModeFlg(ModeFlg_SWIM)) {
                 resetPriTextureAnime();
             }
         }
@@ -4173,7 +4173,7 @@ BOOL daPy_lk_c::changeDamageProc() {
     
     if (checkNoResetFlg1(daPyFlg1_UNK4) || (
         mAcch.ChkGroundHit() &&
-        !checkModeFlg(ModeFlg_00000020) &&
+        !checkModeFlg(ModeFlg_HANG) &&
         mCurrAttributeCode == dBgS_Attr_FREEZE_e
     )) {
         changePlayer(this);
@@ -4185,7 +4185,7 @@ BOOL daPy_lk_c::changeDamageProc() {
         offNoResetFlg0(daPyFlg0_SHIP_DROP);
         changePlayer(this);
         return procLargeDamage_init(-2, 1, 0, 0);
-    } else if (!checkModeFlg(ModeFlg_00000008) && mDamageWaitTimer == 0) {
+    } else if (!checkModeFlg(ModeFlg_DAMAGE) && mDamageWaitTimer == 0) {
         if (mAcch.ChkGroundHit() && (
             mCurrAttributeCode == dBgS_Attr_DAMAGE_e ||
             mCurrAttributeCode == dBgS_Attr_ELECTRICITY_e
@@ -4236,13 +4236,13 @@ BOOL daPy_lk_c::changeDamageProc() {
                 setDamageElecEmitter();
             }
             if (daPy_dmEcallBack_c::checkElec()) {
-                if (checkModeFlg(ModeFlg_00000800)) {
+                if (checkModeFlg(ModeFlg_ROPE)) {
                     return procElecDamage_init(NULL);
-                } else if (checkModeFlg(ModeFlg_00040000)) {
+                } else if (checkModeFlg(ModeFlg_SWIM)) {
                     return procElecDamage_init(NULL);
                 }
             }
-            if (checkModeFlg(ModeFlg_00040000) && !checkNoDamageMode()) {
+            if (checkModeFlg(ModeFlg_SWIM) && !checkNoDamageMode()) {
                 setPriTextureAnime(0x40, 0);
             }
         }
@@ -4291,7 +4291,7 @@ BOOL daPy_lk_c::changeDamageProc() {
                     }
                 }
                 
-                if (checkModeFlg(ModeFlg_00002000)) {
+                if (checkModeFlg(ModeFlg_IN_SHIP)) {
                     return procLargeDamage_init(-9, 1, 0, 0);
                 }
                 
@@ -4517,14 +4517,14 @@ BOOL daPy_lk_c::commonProcInit(daPy_lk_c::daPy_PROC proc) {
     
     returnKeepItemData();
     
-    temp_r28 = checkModeFlg(ModeFlg_00040000) >> 0x12; // TODO fakematch? fixes regalloc
+    temp_r28 = checkModeFlg(ModeFlg_SWIM) >> 0x12; // TODO fakematch? fixes regalloc
     
     // TODO: is this an inline?
-    if (checkModeFlg(ModeFlg_00000020 | ModeFlg_00000800 | ModeFlg_00040000 | ModeFlg_10000000)) {
+    if (checkModeFlg(ModeFlg_HANG | ModeFlg_ROPE | ModeFlg_SWIM | ModeFlg_CAUGHT)) {
         m34C2 = 0xA;
     }
     
-    temp_r29 = (checkModeFlg(ModeFlg_00000002) >> 1) ^ 1; // TODO fakematch? fixes regalloc
+    temp_r29 = (checkModeFlg(ModeFlg_MIDAIR) >> 1) ^ 1; // TODO fakematch? fixes regalloc
     
     mCurProc = proc;
     mCurProcFunc = procInit.mProcFunc;
@@ -4536,11 +4536,11 @@ BOOL daPy_lk_c::commonProcInit(daPy_lk_c::daPy_PROC proc) {
     }
     
     // TODO: is this an inline?
-    if (checkModeFlg(ModeFlg_00000020 | ModeFlg_00000800 | ModeFlg_00040000 | ModeFlg_10000000)) {
+    if (checkModeFlg(ModeFlg_HANG | ModeFlg_ROPE | ModeFlg_SWIM | ModeFlg_CAUGHT)) {
         m34C2 = 0xB;
     }
     
-    if (checkModeFlg(ModeFlg_00000020)) {
+    if (checkModeFlg(ModeFlg_HANG)) {
         mAcch.OffLineCheck();
     } else {
         mAcch.OnLineCheck();
@@ -4570,17 +4570,17 @@ BOOL daPy_lk_c::commonProcInit(daPy_lk_c::daPy_PROC proc) {
     if (!(checkEquipAnime() && checkModeFlg(ModeFlg_00000004)) && !checkModeFlg(ModeFlg_00001000)) {
         if (!(checkGrabAnime() || checkBoomerangThrowAnime()) || !checkModeFlg(ModeFlg_00004000)) {
             resetActAnimeUpper(UPPER_UNK2, -1.0f);
-            if (!checkModeFlg(ModeFlg_00100000)) {
+            if (!checkModeFlg(ModeFlg_GRAB)) {
                 freeGrabItem();
             }
         }
     }
     
-    if (!checkModeFlg(ModeFlg_00100000) && !checkGrabAnime() && mActorKeepGrab.getActor()) {
+    if (!checkModeFlg(ModeFlg_GRAB) && !checkGrabAnime() && mActorKeepGrab.getActor()) {
         freeGrabItem();
     }
     
-    if (temp_r29 && checkModeFlg(ModeFlg_00000002)) {
+    if (temp_r29 && checkModeFlg(ModeFlg_MIDAIR)) {
         m3688 = current.pos;
         m35F0 = m3688.y;
         m35F4 = m3688.y;
@@ -4591,7 +4591,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_lk_c::daPy_PROC proc) {
         mSwimTailEcallBack[1].onEnd();
     }
     
-    if (!checkModeFlg(ModeFlg_00040000)) {
+    if (!checkModeFlg(ModeFlg_SWIM)) {
         m3608 = 0.0f;
     }
     
@@ -4623,13 +4623,13 @@ BOOL daPy_lk_c::commonProcInit(daPy_lk_c::daPy_PROC proc) {
     
     m35E8 = 0.0f;
     
-    if (!checkModeFlg(ModeFlg_00000800) && mCurProc != PROC_ROPE_SUBJECT_e && mCurProc != PROC_ROPE_MOVE_e) {
+    if (!checkModeFlg(ModeFlg_ROPE) && mCurProc != PROC_ROPE_SUBJECT_e && mCurProc != PROC_ROPE_MOVE_e) {
         freeRopeItem();
     }
-    if (!checkModeFlg(ModeFlg_00000200)) {
+    if (!checkModeFlg(ModeFlg_HOOKSHOT)) {
         freeHookshotItem();
     }
-    if (temp_r28 && !checkModeFlg(ModeFlg_00040000)) {
+    if (temp_r28 && !checkModeFlg(ModeFlg_SWIM)) {
         swimOutAfter(0);
     }
     
@@ -5264,26 +5264,26 @@ void daPy_lk_c::setBgCheckParam() {
         mAcchCir[0].SetWallH(-125.0f);
         mAcchCir[1].SetWallH(-89.9f);
         mAcchCir[2].SetWallH(0.0f);
-    } else if (mCurProc == PROC_LARGE_DAMAGE_WALL_e || checkModeFlg(ModeFlg_00010000 | ModeFlg_00400000)) {
+    } else if (mCurProc == PROC_LARGE_DAMAGE_WALL_e || checkModeFlg(ModeFlg_CLIMB | ModeFlg_LADDER)) {
         mAcchCir[0].SetWallR(5.0f);
-    } else if (checkModeFlg(ModeFlg_00200000)) {
+    } else if (checkModeFlg(ModeFlg_PUSHPULL)) {
         mAcchCir[0].SetWallR(40.0f);
-    } else if (checkModeFlg(ModeFlg_00000010)) {
+    } else if (checkModeFlg(ModeFlg_WHIDE)) {
         mAcchCir[0].SetWallR(daPy_HIO_wall_c0::m.field_0x50);
         if (checkNoResetFlg0(daPyFlg0_UNK10000)) {
             mAcchCir[2].SetWallH(89.9f);
         }
-    } else if (checkModeFlg(ModeFlg_00040000)) {
+    } else if (checkModeFlg(ModeFlg_SWIM)) {
         mAcchCir[0].SetWallR(67.5f);
         mAcchCir[0].SetWallH(-5.0f);
         mAcchCir[1].SetWallH(0.0f);
         mAcchCir[2].SetWallH(20.0f);
-    } else if (checkModeFlg(ModeFlg_01000000) && mCurProc != PROC_CRAWL_END_e) {
+    } else if (checkModeFlg(ModeFlg_CRAWL) && mCurProc != PROC_CRAWL_END_e) {
         mAcchCir[0].SetWallR(30.0f);
         mAcchCir[0].SetWallH(10.0f);
         mAcchCir[1].SetWallH(50.0f);
         mAcchCir[2].SetWallH(50.0f);
-    } else if (checkModeFlg(ModeFlg_00000020)) {
+    } else if (checkModeFlg(ModeFlg_HANG)) {
         mAcchCir[0].SetWallR(12.5f);
         mAcchCir[0].SetWallH(25.0f);
         mAcchCir[1].SetWallH(25.0f);
