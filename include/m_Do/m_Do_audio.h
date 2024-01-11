@@ -137,12 +137,12 @@ inline u8 mDoAud_getLinkVoiceVowel(u32 param_1) {
     return mDoAud_zelAudio_c::getInterface()->getLinkVoiceVowel(param_1);
 }
 
-inline void mDoAud_linkVoiceStart(u32 i_sfxID, Vec* i_sePos, u8 param_3, s8 param_4) {
-    mDoAud_zelAudio_c::getInterface()->linkVoiceStart(i_sfxID, i_sePos, param_3, param_4);
+inline void mDoAud_linkVoiceStart(u32 param_0, Vec* i_sePos, u8 param_3, s8 param_4) {
+    mDoAud_zelAudio_c::getInterface()->linkVoiceStart(param_0, i_sePos, param_3, param_4);
 }
 
-inline void mDoAud_monsSeStart(u32 param_0, Vec* param_1, u32 param_2, u32 param_3, s8 i_reverb) {
-    mDoAud_zelAudio_c::getInterface()->monsSeStart(param_0, param_1, param_2, param_3, i_reverb);
+inline void mDoAud_monsSeStart(u32 sfxID, Vec* param_1, u32 param_2, u32 param_3, s8 i_reverb) {
+    mDoAud_zelAudio_c::getInterface()->monsSeStart(sfxID, param_1, param_2, param_3, i_reverb);
 }
 
 inline void mDoAud_onEnemyDamage() {

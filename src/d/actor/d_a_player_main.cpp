@@ -3890,9 +3890,9 @@ BOOL daPy_lk_c::checkEquipAnime() const {
 }
 
 /* 8010C570-8010C71C       .text deleteEquipItem__9daPy_lk_cFi */
-void daPy_lk_c::deleteEquipItem(int param_1) {
+void daPy_lk_c::deleteEquipItem(BOOL param_1) {
     fopAc_ac_c* equipActor = mActorKeepEquip.getActor();
-    if (param_1 != 0 && (mHeldItemType != 0x100 && mHeldItemType != 0x101)) {
+    if (param_1 && (mHeldItemType != 0x100 && mHeldItemType != 0x101)) {
         if (mHeldItemType == 0x103) {
             seStartOnlyReverb(JA_SE_LK_SW_PUTIN_S);
         } else {
@@ -3949,7 +3949,7 @@ void daPy_lk_c::setFallVoice() {
 void daPy_lk_c::keepItemData() {
     mKeepItemType = mHeldItemType;
     
-    deleteEquipItem(0);
+    deleteEquipItem(FALSE);
     
     if (mKeepItemType == 0x101) {
         mKeepItemType = 0x100;
@@ -3965,7 +3965,7 @@ void daPy_lk_c::returnKeepItemData() {
         return;
     }
     
-    deleteEquipItem(0);
+    deleteEquipItem(FALSE);
     mHeldItemType = mKeepItemType;
     mKeepItemType = 0x100;
     
@@ -4093,8 +4093,20 @@ void daPy_lk_c::changeLandProc(f32) {
 }
 
 /* 8011029C-80110338       .text setDamagePoint__9daPy_lk_cFf */
-void daPy_lk_c::setDamagePoint(f32) {
-    /* Nonmatching */
+BOOL daPy_lk_c::setDamagePoint(f32 amount) {
+    if (!checkNoDamageMode()) {
+        dComIfGp_setItemLifeCount(amount);
+        if (amount < 0.0f) {
+            offNoResetFlg1(daPyFlg1_UNK8000);
+            if (dComIfGs_getSelectEquip(0) != MASTER_SWORD_EX) {
+                offNoResetFlg1(daPyFlg1_UNK200000);
+            }
+        }
+        return TRUE;
+    } else {
+        seStartMapInfo(JA_SE_LK_MGC_SHIELD_DEF);
+        return FALSE;
+    }
 }
 
 /* 80110338-80110448       .text checkNormalDamage__9daPy_lk_cFi */
@@ -4118,13 +4130,234 @@ BOOL daPy_lk_c::checkElecReturnDamage(dCcD_GObjInf*, cXyz*) {
 }
 
 /* 801105D8-80110654       .text checkWallAtributeDamage__9daPy_lk_cFP12dBgS_AcchCir */
-BOOL daPy_lk_c::checkWallAtributeDamage(dBgS_AcchCir*) {
+s32 daPy_lk_c::checkWallAtributeDamage(dBgS_AcchCir*) {
     /* Nonmatching */
 }
 
 /* 80110654-80110F3C       .text changeDamageProc__9daPy_lk_cFv */
-void daPy_lk_c::changeDamageProc() {
-    /* Nonmatching */
+BOOL daPy_lk_c::changeDamageProc() {
+    if (!checkModeFlg(0x8) && mDamageWaitTimer > 0) {
+        mDamageWaitTimer--;
+        if (mDamageWaitTimer == 0) {
+            if (m_anm_heap_upper[2].mIdx == LKANM_BCK_DAMDASH) {
+                resetActAnimeUpper(UPPER_UNK2, daPy_HIO_basic_c0::m.field_0xC);
+            } else if (checkModeFlg(0x40000)) {
+                resetPriTextureAnime();
+            }
+        }
+    }
+    
+    if (checkNoResetFlg0(daPyFlg0_UNK1000000)) {
+        offNoResetFlg0(daPyFlg0_UNK1000000);
+        changePlayer(this);
+        return procLargeDamage_init(-5, 1, 0, 0);
+    }
+    
+    daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
+    if (dComIfGp_event_runCheck() ||
+        mDemo.getDemoType() != 0 ||
+        checkNoControll() ||
+        mCurProc == PROC_SHIP_READY_e ||
+        (
+            dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) &&
+            ship && ship->unknown_inline_TODO()
+        )
+    ) {
+        offNoResetFlg0(daPyFlg0_SHIP_DROP);
+        return FALSE;
+    }
+    
+    BOOL r30;
+    int r29;
+    s32 r28 = dBgS_Attr_NORMAL_e;
+    
+    if (checkNoResetFlg1(daPyFlg1_UNK4) || (
+        mAcch.ChkGroundHit() &&
+        !checkModeFlg(0x20) &&
+        mCurrAttributeCode == dBgS_Attr_FREEZE_e
+    )) {
+        changePlayer(this);
+        return dProcFreezeDamage_init();
+    } else if (
+        dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) &&
+        checkNoResetFlg0(daPyFlg0_SHIP_DROP)
+    ) {
+        offNoResetFlg0(daPyFlg0_SHIP_DROP);
+        changePlayer(this);
+        return procLargeDamage_init(-2, 1, 0, 0);
+    } else if (!checkModeFlg(0x8) && mDamageWaitTimer == 0) {
+        if (mAcch.ChkGroundHit() && (
+            mCurrAttributeCode == dBgS_Attr_DAMAGE_e ||
+            mCurrAttributeCode == dBgS_Attr_ELECTRICITY_e
+        )) {
+            r28 = mCurrAttributeCode;
+        } else {
+            for (int i = 0; r28 == dBgS_Attr_NORMAL_e && i < (s32)ARRAY_SIZE(mAcchCir); i++) {
+                r28 = checkWallAtributeDamage(&mAcchCir[i]);
+            }
+        }
+    }
+    
+    if (r28 != dBgS_Attr_NORMAL_e) {
+        r30 = TRUE;
+        r29 = 1;
+    } else {
+        r30 = FALSE;
+        r29 = mStts.GetDmg();
+        if (mCyl.ChkTgHit() && mCyl.GetTgHitGObj() && mCyl.GetTgHitGObj()->GetAtType() == 0x20) {
+            r29 = 1;
+        }
+    }
+    
+    dCcG_At_Spl r27;
+    if (mCyl.ChkTgHit()) {
+        dCcD_GObjInf* gobj = mCyl.GetTgHitGObj();
+        if (gobj) {
+            r27 = gobj->GetAtSpl();
+        } else {
+            r27 = mStts.GetAtSpl();
+        }
+    } else {
+        r27 = (dCcG_At_Spl)0;
+    }
+    
+    if (checkModeFlg(0x4000000)) {
+        if (r30 || mCyl.ChkTgHit() && !checkSuccessGuard(r27)) {
+            setDamagePoint(-r29);
+            mDamageWaitTimer = daPy_HIO_dam_c0::m.field_0x2;
+            
+            voiceStart(2);
+            
+            seStartOnlyReverb(JA_SE_LK_DAMAGE_NORMAL);
+            changePlayer(this);
+            if (mCyl.ChkTgHit() && !checkSuccessGuard(r27)) {
+                setDamageEmitter();
+            } else if (r28 == dBgS_Attr_ELECTRICITY_e) {
+                setDamageElecEmitter();
+            }
+            if (daPy_dmEcallBack_c::checkElec()) {
+                if (checkModeFlg(0x800)) {
+                    return procElecDamage_init(NULL);
+                } else if (checkModeFlg(0x40000)) {
+                    return procElecDamage_init(NULL);
+                }
+            }
+            if (checkModeFlg(0x40000) && !checkNoDamageMode()) {
+                setPriTextureAnime(0x40, 0);
+            }
+        }
+    } else {
+        if (mAtCps[0].GetAtType() != 0x80 && mAtCps[0].GetAtType() != 0x100) {
+            cXyz sp8;
+            if (checkElecReturnDamage(&mAtCps[0], &sp8) ||
+                checkElecReturnDamage(&mAtCps[1], &sp8) ||
+                checkElecReturnDamage(&mAtCps[2], &sp8)
+            ) {
+                setDamagePoint(-1.0f);
+                onResetFlg0(daPyRFlg0_UNK80000);
+                setDamageElecEmitter();
+                changePlayer(this);
+                
+                if (procElecDamage_init(&sp8)) {
+                    return TRUE;
+                }
+                
+                if (daPy_lk_c::checkPlayerFly()) {
+                    return procLargeDamage_init(-1, 1, 0, 0);
+                } else {
+                    return procDamage_init();
+                }
+            }
+        }
+        
+        if (mCyl.ChkTgHit() && !checkGuardSlip() &&
+            (!dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) || !checkNoDamageMode())
+        ) {
+            freeRopeItem();
+            freeHookshotItem();
+            
+            if (!checkSuccessGuard(r27)) {
+                if (mHeldItemType == 0x101) {
+                    deleteEquipItem(FALSE);
+                }
+                
+                setDamageEmitter();
+                changePlayer(this);
+                setDamagePoint(-r29);
+                fopAc_ac_c* grabActor = mActorKeepGrab.getActor();
+                if (daPy_dmEcallBack_c::checkElec()) {
+                    if (procElecDamage_init(NULL)) {
+                        return TRUE;
+                    }
+                }
+                
+                if (checkModeFlg(0x2000)) {
+                    return procLargeDamage_init(-9, 1, 0, 0);
+                }
+                
+                if (checkGrabWear() &&
+                    mCyl.GetTgHitAc() && fopAcM_GetName(mCyl.GetTgHitAc()) == PROC_NZ &&
+                    grabActor)
+                {
+                    cXyz* r3 = getDamageVec(&mCyl);
+                    grabActor->shape_angle.y = cM_atan2s(r3->x, r3->z);
+                    grabActor->shape_angle.x = 0x2000;
+                    return procLargeDamage_init(-4, 1, 0, 0);
+                }
+                if (r27 == 7 || r27 == 2 || r27 == 10) {
+                    return procLargeDamage_init(-6, 0, 0, 0);
+                }
+                if (daPy_lk_c::checkPlayerFly() || r27 == 6 || r27 == 1 || r27 == 9) {
+                    return procLargeDamage_init(-1, 1, 0, 0);
+                }
+                if (checkNormalDamage(r29)) {
+                    return procDamage_init();
+                }
+                setDashDamage();
+            } else {
+                u8 hitSe = mCyl.GetTgHitObjSe();
+                if (hitSe == 6) {
+                    seStartOnlyReverb(JA_SE_OBJ_COL_N_BDY_MPLT);
+                } else if (hitSe == 2 || hitSe == 5) {
+                    seStartOnlyReverb(JA_SE_OBJ_COL_SWS_NMTLP);
+                } else if (hitSe == 4) {
+                    seStartOnlyReverb(JA_SE_OBJ_COL_NWHP_NMTL);
+                } else {
+                    seStartOnlyReverb(JA_SE_OBJ_COL_SWM_NSWL);
+                }
+                
+                if (mCurProc == PROC_CROUCH_DEFENSE_e) {
+                    return procCrouchDefenseSlip_init();
+                } else {
+                    return procGuardSlip_init();
+                }
+            }
+        } else if (r30) {
+            changePlayer(this);
+            if (mHeldItemType == 0x101) {
+                deleteEquipItem(FALSE);
+            }
+            setDamagePoint(-r29);
+            
+            if (r28 == dBgS_Attr_ELECTRICITY_e) {
+                setDamageElecEmitter();
+                if (procElecDamage_init(NULL)) {
+                    return TRUE;
+                }
+            }
+            
+            if (checkNormalDamage(r29)) {
+                return procPolyDamage_init();
+            }
+            
+            setDashDamage();
+        }
+    }
+    
+    mStts.ClrTg();
+    mStts.ClrAt();
+    
+    return FALSE;
 }
 
 /* 80110F3C-80111424       .text changeAutoJumpProc__9daPy_lk_cFv */
@@ -4143,7 +4376,7 @@ void daPy_lk_c::changeDeadProc() {
 }
 
 /* 80111B80-80111D64       .text getDamageVec__9daPy_lk_cFP12dCcD_GObjInf */
-void daPy_lk_c::getDamageVec(dCcD_GObjInf*) {
+cXyz* daPy_lk_c::getDamageVec(dCcD_GObjInf*) {
     /* Nonmatching */
 }
 
@@ -4249,7 +4482,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_lk_c::daPy_PROC proc) {
     } else if (mCurProc == PROC_FAN_SWING_e) {
         setSmallFanModel();
     } else if (mCurProc == PROC_FAN_GLIDE_e) {
-        deleteEquipItem(0);
+        deleteEquipItem(FALSE);
         mMaxFallSpeed = daPy_HIO_autoJump_c0::m.field_0x10;
         setSmallFanModel();
         mHeldItemType = DEKU_LEAF;
@@ -4273,7 +4506,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_lk_c::daPy_PROC proc) {
             item->dead();
         }
     } else if (mCurProc == DPROC_LETTER_READ_e) {
-        deleteEquipItem(0);
+        deleteEquipItem(FALSE);
     } else if (mCurProc == PROC_CUT_ROLL_END_e) {
         if (m33A8.getEmitter()) {
             m33A8.getEmitter()->setGlobalAlpha(0);
@@ -5211,8 +5444,8 @@ BOOL daPy_lk_c::startRestartRoom(u32 param_1, int eventInfoIdx, f32 param_3, int
 }
 
 /* 80120BBC-80120BE0       .text checkSuccessGuard__9daPy_lk_cFi */
-BOOL daPy_lk_c::checkSuccessGuard(int param_1) {
-    if (!mCyl.ChkTgShieldHit() || param_1 >= 8) {
+BOOL daPy_lk_c::checkSuccessGuard(int atSpl) {
+    if (!mCyl.ChkTgShieldHit() || atSpl >= 8) {
         return FALSE;
     }
     return TRUE;

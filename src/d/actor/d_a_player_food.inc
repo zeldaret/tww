@@ -47,7 +47,7 @@ BOOL daPy_lk_c::procFoodThrow_init() {
             mDemo.setSpecialDemoType();
         }
     } else {
-        deleteEquipItem(0);
+        deleteEquipItem(FALSE);
     }
     
     int temp = checkShipRideUseItem(1);
@@ -162,7 +162,7 @@ BOOL daPy_lk_c::procFoodSet_init() {
                 }
             }
             
-            deleteEquipItem(0);
+            deleteEquipItem(FALSE);
         } else {
             setHyoiModel();
         }
@@ -211,7 +211,7 @@ BOOL daPy_lk_c::procFoodSet() {
             dComIfGp_evmng_cutEnd(mStaffIdx);
         } else if (m34D0 < 0) {
             dComIfGp_event_reset();
-            deleteEquipItem(0);
+            deleteEquipItem(FALSE);
             u32 playerPID = fopAcM_GetID(this);
             dCam_getBody()->EndEventCamera(playerPID);
             endDemoMode();

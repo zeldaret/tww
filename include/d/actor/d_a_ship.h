@@ -18,6 +18,8 @@ public:
     bool checkStateFlg(daSHIP_SFLG flag) const { return m0358 & flag; }
     bool checkHeadNoDraw() const { return checkStateFlg(daSFLG_HEAD_NO_DRAW_e); }
     
+    bool unknown_inline_TODO() const { return m041C || m0424; }
+    
     void checkCraneMode() const {}
     void checkCraneUpEnd() const {}
     void checkForceMove() {}
@@ -236,7 +238,9 @@ public:
     /* 0x0414 */ daGrid_c* mpGrid;
     /* 0x0418 */ int m0418;
     /* 0x041C */ fopAc_ac_c* m041C;
-    /* 0x0420 */ u8 m0420[0x042C - 0x0420];
+    /* 0x0420 */ u32 m0420;
+    /* 0x0424 */ fopAc_ac_c* m0424;
+    /* 0x0428 */ u8 m0428[0x042C - 0x0428];
     /* 0x042C */ u32 m042C;
     /* 0x0430 */ u8 m0430[0x0434 - 0x0430];
     /* 0x0434 */ cXyz* m0434;

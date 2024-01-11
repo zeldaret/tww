@@ -38,7 +38,7 @@ void daPy_lk_c::setShipRideArmAngle(int, J3DTransformInfo*) {
 int daPy_lk_c::checkShipRideUseItem(int param_1) {
     if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && dComIfGp_getShipActor() != NULL) {
         if (param_1 != 0) {
-            deleteEquipItem(0);
+            deleteEquipItem(FALSE);
         }
         if (checkShipNotNormalMode()) {
             return 2;

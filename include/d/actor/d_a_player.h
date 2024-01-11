@@ -114,6 +114,7 @@ public:
         daPyFlg0_SCOPE_CANCEL       = 0x00080000,
         daPyFlg0_PHOTO_BOX_CANCEL   = 0x00080000, // Same as scope cancel
         daPyFlg0_UNK200000          = 0x00200000,
+        daPyFlg0_UNK1000000         = 0x01000000,
         daPyFlg0_EQUIP_HEAVY_BOOTS  = 0x02000000,
         daPyFlg0_NO_DRAW            = 0x08000000,
         daPyFlg0_HEAVY_STATE        = 0x40000000,
@@ -122,6 +123,7 @@ public:
     enum daPy_FLG1 {
         daPyFlg1_EQUIP_DRAGON_SHIELD    = 0x00000001,
         daPyFlg1_NPC_CALL_COMMAND       = 0x00000002,
+        daPyFlg1_UNK4                   = 0x00000004,
         daPyFlg1_CASUAL_CLOTHES         = 0x00000008,
         daPyFlg1_FORCE_VOMIT_JUMP       = 0x00000010,
         daPyFlg1_NPC_NOT_CHANGE         = 0x00000040,
@@ -156,6 +158,7 @@ public:
         daPyRFlg0_GRAB_UP_START         = 0x00008000,
         daPyRFlg0_ATTENTION_LOCK        = 0x00010000,
         daPyRFlg0_HAMMER_QUAKE          = 0x00020000,
+        daPyRFlg0_UNK80000              = 0x00080000,
         daPyRFlg0_POISON_CURSE          = 0x00100000,
         daPyRFlg0_GRAB_PUT_START        = 0x00400000,
         daPyRFlg0_TACT_USE              = 0x01000000,

@@ -169,7 +169,15 @@ public:
     static void setType(u16 type) { m_type = type; }
     
     static bool checkCurse() { return m_type == 1; }
+    static bool checkElec() { return m_type == 2; }
     
+    static void checkFlame() {}
+    static void decTimer() {}
+    static void getTimer() {}
+    static void setCurse(s16) {}
+    static void setElec(s16) {}
+    static void setFlame(s16) {}
+
     static s16 m_timer;
     static u16 m_type;
 };  // Size: 0x0C
@@ -1562,7 +1570,7 @@ public:
     BOOL checkSingleItemEquipAnime() const;
     BOOL checkItemEquipAnime() const;
     BOOL checkEquipAnime() const;
-    void deleteEquipItem(int);
+    void deleteEquipItem(BOOL);
     void setFallVoice();
     void keepItemData();
     void returnKeepItemData();
@@ -1587,17 +1595,17 @@ public:
     void changeSlideProc();
     void changeWaitProc();
     void changeLandProc(f32);
-    void setDamagePoint(f32);
+    BOOL setDamagePoint(f32);
     BOOL checkNormalDamage(int);
     void setDashDamage();
     BOOL checkAtHitEnemy(dCcD_GObjInf*);
     BOOL checkElecReturnDamage(dCcD_GObjInf*, cXyz*);
-    BOOL checkWallAtributeDamage(dBgS_AcchCir*);
-    void changeDamageProc();
+    s32 checkWallAtributeDamage(dBgS_AcchCir*);
+    BOOL changeDamageProc();
     void changeAutoJumpProc();
     void changeDemoProc();
     void changeDeadProc();
-    void getDamageVec(dCcD_GObjInf*);
+    cXyz* getDamageVec(dCcD_GObjInf*);
     void setOldRootQuaternion(s16, s16, s16);
     BOOL checkRestHPAnime();
     BOOL checkHeavyStateOn();
@@ -2338,6 +2346,7 @@ public:
             mActivePlayerBombs--;
         }
     }
+    bool checkGuardSlip() const { return mCurProc == PROC_GUARD_SLIP_e || mCurProc == PROC_CROUCH_DEFENSE_SLIP_e; }
     
     int getStartRoomNo() { return fopAcM_GetParam(this) & 0x3F; }
     int getStartMode() { return (fopAcM_GetParam(this) >> 0x0C) & 0xF; }
@@ -2364,7 +2373,6 @@ public:
     void checkDashDamageAnime() const {}
     void checkDoubleItemEquipAnime() const {}
     void checkFaceTypeNot() const {}
-    void checkGuardSlip() const {}
     void checkHookshotReadyAnime() const {}
     void checkIsland() const {}
     void checkMirrorShieldEquip() const {}
@@ -2692,7 +2700,7 @@ public:
     /* 0x3578 */ int m3578;
     /* 0x357C */ u8 m357C[0x3580 - 0x357C];
     /* 0x3580 */ int m3580;
-    /* 0x3584 */ int mCurrentGroundAttributeCode;
+    /* 0x3584 */ int mCurrAttributeCode;
     /* 0x3588 */ u8 m3588[0x358C - 0x3588];
     /* 0x358C */ int mStaffIdx;
     /* 0x3590 */ int mEventIdx;

@@ -33,7 +33,7 @@ void daPy_lk_c::setTactModel() {
     if (mHeldItemType == WIND_TACT)
         return;
     
-    deleteEquipItem(0);
+    deleteEquipItem(FALSE);
     mHeldItemType = WIND_TACT;
     JKRHeap* oldHeap = setItemHeap();
     
