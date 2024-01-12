@@ -73,7 +73,7 @@ public:
     } field_0xe;
     /* 0x10 */ int field_0x10;
     /* 0x14 */ int field_0x14;
-    /* 0x18 */ int field_0x18;
+    /* 0x18 */ void* field_0x18;
     /* 0x1C */ u8** field_0x1c;
 
     static JAIBasic* getInterface() { return msBasic; }
