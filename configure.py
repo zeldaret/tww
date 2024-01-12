@@ -708,7 +708,7 @@ config.libs = [
             Object(Matching,    "JSystem/JAudio/osdsp_task.c", extra_cflags="-lang c++ -O4 -func_align 32"),
             Object(NonMatching, "JSystem/JAudio/JAIAnimation.cpp"),
             Object(NonMatching, "JSystem/JAudio/JAIBasic.cpp"),
-            Object(NonMatching, "JSystem/JAudio/JAIBankWave.cpp"),
+            Object(Matching,    "JSystem/JAudio/JAIBankWave.cpp"),
             Object(Matching,    "JSystem/JAudio/JAIConst.cpp"),
             Object(Matching,    "JSystem/JAudio/JAIDummyObject.cpp"),
             Object(NonMatching, "JSystem/JAudio/JAIFx.cpp"),

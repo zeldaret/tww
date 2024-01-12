@@ -6,13 +6,20 @@
 #include "JSystem/JAudio/JAIBankWave.h"
 #include "JSystem/JAudio/JAIBasic.h"
 #include "JSystem/JAudio/JAIGlobalParameter.h"
+#include "JSystem/JAudio/JAISeMgr.h"
+#include "JSystem/JAudio/JASBankMgr.h"
+#include "JSystem/JAudio/JASDvdThread.h"
 #include "JSystem/JAudio/JASWaveArcLoader.h"
 #include "JSystem/JAudio/JASWaveBankMgr.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 
+JAInter::BankWave::initOnCode_s* JAInter::BankWave::initOnCodeBnk;
+JAInter::BankWave::initOnCode_s* JAInter::BankWave::initOnCodeWs;
 s32* JAInter::BankWave::wsGroupNumber;
 s32* JAInter::BankWave::wsLoadStatus;
 s32 JAInter::BankWave::wsMax;
+JAInter::BankWave::flags_t JAInter::BankWave::flags = {};
+s32 JAInter::BankWave::SceneSetFlag = -1;
 
 /* 80291220-80291230       .text setWsGroupNumber__Q27JAInter8BankWaveFll */
 void JAInter::BankWave::setWsGroupNumber(s32 param_1, s32 param_2) {
@@ -26,50 +33,100 @@ void JAInter::BankWave::setWsLoadStatus(s32 param_1, s32 param_2) {
 
 /* 80291240-8029144C       .text init__Q27JAInter8BankWaveFv */
 void JAInter::BankWave::init() {
-    /* Nonmatching */
     wsGroupNumber = new (JAIBasic::getCurrentJAIHeap(), 32) s32[wsMax];
     wsLoadStatus = new (JAIBasic::getCurrentJAIHeap(), 32) s32[wsMax];
     JASystem::WaveArcLoader::setCurrentDir(JAIGlobalParameter::getParamWavePath());
     JASystem::WaveBankMgr::init(0x100);
     JASystem::WaveArcLoader::init();
+    if (initOnCodeWs) {
+        for (int i = 0; initOnCodeWs[i].field_0x0; i++) {
+            if (initOnCodeWs[i].field_0x0) {
+                JASystem::WaveBankMgr::registWaveBankWS(i, initOnCodeWs[i].field_0x0);
+                wsGroupNumber[i] = -1;
+                wsLoadStatus[i] = 0;
+            }
+        }
+    }
+    JASystem::BankMgr::init(0x100);
+    if (initOnCodeBnk) {
+        int i;
+        for (i = 0; initOnCodeBnk[i].field_0x0; i++) {
+            if (initOnCodeBnk[i].field_0x0) {
+                JASystem::BankMgr::registBankBNK(i, initOnCodeBnk[i].field_0x0);
+            }
+        }
+        for (i = 0; initOnCodeBnk[i].field_0x0; i++) {
+            JASystem::BankMgr::assignWaveBank(i, initOnCodeBnk[i].field_0x8);
+        }
+    }
 }
 
 /* 8029144C-802914D4       .text setWaveScene__Q27JAInter8BankWaveFv */
 void JAInter::BankWave::setWaveScene() {
-    /* Nonmatching */
+    if (!initOnCodeWs) {
+        return;
+    }
+    for (int i = 0; initOnCodeWs[i].field_0x0; i++) {
+        if (initOnCodeWs[i].field_0x8 == 0) {
+            loadGroupWave(i, 0);
+        }
+    }
+    flags.flag1 = true;
 }
 
 /* 802914D4-80291578       .text loadSecondStayWave__Q27JAInter8BankWaveFv */
 void JAInter::BankWave::loadSecondStayWave() {
-    /* Nonmatching */
+    if (SeMgr::seHandle->field_0x5 == 3 && flags.flag2 == 0 && initOnCodeWs) {
+        for (int i = 0; initOnCodeWs[i].field_0x0; i++) {
+            if (initOnCodeWs[i].field_0x8 == 1) {
+                loadGroupWave(i, 0);
+            }
+        }
+        flags.flag2 = true;
+    }
 }
 
 /* 80291578-802915C4       .text setSceneSetFinishCallback__Q27JAInter8BankWaveFll */
-void JAInter::BankWave::setSceneSetFinishCallback(s32, s32) {
-    /* Nonmatching */
+void JAInter::BankWave::setSceneSetFinishCallback(s32 param_1, s32 param_2) {
+    SceneSetFlag = -1;
+    wsLoadStatus[param_1] = 1;
+    JASystem::Dvd::checkPassDvdT((param_1 << 16) + param_2, NULL, finishSceneSet);
 }
 
 /* 802915C4-802915DC       .text finishSceneSet__Q27JAInter8BankWaveFUl */
-void JAInter::BankWave::finishSceneSet(u32) {
-    /* Nonmatching */
+void JAInter::BankWave::finishSceneSet(u32 param_1) {
+    SceneSetFlag = param_1;
+    wsLoadStatus[(param_1 >> 16)] = 2;
 }
 
 /* 802915DC-8029165C       .text loadSceneWave__Q27JAInter8BankWaveFll */
-void JAInter::BankWave::loadSceneWave(s32, s32) {
-    /* Nonmatching */
+void JAInter::BankWave::loadSceneWave(s32 param_1, s32 param_2) {
+    if (initOnCodeWs && initOnCodeWs[param_1].field_0x8 == 2 && param_2 != wsGroupNumber[param_1]) {
+        if (wsGroupNumber[param_1] != -1) {
+            JASystem::WaveBankMgr::eraseWave(param_1, wsGroupNumber[param_1]);
+        }
+        loadGroupWave(param_1, param_2);
+    }
 }
 
 /* 8029165C-802916B0       .text loadGroupWave__Q27JAInter8BankWaveFll */
-void JAInter::BankWave::loadGroupWave(s32, s32) {
-    /* Nonmatching */
+void JAInter::BankWave::loadGroupWave(s32 param_1, s32 param_2) {
+    JASystem::WaveBankMgr::loadWave(param_1, param_2, NULL);
+    setSceneSetFinishCallback(param_1, param_2);
+    wsGroupNumber[param_1] = param_2;
 }
 
 /* 802916B0-802916C0       .text getWaveLoadStatus__Q27JAInter8BankWaveFl */
-s32 JAInter::BankWave::getWaveLoadStatus(s32) {
-    /* Nonmatching */
+s32 JAInter::BankWave::getWaveLoadStatus(s32 param_1) {
+    return wsLoadStatus[param_1];
 }
 
 /* 802916C0-80291704       .text checkAllWaveLoadStatus__Q27JAInter8BankWaveFv */
 bool JAInter::BankWave::checkAllWaveLoadStatus() {
-    /* Nonmatching */
+    for (int i = 0; initOnCodeWs[i].field_0x0; i++) {
+        if (wsLoadStatus[i] == 1) {
+            return true;
+        }
+    }
+    return false;
 }
