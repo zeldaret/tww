@@ -16,6 +16,11 @@ namespace JASystem {
 
 namespace JAInter {
     class Actor;
+    class StreamParameter {
+    public:
+        /* 0x00 */ u8 field_0x0;
+    };
+
     namespace StreamMgr {
         void init();
         void storeStreamBuffer(JAISound**, Actor*, u32, u32, u8, void*);

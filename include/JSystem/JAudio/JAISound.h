@@ -25,7 +25,7 @@ public:
     virtual void setSeDistanceDolby(u8);
     virtual void setSePositionDopplar();
 
-    int getSeCategoryNumber();
+    u8 getSeCategoryNumber();
     int getSwBit();
     int checkSwBit(u32);
     u8 getInfoPriority();
@@ -112,6 +112,14 @@ public:
     void setVolumeU7(u8, u32, u8) {}
     void setWait(u8) {}
 
+    struct PositionInfo_t {
+        f32 field_0x0;
+        u8 field_0x4[0x8 - 0x4];
+        f32 field_0x8;
+        u8 field_0xc[0x18 - 0xc];
+        f32 field_0x18;
+    };
+
     /* 0x04 */ u8 field_0x4;
     /* 0x05 */ u8 field_0x5;
     /* 0x06 */ u8 field_0x6;
@@ -124,7 +132,7 @@ public:
     /* 0x14 */ u32 field_0x14;
     /* 0x18 */ int field_0x18;
     /* 0x1c */ int field_0x1c;
-    /* 0x20 */ void* field_0x20;
+    /* 0x20 */ PositionInfo_t* mPositionInfo;
     /* 0x24 */ void* field_0x24;
     /* 0x28 */ int field_0x28;
     /* 0x2C */ int field_0x2c;
@@ -170,7 +178,7 @@ namespace JAInter {
 
         /* 0x00 */ JAISound* field_0x0;
         /* 0x04 */ JAISound* field_0x4;
-        /* 0x08 */ JAISound* field_0x8;
+        /* 0x08 */ JAISound* Buffer;
     };
 }
 
