@@ -5,7 +5,9 @@
 
 #include "JSystem/JAudio/JAIInitData.h"
 #include "JSystem/JAudio/JAIBankWave.h"
+#include "JSystem/JAudio/JAIBasic.h"
 #include "JSystem/JAudio/JAIConst.h"
+#include "JSystem/JAudio/JAIFx.h"
 #include "JSystem/JAudio/JAIGlobalParameter.h"
 #include "JSystem/JAudio/JAISoundTable.h"
 #include "JSystem/JAudio/JAIStreamMgr.h"
@@ -39,5 +41,78 @@ BOOL JAInter::InitData::checkInitDataFile() {
 
 /* 80292548-8029285C       .text checkInitDataOnMemory__Q27JAInter8InitDataFv */
 void JAInter::InitData::checkInitDataOnMemory() {
-    /* Nonmatching */
+    int r30 = 0;
+    u32 r29 = true;
+    u8 r31;
+    u8* temp;
+    while (r29) {
+        switch (aafPointer[r30++]) {
+        case 0:
+            r29 = false;
+            break;
+        case 1: {
+            u8* var1 = (u8*)aafPointer + aafPointer[r30++];
+            u32 var2 = aafPointer[r30];
+            SoundTable::init(transInitDataFile(var1, var2), var2);
+            r30 += 2;
+            break;
+        }
+        case 2:
+            r31 = 0;
+            temp = (u8*)(aafPointer + r30);
+            u32 var6;
+            for (var6 = 0; aafPointer[r30 + var6]; var6 += 3) {}
+            BankWave::initOnCodeBnk = (BankWave::initOnCode_s*)transInitDataFile(temp, var6 / 3 * 12 + 4);
+            for (; aafPointer[r30]; r31++, r30 += 3) {
+                BankWave::initOnCodeBnk[r31].field_0x0 = (u8*)aafPointer + (u32)BankWave::initOnCodeBnk[r31].field_0x0;
+            }
+            r30++;
+            break;
+        case 3:
+            r31 = 0;
+            temp = (u8*)(aafPointer + r30);
+            for (var6 = 0; aafPointer[r30 + var6]; var6 += 3) {}
+            BankWave::initOnCodeWs = (BankWave::initOnCode_s*)transInitDataFile(temp, var6 / 3 * 12 + 4);
+            for (; aafPointer[r30]; r30 += 3, r31++) {
+                BankWave::initOnCodeWs[r31].field_0x0 = (u8*)aafPointer + (u32)BankWave::initOnCodeWs[r31].field_0x0;
+                BankWave::wsMax++;
+            }
+            r30++;
+            break;
+        case 4:
+            JUT_WARN(120, "%s", "Hed file is not needed. Remove this file('aaf')\n");
+            r30 += 3;
+            break;
+        case 5:
+            StreamMgr::initOnCodeStrm = transInitDataFile((u8*)(aafPointer + r30), 8);
+            *(u8**)StreamMgr::initOnCodeStrm = transInitDataFile((u8*)aafPointer + aafPointer[r30], aafPointer[r30 + 1]);
+            StreamMgr::streamList = *(u8**)StreamMgr::initOnCodeStrm;
+            r30 += 3;
+            break;
+        case 6: {
+            u32* r28 = (u32*)transInitDataFile((u8*)aafPointer + aafPointer[r30], aafPointer[r30 + 1]);
+            JAIGlobalParameter::setParamSoundSceneMax(*r28);
+            JAIBasic::getInterface()->field_0x1c = (u8**)(r28 + 1);
+            for (int i = 0; i < JAIGlobalParameter::getParamSoundSceneMax(); i++) {
+                JAIBasic::getInterface()->field_0x1c[i] += u32(r28);
+            }
+            r30 += 3;
+            break;
+        }
+        case 7:
+            Fx::initOnCodeFxScene = (Fx::initOnCodeFxScene_s*)transInitDataFile((u8*)aafPointer + aafPointer[r30], aafPointer[r30 + 1]);
+            r30 += 3;
+            break;
+        case 8: {
+            u8* tmp = transInitDataFile((u8*)aafPointer + aafPointer[r30], (aafPointer[r30 + 1] & 0xFFF0) + 16);
+            JAIBasic::getInterface()->field_0x18 = tmp;
+            r30 += 3;
+            break;
+        }
+        default:
+            while (aafPointer[r30++]) {}
+            break;
+        }
+    }
+    BankWave::init();
 }
