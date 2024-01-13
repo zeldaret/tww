@@ -1350,7 +1350,7 @@ static s32 daAM2_Create(fopAc_ac_c* i_actor) {
             &fopAcM_GetPosition_p(i_this), &fopAcM_GetOldPosition_p(i_this),
             i_this, 1, &i_this->mAcchCir, &fopAcM_GetSpeed_p(i_this)
         );
-        i_this->mStts.Init(0xFE, 1, i_this);
+        i_this->mStts.Init(254, 1, i_this);
 
         i_this->mGravity = -3.0f;
 

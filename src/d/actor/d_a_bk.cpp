@@ -825,7 +825,7 @@ static s32 daBk_Create(fopAc_ac_c* i_actor) {
             i_this->mMaxHealth = i_this->mHealth = 5;
         }
         
-        i_this->mDamageReaction.mStts.Init(0xC8, 0xFF, i_this);
+        i_this->mDamageReaction.mStts.Init(200, 0xFF, i_this);
         static dCcD_SrcCyl co_cyl_src = {}; // TODO
         i_this->m0B88.Set(co_cyl_src);
         i_this->m0B88.SetStts(&i_this->mDamageReaction.mStts);

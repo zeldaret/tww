@@ -136,7 +136,7 @@ public:
     virtual cCcD_GStts* GetGStts() {
         return (cCcD_GStts*)this;
     }
-    void Init(int, int, fopAc_ac_c*);
+    void Init(int weight, int, fopAc_ac_c* pActor);
     virtual void Ct();
     virtual void ClrAt() {
         cCcD_Stts::ClrAt();

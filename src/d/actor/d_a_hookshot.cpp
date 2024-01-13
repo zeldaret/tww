@@ -370,7 +370,7 @@ s32 daHookshot_c::create() {
     procWait_init(FALSE);
     mGravity = -5.0f;
     
-    mStts.Init(0xA, 0xFF, this);
+    mStts.Init(10, 0xFF, this);
     mCps.Set(l_at_cps_src);
     mCps.SetStts(&mStts);
     

@@ -3500,7 +3500,7 @@ void daPy_lk_c::playerInit() {
     mCameraInfoIdx = dComIfGp_getPlayerCameraID(0);
     mpAttention = &dComIfGp_getAttention();
     
-    mStts.Init(0x78, 0xFF, this);
+    mStts.Init(120, 0xFF, this);
     mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);
     mCyl.OnTgShieldFrontRange();

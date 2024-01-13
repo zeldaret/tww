@@ -176,7 +176,7 @@ BOOL enemy_ice(enemyice* ei) {
     switch (ei->mState) {
     case 0: // Not initialized
         // Initialize the enemyice now.
-        ei->mStts.Init(0xFA, 0xFF, ac);
+        ei->mStts.Init(250, 0xFF, ac);
         ei->mCyl.Set(cc_cyl_src);
         ei->mCyl.SetStts(&ei->mStts);
         ei->mCyl.SetR(ei->mWallRadius);
@@ -468,7 +468,7 @@ void enemy_fire(enemyfire* ef) {
             ef->mFlameScaleY = 2.0f;
         }
         
-        ef->mStts.Init(0xFA, 0xFF, ac);
+        ef->mStts.Init(250, 0xFF, ac);
         ef->mSph.Set(fire_at_sph_src);
         ef->mSph.SetStts(&ef->mStts);
         break;

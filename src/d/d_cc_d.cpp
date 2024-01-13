@@ -62,14 +62,14 @@ void dCcD_GStts::Move() {
 }
 
 /* 800AB3DC-800AB46C       .text Init__9dCcD_SttsFiiP10fopAc_ac_c */
-void dCcD_Stts::Init(int param_0, int param_1, fopAc_ac_c* pActor) {
+void dCcD_Stts::Init(int weight, int param_1, fopAc_ac_c* pActor) {
     u32 procId;
     if (pActor) {
         procId = fpcM_GetID(pActor);
     } else {
         procId = fpcM_ERROR_PROCESS_ID_e;
     }
-    cCcD_Stts::Init(param_0, param_1, pActor, procId);
+    cCcD_Stts::Init(weight, param_1, pActor, procId);
     
     s32 roomNo;
     if (pActor) {
