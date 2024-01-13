@@ -191,7 +191,7 @@ void JAInter::SequenceMgr::releaseSeqBuffer(JAISound*, u32) {
 }
 
 /* 802982C0-802982D0       .text getPlayTrackInfo__Q27JAInter11SequenceMgrFUl */
-int JAInter::SequenceMgr::getPlayTrackInfo(u32) {
+JAInter::SeqUpdateData* JAInter::SequenceMgr::getPlayTrackInfo(u32) {
     /* Nonmatching */
 }
 
