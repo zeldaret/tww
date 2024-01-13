@@ -40,7 +40,7 @@ public:
     void mbossBgmNearByProcess(f32);
     bool checkBgmPlaying();
     int checkPlayingMainBgmFlag();
-    bool checkSubBgmPlaying();
+    BOOL checkSubBgmPlaying();
     int checkPlayingSubBgmFlag();
     int checkPlayingStreamBgmFlag();
     void changeBgmStatus(s32);
@@ -61,7 +61,7 @@ public:
     void initSe();
     void seStart(u32, Vec*, u32, s8, f32, f32, f32, f32, u8);
     void seStop(u32, s32);
-    void checkSePlaying(u32);
+    BOOL checkSePlaying(u32);
     void seStopActor(Vec*, u32);
     void seDeleteObject(Vec*);
     u8 getLinkVoiceVowel(u32);
@@ -83,7 +83,7 @@ public:
     void talkOut();
     void menuIn();
     void menuOut();
-    void getCameraInfo(Vec*, Mtx, u32);
+    void getCameraInfo(Vec*, MtxP, u32);
     void getCameraMapInfo(u32);
     void setCameraPolygonPos(Vec*);
     void setCameraGroupInfo(u8);
@@ -91,11 +91,11 @@ public:
     void startIsleBgm();
     void setLinkGroupInfo(u8);
     void setScene(s32, s32, s32, s32);
-    void expandSceneBgmNum(u32);
+    u32 expandSceneBgmNum(u32);
     void checkLinkOnSea();
     void checkLinkOnBoardSea();
     void setSceneName(char*, s32, s32);
-    void spotNameToId(char*);
+    int spotNameToId(char*);
     void sceneChange(u32, u32, u32, s32);
     void sceneBgmStart();
     void load1stDynamicWave();
@@ -109,26 +109,26 @@ public:
     void setLinkBootsType(s32);
     void setLinkOnBoard(s32);
     void bgmMute(JAISound**, u32, s32, u32);
-    void checkStreamPlaying(u32);
+    int checkStreamPlaying(u32);
     void stWaterLevelUp();
     void stWaterLevelDown();
     void stSkyCloisters();
     void stSkyCloistersProcess();
-    void getRandomU32(u32);
+    u32 getRandomU32(u32);
     void setEventBit(void*);
-    void checkEventBit(u16);
-    void checkDayTime();
+    BOOL checkEventBit(u16);
+    BOOL checkDayTime();
     void processTime();
     void processMorningToNormal();
-    void checkOnOuterSea(f32*);
+    int checkOnOuterSea(f32*);
     void checkSeqIDDemoPlaying(u32);
-    void checkDemoFanfarePlaying();
+    u32 checkDemoFanfarePlaying();
     void processDemoFanfareMute();
     void muteMainBgmAll();
     void unmuteMainBgmAll();
     void demoBgmStop(u32);
-    void isDemo();
-    void checkSeaBgmID();
+    BOOL isDemo();
+    u32 checkSeaBgmID();
     void initSeaEnvPos();
     void registSeaEnvPos(Vec*);
     void seaEnvSePlay(u32, s8);
@@ -158,14 +158,26 @@ public:
     // TODO
     void bstHoriOff() {}
     void bstHoriOn() {}
-    void calcMainBgmVol() {}
-    void calcSubBgmVol() {}
+    f32 calcMainBgmVol() { return field_0x0080 * field_0x0084 * field_0x0088 * field_0x008c * field_0x0090 * field_0x0094 * field_0x0098 * field_0x009c * field_0x00ac; }
+    f32 calcSubBgmVol() { return field_0x00a0 * field_0x00a4 * field_0x00a8; }
     void checkSeMute() {}
     void checkTBoxDemo() {}
     void getCurCamera(u32) {}
     void getLinkBootsType() {}
     void getLinkSwShieldBeat() {}
     void isTaktUsing() {}
+
+    struct scene_info_s {
+        u16 field_0x0;
+        u8 field_0x2;
+        u8 field_0x3;
+    };
+
+    struct isle_info_s {
+        u16 field_0x0;
+        u8 field_0x2;
+        u8 field_0x3;
+    };
 
     static JAIZelBasic* zel_basic;
 
@@ -174,18 +186,18 @@ public:
     // static charVoiceTable;
     // static linkVoiceTable;
 
-    // static m_bgm_wave_info;
-    // static m_dy_wave_set_1st;
-    // static m_dy_wave_set_2nd;
-    // static m_scene_info;
-    // static m_isle_info;
-    // static spot_dir_name;
+    static u8 m_bgm_wave_info[];
+    static u8 m_dy_wave_set_1st[][2];
+    static u8 m_dy_wave_set_2nd[][2];
+    static scene_info_s m_scene_info[];
+    static isle_info_s m_isle_info[];
+    static const char* spot_dir_name[];
     // static mIsleArea;
 
     /* 0x0020 */ u8 field_0x0020;
     /* 0x0021 */ u8 field_0x0021;
     /* 0x0022 */ u8 field_0x0022[0x0024 - 0x0022];
-    /* 0x0024 */ int field_0x0024;
+    /* 0x0024 */ u8* field_0x0024;
 #if VERSION != VERSION_JPN
     /* 0x0028 */ int field_0x0028;
 #endif
@@ -194,7 +206,7 @@ public:
     /* 0x002D */ u8 mMinute;
     /* 0x002E */ u8 mWeekday;
     /* 0x002F */ u8 field_0x002f;
-    /* 0x0030 */ s16 field_0x0030;
+    /* 0x0030 */ u16 field_0x0030;
     /* 0x0032 */ u8 field_0x0032;
     /* 0x0033 */ u8 field_0x0033;
     /* 0x0034 */ int field_0x0034;
@@ -223,7 +235,7 @@ public:
     /* 0x0070 */ JAISound* mpStreamBgmSound;
     /* 0x0074 */ int field_0x0074;
     /* 0x0078 */ u32 field_0x0078;
-    /* 0x007C */ u32 field_0x007c;
+    /* 0x007C */ s32 field_0x007c;
     /* 0x0080 */ f32 field_0x0080;
     /* 0x0084 */ f32 field_0x0084;
     /* 0x0088 */ f32 field_0x0088;
@@ -250,7 +262,7 @@ public:
     /* 0x00BE */ u8 field_0x00be;
     /* 0x00BF */ u8 field_0x00bf;
     /* 0x00C0 */ u8 field_0x00c0;
-    /* 0x00C1 */ u8 field_0x00c1;
+    /* 0x00C1 */ s8 field_0x00c1;
     /* 0x00C4 */ int field_0x00c4;
     /* 0x00C8 */ u8 field_0x00c8;
     /* 0x00C9 */ u8 field_0x00c9;
@@ -261,7 +273,10 @@ public:
     /* 0x00CE */ u8 field_0x00ce;
     /* 0x00CF */ u8 field_0x00CF[0x00D0 - 0x00CF];
     /* 0x00D0 */ int field_0x00d0;
-    /* 0x00D4 */ u8 field_0x00d4[0x01F8 - 0x00D4];
+    /* 0x00D4 */ JAISound* field_0x00d4[24];
+    /* 0x0134 */ u32 field_0x0134[24];
+    /* 0x0194 */ u32 field_0x0194[24];
+    /* 0x01F4 */ int field_0x01f4;
     /* 0x01F8 */ u8 field_0x01f8;
     /* 0x01F9 */ u8 field_0x01f9;
     /* 0x01FA */ u8 field_0x01fa;
@@ -278,7 +293,10 @@ public:
     /* 0x0206 */ u8 field_0x0206;
     /* 0x0207 */ u8 field_0x0207;
     /* 0x0208 */ u8 field_0x0208;
-    /* 0x0209 */ u8 field_0x0209[0x021C - 0x0209];
+    /* 0x020C */ int field_0x020c;
+    /* 0x0210 */ int field_0x0210;
+    /* 0x0214 */ int field_0x0214;
+    /* 0x0218 */ int field_0x0218;
     /* 0x021C */ u8 mCameraSeaFloorGroupInfo;
     /* 0x021D */ u8 mLinkSeaFloorGroupInfo;
     /* 0x021E */ u8 field_0x021e;
@@ -301,16 +319,36 @@ public:
     /* 0x0238 */ u8 mIslandRoomNo;
     /* 0x0239 */ u8 field_0x0239;
     /* 0x023A */ u8 field_0x023a;
-    /* 0x023B */ u8 field_0x023B[0x1DD4 - 0x023B];
+    /* 0x023B */ u8 field_0x023B[0x1B80 - 0x023B];
+    /* 0x1B80 */ int field_0x1b80;
+    /* 0x1B84 */ u8 field_0x1b84[0x1DD0 - 0x1B84];
+    /* 0x1DD0 */ int field_0x1dd0;
     /* 0x1DD4 */ u8 field_0x1dd4;
-    /* 0x1DD5 */ u8 field_0x1DD5[0x1EC0 - 0x1DD5];
+    /* 0x1DD5 */ u8 field_0x1DD5[0x1E98 - 0x1DD5];
+    /* 0x1E98 */ int field_0x1e98;
+    /* 0x1E9C */ u8 field_0x1e9c[0x1EC0 - 0x1E9C];
     /* 0x1EC0 */ int field_0x1ec0;
-    /* 0x1EC4 */ u8 field_0x1EC1[0x1F3C - 0x1EC4];
+    /* 0x1EC4 */ int field_0x1ec4;
+    /* 0x1EC8 */ int field_0x1ec8;
+    /* 0x1ECC */ int field_0x1ecc;
+    /* 0x1ED0 */ int field_0x1ed0;
+    /* 0x1ED4 */ u8 field_0x1ED4[0x1F34 - 0x1ED4];
+    /* 0x1F34 */ int field_0x1f34;
+    /* 0x1F38 */ JAISound* field_0x1f38;
     /* 0x1F3C */ u8 field_0x1f3c;
     /* 0x1F3D */ u8 mIsSailing;
     /* 0x1F3E */ u8 field_0x1F3E[0x1F40 - 0x1F3E];
     /* 0x1F40 */ f32 field_0x1f40;
-    /* 0x1F44 */ u8 field_0x1F44[0x2068 - 0x1F44];
+    /* 0x1F44 */ int field_0x1f44;
+    /* 0x1F48 */ int field_0x1f48;
+    /* 0x1F4C */ int field_0x1f4c;
+    /* 0x1F50 */ u8 field_0x1F50[0x203C - 0x1F50];
+    /* 0x203C */ u8 field_0x203c;
+    /* 0x203D */ u8 field_0x203d;
+    /* 0x2040 */ int field_0x2040[4];
+    /* 0x2050 */ int field_0x2050[4];
+    /* 0x2060 */ JAISound* field_0x2060;
+    /* 0x2064 */ int field_0x2064;
     /* 0x2068 */ JMath::TRandom_enough_ field_0x2068;
     /* 0x20F0 */ u8 field_0x20F0[0x20F4 - 0x20F0];
 };

@@ -56,7 +56,7 @@ namespace JAInter {
         /* 0x3C */ int field_0x3c;
         /* 0x40 */ int field_0x40;
         /* 0x44 */ int* trackupdate;
-        /* 0x48 */ int field_0x48;
+        /* 0x48 */ JAISound* field_0x48;
         /* 0x4C */ PlayerParameter* systemTrackParameter;
     };
 
@@ -121,7 +121,7 @@ namespace JAInter {
         void checkDvdLoadArc(u32, u32);
         void storeSeqBuffer(JAISound**, Actor*, u32, u32, u8, void*);
         void releaseSeqBuffer(JAISound*, u32);
-        int getPlayTrackInfo(u32);
+        SeqUpdateData* getPlayTrackInfo(u32);
 
         extern LinkSound seqControl;
         extern SeqUpdateData* seqTrackInfo;

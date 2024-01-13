@@ -4,15 +4,12 @@
 //
 
 #include "JAZelAudio/JAIZelSound.h"
-#include "dolphin/types.h"
 
 /* 802AEF64-802AEFA0       .text __ct__11JAIZelSoundFv */
-JAIZelSound::JAIZelSound() {
-    /* Nonmatching */
-}
+JAIZelSound::JAIZelSound() {}
 
 /* 802AEFA0-802AF19C       .text setDistanceVolumeCommon__11JAIZelSoundFfUc */
-void JAIZelSound::setDistanceVolumeCommon(f32, u8) {
+f32 JAIZelSound::setDistanceVolumeCommon(f32, u8) {
     /* Nonmatching */
 }
 
