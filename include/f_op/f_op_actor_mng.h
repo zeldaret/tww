@@ -519,7 +519,7 @@ BOOL stealItem_CB(void* actor);
 fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo);
 
 s32 fopAcM_createDisappear(fopAc_ac_c* i_actor, cXyz* p_pos, u8 i_scale, u8 i_health = 0, u8 i_switchNo = -1);
-void fopAcM_setCarryNow(fopAc_ac_c* i_this, int stageLayer);
+void fopAcM_setCarryNow(fopAc_ac_c* i_this, BOOL stageLayer);
 void fopAcM_cancelCarryNow(fopAc_ac_c* i_this);
 s32 fopAcM_otoCheck(fopAc_ac_c*, f32);
 BOOL fopAcM_viewCutoffCheck(fopAc_ac_c* actor, f32 param_2);

@@ -18,9 +18,9 @@ public:
         PROC_EXEC = 1
     };
 
-    void eventSet(signed char) {}
-    inline s32 getSendPrice() { return m_send_price[mPayType]; }
-    void isAnm(signed char) {}
+    void eventSet(s8) {}
+    s32 getSendPrice() { return m_send_price[mPayType]; }
+    void isAnm(s8) {}
     void modeProcInit(int) {}
 
     BOOL _createHeap();

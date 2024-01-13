@@ -1330,7 +1330,7 @@ BOOL fopAcM_getGroundAngle(fopAc_ac_c* actor, csXyz* p_angle) {
 }
 
 /* 80027E28-80027E5C       .text fopAcM_setCarryNow__FP10fopAc_ac_ci */
-void fopAcM_setCarryNow(fopAc_ac_c* i_this, int stageLayer) {
+void fopAcM_setCarryNow(fopAc_ac_c* i_this, BOOL stageLayer) {
     fopAcM_OnStatus(i_this, fopAcStts_CARRY_e);
     if (stageLayer) {
         fopAcM_setStageLayer(i_this);

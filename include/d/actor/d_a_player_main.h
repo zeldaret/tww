@@ -189,8 +189,41 @@ public:
     daPy_mtxPosFollowEcallBack_c() {}
     ~daPy_mtxPosFollowEcallBack_c() {}
 
-    /* 0xC */ u8 field_0xC[0x4];
+    /* 0xC */ const csXyz* mpAngle;
 };  // Size: 0x10
+
+class daPy_matAnm_c : public J3DMaterialAnm {
+public:
+    daPy_matAnm_c();
+
+    virtual ~daPy_matAnm_c() {}
+    virtual void calc(J3DMaterial*) const;
+    
+    static u8 m_maba_flg;
+    static u8 m_eye_move_flg;
+    static u8 m_maba_timer;
+    static u8 m_morf_frame;
+
+    static void onMabaFlg() { m_maba_flg = 1; }
+    static void offMabaFlg() { m_maba_flg = 0; }
+    static void decMabaTimer() {}
+    static void decMorfFrame() {}
+    static void getEyeMoveFlg() {}
+    static void getMabaFlg() {}
+    static void getMabaTimer() {}
+    static void getNowOffsetXP() {}
+    static void getNowOffsetYP() {}
+    static void offEyeMoveFlg() {}
+    static void onEyeMoveFlg() {}
+    static void setMabaTimer(u8 timer) { m_maba_timer = timer; }
+    static void setMorfFrame(u8 frame) { m_morf_frame = frame; }
+    static void setNowOffsetX(f32) {}
+    static void setNowOffsetY(f32) {}
+
+public:
+    /* 0x6C */ cXy mEyePosOld;
+    /* 0x74 */ cXy mEyePos;
+};  // Size: 0x7C
 
 class daPy_swBlur_c : public J3DPacket {
 public:
@@ -204,7 +237,7 @@ public:
     /* 0x018 */ int field_0x018;
     /* 0x01C */ int mBlurColorType;
     /* 0x020 */ f32 field_0x020;
-    /* 0x024 */ void* mpBlurPos;
+    /* 0x024 */ void* mpPosBuffer;
     /* 0x028 */ cXyz field_0x028;
     /* 0x034 */ cXyz field_0x034[60];
     /* 0x304 */ cXyz field_0x304[60];
@@ -1000,225 +1033,225 @@ enum LKANM_RES_FILE_ID { // IDs and indexes are synced
 class daPy_lk_c : public daPy_py_c {
 public:
     enum daPy_PROC {
-        PROC_SCOPE_e = 0x00,
-        PROC_SUBJECTIVITY_e = 0x01,
-        PROC_CALL_e = 0x02,
-        PROC_CONTROLL_WAIT_e = 0x03,
-        PROC_WAIT_e = 0x04,
-        PROC_FREE_WAIT_e = 0x05,
-        PROC_MOVE_e = 0x06,
-        PROC_ATN_MOVE_e = 0x07,
-        PROC_ATN_ACTOR_WAIT_e = 0x08,
-        PROC_ATN_ACTOR_MOVE_e = 0x09,
-        PROC_SIDE_STEP_e = 0x0A,
-        PROC_SIDE_STEP_LAND_e = 0x0B,
-        PROC_CROUCH_DEFENSE_e = 0x0C,
-        PROC_CROUCH_DEFENSE_SLIP_e = 0x0D,
-        PROC_CROUCH_e = 0x0E,
-        PROC_CRAWL_START_e = 0x0F,
-        PROC_CRAWL_MOVE_e = 0x10,
-        PROC_CRAWL_AUTO_MOVE_e = 0x11,
-        PROC_CRAWL_END_e = 0x12,
-        PROC_WHIDE_READY_e = 0x13,
-        PROC_WHIDE_WAIT_e = 0x14,
-        PROC_WHIDE_MOVE_e = 0x15,
-        PROC_WHIDE_PEEP_e = 0x16,
-        PROC_WAIT_TURN_e = 0x17,
-        PROC_MOVE_TURN_e = 0x18,
-        PROC_SLIP_e = 0x19,
-        PROC_SLIDE_FRONT_e = 0x1A,
-        PROC_SLIDE_BACK_e = 0x1B,
-        PROC_SLIDE_FRONT_LAND_e = 0x1C,
-        PROC_SLIDE_BACK_LAND_e = 0x1D,
-        PROC_FRONT_ROLL_e = 0x1E,
-        PROC_FRONT_ROLL_CRASH_e = 0x1F,
-        PROC_NOCK_BACK_END_e = 0x20,
-        PROC_SIDE_ROLL_e = 0x21,
-        PROC_BACK_JUMP_e = 0x22,
-        PROC_BACK_JUMP_LAND_e = 0x23,
-        PROC_AUTO_JUMP_e = 0x24,
-        PROC_LAND_e = 0x25,
-        PROC_LAND_DAMAGE_e = 0x26,
-        PROC_FALL_e = 0x27,
-        PROC_SLOW_FALL_e = 0x28,
-        PROC_SMALL_JUMP_e = 0x29,
-        PROC_VERTICAL_JUMP_e = 0x2A,
-        PROC_HANG_START_e = 0x2B,
-        PROC_HANG_FALL_START_e = 0x2C,
-        PROC_HANG_UP_e = 0x2D,
-        PROC_HANG_WAIT_e = 0x2E,
-        PROC_HANG_MOVE_e = 0x2F,
-        PROC_HANG_CLIMB_e = 0x30,
-        PROC_HANG_WALL_CATCH_e = 0x31,
-        PROC_PUSH_PULL_WAIT_e = 0x32,
-        PROC_PUSH_MOVE_e = 0x33,
-        PROC_PULL_MOVE_e = 0x34,
-        PROC_SWIM_UP_e = 0x35,
-        PROC_SWIM_WAIT_e = 0x36,
-        PROC_SWIM_MOVE_e = 0x37,
-        PROC_LADDER_UP_START_e = 0x38,
-        PROC_LADDER_UP_END_e = 0x39,
-        PROC_LADDER_DOWN_START_e = 0x3A,
-        PROC_LADDER_DOWN_END_e = 0x3B,
-        PROC_LADDER_MOVE_e = 0x3C,
-        PROC_CLIMB_UP_START_e = 0x3D,
-        PROC_CLIMB_DOWN_START_e = 0x3E,
-        PROC_CLIMB_MOVE_UP_DOWN_e = 0x3F,
-        PROC_CLIMB_MOVE_SIDE_e = 0x40,
-        PROC_CUT_A_e = 0x41,
-        PROC_CUT_F_e = 0x42,
-        PROC_CUT_R_e = 0x43,
-        PROC_CUT_L_e = 0x44,
-        PROC_CUT_EA_e = 0x45,
-        PROC_CUT_EB_e = 0x46,
-        PROC_CUT_EX_A_e = 0x47,
-        PROC_CUT_EX_B_e = 0x48,
-        PROC_CUT_EX_MJ_e = 0x49,
-        PROC_CUT_KESA_e = 0x4A,
-        PROC_WEAPON_NORMAL_SWING_e = 0x4B,
-        PROC_WEAPON_SIDE_SWING_e = 0x4C,
-        PROC_WEAPON_FRONT_SWING_READY_e = 0x4D,
-        PROC_WEAPON_FRONT_SWING_e = 0x4E,
-        PROC_WEAPON_FRONT_SWING_END_e = 0x4F,
-        PROC_WEAPON_THROW_e = 0x50,
-        PROC_HAMMER_SIDE_SWING_e = 0x51,
-        PROC_HAMMER_FRONT_SWING_READY_e = 0x52,
-        PROC_HAMMER_FRONT_SWING_e = 0x53,
-        PROC_HAMMER_FRONT_SWING_END_e = 0x54,
-        PROC_CUT_TURN_e = 0x55,
-        PROC_CUT_ROLL_e = 0x56,
-        PROC_CUT_ROLL_END_e = 0x57,
-        PROC_CUT_TURN_CHARGE_e = 0x58,
-        PROC_CUT_TURN_MOVE_e = 0x59,
-        PROC_CUT_REVERSE_e = 0x5A,
-        PROC_JUMP_CUT_e = 0x5B,
-        PROC_JUMP_CUT_LAND_e = 0x5C,
-        PROC_BT_JUMP_e = 0x5D,
-        PROC_BT_JUMP_CUT_e = 0x5E,
-        PROC_BT_SLIDE_e = 0x5F,
-        PROC_BT_ROLL_e = 0x60,
-        PROC_BT_ROLL_CUT_e = 0x61,
-        PROC_BT_VERTICAL_JUMP_e = 0x62,
-        PROC_BT_VERTICAL_JUMP_CUT_e = 0x63,
-        PROC_BT_VERTICAL_JUMP_LAND_e = 0x64,
-        PROC_GUARD_CRASH_e = 0x65,
-        PROC_DAMAGE_e = 0x66,
-        PROC_POLY_DAMAGE_e = 0x67,
-        PROC_LARGE_DAMAGE_e = 0x68,
-        PROC_LARGE_DAMAGE_UP_e = 0x69,
-        PROC_LARGE_DAMAGE_WALL_e = 0x6A,
-        PROC_LAVA_DAMAGE_e = 0x6B,
-        PROC_ELEC_DAMAGE_e = 0x6C,
-        PROC_GUARD_SLIP_e = 0x6D,
-        PROC_GRAB_READY_e = 0x6E,
-        PROC_GRAB_UP_e = 0x6F,
-        PROC_GRAB_MISS_e = 0x70,
-        PROC_GRAB_THROW_e = 0x71,
-        PROC_GRAB_PUT_e = 0x72,
-        PROC_GRAB_WAIT_e = 0x73,
-        PROC_GRAB_HEAVY_WAIT_e = 0x74,
-        PROC_GRAB_REBOUND_e = 0x75,
-        PROC_ROPE_SUBJECT_e = 0x76,
-        PROC_ROPE_READY_e = 0x77,
-        PROC_ROPE_SWING_e = 0x78,
-        PROC_ROPE_HANG_WAIT_e = 0x79,
-        PROC_ROPE_UP_e = 0x7A,
-        PROC_ROPE_DOWN_e = 0x7B,
-        PROC_ROPE_SWING_START_e = 0x7C,
-        PROC_ROPE_MOVE_e = 0x7D,
-        PROC_ROPE_THROW_CATCH_e = 0x7E,
-        PROC_ROPE_UP_HANG_e = 0x7F,
-        PROC_BOOMERANG_SUBJECT_e = 0x80,
-        PROC_BOOMERANG_MOVE_e = 0x81,
-        PROC_BOOMERANG_CATCH_e = 0x82,
-        PROC_HOOKSHOT_SUBJECT_e = 0x83,
-        PROC_HOOKSHOT_MOVE_e = 0x84,
-        PROC_HOOKSHOT_FLY_e = 0x85,
-        PROC_SHIP_READY_e = 0x86,
-        PROC_SHIP_JUMP_RIDE_e = 0x87,
-        PROC_SHIP_STEER_e = 0x88,
-        PROC_SHIP_PADDLE_e = 0x89,
-        PROC_SHIP_SCOPE_e = 0x8A,
-        PROC_SHIP_BOOMERANG_e = 0x8B,
-        PROC_SHIP_HOOKSHOT_e = 0x8C,
-        PROC_SHIP_BOW_e = 0x8D,
-        PROC_SHIP_CANNON_e = 0x8E,
-        PROC_SHIP_CRANE_e = 0x8F,
-        PROC_SHIP_GET_OFF_e = 0x90,
-        PROC_SHIP_RESTART_e = 0x91,
-        PROC_FAN_SWING_e = 0x92,
-        PROC_FAN_GLIDE_e = 0x93,
-        PROC_BOW_SUBJECT_e = 0x94,
-        PROC_BOW_MOVE_e = 0x95,
-        PROC_VOMIT_READY_e = 0x96,
-        PROC_VOMIT_WAIT_e = 0x97,
-        PROC_VOMIT_JUMP_e = 0x98,
-        PROC_VOMIT_LAND_e = 0x99,
-        PROC_TACT_WAIT_e = 0x9A,
-        PROC_TACT_PLAY_e = 0x9B,
-        PROC_TACT_PLAY_END_e = 0x9C,
-        PROC_TACT_PLAY_ORIGINAL_e = 0x9D,
-        PROC_ICE_SLIP_FALL_e = 0x9E,
-        PROC_ICE_SLIP_FALL_UP_e = 0x9F,
-        PROC_ICE_SLIP_ALMOST_FALL_e = 0xA0,
-        PROC_BOOTS_EQUIP_e = 0xA1,
-        PROC_NOT_USE_e = 0xA2,
-        PROC_BOTTLE_DRINK_e = 0xA3,
-        PROC_BOTTLE_OPEN_e = 0xA4,
-        PROC_BOTTLE_SWING_e = 0xA5,
-        PROC_BOTTLE_GET_e = 0xA6,
-        PROC_FOOD_THROW_e = 0xA7,
-        PROC_FOOD_SET_e = 0xA8,
-        DPROC_TOOL_e = 0xA9,
-        DPROC_TALK_e = 0xAA,
-        DPROC_DAMAGE_e = 0xAB,
-        DPROC_HOLDUP_e = 0xAC,
-        DPROC_OPEN_TREASURE_e = 0xAD,
-        DPROC_GET_ITEM_e = 0xAE,
-        DPROC_UNEQUIP_e = 0xAF,
-        DPROC_LAVA_DAMAGE_e = 0xB0,
-        DPROC_FREEZE_DAMAGE_e = 0xB1,
-        DPROC_DEAD_e = 0xB2,
-        DPROC_LOOK_AROUND_e = 0xB3,
-        DPROC_SALUTE_e = 0xB4,
-        DPROC_LOOK_AROUND2_e = 0xB5,
-        DPROC_TALISMAN_PICKUP_e = 0xB6,
-        DPROC_TALISMAN_WAIT_e = 0xB7,
-        DPROC_SURPRISED_e = 0xB8,
-        DPROC_TURN_BACK_e = 0xB9,
-        DPROC_LOOK_UP_e = 0xBA,
-        DPROC_QUAKE_WAIT_e = 0xBB,
-        DPROC_DANCE_e = 0xBC,
-        DPROC_CAUGHT_e = 0xBD,
-        DPROC_LOOK_WAIT_e = 0xBE,
-        DPROC_PUSH_PULL_WAIT_e = 0xBF,
-        DPROC_PUSH_MOVE_e = 0xC0,
-        DPROC_DOOR_OPEN_e = 0xC1,
-        DPROC_NOD_e = 0xC2,
-        DPROC_PRESENT_e = 0xC3,
-        DPROC_WIND_CHANGE_e = 0xC4,
-        DPROC_STAND_ITEM_PUT_e = 0xC5,
-        DPROC_VORCANO_FAIL_e = 0xC6,
-        DPROC_SLIGHT_SURPRISED_e = 0xC7,
-        DPROC_SMILE_e = 0xC8,
-        DPROC_BOSS_WARP_e = 0xC9,
-        DPROC_AGB_USE_e = 0xCA,
-        DPROC_LOOK_TURN_e = 0xCB,
-        DPROC_LETTER_OPEN_e = 0xCC,
-        DPROC_LETTER_READ_e = 0xCD,
-        DPROC_REDEAD_STOP_e = 0xCE,
-        DPROC_REDEAD_CATCH_e = 0xCF,
-        DPROC_GET_DANCE_e = 0xD0,
-        DPROC_BOTTLE_OPEN_FAIRY_e = 0xD1,
-        DPROC_WARP_SHORT_e = 0xD2,
-        DPROC_OPEN_SALVAGE_TREASURE_e = 0xD3,
-        DPROC_SURPRISED_WAIT_e = 0xD4,
-        DPROC_POWER_UP_WAIT_e = 0xD5,
-        DPROC_POWER_UP_e = 0xD6,
-        DPROC_SHIP_SIT_e = 0xD7,
-        DPROC_LAST_COMBO_e = 0xD8,
-        DPROC_HAND_UP_e = 0xD9,
-        DPROC_ICE_SLIP_e = 0xDA,
+        daPyProc_SCOPE_e = 0x00,
+        daPyProc_SUBJECTIVITY_e = 0x01,
+        daPyProc_CALL_e = 0x02,
+        daPyProc_CONTROLL_WAIT_e = 0x03,
+        daPyProc_WAIT_e = 0x04,
+        daPyProc_FREE_WAIT_e = 0x05,
+        daPyProc_MOVE_e = 0x06,
+        daPyProc_ATN_MOVE_e = 0x07,
+        daPyProc_ATN_ACTOR_WAIT_e = 0x08,
+        daPyProc_ATN_ACTOR_MOVE_e = 0x09,
+        daPyProc_SIDE_STEP_e = 0x0A,
+        daPyProc_SIDE_STEP_LAND_e = 0x0B,
+        daPyProc_CROUCH_DEFENSE_e = 0x0C,
+        daPyProc_CROUCH_DEFENSE_SLIP_e = 0x0D,
+        daPyProc_CROUCH_e = 0x0E,
+        daPyProc_CRAWL_START_e = 0x0F,
+        daPyProc_CRAWL_MOVE_e = 0x10,
+        daPyProc_CRAWL_AUTO_MOVE_e = 0x11,
+        daPyProc_CRAWL_END_e = 0x12,
+        daPyProc_WHIDE_READY_e = 0x13,
+        daPyProc_WHIDE_WAIT_e = 0x14,
+        daPyProc_WHIDE_MOVE_e = 0x15,
+        daPyProc_WHIDE_PEEP_e = 0x16,
+        daPyProc_WAIT_TURN_e = 0x17,
+        daPyProc_MOVE_TURN_e = 0x18,
+        daPyProc_SLIP_e = 0x19,
+        daPyProc_SLIDE_FRONT_e = 0x1A,
+        daPyProc_SLIDE_BACK_e = 0x1B,
+        daPyProc_SLIDE_FRONT_LAND_e = 0x1C,
+        daPyProc_SLIDE_BACK_LAND_e = 0x1D,
+        daPyProc_FRONT_ROLL_e = 0x1E,
+        daPyProc_FRONT_ROLL_CRASH_e = 0x1F,
+        daPyProc_NOCK_BACK_END_e = 0x20,
+        daPyProc_SIDE_ROLL_e = 0x21,
+        daPyProc_BACK_JUMP_e = 0x22,
+        daPyProc_BACK_JUMP_LAND_e = 0x23,
+        daPyProc_AUTO_JUMP_e = 0x24,
+        daPyProc_LAND_e = 0x25,
+        daPyProc_LAND_DAMAGE_e = 0x26,
+        daPyProc_FALL_e = 0x27,
+        daPyProc_SLOW_FALL_e = 0x28,
+        daPyProc_SMALL_JUMP_e = 0x29,
+        daPyProc_VERTICAL_JUMP_e = 0x2A,
+        daPyProc_HANG_START_e = 0x2B,
+        daPyProc_HANG_FALL_START_e = 0x2C,
+        daPyProc_HANG_UP_e = 0x2D,
+        daPyProc_HANG_WAIT_e = 0x2E,
+        daPyProc_HANG_MOVE_e = 0x2F,
+        daPyProc_HANG_CLIMB_e = 0x30,
+        daPyProc_HANG_WALL_CATCH_e = 0x31,
+        daPyProc_PUSH_PULL_WAIT_e = 0x32,
+        daPyProc_PUSH_MOVE_e = 0x33,
+        daPyProc_PULL_MOVE_e = 0x34,
+        daPyProc_SWIM_UP_e = 0x35,
+        daPyProc_SWIM_WAIT_e = 0x36,
+        daPyProc_SWIM_MOVE_e = 0x37,
+        daPyProc_LADDER_UP_START_e = 0x38,
+        daPyProc_LADDER_UP_END_e = 0x39,
+        daPyProc_LADDER_DOWN_START_e = 0x3A,
+        daPyProc_LADDER_DOWN_END_e = 0x3B,
+        daPyProc_LADDER_MOVE_e = 0x3C,
+        daPyProc_CLIMB_UP_START_e = 0x3D,
+        daPyProc_CLIMB_DOWN_START_e = 0x3E,
+        daPyProc_CLIMB_MOVE_UP_DOWN_e = 0x3F,
+        daPyProc_CLIMB_MOVE_SIDE_e = 0x40,
+        daPyProc_CUT_A_e = 0x41,
+        daPyProc_CUT_F_e = 0x42,
+        daPyProc_CUT_R_e = 0x43,
+        daPyProc_CUT_L_e = 0x44,
+        daPyProc_CUT_EA_e = 0x45,
+        daPyProc_CUT_EB_e = 0x46,
+        daPyProc_CUT_EX_A_e = 0x47,
+        daPyProc_CUT_EX_B_e = 0x48,
+        daPyProc_CUT_EX_MJ_e = 0x49,
+        daPyProc_CUT_KESA_e = 0x4A,
+        daPyProc_WEAPON_NORMAL_SWING_e = 0x4B,
+        daPyProc_WEAPON_SIDE_SWING_e = 0x4C,
+        daPyProc_WEAPON_FRONT_SWING_READY_e = 0x4D,
+        daPyProc_WEAPON_FRONT_SWING_e = 0x4E,
+        daPyProc_WEAPON_FRONT_SWING_END_e = 0x4F,
+        daPyProc_WEAPON_THROW_e = 0x50,
+        daPyProc_HAMMER_SIDE_SWING_e = 0x51,
+        daPyProc_HAMMER_FRONT_SWING_READY_e = 0x52,
+        daPyProc_HAMMER_FRONT_SWING_e = 0x53,
+        daPyProc_HAMMER_FRONT_SWING_END_e = 0x54,
+        daPyProc_CUT_TURN_e = 0x55,
+        daPyProc_CUT_ROLL_e = 0x56,
+        daPyProc_CUT_ROLL_END_e = 0x57,
+        daPyProc_CUT_TURN_CHARGE_e = 0x58,
+        daPyProc_CUT_TURN_MOVE_e = 0x59,
+        daPyProc_CUT_REVERSE_e = 0x5A,
+        daPyProc_JUMP_CUT_e = 0x5B,
+        daPyProc_JUMP_CUT_LAND_e = 0x5C,
+        daPyProc_BT_JUMP_e = 0x5D,
+        daPyProc_BT_JUMP_CUT_e = 0x5E,
+        daPyProc_BT_SLIDE_e = 0x5F,
+        daPyProc_BT_ROLL_e = 0x60,
+        daPyProc_BT_ROLL_CUT_e = 0x61,
+        daPyProc_BT_VERTICAL_JUMP_e = 0x62,
+        daPyProc_BT_VERTICAL_JUMP_CUT_e = 0x63,
+        daPyProc_BT_VERTICAL_JUMP_LAND_e = 0x64,
+        daPyProc_GUARD_CRASH_e = 0x65,
+        daPyProc_DAMAGE_e = 0x66,
+        daPyProc_POLY_DAMAGE_e = 0x67,
+        daPyProc_LARGE_DAMAGE_e = 0x68,
+        daPyProc_LARGE_DAMAGE_UP_e = 0x69,
+        daPyProc_LARGE_DAMAGE_WALL_e = 0x6A,
+        daPyProc_LAVA_DAMAGE_e = 0x6B,
+        daPyProc_ELEC_DAMAGE_e = 0x6C,
+        daPyProc_GUARD_SLIP_e = 0x6D,
+        daPyProc_GRAB_READY_e = 0x6E,
+        daPyProc_GRAB_UP_e = 0x6F,
+        daPyProc_GRAB_MISS_e = 0x70,
+        daPyProc_GRAB_THROW_e = 0x71,
+        daPyProc_GRAB_PUT_e = 0x72,
+        daPyProc_GRAB_WAIT_e = 0x73,
+        daPyProc_GRAB_HEAVY_WAIT_e = 0x74,
+        daPyProc_GRAB_REBOUND_e = 0x75,
+        daPyProc_ROPE_SUBJECT_e = 0x76,
+        daPyProc_ROPE_READY_e = 0x77,
+        daPyProc_ROPE_SWING_e = 0x78,
+        daPyProc_ROPE_HANG_WAIT_e = 0x79,
+        daPyProc_ROPE_UP_e = 0x7A,
+        daPyProc_ROPE_DOWN_e = 0x7B,
+        daPyProc_ROPE_SWING_START_e = 0x7C,
+        daPyProc_ROPE_MOVE_e = 0x7D,
+        daPyProc_ROPE_THROW_CATCH_e = 0x7E,
+        daPyProc_ROPE_UP_HANG_e = 0x7F,
+        daPyProc_BOOMERANG_SUBJECT_e = 0x80,
+        daPyProc_BOOMERANG_MOVE_e = 0x81,
+        daPyProc_BOOMERANG_CATCH_e = 0x82,
+        daPyProc_HOOKSHOT_SUBJECT_e = 0x83,
+        daPyProc_HOOKSHOT_MOVE_e = 0x84,
+        daPyProc_HOOKSHOT_FLY_e = 0x85,
+        daPyProc_SHIP_READY_e = 0x86,
+        daPyProc_SHIP_JUMP_RIDE_e = 0x87,
+        daPyProc_SHIP_STEER_e = 0x88,
+        daPyProc_SHIP_PADDLE_e = 0x89,
+        daPyProc_SHIP_SCOPE_e = 0x8A,
+        daPyProc_SHIP_BOOMERANG_e = 0x8B,
+        daPyProc_SHIP_HOOKSHOT_e = 0x8C,
+        daPyProc_SHIP_BOW_e = 0x8D,
+        daPyProc_SHIP_CANNON_e = 0x8E,
+        daPyProc_SHIP_CRANE_e = 0x8F,
+        daPyProc_SHIP_GET_OFF_e = 0x90,
+        daPyProc_SHIP_RESTART_e = 0x91,
+        daPyProc_FAN_SWING_e = 0x92,
+        daPyProc_FAN_GLIDE_e = 0x93,
+        daPyProc_BOW_SUBJECT_e = 0x94,
+        daPyProc_BOW_MOVE_e = 0x95,
+        daPyProc_VOMIT_READY_e = 0x96,
+        daPyProc_VOMIT_WAIT_e = 0x97,
+        daPyProc_VOMIT_JUMP_e = 0x98,
+        daPyProc_VOMIT_LAND_e = 0x99,
+        daPyProc_TACT_WAIT_e = 0x9A,
+        daPyProc_TACT_PLAY_e = 0x9B,
+        daPyProc_TACT_PLAY_END_e = 0x9C,
+        daPyProc_TACT_PLAY_ORIGINAL_e = 0x9D,
+        daPyProc_ICE_SLIP_FALL_e = 0x9E,
+        daPyProc_ICE_SLIP_FALL_UP_e = 0x9F,
+        daPyProc_ICE_SLIP_ALMOST_FALL_e = 0xA0,
+        daPyProc_BOOTS_EQUIP_e = 0xA1,
+        daPyProc_NOT_USE_e = 0xA2,
+        daPyProc_BOTTLE_DRINK_e = 0xA3,
+        daPyProc_BOTTLE_OPEN_e = 0xA4,
+        daPyProc_BOTTLE_SWING_e = 0xA5,
+        daPyProc_BOTTLE_GET_e = 0xA6,
+        daPyProc_FOOD_THROW_e = 0xA7,
+        daPyProc_FOOD_SET_e = 0xA8,
+        daPyProc_DEMO_TOOL_e = 0xA9,
+        daPyProc_DEMO_TALK_e = 0xAA,
+        daPyProc_DEMO_DAMAGE_e = 0xAB,
+        daPyProc_DEMO_HOLDUP_e = 0xAC,
+        daPyProc_DEMO_OPEN_TREASURE_e = 0xAD,
+        daPyProc_DEMO_GET_ITEM_e = 0xAE,
+        daPyProc_DEMO_UNEQUIP_e = 0xAF,
+        daPyProc_DEMO_LAVA_DAMAGE_e = 0xB0,
+        daPyProc_DEMO_FREEZE_DAMAGE_e = 0xB1,
+        daPyProc_DEMO_DEAD_e = 0xB2,
+        daPyProc_DEMO_LOOK_AROUND_e = 0xB3,
+        daPyProc_DEMO_SALUTE_e = 0xB4,
+        daPyProc_DEMO_LOOK_AROUND2_e = 0xB5,
+        daPyProc_DEMO_TALISMAN_PICKUP_e = 0xB6,
+        daPyProc_DEMO_TALISMAN_WAIT_e = 0xB7,
+        daPyProc_DEMO_SURPRISED_e = 0xB8,
+        daPyProc_DEMO_TURN_BACK_e = 0xB9,
+        daPyProc_DEMO_LOOK_UP_e = 0xBA,
+        daPyProc_DEMO_QUAKE_WAIT_e = 0xBB,
+        daPyProc_DEMO_DANCE_e = 0xBC,
+        daPyProc_DEMO_CAUGHT_e = 0xBD,
+        daPyProc_DEMO_LOOK_WAIT_e = 0xBE,
+        daPyProc_DEMO_PUSH_PULL_WAIT_e = 0xBF,
+        daPyProc_DEMO_PUSH_MOVE_e = 0xC0,
+        daPyProc_DEMO_DOOR_OPEN_e = 0xC1,
+        daPyProc_DEMO_NOD_e = 0xC2,
+        daPyProc_DEMO_PRESENT_e = 0xC3,
+        daPyProc_DEMO_WIND_CHANGE_e = 0xC4,
+        daPyProc_DEMO_STAND_ITEM_PUT_e = 0xC5,
+        daPyProc_DEMO_VORCANO_FAIL_e = 0xC6,
+        daPyProc_DEMO_SLIGHT_SURPRISED_e = 0xC7,
+        daPyProc_DEMO_SMILE_e = 0xC8,
+        daPyProc_DEMO_BOSS_WARP_e = 0xC9,
+        daPyProc_DEMO_AGB_USE_e = 0xCA,
+        daPyProc_DEMO_LOOK_TURN_e = 0xCB,
+        daPyProc_DEMO_LETTER_OPEN_e = 0xCC,
+        daPyProc_DEMO_LETTER_READ_e = 0xCD,
+        daPyProc_DEMO_REDEAD_STOP_e = 0xCE,
+        daPyProc_DEMO_REDEAD_CATCH_e = 0xCF,
+        daPyProc_DEMO_GET_DANCE_e = 0xD0,
+        daPyProc_DEMO_BOTTLE_OPEN_FAIRY_e = 0xD1,
+        daPyProc_DEMO_WARP_SHORT_e = 0xD2,
+        daPyProc_DEMO_OPEN_SALVAGE_TREASURE_e = 0xD3,
+        daPyProc_DEMO_SURPRISED_WAIT_e = 0xD4,
+        daPyProc_DEMO_POWER_UP_WAIT_e = 0xD5,
+        daPyProc_DEMO_POWER_UP_e = 0xD6,
+        daPyProc_DEMO_SHIP_SIT_e = 0xD7,
+        daPyProc_DEMO_LAST_COMBO_e = 0xD8,
+        daPyProc_DEMO_HAND_UP_e = 0xD9,
+        daPyProc_DEMO_ICE_SLIP_e = 0xDA,
     };
 
     enum daPy_HEAP_TYPE {
@@ -1466,23 +1499,19 @@ public:
     };
 
     enum daPy_UNDER {
-        UNDER_UNK0 = 0,
-        UNDER_UNK1 = 1,
+        UNDER_MOVE0_e = 0,
+        UNDER_MOVE1_e = 1,
     };
 
     enum daPy_UPPER {
-        UPPER_UNK0 = 0,
-        UPPER_UNK1 = 1,
-        UPPER_UNK2 = 2,
+        UPPER_MOVE0_e = 0,
+        UPPER_MOVE1_e = 1,
+        UPPER_MOVE2_e = 2,
     };
 
     enum {
         PART_UNDER_e = 0,
         PART_UPPER_e = 1,
-    };
-
-    enum {
-        UNDER_MOVE0_e = 0,
     };
     
     enum {
@@ -1552,7 +1581,7 @@ public:
     void setDemoTextureAnime(u16, u16, int, u16);
     void resetDemoTextureAnime();
     void setTextureScrollResource(J3DAnmTextureSRTKey*, int);
-    void loadTextureScrollResource(u32, int);
+    J3DAnmTextureSRTKey* loadTextureScrollResource(u32, BOOL);
     void playTextureAnime();
     BOOL checkSightLine(f32, cXyz*);
     void setBootsModel(J3DModel**);
@@ -1655,7 +1684,7 @@ public:
     BOOL checkSubjectEnd(int);
     BOOL checkGuardAccept();
     void cancelNoDamageMode();
-    BOOL commonProcInit(daPy_lk_c::daPy_PROC proc);
+    BOOL commonProcInit(daPy_PROC proc);
     BOOL procScope_init(int);
     BOOL procScope();
     BOOL procSubjectivity_init(int);
@@ -1802,14 +1831,14 @@ public:
     void setSeAnime(daPy_anmHeap_c const*, J3DFrameCtrl*);
     void initSeAnime();
     void resetSeAnime();
-    void setMoveAnime(f32, f32, f32, daPy_lk_c::daPy_ANM, daPy_lk_c::daPy_ANM, int, f32);
-    BOOL setSingleMoveAnime(daPy_lk_c::daPy_ANM, f32, f32, s16, f32);
-    void setActAnimeUpper(u16, daPy_lk_c::daPy_UPPER, f32, f32, s16, f32);
-    void resetActAnimeUpper(daPy_lk_c::daPy_UPPER, f32);
+    void setMoveAnime(f32, f32, f32, daPy_ANM, daPy_ANM, int, f32);
+    BOOL setSingleMoveAnime(daPy_ANM, f32, f32, s16, f32);
+    BOOL setActAnimeUpper(u16, daPy_UPPER, f32, f32, s16, f32);
+    BOOL resetActAnimeUpper(daPy_UPPER, f32);
     void animeUpdate();
     void simpleAnmPlay(J3DAnmBase*);
-    void setHandModel(daPy_lk_c::daPy_ANM);
-    const daPy_anmIndex_c* getAnmData(daPy_lk_c::daPy_ANM) const;
+    void setHandModel(daPy_ANM);
+    const daPy_anmIndex_c* getAnmData(daPy_ANM) const;
     BOOL checkGrabWeapon(int);
     void endDemoMode();
     void setAuraEffect();
@@ -2059,7 +2088,7 @@ public:
     void swimOutAfter(int);
     BOOL checkSwimFallCheck();
     void changeSwimOutProc();
-    void setSwimMoveAnime(daPy_lk_c::daPy_ANM);
+    void setSwimMoveAnime(daPy_ANM);
     void getSwimTimerRate();
     void setSwimTimerStartStop();
     BOOL procSwimUp_init(int);
@@ -2300,7 +2329,7 @@ public:
     void setJumpCutAtParam();
     void getCutDirection();
     void changeCutProc();
-    void changeCutReverseProc(daPy_lk_c::daPy_ANM);
+    void changeCutReverseProc(daPy_ANM);
     BOOL procCutA_init(s16);
     BOOL procCutA();
     BOOL procCutF_init(s16);
@@ -2327,7 +2356,7 @@ public:
     BOOL procCutTurnCharge();
     BOOL procCutTurnMove_init();
     BOOL procCutTurnMove();
-    BOOL procCutReverse_init(daPy_lk_c::daPy_ANM);
+    BOOL procCutReverse_init(daPy_ANM);
     BOOL procCutReverse();
     BOOL procJumpCut_init(int);
     BOOL procJumpCut();
@@ -2341,12 +2370,24 @@ public:
     J3DAnmTevRegKey* getBombBrk() { return mpBombBrk; }
     J3DAnmTextureSRTKey* getIceArrowBtk() { return mpIceArrowBtk; }
     J3DAnmTextureSRTKey* getLightArrowBtk() { return mpLightArrowBtk; }
+    
     bool checkGrabAnime() const { return checkGrabAnimeLight() || checkGrabAnimeHeavy(); };
-    bool checkGrabAnimeLight() const { return m_anm_heap_upper[2].mIdx == LKANM_BCK_GRABWAIT; };
-    bool checkGrabAnimeHeavy() const { return m_anm_heap_upper[2].mIdx == LKANM_BCK_GRABWAITB; };
-    bool checkBoomerangCatchAnime() const { return m_anm_heap_upper[2].mIdx == LKANM_BCK_BOOMCATCH; };
-    bool checkBoomerangThrowAnime() const { return m_anm_heap_upper[2].mIdx == LKANM_BCK_BOOMTHROW; };
-    bool checkBoomerangReadyAnime() const { return m_anm_heap_upper[2].mIdx == LKANM_BCK_BOOMWAIT; };
+    bool checkGrabAnimeLight() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_GRABWAIT; };
+    bool checkGrabAnimeHeavy() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_GRABWAITB; };
+    bool checkBoomerangCatchAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_BOOMCATCH; };
+    bool checkBoomerangThrowAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_BOOMTHROW; };
+    bool checkBoomerangReadyAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_BOOMWAIT; };
+    bool checkHookshotReadyAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_HOOKSHOTWAIT; }
+    bool checkDashDamageAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_DAMDASH; }
+    bool checkGuardSlip() const {
+        return mCurProc == daPyProc_GUARD_SLIP_e ||
+            mCurProc == daPyProc_CROUCH_DEFENSE_SLIP_e;
+    }
+    bool checkUpperGuardAnime() const {
+        return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_ATNG ||
+            m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_ATNGHAM;
+    }
+    
     s16 checkTinkleShield() const { return mTinkleShieldTimer; }
     void setTinkleShield(s16 time) { mTinkleShieldTimer = time; }
     bool checkNoDamageMode() const { return checkEquipDragonShield() || checkTinkleShield() != 0; }
@@ -2381,7 +2422,6 @@ public:
             mActivePlayerBombs--;
         }
     }
-    bool checkGuardSlip() const { return mCurProc == PROC_GUARD_SLIP_e || mCurProc == PROC_CROUCH_DEFENSE_SLIP_e; }
     
     int getStartRoomNo() { return fopAcM_GetParam(this) & 0x3F; }
     int getStartMode() { return (fopAcM_GetParam(this) >> 0x0C) & 0xF; }
@@ -2405,10 +2445,8 @@ public:
     void checkBowShootAnime() const {}
     void checkBowWaitAnime() const {}
     void checkCrawlWaterIn() {}
-    void checkDashDamageAnime() const {}
     void checkDoubleItemEquipAnime() const {}
     void checkFaceTypeNot() const {}
-    void checkHookshotReadyAnime() const {}
     void checkIsland() const {}
     void checkMirrorShieldEquip() const {}
     void checkNoUpperAnime() const {}
@@ -2420,7 +2458,6 @@ public:
     void checkSwordEquip() const {}
     void checkSwordEquipAnime() const {}
     void checkUpperAnime(u16) const {}
-    void checkUpperGuardAnime() const {}
     void doButton() const {}
     void doTrigger() const {}
     void getAnmSpeedStickRate(f32, f32) {}
@@ -2457,6 +2494,7 @@ public:
     virtual BOOL checkPlayerGuard() const;
     virtual fopAc_ac_c* getGrabMissActor();
     virtual u32 checkPlayerFly() const {
+        // Note: These flags combine into 0x10452822.
         return checkModeFlg(
             ModeFlg_MIDAIR |
             ModeFlg_HANG |
@@ -2468,23 +2506,23 @@ public:
             ModeFlg_CAUGHT
         );
     }
-    virtual BOOL checkFrontRoll() const { return mCurProc == PROC_FRONT_ROLL_e; }
-    virtual BOOL checkBottleSwing() const { return mCurProc == PROC_BOTTLE_SWING_e; }
-    virtual BOOL checkCutCharge() const { return mCurProc == PROC_CUT_TURN_MOVE_e; }
+    virtual BOOL checkFrontRoll() const { return mCurProc == daPyProc_FRONT_ROLL_e; }
+    virtual BOOL checkBottleSwing() const { return mCurProc == daPyProc_BOTTLE_SWING_e; }
+    virtual BOOL checkCutCharge() const { return mCurProc == daPyProc_CUT_TURN_MOVE_e; }
     virtual BOOL getBokoFlamePos(cXyz*);
-    virtual BOOL checkTactWait() const { return mCurProc == PROC_TACT_WAIT_e; }
+    virtual BOOL checkTactWait() const { return mCurProc == daPyProc_TACT_WAIT_e; }
     virtual void setTactZev(unsigned int, int, char*);
     virtual void onDekuSpReturnFlg(u8 i_point);
-    virtual BOOL checkComboCutTurn() const { return mCurProc == 0x55 && m3570 != 0; }
-    virtual f32 getBaseAnimeFrameRate() { return mFrameCtrlUnder[0].getRate(); }
-    virtual f32 getBaseAnimeFrame() { return mFrameCtrlUnder[0].getFrame(); }
+    virtual BOOL checkComboCutTurn() const { return mCurProc == daPyProc_CUT_TURN_e && m3570 != 0; }
+    virtual f32 getBaseAnimeFrameRate() { return mFrameCtrlUnder[UNDER_MOVE0_e].getRate(); }
+    virtual f32 getBaseAnimeFrame() { return mFrameCtrlUnder[UNDER_MOVE0_e].getFrame(); }
     virtual u32 getItemID() const { return mActorKeepEquip.getID(); }
     virtual u32 getThrowBoomerangID() const { return mActorKeepThrow.getID(); }
     virtual u32 getGrabActorID() const { return mActorKeepGrab.getID(); }
     virtual BOOL checkGrabBarrel() { return checkGrabBarrelSearch(1); }
     virtual u32 checkPlayerNoDraw() { return dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 2) || checkNoResetFlg0(daPyFlg0_NO_DRAW); }
     virtual BOOL checkRopeTag() { return mActorKeepEquip.getActor() == NULL; }
-    virtual BOOL checkRopeReadyAnime() const { return m_anm_heap_upper[2].mIdx == LKANM_BCK_ROPETHROWWAIT; }
+    virtual BOOL checkRopeReadyAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_ROPETHROWWAIT; }
     virtual void voiceStart(u32);
     virtual void setOutPower(f32, s16, int);
     virtual void onFrollCrashFlg(u32 param_1) { m3620 = param_1; onNoResetFlg0(daPyFlg0_UNK8); }
@@ -2506,7 +2544,7 @@ public:
     /* 0x0334 */ J3DModel* mpYamuModel;
     /* 0x0338 */ ResTIMG* mpCurrLinktex;
     /* 0x033C */ ResTIMG mOtherLinktex;
-    /* 0x035C */ J3DAnmTexPattern* m035C;
+    /* 0x035C */ J3DAnmTexPattern* mpAnmTexPatternData;
     /* 0x0360 */ J3DTexNoAnm* m_texNoAnms;
     /* 0x0364 */ J3DAnmTextureSRTKey* mpTexScrollResData;
     /* 0x0368 */ J3DTexMtxAnm* m_texMtxAnm;
@@ -2514,8 +2552,8 @@ public:
     /* 0x0374 */ J3DShape* mpZOffBlendShape[4];
     /* 0x0384 */ J3DShape* mpZOffNoneShape[4];
     /* 0x0394 */ J3DShape* mpZOnShape[4];
-    /* 0x03A4 */ J3DShape* m03A4;
-    /* 0x03A8 */ J3DShape* m03A8;
+    /* 0x03A4 */ J3DShape* mpLhandShape;
+    /* 0x03A8 */ J3DShape* mpRhandShape;
     /* 0x03AC */ dBgS_AcchCir mAcchCir[3];
     /* 0x046C */ dBgS_LinkAcch mAcch;
     /* 0x0630 */ dBgS_LinkLinChk mLinkLinChk;
@@ -2654,7 +2692,7 @@ public:
     /* 0x34C5 */ u8 m34C5;
     /* 0x34C6 */ u8 m34C6;
     /* 0x34C7 */ u8 mActivePlayerBombs;
-    /* 0x34C8 */ u8 mPressedButtonsBitfield;
+    /* 0x34C8 */ u8 mPressedButtons;
     /* 0x34C9 */ u8 m34C9;
     /* 0x34CA */ u8 m34CA;
     /* 0x34CB */ u8 mDekuSpRestartPoint;
@@ -2735,7 +2773,7 @@ public:
     /* 0x355C */ s16 m355C;
     /* 0x355E */ s16 m355E;
     /* 0x3560 */ u16 mHeldItemType;
-    /* 0x3562 */ u8 m3562[0x3564 - 0x3562];
+    /* 0x3562 */ u16 m3562;
     /* 0x3564 */ s16 m3564;
     /* 0x3566 */ s16 m3566;
     /* 0x3568 */ s16 m3568;

@@ -134,8 +134,9 @@ void daPy_waterDropEcallBack_c::end() {
 }
 
 /* 8012A0B4-8012A0E0       .text makeEmitterColor__28daPy_mtxPosFollowEcallBack_cFUsPA4_fPC4cXyzPC5csXyzPC8_GXColorPC8_GXColor */
-void daPy_mtxPosFollowEcallBack_c::makeEmitterColor(u16, MtxP, const cXyz*, const csXyz*, const GXColor*, const GXColor*) {
-    /* Nonmatching */
+void daPy_mtxPosFollowEcallBack_c::makeEmitterColor(u16 particleID, MtxP mtx, const cXyz* pos, const csXyz* angle, const GXColor* prmColor, const GXColor* envColor) {
+    mpAngle = angle;
+    daPy_mtxFollowEcallBack_c::makeEmitterColor(particleID, mtx, pos, prmColor, envColor);
 }
 
 /* 8012A0E0-8012A160       .text execute__28daPy_mtxPosFollowEcallBack_cFP14JPABaseEmitter */

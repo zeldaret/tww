@@ -83,7 +83,7 @@ void daPy_lk_c::changeCutProc() {
 }
 
 /* 80155C3C-80156034       .text changeCutReverseProc__9daPy_lk_cFQ29daPy_lk_c8daPy_ANM */
-void daPy_lk_c::changeCutReverseProc(daPy_lk_c::daPy_ANM) {
+void daPy_lk_c::changeCutReverseProc(daPy_ANM) {
     /* Nonmatching */
 }
 
@@ -218,7 +218,7 @@ BOOL daPy_lk_c::procCutTurnMove() {
 }
 
 /* 80159130-801592A4       .text procCutReverse_init__9daPy_lk_cFQ29daPy_lk_c8daPy_ANM */
-BOOL daPy_lk_c::procCutReverse_init(daPy_lk_c::daPy_ANM) {
+BOOL daPy_lk_c::procCutReverse_init(daPy_ANM) {
     /* Nonmatching */
 }
 

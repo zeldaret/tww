@@ -195,7 +195,7 @@ void daObjTpost_c::cutPresentProc(int staffIdx) {
 
 void daObjTpost_c::cutSetAnmStart(int staffIdx) {
     const char* name = dComIfGp_evmng_getMyStringP(staffIdx, "Name");
-    if(name != 0 && dEvmng_strcmp(name, "HAKIDASU") == 0) {
+    if(name != 0 && strcmp(name, "HAKIDASU") == 0) {
         setAnm(3, false);
     }
     else {

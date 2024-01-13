@@ -48,7 +48,7 @@ void daPy_lk_c::changeSwimOutProc() {
 }
 
 /* 8013D530-8013D638       .text setSwimMoveAnime__9daPy_lk_cFQ29daPy_lk_c8daPy_ANM */
-void daPy_lk_c::setSwimMoveAnime(daPy_lk_c::daPy_ANM) {
+void daPy_lk_c::setSwimMoveAnime(daPy_ANM) {
     /* Nonmatching */
 }
 

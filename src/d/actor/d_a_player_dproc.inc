@@ -19,7 +19,9 @@ void daPy_lk_c::getDemoLookActor() {
 
 /* 8012CDD4-8012CE2C       .text setTinkleCeiverModel__9daPy_lk_cFv */
 void daPy_lk_c::setTinkleCeiverModel() {
-    /* Nonmatching */
+    JKRHeap* oldHeap = setItemHeap();
+    initModel(&mpHeldItemModel, LINK_BDL_TCEIVER, 0x13000022);
+    mDoExt_setCurrentHeap(oldHeap);
 }
 
 /* 8012CE2C-8012CEFC       .text setTalismanModel__9daPy_lk_cFv */
@@ -34,7 +36,10 @@ void daPy_lk_c::setLetterModel() {
 
 /* 8012CFE8-8012D010       .text checkCaughtShapeHide__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkCaughtShapeHide() {
-    /* Nonmatching */
+    if (mCurProc == daPyProc_DEMO_CAUGHT_e && m3570 != 0) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 8012D010-8012D08C       .text setShapeAngleToTalkActor__9daPy_lk_cFv */

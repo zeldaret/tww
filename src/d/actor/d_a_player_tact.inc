@@ -89,7 +89,7 @@ int daPy_lk_c::getTactPlayLeftArmAnm(s32 r4) {
 
 /* 8014D97C-8014D9A4       .text checkEndTactMusic__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkEndTactMusic() const {
-    if (mCurProc == PROC_TACT_PLAY_e && m34D0 != 0) {
+    if (mCurProc == daPyProc_TACT_PLAY_e && m34D0 != 0) {
         return TRUE;
     }
     return FALSE;
@@ -97,7 +97,7 @@ BOOL daPy_lk_c::checkEndTactMusic() const {
 
 /* 8014D9A4-8014D9D0       .text getTactMetronomeRate__9daPy_lk_cFv */
 f32 daPy_lk_c::getTactMetronomeRate() {
-    if (mCurProc == PROC_TACT_WAIT_e) {
+    if (mCurProc == daPyProc_TACT_WAIT_e) {
         return m35A0 / mDoAud_zelAudio_c::getTact().field_0x30;
     } else {
         return -1.0f;
@@ -106,7 +106,7 @@ f32 daPy_lk_c::getTactMetronomeRate() {
 
 /* 8014D9D0-8014D9F8       .text checkTactLastInput__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkTactLastInput() {
-    if (mCurProc == PROC_TACT_WAIT_e && m34D2 != -1) {
+    if (mCurProc == daPyProc_TACT_WAIT_e && m34D2 != -1) {
         return TRUE;
     }
     return FALSE;
@@ -134,7 +134,7 @@ BOOL daPy_lk_c::getTactTopPos(cXyz* out) {
 
 /* 8014DACC-8014DB00       .text getTactNormalWait__9daPy_lk_cCFv */
 BOOL daPy_lk_c::getTactNormalWait() const {
-    if (mCurProc == PROC_TACT_WAIT_e && m3570 == -1 && m34D2 == -1) {
+    if (mCurProc == daPyProc_TACT_WAIT_e && m3570 == -1 && m34D2 == -1) {
         return TRUE;
     }
     return FALSE;
@@ -142,16 +142,16 @@ BOOL daPy_lk_c::getTactNormalWait() const {
 
 /* 8014DB00-8014DB2C       .text getTactMusic__9daPy_lk_cCFv */
 s32 daPy_lk_c::getTactMusic() const {
-    if (mCurProc == PROC_TACT_PLAY_e)
+    if (mCurProc == daPyProc_TACT_PLAY_e)
         return m3570;
-    if (mCurProc == PROC_TACT_WAIT_e)
+    if (mCurProc == daPyProc_TACT_WAIT_e)
         return m3574;
     return -1;
 }
 
 /* 8014DB2C-8014DB74       .text getTactTimerCancel__9daPy_lk_cCFv */
 int daPy_lk_c::getTactTimerCancel() const {
-    if (mCurProc == PROC_TACT_WAIT_e && m35AC <= 0.0f) {
+    if (mCurProc == daPyProc_TACT_WAIT_e && m35AC <= 0.0f) {
         if (m35AC <= -100.0f) {
             return 2;
         } else {
@@ -163,7 +163,7 @@ int daPy_lk_c::getTactTimerCancel() const {
 
 /* 8014DB74-8014DB9C       .text checkTactPlayMelody__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkTactPlayMelody() {
-    if (mCurProc == PROC_TACT_PLAY_e && m34DA == 0) {
+    if (mCurProc == daPyProc_TACT_PLAY_e && m34DA == 0) {
         return TRUE;
     }
     return FALSE;
@@ -171,7 +171,7 @@ BOOL daPy_lk_c::checkTactPlayMelody() {
 
 /* 8014DB9C-8014DBEC       .text resetTactCount__9daPy_lk_cFv */
 void daPy_lk_c::resetTactCount() {
-    if (mCurProc == PROC_TACT_WAIT_e) {
+    if (mCurProc == daPyProc_TACT_WAIT_e) {
         m34D8 = 0;
         m35A0 = 0.0f;
         m34DA = 0;
@@ -182,7 +182,7 @@ void daPy_lk_c::resetTactCount() {
 
 /* 8014DBEC-8014E100       .text procTactWait_init__9daPy_lk_cFi */
 BOOL daPy_lk_c::procTactWait_init(int r30) {
-    if (mCurProc == PROC_TACT_WAIT_e) {
+    if (mCurProc == daPyProc_TACT_WAIT_e) {
         if (m3570 != r30) {
             m34D8 = 0;
             m34DA = 0;
@@ -248,14 +248,14 @@ BOOL daPy_lk_c::procTactWait_init(int r30) {
         }
     }
     
-    commonProcInit(PROC_TACT_WAIT_e);
+    commonProcInit(daPyProc_TACT_WAIT_e);
     daPy_matAnm_c::offMabaFlg();
     daPy_matAnm_c::setMabaTimer(1);
     setSingleMoveAnime(ANM_WAITTAKT, daPy_HIO_tact_c0::m.field_0x0, 0.0f, -1, daPy_HIO_tact_c0::m.field_0x4);
-    setActAnimeUpper(0x127, UPPER_UNK1, daPy_HIO_tact_c0::m.field_0x0, 0.0f, -1, -1.0f);
-    mAnmRatioUpper[1].setRatio(0.0f);
-    setActAnimeUpper(0x127, UPPER_UNK2, daPy_HIO_tact_c0::m.field_0x0, 0.0f, -1, -1.0f);
-    mAnmRatioUpper[2].setRatio(0.0f);
+    setActAnimeUpper(LKANM_BCK_WAITTAKT, UPPER_MOVE1_e, daPy_HIO_tact_c0::m.field_0x0, 0.0f, -1, -1.0f);
+    mAnmRatioUpper[UPPER_MOVE1_e].setRatio(0.0f);
+    setActAnimeUpper(LKANM_BCK_WAITTAKT, UPPER_MOVE2_e, daPy_HIO_tact_c0::m.field_0x0, 0.0f, -1, -1.0f);
+    mAnmRatioUpper[UPPER_MOVE2_e].setRatio(0.0f);
     mVelocity = 0.0f;
     m34D4 = 0;
     m34D6 = 0;
@@ -308,17 +308,17 @@ BOOL daPy_lk_c::procTactWait() {
 /* 8014E9A4-8014EBA0       .text procTactPlay_init__9daPy_lk_cFlii */
 BOOL daPy_lk_c::procTactPlay_init(s32 r27, int r30, int r31) {
     int r28 = checkShipRideUseItem(0);
-    commonProcInit(PROC_TACT_PLAY_e);
+    commonProcInit(daPyProc_TACT_PLAY_e);
     dComIfGp_setPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e);
     m3570 = r27;
     if (r31 == 0) {
         m3628 = fopMsgM_messageSet(0x5AD + r27);
     } else {
-        m3628 = -1;
+        m3628 = fpcM_ERROR_PROCESS_ID_e;
     }
     mDoAud_tact_setVolume(0.0f);
-    resetActAnimeUpper(UPPER_UNK2, -1.0f);
-    resetActAnimeUpper(UPPER_UNK1, -1.0f);
+    resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
+    resetActAnimeUpper(UPPER_MOVE1_e, -1.0f);
     m34DA = 0xA;
     
     daPy_ANM anm;

@@ -190,8 +190,8 @@ public:
         mAnmTransform = NULL;
     }
 
-    void setRatio(f32 ratio) { mRatio = ratio; }
     f32 getRatio() { return mRatio; }
+    void setRatio(f32 ratio) { mRatio = ratio; }
     J3DAnmTransform* getAnmTransform() { return mAnmTransform; }
     void setAnmTransform(J3DAnmTransform* anm) { mAnmTransform = anm; }
 

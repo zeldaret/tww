@@ -19,7 +19,8 @@ struct JUTDataFileHeader { // actual struct name unknown
     /* 0x04 */ u32 mType;
     /* 0x08 */ u32 mFileSize;
     /* 0x0C */ u32 mBlockNum;
-    /* 0x10 */ u8 _10[0x20 - 0x10];
+    /* 0x10 */ u8 _10[0x1C - 0x10];
+    /* 0x1C */ u32 mSeAnmOffset; // Only exists for some BCKs
     /* 0x20 */ JUTDataBlockHeader mFirstBlock;
 };
 

@@ -30,10 +30,10 @@ void daPy_lk_c::setHyoiModel() {
 
 /* 801543A0-801546F4       .text procFoodThrow_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procFoodThrow_init() {
-    if (mCurProc == PROC_FOOD_THROW_e) {
+    if (mCurProc == daPyProc_FOOD_THROW_e) {
         return TRUE;
     }
-    if (m3630 != -1) {
+    if (m3630 != fpcM_ERROR_PROCESS_ID_e) {
         mDoAud_seStart(JA_SE_ITEM_TARGET_OUT);
         return FALSE;
     }
@@ -52,7 +52,7 @@ BOOL daPy_lk_c::procFoodThrow_init() {
     
     int temp = checkShipRideUseItem(1);
     
-    commonProcInit(PROC_FOOD_THROW_e);
+    commonProcInit(daPyProc_FOOD_THROW_e);
     
     if (temp == 0) {
         f32 offset1 = cM_ssin(shape_angle.y) * 150.0f;
@@ -107,14 +107,14 @@ BOOL daPy_lk_c::procFoodThrow_init() {
     }
     
     initShipRideUseItem(temp, 2);
-    m3630 = -1;
+    m3630 = fpcM_ERROR_PROCESS_ID_e;
     
     return TRUE;
 }
 
 /* 801546F4-80154880       .text procFoodThrow__9daPy_lk_cFv */
 BOOL daPy_lk_c::procFoodThrow() {
-    J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[0];
+    J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
     setShipRidePosUseItem();
     if (frameCtrl.getRate() < 0.01f) {
         if (mDemo.getDemoType() != 5) {
@@ -149,7 +149,7 @@ BOOL daPy_lk_c::procFoodThrow() {
 
 /* 80154880-80154A48       .text procFoodSet_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procFoodSet_init() {
-    if (mCurProc == PROC_FOOD_SET_e) {
+    if (mCurProc == daPyProc_FOOD_SET_e) {
         if (mDemo.getParam0() == 1) {
             if (mHeldItemType == ANIMAL_ESA) {
                 u8 btnIdx = dComIfGp_event_getTalkXYBtn();
@@ -177,7 +177,7 @@ BOOL daPy_lk_c::procFoodSet_init() {
     }
     
     int temp = checkShipRideUseItem(1);
-    commonProcInit(PROC_FOOD_SET_e);
+    commonProcInit(daPyProc_FOOD_SET_e);
     current.angle.y = shape_angle.y;
     
     mVelocity = 0.0f;
@@ -198,7 +198,7 @@ BOOL daPy_lk_c::procFoodSet_init() {
 
 /* 80154A48-80154B80       .text procFoodSet__9daPy_lk_cFv */
 BOOL daPy_lk_c::procFoodSet() {
-    J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[0];
+    J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
     
     setShipRidePosUseItem();
     

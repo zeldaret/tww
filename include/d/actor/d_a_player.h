@@ -5,39 +5,6 @@
 #include "d/d_particle.h"
 #include "d/d_cc_d.h"
 
-class daPy_matAnm_c : public J3DMaterialAnm {
-public:
-    daPy_matAnm_c();
-
-    virtual ~daPy_matAnm_c() {}
-    virtual void calc(J3DMaterial*) const;
-    
-    static u8 m_maba_flg;
-    static u8 m_eye_move_flg;
-    static u8 m_maba_timer;
-    static u8 m_morf_frame;
-
-    static void onMabaFlg() { m_maba_flg = 1; }
-    static void offMabaFlg() { m_maba_flg = 0; }
-    static void decMabaTimer() {}
-    static void decMorfFrame() {}
-    static void getEyeMoveFlg() {}
-    static void getMabaFlg() {}
-    static void getMabaTimer() {}
-    static void getNowOffsetXP() {}
-    static void getNowOffsetYP() {}
-    static void offEyeMoveFlg() {}
-    static void onEyeMoveFlg() {}
-    static void setMabaTimer(u8 timer) { m_maba_timer = timer; }
-    static void setMorfFrame(u8) {}
-    static void setNowOffsetX(f32) {}
-    static void setNowOffsetY(f32) {}
-
-public:
-    /* 0x6C */ cXy mEyePosOld;
-    /* 0x74 */ cXy mEyePos;
-};  // Size: 0x7C
-
 class daPy_mtxFollowEcallBack_c : public dPa_levelEcallBack {
 public:
     void execute(JPABaseEmitter*);
@@ -67,6 +34,12 @@ public:
 
 class daPy_demo_c {
 public:
+    enum {
+        // TODO
+        DEMO_LAST_e = 0x4B,
+        DEMO_NEW_ANM0_e = 0x200,
+    };
+
     void setDemoType(u16 pType) { mDemoType = pType; }
     int getDemoType() const { return mDemoType; }
     void setDemoMode(u32 mode) { mDemoMode = mode; }
@@ -117,6 +90,7 @@ public:
         daPyFlg0_UNK1000000         = 0x01000000,
         daPyFlg0_EQUIP_HEAVY_BOOTS  = 0x02000000,
         daPyFlg0_NO_DRAW            = 0x08000000,
+        daPyFlg0_UNK10000000        = 0x10000000,
         daPyFlg0_HEAVY_STATE        = 0x40000000,
     };
     
@@ -151,6 +125,7 @@ public:
         daPyRFlg0_ROPE_GRAB_RIGHT_HAND  = 0x00000004,
         daPyRFlg0_GRAB_UP_END           = 0x00000020,
         daPyRFlg0_AUTO_JUMP_LAND        = 0x00000040,
+        daPyRFlg0_UNK80                 = 0x00000080,
         daPyRFlg0_RIGHT_FOOT_ON_GROUND  = 0x00000400,
         daPyRFlg0_LEFT_FOOT_ON_GROUND   = 0x00000800,
         daPyRFlg0_FRONT_ROLL_CRASH      = 0x00002000,

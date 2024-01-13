@@ -475,8 +475,11 @@ public:
         mItemNo = i_itemNo;
     }
 
+    u8 getAStatus() { return mCurrButtonBAction; }
     void setAStatus(u8 status) { mCurrButtonBAction = status; }
+    u8 getDoStatus() { return mCurrButtonAAction; }
     void setDoStatus(u8 status) { mCurrButtonAAction = status; }
+    u8 getRStatusForce() { return field_0x4930; }
     void setRStatusForce(u8 status) { field_0x4930 = status; }
     inline u8 getPictureStatus() { return mPictureStatus; }
 
@@ -2255,12 +2258,24 @@ inline u8 dComIfGp_getMiniGameType() {
     return g_dComIfG_gameInfo.play.getMiniGameType();
 }
 
+inline u8 dComIfGp_getAStatus() {
+    return g_dComIfG_gameInfo.play.getAStatus();
+}
+
 inline void dComIfGp_setAStatus(u8 status) {
     g_dComIfG_gameInfo.play.setAStatus(status);
 }
 
+inline u8 dComIfGp_getDoStatus() {
+    return g_dComIfG_gameInfo.play.getDoStatus();
+}
+
 inline void dComIfGp_setDoStatus(u8 status) {
     g_dComIfG_gameInfo.play.setDoStatus(status);
+}
+
+inline u8 dComIfGp_getRStatusForce() {
+    return g_dComIfG_gameInfo.play.getRStatusForce();
 }
 
 inline void dComIfGp_setRStatusForce(u8 status) {
