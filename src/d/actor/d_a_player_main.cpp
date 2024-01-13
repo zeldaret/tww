@@ -268,18 +268,18 @@ void daPy_matAnm_c::calc(J3DMaterial* mat) const {
 }
 
 /* 80103074-801030BC       .text seStartOnlyReverb__9daPy_lk_cFUl */
-void daPy_lk_c::seStartOnlyReverb(u32 sfxID) {
-    mDoAud_seStart(sfxID, &current.pos, 0, mReverb);
+void daPy_lk_c::seStartOnlyReverb(u32 i_seNum) {
+    mDoAud_seStart(i_seNum, &current.pos, 0, mReverb);
 }
 
 /* 801030BC-80103104       .text seStartMapInfo__9daPy_lk_cFUl */
-void daPy_lk_c::seStartMapInfo(u32 sfxID) {
-    mDoAud_seStart(sfxID, &current.pos, mMtrlSndId, mReverb);
+void daPy_lk_c::seStartMapInfo(u32 i_seNum) {
+    mDoAud_seStart(i_seNum, &current.pos, mMtrlSndId, mReverb);
 }
 
 /* 80103104-8010314C       .text seStartSwordCut__9daPy_lk_cFUl */
-void daPy_lk_c::seStartSwordCut(u32 sfxID) {
-    mDoAud_seStart(sfxID, &mSwordTopPos, 0, mReverb);
+void daPy_lk_c::seStartSwordCut(u32 i_seNum) {
+    mDoAud_seStart(i_seNum, &mSwordTopPos, 0, mReverb);
 }
 
 /* 8010314C-801031A4       .text voiceStart__9daPy_lk_cFUl */

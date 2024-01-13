@@ -113,16 +113,16 @@ inline void mDoAud_resetProcess() {
     }
 }
 
-inline void mDoAud_seStart(u32 i_sfxID, Vec* i_sePos = NULL, u32 param_2 = 0, s8 i_reverb = 0) {
-    mDoAud_zelAudio_c::getInterface()->seStart(i_sfxID, i_sePos, param_2, i_reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+inline void mDoAud_seStart(u32 i_seNum, Vec* i_sePos = NULL, u32 param_2 = 0, s8 i_reverb = 0) {
+    mDoAud_zelAudio_c::getInterface()->seStart(i_seNum, i_sePos, param_2, i_reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
 inline void mDoAud_bgmSetSwordUsing(s32 param_1) {
     mDoAud_zelAudio_c::getInterface()->bgmSetSwordUsing(param_1);
 }
 
-inline void mDoAud_seStop(u32 i_sfxID, s32 param_2) {
-    mDoAud_zelAudio_c::getInterface()->seStop(i_sfxID, param_2);
+inline void mDoAud_seStop(u32 i_seNum, s32 param_2) {
+    mDoAud_zelAudio_c::getInterface()->seStop(i_seNum, param_2);
 }
 
 inline void mDoAud_seStopActor(Vec* param_1, u32 param_2) {
@@ -141,8 +141,8 @@ inline void mDoAud_linkVoiceStart(u32 param_0, Vec* i_sePos, u8 param_3, s8 para
     mDoAud_zelAudio_c::getInterface()->linkVoiceStart(param_0, i_sePos, param_3, param_4);
 }
 
-inline void mDoAud_monsSeStart(u32 sfxID, Vec* param_1, u32 param_2, u32 param_3, s8 i_reverb) {
-    mDoAud_zelAudio_c::getInterface()->monsSeStart(sfxID, param_1, param_2, param_3, i_reverb);
+inline void mDoAud_monsSeStart(u32 i_seNum, Vec* param_1, u32 param_2, u32 param_3, s8 i_reverb) {
+    mDoAud_zelAudio_c::getInterface()->monsSeStart(i_seNum, param_1, param_2, param_3, i_reverb);
 }
 
 inline void mDoAud_onEnemyDamage() {

@@ -405,10 +405,10 @@ void dEvDtStaff_c::specialProcSound() {
                 mDoAud_bgmStreamPlay();
                 break;
             case 2: // STRM_DEMO_MJ_SISTER
-                mDoAud_bgmStreamPrepare(0xC0000004);
+                mDoAud_bgmStreamPrepare(JA_STRM_DEMO_MJ_SISTER);
                 break;
             case 3: // STRM_DEMO_GO_MAJU
-                mDoAud_bgmStreamPrepare(0xC0000005);
+                mDoAud_bgmStreamPrepare(JA_STRM_DEMO_GO_MAJU);
                 break;
             case 4: // NOMSG_WAIT
                 specialProc_WaitStart(staffIdx);

@@ -168,13 +168,7 @@ public:
     void isTaktUsing() {}
 
     struct scene_info_s {
-        u16 field_0x0;
-        u8 field_0x2;
-        u8 field_0x3;
-    };
-
-    struct isle_info_s {
-        u16 field_0x0;
+        u16 bgmNum;
         u8 field_0x2;
         u8 field_0x3;
     };
@@ -190,7 +184,7 @@ public:
     static u8 m_dy_wave_set_1st[][2];
     static u8 m_dy_wave_set_2nd[][2];
     static scene_info_s m_scene_info[];
-    static isle_info_s m_isle_info[];
+    static scene_info_s m_isle_info[];
     static const char* spot_dir_name[];
     // static mIsleArea;
 

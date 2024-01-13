@@ -3012,7 +3012,7 @@ void dKy_arrowcol_chg_move() {
 
 /* 80196764-801967C4       .text dKy_checkEventNightStop__Fv */
 BOOL dKy_checkEventNightStop() {
-    if (dComIfGs_isEventBit(0xA02) && !dComIfGs_isSymbol(0)) {
+    if (dComIfGs_isEventBit(dSv_evtBit_c::ENDLESS_NIGHT) && !dComIfGs_isSymbol(0)) {
         return true;
     }
 

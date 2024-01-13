@@ -1096,7 +1096,12 @@ BOOL dComIfGs_checkSeaLandingEvent(s8 i_roomNo) {
     };
 
     static landing_event l_landingEvent[] = {
-        {1, 0x3040}, {4, 0x2E02}, {13, 0x902}, {23, 0xA02}, {41, 0xA20}, {45, 0x2E04},
+        {1,  0x3040},
+        {4,  0x2E02},
+        {13, 0x902},
+        {23, dSv_evtBit_c::ENDLESS_NIGHT},
+        {41, 0xA20},
+        {45, 0x2E04},
     };
 
     landing_event* event_check = l_landingEvent;

@@ -159,11 +159,11 @@ void JAIZelBasic::processHeartGaugeSound() {
     if (dComIfGp_event_getMode() == 0 && field_0x0040) {
         if (field_0x0034 && field_0x0206 == 0) {
             if (field_0x0034 <= 2) {
-                seStart(0xd2, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                seStart(JA_SE_ALMOST_DIE_ALERM_3, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
             } else if (field_0x0034 <= 4) {
-                seStart(0xd1, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                seStart(JA_SE_ALMOST_DIE_ALERM_2, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
             } else if (field_0x0034 <= 6) {
-                seStart(0xd0, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                seStart(JA_SE_ALMOST_DIE_ALERM_1, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
             }
         }
         field_0x0040--;
@@ -262,7 +262,7 @@ void JAIZelBasic::bgmStreamPrepare(u32 param_1) {
     if (mpStreamBgmSound) {
         mpStreamBgmSound->setPrepareFlag(1);
     }
-    if (param_1 == 0xc0000009) {
+    if (param_1 == JA_STRM_BST_START) {
         field_0x00be = 1;
     }
     field_0x007c = param_1;
@@ -278,7 +278,7 @@ void JAIZelBasic::bgmStreamPlay() {
         mpStreamBgmSound->start(0);
     }
     switch (field_0x007c) {
-    case -0x3fffffff:
+    case JA_STRM_DEMO_TETRA_FLY:
         field_0x00ba = 1;
         if (mpMainBgmSound) {
             mpMainBgmSound->stop(30);
@@ -286,7 +286,7 @@ void JAIZelBasic::bgmStreamPlay() {
         field_0x1f3c = 0;
         field_0x0201 = 1;
         break;
-    case -0x40000000:
+    case JA_STRM_PROLOGUE:
         if (mpMainBgmSound) {
             mpMainBgmSound->stop(30);
         }
@@ -305,7 +305,7 @@ void JAIZelBasic::bgmStart(u32, u32, s32) {
 
 /* 802A4658-802A4770       .text bgmStop__11JAIZelBasicFUll */
 void JAIZelBasic::bgmStop(u32 param_1, s32 param_2) {
-    if (field_0x0078 != -0x7ffffffd && field_0x0078 != -0x7ffffff0) {
+    if (field_0x0078 != JA_BGM_GOMA && field_0x0078 != JA_BGM_GOMA_2) {
         mSomeSpecialBGMFlag = 0;
     }
     if (mpMainBgmSound) {
@@ -376,7 +376,7 @@ void JAIZelBasic::bgmBattleGFrame() {
 
 /* 802A5548-802A55AC       .text stopBattleBgm__11JAIZelBasicFv */
 void JAIZelBasic::stopBattleBgm() {
-    if (mpSubBgmSound && (field_0x0074 == -0x7ffffffc || field_0x0074 == -0x7fffffe4)) {
+    if (mpSubBgmSound && (field_0x0074 == JA_BGM_BATTLE_NORM || field_0x0074 == JA_BGM_SEA_ENEMY)) {
         mpSubBgmSound->stop(45);
         mpSubBgmSound = NULL;
         field_0x0074 = -1;
@@ -388,10 +388,10 @@ void JAIZelBasic::bgmNowKaitengiri() {
     /* Nonmatching */
     if (field_0x00c8 == 0 && mpSubBgmSound) {
         switch (field_0x0074) {
-        case -0x7ffffffc:
+        case JA_BGM_BATTLE_NORM:
             mpSubBgmSound->setTrackVolume(JAIZelParam::BTL_KAITENGIRI_TRACK, 1.0, JAIZelParam::BTL_KAITENGIRI_FADEIN_TIME);
             break;
-        case -0x7fffffe6:
+        case JA_BGM_MBOSS_S:
             mpSubBgmSound->setTrackVolume(JAIZelParam::MBOSS_BTL_KAITENGIRI_TRACK, 1.0, JAIZelParam::BTL_KAITENGIRI_FADEIN_TIME);
             break;
         default:
@@ -413,11 +413,11 @@ void JAIZelBasic::bgmSetSwordUsing(s32 param_1) {
 
 /* 802A57A4-802A5818       .text onEnemyDamage__11JAIZelBasicFv */
 void JAIZelBasic::onEnemyDamage() {
-    if (field_0x0074 == -0x7fffffe4) {
+    if (field_0x0074 == JA_BGM_SEA_ENEMY) {
         if (mpSubBgmSound) {
             mpSubBgmSound->setPortData(9, 1);
         }
-    } else if (field_0x0074 == -0x7ffffffc) {
+    } else if (field_0x0074 == JA_BGM_BATTLE_NORM) {
         if (mpSubBgmSound) {
             JASystem::TTrack* track = &mpSubBgmSound->getSeqParameter()->field_0x1360;
             if (track) {
@@ -512,15 +512,15 @@ void JAIZelBasic::bgmMuteMtDragon() {
 
 /* 802A5ACC-802A5BA4       .text enemyNearBy__11JAIZelBasicFv */
 void JAIZelBasic::enemyNearBy() {
-    if (mpMainBgmSound && field_0x0078 == -0x7fffffec && field_0x00cb == -1) {
+    if (mpMainBgmSound && field_0x0078 == JA_BGM_DK_BATTLE && field_0x00cb == -1) {
         if (field_0x00cc == 0) {
-            bgmStart(0x80000111, 0, 0);
+            bgmStart(JA_BGM_UNK_111, 0, 0);
         } else {
-            bgmStart(0x80000112, 0, 0);
+            bgmStart(JA_BGM_UNK_112, 0, 0);
         }
     }
-    if (mpMainBgmSound && field_0x0078 == -0x7fffffeb && field_0x00cb == -1) {
-        bgmStart(0x80000115, 0, 0);
+    if (mpMainBgmSound && field_0x0078 == JA_BGM_MJ_TOWER_BATTLE && field_0x00cb == -1) {
+        bgmStart(JA_BGM_UNK_115, 0, 0);
     }
     field_0x00cb = JAIZelParam::COMMON_BATTLE_FO_DELAY;
 }
@@ -542,7 +542,7 @@ void JAIZelBasic::bgmAllMute(u32 param_1) {
 void JAIZelBasic::taktModeMute() {
     field_0x0098 = 0.0f;
     if (mpMainBgmSound) {
-        if (field_0x0078 != -0x7fffffdf && field_0x0078 != -0x7fffffde) {
+        if (field_0x0078 != JA_BGM_TAKT_MAKORE && field_0x0078 != JA_BGM_TAKT_MEDRI) {
             mpMainBgmSound->setVolume(calcMainBgmVol(), 10, 0);
         } else {
             field_0x0098 = 1.0f;
@@ -560,7 +560,7 @@ void JAIZelBasic::taktModeMuteOff() {
     if (mpMainBgmSound) {
         mpMainBgmSound->setVolume(calcMainBgmVol(), 10, 0);
     }
-    if (field_0x0074 == -0x7fffffcf) {
+    if (field_0x0074 == JA_BGM_TAKT_KAZE) {
         field_0x008c = 1.0;
         if (mpMainBgmSound) {
             mpMainBgmSound->setVolume(calcMainBgmVol(), 45, 0);
@@ -584,7 +584,7 @@ void JAIZelBasic::cbPracticeProcess() {
 
 /* 802A6434-802A6508       .text cbPracticeStop__11JAIZelBasicFv */
 void JAIZelBasic::cbPracticeStop() {
-    if (mpSubBgmSound && (field_0x0074 == -0x7fffffca || field_0x0074 == -0x7fffffc9)) {
+    if (mpSubBgmSound && (field_0x0074 == JA_BGM_CB_NEXTYEAR || field_0x0074 == JA_BGM_CB_NEXTYEAR_W)) {
         mpSubBgmSound->stop(15);
         mpSubBgmSound = NULL;
         field_0x0074 = -1;
@@ -600,7 +600,7 @@ void JAIZelBasic::cbPracticeStop() {
 /* 802A6508-802A6570       .text checkCbPracticePlay__11JAIZelBasicFv */
 BOOL JAIZelBasic::checkCbPracticePlay() {
     BOOL result;
-    if (checkSubBgmPlaying() == 1 && (checkPlayingSubBgmFlag() == -0x7fffffca || checkPlayingSubBgmFlag() == -0x7fffffc9)) {
+    if (checkSubBgmPlaying() == 1 && (checkPlayingSubBgmFlag() == JA_BGM_CB_NEXTYEAR || checkPlayingSubBgmFlag() == JA_BGM_CB_NEXTYEAR_W)) {
         result = 1;
     } else {
         result = 0;
@@ -620,10 +620,10 @@ void JAIZelBasic::startLandingDemo() {
     case 1:
         break;
     case 2:
-        bgmStart(0x8000003a, 0, 0);
+        bgmStart(JA_BGM_ISLAND_DRAGON, 0, 0);
         break;
     case 3:
-        bgmStart(0x80000039, 0, 0);
+        bgmStart(JA_BGM_ISLAND_WOOD, 0, 0);
         break;
     case 4:
         break;
@@ -680,20 +680,20 @@ void JAIZelBasic::initSe() {
 }
 
 /* 802A6720-802A8550       .text seStart__11JAIZelBasicFUlP3VecUlScffffUc */
-void JAIZelBasic::seStart(u32, Vec*, u32, s8, f32, f32, f32, f32, u8) {
+void JAIZelBasic::seStart(u32 i_seNum, Vec*, u32, s8, f32, f32, f32, f32, u8) {
     /* Nonmatching */
 }
 
 /* 802A8550-802A85F4       .text seStop__11JAIZelBasicFUll */
-void JAIZelBasic::seStop(u32 param_1, s32 param_2) {
-    if (param_1 == -1) {
+void JAIZelBasic::seStop(u32 i_seNum, s32 param_2) {
+    if (i_seNum == -1) {
         return;
     }
-    if (param_1 == 0x280d) {
+    if (i_seNum == JA_SE_LK_RUN_SLIP) {
         param_2 = 8;
     }
     for (int i = 0; i < 24; i++) {
-        if (field_0x0134[i] == param_1 && field_0x00d4[i]) {
+        if (field_0x0134[i] == i_seNum && field_0x00d4[i]) {
             field_0x00d4[i]->stop(param_2);
             field_0x00d4[i] = NULL;
             field_0x0134[i] = 0;
@@ -744,7 +744,7 @@ void JAIZelBasic::monsSeInit() {
 }
 
 /* 802A8958-802A8B24       .text monsSeStart__11JAIZelBasicFUlP3VecUlUlSc */
-void JAIZelBasic::monsSeStart(u32, Vec*, u32, u32, s8) {
+void JAIZelBasic::monsSeStart(u32 i_seNum, Vec*, u32, u32, s8) {
     /* Nonmatching */
 }
 
@@ -874,7 +874,7 @@ void JAIZelBasic::setOutputMode(u32 param_1) {
 void JAIZelBasic::talkIn() {
     if (field_0x0064[0] != 1 && isDemo() != 1 && field_0x0098 != 0.0f) {
         field_0x0084 = JAIZelParam::VOL_BGM_TALKING;
-        if (mpMainBgmSound && field_0x0078 != -0x7fffffaf && field_0x0078 != -0x7fffffae) {
+        if (mpMainBgmSound && field_0x0078 != JA_BGM_BIRDMAN_GOAL && field_0x0078 != JA_BGM_BIRDMAN_FAIL) {
             mpMainBgmSound->setVolume(calcMainBgmVol(), 2, 0);
         }
         field_0x00a0 = JAIZelParam::VOL_BGM_TALKING;
@@ -894,7 +894,7 @@ void JAIZelBasic::talkIn() {
 
 /* 802A9A20-802A9B74       .text talkOut__11JAIZelBasicFv */
 void JAIZelBasic::talkOut() {
-    if (checkStreamPlaying(0xc0000006) == 1) {
+    if (checkStreamPlaying(JA_STRM_MJ_DEMO_INTRO) == 1) {
         return;
     }
     field_0x0084 = JAIZelParam::VOL_BGM_DEFAULT;
@@ -1026,17 +1026,17 @@ void JAIZelBasic::changeSeaBgm() {
 
 /* 802AA2B8-802AA348       .text startIsleBgm__11JAIZelBasicFv */
 void JAIZelBasic::startIsleBgm() {
-    /* Nonmatching */
     if (!checkDayTime()) {
         return;
     }
-    u32 r4;
+    u32 bgmNum;
     if (mIslandRoomNo == 44 && checkEventBit(0xe20) == 1) {
-        r4 = 0x80000055;
+        bgmNum = JA_BGM_ISLAND_LINK_3;
     } else {
-        r4 = expandSceneBgmNum(m_isle_info[mIslandRoomNo].field_0x0);
+        bgmNum = m_isle_info[mIslandRoomNo].bgmNum;
+        bgmNum = expandSceneBgmNum(bgmNum);
     }
-    bgmStart(r4, 0, 1);
+    bgmStart(bgmNum, 0, 1);
 }
 
 /* 802AA348-802AA378       .text setLinkGroupInfo__11JAIZelBasicFUc */
@@ -1069,9 +1069,8 @@ BOOL JAIZelBasic::getMapInfoGround(u32) {
 }
 
 /* 802AA390-802AACE8       .text setScene__11JAIZelBasicFllll */
-void JAIZelBasic::setScene(s32 param_1, s32 param_2, s32 param_3, s32 param_4) {
-    /* Nonmatching */
-    OSReport("[JAIZelBasic::setScene] num = %d, start = %d, layer = %d (%d)\n", param_1, param_2, param_4, param_3);
+void JAIZelBasic::setScene(s32 param_1, s32 roomNo, s32 param_3, s32 layerNo) {
+    OSReport("[JAIZelBasic::setScene] num = %d, start = %d, layer = %d (%d)\n", param_1, roomNo, layerNo, param_3);
     if (param_1 >= 0x79) {
         OSReport("[JAIZelBasic::setScene] too large scene number\n");
         return;
@@ -1079,53 +1078,58 @@ void JAIZelBasic::setScene(s32 param_1, s32 param_2, s32 param_3, s32 param_4) {
     if (field_0x022c != 0) {
         return;
     }
-    u32 r27;
-    field_0x00bd = field_0x00cd = r27 = 0;
+    u32 bgmNum;
+    field_0x00bd = field_0x00cd = bgmNum = 0;
     u32 var1;
     u32 var2;
     if (param_1 == 0x12) {
-        if (param_2 > 0) {
-            mIslandRoomNo = param_2;
+        if (roomNo > 0) {
+            mIslandRoomNo = roomNo;
         } else {
-            mIslandRoomNo = r27;
+            mIslandRoomNo = bgmNum;
         }
         OSReport("  --- Isle = %d\n", mIslandRoomNo);
         if (param_3 != 1) {
             if (mIslandRoomNo == 44) {
-                if (param_4 == 10) {
-                    r27 = 0;
+                if (layerNo == 10) {
+                    bgmNum = 0;
                 } else if (checkEventBit(0x3510) == 0) {
-                    r27 = 0x80000038;
+                    bgmNum = JA_BGM_ISLAND_LINK_0;
                 } else if (checkEventBit(1) == 1 && checkEventBit(0x101) == 0) {
-                    r27 = 0x8000000e;
+                    bgmNum = JA_BGM_ISLAND_LINK_2;
                 } else if (checkEventBit(0x101) == 1 && checkEventBit(0xe20) == 0) {
-                    r27 = 0;
+                    bgmNum = 0;
                 } else if (checkEventBit(0xe20) == 1) {
-                    r27 = 0x80000055;
+                    bgmNum = JA_BGM_ISLAND_LINK_3;
                 } else {
-                    r27 = expandSceneBgmNum(m_isle_info[mIslandRoomNo].field_0x0);
+                    bgmNum = m_isle_info[mIslandRoomNo].bgmNum;
+                    bgmNum = expandSceneBgmNum(bgmNum);
                 }
             } else if (mIslandRoomNo == 11) {
                 if (checkEventBit(0x2e01) == 0) {
-                    r27 = 0;
+                    bgmNum = 0;
                 } else {
-                    r27 = expandSceneBgmNum(m_isle_info[mIslandRoomNo].field_0x0);
+                    bgmNum = m_isle_info[mIslandRoomNo].bgmNum;
+                    bgmNum = expandSceneBgmNum(bgmNum);
                 }
             } else if (mIslandRoomNo == 13) {
-                if (param_4 == 8 || param_4 == 10 || param_4 == 11) {
-                    r27 = 0;
+                if (layerNo == 8 || layerNo == 10 || layerNo == 11) {
+                    bgmNum = 0;
                 } else {
-                    r27 = expandSceneBgmNum(m_isle_info[13].field_0x0);
+                    bgmNum = m_isle_info[mIslandRoomNo].bgmNum;
+                    bgmNum = expandSceneBgmNum(bgmNum);
                 }
             } else if (mIslandRoomNo == 14) {
-                if (param_4 == 2 || param_4 == 3) {
-                    r27 = 0;
+                if (layerNo == 2 || layerNo == 3) {
+                    bgmNum = 0;
                     field_0x00bd = 1;
                 } else {
-                    r27 = expandSceneBgmNum(m_isle_info[14].field_0x0);
+                    bgmNum = m_isle_info[mIslandRoomNo].bgmNum;
+                    bgmNum = expandSceneBgmNum(bgmNum);
                 }
             } else {
-                r27 = expandSceneBgmNum(m_isle_info[mIslandRoomNo].field_0x0);
+                bgmNum = m_isle_info[mIslandRoomNo].bgmNum;
+                bgmNum = expandSceneBgmNum(bgmNum);
             }
         }
         var1 = m_isle_info[mIslandRoomNo].field_0x2;
@@ -1133,134 +1137,153 @@ void JAIZelBasic::setScene(s32 param_1, s32 param_2, s32 param_3, s32 param_4) {
     } else {
         mIslandRoomNo = 0;
         if (param_1 == 16 && checkEventBit(0x280) == 0) {
-            r27 = 0x80000016;
+            bgmNum = JA_BGM_FIND_TETRA;
         } else if (param_1 == 19 && checkEventBit(0x801) == 0) {
-            r27 = 0;
+            bgmNum = 0;
         } else if (param_1 == 2 && field_0x0021 != 0) {
             if (g_dComIfG_gameInfo.save.getSavedata().mMemory[3].getBit().isDungeonItem(5)) {
                 field_0x00cd = 1;
             }
             if (g_dComIfG_gameInfo.save.getSavedata().mMemory[3].getBit().isDungeonItem(3)) {
-                r27 = expandSceneBgmNum(m_scene_info[1].field_0x0);
+                bgmNum = m_scene_info[1].bgmNum;
+                bgmNum = expandSceneBgmNum(bgmNum);
                 field_0x0204 = 1;
             } else {
-                r27 = expandSceneBgmNum(m_scene_info[2].field_0x0);
+                bgmNum = m_scene_info[param_1].bgmNum;
+                bgmNum = expandSceneBgmNum(bgmNum);
             }
         } else if (param_1 == 7 && field_0x0021 != 0) {
             if (g_dComIfG_gameInfo.save.getSavedata().mMemory[4].getBit().isDungeonItem(5)) {
                 field_0x00cd = 1;
             }
             if (g_dComIfG_gameInfo.save.getSavedata().mMemory[4].getBit().isDungeonItem(3)) {
-                r27 = expandSceneBgmNum(m_scene_info[3].field_0x0);
+                bgmNum = m_scene_info[3].bgmNum;
+                bgmNum = expandSceneBgmNum(bgmNum);
             } else {
-                r27 = expandSceneBgmNum(m_scene_info[7].field_0x0);
+                bgmNum = m_scene_info[param_1].bgmNum;
+                bgmNum = expandSceneBgmNum(bgmNum);
             }
         } else if (param_1 == 37 && field_0x0021 != 0) {
             if (g_dComIfG_gameInfo.save.getSavedata().mMemory[5].getBit().isDungeonItem(5)) {
                 field_0x00cd = 1;
             }
             if (g_dComIfG_gameInfo.save.getSavedata().mMemory[5].getBit().isDungeonItem(3)) {
-                r27 = expandSceneBgmNum(m_scene_info[10].field_0x0);
+                bgmNum = m_scene_info[10].bgmNum;
+                bgmNum = expandSceneBgmNum(bgmNum);
             } else {
-                r27 = expandSceneBgmNum(m_scene_info[37].field_0x0);
+                bgmNum = m_scene_info[param_1].bgmNum;
+                bgmNum = expandSceneBgmNum(bgmNum);
             }
         } else if (param_1 == 24 && field_0x0021 != 0) {
             if (g_dComIfG_gameInfo.save.getSavedata().mMemory[7].getBit().isDungeonItem(5)) {
                 field_0x00cd = 1;
             }
-            if (param_4 - 8 <= 2 || param_4 == 11) {
-                r27 = 0;
+            if (layerNo == 8 || layerNo == 9 || layerNo == 10 || layerNo == 11) {
+                bgmNum = 0;
             } else if (g_dComIfG_gameInfo.save.getSavedata().mMemory[7].getBit().isDungeonItem(3)) {
-                r27 = 0;
+                bgmNum = 0;
             } else {
-                r27 = expandSceneBgmNum(m_scene_info[24].field_0x0);
+                bgmNum = m_scene_info[param_1].bgmNum;
+                bgmNum = expandSceneBgmNum(bgmNum);
             }
         } else if (param_1 == 45 && field_0x0021 != 0) {
             if (g_dComIfG_gameInfo.save.getSavedata().mMemory[6].getBit().isDungeonItem(5)) {
                 field_0x00cd = 1;
             }
-            if (param_4 - 8 <= 2 || param_4 == 11) {
-                r27 = 0;
+            if (layerNo == 8 || layerNo == 9 || layerNo == 10 || layerNo == 11) {
+                bgmNum = 0;
             } else if (g_dComIfG_gameInfo.save.getSavedata().mMemory[6].getBit().isDungeonItem(3)) {
-                r27 = 0;
+                bgmNum = 0;
             } else {
-                r27 = expandSceneBgmNum(m_scene_info[45].field_0x0);
+                bgmNum = m_scene_info[param_1].bgmNum;
+                bgmNum = expandSceneBgmNum(bgmNum);
             }
         } else if (param_1 == 54) {
             if (checkEventBit(0x2d04) == 0) {
-                r27 = 0x80000034;
+                bgmNum = JA_BGM_HYRULE_OFF;
             } else {
-                r27 = expandSceneBgmNum(m_scene_info[54].field_0x0);
+                bgmNum = m_scene_info[param_1].bgmNum;
+                bgmNum = expandSceneBgmNum(bgmNum);
             }
         } else if (param_1 == 53) {
-            if (param_4 - 8 <= 2 || param_4 == 11) {
-                r27 = 0;
+            if (layerNo == 8 || layerNo == 9 || layerNo == 10 || layerNo == 11) {
+                bgmNum = 0;
             } else {
-                r27 = expandSceneBgmNum(m_scene_info[53].field_0x0);
+                bgmNum = m_scene_info[param_1].bgmNum;
+                bgmNum = expandSceneBgmNum(bgmNum);
             }
         } else if (param_1 == 54) {
-            if (param_4 - 8 <= 2 || param_4 == 11) {
-                r27 = 0;
+            if (layerNo == 8 || layerNo == 9 || layerNo == 10 || layerNo == 11) {
+                bgmNum = 0;
             } else {
-                r27 = expandSceneBgmNum(m_scene_info[54].field_0x0);
+                bgmNum = m_scene_info[param_1].bgmNum;
+                bgmNum = expandSceneBgmNum(bgmNum);
             }
         } else if (param_1 == 89) {
-            if (param_4 - 8 <= 2 || param_4 == 11) {
-                r27 = 0;
+            if (layerNo == 8 || layerNo == 9 || layerNo == 10 || layerNo == 11) {
+                bgmNum = 0;
             } else if (checkEventBit(0x2d04) == 0) {
-                r27 = 0x80000034;
+                bgmNum = JA_BGM_HYRULE_OFF;
             } else {
-                r27 = expandSceneBgmNum(m_scene_info[89].field_0x0);
+                bgmNum = m_scene_info[param_1].bgmNum;
+                bgmNum = expandSceneBgmNum(bgmNum);
             }
         } else if (param_1 == 39) {
-            if (param_4 - 8 <= 2 || param_4 == 11) {
-                r27 = 0;
+            if (layerNo == 8 || layerNo == 9 || layerNo == 10 || layerNo == 11) {
+                bgmNum = 0;
             } else {
-                r27 = expandSceneBgmNum(m_scene_info[39].field_0x0);
+                bgmNum = m_scene_info[param_1].bgmNum;
+                bgmNum = expandSceneBgmNum(bgmNum);
             }
         } else if (param_1 == 41) {
-            if (param_4 - 8 <= 2 || param_4 == 11) {
-                r27 = 0;
+            if (layerNo == 8 || layerNo == 9 || layerNo == 10 || layerNo == 11) {
+                bgmNum = 0;
             } else {
-                r27 = expandSceneBgmNum(m_scene_info[41].field_0x0);
+                bgmNum = m_scene_info[param_1].bgmNum;
+                bgmNum = expandSceneBgmNum(bgmNum);
             }
         } else if (param_1 == 22) {
-            if (param_4 - 8 <= 2 || param_4 == 11) {
-                r27 = 0;
+            if (layerNo == 8 || layerNo == 9 || layerNo == 10 || layerNo == 11) {
+                bgmNum = 0;
             } else {
-                r27 = expandSceneBgmNum(m_scene_info[22].field_0x0);
+                bgmNum = m_scene_info[param_1].bgmNum;
+                bgmNum = expandSceneBgmNum(bgmNum);
             }
         } else if (param_1 == 44) {
-            if (param_4 - 8 <= 2 || param_4 == 11) {
-                r27 = 0;
+            if (layerNo == 8 || layerNo == 9 || layerNo == 10 || layerNo == 11) {
+                bgmNum = 0;
             } else {
-                r27 = expandSceneBgmNum(m_scene_info[44].field_0x0);
+                bgmNum = m_scene_info[param_1].bgmNum;
+                bgmNum = expandSceneBgmNum(bgmNum);
             }
         } else if (param_1 == 11) {
-            if (param_4 == 9 && field_0x0043 == 0) {
-                r27 = 0;
+            if (layerNo == 9 && field_0x0043 == 0) {
+                bgmNum = 0;
             } else if (field_0x0043 && checkEventBit(0x2a20) == 0) {
-                r27 = 0x80000044;
+                bgmNum = JA_BGM_BAACHAN;
             } else {
-                r27 = expandSceneBgmNum(m_scene_info[11].field_0x0);
+                bgmNum = m_scene_info[param_1].bgmNum;
+                bgmNum = expandSceneBgmNum(bgmNum);
             }
         } else if (param_1 == 32) {
-            if (checkEventBit(0x2110) == 0 && checkEventBit(0xa02) == 1) {
-                r27 = 0x8000003d;
+            if (checkEventBit(0x2110) == 0 && checkEventBit(dSv_evtBit_c::ENDLESS_NIGHT) == 1) {
+                bgmNum = JA_BGM_PIRATE_DEMO5;
             } else {
-                r27 = expandSceneBgmNum(m_scene_info[32].field_0x0);
+                bgmNum = m_scene_info[param_1].bgmNum;
+                bgmNum = expandSceneBgmNum(bgmNum);
             }
         } else {
-            r27 = expandSceneBgmNum(m_scene_info[param_1].field_0x0);
+            bgmNum = m_scene_info[param_1].bgmNum;
+            bgmNum = expandSceneBgmNum(bgmNum);
         }
         var1 = m_scene_info[param_1].field_0x2;
         var2 = m_scene_info[param_1].field_0x3;
     }
-    sceneChange(r27, var1, var2, param_3);
+    sceneChange(bgmNum, var1, var2, param_3);
     field_0x022d = 0;
     field_0x0220 = param_1;
     field_0x022c = 1;
-    field_0x0239 = param_4;
+    field_0x0239 = layerNo;
 }
 
 /* 802AACE8-802AAD0C       .text expandSceneBgmNum__11JAIZelBasicFUl */
@@ -1279,9 +1302,8 @@ void JAIZelBasic::checkLinkOnBoardSea() {
 }
 
 /* 802AAD94-802AAE80       .text setSceneName__11JAIZelBasicFPcll */
-void JAIZelBasic::setSceneName(char* param_1, s32 param_2, s32 param_3) {
-    /* Nonmatching */
-    OSReport("[JAIZelBasic::setSceneName] spot = %s, room = %d\n");
+void JAIZelBasic::setSceneName(char* param_1, s32 roomNo, s32 param_3) {
+    OSReport("[JAIZelBasic::setSceneName] spot = %s, room = %d\n", param_1, roomNo);
     int id = spotNameToId(param_1);
     if (id == 0x75) {
         for (int i = 0; i < 24; i++) {
@@ -1298,7 +1320,7 @@ void JAIZelBasic::setSceneName(char* param_1, s32 param_2, s32 param_3) {
     } else {
         field_0x0066 = 0;
     }
-    setScene(id, param_2, 0, param_3);
+    setScene(id, roomNo, 0, param_3);
 }
 
 /* 802AAE80-802AAF04       .text spotNameToId__11JAIZelBasicFPc */
@@ -1389,11 +1411,11 @@ void JAIZelBasic::setLinkBootsType(s32 param_1) {
 /* 802ABA9C-802ABB18       .text setLinkOnBoard__11JAIZelBasicFl */
 void JAIZelBasic::setLinkOnBoard(s32 param_1) {
     field_0x0047 = param_1;
-    if (mpSubBgmSound && field_0x0074 == -0x7fffffe4) {
+    if (mpSubBgmSound && field_0x0074 == JA_BGM_SEA_ENEMY) {
         if (field_0x0047 == 1) {
-            bgmMute(&mpSubBgmSound, 0x8000001c, 0, 10);
+            bgmMute(&mpSubBgmSound, JA_BGM_SEA_ENEMY, 0, 10);
         } else {
-            bgmMute(&mpSubBgmSound, 0x8000001c, 1, 10);
+            bgmMute(&mpSubBgmSound, JA_BGM_SEA_ENEMY, 1, 10);
         }
     }
 }
@@ -1410,23 +1432,23 @@ int JAIZelBasic::checkStreamPlaying(u32) {
 
 /* 802ABC3C-802ABC88       .text stWaterLevelUp__11JAIZelBasicFv */
 void JAIZelBasic::stWaterLevelUp() {
-    if (field_0x00b7 == 0 && field_0x0078 == -0x7fffffd8) {
-        bgmStart(0x80000125, 1, 0);
+    if (field_0x00b7 == 0 && field_0x0078 == JA_BGM_KAMI_TOWER) {
+        bgmStart(JA_BGM_UNK_125, 1, 0);
     }
 }
 
 /* 802ABC88-802ABCD4       .text stWaterLevelDown__11JAIZelBasicFv */
 void JAIZelBasic::stWaterLevelDown() {
-    if (field_0x00b7 == 0 && field_0x0078 == -0x7fffffd8) {
-        bgmStart(0x80000028, 1, 0);
+    if (field_0x00b7 == 0 && field_0x0078 == JA_BGM_KAMI_TOWER) {
+        bgmStart(JA_BGM_KAMI_TOWER, 1, 0);
     }
 }
 
 /* 802ABCD4-802ABD34       .text stSkyCloisters__11JAIZelBasicFv */
 void JAIZelBasic::stSkyCloisters() {
-    if (field_0x0078 == -0x7fffffd8) {
+    if (field_0x0078 == JA_BGM_KAMI_TOWER) {
         if (field_0x00b7 == 0) {
-            bgmStart(0x80000126, 1, 0);
+            bgmStart(JA_BGM_UNK_126, 1, 0);
         }
         field_0x00b7 = 4;
     }
@@ -1477,7 +1499,7 @@ void JAIZelBasic::processTime() {
         if (field_0x0030 < 0x1400 && time >= 0x1400) {
             mainBgmStopOnly(JAIZelParam::JAI_ZEL_NIGHT_FADEOUT_TIME);
         } else if (field_0x0030 < 0x53b && time >= 0x53b) {
-            bgmStart(0x8000001d, 0, 0);
+            bgmStart(JA_BGM_MORNING, 0, 0);
             field_0x0032 = 1;
         }
     }
@@ -1487,7 +1509,7 @@ void JAIZelBasic::processTime() {
 
 /* 802ABF2C-802ABFC0       .text processMorningToNormal__11JAIZelBasicFv */
 void JAIZelBasic::processMorningToNormal() {
-    if (field_0x0078 != -0x7fffffe3) {
+    if (field_0x0078 != JA_BGM_MORNING) {
         field_0x0032 = 0;
         return;
     }
@@ -1495,7 +1517,7 @@ void JAIZelBasic::processMorningToNormal() {
         field_0x0094 = 1.0;
         f32 tmp;
         if (checkOnOuterSea(&tmp) >= 2) {
-            bgmStart(0x8000002e, 0, 1);
+            bgmStart(JA_BGM_SEA, 0, 1);
         } else {
             startIsleBgm();
         }
@@ -1567,9 +1589,9 @@ BOOL JAIZelBasic::isDemo() {
 
 /* 802AC788-802AC7E8       .text checkSeaBgmID__11JAIZelBasicFv */
 u32 JAIZelBasic::checkSeaBgmID() {
-    if (checkEventBit(0xa02) == 1 && checkEventBit(0x3920) == 0) {
-        return 0x8000003c;
+    if (checkEventBit(dSv_evtBit_c::ENDLESS_NIGHT) == 1 && checkEventBit(0x3920) == 0) {
+        return JA_BGM_SEA_STORM;
     } else {
-        return 0x8000002e;
+        return JA_BGM_SEA;
     }
 }

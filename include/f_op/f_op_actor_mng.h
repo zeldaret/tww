@@ -566,16 +566,16 @@ inline f32 fopAcM_searchPlayerDistance(fopAc_ac_c* actor) {
 
 s8 dComIfGp_getReverb(int roomNo);
 
-inline void fopAcM_seStartCurrent(fopAc_ac_c* actor, u32 sfxID, u32 param_2) {
-    mDoAud_seStart(sfxID, &actor->current.pos, param_2, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+inline void fopAcM_seStartCurrent(fopAc_ac_c* actor, u32 i_seNum, u32 param_2) {
+    mDoAud_seStart(i_seNum, &actor->current.pos, param_2, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
 }
 
-inline void fopAcM_seStart(fopAc_ac_c* actor, u32 sfxID, u32 param_2) {
-    mDoAud_seStart(sfxID, &actor->mEyePos, param_2, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+inline void fopAcM_seStart(fopAc_ac_c* actor, u32 i_seNum, u32 param_2) {
+    mDoAud_seStart(i_seNum, &actor->mEyePos, param_2, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
 }
 
-inline void fopAcM_monsSeStart(fopAc_ac_c* actor, u32 sfxID, u32 param_2) {
-    mDoAud_monsSeStart(sfxID, &actor->mEyePos, fopAcM_GetID(actor), 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+inline void fopAcM_monsSeStart(fopAc_ac_c* actor, u32 i_seNum, u32 param_2) {
+    mDoAud_monsSeStart(i_seNum, &actor->mEyePos, fopAcM_GetID(actor), 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
 }
 
 void fopDwTg_ToDrawQ(create_tag_class*, int);
