@@ -262,18 +262,18 @@ void makeAlphaCmpTable() {
     }
 }
 
-J3DZModeInfo j3dZModeTable[0x20];
+u8 j3dZModeTable[96];
 
 /* 802EC69C-802EC708       .text makeZModeTable__Fv */
 void makeZModeTable() {
-    J3DZModeInfo* table = j3dZModeTable;
+    u8* table = j3dZModeTable;
     for (int i = 0; i < 2; i++) {
         for (u32 j = 0; j < 8; j++) {
             for (int k = 0; k < 2; k++) {
                 u32 idx = j * 2 + i * 16 + k;
-                table[idx].mCompareEnable = i;
-                table[idx].mFunc = j;
-                table[idx].mUpdateEnable = k;
+                table[idx * 3 + 0] = i;
+                table[idx * 3 + 1] = j;
+                table[idx * 3 + 2] = k;
             }
         }
     }

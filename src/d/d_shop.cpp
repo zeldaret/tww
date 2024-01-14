@@ -1399,10 +1399,10 @@ u8 dShop_BoughtErrorStatus(ShopItems_c* shopItems, int param_2, int param_3) {
 
 /* 800606A8-80060830       .text __ct__12ShopCursor_cFP12J3DModelDataP15J3DAnmTevRegKeyf */
 ShopCursor_c::ShopCursor_c(J3DModelData* modelData, J3DAnmTevRegKey* brkData, f32 param_2) {
-    static J3DZModeInfo_4bytes ZModeInfo = {GX_TRUE, GX_ALWAYS, GX_TRUE};
+    static J3DZModeInfo ZModeInfo = {GX_TRUE, GX_ALWAYS, GX_TRUE};
     for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
         J3DMaterial* mat = modelData->getMaterialNodePointer(i);
-        mat->getZMode()->setZModeInfo(ZModeInfo.parent);
+        mat->getZMode()->setZModeInfo(ZModeInfo);
     }
     
     for (int i = 0; i < (int)ARRAY_SIZE(mpModels); i++) {

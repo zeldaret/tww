@@ -234,20 +234,10 @@ struct J3DColorChanInfo {
 };
 
 struct J3DZModeInfo {
-    /* 0x0 */ u8 mCompareEnable;
-    /* 0x1 */ u8 mFunc;
-    /* 0x2 */ u8 mUpdateEnable;
+    /* 0x00 */ u8 mCompareEnable;
+    /* 0x01 */ u8 mFunc;
+    /* 0x02 */ u8 mUpdateEnable;
+    /* 0x03 */ u8 pad;
 };
-
-// TODO: This struct is a fakematch.
-// J3DZModeInfo is only 3 bytes in arrays, but 4 bytes when it's a standalone symbol (with 1 byte alignment).
-// Until we figure out the correct way to match this, use J3DZModeInfo in arrays and J3DZModeInfo_4bytes otherwise.
-// ninja diff notices that the size of a standalone J3DZModeInfo is wrong and reports it as an error without this.
-struct J3DZModeInfo_4bytes {
-    J3DZModeInfo parent;
-    u8 padding;
-};
-
-STATIC_ASSERT(sizeof(J3DTevStageInfo) == 0x14);
 
 #endif /* J3DSTRUCT_H */

@@ -31,6 +31,7 @@ namespace JAInter {
             u8 flag6 : 1;
             u8 flag7 : 1;
             u8 flag8 : 1;
+            u8 flag9 : 1;
         };
 
         extern initOnCode_s* initOnCodeBnk;
