@@ -21,8 +21,6 @@ struct J3DAnmColorKeyTable {
     J3DAnmKeyTableBase mAInfo;
 };  // Size = 0x18
 
-struct J3DAnmVtxColorIndexData;
-
 struct J3DAnmColorFullTable {
     /* 0x00 */ u16 mRMaxFrame;
     /* 0x02 */ u16 mROffset;
@@ -683,6 +681,12 @@ private:
     /* 0x40 */ J3DAnmColorFullTable * mAnmTable;
 };
 
+class J3DAnmVtxColorIndexData {
+public:
+    /* 0x00 */ u16 mNum;
+    /* 0x04 */ void* mpData;
+};
+
 class J3DAnmVtxColor : public J3DAnmBase {
 public:
     J3DAnmVtxColor() : J3DAnmBase(0) {
@@ -697,10 +701,11 @@ public:
 
     virtual ~J3DAnmVtxColor();
     virtual void getColor(u8, u16, GXColor*) const {}
+	inline J3DAnmVtxColorIndexData* getAnmVtxColorIndexData(u8 idx, u16 frame) { return &mAnmVtxColorIndexData[idx][frame]; }
 
 protected:
-    /* 0x10 */ s16 mAnmTableNum[2];
-    /* 0x14 */ void* mAnmVtxColorIndexData[2];
+    /* 0x10 */ u16 mAnmTableNum[2];
+    /* 0x14 */ J3DAnmVtxColorIndexData* mAnmVtxColorIndexData[2];
 };  // Size: 0x1C
 
 class J3DAnmVtxColorKey : public J3DAnmVtxColor {

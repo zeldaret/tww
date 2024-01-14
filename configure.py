@@ -898,7 +898,7 @@ config.libs = [
             Object(Matching,    "JSystem/J3DGraphLoader/J3DModelLoaderCalcSize.cpp"),
             Object(Matching,    "JSystem/J3DGraphLoader/J3DJointFactory.cpp"),
             Object(Matching,    "JSystem/J3DGraphLoader/J3DShapeFactory.cpp"),
-            Object(NonMatching, "JSystem/J3DGraphLoader/J3DAnmLoader.cpp"),
+            Object(Matching,    "JSystem/J3DGraphLoader/J3DAnmLoader.cpp"),
         ],
     ),
     JSystemLib(
