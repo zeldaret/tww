@@ -188,7 +188,7 @@ void dKyr_kamome_move() {
                     cLib_addCalc(&pWind->mKamomeEff[i].mScale, 1.0f, 0.1f, 0.003f, 0.000001f);
                     pWind->mKamomeEff[i].mTimer--;
                 } else {
-                    cLib_addCalc(&pWind->mKamomeEff[i].mScale, 0.0f, 1.0f, 0.003f, 0.000001f);
+                    cLib_addCalc(&pWind->mKamomeEff[i].mScale, 0.0f, 0.1f, 0.003f, 0.000001f);
                     if (pWind->mKamomeEff[i].mScale < 0.001f)
                         pWind->mKamomeEff[i].mStatus++;
                 }
@@ -239,13 +239,14 @@ void dKyr_wind_init() {
 /* 8008B504-8008C4BC       .text dKyr_wind_move__Fv */
 void dKyr_wind_move() {
     /* Nonmatching */
-    WINDEFF_SET* pWind = dKy_getEnvlight().mpWind;
+    dScnKy_env_light_c& envLight = dKy_getEnvlight();
+    WINDEFF_SET* pWind = envLight.mpWind;
     camera_class* pCamera = (camera_class*)dComIfGp_getCamera(0);
     cXyz* pWindVec = dKyw_get_wind_vec();
     f32 windPow = dKyw_get_wind_pow();
     fopAc_ac_c* pPlayer = dComIfGp_getPlayer(0);
 
-    dBgS_GndChk gndChk;
+    dBgS_ObjGndChk_All gndChk;
 
     cXyz windVec = *pWindVec;
     u32 particleNum = dComIfGp_particle_getParticleNum();
@@ -259,13 +260,13 @@ void dKyr_wind_move() {
     f32 fVar23 = 1.0f;
     f32 offsetY = 1000.0f;
 
-    s32 windlineCount = dKy_getEnvlight().mWindlineCount;
+    s32 windlineCount = envLight.mWindlineCount;
     if (dComIfGp_checkPlayerStatus1(0, daPyStts1_DEKU_LEAF_FLY_e)) {
         windlineCount = 10;
     }
 
     bool customWindPowerChanged = false;
-    if (dKy_getEnvlight().mWind.mCustomWindPower > 0.0f) {
+    if (envLight.mWind.mCustomWindPower > 0.0f) {
         windlineCount = 9;
         fVar17 = 50.0f;
         posWindScale = 160.0f;
@@ -286,6 +287,9 @@ void dKyr_wind_move() {
             pWind->mbHasCustomWindPower = false;
         }
     }
+
+    f32 fVar27 = 0.18f;
+    f32 fvar28 = 255.0f;
 
     if (customWindPowerChanged) {
         for (s32 i = 0; i < (s32)ARRAY_SIZE(pWind->mWindEff); i++) {
@@ -315,7 +319,10 @@ void dKyr_wind_move() {
         WIND_EFF& windEff = pWind->mWindEff[i];
         switch (windEff.mState) {
         case 0:
-            if (windPow > 0.3f && particleNum <= 1500 && (((g_Counter.mCounter0 >> 4 & 7) != (i & 3U)) || pWind->mbHasCustomWindPower)) {
+            if (windPow < 0.3f)
+                continue;
+            
+            if (particleNum <= 1500 && (((g_Counter.mCounter0 >> 4 & 7) != (i & 3U)) || pWind->mbHasCustomWindPower)) {
                 windEff.mStateTimer = 0.0f;
                 windEff.mAlpha = 0.0f;
                 windEff.field_0x2c = 0;
@@ -388,18 +395,18 @@ void dKyr_wind_move() {
                     windEff.mAngleXZ -= fVar14 * cM_ssin(windEff.field_0x2c);
                 }
 
-                if (windEff.mStateTimer <= 0.4f || windEff.field_0x32 != 1) {
+                if (windEff.mStateTimer > 0.4f && windEff.field_0x32 == 1) {
+                    // do the loop-de-loop
+                    windEff.field_0x28 += i * 200 + 3600;
+                    windEff.mAngleY += i * 200 + 3600;
+                    if (windEff.field_0x28 > 60535)
+                        windEff.field_0x32 = 0;
+                } else {
                     f32 windVec_absXZ = sqrtf(windVec.x*windVec.x + windVec.z*windVec.z);
                     s16 targetAngleXZ = cM_atan2s(windVec.x, windVec.z);
                     s16 targetAngleY = cM_atan2s(windVec.y, windVec_absXZ);
                     cLib_addCalcAngleS(&windEff.mAngleY, targetAngleY, 10, 1000, 1);
                     cLib_addCalcAngleS(&windEff.mAngleXZ, targetAngleXZ, 10, 1000, 1);
-                } else {
-                    // do the loop-de-loop
-                    windEff.field_0x28 += i * 200 + 3600;
-                    windEff.mAngleY += i * 200 + 3600;
-                    if (windEff.field_0x28 >= 60535)
-                        windEff.field_0x32 = 0;
                 }
 
                 cXyz move;
@@ -420,7 +427,7 @@ void dKyr_wind_move() {
 
                 // so much stuff is missing in here
 
-                fVar14 = 0.18f * (i / 15);
+                fVar14 = fVar27 * (i / 15);
                 f32 distance = pos.getSquareDistance(pCamera->mLookat.mEye) / 200.0f;
                 if (distance > 1.0f) {
                     distance = 1.0f;
@@ -1568,9 +1575,9 @@ void dKyr_drawRain(Mtx drawMtx, u8** pImg) {
             GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
             GXSetZMode(true, GX_LEQUAL, false);
             GXSetCullMode(GX_CULL_NONE);
-    #if VERSION != VERSION_JPN
+#if VERSION != VERSION_JPN
             GXSetClipMode(GX_CLIP_DISABLE);
-    #endif
+#endif
             GXSetNumIndStages(0);
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 8);
@@ -1799,7 +1806,8 @@ void dKyr_drawSibuki(Mtx drawMtx, u8** pImg) {
 
 /* 80096D18-800973CC       .text drawPoison__FPA4_fPPUc */
 void drawPoison(Mtx drawMtx, u8** pImg) {
-    /* Nonmatching */
+    /* Nonmatching - just mul order when computing reg0/reg1 */
+    dScnKy_env_light_c& envLight = dKy_getEnvlight();
     dKankyo_poison_Packet* pPkt;
     GXTexObj texObj;
     Mtx camMtx;
@@ -1863,15 +1871,14 @@ void drawPoison(Mtx drawMtx, u8** pImg) {
         rot = 719.0f;
     GXSetCurrentMtx(GX_PNMTX0);
 
-    s32 wave = 0;
-    for (s32 i = 0; i < dKy_getEnvlight().mPoisonCount; i++, wave += 4000) {
+    for (s32 i = 0; i < dKy_getEnvlight().mPoisonCount; i++) {
         f32 size = pPkt->mEff[i].mSize;
         if (pPkt->mEff[i].mAlpha <= 0.0f)
             continue;
 
         GXLoadTexObj(&texObj, GX_TEXMAP0);
 
-        f32 cosR = fabsf(cM_scos(dKy_getEnvlight().mpPoisonPacket->mCount * 500.0f + wave));
+        f32 cosR = fabsf(cM_scos(envLight.mpPoisonPacket->mCount * 500.0f + i * 4000));
         cosR *= cosR;
 
         reg0.r = 95.0f + -50.0f * cosR;
@@ -1881,7 +1888,8 @@ void drawPoison(Mtx drawMtx, u8** pImg) {
         reg1.r = 115.0f + -6.0f * cosR;
         reg1.g = 206.0f + -146.0f * cosR;
         reg1.b = 255.0f + -50.0f * cosR;
-        reg1.a = pPkt->mEff[i].mAlpha * 255.0f;
+
+        reg0.a = pPkt->mEff[i].mAlpha * 255.0f;
 
         GXSetTevColor(GX_TEVREG0, reg0);
         GXSetTevColor(GX_TEVREG1, reg1);
@@ -1962,6 +1970,7 @@ void dKyr_drawStar(Mtx drawMtx, u8** pImg) {
 
 /* 80099D38-8009A5D4       .text drawWave__FPA4_fPPUc */
 void drawWave(Mtx drawMtx, u8** pImg) {
+    /* Nonmatching */
     dKankyo_wave_Packet* pPkt;
     camera_class* pCamera;
     GXTexObj texObj;
@@ -2046,10 +2055,10 @@ void drawWave(Mtx drawMtx, u8** pImg) {
         amb.a = pPkt->mEff[i].mAlpha;
         GXSetTevKColor(GX_KCOLOR3, amb);
 
-        if (pPkt->mSkewDir >= 0.0f) {
-            vp.x = -width - pPkt->mSkewDir * width * (-pPkt->mEff[i].mSpeed * 1.2f);
+        if (pPkt->mSkewDir < 0.0f) {
+            vp.x = -width + pPkt->mSkewDir * width * -(pPkt->mEff[i].mSpeed * 1.2f);
         } else {
-            vp.x = -width + pPkt->mSkewDir * width * (-pPkt->mEff[i].mSpeed * 1.2f);
+            vp.x = -width - pPkt->mSkewDir * width * -(pPkt->mEff[i].mSpeed * 1.2f);
         }
         vp.y = height;
         vp.z = 0.0f;
@@ -2058,10 +2067,10 @@ void drawWave(Mtx drawMtx, u8** pImg) {
         pos[0].y = p.y + lp.y;
         pos[0].z = p.z + lp.z;
 
-        if (pPkt->mSkewDir >= 0.0f) {
-            vp.x = width - pPkt->mSkewDir * width * (-pPkt->mEff[i].mSpeed * 1.2f);
+        if (pPkt->mSkewDir < 0.0f) {
+            vp.x = width + pPkt->mSkewDir * width * -(pPkt->mEff[i].mSpeed * 1.2f);
         } else {
-            vp.x = width + pPkt->mSkewDir * width * (-pPkt->mEff[i].mSpeed * 1.2f);
+            vp.x = width - pPkt->mSkewDir * width * -(pPkt->mEff[i].mSpeed * 1.2f);
         }
         vp.y = height;
         vp.z = 0.0f;
