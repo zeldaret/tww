@@ -69,7 +69,7 @@ public:
     JAInter::SeParameter* getSeParameter();
     JAInter::StreamParameter* getStreamParameter();
     int getTrackPortRoute(u8, u8);
-    int checkSoundHandle(u32, void*);
+    u32 checkSoundHandle(u32, void*);
     void initParameter(JAISound**, JAInter::Actor*, u32, u32, u8, void*);
 
     // TODO
@@ -146,13 +146,15 @@ public:
 namespace JAInter {
     class MoveParaSet {
     public:
-        MoveParaSet(f32 param_1=1.0f) {
+        MoveParaSet(f32 param_1=1.0f) { init(param_1); }
+        int set(f32 param_1, u32 param_2);
+        bool move();
+
+        void init(f32 param_1) {
             field_0x4 = param_1;
             field_0x0 = param_1;
             field_0xc = 0;
         }
-        int set(f32 param_1, u32 param_2);
-        bool move();
 
         /* 0x00 */ f32 field_0x0;
         /* 0x04 */ f32 field_0x4;

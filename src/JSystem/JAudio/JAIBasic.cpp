@@ -297,7 +297,7 @@ f32 JAIBasic::getMapInfoFxParameter(u32 param_1) {
 }
 
 /* 80290DC4-80290E14       .text getSoundOffsetNumberFromID__8JAIBasicFUl */
-void JAIBasic::getSoundOffsetNumberFromID(u32) {
+int JAIBasic::getSoundOffsetNumberFromID(u32) {
     /* Nonmatching */
 }
 

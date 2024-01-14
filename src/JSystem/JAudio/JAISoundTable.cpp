@@ -5,13 +5,14 @@
 
 #include "JSystem/JAudio/JAISoundTable.h"
 #include "JSystem/JAudio/JAIBasic.h"
+#include "JSystem/JAudio/JAIGlobalParameter.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 
 u8 JAInter::SoundTable::mVersion;
 u8 JAInter::SoundTable::mCategotyMax;
-s16* JAInter::SoundTable::mSoundMax;
+u16* JAInter::SoundTable::mSoundMax;
 u32 JAInter::SoundTable::mDatasize;
-int* JAInter::SoundTable::mPointerCategory;
+u8** JAInter::SoundTable::mPointerCategory;
 u8* JAInter::SoundTable::mAddress;
 
 /* 8029B570-8029B6FC       .text init__Q27JAInter10SoundTableFPUcUl */
@@ -20,21 +21,62 @@ void JAInter::SoundTable::init(u8* param_1, u32 param_2) {
     mAddress = param_1;
     mDatasize = param_2;
     mVersion = param_1[3];
-    mSoundMax = new (JAIBasic::getCurrentJAIHeap(), 4) s16[18];
-    mPointerCategory = new (JAIBasic::getCurrentJAIHeap(), 4) int[18];
-    for (int i = 0; i < 18; i++) {
-        // TODO
+    mSoundMax = new (JAIBasic::getCurrentJAIHeap(), 4) u16[18];
+    mPointerCategory = new (JAIBasic::getCurrentJAIHeap(), 4) u8*[18];
+    for (u8 i = 0; i < 18; i++) {
+        mSoundMax[i] = *(u16*)(mAddress + i * 4 + 6);
+        mPointerCategory[i] = mAddress + *(u16*)(mAddress + i * 4 + 8) * 16 + 80;
+        if (i < 16 && mSoundMax[i] != 0) {
+            mCategotyMax = i + 1;
+        }
     }
 }
 
 /* 8029B6FC-8029B8CC       .text getInfoPointer__Q27JAInter10SoundTableFUl */
-void JAInter::SoundTable::getInfoPointer(u32) {
-    /* Nonmatching */
+u8* JAInter::SoundTable::getInfoPointer(u32 param_1) {
+    JUT_ASSERT_MSG(52, mAddress, "getInfoPointer サウンドテーブルがありません\n");
+    u8* r31 = NULL;
+    u32 _category;
+    switch (param_1 & 0xC0000000) {
+    case 0:
+        _category = param_1 >> 12 & 0xff;
+        JUT_ASSERT_MSG(61, (_category<JAIGlobalParameter::getParamSeCategoryMax()), "getInfoPointer 登録されていないSEカテゴリーナンバーが指定されました。\n")
+        break;
+    case 0x80000000:
+        _category = 16;
+        break;
+    case 0xC0000000:
+        _category = 17;
+        break;
+    default:
+        JUT_ASSERT_MSG(70, 0, "getInfoPointer サウンドカテゴリービットが異常です。\n");
+        break;
+    }
+    u32 tmp = param_1 & 0x3ff;
+    if (mAddress && tmp < mSoundMax[_category]) {
+        r31 = mPointerCategory[_category] + tmp * 16;
+    }
+    return r31;
 }
 
 /* 8029B8CC-8029B99C       .text getInfoFormat__Q27JAInter10SoundTableFUl */
-void JAInter::SoundTable::getInfoFormat(u32) {
-    /* Nonmatching */
+u8 JAInter::SoundTable::getInfoFormat(u32 param_1) {
+    u8 r31 = 0;
+    switch (param_1 & 0xC0000000) {
+    case 0:
+        r31 = mAddress[0];
+        break;
+    case 0x80000000:
+        r31 = mAddress[1];
+        break;
+    case 0xC0000000:
+        r31 =  mAddress[2];
+        break;
+    default:
+        JUT_ASSERT_MSG(101, 0, "getInfoFormat サウンドカテゴリービットが異常です。\n");
+        break;
+    }
+    return r31;
 }
 
 /* 8029B99C-8029B9A4       .text getCategotyMax__Q27JAInter10SoundTableFv */

@@ -51,7 +51,7 @@ public:
     void stopAllSound(u32);
     void stopAllSound(u32, void*);
     void deleteObject(void*);
-    void getSoundOffsetNumberFromID(u32);
+    int getSoundOffsetNumberFromID(u32);
     void setSeCategoryVolume(u8, u8);
     static u16 setParameterSeqSync(JASystem::TTrack*, u16);
     bool allocStreamBuffer(void*, s32);

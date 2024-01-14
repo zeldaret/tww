@@ -87,7 +87,7 @@ namespace JASystem {
             /* 0x68 */ int field_0x68;
             /* 0x6C */ u32 field_0x6c;
             /* 0x70 */ u8 field_0x70[0x74 - 0x70];
-            /* 0x74 */ int field_0x74;
+            /* 0x74 */ u32 field_0x74;
             /* 0x78 */ short field_0x78[4];
             /* 0x80 */ short field_0x80[20];
             /* 0xA8 */ short field_0xa8[4];
@@ -100,9 +100,9 @@ namespace JASystem {
             /* 0x108 */ short field_0x108;
             /* 0x10A */ u16 field_0x10a;
             /* 0x10C */ u32 field_0x10c;
-            /* 0x110 */ int field_0x110;
-            /* 0x114 */ int field_0x114;
-            /* 0x118 */ int field_0x118;
+            /* 0x110 */ u32 field_0x110;
+            /* 0x114 */ u32 field_0x114;
+            /* 0x118 */ u32 field_0x118;
             /* 0x11C */ int field_0x11c;
             /* 0x120 */ short field_0x120[8];
             /* 0x130 */ u8 field_0x130[0x148 - 0x130];
