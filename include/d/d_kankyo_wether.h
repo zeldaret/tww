@@ -158,7 +158,7 @@ struct POISON_EFF {
     /* 0x20 */ f32 field_0x20;
     /* 0x24 */ f32 mAlpha;
     /* 0x28 */ f32 mSize;
-    /* 0x2C */ u8 field_0x2c[0x2E - 0x2C];
+    /* 0x2C */ s16 field_0x2c;
     /* 0x2E */ s16 field_0x2e;
 };
 

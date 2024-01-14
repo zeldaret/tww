@@ -522,19 +522,20 @@ BOOL dKyr_moon_arrival_check() {
 
 /* 8008C8B8-8008CF68       .text dKyr_sun_move__Fv */
 void dKyr_sun_move() {
-    /* Nonmatching */
-    dKankyo_sun_Packet* pSunPkt = g_env_light.mpSunPacket;
-    dKankyo_sunlenz_Packet* pLenzPkt = g_env_light.mpSunlenzPacket;
-    camera_class* pCamera = dComIfGp_getCamera(0);
+    camera_class* pCamera;
+    dKankyo_sun_Packet* pSunPkt = dKy_getEnvlight().mpSunPacket;
+    dKankyo_sunlenz_Packet* pLenzPkt = dKy_getEnvlight().mpSunlenzPacket;
+    pCamera = (camera_class*)dComIfGp_getCamera(0);
 
+    f32 pulsePos;
     f32 staringAtSunAmount = 0.0f;
     u8 numPointsVisible = 0, numCenterPointsVisible = 0;
     u32 stType = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo());
     cXyz lightDir;
-    if (g_env_light.mBaseLightInfluence.mColor.r == 0 && stType != dStageType_MISC_e) {
-        dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &g_env_light.mBaseLightInfluence.mPos, &lightDir);
+    if (dKy_getEnvlight().mBaseLightInfluence.mColor.r == 0 && stType != dStageType_MISC_e) {
+        dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &dKy_getEnvlight().mBaseLightInfluence.mPos, &lightDir);
     } else {
-        dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &g_env_light.mSunPos2, &lightDir);
+        dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &dKy_getEnvlight().mSunPos2, &lightDir);
     }
 
     pSunPkt->mPos[0].x = pCamera->mLookat.mEye.x + lightDir.x * 8000.0f;
@@ -548,7 +549,7 @@ void dKyr_sun_move() {
         horizonY = 1.0f;
     horizonY = 1.0f - horizonY;
     horizonY *= horizonY;
-    f32 pulsePos = 1.0f - horizonY;
+    pulsePos = 1.0f - horizonY;
 
     if (dComIfGp_getStageStagInfo() != NULL) {
         dComIfGp_getStageStagInfo();
@@ -558,7 +559,7 @@ void dKyr_sun_move() {
         pSunPkt->field_0x3c--;
     pSunPkt->field_0x3d = false;
 
-    if (g_env_light.mCurTime > 95.7f && g_env_light.mCurTime < 292.5f) {
+    if (dKy_getEnvlight().mCurTime > 95.7f && dKy_getEnvlight().mCurTime < 292.5f) {
         f32 borderY = 0.0f;
         s32 numPointsCulled = 0;
 
@@ -581,11 +582,9 @@ void dKyr_sun_move() {
 
         for (s32 i = 0; i < 5; i++) {
             f32 screenBottom = 490.0f - borderY;
-            cXyz chkpnt;
-            chkpnt.x = sun_chkpnt[i].x;
-            chkpnt.y = sun_chkpnt[i].y;
-            chkpnt.x = projected.x - chkpnt.x;
-            chkpnt.y = projected.y - chkpnt.y;
+            cXyz chkpnt = projected;
+            chkpnt.x -= sun_chkpnt[i].x;
+            chkpnt.y -= sun_chkpnt[i].y;
 
             if (chkpnt.x > 0.0f && chkpnt.x < 640.0 && chkpnt.y > borderY && chkpnt.y < screenBottom) {
                 if (pSunPkt->mVizChkData[i] >= 0xFFFFFF) {
@@ -635,7 +634,7 @@ void dKyr_sun_move() {
         pSunPkt->field_0x3d = false;
     }
 
-    if (g_env_light.mColpatWeather != 0 || (g_env_light.mColpatCurr != 0 && g_env_light.mColPatBlend > 0.5f)) {
+    if (dKy_getEnvlight().mColpatWeather != 0 || (dKy_getEnvlight().mColpatCurr != 0 && dKy_getEnvlight().mColPatBlend > 0.5f)) {
         numCenterPointsVisible = 0;
         numPointsVisible = 0;
     }
@@ -645,7 +644,7 @@ void dKyr_sun_move() {
         numPointsVisible = 0;
     }
 
-    if (g_env_light.mCurTime < 120.0f || g_env_light.mCurTime > 270.0f) {
+    if (dKy_getEnvlight().mCurTime < 120.0f || dKy_getEnvlight().mCurTime > 270.0f) {
         numCenterPointsVisible = 0;
         numPointsVisible = 0;
     }
@@ -665,16 +664,16 @@ void dKyr_sun_move() {
     }
 
     if (numPointsVisible >= 2) {
-        g_env_light.mpSunlenzPacket->mbDrawLenzInSky = false;
+        dKy_getEnvlight().mpSunlenzPacket->mbDrawLenzInSky = false;
     } else {
-        g_env_light.mpSunlenzPacket->mbDrawLenzInSky = true;
+        dKy_getEnvlight().mpSunlenzPacket->mbDrawLenzInSky = true;
     }
 
-    if (pSunPkt->mPos[0].y > 0.0f && !g_env_light.mpSunlenzPacket->mbDrawLenzInSky) {
+    if (pSunPkt->mPos[0].y > 0.0f && !dKy_getEnvlight().mpSunlenzPacket->mbDrawLenzInSky) {
         dKy_set_actcol_ratio(1.0f - staringAtSunAmount * pSunPkt->mVisibility);
         dKy_set_bgcol_ratio(1.0f - staringAtSunAmount * pSunPkt->mVisibility);
-        dKy_set_fogcol_ratio(pulsePos * staringAtSunAmount * pSunPkt->mVisibility * 0.5f + 1.0f);
-        dKy_set_vrboxcol_ratio(pulsePos * staringAtSunAmount * pSunPkt->mVisibility * 0.5f + 1.0f);
+        dKy_set_fogcol_ratio(staringAtSunAmount * pSunPkt->mVisibility * pulsePos * 0.5f + 1.0f);
+        dKy_set_vrboxcol_ratio(staringAtSunAmount * pSunPkt->mVisibility * pulsePos * 0.5f + 1.0f);
     }
 
     if (dKyr_moon_arrival_check()) {
@@ -691,7 +690,7 @@ void dKyr_sun_move() {
 
 /* 8008CF68-8008D0B4       .text dKyr_rain_init__Fv */
 void dKyr_rain_init() {
-    camera_class * pCamera = dComIfGp_getCamera(0);
+    camera_class * pCamera = (camera_class*)dComIfGp_getCamera(0);
     g_env_light.mpRainPacket->mpTxSnow01 = (u8*)dComIfG_getObjectRes("Always", ALWAYS_I8_TX_SNOW01);
     g_env_light.mpRainPacket->mpTxRingAHalf = (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXA_RING_A_32HAFE);
     g_env_light.mpRainPacket->mCamEyePos = pCamera->mLookat.mEye;
@@ -713,13 +712,13 @@ void dKyr_rain_init() {
 
 /* 8008D0B4-8008D0DC       .text rain_bg_chk__FP19dKankyo_rain_Packeti */
 void rain_bg_chk(dKankyo_rain_Packet* pPkt, int idx) {
-    camera_class * pCamera = g_dComIfG_gameInfo.play.mCameraInfo[0].mpCamera;
+    camera_class* pCamera = g_dComIfG_gameInfo.play.mCameraInfo[0].mpCamera;
     pPkt->mEff[idx].field_0x30 = pCamera->mLookat.mCenter.y + -800.0f;
 }
 
 /* 8008D0DC-8008D53C       .text overhead_bg_chk__Fv */
 bool overhead_bg_chk() {
-    camera_class * pCamera = (camera_class*)dComIfGp_getCamera(0);
+    camera_class* pCamera = (camera_class*)dComIfGp_getCamera(0);
     bool ret = false;
 
     dBgS_ObjGndChk_All gndChk;
@@ -741,7 +740,7 @@ bool overhead_bg_chk() {
 
 /* 8008D638-8008DAF0       .text forward_overhead_bg_chk__FP4cXyzf */
 bool forward_overhead_bg_chk(cXyz* pPos, f32 dist) {
-    camera_class * pCamera = (camera_class*)dComIfGp_getCamera(0);
+    camera_class* pCamera = (camera_class*)dComIfGp_getCamera(0);
     bool ret = false;
 
     dBgS_ObjGndChk_All gndChk;
@@ -780,7 +779,7 @@ void dKyr_housi_move() {
 
 /* 8008F0BC-8008F23C       .text dKyr_snow_init__Fv */
 void dKyr_snow_init() {
-    camera_class * pCamera = dComIfGp_getCamera(0);
+    camera_class* pCamera = (camera_class*)dComIfGp_getCamera(0);
     g_env_light.mpSnowPacket = new(0x20) dKankyo_snow_Packet();
     if (g_env_light.mpSnowPacket != NULL) {
         if (strcmp(dComIfGp_getStartStageName(), "Adanmae") != 0) {
@@ -823,7 +822,7 @@ void dKyr_star_init() {
 
 /* 80090D50-80090DE0       .text dKyr_star_move__Fv */
 void dKyr_star_move() {
-    dKankyo_star_Packet * pPkt = g_env_light.mpStarPacket;
+    dKankyo_star_Packet* pPkt = g_env_light.mpStarPacket;
     pPkt->mCount = g_env_light.mStarCount;
     if (pPkt->mCount != 0) {
         f32 wave = fabsf(cM_fsin(pPkt->mStarEff[0].mAnimCounter));
@@ -838,10 +837,10 @@ void wave_move() {
     /* Nonmatching */
     dScnKy_env_light_c& envLight = dKy_getEnvlight();
     dStage_FileList_dt_c* fili_p;
-    camera_class* pCamera;
     fopAc_ac_c* pPlayer;
     cXyz* windVecP;
     dKankyo_wave_Packet* pPkt;
+    camera_class* pCamera;
     f32 seaLevel;
     cXyz newPos2;
     cXyz eyevect;
@@ -865,7 +864,7 @@ void wave_move() {
 
     fili_p = NULL;
     pPkt = g_env_light.mpWavePacket;
-    pCamera = dComIfGp_getCamera(0);
+    pCamera = (camera_class*)dComIfGp_getCamera(0);
     pPlayer = dComIfGp_getPlayer(0);
 
     roomNo = dComIfGp_roomControl_getStayNo();
@@ -2120,7 +2119,148 @@ void drawWave(Mtx drawMtx, u8** pImg) {
 
 /* 8009A5D4-8009AB88       .text drawCloudShadow__FPA4_fPPUc */
 void drawCloudShadow(Mtx drawMtx, u8** pImg) {
-    /* Nonmatching */
+    dScnKy_env_light_c& envLight = dKy_getEnvlight();
+    camera_class *pCamera = (camera_class*)dComIfGp_getCamera(0);
+    dKankyo_cloud_Packet* pPkt = g_env_light.mpMoyaPacket;
+    static f32 rot = 0.0f;
+    GXTexObj texObj;
+    Mtx camMtx;
+    Mtx rotMtx;
+    cXyz pos[4];
+    cXyz windvec;
+    cXyz vp;
+    cXyz lp;
+    cXyz p;
+    cXyz dummy;
+    cXyz tilt;
+
+    if (pPkt->mCount <= 0)
+        return;
+
+    j3dSys.reinitGX();
+    if (dComIfGd_getView() != NULL) {
+        MTXInverse(dComIfGd_getViewRotMtx(), camMtx);
+    } else {
+        return;
+    }
+
+#if VERSION != VERSION_JPN
+    GXSetClipMode(GX_CLIP_DISABLE);
+#endif
+
+    GXColor reg0, reg1;
+    if (dKy_getEnvlight().mMoyaMode != 3 && dKy_getEnvlight().mMoyaMode != 4) {
+        reg0.r = envLight.mBG0_K0.r;
+        reg0.g = envLight.mBG0_K0.g;
+        reg0.b = envLight.mBG0_K0.b;
+
+        reg1.r = envLight.mBG0_K0.r;
+        reg1.g = envLight.mBG0_K0.g;
+        reg1.b = envLight.mBG0_K0.b;
+    } else {
+        reg0.r = envLight.mBG3_K0.r;
+        reg0.g = envLight.mBG3_K0.g;
+        reg0.b = envLight.mBG3_K0.b;
+
+        reg1.r = envLight.mBG3_K0.r;
+        reg1.g = envLight.mBG3_K0.g;
+        reg1.b = envLight.mBG3_K0.b;
+    }
+
+    dKyr_set_btitex(&texObj, (ResTIMG*)pImg[0]);
+
+    GXSetNumChans(0);
+    GXSetTevColor(GX_TEVREG0, reg0);
+    GXSetTevColor(GX_TEVREG1, reg1);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, false, GX_PTIDENTITY);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+    dKy_GxFog_set();
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+    GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
+    GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetNumIndStages(0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 8);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    MTXRotDeg(rotMtx, 'Z', rot);
+    MTXConcat(camMtx, rotMtx, camMtx);
+    GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
+    rot -= 1.5f;
+    if (rot < 0.0f)
+        rot = 719.0f;
+    GXSetCurrentMtx(GX_PNMTX0);
+
+    for (s32 i = 0; i < pPkt->mCount; i++) {
+        f32 size = pPkt->mEff[i].mSize;
+        if (pPkt->mEff[i].mAlpha <= 0.0f)
+            continue;
+
+        GXLoadTexObj(&texObj, GX_TEXMAP0);
+
+        reg0.a = pPkt->mEff[i].mAlpha * 255.0f;
+        GXSetTevColor(GX_TEVREG0, reg0);
+
+        p.x = pPkt->mEff[i].mBasePos.x + pPkt->mEff[i].mPos.x;
+        p.y = pPkt->mEff[i].mBasePos.y + pPkt->mEff[i].mPos.y;
+        p.z = pPkt->mEff[i].mBasePos.z + pPkt->mEff[i].mPos.z;
+
+        vp.x = -size;
+        vp.y = size;
+        vp.z = 0.0f;
+        MTXMultVec(camMtx, &vp, &lp);
+        pos[0].x = p.x + lp.x;
+        pos[0].y = p.y + lp.y;
+        pos[0].z = p.z + lp.z;
+
+        vp.x = size;
+        vp.y = size;
+        vp.z = 0.0f;
+        MTXMultVec(camMtx, &vp, &lp);
+        pos[1].x = p.x + lp.x;
+        pos[1].y = p.y + lp.y;
+        pos[1].z = p.z + lp.z;
+
+        vp.x = size;
+        vp.y = -size;
+        vp.z = 0.0f;
+        MTXMultVec(camMtx, &vp, &lp);
+        pos[2].x = p.x + lp.x;
+        pos[2].y = p.y + lp.y;
+        pos[2].z = p.z + lp.z;
+
+        vp.x = -size;
+        vp.y = -size;
+        vp.z = 0.0f;
+        MTXMultVec(camMtx, &vp, &lp);
+        pos[3].x = p.x + lp.x;
+        pos[3].y = p.y + lp.y;
+        pos[3].z = p.z + lp.z;
+
+        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+        GXPosition3f32(pos[0].x, pos[0].y, pos[0].z);
+        GXTexCoord2s16(0, 0);
+        GXPosition3f32(pos[1].x, pos[1].y, pos[1].z);
+        GXTexCoord2s16(0xFF, 0);
+        GXPosition3f32(pos[2].x, pos[2].y, pos[2].z);
+        GXTexCoord2s16(0xFF, 0xFF);
+        GXPosition3f32(pos[3].x, pos[3].y, pos[3].z);
+        GXTexCoord2s16(0, 0xFF);
+        GXEnd();
+    }
+
+#if VERSION != VERSION_JPN
+    GXSetClipMode(GX_CLIP_ENABLE);
+    J3DShape::resetVcdVatCache();
+#endif
 }
 
 /* 8009AB88-8009B9C4       .text drawVrkumo__FPA4_fR8GXColorPPUc */
