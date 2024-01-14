@@ -334,7 +334,6 @@ void JAISound::setSeqInterFxmix(u8 line_, f32 param_2, u32 param_3) {
 
 /* 8029964C-802997E4       .text setSeqInterDolby__8JAISoundFUcfUl */
 void JAISound::setSeqInterDolby(u8 line_, f32 param_2, u32 param_3) {
-    /* Nonmatching */
     if ((field_0xc & 0xC0000000) != 0x80000000) {
         return;
     }
@@ -343,10 +342,11 @@ void JAISound::setSeqInterDolby(u8 line_, f32 param_2, u32 param_3) {
     }
     JUT_ASSERT_MSG(714, line_<JAIGlobalParameter::seqParameterLines, "JAISound::setSeqInterPan 設定できるライン数を超えています。\n");
     if (JAIBasic::getInterface()->field_0xd != 2) {
-        if (getSeqParameter()->seqDolby[line_].field_0x4 == 0.0f) {
+        if (getSeqParameter()->seqDolby[line_].field_0x4 != 0.0f) {
+            param_2 = 0.0f;
+        } else {
             return;
         }
-        param_2 = 0.0f;
     }
     int r31 = getSeqParameter()->seqDolby[line_].set(param_2, param_3);
     if (r31 == 1) {
