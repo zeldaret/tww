@@ -339,10 +339,10 @@ void dKyw_wether_delete() {
         }
 
         for (int i = 0; i < 2; i++) {
-            if (wind_p->mKamomeEff[i].mpBaseEmitter != NULL) {
-                wind_p->mKamomeEff[i].mpBaseEmitter->deleteAllParticle();
-                wind_p->mKamomeEff[i].mpBaseEmitter->becomeInvalidEmitter();
-                wind_p->mKamomeEff[i].mpBaseEmitter = NULL;
+            if (wind_p->mKamomeEff[i].mpEmitter != NULL) {
+                wind_p->mKamomeEff[i].mpEmitter->deleteAllParticle();
+                wind_p->mKamomeEff[i].mpEmitter->becomeInvalidEmitter();
+                wind_p->mKamomeEff[i].mpEmitter = NULL;
             }
         }
 

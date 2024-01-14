@@ -3038,6 +3038,9 @@ inline void dComIfGp_particle_draw2Dback(JPADrawInfo* inf) { if (g_dComIfG_gameI
 inline void dComIfGp_particle_draw2DmenuFore(JPADrawInfo* inf) { if (g_dComIfG_gameInfo.play.getParticle() != NULL) g_dComIfG_gameInfo.play.getParticle()->draw2DmenuFore(inf); }
 inline void dComIfGp_particle_draw2DmenuBack(JPADrawInfo* inf) { if (g_dComIfG_gameInfo.play.getParticle() != NULL) g_dComIfG_gameInfo.play.getParticle()->draw2DmenuBack(inf); }
 
+inline u32 dComIfGp_particle_getParticleNum() { return g_dComIfG_gameInfo.play.getParticle()->getParticleNum(); }
+inline u32 dComIfGp_particle_getEmitterNum() { return g_dComIfG_gameInfo.play.getParticle()->getEmitterNum(); }
+
 /**
  * === ATTENTION ===
  */

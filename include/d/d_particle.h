@@ -6,6 +6,7 @@
 #include "JSystem/JGeometry.h"
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAEmitter.h"
+#include "JSystem/JParticle/JPAEmitterManager.h"
 #include "d/d_particle_name.h"
 #include "f_pc/f_pc_node.h"
 #include "m_Do/m_Do_ext.h"
@@ -448,6 +449,9 @@ public:
     void draw2DmenuFore(JPADrawInfo* inf) { draw(inf, 9); }
     void draw2DmenuBack(JPADrawInfo* inf) { draw(inf, 10); }
 
+    u32 getParticleNum() { return mEmitterMng->getParticleNumber(); } 
+    u32 getEmitterNum() { return mEmitterMng->getEmitterNumber(); } 
+
     void drawModelParticle() { mModelCtrl->draw(); }
     JKRHeap * getHeap() { return mHeap; }
 
@@ -461,7 +465,7 @@ public:
     static void offStatus(u8 status) { mStatus &= ~status; }
     static u8 mStatus;
 
-    static JPAEmitterManager * mEmitterMng;
+    static JPAEmitterManager* mEmitterMng;
     static dPa_stripesEcallBack mStripes;
     static dPa_kageroEcallBack mKagero;
     static dPa_smokeEcallBack mSmokeEcallback;

@@ -16,6 +16,7 @@
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_lib.h"
 #include "JSystem/JKernel/JKRHeap.h"
+#include "SSystem/SComponent/c_counter.h"
 
 static u32 now_room = -1;
 
@@ -105,9 +106,121 @@ void dKyr_set_btitex(GXTexObj* i_obj, ResTIMG* i_img) {
 /* 8008AE54-8008B44C       .text dKyr_kamome_move__Fv */
 void dKyr_kamome_move() {
     /* Nonmatching */
-    WINDEFF_SET * pWind = g_env_light.mpWind;
+    WINDEFF_SET* pWind = dKy_getEnvlight().mpWind;
     camera_class* pCamera = (camera_class*)dComIfGp_getCamera(0);
+
     dKyw_get_wind_vec();
+
+    cXyz newPos;
+    cXyz targetRot;
+    cXyz newTarget;
+    cXyz oldTarget;
+
+    BOOL spawnBirds = FALSE;
+    if (strcmp(dComIfGp_getStartStageName(), "sea") == 0) {
+        if ((g_env_light.mColpatCurr == 1 && g_env_light.mColPatBlend > 0.0f) ||
+            (g_env_light.mColpatPrev == 1 && g_env_light.mColPatBlend < 1.0f) ||
+            (g_env_light.mColpatCurr == 2 && g_env_light.mColPatBlend > 0.0f) ||
+            (g_env_light.mColpatPrev == 2 && g_env_light.mColPatBlend < 1.0f))
+        {
+            spawnBirds = FALSE;
+        } else {
+            spawnBirds = TRUE;
+        }
+    }
+
+    for (s32 i = 0; i < 2; i++) {
+        switch (pWind->mKamomeEff[i].mStatus) {
+        case 0:
+            if (spawnBirds) {
+                if (pWind->mKamomeEff[i].mTimer == 0) {
+                    pWind->mKamomeEff[i].mAngleY = cM_rndFX(65535.0f);
+                    pWind->mKamomeEff[i].mAngleX = cM_rndFX(65535.0f);
+                    newPos.x = pCamera->mLookat.mEye.x + cM_ssin(pWind->mKamomeEff[i].mAngleY) * 7000.0f;
+                    newPos.y = 4500.0f;
+                    newPos.z = pCamera->mLookat.mEye.z + cM_scos(pWind->mKamomeEff[i].mAngleY) * 7000.0f;
+                    pWind->mKamomeEff[i].mPos.set(newPos);
+                    pWind->mKamomeEff[i].mAngleYSpeed = cM_rndFX(1.0f);
+                    pWind->mKamomeEff[i].mScale = 0.0f;
+                    pWind->mKamomeEff[i].mTimer = 300.0f + cM_rndF(180.0f);
+                    pWind->mKamomeEff[i].mpEmitter = dComIfGp_particle_set(0x429, &pWind->mKamomeEff[i].mPos);
+                    pWind->mKamomeEff[i].mStatus++;
+                } else {
+                    pWind->mKamomeEff[i].mTimer--;
+                }
+            }
+            break;
+        case 1:
+            if (pWind->mKamomeEff[i].mpEmitter != NULL) {
+                if (pWind->mKamomeEff[i].mAngleYSpeed >= 0.0f) {
+                    pWind->mKamomeEff[i].mAngleYSpeed += cM_rndFX(1.0f);
+                    if (pWind->mKamomeEff[i].mAngleYSpeed > 100.0f)
+                        pWind->mKamomeEff[i].mAngleYSpeed = 100.0f;
+                    if (pWind->mKamomeEff[i].mAngleYSpeed < 80.0f)
+                        pWind->mKamomeEff[i].mAngleYSpeed = 80.0f;
+                } else {
+                    pWind->mKamomeEff[i].mAngleYSpeed += cM_rndFX(1.0f);
+                    if (pWind->mKamomeEff[i].mAngleYSpeed < -100.0f)
+                        pWind->mKamomeEff[i].mAngleYSpeed = -100.0f;
+                    if (pWind->mKamomeEff[i].mAngleYSpeed > -80.0f)
+                        pWind->mKamomeEff[i].mAngleYSpeed = -80.0f;
+                }
+
+                oldTarget.x = cM_ssin(pWind->mKamomeEff[i].mAngleY) * 7000.0f;
+                oldTarget.y = fabsf(cM_ssin(pWind->mKamomeEff[i].mAngleX) * 3200.0f);
+                oldTarget.z = cM_scos(pWind->mKamomeEff[i].mAngleY) * 7000.0f;
+
+                pWind->mKamomeEff[i].mAngleY += pWind->mKamomeEff[i].mAngleYSpeed * pWind->mKamomeEff[i].mScale;
+                pWind->mKamomeEff[i].mAngleX += 15;
+
+                newTarget.x = cM_ssin(pWind->mKamomeEff[i].mAngleY) * 7000.0f;
+                newTarget.y = fabsf(cM_ssin(pWind->mKamomeEff[i].mAngleX) * 3200.0f);
+                newTarget.z = cM_scos(pWind->mKamomeEff[i].mAngleY) * 7000.0f;
+
+                newPos.x = pCamera->mLookat.mEye.x + newTarget.x;
+                newPos.y = newTarget.y + 4800.0f;
+                newPos.z = pCamera->mLookat.mEye.z + newTarget.z;
+
+                pWind->mKamomeEff[i].mPos.set(newPos);
+                pWind->mKamomeEff[i].mpEmitter->setGlobalTranslation(pWind->mKamomeEff[i].mPos);
+
+                if (pWind->mKamomeEff[i].mTimer != 0 && spawnBirds) {
+                    cLib_addCalc(&pWind->mKamomeEff[i].mScale, 1.0f, 0.1f, 0.003f, 0.000001f);
+                    pWind->mKamomeEff[i].mTimer--;
+                } else {
+                    cLib_addCalc(&pWind->mKamomeEff[i].mScale, 0.0f, 1.0f, 0.003f, 0.000001f);
+                    if (pWind->mKamomeEff[i].mScale < 0.001f)
+                        pWind->mKamomeEff[i].mStatus++;
+                }
+
+                dKyr_get_vectle_calc(&oldTarget, &newTarget, &targetRot);
+                JGeometry::TVec3<s16> globalRot(0, 0, 0);
+                globalRot.y = cM_atan2s(targetRot.x, targetRot.z);
+                pWind->mKamomeEff[i].mpEmitter->setGlobalRotation(globalRot);
+            }
+            break;
+        case 2:
+            pWind->mKamomeEff[i].mpEmitter->deleteAllParticle();
+            pWind->mKamomeEff[i].mpEmitter->becomeInvalidEmitter();
+            pWind->mKamomeEff[i].mpEmitter = NULL;
+            pWind->mKamomeEff[i].mStatus = 0;
+            pWind->mKamomeEff[i].mTimer = cM_rndF(600.0f) + 900.0f;
+            break;
+        }
+
+        if (pWind->mKamomeEff[i].mpEmitter != NULL) {
+            if (dComIfGd_getView() != NULL) {
+                f32 scale = dComIfGd_getView()->mFovy / 26.0f;
+                if (scale >= 1.0f)
+                    scale = 1.0f;
+
+                scale = pWind->mKamomeEff[i].mScale * scale * 1.6f;
+                pWind->mKamomeEff[i].mpEmitter->setGlobalScale(JGeometry::TVec3<f32>(scale, scale, scale));
+            }
+
+            pWind->mKamomeEff[i].mpEmitter->setGlobalPrmColor(dKy_getEnvlight().mBG0_K0.r, dKy_getEnvlight().mBG0_K0.g, dKy_getEnvlight().mBG0_K0.b);
+        }
+    }
 }
 
 /* 8008B44C-8008B504       .text dKyr_wind_init__Fv */
@@ -116,16 +229,235 @@ void dKyr_wind_init() {
     g_env_light.mpWind->field_0x759 = 0;
 
     for (int i = 0; i < 2; i++) {
-        g_env_light.mpWind->mKamomeEff[i].field_0x1e = 0;
-        g_env_light.mpWind->mKamomeEff[i].field_0x18 = 0.0f;
-        g_env_light.mpWind->mKamomeEff[i].field_0x1c = cM_rndF(1800.0f);
-        g_env_light.mpWind->mKamomeEff[i].mpBaseEmitter = NULL;
+        g_env_light.mpWind->mKamomeEff[i].mStatus = 0;
+        g_env_light.mpWind->mKamomeEff[i].mScale = 0.0f;
+        g_env_light.mpWind->mKamomeEff[i].mTimer = cM_rndF(1800.0f);
+        g_env_light.mpWind->mKamomeEff[i].mpEmitter = NULL;
     }
 }
 
 /* 8008B504-8008C4BC       .text dKyr_wind_move__Fv */
 void dKyr_wind_move() {
     /* Nonmatching */
+    WINDEFF_SET* pWind = dKy_getEnvlight().mpWind;
+    camera_class* pCamera = (camera_class*)dComIfGp_getCamera(0);
+    cXyz* pWindVec = dKyw_get_wind_vec();
+    f32 windPow = dKyw_get_wind_pow();
+    fopAc_ac_c* pPlayer = dComIfGp_getPlayer(0);
+
+    dBgS_GndChk gndChk;
+
+    cXyz windVec = *pWindVec;
+    u32 particleNum = dComIfGp_particle_getParticleNum();
+                                                                                                       
+    f32 fVar17 = 4000.0f;
+    f32 posRange = 2000.0f;
+    f32 fVar28 = 80.0f;
+    f32 posWindScale = 2500.0f;
+    f32 fVar25 = 250.0f;
+    f32 fVar18 = 800.0f;
+    f32 fVar23 = 1.0f;
+    f32 offsetY = 1000.0f;
+
+    s32 windlineCount = dKy_getEnvlight().mWindlineCount;
+    if (dComIfGp_checkPlayerStatus1(0, daPyStts1_DEKU_LEAF_FLY_e)) {
+        windlineCount = 10;
+    }
+
+    bool customWindPowerChanged = false;
+    if (dKy_getEnvlight().mWind.mCustomWindPower > 0.0f) {
+        windlineCount = 9;
+        fVar17 = 50.0f;
+        posWindScale = 160.0f;
+        fVar28 = 8.0f;
+        fVar18 = 150.0f;
+        offsetY = 200.0f;
+        fVar23 = 0.14f;
+        fVar25 = offsetY;
+        posRange = posWindScale;
+
+        if (!pWind->mbHasCustomWindPower) {
+            pWind->mbHasCustomWindPower = true;
+            customWindPowerChanged = true;
+        }
+    } else {
+        if (pWind->mbHasCustomWindPower) {
+            customWindPowerChanged = true;
+            pWind->mbHasCustomWindPower = false;
+        }
+    }
+
+    if (customWindPowerChanged) {
+        for (s32 i = 0; i < (s32)ARRAY_SIZE(pWind->mWindEff); i++) {
+            if (pWind->mWindEff[i].mpEmitter != NULL) {
+                pWind->mWindEff[i].mpEmitter->deleteAllParticle();
+                pWind->mWindEff[i].mpEmitter->becomeInvalidEmitter();
+                pWind->mWindEff[i].mpEmitter = NULL;
+            }
+
+            pWind->mWindEff[i].mState = 0;
+        }
+    }
+
+    cXyz pos;
+    dKy_set_eyevect_calc2(pCamera, &pos, fVar17, fVar17);
+
+    for (s32 i = 0; i < (s32)ARRAY_SIZE(pWind->mWindEff); i++) {
+        if (i >= windlineCount && pWind->mWindEff[i].mState == 0) {
+            if (pWind->mWindEff[i].mpEmitter != NULL) {
+                pWind->mWindEff[i].mpEmitter->deleteAllParticle();
+                pWind->mWindEff[i].mpEmitter->becomeInvalidEmitter();
+                pWind->mWindEff[i].mpEmitter = NULL;
+            }
+            continue;
+        }
+
+        WIND_EFF& windEff = pWind->mWindEff[i];
+        switch (windEff.mState) {
+        case 0:
+            if (windPow > 0.3f && particleNum <= 1500 && (((g_Counter.mCounter0 >> 4 & 7) != (i & 3U)) || pWind->mbHasCustomWindPower)) {
+                windEff.mStateTimer = 0.0f;
+                windEff.mAlpha = 0.0f;
+                windEff.field_0x2c = 0;
+
+                if (pWind->mbHasCustomWindPower) {
+                    windEff.mBasePos.set(pPlayer->current.pos);
+                } else {
+                    windEff.mBasePos.set(pos);
+                }
+
+                windEff.mBasePos.y += offsetY;
+
+                windEff.mPos.x = cM_rndFX(posRange);
+                windEff.mPos.y = cM_rndFX(posRange);
+                windEff.mPos.z = cM_rndFX(posRange);
+
+                f32 windScale = posWindScale + posWindScale * cM_rndF(1.0f);
+                windEff.mPos.x -= windVec.x * windScale;
+                windEff.mPos.y -= windVec.y * windScale;
+                windEff.mPos.z -= windVec.z * windScale;
+
+                windEff.field_0x2c = cM_rndF(65535.0f);
+
+                cXyz pos;
+                pos.x = windEff.mBasePos.x + windEff.mPos.x;
+                pos.y = windEff.mBasePos.y + windEff.mPos.y;
+                pos.z = windEff.mBasePos.z + windEff.mPos.z;
+
+                if (pWind->mbHasCustomWindPower != TRUE) {
+                    cXyz checkPos = pos;
+                    checkPos.y += 10000.0f;
+
+                    gndChk.SetPos(&checkPos);
+
+                    f32 gndY = dComIfG_Bgsp()->GroundCross(&gndChk);
+                    if (pos.y < gndY) {
+                        windEff.mPos.y = (gndY + offsetY + cM_rndF(offsetY)) - windEff.mBasePos.y;
+                    }
+                }
+
+                pos.x = windEff.mBasePos.x + windEff.mPos.x;
+                pos.y = windEff.mBasePos.y + windEff.mPos.y;
+                pos.z = windEff.mBasePos.z + windEff.mPos.z;
+
+                windEff.mpEmitter = dComIfGp_particle_set(0x31, &pos);
+                if (windEff.mpEmitter != NULL) {
+                    windEff.mpEmitter->setGlobalAlpha(0);
+                    windEff.mpEmitter->setGlobalScale(JGeometry::TVec3<f32>(fVar23, fVar23, fVar23));
+                    windEff.mState = 1;
+                }
+
+                f32 windVec_absXZ = sqrtf(windVec.x*windVec.x + windVec.z*windVec.z);
+                windEff.mAngleXZ = cM_atan2s(windVec.x, windVec.z);
+                windEff.mAngleY = cM_atan2s(windVec.y, windVec_absXZ);
+
+                windEff.field_0x28 = 0;
+                windEff.field_0x32 = cM_rndF(1.0f) >= 0.0f ? 1 : 0;
+            }
+            break;
+        case 1:
+        case 2:
+            {
+                f32 fVar14 = fVar25 - fVar17 * (1.0f - windPow);
+                windEff.field_0x2c += fVar18; // mSwerveAnimCounter
+                if (i & 1) {
+                    windEff.mAngleY += fVar14 * cM_ssin(windEff.field_0x2c);
+                    windEff.mAngleXZ += fVar14 * cM_ssin(windEff.field_0x2c);
+                } else {
+                    windEff.mAngleY += fVar14 * cM_ssin(windEff.field_0x2c);
+                    windEff.mAngleXZ -= fVar14 * cM_ssin(windEff.field_0x2c);
+                }
+
+                if (windEff.mStateTimer <= 0.4f || windEff.field_0x32 != 1) {
+                    f32 windVec_absXZ = sqrtf(windVec.x*windVec.x + windVec.z*windVec.z);
+                    s16 targetAngleXZ = cM_atan2s(windVec.x, windVec.z);
+                    s16 targetAngleY = cM_atan2s(windVec.y, windVec_absXZ);
+                    cLib_addCalcAngleS(&windEff.mAngleY, targetAngleY, 10, 1000, 1);
+                    cLib_addCalcAngleS(&windEff.mAngleXZ, targetAngleXZ, 10, 1000, 1);
+                } else {
+                    // do the loop-de-loop
+                    windEff.field_0x28 += i * 200 + 3600;
+                    windEff.mAngleY += i * 200 + 3600;
+                    if (windEff.field_0x28 >= 60535)
+                        windEff.field_0x32 = 0;
+                }
+
+                cXyz move;
+                move.x = cM_scos(windEff.mAngleY) * cM_ssin(windEff.mAngleXZ);
+                move.y = cM_ssin(windEff.mAngleY);
+                move.z = cM_scos(windEff.mAngleY) * cM_scos(windEff.mAngleXZ);
+
+                fVar14 = fVar28 - (fVar28 * 0.2f) * (1.0f - windPow);
+                windEff.mPos.x += move.x * fVar14;
+                windEff.mPos.y += move.y * fVar14;
+                windEff.mPos.z += move.z * fVar14;
+
+                cXyz pos;
+                pos.x = windEff.mBasePos.x + windEff.mPos.x;
+                pos.y = windEff.mBasePos.y + windEff.mPos.y;
+                pos.z = windEff.mBasePos.z + windEff.mPos.z;
+                windEff.mpEmitter->setGlobalTranslation(pos);
+
+                // so much stuff is missing in here
+
+                fVar14 = 0.18f * (i / 15);
+                f32 distance = pos.getSquareDistance(pCamera->mLookat.mEye) / 200.0f;
+                if (distance > 1.0f) {
+                    distance = 1.0f;
+                }
+
+                f32 fVar15 = 1.0f;
+                windEff.mpEmitter->setGlobalAlpha(fVar15 * 255.0f * windEff.mAlpha);
+                if (windEff.mState == 1) {
+                    cLib_addCalc(&windEff.mStateTimer, 1.0f, 0.3f, fVar14 * 0.1f, 0.01f);
+                    if (windEff.mStateTimer >= 1.0f)
+                        windEff.mState = 2;
+                    if (windEff.mStateTimer > 0.5f)
+                        cLib_addCalc(&windEff.mAlpha, 1.0f, 0.5f, 0.05f, 0.001f);
+                } else {
+                    cLib_addCalc(&windEff.mStateTimer, 0.0f, 0.4f, fVar14 * (i * 0.01f + 0.1f), 0.01f);
+                    if (windEff.mStateTimer <= 0.0f) {
+                        windEff.mpEmitter->deleteAllParticle();
+                        windEff.mpEmitter->becomeInvalidEmitter();
+                        windEff.mpEmitter = NULL;
+                        windEff.mState = 0;
+                        if (pWind->mbHasCustomWindPower == TRUE)
+                            windEff.mState = 4;
+                    }
+                    if (windEff.mStateTimer < 0.5f)
+                        cLib_addCalc(&windEff.mAlpha, 0.0f, 0.5f, 0.05f, 0.001f);
+                }
+            }
+
+            break;
+        case 3:
+            if (!pWind->mbHasCustomWindPower)
+                windEff.mState = 0;
+            break;
+        }
+    }
+
+    dKyr_kamome_move();
 }
 
 /* 8008C624-8008C888       .text dKyr_lenzflare_move__Fv */

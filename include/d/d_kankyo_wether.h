@@ -303,14 +303,14 @@ struct KAMOME_EFF {
     KAMOME_EFF();
     ~KAMOME_EFF();
 
-    /* 0x00 */ JPABaseEmitter* mpBaseEmitter;
+    /* 0x00 */ JPABaseEmitter* mpEmitter;
     /* 0x04 */ cXyz mPos;
-    /* 0x10 */ s16 field_0x10;
-    /* 0x12 */ s16 field_0x12;
-    /* 0x14 */ f32 field_0x14;
-    /* 0x18 */ f32 field_0x18;
-    /* 0x1C */ s16 field_0x1c;
-    /* 0x1E */ u8 field_0x1e;
+    /* 0x10 */ s16 mAngleY;
+    /* 0x12 */ s16 mAngleX;
+    /* 0x14 */ f32 mAngleYSpeed;
+    /* 0x18 */ f32 mScale;
+    /* 0x1C */ s16 mTimer;
+    /* 0x1E */ u8 mStatus;
 };
 
 struct WIND_EFF {
@@ -319,7 +319,7 @@ struct WIND_EFF {
 
     /* 0x00 */ JPABaseEmitter* mpEmitter;
     /* 0x04 */ cXyz mBasePos;
-    /* 0x10 */ cXyz mRandomPos;
+    /* 0x10 */ cXyz mPos;
     /* 0x1C */ f32 mStateTimer;
     /* 0x20 */ f32 mAlpha;
     /* 0x24 */ int mState;

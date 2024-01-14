@@ -33,6 +33,8 @@ public:
     void forceDeleteEmitter(JPABaseEmitter*);
     void forceDeleteAllEmitter();
     void clearResourceManager(u8);
+    u32 getParticleNumber() { return mPtclNum - mPtclPool.getNumLinks(); }
+    u32 getEmitterNumber() { return mEmtrNum - mEmtrPool.getNumLinks(); }
 
 public:
     /* 0x00 */ JSUList<JPABaseParticle> mPtclPool;
