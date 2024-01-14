@@ -105,7 +105,6 @@ void dKyr_set_btitex(GXTexObj* i_obj, ResTIMG* i_img) {
 
 /* 8008AE54-8008B44C       .text dKyr_kamome_move__Fv */
 void dKyr_kamome_move() {
-    /* Nonmatching */
     WINDEFF_SET* pWind = dKy_getEnvlight().mpWind;
     camera_class* pCamera = (camera_class*)dComIfGp_getCamera(0);
 
@@ -195,7 +194,7 @@ void dKyr_kamome_move() {
 
                 dKyr_get_vectle_calc(&oldTarget, &newTarget, &targetRot);
                 JGeometry::TVec3<s16> globalRot(0, 0, 0);
-                globalRot.y = cM_atan2s(targetRot.x, targetRot.z);
+                globalRot.y = (int)cM_atan2s(targetRot.x, targetRot.z);
                 pWind->mKamomeEff[i].mpEmitter->setGlobalRotation(globalRot);
             }
             break;
@@ -742,8 +741,7 @@ bool overhead_bg_chk() {
 
 /* 8008D638-8008DAF0       .text forward_overhead_bg_chk__FP4cXyzf */
 bool forward_overhead_bg_chk(cXyz* pPos, f32 dist) {
-    /* Nonmatching - regalloc */
-    camera_class * pCamera = dComIfGp_getCamera(0);
+    camera_class * pCamera = (camera_class*)dComIfGp_getCamera(0);
     bool ret = false;
 
     dBgS_ObjGndChk_All gndChk;
@@ -1008,9 +1006,8 @@ void wave_move() {
 
                         f32 range = outerRadius - innerRadius;
                         if (range > 0.0f) {
-                            f32 fade = (dist - innerRadius) / range;
-                            if (pPkt->mEff[i].mStrengthEnv > fade)
-                                pPkt->mEff[i].mStrengthEnv = fade;
+                            if (pPkt->mEff[i].mStrengthEnv > (dist - innerRadius) / range)
+                                pPkt->mEff[i].mStrengthEnv = (dist - innerRadius) / range;
                         } else {
                             pPkt->mEff[i].mStrengthEnv = 0.0f;
                         }
@@ -1026,9 +1023,8 @@ void wave_move() {
                     f32 outerRadius = innerRadius + 1000.0f;
                     f32 range = outerRadius - innerRadius;
                     if (range > 0.0f) {
-                        f32 fade = (dist - innerRadius) / range;
-                        if (pPkt->mEff[i].mStrengthEnv > fade)
-                            pPkt->mEff[i].mStrengthEnv = fade;
+                        if (pPkt->mEff[i].mStrengthEnv > (dist - innerRadius) / range)
+                            pPkt->mEff[i].mStrengthEnv = (dist - innerRadius) / range;
                     } else {
                         pPkt->mEff[i].mStrengthEnv = 0.0f;
                     }
@@ -1108,7 +1104,6 @@ BOOL dKyr_poison_live_check() {
 
 /* 80092330-80092448       .text dKyr_poison_light_colision__Fv */
 void dKyr_poison_light_colision() {
-    /* Nonmatching */
     dKankyo_poison_Packet * pPkt = g_env_light.mpPoisonPacket;
     if (!dKyr_poison_live_check())
         return;
