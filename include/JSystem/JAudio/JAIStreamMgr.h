@@ -16,9 +16,29 @@ namespace JASystem {
 
 namespace JAInter {
     class Actor;
+    struct streamUpdate_t {
+        streamUpdate_t() { field_0x14 = 0; }
+        u8 field_0x0;
+        u8 field_0x1;
+        u8 field_0x2;
+        f32 field_0x4;
+        f32 field_0x8;
+        f32 field_0xc;
+        int field_0x10;
+        JAISound* field_0x14;
+    };
+
     class StreamParameter {
     public:
-        /* 0x00 */ u8 field_0x0;
+        /* 0x000 */ u8 field_0x0;
+        /* 0x004 */ int field_0x4;
+        /* 0x008 */ int field_0x8;
+        /* 0x00C */ int field_0xc;
+        /* 0x010 */ int field_0x10;
+        /* 0x014 */ JAInter::MoveParaSet field_0x14[20];
+        /* 0x154 */ JAInter::MoveParaSet* pitch;
+        /* 0x158 */ JAInter::MoveParaSet* pan;
+        /* 0x15C */ streamUpdate_t* field_0x15c;
     };
 
     namespace StreamMgr {
@@ -31,13 +51,24 @@ namespace JAInter {
         void checkRequestStream();
         void checkPlayingStream();
 
+        struct flags_t {
+            u8 flag1 : 1;
+            u8 flag2 : 1;
+            u8 flag3 : 1;
+            u8 flag4 : 1;
+            u8 flag5 : 1;
+            u8 flag6 : 1;
+            u8 flag7 : 1;
+            u8 flag8 : 1;
+        };
+
         extern LinkSound streamControl;
-        extern u8 flags;
-        extern int streamUpdate; // TODO pointer to something, not actually an int
+        extern flags_t flags;
+        extern streamUpdate_t* streamUpdate;
         extern u8* streamList;
         extern u8* initOnCodeStrm;
 
-        inline int getUpdateInfo() { return streamUpdate; }
+        inline streamUpdate_t* getUpdateInfo() { return streamUpdate; }
     }
 
     namespace StreamLib {
@@ -72,27 +103,40 @@ namespace JAInter {
         void __start();
         s32 callBack(void* param_1);
 
+        struct StreamHeader {
+            int field_0x0;
+            int field_0x4;
+            u16 field_0x8;
+            u16 field_0xa;
+            u16 field_0xc;
+            u16 field_0xe;
+            u32 field_0x10;
+            u32 field_0x14;
+            int field_0x18;
+            int field_0x1c;
+        };
+
         extern s16 filter_table[];
         extern s16 table4[];
         extern DVDFileInfo finfo;
-        extern u32 header[];
+        extern StreamHeader header;
         extern char Filename[];
         extern JASystem::Kernel::TSolidHeap streamHeap;
         extern u32 LOOP_BLOCKS;
         extern int LOOP_SAMPLESIZE;
         extern int outputmode;
-        extern int adpcm_remain;
-        extern int adpcm_loadpoint;
-        extern int loadsize;
-        extern int adpcm_buffer;
-        extern int loop_buffer;
-        extern int store_buffer;
+        extern u32 adpcm_remain;
+        extern u32 adpcm_loadpoint;
+        extern u32 loadsize;
+        extern s16* adpcm_buffer;
+        extern s16*** loop_buffer;
+        extern void** store_buffer;
         extern JASystem::TDSPChannel* assign_ch[2];
-        extern int playside;
+        extern u32 playside;
         extern int playback_samples;
         extern int loadup_samples;
         extern u32 adpcmbuf_state;
-        extern int movieframe;
+        extern u32 movieframe;
         extern bool stopflag;
         extern bool stopflag2;
         extern u8 playflag;

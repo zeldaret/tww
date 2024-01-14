@@ -632,7 +632,7 @@ int JAISound::getTrackPortRoute(u8, u8) {
 }
 
 /* 8029AE88-8029AEF8       .text checkSoundHandle__8JAISoundFUlPv */
-int JAISound::checkSoundHandle(u32, void*) {
+u32 JAISound::checkSoundHandle(u32, void*) {
     /* Nonmatching */
 }
 
