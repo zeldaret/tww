@@ -182,14 +182,14 @@ struct CLOUD_EFF {
     CLOUD_EFF();
     ~CLOUD_EFF();
 
-    /* 0x00 */ u8 mStatus;
+    /* 0x00 */ s8 mStatus;
     /* 0x04 */ cXyz mPos;
     /* 0x10 */ cXyz mBasePos;
     /* 0x1C */ cXyz mPntWindVel;
     /* 0x28 */ cXyz mVelRndm;
     /* 0x34 */ f32 field_0x34;
     /* 0x38 */ f32 mWindSpeed;
-    /* 0x3C */ s16 mAnimCounter;
+    /* 0x3C */ u16 mAnimCounter;
     /* 0x40 */ f32 mAlpha;
     /* 0x44 */ f32 mSize;
     /* 0x48 */ f32 mInitialSize;
@@ -203,7 +203,7 @@ public:
     virtual ~dKankyo_cloud_Packet();
 
     /* 0x0010 */ u8* mpTexture;
-    /* 0x0014 */ int mCount;
+    /* 0x0014 */ s32 mCount;
     /* 0x0018 */ CLOUD_EFF mEff[100];
 };
 
@@ -363,6 +363,7 @@ void squal_proc();
 void dKyw_pntwind_set(WIND_INFLUENCE*);
 void dKyw_pntwind_cut(WIND_INFLUENCE*);
 void dKyw_pwind_cylinder_set(WIND_INFLUENCE*);
+cXyz dKyw_pntwind_get_vecpow(cXyz* pPos);
 void dKyw_evt_wind_set(s16 i_windX, s16 i_windY);
 void dKyw_evt_wind_set_go();
 void dKyw_get_AllWind_vec(cXyz* param_0, cXyz* i_direction, f32* i_power);

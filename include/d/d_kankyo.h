@@ -237,7 +237,7 @@ public:
     /* 0x9F8 */ dKankyo_housi_Packet* mpHousiPacket;
     /* 0x9FC */ u8 mMoyaInitialized;
     /* 0x9FD */ u8 mMoyaMode;
-    /* 0xA00 */ int mMoyaCount;
+    /* 0xA00 */ s32 mMoyaCount;
     /* 0xA04 */ dKankyo_cloud_Packet* mpMoyaPacket;
     /* 0xA08 */ u8 mVrkumoStatus;
     /* 0xA0C */ int mVrkumoCount;
