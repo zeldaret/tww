@@ -124,10 +124,10 @@ public:
 
     /* 0x04 */ bool field_0x04;
     /* 0x05 */ bool field_0x05;
-    /* 0x08 */ u8 field_0x08[0x0C - 0x08];
+    /* 0x08 */ f32 field_0x08;
     /* 0x0C */ f32 field_0x0C;
     /* 0x10 */ f32 field_0x10;
-    /* 0x14 */ u8 field_0x14[0x20 - 0x14];
+    /* 0x14 */ cXyz field_0x14;
     /* 0x20 */ const csXyz* field_0x20;
     /* 0x24 */ JPABaseEmitter* mpEmitter;
 };  // Size: 0x28
@@ -232,7 +232,7 @@ public:
     void draw();
     ~daPy_swBlur_c() {}
 
-    /* 0x010 */ ResTIMG* mpBlurTex;
+    /* 0x010 */ ResTIMG* mpTex;
     /* 0x014 */ int field_0x014;
     /* 0x018 */ int field_0x018;
     /* 0x01C */ int mBlurColorType;
@@ -1546,7 +1546,7 @@ public:
         ModeFlg_CAUGHT = 0x10000000,
         ModeFlg_SUBJECT = 0x20000000,
         ModeFlg_40000000 = 0x40000000,
-        ModeFlg_BT = 0x80000000,
+        ModeFlg_PARRY = 0x80000000,
     };
     
     typedef BOOL (daPy_lk_c::*ProcFunc)();
@@ -2315,7 +2315,7 @@ public:
     BOOL procFoodThrow();
     BOOL procFoodSet_init();
     BOOL procFoodSet();
-    void setSwordModel(int);
+    void setSwordModel(BOOL);
     void setLightSaver();
     BOOL checkDemoShieldNoDraw();
     BOOL checkDemoSwordNoDraw(int);
@@ -2597,16 +2597,16 @@ public:
     /* 0x2EC8 */ J3DAnmTextureSRTKey* mpGicer01Btk;
     /* 0x2ECC */ JKRSolidHeap* m2ECC;
     /* 0x2ED0 */ void* m_item_bck_buffer;
-    /* 0x2ED4 */ J3DAnmTextureSRTKey* mpHeldItemModelAnimTexEx;
-    /* 0x2ED8 */ J3DAnmTextureSRTKey* mpSwordAnimBTK;
-    /* 0x2EDC */ J3DAnmTevRegKey* mpHeldItemAnimBRK;
+    /* 0x2ED4 */ J3DAnmTextureSRTKey* mpHeldItemBtk;
+    /* 0x2ED8 */ J3DAnmTextureSRTKey* mpSwordBtk;
+    /* 0x2EDC */ J3DAnmTevRegKey* mpHeldItemBrk;
     /* 0x2EE0 */ J3DModel* mpBottleContentsModel;
     /* 0x2EE4 */ J3DModel* mpBottleCapModel;
     /* 0x2EE8 */ J3DModel* mpSwordModel1;
     /* 0x2EEC */ J3DModel* mpSwordTipStabModel;
-    /* 0x2EF0 */ J3DAnmColor* m2EF0;
-    /* 0x2EF4 */ J3DAnmTextureSRTKey* m2EF4;
-    /* 0x2EF8 */ J3DAnmTevRegKey* m2EF8;
+    /* 0x2EF0 */ J3DAnmColor* mpCutfBpk;
+    /* 0x2EF4 */ J3DAnmTextureSRTKey* mpCutfBtk;
+    /* 0x2EF8 */ J3DAnmTevRegKey* mpCutfBrk2EF8;
     /* 0x2EFC */ mDoExt_brkAnm m2EFC;
     /* 0x2F14 */ J3DModel* mpSuimenMunyaModel;
     /* 0x2F18 */ J3DAnmTextureSRTKey* mpSuimenMunyaBtk;

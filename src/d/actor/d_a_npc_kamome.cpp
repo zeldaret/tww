@@ -445,8 +445,8 @@ BOOL daNpc_kam_c::init() {
         mEventIdxs[i] = dComIfGp_evmng_getEventIdx(event_name_tbl[i], 0xFF);
     }
     
-    mEvtInfo.mpCheckCB = &daNpc_kam_XyCheckCB;
-    mEvtInfo.mpEventCB = &daNpc_kam_XyEventCB;
+    mEvtInfo.setXyCheckCB(daNpc_kam_XyCheckCB);
+    mEvtInfo.setXyEventCB(daNpc_kam_XyEventCB);
     
     return TRUE;
 }

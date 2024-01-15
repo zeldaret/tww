@@ -225,4 +225,16 @@ inline void* JKRGetTypeResource(u32 tag, const char* name, JKRArchive* arc) {
     return JKRArchive::getGlbResource(tag, name, arc);
 }
 
+inline u32 JKRReadIdxResource(void* buffer, u32 bufferSize, u32 index, JKRArchive* arc) {
+    return arc->readIdxResource(buffer, bufferSize, index);
+}
+
+inline u32 JKRReadIdResource(void* buffer, u32 bufferSize, u16 id, JKRArchive* arc) {
+    return arc->readResource(buffer, bufferSize, id);
+}
+
+inline u32 JKRReadResource(void* buffer, u32 bufferSize, u16 id, JKRArchive* arc) {
+    return arc->readResource(buffer, bufferSize, id);
+}
+
 #endif

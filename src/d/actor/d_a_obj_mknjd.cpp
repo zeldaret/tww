@@ -283,8 +283,8 @@ int daObjMknjD::Act_c::Create() {
 
     if (checkItemGet(mGiveItemNo, 1) == 0) {
         m043F = 8;
-        mEvtInfo.mpCheckCB = daObjMknjD_XyCheckCB;
-        mEvtInfo.mpEventCB = daObjMknjD_XyEventCB;
+        mEvtInfo.setXyCheckCB(daObjMknjD_XyCheckCB);
+        mEvtInfo.setXyEventCB(daObjMknjD_XyEventCB);
     }
     else {
         m043F = 0;
@@ -710,7 +710,7 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
 
     switch (m043F) {
         case 0:
-            mEvtInfo.onCondition(1);
+            mEvtInfo.onCondition(dEvtCnd_CANTALK_e);
 
             if (mEvtInfo.checkCommandTalk()) {
                 m0500 = 1;
@@ -835,8 +835,8 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
 
             break;
         case 8:
-            mEvtInfo.onCondition(1);
-            mEvtInfo.onCondition(32);
+            mEvtInfo.onCondition(dEvtCnd_CANTALK_e);
+            mEvtInfo.onCondition(dEvtCnd_CANTALKITEM_e);
 
             if (mEvtInfo.checkCommandTalk()) {
                 if (dComIfGp_event_chkTalkXY()) {

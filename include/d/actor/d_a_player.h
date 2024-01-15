@@ -5,6 +5,9 @@
 #include "d/d_particle.h"
 #include "d/d_cc_d.h"
 
+inline u8 dComIfGs_getSelectEquip(int i_no);
+inline u8 dComIfGp_getMiniGameType();
+
 class daPy_mtxFollowEcallBack_c : public dPa_levelEcallBack {
 public:
     void execute(JPABaseEmitter*);
@@ -433,9 +436,11 @@ public:
     bool checkArrowShoot() const { return checkResetFlg0(daPyRFlg0_ARROW_SHOOT); }
     
     bool checkGrabWear() const { return field_0x2b0 < 0.0f; }
+    bool checkNormalSwordEquip() const {
+        return dComIfGs_getSelectEquip(0) == SWORD || dComIfGp_getMiniGameType() == 2;
+    }
     void setFace(daPy_FACE face) { mFace = face; }
     
-    void checkNormalSwordEquip() const {}
     void checkMasterSwordEquip() const {}
     void checkFinalMasterSwordEquip() const {}
     void checkBowMiniGame() const {}

@@ -14,6 +14,12 @@ struct actor_method_class {
     /* 0x14 */ u8 field_0x14[0xC];  // Likely padding
 };
 
+// Unclear what this is. Only used by one actor (PLAYER)
+struct actor_method_class2 {
+    /* 0x00 */ actor_method_class base;
+    /* 0x20 */ u32 field_0x20;
+};
+
 enum fopAc_Status_e {
     // Note: The lowest 5 bits of the status field (& 0x1F) act as an index controlling the map icon type.
     fopAcStts_SHOWMAP_e     = 0x00000020,
@@ -123,6 +129,7 @@ enum dEvt_Command_e {
 enum dEvt_Condition_e {
     dEvtCnd_NONE_e        = 0x0000,
     dEvtCnd_CANTALK_e     = 0x0001,
+    dEvtCnd_UNK2_e        = 0x0002,
     dEvtCnd_CANDOOR_e     = 0x0004,
     dEvtCnd_CANGETITEM_e  = 0x0008,
     dEvtCnd_CANTALKITEM_e = 0x0020,
@@ -132,46 +139,59 @@ enum dEvt_Condition_e {
 // TODO: move to d_event.h
 class dEvt_info_c {
 public:
+    typedef s16 (*CallbackFunc)(void*, int);
+
     dEvt_info_c();
     virtual ~dEvt_info_c() {}
     void setEventName(char*);
     char* getEventName();
-    void beforeProc();
 
-    void setCommand(u16 command) { mCommand = command; }
-    void setMapToolId(u8 id) { mMapToolId = id; }
-    void setEventId(s16 id) { mEventId = id; }
-    void setCondition(u16 condition) { mCondition = condition; }
-    u16 getCondition() { return mCondition; }
-    //void setArchiveName(char* name) { mArchiveName = name; }
-    u8 getMapToolId() { return mMapToolId; }
+    void setToolId(u8 id) { mMapToolId = id; }
     s16 getEventId() { return mEventId; }
-    s16 getIdx() { return mIndex; }
-    void setIdx(u8 i_idx) { mIndex = i_idx; }
-    //char* getArchiveName() { return mArchiveName; }
+    void setEventId(s16 id) { mEventId = id; }
+
+    u16 getCondition() { return mCondition; }
+    void setCondition(u16 condition) { mCondition = condition; }
     BOOL chkCondition(u16 condition) { return (mCondition & condition) == condition; }
     void onCondition(u16 cond) { mCondition |= cond; }
-    void offCondition(u16 cond) { mCondition &= ~cond; }
-    s16 runPhotoEventCB(void* ac, int flag) {
-        if (mpPhotoCB == NULL)
-            return -1;
-        return mpPhotoCB(ac, flag);
-    }
+    void beforeProc() { mCondition = dEvtCnd_NONE_e; }
 
     BOOL checkCommandTalk() { return mCommand == dEvtCmd_INTALK_e; }
     BOOL checkCommandItem() { return mCommand == dEvtCmd_INGETITEM_e; }
     BOOL checkCommandDoor() { return mCommand == dEvtCmd_INDOOR_e; }
     BOOL checkCommandDemoAccrpt() { return mCommand == dEvtCmd_INDEMO_e; }
     BOOL checkCommandCatch() { return mCommand == dEvtCmd_INCATCH_e; }
+    u16 getCommand() { return mCommand; }
+    void setCommand(u16 command) { mCommand = command; }
 
+    void setXyEventCB(CallbackFunc cb) { mpEventCB = cb; }
+    s16 runXyEventCB(void* ac, int flag) {
+        if (mpEventCB == NULL)
+            return -1;
+        return mpEventCB(ac, flag);
+    }
+    void setXyCheckCB(CallbackFunc cb) { mpCheckCB = cb; }
+    s16 runXyCheckCB(void* ac, int flag) {
+        if (mpCheckCB == NULL)
+            return -1;
+        return mpCheckCB(ac, flag);
+    }
+    void setPhotoEventCB(CallbackFunc cb) { mpPhotoCB = cb; }
+    s16 runPhotoEventCB(void* ac, int flag) {
+        if (mpPhotoCB == NULL)
+            return -1;
+        return mpPhotoCB(ac, flag);
+    }
+
+public:
     /* 0x04 */ u16 mCommand;
     /* 0x06 */ u16 mCondition;
     /* 0x08 */ s16 mEventId;
     /* 0x0A */ u8 mMapToolId;
     /* 0x0B */ s8 mIndex;
-    /* 0x0C */ s16 (*mpEventCB)(void*, int);
-    /* 0x10 */ s16 (*mpCheckCB)(void*, int);
-    /* 0x14 */ s16 (*mpPhotoCB)(void*, int);
+    /* 0x0C */ CallbackFunc mpEventCB;
+    /* 0x10 */ CallbackFunc mpCheckCB;
+    /* 0x14 */ CallbackFunc mpPhotoCB;
 };  // Size = 0x18
 
 struct actor_place {

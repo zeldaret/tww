@@ -209,7 +209,7 @@ BOOL daNh_c::checkBinCatch() {
         l_HIO.prm.field_0x10, l_HIO.prm.field_0x3c,
         1
     );
-    mEvtInfo.onCondition(0x40);
+    mEvtInfo.onCondition(dEvtCnd_CANCATCH_e);
     
     return FALSE;
 }

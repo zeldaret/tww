@@ -78,7 +78,7 @@ s32 fopAc_Execute(void* pProc) {
     CHECK_VEC3_RANGE(0x286, actor->current.pos);
 
     if (fopAcM_checkStatus(actor, fopAcStts_NOPAUSE_e) || (!dMenu_flag() && !dScnPly_ply_c::isPause())) {
-        actor->mEvtInfo.setCondition(dEvtCnd_NONE_e);
+        actor->mEvtInfo.beforeProc();
 
         s32 moveApproval = dComIfGp_event_moveApproval(actor);
 

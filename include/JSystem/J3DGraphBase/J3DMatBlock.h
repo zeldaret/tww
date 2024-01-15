@@ -566,7 +566,7 @@ struct J3DZMode {
     J3DZMode() { mZModeID = j3dDefaultZModeID; }
     explicit J3DZMode(const J3DZModeInfo& info) { setZModeInfo(info); }
 
-    u8 getCompareEnaable() const { return j3dZModeTable[mZModeID * 3 + 0]; }
+    u8 getCompareEnable() const { return j3dZModeTable[mZModeID * 3 + 0]; }
     u8 getFunc() const { return j3dZModeTable[mZModeID * 3 + 1]; }
     u8 getUpdateEnable() const { return j3dZModeTable[mZModeID * 3 + 2]; }
 
@@ -575,8 +575,8 @@ struct J3DZMode {
         mZModeID = calcZModeID(compareEn, info.mFunc, info.mUpdateEnable);
     }
 
-    void load() {
-        J3DGDSetZMode(getCompareEnaable(), GXCompare(getFunc()), getUpdateEnable());
+    void load() const {
+        J3DGDSetZMode(getCompareEnable(), GXCompare(getFunc()), getUpdateEnable());
     }
 
     void setCompareEnable(u8 i_compare) {

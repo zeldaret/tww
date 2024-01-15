@@ -40,10 +40,10 @@ void daPy_lk_c::setTactModel() {
     J3DModelData* modelData = initModel(&mpHeldItemModel, LINK_BDL_TAKT, 0x37221222);
     u8* buffer = new(0x20) u8[0x400];
     dComIfGp_getAnmArchive()->readIdxResource(buffer, 0x400, LKANM_BRK_TTAKT);
-    mpHeldItemAnimBRK = (J3DAnmTevRegKey*)J3DAnmLoaderDataBase::load(buffer);
-    mpHeldItemAnimBRK->setFrame(0.0f);
-    mpHeldItemAnimBRK->searchUpdateMaterialID(modelData);
-    modelData->entryTevRegAnimator(mpHeldItemAnimBRK);
+    mpHeldItemBrk = (J3DAnmTevRegKey*)J3DAnmLoaderDataBase::load(buffer);
+    mpHeldItemBrk->setFrame(0.0f);
+    mpHeldItemBrk->searchUpdateMaterialID(modelData);
+    modelData->entryTevRegAnimator(mpHeldItemBrk);
     
     mDoExt_setCurrentHeap(oldHeap);
 }

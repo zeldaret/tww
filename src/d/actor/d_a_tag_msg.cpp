@@ -200,7 +200,7 @@ static BOOL daTag_Msg_actionHunt(daTag_Msg_c* a_this) {
         if (a_this->getType2() & 1) {
             fopAcM_orderSpeakEvent(a_this);
         }
-        a_this->mEvtInfo.mCondition |= dEvtCnd_CANTALK_e;
+        a_this->mEvtInfo.onCondition(dEvtCnd_CANTALK_e);
     }
     return TRUE;
 }

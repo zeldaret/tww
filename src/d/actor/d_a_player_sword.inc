@@ -11,10 +11,113 @@
  */
 
 #include "d/actor/d_a_player_main.h"
+#include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
 
 /* 80154B80-80154FBC       .text setSwordModel__9daPy_lk_cFi */
-void daPy_lk_c::setSwordModel(int) {
-    /* Nonmatching */
+void daPy_lk_c::setSwordModel(BOOL r28) {
+    struct sword_model_tbl_s {
+        /* 0x00 */ u16 bladeModel;
+        /* 0x02 */ u16 glowModel;
+        /* 0x04 */ u16 glowBtk;
+        /* 0x06 */ u16 glowBrk;
+        /* 0x08 */ u16 tipStabModel;
+        /* 0x0A */ u16 tipStabBpk;
+        /* 0x0C */ u16 tipStabBtk;
+        /* 0x0E */ u16 tipStabBrk;
+    };
+    static const sword_model_tbl_s sword_model_tbl[] = {
+	    {
+            LINK_BDL_SWA,
+            LINK_BDL_YHSLS00,
+            LKANM_BTK_YHSLS00,
+            LKANM_BRK_YHSLS00,
+            LINK_BDL_CUTFH,
+            LKANM_BPK_CUTFH,
+            LKANM_BTK_CUTFH,
+            LKANM_BRK_CUTFH
+        },
+	    {
+            LINK_BDL_SWMS,
+            LINK_BDL_YMSLI00,
+            LKANM_BTK_YMSLI00,
+            LKANM_BRK_YMSLI00,
+            LINK_BDL_CUTFM,
+            LKANM_BPK_CUTFM,
+            LKANM_BTK_CUTFM,
+            LKANM_BRK_CUTFM
+        },
+    };
+    
+    u8* buffer;
+    
+    J3DAnmTransform* bck = checkNormalSwordEquip() ? getItemAnimeResource(LKANM_BCK_CUTAA) : getItemAnimeResource(LKANM_BCK_CUTAMS);
+    
+    mHeldItemType = 0x103;
+    JKRHeap* oldHeap = setItemHeap();
+    
+    const sword_model_tbl_s& model_tbl = checkNormalSwordEquip() ? sword_model_tbl[0] : sword_model_tbl[1];
+    J3DModelData* modelData = initModel(&mpHeldItemModel, model_tbl.bladeModel, 0x37221222);
+    BOOL ret = mSwordAnim.init(modelData, bck, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false);
+    if (!ret) { JUT_ASSERT(86, 0); }
+    
+    if (!checkNormalSwordEquip()) {
+        buffer = new(0x20) u8[0x400];
+        JKRReadIdxResource(buffer, 0x400, LKANM_BTK_TSWMS, dComIfGp_getAnmArchive());
+        mpHeldItemBtk = static_cast<J3DAnmTextureSRTKey*>(J3DAnmLoaderDataBase::load(buffer));
+        mpHeldItemBtk->setFrame(0.0f);
+        mpHeldItemBtk->searchUpdateMaterialID(modelData);
+        modelData->entryTexMtxAnimator(mpHeldItemBtk);
+    }
+    
+    mSwBlur.mpPosBuffer = new(0x20) u8[0x4800];
+    modelData = initModel(&mpSwordModel1, model_tbl.glowModel, 0x13000222);
+    
+    buffer = new(0x20) u8[0x400];
+    JKRReadIdxResource(buffer, 0x400, model_tbl.glowBtk, dComIfGp_getAnmArchive());
+    mpSwordBtk = static_cast<J3DAnmTextureSRTKey*>(J3DAnmLoaderDataBase::load(buffer));
+    mpSwordBtk->setFrame(0.0f);
+    mpSwordBtk->searchUpdateMaterialID(modelData);
+    modelData->entryTexMtxAnimator(mpSwordBtk);
+    
+    buffer = new(0x20) u8[0x400];
+    JKRReadIdxResource(buffer, 0x400, model_tbl.glowBrk, dComIfGp_getAnmArchive());
+    mpHeldItemBrk = static_cast<J3DAnmTevRegKey*>(J3DAnmLoaderDataBase::load(buffer));
+    mpHeldItemBrk->setFrame(0.0f);
+    mpHeldItemBrk->searchUpdateMaterialID(modelData);
+    modelData->entryTevRegAnimator(mpHeldItemBrk);
+    
+    modelData = initModel(&mpSwordTipStabModel, model_tbl.tipStabModel, 0x13000223);
+    
+    buffer = new(0x20) u8[0x400];
+    JKRReadIdxResource(buffer, 0x400, model_tbl.tipStabBtk, dComIfGp_getAnmArchive());
+    mpCutfBtk = static_cast<J3DAnmTextureSRTKey*>(J3DAnmLoaderDataBase::load(buffer));
+    mpCutfBtk->setFrame(0.0f);
+    mpCutfBtk->searchUpdateMaterialID(modelData);
+    modelData->entryTexMtxAnimator(mpCutfBtk);
+    
+    buffer = new(0x20) u8[0x400];
+    JKRReadIdxResource(buffer, 0x400, model_tbl.tipStabBrk, dComIfGp_getAnmArchive());
+    mpCutfBrk2EF8 = static_cast<J3DAnmTevRegKey*>(J3DAnmLoaderDataBase::load(buffer));
+    mpCutfBrk2EF8->setFrame(0.0f);
+    mpCutfBrk2EF8->searchUpdateMaterialID(modelData);
+    modelData->entryTevRegAnimator(mpCutfBrk2EF8);
+    
+    buffer = new(0x20) u8[0x400];
+    JKRReadIdxResource(buffer, 0x400, model_tbl.tipStabBpk, dComIfGp_getAnmArchive());
+    mpCutfBpk = static_cast<J3DAnmColor*>(J3DAnmLoaderDataBase::load(buffer));
+    mpCutfBpk->setFrame(0.0f);
+    mpCutfBpk->searchUpdateMaterialID(modelData);
+    modelData->entryMatColorAnimator(mpCutfBpk);
+    
+    mDoExt_setCurrentHeap(oldHeap);
+    mDoAud_bgmSetSwordUsing(1);
+    m355C = 0;
+    
+    if (r28) {
+        onNoResetFlg1(daPyFlg1_UNK200000);
+        mpSwordBtk->setFrame(mpSwordBtk->getFrameMax() - 0.001f);
+    }
 }
 
 /* 80154FBC-80155490       .text setLightSaver__9daPy_lk_cFv */

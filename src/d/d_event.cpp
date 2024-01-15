@@ -618,12 +618,12 @@ u8 dEvt_control_c::getTactFreeCStick(int which) {
 
 /* 80071624-80071658       .text __ct__11dEvt_info_cFv */
 dEvt_info_c::dEvt_info_c() {
-    mCommand = 0;
-    mCondition = 0;
+    mCommand = dEvtCmd_NONE_e;
+    mCondition = dEvtCnd_NONE_e;
     mEventId = -1;
-    mMapToolId = 0xff;
-    mpEventCB = 0;
-    mpCheckCB = 0;
+    mMapToolId = -1;
+    mpEventCB = NULL;
+    mpCheckCB = NULL;
 }
 
 /* 80071658-800716AC       .text setEventName__11dEvt_info_cFPc */

@@ -525,8 +525,8 @@ void daObjTpost_c::eventOrder() {
     };
 
     if(field_0x8F7 == 1 || field_0x8F7 == 2) {
-        mEvtInfo.onCondition(1);
-        mEvtInfo.onCondition(0x20);
+        mEvtInfo.onCondition(dEvtCnd_CANTALK_e);
+        mEvtInfo.onCondition(dEvtCnd_CANTALKITEM_e);
 
         if(field_0x8F7 == 1) {
             fopAcM_orderSpeakEvent(this);

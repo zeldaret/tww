@@ -142,7 +142,7 @@ dAttList_c* dAttention_c::getActionBtnXYZ_local(int button) {
     dAttList_c* list = GetLockonList(0);
     if (list != NULL && list->getActor() != NULL && list->mType == 1 && LockonTruth() != 0) {
         fopAc_ac_c* actor = list->getActor();
-        if ((actor->mEvtInfo.mCondition & dEvtCnd_CANTALKITEM_e) == dEvtCnd_CANTALKITEM_e) {
+        if (actor->mEvtInfo.chkCondition(dEvtCnd_CANTALKITEM_e)) {
             s16 rt;
             if (actor->mEvtInfo.mpCheckCB == NULL)
                 rt = 1;
@@ -161,7 +161,7 @@ dAttList_c* dAttention_c::getActionBtnXYZ_local(int button) {
         for (s32 i = 0; i < mActionNum; i++) {
             if (mActionList[i].mType == 3) {
                 fopAc_ac_c* actor = mActionList[i].getActor();
-                if ((actor->mEvtInfo.mCondition & dEvtCnd_CANTALKITEM_e) == dEvtCnd_CANTALKITEM_e) {
+                if (actor->mEvtInfo.chkCondition(dEvtCnd_CANTALKITEM_e)) {
                     s16 rt;
                     if (actor->mEvtInfo.mpCheckCB == NULL)
                         rt = 1;

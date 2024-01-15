@@ -1038,7 +1038,7 @@ BOOL daTbox_c::actionOpenWait() {
     }
     else {
         if (boxCheck()) {
-            mEvtInfo.onCondition(0x04);
+            mEvtInfo.onCondition(dEvtCnd_CANDOOR_e);
 
             if (getShapeType() == 0) {
                 mEvtInfo.setEventName("DEFAULT_TREASURE_A");
@@ -1063,7 +1063,7 @@ BOOL daTbox_c::actionSwOnWait() {
     else {
         if (dComIfGs_isSwitch(getSwNo(), mRoomNo)) {
             fopAcM_orderOtherEvent2(this, "DEFAULT_TREASURE_APPEAR", 1);
-            mEvtInfo.mCondition |= 2;
+            mEvtInfo.onCondition(dEvtCnd_UNK2_e);
         }
     }
 
@@ -1095,7 +1095,7 @@ BOOL daTbox_c::actionGenocide() {
             }
             else {
                 fopAcM_orderOtherEvent2(this, "DEFAULT_TREASURE_APPEAR", 1);
-                mEvtInfo.mCondition |= 2;
+                mEvtInfo.onCondition(dEvtCnd_UNK2_e);
 
                 dComIfGs_onSwitch(getSwNo(), mRoomNo);
             }

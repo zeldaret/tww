@@ -39,6 +39,7 @@ public:
     JPABaseParticle() : mLink(this), mCurFrame(0.0f) {}
     void setOffsetPosition(f32 x, f32 y, f32 z) { mGlobalPosition.set(x, y, z); }
     void setOffsetPosition(const JGeometry::TVec3<f32>& pos) { mGlobalPosition.set(pos); }
+    void getGlobalPosition(JGeometry::TVec3<f32>& out) const { out.set(mGlobalPosition); }
 
     bool checkStatus(u32 flag) { return mStatus & flag; }
     bool isInvisibleParticle() { return checkStatus(JPAPtclStts_Invisible); }
@@ -50,7 +51,6 @@ public:
     void getAge() const {}
     void getDrawParamCPtr() {}
     void getDrawParamPPtr() {}
-    void getGlobalPosition(JGeometry::TVec3<f32>&) const {}
     void getHeight() {}
     void getLifeTime() const {}
     void getLocalPosition(JGeometry::TVec3<f32>&) const {}

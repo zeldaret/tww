@@ -29,73 +29,70 @@
 #include "d/actor/d_a_boko.h"
 #include "SSystem/SComponent/c_counter.h"
 
-#include "d/actor/d_a_player_main_data.inc"
-
-#include "d/actor/d_a_player_HIO.inc"
-
 Vec dummy_3569;
 JGeometry::TVec3<f32> l_hammer_splash_particle_scale(0.00002f, 0.00002f, 0.00002f);
-
-GXColor l_freeze_fade_color = {0xFF, 0xFF, 0xFF, 0xFF};
 
 cXyz l_debug_keep_pos;
 csXyz l_debug_current_angle;
 csXyz l_debug_shape_angle;
 
-u8 daPy_matAnm_c::m_maba_flg;
-u8 daPy_matAnm_c::m_eye_move_flg;
-u8 daPy_matAnm_c::m_maba_timer;
-u8 daPy_matAnm_c::m_morf_frame;
+#include "d/actor/d_a_player_main_data.inc"
 
-s16 daPy_dmEcallBack_c::m_timer = 0;
-u16 daPy_dmEcallBack_c::m_type = 3;
+#include "d/actor/d_a_player_HIO.inc"
 
-u8 right_dir_4883[0xC];
-u8 texObj_5157[0x20];
+static u8 l_sightDL[] ALIGN_DECL(32) = {
+    0x10, 0x00, 0x00, 0x10, 0x40, 0xFF, 0xFF, 0x42, 0x00, 0x00, 0x00, 0x00, 0xF3, 0xCF, 0x00,
+    0x10, 0x00, 0x00, 0x10, 0x18, 0x3C, 0xF3, 0xCF, 0x00,
+    0x61, 0x28, 0x38, 0x03, 0xC0,
+    0x61, 0xC0, 0x08, 0x42, 0x8F,
+    0x61, 0xC1, 0x08, 0xE6, 0x70,
+    0x61, 0x43, 0x00, 0x00, 0x01,
+    0x61, 0x40, 0x00, 0x00, 0x06,
+    0x61, 0x41, 0x00, 0x04, 0xAD,
+    0x61, 0xF3, 0x64, 0x00, 0x00,
+    0x10, 0x00, 0x00, 0x10, 0x3F, 0x00, 0x00, 0x00, 0x01,
+    0x10, 0x00, 0x00, 0x10, 0x09, 0x00, 0x00, 0x00, 0x00,
+    0x61, 0x00, 0x00, 0x00, 0x01,
+    0x98, 0x00, 0x04, 0x01, 0x01, 0x00, 0x01,
+    0x01, 0xFF, 0x01, 0x00, 0x00, 0x01, 0x01, 0xFF, 0x00, 0x01, 0x00, 0xFF, 0xFF,
+    
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00,
+};
 
-daPy_waterDropPcallBack_c daPy_waterDropEcallBack_c::m_pcallback;
+static Vec waterfall_ripple_scale_5702 = {0.75f, 0.75f, 0.75f};
+static Vec grass_scale_6038 = {1.5f, 1.5f, 1.5f};
+static Vec smoke_scale_6039 = {1.25f, 1.25f, 1.25f};
+static Vec eff_scale_24884 = {1.5f, 1.5f, 1.5f};
+static Quaternion norm_quat_25648 = {0.0f, 0.0f, 0.0f, 1.0f};
+static Vec top_vec_29499 = {0.0f, 70.0f, 0.0f};
 
-u8 normal_ripple_scale_5638[0xC];
-u8 small_ripple_scale_5641[0xC];
-u8 waterfall_splash_trans_5699[0xC];
-u8 run_splash_scale_6040[0xC];
-u8 run_grass_scale_6043[0xC];
-u8 heavy_emit_smoke_scale_6046[0xC];
-u8 heavy_dyn_smoke_scale_6049[0xC];
-u8 heavy_pat_smoke_scale_6052[0xC];
-u8 tail_scale_6508[0xC];
-u8 arm_flame_scale_6651[0xC];
-u8 _6785[0xC];
-u8 eff_scale0_6784[0xC];
-u8 _6789[0xC];
-u8 eff_scale2_6788[0xC];
-u8 direction_6792[0xC];
-u8 splash_scale_14445[0xC];
-u8 ripple_scale_14448[0xC];
-u8 _15293[0xC];
-u8 arm_pos_15292[0xC];
-u8 _15297[0xC];
-u8 armA_offset_15296[0xC];
-u8 dynamic_scale_16750[0xC];
-u8 particle_scale_16753[0xC];
-u8 _17480[0xC];
-u8 local_height_offset_17479[0xC];
-u8 eff_scale_18886[0xC];
-u8 eff_dscale_18889[0xC];
-u8 eff_pscale_18892[0xC];
-u8 smoke_kusa_particle_scale_21005[0xC];
-u8 emitter_scale_21008[0xC];
-u8 emitter_trans_21011[0xC];
-u8 d_scale_23162[0xC];
-u8 p_scale_23165[0xC];
-u8 emitter_trans_24824[0xC];
-u8 particle_scale_24827[0xC];
-u8 root_mtx_25647[0x30];
-
-static mDoExt_offCupOnAupPacket l_offCupOnAupPacket1;
-static mDoExt_offCupOnAupPacket l_offCupOnAupPacket2;
-static mDoExt_onCupOffAupPacket l_onCupOffAupPacket1;
-static mDoExt_onCupOffAupPacket l_onCupOffAupPacket2;
+const u16 aura_emitter_joint_5412[] = {
+    0x0007, 0x000B,
+    0x0008, 0x000C,
+    0x0021, 0x0026,
+    0x0022, 0x0027,
+    0x0000, 0x000F,
+};
+const u16 aura_model_joint_5413[] = {
+    0x0000, 0x000F,
+    0x0008, 0x000C,
+    0x0021, 0x0026,
+};
+const Vec wave_offset_5635 = {0.0f, 18.0f, 0.0f};
+const Vec swim_offset_5636 = {0.0f, 30.0f, 0.0f};
+const Vec swim_side_offset_5637 = {0.0f, 0.0f, 30.0f};
+const u16 eff_joint_8128[] = {
+    0x0007, 0x000B,
+    0x001A, 0x000E,
+    0x001E,
+};
+const Vec ripple_scale_8193 = {0.75f, 0.75f, 0.75f};
+const Vec splash_scale_21927 = {0.3f, 0.3f, 0.3f};
+const Vec ripple_scale_21928 = {0.5f, 0.5f, 0.5f};
 
 static void dummydatafunc(f32* temp, f64* temp2) {
     // temporary hack to improve diffs until sdata2 offsets are figured out
@@ -147,84 +144,176 @@ static void dummydatafunc(f32* temp, f64* temp2) {
     *temp = 11.0f;
     *temp = 17.5f;
     *temp = 1000000000.0f;
-	OSReport("Adanmae");
-	OSReport("d_a_player_dproc.inc");
-	OSReport("0");
-	OSReport("Halt");
-	OSReport("Link");
-	OSReport("DEFAULT_GETITEM");
-	OSReport("GanonK");
-	OSReport("GTower");
-	OSReport("d_a_player_bow.inc");
-	OSReport("d_a_player_hook.inc");
-	OSReport("d_a_player_fan.inc");
-	OSReport("d_a_player_hammer.inc");
-	OSReport("Type");
-	OSReport("Omori");
-	OSReport("d_a_player_sword.inc");
-	OSReport("M_DaiB");
-	OSReport("Xboss2");
-	OSReport("M_DragB");
-	OSReport("Xboss0");
-	OSReport("fall");
-	OSReport("d_a_player_main.cpp");
-	OSReport("(demo_mode < daPy_demo_c::DEMO_LAST_e) || (demo_mode == daPy_demo_c::DEMO_NEW_ANM0_e)");
-	OSReport("Ojhous");
-	OSReport("Orichh");
-	OSReport("kinBOSS");
-	OSReport("Xboss1");
-	OSReport("ICE_FAILED");
-	OSReport("pos");
-	OSReport("angle");
-	OSReport("prm0");
-	OSReport("prm1");
-	OSReport("stick");
-	OSReport("face");
-	OSReport("GanonM");
-	OSReport("sea");
-	OSReport("m_tex_anm_heap.m_buffer != 0");
-	OSReport("m_texNoAnms != 0");
-	OSReport("mat_anm != 0");
-	OSReport("m_tex_scroll_heap.m_buffer != 0");
-	OSReport("material_num == 2");
-	OSReport("m_texMtxAnm != 0");
-	OSReport("m_tex_eye_scroll[no] != 0");
-	OSReport("tmtx != 0");
-	OSReport("mtl->getMaterialAnm() != 0");
-	OSReport("tmp_modelData != 0");
-	OSReport("aura_p->getModel() != 0");
-	OSReport("m_old_fdata != 0");
-	OSReport("m_pbCalc[PART_UNDER_e] != 0");
-	OSReport("m_pbCalc[PART_UPPER_e] != 0");
-	OSReport("m_HIO != 0");
-	OSReport("m_anm_heap_under[UNDER_MOVE0_e].m_buffer != 0");
-	OSReport("m_sanm_buffer != 0");
-	OSReport("m_item_bck_buffer != 0");
-	OSReport("tmp_trans_bas != 0");
-	OSReport("tmp_trans != 0");
-	OSReport("tmp_tp != 0");
-	OSReport("tmp_tk != 0");
-	OSReport("*i_model != 0");
-	OSReport("btk_anm != 0");
-	OSReport("brk_anm != 0");
-	OSReport("zoff_blend_cnt <= 4");
-	OSReport("zoff_none_cnt <= 4");
-	OSReport("zon_cnt <= 4");
-	OSReport("zon_cnt == 4");
-	OSReport("zoff_none_cnt == 4");
-	OSReport("zoff_blend_cnt == 4");
-	OSReport("dummy_data != 0");
-	OSReport("Always");
-	OSReport("tmp_tex != 0");
-	OSReport("tmp_img != 0");
-	OSReport("texture != 0");
-	OSReport("textureName != 0");
-	OSReport("linktexS3TC");
-	OSReport("Pjavdou");
-	OSReport("ShipD");
-	OSReport("Siren");
-	OSReport("data_size < l_sanm_buffer_size");
+    OSReport("Adanmae");
+    OSReport("d_a_player_dproc.inc");
+    OSReport("0");
+    OSReport("Halt");
+    OSReport("Link");
+    OSReport("DEFAULT_GETITEM");
+    OSReport("GanonK");
+    OSReport("GTower");
+    OSReport("d_a_player_bow.inc");
+    OSReport("d_a_player_hook.inc");
+    OSReport("d_a_player_fan.inc");
+    OSReport("d_a_player_hammer.inc");
+    OSReport("Type");
+    OSReport("Omori");
+    OSReport("d_a_player_sword.inc");
+    OSReport("M_DaiB");
+    OSReport("Xboss2");
+    OSReport("M_DragB");
+    OSReport("Xboss0");
+    OSReport("fall");
+    OSReport("d_a_player_main.cpp");
+    OSReport("(demo_mode < daPy_demo_c::DEMO_LAST_e) || (demo_mode == daPy_demo_c::DEMO_NEW_ANM0_e)");
+    OSReport("Ojhous");
+    OSReport("Orichh");
+    OSReport("kinBOSS");
+    OSReport("Xboss1");
+    OSReport("ICE_FAILED");
+    OSReport("pos");
+    OSReport("angle");
+    OSReport("prm0");
+    OSReport("prm1");
+    OSReport("stick");
+    OSReport("face");
+    OSReport("GanonM");
+    OSReport("sea");
+    OSReport("m_tex_anm_heap.m_buffer != 0");
+    OSReport("m_texNoAnms != 0");
+    OSReport("mat_anm != 0");
+    OSReport("m_tex_scroll_heap.m_buffer != 0");
+    OSReport("material_num == 2");
+    OSReport("m_texMtxAnm != 0");
+    OSReport("m_tex_eye_scroll[no] != 0");
+    OSReport("tmtx != 0");
+    OSReport("mtl->getMaterialAnm() != 0");
+    OSReport("tmp_modelData != 0");
+    OSReport("aura_p->getModel() != 0");
+    OSReport("m_old_fdata != 0");
+    OSReport("m_pbCalc[PART_UNDER_e] != 0");
+    OSReport("m_pbCalc[PART_UPPER_e] != 0");
+    OSReport("m_HIO != 0");
+    OSReport("m_anm_heap_under[UNDER_MOVE0_e].m_buffer != 0");
+    OSReport("m_sanm_buffer != 0");
+    OSReport("m_item_bck_buffer != 0");
+    OSReport("tmp_trans_bas != 0");
+    OSReport("tmp_trans != 0");
+    OSReport("tmp_tp != 0");
+    OSReport("tmp_tk != 0");
+    OSReport("*i_model != 0");
+    OSReport("btk_anm != 0");
+    OSReport("brk_anm != 0");
+    OSReport("zoff_blend_cnt <= 4");
+    OSReport("zoff_none_cnt <= 4");
+    OSReport("zon_cnt <= 4");
+    OSReport("zon_cnt == 4");
+    OSReport("zoff_none_cnt == 4");
+    OSReport("zoff_blend_cnt == 4");
+    OSReport("dummy_data != 0");
+    OSReport("Always");
+    OSReport("tmp_tex != 0");
+    OSReport("tmp_img != 0");
+    OSReport("texture != 0");
+    OSReport("textureName != 0");
+    OSReport("linktexS3TC");
+    OSReport("Pjavdou");
+    OSReport("ShipD");
+    OSReport("Siren");
+    OSReport("data_size < l_sanm_buffer_size");
 }
+
+GXColor l_freeze_fade_color = {0xFF, 0xFF, 0xFF, 0xFF};
+
+u8 daPy_matAnm_c::m_maba_flg;
+u8 daPy_matAnm_c::m_eye_move_flg;
+u8 daPy_matAnm_c::m_maba_timer;
+u8 daPy_matAnm_c::m_morf_frame;
+
+#include "d/actor/d_a_player_particle.inc"
+
+#include "d/actor/d_a_player_dproc.inc"
+
+#include "d/actor/d_a_player_ladder.inc"
+
+#include "d/actor/d_a_player_hang.inc"
+
+#include "d/actor/d_a_player_climb.inc"
+
+#include "d/actor/d_a_player_whide.inc"
+
+#include "d/actor/d_a_player_crawl.inc"
+
+#include "d/actor/d_a_player_grab.inc"
+
+#include "d/actor/d_a_player_swim.inc"
+
+#include "d/actor/d_a_player_battle.inc"
+
+#include "d/actor/d_a_player_ship.inc"
+
+#include "d/actor/d_a_player_rope.inc"
+
+#include "d/actor/d_a_player_boomerang.inc"
+
+#include "d/actor/d_a_player_bow.inc"
+
+#include "d/actor/d_a_player_hook.inc"
+
+#include "d/actor/d_a_player_fan.inc"
+
+#include "d/actor/d_a_player_tact.inc"
+
+#include "d/actor/d_a_player_vomit.inc"
+
+#include "d/actor/d_a_player_hammer.inc"
+
+#include "d/actor/d_a_player_pushpull.inc"
+
+#include "d/actor/d_a_player_bottle.inc"
+
+#include "d/actor/d_a_player_weapon.inc"
+
+#include "d/actor/d_a_player_food.inc"
+
+#include "d/actor/d_a_player_sword.inc"
+
+u8 normal_ripple_scale_5638[0xC];
+u8 small_ripple_scale_5641[0xC];
+u8 waterfall_splash_trans_5699[0xC];
+u8 run_splash_scale_6040[0xC];
+u8 run_grass_scale_6043[0xC];
+u8 heavy_emit_smoke_scale_6046[0xC];
+u8 heavy_dyn_smoke_scale_6049[0xC];
+u8 heavy_pat_smoke_scale_6052[0xC];
+u8 tail_scale_6508[0xC];
+u8 arm_flame_scale_6651[0xC];
+u8 _6785[0xC];
+u8 eff_scale0_6784[0xC];
+u8 _6789[0xC];
+u8 eff_scale2_6788[0xC];
+u8 direction_6792[0xC];
+u8 splash_scale_14445[0xC];
+u8 ripple_scale_14448[0xC];
+u8 _15293[0xC];
+u8 arm_pos_15292[0xC];
+u8 _15297[0xC];
+u8 armA_offset_15296[0xC];
+u8 dynamic_scale_16750[0xC];
+u8 particle_scale_16753[0xC];
+u8 _17480[0xC];
+u8 local_height_offset_17479[0xC];
+u8 eff_scale_18886[0xC];
+u8 eff_dscale_18889[0xC];
+u8 eff_pscale_18892[0xC];
+u8 smoke_kusa_particle_scale_21005[0xC];
+u8 emitter_scale_21008[0xC];
+u8 emitter_trans_21011[0xC];
+u8 d_scale_23162[0xC];
+u8 p_scale_23165[0xC];
+u8 emitter_trans_24824[0xC];
+u8 particle_scale_24827[0xC];
+u8 root_mtx_25647[0x30];
 
 /* 80102E8C-80102EAC       .text daPy_createHeap__FP10fopAc_ac_c */
 static BOOL daPy_createHeap(fopAc_ac_c* i_this) {
@@ -427,6 +516,11 @@ static BOOL daPy_jointCallback1(J3DNode* node, int param_1) {
     return TRUE;
 }
 
+static mDoExt_offCupOnAupPacket l_offCupOnAupPacket1;
+static mDoExt_offCupOnAupPacket l_offCupOnAupPacket2;
+static mDoExt_onCupOffAupPacket l_onCupOffAupPacket1;
+static mDoExt_onCupOffAupPacket l_onCupOffAupPacket2;
+
 /* 801041B4-801041EC       .text setAnimeHeap__9daPy_lk_cFP12JKRSolidHeap */
 JKRHeap* daPy_lk_c::setAnimeHeap(JKRSolidHeap* animeHeap) {
     animeHeap->freeAll();
@@ -444,12 +538,12 @@ JKRHeap* daPy_lk_c::setItemHeap() {
 
 /* 80104240-80104280       .text setBlurPosResource__9daPy_lk_cFUs */
 void daPy_lk_c::setBlurPosResource(u16 index) {
-    dComIfGp_getAnmArchive()->readIdxResource(mSwBlur.mpPosBuffer, 0x4800, index);
+    JKRReadIdxResource(mSwBlur.mpPosBuffer, 0x4800, index, dComIfGp_getAnmArchive());
 }
 
 /* 80104280-80104364       .text getItemAnimeResource__9daPy_lk_cFUs */
 J3DAnmTransform* daPy_lk_c::getItemAnimeResource(u16 index) {
-    dComIfGp_getAnmArchive()->readIdxResource(m_item_bck_buffer, 0x1000, index);
+    JKRReadIdxResource(m_item_bck_buffer, 0x1000, index, dComIfGp_getAnmArchive());
     JKRHeap* oldHeap = setAnimeHeap(m2ECC);
     mDoExt_transAnmBas* bas = new mDoExt_transAnmBas(NULL);
     J3DAnmLoaderDataBase::setResource(bas, m_item_bck_buffer);
@@ -460,7 +554,7 @@ J3DAnmTransform* daPy_lk_c::getItemAnimeResource(u16 index) {
 /* 80104364-801043F0       .text getAnimeResource__9daPy_lk_cFP14daPy_anmHeap_cUsUl */
 J3DAnmTransform* daPy_lk_c::getAnimeResource(daPy_anmHeap_c* anmHeap, u16 index, u32 bufferSize) {
     J3DAnmTransform* bck;
-    dComIfGp_getAnmArchive()->readIdxResource(anmHeap->m_buffer, bufferSize, index);
+    JKRReadIdxResource(anmHeap->m_buffer, bufferSize, index, dComIfGp_getAnmArchive());
     JKRHeap* oldHeap = setAnimeHeap(anmHeap->mpAnimeHeap);
     bck = static_cast<J3DAnmTransform*>(J3DAnmLoaderDataBase::load(anmHeap->m_buffer));
     mDoExt_setCurrentHeap(oldHeap);
@@ -506,9 +600,9 @@ void daPy_lk_c::setTextureAnimeResource(J3DAnmTexPattern* btp, int r31) {
 J3DAnmTexPattern* daPy_lk_c::loadTextureAnimeResource(u32 btpIdx, BOOL isDemo) {
     J3DAnmTexPattern* btp;
     if (isDemo) {
-        dComIfGp_getLkDemoAnmArchive()->readResource(m_tex_anm_heap.m_buffer, 0x1000, btpIdx);
+        JKRReadResource(m_tex_anm_heap.m_buffer, 0x1000, btpIdx, dComIfGp_getLkDemoAnmArchive());
     } else {
-        dComIfGp_getAnmArchive()->readIdxResource(m_tex_anm_heap.m_buffer, 0x1000, btpIdx);
+        JKRReadIdxResource(m_tex_anm_heap.m_buffer, 0x1000, btpIdx, dComIfGp_getAnmArchive());
     }
     JKRHeap* oldHeap = setAnimeHeap(m_tex_anm_heap.mpAnimeHeap);
     btp = static_cast<J3DAnmTexPattern*>(J3DAnmLoaderDataBase::load(m_tex_anm_heap.m_buffer));
@@ -631,9 +725,9 @@ void daPy_lk_c::setTextureScrollResource(J3DAnmTextureSRTKey* btk, int r31) {
 J3DAnmTextureSRTKey* daPy_lk_c::loadTextureScrollResource(u32 btkIdx, BOOL isDemo) {
     J3DAnmTextureSRTKey* btk;
     if (isDemo) {
-        dComIfGp_getLkDemoAnmArchive()->readResource(m_tex_scroll_heap.m_buffer, 0x800, btkIdx);
+        JKRReadResource(m_tex_scroll_heap.m_buffer, 0x800, btkIdx, dComIfGp_getLkDemoAnmArchive());
     } else {
-        dComIfGp_getAnmArchive()->readIdxResource(m_tex_scroll_heap.m_buffer, 0x800, btkIdx);
+        JKRReadIdxResource(m_tex_scroll_heap.m_buffer, 0x800, btkIdx, dComIfGp_getAnmArchive());
     }
     JKRHeap* oldHeap = setAnimeHeap(m_tex_scroll_heap.mpAnimeHeap);
     btk = static_cast<J3DAnmTextureSRTKey*>(J3DAnmLoaderDataBase::load(m_tex_scroll_heap.m_buffer));
@@ -918,8 +1012,7 @@ BOOL daPy_lk_c::draw() {
         } else {
             hideHatAndBackle(link_root_joint->getMesh());
         }
-        bool r4 = dComIfGs_getSelectEquip(0) == SWORD || dComIfGp_getMiniGameType() == 2; // TODO this may be an inline
-        if (!r4 && dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != dStageType_FF1_e ||
+        if (!checkNormalSwordEquip() && dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != dStageType_FF1_e ||
             checkCaughtShapeHide() || checkDemoShieldNoDraw())
         {
             mpCLModelData->getJointNodePointer(0x0D)->getMesh()->getShape()->hide(); // cl_podA joint
@@ -1165,6 +1258,8 @@ void daPy_lk_c::setNormalSpeedF(f32, f32, f32, f32) {
 /* 80108D80-8010959C       .text posMoveFromFootPos__9daPy_lk_cFv */
 void daPy_lk_c::posMoveFromFootPos() {
     /* Nonmatching */
+    static const Vec rtoe_pos_offset = {-14.05f, 0.0f, 5.02f};
+    static const Vec rheel_pos_offset = {-10.85f, 0.0f, -6.52f};
 }
 
 /* 8010959C-80109E80       .text posMove__9daPy_lk_cFv */
@@ -1373,17 +1468,17 @@ void daPy_lk_c::deleteEquipItem(BOOL param_1) {
         mSwordAnim.changeBckOnly(NULL);
     }
     m2EAC = NULL;
-    mpHeldItemModelAnimTexEx = NULL;
+    mpHeldItemBtk = NULL;
     mpBottleContentsModel = NULL;
     mpBottleCapModel = NULL;
-    mpHeldItemAnimBRK = NULL;
-    mpSwordAnimBTK = NULL;
+    mpHeldItemBrk = NULL;
+    mpSwordBtk = NULL;
     mpSwordModel1 = NULL;
     m3454.end();
     mpSwordTipStabModel = NULL;
-    m2EF8 = 0;
-    m2EF4 = 0;
-    m2EF0 = 0;
+    mpCutfBrk2EF8 = 0;
+    mpCutfBtk = 0;
+    mpCutfBpk = 0;
     offNoResetFlg1(daPyFlg1_UNK200000);
 }
 
@@ -1420,7 +1515,7 @@ void daPy_lk_c::returnKeepItemData() {
     if (mHeldItemType == 0x10B) {
         mHeldItemType = 0x100;
     } else if (mHeldItemType == 0x103) {
-        setSwordModel(1);
+        setSwordModel(TRUE);
     } else {
         makeItemType();
     }
@@ -1926,6 +2021,7 @@ void daPy_lk_c::changeAutoJumpProc() {
 /* 80111424-80111A80       .text changeDemoProc__9daPy_lk_cFv */
 void daPy_lk_c::changeDemoProc() {
     /* Nonmatching */
+    static const Vec tact_scale = {2.5f, 2.5f, 2.5f};
 }
 
 /* 80111A80-80111B80       .text changeDeadProc__9daPy_lk_cFv */
@@ -2814,6 +2910,8 @@ void daPy_lk_c::setCollision() {
 /* 8011EC0C-8011EEBC       .text setAttentionPos__9daPy_lk_cFv */
 void daPy_lk_c::setAttentionPos() {
     /* Nonmatching */
+    static const Vec offset_39104 = {0.0f, 30.0f, 20.0f};
+    static const Vec offset_39108 = {0.0f, 70.0f, 0.0f};
 }
 
 /* 8011EEBC-8011EF94       .text setRoomInfo__9daPy_lk_cFv */
@@ -3058,6 +3156,14 @@ BOOL daPy_lk_c::checkRoofRestart() {
 /* 80121870-80122D30       .text execute__9daPy_lk_cFv */
 BOOL daPy_lk_c::execute() {
     /* Nonmatching */
+    static const Vec nsword_top = {45.0f, -31.0f, 0.0f};
+    static const Vec msword_top = {57.0f, 48.0f, 0.0f};
+    static const Vec boomerang_catch = {12.5f, 47.5f, 36.6f};
+    static const Vec hookshot_root = {22.0f, 0.0f, 0.0f};
+    static const Vec hammer_top = {160.0f, 70.0f, 0.0f};
+    static const Vec hammer_root = {8.0f, 0.0f, 0.0f};
+    static const Vec fan_top = {55.0f, 0.0f, 0.0f};
+    static const Vec head_offset = {40.0f, 0.0f, 0.0f};
 }
 
 /* 80122D30-80122D50       .text daPy_Execute__FP9daPy_lk_c */
@@ -3149,7 +3255,7 @@ void daPy_lk_c::initTextureAnime() {
     m_tex_anm_heap.m_buffer = new(0x20) u8[0x1000];
     JUT_ASSERT(20869, m_tex_anm_heap.m_buffer != 0);
     
-    dComIfGp_getAnmArchive()->readIdxResource(m_tex_anm_heap.m_buffer, 0x1000, LKANM_BTP_TMABAA);
+    JKRReadIdxResource(m_tex_anm_heap.m_buffer, 0x1000, LKANM_BTP_TMABAA, dComIfGp_getAnmArchive());
     J3DAnmTexPattern* btp = static_cast<J3DAnmTexPattern*>(J3DAnmLoaderDataBase::load(m_tex_anm_heap.m_buffer));
     btp->searchUpdateMaterialID(mpCLModelData);
     u16 material_num = btp->getUpdateMaterialNum();
@@ -3196,7 +3302,7 @@ void daPy_lk_c::initTextureScroll() {
     m_tex_scroll_heap.m_buffer = new(0x20) u8[0x800];
     JUT_ASSERT(20944, m_tex_scroll_heap.m_buffer != 0);
     
-    dComIfGp_getAnmArchive()->readIdxResource(m_tex_scroll_heap.m_buffer, 0x800, LKANM_BTK_TMABA);
+    JKRReadIdxResource(m_tex_scroll_heap.m_buffer, 0x800, LKANM_BTK_TMABA, dComIfGp_getAnmArchive());
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(J3DAnmLoaderDataBase::load(m_tex_scroll_heap.m_buffer));
     btk->searchUpdateMaterialID(mpCLModelData);
     u16 material_num = btk->getUpdateMaterialNum();
@@ -3442,7 +3548,7 @@ void daPy_lk_c::playerInit() {
     for (i = 0; i < 2; i++) {
         while (mat) {
             mat->setMaterialMode(1);
-            if (j3dZModeTable[mat->getZMode()->mZModeID].mCompareEnable == 0) {
+            if (mat->getZMode()->getCompareEnable() == 0) {
                 if (mat->getBlend()->mBlendMode == 1) {
                     mpZOffBlendShape[zoff_blend_cnt] = mat->getShape();
                     zoff_blend_cnt++;
@@ -3578,7 +3684,7 @@ void daPy_lk_c::playerInit() {
     m3630 = fpcM_ERROR_PROCESS_ID_e;
     
     ResTIMG* blur_img = (ResTIMG*)dComIfG_getObjectRes(l_arcName, LINK_BTI_BLUR);
-    mSwBlur.mpBlurTex = blur_img;
+    mSwBlur.mpTex = blur_img;
     
     current.angle.z = 0;
     shape_angle.z = 0;
@@ -3726,10 +3832,11 @@ int phase_3(daPy_lk_c* i_this) {
 }
 
 static s32 daPy_Create(fopAc_ac_c* i_this) {
-    static int (*l_method[3])(daPy_lk_c*) = {
+    static int (*l_method[4])(daPy_lk_c*) = {
         phase_1,
         phase_2,
         phase_3,
+        NULL,
     };
     daPy_lk_c* player_link = (daPy_lk_c*)i_this;
 
@@ -4034,55 +4141,7 @@ BOOL daPy_lk_c::getBokoFlamePos(cXyz* outPos) {
     return FALSE;
 }
 
-#include "d/actor/d_a_player_particle.inc"
-
-#include "d/actor/d_a_player_dproc.inc"
-
-#include "d/actor/d_a_player_ladder.inc"
-
-#include "d/actor/d_a_player_hang.inc"
-
-#include "d/actor/d_a_player_climb.inc"
-
-#include "d/actor/d_a_player_whide.inc"
-
-#include "d/actor/d_a_player_crawl.inc"
-
-#include "d/actor/d_a_player_grab.inc"
-
-#include "d/actor/d_a_player_swim.inc"
-
-#include "d/actor/d_a_player_battle.inc"
-
-#include "d/actor/d_a_player_ship.inc"
-
-#include "d/actor/d_a_player_rope.inc"
-
-#include "d/actor/d_a_player_boomerang.inc"
-
-#include "d/actor/d_a_player_bow.inc"
-
-#include "d/actor/d_a_player_hook.inc"
-
-#include "d/actor/d_a_player_fan.inc"
-
-#include "d/actor/d_a_player_tact.inc"
-
-#include "d/actor/d_a_player_vomit.inc"
-
-#include "d/actor/d_a_player_hammer.inc"
-
-#include "d/actor/d_a_player_pushpull.inc"
-
-#include "d/actor/d_a_player_bottle.inc"
-
-#include "d/actor/d_a_player_weapon.inc"
-
-#include "d/actor/d_a_player_food.inc"
-
-#include "d/actor/d_a_player_sword.inc"
-
-actor_method_class l_daPy_Method = {
+actor_method_class2 l_daPy_Method = {
     (process_method_func)daPy_Create,
     (process_method_func)daPy_Delete,
     (process_method_func)daPy_Execute,
@@ -4101,7 +4160,7 @@ actor_process_profile_definition2 g_profile_PLAYER = {
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ 0x0068,
-    /* Actor SubMtd */ &l_daPy_Method,
+    /* Actor SubMtd */ (actor_method_class*)&l_daPy_Method,
     /* Status       */ fopAcStts_FREEZE_e,
     /* Group        */ fopAc_PLAYER_e,
     /* CullType     */ fopAc_CULLBOX_0_e,

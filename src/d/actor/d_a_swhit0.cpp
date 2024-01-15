@@ -249,7 +249,7 @@ s32 daSwhit0_c::actionOffWait() {
                 mState = 2;
                 
                 fopAcM_orderOtherEventId(this, mEventIdx, getEvNo());
-                mEvtInfo.onCondition(0x02);
+                mEvtInfo.onCondition(dEvtCnd_UNK2_e);
 
                 break;
             default:
@@ -279,7 +279,7 @@ s32 daSwhit0_c::actionToOnReady() {
         mState = 2;
 
         fopAcM_orderOtherEventId(this, mEventIdx, getEvNo());
-        mEvtInfo.onCondition(0x02);
+        mEvtInfo.onCondition(dEvtCnd_UNK2_e);
     }
 
     return TRUE;
@@ -295,7 +295,7 @@ s32 daSwhit0_c::actionToOnOrder() {
     }
     else {
         fopAcM_orderOtherEventId(this, mEventIdx, getEvNo());
-        mEvtInfo.onCondition(0x02);
+        mEvtInfo.onCondition(dEvtCnd_UNK2_e);
     }
 
     return TRUE;

@@ -45,8 +45,56 @@ void daPy_swimTailEcallBack_c::remove() {
 }
 
 /* 8012910C-80129310       .text execute__24daPy_swimTailEcallBack_cFP14JPABaseEmitter */
-void daPy_swimTailEcallBack_c::execute(JPABaseEmitter*) {
-    /* Nonmatching */
+void daPy_swimTailEcallBack_c::execute(JPABaseEmitter* emitter) {
+    static JGeometry::TVec3<f32> right_dir(-1.0f, 0.0f, 0.0f);
+    
+    GXColor ambColor;
+    GXColor difColor;
+    dKy_get_seacolor(&ambColor, &difColor);
+    emitter->setGlobalPrmColor(ambColor.r, ambColor.g, ambColor.b);
+    
+    if (field_0x04) {
+        s16 sp8 = emitter->getGlobalAlpha();
+        cLib_chaseS(&sp8, 0, 0x14);
+        emitter->setGlobalAlpha(sp8);
+        if (sp8 == 0) {
+            emitter->becomeInvalidEmitter();
+            emitter->setEmitterCallBackPtr(NULL);
+            mpEmitter = NULL;
+            return;
+        }
+    }
+    
+    if (field_0x20 != NULL) {
+        emitter->setGlobalTranslation(field_0x14.x, field_0x14.y, field_0x14.z);
+        JGeometry::TVec3<s16> rot(0, 0, 0);
+        rot.y = field_0x20->y;
+        emitter->setGlobalRotation(rot);
+    }else {
+        JGeometry::TVec3<f32> sp20;
+        emitter->getGlobalTranslation(sp20);
+        getMaxWaterY(&sp20);
+        emitter->setGlobalTranslation(sp20);
+        cLib_chaseF(&field_0x08, 0.0f, 0.08f);
+    }
+    
+    emitter->setDirectionalSpeed(1.0f + 12.0f * field_0x08);
+    
+    if (field_0x05) {
+        emitter->setDirection(right_dir);
+    }
+    
+    for (JSULink<JPABaseParticle>* link = emitter->mActiveParticles.getFirst(); link != NULL;) {
+        JSULink<JPABaseParticle>* nextLink = link->getNext();
+        JPABaseParticle* particle = link->getObject();
+        
+        JGeometry::TVec3<f32> sp14;
+        particle->getGlobalPosition(sp14);
+        getMaxWaterY(&sp14);
+        particle->setOffsetPosition(sp14);
+        
+        link = nextLink;
+    }
 }
 
 /* 80129310-80129348       .text draw__24daPy_swimTailEcallBack_cFP14JPABaseEmitter */
@@ -78,7 +126,70 @@ void daPy_swBlur_c::copySwBlur(MtxP, int) {
 
 /* 80129A78-80129DD0       .text draw__13daPy_swBlur_cFv */
 void daPy_swBlur_c::draw() {
-    /* Nonmatching */
+    j3dSys.reinitGX();
+    GXSetNumIndStages(0);
+    
+    static GXTexObj texObj;
+    u16 texWidth = 16;
+    u16 texHeight = 4;
+    GXTexFmt texFormat = GX_TF_I4;
+    GXInitTexObj(&texObj, (u8*)mpTex + mpTex->imageOffset, texWidth, texHeight, texFormat, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    GXLoadTexObj(&texObj, GX_TEXMAP0);
+    
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_S16, 8);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetNumChans(0);
+    
+    if (mBlurColorType == 0) {
+        // Normal color.
+        static GXColor n_color = {0xFF, 0xFF, 0xFF, 0x96};
+        GXSetTevColor(GX_TEVREG0, n_color);
+    } else if (mBlurColorType == 1) {
+        // Elixir Soup color.
+        static GXColor y_color = {0xFF, 0xFF, 0x7B, 0x96};
+        GXSetTevColor(GX_TEVREG0, y_color);
+    } else {
+        // Parrying color.
+        static GXColor g_color = {0x5A, 0xFF, 0x5A, 0x96};
+        GXSetTevColor(GX_TEVREG0, g_color);
+    }
+    
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
+    GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
+    
+    int r30 = 0xFF / ((field_0x014 >> 1) + 1);
+    s16 r29 = r30;
+    s16 r28 = 0x00;
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4 + field_0x014*4);
+    for (int i = field_0x014; i >= 0; i--) {
+        GXPosition3f32(field_0x034[i].x, field_0x034[i].y, field_0x034[i].z);
+        GXTexCoord2s16(r29, 0x00);
+        GXPosition3f32(field_0x304[i].x, field_0x304[i].y, field_0x304[i].z);
+        GXTexCoord2s16(r29, 0xFF);
+        GXPosition3f32(field_0x304[i+1].x, field_0x304[i+1].y, field_0x304[i+1].z);
+        GXTexCoord2s16(r28, 0xFF);
+        GXPosition3f32(field_0x034[i+1].x, field_0x034[i+1].y, field_0x034[i+1].z);
+        GXTexCoord2s16(r28, 0x00);
+        r28 = r29;
+        r29 += r30;
+    }
+    J3DShape::resetVcdVatCache();
 }
 
 /* 80129DD0-80129E9C       .text execute__24daPy_fanSwingEcallBack_cFP14JPABaseEmitter */
@@ -109,6 +220,8 @@ void daPy_followEcallBack_c::end() {
         mpEmitter = NULL;
     }
 }
+
+daPy_waterDropPcallBack_c daPy_waterDropEcallBack_c::m_pcallback;
 
 /* 80129FD4-8012A040       .text execute__25daPy_waterDropEcallBack_cFP14JPABaseEmitter */
 void daPy_waterDropEcallBack_c::execute(JPABaseEmitter* emitter) {
@@ -143,6 +256,9 @@ void daPy_mtxPosFollowEcallBack_c::makeEmitterColor(u16 particleID, MtxP mtx, co
 void daPy_mtxPosFollowEcallBack_c::execute(JPABaseEmitter*) {
     /* Nonmatching */
 }
+
+s16 daPy_dmEcallBack_c::m_timer = 0;
+u16 daPy_dmEcallBack_c::m_type = 3;
 
 /* 8012A160-8012A288       .text execute__18daPy_dmEcallBack_cFP14JPABaseEmitter */
 void daPy_dmEcallBack_c::execute(JPABaseEmitter*) {

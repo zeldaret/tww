@@ -172,7 +172,7 @@ namespace daObjPaper {
             mode_talk0_init();
         }
         else {
-            mEvtInfo.mCondition |= dEvtCnd_CANTALK_e;
+            mEvtInfo.onCondition(dEvtCnd_CANTALK_e);
         }
     }
 

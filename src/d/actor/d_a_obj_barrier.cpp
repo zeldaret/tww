@@ -257,7 +257,7 @@ void daObjBarrier_c::break_order_proc() {
         mBarrierProc = PROC_BREAK_END_WAIT;
     } else {
         fopAcM_orderOtherEventId(this, mEventID);
-        mEvtInfo.onCondition(2);
+        mEvtInfo.onCondition(dEvtCnd_UNK2_e);
     }
 }
 
