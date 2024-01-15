@@ -439,6 +439,8 @@ public:
 
     dTimer_c* getTimerPtr() { return mTimerInfo.mTimerPtr; }
     s32 getTimerMode() { return mTimerInfo.mTimerMode; }
+    s32 getTimerNowTimeMs() { return mTimerInfo.mTimerNowTimeMs; }
+    s32 getTimerLimitTimeMs() { return mTimerInfo.mTimerLimitTimeMs; }
 
     s16 getItemMagicCount() { return mItemMagicCount; }
     void setItemMagicCount(s16 magic) { mItemMagicCount += magic; }
@@ -523,6 +525,7 @@ public:
     void setClothResArchive(JKRArchive * pArc) { mpClothResArchive = pArc; }
     void setSaveResArchive(JKRArchive * pArc) { mpSaveResArchive = pArc; }
     void setItemIconArchive(JKRArchive * pArc) { mpItemIconArchive = pArc; }
+    JKRArchive* getItemIconArchive() { return mpItemIconArchive; }
     void setNameResArchive(JKRArchive * pArc) { mpNameResArchive = pArc; }
     void setErrorResArchive(JKRArchive * pArc) { mpErrorResArchive = pArc; }
     void setActionIconArchive(JKRArchive * pArc) { mpActionIconArchive = pArc; }
@@ -2774,6 +2777,7 @@ inline void dComIfGp_setOptResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.pl
 inline void dComIfGp_setClothResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setClothResArchive(pArc); }
 inline void dComIfGp_setSaveResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setSaveResArchive(pArc); }
 inline void dComIfGp_setItemIconArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setItemIconArchive(pArc); }
+inline JKRArchive* dComIfGp_getItemIconArchive() { return g_dComIfG_gameInfo.play.getItemIconArchive(); }
 inline void dComIfGp_setNameResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setNameResArchive(pArc); }
 inline void dComIfGp_setErrorResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setErrorResArchive(pArc); }
 inline void dComIfGp_setActionIconArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setActionIconArchive(pArc); }
@@ -3076,6 +3080,10 @@ inline void dComIfG_TimerDeleteRequest() {
 
 inline u8 dComIfG_getBrightness() {
     return g_dComIfG_gameInfo.mBrightness;
+}
+
+inline u32 dComIfG_getTimerRestTimeMs() {
+    return g_dComIfG_gameInfo.play.getTimerLimitTimeMs() - g_dComIfG_gameInfo.play.getTimerNowTimeMs();
 }
 
 int dComIfG_changeOpeningScene(scene_class* i_scene, s16 i_procName);
