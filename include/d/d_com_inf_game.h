@@ -437,9 +437,13 @@ public:
     u8 getIkadaShipId() { return mIkadaShipId; }
     u8 getIkadaShipBeforeRoomId() { return mIkadaShipBeforeRoomId; }
 
+    void setTimerPtr(dTimer_c* timer) { mTimerInfo.mTimerPtr = timer; }
     dTimer_c* getTimerPtr() { return mTimerInfo.mTimerPtr; }
+    void setTimerMode(s32 mode) { mTimerInfo.mTimerMode = mode; }
     s32 getTimerMode() { return mTimerInfo.mTimerMode; }
+    void setTimerNowTimeMs(s32 ms) { mTimerInfo.mTimerNowTimeMs = ms; }
     s32 getTimerNowTimeMs() { return mTimerInfo.mTimerNowTimeMs; }
+    void setTimerLimitTimeMs(s32 ms) { mTimerInfo.mTimerLimitTimeMs = ms; }
     s32 getTimerLimitTimeMs() { return mTimerInfo.mTimerLimitTimeMs; }
 
     s16 getItemMagicCount() { return mItemMagicCount; }
@@ -3084,6 +3088,22 @@ inline u8 dComIfG_getBrightness() {
 
 inline u32 dComIfG_getTimerRestTimeMs() {
     return g_dComIfG_gameInfo.play.getTimerLimitTimeMs() - g_dComIfG_gameInfo.play.getTimerNowTimeMs();
+}
+
+inline void dComIfG_setTimerPtr(dTimer_c* timer) {
+    g_dComIfG_gameInfo.play.setTimerPtr(timer);
+}
+
+inline void dComIfG_setTimerMode(int ms) {
+    g_dComIfG_gameInfo.play.setTimerMode(ms);
+}
+
+inline void dComIfG_setTimerNowTimeMs(int ms) {
+    g_dComIfG_gameInfo.play.setTimerNowTimeMs(ms);
+}
+
+inline void dComIfG_setTimerLimitTimeMs(int ms) {
+    g_dComIfG_gameInfo.play.setTimerLimitTimeMs(ms);
 }
 
 int dComIfG_changeOpeningScene(scene_class* i_scene, s16 i_procName);

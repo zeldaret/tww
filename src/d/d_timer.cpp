@@ -81,8 +81,8 @@ s32 dTimer_c::_create() {
         mpScrnDraw->setRupeePos(prm->mRupeePos.x, prm->mRupeePos.y);
         mpScrnDraw->setTimerPos(prm->mTimerPos.x, prm->mTimerPos.y);
         mpScrnDraw->setShowType(prm->mShowType);
-        mType = prm->field_0x1c;
-        if (mType == 7) {
+        mTimerMode = prm->field_0x1c;
+        if (mTimerMode == 7) {
         }
     }
 }
@@ -94,12 +94,30 @@ BOOL dTimer_c::_execute() {
 
 /* 8023BF88-8023BFE4       .text _draw__8dTimer_cFv */
 BOOL dTimer_c::_draw() {
-    /* Nonmatching */
+    if (dMenu_flag())
+        return TRUE;
+    dComIfGd_set2DOpa(mpScrnDraw);
+    return TRUE;
 }
 
 /* 8023BFE4-8023C0B8       .text _delete__8dTimer_cFv */
 BOOL dTimer_c::_delete() {
-    /* Nonmatching */
+    if (mpSolidHeap != NULL)
+        mDoExt_destroySolidHeap(mpSolidHeap);
+
+    if (mTimerMode == 3 && mState != 6 && mState != 5 && mState != 4) {
+        dComIfG_setTimerNowTimeMs(getTimeMs());
+        dComIfG_setTimerLimitTimeMs(getLimitTimeMs());
+        dComIfG_setTimerMode(mTimerMode);
+    } else {
+        dComIfG_setTimerNowTimeMs(0);
+        dComIfG_setTimerLimitTimeMs(0);
+        dComIfG_setTimerMode(-1);
+    }
+
+    dComIfG_setTimerPtr(NULL);
+    dComIfG_resDelete(&mPhs, "Timer");
+    return TRUE;
 }
 
 /* 8023C0B8-8023C110       .text RestTimeCheck__8dTimer_cFi */
@@ -108,8 +126,9 @@ void dTimer_c::RestTimeCheck(int) {
 }
 
 /* 8023C110-8023C124       .text deleteCheck__8dTimer_cFv */
-void dTimer_c::deleteCheck() {
+BOOL dTimer_c::deleteCheck() {
     /* Nonmatching */
+    return mState == 5;
 }
 
 /* 8023C124-8023C268       .text SetSE__8dTimer_cFv */
@@ -118,23 +137,41 @@ void dTimer_c::SetSE() {
 }
 
 /* 8023C268-8023C2CC       .text start__8dTimer_cFv */
-void dTimer_c::start() {
-    /* Nonmatching */
+bool dTimer_c::start() {
+    if (mState == 0 || mState == 1) {
+        mState = 2;
+        mTime = mStartTime = OSGetTime();
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /* 8023C2CC-8023C2F4       .text start__8dTimer_cFs */
-void dTimer_c::start(s16) {
-    /* Nonmatching */
+bool dTimer_c::start(s16 param_1) {
+    if (mState == 0) {
+        field_0x160 = param_1;
+        mState = 1;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /* 8023C2F4-8023C3A8       .text stock_start__8dTimer_cFv */
-void dTimer_c::stock_start() {
+bool dTimer_c::stock_start() {
     /* Nonmatching */
 }
 
 /* 8023C3A8-8023C3D0       .text stock_start__8dTimer_cFs */
-void dTimer_c::stock_start(s16) {
-    /* Nonmatching */
+bool dTimer_c::stock_start(s16 param_1) {
+    if (mState == 0) {
+        field_0x160 = param_1;
+        mState = 3;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /* 8023C3D0-8023C454       .text stop__8dTimer_cFUc */
@@ -153,22 +190,23 @@ void dTimer_c::end(int) {
 }
 
 /* 8023C56C-8023C57C       .text deleteRequest__8dTimer_cFv */
-void dTimer_c::deleteRequest() {
-    /* Nonmatching */
+bool dTimer_c::deleteRequest() {
+    mState = 6;
+    return true;
 }
 
 /* 8023C57C-8023C5E0       .text getTimeMs__8dTimer_cFv */
-void dTimer_c::getTimeMs() {
+s32 dTimer_c::getTimeMs() {
     /* Nonmatching */
 }
 
 /* 8023C5E0-8023C628       .text getLimitTimeMs__8dTimer_cFv */
-void dTimer_c::getLimitTimeMs() {
-    /* Nonmatching */
+s32 dTimer_c::getLimitTimeMs() {
+    return OSTicksToMilliseconds(mLimitTime);
 }
 
 /* 8023C628-8023C69C       .text getRestTimeMs__8dTimer_cFv */
-void dTimer_c::getRestTimeMs() {
+s32 dTimer_c::getRestTimeMs() {
     /* Nonmatching */
 }
 
@@ -271,30 +309,33 @@ void dDlst_TimerScrnDraw_c::setTimer(int time) {
 /* 8023CCD8-8023CEF0       .text setRupee__21dDlst_TimerScrnDraw_cFs */
 void dDlst_TimerScrnDraw_c::setRupee(s16 num) {
     /* Nonmatching */
-    if (num != field_0x230) {
-        if (num > field_0x230) {
-            field_0x230++;
+    if (num != mRupeeNum) {
+        if (num < mRupeeNum) {
+            mRupeeNum--;
         } else {
-            field_0x230--;
+            mRupeeNum++;
         }
 
-        if (field_0x230 < 0)
-            field_0x230 = 0;
+        if (mRupeeNum < 0)
+            mRupeeNum = 0;
 
-        changeNumberTexture(field_0x21c, field_0x230 % 10);
-        changeNumberTexture(field_0x218, (field_0x230 % 100) / 10);
-        changeNumberTexture(field_0x214, field_0x230 / 100);
+        s32 r001 = mRupeeNum % 10;
+        s32 r010 = (mRupeeNum % 100) / 10;
+        s32 r100 = mRupeeNum / 100;
 
-        changeNumberTexture(field_0x228, field_0x230 % 10);
-        changeNumberTexture(field_0x224, (field_0x230 % 100) / 10);
-        changeNumberTexture(field_0x220, field_0x230 / 100);
+        changeNumberTexture(field_0x21c, r001);
+        changeNumberTexture(field_0x218, r010);
+        changeNumberTexture(field_0x214, r100);
+
+        changeNumberTexture(field_0x228, r001);
+        changeNumberTexture(field_0x224, r010);
+        changeNumberTexture(field_0x220, r100);
     }
 
-    
     if (dComIfGp_event_getMode() == 1) {
         if (field_0x158.mUserArea < 5) {
             field_0x158.mUserArea++;
-            s16 alphaStep = 5 - field_0x008.mUserArea;
+            s16 alphaStep = field_0x158.mUserArea;
             f32 alpha = 1.0f - ((f32)alphaStep * (f32)alphaStep) / 25.0f;
             fopMsgM_setNowAlpha(&field_0x158, alpha);
             fopMsgM_setNowAlpha(&field_0x190, alpha);
@@ -303,7 +344,7 @@ void dDlst_TimerScrnDraw_c::setRupee(s16 num) {
     } else {
         if (field_0x158.mUserArea > 0) {
             field_0x158.mUserArea--;
-            s16 alphaStep = 5 - field_0x008.mUserArea;
+            s16 alphaStep = field_0x158.mUserArea;
             f32 alpha = 1.0f - ((f32)alphaStep * (f32)alphaStep) / 25.0f;
             fopMsgM_setNowAlpha(&field_0x158, alpha);
             fopMsgM_setNowAlpha(&field_0x190, alpha);

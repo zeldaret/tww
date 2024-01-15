@@ -4,6 +4,7 @@
 #include "f_op/f_op_msg_mng.h"
 #include "d/d_drawlist.h"
 #include "SSystem/SComponent/c_phase.h"
+#include "dolphin/os/OSTime.h"
 
 class J2DPane;
 class JKRArchive;
@@ -50,7 +51,7 @@ public:
     /* 0x224 */ J2DPane* field_0x224;
     /* 0x228 */ J2DPane* field_0x228;
     /* 0x22C */ J2DPicture* field_0x22c;
-    /* 0x230 */ u32 field_0x230;
+    /* 0x230 */ s32 mRupeeNum;
     /* 0x234 */ s8 field_0x234;
     /* 0x235 */ u8 field_0x235;
     /* 0x236 */ u8 field_0x236;
@@ -64,26 +65,36 @@ public:
     BOOL _draw();
     BOOL _delete();
     void RestTimeCheck(int);
-    void deleteCheck();
+    BOOL deleteCheck();
     void SetSE();
-    void start();
-    void start(s16);
-    void stock_start();
-    void stock_start(s16);
+    bool start();
+    bool start(s16);
+    bool stock_start();
+    bool stock_start(s16);
     void stop(u8);
     void restart(u8);
     void end(int);
-    void deleteRequest();
-    void getTimeMs();
-    void getLimitTimeMs();
-    void getRestTimeMs();
+    bool deleteRequest();
+    s32 getTimeMs();
+    s32 getLimitTimeMs();
+    s32 getRestTimeMs();
 
     /* 0x0FC */ dDlst_TimerScrnDraw_c* mpScrnDraw;
     /* 0x100 */ void* iconTex;
     /* 0x104 */ request_of_phase_process_class mPhs;
-    /* 0x10C */ u8 field_0x10C[0x154 - 0x10C];
-    /* 0x154 */ u32 mType;
-    /* 0x158 */ u8 field_0x158[0x170 - 0x158];
+    /* 0x10C */ u32 field_0x10c;
+    /* 0x110 */ OSTime mStartTime;
+    /* 0x118 */ OSTime mTime;
+    /* 0x120 */ OSTime field_0x120;
+    /* 0x128 */ u8 field_0x128[0x140 - 0x128];
+    /* 0x140 */ OSTime mLimitTime;
+    /* 0x148 */ u8 field_0x148[0x154 - 0x148];
+    /* 0x154 */ s32 mTimerMode;
+    /* 0x158 */ u8 field_0x158[0x160 - 0x158];
+    /* 0x160 */ s16 field_0x160;
+    /* 0x162 */ s16 field_0x162;
+    /* 0x164 */ u8 mState;
+    /* 0x168 */ u32 field_0x168[2];
     /* 0x170 */ JKRSolidHeap* mpSolidHeap;
     /* 0x174 */ u32 field_0x174;
 };
