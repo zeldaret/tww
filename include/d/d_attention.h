@@ -128,7 +128,7 @@ public:
     dAttList_c* getActionBtnX();
     dAttList_c* getActionBtnY();
     dAttList_c* getActionBtnZ();
-    void chkAttMask(u32, u32);
+    u32 chkAttMask(u32, u32);
     f32 calcWeight(int, fopAc_ac_c*, f32, s16, s16, u32*);
     void setLList(fopAc_ac_c*, f32, f32, u32);
     void setAList(fopAc_ac_c*, f32, f32, u32);
@@ -140,7 +140,7 @@ public:
     void nextAttention(u32);
     s32 freeAttention();
     void chaseAttention();
-    void EnemyDistance(fopAc_ac_c*);
+    f32 EnemyDistance(fopAc_ac_c*);
     void runSoundProc();
     void runDrawProc();
     void runDebugDisp0();
@@ -176,6 +176,22 @@ public:
 
     fopAc_ac_c* getLookTarget() { return mLook[0].convPId(mLook[0].getLookTarget()); }
     fopAc_ac_c* getLook2Target() { return mLook[1].convPId(mLook[1].getLookTarget()); }
+
+    static s32 loc_type_num;
+    static u32 act_type_num;
+    static struct LocTbl {
+        s16 mType;
+        u16 mMask;
+    } loc_type_tbl[3];
+    static struct DistTbl {
+        f32 mDistXZMax;
+        f32 mDistXZMaxRelease;
+        f32 mDistXZAngleAdjust;
+        f32 mDeltaYMax;
+        f32 mDeltaYMin;
+        f32 mWeightDivisor;
+        int mFrontAngleCheckBits;
+    } dist_table[16];
 
     // TODO:
     void GetLockonCount() {}

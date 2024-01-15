@@ -238,4 +238,8 @@ inline void mDoAud_stWaterLevelDown() {
     mDoAud_zelAudio_c::getInterface()->stWaterLevelDown();
 }
 
+inline void mDoAud_bgmNowBattle(f32 distance) {
+    mDoAud_zelAudio_c::getInterface()->bgmNowBattle(distance);
+}
+
 #endif /* M_DO_AUDIO_H */
