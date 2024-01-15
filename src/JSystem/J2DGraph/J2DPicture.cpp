@@ -233,8 +233,117 @@ void J2DPicture::drawSelf(f32 x, f32 y, Mtx* mtx) {
 }
 
 /* 802D3D54-802D4074       .text drawFullSet__10J2DPictureFffff10J2DBinding9J2DMirrorbPA3_A4_f */
-void J2DPicture::drawFullSet(f32 x, f32 y, f32 width, f32 height, J2DBinding binding, J2DMirror mirror, bool param_7, Mtx* mtx) {
+void J2DPicture::drawFullSet(f32 x, f32 y, f32 width, f32 height, J2DBinding binding, J2DMirror mirror, bool rotateXY, Mtx* mtx) {
     /* Nonmatching */
+
+    bool bindingS0;
+    bool bindingS1;
+    bool bindingT0;
+    bool bindingT1;
+
+    if (!rotateXY) {
+        if (mirror & 2)
+            bindingS0 = (binding >> 3) & 1;
+        else
+            bindingS0 = (binding >> 2) & 1;
+
+        if (mirror & 2)
+            bindingS1 = (binding >> 2) & 1;
+        else
+            bindingS1 = (binding >> 3) & 1;
+
+        if (mirror & 1)
+            bindingT0 = (binding >> 0) & 1;
+        else
+            bindingT0 = (binding >> 1) & 1;
+
+        if (mirror & 1)
+            bindingT1 = (binding >> 1) & 1;
+        else
+            bindingT1 = (binding >> 0) & 1;
+    } else {
+        if (mirror & 2)
+            bindingS0 = (binding >> 1) & 1;
+        else
+            bindingS0 = (binding >> 0) & 1;
+
+        if (mirror & 2)
+            bindingS1 = (binding >> 0) & 1;
+        else
+            bindingS1 = (binding >> 1) & 1;
+
+        if (mirror & 1)
+            bindingT0 = (binding >> 2) & 1;
+        else
+            bindingT0 = (binding >> 3) & 1;
+
+        if (mirror & 1)
+            bindingT1 = (binding >> 3) & 1;
+        else
+            bindingT1 = (binding >> 2) & 1;
+    }
+
+    f32 texWidth = mpTexture[0]->getWidth();
+    f32 texHeight = mpTexture[0]->getHeight();
+
+    f32 maxS;
+    f32 maxT;
+    if (rotateXY) {
+        maxT = width;
+        maxS = height;
+    } else {
+        maxS = width;
+        maxT = height;
+    }
+
+    f32 s0, t0, s1, t1, s2, t2, s3, t3;
+    if (bindingS0) {
+        s0 = 0.0f;
+        if (bindingS1) {
+            s1 = width / texWidth;
+        } else {
+            s1 = 1.0f;
+        }
+    } else {
+        if (bindingS1) {
+            s1 = (maxS / texWidth) * 0.5f;
+            s0 = 0.5f - s1;
+            s1 = 0.5f + s1;
+        } else {
+            s0 = 1.0f - maxS / texWidth;
+            s1 = 1.0f;
+        }
+    }
+
+    if (bindingT0) {
+        t0 = 0.0f;
+        if (bindingT1) {
+            t1 = height / texHeight;
+        } else {
+            t1 = 1.0f;
+        }
+    } else {
+        if (bindingT1) {
+            t1 = (maxT / texHeight) * 0.5f;
+            t0 = 0.5f - t1;
+            t1 = 0.5f + t1;
+        } else {
+            t0 = 1.0f - maxT / texHeight;
+            t1 = 1.0f;
+        }
+    }
+
+    if (mirror & 2) {
+        swap(s0, s1);
+    }
+    if (mirror & 2) {
+        swap(t0, t1);
+    }
+    if (!rotateXY) {
+        drawTexCoord(0.0f, 0.0f, width, height, s0, t0, s1, t1, s2, t2, s3, t3, mtx);
+    } else {
+        drawTexCoord(0.0f, 0.0f, width, height, s0, t0, s1, t1, s2, t2, s3, t3, mtx);
+    }
 }
 
 /* 802D4074-802D4490       .text draw__10J2DPictureFffffbbb */
@@ -302,12 +411,62 @@ void J2DPicture::draw(f32 param_1, f32 param_2, f32 param_3, f32 param_4, bool p
 }
 
 /* 802D4490-802D4874       .text drawOut__10J2DPictureFRCQ29JGeometry8TBox2<f>RCQ29JGeometry8TBox2<f> */
-void J2DPicture::drawOut(const JGeometry::TBox2<f32>&, const JGeometry::TBox2<f32>&) {
-    /* Nonmatching */
+void J2DPicture::drawOut(const JGeometry::TBox2<f32>& posBox, const JGeometry::TBox2<f32>& texRect) {
+    if (!mVisible) {
+        return;
+    }
+    for (u8 i = 0; i < mNumTexture; i++) {
+        if (i < mNumTexture) {
+            mpTexture[i]->load((GXTexMapID)i);
+        }
+    }
+    GXSetNumTexGens(mNumTexture);
+
+    f32 s0 = (posBox.i.x - texRect.i.x) / texRect.getWidth();
+    f32 s1 = (posBox.f.x - texRect.f.x) / texRect.getWidth() + 1.0f;
+
+    f32 t0 = (posBox.i.y - texRect.i.y) / texRect.getHeight();
+    f32 t1 = (posBox.f.y - texRect.f.y) / texRect.getHeight() + 1.0f;
+
+    mDrawAlpha = mAlpha;
+    JUtility::TColor color[4];
+    getNewColor(color);
+    setTevMode();
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+
+    GXPosition3f32((s16)posBox.i.x, (s16)posBox.i.y, 0.0f);
+    GXColor1u32(color[0]);
+    GXTexCoord2f32(s0, t0);
+
+    GXPosition3f32((s16)posBox.f.x, (s16)posBox.i.y, 0.0f);
+    GXColor1u32(color[1]);
+    GXTexCoord2f32(s1, t0);
+
+    GXPosition3f32((s16)posBox.f.x, (s16)posBox.f.y, 0.0f);
+    GXColor1u32(color[3]);
+    GXTexCoord2f32(s1, t1);
+
+    GXPosition3f32((s16)posBox.i.x, (s16)posBox.f.y, 0.0f);
+    GXColor1u32(color[2]);
+    GXTexCoord2f32(s0, t1);
+
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_U16, 15);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetVtxDesc(GX_VA_TEX0, GX_NONE);
 }
 
 /* 802D4874-802D4B3C       .text drawTexCoord__10J2DPictureFffffffffffffPA3_A4_f */
-void J2DPicture::drawTexCoord(f32 x, f32 y, f32 width, f32 height, f32 s0, f32 t0, f32 s1, f32 t1, f32 s3, f32 t3, f32 s2, f32 t2, Mtx* mtx) {
+void J2DPicture::drawTexCoord(f32 x, f32 y, f32 width, f32 height, f32 s0, f32 t0, f32 s1, f32 t1, f32 s2, f32 t2, f32 s3, f32 t3, Mtx* mtx) {
     for (u8 i = 0; i < mNumTexture; i++) {
         if (i < mNumTexture) {
             mpTexture[i]->load(GXTexMapID(i));
@@ -337,10 +496,10 @@ void J2DPicture::drawTexCoord(f32 x, f32 y, f32 width, f32 height, f32 s0, f32 t
     GXTexCoord2f32(s1, t1);
     GXPosition3f32(x2, y2, 0.0f);
     GXColor1u32(colors[3]);
-    GXTexCoord2f32(s2, t2);
+    GXTexCoord2f32(s3, t3);
     GXPosition3f32(x, y2, 0.0f);
     GXColor1u32(colors[2]);
-    GXTexCoord2f32(s3, t3);
+    GXTexCoord2f32(s2, t2);
     GXEnd();
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_U16, 0xf);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
