@@ -58,38 +58,150 @@ s32 dTimer_c::_create() {
         dRes_info_c* resInfo = dComIfG_getObjectResInfo("Timer");
         JUT_ASSERT(0x44, resInfo != 0);
 
-        if (prm->mIconType != 0) {
-            mpSolidHeap = mDoExt_createSolidHeapFromGameToCurrent(0x4260, 0x20);
-        } else {
+        if (prm->mIconType == 0) {
             mpSolidHeap = mDoExt_createSolidHeapFromGameToCurrent(0x34C0, 0x20);
+        } else {
+            mpSolidHeap = mDoExt_createSolidHeapFromGameToCurrent(0x4260, 0x20);
         }
 
-        if (mpSolidHeap == NULL)
+        if (mpSolidHeap != NULL) {
+            mpScrnDraw = new dDlst_TimerScrnDraw_c();
+            mpScrnDraw->setScreen("ship_race0.blo", resInfo->getArchive());
+            if (prm->mIconType != 0) {
+                iconTex = mpSolidHeap->alloc(0xC00, 0x20);
+                JUT_ASSERT(0x5a, iconTex != 0);
+                mpScrnDraw->setIconType(iconTex, prm->mIconType);
+            }
+
+            mDoExt_restoreCurrentHeap();
+            mDoExt_adjustSolidHeap(mpSolidHeap);
+        } else {
             return cPhs_ERROR_e;
-
-        mpScrnDraw = new dDlst_TimerScrnDraw_c();
-        mpScrnDraw->setScreen("ship_race0.blo", resInfo->getArchive());
-        if (prm->mIconType != 0) {
-            iconTex = JKRAllocFromHeap(mpSolidHeap, 0xC00, 0x20);
-            JUT_ASSERT(0x5a, iconTex != 0);
-            mpScrnDraw->setIconType(iconTex, prm->mIconType);
         }
-
-        mDoExt_restoreCurrentHeap();
-        mDoExt_adjustSolidHeap(mpSolidHeap);
 
         mpScrnDraw->setRupeePos(prm->mRupeePos.x, prm->mRupeePos.y);
         mpScrnDraw->setTimerPos(prm->mTimerPos.x, prm->mTimerPos.y);
         mpScrnDraw->setShowType(prm->mShowType);
-        mTimerMode = prm->field_0x1c;
+        mTimerMode = prm->mTimerMode;
         if (mTimerMode == 7) {
+            mLimitTime = OSMillisecondsToTicks(dComIfG_getTimerRestTimeMs());
+            OSTime curTime = OSGetTime();
+            mStartTime = curTime;
+            mTime = curTime;
+            mStartTime = dComIfG_getTimerNowTimeMs();
+            mState = 0;
+            mTimerMode = dComIfG_getTimerMode();
+            dComIfG_setTimerNowTimeMs(getTimeMs());
+            dComIfG_setTimerLimitTimeMs(getLimitTimeMs());
+            dComIfG_setTimerMode(mTimerMode);
+            dComIfG_setTimerPtr(this);
+            if (dComIfG_getTimerMode() == 3)
+                mpScrnDraw->setShowType(1);
+            stock_start(10);
+        } else {
+            mLimitTime = OSSecondsToTicks(prm->field_0x20);
+            mStartTime = 0;
+            mTime = 0;
+            mState = 0;
+            dComIfG_setTimerNowTimeMs(getTimeMs());
+            dComIfG_setTimerLimitTimeMs(getLimitTimeMs());
+            dComIfG_setTimerMode(mTimerMode);
+            dComIfG_setTimerPtr(this);
+        }
+
+        field_0x120 = 0;
+        field_0x128 = 0;
+        field_0x130 = 0;
+        field_0x138 = 0;
+        field_0x162 = 0;
+        field_0x163 = 0;
+        field_0x158 = 120;
+        field_0x15c = 0;
+
+        u32* seTable = NULL;
+        field_0x16c = 0;
+        field_0x168 = 0;
+        switch (mTimerMode) {
+        case 2: seTable = ShipRaceSeTable; break;
+        case 3: seTable = VolcanoSeTable; break;
+        }
+        if (seTable != NULL) {
+            while (field_0x168 >= 0) {
+                field_0x168 = seTable[field_0x16c * 2 + 0];
+                if (getRestTimeMs() > field_0x168)
+                    break;
+                field_0x16c++;
+            }
         }
     }
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 8023BCD8-8023BF88       .text _execute__8dTimer_cFv */
 BOOL dTimer_c::_execute() {
-    /* Nonmatching */
+    if (field_0x162 != 1) {
+        field_0x150 = getRestTimeMs();
+        if (mState == 0 || mState == 1 || mState == 3) {
+            mStartTime = 0;
+            mTime = 0;
+            if (mState == 1 || mState == 3) {
+                if (--field_0x160 <= 0) {
+                    if (mState == 3)
+                        stock_start();
+                    else
+                        start();
+                }
+            }
+        } else if (mState == 2) {
+            mTime = OSGetTime();
+            dComIfG_setTimerNowTimeMs(getTimeMs());
+            dComIfG_setTimerLimitTimeMs(getLimitTimeMs());
+            if (getRestTimeMs() <= 0) {
+                mTime = mLimitTime + mStartTime;
+                field_0x138 = 0;
+                dComIfG_setTimerNowTimeMs(getTimeMs());
+                if (mTimerMode == 3)
+                    end(30);
+            }
+        } else {
+            mTime = field_0x120;
+        }
+    }
+
+    if (mState == 0 || mState == 2) {
+        if (mTimerMode == 3 || mTimerMode == 2) {
+            if (dMenu_flag() || dComIfGp_event_getMode() == 1)
+                stop(1);
+            else
+                restart(1);
+        }
+    } else if (mState == 6) {
+        if (mpScrnDraw->closeAnime())
+            fopMsgM_Delete(this);
+    } else if (mState != 5 && mState == 4) {
+        if (field_0x158 <= 0) {
+            if (mTimerMode == 3) {
+                deleteRequest();
+                mpScrnDraw->field_0x234 = 0;
+            } else {
+                mpScrnDraw->field_0x234 = 0;
+                mState = 5;
+            }
+        } else {
+            field_0x158--;
+        }
+    }
+
+    if (field_0x15c > 5)
+        mpScrnDraw->anime();
+    else
+        field_0x15c++;
+
+    mpScrnDraw->setTimer(getRestTimeMs());
+    mpScrnDraw->setRupee(dComIfGp_getMiniGameRupee());
+    SetSE();
+    return TRUE;
 }
 
 /* 8023BF88-8023BFE4       .text _draw__8dTimer_cFv */
@@ -127,7 +239,6 @@ void dTimer_c::RestTimeCheck(int) {
 
 /* 8023C110-8023C124       .text deleteCheck__8dTimer_cFv */
 BOOL dTimer_c::deleteCheck() {
-    /* Nonmatching */
     return mState == 5;
 }
 
@@ -161,6 +272,16 @@ bool dTimer_c::start(s16 param_1) {
 /* 8023C2F4-8023C3A8       .text stock_start__8dTimer_cFv */
 bool dTimer_c::stock_start() {
     /* Nonmatching */
+    if (mState == 3) {
+        mState = 2;
+        OSTime time = OSGetTime();
+        mStartTime = time;
+        mTime = time;
+        mStartTime -= OSMillisecondsToTicks(dComIfG_getTimerNowTimeMs());
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /* 8023C3A8-8023C3D0       .text stock_start__8dTimer_cFs */
@@ -175,18 +296,44 @@ bool dTimer_c::stock_start(s16 param_1) {
 }
 
 /* 8023C3D0-8023C454       .text stop__8dTimer_cFUc */
-void dTimer_c::stop(u8) {
-    /* Nonmatching */
+bool dTimer_c::stop(u8 param_1) {
+    if (field_0x162 == 1 || field_0x163 != 0)
+        return false;
+
+    if (mState != 2)
+        return false;
+
+    field_0x130 = OSGetTime();
+    field_0x162 = 1;
+    field_0x163 = param_1;
+    return true;
 }
 
 /* 8023C454-8023C500       .text restart__8dTimer_cFUc */
-void dTimer_c::restart(u8) {
-    /* Nonmatching */
+bool dTimer_c::restart(u8 param_1) {
+    if (field_0x162 != 1 || field_0x163 != param_1)
+        return false;
+
+    if (mState != 2)
+        return false;
+
+    mTime = OSGetTime();
+    field_0x138 += mTime - field_0x130;
+    field_0x162 = 0;
+    field_0x163 = 0;
+    return true;
 }
 
 /* 8023C500-8023C56C       .text end__8dTimer_cFi */
-void dTimer_c::end(int) {
-    /* Nonmatching */
+bool dTimer_c::end(int param_1) {
+    if (mState != 2)
+        return false;
+        
+    field_0x120 = OSGetTime();
+    mState = 4;
+    if (param_1 != -1)
+        field_0x158 = param_1;
+    return true;
 }
 
 /* 8023C56C-8023C57C       .text deleteRequest__8dTimer_cFv */
@@ -197,7 +344,7 @@ bool dTimer_c::deleteRequest() {
 
 /* 8023C57C-8023C5E0       .text getTimeMs__8dTimer_cFv */
 s32 dTimer_c::getTimeMs() {
-    /* Nonmatching */
+    return OSTicksToMilliseconds(mTime - mStartTime - field_0x138);
 }
 
 /* 8023C5E0-8023C628       .text getLimitTimeMs__8dTimer_cFv */
@@ -208,35 +355,37 @@ s32 dTimer_c::getLimitTimeMs() {
 /* 8023C628-8023C69C       .text getRestTimeMs__8dTimer_cFv */
 s32 dTimer_c::getRestTimeMs() {
     /* Nonmatching */
+    return OSTicksToMilliseconds((mTime - mStartTime - field_0x138) - mLimitTime);
 }
 
 /* 8023C69C-8023CA24       .text setScreen__21dDlst_TimerScrnDraw_cFPCcP10JKRArchive */
 void dDlst_TimerScrnDraw_c::setScreen(const char* file, JKRArchive* arc) {
     scrn = new J2DScreen();
     scrn->set(file, arc);
-    field_0x22c = NULL;
-    fopMsgM_setPaneData(&field_0x008, scrn->search('tim0'));
-    fopMsgM_setPaneData(&field_0x040, scrn->search('cn00'));
-    fopMsgM_setPaneData(&field_0x078, scrn->search('tt01'));
-    fopMsgM_setPaneData(&field_0x0b0, scrn->search('tn01'));
-    fopMsgM_setPaneData(&field_0x0e8, scrn->search('tn00'));
-    fopMsgM_setPaneData(&field_0x120, scrn->search('tk00'));
-    fopMsgM_setPaneData(&field_0x158, scrn->search('\x00rup'));
-    fopMsgM_setPaneData(&field_0x190, scrn->search('ruxk'));
-    fopMsgM_setPaneData(&field_0x1c8, scrn->search('rupk'));
-    field_0x200 = scrn->search('tt02');
-    field_0x204 = scrn->search('tt03');
-    field_0x208 = scrn->search('tt04');
-    field_0x20c = scrn->search('tt05');
-    field_0x210 = scrn->search('tt06');
+    mIconPicture = NULL;
+    fopMsgM_setPaneData(&mClockIcon, scrn->search('tim0'));
+    fopMsgM_setPaneData(&mClockBG, scrn->search('cn00'));
+    fopMsgM_setPaneData(&mTimerNumber0, scrn->search('tt01'));
+    fopMsgM_setPaneData(&mTimerNumberBG, scrn->search('tn01'));
+    fopMsgM_setPaneData(&mTimerBG, scrn->search('tn00'));
+    fopMsgM_setPaneData(&mTimerBGShadow, scrn->search('tk00'));
+    fopMsgM_setPaneData(&mRupee, scrn->search('\x00rup'));
+    fopMsgM_setPaneData(&mRupeeXShadow, scrn->search('ruxk'));
+    fopMsgM_setPaneData(&mRupeeShadow, scrn->search('rupk'));
 
-    field_0x214 = scrn->search('\x00ru1');
-    field_0x218 = scrn->search('\x00ru2');
-    field_0x21c = scrn->search('\x00ru3');
+    mTimerNumber[0] = scrn->search('tt02');
+    mTimerNumber[1] = scrn->search('tt03');
+    mTimerNumber[2] = scrn->search('tt04');
+    mTimerNumber[3] = scrn->search('tt05');
+    mTimerNumber[4] = scrn->search('tt06');
 
-    field_0x220 = scrn->search('ruk1');
-    field_0x224 = scrn->search('ruk2');
-    field_0x228 = scrn->search('ruk3');
+    mRupeeNumber[0] = scrn->search('\x00ru1');
+    mRupeeNumber[1] = scrn->search('\x00ru2');
+    mRupeeNumber[2] = scrn->search('\x00ru3');
+
+    mRupeeNumberShadow[0] = scrn->search('ruk1');
+    mRupeeNumberShadow[1] = scrn->search('ruk2');
+    mRupeeNumberShadow[2] = scrn->search('ruk3');
 
     setShowType(3);
 }
@@ -273,35 +422,35 @@ void dDlst_TimerScrnDraw_c::setTimer(int time) {
     s32 minsec = time / 1000;
     s32 min = minsec / 60;
     s32 sec = minsec % 60;
-    changeNumberTexture(field_0x078.pane, min / 10);
-    changeNumberTexture(field_0x200, min % 10);
-    changeNumberTexture(field_0x204, sec / 10);
-    changeNumberTexture(field_0x208, sec % 10);
-    changeNumberTexture(field_0x20c, (time % 1000) / 100);
-    changeNumberTexture(field_0x210, ((time % 1000) / 100) / 10);
+    changeNumberTexture(mTimerNumber0.pane, min / 10);
+    changeNumberTexture(mTimerNumber[0], min % 10);
+    changeNumberTexture(mTimerNumber[1], sec / 10);
+    changeNumberTexture(mTimerNumber[2], sec % 10);
+    changeNumberTexture(mTimerNumber[3], (time % 1000) / 100);
+    changeNumberTexture(mTimerNumber[4], ((time % 1000) / 100) / 10);
     if (dComIfGp_event_getMode() == 1) {
-        if (field_0x008.mUserArea < 5) {
-            field_0x008.mUserArea++;
-            s16 alphaStep = 5 - field_0x008.mUserArea;
+        if (mClockIcon.mUserArea < 5) {
+            mClockIcon.mUserArea++;
+            s16 alphaStep = 5 - mClockIcon.mUserArea;
             f32 alpha = ((f32)alphaStep * (f32)alphaStep) / 25.0f;
-            fopMsgM_setNowAlpha(&field_0x008, alpha);
-            fopMsgM_setNowAlpha(&field_0x040, alpha);
-            fopMsgM_setNowAlpha(&field_0x078, alpha);
-            fopMsgM_setNowAlpha(&field_0x0b0, alpha);
-            fopMsgM_setNowAlpha(&field_0x0e8, alpha);
-            fopMsgM_setNowAlpha(&field_0x120, alpha);
+            fopMsgM_setNowAlpha(&mClockIcon, alpha);
+            fopMsgM_setNowAlpha(&mClockBG, alpha);
+            fopMsgM_setNowAlpha(&mTimerNumber0, alpha);
+            fopMsgM_setNowAlpha(&mTimerNumberBG, alpha);
+            fopMsgM_setNowAlpha(&mTimerBG, alpha);
+            fopMsgM_setNowAlpha(&mTimerBGShadow, alpha);
         }
     } else {
-        if (field_0x008.mUserArea > 0) {
-            field_0x008.mUserArea--;
-            int alphaStep = 5 - field_0x008.mUserArea;
+        if (mClockIcon.mUserArea > 0) {
+            mClockIcon.mUserArea--;
+            int alphaStep = 5 - mClockIcon.mUserArea;
             f32 alpha = ((f32)alphaStep * (f32)alphaStep) / 25.0f;
-            fopMsgM_setNowAlpha(&field_0x008, alpha);
-            fopMsgM_setNowAlpha(&field_0x040, alpha);
-            fopMsgM_setNowAlpha(&field_0x078, alpha);
-            fopMsgM_setNowAlpha(&field_0x0b0, alpha);
-            fopMsgM_setNowAlpha(&field_0x0e8, alpha);
-            fopMsgM_setNowAlpha(&field_0x120, alpha);
+            fopMsgM_setNowAlpha(&mClockIcon, alpha);
+            fopMsgM_setNowAlpha(&mClockBG, alpha);
+            fopMsgM_setNowAlpha(&mTimerNumber0, alpha);
+            fopMsgM_setNowAlpha(&mTimerNumberBG, alpha);
+            fopMsgM_setNowAlpha(&mTimerBG, alpha);
+            fopMsgM_setNowAlpha(&mTimerBGShadow, alpha);
         }
     }
 }
@@ -323,32 +472,32 @@ void dDlst_TimerScrnDraw_c::setRupee(s16 num) {
         s32 r010 = (mRupeeNum % 100) / 10;
         s32 r100 = mRupeeNum / 100;
 
-        changeNumberTexture(field_0x21c, r001);
-        changeNumberTexture(field_0x218, r010);
-        changeNumberTexture(field_0x214, r100);
+        changeNumberTexture(mRupeeNumber[0], r001);
+        changeNumberTexture(mRupeeNumber[1], r010);
+        changeNumberTexture(mRupeeNumber[2], r100);
 
-        changeNumberTexture(field_0x228, r001);
-        changeNumberTexture(field_0x224, r010);
-        changeNumberTexture(field_0x220, r100);
+        changeNumberTexture(mRupeeNumberShadow[0], r001);
+        changeNumberTexture(mRupeeNumberShadow[1], r010);
+        changeNumberTexture(mRupeeNumberShadow[2], r100);
     }
 
     if (dComIfGp_event_getMode() == 1) {
-        if (field_0x158.mUserArea < 5) {
-            field_0x158.mUserArea++;
-            s16 alphaStep = field_0x158.mUserArea;
+        if (mRupee.mUserArea < 5) {
+            mRupee.mUserArea++;
+            s16 alphaStep = mRupee.mUserArea;
             f32 alpha = 1.0f - ((f32)alphaStep * (f32)alphaStep) / 25.0f;
-            fopMsgM_setNowAlpha(&field_0x158, alpha);
-            fopMsgM_setNowAlpha(&field_0x190, alpha);
-            fopMsgM_setNowAlpha(&field_0x1c8, alpha);
+            fopMsgM_setNowAlpha(&mRupee, alpha);
+            fopMsgM_setNowAlpha(&mRupeeXShadow, alpha);
+            fopMsgM_setNowAlpha(&mRupeeShadow, alpha);
         }
     } else {
-        if (field_0x158.mUserArea > 0) {
-            field_0x158.mUserArea--;
-            s16 alphaStep = field_0x158.mUserArea;
+        if (mRupee.mUserArea > 0) {
+            mRupee.mUserArea--;
+            s16 alphaStep = mRupee.mUserArea;
             f32 alpha = 1.0f - ((f32)alphaStep * (f32)alphaStep) / 25.0f;
-            fopMsgM_setNowAlpha(&field_0x158, alpha);
-            fopMsgM_setNowAlpha(&field_0x190, alpha);
-            fopMsgM_setNowAlpha(&field_0x1c8, alpha);
+            fopMsgM_setNowAlpha(&mRupee, alpha);
+            fopMsgM_setNowAlpha(&mRupeeXShadow, alpha);
+            fopMsgM_setNowAlpha(&mRupeeShadow, alpha);
         }
     }
 }
@@ -369,48 +518,48 @@ void dDlst_TimerScrnDraw_c::setPaneInitialPos(fopMsgM_pane_class* pane, f32 x, f
 
 /* 8023CF98-8023D0CC       .text setTimerPos__21dDlst_TimerScrnDraw_cFff */
 void dDlst_TimerScrnDraw_c::setTimerPos(f32 x, f32 y) {
-    setPaneInitialPos(&field_0x008, x, y);
-    setPaneInitialPos(&field_0x040, x + field_0x040.mPosTopLeftOrig.x - field_0x008.mPosTopLeftOrig.x, y + field_0x040.mPosTopLeftOrig.y - field_0x008.mPosTopLeftOrig.y);
-    setPaneInitialPos(&field_0x078, x + field_0x078.mPosTopLeftOrig.x - field_0x008.mPosTopLeftOrig.x, y + field_0x078.mPosTopLeftOrig.y - field_0x008.mPosTopLeftOrig.y);
-    setPaneInitialPos(&field_0x0b0, x + field_0x0b0.mPosTopLeftOrig.x - field_0x008.mPosTopLeftOrig.x, y + field_0x0b0.mPosTopLeftOrig.y - field_0x008.mPosTopLeftOrig.y);
-    setPaneInitialPos(&field_0x0e8, x + field_0x0e8.mPosTopLeftOrig.x - field_0x008.mPosTopLeftOrig.x, y + field_0x0e8.mPosTopLeftOrig.y - field_0x008.mPosTopLeftOrig.y);
-    setPaneInitialPos(&field_0x120, x + field_0x120.mPosTopLeftOrig.x - field_0x008.mPosTopLeftOrig.x, y + field_0x120.mPosTopLeftOrig.y - field_0x008.mPosTopLeftOrig.y);
+    setPaneInitialPos(&mClockIcon, x, y);
+    setPaneInitialPos(&mClockBG, x + mClockBG.mPosTopLeftOrig.x - mClockIcon.mPosTopLeftOrig.x, y + mClockBG.mPosTopLeftOrig.y - mClockIcon.mPosTopLeftOrig.y);
+    setPaneInitialPos(&mTimerNumber0, x + mTimerNumber0.mPosTopLeftOrig.x - mClockIcon.mPosTopLeftOrig.x, y + mTimerNumber0.mPosTopLeftOrig.y - mClockIcon.mPosTopLeftOrig.y);
+    setPaneInitialPos(&mTimerNumberBG, x + mTimerNumberBG.mPosTopLeftOrig.x - mClockIcon.mPosTopLeftOrig.x, y + mTimerNumberBG.mPosTopLeftOrig.y - mClockIcon.mPosTopLeftOrig.y);
+    setPaneInitialPos(&mTimerBG, x + mTimerBG.mPosTopLeftOrig.x - mClockIcon.mPosTopLeftOrig.x, y + mTimerBG.mPosTopLeftOrig.y - mClockIcon.mPosTopLeftOrig.y);
+    setPaneInitialPos(&mTimerBGShadow, x + mTimerBGShadow.mPosTopLeftOrig.x - mClockIcon.mPosTopLeftOrig.x, y + mTimerBGShadow.mPosTopLeftOrig.y - mClockIcon.mPosTopLeftOrig.y);
 }
 
 /* 8023D0CC-8023D128       .text setRupeePos__21dDlst_TimerScrnDraw_cFff */
 void dDlst_TimerScrnDraw_c::setRupeePos(f32 x, f32 y) {
-    setPaneInitialPos(&field_0x158, x, y);
-    setPaneInitialPos(&field_0x1c8, x, y);
+    setPaneInitialPos(&mRupee, x, y);
+    setPaneInitialPos(&mRupeeShadow, x, y);
 }
 
 /* 8023D128-8023D1F8       .text setShowType__21dDlst_TimerScrnDraw_cFUc */
 void dDlst_TimerScrnDraw_c::setShowType(u8 type) {
     if (type & 1) {
-        field_0x008.pane->show();
-        field_0x040.pane->show();
-        field_0x078.pane->show();
-        field_0x0b0.pane->show();
-        field_0x0e8.pane->show();
-        field_0x120.pane->show();
+        mClockIcon.pane->show();
+        mClockBG.pane->show();
+        mTimerNumber0.pane->show();
+        mTimerNumberBG.pane->show();
+        mTimerBG.pane->show();
+        mTimerBGShadow.pane->show();
     } else {
-        field_0x008.pane->hide();
-        field_0x040.pane->hide();
-        field_0x078.pane->hide();
-        field_0x0b0.pane->hide();
-        field_0x0e8.pane->hide();
-        field_0x120.pane->hide();
+        mClockIcon.pane->hide();
+        mClockBG.pane->hide();
+        mTimerNumber0.pane->hide();
+        mTimerNumberBG.pane->hide();
+        mTimerBG.pane->hide();
+        mTimerBGShadow.pane->hide();
     }
 
     if (type & 2) {
-        field_0x158.pane->show();
-        field_0x1c8.pane->show();
-        if (field_0x22c != NULL)
-            field_0x22c->show();
+        mRupee.pane->show();
+        mRupeeShadow.pane->show();
+        if (mIconPicture != NULL)
+            mIconPicture->show();
     } else {
-        field_0x158.pane->hide();
-        field_0x1c8.pane->hide();
-        if (field_0x22c != NULL)
-            field_0x22c->hide();
+        mRupee.pane->hide();
+        mRupeeShadow.pane->hide();
+        if (mIconPicture != NULL)
+            mIconPicture->hide();
     }
 }
 
@@ -435,10 +584,10 @@ void dDlst_TimerScrnDraw_c::setIconType(void* tex, u8 type) {
     }
 
     JKRArchive::readTypeResource(tex, 0xC00, 'TIMG', dItem_data::getTexture(itemNo), dComIfGp_getItemIconArchive());
-    field_0x22c = new J2DPicture();
-    ((J2DPicture*)field_0x158.pane)->setWhite(JUtility::TColor(0));
-    ((J2DPicture*)field_0x1c8.pane)->setWhite(JUtility::TColor(0));
-    field_0x22c->setAlpha(0);
+    mIconPicture = new J2DPicture((ResTIMG*)tex);
+    ((J2DPicture*)mRupee.pane)->setWhite(JUtility::TColor(0));
+    ((J2DPicture*)mRupeeShadow.pane)->setWhite(JUtility::TColor(0));
+    mIconPicture->setAlpha(0);
 }
 
 /* 8023D318-8023D644       .text anime__21dDlst_TimerScrnDraw_cFv */
@@ -447,7 +596,7 @@ void dDlst_TimerScrnDraw_c::anime() {
 }
 
 /* 8023D644-8023D848       .text closeAnime__21dDlst_TimerScrnDraw_cFv */
-bool dDlst_TimerScrnDraw_c::closeAnime() {
+BOOL dDlst_TimerScrnDraw_c::closeAnime() {
     /* Nonmatching */
     bool ret = false;
     field_0x234++;
@@ -455,21 +604,21 @@ bool dDlst_TimerScrnDraw_c::closeAnime() {
         s32 alphaStep = 7 - field_0x234;
         f32 alpha = ((f32)alphaStep * (f32)alphaStep) / 49.0f;
         f32 x = (((f32)field_0x234 * (f32)field_0x234) / 49.0f) * -50.0f;
-        fopMsgM_paneTrans(&field_0x008, x, 0.0f);
-        fopMsgM_paneTrans(&field_0x040, x, 0.0f);
-        fopMsgM_paneTrans(&field_0x0b0, x, 0.0f);
-        fopMsgM_paneTrans(&field_0x0e8, x, 0.0f);
-        fopMsgM_paneTrans(&field_0x120, x, 0.0f);
-        fopMsgM_setNowAlpha(&field_0x008, alpha);
-        fopMsgM_setNowAlpha(&field_0x040, alpha);
-        fopMsgM_setNowAlpha(&field_0x078, alpha);
-        fopMsgM_setNowAlpha(&field_0x0b0, alpha);
-        fopMsgM_setNowAlpha(&field_0x0e8, alpha);
-        fopMsgM_setNowAlpha(&field_0x120, alpha);
-        fopMsgM_paneTrans(&field_0x158, x + g_menuHIO.field_0x9a, g_menuHIO.field_0x9c);
-        fopMsgM_setNowAlpha(&field_0x158, alpha);
-        fopMsgM_setNowAlpha(&field_0x190, alpha);
-        fopMsgM_setNowAlpha(&field_0x1c8, alpha);
+        fopMsgM_paneTrans(&mClockIcon, x, 0.0f);
+        fopMsgM_paneTrans(&mClockBG, x, 0.0f);
+        fopMsgM_paneTrans(&mTimerNumberBG, x, 0.0f);
+        fopMsgM_paneTrans(&mTimerBG, x, 0.0f);
+        fopMsgM_paneTrans(&mTimerBGShadow, x, 0.0f);
+        fopMsgM_setNowAlpha(&mClockIcon, alpha);
+        fopMsgM_setNowAlpha(&mClockBG, alpha);
+        fopMsgM_setNowAlpha(&mTimerNumber0, alpha);
+        fopMsgM_setNowAlpha(&mTimerNumberBG, alpha);
+        fopMsgM_setNowAlpha(&mTimerBG, alpha);
+        fopMsgM_setNowAlpha(&mTimerBGShadow, alpha);
+        fopMsgM_paneTrans(&mRupee, x + g_menuHIO.field_0x9a, g_menuHIO.field_0x9c);
+        fopMsgM_setNowAlpha(&mRupee, alpha);
+        fopMsgM_setNowAlpha(&mRupeeXShadow, alpha);
+        fopMsgM_setNowAlpha(&mRupeeShadow, alpha);
     }
 
     if (field_0x234 >= 7)
@@ -480,36 +629,36 @@ bool dDlst_TimerScrnDraw_c::closeAnime() {
 
 /* 8023D848-8023D8BC       .text hide__21dDlst_TimerScrnDraw_cFv */
 bool dDlst_TimerScrnDraw_c::hide() {
-    fopMsgM_setNowAlphaZero(&field_0x008);
-    fopMsgM_setNowAlphaZero(&field_0x040);
-    fopMsgM_setNowAlphaZero(&field_0x078);
-    fopMsgM_setNowAlphaZero(&field_0x0b0);
-    fopMsgM_setNowAlphaZero(&field_0x0e8);
-    fopMsgM_setNowAlphaZero(&field_0x120);
-    fopMsgM_setNowAlphaZero(&field_0x158);
-    fopMsgM_setNowAlphaZero(&field_0x190);
-    fopMsgM_setNowAlphaZero(&field_0x1c8);
+    fopMsgM_setNowAlphaZero(&mClockIcon);
+    fopMsgM_setNowAlphaZero(&mClockBG);
+    fopMsgM_setNowAlphaZero(&mTimerNumber0);
+    fopMsgM_setNowAlphaZero(&mTimerNumberBG);
+    fopMsgM_setNowAlphaZero(&mTimerBG);
+    fopMsgM_setNowAlphaZero(&mTimerBGShadow);
+    fopMsgM_setNowAlphaZero(&mRupee);
+    fopMsgM_setNowAlphaZero(&mRupeeXShadow);
+    fopMsgM_setNowAlphaZero(&mRupeeShadow);
     return true;
 }
 
 /* 8023D8BC-8023D9A0       .text draw__21dDlst_TimerScrnDraw_cFv */
 void dDlst_TimerScrnDraw_c::draw() {
     /* Nonmatching */
-    fopMsgM_setAlpha(&field_0x008);
-    fopMsgM_setAlpha(&field_0x040);
-    fopMsgM_setAlpha(&field_0x078);
-    fopMsgM_setAlpha(&field_0x0b0);
-    fopMsgM_setAlpha(&field_0x0e8);
-    fopMsgM_setAlpha(&field_0x120);
-    fopMsgM_setAlpha(&field_0x158);
-    fopMsgM_setAlpha(&field_0x190);
-    fopMsgM_setAlpha(&field_0x1c8);
+    fopMsgM_setAlpha(&mClockIcon);
+    fopMsgM_setAlpha(&mClockBG);
+    fopMsgM_setAlpha(&mTimerNumber0);
+    fopMsgM_setAlpha(&mTimerNumberBG);
+    fopMsgM_setAlpha(&mTimerBG);
+    fopMsgM_setAlpha(&mTimerBGShadow);
+    fopMsgM_setAlpha(&mRupee);
+    fopMsgM_setAlpha(&mRupeeXShadow);
+    fopMsgM_setAlpha(&mRupeeShadow);
     J2DOrthoGraph* graf = dComIfGp_getCurrentGrafPort();
     graf->setPort();
     scrn->draw(0.0f, 0.0f, graf);
-    if (field_0x22c != NULL) {
-        field_0x22c->draw(field_0x158.mPosTopLeft.x, field_0x158.mPosTopLeft.y, field_0x158.mSize.x, field_0x158.mSize.y, false, false, false);
-        field_0x22c->setAlpha(field_0x158.mNowAlpha);
+    if (mIconPicture != NULL) {
+        mIconPicture->draw(mRupee.mPosTopLeft.x, mRupee.mPosTopLeft.y, mRupee.mSize.x, mRupee.mSize.y, false, false, false);
+        mIconPicture->setAlpha(mRupee.mNowAlpha);
     }
 }
 

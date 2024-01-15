@@ -26,9 +26,8 @@ struct fopMsg_prm_class {
 };  // Size: 0x1C
 
 struct fopMsg_prm_timer : public fopMsg_prm_class {
-    /* 0x1C */ int field_0x1c;
-    /* 0x20 */ u8 field_0x20;
-    /* 0x21 */ u8 field_0x21;
+    /* 0x1C */ int mTimerMode;
+    /* 0x20 */ u16 field_0x20;
     /* 0x22 */ u8 mShowType;
     /* 0x23 */ u8 mIconType;
     /* 0x24 */ u8 field_0x24;
