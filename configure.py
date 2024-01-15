@@ -120,7 +120,7 @@ if not is_windows():
 
 # Tool versions
 config.compilers_tag = "20230715"
-config.dtk_tag = "v0.6.5"
+config.dtk_tag = "v0.7.2"
 config.sjiswrap_tag = "v1.1.1"
 config.wibo_tag = "0.6.3"
 
@@ -1077,7 +1077,7 @@ config.libs = [
             Object(Matching,    "PowerPC_EABI_Support/Runtime/Src/CPlusLibPPC.cp"),
             Object(NonMatching, "PowerPC_EABI_Support/Runtime/Src/NMWException.cp"),
             Object(Matching,    "PowerPC_EABI_Support/Runtime/Src/ptmf.c"),
-            Object(NonMatching, "PowerPC_EABI_Support/Runtime/Src/runtime.c"),
+            Object(Matching,    "PowerPC_EABI_Support/Runtime/Src/runtime.c"),
             Object(Matching,    "PowerPC_EABI_Support/Runtime/Src/__init_cpp_exceptions.cpp"),
             Object(Matching,    "PowerPC_EABI_Support/Runtime/Src/Gecko_ExceptionPPC.cp"),
             Object(Matching,    "PowerPC_EABI_Support/Runtime/Src/GCN_mem_alloc.c", extra_cflags=["-str reuse,nopool,readonly"]),
