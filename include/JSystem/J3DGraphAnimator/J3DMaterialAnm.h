@@ -71,8 +71,8 @@ public:
         mAnmTransform = NULL;
     }
     J3DTexMtxAnm(J3DAnmTextureSRTKey * pAnm, u16 anmIdx) {
-        mAnmTransform = pAnm;
         mAnmIndex = anmIdx;
+        mAnmTransform = pAnm;
     }
 
     void operator=(J3DTexMtxAnm const& other) {
