@@ -4,12 +4,15 @@
 //
 
 #include "d/d_meter.h"
+#include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
+#include "m_Do/m_Do_hostIO.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
 #include "d/d_metronome.h"
 #include "d/d_procname.h"
+#include "d/d_timer.h"
 #include "stdio.h"
 
 dMeter_info_c dMeter_Info;
@@ -658,12 +661,12 @@ void dMeter_PaneShow(fopMsgM_pane_class* pane) {
 }
 
 /* 801EFAC8-801EFC40       .text dMeter_alphaControl__FP15sub_meter_class */
-void dMeter_alphaControl(sub_meter_class*) {
+void dMeter_alphaControl(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801EFC40-801F01C0       .text dMeter_statusCheck__FP15sub_meter_class */
-void dMeter_statusCheck(sub_meter_class*) {
+void dMeter_statusCheck(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
@@ -720,69 +723,69 @@ const char* dMeter_actionTex(s16 id) {
         u8 id;
         const char* filename;
     } act[] = {
-        0, "ba_shiraberu.bti",
-        1, "ba_miru.bti",
-        2, "ba_syaberu.bti",
-        3, "ba_shiraberu.bti",
-        4, "ba_motu.bti",
-        5, "ba_noru.bti",
-        6, "ba_oriru.bti",
-        7, "ba_modoru.bti",
-        8, "ba_shimau.bti",
-        9, "ba_oku.bti",
-        10, "ba_chekku.bti",
-        11, "ba_hiraku.bti",
-        12, "ba_attack.bti",
-        13, "ba_osu.bti",
-        14, "ba_nageru.bti",
-        15, "ba_shagamu.bti",
-        16, "ba_harituku.bti",
-        17, "ba_tukamu.bti",
-        18, "ba_jump.bti",
-        19, "ba_tomeru.bti",
-        20, "ba_haru.bti",
-        21, "ba_tatamu.bti",
-        22, "ba_hanasu.bti",
-        23, "ba_kettei.bti",
-        24, "ba_kogu.bti",
-        25, "ba_tugihe.bti",
-        26, "ba_sake.bti",
-        27, "ba_motu_buki.bti",
-        28, "ba_noru_hune.bti",
-        29, "ba_oriru_hune.bti",
-        30, "ba_save.bti",
-        31, "ba_option.bti",
-        32, "ba_toru.bti",
-        33, "ba_setumei.bti",
-        34, "ba_kirikae.bti",
-        35, "ba_tobu.bti",
-        36, "ba_yobu.bti",
-        37, "ba_hoshii.bti",
-        38, "ba_yomu.bti",
-        39, "ba_yameru.bti",
-        40, "ba_kakudai.bti",
-        41, "ba_hikaku.bti",
-        42, "ba_zoom01.bti",
-        43, "ba_zoom02.bti",
-        44, "ba_susumu.bti",
-        45, "ba_nageru.bti",
-        46, "ba_motu.bti",
-        47, "ba_huru.bti",
-        48, "ba_kaizuhe.bti",
-        49, "ba_sake.bti",
-        50, "ba_modoru.bti",
-        51, "ba_save.bti",
-        52, "ba_save.bti",
-        53, "sword_01.bti",
-        54, "ba_husegu.bti",
-        55, "boko_stick.bti",
-        56, "hatchet.bti",
-        57, "iron_club.bti",
-        58, "longsword.bti",
-        59, "spear.bti",
-        60, "spear.bti",
-        61, "bow_01.bti",
-        62, "ba_modoru.bti",
+        { 0, "ba_shiraberu.bti" },
+        { 1, "ba_miru.bti" },
+        { 2, "ba_syaberu.bti" },
+        { 3, "ba_shiraberu.bti" },
+        { 4, "ba_motu.bti" },
+        { 5, "ba_noru.bti" },
+        { 6, "ba_oriru.bti" },
+        { 7, "ba_modoru.bti" },
+        { 8, "ba_shimau.bti" },
+        { 9, "ba_oku.bti" },
+        { 10, "ba_chekku.bti" },
+        { 11, "ba_hiraku.bti" },
+        { 12, "ba_attack.bti" },
+        { 13, "ba_osu.bti" },
+        { 14, "ba_nageru.bti" },
+        { 15, "ba_shagamu.bti" },
+        { 16, "ba_harituku.bti" },
+        { 17, "ba_tukamu.bti" },
+        { 18, "ba_jump.bti" },
+        { 19, "ba_tomeru.bti" },
+        { 20, "ba_haru.bti" },
+        { 21, "ba_tatamu.bti" },
+        { 22, "ba_hanasu.bti" },
+        { 23, "ba_kettei.bti" },
+        { 24, "ba_kogu.bti" },
+        { 25, "ba_tugihe.bti" },
+        { 26, "ba_sake.bti" },
+        { 27, "ba_motu_buki.bti" },
+        { 28, "ba_noru_hune.bti" },
+        { 29, "ba_oriru_hune.bti" },
+        { 30, "ba_save.bti" },
+        { 31, "ba_option.bti" },
+        { 32, "ba_toru.bti" },
+        { 33, "ba_setumei.bti" },
+        { 34, "ba_kirikae.bti" },
+        { 35, "ba_tobu.bti" },
+        { 36, "ba_yobu.bti" },
+        { 37, "ba_hoshii.bti" },
+        { 38, "ba_yomu.bti" },
+        { 39, "ba_yameru.bti" },
+        { 40, "ba_kakudai.bti" },
+        { 41, "ba_hikaku.bti" },
+        { 42, "ba_zoom01.bti" },
+        { 43, "ba_zoom02.bti" },
+        { 44, "ba_susumu.bti" },
+        { 45, "ba_nageru.bti" },
+        { 46, "ba_motu.bti" },
+        { 47, "ba_huru.bti" },
+        { 48, "ba_kaizuhe.bti" },
+        { 49, "ba_sake.bti" },
+        { 50, "ba_modoru.bti" },
+        { 51, "ba_save.bti" },
+        { 52, "ba_save.bti" },
+        { 53, "sword_01.bti" },
+        { 54, "ba_husegu.bti" },
+        { 55, "boko_stick.bti" },
+        { 56, "hatchet.bti" },
+        { 57, "iron_club.bti" },
+        { 58, "longsword.bti" },
+        { 59, "spear.bti" },
+        { 60, "spear.bti" },
+        { 61, "bow_01.bti" },
+        { 62, "ba_modoru.bti" },
     };
     int found = 0;
     for (int i = 0; i < 63; i++) {
@@ -797,7 +800,6 @@ const char* dMeter_actionTex(s16 id) {
 
 /* 801F0378-801F041C       .text dMeter_weponTex__Fv */
 const char* dMeter_weponTex() {
-    /* Nonmatching */
     static const char* wepon[] = {
         "sword_00.bti",
         "sword_01.bti",
@@ -819,7 +821,6 @@ const char* dMeter_weponTex() {
 
 /* 801F041C-801F0434       .text dMeter_heartTex__Fs */
 const char* dMeter_heartTex(s16 param_1) {
-    /* Nonmatching */
     static const char* ht[] = {
         "heart.bti",
         "heart_03.bti",
@@ -837,37 +838,85 @@ void dMeter_recollect_boss_data() {
 
 /* 801F0608-801F06CC       .text draw__16dDlst_2DMETER1_cFv */
 void dDlst_2DMETER1_c::draw() {
-    /* Nonmatching */
+    J2DOrthoGraph* graf = dComIfGp_getCurrentGrafPort();
+    graf->setPort();
+    sMainParts3->draw(0.0f, 0.0f, graf);
+    sMainParts1->draw(0.0f, 0.0f, graf);
+    if (sScrTimer1 != NULL) {
+        sScrTimer1->setScissor(true);
+        sScrTimer1->draw(0.0f, 0.0f, graf);
+    }
+    if (sScrTimer2 != NULL) {
+        sScrTimer2->draw(0.0f, 0.0f, graf);
+    }
+    sChoiceRoad->draw(0.0f, 0.0f, graf);
 }
 
 /* 801F06CC-801F0724       .text draw__16dDlst_2DMETER2_cFv */
 void dDlst_2DMETER2_c::draw() {
-    /* Nonmatching */
+    J2DOrthoGraph* graf = dComIfGp_getCurrentGrafPort();
+    graf->setPort();
+    sMainParts2->draw(0.0f, 0.0f, graf);
 }
 
+void dMeter_setNowHeartScaleXY(fopMsgM_pane_class*);
+
 /* 801F0724-801F07D4       .text dMeter_heart_data_set__FP18fopMsgM_pane_classP18fopMsgM_pane_classP18fopMsgM_pane_class */
-void dMeter_heart_data_set(fopMsgM_pane_class*, fopMsgM_pane_class*, fopMsgM_pane_class*) {
-    /* Nonmatching */
+void dMeter_heart_data_set(fopMsgM_pane_class* pane1, fopMsgM_pane_class* pane2, fopMsgM_pane_class* pane3) {
+    dMeter_setNowHeartScaleXY(pane2);
+    dMeter_setNowHeartScaleXY(pane3);
+    pane1->mPosTopLeft = pane2->mPosTopLeft;
+    pane1->mSize = pane2->mSize;
+    pane1->mPosCenter = pane2->mPosCenter;
+    pane1->pane->move(pane1->mPosTopLeft.x, pane1->mPosTopLeft.y);
+    pane1->pane->resize(pane1->mSize.x, pane1->mSize.y);
 }
 
 /* 801F07D4-801F0820       .text dMeter_paneBottomScaleY__FP18fopMsgM_pane_classf */
-void dMeter_paneBottomScaleY(fopMsgM_pane_class*, f32) {
-    /* Nonmatching */
+void dMeter_paneBottomScaleY(fopMsgM_pane_class* pane, f32 scale) {
+    f32 oldBottom = (pane->mPosTopLeft.y + pane->mSize.y);
+    pane->mSize.y = pane->mSizeOrig.y * scale;
+    pane->mPosCenter.y = oldBottom - (pane->mSize.y / 2.0f);
+    fopMsgM_cposMove(pane);
 }
 
 /* 801F0820-801F08DC       .text dMeter_parentPaneTrans__FP18fopMsgM_pane_classf */
-void dMeter_parentPaneTrans(fopMsgM_pane_class*, f32) {
-    /* Nonmatching */
+void dMeter_parentPaneTrans(fopMsgM_pane_class* pane, f32 scale) {
+    pane->mPosCenter.x += g_meterHIO.field_0x50;
+    pane->mPosCenter.y += g_meterHIO.field_0x52;
+    fopMsgM_paneScaleXY(pane, scale);
+    J2DPane* j2dPane = pane->pane;
+    j2dPane->mBasePosition.set(pane->mSize.x / 2.0f, pane->mSize.y / 2.0f);
+    j2dPane->mRotationAxis = 'z';
+    j2dPane->calcMtx();
 }
 
 /* 801F08DC-801F09D8       .text dMeter_childPaneTrans__FP18fopMsgM_pane_classP18fopMsgM_pane_classf */
-void dMeter_childPaneTrans(fopMsgM_pane_class*, fopMsgM_pane_class*, f32) {
+void dMeter_childPaneTrans(fopMsgM_pane_class* pane, fopMsgM_pane_class* parent, f32 scale) {
     /* Nonmatching */
+    pane->mPosCenter.x += (pane->mPosCenterOrig.x - parent->mPosCenterOrig.x) * (scale - 1.0f);
+    pane->mPosCenter.y += (pane->mPosCenterOrig.y - parent->mPosCenterOrig.y) * (scale - 1.0f);
+    pane->mPosCenter.x += g_meterHIO.field_0x50;
+    pane->mPosCenter.y += g_meterHIO.field_0x52;
+    fopMsgM_paneScaleXY(pane, scale);
+    J2DPane* j2dPane = pane->pane;
+    j2dPane->mBasePosition.set(pane->mSize.x / 2.0f, pane->mSize.y / 2.0f);
+    j2dPane->mRotationAxis = 'z';
+    j2dPane->calcMtx();
 }
 
 /* 801F09D8-801F0AD8       .text dMeter_childPaneTransOnly__FP18fopMsgM_pane_classP18fopMsgM_pane_classff */
-void dMeter_childPaneTransOnly(fopMsgM_pane_class*, fopMsgM_pane_class*, f32, f32) {
+void dMeter_childPaneTransOnly(fopMsgM_pane_class* pane, fopMsgM_pane_class* parent, f32 transScale, f32 scale) {
     /* Nonmatching */
+    pane->mPosCenter.x += (pane->mPosCenterOrig.x - parent->mPosCenterOrig.x) * (transScale - 1.0f);
+    pane->mPosCenter.y += (pane->mPosCenterOrig.y - parent->mPosCenterOrig.y) * (transScale - 1.0f);
+    pane->mPosCenter.x += g_meterHIO.field_0x50;
+    pane->mPosCenter.y += g_meterHIO.field_0x52;
+    fopMsgM_paneScaleXY(pane, scale);
+    J2DPane* j2dPane = pane->pane;
+    j2dPane->mBasePosition.set(pane->mSize.x / 2.0f, pane->mSize.y / 2.0f);
+    j2dPane->mRotationAxis = 'z';
+    j2dPane->calcMtx();
 }
 
 /* 801F0AD8-801F0C10       .text dMeter_childPaneTransChildTrans__FP18fopMsgM_pane_classP18fopMsgM_pane_classP18fopMsgM_pane_classff */
@@ -881,60 +930,87 @@ void dMeter_childPaneTransChildTransOnly(fopMsgM_pane_class*, fopMsgM_pane_class
 }
 
 /* 801F0D0C-801F0D64       .text dMeter_setHeartScaleXY__FP18fopMsgM_pane_classs */
-void dMeter_setHeartScaleXY(fopMsgM_pane_class*, s16) {
-    /* Nonmatching */
+void dMeter_setHeartScaleXY(fopMsgM_pane_class* pane, s16 scale) {
+    f32 scaleX, scaleY;
+    if (scale != 4) {
+        scaleX = 1.0f;
+        scaleY = 1.0f;
+    } else {
+        scaleX = texRateX;
+        scaleY = texRateY;
+    }
+    pane->mSize.x = pane->mSizeOrig.x * scaleX;
+    pane->mSize.y = pane->mSizeOrig.y * scaleY;
+    fopMsgM_cposMove(pane);
 }
 
 /* 801F0D64-801F0DD4       .text dMeter_setHeartScaleXY2__FP18fopMsgM_pane_classs */
-void dMeter_setHeartScaleXY2(fopMsgM_pane_class*, s16) {
-    /* Nonmatching */
+void dMeter_setHeartScaleXY2(fopMsgM_pane_class* pane, s16 scale) {
+    f32 scaleX, scaleY;
+    if (scale != 4) {
+        scaleX = 1.0f;
+        scaleY = 1.0f;
+    } else {
+        scaleX = texRateX;
+        scaleY = texRateY;
+    }
+    pane->mSize.x = pane->mSizeOrig.x * scaleX * g_meterHIO.field_0x48;
+    pane->mSize.y = pane->mSizeOrig.y * scaleY * g_meterHIO.field_0x48;
+    fopMsgM_cposMove(pane);
 }
 
 /* 801F0DD4-801F0E1C       .text dMeter_setNowHeartScaleXY__FP18fopMsgM_pane_class */
-void dMeter_setNowHeartScaleXY(fopMsgM_pane_class*) {
-    /* Nonmatching */
+void dMeter_setNowHeartScaleXY(fopMsgM_pane_class* pane) {
+    pane->mSize.x = pane->mSizeOrig.x * g_meterHIO.field_0x10;
+    pane->mSize.y = pane->mSizeOrig.y * g_meterHIO.field_0x10;
+    fopMsgM_cposMove(pane);
 }
 
 /* 801F0E1C-801F0E74       .text dMeter_setNowHeartScaleXY2__FP18fopMsgM_pane_class */
-void dMeter_setNowHeartScaleXY2(fopMsgM_pane_class*) {
-    /* Nonmatching */
+void dMeter_setNowHeartScaleXY2(fopMsgM_pane_class* pane) {
+    pane->mSize.x = pane->mSizeOrig.x * g_meterHIO.field_0x10 * g_meterHIO.field_0x48;
+    pane->mSize.y = pane->mSizeOrig.y * g_meterHIO.field_0x10 * g_meterHIO.field_0x48;
+    fopMsgM_cposMove(pane);
 }
 
 /* 801F0E74-801F0EE4       .text dMeter_heartChangeTexture__FP15sub_meter_classPCci */
-void dMeter_heartChangeTexture(sub_meter_class*, const char*, int) {
-    /* Nonmatching */
+void dMeter_heartChangeTexture(sub_meter_class* i_this, const char* textureName, int no) {
+    ((J2DPicture*)i_this->mHeart[no].pane)->changeTexture(textureName, 0);
+    ((J2DPicture*)i_this->mHeartShadow[no].pane)->changeTexture(textureName, 0);
+    dMeter_PaneShow(&i_this->mHeart[no]);
+    dMeter_PaneShow(&i_this->mHeartShadow[no]);
 }
 
 /* 801F0EE4-801F10B0       .text dMeter_heartScaleInit__FP15sub_meter_class */
-void dMeter_heartScaleInit(sub_meter_class*) {
+void dMeter_heartScaleInit(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F10B0-801F10FC       .text dMeter_maxLifeChange__FP15sub_meter_class */
-void dMeter_maxLifeChange(sub_meter_class*) {
+void dMeter_maxLifeChange(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F10FC-801F11F8       .text dMeter_lifeChange__FP15sub_meter_classPb */
-void dMeter_lifeChange(sub_meter_class*, bool*) {
+void dMeter_lifeChange(sub_meter_class* i_this, bool*) {
     /* Nonmatching */
 }
 
 /* 801F11F8-801F13A4       .text dMeter_heartLightMove__FP15sub_meter_class */
-void dMeter_heartLightMove(sub_meter_class*) {
+void dMeter_heartLightMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F13A4-801F153C       .text dMeter_heartAlpha__FP15sub_meter_class */
-void dMeter_heartAlpha(sub_meter_class*) {
+void dMeter_heartAlpha(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F153C-801F15EC       .text dMeter_heartInit__FP15sub_meter_class */
 void dMeter_heartInit(sub_meter_class* i_this) {
     /* Nonmatching */
-    texScaleX = i_this->field_0x0640[0].mSizeOrig.x / 40.0f;
-    texScaleY = i_this->field_0x0640[0].mSizeOrig.y / 32.0f;
+    texScaleX = i_this->mHeart[0].mSizeOrig.x / 40.0f;
+    texScaleY = i_this->mHeart[0].mSizeOrig.y / 32.0f;
     texRateX = 0.4f;
     texRateY = 0.5f;
     i_this->field_0x0f00.mUserArea = 0;
@@ -944,17 +1020,17 @@ void dMeter_heartInit(sub_meter_class* i_this) {
 }
 
 /* 801F15EC-801F17F0       .text dMeter_LifeMove__FP15sub_meter_classb */
-void dMeter_LifeMove(sub_meter_class*, bool) {
+void dMeter_LifeMove(sub_meter_class* i_this, bool) {
     /* Nonmatching */
 }
 
 /* 801F17F0-801F1A48       .text dMeter_BattleLifeMove__FP15sub_meter_classb */
-void dMeter_BattleLifeMove(sub_meter_class*, bool) {
+void dMeter_BattleLifeMove(sub_meter_class* i_this, bool) {
     /* Nonmatching */
 }
 
 /* 801F1A48-801F1DB8       .text dMeter_heartColor__FP15sub_meter_class */
-void dMeter_heartColor(sub_meter_class*) {
+void dMeter_heartColor(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
@@ -979,78 +1055,78 @@ void dMeter_heartMove(sub_meter_class* i_this) {
 /* 801F1E60-801F1EBC       .text dMeter_heartDraw__FP15sub_meter_class */
 void dMeter_heartDraw(sub_meter_class* i_this) {
     for (int i = 0; i < 20; i++) {
-        fopMsgM_setAlpha(&i_this->field_0x0640[i]);
-        fopMsgM_setAlpha(&i_this->field_0x0aa0[i]);
+        fopMsgM_setAlpha(&i_this->mHeart[i]);
+        fopMsgM_setAlpha(&i_this->mHeartShadow[i]);
     }
 }
 
 /* 801F1EBC-801F1F8C       .text dMeter_weponInit__FP15sub_meter_class */
-void dMeter_weponInit(sub_meter_class*) {
+void dMeter_weponInit(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F1F8C-801F23B8       .text dMeter_weponMove__FP15sub_meter_class */
-void dMeter_weponMove(sub_meter_class*) {
+void dMeter_weponMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F23B8-801F2408       .text dMeter_weponDraw__FP15sub_meter_class */
-void dMeter_weponDraw(sub_meter_class*) {
+void dMeter_weponDraw(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F2408-801F2688       .text dMeter_weponChange__FP15sub_meter_class */
-void dMeter_weponChange(sub_meter_class*) {
+void dMeter_weponChange(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F2688-801F2818       .text dMeter_weponAnime__FP15sub_meter_class */
-void dMeter_weponAnime(sub_meter_class*) {
+void dMeter_weponAnime(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F2818-801F337C       .text dMeter_weponTrans__FP15sub_meter_class */
-void dMeter_weponTrans(sub_meter_class*) {
+void dMeter_weponTrans(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F337C-801F36C0       .text dMeter_weponAlpha__FP15sub_meter_class */
-void dMeter_weponAlpha(sub_meter_class*) {
+void dMeter_weponAlpha(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F36C0-801F3770       .text dMeter_actionInit__FP15sub_meter_class */
-void dMeter_actionInit(sub_meter_class*) {
+void dMeter_actionInit(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F3770-801F37E0       .text dMeter_actionMove__FP15sub_meter_class */
-void dMeter_actionMove(sub_meter_class*) {
+void dMeter_actionMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F37E0-801F386C       .text dMeter_actionDraw__FP15sub_meter_class */
-void dMeter_actionDraw(sub_meter_class*) {
+void dMeter_actionDraw(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F386C-801F3B60       .text dMeter_actionForce__FP15sub_meter_class */
-void dMeter_actionForce(sub_meter_class*) {
+void dMeter_actionForce(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F3B60-801F3CFC       .text dMeter_actionChange__FP15sub_meter_class */
-void dMeter_actionChange(sub_meter_class*) {
+void dMeter_actionChange(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F3CFC-801F489C       .text dMeter_actionTrans__FP15sub_meter_class */
-void dMeter_actionTrans(sub_meter_class*) {
+void dMeter_actionTrans(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F489C-801F4C80       .text dMeter_actionAlpha__FP15sub_meter_class */
-void dMeter_actionAlpha(sub_meter_class*) {
+void dMeter_actionAlpha(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
@@ -1065,17 +1141,17 @@ void dMeter_numberColor(J2DPane*, u8, u8) {
 }
 
 /* 801F4E04-801F4FEC       .text dMeter_xyInit__FP15sub_meter_class */
-void dMeter_xyInit(sub_meter_class*) {
+void dMeter_xyInit(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F4FEC-801F5248       .text dMeter_xyMove__FP15sub_meter_class */
-void dMeter_xyMove(sub_meter_class*) {
+void dMeter_xyMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F5248-801F5308       .text dMeter_xyDraw__FP15sub_meter_class */
-void dMeter_xyDraw(sub_meter_class*) {
+void dMeter_xyDraw(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
@@ -1085,22 +1161,22 @@ void dMeter_xyEquipItem(int) {
 }
 
 /* 801F543C-801F57B0       .text dMeter_xyItemNumberSet__FP15sub_meter_classi */
-void dMeter_xyItemNumberSet(sub_meter_class*, int) {
+void dMeter_xyItemNumberSet(sub_meter_class* i_this, int) {
     /* Nonmatching */
 }
 
 /* 801F57B0-801F58E4       .text dMeter_xyBowLightAnime__FP15sub_meter_classi */
-void dMeter_xyBowLightAnime(sub_meter_class*, int) {
+void dMeter_xyBowLightAnime(sub_meter_class* i_this, int) {
     /* Nonmatching */
 }
 
 /* 801F58E4-801F5C98       .text dMeter_xyItemCountUp__FP15sub_meter_class */
-void dMeter_xyItemCountUp(sub_meter_class*) {
+void dMeter_xyItemCountUp(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F5C98-801F5FDC       .text dMeter_xyItemChange__FP15sub_meter_classi */
-void dMeter_xyItemChange(sub_meter_class*, int) {
+void dMeter_xyItemChange(sub_meter_class* i_this, int) {
     /* Nonmatching */
 }
 
@@ -1110,197 +1186,197 @@ void dMeter_xyRotateZ(fopMsgM_pane_class*, f32, f32) {
 }
 
 /* 801F6084-801F69A0       .text dMeter_xyAlpha__FP15sub_meter_class */
-void dMeter_xyAlpha(sub_meter_class*) {
+void dMeter_xyAlpha(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F69A0-801F7034       .text dMeter_xyTrans__FP15sub_meter_class */
-void dMeter_xyTrans(sub_meter_class*) {
+void dMeter_xyTrans(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F7034-801F70E0       .text dMeter_rInit__FP15sub_meter_class */
-void dMeter_rInit(sub_meter_class*) {
+void dMeter_rInit(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F70E0-801F71F4       .text dMeter_rMove__FP15sub_meter_class */
-void dMeter_rMove(sub_meter_class*) {
+void dMeter_rMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F71F4-801F7234       .text dMeter_rDraw__FP15sub_meter_class */
-void dMeter_rDraw(sub_meter_class*) {
+void dMeter_rDraw(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F7234-801F749C       .text dMeter_rAlpha__FP15sub_meter_class */
-void dMeter_rAlpha(sub_meter_class*) {
+void dMeter_rAlpha(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F749C-801F7B0C       .text dMeter_rTrans__FP15sub_meter_class */
-void dMeter_rTrans(sub_meter_class*) {
+void dMeter_rTrans(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F7B0C-801F7B90       .text dMeter_enemyInit__FP15sub_meter_class */
-void dMeter_enemyInit(sub_meter_class*) {
+void dMeter_enemyInit(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F7B90-801F80C4       .text dMeter_enemyMove__FP15sub_meter_class */
-void dMeter_enemyMove(sub_meter_class*) {
+void dMeter_enemyMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F80C4-801F842C       .text dMeter_zakoEnemyMove__FP15sub_meter_class */
-void dMeter_zakoEnemyMove(sub_meter_class*) {
+void dMeter_zakoEnemyMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F842C-801F86E4       .text dMeter_bossEnemyMove__FP15sub_meter_classP10fopAc_ac_c */
-void dMeter_bossEnemyMove(sub_meter_class*, fopAc_ac_c*) {
+void dMeter_bossEnemyMove(sub_meter_class* i_this, fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 801F86E4-801F878C       .text dMeter_zakoEnemyHide__FP15sub_meter_class */
-void dMeter_zakoEnemyHide(sub_meter_class*) {
+void dMeter_zakoEnemyHide(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F878C-801F8888       .text dMeter_bossEnemyHide__FP15sub_meter_class */
-void dMeter_bossEnemyHide(sub_meter_class*) {
+void dMeter_bossEnemyHide(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F8888-801F8BA8       .text dMeter_bossAnime__FP15sub_meter_class */
-void dMeter_bossAnime(sub_meter_class*) {
+void dMeter_bossAnime(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F8BA8-801F8CD0       .text dMeter_bossEyeAnime__FP15sub_meter_class */
-void dMeter_bossEyeAnime(sub_meter_class*) {
+void dMeter_bossEyeAnime(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F8CD0-801F8F28       .text dMeter_magicInit__FP15sub_meter_class */
-void dMeter_magicInit(sub_meter_class*) {
+void dMeter_magicInit(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F8F28-801F9048       .text dMeter_magicMove__FP15sub_meter_class */
-void dMeter_magicMove(sub_meter_class*) {
+void dMeter_magicMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F9048-801F961C       .text dMeter_magicGaugeMove__FP15sub_meter_class */
-void dMeter_magicGaugeMove(sub_meter_class*) {
+void dMeter_magicGaugeMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F961C-801F9A24       .text dMeter_flyGaugeMove__FP15sub_meter_classUcss */
-void dMeter_flyGaugeMove(sub_meter_class*, u8, s16, s16) {
+void dMeter_flyGaugeMove(sub_meter_class* i_this, u8, s16, s16) {
     /* Nonmatching */
 }
 
 /* 801F9A24-801F9B3C       .text dMeter_magicChange__FP15sub_meter_classf */
-void dMeter_magicChange(sub_meter_class*, f32) {
+void dMeter_magicChange(sub_meter_class* i_this, f32) {
     /* Nonmatching */
 }
 
 /* 801F9B3C-801F9C14       .text dMeter_magicTransNowInit__FP15sub_meter_class */
-void dMeter_magicTransNowInit(sub_meter_class*) {
+void dMeter_magicTransNowInit(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F9C14-801F9CCC       .text dMeter_magicInitTrans__FP15sub_meter_class */
-void dMeter_magicInitTrans(sub_meter_class*) {
+void dMeter_magicInitTrans(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801F9CCC-801F9F18       .text dMeter_magicTransScale__FP15sub_meter_classfff */
-void dMeter_magicTransScale(sub_meter_class*, f32, f32, f32) {
+void dMeter_magicTransScale(sub_meter_class* i_this, f32, f32, f32) {
     /* Nonmatching */
 }
 
 /* 801F9F18-801FA378       .text dMeter_magicColor__FP15sub_meter_class */
-void dMeter_magicColor(sub_meter_class*) {
+void dMeter_magicColor(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FA378-801FA53C       .text dMeter_magicAlpha__FP15sub_meter_class */
-void dMeter_magicAlpha(sub_meter_class*) {
+void dMeter_magicAlpha(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FA53C-801FA670       .text dMeter_gaugeAlpha__FP15sub_meter_class */
-void dMeter_gaugeAlpha(sub_meter_class*) {
+void dMeter_gaugeAlpha(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FA670-801FA6C4       .text dMeter_menuInit__FP15sub_meter_class */
-void dMeter_menuInit(sub_meter_class*) {
+void dMeter_menuInit(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FA6C4-801FA6F8       .text dMeter_menuMove__FP15sub_meter_class */
-void dMeter_menuMove(sub_meter_class*) {
+void dMeter_menuMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FA6F8-801FA918       .text dMeter_menuLRMove__FP15sub_meter_class */
-void dMeter_menuLRMove(sub_meter_class*) {
+void dMeter_menuLRMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FA918-801FBB28       .text dMeter_menuPlusMove__FP15sub_meter_class */
-void dMeter_menuPlusMove(sub_meter_class*) {
+void dMeter_menuPlusMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FBB28-801FBC70       .text dMeter_magicLength__FP15sub_meter_classf */
-void dMeter_magicLength(sub_meter_class*, f32) {
+void dMeter_magicLength(sub_meter_class* i_this, f32) {
     /* Nonmatching */
 }
 
 /* 801FBC70-801FBC90       .text dMeter_windInit__FP15sub_meter_class */
-void dMeter_windInit(sub_meter_class*) {
+void dMeter_windInit(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FBC90-801FBCEC       .text dMeter_metronomeInit__FP15sub_meter_class */
-void dMeter_metronomeInit(sub_meter_class*) {
+void dMeter_metronomeInit(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FBCEC-801FBD7C       .text dMeter_windMove__FP15sub_meter_class */
-void dMeter_windMove(sub_meter_class*) {
+void dMeter_windMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FBD7C-801FBF24       .text dMeter_metronomeMove__FP15sub_meter_class */
-void dMeter_metronomeMove(sub_meter_class*) {
+void dMeter_metronomeMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FBF24-801FC190       .text dMeter_rupyAlpha__FP15sub_meter_class */
-void dMeter_rupyAlpha(sub_meter_class*) {
+void dMeter_rupyAlpha(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FC190-801FC2FC       .text dMeter_rupyInit__FP15sub_meter_class */
-void dMeter_rupyInit(sub_meter_class*) {
+void dMeter_rupyInit(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FC2FC-801FC624       .text dMeter_rupyMove__FP15sub_meter_class */
-void dMeter_rupyMove(sub_meter_class*) {
+void dMeter_rupyMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FC624-801FC85C       .text dMeter_walletChange__FP15sub_meter_class */
-void dMeter_walletChange(sub_meter_class*) {
+void dMeter_walletChange(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
@@ -1315,17 +1391,17 @@ void dMeter_keyRndLightFrame(s16*) {
 }
 
 /* 801FCCA8-801FCE68       .text dMeter_keyAlpha__FP15sub_meter_class */
-void dMeter_keyAlpha(sub_meter_class*) {
+void dMeter_keyAlpha(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FCE68-801FCF28       .text dMeter_keyInit__FP15sub_meter_class */
-void dMeter_keyInit(sub_meter_class*) {
+void dMeter_keyInit(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FCF28-801FD09C       .text dMeter_keyMove__FP15sub_meter_class */
-void dMeter_keyMove(sub_meter_class*) {
+void dMeter_keyMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
@@ -1335,77 +1411,77 @@ void dMeter_compassRotate(fopMsgM_pane_class*, fopMsgM_pane_class*, f32) {
 }
 
 /* 801FD104-801FD410       .text dMeter_compassGetOnProc__FP15sub_meter_class */
-void dMeter_compassGetOnProc(sub_meter_class*) {
+void dMeter_compassGetOnProc(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FD410-801FD48C       .text dMeter_compassGetOffProc__FP15sub_meter_class */
-void dMeter_compassGetOffProc(sub_meter_class*) {
+void dMeter_compassGetOffProc(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FD48C-801FD6C8       .text dMeter_compassDirOpen__FP15sub_meter_class */
-void dMeter_compassDirOpen(sub_meter_class*) {
+void dMeter_compassDirOpen(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FD6C8-801FD8C0       .text dMeter_compassWindOpen__FP15sub_meter_class */
-void dMeter_compassWindOpen(sub_meter_class*) {
+void dMeter_compassWindOpen(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FD8C0-801FDB64       .text dMeter_compassWindClose__FP15sub_meter_class */
-void dMeter_compassWindClose(sub_meter_class*) {
+void dMeter_compassWindClose(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FDB64-801FDDA4       .text dMeter_compassDirClose__FP15sub_meter_class */
-void dMeter_compassDirClose(sub_meter_class*) {
+void dMeter_compassDirClose(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FDDA4-801FDEC4       .text dMeter_compassAnimeMove__FP15sub_meter_class */
-void dMeter_compassAnimeMove(sub_meter_class*) {
+void dMeter_compassAnimeMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FDEC4-801FE0D0       .text dMeter_compassValueInit__FP15sub_meter_class */
-void dMeter_compassValueInit(sub_meter_class*) {
+void dMeter_compassValueInit(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FE0D0-801FE230       .text dMeter_compassAlpha__FP15sub_meter_class */
-void dMeter_compassAlpha(sub_meter_class*) {
+void dMeter_compassAlpha(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FE230-801FE2EC       .text dMeter_compassInit__FP15sub_meter_class */
-void dMeter_compassInit(sub_meter_class*) {
+void dMeter_compassInit(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FE2EC-801FE444       .text dMeter_compassMove__FP15sub_meter_class */
-void dMeter_compassMove(sub_meter_class*) {
+void dMeter_compassMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FE444-801FE8DC       .text dMeter_clockShow__FP15sub_meter_class */
-void dMeter_clockShow(sub_meter_class*) {
+void dMeter_clockShow(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FE8DC-801FE9A4       .text dMeter_clockHide__FP15sub_meter_class */
-void dMeter_clockHide(sub_meter_class*) {
+void dMeter_clockHide(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FE9A4-801FEA50       .text dMeter_clockInit__FP15sub_meter_class */
-void dMeter_clockInit(sub_meter_class*) {
+void dMeter_clockInit(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FEA50-801FEC2C       .text dMeter_clockMove__FP15sub_meter_class */
-void dMeter_clockMove(sub_meter_class*) {
+void dMeter_clockMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
@@ -1420,132 +1496,132 @@ void dMeter_starLightFrame(s16*) {
 }
 
 /* 801FEE00-801FEF40       .text dMeter_clockMultiInit__FP15sub_meter_class */
-void dMeter_clockMultiInit(sub_meter_class*) {
+void dMeter_clockMultiInit(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FEF40-801FF184       .text dMeter_clockMultiMove__FP15sub_meter_class */
-void dMeter_clockMultiMove(sub_meter_class*) {
+void dMeter_clockMultiMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FF184-801FF1F8       .text dMeter_mapInit__FP15sub_meter_class */
-void dMeter_mapInit(sub_meter_class*) {
+void dMeter_mapInit(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FF1F8-801FF684       .text dMeter_mapMove__FP15sub_meter_class */
-void dMeter_mapMove(sub_meter_class*) {
+void dMeter_mapMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FF684-801FF76C       .text dMeter_arwInit__FP15sub_meter_class */
-void dMeter_arwInit(sub_meter_class*) {
+void dMeter_arwInit(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FF76C-801FFEB0       .text dMeter_arwMove__FP15sub_meter_class */
-void dMeter_arwMove(sub_meter_class*) {
+void dMeter_arwMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FFEB0-801FFF30       .text dMeter_moveItemInit__FP15sub_meter_class */
-void dMeter_moveItemInit(sub_meter_class*) {
+void dMeter_moveItemInit(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 801FFF30-80200398       .text dMeter_moveItemMove__FP15sub_meter_class */
-void dMeter_moveItemMove(sub_meter_class*) {
+void dMeter_moveItemMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 80200398-8020042C       .text dMeter_moveItemDraw__FP15sub_meter_class */
-void dMeter_moveItemDraw(sub_meter_class*) {
+void dMeter_moveItemDraw(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 8020042C-8020054C       .text dMeter_swimTransY__FP15sub_meter_classf */
-void dMeter_swimTransY(sub_meter_class*, f32) {
+void dMeter_swimTransY(sub_meter_class* i_this, f32) {
     /* Nonmatching */
 }
 
 /* 8020054C-8020059C       .text dMeter_swimPaneShow__FP15sub_meter_class */
-void dMeter_swimPaneShow(sub_meter_class*) {
+void dMeter_swimPaneShow(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 8020059C-80200630       .text dMeter_swimPaneHide__FP15sub_meter_class */
-void dMeter_swimPaneHide(sub_meter_class*) {
+void dMeter_swimPaneHide(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 80200630-802006AC       .text dMeter_swimPaneTransY__FP15sub_meter_classf */
-void dMeter_swimPaneTransY(sub_meter_class*, f32) {
+void dMeter_swimPaneTransY(sub_meter_class* i_this, f32) {
     /* Nonmatching */
 }
 
 /* 802006AC-8020070C       .text dMeter_swimPaneAlpha__FP15sub_meter_classf */
-void dMeter_swimPaneAlpha(sub_meter_class*, f32) {
+void dMeter_swimPaneAlpha(sub_meter_class* i_this, f32) {
     /* Nonmatching */
 }
 
 /* 8020070C-802008F4       .text dMeter_swimInit__FP15sub_meter_class */
-void dMeter_swimInit(sub_meter_class*) {
+void dMeter_swimInit(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 802008F4-80200D7C       .text dMeter_swimMove__FP15sub_meter_class */
-void dMeter_swimMove(sub_meter_class*) {
+void dMeter_swimMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 80200D7C-80200E18       .text dMeter_swimDraw__FP15sub_meter_class */
-void dMeter_swimDraw(sub_meter_class*) {
+void dMeter_swimDraw(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 80200E18-802011D0       .text dMeter_swimOpenProc__FP15sub_meter_class */
-void dMeter_swimOpenProc(sub_meter_class*) {
+void dMeter_swimOpenProc(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 802011D0-80201224       .text dMeter_swimMoveProc__FP15sub_meter_class */
-void dMeter_swimMoveProc(sub_meter_class*) {
+void dMeter_swimMoveProc(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 80201224-802012CC       .text dMeter_swimMainRotate__FP15sub_meter_class */
-void dMeter_swimMainRotate(sub_meter_class*) {
+void dMeter_swimMainRotate(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 802012CC-80201C08       .text dMeter_swimMainBlink__FP15sub_meter_class */
-void dMeter_swimMainBlink(sub_meter_class*) {
+void dMeter_swimMainBlink(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 80201C08-80201D2C       .text dMeter_swimMainDown__FP15sub_meter_class */
-void dMeter_swimMainDown(sub_meter_class*) {
+void dMeter_swimMainDown(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 80201D2C-80201FC0       .text dMeter_swimTekariScroll__FP15sub_meter_class */
-void dMeter_swimTekariScroll(sub_meter_class*) {
+void dMeter_swimTekariScroll(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 80201FC0-8020205C       .text dMeter_swimLightMove__FP15sub_meter_class */
-void dMeter_swimLightMove(sub_meter_class*) {
+void dMeter_swimLightMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 8020205C-802021B4       .text dMeter_swimLightBirth__FP15sub_meter_class */
-void dMeter_swimLightBirth(sub_meter_class*) {
+void dMeter_swimLightBirth(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 802021B4-8020238C       .text dMeter_swimLightAnime__FP15sub_meter_classs */
-void dMeter_swimLightAnime(sub_meter_class*, s16) {
+void dMeter_swimLightAnime(sub_meter_class* i_this, s16) {
     /* Nonmatching */
 }
 
@@ -1567,22 +1643,22 @@ void dMeter_placeNameMove() {
 void dMeter_arrowInit(sub_meter_class* i_this) {
     /* Nonmatching */
     for (int i = 0; i < 4; i++)
-        i_this->field_0x2e46[i].mUserArea = 0;
+        i_this->field_0x2e48[i].mUserArea = 0;
     // i_this->field_0x3025 = 0;
 }
 
 /* 80202438-80202580       .text dMeter_arrowCheckStatus__FP15sub_meter_class */
-void dMeter_arrowCheckStatus(sub_meter_class*) {
+void dMeter_arrowCheckStatus(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 80202580-80202770       .text dMeter_arrowTransScale__FP15sub_meter_classffi */
-void dMeter_arrowTransScale(sub_meter_class*, f32, f32, int) {
+void dMeter_arrowTransScale(sub_meter_class* i_this, f32, f32, int) {
     /* Nonmatching */
 }
 
 /* 80202770-80203298       .text dMeter_arrowAnime__FP15sub_meter_class */
-void dMeter_arrowAnime(sub_meter_class*) {
+void dMeter_arrowAnime(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
@@ -1592,27 +1668,27 @@ void dMeter_arrowErase(fopMsgM_pane_class*) {
 }
 
 /* 80203354-80203410       .text dMeter_arrowMove__FP15sub_meter_class */
-void dMeter_arrowMove(sub_meter_class*) {
+void dMeter_arrowMove(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 80203410-80203464       .text dMeter_arrowDraw__FP15sub_meter_class */
-void dMeter_arrowDraw(sub_meter_class*) {
+void dMeter_arrowDraw(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 80203464-8020408C       .text dMeter_screenDataSet__FP15sub_meter_class */
-void dMeter_screenDataSet(sub_meter_class*) {
+void dMeter_screenDataSet(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 8020408C-8020438C       .text dMeter_screenDataTimeSet__FP15sub_meter_class */
-void dMeter_screenDataTimeSet(sub_meter_class*) {
+void dMeter_screenDataTimeSet(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
 /* 8020438C-80204404       .text dMeter_screenDataArrowSet__FP15sub_meter_class */
-void dMeter_screenDataArrowSet(sub_meter_class*) {
+void dMeter_screenDataArrowSet(sub_meter_class* i_this) {
     /* Nonmatching */
 }
 
@@ -1624,6 +1700,35 @@ BOOL dMeter_Draw(sub_meter_class* i_this) {
 /* 80204820-80204C20       .text dMeter_Execute__FP15sub_meter_class */
 BOOL dMeter_Execute(sub_meter_class* i_this) {
     /* Nonmatching */
+    JKRHeap* oldHeap = mDoExt_setCurrentHeap(i_this->heap);
+    dMeter_statusCheck(i_this);
+    dMeter_alphaControl(i_this);
+    dMeter_heartMove(i_this);
+    dMeter_actionMove(i_this);
+    dMeter_weponMove(i_this);
+    dMeter_xyMove(i_this);
+    dMeter_rMove(i_this);
+
+    dMeter_enemyMove(i_this);
+    dMeter_magicMove(i_this);
+    dMeter_windMove(i_this);
+    dMeter_metronomeMove(i_this);
+    dMeter_rupyMove(i_this);
+    dMeter_keyMove(i_this);
+    dMeter_compassMove(i_this);
+    dMeter_mapMove(i_this);
+    dMeter_swimMove(i_this);
+    dMeter_arrowMove(i_this);
+
+    if (dMeter_itemMoveFlagCheck())
+        dMeter_moveItemMove(i_this);
+    dMeter_arwMove(i_this);
+    dMeter_placeNameMove();
+    dMeter_menuMove(i_this);
+    dMeter_gaugeAlpha(i_this);
+    g_dComIfG_gameInfo.play.field_0x4942 = 1; // field_0x3024;
+    mDoExt_setCurrentHeap(oldHeap);
+    return TRUE;
 }
 
 /* 80204C20-80204C28       .text dMeter_IsDelete__FP15sub_meter_class */
@@ -1666,7 +1771,7 @@ s32 dMeter_Create(msg_class* i_this) {
     i_Meter->heap = fopMsgM_createExpHeap(0x2a819);
     JUT_ASSERT(0x34a3, i_Meter->heap != 0);
 
-    mDoExt_setCurrentHeap(i_Meter->heap);
+    JKRHeap* oldHeap = mDoExt_setCurrentHeap(i_Meter->heap);
     sMainParts1 = new J2DScreen();
     JUT_ASSERT(0x34a8, sMainParts1 != 0);
     sMainParts1->set("main_parts1.blo", dComIfGp_getMenuArchive());
@@ -1682,6 +1787,66 @@ s32 dMeter_Create(msg_class* i_this) {
     sChoiceRoad = new J2DScreen();
     JUT_ASSERT(0x34ac, sChoiceRoad != 0);
     sChoiceRoad->set("choice_road.blo", dComIfGp_getMenuArchive());
+
+    for (s32 i = 0; i < 3; i++) {
+        i_Meter->actionTex[i] = (ResTIMG*)i_Meter->heap->alloc(0xc00, 0x20);
+        JUT_ASSERT(0x34b9, i_Meter->actionTex[i] != 0);
+
+        i_Meter->xyIconTex[i] = (ResTIMG*)i_Meter->heap->alloc(0xc00, 0x20);
+        JUT_ASSERT(0x34bb, i_Meter->xyIconTex[i] != 0);
+    }
+
+    for (s32 i = 0; i < 2; i++) {
+        i_Meter->moveIconTex[i] = (ResTIMG*)i_Meter->heap->alloc(0xc00, 0x20);
+        JUT_ASSERT(0x34c2, i_Meter->moveIconTex[i] != 0);
+
+        i_Meter->arrowTex[i] = (ResTIMG*)i_Meter->heap->alloc(0xc00, 0x20);
+        JUT_ASSERT(0x34c5, i_Meter->arrowTex[i] != 0);
+    }
+
+    if (strcmp(dComIfGp_getStartStageName(), "sea_T") != 0) {
+        fopMsgM_Create(PROC_MENUWINDOW, NULL, NULL);
+    }
+
+    fopMsgM_Create(PROC_MESG, NULL, NULL);
+
+    g_dComIfG_gameInfo.play.field_0x4932 = 0;
+    g_dComIfG_gameInfo.play.field_0x4930 = 0;
+    g_dComIfG_gameInfo.play.field_0x4931 = 0;
+
+    mDoHIO_root.mDoHIO_createChild("通常画面表示", &g_meterHIO);
+    mDoHIO_root.mDoHIO_createChild("メニュー画面", &g_menuHIO);
+    mDoHIO_root.mDoHIO_createChild("Message（会話）", &g_msgHIO);
+    mDoHIO_root.mDoHIO_createChild("Message（看板）", &g_messageHIO);
+    mDoHIO_root.mDoHIO_createChild("マップ２", &g_meter_mapHIO);
+
+    dMeter_screenDataSet(i_Meter);
+    dMeter_screenDataArrowSet(i_Meter);
+    dComIfGp_2dShowOn();
+    // field_0x2f6c = 1.0f;
+    // field_0x2fd8 = 1.0f;
+    dMeter_mapInit(i_Meter);
+    dMeter_compassInit(i_Meter);
+    dMeter_arrowInit(i_Meter);
+    mDoExt_setCurrentHeap(i_Meter->heap);
+    dMeter_heartInit(i_Meter);
+    dMeter_weponInit(i_Meter);
+    dMeter_actionInit(i_Meter);
+    dMeter_xyInit(i_Meter);
+    dMeter_rInit(i_Meter);
+    dMeter_enemyInit(i_Meter);
+    dMeter_magicInit(i_Meter);
+    dMeter_menuInit(i_Meter);
+    dMeter_windInit(i_Meter);
+    dMeter_metronomeInit(i_Meter);
+    dMeter_rupyInit(i_Meter);
+    dMeter_keyInit(i_Meter);
+    dMeter_moveItemInit(i_Meter);
+    dMeter_arwInit(i_Meter);
+    dTimer_createStockTimer();
+    mDoExt_setCurrentHeap(oldHeap);
+    fopMsgM_setStageLayer(i_Meter);
+    return cPhs_COMPLEATE_e;
 }
 
 /* 802057B8-80205814       .text __dt__16dDlst_2DMETER2_cFv */

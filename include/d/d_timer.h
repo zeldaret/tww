@@ -103,4 +103,6 @@ public:
     /* 0x174 */ u32 field_0x174;
 };
 
+s32 dTimer_createStockTimer();
+
 #endif /* D_TIMER_H */

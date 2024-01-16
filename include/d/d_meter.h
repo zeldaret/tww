@@ -3,14 +3,16 @@
 
 #include "d/d_drawlist.h"
 #include "f_op/f_op_msg_mng.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class J2DPane;
+class JPABaseEmitter;
 class fopAc_ac_c;
 class fopMsgM_pane_class;
 class msg_class;
 class sub_meter_class;
 
-class dMeter_HIO_c {
+class dMeter_HIO_c : public JORReflexible {
 public:
     dMeter_HIO_c();
     virtual ~dMeter_HIO_c();
@@ -180,7 +182,7 @@ public:
     /* 0x154 */ short field_0x154;
 };
 
-class dMeter_menuHIO_c {
+class dMeter_menuHIO_c : public JORReflexible {
 public:
     dMeter_menuHIO_c();
     virtual ~dMeter_menuHIO_c();
@@ -280,7 +282,7 @@ public:
     /* 0xCA */ u8 field_0xca;
 };
 
-class dMeter_msg_HIO_c {
+class dMeter_msg_HIO_c : public JORReflexible {
 public:
     dMeter_msg_HIO_c();
     virtual ~dMeter_msg_HIO_c();
@@ -379,7 +381,7 @@ public:
     /* 0x8A */ u8 field_0x8a;
 };
 
-class dMeter_message_HIO_c {
+class dMeter_message_HIO_c : public JORReflexible {
 public:
     dMeter_message_HIO_c();
     virtual ~dMeter_message_HIO_c();
@@ -496,7 +498,7 @@ public:
     virtual void draw();
 };
 
-class dMeter_map_HIO_c {
+class dMeter_map_HIO_c : public JORReflexible {
 public:
     dMeter_map_HIO_c();
     virtual ~dMeter_map_HIO_c();
@@ -539,15 +541,23 @@ class sub_meter_class : public msg_class {
 public:
     /* 0x00FC */ JKRHeap* heap;
     /* 0x0100 */ fopMsgM_pane_class field_0x0100[24];
-    /* 0x0640 */ fopMsgM_pane_class field_0x0640[20];
-    /* 0x0AA0 */ fopMsgM_pane_class field_0x0aa0[20];
+    /* 0x0640 */ fopMsgM_pane_class mHeart[20];
+    /* 0x0AA0 */ fopMsgM_pane_class mHeartShadow[20];
     /* 0x0F00 */ fopMsgM_pane_class field_0x0f00;
     /* 0x0F38 */ fopMsgM_pane_class field_0x0f38[0x20];
     /* 0x1638 */ fopMsgM_pane_class field_0x1638[0x20];
     /* 0x1D38 */ fopMsgM_pane_class field_0x1d38[0x20];
     /* 0x2438 */ fopMsgM_pane_class field_0x2438[0x20];
     /* 0x2B38 */ fopMsgM_pane_class field_0x2b38[0x0D];
-    /* 0x2E46 */ fopMsgM_pane_class field_0x2e46[4];
+    /* 0x2E48 */ fopMsgM_pane_class field_0x2e48[4];
+    /* 0x2EF0 */ u32 field_0x2ef0[12];
+    /* 0x2F20 */ JPABaseEmitter* mpRupyParticle;
+    /* 0x2F24 */ u32 field_0x2f20[4];
+    /* 0x2F34 */ ResTIMG* arrowTex[2];
+    /* 0x2F3C */ ResTIMG* actionTex[3];
+    /* 0x2F48 */ ResTIMG* xyIconTex[3];
+    /* 0x2F54 */ ResTIMG* field_0x2f54[3];
+    /* 0x2F60 */ ResTIMG* moveIconTex[3];
 };
 
 extern dMeter_menuHIO_c g_menuHIO;
