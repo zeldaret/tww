@@ -35,6 +35,7 @@ BOOL daPy_lk_c::checkGrabBarrelSearch(int) {
 /* 8013A97C-8013AF84       .text setGrabItemPos__9daPy_lk_cFv */
 void daPy_lk_c::setGrabItemPos() {
     /* Nonmatching */
+    static f32 magtail_offset = 40.0f;
 }
 
 /* 8013AF84-8013B05C       .text freeGrabItem__9daPy_lk_cFv */

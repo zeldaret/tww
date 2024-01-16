@@ -142,6 +142,7 @@ public:
     // Appears in TP debug maps but not TWW debug maps.
     Vec* getBaseScale() { return &mBaseScale; }
 
+    /* 0x000 */ /* vtable */
     /* 0x004 */ J3DModelData* mModelData;
     /* 0x008 */ u32 mFlags;
     /* 0x00C */ u32 mDiffFlag;

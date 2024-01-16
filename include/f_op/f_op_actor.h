@@ -132,6 +132,7 @@ enum dEvt_Condition_e {
     dEvtCnd_UNK2_e        = 0x0002,
     dEvtCnd_CANDOOR_e     = 0x0004,
     dEvtCnd_CANGETITEM_e  = 0x0008,
+    dEvtCnd_UNK10_e       = 0x0010,
     dEvtCnd_CANTALKITEM_e = 0x0020,
     dEvtCnd_CANCATCH_e    = 0x0040,
 };

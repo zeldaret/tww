@@ -95,7 +95,7 @@ void daPy_py_c::setDoButtonQuake() {
 }
 
 /* 80102D90-80102E18       .text stopDoButtonQuake__9daPy_py_cFi */
-void daPy_py_c::stopDoButtonQuake(int param_1) {
+void daPy_py_c::stopDoButtonQuake(BOOL param_1) {
     if (mQuakeTimer > 0) {
         mQuakeTimer--;
         if (mQuakeTimer == 0) {
@@ -103,6 +103,6 @@ void daPy_py_c::stopDoButtonQuake(int param_1) {
         }
     }
     if (param_1 && mQuakeTimer == 0) {
-        mNoResetFlg0 &= ~0x00200000;
+        offNoResetFlg0(daPyFlg0_UNK200000);
     }
 }

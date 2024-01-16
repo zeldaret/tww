@@ -485,6 +485,7 @@ public:
     void setAStatus(u8 status) { mCurrButtonBAction = status; }
     u8 getDoStatus() { return mCurrButtonAAction; }
     void setDoStatus(u8 status) { mCurrButtonAAction = status; }
+    void setRStatus(u8 status) { field_0x492d = status; }
     u8 getRStatusForce() { return field_0x4930; }
     void setRStatusForce(u8 status) { field_0x4930 = status; }
     inline u8 getPictureStatus() { return mPictureStatus; }
@@ -990,6 +991,10 @@ inline u8 dComIfGs_getPictureNum() {
 
 inline void dComIfGs_setPictureNum(u8 num) {
     g_dComIfG_gameInfo.save.getPlayer().getItemRecord().setPictureNum(num);
+}
+
+inline u16 dComIfGs_getFwaterTimer() {
+    return g_dComIfG_gameInfo.save.getPlayer().getItemRecord().getTimer();
 }
 
 inline u8 dComIfGs_getBeastNum(int i_idx) {
@@ -2279,6 +2284,10 @@ inline u8 dComIfGp_getDoStatus() {
 
 inline void dComIfGp_setDoStatus(u8 status) {
     g_dComIfG_gameInfo.play.setDoStatus(status);
+}
+
+inline void dComIfGp_setRStatus(u8 status) {
+    g_dComIfG_gameInfo.play.setRStatus(status);
 }
 
 inline u8 dComIfGp_getRStatusForce() {

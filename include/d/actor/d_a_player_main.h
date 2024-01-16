@@ -143,7 +143,8 @@ public:
 
     /* 0x04 */ JPABaseEmitter* mpEmitter;
     /* 0x08 */ cXyz field_0x08;
-    /* 0x14 */ u8 field_0x14[0x1C - 0x14];
+    /* 0x14 */ csXyz field_0x14;
+    /* 0x1A */ u8 field_0x1A[0x1C - 0x1A];
 };  // Size: 0x1C
 
 class daPy_waterDropEcallBack_c : public daPy_followEcallBack_c {
@@ -165,18 +166,26 @@ public:
     ~daPy_dmEcallBack_c() {}
     daPy_dmEcallBack_c() {}
     
+    static int getTimer() { return m_timer; }
     static void setTimer(s16 timer) { m_timer = timer; }
-    static void setType(u16 type) { m_type = type; }
+    static void decTimer() { m_timer--; }
     
+    static bool checkFlame() { return m_type == 0; }
     static bool checkCurse() { return m_type == 1; }
     static bool checkElec() { return m_type == 2; }
-    
-    static void checkFlame() {}
-    static void decTimer() {}
-    static void getTimer() {}
-    static void setCurse(s16) {}
-    static void setElec(s16) {}
-    static void setFlame(s16) {}
+    static void setType(u16 type) { m_type = type; }
+    static void setFlame(s16 timer) {
+        setType(0);
+        setTimer(timer);
+    }
+    static void setCurse(s16 timer) {
+        setType(1);
+        setTimer(timer);
+    }
+    static void setElec(s16 timer) {
+        setType(2);
+        setTimer(timer);
+    }
 
     static s16 m_timer;
     static u16 m_type;
@@ -206,8 +215,8 @@ public:
 
     static void onMabaFlg() { m_maba_flg = 1; }
     static void offMabaFlg() { m_maba_flg = 0; }
-    static void decMabaTimer() {}
-    static void decMorfFrame() {}
+    static void decMabaTimer() { cLib_calcTimer(&m_maba_timer); }
+    static void decMorfFrame() { cLib_calcTimer(&m_morf_frame); }
     static void getEyeMoveFlg() {}
     static void getMabaFlg() {}
     static void getMabaTimer() {}
@@ -1258,7 +1267,7 @@ public:
         HEAP_TYPE_UNDER_UPPER_e = 0,
         HEAP_TYPE_TEXTURE_ANIME_e = 1,
         HEAP_TYPE_TEXTURE_SCROLL_e = 2,
-        HEAP_TYPE_UNK3_e = 3,
+        HEAP_TYPE_ITEM_ANIME_e = 3,
     };
 
     enum daPy_ANM {
@@ -1644,7 +1653,7 @@ public:
     void changeDragonShield(int);
     BOOL checkNewItemChange(u8);
     BOOL checkItemChangeFromButton();
-    BOOL checkItemAction();
+    void checkItemAction();
     void getSlidePolygon();
     BOOL checkJumpCutFromButton();
     void orderTalk();
@@ -1666,9 +1675,9 @@ public:
     BOOL checkElecReturnDamage(dCcD_GObjInf*, cXyz*);
     s32 checkWallAtributeDamage(dBgS_AcchCir*);
     BOOL changeDamageProc();
-    void changeAutoJumpProc();
-    void changeDemoProc();
-    void changeDeadProc();
+    BOOL changeAutoJumpProc();
+    BOOL changeDemoProc();
+    BOOL changeDeadProc();
     cXyz* getDamageVec(dCcD_GObjInf*);
     void setOldRootQuaternion(s16, s16, s16);
     BOOL checkRestHPAnime();
@@ -1783,39 +1792,39 @@ public:
     BOOL procBootsEquip();
     BOOL procNotUse_init(int);
     BOOL procNotUse();
-    void getGroundAngle(cBgS_PolyInfo*, s16);
+    s16 getGroundAngle(cBgS_PolyInfo*, s16);
     void setLegAngle(f32, int, s16*, s16*);
     void footBgCheck();
     void setWaterY();
     void autoGroundHit();
     BOOL checkAttentionPosAngle(fopAc_ac_c*, cXyz**);
     void setNeckAngle();
-    BOOL checkOriginalHatAnimation();
+    void checkOriginalHatAnimation();
     void setHatAngle();
     void setMoveSlantAngle();
     void setWaistAngle();
     void setWorldMatrix();
     void setAtParam(u32, int, dCcG_At_Spl, u8, u8, u8, f32);
     void resetCurse();
-    BOOL checkLightHit();
+    void checkLightHit();
     void setSwordAtCollision();
     void getBlurTopRate();
     void setCollision();
     void setAttentionPos();
-    void setRoomInfo();
+    int setRoomInfo();
     void setDemoData();
     void setStickData();
     void setBgCheckParam();
     u32 setParamData(int, int, int, int);
     BOOL checkLavaFace(cXyz*, int);
-    BOOL checkFallCode();
+    void checkFallCode();
     BOOL startRestartRoom(u32, int, f32, int);
     BOOL checkSuccessGuard(int);
     void setShapeAngleOnGround();
     void setStepsOffset();
     void setBeltConveyerPower();
     void setWindAtPower();
-    BOOL checkRoofRestart();
+    void checkRoofRestart();
     BOOL execute();
     BOOL playerDelete();
     void initTextureAnime();
@@ -1877,7 +1886,7 @@ public:
     BOOL dProcOpenTreasure_init();
     BOOL dProcOpenTreasure();
     void setGetItemSound(u16, int);
-    void setGetDemo();
+    BOOL setGetDemo();
     BOOL dProcGetItem_init();
     BOOL dProcGetItem();
     BOOL dProcUnequip_init();
@@ -2398,7 +2407,7 @@ public:
     }
     void onShipTact() { onNoResetFlg1(daPyFlg1_SHIP_TACT); }
     void offShipTact() { offNoResetFlg1(daPyFlg1_SHIP_TACT); }
-    void checkShipGetOff() {}
+    bool checkShipGetOff() { return mCurProc == daPyProc_SHIP_GET_OFF_e; }
     void onShipDrop(s16 param_1) {
         onNoResetFlg0(daPyFlg0_SHIP_DROP);
         m3550 = param_1;
@@ -2421,6 +2430,10 @@ public:
         if (mActivePlayerBombs != 0) {
             mActivePlayerBombs--;
         }
+    }
+    bool checkSwordEquip() const {
+        return dComIfGs_getSelectEquip(0) != NO_ITEM ||
+        dComIfGp_getMiniGameType() == 2;
     }
     
     int getStartRoomNo() { return fopAcM_GetParam(this) & 0x3F; }
@@ -2455,7 +2468,6 @@ public:
     void checkRopeThrowAnime() const {}
     void checkShieldEquip() const {}
     void checkSpecialDemoMode() const {}
-    void checkSwordEquip() const {}
     void checkSwordEquipAnime() const {}
     void checkUpperAnime(u16) const {}
     void doButton() const {}
@@ -2485,6 +2497,12 @@ public:
     void swordButton() const {}
     void swordTrigger() const {}
     void talkTrigger() const {}
+    
+    virtual void setPlayerPosAndAngle(cXyz*, s16);
+    virtual void setPlayerPosAndAngle(cXyz*, csXyz*);
+    virtual void setPlayerPosAndAngle(MtxP);
+    virtual BOOL setThrowDamage(cXyz*, s16, f32, f32, int);
+    virtual void changeTextureAnime(u16, u16, int);
     
     virtual MtxP getLeftHandMatrix() { return mpCLModel->getAnmMtx(0x08); } // cl_LhandA joint
     virtual MtxP getRightHandMatrix() { return mpCLModel->getAnmMtx(0x0C); } // cl_RhandA joint
@@ -2529,11 +2547,6 @@ public:
     virtual MtxP getModelJointMtx(u16 idx) { return mpCLModel->getAnmMtx(idx); }
     virtual f32 getOldSpeedY() { return mOldSpeed.y; }
     virtual BOOL setHookshotCarryOffset(unsigned int, const cXyz*);
-    virtual void setPlayerPosAndAngle(cXyz*, s16);
-    virtual void setPlayerPosAndAngle(cXyz*, csXyz*);
-    virtual void setPlayerPosAndAngle(MtxP);
-    virtual BOOL setThrowDamage(cXyz*, s16, f32, f32, int);
-    virtual void changeTextureAnime(u16, u16, int);
     virtual void cancelChangeTextureAnime() { resetDemoTextureAnime(); }
 
 public:
@@ -2563,7 +2576,7 @@ public:
     /* 0x07C8 */ dBgS_LinkRoofChk mRoofChk;
     /* 0x0814 */ dBgS_ArrowLinChk mArrowLinChk;
     /* 0x0880 */ dBgS_MirLightLinChk mMirLightLinChk;
-    /* 0x08EC */ dBgS_ObjGndChk_Spl m08EC;
+    /* 0x08EC */ dBgS_ObjGndChk_Spl mLavaGndChk;
     /* 0x0940 */ cBgS_PolyInfo mPolyInfo;
     /* 0x0950 */ daPy_HIO_c* m_HIO;
     /* 0x0954 */ J3DModel* mpHandsModel;
@@ -2587,7 +2600,7 @@ public:
     /* 0x2E90 */ JKRSolidHeap* mpItemHeaps[2];
     /* 0x2E98 */ J3DModel* mpHeldItemModel;
     /* 0x2E9C */ mDoExt_bckAnm mSwordAnim;
-    /* 0x2EAC */ mDoExt_McaMorf* m2EAC;
+    /* 0x2EAC */ mDoExt_McaMorf* mpParachuteFanMorf;
     /* 0x2EB0 */ J3DAnmTevRegKey* mpBombBrk;
     /* 0x2EB4 */ J3DAnmTevRegKey* mpGwp00BrkData;
     /* 0x2EB8 */ J3DAnmTextureSRTKey* mpGwp00BtkData;
@@ -2595,7 +2608,7 @@ public:
     /* 0x2EC0 */ J3DAnmTextureSRTKey* mpIceArrowBtk;
     /* 0x2EC4 */ J3DAnmTextureSRTKey* mpLightArrowBtk;
     /* 0x2EC8 */ J3DAnmTextureSRTKey* mpGicer01Btk;
-    /* 0x2ECC */ JKRSolidHeap* m2ECC;
+    /* 0x2ECC */ JKRSolidHeap* mpItemAnimeHeap;
     /* 0x2ED0 */ void* m_item_bck_buffer;
     /* 0x2ED4 */ J3DAnmTextureSRTKey* mpHeldItemBtk;
     /* 0x2ED8 */ J3DAnmTextureSRTKey* mpSwordBtk;
@@ -2606,7 +2619,7 @@ public:
     /* 0x2EEC */ J3DModel* mpSwordTipStabModel;
     /* 0x2EF0 */ J3DAnmColor* mpCutfBpk;
     /* 0x2EF4 */ J3DAnmTextureSRTKey* mpCutfBtk;
-    /* 0x2EF8 */ J3DAnmTevRegKey* mpCutfBrk2EF8;
+    /* 0x2EF8 */ J3DAnmTevRegKey* mpCutfBrk;
     /* 0x2EFC */ mDoExt_brkAnm m2EFC;
     /* 0x2F14 */ J3DModel* mpSuimenMunyaModel;
     /* 0x2F18 */ J3DAnmTextureSRTKey* mpSuimenMunyaBtk;
@@ -2660,7 +2673,7 @@ public:
     /* 0x336C */ daPy_waterDropEcallBack_c m336C;
     /* 0x338C */ daPy_followEcallBack_c m338C;
     /* 0x33A8 */ daPy_mtxPosFollowEcallBack_c m33A8;
-    /* 0x33B8 */ daPy_dmEcallBack_c m33B8[4];
+    /* 0x33B8 */ daPy_dmEcallBack_c mDmEcallBack[4];
     /* 0x33E8 */ daPy_mtxFollowEcallBack_c m33E8;
     /* 0x33F4 */ daPy_fanSwingEcallBack_c mFanSwingCb;
     /* 0x3400 */ daPy_mtxPosFollowEcallBack_c m3400;
@@ -2699,7 +2712,6 @@ public:
     /* 0x34CC */ u8 m34CC;
     /* 0x34CD */ u8 m34CD;
     /* 0x34CE */ u8 m34CE;
-    /* 0x34CF */ u8 m34CF[0x34D0 - 0x34CF];
     /* 0x34D0 */ s16 m34D0;
     /* 0x34D2 */ s16 m34D2;
     /* 0x34D4 */ s16 m34D4;
@@ -2777,35 +2789,36 @@ public:
     /* 0x3564 */ s16 m3564;
     /* 0x3566 */ s16 m3566;
     /* 0x3568 */ s16 m3568;
-    /* 0x356A */ u8 m356A[0x356C - 0x356A];
     /* 0x356C */ int mCameraInfoIdx;
     /* 0x3570 */ s32 m3570;
     /* 0x3574 */ s32 m3574;
     /* 0x3578 */ int m3578;
-    /* 0x357C */ u8 m357C[0x3580 - 0x357C];
+    /* 0x357C */ int m357C;
     /* 0x3580 */ int m3580;
     /* 0x3584 */ int mCurrAttributeCode;
-    /* 0x3588 */ u8 m3588[0x358C - 0x3588];
+    /* 0x3588 */ int m3588;
     /* 0x358C */ int mStaffIdx;
     /* 0x3590 */ int mEventIdx;
     /* 0x3594 */ int mRestartPoint;
     /* 0x3598 */ f32 m3598;
-    /* 0x359C */ u8 m359C[0x35A0 - 0x359C];
+    /* 0x359C */ f32 m359C;
     /* 0x35A0 */ f32 m35A0;
     /* 0x35A4 */ f32 m35A4;
     /* 0x35A8 */ f32 m35A8;
     /* 0x35AC */ f32 m35AC;
     /* 0x35B0 */ f32 m35B0;
-    /* 0x35B4 */ u8 m35B4[0x35BC - 0x35B4];
+    /* 0x35B4 */ f32 m35B4;
+    /* 0x35B8 */ f32 m35B8;
     /* 0x35BC */ f32 mVelocity;
     /* 0x35C0 */ u8 m35C0[0x35C4 - 0x35C0];
     /* 0x35C4 */ f32 m35C4;
     /* 0x35C8 */ f32 m35C8;
-    /* 0x35CC */ u8 m35CC[0x35D0 - 0x35CC];
+    /* 0x35CC */ f32 m35CC;
     /* 0x35D0 */ f32 m35D0;
     /* 0x35D4 */ f32 m35D4;
     /* 0x35D8 */ f32 m35D8;
-    /* 0x35DC */ u8 m35DC[0x35E4 - 0x35DC];
+    /* 0x35DC */ f32 m35DC;
+    /* 0x35E0 */ f32 m35E0;
     /* 0x35E4 */ f32 m35E4;
     /* 0x35E8 */ f32 m35E8;
     /* 0x35EC */ f32 m35EC;
@@ -2830,7 +2843,6 @@ public:
     /* 0x3638 */ int mMsgId;
     /* 0x363C */ J3DFrameCtrl* mpSeAnmFrameCtrl;
     /* 0x3640 */ s16 m3640;
-    /* 0x3642 */ u8 m3642[0x3644 - 0x3642];
     /* 0x3644 */ f32 m3644;
     /* 0x3648 */ Quaternion m3648;
     /* 0x3658 */ Quaternion m3658;

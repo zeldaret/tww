@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 /* 802AC830-802AC888       .text setAnimSound__11JAIZelAnimeFP3VecffUlSc */
-void JAIZelAnime::setAnimSound(Vec*, f32, f32, u32, s8) {
+void JAIZelAnime::setAnimSound(Vec* pos, f32 frame, f32 rate, u32 mtrlSndId, s8 reverb) {
     /* Nonmatching */
 }
 

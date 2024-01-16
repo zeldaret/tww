@@ -57,9 +57,9 @@ public:
     static void endRender() { JFWDisplay::getManager()->endRender(); }
     static GXTexObj* getZbufferTexObj() { return &mZbufferTexObj; }
     static GXTexObj* getFrameBufferTexObj() { return &mFrameBufferTexObj; }
+    static void fadeIn(f32 rate, GXColor& color) { fadeOut(-rate, color); }
 
     static void alloc32(u32) {}
-    static void fadeIn(f32, _GXColor&) {}
     static void getFrameBufferMemory() {}
     static void getFrameBufferSize() {}
     static void getMonotoneRate() {}

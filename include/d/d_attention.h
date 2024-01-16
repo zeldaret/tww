@@ -28,6 +28,8 @@ public:
     void init();
     void proc();
 
+    fopAc_ac_c* getZHintTarget() { return convPId(field_0x8); }
+
 private:
     /* 0x0 */ u32 mHintActorID;
     /* 0x4 */ int mPriority;
@@ -176,6 +178,7 @@ public:
 
     fopAc_ac_c* getLookTarget() { return mLook[0].convPId(mLook[0].getLookTarget()); }
     fopAc_ac_c* getLook2Target() { return mLook[1].convPId(mLook[1].getLookTarget()); }
+    fopAc_ac_c* getZHintTarget() { return mHint.getZHintTarget(); }
 
     static s32 loc_type_num;
     static u32 act_type_num;
@@ -200,7 +203,6 @@ public:
     void chkEnemySound() {}
     u8 getCatchChgItem() { return mCatch.getChangeItem(); }
     void getCatghTarget() {}
-    void getZHintTarget() {}
     void offAleart() {}
     void revivalAleart() {}
     void LookRequest(fopAc_ac_c*, f32, f32, f32, s16, int) {}

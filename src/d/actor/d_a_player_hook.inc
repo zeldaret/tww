@@ -40,6 +40,9 @@ void daPy_lk_c::freeHookshotItem() {
 /* 8014B05C-8014B2B8       .text checkNextActionHookshotReady__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkNextActionHookshotReady() {
     /* Nonmatching */
+    static JGeometry::TVec3<f32> eff_scale;
+    static JGeometry::TVec3<f32> eff_dscale;
+    static JGeometry::TVec3<f32> eff_pscale;
 }
 
 /* 8014B2B8-8014B350       .text checkNextHookshotMode__9daPy_lk_cFv */

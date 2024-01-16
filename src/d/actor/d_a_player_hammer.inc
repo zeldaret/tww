@@ -20,6 +20,9 @@ void daPy_lk_c::setHammerModel() {
 /* 80150324-801508FC       .text setHammerQuake__9daPy_lk_cFP13cBgS_PolyInfoPC4cXyzi */
 void daPy_lk_c::setHammerQuake(cBgS_PolyInfo*, const cXyz*, int) {
     /* Nonmatching */
+    static JGeometry::TVec3<f32> smoke_kusa_particle_scale;
+    static JGeometry::TVec3<f32> emitter_scale;
+    static JGeometry::TVec3<f32> emitter_trans;
 }
 
 /* 801508FC-80150B60       .text setHammerWaterSplash__9daPy_lk_cFv */

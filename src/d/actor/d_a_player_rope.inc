@@ -50,6 +50,8 @@ void daPy_lk_c::changeRopeToHangProc() {
 /* 8014327C-80143694       .text checkRopeSwingWall__9daPy_lk_cFP4cXyzP4cXyzPsPf */
 BOOL daPy_lk_c::checkRopeSwingWall(cXyz*, cXyz*, s16*, f32*) {
     /* Nonmatching */
+    static JGeometry::TVec3<f32> dynamic_scale;
+    static JGeometry::TVec3<f32> particle_scale;
 }
 
 /* 80143694-80143A44       .text setBlendRopeMoveAnime__9daPy_lk_cFi */
@@ -105,6 +107,7 @@ BOOL daPy_lk_c::procRopeSwing_init(fopAc_ac_c*, s16) {
 /* 80144C58-801456D8       .text procRopeSwing__9daPy_lk_cFv */
 BOOL daPy_lk_c::procRopeSwing() {
     /* Nonmatching */
+    static cXyz local_height_offset;
 }
 
 /* 801456D8-801457FC       .text procRopeHangWait_init__9daPy_lk_cFi */

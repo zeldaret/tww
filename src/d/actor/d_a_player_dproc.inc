@@ -113,7 +113,7 @@ void daPy_lk_c::setGetItemSound(u16, int) {
 }
 
 /* 8012E418-8012E6B4       .text setGetDemo__9daPy_lk_cFv */
-void daPy_lk_c::setGetDemo() {
+BOOL daPy_lk_c::setGetDemo() {
     /* Nonmatching */
 }
 
@@ -155,6 +155,13 @@ BOOL daPy_lk_c::dProcLavaDamage() {
 /* 8012EF78-8012F0DC       .text dProcFreezeDamage_init_sub__9daPy_lk_cFi */
 void daPy_lk_c::dProcFreezeDamage_init_sub(int) {
     /* Nonmatching */
+    static const u16 eff_joint[] = {
+        0x0007,
+        0x000B,
+        0x001A,
+        0x000E,
+        0x001E,
+    };
 }
 
 /* 8012F0DC-8012F174       .text dProcFreezeDamage_init__9daPy_lk_cFv */
@@ -175,6 +182,7 @@ void daPy_lk_c::dProcDead_init_sub() {
 /* 8012F288-8012F38C       .text dProcDead_init_sub2__9daPy_lk_cFv */
 void daPy_lk_c::dProcDead_init_sub2() {
     /* Nonmatching */
+    static const Vec ripple_scale = {0.75f, 0.75f, 0.75f};
 }
 
 /* 8012F38C-8012F3B8       .text checkGameOverStart__9daPy_lk_cFv */

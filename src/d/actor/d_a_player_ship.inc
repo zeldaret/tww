@@ -32,6 +32,8 @@ BOOL daPy_lk_c::checkShipNotNormalMode() {
 /* 8013F9B0-8013FE78       .text setShipRideArmAngle__9daPy_lk_cFiP16J3DTransformInfo */
 void daPy_lk_c::setShipRideArmAngle(int, J3DTransformInfo*) {
     /* Nonmatching */
+    static cXyz arm_pos;
+    static cXyz armA_offset;
 }
 
 /* 8013FE78-8013FEF4       .text checkShipRideUseItem__9daPy_lk_cFi */

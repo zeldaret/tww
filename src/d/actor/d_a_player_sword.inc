@@ -98,10 +98,10 @@ void daPy_lk_c::setSwordModel(BOOL r28) {
     
     buffer = new(0x20) u8[0x400];
     JKRReadIdxResource(buffer, 0x400, model_tbl.tipStabBrk, dComIfGp_getAnmArchive());
-    mpCutfBrk2EF8 = static_cast<J3DAnmTevRegKey*>(J3DAnmLoaderDataBase::load(buffer));
-    mpCutfBrk2EF8->setFrame(0.0f);
-    mpCutfBrk2EF8->searchUpdateMaterialID(modelData);
-    modelData->entryTevRegAnimator(mpCutfBrk2EF8);
+    mpCutfBrk = static_cast<J3DAnmTevRegKey*>(J3DAnmLoaderDataBase::load(buffer));
+    mpCutfBrk->setFrame(0.0f);
+    mpCutfBrk->searchUpdateMaterialID(modelData);
+    modelData->entryTevRegAnimator(mpCutfBrk);
     
     buffer = new(0x20) u8[0x400];
     JKRReadIdxResource(buffer, 0x400, model_tbl.tipStabBpk, dComIfGp_getAnmArchive());
@@ -123,6 +123,8 @@ void daPy_lk_c::setSwordModel(BOOL r28) {
 /* 80154FBC-80155490       .text setLightSaver__9daPy_lk_cFv */
 void daPy_lk_c::setLightSaver() {
     /* Nonmatching */
+    static JGeometry::TVec3<f32> d_scale(1.4f, 1.4f, 1.4f);
+    static JGeometry::TVec3<f32> p_scale(1.6f, 1.4f, 1.4f);
 }
 
 /* 80155490-801554C8       .text checkDemoShieldNoDraw__9daPy_lk_cFv */
@@ -293,6 +295,8 @@ BOOL daPy_lk_c::procCutRoll() {
 /* 801588F0-80158A40       .text procCutRollEnd_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procCutRollEnd_init() {
     /* Nonmatching */
+    static JGeometry::TVec3<f32> emitter_trans(0.0f, 55.0f, 0.0f);
+    static JGeometry::TVec3<f32> particle_scale(0.76f, 0.76f, 0.76f);
 }
 
 /* 80158A40-80158A98       .text procCutRollEnd__9daPy_lk_cFv */
@@ -313,6 +317,7 @@ BOOL daPy_lk_c::procCutTurnCharge() {
 /* 80158B58-80158D40       .text procCutTurnMove_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procCutTurnMove_init() {
     /* Nonmatching */
+    static Vec eff_scale = {1.5f, 1.5f, 1.5f};
 }
 
 /* 80158D40-80159130       .text procCutTurnMove__9daPy_lk_cFv */

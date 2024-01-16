@@ -65,6 +65,8 @@ void daPy_lk_c::setSwimTimerStartStop() {
 /* 8013D814-8013DA18       .text procSwimUp_init__9daPy_lk_cFi */
 BOOL daPy_lk_c::procSwimUp_init(int) {
     /* Nonmatching */
+    static JGeometry::TVec3<f32> splash_scale;
+    static JGeometry::TVec3<f32> ripple_scale;
 }
 
 /* 8013DA18-8013DB24       .text procSwimUp__9daPy_lk_cFv */

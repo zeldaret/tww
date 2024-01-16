@@ -295,8 +295,13 @@ public:
     virtual void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
     void end();
 
+    void getAlpha() {}
+    void remove() {}
+    void setAlpha(u8) {}
+    void setPosArray(cXyz*, s16) {}
+
 public:
-    /* 0x04 */ u8 field_0x04[0x0C];
+    /* 0x04 */ u8 field_0x04[0x10 - 0x04];
 };  // Size: 0x10
 
 STATIC_ASSERT(sizeof(dPa_cutTurnEcallBack_c) == 0x10);

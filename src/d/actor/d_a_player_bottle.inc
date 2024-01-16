@@ -45,6 +45,8 @@ BOOL daPy_lk_c::procBottleOpen_init(u16) {
 /* 801527CC-80152ED0       .text procBottleOpen__9daPy_lk_cFv */
 BOOL daPy_lk_c::procBottleOpen() {
     /* Nonmatching */
+    static const Vec splash_scale = {0.3f, 0.3f, 0.3f};
+    static const Vec ripple_scale = {0.5f, 0.5f, 0.5f};
 }
 
 /* 80152ED0-80153064       .text procBottleSwing_init__9daPy_lk_cFi */

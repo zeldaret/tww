@@ -1085,6 +1085,9 @@ void dStage_restartRoom(u32 roomParam, u32 mode);
 
 BOOL dStage_checkRestart();
 
+class cBgS_GndChk;
+int dStage_RoomCheck(cBgS_GndChk* i_gndChk);
+
 static inline u8 IkadaGetRoomNoArg0(fopAc_ac_c* i_actor) {
     return (fopAcM_GetParam(i_actor) >> 4) & 0x3F;
 }

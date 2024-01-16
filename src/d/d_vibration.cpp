@@ -37,7 +37,7 @@ bool dVibration_c::StartQuake(int, int, cXyz) {
 }
 
 /* 8009CE1C-8009CF84       .text StartQuake__12dVibration_cFPCUcii4cXyz */
-bool dVibration_c::StartQuake(const unsigned char*, int, int, cXyz) {
+bool dVibration_c::StartQuake(const u8*, int, int, cXyz) {
     /* Nonmatching */
 }
 

@@ -86,15 +86,19 @@ public:
         daPyFlg0_HOVER_BOOTS        = 0x00001000,
         daPyFlg0_UNK4000            = 0x00004000,
         daPyFlg0_UNK10000           = 0x00010000,
+        daPyFlg0_UNK20000           = 0x00020000,
         daPyFlg0_NO_FALL_VOICE      = 0x00040000,
         daPyFlg0_SCOPE_CANCEL       = 0x00080000,
         daPyFlg0_PHOTO_BOX_CANCEL   = 0x00080000, // Same as scope cancel
         daPyFlg0_UNK200000          = 0x00200000,
+        daPyFlg0_UNK400000          = 0x00400000,
         daPyFlg0_UNK1000000         = 0x01000000,
         daPyFlg0_EQUIP_HEAVY_BOOTS  = 0x02000000,
         daPyFlg0_NO_DRAW            = 0x08000000,
         daPyFlg0_UNK10000000        = 0x10000000,
+        daPyFlg0_UNK20000000        = 0x20000000,
         daPyFlg0_HEAVY_STATE        = 0x40000000,
+        daPyFlg0_UNK80000000        = 0x80000000,
     };
     
     enum daPy_FLG1 {
@@ -106,6 +110,7 @@ public:
         daPyFlg1_NPC_NOT_CHANGE         = 0x00000040,
         daPyFlg1_UNK80                  = 0x00000080,
         daPyFlg1_CONFUSE                = 0x00000100,
+        daPyFlg1_UNK200                 = 0x00000200,
         daPyFlg1_UNK400                 = 0x00000400,
         daPyFlg1_FREEZE_STATE           = 0x00000800,
         daPyFlg1_SHIP_TACT              = 0x00001000,
@@ -114,13 +119,16 @@ public:
         daPyFlg1_UNK8000                = 0x00008000,
         daPyFlg1_FORCE_VOMIT_JUMP_SHORT = 0x00010000,
         daPyFlg1_FOREST_WATER_USE       = 0x00020000,
+        daPyFlg1_UNK40000               = 0x00040000,
         daPyFlg1_WATER_DROP             = 0x00080000,
         daPyFlg1_UNK200000              = 0x00200000,
         daPyFlg1_UNK800000              = 0x00800000,
         daPyFlg1_UNK1000000             = 0x01000000,
         daPyFlg1_VINE_CATCH             = 0x02000000,
         daPyFlg1_UNK8000000             = 0x08000000,
+        daPyFlg1_UNK10000000            = 0x10000000,
         daPyFlg1_LAST_COMBO_WAIT        = 0x20000000,
+        daPyFlg1_UNK40000000            = 0x40000000,
     };
     
     enum daPy_RFLG0 {
@@ -129,6 +137,7 @@ public:
         daPyRFlg0_GRAB_UP_END           = 0x00000020,
         daPyRFlg0_AUTO_JUMP_LAND        = 0x00000040,
         daPyRFlg0_UNK80                 = 0x00000080,
+        daPyRFlg0_UNK200                = 0x00000200,
         daPyRFlg0_RIGHT_FOOT_ON_GROUND  = 0x00000400,
         daPyRFlg0_LEFT_FOOT_ON_GROUND   = 0x00000800,
         daPyRFlg0_FRONT_ROLL_CRASH      = 0x00002000,
@@ -142,6 +151,7 @@ public:
         daPyRFlg0_TACT_USE              = 0x01000000,
         daPyRFlg0_FAIRY_USE             = 0x02000000,
         daPyRFlg0_UNK8000000            = 0x08000000,
+        daPyRFlg0_UNK10000000           = 0x10000000,
         daPyRFlg0_ARROW_SHOOT           = 0x20000000,
         // 0x00000001 and 0x00000002 set in daPy_lk_c::dProcLastCombo
         // 0x00001000 set in daPy_lk_c::procCrawlMove_init, checked in checkNoCollisionCorret__9daPy_lk_cFv
@@ -437,11 +447,16 @@ public:
     
     bool checkGrabWear() const { return field_0x2b0 < 0.0f; }
     bool checkNormalSwordEquip() const {
-        return dComIfGs_getSelectEquip(0) == SWORD || dComIfGp_getMiniGameType() == 2;
+        return dComIfGs_getSelectEquip(0) == SWORD ||
+        dComIfGp_getMiniGameType() == 2;
+    }
+    bool checkMasterSwordEquip() const {
+        return dComIfGs_getSelectEquip(0) == MASTER_SWORD ||
+        dComIfGs_getSelectEquip(0) == LV3_SWORD ||
+        dComIfGs_getSelectEquip(0) == MASTER_SWORD_EX;
     }
     void setFace(daPy_FACE face) { mFace = face; }
     
-    void checkMasterSwordEquip() const {}
     void checkFinalMasterSwordEquip() const {}
     void checkBowMiniGame() const {}
     void checkSwordMiniGame() const {}
@@ -493,7 +508,7 @@ public:
     void changePlayer(fopAc_ac_c*);
     void objWindHitCheck(dCcD_Cyl*);
     void setDoButtonQuake();
-    void stopDoButtonQuake(int);
+    void stopDoButtonQuake(BOOL);
 };  // Size: 0x320
 
 #endif /* D_A_PLAYER */

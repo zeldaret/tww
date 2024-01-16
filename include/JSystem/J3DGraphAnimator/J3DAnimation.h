@@ -5,9 +5,6 @@
 #include "JSystem/JUtility/JUTNameTab.h"
 #include "JSystem/JUtility/JUTDataHeader.h"
 
-typedef struct _GXColor GXColor;
-typedef struct _GXColorS10 GXColorS10;
-
 struct J3DAnmKeyTableBase {
     /* 0x00 */ u16 mMaxFrame;
     /* 0x02 */ u16 mOffset;
@@ -418,7 +415,7 @@ public:
     void searchUpdateMaterialID(J3DMaterialTable*);
     void searchUpdateMaterialID(J3DModelData*);
 
-    virtual ~J3DAnmTextureSRTKey();
+    virtual ~J3DAnmTextureSRTKey() {}
 
     void getTransform(u16 idx, J3DTextureSRTInfo* pSRTInfo) const {
         calcTransform(getFrame(), idx, pSRTInfo);
@@ -515,7 +512,7 @@ public:
 
     J3DAnmTexPatternFullTable * getAnmTable() const { return mAnmTable; }
 
-    virtual ~J3DAnmTexPattern();
+    virtual ~J3DAnmTexPattern() {}
 
 private:
     /* 0x10 */ u16* mTextureIndex;

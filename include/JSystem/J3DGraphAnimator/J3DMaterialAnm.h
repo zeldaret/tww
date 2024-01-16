@@ -3,9 +3,6 @@
 
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 
-typedef struct _GXColor GXColor;
-typedef struct _GXColorS10 GXColorS10;
-
 class J3DMatColorAnm {
 public:
     ~J3DMatColorAnm() {}
@@ -70,7 +67,7 @@ public:
         mAnmIndex = 0;
         mAnmTransform = NULL;
     }
-    J3DTexMtxAnm(J3DAnmTextureSRTKey * pAnm, u16 anmIdx) {
+    J3DTexMtxAnm(J3DAnmTextureSRTKey* pAnm, u16 anmIdx) {
         mAnmIndex = anmIdx;
         mAnmTransform = pAnm;
     }
@@ -100,7 +97,7 @@ public:
         mAnmTevReg = NULL;
         mAnmIndex = 0;
     }
-    J3DTevKColorAnm(J3DAnmTevRegKey * pAnm, u16 anmIdx) {
+    J3DTevKColorAnm(J3DAnmTevRegKey* pAnm, u16 anmIdx) {
         mAnmTevReg = pAnm;
         mAnmIndex = anmIdx;
     }
@@ -130,7 +127,7 @@ public:
         mAnmTevReg = NULL;
         mAnmIndex = 0;
     }
-    J3DTevColorAnm(J3DAnmTevRegKey * pAnm, u16 anmIdx) {
+    J3DTevColorAnm(J3DAnmTevRegKey* pAnm, u16 anmIdx) {
         mAnmTevReg = pAnm;
         mAnmIndex = anmIdx;
     }
@@ -164,17 +161,17 @@ public:
     inline void setTevColorAnm(int i, J3DTevColorAnm* pAnm) { mTevColorAnm[i] = pAnm; }
     inline void setTevKColorAnm(int i, J3DTevKColorAnm* pAnm) { mTevKColorAnm[i] = pAnm; }
 
-    virtual ~J3DMaterialAnm() {};
+    virtual ~J3DMaterialAnm() {}
     virtual void calc(J3DMaterial*) const;
 
     const J3DTexMtxAnm* getTexMtxAnm(int i) const { return mTexMtxAnm[i]; }
 
 private:
-    /* 0x04 */ J3DMatColorAnm * mMatColorAnm[2];
-    /* 0x0C */ J3DTexMtxAnm * mTexMtxAnm[8];
-    /* 0x2C */ J3DTexNoAnm * mTexNoAnm[8];
-    /* 0x4C */ J3DTevColorAnm * mTevColorAnm[4];
-    /* 0x5C */ J3DTevKColorAnm * mTevKColorAnm[4];
+    /* 0x04 */ J3DMatColorAnm* mMatColorAnm[2];
+    /* 0x0C */ J3DTexMtxAnm* mTexMtxAnm[8];
+    /* 0x2C */ J3DTexNoAnm* mTexNoAnm[8];
+    /* 0x4C */ J3DTevColorAnm* mTevColorAnm[4];
+    /* 0x5C */ J3DTevKColorAnm* mTevKColorAnm[4];
 };  // Size: 0x6C
 
 #endif /* J3DMATERIALANM_H */

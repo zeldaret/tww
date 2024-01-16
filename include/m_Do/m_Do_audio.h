@@ -141,6 +141,18 @@ inline void mDoAud_linkVoiceStart(u32 param_0, Vec* i_sePos, u8 param_3, s8 para
     mDoAud_zelAudio_c::getInterface()->linkVoiceStart(param_0, i_sePos, param_3, param_4);
 }
 
+inline void mDoAud_setLinkGroupInfo(u8 param_0) {
+    mDoAud_zelAudio_c::getInterface()->setLinkGroupInfo(param_0);
+}
+
+inline void mDoAud_setLinkOnBoard(s32 param_0) {
+    mDoAud_zelAudio_c::getInterface()->setLinkOnBoard(param_0);
+}
+
+inline void mDoAud_setLinkHp(s32 param_0, s32 param_1) {
+    mDoAud_zelAudio_c::getInterface()->setLinkHp(param_0, param_1);
+}
+
 inline void mDoAud_monsSeStart(u32 i_seNum, Vec* param_1, u32 param_2, u32 param_3, s8 i_reverb) {
     mDoAud_zelAudio_c::getInterface()->monsSeStart(i_seNum, param_1, param_2, param_3, i_reverb);
 }

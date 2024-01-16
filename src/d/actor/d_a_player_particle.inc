@@ -203,8 +203,14 @@ void daPy_waterDropPcallBack_c::execute(JPABaseEmitter*, JPABaseParticle*) {
 }
 
 /* 80129F48-80129F98       .text execute__22daPy_followEcallBack_cFP14JPABaseEmitter */
-void daPy_followEcallBack_c::execute(JPABaseEmitter*) {
-    /* Nonmatching */
+void daPy_followEcallBack_c::execute(JPABaseEmitter* emitter) {
+    JGeometry::TVec3<f32> pos(field_0x08.x, field_0x08.y, field_0x08.z);
+    emitter->setGlobalTranslation(pos);
+    JGeometry::TVec3<s16> rot;
+    rot.x = field_0x14.x;
+    rot.y = field_0x14.y;
+    rot.z = field_0x14.z;
+    emitter->setGlobalRotation(rot);
 }
 
 /* 80129F98-80129FA0       .text setup__22daPy_followEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
@@ -268,16 +274,50 @@ void daPy_dmEcallBack_c::execute(JPABaseEmitter*) {
 /* 8012A288-8012A8D8       .text setAuraEffect__9daPy_lk_cFv */
 void daPy_lk_c::setAuraEffect() {
     /* Nonmatching */
+    static const u16 aura_emitter_joint[] = {
+        0x0007,
+        0x000B,
+        0x0008,
+        0x000C,
+        0x0021,
+        0x0026,
+        0x0022,
+        0x0027,
+        0x0000,
+        0x000F,
+    };
+    static const u16 aura_model_joint[] = {
+        0x0000,
+        0x000F,
+        0x0008,
+        0x000C,
+        0x0021,
+        0x0026,
+    };
 }
 
 /* 8012A8D8-8012B340       .text setWaterRipple__9daPy_lk_cFv */
 void daPy_lk_c::setWaterRipple() {
     /* Nonmatching */
+    static Vec waterfall_ripple_scale = {0.75f, 0.75f, 0.75f};
+    static JGeometry::TVec3<f32> normal_ripple_scale;
+    static JGeometry::TVec3<f32> small_ripple_scale;
+    static JGeometry::TVec3<f32> waterfall_splash_trans;
+    static const Vec wave_offset = {0.0f, 18.0f, 0.0f};
+    static const Vec swim_offset = {0.0f, 30.0f, 0.0f};
+    static const Vec swim_side_offset = {0.0f, 0.0f, 30.0f};
 }
 
 /* 8012B340-8012B8EC       .text setFootEffectType__9daPy_lk_cFiP4cXyzii */
 void daPy_lk_c::setFootEffectType(int, cXyz*, int, int) {
     /* Nonmatching */
+    static JGeometry::TVec3<f32> run_splash_scale;
+    static Vec grass_scale = {1.5f, 1.5f, 1.5f};
+    static JGeometry::TVec3<f32> run_grass_scale;
+    static Vec smoke_scale = {1.25f, 1.25f, 1.25f};
+    static JGeometry::TVec3<f32> heavy_emit_smoke_scale;
+    static JGeometry::TVec3<f32> heavy_dyn_smoke_scale;
+    static JGeometry::TVec3<f32> heavy_pat_smoke_scale;
 }
 
 /* 8012B8EC-8012B9DC       .text setFootMark__9daPy_lk_cFP4cXyz */
@@ -298,6 +338,7 @@ void daPy_lk_c::resetFootEffect() {
 /* 8012C1A8-8012C2A4       .text setSwimTail__9daPy_lk_cFv */
 void daPy_lk_c::setSwimTail() {
     /* Nonmatching */
+    static JGeometry::TVec3<f32> tail_scale(1.0f, 1.0f, -1.0f);
 }
 
 /* 8012C2A4-8012C330       .text setCutWaterSplash__9daPy_lk_cFv */
@@ -317,7 +358,33 @@ void daPy_lk_c::setWaterDrop() {
 
 /* 8012C620-8012C754       .text setDamageFlameEmitter__9daPy_lk_cFv */
 void daPy_lk_c::setDamageFlameEmitter() {
-    /* Nonmatching */
+    static JGeometry::TVec3<f32> arm_flame_scale(0.6f, 0.6f, 0.6f);
+    static const u16 flame_joint[ARRAY_SIZE(mDmEcallBack)] = {
+        0x000F, // head_jnt
+        0x0003, // stomach_jnt
+        0x0007, // LarmB_jnt
+        0x000B, // RarmB_jnt
+    };
+    
+    if (!daPy_dmEcallBack_c::checkFlame()) {
+        endDamageEmitter();
+        
+        const u16* jointNoP = flame_joint;
+        daPy_dmEcallBack_c* dmECB = mDmEcallBack;
+        for (int i = 0; i < (s32)ARRAY_SIZE(mDmEcallBack); i++, jointNoP++, dmECB++) {
+            cXyz jointPos;
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(*jointNoP), &jointPos);
+            dmECB->makeEmitter(0x3F1, mpCLModel->getAnmMtx(*jointNoP), &jointPos, NULL);
+            if (dmECB->getEmitter() == NULL) {
+                continue;
+            }
+            if (i == 2 || i == 3) {
+                dmECB->getEmitter()->setGlobalScale(arm_flame_scale);
+            }
+        }
+    }
+    
+    daPy_dmEcallBack_c::setFlame(100);
 }
 
 /* 8012C754-8012C7F0       .text setDamageCurseEmitter__9daPy_lk_cFv */
@@ -342,8 +409,8 @@ void daPy_lk_c::endFlameDamageEmitter() {
 
 /* 8012C9D8-8012CA44       .text endDamageEmitter__9daPy_lk_cFv */
 void daPy_lk_c::endDamageEmitter() {
-    for (int i = 0; i < (int)ARRAY_SIZE(m33B8); i++) {
-        m33B8[i].end();
+    for (int i = 0; i < (int)ARRAY_SIZE(mDmEcallBack); i++) {
+        mDmEcallBack[i].end();
     }
     daPy_dmEcallBack_c::setTimer(0);
     daPy_dmEcallBack_c::setType(3);
@@ -353,4 +420,7 @@ void daPy_lk_c::endDamageEmitter() {
 /* 8012CA44-8012CD60       .text setItemWaterEffect__9daPy_lk_cFP10fopAc_ac_cii */
 u32 daPy_lk_c::setItemWaterEffect(fopAc_ac_c*, int, int) {
     /* Nonmatching */
+    static cXyz eff_scale0(0.5f, 0.5f, 0.5f);
+    static cXyz eff_scale2(0.13f, 0.13f, 0.13f);
+    static JGeometry::TVec3<f32> direction(0.0f, 1.0f, 0.0f);
 }
