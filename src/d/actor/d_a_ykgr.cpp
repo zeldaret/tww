@@ -6,6 +6,16 @@
 #include "d/actor/d_a_ykgr.h"
 #include "dolphin/types.h"
 
+/* 000000EC-00000134       .text draw__17dPa_YkgrPcallBackFP14JPABaseEmitterP15JPABaseParticle */
+void dPa_YkgrPcallBack::draw(JPABaseEmitter*, JPABaseParticle*) {
+    /* Nonmatching */
+}
+
+/* 00000134-00000234       .text setParam__17dPa_YkgrPcallBackFf */
+void dPa_YkgrPcallBack::setParam(float) {
+    /* Nonmatching */
+}
+
 /* 00000234-00000408       .text getPosRate__8daYkgr_cFv */
 void daYkgr_c::getPosRate() {
     /* Nonmatching */

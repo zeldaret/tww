@@ -3,6 +3,7 @@
 // Translation Unit: d_gameover.cpp
 //
 
+#include "d/d_menu_save.h"
 #include "d/d_drawlist.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_meter.h"
@@ -16,35 +17,6 @@
 #include "JSystem/J2DGraph/J2DPane.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "SSystem/SComponent/c_phase.h"
-
-class dDlst_MenuSave_c : public dDlst_base_c {
-};
-
-class dMenu_save_c {
-public:
-    virtual ~dMenu_save_c() {}
-    void _create();
-    void _draw2();
-    void _move();
-    bool _open();
-    bool _close();
-    void _delete();
-
-public:
-    /* 0x0004 */ u8 field_0x0004;
-    /* 0x0008 */ dDlst_MenuSave_c mDlst;
-    /* 0x000C */ u8 field_0x000c[0x0524];
-    /* 0x0530 */ u8 field_0x0530;
-    /* 0x0531 */ u8 field_0x0531;
-    /* 0x0532 */ u8 field_0x0532;
-    /* 0x0533 */ u8 field_0x0533;
-    /* 0x0534 */ u8 field_0x0534;
-    /* 0x0535 */ u8 field_0x0535;
-    /* 0x0536 */ u8 field_0x0536;
-    /* 0x0537 */ u8 field_0x0537;
-    /* 0x0538 */ u8 field_0x0538;
-    /* 0x0539 */ u8 field_0x0539[0x1ba4 - 0x0539];
-};
 
 class dDlst_Gameover_CAPTURE_c : public dDlst_base_c {
 public:

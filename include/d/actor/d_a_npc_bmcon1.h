@@ -12,6 +12,8 @@ struct sBmconAnmDat {
 
 class daNpcBmcon_c : public fopAc_ac_c {
 public:
+    daNpcBmcon_c();
+
     void getNpcNo() {}
     void getPhaseP() {}
     void get_arm_L_jnt_num() {}

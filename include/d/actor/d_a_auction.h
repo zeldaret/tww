@@ -7,6 +7,8 @@
 
 class daAuction_c : public fopAc_ac_c {
 public:
+    daAuction_c();
+
     void chkNpcExec(int) {}
     void getAnmNpcNo() {}
     void getAucMdlNo(unsigned char) {}

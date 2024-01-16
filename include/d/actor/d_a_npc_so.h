@@ -11,54 +11,9 @@ public:
         
     };
 
-    void cutAppearProc() {}
-    void cutAppearStart() {}
-    void cutDisappearProc() {}
-    void cutDisappearStart() {}
-    void cutDiveProc() {}
-    void cutDiveStart() {}
-    void cutEatesaFirstProc() {}
-    void cutEatesaFirstStart() {}
-    void cutEatesaProc() {}
-    void cutEatesaStart() {}
-    void cutEffectProc() {}
-    void cutEffectStart() {}
-    void cutEquipProc() {}
-    void cutEquipStart() {}
-    void cutJumpMapopenProc() {}
-    void cutJumpMapopenStart() {}
-    void cutJumpProc() {}
-    void cutJumpStart() {}
-    void cutMiniGameEndProc() {}
-    void cutMiniGameEndStart() {}
-    void cutMiniGamePlTurnProc() {}
-    void cutMiniGamePlTurnStart() {}
-    void cutMiniGamePlUpProc() {}
-    void cutMiniGamePlUpStart() {}
-    void cutMiniGameProc() {}
-    void cutMiniGameReturnProc() {}
-    void cutMiniGameReturnStart() {}
-    void cutMiniGameStart() {}
-    void cutMiniGameWaitProc() {}
-    void cutMiniGameWaitStart() {}
-    void cutMiniGameWarpProc() {}
-    void cutMiniGameWarpStart() {}
-    void cutPartnerShipProc() {}
-    void cutPartnerShipStart() {}
-    void cutProc() {}
-    void cutSetAnmProc() {}
-    void cutSetAnmStart() {}
-    void cutSwimProc() {}
-    void cutSwimStart() {}
-    void cutTurnProc() {}
-    void cutTurnStart() {}
-    void cutUnequipProc() {}
-    void cutUnequipStart() {}
     void getMiniGameRestArrow() {}
-    void initCam() {}
     void isAnm(signed char) {}
     void modeProcInit(int) {}
-    void moveCam() {}
 
     void _searchEsa(fopAc_ac_c*);
     void _nodeControl(J3DNode*, J3DModel*);
@@ -124,6 +79,52 @@ public:
     void getArg();
     s32 _create();
     BOOL _delete();
+
+    void cutAppearProc();
+    void cutAppearStart();
+    void cutDisappearProc();
+    void cutDisappearStart();
+    void cutDiveProc();
+    void cutDiveStart();
+    void cutEatesaFirstProc();
+    void cutEatesaFirstStart();
+    void cutEatesaProc();
+    void cutEatesaStart();
+    void cutEffectProc();
+    void cutEffectStart();
+    void cutEquipProc();
+    void cutEquipStart();
+    void cutJumpMapopenProc();
+    void cutJumpMapopenStart();
+    void cutJumpProc();
+    void cutJumpStart();
+    void cutMiniGameEndProc();
+    void cutMiniGameEndStart();
+    void cutMiniGamePlTurnProc();
+    void cutMiniGamePlTurnStart();
+    void cutMiniGamePlUpProc();
+    void cutMiniGamePlUpStart();
+    void cutMiniGameProc();
+    void cutMiniGameReturnProc();
+    void cutMiniGameReturnStart();
+    void cutMiniGameStart();
+    void cutMiniGameWaitProc();
+    void cutMiniGameWaitStart();
+    void cutMiniGameWarpProc();
+    void cutMiniGameWarpStart();
+    void cutPartnerShipProc();
+    void cutPartnerShipStart();
+    void cutProc();
+    void cutSetAnmProc();
+    void cutSetAnmStart();
+    void cutSwimProc();
+    void cutSwimStart();
+    void cutTurnProc();
+    void cutTurnStart();
+    void cutUnequipProc();
+    void cutUnequipStart();
+    void initCam();
+    void moveCam();
 
 public:
     /* Place member variables here */

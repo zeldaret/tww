@@ -6,7 +6,7 @@
 class daWarpls_c : public fopAc_ac_c {
 public:
     inline BOOL _draw();
-    void set_mtx() {}
+    void set_mtx(); // weak but not inlined?
 
     BOOL _delete();
     void CreateHeap();

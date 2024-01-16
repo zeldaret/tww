@@ -15,7 +15,7 @@ public:
     inline BOOL _delete();
     inline BOOL _draw();
     void reqClearGame() {}
-    void set_mtx() {}
+    void set_mtx(); // weak but not inlined?
 
     bool checkClearGame();
     u8 getScore();

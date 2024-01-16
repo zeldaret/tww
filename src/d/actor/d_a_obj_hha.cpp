@@ -155,23 +155,3 @@ BOOL daObjHha_c::_execute() {
 BOOL daObjHha_c::_draw() {
     /* Nonmatching */
 }
-/* 00003064-00003080       .text get_base_pos__16daObjHhaSplash_cFv */
-void daObjHhaSplash_c::get_base_pos() {
-    /* Nonmatching */
-}
-
-/* 00003080-0000309C       .text get_pos__16daObjHhaSplash_cFv */
-void daObjHhaSplash_c::get_pos() {
-    /* Nonmatching */
-}
-
-/* 0000309C-000030B8       .text set_pos__15daObjHhaYgush_cF4cXyz */
-void daObjHhaYgush_c::set_pos(cXyz) {
-    /* Nonmatching */
-}
-
-/* 000030B8-000030D4       .text get_base_pos__15daObjHhaYgush_cFv */
-void daObjHhaYgush_c::get_base_pos() {
-    /* Nonmatching */
-}
-

@@ -3,7 +3,7 @@
 // Translation Unit: d_menu_save.cpp
 //
 
-#include "d_menu_save.h"
+#include "d/d_menu_save.h"
 #include "dolphin/types.h"
 
 /* 801D5DB8-801D5E8C       .text __ct__9dMs_HIO_cFv */
@@ -22,7 +22,7 @@ void dMenu_save_c::initialize() {
 }
 
 /* 801D6174-801D61A0       .text _open__12dMenu_save_cFv */
-void dMenu_save_c::_open() {
+bool dMenu_save_c::_open() {
     /* Nonmatching */
 }
 
@@ -32,7 +32,7 @@ void dMenu_save_c::openNormal() {
 }
 
 /* 801D62CC-801D62F8       .text _close__12dMenu_save_cFv */
-void dMenu_save_c::_close() {
+bool dMenu_save_c::_close() {
     /* Nonmatching */
 }
 
@@ -420,14 +420,3 @@ void dMenu_save_c::_draw2() {
 void dDlst_MenuSave_c::draw() {
     /* Nonmatching */
 }
-
-/* 801DAED0-801DAF44       .text __dt__13dFile_error_cFv */
-dFile_error_c::~dFile_error_c() {
-    /* Nonmatching */
-}
-
-/* 801DAF44-801DAF8C       .text __dt__9dMs_HIO_cFv */
-dMs_HIO_c::~dMs_HIO_c() {
-    /* Nonmatching */
-}
-

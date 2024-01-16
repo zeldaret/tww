@@ -250,43 +250,5 @@ static BOOL daNpc_Tt_Draw(daNpc_Tt_c*) {
 static BOOL daNpc_Tt_IsDelete(daNpc_Tt_c*) {
     /* Nonmatching */
 }
-/* 00002C60-00002C7C       .text setEyePos__10daNpc_Tt_cF4cXyz */
-void daNpc_Tt_c::setEyePos(cXyz) {
-    /* Nonmatching */
-}
 
-/* 00002C7C-00002C98       .text setAttentionBasePos__10daNpc_Tt_cF4cXyz */
-void daNpc_Tt_c::setAttentionBasePos(cXyz) {
-    /* Nonmatching */
-}
-
-/* 00002CD4-00002DEC       .text initTexPatternAnm__10daNpc_Tt_cFb */
-void daNpc_Tt_c::initTexPatternAnm(bool) {
-    /* Nonmatching */
-}
-
-/* 00002DEC-00002E78       .text playTexPatternAnm__10daNpc_Tt_cFv */
-void daNpc_Tt_c::playTexPatternAnm() {
-    /* Nonmatching */
-}
-
-/* 00002E78-00002F94       .text setAnm__10daNpc_Tt_cFi */
-void daNpc_Tt_c::setAnm(int) {
-    /* Nonmatching */
-}
-
-/* 00002F94-00002FFC       .text danceInit__10daNpc_Tt_cFi */
-void daNpc_Tt_c::danceInit(int) {
-    /* Nonmatching */
-}
-
-/* 00002FFC-000030B0       .text danceProc__10daNpc_Tt_cFv */
-void daNpc_Tt_c::danceProc() {
-    /* Nonmatching */
-}
-
-/* 000030B0-00003210       .text danceNext__10daNpc_Tt_cFv */
-void daNpc_Tt_c::danceNext() {
-    /* Nonmatching */
-}
-
+#include "d/actor/d_a_npc_tt_anm.inc"

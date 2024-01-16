@@ -9,6 +9,8 @@ struct sAnmDat {
 
 class daNpcAuction_c : public fopAc_ac_c {
 public:
+    daNpcAuction_c();
+
     inline s32 _create();
     inline BOOL _delete();
     inline BOOL _draw();

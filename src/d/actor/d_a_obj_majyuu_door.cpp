@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_obj_majyuu_door.h"
-#include "dolphin/types.h"
+#include "d/d_cc_d.h"
 
 /* 000000EC-0000010C       .text createHeap_CB__FP10fopAc_ac_c */
 static BOOL createHeap_CB(fopAc_ac_c*) {

@@ -361,7 +361,11 @@ public:
     BOOL checkFrame(f32 frame) {
         return mFrameCtrl.checkPass(frame);
     }
-    void isMorf() {} // TODO
+    void changeAnm(J3DAnmTransform* bckAnm) { mpAnm = bckAnm; }
+    J3DAnmTransform* getAnm() { return mpAnm; }
+    f32 getMorfRatio() { return mCurMorf; }
+    BOOL isLoop() { return mFrameCtrl.checkState(J3DFrameCtrl::STATE_LOOP_E); }
+    BOOL isMorf() { return mCurMorf < 1.0f; }
 
     /* 0x50 */ J3DModel* mpModel;
     /* 0x54 */ J3DAnmTransform* mpAnm;

@@ -10,6 +10,8 @@ struct sAhAnmDat {
 
 class daNpcAh_c : public fopAc_ac_c {
 public:
+    daNpcAh_c();
+
     void getPhaseP() {}
     void setResFlag(unsigned char) {}
 

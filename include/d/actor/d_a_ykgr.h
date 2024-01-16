@@ -4,6 +4,7 @@
 #include "f_op/f_op_actor.h"
 
 class JPABaseEmitter;
+class JPABaseParticle;
 
 class daYkgr_c : public fopAc_ac_c {
 public:
@@ -32,6 +33,12 @@ public:
 
 public:
     /* Place member variables here */
+};
+
+class dPa_YkgrPcallBack {
+public:
+    void draw(JPABaseEmitter*, JPABaseParticle*);
+    void setParam(float);
 };
 
 #endif /* D_A_YKGR_H */

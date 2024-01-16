@@ -355,14 +355,3 @@ static BOOL daBigelf_Draw(daBigelf_c*) {
 static BOOL daBigelf_IsDelete(daBigelf_c*) {
     /* Nonmatching */
 }
-
-/* 00003890-000038AC       .text setEyePos__10daBigelf_cF4cXyz */
-void daBigelf_c::setEyePos(cXyz) {
-    /* Nonmatching */
-}
-
-/* 000038AC-000038C8       .text setAttentionBasePos__10daBigelf_cF4cXyz */
-void daBigelf_c::setAttentionBasePos(cXyz) {
-    /* Nonmatching */
-}
-

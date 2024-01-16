@@ -7,12 +7,12 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000368       .text CreateHeap__Q210daObjEkskz5Act_cFv */
-void daObjEkskz::Act_c::CreateHeap() {
+int daObjEkskz::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 00000368-0000054C       .text Create__Q210daObjEkskz5Act_cFv */
-s32 daObjEkskz::Act_c::Create() {
+int daObjEkskz::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -42,7 +42,7 @@ void daObjEkskz::Act_c::init_mtx() {
 }
 
 /* 00000DC0-00000FFC       .text Execute__Q210daObjEkskz5Act_cFPPA3_A4_f */
-void daObjEkskz::Act_c::Execute(float(**)[3][4]) {
+int daObjEkskz::Act_c::Execute(float(**)[3][4]) {
     /* Nonmatching */
 }
 

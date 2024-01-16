@@ -6,7 +6,7 @@
 class daObjVgnfd_c : public fopAc_ac_c {
 public:
     void check_boss(int) {}
-    void check_ev_init(int) {}
+    void check_ev_init(int); // weak but not inlined?
     void on_door_ev(int) {}
 
     void solidHeapCB(fopAc_ac_c*);

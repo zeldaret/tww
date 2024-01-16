@@ -12,6 +12,14 @@ namespace daObjFtree {
         
     };
 
+    static void Ftree_get_water_pos(cXyz*, cXyz*);
+    static void Ftree_checkXyEventCallBack(void*, int);
+    static void Ftree_XyEventCallBack(void*, int);
+    static void is_broughtID(int);
+    static void Ftree_NodeCallBack_Effect(J3DNode*, int);
+    static void Ftree_NodeCallBack_M(J3DNode*, int);
+    static void Ftree_NodeCallBack_L(J3DNode*, int);
+
     class Act_c : public fopAc_ac_c {
     public:
         void GetRate(float, float, float) {}
@@ -19,7 +27,7 @@ namespace daObjFtree {
         void check_heart() {}
         void check_water() {}
         void init_water() {}
-        void param_get_tree_idx() const {}
+        void param_get_tree_idx() const; // weak but not inlined?
         void set_heart(short) {}
         void set_water(short) {}
         void tree_brouht(int) {}

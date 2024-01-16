@@ -2,6 +2,7 @@
 #define D_A_OBJ_EFF_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_particle.h"
 
 namespace daObjEff {
     class Act_c : public fopAc_ac_c {
@@ -49,6 +50,41 @@ namespace daObjEff {
     
     public:
         /* Place member variables here */
+    };
+
+    class BarrelSmokeCB : public dPa_smokeEcallBack {
+    public:
+        BarrelSmokeCB();
+        void execute(JPABaseEmitter*);
+    };
+
+    class StoolSmokeCB : public dPa_smokeEcallBack {
+    public:
+        StoolSmokeCB();
+        void execute(JPABaseEmitter*);
+    };
+
+    class SkullSmokeCB : public dPa_smokeEcallBack {
+    public:
+        SkullSmokeCB();
+        void execute(JPABaseEmitter*);
+    };
+
+    class LandSmokeCB : public dPa_smokeEcallBack {
+    public:
+        LandSmokeCB();
+    };
+
+    class PineconeSmokeCB : public dPa_smokeEcallBack {
+    public:
+        PineconeSmokeCB();
+        void execute(JPABaseEmitter*);
+    };
+
+    class WoodBoxSmokeCB : public dPa_smokeEcallBack {
+    public:
+        WoodBoxSmokeCB();
+        void execute(JPABaseEmitter*);
     };
 };
 

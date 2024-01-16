@@ -33,6 +33,12 @@ namespace daObjMmrr {
         /* 0xBF8 */ u8 mBF8;
         /* 0xBF9 */ u8 mBF9[0xC18 - 0xBF9];
     };
+
+    class Eff_c {
+    public:
+        void end();
+        void remove();
+    };
 };
 
 #endif /* D_A_OBJ_MMRR_H */

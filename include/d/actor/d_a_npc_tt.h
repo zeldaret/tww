@@ -17,9 +17,6 @@ public:
     void chkFlag(unsigned short) {}
     void clrEvFlag(unsigned short) {}
     void clrFlag(unsigned short) {}
-    void danceInit(int) {}
-    void danceNext() {}
-    void danceProc() {}
     void getBackboneJntNum() {}
     void getBackbone_x() {}
     void getBackbone_y() {}
@@ -27,10 +24,7 @@ public:
     void getHead_x() {}
     void getHead_y() {}
     void incAttnSetCount() {}
-    void initTexPatternAnm(bool) {}
-    void playTexPatternAnm() {}
     void setAction(int (daNpc_Tt_c::*)(void*), void*) {}
-    void setAnm(int) {}
     void setAttentionBasePos(cXyz) {}
     void setEvFlag(unsigned short) {}
     void setEyePos(cXyz) {}
@@ -74,6 +68,13 @@ public:
     BOOL _delete();
     s32 _create();
     void CreateHeap();
+
+    void initTexPatternAnm(bool);
+    void playTexPatternAnm();
+    void setAnm(int);
+    void danceInit(int);
+    void danceProc();
+    void danceNext();
 
 public:
     /* Place member variables here */

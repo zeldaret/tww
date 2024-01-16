@@ -3,7 +3,7 @@
 // Translation Unit: d_menu_option.cpp
 //
 
-#include "d_menu_option.h"
+#include "d/d_menu_option.h"
 #include "dolphin/types.h"
 
 /* 801D2B68-801D2B78       .text __ct__9dMo_HIO_cFv */
@@ -150,9 +150,3 @@ void dMenu_Option_c::_open() {
 void dMenu_Option_c::_close() {
     /* Nonmatching */
 }
-
-/* 801D5D38-801D5D80       .text __dt__9dMo_HIO_cFv */
-dMo_HIO_c::~dMo_HIO_c() {
-    /* Nonmatching */
-}
-

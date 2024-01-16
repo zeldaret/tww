@@ -11,8 +11,8 @@ public:
     inline BOOL _execute();
     void getYureScale() const {}
     void getYureTimer() const {}
-    void setMoveBGMtx() {}
-    void set_mtx() {}
+    void setMoveBGMtx(); // weak but not inlined?
+    void set_mtx(); // weak but not inlined?
 
     void CreateHeap();
     void CreateInit();

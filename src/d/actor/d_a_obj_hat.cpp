@@ -90,8 +90,3 @@ static BOOL daSampleDraw(void*) {
 static BOOL daSampleIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 00000B94-00000BB0       .text getWindVec__12daNpcRoten_cFv */
-void daNpcRoten_c::getWindVec() {
-    /* Nonmatching */
-}

@@ -340,4 +340,3 @@ static BOOL daObjTapestry_Draw(daObjTapestry_c*) {
 static BOOL daObjTapestry_IsDelete(daObjTapestry_c*) {
     /* Nonmatching */
 }
-

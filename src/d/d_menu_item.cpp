@@ -3,7 +3,7 @@
 // Translation Unit: d_menu_item.cpp
 //
 
-#include "d_menu_item.h"
+#include "d/d_menu_item.h"
 #include "dolphin/types.h"
 
 /* 801C7B4C-801C7C7C       .text __ct__9dMi_HIO_cFv */
@@ -260,19 +260,3 @@ void dMenu_Item_c::_open2() {
 void dMenu_Item_c::_close2() {
     /* Nonmatching */
 }
-
-/* 801D2A4C-801D2AB8       .text __dt__12dMenu_Item_cFv */
-dMenu_Item_c::~dMenu_Item_c() {
-    /* Nonmatching */
-}
-
-/* 801D2AB8-801D2AE4       .text draw__12dMenu_Item_cFv */
-void dMenu_Item_c::draw() {
-    /* Nonmatching */
-}
-
-/* 801D2AE4-801D2B2C       .text __dt__9dMi_HIO_cFv */
-dMi_HIO_c::~dMi_HIO_c() {
-    /* Nonmatching */
-}
-

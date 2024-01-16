@@ -8,6 +8,8 @@
 
 class daObjFigure_c : public fopAc_ac_c {
 public:
+    daObjFigure_c();
+
     void getFigureNo() {}
     void getPhase1P() {}
     void getPhase2P() {}

@@ -3,8 +3,8 @@
 // Translation Unit: d_menu_window.cpp
 //
 
-#include "d_menu_window.h"
-#include "dolphin/types.h"
+#include "d/d_menu_window.h"
+#include "f_op/f_op_msg.h"
 
 /* 801DB384-801DB50C       .text __ct__9dMw_HIO_cFv */
 dMw_HIO_c::dMw_HIO_c() {
@@ -160,59 +160,3 @@ void dMs_Delete(sub_ms_screen_class*) {
 void dMs_Create(msg_class*) {
     /* Nonmatching */
 }
-
-/* 801DF684-801DF9C0       .text draw__20dDlst_MENU_CAPTURE_cFv */
-void dDlst_MENU_CAPTURE_c::draw() {
-    /* Nonmatching */
-}
-
-/* 801DF9C0-801DFA70       .text draw__18dDlst_MENU_CLOTH_cFv */
-void dDlst_MENU_CLOTH_c::draw() {
-    /* Nonmatching */
-}
-
-/* 801DFA70-801DFACC       .text __dt__20dDlst_MENU_CAPTURE_cFv */
-dDlst_MENU_CAPTURE_c::~dDlst_MENU_CAPTURE_c() {
-    /* Nonmatching */
-}
-
-/* 801DFACC-801DFB28       .text __dt__18dDlst_MENU_CLOTH_cFv */
-dDlst_MENU_CLOTH_c::~dDlst_MENU_CLOTH_c() {
-    /* Nonmatching */
-}
-
-/* 801DFB28-801DFBC4       .text __dt__13dMenu_Fmap2_cFv */
-dMenu_Fmap2_c::~dMenu_Fmap2_c() {
-    /* Nonmatching */
-}
-
-/* 801DFBC4-801DFC9C       .text __dt__12dMenu_Fmap_cFv */
-dMenu_Fmap_c::~dMenu_Fmap_c() {
-    /* Nonmatching */
-}
-
-/* 801DFC9C-801DFCF8       .text __dt__14dDlst_NameIN_cFv */
-dDlst_NameIN_c::~dDlst_NameIN_c() {
-    /* Nonmatching */
-}
-
-/* 801DFCF8-801DFD6C       .text __dt__7dName_cFv */
-dName_c::~dName_c() {
-    /* Nonmatching */
-}
-
-/* 801DFD6C-801DFDB4       .text __dt__10dMw_DHIO_cFv */
-dMw_DHIO_c::~dMw_DHIO_c() {
-    /* Nonmatching */
-}
-
-/* 801DFDB4-801DFDFC       .text __dt__9dMw_HIO_cFv */
-dMw_HIO_c::~dMw_HIO_c() {
-    /* Nonmatching */
-}
-
-/* 801DFEA8-801DFEE4       .text __dt__14dMenu_FmapSv_cFv */
-dMenu_FmapSv_c::~dMenu_FmapSv_c() {
-    /* Nonmatching */
-}
-

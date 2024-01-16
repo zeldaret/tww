@@ -3,8 +3,7 @@
 // Translation Unit: d_menu_fmap.cpp
 //
 
-#include "d_menu_fmap.h"
-#include "dolphin/types.h"
+#include "d/d_menu_fmap.h"
 
 /* 801AF4F0-801AF848       .text __ct__9dMf_HIO_cFv */
 dMf_HIO_c::dMf_HIO_c() {
@@ -660,14 +659,3 @@ void dMenu_Fmap_c::getButtonIconMode() {
 void dDlst_FMAP_c::draw() {
     /* Nonmatching */
 }
-
-/* 801BB088-801BB0E4       .text __dt__12dDlst_FMAP_cFv */
-dDlst_FMAP_c::~dDlst_FMAP_c() {
-    /* Nonmatching */
-}
-
-/* 801BB0E4-801BB12C       .text __dt__9dMf_HIO_cFv */
-dMf_HIO_c::~dMf_HIO_c() {
-    /* Nonmatching */
-}
-

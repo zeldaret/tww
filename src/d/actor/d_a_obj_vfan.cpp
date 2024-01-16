@@ -7,12 +7,12 @@
 #include "dolphin/types.h"
 
 /* 00000078-00000134       .text CreateHeap__Q29daObjVfan5Act_cFv */
-void daObjVfan::Act_c::CreateHeap() {
+int daObjVfan::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 00000134-00000214       .text Create__Q29daObjVfan5Act_cFv */
-s32 daObjVfan::Act_c::Create() {
+int daObjVfan::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -47,7 +47,7 @@ void daObjVfan::Act_c::ParticleSet() {
 }
 
 /* 000009B4-00000C74       .text Execute__Q29daObjVfan5Act_cFPPA3_A4_f */
-void daObjVfan::Act_c::Execute(float(**)[3][4]) {
+int daObjVfan::Act_c::Execute(float(**)[3][4]) {
     /* Nonmatching */
 }
 

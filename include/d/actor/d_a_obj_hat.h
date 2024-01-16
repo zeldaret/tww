@@ -5,6 +5,8 @@
 
 class daObjHat_c : public fopAc_ac_c {
 public:
+    daObjHat_c();
+
     s32 _create();
     void createHeap();
     void createInit();

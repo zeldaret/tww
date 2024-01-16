@@ -3,7 +3,7 @@
 // Translation Unit: d_menu_cloth.cpp
 //
 
-#include "d_menu_cloth.h"
+#include "d/d_menu_cloth.h"
 #include "dolphin/types.h"
 
 /* 8019940C-8019966C       .text __ct__13daCLOTH_HIO_cFv */
@@ -145,9 +145,3 @@ void dMenu_ClothDraw(void*) {
 void dMenu_ClothIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 8019BDE0-8019BE50       .text __dt__13daCLOTH_HIO_cFv */
-daCLOTH_HIO_c::~daCLOTH_HIO_c() {
-    /* Nonmatching */
-}
-

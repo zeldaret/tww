@@ -5,6 +5,8 @@
 
 class daTag_MdCb_c : public fopAc_ac_c {
 public:
+    ~daTag_MdCb_c();
+
     void offEventAccept() {}
     void onEventAccept() {}
     void setTimer(short) {}

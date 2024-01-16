@@ -3,8 +3,8 @@
 // Translation Unit: d_menu_dmap.cpp
 //
 
-#include "d_menu_dmap.h"
-#include "dolphin/types.h"
+#include "d/d_menu_dmap.h"
+#include "d/d_stage.h"
 
 /* 801A86A4-801A87CC       .text __ct__9dMd_HIO_cFv */
 dMd_HIO_c::dMd_HIO_c() {
@@ -185,19 +185,3 @@ void dMenu_Dmap_c::_open() {
 void dMenu_Dmap_c::_close() {
     /* Nonmatching */
 }
-
-/* 801AF3B8-801AF440       .text __dt__12dMenu_Dmap_cFv */
-dMenu_Dmap_c::~dMenu_Dmap_c() {
-    /* Nonmatching */
-}
-
-/* 801AF440-801AF46C       .text draw__12dMenu_Dmap_cFv */
-void dMenu_Dmap_c::draw() {
-    /* Nonmatching */
-}
-
-/* 801AF46C-801AF4B4       .text __dt__9dMd_HIO_cFv */
-dMd_HIO_c::~dMd_HIO_c() {
-    /* Nonmatching */
-}
-
