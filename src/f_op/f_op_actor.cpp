@@ -98,7 +98,7 @@ s32 fopAc_Execute(void* pProc) {
             )
         ) {
             fopAcM_OffCondition(actor, fopAcCnd_NOEXEC_e);
-            actor->next = actor->current;
+            actor->old = actor->current;
             ret = fpcMtd_Execute((process_method_class*)actor->mSubMtd, actor);
         } else {
             fopAcM_OnCondition(actor, fopAcCnd_NOEXEC_e);
@@ -157,20 +157,20 @@ s32 fopAc_Create(void* pProc) {
         fopAcM_prm_class* prm = fopAcM_GetAppend(actor);
         if (prm != NULL) {
             fopAcM_SetParam(actor, prm->mParameter);
-            actor->orig.pos = prm->mPos;
-            actor->orig.angle = prm->mAngle;
+            actor->home.pos = prm->mPos;
+            actor->home.angle = prm->mAngle;
             actor->shape_angle = prm->mAngle;
             actor->mParentPcId = prm->mParentPcId;
             actor->mSubtype = prm->mSubtype;
             actor->mGbaName = prm->mGbaName;
             actor->mScale.set(prm->mScale.x * 0.1f, prm->mScale.y * 0.1f, prm->mScale.z * 0.1f);
             actor->mSetId = prm->mSetId;
-            actor->orig.roomNo = prm->mRoomNo;
+            actor->home.roomNo = prm->mRoomNo;
         }
 
-        actor->next = actor->orig;
-        actor->current = actor->orig;
-        actor->mEyePos = actor->orig.pos;
+        actor->old = actor->home;
+        actor->current = actor->home;
+        actor->mEyePos = actor->home.pos;
         actor->mMaxFallSpeed = -100.0f;
         actor->mAttentionInfo.mDistances[0] = 1;
         actor->mAttentionInfo.mDistances[1] = 2;
@@ -180,8 +180,8 @@ s32 fopAc_Create(void* pProc) {
         actor->mAttentionInfo.mDistances[7] = 15;
         actor->mAttentionInfo.mDistances[5] = 16;
         actor->mAttentionInfo.mDistances[6] = 16;
-        actor->mAttentionInfo.mPosition = actor->orig.pos;
-        dKy_tevstr_init(&actor->mTevStr, actor->orig.roomNo, 0xFF);
+        actor->mAttentionInfo.mPosition = actor->home.pos;
+        dKy_tevstr_init(&actor->mTevStr, actor->home.roomNo, 0xFF);
     }
 
     s32 status = fpcMtd_Create((process_method_class*)actor->mSubMtd, actor);

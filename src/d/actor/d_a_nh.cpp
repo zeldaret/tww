@@ -222,7 +222,7 @@ BOOL daNh_c::searchPlayer() {
     }
     
     daPy_py_c* player = daPy_getPlayerActorClass();
-    cXyz playerDelta = player->next.pos - player->current.pos;
+    cXyz playerDelta = player->old.pos - player->current.pos;
     f32 playerDist = fopAcM_searchPlayerDistance(this);
     f32 playerDistDelta = mPlayerDist - playerDist;
     mPlayerDist = playerDist;
@@ -247,7 +247,7 @@ BOOL daNh_c::moveProc(f32 targetSpeed, f32 speedStep, s16 targetAngle) {
 
 /* 800FA19C-800FA260       .text getHomeDistance__6daNh_cFv */
 f32 daNh_c::getHomeDistance() {
-    cXyz delta = orig.pos - current.pos;
+    cXyz delta = home.pos - current.pos;
     return cXyz(delta.x, 0.0f, delta.z).abs();
 }
 
@@ -306,7 +306,7 @@ BOOL daNh_c::waitAction(void*) {
 
 /* 800FA674-800FA78C       .text checkEscapeEnd__6daNh_cFv */
 BOOL daNh_c::checkEscapeEnd() {
-    cXyz homeDelta = orig.pos - current.pos;
+    cXyz homeDelta = home.pos - current.pos;
     if (!isTypeBottle()) {
         if (cLib_calcTimer(&mEscapeTimer) == 0) {
             setAction(&daNh_c::waitAction, NULL);
@@ -354,8 +354,8 @@ BOOL daNh_c::returnAction(void*) {
         if (getHomeDistance() < 50.0f) {
             setAction(&daNh_c::waitAction, NULL);
         } else {
-            s16 targetAngle = cLib_targetAngleY(&current.pos, &orig.pos);
-            cXyz homeDelta = orig.pos - current.pos;
+            s16 targetAngle = cLib_targetAngleY(&current.pos, &home.pos);
+            cXyz homeDelta = home.pos - current.pos;
             if (homeDelta.abs2XZ() < l_HIO.prm.mMaxHomeDist*l_HIO.prm.mMaxHomeDist) {
                 s16 angle = targetAngle - fopAcM_searchPlayerAngleY(this);
                 if (abs(angle) < 0x1000) {

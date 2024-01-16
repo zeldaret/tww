@@ -279,7 +279,7 @@ BOOL daNpc_Btsw2_c::CreateHeap() {
     modelData->getJointNodePointer(m_jnt.getBackboneJntNum())->setCallBack(nodeCallBack);
     mpMcaMorf->getModel()->setUserArea((u32)this);
     mAcchCir.SetWall(30.0f, 0.0f);
-    mObjAcch.Set(&current.pos, &next.pos, this, 1, &mAcchCir, &speed);
+    mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
     
     return TRUE;
 }

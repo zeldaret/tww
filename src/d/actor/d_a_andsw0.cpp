@@ -78,7 +78,7 @@ static void daAndsw0_check(andsw0_class* i_this) {
 
             break;
         case ACT_TIMER:
-            i_this->mTimer = (i_this->orig.angle.z & 0xFF) * 15;
+            i_this->mTimer = (i_this->home.angle.z & 0xFF) * 15;
             if(fopAcM_isSwitch(i_this, i_this->mSwitchToSet)) {
                 i_this->mAction = ACT_WAIT;
             }
@@ -310,8 +310,8 @@ static s32 daAndsw0_Create(fopAc_ac_c* ac) {
     i_this->mBehaviorType = (fopAcM_GetParam(ac) >> 8) & 0xFF;
     i_this->mSwitchToSet = (fopAcM_GetParam(ac) >> 24) & 0xFF;
     i_this->mFirstSwitchToCheck = (fopAcM_GetParam(ac) >> 16) & 0xFF;
-    i_this->mTimer = (i_this->orig.angle.z & 0xFF) * 15;
-    i_this->mEventNo = i_this->orig.angle.x;
+    i_this->mTimer = (i_this->home.angle.z & 0xFF) * 15;
+    i_this->mEventNo = i_this->home.angle.x;
     i_this->mEventIdx = dComIfGp_evmng_getEventIdx(NULL, i_this->mEventNo);
     if (i_this->mBehaviorType == 2)
         i_this->mAction = ACT_TIMER;

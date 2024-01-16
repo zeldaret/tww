@@ -243,7 +243,7 @@ void wether_tag_efect_move(kytag00_class* i_this) {
             g_env_light.mMoyaCount = 100.0f * blend;
             break;
         case 0x6:
-            if (i_this->orig.roomNo == dComIfGp_roomControl_getStayNo()) {
+            if (i_this->home.roomNo == dComIfGp_roomControl_getStayNo()) {
                 g_env_light.mHousiCount = 300.0f * blend;
             } else {
                 g_env_light.mHousiCount = 0;

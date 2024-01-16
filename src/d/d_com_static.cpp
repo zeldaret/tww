@@ -252,7 +252,7 @@ void daTagKbItem_c::dig_main() {
     }
     
     if (field_0x2a1 != 0xFF) {
-        mpActor->orig.angle.z = field_0x2a1;
+        mpActor->home.angle.z = field_0x2a1;
         fopAcM_onSwitch(this, field_0x2a4);
         fopAcM_delete(this);
         r30 = true;

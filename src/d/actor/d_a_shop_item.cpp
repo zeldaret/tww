@@ -81,7 +81,7 @@ void daShopItem_c::CreateInit() {
     show();
 
     mScale = getData()[m_itemNo].mScale;
-    orig.pos = current.pos;
+    home.pos = current.pos;
     set_mtx();
 
     if(isDaizaItem(m_itemNo)) {

@@ -40,7 +40,7 @@ u8 daMbdoor_c::getSwbit() {
 
 /* 00000084-00000090       .text getType__10daMbdoor_cFv */
 u8 daMbdoor_c::getType() {
-    return orig.angle.z & 0x3F;
+    return home.angle.z & 0x3F;
 }
 
 /* 00000090-0000009C       .text getShapeType__10daMbdoor_cFv */
@@ -178,7 +178,7 @@ BOOL daMbdoor_c::CreateHeap() {
 void daMbdoor_c::calcMtx() {
     // Transform the door's frame.
     mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::YrotM(orig.angle.y);
+    mDoMtx_stack_c::YrotM(home.angle.y);
     mpFuModel->setBaseTRMtx(mDoMtx_stack_c::now);
     
     cXyz offset;
@@ -214,7 +214,7 @@ void daMbdoor_c::calcMtx() {
     
     // Transform door's bar.
     mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::YrotM(orig.angle.y);
+    mDoMtx_stack_c::YrotM(home.angle.y);
     if (field_0x2b0) {
         mDoMtx_stack_c::transM(getToOffset(), 231.0f, 0.0f);
         mDoMtx_stack_c::ZrotM(field_0x2b0);
@@ -405,7 +405,7 @@ void daMbdoor_c::demoProc() {
 /* 00000F78-000010CC       .text checkArea__10daMbdoor_cFv */
 BOOL daMbdoor_c::checkArea() {
     daPy_py_c* player = daPy_getPlayerActorClass();
-    cXyz relPos1 = player->current.pos - orig.pos;
+    cXyz relPos1 = player->current.pos - home.pos;
     cXyz relPos2 = relPos1;
     relPos2.x = relPos1.z * cM_ssin(current.angle.y) - relPos1.x * cM_scos(current.angle.y);
     relPos2.z = relPos1.z * cM_scos(current.angle.y) + relPos1.x * cM_ssin(current.angle.y);

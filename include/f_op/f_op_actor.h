@@ -196,8 +196,6 @@ public:
 };  // Size = 0x18
 
 struct actor_place {
-    // void operator=(actor_place const&);
-
     /* 0x00 */ cXyz pos;
     /* 0x0C */ csXyz angle;
     /* 0x12 */ s8 roomNo;
@@ -261,8 +259,8 @@ public:
     /* 0x1C4 */ u32 mStatus;
     /* 0x1C8 */ u32 mCondition;
     /* 0x1CC */ u32 mParentPcId;
-    /* 0x1D0 */ actor_place orig;
-    /* 0x1E4 */ actor_place next;
+    /* 0x1D0 */ actor_place home;
+    /* 0x1E4 */ actor_place old;
     /* 0x1F8 */ actor_place current;
     /* 0x20C */ csXyz shape_angle;
     /* 0x214 */ cXyz mScale;

@@ -11,7 +11,7 @@
 
 /* 8015A37C-8015A448       .text check_initialRoom__10daPy_npc_cFv */
 int daPy_npc_c::check_initialRoom() {
-    if (orig.roomNo < 0) {
+    if (home.roomNo < 0) {
         mAcch.CrrPos(*dComIfG_Bgsp());
         if (mAcch.GetGroundH() == -1000000000.0f || dComIfG_Bgsp()->GetGroundCode(mAcch.m_gnd) == 4) {
             return 0;
@@ -35,8 +35,8 @@ BOOL daPy_npc_c::check_moveStop() {
     BOOL hasBgW = dComIfGp_roomControl_checkStatusFlag(roomNo, 0x10);
     if ((roomNo < 0 || !hasBgW)) {
         if (!hasBgW || m4E8 >= 30) {
-            current = orig;
-            shape_angle = orig.angle;
+            current = home;
+            shape_angle = home.angle;
             speedF = 0.0f;
             m4E8 = 0;
         }
@@ -64,15 +64,15 @@ void daPy_npc_c::setRestart(s8 option) {
 void daPy_npc_c::unconditionalSetRestart(s8 option) {
     dComIfGs_setRestartOption(option);
     dComIfGs_setPlayerPriest(option, dComIfGs_getRestartOptionPos(), dComIfGs_getRestartOptionAngleY(), dComIfGs_getRestartOptionRoomNo());
-    orig.pos = dComIfGs_getRestartOptionPos();
-    orig.angle.y = dComIfGs_getRestartOptionAngleY();
-    orig.roomNo = dComIfGs_getRestartOptionRoomNo();
+    home.pos = dComIfGs_getRestartOptionPos();
+    home.angle.y = dComIfGs_getRestartOptionAngleY();
+    home.roomNo = dComIfGs_getRestartOptionRoomNo();
 }
 
 /* 8015A624-8015A6A4       .text setOffsetHomePos__10daPy_npc_cFv */
 void daPy_npc_c::setOffsetHomePos() {
     static cXyz l_offsetPos(100.0f, 0.0f, 0.0f);
-    cLib_offsetPos(&orig.pos, &orig.pos, orig.angle.y, &l_offsetPos);
+    cLib_offsetPos(&home.pos, &home.pos, home.angle.y, &l_offsetPos);
 }
 
 /* 8015A6A4-8015AA0C       .text setPointRestart__10daPy_npc_cFsSc */
@@ -105,18 +105,18 @@ void daPy_npc_c::setPointRestart(s16 i_point, s8 option) {
     }
     JUT_ASSERT(174, i != dComIfGp_getStagePlayerNum());
     
-    orig.pos = player_data->mSpawnPos;
-    orig.angle.y = player_data->mAngle.y;
-    orig.roomNo = -1;
+    home.pos = player_data->mSpawnPos;
+    home.angle.y = player_data->mAngle.y;
+    home.roomNo = -1;
     setOffsetHomePos();
-    current = orig;
-    next = orig;
-    shape_angle = orig.angle;
+    current = home;
+    old = home;
+    shape_angle = home.angle;
     
-    rotY = orig.angle.y;
+    rotY = home.angle.y;
     roomNo = -1;
-    dComIfGs_setRestartOption(&orig.pos, rotY, roomNo, option);
-    dComIfGs_setPlayerPriest(option, orig.pos, rotY, roomNo);
+    dComIfGs_setRestartOption(&home.pos, rotY, roomNo, option);
+    dComIfGs_setPlayerPriest(option, home.pos, rotY, roomNo);
     dComIfGs_setPlayerPriest(option, dComIfGs_getRestartOptionPos(), dComIfGs_getRestartOptionAngleY(), dComIfGs_getRestartOptionRoomNo());
     fopAcM_setStageLayer(this);
 }
@@ -126,12 +126,12 @@ BOOL daPy_npc_c::checkRestart(s8 option) {
     if (option == dComIfGs_getRestartOption()) {
         s16 option_point = dComIfGs_getRestartOptionPoint();
         if (option_point < 0) {
-            orig.pos = dComIfGs_getRestartOptionPos();
-            orig.angle.y = dComIfGs_getRestartOptionAngleY();
-            orig.roomNo = dComIfGs_getRestartOptionRoomNo();
-            current = orig;
-            next = orig;
-            shape_angle = orig.angle;
+            home.pos = dComIfGs_getRestartOptionPos();
+            home.angle.y = dComIfGs_getRestartOptionAngleY();
+            home.roomNo = dComIfGs_getRestartOptionRoomNo();
+            current = home;
+            old = home;
+            shape_angle = home.angle;
         } else {
             setPointRestart(option_point, 1);
         }
@@ -148,9 +148,9 @@ BOOL daPy_npc_c::initialRestartOption(s8 option, int save) {
         if (save && option != dComIfGs_getRestartOption()) {
             s16 rotY;
             s8 roomNo = current.roomNo;
-            rotY = orig.angle.y;
-            dComIfGs_setRestartOption(&orig.pos, rotY, roomNo, option);
-            dComIfGs_setPlayerPriest(option, orig.pos, rotY, roomNo);
+            rotY = home.angle.y;
+            dComIfGs_setRestartOption(&home.pos, rotY, roomNo, option);
+            dComIfGs_setPlayerPriest(option, home.pos, rotY, roomNo);
         }
         return TRUE;
     }
@@ -201,7 +201,7 @@ int daPy_npc_c::chkMoveBlock(cXyz* outBlockVel) {
     cXyz blockRelPos;
     fopAc_ac_c* block = daPy_npc_SearchAreaByName(this, PROC_Obj_Movebox, 300.0f, &blockRelPos);
     if (block) {
-        cXyz blockVel = block->current.pos - block->next.pos;
+        cXyz blockVel = block->current.pos - block->old.pos;
         if (blockVel.abs() > 0.001f) {
             if (outBlockVel) {
                 *outBlockVel = blockVel;

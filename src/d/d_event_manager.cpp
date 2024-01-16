@@ -646,7 +646,7 @@ static fopAc_ac_c* findShutterCallBack(fopAc_ac_c* actor, void* user) {
     if (param->profName != fopAcM_GetProfName(actor))
         return NULL;
 
-    cXyz diff = actor->orig.pos - param->actor->orig.pos;
+    cXyz diff = actor->home.pos - param->actor->home.pos;
     if (diff.x < 10.0f && diff.x > -10.0f && diff.y < 10.0f && diff.y > -10.0f && diff.z < 10.0f && diff.z > -10.0f)
         return actor;
 
@@ -664,8 +664,8 @@ fopAc_ac_c* dEvent_manager_c::specialCast_Shutter(s16 profName, int flag) {
 
     fopAc_ac_c* shutter = (fopAc_ac_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)findShutterCallBack, &param);
     if (shutter != NULL && flag) {
-        cXyz goal = shutter->orig.pos;
-        s16 angle = param.actor->orig.angle.y + 0x8000;
+        cXyz goal = shutter->home.pos;
+        s16 angle = param.actor->home.angle.y + 0x8000;
         goal.x += cM_ssin(angle) * 100.0f;
         goal.z += cM_scos(angle) * 100.0f;
         dComIfGp_evmng_setGoal(&goal);

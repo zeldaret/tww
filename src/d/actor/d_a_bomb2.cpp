@@ -288,7 +288,7 @@ namespace daBomb2 {
 
     void Act_c::crr_init() {
         mCir.SetWall(30.0f, 30.0f);
-        mAcch.Set(&current.pos, &next.pos, this, 1, &mCir, &speed, &current.angle, &shape_angle);
+        mAcch.Set(&current.pos, &old.pos, this, 1, &mCir, &speed, &current.angle, &shape_angle);
         mAcch.ClrWaterNone();
         mAcch.ClrRoofNone();
         mAcch.m_roof_crr_height = 50.0f;
@@ -392,7 +392,7 @@ namespace daBomb2 {
         bgCrrPos();
         speed.y = 0.0f;
         speedF = 0.0f;
-        current.pos = orig.pos;
+        current.pos = home.pos;
         init_mtx();
 
         field_0x738 = attr().field_0x8;
@@ -524,7 +524,7 @@ namespace daBomb2 {
 
     /* 800DE8A8-800DE914       .text bgCrrPos_lava__Q27daBomb25Act_cFv */
     void Act_c::bgCrrPos_lava() {
-        cXyz temp(current.pos.x, next.pos.y + 1.0f, current.pos.z);
+        cXyz temp(current.pos.x, old.pos.y + 1.0f, current.pos.z);
         mGndChk.SetPos(&temp);
 
         field_0x51C = dComIfG_Bgsp()->GroundCross(&mGndChk);

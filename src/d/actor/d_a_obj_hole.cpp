@@ -213,7 +213,7 @@ void daObj_Hole_c::createInit() {
     fopAcM_setCullSizeFar(this, 10.0f);
 
     mAcchCir.SetWall(100.0f, 10.0f);
-    mAcch.Set(&current.pos, &next.pos, this, 1, &mAcchCir, &speed);
+    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
 
     mAcch.SetWallNone();
     mAcch.SetRoofNone();
@@ -243,7 +243,7 @@ void daObj_Hole_c::getArg() {
     mExitIdx = param & 0xFF;
     mHasModel = param >> 8;
 
-    mScaleLocal = orig.angle.z;
+    mScaleLocal = home.angle.z;
     if (mScaleLocal == 0xFFFF) {
         mScaleLocal = 0;
     }

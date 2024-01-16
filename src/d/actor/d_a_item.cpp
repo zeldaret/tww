@@ -134,7 +134,7 @@ void itemGetCallBack(fopAc_ac_c* item_actor, dCcD_GObjInf*, fopAc_ac_c* collided
 /* 800F5044-800F53EC       .text CreateInit__8daItem_cFv */
 void daItem_c::CreateInit() {
     mAcchCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&current.pos, &next.pos, this, 1, &mAcchCir, &fopAcM_GetSpeed_p(this));
+    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &fopAcM_GetSpeed_p(this));
     mAcch.m_flags &= ~0x400;
     mAcch.m_flags &= ~0x8;
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -193,7 +193,7 @@ void daItem_c::CreateInit() {
     mActivationSwitch = daItem_prm::getSwitchNo(this);
     
     current.angle.z = 0;
-    orig.angle.z = 0;
+    home.angle.z = 0;
     initAction();
     
     switch (m_itemNo) {
@@ -1304,7 +1304,7 @@ void daItem_c::mode_wait() {
     
     dBgS_ObjGndChk_Yogan gndChk;
     cXyz temp;
-    temp.set(next.pos.x, next.pos.y, next.pos.z);
+    temp.set(old.pos.x, old.pos.y, old.pos.z);
     gndChk.SetPos(&temp);
     f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
     if (groundY != -1000000000.0f && groundY > current.pos.y) {

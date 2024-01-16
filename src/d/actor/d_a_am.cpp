@@ -455,10 +455,10 @@ static void BG_check(am_class* i_this) {
     i_this->mAcchCir.SetWall(halfHeight, radius);
 
     i_this->current.pos.y -= i_this->m02EC;
-    i_this->next.pos.y -= i_this->m02EC;
+    i_this->old.pos.y -= i_this->m02EC;
     i_this->mAcch.CrrPos(*dComIfG_Bgsp());
     i_this->current.pos.y += i_this->m02EC;
-    i_this->next.pos.y += i_this->m02EC;
+    i_this->old.pos.y += i_this->m02EC;
 }
 
 /* 000011E4-00001504       .text Line_check__FP8am_class4cXyz */

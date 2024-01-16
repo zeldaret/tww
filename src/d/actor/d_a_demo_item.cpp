@@ -367,7 +367,7 @@ void daDitem_c::set_pos() {
         mDoMtx_stack_c::multVec(&offset, &offset);
         pos = dComIfGp_getPlayer(0)->current.pos;
     } else {
-        pos = orig.pos;
+        pos = home.pos;
     }
     
     pos += offset;

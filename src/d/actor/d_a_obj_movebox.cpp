@@ -190,7 +190,7 @@ namespace daObjMovebox {
         f32 maxGroundY = -1000000000.0f;
         
         mDoMtx_stack_c::transS(movebox->current.pos);
-        mDoMtx_stack_c::YrotM(movebox->orig.angle.y);
+        mDoMtx_stack_c::YrotM(movebox->home.angle.y);
         mMaxGroundIdx = -1;
         
         for (int i = 0; i < bgcSrcCount; i++, bgcSrc++) {
@@ -237,7 +237,7 @@ namespace daObjMovebox {
         cXyz temp_2c;
         cXyz temp_20;
         
-        angle = movebox->orig.angle.y + param_4;
+        angle = movebox->home.angle.y + param_4;
         mWallIdx = -1;
         mNearestWallDist = FLOAT_MAX;
         mDoMtx_stack_c::YrotS((s16)angle);
@@ -328,7 +328,7 @@ namespace daObjMovebox {
         cXyz temp_20;
         cXyz direction;
         
-        s16 angle = movebox->orig.angle.y + param_3;
+        s16 angle = movebox->home.angle.y + param_3;
         mDoMtx_stack_c::YrotS((s16)angle);
         mDoMtx_stack_c::XrotM(0x4000);
         offset.set(bgcSrc->m0C, 0.0f, bgcSrc->m08);
@@ -1104,10 +1104,10 @@ namespace daObjMovebox {
             // The appearing/disappearing type of box does not take pathId or swSave2 params.
             mPrmZ = 0xFFFF;
         } else {
-            mPrmZ = orig.angle.z;
+            mPrmZ = home.angle.z;
         }
         
-        orig.angle.z = 0;
+        home.angle.z = 0;
         current.angle.z = 0;
         shape_angle.z = 0;
     }
@@ -1115,11 +1115,11 @@ namespace daObjMovebox {
     /* 00001380-000013B0       .text prmX_init__Q212daObjMovebox5Act_cFv */
     void Act_c::prmX_init() {
         if (!mbPrmXInitialized) {
-            mPrmX = orig.angle.x;
+            mPrmX = home.angle.x;
             mbPrmXInitialized = true;
         }
         
-        orig.angle.x = 0;
+        home.angle.x = 0;
         current.angle.x = 0;
         shape_angle.x = 0;
     }
@@ -1225,9 +1225,9 @@ namespace daObjMovebox {
                 pntIdx += 2;
             }
             
-            mpPath = dPath_GetRoomPath(pathId, orig.roomNo);
+            mpPath = dPath_GetRoomPath(pathId, home.roomNo);
             dPath__Point* pnt = dPath_GetPnt(mpPath, pntIdx);
-            orig.pos = pnt->mPos;
+            home.pos = pnt->mPos;
             current.pos = pnt->mPos;
         }
     }
@@ -1344,7 +1344,7 @@ namespace daObjMovebox {
                 unk = orig_pp_label & dBgW::PP_UNK8_e;
             }
             if (unk) {
-                s16 angle = (s16)(pp_label & dBgW::PP_UNK2_e ? rot - 0x8000 : rot) - actor->orig.angle.y;
+                s16 angle = (s16)(pp_label & dBgW::PP_UNK2_e ? rot - 0x8000 : rot) - actor->home.angle.y;
                 int pp_field = dBgW::PP_UNK1_e | dBgW::PP_UNK2_e;
                 JUT_ASSERT(1813, pp_label != pp_field);
                 
@@ -1583,7 +1583,7 @@ namespace daObjMovebox {
             cXyz(0.5f, 0.0f, -0.5f)
         };
         
-        s16 angle = orig.angle.y + M_dir_base[m634];
+        s16 angle = home.angle.y + M_dir_base[m634];
         
         f32 scale = i_attr()->mScaleXZ;
         mDoMtx_stack_c::transS(current.pos);
@@ -1656,8 +1656,8 @@ namespace daObjMovebox {
         
         daObj::posMoveF_stream(this, NULL, &cXyz::Zero, i_attr()->m18, i_attr()->m1C);
         
-        mDoMtx_stack_c::transS(orig.pos);
-        mDoMtx_stack_c::YrotM(orig.angle.y);
+        mDoMtx_stack_c::transS(home.pos);
+        mDoMtx_stack_c::YrotM(home.angle.y);
         mDoMtx_stack_c::transM(m628 * i_attr()->m0C, 0.0f, m62C * i_attr()->m0C);
         cXyz pos;
         mDoMtx_stack_c::multVec(&cXyz::Zero, &pos);
@@ -1698,8 +1698,8 @@ namespace daObjMovebox {
         
         bool r28 = --m644 <= 0;
         f32 temp = (cM_scos(m644 * m630) + 1.0f) * 0.5f;
-        mDoMtx_stack_c::transS(orig.pos);
-        mDoMtx_stack_c::YrotM(orig.angle.y);
+        mDoMtx_stack_c::transS(home.pos);
+        mDoMtx_stack_c::YrotM(home.angle.y);
         mDoMtx_stack_c::transM(
             (m628 + temp * dir_vec[m634].x) * i_attr()->m0C,
             0.0f,

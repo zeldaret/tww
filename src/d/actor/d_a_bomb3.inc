@@ -491,7 +491,7 @@ void daBomb_c::bgCrrPos() {
 }
 
 void daBomb_c::bgCrrPos_lava() {
-    cXyz temp(current.pos.x, next.pos.y + 1.0f, current.pos.z);
+    cXyz temp(current.pos.x, old.pos.y + 1.0f, current.pos.z);
     mGndChk.SetPos(&temp);
 
     field_0x554.x = dComIfG_Bgsp()->GroundCross(&mGndChk);
@@ -1346,7 +1346,7 @@ static dCcD_SrcSph l_sph_src = {
 
 void daBomb_c::create_init() {
     mCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&current.pos, &next.pos, this, 1, &mCir, &speed, &current.angle, &shape_angle);
+    mAcch.Set(&current.pos, &old.pos, this, 1, &mCir, &speed, &current.angle, &shape_angle);
     mAcch.ClrWaterNone();
     mAcch.ClrRoofNone();
     mAcch.m_roof_crr_height = 50.0f;

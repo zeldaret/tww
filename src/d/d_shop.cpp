@@ -1068,7 +1068,7 @@ BOOL ShopItems_c::Item_Select(int idx) {
     if (item) {
         csXyz* pAngle = item->getRotateP();
         cXyz* pPos = item->getPosP();
-        cXyz temp2 = item->orig.pos;
+        cXyz temp2 = item->home.pos;
         cXyz temp = m30;
         temp -= item->getCenter();
         if (m3C == 1) {
@@ -1088,9 +1088,9 @@ BOOL ShopItems_c::Item_Select(int idx) {
 BOOL ShopItems_c::Item_Wait(int idx) {
     daShopItem_c* item = (daShopItem_c*)fopAcM_SearchByID(mItemActorProcessIds[idx]);
     if (item) {
-        cLib_addCalcAngleS(&item->getRotateP()->y, item->orig.angle.y, 0x4, 0x800, 0x80);
+        cLib_addCalcAngleS(&item->getRotateP()->y, item->home.angle.y, 0x4, 0x800, 0x80);
         cXyz* pPos = item->getPosP();
-        cXyz targetPos = item->orig.pos;
+        cXyz targetPos = item->home.pos;
         cLib_addCalcPos2(pPos, targetPos, 0.5f, 20.0f);
         return TRUE;
     }
@@ -1148,7 +1148,7 @@ cXyz ShopItems_c::getSelectItemBasePos() {
     }
     daShopItem_c* item = (daShopItem_c*)fopAcM_SearchByID(mItemActorProcessIds[mSelectedItemIdx]);
     if (item) {
-        return item->orig.pos + item->getCenter();
+        return item->home.pos + item->getCenter();
     } else {
         return cXyz::Zero;
     }
@@ -1186,8 +1186,8 @@ void ShopItems_c::showItem() {
         daShopItem_c* item = (daShopItem_c*)fopAcM_SearchByID(mItemActorProcessIds[i]);
         if (item && m28[i] != 1) {
             item->show();
-            item->current.pos = item->orig.pos;
-            item->getRotateP()->y = item->orig.angle.y;
+            item->current.pos = item->home.pos;
+            item->getRotateP()->y = item->home.angle.y;
         }
     }
     mbIsHide = 0;

@@ -376,7 +376,7 @@ bool daArrow_c::check_water_in() {
         f32 waterY;
         fopAcM_getWaterY(&current.pos, &waterY);
         
-        f32 deltaY = fabs(next.pos.y - current.pos.y);
+        f32 deltaY = fabs(old.pos.y - current.pos.y);
         f32 waterDist = fabs(waterY - current.pos.y);
         cXyz waterHitPos;
         if (deltaY < 1.0f) {
@@ -386,7 +386,7 @@ bool daArrow_c::check_water_in() {
             if (weight > 1.0f) {
                 weight = 1.0f;
             }
-            waterHitPos = (next.pos * weight) + (current.pos * (1.0f - weight));
+            waterHitPos = (old.pos * weight) + (current.pos * (1.0f - weight));
         }
         
         mCurrProcFunc = &daArrow_c::procWater;
@@ -631,7 +631,7 @@ BOOL daArrow_c::procMove() {
     speedF = 100.0f;
     current.pos += speed;
     cXyz quarterStepPos = current.pos + speed*0.25f;
-    mLinChk.Set(&next.pos, &quarterStepPos, this);
+    mLinChk.Set(&old.pos, &quarterStepPos, this);
     field_0x6e6 = shape_angle;
     
     cMtx_copy(mpModel->getBaseTRMtx(), field_0x6b4);
@@ -731,7 +731,7 @@ BOOL daArrow_c::procMove() {
             mCurrProcFunc = &daArrow_c::procReturn;
             speed *= -0.1f;
             speed.y += speed.absXZ();
-            current.pos = next.pos;
+            current.pos = old.pos;
             field_0x69c = 0x2C00;
             mDoMtx_stack_c::transS(current.pos);
             mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, 0);
@@ -831,7 +831,7 @@ BOOL daArrow_c::procMove() {
                 fopAcM_SetParam(this, 3);
                 speed *= -0.1f;
                 speed.y += speed.absXZ();
-                current.pos = next.pos;
+                current.pos = old.pos;
                 field_0x69c = 0x2C00;
                 csXyz temp9;
                 cM3d_CalcVecZAngle(triPla->mNormal, &temp9);
@@ -893,7 +893,7 @@ BOOL daArrow_c::procReturn() {
     shape_angle.x += field_0x69c;
     cXyz quarterStepPos = current.pos + speed*0.25f;
     field_0x699 = daPy_lk_c::setItemWaterEffect(this, field_0x699, 1);
-    mLinChk.Set(&next.pos, &quarterStepPos, this);
+    mLinChk.Set(&old.pos, &quarterStepPos, this);
     setBlur();
     
     if (dComIfG_Bgsp()->LineCross(&mLinChk)) {

@@ -25,7 +25,7 @@ public:
 
     u8 getTboxNo() { return fopAcM_GetParam(this) >> 0x07 & 0x1F; }
     int getSwNo() { return fopAcM_GetParam(this) >> 0x0C & 0xFF; }
-    u8 getItemNo() { return orig.angle.z >> 8 & 0xFF; }
+    u8 getItemNo() { return home.angle.z >> 8 & 0xFF; }
     void flagOn(u16 flag) { mFlags |= flag; }
     void flagOff(u16 flag) { mFlags &= ~flag; }
     void flagClr() { mFlags = 0; }

@@ -63,11 +63,11 @@ const char* daTag_Msg_c::myDemoName() {
 }
 
 u16 daTag_Msg_c::getMessage() {
-    return orig.angle.x;
+    return home.angle.x;
 }
 
 u16 daTag_Msg_c::getEventFlag() {
-    return orig.angle.z;
+    return home.angle.z;
 }
 
 BOOL daTag_Msg_c::arrivalTerms() {
@@ -113,7 +113,7 @@ BOOL daTag_Msg_c::otherCheck() {
     }
     JUT_ASSERT(0xC8, player);
     if (getMessage() == 0x1902) {
-        s16 diff = targetAngle - orig.angle.y;
+        s16 diff = targetAngle - home.angle.y;
         if (diff < 0) {
             diff = -diff;
         }

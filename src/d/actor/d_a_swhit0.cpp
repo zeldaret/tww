@@ -97,7 +97,7 @@ s32 daSwhit0_c::getTimer() {
 
 /* 000000B8-000000C4       .text getSwNo2__10daSwhit0_cFv */
 s32 daSwhit0_c::getSwNo2() {
-    return orig.angle.z & 0xFF;
+    return home.angle.z & 0xFF;
 }
 
 /* 000000C4-00000230       .text CreateHeap__10daSwhit0_cFv */
@@ -125,10 +125,10 @@ BOOL daSwhit0_c::CreateHeap() {
 
 /* 00000230-00000270       .text decisionRtType__10daSwhit0_cFv */
 void daSwhit0_c::decisionRtType() {
-    if (orig.angle.x == 0) {
+    if (home.angle.x == 0) {
         mRetType = 0;
     }
-    else if (orig.angle.x < -0x4E20 || orig.angle.x > 0x4E20) {
+    else if (home.angle.x < -0x4E20 || home.angle.x > 0x4E20) {
         mRetType = 2;
         return;
     }
@@ -145,9 +145,9 @@ s32 daSwhit0_c::CreateInit() {
 
     mColStatus.Init(0xFF, 0xFF, this);
 
-    mAttentionInfo.mPosition.x += cM_ssin(orig.angle.x) * 65.0f * cM_ssin(orig.angle.y);
-    mAttentionInfo.mPosition.y += cM_scos(orig.angle.x) * 65.0f;
-    mAttentionInfo.mPosition.z += cM_ssin(orig.angle.x) * 65.0f * cM_scos(orig.angle.y);
+    mAttentionInfo.mPosition.x += cM_ssin(home.angle.x) * 65.0f * cM_ssin(home.angle.y);
+    mAttentionInfo.mPosition.y += cM_scos(home.angle.x) * 65.0f;
+    mAttentionInfo.mPosition.z += cM_ssin(home.angle.x) * 65.0f * cM_scos(home.angle.y);
 
     mEyePos = mAttentionInfo.mPosition;
 

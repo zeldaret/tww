@@ -12,7 +12,7 @@
 bool daTagKbItem_c::_delete() {
 #if VERSION != VERSION_JPN
     if (field_0x2a0 != 0xff && field_0x2a4 != 0xff) {
-        dComIfGs_offSwitch(field_0x2a4, orig.roomNo);
+        dComIfGs_offSwitch(field_0x2a4, home.roomNo);
     }
 #endif
     return 1;
@@ -35,8 +35,8 @@ int daTagKbItem_c::_create() {
     fopAcM_SetupActor(this, daTagKbItem_c);
 
     CreateInit();
-    if (field_0x29c != 0x1f && dComIfGs_isItem(field_0x29c, orig.roomNo) ||
-        field_0x2a4 != 0xff && dComIfGs_isSwitch(field_0x2a4, orig.roomNo))
+    if (field_0x29c != 0x1f && dComIfGs_isItem(field_0x29c, home.roomNo) ||
+        field_0x2a4 != 0xff && dComIfGs_isSwitch(field_0x2a4, home.roomNo))
     {
         return cPhs_ERROR_e;
     }
@@ -46,8 +46,8 @@ int daTagKbItem_c::_create() {
 /* 000001BC-000001C4       .text _execute__13daTagKbItem_cFv */
 bool daTagKbItem_c::_execute() {
 #if VERSION == VERSION_JPN
-    if (field_0x29c != 0x1f && dComIfGs_isItem(field_0x29c, orig.roomNo) ||
-        field_0x2a4 != 0xff && dComIfGs_isSwitch(field_0x2a4, orig.roomNo))
+    if (field_0x29c != 0x1f && dComIfGs_isItem(field_0x29c, home.roomNo) ||
+        field_0x2a4 != 0xff && dComIfGs_isSwitch(field_0x2a4, home.roomNo))
     {
         fopAcM_delete(this);
     }

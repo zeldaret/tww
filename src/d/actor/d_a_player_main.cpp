@@ -3176,10 +3176,10 @@ BOOL daPy_lk_c::execute() {
         dComIfG_Bgsp()->ChkMoveBG(mAcch.m_gnd)
     ) {
         dComIfG_Bgsp()->MoveBgCrrPos(mAcch.m_gnd, mAcch.ChkGroundHit(), &current.pos, &current.angle, &shape_angle);
-        dComIfG_Bgsp()->MoveBgCrrPos(mAcch.m_gnd, mAcch.ChkGroundHit(), &next.pos, NULL, NULL);
+        dComIfG_Bgsp()->MoveBgCrrPos(mAcch.m_gnd, mAcch.ChkGroundHit(), &old.pos, NULL, NULL);
     }
     
-    cXyz sp20 = next.pos;
+    cXyz sp20 = old.pos;
     m34DE = shape_angle.y;
     m35B4 = m35B0;
     m34EA = m34DC;
@@ -4068,7 +4068,7 @@ void daPy_lk_c::playerInit() {
         m_anm_heap_upper[i].m_buffer = reinterpret_cast<void*>(buffer_start);
     }
     
-    mAcch.Set(&current.pos, &next.pos, this, ARRAY_SIZE(mAcchCir), mAcchCir, &speed, &current.angle, &shape_angle);
+    mAcch.Set(&current.pos, &old.pos, this, ARRAY_SIZE(mAcchCir), mAcchCir, &speed, &current.angle, &shape_angle);
     mAcch.ClrWaterNone();
     mAcch.SetWaterCheckOffset(500.0f);
     mAcch.OnLineCheck();

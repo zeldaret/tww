@@ -37,22 +37,22 @@ u8 dDoor_info_c::getEventNo() {
 
 /* 8006B3F8-8006B404       .text getFRoomNo__12dDoor_info_cFv */
 u8 dDoor_info_c::getFRoomNo() {
-    return orig.angle.x & 0x3F;
+    return home.angle.x & 0x3F;
 }
 
 /* 8006B404-8006B410       .text getBRoomNo__12dDoor_info_cFv */
 u8 dDoor_info_c::getBRoomNo() {
-    return (orig.angle.x >> 0x06) & 0x3F;
+    return (home.angle.x >> 0x06) & 0x3F;
 }
 
 /* 8006B410-8006B41C       .text getShipId__12dDoor_info_cFv */
 u8 dDoor_info_c::getShipId() {
-    return orig.angle.z & 0x3F;
+    return home.angle.z & 0x3F;
 }
 
 /* 8006B41C-8006B428       .text getArg1__12dDoor_info_cFv */
 u8 dDoor_info_c::getArg1() {
-    return (orig.angle.z >> 0x08) & 0xFF;
+    return (home.angle.z >> 0x08) & 0xFF;
 }
 
 /* 8006B428-8006B4C4       .text adjoinPlayer__12dDoor_info_cFv */

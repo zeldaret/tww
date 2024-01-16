@@ -24,10 +24,10 @@ static BOOL daSwtdoor_Draw(swtdoor_class* i_this) {
 /* 000000C4-000001BC       .text daSwtdoor_Execute__FP13swtdoor_class */
 static BOOL daSwtdoor_Execute(swtdoor_class* i_this) {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &i_this->current.pos, &i_this->mTevStr);
-    if (dComIfGs_isSwitch(i_this->mSwitchNo, fopAcM_GetRoomNo(i_this)) && i_this->orig.pos.y > -300.0f)
-        i_this->orig.pos.y -= 10.0f;
+    if (dComIfGs_isSwitch(i_this->mSwitchNo, fopAcM_GetRoomNo(i_this)) && i_this->home.pos.y > -300.0f)
+        i_this->home.pos.y -= 10.0f;
 
-    MtxTrans(i_this->current.pos.x, i_this->current.pos.y + i_this->orig.pos.y, i_this->current.pos.z, false);
+    MtxTrans(i_this->current.pos.x, i_this->current.pos.y + i_this->home.pos.y, i_this->current.pos.z, false);
     mDoMtx_YrotM(*calc_mtx, i_this->current.angle.y);
     mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
     mDoMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
@@ -81,7 +81,7 @@ static s32 daSwtdoor_Create(fopAc_ac_c* i_ac) {
     fopAcM_SetMin(i_this, -2000.0f, -1000.0f, -2000.0f);
     fopAcM_SetMax(i_this, 2000.0f, 1000.0f, 2000.0f);
     fopAcM_SetMtx(i_this, i_this->model->getBaseTRMtx());
-    i_this->orig.pos.y = 0.0f;
+    i_this->home.pos.y = 0.0f;
     return cPhs_COMPLEATE_e;
 }
 

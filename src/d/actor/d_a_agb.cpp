@@ -522,10 +522,10 @@ void daAgb_c::resetCursor(bool param_0) {
 
     if (fopAcM_GetName(player_p) != PROC_NPC_KAM) {
         current.pos = player_p->current.pos;
-        orig.pos = player_p->current.pos;
+        home.pos = player_p->current.pos;
     } else {
         current.pos = daPy_getPlayerLinkActorClass()->current.pos;
-        orig.pos = daPy_getPlayerLinkActorClass()->current.pos;
+        home.pos = daPy_getPlayerLinkActorClass()->current.pos;
     }
 
     field_0x628 = 2.5f;
@@ -1022,53 +1022,53 @@ void daAgb_c::CursorMove(fopAc_ac_c* actor, u32 stage_type) {
         !CPad_CHECK_HOLD_L(mDoGaC_getPortNo())
     ) {
         if (CPad_CHECK_HOLD_LEFT(mDoGaC_getPortNo())) {
-            actor->orig.pos.x -= f31;
+            actor->home.pos.x -= f31;
         } else if (CPad_CHECK_HOLD_RIGHT(mDoGaC_getPortNo())) {
-            actor->orig.pos.x += f31;
+            actor->home.pos.x += f31;
         }
         if (CPad_CHECK_HOLD_UP(mDoGaC_getPortNo())) {
-            actor->orig.pos.z -= f31;
+            actor->home.pos.z -= f31;
         } else if (CPad_CHECK_HOLD_DOWN(mDoGaC_getPortNo())) {
-            actor->orig.pos.z += f31;
+            actor->home.pos.z += f31;
         }
         
         if (stage_type == dSv_save_c::STAGE_WT && field_0x67e == 0) {
-            if (actor->orig.pos.x < -350000.0f) {
-                actor->orig.pos.x = -350000.0f;
-            } else if (actor->orig.pos.x > 350000.0f) {
-                actor->orig.pos.x = 350000.0f;
+            if (actor->home.pos.x < -350000.0f) {
+                actor->home.pos.x = -350000.0f;
+            } else if (actor->home.pos.x > 350000.0f) {
+                actor->home.pos.x = 350000.0f;
             }
-            if (actor->orig.pos.z < -350000.0f) {
-                actor->orig.pos.z = -350000.0f;
-            } else if (actor->orig.pos.z > 350000.0f) {
-                actor->orig.pos.z = 350000.0f;
+            if (actor->home.pos.z < -350000.0f) {
+                actor->home.pos.z = -350000.0f;
+            } else if (actor->home.pos.z > 350000.0f) {
+                actor->home.pos.z = 350000.0f;
             }
         } else {
             int roomNo = dComIfGp_roomControl_getStayNo();
             stage_map_info_class* mapInfo = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getMapInfo();
             if (mapInfo) {
-                if (actor->orig.pos.x < mapInfo->field_0x18) {
-                    actor->orig.pos.x = mapInfo->field_0x18;
-                } else if (actor->orig.pos.x > mapInfo->field_0x20) {
-                    actor->orig.pos.x = mapInfo->field_0x20;
+                if (actor->home.pos.x < mapInfo->field_0x18) {
+                    actor->home.pos.x = mapInfo->field_0x18;
+                } else if (actor->home.pos.x > mapInfo->field_0x20) {
+                    actor->home.pos.x = mapInfo->field_0x20;
                 }
-                if (actor->orig.pos.z < mapInfo->field_0x1C) {
-                    actor->orig.pos.z = mapInfo->field_0x1C;
-                } else if (actor->orig.pos.z > mapInfo->field_0x24) {
-                    actor->orig.pos.z = mapInfo->field_0x24;
+                if (actor->home.pos.z < mapInfo->field_0x1C) {
+                    actor->home.pos.z = mapInfo->field_0x1C;
+                } else if (actor->home.pos.z > mapInfo->field_0x24) {
+                    actor->home.pos.z = mapInfo->field_0x24;
                 }
             }
         }
         
-        cLib_chaseF(&actor->current.pos.x, actor->orig.pos.x, f31);
-        cLib_chaseF(&actor->current.pos.z, actor->orig.pos.z, f31);
+        cLib_chaseF(&actor->current.pos.x, actor->home.pos.x, f31);
+        cLib_chaseF(&actor->current.pos.z, actor->home.pos.z, f31);
         
         f32 playerDist = fopAcM_searchPlayerDistanceXZ(actor);
         if (playerDist > 212100.0f) {
             if (mIsFree || mFollowTarget == 0) {
                 cXyz r1_50 = player->current.pos - actor->current.pos;
-                actor->orig.pos.x = player->current.pos.x - r1_50.x * 212100.0f / playerDist;
-                actor->orig.pos.z = player->current.pos.z - r1_50.z * 212100.0f / playerDist;
+                actor->home.pos.x = player->current.pos.x - r1_50.x * 212100.0f / playerDist;
+                actor->home.pos.z = player->current.pos.z - r1_50.z * 212100.0f / playerDist;
             } else {
                 mIsFree = false;
                 mFollowTarget = 0;
@@ -1077,8 +1077,8 @@ void daAgb_c::CursorMove(fopAc_ac_c* actor, u32 stage_type) {
         }
     }
     
-    cXyz r1_44 = actor->next.pos;
-    cXyz r1_38 = actor->next.pos;
+    cXyz r1_44 = actor->old.pos;
+    cXyz r1_38 = actor->old.pos;
     r1_38.y += 171.0f;
     dBgS_LinkLinChk r1_11C;
     r1_11C.Set(&r1_44, &r1_38, actor);
@@ -1097,14 +1097,14 @@ void daAgb_c::CursorMove(fopAc_ac_c* actor, u32 stage_type) {
     mAcch.CrrPos(*dComIfG_Bgsp());
     
     {
-        cXyz r1_2C = actor->next.pos;
+        cXyz r1_2C = actor->old.pos;
         r1_2C.y += f31_2;
         cXyz r1_20 = actor->current.pos;
         r1_20.y += f31_2;
         dBgS_LinkLinChk r1_B0;
         r1_B0.Set(&r1_2C, &r1_20, actor);
         if (dComIfG_Bgsp()->LineCross(&r1_B0)) {
-            actor->current.pos = actor->next.pos;
+            actor->current.pos = actor->old.pos;
         }
     }
     
@@ -1117,10 +1117,10 @@ void daAgb_c::CursorMove(fopAc_ac_c* actor, u32 stage_type) {
     field_0x679 = 1;
     
     if (mCrrPos.ChkXCrr()) {
-        actor->orig.pos.x = actor->current.pos.x;
+        actor->home.pos.x = actor->current.pos.x;
     }
     if (mCrrPos.ChkZCrr()) {
-        actor->orig.pos.z = actor->current.pos.z;
+        actor->home.pos.z = actor->current.pos.z;
     }
     
     cXyz r1_14;
@@ -1144,9 +1144,9 @@ void daAgb_c::CursorMove(fopAc_ac_c* actor, u32 stage_type) {
         }
     }
     
-    cLib_chaseF(&actor->current.pos.y, actor->orig.pos.y, 25.0f);
+    cLib_chaseF(&actor->current.pos.y, actor->home.pos.y, 25.0f);
     if (f30 > actor->current.pos.y && f30 < actor->current.pos.y + 170.0f + 1.0f) {
-        actor->orig.pos.y = f30;
+        actor->home.pos.y = f30;
     }
 }
 
@@ -1272,7 +1272,7 @@ void daAgb_c::modeMove() {
                 if (r3) {
                     if (fopAcM_CheckStatusMap(r3, 0) && !fopAcM_checkStatus(r3, fopAcStts_BOSS_e) && fopAcM_GetName(r3) != PROC_FGANON) {
                         current.pos = r3->current.pos;
-                        orig.pos = r3->current.pos;
+                        home.pos = r3->current.pos;
                         field_0x650 = attList->getPid();
                         mFollowTarget = 1;
                     }
@@ -1295,12 +1295,12 @@ void daAgb_c::modeMove() {
                 onFree();
             } else {
                 current.pos = player->current.pos;
-                orig.pos = player->current.pos;
+                home.pos = player->current.pos;
             }
         } else {
             fopAc_ac_c* r3 = fopAcM_SearchByID(field_0x650);
             current.pos = r3->current.pos;
-            orig.pos = r3->current.pos;
+            home.pos = r3->current.pos;
         }
         
         shape_angle.setall(0);
@@ -1397,8 +1397,8 @@ static int daAgb_Execute(daAgb_c* i_this) {
 
     if (mDoGaC_GbaLink()) {
         if (i_this->isFree()) {
-            if (i_this->current.pos.x != i_this->next.pos.x ||
-                i_this->current.pos.z != i_this->next.pos.z)
+            if (i_this->current.pos.x != i_this->old.pos.x ||
+                i_this->current.pos.z != i_this->old.pos.z)
             {
                 daAgb_c::mFlags.field_0x5_3 = 1;
             } else {

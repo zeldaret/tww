@@ -205,7 +205,7 @@ void daNpc_kam_c::setAttention(bool param_1, int param_2) {
         if (param_2) {
             mAttentionInfo.mPosition.set(current.pos.x, current.pos.y, current.pos.z);
         } else {
-            mAttentionInfo.mPosition.set(orig.pos.x, orig.pos.y, orig.pos.z);
+            mAttentionInfo.mPosition.set(home.pos.x, home.pos.y, home.pos.z);
         }
     }
 }
@@ -408,8 +408,8 @@ BOOL daNpc_kam_c::init() {
     mEventState = -1;
     mCurrEventIdxIdx = -1;
     mScale *= 1000.0f;
-    mMaxY = orig.pos.y + mScale.y;
-    mMinY = orig.pos.y - mScale.y;
+    mMaxY = home.pos.y + mScale.y;
+    mMinY = home.pos.y - mScale.y;
     
     mTargetSpeedF = l_HIO.mHio1.mSpeedF;
     mAngVelY = l_HIO.mHio1.mGlidingAngVelY;
@@ -421,7 +421,7 @@ BOOL daNpc_kam_c::init() {
     
     mAcchCirs[0].SetWall(20.0f, 50.0f);
     mAcchCirs[1].SetWall(-20.0f, 50.0f);
-    mAcch.Set(&current.pos, &next.pos, this, ARRAY_SIZE(mAcchCirs), mAcchCirs, &speed);
+    mAcch.Set(&current.pos, &old.pos, this, ARRAY_SIZE(mAcchCirs), mAcchCirs, &speed);
     mAcch.ClrRoofNone();
     mAcch.SetRoofCrrHeight(20.0f);
     mAcch.OnLineCheck();
@@ -537,7 +537,7 @@ BOOL daNpc_kam_c::changeAreaCheck() {
         }
     } else {
         // For all other sectors, simple check if Link is within the Hyoi Seagull's moveable range.
-        delta = player->current.pos - orig.pos;
+        delta = player->current.pos - home.pos;
         if (delta.absXZ() < mScale.x) {
             offNpcNotChange();
             return TRUE;
@@ -549,7 +549,7 @@ BOOL daNpc_kam_c::changeAreaCheck() {
 
 /* 0000235C-00002450       .text areaOutCheck__11daNpc_kam_cFv */
 BOOL daNpc_kam_c::areaOutCheck() {
-    cXyz delta = (current.pos - orig.pos);
+    cXyz delta = (current.pos - home.pos);
     return delta.absXZ() > mScale.x ? TRUE : FALSE;
 }
 
@@ -680,7 +680,7 @@ int daNpc_kam_c::waitNpcAction(void*) {
                 }
             }
         } else if (mActionStatus == ACTION_ONGOING_2) {
-            targetAngleY = cLib_targetAngleY(&current.pos, &orig.pos);
+            targetAngleY = cLib_targetAngleY(&current.pos, &home.pos);
             if (cLib_calcTimer(&mC08) == 0 && !areaOutCheck()) {
                 mActionStatus = ACTION_ONGOING_1;
                 setAnm(ANM_WAIT2);
@@ -703,7 +703,7 @@ int daNpc_kam_c::waitNpcAction(void*) {
             fopAcM_seStart(this, JA_SE_CV_KAMOME, 0);
         }
         
-        if (current.pos.y < orig.pos.y) {
+        if (current.pos.y < home.pos.y) {
             targetAngleX = -l_HIO.mHio1.mGlidingAngVelX;
         }
         
@@ -1089,7 +1089,7 @@ BOOL daNpc_kam_c::actionAreaOutTurn(int evtStaffId) {
         onNoBgCheck();
         speedF = 0.0f;
         
-        s16 targetAngle = cLib_targetAngleY(&current.pos, &orig.pos);
+        s16 targetAngle = cLib_targetAngleY(&current.pos, &home.pos);
         s16 angleDiff = current.angle.y - targetAngle;
         if (abs(angleDiff) != 0) {
             cLib_addCalcAngleS(&current.angle.y, targetAngle, 16, 0x2000, 0x400);

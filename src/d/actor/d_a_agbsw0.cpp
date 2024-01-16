@@ -640,13 +640,13 @@ BOOL daAgbsw0_c::ExeSubF2() {
 
                 f32 x = current.pos.x;
                 agb->current.pos.x = x;
-                agb->orig.pos.x = x;
+                agb->home.pos.x = x;
                 f32 y = current.pos.y + 50.0f;
                 agb->current.pos.y = y;
-                agb->orig.pos.y = y;
+                agb->home.pos.y = y;
                 f32 z = current.pos.z;
                 agb->current.pos.z = z;
-                agb->orig.pos.z = z;
+                agb->home.pos.z = z;
                 agb->shape_angle.x = 0x3FFF;
                 agb->field_0x67f = 1;
                 mOrigScaleX = mScale.x;
@@ -1304,15 +1304,15 @@ BOOL daAgbsw0_c::ExeSubB() {
                     f32 rad = mScale.x;
                     if(xzDiff < rad - 100.0f) {
                         if(agb->current.pos.y < current.pos.y + mScale.y / 2.0f) {
-                            agb->orig.pos.y = current.pos.y - 6.0f;
+                            agb->home.pos.y = current.pos.y - 6.0f;
                         }
                         else {
-                            agb->orig.pos.y = current.pos.y + mScale.y + 6.0f;
+                            agb->home.pos.y = current.pos.y + mScale.y + 6.0f;
                         }
                     }
                     else {
-                        agb->orig.pos.x = current.pos.x - (posDiff.x * (rad + 1.0f) / xzDiff);
-                        agb->orig.pos.z = current.pos.z - (posDiff.z * (mScale.z + 1.0f) / xzDiff);
+                        agb->home.pos.x = current.pos.x - (posDiff.x * (rad + 1.0f) / xzDiff);
+                        agb->home.pos.z = current.pos.z - (posDiff.z * (mScale.z + 1.0f) / xzDiff);
                     }
                 }
                 else {
@@ -1324,30 +1324,30 @@ BOOL daAgbsw0_c::ExeSubB() {
                     f32 z_diff = mScale.z - fabsf(rel.z);
                     if(y_diff < x_diff && y_diff < z_diff) {
                         if(agb->current.pos.y < current.pos.y + mScale.y / 2.0f) {
-                            agb->orig.pos.y = current.pos.y - 6.0f;
+                            agb->home.pos.y = current.pos.y - 6.0f;
                         }
                         else {
-                            agb->orig.pos.y = current.pos.y + mScale.y + 6.0f;
+                            agb->home.pos.y = current.pos.y + mScale.y + 6.0f;
                         }
                     }
                     else {
                         if(x_diff < z_diff) {
                             if(rel.x >= 0.0f) {
-                                agb->orig.pos.x = (current.pos.x - posDiff.x) + (x_diff + 1.0f) * cM_scos(shape_angle.y);
-                                agb->orig.pos.z = (current.pos.z - posDiff.z) - (x_diff + 1.0f) * cM_ssin(shape_angle.y);
+                                agb->home.pos.x = (current.pos.x - posDiff.x) + (x_diff + 1.0f) * cM_scos(shape_angle.y);
+                                agb->home.pos.z = (current.pos.z - posDiff.z) - (x_diff + 1.0f) * cM_ssin(shape_angle.y);
                             }
                             else {
-                                agb->orig.pos.x = (current.pos.x - posDiff.x) - (x_diff + 1.0f) * cM_scos(shape_angle.y);
-                                agb->orig.pos.z = (current.pos.z - posDiff.z) + (x_diff + 1.0f) * cM_ssin(shape_angle.y);
+                                agb->home.pos.x = (current.pos.x - posDiff.x) - (x_diff + 1.0f) * cM_scos(shape_angle.y);
+                                agb->home.pos.z = (current.pos.z - posDiff.z) + (x_diff + 1.0f) * cM_ssin(shape_angle.y);
                             }
                         }
                         else if(rel.z >= 0.0f) {
-                            agb->orig.pos.x = (current.pos.x - posDiff.x) + (z_diff + 1.0f) * cM_ssin(shape_angle.y);
-                            agb->orig.pos.z = (current.pos.z - posDiff.z) + (z_diff + 1.0f) * cM_scos(shape_angle.y);
+                            agb->home.pos.x = (current.pos.x - posDiff.x) + (z_diff + 1.0f) * cM_ssin(shape_angle.y);
+                            agb->home.pos.z = (current.pos.z - posDiff.z) + (z_diff + 1.0f) * cM_scos(shape_angle.y);
                         }
                         else {
-                            agb->orig.pos.x = (current.pos.x - posDiff.x) - (z_diff + 1.0f) * cM_ssin(shape_angle.y);
-                            agb->orig.pos.z = (current.pos.z - posDiff.z) - (z_diff + 1.0f) * cM_scos(shape_angle.y);
+                            agb->home.pos.x = (current.pos.x - posDiff.x) - (z_diff + 1.0f) * cM_ssin(shape_angle.y);
+                            agb->home.pos.z = (current.pos.z - posDiff.z) - (z_diff + 1.0f) * cM_scos(shape_angle.y);
                         }
                     }
                 }
@@ -1425,13 +1425,13 @@ BOOL daAgbsw0_c::ExeSubD() {
 
                         f32 x = current.pos.x;
                         agb->current.pos.x = x;
-                        agb->orig.pos.x = x;
+                        agb->home.pos.x = x;
                         f32 y = current.pos.y;
                         agb->current.pos.y = y;
-                        agb->orig.pos.y = y;
+                        agb->home.pos.y = y;
                         f32 z = current.pos.z;
                         agb->current.pos.z = z;
-                        agb->orig.pos.z = z;
+                        agb->home.pos.z = z;
                         agb->shape_angle.x = -0x3FFF;
                         agb->field_0x67f = 1;
                         mOrigScaleX = mScale.x;
@@ -1446,8 +1446,8 @@ BOOL daAgbsw0_c::ExeSubD() {
                         MailSend(BigLittleChange(getMsgNo()) >> 0x10, 0xC, getSw1(), 0xFF, 0x1B);
 
                         agb->shape_angle.x = 0x3FFF;
-                        agb->orig.pos.y += 50.0f;
-                        agb->current.pos.y = agb->orig.pos.y;
+                        agb->home.pos.y += 50.0f;
+                        agb->current.pos.y = agb->home.pos.y;
                         agb->field_0x676 = 1;
 
                         field_0x299 += 1;

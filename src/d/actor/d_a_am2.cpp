@@ -390,10 +390,10 @@ static void BG_check(am2_class* i_this) {
     i_this->mAcchCir.SetWall(halfHeight, i_this->mAcchRadius);
 
     i_this->current.pos.y -= i_this->mCorrectionOffsetY;
-    i_this->next.pos.y -= i_this->mCorrectionOffsetY;
+    i_this->old.pos.y -= i_this->mCorrectionOffsetY;
     i_this->mAcch.CrrPos(*dComIfG_Bgsp());
     i_this->current.pos.y += i_this->mCorrectionOffsetY;
-    i_this->next.pos.y += i_this->mCorrectionOffsetY;
+    i_this->old.pos.y += i_this->mCorrectionOffsetY;
 }
 
 /* 00000FF4-00001344       .text Line_check__FP9am2_class4cXyz */
@@ -718,7 +718,7 @@ static void action_mahi(am2_class* i_this) {
         break;
     case 0xD:
         actor->current.angle.y = player->shape_angle.y;
-        if (actor->orig.roomNo != actor->current.roomNo) {
+        if (actor->home.roomNo != actor->current.roomNo) {
             i_this->mbNotInHomeRoom = true;
         }
         if (i_this->mPickedUpYPos + 10.0f <= actor->current.pos.y) {

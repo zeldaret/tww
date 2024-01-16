@@ -331,7 +331,7 @@ s32 daTbox_c::bgCheckSet() {
 /* 00000BB0-00000C14       .text searchRoomNo__8daTbox_cFv */
 void daTbox_c::searchRoomNo() {
     if (mRoomNo == -1) {
-        mRoomNo = orig.angle.x & 0x3F;
+        mRoomNo = home.angle.x & 0x3F;
     }
 
     if (flagCheck(0x02)) {
@@ -600,7 +600,7 @@ void daTbox_c::CreateInit() {
 
     if (funcType == FUNC_TYPE_GRAVITY) {
         mAcchCir.SetWall(30.0f, 0.0f);
-        mObjAcch.Set(&current.pos, &next.pos, this, 1, &mAcchCir, &speed);
+        mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
 
         mGravity = -2.5f;
     }
@@ -611,7 +611,7 @@ void daTbox_c::CreateInit() {
 /* 00001560-00001624       .text boxCheck__8daTbox_cFv */
 s32 daTbox_c::boxCheck() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
-    cXyz playerChestDiff = player->current.pos - orig.pos;
+    cXyz playerChestDiff = player->current.pos - home.pos;
 
     if (playerChestDiff.abs2XZ() < 10000.0f) {
         if (fopAcM_seenActorAngleY(this, dComIfGp_getPlayer(0)) < 0x2000 && fopAcM_seenActorAngleY(player, this) < 0x2000) {
@@ -910,7 +910,7 @@ void daTbox_c::OpenInit_com() {
         dComIfGs_onTbox(tboxNo);
     }
 
-    s32 openSwNo = orig.angle.z & 0xFF;
+    s32 openSwNo = home.angle.z & 0xFF;
     if (openSwNo != 0xFF) {
 
         dComIfGs_onSwitch(openSwNo, mRoomNo);
@@ -1231,7 +1231,7 @@ BOOL daTbox_c::execute() {
         mAttentionInfo.mPosition = current.pos;
 
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
-        mDoMtx_stack_c::YrotM(orig.angle.y);
+        mDoMtx_stack_c::YrotM(home.angle.y);
 
         mpChestMdl->setBaseTRMtx(mDoMtx_stack_c::get());
         mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
@@ -1300,7 +1300,7 @@ static s32 daTbox_Create(fopAc_ac_c* i_actor) {
     result = dComIfG_resLoad(tbox->getPhase(), "Dalways");
 
     if (result == cPhs_COMPLEATE_e) {
-        tbox->mRoomNo = tbox->orig.angle.x & 0x3F;
+        tbox->mRoomNo = tbox->home.angle.x & 0x3F;
 
         u32 shapeType = tbox->getShapeType();
         u32 heapSize = heapsize_tbl[shapeType];

@@ -123,7 +123,7 @@ namespace daItem_prm {
     inline u32 getAction(daItem_c* item) { return (fopAcM_GetParam(item) & 0xFC000000) >> 0x1A; }
     inline u32 getItemNo(daItem_c* item) { return (fopAcM_GetParam(item) & 0x000000FF) >> 0x00; }
     inline u32 getItemBitNo(daItem_c* item) { return (fopAcM_GetParam(item) & 0x0000FF00) >> 0x08; }
-    inline u32 getSwitchNo(daItem_c* item) { return (item->orig.angle.z & 0x00FF) >> 0; }
+    inline u32 getSwitchNo(daItem_c* item) { return (item->home.angle.z & 0x00FF) >> 0; }
     inline u32 getSwitchNo2(daItem_c* item) { return (fopAcM_GetParam(item) & 0x00FF0000) >> 0x10; }
 };
 

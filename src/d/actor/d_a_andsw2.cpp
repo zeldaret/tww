@@ -25,7 +25,7 @@ enum Type {
 
 /* 00000078-00000084       .text getEventNo__10daAndsw2_cFv */
 u8 daAndsw2_c::getEventNo() {
-    return (orig.angle.x & 0x00FF) >> 0;
+    return (home.angle.x & 0x00FF) >> 0;
 }
 
 /* 00000084-00000090       .text getSwbit__10daAndsw2_cFv */
@@ -47,7 +47,7 @@ u8 daAndsw2_c::getType() {
 
 /* 000000A8-000000B4       .text getTimer__10daAndsw2_cFv */
 u8 daAndsw2_c::getTimer() {
-    return (orig.angle.z & 0x00FF) >> 0;
+    return (home.angle.z & 0x00FF) >> 0;
 }
 
 /* 000000B4-000000C0       .text getNum__10daAndsw2_cFv */

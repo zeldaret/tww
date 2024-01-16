@@ -94,7 +94,7 @@ BOOL daRaceItem_c::CreateInit() {
     mCyl.SetH(height);
 
     mAcchCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&current.pos, &next.pos, this, 1, &mAcchCir, &speed);
+    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
     mAcch.ClrWaterNone();
     mAcch.ClrRoofNone();
     

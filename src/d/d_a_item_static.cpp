@@ -66,7 +66,7 @@ BOOL daItem_c::releaseLock() {
 
 /* 800689A8-800689F0       .text checkActionNow__8daItem_cFv */
 BOOL daItem_c::checkActionNow() {
-    if (fabsf(speedF) < 0.1f && fabsf(next.pos.y - current.pos.y) < 1.0f) {
+    if (fabsf(speedF) < 0.1f && fabsf(old.pos.y - current.pos.y) < 1.0f) {
         return FALSE;
     }
     return TRUE;

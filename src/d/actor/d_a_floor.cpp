@@ -87,7 +87,7 @@ int daFloor_c::Execute(Mtx**) {
         }
     }
 
-    if ((dComIfGp_getPlayer(0)->current.pos - dComIfGp_getPlayer(0)->next.pos).absXZ() != 0.0f)
+    if ((dComIfGp_getPlayer(0)->current.pos - dComIfGp_getPlayer(0)->old.pos).absXZ() != 0.0f)
         field_0x2d9 = 0;
 
     return TRUE;

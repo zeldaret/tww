@@ -204,7 +204,7 @@ void daIball_c::checkGeo() {
     (this->*mode_proc[mMode])();
     
     dBgS_ObjGndChk_Yogan gnd_chk;
-    cXyz pos(current.pos.x, next.pos.y + 30.0f + m_data.mYOffset, current.pos.z);
+    cXyz pos(current.pos.x, old.pos.y + 30.0f + m_data.mYOffset, current.pos.z);
     gnd_chk.SetPos(&pos);
     f32 groundY = dComIfG_Bgsp()->GroundCross(&gnd_chk);
     f32 groundH = mAcch.GetGroundH();
@@ -360,7 +360,7 @@ void daIball_c::CreateInit() {
     mCyl.Set(m_cyl_src);
     mCyl.SetStts(&mStts);
     mAcchCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&current.pos, &next.pos, this, 1, &mAcchCir, &speed);
+    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
     mAcch.OnSeaCheckOn();
     mAcch.OnSeaWaterHeight();
     

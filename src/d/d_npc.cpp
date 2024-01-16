@@ -796,14 +796,14 @@ void dNpc_JntCtrl_c::turn_fromHead2Backbone(s16 param_1, s16* param_2, s16* para
     }
 }
 
-s16 dNpc_JntCtrl_c::follow_current(s16* orig, s16 diff) {
-    s16 angle = *orig;
-    *orig -= diff;
+s16 dNpc_JntCtrl_c::follow_current(s16* pAngle, s16 diff) {
+    s16 angle = *pAngle;
+    *pAngle -= diff;
 
     s16 ret = 0;
-    if((angle > 0 && *orig < 0) || (angle < 0 && *orig > 0)) {
-        ret = -*orig;
-        *orig = 0;
+    if((angle > 0 && *pAngle < 0) || (angle < 0 && *pAngle > 0)) {
+        ret = -*pAngle;
+        *pAngle = 0;
     }
     
     return ret;
