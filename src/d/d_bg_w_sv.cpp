@@ -3,7 +3,7 @@
 // Translation Unit: d_bg_w_sv.cpp
 //
 
-#include "d_bg_w_sv.h"
+#include "d/d_bg_w_sv.h"
 #include "dolphin/types.h"
 
 /* 800AABFC-800AAC84       .text Set__6dBgWSvFP6cBgD_tUl */
@@ -35,9 +35,3 @@ void dBgWSv::TransPosWork(cXyz*, int, int, int) {
 void dBgWSv::TransPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*) {
     /* Nonmatching */
 }
-
-/* 800AB23C-800AB2AC       .text __dt__6dBgWSvFv */
-dBgWSv::~dBgWSv() {
-    /* Nonmatching */
-}
-

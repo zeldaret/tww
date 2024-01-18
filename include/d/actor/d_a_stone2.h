@@ -6,6 +6,8 @@
 namespace daStone2 {
     class Act_c : public fopAc_ac_c {
     public:
+        Act_c();
+        
         void attr() {}
         void prmZ_get_evId() const {}
         void prm_get_cull() const {}

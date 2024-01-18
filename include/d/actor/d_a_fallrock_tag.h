@@ -8,7 +8,7 @@ public:
     inline s32 create();
     inline BOOL draw();
     inline BOOL execute();
-    void getData() {}
+    void getData(); // weak but not inlined?
 
     void createRock(cXyz*, cXyz*, csXyz*, int, unsigned long);
 

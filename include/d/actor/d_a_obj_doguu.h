@@ -9,7 +9,7 @@ public:
     inline BOOL _delete();
     inline BOOL _draw();
     inline BOOL _execute();
-    void setEffectMtx(const cXyz*, float) {}
+    void setEffectMtx(const cXyz*, float); // weak but not inlined?
 
     void setPointLight();
     void CreateHeap();

@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_kanban.h"
-#include "dolphin/types.h"
+#include "JSystem/J3DGraphAnimator/J3DModel.h"
 
 /* 000000EC-0000012C       .text __ct__14daKanban_HIO_cFv */
 daKanban_HIO_c::daKanban_HIO_c() {

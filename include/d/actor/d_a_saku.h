@@ -5,13 +5,14 @@
 
 class daSaku_c : public fopAc_ac_c {
 public:
-    void _daSaku_create() {}
-    void _daSaku_delete() {}
-    void _daSaku_draw() {}
-    void _daSaku_execute() {}
-    void _daSaku_isdelete() {}
     void chkFlag(unsigned char) {}
     void setFlag(unsigned char) {}
+
+    inline s32 _daSaku_create();
+    inline BOOL _daSaku_delete();
+    inline BOOL _daSaku_draw();
+    inline BOOL _daSaku_execute();
+    inline BOOL _daSaku_isdelete();
 
     void CreateInit();
     void saku_draw_sub(int);

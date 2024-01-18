@@ -7,6 +7,8 @@ class JPABaseEmitter;
 
 class daObj_hsh_c : public fopAc_ac_c {
 public:
+    ~daObj_hsh_c();
+    
     void isEventAccept() {}
     void isOffDraw() {}
     void isTactCancel() {}

@@ -34,7 +34,7 @@ namespace daObjComing {
         void prm_get_swSave() const {}
         void prm_get_tblNum() const {}
         void prm_get_type() const {}
-        void prm_get_waitTime() const {}
+        void prm_get_waitTime() const; // weak but not inlined?
     
         void chk_switch();
         s32 _create();

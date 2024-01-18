@@ -5,7 +5,7 @@
 
 class daWarpdm20_c : public fopAc_ac_c {
 public:
-    void set_mtx() {}
+    void set_mtx(); // weak but not inlined?
 
     BOOL _delete();
     void CreateHeap();

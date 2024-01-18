@@ -5,10 +5,6 @@
 #include "d/actor/d_a_obj_try.h"
 
 namespace daObjCorrect {
-    enum Type_e {
-        
-    };
-
     class Act_c : public fopAc_ac_c {
     public:
         void prm_get_evId() const {}
@@ -18,8 +14,8 @@ namespace daObjCorrect {
         s32 _create();
         BOOL _delete();
         void chk_try_actor0(fopAc_ac_c*);
-        void chk_try_actor1(Act_c*, Type_e, float) const;
-        void chk_try_actor2(Act_c*, Type_e, bool, float, float) const;
+        void chk_try_actor1(daObjTry::Act_c*, daObjTry::Type_e, float) const;
+        void chk_try_actor2(daObjTry::Act_c*, daObjTry::Type_e, bool, float, float) const;
         void search_movebox(void*, void*);
         void search_tryColSun(void*, void*);
         void search_tryColMer(void*, void*);

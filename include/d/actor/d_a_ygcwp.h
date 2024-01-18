@@ -5,8 +5,8 @@
 
 class daYgcwp_c : public fopAc_ac_c {
 public:
-    void check_ev() const {}
-    void off_ev() const {}
+    void check_ev() const; // weak but not inlined?
+    void off_ev() const; // weak but not inlined?
 
     void solidHeapCB(fopAc_ac_c*);
     void create_heap();
