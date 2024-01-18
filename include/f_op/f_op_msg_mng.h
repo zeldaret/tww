@@ -27,14 +27,12 @@ struct fopMsg_prm_class {
 
 struct fopMsg_prm_timer : public fopMsg_prm_class {
     /* 0x1C */ int mTimerMode;
-    /* 0x20 */ u16 field_0x20;
+    /* 0x20 */ u16 mLimitTimeMs;
     /* 0x22 */ u8 mShowType;
     /* 0x23 */ u8 mIconType;
-    /* 0x24 */ u8 field_0x24;
-    /* 0x25 */ u8 field_0x25;
-    /* 0x28 */ cXy mTimerPos;
-    /* 0x30 */ cXy mRupeePos;
-};  // Size: 0x38
+    /* 0x24 */ cXy mTimerPos;
+    /* 0x2C */ cXy mRupeePos;
+};  // Size: 0x34
 
 class J2DScreen;
 

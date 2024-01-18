@@ -50,8 +50,9 @@ u32 VolcanoSeTable[] = {
 s32 dTimer_c::_create() {
     /* Nonmatching */
     s32 rt = dComIfG_resLoad(&mPhs, "Timer");
+    fopMsg_prm_timer* prm;
     if (rt == cPhs_COMPLEATE_e) {
-        fopMsg_prm_timer* prm = (fopMsg_prm_timer*)fopMsgM_GetAppend(this);
+        prm = (fopMsg_prm_timer*)fopMsgM_GetAppend(this);
         if (prm == NULL)
             return cPhs_ERROR_e;
 
@@ -78,60 +79,61 @@ s32 dTimer_c::_create() {
         } else {
             return cPhs_ERROR_e;
         }
+    } else {
+        return rt;
+    }
 
-        mpScrnDraw->setRupeePos(prm->mRupeePos.x, prm->mRupeePos.y);
-        mpScrnDraw->setTimerPos(prm->mTimerPos.x, prm->mTimerPos.y);
-        mpScrnDraw->setShowType(prm->mShowType);
-        mTimerMode = prm->mTimerMode;
-        if (mTimerMode == 7) {
-            mLimitTime = OSMillisecondsToTicks(dComIfG_getTimerRestTimeMs());
-            OSTime curTime = OSGetTime();
-            mStartTime = curTime;
-            mTime = curTime;
-            mStartTime = dComIfG_getTimerNowTimeMs();
-            mState = 0;
-            mTimerMode = dComIfG_getTimerMode();
-            dComIfG_setTimerNowTimeMs(getTimeMs());
-            dComIfG_setTimerLimitTimeMs(getLimitTimeMs());
-            dComIfG_setTimerMode(mTimerMode);
-            dComIfG_setTimerPtr(this);
-            if (dComIfG_getTimerMode() == 3)
-                mpScrnDraw->setShowType(1);
-            stock_start(10);
-        } else {
-            mLimitTime = OSSecondsToTicks(prm->field_0x20);
-            mStartTime = 0;
-            mTime = 0;
-            mState = 0;
-            dComIfG_setTimerNowTimeMs(getTimeMs());
-            dComIfG_setTimerLimitTimeMs(getLimitTimeMs());
-            dComIfG_setTimerMode(mTimerMode);
-            dComIfG_setTimerPtr(this);
-        }
+    mpScrnDraw->setRupeePos(prm->mRupeePos.x, prm->mRupeePos.y);
+    mpScrnDraw->setTimerPos(prm->mTimerPos.x, prm->mTimerPos.y);
+    mpScrnDraw->setShowType(prm->mShowType);
+    mTimerMode = prm->mTimerMode;
+    if (mTimerMode == 7) {
+        mLimitTime = OSMillisecondsToTicks((OSTime)dComIfG_getTimerLimitTimeMs());
+        OSTime curTime = OSGetTime();
+        mTime = mStartTime = curTime;
+        mStartTime -= OSMillisecondsToTicks((OSTime)dComIfG_getTimerNowTimeMs());
+        mState = 0;
+        mTimerMode = dComIfG_getTimerMode();
+        dComIfG_setTimerNowTimeMs(getTimeMs());
+        dComIfG_setTimerLimitTimeMs(getLimitTimeMs());
+        dComIfG_setTimerMode(mTimerMode);
+        dComIfG_setTimerPtr(this);
+        if (dComIfG_getTimerMode() == 3)
+            mpScrnDraw->setShowType(1);
+        stock_start(10);
+    } else {
+        mLimitTime = OSSecondsToTicks((OSTime)prm->mLimitTimeMs);
+        mStartTime = 0;
+        mTime = 0;
+        mState = 0;
+        dComIfG_setTimerNowTimeMs(getTimeMs());
+        dComIfG_setTimerLimitTimeMs(getLimitTimeMs());
+        dComIfG_setTimerMode(mTimerMode);
+        dComIfG_setTimerPtr(this);
+    }
 
-        field_0x120 = 0;
-        field_0x128 = 0;
-        field_0x130 = 0;
-        field_0x138 = 0;
-        field_0x162 = 0;
-        field_0x163 = 0;
-        field_0x158 = 120;
-        field_0x15c = 0;
+    field_0x120 = 0;
+    field_0x128 = 0;
+    field_0x130 = 0;
+    field_0x138 = 0;
+    field_0x162 = 0;
+    field_0x163 = 0;
+    field_0x158 = 120;
+    field_0x15c = 0;
 
-        u32* seTable = NULL;
-        field_0x16c = 0;
-        field_0x168 = 0;
-        switch (mTimerMode) {
-        case 2: seTable = ShipRaceSeTable; break;
-        case 3: seTable = VolcanoSeTable; break;
-        }
-        if (seTable != NULL) {
-            while (field_0x168 >= 0) {
-                field_0x168 = seTable[field_0x16c * 2 + 0];
-                if (getRestTimeMs() > field_0x168)
-                    break;
-                field_0x16c++;
-            }
+    u32* seTable = NULL;
+    field_0x16c = 0;
+    field_0x168 = 0;
+    switch (mTimerMode) {
+    case 2: seTable = ShipRaceSeTable; break;
+    case 3: seTable = VolcanoSeTable; break;
+    }
+    if (seTable != NULL) {
+        while (field_0x168 >= 0) {
+            field_0x168 = seTable[field_0x16c * 2 + 0];
+            if (getRestTimeMs() > field_0x168)
+                break;
+            field_0x16c++;
         }
     }
 
@@ -277,7 +279,7 @@ bool dTimer_c::stock_start() {
         OSTime time = OSGetTime();
         mStartTime = time;
         mTime = time;
-        mStartTime -= OSMillisecondsToTicks(dComIfG_getTimerNowTimeMs());
+        mStartTime -= OSMillisecondsToTicks((OSTime)dComIfG_getTimerNowTimeMs());
         return true;
     } else {
         return false;
@@ -355,7 +357,9 @@ s32 dTimer_c::getLimitTimeMs() {
 /* 8023C628-8023C69C       .text getRestTimeMs__8dTimer_cFv */
 s32 dTimer_c::getRestTimeMs() {
     /* Nonmatching */
-    return OSTicksToMilliseconds((mTime - mStartTime - field_0x138) - mLimitTime);
+    OSTime time = mTime - mStartTime - field_0x138;
+    time = mLimitTime - time;
+    return OSTicksToMilliseconds(time);
 }
 
 /* 8023C69C-8023CA24       .text setScreen__21dDlst_TimerScrnDraw_cFPCcP10JKRArchive */
@@ -420,14 +424,15 @@ const char* dDlst_TimerScrnDraw_c::getNumber(int no) {
 void dDlst_TimerScrnDraw_c::setTimer(int time) {
     /* Nonmatching */
     s32 minsec = time / 1000;
+    s32 ms = time % 1000;
     s32 min = minsec / 60;
     s32 sec = minsec % 60;
     changeNumberTexture(mTimerNumber0.pane, min / 10);
     changeNumberTexture(mTimerNumber[0], min % 10);
     changeNumberTexture(mTimerNumber[1], sec / 10);
     changeNumberTexture(mTimerNumber[2], sec % 10);
-    changeNumberTexture(mTimerNumber[3], (time % 1000) / 100);
-    changeNumberTexture(mTimerNumber[4], ((time % 1000) / 100) / 10);
+    changeNumberTexture(mTimerNumber[3], ms / 100);
+    changeNumberTexture(mTimerNumber[4], (ms % 100) / 10);
     if (dComIfGp_event_getMode() == 1) {
         if (mClockIcon.mUserArea < 5) {
             mClockIcon.mUserArea++;
@@ -643,7 +648,6 @@ bool dDlst_TimerScrnDraw_c::hide() {
 
 /* 8023D8BC-8023D9A0       .text draw__21dDlst_TimerScrnDraw_cFv */
 void dDlst_TimerScrnDraw_c::draw() {
-    /* Nonmatching */
     fopMsgM_setAlpha(&mClockIcon);
     fopMsgM_setAlpha(&mClockBG);
     fopMsgM_setAlpha(&mTimerNumber0);
