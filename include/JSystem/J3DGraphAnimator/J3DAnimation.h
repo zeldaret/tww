@@ -698,7 +698,6 @@ public:
 
     virtual ~J3DAnmVtxColor();
     virtual void getColor(u8, u16, GXColor*) const {}
-	inline J3DAnmVtxColorIndexData* getAnmVtxColorIndexData(u8 idx, u16 frame) { return &mAnmVtxColorIndexData[idx][frame]; }
 
 protected:
     /* 0x10 */ u16 mAnmTableNum[2];

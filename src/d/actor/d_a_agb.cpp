@@ -1568,11 +1568,11 @@ static int daAgb_Create(fopAc_ac_c* i_this) {
             return cPhs_ERROR_e;
         }
 
-        a_this->mCrrPos.Set(&fopAcM_GetPosition_p(a_this), &fopAcM_GetOldPosition_p(a_this), (void*)NULL, NULL);
+        a_this->mCrrPos.Set(fopAcM_GetPosition_p(a_this), fopAcM_GetOldPosition_p(a_this), (void*)NULL, NULL);
         a_this->mCrrPos.SetWall(171.0f, 50.0f);
         a_this->mCrrPos.SetGndUpY(170.0f);
         a_this->mCrrPos.ClrNoRoof();
-        a_this->mAcch.Set(&fopAcM_GetPosition_p(a_this), &fopAcM_GetOldPosition_p(a_this), a_this, 1, &a_this->mAcchCir);
+        a_this->mAcch.Set(fopAcM_GetPosition_p(a_this), fopAcM_GetOldPosition_p(a_this), a_this, 1, &a_this->mAcchCir);
         a_this->mAcch.OnLineCheck();
         a_this->mAcch.SetGrndNone();
         a_this->mAcchCir.SetWall(171.0f, 40.0f);

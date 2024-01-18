@@ -134,7 +134,7 @@ void itemGetCallBack(fopAc_ac_c* item_actor, dCcD_GObjInf*, fopAc_ac_c* collided
 /* 800F5044-800F53EC       .text CreateInit__8daItem_cFv */
 void daItem_c::CreateInit() {
     mAcchCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &fopAcM_GetSpeed_p(this));
+    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
     mAcch.m_flags &= ~0x400;
     mAcch.m_flags &= ~0x8;
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -157,7 +157,7 @@ void daItem_c::CreateInit() {
     
     mDisappearTimer = getData()->mDuration;
     field_0x65a = getData()->field_0x18;
-    field_0x650 = fopAcM_GetSpeed_p(this).y;
+    field_0x650 = fopAcM_GetSpeed(this).y;
     mItemStatus = 0;
     
     mType = daItem_prm::getType(this);
