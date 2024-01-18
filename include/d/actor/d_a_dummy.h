@@ -6,16 +6,21 @@
 namespace daDummy {
     class Act_c : public fopAc_ac_c {
     public:
-        void solidHeapCB(fopAc_ac_c*);
-        void create_heap();
+        static BOOL solidHeapCB(fopAc_ac_c*);
+        bool create_heap();
         s32 _create();
-        BOOL _delete();
+        bool _delete();
         void set_mtx();
-        BOOL _execute();
-        BOOL _draw();
-    
+        bool _execute();
+        bool _draw();
+
+        virtual ~Act_c();
+
     public:
         /* Place member variables here */
+        /* 0x290 */ // vtable
+        /* 0x294 */ u8 field_0x294[0x29c - 0x294];
+        /* 0x29c */ Mtx field_0x29c;
     };
 };
 
