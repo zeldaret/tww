@@ -8,6 +8,7 @@
 #include "SSystem/SComponent/c_bg_s_lin_chk.h"
 #include "SSystem/SComponent/c_bg_s_shdw_draw.h"
 #include "SSystem/SComponent/c_m3d_g_tri.h"
+#include "SSystem/SComponent/c_math.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "m_Do/m_Do_printf.h"
@@ -198,8 +199,29 @@ void cBgW::MakeBlckMinMax(int i_no, cXyz* min, cXyz* max) {
 }
 
 /* 80247CD4-80247E48       .text MakeBlckBnd__4cBgWFiP4cXyzP4cXyz */
-void cBgW::MakeBlckBnd(int, cXyz*, cXyz*) {
-    /* Nonmatching */
+void cBgW::MakeBlckBnd(int i, cXyz* min, cXyz* max) {
+    s32 startTri = pm_bgd->m_b_tbl[i].startTri;
+    s32 lastTri = (i != pm_bgd->m_b_num - 1) ? pm_bgd->m_b_tbl[i + 1].startTri - 1 : pm_bgd->m_t_num - 1;
+
+    if (!mbNeedsFullTransform) {
+        MakeBlckTransMinMax(min, max);
+    } else {
+        min->x = min->y = min->z = 1000000000.0f;
+        max->x = max->y = max->z = -1000000000.0f;
+
+        for (s32 j = startTri; j <= lastTri; j++) {
+            MakeBlckMinMax(pm_bgd->m_t_tbl[j].vtx0, min, max);
+            MakeBlckMinMax(pm_bgd->m_t_tbl[j].vtx1, min, max);
+            MakeBlckMinMax(pm_bgd->m_t_tbl[j].vtx2, min, max);
+        }
+
+        min->x -= 1.0f;
+        min->y -= 1.0f;
+        min->z -= 1.0f;
+        max->x += 1.0f;
+        max->y += 1.0f;
+        max->z += 1.0f;
+    }
 }
 
 /* 80247E48-80247F4C       .text MakeNodeTreeRp__4cBgWFi */
@@ -226,21 +248,21 @@ void cBgW::MakeNodeTreeRp(int i) {
 }
 
 /* 80247F4C-80248078       .text MakeNodeTreeGrpRp__4cBgWFi */
-void cBgW::MakeNodeTreeGrpRp(int grp_idx) {
-    u32 tree_idx = pm_bgd->m_g_tbl[grp_idx].m_tree_idx;
+void cBgW::MakeNodeTreeGrpRp(int grp_id) {
+    u32 tree_idx = pm_bgd->m_g_tbl[grp_id].m_tree_idx;
     if (tree_idx != 0xFFFF) {
         MakeNodeTreeRp(tree_idx);
-        pm_grp[grp_idx].aab.SetMin(*pm_node_tree[pm_bgd->m_g_tbl[grp_idx].m_tree_idx].GetMinP());
-        pm_grp[grp_idx].aab.SetMax(*pm_node_tree[pm_bgd->m_g_tbl[grp_idx].m_tree_idx].GetMaxP());
+        pm_grp[grp_id].aab.SetMin(*pm_node_tree[pm_bgd->m_g_tbl[grp_id].m_tree_idx].GetMinP());
+        pm_grp[grp_id].aab.SetMax(*pm_node_tree[pm_bgd->m_g_tbl[grp_id].m_tree_idx].GetMaxP());
     }
 
-    s32 child_idx = pm_bgd->m_g_tbl[grp_idx].m_first_child;
+    s32 child_idx = pm_bgd->m_g_tbl[grp_id].m_first_child;
     while (true) {
         if (child_idx == 0xFFFF)
             break;
         MakeNodeTreeGrpRp(child_idx);
-        pm_grp[grp_idx].aab.SetMin(*pm_grp[child_idx].aab.GetMinP());
-        pm_grp[grp_idx].aab.SetMax(*pm_grp[child_idx].aab.GetMaxP());
+        pm_grp[grp_id].aab.SetMin(*pm_grp[child_idx].aab.GetMinP());
+        pm_grp[grp_id].aab.SetMax(*pm_grp[child_idx].aab.GetMaxP());
         child_idx = pm_bgd->m_g_tbl[child_idx].m_next_sibling;
     }
 }
@@ -277,8 +299,64 @@ bool cBgW::ChkMemoryError() {
 }
 
 /* 802481C4-80248414       .text Set__4cBgWFP6cBgD_tUlPA3_A4_f */
-bool cBgW::Set(cBgD_t*, u32, Mtx*) {
-    /* Nonmatching */
+bool cBgW::Set(cBgD_t* bgd, u32 flag, Mtx* mtx) {
+    ASSERT_SOLDHEAP();
+    mFlags = GLOBAL_e;
+    pm_vtx_tbl = NULL;
+    pm_tri = NULL;
+    pm_rwg = NULL;
+    pm_blk = NULL;
+    pm_node_tree = NULL;
+    pm_grp = NULL;
+    mMoveCounter = cM_rndF(128.0f);
+    if (bgd == NULL)
+        return true;
+
+    mFlags = flag;
+    if (mFlags & GLOBAL_e) {
+        pm_base = NULL;
+        mDoMtx_identity(mOldMtx);
+        mDoMtx_identity(mCurMtx);
+    } else {
+        pm_base = mtx;
+        mDoMtx_copy(*pm_base, mOldMtx);
+        mDoMtx_copy(*pm_base, mCurMtx);
+    }
+
+    pm_bgd = bgd;
+    if (SetVtx() || SetTri()) {
+        FreeArea();
+        return true;
+    }
+
+    pm_rwg = new cBgW_RwgElm[pm_bgd->m_t_num];
+    if (pm_rwg == NULL) {
+        FreeArea();
+        return true;
+    }
+
+    pm_blk = new cBgW_BlkElm[pm_bgd->m_b_num];
+    if (pm_blk == NULL) {
+        FreeArea();
+        return true;
+    }
+
+    pm_node_tree = new cBgW_NodeTree[pm_bgd->m_tree_num];
+    if (pm_node_tree == NULL) {
+        FreeArea();
+        return true;
+    }
+
+    pm_grp = new cBgW_GrpElm[pm_bgd->m_g_num];
+    if (pm_grp == NULL) {
+        FreeArea();
+        return true;
+    }
+
+    ClassifyPlane();
+    mbNeedsFullTransform = true;
+    MakeNodeTree();
+    return false;
 }
 
 /* 80248414-802485FC       .text RwgLineCheck__4cBgWFUsP11cBgS_LinChk */
@@ -359,26 +437,26 @@ bool cBgW::LineCheckRp(cBgS_LinChk* chk, int i) {
 }
 
 /* 80248868-8024898C       .text LineCheckGrpRp__4cBgWFP11cBgS_LinChkii */
-bool cBgW::LineCheckGrpRp(cBgS_LinChk* chk, int grp, int depth) {
+bool cBgW::LineCheckGrpRp(cBgS_LinChk* chk, int grp_id, int depth) {
     /* Nonmatching */
-    if (ChkGrpThrough(grp, chk->GetGrpPassChk(), depth))
+    if (ChkGrpThrough(grp_id, chk->GetGrpPassChk(), depth))
         return false;
 
-    if (!pm_grp[grp].aab.Cross(chk->GetLinP()))
+    if (!pm_grp[grp_id].aab.Cross(chk->GetLinP()))
         return false;
 
     bool ret = false;
-    u16 tree = pm_bgd->m_g_tbl[grp].m_tree_idx;
+    u16 tree = pm_bgd->m_g_tbl[grp_id].m_tree_idx;
     if (tree != 0xFFFF && LineCheckRp(chk, tree))
         ret = true;
 
-    s32 child = pm_bgd->m_g_tbl[grp].m_first_child;
+    s32 child_idx = pm_bgd->m_g_tbl[grp_id].m_first_child;
     while (true) {
-        if (child == 0xFFFF)
+        if (child_idx == 0xFFFF)
             break;
-        if (LineCheckGrpRp(chk, child, depth + 1))
+        if (LineCheckGrpRp(chk, child_idx, depth + 1))
             ret = true;
-        child = pm_bgd->m_g_tbl[child].m_next_sibling;
+        child_idx = pm_bgd->m_g_tbl[child_idx].m_next_sibling;
     }
 
     return ret;
@@ -430,13 +508,44 @@ bool cBgW::RwgGroundCheckWall(u16 poly_index, cBgS_GndChk* chk) {
 }
 
 /* 80248C38-802491F4       .text GroundCrossRp__4cBgWFP11cBgS_GndChki */
-void cBgW::GroundCrossRp(cBgS_GndChk*, int) {
+bool cBgW::GroundCrossRp(cBgS_GndChk*, int) {
     /* Nonmatching */
 }
 
 /* 802491F4-80249368       .text GroundCrossGrpRp__4cBgWFP11cBgS_GndChkii */
-bool cBgW::GroundCrossGrpRp(cBgS_GndChk*, int, int) {
+bool cBgW::GroundCrossGrpRp(cBgS_GndChk* chk, int grp_id, int depth) {
     /* Nonmatching */
+    if (ChkGrpThrough(grp_id, chk->GetGrpPassChk(), depth))
+        return false;
+
+    bool insideXZ;
+    cBgW_GrpElm* grp = &pm_grp[grp_id];
+
+    // is this an inline? also seems to be used in GroundCrossGrp
+    if (grp->aab.mMin.x > chk->GetPointP()->x || grp->aab.mMax.x < chk->GetPointP()->x ||
+        grp->aab.mMin.z > chk->GetPointP()->z || grp->aab.mMax.z < chk->GetPointP()->z)
+        insideXZ = false;
+    else
+        insideXZ = true;
+
+    if (!insideXZ || (grp->aab.mMin.y > chk->GetPointP()->y || grp->aab.mMax.y < chk->GetNowY()))
+        return false;
+
+    bool ret = false;
+    u32 tree_idx = pm_bgd->m_g_tbl[grp_id].m_tree_idx;
+    if (tree_idx != 0xFFFF && GroundCrossRp(chk, tree_idx))
+        ret = true;
+
+    s32 child_idx = pm_bgd->m_g_tbl[grp_id].m_first_child;
+    while (true) {
+        if (child_idx == 0xFFFF)
+            break;
+        if (GroundCrossGrpRp(chk, child_idx, depth + 1))
+            ret = true;
+        child_idx = pm_bgd->m_g_tbl[child_idx].m_next_sibling;
+    }
+
+    return ret;
 }
 
 /* 80249368-802493B4       .text CopyOldMtx__4cBgWFv */
@@ -502,16 +611,16 @@ void cBgW::ShdwDrawRp(cBgS_ShdwDraw* shdw, int i) {
 }
 
 /* 80249840-80249904       .text ShdwDrawGrpRp__4cBgWFP13cBgS_ShdwDrawi */
-void cBgW::ShdwDrawGrpRp(cBgS_ShdwDraw* shdw, int grp_idx) {
-    if (!pm_grp[grp_idx].aab.Cross(shdw->GetBndP()))
+void cBgW::ShdwDrawGrpRp(cBgS_ShdwDraw* shdw, int grp_id) {
+    if (!pm_grp[grp_id].aab.Cross(shdw->GetBndP()))
         return;
 
-    u32 tree_idx = pm_bgd->m_g_tbl[grp_idx].m_tree_idx;
+    u32 tree_idx = pm_bgd->m_g_tbl[grp_id].m_tree_idx;
     if (tree_idx != 0xFFFF) {
         ShdwDrawRp(shdw, tree_idx);
     }
 
-    s32 child_idx = pm_bgd->m_g_tbl[grp_idx].m_first_child;
+    s32 child_idx = pm_bgd->m_g_tbl[grp_id].m_first_child;
     while (true) {
         if (child_idx == 0xFFFF)
             break;

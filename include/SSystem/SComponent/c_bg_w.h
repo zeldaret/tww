@@ -80,7 +80,7 @@ struct cBgD_Tree_t {
 
 class cBgW_NodeTree : public cM3dGAab {
 public:
-    virtual ~cBgW_NodeTree();
+    virtual ~cBgW_NodeTree() {}
 };
 
 class cBgD_t {
@@ -170,7 +170,7 @@ public:
     bool RwgGroundCheckCommon(f32, u16, cBgS_GndChk*);
     bool RwgGroundCheckGnd(u16, cBgS_GndChk*);
     bool RwgGroundCheckWall(u16, cBgS_GndChk*);
-    void GroundCrossRp(cBgS_GndChk*, int);
+    bool GroundCrossRp(cBgS_GndChk*, int);
     bool GroundCrossGrpRp(cBgS_GndChk*, int, int);
     void CopyOldMtx();
     void Move();
