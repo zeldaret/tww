@@ -24,23 +24,25 @@ public:
     void SetMax(const cXyz&);
     const cXyz* GetMaxP(void) const { return &mMax; }
     const cXyz* GetMinP(void) const { return &mMin; }
+    cXyz* GetMaxP(void) { return &mMax; }
+    cXyz* GetMinP(void) { return &mMin; }
     const f32 GetMaxX(void) const { return mMax.x; }
     const f32 GetMaxY(void) const { return mMax.y; }
     const f32 GetMaxZ(void) const { return mMax.z; }
     const f32 GetMinX(void) const { return mMin.x; }
     const f32 GetMinY(void) const { return mMin.y; }
     const f32 GetMinZ(void) const { return mMin.z; }
-    bool Cross(const cM3dGAab *param_1) {
-        return cM3d_Cross_AabAab(this, param_1);
+    bool Cross(const cM3dGAab *aab) {
+        return cM3d_Cross_AabAab(this, aab);
     }
-    bool Cross(const cM3dGCyl *param_1) {
-        return cM3d_Cross_AabCyl(this, param_1);
+    bool Cross(const cM3dGCyl *cyl) {
+        return cM3d_Cross_AabCyl(this, cyl);
     }
-    bool Cross(const cM3dGSph *param_1) {
-        return cM3d_Cross_AabSph(this, param_1);
+    bool Cross(const cM3dGSph *sph) {
+        return cM3d_Cross_AabSph(this, sph);
     }
-    bool Cross(const cM3dGLin *param_1) {
-        return cM3d_Cross_MinMaxBoxLine(GetMinP(), GetMaxP(), param_1->GetStartP(), param_1->GetEndP());
+    bool Cross(const cM3dGLin *lin) {
+        return cM3d_Cross_MinMaxBoxLine(GetMinP(), GetMaxP(), lin->GetStartP(), lin->GetEndP());
     }
     void CalcCenter(cXyz* pOut) const {
         VECAdd(&mMin, &mMax, pOut);
