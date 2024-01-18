@@ -1556,10 +1556,10 @@ void dDlst_alphaVolPacket::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetArray(GX_VA_POS, (void*)l_simpleShadowPos, ARRAY_SIZE(l_simpleShadowPos));
+    GXSetArray(GX_VA_POS, (void*)l_simpleShadowPos, 0x0C);
     GXLoadPosMtxImm(mtx, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
-    GXCallDisplayList(l_frontMat, 0x40);
+    GXCallDisplayList(l_frontMat, 0x40)
     GXCallDisplayList(l_shadowVolumeDL, 0x40);
     GXCallDisplayList(l_backSubMat, 0x20);
     GXCallDisplayList(l_shadowVolumeDL, 0x40);
@@ -1576,7 +1576,7 @@ void dDlst_alphaInvVolPacket::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetArray(GX_VA_POS, (void*)l_simpleShadowPos, ARRAY_SIZE(l_simpleShadowPos));
+    GXSetArray(GX_VA_POS, (void*)l_simpleShadowPos, 0x0C);
     GXLoadPosMtxImm(mtx, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
     GXSetTevColor(GX_TEVREG0, g_whiteColor);

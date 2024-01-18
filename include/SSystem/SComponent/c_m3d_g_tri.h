@@ -46,7 +46,12 @@ public:
     void crossX(const Vec*, f32*) const {}
     void crossY(const Vec*) const {}
     void crossZ(const Vec*, f32*) const {}
-    void setBg(const Vec*, const Vec*, const Vec*, const cM3dGPla*) {}
+    void setBg(const Vec* a, const Vec* b, const Vec* c, const cM3dGPla* pla) {
+        mA = *a;
+        mB = *b;
+        mC = *c;
+        *((cM3dGPla*)this) = *pla;
+    }
     void setPos(const Vec*, const Vec*, const Vec*) {}
     void setUp() {}
     ~cM3dGTri() {}

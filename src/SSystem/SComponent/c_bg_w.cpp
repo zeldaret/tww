@@ -5,9 +5,13 @@
 
 #include "SSystem/SComponent/c_bg_w.h"
 #include "SSystem/SComponent/c_bg_s_gnd_chk.h"
+#include "SSystem/SComponent/c_bg_s_lin_chk.h"
+#include "SSystem/SComponent/c_bg_s_shdw_draw.h"
+#include "SSystem/SComponent/c_m3d_g_tri.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "m_Do/m_Do_printf.h"
+#include "m_Do/m_Do_mtx.h"
 #include "dolphin/mtx/mtxvec.h"
 #include "dolphin/types.h"
 
@@ -19,7 +23,23 @@ void ASSERT_SOLDHEAP() {
 
 /* 8024754C-8024760C       .text __ct__4cBgWFv */
 cBgW::cBgW() {
-    /* Nonmatching */
+    pm_bgd = NULL;
+    mFlags = GLOBAL_e;
+    mbNeedsFullTransform = true;
+    mMoveCounter = 0;
+    mTransVel.setall(0.0f);
+    pm_tri = NULL;
+    pm_rwg = NULL;
+    pm_blk = NULL;
+    pm_node_tree = NULL;
+    pm_grp = NULL;
+    pm_vtx_tbl = NULL;
+    pm_base = NULL;
+    mDoMtx_identity(mOldMtx);
+    mDoMtx_identity(mCurMtx);
+    m_rootGrpIdx = 0xFFFF;
+    mWallCorrectPriority = 2;
+    mIgnorePlaneType = 0;
 }
 
 /* 8024760C-8024767C       .text __dt__4cBgWFv */
@@ -51,13 +71,50 @@ void cBgW::GlobalVtx() {
 }
 
 /* 8024775C-80247840       .text SetVtx__4cBgWFv */
-void cBgW::SetVtx() {
-    /* Nonmatching */
+bool cBgW::SetVtx() {
+    ASSERT_SOLDHEAP();
+    if (mFlags & NO_VTX_TBL_e) {
+        pm_vtx_tbl = NULL;
+    } else {
+        if (mFlags & MOVE_BG_e) {
+            pm_vtx_tbl = new Vec[pm_bgd->m_v_num];
+            if (pm_vtx_tbl == NULL)
+                return true;
+
+            if (mFlags & UNK40_e) {
+                for (s32 i = 0; i < pm_bgd->m_v_num; i++) {
+                    pm_vtx_tbl[i].x = 0.0f;
+                    pm_vtx_tbl[i].y = 0.0f;
+                    pm_vtx_tbl[i].z = 0.0f;
+                }
+            }
+            GlobalVtx();
+        } else {
+            pm_vtx_tbl = pm_bgd->m_v_tbl;
+        }
+    }
+
+    return false;
 }
 
 /* 80247840-80247944       .text CalcPlane__4cBgWFv */
 void cBgW::CalcPlane() {
-    /* Nonmatching */
+    const cBgD_Tri_t* t_tbl = pm_bgd->m_t_tbl;
+
+    if (pm_vtx_tbl == NULL)
+        return;
+
+    if (!mbNeedsFullTransform) {
+        for (s32 i = 0; i < pm_bgd->m_t_num; i++) {
+            f32 dot = VECDotProduct(pm_tri[i].m_plane.GetNP(), &mTransVel);
+            pm_tri[i].m_plane.mD -= dot;
+        }
+    } else {
+        for (s32 i = 0; i < pm_bgd->m_t_num; i++) {
+            cBgW_TriElm* tri_elm = &pm_tri[i];
+            cM3d_CalcPla(&pm_vtx_tbl[t_tbl[i].vtx0], &pm_vtx_tbl[t_tbl[i].vtx1], &pm_vtx_tbl[t_tbl[i].vtx2], &tri_elm->m_plane.mNormal, &tri_elm->m_plane.mD);
+        }
+    }
 }
 
 /* 80247944-802479D8       .text SetTri__4cBgWFv */
@@ -83,6 +140,44 @@ void cBgW::BlckConnect(u16* rwg, int* prev, int i_no) {
 /* 80247A24-80247BF8       .text ClassifyPlane__4cBgWFv */
 void cBgW::ClassifyPlane() {
     /* Nonmatching */
+    if (pm_vtx_tbl == NULL)
+        return;
+
+    s32 i = 0;
+    f32 eps = G_CM3D_F_ABS_MIN;
+
+    int roof, wall, ground;
+    for (; i < pm_bgd->m_b_num; i++) {
+        s32 startTri = pm_bgd->m_b_tbl[i].startTri;
+        s32 lastTri = (i != pm_bgd->m_b_num - 1) ? pm_bgd->m_b_tbl[i + 1].startTri - 1 : pm_bgd->m_t_num - 1;
+
+        pm_blk[i].roof = 0xFFFF;
+        pm_blk[i].wall = 0xFFFF;
+        pm_blk[i].ground = 0xFFFF;
+
+        ground = 0xFFFF;
+        wall = 0xFFFF;
+        roof = 0xFFFF;
+
+        for (s32 j = startTri; j <= lastTri; j++) {
+            cBgW_TriElm* tri_elm = &pm_tri[j];
+
+            f32 ny = tri_elm->m_plane.mNormal.y;
+            if (fabsf(tri_elm->m_plane.mNormal.x) < eps && fabsf(tri_elm->m_plane.mNormal.y) < eps && fabsf(tri_elm->m_plane.mNormal.z) < eps)
+                continue;
+
+            if (ny >= 0.5f) {
+                if (!(mIgnorePlaneType & 1))
+                    BlckConnect(&pm_blk[i].ground, &ground, i);
+            } else if (ny < -0.8f) {
+                if (!(mIgnorePlaneType & 4))
+                    BlckConnect(&pm_blk[i].roof, &roof, i);
+            } else {
+                if (!(mIgnorePlaneType & 2))
+                    BlckConnect(&pm_blk[i].wall, &wall, i);
+            }
+        }
+    }
 }
 
 /* 80247BF8-80247C4C       .text MakeBlckTransMinMax__4cBgWFP4cXyzP4cXyz */
@@ -93,7 +188,7 @@ void cBgW::MakeBlckTransMinMax(cXyz* min, cXyz* max) {
 
 /* 80247C4C-80247CD4       .text MakeBlckMinMax__4cBgWFiP4cXyzP4cXyz */
 void cBgW::MakeBlckMinMax(int i_no, cXyz* min, cXyz* max) {
-    cXyz * vtx = &pm_vtx_tbl[i_no];
+    Vec* vtx = &pm_vtx_tbl[i_no];
     if (min->x > vtx->x) min->x = vtx->x;
     if (max->x < vtx->x) max->x = vtx->x;
     if (min->y > vtx->y) min->y = vtx->y;
@@ -108,8 +203,24 @@ void cBgW::MakeBlckBnd(int, cXyz*, cXyz*) {
 }
 
 /* 80247E48-80247F4C       .text MakeNodeTreeRp__4cBgWFi */
-void cBgW::MakeNodeTreeRp(int) {
+void cBgW::MakeNodeTreeRp(int i) {
     /* Nonmatching */
+    const cBgD_Tree_t* tree = &pm_bgd->m_tree_tbl[i];
+    if (tree->mFlag & 1) {
+        // leaf
+        if (tree->mBlock != 0xFFFF) {
+            MakeBlckBnd(tree->mBlock, &pm_node_tree[i].mMin, &pm_node_tree[i].mMax);
+        }
+    } else {
+        // branch
+        pm_node_tree[i].ClearForMinMax();
+        for (s32 j = 0; j < 8; j++) {
+            u16 child = tree->mChild[j];
+            MakeNodeTreeRp(child);
+            pm_node_tree[j].SetMinMax(pm_node_tree[child].mMin);
+            pm_node_tree[j].SetMinMax(pm_node_tree[child].mMax);
+        }
+    }
 }
 
 /* 80247F4C-80248078       .text MakeNodeTreeGrpRp__4cBgWFi */
@@ -122,20 +233,39 @@ void cBgW::MakeNodeTreeGrpRp(int grp_idx) {
         pm_grp[grp_idx].aab.SetMax(pm_node_tree[pm_bgd->m_g_tbl[grp_idx].m_tree_idx].mMax);
     }
 
-    u32 chld_idx = pm_bgd->m_g_tbl[grp_idx].m_first_child;
+    u32 child_idx = pm_bgd->m_g_tbl[grp_idx].m_first_child;
     while (true) {
-        if (chld_idx == 0xFFFF)
+        if (child_idx == 0xFFFF)
             break;
-        MakeNodeTreeGrpRp(chld_idx);
-        pm_grp[grp_idx].aab.SetMin(pm_grp[chld_idx].aab.mMin);
-        pm_grp[grp_idx].aab.SetMax(pm_grp[chld_idx].aab.mMax);
-        chld_idx = pm_bgd->m_g_tbl[chld_idx].m_next_sibling;
+        MakeNodeTreeGrpRp(child_idx);
+        pm_grp[grp_idx].aab.SetMin(pm_grp[child_idx].aab.mMin);
+        pm_grp[grp_idx].aab.SetMax(pm_grp[child_idx].aab.mMax);
+        child_idx = pm_bgd->m_g_tbl[child_idx].m_next_sibling;
     }
 }
 
 /* 80248078-80248178       .text MakeNodeTree__4cBgWFv */
 void cBgW::MakeNodeTree() {
-    /* Nonmatching */
+    if (pm_vtx_tbl == NULL) {
+        for (s32 i = 0; i < pm_bgd->m_g_num; i++) {
+            if (pm_bgd->m_g_tbl[i].m_parent == 0xFFFF) {
+                m_rootGrpIdx = i;
+                break;
+            }
+        }
+    } else {
+        for (s32 i = 0; i < pm_bgd->m_g_num; i++) {
+            pm_grp[i].aab.ClearForMinMax();
+        }
+
+        for (s32 i = 0; i < pm_bgd->m_g_num; i++) {
+            if (pm_bgd->m_g_tbl[i].m_parent == 0xFFFF) {
+                m_rootGrpIdx = i;
+                MakeNodeTreeGrpRp(i);
+                break;
+            }
+        }
+    }
 }
 
 /* 80248178-802481C4       .text ChkMemoryError__4cBgWFv */
@@ -151,45 +281,151 @@ bool cBgW::Set(cBgD_t*, u32, Mtx*) {
 }
 
 /* 80248414-802485FC       .text RwgLineCheck__4cBgWFUsP11cBgS_LinChk */
-void cBgW::RwgLineCheck(u16, cBgS_LinChk*) {
-    /* Nonmatching */
+bool cBgW::RwgLineCheck(u16 poly_index, cBgS_LinChk* chk) {
+    bool ret = false;
+    cM3dGTri gtri;
+
+    cM3dGLin *lin = chk->GetLinP();
+    while (true) {
+        cBgW_TriElm* tri_elm;
+        cBgD_Tri_t* tri;
+
+        tri = &pm_bgd->m_t_tbl[poly_index];
+        tri_elm = &pm_tri[poly_index];
+
+        gtri.setBg(&pm_vtx_tbl[tri->vtx0], &pm_vtx_tbl[tri->vtx1], &pm_vtx_tbl[tri->vtx2], &tri_elm->m_plane);
+        bool backFlag = chk->ChkBackFlag();
+        bool frontFlag = chk->ChkFrontFlag();
+
+        cXyz pt;
+        if (cM3d_Cross_LinTri(lin, &gtri, &pt, frontFlag, backFlag) && !ChkPolyThrough(poly_index, chk->GetPolyPassChk())) {
+            chk->GetLinP()->SetEnd(pt);
+            chk->SetPolyIndex(poly_index);
+            ret = true;
+        }
+
+        if (pm_rwg[poly_index].next == 0xFFFF)
+            break;
+
+        poly_index = pm_rwg[poly_index].next;
+    }
+
+    return ret;
+}
+
+static void dummy() {
+    // 0 <= bg_index
+    cBgS_PolyInfo pi;
+    pi.SetActorInfo(-1, NULL, 0);
 }
 
 /* 802485FC-80248868       .text LineCheckRp__4cBgWFP11cBgS_LinChki */
-void cBgW::LineCheckRp(cBgS_LinChk*, int) {
+bool cBgW::LineCheckRp(cBgS_LinChk* chk, int i) {
     /* Nonmatching */
+
+    if (!pm_node_tree[i].Cross(chk->GetLinP()))
+        return false;
+
+    cBgD_Tree_t* tree = &pm_bgd->m_tree_tbl[i];
+    bool ret = false;
+    if (tree->mFlag & 1) {
+        if (chk->mPreWallChk && pm_blk[tree->mBlock].wall != 0xFFFF && RwgLineCheck(pm_blk[tree->mBlock].wall, chk))
+            ret = true;
+        if (chk->mPreGroundChk && pm_blk[tree->mBlock].ground != 0xFFFF && RwgLineCheck(pm_blk[tree->mBlock].ground, chk))
+            ret = true;
+        if (chk->mPreRoofChk && pm_blk[tree->mBlock].roof != 0xFFFF && RwgLineCheck(pm_blk[tree->mBlock].roof, chk))
+            ret = true;
+        return ret;
+    } else {
+        if (tree->mChild[0] != 0xFFFF && LineCheckRp(chk, tree->mChild[0]))
+            ret = true;
+        if (tree->mChild[1] != 0xFFFF && LineCheckRp(chk, tree->mChild[1]))
+            ret = true;
+        if (tree->mChild[2] != 0xFFFF && LineCheckRp(chk, tree->mChild[2]))
+            ret = true;
+        if (tree->mChild[3] != 0xFFFF && LineCheckRp(chk, tree->mChild[3]))
+            ret = true;
+        if (tree->mChild[4] != 0xFFFF && LineCheckRp(chk, tree->mChild[4]))
+            ret = true;
+        if (tree->mChild[5] != 0xFFFF && LineCheckRp(chk, tree->mChild[5]))
+            ret = true;
+        if (tree->mChild[6] != 0xFFFF && LineCheckRp(chk, tree->mChild[6]))
+            ret = true;
+        if (tree->mChild[7] != 0xFFFF && LineCheckRp(chk, tree->mChild[7]))
+            ret = true;
+        return ret;
+    }
 }
 
 /* 80248868-8024898C       .text LineCheckGrpRp__4cBgWFP11cBgS_LinChkii */
-bool cBgW::LineCheckGrpRp(cBgS_LinChk*, int, int) {
+bool cBgW::LineCheckGrpRp(cBgS_LinChk* chk, int grp, int depth) {
     /* Nonmatching */
+    if (ChkGrpThrough(grp, chk->GetGrpPassChk(), depth))
+        return false;
+
+    if (!pm_grp[grp].aab.Cross(chk->GetLinP()))
+        return false;
+
+    bool ret = false;
+    u16 tree = pm_bgd->m_g_tbl[grp].m_tree_idx;
+    if (tree != 0xFFFF && LineCheckRp(chk, tree))
+        ret = true;
+
+    s32 child = pm_bgd->m_g_tbl[grp].m_first_child;
+    while (true) {
+        if (child == 0xFFFF)
+            break;
+        if (LineCheckGrpRp(chk, child, depth + 1))
+            ret = true;
+        child = pm_bgd->m_g_tbl[child].m_next_sibling;
+    }
+
+    return ret;
 }
 
 /* 8024898C-80248AB8       .text RwgGroundCheckCommon__4cBgWFfUsP11cBgS_GndChk */
-bool cBgW::RwgGroundCheckCommon(f32 y, u16 idx, cBgS_GndChk* chk) {
-    /* Nonmatching */
+bool cBgW::RwgGroundCheckCommon(f32 y, u16 poly_index, cBgS_GndChk* chk) {
+    if (y < chk->GetPointP()->y && y > chk->GetNowY()) {
+        cBgD_Tri_t* tri = &pm_bgd->m_t_tbl[poly_index];
+        if (cM3d_CrossY_Tri_Front(pm_vtx_tbl[tri->vtx0], pm_vtx_tbl[tri->vtx1], pm_vtx_tbl[tri->vtx2], &chk->m_pos) && !ChkPolyThrough(poly_index, chk->GetPolyPassChk())) {
+            chk->SetNowY(y);
+            chk->SetPolyIndex(poly_index);
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /* 80248AB8-80248B68       .text RwgGroundCheckGnd__4cBgWFUsP11cBgS_GndChk */
-bool cBgW::RwgGroundCheckGnd(u16 idx, cBgS_GndChk* chk) {
-    /* Nonmatching */
+bool cBgW::RwgGroundCheckGnd(u16 poly_index, cBgS_GndChk* chk) {
     bool ret = false;
     while (true) {
-        cBgW_RwgElm * rwg = &pm_rwg[idx];
-        cBgW_TriElm * tri = &pm_tri[idx];
+        cBgW_RwgElm* rwg = &pm_rwg[poly_index];
+        cBgW_TriElm* tri = &pm_tri[poly_index];
         f32 y = tri->m_plane.getCrossY_NonIsZero(*chk->GetPointP());
-        if (RwgGroundCheckCommon(y, (u16)idx, chk))
+        if (RwgGroundCheckCommon(y, (u16)poly_index, chk))
             ret = true;
-        idx = rwg->next;
-        if (idx == 0xFFFF)
+        if (rwg->next == 0xFFFF)
             break;
+        poly_index = rwg->next;
     }
     return ret;
 }
 
 /* 80248B68-80248C38       .text RwgGroundCheckWall__4cBgWFUsP11cBgS_GndChk */
-bool cBgW::RwgGroundCheckWall(u16, cBgS_GndChk*) {
-    /* Nonmatching */
+bool cBgW::RwgGroundCheckWall(u16 poly_index, cBgS_GndChk* chk) {
+    bool ret = false;
+    while (true) {
+        cBgW_TriElm* tri = &pm_tri[poly_index];
+        cBgW_RwgElm* rwg = &pm_rwg[poly_index];
+        if (tri->m_plane.mNormal.y >= 0.014f && RwgGroundCheckCommon(tri->m_plane.getCrossY_NonIsZero(*chk->GetPointP()), (u16)poly_index, chk))
+            ret = true;
+        if (rwg->next == 0xFFFF)
+            break;
+        poly_index = rwg->next;
+    }
+    return ret;
 }
 
 /* 80248C38-802491F4       .text GroundCrossRp__4cBgWFP11cBgS_GndChki */
@@ -216,18 +452,73 @@ void cBgW::Move() {
 }
 
 /* 80249584-80249698       .text RwgShdwDraw__4cBgWFiP13cBgS_ShdwDraw */
-void cBgW::RwgShdwDraw(int, cBgS_ShdwDraw*) {
+void cBgW::RwgShdwDraw(int index, cBgS_ShdwDraw* shdw) {
     /* Nonmatching */
+    while (true) {
+        cBgW_RwgElm* rwg = &pm_rwg[index];
+        if (!ChkShdwDrawThrough(index, shdw->GetPolyPassChk())) {
+            const cBgD_Tri_t* tri = &pm_bgd->m_t_tbl[index];
+            shdw->mCallbackFun(shdw, (cBgD_Vtx_t*)pm_vtx_tbl, tri->vtx0, tri->vtx1, tri->vtx2, &pm_tri[index].m_plane);
+        }
+        if (rwg->next == 0xFFFF)
+            break;
+        index = rwg->next;
+        JUT_ASSERT(0xbc6, 0 <= index && index < pm_bgd->m_t_num);
+    }
 }
 
 /* 80249698-80249840       .text ShdwDrawRp__4cBgWFP13cBgS_ShdwDrawi */
-void cBgW::ShdwDrawRp(cBgS_ShdwDraw*, int) {
-    /* Nonmatching */
+void cBgW::ShdwDrawRp(cBgS_ShdwDraw* shdw, int i) {
+    if (!pm_node_tree[i].Cross(shdw->GetBndP()))
+        return;
+
+    cBgD_Tree_t* tree = &pm_bgd->m_tree_tbl[i];
+    if (tree->mFlag & 1) {
+        if (pm_blk[tree->mBlock].wall != 0xFFFF)
+            RwgShdwDraw(pm_blk[tree->mBlock].wall, shdw);
+        if (pm_blk[tree->mBlock].roof != 0xFFFF)
+            RwgShdwDraw(pm_blk[tree->mBlock].roof, shdw);
+        if (pm_blk[tree->mBlock].ground != 0xFFFF)
+            RwgShdwDraw(pm_blk[tree->mBlock].ground, shdw);
+    } else {
+        if (tree->mChild[0] != 0xFFFF)
+            ShdwDrawRp(shdw, tree->mChild[0]);
+        if (tree->mChild[1] != 0xFFFF)
+            ShdwDrawRp(shdw, tree->mChild[1]);
+        if (tree->mChild[2] != 0xFFFF)
+            ShdwDrawRp(shdw, tree->mChild[2]);
+        if (tree->mChild[3] != 0xFFFF)
+            ShdwDrawRp(shdw, tree->mChild[3]);
+        if (tree->mChild[4] != 0xFFFF)
+            ShdwDrawRp(shdw, tree->mChild[4]);
+        if (tree->mChild[5] != 0xFFFF)
+            ShdwDrawRp(shdw, tree->mChild[5]);
+        if (tree->mChild[6] != 0xFFFF)
+            ShdwDrawRp(shdw, tree->mChild[6]);
+        if (tree->mChild[7] != 0xFFFF)
+            ShdwDrawRp(shdw, tree->mChild[7]);
+    }
 }
 
 /* 80249840-80249904       .text ShdwDrawGrpRp__4cBgWFP13cBgS_ShdwDrawi */
-void cBgW::ShdwDrawGrpRp(cBgS_ShdwDraw*, int) {
+void cBgW::ShdwDrawGrpRp(cBgS_ShdwDraw* shdw, int grp_idx) {
     /* Nonmatching */
+    if (!pm_grp[grp_idx].aab.Cross(shdw->GetBndP()))
+        return;
+
+    u32 tree_idx = pm_bgd->m_g_tbl[grp_idx].m_tree_idx;
+    if (tree_idx != 0xFFFF) {
+        ShdwDrawRp(shdw, tree_idx);
+    }
+
+    u32 child_idx = pm_bgd->m_g_tbl[grp_idx].m_first_child;
+    while (true) {
+        if (child_idx == 0xFFFF)
+            break;
+        ShdwDrawGrpRp(shdw, child_idx);
+        child_idx = pm_bgd->m_g_tbl[child_idx].m_next_sibling;
+    }
+
 }
 
 /* 80249904-8024990C       .text ChkPolyThrough__4cBgWFiP16cBgS_PolyPassChk */
@@ -272,8 +563,7 @@ void cBgW::GetTriPnt(int i_no, cXyz* p0, cXyz* p1, cXyz* p2) const {
 }
 
 /* 80249B64-80249BA0       .text GetTopUnder__4cBgWCFPfPf */
-void cBgW::GetTopUnder(f32* min, f32* max) const {
-    /* Nonmatching */
-    *min = pm_grp[m_rootGrpIdx].aab.mMin.y;
-    *max = pm_grp[m_rootGrpIdx].aab.mMax.y;
+void cBgW::GetTopUnder(f32* max, f32* min) const {
+    *min = pm_grp[m_rootGrpIdx].aab.GetMinP()->y;
+    *max = pm_grp[m_rootGrpIdx].aab.GetMaxP()->y;
 }

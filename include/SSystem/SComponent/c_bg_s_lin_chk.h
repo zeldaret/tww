@@ -39,7 +39,7 @@ public:
 
     void SetCross(cXyz& pos) { mLin.SetEnd(pos); }
     cXyz& GetCross() { return mLin.GetEnd(); }
-    cXyz& GetCrossP() { return mLin.GetEndP(); }
+    cXyz* GetCrossP() { return mLin.GetEndP(); }
     cM3dGLin* GetLinP() { return &mLin; }
 
     void OnFrontFlag() { mFrontFlag = true; }

@@ -3669,7 +3669,7 @@ BOOL daPy_lk_c::playerDelete() {
     mDoAud_seDeleteObject(&mSwordTopPos);
     mDoAud_seDeleteObject(&mRopePos);
     mDoAud_seDeleteObject(&m338C.field_0x08);
-    mDoAud_seDeleteObject(&mFanWindCps.GetEndP());
+    mDoAud_seDeleteObject(mFanWindCps.GetEndP());
     
     for (i = 0; i < (int)ARRAY_SIZE(m_anm_heap_under); i++) {
         mDoExt_destroySolidHeap(m_anm_heap_under[i].mpAnimeHeap);

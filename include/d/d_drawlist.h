@@ -458,7 +458,6 @@ public:
     virtual void draw();
 
 public:
-    /* 0x04 */ u32 field_0x04[3];
     /* 0x10 */ Mtx mtx;
 };
 
@@ -467,7 +466,6 @@ public:
     virtual void draw();
 
 public:
-    /* 0x04 */ u32 field_0x04[3];
     /* 0x10 */ Mtx mtx;
 };
 

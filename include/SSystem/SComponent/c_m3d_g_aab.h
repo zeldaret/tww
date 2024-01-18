@@ -3,6 +3,7 @@
 
 #include "SSystem/SComponent/c_xyz.h"
 #include "SSystem/SComponent/c_m3d.h"
+#include "SSystem/SComponent/c_m3d_g_lin.h"
 #include "global.h"
 
 // Axis aligned bounding box
@@ -37,6 +38,9 @@ public:
     }
     bool Cross(const cM3dGSph *param_1) {
         return cM3d_Cross_AabSph(this, param_1);
+    }
+    bool Cross(const cM3dGLin *param_1) {
+        return cM3d_Cross_MinMaxBoxLine(GetMinP(), GetMaxP(), param_1->GetStartP(), param_1->GetEndP());
     }
     void CalcCenter(cXyz* pOut) const {
         VECAdd(&mMin, &mMax, pOut);
