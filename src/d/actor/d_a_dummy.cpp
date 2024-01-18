@@ -15,7 +15,7 @@ BOOL daDummy::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 0000009C-000000A4       .text create_heap__Q27daDummy5Act_cFv */
 bool daDummy::Act_c::create_heap() {
-    return 1;  
+    return true;  
 }
 
 /* 000000A4-0000015C       .text _create__Q27daDummy5Act_cFv */
@@ -32,7 +32,7 @@ s32 daDummy::Act_c::_create() {
 
 /* 0000015C-00000164       .text _delete__Q27daDummy5Act_cFv */
 bool daDummy::Act_c::_delete() {
-    return 1; 
+    return true; 
 }
 
 /* 00000164-000001CC       .text set_mtx__Q27daDummy5Act_cFv */
@@ -44,12 +44,12 @@ void daDummy::Act_c::set_mtx() {
 
 /* 000001CC-000001D4       .text _execute__Q27daDummy5Act_cFv */
 bool daDummy::Act_c::_execute() {
-    return 1; 
+    return true; 
 }
 
 /* 000001D4-000001DC       .text _draw__Q27daDummy5Act_cFv */
 bool daDummy::Act_c::_draw() {
-    return 1; 
+    return true; 
 }
 
 namespace daDummy {
@@ -71,7 +71,7 @@ namespace daDummy {
         }
         
         BOOL Mthd_IsDelete(void* i_this) {
-            return 1;
+            return TRUE;
         }
         static actor_method_class Mthd_Table = {
             (process_method_func)Mthd_Create,
