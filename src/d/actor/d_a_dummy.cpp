@@ -52,9 +52,6 @@ bool daDummy::Act_c::_draw() {
     return 1; 
 }
 
-inline daDummy::Act_c::~Act_c() {}
-
-
 namespace daDummy {
     namespace {
         s32 Mthd_Create(void* i_this) {

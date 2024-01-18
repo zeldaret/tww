@@ -14,7 +14,7 @@ namespace daDummy {
         bool _execute();
         bool _draw();
 
-        virtual ~Act_c();
+        virtual ~Act_c() {}
 
     public:
         /* Place member variables here */
