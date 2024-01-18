@@ -29,9 +29,9 @@ void vectle_calc(DOUBLE_POS* i_pos, cXyz* o_out) {
         o_out->y = i_pos->y / s;
         o_out->z = i_pos->z / s;
     } else {
-        o_out->x = 0.0;
-        o_out->y = 0.0;
-        o_out->z = 0.0;
+        o_out->x = 0.0f;
+        o_out->y = 0.0f;
+        o_out->z = 0.0f;
     }
 }
 

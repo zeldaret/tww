@@ -118,7 +118,7 @@ static dCcD_SrcCyl l_cyl_src = {
 
 /* 000000EC-000001A8       .text __ct__17daNpc_Btsw2_HIO_cFv */
 daNpc_Btsw2_HIO_c::daNpc_Btsw2_HIO_c() {
-    mNpc.m04 = 0.0;
+    mNpc.m04 = 0.0f;
     mNpc.m08 = 0x1F40;
     mNpc.mMaxHeadRot = 0x1F40;
     mNpc.m0A = 0x0;
@@ -129,14 +129,14 @@ daNpc_Btsw2_HIO_c::daNpc_Btsw2_HIO_c() {
     mNpc.mMinBackBoneRot = -0x1F40;
     mNpc.m18 = 0x3E8;
     mNpc.mMaxHeadTurnVel = 0x640;
-    mNpc.m1C = 40.0;
+    mNpc.m1C = 40.0f;
     mNpc.m20 = 0x2000;
     mNpc.m22 = 0x0;
-    mNpc.m24 = 200.0;
+    mNpc.m24 = 200.0f;
     m30 = 0x258;
     m32 = 0x5;
-    m34 = 0.8;
-    m38 = 0.95;
+    m34 = 0.8f;
+    m38 = 0.95f;
     m3C = 0x5A;
     m3E = 0x5A;
     mChildID = -1;

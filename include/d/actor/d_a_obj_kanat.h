@@ -33,9 +33,9 @@ namespace daObjKanat {
     public:
         /* 0x2C8 */ request_of_phase_process_class mPhs;
         /* 0x2D0 */ J3DModel* mpModel;
-        /* 0x2D4 */ dPa_smokeEcallBack m2D4;
-        /* 0x2F4 */ u8 m2F4;
-        /* 0x2F5 */ u8 m2F5;
+        /* 0x2D4 */ dPa_smokeEcallBack mSmokeCb;
+        /* 0x2F4 */ bool mIsBroken;
+        /* 0x2F5 */ bool mIsVisible;
     };
 };
 

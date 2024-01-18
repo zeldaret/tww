@@ -2,6 +2,7 @@
 #define D_A_DUMMY_H
 
 #include "f_op/f_op_actor.h"
+#include "SSystem/SComponent/c_phase.h"
 
 namespace daDummy {
     class Act_c : public fopAc_ac_c {
@@ -17,10 +18,9 @@ namespace daDummy {
         virtual ~Act_c() {}
 
     public:
-        /* Place member variables here */
         /* 0x290 */ // vtable
-        /* 0x294 */ u8 field_0x294[0x29c - 0x294];
-        /* 0x29c */ Mtx field_0x29c;
+        /* 0x294 */ request_of_phase_process_class mPhase;
+        /* 0x29c */ Mtx mMtx;
     };
 };
 

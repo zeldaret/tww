@@ -220,7 +220,7 @@ bool cM3d_Cross_LinPla(const cM3dGLin* lin, const cM3dGPla* pla, Vec* dst, bool 
     f32 startVal = pla->getPlaneFunc(lin->GetStartP());
     f32 endVal = pla->getPlaneFunc(lin->GetEndP());
     if (startVal * endVal > 0.0f) {
-        *dst = *lin->GetEndP();
+        *dst = lin->GetEnd();
         return false;
     } else {
         if (startVal >= 0.0f && endVal <= 0.0f) {
@@ -232,7 +232,7 @@ bool cM3d_Cross_LinPla(const cM3dGLin* lin, const cM3dGPla* pla, Vec* dst, bool 
                 return cM3d_CrossInfLineVsInfPlane_proc(startVal, endVal, lin->GetStartP(), lin->GetEndP(), dst);
             }
         }
-        *dst = *lin->GetEndP();
+        *dst = lin->GetEnd();
         return false;
     }
 }

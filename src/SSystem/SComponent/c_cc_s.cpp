@@ -187,9 +187,7 @@ void cCcS::ChkCo() {
                 continue;
             f32 cross_len = 0.0f;
             if (co1ShapeAttr->CrossCo(*co2ShapeAttr, &cross_len)) {
-                cXyz& obj2CoCP = co2ShapeAttr->GetCoCP();
-                cXyz& obj1CoCP = co1ShapeAttr->GetCoCP();
-                SetCoCommonHitInf(*objCo1, &obj1CoCP, *objCo2, &obj2CoCP, cross_len);
+                SetCoCommonHitInf(*objCo1, co1ShapeAttr->GetCoCP(), *objCo2, co2ShapeAttr->GetCoCP(), cross_len);
             }
         }
     }

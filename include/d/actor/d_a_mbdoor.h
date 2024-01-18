@@ -51,13 +51,13 @@ public:
     /* 0x2B4 */ s16 field_0x2b4;
     /* 0x2B6 */ u8 field_0x2b6;
     /* 0x2B7 */ u8 field_0x2B7[0x2B8 - 0x2B7];
-    /* 0x2B8 */ s16 field_0x2b8;
+    /* 0x2B8 */ s16 mAdjustmentTimer;
     /* 0x2BA */ u8 field_0x2BA[0x2BC - 0x2BA];
     /* 0x2BC */ s32 field_0x2bc;
     /* 0x2C0 */ s32 mEvtStaffId;
     /* 0x2C4 */ cXyz field_0x2c4;
-    /* 0x2D0 */ cXyz field_0x2d0;
-    /* 0x2DC */ cXyz field_0x2dc;
+    /* 0x2D0 */ cXyz mGoalPos;
+    /* 0x2DC */ cXyz mGoal2Pos;
 };
 
 #endif /* D_A_MBDOOR_H */

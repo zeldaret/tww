@@ -1422,7 +1422,7 @@ void dDlst_shadowControl_c::draw(Mtx drawMtx) {
     GXSetChanCtrl(GX_ALPHA0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
     GXColor alpha = { 0x00, 0x00, 0x00, 0x20 };
     GXSetChanMatColor(GX_ALPHA0, alpha);
-    GXSetArray(GX_VA_POS, l_shadowVolPos, 0xc);
+    GXSetArray(GX_VA_POS, l_shadowVolPos, sizeof(*l_shadowVolPos));
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
     GXSetNumTevStages(1);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
@@ -1437,7 +1437,7 @@ void dDlst_shadowControl_c::draw(Mtx drawMtx) {
         real->draw();
 
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S8, 0);
-    GXSetArray(GX_VA_POS, l_simpleShadowPos, 0xc);
+    GXSetArray(GX_VA_POS, l_simpleShadowPos, sizeof(*l_simpleShadowPos));
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
@@ -1556,10 +1556,10 @@ void dDlst_alphaVolPacket::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetArray(GX_VA_POS, (void*)l_simpleShadowPos, 0x0C);
+    GXSetArray(GX_VA_POS, (void*)l_simpleShadowPos, sizeof(*l_simpleShadowPos));
     GXLoadPosMtxImm(mtx, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
-    GXCallDisplayList(l_frontMat, 0x40)
+    GXCallDisplayList(l_frontMat, 0x40);
     GXCallDisplayList(l_shadowVolumeDL, 0x40);
     GXCallDisplayList(l_backSubMat, 0x20);
     GXCallDisplayList(l_shadowVolumeDL, 0x40);
@@ -1576,7 +1576,7 @@ void dDlst_alphaInvVolPacket::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetArray(GX_VA_POS, (void*)l_simpleShadowPos, 0x0C);
+    GXSetArray(GX_VA_POS, (void*)l_simpleShadowPos, sizeof(*l_simpleShadowPos));
     GXLoadPosMtxImm(mtx, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
     GXSetTevColor(GX_TEVREG0, g_whiteColor);

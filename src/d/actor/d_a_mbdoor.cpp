@@ -179,18 +179,18 @@ void daMbdoor_c::calcMtx() {
     // Transform the door's frame.
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(home.angle.y);
-    mpFuModel->setBaseTRMtx(mDoMtx_stack_c::now);
+    mpFuModel->setBaseTRMtx(mDoMtx_stack_c::get());
     
     cXyz offset;
     offset.set(0.0f, 0.0f, -150.0f);
-    mDoMtx_stack_c::multVec(&offset, &field_0x2d0);
+    mDoMtx_stack_c::multVec(&offset, &mGoalPos);
     offset.set(0.0f, 0.0f, -400.0f);
-    mDoMtx_stack_c::multVec(&offset, &field_0x2dc);
+    mDoMtx_stack_c::multVec(&offset, &mGoal2Pos);
     
     // Transform door's right half.
     if (field_0x2ad == 0) {
-        mpLModel->setBaseTRMtx(mDoMtx_stack_c::now);
-        if (field_0x2b2) {
+        mpLModel->setBaseTRMtx(mDoMtx_stack_c::get());
+        if (field_0x2b2 != 0) {
             mDoMtx_stack_c::transM(getROffset(), 0.0f, 0.0f);
             mDoMtx_stack_c::YrotM(field_0x2b2);
             mDoMtx_stack_c::transM(-getROffset(), 0.0f, 0.0f);
@@ -198,18 +198,18 @@ void daMbdoor_c::calcMtx() {
         offset.set(80.0f, 0.0f, 75.0f);
         mDoMtx_stack_c::multVec(&offset, &field_0x2c4);
     }
-    mpRModel->setBaseTRMtx(mDoMtx_stack_c::now);
+    mpRModel->setBaseTRMtx(mDoMtx_stack_c::get());
     
     // Transform door's left half.
     if (field_0x2ad == 1) {
-        if (field_0x2b2) {
+        if (field_0x2b2 != 0) {
             mDoMtx_stack_c::transM(getLOffset(), 0.0f, 0.0f);
             mDoMtx_stack_c::YrotM(-field_0x2b2);
             mDoMtx_stack_c::transM(-getLOffset(), 0.0f, 0.0f);
         }
         offset.set(-80.0f, 0.0f, 75.0f);
         mDoMtx_stack_c::multVec(&offset, &field_0x2c4);
-        mpLModel->setBaseTRMtx(mDoMtx_stack_c::now);
+        mpLModel->setBaseTRMtx(mDoMtx_stack_c::get());
     }
     
     // Transform door's bar.
@@ -220,7 +220,7 @@ void daMbdoor_c::calcMtx() {
         mDoMtx_stack_c::ZrotM(field_0x2b0);
         mDoMtx_stack_c::transM(-getToOffset(), -231.0f, 0.0f);
     }
-    mpToModel->setBaseTRMtx(mDoMtx_stack_c::now);
+    mpToModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000898-00000A44       .text CreateInit__10daMbdoor_cFv */
@@ -324,28 +324,28 @@ void daMbdoor_c::demoProc() {
             field_0x2b6 = 1;
             break;
         case 6: // SET_GOAL
-            goal = field_0x2d0;
+            goal = mGoalPos;
             dComIfGp_evmng_setGoal(&goal);
             break;
         case 7: // SET_GOAL2
-            goal = field_0x2dc;
+            goal = mGoal2Pos;
             dComIfGp_evmng_setGoal(&goal);
             break;
         case 8: // ADJUSTMENT
             calcMtx();
-            field_0x2b8 = 0;
+            mAdjustmentTimer = 0;
             u32* timerP = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Timer");
             if (timerP) {
-                field_0x2b8 = *timerP;
+                mAdjustmentTimer = *timerP;
             }
             break;
         }
     }
     
     switch (actIdx) {
-    case 3:
+    case 3: // END
         break;
-    case 4:
+    case 4: // OPEN
         if (field_0x2b4 < 250) {
             field_0x2b4 += 50;
         }
@@ -357,14 +357,14 @@ void daMbdoor_c::demoProc() {
             field_0x2b2 = temp;
         }
         calcMtx();
-        if (field_0x2ad) {
+        if (field_0x2ad != 0) {
             angle = current.angle.y + 0x7FFF - field_0x2b2;
         } else {
             angle = current.angle.y + 0x7FFF + field_0x2b2;
         }
         player->setPlayerPosAndAngle(&field_0x2c4, angle);
         break;
-    case 5:
+    case 5: // STOP_OPEN
         if (field_0x2b6) {
             if (field_0x2b4 < 400) {
                 field_0x2b4 += 40;
@@ -383,15 +383,15 @@ void daMbdoor_c::demoProc() {
             dComIfGp_evmng_cutEnd(mEvtStaffId);
         }
         break;
-    case 8:
+    case 8: // ADJUSTMENT
         angle = player->shape_angle.y;
         cLib_addCalcAngleS2(&angle, current.angle.y + 0x7FFF, 10, 0x800);
         goal = player->current.pos;
         goal.x = goal.x*0.9f + field_0x2c4.x*0.1f;
         goal.z = goal.z*0.9f + field_0x2c4.z*0.1f;
         player->setPlayerPosAndAngle(&goal, angle);
-        if (field_0x2b8 > 0) {
-            field_0x2b8--;
+        if (mAdjustmentTimer > 0) {
+            mAdjustmentTimer--;
         } else {
             dComIfGp_evmng_cutEnd(mEvtStaffId);
         }

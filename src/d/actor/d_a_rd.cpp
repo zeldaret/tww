@@ -113,10 +113,10 @@ daRd_HIO_c::daRd_HIO_c() {
     m5C = 10.0f;
     m60 = 50.0f;
     m64 = 30.0f;
-    m68 = 1.8;
+    m68 = 1.8f;
     mReturnWalkSpeed = 2.0f;
-    m70 = 1.25;
-    m74 = 0.9;
+    m70 = 1.25f;
+    m74 = 0.9f;
     m50 = 0x28;
     m78 = 0x2D;
     m54 = 0x87;
@@ -277,7 +277,7 @@ BOOL daRd_c::_createHeap() {
 bool daRd_c::createArrowHeap() {
     static Vec sebone_cyl_offset[] = {{0.0f, 0.0f, 0.0f},    {30.0f, 0.0f, 0.0f}};
     static Vec muneA_cyl_offset[]  = {{5.0f, -5.0f, 0.0f},   {20.0f, -5.0f, 0.0f}};
-    static Vec muneB1_cyl_offset[] = {{15.0, 0.0, -15.0},    {50.0, 0.0, -15.0}};
+    static Vec muneB1_cyl_offset[] = {{15.0f, 0.0f, -15.0f}, {50.0f, 0.0f, -15.0f}};
     static Vec muneB2_cyl_offset[] = {{15.0f, 0.0f, 0.0f},   {50.0f, 0.0f, 0.0f}};
     static Vec muneB3_cyl_offset[] = {{15.0f, 0.0f, 15.0f},  {50.0f, 0.0f, 15.0f}};
     static Vec kosi1_cyl_offset[]  = {{0.0f, 0.0f, -10.0f},  {20.0f, 0.0f, -10.0f}};
@@ -296,133 +296,133 @@ bool daRd_c::createArrowHeap() {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x01,
             /* mRadius     */ 4.0f,
-            /* mpOffsets   */ (cXyz*)&kosi1_cyl_offset,
+            /* mpOffsets   */ kosi1_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x01,
             /* mRadius     */ 4.0f,
-            /* mpOffsets   */ (cXyz*)&kosi2_cyl_offset,
+            /* mpOffsets   */ kosi2_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x01,
             /* mRadius     */ 4.0f,
-            /* mpOffsets   */ (cXyz*)&kosi3_cyl_offset,
+            /* mpOffsets   */ kosi3_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x02,
             /* mRadius     */ 2.0f,
-            /* mpOffsets   */ (cXyz*)&asi1_cyl_offset,
+            /* mpOffsets   */ asi1_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x03,
             /* mRadius     */ 2.0f,
-            /* mpOffsets   */ (cXyz*)&asi2_cyl_offset,
+            /* mpOffsets   */ asi2_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x04,
             /* mRadius     */ 2.0f,
-            /* mpOffsets   */ (cXyz*)&asi3_cyl_offset,
+            /* mpOffsets   */ asi3_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x05,
             /* mRadius     */ 2.0f,
-            /* mpOffsets   */ (cXyz*)&asi1_cyl_offset,
+            /* mpOffsets   */ asi1_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x06,
             /* mRadius     */ 2.0f,
-            /* mpOffsets   */ (cXyz*)&asi2_cyl_offset,
+            /* mpOffsets   */ asi2_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x07,
             /* mRadius     */ 2.0f,
-            /* mpOffsets   */ (cXyz*)&asi3_cyl_offset,
+            /* mpOffsets   */ asi3_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x08,
             /* mRadius     */ 6.0f,
-            /* mpOffsets   */ (cXyz*)&sebone_cyl_offset,
+            /* mpOffsets   */ sebone_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x09,
             /* mRadius     */ 10.0f,
-            /* mpOffsets   */ (cXyz*)&muneA_cyl_offset,
+            /* mpOffsets   */ muneA_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x09,
             /* mRadius     */ 6.0f,
-            /* mpOffsets   */ (cXyz*)&muneB1_cyl_offset,
+            /* mpOffsets   */ muneB1_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x09,
             /* mRadius     */ 6.0f,
-            /* mpOffsets   */ (cXyz*)&muneB2_cyl_offset,
+            /* mpOffsets   */ muneB2_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x09,
             /* mRadius     */ 6.0f,
-            /* mpOffsets   */ (cXyz*)&muneB3_cyl_offset,
+            /* mpOffsets   */ muneB3_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x0F,
             /* mRadius     */ 2.0f,
-            /* mpOffsets   */ (cXyz*)&ude1_cyl_offset,
+            /* mpOffsets   */ ude1_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x10,
             /* mRadius     */ 2.0f,
-            /* mpOffsets   */ (cXyz*)&ude2_cyl_offset,
+            /* mpOffsets   */ ude2_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x11,
             /* mRadius     */ 6.0f,
-            /* mpOffsets   */ (cXyz*)&te_cyl_offset,
+            /* mpOffsets   */ te_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x12,
             /* mRadius     */ 6.0f,
-            /* mpOffsets   */ (cXyz*)&yubi_cyl_offset,
+            /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x13,
             /* mRadius     */ 2.0f,
-            /* mpOffsets   */ (cXyz*)&ude1_cyl_offset,
+            /* mpOffsets   */ ude1_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x14,
             /* mRadius     */ 2.0f,
-            /* mpOffsets   */ (cXyz*)&ude2_cyl_offset,
+            /* mpOffsets   */ ude2_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x15,
             /* mRadius     */ 6.0f,
-            /* mpOffsets   */ (cXyz*)&te_cyl_offset,
+            /* mpOffsets   */ te_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x16,
             /* mRadius     */ 6.0f,
-            /* mpOffsets   */ (cXyz*)&yubi_cyl_offset,
+            /* mpOffsets   */ yubi_cyl_offset,
         },
     };
     mpJntHit = JntHit_create(mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));

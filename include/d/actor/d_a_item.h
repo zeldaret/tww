@@ -11,8 +11,11 @@ public:
     typedef void (daItem_c::*ModeFunc)();
     
     enum State {
+        STATUS_UNK0          = 0x0,
+        STATUS_UNK1          = 0x1,
         STATUS_WAIT_MAIN     = 0x2,
         STATUS_BRING_NEZUMI  = 0x3,
+        STATUS_UNK4          = 0x4,
         STATUS_INIT_NORMAL   = 0x5,
         STATUS_MAIN_NORMAL   = 0x6,
         STATUS_INIT_GET_DEMO = 0x7,
@@ -20,6 +23,15 @@ public:
         STATUS_MAIN_GET_DEMO = 0x9,
         STATUS_WAIT_BOSS1    = 0xA,
         STATUS_WAIT_BOSS2    = 0xB,
+    };
+    
+    enum Flag {
+        FLAG_UNK02 = 0x02,
+        FLAG_UNK04 = 0x04,
+        FLAG_BOOMERANG = 0x08,
+        FLAG_UNK10 = 0x10,
+        FLAG_QUAKE = 0x20,
+        FLAG_HOOK = 0x40,
     };
     
     float getYOffset();
@@ -87,8 +99,8 @@ public:
 
 public:
     /* 0x63C */ cXyz mScaleTarget;
-    /* 0x648 */ s32 mSwitchId;
-    /* 0x64C */ s32 mActivationSwitch;
+    /* 0x648 */ s32 mSpawnSwitchNo;
+    /* 0x64C */ s32 mCollideSwitchNo;
     /* 0x650 */ f32 field_0x650;
     /* 0x654 */ s16 field_0x654;
     /* 0x656 */ s16 mTargetAngleX;

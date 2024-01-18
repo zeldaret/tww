@@ -24,19 +24,18 @@ static s32 daAndsw0_Draw(andsw0_class*) {
 }
 
 static void daAndsw0_check(andsw0_class* i_this) {
-    /* Nonmatching */
     s32 numToCheck = i_this->mNumSwitchesToCheck;
-    u32 switchIdxToCheck;
+    u32 switchToCheck;
     if (i_this->mFirstSwitchToCheck) {
-        switchIdxToCheck = i_this->mFirstSwitchToCheck;
+        switchToCheck = i_this->mFirstSwitchToCheck;
     } else {
-        switchIdxToCheck = i_this->mSwitchToSet + 1;
+        switchToCheck = i_this->mSwitchToSet + 1;
     }
 
     switch(i_this->mAction) {
         case ACT_ON_ALL:
             for(int i = 0; i < numToCheck; i++) {
-                if(dComIfGs_isSwitch(switchIdxToCheck, fopAcM_GetRoomNo(i_this)) == false) {
+                if(dComIfGs_isSwitch(switchToCheck, fopAcM_GetRoomNo(i_this)) == false) {
                     break;
                 }
 
@@ -59,21 +58,21 @@ static void daAndsw0_check(andsw0_class* i_this) {
                     }
                 }
 
-                switchIdxToCheck += 1;
+                switchToCheck += 1;
             }
 
             break;
         case ACT_OFF_ALL:
-            u32 switchIdxToCheck2 = i_this->mFirstSwitchToCheck ? i_this->mFirstSwitchToCheck : i_this->mSwitchToSet + 1;
+            u32 switchToCheck2 = i_this->mFirstSwitchToCheck ? i_this->mFirstSwitchToCheck : i_this->mSwitchToSet + 1;
 
             for(int i = 0; i < numToCheck; i++) {
-                if(dComIfGs_isSwitch(switchIdxToCheck2, fopAcM_GetRoomNo(i_this)) == false) {
+                if(dComIfGs_isSwitch(switchToCheck2, fopAcM_GetRoomNo(i_this)) == false) {
                     dComIfGs_offSwitch(i_this->mSwitchToSet, fopAcM_GetRoomNo(i_this));
                     i_this->mAction  = ACT_ON_ALL;
                     break;
                 }
                 
-                switchIdxToCheck2 += 1;
+                switchToCheck2 += 1;
             }
 
             break;
@@ -84,12 +83,12 @@ static void daAndsw0_check(andsw0_class* i_this) {
             }
             else {
                 for(int i = 0; i < numToCheck; i++) {
-                    if(fopAcM_isSwitch(i_this, switchIdxToCheck)) {
+                    if(fopAcM_isSwitch(i_this, switchToCheck)) {
                         i_this->mAction += 1;
                         break;
                     }
                     
-                    switchIdxToCheck += 1;
+                    switchToCheck += 1;
                 }
             }
 
@@ -98,17 +97,17 @@ static void daAndsw0_check(andsw0_class* i_this) {
             i_this->mTimer -= 1;
             if(i_this->mTimer == 0) {
                 for(int i = 0; i < numToCheck; i++) {
-                    fopAcM_offSwitch(i_this, switchIdxToCheck);
-                    switchIdxToCheck += 1;
+                    fopAcM_offSwitch(i_this, switchToCheck);
+                    switchToCheck += 1;
                 }
                 
                 i_this->mAction = ACT_TIMER;
             }
             else {
-                switchIdxToCheck = i_this->mFirstSwitchToCheck ? i_this->mFirstSwitchToCheck : i_this->mSwitchToSet + 1;
+                switchToCheck = i_this->mFirstSwitchToCheck ? i_this->mFirstSwitchToCheck : i_this->mSwitchToSet + 1;
 
                 for(int i = 0; i < numToCheck; i++) {
-                    if(fopAcM_isSwitch(i_this, switchIdxToCheck) == false) {
+                    if(fopAcM_isSwitch(i_this, switchToCheck) == false) {
                         break;
                     }
 
@@ -117,7 +116,7 @@ static void daAndsw0_check(andsw0_class* i_this) {
                         i_this->mAction = ACT_WAIT;
                     }
                     
-                    switchIdxToCheck += 1;
+                    switchToCheck += 1;
                 }
             }
 

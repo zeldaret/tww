@@ -157,7 +157,7 @@ BOOL daRaceItem_c::execute() {
             mCyl.ClrCoSet();
             mCyl.ClrTgSet();
 
-            field_0x645 &= 0xFE;
+            cLib_offBit(field_0x645, (u8)0x01);
             field_0x640 = 2;
         case 2:
             field_0x63C -= 1;
@@ -187,7 +187,7 @@ BOOL daRaceItem_c::execute() {
             fopAcM_posMoveF(this, mStts.GetCCMoveP());
             mAcch.CrrPos(*dComIfG_Bgsp());
 
-            if(!(field_0x645 & 1) && !fopAcM_checkHookCarryNow(this)) { // looks like !checkOffsetPos() but that isn't an inline
+            if(!cLib_checkBit(field_0x645, (u8)0x01) && !fopAcM_checkHookCarryNow(this)) {
                 if(mAcch.ChkWaterIn()) {
                     fopAcM_seStart(this, JA_SE_OBJ_FALL_WATER_S, 0);
                     fopAcM_delete(this);
@@ -214,7 +214,7 @@ BOOL daRaceItem_c::execute() {
         if (hitObj) {
             u32 atType = hitObj->GetAtType();
             if (atType & AT_TYPE_BOOMERANG) {
-                field_0x645 |= 1;
+                cLib_onBit(field_0x645, (u8)0x01);
             } else if (atType & AT_TYPE_HOOKSHOT) {
                 cXyz pos(0.0f, dItem_data::getH(m_itemNo) / 2.0f, 0.0f);
                 daPy_getPlayerActorClass()->setHookshotCarryOffset(fopAcM_GetID(this), &pos);
@@ -222,13 +222,13 @@ BOOL daRaceItem_c::execute() {
         }
     }
 
-    if(field_0x645 & 1) {
+    if(cLib_checkBit(field_0x645, (u8)0x01)) {
         fopAc_ac_c* boomerang = (fopAc_ac_c*)fopAcM_SearchByName(PROC_BOOMERANG);
         if(boomerang) {
             current.pos = boomerang->current.pos;
         }
         else {
-            field_0x645 &= 0xFE;
+            cLib_offBit(field_0x645, (u8)0x01);
         }
     }
 

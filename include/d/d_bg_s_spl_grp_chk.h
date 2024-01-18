@@ -26,7 +26,7 @@ public:
     bool ChkMoveBGOnly() { return m_flags & MOVE_BG_ONLY; }
     void SetHeight(f32 height) { m_height = height; }
     f32 GetHeight() { return m_height; }
-    cXyz& GetPosP() { return m_ground; }
+    cXyz* GetPosP() { return &m_ground; }
     f32 GetRoof() const { return m_roof; }
     void Set(cXyz& ground, f32 roof) {
         m_ground = ground;

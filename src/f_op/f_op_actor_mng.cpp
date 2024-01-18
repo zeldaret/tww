@@ -1127,7 +1127,7 @@ BOOL stealItem_CB(void* actor) {
     if (actor) {
         daItem_c* item = (daItem_c*)actor;
         item->mScale.setall(1.0f);
-        item->setFlag(0x40);
+        item->setFlag(daItem_c::FLAG_HOOK);
     }
     return TRUE;
 }

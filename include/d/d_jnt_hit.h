@@ -11,7 +11,7 @@ public:
     /* 0x0 */ s16 mShapeType;
     /* 0x2 */ s16 mJointIndex;
     /* 0x4 */ f32 mRadius;
-    /* 0x8 */ cXyz* mpOffsets;
+    /* 0x8 */ Vec* mpOffsets;
 };
 
 class JntHit_c {

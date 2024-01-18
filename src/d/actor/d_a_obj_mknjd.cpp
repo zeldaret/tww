@@ -305,8 +305,7 @@ s32 daObjMknjD::Act_c::Mthd_Create() {
 
     m043E = prm_get_Type();
 
-    int switchIdx = prm_get_swSave();
-    if (fopAcM_isSwitch(this, switchIdx)) {
+    if (fopAcM_isSwitch(this, prm_get_swSave())) {
         mEmitters[2] = NULL;
         mEmitters[3] = NULL;
 
@@ -465,8 +464,7 @@ void daObjMknjD::Act_c::privateCut() {
                     case ACT_BREAK:
                         mDoAud_seStart(JA_SE_READ_RIDDLE_1);
 
-                        int switchId = prm_get_swSave();
-                        fopAcM_onSwitch(this, switchId);
+                        fopAcM_onSwitch(this, prm_get_swSave());
 
                         mBreakTimer = 0;
 

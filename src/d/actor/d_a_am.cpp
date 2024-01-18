@@ -1167,7 +1167,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
             /* mShapeType  */ 2, // Cylinder
             /* mJointIndex */ 0x05, // hitomi (pupil) joint
             /* mRadius     */ 5.0f,
-            /* mpOffsets   */ (cXyz*)&cyl2_eye_offset,
+            /* mpOffsets   */ cyl2_eye_offset,
         },
     };
     i_this->mEyeJntHit = JntHit_create(i_this->mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));

@@ -1278,13 +1278,13 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
             /* mShapeType  */ 2, // Cylinder
             /* mJointIndex */ 0x00, // body joint
             /* mRadius     */ 20.0f,
-            /* mpOffsets   */ (cXyz*)&cyl_eye_offset,
+            /* mpOffsets   */ cyl_eye_offset,
         },
         {
             /* mShapeType  */ 1, // Sphere
             /* mJointIndex */ 0x00, // body joint
             /* mRadius     */ 20.0f,
-            /* mpOffsets   */ (cXyz*)&sph_offset,
+            /* mpOffsets   */ sph_offset,
         },
     };
     i_this->mEyeJntHit = JntHit_create(i_this->mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));

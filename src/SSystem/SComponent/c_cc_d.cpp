@@ -363,9 +363,9 @@ bool cCcD_CpsAttr::GetNVec(const cXyz& vec, cXyz* dst) const {
 
     cXyz pt;
     if (dot < 0.0f) {
-        pt.set(*GetStartP());
+        pt.set(GetStart());
     } else if (dot > 1.0f) {
-        pt.set(*GetEndP());
+        pt.set(GetEnd());
     } else {
         VECScale(&lin, &lin, dot);
         VECAdd(&lin, GetStartP(), &pt);

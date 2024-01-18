@@ -158,17 +158,17 @@ void daItem_c::CreateInit() {
     mDisappearTimer = getData()->mDuration;
     field_0x65a = getData()->field_0x18;
     field_0x650 = fopAcM_GetSpeed(this).y;
-    mItemStatus = 0;
+    mItemStatus = STATUS_UNK0;
     
     mType = daItem_prm::getType(this);
     if (daItem_prm::getType(this) == 3 || daItem_prm::getType(this) == 1) {
-        setFlag(0x02);
+        setFlag(FLAG_UNK02);
     }
     mAction = daItem_prm::getAction(this);
     
     show();
     
-    if (dItem_data::checkSpecialEffect(m_itemNo) && (m_itemNo != SMALL_KEY || (m_itemNo == SMALL_KEY && checkFlag(0x02)))) {
+    if (dItem_data::checkSpecialEffect(m_itemNo) && (m_itemNo != SMALL_KEY || (m_itemNo == SMALL_KEY && checkFlag(FLAG_UNK02)))) {
         u16 particleID = dItem_data::getSpecialEffect(m_itemNo);
         dComIfGp_particle_set(particleID, &current.pos, NULL, NULL, 0xFF, &mPtclFollowCb);
     }
@@ -185,12 +185,12 @@ void daItem_c::CreateInit() {
         break;
     }
     
-    mSwitchId = daItem_prm::getSwitchNo2(this);
-    if (mSwitchId != 0xFF && !fopAcM_isSwitch(this, mSwitchId)) {
+    mSpawnSwitchNo = daItem_prm::getSwitchNo2(this);
+    if (mSpawnSwitchNo != 0xFF && !fopAcM_isSwitch(this, mSpawnSwitchNo)) {
         hide();
         setFlag(0x02);
     }
-    mActivationSwitch = daItem_prm::getSwitchNo(this);
+    mCollideSwitchNo = daItem_prm::getSwitchNo(this);
     
     current.angle.z = 0;
     home.angle.z = 0;
@@ -250,10 +250,10 @@ s32 daItem_c::_daItem_create() {
 
 /* 800F5668-800F5834       .text _daItem_execute__8daItem_cFv */
 BOOL daItem_c::_daItem_execute() {
-    if (mSwitchId != 0xFF && !fopAcM_isSwitch(this, mSwitchId)) {
+    if (mSpawnSwitchNo != 0xFF && !fopAcM_isSwitch(this, mSpawnSwitchNo)) {
         return TRUE;
     }
-    if (mSwitchId != 0xFF && fopAcM_isSwitch(this, mSwitchId)) {
+    if (mSpawnSwitchNo != 0xFF && fopAcM_isSwitch(this, mSpawnSwitchNo)) {
         show();
     }
     
@@ -267,12 +267,12 @@ BOOL daItem_c::_daItem_execute() {
     case STATUS_BRING_NEZUMI:
         execBringNezumi();
         break;
-    case 0:
-    case 1:
+    case STATUS_UNK0:
+    case STATUS_UNK1:
         if (checkActionNow()) {
-            mItemStatus = 1;
+            mItemStatus = STATUS_UNK1;
         } else {
-            mItemStatus = 0;
+            mItemStatus = STATUS_UNK0;
         }
     case STATUS_WAIT_MAIN:
         execWaitMain();
@@ -317,25 +317,25 @@ void daItem_c::mode_proc_call() {
         (this->*mode_proc[mMode])();
     }
     
-    if (checkFlag(0x08)) {
+    if (checkFlag(FLAG_BOOMERANG)) {
         fopAc_ac_c* boomerang = (fopAc_ac_c*)fopAcM_SearchByName(PROC_BOOMERANG);
         if (boomerang) {
             current.pos = boomerang->current.pos;
         } else {
-            clrFlag(0x08);
+            clrFlag(FLAG_BOOMERANG);
         }
     }
     
-    if (checkFlag(0x40)) {
+    if (checkFlag(FLAG_HOOK)) {
         fopAc_ac_c* grappling_hook = (fopAc_ac_c*)fopAcM_SearchByName(PROC_HIMO2);
         if (grappling_hook) {
             current.pos = grappling_hook->current.pos;
         } else {
-            clrFlag(0x40);
+            clrFlag(FLAG_HOOK);
         }
     }
     
-    if (mType == 1 && (fopAcM_checkHookCarryNow(this) || checkFlag(0x08))) {
+    if (mType == 1 && (fopAcM_checkHookCarryNow(this) || checkFlag(FLAG_BOOMERANG))) {
         mType = 3;
     }
 }
@@ -447,13 +447,13 @@ void daItem_c::execWaitMain() {
     }
     mode_proc_call();
     
-    if (!checkFlag(0x02)) {
-        f32 temp1 = mScaleTarget.x / getData()->mScaleAnimSpeed;
-        f32 temp2 = mScaleTarget.y / getData()->mScaleAnimSpeed;
-        f32 temp3 = mScaleTarget.z / getData()->mScaleAnimSpeed;
-        cLib_chaseF(&mScale.x, mScaleTarget.x, temp1);
-        cLib_chaseF(&mScale.y, mScaleTarget.y, temp2);
-        cLib_chaseF(&mScale.z, mScaleTarget.z, temp3);
+    if (!checkFlag(FLAG_UNK02)) {
+        f32 scaleStepX = mScaleTarget.x / getData()->mScaleAnimSpeed;
+        f32 scaleStepY = mScaleTarget.y / getData()->mScaleAnimSpeed;
+        f32 scaleStepZ = mScaleTarget.z / getData()->mScaleAnimSpeed;
+        cLib_chaseF(&mScale.x, mScaleTarget.x, scaleStepX);
+        cLib_chaseF(&mScale.y, mScaleTarget.y, scaleStepY);
+        cLib_chaseF(&mScale.z, mScaleTarget.z, scaleStepZ);
     }
     
     if (checkItemDisappear() && mDisappearTimer == 0) {
@@ -468,7 +468,7 @@ void daItem_c::execWaitMain() {
     }
     
     if (!dItem_data::chkFlag(m_itemNo, 2)) {
-        if (mActivationSwitch == 0xFF || (mActivationSwitch != 0xFF && fopAcM_isSwitch(this, mActivationSwitch))) {
+        if (mCollideSwitchNo == 0xFF || (mCollideSwitchNo != 0xFF && fopAcM_isSwitch(this, mCollideSwitchNo))) {
             mCyl.SetC(current.pos);
             dComIfG_Ccsp()->Set(&mCyl);
         }
@@ -761,7 +761,7 @@ void daItem_c::itemGetExecute() {
     
     fopAcM_onItemForIb(mItemBitNo, m_itemNo, current.roomNo);
     
-    clrFlag(0x04);
+    clrFlag(FLAG_UNK04);
     
     mCyl.SetTgType(0);
     mCyl.OffCoSetBit();
@@ -783,10 +783,10 @@ BOOL daItem_c::checkItemDisappear() {
         disappearing = FALSE;
         show();
     }
-    if (checkFlag(0x02)) {
+    if (checkFlag(FLAG_UNK02)) {
         disappearing = FALSE;
     }
-    if (checkFlag(0x10)) {
+    if (checkFlag(FLAG_UNK10)) {
         disappearing = FALSE;
     }
     if (dItem_data::chkFlag(m_itemNo, 0x01)) {
@@ -795,10 +795,10 @@ BOOL daItem_c::checkItemDisappear() {
     if (dComIfGp_event_runCheck()) {
         disappearing = FALSE;
     }
-    if (mItemStatus == 4) {
+    if (mItemStatus == STATUS_UNK4) {
         disappearing = FALSE;
     }
-    if (checkFlag(0x08) || checkFlag(0x40) || fopAcM_checkStatus(this, fopAcStts_HOOK_CARRY_e)) {
+    if (checkFlag(FLAG_BOOMERANG) || checkFlag(FLAG_HOOK) || fopAcM_checkStatus(this, fopAcStts_HOOK_CARRY_e)) {
         disappearing = FALSE;
         show();
     }
@@ -808,7 +808,7 @@ BOOL daItem_c::checkItemDisappear() {
 /* 800F6E54-800F6E74       .text setItemTimer__8daItem_cFi */
 void daItem_c::setItemTimer(int timer) {
     if (timer == -1) {
-        setFlag(0x10);
+        setFlag(FLAG_UNK10);
         return;
     }
     mDisappearTimer = timer;
@@ -840,14 +840,14 @@ BOOL daItem_c::itemActionForRupee() {
         
         mOnGroundTimer++;
         if (mOnGroundTimer >= 2) {
-            clrFlag(0x04);
+            clrFlag(FLAG_UNK04);
         }
         
         set_bound_se();
     } else if (mAcch.ChkGroundHit()) {
         itemDefaultRotateY();
         speedF = 0.0f;
-        clrFlag(0x04);
+        clrFlag(FLAG_UNK04);
         mOnGroundTimer = 1;
     }
     
@@ -863,7 +863,7 @@ BOOL daItem_c::itemActionForRupee() {
         mTargetAngleX = 0;
     }
     
-    if (!checkFlag(0x02)) {
+    if (!checkFlag(FLAG_UNK02)) {
         cLib_chaseAngleS(&current.angle.x, mTargetAngleX, field_0x654);
     }
     
@@ -881,7 +881,7 @@ BOOL daItem_c::itemActionForHeart() {
     mAcch.CrrPos(*dComIfG_Bgsp());
     
     if (mAcch.ChkGroundLanding() || mAcch.ChkGroundHit()) {
-        clrFlag(0x04);
+        clrFlag(FLAG_UNK04);
         mExtraZRot = 0;
         speed.set(0.0f, -1.0f, 0.0f);
         speedF = 0.0f;
@@ -913,13 +913,13 @@ BOOL daItem_c::itemActionForKey() {
         
         mOnGroundTimer++;
         if (mOnGroundTimer >= 2) {
-            clrFlag(0x04);
+            clrFlag(FLAG_UNK04);
         }
     } else if (mAcch.ChkGroundHit()) {
         mOnGroundTimer = 1;
         mTargetAngleX = 0;
         current.angle.x = 0;
-        clrFlag(0x04);
+        clrFlag(FLAG_UNK04);
         itemDefaultRotateY();
     }
     
@@ -973,7 +973,7 @@ BOOL daItem_c::itemActionForSword() {
     mAcch.CrrPos(*dComIfG_Bgsp());
     
     bool isQuake = dComIfGp_getDetect().chk_quake(&current.pos);
-    if (isQuake && !checkFlag(0x20) && mAcch.ChkGroundHit()) {
+    if (isQuake && !checkFlag(FLAG_QUAKE) && mAcch.ChkGroundHit()) {
         speed.set(0.0f, 21.0f, 0.0f);
         mGravity = -3.5f;
     }
@@ -1027,9 +1027,9 @@ BOOL daItem_c::itemActionForSword() {
     }
     
     if (isQuake) {
-        setFlag(0x20);
+        setFlag(FLAG_QUAKE);
     } else {
-        clrFlag(0x20);
+        clrFlag(FLAG_QUAKE);
     }
     
     return TRUE;
@@ -1178,7 +1178,7 @@ BOOL daItem_c::checkGetItem() {
                 itemGetExecute();
                 return TRUE;
             } else if (atType & AT_TYPE_BOOMERANG) {
-                setFlag(0x08);
+                setFlag(FLAG_BOOMERANG);
             }
         }
     }
@@ -1233,7 +1233,7 @@ void daItem_c::mode_water_init() {
     current.angle.x = 0;
     mExtraZRot = 0;
     field_0x654 = 0;
-    clrFlag(0x04);
+    clrFlag(FLAG_UNK04);
     mScale.set(mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
     
     cXyz scale;
@@ -1248,7 +1248,7 @@ void daItem_c::mode_water_init() {
 
 /* 800F80CC-800F844C       .text mode_wait__8daItem_cFv */
 void daItem_c::mode_wait() {
-    if (checkFlag(0x04) && dItem_data::checkAppearEffect(m_itemNo)) {
+    if (checkFlag(FLAG_UNK04) && dItem_data::checkAppearEffect(m_itemNo)) {
         u16 appearEffect = dItem_data::getAppearEffect(m_itemNo);
         dComIfGp_particle_setSimple(appearEffect, &current.pos, 0xFF, g_whiteColor, g_whiteColor, 0);
     }
@@ -1335,7 +1335,7 @@ void daItem_c::mode_water() {
 
 /* 800F8528-800F8950       .text initAction__8daItem_cFv */
 BOOL daItem_c::initAction() {
-    if (checkFlag(0x02)) {
+    if (checkFlag(FLAG_UNK02)) {
         mScale.set(mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
         
         switch (mAction) {
@@ -1362,7 +1362,7 @@ BOOL daItem_c::initAction() {
         }
         
         mGravity = getData()->mFieldItemGravity;
-        clrFlag(0x04);
+        clrFlag(FLAG_UNK04);
         mMode = 0;
         
         return TRUE;
@@ -1435,7 +1435,7 @@ BOOL daItem_c::initAction() {
     
     mMode = 0;
     
-    setFlag(0x04);
+    setFlag(FLAG_UNK04);
     
     return TRUE;
 }
