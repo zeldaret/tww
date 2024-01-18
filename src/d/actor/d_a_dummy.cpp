@@ -4,39 +4,103 @@
 //
 
 #include "d/actor/d_a_dummy.h"
-#include "dolphin/types.h"
+#include "d/d_procname.h"
+#include "f_op/f_op_actor_mng.h"
+#include "m_Do/m_Do_mtx.h"
 
 /* 00000078-0000009C       .text solidHeapCB__Q27daDummy5Act_cFP10fopAc_ac_c */
-void daDummy::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daDummy::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((Act_c*)i_this)->create_heap();
 }
 
 /* 0000009C-000000A4       .text create_heap__Q27daDummy5Act_cFv */
-void daDummy::Act_c::create_heap() {
-    /* Nonmatching */
+bool daDummy::Act_c::create_heap() {
+    return 1;  
 }
 
 /* 000000A4-0000015C       .text _create__Q27daDummy5Act_cFv */
-s32 daDummy::Act_c::_create() {
-    /* Nonmatching */
+s32 daDummy::Act_c::_create() {  
+    fopAcM_SetupActor(this, Act_c);
+
+    if (fopAcM_entrySolidHeap(this, solidHeapCB, 0) != 0) {
+        set_mtx();
+        fopAcM_SetMtx(this, field_0x29c);
+        fopAcM_setCullSizeBox(this, -100.0, -1000.0, -100.0, 100.0, 100.0, 100.0);
+    }
+    return cPhs_COMPLEATE_e;
 }
 
 /* 0000015C-00000164       .text _delete__Q27daDummy5Act_cFv */
-BOOL daDummy::Act_c::_delete() {
-    /* Nonmatching */
+bool daDummy::Act_c::_delete() {
+    return 1; 
 }
 
 /* 00000164-000001CC       .text set_mtx__Q27daDummy5Act_cFv */
 void daDummy::Act_c::set_mtx() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    cMtx_copy(mDoMtx_stack_c::get(), field_0x29c);
 }
 
 /* 000001CC-000001D4       .text _execute__Q27daDummy5Act_cFv */
-BOOL daDummy::Act_c::_execute() {
-    /* Nonmatching */
+bool daDummy::Act_c::_execute() {
+    return 1; 
 }
 
 /* 000001D4-000001DC       .text _draw__Q27daDummy5Act_cFv */
-BOOL daDummy::Act_c::_draw() {
-    /* Nonmatching */
+bool daDummy::Act_c::_draw() {
+    return 1; 
 }
+
+inline daDummy::Act_c::~Act_c() {}
+
+
+namespace daDummy {
+    namespace {
+        s32 Mthd_Create(void* i_this) {
+            return static_cast<Act_c*>(i_this)->_create();
+        }
+        
+        BOOL Mthd_Delete(void* i_this) {
+            return static_cast<Act_c*>(i_this)->_delete();
+        }
+        
+        BOOL Mthd_Execute(void* i_this) {
+            return static_cast<Act_c*>(i_this)->_execute();
+        }
+        
+        BOOL Mthd_Draw(void* i_this) {
+            return ((Act_c*)i_this)->_draw();
+        }
+        
+        BOOL Mthd_IsDelete(void* i_this) {
+            return 1;
+        }
+        static actor_method_class Mthd_Table = {
+            (process_method_func)Mthd_Create,
+            (process_method_func)Mthd_Delete,
+            (process_method_func)Mthd_Execute,
+            (process_method_func)Mthd_IsDelete,
+            (process_method_func)Mthd_Draw,
+        };
+    }
+}
+
+actor_process_profile_definition g_profile_Dummy = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 7,
+    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ProcName     */ PROC_Dummy,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daDummy::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x0060,
+    /* Actor SubMtd */ &daDummy::Mthd_Table,
+    /* Status       */ fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};
+
+
