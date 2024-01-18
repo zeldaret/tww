@@ -60,7 +60,10 @@ public:
     // TODO
     void ChkSafe(const void*, unsigned int) const {}
     void ChkSetInf() const {}
-    void SetPolyIndex(int) {}
+    void SetPolyIndex(int poly_index) {
+        JUT_ASSERT(0x7b, 0 <= poly_index);
+        mPolyIndex = poly_index;
+    }
 };  // Size: 0x10
 
 STATIC_ASSERT(sizeof(cBgS_PolyInfo) == 0x10);

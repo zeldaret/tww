@@ -217,7 +217,7 @@ void daGhostship_c::createInit() {
     }
 
     mCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&fopAcM_GetPosition_p(this), &fopAcM_GetOldPosition_p(this), this, 1, &mCir, &fopAcM_GetSpeed_p(this));
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mCir, fopAcM_GetSpeed_p(this));
     mAcch.SetWallNone();
     mAcch.SetRoofNone();
     dLib_waveRot(&current.pos, 0.0f, &mWave);

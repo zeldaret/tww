@@ -165,7 +165,7 @@ void* cBgS::ConvDzb(void* work) {
 
     pbgd->m_t_tbl = (cBgD_Tri_t*)((u32)pbgd->m_t_tbl + (u32)pbgd);
     pbgd->m_b_tbl = (cBgD_Blk_t*)((u32)pbgd->m_b_tbl + (u32)pbgd);
-    pbgd->m_tree_tbl = (void*)((u32)pbgd->m_tree_tbl + (u32)pbgd);
+    pbgd->m_tree_tbl = (cBgD_Tree_t*)((u32)pbgd->m_tree_tbl + (u32)pbgd);
     pbgd->m_g_tbl = (cBgD_Grp_t*)((u32)pbgd->m_g_tbl + (u32)pbgd);
     pbgd->m_ti_tbl = (cBgD_Ti_t*)((u32)pbgd->m_ti_tbl + (u32)pbgd);
 

@@ -809,9 +809,9 @@ static s32 daBk_Create(fopAc_ac_c* i_actor) {
         }
         
         i_this->mDamageReaction.mAcch.Set(
-            &fopAcM_GetPosition_p(i_this), &fopAcM_GetOldPosition_p(i_this),
+            fopAcM_GetPosition_p(i_this), fopAcM_GetOldPosition_p(i_this),
             i_this, 1, &i_this->mDamageReaction.mAcchCir,
-            &fopAcM_GetSpeed_p(i_this)
+            fopAcM_GetSpeed_p(i_this)
         );
         i_this->mDamageReaction.mAcchCir.SetWall(40.0f, 40.0f);
         i_this->mDamageReaction.mAcch.ClrRoofNone();

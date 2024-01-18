@@ -181,11 +181,6 @@ BOOL daObjAjav::Act_c::_execute() {
     /* Nonmatching */
 }
 
-/* 00002CF4-00002D50       .text set_se_pos__Q29daObjAjav6Part_cF4cXyz */
-void daObjAjav::Part_c::set_se_pos(cXyz) {
-    /* Nonmatching */
-}
-
 /* 00002D50-00002DCC       .text _draw__Q29daObjAjav5Act_cFv */
 BOOL daObjAjav::Act_c::_draw() {
     /* Nonmatching */

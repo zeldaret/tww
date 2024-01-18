@@ -6,6 +6,8 @@
 #include "d/actor/d_a_kui.h"
 #include "dolphin/types.h"
 
+class J3DModelData;
+
 /* 00000078-000000C4       .text s_a_i_sub__FPvPv */
 void s_a_i_sub(void*, void*) {
     /* Nonmatching */

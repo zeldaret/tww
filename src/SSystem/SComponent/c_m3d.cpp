@@ -179,7 +179,7 @@ int cM3d_Check_LinLin(const cM3dGLin* lin_a, const cM3dGLin* lin_b, f32* dst_a, 
         VECScale(&linAVec, &linAVec, invLinALen);
         VECScale(&linBVec, &linBVec, invLinBLen);
         Vec tmp;
-        VECSubtract(&lin_a->GetStartP(), &lin_b->GetStartP(), &tmp);
+        VECSubtract(lin_a->GetStartP(), lin_b->GetStartP(), &tmp);
         f32 tmpF = -VECDotProduct(&linAVec, &linBVec);
         f32 tmpF2 = VECDotProduct(&tmp, &linAVec);
         VECSquareMag(&tmp);  // result not used
@@ -217,22 +217,22 @@ int cM3d_Check_LinLin(const cM3dGLin* lin_a, const cM3dGLin* lin_b, f32* dst_a, 
 
 /* 8024ACA8-8024AE3C       .text cM3d_Cross_LinPla__FPC8cM3dGLinPC8cM3dGPlaP3Vecbb */
 bool cM3d_Cross_LinPla(const cM3dGLin* lin, const cM3dGPla* pla, Vec* dst, bool a, bool b) {
-    f32 startVal = pla->getPlaneFunc(&lin->GetStartP());
-    f32 endVal = pla->getPlaneFunc(&lin->GetEndP());
+    f32 startVal = pla->getPlaneFunc(lin->GetStartP());
+    f32 endVal = pla->getPlaneFunc(lin->GetEndP());
     if (startVal * endVal > 0.0f) {
-        *dst = lin->GetEndP();
+        *dst = *lin->GetEndP();
         return false;
     } else {
         if (startVal >= 0.0f && endVal <= 0.0f) {
             if (a) {
-                return cM3d_CrossInfLineVsInfPlane_proc(startVal, endVal, &lin->GetStartP(), &lin->GetEndP(), dst);
+                return cM3d_CrossInfLineVsInfPlane_proc(startVal, endVal, lin->GetStartP(), lin->GetEndP(), dst);
             }
         } else {
             if (b) {
-                return cM3d_CrossInfLineVsInfPlane_proc(startVal, endVal, &lin->GetStartP(), &lin->GetEndP(), dst);
+                return cM3d_CrossInfLineVsInfPlane_proc(startVal, endVal, lin->GetStartP(), lin->GetEndP(), dst);
             }
         }
-        *dst = lin->GetEndP();
+        *dst = *lin->GetEndP();
         return false;
     }
 }
@@ -540,22 +540,22 @@ int cM3d_2PlaneCrossLine(const cM3dGPla& pPlaneA, const cM3dGPla& pPlaneB, cM3dG
         if (absTX >= absTY && absTX >= absTZ) {
             cM3d_PlaneCrossLineProcWork(pPlaneA.GetNP()->y, pPlaneA.GetNP()->z, pPlaneB.GetNP()->y,
                                         pPlaneB.GetNP()->z, tmp.x, pPlaneA.GetD(), pPlaneB.GetD(),
-                                        &pLinOut->GetStartP().y, &pLinOut->GetStartP().z);
-            pLinOut->GetStartP().x = 0.0f;
+                                        &pLinOut->GetStartP()->y, &pLinOut->GetStartP()->z);
+            pLinOut->GetStartP()->x = 0.0f;
         } else if (absTY >= absTX && absTY >= absTZ) {
             cM3d_PlaneCrossLineProcWork(pPlaneA.GetNP()->z, pPlaneA.GetNP()->x, pPlaneB.GetNP()->z,
                                         pPlaneB.GetNP()->x, tmp.y, pPlaneA.GetD(), pPlaneB.GetD(),
-                                        &pLinOut->GetStartP().z, &pLinOut->GetStartP().x);
-            pLinOut->GetStartP().y = 0.0f;
+                                        &pLinOut->GetStartP()->z, &pLinOut->GetStartP()->x);
+            pLinOut->GetStartP()->y = 0.0f;
         } else {
             cM3d_PlaneCrossLineProcWork(pPlaneA.GetNP()->x, pPlaneA.GetNP()->y, pPlaneB.GetNP()->x,
                                         pPlaneB.GetNP()->y, tmp.z, pPlaneA.GetD(), pPlaneB.GetD(),
-                                        &pLinOut->GetStartP().x, &pLinOut->GetStartP().y);
-            pLinOut->GetStartP().z = 0.0f;
+                                        &pLinOut->GetStartP()->x, &pLinOut->GetStartP()->y);
+            pLinOut->GetStartP()->z = 0.0f;
         }
-        f32 scale = VECMag(&pLinOut->GetStartP());
+        f32 scale = VECMag(pLinOut->GetStartP());
         VECScale(&tmp, &tmp, scale);
-        VECAdd(&pLinOut->GetStartP(), &tmp, &pLinOut->GetEndP());
+        VECAdd(pLinOut->GetStartP(), &tmp, pLinOut->GetEndP());
         return 1;
     }
 }
@@ -585,13 +585,13 @@ f32 cM3d_lineVsPosSuisenCross(const cM3dGLin* g_lin, const Vec* pt, Vec* dst) {
     }
 
     Vec p0_v;
-    VECSubtract(pt, &g_lin->GetStartP(), &p0_v);
+    VECSubtract(pt, g_lin->GetStartP(), &p0_v);
     f32 dot = VECDotProduct(&p0_v, &lin);
     f32 v = dot / len;
 
     Vec ret;
     VECScale(&lin, &ret, v);
-    VECAdd(&ret, &g_lin->GetStartP(), dst);
+    VECAdd(&ret, g_lin->GetStartP(), dst);
     return v;
 }
 

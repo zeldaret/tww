@@ -15,7 +15,3 @@ s32 daTagAttention::Act_c::_create() {
 BOOL daTagAttention::Act_c::_execute() {
     /* Nonmatching */
 }
-/* 000005C4-000007E0       .text chk_inside__Q214daTagAttention5Act_cCFP4cXyz */
-void daTagAttention::Act_c::chk_inside(cXyz*) const {
-    /* Nonmatching */
-}

@@ -6,6 +6,9 @@
 #include "d/actor/d_a_saku.h"
 #include "dolphin/types.h"
 
+class J3DModelData;
+class J3DMaterial;
+
 /* 000000EC-00000200       .text CreateInit__8daSaku_cFv */
 void daSaku_c::CreateInit() {
     /* Nonmatching */
@@ -127,7 +130,7 @@ static s32 daSaku_Create(fopAc_ac_c*) {
 }
 
 /* 00001BB8-00001F28       .text _daSaku_create__8daSaku_cFv */
-void daSaku_c::_daSaku_create() {
+s32 daSaku_c::_daSaku_create() {
     /* Nonmatching */
 }
 

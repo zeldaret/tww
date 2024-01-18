@@ -4,6 +4,23 @@
 #include "f_op/f_op_actor.h"
 #include "SSystem/SComponent/c_phase.h"
 
+class daMajuu_Flag_packet_c {
+public:
+    void changeCurrentPos() {}
+    void getImageTexObj() {}
+    void getMtx() {}
+    void getNrm() {}
+    void getOffsetVec() {}
+    void getPos() {}
+    void getToonTexObj() {}
+    void setTevStr(dKy_tevstr_c*) {}
+
+    void setNrmMtx();
+    void setBackNrm();
+    void setNrmVtx(cXyz*, int);
+    void draw();
+};
+
 class daMajuu_Flag_c : public fopAc_ac_c {
 public:
     void setBaseScale(float) {}

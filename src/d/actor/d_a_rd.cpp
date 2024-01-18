@@ -839,7 +839,7 @@ void daRd_c::modeDeath() {
     fopAcM_onActor(this);
     
     // Do not consider the ReDead to be a living enemy while its death animation is playing out.
-    mGroup = fopAc_ENV_e;
+    fopAcM_SetGroup(this, fopAc_ENV_e);
     
     if (cLib_calcTimer(&mTimer1) == 0) {
         fopAcM_createDisappear(this, &current.pos, 5);
@@ -1773,7 +1773,7 @@ void daRd_c::createInit() {
     mCyl.Set(m_cyl_src);
     mCyl.SetStts(&mStts);
     mAcchCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&fopAcM_GetPosition_p(this), &fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, &fopAcM_GetSpeed_p(this));
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
     mAcch.SetRoofNone();
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     mJntCtrl.setHeadJntNum(0x0A); // ree_kubi_1

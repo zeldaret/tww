@@ -27,7 +27,7 @@ void daPy_lk_c::setSwordModel(BOOL r28) {
         /* 0x0E */ u16 tipStabBrk;
     };
     static const sword_model_tbl_s sword_model_tbl[] = {
-	    {
+        {
             LINK_BDL_SWA,
             LINK_BDL_YHSLS00,
             LKANM_BTK_YHSLS00,
@@ -37,7 +37,7 @@ void daPy_lk_c::setSwordModel(BOOL r28) {
             LKANM_BTK_CUTFH,
             LKANM_BRK_CUTFH
         },
-	    {
+        {
             LINK_BDL_SWMS,
             LINK_BDL_YMSLI00,
             LKANM_BTK_YMSLI00,

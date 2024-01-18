@@ -6,7 +6,7 @@
 class daObjVtil_c : public fopAc_ac_c {
 public:
     void camera_off() {}
-    void check_ev_bit() const {}
+    void check_ev_bit() const; // weak but not inlined?
     void prm_get_type() const {}
 
     void solidHeapCB(fopAc_ac_c*);

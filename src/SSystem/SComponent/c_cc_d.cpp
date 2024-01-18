@@ -358,17 +358,17 @@ bool cCcD_CpsAttr::GetNVec(const cXyz& vec, cXyz* dst) const {
         return false;
 
     cXyz p0_v;
-    VECSubtract(&vec, &GetStartP(), &p0_v);
+    VECSubtract(&vec, GetStartP(), &p0_v);
     f32 dot = p0_v.getDotProduct(lin) / len;
 
     cXyz pt;
     if (dot < 0.0f) {
-        pt.set(GetStartP());
+        pt.set(*GetStartP());
     } else if (dot > 1.0f) {
-        pt.set(GetEndP());
+        pt.set(*GetEndP());
     } else {
         VECScale(&lin, &lin, dot);
-        VECAdd(&lin, &GetStartP(), &pt);
+        VECAdd(&lin, GetStartP(), &pt);
     }
 
     VECSubtract(&vec, &pt, dst);

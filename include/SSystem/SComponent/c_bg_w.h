@@ -35,7 +35,7 @@ public:
 struct cBgD_Vtx_t;
 
 struct cBgD_Blk_t {
-    /* 0x0 */ u16 field_0x00;
+    /* 0x00 */ u16 startTri;
 };
 
 struct cBgD_Ti_t {
@@ -69,9 +69,18 @@ struct cBgD_Grp_t {
     /* 0x30 */ u32 m_info;
 }; // Size: 0x34
 
+struct cBgD_Tree_t {
+    /* 0x00 */ u16 mFlag;
+    /* 0x02 */ u16 mParent;
+    union {
+        /* 0x04 */ u16 mChild[8]; // branch
+        /* 0x04 */ u16 mBlock; // leaf
+    };
+}; // Size: 0x14
+
 class cBgW_NodeTree : public cM3dGAab {
 public:
-    virtual ~cBgW_NodeTree();
+    virtual ~cBgW_NodeTree() {}
 };
 
 class cBgD_t {
@@ -83,7 +92,7 @@ public:
     /* 0x10 */ s32 m_b_num;
     /* 0x14 */ cBgD_Blk_t* m_b_tbl;
     /* 0x18 */ s32 m_tree_num;
-    /* 0x1C */ void* m_tree_tbl;
+    /* 0x1C */ cBgD_Tree_t* m_tree_tbl;
     /* 0x20 */ s32 m_g_num;
     /* 0x24 */ cBgD_Grp_t* m_g_tbl;
     /* 0x28 */ s32 m_ti_num;
@@ -104,7 +113,13 @@ public:
     virtual ~cBgW_RwgElm() {}
 };
 
-class cBgW_BlkElm;
+class cBgW_BlkElm {
+public:
+    /* 0x00 */ u16 roof;
+    /* 0x02 */ u16 wall;
+    /* 0x04 */ u16 ground;
+};
+
 class cBgW_TriElm {
 public:
     /* 0x00 */ cM3dGPla m_plane;
@@ -126,6 +141,7 @@ public:
         MOVE_BG_e = 0x1,
         NO_VTX_TBL_e = 0x10,
         GLOBAL_e = 0x20,
+        UNK40_e = 0x40,
         LOCK_e = 0x80,
     };
 
@@ -137,8 +153,7 @@ public:
 
     void FreeArea();
     void GlobalVtx();
-    void SetVtx();
-    
+    bool SetVtx();
     bool SetTri();
     void BlckConnect(u16*, int*, int);
     void MakeBlckTransMinMax(cXyz*, cXyz*);
@@ -149,13 +164,13 @@ public:
     void MakeNodeTree();
     bool ChkMemoryError();
     bool Set(cBgD_t*, u32, f32(*)[3][4]);
-    void RwgLineCheck(u16, cBgS_LinChk*);
-    void LineCheckRp(cBgS_LinChk*, int);
+    bool RwgLineCheck(u16, cBgS_LinChk*);
+    bool LineCheckRp(cBgS_LinChk*, int);
     bool LineCheckGrpRp(cBgS_LinChk*, int, int);
     bool RwgGroundCheckCommon(f32, u16, cBgS_GndChk*);
     bool RwgGroundCheckGnd(u16, cBgS_GndChk*);
     bool RwgGroundCheckWall(u16, cBgS_GndChk*);
-    void GroundCrossRp(cBgS_GndChk*, int);
+    bool GroundCrossRp(cBgS_GndChk*, int);
     bool GroundCrossGrpRp(cBgS_GndChk*, int, int);
     void CopyOldMtx();
     void Move();
@@ -247,7 +262,7 @@ public:
     /* 0x7C */ cXyz mTransVel;
     /* 0x88 */ cBgW_TriElm* pm_tri;
     /* 0x8C */ cBgW_RwgElm* pm_rwg;
-    /* 0x90 */ cXyz* pm_vtx_tbl;
+    /* 0x90 */ Vec* pm_vtx_tbl;
     /* 0x94 */ cBgD_t* pm_bgd;
     /* 0x98 */ cBgW_BlkElm* pm_blk;
     /* 0x9C */ cBgW_GrpElm* pm_grp;

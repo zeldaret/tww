@@ -4,7 +4,7 @@
 //
 
 #include "d/actor/d_a_beam.h"
-#include "dolphin/types.h"
+#include "d/d_cc_d.h"
 
 /* 000000EC-00000118       .text __ct__12daBeam_HIO_cFv */
 daBeam_HIO_c::daBeam_HIO_c() {

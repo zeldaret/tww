@@ -129,8 +129,20 @@ inline s16 fopAcM_GetProfName(void* pActor) {
     return fpcM_GetProfName(pActor);
 }
 
+inline actor_process_profile_definition* fopAcM_GetProfile(void* pActor) {
+    return (actor_process_profile_definition*)fpcM_GetProfile(pActor);
+}
+
+inline void fopAcM_SetPriority(void* pActor, int priority) {
+    fpcM_SetPriority(pActor, priority);
+}
+
 inline u8 fopAcM_GetGroup(fopAc_ac_c* p_actor) {
     return p_actor->mGroup;
+}
+
+inline void fopAcM_SetGroup(fopAc_ac_c* pActor, u8 group) {
+    pActor->mGroup = group;
 }
 
 inline void fopAcM_OnStatus(fopAc_ac_c* pActor, u32 flag) {
@@ -154,28 +166,32 @@ inline fopAc_ac_c* fopAcM_Search(fopAcIt_JudgeFunc func, void* param) {
     return (fopAc_ac_c*)fopAcIt_Judge(func, param);
 }
 
-inline cXyz& fopAcM_GetPosition_p(fopAc_ac_c* pActor) {
-    return pActor->current.pos;
+inline cXyz* fopAcM_GetPosition_p(fopAc_ac_c* pActor) {
+    return &pActor->current.pos;
 }
 
 inline cXyz& fopAcM_GetPosition(fopAc_ac_c* pActor) {
     return pActor->current.pos;
 }
 
-inline cXyz& fopAcM_GetOldPosition_p(fopAc_ac_c* pActor) {
-    return pActor->old.pos;
+inline cXyz* fopAcM_GetOldPosition_p(fopAc_ac_c* pActor) {
+    return &pActor->old.pos;
 }
 
-inline cXyz& fopAcM_GetSpeed_p(fopAc_ac_c* pActor) {
+inline cXyz* fopAcM_GetSpeed_p(fopAc_ac_c* pActor) {
+    return &pActor->speed;
+}
+
+inline cXyz& fopAcM_GetSpeed(fopAc_ac_c* pActor) {
     return pActor->speed;
 }
 
-inline csXyz& fopAcM_GetAngle_p(fopAc_ac_c* pActor) {
-    return pActor->current.angle;
+inline csXyz* fopAcM_GetAngle_p(fopAc_ac_c* pActor) {
+    return &pActor->current.angle;
 }
 
-inline csXyz& fopAcM_GetShapeAngle_p(fopAc_ac_c* pActor) {
-    return pActor->shape_angle;
+inline csXyz* fopAcM_GetShapeAngle_p(fopAc_ac_c* pActor) {
+    return &pActor->shape_angle;
 }
 
 inline bool fopAcM_CheckCondition(fopAc_ac_c* p_actor, u32 flag) {
@@ -276,6 +292,10 @@ inline void fopAcM_setCullSizeFar(fopAc_ac_c* i_actor, f32 i_far) {
 
 inline f32 fopAcM_getCullSizeFar(fopAc_ac_c* i_actor) {
     return i_actor->mCullSizeFar;
+}
+
+inline void fopAcM_SetCullSize(fopAc_ac_c* i_actor, int i_culltype) {
+    i_actor->mCullType = i_culltype;
 }
 
 inline int fopAcM_GetCullSize(fopAc_ac_c* i_actor) {
@@ -588,5 +608,11 @@ inline void fopAcM_onDraw(fopAc_ac_c* actor) {
 inline void fopAcM_offDraw(fopAc_ac_c* actor) {
     fopDwTg_DrawQTo(&actor->mDwTg);
 }
+
+inline void fopAcM_getCullSizeBoxMax(fopAc_ac_c*) {}
+inline void fopAcM_getCullSizeBoxMin(fopAc_ac_c*) {}
+inline void fopAcM_monsSeStart(fopAc_ac_c*, unsigned long, Vec*, unsigned long) {}
+inline void fopAcM_getNameString(fopAc_ac_c*, char*) {}
+inline void fopAcM_orderOtherEvent(fopAc_ac_c*, char*, unsigned short) {}
 
 #endif

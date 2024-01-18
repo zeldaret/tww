@@ -4,6 +4,9 @@
 #include "f_op/f_op_actor.h"
 
 namespace daComing3 {
+    static void position_is_safety_call_back(void*, void*);
+    static void position_is_none_obj(cXyz*);
+    
     class Act_c : public fopAc_ac_c {
     public:
         void get_water_height(float*, int*, const cXyz*);

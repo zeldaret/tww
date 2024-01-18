@@ -122,7 +122,7 @@ public:
         return isPushingReset;
     }
 
-    inline void stopMotorWave() { mRumble.stopPatternedRumbleAtThePeriod(); }
+    void stopMotorWave() { mRumble.stopPatternedRumbleAtThePeriod(); }
     void stopMotor() { mRumble.stopMotor(mPortNum); }
     void stopMotorHard() { mRumble.stopMotorHard(mPortNum); }
 

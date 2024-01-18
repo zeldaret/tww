@@ -5,6 +5,8 @@
 
 class daTagPhoto_c : public fopAc_ac_c {
 public:
+    daTagPhoto_c();
+
     void getTagNo() {}
 
     s32 _create();

@@ -5,7 +5,7 @@
 
 class daObjVmsms_c : public fopAc_ac_c {
 public:
-    void check_demo() const {}
+    void check_demo() const; // weak but not inlined?
 
     void solidHeapCB(fopAc_ac_c*);
     void create_heap();

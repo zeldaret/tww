@@ -4,6 +4,10 @@
 #include "f_op/f_op_actor.h"
 
 namespace daObjTry {
+    enum Type_e {
+        
+    };
+    
     class Act_c : public fopAc_ac_c {
     public:
         void attr() const {}

@@ -490,16 +490,16 @@ f32 fopAcM_searchActorDistance2(fopAc_ac_c* i_this, fopAc_ac_c* i_other) {
 
 /* 800253C0-80025470       .text fopAcM_searchActorDistanceXZ__FP10fopAc_ac_cP10fopAc_ac_c */
 f32 fopAcM_searchActorDistanceXZ(fopAc_ac_c* i_this, fopAc_ac_c* i_other) {
-    cXyz& this_pos = fopAcM_GetPosition_p(i_this);
-    cXyz& other_pos = fopAcM_GetPosition_p(i_other);
-    return (other_pos - this_pos).absXZ();
+    cXyz* this_pos = fopAcM_GetPosition_p(i_this);
+    cXyz* other_pos = fopAcM_GetPosition_p(i_other);
+    return (*other_pos - *this_pos).absXZ();
 }
 
 /* 80025470-800254BC       .text fopAcM_searchActorDistanceXZ2__FP10fopAc_ac_cP10fopAc_ac_c */
 f32 fopAcM_searchActorDistanceXZ2(fopAc_ac_c* i_this, fopAc_ac_c* i_other) {
-    cXyz& this_pos = fopAcM_GetPosition_p(i_this);
-    cXyz& other_pos = fopAcM_GetPosition_p(i_other);
-    return (other_pos - this_pos).abs2XZ();
+    cXyz* this_pos = fopAcM_GetPosition_p(i_this);
+    cXyz* other_pos = fopAcM_GetPosition_p(i_other);
+    return (*other_pos - *this_pos).abs2XZ();
 }
 
 /* 800254BC-800255B4       .text fopAcM_rollPlayerCrash__FP10fopAc_ac_cfUl */

@@ -7,6 +7,8 @@
 class J3DMaterial;
 
 namespace daTagLight {
+    static void get_cross_plane_line(cXyz*, float, float, float, float, float, float, float, float, float, float);
+    
     class Act_c : public fopAc_ac_c {
     public:
         enum Prm_e {

@@ -165,19 +165,3 @@ static BOOL daSalvageDraw(void*) {
 static BOOL daSalvageIsDelete(void*) {
     /* Nonmatching */
 }
-
-/* 000025A4-000025EC       .text setPos__11daSalvage_cFi4cXyz */
-void daSalvage_c::setPos(int, cXyz) {
-    /* Nonmatching */
-}
-
-/* 000025EC-00002620       .text getPos__11daSalvage_cFi */
-void daSalvage_c::getPos(int) {
-    /* Nonmatching */
-}
-
-/* 00002620-00002654       .text getScale__11daSalvage_cFi */
-void daSalvage_c::getScale(int) {
-    /* Nonmatching */
-}
-

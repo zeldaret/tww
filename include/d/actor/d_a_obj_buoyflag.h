@@ -7,10 +7,42 @@
 #include "f_op/f_op_actor_mng.h"
 
 namespace daObjBuoyflag {
+    class Act_c;
+    
     enum Type_e {
         
     };
     enum Texture_e {
+        
+    };
+    
+    class Packet_c {
+    public:
+        void calc_pos_gravity(int, int) {}
+        void calc_pos_spd(int, int) {}
+        void calc_pos_spring(int, int) {}
+        void calc_pos_wave(int, int) {}
+        
+        void hasi_nrm_init();
+        void draw_hata(daObjBuoyflag::Act_c*);
+        void draw_hasi(daObjBuoyflag::Act_c*);
+        void draw();
+        void init(daObjBuoyflag::Act_c*);
+        void calc_wind_base(daObjBuoyflag::Act_c*);
+        void calc_pos_spring_near(const cXyz*, const cXyz*, float, float);
+        void calc_pos(daObjBuoyflag::Act_c*);
+        void calc_nrm();
+        void calc(daObjBuoyflag::Act_c*);
+        void update(daObjBuoyflag::Act_c*);
+    };
+    
+    class DrawVtx_c {
+    public:
+        
+    };
+    
+    class MoveVtx_c {
+    public:
         
     };
     
@@ -33,9 +65,9 @@ namespace daObjBuoyflag {
         void jump_to_sea(float, float, short) {}
         void make_barrel2_mine(unsigned int, cXyz*, int, csXyz*, Texture_e, bool) {}
         void make_barrel2_norm(unsigned int, cXyz*, int, csXyz*, Texture_e) {}
-        void attr_type() const {}
+        void attr_type() const; // weak but not inlined?
         void prm_get_noCull() const {}
-        void prm_get_texture() const {}
+        void prm_get_texture() const; // weak but not inlined?
         void prm_get_type() const {}
     
         void mtx_init();

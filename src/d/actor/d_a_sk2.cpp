@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_sk2.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_bg_w_sv.h"
 
 /* 00000078-00000194       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode*, int) {
@@ -45,9 +46,3 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 static s32 daSk2_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
-
-/* 00000C78-00000C7C       .text MatrixCrrPos__6dBgWSvFR13cBgS_PolyInfoPvbP4cXyzP5csXyzP5csXyz */
-void dBgWSv::MatrixCrrPos(cBgS_PolyInfo&, void*, bool, cXyz*, csXyz*, csXyz*) {
-    /* Nonmatching */
-}
-

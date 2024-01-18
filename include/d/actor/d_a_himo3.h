@@ -3,6 +3,10 @@
 
 #include "f_op/f_op_actor.h"
 
+struct himo3_s {
+    
+};
+
 class himo3_class : public fopAc_ac_c {
 public:
     void getPlayerMoveLength() {}

@@ -46,6 +46,10 @@ inline s32 fpcM_ChangeLayerID(void* proc, int layerID) {
     return fpcPi_Change(&((base_process_class*)proc)->mPi, layerID, fpcPi_CURRENT_e, fpcPi_CURRENT_e);
 }
 
+inline void fpcM_SetPriority(void* proc, int priority) {
+    fpcPi_Change(&((base_process_class*)proc)->mPi, fpcLy_CURRENT_e, priority, fpcPi_CURRENT_e);
+}
+
 inline s32 fpcM_IsJustType(int type1, int type2) {
     return fpcBs_Is_JustOfType(type1, type2);
 }

@@ -8,4 +8,14 @@ public:
     /* Place member variables here */
 };
 
+class daBwdg_packet_c {
+public:
+    void getMtx() {}
+    void getNrm() {}
+    void getPos() {}
+    void setTevStr(dKy_tevstr_c*) {}
+
+    void draw();
+};
+
 #endif /* D_A_BWDG_H */

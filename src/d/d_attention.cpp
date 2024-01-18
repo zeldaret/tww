@@ -17,7 +17,6 @@ u32 dAttention_c::act_type_num = 5;
 
 /* 8009D220-8009D268       .text __ct__11dAttParam_cFl */
 dAttParam_c::dAttParam_c(s32) {
-    /* Nonmatching */
     field_0x04 = 45.0f;
     field_0x08 = 30.0f;
     field_0x0c = 90.0f;
@@ -41,7 +40,6 @@ bool dAttDraw_CallBack_c::execute(u16 timing, J3DTransformInfo* xform) {
 
 /* 8009D2E0-8009D654       .text __ct__12dAttention_cFP10fopAc_ac_cUl */
 dAttention_c::dAttention_c(fopAc_ac_c* player, u32 playerNo) {
-    /* Nonmatching */
     mpPlayer = (daPy_lk_c*)player;
     mPlayerNo = playerNo;
     initList(0xFFFFFFFF);
@@ -88,6 +86,7 @@ dAttention_c::dAttention_c(fopAc_ac_c* player, u32 playerNo) {
     mCatch.init();
     mLook[0].init();
     mLook[1].init();
+    new(&mAttParam) dAttParam_c(0);
 }
 
 /* 8009D654-8009D6EC       .text __dt__12dAttention_cFv */

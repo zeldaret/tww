@@ -754,7 +754,7 @@ BOOL daArrow_c::procMove() {
             setStopActorMatrix();
         }
     } else if (dComIfG_Bgsp()->LineCross(&mLinChk)) {
-        cXyz* linEnd = &mLinChk.GetLinP()->GetEndP();
+        cXyz* linEnd = mLinChk.GetLinP()->GetEndP();
         field_0x6a8 = *linEnd;
         current.pos = *linEnd - (speed * 0.25f);
         
