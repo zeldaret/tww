@@ -560,6 +560,11 @@ public:
     u8 getMelodyNum() { return mMelodyNum; }
     void setMelodyNum(u8 melody) { mMelodyNum = melody; }
 
+    u8 getBaseAnimeID() { return mMesgAnime; }
+    void clearBaseAnimeID() { mMesgAnime = 0xFF; }
+    u8 getNowAnimeID() { return mMesgAnimeTagInfo; }
+    void clearNowAnimeID() { mMesgAnimeTagInfo = 0xFF; }
+
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
     /* 0x3DF8 */ dADM mADM;
@@ -2356,6 +2361,22 @@ inline u8 dComIfGp_setMelodyNum() {
 
 inline void dComIfGp_setMelodyNum(u8 melody) {
     g_dComIfG_gameInfo.play.setMelodyNum(melody);
+}
+
+inline u8 dComIfGp_getMesgAnimeAttrInfo() {
+    return g_dComIfG_gameInfo.play.getBaseAnimeID();
+}
+
+inline void dComIfGp_clearMesgAnimeAttrInfo() {
+    g_dComIfG_gameInfo.play.clearBaseAnimeID();
+}
+
+inline u8 dComIfGp_getMesgAnimeTagInfo() {
+    return g_dComIfG_gameInfo.play.getNowAnimeID();
+}
+
+inline void dComIfGp_clearMesgAnimeTagInfo() {
+    g_dComIfG_gameInfo.play.clearNowAnimeID();
 }
 
 /**

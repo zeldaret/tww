@@ -649,7 +649,7 @@ void fopNpc_npc_c::setCollision(f32 radius, f32 height) {
 }
 
 u16 fopNpc_npc_c::talk(int param_1) {
-    u16 mode = 0xFF;
+    u16 status = 0xFF;
 
     if(mCurrMsgBsPcId == fpcM_ERROR_PROCESS_ID_e) {
         if(param_1 == 1) {
@@ -661,26 +661,26 @@ u16 fopNpc_npc_c::talk(int param_1) {
     }
     else {
         if(mpCurrMsg) {
-            mode = mpCurrMsg->mStatus;
-            if(mode == fopMsgStts_MSG_DISPLAYED_e) {
+            status = mpCurrMsg->mStatus;
+            if(status == fopMsgStts_MSG_DISPLAYED_e) {
                 mpCurrMsg->mStatus = next_msgStatus(&mCurrMsgNo);
                 if(mpCurrMsg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
                     fopMsgM_messageSet(mCurrMsgNo);
                 }
             }
-            else if (mode == fopMsgStts_BOX_CLOSED_e) {
+            else if (status == fopMsgStts_BOX_CLOSED_e) {
                 mpCurrMsg->mStatus = fopMsgStts_MSG_DESTROYED_e;
                 mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
             }
 
-            anmAtr(mode);
+            anmAtr(status);
         }
         else {
             mpCurrMsg = fopMsgM_SearchByID(mCurrMsgBsPcId);
         }
     }
 
-    return mode;
+    return status;
 }
 
 bool dNpc_setAnm_2(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileIdx, int soundFileIdx, const char* arcName) {
