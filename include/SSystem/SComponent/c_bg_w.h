@@ -6,6 +6,7 @@
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_m3d_g_aab.h"
 #include "SSystem/SComponent/c_m3d_g_pla.h"
+#include "SSystem/SComponent/c_bg_w_tri_elm.h"
 #include "dolphin/mtx/mtx.h"
 
 class cBgW_BgId {
@@ -118,13 +119,6 @@ public:
     /* 0x00 */ u16 roof;
     /* 0x02 */ u16 wall;
     /* 0x04 */ u16 ground;
-};
-
-class cBgW_TriElm {
-public:
-    /* 0x00 */ cM3dGPla m_plane;
-
-    virtual ~cBgW_TriElm() {}
 };
 
 class cBgW_GrpElm {

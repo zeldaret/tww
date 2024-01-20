@@ -632,9 +632,9 @@ void cBgW::Move() {
                 if (!ChkFlush())
                     return;
             } else {
-                mTransVel.x = mCurMtx[0][3] - (*pm_base)[0][3];
-                mTransVel.y = mCurMtx[1][3] - (*pm_base)[1][3];
-                mTransVel.z = mCurMtx[2][3] - (*pm_base)[2][3];
+                mTransVel.x = (*pm_base)[0][3] - mCurMtx[0][3];
+                mTransVel.y = (*pm_base)[1][3] - mCurMtx[1][3];
+                mTransVel.z = (*pm_base)[2][3] - mCurMtx[2][3];
                 mbNeedsFullTransform = false;
             }
 
