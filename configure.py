@@ -1530,7 +1530,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_ftree"),
     ActorRel(Matching,    "d_a_obj_ganonbed", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_gaship"),
-    ActorRel(NonMatching, "d_a_obj_gaship2"),
+    ActorRel(Matching, "d_a_obj_gaship2"),
     ActorRel(NonMatching, "d_a_obj_gnnbtltaki"),
     ActorRel(NonMatching, "d_a_obj_gnndemotakie"),
     ActorRel(NonMatching, "d_a_obj_gnndemotakis"),
