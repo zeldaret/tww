@@ -6,7 +6,7 @@
 #include "dolphin/types.h"
 
 namespace JASystem {
-    class TSimpleWaveBank : public TWaveBank, TWaveArc {
+    class TSimpleWaveBank : public TWaveBank, public TWaveArc {
     public:
         class TWaveHandle : public JASystem::TWaveHandle {
         public:
