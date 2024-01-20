@@ -4,39 +4,154 @@
 //
 
 #include "d/actor/d_a_obj_gaship2.h"
+#include "SSystem/SComponent/c_bg_w.h"
+#include "d/d_com_inf_game.h"
 #include "dolphin/types.h"
+#include "d/d_bg_s_movebg_actor.h"
+#include "d/d_procname.h"
+#include "m_Do/m_Do_mtx.h"
 
-/* 00000078-0000009C       .text solidHeapCB__Q212daObjGaship25Act_cFP10fopAc_ac_c */
-void daObjGaship2::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
-}
 
-/* 0000009C-00000220       .text create_heap__Q212daObjGaship25Act_cFv */
-void daObjGaship2::Act_c::create_heap() {
-    /* Nonmatching */
-}
 
-/* 00000220-000002F8       .text _create__Q212daObjGaship25Act_cFv */
-s32 daObjGaship2::Act_c::_create() {
-    /* Nonmatching */
-}
+namespace daObjGaship2 {
+    const char Act_c::M_arcname[] = "YakeRom";
 
-/* 000002F8-00000384       .text _delete__Q212daObjGaship25Act_cFv */
-BOOL daObjGaship2::Act_c::_delete() {
-    /* Nonmatching */
-}
+    /* 00000078-0000009C       .text solidHeapCB__Q212daObjGaship25Act_cFP10fopAc_ac_c */
+    BOOL daObjGaship2::Act_c::solidHeapCB(fopAc_ac_c *i_this) {
+        return ((Act_c *) i_this)->create_heap();
+    }
 
-/* 00000384-00000430       .text set_mtx__Q212daObjGaship25Act_cFv */
-void daObjGaship2::Act_c::set_mtx() {
-    /* Nonmatching */
-}
+    /* 0000009C-00000220       .text create_heap__Q212daObjGaship25Act_cFv */
+    bool daObjGaship2::Act_c::create_heap() {
+        J3DModelData *mdl_data;
+        cBgD_t *bgw_data;
+        bool uVar4;
 
-/* 00000430-00000468       .text _execute__Q212daObjGaship25Act_cFv */
-BOOL daObjGaship2::Act_c::_execute() {
-    /* Nonmatching */
-}
+        mdl_data = (J3DModelData *) (dComIfG_getObjectRes(M_arcname, 4));
+        JUT_ASSERT(0x5A, mdl_data != 0);
 
-/* 00000468-00000508       .text _draw__Q212daObjGaship25Act_cFv */
-BOOL daObjGaship2::Act_c::_draw() {
-    /* Nonmatching */
-}
+        mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11000002);
+        set_mtx();
+        bgw_data = (cBgD_t *) (dComIfG_getObjectRes(M_arcname, 7));
+        JUT_ASSERT(0x67, bgw_data != 0);
+        if (bgw_data != NULL) {
+            field_x2A0 = new dBgW();
+            if (field_x2A0 != NULL && (field_x2A0->Set(bgw_data, cBgW::MOVE_BG_e, &field_x2A4) == 1)) {
+                return false;
+            }
+        }
+
+        uVar4 = false;
+        if (mdl_data != NULL && mpModel != NULL && bgw_data != NULL && field_x2A0 != NULL) {
+            uVar4 = true;
+        }
+        return uVar4;
+    }
+
+    /* 00000220-000002F8       .text _create__Q212daObjGaship25Act_cFv */
+    s32 daObjGaship2::Act_c::_create() {
+        fopAcM_SetupActor((fopAc_ac_c*)this, Act_c);
+        cPhs__Step phase = (cPhs__Step) dComIfG_resLoad(&mphs, M_arcname);
+        if (phase == cPhs_COMPLEATE_e) {
+            if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0) & 0xFF) {
+                mCullMtx = mpModel->mBaseTransformMtx;
+                dComIfG_Bgsp()->Regist(field_x2A0, this);
+                field_x2A0->SetCrrFunc(dBgS_MoveBGProc_Typical);
+            } else {
+                phase = cPhs_ERROR_e;
+            }
+        }
+        return phase;
+    }
+
+    /* 000002F8-00000384       .text _delete__Q212daObjGaship25Act_cFv */
+    BOOL daObjGaship2::Act_c::_delete() {
+        if (heap != NULL && field_x2A0 != NULL) {
+            if (field_x2A0->ChkUsed()) {
+                dComIfG_Bgsp()->Release(field_x2A0);
+            }
+        }
+
+        dComIfG_resDelete(&mphs, M_arcname);
+        return true;
+    }
+
+    /* 00000384-00000430       .text set_mtx__Q212daObjGaship25Act_cFv */
+    // Not Matching
+    void daObjGaship2::Act_c::set_mtx() {
+        MtxP pNow = mDoMtx_stack_c::get();
+        mpModel->mBaseScale = mScale;
+        mDoMtx_stack_c::ZXYrotM(shape_angle);
+        mDoMtx_stack_c::transS(mpModel->mBaseScale);
+
+        mpModel->setBaseTRMtx(pNow);
+        MTXCopy(mDoMtx_stack_c::now, field_x2A4);
+        mpModel->calc();
+    }
+
+    /* 00000430-00000468       .text _execute__Q212daObjGaship25Act_cFv */
+    BOOL daObjGaship2::Act_c::_execute() {
+        set_mtx();
+        field_x2A0->Move();
+        return TRUE;
+    }
+
+    /* 00000468-00000508       .text _draw__Q212daObjGaship25Act_cFv */
+    BOOL daObjGaship2::Act_c::_draw() {
+        dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
+        dComIfGd_setListBG();
+        dKy_getEnvlight().setLightTevColorType(mpModel, &mTevStr);
+        mDoExt_modelUpdateDL(mpModel);
+        dComIfGd_setList();
+        return TRUE;
+    };
+
+    namespace {
+        /* 000005EC-0000060C       .text Mthd_Create__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
+        s32 Mthd_Create(void *i_this) {
+            return ((Act_c *) i_this)->_create();
+        }
+
+        /* 0000060C-00000630       .text Mthd_Delete__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
+        u8 Mthd_Delete(void *i_this) {
+            return ((Act_c *) i_this)->_delete();
+        }
+
+        /* 00000630-00000654       .text Mthd_Execute__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
+        u8 Mthd_Execute(void *i_this) {
+            return ((Act_c *) i_this)->_execute();
+        }
+
+        /* 00000654-00000678       .text Mthd_Draw__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
+        u8 Mthd_Draw(void *i_this) {
+            return ((Act_c *) i_this)->_draw();
+        }
+
+        /* 00000678-00000680       .text Mthd_IsDelete__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
+        BOOL Mthd_IsDelete(void *i_this) {
+            return TRUE;
+        }
+
+        actor_method_class Mthd_Table = {
+            (process_method_func) Mthd_Create, (process_method_func) Mthd_Delete,
+            (process_method_func) Mthd_Execute, (process_method_func) Mthd_IsDelete,
+            (process_method_func) Mthd_Draw,
+        };
+
+        actor_process_profile_definition g_profile_Obj_Gaship2 = {
+            /* LayerID      */ fpcLy_CURRENT_e,
+            /* ListID       */ 3,
+            /* ListPrio     */ fpcPi_CURRENT_e,
+            /* ProcName     */ PROC_Obj_Gaship2,
+            /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+            /* Size         */ sizeof(Act_c),
+            /* SizeOther    */ 0,
+            /* Parameters   */ 0x00,
+            /* Leaf SubMtd  */ &g_fopAc_Method.base,
+            /* Priority     */ 0x0040,
+            /* Actor SubMtd */ &Mthd_Table,
+            /* Group        */ 0x00040000,
+        };
+
+    }// namespace
+}; // namespace daObjGaship2
