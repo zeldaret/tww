@@ -58,9 +58,33 @@ void cM3d_InDivPos2(const Vec* v0, const Vec* v1, f32 scale, Vec* pDst) {
     cM3d_InDivPos1(v0, &tmp, scale, pDst);
 }
 
+inline f32 cM3d_Len2dSq(f32 x0, f32 y0, f32 x1, f32 y1) {
+    f32 x = x0 - x1;
+    f32 y = y0 - y1;
+    return x*x + y*y;
+}
+
 /* 8024A4B4-8024A56C       .text cM3d_Len2dSqPntAndSegLine__FffffffPfPfPf */
-bool cM3d_Len2dSqPntAndSegLine(f32, f32, f32, f32, f32, f32, f32*, f32*, f32*) {
+bool cM3d_Len2dSqPntAndSegLine(f32 xp, f32 yp, f32 x0, f32 y0, f32 x1, f32 y1, f32* outx, f32* outy, f32* seg) {
     /* Nonmatching */
+    bool ret = false;
+    f32 xd = x1 - x0;
+    f32 yd = y1 - y0;
+    f32 dot = (xd*xd + yd*yd);
+    if (cM3d_IsZero(dot)) {
+        *seg = 0.0f;
+        return ret;
+    }
+
+    f32 t = (x1 * (xp - x0) + y1 * (yp - y0)) / dot;
+    if (t >= 0.0f && t <= 1.0f) {
+        ret = true;
+    }
+
+    *outx = x0 + xd * t;
+    *outy = y0 + yd * t;
+    *seg = cM3d_Len2dSq(*outx, *outy, xp, yp);
+    return ret;
 }
 
 /* 8024A56C-8024A670       .text cM3d_Len3dSqPntAndSegLine__FPC8cM3dGLinPC3VecP3VecPf */
