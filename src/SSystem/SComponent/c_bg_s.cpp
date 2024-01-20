@@ -113,9 +113,9 @@ bool cBgS::LineCross(cBgS_LinChk* chk) {
     chk->ClrHit();
     for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
         cBgS_ChkElm* elm = &m_chk_element[bg_index];
-        if (elm->ChkUsed() && elm->m_bgw_base_ptr->pm_vtx_tbl != NULL && !chk->ChkSameActorPid(elm->m_actor_id)) {
+        if (elm->ChkUsed() && elm->m_bgw_base_ptr->GetVtxTbl() != NULL && !chk->ChkSameActorPid(elm->m_actor_id)) {
             chk->PreCalc();
-            if (elm->m_bgw_base_ptr->LineCheckGrpRp(chk, elm->m_bgw_base_ptr->m_rootGrpIdx, 1)) {
+            if (elm->m_bgw_base_ptr->LineCheck(chk)) {
                 chk->SetActorInfo(bg_index, elm->m_bgw_base_ptr, elm->m_actor_id);
                 ret = true;
             }
@@ -134,8 +134,8 @@ f32 cBgS::GroundCross(cBgS_GndChk* chk) {
     chk->mGndPrecheck = (chk->mFlag & 0x01);
     cBgS_ChkElm* elm = m_chk_element;
     for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++, elm++) {
-        if (elm->ChkUsed() && elm->m_bgw_base_ptr->pm_vtx_tbl != NULL && !chk->ChkSameActorPid(elm->m_actor_id)) {
-            if (elm->m_bgw_base_ptr->GroundCrossGrpRp(chk, elm->m_bgw_base_ptr->m_rootGrpIdx, 1)) {
+        if (elm->ChkUsed() && elm->m_bgw_base_ptr->GetVtxTbl() != NULL && !chk->ChkSameActorPid(elm->m_actor_id)) {
+            if (elm->m_bgw_base_ptr->GroundCross(chk)) {
                 chk->SetActorInfo(bg_index, elm->m_bgw_base_ptr, elm->m_actor_id);
             }
         }
@@ -258,7 +258,7 @@ void cBgS::Move() {
 void cBgS::ShdwDraw(cBgS_ShdwDraw* shdw) {
     for (s32 i = 0; i < (s32)ARRAY_SIZE(m_chk_element); i++)
         if (m_chk_element[i].ChkUsed())
-            m_chk_element[i].m_bgw_base_ptr->ShdwDrawGrpRp(shdw, m_chk_element[i].m_bgw_base_ptr->m_rootGrpIdx);
+            m_chk_element[i].m_bgw_base_ptr->ShdwDraw(shdw);
 }
 
 /* 802471E8-80247304       .text GetGrpInf__4cBgSCFR13cBgS_PolyInfoi */

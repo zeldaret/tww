@@ -56,6 +56,19 @@ public:
         mMax.y = -1000000000.0f;
         mMax.x = -1000000000.0f;
     }
+    bool CrossY(const cXyz* v) const {
+        if (mMin.x > v->x || mMax.x < v->x || mMin.z > v->z || mMax.z < v->z) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    bool UnderPlaneYUnder(f32 y) const {
+        return mMin.y < y;
+    }
+    bool TopPlaneYUnder(f32 y) const {
+        return mMax.y < y;
+    }
 };  // Size = 0x1C
 
 STATIC_ASSERT(0x1C == sizeof(cM3dGAab));
