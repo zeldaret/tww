@@ -31,7 +31,6 @@ public:
     /* 0x24 */ s16 mFlapDuration;
     /* 0x26 */ s16 mFlapExhaustedDuration;
     /* 0x28 */ s16 mFlapEnergyDuration;
-    /* 0x2A */ u8 field_2A[0x2C - 0x2A];
 };  // Size: 0x2C
 
 class daNpc_kam_HIO_c : public JORReflexible {

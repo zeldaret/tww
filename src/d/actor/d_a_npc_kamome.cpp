@@ -166,8 +166,8 @@ int daNpc_kam_c::callDemoStartCheck() {
 }
 
 /* 0000052C-0000054C       .text daNpc_kam_XyEventCB__FPvi */
-static s16 daNpc_kam_XyEventCB(void* i_this, int param_1) {
-    return ((daNpc_kam_c*)i_this)->XyEventCB(param_1);
+static s16 daNpc_kam_XyEventCB(void* i_this, int equippedItemIdx) {
+    return ((daNpc_kam_c*)i_this)->XyEventCB(equippedItemIdx);
 }
 
 /* 0000054C-00000568       .text XyEventCB__11daNpc_kam_cFi */

@@ -61,7 +61,7 @@ public:
     /* 0x710 */ u8 m710[0x714 - 0x710];
     /* 0x714 */ csXyz m714;
     /* 0x71A */ u8 m71A[0x71D - 0x71A];
-    /* 0x71D */ bool m71D;
+    /* 0x71D */ bool mHasAttention;
     /* 0x71E */ bool m71E;
     /* 0x71F */ u8 m71F[0x724 - 0x71F];
     /* 0x724 */ u8 m724;

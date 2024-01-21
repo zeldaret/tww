@@ -16,21 +16,21 @@ public:
 
 public:
     /* 0x04 */ f32 m04;
-    /* 0x08 */ s16 m08;
-    /* 0x0A */ s16 m0A;
-    /* 0x0C */ s16 mMaxHeadRot;
-    /* 0x0E */ s16 mMaxBackBoneRot;
-    /* 0x10 */ s16 m10;
-    /* 0x12 */ s16 m12;
-    /* 0x14 */ s16 mMinHeadRot;
-    /* 0x16 */ s16 mMinBackBoneRot;
-    /* 0x18 */ s16 m18;
-    /* 0x1A */ s16 mMaxHeadTurnVel;
-    /* 0x1C */ f32 m1C;
-    /* 0x20 */ s16 m20;
+    /* 0x08 */ s16 mMaxHeadX;
+    /* 0x0A */ s16 mMaxBackboneX;
+    /* 0x0C */ s16 mMaxHeadY;
+    /* 0x0E */ s16 mMaxBackboneY;
+    /* 0x10 */ s16 mMinHeadX;
+    /* 0x12 */ s16 mMinBackboneX;
+    /* 0x14 */ s16 mMinHeadY;
+    /* 0x16 */ s16 mMinBackboneY;
+    /* 0x18 */ s16 mMaxTurnStep;
+    /* 0x1A */ s16 mMaxHeadTurnVel; // TODO: Not sure what the difference between this and the above field is
+    /* 0x1C */ f32 mAttnYOffset;
+    /* 0x20 */ s16 mMaxAttnAngleY;
     /* 0x22 */ u8 m22;
     /* 0x23 */ u8 m23[0x24 - 0x23];
-    /* 0x24 */ f32 m24;
+    /* 0x24 */ f32 mMaxAttnDistXZ;
 };
 
 class dNpc_JntCtrl_c {
@@ -56,7 +56,7 @@ public:
     // /* 0x18 */ s16 mMaxHeadRot;
     // /* 0x1A */ s16 field_0x1A;
     // /* 0x1C */ s16 mMaxSpineRot;
-    /* 0x1E */ s16 field_0x1E[2][2];
+    /* 0x1E */ s16 mMaxTurnStep[2][2];
     /* 0x26 */ u8 pad_0x26[0x2C - 0x26];
     /* 0x2C */ s16 field_0x2C;
     /* 0x2E */ s16 field_0x2E;
@@ -93,8 +93,10 @@ public:
     void limitter(s16*, s16, s16);
     bool follow(s16*, s16, s16, int);
     bool move(s16, int);
-    void lookAtTarget(s16*, cXyz*, cXyz, s16, s16, bool);
-    void setParam(s16, s16, s16, s16, s16, s16, s16, s16, s16);
+    void lookAtTarget(s16* outY, cXyz* pDstPos, cXyz srcPos, s16 defaultY, s16 maxVel, bool param_6);
+    void setParam(s16 max_backbone_x, s16 max_backbone_y, s16 min_backbone_x, s16 min_backbone_y,
+                  s16 max_head_x, s16 max_head_y, s16 min_head_x, s16 min_head_y,
+                  s16 max_turn_step);
 
     int chkLim(s16, int, int);
     void turn_fromBackbone2Head(s16, s16*, s16*, bool);

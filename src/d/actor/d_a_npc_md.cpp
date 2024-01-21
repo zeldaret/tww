@@ -229,20 +229,20 @@ daNpc_Md_HIO2_c::daNpc_Md_HIO2_c() {
 /* 00000274-00000574       .text __ct__14daNpc_Md_HIO_cFv */
 daNpc_Md_HIO_c::daNpc_Md_HIO_c() {
     mNpc.m04 = -25.0f;
-    mNpc.m08 = 0x2328;
-    mNpc.mMaxHeadRot = 0x2328;
-    mNpc.m0A = 0x0;
-    mNpc.mMaxBackBoneRot = 0x1F40;
-    mNpc.m10 = -0x2328;
-    mNpc.mMinHeadRot = -0x2328;
-    mNpc.m12 = 0x0;
-    mNpc.mMinBackBoneRot = -0x1F40;
-    mNpc.m18 = 0x1000;
+    mNpc.mMaxHeadX = 0x2328;
+    mNpc.mMaxHeadY = 0x2328;
+    mNpc.mMaxBackboneX = 0x0;
+    mNpc.mMaxBackboneY = 0x1F40;
+    mNpc.mMinHeadX = -0x2328;
+    mNpc.mMinHeadY = -0x2328;
+    mNpc.mMinBackboneX = 0x0;
+    mNpc.mMinBackboneY = -0x1F40;
+    mNpc.mMaxTurnStep = 0x1000;
     mNpc.mMaxHeadTurnVel = 0x800;
-    mNpc.m1C = 130.0f;
-    mNpc.m20 = 0x4000;
+    mNpc.mAttnYOffset = 130.0f;
+    mNpc.mMaxAttnAngleY = 0x4000;
     mNpc.m22 = 0x0;
-    mNpc.m24 = 150.0f;
+    mNpc.mMaxAttnDistXZ = 150.0f;
     mpActor = NULL;
     m0B8 = 770.0f;
     m0BC = 250.0f;
@@ -1445,7 +1445,7 @@ BOOL daNpc_Md_c::waitPlayerAction(void*) {
                 shape_angle.y = current.angle.y;
             }
             s16 tempAngle = shape_angle.y;
-            mJntCtrl.lookAtTarget(&tempAngle, &stickPos, current.pos, shape_angle.y, l_HIO.mNpc.m18, false);
+            mJntCtrl.lookAtTarget(&tempAngle, &stickPos, current.pos, shape_angle.y, l_HIO.mNpc.mMaxTurnStep, false);
             if (temp > 0) {
                 shape_angle.y = tempAngle;
             }

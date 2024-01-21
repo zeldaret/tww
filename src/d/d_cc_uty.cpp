@@ -90,13 +90,8 @@ fopAc_ac_c* at_power_check(CcAtInfo* atInfo) {
     if (atInfo->mpObj == NULL) {
         return NULL;
     }
-    fopAc_ac_c* r0;
-    if (atInfo->mpObj->GetStts() == NULL) {
-        r0 = NULL;
-    } else {
-        r0 = atInfo->mpObj->GetStts()->GetAc();
-    }
-    atInfo->mpActor = r0;
+    cCcD_Stts* stts = atInfo->mpObj->GetStts();
+    atInfo->mpActor = stts == NULL ? NULL : stts->GetAc();
     atInfo->mResultingAttackType = 0xC;
     atInfo->mDamage = 0;
     
@@ -174,25 +169,25 @@ fopAc_ac_c* at_power_check(CcAtInfo* atInfo) {
         }
     }
         
-    atInfo->mbDead = 0;
+    atInfo->mbDead = false;
     if (fopAcM_GetName(atInfo->mpActor) == PROC_PLAYER) {
         dCcD_GObjInf* gObjInf = dCcD_GetGObjInf(atInfo->mpObj);
         if (gObjInf->GetAtSpl() == 1) {
-            atInfo->mbDead = 1;
+            atInfo->mbDead = true;
         }
     } else if (atInfo->mDamage >= 2) {
-        atInfo->mbDead = 1;
+        atInfo->mbDead = true;
     }
     
     return atInfo->mpActor;
 }
 
 /* 800AEEF8-800AF368       .text cc_at_check__FP10fopAc_ac_cP8CcAtInfo */
-fopAc_ac_c* cc_at_check(fopAc_ac_c* r30, CcAtInfo* atInfo) {
+fopAc_ac_c* cc_at_check(fopAc_ac_c* tgActor, CcAtInfo* atInfo) {
     atInfo->mHitSoundId = 0;
     atInfo->mpActor = at_power_check(atInfo);
     
-    s8 r28;
+    s8 pauseTime;
     
     if (atInfo->mpActor) {
         mDoAud_onEnemyDamage();
@@ -202,34 +197,34 @@ fopAc_ac_c* cc_at_check(fopAc_ac_c* r30, CcAtInfo* atInfo) {
             f2 = atInfo->mpActor->speed.x;
             f0 = atInfo->mpActor->speed.z;
         } else {
-            f2 = r30->current.pos.x - atInfo->mpActor->current.pos.x;
-            f0 = r30->current.pos.z - atInfo->mpActor->current.pos.z;
+            f2 = tgActor->current.pos.x - atInfo->mpActor->current.pos.x;
+            f0 = tgActor->current.pos.z - atInfo->mpActor->current.pos.z;
         }
-        atInfo->m0E = cM_atan2s(-f2, -f0);
+        atInfo->m0C.y = cM_atan2s(-f2, -f0);
         
         if (atInfo->mpObj->GetAtType() & AT_TYPE_HOOKSHOT) {
-            if (fopAcM_checkStatus(r30, fopAcStts_UNK80000_e | fopAcStts_HOOK_CARRY_e | fopAcStts_UNK200000_e)) {
+            if (fopAcM_checkStatus(tgActor, fopAcStts_UNK80000_e | fopAcStts_HOOK_CARRY_e | fopAcStts_UNK200000_e)) {
                 atInfo->mDamage = 0;
             }
         }
         
-        if (fopAcM_GetName(atInfo->mpActor) == PROC_HIMO2 && r30->mStealItemLeft != 0) {
-            r30->mStealItemLeft--;
-            fopAcM_createStealItem(&r30->current.pos, r30->mItemTableIdx, r30->current.roomNo, NULL, r30->mStealItemBitNo);
-            r30->mStealItemBitNo++;
+        if (fopAcM_GetName(atInfo->mpActor) == PROC_HIMO2 && tgActor->mStealItemLeft != 0) {
+            tgActor->mStealItemLeft--;
+            fopAcM_createStealItem(&tgActor->current.pos, tgActor->mItemTableIdx, tgActor->current.roomNo, NULL, tgActor->mStealItemBitNo);
+            tgActor->mStealItemBitNo++;
             atInfo->mDamage = 0;
         }
         
         if ((s8)atInfo->mDamage > 0) {
-            r30->mHealth -= atInfo->mDamage;
+            tgActor->mHealth -= atInfo->mDamage;
         }
         
-        if (r30->mHealth <= 0) {
-            atInfo->mbDead = 1;
+        if (tgActor->mHealth <= 0) {
+            atInfo->mbDead = true;
             
-            fopAcM_seStart(r30, JA_SE_LK_LAST_HIT, 0);
+            fopAcM_seStart(tgActor, JA_SE_LK_LAST_HIT, 0);
             
-            r28 = 6 + g_regHIO.mChild->mShortRegs[7];
+            pauseTime = 6 + g_regHIO.mChild->mShortRegs[7];
             
             if (atInfo->pParticlePos) {
                 dComIfGp_particle_set(0x10, atInfo->pParticlePos);
@@ -237,35 +232,35 @@ fopAc_ac_c* cc_at_check(fopAc_ac_c* r30, CcAtInfo* atInfo) {
                 scale.x = scale.y = scale.z = 2.0f;
                 csXyz angle;
                 angle.x = angle.z = 0;
-                angle.y = fopAcM_searchPlayerAngleY(r30);
+                angle.y = fopAcM_searchPlayerAngleY(tgActor);
                 dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, atInfo->pParticlePos, &angle, &scale);
             }
         } else {
-            u32 r29 = fopAcM_GetName(r30) == PROC_ST ? 0x33 : 0x20;
+            u32 r29 = fopAcM_GetName(tgActor) == PROC_ST ? 0x33 : 0x20;
             if (atInfo->mbDead) {
-                fopAcM_seStart(r30, at_se_getC(atInfo->mpObj), r29);
+                fopAcM_seStart(tgActor, at_se_getC(atInfo->mpObj), r29);
                 if (atInfo->mResultingAttackType == 9) {
-                    r28 = 6;
+                    pauseTime = 6;
                 } else {
-                    r28 = 4 + g_regHIO.mChild->mShortRegs[6];
+                    pauseTime = 4 + g_regHIO.mChild->mShortRegs[6];
                 }
             } else {
-                if (fopAcM_GetName(r30) == PROC_MT) {
-                    mt_class* mt = (mt_class*)r30;
+                if (fopAcM_GetName(tgActor) == PROC_MT) {
+                    mt_class* mt = (mt_class*)tgActor;
                     if (mt->m454 == 2) {
-                        fopAcM_seStart(r30, JA_SE_OBJ_MG_BALL_DMG, 0);
+                        fopAcM_seStart(tgActor, JA_SE_OBJ_MG_BALL_DMG, 0);
                     } else {
-                        fopAcM_seStart(r30, at_se_get(atInfo->mpObj), r29);
+                        fopAcM_seStart(tgActor, at_se_get(atInfo->mpObj), r29);
                     }
                 } else {
-                    fopAcM_seStart(r30, at_se_get(atInfo->mpObj), r29);
+                    fopAcM_seStart(tgActor, at_se_get(atInfo->mpObj), r29);
                 }
-                r28 = 1 + g_regHIO.mChild->mShortRegs[5];
+                pauseTime = 1 + g_regHIO.mChild->mShortRegs[5];
             }
         }
         
         if (atInfo->mResultingAttackType == 1) {
-            dScnPly_ply_c::setPauseTimer(r28);
+            dScnPly_ply_c::setPauseTimer(pauseTime);
         }
         
         if (atInfo->mDamage != 0) {

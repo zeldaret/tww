@@ -10,17 +10,15 @@ public:
     ~CcAtInfo() {}
 
 public:
-    /* 0x00 */ cCcD_Obj* mpObj;
-    /* 0x04 */ fopAc_ac_c* mpActor;
+    /* 0x00 */ cCcD_Obj* mpObj; // The attack obj
+    /* 0x04 */ fopAc_ac_c* mpActor; // The attacking actor
     /* 0x08 */ u8 mDamage;
-    /* 0x09 */ u8 mbDead;
-    /* 0x0A */ u8 mResultingAttackType;
-    /* 0x0B */ u8 m0B[0x0E - 0x0B];
-    /* 0x0E */ s16 m0E;
-    /* 0x10 */ u8 m10[0x12 - 0x10];
+    /* 0x09 */ bool mbDead;
+    /* 0x0A */ u8 mResultingAttackType; // TODO: Add enum for this
+    /* 0x0C */ csXyz m0C;
     /* 0x12 */ u16 mPlCutBit;
     /* 0x14 */ cXyz* pParticlePos;
-    /* 0x18 */ s32 mHitSoundId;
+    /* 0x18 */ s32 mHitSoundId; // TODO: Not sure what this is, argument passed to bgmHitSound
 };
 
 int cc_pl_cut_bit_get();
@@ -30,5 +28,7 @@ void def_se_set(fopAc_ac_c*, cCcD_Obj*, unsigned long);
 void def_se_set_p(fopAc_ac_c*, cXyz*, cCcD_Obj*, unsigned long);
 fopAc_ac_c* at_power_check(CcAtInfo*);
 fopAc_ac_c* cc_at_check(fopAc_ac_c*, CcAtInfo*);
+
+inline void dCc_GetAc(void*) {}
 
 #endif /* D_CC_UTY_H */

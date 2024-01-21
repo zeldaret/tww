@@ -121,20 +121,20 @@ static dCcD_SrcCyl l_cyl_src = {
 /* 000000EC-000001A8       .text __ct__17daNpc_Btsw2_HIO_cFv */
 daNpc_Btsw2_HIO_c::daNpc_Btsw2_HIO_c() {
     mNpc.m04 = 0.0f;
-    mNpc.m08 = 0x1F40;
-    mNpc.mMaxHeadRot = 0x1F40;
-    mNpc.m0A = 0x0;
-    mNpc.mMaxBackBoneRot = 0x1F40;
-    mNpc.m10 = -0xBB8;
-    mNpc.mMinHeadRot = -0x1F40;
-    mNpc.m12 = 0x0;
-    mNpc.mMinBackBoneRot = -0x1F40;
-    mNpc.m18 = 0x3E8;
+    mNpc.mMaxHeadX = 0x1F40;
+    mNpc.mMaxHeadY = 0x1F40;
+    mNpc.mMaxBackboneX = 0x0;
+    mNpc.mMaxBackboneY = 0x1F40;
+    mNpc.mMinHeadX = -0xBB8;
+    mNpc.mMinHeadY = -0x1F40;
+    mNpc.mMinBackboneX = 0x0;
+    mNpc.mMinBackboneY = -0x1F40;
+    mNpc.mMaxTurnStep = 0x3E8;
     mNpc.mMaxHeadTurnVel = 0x640;
-    mNpc.m1C = 40.0f;
-    mNpc.m20 = 0x2000;
+    mNpc.mAttnYOffset = 40.0f;
+    mNpc.mMaxAttnAngleY = 0x2000;
     mNpc.m22 = 0x0;
-    mNpc.m24 = 200.0f;
+    mNpc.mMaxAttnDistXZ = 200.0f;
     m30 = 0x258;
     m32 = 0x5;
     m34 = 0.8f;
@@ -271,21 +271,22 @@ void daNpc_Btsw2_c::setAnm(s8 param_0) {
 }
 
 /* 0000067C-000007D0       .text chkAttention__13daNpc_Btsw2_cF4cXyzs */
-bool daNpc_Btsw2_c::chkAttention(cXyz pos, s16 r29) {
+bool daNpc_Btsw2_c::chkAttention(cXyz pos, s16 facingAngleY) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
-    f32 f30 = l_HIO.mNpc.m24;
-    int r30 = l_HIO.mNpc.m20;
+    f32 maxAttnDistXZ = l_HIO.mNpc.mMaxAttnDistXZ;
+    int maxAttnAngleY = l_HIO.mNpc.mMaxAttnAngleY;
     cXyz delta;
     delta.x = player->current.pos.x - pos.x;
     delta.z = player->current.pos.z - pos.z;
-    f32 f31 = sqrtf(delta.x*delta.x + delta.z*delta.z);
-    s16 r3 = cM_atan2s(delta.x, delta.z);
-    if (m71D) {
-        f30 += 40.0f;
-        r30 += 0x071C;
+    f32 distXZ = sqrtf(delta.x*delta.x + delta.z*delta.z);
+    s16 targetAngleY = cM_atan2s(delta.x, delta.z);
+    if (mHasAttention) {
+        // Increase the attention range when we're already looking at the player so it sticks slightly out of range.
+        maxAttnDistXZ += 40.0f;
+        maxAttnAngleY += cAngle::d2s(10.0f);
     }
-    r3 -= r29;
-    return r30 > abs(r3) && f30 > f31;
+    targetAngleY -= facingAngleY;
+    return maxAttnAngleY > abs(targetAngleY) && maxAttnDistXZ > distXZ;
 }
 
 /* 000007D0-00000820       .text eventOrder__13daNpc_Btsw2_cFv */
@@ -369,7 +370,7 @@ u16 daNpc_Btsw2_c::next_msgStatus(u32*) {
 
 /* 000009F4-00000A20       .text setAttention__13daNpc_Btsw2_cFv */
 void daNpc_Btsw2_c::setAttention() {
-    mAttentionInfo.mPosition.set(m704.x, m704.y + l_HIO.mNpc.m1C, m704.z);
+    mAttentionInfo.mPosition.set(m704.x, m704.y + l_HIO.mNpc.mAttnYOffset, m704.z);
 }
 
 /* 00000A20-00000B94       .text lookBack__13daNpc_Btsw2_cFv */
@@ -387,13 +388,13 @@ void daNpc_Btsw2_c::lookBack() {
         if (m747 == 2) {
             r29 = false;
             m_jnt.setTrn();
-            if (m71D == 0) {
+            if (!mHasAttention) {
                 sp38 = dNpc_playerEyePos(l_HIO.mNpc.m04);
                 s16 r4 = cLib_targetAngleY(&current.pos, &sp38);
                 cLib_addCalcAngleS2(&current.angle.y, r4, 4, 0x1800);
             }
         }
-        if (m71D) {
+        if (mHasAttention) {
             sp38 = dNpc_playerEyePos(l_HIO.mNpc.m04);
             r31 = &sp38;
             sp2c = current.pos;
@@ -572,8 +573,8 @@ BOOL daNpc_Btsw2_c::wait_action(void*) {
         m747 = 1;
         m74A++;
     } else if (m74A != -1) {
-        s16 angleY = current.angle.y + m_jnt.getHead_y() + m_jnt.getBackbone_y();
-        m71D = chkAttention(current.pos, angleY);
+        s16 facingAngleY = current.angle.y + m_jnt.getHead_y() + m_jnt.getBackbone_y();
+        mHasAttention = chkAttention(current.pos, facingAngleY);
         m746 = 0;
         
         switch (m747) {
@@ -630,9 +631,9 @@ BOOL daNpc_Btsw2_c::_delete() {
 /* 00001C8C-00001DDC       .text _execute__13daNpc_Btsw2_cFv */
 BOOL daNpc_Btsw2_c::_execute() {
     m_jnt.setParam(
-        l_HIO.mNpc.m0A, l_HIO.mNpc.mMaxBackBoneRot, l_HIO.mNpc.m12, l_HIO.mNpc.mMinBackBoneRot,
-        l_HIO.mNpc.m08, l_HIO.mNpc.mMaxHeadRot, l_HIO.mNpc.m10, l_HIO.mNpc.mMinHeadRot,
-        l_HIO.mNpc.m18
+        l_HIO.mNpc.mMaxBackboneX, l_HIO.mNpc.mMaxBackboneY, l_HIO.mNpc.mMinBackboneX, l_HIO.mNpc.mMinBackboneY,
+        l_HIO.mNpc.mMaxHeadX, l_HIO.mNpc.mMaxHeadY, l_HIO.mNpc.mMinHeadX, l_HIO.mNpc.mMinHeadY,
+        l_HIO.mNpc.mMaxTurnStep
     );
     playTexPatternAnm();
     mpMcaMorf->play(&mEyePos, 0, 0);

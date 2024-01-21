@@ -123,20 +123,20 @@ daRd_HIO_c::daRd_HIO_c() {
     m52 = 0x96;
     mParalysisDuration = 2*30;
     mNpc.m04 = -20.0f;
-    mNpc.m08 = 0x1FFE;
-    mNpc.mMaxHeadRot = 0x4000;
-    mNpc.m0A = 0x0;
-    mNpc.mMaxBackBoneRot = 0x2000;
-    mNpc.m10 = -0x9C4;
-    mNpc.mMinHeadRot = -0x4000;
-    mNpc.m12 = 0x0;
-    mNpc.mMinBackBoneRot = -0x2000;
-    mNpc.m18 = 0x250;
+    mNpc.mMaxHeadX = 0x1FFE;
+    mNpc.mMaxHeadY = 0x4000;
+    mNpc.mMaxBackboneX = 0x0;
+    mNpc.mMaxBackboneY = 0x2000;
+    mNpc.mMinHeadX = -0x9C4;
+    mNpc.mMinHeadY = -0x4000;
+    mNpc.mMinBackboneX = 0x0;
+    mNpc.mMinBackboneY = -0x2000;
+    mNpc.mMaxTurnStep = 0x250;
     mNpc.mMaxHeadTurnVel = 0x150;
-    mNpc.m1C = 50.0f;
-    mNpc.m20 = 0x7FFF;
+    mNpc.mAttnYOffset = 50.0f;
+    mNpc.mMaxAttnAngleY = 0x7FFF;
     mNpc.m22 = 0x0;
-    mNpc.m24 = 400.0f;
+    mNpc.mMaxAttnDistXZ = 400.0f;
 }
 
 /* 0000027C-000002A8       .text searchNeadDeadRd_CB__FPvPv */
@@ -1672,9 +1672,9 @@ bool daRd_c::_execute() {
     }
     
     mJntCtrl.setParam(
-        l_HIO.mNpc.m0A, l_HIO.mNpc.mMaxBackBoneRot, l_HIO.mNpc.m12, l_HIO.mNpc.mMinBackBoneRot,
-        l_HIO.mNpc.m08, l_HIO.mNpc.mMaxHeadRot, l_HIO.mNpc.m10, l_HIO.mNpc.mMinHeadRot,
-        l_HIO.mNpc.m18
+        l_HIO.mNpc.mMaxBackboneX, l_HIO.mNpc.mMaxBackboneY, l_HIO.mNpc.mMinBackboneX, l_HIO.mNpc.mMinBackboneY,
+        l_HIO.mNpc.mMaxHeadX, l_HIO.mNpc.mMaxHeadY, l_HIO.mNpc.mMinHeadX, l_HIO.mNpc.mMinHeadY,
+        l_HIO.mNpc.mMaxTurnStep
     );
     
     if (mMode != MODE_PARALYSIS) {
