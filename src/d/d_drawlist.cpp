@@ -679,13 +679,13 @@ dDlst_2D_c::dDlst_2D_c(ResTIMG* timg, s16 x, s16 y, u8 alpha) {
 
 /* 800821B0-80082264       .text draw__10dDlst_2D_cFv */
 void dDlst_2D_c::draw() {
+    /* Nonmatching */
     mPicture.setAlpha(mAlpha);
     mPicture.draw(mX, mY, false, false, false);
 }
 
 /* 80082424-80082794       .text draw__18dDlst_effectLine_cFv */
 void dDlst_effectLine_c::draw() {
-    /* Nonmatching */
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -1105,8 +1105,6 @@ void dDlst_shadowReal_c::reset() {
 
 /* 80083850-8008398C       .text imageDraw__18dDlst_shadowReal_cFPA4_f */
 void dDlst_shadowReal_c::imageDraw(Mtx drawMtx) {
-    /* Nonmatching */
-
     if (mState != 1)
         return;
 
@@ -1118,18 +1116,16 @@ void dDlst_shadowReal_c::imageDraw(Mtx drawMtx) {
         J3DModel** modelP = mpModels;
         J3DShape::resetVcdVatCache();
         for (u8 i = 0; i < mModelNum; i++) {
-            J3DModel* model = *modelP;
-            model->viewCalc();
-            J3DModelData* modelData = model->getModelData();
+            (*modelP)->viewCalc();
+            J3DModelData* modelData = (*modelP)->getModelData();
             modelData->getShapeNodePointer(0)->loadPreDrawSetting();
             for (u16 j = 0; j < modelData->getShapeNum(); j++) {
-                if (modelData->getShapeNodePointer(j)->checkFlag(J3DShpFlag_Hide))
-                    continue;
-
-                J3DShapePacket* packet = model->getShapePacket(j);
-                packet->setBaseMtxPtr(&mViewMtx);
-                packet->drawFast();
-                packet->setBaseMtxPtr((Mtx*)&drawMtx);
+                if (!modelData->getShapeNodePointer(j)->checkFlag(J3DShpFlag_Hide)) {
+                    J3DShapePacket* packet = (*modelP)->getShapePacket(j);
+                    packet->setBaseMtxPtr(&mViewMtx);
+                    packet->drawFast();
+                    packet->setBaseMtxPtr((Mtx*)drawMtx);
+                }
             }
             modelP++;
         }
@@ -1214,7 +1210,6 @@ u8 setShadowRealMtx(Mtx, Mtx, Mtx, cXyz*, cXyz*, f32, f32, dDlst_shadowPoly_c*, 
 
 /* 8008450C-800846C8       .text set__18dDlst_shadowReal_cFUlScP8J3DModelP4cXyzffP12dKy_tevstr_c */
 u32 dDlst_shadowReal_c::set(u32 key, s8 param_2, J3DModel* model, cXyz* param_4, f32 param_5, f32 param_6, dKy_tevstr_c* tevstr) {
-    /* Nonmatching */
     if (mState != 1 || key != mKey) {
         cXyz lightPos = dKy_plight_near_pos();
         if (tevstr) {
@@ -1338,38 +1333,45 @@ void dDlst_shadowSimple_c::draw() {
 }
 
 /* 80084AC8-80084D48       .text set__20dDlst_shadowSimple_cFP4cXyzffP4cXyzsfP9_GXTexObj */
-void dDlst_shadowSimple_c::set(cXyz* pos, f32 param_2, f32 param_3, cXyz* floorNrm, s16 rotY, f32 param_6, GXTexObj* texObj) {
+void dDlst_shadowSimple_c::set(cXyz* pos, f32 y, f32 param_3, cXyz* floorNrm, s16 rotY, f32 param_6, GXTexObj* texObj) {
     /* Nonmatching */
 
     f32 offsetY = param_3 * 16.0f * (1.0f - floorNrm->y) + 1.0f;
-    mDoMtx_stack_c::transS(pos->x, param_2 + offsetY, pos->z);
+    mDoMtx_stack_c::transS(pos->x, y + offsetY, pos->z);
     mDoMtx_stack_c::YrotM(rotY);
     mDoMtx_stack_c::scaleM(param_3, offsetY + offsetY + 16.0f, param_3 * param_6);
     mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mVolumeMtx);
 
-    // this is an inline, right? i recognize this math from somewhere
-    Mtx& mtx = mDoMtx_stack_c::now;
-    mtx[0][0] = sqrtf(1.0f - floorNrm->x * floorNrm->x);
-    mtx[1][2] = 0.0f;
-    mtx[2][2] = 0.0f;
-    if (mtx[0][0] != 0.0f) {
-        mtx[2][2] = floorNrm->y * mtx[0][0];
-        mtx[1][2] = -floorNrm->z * mtx[0][0];
+    f32 xs = sqrtf(1.0f - floorNrm->x * floorNrm->x);
+    f32 yy;
+    f32 zz;
+    if (xs != 0.0f) {
+        yy = floorNrm->y * xs;
+        zz = -floorNrm->z * xs;
+    } else {
+        yy = 0.0f;
+        zz = 0.0f;
     }
-    mtx[0][1] = floorNrm->x;
-    mtx[0][2] = 0.0f;
-    mtx[0][3] = pos->x;
-    mtx[1][0] = -mtx[0][1] * mtx[2][2];
-    mtx[1][1] = floorNrm->y;
-    mtx[2][0] = mtx[0][1] * mtx[1][2];
-    mtx[2][1] = floorNrm->z;
-    mtx[2][3] = pos->z;
-    mtx[1][3] = param_2;
+
+    mDoMtx_stack_c::get()[0][0] = xs;
+    mDoMtx_stack_c::get()[0][1] = floorNrm->x;
+    mDoMtx_stack_c::get()[0][2] = 0.0f;
+    mDoMtx_stack_c::get()[0][3] = pos->x;
+
+    mDoMtx_stack_c::get()[1][0] = -xs * yy;
+    mDoMtx_stack_c::get()[1][1] = floorNrm->y;
+    mDoMtx_stack_c::get()[1][2] = zz;
+    mDoMtx_stack_c::get()[1][3] = y;
+
+    mDoMtx_stack_c::get()[2][0] = xs * zz;
+    mDoMtx_stack_c::get()[2][1] = floorNrm->z;
+    mDoMtx_stack_c::get()[2][2] = yy;
+    mDoMtx_stack_c::get()[2][3] = pos->z;
 
     mDoMtx_stack_c::YrotM(rotY);
     mDoMtx_stack_c::scaleM(param_3, 1.0f, param_3 * param_6);
     mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mMtx);
-    f32 dist = 1.0f - (pos->y - param_2) * 0.0007f;
+    f32 dist = 1.0f - (pos->y - y) * 0.0007f;
     if (dist < 0.0f)
         dist = 0.0f;
     else if (dist > 1.0f)
@@ -1751,14 +1753,14 @@ void dDlst_list_c::entryZSortXluDrawList(J3DDrawBuffer* pBuffer, J3DPacket* pPac
     /* Nonmatching */
     f32 z = -J3DCalcZValue(j3dSys.getViewMtx(), pos);
     u16 idx;
-    if (z <= 40.05859) {
+    if (40.05859f > z) {
         idx = 0;
-    } else if (z >= 9960.941f) {
+    } else if (z > 9960.941f) {
         idx = 0xFF;
     } else {
-        idx = z / 39.05859;
+        idx = z / 39.05859f;
     }
-    pBuffer->entryImm(pPacket, 0xFF - z);
+    pBuffer->entryImm(pPacket, 0xFF - idx);
 }
 
 /* 80086540-80086570       .text set__12dDlst_list_cFRPP12dDlst_base_cRPP12dDlst_base_cP12dDlst_base_c */
