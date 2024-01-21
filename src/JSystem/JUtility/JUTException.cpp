@@ -856,7 +856,6 @@ bool JUTException::queryMapAddress(char* mapPath, u32 address, s32 section_id, u
 
 /* 802C6A0C-802C6D60       .text queryMapAddress_single__12JUTExceptionFPcUllPUlPUlPcUlbb */
 bool JUTException::queryMapAddress_single(char* mapPath, u32 address, s32 section_id, u32* out_addr, u32* out_size, char* out_line, u32 line_length, bool print, bool begin_with_newline) {
-    /* Nonmatching */
     if (!mapPath) {
         return false;
     }
@@ -870,118 +869,112 @@ bool JUTException::queryMapAddress_single(char* mapPath, u32 address, s32 sectio
     }
 
     bool result = false;
+    bool found_section;
 
-    do {
-        bool found_section;
-        u32 addr;
-        int size;
+    while (true) {
+        section_idx++;
+        found_section = false;
+        while (true) {
+            char* src;
+            char* dst;
 
-        do {
-            found_section = false;
-            section_idx++;
-            while (true) {
-                char* src;
+            if (file.fgets(buffer, ARRAY_SIZE(buffer)) < 0)
+                break;
+            if (buffer[0] != '.')
+                continue;
 
-                while (true) {
-                    int length = file.fgets(buffer, ARRAY_SIZE(buffer));
-                    if (length < 0)
-                        goto next_section;
-                    if (buffer[0] == '.')
-                        break;
-                }
-
-                int i = 0;
-                src = buffer + 1;
-                while (*src != '\0') {
-                    section_name[i] = *src;
-                    if (*src == ' ' || i == 0xf)
-                        break;
-                    i++;
-                    src++;
-                }
-
-                section_name[i] = 0;
-                if (*src == 0)
+            int i = 0;
+            src = buffer + 1;
+            while (*src != '\0') {
+                section_name[i] = *src;
+                if (*src == ' ' || i == 0xf)
                     break;
-
-                if (src[1] == 's' && src[2] == 'e' && src[3] == 'c' && src[4] == 't') {
-                    found_section = true;
-                    break;
-                }
+                i++;
+                src++;
             }
 
-next_section:
+            section_name[i] = 0;
+            if (*src == 0)
+                break;
 
-            if (!found_section)
-                goto end;
-        } while (section_id >= 0 && section_id != section_idx);
-
-        do {
-            int length;
-            do {
-                length = file.fgets(buffer, ARRAY_SIZE(buffer));
-                if (length <= 4)
-                    goto next_symbol;
-            } while ((length < 28) || (buffer[28] != '4'));
-
-            addr = strtol(buffer + 19, NULL, 16);
-            addr = ((buffer[18] - '0') << 28) | addr;
-            size = strtol(buffer + 11, NULL, 16);
-        } while (addr > address || address >= addr + size);
-
-        if (out_addr)
-            *out_addr = addr;
-
-        if (out_size)
-            *out_size = size;
-
-        if (out_line) {
-            char* src = buffer + 0x1e;
-            char* dst = out_line;
-            u32 length = 0;
-
-            for (; length < line_length - 1; src++) {
-                u32 ch = *(u8*)src;
-                if (ch < ' ' && ch != '\t')
-                    break;
-                if (((int)ch == ' ' || ch == '\t') && (length != 0)) {
-                    if (dst[-1] != ' ') {
-                        *dst = ' ';
-                        dst++;
-                        length++;
-                    }
-                } else {
-                    *dst = ch;
-                    dst++;
-                    length++;
-                }
-            }
-            if (length != 0 && dst[-1] == ' ') {
-                dst--;
-            }
-            *dst = 0;
-            if (print) {
-                if (begin_with_newline) {
-                    sConsole->print("\n");
-                }
-                sConsole->print_f("  [%08X]: .%s [%08X: %XH]\n  %s\n", address, section_name, addr, size, out_line);
-                begin_with_newline = false;
+            if (src[1] == 's' && src[2] == 'e' && src[3] == 'c' && src[4] == 't') {
+                found_section = true;
+                break;
             }
         }
 
-        result = true;
+        if (!found_section)
+            break;
 
-next_symbol: ;
-    } while (section_id < 0 || section_id != section_idx);
+        if (section_id >= 0 && section_id != section_idx)
+            continue;
 
-    if (print && begin_with_newline) {
-        sConsole->print("\n");
+        int length;
+
+        while (true) {
+            if ((length = file.fgets(buffer, ARRAY_SIZE(buffer))) <= 4)
+                break;
+            if ((length < 28))
+                continue;
+            if ((buffer[28] == '4')) {
+                u32 addr = ((buffer[18] - '0') << 28) | strtol(buffer + 19, NULL, 16);
+                int size = strtol(buffer + 11, NULL, 16);
+                if ((addr <= address && address < addr + size)) {
+                    if (out_addr)
+                        *out_addr = addr;
+
+                    if (out_size)
+                        *out_size = size;
+
+                    if (out_line) {
+                        const u8* src = (const u8*)&buffer[0x1e];
+                        u8* dst       = (u8*)out_line;
+                        u32 i         = 0;
+
+                        for (i = 0; i < line_length - 1; ++src) {
+                            if ((u32)(*src) < ' ' && (u32)*src != '\t')
+                                break;
+                            if ((*src == ' ' || (u32)*src == '\t') && (i != 0)) {
+                                if (dst[-1] != ' ') {
+                                    *dst = ' ';
+                                    dst++;
+                                    ++i;
+                                }
+                            } else {
+                                *dst++ = *src;
+                                i++;
+                            }
+                        }
+                        if (i != 0 && dst[-1] == ' ') {
+                            dst--;
+                            i--;
+                        }
+                        *dst = 0;
+                        if (print) {
+                            if (begin_with_newline) {
+                                sConsole->print("\n");
+                            }
+                            sConsole->print_f("  [%08X]: .%s [%08X: %XH]\n  %s\n", address, section_name, addr, size, out_line);
+                            begin_with_newline = false;
+                        }
+                    }
+                    result = true;
+                    break;
+                }
+            }
+        }
+
+        if ((section_id < 0 || section_id != section_idx)) {
+            continue;
+        }
+        if (print && begin_with_newline) {
+            sConsole->print("\n");
+        }
+        break;
     }
 
-end:
     file.fclose();
-    bool bresult = result != false;
-    return bresult;
+    return result ? true : false;
 }
 
 /* 802C6D60-802C6E40       .text createConsole__12JUTExceptionFPvUl */
