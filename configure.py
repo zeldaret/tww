@@ -847,7 +847,7 @@ config.libs = [
             Object(Matching,    "JSystem/J2DGraph/J2DPrint.cpp"),
             Object(Matching,    "JSystem/J2DGraph/J2DPane.cpp"),
             Object(Matching,    "JSystem/J2DGraph/J2DScreen.cpp"),
-            Object(NonMatching, "JSystem/J2DGraph/J2DWindow.cpp"),
+            Object(Matching,    "JSystem/J2DGraph/J2DWindow.cpp"),
             Object(Matching,    "JSystem/J2DGraph/J2DPicture.cpp"),
             Object(Matching,    "JSystem/J2DGraph/J2DTextBox.cpp"),
         ],

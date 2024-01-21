@@ -103,6 +103,13 @@ public:
 
     u8 getNumTexture() { return mNumTexture; }
 
+    void setBinding(J2DBinding v) { mBinding = v; }
+    void setMirror(J2DMirror v) {} // untested { mFlag = (mFlag & ~0x03) | v; }
+    J2DMirror getMirror() const { return J2DMirror(mFlag & 0x03); }
+
+    void setTumble(bool v) {} // untested { mFlag = (mFlag & ~0x04) | (v << 2); }
+    bool isTumble() const { return mFlag >> 2 & 1; }
+
 private:
     /* 0x0CC */ JUTTexture* mpTexture[4];
     /* 0x0DC */ u8 mNumTexture;
