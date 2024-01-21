@@ -12,18 +12,17 @@ public:
     static BOOL solidHeapCB(fopAc_ac_c*);
     bool create_heap();
     s32 _create();
-    BOOL _delete();
+    bool _delete();
     void set_mtx();
-    BOOL _execute();
-    BOOL _draw();
+    bool _execute();
+    bool _draw();
 
     static const char M_arcname[8];
 
     /* 0x290 */ request_of_phase_process_class mphs;
     /* 0x29C */ J3DModel* mpModel;
-    /* 0x2A0 */ dBgW* field_x2A0;
-    /* 0x2A4 */ Mtx field_x2A4;
-    /* 0x2D4    u8 padding?  */
+    /* 0x2A0 */ dBgW* mpBgW;
+    /* 0x2A4 */ Mtx mMtx;
 };
 };  // namespace daObjGaship2
 

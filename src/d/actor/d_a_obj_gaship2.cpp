@@ -22,7 +22,6 @@ BOOL daObjGaship2::Act_c::solidHeapCB(fopAc_ac_c *i_this) {
 bool daObjGaship2::Act_c::create_heap() {
     J3DModelData *mdl_data;
     cBgD_t *bgw_data;
-    bool uVar4;
 
     mdl_data = (J3DModelData *) (dComIfG_getObjectRes(M_arcname, 4));
     JUT_ASSERT(0x5A, mdl_data != 0);
@@ -32,17 +31,13 @@ bool daObjGaship2::Act_c::create_heap() {
     bgw_data = (cBgD_t *) (dComIfG_getObjectRes(M_arcname, 7));
     JUT_ASSERT(0x67, bgw_data != 0);
     if (bgw_data != NULL) {
-        field_x2A0 = new dBgW();
-        if (field_x2A0 != NULL && (field_x2A0->Set(bgw_data, cBgW::MOVE_BG_e, &field_x2A4) == 1)) {
+        mpBgW = new dBgW();
+        if (mpBgW != NULL && (mpBgW->Set(bgw_data, cBgW::MOVE_BG_e, &mMtx) == true)) {
             return false;
         }
     }
 
-    uVar4 = false;
-    if (mdl_data != NULL && mpModel != NULL && bgw_data != NULL && field_x2A0 != NULL) {
-        uVar4 = true;
-    }
-    return uVar4;
+    return mdl_data != NULL && mpModel != NULL && bgw_data != NULL && mpBgW != NULL;
 }
 
 /* 00000220-000002F8       .text _create__Q212daObjGaship25Act_cFv */
@@ -50,10 +45,10 @@ s32 daObjGaship2::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
     cPhs__Step phase = (cPhs__Step) dComIfG_resLoad(&mphs, M_arcname);
     if (phase == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0) & 0xFF) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0)) {
             fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
-            dComIfG_Bgsp()->Regist(field_x2A0, this);
-            field_x2A0->SetCrrFunc(dBgS_MoveBGProc_Typical);
+            dComIfG_Bgsp()->Regist(mpBgW, this);
+            mpBgW->SetCrrFunc(dBgS_MoveBGProc_Typical);
         } else {
             phase = cPhs_ERROR_e;
         }
@@ -62,10 +57,10 @@ s32 daObjGaship2::Act_c::_create() {
 }
 
 /* 000002F8-00000384       .text _delete__Q212daObjGaship25Act_cFv */
-BOOL daObjGaship2::Act_c::_delete() {
-    if (heap != NULL && field_x2A0 != NULL) {
-        if (field_x2A0->ChkUsed()) {
-            dComIfG_Bgsp()->Release(field_x2A0);
+bool daObjGaship2::Act_c::_delete() {
+    if (heap != NULL && mpBgW != NULL) {
+        if (mpBgW->ChkUsed()) {
+            dComIfG_Bgsp()->Release(mpBgW);
         }
     }
 
@@ -74,26 +69,25 @@ BOOL daObjGaship2::Act_c::_delete() {
 }
 
 /* 00000384-00000430       .text set_mtx__Q212daObjGaship25Act_cFv */
-// Not Matching
 void daObjGaship2::Act_c::set_mtx() {
     mpModel->setBaseScale(mScale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
 
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    MTXCopy(mDoMtx_stack_c::now, field_x2A4);
+    MTXCopy(mDoMtx_stack_c::get(), mMtx);
     mpModel->calc();
 }
 
 /* 00000430-00000468       .text _execute__Q212daObjGaship25Act_cFv */
-BOOL daObjGaship2::Act_c::_execute() {
+bool daObjGaship2::Act_c::_execute() {
     set_mtx();
-    field_x2A0->Move();
+    mpBgW->Move();
     return TRUE;
 }
 
 /* 00000468-00000508       .text _draw__Q212daObjGaship25Act_cFv */
-BOOL daObjGaship2::Act_c::_draw() {
+bool daObjGaship2::Act_c::_draw() {
     dKy_getEnvlight().settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
     dComIfGd_setListBG();
     dKy_getEnvlight().setLightTevColorType(mpModel, &mTevStr);
@@ -101,27 +95,29 @@ BOOL daObjGaship2::Act_c::_draw() {
     dComIfGd_setList();
     return TRUE;
 };
+
 namespace daObjGaship2 {
     namespace {
         s32 Mthd_Create(void *i_this) {
             return ((daObjGaship2::Act_c *) i_this)->_create();
         }
 
-        u8 Mthd_Delete(void *i_this) {
+        BOOL Mthd_Delete(void *i_this) {
             return ((daObjGaship2::Act_c *) i_this)->_delete();
         }
 
-        u8 Mthd_Execute(void *i_this) {
+        BOOL Mthd_Execute(void *i_this) {
             return ((daObjGaship2::Act_c *) i_this)->_execute();
         }
 
-        u8 Mthd_Draw(void *i_this) {
+        BOOL Mthd_Draw(void *i_this) {
             return ((daObjGaship2::Act_c *) i_this)->_draw();
         }
 
         BOOL Mthd_IsDelete(void *i_this) {
             return TRUE;
         }
+
         actor_method_class Mthd_Table = {
             (process_method_func) Mthd_Create,
             (process_method_func) Mthd_Delete,
