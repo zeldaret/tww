@@ -863,7 +863,7 @@ static s32 daBk_Create(fopAc_ac_c* i_actor) {
             i_this->mEnemyFire.mParticleScale[i] = fire_sc[i];
         }
         
-        i_this->mItemStealLeft = 3;
+        i_this->mStealItemLeft = 3;
         
         daBk_Execute(i_this);
     }

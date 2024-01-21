@@ -260,7 +260,7 @@ static BOOL medama_atari_check(am_class* i_this) {
     switch (hitObj->GetAtType()) {
     case AT_TYPE_GRAPPLING_HOOK:
         if (i_this->mCurrBckIdx != AM_BCK_SLEEP && i_this->mCurrBckIdx != AM_BCK_SLEEP_LOOP) {
-            if (i_this->mItemStealLeft > 0) {
+            if (i_this->mStealItemLeft > 0) {
                 i_this->mMaxHealth = 10;
                 i_this->mHealth = 10;
                 atInfo.mpObj = i_this->mEyeSph.GetTgHitObj();
@@ -1192,7 +1192,7 @@ static s32 daAM_Create(fopAc_ac_c* i_actor) {
             return cPhs_ERROR_e;
         }
 
-        i_this->mItemStealLeft = 3;
+        i_this->mStealItemLeft = 3;
 
         i_this->mSmokeCbs[0].setRateOff(0);
         i_this->mSmokeCbs[1].setRateOff(0);

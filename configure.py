@@ -400,7 +400,7 @@ config.libs = [
             Object(Matching,    "d/d_cc_d.cpp"),
             Object(NonMatching, "d/d_cc_mass_s.cpp"),
             Object(NonMatching, "d/d_cc_s.cpp"),
-            Object(NonMatching, "d/d_cc_uty.cpp"),
+            Object(Matching,    "d/d_cc_uty.cpp"),
             Object(NonMatching, "d/d_cam_param.cpp"),
             Object(NonMatching, "d/d_cam_type.cpp"),
             Object(NonMatching, "d/d_cam_style.cpp"),

@@ -87,7 +87,7 @@ dCcD_SrcCyl cc_cyl_src = {
         /* SrcGObjAt Spl     */ 0,
         /* SrcGObjAt Mtrl    */ 0,
         /* SrcGObjAt SPrm    */ 0,
-        /* SrcGObjTg Se      */ 0x05,
+        /* SrcGObjTg Se      */ dCcD_SE_UNK5,
         /* SrcGObjTg HitMark */ G_TG_MARK_PURPLE_HIT,
         /* SrcGObjTg Spl     */ 0,
         /* SrcGObjTg Mtrl    */ 0,
@@ -158,7 +158,7 @@ BOOL enemy_ice(enemyice* ei) {
                     if (fopAcM_GetName(ac) != PROC_PZ) {
                         // If the actor is not Princess Zelda, drop an item ball.
                         // TODO: Why the Zelda check? Is she coded to be able to die to Light Arrows?
-                        fopAcM_createIball(&pos, ac->mItemTableIdx, fopAcM_GetRoomNo(ac), &ac->current.angle, ac->mItemStealNum);
+                        fopAcM_createIball(&pos, ac->mItemTableIdx, fopAcM_GetRoomNo(ac), &ac->current.angle, ac->mStealItemBitNo);
                     }
                     if (ei->mDeathSwitch != 0) {
                         dComIfGs_onSwitch(ei->mDeathSwitch, fopAcM_GetRoomNo(ac));
@@ -336,7 +336,7 @@ BOOL enemy_ice(enemyice* ei) {
                 }
                 
                 fopAcM_seStart(ac, JA_SE_CM_ICE_BREAK, 0);
-                fopAcM_createIball(&pos, ac->mItemTableIdx, fopAcM_GetRoomNo(ac), &ac->current.angle, ac->mItemStealNum);
+                fopAcM_createIball(&pos, ac->mItemTableIdx, fopAcM_GetRoomNo(ac), &ac->current.angle, ac->mStealItemBitNo);
                 ei->mFreezeTimer = 0;
                 if (ei->mDeathSwitch != 0) {
                     dComIfGs_onSwitch(ei->mDeathSwitch, fopAcM_GetRoomNo(ac));

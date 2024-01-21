@@ -165,6 +165,10 @@ inline void mDoAud_bgmMuteMtDragon() {
     mDoAud_zelAudio_c::getInterface()->bgmMuteMtDragon();
 }
 
+inline void mDoAud_bgmHitSound(s32 param_0) {
+    mDoAud_zelAudio_c::getInterface()->bgmHitSound(param_0);
+}
+
 inline void mDoAud_stSkyCloisters() {
     mDoAud_zelAudio_c::getInterface()->stSkyCloisters();
 }

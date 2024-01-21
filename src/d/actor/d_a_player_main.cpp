@@ -1749,7 +1749,7 @@ BOOL daPy_lk_c::changeDamageProc() {
     }
     
     BOOL r30;
-    int r29;
+    int damage;
     s32 r28 = dBgS_Attr_NORMAL_e;
     
     if (checkNoResetFlg1(daPyFlg1_UNK4) || (
@@ -1781,12 +1781,12 @@ BOOL daPy_lk_c::changeDamageProc() {
     
     if (r28 != dBgS_Attr_NORMAL_e) {
         r30 = TRUE;
-        r29 = 1;
+        damage = 1;
     } else {
         r30 = FALSE;
-        r29 = mStts.GetDmg();
-        if (mCyl.ChkTgHit() && mCyl.GetTgHitGObj() && mCyl.GetTgHitGObj()->GetAtType() == 0x20) {
-            r29 = 1;
+        damage = mStts.GetDmg();
+        if (mCyl.ChkTgHit() && mCyl.GetTgHitGObj() && mCyl.GetTgHitGObj()->GetAtType() == AT_TYPE_BOMB) {
+            damage = 1;
         }
     }
     
@@ -1804,7 +1804,7 @@ BOOL daPy_lk_c::changeDamageProc() {
     
     if (checkModeFlg(ModeFlg_04000000)) {
         if (r30 || mCyl.ChkTgHit() && !checkSuccessGuard(r27)) {
-            setDamagePoint(-r29);
+            setDamagePoint(-damage);
             mDamageWaitTimer = daPy_HIO_dam_c0::m.field_0x2;
             
             voiceStart(2);
@@ -1828,7 +1828,7 @@ BOOL daPy_lk_c::changeDamageProc() {
             }
         }
     } else {
-        if (mAtCps[0].GetAtType() != 0x80 && mAtCps[0].GetAtType() != 0x100) {
+        if (mAtCps[0].GetAtType() != AT_TYPE_BOKO_STICK && mAtCps[0].GetAtType() != AT_TYPE_WATER) {
             cXyz sp8;
             if (checkElecReturnDamage(&mAtCps[0], &sp8) ||
                 checkElecReturnDamage(&mAtCps[1], &sp8) ||
@@ -1864,7 +1864,7 @@ BOOL daPy_lk_c::changeDamageProc() {
                 
                 setDamageEmitter();
                 changePlayer(this);
-                setDamagePoint(-r29);
+                setDamagePoint(-damage);
                 fopAc_ac_c* grabActor = mActorKeepGrab.getActor();
                 if (daPy_dmEcallBack_c::checkElec()) {
                     if (procElecDamage_init(NULL)) {
@@ -1891,17 +1891,17 @@ BOOL daPy_lk_c::changeDamageProc() {
                 if (daPy_lk_c::checkPlayerFly() || r27 == 6 || r27 == 1 || r27 == 9) {
                     return procLargeDamage_init(-1, 1, 0, 0);
                 }
-                if (checkNormalDamage(r29)) {
+                if (checkNormalDamage(damage)) {
                     return procDamage_init();
                 }
                 setDashDamage();
             } else {
                 u8 hitSe = mCyl.GetTgHitObjSe();
-                if (hitSe == 6) {
+                if (hitSe == dCcD_SE_UNK6) {
                     seStartOnlyReverb(JA_SE_OBJ_COL_N_BDY_MPLT);
-                } else if (hitSe == 2 || hitSe == 5) {
+                } else if (hitSe == dCcD_SE_UNK2 || hitSe == dCcD_SE_UNK5) {
                     seStartOnlyReverb(JA_SE_OBJ_COL_SWS_NMTLP);
-                } else if (hitSe == 4) {
+                } else if (hitSe == dCcD_SE_UNK4) {
                     seStartOnlyReverb(JA_SE_OBJ_COL_NWHP_NMTL);
                 } else {
                     seStartOnlyReverb(JA_SE_OBJ_COL_SWM_NSWL);
@@ -1918,7 +1918,7 @@ BOOL daPy_lk_c::changeDamageProc() {
             if (mHeldItemType == 0x101) {
                 deleteEquipItem(FALSE);
             }
-            setDamagePoint(-r29);
+            setDamagePoint(-damage);
             
             if (r28 == dBgS_Attr_ELECTRICITY_e) {
                 setDamageElecEmitter();
@@ -1927,7 +1927,7 @@ BOOL daPy_lk_c::changeDamageProc() {
                 }
             }
             
-            if (checkNormalDamage(r29)) {
+            if (checkNormalDamage(damage)) {
                 return procPolyDamage_init();
             }
             
@@ -2790,7 +2790,7 @@ void daPy_lk_c::setAtParam(u32 type, int atp, dCcG_At_Spl spl, u8 se, u8 hitMark
         atp *= 2;
     }
     if (type != AT_TYPE_SWORD) {
-        field_0x291 = 0;
+        mCutCount = 0;
     }
     for (int i = 0; i < ARRAY_SIZE(mAtCps); i++, cps++) {
         cps->SetAtType(type);

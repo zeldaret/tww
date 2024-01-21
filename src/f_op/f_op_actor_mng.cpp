@@ -865,7 +865,7 @@ s32 fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo, int r
 
                 if (tableIdx == RECOVER_FAIRY) {
                     // Bug: This condition never gets triggered. They meant to check if (itemNo == RECOVER_FAIRY) so
-                    // that the 3x fairies drop table (table 0x14) spawns them in a triangle. But nstead they check if
+                    // that the 3x fairies drop table (table 0x14) spawns them in a triangle. But instead they check if
                     // the table index is equal to 0x16/RECOVER_FAIRY, which will never be true.
                     pos += fairy_offset_tbl[i];
                     angle.y = cM_rndF((f32)0x7FFE);

@@ -45,7 +45,7 @@ const dCcD_SrcCyl daRd_c::m_cyl_src = {
         /* SrcGObjAt Spl     */ 0,
         /* SrcGObjAt Mtrl    */ 0,
         /* SrcGObjAt SPrm    */ 0,
-        /* SrcGObjTg Se      */ 0x23,
+        /* SrcGObjTg Se      */ dCcD_SE_UNK23,
         /* SrcGObjTg HitMark */ 0,
         /* SrcGObjTg Spl     */ 0,
         /* SrcGObjTg Mtrl    */ 0,
@@ -1813,7 +1813,7 @@ void daRd_c::createInit() {
     
     mD3C = 1;
     mD40 = 1;
-    mItemStealLeft = 5;
+    mStealItemLeft = 5;
     
     mEnemyFire.mpMcaMorf = mpMorf;
     mEnemyFire.mpActor = this;

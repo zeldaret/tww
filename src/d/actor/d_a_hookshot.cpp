@@ -343,7 +343,7 @@ static dCcD_SrcCps l_at_cps_src = {
         /* SrcObjTg  Type    */ 0,
         /* SrcObjTg  SPrm    */ 0,
         /* SrcObjCo  SPrm    */ 0,
-        /* SrcGObjAt Se      */ 0x08,
+        /* SrcGObjAt Se      */ dCcD_SE_HOOKSHOT,
         /* SrcGObjAt HitMark */ 0,
         /* SrcGObjAt Spl     */ 0,
         /* SrcGObjAt Mtrl    */ 0,

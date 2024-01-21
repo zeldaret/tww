@@ -1253,7 +1253,7 @@ BOOL light_at_hit_check(cXyz* pPos) {
     BOOL ret = FALSE;
     fopAc_ac_c * pActor;
     u32 res = dComIfG_Ccsp()->ChkMass(pPos, &pActor, &hitInfo);
-    if (((res & 1) != 0) && (hitInfo.GetAtHitObj()->GetAtType() & AT_TYPE_LIGHT) != 0)
+    if (((res & 1) != 0) && (hitInfo.GetAtHitObj()->GetAtType() & AT_TYPE_LIGHT))
         ret = TRUE;
     return ret;
 }

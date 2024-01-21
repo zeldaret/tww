@@ -29,7 +29,17 @@ enum dCcG_Co_SPrm {
     G_CO_SPRM_TG_LASSO = 0x02,
 };
 
-enum dCcD_hitSe {};
+enum dCcD_hitSe {
+    /* 0x01 */ dCcD_SE_UNK1 = 1,
+    /* 0x02 */ dCcD_SE_UNK2 = 2,
+    /* 0x04 */ dCcD_SE_UNK4 = 4,
+    /* 0x05 */ dCcD_SE_UNK5 = 5,
+    /* 0x06 */ dCcD_SE_UNK6 = 6,
+    /* 0x07 */ dCcD_SE_ARROW = 7,
+    /* 0x08 */ dCcD_SE_HOOKSHOT = 8,
+    /* 0x23 */ dCcD_SE_UNK23 = 0x23,
+    /* 0x25 */ dCcD_SE_UNK25 = 0x25,
+};
 
 enum CcG_At_HitMark {
     /* 0xD */ G_AT_MARK_NORMAL_HIT = dPa_name::ID_COMMON_NORMAL_HIT,

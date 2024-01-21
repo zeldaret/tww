@@ -534,6 +534,8 @@ void* fopAcM_fastCreateItem(cXyz* p_pos, int i_itemNo, int i_roomNo, csXyz* p_an
                             cXyz* p_scale, f32 p_speedF, f32 p_speedY, f32 param_8,
                             int param_9 = -1, createFunc p_createFunc = NULL);
 
+void* fopAcM_createStealItem(cXyz* p_pos, int i_tblNo, int i_roomNo, csXyz* p_angle, int i_itemBitNo);
+
 BOOL stealItem_CB(void* actor);
 
 fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo);

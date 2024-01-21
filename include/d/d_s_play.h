@@ -6,6 +6,7 @@
 #include "m_Do/m_Do_hostIO.h"
 
 class mDoDvdThd_toMainRam_c;
+
 class dScnPly_ply_c : public scene_class {
 public:
     s8 calcPauseTimer();
@@ -14,6 +15,9 @@ public:
 
     static bool isPause() { return pauseTimer != 0; }
     static void setPauseTimer(s8 time) { nextPauseTimer = time; }
+
+    static void onDebugPause() {}
+    static void offDebugPause() {}
 
     static s8 pauseTimer;
     static s8 nextPauseTimer;

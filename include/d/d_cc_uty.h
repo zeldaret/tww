@@ -23,12 +23,12 @@ public:
     /* 0x18 */ s32 mHitSoundId;
 };
 
-void cc_pl_cut_bit_get();
-void at_se_get(cCcD_Obj*);
-void at_se_getC(cCcD_Obj*);
+int cc_pl_cut_bit_get();
+u32 at_se_get(cCcD_Obj*);
+u32 at_se_getC(cCcD_Obj*);
 void def_se_set(fopAc_ac_c*, cCcD_Obj*, unsigned long);
 void def_se_set_p(fopAc_ac_c*, cXyz*, cCcD_Obj*, unsigned long);
-void at_power_check(CcAtInfo*);
-void cc_at_check(fopAc_ac_c*, CcAtInfo*);
+fopAc_ac_c* at_power_check(CcAtInfo*);
+fopAc_ac_c* cc_at_check(fopAc_ac_c*, CcAtInfo*);
 
 #endif /* D_CC_UTY_H */

@@ -7,26 +7,38 @@
 #include "d/d_bg_s_acch.h"
 #include "SSystem/SComponent/c_bg_s_poly_info.h"
 #include "d/d_particle.h"
+#include "d/d_a_obj.h"
 #include "SSystem/SComponent/c_angle.h"
 #include "SSystem/SComponent/c_phase.h"
 
 namespace daTsubo {
     class Act_c : public fopAc_ac_c {
     public:
+        enum Prm_e {
+            PRM_TYPE_W = 0x04,
+            PRM_TYPE_S = 0x18,
+        };
+        
+        enum Type {
+            TYPE_WATER_JUG = 0x2,
+            TYPE_KUTANI = 0xE,
+        };
+        
+        int prm_get_type() const { return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S); }
+        bool prm_chk_type_kutani() const { return prm_get_type() == TYPE_KUTANI; }
+        
         void attrSpine() {}
         void data() const {}
         void data_spec_boko(int) {}
         void is_switch() const {}
         void pos_init() {}
         void prmZ_get_swSave() const {}
-        void prm_chk_type_kutani() const {}
         void prm_get_cull() const {}
         void prm_get_itemNo() const {}
         void prm_get_itemSave() const {}
         void prm_get_moveBg() const {}
         void prm_get_spec() const {}
         void prm_get_stick() const {}
-        void prm_get_type() const {}
         void prm_make_acorn(bool, int, int) {}
         void prm_make_skull() {}
         void prm_make_yw1() {}
