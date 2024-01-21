@@ -76,6 +76,7 @@ public:
     static u8 mNowRoomNo;
     static daSalvage_control_c* mTagData_p;
     static s32 mSalvageId;
+    static const u16 m_savelabel[];
 
 public:
     /* Place member variables here */

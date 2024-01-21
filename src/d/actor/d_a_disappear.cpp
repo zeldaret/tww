@@ -23,16 +23,19 @@ static BOOL daDisappear_Execute(disappear_class* i_this) {
         i_this->mTimer--;
         
         if (i_this->mTimer == 0) {
-            s8 health = i_this->mHealth;
+            s8 health = i_this->mHealth; // TODO: add enum for disappear types (stored in health)
 
             if (health != 1 && health != 3) {
                 if (health == 2) {
                     fopAcM_createItemForBoss(&i_this->current.pos, 0, i_this->current.roomNo, &i_this->current.angle);
                 }
                 else if (health >= 0x0A && health <= 0x0D) {
+                    // Special type for Keese (ki) spawned in the Puppet Ganon fight.
                     if (health < 0x0D) {
                         static u32 ki_item_d[] = {
-                            0, 10, 16
+                            HEART,
+                            L_MAGIC,
+                            ARROW_10,
                         };
 
                         fopAcM_createItem(&i_this->current.pos, ki_item_d[health - 0xA], -1, -1, 0, NULL, 4);
@@ -69,23 +72,23 @@ void set_disappear(disappear_class* i_this, float scale) {
     i_this->mTimer = 58 + g_regHIO.mChild[8].mShortRegs[0];
 
     switch (i_this->mHealth) {
-        case 0:
-        case 2:
-        case 10:
+        case 0x0:
+        case 0x2:
+        case 0xA:
         case 0xB:
         case 0xC:
         case 0xD:
             dComIfGp_particle_set(0x14, &i_this->current.pos, NULL, &particleScale);
-        case 3:
+        case 0x3:
             dComIfGp_particle_set(0x13, &i_this->current.pos, NULL, &particleScale);
             dComIfGp_particle_setStripes(0x15, &i_this->current.pos, NULL, &particleScale, 0xFF, 0x96);
             dComIfGp_particle_set(0x16, &i_this->current.pos, NULL, &particleScale);
             break;
-        case 1:
+        case 0x1:
             dComIfGp_particle_set(0x13, &i_this->current.pos, NULL, &particleScale);
             dComIfGp_particle_set(0x16, &i_this->current.pos, NULL, &particleScale);
             break;
-        case 4:
+        case 0x4:
             dComIfGp_particle_set(0x043C, &i_this->current.pos);
             dComIfGp_particle_set(0x043D, &i_this->current.pos);
             dComIfGp_particle_set(0x043E, &i_this->current.pos);

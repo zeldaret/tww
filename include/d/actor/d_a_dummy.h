@@ -19,7 +19,7 @@ namespace daDummy {
 
     public:
         /* 0x290 */ // vtable
-        /* 0x294 */ request_of_phase_process_class mPhase;
+        /* 0x294 */ request_of_phase_process_class mPhase; // Unused
         /* 0x29c */ Mtx mMtx;
     };
 };

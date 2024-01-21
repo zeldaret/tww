@@ -30,9 +30,12 @@ public:
         mNowDaizaNum = 0;
         mNowItemNum = 0;
     }
+    static void getMaxDaiza();
+    static void getDaizaSetItemNum();
 
     static u32 mNowDaizaNum;
     static u32 mNowItemNum;
+    static const u16 m_savelabel[];
 
 public:
     /* 0x6C4 */ request_of_phase_process_class mPhsFdai;

@@ -19,7 +19,7 @@ public:
 
     static void daTitle_Kirakira_Sound_flag_on();
 
-    static bool daTitle_Kirakira_Sound_flag[];
+    static bool daTitle_Kirakira_Sound_flag;
 };
 
 class daTitle_c : public fopAc_ac_c {

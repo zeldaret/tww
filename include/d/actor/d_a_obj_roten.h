@@ -13,6 +13,8 @@ public:
     void set_mtx();
     void CreateHeap();
     void CreateInit();
+    
+    static void getCreateCount();
 
 public:
     /* Place member variables here */

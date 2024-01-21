@@ -34,7 +34,7 @@ public:
     /* 0x55C */ dPointWind_c mPointWind;
 
 public:
-    static s32 mEmitterNum;
+    static u8 mEmitterNum;
 };
 
 #endif /* D_A_STEAM_TAG_H */
