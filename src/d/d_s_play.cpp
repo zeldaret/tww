@@ -8,10 +8,16 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTReport.h"
-#include "string.h"
 #include "SSystem/SComponent/c_counter.h"
+#include "d/actor/d_a_dai.h"
+#include "d/actor/d_a_ib.h"
+#include "d/actor/d_a_npc_kg2.h"
 #include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_salvage.h"
+#include "d/actor/d_a_sea.h"
+#include "d/actor/d_a_steam_tag.h"
 #include "d/actor/d_a_title.h"
+#include "d/actor/d_a_ykgr.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
 #include "d/d_kankyo_rain.h"
@@ -28,6 +34,9 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_graphic.h"
+#include "m_Do/m_Do_machine.h"
+#include "printf.h"
+#include "string.h"
 
 namespace daObjTribox {
 class Act_c {
@@ -473,12 +482,32 @@ int phase_01(dScnPly_ply_c* i_this) {
     }
 }
 
-/* 802356E0-802357F4       .text phase_0__FP13dScnPly_ply_c */
-void phase_0(dScnPly_ply_c* i_this) {
-    /* Nonmatching */
-}
-
 static mDoDvdThd_mountXArchive_c* l_lkDemoAnmCommand;
+
+/* 802356E0-802357F4       .text phase_0__FP13dScnPly_ply_c */
+s32 phase_0(dScnPly_ply_c* i_this) {
+    /* Nonmatching */
+    if (!mDoAud_checkAllWaveLoadStatus()) {
+        l_lkDemoAnmCommand = NULL;
+
+        u32 darcIdx = dComIfGs_isEventBit(0x2D01) ? 1 : 0;
+        if (darcIdx != dComIfGp_getLkDemoAnmNo()) {
+            if (dComIfGp_getLkDemoAnmNo() > -1) {
+                dComIfGp_getLkDemoAnmArchive()->unmount();
+            }
+            dComIfGp_setLkDemoAnmNo(darcIdx);
+        }
+
+        char buf[32];
+        sprintf(buf, "/res/Object/LkD%02.arc", darcIdx);
+        l_lkDemoAnmCommand = mDoDvdThd_mountXArchive_c::create(buf, 0, JKRArchive::MOUNT_ARAM);
+        JUT_ASSERT(0xd56, l_lkDemoAnmCommand != 0);
+
+        return cPhs_NEXT_e;
+    } else {
+        return cPhs_INIT_e;
+    }
+}
 
 /* 802357F4-802359DC       .text phase_1__FP13dScnPly_ply_c */
 int phase_1(dScnPly_ply_c* i_this) {
@@ -538,18 +567,145 @@ int phase_3(dScnPly_ply_c* i_this) {
     return cPhs_NEXT_e;
 }
 
+static s8 preLoadNo;
+static bool doPreLoad;
+static OSTime resPreLoadTime0;
+static OSTime resPreLoadTime1;
+
 /* 80235B0C-80236334       .text phase_4__FP13dScnPly_ply_c */
-void phase_4(dScnPly_ply_c* i_this) {
+s32 phase_4(dScnPly_ply_c* i_this) {
     /* Nonmatching */
+
+    if (i_this->sceneCommand != NULL) {
+        JUT_ASSERT(0xdef, i_this->sceneCommand->getMemAddress());
+        dComIfGp_particle_createScene(i_this->sceneCommand->getMemAddress());
+        delete i_this->sceneCommand;
+    } else {
+        dComIfGp_particle_createScene(NULL);
+    }
+
+    dComIfG_Ccsp()->Ct();
+    dComIfGp_createDemo();
+    daSea_Init();
+    dSnap_Create();
+    dComIfGp_setPlayerPtr(0, NULL);
+    g_dComIfG_gameInfo.play.mCurCamera[0] = 0; // dComIfGp_setPlayerInfo?
+    for (s32 i = 0; i < 3; i++)
+        dComIfGp_setPlayerPtr(i, NULL);
+    dComIfGp_setWindowNum(1);
+    dComIfGp_setWindow(0, 0.0f, 0.0f, mDoMch_render_c::getFbWidth(), mDoMch_render_c::getEfbHeight(), 0.0f, 1.0f, 0, 2);
+    dComIfGp_setCameraInfo(0, NULL, 0, 0, 0xFF);
+    // setCameraAttentionStatus?
+    dComIfGd_setWindow(NULL);
+    dComIfGd_setViewport(NULL);
+    dComIfGd_setView(NULL);
+
+    JKRExpHeap* heap = fopMsgM_createExpHeap(0x73ea1);
+    JUT_ASSERT(0xe45, heap != 0);
+    dComIfGp_setExpHeap2D(heap);
+
+    dStage_Create();
+    mDoGph_gInf_c::setTickRate((OS_BUS_CLOCK / 4) / 60);
+
+    g_darkHIO.mChildID = mDoHIO_root.mDoHIO_createChild("暗闇スポット", &g_darkHIO);
+    g_envHIO.mChildID = mDoHIO_root.mDoHIO_createChild("描画設定", &g_envHIO);
+    g_msgDHIO.mChildID = mDoHIO_root.mDoHIO_createChild("Message Data", &g_msgDHIO);
+
+    new(&dComIfGp_getAttention()) dAttention_c(dComIfGp_getPlayer(0), NULL);
+    dComIfGp_getVibration().Init();
+    daSteamTag_c::init();
+    daYkgr_c::init();
+    daSalvage_c::init();
+    daDai_c::init();
+    daNpc_Kg2_c::init();
+    daIball_c::init();
+    dComIfG_setBrightness(0xFF);
+    mDoGph_gInf_c::offFade();
+
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+    if (stag_info != NULL && dStage_stagInfo_GetSTType(stag_info) == dStageType_FF1_e && dComIfGs_isEventBit(0x0801)) {
+        dComIfGs_setSelectEquip(0, NO_ITEM);
+        dComIfGp_setSelectEquip(0, NO_ITEM);
+        dComIfGs_offCollect(0, 0);
+    }
+
+    if (strcmp(dComIfGp_getStartStageName(), "GTower") == 0) {
+        dComIfGs_setItem(12, NO_ITEM); // take away the bow
+        for (s32 i = 0; i < 3; i++) {
+            s32 itemno = dComIfGp_getSelectItem(i);
+            if (itemno == BOW || itemno == MAGIC_ARROW || itemno == LIGHT_ARROW) {
+                dComIfGs_setSelectItem(i, NO_ITEM);
+                dComIfGp_setSelectItem(i);
+            }
+        }
+    } else if (dComIfGs_getItem(12) == NO_ITEM) {
+        // give the bow back
+        if (dComIfGs_isItem(12, 2))
+            dComIfGs_setItem(12, LIGHT_ARROW);
+        else if (dComIfGs_isItem(12, 1))
+            dComIfGs_setItem(12, MAGIC_ARROW);
+        else if (dComIfGs_isItem(12, 0))
+            dComIfGs_setItem(12, BOW);
+    }
+
+    if (strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0 || strcmp(dComIfGp_getStartStageName(), "Xboss1") == 0 || strcmp(dComIfGp_getStartStageName(), "Xboss2") == 0 || strcmp(dComIfGp_getStartStageName(), "Xboss3") == 0) {
+        dComIfGs_setPlayerRecollectionData();
+    }
+
+    mDoAud_monsSeInit();
+
+    if (fpcM_GetProfName(i_this) == PROC_PLAY_SCENE) {
+        mDoAud_zelAudio_c::onBgmSet();
+    } else {
+        mDoAud_zelAudio_c::offBgmSet();
+    }
+
+    dScnPly_ply_c::pauseTimer = 0;
+    dScnPly_ply_c::nextPauseTimer = 0;
+
+    if (((strcmp(dComIfGp_getStartStageName(), "Hyrule") == 0 || strcmp(dComIfGp_getStartStageName(), "Hyroom") == 0 || strcmp(dComIfGp_getStartStageName(), "kenroom") == 0) && !dComIfGs_isEventBit(0x3802)) || dComIfGp_getStartStageName()[0] == 'X') {
+        mDoGph_gInf_c::onMonotone();
+
+        bool hy8 = strcmp(dComIfGp_getStartStageName(), "Hyrule") == 0 && dComIfGp_getStartStageLayer() == 8;
+        mDoGph_gInf_c::setMonotoneRate(400);
+        if (hy8)
+            mDoGph_gInf_c::setMonotoneRate(-600);
+        mDoGph_gInf_c::setMonotoneRateSpeed(0);
+    } else {
+        mDoGph_gInf_c::offMonotone();
+    }
+
+    preLoadNo = -1;
+    if (doPreLoad) {
+        // PreloadTable
+    }
+
+    mDoRst::offReset();
+    OSTime time = resPreLoadTime0;
+    JUTGamePad::clearResetOccurred();
+    JUTGamePad::setResetCallback(mDoRst_resetCallBack, NULL);
+
+    s32 rt;
+    if (preLoadNo < 0)
+        return cPhs_COMPLEATE_e;
+
+    time = OSGetTime();
+    rt = cPhs_NEXT_e;
+    resPreLoadTime0 = time;
+
+    return rt;
 }
 
 /* 80236334-80236444       .text phase_5__FP13dScnPly_ply_c */
-void phase_5(dScnPly_ply_c* i_this) {
+s32 phase_5(dScnPly_ply_c* i_this) {
     /* Nonmatching */
+    if (preLoadNo < 0) {
+        return cPhs_NEXT_e;
+    }
 }
 
 /* 80236444-80236554       .text phase_6__FP13dScnPly_ply_c */
-void phase_6(dScnPly_ply_c* i_this) {
+s32 phase_6(dScnPly_ply_c* i_this) {
     /* Nonmatching */
 }
 

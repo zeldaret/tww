@@ -4,6 +4,8 @@
 #include "f_op/f_op_actor.h"
 #include "d/actor/d_a_oship.h"
 
+class daSalvage_control_c;
+
 class daSalvage_c : public fopAc_ac_c {
 public:
     void checkRegist(int) {}
@@ -28,7 +30,6 @@ public:
     void getScale(int) {}
     void getSwitchNo(int) {}
     void getType(int) {}
-    void init() {}
     void init_one(int) {}
     void isValidSalvageId() {}
     void setDrawMode(int, int) {}
@@ -65,6 +66,16 @@ public:
     void debugDraw();
 
     static void init_room(signed char);
+
+    static void init() {
+        mNowRoomNo = 0xFF;
+        mTagData_p = NULL;
+        mSalvageId = -1;
+    }
+
+    static u8 mNowRoomNo;
+    static daSalvage_control_c* mTagData_p;
+    static s32 mSalvageId;
 
 public:
     /* Place member variables here */

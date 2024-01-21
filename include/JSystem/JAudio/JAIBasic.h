@@ -3,6 +3,7 @@
 
 #include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/mtx/vec.h"
+#include "JSystem/JAudio/JAIBankWave.h"
 
 class JAISound;
 class JKRSolidHeap;
@@ -82,9 +83,12 @@ public:
         return msCurrentHeap;
     }
 
+    bool checkAllWaveLoadStatus() {
+        return JAInter::BankWave::checkAllWaveLoadStatus();
+    }
+
     // TODO
     void addInitOnCodeSeScene(u32, u32) {}
-    void checkAllWaveLoadStatus() {}
     void checkEnablePrepare(u32) {}
     void getAudioCamera() {}
     void getInitDataInfo() {}

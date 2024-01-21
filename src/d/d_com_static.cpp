@@ -5,27 +5,29 @@
 
 #include "dolphin/types.h"
 #include "d/d_com_inf_game.h"
-#include "d/actor/d_a_obj_pirateship.h"
 #include "d/actor/d_a_agb.h"
 #include "d/actor/d_a_agbsw0.h"
+#include "d/actor/d_a_npc_kamome.h"
 #include "d/actor/d_a_npc_os.h"
 #include "d/actor/d_a_npc_md.h"
 #include "d/actor/d_a_arrow.h"
 #include "d/actor/d_a_ib.h"
-#include "d/actor/d_a_obj_movebox.h"
-#include "d/actor/d_a_tag_kb_item.h"
 #include "d/actor/d_a_item.h"
+#include "d/actor/d_a_obj_movebox.h"
+#include "d/actor/d_a_obj_pirateship.h"
+#include "d/actor/d_a_steam_tag.h"
+#include "d/actor/d_a_tag_kb_item.h"
 #include "d/actor/d_a_tag_waterlevel.h"
 #include "d/actor/d_a_title.h"
 #include "d/d_procname.h"
-#include "d/actor/d_a_npc_kamome.h"
 
 static Vec dummy_3569;
+u32 daSteamTag_c::mEmitterNum;
 
-// /* 8005662C-80056638       .text init__12daSteamTag_cFv */
-// void daSteamTag_c::init() {
-//     /* Nonmatching */
-// }
+/* 8005662C-80056638       .text init__12daSteamTag_cFv */
+void daSteamTag_c::init() {
+    mEmitterNum = 0;
+}
 
 /* 80056638-800566F0       .text getShipOffsetY__15daObjPirateshipFPsPsf */
 f32 daObjPirateship::getShipOffsetY(s16* param_1, s16* param_2, f32 param_3) {

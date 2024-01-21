@@ -8,6 +8,13 @@ class JPABaseParticle;
 
 class daYkgr_c : public fopAc_ac_c {
 public:
+    static void init() {
+        m_emitter = NULL;
+        m_flag = 0;
+        m_alpha_flag = 1;
+        m_alpha = 0xFF;
+    }
+
     static void stop() {
         if (m_emitter) {
             m_alpha_flag = 0;
@@ -15,14 +22,15 @@ public:
     };
     
     static JPABaseEmitter* m_emitter;
+    static u8 m_flag;
     static u8 m_alpha_flag;
+    static u8 m_alpha;
     
     inline s32 _create();
     inline BOOL _delete();
     inline BOOL _draw();
     inline BOOL _execute();
     void hide() {}
-    void init() {}
     void setAimRate(float) {}
     void setAlpha(unsigned char) {}
     void set_mtx() {}

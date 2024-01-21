@@ -1084,6 +1084,8 @@ int dStage_changeScene(int i_exitId, f32 speed, u32 mode, s8 room_no);
 void dStage_restartRoom(u32 roomParam, u32 mode);
 
 BOOL dStage_checkRestart();
+void dStage_Create();
+void dStage_Delete();
 
 class cBgS_GndChk;
 int dStage_RoomCheck(cBgS_GndChk* i_gndChk);

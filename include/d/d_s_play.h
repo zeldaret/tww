@@ -26,19 +26,19 @@ public:
     /* 0x1CC */ mDoDvdThd_toMainRam_c* sceneCommand;
 };
 
-class dScnPly_dark_HIO_c {
+class dScnPly_dark_HIO_c : public JORReflexible {
 public:
     dScnPly_dark_HIO_c();
     virtual ~dScnPly_dark_HIO_c() {}
 
-    /* 0x04 */ u8 field_0x04[0x05 - 0x04];
+    /* 0x04 */ s8 mChildID;
     /* 0x05 */ u8 field_0x05;
     /* 0x06 */ u8 field_0x06;
     /* 0x07 */ u8 field_0x07[0x08 - 0x07];
     /* 0x08 */ dStage_darkStatus_c mDarkStatus;
 };
 
-class dScnPly_reg_childHIO_c {
+class dScnPly_reg_childHIO_c : public JORReflexible {
 public:
     dScnPly_reg_childHIO_c();
     virtual ~dScnPly_reg_childHIO_c() {}
@@ -47,12 +47,12 @@ public:
     /* 0x7C */ s16 mShortRegs[10];
 };
 
-class dScnPly_env_otherHIO_c {
+class dScnPly_env_otherHIO_c : public JORReflexible {
 public:
     dScnPly_env_otherHIO_c();
     virtual ~dScnPly_env_otherHIO_c() {}
 
-    /* 0x04 */ u8 field_0x04;
+    /* 0x04 */ s8 mChildID;
     /* 0x05 */ u8 field_0x05;
     /* 0x06 */ u8 field_0x06;
     /* 0x07 */ u8 field_0x07;
@@ -77,12 +77,12 @@ public:
     /* 0x44 */ f32 field_0x44;
 };
 
-class dScnPly_env_debugHIO_c {
+class dScnPly_env_debugHIO_c : public JORReflexible {
 public:
     dScnPly_env_debugHIO_c();
     virtual ~dScnPly_env_debugHIO_c() {}
 
-    /* 0x04 */ u8 field_0x04[0x08 - 0x04];
+    /* 0x04 */ s8 mChildID;
     /* 0x08 */ f32 field_0x08;
     /* 0x0C */ f32 field_0x0c;
     /* 0x10 */ f32 field_0x10;
@@ -95,7 +95,7 @@ public:
     /* 0x2C */ f32 field_0x2c;
 };
 
-class dScnPly_msg_HIO_c {
+class dScnPly_msg_HIO_c : public JORReflexible {
 public:
     dScnPly_msg_HIO_c();
     void dScnPly_msg_HIO_checkUpdate(u8);
@@ -106,7 +106,7 @@ public:
 
     virtual ~dScnPly_msg_HIO_c() {}
 
-    /* 0x04 */ u8 field_0x04;
+    /* 0x04 */ s8 mChildID;
     /* 0x05 */ u8 mIsUpdate;
     /* 0x06 */ u8 field_0x06;
     /* 0x07 */ u8 field_0x07;
@@ -119,16 +119,16 @@ public:
 
 extern dScnPly_msg_HIO_c g_msgDHIO;
 
-class dScnPly_preLoad_HIO_c : public mDoHIO_entry_c {
+class dScnPly_preLoad_HIO_c : public JORReflexible {
 public:
     virtual ~dScnPly_preLoad_HIO_c() {}
 };
 
-class dScnPly_env_HIO_c {
+class dScnPly_env_HIO_c : public JORReflexible {
 public:
     virtual ~dScnPly_env_HIO_c() {}
 
-    /* 0x04 */ u8 field_0x4;
+    /* 0x04 */ s8 mChildID;
     /* 0x08 */ dScnPly_env_otherHIO_c mOther;
     /* 0x50 */ dScnPly_env_debugHIO_c mEnvDebug;
 };
@@ -137,7 +137,7 @@ class dScnPly_reg_HIO_c {
 public:
     virtual ~dScnPly_reg_HIO_c() {}
 
-    /* 0x4 */ u8 field_0x4;
+    /* 0x4 */ s8 mChildID;
     /* 0x8 */ dScnPly_reg_childHIO_c mChild[22];
 };
 

@@ -10,7 +10,6 @@ public:
     void decNowItemNum() {}
     void incNowDaizaNum() {}
     void incNowItemNum() {}
-    void init() {}
 
     BOOL _delete();
     void CreateHeap();
@@ -26,6 +25,14 @@ public:
     BOOL _draw();
     void getMsg();
     void next_msgStatus(unsigned long*);
+
+    static void init() {
+        mNowDaizaNum = 0;
+        mNowItemNum = 0;
+    }
+
+    static u32 mNowDaizaNum;
+    static u32 mNowItemNum;
 
 public:
     /* 0x6C4 */ request_of_phase_process_class mPhsFdai;
