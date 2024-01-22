@@ -18,6 +18,7 @@
 #include "d/actor/d_a_steam_tag.h"
 #include "d/actor/d_a_title.h"
 #include "d/actor/d_a_ykgr.h"
+#include "d/actor/d_a_obj_tribox.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
 #include "d/d_kankyo_rain.h"
@@ -38,12 +39,18 @@
 #include "printf.h"
 #include "string.h"
 
-namespace daObjTribox {
-class Act_c {
-public:
-    static void reset();
+static Vec dummy_3569;
+
+static const int PRELOAD_RES_MAX = 0x23;
+static const int PRELOAD_DYL_MAX = 0x1B;
+
+struct PreLoadInfoT_s {
+    char* stageName;
+    const s16* dylKeyTbl;
+    const char** resName;
+    u8 dylKeyTblNum;
+    u8 resNameNum;
 };
-};  // namespace daObjTribox
 
 s8 dScnPly_ply_c::pauseTimer;
 s8 dScnPly_ply_c::nextPauseTimer;
@@ -175,7 +182,6 @@ void dScnPly_msg_HIO_c::dScnPly_msg_HIO_numUpdate(s16 i_addGroup, s16 i_addID) {
 }
 
 /* 80234830-80234AA8       .text dScnPly_msg_HIO_padCheck__17dScnPly_msg_HIO_cFv */
-// NONMATCHING - regswap
 void dScnPly_msg_HIO_c::dScnPly_msg_HIO_padCheck() {
     if (mIsUpdate) {
         if (CPad_CHECK_TRIG_Z(3)) {
@@ -239,7 +245,8 @@ void dScnPly_msg_HIO_c::dScnPly_msg_HIO_messageProc() {
     if (field_0x06) {
         if (field_0x10 == fpcM_ERROR_PROCESS_ID_e) {
             u32 msg_num = (mGroup << 0x10) | mID;
-            cXyz sp10(0.0f, 0.0f, 0.0f);
+            cXyz sp10;
+            sp10.x = sp10.y = sp10.z = 0.0f;
 
             if (mGroup != 99 && mGroup != 98 && mGroup != 89) {
                 msg_num = fopMsgM_searchMessageNumber(msg_num);
@@ -263,6 +270,17 @@ void dScnPly_msg_HIO_c::dScnPly_msg_HIO_messageProc() {
         }
     }
 }
+
+static OSTime dylPreLoadTime1;
+static OSTime resPreLoadTime0;
+static OSTime resPreLoadTime1;
+
+static u8 number_of_resPhase[PRELOAD_RES_MAX];
+static u8 number_of_dylPhase[PRELOAD_DYL_MAX];
+static request_of_phase_process_class resPhase[PRELOAD_RES_MAX];
+static request_of_phase_process_class dylPhase[PRELOAD_DYL_MAX];
+
+static dScnPly_preLoad_HIO_c g_preLoadHIO;
 
 /* 80234B9C-80234FD0       .text dScnPly_Draw__FP13dScnPly_ply_c */
 // NONMATCHING - close, just an issue with the wipe conditional
@@ -366,6 +384,644 @@ int dScnPly_Draw(dScnPly_ply_c* i_this) {
     return 1;
 }
 
+const char* sea_resName[] = {
+    "Ship",
+    "Cloth",
+    "knob",
+    "Yslvg00",
+    "Kamome",
+};
+STATIC_ASSERT(ARRAY_SIZE(sea_resName) <= PRELOAD_RES_MAX);
+
+const char* M_Dai_resName[] = {
+    "door12",
+    "System",
+    "Dalways",
+    "M_DOOR",
+    "Odokuro",
+    "Key",
+    "Mspot",
+    "Kbota_00",
+    "Tenmado",
+    "Osiblk",
+    "Mmirror",
+    "MkieK",
+    "Mkanoke",
+    "Vds",
+    "St",
+    "Msdan",
+    "MkieB",
+    "Mhsg",
+    "Club",
+    "ltubw",
+    "Rd",
+    "MpwrB",
+    "Fm",
+};
+STATIC_ASSERT(ARRAY_SIZE(M_Dai_resName) <= PRELOAD_RES_MAX);
+
+const s16 majroom_dylKeyTbl[] = {
+    PROC_DOOR10,
+    PROC_EP,
+    PROC_HIMO3,
+    PROC_KNOB00,
+    PROC_KYTAG02,
+    PROC_MO2,
+    PROC_NPC_NZ,
+    PROC_NZ,
+    PROC_NZG,
+    PROC_Obj_Barrel,
+    PROC_Obj_Mshokki,
+    PROC_OBJ_OTBLE,
+    PROC_Tag_Attention,
+    PROC_TAG_EVENT,
+    PROC_TAG_HINT,
+    PROC_TBOX,
+    PROC_TSUBO,
+};
+STATIC_ASSERT(ARRAY_SIZE(majroom_dylKeyTbl) <= PRELOAD_DYL_MAX);
+
+const char* majroom_resName[] = {
+    "Dalways",
+    "Ep",
+    "Ktaru_01",
+    "System",
+    "knob",
+    "Himo3",
+    "Mshokki",
+    "Okmono",
+    "Kantera",
+    "Mbdoor",
+    "Mo2",
+    "Spear",
+    "NZ",
+    "NZG",
+    "Npcnz",
+    "Atdoor",
+    "Ylesr00",
+    "Pt",
+    "Mozo",
+    "Ki",
+    "Kbota_00",
+};
+STATIC_ASSERT(ARRAY_SIZE(majroom_resName) <= PRELOAD_RES_MAX);
+
+const s16 ma2room_dylKeyTbl[] = {
+    PROC_AGBSW0,
+    PROC_BK,
+    PROC_DOOR10,
+    PROC_EP,
+    PROC_KNOB00,
+    PROC_MO2,
+    PROC_NZ,
+    PROC_NZG,
+    PROC_Obj_Mshokki,
+    PROC_OBJ_OTBLE,
+    PROC_Tag_Attention,
+    PROC_TAG_EVENT,
+    PROC_TBOX,
+    PROC_TSUBO,
+};
+STATIC_ASSERT(ARRAY_SIZE(ma2room_dylKeyTbl) <= PRELOAD_DYL_MAX);
+
+const char* ma2room_resName[] = {
+    "Dalways",
+    "Ep",
+    "System",
+    "knob",
+    "Ktaru_01",
+    "Okmono",
+    "Mo2",
+    "Mbdoor",
+    "Kantera",
+    "Mshokki",
+    "NZ",
+    "NZG",
+    "Shmrgrd",
+    "Spear",
+    "Nata",
+    "Bk",
+    "Atdoor",
+    "Fm",
+    "Kbota_00",
+    "Mozo",
+    "OQ",
+    "Pt",
+    "StpTetu",
+    "Ylesr00",
+};
+STATIC_ASSERT(ARRAY_SIZE(ma2room_resName) <= PRELOAD_RES_MAX);
+
+const s16 ma3room_dylKeyTbl[] = {
+    PROC_DOOR10,
+    PROC_EP,
+    PROC_KI,
+    PROC_KNOB00,
+    PROC_MO2,
+    PROC_NZ,
+    PROC_NZG,
+    PROC_Obj_Mshokki,
+    PROC_OBJ_OTBLE,
+    PROC_Tag_Attention,
+    PROC_TAG_EVENT,
+    PROC_TBOX,
+    PROC_TSUBO,
+};
+STATIC_ASSERT(ARRAY_SIZE(ma3room_dylKeyTbl) <= PRELOAD_DYL_MAX);
+
+const char* ma3room_resName[] = {
+    "Dalways",
+    "Ep",
+    "System",
+    "knob",
+    "Ki",
+    "Ktaru_01",
+    "Okmono",
+    "Mbdoor",
+    "Mshokki",
+    "NZ",
+    "NZG",
+    "Npcnz",
+    "Atdoor",
+    "Kbota_00",
+    "Mozo",
+    "StpTetu",
+    "Ylesr00",
+};
+STATIC_ASSERT(ARRAY_SIZE(ma3room_resName) <= PRELOAD_RES_MAX);
+
+const s16 M_NewD2_dylKeyTbl[] = {
+    PROC_TBOX,
+    PROC_TAG_EVENT,
+    PROC_DOOR10,
+    PROC_AGBSW0,
+    PROC_Ykgr,
+    PROC_TSUBO,
+    PROC_BK,
+    PROC_SteamTag,
+    PROC_MT,
+    PROC_CC,
+    PROC_NPC_NZ,
+    PROC_Fire,
+};
+STATIC_ASSERT(ARRAY_SIZE(M_NewD2_dylKeyTbl) <= PRELOAD_DYL_MAX);
+
+const char* M_NewD2_resName[] = {
+    "System",
+    "Link",
+    "Key",
+    "Dalways",
+    "Always",
+    "Agb",
+    "Ep",
+    "Magma",
+    "Boko",
+    "KsakuCo",
+    "Bk",
+    "YFire_00",
+    "Kmtub_00",
+    "Kui",
+    "Knsak_00",
+    "Ki",
+    "ltubw",
+    "Osiblk",
+    "Nata",
+    "Mt",
+    "Ksaku_00",
+    "Ebrock",
+    "CC",
+    "Bridge",
+    "Odokuro",
+    "Msw",
+    "Kbota_00",
+    "Otana",
+    "Okmono",
+    "Npcnz",
+    "NZG",
+    "NZ",
+    "MtoriSU",
+    "Mflft",
+    "Bb",
+};
+STATIC_ASSERT(ARRAY_SIZE(M_NewD2_resName) <= PRELOAD_RES_MAX);
+
+const s16 kindan_dylKeyTbl[] = {
+    PROC_TBOX,
+    PROC_TAG_EVENT,
+    PROC_SWC00,
+    PROC_DOOR10,
+    PROC_AGBSW0,
+    PROC_Tag_Attention,
+    PROC_TSUBO,
+    PROC_CC,
+    PROC_PH,
+    PROC_KLFT,
+    PROC_SITEM,
+    PROC_KITA,
+    PROC_Obj_Mtest,
+};
+STATIC_ASSERT(ARRAY_SIZE(kindan_dylKeyTbl) <= PRELOAD_DYL_MAX);
+
+const char* kindan_resName[] = {
+    "System",
+    "Ssk",
+    "Link",
+    "Key",
+    "Dalways",
+    "Always",
+    "Agb",
+    "Sitem",
+    "Ss",
+    "CC",
+    "Vochi",
+    "PH",
+    "JBO",
+    "Ep",
+    "Klft",
+    "KS",
+    "BO",
+    "ltubw",
+    "Kui",
+    "KsakuCo",
+    "Sss",
+    "Sk2",
+    "Sk",
+    "Shand",
+    "Knsak_00",
+    "Yaflw00",
+    "Vpbot_00",
+    "Spear",
+    "Mtest",
+    "Ksaku_00",
+    "Kokiie",
+    "Kita",
+    "Kanat",
+    "Boko",
+    "Mdoor",
+};
+STATIC_ASSERT(ARRAY_SIZE(kindan_resName) <= PRELOAD_RES_MAX);
+
+const s16 M_Dai_dylKeyTbl[] = {
+    PROC_ALLDIE,
+    PROC_Obj_Msdan2,
+    PROC_Obj_Msdan,
+    PROC_Obj_MsdanSub2,
+    PROC_Obj_MsdanSub,
+    PROC_SW_ATTACK,
+    PROC_Obj_Correct,
+    PROC_Obj_Mkiek,
+    PROC_Obj_Vds,
+    PROC_Obj_Ladder,
+    PROC_DOOR12,
+    PROC_Obj_MknjD,
+    PROC_Obj_Swhammer,
+    PROC_Obj_Swlight,
+    PROC_Obj_Mkie,
+    PROC_KANTERA,
+    PROC_Obj_Mmrr,
+    PROC_Obj_Kanoke,
+    PROC_BOKO,
+    PROC_BL,
+    PROC_PW,
+    PROC_CC,
+    PROC_Obj_Tapestry,
+    PROC_ST,
+    PROC_FM,
+    PROC_MO2,
+    PROC_TN,
+};
+STATIC_ASSERT(ARRAY_SIZE(M_Dai_dylKeyTbl) <= PRELOAD_DYL_MAX);
+
+const s16 sea_dylKeyTbl[] = {
+    PROC_TAG_SO,
+    PROC_Salvage,
+    PROC_Obj_Coming,
+    PROC_LODBG,
+    PROC_Coming2,
+    PROC_SHIP,
+    PROC_NPC_SO,
+};
+STATIC_ASSERT(ARRAY_SIZE(sea_dylKeyTbl) <= PRELOAD_DYL_MAX);
+
+const s16 kaze_dylKeyTbl[] = {
+    PROC_GRASS,
+    PROC_PH,
+    PROC_FM,
+    PROC_TAG_MDCB,
+    PROC_Obj_Hfuck1,
+    PROC_Obj_Eff,
+    PROC_WindTag,
+    PROC_Obj_Homen,
+    PROC_TSUBO,
+    PROC_EP,
+    PROC_Obj_Jump,
+    PROC_Obj_Hami3,
+    PROC_WINDMILL,
+    PROC_Obj_Hbrf1,
+    PROC_Obj_Hami4,
+    PROC_Obj_Hami2,
+    PROC_MACHINE,
+    PROC_Obj_Vmc,
+    PROC_Obj_MknjD,
+    PROC_NPC_CB1,
+    PROC_Obj_Trap,
+    PROC_SW_PROPELLER,
+    PROC_TOGE,
+    PROC_SHUTTER2,
+};
+STATIC_ASSERT(ARRAY_SIZE(kaze_dylKeyTbl) <= PRELOAD_DYL_MAX);
+
+const char* kaze_resName[] = {
+    "Dalways",
+    "Key",
+    "door13",
+    "Am",
+    "Am2",
+    "Ep",
+    "Hami1",
+    "Hami2",
+    "Hami3",
+    "Hami4",
+    "Hfuck1",
+    "Hhbot",
+    "Hhyu1",
+    "Hjump",
+    "Hpbot1",
+    "Hsen1",
+    "Hsen3",
+    "Kbota_00",
+    "Ybgaf00",
+    "Ph",
+    "Sss",
+    "Trap",
+    "Vmc",
+    "Yaflw00",
+    "ltubw",
+};
+STATIC_ASSERT(ARRAY_SIZE(kaze_resName) <= PRELOAD_RES_MAX);
+
+s16 Siren_dylKeyTbl[] = {
+    PROC_Obj_Hha,
+    PROC_Obj_Htetu1,
+    PROC_NPC_OS,
+    PROC_LIGHTSTAIR,
+    PROC_WALL,
+    PROC_Obj_Try,
+    PROC_Obj_Correct,
+};
+STATIC_ASSERT(ARRAY_SIZE(Siren_dylKeyTbl) <= PRELOAD_DYL_MAX);
+
+const char* Siren_resName[] = {
+    "Dalways",
+    "Ship",
+    "Cloth",
+    "Key",
+    "Hha",
+    "Htetu1",
+    "Os",
+    "Htw1",
+    "Hcbh",
+    "Hdai1",
+};
+STATIC_ASSERT(ARRAY_SIZE(Siren_resName) <= PRELOAD_RES_MAX);
+
+s16 GanonJ_dylKeyTbl[] = {
+    PROC_TBOX,
+    PROC_DOOR10,
+    PROC_MANT,
+    PROC_FGANON,
+    PROC_TSUBO,
+    PROC_MO2,
+    PROC_BK,
+    PROC_TN,
+    PROC_PT,
+    PROC_Obj_Hcbh,
+    PROC_ANDSW0,
+};
+STATIC_ASSERT(ARRAY_SIZE(GanonJ_dylKeyTbl) <= PRELOAD_DYL_MAX);
+
+const char* GanonJ_resName[] = {
+    "System",
+    "Link",
+    "Dalways",
+    "Always",
+    "Agb",
+    "Fganon",
+    "Spear",
+    "Nata",
+    "Mo2",
+    "Bk",
+    "Tn",
+    "Tkwn",
+    "Odokuro",
+    "Boko",
+};
+STATIC_ASSERT(ARRAY_SIZE(GanonJ_resName) <= PRELOAD_RES_MAX);
+
+s16 GanonK_dylKeyTbl[] = {
+    PROC_TSUBO,
+    PROC_Obj_Vteng,
+    PROC_KUI,
+    PROC_KS,
+    PROC_EP,
+    PROC_BGN,
+    PROC_TAG_EVENT,
+    PROC_Tag_Attention,
+    PROC_PZ,
+    PROC_Obj_Gbed,
+    PROC_BGN3,
+    PROC_BGN2,
+    PROC_ATT,
+};
+STATIC_ASSERT(ARRAY_SIZE(GanonK_dylKeyTbl) <= PRELOAD_DYL_MAX);
+
+const char* GanonK_resName[] = {
+    "Agb",
+    "Always",
+    "Ep",
+    "KS",
+    "Kui",
+    "Link",
+    "System",
+    "ltubw",
+};
+STATIC_ASSERT(ARRAY_SIZE(GanonK_resName) <= PRELOAD_RES_MAX);
+
+s16 GanonM_dylKeyTbl[] = {
+    PROC_FGANON,
+    PROC_MANT,
+    PROC_Ygcwp,
+    PROC_Obj_Vfan,
+    PROC_WARPGANON,
+};
+STATIC_ASSERT(ARRAY_SIZE(GanonM_dylKeyTbl) <= PRELOAD_DYL_MAX);
+
+const char* GanonM_resName[] = {
+    "Fganon",
+    "Pgsw",
+    "Vfan",
+    "Ygcwp",
+    "Gmjwp",
+};
+STATIC_ASSERT(ARRAY_SIZE(GanonM_resName) <= PRELOAD_RES_MAX);
+
+const s16 M_DragB_dylKeyTbl[] = {
+    PROC_WARPFLOWER,
+};
+STATIC_ASSERT(ARRAY_SIZE(M_DragB_dylKeyTbl) <= PRELOAD_DYL_MAX);
+
+const char* M_DragB_resName[] = {
+    NULL,
+};
+STATIC_ASSERT(ARRAY_SIZE(M_DragB_resName) <= PRELOAD_RES_MAX);
+
+const s16 kinBOSS_dylKeyTbl[] = {
+    PROC_NPC_CB1,
+    PROC_WARPFLOWER,
+};
+STATIC_ASSERT(ARRAY_SIZE(kinBOSS_dylKeyTbl) <= PRELOAD_DYL_MAX);
+
+const char* kinBOSS_resName[] = {
+    "Cb",
+    "Gtfglow",
+};
+STATIC_ASSERT(ARRAY_SIZE(kinBOSS_resName) <= PRELOAD_RES_MAX);
+
+const s16 M_DaiB_dylKeyTbl[] = {
+    PROC_WARPFLOWER,
+};
+STATIC_ASSERT(ARRAY_SIZE(M_DaiB_dylKeyTbl) <= PRELOAD_DYL_MAX);
+
+const char* M_DaiB_resName[] = {
+    "Gtfglow",
+};
+STATIC_ASSERT(ARRAY_SIZE(M_DaiB_resName) <= PRELOAD_RES_MAX);
+
+const s16 SirenB_dylKeyTbl[] = {
+    PROC_WARPFLOWER,
+};
+STATIC_ASSERT(ARRAY_SIZE(SirenB_dylKeyTbl) <= PRELOAD_DYL_MAX);
+
+const char* SirenB_resName[] = {
+    "Ysbwp00",
+};
+STATIC_ASSERT(ARRAY_SIZE(SirenB_resName) <= PRELOAD_RES_MAX);
+
+const PreLoadInfoT_s PreLoadInfoT[] = {
+    {
+        "sea",
+        sea_dylKeyTbl,
+        sea_resName,
+        ARRAY_SIZE(sea_dylKeyTbl),
+        ARRAY_SIZE(sea_resName),
+    },
+    {
+        "M_Dai",
+        M_Dai_dylKeyTbl,
+        M_Dai_resName,
+        ARRAY_SIZE(M_Dai_dylKeyTbl),
+        ARRAY_SIZE(M_Dai_resName),
+    },
+    {
+        "kaze",
+        kaze_dylKeyTbl,
+        kaze_resName,
+        ARRAY_SIZE(kaze_dylKeyTbl),
+        ARRAY_SIZE(kaze_resName),
+    },
+    {
+        "Siren",
+        Siren_dylKeyTbl,
+        Siren_resName,
+        ARRAY_SIZE(Siren_dylKeyTbl),
+        ARRAY_SIZE(Siren_resName),
+    },
+    {
+        "M_DragB",
+        M_DragB_dylKeyTbl,
+        M_DragB_resName,
+        ARRAY_SIZE(M_DragB_dylKeyTbl),
+        ARRAY_SIZE(M_DragB_resName),
+    },
+    {
+        "kinBOSS",
+        kinBOSS_dylKeyTbl,
+        kinBOSS_resName,
+        ARRAY_SIZE(kinBOSS_dylKeyTbl),
+        ARRAY_SIZE(kinBOSS_resName),
+    },
+    {
+        "SirenB",
+        SirenB_dylKeyTbl,
+        SirenB_resName,
+        ARRAY_SIZE(SirenB_dylKeyTbl),
+        ARRAY_SIZE(SirenB_resName),
+    },
+    {
+        "M_DaiB",
+        M_DaiB_dylKeyTbl,
+        M_DaiB_resName,
+        ARRAY_SIZE(M_DaiB_dylKeyTbl),
+        ARRAY_SIZE(M_DaiB_resName),
+    },
+    {
+        "majroom",
+        majroom_dylKeyTbl,
+        majroom_resName,
+        ARRAY_SIZE(majroom_dylKeyTbl),
+        ARRAY_SIZE(majroom_resName),
+    },
+    {
+        "ma2room",
+        ma2room_dylKeyTbl,
+        ma2room_resName,
+        ARRAY_SIZE(ma2room_dylKeyTbl),
+        ARRAY_SIZE(ma2room_resName),
+    },
+    {
+        "ma3room",
+        ma3room_dylKeyTbl,
+        ma3room_resName,
+        ARRAY_SIZE(ma3room_dylKeyTbl),
+        ARRAY_SIZE(ma3room_resName),
+    },
+    {
+        "M_NewD2",
+        M_NewD2_dylKeyTbl,
+        M_NewD2_resName,
+        ARRAY_SIZE(M_NewD2_dylKeyTbl),
+        ARRAY_SIZE(M_NewD2_resName),
+    },
+    {
+        "kindan",
+        kindan_dylKeyTbl,
+        kindan_resName,
+        ARRAY_SIZE(kindan_dylKeyTbl),
+        ARRAY_SIZE(kindan_resName),
+    },
+    {
+        "GanonJ",
+        GanonJ_dylKeyTbl,
+        GanonJ_resName,
+        ARRAY_SIZE(GanonJ_dylKeyTbl),
+        ARRAY_SIZE(GanonJ_resName),
+    },
+    {
+        "GanonK",
+        GanonK_dylKeyTbl,
+        GanonK_resName,
+        ARRAY_SIZE(GanonK_dylKeyTbl),
+        ARRAY_SIZE(GanonK_resName),
+    },
+    {
+        "GanonM",
+        GanonM_dylKeyTbl,
+        GanonM_resName,
+        ARRAY_SIZE(GanonM_dylKeyTbl),
+        ARRAY_SIZE(GanonM_resName),
+    },
+};
+
 /* 80234FD0-802350B4       .text dScnPly_Execute__FP13dScnPly_ply_c */
 int dScnPly_Execute(dScnPly_ply_c* i_this) {
     if (!fopOvlpM_IsPeek()) {
@@ -405,6 +1061,10 @@ int dScnPly_IsDelete(dScnPly_ply_c* i_this) {
 /* 802350BC-80235364       .text dScnPly_Delete__FP13dScnPly_ply_c */
 void dScnPly_Delete(dScnPly_ply_c* i_this) {
     /* Nonmatching */
+    OSReport("Xboss0");
+    OSReport("Xboss1");
+    OSReport("Xboss2");
+    OSReport("Xboss3");
 }
 
 /* 80235364-802355A8       .text heapSizeCheck__Fv */
@@ -487,25 +1147,25 @@ static mDoDvdThd_mountXArchive_c* l_lkDemoAnmCommand;
 /* 802356E0-802357F4       .text phase_0__FP13dScnPly_ply_c */
 s32 phase_0(dScnPly_ply_c* i_this) {
     /* Nonmatching */
-    if (!mDoAud_checkAllWaveLoadStatus()) {
+    if (mDoAud_checkAllWaveLoadStatus()) {
+        return cPhs_INIT_e;
+    } else {
         l_lkDemoAnmCommand = NULL;
 
-        u32 darcIdx = dComIfGs_isEventBit(0x2D01) ? 1 : 0;
+        s32 darcIdx = dComIfGs_isEventBit(0x2D01) ? 1 : 0;
         if (darcIdx != dComIfGp_getLkDemoAnmNo()) {
-            if (dComIfGp_getLkDemoAnmNo() > -1) {
+            if (dComIfGp_getLkDemoAnmNo() >= 0) {
                 dComIfGp_getLkDemoAnmArchive()->unmount();
             }
             dComIfGp_setLkDemoAnmNo(darcIdx);
+            
+            char buf[32];
+            sprintf(buf, "/res/Object/LkD%02d.arc", darcIdx);
+            l_lkDemoAnmCommand = mDoDvdThd_mountXArchive_c::create(buf, 0, JKRArchive::MOUNT_ARAM);
+            JUT_ASSERT(0xd56, l_lkDemoAnmCommand != 0);
         }
 
-        char buf[32];
-        sprintf(buf, "/res/Object/LkD%02.arc", darcIdx);
-        l_lkDemoAnmCommand = mDoDvdThd_mountXArchive_c::create(buf, 0, JKRArchive::MOUNT_ARAM);
-        JUT_ASSERT(0xd56, l_lkDemoAnmCommand != 0);
-
         return cPhs_NEXT_e;
-    } else {
-        return cPhs_INIT_e;
     }
 }
 
@@ -543,7 +1203,7 @@ int phase_1(dScnPly_ply_c* i_this) {
 
 /* 802359DC-80235ABC       .text phase_2__FP13dScnPly_ply_c */
 int phase_2(dScnPly_ply_c* i_this) {
-    int rt = dComIfG_syncStageRes("Stg_00");
+    int rt = dComIfG_syncStageRes("Stage");
     JUT_ASSERT(3485, rt >= 0)
 
     if (rt != 0) {
@@ -567,34 +1227,33 @@ int phase_3(dScnPly_ply_c* i_this) {
     return cPhs_NEXT_e;
 }
 
-static s8 preLoadNo;
-static bool doPreLoad;
-static OSTime resPreLoadTime0;
-static OSTime resPreLoadTime1;
+static s8 preLoadNo = 0xFF;
+static bool doPreLoad = true;
 
 /* 80235B0C-80236334       .text phase_4__FP13dScnPly_ply_c */
 s32 phase_4(dScnPly_ply_c* i_this) {
     /* Nonmatching */
 
     if (i_this->sceneCommand != NULL) {
-        JUT_ASSERT(0xdef, i_this->sceneCommand->getMemAddress());
+        JUT_ASSERT(0xdef, i_this->sceneCommand->getMemAddress() != 0);
         dComIfGp_particle_createScene(i_this->sceneCommand->getMemAddress());
         delete i_this->sceneCommand;
     } else {
         dComIfGp_particle_createScene(NULL);
     }
 
+    dComIfG_Bgsp()->Ct();
     dComIfG_Ccsp()->Ct();
     dComIfGp_createDemo();
     daSea_Init();
     dSnap_Create();
-    dComIfGp_setPlayerPtr(0, NULL);
+    dComIfGp_setPlayer(0, NULL);
     g_dComIfG_gameInfo.play.mCurCamera[0] = 0; // dComIfGp_setPlayerInfo?
     for (s32 i = 0; i < 3; i++)
         dComIfGp_setPlayerPtr(i, NULL);
     dComIfGp_setWindowNum(1);
     dComIfGp_setWindow(0, 0.0f, 0.0f, mDoMch_render_c::getFbWidth(), mDoMch_render_c::getEfbHeight(), 0.0f, 1.0f, 0, 2);
-    dComIfGp_setCameraInfo(0, NULL, 0, 0, 0xFF);
+    dComIfGp_setCameraInfo(0, NULL, 0, 0, -1);
     // setCameraAttentionStatus?
     dComIfGd_setWindow(NULL);
     dComIfGd_setViewport(NULL);
@@ -605,7 +1264,7 @@ s32 phase_4(dScnPly_ply_c* i_this) {
     dComIfGp_setExpHeap2D(heap);
 
     dStage_Create();
-    mDoGph_gInf_c::setTickRate((OS_BUS_CLOCK / 4) / 60);
+    mDoGph_gInf_c::setTickRate((OS_BUS_CLOCK / 4) / 30);
 
     g_darkHIO.mChildID = mDoHIO_root.mDoHIO_createChild("暗闇スポット", &g_darkHIO);
     g_envHIO.mChildID = mDoHIO_root.mDoHIO_createChild("描画設定", &g_envHIO);
@@ -632,7 +1291,7 @@ s32 phase_4(dScnPly_ply_c* i_this) {
     if (strcmp(dComIfGp_getStartStageName(), "GTower") == 0) {
         dComIfGs_setItem(12, NO_ITEM); // take away the bow
         for (s32 i = 0; i < 3; i++) {
-            s32 itemno = dComIfGp_getSelectItem(i);
+            u32 itemno = dComIfGp_getSelectItem(i);
             if (itemno == BOW || itemno == MAGIC_ARROW || itemno == LIGHT_ARROW) {
                 dComIfGs_setSelectItem(i, NO_ITEM);
                 dComIfGp_setSelectItem(i);
@@ -640,11 +1299,11 @@ s32 phase_4(dScnPly_ply_c* i_this) {
         }
     } else if (dComIfGs_getItem(12) == NO_ITEM) {
         // give the bow back
-        if (dComIfGs_isItem(12, 2))
+        if (dComIfGs_isGetItem(12, 2))
             dComIfGs_setItem(12, LIGHT_ARROW);
-        else if (dComIfGs_isItem(12, 1))
+        else if (dComIfGs_isGetItem(12, 1))
             dComIfGs_setItem(12, MAGIC_ARROW);
-        else if (dComIfGs_isItem(12, 0))
+        else if (dComIfGs_isGetItem(12, 0))
             dComIfGs_setItem(12, BOW);
     }
 
@@ -654,7 +1313,7 @@ s32 phase_4(dScnPly_ply_c* i_this) {
 
     mDoAud_monsSeInit();
 
-    if (fpcM_GetProfName(i_this) == PROC_PLAY_SCENE) {
+    if (fpcM_GetName(i_this) == PROC_PLAY_SCENE) {
         mDoAud_zelAudio_c::onBgmSet();
     } else {
         mDoAud_zelAudio_c::offBgmSet();
@@ -667,9 +1326,8 @@ s32 phase_4(dScnPly_ply_c* i_this) {
         mDoGph_gInf_c::onMonotone();
 
         bool hy8 = strcmp(dComIfGp_getStartStageName(), "Hyrule") == 0 && dComIfGp_getStartStageLayer() == 8;
-        mDoGph_gInf_c::setMonotoneRate(400);
-        if (hy8)
-            mDoGph_gInf_c::setMonotoneRate(-600);
+        s16 rate = hy8 ? -600 : 400;
+        mDoGph_gInf_c::setMonotoneRate(rate);
         mDoGph_gInf_c::setMonotoneRateSpeed(0);
     } else {
         mDoGph_gInf_c::offMonotone();
@@ -677,7 +1335,11 @@ s32 phase_4(dScnPly_ply_c* i_this) {
 
     preLoadNo = -1;
     if (doPreLoad) {
-        // PreloadTable
+        for (int i = 0; i < ARRAY_SIZE(PreLoadInfoT); i++) {
+            if (strcmp(dComIfGp_getStartStageName(), PreLoadInfoT[i].stageName) == 0) {
+                preLoadNo = i;
+            }
+        }
     }
 
     mDoRst::offReset();
@@ -699,7 +1361,10 @@ s32 phase_4(dScnPly_ply_c* i_this) {
 /* 80236334-80236444       .text phase_5__FP13dScnPly_ply_c */
 s32 phase_5(dScnPly_ply_c* i_this) {
     /* Nonmatching */
-    if (preLoadNo < 0) {
+    if (preLoadNo >= 0) {
+        u8 resNameNum = PreLoadInfoT[preLoadNo].resNameNum;
+        JUT_ASSERT(0, resNameNum <= (sizeof(resPhase) / sizeof(resPhase[0])));
+    } else {
         return cPhs_NEXT_e;
     }
 }
@@ -707,6 +1372,12 @@ s32 phase_5(dScnPly_ply_c* i_this) {
 /* 80236444-80236554       .text phase_6__FP13dScnPly_ply_c */
 s32 phase_6(dScnPly_ply_c* i_this) {
     /* Nonmatching */
+    if (preLoadNo >= 0) {
+        u8 dylKeyTblNum = PreLoadInfoT[preLoadNo].dylKeyTblNum;
+        JUT_ASSERT(0, dylKeyTblNum <= (sizeof(dylPhase) / sizeof(dylPhase[0])));
+    } else {
+        return cPhs_NEXT_e;
+    }
 }
 
 /* 80236554-8023655C       .text phase_compleate__FPv */

@@ -66,8 +66,8 @@ public:
     static void setBlureMtx(const Mtx) {}
     static void setBlureRate(u8) {}
     static void setFrameRate(u16) {}
-    static void setMonotoneRate(s16) {}
-    static void setMonotoneRateSpeed(s16) {}
+    static void setMonotoneRate(s16 rate) { mMonotoneRate = rate; }
+    static void setMonotoneRateSpeed(s16 speed) { mMonotoneRateSpeed = speed; }
 
     static GXTexObj mFrameBufferTexObj;
     static GXTexObj mZbufferTexObj;

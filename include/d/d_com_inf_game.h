@@ -284,7 +284,7 @@ public:
     /* 0x00 */ camera_class* mpCamera;
     /* 0x04 */ u8 mDlstWindowIdx;
     /* 0x05 */ u8 mCamIdx;
-    /* 0x06 */ u8 field_0x06;
+    /* 0x06 */ s8 field_0x06;
     /* 0x07 */ u8 field_0x07;
     /* 0x08 */ u32 mCameraAttentionStatus;
     /* 0x0C */ f32 mCameraZoomScale;

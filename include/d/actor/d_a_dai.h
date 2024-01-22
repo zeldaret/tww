@@ -33,8 +33,8 @@ public:
     static void getMaxDaiza();
     static void getDaizaSetItemNum();
 
-    static u32 mNowDaizaNum;
-    static u32 mNowItemNum;
+    static s8 mNowDaizaNum;
+    static s8 mNowItemNum;
     static const u16 m_savelabel[];
 
 public:
