@@ -20,7 +20,7 @@ namespace JASystem {
         /* 0x30 */ f32 field_0x30;
         /* 0x34 */ f32 field_0x34;
         /* 0x38 */ u8 field_0x38;
-        /* 0x3A */ short field_0x3a;
+        /* 0x3A */ u16 field_0x3a;
         /* 0x3C */ int field_0x3c;
     };
     class TInst {
