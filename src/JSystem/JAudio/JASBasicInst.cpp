@@ -33,8 +33,8 @@ JASystem::TBasicInst::~TBasicInst() {
 bool JASystem::TBasicInst::getParam(int key, int velo, TInstParam* param) const {
     param->field_0x0 = 0;
     param->field_0x38 = 0;
-    param->field_0x8 = mOsc;
-    param->field_0xc = mOscCount;
+    param->mOscData = mOsc;
+    param->mOscCount = mOscCount;
     param->field_0x10 *= field_0x4;
     param->field_0x14 *= field_0x8;
     for (int i = 0; i < mEffectCount; i++) {

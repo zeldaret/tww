@@ -32,8 +32,8 @@ bool JASystem::TDrumSet::getParam(int key, int param_2, JASystem::TInstParam* pa
     osc.field_0x10 = 1.0f;
     osc.field_0x14 = 0.0f;
     static TOscillator::Osc_* oscp = &osc;
-    param_3->field_0x8 = &oscp;
-    param_3->field_0xc = 1;
+    param_3->mOscData = &oscp;
+    param_3->mOscCount = 1;
     for (int i = 0; i < perc->mEffectCount; i++) {
         TInstEffect* effect = perc->mEffect[i];
         if (effect) {
