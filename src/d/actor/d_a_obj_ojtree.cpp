@@ -3,10 +3,13 @@
 // Translation Unit: d_a_obj_ojtree.cpp
 //
 
+#include "SSystem/SComponent/c_bg_w.h"
 #include "d/actor/d_a_obj_ojtree.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_procname.h"
+
+
 
 Mtx daObjOjtree::Act_c::M_tmp_mtx;
 const char daObjOjtree::Act_c::M_arcname[] = "Ojtree";
@@ -76,18 +79,32 @@ void daObjOjtree::Act_c::set_mtx() {
 
 /* 000003B8-000003F4       .text init_mtx__Q211daObjOjtree5Act_cFv */
 void daObjOjtree::Act_c::init_mtx() {
-    mpModel->mBaseScale = mScale;
+    mpModel->setBaseScale(mScale);
     set_mtx();
 }
 
 /* 000003F4-0000045C       .text Execute__Q211daObjOjtree5Act_cFPPA3_A4_f */
-int daObjOjtree::Act_c::Execute(float(**)[3][4]) {
-    /* Nonmatching */
+int daObjOjtree::Act_c::Execute(Mtx** pMtx) {
+    if(field_0x2d4 != 0)
+    {
+        if (--field_0x2d4 == 0) 
+        {
+           mpBgW->SetLock(); 
+        }
+    }
+    set_mtx();
+    *pMtx = &M_tmp_mtx;
+    return TRUE;
 }
 
 /* 0000045C-000004FC       .text Draw__Q211daObjOjtree5Act_cFv */
 BOOL daObjOjtree::Act_c::Draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
+    g_env_light.setLightTevColorType(mpModel, &mTevStr);
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(mpModel);
+    dComIfGd_setList();
+    return TRUE;
 }
 
 namespace daObjOjtree {
@@ -104,19 +121,37 @@ namespace daObjOjtree {
             return static_cast<Act_c*>(i_this)->MoveBGExecute();
         }
         
-        //BOOL Mthd_Draw(void* i_this) {
-            //return static_cast<Act_c*>(i_this)->_execute();
-        //}
+        BOOL Mthd_Draw(void* i_this) {
+            return static_cast<Act_c*>(i_this)->MoveBGDraw();
+        }
         
-        //BOOL Mthd_IsDelete(void* i_this) {
-            //return TRUE;
-        //}
+        BOOL Mthd_IsDelete(void* i_this) {
+            return static_cast<Act_c*>(i_this)->MoveBGIsDelete();
+        }
+
         static actor_method_class Mthd_Table = {
             (process_method_func)Mthd_Create,
             (process_method_func)Mthd_Delete,
             (process_method_func)Mthd_Execute,
-            //(process_method_func)Mthd_IsDelete,
-            //(process_method_func)Mthd_Draw,
+            (process_method_func)Mthd_IsDelete,
+            (process_method_func)Mthd_Draw,
         };
     }
 }
+
+actor_process_profile_definition g_profile_Obj_Ojtree = {
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 3,
+    /* ListPrio     */ fpcLy_CURRENT_e,
+    /* ProcName     */ PROC_Obj_Ojtree,
+    /* Proc SubMtd  */ &g_fpcLf_Method.mBase,
+    /* Size         */ sizeof(daObjOjtree::Act_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Priority     */ 0x002D,
+    /* Actor SubMtd */ &daObjOjtree::Mthd_Table,
+    /* Status       */ fopAcStts_UNK40000_e | fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+};

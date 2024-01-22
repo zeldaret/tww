@@ -19,7 +19,7 @@ namespace daObjOjtree {
         s32 Mthd_Delete();
         void set_mtx();
         void init_mtx();
-        int Execute(float(**)[3][4]);
+        int Execute(Mtx**);
         BOOL Draw();
 
     public:
@@ -27,6 +27,7 @@ namespace daObjOjtree {
         /* 0x2C8 */ request_of_phase_process_class mPhs;
         /* 0x2D0 */ J3DModel* mpModel;
         /* 0x2D4 */ u8 field_0x2d4;
+        /* 0x2D5 */ u8 field_0x2d5[0x2d7 - 0x2d5];
     };
 };
 
