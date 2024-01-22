@@ -945,8 +945,9 @@ inline u16 calcColorChanID(u16 enable, u8 matSrc, u8 lightMask, u8 diffuseFn, u8
 }
 
 inline u32 setChanCtrlMacro(u8 enable, GXColorSrc ambSrc, GXColorSrc matSrc, u32 lightMask, GXDiffuseFn diffuseFn, GXAttnFn attnFn) {
+    u32 ret = matSrc << 0; // Putting this as a separate statement fixes codegen, but regalloc is still wrong
     return
-        matSrc << 0 |
+        ret |
         enable << 1 |
         (lightMask & 0x0F) << 2 |
         ambSrc << 6 |
