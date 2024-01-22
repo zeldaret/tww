@@ -119,7 +119,7 @@ public:
 
 extern dScnPly_msg_HIO_c g_msgDHIO;
 
-class dScnPly_preLoad_HIO_c : public JORReflexible {
+class dScnPly_preLoad_HIO_c : public mDoHIO_entry_c {
 public:
     virtual ~dScnPly_preLoad_HIO_c() {}
 };

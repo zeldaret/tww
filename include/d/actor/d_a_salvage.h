@@ -68,12 +68,12 @@ public:
     static void init_room(signed char);
 
     static void init() {
-        mNowRoomNo = 0xFF;
+        mNowRoomNo = -1;
         mTagData_p = NULL;
         mSalvageId = -1;
     }
 
-    static u8 mNowRoomNo;
+    static s8 mNowRoomNo;
     static daSalvage_control_c* mTagData_p;
     static s32 mSalvageId;
     static const u16 m_savelabel[];

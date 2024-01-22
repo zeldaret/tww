@@ -47,7 +47,7 @@ public:
         canon_game_result = 0;
     }
 
-    static s32 canon_game_result;
+    static s8 canon_game_result;
 
 public:
     /* Place member variables here */
