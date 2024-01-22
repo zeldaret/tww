@@ -4,49 +4,119 @@
 //
 
 #include "d/actor/d_a_obj_ojtree.h"
-#include "dolphin/types.h"
+#include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_mtx.h"
+#include "d/d_procname.h"
+
+Mtx daObjOjtree::Act_c::M_tmp_mtx;
+const char daObjOjtree::Act_c::M_arcname[] = "Ojtree";
+
+enum OJTREE_RES_FILE_ID { // IDs and indexes are synced
+    /* BDL */
+    OJTREE_BDL_OJTREE=0x4,
+    
+    /* DZB */
+    OJTREE_DZB_OJTREE=0x7,
+};
 
 /* 00000078-0000012C       .text CreateHeap__Q211daObjOjtree5Act_cFv */
-void daObjOjtree::Act_c::CreateHeap() {
-    /* Nonmatching */
+int daObjOjtree::Act_c::CreateHeap() {
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, OJTREE_BDL_OJTREE);
+    JUT_ASSERT(67, model_data != 0);
+    mpModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000022);
+    return !!mpModel;
 }
 
 /* 0000012C-000001EC       .text Create__Q211daObjOjtree5Act_cFv */
-s32 daObjOjtree::Act_c::Create() {
-    /* Nonmatching */
+int daObjOjtree::Act_c::Create() {
+    cXyz pos;
+
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    init_mtx();
+    fopAcM_setCullSizeBox(this, -500.0f, -1.0f, -300.0f, 251.0f, 5001.0f, 251.0f);
+    pos.set(current.pos);
+    pos.y += 5000.0f;
+    fopAcM_create(PROC_JBO, 0, &pos, home.roomNo, &shape_angle, NULL, 0xff, NULL);
+    field_0x2d4 = 2;
+    return TRUE;
 }
 
 /* 000001EC-000002E4       .text Mthd_Create__Q211daObjOjtree5Act_cFv */
-void daObjOjtree::Act_c::Mthd_Create() {
-    /* Nonmatching */
+s32 daObjOjtree::Act_c::Mthd_Create() {
+    fopAcM_SetupActor(this, daObjOjtree::Act_c);
+       
+    s32 phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    if (phase_state == cPhs_COMPLEATE_e) {
+        phase_state = MoveBGCreate(M_arcname, OJTREE_DZB_OJTREE, NULL, 0x26a0);
+        JUT_ASSERT(123, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
+    }
+    
+    return phase_state;
 }
 
 /* 000002E4-000002EC       .text Delete__Q211daObjOjtree5Act_cFv */
 BOOL daObjOjtree::Act_c::Delete() {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000002EC-00000338       .text Mthd_Delete__Q211daObjOjtree5Act_cFv */
-void daObjOjtree::Act_c::Mthd_Delete() {
-    /* Nonmatching */
+s32 daObjOjtree::Act_c::Mthd_Delete() {
+    s32 result = MoveBGDelete();
+    dComIfG_resDelete(&mPhs, M_arcname);
+    return result;
 }
 
 /* 00000338-000003B8       .text set_mtx__Q211daObjOjtree5Act_cFv */
 void daObjOjtree::Act_c::set_mtx() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    cMtx_copy(mDoMtx_stack_c::get(), mpModel->mBaseTransformMtx);
+    cMtx_copy(mDoMtx_stack_c::get(), M_tmp_mtx);
 }
 
 /* 000003B8-000003F4       .text init_mtx__Q211daObjOjtree5Act_cFv */
 void daObjOjtree::Act_c::init_mtx() {
-    /* Nonmatching */
+    mpModel->mBaseScale = mScale;
+    set_mtx();
 }
 
 /* 000003F4-0000045C       .text Execute__Q211daObjOjtree5Act_cFPPA3_A4_f */
-void daObjOjtree::Act_c::Execute(float(**)[3][4]) {
+int daObjOjtree::Act_c::Execute(float(**)[3][4]) {
     /* Nonmatching */
 }
 
 /* 0000045C-000004FC       .text Draw__Q211daObjOjtree5Act_cFv */
 BOOL daObjOjtree::Act_c::Draw() {
     /* Nonmatching */
+}
+
+namespace daObjOjtree {
+    namespace {
+        s32 Mthd_Create(void* i_this) {
+            return static_cast<Act_c*>(i_this)->Mthd_Create();
+        }
+        
+        s32 Mthd_Delete(void* i_this) {
+            return static_cast<Act_c*>(i_this)->Mthd_Delete();
+        }
+        
+        BOOL Mthd_Execute(void* i_this) {
+            return static_cast<Act_c*>(i_this)->MoveBGExecute();
+        }
+        
+        //BOOL Mthd_Draw(void* i_this) {
+            //return static_cast<Act_c*>(i_this)->_execute();
+        //}
+        
+        //BOOL Mthd_IsDelete(void* i_this) {
+            //return TRUE;
+        //}
+        static actor_method_class Mthd_Table = {
+            (process_method_func)Mthd_Create,
+            (process_method_func)Mthd_Delete,
+            (process_method_func)Mthd_Execute,
+            //(process_method_func)Mthd_IsDelete,
+            //(process_method_func)Mthd_Draw,
+        };
+    }
 }
