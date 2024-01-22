@@ -43,6 +43,8 @@ public:
     void mode_drop();
     bool _draw();
 
+    static BOOL daiItemNodeCallBack(J3DNode*, int);
+
 public:
     /* 0x290 */ request_of_phase_process_class mPhsDai;
     /* 0x298 */ request_of_phase_process_class mPhsCloth;

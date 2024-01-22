@@ -239,6 +239,8 @@ public:
 
     view_port_class* getViewPort() { return &mViewport; }
     s8 getCameraID() { return mCameraID; }
+    void setCameraID(int id) { mCameraID = id; }
+    void setMode(int mode) { mMode = mode; }
 
 private:
     /* 0x00 */ view_port_class mViewport;

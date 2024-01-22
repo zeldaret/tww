@@ -77,7 +77,7 @@ bool cBgW::SetVtx() {
     if (mFlags & NO_VTX_TBL_e) {
         pm_vtx_tbl = NULL;
     } else {
-        if (mFlags & MOVE_BG_e) {
+        if (ChkMoveBg()) {
             pm_vtx_tbl = new Vec[pm_bgd->m_v_num];
             if (pm_vtx_tbl == NULL)
                 return true;
@@ -138,9 +138,16 @@ void cBgW::BlckConnect(u16* rwg, int* prev, int i_no) {
     pm_rwg[*prev].next = -1;
 }
 
+inline bool cBgW_CheckBGround(f32 ny) {
+    return ny >= 0.5f;
+}
+
+inline bool cBgW_CheckBRoof(f32 ny) {
+    return ny < (-4.0f / 5.0f);
+}
+
 /* 80247A24-80247BF8       .text ClassifyPlane__4cBgWFv */
 void cBgW::ClassifyPlane() {
-    /* Nonmatching */
     if (pm_vtx_tbl == NULL)
         return;
 
@@ -150,7 +157,11 @@ void cBgW::ClassifyPlane() {
     int roof, wall, ground;
     for (; i < pm_bgd->m_b_num; i++) {
         s32 startTri = pm_bgd->m_b_tbl[i].startTri;
-        s32 lastTri = (i != pm_bgd->m_b_num - 1) ? pm_bgd->m_b_tbl[i + 1].startTri - 1 : pm_bgd->m_t_num - 1;
+        s32 lastTri;
+        if (i != pm_bgd->m_b_num - 1)
+            lastTri = pm_bgd->m_b_tbl[i + 1].startTri - 1;
+        else
+            lastTri = pm_bgd->m_t_num - 1;
 
         pm_blk[i].roof = 0xFFFF;
         pm_blk[i].wall = 0xFFFF;
@@ -163,19 +174,20 @@ void cBgW::ClassifyPlane() {
         for (s32 j = startTri; j <= lastTri; j++) {
             cBgW_TriElm* tri_elm = &pm_tri[j];
 
+            /* cM3d_isZero */
             f32 ny = tri_elm->m_plane.mNormal.y;
             if (fabsf(tri_elm->m_plane.mNormal.x) < eps && fabsf(tri_elm->m_plane.mNormal.y) < eps && fabsf(tri_elm->m_plane.mNormal.z) < eps)
                 continue;
 
-            if (ny >= 0.5f) {
+            if (cBgW_CheckBGround(ny)) {
                 if (!(mIgnorePlaneType & 1))
-                    BlckConnect(&pm_blk[i].ground, &ground, i);
-            } else if (ny < -0.8f) {
+                    BlckConnect(&pm_blk[i].ground, &ground, j);
+            } else if (cBgW_CheckBRoof(ny)) {
                 if (!(mIgnorePlaneType & 4))
-                    BlckConnect(&pm_blk[i].roof, &roof, i);
+                    BlckConnect(&pm_blk[i].roof, &roof, j);
             } else {
                 if (!(mIgnorePlaneType & 2))
-                    BlckConnect(&pm_blk[i].wall, &wall, i);
+                    BlckConnect(&pm_blk[i].wall, &wall, j);
             }
         }
     }
@@ -400,9 +412,9 @@ static void dummy() {
 
 /* 802485FC-80248868       .text LineCheckRp__4cBgWFP11cBgS_LinChki */
 bool cBgW::LineCheckRp(cBgS_LinChk* chk, int i) {
-    /* Nonmatching */
-
-    if (!pm_node_tree[i].Cross(chk->GetLinP()))
+    cBgW_NodeTree* node = &pm_node_tree[i];
+    // node->Cross(chk->GetLinP());
+    if (!cM3d_Cross_MinMaxBoxLine(node->GetMinP(), node->GetMaxP(), chk->GetLinP()->GetStartP(), chk->GetLinP()->GetEndP()))
         return false;
 
     cBgD_Tree_t* tree = &pm_bgd->m_tree_tbl[i];
@@ -416,6 +428,7 @@ bool cBgW::LineCheckRp(cBgS_LinChk* chk, int i) {
             ret = true;
         return ret;
     } else {
+        // was this manually unrolled?
         if (tree->mChild[0] != 0xFFFF && LineCheckRp(chk, tree->mChild[0]))
             ret = true;
         if (tree->mChild[1] != 0xFFFF && LineCheckRp(chk, tree->mChild[1]))
@@ -438,7 +451,6 @@ bool cBgW::LineCheckRp(cBgS_LinChk* chk, int i) {
 
 /* 80248868-8024898C       .text LineCheckGrpRp__4cBgWFP11cBgS_LinChkii */
 bool cBgW::LineCheckGrpRp(cBgS_LinChk* chk, int grp_id, int depth) {
-    /* Nonmatching */
     if (ChkGrpThrough(grp_id, chk->GetGrpPassChk(), depth))
         return false;
 
@@ -508,27 +520,76 @@ bool cBgW::RwgGroundCheckWall(u16 poly_index, cBgS_GndChk* chk) {
 }
 
 /* 80248C38-802491F4       .text GroundCrossRp__4cBgWFP11cBgS_GndChki */
-bool cBgW::GroundCrossRp(cBgS_GndChk*, int) {
-    /* Nonmatching */
+bool cBgW::GroundCrossRp(cBgS_GndChk* chk, int i) {
+    bool ret = false;
+    cBgD_Tree_t* tree = &pm_bgd->m_tree_tbl[i];
+    if (tree->mFlag & 1) {
+        if (chk->GetGndPrecheck() && pm_blk[tree->mBlock].ground != 0xFFFF && RwgGroundCheckGnd(pm_blk[tree->mBlock].ground, chk))
+            ret = true;
+        if (chk->GetWallPrecheck() && pm_blk[tree->mBlock].wall != 0xFFFF && RwgGroundCheckWall(pm_blk[tree->mBlock].wall, chk))
+            ret = true;
+        return ret;
+    } else {
+        if (tree->mChild[2] != 0xFFFF) {
+            cBgW_NodeTree* node = &pm_node_tree[tree->mChild[2]];
+            if (node->CrossY(chk->GetPointP()) && node->UnderPlaneYUnder(chk->GetPointP()->y) && !node->TopPlaneYUnder(chk->mNowY) && GroundCrossRp(chk, tree->mChild[2]))
+                ret = true;
+        }
+
+        if (tree->mChild[3] != 0xFFFF) {
+            cBgW_NodeTree* node = &pm_node_tree[tree->mChild[3]];
+            if (node->CrossY(chk->GetPointP()) && node->UnderPlaneYUnder(chk->GetPointP()->y) && !node->TopPlaneYUnder(chk->mNowY) && GroundCrossRp(chk, tree->mChild[3]))
+                ret = true;
+        }
+
+        if (tree->mChild[6] != 0xFFFF) {
+            cBgW_NodeTree* node = &pm_node_tree[tree->mChild[6]];
+            if (node->CrossY(chk->GetPointP()) && node->UnderPlaneYUnder(chk->GetPointP()->y) && !node->TopPlaneYUnder(chk->mNowY) && GroundCrossRp(chk, tree->mChild[6]))
+                ret = true;
+        }
+
+        if (tree->mChild[7] != 0xFFFF) {
+            cBgW_NodeTree* node = &pm_node_tree[tree->mChild[7]];
+            if (node->CrossY(chk->GetPointP()) && node->UnderPlaneYUnder(chk->GetPointP()->y) && !node->TopPlaneYUnder(chk->mNowY) && GroundCrossRp(chk, tree->mChild[7]))
+                ret = true;
+        }
+
+        if (tree->mChild[0] != 0xFFFF) {
+            cBgW_NodeTree* node = &pm_node_tree[tree->mChild[0]];
+            if (node->CrossY(chk->GetPointP()) && node->UnderPlaneYUnder(chk->GetPointP()->y) && !node->TopPlaneYUnder(chk->mNowY) && GroundCrossRp(chk, tree->mChild[0]))
+                ret = true;
+        }
+
+        if (tree->mChild[1] != 0xFFFF) {
+            cBgW_NodeTree* node = &pm_node_tree[tree->mChild[1]];
+            if (node->CrossY(chk->GetPointP()) && node->UnderPlaneYUnder(chk->GetPointP()->y) && !node->TopPlaneYUnder(chk->mNowY) && GroundCrossRp(chk, tree->mChild[1]))
+                ret = true;
+        }
+
+        if (tree->mChild[4] != 0xFFFF) {
+            cBgW_NodeTree* node = &pm_node_tree[tree->mChild[4]];
+            if (node->CrossY(chk->GetPointP()) && node->UnderPlaneYUnder(chk->GetPointP()->y) && !node->TopPlaneYUnder(chk->mNowY) && GroundCrossRp(chk, tree->mChild[4]))
+                ret = true;
+        }
+
+        if (tree->mChild[5] != 0xFFFF) {
+            cBgW_NodeTree* node = &pm_node_tree[tree->mChild[5]];
+            if (node->CrossY(chk->GetPointP()) && node->UnderPlaneYUnder(chk->GetPointP()->y) && !node->TopPlaneYUnder(chk->mNowY) && GroundCrossRp(chk, tree->mChild[5]))
+                ret = true;
+        }
+
+        return ret;
+    }
 }
 
 /* 802491F4-80249368       .text GroundCrossGrpRp__4cBgWFP11cBgS_GndChkii */
 bool cBgW::GroundCrossGrpRp(cBgS_GndChk* chk, int grp_id, int depth) {
-    /* Nonmatching */
     if (ChkGrpThrough(grp_id, chk->GetGrpPassChk(), depth))
         return false;
 
-    bool insideXZ;
     cBgW_GrpElm* grp = &pm_grp[grp_id];
 
-    // is this an inline? also seems to be used in GroundCrossGrp
-    if (grp->aab.mMin.x > chk->GetPointP()->x || grp->aab.mMax.x < chk->GetPointP()->x ||
-        grp->aab.mMin.z > chk->GetPointP()->z || grp->aab.mMax.z < chk->GetPointP()->z)
-        insideXZ = false;
-    else
-        insideXZ = true;
-
-    if (!insideXZ || (grp->aab.mMin.y > chk->GetPointP()->y || grp->aab.mMax.y < chk->GetNowY()))
+    if (!grp->aab.CrossY(chk->GetPointP()) || !grp->aab.UnderPlaneYUnder(chk->GetPointP()->y) || grp->aab.TopPlaneYUnder(chk->mNowY))
         return false;
 
     bool ret = false;
@@ -559,6 +620,38 @@ void cBgW::CopyOldMtx() {
 /* 802493B4-80249584       .text Move__4cBgWFv */
 void cBgW::Move() {
     /* Nonmatching */
+    if (!ChkLock() && ChkMoveBg()) {
+        if (!ChkNoCalcVtx()) {
+            if (mMoveCounter >= 0xFF ||
+                    mCurMtx[0][0] != (*pm_base)[0][0] || mCurMtx[0][1] != (*pm_base)[0][1] || mCurMtx[0][2] != (*pm_base)[0][2] ||
+                    mCurMtx[1][0] != (*pm_base)[1][0] || mCurMtx[1][1] != (*pm_base)[1][1] || mCurMtx[1][2] != (*pm_base)[1][2] ||
+                    mCurMtx[2][0] != (*pm_base)[2][0] || mCurMtx[2][1] != (*pm_base)[2][1] || mCurMtx[2][2] != (*pm_base)[2][2]) {
+                mbNeedsFullTransform = true;
+            } else if (mCurMtx[0][3] == (*pm_base)[0][3] && mCurMtx[1][3] == (*pm_base)[1][3] && mCurMtx[2][3] == (*pm_base)[2][3]) {
+                mDoMtx_copy(*pm_base, mOldMtx);
+                if (!ChkFlush())
+                    return;
+            } else {
+                mTransVel.x = (*pm_base)[0][3] - mCurMtx[0][3];
+                mTransVel.y = (*pm_base)[1][3] - mCurMtx[1][3];
+                mTransVel.z = (*pm_base)[2][3] - mCurMtx[2][3];
+                mbNeedsFullTransform = false;
+            }
+
+            if (mMoveCounter >= 0xFF) {
+                mMoveCounter = 0;
+            } else {
+                mMoveCounter++;
+            }
+
+            GlobalVtx();
+        }
+
+        CopyOldMtx();
+        CalcPlane();
+        ClassifyPlane();
+        MakeNodeTree();
+    }
 }
 
 /* 80249584-80249698       .text RwgShdwDraw__4cBgWFiP13cBgS_ShdwDraw */

@@ -23,7 +23,6 @@ extern f32 G_CM3D_F_ABS_MIN;
 
 void cM3d_InDivPos1(const Vec*, const Vec*, f32, Vec*);
 void cM3d_InDivPos2(const Vec*, const Vec*, f32, Vec*);
-f32 cM3d_Len2dSq(f32, f32, f32, f32);
 bool cM3d_Len2dSqPntAndSegLine(f32, f32, f32, f32, f32, f32, f32*, f32*, f32*);
 bool cM3d_Len3dSqPntAndSegLine(const cM3dGLin*, const Vec*, Vec*, f32*);
 f32 cM3d_SignedLenPlaAndPos(const cM3dGPla*, const Vec*);

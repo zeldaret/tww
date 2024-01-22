@@ -22,7 +22,7 @@ dBgS_SplGrpChk::dBgS_SplGrpChk() {
 void dBgS_SplGrpChk::Init() {
     OffIn();
     OffFind();
-    SetHeight(m_ground.y);
+    SetHeight(GetPosP()->y);
     ClearPi();
 }
 

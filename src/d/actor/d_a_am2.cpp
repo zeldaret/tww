@@ -168,7 +168,7 @@ static BOOL medama_atari_check(am2_class* i_this) {
 
             if (hitObj->GetAtType() & AT_TYPE_GRAPPLING_HOOK) {
                 if (i_this->mCurrBckIdx != AM2_BCK_SLEEP) {
-                    if (i_this->mItemStealLeft > 0) {
+                    if (i_this->mStealItemLeft > 0) {
                         s8 origHealth = i_this->mHealth;
                         i_this->mHealth = 10;
                         atInfo.mpObj = i_this->mEyeSph.GetTgHitObj();
@@ -1278,13 +1278,13 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
             /* mShapeType  */ 2, // Cylinder
             /* mJointIndex */ 0x00, // body joint
             /* mRadius     */ 20.0f,
-            /* mpOffsets   */ (cXyz*)&cyl_eye_offset,
+            /* mpOffsets   */ cyl_eye_offset,
         },
         {
             /* mShapeType  */ 1, // Sphere
             /* mJointIndex */ 0x00, // body joint
             /* mRadius     */ 20.0f,
-            /* mpOffsets   */ (cXyz*)&sph_offset,
+            /* mpOffsets   */ sph_offset,
         },
     };
     i_this->mEyeJntHit = JntHit_create(i_this->mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));
@@ -1338,7 +1338,7 @@ static s32 daAM2_Create(fopAc_ac_c* i_actor) {
         i_this->mItemTableIdx = dComIfGp_CharTbl()->GetNameIndex("amos2", 0);
         i_this->mMaxHealth = 2;
         i_this->mHealth = 2;
-        i_this->mItemStealLeft = 3;
+        i_this->mStealItemLeft = 3;
         i_this->model = i_this->mpMorf->getModel();
         
         fopAcM_SetMtx(i_this, i_this->mpMorf->mpModel->getBaseTRMtx());

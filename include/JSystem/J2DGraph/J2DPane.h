@@ -49,8 +49,13 @@ public:
     virtual u16 getTypeID() { return 0x10; }
     virtual void move(f32 x, f32 y);
     virtual void add(f32 x, f32 y);
+
+    // fakematch, this getter doesn't exist
+    f32 resize__getMinX() const { return mBounds.i.x; }
     virtual void resize(f32 w, f32 h) {
-        mBounds.f.x = mBounds.i.x + w;
+        f32 x = resize__getMinX();
+        x += w;
+        mBounds.f.x = x;
         mBounds.f.y = mBounds.i.y + h;
     }
     virtual bool setConnectParent(bool connected) {

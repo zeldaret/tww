@@ -12,9 +12,17 @@ class JUTPalette;
 struct ResTIMG;
 struct ResTLUT;
 
-enum J2DBinding {};
+enum J2DBinding {
+    J2DBind_Bottom = (1 << 0),
+    J2DBind_Top    = (1 << 1),
+    J2DBind_Right  = (1 << 2),
+    J2DBind_Left   = (1 << 3),
+};
 
-enum J2DMirror {};
+enum J2DMirror {
+    J2DMirror_Y    = (1 << 0),
+    J2DMirror_X    = (1 << 1),
+};
 
 class J2DPicture : public J2DPane {
 public:
@@ -95,12 +103,19 @@ public:
 
     u8 getNumTexture() { return mNumTexture; }
 
+    void setBinding(J2DBinding v) { mBinding = v; }
+    void setMirror(J2DMirror v) {} // untested { mFlag = (mFlag & ~0x03) | v; }
+    J2DMirror getMirror() const { return J2DMirror(mFlag & 0x03); }
+
+    void setTumble(bool v) {} // untested { mFlag = (mFlag & ~0x04) | (v << 2); }
+    bool isTumble() const { return mFlag >> 2 & 1; }
+
 private:
     /* 0x0CC */ JUTTexture* mpTexture[4];
     /* 0x0DC */ u8 mNumTexture;
     /* 0x0DD */ u8 mValidTexture;
-    /* 0x0DE */ u8 field_0xde;
-    /* 0x0DF */ u8 field_0xdf;
+    /* 0x0DE */ u8 mBinding;
+    /* 0x0DF */ u8 mFlag;
     /* 0x0E0 */ f32 mBlendKonstColorF[4];
     /* 0x0F0 */ f32 mBlendKonstAlphaF[4];
     /* 0x100 */ JUTPalette* mpPalette;

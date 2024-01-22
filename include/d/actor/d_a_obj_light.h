@@ -25,8 +25,14 @@ namespace daObjLight {
         void control_treasure();
         BOOL _execute();
         BOOL _draw();
-    
-    public:
+        
+        static void renew_light_angle();
+        static void get_light_angle();
+        static void get_light_dif_angle();
+        static void set_light_dif_angle_LOD(short);
+        static void set_light_dif_angle_FRRS(short);
+
+public:
         /* Place member variables here */
     };
 };

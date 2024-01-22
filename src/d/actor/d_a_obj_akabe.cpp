@@ -21,7 +21,7 @@ namespace daObjAkabe {
 
     /* 00000078-0000009C       .text solidHeapCB__Q210daObjAkabe5Act_cFP10fopAc_ac_c */
     BOOL Act_c::solidHeapCB(fopAc_ac_c* i_this) {
-        return ((Act_c*)i_this)->create_heap() & 0xFF; // Fakematch
+        return ((Act_c*)i_this)->create_heap() & 0xFF; // Fakematch (see comment in create_heap)
     }
 
     /* 0000009C-000001A4       .text create_heap__Q210daObjAkabe5Act_cFv */

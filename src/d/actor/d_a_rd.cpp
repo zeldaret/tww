@@ -45,7 +45,7 @@ const dCcD_SrcCyl daRd_c::m_cyl_src = {
         /* SrcGObjAt Spl     */ 0,
         /* SrcGObjAt Mtrl    */ 0,
         /* SrcGObjAt SPrm    */ 0,
-        /* SrcGObjTg Se      */ 0x23,
+        /* SrcGObjTg Se      */ dCcD_SE_UNK23,
         /* SrcGObjTg HitMark */ 0,
         /* SrcGObjTg Spl     */ 0,
         /* SrcGObjTg Mtrl    */ 0,
@@ -113,30 +113,30 @@ daRd_HIO_c::daRd_HIO_c() {
     m5C = 10.0f;
     m60 = 50.0f;
     m64 = 30.0f;
-    m68 = 1.8;
+    m68 = 1.8f;
     mReturnWalkSpeed = 2.0f;
-    m70 = 1.25;
-    m74 = 0.9;
+    m70 = 1.25f;
+    m74 = 0.9f;
     m50 = 0x28;
     m78 = 0x2D;
     m54 = 0x87;
     m52 = 0x96;
     mParalysisDuration = 2*30;
     mNpc.m04 = -20.0f;
-    mNpc.m08 = 0x1FFE;
-    mNpc.mMaxHeadRot = 0x4000;
-    mNpc.m0A = 0x0;
-    mNpc.mMaxBackBoneRot = 0x2000;
-    mNpc.m10 = -0x9C4;
-    mNpc.mMinHeadRot = -0x4000;
-    mNpc.m12 = 0x0;
-    mNpc.mMinBackBoneRot = -0x2000;
-    mNpc.m18 = 0x250;
+    mNpc.mMaxHeadX = 0x1FFE;
+    mNpc.mMaxHeadY = 0x4000;
+    mNpc.mMaxBackboneX = 0x0;
+    mNpc.mMaxBackboneY = 0x2000;
+    mNpc.mMinHeadX = -0x9C4;
+    mNpc.mMinHeadY = -0x4000;
+    mNpc.mMinBackboneX = 0x0;
+    mNpc.mMinBackboneY = -0x2000;
+    mNpc.mMaxTurnStep = 0x250;
     mNpc.mMaxHeadTurnVel = 0x150;
-    mNpc.m1C = 50.0f;
-    mNpc.m20 = 0x7FFF;
+    mNpc.mAttnYOffset = 50.0f;
+    mNpc.mMaxAttnAngleY = 0x7FFF;
     mNpc.m22 = 0x0;
-    mNpc.m24 = 400.0f;
+    mNpc.mMaxAttnDistXZ = 400.0f;
 }
 
 /* 0000027C-000002A8       .text searchNeadDeadRd_CB__FPvPv */
@@ -277,7 +277,7 @@ BOOL daRd_c::_createHeap() {
 bool daRd_c::createArrowHeap() {
     static Vec sebone_cyl_offset[] = {{0.0f, 0.0f, 0.0f},    {30.0f, 0.0f, 0.0f}};
     static Vec muneA_cyl_offset[]  = {{5.0f, -5.0f, 0.0f},   {20.0f, -5.0f, 0.0f}};
-    static Vec muneB1_cyl_offset[] = {{15.0, 0.0, -15.0},    {50.0, 0.0, -15.0}};
+    static Vec muneB1_cyl_offset[] = {{15.0f, 0.0f, -15.0f}, {50.0f, 0.0f, -15.0f}};
     static Vec muneB2_cyl_offset[] = {{15.0f, 0.0f, 0.0f},   {50.0f, 0.0f, 0.0f}};
     static Vec muneB3_cyl_offset[] = {{15.0f, 0.0f, 15.0f},  {50.0f, 0.0f, 15.0f}};
     static Vec kosi1_cyl_offset[]  = {{0.0f, 0.0f, -10.0f},  {20.0f, 0.0f, -10.0f}};
@@ -296,133 +296,133 @@ bool daRd_c::createArrowHeap() {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x01,
             /* mRadius     */ 4.0f,
-            /* mpOffsets   */ (cXyz*)&kosi1_cyl_offset,
+            /* mpOffsets   */ kosi1_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x01,
             /* mRadius     */ 4.0f,
-            /* mpOffsets   */ (cXyz*)&kosi2_cyl_offset,
+            /* mpOffsets   */ kosi2_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x01,
             /* mRadius     */ 4.0f,
-            /* mpOffsets   */ (cXyz*)&kosi3_cyl_offset,
+            /* mpOffsets   */ kosi3_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x02,
             /* mRadius     */ 2.0f,
-            /* mpOffsets   */ (cXyz*)&asi1_cyl_offset,
+            /* mpOffsets   */ asi1_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x03,
             /* mRadius     */ 2.0f,
-            /* mpOffsets   */ (cXyz*)&asi2_cyl_offset,
+            /* mpOffsets   */ asi2_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x04,
             /* mRadius     */ 2.0f,
-            /* mpOffsets   */ (cXyz*)&asi3_cyl_offset,
+            /* mpOffsets   */ asi3_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x05,
             /* mRadius     */ 2.0f,
-            /* mpOffsets   */ (cXyz*)&asi1_cyl_offset,
+            /* mpOffsets   */ asi1_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x06,
             /* mRadius     */ 2.0f,
-            /* mpOffsets   */ (cXyz*)&asi2_cyl_offset,
+            /* mpOffsets   */ asi2_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x07,
             /* mRadius     */ 2.0f,
-            /* mpOffsets   */ (cXyz*)&asi3_cyl_offset,
+            /* mpOffsets   */ asi3_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x08,
             /* mRadius     */ 6.0f,
-            /* mpOffsets   */ (cXyz*)&sebone_cyl_offset,
+            /* mpOffsets   */ sebone_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x09,
             /* mRadius     */ 10.0f,
-            /* mpOffsets   */ (cXyz*)&muneA_cyl_offset,
+            /* mpOffsets   */ muneA_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x09,
             /* mRadius     */ 6.0f,
-            /* mpOffsets   */ (cXyz*)&muneB1_cyl_offset,
+            /* mpOffsets   */ muneB1_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x09,
             /* mRadius     */ 6.0f,
-            /* mpOffsets   */ (cXyz*)&muneB2_cyl_offset,
+            /* mpOffsets   */ muneB2_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x09,
             /* mRadius     */ 6.0f,
-            /* mpOffsets   */ (cXyz*)&muneB3_cyl_offset,
+            /* mpOffsets   */ muneB3_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x0F,
             /* mRadius     */ 2.0f,
-            /* mpOffsets   */ (cXyz*)&ude1_cyl_offset,
+            /* mpOffsets   */ ude1_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x10,
             /* mRadius     */ 2.0f,
-            /* mpOffsets   */ (cXyz*)&ude2_cyl_offset,
+            /* mpOffsets   */ ude2_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x11,
             /* mRadius     */ 6.0f,
-            /* mpOffsets   */ (cXyz*)&te_cyl_offset,
+            /* mpOffsets   */ te_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x12,
             /* mRadius     */ 6.0f,
-            /* mpOffsets   */ (cXyz*)&yubi_cyl_offset,
+            /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x13,
             /* mRadius     */ 2.0f,
-            /* mpOffsets   */ (cXyz*)&ude1_cyl_offset,
+            /* mpOffsets   */ ude1_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x14,
             /* mRadius     */ 2.0f,
-            /* mpOffsets   */ (cXyz*)&ude2_cyl_offset,
+            /* mpOffsets   */ ude2_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x15,
             /* mRadius     */ 6.0f,
-            /* mpOffsets   */ (cXyz*)&te_cyl_offset,
+            /* mpOffsets   */ te_cyl_offset,
         },
         {
             /* mShapeType  */ 0, // Cylinder
             /* mJointIndex */ 0x16,
             /* mRadius     */ 6.0f,
-            /* mpOffsets   */ (cXyz*)&yubi_cyl_offset,
+            /* mpOffsets   */ yubi_cyl_offset,
         },
     };
     mpJntHit = JntHit_create(mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));
@@ -1672,9 +1672,9 @@ bool daRd_c::_execute() {
     }
     
     mJntCtrl.setParam(
-        l_HIO.mNpc.m0A, l_HIO.mNpc.mMaxBackBoneRot, l_HIO.mNpc.m12, l_HIO.mNpc.mMinBackBoneRot,
-        l_HIO.mNpc.m08, l_HIO.mNpc.mMaxHeadRot, l_HIO.mNpc.m10, l_HIO.mNpc.mMinHeadRot,
-        l_HIO.mNpc.m18
+        l_HIO.mNpc.mMaxBackboneX, l_HIO.mNpc.mMaxBackboneY, l_HIO.mNpc.mMinBackboneX, l_HIO.mNpc.mMinBackboneY,
+        l_HIO.mNpc.mMaxHeadX, l_HIO.mNpc.mMaxHeadY, l_HIO.mNpc.mMinHeadX, l_HIO.mNpc.mMinHeadY,
+        l_HIO.mNpc.mMaxTurnStep
     );
     
     if (mMode != MODE_PARALYSIS) {
@@ -1813,7 +1813,7 @@ void daRd_c::createInit() {
     
     mD3C = 1;
     mD40 = 1;
-    mItemStealLeft = 5;
+    mStealItemLeft = 5;
     
     mEnemyFire.mpMcaMorf = mpMorf;
     mEnemyFire.mpActor = this;

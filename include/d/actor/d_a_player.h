@@ -337,7 +337,7 @@ public:
     };
     
     /* 0x290 */ u8 mCutType;
-    /* 0x291 */ u8 field_0x291;
+    /* 0x291 */ u8 mCutCount;
     /* 0x292 */ u8 field_0x292[0x294 - 0x292];
     /* 0x294 */ s16 mDamageWaitTimer;
     /* 0x296 */ s16 mQuakeTimer;
@@ -361,6 +361,7 @@ public:
 
     f32 getSpeedF() const { return speedF; }
     u8 getCutType() const { return mCutType; }
+    u8 getCutCount() const { return mCutCount; }
     s16 getDamageWaitTimer() const { return mDamageWaitTimer; }
     f32 getHeight() const { return mHeight; }
     s16 getBodyAngleX() const { return mBodyAngle.x; }
@@ -371,7 +372,6 @@ public:
     cXyz getLeftHandPos() const { return mLeftHandPos; }
     cXyz getRightHandPos() const { return mRightHandPos; }
     cXyz getRopePos() const { return mRopePos; }
-    void getCutCount() const {} // field_0x291?
     void getYPos() const {}
     
     void changeDemoMode(u32) {}
@@ -448,12 +448,12 @@ public:
     bool checkGrabWear() const { return field_0x2b0 < 0.0f; }
     bool checkNormalSwordEquip() const {
         return dComIfGs_getSelectEquip(0) == SWORD ||
-        dComIfGp_getMiniGameType() == 2;
+            dComIfGp_getMiniGameType() == 2;
     }
     bool checkMasterSwordEquip() const {
         return dComIfGs_getSelectEquip(0) == MASTER_SWORD ||
-        dComIfGs_getSelectEquip(0) == LV3_SWORD ||
-        dComIfGs_getSelectEquip(0) == MASTER_SWORD_EX;
+            dComIfGs_getSelectEquip(0) == LV3_SWORD ||
+            dComIfGs_getSelectEquip(0) == MASTER_SWORD_EX;
     }
     void setFace(daPy_FACE face) { mFace = face; }
     

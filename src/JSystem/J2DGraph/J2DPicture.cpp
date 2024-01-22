@@ -20,55 +20,58 @@ J2DPicture::J2DPicture() {
 }
 
 /* 802D2E1C-802D326C       .text __ct__10J2DPictureFP7J2DPaneP20JSURandomInputStream */
-J2DPicture::J2DPicture(J2DPane* param_1, JSURandomInputStream* param_2) : mpPalette(NULL) {
-    /* Nonmatching */
+J2DPicture::J2DPicture(J2DPane* parent, JSURandomInputStream* stream) : mpPalette(NULL) {
     J2DPaneHeader header;
-    s32 var1 = param_2->getPosition();
-    param_2->read(&header, sizeof(J2DPaneHeader));
+
+    s32 pos = stream->getPosition();
+    stream->read(&header, sizeof(J2DPaneHeader));
     mMagic = header.mMagic;
-    s32 r31 = var1 + header.mSize;
-    makePaneStream(param_1, param_2);
+    pos += header.mSize;
+
+    makePaneStream(parent, stream);
     JUTResReference ref;
-    u8 r28 = param_2->readU8();
-    ResTIMG* r30 = (ResTIMG*)ref.getResource(param_2, 'TIMG', NULL);
-    ResTLUT* r29 = (ResTLUT*)ref.getResource(param_2, 'TLUT', NULL);
-    field_0xde = param_2->read8b();
-    r28 -= 3;
-    if (r28) {
-        field_0xdf = param_2->read8b();
-        r28--;
+    ResTIMG* timg;
+    ResTLUT* tlut;
+    u8 num = stream->readU8();
+    timg = (ResTIMG*)ref.getResource(stream, 'TIMG', NULL);
+    tlut = (ResTLUT*)ref.getResource(stream, 'TLUT', NULL);
+    mBinding = stream->read8b();
+    num -= 3;
+    if (num) {
+        mFlag = stream->read8b();
+        num--;
     } else {
-        field_0xdf = 0;
+        mFlag = 0;
     }
-    if (r28) {
-        param_2->read8b();
-        r28--;
+    if (num) {
+        stream->read8b();
+        num--;
     }
     mColorBlack = JUtility::TColor(0);
     mColorWhite = JUtility::TColor(-1);
-    if (r28) {
-        mColorBlack = JUtility::TColor(param_2->readU32());
-        r28--;
+    if (num) {
+        mColorBlack = JUtility::TColor(stream->readU32());
+        num--;
     }
-    if (r28) {
-        mColorWhite = JUtility::TColor(param_2->readU32());
-        r28--;
+    if (num) {
+        mColorWhite = JUtility::TColor(stream->readU32());
+        num--;
     }
     setCornerColor(JUtility::TColor(-1), JUtility::TColor(-1), JUtility::TColor(-1), JUtility::TColor(-1));
-    for (int i = 0; r28 && i < 4; i++) {
-        mCornerColor[i] = JUtility::TColor(param_2->readU32());
-        r28--;
+    for (int i = 0; num > 0 && i < 4; i++) {
+        mCornerColor[i] = JUtility::TColor(stream->readU32());
+        num--;
     }
-    param_2->seek(r31, JSUStreamSeekFrom_SET);
+    stream->seek(pos, JSUStreamSeekFrom_SET);
     mpTexture[0] = NULL;
     mNumTexture = 0;
     mValidTexture = 1;
-    if (r30) {
-        mpTexture[0] = new JUTTexture(r30, 0);
+    if (timg) {
+        mpTexture[0] = new JUTTexture(timg, 0);
         mNumTexture++;
     }
-    if (r29) {
-        mpPalette = new JUTPalette(GX_TLUT0, r29);
+    if (tlut) {
+        mpPalette = new JUTPalette(GX_TLUT0, tlut);
         mpTexture[0]->attachPalette(mpPalette);
     }
     setBlendRatio(1.0f, 1.0f, 1.0f, 1.0f);
@@ -131,9 +134,9 @@ void J2DPicture::private_initiate(const ResTIMG* pTimg, const ResTLUT* pTlut) {
 /* 802D35FC-802D3774       .text initinfo__10J2DPictureFv */
 void J2DPicture::initinfo() {
     mMagic = 'PIC1';
-    field_0xde = 0x0f;
-    field_0xdf &= 4;
-    field_0xdf &= 3;
+    mBinding = J2DBind_Bottom | J2DBind_Top | J2DBind_Right | J2DBind_Left;
+    mFlag &= 4;
+    mFlag &= 3;
     setBlendRatio(1.0f, 1.0f, 1.0f, 1.0f);
     mColorBlack = JUtility::TColor(0);
     mColorWhite = JUtility::TColor(-1);
@@ -229,125 +232,105 @@ void J2DPicture::drawSelf(f32 x, f32 y, Mtx* mtx) {
     if (!mpTexture[0]) {
         return;
     }
-    drawFullSet(mScreenBounds.i.x + x, mScreenBounds.i.y + y, mBounds.getWidth(), mBounds.getHeight(), J2DBinding(field_0xde), J2DMirror(field_0xdf & 3), field_0xdf >> 2 & 1, mtx);
+    drawFullSet(mScreenBounds.i.x + x, mScreenBounds.i.y + y, mBounds.getWidth(), mBounds.getHeight(), J2DBinding(mBinding), getMirror(), isTumble(), mtx);
 }
 
 /* 802D3D54-802D4074       .text drawFullSet__10J2DPictureFffff10J2DBinding9J2DMirrorbPA3_A4_f */
-void J2DPicture::drawFullSet(f32 x, f32 y, f32 width, f32 height, J2DBinding binding, J2DMirror mirror, bool rotateXY, Mtx* mtx) {
-    /* Nonmatching */
+void J2DPicture::drawFullSet(f32 x, f32 y, f32 width, f32 height, J2DBinding binding, J2DMirror mirror, bool rotate90, Mtx* mtx) {
+    bool bindLeft;
+    bool bindRight;
+    bool bindTop;
+    bool bindBottom;
 
-    bool bindingS0;
-    bool bindingS1;
-    bool bindingT0;
-    bool bindingT1;
-
-    if (!rotateXY) {
-        if (mirror & 2)
-            bindingS0 = (binding >> 3) & 1;
+    if (!rotate90) {
+        if (mirror & J2DMirror_X)
+            bindLeft = binding & J2DBind_Right;
         else
-            bindingS0 = (binding >> 2) & 1;
+            bindLeft = binding & J2DBind_Left;
 
-        if (mirror & 2)
-            bindingS1 = (binding >> 2) & 1;
+        if (mirror & J2DMirror_X)
+            bindRight = binding & J2DBind_Left;
         else
-            bindingS1 = (binding >> 3) & 1;
+            bindRight = binding & J2DBind_Right;
 
-        if (mirror & 1)
-            bindingT0 = (binding >> 0) & 1;
+        if (mirror & J2DMirror_Y)
+            bindTop = binding & J2DBind_Bottom;
         else
-            bindingT0 = (binding >> 1) & 1;
+            bindTop = binding & J2DBind_Top;
 
-        if (mirror & 1)
-            bindingT1 = (binding >> 1) & 1;
+        if (mirror & J2DMirror_Y)
+            bindBottom = binding & J2DBind_Top;
         else
-            bindingT1 = (binding >> 0) & 1;
+            bindBottom = binding & J2DBind_Bottom;
     } else {
-        if (mirror & 2)
-            bindingS0 = (binding >> 1) & 1;
+        if (mirror & J2DMirror_X)
+            bindLeft = binding & J2DBind_Bottom;
         else
-            bindingS0 = (binding >> 0) & 1;
+            bindLeft = binding & J2DBind_Top;
 
-        if (mirror & 2)
-            bindingS1 = (binding >> 0) & 1;
+        if (mirror & J2DMirror_X)
+            bindRight = binding & J2DBind_Top;
         else
-            bindingS1 = (binding >> 1) & 1;
+            bindRight = binding & J2DBind_Bottom;
 
-        if (mirror & 1)
-            bindingT0 = (binding >> 2) & 1;
+        if (mirror & J2DMirror_Y)
+            bindTop = binding & J2DBind_Left;
         else
-            bindingT0 = (binding >> 3) & 1;
+            bindTop = binding & J2DBind_Right;
 
-        if (mirror & 1)
-            bindingT1 = (binding >> 3) & 1;
+        if (mirror & J2DMirror_Y)
+            bindBottom = binding & J2DBind_Right;
         else
-            bindingT1 = (binding >> 2) & 1;
+            bindBottom = binding & J2DBind_Left;
     }
 
+    f32 rectWidth;
+    f32 rectHeight;
     f32 texWidth = mpTexture[0]->getWidth();
     f32 texHeight = mpTexture[0]->getHeight();
 
-    f32 maxS;
-    f32 maxT;
-    if (rotateXY) {
-        maxT = width;
-        maxS = height;
-    } else {
-        maxS = width;
-        maxT = height;
-    }
+    rectWidth = !rotate90 ? width : height;
+    rectHeight = !rotate90 ? height : width;
 
-    f32 s0, t0, s1, t1, s2, t2, s3, t3;
-    if (bindingS0) {
+    f32 s0, t0, s1, t1;
+    if (bindLeft) {
         s0 = 0.0f;
-        if (bindingS1) {
-            s1 = width / texWidth;
-        } else {
-            s1 = 1.0f;
-        }
+        s1 = bindRight ? 1.0f : (rectWidth / texWidth);
+    } else if (bindRight) {
+        s0 = 1.0f - (rectWidth / texWidth);
+        s1 = 1.0f;
     } else {
-        if (bindingS1) {
-            s1 = (maxS / texWidth) * 0.5f;
-            s0 = 0.5f - s1;
-            s1 = 0.5f + s1;
-        } else {
-            s0 = 1.0f - maxS / texWidth;
-            s1 = 1.0f;
-        }
+        s0 = 0.5f - (rectWidth / texWidth) / 2.0f;
+        s1 = 0.5f + (rectWidth / texWidth) / 2.0f;
     }
 
-    if (bindingT0) {
+    if (bindTop) {
         t0 = 0.0f;
-        if (bindingT1) {
-            t1 = height / texHeight;
-        } else {
-            t1 = 1.0f;
-        }
+        t1 = bindBottom ? 1.0f : (rectHeight / texHeight);
+    } else if (bindBottom) {
+        t0 = 1.0f - (rectHeight / texHeight);
+        t1 = 1.0f;
     } else {
-        if (bindingT1) {
-            t1 = (maxT / texHeight) * 0.5f;
-            t0 = 0.5f - t1;
-            t1 = 0.5f + t1;
-        } else {
-            t0 = 1.0f - maxT / texHeight;
-            t1 = 1.0f;
-        }
+        t0 = 0.5f - (rectHeight / texHeight) / 2.0f;
+        t1 = 0.5f + (rectHeight / texHeight) / 2.0f;
     }
 
-    if (mirror & 2) {
+    if (mirror & J2DMirror_X) {
         swap(s0, s1);
     }
-    if (mirror & 2) {
+    if (mirror & J2DMirror_Y) {
         swap(t0, t1);
     }
-    if (!rotateXY) {
-        drawTexCoord(0.0f, 0.0f, width, height, s0, t0, s1, t1, s2, t2, s3, t3, mtx);
+
+    if (!rotate90) {
+        drawTexCoord(0.0f, 0.0f, width, height, s0, t0, s1, t0, s0, t1, s1, t1, mtx);
     } else {
-        drawTexCoord(0.0f, 0.0f, width, height, s0, t0, s1, t1, s2, t2, s3, t3, mtx);
+        drawTexCoord(0.0f, 0.0f, width, height, s0, t1, s0, t0, s1, t1, s1, t0, mtx);
     }
 }
 
 /* 802D4074-802D4490       .text draw__10J2DPictureFffffbbb */
-void J2DPicture::draw(f32 param_1, f32 param_2, f32 param_3, f32 param_4, bool param_5, bool param_6, bool param_7) {
+void J2DPicture::draw(f32 x, f32 y, f32 width, f32 height, bool mirrorX, bool mirrorY, bool rotate90) {
     if (!mVisible) {
         return;
     }
@@ -361,7 +344,7 @@ void J2DPicture::draw(f32 param_1, f32 param_2, f32 param_3, f32 param_4, bool p
     JUtility::TColor color[4];
     getNewColor(color);
     setTevMode();
-    makeMatrix(param_1, param_2);
+    makeMatrix(x, y);
     GXLoadPosMtxImm(mMtx, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
     GXClearVtxDesc();
@@ -372,31 +355,31 @@ void J2DPicture::draw(f32 param_1, f32 param_2, f32 param_3, f32 param_4, bool p
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(0.0f, 0.0f, 0.0f);
     GXColor1u32(color[0]);
-    if (!param_7) {
-        GXTexCoord2s16(param_5 ? 0x8000 : 0, param_6 ? 0x8000 : 0);
+    if (!rotate90) {
+        GXTexCoord2s16(mirrorX ? 0x8000 : 0, mirrorY ? 0x8000 : 0);
     } else {
-        GXTexCoord2s16(param_5 ? 0x8000 : 0, param_6 ? 0 : 0x8000);
+        GXTexCoord2s16(mirrorX ? 0x8000 : 0, mirrorY ? 0 : 0x8000);
     }
-    GXPosition3f32(param_3, 0.0f, 0.0f);
+    GXPosition3f32(width, 0.0f, 0.0f);
     GXColor1u32(color[1]);
-    if (!param_7) {
-        GXTexCoord2s16(param_5 ? 0 : 0x8000, param_6 ? 0x8000 : 0);
+    if (!rotate90) {
+        GXTexCoord2s16(mirrorX ? 0 : 0x8000, mirrorY ? 0x8000 : 0);
     } else {
-        GXTexCoord2s16(param_5 ? 0x8000 : 0, param_6 ? 0x8000 : 0);
+        GXTexCoord2s16(mirrorX ? 0x8000 : 0, mirrorY ? 0x8000 : 0);
     }
-    GXPosition3f32(param_3, param_4, 0.0f);
+    GXPosition3f32(width, height, 0.0f);
     GXColor1u32(color[3]);
-    if (!param_7) {
-        GXTexCoord2s16(param_5 ? 0 : 0x8000, param_6 ? 0 : 0x8000);
+    if (!rotate90) {
+        GXTexCoord2s16(mirrorX ? 0 : 0x8000, mirrorY ? 0 : 0x8000);
     } else {
-        GXTexCoord2s16(param_5 ? 0 : 0x8000, param_6 ? 0x8000 : 0);
+        GXTexCoord2s16(mirrorX ? 0 : 0x8000, mirrorY ? 0x8000 : 0);
     }
-    GXPosition3f32(0.0f, param_4, 0.0f);
+    GXPosition3f32(0.0f, height, 0.0f);
     GXColor1u32(color[2]);
-    if (!param_7) {
-        GXTexCoord2s16(param_5 ? 0x8000 : 0, param_6 ? 0 : 0x8000);
+    if (!rotate90) {
+        GXTexCoord2s16(mirrorX ? 0x8000 : 0, mirrorY ? 0 : 0x8000);
     } else {
-        GXTexCoord2s16(param_5 ? 0 : 0x8000, param_6 ? 0 : 0x8000);
+        GXTexCoord2s16(mirrorX ? 0 : 0x8000, mirrorY ? 0 : 0x8000);
     }
     GXEnd();
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_U16, 0x0f);
@@ -511,7 +494,6 @@ static inline void GXSetTexCoordGen(GXTexCoordID dst, GXTexGenType type, GXTexGe
 
 /* 802D4B3C-802D4F44       .text setTevMode__10J2DPictureFv */
 void J2DPicture::setTevMode() {
-    /* Nonmatching */
     u8 i;
     for (i = 0; i < mNumTexture; i++) {
         GXSetTevOrder(GXTevStageID(i), GXTexCoordID(i), GXTexMapID(i), GX_COLOR_NULL);

@@ -12,7 +12,7 @@ struct TColor : public GXColor {
 
     // TColor(const TColor& other) { set(other.toUInt32()); }
     TColor& operator=(const TColor& other) {
-        ((GXColor*)this)->operator=(other);
+        GXColor::operator=(other);
         return *this;
     }
 

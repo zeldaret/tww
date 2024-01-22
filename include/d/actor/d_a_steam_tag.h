@@ -18,6 +18,8 @@ public:
     void createEmitter();
     void endEmitter();
 
+    static void init();
+
 public:
     /* 0x290 */ JPABaseEmitter* mpEmitter;
     /* 0x294 */ u8 m294[0x296 - 0x294];
@@ -30,6 +32,9 @@ public:
     /* 0x408 */ dCcD_Cps mCps;
     /* 0x540 */ cM3dGCpsS mPntWindCpsS;
     /* 0x55C */ dPointWind_c mPointWind;
+
+public:
+    static u8 mEmitterNum;
 };
 
 #endif /* D_A_STEAM_TAG_H */

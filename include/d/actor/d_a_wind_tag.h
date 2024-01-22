@@ -25,6 +25,8 @@ namespace daWindTag {
         void set_next_pnt();
         BOOL _draw();
         void MoveEmitter();
+        
+        static const f32 mData[];
     
     public:
         /* Place member variables here */

@@ -18,7 +18,7 @@ s32 daSpotbox_c::create() {
     mScale.z *= (baseScale * 1.2f);
     current.pos.y += mScale.y * 0.5f;
     fopAcM_SetMtx(this, mMtx);
-    fopAcM_setCullSizeBox(this, -0.5, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f);
+    fopAcM_setCullSizeBox(this, -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f);
 
     return cPhs_COMPLEATE_e;
 }

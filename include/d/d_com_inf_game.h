@@ -415,6 +415,8 @@ public:
 
     JKRArchive* getLkDemoAnmArchive() { return mpLkDArc; }
     void setLkDemoAnmArchive(JKRArchive* i_arc) { mpLkDArc = i_arc; }
+    s8 getLkDemoAnmNo() { return mLkDArcIdx; }
+    void setLkDemoAnmNo(s8 idx) { mLkDArcIdx = idx; }
     void setStatus(u16 status) { mStatus = status; }
     void onStatus(u16 status) { mStatus |= status; }
     s32 checkStatus(u16 flags) { return flags & mStatus; }
@@ -492,6 +494,13 @@ public:
 
     u8 getScopeType() { return mbCamOverrideFarPlane; }
     void setScopeType(u8 v) { mbCamOverrideFarPlane = v; }
+    void setCameraInfo(int idx, camera_class* camera_p, int dlst_window_idx, int cam_idx, int p5) {
+        mCameraInfo[idx].mpCamera = camera_p;
+        mCameraInfo[idx].mDlstWindowIdx = dlst_window_idx;
+        mCameraInfo[idx].mCamIdx = cam_idx;
+        mCameraInfo[idx].field_0x06 = p5;
+    }
+    // void setCameraAttentionStatus(u32 stts) { mCameraInfo[0].mCameraAttentionStatus = stts; )
     void setCurrentGrafPort(J2DOrthoGraph* i_graf) { mCurrentGrafPort = i_graf; }
     void setCurrentWindow(dDlst_window_c* i_window) { mCurrentWindow = i_window; }
     void setCurrentView(view_class* i_view) { mCurrentView = i_view; }
@@ -499,10 +508,17 @@ public:
     s32 getWindowNum() { return mDlstWindowNum; }
     void setWindowNum(u8 num) { mDlstWindowNum = num; }
     dDlst_window_c * getWindow(int idx) { return &mDlstWindow[idx]; }
+    void setWindow(int idx, f32 x, f32 y, f32 w, f32 h, f32 n, f32 f, int cameraID, int mode) {
+        getWindow(idx)->setViewPort(x, y, w, h, n, f);
+        getWindow(idx)->setScissor(x, y, w, h);
+        getWindow(idx)->setCameraID(cameraID);
+        getWindow(idx)->setMode(mode);
+    }
 
     J2DOrthoGraph* getCurrentGrafPort() { return mCurrentGrafPort; }
 
-    JKRExpHeap * getExpHeap2D() { return mpExpHeap2D; }
+    JKRExpHeap* getExpHeap2D() { return mpExpHeap2D; }
+    void setExpHeap2D(void* heap) { mpExpHeap2D = (JKRExpHeap*)heap; }
 
     inline u8 getHeapLockFlag() { return mHeapLockFlag; }
     inline void setHeapLockFlag(u8 flag) { mHeapLockFlag = flag; }
@@ -559,6 +575,11 @@ public:
 
     u8 getMelodyNum() { return mMelodyNum; }
     void setMelodyNum(u8 melody) { mMelodyNum = melody; }
+
+    u8 getBaseAnimeID() { return mMesgAnime; }
+    void clearBaseAnimeID() { mMesgAnime = 0xFF; }
+    u8 getNowAnimeID() { return mMesgAnimeTagInfo; }
+    void clearNowAnimeID() { mMesgAnimeTagInfo = 0xFF; }
 
     /* 0x0000 */ dBgS mBgS;
     /* 0x1404 */ dCcS mCcS;
@@ -1262,6 +1283,10 @@ inline void dComIfGs_onCollect(int i_idx, u8 i_item) {
     g_dComIfG_gameInfo.save.getPlayer().getCollect().onCollect(i_idx, i_item);
 }
 
+inline void dComIfGs_offCollect(int i_idx, u8 i_item) {
+    g_dComIfG_gameInfo.save.getPlayer().getCollect().offCollect(i_idx, i_item);
+}
+
 inline u8 dComIfGs_checkCollect(int no) {
     return g_dComIfG_gameInfo.save.getPlayer().getCollect().checkCollect(no);
 }
@@ -1688,6 +1713,8 @@ inline u8 dComIfGs_checkFwaterTimer() {
     return g_dComIfG_gameInfo.play.checkFwaterTimer();
 }
 
+void dComIfGs_setPlayerRecollectionData();
+
 /**
  * === PLAY ===
  */
@@ -2024,6 +2051,10 @@ inline void dComIfGp_map_clrAGBMapSendStopFlg() {
     // dMap_c::clrAGBMapSendStopFlg();
 }
 
+inline void dComIfGp_createDemo() {
+    return g_dComIfG_gameInfo.play.createDemo();
+}
+
 inline dDemo_manager_c* dComIfGp_demo_get() {
     return g_dComIfG_gameInfo.play.getDemo();
 }
@@ -2054,6 +2085,14 @@ inline JKRArchive* dComIfGp_getLkDemoAnmArchive() {
 
 inline void dComIfGp_setLkDemoAnmArchive(JKRArchive* i_arc) {
     g_dComIfG_gameInfo.play.setLkDemoAnmArchive(i_arc);
+}
+
+inline s8 dComIfGp_getLkDemoAnmNo() {
+    return g_dComIfG_gameInfo.play.getLkDemoAnmNo();
+}
+
+inline void dComIfGp_setLkDemoAnmNo(s8 idx) {
+    g_dComIfG_gameInfo.play.setLkDemoAnmNo(idx);
 }
 
 inline void dComIfGp_setStatus(u16 status) {
@@ -2310,9 +2349,11 @@ inline void dComIfGp_plusMiniGameRupee(s16 count) {
     g_dComIfG_gameInfo.play.plusMiniGameRupee(count);
 }
 
+inline void dComIfGp_setCameraInfo(int idx, camera_class* camera, int dlst, int cam, int p5) { g_dComIfG_gameInfo.play.setCameraInfo(idx, camera, dlst, cam, p5); }
 inline s32 dComIfGp_getWindowNum() { return g_dComIfG_gameInfo.play.getWindowNum(); }
 inline void dComIfGp_setWindowNum(u8 num) { g_dComIfG_gameInfo.play.setWindowNum(num); }
 inline dDlst_window_c * dComIfGp_getWindow(int idx) { return g_dComIfG_gameInfo.play.getWindow(idx); }
+inline void dComIfGp_setWindow(int idx, f32 x, f32 y, f32 w, f32 h, f32 n, f32 f, int cameraID, int mode) { g_dComIfG_gameInfo.play.setWindow(idx, x, y, w, h, n, f, cameraID, mode); }
 inline J2DOrthoGraph* dComIfGp_getCurrentGrafPort() { return g_dComIfG_gameInfo.play.getCurrentGrafPort(); }
 inline void dComIfGp_setCurrentWindow(dDlst_window_c* window) { return g_dComIfG_gameInfo.play.setCurrentWindow(window); }
 inline void dComIfGp_setCurrentView(view_class* view) { return g_dComIfG_gameInfo.play.setCurrentView(view); }
@@ -2322,9 +2363,8 @@ inline dADM_CharTbl* dComIfGp_CharTbl() {
     return &g_dComIfG_gameInfo.play.mADM.mCharTbl;
 }
 
-inline JKRExpHeap * dComIfGp_getExpHeap2D() {
-    return g_dComIfG_gameInfo.play.getExpHeap2D();
-}
+inline JKRExpHeap* dComIfGp_getExpHeap2D() { return g_dComIfG_gameInfo.play.getExpHeap2D(); }
+inline void dComIfGp_setExpHeap2D(void* heap) { g_dComIfG_gameInfo.play.setExpHeap2D(heap); }
 
 inline u8 dComIfGp_getHeapLockFlag() {
     return g_dComIfG_gameInfo.play.getHeapLockFlag();
@@ -2356,6 +2396,22 @@ inline u8 dComIfGp_setMelodyNum() {
 
 inline void dComIfGp_setMelodyNum(u8 melody) {
     g_dComIfG_gameInfo.play.setMelodyNum(melody);
+}
+
+inline u8 dComIfGp_getMesgAnimeAttrInfo() {
+    return g_dComIfG_gameInfo.play.getBaseAnimeID();
+}
+
+inline void dComIfGp_clearMesgAnimeAttrInfo() {
+    g_dComIfG_gameInfo.play.clearBaseAnimeID();
+}
+
+inline u8 dComIfGp_getMesgAnimeTagInfo() {
+    return g_dComIfG_gameInfo.play.getNowAnimeID();
+}
+
+inline void dComIfGp_clearMesgAnimeTagInfo() {
+    g_dComIfG_gameInfo.play.clearNowAnimeID();
 }
 
 /**
@@ -3031,6 +3087,10 @@ inline void dComIfGp_particle_createCommon(const void * pArc) {
     g_dComIfG_gameInfo.play.getParticle()->createCommon(pArc);
 }
 
+inline void dComIfGp_particle_createScene(const void* pArc) {
+    g_dComIfG_gameInfo.play.getParticle()->createScene(pArc);
+}
+
 inline void dComIfGp_particle_createRoomScene(void * pData) {
     g_dComIfG_gameInfo.play.getParticle()->createRoomScene(pData);
 }
@@ -3092,9 +3152,8 @@ inline u32 dComIfG_getTimerRestTimeMs() { return g_dComIfG_gameInfo.play.getTime
 
 inline void dComIfG_TimerDeleteRequest() { dComIfG_getTimerPtr()->deleteRequest(); }
 
-inline u8 dComIfG_getBrightness() {
-    return g_dComIfG_gameInfo.mBrightness;
-}
+inline u8 dComIfG_getBrightness() { return g_dComIfG_gameInfo.mBrightness; }
+inline void dComIfG_setBrightness(u8 v) { g_dComIfG_gameInfo.mBrightness = v; }
 
 class scene_class;
 int dComIfG_resetToOpening(scene_class* i_scene);

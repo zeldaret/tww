@@ -22,10 +22,10 @@ bool daDummy::Act_c::create_heap() {
 s32 daDummy::Act_c::_create() {  
     fopAcM_SetupActor(this, Act_c);
 
-    if (fopAcM_entrySolidHeap(this, solidHeapCB, 0) != 0) {
+    if (fopAcM_entrySolidHeap(this, solidHeapCB, 0)) {
         set_mtx();
-        fopAcM_SetMtx(this, field_0x29c);
-        fopAcM_setCullSizeBox(this, -100.0, -1000.0, -100.0, 100.0, 100.0, 100.0);
+        fopAcM_SetMtx(this, mMtx);
+        fopAcM_setCullSizeBox(this, -100.0f, -1000.0f, -100.0f, 100.0f, 100.0f, 100.0f);
     }
     return cPhs_COMPLEATE_e;
 }
@@ -39,7 +39,7 @@ bool daDummy::Act_c::_delete() {
 void daDummy::Act_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
-    cMtx_copy(mDoMtx_stack_c::get(), field_0x29c);
+    cMtx_copy(mDoMtx_stack_c::get(), mMtx);
 }
 
 /* 000001CC-000001D4       .text _execute__Q27daDummy5Act_cFv */
@@ -67,12 +67,13 @@ namespace daDummy {
         }
         
         BOOL Mthd_Draw(void* i_this) {
-            return ((Act_c*)i_this)->_draw();
+            return static_cast<Act_c*>(i_this)->_draw();
         }
         
         BOOL Mthd_IsDelete(void* i_this) {
             return TRUE;
         }
+        
         static actor_method_class Mthd_Table = {
             (process_method_func)Mthd_Create,
             (process_method_func)Mthd_Delete,
@@ -99,5 +100,3 @@ actor_process_profile_definition g_profile_Dummy = {
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };
-
-

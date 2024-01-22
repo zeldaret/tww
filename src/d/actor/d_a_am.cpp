@@ -260,7 +260,7 @@ static BOOL medama_atari_check(am_class* i_this) {
     switch (hitObj->GetAtType()) {
     case AT_TYPE_GRAPPLING_HOOK:
         if (i_this->mCurrBckIdx != AM_BCK_SLEEP && i_this->mCurrBckIdx != AM_BCK_SLEEP_LOOP) {
-            if (i_this->mItemStealLeft > 0) {
+            if (i_this->mStealItemLeft > 0) {
                 i_this->mMaxHealth = 10;
                 i_this->mHealth = 10;
                 atInfo.mpObj = i_this->mEyeSph.GetTgHitObj();
@@ -1167,7 +1167,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
             /* mShapeType  */ 2, // Cylinder
             /* mJointIndex */ 0x05, // hitomi (pupil) joint
             /* mRadius     */ 5.0f,
-            /* mpOffsets   */ (cXyz*)&cyl2_eye_offset,
+            /* mpOffsets   */ cyl2_eye_offset,
         },
     };
     i_this->mEyeJntHit = JntHit_create(i_this->mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));
@@ -1192,7 +1192,7 @@ static s32 daAM_Create(fopAc_ac_c* i_actor) {
             return cPhs_ERROR_e;
         }
 
-        i_this->mItemStealLeft = 3;
+        i_this->mStealItemLeft = 3;
 
         i_this->mSmokeCbs[0].setRateOff(0);
         i_this->mSmokeCbs[1].setRateOff(0);

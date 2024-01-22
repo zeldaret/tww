@@ -7,7 +7,6 @@ class daNpc_Kg2_c : public fopAc_ac_c {
 public:
     void getAttentionBasePos() {}
     void getEyePos() {}
-    void init() {}
     void seStart(unsigned long) {}
     void setAction(int (daNpc_Kg2_c::*)(void*), void*) {}
     void setCanonGameResult(unsigned char) {}
@@ -43,6 +42,12 @@ public:
     BOOL _delete();
     BOOL _execute();
     BOOL _draw();
+
+    static void init() {
+        canon_game_result = 0;
+    }
+
+    static s32 canon_game_result;
 
 public:
     /* Place member variables here */

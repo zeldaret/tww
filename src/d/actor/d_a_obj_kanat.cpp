@@ -31,10 +31,10 @@ int daObjKanat::Act_c::CreateHeap() {
 int daObjKanat::Act_c::Create() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     init_mtx();
-    fopAcM_setCullSizeBox(this, -500.0, -100.0f, -500.0f, 500.0f, 200.0f, 500.0f);
-    m2F4 = 0;
-    m2F5 = 1;
-    m2D4.setRateOff(0);
+    fopAcM_setCullSizeBox(this, -500.0f, -100.0f, -500.0f, 500.0f, 200.0f, 500.0f);
+    mIsBroken = false;
+    mIsVisible = true;
+    mSmokeCb.setRateOff(0);
     return TRUE;
 }
 
@@ -57,7 +57,7 @@ s32 daObjKanat::Act_c::Mthd_Create() {
 
 /* 000002EC-0000031C       .text Delete__Q210daObjKanat5Act_cFv */
 BOOL daObjKanat::Act_c::Delete() {
-    m2D4.end();
+    mSmokeCb.end();
     return TRUE;
 }
 
@@ -86,9 +86,9 @@ void daObjKanat::Act_c::init_mtx() {
 
 /* 00000430-00000590       .text Execute__Q210daObjKanat5Act_cFPPA3_A4_f */
 BOOL daObjKanat::Act_c::Execute(Mtx** pMtx) {
-    if (m2F4 == 0) {
+    if (!mIsBroken) {
         if (fopAcM_isSwitch(this, prm_get_swSave())) {
-            m2F4 = 1;
+            mIsBroken = true;
             GXColor color;
             color.r = mTevStr.mColorC0.r;
             color.g = mTevStr.mColorC0.g;
@@ -100,12 +100,12 @@ BOOL daObjKanat::Act_c::Execute(Mtx** pMtx) {
             );
             dComIfGp_particle_setToon(
                 0xA2A3, &current.pos, &current.angle, NULL, 0xB4,
-                &m2D4, current.roomNo, &mTevStr.mColorK0, &color
+                &mSmokeCb, current.roomNo, &mTevStr.mColorK0, &color
             );
         }
     } else {
-        m2F5 = 0;
-        if (m2D4.isEnd()) {
+        mIsVisible = false;
+        if (mSmokeCb.isEnd()) {
             fopAcM_delete(this);
         }
     }
@@ -118,7 +118,7 @@ BOOL daObjKanat::Act_c::Execute(Mtx** pMtx) {
 BOOL daObjKanat::Act_c::Draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &mTevStr);
-    if (m2F5 == 0) {
+    if (!mIsVisible) {
         return TRUE;
     }
     dComIfGd_setListBG();

@@ -6,6 +6,7 @@
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_m3d_g_aab.h"
 #include "SSystem/SComponent/c_m3d_g_pla.h"
+#include "SSystem/SComponent/c_bg_w_tri_elm.h"
 #include "dolphin/mtx/mtx.h"
 
 class cBgW_BgId {
@@ -120,13 +121,6 @@ public:
     /* 0x04 */ u16 ground;
 };
 
-class cBgW_TriElm {
-public:
-    /* 0x00 */ cM3dGPla m_plane;
-
-    virtual ~cBgW_TriElm() {}
-};
-
 class cBgW_GrpElm {
 public:
     virtual ~cBgW_GrpElm() {}
@@ -139,6 +133,7 @@ class cBgW : public cBgW_BgId {
 public:
     enum Flags_e {
         MOVE_BG_e = 0x1,
+        NO_CALC_VTX_e = 0x2,
         NO_VTX_TBL_e = 0x10,
         GLOBAL_e = 0x20,
         UNK40_e = 0x40,
@@ -198,19 +193,14 @@ public:
 
     void SetPriority(PRIORITY priority) { mWallCorrectPriority = priority; }
     void SetLock() { mFlags |= LOCK_e; }
-
-    void ChkFlush() {}
-    void ChkGroundRegist() {}
-    void ChkLock() {}
+    bool ChkLock() { return mFlags & LOCK_e; }
     bool ChkMoveBg() { return mFlags & MOVE_BG_e; }
-    void ChkNoCalcVtx() {}
+    void SetNoCalcVtx() { mFlags |= NO_CALC_VTX_e; }
+    void ClrNoCalcVtx() { mFlags &= ~NO_CALC_VTX_e; }
+    bool ChkNoCalcVtx() { return mFlags & NO_CALC_VTX_e; }
     BOOL ChkPriority(int prio) { return mWallCorrectPriority == prio; }
-    void ChkRoofRegist() {}
-    void ChkThrough() {}
-    void ChkWallRegist() {}
-    void ClrNoCalcVtx() {}
-    void GetBaseMtxP() {}
-    void GetOldInvMtx(float(*)[4]) const {}
+
+    Mtx* GetBaseMtxP() { return pm_base; }
     u32 GetPolyInfId(int poly_index) const {
         JUT_ASSERT(0x2f1, 0 <= poly_index && poly_index < pm_bgd->m_t_num);
         return pm_bgd->m_t_tbl[poly_index].id;
@@ -231,15 +221,27 @@ public:
         JUT_ASSERT(0x307, 0 <= id && id < pm_bgd->m_ti_num);
         return pm_bgd->m_ti_tbl[id].mPolyInf3;
     }
-    void GetVtxNum() const {}
-    void GetVtxTbl() const {}
-    void GroundCross(cBgS_GndChk*) {}
-    void LineCheck(cBgS_LinChk*) {}
+    int GetVtxNum() const { return pm_bgd->m_v_num; }
+    Vec* GetVtxTbl() const { return pm_vtx_tbl; }
+    bool GroundCross(cBgS_GndChk* chk) {
+        return GroundCrossGrpRp(chk, m_rootGrpIdx, 1);
+    }
+    bool LineCheck(cBgS_LinChk* chk) {
+        return LineCheckGrpRp(chk, m_rootGrpIdx, 1);
+    }
+
+    void GetOldInvMtx(float(*)[4]) const {}
+    bool ChkFlush() { return mIgnorePlaneType & 8; }
+    void ChkGroundRegist() {}
+    void ChkRoofRegist() {}
+    void ChkThrough() {}
+    void ChkWallRegist() {}
     void OffRoofRegist() {}
-    void SetBaseMtxP(float(*)[3][4]) {}
-    void SetNoCalcVtx() {}
-    void SetVtxTbl(Vec*) {}
-    void ShdwDraw(cBgS_ShdwDraw*) {}
+    void SetBaseMtxP(Mtx* mtx_p) { pm_base = mtx_p; }
+    void SetVtxTbl(Vec* v) { pm_vtx_tbl = v; }
+    void ShdwDraw(cBgS_ShdwDraw* shdw) {
+        ShdwDrawGrpRp(shdw, m_rootGrpIdx);
+    }
 
     virtual ~cBgW();
     virtual u32 GetGrpToRoomIndex(int) const;
@@ -270,8 +272,8 @@ public:
     /* 0xA4 */ int m_rootGrpIdx;
 };
 
-bool cBgW_CheckBGround(f32 a1);
-bool cBgW_CheckBRoof(f32 a1);
-bool cBgW_CheckBWall(f32 a1);
+bool cBgW_CheckBGround(f32 ny);
+bool cBgW_CheckBRoof(f32 ny);
+bool cBgW_CheckBWall(f32 ny);
 
 #endif /* C_BG_W_H */

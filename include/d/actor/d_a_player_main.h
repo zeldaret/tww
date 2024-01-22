@@ -2433,7 +2433,7 @@ public:
     }
     bool checkSwordEquip() const {
         return dComIfGs_getSelectEquip(0) != NO_ITEM ||
-        dComIfGp_getMiniGameType() == 2;
+            dComIfGp_getMiniGameType() == 2;
     }
     
     int getStartRoomNo() { return fopAcM_GetParam(this) & 0x3F; }

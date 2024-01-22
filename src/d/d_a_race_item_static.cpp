@@ -9,6 +9,7 @@
 #include "d/d_item_data.h"
 #include "m_Do/m_Do_mtx.h"
 
+/* 80068A58-80068AA4       .text raceItemForceGet__12daRaceItem_cFv */
 void daRaceItem_c::raceItemForceGet() {
     field_0x640 = 1;
     switch(field_0x644) {
@@ -21,6 +22,7 @@ void daRaceItem_c::raceItemForceGet() {
     }
 }
 
+/* 80068AA4-80068D48       .text raceItemGet__12daRaceItem_cFv */
 void daRaceItem_c::raceItemGet() {
     switch(m_itemNo) {
         case GREEN_RUPEE:
@@ -54,6 +56,7 @@ void daRaceItem_c::raceItemGet() {
     }
 }
 
+/* 80068D48-80068FD0       .text normalItemGet__12daRaceItem_cFv */
 void daRaceItem_c::normalItemGet() {
     field_0x640 = 1;
     execItemGet(m_itemNo);
@@ -104,11 +107,13 @@ void daRaceItem_c::normalItemGet() {
     }
 }
 
+/* 80068FD0-80068FE0       .text startOffsetPos__12daRaceItem_cFv */
 BOOL daRaceItem_c::startOffsetPos() {
     field_0x640 = 0;
     return true;
 }
 
+/* 80068FE0-8006903C       .text endOffsetPos__12daRaceItem_cFfP4cXyzffP5csXyz */
 BOOL daRaceItem_c::endOffsetPos(f32 param_1, cXyz* param_2, f32 param_3, f32 param_4, csXyz* param_5) {
     if(param_5) {
         current.angle = *param_5;
@@ -125,19 +130,20 @@ BOOL daRaceItem_c::endOffsetPos(f32 param_1, cXyz* param_2, f32 param_3, f32 par
     return true;
 }
 
+/* 8006903C-80069064       .text checkOffsetPos__12daRaceItem_cFv */
 BOOL daRaceItem_c::checkOffsetPos() {
     BOOL ret = true;
-    if(field_0x645 & 0x1 || fopAcM_checkHookCarryNow(this)) {
+    if(cLib_checkBit(field_0x645, (u8)0x01) || fopAcM_checkHookCarryNow(this)) {
         ret = false;
     }
 
     return ret;
 }
 
+/* 80069064-800690E4       .text set_mtx__12daRaceItem_cFP4cXyz */
 void daRaceItem_c::set_mtx(cXyz* param_1) {
     mpModel->setBaseScale(mScale);
     mDoMtx_stack_c::transS(*param_1);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
-

@@ -111,8 +111,8 @@ public:
     virtual bool CrossCo(cCcD_AabAttr const&, f32*) const = 0;
     virtual bool CrossCo(cCcD_CylAttr const&, f32*) const = 0;
     virtual bool CrossCo(cCcD_SphAttr const&, f32*) const = 0;
-    virtual const cXyz& GetCoCP() const { return m_virtual_center; }
-    virtual cXyz& GetCoCP() { return m_virtual_center; }
+    virtual const cXyz* GetCoCP() const { return &m_virtual_center; }
+    virtual cXyz* GetCoCP() { return &m_virtual_center; }
     virtual void CalcAabBox() = 0;
     virtual bool GetNVec(cXyz const&, cXyz*) const = 0;
 
@@ -214,8 +214,8 @@ public:
     }
 
     virtual ~cCcD_SphAttr() {}
-    virtual const cXyz& GetCoCP() const { return mCenter; }
-    virtual cXyz& GetCoCP() { return mCenter; }
+    virtual const cXyz* GetCoCP() const { return &mCenter; }
+    virtual cXyz* GetCoCP() { return &mCenter; }
     virtual bool CrossAtTg(cCcD_ShapeAttr const& shape, cXyz* xyz) const {
         return shape.CrossAtTg(*this, xyz);
     }
@@ -249,7 +249,7 @@ public:
     }
 
     virtual ~cCcD_CylAttr() {}
-    virtual const cXyz& GetCoCP() const { return mCenter; }
+    virtual const cXyz* GetCoCP() const { return &mCenter; }
     virtual bool CrossAtTg(cCcD_SphAttr const&, cXyz*) const;
     virtual bool CrossAtTg(cCcD_CylAttr const&, cXyz*) const;
     virtual bool CrossAtTg(cCcD_TriAttr const&, cXyz*) const;
@@ -268,7 +268,7 @@ public:
     virtual bool CrossCo(cCcD_TriAttr const&, f32*) const { return false; }
     virtual bool CrossCo(cCcD_AabAttr const&, f32*) const { return false; }
     virtual bool CrossCo(cCcD_SphAttr const&, f32*) const;
-    virtual cXyz& GetCoCP() { return mCenter; }
+    virtual cXyz* GetCoCP() { return &mCenter; }
     virtual void CalcAabBox();
     virtual bool GetNVec(cXyz const&, cXyz*) const;
 

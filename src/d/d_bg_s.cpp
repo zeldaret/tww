@@ -53,7 +53,7 @@ bool dBgS::Regist(cBgW* bgw, fopAc_ac_c* ac) {
     if (bgw == NULL)
         return true;
 
-    if (ac != NULL && !!(bgw->mFlags & cBgW::MOVE_BG_e)) {
+    if (ac != NULL && bgw->ChkMoveBg()) {
         dBgW* bgwp = (dBgW*)bgw;
         bgwp->mOldRotY = ac->shape_angle.y;
         bgwp->mRoomNo = fopAcM_GetRoomNo(ac);
@@ -66,9 +66,9 @@ bool dBgS::Regist(cBgW* bgw, fopAc_ac_c* ac) {
 bool dBgS::ChkMoveBG(cBgS_PolyInfo& polyInfo) {
     dBgW* bgwp = (dBgW*)dComIfG_Bgsp()->GetBgWPointer(polyInfo);
     if (bgwp != NULL) {
-        if (bgwp->mFlags & cBgW::LOCK_e)
+        if (bgwp->ChkLock())
             return false;
-        if (bgwp->mFlags & cBgW::MOVE_BG_e)
+        if (bgwp->ChkMoveBg())
             return true;
     }
     return false;
@@ -78,7 +78,7 @@ bool dBgS::ChkMoveBG(cBgS_PolyInfo& polyInfo) {
 bool dBgS::ChkMoveBG_NoDABg(cBgS_PolyInfo& polyInfo) {
     dBgW* bgwp = (dBgW*)dComIfG_Bgsp()->GetBgWPointer(polyInfo);
     if (bgwp != NULL) {
-        if (bgwp->mFlags & cBgW::MOVE_BG_e)
+        if (bgwp->ChkMoveBg())
             return true;
     }
     return false;
@@ -316,7 +316,7 @@ bool dBgS::LineCrossNonMoveBG(cBgS_LinChk* chk) {
     chk->ClrHit();
     for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
         cBgS_ChkElm* elm = &m_chk_element[bg_index];
-        if (elm->ChkUsed() && elm->m_bgw_base_ptr->pm_vtx_tbl != NULL && !chk->ChkSameActorPid(elm->m_actor_id) && !elm->m_bgw_base_ptr->ChkMoveBg()) {
+        if (elm->ChkUsed() && elm->m_bgw_base_ptr->GetVtxTbl() != NULL && !chk->ChkSameActorPid(elm->m_actor_id) && !elm->m_bgw_base_ptr->ChkMoveBg()) {
             chk->PreCalc();
             if (elm->m_bgw_base_ptr->LineCheckGrpRp(chk, elm->m_bgw_base_ptr->m_rootGrpIdx, 1)) {
                 chk->SetActorInfo(bg_index, elm->m_bgw_base_ptr, elm->m_actor_id);
@@ -340,7 +340,7 @@ void dBgS::WallCorrect(dBgS_Acch* acch) {
     for (s32 prio = 0; prio < 3; prio++) {
         for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
             elm = &m_chk_element[bg_index];
-            if (elm->ChkUsed() && elm->m_bgw_base_ptr->pm_vtx_tbl != NULL) {
+            if (elm->ChkUsed() && elm->m_bgw_base_ptr->GetVtxTbl() != NULL) {
                 acch->SetNowActorInfo(bg_index, elm->m_bgw_base_ptr, elm->m_actor_id);
                 if (!acch->ChkSameActorPid(elm->m_actor_id)) {
                     dBgW* bgwp = (dBgW*)elm->m_bgw_base_ptr;
@@ -359,7 +359,7 @@ f32 dBgS::RoofChk(dBgS_RoofChk* chk) {
     cBgS_ChkElm* elm;
     for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
         elm = &m_chk_element[bg_index];
-        if (elm->ChkUsed() && elm->m_bgw_base_ptr->pm_vtx_tbl != NULL && !chk->ChkSameActorPid(elm->m_actor_id)) {
+        if (elm->ChkUsed() && elm->m_bgw_base_ptr->GetVtxTbl() != NULL && !chk->ChkSameActorPid(elm->m_actor_id)) {
             dBgW* bgwp = (dBgW*)elm->m_bgw_base_ptr;
             if (bgwp->RoofChkGrpRp(chk, elm->m_bgw_base_ptr->m_rootGrpIdx, 1)) {
                 chk->SetActorInfo(bg_index, elm->m_bgw_base_ptr, elm->m_actor_id);
@@ -375,7 +375,7 @@ bool dBgS::SplGrpChk(dBgS_SplGrpChk* chk) {
     chk->Init();
     for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
         cBgS_ChkElm* elm = &m_chk_element[bg_index];
-        if (elm->ChkUsed() && elm->m_bgw_base_ptr->pm_vtx_tbl != NULL && !chk->ChkSameActorPid(elm->m_actor_id)) {
+        if (elm->ChkUsed() && elm->m_bgw_base_ptr->GetVtxTbl() != NULL && !chk->ChkSameActorPid(elm->m_actor_id)) {
             dBgW* bgwp = (dBgW*)elm->m_bgw_base_ptr;
             if (bgwp->SplGrpChkGrpRp(chk, elm->m_bgw_base_ptr->m_rootGrpIdx, 1)) {
                 ret = true;
@@ -394,7 +394,7 @@ bool dBgS::SphChk(dBgS_SphChk* chk, void* user) {
     chk->Init();
     for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
         elm = &m_chk_element[bg_index];
-        if (elm->ChkUsed() && elm->m_bgw_base_ptr->pm_vtx_tbl != NULL && !chk->ChkSameActorPid(elm->m_actor_id)) {
+        if (elm->ChkUsed() && elm->m_bgw_base_ptr->GetVtxTbl() != NULL && !chk->ChkSameActorPid(elm->m_actor_id)) {
             dBgW* bgwp = (dBgW*)elm->m_bgw_base_ptr;
             if (bgwp->SphChkGrpRp(chk, user, elm->m_bgw_base_ptr->m_rootGrpIdx, 1)) {
                 chk->SetActorInfo(bg_index, elm->m_bgw_base_ptr, elm->m_actor_id);
@@ -417,7 +417,7 @@ bool dBgS::WallCrrPos(dBgS_CrrPos* crr) {
     for (s32 prio = 0; prio < 3; prio++) {
         for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
             elm = &m_chk_element[bg_index];
-            if (elm->ChkUsed() && elm->m_bgw_base_ptr->pm_vtx_tbl != NULL) {
+            if (elm->ChkUsed() && elm->m_bgw_base_ptr->GetVtxTbl() != NULL) {
                 if (crr->ChkSameActorPid(elm->m_actor_id))
                     continue;
                 dBgW* bgwp = (dBgW*)elm->m_bgw_base_ptr;
@@ -489,7 +489,7 @@ void dBgS_MoveBGProc_Typical(dBgW* pbgw, void* user, cBgS_PolyInfo& polyInfo, bo
     if (MTXInverse(pbgw->mOldMtx, inv)) {
         cXyz local, newPos;
         MTXMultVec(inv, pos, &local);
-        MTXMultVec(*pbgw->pm_base, &local, &newPos);
+        MTXMultVec(*pbgw->GetBaseMtxP(), &local, &newPos);
         *pos = newPos;
     }
 }

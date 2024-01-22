@@ -14,6 +14,8 @@
 #include "d/d_tree.h"
 #include "SSystem/SComponent/c_sxyz.h"
 
+static u8 dummy[0x4C];
+
 namespace daGrass_prm {
     inline s8 getItemNo(grass_class* ac) { return (fopAcM_GetParam(ac) >> 6) & 0x3F; }
     inline u8 getKind(grass_class* ac) { return (fopAcM_GetParam(ac) >> 4) & 0x03; }
@@ -32,8 +34,6 @@ static BOOL daGrass_Delete(grass_class*) {
 
 /* 000000FC-000014E0       .text daGrass_Create__FP10fopAc_ac_c */
 static s32 daGrass_Create(fopAc_ac_c* i_ac) {
-    static float dummy[19];
-
     static const csXyz l_setType0[] = {
         csXyz(0, 0, 0),
         csXyz(3, 0, -50),

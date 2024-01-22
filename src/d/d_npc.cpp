@@ -81,12 +81,12 @@ bool dNpc_JntCtrl_c::move(s16 param_1, int param_2) {
         param_1 -= (int)angle;
         angles[i] = angle;
         angleL = mAngles[i][param_2];
-        cLib_addCalcAngleL(&angleL, angle, 4, field_0x1E[i][param_2], 1);
+        cLib_addCalcAngleL(&angleL, angle, 4, mMaxTurnStep[i][param_2], 1);
         mAngles[i][param_2] = angleL;
     }
     
     for (i = 0, r25 = 0; i < 2; i++) {
-        if (cLib_distanceAngleS(angles[i], mAngles[i][param_2]) <= field_0x1E[i][param_2]/2) {
+        if (cLib_distanceAngleS(angles[i], mAngles[i][param_2]) <= mMaxTurnStep[i][param_2]/2) {
             r25++;
         }
     }
@@ -129,22 +129,22 @@ void dNpc_JntCtrl_c::lookAtTarget(s16* outY, cXyz* pDstPos, cXyz srcPos, s16 def
 }
 
 /* 8021AC6C-8021ACA8       .text setParam__14dNpc_JntCtrl_cFsssssssss */
-void dNpc_JntCtrl_c::setParam(s16 param_1, s16 maxBackBoneRot, s16 param_3, s16 minBackBoneRot,
-                              s16 param_5, s16 maxHeadRot, s16 param_7, s16 minHeadRot,
-                              s16 param_9)
+void dNpc_JntCtrl_c::setParam(s16 max_backbone_x, s16 max_backbone_y, s16 min_backbone_x, s16 min_backbone_y,
+                              s16 max_head_x, s16 max_head_y, s16 min_head_x, s16 min_head_y,
+                              s16 max_turn_step)
 {
-    mMaxAngles[1][0] = param_1;
-    mMaxAngles[1][1] = maxBackBoneRot;
-    mMinAngles[1][0] = param_3;
-    mMinAngles[1][1] = minBackBoneRot;
-    mMaxAngles[0][0] = param_5;
-    mMaxAngles[0][1] = maxHeadRot;
-    mMinAngles[0][0] = param_7;
-    mMinAngles[0][1] = minHeadRot;
-    field_0x1E[1][0] = param_9;
-    field_0x1E[1][1] = param_9;
-    field_0x1E[0][0] = param_9;
-    field_0x1E[0][1] = param_9;
+    mMaxAngles[1][0] = max_backbone_x;
+    mMaxAngles[1][1] = max_backbone_y;
+    mMinAngles[1][0] = min_backbone_x;
+    mMinAngles[1][1] = min_backbone_y;
+    mMaxAngles[0][0] = max_head_x;
+    mMaxAngles[0][1] = max_head_y;
+    mMinAngles[0][0] = min_head_x;
+    mMinAngles[0][1] = min_head_y;
+    mMaxTurnStep[1][0] = max_turn_step;
+    mMaxTurnStep[1][1] = max_turn_step;
+    mMaxTurnStep[0][0] = max_turn_step;
+    mMaxTurnStep[0][1] = max_turn_step;
 }
 
 /* 8021ACA8-8021ACBC       .text setInfDrct__14dNpc_PathRun_cFP5dPath */
@@ -597,13 +597,13 @@ void dNpc_setShadowModel(J3DModel* param_1, J3DModelData* param_2, J3DModel* par
     }
 }
 
-cXyz dNpc_playerEyePos(f32 param_1) {
+cXyz dNpc_playerEyePos(f32 offsetY) {
     daPy_py_c* pPlayer = daPy_getPlayerActorClass();
     cXyz pos = pPlayer->getHeadTopPos();
     cXyz out;
 
     MtxTrans(pos.x, pos.y, pos.z, false);
-    pos.set(0.0f, param_1, 0.0f);
+    pos.set(0.0f, offsetY, 0.0f);
     MtxPosition(&pos, &out);
     
     out.x = pPlayer->current.pos.x;
@@ -649,7 +649,7 @@ void fopNpc_npc_c::setCollision(f32 radius, f32 height) {
 }
 
 u16 fopNpc_npc_c::talk(int param_1) {
-    u16 mode = 0xFF;
+    u16 status = 0xFF;
 
     if(mCurrMsgBsPcId == fpcM_ERROR_PROCESS_ID_e) {
         if(param_1 == 1) {
@@ -661,26 +661,26 @@ u16 fopNpc_npc_c::talk(int param_1) {
     }
     else {
         if(mpCurrMsg) {
-            mode = mpCurrMsg->mStatus;
-            if(mode == fopMsgStts_MSG_DISPLAYED_e) {
+            status = mpCurrMsg->mStatus;
+            if(status == fopMsgStts_MSG_DISPLAYED_e) {
                 mpCurrMsg->mStatus = next_msgStatus(&mCurrMsgNo);
                 if(mpCurrMsg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
                     fopMsgM_messageSet(mCurrMsgNo);
                 }
             }
-            else if (mode == fopMsgStts_BOX_CLOSED_e) {
+            else if (status == fopMsgStts_BOX_CLOSED_e) {
                 mpCurrMsg->mStatus = fopMsgStts_MSG_DESTROYED_e;
                 mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
             }
 
-            anmAtr(mode);
+            anmAtr(status);
         }
         else {
             mpCurrMsg = fopMsgM_SearchByID(mCurrMsgBsPcId);
         }
     }
 
-    return mode;
+    return status;
 }
 
 bool dNpc_setAnm_2(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileIdx, int soundFileIdx, const char* arcName) {
@@ -856,8 +856,8 @@ void dNpc_JntCtrl_c::lookAtTarget_2(s16* r26, cXyz* r29, cXyz r24, s16 r7, s16 r
     temp11 = field_0x32;
     r1_10 = mAngles[0][1];
     r1_0C = mAngles[1][1];
-    cLib_addCalcAngleL(&r1_10, temp10, 4, field_0x1E[0][0], 4);
-    cLib_addCalcAngleL(&r1_0C, temp11, 4, field_0x1E[0][0], 4);
+    cLib_addCalcAngleL(&r1_10, temp10, 4, mMaxTurnStep[0][0], 4);
+    cLib_addCalcAngleL(&r1_0C, temp11, 4, mMaxTurnStep[0][0], 4);
     mAngles[0][1] = r1_10;
     mAngles[1][1] = r1_0C;
     
@@ -892,8 +892,8 @@ void dNpc_JntCtrl_c::lookAtTarget_2(s16* r26, cXyz* r29, cXyz r24, s16 r7, s16 r
     temp6 = field_0x30;
     r1_10 = mAngles[0][0];
     r1_0C = mAngles[1][0];
-    cLib_addCalcAngleL(&r1_10, temp7, 4, field_0x1E[0][0], 4);
-    cLib_addCalcAngleL(&r1_0C, temp6, 4, field_0x1E[0][0], 4);
+    cLib_addCalcAngleL(&r1_10, temp7, 4, mMaxTurnStep[0][0], 4);
+    cLib_addCalcAngleL(&r1_0C, temp6, 4, mMaxTurnStep[0][0], 4);
     mAngles[0][0] = r1_10;
     mAngles[1][0] = r1_0C;
 }

@@ -5,27 +5,35 @@
 
 #include "dolphin/types.h"
 #include "d/d_com_inf_game.h"
-#include "d/actor/d_a_obj_pirateship.h"
 #include "d/actor/d_a_agb.h"
 #include "d/actor/d_a_agbsw0.h"
+#include "d/actor/d_a_npc_kamome.h"
 #include "d/actor/d_a_npc_os.h"
 #include "d/actor/d_a_npc_md.h"
 #include "d/actor/d_a_arrow.h"
 #include "d/actor/d_a_ib.h"
-#include "d/actor/d_a_obj_movebox.h"
-#include "d/actor/d_a_tag_kb_item.h"
 #include "d/actor/d_a_item.h"
+#include "d/actor/d_a_obj_movebox.h"
+#include "d/actor/d_a_obj_pirateship.h"
+#include "d/actor/d_a_steam_tag.h"
+#include "d/actor/d_a_tag_kb_item.h"
 #include "d/actor/d_a_tag_waterlevel.h"
 #include "d/actor/d_a_title.h"
+#include "d/actor/d_a_wind_tag.h"
+#include "d/actor/d_a_salvage.h"
+#include "d/actor/d_a_obj_light.h"
+#include "d/actor/d_a_dai.h"
+#include "d/actor/d_a_obj_roten.h"
+#include "d/actor/d_a_dai_item.h"
 #include "d/d_procname.h"
-#include "d/actor/d_a_npc_kamome.h"
 
 static Vec dummy_3569;
+u8 daSteamTag_c::mEmitterNum;
 
-// /* 8005662C-80056638       .text init__12daSteamTag_cFv */
-// void daSteamTag_c::init() {
-//     /* Nonmatching */
-// }
+/* 8005662C-80056638       .text init__12daSteamTag_cFv */
+void daSteamTag_c::init() {
+    mEmitterNum = 0;
+}
 
 /* 80056638-800566F0       .text getShipOffsetY__15daObjPirateshipFPsPsf */
 f32 daObjPirateship::getShipOffsetY(s16* param_1, s16* param_2, f32 param_3) {
@@ -75,45 +83,86 @@ void daAgbsw0_c::incTclBeat() {
     mFigureBeat++;
 }
 
-// /* 80056760-80056790       .text init_room__11daSalvage_cFSc */
-// void daSalvage_c::init_room(signed char) {
-//     /* Nonmatching */
-// }
+const f32 daWindTag::daWindTag_c::mData[] = {
+    150.0f,
+    1000.0f,
+    1000.0f,
+    7000.0f,
+};
 
-// /* 80056790-800567F8       .text renew_light_angle__Q210daObjLight5Act_cFv */
-// void daObjLight::Act_c::renew_light_angle() {
-//     /* Nonmatching */
-// }
+const u16 daSalvage_c::m_savelabel[] = {
+    0x2080, 0x2004,
+    0x2002, 0x2804,
+    0x2802, 0x2801,
+    0x2980, 0x2940,
+    0x3B01, 0x3C80,
+    0x3C40, 0x3C20,
+    0x3C10, 0x3C08,
+    0x3C04, 0x3C02,
+};
 
-// /* 800567F8-80056824       .text get_light_angle__Q210daObjLight5Act_cFv */
-// void daObjLight::Act_c::get_light_angle() {
-//     /* Nonmatching */
-// }
+/* 80056760-80056790       .text init_room__11daSalvage_cFSc */
+void daSalvage_c::init_room(signed char) {
+    /* Nonmatching */
+}
 
-// /* 80056824-8005682C       .text get_light_dif_angle__Q210daObjLight5Act_cFv */
-// void daObjLight::Act_c::get_light_dif_angle() {
-//     /* Nonmatching */
-// }
+/* 80056790-800567F8       .text renew_light_angle__Q210daObjLight5Act_cFv */
+void daObjLight::Act_c::renew_light_angle() {
+    /* Nonmatching */
+}
 
-// /* 8005682C-80056860       .text set_light_dif_angle_LOD__Q210daObjLight5Act_cFs */
-// void daObjLight::Act_c::set_light_dif_angle_LOD(short) {
-//     /* Nonmatching */
-// }
+/* 800567F8-80056824       .text get_light_angle__Q210daObjLight5Act_cFv */
+void daObjLight::Act_c::get_light_angle() {
+    /* Nonmatching */
+}
 
-// /* 80056860-800568A8       .text set_light_dif_angle_FRRS__Q210daObjLight5Act_cFs */
-// void daObjLight::Act_c::set_light_dif_angle_FRRS(short) {
-//     /* Nonmatching */
-// }
+/* 80056824-8005682C       .text get_light_dif_angle__Q210daObjLight5Act_cFv */
+void daObjLight::Act_c::get_light_dif_angle() {
+    /* Nonmatching */
+}
 
-// /* 800568A8-800568B0       .text getMaxDaiza__7daDai_cFv */
-// void daDai_c::getMaxDaiza() {
-//     /* Nonmatching */
-// }
+/* 8005682C-80056860       .text set_light_dif_angle_LOD__Q210daObjLight5Act_cFs */
+void daObjLight::Act_c::set_light_dif_angle_LOD(short) {
+    /* Nonmatching */
+}
 
-// /* 800568B0-800568B8       .text getDaizaSetItemNum__7daDai_cFv */
-// void daDai_c::getDaizaSetItemNum() {
-//     /* Nonmatching */
-// }
+/* 80056860-800568A8       .text set_light_dif_angle_FRRS__Q210daObjLight5Act_cFs */
+void daObjLight::Act_c::set_light_dif_angle_FRRS(short) {
+    /* Nonmatching */
+}
+
+const u16 daDai_c::m_savelabel[] = {
+    0xF8FF, 0xF7FF,
+    0xF6FF, 0xF5FF,
+    0xF4FF, 0xF3FF,
+    0xF2FF, 0xF1FF,
+    0xF0FF, 0xEFFF,
+    0xEEFF, 0xEDFF,
+    0xECFF, 0xEBFF,
+    0xEAFF, 0xE9FF,
+    0xE8FF, 0xE7FF,
+    0xE6FF, 0xE5FF,
+    0xE4FF, 0xE3FF,
+    0xE2FF, 0xE1FF,
+    0xE0FF, 0xDFFF,
+    0xDEFF, 0xDDFF,
+    0xDCFF, 0xDBFF,
+    0xDAFF, 0xD9FF,
+    0xD8FF, 0xD7FF,
+    0xD6FF, 0xD5FF,
+    0xD4FF, 0xD3FF,
+    0xD2FF, 0xD1FF,
+};
+
+/* 800568A8-800568B0       .text getMaxDaiza__7daDai_cFv */
+void daDai_c::getMaxDaiza() {
+    /* Nonmatching */
+}
+
+/* 800568B0-800568B8       .text getDaizaSetItemNum__7daDai_cFv */
+void daDai_c::getDaizaSetItemNum() {
+    /* Nonmatching */
+}
 
 bool daNpc_Os_c::m_playerRoom[3] = { false, false, false };
 s8 daNpc_Os_c::m_cattleRoomNo = -1;
@@ -190,10 +239,10 @@ void daIball_c::remove_old() {
     }
 }
 
-// /* 80056A18-80056AD0       .text getCreateCount__13daObj_Roten_cFv */
-// void daObj_Roten_c::getCreateCount() {
-//     /* Nonmatching */
-// }
+/* 80056A18-80056AD0       .text getCreateCount__13daObj_Roten_cFv */
+void daObj_Roten_c::getCreateCount() {
+    /* Nonmatching */
+}
 
 const s16 daObjMovebox::Act_c::M_dir_base[4] = {
     0x0000,
@@ -264,16 +313,16 @@ void daTagKbItem_c::dig_main() {
     field_0x299 = 0;
 }
 
-bool daTitle_proc_c::daTitle_Kirakira_Sound_flag[] = { false };
+bool daTitle_proc_c::daTitle_Kirakira_Sound_flag = true;
 
 /* 80056CC0-80056CCC       .text daTitle_Kirakira_Sound_flag_on__14daTitle_proc_cFv */
 void daTitle_proc_c::daTitle_Kirakira_Sound_flag_on() {
-    daTitle_Kirakira_Sound_flag[0] = true;
+    daTitle_Kirakira_Sound_flag = true;
 }
 
-// /* 80056CCC-80056DE0       .text daiItemNodeCallBack__13daStandItem_cFP7J3DNodei */
-// void daStandItem_c::daiItemNodeCallBack(J3DNode*, int) {
-//     /* Nonmatching */
-// }
+/* 80056CCC-80056DE0       .text daiItemNodeCallBack__13daStandItem_cFP7J3DNodei */
+BOOL daStandItem_c::daiItemNodeCallBack(J3DNode*, int) {
+    /* Nonmatching */
+}
 
 bool daNpc_kam_c::m_hyoi_kamome;

@@ -194,7 +194,7 @@ public:
         f32 mDeltaYMin;
         f32 mWeightDivisor;
         int mFrontAngleCheckBits;
-    } dist_table[16];
+    } dist_table[];
 
     // TODO:
     void GetLockonCount() {}

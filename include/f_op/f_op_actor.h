@@ -23,25 +23,25 @@ struct actor_method_class2 {
 enum fopAc_Status_e {
     // Note: The lowest 5 bits of the status field (& 0x1F) act as an index controlling the map icon type.
     fopAcStts_SHOWMAP_e     = 0x00000020,
-    fopAcStts_UNK40_e       = 0x00000040,
+    fopAcStts_UNK40_e       = 0x00000040, // Related to talking to the Killer Bees?
     fopAcStts_NOCULLEXEC_e  = 0x00000080,
     fopAcStts_CULL_e        = 0x00000100,
     fopAcStts_FREEZE_e      = 0x00000400,
     fopAcStts_UNK800_e      = 0x00000800,
-    fopAcStts_UNK1000_e     = 0x00001000,
+    fopAcStts_UNK1000_e     = 0x00001000, // Door related
     fopAcStts_CARRY_e       = 0x00002000,
     fopAcStts_UNK4000_e     = 0x00004000,
     fopAcStts_FORCEMOVE_e   = 0x00008000,
     fopAcStts_NOPAUSE_e     = 0x00020000,
     fopAcStts_UNK40000_e    = 0x00040000,
-    fopAcStts_UNK80000_e    = 0x00080000,
+    fopAcStts_UNK80000_e    = 0x00080000, // Hookshot related
     fopAcStts_HOOK_CARRY_e  = 0x00100000,
-    fopAcStts_UNK200000_e   = 0x00200000,
+    fopAcStts_UNK200000_e   = 0x00200000, // Hookshot related
     fopAcStts_NODRAW_e      = 0x01000000,
     fopAcStts_UNK2000000_e  = 0x02000000,
     fopAcStts_BOSS_e        = 0x04000000,
     fopAcStts_UNK8000000_e  = 0x08000000,
-    fopAcStts_UNK10000000_e = 0x10000000,
+    fopAcStts_UNK10000000_e = 0x10000000, // Hookshot related
 };
 
 enum fopAc_Condition_e {
@@ -281,8 +281,8 @@ public:
     /* 0x284 */ s8 mMaxHealth;
     /* 0x285 */ s8 mHealth;
     /* 0x288 */ s32 mItemTableIdx;
-    /* 0x28C */ u8 mItemStealNum;
-    /* 0x28D */ s8 mItemStealLeft;
+    /* 0x28C */ u8 mStealItemBitNo; // For limited items (Blue Chu Jelly), this is the first itemBitNo to set.
+    /* 0x28D */ s8 mStealItemLeft;
 
     fopAc_ac_c();
     ~fopAc_ac_c();

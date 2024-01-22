@@ -153,6 +153,10 @@ inline void mDoAud_setLinkHp(s32 param_0, s32 param_1) {
     mDoAud_zelAudio_c::getInterface()->setLinkHp(param_0, param_1);
 }
 
+inline void mDoAud_monsSeInit() {
+    mDoAud_zelAudio_c::getInterface()->monsSeInit();
+}
+
 inline void mDoAud_monsSeStart(u32 i_seNum, Vec* param_1, u32 param_2, u32 param_3, s8 i_reverb) {
     mDoAud_zelAudio_c::getInterface()->monsSeStart(i_seNum, param_1, param_2, param_3, i_reverb);
 }
@@ -163,6 +167,10 @@ inline void mDoAud_onEnemyDamage() {
 
 inline void mDoAud_bgmMuteMtDragon() {
     mDoAud_zelAudio_c::getInterface()->bgmMuteMtDragon();
+}
+
+inline void mDoAud_bgmHitSound(s32 param_0) {
+    mDoAud_zelAudio_c::getInterface()->bgmHitSound(param_0);
 }
 
 inline void mDoAud_stSkyCloisters() {
@@ -252,6 +260,10 @@ inline void mDoAud_stWaterLevelDown() {
 
 inline void mDoAud_bgmNowBattle(f32 distance) {
     mDoAud_zelAudio_c::getInterface()->bgmNowBattle(distance);
+}
+
+inline bool mDoAud_checkAllWaveLoadStatus() {
+    return mDoAud_zelAudio_c::getInterface()->checkAllWaveLoadStatus();
 }
 
 #endif /* M_DO_AUDIO_H */
