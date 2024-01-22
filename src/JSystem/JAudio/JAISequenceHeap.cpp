@@ -7,6 +7,7 @@
 #include "JSystem/JAudio/JAIBasic.h"
 #include "JSystem/JAudio/JAIGlobalParameter.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
+#include "global.h"
 
 JAInter::HeapBlock* JAInter::HeapMgr::sAutoHeap;
 JAInter::HeapBlock* JAInter::HeapMgr::sStayHeap;

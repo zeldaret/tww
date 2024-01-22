@@ -73,8 +73,8 @@ JAIZelBasic::JAIZelBasic() {
     field_0x01f8 = 0;
     field_0x0201 = 0;
     field_0x0204 = 0;
-    field_0x0064[0] = 0;
-    field_0x0064[1] = 0;
+    field_0x0064 = 0;
+    field_0x0065 = 0;
     field_0x00b8 = 0;
     field_0x00ba = 0;
     field_0x00bb = 0;
@@ -332,8 +332,8 @@ void JAIZelBasic::bgmStop(u32 param_1, s32 param_2) {
     field_0x1f3c = 0;
     field_0x0201 = 0;
     mLastMinibossSubBGMType = 0;
-    field_0x0064[0] = 0;
-    field_0x0064[1] = 0;
+    field_0x0064 = 0;
+    field_0x0065 = 0;
     field_0x00b8 = 0;
     field_0x00cb = 0xff;
     field_0x00cc = 0;
@@ -872,7 +872,7 @@ void JAIZelBasic::setOutputMode(u32 param_1) {
 
 /* 802A98A0-802A9A20       .text talkIn__11JAIZelBasicFv */
 void JAIZelBasic::talkIn() {
-    if (field_0x0064[0] != 1 && isDemo() != 1 && field_0x0098 != 0.0f) {
+    if (field_0x0064 != 1 && isDemo() != 1 && field_0x0098 != 0.0f) {
         field_0x0084 = JAIZelParam::VOL_BGM_TALKING;
         if (mpMainBgmSound && field_0x0078 != JA_BGM_BIRDMAN_GOAL && field_0x0078 != JA_BGM_BIRDMAN_FAIL) {
             mpMainBgmSound->setVolume(calcMainBgmVol(), 2, 0);

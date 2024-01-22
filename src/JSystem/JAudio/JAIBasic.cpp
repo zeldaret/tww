@@ -43,7 +43,7 @@ JAIBasic::JAIBasic() {
     mAudioCamera = NULL;
     field_0x10 = 0;
     initLoadFileSw = 2;
-    field_0x1c = 0;
+    field_0x1c = NULL;
     field_0x8 = NULL;
     field_0x18 = 0;
     msCurrentHeap = JASDram;
