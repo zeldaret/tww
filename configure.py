@@ -488,7 +488,7 @@ config.libs = [
             Object(NonMatching, "d/d_s_name.cpp"),
             Object(Matching,    "d/d_s_open.cpp"),
             Object(NonMatching, "d/d_s_open_sub.cpp"),
-            Object(NonMatching, "d/d_s_play.cpp"),
+            Object(Matching,    "d/d_s_play.cpp", extra_cflags=['-pragma "nosyminline on"']),
             Object(Matching,    "d/d_s_room.cpp"),
             Object(Matching,    "d/d_s_title.cpp"),
             Object(NonMatching, "d/d_scope.cpp"),
