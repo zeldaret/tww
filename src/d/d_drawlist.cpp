@@ -1523,18 +1523,17 @@ void dDlst_shadowReal_c::draw() {
 }
 
 /* 80083B8C-80083DA0       .text psdRealCallBack__FP13cBgS_ShdwDrawP10cBgD_Vtx_tiiiP8cM3dGPla */
-int psdRealCallBack(cBgS_ShdwDraw* param_0, cBgD_Vtx_t* param_1, int param_2,
-                     int param_3, int param_4, cM3dGPla* param_5) {
-    ShdwDrawPoly_c* shdwDrawPoly = (ShdwDrawPoly_c*)param_0;
-    const cXyz* normal = param_5->GetNP();
+int psdRealCallBack(cBgS_ShdwDraw* shdw, cBgD_Vtx_t* pVtx, int v0, int v1, int v2, cM3dGPla* tri) {
+    ShdwDrawPoly_c* shdwDrawPoly = (ShdwDrawPoly_c*)shdw;
+    const cXyz* normal = tri->GetNP();
     if (shdwDrawPoly->getLightVec()->inprod(*normal) < -0.2f) {
         cXyz* center = shdwDrawPoly->getCenter();
-        if (normal->x * center->x + normal->y * center->y + normal->z * center->z + param_5->GetD() > -90.f) {
+        if (normal->x * center->x + normal->y * center->y + normal->z * center->z + tri->GetD() > -90.f) {
             const cXyz* min = shdwDrawPoly->GetBndP()->GetMinP();
             const cXyz* max = shdwDrawPoly->GetBndP()->GetMaxP();
-            cBgD_Vtx_t* vert1 = param_1 + param_2;
-            cBgD_Vtx_t* vert2 = param_1 + param_3;
-            cBgD_Vtx_t* vert3 = param_1 + param_4;
+            cBgD_Vtx_t* vert1 = pVtx + v0;
+            cBgD_Vtx_t* vert2 = pVtx + v1;
+            cBgD_Vtx_t* vert3 = pVtx + v2;
             if ((normal->y <= 0.0f && (vert1->y < min->y || vert2->y < min->y || vert3->y < min->y)) ||
                 (normal->y > 0.0f && (vert1->y < min->y && vert2->y < min->y && vert3->y < min->y)) ||
                 (vert1->y > max->y && vert2->y > max->y && vert3->y > max->y) ||
@@ -1545,7 +1544,7 @@ int psdRealCallBack(cBgS_ShdwDraw* param_0, cBgD_Vtx_t* param_1, int param_2,
             ) {
                 return 1;
             } else {
-                return shdwDrawPoly->getPoly()->set(param_1, param_2, param_3, param_4, param_5);
+                return shdwDrawPoly->getPoly()->set(pVtx, v0, v1, v2, tri);
             }
         }
     }
@@ -1558,8 +1557,7 @@ void seaRealCallBack(void*, cXyz&, cXyz&, cXyz&) {
 }
 
 /* 80083E18-800840B0       .text realPolygonCheck__FP4cXyzffP4cXyzP18dDlst_shadowPoly_c */
-BOOL realPolygonCheck(cXyz* param_0, f32 param_1, f32 param_2, cXyz* param_3,
-                      dDlst_shadowPoly_c* param_4) {
+BOOL realPolygonCheck(cXyz* param_0, f32 param_1, f32 param_2, cXyz* param_3, dDlst_shadowPoly_c* param_4) {
     ShdwDrawPoly_c shdwDrawPoly;
     cXyz local_8c;
     cXyz local_98;
@@ -2243,17 +2241,20 @@ void dDlst_list_c::reset() {
 
 /* 80086490-80086540       .text entryZSortXluDrawList__12dDlst_list_cFP13J3DDrawBufferP9J3DPacketR4cXyz */
 void dDlst_list_c::entryZSortXluDrawList(J3DDrawBuffer* pBuffer, J3DPacket* pPacket, cXyz& pos) {
-    /* Nonmatching */
     f32 z = -J3DCalcZValue(j3dSys.getViewMtx(), pos);
     u16 idx;
-    if (40.05859f > z) {
-        idx = 0;
-    } else if (z > 9960.941f) {
-        idx = 0xFF;
+    if (40.05859f < z) {
+        if (9960.941f > z) {
+            idx = z / 39.05859f;
+        } else {
+            idx = 0xFF;
+        }
     } else {
-        idx = z / 39.05859f;
+        idx = 0;
     }
-    pBuffer->entryImm(pPacket, 0xFF - idx);
+
+    idx = 0xFF - idx;
+    pBuffer->entryImm(pPacket, idx);
 }
 
 /* 80086540-80086570       .text set__12dDlst_list_cFRPP12dDlst_base_cRPP12dDlst_base_cP12dDlst_base_c */

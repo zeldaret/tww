@@ -21,7 +21,7 @@ public:
     BOOL CreateHeap();
     s32 CreateInit();
     void event_move();
-    void getBeamActor(u32);
+    fopAc_ac_c* getBeamActor(unsigned int);
     void search_beam_proc_init();
     void search_beam_proc();
     void search_fire_proc_init();
@@ -43,9 +43,11 @@ public:
     /* 0x2D8 */ J3DAnmTextureSRTKey* m_btk;
     /* 0x2DC */ u8 m2DC[0x35C - 0x2DC];
     /* 0x35C */ Quaternion mQuatRotation;
-    /* 0x36C */ u8 m36C[0x380 - 0x36C];
-    /* 0x380 */ dCcD_Stts mColStatus;
-    /* 0x3BC */ dCcD_Cps mCapsuleCol;
+    /* 0x36C */ u8 m36C[0x376 - 0x36C];
+    /* 0x376 */ u8 field_0x376;
+    /* 0x377 */ u8 field_0x377[7];
+    /* 0x380 */ dCcD_Stts mStts;
+    /* 0x3BC */ dCcD_Cps mCps;
 };
 
 class daMozo_HIO_c {

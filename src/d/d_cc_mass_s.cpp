@@ -27,44 +27,43 @@ void dCcMassS_Mng::Ct() {
 /* 800AC96C-800ACCB8       .text Prepare__12dCcMassS_MngFv */
 void dCcMassS_Mng::Prepare() {
     /* Nonmatching */
-    cM3dGAab local_38;
-    local_38.ClearForMinMax();
+    cM3dGAab area;
+    area.ClearForMinMax();
     for (dCcMassS_Obj* mass = mMassObjs; mass < mMassObjs + mMassObjCount; mass++) {
         cCcD_Obj* pobj = mass->mpObj;
         JUT_ASSERT(61, pobj != 0);
         cCcD_ShapeAttr* attr = pobj->GetShapeAttr();
         attr->CalcAabBox();
-        local_38.SetMinMax(attr->mAab.mMin);
-        local_38.SetMinMax(attr->mAab.mMax);
+        area.SetMinMax(attr->GetWorkAab().mMin);
+        area.SetMinMax(attr->GetWorkAab().mMax);
     }
     for (dCcMassS_Obj* mass = mMassAreas; mass < mMassAreas + mMassAreaCount; mass++) {
         cCcD_Obj* parea = mass->mpObj;
         JUT_ASSERT(73, parea != 0);
         cCcD_ShapeAttr* attr = parea->GetShapeAttr();
         attr->CalcAabBox();
-        local_38.SetMinMax(attr->mAab.mMin);
-        local_38.SetMinMax(attr->mAab.mMax);
+        area.SetMinMax(attr->GetWorkAab().mMin);
+        area.SetMinMax(attr->GetWorkAab().mMax);
     }
     if (mFlag & 1) {
         mCpsAttr.CalcAabBox();
-        local_38.SetMinMax(mCpsAttr.mAab.mMin);
-        local_38.SetMinMax(mCpsAttr.mAab.mMax);
+        cCcD_ShapeAttr* attr = &mCpsAttr;
+        area.SetMinMax(attr->GetWorkAab().mMin);
+        area.SetMinMax(attr->GetWorkAab().mMax);
     }
-    mDivideArea.SetArea(local_38);
+    mDivideArea.SetArea(area);
     for (dCcMassS_Obj* mass = mMassObjs; mass < mMassObjs + mMassObjCount; mass++) {
         cCcD_Obj* pobj = mass->mpObj;
         JUT_ASSERT(93, pobj != 0);
-        cCcD_ShapeAttr* attr = pobj->GetShapeAttr();
-        mDivideArea.CalcDivideInfo(&mass->mDivideInfo, attr->mAab, 0);
+        mDivideArea.CalcDivideInfo(&mass->mDivideInfo, pobj->GetShapeAttr()->GetWorkAab(), 0);
     }
     for (dCcMassS_Obj* mass = mMassAreas; mass < mMassAreas + mMassAreaCount; mass++) {
         cCcD_Obj* parea = mass->mpObj;
         JUT_ASSERT(104, parea != 0);
-        cCcD_ShapeAttr* attr = parea->GetShapeAttr();
-        mDivideArea.CalcDivideInfo(&mass->mDivideInfo, attr->mAab, 0);
+        mDivideArea.CalcDivideInfo(&mass->mDivideInfo, parea->GetShapeAttr()->GetWorkAab(), 0);
     }
     if (mFlag & 1) {
-        mDivideArea.CalcDivideInfo(&mDivideInfo, mCpsAttr.mAab, 0);
+        mDivideArea.CalcDivideInfo(&mDivideInfo, mCpsAttr.GetWorkAab(), 0);
     }
     mCamTopPos.x = 0.0f;
     mCamTopPos.y = -1e+9f;

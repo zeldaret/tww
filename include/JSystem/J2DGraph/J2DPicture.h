@@ -56,9 +56,9 @@ public:
     const ResTIMG * changeTexture(const char*, u8);
     void drawFullSet(f32, f32, f32, f32, J2DBinding, J2DMirror, bool, Mtx*);
     void draw(f32, f32, f32, f32, bool, bool, bool);
-    void draw(f32 x, f32 y, bool, bool, bool) {
+    void draw(f32 x, f32 y, bool mirrorX, bool mirrorY, bool tumble) {
         if (mNumTexture > 0)
-            draw(x, y, mpTexture[0]->getWidth(), mpTexture[0]->getHeight(), false, false, false);
+            draw(x, y, mpTexture[0]->getWidth(), mpTexture[0]->getHeight(), mirrorX, mirrorY, tumble);
     }
     void drawOut(const JGeometry::TBox2<f32>&, const JGeometry::TBox2<f32>&);
     void drawTexCoord(f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, Mtx*);

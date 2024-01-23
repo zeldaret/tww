@@ -14,7 +14,7 @@ daSea_packet_c l_cloth;
 
 f32 daSea_packet_c::BASE_HEIGHT = 1.0f;
 
-daSea_WaveInfo__Table wi_prm_ocean[4] = {
+daSea_WaveInfoDat wi_prm_ocean[4] = {
     {
         2.5f,           // mHeight
         7.352941E-5f,   // mKm
@@ -176,10 +176,10 @@ bool daSea_packet_c::create(cXyz& pos) {
     mFlatInter = 0.0f;
     mpHeightTable = new f32[65 * 65];
     if (mpHeightTable == NULL)
-        return true;
+        return false;
 
     mWaterHeightMgr.SetInf();
-    mWaveInfo.mWaveInfoTable = wi_prm_ocean;
+    mWaveInfo.SetDat(wi_prm_ocean);
     CleanUp();
     mInitFlag = true;
     mRoomNo = -1;
@@ -203,7 +203,7 @@ bool daSea_packet_c::create(cXyz& pos) {
         (GXAnisotropy)timg->maxAnisotropy);
 
     timg = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_B_WYURAYURA_TEX1);
-    mDoLib_setResTimgObj(timg, &mpTexWyurayura, 0, NULL);
+    mDoLib_setResTimgObj(timg, &mTexYura, 0, NULL);
 
     return true;
 }

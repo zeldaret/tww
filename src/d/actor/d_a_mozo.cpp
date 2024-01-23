@@ -22,18 +22,29 @@ daMozo_HIO_c::daMozo_HIO_c() {
 }
 
 /* 000002D0-00000568       .text daMozo_nodeCallBackBeam__FP8daMozo_cP8J3DModelP7J3DNodei */
-void daMozo_nodeCallBackBeam(daMozo_c*, J3DModel*, J3DNode*, int) {
+static BOOL daMozo_nodeCallBackBeam(daMozo_c*, J3DModel*, J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 00000568-00000728       .text daMozo_nodeCallBackFire__FP8daMozo_cP8J3DModelP7J3DNodei */
-void daMozo_nodeCallBackFire(daMozo_c*, J3DModel*, J3DNode*, int) {
+static BOOL daMozo_nodeCallBackFire(daMozo_c*, J3DModel*, J3DNode*, int) {
     /* Nonmatching */
 }
 
 /* 00000728-0000078C       .text daMozo_nodeCallBack__FP7J3DNodei */
-static BOOL daMozo_nodeCallBack(J3DNode*, int) {
+static BOOL daMozo_nodeCallBack(J3DNode* node, int idx) {
     /* Nonmatching */
+    J3DJoint* joint = (J3DJoint*)node;
+    s32 jntNo = joint->getJntNo();
+    J3DModel* model = j3dSys.getModel();
+    daMozo_c* i_this = (daMozo_c*)model->getUserArea();
+
+    switch (i_this->field_0x376) {
+    case 0: return daMozo_nodeCallBackBeam(i_this, model, node, idx);
+    case 1: return daMozo_nodeCallBackFire(i_this, model, node, idx);
+    }
+
+    return TRUE;
 }
 
 /* 0000078C-000007AC       .text CheckCreateHeap__FP10fopAc_ac_c */
@@ -43,7 +54,6 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000007AC-00000A24       .text CreateHeap__8daMozo_cFv */
 BOOL daMozo_c::CreateHeap() {
-    /* Nonmatching */
     J3DModelData* mdlData = (J3DModelData*)dComIfG_getObjectRes("Mozo", 9);
     
     mDoExt_McaMorf* newMorf =  new mDoExt_McaMorf(
@@ -181,20 +191,16 @@ s32 daMozo_c::CreateInit() {
 
 /* 00002228-000023B0       .text _create__8daMozo_cFv */
 s32 daMozo_c::_create() {
-    /* Nonmatching */
     fopAcM_SetupActor(this, daMozo_c);
 
     s32 result = dComIfG_resLoad(&mPhs, "Mozo");
 
     if (result == cPhs_COMPLEATE_e) {
-        s32 solidHeapResult = fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1AA0);
-
-        if (solidHeapResult & 0xFF == 0) {
-            result = cPhs_ERROR_e;
-        }
-        else {
+        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1AA0)) {
             result = CreateInit();
             _execute();
+        } else {
+            return cPhs_ERROR_e;
         }
     }
 
@@ -207,8 +213,13 @@ bool daMozo_c::_delete() {
 }
 
 /* 0000242C-00002498       .text getBeamActor__8daMozo_cFUi */
-void daMozo_c::getBeamActor(u32) {
-    /* Nonmatching */
+fopAc_ac_c* daMozo_c::getBeamActor(unsigned int apid) {
+    fopAc_ac_c* ac = fopAcM_SearchByID(apid);
+    if (ac == NULL)
+        return NULL;
+    if (fopAc_IsActor(ac) && fopAcM_GetProfName(ac) == PROC_Beam)
+        return ac;
+    return NULL;
 }
 
 /* 00002498-00002588       .text event_move__8daMozo_cFv */
