@@ -12,15 +12,15 @@ typedef int (*cBgS_ShdwDraw_Callback)(class cBgS_ShdwDraw*, cBgD_Vtx_t*, int, in
 
 class cBgS_ShdwDraw : public cBgS_Chk {
 public:
-    cBgS_ShdwDraw(void);
-    virtual ~cBgS_ShdwDraw(void);
-    void Set(cXyz&, cXyz&);
-    void SetCallback(cBgS_ShdwDraw_Callback);
+    cBgS_ShdwDraw() {}
+    virtual ~cBgS_ShdwDraw() {}
+    void Set(cXyz& min, cXyz& max) { mM3dGAab.Set(min, max); }
+    void SetCallback(cBgS_ShdwDraw_Callback callback) { mCallbackFun = callback; }
 
     cM3dGAab* GetBndP() { return &mM3dGAab; }
 
     /* 0x14 */ cM3dGAab mM3dGAab;
     /* 0x30 */ cBgS_ShdwDraw_Callback mCallbackFun;
-};
+};  // Size: 0x34
 
 #endif /* C_BG_S_SHDW_DRAW_H */

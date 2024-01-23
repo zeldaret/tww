@@ -6,6 +6,7 @@
 #include "d/d_drawlist.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_rain.h"
+#include "d/actor/d_a_sea.h"
 #include "dolphin/gf/GFGeometry.h"
 #include "dolphin/gf/GFLight.h"
 #include "dolphin/gf/GFPixel.h"
@@ -20,6 +21,22 @@
 #include "SSystem/SComponent/c_rnd.h"
 #include "SSystem/SComponent/c_bg_s_shdw_draw.h"
 #include "global.h"
+
+class ShdwDrawPoly_c : public cBgS_ShdwDraw {
+public:
+    virtual ~ShdwDrawPoly_c() {}
+
+    void setCenter(cXyz* center) { mCenter = center; }
+    cXyz* getCenter() { return mCenter; }
+    void setLightVec(cXyz* lightVec) { mLightVec = lightVec; }
+    cXyz* getLightVec() { return mLightVec; }
+    void setPoly(dDlst_shadowPoly_c* poly) { mPoly = poly; }
+    dDlst_shadowPoly_c* getPoly() { return mPoly; }
+
+    /* 0x34 */ cXyz* mCenter;
+    /* 0x38 */ cXyz* mLightVec;
+    /* 0x3C */ dDlst_shadowPoly_c* mPoly;
+};  // Size: 0x40
 
 GXTexObj dDlst_shadowControl_c::mSimpleTexObj;
 
@@ -1506,8 +1523,33 @@ void dDlst_shadowReal_c::draw() {
 }
 
 /* 80083B8C-80083DA0       .text psdRealCallBack__FP13cBgS_ShdwDrawP10cBgD_Vtx_tiiiP8cM3dGPla */
-void psdRealCallBack(cBgS_ShdwDraw*, cBgD_Vtx_t*, int, int, int, cM3dGPla*) {
-    /* Nonmatching */
+int psdRealCallBack(cBgS_ShdwDraw* param_0, cBgD_Vtx_t* param_1, int param_2,
+                     int param_3, int param_4, cM3dGPla* param_5) {
+    ShdwDrawPoly_c* shdwDrawPoly = (ShdwDrawPoly_c*)param_0;
+    const cXyz* normal = param_5->GetNP();
+    if (shdwDrawPoly->getLightVec()->inprod(*normal) < -0.2f) {
+        cXyz* center = shdwDrawPoly->getCenter();
+        if (normal->x * center->x + normal->y * center->y + normal->z * center->z + param_5->GetD() > -90.f) {
+            const cXyz* min = shdwDrawPoly->GetBndP()->GetMinP();
+            const cXyz* max = shdwDrawPoly->GetBndP()->GetMaxP();
+            cBgD_Vtx_t* vert1 = param_1 + param_2;
+            cBgD_Vtx_t* vert2 = param_1 + param_3;
+            cBgD_Vtx_t* vert3 = param_1 + param_4;
+            if ((normal->y <= 0.0f && (vert1->y < min->y || vert2->y < min->y || vert3->y < min->y)) ||
+                (normal->y > 0.0f && (vert1->y < min->y && vert2->y < min->y && vert3->y < min->y)) ||
+                (vert1->y > max->y && vert2->y > max->y && vert3->y > max->y) ||
+                (vert1->x < min->x && vert2->x < min->x && vert3->x < min->x) ||
+                (vert1->x > max->x && vert2->x > max->x && vert3->x > max->x) ||
+                (vert1->z < min->z && vert2->z < min->z && vert3->z < min->z) ||
+                (vert1->z > max->z && vert2->z > max->z && vert3->z > max->z)
+            ) {
+                return 1;
+            } else {
+                return shdwDrawPoly->getPoly()->set(param_1, param_2, param_3, param_4, param_5);
+            }
+        }
+    }
+    return 1;
 }
 
 /* 80083DA0-80083E18       .text seaRealCallBack__FPvR4cXyzR4cXyzR4cXyz */
@@ -1516,18 +1558,98 @@ void seaRealCallBack(void*, cXyz&, cXyz&, cXyz&) {
 }
 
 /* 80083E18-800840B0       .text realPolygonCheck__FP4cXyzffP4cXyzP18dDlst_shadowPoly_c */
-void realPolygonCheck(cXyz*, f32, f32, cXyz*, dDlst_shadowPoly_c*) {
-    /* Nonmatching */
-}
-
-/* 80084138-800841B0       .text __dt__13cBgS_ShdwDrawFv */
-cBgS_ShdwDraw::~cBgS_ShdwDraw() {
-    /* Nonmatching */
+BOOL realPolygonCheck(cXyz* param_0, f32 param_1, f32 param_2, cXyz* param_3,
+                      dDlst_shadowPoly_c* param_4) {
+    ShdwDrawPoly_c shdwDrawPoly;
+    cXyz local_8c;
+    cXyz local_98;
+    f32 var1 = param_1 + param_2 - cLib_maxLimit(param_1 * param_1 * 0.002f, 120.0f);
+    local_8c.y = param_0->y - var1;
+    local_98.y = param_0->y + param_1 * 0.15f;
+    local_98.x = param_0->x + param_3->x * var1;
+    if (local_98.x < param_0->x) {
+        local_8c.x = local_98.x;
+        local_98.x = param_0->x;
+    } else {
+        local_8c.x = param_0->x;
+    }
+    local_8c.x -= param_1;
+    local_98.x += param_1;
+    var1 = param_0->z + param_3->z * var1;
+    local_98.z = var1;
+    if (var1 < param_0->z) {
+        local_8c.z = local_98.z;
+        local_98.z = param_0->z;
+    } else {
+        local_8c.z = param_0->z;
+    }
+    local_8c.z -= param_1;
+    local_98.z += param_1;
+    mDoLib_clipper::changeFar(mDoLib_clipper::getFovyRate() * 10000.0f);
+    s32 clip = mDoLib_clipper::clip(j3dSys.getViewMtx(), &local_98, &local_8c);
+    mDoLib_clipper::resetFar();
+    if (clip) {
+        return FALSE;
+    }
+    shdwDrawPoly.Set(local_8c, local_98);
+    shdwDrawPoly.SetCallback(psdRealCallBack);
+    shdwDrawPoly.setCenter(param_0);
+    shdwDrawPoly.setLightVec(param_3);
+    shdwDrawPoly.setPoly(param_4);
+    dComIfG_Bgsp()->ShdwDraw(&shdwDrawPoly);
+    daSea_GetPoly(&shdwDrawPoly, seaRealCallBack, local_8c, local_98);
+    return TRUE;
 }
 
 /* 800841B0-8008450C       .text setShadowRealMtx__FPA4_fPA4_fPA4_fP4cXyzP4cXyzffP18dDlst_shadowPoly_cf */
-u8 setShadowRealMtx(Mtx, Mtx, Mtx, cXyz*, cXyz*, f32, f32, dDlst_shadowPoly_c*, f32) {
-    /* Nonmatching */
+u8 setShadowRealMtx(Mtx r26, Mtx r27, Mtx r28, cXyz* r6, cXyz* r29, f32 f30, f32 f31, dDlst_shadowPoly_c* r30, f32 f3) {
+    r30->reset();
+    if (f3 >= 1.0f) {
+        return 0;
+    }
+    f32 f1 = 1.0f - f3;
+    if (f1 > 1.0f) {
+        f1 = 1.0f;
+    }
+    int r31 = 200.0f * f1;
+    cXyz local_64 = *r6 - *r29;
+    local_64.y += f31;
+    f32 tmp = 3000.0f * (50.0f - f31);
+    if (tmp < 0.8f) {
+        local_64.x = 0.8f;
+        local_64.z = 0.8f;
+    } else if (tmp < 1.0f) {
+        local_64.x *= tmp;
+        local_64.z *= tmp;
+    }
+    f32 tmp2 = sqrtf(local_64.abs2());
+    if (tmp2 != 0.0f) {
+        f32 tmp3 = (local_64.y / tmp2);
+        if (tmp3 < 1.5f) {
+            local_64.y = 1.5f * tmp2;
+            tmp2 = local_64.abs2();
+            tmp2 = sqrtf(tmp2);
+        }
+        tmp2 = (f30 * 0.5f) / tmp2;
+    }
+    local_64 *= tmp2;
+    local_64 += *r29;
+    f32 f29 = f30 * 0.4f;
+    cXyz local_70 = *r29 - local_64;
+    if (local_70.isZero()) {
+        local_70.y = -1.0f;
+        local_64.y = r29->y + 1.0f;
+    } else {
+        local_70.normalize();
+    }
+    if (!realPolygonCheck(r29, f29, f31, &local_70, r30)) {
+        return 0;
+    }
+    cMtx_lookAt(r26, &local_64, r29, 0);
+    C_MTXOrtho(r27, f29, -f29, -f29, f29, 1.0f, 10000.0f);
+    C_MTXLightOrtho(r28, f29, -f29, -f29, f29, 0.5f, -0.5f, 0.5f, 0.5f);
+    cMtx_concat(r28, r26, r28);
+    return r31;
 }
 
 /* 8008450C-800846C8       .text set__18dDlst_shadowReal_cFUlScP8J3DModelP4cXyzffP12dKy_tevstr_c */
