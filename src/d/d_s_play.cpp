@@ -9,6 +9,7 @@
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTReport.h"
 #include "SSystem/SComponent/c_counter.h"
+#include "c/c_dylink.h"
 #include "d/actor/d_a_dai.h"
 #include "d/actor/d_a_ib.h"
 #include "d/actor/d_a_npc_kg2.h"
@@ -238,8 +239,8 @@ void dScnPly_msg_HIO_c::dScnPly_msg_HIO_padCheck() {
 }
 
 /* 80234AA8-80234B9C       .text dScnPly_msg_HIO_messageProc__17dScnPly_msg_HIO_cFv */
-// NONMATCHING - regalloc
 void dScnPly_msg_HIO_c::dScnPly_msg_HIO_messageProc() {
+    /* Nonmatching - missing mGroup load */
     dScnPly_msg_HIO_padCheck();
 
     if (field_0x06) {
@@ -283,7 +284,6 @@ static request_of_phase_process_class dylPhase[PRELOAD_DYL_MAX];
 static dScnPly_preLoad_HIO_c g_preLoadHIO;
 
 /* 80234B9C-80234FD0       .text dScnPly_Draw__FP13dScnPly_ply_c */
-// NONMATCHING - close, just an issue with the wipe conditional
 int dScnPly_Draw(dScnPly_ply_c* i_this) {
     dComIfG_Ccsp()->Move();
     dComIfG_Bgsp()->ClrMoveFlag();
@@ -302,22 +302,21 @@ int dScnPly_Draw(dScnPly_ply_c* i_this) {
                 fopScnM_ChangeReq(i_this, PROC_PLAY_SCENE, l_wipeType[dComIfGp_getNextStageWipe()], 5);
 
                 int hour = dKy_getdaytime_hour();
-                bool useWhiteColor = false;
+                BOOL useWhiteColor = FALSE;
 
                 if (dKy_checkEventNightStop()) {
-                    useWhiteColor = true;
+                    useWhiteColor = TRUE;
                 } else {
-                    useWhiteColor = (hour >= 6 && hour < 18) == 0;
+                    useWhiteColor = (hour >= 6 && hour < 18) ? FALSE : TRUE;
                 }
 
-                int wipe = dComIfGp_getNextStageWipe();
-                if (wipe == 1 || wipe == 2 || wipe == 7 ||
-                    ((wipe == 8 || wipe == 10) && useWhiteColor) ||
-                    ((wipe == 9 || wipe == 11) && !useWhiteColor))
+                if (dComIfGp_getNextStageWipe() == 1 || dComIfGp_getNextStageWipe() == 2 || dComIfGp_getNextStageWipe() == 7 ||
+                    ((dComIfGp_getNextStageWipe() == 8 || dComIfGp_getNextStageWipe() == 10) && useWhiteColor) ||
+                    ((dComIfGp_getNextStageWipe() == 9 || dComIfGp_getNextStageWipe() == 11) && !useWhiteColor))
                 {
-                    mDoGph_gInf_c::setFadeColor(g_saftyWhiteColor);
+                    mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_saftyWhiteColor); // Fakematch?
                 } else {
-                    mDoGph_gInf_c::setFadeColor(g_blackColor);
+                    mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_blackColor); // Fakematch?
                 }
 
                 mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(),
@@ -1058,13 +1057,73 @@ int dScnPly_IsDelete(dScnPly_ply_c* i_this) {
     return 1;
 }
 
+static s8 preLoadNo = 0xFF;
+static bool doPreLoad = true;
+
 /* 802350BC-80235364       .text dScnPly_Delete__FP13dScnPly_ply_c */
-void dScnPly_Delete(dScnPly_ply_c* i_this) {
-    /* Nonmatching */
-    OSReport("Xboss0");
-    OSReport("Xboss1");
-    OSReport("Xboss2");
-    OSReport("Xboss3");
+BOOL dScnPly_Delete(dScnPly_ply_c* i_this) {
+    dComIfGp_getAttention().~dAttention_c();
+    dComIfGp_getVibration().dVibration_c::~dVibration_c();
+    dComIfG_Bgsp()->Dt();
+    dComIfG_Ccsp()->Dt();
+    dSnap_Delete();
+    dStage_Delete();
+    
+    dComIfGp_event_remove();
+    dComIfGp_particle_removeScene();
+    // dComIfGp_removeJcame(); // Debug only
+    // dComIfGp_removeJprev(); // Debug only
+    dComIfGp_removeDemo();
+    dMat_control_c::remove();
+    
+    fopMsgM_destroyExpHeap(dComIfGp_getExpHeap2D());
+    
+    if (strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0 ||
+        strcmp(dComIfGp_getStartStageName(), "Xboss1") == 0 ||
+        strcmp(dComIfGp_getStartStageName(), "Xboss2") == 0 ||
+        strcmp(dComIfGp_getStartStageName(), "Xboss3") == 0
+    ) {
+        dComIfGs_revPlayerRecollectionData();
+    }
+    
+    dComIfGp_removeMagma();
+    dComIfGp_removeGrass();
+    dComIfGp_removeTree();
+    dComIfGp_removeWood();
+    dComIfGp_removeFlower();
+    
+    g_dComIfG_gameInfo.play.mAirMeter = 0; // TODO inline
+    g_dComIfG_gameInfo.play.field_0x4928 = 0; // TODO inline
+    
+    g_msgDHIO.field_0x06 = 0;
+    g_msgDHIO.field_0x10 = -1;
+    mDoHIO_root.mDoHIO_deleteChild(g_darkHIO.mChildID);
+    mDoHIO_root.mDoHIO_deleteChild(g_envHIO.mChildID);
+    mDoHIO_root.mDoHIO_deleteChild(g_msgDHIO.mChildID);
+    
+    dComIfGp_setWindowNum(0);
+    
+    if (preLoadNo >= 0) {
+        const char** resName = PreLoadInfoT[preLoadNo].resName;
+        s32 resNameNum = PreLoadInfoT[preLoadNo].resNameNum;
+        if (resName != NULL && resName[0] != NULL) {
+            for (int i = 0; i < resNameNum; i++) {
+                dComIfG_resDelete(&resPhase[i], resName[i]);
+            }
+        }
+        
+        const s16* dylKeyTbl = PreLoadInfoT[preLoadNo].dylKeyTbl;
+        s32 dylKeyTblNum = PreLoadInfoT[preLoadNo].dylKeyTblNum;
+        if (dylKeyTbl != NULL && dylKeyTbl[0] != NULL) {
+            for (int i = 0; i < dylKeyTblNum; i++) {
+                cDylPhs::Unlink(&dylPhase[i], dylKeyTbl[i]);
+            }
+        }
+    }
+    
+    dComIfGp_init();
+    
+    return TRUE;
 }
 
 /* 80235364-802355A8       .text heapSizeCheck__Fv */
@@ -1146,7 +1205,7 @@ static mDoDvdThd_mountXArchive_c* l_lkDemoAnmCommand;
 
 /* 802356E0-802357F4       .text phase_0__FP13dScnPly_ply_c */
 s32 phase_0(dScnPly_ply_c* i_this) {
-    /* Nonmatching */
+    /* Nonmatching - darcIdx type */
     if (mDoAud_checkAllWaveLoadStatus()) {
         return cPhs_INIT_e;
     } else {
@@ -1227,13 +1286,8 @@ int phase_3(dScnPly_ply_c* i_this) {
     return cPhs_NEXT_e;
 }
 
-static s8 preLoadNo = 0xFF;
-static bool doPreLoad = true;
-
 /* 80235B0C-80236334       .text phase_4__FP13dScnPly_ply_c */
 s32 phase_4(dScnPly_ply_c* i_this) {
-    /* Nonmatching */
-
     if (i_this->sceneCommand != NULL) {
         JUT_ASSERT(0xdef, i_this->sceneCommand->getMemAddress() != 0);
         dComIfGp_particle_createScene(i_this->sceneCommand->getMemAddress());
@@ -1254,7 +1308,6 @@ s32 phase_4(dScnPly_ply_c* i_this) {
     dComIfGp_setWindowNum(1);
     dComIfGp_setWindow(0, 0.0f, 0.0f, mDoMch_render_c::getFbWidth(), mDoMch_render_c::getEfbHeight(), 0.0f, 1.0f, 0, 2);
     dComIfGp_setCameraInfo(0, NULL, 0, 0, -1);
-    // setCameraAttentionStatus?
     dComIfGd_setWindow(NULL);
     dComIfGd_setViewport(NULL);
     dComIfGd_setView(NULL);
@@ -1307,7 +1360,11 @@ s32 phase_4(dScnPly_ply_c* i_this) {
             dComIfGs_setItem(12, BOW);
     }
 
-    if (strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0 || strcmp(dComIfGp_getStartStageName(), "Xboss1") == 0 || strcmp(dComIfGp_getStartStageName(), "Xboss2") == 0 || strcmp(dComIfGp_getStartStageName(), "Xboss3") == 0) {
+    if (strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0 ||
+        strcmp(dComIfGp_getStartStageName(), "Xboss1") == 0 ||
+        strcmp(dComIfGp_getStartStageName(), "Xboss2") == 0 ||
+        strcmp(dComIfGp_getStartStageName(), "Xboss3") == 0
+    ) {
         dComIfGs_setPlayerRecollectionData();
     }
 
@@ -1360,10 +1417,22 @@ s32 phase_4(dScnPly_ply_c* i_this) {
 
 /* 80236334-80236444       .text phase_5__FP13dScnPly_ply_c */
 s32 phase_5(dScnPly_ply_c* i_this) {
-    /* Nonmatching */
     if (preLoadNo >= 0) {
-        u8 resNameNum = PreLoadInfoT[preLoadNo].resNameNum;
-        JUT_ASSERT(0, resNameNum <= (sizeof(resPhase) / sizeof(resPhase[0])));
+        s32 rt = cPhs_NEXT_e;
+        const char** resName = PreLoadInfoT[preLoadNo].resName;
+        s32 resNameNum = PreLoadInfoT[preLoadNo].resNameNum;
+        if (resName != NULL && resName[0] != NULL) {
+            JUT_ASSERT(3824, resNameNum <= (sizeof(resPhase) / sizeof(resPhase[0])));
+            for (int i = 0; i < resNameNum; i++) {
+                if (dComIfG_resLoad(&resPhase[i], resName[i]) != cPhs_COMPLEATE_e) {
+                    rt = cPhs_INIT_e;
+                }
+            }
+        }
+        if (rt == cPhs_COMPLEATE_e) {
+            resPreLoadTime1 = OSGetTime();
+        }
+        return rt;
     } else {
         return cPhs_NEXT_e;
     }
@@ -1371,10 +1440,22 @@ s32 phase_5(dScnPly_ply_c* i_this) {
 
 /* 80236444-80236554       .text phase_6__FP13dScnPly_ply_c */
 s32 phase_6(dScnPly_ply_c* i_this) {
-    /* Nonmatching */
     if (preLoadNo >= 0) {
-        u8 dylKeyTblNum = PreLoadInfoT[preLoadNo].dylKeyTblNum;
-        JUT_ASSERT(0, dylKeyTblNum <= (sizeof(dylPhase) / sizeof(dylPhase[0])));
+        s32 rt = cPhs_NEXT_e;
+        const s16* dylKeyTbl = PreLoadInfoT[preLoadNo].dylKeyTbl;
+        s32 dylKeyTblNum = PreLoadInfoT[preLoadNo].dylKeyTblNum;
+        if (dylKeyTbl != NULL && dylKeyTbl[0] != NULL) {
+            JUT_ASSERT(3858, dylKeyTblNum <= (sizeof(dylPhase) / sizeof(dylPhase[0])));
+            for (int i = 0; i < dylKeyTblNum; i++) {
+                if (cDylPhs::Link(&dylPhase[i], dylKeyTbl[i]) != cPhs_COMPLEATE_e) {
+                    rt = cPhs_INIT_e;
+                }
+            }
+        }
+        if (rt == cPhs_COMPLEATE_e) {
+            dylPreLoadTime1 = OSGetTime();
+        }
+        return rt;
     } else {
         return cPhs_NEXT_e;
     }

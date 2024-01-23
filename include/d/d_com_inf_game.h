@@ -500,7 +500,9 @@ public:
         mCameraInfo[idx].mCamIdx = cam_idx;
         mCameraInfo[idx].field_0x06 = p5;
     }
-    // void setCameraAttentionStatus(u32 stts) { mCameraInfo[0].mCameraAttentionStatus = stts; )
+    void setCameraAttentionStatus(int idx, u32 stts) {
+        mCameraInfo[idx].mCameraAttentionStatus = stts;
+    }
     void setCurrentGrafPort(J2DOrthoGraph* i_graf) { mCurrentGrafPort = i_graf; }
     void setCurrentWindow(dDlst_window_c* i_window) { mCurrentWindow = i_window; }
     void setCurrentView(view_class* i_view) { mCurrentView = i_view; }
@@ -509,10 +511,10 @@ public:
     void setWindowNum(u8 num) { mDlstWindowNum = num; }
     dDlst_window_c * getWindow(int idx) { return &mDlstWindow[idx]; }
     void setWindow(int idx, f32 x, f32 y, f32 w, f32 h, f32 n, f32 f, int cameraID, int mode) {
-        getWindow(idx)->setViewPort(x, y, w, h, n, f);
-        getWindow(idx)->setScissor(x, y, w, h);
-        getWindow(idx)->setCameraID(cameraID);
-        getWindow(idx)->setMode(mode);
+        mDlstWindow[idx].setViewPort(x, y, w, h, n, f);
+        mDlstWindow[idx].setScissor(x, y, w, h);
+        mDlstWindow[idx].setCameraID(cameraID);
+        mDlstWindow[idx].setMode(mode);
     }
 
     J2DOrthoGraph* getCurrentGrafPort() { return mCurrentGrafPort; }
@@ -1714,10 +1716,13 @@ inline u8 dComIfGs_checkFwaterTimer() {
 }
 
 void dComIfGs_setPlayerRecollectionData();
+void dComIfGs_revPlayerRecollectionData();
 
 /**
  * === PLAY ===
  */
+
+inline void dComIfGp_init() { g_dComIfG_gameInfo.play.init(); }
 
 void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8 i_layer = -1,
                            f32 i_lastSpeed = 0.0f, u32 i_lastMode = 0, BOOL i_setPoint = TRUE,
@@ -2008,6 +2013,7 @@ inline dDetect_c& dComIfGp_getDetect() {
     return g_dComIfG_gameInfo.play.getDetect();
 }
 
+inline dMagma_packet_c* dComIfGp_createMagma() { return g_dComIfG_gameInfo.play.createMagma(); }
 inline dGrass_packet_c* dComIfGp_createGrass() { return g_dComIfG_gameInfo.play.createGrass(); }
 inline dTree_packet_c* dComIfGp_createTree() { return g_dComIfG_gameInfo.play.createTree(); }
 inline dFlower_packet_c* dComIfGp_createFlower() { return g_dComIfG_gameInfo.play.createFlower(); }
@@ -2031,6 +2037,12 @@ inline void dComIfGp_drawTree() { return g_dComIfG_gameInfo.play.drawTree(); }
 inline void dComIfGp_drawFlower() { return g_dComIfG_gameInfo.play.drawFlower(); }
 inline void dComIfGp_drawWood() { return g_dComIfG_gameInfo.play.drawWood(); }
 
+inline void dComIfGp_removeMagma() { g_dComIfG_gameInfo.play.removeMagma(); }
+inline void dComIfGp_removeGrass() { g_dComIfG_gameInfo.play.removeGrass(); }
+inline void dComIfGp_removeTree() { g_dComIfG_gameInfo.play.removeTree(); }
+inline void dComIfGp_removeWood() { g_dComIfG_gameInfo.play.removeWood(); }
+inline void dComIfGp_removeFlower() { g_dComIfG_gameInfo.play.removeFlower(); }
+
 inline void dComIfGp_map_mapBufferSendAGB(int param_0) {
     dMap_c::mapBufferSendAGB(param_0);
 }
@@ -2053,6 +2065,10 @@ inline void dComIfGp_map_clrAGBMapSendStopFlg() {
 
 inline void dComIfGp_createDemo() {
     return g_dComIfG_gameInfo.play.createDemo();
+}
+
+inline void dComIfGp_removeDemo() {
+    return g_dComIfG_gameInfo.play.removeDemo();
 }
 
 inline dDemo_manager_c* dComIfGp_demo_get() {
@@ -2349,11 +2365,16 @@ inline void dComIfGp_plusMiniGameRupee(s16 count) {
     g_dComIfG_gameInfo.play.plusMiniGameRupee(count);
 }
 
-inline void dComIfGp_setCameraInfo(int idx, camera_class* camera, int dlst, int cam, int p5) { g_dComIfG_gameInfo.play.setCameraInfo(idx, camera, dlst, cam, p5); }
+inline void dComIfGp_setCameraInfo(int idx, camera_class* camera, int dlst, int cam, int p5) {
+    g_dComIfG_gameInfo.play.setCameraInfo(idx, camera, dlst, cam, p5);
+    g_dComIfG_gameInfo.play.setCameraAttentionStatus(0, 0);
+}
 inline s32 dComIfGp_getWindowNum() { return g_dComIfG_gameInfo.play.getWindowNum(); }
 inline void dComIfGp_setWindowNum(u8 num) { g_dComIfG_gameInfo.play.setWindowNum(num); }
 inline dDlst_window_c * dComIfGp_getWindow(int idx) { return g_dComIfG_gameInfo.play.getWindow(idx); }
-inline void dComIfGp_setWindow(int idx, f32 x, f32 y, f32 w, f32 h, f32 n, f32 f, int cameraID, int mode) { g_dComIfG_gameInfo.play.setWindow(idx, x, y, w, h, n, f, cameraID, mode); }
+inline void dComIfGp_setWindow(int idx, f32 x, f32 y, f32 w, f32 h, f32 n, f32 f, int cameraID, int mode) {
+    g_dComIfG_gameInfo.play.setWindow(idx, x, y, w, h, n, f, cameraID, mode);
+}
 inline J2DOrthoGraph* dComIfGp_getCurrentGrafPort() { return g_dComIfG_gameInfo.play.getCurrentGrafPort(); }
 inline void dComIfGp_setCurrentWindow(dDlst_window_c* window) { return g_dComIfG_gameInfo.play.setCurrentWindow(window); }
 inline void dComIfGp_setCurrentView(view_class* view) { return g_dComIfG_gameInfo.play.setCurrentView(view); }
@@ -3097,6 +3118,10 @@ inline void dComIfGp_particle_createRoomScene(void * pData) {
 
 inline void dComIfGp_particle_removeRoomScene() {
     g_dComIfG_gameInfo.play.getParticle()->removeRoomScene();
+}
+
+inline void dComIfGp_particle_removeScene() {
+    g_dComIfG_gameInfo.play.getParticle()->removeScene();
 }
 
 inline void dComIfGp_particle_swapFrameBufferTexture() {

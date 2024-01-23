@@ -37,6 +37,8 @@ public:
     s8 createChild(const char*, JORReflexible*);
     void deleteChild(s8);
 
+    void updateChild(s8) {}
+
 private:
     /* 0x4 */ mDoHIO_child_c mChild[64];
 };

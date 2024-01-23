@@ -26,8 +26,8 @@ s32 daMagma_c::create() {
         return result;
     }
 
-    if (g_dComIfG_gameInfo.play.createMagma()) {
-        g_dComIfG_gameInfo.play.mpMagmaPacket->newFloor(
+    if (dComIfGp_createMagma()) {
+        dComIfGp_getMagma()->newFloor(
             current.pos,
             mScale,
             current.roomNo,
