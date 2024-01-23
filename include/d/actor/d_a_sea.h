@@ -69,10 +69,10 @@ public:
     void draw();
     ~daSea_packet_c() {}
 
-    f32 getMinX() {}
-    f32 getMinZ() {}
-    f32 getMaxX() {}
-    f32 getMaxZ() {}
+    f32 getMinX() { return mDrawMinX; }
+    f32 getMinZ() { return mDrawMinZ; }
+    f32 getMaxX() { return mDrawMaxX; }
+    f32 getMaxZ() { return mDrawMaxZ; }
     GXTexObj* getSea0TexObj() { return &mTexSea0; }
     GXTexObj* getSea1TexObj() { return &mTexSea1; }
     GXTexObj* getYuraTexObj() { return &mTexYura; }

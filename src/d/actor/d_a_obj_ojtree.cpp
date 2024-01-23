@@ -40,7 +40,7 @@ int daObjOjtree::Act_c::Create() {
     pos.set(current.pos);
     pos.y += 5000.0f;
     fopAcM_create(PROC_JBO, 0, &pos, home.roomNo, &shape_angle, NULL, 0xff, NULL);
-    field_0x2d4 = 2;
+    mLockTimer = 2;
     return TRUE;
 }
 
@@ -73,7 +73,7 @@ s32 daObjOjtree::Act_c::Mthd_Delete() {
 void daObjOjtree::Act_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
-    cMtx_copy(mDoMtx_stack_c::get(), mpModel->mBaseTransformMtx);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     cMtx_copy(mDoMtx_stack_c::get(), M_tmp_mtx);
 }
 
@@ -85,9 +85,9 @@ void daObjOjtree::Act_c::init_mtx() {
 
 /* 000003F4-0000045C       .text Execute__Q211daObjOjtree5Act_cFPPA3_A4_f */
 int daObjOjtree::Act_c::Execute(Mtx** pMtx) {
-    if(field_0x2d4 != 0)
+    if(mLockTimer != 0)
     {
-        if (--field_0x2d4 == 0) 
+        if (--mLockTimer == 0) 
         {
            mpBgW->SetLock(); 
         }

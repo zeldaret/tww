@@ -23,11 +23,9 @@ namespace daObjOjtree {
         BOOL Draw();
 
     public:
-        /* Place member variables here */
         /* 0x2C8 */ request_of_phase_process_class mPhs;
         /* 0x2D0 */ J3DModel* mpModel;
-        /* 0x2D4 */ u8 field_0x2d4;
-        /* 0x2D5 */ u8 field_0x2d5[0x2d7 - 0x2d5];
+        /* 0x2D4 */ u8 mLockTimer;
     };
 };
 

@@ -42,7 +42,7 @@ static BOOL daDisappear_Execute(disappear_class* i_this) {
                     }
                 }
                 else {
-                    fopAcM_createIball(&i_this->current.pos, i_this->mItemTableIdx, i_this->current.roomNo, &i_this->current.angle, i_this->mSwitchNo);
+                    fopAcM_createIball(&i_this->current.pos, i_this->mItemTableIdx, i_this->current.roomNo, &i_this->current.angle, i_this->mItemBitNo);
                 }
             }
         }
@@ -102,17 +102,16 @@ static s32 daDisappear_Create(fopAc_ac_c* i_this) {
 
     fopAcM_SetupActor(dis, disappear_class);
 
-    u32 params = dis->mBase.mParameters;
+    dis->mHealth = fopAcM_GetParam(dis) & 0xFF;
+    f32 scale = ((fopAcM_GetParam(dis) >> 8) & 0xFF) * 0.1f;
 
-    dis->mHealth = dis->mBase.mParameters & 0xFF;
-    float scale = ((dis->mBase.mParameters >> 8) & 0xFF) * 0.1f;
-
-    dis->mSwitchNo = (dis->mBase.mParameters >> 0x10) & 0xFF;
-    if (dis->mSwitchNo == 0xFF) {
-        dis->mSwitchNo = -1;
+    dis->mItemBitNo = (fopAcM_GetParam(dis) >> 0x10) & 0xFF;
+    if (dis->mItemBitNo == 0xFF) {
+        dis->mItemBitNo = -1;
     }
 
     set_disappear(dis, scale);
+
     return cPhs_COMPLEATE_e;
 }
 

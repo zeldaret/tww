@@ -7,7 +7,7 @@
 class disappear_class : public fopAc_ac_c {
 public:
     /* 0x290 */ request_of_phase_process_class mPhase; // Unused
-    /* 0x298 */ s32 mSwitchNo;
+    /* 0x298 */ s32 mItemBitNo;
     /* 0x29C */ s16 mTimer;
 };
 
