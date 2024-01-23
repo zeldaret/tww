@@ -3,61 +3,141 @@
 // Translation Unit: JASDrumSet.cpp
 //
 
-#include "JASDrumSet.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASDrumSet.h"
+#include "JSystem/JAudio/JASBank.h"
+#include "JSystem/JAudio/JASCalc.h"
+#include "JSystem/JAudio/JASInstEffect.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JUtility/JUTAssert.h"
 
 /* 802851D4-80285470       .text getParam__Q28JASystem8TDrumSetCFiiPQ28JASystem10TInstParam */
-void JASystem::TDrumSet::getParam(int, int, JASystem::TInstParam*) const {
-    /* Nonmatching */
+bool JASystem::TDrumSet::getParam(int key, int param_2, JASystem::TInstParam* param_3) const {
+    JUT_ASSERT(24, key >= 0);
+    if (key >= sPercCount) {
+        OSReport("JASDrumSet: key %d >= sPercCount %d\n", key, sPercCount);
+        return false;
+    }
+    const TPerc* perc = field_0x4 + key;
+    param_3->field_0x0 = 0;
+    param_3->field_0x38 = 1;
+    param_3->field_0x10 *= perc->field_0x0;
+    param_3->field_0x14 *= perc->field_0x4;
+    param_3->field_0x20 = perc->field_0x8;
+    param_3->field_0x3a = perc->field_0xc;
+    static TOscillator::Osc_ osc;
+    osc.field_0x0 = 0;
+    osc.field_0x4 = 1.0f;
+    osc.table = NULL;
+    osc.rel_table = NULL;
+    osc.field_0x10 = 1.0f;
+    osc.field_0x14 = 0.0f;
+    static TOscillator::Osc_* oscp = &osc;
+    param_3->mOscData = &oscp;
+    param_3->mOscCount = 1;
+    for (int i = 0; i < perc->mEffectCount; i++) {
+        TInstEffect* effect = perc->mEffect[i];
+        if (effect) {
+            f32 y = effect->getY(key, param_2);
+            switch (effect->mTarget) {
+            case 0:
+                param_3->field_0x18 *= y;
+                break;
+            case 1:
+                param_3->field_0x1c *= y;
+                break;
+            case 2:
+                param_3->field_0x2c += y - 0.5;
+                break;
+            case 3:
+                param_3->field_0x30 += y;
+                break;
+            case 4:
+                param_3->field_0x34 += y;
+                break;
+            default:
+                JUT_ASSERT(77, 0);
+                break;
+            }
+        }
+    }
+    for (int i = 0; i < perc->mVelomapCount; i++) {
+        TBasicInst::TVeloRegion* region = perc->mVelomap + i;
+        if (param_2 > region->mBaseVel) {
+            continue;
+        }
+        param_3->field_0x10 *= region->field_0x08;
+        param_3->field_0x14 *= region->field_0x0c;
+        param_3->field_0x4 = region->field_0x04;
+        return true;
+    }
+    return false;
 }
 
 /* 80285470-80285520       .text getPerc__Q28JASystem8TDrumSetFi */
-void JASystem::TDrumSet::getPerc(int) {
-    /* Nonmatching */
+JASystem::TDrumSet::TPerc* JASystem::TDrumSet::getPerc(int index) {
+    JUT_ASSERT(101, index < sPercCount);
+    JUT_ASSERT(102, index >= 0);
+    return field_0x4 + index;
 }
 
 /* 80285520-80285554       .text __ct__Q38JASystem8TDrumSet5TPercFv */
 JASystem::TDrumSet::TPerc::TPerc() {
-    /* Nonmatching */
+    field_0x0 = 1.0f;
+    field_0x4 = 1.0f;
+    field_0x8 = 0.5f;
+    field_0xc = 1000;
+    mEffect = NULL;
+    mEffectCount = 0;
+    mVelomapCount = 0;
+    mVelomap = NULL;
 }
 
 /* 80285554-802855B0       .text __dt__Q38JASystem8TDrumSet5TPercFv */
 JASystem::TDrumSet::TPerc::~TPerc() {
-    /* Nonmatching */
+    delete[] mEffect;
+    delete[] mVelomap;
 }
 
 /* 802855B0-80285664       .text setEffectCount__Q38JASystem8TDrumSet5TPercFUl */
-void JASystem::TDrumSet::TPerc::setEffectCount(unsigned long) {
-    /* Nonmatching */
+void JASystem::TDrumSet::TPerc::setEffectCount(u32 param_1) {
+    delete[] mEffect;
+    mEffectCount = param_1;
+    if (param_1 == 0) {
+        mEffect = NULL;
+        return;
+    }
+    mEffect = new (TBank::getCurrentHeap(), 0) TInstEffect*[param_1];
+    JUT_ASSERT(146, mEffect != 0);
+    Calc::bzero(mEffect, param_1 * 4);
 }
 
 /* 80285664-802856F8       .text setVeloRegionCount__Q38JASystem8TDrumSet5TPercFUl */
-void JASystem::TDrumSet::TPerc::setVeloRegionCount(unsigned long) {
-    /* Nonmatching */
+void JASystem::TDrumSet::TPerc::setVeloRegionCount(u32 param_1) {
+    delete[] mVelomap;
+    mVelomap = new (TBank::getCurrentHeap(), 0) TBasicInst::TVeloRegion[param_1];
+    JUT_ASSERT(155, mVelomap != 0);
+    mVelomapCount = param_1;
 }
 
 /* 802856F8-802857AC       .text getVeloRegion__Q38JASystem8TDrumSet5TPercFi */
-void JASystem::TDrumSet::TPerc::getVeloRegion(int) {
-    /* Nonmatching */
+JASystem::TBasicInst::TVeloRegion* JASystem::TDrumSet::TPerc::getVeloRegion(int index) {
+    JUT_ASSERT(161, index < mVelomapCount);
+    JUT_ASSERT(162, index >= 0);
+    return mVelomap + index;
 }
 
 /* 802857AC-80285864       .text setEffect__Q38JASystem8TDrumSet5TPercFiPQ28JASystem11TInstEffect */
-void JASystem::TDrumSet::TPerc::setEffect(int, JASystem::TInstEffect*) {
-    /* Nonmatching */
+void JASystem::TDrumSet::TPerc::setEffect(int index, JASystem::TInstEffect* param_2) {
+    JUT_ASSERT(177, index < mEffectCount);
+    JUT_ASSERT(178, index >= 0);
+    mEffect[index] = param_2;
 }
 
 /* 80285864-802858D8       .text setRelease__Q38JASystem8TDrumSet5TPercFUl */
-void JASystem::TDrumSet::TPerc::setRelease(unsigned long) {
-    /* Nonmatching */
+void JASystem::TDrumSet::TPerc::setRelease(u32 release) {
+    JUT_ASSERT(195, release < 0x10000);
+    field_0xc = release;
 }
 
 /* 802858D8-8028595C       .text __dt__Q28JASystem8TDrumSetFv */
-JASystem::TDrumSet::~TDrumSet() {
-    /* Nonmatching */
-}
-
-/* 8028595C-80285968       .text getType__Q28JASystem8TDrumSetCFv */
-void JASystem::TDrumSet::getType() const {
-    /* Nonmatching */
-}
-
+JASystem::TDrumSet::~TDrumSet() {}

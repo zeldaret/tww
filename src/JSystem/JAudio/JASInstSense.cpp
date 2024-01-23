@@ -3,15 +3,38 @@
 // Translation Unit: JASInstSense.cpp
 //
 
-#include "JASInstSense.h"
-#include "dolphin/types.h"
+#include "JSystem/JAudio/JASInstSense.h"
+#include "JSystem/JUtility/JUTAssert.h"
 
 /* 802868F0-80286A1C       .text getY__Q28JASystem10TInstSenseCFii */
-void JASystem::TInstSense::getY(int, int) const {
+f32 JASystem::TInstSense::getY(int param_1, int param_2) const {
     /* Nonmatching */
+    int r6 = 0;
+    switch (field_0x8) {
+    case 1:
+        r6 = param_2;
+        break;
+    case 2:
+        r6 = param_1;
+        break;
+    }
+    if (field_0x9 == 0x7f || field_0x9 == 0) {
+        return field_0xc + r6 * (field_0x10 - field_0xc) / 127.0f;
+    }
+    if (r6 < field_0x9) {
+        return field_0xc + (1.0f - field_0xc) * r6 / field_0x9;
+    }
+    return field_0x10 - 1.0f * (r6 - field_0x9) / (0x7f - field_0x9) + 1.0f;
 }
 
 /* 80286A1C-80286B58       .text setParams__Q28JASystem10TInstSenseFiiff */
-void JASystem::TInstSense::setParams(int trigger, int centerkey, float, float) {
-    /* Nonmatching */
+void JASystem::TInstSense::setParams(int trigger, int centerkey, f32 param_3, f32 param_4) {
+    JUT_ASSERT(43, trigger >= 0);
+    JUT_ASSERT(44, trigger < 256);
+    field_0x8 = trigger;
+    JUT_ASSERT(47, centerkey >= 0);
+    JUT_ASSERT(48, centerkey < 256);
+    field_0x9 = centerkey;
+    field_0xc = param_3;
+    field_0x10 = param_4;
 }

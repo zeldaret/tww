@@ -9,14 +9,14 @@ namespace JASystem {
     class TWaveArc;
 
     struct TWaveInfo {
-        /* 0x00 */ u8 field_0x0;
+        /* 0x00 */ u8 mBlockType;
         /* 0x01 */ u8 field_0x1;
         /* 0x02 */ u8 field_0x2;
         /* 0x04 */ f32 field_0x4;
         /* 0x08 */ int mWavePtrOffs;
         /* 0x0C */ int field_0xc;
         /* 0x10 */ int field_0x10;
-        /* 0x14 */ int field_0x14;
+        /* 0x14 */ int mBlockCount;
         /* 0x18 */ int field_0x18;
         /* 0x1C */ int field_0x1c;
         /* 0x20 */ s16 field_0x20;

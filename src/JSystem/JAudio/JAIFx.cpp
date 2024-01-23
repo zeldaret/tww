@@ -7,6 +7,7 @@
 #include "JSystem/JAudio/JAIBasic.h"
 #include "JSystem/JAudio/JASDSPInterface.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
+#include "global.h"
 
 JAInter::Fx::initOnCodeFxScene_s* JAInter::Fx::initOnCodeFxScene;
 u8 JAInter::Fx::mSceneMax;
