@@ -398,6 +398,10 @@ public:
     void setPlayer(int idx, fopAc_ac_c* player) { mpPlayer[idx] = (daPy_py_c*)player; }
     void setPlayerPtr(int idx, fopAc_ac_c* playerPtr) { mpPlayerPtr[idx] = playerPtr; }
     s8 getPlayerCameraID(int idx) { return mCurCamera[idx]; }
+    void setPlayerInfo(int idx, fopAc_ac_c* player, int cam) {
+        mpPlayer[idx] = (daPy_py_c*)player;
+        mCurCamera[idx] = cam;
+    }
 
     int getItemRupeeCount() { return mItemRupeeCount; }
     void setItemRupeeCount(s32 count) { mItemRupeeCount += count; }
@@ -468,6 +472,9 @@ public:
 
     void setItemBeastNumCount(int i_idx, s16 num) { mItemBeastNumCounts[i_idx] += num; }
 
+    void setItemTimeCount(s32 time) { mAirMeter = time; }
+    void setItemTimeMax(s32 time) { field_0x4928 = time; }
+
     u8 checkMesgCancelButton() { return mMesgCancelButton; }
 
     void setPlayerStatus(int param_0, int i, u32 flag) { mPlayerStatus[param_0][i] |= flag; }
@@ -499,6 +506,7 @@ public:
         mCameraInfo[idx].mDlstWindowIdx = dlst_window_idx;
         mCameraInfo[idx].mCamIdx = cam_idx;
         mCameraInfo[idx].field_0x06 = p5;
+        setCameraAttentionStatus(0, 0);
     }
     void setCameraAttentionStatus(int idx, u32 stts) {
         mCameraInfo[idx].mCameraAttentionStatus = stts;
@@ -1817,6 +1825,10 @@ inline void dComIfGp_setPlayer(int idx, fopAc_ac_c* player) {
     g_dComIfG_gameInfo.play.setPlayer(idx, player);
 }
 
+inline void dComIfGp_setPlayerInfo(int idx, fopAc_ac_c* player, int cam) {
+    g_dComIfG_gameInfo.play.setPlayerInfo(idx, player, cam);
+}
+
 inline void dComIfGp_setPlayerPtr(int idx, fopAc_ac_c* player) {
     g_dComIfG_gameInfo.play.setPlayerPtr(idx, player);
 }
@@ -2207,6 +2219,14 @@ inline void dComIfGp_setItemKeyNumCount(s16 num) {
     g_dComIfG_gameInfo.play.setItemKeyNumCount(num);
 }
 
+inline void dComIfGp_setItemTimeCount(s32 time) {
+    g_dComIfG_gameInfo.play.setItemTimeCount(time);
+}
+
+inline void dComIfGp_setItemTimeMax(s32 time) {
+    g_dComIfG_gameInfo.play.setItemTimeMax(time);
+}
+
 inline void dComIfGp_setMessageCountNumber(s16 num) {
     g_dComIfG_gameInfo.play.setMessageCountNumber(num);
 }
@@ -2367,7 +2387,6 @@ inline void dComIfGp_plusMiniGameRupee(s16 count) {
 
 inline void dComIfGp_setCameraInfo(int idx, camera_class* camera, int dlst, int cam, int p5) {
     g_dComIfG_gameInfo.play.setCameraInfo(idx, camera, dlst, cam, p5);
-    g_dComIfG_gameInfo.play.setCameraAttentionStatus(0, 0);
 }
 inline s32 dComIfGp_getWindowNum() { return g_dComIfG_gameInfo.play.getWindowNum(); }
 inline void dComIfGp_setWindowNum(u8 num) { g_dComIfG_gameInfo.play.setWindowNum(num); }

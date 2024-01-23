@@ -1092,8 +1092,8 @@ BOOL dScnPly_Delete(dScnPly_ply_c* i_this) {
     dComIfGp_removeWood();
     dComIfGp_removeFlower();
     
-    g_dComIfG_gameInfo.play.mAirMeter = 0; // TODO inline
-    g_dComIfG_gameInfo.play.field_0x4928 = 0; // TODO inline
+    dComIfGp_setItemTimeCount(0);
+    dComIfGp_setItemTimeMax(0);
     
     g_msgDHIO.field_0x06 = 0;
     g_msgDHIO.field_0x10 = -1;
@@ -1301,8 +1301,7 @@ s32 phase_4(dScnPly_ply_c* i_this) {
     dComIfGp_createDemo();
     daSea_Init();
     dSnap_Create();
-    dComIfGp_setPlayer(0, NULL);
-    g_dComIfG_gameInfo.play.mCurCamera[0] = 0; // dComIfGp_setPlayerInfo?
+    dComIfGp_setPlayerInfo(0, NULL, 0);
     for (s32 i = 0; i < 3; i++)
         dComIfGp_setPlayerPtr(i, NULL);
     dComIfGp_setWindowNum(1);
