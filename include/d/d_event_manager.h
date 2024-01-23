@@ -60,7 +60,7 @@ public:
     fopAc_ac_c* specialCast_Shutter(s16, int);
     fopAc_ac_c* specialCast(const char*, int);
     void setPrmStaff(void*, int);
-    void getToolId(u8, int);
+    u8 getToolId(u8, int);
     BOOL ChkPresentEnd();
     BOOL CancelPresent();
     BOOL checkStartDemo();

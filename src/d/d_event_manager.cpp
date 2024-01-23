@@ -100,7 +100,6 @@ enum {
 
 /* 80073A4C-80073BC0       .text getSubstance__16dEvent_manager_cFP11dEvDtData_ci */
 void* dEvent_manager_c::getSubstance(dEvDtData_c* data, int type) {
-    /* Nonmatching */
     if (data->getIndex() < 0 || data->getNumber() <= 0) {
         JUT_ASSERT(0x169, 0);
         return NULL;
@@ -110,15 +109,19 @@ void* dEvent_manager_c::getSubstance(dEvDtData_c* data, int type) {
         JUT_ASSERT(0x16e, 0);
     }
 
+    s32 index;
     switch (data->getType()) {
     case dEvtSub_FLOAT_e:
     case dEvtSub_XYZ_e:
     case dEvtSub_UNK2_e:
-        return mList.getFDataP(data->getIndex());
+        index = data->getIndex();
+        return mList.getFDataP(index);
     case dEvtSub_INT_e:
-        return mList.getIDataP(data->getIndex());
+        index = data->getIndex();
+        return mList.getIDataP(index);
     case dEvtSub_STR_e:
-        return mList.getSDataP(data->getIndex());
+        index = data->getIndex();
+        return mList.getSDataP(index);
     default:
         JUT_ASSERT(0x182, 0);
         return NULL;
@@ -149,7 +152,6 @@ void dEvent_manager_c::setData(const char* data) {
 
 /* 80073C94-80073D10       .text create__16dEvent_manager_cFv */
 BOOL dEvent_manager_c::create() {
-    /* Nonmatching */
     mList.init();
     mCameraPlay = 0;
     mException.init();
@@ -266,7 +268,6 @@ void dEvent_manager_c::closeProc(dEvDtEvent_c* event) {
 
 /* 80074114-800741D4       .text endProc__16dEvent_manager_cFsi */
 void dEvent_manager_c::endProc(s16 eventIdx, int act) {
-    /* Nonmatching */
     dEvDtEvent_c* event = getEventData(eventIdx);
     if (event == NULL) {
         JUT_ASSERT(0x2ec, 0);
@@ -333,7 +334,6 @@ dEvDtEvent_c* dEvent_manager_c::getEventData(s16 eventIdx) {
 
 /* 800743AC-800744AC       .text getEventIdx__16dEvent_manager_cFPCcUc */
 s16 dEvent_manager_c::getEventIdx(const char* eventName, u8 eventInfoIdx) {
-    /* Nonmatching */
     dStage_EventInfo_c* stageEventInfo = dComIfGp_getStageEventInfo();
     if (mList.mHeaderP == NULL)
         return -1;
@@ -428,6 +428,7 @@ BOOL dEvent_manager_c::getIsAddvance(int staffIdx) {
 }
 
 int dEvmng_strcmp(const char* s1, char* s2) {
+    /* Nonmatching */
     u32 len1 = strlen(s1);
     u32 len2 = strlen(s2);
 
@@ -453,7 +454,6 @@ int dEvmng_strcmp(const char* s1, char* s2) {
 
 /* 80074824-80074964       .text getMyActIdx__16dEvent_manager_cFiPCPCciii */
 int dEvent_manager_c::getMyActIdx(int staffIdx, const char* const* action, int actionNum, int force, int nameType) {
-    /* Nonmatching */
     if (staffIdx == -1)
         return -1;
 
@@ -461,12 +461,13 @@ int dEvent_manager_c::getMyActIdx(int staffIdx, const char* const* action, int a
     if (staff->mbHasAction && !force)
         return staff->mCurActionIdx;
 
+    s32 i;
     char* name = getMyNowCutName(staffIdx);
     if (name == NULL)
         return -1;
 
     staff->mbHasAction = true;
-    for (s32 i = 0; i < actionNum; i++) {
+    for (i = 0; i < actionNum; i++) {
         JUT_ASSERT(0x46a, action[i]);
 
         if (nameType != 0) {
@@ -546,11 +547,11 @@ s32 dEvent_manager_c::getMySubstanceNum(int staffIdx, const char* name) {
 
 /* 80074B30-80074B7C       .text cutEnd__16dEvent_manager_cFi */
 void dEvent_manager_c::cutEnd(int staffIdx) {
-    /* Nonmatching */
     if (staffIdx == -1)
         return;
 
-    getFlags().flagSet(mList.getCutStaffCurrentCutP(staffIdx)->getFlagId());
+    dEvDtCut_c* cut = mList.getCutStaffCurrentCutP(staffIdx);
+    getFlags().flagSet(cut->getFlagId());
 }
 
 /* 80074B7C-80074BB0       .text getEventPrio__16dEvent_manager_cFs */
@@ -729,8 +730,33 @@ void dEvent_manager_c::setPrmStaff(void* work, int staffIdx) {
 }
 
 /* 80075288-8007537C       .text getToolId__16dEvent_manager_cFUci */
-void dEvent_manager_c::getToolId(u8, int) {
-    /* Nonmatching */
+u8 dEvent_manager_c::getToolId(u8 r4, int r31) {
+    dStage_EventInfo_c* eventInfo = dComIfGp_getStageEventInfo();
+    int r5 = r31;
+    if (r4 == 0xFF) {
+        return 0xFF;
+    }
+    if (eventInfo == NULL) {
+        return 0xFF;
+    }
+    if (r4 >= eventInfo->num) {
+        return 0xFF;
+    }
+    for (; r5 >= 0; r5--) {
+        dStage_Event_dt_c* event = &eventInfo->events[r4];
+        if (event->field_0x12 == 0xFF) {
+            if (r5 == 0) {
+                return r4;
+            }
+        } else if (r31 == event->field_0x12) {
+            return r4;
+        }
+        r4 = event->field_0x0;
+        if (r4 == 0xFF) {
+            return 0xFF;
+        }
+    }
+    return 0xFF;
 }
 
 /* 8007537C-80075394       .text __ct__13dEv_seach_prmFPCcUlUl */
@@ -742,18 +768,32 @@ dEv_seach_prm::dEv_seach_prm(const char* name, u32 mask, u32 value) {
 }
 
 /* 80075394-800753A8       .text dEv_extra_createCB__FPv */
-static void dEv_extra_createCB(void*) {
-    /* Nonmatching */
+static int dEv_extra_createCB(void* actor) {
+    fopAcM_OnStatus((fopAc_ac_c*)actor, fopAcStts_UNK800_e);
+    return 4;
 }
 
 /* 800753A8-80075450       .text dEv_talkman_get_action__Fi */
-static int dEv_talkman_get_action(int) {
-    /* Nonmatching */
+static int dEv_talkman_get_action(int param_0) {
+    static char* action_table[] = {
+        "WAIT",
+        "TALK0",
+        "TALK1",
+    };
+    int staffId = dComIfGp_evmng_getMyStaffId("TALKMAN");
+    if (staffId == -1) {
+        return -1;
+    }
+    int actIdx = dComIfGp_evmng_getMyActIdx(staffId, action_table, ARRAY_SIZE(action_table), 0, 0);
+    if (actIdx == param_0) {
+        dComIfGp_evmng_cutEnd(staffId);
+    }
+    return actIdx;
 }
 
 /* 80075450-8007548C       .text ChkPresentEnd__16dEvent_manager_cFv */
 BOOL dEvent_manager_c::ChkPresentEnd() {
-    /* Nonmatching */
+    return dEv_talkman_get_action(0) >= 1;
 }
 
 /* 8007548C-800754BC       .text CancelPresent__16dEvent_manager_cFv */
@@ -763,15 +803,44 @@ BOOL dEvent_manager_c::CancelPresent() {
 
 /* 800754BC-800754EC       .text checkStartDemo__16dEvent_manager_cFv */
 BOOL dEvent_manager_c::checkStartDemo() {
-    /* Nonmatching */
+    if (!dComIfGp_event_runCheck()) {
+        return FALSE;
+    }
+    if (mException.mEventInfoIdx == -1) {
+        return FALSE;
+    }
+    return TRUE;
 }
 
+static u8 daNpc_Tt_tact_table[] = {
+    0x00,
+    0x03,
+    0x04,
+    0x02,
+    0x01,
+};
+
 /* 800754EC-80075590       .text dEvmng_daNpc_Tt_Conv__FUc */
-void dEvmng_daNpc_Tt_Conv(u8) {
-    /* Nonmatching */
+u8 dEvmng_daNpc_Tt_Conv(u8 param_0) {
+    if (param_0 >= ARRAY_SIZE(daNpc_Tt_tact_table)) {
+        JUT_ASSERT(1814, 0);
+    }
+    for (u8 i = 0; i < ARRAY_SIZE(daNpc_Tt_tact_table); i++) {
+        if (daNpc_Tt_tact_table[i] == param_0) {
+            return i;
+        }
+    }
+    return 0;
 }
 
 /* 80075590-800755A4       .text dEvmng_daNpc_Tt_GetEvFlag__Fi */
-void dEvmng_daNpc_Tt_GetEvFlag(int) {
-    /* Nonmatching */
+u16 dEvmng_daNpc_Tt_GetEvFlag(int idx) {
+    static u16 dance_table[] = {
+        0xFD1F,
+        0xFC1F,
+        0xFB1F,
+        0xFA1F,
+        0xF91F,
+    };
+    return dance_table[idx];
 }
