@@ -39,19 +39,19 @@ namespace JASystem {
 
         u8 getNumber() { return mNumber; }
         // TODO: inlines
-        void checkSign(u32);
-        void isFree();
-        void getPriority();
-        void getStatus();
-        void getCBInterval();
-        void decCBInterval();
-        void getPriorityTime();
-        void setCBInterval(u16);
-        void setPriorityTime(u16);
-        void setPriority(u8);
-        void getLogicalChannel();
-        void forceStop(TDSPChannel*);
-        void release(TDSPChannel*, u32);
+        void checkSign(u32) {}
+        void isFree() {}
+        void getPriority() {}
+        void getStatus() {}
+        void getCBInterval() {}
+        void decCBInterval() {}
+        void getPriorityTime() {}
+        void setCBInterval(u16) {}
+        void setPriorityTime(u16) {}
+        void setPriority(u8) {}
+        void getLogicalChannel() {}
+        void forceStop(TDSPChannel*) {}
+        void release(TDSPChannel*, u32) {}
 
         /* 0x00 */ u8 mNumber;
         /* 0x01 */ u8 field_0x1;

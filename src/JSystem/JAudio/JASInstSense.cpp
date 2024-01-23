@@ -8,7 +8,6 @@
 
 /* 802868F0-80286A1C       .text getY__Q28JASystem10TInstSenseCFii */
 f32 JASystem::TInstSense::getY(int param_1, int param_2) const {
-    /* Nonmatching */
     int r6 = 0;
     switch (field_0x8) {
     case 1:
@@ -18,13 +17,15 @@ f32 JASystem::TInstSense::getY(int param_1, int param_2) const {
         r6 = param_1;
         break;
     }
+    f32 ret;
     if (field_0x9 == 0x7f || field_0x9 == 0) {
-        return field_0xc + r6 * (field_0x10 - field_0xc) / 127.0f;
+        ret = field_0xc + r6 * (field_0x10 - field_0xc) / 127.0f;
+    } else if (r6 < field_0x9) {
+        ret = field_0xc + (1.0f - field_0xc) * (r6 / (f32)field_0x9);
+    } else {
+        ret = (field_0x10 - 1.0f) * ((r6 - field_0x9) / (f32)(0x7f - field_0x9)) + 1.0f;
     }
-    if (r6 < field_0x9) {
-        return field_0xc + (1.0f - field_0xc) * r6 / field_0x9;
-    }
-    return field_0x10 - 1.0f * (r6 - field_0x9) / (0x7f - field_0x9) + 1.0f;
+    return ret;
 }
 
 /* 80286A1C-80286B58       .text setParams__Q28JASystem10TInstSenseFiiff */

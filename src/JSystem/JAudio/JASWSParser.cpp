@@ -19,7 +19,7 @@ u32 JASystem::WSParser::getGroupCount(void* stream) {
 
 /* 80286C1C-80286E38       .text createBasicWaveBank__Q28JASystem8WSParserFPv */
 JASystem::TBasicWaveBank* JASystem::WSParser::createBasicWaveBank(void* stream) {
-    /* Nonmatching */
+    TWaveArchive* archiveRaw;
     JKRHeap* heap = TWaveBank::getCurrentHeap();
     const u32 priorFreeSize = heap->getFreeSize();
     const THeader* header = (THeader*)stream;
@@ -36,7 +36,7 @@ JASystem::TBasicWaveBank* JASystem::WSParser::createBasicWaveBank(void* stream) 
         TCtrl* ctrlRaw = JSUConvertOffsetToPtr<TCtrl>(header, ctrlSceneRaw->mCtrlOffset);
         TBasicWaveBank::TWaveGroup* waveGroup = bank->getWaveGroup(groupIndex);
         TWaveArchiveBank* archiveBankRaw = JSUConvertOffsetToPtr<TWaveArchiveBank>(header, header->mArchiveBankOffset);
-        TWaveArchive* archiveRaw = JSUConvertOffsetToPtr<TWaveArchive>(header, archiveBankRaw->mArchiveOffsets[groupIndex]);
+        archiveRaw = JSUConvertOffsetToPtr<TWaveArchive>(header, archiveBankRaw->mArchiveOffsets[groupIndex]);
         waveGroup->setWaveCount(ctrlRaw->mWaveCount);
         for (int waveIndex = 0; waveIndex < ctrlRaw->mWaveCount; waveIndex++) {
             TWave* waveRaw = JSUConvertOffsetToPtr<TWave>(header, archiveRaw->mWaveOffsets[waveIndex]);
@@ -56,7 +56,7 @@ JASystem::TBasicWaveBank* JASystem::WSParser::createBasicWaveBank(void* stream) 
             info.field_0x22 = waveRaw->field_0x22;
             info.field_0x28 = waveRaw->field_0x28;
             TCtrlWave* ctrlWaveRaw = JSUConvertOffsetToPtr<TCtrlWave>(header, ctrlRaw->mCtrlWaveOffsets[waveIndex]);
-            u32 size = ctrlWaveRaw->field_0x0 & 0xFFFF;
+            u32 size = (u16)ctrlWaveRaw->field_0x0;
             waveGroup->setWaveInfo(waveIndex, size, info);
             if (maxSize < size) {
                 maxSize = size;
@@ -71,7 +71,7 @@ JASystem::TBasicWaveBank* JASystem::WSParser::createBasicWaveBank(void* stream) 
 
 /* 80286E38-80287048       .text createSimpleWaveBank__Q28JASystem8WSParserFPv */
 JASystem::TSimpleWaveBank* JASystem::WSParser::createSimpleWaveBank(void* stream) {
-    /* Nonmatching */
+    const TWaveArchive* archiveRaw;
     JKRHeap* heap = TWaveBank::getCurrentHeap();
     const u32 priorFreeSize = heap->getFreeSize();
     const THeader* header = (THeader*)stream;
@@ -88,7 +88,7 @@ JASystem::TSimpleWaveBank* JASystem::WSParser::createSimpleWaveBank(void* stream
     const TCtrlScene* ctrlSceneRaw = JSUConvertOffsetToPtr<TCtrlScene>(header, ctrlGroupRaw->mCtrlSceneOffsets[0]);
     const TCtrl* ctrlRaw = JSUConvertOffsetToPtr<TCtrl>(header, ctrlSceneRaw->mCtrlOffset);
     const TWaveArchiveBank* archiveBankRaw = JSUConvertOffsetToPtr<TWaveArchiveBank>(header, header->mArchiveBankOffset);
-    const TWaveArchive* archiveRaw = JSUConvertOffsetToPtr<TWaveArchive>(header, archiveBankRaw->mArchiveOffsets[0]);
+    archiveRaw = JSUConvertOffsetToPtr<TWaveArchive>(header, archiveBankRaw->mArchiveOffsets[0]);
     for (int waveIndex = 0; waveIndex < ctrlRaw->mWaveCount; waveIndex++) {
         TCtrlWave* ctrlWaveRaw = JSUConvertOffsetToPtr<TCtrlWave>(header, ctrlRaw->mCtrlWaveOffsets[waveIndex]);
         u32 size = ctrlWaveRaw->field_0x0 & 0xFFFF;
@@ -100,8 +100,9 @@ JASystem::TSimpleWaveBank* JASystem::WSParser::createSimpleWaveBank(void* stream
     for (int waveIndex = 0; waveIndex < ctrlRaw->mWaveCount; waveIndex++) {
         TWave* waveRaw = JSUConvertOffsetToPtr<TWave>(header, archiveRaw->mWaveOffsets[waveIndex]);
         TWaveInfo info;
-        info.mBlockType = waveRaw->field_0x1;
-        info.field_0x1 = waveRaw->field_0x2;
+        info.mBlockType = waveRaw->field_0x0;
+        info.field_0x1 = waveRaw->field_0x1;
+        info.field_0x2 = waveRaw->field_0x2;
         info.field_0x4 = waveRaw->field_0x4;
         info.mWavePtrOffs = waveRaw->mOffset;
         info.field_0xc = waveRaw->field_0xc;
@@ -111,8 +112,11 @@ JASystem::TSimpleWaveBank* JASystem::WSParser::createSimpleWaveBank(void* stream
         info.field_0x1c = waveRaw->field_0x1c;
         info.field_0x20 = waveRaw->field_0x20;
         info.field_0x22 = waveRaw->field_0x22;
-        TCtrlWave* ctrlWaveRaw = JSUConvertOffsetToPtr<TCtrlWave>(header, ctrlRaw->mCtrlWaveOffsets[waveIndex]);
-        bank->setWaveInfo(ctrlWaveRaw->field_0x0 & 0xFFFF, info);
+        info.field_0x28 = waveRaw->field_0x28;
+        bank->setWaveInfo(
+            (u16)JSUConvertOffsetToPtr<TCtrlWave>(header, ctrlRaw->mCtrlWaveOffsets[waveIndex])->field_0x0,
+            info
+        );
     }
     bank->setFileName(archiveRaw->mFileName);
     sUsedHeapSize += priorFreeSize - heap->getFreeSize();

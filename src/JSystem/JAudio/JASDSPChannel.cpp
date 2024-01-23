@@ -27,11 +27,11 @@ void JASystem::TDSPChannel::init(u8 param_1) {
 
 /* 80289694-80289720       .text allocate__Q28JASystem11TDSPChannelFUl */
 int JASystem::TDSPChannel::allocate(u32 param_1) {
-    /* Nonmatching */
     if (field_0x1 != 1) {
         return false;
     }
-    if (field_0x8 == 0) {
+    BOOL r0 = (field_0x8 == 0) ? TRUE : FALSE;
+    if (!r0) {
         OSReport("sign %x があるのにCH.%d はFREE\n", field_0x8, mNumber);
     }
     field_0x1 = 0;
@@ -113,14 +113,14 @@ int JASystem::TDSPChannel::smnFree = 64;
 
 /* 80289994-80289A54       .text alloc__Q28JASystem11TDSPChannelFUlUl */
 JASystem::TDSPChannel* JASystem::TDSPChannel::alloc(u32 param_1, u32 param_2) {
-    /* Nonmatching */
     if (param_1) {
         OSReport("----- JASDSPChannel::alloc : 多チャネルモードはサポートされていません\n");
         return NULL;
     }
     int i = 0;
     do {
-        if (DSPCH[i].field_0x1 == 1 && DSPCH[i].allocate(param_2)) {
+        BOOL r0 = DSPCH[i].field_0x1 == 1 ? TRUE : FALSE;
+        if (r0 && DSPCH[i].allocate(param_2)) {
             smnFree--;
             smnUse++;
             return &DSPCH[i];
@@ -242,18 +242,20 @@ bool JASystem::TDSPChannel::breakLowerActive(u8 param_1) {
     return true;
 }
 
-OSTick JASystem::history[10];
+OSTick JASystem::history[10] = { 1000000, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 OSTick JASystem::old_time;
 f32 JASystem::DSP_LIMIT_RATIO = 1.1f;
 
 /* 80289E68-8028A04C       .text updateAll__Q28JASystem11TDSPChannelFv */
 void JASystem::TDSPChannel::updateAll() {
-    /* Nonmatching */
+    /* Nonmatching - instruction ordering, maybe inline related */
+    DSPInterface::DSPBuffer* dspBuffer;
     if (Kernel::getSubFrames() <= 10) {
         OSTick time = OSGetTick();
+        u32 var2;
         OSTick var3 = time - old_time;
         old_time = time;
-        u32 var2 = Kernel::getSubFrames() - TAudioThread::snIntCount;
+        var2 = Kernel::getSubFrames() - TAudioThread::snIntCount;
         history[var2] = var3;
         if (var2) {
             if (f32(history[0]) / var3 < DSP_LIMIT_RATIO) {
@@ -266,8 +268,8 @@ void JASystem::TDSPChannel::updateAll() {
         if ((i & 0x0f) == 0 && i != 0) {
             DSPReleaseHalt2(i - 1 >> 4);
         }
-        TDSPChannel* dspChannel = DSPCH + i;
-        DSPInterface::DSPBuffer* dspBuffer = dspChannel->field_0xc;
+        dspBuffer = DSPCH[i].field_0xc;
+        TDSPChannel* dspChannel = &DSPCH[i];
         if (dspChannel->field_0x1 == 1) {
             continue;
         }

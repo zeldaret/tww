@@ -18,6 +18,7 @@ u32 JASystem::BNKParser::sUsedHeapSize;
 
 /* 802870F0-802879A0       .text createBasicBank__Q28JASystem9BNKParserFPv */
 JASystem::TBasicBank* JASystem::BNKParser::createBasicBank(void* stream) {
+    /* Nonmatching - regswap */
     JKRHeap* heap = TBank::getCurrentHeap();
     const u32 freeSize = heap->getFreeSize();
     THeader* header = (THeader*)stream;
@@ -47,7 +48,7 @@ JASystem::TBasicBank* JASystem::BNKParser::createBasicBank(void* stream) {
                         osc->field_0x4 = oscRaw->field_0x4;
                         s16* oscTable = JSUConvertOffsetToPtr<s16>(header, oscRaw->field_0x8);
                         if (oscTable != NULL) {
-                            u32 tableLength = getOscTableEndPtr(oscTable) - oscTable;
+                            s32 tableLength = getOscTableEndPtr(oscTable) - oscTable;
                             osc->table = new (heap, 0) s16[tableLength];
                             JUT_ASSERT(82, osc->table != 0);
                             Calc::bcopy(oscTable, osc->table, tableLength * sizeof(s16));
@@ -56,10 +57,10 @@ JASystem::TBasicBank* JASystem::BNKParser::createBasicBank(void* stream) {
                         }
                         oscTable = JSUConvertOffsetToPtr<s16>(header, oscRaw->field_0xC);
                         if (oscTable != NULL) {
-                            u32 tableLength = getOscTableEndPtr(oscTable) - oscTable;
+                            s32 tableLength = getOscTableEndPtr(oscTable) - oscTable;
                             osc->rel_table = new (heap, 0) s16[tableLength];
                             JUT_ASSERT(94, osc->rel_table != 0);
-                            Calc::bcopy(oscTable, osc->rel_table, tableLength);
+                            Calc::bcopy(oscTable, osc->rel_table, tableLength * sizeof(s16));
                         } else {
                             osc->rel_table = NULL;
                         }
