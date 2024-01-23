@@ -3,12 +3,80 @@
 // Translation Unit: d_s_menu.cpp
 //
 
-#include "d_s_menu.h"
-#include "dolphin/types.h"
+#include "d/d_s_menu.h"
+#include "JSystem/JFramework/JFWDisplay.h"
+#include "JSystem/JFramework/JFWSystem.h"
+#include "JSystem/JKernel/JKRHeap.h"
+#include "JSystem/JUtility/JUTDbPrint.h"
+#include "JSystem/JUtility/JUTReport.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_com_lib_game.h"
+#include "d/d_procname.h"
+#include "f_ap/f_ap_game.h"
+#include "m_Do/m_Do_dvd_thread.h"
+#include "m_Do/m_Do_graphic.h"
+#include "m_Do/m_Do_main.h"
+
+s32 l_startID;
+s32 l_cursolID;
+s32 l_timepat;
+s16 l_weekpat;
+s16 l_demo23;
+u8* l_groupPoint;
+u8 l_languageType;
 
 /* 8022E9F4-8022ED50       .text dScnMenu_Draw__FP19menu_of_scene_class */
-void dScnMenu_Draw(menu_of_scene_class*) {
+BOOL dScnMenu_Draw(menu_of_scene_class* i_this) {
     /* Nonmatching */
+    JUTReport(300, 50, "メニュー");
+    if (i_this->field_0x1e0) {
+        JUTReport(400, 50,"<%d>", i_this->field_0x1e0 - 1);
+    }
+    menu_of_scene_class::info1_s* r30 = i_this->info;
+    int r29 = 70;
+    int r4 = l_cursolID - l_startID;
+    u8 r3 = r30->field_0x0;
+    int r31 = r3 < 20 ? r3 : 20;
+    if (r4 < 5) {
+        l_startID += r4 - 5;
+        if (l_startID < 0) {
+            l_startID = 0;
+        }
+    } else if (r4 > 15) {
+        int r5 = r3 - 20;
+        if (r5 < 0) {
+            r5 = 0;
+        }
+        l_startID += r4 - 15;
+        if (l_startID > r5) {
+            l_startID = r5;
+        }
+    }
+    int r26 = l_startID;
+    for (int i = 0; i < r31; i++, r29 += 16) {
+        int r6 = l_cursolID == r26 ? 79 : 32;
+        menu_of_scene_class::info2_s* r8 = r30->field_0x4 + i;
+        JUTReport(20, r29, "%c %2d %s　＜%s＞", r6, r26, r8, r8->field_0x24 + l_groupPoint[i] * 0x2c);
+    }
+    JUTReport(280,400,"Ｘ：進む　Ｙ：戻る");
+    char* local_3c[] = {"通常", "高速経過", "朝（あさ）に固定", "昼（ひる）に固定", "夕方（ゆうがた）に固定", "夜（よる）に固定", "時に固定"};
+    char* local_58[] = {"日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"};
+    if (l_timepat >= 6) {
+        JUTReport(280, 420, "時刻：%d%s", l_timepat + -6, local_3c[6]);
+    } else {
+        JUTReport(280, 420, "時刻：%s", local_3c[l_timepat]);
+    }
+    JUTReport(40, 420, "十字右：進む　十字左：戻る");
+    JUTReport(200, 400, "曜日：%s", local_58[l_weekpat]);
+    static const char* language[] = {"ENGLISH", "GERMAN", "FRENCH", "SPANISH", "ITALIAN"};
+    JUTReport(40, 440, "%s", language[g_dComIfG_gameInfo.play.mGameLanguage]);
+    if (dComIfGs_isEventBit(0x2d01)) {
+        JUTReport(400, 420, "３コン（Ａ）:デモ２３　ＯＮ");
+    } else {
+        JUTReport(400, 420, "３コン（Ａ）:デモ２３　ＯＦＦ");
+    }
+    JUTReport(36, 40, "NDEBUG %s %s", mDoMain::COPYDATE_STRING, "FINAL");
+    return true;
 }
 
 /* 8022ED50-8022F318       .text dScnMenu_Execute__FP19menu_of_scene_class */
@@ -17,72 +85,105 @@ void dScnMenu_Execute(menu_of_scene_class*) {
 }
 
 /* 8022F318-8022F320       .text dScnMenu_IsDelete__FP19menu_of_scene_class */
-void dScnMenu_IsDelete(menu_of_scene_class*) {
-    /* Nonmatching */
+BOOL dScnMenu_IsDelete(menu_of_scene_class*) {
+    return true;
 }
 
 /* 8022F320-8022F3C4       .text dScnMenu_Delete__FP19menu_of_scene_class */
-void dScnMenu_Delete(menu_of_scene_class*) {
+BOOL dScnMenu_Delete(menu_of_scene_class* i_this) {
     /* Nonmatching */
+    JUTDbPrint::getManager()->changeFont(JFWSystem::systemFont);
+    delete i_this->field_0x1dc;
+    i_JKRFree(i_this->info);
+    i_JKRFree(i_this->field_0x1d8);
+    g_HIO.mDisplayFlag &= ~2;
+    dComIfGs_setRestartOption(0);
+    return true;
 }
 
 /* 8022F3C4-8022F4B0       .text phase_1__FP19menu_of_scene_class */
-void phase_1(menu_of_scene_class*) {
+s32 phase_1(menu_of_scene_class* i_this) {
     /* Nonmatching */
+    i_this->command = mDoDvdThd_toMainRam_c::create("/res/Menu/Menu1.dat", 0, NULL);
+    JUT_ASSERT(732, i_this->command != 0);
+    i_this->fontCommand = mDoDvdThd_toMainRam_c::create("/res/Menu/kanfont_fix16.bfn", 0, NULL);
+    JUT_ASSERT(735, i_this->fontCommand != 0);
+    return cPhs_NEXT_e;
 }
 
 /* 8022F4B0-8022F70C       .text phase_2__FP19menu_of_scene_class */
-void phase_2(menu_of_scene_class*) {
+s32 phase_2(menu_of_scene_class* i_this) {
     /* Nonmatching */
+    if (!i_this->command->sync() || !i_this->fontCommand->sync()) {
+        return cPhs_INIT_e;
+    }
+    i_this->info = (menu_of_scene_class::info1_s*)i_this->command->getMemAddress();
+    JUT_ASSERT(779, i_this->info != 0);
+    delete i_this->command;
+    menu_of_scene_class::info1_s* info = i_this->info;
+    info->field_0x4 = (menu_of_scene_class::info2_s*)(u32(info->field_0x4) + u32(info));
+    for (int i = 0; i < info->field_0x0; i++) {
+        info->field_0x4[i].field_0x24 = (u8*)info + u32(info->field_0x4[i].field_0x24);
+    }
+    if (!l_groupPoint) {
+        l_groupPoint = new u8[info->field_0x0];
+        JUT_ASSERT(792, l_groupPoint != 0);
+        for (int i = 0; i < info->field_0x0; i++) {
+            l_groupPoint[i] = 0;
+        }
+    }
+    i_this->field_0x1d8 = (ResFONT*)i_this->fontCommand->getMemAddress();
+    delete i_this->fontCommand;
+    if (i_this->field_0x1d8) {
+        i_this->field_0x1dc = new myFontClass(i_this->field_0x1d8, NULL);
+        if (i_this->field_0x1dc) {
+            JUTDbPrint::getManager()->changeFont(i_this->field_0x1dc);
+        }
+    }
+    JFWDisplay::getManager()->setTickRate(OS_TIMER_CLOCK / 60);
+    mDoGph_gInf_c::setBackColor(g_clearColor);
+    g_HIO.mDisplayFlag |= 2;
+    return cPhs_COMPLEATE_e;
 }
 
 /* 8022F70C-8022F748       .text dScnMenu_Create__FP11scene_class */
-void dScnMenu_Create(scene_class*) {
-    /* Nonmatching */
+s32 dScnMenu_Create(scene_class* i_scn) {
+    static cPhs__Handler l_method[] = {
+        (cPhs__Handler)phase_1,
+        (cPhs__Handler)phase_2,
+    };
+    menu_of_scene_class* i_this = (menu_of_scene_class *)i_scn;
+    l_languageType = g_dComIfG_gameInfo.play.mGameLanguage;
+    return dComLbG_PhaseHandler(&i_this->mPhs, l_method, i_this);
 }
 
 /* 8022F748-8022F7A8       .text __dt__11myFontClassFv */
-myFontClass::~myFontClass() {
-    /* Nonmatching */
-}
+myFontClass::~myFontClass() {}
 
 /* 8022F7A8-8022F7CC       .text drawChar_scale__11myFontClassFffffib */
-void myFontClass::drawChar_scale(float, float, float, float, int, bool) {
+f32 myFontClass::drawChar_scale(f32 param_1, f32 param_2, f32 param_3, f32 param_4, int param_5, bool param_6) {
     /* Nonmatching */
+    JUTResFont::drawChar_scale(param_1, param_2, 12.0f, param_4, param_5, param_6);
 }
 
-/* 8022F7CC-8022F7D4       .text getResFont__10JUTResFontCFv */
-void JUTResFont::getResFont() const {
-    /* Nonmatching */
-}
+scene_method_class l_dScnMenu_Method = {
+    (process_method_func)dScnMenu_Create,
+    (process_method_func)dScnMenu_Delete,
+    (process_method_func)dScnMenu_Execute,
+    (process_method_func)dScnMenu_IsDelete,
+    (process_method_func)dScnMenu_Draw,
+};
 
-/* 8022F7D4-8022F7E0       .text getFontType__10JUTResFontCFv */
-void JUTResFont::getFontType() const {
-    /* Nonmatching */
-}
-
-/* 8022F7E0-8022F7EC       .text getLeading__10JUTResFontCFv */
-void JUTResFont::getLeading() const {
-    /* Nonmatching */
-}
-
-/* 8022F7EC-8022F7F8       .text getWidth__10JUTResFontCFv */
-void JUTResFont::getWidth() const {
-    /* Nonmatching */
-}
-
-/* 8022F7F8-8022F804       .text getAscent__10JUTResFontCFv */
-void JUTResFont::getAscent() const {
-    /* Nonmatching */
-}
-
-/* 8022F804-8022F810       .text getDescent__10JUTResFontCFv */
-void JUTResFont::getDescent() const {
-    /* Nonmatching */
-}
-
-/* 8022F810-8022F86C       .text getHeight__10JUTResFontCFv */
-void JUTResFont::getHeight() const {
-    /* Nonmatching */
-}
-
+scene_process_profile_definition g_profile_MENU_SCENE = {
+    fpcLy_ROOT_e,
+    1,
+    fpcPi_CURRENT_e,
+    PROC_MENU_SCENE,
+    &g_fpcNd_Method.mBase,
+    sizeof(menu_of_scene_class),
+    0,
+    0,
+    &g_fopScn_Method.mBase,
+    &l_dScnMenu_Method,
+    NULL,
+};

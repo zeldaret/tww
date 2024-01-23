@@ -14,16 +14,16 @@ public:
     virtual void setGX();
     virtual void setGX(JUtility::TColor, JUtility::TColor);
     virtual f32 drawChar_scale(f32, f32, f32, f32, int, bool);
+    virtual const ResFONT* getResFont() const { return mResFont; }
+    virtual int getFontType() const { return mInfoBlock->fontType; }
     virtual int getLeading() const { return mInfoBlock->leading; }
+    virtual s32 getWidth() const { return mInfoBlock->width; }
     virtual s32 getAscent() const { return mInfoBlock->ascent; }
     virtual s32 getDescent() const { return mInfoBlock->descent; }
     virtual s32 getHeight() const { return getAscent() + getDescent(); }
-    virtual s32 getWidth() const { return mInfoBlock->width; }
     virtual void getWidthEntry(int, JUTFont::TWidth*) const;
     virtual int getCellWidth() const;
     virtual s32 getCellHeight() const;
-    virtual int getFontType() const { return mInfoBlock->fontType; }
-    virtual const ResFONT* getResFont() const { return mResFont; }
     virtual bool isLeadByte(int) const;
     virtual void loadImage(int, _GXTexMapID);
     virtual void setBlock();
