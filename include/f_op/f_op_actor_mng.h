@@ -62,10 +62,9 @@ struct fopAcM_search4ev_prm {
 };
 
 struct fopAcM_search_prm {
-    /* 0x00 */ u32 mParam0;
-    /* 0x04 */ u32 mParam1;
-    /* 0x08 */ s16 mProcName;
-    /* 0x0A */ s8 mSubType;
+    /* 0x00 */ const char * mpProcName;
+    /* 0x04 */ u32 mParamMask;
+    /* 0x08 */ u32 mParameter;
 };
 
 class l_HIO {
@@ -306,15 +305,31 @@ inline int fopAcM_GetCullSize(fopAc_ac_c* i_actor) {
 }
 
 inline BOOL fopAcM_CULLSIZE_IS_BOX(int i_culltype) {
-    return (i_culltype >= 0 && i_culltype < 14) || i_culltype == 14;
+    return (i_culltype >= fopAc_CULLBOX_0_e && i_culltype < fopAc_CULLBOX_CUSTOM_e) || i_culltype == fopAc_CULLBOX_CUSTOM_e;
 }
 
-inline Vec fopAcM_getCullSizeSphereCenter(fopAc_ac_c* i_actor) {
-    return i_actor->mCull.mSphere.mCenter;
+inline int fopAcM_CULLSIZE_IDX(int i_culltype) {
+    return i_culltype - fopAc_CULLBOX_0_e;
+}
+
+inline int fopAcM_CULLSIZE_Q_IDX(int i_culltype) {
+    return i_culltype - fopAc_CULLSPHERE_0_e;
+}
+
+inline cXyz* fopAcM_getCullSizeSphereCenter(fopAc_ac_c* i_actor) {
+    return (cXyz*)&i_actor->mCull.mSphere.mCenter;
 }
 
 inline f32 fopAcM_getCullSizeSphereR(fopAc_ac_c* i_actor) {
     return i_actor->mCull.mSphere.mRadius;
+}
+
+inline cXyz* fopAcM_getCullSizeBoxMax(fopAc_ac_c* actor) {
+    return (cXyz*)&actor->mCull.mBox.mMax;
+}
+
+inline cXyz* fopAcM_getCullSizeBoxMin(fopAc_ac_c* actor) {
+    return (cXyz*)&actor->mCull.mBox.mMin;
 }
 
 inline void dComIfGs_onSwitch(int i_no, int i_roomNo);
@@ -614,8 +629,6 @@ inline void fopAcM_offDraw(fopAc_ac_c* actor) {
     fopDwTg_DrawQTo(&actor->mDwTg);
 }
 
-inline void fopAcM_getCullSizeBoxMax(fopAc_ac_c*) {}
-inline void fopAcM_getCullSizeBoxMin(fopAc_ac_c*) {}
 inline void fopAcM_monsSeStart(fopAc_ac_c*, unsigned long, Vec*, unsigned long) {}
 inline void fopAcM_getNameString(fopAc_ac_c*, char*) {}
 inline void fopAcM_orderOtherEvent(fopAc_ac_c*, char*, unsigned short) {}

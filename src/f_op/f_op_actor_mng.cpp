@@ -50,7 +50,7 @@ s32 fopAcM_SearchByID(unsigned int actorID, fopAc_ac_c** pDstActor) {
     if (fpcM_IsCreating(actorID)) {
         *pDstActor = NULL;
     } else {
-        fopAc_ac_c *pActor = (fopAc_ac_c *) fopAcIt_Judge((fopAcIt_JudgeFunc)fpcSch_JudgeByID, &actorID);
+        fopAc_ac_c *pActor = fopAcM_Search((fopAcIt_JudgeFunc)fpcSch_JudgeByID, &actorID);
         *pDstActor = pActor;
         if (*pDstActor == NULL)
             return 0;
@@ -61,7 +61,7 @@ s32 fopAcM_SearchByID(unsigned int actorID, fopAc_ac_c** pDstActor) {
 
 /* 80024230-800242AC       .text fopAcM_SearchByName__FsPP10fopAc_ac_c */
 s32 fopAcM_SearchByName(s16 procName, fopAc_ac_c** pDstActor) {
-    *pDstActor = (fopAc_ac_c*) fopAcIt_Judge((fopAcIt_JudgeFunc)fpcSch_JudgeForPName, &procName);
+    *pDstActor = fopAcM_Search((fopAcIt_JudgeFunc)fpcSch_JudgeForPName, &procName);
     if (*pDstActor == NULL) {
         return 0;
     } else {
@@ -572,11 +572,11 @@ static void dummy() {
 /* 80025660-800259A8       .text fopAcM_cullingCheck__FP10fopAc_ac_c */
 s32 fopAcM_cullingCheck(fopAc_ac_c* i_this) {
     MtxP pMtx;
-    if (i_this->mCullMtx == NULL) {
+    if (fopAcM_GetMtx(i_this) == NULL) {
         pMtx = j3dSys.getViewMtx();
     } else {
         Mtx mtx;
-        cMtx_concat(j3dSys.getViewMtx(), i_this->mCullMtx, mtx);
+        cMtx_concat(j3dSys.getViewMtx(), fopAcM_GetMtx(i_this), mtx);
         pMtx = mtx;
     }
 
@@ -585,24 +585,18 @@ s32 fopAcM_cullingCheck(fopAc_ac_c* i_this) {
         cullFar *= dComIfGp_event_getCullRate();
     }
 
-    int cullType = fopAcM_GetCullSize(i_this);
-    bool isBox = false;
-    if ((cullType >= 0 && cullType < fopAc_CULLBOX_CUSTOM_e) || cullType == fopAc_CULLBOX_CUSTOM_e) {
-        isBox = true;
-    }
-
-    if (isBox) {
-        if (cullType == fopAc_CULLBOX_CUSTOM_e) {
+    if (fopAcM_CULLSIZE_IS_BOX(fopAcM_GetCullSize(i_this))) {
+        if (fopAcM_GetCullSize(i_this) == fopAc_CULLBOX_CUSTOM_e) {
             if (fopAcM_getCullSizeFar(i_this) > 0.0f) {
                 mDoLib_clipper::changeFar(cullFar * mDoLib_clipper::getFar());
-                s32 ret = mDoLib_clipper::clip(pMtx, &i_this->mCull.mBox.mMax, &i_this->mCull.mBox.mMin);
+                s32 ret = mDoLib_clipper::clip(pMtx, fopAcM_getCullSizeBoxMax(i_this), fopAcM_getCullSizeBoxMin(i_this));
                 mDoLib_clipper::resetFar();
                 return ret;
             } else {
-                return mDoLib_clipper::clip(pMtx, &i_this->mCull.mBox.mMax, &i_this->mCull.mBox.mMin);
+                return mDoLib_clipper::clip(pMtx, fopAcM_getCullSizeBoxMax(i_this), fopAcM_getCullSizeBoxMin(i_this));
             }
         } else {
-            fopAc_cullSizeBox& cullBox = l_cullSizeBox[cullType];
+            fopAc_cullSizeBox& cullBox = l_cullSizeBox[fopAcM_CULLSIZE_IDX(fopAcM_GetCullSize(i_this))];
             if (fopAcM_getCullSizeFar(i_this) > 0.0f) {
                 mDoLib_clipper::changeFar(cullFar * mDoLib_clipper::getFar());
                 s32 ret = mDoLib_clipper::clip(pMtx, &cullBox.mMax, &cullBox.mMin);
@@ -613,26 +607,24 @@ s32 fopAcM_cullingCheck(fopAc_ac_c* i_this) {
             }
         }
     } else { // Sphere
-        if (cullType == fopAc_CULLSPHERE_CUSTOM_e) {
+        if (fopAcM_GetCullSize(i_this) == fopAc_CULLSPHERE_CUSTOM_e) {
             if (fopAcM_getCullSizeFar(i_this) > 0.0f) {
                 mDoLib_clipper::changeFar(cullFar * mDoLib_clipper::getFar());
-                f32 radius = i_this->mCull.mSphere.mRadius;
-                Vec center = i_this->mCull.mSphere.mCenter;
-                Vec unusedCenter = center;
+                f32 radius = fopAcM_getCullSizeSphereR(i_this);
+                Vec center = *fopAcM_getCullSizeSphereCenter(i_this);
                 s32 ret = mDoLib_clipper::clip(pMtx, center, radius);
                 mDoLib_clipper::resetFar();
                 return ret;
             } else {
-                f32 radius = i_this->mCull.mSphere.mRadius;
-                return mDoLib_clipper::clip(pMtx, i_this->mCull.mSphere.mCenter, radius);
+                f32 radius = fopAcM_getCullSizeSphereR(i_this);
+                return mDoLib_clipper::clip(pMtx, *fopAcM_getCullSizeSphereCenter(i_this), radius);
             }
         } else {
-            fopAc_cullSizeSphere& cullSphere = l_cullSizeSphere[cullType - fopAc_CULLSPHERE_0_e];
+            fopAc_cullSizeSphere& cullSphere = l_cullSizeSphere[fopAcM_CULLSIZE_Q_IDX(fopAcM_GetCullSize(i_this))];
             if (fopAcM_getCullSizeFar(i_this) > 0.0f) {
                 mDoLib_clipper::changeFar(cullFar * mDoLib_clipper::getFar());
                 f32 radius = cullSphere.mRadius;
                 Vec center = cullSphere.mCenter;
-                Vec unusedCenter = center;
                 s32 ret = mDoLib_clipper::clip(pMtx, center, radius);
                 mDoLib_clipper::resetFar();
                 return ret;
@@ -1268,7 +1260,7 @@ fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo) {
 /* 80027A9C-80027B24       .text fopAcM_createDisappear__FP10fopAc_ac_cP4cXyzUcUcUc */
 s32 fopAcM_createDisappear(fopAc_ac_c* i_actor, cXyz* p_pos, u8 i_scale, u8 i_health, u8 i_itemBitNo) {
     u32 params = (i_itemBitNo & 0xFF) << 0x10 | (i_scale & 0xFF) << 0x08 | i_health & 0xFF;
-    fopAc_ac_c* disappear = (fopAc_ac_c*)fopAcM_fastCreate(PROC_DISAPPEAR, params, p_pos, fopAcM_GetRoomNo(i_actor), &i_actor->current.angle);
+    fopAc_ac_c* disappear = (fopAc_ac_c*)fopAcM_fastCreate(PROC_DISAPPEAR, params, p_pos, fopAcM_GetRoomNo(i_actor), fopAcM_GetAngle_p(i_actor));
     if (disappear) {
         disappear->mItemTableIdx = i_actor->mItemTableIdx;
     }
@@ -1286,13 +1278,13 @@ BOOL fopAcM_getGroundAngle(fopAc_ac_c* actor, csXyz* p_angle) {
     pos.y = dComIfG_Bgsp()->GroundCross(&gndChk);
     s16 targetAngleX;
     int targetAngleZ;
-    if (pos.y != -1e09f) {
+    if (pos.y != -1e9f) {
         f32 origY = pos.y + 50.0f;
         gndChk.GetPointP()->set(pos.x, origY, pos.z + 10.0f);
         f32 origX = gndChk.GetPointP()->x;
         f32 origZ = gndChk.GetPointP()->z;
         f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
-        if (groundY != -1e09f) {
+        if (groundY != -1e9f) {
             targetAngleX = -cM_atan2s(groundY - pos.y, origZ - pos.z);
         } else {
             pos.y = pos.y; // ?? fakematch?
@@ -1304,7 +1296,7 @@ BOOL fopAcM_getGroundAngle(fopAc_ac_c* actor, csXyz* p_angle) {
         f32 tempZ = pos.z;
         gndChk.GetPointP()->set(origX, origY, tempZ);
         groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
-        if (groundY != -1e09f) {
+        if (groundY != -1e9f) {
             targetAngleZ = cM_atan2s(groundY - pos.y, origX - pos.x);
         } else {
             ret = FALSE;
@@ -1376,15 +1368,9 @@ const char * fopAcM_getProcNameString(fopAc_ac_c* i_this) {
     return "UNKOWN";
 }
 
-struct findObjectCBParam {
-    const char * mpProcName;
-    u32 mParamMask;
-    u32 mParameter;
-};
-
 /* 8002833C-80028410       .text fopAcM_findObjectCB__FP10fopAc_ac_cPv */
 fopAc_ac_c* fopAcM_findObjectCB(fopAc_ac_c* it, void* i_prm) {
-    findObjectCBParam* Prm = (findObjectCBParam*)i_prm;
+    fopAcM_search_prm* Prm = (fopAcM_search_prm*)i_prm;
     JUT_ASSERT(4095, Prm);
 
     dStage_objectNameInf *inf = dStage_searchName(Prm->mpProcName);
@@ -1399,11 +1385,11 @@ fopAc_ac_c* fopAcM_findObjectCB(fopAc_ac_c* it, void* i_prm) {
 
 /* 80028410-80028448       .text fopAcM_searchFromName__FPcUlUl */
 fopAc_ac_c* fopAcM_searchFromName(char* pProcName, u32 paramMask, u32 parameter) {
-    findObjectCBParam param;
+    fopAcM_search_prm param;
     param.mpProcName = pProcName;
     param.mParamMask = paramMask;
     param.mParameter = parameter;
-    return (fopAc_ac_c*)fopAcIt_Judge((fopAcIt_JudgeFunc)fopAcM_findObjectCB, &param);
+    return fopAcM_Search((fopAcIt_JudgeFunc)fopAcM_findObjectCB, &param);
 }
 
 /* 80028448-80028560       .text fopAcM_getWaterY__FPC4cXyzPf */
@@ -1419,7 +1405,7 @@ s32 fopAcM_getWaterY(const cXyz* pPos, f32* pDstWaterY) {
     pos.z = pPos->z;
     water_check.Set(pos, pos.y + 1000.0f);
 
-    bool hit = dComIfG_Bgsp()->SplGrpChk(&water_check);
+    bool hit = dComIfG_Bgsp()->WaterChk(&water_check);
     if (hit) {
         *pDstWaterY = water_check.GetHeight();
         ret = 1;
