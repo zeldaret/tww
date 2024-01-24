@@ -80,7 +80,7 @@ void* deleteJugge(void* i_this, void*) {
 /* 80236A38-80236B1C       .text objectSetCheck__FP19room_of_scene_class */
 void objectSetCheck(room_of_scene_class* i_this) {
     s32 roomNo = fopScnM_GetParam(i_this);
-    s32 hiddenFlag = (g_dComIfG_gameInfo.play.getRoomControl()->mStatus[roomNo].mFlags & 0x08);
+    s32 hiddenFlag = dComIfGp_roomControl_checkStatusFlag(roomNo, 0x08);
 
     if (!i_this->mbReLoaded) {
         if (!hiddenFlag) {

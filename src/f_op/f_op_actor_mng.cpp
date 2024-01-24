@@ -594,59 +594,51 @@ s32 fopAcM_cullingCheck(fopAc_ac_c* i_this) {
     if (isBox) {
         if (cullType == fopAc_CULLBOX_CUSTOM_e) {
             if (fopAcM_getCullSizeFar(i_this) > 0.0f) {
-                mDoLib_clipper::mClipper.setFar(cullFar * mDoLib_clipper::mSystemFar);
-                mDoLib_clipper::mClipper.calcViewFrustum();
-                s32 ret = mDoLib_clipper::mClipper.clip(pMtx, &i_this->mCull.mBox.mMax, &i_this->mCull.mBox.mMin);
-                mDoLib_clipper::mClipper.setFar(mDoLib_clipper::mSystemFar);
-                mDoLib_clipper::mClipper.calcViewFrustum();
+                mDoLib_clipper::changeFar(cullFar * mDoLib_clipper::getFar());
+                s32 ret = mDoLib_clipper::clip(pMtx, &i_this->mCull.mBox.mMax, &i_this->mCull.mBox.mMin);
+                mDoLib_clipper::resetFar();
                 return ret;
             } else {
-                return mDoLib_clipper::mClipper.clip(pMtx, &i_this->mCull.mBox.mMax, &i_this->mCull.mBox.mMin);
+                return mDoLib_clipper::clip(pMtx, &i_this->mCull.mBox.mMax, &i_this->mCull.mBox.mMin);
             }
         } else {
             fopAc_cullSizeBox& cullBox = l_cullSizeBox[cullType];
             if (fopAcM_getCullSizeFar(i_this) > 0.0f) {
-                mDoLib_clipper::mClipper.setFar(cullFar * mDoLib_clipper::mSystemFar);
-                mDoLib_clipper::mClipper.calcViewFrustum();
-                s32 ret = mDoLib_clipper::mClipper.clip(pMtx, &cullBox.mMax, &cullBox.mMin);
-                mDoLib_clipper::mClipper.setFar(mDoLib_clipper::mSystemFar);
-                mDoLib_clipper::mClipper.calcViewFrustum();
+                mDoLib_clipper::changeFar(cullFar * mDoLib_clipper::getFar());
+                s32 ret = mDoLib_clipper::clip(pMtx, &cullBox.mMax, &cullBox.mMin);
+                mDoLib_clipper::resetFar();
                 return ret;
             } else {
-                return mDoLib_clipper::mClipper.clip(pMtx, &cullBox.mMax, &cullBox.mMin);
+                return mDoLib_clipper::clip(pMtx, &cullBox.mMax, &cullBox.mMin);
             }
         }
     } else { // Sphere
         if (cullType == fopAc_CULLSPHERE_CUSTOM_e) {
             if (fopAcM_getCullSizeFar(i_this) > 0.0f) {
-                mDoLib_clipper::mClipper.setFar(cullFar * mDoLib_clipper::mSystemFar);
-                mDoLib_clipper::mClipper.calcViewFrustum();
+                mDoLib_clipper::changeFar(cullFar * mDoLib_clipper::getFar());
                 f32 radius = i_this->mCull.mSphere.mRadius;
                 Vec center = i_this->mCull.mSphere.mCenter;
                 Vec unusedCenter = center;
-                s32 ret = mDoLib_clipper::mClipper.clip(pMtx, center, radius);
-                mDoLib_clipper::mClipper.setFar(mDoLib_clipper::mSystemFar);
-                mDoLib_clipper::mClipper.calcViewFrustum();
+                s32 ret = mDoLib_clipper::clip(pMtx, center, radius);
+                mDoLib_clipper::resetFar();
                 return ret;
             } else {
                 f32 radius = i_this->mCull.mSphere.mRadius;
-                return mDoLib_clipper::mClipper.clip(pMtx, i_this->mCull.mSphere.mCenter, radius);
+                return mDoLib_clipper::clip(pMtx, i_this->mCull.mSphere.mCenter, radius);
             }
         } else {
             fopAc_cullSizeSphere& cullSphere = l_cullSizeSphere[cullType - fopAc_CULLSPHERE_0_e];
             if (fopAcM_getCullSizeFar(i_this) > 0.0f) {
-                mDoLib_clipper::mClipper.setFar(cullFar * mDoLib_clipper::mSystemFar);
-                mDoLib_clipper::mClipper.calcViewFrustum();
+                mDoLib_clipper::changeFar(cullFar * mDoLib_clipper::getFar());
                 f32 radius = cullSphere.mRadius;
                 Vec center = cullSphere.mCenter;
                 Vec unusedCenter = center;
-                s32 ret = mDoLib_clipper::mClipper.clip(pMtx, center, radius);
-                mDoLib_clipper::mClipper.setFar(mDoLib_clipper::mSystemFar);
-                mDoLib_clipper::mClipper.calcViewFrustum();
+                s32 ret = mDoLib_clipper::clip(pMtx, center, radius);
+                mDoLib_clipper::resetFar();
                 return ret;
             } else {
                 f32 radius = cullSphere.mRadius;
-                return mDoLib_clipper::mClipper.clip(pMtx, cullSphere.mCenter, radius);
+                return mDoLib_clipper::clip(pMtx, cullSphere.mCenter, radius);
             }
         }
     }
@@ -935,7 +927,7 @@ s32 fopAcM_createRaceItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* rot, 
 
     i_itemNo = check_itemno(i_itemNo);
     u32 params = (i_itemBitNo & 0x7F) << 0x08 | i_itemNo & 0xFF | (param_7 & 0xF) << 0xF;
-    fopAcM_create(PROC_RACEITEM, params, pos, roomNo, rot, scale);
+    return fopAcM_create(PROC_RACEITEM, params, pos, roomNo, rot, scale);
 }
 
 /* 80026980-80026A68       .text fopAcM_createDemoItem__FP4cXyziiP5csXyziP4cXyzUc */
@@ -1168,22 +1160,22 @@ void* fopAcM_createItemFromEnemyTable(u16 itemTableIdx, int i_itemBitNo, int i_r
     int itemIdx = (int)cM_rndF(15.999f);
     cXyz scale = cXyz::Zero;
     
-    items[0]  = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_N_ITEM0,  itemTableIdx);
-    items[1]  = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_N_ITEM1,  itemTableIdx);
-    items[2]  = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_N_ITEM2,  itemTableIdx);
-    items[3]  = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_N_ITEM3,  itemTableIdx);
-    items[4]  = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_N_ITEM4,  itemTableIdx);
-    items[5]  = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_N_ITEM5,  itemTableIdx);
-    items[6]  = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_N_ITEM6,  itemTableIdx);
-    items[7]  = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_N_ITEM7,  itemTableIdx);
-    items[8]  = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_N_ITEM8,  itemTableIdx);
-    items[9]  = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_N_ITEM9,  itemTableIdx);
-    items[10] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_N_ITEM10, itemTableIdx);
-    items[11] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_N_ITEM11, itemTableIdx);
-    items[12] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_N_ITEM12, itemTableIdx);
-    items[13] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_N_ITEM13, itemTableIdx);
-    items[14] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_N_ITEM14, itemTableIdx);
-    items[15] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_N_ITEM15, itemTableIdx);
+    items[0]  = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetNITEM0(),  itemTableIdx);
+    items[1]  = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetNITEM1(),  itemTableIdx);
+    items[2]  = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetNITEM2(),  itemTableIdx);
+    items[3]  = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetNITEM3(),  itemTableIdx);
+    items[4]  = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetNITEM4(),  itemTableIdx);
+    items[5]  = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetNITEM5(),  itemTableIdx);
+    items[6]  = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetNITEM6(),  itemTableIdx);
+    items[7]  = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetNITEM7(),  itemTableIdx);
+    items[8]  = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetNITEM8(),  itemTableIdx);
+    items[9]  = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetNITEM9(),  itemTableIdx);
+    items[10] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetNITEM10(), itemTableIdx);
+    items[11] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetNITEM11(), itemTableIdx);
+    items[12] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetNITEM12(), itemTableIdx);
+    items[13] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetNITEM13(), itemTableIdx);
+    items[14] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetNITEM14(), itemTableIdx);
+    items[15] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetNITEM15(), itemTableIdx);
     
     if (isLimitedItem(items[itemIdx])) {
         if (
@@ -1215,7 +1207,7 @@ void* fopAcM_createItemFromEnemyTable(u16 itemTableIdx, int i_itemBitNo, int i_r
 
 /* 8002777C-800278D8       .text fopAcM_createIball__FP4cXyziiP5csXyzi */
 s32 fopAcM_createIball(cXyz* p_pos, int itemTableIdx, int i_roomNo, csXyz* p_angle, int i_itemBitNo) {
-    int dropChance = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_percent, (u16)itemTableIdx);
+    int dropChance = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetPercent(), (u16)itemTableIdx);
     int randPercent = cM_rndF(99.999f);
     
     if (strcmp(dComIfGp_getStartStageName(), "Cave09") == 0 ||
@@ -1445,7 +1437,10 @@ s32 fopAcM_getWaterY(const cXyz* pPos, f32* pDstWaterY) {
 
 /* 80028684-80028724       .text fopAcM_setGbaName__FP10fopAc_ac_cUcUcUc */
 void fopAcM_setGbaName(fopAc_ac_c* i_this, u8 itemNo, u8 gbaName0, u8 gbaName1) {
-    if (dComIfGs_checkGetItem(itemNo) || (itemNo == BOW && (dComIfGs_checkGetItem(MAGIC_ARROW) || dComIfGs_checkGetItem(LIGHT_ARROW))) || (itemNo == MAGIC_ARROW && dComIfGs_checkGetItem(LIGHT_ARROW)))
+    if (dComIfGs_checkGetItem(itemNo) ||
+        (itemNo == BOW && (dComIfGs_checkGetItem(MAGIC_ARROW) || dComIfGs_checkGetItem(LIGHT_ARROW))) ||
+        (itemNo == MAGIC_ARROW && dComIfGs_checkGetItem(LIGHT_ARROW))
+    )
         i_this->mGbaName = gbaName1;
     else
         i_this->mGbaName = gbaName0;
@@ -1467,23 +1462,3 @@ void fpoAcM_relativePos(fopAc_ac_c* i_this, cXyz* absPos, cXyz* relPos) {
     relPos->y = offset.y;
     relPos->z = offset.z * cM_scos(angle) - offset.x * cM_ssin(angle);
 }
-
-#ifndef __INTELLISENSE__
-/* 80029178-80029198       .text __ct__20fopAc_cullSizeSphereF4cXyzf */
-fopAc_cullSizeSphere::fopAc_cullSizeSphere(cXyz p, f32 r) {
-    mCenter = p;
-    mRadius = r;
-}
-
-/* 80029198-800291CC       .text __ct__17fopAc_cullSizeBoxFRC17fopAc_cullSizeBox */
-fopAc_cullSizeBox::fopAc_cullSizeBox(const fopAc_cullSizeBox& box) {
-    mMin = box.mMin;
-    mMax = box.mMax;
-}
-
-/* 800291CC-80029200       .text __ct__17fopAc_cullSizeBoxF4cXyz4cXyz */
-fopAc_cullSizeBox::fopAc_cullSizeBox(cXyz min, cXyz max) {
-    mMin = min;
-    mMax = max;
-}
-#endif

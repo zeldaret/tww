@@ -123,14 +123,14 @@ BOOL daIball_c::createItem() {
     int itemTableIdx = itemBitNo;
     u32 items[8];
     
-    items[0] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_ITEM0, itemTableIdx);
-    items[1] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_ITEM1, itemTableIdx);
-    items[2] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_ITEM2, itemTableIdx);
-    items[3] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_ITEM3, itemTableIdx);
-    items[4] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_ITEM4, itemTableIdx);
-    items[5] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_ITEM5, itemTableIdx);
-    items[6] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_ITEM6, itemTableIdx);
-    items[7] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->mIndex_ITEM7, itemTableIdx);
+    items[0] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetITEM0(), itemTableIdx);
+    items[1] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetITEM1(), itemTableIdx);
+    items[2] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetITEM2(), itemTableIdx);
+    items[3] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetITEM3(), itemTableIdx);
+    items[4] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetITEM4(), itemTableIdx);
+    items[5] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetITEM5(), itemTableIdx);
+    items[6] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetITEM6(), itemTableIdx);
+    items[7] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetITEM7(), itemTableIdx);
     
     for (int i = 0; i < 8; i++) {
         itemBitNo = -1;

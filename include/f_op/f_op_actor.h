@@ -107,13 +107,13 @@ struct actor_process_profile_definition {
     /* 0x28 */ u32 mStatus;
     /* 0x2C */ u8 mGroup;
     /* 0x2D */ u8 mCullType;
-};
+};  // Size: 0x30
 
 // Unclear what this is. Only appears in 2 profiles (PLAYER,BG)
 struct actor_process_profile_definition2 {
     /* 0x00 */ actor_process_profile_definition def;
     /* 0x30 */ u32 field_0x30;
-};
+};  // Size: 0x34
 
 class JKRSolidHeap;
 
@@ -220,7 +220,10 @@ public:
     /* 0xC */ f32 mRadius;
 
     fopAc_cullSizeSphere() {}
-    fopAc_cullSizeSphere(cXyz, f32);
+    fopAc_cullSizeSphere(cXyz p, f32 r) {
+        mCenter = p;
+        mRadius = r;
+    }
     ~fopAc_cullSizeSphere() {}
 #endif
 };
@@ -232,8 +235,14 @@ public:
     /* 0xC */ Vec mMax;
 #else
     fopAc_cullSizeBox() {}
-    fopAc_cullSizeBox(const fopAc_cullSizeBox&);
-    fopAc_cullSizeBox(cXyz, cXyz);
+    fopAc_cullSizeBox(const fopAc_cullSizeBox& box) {
+        mMin = box.mMin;
+        mMax = box.mMax;
+    }
+    fopAc_cullSizeBox(cXyz min, cXyz max) {
+        mMin = min;
+        mMax = max;
+    }
     ~fopAc_cullSizeBox() {}
 
     /* 0x0 */ cXyz mMin;

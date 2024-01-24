@@ -71,6 +71,9 @@ struct fopAcM_search_prm {
 class l_HIO {
 public:
     ~l_HIO() {}
+
+    void entry() {}
+    void erase() {}
 };
 
 class dKy_tevstr_c;

@@ -91,7 +91,7 @@ public:
     dStage_Event_dt_c* getStageEventDt();
     dStage_Event_dt_c* nextStageEventDt(void*);
     int getPId(void*);
-    fopAc_ac_c * convPId(unsigned int);
+    void* convPId(unsigned int);
     u8 getTactFreeMStick(int);
     u8 getTactFreeCStick(int);
     bool giveItemCut(u8);
@@ -100,11 +100,15 @@ public:
     bool chkTalkXY() { return mTalkButton == 1 || mTalkButton == 2 || mTalkButton == 3; }
     void setPtI_Id(unsigned int id) { mPtItem = id; }
     void setPtI(void* actor) { mPtItem = getPId(actor); }
+    void* getPtI() { return convPId(mPtItem); }
     void setGtItm(u8 itemNo) { mGetItemNo = itemNo; }
     u8 getGtItm() { return mGetItemNo; }
     void setPtT(void* i_actor) { mPtTalk = getPId(i_actor); }
+    void* getPtT() { return convPId(mPtTalk); }
     void setPt1(void* i_actor) { mPt1 = getPId(i_actor); }
+    void* getPt1() { return convPId(mPt1); }
     void setPt2(void* i_actor) { mPt2 = getPId(i_actor); }
+    void* getPt2() { return convPId(mPt2); }
     u8 getPreItemNo() { return mItemNo; }
     
     f32 getCullRate() { return mCullFarClipRatio; }
@@ -118,6 +122,14 @@ public:
     bool runCheck() { return mMode != 0; }
     u8 getMode() { return mMode; }
 
+    void checkHind(u16) {}
+    void chkPhoto() {}
+    void getMode() const {}
+    void offHindFlag(u16) {}
+    void onHindFlag(u16) {}
+    void setDebugStb(u8) {}
+
+public:
     /* 0x00 */ dEvt_order_c mOrder[8];
     /* 0xC0 */ s8 mOrderCount;
     /* 0xC1 */ s8 mFirstOrderIdx;
@@ -125,7 +137,7 @@ public:
     /* 0xC3 */ u8 mbEndProc;
     /* 0xC4 */ u32 mPt1;
     /* 0xC8 */ u32 mPt2;
-    /* 0xCC */ int mPtTalk;
+    /* 0xCC */ u32 mPtTalk;
     /* 0xD0 */ u32 mPtItem;
     /* 0xD4 */ u8 mGetItemNo;
     /* 0xD5 */ u8 field_0xD5[0xD6 - 0xD5];
