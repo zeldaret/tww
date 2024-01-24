@@ -3,6 +3,14 @@
 // Translation Unit: f_op_camera.cpp
 //
 
+// Fakematch: These are supposed to be weak functions declared in d_a_player.h that wind up at the end of the
+// f_op_actor_mng TU. But weak function ordering is currently broken, so to get f_op_actor_mng to match, we define them
+// here (at the start of the *next* TU after f_op_actor_mng) so that they get placed into the correct spot in
+// the DOL, even though this is an ugly hack and they're now in the wrong translation unit instead.
+#include "d/actor/d_a_player.h"
+void daPy_py_c::onFrollCrashFlg(u32) {}
+u32 daPy_py_c::getGrabActorID() const { return -1; }
+
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_draw_tag.h"
 #include "dolphin/types.h"

@@ -467,6 +467,9 @@ public:
     void getRopeJumpLand() const {}
     void checkRopeForceEnd() const {}
     
+    // This class's weak virtual functions tend to cause weak function ordering issues in TUs that use them.
+    // The proper way to match this is still unknown, so some of the definitions have been temporarily commented out
+    // here so that they can be fakematched instead.
     virtual MtxP getLeftHandMatrix() = 0;
     virtual MtxP getRightHandMatrix() = 0;
     virtual f32 getGroundY() = 0;
@@ -478,7 +481,7 @@ public:
     virtual BOOL checkFrontRoll() const { return FALSE; }
     virtual BOOL checkBottleSwing() const { return FALSE; }
     virtual BOOL checkCutCharge() const { return FALSE; }
-    virtual BOOL getBokoFlamePos(cXyz*) { return FALSE; }
+    virtual BOOL getBokoFlamePos(cXyz*);// { return FALSE; }
     virtual BOOL checkTactWait() const { return FALSE; }
     virtual void setTactZev(unsigned int, int, char*) {}
     virtual void onDekuSpReturnFlg(u8) {}
@@ -487,14 +490,14 @@ public:
     virtual f32 getBaseAnimeFrame() = 0;
     virtual u32 getItemID() const { return -1; }
     virtual u32 getThrowBoomerangID() const { return -1; }
-    virtual u32 getGrabActorID() const { return -1; }
+    virtual u32 getGrabActorID() const;// { return -1; }
     virtual BOOL checkGrabBarrel() { return FALSE; }
     virtual u32 checkPlayerNoDraw() { return FALSE; }
     virtual BOOL checkRopeTag() { return FALSE; }
     virtual BOOL checkRopeReadyAnime() const { return FALSE; }
     virtual void voiceStart(u32) {}
     virtual void setOutPower(f32, s16, int) {}
-    virtual void onFrollCrashFlg(u32) {}
+    virtual void onFrollCrashFlg(u32);// {}
     virtual MtxP getModelJointMtx(u16) { return NULL; }
     virtual f32 getOldSpeedY() { return 0.0f; }
     virtual BOOL setHookshotCarryOffset(unsigned int, const cXyz*) { return FALSE; }
