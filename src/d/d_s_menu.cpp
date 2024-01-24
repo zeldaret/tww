@@ -22,20 +22,21 @@ s32 l_cursolID;
 s32 l_timepat;
 s16 l_weekpat;
 s16 l_demo23;
-u8* l_groupPoint;
+s8* l_groupPoint;
 u8 l_languageType;
 
 /* 8022E9F4-8022ED50       .text dScnMenu_Draw__FP19menu_of_scene_class */
 BOOL dScnMenu_Draw(menu_of_scene_class* i_this) {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
     JUTReport(300, 50, "メニュー");
     if (i_this->field_0x1e0) {
         JUTReport(400, 50,"<%d>", i_this->field_0x1e0 - 1);
     }
     menu_of_scene_class::info1_s* r30 = i_this->info;
     int r29 = 70;
+    u8 r3;
     int r4 = l_cursolID - l_startID;
-    u8 r3 = r30->field_0x0;
+    r3 = r30->field_0x0;
     int r31 = r3 < 20 ? r3 : 20;
     if (r4 < 5) {
         l_startID += r4 - 5;
@@ -52,11 +53,12 @@ BOOL dScnMenu_Draw(menu_of_scene_class* i_this) {
             l_startID = r5;
         }
     }
-    int r26 = l_startID;
-    for (int i = 0; i < r31; i++, r29 += 16) {
-        int r6 = l_cursolID == r26 ? 79 : 32;
-        menu_of_scene_class::info2_s* r8 = r30->field_0x4 + i;
-        JUTReport(20, r29, "%c %2d %s　＜%s＞", r6, r26, r8, r8->field_0x24 + l_groupPoint[i] * 0x2c);
+    int i, r26;
+    r26 = l_startID;
+    for (i = 0; i < r31; r26++, r29 += 16, i++) {
+        s8 r6 = l_cursolID == r26 ? 79 : 32;
+        menu_of_scene_class::info2_s* r8 = r30->field_0x4 + r26;
+        JUTReport(20, r29, "%c %2d %s　＜%s＞", r6, r26, r8, r8->field_0x24 + l_groupPoint[r26] * 0x2c);
     }
     JUTReport(280,400,"Ｘ：進む　Ｙ：戻る");
     char* local_3c[] = {"通常", "高速経過", "朝（あさ）に固定", "昼（ひる）に固定", "夕方（ゆうがた）に固定", "夜（よる）に固定", "時に固定"};
@@ -91,11 +93,11 @@ BOOL dScnMenu_IsDelete(menu_of_scene_class*) {
 
 /* 8022F320-8022F3C4       .text dScnMenu_Delete__FP19menu_of_scene_class */
 BOOL dScnMenu_Delete(menu_of_scene_class* i_this) {
-    /* Nonmatching */
     JUTDbPrint::getManager()->changeFont(JFWSystem::systemFont);
     delete i_this->field_0x1dc;
     i_JKRFree(i_this->info);
     i_JKRFree(i_this->field_0x1d8);
+    g_HIO.mDisplayFlag &= ~2;
     g_HIO.mDisplayFlag &= ~2;
     dComIfGs_setRestartOption(0);
     return true;
@@ -126,7 +128,7 @@ s32 phase_2(menu_of_scene_class* i_this) {
         info->field_0x4[i].field_0x24 = (u8*)info + u32(info->field_0x4[i].field_0x24);
     }
     if (!l_groupPoint) {
-        l_groupPoint = new u8[info->field_0x0];
+        l_groupPoint = new s8[info->field_0x0];
         JUT_ASSERT(792, l_groupPoint != 0);
         for (int i = 0; i < info->field_0x0; i++) {
             l_groupPoint[i] = 0;
