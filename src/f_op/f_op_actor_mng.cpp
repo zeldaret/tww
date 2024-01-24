@@ -1043,7 +1043,6 @@ daItem_c* fopAcM_createItemForSimpleDemo(cXyz* pos, int i_itemNo, int roomNo, cs
 /* 80026F98-80027254       .text fopAcM_fastCreateItem__FP4cXyziiP5csXyzP4cXyzfffiPFPv_i */
 void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* rot, cXyz* scale,
                             f32 speedF, f32 speedY, f32 gravity, int i_itemBitNo, createFunc createFunc) {
-    /* Nonmatching - single regswap on params */
     int type = 0;
     int action = 0xA;
     int switchNo = 0xFF;
@@ -1057,7 +1056,8 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* rot, cXy
     int i;
     
     u8 itemNo = check_itemno(i_itemNo);
-    u32 params = (i_itemBitNo & 0xFF) << 0x08 | itemNo & 0xFF | switchNo2 << 16 | (type & 3) << 24 | action << 26;
+    u8 itemBitNo = i_itemBitNo;
+    u32 params = (itemNo & 0xFF) << 0 | (itemBitNo & 0xFF) << 8 | switchNo2 << 16 | (type & 3) << 24 | action << 26;
 
     if (isHeart(i_itemNo)) {
         speedF = 2.0f * speedF;
