@@ -3,36 +3,73 @@
 // Translation Unit: d_s_name.cpp
 //
 
-#include "d_s_name.h"
-#include "dolphin/types.h"
+#include "d/d_s_name.h"
+#include "d/d_com_lib_game.h"
+#include "d/d_procname.h"
+#include "new.h"
+
+static Vec lit_2100 = {1.0f, 1.0f, 1.0f};
+static Vec lit_2080 = {1.0f, 1.0f, 1.0f};
+
+dSn_HIO_c g_snHIO;
 
 /* 8022F86C-8022F8F0       .text __ct__9dSn_HIO_cFv */
 dSn_HIO_c::dSn_HIO_c() {
-    /* Nonmatching */
+    this->field_0x5 = 20;
+    this->field_0x6 = 15;
+    this->field_0x7 = 30;
+    this->field_0x8 = 0;
+    this->field_0x9 = 0;
+    this->field_0xa = 0;
+    this->field_0xb = 0;
+    this->field_0xe = 7;
+    this->field_0xc = -200;
+    this->field_0xf = 2;
+    this->field_0x10 = 0;
+    this->field_0x11 = 0;
+    this->field_0x12 = 0;
+    this->field_0x13 = 0;
+    this->field_0x14 = 0;
+    this->field_0x15 = 0;
+    this->field_0x16 = 0;
+    this->field_0x17 = 0;
+    this->field_0x18 = 0;
+    this->field_0x19 = 0;
+    this->field_0x1a = 0;
+    this->field_0x1b = 0;
 }
 
 /* 8022F8F0-8022F95C       .text phase_1__FPc */
-void phase_1(char*) {
+static void phase_1(char*) {
     /* Nonmatching */
 }
 
 /* 8022F95C-8022F9B4       .text phase_2__FPc */
-void phase_2(char*) {
+static void phase_2(char*) {
     /* Nonmatching */
 }
 
 /* 8022F9B4-8022F9BC       .text phase_3__FPc */
-void phase_3(char*) {
-    /* Nonmatching */
+static s32 phase_3(char*) {
+    return cPhs_COMPLEATE_e;
 }
 
 /* 8022F9BC-8022F9FC       .text resLoad__FP30request_of_phase_process_classPc */
-void resLoad(request_of_phase_process_class*, char*) {
+s32 resLoad(request_of_phase_process_class* param_1, char* param_2) {
     /* Nonmatching */
+    static cPhs__Handler l_method[] = {
+        (cPhs__Handler)phase_1,
+        (cPhs__Handler)phase_2,
+        (cPhs__Handler)phase_3,
+    };
+    if (param_1->id == 2) {
+        return cPhs_COMPLEATE_e;
+    }
+    return dComLbG_PhaseHandler(param_1, l_method, param_2);
 }
 
 /* 8022F9FC-802301C8       .text create__10dScnName_cFv */
-void dScnName_c::create() {
+s32 dScnName_c::create() {
     /* Nonmatching */
 }
 
@@ -57,12 +94,69 @@ void dScnName_c::buttonIconCreate() {
 }
 
 /* 80230500-802305E0       .text paneTransButtonIcon__10dScnName_cFsUcffUc */
-void dScnName_c::paneTransButtonIcon(short, unsigned char, float, float, unsigned char) {
+void dScnName_c::paneTransButtonIcon(s16, u8, f32, f32, u8) {
     /* Nonmatching */
 }
 
+void (dScnName_c::*MainProc[])() = {
+    &dScnName_c::MemCardCheckMain,
+    &dScnName_c::NoteOpen,
+    &dScnName_c::NoteOpenWait,
+    &dScnName_c::FileSelectOpen,
+    &dScnName_c::FileSelectMain,
+    &dScnName_c::FileSelectClose,
+    &dScnName_c::NameInOpen,
+    &dScnName_c::NameInMain,
+    &dScnName_c::NameInClose,
+    &dScnName_c::changeGameScene,
+    &dScnName_c::SaveOpen,
+    &dScnName_c::SaveMain,
+    &dScnName_c::SaveClose,
+    &dScnName_c::ResetWait,
+    &dScnName_c::ShopDemoDataLoad,
+    &dScnName_c::ShopDemoDataSet,
+};
+
+void (dScnName_c::*MemCardCheckProc[])() = {
+    &dScnName_c::MemCardStatCheck,
+    &dScnName_c::MemCardLoadWait,
+    &dScnName_c::MemCardErrMsgWaitKey,
+    &dScnName_c::MemCardErrMsgWaitKey2,
+    &dScnName_c::MemCardErrMsgWaitNoSaveSel,
+    &dScnName_c::MemCardErrMsgWaitFormatSel,
+    &dScnName_c::MemCardErrMsgWaitFormatSel2,
+    &dScnName_c::MemCardFormat,
+    &dScnName_c::MemCardFormatCheck,
+    &dScnName_c::MemCardMakeGameFileSel,
+    &dScnName_c::MemCardMakeGameFile,
+    &dScnName_c::MemCardMakeGameFileCheck,
+    &dScnName_c::MemCardGotoFileSelect,
+    &dScnName_c::MemCardGotoIPLSelect,
+    &dScnName_c::MemCardGotoIPL,
+    &dScnName_c::MemCardCheckDbg,
+    &dScnName_c::MemCardCheckDbgWait,
+};
+
+void (dScnName_c::*NameOpenProc[])() = {
+    &dScnName_c::NameOpenMain,
+    &dScnName_c::NameOpenWait,
+};
+
+void (dScnName_c::*FileSelOpenProc[])() = {
+    &dScnName_c::FileSelOpenMain,
+    &dScnName_c::FileselOpenWait,
+};
+
+void (dScnName_c::*DrawProc[])() = {
+    &dScnName_c::FileErrorDraw,
+    &dScnName_c::FileSelectDraw,
+    &dScnName_c::NameInDraw,
+    &dScnName_c::SaveDraw,
+    &dScnName_c::NoneDraw,
+};
+
 /* 802305E0-80230678       .text execute__10dScnName_cFv */
-void dScnName_c::execute() {
+s32 dScnName_c::execute() {
     /* Nonmatching */
 }
 
@@ -72,7 +166,7 @@ void dScnName_c::setView() {
 }
 
 /* 80230714-802307EC       .text draw__10dScnName_cFv */
-void dScnName_c::draw() {
+s32 dScnName_c::draw() {
     /* Nonmatching */
 }
 
@@ -162,9 +256,7 @@ void dScnName_c::MemCardGotoFileSelect() {
 }
 
 /* 802313AC-802313B0       .text MemCardCheckDbg__10dScnName_cFv */
-void dScnName_c::MemCardCheckDbg() {
-    /* Nonmatching */
-}
+void dScnName_c::MemCardCheckDbg() {}
 
 /* 802313B0-80231428       .text MemCardCheckDbgWait__10dScnName_cFv */
 void dScnName_c::MemCardCheckDbgWait() {
@@ -202,9 +294,7 @@ void dScnName_c::FileSelOpenMain() {
 }
 
 /* 80231A24-80231A28       .text FileselOpenWait__10dScnName_cFv */
-void dScnName_c::FileselOpenWait() {
-    /* Nonmatching */
-}
+void dScnName_c::FileselOpenWait() {}
 
 /* 80231A28-80231A8C       .text FileSelectMain__10dScnName_cFv */
 void dScnName_c::FileSelectMain() {
@@ -247,9 +337,7 @@ void dScnName_c::NameOpenMain() {
 }
 
 /* 80231F44-80231F48       .text NameOpenWait__10dScnName_cFv */
-void dScnName_c::NameOpenWait() {
-    /* Nonmatching */
-}
+void dScnName_c::NameOpenWait() {}
 
 /* 80231F48-80231FF4       .text NameInMain__10dScnName_cFv */
 void dScnName_c::NameInMain() {
@@ -297,9 +385,7 @@ void dScnName_c::SaveDraw() {
 }
 
 /* 8023229C-802322A0       .text NoneDraw__10dScnName_cFv */
-void dScnName_c::NoneDraw() {
-    /* Nonmatching */
-}
+void dScnName_c::NoneDraw() {}
 
 /* 802322A0-80232338       .text changeGameScene__10dScnName_cFv */
 void dScnName_c::changeGameScene() {
@@ -307,28 +393,30 @@ void dScnName_c::changeGameScene() {
 }
 
 /* 80232338-80232358       .text dScnName_Draw__FP10dScnName_c */
-void dScnName_Draw(dScnName_c*) {
-    /* Nonmatching */
+s32 dScnName_Draw(dScnName_c* i_this) {
+    return i_this->draw();
 }
 
 /* 80232358-80232378       .text dScnName_Execute__FP10dScnName_c */
-void dScnName_Execute(dScnName_c*) {
-    /* Nonmatching */
+s32 dScnName_Execute(dScnName_c* i_this) {
+    return i_this->execute();
 }
 
 /* 80232378-80232380       .text dScnName_IsDelete__FP10dScnName_c */
-void dScnName_IsDelete(dScnName_c*) {
-    /* Nonmatching */
+s32 dScnName_IsDelete(dScnName_c*) {
+    return 1;
 }
 
 /* 80232380-802323A8       .text dScnName_Delete__FP10dScnName_c */
-void dScnName_Delete(dScnName_c*) {
-    /* Nonmatching */
+s32 dScnName_Delete(dScnName_c* i_this) {
+    i_this->~dScnName_c();
+    return 1;
 }
 
 /* 802323A8-802323F8       .text dScnName_Create__FP11scene_class */
-void dScnName_Create(scene_class*) {
-    /* Nonmatching */
+s32 dScnName_Create(scene_class* i_scn) {
+    dScnName_c* i_this = new (i_scn) dScnName_c();
+    return i_this->create();
 }
 
 /* 802323F8-8023245C       .text draw__13dDlst_BTICN_cFv */
@@ -341,18 +429,38 @@ void dDlst_FLSEL_CLOTH_c::draw() {
     /* Nonmatching */
 }
 
-/* 80232518-80232574       .text __dt__19dDlst_FLSEL_CLOTH_cFv */
-dDlst_FLSEL_CLOTH_c::~dDlst_FLSEL_CLOTH_c() {
-    /* Nonmatching */
-}
+scene_method_class l_dScnName_Method = {
+    (process_method_func)dScnName_Create,
+    (process_method_func)dScnName_Delete,
+    (process_method_func)dScnName_Execute,
+    (process_method_func)dScnName_IsDelete,
+    (process_method_func)dScnName_Draw,
+};
 
-/* 80232574-802325D0       .text __dt__13dDlst_BTICN_cFv */
-dDlst_BTICN_c::~dDlst_BTICN_c() {
-    /* Nonmatching */
-}
+scene_process_profile_definition g_profile_NAME_SCENE = {
+    fpcLy_ROOT_e,
+    1,
+    fpcPi_CURRENT_e,
+    PROC_NAME_SCENE,
+    &g_fpcNd_Method.mBase,
+    sizeof(dScnName_c),
+    0,
+    0,
+    &g_fopScn_Method.mBase,
+    &l_dScnName_Method,
+    NULL,
+};
 
-/* 802325D0-80232618       .text __dt__9dSn_HIO_cFv */
-dSn_HIO_c::~dSn_HIO_c() {
-    /* Nonmatching */
-}
-
+scene_process_profile_definition g_profile_NAMEEX_SCENE = {
+    fpcLy_ROOT_e,
+    1,
+    fpcPi_CURRENT_e,
+    PROC_NAMEEX_SCENE,
+    &g_fpcNd_Method.mBase,
+    sizeof(dScnName_c),
+    0,
+    0,
+    &g_fopScn_Method.mBase,
+    &l_dScnName_Method,
+    NULL,
+};
