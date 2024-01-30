@@ -74,7 +74,7 @@ s32 fopAcM_SearchByName(s16 procName, fopAc_ac_c** pDstActor) {
 
 /* 800242AC-80024320       .text fopAcM_CreateAppend__Fv */
 fopAcM_prm_class* fopAcM_CreateAppend() {
-    fopAcM_prm_class* params = (fopAcM_prm_class*) cMl::memalignB(-4, sizeof(fopAcM_prm_class));
+    fopAcM_prm_class* params = (fopAcM_prm_class*)cMl::memalignB(-4, sizeof(fopAcM_prm_class));
     if (params != NULL) {
         cLib_memSet(params, 0, sizeof(fopAcM_prm_class));
         params->mSetId = 0xFFFF;
@@ -1254,7 +1254,7 @@ fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo) {
     if (enemy != NULL && fopAcM_GetGroup(enemy) == fopAc_ENEMY_e)
         return enemy;
 
-    return (fopAc_ac_c*) fpcM_JudgeInLayer(fpcM_LayerID(roomProc), (fpcCtIt_JudgeFunc)enemySearchJugge, NULL);
+    return (fopAc_ac_c*)fpcM_JudgeInLayer(fpcM_LayerID(roomProc), (fpcCtIt_JudgeFunc)enemySearchJugge, NULL);
 }
 
 /* 80027A9C-80027B24       .text fopAcM_createDisappear__FP10fopAc_ac_cP4cXyzUcUcUc */

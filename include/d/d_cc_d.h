@@ -47,6 +47,7 @@ enum CcG_At_HitMark {
 };
 
 enum CcG_Tg_HitMark {
+    /* 0x1 */ G_TG_MARK_UNK1 = 1,
     /* 0xC */ G_TG_MARK_PURPLE_HIT = dPa_name::ID_COMMON_PURPLE_HIT,
 };
 
