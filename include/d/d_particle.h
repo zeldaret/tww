@@ -4,6 +4,7 @@
 #include "JSystem/J3DGraphBase/J3DVertex.h"
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 #include "JSystem/JGeometry.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JParticle/JPAEmitterManager.h"
@@ -89,9 +90,9 @@ public:
 
     void executeAfter(JPABaseEmitter*);
     void draw(JPABaseEmitter*);
-    void create(JPAEmitterManager*, u16, u8);
+    JPABaseEmitter* create(JPAEmitterManager*, u16, u8);
     JPABaseEmitter* createEmitter(JPAEmitterManager*);
-    void set(cXyz const*, u8, GXColor const&, GXColor const&, int);
+    bool set(cXyz const*, u8, GXColor const&, GXColor const&, int);
 
     /* 0x004 */ JPABaseEmitter* mpBaseEmitter;
     /* 0x008 */ u16 mResID;
@@ -119,8 +120,8 @@ public:
     /* 0x14 */ f32 mVelFade2;
     /* 0x18 */ f32 mMaxParticleVelocity;
     /* 0x1C */ cXyz mCollapsePos[2];
-    /* 0x34 */ cXyz* mpPos;
-    /* 0x38 */ csXyz* mpRot;
+    /* 0x34 */ const cXyz* mpPos;
+    /* 0x38 */ const csXyz* mpRot;
     /* 0x3C */ JGeometry::TVec3<f32> mRotMtx[3];
     /* 0x60 */ JPABaseEmitter* mpBaseEmitter;
 };
@@ -136,8 +137,8 @@ public:
     /* 0x04 */ s16 mState;
     /* 0x08 */ f32 mScaleTimer;
     /* 0x0C */ f32 mMaxScaleTimer;
-    /* 0x10 */ cXyz* mpPos;
-    /* 0x14 */ csXyz* mpRot;
+    /* 0x10 */ const cXyz* mpPos;
+    /* 0x14 */ const csXyz* mpRot;
     /* 0x18 */ JPABaseEmitter* mpBaseEmitter;
 };
 
@@ -155,8 +156,8 @@ public:
     /* 0x08 */ f32 mBaseY;
     /* 0x0C */ f32 mMinY;
     /* 0x10 */ Vec mPos[3];
-    /* 0x34 */ cXyz* mpPos;
-    /* 0x38 */ csXyz* mpRot;
+    /* 0x34 */ const cXyz* mpPos;
+    /* 0x38 */ const csXyz* mpRot;
     /* 0x3C */ f32 mExTransY;
     /* 0x40 */ f32 mExScaleY;
     /* 0x44 */ f32 mVel;
@@ -182,7 +183,7 @@ public:
     void setRate(f32 rate) { mRate = rate; }
 
     /* 0x04 */ JPABaseEmitter* mpBaseEmitter;
-    /* 0x08 */ cXyz* mPos;
+    /* 0x08 */ const cXyz* mPos;
     /* 0x0C */ u32 mFlags;
     /* 0x10 */ f32 mRate;
 };
@@ -301,7 +302,11 @@ public:
     void setPosArray(cXyz*, s16) {}
 
 public:
-    /* 0x04 */ u8 field_0x04[0x10 - 0x04];
+    /* 0x04 */ u8 field_0x4;
+    /* 0x05 */ u8 field_0x5;
+    /* 0x06 */ u16 field_0x6;
+    /* 0x08 */ u8 field_0x8[0xC - 0x08];
+    /* 0x0C */ JPABaseEmitter* mpBaseEmitter;
 };  // Size: 0x10
 
 STATIC_ASSERT(sizeof(dPa_cutTurnEcallBack_c) == 0x10);
@@ -379,9 +384,9 @@ public:
                        int*, int);
     void checkAtrCodeEffect(int);
     void setNormalStripes(u16, cXyz const*, csXyz const*, cXyz const*, u8, u16);
-    void newSimple(u16, u8);
-    void setSimple(u16, cXyz const*, u8, GXColor const&, GXColor const&, int);
-    void getSimple(u16);
+    bool newSimple(u16, u8);
+    bool setSimple(u16, cXyz const*, u8, GXColor const&, GXColor const&, int);
+    dPa_simpleEcallBack* getSimple(u16);
 
     JPABaseEmitter* setNormal(u16 particleID, const cXyz* pos, const csXyz* angle,
                               const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack,
@@ -457,7 +462,7 @@ public:
     u32 getParticleNum() { return mEmitterMng->getParticleNumber(); } 
     u32 getEmitterNum() { return mEmitterMng->getEmitterNumber(); } 
 
-    void drawModelParticle() { mModelCtrl->draw(); }
+    void drawModelParticle() { mModelControl->draw(); }
     JKRHeap * getHeap() { return mHeap; }
 
     static dPa_selectTexEcallBack mTsubo[4];
@@ -482,12 +487,12 @@ public:
     static MtxP getWindViewMatrix() { return mWindViewMatrix; }
     static Mtx mWindViewMatrix;
 
-    /* 0x0000 */ JKRHeap* mHeap;
-    /* 0x0004 */ JPAResourceManager* mpCommonResMgr;
-    /* 0x0008 */ dPa_modelControl_c* mModelCtrl;
-    /* 0x000C */ JKRHeap* mpSceneHeap;
-    /* 0x0010 */ void* mpData;
-    /* 0x0014 */ JPAResourceManager* mpSceneResMgr;
+    /* 0x0000 */ JKRSolidHeap* mHeap;
+    /* 0x0004 */ JPAResourceManager* mCommonResMng;
+    /* 0x0008 */ dPa_modelControl_c* mModelControl;
+    /* 0x000C */ JKRSolidHeap* mSceneHeap;
+    /* 0x0010 */ const void* mpData;
+    /* 0x0014 */ JPAResourceManager* mSceneResMng;
     /* 0x0018 */ u8 mSceneNo;
     /* 0x0019 */ u8 mCount;
     /* 0x001A */ u8 mNumSimple;

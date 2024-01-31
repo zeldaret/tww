@@ -650,6 +650,7 @@ s32 mDoExt_resIDToIndex(JKRArchive*, u16);
 
 JKRSolidHeap * mDoExt_createSolidHeapFromGameToCurrent(u32 size, u32 align);
 JKRSolidHeap * mDoExt_createSolidHeapToCurrent(u32, JKRHeap *, u32 align);
+JKRSolidHeap * mDoExt_createSolidHeapFromGame(u32 i_size, u32 i_alignment);
 JKRSolidHeap * mDoExt_createSolidHeapFromSystem(u32 i_size, u32 i_alignment);
 void mDoExt_restoreCurrentHeap();
 s32 mDoExt_adjustSolidHeap(JKRSolidHeap * pHeap);
