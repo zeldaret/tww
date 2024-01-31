@@ -3,8 +3,12 @@
 // Translation Unit: d_ovlp_fade4.cpp
 //
 
-#include "d_ovlp_fade4.h"
-#include "dolphin/types.h"
+#include "d/d_ovlp_fade4.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_procname.h"
+#include "f_op/f_op_overlap.h"
+#include "m_Do/m_Do_graphic.h"
+#include "new.h"
 
 /* 80224390-80224484       .text init__15dDlst_2DtEff1_cF8_GXColor */
 void dDlst_2DtEff1_c::init(_GXColor) {
@@ -22,12 +26,12 @@ void dDlst_snapShot2_c::draw() {
 }
 
 /* 80224748-80224884       .text dDlst_setResTimgObj__FPC7ResTIMGP9_GXTexObjPvUlUl */
-void dDlst_setResTimgObj(const ResTIMG*, _GXTexObj*, void*, unsigned long, unsigned long) {
+void dDlst_setResTimgObj(const ResTIMG*, _GXTexObj*, void*, u32, u32) {
     /* Nonmatching */
 }
 
 /* 80224884-802249C4       .text cnvAddress__FffPfPf */
-void cnvAddress(float, float, float*, float*) {
+void cnvAddress(f32, f32, f32*, f32*) {
     /* Nonmatching */
 }
 
@@ -37,13 +41,35 @@ void dDlst_2Dt_Sp_c::draw() {
 }
 
 /* 80224CC4-80224DBC       .text init__14dDlst_2Dt_Sp_cFP7ResTIMGffff8_GXColor */
-void dDlst_2Dt_Sp_c::init(ResTIMG*, float, float, float, float, _GXColor) {
+void dDlst_2Dt_Sp_c::init(ResTIMG*, f32, f32, f32, f32, _GXColor) {
     /* Nonmatching */
 }
 
 /* 80224DBC-80224F98       .text __ct__10dOvlpFd4_cFv */
 dOvlpFd4_c::dOvlpFd4_c() {
     /* Nonmatching */
+    field_0x2ac = 1;
+    field_0xcc = &dOvlpFd4_c::execFirstSnap;
+    field_0xd8 = &dOvlpFd4_c::drawFadeOut;
+    if (mBase.mProcName == PROC_OVERLAP4) {
+        field_0xfc.init(mDoGph_gInf_c::mFrameBufferTimg, 0.0f, 0.0f, 640.0f, 480.0f, g_saftyWhiteColor);
+    } else {
+        GXColor tmp = {0, 0, 0, 0};
+        field_0xfc.init(mDoGph_gInf_c::mFrameBufferTimg, 0.0f, 0.0f, 640.0f, 480.0f, tmp);
+    }
+    field_0x148.init(mDoGph_gInf_c::mFrameBufferTimg, 0.0f, 0.0f, 640.0f, 480.0f, g_whiteColor);
+    field_0xe4.field_0x4 = mDoGph_gInf_c::mFrameBufferTex;
+    field_0xe4.field_0x8 = 640;
+    field_0xe4.field_0xa = 480;
+    field_0xf0.field_0x4 = mDoGph_gInf_c::mFrameBufferTex;
+    field_0xf0.field_0x8 = 640;
+    field_0xf0.field_0xa = 480;
+    field_0x194.init(g_saftyWhiteColor);
+    dComIfGp_2dShowOff();
+    field_0x2b0 = 2;
+    field_0x2ae = 39;
+    field_0x2b4 = 0.0f;
+    field_0x2ad = 0;
 }
 
 /* 80224F98-80225060       .text drawFadeOut__10dOvlpFd4_cFv */
@@ -77,42 +103,68 @@ void dOvlpFd4_c::execFadeIn() {
 }
 
 /* 802255F4-80225658       .text dOvlpFd4_Draw__FP10dOvlpFd4_c */
-void dOvlpFd4_Draw(dOvlpFd4_c*) {
-    /* Nonmatching */
+s32 dOvlpFd4_Draw(dOvlpFd4_c* i_this) {
+    void (dOvlpFd4_c::*tmp)() = i_this->field_0xd8;
+    if (tmp) {
+        (i_this->*i_this->field_0xd8)();
+    }
+    return 1;
 }
 
 /* 80225658-80225684       .text dOvlpFd4_Execute__FP10dOvlpFd4_c */
-void dOvlpFd4_Execute(dOvlpFd4_c*) {
-    /* Nonmatching */
+s32 dOvlpFd4_Execute(dOvlpFd4_c* i_this) {
+    (i_this->*i_this->field_0xcc)();
+    return 1;
 }
 
 /* 80225684-8022568C       .text dOvlpFd4_IsDelete__FP10dOvlpFd4_c */
-void dOvlpFd4_IsDelete(dOvlpFd4_c*) {
-    /* Nonmatching */
+s32 dOvlpFd4_IsDelete(dOvlpFd4_c*) {
+    return 1;
 }
 
 /* 8022568C-80225694       .text dOvlpFd4_Delete__FP10dOvlpFd4_c */
-void dOvlpFd4_Delete(dOvlpFd4_c*) {
-    /* Nonmatching */
+s32 dOvlpFd4_Delete(dOvlpFd4_c*) {
+    return 1;
 }
 
 /* 80225694-802256C0       .text dOvlpFd4_Create__FPv */
-void dOvlpFd4_Create(void*) {
-    /* Nonmatching */
+s32 dOvlpFd4_Create(void* i_this) {
+    new (i_this) dOvlpFd4_c();
+    return 4;
 }
 
-/* 802256C0-80225810       .text __dt__15dDlst_2DtEff1_cFv */
-dDlst_2DtEff1_c::~dDlst_2DtEff1_c() {
-    /* Nonmatching */
-}
+overlap_method_class l_dOvlpFd4_Method = {
+    (process_method_func)dOvlpFd4_Create,
+    (process_method_func)dOvlpFd4_Delete,
+    (process_method_func)dOvlpFd4_Execute,
+    (process_method_func)dOvlpFd4_IsDelete,
+    (process_method_func)dOvlpFd4_Draw,
+};
 
-/* 80225810-8022586C       .text __dt__14dDlst_2Dt_Sp_cFv */
-dDlst_2Dt_Sp_c::~dDlst_2Dt_Sp_c() {
-    /* Nonmatching */
-}
+overlap_process_profile_definition g_profile_OVERLAP4 = {
+    fpcLy_ROOT_e,
+    2,
+    fpcPi_CURRENT_e,
+    PROC_OVERLAP4,
+    &g_fpcLf_Method.mBase,
+    sizeof(dOvlpFd4_c),
+    0,
+    0,
+    &g_fopOvlp_Method,
+    0x1E5,
+    &l_dOvlpFd4_Method,
+};
 
-/* 8022586C-802258C8       .text __dt__17dDlst_snapShot2_cFv */
-dDlst_snapShot2_c::~dDlst_snapShot2_c() {
-    /* Nonmatching */
-}
-
+overlap_process_profile_definition g_profile_OVERLAP5 = {
+    fpcLy_ROOT_e,
+    2,
+    fpcPi_CURRENT_e,
+    PROC_OVERLAP5,
+    &g_fpcLf_Method.mBase,
+    sizeof(dOvlpFd4_c),
+    0,
+    0,
+    &g_fopOvlp_Method,
+    0x1E6,
+    &l_dOvlpFd4_Method,
+};
