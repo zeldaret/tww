@@ -34,7 +34,7 @@ public:
     JPAEmitterResource(u32, JKRHeap*);
     void registration(JPAEmitterData*, u16);
     JPAEmitterData * getByUserIndex(u16);
-    BOOL checkUserIndexDuplication(u16);
+    bool checkUserIndexDuplication(u16);
 
 public:
     /* 0x00 */ u32 registNum;

@@ -65,7 +65,7 @@ JPAEmitterData * JPAEmitterResource::getByUserIndex(u16 userIndex) {
 }
 
 /* 80258F5C-80258FA0       .text checkUserIndexDuplication__18JPAEmitterResourceFUs */
-BOOL JPAEmitterResource::checkUserIndexDuplication(u16 userIndex) {
+bool JPAEmitterResource::checkUserIndexDuplication(u16 userIndex) {
     for (u32 i = 0; i < registNum; i++) {
         if (pEmtrResArray[i]->getUserIndex() == userIndex)
             return TRUE;

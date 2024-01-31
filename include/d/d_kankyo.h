@@ -428,6 +428,7 @@ void dKy_arrowcol_chg_on(cXyz*, int);
 void dKy_arrowcol_chg_move();
 void dKy_setLight_init();
 void dKy_setLight();
+void dKy_setLight_again();
 void dKy_GxFog_set();
 void dKy_GxFog_sea_set();
 void dKy_GxFog_tevstr_set(dKy_tevstr_c*);

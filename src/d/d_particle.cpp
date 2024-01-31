@@ -4,13 +4,21 @@
 //
 
 #include "d/d_particle.h"
-#include "JSystem/JParticle/JPAParticle.h"
+#include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JParticle/JPAEmitterManager.h"
-#include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/JParticle/JPAParticle.h"
+#include "JSystem/JParticle/JPAResourceManager.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "SSystem/SComponent/c_malloc.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
+#include "d/d_resorce.h"
+#include "m_Do/m_Do_dvd_thread.h"
+#include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
+#include "stdio.h"
 
 static f32 dummy_2100[3] = {1.0f, 1.0f, 1.0f};
 static f32 dummy_2080[3] = {1.0f, 1.0f, 1.0f};
@@ -331,8 +339,19 @@ void dPa_simpleEcallBack::draw(JPABaseEmitter*) {
 }
 
 /* 8007C6EC-8007C774       .text create__19dPa_simpleEcallBackFP17JPAEmitterManagerUsUc */
-void dPa_simpleEcallBack::create(JPAEmitterManager*, u16, u8) {
-    /* Nonmatching */
+JPABaseEmitter* dPa_simpleEcallBack::create(JPAEmitterManager* manager, u16 param_2, u8 param_3) {
+    mpBaseEmitter = NULL;
+    mGrpID = param_3;
+    mResID = param_2;
+    if (createEmitter(manager)) {
+        if (param_2 == 0xa06a || param_2 == 0xa410) {
+            mbIsSmoke = true;
+            mpBaseEmitter->mpParticleCallBack = &dPa_control_c::mSmokePcallback;
+        } else {
+            mbIsSmoke = false;
+        }
+    }
+    return mpBaseEmitter;
 }
 
 /* 8007C774-8007C840       .text createEmitter__19dPa_simpleEcallBackFP17JPAEmitterManager */
@@ -351,7 +370,7 @@ JPABaseEmitter* dPa_simpleEcallBack::createEmitter(JPAEmitterManager* manager) {
 }
 
 /* 8007C840-8007C8C4       .text set__19dPa_simpleEcallBackFPC4cXyzUcRC8_GXColorRC8_GXColori */
-void dPa_simpleEcallBack::set(const cXyz*, u8, const _GXColor&, const _GXColor&, int) {
+bool dPa_simpleEcallBack::set(const cXyz*, u8, const _GXColor&, const _GXColor&, int) {
     /* Nonmatching */
 }
 
@@ -379,7 +398,7 @@ dPa_setColorEcallBack dPa_control_c::mLifeBall[] = {
     dPa_setColorEcallBack(l_lifeBallColor[2]),
 };
 
-JPAEmitterManager * dPa_control_c::mEmitterMng;
+JPAEmitterManager* dPa_control_c::mEmitterMng;
 dPa_stripesEcallBack dPa_control_c::mStripes;
 dPa_kageroEcallBack dPa_control_c::mKagero;
 dPa_smokeEcallBack dPa_control_c::mSmokeEcallback(0, 1, 1, 1);
@@ -397,8 +416,8 @@ dPa_control_c::dPa_control_c() {
     mCount = 0;
     mEmitterMng = NULL;
     mNumSimple = 0;
-    mpCommonResMgr = NULL;
-    mpSceneResMgr = NULL;
+    mCommonResMng = NULL;
+    mSceneResMng = NULL;
 }
 
 /* 8007CA28-8007CA30       .text getRM_ID__13dPa_control_cFUs */
@@ -408,22 +427,77 @@ u8 dPa_control_c::getRM_ID(u16 uid) {
 
 /* 8007CA30-8007CA98       .text swapFrameBufferTexture__13dPa_control_cFv */
 void dPa_control_c::swapFrameBufferTexture() {
-    /* Nonmatching */
+    if (mCommonResMng) {
+        mCommonResMng->swapTexture(mDoGph_gInf_c::mFrameBufferTimg, "AK_kagerouSwap00");
+    }
+    if (mSceneResMng) {
+        mSceneResMng->swapTexture(mDoGph_gInf_c::mFrameBufferTimg, "AK_kagerouSwap00");
+    }
 }
 
 /* 8007CA98-8007CCC8       .text createCommon__13dPa_control_cFPCv */
-void dPa_control_c::createCommon(const void*) {
+void dPa_control_c::createCommon(const void* param_1) {
     /* Nonmatching */
+    mCommonResMng = new (mHeap, 0) JPAResourceManager(param_1, mHeap);
+    JUT_ASSERT(1313, mCommonResMng != 0);
+    mCommonResMng->swapTexture(mDoGph_gInf_c::mFrameBufferTimg, "AK_kagerouSwap00");
+    mEmitterMng = new(mHeap, 0) JPAEmitterManager(mCommonResMng, 3000, 150, 200, mHeap);
+    JUT_ASSERT(1324, mEmitterMng != 0);
+    JKRHeap* oldHeap = mDoExt_setCurrentHeap(mHeap);
+    mModelControl = new dPa_modelControl_c((J3DModelData*)g_dComIfG_gameInfo.mResControl.getObjectRes("Always", 0x31));
+    JUT_ASSERT(1332, mModelControl != 0);
+    for (u16 i = 0; i < 8; i++) {
+        u16 var1 = dPa_name::j_o_id[i];
+        if (mCommonResMng->pEmtrRes->checkUserIndexDuplication(var1)) {
+            newSimple(var1, var1 & 0x4000 ? 4 : 0);
+        }
+    }
+    mNumSimpleCommon = mNumSimple;
+    mDoExt_setCurrentHeap(oldHeap);
+    mDoExt_adjustSolidHeap(mHeap);
 }
 
 /* 8007CCC8-8007CE50       .text createRoomScene__13dPa_control_cFPCv */
-void dPa_control_c::createRoomScene(const void*) {
+void dPa_control_c::createRoomScene(const void* param_1) {
     /* Nonmatching */
+    mSceneHeap = mDoExt_createSolidHeapFromGame(0, 0);
+    JUT_ASSERT(1369, mSceneHeap != 0);
+    mpData = param_1;
+    mSceneResMng = new (mSceneHeap, 0) JPAResourceManager(mpData, mSceneHeap);
+    JUT_ASSERT(1373, mSceneResMng != 0);
+    mSceneResMng->swapTexture(mDoGph_gInf_c::mFrameBufferTimg, "AK_kagerouSwap00");
+    mEmitterMng->pResMgrArray[1] = mSceneResMng;
+    mDoExt_adjustSolidHeap(mSceneHeap);
+    for (u16 i = 0; i < 34; i++) {
+        u16 var1 = dPa_name::s_o_id[i];
+        if (mSceneResMng->pEmtrRes->checkUserIndexDuplication(var1)) {
+            u32 var2;
+            if (var1 & 0x4000) {
+                var2 = 4;
+            } else if (var1 & 0x2000) {
+                var2 = 2;
+            } else {
+                var2 = 0;
+            }
+            newSimple(var1, var2);
+        }
+    }
 }
 
 /* 8007CE50-8007CF20       .text readScene__13dPa_control_cFUcPP21mDoDvdThd_toMainRam_c */
-bool dPa_control_c::readScene(u8, mDoDvdThd_toMainRam_c**) {
-    /* Nonmatching */
+bool dPa_control_c::readScene(u8 i_no, mDoDvdThd_toMainRam_c** param_2) {
+    if (i_no == 0xff) {
+        return false;
+    }
+    if (mCount++) {
+        JUT_ASSERT(1415, i_no != mSceneNo);
+        return true;
+    }
+    mSceneNo = i_no;
+    static char jpcName[32];
+    sprintf(jpcName, "/res/Particle/Pscene%03d.jpc", i_no);
+    *param_2 = mDoDvdThd_toMainRam_c::create(jpcName, 0, NULL);
+    return true;
 }
 
 /* 8007CF20-8007CF98       .text createScene__13dPa_control_cFPCv */
@@ -457,8 +531,15 @@ void dPa_control_c::calcMenu() {
 }
 
 /* 8007D16C-8007D1DC       .text draw__13dPa_control_cFP11JPADrawInfoUc */
-void dPa_control_c::draw(JPADrawInfo*, u8) {
-    /* Nonmatching */
+void dPa_control_c::draw(JPADrawInfo* param_1, u8 param_2) {
+    if (!mEmitterMng) {
+        return;
+    }
+    j3dSys.reinitGX();
+    dKy_setLight_again();
+    mEmitterMng->draw(param_1, param_2);
+    GXSetAlphaUpdate(GX_DISABLE);
+    GXSetNumIndStages(0);
 }
 
 /* 8007D1DC-8007D378       .text set__13dPa_control_cFUcUsPC4cXyzPC5csXyzPC4cXyzUcP18dPa_levelEcallBackScPC8_GXColorPC8_GXColorPC4cXyz */
@@ -492,28 +573,61 @@ void dPa_control_c::setNormalStripes(u16, const cXyz*, const csXyz*, const cXyz*
 }
 
 /* 8007DB34-8007DBC4       .text newSimple__13dPa_control_cFUsUc */
-void dPa_control_c::newSimple(u16, u8) {
+bool dPa_control_c::newSimple(u16 param_1, u8 param_2) {
     /* Nonmatching */
+    if (mNumSimple >= 25) {
+        OSReport("\x1b[43;30m１エミッター登録数オーバー！！\n");
+        return false;
+    }
+    JPABaseEmitter* emitter = mSimpleCallbacks[mNumSimple].create(mEmitterMng, param_1, param_2);
+    if (!emitter) {
+        return false;
+    }
+    mNumSimple++;
+    return true;
 }
 
 /* 8007DBC4-8007DC30       .text setSimple__13dPa_control_cFUsPC4cXyzUcRC8_GXColorRC8_GXColori */
-void dPa_control_c::setSimple(u16, const cXyz*, u8, const _GXColor&, const _GXColor&, int) {
-    /* Nonmatching */
+bool dPa_control_c::setSimple(u16 param_1, const cXyz* param_2, u8 param_3, const _GXColor& param_4, const _GXColor& param_5, int param_6) {
+    dPa_simpleEcallBack* simple = getSimple(param_1);
+    if (simple == NULL) {
+        return false;
+    }
+    return simple->set(param_2, param_3, param_4, param_5, param_6);
 }
 
 /* 8007DC30-8007DC6C       .text getSimple__13dPa_control_cFUs */
-void dPa_control_c::getSimple(u16) {
+dPa_simpleEcallBack* dPa_control_c::getSimple(u16 param_1) {
     /* Nonmatching */
+    dPa_simpleEcallBack* simple = mSimpleCallbacks;
+    for (int i = 0; i < mNumSimple; i++, simple++) {
+        if (simple->mResID == param_1) {
+            return simple;
+        }
+    }
+    return NULL;
 }
 
 /* 8007DC6C-8007DC94       .text setup__19dPa_rippleEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void dPa_rippleEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
+void dPa_rippleEcallBack::setup(JPABaseEmitter* param_1, const cXyz* param_2, const csXyz* param_3, s8 param_4) {
     /* Nonmatching */
+    param_1->setParticleCallBackPtr(&dPa_control_c::mRipplePcallBack);
+    mPos = param_2;
+    mRate = 1.0f;
+    mFlags |= 1;
+    mpBaseEmitter = param_1;
 }
 
 /* 8007DC94-8007DCE4       .text end__19dPa_rippleEcallBackFv */
 void dPa_rippleEcallBack::end() {
-    /* Nonmatching */
+    if (!mpBaseEmitter) {
+        return;
+    }
+    mpBaseEmitter->becomeInvalidEmitter();
+    mpBaseEmitter->quitImmortalEmitter();
+    mpBaseEmitter->setEmitterCallBackPtr(NULL);
+    mFlags |= 2;
+    mpBaseEmitter = NULL;
 }
 
 /* 8007DCE4-8007DD70       .text execute__19dPa_rippleEcallBackFP14JPABaseEmitter */
@@ -523,27 +637,38 @@ void dPa_rippleEcallBack::execute(JPABaseEmitter*) {
 
 /* 8007DD70-8007DDA8       .text draw__19dPa_rippleEcallBackFP14JPABaseEmitter */
 void dPa_rippleEcallBack::draw(JPABaseEmitter*) {
-    /* Nonmatching */
+    if (dPa_control_c::isStatus(1)) {
+        GXSetZMode(GX_FALSE, GX_NEVER, GX_FALSE);
+    }
 }
 
 /* 8007DDA8-8007DDB4       .text setup__25dPa_singleRippleEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void dPa_singleRippleEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
-    /* Nonmatching */
+void dPa_singleRippleEcallBack::setup(JPABaseEmitter* param_1, const cXyz*, const csXyz*, s8) {
+    param_1->setParticleCallBackPtr(&dPa_control_c::mRipplePcallBack);
 }
 
 /* 8007DDB4-8007DE00       .text execute__25dPa_singleRippleEcallBackFP14JPABaseEmitter */
-void dPa_singleRippleEcallBack::execute(JPABaseEmitter*) {
-    /* Nonmatching */
+void dPa_singleRippleEcallBack::execute(JPABaseEmitter* param_1) {
+    GXColor c1, c2;
+    dKy_get_seacolor(&c1, &c2);
+    param_1->setGlobalPrmColor(c1.r, c1.g, c1.b);
 }
 
 /* 8007DE00-8007DE38       .text draw__25dPa_singleRippleEcallBackFP14JPABaseEmitter */
 void dPa_singleRippleEcallBack::draw(JPABaseEmitter*) {
-    /* Nonmatching */
+    if (dPa_control_c::isStatus(1)) {
+        GXSetZMode(GX_FALSE, GX_NEVER, GX_FALSE);
+    }
 }
 
 /* 8007DE38-8007DE94       .text execute__19dPa_ripplePcallBackFP14JPABaseEmitterP15JPABaseParticle */
-void dPa_ripplePcallBack::execute(JPABaseEmitter*, JPABaseParticle*) {
+void dPa_ripplePcallBack::execute(JPABaseEmitter* param_1, JPABaseParticle* param_2) {
     /* Nonmatching */
+    f32 tmp2;
+    cXyz tmp1(param_2->mPosition.x, param_2->mPosition.y, param_2->mPosition.z);
+    if (fopAcM_getWaterY(&tmp1, &tmp2)) {
+        param_2->mGlobalPosition.y = tmp2;
+    }
 }
 
 /* 8007DE94-8007E254       .text draw__19dPa_ripplePcallBackFP14JPABaseEmitterP15JPABaseParticle */
@@ -552,13 +677,26 @@ void dPa_ripplePcallBack::draw(JPABaseEmitter*, JPABaseParticle*) {
 }
 
 /* 8007E254-8007E288       .text setup__17dPa_waveEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void dPa_waveEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
+void dPa_waveEcallBack::setup(JPABaseEmitter* param_1, const cXyz* param_2, const csXyz* param_3, s8 param_4) {
     /* Nonmatching */
+    mpPos = param_2;
+    mpRot = param_3;
+    mVel = 0.0f;
+    mVelFade2 = 1.0f;
+    mpBaseEmitter = param_1;
+    mMaxParticleVelocity = 10000.0f;
+    mState = 0;
+    mFadeTimer = 0;
 }
 
 /* 8007E288-8007E2BC       .text remove__17dPa_waveEcallBackFv */
 void dPa_waveEcallBack::remove() {
-    /* Nonmatching */
+    if (!mpBaseEmitter) {
+        return;
+    }
+    mpBaseEmitter->setEmitterCallBackPtr(NULL);
+    mpBaseEmitter->becomeInvalidEmitter();
+    mpBaseEmitter = NULL;
 }
 
 /* 8007E2BC-8007E484       .text executeAfter__17dPa_waveEcallBackFP14JPABaseEmitter */
@@ -611,13 +749,21 @@ void dPa_waveEcallBack::draw(JPABaseEmitter*) {
 }
 
 /* 8007E804-8007E81C       .text setup__19dPa_splashEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void dPa_splashEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
-    /* Nonmatching */
+void dPa_splashEcallBack::setup(JPABaseEmitter* param_1, const cXyz* param_2, const csXyz* param_3, s8 param_4) {
+    mpPos = param_2;
+    mpRot = param_3;
+    mpBaseEmitter = param_1;
+    mState = 0;
 }
 
 /* 8007E81C-8007E850       .text remove__19dPa_splashEcallBackFv */
 void dPa_splashEcallBack::remove() {
-    /* Nonmatching */
+    if (!mpBaseEmitter) {
+        return;
+    }
+    mpBaseEmitter->setEmitterCallBackPtr(NULL);
+    mpBaseEmitter->becomeInvalidEmitter();
+    mpBaseEmitter = NULL;
 }
 
 /* 8007E850-8007E9B8       .text execute__19dPa_splashEcallBackFP14JPABaseEmitter */
@@ -626,8 +772,11 @@ void dPa_splashEcallBack::execute(JPABaseEmitter*) {
 }
 
 /* 8007E9B8-8007E9D4       .text setup__22dPa_cutTurnEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void dPa_cutTurnEcallBack_c::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
-    /* Nonmatching */
+void dPa_cutTurnEcallBack_c::setup(JPABaseEmitter* param_1, const cXyz* param_2, const csXyz* param_3, s8 param_4) {
+    mpBaseEmitter = param_1;
+    field_0x6 = 0;
+    field_0x5 = 0;
+    field_0x4 = 0xFF;
 }
 
 /* 8007E9D4-8007EAC4       .text executeAfter__22dPa_cutTurnEcallBack_cFP14JPABaseEmitter */
@@ -637,7 +786,13 @@ void dPa_cutTurnEcallBack_c::executeAfter(JPABaseEmitter*) {
 
 /* 8007EAC4-8007EB00       .text end__22dPa_cutTurnEcallBack_cFv */
 void dPa_cutTurnEcallBack_c::end() {
-    /* Nonmatching */
+    if (!mpBaseEmitter) {
+        return;
+    }
+    mpBaseEmitter->setEmitterCallBackPtr(NULL);
+    mpBaseEmitter->becomeInvalidEmitter();
+    mpBaseEmitter = NULL;
+    field_0x5 = 1;
 }
 
 /* 8007EB00-8007F028       .text draw__20dPa_stripesEcallBackFP14JPABaseEmitter */
@@ -647,7 +802,7 @@ void dPa_stripesEcallBack::draw(JPABaseEmitter*) {
 
 /* 8007F028-8007F05C       .text draw__19dPa_kageroEcallBackFP14JPABaseEmitter */
 void dPa_kageroEcallBack::draw(JPABaseEmitter*) {
-    /* Nonmatching */
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
 }
 
 /* 8007F05C-8007F108       .text execute__22dPa_bombSmokeEcallBackFP14JPABaseEmitter */
@@ -661,13 +816,21 @@ void dPa_trackEcallBack::getMaxWaterY(JGeometry::TVec3<f32>*) {
 }
 
 /* 8007F1A8-8007F1C0       .text setup__18dPa_trackEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
-void dPa_trackEcallBack::setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) {
-    /* Nonmatching */
+void dPa_trackEcallBack::setup(JPABaseEmitter* param_1, const cXyz* param_2, const csXyz* param_3, s8 param_4) {
+    mpPos = param_2;
+    mState = 0;
+    mpRot = param_3;
+    mpBaseEmitter = param_1;
 }
 
 /* 8007F1C0-8007F1F4       .text remove__18dPa_trackEcallBackFv */
 void dPa_trackEcallBack::remove() {
-    /* Nonmatching */
+    if (!mpBaseEmitter) {
+        return;
+    }
+    mpBaseEmitter->setEmitterCallBackPtr(NULL);
+    mpBaseEmitter->becomeInvalidEmitter();
+    mpBaseEmitter = NULL;
 }
 
 /* 8007F1F4-8007F3BC       .text execute__18dPa_trackEcallBackFP14JPABaseEmitter */
