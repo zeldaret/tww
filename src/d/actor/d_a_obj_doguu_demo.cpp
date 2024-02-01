@@ -18,8 +18,8 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 BOOL daObjDoguuD_c::CreateHeap() {
-    this->param = (u8)mBase.mParameters;  // Im not sure why this is here, none of the other classes
-                                          // I looked at did this
+    mUnusedParam = fopAcM_GetParam(this) & 0xFF;  // Im not sure why this is here, none of the other
+                                                  // classes I looked at did this
 
     J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("DoguuD", 0x04));
     JUT_ASSERT(0x65, modelData != 0);
@@ -46,7 +46,7 @@ BOOL daObjDoguuD_c::CreateHeap() {
 
 void daObjDoguuD_c::CreateInit() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
-    fopAcM_setCullSizeBox(this, -30000.0, -5000.0, -30000.0, 30000.0, 40000.0, 30000.0);
+    fopAcM_setCullSizeBox(this, -30000.0f, -5000.0f, -30000.0f, 30000.0f, 40000.0f, 30000.0f);
     dComIfG_Bgsp()->Regist(mpBgW, this);
     mFlag = 1;
     set_mtx();
@@ -61,7 +61,7 @@ void daObjDoguuD_c::set_mtx() {
 
 s32 daObjDoguuD_c::_create() {
     fopAcM_SetupActor(this, daObjDoguuD_c);
-    this->mFlag = 0;
+    mFlag = 0;
 
     s32 ret = dComIfG_resLoad(&mPhs, "DoguuD");
 
