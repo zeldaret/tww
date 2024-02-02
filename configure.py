@@ -387,7 +387,7 @@ config.libs = [
             Object(NonMatching, "d/d_attention.cpp"),
             Object(Matching,    "d/d_att_dist.cpp"),
             Object(Matching,    "d/d_bg_s.cpp"),
-            Object(NonMatching, "d/d_bg_s_acch.cpp"),
+            Object(Matching,    "d/d_bg_s_acch.cpp"),
             Object(NonMatching, "d/d_bg_s_func.cpp"),
             Object(Matching,    "d/d_bg_s_lin_chk.cpp"),
             Object(Matching,    "d/d_bg_s_movebg_actor.cpp"),

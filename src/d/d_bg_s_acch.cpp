@@ -38,6 +38,11 @@ void dBgS_AcchCir::SetWall(f32 height, f32 radius) {
     SetWallR(radius);
 }
 
+static void dummy3() {
+    // Fakematch to fix the order of vtables in this TU, cM3dGPla's should appear after dBgS_Acch's.
+    cM3dGPla pla;
+}
+
 /* 800A2624-800A29B0       .text __dt__9dBgS_AcchFv */
 dBgS_Acch::~dBgS_Acch() {
 }
@@ -150,11 +155,11 @@ void dBgS_Acch::GroundCheck(dBgS& i_bgs) {
 
 /* 800A305C-800A313C       .text GroundRoofProc__9dBgS_AcchFR4dBgS */
 f32 dBgS_Acch::GroundRoofProc(dBgS& i_bgs) {
-    /* Nonmatching */
     f32 y = -1000000000.0f;
     if (m_ground_h != -1000000000.0f) {
-        y = m_roof_height;
-        if (field_0xb8 < y && y < pm_pos->y) {
+        // y = m_roof_height;
+        // fakematch to fix load order
+        if (field_0xb8 < (y = m_roof_height) && y < pm_pos->y) {
             pm_pos->y = y;
         }
 
@@ -331,10 +336,6 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
     CHECK_PVEC3_RANGE(786, pm_pos);
 }
 
-static void dummy2() {
-    OSReport("\033[43;30m**************************************\ndBgS_ObjAcch::copy constructer called.\n**************************************\n\033[m");
-}
-
 /* 800A3F50-800A3F8C       .text GetWallAllR__9dBgS_AcchFv */
 f32 dBgS_Acch::GetWallAllR() {
     f32 max = 0.0f;
@@ -458,7 +459,21 @@ f32 dBgS_Acch::GetWallAddY(Vec& vec, int) {
     }
 }
 
-// TODO: Not sure why this weak function doesn't get inlined.
+static void dummy2() {
+    OSReport("\033[43;30m**************************************\ndBgS_ObjAcch::copy constructer called.\n**************************************\n\033[m");
+    dBgS_ObjAcch acch; // fakematch to get dBgS_ObjAcch's vtable and destructor to show up in this TU
+}
+
+// TODO: Figure out what's going on with dStage_roomControl_c's weak functions. This is a fakematch.
+// dStage_roomControl_c::getBgW is supposed to be a weak function defined in d_stage.h, but putting it in the class body
+// makes it inline, and putting it outside the class body causes it to be included in every TU that includes d_stage.h.
+// It should only appear in d_bg_s_acch, but putting it in d_bg_s_acch.cpp would normally screw up the order of weak
+// functions in this TU because of the `-sym on` compiler flag.
+// This can be fixed by putting the function in a fake separate file and including it in only this TU.
+// But in this case we simulate this by using the #line directive's second argument to force the filename for this one
+// function to be different from the other functions in this file. This tricks `-sym on` into splitting it into its own
+// .text section, and the weak function order winds up being correct.
+#line 1 "d_stage.h"
 /* 800A4434-800A444C       .text getBgW__20dStage_roomControl_cFi */
 dBgW* dStage_roomControl_c::getBgW(int i_roomNo) {
     return mStatus[i_roomNo].mpBgW;
