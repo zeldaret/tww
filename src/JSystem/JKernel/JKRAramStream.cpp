@@ -116,7 +116,7 @@ s32 JKRAramStream::writeToAram(JKRAramStreamCommand* command) {
         }
 
         if (command->mAllocatedTransferBuffer) {
-            i_JKRFree(buffer);
+            JKRFree(buffer);
             command->mAllocatedTransferBuffer = false;
         }
     }

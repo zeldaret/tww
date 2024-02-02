@@ -302,10 +302,9 @@ void JPAFieldManager::deleteField(JPAFieldData* data) {
 
 /* 8025BB20-8025BB74       .text deleteAllField__15JPAFieldManagerFv */
 void JPAFieldManager::deleteAllField() {
-    /* Nonmatching */
     for (JSULink<JPAFieldData>* link = mList.getFirst(); link != NULL;) {
         JSULink<JPAFieldData>* next = link->getNext();
-        JPAFieldData* data = link->getObject();
+        JPAFieldData* data = (JPAFieldData*)link->getObject();
         deleteField(data);
         link = next;
     }

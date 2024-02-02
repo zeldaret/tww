@@ -205,7 +205,7 @@ bool DynamicModuleControl::do_load() {
     s32 i = 0;
     while (true) {
         if (mModule != NULL) {
-            i_JKRFree(mModule);
+            JKRFree(mModule);
             mModule = NULL;
         }
         char buffer[64];
@@ -317,7 +317,7 @@ BOOL DynamicModuleControl::do_load_async() {
 
 bool DynamicModuleControl::do_unload() {
     if (mModule != NULL) {
-        i_JKRFree(mModule);
+        JKRFree(mModule);
         mModule = NULL;
     }
     return true;
@@ -443,7 +443,7 @@ bool DynamicModuleControl::do_unlink() {
     }
     sAllocBytes = sAllocBytes - getModuleSize();
     if (mBss != NULL) {
-        i_JKRFree(mBss);
+        JKRFree(mBss);
         mBss = NULL;
     }
     do_unload();

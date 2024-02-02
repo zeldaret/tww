@@ -207,7 +207,7 @@ inline void JKRFreeToSysHeap(void* ptr) {
     systemHeap->free(ptr);
 }
 
-inline void i_JKRFree(void* ptr) {
+inline void JKRFree(void* ptr) {
     JKRHeap::free(ptr, NULL);
 }
 

@@ -27,7 +27,6 @@ s32 dEvt_control_c::orderOld(u16 eventType, u16 priority, u16 flag, u16 hindFlag
 
 /* 8006FEE8-8007002C       .text order__14dEvt_control_cFUsUsUsUsPvPvsUc */
 s32 dEvt_control_c::order(u16 eventType, u16 priority, u16 flag, u16 hindFlag, void* ac1, void* ac2, s16 eventIdx, u8 eventInfoIdx) {
-    /* Nonmatching */
     if (mOrderCount >= 8)
         return FALSE;
 
@@ -54,13 +53,14 @@ s32 dEvt_control_c::order(u16 eventType, u16 priority, u16 flag, u16 hindFlag, v
             mFirstOrderIdx = mOrderCount;
             pNewOrder->mNextOrderIdx = queueIdx;
         } else {
-            while ((queueIdx = pQueue->mNextOrderIdx) >= 0) {
-                pQueue = &mOrder[queueIdx];
-                if (pNewOrder->mPriority < pQueue->mPriority)
+            s8 nextQueueIdx;
+            while ((nextQueueIdx = pQueue->mNextOrderIdx) >= 0) {
+                if (pNewOrder->mPriority < mOrder[pQueue->mNextOrderIdx].mPriority)
                     break;
+                pQueue = &mOrder[nextQueueIdx];
             }
 
-            pNewOrder->mNextOrderIdx = queueIdx;
+            pNewOrder->mNextOrderIdx = nextQueueIdx;
             pQueue->mNextOrderIdx = mOrderCount;
         }
     }
@@ -213,10 +213,10 @@ BOOL dEvt_control_c::catchCheck(dEvt_order_c* order) {
 
 /* 800707C0-80070870       .text talkEnd__14dEvt_control_cFv */
 BOOL dEvt_control_c::talkEnd() {
-    fopAc_ac_c* actor1 = convPId(mPt1);
+    fopAc_ac_c* actor1 = getPt1();
     if (actor1 != NULL)
         actor1->mEvtInfo.setCommand(dEvtCmd_NONE_e);
-    fopAc_ac_c* actor2 = convPId(mPt2);
+    fopAc_ac_c* actor2 = getPt2();
     if (actor2 != NULL)
         actor2->mEvtInfo.setCommand(dEvtCmd_NONE_e);
     if (mEventId != -1) {
@@ -265,10 +265,10 @@ BOOL dEvt_control_c::demoCheck(dEvt_order_c* order) {
 
 /* 800709C0-80070A64       .text demoEnd__14dEvt_control_cFv */
 BOOL dEvt_control_c::demoEnd() {
-    fopAc_ac_c* actor1 = convPId(mPt1);
+    fopAc_ac_c* actor1 = getPt1();
     if (actor1 != NULL)
         actor1->mEvtInfo.setCommand(dEvtCmd_NONE_e);
-    fopAc_ac_c* actor2 = convPId(mPt2);
+    fopAc_ac_c* actor2 = getPt2();
     if (actor2 != NULL)
         actor2->mEvtInfo.setCommand(dEvtCmd_NONE_e);
     if (mEventId != -1) {
@@ -300,7 +300,7 @@ BOOL dEvt_control_c::potentialCheck(dEvt_order_c* order) {
 BOOL dEvt_control_c::doorCheck(dEvt_order_c* order) {
     if (commonCheck(order, dEvtCnd_CANDOOR_e, dEvtCmd_INDOOR_e)) {
         mMode = dEvtMode_DEMO_e;
-        fopAc_ac_c* actor2 = convPId(mPt2);
+        fopAc_ac_c* actor2 = getPt2();
         if (mEventId == -1 && actor2 != NULL && actor2->mEvtInfo.getEventId() != -1)
             mEventId = actor2->mEvtInfo.getEventId();
         if (mEventId != -1 && g_dComIfG_gameInfo.play.getEvtManager().getEventData(mEventId) != NULL) {

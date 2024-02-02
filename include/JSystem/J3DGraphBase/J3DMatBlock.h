@@ -863,6 +863,8 @@ struct J3DIndTexOrder : public J3DIndTexOrderInfo {
 
     u8 getCoord() const { return mCoord; }
     u8 getMap() const { return mMap; }
+    void setCoord(u8 coord) { mCoord = coord; }
+    void setMap(u8 map) { mMap = map; }
 };
 
 class J3DIndBlock {

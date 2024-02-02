@@ -80,6 +80,7 @@ public:
     void onInvalid() { mInvalid = 1; }
     u32 getTexGenNum() const { return mTexGenBlock->getTexGenNum(); }
     u8 getTevStageNum() const { return mTevBlock->getTevStageNum(); }
+    J3DIndTexOrder* getIndTexOrder(u32 i) { return mIndBlock->getIndTexOrder(i); }
     J3DIndTexMtx* getIndTexMtx(u32 i) { return mIndBlock->getIndTexMtx(i); }
     u8 getIndTexStageNum() const { return mIndBlock->getIndTexStageNum(); }
 
@@ -97,7 +98,6 @@ public:
     void getDither() const {}
     void getIndTevStage(u32) {}
     void getIndTexCoordScale(u32) {}
-    void getIndTexOrder(u32) {}
     void getLight(u32) {}
     void getMatColor(u32) {}
     void getTevKAlphaSel(u32) {}

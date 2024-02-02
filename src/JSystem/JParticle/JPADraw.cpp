@@ -834,13 +834,13 @@ void JPADraw::drawParticle() {
     JPABaseEmitter * emtr = dc.pbe;
     if (dc.pbsp->getListOrder() == 0) {
         for (JSULink<JPABaseParticle> * link = emtr->mActiveParticles.getFirst(); link != NULL; link = link->getNext()) {
-            JPABaseParticle * ptcl = link->getObject();
+            JPABaseParticle * ptcl = (JPABaseParticle*)link->getObject();
             for (s32 i = 0; i < execPtclVisNum; i++)
                 mpExecPtclVis[i]->exec(&dc, ptcl);
         }
     } else {
         for (JSULink<JPABaseParticle> * link = emtr->mActiveParticles.getLast(); link != NULL; link = link->getPrev()) {
-            JPABaseParticle * ptcl = link->getObject();
+            JPABaseParticle * ptcl = (JPABaseParticle*)link->getObject();
             for (s32 i = 0; i < execPtclVisNum; i++)
                 mpExecPtclVis[i]->exec(&dc, ptcl);
         }
@@ -936,13 +936,13 @@ void JPADraw::zDrawParticle() {
     JPABaseEmitter * emtr = dc.pbe;
     if (dc.pbsp->getListOrder() == 0) {
         for (JSULink<JPABaseParticle> * link = emtr->mActiveParticles.getFirst(); link != NULL; link = link->getNext()) {
-            JPABaseParticle * ptcl = link->getObject();
+            JPABaseParticle * ptcl = (JPABaseParticle*)link->getObject();
             for (s32 i = 0; i < execPtclVisNum; i++)
                 mpExecPtclVis[i]->exec(&dc, ptcl);
         }
     } else {
         for (JSULink<JPABaseParticle> * link = emtr->mActiveParticles.getLast(); link != NULL; link = link->getPrev()) {
-            JPABaseParticle * ptcl = link->getObject();
+            JPABaseParticle * ptcl = (JPABaseParticle*)link->getObject();
             for (s32 i = 0; i < execPtclVisNum; i++)
                 mpExecPtclVis[i]->exec(&dc, ptcl);
         }
@@ -986,13 +986,13 @@ void JPADraw::zDrawChild() {
     JPABaseEmitter * emtr = dc.pbe;
     if (dc.pbsp->getListOrder() == 0) {
         for (JSULink<JPABaseParticle> * link = emtr->mChildParticles.getFirst(); link != NULL; link = link->getNext()) {
-            JPABaseParticle * ptcl = link->getObject();
+            JPABaseParticle * ptcl = (JPABaseParticle*)link->getObject();
             for (s32 i = 0; i < execChldVisNum; i++)
                 mpExecChldVis[i]->exec(&dc, ptcl);
         }
     } else {
         for (JSULink<JPABaseParticle> * link = emtr->mChildParticles.getLast(); link != NULL; link = link->getPrev()) {
-            JPABaseParticle * ptcl = link->getObject();
+            JPABaseParticle * ptcl = (JPABaseParticle*)link->getObject();
             for (s32 i = 0; i < execChldVisNum; i++)
                 mpExecChldVis[i]->exec(&dc, ptcl);
         }

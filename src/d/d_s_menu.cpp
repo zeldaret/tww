@@ -95,8 +95,8 @@ BOOL dScnMenu_IsDelete(menu_of_scene_class*) {
 BOOL dScnMenu_Delete(menu_of_scene_class* i_this) {
     JUTDbPrint::getManager()->changeFont(JFWSystem::systemFont);
     delete i_this->field_0x1dc;
-    i_JKRFree(i_this->info);
-    i_JKRFree(i_this->field_0x1d8);
+    JKRFree(i_this->info);
+    JKRFree(i_this->field_0x1d8);
     g_HIO.mDisplayFlag &= ~2;
     g_HIO.mDisplayFlag &= ~2;
     dComIfGs_setRestartOption(0);

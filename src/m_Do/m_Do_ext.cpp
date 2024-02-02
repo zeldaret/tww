@@ -1014,7 +1014,7 @@ void mDoExt_MtxCalcAnmBlendTbl::calc(u16 param_0) {
     if (mNum == 1) {
         J3DTransformInfo info1;
         mAnmRatio->getAnmTransform()->getTransform(param_0, &info1);
-        calcTransform(param_0, info1);
+        calcTransform(param_0, info1); // Doesn't match because J3DMtxCalcBasic's vtable is in the wrong order
         return;
     }
     J3DTransformInfo info2;

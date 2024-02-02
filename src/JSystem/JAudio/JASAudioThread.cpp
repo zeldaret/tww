@@ -47,7 +47,7 @@ void JASystem::TAudioThread::syncAudio() {
 /* 80288F88-80289130       .text audioproc__Q28JASystem12TAudioThreadFPv */
 void* JASystem::TAudioThread::audioproc(void*) {
     JKRThread thread(&sAudioThread, 0);
-    i_OSInitFastCast();
+    OSInitFastCast();
     OSInitMessageQueue(&sAudioprocMQ, saAudioMsgBuf, 16);
     sAudioprocMQInit = 1;
     Kernel::init();

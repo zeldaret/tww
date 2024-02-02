@@ -91,7 +91,7 @@ public:
     dStage_Event_dt_c* getStageEventDt();
     dStage_Event_dt_c* nextStageEventDt(void*);
     int getPId(void*);
-    void* convPId(unsigned int);
+    fopAc_ac_c* convPId(unsigned int);
     u8 getTactFreeMStick(int);
     u8 getTactFreeCStick(int);
     bool giveItemCut(u8);
@@ -100,15 +100,15 @@ public:
     bool chkTalkXY() { return mTalkButton == 1 || mTalkButton == 2 || mTalkButton == 3; }
     void setPtI_Id(unsigned int id) { mPtItem = id; }
     void setPtI(void* actor) { mPtItem = getPId(actor); }
-    void* getPtI() { return convPId(mPtItem); }
+    fopAc_ac_c* getPtI() { return convPId(mPtItem); }
     void setGtItm(u8 itemNo) { mGetItemNo = itemNo; }
     u8 getGtItm() { return mGetItemNo; }
     void setPtT(void* i_actor) { mPtTalk = getPId(i_actor); }
-    void* getPtT() { return convPId(mPtTalk); }
+    fopAc_ac_c* getPtT() { return convPId(mPtTalk); }
     void setPt1(void* i_actor) { mPt1 = getPId(i_actor); }
-    void* getPt1() { return convPId(mPt1); }
+    fopAc_ac_c* getPt1() { return convPId(mPt1); }
     void setPt2(void* i_actor) { mPt2 = getPId(i_actor); }
-    void* getPt2() { return convPId(mPt2); }
+    fopAc_ac_c* getPt2() { return convPId(mPt2); }
     u8 getPreItemNo() { return mItemNo; }
     
     f32 getCullRate() { return mCullFarClipRatio; }

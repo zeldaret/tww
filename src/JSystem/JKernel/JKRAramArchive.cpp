@@ -47,7 +47,7 @@ JKRAramArchive::~JKRAramArchive() {
         }
 
         if (mExpandedSize != NULL) {
-            i_JKRFree(mExpandedSize);
+            JKRFree(mExpandedSize);
             mExpandedSize = NULL;
         }
 
@@ -119,7 +119,7 @@ bool JKRAramArchive::open(s32 entryNum) {
             if (compressedFiles != 0) {
                 mExpandedSize = (s32 *)JKRAllocFromHeap(mHeap, mArcInfoBlock->num_file_entries << 2, abs(alignment));
                 if (mExpandedSize == NULL) {
-                    i_JKRFree(mArcInfoBlock);
+                    JKRFree(mArcInfoBlock);
                     mMountMode = 0;
                     goto cleanup;
                 }
@@ -130,10 +130,10 @@ bool JKRAramArchive::open(s32 entryNum) {
             mBlock = (JKRAramBlock*) JKRAllocFromAram(aramSize, mMountDirection == MOUNT_DIRECTION_HEAD ? JKRAramHeap::HEAD : JKRAramHeap::TAIL);
             if(mBlock == NULL) {
                 if (mArcInfoBlock) {
-                    i_JKRFree(mArcInfoBlock);
+                    JKRFree(mArcInfoBlock);
                 }
                 if(mExpandedSize) {
-                    i_JKRFree(mExpandedSize);
+                    JKRFree(mExpandedSize);
                 }
                 mMountMode = 0;
             }

@@ -42,7 +42,7 @@ JKRDvdArchive::~JKRDvdArchive() {
         }
 
         if (mExpandedSize) {
-            i_JKRFree(mExpandedSize);
+            JKRFree(mExpandedSize);
             mExpandedSize = NULL;
         }
 
